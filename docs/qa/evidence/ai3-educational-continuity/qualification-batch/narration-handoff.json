@@ -1,0 +1,61 @@
+{
+  "status": "source frozen; shared translation merge pending parent",
+  "ownership": "Only s01_hook.py, s13_words.py and s18_netflix.py changed by reviewer; no shared table or tests changed.",
+  "zh_lines_sha256_at_handoff": "d177dd890369a6855990b72f5d68aa0b0085379837cec794437023e04d2ffc99",
+  "entries": [
+    {
+      "file": "videos/ai/ai3/s01_hook.py",
+      "method": "islands",
+      "before_sha256": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+      "after_sha256": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86",
+      "old_voiceover_expression": "\"In part one, a model learned to guess the next letter by counting, and it hit a wall. Every context was \"\n            \"its own island. <bookmark mark='a'/> Reading the dog barked a hundred times taught it nothing about \"\n            \"the hound barked.\"",
+      "new_voiceover_expression": "\"In part one, a model learned to guess the next letter by counting, and it hit a wall. It could share \"\n            \"exact letter patterns, but each context was an island of counts. <bookmark mark='a'/> Reading the dog \"\n            \"barked a hundred times did not teach it that dog and hound have related meanings.\"",
+      "old_mapping_key": "In part one, a model learned to guess the next letter by counting",
+      "new_mapping_key": "In part one, a model learned to guess the next letter by counting",
+      "old_zh": "在第1部分，一个模型靠计数学会了猜下一个字母，然后撞上了一堵墙：每个上下文都是一座孤岛。<bookmark mark='a'/>把the dog barked读上100遍，也没让它学到关于the hound barked的任何东西。",
+      "new_zh": "在第1部分，一个模型靠计数学会了猜下一个字母，然后撞上了一堵墙。它能共享完全相同的字母模式，但每个上下文仍是一座计数的孤岛。<bookmark mark='a'/>把the dog barked读上100遍，也不会让它学到dog和hound在意义上相近。",
+      "bookmarks": [
+        "<bookmark mark='a'/>"
+      ],
+      "same_module_AST_except_one_voiceover_expression": true
+    },
+    {
+      "file": "videos/ai/ai3/s13_words.py",
+      "method": "history",
+      "before_sha256": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+      "after_sha256": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d",
+      "old_voiceover_expression": "\"Part 1's counting model treated every word as an island. The fix is an old idea from linguistics. \"\n            \"<bookmark mark='a'/> In 1954 Zellig Harris argued that words in the same contexts tend to mean similar \"\n            \"things. <bookmark mark='b'/> In 1957 John Firth: you shall know a word by the company it keeps. \"\n            \"<bookmark mark='c'/> In 1990 Scott Deerwester, Susan Dumais and colleagues made it an algorithm: count \"\n            \"words in documents, take the SVD, and search by meaning rather than spelling.\"",
+      "new_voiceover_expression": "\"Part 1 began with counts of distinct letter symbols. Now we connect words by counting the contexts \"\n            \"they share. The idea comes from linguistics. \"\n            \"<bookmark mark='a'/> In 1954 Zellig Harris argued that words in the same contexts tend to mean similar \"\n            \"things. <bookmark mark='b'/> In 1957 John Firth: you shall know a word by the company it keeps. \"\n            \"<bookmark mark='c'/> In 1990 Scott Deerwester, Susan Dumais and colleagues made it an algorithm: count \"\n            \"words in documents, take the SVD, and search by meaning rather than spelling.\"",
+      "old_mapping_key": "Part 1's counting model treated every word as an island.",
+      "new_mapping_key": "Part 1 began with counts of distinct letter symbols.",
+      "old_zh": "第1部分的计数模型，把每个词都当成一座孤岛。办法来自语言学里的一个老想法。<bookmark mark='a'/>1954年，泽利格·哈里斯指出，出现在相同上下文里的词，意思往往相近。<bookmark mark='b'/>1957年，约翰·弗斯说：要了解一个词，就看它和什么词为伴。<bookmark mark='c'/>1990年，斯科特·迪尔韦斯特、苏珊·杜迈斯和同事把它变成了算法：数一数词在文档里出现的次数，做奇异值分解，按意义而不是按拼写来检索。",
+      "new_zh": "第1部分先从不同字母符号的计数开始。现在，我们通过统计词共享的上下文，把词联系起来。这个想法来自语言学。<bookmark mark='a'/>1954年，泽利格·哈里斯指出，出现在相同上下文里的词，意思往往相近。<bookmark mark='b'/>1957年，约翰·弗斯说：要了解一个词，就看它和什么词为伴。<bookmark mark='c'/>1990年，斯科特·迪尔韦斯特、苏珊·杜迈斯和同事把它变成了算法：数一数词在文档里出现的次数，做奇异值分解，按意义而不是按拼写来检索。",
+      "bookmarks": [
+        "<bookmark mark='a'/>",
+        "<bookmark mark='b'/>",
+        "<bookmark mark='c'/>"
+      ],
+      "same_module_AST_except_one_voiceover_expression": true
+    },
+    {
+      "file": "videos/ai/ai3/s18_netflix.py",
+      "method": "model",
+      "before_sha256": "a6709b228262080e408cfc559edc473696b57cef516defa3316f514b5b1ad21c",
+      "after_sha256": "893ab4f1d48fa93876cd88c01b887a906aedc6e5fc19a70d54d6a56029e93a67",
+      "old_voiceover_expression": "\"The model is a sum. <bookmark mark='a'/> An average, plus the user's generosity, plus the film's quality, \"\n            \"plus a dot product of k numbers of taste each. <bookmark mark='b'/> Fit it to the ratings we have, keeping \"\n            \"the vectors small, with a separate fixed penalty on user and film biases. <bookmark mark='c'/> A full table would have chapter eight's answer; with holes there is \"\n            \"no formula, and we descend the gradient. <bookmark mark='d'/> We built a small world to test on: \"\n            f\"{m['users']:,} users, {m['items']:,} films, {m['n_ratings']:,} ratings, from six hidden genres the method \"\n            \"never sees.\"",
+      "new_voiceover_expression": "\"The model is a sum. <bookmark mark='a'/> An average, plus the user's generosity, plus the film's quality, \"\n            \"plus a dot product of k numbers of taste each. <bookmark mark='b'/> Fit it to the ratings we have, keeping \"\n            \"the vectors small, with a separate fixed penalty on user and film biases. <bookmark mark='c'/> Chapter \"\n            \"eight solves the unregularized least-squares rank-k approximation of a full matrix. Here, we optimize \"\n            \"the observed ratings with the vector and bias penalties. <bookmark mark='d'/> We built a small world to test on: \"\n            f\"{m['users']:,} users, {m['items']:,} films, {m['n_ratings']:,} ratings, from six hidden genres the method \"\n            \"never sees.\"",
+      "old_mapping_key": "f\"The model is a sum.",
+      "new_mapping_key": "f\"The model is a sum.",
+      "old_zh": "模型是一个和。<bookmark mark='a'/>一个平均分，加上用户的宽厚，加上电影的质量，再加上两个各有k个口味数的向量的点积。<bookmark mark='b'/>拟合已有的评分，同时让向量保持小；用户和电影的偏置，还各有一个单独的固定惩罚。<bookmark mark='c'/>一张满的表，第8章就有答案；有空洞就没有公式，只能沿梯度下降。<bookmark mark='d'/>我们造了一个小世界来检验：{m['users']:,}位用户，{m['items']:,}部电影，{m['n_ratings']:,}条评分，来自六种隐藏的类型，方法本身看不到它们。",
+      "new_zh": "模型是一个和。<bookmark mark='a'/>一个平均分，加上用户的宽厚，加上电影的质量，再加上两个各有k个口味数的向量的点积。<bookmark mark='b'/>拟合已有的评分，同时让向量保持小；用户和电影的偏置，还各有一个单独的固定惩罚。<bookmark mark='c'/>第8章解决的是：对完整矩阵，不加正则化、按最小二乘做秩k近似。这里，我们只优化已观测的评分，同时保留向量和偏置惩罚。<bookmark mark='d'/>我们造了一个小世界来检验：{m['users']:,}位用户，{m['items']:,}部电影，{m['n_ratings']:,}条评分，来自六种隐藏的类型，方法本身看不到它们。",
+      "bookmarks": [
+        "<bookmark mark='a'/>",
+        "<bookmark mark='b'/>",
+        "<bookmark mark='c'/>",
+        "<bookmark mark='d'/>"
+      ],
+      "same_module_AST_except_one_voiceover_expression": true
+    }
+  ],
+  "timing_note": "All three narrator paragraphs have additional/changed wording. Prior rendered outputs/audio do not validate these new utterances. Bookmarks and scene actions/data are unchanged."
+}

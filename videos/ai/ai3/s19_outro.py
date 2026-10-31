@@ -104,9 +104,17 @@ class Outro(VoiceoverScene):
         out.append((VGroup(ax, curve(ax, range(len(ks)), ys, C.BITS, 2.5),
                            *[Dot(ax.c2p(i, y), radius=0.04, color=C.BITS) for i, y in enumerate(ys)]),
                     r"filling in ratings", C.BITS))
+        wrapped_footers = {
+            r"spectra: \ separately peak-normalized": (r"spectra: separately", r"peak-normalized"),
+            r"SGNS: generalized shifted PMI": (r"SGNS: generalized", r"shifted PMI"),
+        }
         tiles = Group()
         for pic, cap, col in out:
-            box, c_ = tile_frame(cap, col, TW, TH)
+            lines = wrapped_footers.get(cap)
+            box, c_ = tile_frame(lines[0] if lines else cap, col, TW, TH)
+            if lines:
+                c_ = VGroup(c_, label(lines[1], font_size=22, color=col)).arrange(DOWN, buff=0.035)
+                c_.move_to(box.get_bottom() + UP * 0.30)
             if c_.width > TW + 0.1:
                 c_.width = TW + 0.1
             pic.move_to(box.get_center() + UP * 0.22)

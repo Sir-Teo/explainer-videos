@@ -1,0 +1,26 @@
+[
+  {
+    "file": "videos/ai/ai3/s01_hook.py",
+    "english": "In part one, a model learned to guess the next letter by counting, and it hit a wall. It could share exact letter patterns, but each context was an island of counts. <bookmark mark='a'/> Reading the dog barked a hundred times did not teach it that dog and hound have related meanings.",
+    "chinese": "在第1部分，一个模型靠计数学会了猜下一个字母，然后撞上了一堵墙。它能共享完全相同的字母模式，但每个上下文仍是一座计数的孤岛。<bookmark mark='a'/>把the dog barked读上100遍，也不会让它学到dog和hound在意义上相近。",
+    "numeric_values_are_non_measured_translation_fixtures": true,
+    "bookmarks_preserved": true,
+    "qualifiers_checked": true
+  },
+  {
+    "file": "videos/ai/ai3/s13_words.py",
+    "english": "Part 1 began with counts of distinct letter symbols. Now we connect words by counting the contexts they share. The idea comes from linguistics. <bookmark mark='a'/> In 1954 Zellig Harris argued that words in the same contexts tend to mean similar things. <bookmark mark='b'/> In 1957 John Firth: you shall know a word by the company it keeps. <bookmark mark='c'/> In 1990 Scott Deerwester, Susan Dumais and colleagues made it an algorithm: count words in documents, take the SVD, and search by meaning rather than spelling.",
+    "chinese": "第1部分先从不同字母符号的计数开始。现在，我们通过统计词共享的上下文，把词联系起来。这个想法来自语言学。<bookmark mark='a'/>1954年，泽利格·哈里斯指出，出现在相同上下文里的词，意思往往相近。<bookmark mark='b'/>1957年，约翰·弗斯说：要了解一个词，就看它和什么词为伴。<bookmark mark='c'/>1990年，斯科特·迪尔韦斯特、苏珊·杜迈斯和同事把它变成了算法：数一数词在文档里出现的次数，做奇异值分解，按意义而不是按拼写来检索。",
+    "numeric_values_are_non_measured_translation_fixtures": true,
+    "bookmarks_preserved": true,
+    "qualifiers_checked": true
+  },
+  {
+    "file": "videos/ai/ai3/s18_netflix.py",
+    "english": "The model is a sum. <bookmark mark='a'/> An average, plus the user's generosity, plus the film's quality, plus a dot product of k numbers of taste each. <bookmark mark='b'/> Fit it to the ratings we have, keeping the vectors small, with a separate fixed penalty on user and film biases. <bookmark mark='c'/> Chapter eight solves the unregularized least-squares rank-k approximation of a full matrix. Here, we optimize the observed ratings with the vector and bias penalties. <bookmark mark='d'/> We built a small world to test on: 4,000 users, 1,200 films, 123,456 ratings, from six hidden genres the method never sees.",
+    "chinese": "模型是一个和。<bookmark mark='a'/>一个平均分，加上用户的宽厚，加上电影的质量，再加上两个各有k个口味数的向量的点积。<bookmark mark='b'/>拟合已有的评分，同时让向量保持小；用户和电影的偏置，还各有一个单独的固定惩罚。<bookmark mark='c'/>第8章解决的是：对完整矩阵，不加正则化、按最小二乘做秩k近似。这里，我们只优化已观测的评分，同时保留向量和偏置惩罚。<bookmark mark='d'/>我们造了一个小世界来检验：4000位用户，1200部电影，123456条评分，来自六种隐藏的类型，方法本身看不到它们。",
+    "numeric_values_are_non_measured_translation_fixtures": true,
+    "bookmarks_preserved": true,
+    "qualifiers_checked": true
+  }
+]

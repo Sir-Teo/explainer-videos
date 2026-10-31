@@ -1,0 +1,493 @@
+{
+  "created_utc": "2026-10-31T21:51:37.814238+00:00",
+  "payloads": [
+    {
+      "file": "motion-review.json.gz",
+      "sha256": "957de9fb7ea68b048cd3ec8bee9ee31c5abd19821ab72f095379038459d42bf0",
+      "size": 73247,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-review.json",
+      "uncompressed_sha256": "28069e3e2ac47410bb8be52b48ba278cf4aecaa40ed355ecd55ab05d44e737cb"
+    },
+    {
+      "file": "motion-review.md.gz",
+      "sha256": "129ce2eef5cb81c2fc801b62b1d523b148289eaaece205604d5ce301393644e3",
+      "size": 1364,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-review.md",
+      "uncompressed_sha256": "0b2d55e43367e25859e10ab20e116a6833538f3c56988c7c45a0237f42bd1997"
+    },
+    {
+      "file": "endpoint-review.json.gz",
+      "sha256": "38798501c024dc5646383754976b8b99216417901f4411ed9dddfc530beb7e66",
+      "size": 36141,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/review.json",
+      "uncompressed_sha256": "7cfec0d05e9bb7389ceae1bcffad096e77e2321dc0617e287a860fa0e63a2f19"
+    },
+    {
+      "file": "completed-prior-motion-ledger.json.gz",
+      "sha256": "b22a269d3a95ca30f7068d2e70aa7989c98c140cbbf4ef4e8078738b4afd6e4c",
+      "size": 140023,
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-review.json",
+      "uncompressed_sha256": "3ab6e2bc8ba1f47193fa9306d0861e8f59aa62298fbe690bbb7f37fec27dbc8d"
+    },
+    {
+      "file": "completed-prior-preview-endpoints.json.gz",
+      "sha256": "34739b85eda3d8f898807d7abc5bf4b359994a1f2fa44abf9bfba8db131239e5",
+      "size": 32943,
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/review.json",
+      "uncompressed_sha256": "997567d3abb254176c62badc76e4cb32014914bac22fc8ff1a98146faa00d469"
+    },
+    {
+      "file": "completed-prior-native-endpoints.json.gz",
+      "sha256": "9909413a7b34ab68763161c0f83685b36b85f141e25676bd78774f7c3b2116af",
+      "size": 63118,
+      "source": "/workspace/runtime/ai3-production1080-foundations/review.json",
+      "uncompressed_sha256": "7723b7c73d0191a486f1b6405e1d07e4a80da22c573653a5a5b8777ab1e768ed"
+    },
+    {
+      "file": "ai3_galore_feasibility_motion_prepare.py.gz",
+      "sha256": "74ee398965e90d214bc46eea34e3a754d501e65b31cfff8d92b2edabdb8f1ceb",
+      "size": 2392,
+      "source": "/workspace/runtime/ai3_galore_feasibility_motion_prepare.py",
+      "uncompressed_sha256": "25f4a37f0e9be3ad078bfc83e31ffe31263a843f2a466d3ec83ee798185e5bbb"
+    },
+    {
+      "file": "ai3_galore_feasibility_motion_record.py.gz",
+      "sha256": "459a148e3cc16b5294d10077265cf0a046c5d0fa86ac96de975b2cf500bb9cea",
+      "size": 1210,
+      "source": "/workspace/runtime/ai3_galore_feasibility_motion_record.py",
+      "uncompressed_sha256": "9bdc6ab4cfbad3a9f560620660f010845419024b4f1e1d209a74306fcda6159f"
+    },
+    {
+      "file": "ai3_galore_feasibility_endpoint_prepare.py.gz",
+      "sha256": "f5827e095a41b9f73e57bc4cf26bd0a82fd54dc3fb9936d1ca83ee1038143f70",
+      "size": 1893,
+      "source": "/workspace/runtime/ai3_galore_feasibility_endpoint_prepare.py",
+      "uncompressed_sha256": "53c2bc2cf9c7df9e40a3f1833a905c8df51e75d3ee3a535299c0261331667f2f"
+    },
+    {
+      "file": "ai3_galore_feasibility_finalize.py.gz",
+      "sha256": "9e167855073d246debcde2b01ea25db1bd101d74875c4ba45f605aba3fb7fca6",
+      "size": 3529,
+      "source": "/workspace/runtime/ai3_galore_feasibility_finalize.py",
+      "uncompressed_sha256": "e7020f5ad5d11d4444273ad304f554819d709a894a665dd69c293ac87024447a"
+    },
+    {
+      "file": "ai3_galore_feasibility_receipt.py.gz",
+      "sha256": "c922e25d63e51e2e0ab368ce2155a1f54230b8156e2d2f110befb766c544f3a6",
+      "size": 2185,
+      "source": "/workspace/runtime/ai3_galore_feasibility_receipt.py",
+      "uncompressed_sha256": "0313a4c128a80ce9976c062186abf03dc2c9f99f92308032867b1d0c885cb0d1"
+    },
+    {
+      "file": "render_ai3_galore_feasibility.py.gz",
+      "sha256": "a5c0f3f3e0c5ee8cd1728c1cb43a17dbb7d6fad439a0ca8ea65bbe5897024973",
+      "size": 820,
+      "source": "/workspace/runtime/render_ai3_galore_feasibility.py",
+      "uncompressed_sha256": "44c874f0c1e4511fba583bfbf70d404b681099fad7e0d236648135d7e9af7616"
+    },
+    {
+      "file": "qa_production_endpoint_galore_feasibility.py.gz",
+      "sha256": "58d15671ca29581c5669530b5a76828cd15eea852323100b6ca84cd08e1a0ed1",
+      "size": 959,
+      "source": "/workspace/runtime/qa_production_endpoint_galore_feasibility.py",
+      "uncompressed_sha256": "4972f1f78641b8b97e4dc1c083a305c47978b20e4e3743a257ccab97dbe06046"
+    },
+    {
+      "file": "en-GaLore-capture-result.json.gz",
+      "sha256": "2bdc03f8bdd5464629ecd5cbbb53697d17dfc31e8f88d4d2987a45ca5c59d43a",
+      "size": 15526,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/capture-result.json",
+      "uncompressed_sha256": "b5c910fa4b8912e295c8b03833eecc026334764f1d99bdddad8fac5acd38a8af"
+    },
+    {
+      "file": "en-GaLore-temporal-audit-result.json.gz",
+      "sha256": "44e4f4e3b9eaec3e0a4852926e21a1c753620a4577a5850b8863a101bc998cbe",
+      "size": 27839,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/temporal-audit-result.json",
+      "uncompressed_sha256": "3eacdee26720da62449126e744751c58410e484d9f43a554eb08aa82e6d96ca4"
+    },
+    {
+      "file": "en-GaLore-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "size": 6507,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/qa_motion.snapshot.py",
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+    },
+    {
+      "file": "en-GaLore-viewed-page-01.png",
+      "sha256": "215fda34142c875e83f0ef64c78bc13375cd5f8ba8c1a231ef6ab89428b8bab5",
+      "size": 145384,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/unique-001.png",
+      "uncompressed_sha256": "215fda34142c875e83f0ef64c78bc13375cd5f8ba8c1a231ef6ab89428b8bab5"
+    },
+    {
+      "file": "en-GaLore-viewed-page-02.png",
+      "sha256": "f59330f7dbb90984a65c8349e74d819fc2bdc4b1d1192abda8dd4b1a587b85f4",
+      "size": 184758,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/unique-002.png",
+      "uncompressed_sha256": "f59330f7dbb90984a65c8349e74d819fc2bdc4b1d1192abda8dd4b1a587b85f4"
+    },
+    {
+      "file": "en-GaLore-viewed-page-03.png",
+      "sha256": "467923ec4610a4fa66f7dd39f9ffae643a4182396f0f7a8b8652d5a14c1d8981",
+      "size": 197724,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/unique-003.png",
+      "uncompressed_sha256": "467923ec4610a4fa66f7dd39f9ffae643a4182396f0f7a8b8652d5a14c1d8981"
+    },
+    {
+      "file": "en-GaLore-viewed-page-04.png",
+      "sha256": "22d42cee13f422f4ae787dbc83baa0c696e7bc21abb5d6957c478bc0131b15c1",
+      "size": 215551,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/unique-004.png",
+      "uncompressed_sha256": "22d42cee13f422f4ae787dbc83baa0c696e7bc21abb5d6957c478bc0131b15c1"
+    },
+    {
+      "file": "en-GaLore-viewed-page-05.png",
+      "sha256": "7171ac6ebbcde40d44a24aa64237781ad416bf869d990e558aa99d92a7203384",
+      "size": 273969,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/unique-005.png",
+      "uncompressed_sha256": "7171ac6ebbcde40d44a24aa64237781ad416bf869d990e558aa99d92a7203384"
+    },
+    {
+      "file": "en-GaLore-viewed-page-06.png",
+      "sha256": "ee61432efe00ddd3af0003f9fda62e1dec1ff8fec2b0dd93b083fc08fea38c6d",
+      "size": 296252,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/unique-006.png",
+      "uncompressed_sha256": "ee61432efe00ddd3af0003f9fda62e1dec1ff8fec2b0dd93b083fc08fea38c6d"
+    },
+    {
+      "file": "en-GaLore-viewed-page-07.png",
+      "sha256": "0c0ea4fd544a59158df796f05f3fa33b7fda3f2c9fdb632c2e418d840264a4a9",
+      "size": 365898,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/unique-007.png",
+      "uncompressed_sha256": "0c0ea4fd544a59158df796f05f3fa33b7fda3f2c9fdb632c2e418d840264a4a9"
+    },
+    {
+      "file": "en-GaLore-viewed-page-08.png",
+      "sha256": "93e92f538baaa62a293ecfcc55eea8f8feddeb231d89bf77cb5aa7c14c530d13",
+      "size": 376186,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/unique-008.png",
+      "uncompressed_sha256": "93e92f538baaa62a293ecfcc55eea8f8feddeb231d89bf77cb5aa7c14c530d13"
+    },
+    {
+      "file": "en-GaLore-viewed-page-09.png",
+      "sha256": "d90c96fa790d080d4ca1960db8061fe95767effb42296fbe2c21661761e4f5bd",
+      "size": 318180,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/unique-009.png",
+      "uncompressed_sha256": "d90c96fa790d080d4ca1960db8061fe95767effb42296fbe2c21661761e4f5bd"
+    },
+    {
+      "file": "en-GaLore-viewed-page-10.png",
+      "sha256": "d745f53ea95b1088ed0a16991b1f77475bde8ba011858040bf783cd41022ce06",
+      "size": 39600,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/unique-010.png",
+      "uncompressed_sha256": "d745f53ea95b1088ed0a16991b1f77475bde8ba011858040bf783cd41022ce06"
+    },
+    {
+      "file": "en-GaLore-encoded-native.png",
+      "sha256": "d9a393b461971f0c617d09d49093d3c4d842506985a1d71ae3b5dd2079bedabd",
+      "size": 87839,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-GaLore-feasibility-final/frames/0001487_000099.133s.png",
+      "uncompressed_sha256": "d9a393b461971f0c617d09d49093d3c4d842506985a1d71ae3b5dd2079bedabd"
+    },
+    {
+      "file": "zh-GaLore-capture-result.json.gz",
+      "sha256": "c3a1250ea7a63408617cc5a8dc41fd78976c0a67e7bac812f61a1ee3cd9d443e",
+      "size": 23273,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/capture-result.json",
+      "uncompressed_sha256": "5c1a2f15d7cb281b3dbf102f9746d232066cab8dca52684d268ff9407db22950"
+    },
+    {
+      "file": "zh-GaLore-temporal-audit-result.json.gz",
+      "sha256": "5aabd32d347c53f6bfb7f9cb4ff7e81c511ff2d9e971ad7edfbeb77dcb69169d",
+      "size": 29537,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/temporal-audit-result.json",
+      "uncompressed_sha256": "14e340d3cc3a6eb134e13e1da2b5663a698f995f91cd37c9cedd3d1c9f43fc51"
+    },
+    {
+      "file": "zh-GaLore-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "size": 6507,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/qa_motion.snapshot.py",
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-01.png",
+      "sha256": "6c9ae3fe04cc8c824250f9b548f1fa5d6845a7bc26ddeb8a074151ed9152deb5",
+      "size": 118858,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/unique-001.png",
+      "uncompressed_sha256": "6c9ae3fe04cc8c824250f9b548f1fa5d6845a7bc26ddeb8a074151ed9152deb5"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-02.png",
+      "sha256": "b278beb2399715e1182c6c1d4dd541445b150e28bf1b379a18e0909e6fe0d9ef",
+      "size": 160312,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/unique-002.png",
+      "uncompressed_sha256": "b278beb2399715e1182c6c1d4dd541445b150e28bf1b379a18e0909e6fe0d9ef"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-03.png",
+      "sha256": "d7b94432ebd3b6587512c3d15fe67df781e682c84a09b452347e358dfc449bc3",
+      "size": 237204,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/unique-003.png",
+      "uncompressed_sha256": "d7b94432ebd3b6587512c3d15fe67df781e682c84a09b452347e358dfc449bc3"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-04.png",
+      "sha256": "d451188f0e6a0243983eb1fe3c3c164ba9e587687a3a837483b8a5939b680bae",
+      "size": 237369,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/unique-004.png",
+      "uncompressed_sha256": "d451188f0e6a0243983eb1fe3c3c164ba9e587687a3a837483b8a5939b680bae"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-05.png",
+      "sha256": "8ed0a2bd5db55e7aaff1bef508070538c04671a5fa73750ae05c90719aa91ecc",
+      "size": 307724,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/unique-005.png",
+      "uncompressed_sha256": "8ed0a2bd5db55e7aaff1bef508070538c04671a5fa73750ae05c90719aa91ecc"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-06.png",
+      "sha256": "b90e0c55838538f04852b80bc00e41c11ddb2cfd9279274c730bb105e505a578",
+      "size": 294657,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/unique-006.png",
+      "uncompressed_sha256": "b90e0c55838538f04852b80bc00e41c11ddb2cfd9279274c730bb105e505a578"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-07.png",
+      "sha256": "3581cfb5164fcad55744478ef14e354c74cb0dec560299158aadc5420339a3b8",
+      "size": 309896,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/unique-007.png",
+      "uncompressed_sha256": "3581cfb5164fcad55744478ef14e354c74cb0dec560299158aadc5420339a3b8"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-08.png",
+      "sha256": "5643a76dfbbeb46fb698aa4523fdcf4aea9fd08be3b28d4b68af52c668873f95",
+      "size": 312624,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/unique-008.png",
+      "uncompressed_sha256": "5643a76dfbbeb46fb698aa4523fdcf4aea9fd08be3b28d4b68af52c668873f95"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-09.png",
+      "sha256": "9311ac5d60f27470aec97ed10af105cbc1e648cdd930c8682ecdf3845d877026",
+      "size": 251556,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/unique-009.png",
+      "uncompressed_sha256": "9311ac5d60f27470aec97ed10af105cbc1e648cdd930c8682ecdf3845d877026"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-10.png",
+      "sha256": "55840c06e5293b59ae93911de017dde10083b43ff680a49f14593b941f71086c",
+      "size": 64685,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/unique-010.png",
+      "uncompressed_sha256": "55840c06e5293b59ae93911de017dde10083b43ff680a49f14593b941f71086c"
+    },
+    {
+      "file": "zh-GaLore-encoded-native.png",
+      "sha256": "ca9d78a367f046e6c3826f686a8094abcb15f94529ff54571427e0c66e8fa644",
+      "size": 87414,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-GaLore-feasibility-final/frames/0001548_000103.200s.png",
+      "uncompressed_sha256": "ca9d78a367f046e6c3826f686a8094abcb15f94529ff54571427e0c66e8fa644"
+    },
+    {
+      "file": "en-480-endpoint-capture.json.gz",
+      "sha256": "c18f03ba6e7f1bc8f7bc8512babc974652b1228b29b9e35beaef57f9242c4d3c",
+      "size": 15818,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/en/480/capture-result.json",
+      "uncompressed_sha256": "0fcf5d7a9f0bdd452a4af8f949cacb83182eb1b8e6c15f5f42eb7a6d158fdc84"
+    },
+    {
+      "file": "en-480-endpoint-changed-page.png",
+      "sha256": "109dbe47d3a4d2e0d68b7c0ed542994e3d1f42e568ad343b59e87e410a0aa2fe",
+      "size": 115917,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/en/480/changed-page-01.png",
+      "uncompressed_sha256": "109dbe47d3a4d2e0d68b7c0ed542994e3d1f42e568ad343b59e87e410a0aa2fe"
+    },
+    {
+      "file": "zh-480-endpoint-capture.json.gz",
+      "sha256": "1e16d3c239f04e9140e158292cd9a57e625ed7b7056e3b6efcf97f99c40c9f2e",
+      "size": 23387,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/zh/480/capture-result.json",
+      "uncompressed_sha256": "40be7752e5306c8e0fc0c391e797b1195bb402f1e392047aa349a770b57df5d6"
+    },
+    {
+      "file": "zh-480-endpoint-changed-page.png",
+      "sha256": "b6343a8782b094e74484bd982fab6f37b2eb643e30f0382632cd51916c670602",
+      "size": 122790,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/zh/480/changed-page-01.png",
+      "uncompressed_sha256": "b6343a8782b094e74484bd982fab6f37b2eb643e30f0382632cd51916c670602"
+    },
+    {
+      "file": "en-1080-endpoint-capture.json.gz",
+      "sha256": "c50f20a0c3e78b2696eed82292e2ff3203ced575d5f42907f995db5e5f744a8e",
+      "size": 16083,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/en/1080/capture-result.json",
+      "uncompressed_sha256": "f587e15c9969b1e09bf8a77ff523988321137815ceb7bec5d4d5ff1d0cec9ea8"
+    },
+    {
+      "file": "en-1080-endpoint-changed-page.png",
+      "sha256": "b2f28050bd1fe268b6988cd8ce87e559b73d84a6fb3f32f73732329b3b9e0c7c",
+      "size": 190603,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/en/1080/changed-page-01.png",
+      "uncompressed_sha256": "b2f28050bd1fe268b6988cd8ce87e559b73d84a6fb3f32f73732329b3b9e0c7c"
+    },
+    {
+      "file": "zh-1080-endpoint-capture.json.gz",
+      "sha256": "d54a963b0c1c5b24fc39d8c9722b59a9d07d9c52c31d2e842ccfc75a8c633c1f",
+      "size": 23662,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/zh/1080/capture-result.json",
+      "uncompressed_sha256": "ea784c53e4e56d1aaf9e3ae8d7db54bf7566d522cb7995f88a7ad6975e2632d4"
+    },
+    {
+      "file": "zh-1080-endpoint-changed-page.png",
+      "sha256": "b02ca69ea91630adeb4f97cb97fe54e4825e766d0cb109b1e2192cdbf22f52b7",
+      "size": 193582,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/zh/1080/changed-page-01.png",
+      "uncompressed_sha256": "b02ca69ea91630adeb4f97cb97fe54e4825e766d0cb109b1e2192cdbf22f52b7"
+    },
+    {
+      "file": "en-execution.json.gz",
+      "sha256": "1be6c74f8afbc5b1abc28ffb9890af895c0b0e9b961a20a5376737ae1f1f4b38",
+      "size": 661,
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/render-en/execution.json",
+      "uncompressed_sha256": "81a72bf8e85347ce652529342d8632a866feed747fb66c7843650b07a5440e29"
+    },
+    {
+      "file": "en-endpoints.log.gz",
+      "sha256": "eb1e7338cdfe6abe20ad9c15e9c57b79f22aedd425e9d4dbce4d39328d3b08ba",
+      "size": 65,
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/render-en/endpoints.log",
+      "uncompressed_sha256": "eb36fc99f3fe15217f25ee6136eb3f016e23778d50e1e18f4d0a111ab4621f7e"
+    },
+    {
+      "file": "en-motion.log.gz",
+      "sha256": "e9fdfd0175b2ee9ac1e1d40d3fbeb221b502f8adcea2d09285ed45e46fcd1b34",
+      "size": 71,
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/render-en/motion.log",
+      "uncompressed_sha256": "5f6e2d8b4246669ee6e91960bddd816f91f7f7690b470f4c2a967891d94eef45"
+    },
+    {
+      "file": "en-native1080.log.gz",
+      "sha256": "69b28f6187f507433ef65d09eee4f58d200fc79083287702043ca37ef228cfbb",
+      "size": 124,
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/render-en/native1080.log",
+      "uncompressed_sha256": "c37b7e367ce4ab248457c584ea86ad47fc2cbe29c77fe821c465825b8c4cadc8"
+    },
+    {
+      "file": "zh-execution.json.gz",
+      "sha256": "09ebe27c5aca5ab607fb4d59b35ec30284586da81490162a94c9b75790207b35",
+      "size": 660,
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/render-zh/execution.json",
+      "uncompressed_sha256": "dfb06c9acafac6fa4ab8e47e959409800b97caaf50c2da342e1ace9ce3f16718"
+    },
+    {
+      "file": "zh-endpoints.log.gz",
+      "sha256": "9ec87a59e448ab2779579057effc0a83246748ee6ac04036b07a51aea3eea755",
+      "size": 71,
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/render-zh/endpoints.log",
+      "uncompressed_sha256": "5af8815dc9232766d8ff63065eea53ec5c5130895021f91d78d07cd7228e307c"
+    },
+    {
+      "file": "zh-motion.log.gz",
+      "sha256": "a7f0ffe59cdcf1b469f9901865d7b991e7ee5069ea6479399d844919f41f719a",
+      "size": 65,
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/render-zh/motion.log",
+      "uncompressed_sha256": "8cedbfc62eaa87bd2444ff204b109a9bdd8f897c31b8ddb85a6bfa2545251467"
+    },
+    {
+      "file": "zh-native1080.log.gz",
+      "sha256": "5404833c3f72eb28a8500eb063c5a30085641993e40c0c553d2c735732f9da3e",
+      "size": 154,
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/render-zh/native1080.log",
+      "uncompressed_sha256": "03a05d9b88fd31cbdc2bf7574009b361b9a211ec11a2f355b30a5ecf49247abd"
+    },
+    {
+      "file": "table-8e4ed21282fc.json.gz",
+      "sha256": "9b5f949a1eef102f26f5267d29f81f9990990e8dee1ff0a7921bc1a82f4f4ee2",
+      "size": 871161,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/zh/1080/ai_text_zh.snapshot.json",
+      "uncompressed_sha256": "8e4ed21282fc336bebc5f6e7d1aea7e3c975d09da486c873913c84c98bf3cb0a"
+    },
+    {
+      "file": "scene-a5dbaa9950a3.py.gz",
+      "sha256": "5c3fa0b12ea79e2a1f1ae2f5ba872fbff9b909bc81db2c08be2a84dc1c07d2e9",
+      "size": 6159,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/zh/1080/s12_galore.py",
+      "uncompressed_sha256": "a5dbaa9950a3386c48974486571251dc85f851e7c2d0806223177feba80d4ed4"
+    },
+    {
+      "file": "local-zh-d177dd890369.py.gz",
+      "sha256": "cd5f7faa5d4c2982fb8640b493196b68efed09b5af9c5125f777833b940e7e4c",
+      "size": 25621,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/en/GaLore/zh_lines.snapshot.py",
+      "uncompressed_sha256": "d177dd890369a6855990b72f5d68aa0b0085379837cec794437023e04d2ffc99"
+    },
+    {
+      "file": "local-zh-ad8a17ed7edd.py.gz",
+      "sha256": "23bdfe0d8344d735dda5d3557088ecea0fe4788c15aef0d4d229557a8a1c3c7d",
+      "size": 25697,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/zh_lines.snapshot.py",
+      "uncompressed_sha256": "ad8a17ed7eddba7b8b8358186b39527f3f292434c8be6842bb63617efd930e36"
+    },
+    {
+      "file": "input-b7e645c68c7a-galore.json.gz",
+      "sha256": "2aac5ab59200a8438d4885725b32698476ee410e8f2222cc1b6874f8c67c07d7",
+      "size": 45382,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/inputs/.cache/ai3/galore.json",
+      "uncompressed_sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e"
+    },
+    {
+      "file": "input-79b65de05a22-galorectl.json.gz",
+      "sha256": "8fe93dc4cd65111fd7c4c40730b4ca62c76d9cc0cd3e427adb7136b3d74285cc",
+      "size": 7118,
+      "source": "/workspace/runtime/ai3-galore-feasibility-motion-evidence/zh/GaLore/inputs/.cache/ai3/galorectl.json",
+      "uncompressed_sha256": "79b65de05a229645bbac8497d8bf633aa02399a87a2d094497b4a984ed5af274"
+    },
+    {
+      "file": "en-before-after.png",
+      "sha256": "6cf1bea6e2b43b27d1404af20393ab26810038e8079cc2a4d9ea28cefef9fda4",
+      "size": 151844,
+      "source": "/workspace/runtime/ai3-galore-feasibility-native-before-after/en-before-after.png",
+      "uncompressed_sha256": "6cf1bea6e2b43b27d1404af20393ab26810038e8079cc2a4d9ea28cefef9fda4"
+    },
+    {
+      "file": "en-1080-before.png",
+      "sha256": "557df88668e8753d2080bfb434faf865d21cd81e5f4355bb7ad375b31c9b8d1f",
+      "size": 205237,
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/013_00099.6s.png",
+      "uncompressed_sha256": "557df88668e8753d2080bfb434faf865d21cd81e5f4355bb7ad375b31c9b8d1f"
+    },
+    {
+      "file": "en-1080-after.png",
+      "sha256": "d07ef3c1d463b7bdd04bdb16550d4651af85c2f27117d462d7d028c710479cda",
+      "size": 200015,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/en/1080/013_00099.5s.png",
+      "uncompressed_sha256": "d07ef3c1d463b7bdd04bdb16550d4651af85c2f27117d462d7d028c710479cda"
+    },
+    {
+      "file": "zh-before-after.png",
+      "sha256": "ef94ecf9d4c27df39551b622c4a1e56062e3beb2fe2a2ca031b09dea36760819",
+      "size": 149043,
+      "source": "/workspace/runtime/ai3-galore-feasibility-native-before-after/zh-before-after.png",
+      "uncompressed_sha256": "ef94ecf9d4c27df39551b622c4a1e56062e3beb2fe2a2ca031b09dea36760819"
+    },
+    {
+      "file": "zh-1080-before.png",
+      "sha256": "23b8b139aa75923f04f8caa9074beb92a7ade246821d80d0f1d1b1a8c15792f0",
+      "size": 205630,
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/013_00103.9s.png",
+      "uncompressed_sha256": "23b8b139aa75923f04f8caa9074beb92a7ade246821d80d0f1d1b1a8c15792f0"
+    },
+    {
+      "file": "zh-1080-after.png",
+      "sha256": "38d51cd85db60816c2437a45830f898abae1c80b41c88eeff2fe101966302c41",
+      "size": 206906,
+      "source": "/workspace/runtime/ai3-galore-feasibility-endpoints/zh/1080/013_00103.8s.png",
+      "uncompressed_sha256": "38d51cd85db60816c2437a45830f898abae1c80b41c88eeff2fe101966302c41"
+    },
+    {
+      "file": "README.md",
+      "sha256": "12ab629fb40f1b2a3f8aa9a1a980be3a336604d8d441e583ae03efa04651cb0a",
+      "size": 3266
+    }
+  ]
+}

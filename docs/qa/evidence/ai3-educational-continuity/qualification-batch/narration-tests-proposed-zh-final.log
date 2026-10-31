@@ -1,0 +1,16 @@
+test_actual_rate_and_reference_verdict_branches_translate (ai3_narration_tests.Part3NarrationTests.test_actual_rate_and_reference_verdict_branches_translate) ... ok
+test_all_chapter_helper_spoken_lines_translate (ai3_narration_tests.Part3NarrationTests.test_all_chapter_helper_spoken_lines_translate) ... ok
+test_all_narrated_templates_resolve_fields_and_preserve_bookmarks (ai3_narration_tests.Part3NarrationTests.test_all_narrated_templates_resolve_fields_and_preserve_bookmarks) ... ok
+test_empirical_spectra_and_gradient_qualifiers_are_retained (ai3_narration_tests.Part3NarrationTests.test_empirical_spectra_and_gradient_qualifiers_are_retained) ... ok
+test_jl_confidence_branches_preserve_unavailable_vs_failed_distinction (ai3_narration_tests.Part3NarrationTests.test_jl_confidence_branches_preserve_unavailable_vs_failed_distinction) ... ok
+test_mathematical_qualifiers_survive_head_translation (ai3_narration_tests.Part3NarrationTests.test_mathematical_qualifiers_survive_head_translation) ... ok
+test_nested_literal_suffixes_omitted_by_simple_scanner_translate (ai3_narration_tests.Part3NarrationTests.test_nested_literal_suffixes_omitted_by_simple_scanner_translate) ... ok
+test_new_dimensional_bookmark_and_layer_peak_are_not_lost (ai3_narration_tests.Part3NarrationTests.test_new_dimensional_bookmark_and_layer_peak_are_not_lost) ... ok
+test_numeric_penalty_suffix_translates_all_comparisons_recursively (ai3_narration_tests.Part3NarrationTests.test_numeric_penalty_suffix_translates_all_comparisons_recursively) ... ok
+test_retrieval_availability_helpers_translate_without_nan_verdicts (ai3_narration_tests.Part3NarrationTests.test_retrieval_availability_helpers_translate_without_nan_verdicts) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 7.551s
+
+OK
+EXISTING10NARRATIONTESTS_PASS_WITH_PRIVATE_PROPOSED_ZH_OVERLAY; changed3paragraphs qualified and bookmark-correct; no shared source/table mutation

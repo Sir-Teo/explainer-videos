@@ -1,0 +1,165 @@
+{
+  "created_utc": "2026-10-31T21:45:02.431312+00:00",
+  "payloads": [
+    {
+      "file": "report.json.gz",
+      "sha256": "adc1bf6c027152ab5ddadc89aeb77fe3c058fedc94a25d946d7774c50a6ac131",
+      "size": 9114,
+      "uncompressed_sha256": "b9d1dda4d138ffbbb3ae132690865ce89d583c35fdb061131e3965f0caf744be",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/report.json"
+    },
+    {
+      "file": "report.md.gz",
+      "sha256": "b70dd649872ceb242ce3707ff8fac3d73d843451a73860784cd656a7798e7a49",
+      "size": 5418,
+      "uncompressed_sha256": "09915fd1b24c3d852360df22f61ba26a9cfe62f2ab0af9b98a453fc1c621ea77",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/report.md"
+    },
+    {
+      "file": "validation.json.gz",
+      "sha256": "0bca6107ca4e8e63873f5168e7e4354e56d0ea05fd8bf35eb12f9ce83546438a",
+      "size": 321,
+      "uncompressed_sha256": "5303f194da25704719cbb29717c67d9835a885e91f171195ccdc190159fc48f3",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/validation.json"
+    },
+    {
+      "file": "reviewed-before-README.md.gz",
+      "sha256": "cd29688fe5f18e18bf8110918bc9be6f52300d64eca7e3b6fe64b7eac2bd9a78",
+      "size": 10178,
+      "uncompressed_sha256": "5a89fa372df57376e06e128f44c81c2fff63a8b440dcb3d8fb9bdaad87e7ab75",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/source-snapshot/README.md"
+    },
+    {
+      "file": "reviewed-before-s01_hook.py.gz",
+      "sha256": "3668b6e82a155e1bf93b3d8dcf6725605f05bc8c7a851b7abb80c74e2fa30d2e",
+      "size": 4810,
+      "uncompressed_sha256": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/source-snapshot/s01_hook.py"
+    },
+    {
+      "file": "reviewed-before-s07_power.py.gz",
+      "sha256": "691b392410ff37d1650967314965f907ef030adab0fa5411f324110f2c6e75f0",
+      "size": 4302,
+      "uncompressed_sha256": "f67974683fafc9378f5ada7ea210ce1db8c1d507b9b972efad7c03aa803755b4",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/source-snapshot/s07_power.py"
+    },
+    {
+      "file": "reviewed-before-s08_svd.py.gz",
+      "sha256": "fd580ef6aefb64265d668c5231b42ae0736ae0765a35b69fc4b4b14dcb14e7c3",
+      "size": 3926,
+      "uncompressed_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/source-snapshot/s08_svd.py"
+    },
+    {
+      "file": "reviewed-before-s09_lowrank.py.gz",
+      "sha256": "c9d466cf251ebbb8e0a6d67b1a0f07afde2fdec833fefc3cc2d95c9250847d17",
+      "size": 5698,
+      "uncompressed_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/source-snapshot/s09_lowrank.py"
+    },
+    {
+      "file": "reviewed-before-s11_spectra.py.gz",
+      "sha256": "ab71d311ce35aa70cc295491aea5045cb654a3a0b43ff42e07eb14f5c29d4e24",
+      "size": 4838,
+      "uncompressed_sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/source-snapshot/s11_spectra.py"
+    },
+    {
+      "file": "reviewed-before-s12_galore.py.gz",
+      "sha256": "6e3b747941a7f56a6a34ff3f2b3596213ad880e37072ec13d7c15cf6f2d3872f",
+      "size": 6117,
+      "uncompressed_sha256": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/source-snapshot/s12_galore.py"
+    },
+    {
+      "file": "reviewed-before-s13_words.py.gz",
+      "sha256": "1b5b2ae64443964b9b5d22595f97e41e7855a14bfef8cf76d109cf6a3fe0b5e3",
+      "size": 5624,
+      "uncompressed_sha256": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/source-snapshot/s13_words.py"
+    },
+    {
+      "file": "reviewed-before-s16_jl.py.gz",
+      "sha256": "f06cdbd1c4030d0c07c795bea0994c159ef7a94ec08ca999cd3ed4b43a6fbebe",
+      "size": 5946,
+      "uncompressed_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "source": "/workspace/runtime/ai3-history-primary-source-review/source-snapshot/s16_jl.py"
+    },
+    {
+      "file": "repair-handoff.json.gz",
+      "sha256": "182072114470fdcc666a558672fa72ff7604b1efcfe1895c701cbd27c5bfd1fd",
+      "size": 2241,
+      "uncompressed_sha256": "45b334f67a84f58d6486feba872dfcc0901626633ea20b2ddc17011ad0bb0cac",
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/handoff.json"
+    },
+    {
+      "file": "repair-checks.json.gz",
+      "sha256": "3a70f8106fd1aacb682acec4c4b768609745f480e4be6968bd54951c3d8ba8c7",
+      "size": 1883,
+      "uncompressed_sha256": "2cb12494a3acd21791af0f1e676be11ca16138d3f2d9097b2c2e15cbcc171027",
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/checks.json"
+    },
+    {
+      "file": "repair-captions-handoff.json.gz",
+      "sha256": "4ea0c7216b05111d3faa5fdaafc09377b9085d8d10a17962c6f0572e41c51e23",
+      "size": 350,
+      "uncompressed_sha256": "59a7210a639c49dadfb65f2f44707394624c861e70b363b7d330b0ca3e95c4fb",
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/captions-handoff.json"
+    },
+    {
+      "file": "repair-diff.patch.gz",
+      "sha256": "6d7967d4a487d2c3aac5bf84b1619f62fd93789887f9c53a420655cc5177d1ce",
+      "size": 2078,
+      "uncompressed_sha256": "4504547ab5ea1122ea95c5afe04f214f69b3ee4e23b684970f9d348d02bf33ea",
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/diff.patch"
+    },
+    {
+      "file": "repair-narration-tests.log.gz",
+      "sha256": "427cf5a127e3aa5d28ba547614b8c81611532458ff76e5fac7b44704812c71fe",
+      "size": 461,
+      "uncompressed_sha256": "1f8130ee736ac52d6e72dd5a8ce72d9312dd89bfe814c97d3c0bbcfff4a9927c",
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/narration-tests.log"
+    },
+    {
+      "file": "repair-check.py.gz",
+      "sha256": "44c1b53daf1d396dcbf2d1c3da39e4f791b50865e239da0f09d786a2e50b9817",
+      "size": 2099,
+      "uncompressed_sha256": "d2c8b0bcd454c1c9f81366bca88b5479a88919d422ae21f74582b4c88ed709e1",
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/check.py"
+    },
+    {
+      "file": "repair-s12_galore.py.before.gz",
+      "sha256": "6e3b747941a7f56a6a34ff3f2b3596213ad880e37072ec13d7c15cf6f2d3872f",
+      "size": 6117,
+      "uncompressed_sha256": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/s12_galore.py.before"
+    },
+    {
+      "file": "repair-s12_galore.py.after.gz",
+      "sha256": "5c3fa0b12ea79e2a1f1ae2f5ba872fbff9b909bc81db2c08be2a84dc1c07d2e9",
+      "size": 6159,
+      "uncompressed_sha256": "a5dbaa9950a3386c48974486571251dc85f851e7c2d0806223177feba80d4ed4",
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/s12_galore.py.after"
+    },
+    {
+      "file": "repair-zh_lines.py.before.gz",
+      "sha256": "8fd99d5978b76022a9f15a07dff5b019db2b1fd6cf0d7277d0599d99253770f6",
+      "size": 25580,
+      "uncompressed_sha256": "5305426a579e3d0d3863b92917baeb18b3402b12d93fd8389c9161101f7c82fc",
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/zh_lines.py.before"
+    },
+    {
+      "file": "repair-zh_lines.py.after.gz",
+      "sha256": "cd5f7faa5d4c2982fb8640b493196b68efed09b5af9c5125f777833b940e7e4c",
+      "size": 25621,
+      "uncompressed_sha256": "d177dd890369a6855990b72f5d68aa0b0085379837cec794437023e04d2ffc99",
+      "source": "/workspace/runtime/ai3-galore-24gb-feasibility-repair/zh_lines.py.after"
+    },
+    {
+      "file": "README.md",
+      "sha256": "17adaffe6eff42ba66fceb63a6f10a0c1e9c43621c113d8307fbfe0e90880f3a",
+      "size": 2812
+    }
+  ],
+  "excluded": "Full external copyrighted PDFs and full extracted texts; raw movie files; unrelated source edits."
+}

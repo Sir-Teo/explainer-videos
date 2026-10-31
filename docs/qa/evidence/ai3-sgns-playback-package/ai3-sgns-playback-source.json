@@ -1,0 +1,19 @@
+{
+  "file": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-SGNS-EN-Silent-480p.mp4",
+  "sha256": "9bcf4449c40f09728464d0952abb20daf0ab1926306febf55dfa83b195dfaf22",
+  "bytes": 2058940,
+  "source_file": "videos/ai/ai3/s14_sgns.py",
+  "source_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673",
+  "render_record_sha256": "30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b",
+  "render_fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+  "runtime_status": "passed",
+  "warnings": [],
+  "seconds": 214.3333333333318,
+  "resolution": [
+    854,
+    480
+  ],
+  "fps_nominal": 15,
+  "language": "English",
+  "scope": "Final replay repair;437selectedtimes covered via actual changed frames and exact baseline PNG inheritance. Silent preview only; native UI playback, continuous perception, audio/listening pending."
+}

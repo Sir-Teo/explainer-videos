@@ -1,0 +1,11 @@
+test_available_cohorts_keep_both_curves_and_truthful_comparisons (test_ai3_retrieval_scene.RetrievalSceneTests.test_available_cohorts_keep_both_curves_and_truthful_comparisons) ... ok
+test_empty_cohorts_have_no_curves_baselines_or_loss_verdict (test_ai3_retrieval_scene.RetrievalSceneTests.test_empty_cohorts_have_no_curves_baselines_or_loss_verdict) ... ok
+test_finite_model_without_baseline_has_no_comparison (test_ai3_retrieval_scene.RetrievalSceneTests.test_finite_model_without_baseline_has_no_comparison) ... ok
+test_nonfinite_model_omits_curve_but_keeps_finite_baseline (test_ai3_retrieval_scene.RetrievalSceneTests.test_nonfinite_model_omits_curve_but_keeps_finite_baseline) ... ok
+test_only_eligible_warm_cohort_is_plotted_and_compared (test_ai3_retrieval_scene.RetrievalSceneTests.test_only_eligible_warm_cohort_is_plotted_and_compared) ... ok
+test_zero_counts_override_finite_stale_measurements (test_ai3_retrieval_scene.RetrievalSceneTests.test_zero_counts_override_finite_stale_measurements) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.069s
+
+OK

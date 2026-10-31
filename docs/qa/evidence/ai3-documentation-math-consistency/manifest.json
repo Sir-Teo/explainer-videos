@@ -1,0 +1,73 @@
+{
+  "created_utc": "2026-10-31T21:30:24.430309+00:00",
+  "payloads": [
+    {
+      "file": "report.json.gz",
+      "sha256": "9d9b2092b2a3ebb5389839f3afe37abbc4e48d87a83e974392fe13007b675ad0",
+      "size": 6834,
+      "uncompressed_sha256": "c1eba0f13c97ed049c513fb2d9c9a3df8567ba66bcaedf7dfcba6871c1c515ac",
+      "source": "/workspace/runtime/ai3-documentation-math-consistency/report.json"
+    },
+    {
+      "file": "report.md.gz",
+      "sha256": "5d5b4ca6f732fd08bf5c3a73e85036d031e63ba3b46f49b78eb6454046aba737",
+      "size": 1980,
+      "uncompressed_sha256": "d7b91dbc24280c5fabf83adf36562f7aaaa46134548bc7a42d22e978cd633f3f",
+      "source": "/workspace/runtime/ai3-documentation-math-consistency/report.md"
+    },
+    {
+      "file": "review.py.gz",
+      "sha256": "007052be17aeaf10486c26141cad93c1111eb02974c4941a31af033e98f428d8",
+      "size": 4360,
+      "uncompressed_sha256": "0aff921bb4fea64f3258f44eeae36f6874cda3c31902ea12d9ca8e442beb7daa",
+      "source": "/workspace/runtime/ai3-documentation-math-consistency/review.py"
+    },
+    {
+      "file": "README.snapshot.md.gz",
+      "sha256": "d8255f44288e986b6d409dc440f440c22f012669547a9574f6c2dbcde0aafbd5",
+      "size": 10064,
+      "uncompressed_sha256": "5bcf96a46406ebd9a65fc143817c87097aaf663da2486ff26dbcd63ba14222fe",
+      "source": "/workspace/runtime/ai3-documentation-math-consistency/README.snapshot.md"
+    },
+    {
+      "file": "README.after.md.gz",
+      "sha256": "cd29688fe5f18e18bf8110918bc9be6f52300d64eca7e3b6fe64b7eac2bd9a78",
+      "size": 10178,
+      "uncompressed_sha256": "5a89fa372df57376e06e128f44c81c2fff63a8b440dcb3d8fb9bdaad87e7ab75",
+      "source": "/workspace/runtime/ai3-documentation-math-consistency/README.after.md"
+    },
+    {
+      "file": "README.patch.gz",
+      "sha256": "fbfcde4236b576869b9d97b700e7361396465e1f36552e7d85b1d50df6124f28",
+      "size": 3007,
+      "uncompressed_sha256": "61c40867355290280a69bfdcf46898df87514c9c89129b019ee5614bcb75ffc6",
+      "source": "/workspace/runtime/ai3-documentation-math-consistency/README.patch"
+    },
+    {
+      "file": "validate_repair.py.gz",
+      "sha256": "999c7af98ad6bb0adaaaf7a6d711753aa778614565d1033b3fec541c766355c5",
+      "size": 1641,
+      "uncompressed_sha256": "4d5931fa87955ffd705c6f88a3ddd0a4ac1d710dc3f2830256cb2e177fda557d",
+      "source": "/workspace/runtime/ai3-documentation-math-consistency/validate_repair.py"
+    },
+    {
+      "file": "repair-validation.json.gz",
+      "sha256": "67e8b209856862f65eedbcb987dd2ee278f07e129efd82b521e748b015362fd1",
+      "size": 731,
+      "uncompressed_sha256": "d6ade83b565434dda2492bb1ad5c5a54e5081818c73029222bbd482ca25efcd3",
+      "source": "/workspace/runtime/ai3-documentation-math-consistency/repair-validation.json"
+    },
+    {
+      "file": "repair-validation.log.gz",
+      "sha256": "67e8b209856862f65eedbcb987dd2ee278f07e129efd82b521e748b015362fd1",
+      "size": 731,
+      "uncompressed_sha256": "d6ade83b565434dda2492bb1ad5c5a54e5081818c73029222bbd482ca25efcd3",
+      "source": "/workspace/runtime/ai3-documentation-math-consistency/repair-validation.log"
+    },
+    {
+      "file": "README.md",
+      "sha256": "3f5a1748348db8b68b4b7dac2d6fc9f0fc37656e61f91026a6c809408fbae16c",
+      "size": 1281
+    }
+  ]
+}

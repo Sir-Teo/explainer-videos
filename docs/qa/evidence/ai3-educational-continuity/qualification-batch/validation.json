@@ -1,0 +1,101 @@
+{
+  "status": "source frozen; Chinese shared merge delegated to parent",
+  "created_utc": "2026-10-31T21:47:09.809887+00:00",
+  "allowed_changes_only": [
+    {
+      "file": "videos/ai/ai3/s01_hook.py",
+      "before_sha256": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+      "after_sha256": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86",
+      "whole_module_ast_difference": "one intended voiceover argument only",
+      "bookmarks": [
+        "<bookmark mark='a'/>"
+      ]
+    },
+    {
+      "file": "videos/ai/ai3/s13_words.py",
+      "before_sha256": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+      "after_sha256": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d",
+      "whole_module_ast_difference": "one intended voiceover argument only",
+      "bookmarks": [
+        "<bookmark mark='a'/>",
+        "<bookmark mark='b'/>",
+        "<bookmark mark='c'/>"
+      ]
+    },
+    {
+      "file": "videos/ai/ai3/s18_netflix.py",
+      "before_sha256": "a6709b228262080e408cfc559edc473696b57cef516defa3316f514b5b1ad21c",
+      "after_sha256": "893ab4f1d48fa93876cd88c01b887a906aedc6e5fc19a70d54d6a56029e93a67",
+      "whole_module_ast_difference": "one intended voiceover argument only",
+      "bookmarks": [
+        "<bookmark mark='a'/>",
+        "<bookmark mark='b'/>",
+        "<bookmark mark='c'/>",
+        "<bookmark mark='d'/>"
+      ]
+    }
+  ],
+  "tests": {
+    "existing_narration_suite": {
+      "count": 10,
+      "passed": 10,
+      "mode": "private in-process proposed Chinese table overlay; repository zh_lines.py not modified by reviewer",
+      "log": "/workspace/runtime/ai3-continuity-review/qualification-batch/narration-tests-proposed-zh-final.log"
+    },
+    "actual_changed_paragraph_fixtures": {
+      "count": 3,
+      "passed": 3,
+      "numbers": "non-measured translation fixtures, not production results",
+      "file": "/workspace/runtime/ai3-continuity-review/qualification-batch/actual-changed-paragraph-translation-fixtures.json"
+    },
+    "syntax_ast": "all three parse",
+    "whitespace": "git diff --check clean"
+  },
+  "audio_render_limit": "No fresh rendered/listened/timing approval for new utterances. Prior Netflix proof remains evidence for its exact old a670 source.",
+  "runtime_evidence": {
+    "actual-changed-paragraph-translation-fixtures.json": {
+      "sha256": "7831581419312fc92ab0e154b1b4554f2a196aad4f80eaa6084d8c19e2a4c9c2",
+      "bytes": 3616
+    },
+    "before.json": {
+      "sha256": "2c6e7c46026e0eac58126941a0de4eb968e189f5d32a353eb7539e0cc34fb039",
+      "bytes": 283
+    },
+    "check_and_handoff.py": {
+      "sha256": "068e182dcbe149698d9074b7ee8c448bbbe58722edc0558113d5b834b7038ba5",
+      "bytes": 4375
+    },
+    "narration-handoff.json": {
+      "sha256": "4a04b910b632143f2a9892012c2d56714153ef83571089dfe581f24421ccf1f7",
+      "bytes": 8790
+    },
+    "narration-tests-proposed-zh-final.log": {
+      "sha256": "7751a6e34873b3784009e383cabfb4a99259ca73912d3f5bbf2a0301fbd44d5c",
+      "bytes": 1962
+    },
+    "narration-tests-proposed-zh.log": {
+      "sha256": "553b23c049dc6ea4c1440a20d79ca9e0ffea5c7810c6abce2dc397952ae95ae7",
+      "bytes": 1962
+    },
+    "run_narration_checks.py": {
+      "sha256": "2d805e4e5e1a315dfbc7311f2ed7131b0be580c6728b7c5bdfc11f304300929a",
+      "bytes": 2248
+    },
+    "s01_hook.py.before": {
+      "sha256": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+      "bytes": 13840
+    },
+    "s13_words.py.before": {
+      "sha256": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+      "bytes": 17048
+    },
+    "s18_netflix.py.before": {
+      "sha256": "a6709b228262080e408cfc559edc473696b57cef516defa3316f514b5b1ad21c",
+      "bytes": 28092
+    },
+    "source.patch": {
+      "sha256": "610b7b50dcdd27a9a63a379cfbf9c6feec31b59210900f5922976bd00f66255c",
+      "bytes": 3467
+    }
+  }
+}

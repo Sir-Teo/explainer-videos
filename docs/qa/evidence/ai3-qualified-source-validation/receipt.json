@@ -1,0 +1,21 @@
+{
+  "observed_utc": "2026-10-31T21:52:52.414762+00:00",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 nice -n10 python -m unittest discover -s tests -v",
+  "exit_code": 0,
+  "tests": 238,
+  "seconds": 27.692,
+  "uncompressed_log_sha256": "7bd80cdf461ac210b9dfa1eeaf776e9240696dc4d3a72b74c23cd07622267d83",
+  "source_bytes_at_checkpoint": {
+    "videos/ai/ai3/s01_hook.py": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86",
+    "videos/ai/ai3/s07_power.py": "f67974683fafc9378f5ada7ea210ce1db8c1d507b9b972efad7c03aa803755b4",
+    "videos/ai/ai3/s12_galore.py": "a5dbaa9950a3386c48974486571251dc85f851e7c2d0806223177feba80d4ed4",
+    "videos/ai/ai3/s13_words.py": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d",
+    "videos/ai/ai3/s18_netflix.py": "893ab4f1d48fa93876cd88c01b887a906aedc6e5fc19a70d54d6a56029e93a67",
+    "videos/ai/ai3/s19_outro.py": "4e1d29200637256128acf72ecffd0f02caaf6733a4222808dd0b32bf82981ed7",
+    "videos/ai/ai3/zh_lines.py": "ad8a17ed7eddba7b8b8358186b39527f3f292434c8be6842bb63617efd930e36",
+    "videos/ai/ai3/README.md": "5a89fa372df57376e06e128f44c81c2fff63a8b440dcb3d8fb9bdaad87e7ab75",
+    "videos/ai/ai_text_zh.json": "8e4ed21282fc336bebc5f6e7d1aea7e3c975d09da486c873913c84c98bf3cb0a",
+    "videos/ai/SYLLABUS.md": "9585a01efd06ad2847a357a091d848d0c8ed36e0bca4a36a119f61b3b8531ee1"
+  },
+  "scope": "All current source qualifications and merged translations. Fresh Hook/Words/Netflix movie timing/visual regressions still pending. No actual narration/listening/continuous perception or full1080motion approval."
+}

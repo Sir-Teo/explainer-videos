@@ -1,0 +1,1348 @@
+{
+  "packaged_utc": "2026-10-31T21:24:55.853765+00:00",
+  "scope": "Six cached-only native1920x1080 silent skipped-animation endpoint captures and actual direct native review",
+  "repository_head_at_packaging": "a7e5ef3ba7bbd8096eb711e7ffeced6d89f1a2cd",
+  "payloads": [
+    {
+      "file": "report.json.gz",
+      "sha256": "8fd7b0655d2a2bbf167040218258f8a8bdec780f06e2fc83d4dcc46e5781bb37",
+      "bytes": 2508,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/report.json",
+      "source_sha256": "e2aedc733332ae832e8599f5002c6f1b401674abd1d06b0c5007d6e769a0ff84",
+      "uncompressed_sha256": "e2aedc733332ae832e8599f5002c6f1b401674abd1d06b0c5007d6e769a0ff84"
+    },
+    {
+      "file": "pre-capture-sources.json.gz",
+      "sha256": "e8b11910051d6a97401fe2ecf66c9e3e850d3f62779c2bf1dcc22310fe42acb2",
+      "bytes": 558,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/pre-capture-sources.json",
+      "source_sha256": "93ad72f115c7d23d3dec84e12f0e8f87f2e7cb73c4d3a2228198dc311c1d9d1d",
+      "uncompressed_sha256": "93ad72f115c7d23d3dec84e12f0e8f87f2e7cb73c4d3a2228198dc311c1d9d1d"
+    },
+    {
+      "file": "projection-source-before-completion.json.gz",
+      "sha256": "db6daabe8468048f0725260f9d8649613a36657862b71d2932a7f7a015720c9b",
+      "bytes": 207,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/projection-source-before-completion.json",
+      "source_sha256": "b46c1e14d0b66c063f71ffa2e58be076b9602a7a4e701c0eadff0bfd7fea4df2",
+      "uncompressed_sha256": "b46c1e14d0b66c063f71ffa2e58be076b9602a7a4e701c0eadff0bfd7fea4df2"
+    },
+    {
+      "file": "before-ai_text_zh.json.gz",
+      "sha256": "fe601a2202b722d891e9fbf91ad02def4a7532819b290085fbd32f01bc10ce1b",
+      "bytes": 871020,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/before-ai_text_zh.json",
+      "source_sha256": "075af7895f39456b287f7e8a6e7dbc4e2c36798e72d4adb2aafe6858251e1d3a",
+      "uncompressed_sha256": "075af7895f39456b287f7e8a6e7dbc4e2c36798e72d4adb2aafe6858251e1d3a"
+    },
+    {
+      "file": "before-qa_production_endpoint.py.gz",
+      "sha256": "9d2a7580006b54755cfd70f99ac5cf6dc0d91e8f32d5c81e82038026712e6f23",
+      "bytes": 947,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/before-qa_production_endpoint.py",
+      "source_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+      "uncompressed_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d"
+    },
+    {
+      "file": "before-s05_projection.py.gz",
+      "sha256": "b7673af37487385784a7715ee60636e905392f69f14f7b2d837a68cb65915dab",
+      "bytes": 5565,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/before-s05_projection.py",
+      "source_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "uncompressed_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae"
+    },
+    {
+      "file": "before-s15_highdim.py.gz",
+      "sha256": "d34fbdb5c567315ff7c5f01c2acf7b33849f2b1b0ddc13006cf48579cba0b9c4",
+      "bytes": 4399,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/before-s15_highdim.py",
+      "source_sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "uncompressed_sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55"
+    },
+    {
+      "file": "before-s16_jl.py.gz",
+      "sha256": "f06cdbd1c4030d0c07c795bea0994c159ef7a94ec08ca999cd3ed4b43a6fbebe",
+      "bytes": 5946,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/before-s16_jl.py",
+      "source_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "uncompressed_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5"
+    },
+    {
+      "file": "before-zh_lines.py.gz",
+      "sha256": "8fd99d5978b76022a9f15a07dff5b019db2b1fd6cf0d7277d0599d99253770f6",
+      "bytes": 25580,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/before-zh_lines.py",
+      "source_sha256": "5305426a579e3d0d3863b92917baeb18b3402b12d93fd8389c9161101f7c82fc",
+      "uncompressed_sha256": "5305426a579e3d0d3863b92917baeb18b3402b12d93fd8389c9161101f7c82fc"
+    },
+    {
+      "file": "record-review.py.gz",
+      "sha256": "8ff6eddbd57b18cbb36e96b2407395315b1a13c6ff7667622eb34214d4f0f51e",
+      "bytes": 1559,
+      "source": "/workspace/runtime/record-ai3-theory-1080-review.py",
+      "source_sha256": "0fba2a018196fb496b3c84ce24de2793ef144a8ce6b233465455f6f13b28b046",
+      "uncompressed_sha256": "0fba2a018196fb496b3c84ce24de2793ef144a8ce6b233465455f6f13b28b046"
+    },
+    {
+      "file": "package-evidence.py.gz",
+      "sha256": "7f0a393747a2595c591d5a751581549e65660b872eb79210660f17bdb83d6f6f",
+      "bytes": 1098,
+      "source": "/workspace/runtime/package-ai3-theory-1080.py",
+      "source_sha256": "b23ecd2eb9e12a504299e9178c93a1b58a8454ca4d1692907939cc8c06c866d1",
+      "uncompressed_sha256": "b23ecd2eb9e12a504299e9178c93a1b58a8454ca4d1692907939cc8c06c866d1"
+    },
+    {
+      "file": "qa_series.py.gz",
+      "sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf",
+      "bytes": 7934,
+      "source": "/workspace/explainer-videos/tools/qa_series.py",
+      "source_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "uncompressed_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+    },
+    {
+      "file": "manim.cfg.gz",
+      "sha256": "79f2d5bcc6a02a4cc297586601b992ea0a3d43faae071a55dea62db179797a31",
+      "bytes": 247,
+      "source": "/workspace/explainer-videos/manim.cfg",
+      "source_sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+      "uncompressed_sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e"
+    },
+    {
+      "file": "critical-crops.json.gz",
+      "sha256": "82dbd9389837821f831f6d83c120314d224ce2d2cf8dbcb0c700467adfda2e9c",
+      "bytes": 848,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/critical-crops.json",
+      "source_sha256": "4e48fb45697749076c4cae4030e167aec125216ac9e6941a088c6a9d64144958",
+      "uncompressed_sha256": "4e48fb45697749076c4cae4030e167aec125216ac9e6941a088c6a9d64144958"
+    },
+    {
+      "file": "en-HighDim-d100-crop.png",
+      "sha256": "9a6debe34fd28cf84252f3ef61f2c7b0163cd765b20ab016318484cd29260599",
+      "bytes": 5523,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/en-HighDim-d100-crop.png",
+      "source_sha256": "9a6debe34fd28cf84252f3ef61f2c7b0163cd765b20ab016318484cd29260599"
+    },
+    {
+      "file": "en-JL-996-readout.png",
+      "sha256": "00dc331c084c495fadeb5e101abaa2bd1fd484ed7226c3fd0f44330b39ee5216",
+      "bytes": 17206,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/en-JL-996-readout.png",
+      "source_sha256": "00dc331c084c495fadeb5e101abaa2bd1fd484ed7226c3fd0f44330b39ee5216"
+    },
+    {
+      "file": "en-JL-history-caption-margin.png",
+      "sha256": "e293b0481ce79d672da3e2b0f363e65ad881bd91f3b4d730dd66b9fe224dee6d",
+      "bytes": 35591,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/en-JL-history-caption-margin.png",
+      "source_sha256": "e293b0481ce79d672da3e2b0f363e65ad881bd91f3b4d730dd66b9fe224dee6d"
+    },
+    {
+      "file": "en-Projection-legends-caption.png",
+      "sha256": "543fcead3aba14d0895c9188f1808bfd37efb69dcf0317523bc5ac1a4ad18eb0",
+      "bytes": 50227,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/en-Projection-legends-caption.png",
+      "source_sha256": "543fcead3aba14d0895c9188f1808bfd37efb69dcf0317523bc5ac1a4ad18eb0"
+    },
+    {
+      "file": "zh-JL-996-readout.png",
+      "sha256": "6cb76950946cf02c1d4cd85fe442ebfa634e3d1fe50b3da1e03a6ad520985d02",
+      "bytes": 19961,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/zh-JL-996-readout.png",
+      "source_sha256": "6cb76950946cf02c1d4cd85fe442ebfa634e3d1fe50b3da1e03a6ad520985d02"
+    },
+    {
+      "file": "zh-JL-history-caption-margin.png",
+      "sha256": "82822648bd7d2e2f56ea51cd43494bdb49a0d14f35c940e22657f4d2b70a7c00",
+      "bytes": 34279,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/zh-JL-history-caption-margin.png",
+      "source_sha256": "82822648bd7d2e2f56ea51cd43494bdb49a0d14f35c940e22657f4d2b70a7c00"
+    },
+    {
+      "file": "zh-Projection-legends-caption.png",
+      "sha256": "8c9127966d4ef5f6599058791cde4dbafe460406621440b94e5946336679283b",
+      "bytes": 55368,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/zh-Projection-legends-caption.png",
+      "source_sha256": "8c9127966d4ef5f6599058791cde4dbafe460406621440b94e5946336679283b"
+    },
+    {
+      "file": "en-Projection-review.json.gz",
+      "sha256": "59ae20e779eb4c37ddcff6ef212cf46f9957f9921a6587ea85380ee8a3611716",
+      "bytes": 2621,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/en-Projection/review.json",
+      "source_sha256": "8d4bb613d3bbbc8fef3fedd25ef278acb6f16ee1e1404c70282b1505607fc01a",
+      "uncompressed_sha256": "8d4bb613d3bbbc8fef3fedd25ef278acb6f16ee1e1404c70282b1505607fc01a"
+    },
+    {
+      "file": "en-Projection-capture.json.gz",
+      "sha256": "54d3b1206a788bd56ba780c0a04b423e46e6ec840d0b08c95ae42fb63d0ca45a",
+      "bytes": 14749,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/en-Projection/render-result.json",
+      "source_sha256": "dc9667d1c81169c4db3f23a4326574de1825e62826a2c48fe140f5570ddba3fe",
+      "uncompressed_sha256": "dc9667d1c81169c4db3f23a4326574de1825e62826a2c48fe140f5570ddba3fe"
+    },
+    {
+      "file": "en-Projection-capture.log.gz",
+      "sha256": "59fec04d838468e69c315fe06887b80293f8345c05f7aa9695e405b421ac7f73",
+      "bytes": 126,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-en-Projection.log",
+      "source_sha256": "ab5def38981ddf31a5472aaa4f8befa7adaf34cb9c4bda5f6b7eefbc15c07b7d",
+      "uncompressed_sha256": "ab5def38981ddf31a5472aaa4f8befa7adaf34cb9c4bda5f6b7eefbc15c07b7d"
+    },
+    {
+      "file": "en-Projection-000_00001.0s.png",
+      "sha256": "f9ab87997ba657de8cb874bb4375291bffaa875ee1ab55a0bed952541297f25c",
+      "bytes": 70022,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/000_00001.0s.png",
+      "source_sha256": "f9ab87997ba657de8cb874bb4375291bffaa875ee1ab55a0bed952541297f25c"
+    },
+    {
+      "file": "en-Projection-001_00005.9s.png",
+      "sha256": "99b58b09ba8f82f5cb94cc5052614ccfd8b016f2f25944496e607c7b2a7a9ea8",
+      "bytes": 22857,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/001_00005.9s.png",
+      "source_sha256": "99b58b09ba8f82f5cb94cc5052614ccfd8b016f2f25944496e607c7b2a7a9ea8"
+    },
+    {
+      "file": "en-Projection-002_00011.2s.png",
+      "sha256": "ba0564b5c391ee166ad01f70a072baa44e89e24a0739399984a6c25f8e82bc7f",
+      "bytes": 34339,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/002_00011.2s.png",
+      "source_sha256": "ba0564b5c391ee166ad01f70a072baa44e89e24a0739399984a6c25f8e82bc7f"
+    },
+    {
+      "file": "en-Projection-003_00021.2s.png",
+      "sha256": "b4dbc9f15f28411b33adada53edc26f22874aa8eaa90f1514c3546f74655cdc6",
+      "bytes": 75955,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/003_00021.2s.png",
+      "source_sha256": "b4dbc9f15f28411b33adada53edc26f22874aa8eaa90f1514c3546f74655cdc6"
+    },
+    {
+      "file": "en-Projection-004_00030.2s.png",
+      "sha256": "97a6ea55c690a00dc36e0c8cb6d46c986bf96fd443e687129a622213a01a7b52",
+      "bytes": 99715,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/004_00030.2s.png",
+      "source_sha256": "97a6ea55c690a00dc36e0c8cb6d46c986bf96fd443e687129a622213a01a7b52"
+    },
+    {
+      "file": "en-Projection-005_00038.9s.png",
+      "sha256": "d5b20dc2aadb7cc219b586609498ed8a03bd8d67980dade1666444b06bb7b392",
+      "bytes": 52501,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/005_00038.9s.png",
+      "source_sha256": "d5b20dc2aadb7cc219b586609498ed8a03bd8d67980dade1666444b06bb7b392"
+    },
+    {
+      "file": "en-Projection-006_00048.0s.png",
+      "sha256": "bff57732812dbd930a8ad973286d84740762a9c84c9cf69c7af7468faa49417e",
+      "bytes": 81320,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/006_00048.0s.png",
+      "source_sha256": "bff57732812dbd930a8ad973286d84740762a9c84c9cf69c7af7468faa49417e"
+    },
+    {
+      "file": "en-Projection-007_00062.4s.png",
+      "sha256": "2d993b43aeb5d991d3720d156e9b6ee7312a314fe6cfc7e444e3ae54eebe5d9a",
+      "bytes": 125428,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/007_00062.4s.png",
+      "source_sha256": "2d993b43aeb5d991d3720d156e9b6ee7312a314fe6cfc7e444e3ae54eebe5d9a"
+    },
+    {
+      "file": "en-Projection-008_00066.6s.png",
+      "sha256": "fbf7a847df6df5a89dff6b14d6dc867250cd7ead66a7d6dac3d984e62c468ed0",
+      "bytes": 143473,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/008_00066.6s.png",
+      "source_sha256": "fbf7a847df6df5a89dff6b14d6dc867250cd7ead66a7d6dac3d984e62c468ed0"
+    },
+    {
+      "file": "en-Projection-009_00069.1s.png",
+      "sha256": "9ea7a545f5e7b4f2455b74cd9e3933b211d9d84e788de5caf6893fa17ebbfdda",
+      "bytes": 187406,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/009_00069.1s.png",
+      "source_sha256": "9ea7a545f5e7b4f2455b74cd9e3933b211d9d84e788de5caf6893fa17ebbfdda"
+    },
+    {
+      "file": "en-Projection-010_00080.5s.png",
+      "sha256": "7a1ce2246eef398c38782dd4d01dfe0b1ec82492cb1d37da7b45922408316c40",
+      "bytes": 23554,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/010_00080.5s.png",
+      "source_sha256": "7a1ce2246eef398c38782dd4d01dfe0b1ec82492cb1d37da7b45922408316c40"
+    },
+    {
+      "file": "en-Projection-011_00084.4s.png",
+      "sha256": "258495abfdfdfdfaa0d1897932a9c9cc0b5cb73e8498c23f4fdcc5054a97d518",
+      "bytes": 46100,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/011_00084.4s.png",
+      "source_sha256": "258495abfdfdfdfaa0d1897932a9c9cc0b5cb73e8498c23f4fdcc5054a97d518"
+    },
+    {
+      "file": "en-Projection-012_00096.4s.png",
+      "sha256": "ba07dd8c529439b2728636ef2e557ed592dbcc04a7e49ff8e50d7d9f34277406",
+      "bytes": 80542,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/012_00096.4s.png",
+      "source_sha256": "ba07dd8c529439b2728636ef2e557ed592dbcc04a7e49ff8e50d7d9f34277406"
+    },
+    {
+      "file": "en-Projection-013_00112.2s.png",
+      "sha256": "e720c6ffa8eb8d796b98717aa37a1eaeb69a0b6c0ade579d7b8cf2a456bb3277",
+      "bytes": 26800,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/013_00112.2s.png",
+      "source_sha256": "e720c6ffa8eb8d796b98717aa37a1eaeb69a0b6c0ade579d7b8cf2a456bb3277"
+    },
+    {
+      "file": "en-Projection-014_00122.5s.png",
+      "sha256": "d4f9e4c249810c58ac7636ceb3628eedb875af3dce7a619bb9b6996c8fc8f806",
+      "bytes": 37819,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/014_00122.5s.png",
+      "source_sha256": "d4f9e4c249810c58ac7636ceb3628eedb875af3dce7a619bb9b6996c8fc8f806"
+    },
+    {
+      "file": "en-Projection-015_00139.4s.png",
+      "sha256": "644338dddef5db6ba3c2f2e3150402f1beb083fcec86ad921a031ffc8d7c03fc",
+      "bytes": 112769,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/015_00139.4s.png",
+      "source_sha256": "644338dddef5db6ba3c2f2e3150402f1beb083fcec86ad921a031ffc8d7c03fc"
+    },
+    {
+      "file": "en-Projection-016_00142.2s.png",
+      "sha256": "73bf18a4a42326bbc49d011948eb1931a6b607513337c2ffcc9702fe7c582ad9",
+      "bytes": 113453,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/016_00142.2s.png",
+      "source_sha256": "73bf18a4a42326bbc49d011948eb1931a6b607513337c2ffcc9702fe7c582ad9"
+    },
+    {
+      "file": "en-Projection-017_00151.6s.png",
+      "sha256": "cb20e7e3ec139afc514b79cd9e005f82f17aa60fee1240d96cfbd062a2d1e4ba",
+      "bytes": 131870,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/017_00151.6s.png",
+      "source_sha256": "cb20e7e3ec139afc514b79cd9e005f82f17aa60fee1240d96cfbd062a2d1e4ba"
+    },
+    {
+      "file": "en-Projection-018_00168.6s.png",
+      "sha256": "d8e32db848e8a9407e868e881fa1051cae9cdd4d2ba352a28fd9081663d5aa5d",
+      "bytes": 149523,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/018_00168.6s.png",
+      "source_sha256": "d8e32db848e8a9407e868e881fa1051cae9cdd4d2ba352a28fd9081663d5aa5d"
+    },
+    {
+      "file": "en-Projection-019_00174.7s.png",
+      "sha256": "f3d52d92fab6251f684ea642fe651bfd009b987d719a59f96a7a713df46d1030",
+      "bytes": 164132,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/019_00174.7s.png",
+      "source_sha256": "f3d52d92fab6251f684ea642fe651bfd009b987d719a59f96a7a713df46d1030"
+    },
+    {
+      "file": "en-Projection-020_00182.2s.png",
+      "sha256": "eb6590e6cddeb738b23d70e9b8c3fdaeea2df06ad648b33c28faea397fdefc32",
+      "bytes": 196302,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/Projection/020_00182.2s.png",
+      "source_sha256": "eb6590e6cddeb738b23d70e9b8c3fdaeea2df06ad648b33c28faea397fdefc32"
+    },
+    {
+      "file": "en-HighDim-review.json.gz",
+      "sha256": "a641a763d6bfe5eded0b1638d12eeaa85a8c13876d3e854fa12de08cd4230b65",
+      "bytes": 2333,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/en-HighDim/review.json",
+      "source_sha256": "ad78852e494d5fb0633d539d26e9cafc650109ab52017870d5f5e5486b93e53e",
+      "uncompressed_sha256": "ad78852e494d5fb0633d539d26e9cafc650109ab52017870d5f5e5486b93e53e"
+    },
+    {
+      "file": "en-HighDim-capture.json.gz",
+      "sha256": "325c21a2dff54d595c831936c98584d6bab312fe241896cd677e249e9d296e01",
+      "bytes": 10670,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/en-HighDim/render-result.json",
+      "source_sha256": "cb1afdb9e1c482df47867a90e1b4ecfe66e27e4fa48e1ed7542f9b2fcb394f94",
+      "uncompressed_sha256": "cb1afdb9e1c482df47867a90e1b4ecfe66e27e4fa48e1ed7542f9b2fcb394f94"
+    },
+    {
+      "file": "en-HighDim-capture.log.gz",
+      "sha256": "8f1c2c3e155ea3b74aa11ba5cbd20b32dd986eb7de19096f510a80b6d0df093c",
+      "bytes": 125,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-en-HighDim.log",
+      "source_sha256": "0c47d9e73e3d5934e22fd5c6ce78956b68d65323ed863898892c962eb9004357",
+      "uncompressed_sha256": "0c47d9e73e3d5934e22fd5c6ce78956b68d65323ed863898892c962eb9004357"
+    },
+    {
+      "file": "en-HighDim-000_00001.0s.png",
+      "sha256": "7f95ca44390b4b43e60eab33ad94623ad327dce08b17126f597772fe56cd94b9",
+      "bytes": 68649,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/000_00001.0s.png",
+      "source_sha256": "7f95ca44390b4b43e60eab33ad94623ad327dce08b17126f597772fe56cd94b9"
+    },
+    {
+      "file": "en-HighDim-001_00006.4s.png",
+      "sha256": "842f6c278dd3252d4e4640ae0a1e0223138989ca8e44d119646a4f3d1af0d5ba",
+      "bytes": 62854,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/001_00006.4s.png",
+      "source_sha256": "842f6c278dd3252d4e4640ae0a1e0223138989ca8e44d119646a4f3d1af0d5ba"
+    },
+    {
+      "file": "en-HighDim-002_00015.8s.png",
+      "sha256": "5a40f5ec618984877cbd1930e6b3d6eb5e3c65baa9af725e77323cf0ae5cac1c",
+      "bytes": 63334,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/002_00015.8s.png",
+      "source_sha256": "5a40f5ec618984877cbd1930e6b3d6eb5e3c65baa9af725e77323cf0ae5cac1c"
+    },
+    {
+      "file": "en-HighDim-003_00019.8s.png",
+      "sha256": "516f2d1fc9234d13ad1be554f5d8d37b479c76bc7e9f03e490f648144ead1130",
+      "bytes": 63010,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/003_00019.8s.png",
+      "source_sha256": "516f2d1fc9234d13ad1be554f5d8d37b479c76bc7e9f03e490f648144ead1130"
+    },
+    {
+      "file": "en-HighDim-004_00022.9s.png",
+      "sha256": "a91ca1d72df9f3209ea4f3cd9bde2538c6f0eee236a5592ac77d7564ad29c0c4",
+      "bytes": 63464,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/004_00022.9s.png",
+      "source_sha256": "a91ca1d72df9f3209ea4f3cd9bde2538c6f0eee236a5592ac77d7564ad29c0c4"
+    },
+    {
+      "file": "en-HighDim-005_00028.7s.png",
+      "sha256": "256a9013b488ea43eb07ab51a435f74f20ee9b3312ed9d141b578a717cc2691c",
+      "bytes": 64217,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/005_00028.7s.png",
+      "source_sha256": "256a9013b488ea43eb07ab51a435f74f20ee9b3312ed9d141b578a717cc2691c"
+    },
+    {
+      "file": "en-HighDim-006_00033.6s.png",
+      "sha256": "41cac2b8f9da974a95edef42ced1957174ce4c056a87873f22746947de00da90",
+      "bytes": 70312,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/006_00033.6s.png",
+      "source_sha256": "41cac2b8f9da974a95edef42ced1957174ce4c056a87873f22746947de00da90"
+    },
+    {
+      "file": "en-HighDim-007_00041.4s.png",
+      "sha256": "63610c18f22bc98d0e60c0e4987f9b34d9d92f19122220ba2811b7fffc243b52",
+      "bytes": 100692,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/007_00041.4s.png",
+      "source_sha256": "63610c18f22bc98d0e60c0e4987f9b34d9d92f19122220ba2811b7fffc243b52"
+    },
+    {
+      "file": "en-HighDim-008_00053.1s.png",
+      "sha256": "93cceb44e976e878ece020c5013fe426835bccea2366881d545997140766b76f",
+      "bytes": 163758,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/008_00053.1s.png",
+      "source_sha256": "93cceb44e976e878ece020c5013fe426835bccea2366881d545997140766b76f"
+    },
+    {
+      "file": "en-HighDim-009_00065.5s.png",
+      "sha256": "4641ddea11641643fbc25d2a67fd931ebac00e6b02aa2a78fd0031dac09a6c8d",
+      "bytes": 181379,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/009_00065.5s.png",
+      "source_sha256": "4641ddea11641643fbc25d2a67fd931ebac00e6b02aa2a78fd0031dac09a6c8d"
+    },
+    {
+      "file": "en-HighDim-010_00069.9s.png",
+      "sha256": "be76a51e4794a1daeb876128117004a8419fac4f0a64ed1d61a893abfac3029a",
+      "bytes": 268659,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/010_00069.9s.png",
+      "source_sha256": "be76a51e4794a1daeb876128117004a8419fac4f0a64ed1d61a893abfac3029a"
+    },
+    {
+      "file": "en-HighDim-011_00091.4s.png",
+      "sha256": "c3f1ab4d79a27563651388166311af0af279bb88e29341d7bbafd5fe5bca5a93",
+      "bytes": 73628,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/011_00091.4s.png",
+      "source_sha256": "c3f1ab4d79a27563651388166311af0af279bb88e29341d7bbafd5fe5bca5a93"
+    },
+    {
+      "file": "en-HighDim-012_00099.6s.png",
+      "sha256": "5b577973994e43d02eb17ae14002b1c0ca46fb1904b03ea3a6a9e4bdfb9465d3",
+      "bytes": 128967,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/012_00099.6s.png",
+      "source_sha256": "5b577973994e43d02eb17ae14002b1c0ca46fb1904b03ea3a6a9e4bdfb9465d3"
+    },
+    {
+      "file": "en-HighDim-013_00119.6s.png",
+      "sha256": "ef516644e6603a910940dfc847e9f08ba4170caee527e10c18e3a81c2fb96dcf",
+      "bytes": 82683,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/013_00119.6s.png",
+      "source_sha256": "ef516644e6603a910940dfc847e9f08ba4170caee527e10c18e3a81c2fb96dcf"
+    },
+    {
+      "file": "en-HighDim-014_00133.5s.png",
+      "sha256": "5b8ba05b19fede78b61b4a49a64efc67631dfab7c68a66f566bda6379eef9aa1",
+      "bytes": 116266,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/014_00133.5s.png",
+      "source_sha256": "5b8ba05b19fede78b61b4a49a64efc67631dfab7c68a66f566bda6379eef9aa1"
+    },
+    {
+      "file": "en-HighDim-015_00138.6s.png",
+      "sha256": "3c2b11ddccde59144a9895959155062d909405c8fa286f520b79144e7628e24e",
+      "bytes": 143755,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/HighDim/015_00138.6s.png",
+      "source_sha256": "3c2b11ddccde59144a9895959155062d909405c8fa286f520b79144e7628e24e"
+    },
+    {
+      "file": "en-JL-review.json.gz",
+      "sha256": "c41dddef5c6d9ef8a4f81f4f2ec0560eb53ee7f2d0ee96bcb2af02c287eaf677",
+      "bytes": 2421,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/en-JL/review.json",
+      "source_sha256": "d7befc45bf7cb5c044e5513d286516eb9b11a1f2f4a264299d40e67bada79188",
+      "uncompressed_sha256": "d7befc45bf7cb5c044e5513d286516eb9b11a1f2f4a264299d40e67bada79188"
+    },
+    {
+      "file": "en-JL-capture.json.gz",
+      "sha256": "c0c2f232f401ff4ebaa6efdaf2382dc1df8efcac2e165f9a2c1164257aa13c77",
+      "bytes": 13521,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/en-JL/render-result.json",
+      "source_sha256": "3a594fc787261fa444485c6273ef14b7e96797e87fcf4d18ade8713ed0708a0b",
+      "uncompressed_sha256": "3a594fc787261fa444485c6273ef14b7e96797e87fcf4d18ade8713ed0708a0b"
+    },
+    {
+      "file": "en-JL-capture.log.gz",
+      "sha256": "914d197c68ba49e1fa8bd53b2d4eefc4a8e6f7acf85d7eaa05493e33f571591a",
+      "bytes": 121,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-en-JL.log",
+      "source_sha256": "632fdbb86bcb83a9786c35a1fcaee93afb5a096fd9d5186b88bc960b59682994",
+      "uncompressed_sha256": "632fdbb86bcb83a9786c35a1fcaee93afb5a096fd9d5186b88bc960b59682994"
+    },
+    {
+      "file": "en-JL-000_00001.0s.png",
+      "sha256": "b1eeadf758ddf0075d4696637439c9e4cf1ac34c5bfd451002c53f9f97bad410",
+      "bytes": 79514,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/000_00001.0s.png",
+      "source_sha256": "b1eeadf758ddf0075d4696637439c9e4cf1ac34c5bfd451002c53f9f97bad410"
+    },
+    {
+      "file": "en-JL-001_00008.9s.png",
+      "sha256": "72c1a0967e6d08b27de3d71a3546a8ad49b31751392b82fdd558e54cab4cba0e",
+      "bytes": 202888,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/001_00008.9s.png",
+      "source_sha256": "72c1a0967e6d08b27de3d71a3546a8ad49b31751392b82fdd558e54cab4cba0e"
+    },
+    {
+      "file": "en-JL-002_00026.7s.png",
+      "sha256": "ff3b232a96fbfff1e1612c73673c4831107336792e7bda871067cae82640f228",
+      "bytes": 183335,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/002_00026.7s.png",
+      "source_sha256": "ff3b232a96fbfff1e1612c73673c4831107336792e7bda871067cae82640f228"
+    },
+    {
+      "file": "en-JL-003_00034.1s.png",
+      "sha256": "f9854d9402d64f8f7b7cbbddb364dc7522dc813fa97add4895e5a818d98351a4",
+      "bytes": 109355,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/003_00034.1s.png",
+      "source_sha256": "f9854d9402d64f8f7b7cbbddb364dc7522dc813fa97add4895e5a818d98351a4"
+    },
+    {
+      "file": "en-JL-004_00052.0s.png",
+      "sha256": "80abe2b24d6dc10aab050dd0ee0565c713cdaf334a9b4de6a2688e046a991901",
+      "bytes": 142111,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/004_00052.0s.png",
+      "source_sha256": "80abe2b24d6dc10aab050dd0ee0565c713cdaf334a9b4de6a2688e046a991901"
+    },
+    {
+      "file": "en-JL-005_00062.9s.png",
+      "sha256": "e4220180a0a86ac5e0c6465b5bb1fc88d69c2c3a10a6ada89bafdb6a9ba90756",
+      "bytes": 68178,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/005_00062.9s.png",
+      "source_sha256": "e4220180a0a86ac5e0c6465b5bb1fc88d69c2c3a10a6ada89bafdb6a9ba90756"
+    },
+    {
+      "file": "en-JL-006_00074.3s.png",
+      "sha256": "b3cd560226c0fe63793049109fbbc54f6baa44428da7374be493cfd0da92683b",
+      "bytes": 86388,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/006_00074.3s.png",
+      "source_sha256": "b3cd560226c0fe63793049109fbbc54f6baa44428da7374be493cfd0da92683b"
+    },
+    {
+      "file": "en-JL-007_00079.7s.png",
+      "sha256": "fd120c9598106c1ec3fafd673a05630a8fa15df51fbe37eca175d889460b4281",
+      "bytes": 118671,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/007_00079.7s.png",
+      "source_sha256": "fd120c9598106c1ec3fafd673a05630a8fa15df51fbe37eca175d889460b4281"
+    },
+    {
+      "file": "en-JL-008_00086.3s.png",
+      "sha256": "3fdf9358e0132923ca624ce6546f5dd66373fb5bcebb5373a6874eb3defc834e",
+      "bytes": 154264,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/008_00086.3s.png",
+      "source_sha256": "3fdf9358e0132923ca624ce6546f5dd66373fb5bcebb5373a6874eb3defc834e"
+    },
+    {
+      "file": "en-JL-009_00095.4s.png",
+      "sha256": "010e7883f811088e2cdc094b64a520b2310939e57493619b70cdc9585c2c1b8b",
+      "bytes": 199638,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/009_00095.4s.png",
+      "source_sha256": "010e7883f811088e2cdc094b64a520b2310939e57493619b70cdc9585c2c1b8b"
+    },
+    {
+      "file": "en-JL-010_00114.0s.png",
+      "sha256": "f5ce0cbcc06ade46afcb85376b2beb00813c7975d118db4fbb621d4e00e6c84f",
+      "bytes": 91076,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/010_00114.0s.png",
+      "source_sha256": "f5ce0cbcc06ade46afcb85376b2beb00813c7975d118db4fbb621d4e00e6c84f"
+    },
+    {
+      "file": "en-JL-011_00123.7s.png",
+      "sha256": "a8811653e8b60e721406ce0e295bc01cc127e82191475a5a1e36e38b027cc9b3",
+      "bytes": 103869,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/011_00123.7s.png",
+      "source_sha256": "a8811653e8b60e721406ce0e295bc01cc127e82191475a5a1e36e38b027cc9b3"
+    },
+    {
+      "file": "en-JL-012_00134.4s.png",
+      "sha256": "8de7862c613070ca14687e57a0e8862c3b95819155fe6a5df1d21c60964d3ad1",
+      "bytes": 112357,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/012_00134.4s.png",
+      "source_sha256": "8de7862c613070ca14687e57a0e8862c3b95819155fe6a5df1d21c60964d3ad1"
+    },
+    {
+      "file": "en-JL-013_00141.4s.png",
+      "sha256": "5aa6c817e67678fe6a9bf2dd1516fda8ec6cec2d42af0e12db39165cd77338b4",
+      "bytes": 77188,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/013_00141.4s.png",
+      "source_sha256": "5aa6c817e67678fe6a9bf2dd1516fda8ec6cec2d42af0e12db39165cd77338b4"
+    },
+    {
+      "file": "en-JL-014_00144.9s.png",
+      "sha256": "f91e44fd08a47cf621fd00dbe3ef4bee42230a567da34a848490b05b02349bb4",
+      "bytes": 89311,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/014_00144.9s.png",
+      "source_sha256": "f91e44fd08a47cf621fd00dbe3ef4bee42230a567da34a848490b05b02349bb4"
+    },
+    {
+      "file": "en-JL-015_00153.3s.png",
+      "sha256": "8dbdb7a87e94fce08f5c626e10b0507377046b9e46adefecfd041c0ff109cc5e",
+      "bytes": 103960,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/015_00153.3s.png",
+      "source_sha256": "8dbdb7a87e94fce08f5c626e10b0507377046b9e46adefecfd041c0ff109cc5e"
+    },
+    {
+      "file": "en-JL-016_00171.2s.png",
+      "sha256": "bbda3b4c347f6a0963442e0fb4f114ee5737fe87d24d8b0789f92e1308da7455",
+      "bytes": 131758,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/en/JL/016_00171.2s.png",
+      "source_sha256": "bbda3b4c347f6a0963442e0fb4f114ee5737fe87d24d8b0789f92e1308da7455"
+    },
+    {
+      "file": "zh-Projection-review.json.gz",
+      "sha256": "b4b5c596c9f240d9a7ea34a788cc054ca9e9b5e915accde42f2afb2855497fdb",
+      "bytes": 2729,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/zh-Projection/review.json",
+      "source_sha256": "987e22bd8adbf4f4879da50a2186bbed7a6c4e1d30b968fa93931529b61eb840",
+      "uncompressed_sha256": "987e22bd8adbf4f4879da50a2186bbed7a6c4e1d30b968fa93931529b61eb840"
+    },
+    {
+      "file": "zh-Projection-capture.json.gz",
+      "sha256": "ee4063ce0ca0a2544c62ef5ab84da87de8e42abf8bcddd23735bf2d44dbc6735",
+      "bytes": 22461,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/zh-Projection/render-result.json",
+      "source_sha256": "0a7542f77e4f090baafb591f497038abf6695599db347241ec54dfeb8982466d",
+      "uncompressed_sha256": "0a7542f77e4f090baafb591f497038abf6695599db347241ec54dfeb8982466d"
+    },
+    {
+      "file": "zh-Projection-capture.log.gz",
+      "sha256": "046db20597de26b6d74ca48148c8365e2f992ec8c7d910d7107bef9aa6396102",
+      "bytes": 126,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-zh-Projection.log",
+      "source_sha256": "91f932498d053b5c28220368ca6a6a2c12ab9e0a09cb7add9d715c19bea898be",
+      "uncompressed_sha256": "91f932498d053b5c28220368ca6a6a2c12ab9e0a09cb7add9d715c19bea898be"
+    },
+    {
+      "file": "zh-Projection-000_00001.0s.png",
+      "sha256": "49c6efc36c745c279a6340ef85934b7b0fe6d5b7d72fcf3706f222d7104c86d9",
+      "bytes": 63546,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/000_00001.0s.png",
+      "source_sha256": "49c6efc36c745c279a6340ef85934b7b0fe6d5b7d72fcf3706f222d7104c86d9"
+    },
+    {
+      "file": "zh-Projection-001_00005.9s.png",
+      "sha256": "99b58b09ba8f82f5cb94cc5052614ccfd8b016f2f25944496e607c7b2a7a9ea8",
+      "bytes": 22857,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/001_00005.9s.png",
+      "source_sha256": "99b58b09ba8f82f5cb94cc5052614ccfd8b016f2f25944496e607c7b2a7a9ea8"
+    },
+    {
+      "file": "zh-Projection-002_00010.0s.png",
+      "sha256": "ba0564b5c391ee166ad01f70a072baa44e89e24a0739399984a6c25f8e82bc7f",
+      "bytes": 34339,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/002_00010.0s.png",
+      "source_sha256": "ba0564b5c391ee166ad01f70a072baa44e89e24a0739399984a6c25f8e82bc7f"
+    },
+    {
+      "file": "zh-Projection-003_00018.8s.png",
+      "sha256": "4386a8c2ba0ac9708eff9135b54d04f77ee775953953a753d11eb661faf64f3c",
+      "bytes": 69647,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/003_00018.8s.png",
+      "source_sha256": "4386a8c2ba0ac9708eff9135b54d04f77ee775953953a753d11eb661faf64f3c"
+    },
+    {
+      "file": "zh-Projection-004_00029.1s.png",
+      "sha256": "6d5e6add6d79e8e8662533a5726d8927f3347066fc7a80f97e8da9fa9931d893",
+      "bytes": 93152,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/004_00029.1s.png",
+      "source_sha256": "6d5e6add6d79e8e8662533a5726d8927f3347066fc7a80f97e8da9fa9931d893"
+    },
+    {
+      "file": "zh-Projection-005_00036.8s.png",
+      "sha256": "0cdad03f6528223d6a0f2577be0baafd79c478dcb62c45afae70941e2f48f1d7",
+      "bytes": 51826,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/005_00036.8s.png",
+      "source_sha256": "0cdad03f6528223d6a0f2577be0baafd79c478dcb62c45afae70941e2f48f1d7"
+    },
+    {
+      "file": "zh-Projection-006_00045.9s.png",
+      "sha256": "c966189865198ef521dd071a651cd0bc1669257e3fd71b76e1b9ae02d8c9dc6d",
+      "bytes": 73985,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/006_00045.9s.png",
+      "source_sha256": "c966189865198ef521dd071a651cd0bc1669257e3fd71b76e1b9ae02d8c9dc6d"
+    },
+    {
+      "file": "zh-Projection-007_00057.1s.png",
+      "sha256": "ea0314da7c6f5cd13365880b29e28a9479bf70ef5a6fecbfa9741c6b9771bca1",
+      "bytes": 114509,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/007_00057.1s.png",
+      "source_sha256": "ea0314da7c6f5cd13365880b29e28a9479bf70ef5a6fecbfa9741c6b9771bca1"
+    },
+    {
+      "file": "zh-Projection-008_00061.6s.png",
+      "sha256": "93a6901bf766260b88320c412c2849edcc04fec10c93523f1ad097916e3037e9",
+      "bytes": 129781,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/008_00061.6s.png",
+      "source_sha256": "93a6901bf766260b88320c412c2849edcc04fec10c93523f1ad097916e3037e9"
+    },
+    {
+      "file": "zh-Projection-009_00064.5s.png",
+      "sha256": "b30d9245e4a00c5f05ae460ab15393113f120b41d517fb99badda60251e182b5",
+      "bytes": 175753,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/009_00064.5s.png",
+      "source_sha256": "b30d9245e4a00c5f05ae460ab15393113f120b41d517fb99badda60251e182b5"
+    },
+    {
+      "file": "zh-Projection-010_00078.5s.png",
+      "sha256": "55863d90d10e50ec93b596ca213f39531f483d00919cee5a1a40c7169803e10e",
+      "bytes": 23637,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/010_00078.5s.png",
+      "source_sha256": "55863d90d10e50ec93b596ca213f39531f483d00919cee5a1a40c7169803e10e"
+    },
+    {
+      "file": "zh-Projection-011_00082.5s.png",
+      "sha256": "0327e361464593e61c4584fdcfa254d6b017f14b8ef9f322642696d3d407aa42",
+      "bytes": 46187,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/011_00082.5s.png",
+      "source_sha256": "0327e361464593e61c4584fdcfa254d6b017f14b8ef9f322642696d3d407aa42"
+    },
+    {
+      "file": "zh-Projection-012_00094.4s.png",
+      "sha256": "168df3c4988463af14931295638818b8f44e60182600dcb7beaeab92db1c71ca",
+      "bytes": 75930,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/012_00094.4s.png",
+      "source_sha256": "168df3c4988463af14931295638818b8f44e60182600dcb7beaeab92db1c71ca"
+    },
+    {
+      "file": "zh-Projection-013_00109.9s.png",
+      "sha256": "e720c6ffa8eb8d796b98717aa37a1eaeb69a0b6c0ade579d7b8cf2a456bb3277",
+      "bytes": 26800,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/013_00109.9s.png",
+      "source_sha256": "e720c6ffa8eb8d796b98717aa37a1eaeb69a0b6c0ade579d7b8cf2a456bb3277"
+    },
+    {
+      "file": "zh-Projection-014_00122.1s.png",
+      "sha256": "359f0a8021960fb677ee5eb8baa52654fd07ca0e3b983cd969870bd64a98c8f8",
+      "bytes": 36093,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/014_00122.1s.png",
+      "source_sha256": "359f0a8021960fb677ee5eb8baa52654fd07ca0e3b983cd969870bd64a98c8f8"
+    },
+    {
+      "file": "zh-Projection-015_00133.4s.png",
+      "sha256": "b003f23a2d5c04950dbb901c3988c9d5529cd10e2e78240d1e0a2f39397660c8",
+      "bytes": 64282,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/015_00133.4s.png",
+      "source_sha256": "b003f23a2d5c04950dbb901c3988c9d5529cd10e2e78240d1e0a2f39397660c8"
+    },
+    {
+      "file": "zh-Projection-016_00142.5s.png",
+      "sha256": "80b9518d7c20efe83e485e383fe464fd8ad42c78de776de6aff8729994fa4824",
+      "bytes": 116836,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/016_00142.5s.png",
+      "source_sha256": "80b9518d7c20efe83e485e383fe464fd8ad42c78de776de6aff8729994fa4824"
+    },
+    {
+      "file": "zh-Projection-017_00146.7s.png",
+      "sha256": "13dd86d74ae36df71216686f30bb0cca8818140a421ceff4ef95093013cc5dfe",
+      "bytes": 110842,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/017_00146.7s.png",
+      "source_sha256": "13dd86d74ae36df71216686f30bb0cca8818140a421ceff4ef95093013cc5dfe"
+    },
+    {
+      "file": "zh-Projection-018_00159.1s.png",
+      "sha256": "99e70ad9cff3d2b89adb31e2155593179885e8a9f3d6736669cabd14c1b185e7",
+      "bytes": 131948,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/018_00159.1s.png",
+      "source_sha256": "99e70ad9cff3d2b89adb31e2155593179885e8a9f3d6736669cabd14c1b185e7"
+    },
+    {
+      "file": "zh-Projection-019_00175.1s.png",
+      "sha256": "02132e2518c993475f0749c26fe3d8323ce52e001f232fe1e7a01728fa425aeb",
+      "bytes": 152745,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/019_00175.1s.png",
+      "source_sha256": "02132e2518c993475f0749c26fe3d8323ce52e001f232fe1e7a01728fa425aeb"
+    },
+    {
+      "file": "zh-Projection-020_00182.4s.png",
+      "sha256": "0a427636430fca435b846d884cadf43420e204df9fc839e9eb147cbb1581d611",
+      "bytes": 168228,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/020_00182.4s.png",
+      "source_sha256": "0a427636430fca435b846d884cadf43420e204df9fc839e9eb147cbb1581d611"
+    },
+    {
+      "file": "zh-Projection-021_00193.0s.png",
+      "sha256": "0b234ad6bb445bc8b725fd0aade0bc992a97da6e22a220cec1e09f26502eddfd",
+      "bytes": 199097,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/Projection/021_00193.0s.png",
+      "source_sha256": "0b234ad6bb445bc8b725fd0aade0bc992a97da6e22a220cec1e09f26502eddfd"
+    },
+    {
+      "file": "zh-HighDim-review.json.gz",
+      "sha256": "60457d4a13c304e9a21d34795e979934c31ea009d5055520091d65778f147425",
+      "bytes": 2414,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/zh-HighDim/review.json",
+      "source_sha256": "66a8789ea8f111419f6b650f4ae57754fa63ed9b0c925543d3e4448ef3cc9981",
+      "uncompressed_sha256": "66a8789ea8f111419f6b650f4ae57754fa63ed9b0c925543d3e4448ef3cc9981"
+    },
+    {
+      "file": "zh-HighDim-capture.json.gz",
+      "sha256": "55721145713e404b280a220845bafe18dda6a433ea11997f280fa356ab8037cc",
+      "bytes": 14837,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/zh-HighDim/render-result.json",
+      "source_sha256": "5eab72f817b9840c13187f54e26429f3538adce1e5fae35543c916f5844029fa",
+      "uncompressed_sha256": "5eab72f817b9840c13187f54e26429f3538adce1e5fae35543c916f5844029fa"
+    },
+    {
+      "file": "zh-HighDim-capture.log.gz",
+      "sha256": "8bb20bd3ecfdf66fcdcf6115c5fa951b736edbd18b09ef606c5518c0331b460d",
+      "bytes": 126,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-zh-HighDim.log",
+      "source_sha256": "bed1f5736492d23cce920b71b2d0f28bcebb485b87860a1f1ca1a38a89c4851f",
+      "uncompressed_sha256": "bed1f5736492d23cce920b71b2d0f28bcebb485b87860a1f1ca1a38a89c4851f"
+    },
+    {
+      "file": "zh-HighDim-000_00001.0s.png",
+      "sha256": "cdd6209f1f1baa67ec44b51320f13e28883a0d2a47d09c3d28b192bcad36ceb3",
+      "bytes": 61562,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/000_00001.0s.png",
+      "source_sha256": "cdd6209f1f1baa67ec44b51320f13e28883a0d2a47d09c3d28b192bcad36ceb3"
+    },
+    {
+      "file": "zh-HighDim-001_00004.9s.png",
+      "sha256": "5366b2e2b61ec4abd6e43aedc142c1eac332c76471ae12469562e134cb4a0afb",
+      "bytes": 60893,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/001_00004.9s.png",
+      "source_sha256": "5366b2e2b61ec4abd6e43aedc142c1eac332c76471ae12469562e134cb4a0afb"
+    },
+    {
+      "file": "zh-HighDim-002_00014.8s.png",
+      "sha256": "f823aa3dcfd7326080039dc1735ab2e8628254e7815f33f82626fd0d66d58640",
+      "bytes": 61469,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/002_00014.8s.png",
+      "source_sha256": "f823aa3dcfd7326080039dc1735ab2e8628254e7815f33f82626fd0d66d58640"
+    },
+    {
+      "file": "zh-HighDim-003_00020.3s.png",
+      "sha256": "b8573e80a44c1d3016a63f818a35e905bb783eeb7ff8e12b5bf0e1d184c73e27",
+      "bytes": 61799,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/003_00020.3s.png",
+      "source_sha256": "b8573e80a44c1d3016a63f818a35e905bb783eeb7ff8e12b5bf0e1d184c73e27"
+    },
+    {
+      "file": "zh-HighDim-004_00025.0s.png",
+      "sha256": "ad7367573be2ef4de31ca265f174c9afd3b1f7e33612b34afb97ed39d04985e5",
+      "bytes": 62742,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/004_00025.0s.png",
+      "source_sha256": "ad7367573be2ef4de31ca265f174c9afd3b1f7e33612b34afb97ed39d04985e5"
+    },
+    {
+      "file": "zh-HighDim-005_00030.7s.png",
+      "sha256": "74f2c0720ea4306af44c2b4d6acd640dec254cba1252f7155888ddf0f09ce3f5",
+      "bytes": 71728,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/005_00030.7s.png",
+      "source_sha256": "74f2c0720ea4306af44c2b4d6acd640dec254cba1252f7155888ddf0f09ce3f5"
+    },
+    {
+      "file": "zh-HighDim-006_00039.0s.png",
+      "sha256": "4beed725d85e364303db56c62df6160abb9abe8ec441a54dfcc64f31fe40eedf",
+      "bytes": 100185,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/006_00039.0s.png",
+      "source_sha256": "4beed725d85e364303db56c62df6160abb9abe8ec441a54dfcc64f31fe40eedf"
+    },
+    {
+      "file": "zh-HighDim-007_00049.5s.png",
+      "sha256": "aa6e07dba995e4646e3e27a5a5341ad56c3713c4bc8f887fb6978b719d7ee321",
+      "bytes": 163693,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/007_00049.5s.png",
+      "source_sha256": "aa6e07dba995e4646e3e27a5a5341ad56c3713c4bc8f887fb6978b719d7ee321"
+    },
+    {
+      "file": "zh-HighDim-008_00056.1s.png",
+      "sha256": "d09d726013f24960da064611d84d07920a63f232c9383dccd380ba090729d8d4",
+      "bytes": 36282,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/008_00056.1s.png",
+      "source_sha256": "d09d726013f24960da064611d84d07920a63f232c9383dccd380ba090729d8d4"
+    },
+    {
+      "file": "zh-HighDim-009_00060.5s.png",
+      "sha256": "7524585cc9079cc0f81dccb90b993602ca25577a01e5c89d5e53690906f63400",
+      "bytes": 190849,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/009_00060.5s.png",
+      "source_sha256": "7524585cc9079cc0f81dccb90b993602ca25577a01e5c89d5e53690906f63400"
+    },
+    {
+      "file": "zh-HighDim-010_00065.0s.png",
+      "sha256": "4adbec2df8a16de74beb216756f71b1c89eec8d1805dfe93d696b24c80fd80c1",
+      "bytes": 279504,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/010_00065.0s.png",
+      "source_sha256": "4adbec2df8a16de74beb216756f71b1c89eec8d1805dfe93d696b24c80fd80c1"
+    },
+    {
+      "file": "zh-HighDim-011_00085.3s.png",
+      "sha256": "ca79daa52115259189e6001a22a77e5e39a960153ce6b65ab0c8ae199ee5ebce",
+      "bytes": 56211,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/011_00085.3s.png",
+      "source_sha256": "ca79daa52115259189e6001a22a77e5e39a960153ce6b65ab0c8ae199ee5ebce"
+    },
+    {
+      "file": "zh-HighDim-012_00096.3s.png",
+      "sha256": "9a28c4471aef6241a9a33f21224faa88b8c35f1984a8331f97ff045f1b2a604b",
+      "bytes": 127624,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/012_00096.3s.png",
+      "source_sha256": "9a28c4471aef6241a9a33f21224faa88b8c35f1984a8331f97ff045f1b2a604b"
+    },
+    {
+      "file": "zh-HighDim-013_00117.9s.png",
+      "sha256": "fcf204d390a7c27074f2e27490d708ce3514146293f904cd1c29b7aefb2a2fe1",
+      "bytes": 80999,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/013_00117.9s.png",
+      "source_sha256": "fcf204d390a7c27074f2e27490d708ce3514146293f904cd1c29b7aefb2a2fe1"
+    },
+    {
+      "file": "zh-HighDim-014_00128.6s.png",
+      "sha256": "937ee35769881751e9af21af3a52b38f061fa12f1f2018559da89ea1c01be25d",
+      "bytes": 114617,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/014_00128.6s.png",
+      "source_sha256": "937ee35769881751e9af21af3a52b38f061fa12f1f2018559da89ea1c01be25d"
+    },
+    {
+      "file": "zh-HighDim-015_00133.6s.png",
+      "sha256": "ce9bbd6aeb111585dc44549642450ff91ac7e8f868afa35df61ca327ef259c85",
+      "bytes": 142095,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/HighDim/015_00133.6s.png",
+      "source_sha256": "ce9bbd6aeb111585dc44549642450ff91ac7e8f868afa35df61ca327ef259c85"
+    },
+    {
+      "file": "zh-JL-review.json.gz",
+      "sha256": "ee5c5402e8aa6a5e8d0c924aa41acdffb15bb68fe74e9662889e2fc128e4c1cf",
+      "bytes": 2565,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/zh-JL/review.json",
+      "source_sha256": "cb98402dcaa2f61baf5c5196cfd997fd0d49454155b3adc0bd21ac1f09d50dd1",
+      "uncompressed_sha256": "cb98402dcaa2f61baf5c5196cfd997fd0d49454155b3adc0bd21ac1f09d50dd1"
+    },
+    {
+      "file": "zh-JL-capture.json.gz",
+      "sha256": "76457b0cc724fc61c6b6c1e3c8c93744eedc1df19dc83719a75dcb98e9448dcf",
+      "bytes": 20951,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-review/zh-JL/render-result.json",
+      "source_sha256": "c8ff5449cb752a2c60d991eefbb98d59cfc3785482dbfdc0cd5e3d71e44a57fe",
+      "uncompressed_sha256": "c8ff5449cb752a2c60d991eefbb98d59cfc3785482dbfdc0cd5e3d71e44a57fe"
+    },
+    {
+      "file": "zh-JL-capture.log.gz",
+      "sha256": "1ac14e8165cb9f21b2a5e4979a8d87ea4c647c3b80dd7d75c330b052c1b3423a",
+      "bytes": 121,
+      "source": "/workspace/runtime/ai3-projection-highdim-jl-1080-zh-JL.log",
+      "source_sha256": "37054f3be203a2b42007a67e61d9cfdb3da1182958466eef68b5243056300e9b",
+      "uncompressed_sha256": "37054f3be203a2b42007a67e61d9cfdb3da1182958466eef68b5243056300e9b"
+    },
+    {
+      "file": "zh-JL-000_00001.0s.png",
+      "sha256": "378245b3de1bc6ad342ddeeee4278a44ac2a26d01d159be78fb30a614e0afed4",
+      "bytes": 97443,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/000_00001.0s.png",
+      "source_sha256": "378245b3de1bc6ad342ddeeee4278a44ac2a26d01d159be78fb30a614e0afed4"
+    },
+    {
+      "file": "zh-JL-001_00007.0s.png",
+      "sha256": "ae19c5f241a89a85ce7735a77d14be4ed9e80a4244a0255fb93a5c5e25231210",
+      "bytes": 89148,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/001_00007.0s.png",
+      "source_sha256": "ae19c5f241a89a85ce7735a77d14be4ed9e80a4244a0255fb93a5c5e25231210"
+    },
+    {
+      "file": "zh-JL-002_00010.3s.png",
+      "sha256": "0a04efd0dd887f0249706107acf5ef0c4be615dd46993dd69c9a5f18eaa16d7d",
+      "bytes": 200226,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/002_00010.3s.png",
+      "source_sha256": "0a04efd0dd887f0249706107acf5ef0c4be615dd46993dd69c9a5f18eaa16d7d"
+    },
+    {
+      "file": "zh-JL-003_00026.3s.png",
+      "sha256": "56ab0528f3dbb841779a41b06db1347705e5e21c37644a1471297a47d8c3a8b8",
+      "bytes": 193760,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/003_00026.3s.png",
+      "source_sha256": "56ab0528f3dbb841779a41b06db1347705e5e21c37644a1471297a47d8c3a8b8"
+    },
+    {
+      "file": "zh-JL-004_00030.6s.png",
+      "sha256": "6cf8d36f8fc148e0d97d376c5143d14a6daea23981ec37abd5a9f52fa5717029",
+      "bytes": 180544,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/004_00030.6s.png",
+      "source_sha256": "6cf8d36f8fc148e0d97d376c5143d14a6daea23981ec37abd5a9f52fa5717029"
+    },
+    {
+      "file": "zh-JL-005_00035.2s.png",
+      "sha256": "9a9dc3b766d797594b5f8d8f363788f6d8c998a63e4387d292bb61eaa5f347c2",
+      "bytes": 115103,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/005_00035.2s.png",
+      "source_sha256": "9a9dc3b766d797594b5f8d8f363788f6d8c998a63e4387d292bb61eaa5f347c2"
+    },
+    {
+      "file": "zh-JL-006_00055.6s.png",
+      "sha256": "965b90376e6c6721caf10e09d46750bdc70663a324377943a72abeff930ec04f",
+      "bytes": 149782,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/006_00055.6s.png",
+      "source_sha256": "965b90376e6c6721caf10e09d46750bdc70663a324377943a72abeff930ec04f"
+    },
+    {
+      "file": "zh-JL-007_00066.8s.png",
+      "sha256": "735d9db56343a771a9c2bc7752758145d1cc443db31ad6eca50ad0e2dcd8e187",
+      "bytes": 68045,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/007_00066.8s.png",
+      "source_sha256": "735d9db56343a771a9c2bc7752758145d1cc443db31ad6eca50ad0e2dcd8e187"
+    },
+    {
+      "file": "zh-JL-008_00078.2s.png",
+      "sha256": "98f0a04cd3b3ad2de6d5eac8c4c14448535dee67c20df3a8064eac96c45d9c72",
+      "bytes": 84021,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/008_00078.2s.png",
+      "source_sha256": "98f0a04cd3b3ad2de6d5eac8c4c14448535dee67c20df3a8064eac96c45d9c72"
+    },
+    {
+      "file": "zh-JL-009_00084.3s.png",
+      "sha256": "52092acd999ef25a3e4205d48582bb9c3a31d37e16d536e05bb24877235daf0e",
+      "bytes": 117915,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/009_00084.3s.png",
+      "source_sha256": "52092acd999ef25a3e4205d48582bb9c3a31d37e16d536e05bb24877235daf0e"
+    },
+    {
+      "file": "zh-JL-010_00093.4s.png",
+      "sha256": "fcc5f5b07eb2687cfc85328cbb7d7a24b685b04ddf4c4794a7f45ccaa514e08c",
+      "bytes": 155460,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/010_00093.4s.png",
+      "source_sha256": "fcc5f5b07eb2687cfc85328cbb7d7a24b685b04ddf4c4794a7f45ccaa514e08c"
+    },
+    {
+      "file": "zh-JL-011_00101.0s.png",
+      "sha256": "5f77793beb56f46120f2e423c3c1a6039316454428e662577a4e2345eaeb44af",
+      "bytes": 201025,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/011_00101.0s.png",
+      "source_sha256": "5f77793beb56f46120f2e423c3c1a6039316454428e662577a4e2345eaeb44af"
+    },
+    {
+      "file": "zh-JL-012_00119.0s.png",
+      "sha256": "e1dc3a648736cbfe5edc80f8ff6065cdc4e5a05137d29e061c38bbfa78c56f79",
+      "bytes": 92716,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/012_00119.0s.png",
+      "source_sha256": "e1dc3a648736cbfe5edc80f8ff6065cdc4e5a05137d29e061c38bbfa78c56f79"
+    },
+    {
+      "file": "zh-JL-013_00130.2s.png",
+      "sha256": "ae9d18e2a0ae9e09751d4870814f0cec26806f7d9138c79b4fb4eebc15c17a10",
+      "bytes": 106265,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/013_00130.2s.png",
+      "source_sha256": "ae9d18e2a0ae9e09751d4870814f0cec26806f7d9138c79b4fb4eebc15c17a10"
+    },
+    {
+      "file": "zh-JL-014_00141.0s.png",
+      "sha256": "69b94c561ccdb3dbfd9a964ee0f075e683d281ab9063461ecb4dc2867cd56187",
+      "bytes": 114671,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/014_00141.0s.png",
+      "source_sha256": "69b94c561ccdb3dbfd9a964ee0f075e683d281ab9063461ecb4dc2867cd56187"
+    },
+    {
+      "file": "zh-JL-015_00149.0s.png",
+      "sha256": "7e80f6add0092c5c442896a8d299229e576b7a7bf1f14c936971255f6c454cdc",
+      "bytes": 68809,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/015_00149.0s.png",
+      "source_sha256": "7e80f6add0092c5c442896a8d299229e576b7a7bf1f14c936971255f6c454cdc"
+    },
+    {
+      "file": "zh-JL-016_00153.2s.png",
+      "sha256": "605fcc40b92c02374262995ba2a3d4691ff52925b801e62ccece8c7b57e1c474",
+      "bytes": 81224,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/016_00153.2s.png",
+      "source_sha256": "605fcc40b92c02374262995ba2a3d4691ff52925b801e62ccece8c7b57e1c474"
+    },
+    {
+      "file": "zh-JL-017_00162.9s.png",
+      "sha256": "ffe78374783cda0cb43c19273c16803e97a5cc00a329498f5424ef6804ee0367",
+      "bytes": 95517,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/017_00162.9s.png",
+      "source_sha256": "ffe78374783cda0cb43c19273c16803e97a5cc00a329498f5424ef6804ee0367"
+    },
+    {
+      "file": "zh-JL-018_00183.3s.png",
+      "sha256": "43f52725ee74110d7cd62a386e0ead8b7596d955fae766d3f45b4bd3850aae36",
+      "bytes": 126631,
+      "source": "/workspace/explainer-videos/renders/qa/production-endpoints-1080/ai3/zh/JL/018_00183.3s.png",
+      "source_sha256": "43f52725ee74110d7cd62a386e0ead8b7596d955fae766d3f45b4bd3850aae36"
+    }
+  ],
+  "cases": [
+    {
+      "case": "en-Projection",
+      "capture_status": "passed",
+      "warnings": [],
+      "capture_fingerprint": "198fd0d4f6fb8f222bd2ab0506043e8f7be158187036539d81c490848dca3bbf",
+      "capture_record_sha256": "dc9667d1c81169c4db3f23a4326574de1825e62826a2c48fe140f5570ddba3fe",
+      "source_at_review": {
+        "file": "/workspace/explainer-videos/videos/ai/ai3/s05_projection.py",
+        "sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae"
+      },
+      "inputs": [
+        {
+          "file": ".cache/ai3/project.json",
+          "record_signature": [
+            3040,
+            1793466892107548414
+          ],
+          "sha256": "df5963651d0f0d52cf199d47375c611d6925b507f0eae890c9eaf9fc28eee96f",
+          "signature_still_matches_at_finalization": true
+        },
+        {
+          "file": ".cache/ai3/project.npz",
+          "record_signature": null,
+          "sha256": null,
+          "signature_still_matches_at_finalization": true
+        }
+      ],
+      "covered_frames": 21,
+      "total_captured_frames": 21,
+      "complete": true,
+      "findings": "Native title/vector/orthogonal residual/formula/independent-column qualifier/history/QR/roundoff/axes/ticks/lifted legends/right caption checked; no clipping or unreadable collision found in actual endpoints.",
+      "limits": [
+        "Silent skipped-animation endpoint evaluation at native1920x1080; not a full motion render.",
+        "No continuous perceptual playback, audio generation/listening/sync, player or responsive QA.",
+        "Endpoint times use skipped-animation narration placeholders and are not original full-motion movie timestamps.",
+        "Cache input missing npz is recorded null where producer uses JSON-only; no implicit compute requested."
+      ]
+    },
+    {
+      "case": "en-HighDim",
+      "capture_status": "passed",
+      "warnings": [],
+      "capture_fingerprint": "198fd0d4f6fb8f222bd2ab0506043e8f7be158187036539d81c490848dca3bbf",
+      "capture_record_sha256": "cb1afdb9e1c482df47867a90e1b4ecfe66e27e4fa48e1ed7542f9b2fcb394f94",
+      "source_at_review": {
+        "file": "/workspace/explainer-videos/videos/ai/ai3/s15_highdim.py",
+        "sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55"
+      },
+      "inputs": [
+        {
+          "file": ".cache/ai3/highdim.json",
+          "record_signature": [
+            1198,
+            1793474015728107470
+          ],
+          "sha256": "744e957772fb378a8f5248306754830f91a2c0539e61cc7f971b8ea61146ff14",
+          "signature_still_matches_at_finalization": true
+        },
+        {
+          "file": ".cache/ai3/highdim.npz",
+          "record_signature": [
+            2629,
+            1793474015725300016
+          ],
+          "sha256": "0dba73a53829821ee589a44fb21025da827c2b0f96162b52027bd0d9b8b12c70",
+          "signature_still_matches_at_finalization": true
+        }
+      ],
+      "covered_frames": 16,
+      "total_captured_frames": 16,
+      "complete": true,
+      "findings": "Native angular histogram dimensions and readouts, finite variance, schematic feature alignment and legend, normalized versus absolute Gaussian spreads, exaggerated shell disclaimer checked; no concrete layout defect.",
+      "limits": [
+        "Silent skipped-animation endpoint evaluation at native1920x1080; not a full motion render.",
+        "No continuous perceptual playback, audio generation/listening/sync, player or responsive QA.",
+        "Endpoint times use skipped-animation narration placeholders and are not original full-motion movie timestamps.",
+        "Cache input missing npz is recorded null where producer uses JSON-only; no implicit compute requested."
+      ]
+    },
+    {
+      "case": "en-JL",
+      "capture_status": "passed",
+      "warnings": [],
+      "capture_fingerprint": "198fd0d4f6fb8f222bd2ab0506043e8f7be158187036539d81c490848dca3bbf",
+      "capture_record_sha256": "3a594fc787261fa444485c6273ef14b7e96797e87fcf4d18ade8713ed0708a0b",
+      "source_at_review": {
+        "file": "/workspace/explainer-videos/videos/ai/ai3/s16_jl.py",
+        "sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5"
+      },
+      "inputs": [
+        {
+          "file": ".cache/ai3/jl.json",
+          "record_signature": [
+            5524,
+            1793474031988199490
+          ],
+          "sha256": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f",
+          "signature_still_matches_at_finalization": true
+        },
+        {
+          "file": ".cache/ai3/jl.npz",
+          "record_signature": [
+            90809,
+            1793474031985285473
+          ],
+          "sha256": "d4701dae8bcb658feb0afbb8411c3f5e900a598bc7b8df6164df1a5c7fc63009",
+          "signature_still_matches_at_finalization": true
+        }
+      ],
+      "covered_frames": 17,
+      "total_captured_frames": 17,
+      "complete": true,
+      "findings": "Native one-decimal 99.6% readout and descriptor gap, confidence/squared-error disclosures, finite versus uninformative bound gap, axes/curves/ticks/legend, lifted history card and caption separation checked; no concrete layout defect.",
+      "limits": [
+        "Silent skipped-animation endpoint evaluation at native1920x1080; not a full motion render.",
+        "No continuous perceptual playback, audio generation/listening/sync, player or responsive QA.",
+        "Endpoint times use skipped-animation narration placeholders and are not original full-motion movie timestamps.",
+        "Cache input missing npz is recorded null where producer uses JSON-only; no implicit compute requested."
+      ]
+    },
+    {
+      "case": "zh-Projection",
+      "capture_status": "passed",
+      "warnings": [],
+      "capture_fingerprint": "198fd0d4f6fb8f222bd2ab0506043e8f7be158187036539d81c490848dca3bbf",
+      "capture_record_sha256": "0a7542f77e4f090baafb591f497038abf6695599db347241ec54dfeb8982466d",
+      "source_at_review": {
+        "file": "/workspace/explainer-videos/videos/ai/ai3/s05_projection.py",
+        "sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae"
+      },
+      "inputs": [
+        {
+          "file": ".cache/ai3/project.json",
+          "record_signature": [
+            3040,
+            1793466892107548414
+          ],
+          "sha256": "df5963651d0f0d52cf199d47375c611d6925b507f0eae890c9eaf9fc28eee96f",
+          "signature_still_matches_at_finalization": true
+        },
+        {
+          "file": ".cache/ai3/project.npz",
+          "record_signature": null,
+          "sha256": null,
+          "signature_still_matches_at_finalization": true
+        }
+      ],
+      "covered_frames": 22,
+      "total_captured_frames": 22,
+      "complete": true,
+      "findings": "Native title/vector/orthogonal residual/formula/independent-column qualifier/history/QR/roundoff/axes/ticks/lifted legends/right caption checked; no clipping or unreadable collision found in actual endpoints.",
+      "limits": [
+        "Silent skipped-animation endpoint evaluation at native1920x1080; not a full motion render.",
+        "No continuous perceptual playback, audio generation/listening/sync, player or responsive QA.",
+        "Endpoint times use skipped-animation narration placeholders and are not original full-motion movie timestamps.",
+        "Cache input missing npz is recorded null where producer uses JSON-only; no implicit compute requested."
+      ]
+    },
+    {
+      "case": "zh-HighDim",
+      "capture_status": "passed",
+      "warnings": [],
+      "capture_fingerprint": "198fd0d4f6fb8f222bd2ab0506043e8f7be158187036539d81c490848dca3bbf",
+      "capture_record_sha256": "5eab72f817b9840c13187f54e26429f3538adce1e5fae35543c916f5844029fa",
+      "source_at_review": {
+        "file": "/workspace/explainer-videos/videos/ai/ai3/s15_highdim.py",
+        "sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55"
+      },
+      "inputs": [
+        {
+          "file": ".cache/ai3/highdim.json",
+          "record_signature": [
+            1198,
+            1793474015728107470
+          ],
+          "sha256": "744e957772fb378a8f5248306754830f91a2c0539e61cc7f971b8ea61146ff14",
+          "signature_still_matches_at_finalization": true
+        },
+        {
+          "file": ".cache/ai3/highdim.npz",
+          "record_signature": [
+            2629,
+            1793474015725300016
+          ],
+          "sha256": "0dba73a53829821ee589a44fb21025da827c2b0f96162b52027bd0d9b8b12c70",
+          "signature_still_matches_at_finalization": true
+        }
+      ],
+      "covered_frames": 16,
+      "total_captured_frames": 16,
+      "complete": true,
+      "findings": "Native angular histogram dimensions and readouts, finite variance, schematic feature alignment and legend, normalized versus absolute Gaussian spreads, exaggerated shell disclaimer checked; no concrete layout defect.",
+      "limits": [
+        "Silent skipped-animation endpoint evaluation at native1920x1080; not a full motion render.",
+        "No continuous perceptual playback, audio generation/listening/sync, player or responsive QA.",
+        "Endpoint times use skipped-animation narration placeholders and are not original full-motion movie timestamps.",
+        "Cache input missing npz is recorded null where producer uses JSON-only; no implicit compute requested.",
+        "No settled d=10 angle histogram endpoint was captured at this resolution; that state has earlier low-resolution actual selected-motion coverage, not native1080 approval."
+      ]
+    },
+    {
+      "case": "zh-JL",
+      "capture_status": "passed",
+      "warnings": [],
+      "capture_fingerprint": "198fd0d4f6fb8f222bd2ab0506043e8f7be158187036539d81c490848dca3bbf",
+      "capture_record_sha256": "c8ff5449cb752a2c60d991eefbb98d59cfc3785482dbfdc0cd5e3d71e44a57fe",
+      "source_at_review": {
+        "file": "/workspace/explainer-videos/videos/ai/ai3/s16_jl.py",
+        "sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5"
+      },
+      "inputs": [
+        {
+          "file": ".cache/ai3/jl.json",
+          "record_signature": [
+            5524,
+            1793474031988199490
+          ],
+          "sha256": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f",
+          "signature_still_matches_at_finalization": true
+        },
+        {
+          "file": ".cache/ai3/jl.npz",
+          "record_signature": [
+            90809,
+            1793474031985285473
+          ],
+          "sha256": "d4701dae8bcb658feb0afbb8411c3f5e900a598bc7b8df6164df1a5c7fc63009",
+          "signature_still_matches_at_finalization": true
+        }
+      ],
+      "covered_frames": 19,
+      "total_captured_frames": 19,
+      "complete": true,
+      "findings": "Native one-decimal 99.6% readout and descriptor gap, confidence/squared-error disclosures, finite versus uninformative bound gap, axes/curves/ticks/legend, lifted history card and caption separation checked; no concrete layout defect.",
+      "limits": [
+        "Silent skipped-animation endpoint evaluation at native1920x1080; not a full motion render.",
+        "No continuous perceptual playback, audio generation/listening/sync, player or responsive QA.",
+        "Endpoint times use skipped-animation narration placeholders and are not original full-motion movie timestamps.",
+        "Cache input missing npz is recorded null where producer uses JSON-only; no implicit compute requested."
+      ]
+    }
+  ],
+  "summary": {
+    "actual_native_images_viewed": 111,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "cases": 6,
+    "runtime_status": "All six passed, zero warnings, worker exits0.",
+    "critical_crops_actually_viewed": 7
+  },
+  "limits": [
+    "Endpoints only: no full1080p motion, continuous perception, audio/listening/sync or player/responsive approval.",
+    "ZH HighDim has no settledd10angleendpoint in this capture. Earlier low-resolution motion evidence is separate.",
+    "OriginalProjectionZHselectedmovieimportsourceuncertainty remains in separate historical package; these fresh endpoints do not resolve historical linkage."
+  ],
+  "mutations": "No source/global/data/model edits, compute, commits or pushes. Only authorized six endpoint captures and runtime/evidence packaging."
+}

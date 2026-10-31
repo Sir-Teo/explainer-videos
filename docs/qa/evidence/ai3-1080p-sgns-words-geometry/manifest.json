@@ -1,0 +1,598 @@
+{
+  "scope": "Native1920x1080 endpoint typography/layout and displayed data checks; no full1080p motion or listening approval",
+  "created_utc": "2026-10-31T21:29:30.493486+00:00",
+  "actual_native_views": 113,
+  "native_size": [
+    1920,
+    1080
+  ],
+  "cases": [
+    {
+      "lang": "en",
+      "scene": "SGNS",
+      "record_sha256": "a0eae79da5ab07ce64f0847807fcb84f30383ee84a77b770b252f214eebe3724",
+      "review_sha256": "6bc233e1d71e9fb305497c948e8f674e8ac0ca89a656754884456fed5aa980eb",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "frame_count": 23,
+      "direct_source_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673",
+      "whole_fingerprint_matches_completion": false,
+      "observations": [
+        "All game/formula/history-card states readable and contained.",
+        "Actual replay snapshots0/36/1089/10890 show measured lists and unclipped progress counts.",
+        "Observed/free-dot-product condition, generalized negative-sampling denominator and empirical-PMI qualifier are readable in complete derivation.",
+        "300/30/5 dimension/error panels, omission notes, diagnostic cohort/sample distinction, analogy/purity table and final GloVe/contextual handoff fit."
+      ],
+      "review": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/SGNS/a0eae79da5ab07ce64f0847807fcb84f30383ee84a77b770b252f214eebe3724/review.json"
+    },
+    {
+      "lang": "zh",
+      "scene": "SGNS",
+      "record_sha256": "6e1a965915976db158a6680d94089ede895a6dc83d77b1be6a877f57526c502a",
+      "review_sha256": "ffe976e8249f59cb30caaff8c82c33c27dcb9527aae69fc001b9db10b0dda75c",
+      "runtime_status": "passed",
+      "warnings": [],
+      "frame_count": 22,
+      "direct_source_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673",
+      "whole_fingerprint_matches_completion": true,
+      "observations": [
+        "All game/formula/history-card states readable and contained.",
+        "Actual replay snapshots0/36/1089/10890 show measured lists and unclipped progress counts.",
+        "Observed/free-dot-product condition, generalized negative-sampling denominator and empirical-PMI qualifier are readable in complete derivation.",
+        "300/30/5 dimension/error panels, omission notes, diagnostic cohort/sample distinction, analogy/purity table and final GloVe/contextual handoff fit."
+      ],
+      "review": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/SGNS/6e1a965915976db158a6680d94089ede895a6dc83d77b1be6a877f57526c502a/review.json"
+    },
+    {
+      "lang": "en",
+      "scene": "Words",
+      "record_sha256": "1530ae9bd108db8aa20cac999f208f6cb08d2c8174d78a0cfa0bb311f470ad6a",
+      "review_sha256": "cc183cbb8a024755b5d4e42057c2e66409bd74f33e398a4355ddb63a48084d30",
+      "runtime_status": "passed",
+      "warnings": [],
+      "frame_count": 18,
+      "direct_source_sha256": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+      "whole_fingerprint_matches_completion": true,
+      "observations": [
+        "History cards,4.35-million-word caption,300-of10000 heatmap, PMI definition/examples and smoothed SVD distribution readable and contained.",
+        "All four neighbour columns and similarity bars fit; learned English data words remain intentionally verbatim in Chinese.",
+        "Rank2 and100 endpoint states, final-top10/three-of-five/first-crossing qualifiers readable. Intermediate rank5/10/25 motion states are not captured or approved by this endpoint pass.",
+        "France/Paris/England/London labels, arrows, learned duke/queen ranking,710-question41-percent result,100D ranking and category-candidate-pool footnotes fit. Endpoint-only approval does not inspect moving arrows."
+      ],
+      "review": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Words/1530ae9bd108db8aa20cac999f208f6cb08d2c8174d78a0cfa0bb311f470ad6a/review.json"
+    },
+    {
+      "lang": "zh",
+      "scene": "Words",
+      "record_sha256": "dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804",
+      "review_sha256": "ada3b6e3c8eef74b76d908950e573bf4ef1697579542b63df98bfc309cfa720c",
+      "runtime_status": "passed",
+      "warnings": [],
+      "frame_count": 18,
+      "direct_source_sha256": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+      "whole_fingerprint_matches_completion": true,
+      "observations": [
+        "History cards,4.35-million-word caption,300-of10000 heatmap, PMI definition/examples and smoothed SVD distribution readable and contained.",
+        "All four neighbour columns and similarity bars fit; learned English data words remain intentionally verbatim in Chinese.",
+        "Rank2 and100 endpoint states, final-top10/three-of-five/first-crossing qualifiers readable. Intermediate rank5/10/25 motion states are not captured or approved by this endpoint pass.",
+        "France/Paris/England/London labels, arrows, learned duke/queen ranking,710-question41-percent result,100D ranking and category-candidate-pool footnotes fit. Endpoint-only approval does not inspect moving arrows."
+      ],
+      "review": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/review.json"
+    },
+    {
+      "lang": "en",
+      "scene": "Geometry",
+      "record_sha256": "3a2ad630f4cabe7537a8e3b697ce5114cf19c220cb3af6379873f124870d1031",
+      "review_sha256": "5e80b9b95bd1ca1b0fe52988b8fe61753d6083391472facdc43344e95fb883c4",
+      "runtime_status": "passed",
+      "warnings": [],
+      "frame_count": 16,
+      "direct_source_sha256": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a",
+      "whole_fingerprint_matches_completion": true,
+      "observations": [
+        "Sampled token-ID scope, histogram window normalization/tail omission and0.036 random-direction scale are readable.",
+        "Raw0.24 and centred0.010 means, centred principal-direction shares/equal-share guide and vocabulary-ID legend fit.",
+        "Layer0–12 plot,final/peak12=0.94,layer6 dimensions447/373/64 signed64-percent contribution and1024-token provenance footnote fit.",
+        "Linear-representation cards and Part30 handoff readable and contained."
+      ],
+      "review": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Geometry/3a2ad630f4cabe7537a8e3b697ce5114cf19c220cb3af6379873f124870d1031/review.json"
+    },
+    {
+      "lang": "zh",
+      "scene": "Geometry",
+      "record_sha256": "0fcc6c7a60af443e59554b00ef01a15f061b34a1fd53dd9676337d8d4c3389ef",
+      "review_sha256": "989efab82cda241e04db492444e91926971cf34ff7147d0d390edaf59fce8f7a",
+      "runtime_status": "passed",
+      "warnings": [],
+      "frame_count": 16,
+      "direct_source_sha256": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a",
+      "whole_fingerprint_matches_completion": true,
+      "observations": [
+        "Sampled token-ID scope, histogram window normalization/tail omission and0.036 random-direction scale are readable.",
+        "Raw0.24 and centred0.010 means, centred principal-direction shares/equal-share guide and vocabulary-ID legend fit.",
+        "Layer0–12 plot,final/peak12=0.94,layer6 dimensions447/373/64 signed64-percent contribution and1024-token provenance footnote fit.",
+        "Linear-representation cards and Part30 handoff readable and contained."
+      ],
+      "review": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Geometry/0fcc6c7a60af443e59554b00ef01a15f061b34a1fd53dd9676337d8d4c3389ef/review.json"
+    }
+  ],
+  "findings": [
+    {
+      "id": "W1080-01",
+      "severity": "minor-optional-typography",
+      "summary": "Harris history-card body has a leading Chinese comma on final wrapped line; text remains readable and contained.",
+      "indices": [
+        2,
+        3,
+        4
+      ],
+      "evidence": [
+        {
+          "index": 2,
+          "path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/002_00014.9s.png",
+          "sha256": "ba2d91b8842cec52c26e8756a985c71cafc8cea8fe795b51b0cec84972254f51",
+          "time": 14.854670089509792
+        },
+        {
+          "index": 3,
+          "path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/003_00022.0s.png",
+          "sha256": "5a5e980af16452d2b0561a065ca9a9d2c7959b2cafa2a0eb35abfca76e72faa8",
+          "time": 21.95927942529697
+        },
+        {
+          "index": 4,
+          "path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/004_00027.7s.png",
+          "sha256": "e0ecb043ec8b57ceb687e9b97a0b22769efb02736931c4e9db0f997034bf7731",
+          "time": 27.748220365568038
+        }
+      ],
+      "disposition": "Parent retained in polish queue; source/table unchanged in this batch."
+    }
+  ],
+  "files": [
+    {
+      "file": "ledgers/en-SGNS-review.json.gz",
+      "sha256": "a6a827875d6c03a63b5f492ccc2f4e5fccd91ac493592b3eefa8ce08fe300ba9",
+      "bytes": 11347,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/SGNS/a0eae79da5ab07ce64f0847807fcb84f30383ee84a77b770b252f214eebe3724/review.json",
+      "original_bytes": 95936,
+      "uncompressed_sha256": "6bc233e1d71e9fb305497c948e8f674e8ac0ca89a656754884456fed5aa980eb"
+    },
+    {
+      "file": "ledgers/en-SGNS-result.json.gz",
+      "sha256": "1e4d89dff3b299408dc963dce10842f80f5deb4630cc7ef1b1dd820fc78dd1b5",
+      "bytes": 18332,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/SGNS/a0eae79da5ab07ce64f0847807fcb84f30383ee84a77b770b252f214eebe3724/result.json",
+      "original_bytes": 102846,
+      "uncompressed_sha256": "a0eae79da5ab07ce64f0847807fcb84f30383ee84a77b770b252f214eebe3724"
+    },
+    {
+      "file": "ledgers/en-SGNS-text.jsonl.gz",
+      "sha256": "c4b8302769b8b10692c24c27b4dfd96c111f43c05c4073ef3167d5d528b9cb7b",
+      "bytes": 1685,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/SGNS/a0eae79da5ab07ce64f0847807fcb84f30383ee84a77b770b252f214eebe3724/text.jsonl",
+      "original_bytes": 9490,
+      "uncompressed_sha256": "ea7341fd2ae008a3f5aff9e617944cc79c403d9eb3654ffc3aa142b946366b2b"
+    },
+    {
+      "file": "ledgers/en-SGNS-capture.log.gz",
+      "sha256": "cdf6db1b52b279e5315f2bf3704ba1d148c60d5a80ff638777dab27c8f4219e8",
+      "bytes": 154,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/en-SGNS-capture.log",
+      "original_bytes": 174,
+      "uncompressed_sha256": "96318147d2433e39a5b6e978a448e992f6abded306e3294416e05921bc23b89d"
+    },
+    {
+      "file": "images/en-SGNS-006.png",
+      "sha256": "d25a9758140f8457f6342cb81812fdf1694955bc71a2e9c36867ab1823a49692",
+      "bytes": 102748,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/SGNS/a0eae79da5ab07ce64f0847807fcb84f30383ee84a77b770b252f214eebe3724/006_00053.2s.png",
+      "original_bytes": 102748,
+      "uncompressed_sha256": "d25a9758140f8457f6342cb81812fdf1694955bc71a2e9c36867ab1823a49692"
+    },
+    {
+      "file": "images/en-SGNS-007.png",
+      "sha256": "5b6fa90face24225551ccfa5ddbf4dcb42b696bf6868ed919c8218effd7390c8",
+      "bytes": 121409,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/SGNS/a0eae79da5ab07ce64f0847807fcb84f30383ee84a77b770b252f214eebe3724/007_00058.8s.png",
+      "original_bytes": 121409,
+      "uncompressed_sha256": "5b6fa90face24225551ccfa5ddbf4dcb42b696bf6868ed919c8218effd7390c8"
+    },
+    {
+      "file": "images/en-SGNS-013.png",
+      "sha256": "e84f416fbdd4b96277d0883f2fef479fcc88d98200baea6cdf7d8defb410179b",
+      "bytes": 218758,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/SGNS/a0eae79da5ab07ce64f0847807fcb84f30383ee84a77b770b252f214eebe3724/013_00106.5s.png",
+      "original_bytes": 218758,
+      "uncompressed_sha256": "e84f416fbdd4b96277d0883f2fef479fcc88d98200baea6cdf7d8defb410179b"
+    },
+    {
+      "file": "images/en-SGNS-016.png",
+      "sha256": "8fe7271cf448f885686fd25f58b8c3ab2d39bae10d5dafcc11c27ef84a53246a",
+      "bytes": 235778,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/SGNS/a0eae79da5ab07ce64f0847807fcb84f30383ee84a77b770b252f214eebe3724/016_00150.3s.png",
+      "original_bytes": 235778,
+      "uncompressed_sha256": "8fe7271cf448f885686fd25f58b8c3ab2d39bae10d5dafcc11c27ef84a53246a"
+    },
+    {
+      "file": "ledgers/zh-SGNS-review.json.gz",
+      "sha256": "2ffdbd374c9a9d1c7a103f59c3c69ea8126c80cba132f58142ea68285c5869c5",
+      "bytes": 11799,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/SGNS/6e1a965915976db158a6680d94089ede895a6dc83d77b1be6a877f57526c502a/review.json",
+      "original_bytes": 92632,
+      "uncompressed_sha256": "ffe976e8249f59cb30caaff8c82c33c27dcb9527aae69fc001b9db10b0dda75c"
+    },
+    {
+      "file": "ledgers/zh-SGNS-result.json.gz",
+      "sha256": "f4b60bc6b24e612a4dba4afd39f03c4712b00439426269a710349382ba417e69",
+      "bytes": 25900,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/SGNS/6e1a965915976db158a6680d94089ede895a6dc83d77b1be6a877f57526c502a/result.json",
+      "original_bytes": 125217,
+      "uncompressed_sha256": "6e1a965915976db158a6680d94089ede895a6dc83d77b1be6a877f57526c502a"
+    },
+    {
+      "file": "ledgers/zh-SGNS-text.jsonl.gz",
+      "sha256": "474c93b986b9abfb19c5f41ff6134186c4872d8f82dedb563c65fa2057441965",
+      "bytes": 1873,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/SGNS/6e1a965915976db158a6680d94089ede895a6dc83d77b1be6a877f57526c502a/text.jsonl",
+      "original_bytes": 9594,
+      "uncompressed_sha256": "39796a02bdebb3e133d3bafd645b11239dcc545bfa6862e97ec8dc950994df3e"
+    },
+    {
+      "file": "ledgers/zh-SGNS-capture.log.gz",
+      "sha256": "746d6197981d48ff258551e97169255c36166ac197a49c07f5896aaff0bdbaa2",
+      "bytes": 124,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/zh-SGNS-capture.log",
+      "original_bytes": 128,
+      "uncompressed_sha256": "bf740696540cd50119d211d4140cd0105fdb1de16c9b9446732f59b2719d2c5d"
+    },
+    {
+      "file": "images/zh-SGNS-006.png",
+      "sha256": "28f3089e7aac99bdcc605c2581cbe9cffcb8d9760061e7f3496868dab7908739",
+      "bytes": 101194,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/SGNS/6e1a965915976db158a6680d94089ede895a6dc83d77b1be6a877f57526c502a/006_00057.5s.png",
+      "original_bytes": 101194,
+      "uncompressed_sha256": "28f3089e7aac99bdcc605c2581cbe9cffcb8d9760061e7f3496868dab7908739"
+    },
+    {
+      "file": "images/zh-SGNS-007.png",
+      "sha256": "e1bfffa29f9f773a5785151960f9cd573519cee1a9aa0a4ecfb424064491f470",
+      "bytes": 120191,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/SGNS/6e1a965915976db158a6680d94089ede895a6dc83d77b1be6a877f57526c502a/007_00063.9s.png",
+      "original_bytes": 120191,
+      "uncompressed_sha256": "e1bfffa29f9f773a5785151960f9cd573519cee1a9aa0a4ecfb424064491f470"
+    },
+    {
+      "file": "images/zh-SGNS-012.png",
+      "sha256": "b2cc41f71e51a8b0076cf6c3c3b57ea8a478d26d55560b25a49b12e14a745047",
+      "bytes": 214710,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/SGNS/6e1a965915976db158a6680d94089ede895a6dc83d77b1be6a877f57526c502a/012_00113.4s.png",
+      "original_bytes": 214710,
+      "uncompressed_sha256": "b2cc41f71e51a8b0076cf6c3c3b57ea8a478d26d55560b25a49b12e14a745047"
+    },
+    {
+      "file": "ledgers/en-Words-review.json.gz",
+      "sha256": "3a74f1d3a0125ee99ff2460fbb233f6d54aea1a11fd02d314463869a82b5ecc3",
+      "bytes": 8752,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Words/1530ae9bd108db8aa20cac999f208f6cb08d2c8174d78a0cfa0bb311f470ad6a/review.json",
+      "original_bytes": 60244,
+      "uncompressed_sha256": "cc183cbb8a024755b5d4e42057c2e66409bd74f33e398a4355ddb63a48084d30"
+    },
+    {
+      "file": "ledgers/en-Words-result.json.gz",
+      "sha256": "841ec28a393013de970f2086e2fb9d042a7c317a7138047a2c83d6f6223542eb",
+      "bytes": 14340,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Words/1530ae9bd108db8aa20cac999f208f6cb08d2c8174d78a0cfa0bb311f470ad6a/result.json",
+      "original_bytes": 71174,
+      "uncompressed_sha256": "1530ae9bd108db8aa20cac999f208f6cb08d2c8174d78a0cfa0bb311f470ad6a"
+    },
+    {
+      "file": "ledgers/en-Words-text.jsonl.gz",
+      "sha256": "e55c97fdd72d0b0afcff857fcbb89c83a607bdc9bd73ef7553563ae14a287ede",
+      "bytes": 1124,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Words/1530ae9bd108db8aa20cac999f208f6cb08d2c8174d78a0cfa0bb311f470ad6a/text.jsonl",
+      "original_bytes": 4695,
+      "uncompressed_sha256": "42065196683fa3d6bc9de361958c3869255abbaab038a82d6107e695b806acaf"
+    },
+    {
+      "file": "ledgers/en-Words-capture.log.gz",
+      "sha256": "48e6d7866500f2064c99f094ce944186209ae6d7b6c4d724b7f8dfebaf6f28b8",
+      "bytes": 122,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/en-Words-capture.log",
+      "original_bytes": 129,
+      "uncompressed_sha256": "91aa9dad50eaf917e3c96ddd3ddfc04291deb19ee8fdfaaa4864cbd67f92ef76"
+    },
+    {
+      "file": "images/en-Words-009.png",
+      "sha256": "e35035a88965dad0bc52e31c750208690224cb987f1ac97e04a6f8fb4692adfe",
+      "bytes": 384993,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Words/1530ae9bd108db8aa20cac999f208f6cb08d2c8174d78a0cfa0bb311f470ad6a/009_00071.2s.png",
+      "original_bytes": 384993,
+      "uncompressed_sha256": "e35035a88965dad0bc52e31c750208690224cb987f1ac97e04a6f8fb4692adfe"
+    },
+    {
+      "file": "images/en-Words-011.png",
+      "sha256": "9170934f5c5451822388837279e383a432dcb08bae5395f72b856417b79efb45",
+      "bytes": 150827,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Words/1530ae9bd108db8aa20cac999f208f6cb08d2c8174d78a0cfa0bb311f470ad6a/011_00092.1s.png",
+      "original_bytes": 150827,
+      "uncompressed_sha256": "9170934f5c5451822388837279e383a432dcb08bae5395f72b856417b79efb45"
+    },
+    {
+      "file": "images/en-Words-017.png",
+      "sha256": "834b33c8e1122d8211c21c0002f8165ffcfa3e7867bcffe4a4f5f60d118b9f45",
+      "bytes": 161773,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Words/1530ae9bd108db8aa20cac999f208f6cb08d2c8174d78a0cfa0bb311f470ad6a/017_00159.5s.png",
+      "original_bytes": 161773,
+      "uncompressed_sha256": "834b33c8e1122d8211c21c0002f8165ffcfa3e7867bcffe4a4f5f60d118b9f45"
+    },
+    {
+      "file": "ledgers/zh-Words-review.json.gz",
+      "sha256": "0458ed93e89aa0d7bd7e0ca398c3c5f3d88c50142e57ea3bb262721fbb7bca28",
+      "bytes": 9536,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/review.json",
+      "original_bytes": 61641,
+      "uncompressed_sha256": "ada3b6e3c8eef74b76d908950e573bf4ef1697579542b63df98bfc309cfa720c"
+    },
+    {
+      "file": "ledgers/zh-Words-result.json.gz",
+      "sha256": "474d587c6ffea1f73f1a62e9aa5e76fc3d71ad8d8c20fc34c568d1ac34337c04",
+      "bytes": 21418,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/result.json",
+      "original_bytes": 92566,
+      "uncompressed_sha256": "dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804"
+    },
+    {
+      "file": "ledgers/zh-Words-text.jsonl.gz",
+      "sha256": "17ec26fe53f414c3d255262aff709b1a5fed2e7f5443bacd13bdc9e6199ab2cc",
+      "bytes": 1288,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/text.jsonl",
+      "original_bytes": 4806,
+      "uncompressed_sha256": "6a15871768ac12b5c20dfa61dd676fb8e8da28711537d4c3c6bbfce0adc5e7e1"
+    },
+    {
+      "file": "ledgers/zh-Words-capture.log.gz",
+      "sha256": "81aa7fe5d8b5fbda9dd78b20e1e67c28acc5134acb58a441b374732f20586422",
+      "bytes": 122,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/zh-Words-capture.log",
+      "original_bytes": 129,
+      "uncompressed_sha256": "d5570ed5f579119f123bf9ea9cabc4cadce5873335453803112fe2404d0b5e5f"
+    },
+    {
+      "file": "images/zh-Words-002.png",
+      "sha256": "ba2d91b8842cec52c26e8756a985c71cafc8cea8fe795b51b0cec84972254f51",
+      "bytes": 68605,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/002_00014.9s.png",
+      "original_bytes": 68605,
+      "uncompressed_sha256": "ba2d91b8842cec52c26e8756a985c71cafc8cea8fe795b51b0cec84972254f51"
+    },
+    {
+      "file": "images/zh-Words-009.png",
+      "sha256": "0d0b29ba647efa9457849eee2173a373361ecc5a6337149769c7be894c14fc6d",
+      "bytes": 381165,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/009_00078.1s.png",
+      "original_bytes": 381165,
+      "uncompressed_sha256": "0d0b29ba647efa9457849eee2173a373361ecc5a6337149769c7be894c14fc6d"
+    },
+    {
+      "file": "images/zh-Words-011.png",
+      "sha256": "bf66c9492bc8e6d06f38f817f472c99c802ea54cee3040f605f3bad6af6679ad",
+      "bytes": 153305,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/011_00100.3s.png",
+      "original_bytes": 153305,
+      "uncompressed_sha256": "bf66c9492bc8e6d06f38f817f472c99c802ea54cee3040f605f3bad6af6679ad"
+    },
+    {
+      "file": "images/zh-Words-017.png",
+      "sha256": "f07835c1854ab1f2e638e05d902a2b8717dbfcc9c48108f78a8ac289793a79dd",
+      "bytes": 152177,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Words/dda62a1fcbefe2d083bf8d018269c8f96fb5a5ac9fde501fd6153f8c91408804/017_00171.9s.png",
+      "original_bytes": 152177,
+      "uncompressed_sha256": "f07835c1854ab1f2e638e05d902a2b8717dbfcc9c48108f78a8ac289793a79dd"
+    },
+    {
+      "file": "ledgers/en-Geometry-review.json.gz",
+      "sha256": "ff4d2a1610b7e522f2d1dfad6049c9e7c608c80cbe072c1dcf100cdd97c473ed",
+      "bytes": 6907,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Geometry/3a2ad630f4cabe7537a8e3b697ce5114cf19c220cb3af6379873f124870d1031/review.json",
+      "original_bytes": 60190,
+      "uncompressed_sha256": "5e80b9b95bd1ca1b0fe52988b8fe61753d6083391472facdc43344e95fb883c4"
+    },
+    {
+      "file": "ledgers/en-Geometry-result.json.gz",
+      "sha256": "fdd9796f16bcb4dd4c3244142811c4ae19f5e524f4c030b1bbe0145163bf839f",
+      "bytes": 11951,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Geometry/3a2ad630f4cabe7537a8e3b697ce5114cf19c220cb3af6379873f124870d1031/result.json",
+      "original_bytes": 68303,
+      "uncompressed_sha256": "3a2ad630f4cabe7537a8e3b697ce5114cf19c220cb3af6379873f124870d1031"
+    },
+    {
+      "file": "ledgers/en-Geometry-text.jsonl.gz",
+      "sha256": "49c9b613fb8f1a1effb03339d6b84a9e17ff2289a0010e64c14547250fe15f32",
+      "bytes": 1102,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Geometry/3a2ad630f4cabe7537a8e3b697ce5114cf19c220cb3af6379873f124870d1031/text.jsonl",
+      "original_bytes": 5769,
+      "uncompressed_sha256": "0daaefafec966029ea515a4fcde44a570371cb1300173cf7787accfd20315703"
+    },
+    {
+      "file": "ledgers/en-Geometry-capture.log.gz",
+      "sha256": "1ec6b822ac4ab4720c31e63954bbb7647fe545aeee5f65ddc196814ad2e95a5c",
+      "bytes": 125,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/en-Geometry-capture.log",
+      "original_bytes": 132,
+      "uncompressed_sha256": "e4841b4294e122be68704052e2a99fb09ac01a7bd000c2694330be1b3c8a38d3"
+    },
+    {
+      "file": "images/en-Geometry-006.png",
+      "sha256": "73d59e36ba0190629fbb5e9089d56fdb5d77411073ef81f1f990593be5f802eb",
+      "bytes": 242045,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Geometry/3a2ad630f4cabe7537a8e3b697ce5114cf19c220cb3af6379873f124870d1031/006_00051.5s.png",
+      "original_bytes": 242045,
+      "uncompressed_sha256": "73d59e36ba0190629fbb5e9089d56fdb5d77411073ef81f1f990593be5f802eb"
+    },
+    {
+      "file": "images/en-Geometry-010.png",
+      "sha256": "e4550399e505bb50a6d8c29949482c1a90492cbe152850febe57ae032dd716fb",
+      "bytes": 156518,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/en/Geometry/3a2ad630f4cabe7537a8e3b697ce5114cf19c220cb3af6379873f124870d1031/010_00118.6s.png",
+      "original_bytes": 156518,
+      "uncompressed_sha256": "e4550399e505bb50a6d8c29949482c1a90492cbe152850febe57ae032dd716fb"
+    },
+    {
+      "file": "ledgers/zh-Geometry-review.json.gz",
+      "sha256": "f90e211e209cc4d990bb8d4fe51826caf6827b08c5929c333a980c87545f561d",
+      "bytes": 7261,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Geometry/0fcc6c7a60af443e59554b00ef01a15f061b34a1fd53dd9676337d8d4c3389ef/review.json",
+      "original_bytes": 59746,
+      "uncompressed_sha256": "989efab82cda241e04db492444e91926971cf34ff7147d0d390edaf59fce8f7a"
+    },
+    {
+      "file": "ledgers/zh-Geometry-result.json.gz",
+      "sha256": "1346edd6d7f6af8227d9a8ed42c494cd2134dbcb8683ef200f2685912bd302fc",
+      "bytes": 18125,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Geometry/0fcc6c7a60af443e59554b00ef01a15f061b34a1fd53dd9676337d8d4c3389ef/result.json",
+      "original_bytes": 86090,
+      "uncompressed_sha256": "0fcc6c7a60af443e59554b00ef01a15f061b34a1fd53dd9676337d8d4c3389ef"
+    },
+    {
+      "file": "ledgers/zh-Geometry-text.jsonl.gz",
+      "sha256": "ff7547110e4fad7041a85b227c06a75d08a45986e32cad7eae3825b92c4e9335",
+      "bytes": 1236,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Geometry/0fcc6c7a60af443e59554b00ef01a15f061b34a1fd53dd9676337d8d4c3389ef/text.jsonl",
+      "original_bytes": 5815,
+      "uncompressed_sha256": "cee433d8273f224dcebb6408e05dbd2a99f3e3c517345e42e888a84a00d1a521"
+    },
+    {
+      "file": "ledgers/zh-Geometry-capture.log.gz",
+      "sha256": "9c6924aa4050368969cd275b52af84363a8f48129c19118f6404106c7691cd55",
+      "bytes": 125,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/zh-Geometry-capture.log",
+      "original_bytes": 132,
+      "uncompressed_sha256": "40bcf482bffbd7fffe804de4dbfb5b720f435e73f82556167a38acce39a92164"
+    },
+    {
+      "file": "images/zh-Geometry-006.png",
+      "sha256": "0bd16f99e8aca9a67aef125c50bc61552bb551fe06e5a7ab4962321af9c618f0",
+      "bytes": 231442,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Geometry/0fcc6c7a60af443e59554b00ef01a15f061b34a1fd53dd9676337d8d4c3389ef/006_00048.1s.png",
+      "original_bytes": 231442,
+      "uncompressed_sha256": "0bd16f99e8aca9a67aef125c50bc61552bb551fe06e5a7ab4962321af9c618f0"
+    },
+    {
+      "file": "images/zh-Geometry-010.png",
+      "sha256": "52bc583a0978ff1d764e0617d5df049f033f8dcab56f85c2d04bb71415659eef",
+      "bytes": 148989,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/captures/zh/Geometry/0fcc6c7a60af443e59554b00ef01a15f061b34a1fd53dd9676337d8d4c3389ef/010_00121.8s.png",
+      "original_bytes": 148989,
+      "uncompressed_sha256": "52bc583a0978ff1d764e0617d5df049f033f8dcab56f85c2d04bb71415659eef"
+    },
+    {
+      "file": "ledgers/capture-receipt.json.gz",
+      "sha256": "84a3b3a3105865968ba3a344af90b0860932da5df9de80967b25eed27b2a88e2",
+      "bytes": 1679,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/capture-receipt.json",
+      "original_bytes": 9282,
+      "uncompressed_sha256": "8ecdb2157d8953656d1cd8a286ec993d21079f1dc8174a0b772b8b13e1b8c269"
+    },
+    {
+      "file": "ledgers/completion-review.json.gz",
+      "sha256": "752d13b142381d6c7a33c8a29c25e4f4c72c56b6cf36e1208a6bc267778312fe",
+      "bytes": 3077,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/completion-review.json",
+      "original_bytes": 10225,
+      "uncompressed_sha256": "5a3030250510e87fe76baa1f16c4b1dfcfecd2be9e8bf2c42eea311f44763d01"
+    },
+    {
+      "file": "ledgers/completion-review.log.gz",
+      "sha256": "752d13b142381d6c7a33c8a29c25e4f4c72c56b6cf36e1208a6bc267778312fe",
+      "bytes": 3077,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/completion-review.log",
+      "original_bytes": 10225,
+      "uncompressed_sha256": "5a3030250510e87fe76baa1f16c4b1dfcfecd2be9e8bf2c42eea311f44763d01"
+    },
+    {
+      "file": "ledgers/s13_words.py.gz",
+      "sha256": "1b5b2ae64443964b9b5d22595f97e41e7855a14bfef8cf76d109cf6a3fe0b5e3",
+      "bytes": 5624,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/before/en/Words/s13_words.py",
+      "original_bytes": 17048,
+      "uncompressed_sha256": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf"
+    },
+    {
+      "file": "ledgers/s14_sgns.py.gz",
+      "sha256": "f9af5f657a31a5c2c261b273d8aba4bcb15fe17694189007c810be7e6cf67f0f",
+      "bytes": 6466,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/before/en/SGNS/s14_sgns.py",
+      "original_bytes": 20385,
+      "uncompressed_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673"
+    },
+    {
+      "file": "ledgers/s17_geometry.py.gz",
+      "sha256": "62cfc1d8d02136650affe0dc24b589c8da03e63690240ede800c8068746dc539",
+      "bytes": 4429,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/before/en/Geometry/s17_geometry.py",
+      "original_bytes": 12774,
+      "uncompressed_sha256": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a"
+    },
+    {
+      "file": "ledgers/common.py.gz",
+      "sha256": "2d5c28af92efa80d645dbb66dbdcfb365b99271a860a7bed7157ab732e1b0283",
+      "bytes": 3302,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/before/zh/SGNS/common.py",
+      "original_bytes": 7707,
+      "uncompressed_sha256": "43bc01600482b1780d46ce9fe2b7c9318b1209d0e9d7ac0b490cf25279226ab9"
+    },
+    {
+      "file": "ledgers/compute.py.gz",
+      "sha256": "34cad82e23de7389bfe35aebe10a602674a66db97a592113ad6a0a0df00f5b0f",
+      "bytes": 29936,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/before/zh/SGNS/compute.py",
+      "original_bytes": 91092,
+      "uncompressed_sha256": "decde1f7874d08148cf35ac8067cb6ea6cf051d058ce052a6282afdca4cdb41a"
+    },
+    {
+      "file": "ledgers/manifest.py.gz",
+      "sha256": "ccaa85ffcfe84283c933215a09b57690f249c3227d4d3b2601bf5690a40f69c3",
+      "bytes": 696,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/before/zh/SGNS/manifest.py",
+      "original_bytes": 1321,
+      "uncompressed_sha256": "f9d32cb62542791e063c5a3186745a0d2ba89d8044da463a9d75f3111b6f5d5a"
+    },
+    {
+      "file": "ledgers/zh_lines.py.gz",
+      "sha256": "8fd99d5978b76022a9f15a07dff5b019db2b1fd6cf0d7277d0599d99253770f6",
+      "bytes": 25580,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/before/zh/SGNS/zh_lines.py",
+      "original_bytes": 64038,
+      "uncompressed_sha256": "5305426a579e3d0d3863b92917baeb18b3402b12d93fd8389c9161101f7c82fc"
+    },
+    {
+      "file": "ledgers/qa_series.py.gz",
+      "sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf",
+      "bytes": 7934,
+      "original_path": "/workspace/runtime/ai3-production-endpoint-sgns-words-geometry/before/zh/SGNS/qa_series.py",
+      "original_bytes": 25379,
+      "uncompressed_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+    },
+    {
+      "file": "ledgers/qa_production_endpoint.py.gz",
+      "sha256": "9d2a7580006b54755cfd70f99ac5cf6dc0d91e8f32d5c81e82038026712e6f23",
+      "bytes": 947,
+      "original_path": "/workspace/runtime/qa_production_endpoint.py",
+      "original_bytes": 1943,
+      "uncompressed_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d"
+    },
+    {
+      "file": "ledgers/capture_ai3_production_head_semantics.py.gz",
+      "sha256": "311c26142adb5978e82df7eb0c7d8dd193b00bd40d45026fca45bd43a9d4e099",
+      "bytes": 2129,
+      "original_path": "/workspace/runtime/capture_ai3_production_head_semantics.py",
+      "original_bytes": 5120,
+      "uncompressed_sha256": "afed67dd8eb29c36cc2e901b818133a6bba85e13d075a3d78189fa6373971d18"
+    }
+  ]
+}

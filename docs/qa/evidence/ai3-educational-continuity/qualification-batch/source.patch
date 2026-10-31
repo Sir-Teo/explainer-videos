@@ -1,0 +1,47 @@
+diff --git a/videos/ai/ai3/s01_hook.py b/videos/ai/ai3/s01_hook.py
+index ab67fa8..9474e6c 100644
+--- a/videos/ai/ai3/s01_hook.py
++++ b/videos/ai/ai3/s01_hook.py
+@@ -28,9 +28,9 @@ class Hook(VoiceoverScene):
+         cap = label(r"Part 1's counting model: \\ every context is its own island", font_size=30, color=GREY_A)
+         cap.to_edge(DOWN, buff=1.0)
+         with self.voiceover(
+-            "In part one, a model learned to guess the next letter by counting, and it hit a wall. Every context was "
+-            "its own island. <bookmark mark='a'/> Reading the dog barked a hundred times taught it nothing about "
+-            "the hound barked."
++            "In part one, a model learned to guess the next letter by counting, and it hit a wall. It could share "
++            "exact letter patterns, but each context was an island of counts. <bookmark mark='a'/> Reading the dog "
++            "barked a hundred times did not teach it that dog and hound have related meanings."
+         ) as vo:
+             self.play(FadeIn(a, shift=RIGHT * 0.3), FadeIn(cap))
+             vo.wait_until("a")
+diff --git a/videos/ai/ai3/s13_words.py b/videos/ai/ai3/s13_words.py
+index 89e1bd9..0ecf0b4 100644
+--- a/videos/ai/ai3/s13_words.py
++++ b/videos/ai/ai3/s13_words.py
+@@ -46,7 +46,8 @@ class Words(VoiceoverScene):
+         ).arrange(RIGHT, buff=0.2, aligned_edge=UP).move_to(DOWN * 0.3)
+         head = label(r"Meaning from company", font_size=40).to_edge(UP, buff=0.4)
+         with self.voiceover(
+-            "Part 1's counting model treated every word as an island. The fix is an old idea from linguistics. "
++            "Part 1 began with counts of distinct letter symbols. Now we connect words by counting the contexts "
++            "they share. The idea comes from linguistics. "
+             "<bookmark mark='a'/> In 1954 Zellig Harris argued that words in the same contexts tend to mean similar "
+             "things. <bookmark mark='b'/> In 1957 John Firth: you shall know a word by the company it keeps. "
+             "<bookmark mark='c'/> In 1990 Scott Deerwester, Susan Dumais and colleagues made it an algorithm: count "
+diff --git a/videos/ai/ai3/s18_netflix.py b/videos/ai/ai3/s18_netflix.py
+index f27a03e..758efb5 100644
+--- a/videos/ai/ai3/s18_netflix.py
++++ b/videos/ai/ai3/s18_netflix.py
+@@ -150,8 +150,9 @@ class Netflix(VoiceoverScene):
+         with self.voiceover(
+             "The model is a sum. <bookmark mark='a'/> An average, plus the user's generosity, plus the film's quality, "
+             "plus a dot product of k numbers of taste each. <bookmark mark='b'/> Fit it to the ratings we have, keeping "
+-            "the vectors small, with a separate fixed penalty on user and film biases. <bookmark mark='c'/> A full table would have chapter eight's answer; with holes there is "
+-            "no formula, and we descend the gradient. <bookmark mark='d'/> We built a small world to test on: "
++            "the vectors small, with a separate fixed penalty on user and film biases. <bookmark mark='c'/> Chapter "
++            "eight solves the unregularized least-squares rank-k approximation of a full matrix. Here, we optimize "
++            "the observed ratings with the vector and bias penalties. <bookmark mark='d'/> We built a small world to test on: "
+             f"{m['users']:,} users, {m['items']:,} films, {m['n_ratings']:,} ratings, from six hidden genres the method "
+             "never sees."
+         ) as vo:

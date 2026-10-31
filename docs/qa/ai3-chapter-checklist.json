@@ -14,9 +14,9 @@
       "title": "Where words live",
       "source_file": "videos/ai/ai3/s01_hook.py",
       "source_sha256_at_checkpoint": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
-      "selected_review": "Selected review complete: EN356/ZH374",
+      "selected_review": "Current semantic-sharing VO qualification regression active",
       "repair_or_checks": "Label halos, transition continuity, footer clearance",
-      "evidence_directory": "docs/qa/evidence/ai3-hook-motion-regression",
+      "evidence_directory": "docs/qa/evidence/ai3-educational-continuity",
       "cases": {
         "en": {
           "endpoints": {
@@ -78,7 +78,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86"
     },
     {
       "scene": "Vectors",
@@ -133,7 +134,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "110a369b78476c6d4a302e9ff61dfbb5fe5e569a74e0843d2c249cc1eb5cb62e"
     },
     {
       "scene": "Einsum",
@@ -192,7 +194,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "4cf32fd13a907723f2478104b8be2de7dd38df693fa330558edb15d1716ed23e"
     },
     {
       "scene": "Matrices",
@@ -251,7 +254,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47"
     },
     {
       "scene": "Projection",
@@ -310,7 +314,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae"
     },
     {
       "scene": "Eigen",
@@ -365,16 +370,17 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0"
     },
     {
       "scene": "Power",
       "title": "6. Power iteration, run live",
       "source_file": "videos/ai/ai3/s07_power.py",
       "source_sha256_at_checkpoint": "3a0bf8e0af73cf30fd68f528881e46db9e29be38d6a0f756378f815ceb59809c",
-      "selected_review": "Selected review complete: EN318/ZH315",
+      "selected_review": "Final selected review complete: EN318/ZH315; new native label clearance verified",
       "repair_or_checks": "Roundoff leader and non-growing prediction emphasis",
-      "evidence_directory": "docs/qa/evidence/ai3-power-svd-motion-regression",
+      "evidence_directory": "docs/qa/evidence/ai3-power-label-regression",
       "cases": {
         "en": {
           "endpoints": {
@@ -420,7 +426,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "f67974683fafc9378f5ada7ea210ce1db8c1d507b9b972efad7c03aa803755b4"
     },
     {
       "scene": "SVD",
@@ -479,7 +486,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10"
     },
     {
       "scene": "LowRank",
@@ -542,7 +550,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd"
     },
     {
       "scene": "Norms",
@@ -597,7 +606,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec"
     },
     {
       "scene": "Spectra",
@@ -654,16 +664,17 @@
         }
       },
       "native_1080_endpoint_review": "All31 native-resolution captures inspected on8pages at960px width plus8native-pixel critical crops; separate from motion.",
-      "native_1080_evidence": "docs/qa/evidence/ai3-spectra-production-endpoints-1080/"
+      "native_1080_evidence": "docs/qa/evidence/ai3-spectra-production-endpoints-1080/",
+      "latest_frozen_source_sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053"
     },
     {
       "scene": "GaLore",
       "title": "11. Gradients are low rank",
       "source_file": "videos/ai/ai3/s12_galore.py",
       "source_sha256_at_checkpoint": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
-      "selected_review": "Final bilingual selected review complete",
+      "selected_review": "Final selected review complete: EN410/ZH435; feasibility qualification verified",
       "repair_or_checks": "Rank bounds qualified; 84 Norms/GaLore endpoints and 1,758 motion times jointly reviewed",
-      "evidence_directory": "docs/qa/evidence/ai3-norms-galore-motion-regression",
+      "evidence_directory": "docs/qa/evidence/ai3-galore-feasibility-regression",
       "cases": {
         "en": {
           "endpoints": {
@@ -709,16 +720,17 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "a5dbaa9950a3386c48974486571251dc85f851e7c2d0806223177feba80d4ed4"
     },
     {
       "scene": "Words",
       "title": "12. Word vectors from counting",
       "source_file": "videos/ai/ai3/s13_words.py",
       "source_sha256_at_checkpoint": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
-      "selected_review": "Final bilingual selected review complete",
+      "selected_review": "Current exact-context/counting bridge VO regression active",
       "repair_or_checks": "Protect analogy labels from translated arrow strokes",
-      "evidence_directory": "docs/qa/evidence/ai3-words-geometry-motion-regression",
+      "evidence_directory": "docs/qa/evidence/ai3-educational-continuity",
       "cases": {
         "en": {
           "endpoints": {
@@ -764,7 +776,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d"
     },
     {
       "scene": "SGNS",
@@ -827,7 +840,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673"
     },
     {
       "scene": "HighDim",
@@ -890,7 +904,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55"
     },
     {
       "scene": "JL",
@@ -945,7 +960,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5"
     },
     {
       "scene": "Geometry",
@@ -1000,16 +1016,17 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a"
     },
     {
       "scene": "Netflix",
       "title": "17. Low rank in the wild",
       "source_file": "videos/ai/ai3/s18_netflix.py",
       "source_sha256_at_checkpoint": "a6709b228262080e408cfc559edc473696b57cef516defa3316f514b5b1ad21c",
-      "selected_review": "Current bilingual selected review underway",
+      "selected_review": "Current unregularized-SVD scope VO regression active",
       "repair_or_checks": "Standard macro recall, raw conditional scores, grouped objective, readable counts",
-      "evidence_directory": "docs/qa/evidence/ai3-late-source-repairs",
+      "evidence_directory": "docs/qa/evidence/ai3-educational-continuity",
       "cases": {
         "en": {
           "endpoints": {
@@ -1055,16 +1072,17 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "893ab4f1d48fa93876cd88c01b887a906aedc6e5fc19a70d54d6a56029e93a67"
     },
     {
       "scene": "Outro",
       "title": "Recap, problems, and what comes next",
       "source_file": "videos/ai/ai3/s19_outro.py",
       "source_sha256_at_checkpoint": "22163cd98ceb1928347079996807c11d97aab44622b65a520a00b028d3e3c116",
-      "selected_review": "Complete original643 selected times reviewed; final wrapped-caption regression underway",
+      "selected_review": "Final selected review complete: EN310/ZH338; wrapped footer verified",
       "repair_or_checks": "Chinese captions corrected; long recap caption wrapping queued",
-      "evidence_directory": "docs/qa/evidence/ai3-late-source-repairs",
+      "evidence_directory": "docs/qa/evidence/ai3-outro-selected-review",
       "cases": {
         "en": {
           "endpoints": {
@@ -1110,7 +1128,8 @@
             "scope": "Runtime record only; actual selected review is tracked separately above."
           }
         }
-      }
+      },
+      "latest_frozen_source_sha256": "4e1d29200637256128acf72ecffd0f02caaf6733a4222808dd0b32bf82981ed7"
     }
   ],
   "selected_review_updated_utc": "2026-10-31T21:20:31.050627+00:00",
@@ -1118,5 +1137,13 @@
   "remaining_bilingual_selected_chapters": [
     "Netflix",
     "Outro"
-  ]
+  ],
+  "late_source_qualification_updated_utc": "2026-10-31T21:52:52.418064+00:00",
+  "late_qualification_pending_chapters": [
+    "Hook",
+    "Words",
+    "Netflix"
+  ],
+  "native_1080_original_capture_cases": 38,
+  "native_1080_original_images_reviewed": 695
 }

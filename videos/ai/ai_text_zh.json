@@ -20581,7 +20581,12 @@
     "SGNS: generalized shifted PMI": "SGNS：广义移位PMI",
     "a sum of outer products: \\ rank at most one each": "外积之和：每个的秩至多为$1$",
     "LoRA (2021): \\ the \\textit{change} has rank $\\le r$, \\ always": "LoRA（2021）：变化的秩始终$\\le r$",
-    "GaLore: \\ each \\textit{step} has rank $\\le r$; \\ the window moves": "GaLore：每一步的秩$\\le r$；窗口会移动"
+    "GaLore: \\ each \\textit{step} has rank $\\le r$; \\ the window moves": "GaLore：每一步的秩$\\le r$；窗口会移动",
+    "spectra: separately": "谱：各自",
+    "peak-normalized": "按峰值归一化",
+    "SGNS: generalized": "SGNS：广义",
+    "shifted PMI": "移位 PMI",
+    "up to $65.5\\%$ less optimizer memory in pretraining; \\ with 8-bit states and per-layer updates, \\ 7B pretraining can fit within 24 GB": "预训练时优化器内存最多减少$65.5\\%$；\\ 配合8位状态和逐层更新，\\ 70亿参数模型的预训练可容纳在24GB内存中"
   },
   "phrases": {
     "width": "宽度",

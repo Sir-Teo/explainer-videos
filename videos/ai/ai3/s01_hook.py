@@ -28,9 +28,9 @@ class Hook(VoiceoverScene):
         cap = label(r"Part 1's counting model: \\ every context is its own island", font_size=30, color=GREY_A)
         cap.to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "In part one, a model learned to guess the next letter by counting, and it hit a wall. Every context was "
-            "its own island. <bookmark mark='a'/> Reading the dog barked a hundred times taught it nothing about "
-            "the hound barked."
+            "In part one, a model learned to guess the next letter by counting, and it hit a wall. It could share "
+            "exact letter patterns, but each context was an island of counts. <bookmark mark='a'/> Reading the dog "
+            "barked a hundred times did not teach it that dog and hound have related meanings."
         ) as vo:
             self.play(FadeIn(a, shift=RIGHT * 0.3), FadeIn(cap))
             vo.wait_until("a")

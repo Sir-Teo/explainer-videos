@@ -1,0 +1,631 @@
+{
+  "created_utc": "2026-10-31T21:21:46.496576+00:00",
+  "payloads": [
+    {
+      "file": "review.json.gz",
+      "sha256": "9909413a7b34ab68763161c0f83685b36b85f141e25676bd78774f7c3b2116af",
+      "size": 63118,
+      "uncompressed_sha256": "7723b7c73d0191a486f1b6405e1d07e4a80da22c573653a5a5b8777ab1e768ed",
+      "source": "/workspace/runtime/ai3-production1080-foundations/review.json"
+    },
+    {
+      "file": "capture-receipts.json.gz",
+      "sha256": "cafcf30194db572159af1f6314bfd9d5b7ab6e96fb126b484eed5157d0ffd5dc",
+      "size": 1768,
+      "uncompressed_sha256": "46979988f49ee54aa64a0db9239a7133fc9bea632d10d9599726a1b50359f81c",
+      "source": "/workspace/runtime/ai3-production1080-foundations/capture-receipts.json"
+    },
+    {
+      "file": "qa_production_endpoint.py.gz",
+      "sha256": "9d2a7580006b54755cfd70f99ac5cf6dc0d91e8f32d5c81e82038026712e6f23",
+      "size": 947,
+      "uncompressed_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+      "source": "/workspace/runtime/ai3-production1080-foundations/qa_production_endpoint.py"
+    },
+    {
+      "file": "qa_series.py.gz",
+      "sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf",
+      "size": 7934,
+      "uncompressed_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "source": "/workspace/runtime/ai3-production1080-foundations/qa_series.py"
+    },
+    {
+      "file": "qa_scene.py.gz",
+      "sha256": "8fe157eed425ff07ddca65ca0e6a6f831f30edc0a151a37fa776dd8fe19454e7",
+      "size": 1406,
+      "uncompressed_sha256": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+      "source": "/workspace/runtime/ai3-production1080-foundations/qa_scene.py"
+    },
+    {
+      "file": "ai3_production1080_foundations_capture.py.gz",
+      "sha256": "3c2268ac9aa1432cfe9833f3c7d41f81646fc0b05f000c3e9ff8b3b5bb69c638",
+      "size": 1135,
+      "uncompressed_sha256": "505584b84fd91cd12547af17f5d6153818e2f5e111a60334bb458cbd6ecf2d35",
+      "source": "/workspace/runtime/ai3_production1080_foundations_capture.py"
+    },
+    {
+      "file": "ai3_production1080_foundations_prepare.py.gz",
+      "sha256": "0689eab3e929f6ea8168836a6224000130c88055090ed83882d940ca37e0f11c",
+      "size": 1288,
+      "uncompressed_sha256": "4d8dce647d0e967eaa77984ed260549d522b0dab60207d155bb9ca76bf705cfd",
+      "source": "/workspace/runtime/ai3_production1080_foundations_prepare.py"
+    },
+    {
+      "file": "ai3_production1080_foundations_record.py.gz",
+      "sha256": "a2beaa58eac0709c79061ebd0a98982916ef5747afb3730ef6cc7e207aa701e1",
+      "size": 454,
+      "uncompressed_sha256": "9d389911cae7df291e922db793dc0364932b5d50471f11def48a1f9d2ce275bf",
+      "source": "/workspace/runtime/ai3_production1080_foundations_record.py"
+    },
+    {
+      "file": "en-LowRank-capture.json.gz",
+      "sha256": "e2768d395ed52c7a96cc599ef370dd6e57a446910d68b0f0e10b3efd7c26f87e",
+      "size": 15025,
+      "uncompressed_sha256": "58959ad32a50d8c77a07c401170a8cc9af99368f3a765919668c370300f3d24e",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/capture.json"
+    },
+    {
+      "file": "en-LowRank-source.py.gz",
+      "sha256": "c9d466cf251ebbb8e0a6d67b1a0f07afde2fdec833fefc3cc2d95c9250847d17",
+      "size": 5698,
+      "uncompressed_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/s09_lowrank.py"
+    },
+    {
+      "file": "en-LowRank-capture.log.gz",
+      "sha256": "371538c6b0f72d63d5bf2926f7df5af604ddc206a103a3dce748233fcb5e2ca0",
+      "size": 125,
+      "uncompressed_sha256": "5ee0f2c4d06faefcffd1d91bc346eeaaed66c63a31d48fb785937033801779a8",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en-LowRank-capture.log"
+    },
+    {
+      "file": "en-LowRank-viewed-page-01.png",
+      "sha256": "13820894c65bc72284b0295c1c2cd7b058812faaf7d3cc4eb2c3a5e8c8438a3f",
+      "size": 138496,
+      "uncompressed_sha256": "13820894c65bc72284b0295c1c2cd7b058812faaf7d3cc4eb2c3a5e8c8438a3f",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/page-001.png"
+    },
+    {
+      "file": "en-LowRank-viewed-page-02.png",
+      "sha256": "8c3646499a1326965f7c5b09d315518bd052af566248cb068ca983848e034da8",
+      "size": 186697,
+      "uncompressed_sha256": "8c3646499a1326965f7c5b09d315518bd052af566248cb068ca983848e034da8",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/page-002.png"
+    },
+    {
+      "file": "en-LowRank-viewed-page-03.png",
+      "sha256": "7d7364054481bee64532b6538fad6be003db0c830a7b23c7a0dc09b35d11e02e",
+      "size": 261158,
+      "uncompressed_sha256": "7d7364054481bee64532b6538fad6be003db0c830a7b23c7a0dc09b35d11e02e",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/page-003.png"
+    },
+    {
+      "file": "en-LowRank-viewed-page-04.png",
+      "sha256": "1bcc2cd7c57fe421928c3c15b1cba87d59d13aea530a41c7f6626cf1b31688e9",
+      "size": 333842,
+      "uncompressed_sha256": "1bcc2cd7c57fe421928c3c15b1cba87d59d13aea530a41c7f6626cf1b31688e9",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/page-004.png"
+    },
+    {
+      "file": "en-LowRank-viewed-page-05.png",
+      "sha256": "1780fb99d6df0d222e1cd56fb45da2d5dc1b134275a4d5be3b5d17a4dc4a2951",
+      "size": 155783,
+      "uncompressed_sha256": "1780fb99d6df0d222e1cd56fb45da2d5dc1b134275a4d5be3b5d17a4dc4a2951",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/page-005.png"
+    },
+    {
+      "file": "en-LowRank-viewed-page-06.png",
+      "sha256": "d689b23e8fa1e71facfd4d1d58d9422fcf68843bf45be27928942ce8916ed579",
+      "size": 133803,
+      "uncompressed_sha256": "d689b23e8fa1e71facfd4d1d58d9422fcf68843bf45be27928942ce8916ed579",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/page-006.png"
+    },
+    {
+      "file": "en-LowRank-native-01.png",
+      "sha256": "a7034cb248013a3baa7e229cacb9dc76304ef9adfd7c4fde2a49d6abaaf9cdec",
+      "size": 183839,
+      "uncompressed_sha256": "a7034cb248013a3baa7e229cacb9dc76304ef9adfd7c4fde2a49d6abaaf9cdec",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/007_00062.3s.png"
+    },
+    {
+      "file": "en-LowRank-native-02.png",
+      "sha256": "dcac68ff3db08b3262ffd5e3daba4dd0a813532e6defbec9003808fb59e66a1d",
+      "size": 374337,
+      "uncompressed_sha256": "dcac68ff3db08b3262ffd5e3daba4dd0a813532e6defbec9003808fb59e66a1d",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/012_00092.4s.png"
+    },
+    {
+      "file": "en-LowRank-native-03.png",
+      "sha256": "0e5e054afd9e288211b1680165768d4800546a103ef0b9712c3e325ceb52b877",
+      "size": 135429,
+      "uncompressed_sha256": "0e5e054afd9e288211b1680165768d4800546a103ef0b9712c3e325ceb52b877",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/016_00131.8s.png"
+    },
+    {
+      "file": "input-c0ee874791ca-image.json.gz",
+      "sha256": "cc18f509c4751ce1393f6b5a0c13617d37e04a63389d4dc720b47d3331adaaf9",
+      "size": 333,
+      "uncompressed_sha256": "c0ee874791ca66a6715b9381bd3f03b33b06ddb3e775475c9b41d498a364c6b7",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/inputs/.cache/ai3/image.json"
+    },
+    {
+      "file": "input-2c874e5daf87-image.npz.gz",
+      "sha256": "3294f15c6156e0c425ae9d57c92d380ccc3a261a6ca88d3eedca363139cd4560",
+      "size": 216171,
+      "uncompressed_sha256": "2c874e5daf872c3c4505e689bfe0350248e5271b3df77e5422a38f1684417de7",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/inputs/.cache/ai3/image.npz"
+    },
+    {
+      "file": "input-8856792172f9-letters.json.gz",
+      "sha256": "071e06b2079fae4ba16df198103adb638e57860b851f5ee307c8e42dab1dcc27",
+      "size": 112,
+      "uncompressed_sha256": "8856792172f9cc63d38eac0dda663aa0303c42bdb4515d8e7723b481153031c5",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/inputs/.cache/ai3/letters.json"
+    },
+    {
+      "file": "input-eec30557b0c1-letters.npz.gz",
+      "sha256": "13a2cef4832c8e2efe53b97e08e0cf898ebf9d03e6adf5a5b402ce30ac69aae4",
+      "size": 149678,
+      "uncompressed_sha256": "eec30557b0c16285e938b327e55461c0a95b7d3788b790a8682bfb85e2e3be0a",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/inputs/.cache/ai3/letters.npz"
+    },
+    {
+      "file": "table-0e1a24b26cd7.json.gz",
+      "sha256": "c5a02f5509ba3b2c947d5a33297272de4156c05d62d06c9ec0baa8aa464f21cc",
+      "size": 870990,
+      "uncompressed_sha256": "0e1a24b26cd7c9730e9830a4dfb5f06e68638cdc70117aa28b68ce18317a6466",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/LowRank/table-at-review.json"
+    },
+    {
+      "file": "zh-LowRank-capture.json.gz",
+      "sha256": "317090693dbb859202fe06d391b89c617e4b5631549b6d141e4c23210ff8c31a",
+      "size": 20570,
+      "uncompressed_sha256": "da4e1a6eadf2cfa78053f934a25ec37deb97f18e1949687a9782694a15f3bf2a",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/capture.json"
+    },
+    {
+      "file": "zh-LowRank-source.py.gz",
+      "sha256": "c9d466cf251ebbb8e0a6d67b1a0f07afde2fdec833fefc3cc2d95c9250847d17",
+      "size": 5698,
+      "uncompressed_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/s09_lowrank.py"
+    },
+    {
+      "file": "zh-LowRank-capture.log.gz",
+      "sha256": "35b66565e0a87678f8a77a4529f27ea192c4c469e90bdd30e5b5f42c665c72e6",
+      "size": 126,
+      "uncompressed_sha256": "486e24f0aa930a8e81a1a9963d39bc0311443dc5915bb74ce667e2676fec6e6d",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh-LowRank-capture.log"
+    },
+    {
+      "file": "zh-LowRank-viewed-page-01.png",
+      "sha256": "73e2624bdfd869913debc1c96ed00c6640662c27cf9e7f791a002b47af5ba89a",
+      "size": 141788,
+      "uncompressed_sha256": "73e2624bdfd869913debc1c96ed00c6640662c27cf9e7f791a002b47af5ba89a",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/page-001.png"
+    },
+    {
+      "file": "zh-LowRank-viewed-page-02.png",
+      "sha256": "dfbae26237a9226aa0c8716d53f81181f02cda79ef49d110689667146dbb1982",
+      "size": 238069,
+      "uncompressed_sha256": "dfbae26237a9226aa0c8716d53f81181f02cda79ef49d110689667146dbb1982",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/page-002.png"
+    },
+    {
+      "file": "zh-LowRank-viewed-page-03.png",
+      "sha256": "0b26c9f81ab4b4d2a15fcee6b21bbc2833b9504773c322fd1dc5743f82eb7fde",
+      "size": 330811,
+      "uncompressed_sha256": "0b26c9f81ab4b4d2a15fcee6b21bbc2833b9504773c322fd1dc5743f82eb7fde",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/page-003.png"
+    },
+    {
+      "file": "zh-LowRank-viewed-page-04.png",
+      "sha256": "bede1a38787851ba53e3b246e6d6394c89ac90342f67e8d5e7d1078b7b1196cd",
+      "size": 211312,
+      "uncompressed_sha256": "bede1a38787851ba53e3b246e6d6394c89ac90342f67e8d5e7d1078b7b1196cd",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/page-004.png"
+    },
+    {
+      "file": "zh-LowRank-viewed-page-05.png",
+      "sha256": "6df9b33d69d2705d53c277489f7fa0e5d319961ac8de2507880c01fbf3f339ee",
+      "size": 180962,
+      "uncompressed_sha256": "6df9b33d69d2705d53c277489f7fa0e5d319961ac8de2507880c01fbf3f339ee",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/page-005.png"
+    },
+    {
+      "file": "zh-LowRank-viewed-page-06.png",
+      "sha256": "8d195658b073c3a04b31585b72fb2fbd31564dfdb7c98de143a200529de7a3fb",
+      "size": 131460,
+      "uncompressed_sha256": "8d195658b073c3a04b31585b72fb2fbd31564dfdb7c98de143a200529de7a3fb",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/page-006.png"
+    },
+    {
+      "file": "zh-LowRank-native-01.png",
+      "sha256": "efbc6205462bdf7bfec36851d821ecf0926f2bf3818d76f37b5ca011e6fc868a",
+      "size": 181074,
+      "uncompressed_sha256": "efbc6205462bdf7bfec36851d821ecf0926f2bf3818d76f37b5ca011e6fc868a",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/006_00062.7s.png"
+    },
+    {
+      "file": "zh-LowRank-native-02.png",
+      "sha256": "ec8b851b9d5a75b08dfa32d7545247216c81fda18ba2f5e597d8d9b554974631",
+      "size": 373562,
+      "uncompressed_sha256": "ec8b851b9d5a75b08dfa32d7545247216c81fda18ba2f5e597d8d9b554974631",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/011_00088.2s.png"
+    },
+    {
+      "file": "zh-LowRank-native-03.png",
+      "sha256": "89f2cc976452b1307078f33599fafaa2f4e09bbc9735480b890cbe069496ccfb",
+      "size": 112201,
+      "uncompressed_sha256": "89f2cc976452b1307078f33599fafaa2f4e09bbc9735480b890cbe069496ccfb",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/LowRank/016_00144.8s.png"
+    },
+    {
+      "file": "en-Norms-capture.json.gz",
+      "sha256": "b3873670ef7c00b6bd47ff8a4ca99ca91f392f3562b186a75ec03a0874f3d49d",
+      "size": 15154,
+      "uncompressed_sha256": "e61aba5cc5ae5152cc30fe666a8d4329845696eaa5b67c9c8e16740eec69bc91",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/capture.json"
+    },
+    {
+      "file": "en-Norms-source.py.gz",
+      "sha256": "c12eb19de4cb0d5b5aa780c964a268f56b7e7d32d47cb8c6331a2b6eb0266d30",
+      "size": 5583,
+      "uncompressed_sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/s10_norms.py"
+    },
+    {
+      "file": "en-Norms-capture.log.gz",
+      "sha256": "fd20a5502e0122447361c0cf18c05b7224e914358d1b09002d638562558562ac",
+      "size": 152,
+      "uncompressed_sha256": "2c7ac34d1d5a19412e35525d9bfcfeb7270911c80c2ac534110db337e6d50dff",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en-Norms-capture.log"
+    },
+    {
+      "file": "en-Norms-viewed-page-01.png",
+      "sha256": "4248d28a2f764274b6b4cd437d5d8404b3bd1bd4fca906361fe829ec50766d1d",
+      "size": 140702,
+      "uncompressed_sha256": "4248d28a2f764274b6b4cd437d5d8404b3bd1bd4fca906361fe829ec50766d1d",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/page-001.png"
+    },
+    {
+      "file": "en-Norms-viewed-page-02.png",
+      "sha256": "69d962a8e817b431aa5b43ee1f18aae0627c0bb1b9e5161e3150b9696fc1f97a",
+      "size": 140677,
+      "uncompressed_sha256": "69d962a8e817b431aa5b43ee1f18aae0627c0bb1b9e5161e3150b9696fc1f97a",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/page-002.png"
+    },
+    {
+      "file": "en-Norms-viewed-page-03.png",
+      "sha256": "4ab2e48a19591bf245ca02e7fad95b8258c7a68bd7bb18dd695c2564207eefa7",
+      "size": 207082,
+      "uncompressed_sha256": "4ab2e48a19591bf245ca02e7fad95b8258c7a68bd7bb18dd695c2564207eefa7",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/page-003.png"
+    },
+    {
+      "file": "en-Norms-viewed-page-04.png",
+      "sha256": "ce7ac66ecaec212dda6b2b9afe8eb6922d416e57e25bae91b48837323e373c9a",
+      "size": 141370,
+      "uncompressed_sha256": "ce7ac66ecaec212dda6b2b9afe8eb6922d416e57e25bae91b48837323e373c9a",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/page-004.png"
+    },
+    {
+      "file": "en-Norms-viewed-page-05.png",
+      "sha256": "1a1bee0bb7da7f21755009bf22f67aa12a361e0cdb61a5129dfac1b7e4148753",
+      "size": 179989,
+      "uncompressed_sha256": "1a1bee0bb7da7f21755009bf22f67aa12a361e0cdb61a5129dfac1b7e4148753",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/page-005.png"
+    },
+    {
+      "file": "en-Norms-native-01.png",
+      "sha256": "3f0acc67bf62c5544ab97a2c10e4cfb7c0a9b39a6860b9d855cafac20ab0687f",
+      "size": 129175,
+      "uncompressed_sha256": "3f0acc67bf62c5544ab97a2c10e4cfb7c0a9b39a6860b9d855cafac20ab0687f",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/011_00089.0s.png"
+    },
+    {
+      "file": "en-Norms-native-02.png",
+      "sha256": "eca9e37a295c33698a4963667e14902f7f504255d1edf5d4ad560740f97092d7",
+      "size": 160209,
+      "uncompressed_sha256": "eca9e37a295c33698a4963667e14902f7f504255d1edf5d4ad560740f97092d7",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/019_00190.2s.png"
+    },
+    {
+      "file": "input-4d937570843c-norms.json.gz",
+      "sha256": "94b87d3a4a5402a6044018814d85b1792dda361d1db188a7b00d91d9a69c9083",
+      "size": 3204,
+      "uncompressed_sha256": "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/inputs/.cache/ai3/norms.json"
+    },
+    {
+      "file": "input-723d6fa3c6d3-depth.json.gz",
+      "sha256": "324f2ad07c5a6b4ead71b272c94d63f6a9b9a69da0e1244740b03b8fc3e1415b",
+      "size": 178,
+      "uncompressed_sha256": "723d6fa3c6d32075436707a64bf739872ce008bfc97a477ea73a87ef3efb6cc2",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/inputs/.cache/ai3/depth.json"
+    },
+    {
+      "file": "input-ffb353954883-depth.npz.gz",
+      "sha256": "3f8674f8f9af068081bd4e5b153045d716d10348a5396a3d92c708bb2a57ad04",
+      "size": 1314,
+      "uncompressed_sha256": "ffb353954883c5cf44327fbe7ffa03712eda5cef4e72a2607756e9549e7b6ea9",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/inputs/.cache/ai3/depth.npz"
+    },
+    {
+      "file": "input-b7e645c68c7a-galore.json.gz",
+      "sha256": "2aac5ab59200a8438d4885725b32698476ee410e8f2222cc1b6874f8c67c07d7",
+      "size": 45382,
+      "uncompressed_sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/Norms/inputs/.cache/ai3/galore.json"
+    },
+    {
+      "file": "zh-Norms-capture.json.gz",
+      "sha256": "2c1d139b6ed922e5b1a18065b5d193cd06686166078d0d28b660257dc1dec030",
+      "size": 20976,
+      "uncompressed_sha256": "1f511ff3d28c20c9f0682635f7601455aa553ecb657787fd8c7b504bd23c28ce",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/Norms/capture.json"
+    },
+    {
+      "file": "zh-Norms-source.py.gz",
+      "sha256": "c12eb19de4cb0d5b5aa780c964a268f56b7e7d32d47cb8c6331a2b6eb0266d30",
+      "size": 5583,
+      "uncompressed_sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/Norms/s10_norms.py"
+    },
+    {
+      "file": "zh-Norms-capture.log.gz",
+      "sha256": "1027dc728801d6f41492fc238a944e74b0125ccd368ccde021b75e6b06181b85",
+      "size": 123,
+      "uncompressed_sha256": "4ab6ec5f8093ad9892ad876d5406ac0f8c7b9ff4545720043a51d0ecef681e7c",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh-Norms-capture.log"
+    },
+    {
+      "file": "zh-Norms-viewed-page-01.png",
+      "sha256": "26c3aa782ddcfc0d098ed0e6fd13e9292f1ac04dd9b5d054b0fba3ed9005ff08",
+      "size": 140436,
+      "uncompressed_sha256": "26c3aa782ddcfc0d098ed0e6fd13e9292f1ac04dd9b5d054b0fba3ed9005ff08",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/Norms/page-001.png"
+    },
+    {
+      "file": "zh-Norms-viewed-page-02.png",
+      "sha256": "2bc5a72fa7892fee66f22db9e4c31559a24988a64b4f255fb39ab6863ca8d38c",
+      "size": 136853,
+      "uncompressed_sha256": "2bc5a72fa7892fee66f22db9e4c31559a24988a64b4f255fb39ab6863ca8d38c",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/Norms/page-002.png"
+    },
+    {
+      "file": "zh-Norms-viewed-page-03.png",
+      "sha256": "00cae494425639ebac6515fbfa450e3517b6e7b8ea0c8ada831c4e9fd570b272",
+      "size": 174339,
+      "uncompressed_sha256": "00cae494425639ebac6515fbfa450e3517b6e7b8ea0c8ada831c4e9fd570b272",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/Norms/page-003.png"
+    },
+    {
+      "file": "zh-Norms-viewed-page-04.png",
+      "sha256": "c8b2815e8b4bdf93732c1ec8a29cca0db5d1cbba5b09891d7c27a8fc048ef544",
+      "size": 164737,
+      "uncompressed_sha256": "c8b2815e8b4bdf93732c1ec8a29cca0db5d1cbba5b09891d7c27a8fc048ef544",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/Norms/page-004.png"
+    },
+    {
+      "file": "zh-Norms-viewed-page-05.png",
+      "sha256": "6e225654df578d440615eea7c535f7f3b3832ec2589d526292d3acf5b79c837b",
+      "size": 244538,
+      "uncompressed_sha256": "6e225654df578d440615eea7c535f7f3b3832ec2589d526292d3acf5b79c837b",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/Norms/page-005.png"
+    },
+    {
+      "file": "zh-Norms-viewed-page-06.png",
+      "sha256": "ee7215007754472e53e3eb786275596ea94d46c6b6f48dc1e8fde5d57683d0bc",
+      "size": 100739,
+      "uncompressed_sha256": "ee7215007754472e53e3eb786275596ea94d46c6b6f48dc1e8fde5d57683d0bc",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/Norms/page-006.png"
+    },
+    {
+      "file": "zh-Norms-native-01.png",
+      "sha256": "6cb614e54a9f13564027e3e1e0a3adc11f19f80e61e2b9b78be1524c6cf88976",
+      "size": 124219,
+      "uncompressed_sha256": "6cb614e54a9f13564027e3e1e0a3adc11f19f80e61e2b9b78be1524c6cf88976",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/Norms/012_00092.6s.png"
+    },
+    {
+      "file": "zh-Norms-native-02.png",
+      "sha256": "5850a4e816b2b3779a8497fdbd2a8ad89b6565621f28751385dc4761ebf169ef",
+      "size": 171336,
+      "uncompressed_sha256": "5850a4e816b2b3779a8497fdbd2a8ad89b6565621f28751385dc4761ebf169ef",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/Norms/020_00193.5s.png"
+    },
+    {
+      "file": "en-GaLore-capture.json.gz",
+      "sha256": "d7fda5885ef68d5f4b28504830fd4281972ee2b52a83a04a84128d83de354112",
+      "size": 15843,
+      "uncompressed_sha256": "eee9300e3a85a42fe1b237f64f0bf32a63797ac96b9c18738efe6be4a587beb7",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/capture.json"
+    },
+    {
+      "file": "en-GaLore-source.py.gz",
+      "sha256": "6e3b747941a7f56a6a34ff3f2b3596213ad880e37072ec13d7c15cf6f2d3872f",
+      "size": 6117,
+      "uncompressed_sha256": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/s12_galore.py"
+    },
+    {
+      "file": "en-GaLore-capture.log.gz",
+      "sha256": "69b28f6187f507433ef65d09eee4f58d200fc79083287702043ca37ef228cfbb",
+      "size": 124,
+      "uncompressed_sha256": "c37b7e367ce4ab248457c584ea86ad47fc2cbe29c77fe821c465825b8c4cadc8",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en-GaLore-capture.log"
+    },
+    {
+      "file": "en-GaLore-viewed-page-01.png",
+      "sha256": "7614d339ebd9137f073097fa8818d4a464588f2322c25ff34e99d2e0adce889c",
+      "size": 87519,
+      "uncompressed_sha256": "7614d339ebd9137f073097fa8818d4a464588f2322c25ff34e99d2e0adce889c",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/page-001.png"
+    },
+    {
+      "file": "en-GaLore-viewed-page-02.png",
+      "sha256": "c44da0407b9fbe67dec896b490091174a5e2b8fc7e57061cc0d3e1392ccee814",
+      "size": 150773,
+      "uncompressed_sha256": "c44da0407b9fbe67dec896b490091174a5e2b8fc7e57061cc0d3e1392ccee814",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/page-002.png"
+    },
+    {
+      "file": "en-GaLore-viewed-page-03.png",
+      "sha256": "83e1def84440df729e7f0bc2626f40394ac5faf834bca6b70712edb95aac76c5",
+      "size": 179323,
+      "uncompressed_sha256": "83e1def84440df729e7f0bc2626f40394ac5faf834bca6b70712edb95aac76c5",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/page-003.png"
+    },
+    {
+      "file": "en-GaLore-viewed-page-04.png",
+      "sha256": "83e6b23f9599c65f251f501e7edeca69878b8068be8a353a3a94f533af2535c7",
+      "size": 183361,
+      "uncompressed_sha256": "83e6b23f9599c65f251f501e7edeca69878b8068be8a353a3a94f533af2535c7",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/page-004.png"
+    },
+    {
+      "file": "en-GaLore-viewed-page-05.png",
+      "sha256": "f9f9ef7b9a25032ef2df93067c64d452215be390e542b74011e0e1691c181e21",
+      "size": 151837,
+      "uncompressed_sha256": "f9f9ef7b9a25032ef2df93067c64d452215be390e542b74011e0e1691c181e21",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/page-005.png"
+    },
+    {
+      "file": "en-GaLore-viewed-page-06.png",
+      "sha256": "6c9183a0b44168074a2d2e51e027eff7bb4ef5f0e8ce8e41a7276ed3f3038561",
+      "size": 79766,
+      "uncompressed_sha256": "6c9183a0b44168074a2d2e51e027eff7bb4ef5f0e8ce8e41a7276ed3f3038561",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/page-006.png"
+    },
+    {
+      "file": "en-GaLore-native-01.png",
+      "sha256": "557df88668e8753d2080bfb434faf865d21cd81e5f4355bb7ad375b31c9b8d1f",
+      "size": 205237,
+      "uncompressed_sha256": "557df88668e8753d2080bfb434faf865d21cd81e5f4355bb7ad375b31c9b8d1f",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/013_00099.6s.png"
+    },
+    {
+      "file": "en-GaLore-native-02.png",
+      "sha256": "f3eb40ffac20c14c9be6e7a18cdde016e11d2b59d679b9fe06834176c1f817c9",
+      "size": 197120,
+      "uncompressed_sha256": "f3eb40ffac20c14c9be6e7a18cdde016e11d2b59d679b9fe06834176c1f817c9",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/017_00151.2s.png"
+    },
+    {
+      "file": "en-GaLore-native-03.png",
+      "sha256": "9b82899b5720fe99121ad5e31f3f450df2f57e5b375ba5ac83b17864a0c346e6",
+      "size": 137198,
+      "uncompressed_sha256": "9b82899b5720fe99121ad5e31f3f450df2f57e5b375ba5ac83b17864a0c346e6",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/020_00183.8s.png"
+    },
+    {
+      "file": "input-79b65de05a22-galorectl.json.gz",
+      "sha256": "8fe93dc4cd65111fd7c4c40730b4ca62c76d9cc0cd3e427adb7136b3d74285cc",
+      "size": 7118,
+      "uncompressed_sha256": "79b65de05a229645bbac8497d8bf633aa02399a87a2d094497b4a984ed5af274",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/inputs/.cache/ai3/galorectl.json"
+    },
+    {
+      "file": "table-075af7895f39.json.gz",
+      "sha256": "fe601a2202b722d891e9fbf91ad02def4a7532819b290085fbd32f01bc10ce1b",
+      "size": 871020,
+      "uncompressed_sha256": "075af7895f39456b287f7e8a6e7dbc4e2c36798e72d4adb2aafe6858251e1d3a",
+      "source": "/workspace/runtime/ai3-production1080-foundations/en/GaLore/table-at-review.json"
+    },
+    {
+      "file": "zh-GaLore-capture.json.gz",
+      "sha256": "f77e9b21be920706934f6ef95c51cfacd2c9bafb08a0b7734a545774935712b8",
+      "size": 23163,
+      "uncompressed_sha256": "d9317fcaaf7ce2b28426a727356f7cf0bce14162a9fe5013aec4d05549d82c6d",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/capture.json"
+    },
+    {
+      "file": "zh-GaLore-source.py.gz",
+      "sha256": "6e3b747941a7f56a6a34ff3f2b3596213ad880e37072ec13d7c15cf6f2d3872f",
+      "size": 6117,
+      "uncompressed_sha256": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/s12_galore.py"
+    },
+    {
+      "file": "zh-GaLore-capture.log.gz",
+      "sha256": "5404833c3f72eb28a8500eb063c5a30085641993e40c0c553d2c735732f9da3e",
+      "size": 154,
+      "uncompressed_sha256": "03a05d9b88fd31cbdc2bf7574009b361b9a211ec11a2f355b30a5ecf49247abd",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh-GaLore-capture.log"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-01.png",
+      "sha256": "ba29b1f832383de22a50c8071f56d7d6f2f4f27da7d3a2572afa3e34ffcacfba",
+      "size": 89402,
+      "uncompressed_sha256": "ba29b1f832383de22a50c8071f56d7d6f2f4f27da7d3a2572afa3e34ffcacfba",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/page-001.png"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-02.png",
+      "sha256": "c8c0ab39ffacbdfb1700dbbe4148c844cf26d76aa66fb44dbb049ede8d07faa8",
+      "size": 150253,
+      "uncompressed_sha256": "c8c0ab39ffacbdfb1700dbbe4148c844cf26d76aa66fb44dbb049ede8d07faa8",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/page-002.png"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-03.png",
+      "sha256": "548b2f5983c0ea2d837131519a7ea349528b3f60a51dc58725047a02456a708f",
+      "size": 176986,
+      "uncompressed_sha256": "548b2f5983c0ea2d837131519a7ea349528b3f60a51dc58725047a02456a708f",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/page-003.png"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-04.png",
+      "sha256": "6f1648e38a3ad896c7d5af9f497f18566cd15f11543a1252eb565d2d24d223cd",
+      "size": 185132,
+      "uncompressed_sha256": "6f1648e38a3ad896c7d5af9f497f18566cd15f11543a1252eb565d2d24d223cd",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/page-004.png"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-05.png",
+      "sha256": "ea929e2ae9b26d667154d1839551d08c85a6ea52f5917dbe609210c97dcf163f",
+      "size": 147501,
+      "uncompressed_sha256": "ea929e2ae9b26d667154d1839551d08c85a6ea52f5917dbe609210c97dcf163f",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/page-005.png"
+    },
+    {
+      "file": "zh-GaLore-viewed-page-06.png",
+      "sha256": "00d31ceec034b5989c2b02bc82c926640f1f615b7e3c790b8a7fd1cb82d4edd5",
+      "size": 72718,
+      "uncompressed_sha256": "00d31ceec034b5989c2b02bc82c926640f1f615b7e3c790b8a7fd1cb82d4edd5",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/page-006.png"
+    },
+    {
+      "file": "zh-GaLore-native-01.png",
+      "sha256": "23b8b139aa75923f04f8caa9074beb92a7ade246821d80d0f1d1b1a8c15792f0",
+      "size": 205630,
+      "uncompressed_sha256": "23b8b139aa75923f04f8caa9074beb92a7ade246821d80d0f1d1b1a8c15792f0",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/013_00103.9s.png"
+    },
+    {
+      "file": "zh-GaLore-native-02.png",
+      "sha256": "57951874bcd214fc8dbeeb641f68231db3a632a59455533f4a2de27216c38ab1",
+      "size": 210752,
+      "uncompressed_sha256": "57951874bcd214fc8dbeeb641f68231db3a632a59455533f4a2de27216c38ab1",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/017_00160.7s.png"
+    },
+    {
+      "file": "zh-GaLore-native-03.png",
+      "sha256": "18f1f00dada6bed4899a492c960c5cdbdd225bf8bc2852ed1b6b5213e2105ad3",
+      "size": 125100,
+      "uncompressed_sha256": "18f1f00dada6bed4899a492c960c5cdbdd225bf8bc2852ed1b6b5213e2105ad3",
+      "source": "/workspace/runtime/ai3-production1080-foundations/zh/GaLore/021_00191.9s.png"
+    },
+    {
+      "file": "source-drift-reconciliation.json",
+      "sha256": "fc684865eef4107b0b1b8c5f821b10ea28ad9393975c80b1dd52d42c9b69512a",
+      "size": 1452
+    },
+    {
+      "file": "README.md",
+      "sha256": "b3fe726f100ed52f7095b92406afd464b176f4b6628b3e63d3f3aeb7df4d0d4e",
+      "size": 3125
+    }
+  ]
+}

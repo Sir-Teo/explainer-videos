@@ -1,0 +1,36 @@
+[
+  {
+    "scene": "Netflix",
+    "lang": "en",
+    "command": [
+      "nice",
+      "-n",
+      "10",
+      "python",
+      "/workspace/runtime/qa_production_endpoint.py",
+      "ai3",
+      "en",
+      "Netflix"
+    ],
+    "exit_code": 1,
+    "seconds": 38.81175895900378,
+    "record": "renders/qa/production-endpoints-1080/ai3/en/Netflix/result.json"
+  },
+  {
+    "scene": "Netflix",
+    "lang": "zh",
+    "command": [
+      "nice",
+      "-n",
+      "10",
+      "python",
+      "/workspace/runtime/qa_production_endpoint.py",
+      "ai3",
+      "zh",
+      "Netflix"
+    ],
+    "exit_code": 0,
+    "seconds": 56.35201722999773,
+    "record": "renders/qa/production-endpoints-1080/ai3/zh/Netflix/result.json"
+  }
+]

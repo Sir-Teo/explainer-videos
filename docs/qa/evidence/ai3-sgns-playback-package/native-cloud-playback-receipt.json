@@ -1,0 +1,36 @@
+{
+  "receipt_source": "Trusted parent relay of independent dot cloud desktop worker; no user computer used.",
+  "recorded_utc": "2026-10-31T21:50:50.885827+00:00",
+  "library_file_id": "libfile_6cfbead0a8988191b82224deb384f8ce",
+  "version": 0,
+  "movie_sha256": "9bcf4449c40f09728464d0952abb20daf0ab1926306febf55dfa83b195dfaf22",
+  "resolution": [
+    854,
+    480
+  ],
+  "duration_seconds": 214.332,
+  "terminal_ui_timecode": "03:34:09",
+  "ui_opening_to_terminal_stop": "confirmed",
+  "seek_and_replay": "worked",
+  "timed_screenshot_coverage": [
+    "objective00:15–00:25",
+    "replay00:39–01:17",
+    "derivation01:22–01:52",
+    "numericalcharts02:03–02:53",
+    "comparison/closing03:05–03:21"
+  ],
+  "focused_replay_samples": {
+    "00:49": "step0",
+    "00:59": "step1089",
+    "01:07": "step10890",
+    "01:10": "step10890"
+  },
+  "observed": "No blocking clipping, overlap, corruption or disappearing checkpoint labels in the inspected states.",
+  "minor_candidates": "Footnotes/fractions soft and low contrast when enlarged from480p; tight attribution margin. Native1080 endpoint review is separate and did not confirm a substantive defect.",
+  "native_1080_related_evidence": "../ai3-1080p-sgns-words-geometry/README.md",
+  "signal_mean_max_db": -91,
+  "signal_scope": "Silent timing-placeholder stream only.",
+  "continuous_perceptual_review": "unverified",
+  "spoken_sync_and_listening": "unverified",
+  "source_association": "Exact archived file only. Direct SGNS scene remains bec79fc8; subsequent changes elsewhere do not refresh its aggregate fingerprint."
+}

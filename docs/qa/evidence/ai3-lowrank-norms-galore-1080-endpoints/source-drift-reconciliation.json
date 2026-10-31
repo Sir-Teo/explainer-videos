@@ -1,0 +1,32 @@
+{
+  "table_delta_at_review": {
+    "strings": {
+      "added": {
+        "spectra: separately": "谱：各自",
+        "peak-normalized": "按峰值归一化",
+        "SGNS: generalized": "SGNS：广义",
+        "shifted PMI": "移位 PMI"
+      },
+      "removed": {},
+      "changed": {}
+    }
+  },
+  "parent_context": "Root reported four exact Outro-only footer caption strings and unrelated Outro source work overlapped; no change to these3scene modules/data.",
+  "scene_modules_match_frozen": {
+    "en/LowRank": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+    "zh/LowRank": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+    "en/Norms": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+    "zh/Norms": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+    "en/GaLore": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
+    "zh/GaLore": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8"
+  },
+  "capture_statuses_unchanged": {
+    "en/LowRank": "passed",
+    "zh/LowRank": "passed",
+    "en/Norms": "needs-review",
+    "zh/Norms": "passed",
+    "en/GaLore": "passed",
+    "zh/GaLore": "needs-review"
+  },
+  "warning_policy": "Retain both needs-review/source-changed-during-render records. Exact scoped content/source checks support bounded appearance review but do not prove historical worker imports or whole-part currency."
+}

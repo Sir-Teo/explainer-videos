@@ -138,7 +138,7 @@ class GaLore(VoiceoverScene):
         step = ladder(self, rows, whys, keep=2, top=3.0, x=-2.0, buff=0.45, edge=6.9)
         hist = history_card(2024, r"J.~Zhao, \ Y.~Tian, \ A.~Anandkumar et al., \ GaLore",
                             r"up to $65.5\%$ less optimizer memory in pretraining; \ with 8-bit states and per-layer "
-                            r"updates, \ a 7-billion-parameter model pretrained on one 24-GB GPU", color=HIST,
+                            r"updates, \ 7B pretraining can fit within 24 GB", color=HIST,
                             width=5.6).move_to([-3.6, -1.6, 0])
         bars = VGroup()
         top = max(mems.values())
@@ -166,7 +166,8 @@ class GaLore(VoiceoverScene):
             "and runs Adam there, refreshing the directions now and then. <bookmark mark='c'/> For our model: "
             f"{mems['adam']:,} numbers with Adam, {mems['galore32']:,} at rank 32, "
             f"{mems['galore8']:,} at rank 8. At scale the paper reports up to 65 percent less optimizer memory, "
-            "and, with 8-bit states, a seven-billion-parameter model pretrained on one 24-gigabyte card."
+            "and demonstrates that seven-billion-parameter pretraining can fit within 24 gigabytes, "
+            "with 8-bit states, per-layer updates, and a small token batch. This is a memory-feasibility result."
         ) as vo:
             self.play(FadeIn(hist, shift=UP * 0.2))
             self.play(FadeIn(adam_pic))
