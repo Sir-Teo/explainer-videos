@@ -64,15 +64,18 @@ A hook, seventeen chapters and an outro (about 50 minutes; `python tools/lecture
   direction by direction; analogies, and a test of 710 analogy questions built from the books, and category
   neighbours.
 * **13. word2vec is counting in disguise.** Skip-gram with negative sampling (Mikolov et al. 2013) trained on the
-  same books and replayed; Levy and Goldberg's theorem (2014) derived (w·c = PMI − log k) and checked: exactly at
-  full rank on the 300 commonest words, approximately at rank 30 and 5, and on the real 10,000-word run; GloVe
+  same books and replayed; Levy and Goldberg's theorem (2014) derived as a generalized shifted-PMI target for
+  the smoothed negative distribution (ordinary PMI − log k when negatives follow the empirical context
+  distribution). Finite optimization fits are measured at full rank on the 300 commonest words, at ranks 30
+  and 5, and on the real 10,000-word run; full rank does not certify convergence to the target. GloVe
   (2014); counting against guessing on the same tests.
 * **14. Life in 768 dimensions.** Angles between random directions; Var(cos θ) = 1/d derived and measured from d = 2
   to 4,096; 10,000 random directions all within a few degrees of perpendicular, and superposition; lengths
   concentrating at √d with spread 1/√2, derived and measured; the volume in a thin shell.
 * **15. Johnson–Lindenstrauss, proved.** A thousand of GPT-2's vectors through one random matrix; the lemma
   (Dasgupta–Gupta form) and its proof: Gaussian projection, χ² variable, Chernoff bound, union bound. Checked: the
-  per-pair failure rate on all 499,500 pairs on the exact χ² tail; the worst pair against the proved ε; Larsen and
+  per-pair failure rate on all 499,500 pairs against the exact χ² tail; the worst pair against a separate explicit
+  95%-confidence union bound, with unavailable nontrivial bounds reported honestly; Larsen and
   Nelson's optimality (2017).
 * **16. GPT-2's lopsided space.** Anisotropy (mean cosine of random tokens), the fix by centring, the top principal
   directions and what the first one tracks (token id, a proxy for frequency); all-but-the-top (Mu and Viswanath
@@ -81,9 +84,13 @@ A hook, seventeen chapters and an outro (about 50 minutes; `python tools/lecture
   2013; Elhage et al. 2022; Park, Choe and Veitch 2024); Part 30.
 * **17. Low rank in the wild.** The Netflix Prize (2006–09); matrix factorization with biases on a synthetic ratings
   world (4,000 users, 1,200 films, six hidden genres), trained by gradient descent and replayed: held-out error with
-  and without regularization, by rank over three seeds, and film vectors separating by the genres they never saw.
-  Two-tower retrieval trained with an in-batch softmax and a popularity correction (its score estimates a PMI),
-  recall@10 for known and brand-new users against popularity; YouTube (2016), FAISS (2017), dense passage retrieval
+  and without the vector penalty (both retain the same bias penalty), by rank over three seeds against baselines
+  fitted on the same ratings, and measured genre structure in film vectors whose training never used genre labels.
+  Two-tower retrieval trained with an in-batch softmax and a negative-sampling correction: in the ideal
+  candidate-classification calculation, the corrected training logit models a density ratio and the raw score
+  models conditional log probability up to a user constant. Inference ranks raw scores; adding a popularity
+  prior is a separate ablation. Measured macro recall@10 compares eligible known and brand-new users against
+  popularity, with unavailable cohorts reported explicitly; YouTube (2016), FAISS (2017), dense passage retrieval
   (2020).
 * **Outro.** Twelve recap tiles from the part's own results; where it comes back (Parts 4, 9, 11, 13, 15, 27, 30);
   eight problems; Part 4's teaser; references.

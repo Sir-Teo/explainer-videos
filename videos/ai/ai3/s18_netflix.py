@@ -25,6 +25,49 @@ def penalty_verdict(history, no_vector_penalty, tolerance=0.01):
             "Both runs retain the same bias penalty.")
 
 
+def retrieval_display_data(result):
+    """Separate eligibility, finite measurements and displayable history per cohort."""
+    history = np.asarray(result["curve"], float)
+    cohorts = {}
+    for key, suffix, column in (("warm", "warm", 2), ("cold", "cold", 3)):
+        counts = result["evaluation"][key]
+        users, targets = int(counts["evaluated_users"]), int(counts["eligible_targets"])
+        eligible = users > 0 and targets > 0
+        recall, popularity = float(result[f"recall_{suffix}"]), float(result[f"pop_{suffix}"])
+        model_available = eligible and bool(np.isfinite(recall))
+        baseline_available = eligible and bool(np.isfinite(popularity))
+        steps, values = history[:, 0].copy(), history[:, column].copy()
+        valid = np.isfinite(steps) & np.isfinite(values)
+        values[~valid] = np.nan  # shared curve() preserves omitted runs as gaps
+        cohorts[key] = dict(users=users, targets=targets, eligible=eligible, recall=recall,
+                            popularity=popularity, model_available=model_available,
+                            baseline_available=baseline_available, steps=steps, values=values,
+                            show_curve=model_available and bool(valid.any()))
+    return cohorts
+
+
+def retrieval_cohort_summary(cohort, name):
+    """Never compare unavailable recall with popularity or pronounce it a loss."""
+    users, targets = cohort["users"], cohort["targets"]
+    if not cohort["eligible"]:
+        return (f"For {name}, recall is unavailable: {users} evaluated users have {targets} eligible held-out "
+                "targets. Empty-target users are excluded, so there is no popularity comparison.")
+    recall, popularity = cohort["recall"], cohort["popularity"]
+    if not cohort["model_available"] and not cohort["baseline_available"]:
+        return (f"For {name}, both recall measurements are unavailable despite {users} evaluated users and "
+                f"{targets} eligible targets. No finite comparison is available.")
+    if not cohort["model_available"]:
+        return (f"For {name}, two-tower recall is unavailable on {users} users and {targets} eligible targets; "
+                f"popularity recall is {popularity:.2f}. No comparison is available.")
+    if not cohort["baseline_available"]:
+        return (f"For {name}, two-tower recall is {recall:.2f} on {users} users and {targets} eligible targets, "
+                "but popularity recall is unavailable. No comparison is available.")
+    comparison = ("The two towers beat popularity for this cohort." if recall > popularity else
+                  "The two towers do not beat popularity for this cohort.")
+    return (f"For {name}, macro recall reaches {recall:.2f}, against popularity's {popularity:.2f}, on "
+            f"{users} users and {targets} eligible targets. {comparison}")
+
+
 class Netflix(VoiceoverScene):
     def construct(self):
         chapter(self, 17, r"Low rank in the wild", r"Can a mostly empty table be filled in?",
@@ -274,6 +317,7 @@ class Netflix(VoiceoverScene):
         t = load("twotower")
         curve_ = np.asarray(t["curve"])
         steps = curve_[:, 0]
+        cohorts = retrieval_display_data(t)
         # the two towers, schematic
         def tower(title, inputs, col, x):
             box = RoundedRectangle(width=2.6, height=1.0, corner_radius=0.12, stroke_color=col, stroke_width=2,
@@ -292,36 +336,65 @@ class Netflix(VoiceoverScene):
         dot = MathTex(r"\text{score} = \mathbf{u}\cdot\mathbf{v}", font_size=32).next_to(both, UP, buff=0.3)
         tag = note(r"schematic; \ inference ranks by raw $s = \mathbf{u}\cdot\mathbf{v}/\tau$ \\ training candidate logits: $s-\log q(i)$",
                    font_size=18).next_to(both, DOWN, buff=0.2)
-        ymax = min(1.0, max(0.1, float(curve_[:, 2:4].max()), t["pop_warm"], t["pop_cold"]) * 1.15)
+        available_values = [0.1]
+        for cohort in cohorts.values():
+            if cohort["show_curve"]:
+                available_values.extend(cohort["values"][np.isfinite(cohort["values"])])
+            if cohort["baseline_available"]:
+                available_values.append(cohort["popularity"])
+        ymax = min(1.0, max(available_values) * 1.15)
         g = axes([0, float(steps[-1]), 1000], [0, ymax, ymax / 4], x_length=5.4, y_length=3.4,
                  xticks=list(np.linspace(0, steps[-1], 4)), yticks=list(np.linspace(0, ymax, 5)),
                  yfmt=lambda v: f"{v:.2f}", xlabel=r"training step", ylabel=r"macro recall at $10$ \ (held-out films)",
                  center=[3.4, -0.5, 0])
         ax = g.ax
-        cw = curve(ax, steps, curve_[:, 2], TT, 3)
-        cc = curve(ax, steps, curve_[:, 3], C.BITS, 3)
-        pw = DashedLine(ax.c2p(0, t["pop_warm"]), ax.c2p(steps[-1], t["pop_warm"]), color=POP)
-        pc = DashedLine(ax.c2p(0, t["pop_cold"]), ax.c2p(steps[-1], t["pop_cold"]), color=GREY_A, dashed_ratio=0.3)
-        leg = legend([(TT, r"two towers: \ users it trained on"), (C.BITS, r"two towers: \ new users, \ $5$ films each"),
-                      (POP, r"popular films: \ known users, dashed"),
-                      (GREY_A, r"popular films: \ new users, short dashes")], font_size=17).move_to([-3.2, -2.9, 0])
+        def measured(cohort, color):
+            if not cohort["show_curve"]:
+                return VGroup()
+            finite = np.isfinite(cohort["values"])
+            if finite.sum() == 1:
+                i = int(np.flatnonzero(finite)[0])
+                return Dot(ax.c2p(cohort["steps"][i], cohort["values"][i]), radius=0.06, color=color)
+            return curve(ax, cohort["steps"], cohort["values"], color, 3)
+
+        warm, cold = cohorts["warm"], cohorts["cold"]
+        cw, cc = measured(warm, TT), measured(cold, C.BITS)
+        pw = (DashedLine(ax.c2p(0, warm["popularity"]), ax.c2p(steps[-1], warm["popularity"]), color=POP)
+              if warm["baseline_available"] else VGroup())
+        pc = (DashedLine(ax.c2p(0, cold["popularity"]), ax.c2p(steps[-1], cold["popularity"]),
+                         color=GREY_A, dashed_ratio=0.3) if cold["baseline_available"] else VGroup())
+        legend_rows = []
+        for available, color, text in (
+                (warm["show_curve"], TT, r"two towers: \ users it trained on"),
+                (cold["show_curve"], C.BITS, r"two towers: \ new users, \ $5$ films each"),
+                (warm["baseline_available"], POP, r"popular films: \ known users, dashed"),
+                (cold["baseline_available"], GREY_A, r"popular films: \ new users, short dashes")):
+            if available:
+                legend_rows.append((color, text))
+        leg = (legend(legend_rows, font_size=17) if legend_rows else VGroup()).move_to([-3.2, -2.9, 0])
+        unavailable_rows = []
+        for cohort, name in ((warm, r"known users"), (cold, r"new users")):
+            if not cohort["eligible"]:
+                reason = r"no eligible held-out targets"
+                missing = r"recall unavailable"
+            elif not cohort["model_available"] or not cohort["baseline_available"]:
+                reason = r"a recall measurement is non-finite"
+                missing = r"comparison unavailable"
+            elif not cohort["show_curve"]:
+                reason = r"no finite training-history samples"
+                missing = r"history unavailable"
+            else:
+                continue
+            unavailable_rows.append(note(rf"{name}: {missing} \\ {reason}", font_size=17))
+        unavailable = VGroup(*unavailable_rows).arrange(DOWN, buff=0.12).move_to([3.4, 2.65, 0])
         ew, ec = t["evaluation"]["warm"], t["evaluation"]["cold"]
         metric = note(r"recall: hits / all eligible targets, averaged over users \\ "
                       rf"known: ${ew['evaluated_users']}$ users, ${fmt_int(ew['eligible_targets'])}$ targets; \ "
                       rf"new: ${ec['evaluated_users']}$ users, ${fmt_int(ec['eligible_targets'])}$ targets \\ "
                       r"empty-target users excluded; \ watched films filtered",
                       font_size=15).next_to(g, DOWN, buff=0.08)
-        rw, rc = t["recall_warm"], t["recall_cold"]
-        bw = rw > t["pop_warm"]
-        bc = rc > t["pop_cold"]
-        if bw and bc:
-            verdict = "Both beat recommending the most popular films."
-        elif bw:
-            verdict = "For users it trained on it beats popularity; for brand-new users it does not, yet."
-        elif bc:
-            verdict = "It beats popularity for new users, but not for the users it trained on."
-        else:
-            verdict = "Neither beats simply recommending the most popular films: in this world popularity is a strong signal."
+        warm_summary = retrieval_cohort_summary(warm, "known users")
+        cold_summary = retrieval_cohort_summary(cold, "new users")
         with self.voiceover(
             "Factorization has a weakness: a new user has no vector. Today's recommenders use two towers. "
             "<bookmark mark='a'/> One network turns a user's history into a vector, another a film's details; the score "
@@ -330,11 +403,10 @@ class Netflix(VoiceoverScene):
             "logit carries a density ratio, while the raw score models the conditional log probability, up to a user "
             "constant. We rank by the raw score; adding a popularity prior again is a separate ablation, not a recovery "
             "step. Finite training need not reach that ideal. <bookmark mark='c'/> Macro recall averages each user's "
-            "fraction of all eligible held-out favourites recovered in the top ten. It reaches "
-            f"{rw:.2f} for known users and {rc:.2f} for new ones, from five films each; popularity alone gets "
-            f"{t['pop_warm']:.2f} and {t['pop_cold']:.2f}. {verdict}"
+            "fraction of all eligible held-out favourites recovered in the top ten. New users start from five "
+            f"films each. {warm_summary} Separately, {cold_summary}"
         ) as vo:
-            self.play(FadeIn(both), FadeIn(tag), FadeIn(g), FadeIn(metric))
+            self.play(FadeIn(both), FadeIn(tag), FadeIn(g), FadeIn(metric), FadeIn(unavailable))
             vo.wait_until("a")
             self.play(FadeIn(dot))
             vo.wait_until("b")
