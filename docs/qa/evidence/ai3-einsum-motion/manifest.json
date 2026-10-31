@@ -1,0 +1,18 @@
+{
+  "native-cloud-playback-receipt.json": {
+    "bytes": 1140,
+    "sha256": "4a2e955fa74f406896db5f974fd737be7b3f80f86e7a5a3205c4005a3e0aae56"
+  },
+  "README.md": {
+    "bytes": 996,
+    "sha256": "207e2da6e8708600616417605815e329d8317536b8d8bfe63fd2133be09c0f23"
+  },
+  "ai3-en-Einsum-motion-review.md": {
+    "bytes": 3216,
+    "sha256": "880c537f2e9bb316097799f51cf81b5613e5aa90b453de70a9b85433327c53e0"
+  },
+  "ai3-en-Einsum-motion-review.json.gz": {
+    "bytes": 31586,
+    "sha256": "a498b022d4c8ecee4f1330992e338fef27fd37c429b71ae9ec4c2169479a409a"
+  }
+}

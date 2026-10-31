@@ -1,0 +1,32 @@
+{
+  "received_from": "parent cloud thread 01a1826b-422f-7590-a67c-6fd5387890c0",
+  "observed_utc": "2026-10-31T18:44:40.096022+00:00",
+  "movie_sha256": "bd287224d65ec684ec5628444f0d5d590994bdb17c81514263eefb66637ff897",
+  "library_id": "libfile_73502923a69c819180ed6a61db90a88f",
+  "library_version": 0,
+  "width": 854,
+  "height": 480,
+  "native_player": "Kdenlive on dot cloud Linux desktop",
+  "progression": "uninterrupted native playback through terminal stop 02:39:08",
+  "timed_states_inspected": 17,
+  "reported_key_times": [
+    "00:22",
+    "00:39",
+    "00:55",
+    "01:28",
+    "01:53",
+    "02:03",
+    "02:18",
+    "02:32"
+  ],
+  "observed_blocking_visual_defects": [],
+  "optional_polish": [
+    "Clarify colors identify index letters; output indices are retained, input-only indices summed.",
+    "Inset bottom-right citations consistently."
+  ],
+  "audio_signal_mean_max_db": -91,
+  "continuous_perceptual_review": "unverified",
+  "audio_listening": "unverified",
+  "production_resolution": "unverified",
+  "scope": "parent-reported native UI progression and timed screenshot inspection; no source edits or transcoding"
+}

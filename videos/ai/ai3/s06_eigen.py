@@ -220,6 +220,11 @@ class Eigen(VoiceoverScene):
         pc2 = arrow([*(2 * math.sqrt(lam[0]) * np.array([-top[1], top[0]])), 0], color=C.MODEL_Q)
         line = Line([*(-5.5 * top), 0], [*(5.5 * top), 0], color=C.BITS, stroke_width=2, stroke_opacity=0.6)
         proj = VGroup(*[Dot([*((p @ top) * top), 0], radius=0.045, color=C.TRUE_P) for p in X])
+        # One viewport transform for every representation of the same data:
+        # keep covariance/angles intact and reserve a clear title band.
+        viewport = VGroup(dots, ell, pc1, pc2, line, proj)
+        viewport.scale(min(1.0, 12.0 / viewport.width, 5.4 / viewport.height), about_point=ORIGIN)
+        viewport.move_to(DOWN * 0.4)
         tag = label(r"centred illustrative data", font_size=22, color=GREY_B).to_corner(DR, buff=0.4)
         head = label(r"covariance: \ symmetric; \ its eigenvectors: \ the \textit{principal components}", font_size=30)
         head.to_edge(UP, buff=0.4)

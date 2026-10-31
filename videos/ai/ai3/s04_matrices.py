@@ -88,6 +88,7 @@ class Matrices(VoiceoverScene):
             jh = arrow(UP * 0.42, color=J_COLOR, stroke_width=4)
             g = VGroup(pl, sq, ih, jh).move_to([-3.5 + 7 * k, -0.4, 0])
             t = label(txt, font_size=30).next_to(g, UP, buff=0.2)
+            t.add_background_rectangle(color=BACKGROUND, opacity=0.94, buff=0.09).set_z_index(5)
             panels.append((g, t, first, second))
         prod = MathTex(r"S\,R \ne R\,S", font_size=44).to_edge(DOWN, buff=0.4)
         hist = history_card(1858, r"Arthur Cayley, \textit{A Memoir on the Theory of Matrices}",

@@ -1,7 +1,6 @@
 # Part 3 source repair checkpoint
 
-All19chapter sources were reviewed before production data generation. This is a tested source/methodology checkpoint;
-**no Part3 rendered visual, playback, narration or production approval is claimed**. Layout changes remain pending actual EN/ZH output.
+All19chapter sources were reviewed before production data generation. This package freezes the source/methodology checkpoint at `4a20866`; it is not itself rendered visual, narration or production approval. Subsequent actual endpoint and motion evidence is in the adjacent `ai3-endpoint-polish` and `ai3-einsum-motion` packages; current coverage is summarized in `../../STATUS.md`.
 
 Repairs include valid attention tensor indices; both Cauchy–Schwarz equality directions; true Newton–Schulz stepzero;
 qualified single MLP-shaped spectral reference; standard recall denominators and raw conditional-score inference;

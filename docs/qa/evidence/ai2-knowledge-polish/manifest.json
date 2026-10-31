@@ -1,0 +1,257 @@
+{
+  "scope": "Hashes cover repository bytes after compression/copy. Manifest excludes itself. Full movies are intentionally not packaged.",
+  "files": [
+    {
+      "file": "final-review.json.gz",
+      "bytes": 3606,
+      "sha256": "bb663cccc02507f463e03752709824ed98acab4d65949183b31b544441ab3042",
+      "encoding": "gzip",
+      "uncompressed_bytes": 10395,
+      "uncompressed_sha256": "36f741a1cb620a6c76868d5d0e14061b0603eaaf493a45ade87e334ee6af8420",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final-review.json"
+    },
+    {
+      "file": "geometry-checks.json.gz",
+      "bytes": 4321,
+      "sha256": "a57ee75a69516af176185aebdfd23ba0eb370640e83f2def825c7fba595fb699",
+      "encoding": "gzip",
+      "uncompressed_bytes": 28148,
+      "uncompressed_sha256": "13bae5b398f3c45515e893a2884c03ff2d061b547ffeac5ad7685540f9cd2371",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/geometry-checks.json"
+    },
+    {
+      "file": "frozen-inputs.json.gz",
+      "bytes": 312,
+      "sha256": "f56d238f39dd51e0519fe168d24a88c82db93e2215be6f3f6bd705b962128fca",
+      "encoding": "gzip",
+      "uncompressed_bytes": 517,
+      "uncompressed_sha256": "40126710f13f98d089ff976a9dea49036e508c56c7e06593699ceb8fce17d57e",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/frozen-inputs.json"
+    },
+    {
+      "file": "current-check-at-freeze.json.gz",
+      "bytes": 176,
+      "sha256": "949471303d5b111ef6c8c3e9b710455f92a7c654f14a6f0e5e8ab36a5c2e16ad",
+      "encoding": "gzip",
+      "uncompressed_bytes": 1055,
+      "uncompressed_sha256": "9256746f4cb0d493a8e33dbc6d83700a01ed07ff19fcb3eeebd07f4ca3982ef6",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/current-check.json"
+    },
+    {
+      "file": "intermediate-review.json.gz",
+      "bytes": 67405,
+      "sha256": "4bb571848f9459c870e6fd306d8c4237cbe4084ab43944e10872e504b0fca089",
+      "encoding": "gzip",
+      "uncompressed_bytes": 688847,
+      "uncompressed_sha256": "7dcb2ae4d2689c14e3918c3ac3b07739bd6c44a32ff618161cc4d047847a14b4",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/first-after-review.json"
+    },
+    {
+      "file": "intermediate-1080-review-map.json.gz",
+      "bytes": 14664,
+      "sha256": "09d44d07c2bc95cb22bb275cf02cfb4c3b393e06c7c68b306d15089a5c088b51",
+      "encoding": "gzip",
+      "uncompressed_bytes": 123045,
+      "uncompressed_sha256": "962d04fa78a0f5957ba099f450b670cbfc41cde2a9b7d70f8487f5123484d580",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/first-after-1080-review-map.snapshot.json"
+    },
+    {
+      "file": "before-1080-en-review.json.gz",
+      "bytes": 10036,
+      "sha256": "955e6f48522e91fac5e182871bf8d78b18b5ddcd8793fd26ed5cbc6303326dfa",
+      "encoding": "gzip",
+      "uncompressed_bytes": 60588,
+      "uncompressed_sha256": "88f7b4e6b6911ffe4772adcfb21f17223c779694423589d2609eee2de6501624",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-1080-endpoint-review/report.json"
+    },
+    {
+      "file": "before-preservation.json.gz",
+      "bytes": 2096,
+      "sha256": "fdb9e982630c28f1ff6bbae37dbf755081b248f64575f8429b83c8bd3cc4f987",
+      "encoding": "gzip",
+      "uncompressed_bytes": 9734,
+      "uncompressed_sha256": "c13b9d402a1588a62e6cca3943df4b2c91662b08929edb96b2a74e2d87490cde",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/before-preservation.json"
+    },
+    {
+      "file": "intermediate-preservation.json.gz",
+      "bytes": 2924,
+      "sha256": "5f4183abf5bc4405c79a79543db7db85ff31f0d413f811cd4ba4e50474bef9af",
+      "encoding": "gzip",
+      "uncompressed_bytes": 15893,
+      "uncompressed_sha256": "6e0eff4a703d09ae20cb53d17ca8e8c615d7d1c9eaffebb01cafe2eef60119ff",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/after/preservation.json"
+    },
+    {
+      "file": "final-preservation.json.gz",
+      "bytes": 4110,
+      "sha256": "3b6e3721715dfce3f4aa7193d0fea82e36f6f33d97a462a11f088ecec3d74f6a",
+      "encoding": "gzip",
+      "uncompressed_bytes": 15945,
+      "uncompressed_sha256": "45fd4ce859db18f5bbe7997026bf232d68fe702036ac2f840145361f9edbf46a",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/preservation.json"
+    },
+    {
+      "file": "final-en-motion-review-map.json.gz",
+      "bytes": 28246,
+      "sha256": "3132e48858db95d36564176ad99262955c5a9e45644d42ad09834a2b077b7ee7",
+      "encoding": "gzip",
+      "uncompressed_bytes": 340758,
+      "uncompressed_sha256": "bfde91aeb1eafe1fd5124cc4533004017aeec517e94707acd6cee49879f201a3",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/en/review-map.json"
+    },
+    {
+      "file": "intermediate-en-motion-review-map.json.gz",
+      "bytes": 25068,
+      "sha256": "4c9abef8091b35ece00c6e02401c3ad8cf26bd6f2be7b1493d1ebfa643ec1409",
+      "encoding": "gzip",
+      "uncompressed_bytes": 234981,
+      "uncompressed_sha256": "fb670cb5781374fafd0e34213eab9c5ac15597ac5df9dddcbe82254d08f7c4fc",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/regression/en/first-after-review-map.snapshot.json"
+    },
+    {
+      "file": "final-en-temporal-audit.json.gz",
+      "bytes": 28464,
+      "sha256": "c2ca433fe6ef01421b2732feefeccc4c4e7d2eaa171a921053eeaa32f329d043",
+      "encoding": "gzip",
+      "uncompressed_bytes": 168371,
+      "uncompressed_sha256": "f70bb6938148d353e98ba9fccb0f2370198c10230501e993459d71c418ca3f91",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/temporal/ai2-en-Knowledge-caption-final/result.json"
+    },
+    {
+      "file": "final-en-motion-render-record.json.gz",
+      "bytes": 15304,
+      "sha256": "cc4308a3429af99149daaba1f91a8a190240fc103c09cb976d4dd8571df4601a",
+      "encoding": "gzip",
+      "uncompressed_bytes": 83413,
+      "uncompressed_sha256": "57459dcb84b6c4c4e60d20c4be6489b055f8773fd7a2bed5d86c5d05e600a6cf",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/en/motion-result.json"
+    },
+    {
+      "file": "final-en-1080-review-map.json.gz",
+      "bytes": 7122,
+      "sha256": "65f0d337b432b4f573f84bd67d09b61bba86298ae239b6f0a615ebfa8d85d508",
+      "encoding": "gzip",
+      "uncompressed_bytes": 54281,
+      "uncompressed_sha256": "8f84d2f0f2571e2d9102a6fee3acb3c406214301a9685c3501d2a07c6c8ddb5d",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/en/1080/review-map.json"
+    },
+    {
+      "file": "final-en-1080-render-record.json.gz",
+      "bytes": 15712,
+      "sha256": "4a36815e81a7cd1eedeeb3610a9b20e37141858519e3a0b8f9a51f70b3d4ad84",
+      "encoding": "gzip",
+      "uncompressed_bytes": 83649,
+      "uncompressed_sha256": "44ca68f12ddac8582ae7804f2ddf3ad56b4484978cf25247866640679409ff35",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/en/1080/result.json"
+    },
+    {
+      "file": "final-zh-motion-review-map.json.gz",
+      "bytes": 30088,
+      "sha256": "228754bef9c61c30e6e41fe607edd8396600f73a0fa71173ef4a606c6616e823",
+      "encoding": "gzip",
+      "uncompressed_bytes": 379342,
+      "uncompressed_sha256": "7dea0dcf325e2ebeb522a57b6bc036569d3a742c16e8aee8bf0fb59b2f1e9e25",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/zh/review-map.json"
+    },
+    {
+      "file": "intermediate-zh-motion-review-map.json.gz",
+      "bytes": 26628,
+      "sha256": "8200021023b1fbdbf9140ee94e8b5e325e27921002b395885dea7dba1aeeba63",
+      "encoding": "gzip",
+      "uncompressed_bytes": 263354,
+      "uncompressed_sha256": "cb9cb861388df24e8dfd76473c5c48b082e3a84059a37b2e36b8cddcfd3bd9a7",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/regression/zh/first-after-review-map.snapshot.json"
+    },
+    {
+      "file": "final-zh-temporal-audit.json.gz",
+      "bytes": 30456,
+      "sha256": "1cfda7874e95be12a9c0ae541993647907928a34e869659430929afd07ee4b8c",
+      "encoding": "gzip",
+      "uncompressed_bytes": 186546,
+      "uncompressed_sha256": "16a638e50940d429551b32782c0c91e0e6f8dbb691e5d7a82e72ec5f8df7820c",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Knowledge-caption-final/result.json"
+    },
+    {
+      "file": "final-zh-motion-render-record.json.gz",
+      "bytes": 25443,
+      "sha256": "c71ceb06bc8ab37f410b466db5d0d4cb339237b3e404ba1f6376ae9c17325462",
+      "encoding": "gzip",
+      "uncompressed_bytes": 114340,
+      "uncompressed_sha256": "6ea3474e5437f754af2d1d1db88afacc5ae109795211540d058bd07378c329bd",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/zh/motion-result.json"
+    },
+    {
+      "file": "final-zh-1080-review-map.json.gz",
+      "bytes": 7686,
+      "sha256": "168f32ba5892b7822478a9ed739e1e52a5aa2ab23259d2f22dbdf92ed25198db",
+      "encoding": "gzip",
+      "uncompressed_bytes": 60474,
+      "uncompressed_sha256": "eaec6336fe36d922cbb73e760371a7dfecb1fe3d0cb85e07c38a4a2dec09e898",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/zh/1080/review-map.json"
+    },
+    {
+      "file": "final-zh-1080-render-record.json.gz",
+      "bytes": 26099,
+      "sha256": "31604299cfb35095afc2b075b5ab382368f4ef6f1192b81baf9e10452d62279c",
+      "encoding": "gzip",
+      "uncompressed_bytes": 114533,
+      "uncompressed_sha256": "2e7325ad04f877d9d4d929e1f0ef694e64283d865fdc90314825f6e49915f51e",
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/zh/1080/result.json"
+    },
+    {
+      "file": "en-before-node-joins-1080.png",
+      "bytes": 74685,
+      "sha256": "7f103095d70f796ba095ec6045596f8a01d5b4745d2da79f5c743e443b49a3a9",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/before/en1080/017_00185.8s.png",
+      "meaning": "Original before polish; EN native endpoint185.8s; source520bebce.",
+      "image_processing": "Exact original PNG bytes copied; no crops, resizes or composites."
+    },
+    {
+      "file": "en-final-node-joins-and-captions-1080.png",
+      "bytes": 71955,
+      "sha256": "579b1c6738e2e6cb5251320906760377880dc80174205c552d50701a02f3bdf3",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/en/1080/017_00185.8s.png",
+      "meaning": "Final EN native endpoint185.8s; source1ca9dc3f.",
+      "image_processing": "Exact original PNG bytes copied; no crops, resizes or composites."
+    },
+    {
+      "file": "zh-intermediate-caption-collision-1080.png",
+      "bytes": 69965,
+      "sha256": "0e578ca294558b670279ad900230220af79a527679080f953c411f67d5387dc7",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/after/zh/1080/018_00212.4s.png",
+      "meaning": "Connector-only intermediate; ZH native endpoint212.4s; sourcebe5c7052; caption clearance not yet repaired.",
+      "image_processing": "Exact original PNG bytes copied; no crops, resizes or composites."
+    },
+    {
+      "file": "zh-final-caption-clearance-1080.png",
+      "bytes": 69966,
+      "sha256": "54a05971ed36f3e9cacf2d5dcb7e52c371422e85b083b3de13a235067cfe6986",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_at_freeze": "/workspace/runtime/ai2-knowledge-connector-polish/final/zh/1080/018_00212.4s.png",
+      "meaning": "Final ZH native endpoint212.4s; source1ca9dc3f.",
+      "image_processing": "Exact original PNG bytes copied; no crops, resizes or composites."
+    },
+    {
+      "file": "README.md",
+      "bytes": 4038,
+      "sha256": "c4f44a42c503599854bdddace8dbb7a7345987b9600e241687a8a1e21e8f7f48",
+      "encoding": "utf-8"
+    }
+  ]
+}

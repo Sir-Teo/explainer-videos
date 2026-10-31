@@ -1,0 +1,100 @@
+[
+  {
+    "file": "ai2-alpha-rename-regression-review.json.gz",
+    "uncompressed_sha256": "2fdc1062200b9da63fcd6b076645634e0ad6ef83042a9d581ec9a4d7e99c0345",
+    "compressed_sha256": "794696bc4d4b1a24e8b18cd13b7ab7a306c8c6e5c8522f99e3e2b0b22e3f2392",
+    "compressed_bytes": 69306,
+    "uncompressed_bytes": 1057514
+  },
+  {
+    "file": "ai2-eliza-after-review.json.gz",
+    "uncompressed_sha256": "26fc0a26d7d20497ecda4b64c8238b15b93e38509f60bd64ba3bb8bef9d563e2",
+    "compressed_sha256": "c44a2a97d6209aafac4496e26c869ed4cadc611488d012fa4437b11ea34f3e44",
+    "compressed_bytes": 41955,
+    "uncompressed_bytes": 232222
+  },
+  {
+    "file": "ai2-foundations-motion-review.json.gz",
+    "uncompressed_sha256": "0f2f903d4e12c77f6b0409111977a08767954d93c8871399849fd9a9cb73cd33",
+    "compressed_sha256": "ac8ab2153cd69c4388adbd39549034f1bd5aa0ba43396c2cd7e02fd398e91505",
+    "compressed_bytes": 276865,
+    "uncompressed_bytes": 1627852
+  },
+  {
+    "file": "ai2-hook-repair-review.json.gz",
+    "uncompressed_sha256": "93b6633b5431115bc2ab4861ef1e13fa57081de2f34ab1a4b11f166915c50172",
+    "compressed_sha256": "53abd2e151079d052c8085f9a1fc847b14c174823abc48a32ed8f3b82f754c03",
+    "compressed_bytes": 45384,
+    "uncompressed_bytes": 274243
+  },
+  {
+    "file": "ai2-local-caption-repair-review.json.gz",
+    "uncompressed_sha256": "08580d3cab04f3bdd88cbbb68ceaba3ad56981eba3cb58b7ec89b8d2a2a16ac7",
+    "compressed_sha256": "b3dc3bd9462603ef169da5003a74c741361e2943a4aee0f601384f60f400f7ca",
+    "compressed_bytes": 38704,
+    "uncompressed_bytes": 511245
+  },
+  {
+    "file": "ai2-logic-motion-review.json.gz",
+    "uncompressed_sha256": "b0b2a0eaaca9e6f425cf454900d539059e58a6e0ff52ee900317f84e4ae1da5e",
+    "compressed_sha256": "41178ee091f6794a6797cd4514f416ce47d512535bfb0f34910506a21ce7ded8",
+    "compressed_bytes": 114989,
+    "uncompressed_bytes": 845684
+  },
+  {
+    "file": "ai2-plans-motion-review.json.gz",
+    "uncompressed_sha256": "91c851d89db7e9063650b06f358f02f513fc10eac5085acd653af29b2abe86a8",
+    "compressed_sha256": "21cd0bb672251df5d429633086808d529f81c9c500792243c20c372d447a930e",
+    "compressed_bytes": 64310,
+    "uncompressed_bytes": 439059
+  },
+  {
+    "file": "ai2-tail-motion-review.json.gz",
+    "uncompressed_sha256": "8d756d0cbe639fd3059fe6ffdf263fdee8fe6926e039906a2d8bde0d07cb1981",
+    "compressed_sha256": "e0087beaed56c157e012de7a9c747831f263b3d4d4e531d759c180be289b3da1",
+    "compressed_bytes": 272770,
+    "uncompressed_bytes": 1976471
+  },
+  {
+    "file": "ai2-theory-motion-review.json.gz",
+    "uncompressed_sha256": "483850f9736a21bb3f9163a4ed44663c0f1bea5d442170d7ebac6c908cc22b0b",
+    "compressed_sha256": "0ff883107b7dd025a6cdf21314f43bdad0823e5f89e57f4bd41c5f7d3b358a93",
+    "compressed_bytes": 424250,
+    "uncompressed_bytes": 4560665
+  },
+  {
+    "file": "ai2-theory-motion-views.json.gz",
+    "uncompressed_sha256": "a5a7b531a8ceae9417546a924bac724520e6bf79f8658bf15279a6f9377ccbdb",
+    "compressed_sha256": "ff751ab78a11555a0b47e239e7ac41f0c190c062b676c35d4d0d7e0f7147d023",
+    "compressed_bytes": 173841,
+    "uncompressed_bytes": 1062792
+  },
+  {
+    "file": "ai2-winters-after-review.json.gz",
+    "uncompressed_sha256": "f81ccdfa21063fbe5faa0257b31e00807d2f44c31ac0ede9b7456d40c44ef1d6",
+    "compressed_sha256": "d48128dd2f1edb86aacfa5379b8af41f1e39cadb987087aab9d2e8a92d9e035a",
+    "compressed_bytes": 28937,
+    "uncompressed_bytes": 229220
+  },
+  {
+    "file": "ai2-zh-eliza-winters-review.json.gz",
+    "uncompressed_sha256": "ad4ae0de6ca345414930d486c8dd80da81a2bfbc400e73d5df79975d92f4e54f",
+    "compressed_sha256": "76a483ce19781d326bbc8bab8cb71f9f2ceb4c008bda0148da398987717570fc",
+    "compressed_bytes": 98029,
+    "uncompressed_bytes": 972414
+  },
+  {
+    "file": "ai2-zh-sat-knowledge-motion-review.json.gz",
+    "uncompressed_sha256": "980716dcdfc17e594223d9b5c47ac247fafa9665c80ecce2a25794119bef0e87",
+    "compressed_sha256": "eaf93460dbc41f90abbf4e585a6764f58ddaf49bc6e394b5b6888aacff830d42",
+    "compressed_bytes": 112365,
+    "uncompressed_bytes": 824818
+  },
+  {
+    "file": "summary-original-32-cases.json.gz",
+    "compressed_sha256": "f7f1fe8453368b83b4bcab7bbdde7283fe8ce103934e4af88f970961e7010aea",
+    "compressed_bytes": 4040,
+    "uncompressed_sha256": "3a2354e814488fe3b03a7c5f834eb50d8b1de4e7b4131aaf3ffe2b94e93f5c04",
+    "uncompressed_bytes": 26031
+  }
+]

@@ -264,6 +264,10 @@ class Projection(VoiceoverScene):
                       (HH, r"Householder reflections (1958)")], font_size=20).next_to(g1, DOWN, buff=0.15)
         lg2 = legend([(CGS, r"normal equations $A^{\top}A\hat{\mathbf{x}} = A^{\top}\mathbf{b}$"),
                       (HH, r"QR")], font_size=20).next_to(g2, DOWN, buff=0.15)
+        # Keep the complete bilingual legends inside the frame. Move each
+        # curve with its axes; the data caption retains its own bottom band.
+        comparison = VGroup(g1, c1, g2, c2, lg1, lg2)
+        comparison.shift(UP * max(0.4, -config.frame_height / 2 + 0.35 - comparison.get_bottom()[1]))
         head = label(r"In floating point, \ the order of operations matters", font_size=36).to_edge(UP, buff=0.3)
         cap = note(r"computed: \ the first $n$ columns of a $2n \times 2n$ Hilbert matrix, \ $n = 2, \dots, 14$",
                    font_size=20).to_corner(DR, buff=0.15)

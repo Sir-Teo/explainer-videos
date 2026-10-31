@@ -1,0 +1,504 @@
+{
+  "scope": "Historical Part3 endpoint visual repair evidence only; not motion/audio/current-source sign-off",
+  "packaged_utc": "2026-10-31T18:45:14.402609+00:00",
+  "files": [
+    {
+      "file": "ledgers/en-first4-baseline.json.gz",
+      "kind": "unmodified review ledger",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/review.json",
+      "original_sha256": "c22d9f89277959bb3164864c6ccfb65ee8559b8e8826679ef0dfaf73ee4f6004",
+      "original_bytes": 312945,
+      "packaged_sha256": "5a57ae896d7877e03f677c398c3386649f4416992e54191b15e56e374f37f124",
+      "packaged_bytes": 33972
+    },
+    {
+      "file": "ledgers/en-first3-repair.json.gz",
+      "kind": "unmodified review ledger",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/repair-recheck/review.json",
+      "original_sha256": "56e202987c9d0c04b32adf03447ef749259327e06bf3d78b45efdb4986f42182",
+      "original_bytes": 303522,
+      "packaged_sha256": "7d30e1d530c8312cefe745481063f0417bd47ad73ea778134d4fe00ed9698bc3",
+      "packaged_bytes": 31289
+    },
+    {
+      "file": "ledgers/en-first3-comparison-plan.json.gz",
+      "kind": "unmodified review ledger",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/repair-recheck/plan.json",
+      "original_sha256": "39c8bf74a4b0a2602c82ae512bc85c580668acf13e7c926eaced54c63256b699",
+      "original_bytes": 210775,
+      "packaged_sha256": "28337dd457f9662cdd8f4422bfc12e896b9b7cccf2336a504478ec2efdbcdfa2",
+      "packaged_bytes": 21241
+    },
+    {
+      "file": "ledgers/en-first3-owner-freeze.json.gz",
+      "kind": "unmodified review ledger",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/repair-recheck/owner-repair-receipt-at-review.json",
+      "original_sha256": "4b1d4fbe29f805b9d2406a0fcf2c6469c604d9d88d738a67ed7d22c581b8056d",
+      "original_bytes": 9143,
+      "packaged_sha256": "568f9b85f0733d1854ea5b86d399a580fabb10625bf140251a808dce22f0dca9",
+      "packaged_bytes": 2972
+    },
+    {
+      "file": "ledgers/vectors-score-bar-fixtures.json.gz",
+      "kind": "unmodified review ledger",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/score-bar-independent-fixtures.json",
+      "original_sha256": "de099f2a7e724f05d1439f56e7580d48e7170866badb3810f49d730917d57654",
+      "original_bytes": 1087,
+      "packaged_sha256": "4c0fc06914b68fd755857d447599b164f6e1f5944154d7b1af7fc0941c14d6bb",
+      "packaged_bytes": 386
+    },
+    {
+      "file": "ledgers/en-projection-eigen-power-repair.json.gz",
+      "kind": "unmodified review ledger",
+      "original_path": "/workspace/runtime/ai3-en-head-endpoint-repair-review/report.json",
+      "original_sha256": "afc28a4d8f29056333e73bc01c5aec0ba69d43998a8abf17f0493045ec3ffbab",
+      "original_bytes": 5234,
+      "packaged_sha256": "b7d409672e3f911df235c51a08cb929328a7d072f3d95d878606c5bdc51fb6a1",
+      "packaged_bytes": 1911
+    },
+    {
+      "file": "ledgers/zh-baseline.json.gz",
+      "kind": "unmodified review ledger",
+      "original_path": "/workspace/runtime/ai3-zh-first-nine-endpoint-review.json",
+      "original_sha256": "8eb539f901a0d45d7cffa5d679f96e91120db622d112f446b51fa7a612643fa4",
+      "original_bytes": 543666,
+      "packaged_sha256": "7bf462ddace1f2bc0d40abc8e1952f3ea2b5ea88aaafa5927cb513366fcb5ff0",
+      "packaged_bytes": 60973
+    },
+    {
+      "file": "ledgers/zh-six-repair.json.gz",
+      "kind": "unmodified review ledger",
+      "original_path": "/workspace/runtime/ai3-zh-six-refresh-review.json",
+      "original_sha256": "538501ead0019c76e20b77e23360915bab87f9138b0e08621702c2dc97862ab7",
+      "original_bytes": 365309,
+      "packaged_sha256": "c560fa13487da08a020959e090e35c88fe8d8f4102b4edd00482da4d8d1c56a2",
+      "packaged_bytes": 41283
+    },
+    {
+      "file": "images/en-hook-before.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/Hook/38918b469e331650ebfc82d6c0b481575e45e167970ecce11796a020733cca01/frames/004_00039.6s.png",
+      "original_sha256": "9d9a660bfe6274a774872226169f8019bf9162b2033dd5417ffca616b9f7ef81",
+      "original_bytes": 52610,
+      "packaged_sha256": "9d9a660bfe6274a774872226169f8019bf9162b2033dd5417ffca616b9f7ef81",
+      "packaged_bytes": 52610,
+      "scene": "Hook",
+      "lang": "en",
+      "stage": "before",
+      "index": 4,
+      "time": 39.58329166666667
+    },
+    {
+      "file": "images/en-hook-after.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/Hook/000b71bb9d0728d813a70f76cd71b75fa0024180c4e6e664c3498663b4834165/frames/004_00039.6s.png",
+      "original_sha256": "ce96e6ecbde8a71746221c482e9d2b4e1e628d88eb05afe726a20ba3cfd7bd8c",
+      "original_bytes": 52561,
+      "packaged_sha256": "ce96e6ecbde8a71746221c482e9d2b4e1e628d88eb05afe726a20ba3cfd7bd8c",
+      "packaged_bytes": 52561,
+      "scene": "Hook",
+      "lang": "en",
+      "stage": "after",
+      "index": 4,
+      "time": 39.58329166666667
+    },
+    {
+      "file": "images/en-vectors-before.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/Vectors/99a26b26be0737708cb8896a6ccecc65cb1c4302579d15a3705088c94cae4aa9/frames/022_00188.6s.png",
+      "original_sha256": "5005212265e886a9390ce0dc7192d38806475a0c84114bd062568bff4563c43b",
+      "original_bytes": 41025,
+      "packaged_sha256": "5005212265e886a9390ce0dc7192d38806475a0c84114bd062568bff4563c43b",
+      "packaged_bytes": 41025,
+      "scene": "Vectors",
+      "lang": "en",
+      "stage": "before",
+      "index": 22,
+      "time": 188.59797685185188
+    },
+    {
+      "file": "images/en-vectors-after.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/Vectors/ccb7dfdc9e19c4382b15bf55d18b76622c9d3f7bfc174f978369a58dee2c6074/frames/022_00188.6s.png",
+      "original_sha256": "644c46e4c60acbf39f5ff83c139f37e5c8890f5bff1189ac4fd5070763b09011",
+      "original_bytes": 46169,
+      "packaged_sha256": "644c46e4c60acbf39f5ff83c139f37e5c8890f5bff1189ac4fd5070763b09011",
+      "packaged_bytes": 46169,
+      "scene": "Vectors",
+      "lang": "en",
+      "stage": "after",
+      "index": 22,
+      "time": 188.59797685185188
+    },
+    {
+      "file": "images/en-matrices-before.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/Matrices/db0ba5b66229adead497a0c084a2057986130733f6e34f45b892ae1c3e7ab09c/frames/005_00056.1s.png",
+      "original_sha256": "0a0f906cf5208c91218e1551e848ffc8358662216716dc6f456a0dbb218388e8",
+      "original_bytes": 40225,
+      "packaged_sha256": "0a0f906cf5208c91218e1551e848ffc8358662216716dc6f456a0dbb218388e8",
+      "packaged_bytes": 40225,
+      "scene": "Matrices",
+      "lang": "en",
+      "stage": "before",
+      "index": 5,
+      "time": 56.11694339225588
+    },
+    {
+      "file": "images/en-matrices-after.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/Matrices/c6550e8cf1fa71a395f8f6301a6f292d9f8ad5e9f6e1cf3cea5aa50b72d444cc/frames/005_00056.1s.png",
+      "original_sha256": "0dbd36da57197016a83ba921702c7315fd392ef89ddb148119ef93d43bc1abf7",
+      "original_bytes": 40496,
+      "packaged_sha256": "0dbd36da57197016a83ba921702c7315fd392ef89ddb148119ef93d43bc1abf7",
+      "packaged_bytes": 40496,
+      "scene": "Matrices",
+      "lang": "en",
+      "stage": "after",
+      "index": 5,
+      "time": 56.11694339225588
+    },
+    {
+      "file": "ledgers/en-projection-before-provenance.json.gz",
+      "kind": "unmodified per-frame provenance ledger",
+      "original_path": "/workspace/runtime/ai3-en-tailhead-endpoint-review/Projection/provenance.json",
+      "original_sha256": "c4e080a3e9908c2477a54fe9f8ceb2f54fb3f3bc99db3f88ccfabff393f72031",
+      "original_bytes": 68259,
+      "packaged_sha256": "fec617abd61a043cf15ae1fb383d7b9d735848dfdfccc0e06696efa2f3332a50",
+      "packaged_bytes": 8047
+    },
+    {
+      "file": "images/en-projection-before.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-en-tailhead-endpoint-review/Projection/020_00182.2s.png",
+      "original_sha256": "d1858cfb49de3b63686c6994b36edbd5387cc530a26dc16bd2bb6f0abb005b19",
+      "original_bytes": 71818,
+      "packaged_sha256": "d1858cfb49de3b63686c6994b36edbd5387cc530a26dc16bd2bb6f0abb005b19",
+      "packaged_bytes": 71818,
+      "scene": "Projection",
+      "lang": "en",
+      "stage": "before",
+      "index": 20,
+      "time": 182.15250702426565
+    },
+    {
+      "file": "ledgers/en-projection-after-provenance.json.gz",
+      "kind": "unmodified per-frame provenance ledger",
+      "original_path": "/workspace/runtime/ai3-en-head-endpoint-repair-review/Projection/provenance.json",
+      "original_sha256": "06cf3ea3759fa8d7583f20422ca18598b39ca9b2bcf16fe613560643604d49f2",
+      "original_bytes": 72844,
+      "packaged_sha256": "e08c9bbb28251af5b04cb8e90162252d3df55898566ddf1b5fb173f282cfd77d",
+      "packaged_bytes": 9371
+    },
+    {
+      "file": "images/en-projection-after.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-en-head-endpoint-repair-review/Projection/020_00182.2s.png",
+      "original_sha256": "0050eda87c2699ef82230050a1399c39d11bf8257ad55e3fd80b307e38a671ad",
+      "original_bytes": 71524,
+      "packaged_sha256": "0050eda87c2699ef82230050a1399c39d11bf8257ad55e3fd80b307e38a671ad",
+      "packaged_bytes": 71524,
+      "scene": "Projection",
+      "lang": "en",
+      "stage": "after",
+      "index": 20,
+      "time": 182.15250702426565
+    },
+    {
+      "file": "ledgers/en-eigen-before-provenance.json.gz",
+      "kind": "unmodified per-frame provenance ledger",
+      "original_path": "/workspace/runtime/ai3-en-tailhead-endpoint-review/Eigen/provenance.json",
+      "original_sha256": "8ca3c863493bbd2f88fae868b4574f61197095e3d80a7fd69695a71ac2f7f669",
+      "original_bytes": 30876,
+      "packaged_sha256": "81d0e1669781a46181c936b8c2761e5ef406bf39fdae8fdd81f56e554d5a3247",
+      "packaged_bytes": 5587
+    },
+    {
+      "file": "images/en-eigen-before.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-en-tailhead-endpoint-review/Eigen/014_00136.0s.png",
+      "original_sha256": "de90bd7b95ff250be2fa630f0f6ac7177339ba96f72caf86e1bf9ee48e819ea8",
+      "original_bytes": 60814,
+      "packaged_sha256": "de90bd7b95ff250be2fa630f0f6ac7177339ba96f72caf86e1bf9ee48e819ea8",
+      "packaged_bytes": 60814,
+      "scene": "Eigen",
+      "lang": "en",
+      "stage": "before",
+      "index": 14,
+      "time": 135.961227124183
+    },
+    {
+      "file": "ledgers/en-eigen-after-provenance.json.gz",
+      "kind": "unmodified per-frame provenance ledger",
+      "original_path": "/workspace/runtime/ai3-en-head-endpoint-repair-review/Eigen/provenance.json",
+      "original_sha256": "a7bb49945ff3f28fc3d89c6e3bc35bee978ff03abee27b4dd7e4b867e2f13f58",
+      "original_bytes": 35842,
+      "packaged_sha256": "83780a3484cff88d3d0528045a3e99a71188a6b63767ae6e180a3391f9ab65b4",
+      "packaged_bytes": 6369
+    },
+    {
+      "file": "images/en-eigen-after.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-en-head-endpoint-repair-review/Eigen/014_00136.0s.png",
+      "original_sha256": "c6245a9c7373f9d7696eaedb1995a5f5405ab4bc20e3b7d640476e34a04fee32",
+      "original_bytes": 55137,
+      "packaged_sha256": "c6245a9c7373f9d7696eaedb1995a5f5405ab4bc20e3b7d640476e34a04fee32",
+      "packaged_bytes": 55137,
+      "scene": "Eigen",
+      "lang": "en",
+      "stage": "after",
+      "index": 14,
+      "time": 135.961227124183
+    },
+    {
+      "file": "ledgers/en-power-before-provenance.json.gz",
+      "kind": "unmodified per-frame provenance ledger",
+      "original_path": "/workspace/runtime/ai3-en-tailhead-endpoint-review/Power/provenance.json",
+      "original_sha256": "ea9921a459369121de9f3a60b675f55b53e3926b58168c3c206d892eb13f82d0",
+      "original_bytes": 36718,
+      "packaged_sha256": "a4012d1ca3d6e7b9e0e4e70247abad8e7908914f90d73362a095bc6b491dade6",
+      "packaged_bytes": 5756
+    },
+    {
+      "file": "images/en-power-before.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-en-tailhead-endpoint-review/Power/010_00104.9s.png",
+      "original_sha256": "0a7179b9be23315c770b36fd392ab756d1ffc4bff16ecdfd495dde576cdd4fe6",
+      "original_bytes": 51834,
+      "packaged_sha256": "0a7179b9be23315c770b36fd392ab756d1ffc4bff16ecdfd495dde576cdd4fe6",
+      "packaged_bytes": 51834,
+      "scene": "Power",
+      "lang": "en",
+      "stage": "before",
+      "index": 10,
+      "time": 104.85556965329995
+    },
+    {
+      "file": "ledgers/en-power-after-provenance.json.gz",
+      "kind": "unmodified per-frame provenance ledger",
+      "original_path": "/workspace/runtime/ai3-en-head-endpoint-repair-review/Power/provenance.json",
+      "original_sha256": "173546e0166ff0f9da87f379c2d8ee7e3df312f2855a9700ac9938b6f77520e1",
+      "original_bytes": 40888,
+      "packaged_sha256": "903342e054af30a13efc70eec273b3fee59909403456db8c8f2b970d3c30c927",
+      "packaged_bytes": 6683
+    },
+    {
+      "file": "images/en-power-after.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-en-head-endpoint-repair-review/Power/010_00105.4s.png",
+      "original_sha256": "79a64fcb8f7dd00109b24ecaea1a0b67d37958a97679f6043b16a48894fb639c",
+      "original_bytes": 53571,
+      "packaged_sha256": "79a64fcb8f7dd00109b24ecaea1a0b67d37958a97679f6043b16a48894fb639c",
+      "packaged_bytes": 53571,
+      "scene": "Power",
+      "lang": "en",
+      "stage": "after",
+      "index": 10,
+      "time": 105.35556965329995
+    },
+    {
+      "file": "images/en-projection-eigen-power-comparison.png",
+      "kind": "previously authored before/after comparison",
+      "original_path": "/workspace/runtime/ai3-en-head-endpoint-repair-review/before-after.png",
+      "original_sha256": "f5765b4764d986a87d68436962bd65ed0928440fa7a38dd0e4caae83be04ed7b",
+      "original_bytes": 261010,
+      "packaged_sha256": "f5765b4764d986a87d68436962bd65ed0928440fa7a38dd0e4caae83be04ed7b",
+      "packaged_bytes": 261010
+    },
+    {
+      "file": "images/zh-projection-after.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-zh-six-refresh-snapshot/Projection/021_00193.0s.png",
+      "original_sha256": "1931f0a2c0fe3cb4fb54494ad1261596a8d2176c137dd1b06eafc8f09d803509",
+      "original_bytes": 72782,
+      "packaged_sha256": "1931f0a2c0fe3cb4fb54494ad1261596a8d2176c137dd1b06eafc8f09d803509",
+      "packaged_bytes": 72782,
+      "scene": "Projection",
+      "lang": "zh",
+      "stage": "after",
+      "index": 21,
+      "time": 192.95350904135398
+    },
+    {
+      "file": "images/zh-projection-before.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-zh-first-nine-endpoint-snapshot/Projection/021_00193.0s.png",
+      "original_sha256": "268948ca1dfed864cc510223b0024f6f6c4c3807585cc75b07fdaadcfc1c88a1",
+      "original_bytes": 73063,
+      "packaged_sha256": "268948ca1dfed864cc510223b0024f6f6c4c3807585cc75b07fdaadcfc1c88a1",
+      "packaged_bytes": 73063,
+      "scene": "Projection",
+      "lang": "zh",
+      "stage": "before",
+      "index": 21,
+      "time": 192.95350904135398
+    },
+    {
+      "file": "images/zh-hook-after.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-zh-six-refresh-snapshot/Hook/004_00046.1s.png",
+      "original_sha256": "bf7e9a082e168baefb0938e4a7566571614149fb5108c87e78f446d9b08587bb",
+      "original_bytes": 53358,
+      "packaged_sha256": "bf7e9a082e168baefb0938e4a7566571614149fb5108c87e78f446d9b08587bb",
+      "packaged_bytes": 53358,
+      "scene": "Hook",
+      "lang": "zh",
+      "stage": "after",
+      "index": 4,
+      "time": 46.06975
+    },
+    {
+      "file": "images/zh-vectors-after.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-zh-six-refresh-snapshot/Vectors/022_00189.9s.png",
+      "original_sha256": "6906e3318f1fc2ff1bcaaf82535d14438c2c4c95152cc8e6bac723ab1a5ffd06",
+      "original_bytes": 48440,
+      "packaged_sha256": "6906e3318f1fc2ff1bcaaf82535d14438c2c4c95152cc8e6bac723ab1a5ffd06",
+      "packaged_bytes": 48440,
+      "scene": "Vectors",
+      "lang": "zh",
+      "stage": "after",
+      "index": 22,
+      "time": 189.91232581132576
+    },
+    {
+      "file": "images/zh-power-after.png",
+      "kind": "actual native endpoint PNG",
+      "original_path": "/workspace/runtime/ai3-zh-six-refresh-snapshot/Power/010_00108.5s.png",
+      "original_sha256": "905e5682103d30c50d252245762134f3449da61e4d64d22d2ece4bbcf2434180",
+      "original_bytes": 56137,
+      "packaged_sha256": "905e5682103d30c50d252245762134f3449da61e4d64d22d2ece4bbcf2434180",
+      "packaged_bytes": 56137,
+      "scene": "Power",
+      "lang": "zh",
+      "stage": "after",
+      "index": 10,
+      "time": 108.53016472868214
+    }
+  ],
+  "comparisons": [
+    {
+      "scene": "Hook",
+      "lang": "en",
+      "before": {
+        "file": "images/en-hook-before.png",
+        "index": 4,
+        "time": 39.58329166666667,
+        "sha256": "9d9a660bfe6274a774872226169f8019bf9162b2033dd5417ffca616b9f7ef81"
+      },
+      "after": {
+        "file": "images/en-hook-after.png",
+        "index": 4,
+        "time": 39.58329166666667,
+        "sha256": "ce96e6ecbde8a71746221c482e9d2b4e1e628d88eb05afe726a20ba3cfd7bd8c"
+      }
+    },
+    {
+      "scene": "Vectors",
+      "lang": "en",
+      "before": {
+        "file": "images/en-vectors-before.png",
+        "index": 22,
+        "time": 188.59797685185188,
+        "sha256": "5005212265e886a9390ce0dc7192d38806475a0c84114bd062568bff4563c43b"
+      },
+      "after": {
+        "file": "images/en-vectors-after.png",
+        "index": 22,
+        "time": 188.59797685185188,
+        "sha256": "644c46e4c60acbf39f5ff83c139f37e5c8890f5bff1189ac4fd5070763b09011"
+      }
+    },
+    {
+      "scene": "Matrices",
+      "lang": "en",
+      "before": {
+        "file": "images/en-matrices-before.png",
+        "index": 5,
+        "time": 56.11694339225588,
+        "sha256": "0a0f906cf5208c91218e1551e848ffc8358662216716dc6f456a0dbb218388e8"
+      },
+      "after": {
+        "file": "images/en-matrices-after.png",
+        "index": 5,
+        "time": 56.11694339225588,
+        "sha256": "0dbd36da57197016a83ba921702c7315fd392ef89ddb148119ef93d43bc1abf7"
+      }
+    },
+    {
+      "scene": "Projection",
+      "lang": "en",
+      "before": {
+        "file": "images/en-projection-before.png",
+        "index": 20,
+        "time": 182.15250702426565,
+        "sha256": "d1858cfb49de3b63686c6994b36edbd5387cc530a26dc16bd2bb6f0abb005b19"
+      },
+      "after": {
+        "file": "images/en-projection-after.png",
+        "index": 20,
+        "time": 182.15250702426565,
+        "sha256": "0050eda87c2699ef82230050a1399c39d11bf8257ad55e3fd80b307e38a671ad"
+      }
+    },
+    {
+      "scene": "Eigen",
+      "lang": "en",
+      "before": {
+        "file": "images/en-eigen-before.png",
+        "index": 14,
+        "time": 135.961227124183,
+        "sha256": "de90bd7b95ff250be2fa630f0f6ac7177339ba96f72caf86e1bf9ee48e819ea8"
+      },
+      "after": {
+        "file": "images/en-eigen-after.png",
+        "index": 14,
+        "time": 135.961227124183,
+        "sha256": "c6245a9c7373f9d7696eaedb1995a5f5405ab4bc20e3b7d640476e34a04fee32"
+      }
+    },
+    {
+      "scene": "Power",
+      "lang": "en",
+      "before": {
+        "file": "images/en-power-before.png",
+        "index": 10,
+        "time": 104.85556965329995,
+        "sha256": "0a7179b9be23315c770b36fd392ab756d1ffc4bff16ecdfd495dde576cdd4fe6"
+      },
+      "after": {
+        "file": "images/en-power-after.png",
+        "index": 10,
+        "time": 105.35556965329995,
+        "sha256": "79a64fcb8f7dd00109b24ecaea1a0b67d37958a97679f6043b16a48894fb639c"
+      }
+    },
+    {
+      "scene": "Projection",
+      "lang": "zh",
+      "before": {
+        "file": "images/zh-projection-before.png",
+        "index": 21,
+        "time": 192.95350904135398,
+        "sha256": "268948ca1dfed864cc510223b0024f6f6c4c3807585cc75b07fdaadcfc1c88a1"
+      },
+      "after": {
+        "file": "images/zh-projection-after.png",
+        "index": 21,
+        "time": 192.95350904135398,
+        "sha256": "1931f0a2c0fe3cb4fb54494ad1261596a8d2176c137dd1b06eafc8f09d803509"
+      }
+    }
+  ],
+  "limitations": [
+    "Original review ledgers preserved byte-for-byte under deterministic gzip; absolute runtime paths describe historical locations, not portable links.",
+    "PNG examples are selected evidence, not the complete endpoint image archive; full timestamp/hash/reuse mappings remain in the ledgers.",
+    "No rerender, production computation, source change, or new motion/audio review performed by this packaging step."
+  ],
+  "hook_source_caveat": {
+    "en_endpoint_review_frozen_sha256": "2cc150ba66e921c64279c1d8a5965836c5971f947d55defb83a69a9a7aa7eae1",
+    "zh_source_sha256_at_snapshot": "2cc150ba66e921c64279c1d8a5965836c5971f947d55defb83a69a9a7aa7eae1",
+    "later_transition_source_sha256": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+    "interpretation": "The endpoint images and their frozen review hashes predate the later Hook transition repair. Packaging does not establish freshness against it or worker-loaded source."
+  }
+}

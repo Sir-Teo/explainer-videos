@@ -1,0 +1,751 @@
+{
+  "part": "ai2",
+  "cases": [
+    {
+      "case": "en/Hook",
+      "title": "Forty years to checkmate",
+      "selected_times_covered": 272,
+      "movie_sha256": "03bd71d56d6a63b4110d3a2296c50518b180d5d88ce9178aa21f5f879d421d76",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "127.333333",
+        "nb_frames": "1910"
+      },
+      "proof": "ai2-hook-repair-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "eba5f33461813b36c7044ef7aa99d9f98860c9db66173594197e409e8449d3cd"
+    },
+    {
+      "case": "zh/Hook",
+      "title": "Forty years to checkmate",
+      "selected_times_covered": 282,
+      "movie_sha256": "97a72de0bdf0ec7860872e9d5c4a7411d811e8a7bad1d9f7f9703745fcd5a006",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "144.600000",
+        "nb_frames": "2169"
+      },
+      "proof": "ai2-hook-repair-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "eba5f33461813b36c7044ef7aa99d9f98860c9db66173594197e409e8449d3cd"
+    },
+    {
+      "case": "en/Turing",
+      "title": "1. Can machines think?",
+      "selected_times_covered": 471,
+      "movie_sha256": "8d30469affce9c7a0f418dc0a8c31558fd5264286342ffb7b1d8607f1f84a54e",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "225.200000",
+        "nb_frames": "3378"
+      },
+      "proof": "ai2-foundations-motion-review.json.gz",
+      "runtime_status": "needs-review",
+      "runtime_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "c7a6a63a4153badde7cb7ace994b989499b2b9dd735ddee52e5b42d983ee026f"
+    },
+    {
+      "case": "zh/Turing",
+      "title": "1. Can machines think?",
+      "selected_times_covered": 490,
+      "movie_sha256": "c2c2033479276a09c816a184b29f241a04c7345dfcdbaa5e8a1ec00eac4fe687",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "263.266667",
+        "nb_frames": "3949"
+      },
+      "proof": "ai2-foundations-motion-review.json.gz",
+      "runtime_status": "needs-review",
+      "runtime_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "c7a6a63a4153badde7cb7ace994b989499b2b9dd735ddee52e5b42d983ee026f"
+    },
+    {
+      "case": "en/Search",
+      "title": "2. Search",
+      "selected_times_covered": 327,
+      "movie_sha256": "91635f6cf93da1f632e2d871a5bfb896548827cb6fb66e48c17e1ab68a2464e1",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "177.200000",
+        "nb_frames": "2658"
+      },
+      "proof": "ai2-foundations-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "07ca34329fe691ebc10a84fdd3d5d904fa1698c885bed18479d991a5ed5b78da"
+    },
+    {
+      "case": "zh/Search",
+      "title": "2. Search",
+      "selected_times_covered": 342,
+      "movie_sha256": "b8d74562bbcadeb0f308b943ae61282e42b549e62349426c08832fd4571fbca8",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "200.466667",
+        "nb_frames": "3007"
+      },
+      "proof": "ai2-foundations-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "07ca34329fe691ebc10a84fdd3d5d904fa1698c885bed18479d991a5ed5b78da"
+    },
+    {
+      "case": "en/AStar",
+      "title": "3. A*",
+      "selected_times_covered": 486,
+      "movie_sha256": "8fa34ba8eb49f5e4dcbac309475dfdb8e83a85b11789fa73cfbd22d029adb3bd",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "10521600/701437",
+        "duration": "228.332357",
+        "nb_frames": "3425"
+      },
+      "proof": "ai2-foundations-motion-review.json.gz",
+      "runtime_status": "needs-review",
+      "runtime_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "ac2886b808f59ac3237be0f88de00f3f5c5dba954b67bbe3fbdfcd0e0a8aa5dc"
+    },
+    {
+      "case": "zh/AStar",
+      "title": "3. A*",
+      "selected_times_covered": 479,
+      "movie_sha256": "3af9d92efe8cff4343c991cba12b4447029a0caece7a92fbb3ac3030f738bd13",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "5693440/379561",
+        "duration": "222.399023",
+        "nb_frames": "3336"
+      },
+      "proof": "ai2-foundations-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "ac2886b808f59ac3237be0f88de00f3f5c5dba954b67bbe3fbdfcd0e0a8aa5dc"
+    },
+    {
+      "case": "en/Heuristics",
+      "title": "4. Where heuristics come from",
+      "selected_times_covered": 425,
+      "movie_sha256": "463900c0a596fa89912f6dfc0bdf7e16e134b7dffd046a6e4e68ef1fd459a7d9",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "18165760/1211049",
+        "duration": "236.533008",
+        "nb_frames": "3548"
+      },
+      "proof": "ai2-theory-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "a09c2cd07ec02f6f2bb1b82e70a2afa4539bdf34d5bb671765e9883399b04bdd"
+    },
+    {
+      "case": "zh/Heuristics",
+      "title": "4. Where heuristics come from",
+      "selected_times_covered": 450,
+      "movie_sha256": "de802acd8f8f8222cf3185a70a11cc0cc97123c36ea2a1080dfce61936e7ec29",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "19563520/1304233",
+        "duration": "254.733008",
+        "nb_frames": "3821"
+      },
+      "proof": "ai2-theory-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "a09c2cd07ec02f6f2bb1b82e70a2afa4539bdf34d5bb671765e9883399b04bdd"
+    },
+    {
+      "case": "en/Local",
+      "title": "5. Climbing and cooling",
+      "selected_times_covered": 527,
+      "movie_sha256": "0d7a5316a07e4cc936315df2f37869ee9fd97d2f546c3c0cdabf9081e8c25b40",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "9807360/653819",
+        "duration": "255.398047",
+        "nb_frames": "3831"
+      },
+      "proof": "ai2-local-caption-repair-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "4228c250e63d62cd8daf00a40c17d434dbf953619028c07766937c4749c58206"
+    },
+    {
+      "case": "zh/Local",
+      "title": "5. Climbing and cooling",
+      "selected_times_covered": 553,
+      "movie_sha256": "c73aaa26f63fa9653fb2368173c32bb4653df1464ac60d031060e5630aab76fd",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "21329920/1421983",
+        "duration": "277.731055",
+        "nb_frames": "4166"
+      },
+      "proof": "ai2-theory-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "4228c250e63d62cd8daf00a40c17d434dbf953619028c07766937c4749c58206"
+    },
+    {
+      "case": "en/Games",
+      "title": "6. Games and alpha-beta",
+      "selected_times_covered": 393,
+      "movie_sha256": "70a500bc9a2d6603491fb8db2e268c7198e8199cc59869f8192896f6389551bf",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "45757440/3050491",
+        "duration": "198.599674",
+        "nb_frames": "2979"
+      },
+      "proof": "ai2-theory-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "07c08b6a3ba3065f803d9a2903126b4be2fcd8c1005f4a33e775cca380899f2d"
+    },
+    {
+      "case": "zh/Games",
+      "title": "6. Games and alpha-beta",
+      "selected_times_covered": 407,
+      "movie_sha256": "bb294921e1f1533f2146fe6c80259d795b68151731109219f8859a6d2ae6af6f",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "24253440/1616891",
+        "duration": "210.532682",
+        "nb_frames": "3158"
+      },
+      "proof": "ai2-theory-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "07c08b6a3ba3065f803d9a2903126b4be2fcd8c1005f4a33e775cca380899f2d"
+    },
+    {
+      "case": "en/Samuel",
+      "title": "7. Machines that learned to play",
+      "selected_times_covered": 473,
+      "movie_sha256": "633796bd802f01f5a8c641907f5d48bc31ca291d7d10152d5f309e6560a0bd83",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "18524160/1234939",
+        "duration": "241.199023",
+        "nb_frames": "3618"
+      },
+      "proof": "ai2-theory-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "47c2698ac41dbe1b104c11c860b31c297f1c6af0831710b32edd1374fc7d8f92"
+    },
+    {
+      "case": "zh/Samuel",
+      "title": "7. Machines that learned to play",
+      "selected_times_covered": 500,
+      "movie_sha256": "d10915564dc0bbb04ed4333af54f8109e0a7fc95b6defcf7daeb3e2745344e4b",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "59013120/3934193",
+        "duration": "256.132357",
+        "nb_frames": "3842"
+      },
+      "proof": "ai2-theory-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "47c2698ac41dbe1b104c11c860b31c297f1c6af0831710b32edd1374fc7d8f92"
+    },
+    {
+      "case": "en/Logic",
+      "title": "8. Logic and resolution",
+      "selected_times_covered": 456,
+      "movie_sha256": "8114c5411092b53a105bfdc69ff80a639a51a7553fa74ed3aa382fb66bbe004d",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "222.600000",
+        "nb_frames": "3339"
+      },
+      "proof": "ai2-alpha-rename-regression-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "666434bf194f5f29ddba9dc1b2bd216ac9e82bdaf5789cb2817955fac5007d3f"
+    },
+    {
+      "case": "zh/Logic",
+      "title": "8. Logic and resolution",
+      "selected_times_covered": 494,
+      "movie_sha256": "e62f9a5187008b52af2ed895e70c9e1e8e69255247c65bd4daf2f50c99db7d4c",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "245.400000",
+        "nb_frames": "3681"
+      },
+      "proof": "ai2-alpha-rename-regression-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "666434bf194f5f29ddba9dc1b2bd216ac9e82bdaf5789cb2817955fac5007d3f"
+    },
+    {
+      "case": "en/SAT",
+      "title": "9. Satisfiability",
+      "selected_times_covered": 533,
+      "movie_sha256": "20f51f00bfaf9a2eeeceaf3820c1a00dcc994df9997d0330c4d8c4f284629f07",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "244.000000",
+        "nb_frames": "3660"
+      },
+      "proof": "ai2-tail-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "1bf9e0cdb8de95f4d0cc1d7b23ae9b225918baec8e73de21527511d51a7ff19c"
+    },
+    {
+      "case": "zh/SAT",
+      "title": "9. Satisfiability",
+      "selected_times_covered": 556,
+      "movie_sha256": "4ca0d1b77a68560457f98f9e28049ad2ed2a56ca8553038d197449460c632c7f",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "271.266667",
+        "nb_frames": "4069"
+      },
+      "proof": "ai2-zh-sat-knowledge-motion-review.json.gz",
+      "runtime_status": "needs-review",
+      "runtime_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "1bf9e0cdb8de95f4d0cc1d7b23ae9b225918baec8e73de21527511d51a7ff19c"
+    },
+    {
+      "case": "en/Plans",
+      "title": "10. Constraints and plans",
+      "selected_times_covered": 460,
+      "movie_sha256": "ca2a465c71e715c944970b528c846173dd9f255ef23bae0aba4262d9694e4190",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "18780160/1252009",
+        "duration": "244.533008",
+        "nb_frames": "3668"
+      },
+      "proof": "ai2-plans-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "7acde48a6a99aec78c344989df410c6a220fbdbe3181f22aeb140f78f7b6b6ec"
+    },
+    {
+      "case": "zh/Plans",
+      "title": "10. Constraints and plans",
+      "selected_times_covered": 484,
+      "movie_sha256": "d0d0f8223ec268fd9add9a86dd7dddd9a3e39e649b594fa14215f9044b2ec842",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "21114880/1407657",
+        "duration": "274.933008",
+        "nb_frames": "4124"
+      },
+      "proof": "ai2-plans-motion-review.json.gz",
+      "runtime_status": "needs-review",
+      "runtime_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "7acde48a6a99aec78c344989df410c6a220fbdbe3181f22aeb140f78f7b6b6ec"
+    },
+    {
+      "case": "en/Knowledge",
+      "title": "11. Knowledge is power",
+      "selected_times_covered": 423,
+      "movie_sha256": "1fa0436051a496ceaaf9c4a5544e83657790dc60a3a7ab44d651a956caf19cf3",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "1963008/130867",
+        "duration": "212.999674",
+        "nb_frames": "3195"
+      },
+      "proof": "../ai2-knowledge-polish/final-review.json.gz",
+      "runtime_status": "needs-review",
+      "runtime_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "visual_review": "all selected times covered through direct views or exact-PNG inheritance; repaired graph joins and caption clearance verified",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "1ca9dc3f872f515ff74b3c2517eb2c1093727adec3eeb3aca0f8069ba86b2a76",
+      "proof_sha256": "bb663cccc02507f463e03752709824ed98acab4d65949183b31b544441ab3042",
+      "runtime_record_scope": "runtime_status/runtime_warnings retain the original series-freeze history; replacement_render records the new movie job.",
+      "replacement_render": {
+        "status": "passed",
+        "warnings": [],
+        "fingerprint_at_freeze": "151366ae0caf01a084ef25b473f337be9a3b1db655b333399d599be60f797f5f",
+        "inputs_current_at_freeze": true,
+        "record": "../ai2-knowledge-polish/final-en-motion-render-record.json.gz"
+      },
+      "prior_selected_case": {
+        "case": "en/Knowledge",
+        "title": "11. Knowledge is power",
+        "selected_times_covered": 429,
+        "movie_sha256": "73d728a7d3c11b12373859080768cd96cf01038b41484c76cf3f5bd30c781076",
+        "video": {
+          "width": 854,
+          "height": 480,
+          "avg_frame_rate": "1963008/130867",
+          "duration": "212.999674",
+          "nb_frames": "3195"
+        },
+        "proof": "ai2-tail-motion-review.json.gz",
+        "runtime_status": "needs-review",
+        "runtime_warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "visual_review": "all selected times covered; no unresolved observed defect",
+        "continuous_perceptual_playback": "unverified",
+        "narration_listening": "unverified",
+        "scene_source_sha256_at_freeze": "520bebce0a5b2b1e157498a68c2a613fd8b3b8507409c4b5275de418e7b1c3e7"
+      }
+    },
+    {
+      "case": "zh/Knowledge",
+      "title": "11. Knowledge is power",
+      "selected_times_covered": 469,
+      "movie_sha256": "c24c749e1536448020c521e1f8d274147173d3d0130c73440b01ca0adb0c1581",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "56125440/3741691",
+        "duration": "243.599674",
+        "nb_frames": "3654"
+      },
+      "proof": "../ai2-knowledge-polish/final-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered through direct views or exact-PNG inheritance; repaired graph joins and caption clearance verified",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "1ca9dc3f872f515ff74b3c2517eb2c1093727adec3eeb3aca0f8069ba86b2a76",
+      "proof_sha256": "bb663cccc02507f463e03752709824ed98acab4d65949183b31b544441ab3042",
+      "runtime_record_scope": "runtime_status/runtime_warnings retain the original series-freeze history; replacement_render records the new movie job.",
+      "replacement_render": {
+        "status": "passed",
+        "warnings": [],
+        "fingerprint_at_freeze": "151366ae0caf01a084ef25b473f337be9a3b1db655b333399d599be60f797f5f",
+        "inputs_current_at_freeze": true,
+        "record": "../ai2-knowledge-polish/final-zh-motion-render-record.json.gz"
+      },
+      "prior_selected_case": {
+        "case": "zh/Knowledge",
+        "title": "11. Knowledge is power",
+        "selected_times_covered": 469,
+        "movie_sha256": "f8e0d192b6fab628ba6da82f93bac7b2d612660866172ccdac7fe93c5a329306",
+        "video": {
+          "width": 854,
+          "height": 480,
+          "avg_frame_rate": "56125440/3741691",
+          "duration": "243.599674",
+          "nb_frames": "3654"
+        },
+        "proof": "ai2-zh-sat-knowledge-motion-review.json.gz",
+        "runtime_status": "passed",
+        "runtime_warnings": [],
+        "visual_review": "all selected times covered; no unresolved observed defect",
+        "continuous_perceptual_playback": "unverified",
+        "narration_listening": "unverified",
+        "scene_source_sha256_at_freeze": "520bebce0a5b2b1e157498a68c2a613fd8b3b8507409c4b5275de418e7b1c3e7"
+      }
+    },
+    {
+      "case": "en/Eliza",
+      "title": "12. ELIZA",
+      "selected_times_covered": 389,
+      "movie_sha256": "97afa64d16afddc5c88676d8be6ea9e7641c06e4bf6ad84eb39e756c79a78c53",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "495616/33041",
+        "duration": "161.333008",
+        "nb_frames": "2420"
+      },
+      "proof": "ai2-eliza-after-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "c0c85e300f04d25e65cc1cfdabec5853d10c34455f68370b07249d0c7f5e03bd"
+    },
+    {
+      "case": "zh/Eliza",
+      "title": "12. ELIZA",
+      "selected_times_covered": 449,
+      "movie_sha256": "918814a49e7e7b58a10afd525921c0fae70459de345db7ae0b81e3115528840a",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "41195520/2746363",
+        "duration": "178.799674",
+        "nb_frames": "2682"
+      },
+      "proof": "ai2-zh-eliza-winters-review.json.gz",
+      "runtime_status": "needs-review",
+      "runtime_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "c0c85e300f04d25e65cc1cfdabec5853d10c34455f68370b07249d0c7f5e03bd"
+    },
+    {
+      "case": "en/Winters",
+      "title": "13. The winters",
+      "selected_times_covered": 417,
+      "movie_sha256": "2f2d48171ef14cdcb187dc8134a1d7a9830819273c5efc1bb287deb4cdb64a03",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "46725120/3114983",
+        "duration": "202.798372",
+        "nb_frames": "3042"
+      },
+      "proof": "ai2-winters-after-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "48293fb728c3bb443adf099dd453a5aded8b1f62629dddb7b585b61dba8f45f6"
+    },
+    {
+      "case": "zh/Winters",
+      "title": "13. The winters",
+      "selected_times_covered": 452,
+      "movie_sha256": "0dbf9855446619258d7d4d58c8907ba2c46a7dca35cab00bfbfab15613591007",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "13155840/877051",
+        "duration": "228.398698",
+        "nb_frames": "3426"
+      },
+      "proof": "ai2-zh-eliza-winters-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "48293fb728c3bb443adf099dd453a5aded8b1f62629dddb7b585b61dba8f45f6"
+    },
+    {
+      "case": "en/Survives",
+      "title": "14. What survives",
+      "selected_times_covered": 462,
+      "movie_sha256": "df3af2874a0d2ee8236ba4674d7a181148f62d2db617b4c1e17c2447bb11810d",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "53422080/3561467",
+        "duration": "231.866341",
+        "nb_frames": "3478"
+      },
+      "proof": "ai2-tail-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "b8c5fea1bcc465f5ced379d079fece5422134ea3a7fc95088c553bb508b89ac5"
+    },
+    {
+      "case": "zh/Survives",
+      "title": "14. What survives",
+      "selected_times_covered": 510,
+      "movie_sha256": "1e74b3ba5bbe4f24e28f07136198c6653774e1567c676b0cfcc125fc6ad2f9e2",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "19778560/1318569",
+        "duration": "257.533008",
+        "nb_frames": "3863"
+      },
+      "proof": "ai2-tail-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "b8c5fea1bcc465f5ced379d079fece5422134ea3a7fc95088c553bb508b89ac5"
+    },
+    {
+      "case": "en/Outro",
+      "title": "Recap, problems, and where this comes back",
+      "selected_times_covered": 303,
+      "movie_sha256": "592e553a6af2c93fa8cac841e0b9223ca99e43185d207388e658b69ccbcecc18",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "131.066667",
+        "nb_frames": "1966"
+      },
+      "proof": "ai2-tail-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "260ec66f3d88559fe779fdae72272f34ddc1f1034fc2175fa0cbc267e590e1c3"
+    },
+    {
+      "case": "zh/Outro",
+      "title": "Recap, problems, and where this comes back",
+      "selected_times_covered": 328,
+      "movie_sha256": "d6f8fe701891b8ef74964e3d167ba07d8395158f0bb151daedcd99250f5efe30",
+      "video": {
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1",
+        "duration": "143.666667",
+        "nb_frames": "2155"
+      },
+      "proof": "ai2-tail-motion-review.json.gz",
+      "runtime_status": "passed",
+      "runtime_warnings": [],
+      "visual_review": "all selected times covered; no unresolved observed defect",
+      "continuous_perceptual_playback": "unverified",
+      "narration_listening": "unverified",
+      "scene_source_sha256_at_freeze": "260ec66f3d88559fe779fdae72272f34ddc1f1034fc2175fa0cbc267e590e1c3"
+    }
+  ],
+  "total_cases": 32,
+  "selected_times_covered": 14062,
+  "automated_video_frames": 105217,
+  "coverage": "Full files decoded automatically; every selected time covered by actual views or exact PNG equality. Unselected frames and listening are not certified.",
+  "aggregate_fingerprint": "Original broad source-change warnings retained; direct source/data evidence lives in detailed frozen ledgers.",
+  "production_queue": "../../remaining-production-qa.md",
+  "original_32_case_summary": {
+    "file": "summary-original-32-cases.json.gz",
+    "compressed_sha256": "f7f1fe8453368b83b4bcab7bbdde7283fe8ce103934e4af88f970961e7010aea",
+    "uncompressed_sha256": "3a2354e814488fe3b03a7c5f834eb50d8b1de4e7b4131aaf3ffe2b94e93f5c04",
+    "total_cases": 32,
+    "selected_times_covered": 14068,
+    "automated_video_frames": 105217,
+    "interpretation": "Exact original summary bytes; historical current_scene_source_sha256 keys denote the original freeze, not current freshness."
+  },
+  "knowledge_replacement_note": "EN429\u2192423; ZH469\u2192469. Current index totals14,062 selected times; original freeze14,068 preserved separately. Source hashes describe recorded freezes. Full playback/listening remain unverified."
+}

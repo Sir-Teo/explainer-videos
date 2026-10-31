@@ -1,0 +1,62 @@
+{
+  "scope": "Attempted refresh of exactly the existing Part 1 review ZIP and Part 2 Logic video; unrelated search results are excluded.",
+  "outcome": "failed_before_prepare",
+  "blocker": {
+    "action": "Discover hosted-app tools for the two-file Library refresh",
+    "target": "hosted apps tools/list",
+    "reason": "HTTP status 401",
+    "stage": "before prepare_uploads; no prepared operation",
+    "classification": "authentication failure; not an automatic approval-review denial"
+  },
+  "stdout_bytes": 0,
+  "retry_performed": false,
+  "pending_prepared_operation": false,
+  "artifacts": {
+    "helper-stderr.log": {
+      "source_path": "/workspace/explainer-videos/renders/qa/current-review/library-ready-review-batch.log",
+      "sha256": "c7e71c8d4dda96908a324efe94fb4890a842b8d9dff554a44e7553bc2b2c0faf",
+      "bytes": 82
+    },
+    "helper-stdout.json": {
+      "source_path": "/workspace/explainer-videos/renders/qa/current-review/library-ready-review-batch.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "zip-prior-identity.json": {
+      "source_path": "/workspace/explainer-videos/renders/qa/current-review/library-identity.json",
+      "sha256": "e21e173cb107fca1dc2a43b204dfccfa8994b1d5d61ffb27cc7bd0c93b1db930",
+      "bytes": 450
+    },
+    "logic-prior-identity.json": {
+      "source_path": "/workspace/explainer-videos/renders/qa/current-review/part2-logic-video-identity.json",
+      "sha256": "d039b3afe53d4aad52722fadf0f799c044c8371612c98b1ebcefba36aa406e3b",
+      "bytes": 656
+    }
+  },
+  "official_search_reconciliation": {
+    "evidence_type": "root-observed scoped attestation; raw official Library search response was not saved",
+    "attested_by": "parent agent /root",
+    "timing": "Official Library search after this helper failure",
+    "finding": "Both target files retained their previous IDs, versions, sizes and modification times; no successful refresh is claimed.",
+    "targets": [
+      {
+        "name": "ai1-visual-review-checkpoint.zip",
+        "library_file_id": "libfile_9c3c21b723608191890d0f6c479c917c",
+        "file_id": "file_00000000554881f6a8260f997aa9bd5f",
+        "version": 1,
+        "size_bytes": 14722297,
+        "modified_time_attested": "14:38; exact timestamp was not saved in this receipt"
+      },
+      {
+        "name": "AI-Built-Part2-Logic-EN-Silent-480p.mp4",
+        "library_file_id": "libfile_1121caffe49c8191a07bd046bfadbe10",
+        "file_id": "file_00000000367481f6b902da59ff53d996",
+        "version": 0,
+        "size_bytes": 1618541,
+        "modified_time_attested": "unchanged; exact timestamp was not supplied"
+      }
+    ]
+  },
+  "completed_independently": "Caption-regression repository evidence prepared locally; no Library refresh/retry was performed while writing this receipt.",
+  "limits": "Prior identity receipts document earlier successful versions, not this failed refresh. Empty stdout is not a success result. The post-failure search is an explicitly attributed attestation, not a preserved raw search response."
+}

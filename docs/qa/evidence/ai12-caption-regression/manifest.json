@@ -1,0 +1,31 @@
+{
+  "report.json.gz": {
+    "sha256": "2c4ce6a38870ba2cc3683b3d7e29f38c5598e4c2cb8698ee90b9ee609c501628",
+    "uncompressed_sha256": "1d45a67996b58482d161c19a000d93e83d134e10a2ef5fa39428e8f1b95b87f2",
+    "bytes": 8433,
+    "uncompressed_bytes": 28088
+  },
+  "used-caption-results.json.gz": {
+    "sha256": "55e9900154084f0cf083d89acf956b2ab3d0eb158717c2124379764703de2e1d",
+    "uncompressed_sha256": "aa137cbd8fe8ef78d8cadc7dfefcfbb319d416fb9a1de1cc17f8bf44620fb9d8",
+    "bytes": 135950,
+    "uncompressed_bytes": 2016716
+  },
+  "baseline-ai_text_zh.json.gz": {
+    "sha256": "c015fd3568e75ddc3f3ea10fb029382f2ec1f444ce66f88e463e3fc6ac4a5f4c",
+    "uncompressed_sha256": "65772b576d93e271db85cec6b63d555ff090d0e885491e7e6a9a10db6629f730",
+    "bytes": 866427,
+    "uncompressed_bytes": 2384196
+  },
+  "current-ai_text_zh.json.gz": {
+    "sha256": "f9fed51db9d26a235820de3c125798fe26f04fc5a304d9b33c8b18598dff9744",
+    "uncompressed_sha256": "d805eb1858f976969c64014adda5f1b60f0e33830865d11238e28df114a0fa73",
+    "bytes": 870564,
+    "uncompressed_bytes": 2394994
+  },
+  "comparison.py": {
+    "sha256": "414ae4e2133fbd053e77a973d8370f5189a8ee494dc4efae9d7790a2deb76737",
+    "bytes": 9012,
+    "note": "Original comparison script; runtime absolute paths are retained as provenance, not a portable replay promise."
+  }
+}
