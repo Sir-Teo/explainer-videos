@@ -1,0 +1,8 @@
+{
+  "scope": "Actual tiny temporary-file test of metadata-index copy/idempotence/conflict refusal only; fixture MP4 is not video, and no rendering/audio/stream validation is asserted. No local execution.",
+  "copy_exit": 0,
+  "idempotent_exit": 0,
+  "conflict_exit": 1,
+  "conflict_preserved": true,
+  "all_python_helpers_AST_parse": true
+}

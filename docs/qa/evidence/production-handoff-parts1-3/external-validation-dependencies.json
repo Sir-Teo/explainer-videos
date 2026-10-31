@@ -1,0 +1,151 @@
+{
+  "scope": "External strict-validator inputs observed from existing sidecars/source; copying the58.9MB core alone does not satisfy these checks. No download/load/re-attestation occurred.",
+  "extra_repo_relative_files": [
+    {
+      "path": ".cache/novels/train.npy",
+      "bytes": 13193758,
+      "sha256": "0cae9f9b82f68aecc2720da2061b77376c733fd44bd896a84ff91957e1128c83",
+      "role": "required by unchanged galorectl sidecar dependency check; source tokens/tokenizer, not trained-model checkpoint"
+    },
+    {
+      "path": ".cache/novels/valid.npy",
+      "bytes": 693296,
+      "sha256": "7afd3c4de73d858c843d5ff2e8ce93f6a5467274596e05833dfa448e6e05bc17",
+      "role": "required by unchanged galorectl sidecar dependency check; source tokens/tokenizer, not trained-model checkpoint"
+    },
+    {
+      "path": ".cache/novels/tokenizer.json",
+      "bytes": 263663,
+      "sha256": "9b01163b4bfa0ebeb680e14578c7267cf94ce6304df1d9dca95c70a070fceed7",
+      "role": "required by unchanged galorectl sidecar dependency check; source tokens/tokenizer, not trained-model checkpoint"
+    }
+  ],
+  "extra_repo_relative_bytes": 14150717,
+  "required_observed_packages": {
+    "numpy": "2.5.4",
+    "torch": "2.15.0+cpu",
+    "transformers": "5.22.1"
+  },
+  "reviewed_lockfile_packages": {
+    "numpy": "2.5.4",
+    "torch": "2.14.1",
+    "transformers": "5.20.1"
+  },
+  "stop_rule": "Install matching observed versions only where genuinely supported and verify before normal load. Different wheel tags/versions or missing/mismatched dependency files are a stop, never permission to weaken current(), regenerate numerical data or rewrite sidecars. A portable frozen-payload reader is a separate pipeline change requiring parent review.",
+  "gpt2": {
+    "repo_id": "openai-community/gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+    "ref_main_bytes": 40,
+    "ref_main_sha256": "2e3acc6f9be49ff0931763eed736f7b05157aa742d2d088fbcbb548b83f0b208",
+    "files": [
+      {
+        "source_snapshot_path": "/workspace/runtime/huggingface/hub/models--openai-community--gpt2/snapshots/607a30d783dfa663caf39e06633721c8d4cfcd7e/config.json",
+        "resolved_regular_blob": "/workspace/runtime/huggingface/hub/models--openai-community--gpt2/blobs/10c66461e4c109db5a2196bff4bb59be30396ed8",
+        "snapshot_relative_path": "models--openai-community--gpt2/snapshots/607a30d783dfa663caf39e06633721c8d4cfcd7e/config.json",
+        "bytes": 665,
+        "sha256": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+        "role": "required only by unchanged Part3 Power dependency validation; no inference needed for completed cached-results rendering"
+      },
+      {
+        "source_snapshot_path": "/workspace/runtime/huggingface/hub/models--openai-community--gpt2/snapshots/607a30d783dfa663caf39e06633721c8d4cfcd7e/model.safetensors",
+        "resolved_regular_blob": "/workspace/runtime/huggingface/hub/blobs/63/63bed80836ee0758c8fd4f8975d59bb0b864263ee2753547c358e8a37cde8758",
+        "snapshot_relative_path": "models--openai-community--gpt2/snapshots/607a30d783dfa663caf39e06633721c8d4cfcd7e/model.safetensors",
+        "bytes": 548105171,
+        "sha256": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+        "role": "required only by unchanged Part3 Power dependency validation; no inference needed for completed cached-results rendering"
+      }
+    ],
+    "total_required_bytes": 548105836,
+    "normal_download_alternative": "Use a fresh dedicated HF_HUB_CACHE and exact public revision; only config.json/model.safetensors. Existing _gpt2_files uses refs/main first, else requires exactly one snapshot, so another cached revision/ref is not equivalent."
+  },
+  "sidecar_dependency_observations": {
+    "power": {
+      "recipe": {
+        "contract_version": 1,
+        "producer_ast_sha256": "7eaad4fa0e53678f5016b75aac63b740f0d8f53bebc20389754fcba532092ba9",
+        "producer_symbols": [
+          "compute_power",
+          "power_run",
+          "rng",
+          "torch_threads"
+        ],
+        "numpy_version": "2.5.4"
+      },
+      "dependencies_observed_now": {
+        "ai3/letters.json": "8856792172f9cc63d38eac0dda663aa0303c42bdb4515d8e7723b481153031c5",
+        "ai3/letters.npz": "eec30557b0c16285e938b327e55461c0a95b7d3788b790a8682bfb85e2e3be0a",
+        "hf:openai-community/gpt2@607a30d783dfa663caf39e06633721c8d4cfcd7e/config.json": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+        "hf:openai-community/gpt2@607a30d783dfa663caf39e06633721c8d4cfcd7e/model.safetensors": "248dfc3911869ec493c76e65bf2fcf7f615828b0254c12b473182f0f81d3a707",
+        "package:torch": "2.15.0+cpu",
+        "package:transformers": "5.22.1"
+      },
+      "scope": "Observed at publication; not proof of original consumed inputs."
+    },
+    "galorectl": {
+      "recipe": {
+        "contract_version": 1,
+        "producer_ast_sha256": "9fbbbf4f3b02d02eb455285d8611c0ee654f5f376d4f39eebaee4f14948f272a",
+        "producer_symbols": [
+          "GL_BATCH",
+          "GL_CFG",
+          "GL_LRS",
+          "GL_REFRESH",
+          "GL_SCALE",
+          "GL_STEPS",
+          "GL_TRACK",
+          "GL_TRACK_STEPS",
+          "GL_WARM",
+          "compute_galorectl",
+          "effective_rank",
+          "galore_run",
+          "stable_rank",
+          "torch_threads"
+        ],
+        "numpy_version": "2.5.4"
+      },
+      "dependencies_observed_now": {
+        "novels/tokenizer.json": "9b01163b4bfa0ebeb680e14578c7267cf94ce6304df1d9dca95c70a070fceed7",
+        "novels/train.npy": "0cae9f9b82f68aecc2720da2061b77376c733fd44bd896a84ff91957e1128c83",
+        "novels/valid.npy": "7afd3c4de73d858c843d5ff2e8ce93f6a5467274596e05833dfa448e6e05bc17",
+        "source:explainer/ai/novels.py": "d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032",
+        "source:explainer/lm/pocket.py": "163fab83580f701f663c7226b26cde0c455fc6aca174af26bc99d26bcdd966ff",
+        "package:torch": "2.15.0+cpu"
+      },
+      "scope": "Observed at publication; not proof of original consumed inputs."
+    },
+    "letters": {
+      "recipe": {
+        "contract_version": 1,
+        "producer_ast_sha256": "8243f7a2c1f6ac4a0486b0aa3ef56984d162fdbfb88f2830777661c0aed44708",
+        "producer_symbols": [
+          "VOWELS",
+          "compute_letters"
+        ],
+        "numpy_version": "2.5.4"
+      },
+      "dependencies_observed_now": {
+        "ai1/bigram.json": "55d2361d618b0ac5cb22ecf2486ffbd90a991347f75fa74681a83f70b95eb762",
+        "ai1/bigram.npz": "c5cbc4bdbc5358a2ce4a37a6947d51db4d631c731d538f9d38c7562e070d23d5",
+        "source:ai1/compute.py": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa"
+      },
+      "scope": "Observed at publication; not proof of original consumed inputs."
+    }
+  },
+  "source_inputs": [
+    {
+      "path": "videos/ai/ai1/compute.py",
+      "bytes": 78448,
+      "sha256": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa"
+    },
+    {
+      "path": "explainer/ai/novels.py",
+      "bytes": 7081,
+      "sha256": "d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032"
+    },
+    {
+      "path": "explainer/lm/pocket.py",
+      "bytes": 19996,
+      "sha256": "163fab83580f701f663c7226b26cde0c455fc6aca174af26bc99d26bcdd966ff"
+    }
+  ]
+}

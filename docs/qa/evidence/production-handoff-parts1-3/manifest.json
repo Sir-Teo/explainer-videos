@@ -1,0 +1,82 @@
+{
+  "scope": "Metadata/inspection-helper package only; no data archive or transfer. Hashes identify current handoff bytes; no local production approval.",
+  "handoff_document": {
+    "path": "docs/qa/production-handoff-parts1-3.md",
+    "bytes": 15839,
+    "sha256": "c2380a437373363765af024b58cecf4944185680637af45accecee2d092f8371"
+  },
+  "files": {
+    "README.md": {
+      "bytes": 2600,
+      "sha256": "e5e155c8b41106e1ddf6027f880619c6821ae91791450ee52ba0ad95f6cff365"
+    },
+    "cache-inventory.json": {
+      "bytes": 46061,
+      "sha256": "8cf34dd7acc11ba29eb37fa6881c70f706f7209301540145d679fd4dad3d2af4"
+    },
+    "coverage-source-identities.json": {
+      "bytes": 1289,
+      "sha256": "870d5becf2002f86b719329ab5cee26161019086ca2ad70eb0cd9f6311b1af6e"
+    },
+    "external-validation-dependencies.json": {
+      "bytes": 7325,
+      "sha256": "9e60b6b1545b517c79107d27ae3a1e835adf6b0859cd3051dbfb1eabcd688480"
+    },
+    "helper-checks.json": {
+      "bytes": 341,
+      "sha256": "7a4a547dff96fba4e2ec076bc9329ca5ceaf4bfb3989eafa3c03721c92efe4f9"
+    },
+    "identify-audio-procedure.py": {
+      "bytes": 2357,
+      "sha256": "9c9d8da2f3cb8634d87e067fdddd0fa86c632751ec901a07d823fafe1202caf2"
+    },
+    "index_master_narration.py": {
+      "bytes": 1781,
+      "sha256": "4e84ddf8038088b8076299095242e79bc7244ff95c4bc8c01847b8634ae55ea2"
+    },
+    "inventory-procedure.py": {
+      "bytes": 8292,
+      "sha256": "82f000dcae80ea5f74e343f4339e6ecfe47d2795c04012d3f10020e03943dec2"
+    },
+    "real-information-audio.json": {
+      "bytes": 10569,
+      "sha256": "a1da73b811d29cc6675dbff5c1d095bb31228ae3cea97ea21c10366cc83a06c5"
+    },
+    "reviewed-source-inventory.json": {
+      "bytes": 30831,
+      "sha256": "1c9eb76a370a5b74b79b7a0aa5b7e8f9300bfe4cd00ed494f3801d3ac50a79f2"
+    },
+    "svd-pilot-source-equivalence.json": {
+      "bytes": 2622,
+      "sha256": "8a930f383c159487b5e8352458972eaaab36c6d0667e5c5883504a084873ca46"
+    },
+    "transfer-core-files.txt": {
+      "bytes": 3316,
+      "sha256": "d61f1ef2ea4b213f1d4f9bf632f29de075c6ba3440318f16a1da140d4d40e308"
+    },
+    "transfer-core.sha256": {
+      "bytes": 12622,
+      "sha256": "dfd94f08832b55b9b031c06096de1c7497a9d934fdb5de1ef0a728133b31a08e"
+    },
+    "transfer-optional-real-audio-files.txt": {
+      "bytes": 390,
+      "sha256": "fc4bd6913f08c1502786587bb2e053301fb3347daa6c1e20157260c328a9d1b5"
+    },
+    "transfer-optional-real-audio.sha256": {
+      "bytes": 1182,
+      "sha256": "9723d8dee1871e8541bd6c6bf2ca16612c83abc2a54da6e048166e44ba9723bb"
+    },
+    "transfer-strict-extra-files.txt": {
+      "bytes": 77,
+      "sha256": "f3f5b39a433837d8d5c7d3abeb39798d41529aafa233d963f5d9b216fc77d199"
+    },
+    "transfer-strict-extra.sha256": {
+      "bytes": 275,
+      "sha256": "b7b943e426f364f9c29982e2be492e99949c3bd7ed2b35f9d89aed290c0c8aaf"
+    },
+    "verify_handoff.py": {
+      "bytes": 3197,
+      "sha256": "9e13c7cce89c686198ed388cc0e4f9532b51ede7a9bda919c380789d3466e7ad"
+    }
+  }
+}

@@ -1,0 +1,3 @@
+.cache/novels/train.npy
+.cache/novels/valid.npy
+.cache/novels/tokenizer.json

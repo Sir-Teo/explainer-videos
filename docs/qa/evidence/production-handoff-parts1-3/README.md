@@ -1,0 +1,13 @@
+# Parts 1–3 production handoff inventories
+
+See [the handoff](../../production-handoff-parts1-3.md) for the reviewed source pin, independent running SVD pilot, exact commands, required full-part gates and remaining audio/4K gaps. This directory contains metadata and small inspection helpers only: **no data/model/audio archive or transfer was created**.
+
+- `cache-inventory.json`: all 141 regular non-lock files in the requested three cache directories (58,874,232 bytes); 67 transient lock paths explicitly excluded. `transfer-core*` gives exact relative paths and SHA256 checks.
+- `external-validation-dependencies.json`: 3 novels files (14,150,717 bytes), 2 GPT-2 strict-validation files (548,105,836 bytes), observed package requirements and the lockfile mismatch. These dependencies are additional to the core total. Different versions/tags are a stop before normal load, not permission to bypass validation.
+- `real-information-audio.json`: 6 actual nonzero EN Information WAV/JSON pairs (7,833,893 bytes) with exact profile/key/spoken text, signal and alignment metadata. No new synthesis or listening approval. Optional audio paths are explicitly whitelisted; the whole silent preview cache is not proposed for reuse.
+- `reviewed-source-inventory.json`: 107 pinned repository source/config/reference-voice identities, plus 17/16/19 scene manifests. `svd-pilot-source-equivalence.json` separately proves the bounded f00/927 cache-independent SVD equivalence and preserves its limits.
+- `verify_handoff.py`: read-only hash/package metadata preflight, no scene/producer imports or model loads. It is **not** a runtime inherited producer guard.
+- `index_master_narration.py`: metadata-only CRF-master discovery bridge for existing translation tools, to run locally only after full EN master/stream validation. It refuses different existing metadata. `helper-checks.json` records an actual tiny cloud temporary-file test, not rendering or user's-computer execution.
+- `coverage-source-identities.json`: exact consulted cloud documentation hashes. Inventory/audio procedure snapshots preserve how these read-only observations were produced.
+
+The already-running parent-reported Mac SVD 4K60 narrated pilot does not require the full-part cache transfer. Full-part expansion remains gated. No numerical producer, model load/download, new credentials, source edits, local execution, upload or publication occurred in this handoff task. Sources, numerical files, sidecars, checkpoints and generated speech remain preserved. The parent owns review, publication and relay to the separate local owner.

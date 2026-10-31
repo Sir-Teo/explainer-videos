@@ -1,0 +1,177 @@
+{
+  "scope": "Six existing real InformationEN speech blocks and alignment metadata. Actualcache_key evaluated with backendserver,voiceqwen3-calm-a,speed1.0 and currentprofile matching927. No synthesis/network/model load. Nonzero PCM confirms speech-bearing signal, not pronunciation/listening approval.",
+  "source_result": "renders/qa/narrated/ai1/en/Information_result.json",
+  "source_result_sha256": "277a53e95073538c867b6cfbb407cb1c5a1e9c50772e7d1a16906808a809038d",
+  "backend": "server",
+  "voice": "qwen3-calm-a",
+  "speed": 1.0,
+  "profile": [
+    "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16",
+    {
+      "ref_audio": "tools/voice_refs/kokoro_en.wav",
+      "ref_text": "It isn't. Here's a sequence inside the ball: f n is a tent of height one over the interval from one over n plus one to one over n, and zero everywhere else. The tents march toward zero, getting narrower, each one sitting where all the others are zero.",
+      "params": {
+        "temperature": 0.7
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "block": 1,
+      "cache_key": "99dd5ff1f1991a35",
+      "text": "Chapter twelve. What the past tells you about the future.",
+      "spoken": "Chapter twelve. What the past tells you about the future.",
+      "duration": 3.57,
+      "tokens": 10,
+      "wav_sample_rate": 24000,
+      "wav_frames": 85680,
+      "channels": 1,
+      "sample_width": 2,
+      "nonzero_samples": 63910,
+      "peak_integer": 9488,
+      "files": [
+        {
+          "path": ".cache/tts/99dd5ff1f1991a35.json",
+          "bytes": 563,
+          "sha256": "91354f83945bcaf99a10c962daac94870e872297b94603e16afcf5ed385ea380"
+        },
+        {
+          "path": ".cache/tts/99dd5ff1f1991a35.wav",
+          "bytes": 171404,
+          "sha256": "8b7a56529b1cfe695d2400aec40f1eb14e01a1bab6dabe25e3d4ebd6aa9a41d6"
+        }
+      ]
+    },
+    {
+      "block": 2,
+      "cache_key": "b005bcef9a0bb7ff",
+      "text": "In chapter seven, knowing X lowered the entropy of Y, on average. That drop is the mutual information. It's the bits that knowing one thing saves you when you guess the other, and it's symmetric. It's also a divergence, of the joint distribution from independence, so it's never negative. In our books, the next letter carries 4.08 bits; knowing the letter before it, 3.33. So neighbouring letters share 0.75 bits. Two letters back share 1.36, though the second one on its own shares only 0.27: together, letters say more than apart.",
+      "spoken": "In chapter seven, knowing X lowered the entropy of Y, on average. That drop is the mutual information. It's the bits that knowing one thing saves you when you guess the other, and it's symmetric. It's also a divergence, of the joint distribution from independence, so it's never negative. In our books, the next letter carries 4.08 bits; knowing the letter before it, 3.33. So neighbouring letters share 0.75 bits. Two letters back share 1.36, though the second one on its own shares only 0.27: together, letters say more than apart.",
+      "duration": 35.63,
+      "tokens": 91,
+      "wav_sample_rate": 24000,
+      "wav_frames": 855120,
+      "channels": 1,
+      "sample_width": 2,
+      "nonzero_samples": 776030,
+      "peak_integer": 10864,
+      "files": [
+        {
+          "path": ".cache/tts/b005bcef9a0bb7ff.json",
+          "bytes": 5570,
+          "sha256": "fb1dada181d2316ac6e302e9fc2b94159fa01f53db726844c5106739d971b791"
+        },
+        {
+          "path": ".cache/tts/b005bcef9a0bb7ff.wav",
+          "bytes": 1710284,
+          "sha256": "637afb44d04ac237fcc10e6bb6bfbcdb58c8e687d67437e68407d69167ab9fdd"
+        }
+      ]
+    },
+    {
+      "block": 3,
+      "cache_key": "c0abbb907b10dc78",
+      "text": "Now process what you know. Suppose Z is computed from Y, by any function at all, even a noisy one. The chain rule splits what Y and Z together say about X in two ways: first Y, then whatever Z adds, which is nothing. Or first Z, then whatever Y adds. Compare the two, and Z can never tell you more about X than Y did. No amount of processing creates information.",
+      "spoken": "Now process what you know. Suppose Z is computed from Y, by any function at all, even a noisy one. The chain rule splits what Y and Z together say about X in two ways: first Y, then whatever Z adds, which is nothing. Or first Z, then whatever Y adds. Compare the two, and Z can never tell you more about X than Y did. No amount of processing creates information.",
+      "duration": 23.88,
+      "tokens": 72,
+      "wav_sample_rate": 24000,
+      "wav_frames": 573120,
+      "channels": 1,
+      "sample_width": 2,
+      "nonzero_samples": 511445,
+      "peak_integer": 11996,
+      "files": [
+        {
+          "path": ".cache/tts/c0abbb907b10dc78.json",
+          "bytes": 3857,
+          "sha256": "cf7a444ca690d6515f0a0bb37ce669e3511ab43457be2391086c001bb0622a01"
+        },
+        {
+          "path": ".cache/tts/c0abbb907b10dc78.wav",
+          "bytes": 1146284,
+          "sha256": "be4f528ad6a08434c6c67365eb23d30b66a8b09deb84899ed26e1eb96c03a265"
+        }
+      ]
+    },
+    {
+      "block": 4,
+      "cache_key": "5f30488deca3f5f0",
+      "text": "Let's watch it happen in our books. Keep only the kind of the previous letter: space, vowel or consonant. Of the 0.75 bits, 0.35 survive. Or garble it: replace a share of the letters with random ones. The more noise, the less it tells, down to nothing. Do both, and you lose more: each curve stays under the one before. A law for learning machines too: whatever a network computes from its context can't know more about the next token than the context itself.",
+      "spoken": "Let's watch it happen in our books. Keep only the kind of the previous letter: space, vowel or consonant. Of the 0.75 bits, 0.35 survive. Or garble it: replace a share of the letters with random ones. The more noise, the less it tells, down to nothing. Do both, and you lose more: each curve stays under the one before. A law for learning machines too: whatever a network computes from its context can't know more about the next token than the context itself.",
+      "duration": 29.2,
+      "tokens": 84,
+      "wav_sample_rate": 24000,
+      "wav_frames": 700800,
+      "channels": 1,
+      "sample_width": 2,
+      "nonzero_samples": 628174,
+      "peak_integer": 14433,
+      "files": [
+        {
+          "path": ".cache/tts/5f30488deca3f5f0.json",
+          "bytes": 5187,
+          "sha256": "f95ace6b7086586da63fbf5ba136fd34b9f8f3fb25327f18f55194727141b1f6"
+        },
+        {
+          "path": ".cache/tts/5f30488deca3f5f0.wav",
+          "bytes": 1401644,
+          "sha256": "af2ae5d03d51f58855cf5752d851935b8bfb97d24bb5d8f03d97742c9a48fc83"
+        }
+      ]
+    },
+    {
+      "block": 5,
+      "cache_key": "92a902a99d6e11a1",
+      "text": "How far back does that reach? Measure pairs of letters at distance d across our books. These are finite-sample estimates, with an approximate bias correction. The neighbouring letter estimate is 0.75 bits. At our largest measured distance, 1000 letters, the corrected estimate is about 7.32 millionths of a bit; one shuffled version of the same letters gives about minus 0.69 millionths of a bit. The shuffled control is a reference realization, not an uncertainty interval. Both axes are logarithmic. Nonpositive estimates cannot appear on them; their signed values are retained, including the control shown at the right.",
+      "spoken": "How far back does that reach? Measure pairs of letters at distance d across our books. These are finite-sample estimates, with an approximate bias correction. The neighbouring letter estimate is 0.75 bits. At our largest measured distance, 1000 letters, the corrected estimate is about 7.32 millionths of a bit; one shuffled version of the same letters gives about minus 0.69 millionths of a bit. The shuffled control is a reference realization, not an uncertainty interval. Both axes are logarithmic. Nonpositive estimates cannot appear on them; their signed values are retained, including the control shown at the right.",
+      "duration": 37.68,
+      "tokens": 97,
+      "wav_sample_rate": 24000,
+      "wav_frames": 904320,
+      "channels": 1,
+      "sample_width": 2,
+      "nonzero_samples": 821341,
+      "peak_integer": 13218,
+      "files": [
+        {
+          "path": ".cache/tts/92a902a99d6e11a1.json",
+          "bytes": 6421,
+          "sha256": "d8b915c25aa20170ecf623f2dbd539bc36c6c36b64c53786dd7cdd21679c5c4a"
+        },
+        {
+          "path": ".cache/tts/92a902a99d6e11a1.wav",
+          "bytes": 1808684,
+          "sha256": "a1c84134b80ec1acd76ba4f3c98f18a4b5ea5d44b1949d67d142a7bea09c9119"
+        }
+      ]
+    },
+    {
+      "block": 6,
+      "cache_key": "2c88de9b59119cf5",
+      "text": "A fit is a summary, not a law. The gold line is a descriptive least-squares fit to the positive estimates from twenty to one thousand letters. It is not a test that proves a power law. Bias correction is approximate, especially for overlapping pairs from text. Corrected estimates can fluctuate below zero, even though true mutual information is nonnegative. Our measurement stops at this distance. It does not establish what happens beyond it, or prove that memory helps at every distance. Long context remains a question for models to test: attention, in Part 13.",
+      "spoken": "A fit is a summary, not a law. The gold line is a descriptive least-squares fit to the positive estimates from twenty to one thousand letters. It is not a test that proves a power law. Bias correction is approximate, especially for overlapping pairs from text. Corrected estimates can fluctuate below zero, even though true mutual information is nonnegative. Our measurement stops at this distance. It does not establish what happens beyond it, or prove that memory helps at every distance. Long context remains a question for models to test: attention, in Part 13.",
+      "duration": 32.68,
+      "tokens": 94,
+      "wav_sample_rate": 24000,
+      "wav_frames": 784320,
+      "channels": 1,
+      "sample_width": 2,
+      "nonzero_samples": 704103,
+      "peak_integer": 14316,
+      "files": [
+        {
+          "path": ".cache/tts/2c88de9b59119cf5.json",
+          "bytes": 5311,
+          "sha256": "7dd9d426ede85710b4588f2781c46899639a9f56542750be5c47cd25b3aec66b"
+        },
+        {
+          "path": ".cache/tts/2c88de9b59119cf5.wav",
+          "bytes": 1568684,
+          "sha256": "9bab2becfe06ad341d8d1fd466cdc46622280c18eafa78712fd6a730b64441eb"
+        }
+      ]
+    }
+  ],
+  "total_transfer_bytes": 7833893
+}

@@ -1,0 +1,12 @@
+.cache/tts/99dd5ff1f1991a35.json
+.cache/tts/99dd5ff1f1991a35.wav
+.cache/tts/b005bcef9a0bb7ff.json
+.cache/tts/b005bcef9a0bb7ff.wav
+.cache/tts/c0abbb907b10dc78.json
+.cache/tts/c0abbb907b10dc78.wav
+.cache/tts/5f30488deca3f5f0.json
+.cache/tts/5f30488deca3f5f0.wav
+.cache/tts/92a902a99d6e11a1.json
+.cache/tts/92a902a99d6e11a1.wav
+.cache/tts/2c88de9b59119cf5.json
+.cache/tts/2c88de9b59119cf5.wav

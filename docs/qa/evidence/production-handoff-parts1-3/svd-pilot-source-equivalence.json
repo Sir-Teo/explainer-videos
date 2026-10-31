@@ -1,0 +1,57 @@
+{
+  "reviewed_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "pilot_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+  "scope": "Bounded source comparison for the parent-reported local bilingual SVD4K60 narrated pilot only. No local execution or audio/4K approval by cloud. Not equivalence of all f00/927 dependencies or full-part data readiness.",
+  "files": [
+    {
+      "path": "videos/ai/ai3/s08_svd.py",
+      "reviewed_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+      "pilot_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+      "byte_identical": true
+    },
+    {
+      "path": "videos/ai/ai3/common.py",
+      "reviewed_sha256": "43bc01600482b1780d46ce9fe2b7c9318b1209d0e9d7ac0b490cf25279226ab9",
+      "pilot_sha256": "43bc01600482b1780d46ce9fe2b7c9318b1209d0e9d7ac0b490cf25279226ab9",
+      "byte_identical": true
+    },
+    {
+      "path": "videos/ai/ai3/compute.py",
+      "reviewed_sha256": "decde1f7874d08148cf35ac8067cb6ea6cf051d058ce052a6282afdca4cdb41a",
+      "pilot_sha256": "decde1f7874d08148cf35ac8067cb6ea6cf051d058ce052a6282afdca4cdb41a",
+      "byte_identical": true
+    },
+    {
+      "path": "videos/ai/ai3/zh_lines.py",
+      "reviewed_sha256": "ad8a17ed7eddba7b8b8358186b39527f3f292434c8be6842bb63617efd930e36",
+      "pilot_sha256": "ad8a17ed7eddba7b8b8358186b39527f3f292434c8be6842bb63617efd930e36",
+      "byte_identical": true
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "reviewed_sha256": "8e4ed21282fc336bebc5f6e7d1aea7e3c975d09da486c873913c84c98bf3cb0a",
+      "pilot_sha256": "8e4ed21282fc336bebc5f6e7d1aea7e3c975d09da486c873913c84c98bf3cb0a",
+      "byte_identical": true
+    },
+    {
+      "path": "explainer/ai/autodiff.py",
+      "reviewed_sha256": "4d307aae5d197b69b34406456bb0901bd80c0cbea758582f7af625cbed00e492",
+      "pilot_sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+      "byte_identical": false
+    }
+  ],
+  "scene_load_calls": [],
+  "fixed_matrix": [
+    [
+      1.4,
+      1.1
+    ],
+    [
+      -0.5,
+      0.9
+    ]
+  ],
+  "operations": "Scene uses local numpy.linalg.svd/norm on this fixed matrix; imports load but does not call it. Different autodiff module is not used by this SVD scene.",
+  "hardware_and_speed": "Parent-reported MacM1/16GB, installed BF16Qwen3TTS1.7B qwen3-calm-a, about8xreal-time synthesis; not independently measured here.",
+  "gate": "Cache transfer and full-part strict dependency gates do not block this cache-independent pilot. Do not expand to full parts before resolving the separate guard/portability gate."
+}

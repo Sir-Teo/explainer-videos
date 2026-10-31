@@ -1,0 +1,983 @@
+{
+  "commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "scope": "Exact git-show bytes at immutable review checkpoint. Worktree equality is an observation only; production uses the pin. Later Part4 global/source changes are intentionally excluded.38Part3 cases mean19scenes\u00d72languages, not38source modules.",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 8221,
+      "sha256": "918914cd0469fae7f87a7d9aa7f57cb0dcae7b77d19398c4b31f1071a5328edc",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "explainer/ai/cache.py",
+      "bytes": 6276,
+      "sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "explainer/cache_lock.py",
+      "bytes": 1521,
+      "sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "explainer/tts.py",
+      "bytes": 40277,
+      "sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "explainer/voiceover.py",
+      "bytes": 10700,
+      "sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "manim.cfg",
+      "bytes": 325,
+      "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 1417,
+      "sha256": "b96e090cb4fbdd2e42308ae7cb73986c56817c87191fe2e3830242e48e52d8d8",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "requirements-lock.txt",
+      "bytes": 2697,
+      "sha256": "a7973833329bcb5957c0246fcdc302950b349512765298aaf9c037cbd93d805c",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "tools/build.py",
+      "bytes": 11900,
+      "sha256": "12337229386de13d5c4090f7d07a389ef1d06745a78896493398a38699f1affc",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "tools/make.py",
+      "bytes": 11647,
+      "sha256": "1a6539747af517f733a92b5774d624964dd9b33ca568c2cfe99ac2e19b060f0f",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "tools/narrate.py",
+      "bytes": 1835,
+      "sha256": "69daf6b6f3ace30d47f1979456d09d8ba02fed46cb715ae58245c0fecfaeadb0",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "tools/translate_narration.py",
+      "bytes": 4935,
+      "sha256": "48f68431559c5dd021ae0b6533c40520ae86195beb692c05f4c39abdc4546d99",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "tools/tts_server.py",
+      "bytes": 17192,
+      "sha256": "a81f67d963dc806bbc8943fb306bd99ad442f09847669ae4b2f8a6c6dcd1b0cf",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "tools/voice_refs/kokoro_en.wav",
+      "bytes": 796878,
+      "sha256": "340567a9034b3e0853f8e9487a8a215e4d95c955d7072bbd03e254aa8bf93437",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "tools/voice_refs/serenaflat_zh.wav",
+      "bytes": 709004,
+      "sha256": "1c38b13b15cacdba06aad129c7cbb51fb965520f7a6fd113f14d33fe2a4c4e56",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "tools/voices.json",
+      "bytes": 1159,
+      "sha256": "e8476f2142d83715bf11b46778d27c26c85b499df1628de19af63973ce846a79",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "tools/zh_lines.py",
+      "bytes": 6005,
+      "sha256": "37320cdf72d67171364debee12754bf738502dccbdf458312d393e6006aea957",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/AI_ZH_GUIDE.md",
+      "bytes": 112207,
+      "sha256": "6665f346e523c29b820681653022d6d8165b6441f193613048cb33e06621d7bf",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/LECTURE_GUIDE.md",
+      "bytes": 8183,
+      "sha256": "b85025d5f5b0d30b3d8c3459af9d3e9d1059eda5ed1284979ff4db34191f6424",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/README.md",
+      "bytes": 21787,
+      "sha256": "2384a236fe71a099e41207e99c053f17a7f1729477ff9123225b79f245aec116",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/coder.py",
+      "bytes": 5734,
+      "sha256": "802ba281240adec1b0ff72831fe66fb569163e326495170c94b4badafbb7a69a",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/common.py",
+      "bytes": 16482,
+      "sha256": "f1262659e073baff2ff2c786ea8e4c12a9adf53aff70209cc21629e81c7ca48f",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/compute.py",
+      "bytes": 78448,
+      "sha256": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/manifest.py",
+      "bytes": 1486,
+      "sha256": "335fe7ea82257be43fbda9e06dd67231cd6ee04f5a7bbf93fa71eded36d9512d",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/narration_zh.json",
+      "bytes": 109726,
+      "sha256": "c13b04dcd43fbb4c85c621ef9b245a9fce10d174ef018c6a3dfe0f8457398151",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s01_hook.py",
+      "bytes": 23077,
+      "sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s02_probability.py",
+      "bytes": 24663,
+      "sha256": "f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s03_surprise.py",
+      "bytes": 23704,
+      "sha256": "5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s04_entropy.py",
+      "bytes": 29406,
+      "sha256": "8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s05_prefix.py",
+      "bytes": 23419,
+      "sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s06_huffman.py",
+      "bytes": 20144,
+      "sha256": "a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s07_typical.py",
+      "bytes": 23829,
+      "sha256": "1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s08_cross_entropy.py",
+      "bytes": 23968,
+      "sha256": "149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s09_arithmetic.py",
+      "bytes": 29057,
+      "sha256": "565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s10_counting.py",
+      "bytes": 25504,
+      "sha256": "d3f5b5218d27c5af539ee0dcc7f214302cbbfa09f42e572647cf4e9047d8e2ab",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s11_shannon.py",
+      "bytes": 11557,
+      "sha256": "8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s12_likelihood.py",
+      "bytes": 19190,
+      "sha256": "d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s13_information.py",
+      "bytes": 18624,
+      "sha256": "8f788f0a5ee0b6c8d3f39e2b814d6c8490933a068fc706715ef08911c8bfa18a",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s14_knowledge.py",
+      "bytes": 13554,
+      "sha256": "7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s15_units.py",
+      "bytes": 12257,
+      "sha256": "92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s16_scoreboard.py",
+      "bytes": 17742,
+      "sha256": "210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/s17_outro.py",
+      "bytes": 17213,
+      "sha256": "8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/text_zh_add.json",
+      "bytes": 39331,
+      "sha256": "4ee7f26834a904b5c402e08ac82825a2968c191d356b43bb6b07cb9f63e71620",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/zh_lines.py",
+      "bytes": 68358,
+      "sha256": "ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/README.md",
+      "bytes": 24641,
+      "sha256": "1015f04bafb5576ea1bd250b928b35f7bdae1fe9c69136a89879b6268b039c29",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/common.py",
+      "bytes": 9269,
+      "sha256": "7c70137b410f96fee89bf34893f58ec12ef675957dfbb8575e4f941bf485e1e4",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/compute.py",
+      "bytes": 46559,
+      "sha256": "a9eb15b35ca0c21392e4c20c1328dda27b50e431a2d32973ccae117d285f4925",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/csp.py",
+      "bytes": 5772,
+      "sha256": "55aa58479c3204295794bef50fa1a7d7fdf4977ae1c1fde515629a1b6fd0b014",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/eliza.py",
+      "bytes": 18899,
+      "sha256": "e314a6d3e108f6a96575c95821fc231ec18792b47ee39bb861404c495740aee9",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/local.py",
+      "bytes": 10668,
+      "sha256": "56dcec8ad4404c39e0938033ed6800593e2fdd130ece5443e7550115652cfc2a",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/logic.py",
+      "bytes": 9332,
+      "sha256": "f04ef328b499e9453b0e0f63d49f90791e700f756fdebc585d7bc9b6f5c60eb1",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/machines.py",
+      "bytes": 4098,
+      "sha256": "64a7a3c7bdfabcb124c36e08cebc8c40e21a6b5d1d65b00bc12cf7a6152b15ed",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/manifest.py",
+      "bytes": 1014,
+      "sha256": "5f0b4862b501cc34a911affeefb20c498886e1809a9b2b7e33d444778ace0cf0",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/narration_zh.json",
+      "bytes": 103670,
+      "sha256": "14eaa56da9b1d4d94117ce4da2f8a5e85c154e6a5f59dce323dbf27c55575da0",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/plan.py",
+      "bytes": 7916,
+      "sha256": "59fce734711c1541dc51066919fcb0dc3720d6b2a8e9b75cd94c8a729e4d2f0e",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/play.py",
+      "bytes": 15451,
+      "sha256": "cf8ef1ab455483668b647b524c1dbbebdcf6ef46ce48580a8034cd50bd70582f",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s01_hook.py",
+      "bytes": 10698,
+      "sha256": "06587b3781f0cd7dc71d1e75fcacd771975b7c251f87a35032df8fe8096c7a29",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s02_turing.py",
+      "bytes": 18815,
+      "sha256": "c7a6a63a4153badde7cb7ace994b989499b2b9dd735ddee52e5b42d983ee026f",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s03_search.py",
+      "bytes": 13501,
+      "sha256": "07ca34329fe691ebc10a84fdd3d5d904fa1698c885bed18479d991a5ed5b78da",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s04_astar.py",
+      "bytes": 20529,
+      "sha256": "ac2886b808f59ac3237be0f88de00f3f5c5dba954b67bbe3fbdfcd0e0a8aa5dc",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s05_heuristics.py",
+      "bytes": 16890,
+      "sha256": "a09c2cd07ec02f6f2bb1b82e70a2afa4539bdf34d5bb671765e9883399b04bdd",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s06_local.py",
+      "bytes": 24099,
+      "sha256": "4228c250e63d62cd8daf00a40c17d434dbf953619028c07766937c4749c58206",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s07_games.py",
+      "bytes": 17254,
+      "sha256": "07c08b6a3ba3065f803d9a2903126b4be2fcd8c1005f4a33e775cca380899f2d",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s08_samuel.py",
+      "bytes": 21817,
+      "sha256": "47c2698ac41dbe1b104c11c860b31c297f1c6af0831710b32edd1374fc7d8f92",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s09_logic.py",
+      "bytes": 22405,
+      "sha256": "666434bf194f5f29ddba9dc1b2bd216ac9e82bdaf5789cb2817955fac5007d3f",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s10_sat.py",
+      "bytes": 24876,
+      "sha256": "1bf9e0cdb8de95f4d0cc1d7b23ae9b225918baec8e73de21527511d51a7ff19c",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s11_plans.py",
+      "bytes": 24479,
+      "sha256": "7acde48a6a99aec78c344989df410c6a220fbdbe3181f22aeb140f78f7b6b6ec",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s12_knowledge.py",
+      "bytes": 18463,
+      "sha256": "1ca9dc3f872f515ff74b3c2517eb2c1093727adec3eeb3aca0f8069ba86b2a76",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s13_eliza.py",
+      "bytes": 14047,
+      "sha256": "c0c85e300f04d25e65cc1cfdabec5853d10c34455f68370b07249d0c7f5e03bd",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s14_winters.py",
+      "bytes": 15390,
+      "sha256": "48293fb728c3bb443adf099dd453a5aded8b1f62629dddb7b585b61dba8f45f6",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s15_survives.py",
+      "bytes": 19772,
+      "sha256": "b8c5fea1bcc465f5ced379d079fece5422134ea3a7fc95088c553bb508b89ac5",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/s16_outro.py",
+      "bytes": 13977,
+      "sha256": "260ec66f3d88559fe779fdae72272f34ddc1f1034fc2175fa0cbc267e590e1c3",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/sat.py",
+      "bytes": 17585,
+      "sha256": "340699601e393ee9e04cd18d6ea1524d0ceb21889840d8940f4208e75a32a5d5",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/search.py",
+      "bytes": 17186,
+      "sha256": "6c1e3bbf8e5b38d2a4bb69ddd0176a2e4b746562ec02e61e8df00cc323eb4623",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/text_zh_add.json",
+      "bytes": 76950,
+      "sha256": "2dae40be25f194edf94ff7448f1c0589aa5e73711bca5cae733c98c529f6b05a",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai2/zh_lines.py",
+      "bytes": 69282,
+      "sha256": "cd145bbdb6d7695b7476bec93f2e14bee2c4165176943c1e0f0785b58f37a893",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/README.md",
+      "bytes": 22090,
+      "sha256": "5a89fa372df57376e06e128f44c81c2fff63a8b440dcb3d8fb9bdaad87e7ab75",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/cache_integrity.py",
+      "bytes": 18331,
+      "sha256": "3137306b2a26dea04a62cf6c13b8f6d339c2f7140f0f72201431b40ff275a7ce",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/common.py",
+      "bytes": 7707,
+      "sha256": "43bc01600482b1780d46ce9fe2b7c9318b1209d0e9d7ac0b490cf25279226ab9",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/compute.py",
+      "bytes": 91092,
+      "sha256": "decde1f7874d08148cf35ac8067cb6ea6cf051d058ce052a6282afdca4cdb41a",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/manifest.py",
+      "bytes": 1321,
+      "sha256": "f9d32cb62542791e063c5a3186745a0d2ba89d8044da463a9d75f3111b6f5d5a",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/narration_zh.json",
+      "bytes": 99390,
+      "sha256": "9b49515db87ea55cb4b3da1418c69272e63b45b5e63d5fa1efd6bedb5b3e1249",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s01_hook.py",
+      "bytes": 13903,
+      "sha256": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s02_vectors.py",
+      "bytes": 22794,
+      "sha256": "110a369b78476c6d4a302e9ff61dfbb5fe5e569a74e0843d2c249cc1eb5cb62e",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s03_einsum.py",
+      "bytes": 15211,
+      "sha256": "4cf32fd13a907723f2478104b8be2de7dd38df693fa330558edb15d1716ed23e",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s04_matrices.py",
+      "bytes": 12521,
+      "sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s05_projection.py",
+      "bytes": 18467,
+      "sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s06_eigen.py",
+      "bytes": 16259,
+      "sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s07_power.py",
+      "bytes": 12752,
+      "sha256": "f67974683fafc9378f5ada7ea210ce1db8c1d507b9b972efad7c03aa803755b4",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s08_svd.py",
+      "bytes": 11730,
+      "sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s09_lowrank.py",
+      "bytes": 17612,
+      "sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s10_norms.py",
+      "bytes": 17251,
+      "sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s11_spectra.py",
+      "bytes": 14291,
+      "sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s12_galore.py",
+      "bytes": 18954,
+      "sha256": "a5dbaa9950a3386c48974486571251dc85f851e7c2d0806223177feba80d4ed4",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s13_words.py",
+      "bytes": 17109,
+      "sha256": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s14_sgns.py",
+      "bytes": 20385,
+      "sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s15_highdim.py",
+      "bytes": 13956,
+      "sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s16_jl.py",
+      "bytes": 18020,
+      "sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s17_geometry.py",
+      "bytes": 12774,
+      "sha256": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s18_netflix.py",
+      "bytes": 28165,
+      "sha256": "893ab4f1d48fa93876cd88c01b887a906aedc6e5fc19a70d54d6a56029e93a67",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/s19_outro.py",
+      "bytes": 16807,
+      "sha256": "4e1d29200637256128acf72ecffd0f02caaf6733a4222808dd0b32bf82981ed7",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/text_zh_add.json",
+      "bytes": 54806,
+      "sha256": "b275f9ec3a04db629c2863b107773bc4ec258c04d341816e41e1928427cb4bda",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai3/zh_lines.py",
+      "bytes": 64279,
+      "sha256": "ad8a17ed7eddba7b8b8358186b39527f3f292434c8be6842bb63617efd930e36",
+      "worktree_bytes_match_pin": true
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "bytes": 2396458,
+      "sha256": "8e4ed21282fc336bebc5f6e7d1aea7e3c975d09da486c873913c84c98bf3cb0a",
+      "worktree_bytes_match_pin": false
+    }
+  ],
+  "manifests": [
+    {
+      "part": "ai1",
+      "scene_count": 17,
+      "bilingual_cases": 34,
+      "scenes": [
+        {
+          "position": 1,
+          "module": "s01_hook",
+          "scene": "Hook",
+          "title_en": "Shannon's guessing game"
+        },
+        {
+          "position": 2,
+          "module": "s02_probability",
+          "scene": "Probability",
+          "title_en": "1. Probability, and the chain rule"
+        },
+        {
+          "position": 3,
+          "module": "s03_surprise",
+          "scene": "Surprise",
+          "title_en": "2. How surprised to be"
+        },
+        {
+          "position": 4,
+          "module": "s04_entropy",
+          "scene": "Entropy",
+          "title_en": "3. Entropy, and why it is unique"
+        },
+        {
+          "position": 5,
+          "module": "s05_prefix",
+          "scene": "Prefix",
+          "title_en": "4. Prefix codes and the Kraft-McMillan inequality"
+        },
+        {
+          "position": 6,
+          "module": "s06_huffman",
+          "scene": "Huffman",
+          "title_en": "5. The best code: Huffman, and why it is optimal"
+        },
+        {
+          "position": 7,
+          "module": "s07_typical",
+          "scene": "Typical",
+          "title_en": "6. Typical sequences and the source coding theorem"
+        },
+        {
+          "position": 8,
+          "module": "s08_cross_entropy",
+          "scene": "CrossEntropy",
+          "title_en": "7. Cross-entropy and KL: the price of a wrong model"
+        },
+        {
+          "position": 9,
+          "module": "s09_arithmetic",
+          "scene": "Arithmetic",
+          "title_en": "8. Arithmetic coding: prediction is compression"
+        },
+        {
+          "position": 10,
+          "module": "s10_counting",
+          "scene": "Counting",
+          "title_en": "9. Learning by counting, and Laplace's rule"
+        },
+        {
+          "position": 11,
+          "module": "s11_shannon",
+          "scene": "Shannon1951",
+          "title_en": "10. Shannon's 1951 experiment"
+        },
+        {
+          "position": 12,
+          "module": "s12_likelihood",
+          "scene": "Likelihood",
+          "title_en": "11. Learning: likelihood, softmax, and the gradient"
+        },
+        {
+          "position": 13,
+          "module": "s13_information",
+          "scene": "Information",
+          "title_en": "12. Mutual information: what the past tells the future"
+        },
+        {
+          "position": 14,
+          "module": "s14_knowledge",
+          "scene": "Knowledge",
+          "title_en": "13. What it takes to guess well"
+        },
+        {
+          "position": 15,
+          "module": "s15_units",
+          "scene": "Units",
+          "title_en": "14. Bits per character, bits per token"
+        },
+        {
+          "position": 16,
+          "module": "s16_scoreboard",
+          "scene": "Scoreboard",
+          "title_en": "15. The scoreboard: language modeling is compression"
+        },
+        {
+          "position": 17,
+          "module": "s17_outro",
+          "scene": "Outro",
+          "title_en": "Recap, problems, and where this comes back"
+        }
+      ]
+    },
+    {
+      "part": "ai2",
+      "scene_count": 16,
+      "bilingual_cases": 32,
+      "scenes": [
+        {
+          "position": 1,
+          "module": "s01_hook",
+          "scene": "Hook",
+          "title_en": "Forty years to checkmate"
+        },
+        {
+          "position": 2,
+          "module": "s02_turing",
+          "scene": "Turing",
+          "title_en": "1. Can machines think?"
+        },
+        {
+          "position": 3,
+          "module": "s03_search",
+          "scene": "Search",
+          "title_en": "2. Search"
+        },
+        {
+          "position": 4,
+          "module": "s04_astar",
+          "scene": "AStar",
+          "title_en": "3. A*"
+        },
+        {
+          "position": 5,
+          "module": "s05_heuristics",
+          "scene": "Heuristics",
+          "title_en": "4. Where heuristics come from"
+        },
+        {
+          "position": 6,
+          "module": "s06_local",
+          "scene": "Local",
+          "title_en": "5. Climbing and cooling"
+        },
+        {
+          "position": 7,
+          "module": "s07_games",
+          "scene": "Games",
+          "title_en": "6. Games and alpha-beta"
+        },
+        {
+          "position": 8,
+          "module": "s08_samuel",
+          "scene": "Samuel",
+          "title_en": "7. Machines that learned to play"
+        },
+        {
+          "position": 9,
+          "module": "s09_logic",
+          "scene": "Logic",
+          "title_en": "8. Logic and resolution"
+        },
+        {
+          "position": 10,
+          "module": "s10_sat",
+          "scene": "SAT",
+          "title_en": "9. Satisfiability"
+        },
+        {
+          "position": 11,
+          "module": "s11_plans",
+          "scene": "Plans",
+          "title_en": "10. Constraints and plans"
+        },
+        {
+          "position": 12,
+          "module": "s12_knowledge",
+          "scene": "Knowledge",
+          "title_en": "11. Knowledge is power"
+        },
+        {
+          "position": 13,
+          "module": "s13_eliza",
+          "scene": "Eliza",
+          "title_en": "12. ELIZA"
+        },
+        {
+          "position": 14,
+          "module": "s14_winters",
+          "scene": "Winters",
+          "title_en": "13. The winters"
+        },
+        {
+          "position": 15,
+          "module": "s15_survives",
+          "scene": "Survives",
+          "title_en": "14. What survives"
+        },
+        {
+          "position": 16,
+          "module": "s16_outro",
+          "scene": "Outro",
+          "title_en": "Recap, problems, and where this comes back"
+        }
+      ]
+    },
+    {
+      "part": "ai3",
+      "scene_count": 19,
+      "bilingual_cases": 38,
+      "scenes": [
+        {
+          "position": 1,
+          "module": "s01_hook",
+          "scene": "Hook",
+          "title_en": "Where words live"
+        },
+        {
+          "position": 2,
+          "module": "s02_vectors",
+          "scene": "Vectors",
+          "title_en": "1. Vectors and the inner product"
+        },
+        {
+          "position": 3,
+          "module": "s03_einsum",
+          "scene": "Einsum",
+          "title_en": "2. Tensors and einsum"
+        },
+        {
+          "position": 4,
+          "module": "s04_matrices",
+          "scene": "Matrices",
+          "title_en": "3. Matrices move space"
+        },
+        {
+          "position": 5,
+          "module": "s05_projection",
+          "scene": "Projection",
+          "title_en": "4. Projection and least squares"
+        },
+        {
+          "position": 6,
+          "module": "s06_eigen",
+          "scene": "Eigen",
+          "title_en": "5. Directions that stay put"
+        },
+        {
+          "position": 7,
+          "module": "s07_power",
+          "scene": "Power",
+          "title_en": "6. Power iteration, run live"
+        },
+        {
+          "position": 8,
+          "module": "s08_svd",
+          "scene": "SVD",
+          "title_en": "7. Every matrix: turn, stretch, turn"
+        },
+        {
+          "position": 9,
+          "module": "s09_lowrank",
+          "scene": "LowRank",
+          "title_en": "8. The best low-rank copy"
+        },
+        {
+          "position": 10,
+          "module": "s10_norms",
+          "scene": "Norms",
+          "title_en": "9. How big is a matrix?"
+        },
+        {
+          "position": 11,
+          "module": "s11_spectra",
+          "scene": "Spectra",
+          "title_en": "10. Random matrices and trained weights"
+        },
+        {
+          "position": 12,
+          "module": "s12_galore",
+          "scene": "GaLore",
+          "title_en": "11. Gradients are low rank"
+        },
+        {
+          "position": 13,
+          "module": "s13_words",
+          "scene": "Words",
+          "title_en": "12. Word vectors from counting"
+        },
+        {
+          "position": 14,
+          "module": "s14_sgns",
+          "scene": "SGNS",
+          "title_en": "13. word2vec is counting in disguise"
+        },
+        {
+          "position": 15,
+          "module": "s15_highdim",
+          "scene": "HighDim",
+          "title_en": "14. Life in 768 dimensions"
+        },
+        {
+          "position": 16,
+          "module": "s16_jl",
+          "scene": "JL",
+          "title_en": "15. Johnson-Lindenstrauss, proved"
+        },
+        {
+          "position": 17,
+          "module": "s17_geometry",
+          "scene": "Geometry",
+          "title_en": "16. GPT-2's lopsided space"
+        },
+        {
+          "position": 18,
+          "module": "s18_netflix",
+          "scene": "Netflix",
+          "title_en": "17. Low rank in the wild"
+        },
+        {
+          "position": 19,
+          "module": "s19_outro",
+          "scene": "Outro",
+          "title_en": "Recap, problems, and what comes next"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "scope": "Actual cloud documentation bytes consulted for coverage and eviction facts. Source release pin and later scope receipts remain separate; no new playback/listening claim.",
+  "files": [
+    {
+      "path": "docs/qa/STATUS.md",
+      "bytes": 9466,
+      "sha256": "cef490baef7246a7b95d0105481781b669a8d869fe140624c8588abbff357294"
+    },
+    {
+      "path": "docs/qa/remaining-production-qa.md",
+      "bytes": 3951,
+      "sha256": "8fc36ccf2db345433cdf588401788149431881cef3bbdce120f9a6022c193b1d"
+    },
+    {
+      "path": "docs/qa/ai3-chapter-checklist.md",
+      "bytes": 5188,
+      "sha256": "5a5f903c4657393647115b014ea182ca6a0417665d1c83fb0afa8c1ccef2cb08"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-final-assembly-review/README.md",
+      "bytes": 4078,
+      "sha256": "97f403f0757f865fe30410db3a4bda74a1ced757cd1888778397a68a195d38a2"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-chapter-group-library-delivery/README.md",
+      "bytes": 2777,
+      "sha256": "69c89ef520582cd67b4c991f1c41110a01dc13a2d161a7aa332f5574e8ceb1ae"
+    },
+    {
+      "path": "docs/qa/evidence/cloud-capacity-20261031/inactive-tts-public-download/README.md",
+      "bytes": 1286,
+      "sha256": "baf341081b1f0a9f57aa3d1319f31cd9051dade0ae5ecc677b4238df53f75de2"
+    }
+  ]
+}
