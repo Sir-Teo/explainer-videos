@@ -1,0 +1,10 @@
+{
+  "observed_utc": "2026-10-31T12:52:02.058794+00:00",
+  "memory_limit_bytes": 17179869184,
+  "memory_events": "low 0\nhigh 0\nmax 135871\noom 1\noom_kill 1\noom_group_kill 0\n",
+  "server_exit_code": 137,
+  "scope": "Long paragraph synthesis with pre-fix CPU batching; OOM event counter observed after process termination. Current bounded path has unit regression; real repeat pending.",
+  "original_log": "renders/qa/tts-server.log",
+  "fix": "TorchEngine.takes serializes CPU chunks; GPU batching unchanged",
+  "tests": 76
+}

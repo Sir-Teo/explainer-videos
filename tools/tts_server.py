@@ -175,6 +175,11 @@ class TorchEngine(Engine):
         self.sr = 24000
 
     def takes(self, texts: list[str], lang: str, attempt: int) -> list[np.ndarray]:
+        # The speech model plus ASR/aligner already occupy most of a 16 GB
+        # CPU machine. A whole paragraph's pending sentences can exceed the
+        # memory limit when generated together; keep CPU inference bounded.
+        if self.device == "cpu" and len(texts) > 1:
+            return [self.takes([text], lang, attempt)[0] for text in texts]
         p = self.profile["voices"][lang]
         base = p.get("params", {}).get("temperature", 0.9)
         temp = max(0.5, base - 0.1 * attempt) if attempt else base
