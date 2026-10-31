@@ -1,0 +1,214 @@
+{
+  "scope": "Actual packaged file bytes; manifest excludes itself. Compressed ledgers preserve original scope/history and absolute cloud paths. Movies and complete extracted PNG sets omitted.",
+  "files": [
+    {
+      "file": "motion-review.json.gz",
+      "bytes": 3670,
+      "sha256": "7d35c52528896407cfaea02af6b627879810cf957ee89edd36585f19e305f5f0",
+      "encoding": "gzip",
+      "uncompressed_bytes": 11717,
+      "uncompressed_sha256": "be0059fc68e570655b21277a0250f6965192da29b909896d4bda383e07f8d3b0",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/motion-review.json"
+    },
+    {
+      "file": "motion-review.md.gz",
+      "bytes": 1484,
+      "sha256": "8a26809ee5791374bee723bb3290d2020d1ac044ee6e14e7dd24895c23952cfc",
+      "encoding": "gzip",
+      "uncompressed_bytes": 2681,
+      "uncompressed_sha256": "0e54896ce264514f5e4ec5e5d3c025ddef4337f8f1b8e63f22921250dceeb3c7",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/motion-review.md"
+    },
+    {
+      "file": "endpoint-review.json.gz",
+      "bytes": 15425,
+      "sha256": "1446c6e779d17f2359e48aaa626934e46a2e6532505fce9f718e5a231d35cc86",
+      "encoding": "gzip",
+      "uncompressed_bytes": 149415,
+      "uncompressed_sha256": "be983881ad596ca54f5ae49d0fb6148859cefcbb2556b3a3226b3574229c0475",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/endpoint-review.json"
+    },
+    {
+      "file": "endpoint-review.md.gz",
+      "bytes": 1295,
+      "sha256": "c88221b217b63116b3136af47264571e3265911cdb7f2a30cf0f091823cd77b7",
+      "encoding": "gzip",
+      "uncompressed_bytes": 2200,
+      "uncompressed_sha256": "7706ef7e91943dc55092d757bcf22d61a807609e9cb5293cee607082187b6265",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/endpoint-review.md"
+    },
+    {
+      "file": "freeze-receipt.json.gz",
+      "bytes": 17884,
+      "sha256": "33f2046332e1b3bc641ce1d0105c98143263623c5c58b2fbec4685919c070955",
+      "encoding": "gzip",
+      "uncompressed_bytes": 159147,
+      "uncompressed_sha256": "298c855e71a60ff8299111efe1e0fab7270cfa4b082384d2ecc1cddd458acef2",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/freeze-receipt.json"
+    },
+    {
+      "file": "snapshot-attempt-1.json.gz",
+      "bytes": 321,
+      "sha256": "42690a4090720063c7e8d6b4917736c07fc4f316c92a1ea4ca5b52096e615e85",
+      "encoding": "gzip",
+      "uncompressed_bytes": 438,
+      "uncompressed_sha256": "6b1a14528a293b9163e7f3a6dcf37ffc32d489539cdf62e3aa9132bdcaf233b6",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/snapshot-attempt-1.json"
+    },
+    {
+      "file": "motion-freeze.json.gz",
+      "bytes": 891,
+      "sha256": "0e415105d934f5827c73c203e7b93fc5a615de2719d52b4954c05b4783c63d38",
+      "encoding": "gzip",
+      "uncompressed_bytes": 2923,
+      "uncompressed_sha256": "e1ab031963e7db270119478a53af25eb0037a1cf91839d4f48af66c74c547e80",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/motion-freeze.json"
+    },
+    {
+      "file": "scene-commit-anchor.json.gz",
+      "bytes": 194,
+      "sha256": "3feb8e5cc8d3ea0732d9a71e590d9d6d6e3131fe92cbf4cab5f1e9f1c0964e1e",
+      "encoding": "gzip",
+      "uncompressed_bytes": 245,
+      "uncompressed_sha256": "6d7fa222a773bb252f3dcb687e4a0d3d353cd399dcf3c7faaee3eb02ed62cd65",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/scene-commit-anchor.json"
+    },
+    {
+      "file": "cached-data-checks.json.gz",
+      "bytes": 453,
+      "sha256": "7c8a265628579b28a2f4b65e61f52a2656c6876badbbfa9145be2dc9b3be4507",
+      "encoding": "gzip",
+      "uncompressed_bytes": 859,
+      "uncompressed_sha256": "478d220fa279a2440a1cab2e75a735a60a30a576c778ac356c4504ceeb0d8226",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/cached-data-checks.json"
+    },
+    {
+      "file": "s11_spectra.commit-anchor.py.gz",
+      "bytes": 4838,
+      "sha256": "ab71d311ce35aa70cc295491aea5045cb654a3a0b43ff42e07eb14f5c29d4e24",
+      "encoding": "gzip",
+      "uncompressed_bytes": 14291,
+      "uncompressed_sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/s11_spectra.commit-anchor.py"
+    },
+    {
+      "file": "qa_motion.frozen.py.gz",
+      "bytes": 6507,
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "encoding": "gzip",
+      "uncompressed_bytes": 19437,
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/snapshot/tools/qa_motion.py"
+    },
+    {
+      "file": "mp.cached-at-review.json.gz",
+      "bytes": 27043,
+      "sha256": "8fac920b951293e905d2c79e8b52543f1501cefbed45c87da5498eaba5fb0238",
+      "encoding": "gzip",
+      "uncompressed_bytes": 82808,
+      "uncompressed_sha256": "ccf0cc95a19a419644e7440d1e6bf31058f38bbbfa2fb2a172591781afdcc033",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/snapshot/.cache/ai3/mp.json"
+    },
+    {
+      "file": "en-selected-frame-review-map.json.gz",
+      "bytes": 33563,
+      "sha256": "3edd6c817e3d717c0a6f8b8ca76541142f4a68a8e8b1d5e1eb317e5b2d45c9a2",
+      "encoding": "gzip",
+      "uncompressed_bytes": 211925,
+      "uncompressed_sha256": "3ac85963569f68f9487f3b9c9de0a851db7f78f8a1bb81bd9bcdd85921d07a96",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/motion/en/review/review-map.json"
+    },
+    {
+      "file": "en-motion-render-result.json.gz",
+      "bytes": 11941,
+      "sha256": "db54bb7ca7631a1397bda60e985489839686d02b48fa28879e6713cc38c49381",
+      "encoding": "gzip",
+      "uncompressed_bytes": 75671,
+      "uncompressed_sha256": "02d51ee90ba2ac4ebf939bc95da80ca1bcf1ee3c693704d7025ac989b56fbb34",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/motion/en/motion-result.json"
+    },
+    {
+      "file": "en-endpoint-render-result.json.gz",
+      "bytes": 11966,
+      "sha256": "75ac2f63c4524d0e5d1c228b46508e57d0e433148a5c50bbfef7f05dcb327744",
+      "encoding": "gzip",
+      "uncompressed_bytes": 75417,
+      "uncompressed_sha256": "61b18c6fc3a9f16a6374711d57e77de8e2abbfe22892ea5b1a2629c04f03b539",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/endpoints/en/result.json"
+    },
+    {
+      "file": "en-temporal-audit.json.gz",
+      "bytes": 21257,
+      "sha256": "fd6e6b5595c3f8fb4a9741cae78d971b2318dd2569b0997db2bcf37a168c813e",
+      "encoding": "gzip",
+      "uncompressed_bytes": 122612,
+      "uncompressed_sha256": "390a5a4f9c1f67da64222f3a8e29eb81a8619656355507046a16db95477dd583",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Spectra-dense-qa-integrity/result.json"
+    },
+    {
+      "file": "zh-selected-frame-review-map.json.gz",
+      "bytes": 33196,
+      "sha256": "4926c09acd49c69aa62a30ac27e866a8220ca58dfe1e18ec0bfb79b02546a50d",
+      "encoding": "gzip",
+      "uncompressed_bytes": 212800,
+      "uncompressed_sha256": "e273d4f1a51cbabf0da28c311dd6955ae744ccb6b22a90fc4a21d3de9815e908",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/motion/zh/review/review-map.json"
+    },
+    {
+      "file": "zh-motion-render-result.json.gz",
+      "bytes": 18655,
+      "sha256": "bf067cb51f31b404b2c6704fec983221698449de653ab2e9d880dd9de1a29836",
+      "encoding": "gzip",
+      "uncompressed_bytes": 99383,
+      "uncompressed_sha256": "f16e390bd392f21f6b5b749e1938a09f17d6b03e689437169c8e0f3e0322f8e8",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/motion/zh/motion-result.json"
+    },
+    {
+      "file": "zh-endpoint-render-result.json.gz",
+      "bytes": 18743,
+      "sha256": "71aabf84415e04aca61bc0b15414487b78cb49b99a9c7acc55442793ab06f080",
+      "encoding": "gzip",
+      "uncompressed_bytes": 99100,
+      "uncompressed_sha256": "d093bcd19000248ab318c19e65dcbb031ea8e38aee779c4eb1c7027de5ef7f6c",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/endpoints/zh/result.json"
+    },
+    {
+      "file": "zh-temporal-audit.json.gz",
+      "bytes": 21378,
+      "sha256": "0e6bc28166e0a04e2600c39c1611e87f5d84e210cdceaf3c015bb678653689c6",
+      "encoding": "gzip",
+      "uncompressed_bytes": 126605,
+      "uncompressed_sha256": "23c54807965d92365928670a1355c28777be14244933e87542987371c3ac786a",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Spectra-dense-qa-integrity/result.json"
+    },
+    {
+      "file": "en-trained-shuffled-transition-480.png",
+      "bytes": 74157,
+      "sha256": "6fe01e6ba548265ca74a1d6daf852572ec91233d325a7e6f4e9bd2a22e1f0e19",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Spectra-dense-qa-integrity/frames/0001103_000073.533s.png"
+    },
+    {
+      "file": "en-novels-trained-fresh-480.png",
+      "bytes": 51917,
+      "sha256": "d2207add263a37d4993a2beb6dfe8f27b52b88c4c31727e4a83eb6b1420b3658",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Spectra-dense-qa-integrity/frames/0002173_000144.867s.png"
+    },
+    {
+      "file": "zh-strict-edge-readout-480.png",
+      "bytes": 72033,
+      "sha256": "58a98645fcf53e81cb639b6096a894800972ac90672347ec85d1c5053ebf0ec0",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Spectra-dense-qa-integrity/frames/0001037_000069.133s.png"
+    },
+    {
+      "file": "zh-descriptive-tail-fits-480.png",
+      "bytes": 68991,
+      "sha256": "6f832e46a64b8c59e6fd22544cf37c983ec714909f23c7dd5099058fef1a8ece",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Spectra-dense-qa-integrity/frames/0001886_000125.733s.png"
+    },
+    {
+      "file": "README.md",
+      "bytes": 4478,
+      "sha256": "4b632f3e1846a521ba4b044ddac61d47db79907e3e3a5f6e56fcdf0221e6c3ae"
+    }
+  ]
+}

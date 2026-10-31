@@ -1,0 +1,317 @@
+{
+  "created_utc": "2026-10-31T21:03:41.653619+00:00",
+  "payloads": [
+    {
+      "file": "ai3-lowrank-tailnorm-motion-review.json.gz",
+      "sha256": "9a6ff8b0235d7331c846b32ceb78c52162f7c3d13fe677f204f0604c7d7f879f",
+      "size": 71058,
+      "uncompressed_sha256": "6c43a202a3606a6555883b66afd17c2ba2941faacace2f62ee9936823d752979",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-review.json"
+    },
+    {
+      "file": "ai3-lowrank-tailnorm-motion-review.md.gz",
+      "sha256": "adc420791fe631d1be7576d6c02faf7fc92a8b71b306d3d7c8b8b1db19aa32de",
+      "size": 574,
+      "uncompressed_sha256": "acf96d01f01cee50b6ef0a4a1bd747d0b5b1ec21eae45aaa48e107c292794b1b",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-review.md"
+    },
+    {
+      "file": "ai3-lowrank-before-tailnorm-completed.json.gz",
+      "sha256": "38c9164662c99605d81315affba3cd12465f92dee74269d0a9eb5436eb8becc3",
+      "size": 111253,
+      "uncompressed_sha256": "2e17322672607444c941f1cb2d573bdce145fc8c538c78aa43394f74ef8780c0",
+      "source": "/workspace/runtime/ai3-lowrank-before-tailnorm-completed.json"
+    },
+    {
+      "file": "ai3_lowrank_tailnorm_prepare.py.gz",
+      "sha256": "5cae725eac22891efd1a6e20e3769ac469eb7dc462181911a8d1e3ec21b7ebb4",
+      "size": 2308,
+      "uncompressed_sha256": "8df9731e07e210a1979e8bc6b48a09d8457698e1a3442b9ada8c6589b1906f92",
+      "source": "/workspace/runtime/ai3_lowrank_tailnorm_prepare.py"
+    },
+    {
+      "file": "ai3_lowrank_tailnorm_record.py.gz",
+      "sha256": "4b6bb09e8a3fd65daa5a3f4b5bfc12c577c2f72189ec6d67b4ff35605911ee09",
+      "size": 1209,
+      "uncompressed_sha256": "1b2914f656beabba12a6b75afd7bf6c5a556b44baba04bf478637b167f5e6aae",
+      "source": "/workspace/runtime/ai3_lowrank_tailnorm_record.py"
+    },
+    {
+      "file": "en-final-capture.json.gz",
+      "sha256": "027fb1fcf8638a20ddd337afbb8951fcba7529ac64d9f50366e7a09201982ae8",
+      "size": 14456,
+      "uncompressed_sha256": "62f52f2aca0a5e2fd2ab59f755cec87ebaf90cd05286e0fd9095ac1ade03c7b8",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/en/LowRank/capture-result.json"
+    },
+    {
+      "file": "en-final-motion-audit.json.gz",
+      "sha256": "47af7631cc3df36232602fc373ed5bb97ceca4cf9469b026839d7856e7d36b45",
+      "size": 30812,
+      "uncompressed_sha256": "270e16d814377bb2356646c2adffb00168d66f2cf6bf08909cdc58b61eb07ee8",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/en/LowRank/temporal-audit-result.json"
+    },
+    {
+      "file": "en-final-scene-source.py.gz",
+      "sha256": "c9d466cf251ebbb8e0a6d67b1a0f07afde2fdec833fefc3cc2d95c9250847d17",
+      "size": 5698,
+      "uncompressed_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/en/LowRank/s09_lowrank.py"
+    },
+    {
+      "file": "en-frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "size": 6507,
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/en/LowRank/qa_motion.snapshot.py"
+    },
+    {
+      "file": "en-input-image.npz.gz",
+      "sha256": "3294f15c6156e0c425ae9d57c92d380ccc3a261a6ca88d3eedca363139cd4560",
+      "size": 216171,
+      "uncompressed_sha256": "2c874e5daf872c3c4505e689bfe0350248e5271b3df77e5422a38f1684417de7",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/en/LowRank/inputs/.cache/ai3/image.npz"
+    },
+    {
+      "file": "en-input-letters.json.gz",
+      "sha256": "071e06b2079fae4ba16df198103adb638e57860b851f5ee307c8e42dab1dcc27",
+      "size": 112,
+      "uncompressed_sha256": "8856792172f9cc63d38eac0dda663aa0303c42bdb4515d8e7723b481153031c5",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/en/LowRank/inputs/.cache/ai3/letters.json"
+    },
+    {
+      "file": "en-input-letters.npz.gz",
+      "sha256": "13a2cef4832c8e2efe53b97e08e0cf898ebf9d03e6adf5a5b402ce30ac69aae4",
+      "size": 149678,
+      "uncompressed_sha256": "eec30557b0c16285e938b327e55461c0a95b7d3788b790a8682bfb85e2e3be0a",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/en/LowRank/inputs/.cache/ai3/letters.npz"
+    },
+    {
+      "file": "en-input-image.json.gz",
+      "sha256": "cc18f509c4751ce1393f6b5a0c13617d37e04a63389d4dc720b47d3331adaaf9",
+      "size": 333,
+      "uncompressed_sha256": "c0ee874791ca66a6715b9381bd3f03b33b06ddb3e775475c9b41d498a364c6b7",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/en/LowRank/inputs/.cache/ai3/image.json"
+    },
+    {
+      "file": "en-after-native-01.png",
+      "sha256": "2948f1953f87cf4ddf3383f360fbe8502592ec0b0640fa4cf161f09df0e47fc4",
+      "size": 178334,
+      "uncompressed_sha256": "2948f1953f87cf4ddf3383f360fbe8502592ec0b0640fa4cf161f09df0e47fc4",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-LowRank-repaired-final/frames/0001382_000092.133s.png"
+    },
+    {
+      "file": "en-after-native-02.png",
+      "sha256": "c2a73f7ff7f16e40563ef6b6fd58e48978c04847352a71994c00710add5539a6",
+      "size": 141957,
+      "uncompressed_sha256": "c2a73f7ff7f16e40563ef6b6fd58e48978c04847352a71994c00710add5539a6",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-LowRank-repaired-final/frames/0001735_000115.665s.png"
+    },
+    {
+      "file": "en-before-native-01.png",
+      "sha256": "e756766e498acff6d4d9888055a59c63623486b718d42184be79c2203e57aa46",
+      "size": 79637,
+      "uncompressed_sha256": "e756766e498acff6d4d9888055a59c63623486b718d42184be79c2203e57aa46",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-LowRank-dense-final/frames/0000944_000062.933s.png"
+    },
+    {
+      "file": "en-before-native-02.png",
+      "sha256": "49620d65d470843af338ca65fd92d169baed736a46cb45396b3a96f8c3c31bf6",
+      "size": 183950,
+      "uncompressed_sha256": "49620d65d470843af338ca65fd92d169baed736a46cb45396b3a96f8c3c31bf6",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-LowRank-dense-final/frames/0001435_000095.666s.png"
+    },
+    {
+      "file": "en-before-native-03.png",
+      "sha256": "ce35ad97411ac0fa470c29111b8fbbdeeb4127c134c20cd5a687cebbb1b4220f",
+      "size": 139828,
+      "uncompressed_sha256": "ce35ad97411ac0fa470c29111b8fbbdeeb4127c134c20cd5a687cebbb1b4220f",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-LowRank-dense-final/frames/0001701_000113.399s.png"
+    },
+    {
+      "file": "en-endpoints-review.json",
+      "sha256": "369f0e22727e3def721e6ff73ced2f80245318f254debc8389e70f13a04ce8c5",
+      "size": 73352
+    },
+    {
+      "file": "en-endpoint-capture.json.gz",
+      "sha256": "38ccc2e05191e409aa5f311ab166d9702a95b1b8a7f0f41bb2dcd4c29c315983",
+      "size": 14754,
+      "uncompressed_sha256": "5c6c904a65fcce392dcce2f2c023be70798cfc9747dc4aa2dc8558a264a70e5f",
+      "source": "/workspace/runtime/ai3-lowrank-norms-galore-endpoint-review/en/LowRank/capture.json"
+    },
+    {
+      "file": "en-endpoint-table-at-review.json.gz",
+      "sha256": "2dfe839a34acd096decad5f25b4d129c3ed7a5c0701987ac4f5bf1f282db9293",
+      "size": 870782,
+      "uncompressed_sha256": "868725a29323f7fc99922c46fd255ffe4a111a57695d60f1ce695e7e75fe0774",
+      "source": "/workspace/runtime/ai3-lowrank-norms-galore-endpoint-review/en/LowRank/table-at-review.json"
+    },
+    {
+      "file": "en-endpoint-page-001.png",
+      "sha256": "3f90e633885e817d50ef49532c39e64a16e14933645a3eb20a06a578d485e339",
+      "size": 197047,
+      "uncompressed_sha256": "3f90e633885e817d50ef49532c39e64a16e14933645a3eb20a06a578d485e339",
+      "source": "/workspace/runtime/ai3-lowrank-norms-galore-endpoint-review/en/LowRank/page-001.png"
+    },
+    {
+      "file": "en-endpoint-page-002.png",
+      "sha256": "8fb135cd7d756a073c30632fe68b344535ac07b96f31bde12b270d0d7d8eaf0b",
+      "size": 359804,
+      "uncompressed_sha256": "8fb135cd7d756a073c30632fe68b344535ac07b96f31bde12b270d0d7d8eaf0b",
+      "source": "/workspace/runtime/ai3-lowrank-norms-galore-endpoint-review/en/LowRank/page-002.png"
+    },
+    {
+      "file": "en-endpoint-page-003.png",
+      "sha256": "ea44d1c2da34021104e91e4d860504256ab89c67ff5fe6542d891a1700660073",
+      "size": 170391,
+      "uncompressed_sha256": "ea44d1c2da34021104e91e4d860504256ab89c67ff5fe6542d891a1700660073",
+      "source": "/workspace/runtime/ai3-lowrank-norms-galore-endpoint-review/en/LowRank/page-003.png"
+    },
+    {
+      "file": "en-final-freeze.json",
+      "sha256": "34e99ca9bf4383c5196ff9307c2f63dd4d5525d780d5cd745e7a4a761cea9e30",
+      "size": 993
+    },
+    {
+      "file": "zh-final-capture.json.gz",
+      "sha256": "884a9618a1c75a6fa7f2be216c0a8444eb78fc9edf6a21868d92d72964fb3075",
+      "size": 20006,
+      "uncompressed_sha256": "981fc8b3b82fbe570f35297a3848b372464feb3fa08eae43a53b4027fac6f030",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/zh/LowRank/capture-result.json"
+    },
+    {
+      "file": "zh-final-motion-audit.json.gz",
+      "sha256": "683a729818fe0b03a1da0644210cec7b44913890c04818e15257bd142747f1f7",
+      "size": 31367,
+      "uncompressed_sha256": "b52606d0fa737b58a5afb87d9d3b835c01002c293a496b761dc902e65f0af919",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/zh/LowRank/temporal-audit-result.json"
+    },
+    {
+      "file": "zh-final-scene-source.py.gz",
+      "sha256": "c9d466cf251ebbb8e0a6d67b1a0f07afde2fdec833fefc3cc2d95c9250847d17",
+      "size": 5698,
+      "uncompressed_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/zh/LowRank/s09_lowrank.py"
+    },
+    {
+      "file": "zh-frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "size": 6507,
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/zh/LowRank/qa_motion.snapshot.py"
+    },
+    {
+      "file": "zh-input-image.npz.gz",
+      "sha256": "3294f15c6156e0c425ae9d57c92d380ccc3a261a6ca88d3eedca363139cd4560",
+      "size": 216171,
+      "uncompressed_sha256": "2c874e5daf872c3c4505e689bfe0350248e5271b3df77e5422a38f1684417de7",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/zh/LowRank/inputs/.cache/ai3/image.npz"
+    },
+    {
+      "file": "zh-input-letters.json.gz",
+      "sha256": "071e06b2079fae4ba16df198103adb638e57860b851f5ee307c8e42dab1dcc27",
+      "size": 112,
+      "uncompressed_sha256": "8856792172f9cc63d38eac0dda663aa0303c42bdb4515d8e7723b481153031c5",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/zh/LowRank/inputs/.cache/ai3/letters.json"
+    },
+    {
+      "file": "zh-input-letters.npz.gz",
+      "sha256": "13a2cef4832c8e2efe53b97e08e0cf898ebf9d03e6adf5a5b402ce30ac69aae4",
+      "size": 149678,
+      "uncompressed_sha256": "eec30557b0c16285e938b327e55461c0a95b7d3788b790a8682bfb85e2e3be0a",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/zh/LowRank/inputs/.cache/ai3/letters.npz"
+    },
+    {
+      "file": "zh-input-image.json.gz",
+      "sha256": "cc18f509c4751ce1393f6b5a0c13617d37e04a63389d4dc720b47d3331adaaf9",
+      "size": 333,
+      "uncompressed_sha256": "c0ee874791ca66a6715b9381bd3f03b33b06ddb3e775475c9b41d498a364c6b7",
+      "source": "/workspace/runtime/ai3-lowrank-tailnorm-motion-evidence/zh/LowRank/inputs/.cache/ai3/image.json"
+    },
+    {
+      "file": "zh-after-native-01.png",
+      "sha256": "26dd4a95d7253b16c09faab1ff8d9b7eb67aecdd6f6d2979b06a8dc448a56f04",
+      "size": 176157,
+      "uncompressed_sha256": "26dd4a95d7253b16c09faab1ff8d9b7eb67aecdd6f6d2979b06a8dc448a56f04",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-LowRank-repaired-final/frames/0001319_000087.933s.png"
+    },
+    {
+      "file": "zh-after-native-02.png",
+      "sha256": "c791a420e50c85575c400ba60e1613eb0a2b30c871a57b9987c0a5ec7ca9d3b4",
+      "size": 138084,
+      "uncompressed_sha256": "c791a420e50c85575c400ba60e1613eb0a2b30c871a57b9987c0a5ec7ca9d3b4",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-LowRank-repaired-final/frames/0001768_000117.866s.png"
+    },
+    {
+      "file": "zh-before-native-01.png",
+      "sha256": "6319b1ff810ee4cf8fad40e095846dfe27a807512d3beb93a789d7647f8ed5ca",
+      "size": 76630,
+      "uncompressed_sha256": "6319b1ff810ee4cf8fad40e095846dfe27a807512d3beb93a789d7647f8ed5ca",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-LowRank-dense-final/frames/0000945_000063.000s.png"
+    },
+    {
+      "file": "zh-before-native-02.png",
+      "sha256": "9a56c2c0c1d0866269f38e13b245e19df96fbde8aaaa970cadae5052514d8c87",
+      "size": 176092,
+      "uncompressed_sha256": "9a56c2c0c1d0866269f38e13b245e19df96fbde8aaaa970cadae5052514d8c87",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-LowRank-dense-final/frames/0001324_000088.266s.png"
+    },
+    {
+      "file": "zh-before-native-03.png",
+      "sha256": "ade5ae236aa79620862f53f3d383cc536dc6926745982473a7c7892a43a10bec",
+      "size": 131695,
+      "uncompressed_sha256": "ade5ae236aa79620862f53f3d383cc536dc6926745982473a7c7892a43a10bec",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-LowRank-dense-final/frames/0001701_000113.399s.png"
+    },
+    {
+      "file": "zh-endpoints-review.json",
+      "sha256": "fdeed82d688ac8fbce3a12f0bfe0670d702db2191b210cebcfd9caa3481973ef",
+      "size": 70853
+    },
+    {
+      "file": "zh-endpoint-capture.json.gz",
+      "sha256": "0e5d39fffc1150e92d766a069338ec166e724732c725481560f478adea6ad16c",
+      "size": 20286,
+      "uncompressed_sha256": "69c196b378a57b0beba5c730ccc11313facabf93b57a27893fd6400810b3b3db",
+      "source": "/workspace/runtime/ai3-lowrank-norms-galore-endpoint-review/zh/LowRank/capture.json"
+    },
+    {
+      "file": "zh-endpoint-table-at-review.json.gz",
+      "sha256": "2dfe839a34acd096decad5f25b4d129c3ed7a5c0701987ac4f5bf1f282db9293",
+      "size": 870782,
+      "uncompressed_sha256": "868725a29323f7fc99922c46fd255ffe4a111a57695d60f1ce695e7e75fe0774",
+      "source": "/workspace/runtime/ai3-lowrank-norms-galore-endpoint-review/zh/LowRank/table-at-review.json"
+    },
+    {
+      "file": "zh-endpoint-page-001.png",
+      "sha256": "60b5017d0004274ca2e9d3ebbd0bf018791e84f42fdf0f595dd968d93c3117ab",
+      "size": 226866,
+      "uncompressed_sha256": "60b5017d0004274ca2e9d3ebbd0bf018791e84f42fdf0f595dd968d93c3117ab",
+      "source": "/workspace/runtime/ai3-lowrank-norms-galore-endpoint-review/zh/LowRank/page-001.png"
+    },
+    {
+      "file": "zh-endpoint-page-002.png",
+      "sha256": "ebb54ea1aff445a1a0c50c54c399c4e035b5739d6f1bec7e69e7a0866adcd6c8",
+      "size": 337099,
+      "uncompressed_sha256": "ebb54ea1aff445a1a0c50c54c399c4e035b5739d6f1bec7e69e7a0866adcd6c8",
+      "source": "/workspace/runtime/ai3-lowrank-norms-galore-endpoint-review/zh/LowRank/page-002.png"
+    },
+    {
+      "file": "zh-endpoint-page-003.png",
+      "sha256": "3a2559eb8efa671ea880454a9920ccc8d32977e3c7f840a50676d8073a4b52b8",
+      "size": 182013,
+      "uncompressed_sha256": "3a2559eb8efa671ea880454a9920ccc8d32977e3c7f840a50676d8073a4b52b8",
+      "source": "/workspace/runtime/ai3-lowrank-norms-galore-endpoint-review/zh/LowRank/page-003.png"
+    },
+    {
+      "file": "zh-final-freeze.json",
+      "sha256": "50e2ec053e25074723b7271fdc613313da22ada563b2dd8d2872237026b708c0",
+      "size": 994
+    },
+    {
+      "file": "README.md",
+      "sha256": "d1d4499aac7a7a72bf1582c35be3c02d00fff8d0b88eb95d9afd279eea6fa740",
+      "size": 2243
+    }
+  ]
+}

@@ -62,7 +62,7 @@ class Geometry(VoiceoverScene):
                 interpolate_color(ManimColor(RAWC), ManimColor(CENC), color_mix.get_value())
             ] * group.n))
             self.play(*bars.to(cen / cen.sum()), color_mix.animate.set_value(1.0),
-                      FadeOut(m1), FadeIn(m2), run_time=1.6)
+                      Succession(FadeOut(m1, run_time=0.8), FadeIn(m2, run_time=0.8)), run_time=1.6)
         bars.freeze()
         self.wait(0.3)
         self.clear_scene()
@@ -111,7 +111,7 @@ class Geometry(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.0005), FadeIn(key), run_time=2.0)
             vo.wait_until("c")
-            self.play(Indicate(bars[0], color=WHITE))
+            self.play(Indicate(bars[0], color=WHITE, scale_factor=1.0))
         self.wait(0.3)
         self.clear_scene()
 

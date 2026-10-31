@@ -1,0 +1,23 @@
+{
+  "movie_sha256": "ee94ff52e06f17eed3b48dac4a8402fe540198134ab8aee34acaaea47cc76ee0",
+  "source_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+  "capture_sha256": "62f52f2aca0a5e2fd2ab59f755cec87ebaf90cd05286e0fd9095ac1ade03c7b8",
+  "capture_warnings": [
+    {
+      "kind": "source-changed-during-render"
+    }
+  ],
+  "capture_status": "needs-review",
+  "capture_fingerprint": "b6996509e10f25b35447673ccc4bc2d853ce194583356afc425bf618f27a41ad",
+  "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+  "duration": 178.865365,
+  "duration_before": 175.865365,
+  "duration_delta": 3.0,
+  "counts": {
+    "directly_inspected": 34,
+    "exact_png_duplicate_of_inspected": 5,
+    "exact_png_inherited_from_completed_baseline": 386,
+    "not_yet_reviewed": 0
+  },
+  "limits": "Current source snapshots alone do not prove historical worker import. Movie/raw capture warning preserved; exact PNG identity supports reuse independently."
+}

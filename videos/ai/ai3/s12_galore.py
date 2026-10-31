@@ -43,7 +43,7 @@ class GaLore(VoiceoverScene):
             cmath(r"\operatorname{rank} G", r"\le", r"\min(T,\ m,\ n)", font_size=36),
         ]
         whys = [why(r"one token $t$ through a layer"), why(r"the chain rule"),
-                why(r"a sum of outer products: \ rank one each"), why(r"at most one new direction per token")]
+                why(r"a sum of outer products: \ rank at most one each"), why(r"at most one new direction per token")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.2, buff=0.45, edge=6.9)
         tag = note(r"$\boldsymbol{\delta}_t = \partial L/\partial \mathbf{y}_t$, \ the error signal arriving from above "
                    r"(Part 4)").to_edge(DOWN, buff=0.5)
@@ -51,7 +51,7 @@ class GaLore(VoiceoverScene):
             "A gradient is a matrix too, with its own singular values. <bookmark mark='a'/> A layer turns each "
             "token's vector x into W x. <bookmark mark='b'/> By the chain rule, Part 4's subject, the gradient for one "
             "weight sums, over tokens, the error at that output times the input. <bookmark mark='c'/> So the gradient is "
-            "a sum of outer products, rank one per token. <bookmark mark='d'/> Its rank is at most the number of tokens. "
+            "a sum of outer products, each of rank at most one per token. <bookmark mark='d'/> Its rank is at most the number of tokens. "
             "In practice it is often approximately low rank: errors and inputs concentrate in a few directions."
         ) as vo:
             self.play(FadeIn(tag))
@@ -271,9 +271,9 @@ class GaLore(VoiceoverScene):
         ra = g["runs"][f"adam_{g['best_lr']['adam']:g}_0"]["dW"][name]
         full = int(r8["rank"])
         lo = VGroup(MathTex(r"W + BA", font_size=40, color=C.REWARD),
-                    label(r"LoRA (2021): \ the \textit{change} has rank $r$, \ always", font_size=26, color=GREY_A))
+                    label(r"LoRA (2021): \ the \textit{change} has rank $\le r$, \ always", font_size=26, color=GREY_A))
         ga = VGroup(MathTex(r"W - \eta\,\textstyle\sum_t P_t\,\mathrm{Adam}(R_t)", font_size=36, color=C.BITS),
-                    label(r"GaLore: \ each \textit{step} has rank $r$; \ the window moves", font_size=26, color=GREY_A))
+                    label(r"GaLore: \ each \textit{step} has rank $\le r$; \ the window moves", font_size=26, color=GREY_A))
         for v in (lo, ga):
             v.arrange(DOWN, buff=0.2)
         VGroup(lo, ga).arrange(RIGHT, buff=1.2).move_to(UP * 1.3)
@@ -290,8 +290,8 @@ class GaLore(VoiceoverScene):
                 "uses LoRA where a small change is all that's wanted." if more else
                 "close to the window's own rank.")
         with self.voiceover(
-            "Compare LoRA, Part 27's tool. <bookmark mark='a'/> LoRA fixes the change to the weights at rank r for good. "
-            "<bookmark mark='b'/> GaLore makes each step low rank, but the window moves. <bookmark mark='c'/> After 600 "
+            "Compare LoRA, Part 27's tool. <bookmark mark='a'/> LoRA keeps the change to the weights at rank at most r for good. "
+            "<bookmark mark='b'/> GaLore keeps each step at rank at most r, but the window moves. <bookmark mark='c'/> After 600 "
             f"steps, the total change to one matrix has an effective rank of {r8['eff']:.0f} with the rank-8 window, "
             f"against {ra['eff']:.0f} for Adam: {tail}"
         ) as vo:

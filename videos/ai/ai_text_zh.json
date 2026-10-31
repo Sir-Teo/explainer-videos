@@ -20575,7 +20575,13 @@
     "new users: history unavailable \\\\ no finite training-history samples": "新用户：历史轨迹不可用 \\\\ 没有有限的训练历史样本",
     "colours name indices; output indices stay; input-only indices are summed": "颜色标识索引；输出中出现的索引保留；仅在输入中出现的索引求和",
     "outer product: \\ rank at most one": "外积：\\ 秩至多为1",
-    "rank $8$: \\ $\\|A-A_{8}\\|_F=7.8646$; \\ $\\sqrt{\\sum_{i>8}\\sigma_i^2}=7.8646$": "秩$8$： \\ $\\|A-A_{8}\\|_F=7.8646$； \\ $\\sqrt{\\sum_{i>8}\\sigma_i^2}=7.8646$"
+    "rank $8$: \\ $\\|A-A_{8}\\|_F=7.8646$; \\ $\\sqrt{\\sum_{i>8}\\sigma_i^2}=7.8646$": "秩$8$： \\ $\\|A-A_{8}\\|_F=7.8646$； \\ $\\sqrt{\\sum_{i>8}\\sigma_i^2}=7.8646$",
+    "macro recall at $10$ \\ (held-out films)": "宏平均召回率@$10$（留出电影）",
+    "spectra: \\ separately peak-normalized": "谱：各自按峰值归一化",
+    "SGNS: generalized shifted PMI": "SGNS：广义移位PMI",
+    "a sum of outer products: \\ rank at most one each": "外积之和：每个的秩至多为$1$",
+    "LoRA (2021): \\ the \\textit{change} has rank $\\le r$, \\ always": "LoRA（2021）：变化的秩始终$\\le r$",
+    "GaLore: \\ each \\textit{step} has rank $\\le r$; \\ the window moves": "GaLore：每一步的秩$\\le r$；窗口会移动"
   },
   "phrases": {
     "width": "宽度",

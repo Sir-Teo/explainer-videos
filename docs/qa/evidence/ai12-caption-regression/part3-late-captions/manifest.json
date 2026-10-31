@@ -1,0 +1,22 @@
+{
+  "report.json.gz": {
+    "bytes": 8320,
+    "sha256": "176e43800fca46ca76b59eb3c0bee61b8871a48b46fdc10070d5697cb73b693b",
+    "uncompressed_sha256": "8bd7d7882bb56d765d162241c24c9df6068acd597df0bf2d7d9fc4bb57f09620"
+  },
+  "used-caption-results.json.gz": {
+    "bytes": 135950,
+    "sha256": "55e9900154084f0cf083d89acf956b2ab3d0eb158717c2124379764703de2e1d",
+    "uncompressed_sha256": "aa137cbd8fe8ef78d8cadc7dfefcfbb319d416fb9a1de1cc17f8bf44620fb9d8"
+  },
+  "current-table.json.gz": {
+    "bytes": 870990,
+    "sha256": "c5a02f5509ba3b2c947d5a33297272de4156c05d62d06c9ec0baa8aa464f21cc",
+    "uncompressed_sha256": "0e1a24b26cd7c9730e9830a4dfb5f06e68638cdc70117aa28b68ce18317a6466"
+  },
+  "comparison.py.gz": {
+    "bytes": 3456,
+    "sha256": "aa1203015fced32e70af2684e059353af8f16b7bc993bfa2caf67b00b56f991f",
+    "uncompressed_sha256": "30402918eb6b8baf2551037268fcaedc72bcee27aaed78cb7fbb441aa6989413"
+  }
+}

@@ -135,7 +135,7 @@ class RetrievalSceneTests(unittest.TestCase):
         r, _ = self.run_actual_scene(result(warm=(0, 0, float('nan'), float('nan')),
                                            cold=(2, 4, .2, float('nan'))))
         self.assertEqual((len(r['curves']), len(r['baselines'])), (1, 0))
-        self.assertIn('two-tower recall is 0.20 on 2 users and 4 eligible targets', r['narration'][0])
+        self.assertIn('two-tower recall is 0.200 on 2 users and 4 eligible targets', r['narration'][0])
         self.assertIn('popularity recall is unavailable. No comparison', r['narration'][0])
         self.assertNotIn('beat popularity for this cohort', r['narration'][0])
 

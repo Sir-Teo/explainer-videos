@@ -255,7 +255,7 @@ ZH = {
     'Chapter eleven.': '第11章。梯度是低秩的。',
 
     'A gradient is a matrix too':
-        "梯度也是一个矩阵，有它自己的奇异值。<bookmark mark='a'/>一层把每个词元的向量x变成W x。<bookmark mark='b'/>根据链式法则，也就是第4部分的主题，一个权重的梯度，是对各个词元，把那个输出处的误差乘上输入，再加起来。<bookmark mark='c'/>所以梯度是一些外积之和，每个词元贡献一个秩1的块。<bookmark mark='d'/>它的秩至多是词元的个数。实际中，它往往是近似低秩的：误差和输入集中在几个共同的方向上。",
+        "梯度也是一个矩阵，有它自己的奇异值。<bookmark mark='a'/>一层把每个词元的向量x变成W x。<bookmark mark='b'/>根据链式法则，也就是第4部分的主题，一个权重的梯度，是对各个词元，把那个输出处的误差乘上输入，再加起来。<bookmark mark='c'/>所以梯度是一些外积之和，每个词元贡献一个秩至多为1的块。<bookmark mark='d'/>它的秩至多是词元的个数。实际中，它往往是近似低秩的：误差和输入集中在几个共同的方向上。",
 
     'f"Here is a real gradient, from a small transformer':
         "这是一个真实的梯度，来自一个在小说上训练的小Transformer：一个{shape[0]}乘{shape[1]}的矩阵。<bookmark mark='a'/>它的奇异值，从大到小，对数坐标。在第{tr[0]['step']}步，前八个方向承载了梯度平方能量的{100 * tr[0]['top8']:.1f}%。<bookmark mark='b'/>实测前八个方向的占比，在第{pk['step']}步达到最大，{100 * pk['top8']:.1f}%。<bookmark mark='c'/>最后第{last['step']}步，占比是{100 * last['top8']:.1f}%，而方向一共有{n}个。游标把每一张谱，和完整能量占比轨迹上的同一步对齐。",
@@ -282,7 +282,7 @@ ZH = {
         "在这里GaLore不如Adam，这是在这个规模上省内存的代价。",
 
     'f"Compare LoRA, Part 27\'s tool.':
-        "对比一下第27部分的工具LoRA。<bookmark mark='a'/>LoRA把权重的变化永远固定在秩r。<bookmark mark='b'/>GaLore让每一步是低秩的，但窗口会移动。<bookmark mark='c'/>600步之后，一个矩阵的总变化，用秩8窗口时有效秩是{r8['eff']:.0f}，Adam是{ra['eff']:.0f}：{tail}",
+        "对比一下第27部分的工具LoRA。<bookmark mark='a'/>LoRA让权重的变化始终保持在至多秩r。<bookmark mark='b'/>GaLore让每一步的秩至多为r，但窗口会移动。<bookmark mark='c'/>600步之后，一个矩阵的总变化，用秩8窗口时有效秩是{r8['eff']:.0f}，Adam是{ra['eff']:.0f}：{tail}",
 
     "so its total change is far richer than rank 8.":
         "所以它的总变化远比秩8丰富。这是GaLore对LoRA局限的回答；只需要一点小改动的时候，第27部分就用LoRA。",
@@ -326,7 +326,7 @@ ZH = {
         "2013年，谷歌的托马斯·米科洛夫和同事用一个猜谜游戏学习词向量。<bookmark mark='a'/>每个词有两个向量，一个在它作为中心词时用，一个在它作为邻居时用。<bookmark mark='b'/>训练会通过逻辑函数，提高一个词和它真实邻居的点积，并降低它和{K}个随机词的点积。<bookmark mark='c'/>这就是带负采样的跳字模型，word2vec的核心：便宜到几小时就能学完几十亿个词。",
 
     'f"We trained it on the novels':
-        "我们在小说上训练它，用和计数时相同的词表和名义窗口。对高频词做下采样，会改变实际的上下文序列。四个词和它们的最近邻，下面是损失。<bookmark mark='a'/>开始时是随机的。<bookmark mark='b'/>{steps[1]}步之后，近邻都是最常见的词：它们最先被推动。<bookmark mark='c'/>到第{steps[mid]:,}步，意义出现了：three和{', '.join(snaps[mid]['three'][:3])}在一起。<bookmark mark='d'/>到最后，monday和{proper(snaps[-1]['monday'][0])}在一起，father和{snaps[-1]['father'][0]}在一起。没有任何东西告诉它，什么是一天，什么是亲戚。",
+        "我们在小说上训练它，用和计数时相同的词表和名义窗口。对高频词做下采样，会改变实际的上下文序列。四个词和它们的最近邻，下面是损失。<bookmark mark='a'/>开始时是随机的。<bookmark mark='b'/>{steps[1]}步之后，近邻列表还很混杂，有些列表偏向常见的功能词。<bookmark mark='c'/>到第{steps[mid]:,}步，意义出现了：three和{', '.join(snaps[mid]['three'][:3])}在一起。<bookmark mark='d'/>到最后，monday和{proper(snaps[-1]['monday'][0])}在一起，father和{snaps[-1]['father'][0]}在一起。没有任何东西告诉它，什么是一天，什么是亲戚。",
 
     'Why do guessing and counting agree?':
         "为什么猜测和计数会一致？2014年，奥默·列维和约阿夫·戈德堡说明了原因。<bookmark mark='a'/>把一个词和一个上下文的对数目标收集起来：这一对作为真实邻居出现若干次，作为负样本出现的次数，大约是k乘这个词的计数，再乘这个上下文的采样概率。<bookmark mark='b'/>把它们的点积x当作自由的；令导数为0。<bookmark mark='c'/>两个逻辑函数项之比是e的x次方。<bookmark mark='d'/>取对数：这使对数目标达到最大。如果负样本服从经验上下文分布，最好的点积就是点互信息减去log k。若像我们的训练一样，用平滑后的负采样分布，就把它的采样概率代入同一个对数计数比：这是广义的平移点互信息。",
@@ -461,9 +461,9 @@ ZH = {
     'The final genre-neighbour agreement does not exceed the without-self chance baseline.': '最终，近邻同类型的比例，没有高于排除自身后的随机基线。',
     'f"For {name}, recall is unavailable:': '对{name}，召回率不可用：{users}位参与评估的用户，共有{targets}个合格的留出目标。没有目标的用户被排除，因此这里没有热门推荐对照。',
     'f"For {name}, both recall measurements are unavailable': '对{name}，虽然有{users}位参与评估的用户和{targets}个合格目标，但两项召回测量都不可用，无法进行有限数值的比较。',
-    'f"For {name}, two-tower recall is unavailable': '对{name}，{users}位用户和{targets}个合格目标上的双塔召回率不可用；热门推荐的召回率是{popularity:.2f}。无法比较。',
-    'f"For {name}, two-tower recall is {recall:.2f}': '对{name}，双塔召回率是{recall:.2f}，来自{users}位用户和{targets}个合格目标；但热门推荐的召回率不可用。无法比较。',
-    'f"For {name}, macro recall reaches': '对{name}，宏平均召回率达到{recall:.2f}，热门推荐是{popularity:.2f}，评估了{users}位用户和{targets}个合格目标。{comparison}',
+    'f"For {name}, two-tower recall is unavailable': '对{name}，{users}位用户和{targets}个合格目标上的双塔召回率不可用；热门推荐的召回率是{popularity:.3f}。无法比较。',
+    'f"For {name}, two-tower recall is {recall:.3f}': '对{name}，双塔召回率是{recall:.3f}，来自{users}位用户和{targets}个合格目标；但热门推荐的召回率不可用。无法比较。',
+    'f"For {name}, macro recall reaches': '对{name}，宏平均召回率达到{recall:.3f}，热门推荐是{popularity:.3f}，评估了{users}位用户和{targets}个合格目标。{comparison}',
     'The two towers beat popularity for this cohort.': '对这组用户，双塔胜过热门推荐。',
     'The two towers do not beat popularity for this cohort.': '对这组用户，双塔没有胜过热门推荐。',
 }

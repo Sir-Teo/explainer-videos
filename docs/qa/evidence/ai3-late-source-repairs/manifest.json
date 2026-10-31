@@ -1,0 +1,32 @@
+{
+  "norms-handoff.json.gz": {
+    "sha256": "683f90d0ed0b34eef171d015d7876d2689f9bab5e12f315dda35edd78470c30b",
+    "uncompressed_sha256": "2fc10eccd669e89f3ec1c966d34e493066c44b53f026e169ff5d0f715532896f",
+    "source": "/workspace/runtime/ai3-norms-card-emphasis-repair/handoff.json",
+    "bytes": 937
+  },
+  "galore-handoff.json.gz": {
+    "sha256": "f36dbbcb0a1e3a28d7facf62a13d91d559c17f208c18fd4e768bef57e3dd1568",
+    "uncompressed_sha256": "c67fca1fa3d22e71281a02442331ecc8e922174538a9f1d1bf21645decf682fb",
+    "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/handoff.json",
+    "bytes": 1217
+  },
+  "sgns-handoff.json.gz": {
+    "sha256": "cbe3a54c0d18e7c2da0949a2e8568f2dd8859ac07eb8c5a5e50a646815f05773",
+    "uncompressed_sha256": "68e42a9f861f8fd0e94a9d6fbe0c67397ef92d43accb5f3261170fab345e76a2",
+    "source": "/workspace/runtime/ai3-sgns-review/repair-handoff.json",
+    "bytes": 941
+  },
+  "netflix-source-freeze.json.gz": {
+    "sha256": "cf9d8d25db1567a741c4ac7719a3c6d2673976451e4d425fa7e702f34c3a9ab2",
+    "uncompressed_sha256": "ed8a7080115b9d44fe505209f33a2c664f408bb228670c0ab75b535a4ec60a8c",
+    "source": "/workspace/runtime/ai3-netflix-review/polish-source-freeze.json",
+    "bytes": 4133
+  },
+  "words-geometry-repair.json.gz": {
+    "sha256": "61debd6d0f491b1be66d15c147b860ac990e04a8a16f950457dc3735dcb75608",
+    "uncompressed_sha256": "9458dae1cd2562899a242d80628ab437b8a2de060b82d6ceec85b818f8a245a3",
+    "source": "/workspace/runtime/ai3-words-geometry-motion-repair/repair.json",
+    "bytes": 1025
+  }
+}

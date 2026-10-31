@@ -1,0 +1,444 @@
+{
+  "created_utc": "2026-10-31T21:04:53.091557+00:00",
+  "payloads": [
+    {
+      "file": "ai3-norms-galore-before-repairs-completed.json.gz",
+      "sha256": "8720f4091745ba6664c7477387ad3ea6c772d6217f659193d6810270cca4afd5",
+      "size": 215010,
+      "uncompressed_sha256": "620c22200b497d2553b5ce5f9dbe16aae5775ea07dd8bc0f2ab6df4b120e32d0",
+      "source": "/workspace/runtime/ai3-norms-galore-before-repairs-completed.json"
+    },
+    {
+      "file": "ai3-norms-galore-motion-review.md.gz",
+      "sha256": "9ca745369ddf05e24d045a665242d36a57c358173ba58daed6199bfcee6dc2ae",
+      "size": 784,
+      "uncompressed_sha256": "7f03b1d1b69d7f204e8a0440d414bc70066dde32fb57c1734ea43730bd40f90a",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-review.md"
+    },
+    {
+      "file": "ai3-norms-galore-cached-consistency.json.gz",
+      "sha256": "1c98df545d76ed74756679e7ed9683f11c02ac0235d1912a855efc3763638f06",
+      "size": 667,
+      "uncompressed_sha256": "3bc47fccbcd03bbdcbbadc0ca9c8ff45c07606999e0d088e00e7c22121a0ac8a",
+      "source": "/workspace/runtime/ai3-norms-galore-cached-consistency.json"
+    },
+    {
+      "file": "ai3_norms_galore_prepare.py.gz",
+      "sha256": "69868912db33df2959d30f2e27f11c188597134eb449e38bf87d7c9c8f6efe9e",
+      "size": 1998,
+      "uncompressed_sha256": "81ce8a4ad5114b7dbaa99860745c3a4bccfe4f54e172a42b102b15450b24a6ec",
+      "source": "/workspace/runtime/ai3_norms_galore_prepare.py"
+    },
+    {
+      "file": "ai3_norms_galore_record.py.gz",
+      "sha256": "e71970f5b648c79cb5a048052a5a15b44143bdbedcd87de8ced4395e6725c1c4",
+      "size": 1182,
+      "uncompressed_sha256": "fe440ca4b40683bacb5daea222be3814a5763cb1aa987382908443ea9259f978",
+      "source": "/workspace/runtime/ai3_norms_galore_record.py"
+    },
+    {
+      "file": "en-Norms-capture.json.gz",
+      "sha256": "1e2601893c95abdeee2e42994c22b0dd98b6d39de6be477952d37bd6a9e6daa0",
+      "size": 14624,
+      "uncompressed_sha256": "83d849338212e4be1bf221c967a2ef48af91d64993f1e5bac189b4282208a78b",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/Norms/capture-result.json"
+    },
+    {
+      "file": "en-Norms-audit.json.gz",
+      "sha256": "dfbd347ec2db5465549b8c0d3f05f08d54c9dedb2c2a4e31a33665a9283f94a5",
+      "size": 31903,
+      "uncompressed_sha256": "4717a0f965bac5514ad0d0f018596225113b9f470cba472545acd1bfeb66cd37",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/Norms/temporal-audit-result.json"
+    },
+    {
+      "file": "en-Norms-source.py.gz",
+      "sha256": "b21af3135e7d6c6561049ac71e88afc46605fcaad6f5e77bbea32f7126b82089",
+      "size": 5557,
+      "uncompressed_sha256": "03b33a3f314f27e58e5e95e9c91e8d6ad665e7ca21bf38c44d03f23bb00488f1",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/Norms/s10_norms.py"
+    },
+    {
+      "file": "en-Norms-native-01.png",
+      "sha256": "9d746c415428c509933e0bdbdbfb6e26ceaa1d88c3e97e8b7985cbe99e15c336",
+      "size": 25136,
+      "uncompressed_sha256": "9d746c415428c509933e0bdbdbfb6e26ceaa1d88c3e97e8b7985cbe99e15c336",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Norms-dense-final/frames/0000124_000008.267s.png"
+    },
+    {
+      "file": "en-Norms-native-02.png",
+      "sha256": "366347bcd32295b0afb272bc80ba8fdf54854aff51b1a950ad5839b855714bc6",
+      "size": 72161,
+      "uncompressed_sha256": "366347bcd32295b0afb272bc80ba8fdf54854aff51b1a950ad5839b855714bc6",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Norms-dense-final/frames/0001331_000088.733s.png"
+    },
+    {
+      "file": "en-Norms-native-03.png",
+      "sha256": "1bb241df706f19f3089136a089c100eac40bc922724546490d4c179012dcf4b3",
+      "size": 68686,
+      "uncompressed_sha256": "1bb241df706f19f3089136a089c100eac40bc922724546490d4c179012dcf4b3",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Norms-dense-final/frames/0002488_000165.865s.png"
+    },
+    {
+      "file": "en-Norms-native-04.png",
+      "sha256": "b98df7cdfd9c30be5af040f1eb38d1f80f567faf021fc079bca1a27beea6c610",
+      "size": 69478,
+      "uncompressed_sha256": "b98df7cdfd9c30be5af040f1eb38d1f80f567faf021fc079bca1a27beea6c610",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Norms-dense-final/frames/0002847_000189.799s.png"
+    },
+    {
+      "file": "en-Norms-input-depth.npz.gz",
+      "sha256": "3f8674f8f9af068081bd4e5b153045d716d10348a5396a3d92c708bb2a57ad04",
+      "size": 1314,
+      "uncompressed_sha256": "ffb353954883c5cf44327fbe7ffa03712eda5cef4e72a2607756e9549e7b6ea9",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/Norms/inputs/.cache/ai3/depth.npz"
+    },
+    {
+      "file": "en-Norms-input-norms.json.gz",
+      "sha256": "94b87d3a4a5402a6044018814d85b1792dda361d1db188a7b00d91d9a69c9083",
+      "size": 3204,
+      "uncompressed_sha256": "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/Norms/inputs/.cache/ai3/norms.json"
+    },
+    {
+      "file": "en-Norms-input-depth.json.gz",
+      "sha256": "324f2ad07c5a6b4ead71b272c94d63f6a9b9a69da0e1244740b03b8fc3e1415b",
+      "size": 178,
+      "uncompressed_sha256": "723d6fa3c6d32075436707a64bf739872ce008bfc97a477ea73a87ef3efb6cc2",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/Norms/inputs/.cache/ai3/depth.json"
+    },
+    {
+      "file": "en-Norms-input-galore.json.gz",
+      "sha256": "2aac5ab59200a8438d4885725b32698476ee410e8f2222cc1b6874f8c67c07d7",
+      "size": 45382,
+      "uncompressed_sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/Norms/inputs/.cache/ai3/galore.json"
+    },
+    {
+      "file": "zh-Norms-capture.json.gz",
+      "sha256": "dc5a0a18c95cffcf92de234c0706993186255e94438c89935d0c8c149bb1ac59",
+      "size": 20205,
+      "uncompressed_sha256": "1b339b4a9c50a51bd31f90fe865d9f31e4fbacd195eaf0d8a446f79f35fe20d6",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/Norms/capture-result.json"
+    },
+    {
+      "file": "zh-Norms-audit.json.gz",
+      "sha256": "34cb2e6a4e6e74b22fc333f41cc9f0e1960f3644e0e97e71703a129af0484192",
+      "size": 32274,
+      "uncompressed_sha256": "d5c6e92ec20925f70baeb34153a614af294715fb2c79ef60eaebd45377d06407",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/Norms/temporal-audit-result.json"
+    },
+    {
+      "file": "zh-Norms-source.py.gz",
+      "sha256": "b21af3135e7d6c6561049ac71e88afc46605fcaad6f5e77bbea32f7126b82089",
+      "size": 5557,
+      "uncompressed_sha256": "03b33a3f314f27e58e5e95e9c91e8d6ad665e7ca21bf38c44d03f23bb00488f1",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/Norms/s10_norms.py"
+    },
+    {
+      "file": "zh-Norms-native-01.png",
+      "sha256": "c363110a330731796e79bddca585b37895679c9059075285d1158d5bb00c06b0",
+      "size": 25898,
+      "uncompressed_sha256": "c363110a330731796e79bddca585b37895679c9059075285d1158d5bb00c06b0",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Norms-dense-final/frames/0000129_000008.600s.png"
+    },
+    {
+      "file": "zh-Norms-native-02.png",
+      "sha256": "dcba51c4e89f645706253728230595713a27073d4a0de9eb44e70162a317b80f",
+      "size": 73713,
+      "uncompressed_sha256": "dcba51c4e89f645706253728230595713a27073d4a0de9eb44e70162a317b80f",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Norms-dense-final/frames/0002535_000168.998s.png"
+    },
+    {
+      "file": "zh-Norms-native-03.png",
+      "sha256": "263478f37575b6a98938839ca1e0c27e82449dec3c33eff51c34fe10165de2ba",
+      "size": 74067,
+      "uncompressed_sha256": "263478f37575b6a98938839ca1e0c27e82449dec3c33eff51c34fe10165de2ba",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Norms-dense-final/frames/0002913_000194.198s.png"
+    },
+    {
+      "file": "zh-Norms-input-depth.npz.gz",
+      "sha256": "3f8674f8f9af068081bd4e5b153045d716d10348a5396a3d92c708bb2a57ad04",
+      "size": 1314,
+      "uncompressed_sha256": "ffb353954883c5cf44327fbe7ffa03712eda5cef4e72a2607756e9549e7b6ea9",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/Norms/inputs/.cache/ai3/depth.npz"
+    },
+    {
+      "file": "zh-Norms-input-norms.json.gz",
+      "sha256": "94b87d3a4a5402a6044018814d85b1792dda361d1db188a7b00d91d9a69c9083",
+      "size": 3204,
+      "uncompressed_sha256": "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/Norms/inputs/.cache/ai3/norms.json"
+    },
+    {
+      "file": "zh-Norms-input-depth.json.gz",
+      "sha256": "324f2ad07c5a6b4ead71b272c94d63f6a9b9a69da0e1244740b03b8fc3e1415b",
+      "size": 178,
+      "uncompressed_sha256": "723d6fa3c6d32075436707a64bf739872ce008bfc97a477ea73a87ef3efb6cc2",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/Norms/inputs/.cache/ai3/depth.json"
+    },
+    {
+      "file": "zh-Norms-input-galore.json.gz",
+      "sha256": "2aac5ab59200a8438d4885725b32698476ee410e8f2222cc1b6874f8c67c07d7",
+      "size": 45382,
+      "uncompressed_sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/Norms/inputs/.cache/ai3/galore.json"
+    },
+    {
+      "file": "en-GaLore-capture.json.gz",
+      "sha256": "cc9ec29ba866cbc7b4313f913f90ba880cb92bea08178f198abb7c5a25521384",
+      "size": 15291,
+      "uncompressed_sha256": "3d5b8a357f27bc77f1eb49cbddf17f980f9bb19fe2dab04b930970c3d49ec271",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/GaLore/capture-result.json"
+    },
+    {
+      "file": "en-GaLore-audit.json.gz",
+      "sha256": "35afd9414ce722131bc3257cd01a3fa9e9971f0747436eab5924c443e6e07b1e",
+      "size": 28846,
+      "uncompressed_sha256": "ca4943d0e378a385e92a5fde5d7d5ba03c3e0e3fdfba71a1ad9e564a62ddecae",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/GaLore/temporal-audit-result.json"
+    },
+    {
+      "file": "en-GaLore-source.py.gz",
+      "sha256": "5880bfe888ff2987977ca81a1d8ff64ad6099f88612577e15577f58ff063d2ed",
+      "size": 6115,
+      "uncompressed_sha256": "67da4d46d62ce49289da18828ac294a08e42eb4a1c88ca4fe9f2b99849b96d1d",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/GaLore/s12_galore.py"
+    },
+    {
+      "file": "en-GaLore-native-01.png",
+      "sha256": "cebabb2b3a7d6dc2f8482962b5a23ce30b9996477e6cd46bd4ac88c242f7005b",
+      "size": 76026,
+      "uncompressed_sha256": "cebabb2b3a7d6dc2f8482962b5a23ce30b9996477e6cd46bd4ac88c242f7005b",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-GaLore-dense-final/frames/0002241_000149.399s.png"
+    },
+    {
+      "file": "en-GaLore-native-02.png",
+      "sha256": "d359f4d9653885178fa578c367b82c948876927ca74f5826a6e82c2812d738e2",
+      "size": 59478,
+      "uncompressed_sha256": "d359f4d9653885178fa578c367b82c948876927ca74f5826a6e82c2812d738e2",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-GaLore-dense-final/frames/0002697_000179.799s.png"
+    },
+    {
+      "file": "en-GaLore-native-03.png",
+      "sha256": "c3d4f4b5f4beda3edfb91d6cdfc07add1cda70ef2287c2b45cf10e8993ccaea6",
+      "size": 64356,
+      "uncompressed_sha256": "c3d4f4b5f4beda3edfb91d6cdfc07add1cda70ef2287c2b45cf10e8993ccaea6",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-GaLore-dense-final/frames/0000881_000058.733s.png"
+    },
+    {
+      "file": "en-GaLore-native-04.png",
+      "sha256": "efdb21aea32b178a5dfe9c489e5361d2da284d2595b928f0c94b08d7c2fb5714",
+      "size": 63221,
+      "uncompressed_sha256": "efdb21aea32b178a5dfe9c489e5361d2da284d2595b928f0c94b08d7c2fb5714",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-GaLore-dense-final/frames/0000929_000061.933s.png"
+    },
+    {
+      "file": "en-GaLore-input-galorectl.json.gz",
+      "sha256": "8fe93dc4cd65111fd7c4c40730b4ca62c76d9cc0cd3e427adb7136b3d74285cc",
+      "size": 7118,
+      "uncompressed_sha256": "79b65de05a229645bbac8497d8bf633aa02399a87a2d094497b4a984ed5af274",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/GaLore/inputs/.cache/ai3/galorectl.json"
+    },
+    {
+      "file": "en-GaLore-input-galore.json.gz",
+      "sha256": "2aac5ab59200a8438d4885725b32698476ee410e8f2222cc1b6874f8c67c07d7",
+      "size": 45382,
+      "uncompressed_sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/GaLore/inputs/.cache/ai3/galore.json"
+    },
+    {
+      "file": "zh-GaLore-capture.json.gz",
+      "sha256": "a03ce14fde5dd52ca1d975fd8fc350048e2ccad15c082173574da367f54d00db",
+      "size": 22525,
+      "uncompressed_sha256": "d8f676a6721096f00e936303541536f629b08bf16165904b4e16229a6429a5e2",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/GaLore/capture-result.json"
+    },
+    {
+      "file": "zh-GaLore-audit.json.gz",
+      "sha256": "6129d91f40620408a2c04b32729d60c8fd50f6303171136b125a28a96881f1a7",
+      "size": 29855,
+      "uncompressed_sha256": "26ecde67837eb45b3febcf12bb93c43efbbb42de8ec638619906430aef0714f5",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/GaLore/temporal-audit-result.json"
+    },
+    {
+      "file": "zh-GaLore-source.py.gz",
+      "sha256": "5880bfe888ff2987977ca81a1d8ff64ad6099f88612577e15577f58ff063d2ed",
+      "size": 6115,
+      "uncompressed_sha256": "67da4d46d62ce49289da18828ac294a08e42eb4a1c88ca4fe9f2b99849b96d1d",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/GaLore/s12_galore.py"
+    },
+    {
+      "file": "zh-GaLore-native-01.png",
+      "sha256": "f272607df099287e610183634cdf85f4124e2a9000f918cf87eba08f6a463b2f",
+      "size": 75508,
+      "uncompressed_sha256": "f272607df099287e610183634cdf85f4124e2a9000f918cf87eba08f6a463b2f",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-GaLore-dense-final/frames/0000986_000065.733s.png"
+    },
+    {
+      "file": "zh-GaLore-native-02.png",
+      "sha256": "6388ae37615d9b1febc495949611c05d2883213b7faa190232b22328ab25f2bd",
+      "size": 83005,
+      "uncompressed_sha256": "6388ae37615d9b1febc495949611c05d2883213b7faa190232b22328ab25f2bd",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-GaLore-dense-final/frames/0002391_000159.399s.png"
+    },
+    {
+      "file": "zh-GaLore-native-03.png",
+      "sha256": "e5066de3c5767551d4bfa9259af2a0570ed7bf35a85f06af974ddbb5fd62b124",
+      "size": 51222,
+      "uncompressed_sha256": "e5066de3c5767551d4bfa9259af2a0570ed7bf35a85f06af974ddbb5fd62b124",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-GaLore-dense-final/frames/0002862_000190.799s.png"
+    },
+    {
+      "file": "zh-GaLore-input-galorectl.json.gz",
+      "sha256": "8fe93dc4cd65111fd7c4c40730b4ca62c76d9cc0cd3e427adb7136b3d74285cc",
+      "size": 7118,
+      "uncompressed_sha256": "79b65de05a229645bbac8497d8bf633aa02399a87a2d094497b4a984ed5af274",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/GaLore/inputs/.cache/ai3/galorectl.json"
+    },
+    {
+      "file": "zh-GaLore-input-galore.json.gz",
+      "sha256": "2aac5ab59200a8438d4885725b32698476ee410e8f2222cc1b6874f8c67c07d7",
+      "size": 45382,
+      "uncompressed_sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/zh/GaLore/inputs/.cache/ai3/galore.json"
+    },
+    {
+      "file": "frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "size": 6507,
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "source": "/workspace/runtime/ai3-norms-galore-motion-evidence/en/Norms/qa_motion.snapshot.py"
+    },
+    {
+      "file": "norms-card-emphasis-repair-s10_norms.before.py.gz",
+      "sha256": "b21af3135e7d6c6561049ac71e88afc46605fcaad6f5e77bbea32f7126b82089",
+      "size": 5557,
+      "uncompressed_sha256": "03b33a3f314f27e58e5e95e9c91e8d6ad665e7ca21bf38c44d03f23bb00488f1",
+      "source": "/workspace/runtime/ai3-norms-card-emphasis-repair/s10_norms.before.py"
+    },
+    {
+      "file": "norms-card-emphasis-repair-s10_norms.after.py.gz",
+      "sha256": "c12eb19de4cb0d5b5aa780c964a268f56b7e7d32d47cb8c6331a2b6eb0266d30",
+      "size": 5583,
+      "uncompressed_sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "source": "/workspace/runtime/ai3-norms-card-emphasis-repair/s10_norms.after.py"
+    },
+    {
+      "file": "norms-card-emphasis-repair-fixture.py.gz",
+      "sha256": "b986595dea507f5ac174592df478a75f744a8dd95630d138fdf23034bb914fb1",
+      "size": 1165,
+      "uncompressed_sha256": "cbfa244d672d54f3a860928faa166d4f80d9df2929f6264f8a36ca08a8cc40e0",
+      "source": "/workspace/runtime/ai3-norms-card-emphasis-repair/fixture.py"
+    },
+    {
+      "file": "norms-card-emphasis-repair-fixture-en.json.gz",
+      "sha256": "80de571487f89c11c452c7f3c1765f9c7eae5195c5399a9f2262c9b6e65230f7",
+      "size": 440,
+      "uncompressed_sha256": "5a498763186cb7f8466d5f29ddabffef2612e7789c2437a6cc708fdda9b8ac0d",
+      "source": "/workspace/runtime/ai3-norms-card-emphasis-repair/fixture-en.json"
+    },
+    {
+      "file": "norms-card-emphasis-repair-fixture-zh.json.gz",
+      "sha256": "40b2745ba80cb5005127187b6aaacbe7444710fb25e196e6c8218cda02060b97",
+      "size": 440,
+      "uncompressed_sha256": "c14b4bffe948c1ae4cd747d4a0b4ebdbc184cd7729c5b69a02a8a5cf1f829657",
+      "source": "/workspace/runtime/ai3-norms-card-emphasis-repair/fixture-zh.json"
+    },
+    {
+      "file": "norms-card-emphasis-repair-fixture-en.log.gz",
+      "sha256": "da869971df25bb1123468441d53d547fa19a88ee6045bc48a93e263de558a13c",
+      "size": 742,
+      "uncompressed_sha256": "8ec4ff2647cc79b4eb063bc58dc17fbb603bca72ebafdd1ec8b18fbed2d1dd32",
+      "source": "/workspace/runtime/ai3-norms-card-emphasis-repair/fixture-en.log"
+    },
+    {
+      "file": "norms-card-emphasis-repair-fixture-zh.log.gz",
+      "sha256": "140c6eefafa499db0f79b1743fce608e85b6e52910bdc8944173993db32777fb",
+      "size": 997,
+      "uncompressed_sha256": "db44bc89e45e05e0d29ed54cee580406a47834e3b3c8e31359c4f688f37823c9",
+      "source": "/workspace/runtime/ai3-norms-card-emphasis-repair/fixture-zh.log"
+    },
+    {
+      "file": "norms-card-emphasis-repair-handoff.json.gz",
+      "sha256": "683f90d0ed0b34eef171d015d7876d2689f9bab5e12f315dda35edd78470c30b",
+      "size": 937,
+      "uncompressed_sha256": "2fc10eccd669e89f3ec1c966d34e493066c44b53f026e169ff5d0f715532896f",
+      "source": "/workspace/runtime/ai3-norms-card-emphasis-repair/handoff.json"
+    },
+    {
+      "file": "galore-rank-qualification-repair-s12_galore.py.before.gz",
+      "sha256": "5880bfe888ff2987977ca81a1d8ff64ad6099f88612577e15577f58ff063d2ed",
+      "size": 6115,
+      "uncompressed_sha256": "67da4d46d62ce49289da18828ac294a08e42eb4a1c88ca4fe9f2b99849b96d1d",
+      "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/s12_galore.py.before"
+    },
+    {
+      "file": "galore-rank-qualification-repair-s12_galore.py.after.gz",
+      "sha256": "6e3b747941a7f56a6a34ff3f2b3596213ad880e37072ec13d7c15cf6f2d3872f",
+      "size": 6117,
+      "uncompressed_sha256": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
+      "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/s12_galore.py.after"
+    },
+    {
+      "file": "galore-rank-qualification-repair-zh_lines.py.before.gz",
+      "sha256": "a02fbe7197f181c677e22b791c172ccceddc4150adf09557882ecbe539ce743b",
+      "size": 25574,
+      "uncompressed_sha256": "5dc5ce49bbac4393b6e809e0d639d5c543114ab48e3cd2983f2fdedbae697671",
+      "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/zh_lines.py.before"
+    },
+    {
+      "file": "galore-rank-qualification-repair-zh_lines.py.after.gz",
+      "sha256": "8fd99d5978b76022a9f15a07dff5b019db2b1fd6cf0d7277d0599d99253770f6",
+      "size": 25580,
+      "uncompressed_sha256": "5305426a579e3d0d3863b92917baeb18b3402b12d93fd8389c9161101f7c82fc",
+      "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/zh_lines.py.after"
+    },
+    {
+      "file": "galore-rank-qualification-repair-check.py.gz",
+      "sha256": "f29520ac72da40ec5240163188e1a08823d405f423ae00d0078e93c533621e33",
+      "size": 1738,
+      "uncompressed_sha256": "cf78ce2087a770ef0ad738ebf27d61d1f3f06017579c3b0004b73129c86b440c",
+      "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/check.py"
+    },
+    {
+      "file": "galore-rank-qualification-repair-checks.json.gz",
+      "sha256": "2b52a79efe708f740c70c168455dc15be60c48c0871ef3c332d2ace43f35c6ab",
+      "size": 1117,
+      "uncompressed_sha256": "5da7cc1d009c54b1c6ec78c3b1ba3174dab82cbb09b60fb5d0afdd2990fc9c3e",
+      "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/checks.json"
+    },
+    {
+      "file": "galore-rank-qualification-repair-check.log.gz",
+      "sha256": "74a7e0e8786eb36595fa93fef731272be7efacbfca880dc441ae2350724ad813",
+      "size": 1723,
+      "uncompressed_sha256": "f77ab28acb035109adf6fbfac4232d09b46a72e673682e4c33ae31bd0d572497",
+      "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/check.log"
+    },
+    {
+      "file": "galore-rank-qualification-repair-narration-tests.log.gz",
+      "sha256": "f648314ea2f21435e43706e545a8ca2cae9f800120a46423a0d5639e4128dab9",
+      "size": 460,
+      "uncompressed_sha256": "aedb4ae6cd093e6d23e7fb699768477d543989a72b9771c263167ed357b8cb3c",
+      "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/narration-tests.log"
+    },
+    {
+      "file": "galore-rank-qualification-repair-captions-handoff.json.gz",
+      "sha256": "8cddd113a203f195bb205063d19da4b982fda56a3023a1fc446a6941cc6f0638",
+      "size": 296,
+      "uncompressed_sha256": "abbb42362c922d1c0a22e7abe41a414c97678cd2f23c078922377c52535d9e31",
+      "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/captions-handoff.json"
+    },
+    {
+      "file": "galore-rank-qualification-repair-handoff.json.gz",
+      "sha256": "f36dbbcb0a1e3a28d7facf62a13d91d559c17f208c18fd4e768bef57e3dd1568",
+      "size": 1217,
+      "uncompressed_sha256": "c67fca1fa3d22e71281a02442331ecc8e922174538a9f1d1bf21645decf682fb",
+      "source": "/workspace/runtime/ai3-galore-rank-qualification-repair/handoff.json"
+    },
+    {
+      "file": "README.md",
+      "sha256": "98c3fc91fe7708e833933cc712ccf0eaef2b6e20aa304197e23ea166651ce02a",
+      "size": 2816
+    }
+  ]
+}

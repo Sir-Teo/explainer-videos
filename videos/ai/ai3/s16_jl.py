@@ -277,6 +277,7 @@ class JL(VoiceoverScene):
         hist = history_card(2017, r"K.~Larsen \& J.~Nelson",
                             r"worst-case point sets require \ $k$ to grow like "
                             r"$\log n / \varepsilon^2$", color=HIST, width=5.0).to_corner(DR, buff=0.25)
+        hist.shift(UP * 0.4)  # leave the two-line confidence disclosure unobstructed
         with self.voiceover(
             "The lemma promises every pair at once. <bookmark mark='a'/> The worst pair of all, five random matrices "
             f"per k. Bars show the minimum to maximum, with a mean dot. <bookmark mark='b'/> {bound_verdict} "
