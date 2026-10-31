@@ -422,15 +422,11 @@ ZH = {
 
 
     'f"Factorization has a weakness':
-        "矩阵分解有个弱点：新用户没有向量。今天的推荐系统用的是双塔。<bookmark mark='a'/>一个网络把用户的历史变成向量，另一个把电影的信息变成向量；分数就是它们的点积。<bookmark mark='b'/>训练让每位用户真正看过的电影，在一批里得分最高，同时按负采样分布校正。在理想的候选分类推导中，校正后的logit表达密度比，而原始分数表示条件对数概率，差一个只和用户有关的常数。我们按原始分数排序；再加热门先验，是单独的消融实验，并不是恢复概率的步骤。有限步训练未必达到这个理想。<bookmark mark='c'/>宏平均召回率，先计算每位用户所有合格的留出心头好里，有多少比例进入前十，再对用户取平均：已知用户{rw:.2f}，新用户{rc:.2f}，新用户各只给了五部电影；只按热门推荐，分别是{t['pop_warm']:.2f}和{t['pop_cold']:.2f}。{verdict}",
+        "矩阵分解有个弱点：新用户没有向量。今天的推荐系统用的是双塔。<bookmark mark='a'/>一个网络把用户的历史变成向量，另一个把电影的信息变成向量；分数就是它们的点积。<bookmark mark='b'/>训练让每位用户真正看过的电影，在一批里得分最高，同时按负采样分布校正。在理想的候选分类推导中，校正后的logit表达密度比，而原始分数表示条件对数概率，差一个只和用户有关的常数。我们按原始分数排序；再加热门先验，是单独的消融实验，并不是恢复概率的步骤。有限步训练未必达到这个理想。<bookmark mark='c'/>宏平均召回率，先计算每位用户所有合格的留出心头好里，有多少比例进入前十，再对用户取平均。新用户各从五部电影开始。{warm_summary}另外，{cold_summary}",
 
-    'Both beat recommending the most popular films.': '两者都胜过只推荐最热门的电影。',
 
-    'For users it trained on it beats popularity': '对训练过的用户，它胜过热门推荐；对全新的用户，暂时还没有。',
 
-    'It beats popularity for new users': '对新用户它胜过热门推荐，对训练过的用户却没有。',
 
-    'Neither beats simply recommending the most popular films': '两者都没胜过只推荐最热门的电影：在这个世界里，热门程度是很强的信号。',
 
     'Retrieval is, at heart, one matrix product':
         "检索说到底是一次矩阵乘法，而技巧在于大部分都不用算。<bookmark mark='a'/>2016年，YouTube把推荐描述成在视频向量之间找最近邻。<bookmark mark='b'/>2017年，Facebook的FAISS在GPU上搜索十亿个向量。<bookmark mark='c'/>2020年，稠密段落检索把问题和段落放进同一个空间，现在的助手回答之前，就是这样找到要读的东西。第29部分会用上它。",
@@ -463,9 +459,18 @@ ZH = {
     'Our displayed layer has no available power-law tail fit under this selection rule.': '按这个选择规则，图上这一层没有可用的幂律尾部拟合。',
     'The final genre-neighbour agreement exceeds the without-self chance baseline.': '最终，近邻同类型的比例，高于排除自身后的随机基线。',
     'The final genre-neighbour agreement does not exceed the without-self chance baseline.': '最终，近邻同类型的比例，没有高于排除自身后的随机基线。',
+    'f"For {name}, recall is unavailable:': '对{name}，召回率不可用：{users}位参与评估的用户，共有{targets}个合格的留出目标。没有目标的用户被排除，因此这里没有热门推荐对照。',
+    'f"For {name}, both recall measurements are unavailable': '对{name}，虽然有{users}位参与评估的用户和{targets}个合格目标，但两项召回测量都不可用，无法进行有限数值的比较。',
+    'f"For {name}, two-tower recall is unavailable': '对{name}，{users}位用户和{targets}个合格目标上的双塔召回率不可用；热门推荐的召回率是{popularity:.2f}。无法比较。',
+    'f"For {name}, two-tower recall is {recall:.2f}': '对{name}，双塔召回率是{recall:.2f}，来自{users}位用户和{targets}个合格目标；但热门推荐的召回率不可用。无法比较。',
+    'f"For {name}, macro recall reaches': '对{name}，宏平均召回率达到{recall:.2f}，热门推荐是{popularity:.2f}，评估了{users}位用户和{targets}个合格目标。{comparison}',
+    'The two towers beat popularity for this cohort.': '对这组用户，双塔胜过热门推荐。',
+    'The two towers do not beat popularity for this cohort.': '对这组用户，双塔没有胜过热门推荐。',
 }
 
 PHRASES = {
+    'known users': '已知用户',
+    'new users': '新用户',
     'higher than': '更高',
     'lower than': '更低',
     'within 0.01 stars of': '相差不超过0.01星',

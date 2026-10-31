@@ -20562,7 +20562,17 @@
     "popular films: \\ known users, dashed": "热门电影： \\ 已知用户，虚线",
     "popular films: \\ new users, short dashes": "热门电影： \\ 新用户，短虚线",
     "recall: hits / all eligible targets, averaged over users \\\\ known: $501$ users, $12{,}345$ targets; \\ new: $67$ users, $8{,}901$ targets \\\\ empty-target users excluded; \\ watched films filtered": "召回率：命中数／全部合格目标，再对用户取平均 \\\\ 已知用户：$501$人，$12{,}345$个目标； \\ 新用户：$67$人，$8{,}901$个目标 \\\\ 排除没有目标的用户； \\ 过滤看过的电影",
-    "For $A$ with full column rank, show that $P = A(A^{\\top}A)^{-1}A^{\\top}$ satisfies $P^2 = P = P^{\\top}$, \\ and that $I - P$ projects onto the vectors perpendicular to every column of $A$.": "对满列秩的$A$，证明$P = A(A^{\\top}A)^{-1}A^{\\top}$满足$P^2 = P = P^{\\top}$， \\ 且$I - P$投影到与$A$每一列都垂直的向量上。"
+    "For $A$ with full column rank, show that $P = A(A^{\\top}A)^{-1}A^{\\top}$ satisfies $P^2 = P = P^{\\top}$, \\ and that $I - P$ projects onto the vectors perpendicular to every column of $A$.": "对满列秩的$A$，证明$P = A(A^{\\top}A)^{-1}A^{\\top}$满足$P^2 = P = P^{\\top}$， \\ 且$I - P$投影到与$A$每一列都垂直的向量上。",
+    "bar baseline:": "柱形基线：",
+    "labels show raw logits": "标签显示原始分数",
+    "bar baseline: $q=0$; \\ labels show probabilities": "柱形基线：$q=0$；\\ 标签显示概率",
+    "round-off plateau": "舍入误差平台",
+    "known users: recall unavailable \\\\ no eligible held-out targets": "已知用户：召回率不可用 \\\\ 没有合格的留出目标",
+    "known users: comparison unavailable \\\\ a recall measurement is non-finite": "已知用户：无法比较 \\\\ 一项召回测量不是有限数值",
+    "known users: history unavailable \\\\ no finite training-history samples": "已知用户：历史轨迹不可用 \\\\ 没有有限的训练历史样本",
+    "new users: recall unavailable \\\\ no eligible held-out targets": "新用户：召回率不可用 \\\\ 没有合格的留出目标",
+    "new users: comparison unavailable \\\\ a recall measurement is non-finite": "新用户：无法比较 \\\\ 一项召回测量不是有限数值",
+    "new users: history unavailable \\\\ no finite training-history samples": "新用户：历史轨迹不可用 \\\\ 没有有限的训练历史样本"
   },
   "phrases": {
     "width": "宽度",

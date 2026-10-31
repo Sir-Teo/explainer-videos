@@ -1,0 +1,17 @@
+{
+  "targeted_tests": {
+    "actual_retrieval_scene": 6,
+    "narration": 10,
+    "caption_helper_cli": 7
+  },
+  "logs": {
+    "ai3-retrieval-scene-final.log": "a40c0ae1b8182ad382a3a458214b2402776e1ab5e4e2f3b7957f5b8b65c65526",
+    "ai3-narration-residual-final.log": "4b1dbb4c19d4e2f3b362246ce77c41a5f4c391b81acd9cb2bb497a727c390ecf",
+    "caption-helper-validation-final.log": "6158348159bd86943b48c714037833ea80c0ba39ad38ca772bbbfeb84d3efb24"
+  },
+  "source": {
+    "videos/ai/ai3/s18_netflix.py": "f252152488e2b58e0e256315b2c5bd11db85370d9d529411ff1f6e26313b16e4",
+    "videos/ai/ai3/zh_lines.py": "c17f1716562f3bc61e868d4e8a5845dcc941d99db1e5063430a7ec70861ef732",
+    "tools/text_zh_add.py": "99d96d58dfb51d6e5772eb21d3c0f9661f9629689dd3628f1503af7067383b40"
+  }
+}
