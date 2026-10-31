@@ -111,20 +111,20 @@ class Frontier(VoiceoverScene):
         steady = err < 0.03 and abs(bias) < 0.6 * err
         if steady:
             said1 = (
-                ", and it does not drift as the compute grows: the law extrapolates. <bookmark mark='b'/> That is the "
-                "sense in which pretraining has not stalled: the loss keeps falling along its curve. "
+                ", with a small mean residual on these held-out runs. <bookmark mark='b'/> This supports "
+                "extrapolation over our measured range; it does not guarantee the trend beyond it. "
             )
         elif bias > 0:
             said1 = (
-                ", and almost always on the high side: the costlier runs come out better than the cheap ones "
-                "predicted. <bookmark mark='b'/> That is the sense in which pretraining has not stalled: at every scale "
-                "we tried, the loss fell at least as fast as the law promised. "
+                ", with predictions high on average: the costlier runs are better on average than the cheap-run "
+                "fit predicted. <bookmark mark='b'/> On these held-out experiments, the larger runs show no average "
+                "slowdown relative to that forecast. "
             )
         else:
             said1 = (
-                ", and almost always on the low side: the costlier runs fall short of the forecast. "
-                "<bookmark mark='b'/> On our small scale, that is the stalling argument in miniature: a law fitted on "
-                "small runs can promise more than larger ones deliver. "
+                ", with predictions low on average: the costlier runs fall short of the forecast on average. "
+                "<bookmark mark='b'/> On our small scale, this illustrates an extrapolation risk: a fit to small "
+                "runs can promise more than larger ones deliver. "
             )
         with self.voiceover(
             "What can a scaling law actually tell us? Test ours the way laboratories use theirs. Fit Chinchilla's "

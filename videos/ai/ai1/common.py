@@ -113,7 +113,9 @@ def letter_bars(p, order=None, width=12.0, height=3.2, pmax=None, color=C.TRUE_P
         if labels:
             labs.add(letter(ALPHA27[i], font_size=font_size, color=GREY_A).move_to([x0 + (k + 0.5) * slot, y0 - 0.25, 0]))
     g = VGroup(bars, labs)
-    g.bars, g.labels, g.idx, g.slot, g.x0, g.y0, g.height, g.pmax = bars, labs, order, slot, x0, y0, height, pmax
+    # Mobject.height is a scaling property, not a free metadata slot. Assigning
+    # it here shrinks the bars and shifts their baseline to include the labels.
+    g.bars, g.labels, g.idx, g.slot, g.x0, g.y0, g.bar_height, g.pmax = bars, labs, order, slot, x0, y0, height, pmax
     return g
 
 
@@ -122,7 +124,7 @@ def bars_to(g: VGroup, p, pmax=None, color=None) -> list:
     pmax = pmax or g.pmax
     anims = []
     for k, i in enumerate(g.idx):
-        h = max(g.height * float(p[i]) / pmax, 0.005)
+        h = max(g.bar_height * float(p[i]) / pmax, 0.005)
         target = Rectangle(width=g.bars[k].width, height=h, stroke_width=0,
                            fill_color=color or g.bars[k].get_fill_color(), fill_opacity=0.9)
         target.move_to([g.bars[k].get_x(), g.y0 + h / 2, 0])

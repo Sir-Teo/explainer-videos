@@ -610,11 +610,11 @@ ZH = {
     'Mostly they finish a word that has already begun':
         '它们大多是把一个已经开了头的词补完，就像例子里那样：这些补全，小说里见过很多次。',
 
-    'f"Edouard Grave and colleagues had done the same in 2017':
+    'f"Edouard Grave and colleagues had done the same in 2017 with the text read so far, a continuous cache. For our passage, which runs far past the model\'s 256-token window, a memory of its own earlier hidden states takes the score from {base:.3f} to {float(sc[\'bits\']):.3f}: names that appeared a page earlier come back."':
         "2017年，爱德华·格拉夫和同事们，用已经读过的文本做过同样的事，叫作连续缓存。我们这段文字远远超过模型256个词元的窗口，用它自己更早的"
         "隐状态做一份记忆，把分数从{base:.3f}降到了{float(sc['bits']):.3f}：一页之前出现过的名字，又被找了回来。",
 
-    "f'Edouard Grave and colleagues had done the same in 2017 with the text read so far, a continuous cache; for":
+    'f"Edouard Grave and colleagues had done the same in 2017 with the text read so far, a continuous cache; for our passage it gives {float(sc[\'bits\']):.3f} against {base:.3f}, little."':
         "2017年，爱德华·格拉夫和同事们，用已经读过的文本做过同样的事，叫作连续缓存；对我们这段文字，它得到{float(sc['bits']):.3f}，"
         "而不用它是{base:.3f}，帮助不大。",
 

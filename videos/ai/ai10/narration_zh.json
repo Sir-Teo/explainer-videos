@@ -34,7 +34,7 @@
   "50079c334ede": {
    "scene": "Hook",
    "en": "Seeing is half of this part. The other half is remembering. <bookmark mark='a'/> In 2014 networks learned to read a whole sentence and write it in another language. <bookmark mark='b'/> And that year they learned to look back: at each word they wrote, to pick out the words of the input they needed. This is a small one, trained here to write strings backwards; the bright squares are where it looked. It was the first attention.",
-   "zh": "看见，是本部分的一半。另一半是记住。<bookmark mark='a'/>2014年，网络学会了读完一整句话，再用另一种语言把它写出来。<bookmark mark='b'/>也是那一年，它们学会了回头看：每写一个词，就去挑出输入里需要的那几个词。这是一个小网络，在这里训练来把字符串倒过来写；亮的方格是它看的地方。这就是最早的注意力。"
+   "zh": "看见，是本部分的一半。另一半是记住。<bookmark mark='a'/>2014年，网络学会了读完一整句话，再用另一种语言把它写出来。<bookmark mark='b'/>也是那一年，它们学会了回头看：每写一个词，就去挑出输入里需要的那几个词。这是一个小网络，在这里训练来把字符串倒过来写；亮的方格是它看的地方。这就是神经机器翻译中的注意力。"
   },
   "cf3a351bb793": {
    "scene": "Hook",
@@ -59,7 +59,7 @@
   "28649ebe4ed1": {
    "scene": "Before",
    "en": "Computer vision began the same way, with edges. An edge is where the brightness changes quickly, so take the derivative of the image. <bookmark mark='a'/> In practice, the difference between the pixels on either side, across and down. <bookmark mark='b'/> On a handwritten digit, each arrow points uphill in brightness, across the stroke. <bookmark mark='c'/> On a photograph, the length of the gradient, in Irwin Sobel's 1968 version, draws the outline of the horse. For decades every vision system started here.",
-   "zh": "计算机视觉也是这样起步的：从边缘开始。边缘就是亮度变化很快的地方，所以对图像求导。<bookmark mark='a'/>实际上，就是左右、上下两侧像素之差。<bookmark mark='b'/>在一个手写数字上，每个箭头都指向亮度上升的方向，横穿笔画。<bookmark mark='c'/>在一张照片上，梯度的长度，用欧文·索贝尔1968年的算子来算，勾出了马的轮廓。几十年里，每个视觉系统都从这里开始。"
+   "zh": "计算机视觉也是这样起步的：从边缘开始。边缘就是亮度变化很快的地方，所以对图像求导。<bookmark mark='a'/>实际上，就是两侧像素之差除以它们的间距，横向和纵向各算一次。<bookmark mark='b'/>在一个手写数字上，每个箭头都指向亮度上升的方向，横穿笔画。<bookmark mark='c'/>在一张照片上，梯度的长度，用欧文·索贝尔1968年的算子来算，勾出了马的轮廓。几十年里，每个视觉系统都从这里开始。"
   },
   "3bfdd95e0e16": {
    "scene": "Before",
@@ -339,7 +339,7 @@
   "b78d5878d2aa": {
    "scene": "Recurrence",
    "en": "To train it, unroll it and backpropagate, as Paul Werbos described in 1990: backpropagation through time. <bookmark mark='a'/> The gradient with respect to an early state h k passes through every later state. <bookmark mark='b'/> Each step back multiplies it by that step's Jacobian: the tanh's slopes times the same matrix W, again and again. <bookmark mark='c'/> The slopes are at most one, so the product is at most the largest singular value of W, raised to the number of steps. <bookmark mark='d'/> Below one, the gradient from far back shrinks exponentially; with eigenvalues above one, it can blow up. <bookmark mark='e'/> Sepp Hochreiter worked this out in his 1991 diploma thesis; Yoshua Bengio, Patrice Simard and Paolo Frasconi published it in 1994.",
-   "zh": "要训练它，就把它展开再做反向传播，这是保罗·韦尔博斯在1990年描述的：随时间反向传播。<bookmark mark='a'/>对一个早期状态h k的梯度，要穿过之后的每一个状态。<bookmark mark='b'/>每往回一步，就乘上那一步的雅可比矩阵：tanh的斜率乘以同一个矩阵W，一遍又一遍。<bookmark mark='c'/>斜率最多是1，所以这个乘积最多是W的最大奇异值的步数次方。<bookmark mark='d'/>小于1，从远处传回的梯度就指数级地缩小；特征值大于1，它就可能爆炸。<bookmark mark='e'/>塞普·霍赫赖特在他1991年的毕业论文里分析了这个问题；约书亚·本吉奥、帕特里斯·西马尔和保罗·弗拉斯科尼在1994年发表了它。"
+   "zh": "要训练它，就把它展开再做反向传播，这是保罗·韦尔博斯在1990年描述的：随时间反向传播。<bookmark mark='a'/>如果损失只作用于末状态，对早期状态h k的梯度就要穿过之后的每一个状态。<bookmark mark='b'/>每往回一步，就乘上那一步的雅可比矩阵：tanh的斜率乘以同一个矩阵W，一遍又一遍。<bookmark mark='c'/>斜率最多是1，所以这个乘积最多是W的最大奇异值的步数次方。<bookmark mark='d'/>小于1，从远处传回的梯度就指数级地缩小；特征值大于1，它就可能爆炸。<bookmark mark='e'/>塞普·霍赫赖特在他1991年的毕业论文里分析了这个问题；约书亚·本吉奥、帕特里斯·西马尔和保罗·弗拉斯科尼在1994年发表了它。"
   },
   "f86812a8bb98": {
    "scene": "Recurrence",
@@ -359,7 +359,7 @@
   "fa5505052716": {
    "scene": "LSTM",
    "en": "The cure came from Hochreiter himself, with Jurgen Schmidhuber, in 1997. <bookmark mark='a'/> If every step multiplies the gradient by something less than one, build a unit where it multiplies by exactly one: a memory cell connected to itself with weight one, and no squashing. <bookmark mark='b'/> An error signal can ride it back across any number of steps without fading: the constant error carousel. <bookmark mark='c'/> Around it, learned gates decide when to write to the cell and when to read it; in 2000 Felix Gers added a forget gate, to clear it.",
-   "zh": "解药来自霍赫赖特本人，和于尔根·施密德胡伯一起，在1997年。<bookmark mark='a'/>如果每一步都把梯度乘以小于1的东西，那就造一个每步恰好乘以1的单元：一个自己连到自己、权重为1、不压扁的记忆细胞。<bookmark mark='b'/>误差信号可以骑着它往回走任意多步而不衰减：恒定误差传送带。<bookmark mark='c'/>在它周围，学出来的门决定什么时候写进细胞、什么时候读出；2000年，费利克斯·格斯加了一个遗忘门，用来清空它。"
+   "zh": "解药来自霍赫赖特本人，和于尔根·施密德胡伯一起，在1997年。<bookmark mark='a'/>如果每一步都把梯度乘以小于1的东西，那就造一个每步恰好乘以1的单元：一个自己连到自己、权重为1、不压扁的记忆细胞。<bookmark mark='b'/>误差信号可以骑着它往回走任意多步而不衰减：恒定误差传送带。<bookmark mark='c'/>在它周围，学出来的门决定什么时候写进细胞、什么时候读出；后来，格斯、施密德胡伯和弗雷德·卡明斯加了一个遗忘门，用来清空它。"
   },
   "909ef8da7599": {
    "scene": "LSTM",
@@ -369,7 +369,7 @@
   "3d5617028335": {
    "scene": "LSTM",
    "en": "Why does the gradient survive? <bookmark mark='a'/> Differentiate the cell state with respect to the previous one. Along the belt, it's just the forget gate, a diagonal matrix of numbers between zero and one; the other paths run through the gates, and they are small. <bookmark mark='b'/> So back across many steps, the gradient is multiplied by the product of the forget gates, which the network learns, in place of the fixed matrix W. <bookmark mark='c'/> A forget gate held at f halves the memory every ln 2 over minus ln f steps. <bookmark mark='d'/> At 0.99, about sixty-nine steps; at exactly one, Hochreiter's original carousel, forever.",
-   "zh": "为什么梯度能活下来？<bookmark mark='a'/>对细胞状态关于上一个细胞状态求导。沿着传送带，它就是遗忘门，一个由零到一之间的数组成的对角矩阵；其他的路径要穿过门，它们很小。<bookmark mark='b'/>所以往回跨过许多步，梯度乘的是遗忘门的乘积，这是网络学出来的，取代了固定的矩阵W。<bookmark mark='c'/>遗忘门保持在f时，每过ln 2除以负ln f步，记忆就减半。<bookmark mark='d'/>f等于0.99时，大约六十九步；恰好等于1，就是霍赫赖特最初的传送带，永远不忘。"
+   "zh": "为什么梯度能活下来？<bookmark mark='a'/>对细胞状态关于上一个细胞状态求导。沿着传送带，它就是遗忘门，一个由零到一之间的数组成的对角矩阵；其他路径要穿过门，它们不一定很小。<bookmark mark='b'/>沿细胞状态的直接路径往回跨过许多步，这一份梯度贡献乘的是网络学出来的遗忘门乘积。完整梯度还包括其他路径的贡献。<bookmark mark='c'/>遗忘门保持在f时，每过ln 2除以负ln f步，这条直接路径上的记忆贡献就减半。<bookmark mark='d'/>f等于0.99时，大约六十九步；恰好等于1，就是霍赫赖特最初的传送带，永远不忘。"
   },
   "8129c1fe93bd": {
    "scene": "LSTM",
@@ -504,7 +504,7 @@
   "4981dccafa61": {
    "scene": "Return",
    "en": "It can, if the recurrence is linear. <bookmark mark='a'/> Suppose the new state is the old one, multiplied elementwise by a, plus b, where a and b depend only on the current input. <bookmark mark='b'/> Then two steps together are again one step of the same form, with a times a prime and a prime b plus b prime. <bookmark mark='c'/> That combining rule is associative, and any associative operation over a sequence can be computed by a parallel prefix scan, the algorithm Guy Blelloch made famous in 1990. <bookmark mark='d'/> Combine neighbours, then pairs two apart, then four apart: after log two of T rounds, every position has its state. A thousand steps become ten rounds.",
-   "zh": "能，只要递推是线性的。<bookmark mark='a'/>假设新的状态是旧状态逐元素乘以a，再加上b，而a和b只取决于当前的输入。<bookmark mark='b'/>那么两步合起来，又是同样形式的一步：a乘a撇，以及a撇乘b加b撇。<bookmark mark='c'/>这个合并规则满足结合律，而序列上任何满足结合律的运算，都能用并行前缀扫描算出来，这是盖伊·布莱洛克在1990年让它出名的算法。<bookmark mark='d'/>先合并相邻的，再合并相隔两格的，再合并相隔四格的：以2为底T的对数轮之后，每个位置都得到了自己的状态。一千步变成了十轮。"
+   "zh": "能，只要递推是线性的。<bookmark mark='a'/>假设新的状态是旧状态逐元素乘以a，再加上b，而a和b只取决于当前的输入。<bookmark mark='b'/>那么两步合起来，又是同样形式的一步：a乘a撇，以及a撇乘b加b撇。<bookmark mark='c'/>这个合并规则满足结合律：可以改变分组，但必须保持时间顺序。序列上任何满足结合律的运算，都能用并行前缀扫描算出来，这是盖伊·布莱洛克在1990年让它出名的算法。<bookmark mark='d'/>先合并相邻的，再合并相隔两格的，再合并相隔四格的：以2为底T的对数轮之后，每个位置都得到了自己的状态。一千步变成了十轮。"
   },
   "28080f15fc56": {
    "scene": "Return",

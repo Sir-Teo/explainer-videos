@@ -51,8 +51,8 @@ class GaLore(VoiceoverScene):
             "A gradient is a matrix too, with its own singular values. <bookmark mark='a'/> A layer turns each "
             "token's vector x into W x. <bookmark mark='b'/> By the chain rule, Part 4's subject, the gradient for one "
             "weight sums, over tokens, the error at that output times the input. <bookmark mark='c'/> So the gradient is "
-            "a sum of outer products, rank one per token. <bookmark mark='d'/> Its rank is at most the number of tokens, "
-            "and in practice far lower: errors and inputs share a few directions."
+            "a sum of outer products, rank one per token. <bookmark mark='d'/> Its rank is at most the number of tokens. "
+            "In practice it is often approximately low rank: errors and inputs concentrate in a few directions."
         ) as vo:
             self.play(FadeIn(tag))
             for k, mk in enumerate("abcd"):
@@ -202,7 +202,9 @@ class GaLore(VoiceoverScene):
             r.arrange(RIGHT, buff=0.3)
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.22)
         regrid(tab, gap=0.3)
-        tab.move_to([3.6, 0.2, 0])
+        if tab.width > 6.4:
+            tab.scale_to_fit_width(6.4)
+        tab.move_to([3.4, 0.2, 0])
         cap = note(r"computed: \ $600$ steps of $16 \times 64$ tokens; \ learning rates $10^{-3}$, $3 \times 10^{-3}$, "
                    r"$10^{-2}$ tried for each; \ each method at its best, three seeds").to_edge(DOWN, buff=0.2)
         mean = {m: float(np.mean(vals[m])) for m in methods}

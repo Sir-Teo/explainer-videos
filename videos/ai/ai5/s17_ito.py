@@ -47,7 +47,7 @@ class Ito(VoiceoverScene):
                 why(r"quadratic variation \ (Chapter 14)", font_size=22)]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-2.4, buff=0.4, edge=6.8)
         ax = CornerAxes(x_range=[1, 4, 1], y_range=[-16, 0, 4], x_length=5.6, y_length=2.6, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.2, -2.4, 0])
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.2, -2.0, 0])
         xt = VGroup(*[MathTex(f"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(v, -16), DOWN, buff=0.08) for v in (1, 2, 3, 4)])
         lx = np.log10(ns)
         lc = VGroup(curve(ax, lx, np.log10(le), color=LPT, stroke_width=3),

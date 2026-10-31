@@ -365,7 +365,12 @@
   "Fan, Lewis \\& Dauphin (2018); \\ Holtzman et al., \\textit{The Curious Case of Neural Text Degeneration} (2020); \\ Nguyen et al., min-$p$ (2024); \\ Schaeffer et al.\\ (2025)": "Fan，Lewis \\& Dauphin (2018)；\\ Holtzman等， \\textit{The Curious Case of Neural Text Degeneration} (2020)；\\ Nguyen等， min-$p$ (2024)；\\ Schaeffer等(2025)",
   "Markov (1906); \\ Metropolis \\& Ulam (1949); \\ Metropolis, Rosenbluth, Rosenbluth, Teller \\& Teller (1953); \\ Hastings (1970); \\ Glynn (1990); \\ Williams (1992); \\ Salimans et al.\\ (2017)": "Markov (1906)；\\ Metropolis \\& Ulam (1949)；\\ Metropolis，Rosenbluth，Rosenbluth，Teller \\& Teller (1953)；\\ Hastings (1970)；\\ Glynn (1990)；\\ Williams (1992)；\\ Salimans等(2017)",
   "Langevin (1908); \\ Roberts \\& Tweedie (1996); \\ Welling \\& Teh (2011); \\ Einstein (1905); \\ Bachelier (1900); \\ Wiener (1923); \\ L\\'evy (1940); \\ It\\^o (1944, 1951); \\ Maruyama (1955)": "Langevin (1908)；\\ Roberts \\& Tweedie (1996)；\\ Welling \\& Teh (2011)；\\ Einstein (1905)；\\ Bachelier (1900)；\\ Wiener (1923)；\\ L\\'evy (1940)；\\ It\\^o (1944，1951)；\\ Maruyama (1955)",
-  "Fokker (1914); \\ Planck (1917); \\ Kolmogorov (1931); \\ Ornstein \\& Uhlenbeck (1930); \\ Anderson (1982); \\ Sohl-Dickstein et al.\\ (2015); \\ Song et al.\\ (2021)": "Fokker (1914)；\\ Planck (1917)；\\ Kolmogorov (1931)；\\ Ornstein \\& Uhlenbeck (1930)；\\ Anderson (1982)；\\ Sohl-Dickstein等(2015)；\\ Song等(2021)"
+  "Fokker (1914); \\ Planck (1917); \\ Kolmogorov (1931); \\ Ornstein \\& Uhlenbeck (1930); \\ Anderson (1982); \\ Sohl-Dickstein et al.\\ (2015); \\ Song et al.\\ (2021)": "Fokker (1914)；\\ Planck (1917)；\\ Kolmogorov (1931)；\\ Ornstein \\& Uhlenbeck (1930)；\\ Anderson (1982)；\\ Sohl-Dickstein等(2015)；\\ Song等(2021)",
+  "central limit theorem: \\ i.i.d. draws, \\ $0 < \\sigma^2 < \\infty$": "中心极限定理：\\ 独立同分布抽样，\\ $0 < \\sigma^2 < \\infty$",
+  "under regularity conditions, \\ an unbiased estimate from $n$ i.i.d. draws has variance at least $1 / (n\\, I(\\theta))$": "在正则条件下，\\ 来自 $n$ 次独立同分布抽样的无偏估计，方差至少为 $1 / (n\\, I(\\theta))$",
+  "top-$k$: \\ $0.922$": "前$k$项： \\ $0.922$",
+  "top-$p$: \\ $0.949$": "核采样$p$： \\ $0.949$",
+  "min-$p$: \\ $0.921$": "最小概率$p$： \\ $0.921$"
  },
  "patterns": [
   [

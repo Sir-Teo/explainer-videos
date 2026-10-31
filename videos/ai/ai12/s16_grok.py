@@ -113,7 +113,7 @@ class Grok(VoiceoverScene):
         m2 = DashedLine(ax.c2p(math.log10(t_te), 0), ax.c2p(math.log10(t_te), 1), color=TE, stroke_width=2)
         lag = label(rf"memorized by step ${t_tr:,}$; \\ generalized by step ${t_te:,}$".replace(",", "{,}"), font_size=26,
                     color=WHITE).next_to(key, DOWN, buff=0.45).align_to(key, LEFT)
-        nowd = label(r"without weight decay (dashed): \\ it never generalizes" if g["t_test_nowd"] is None else
+        nowd = label(r"without weight decay (dashed): \\ not generalized by the run's end" if g["t_test_nowd"] is None else
                      rf"without weight decay (dashed): \\ much later, \ step ${int(g['t_test_nowd']):,}$".replace(",", "{,}"),
                      font_size=24, color=C.SURPRISE).next_to(lag, DOWN, buff=0.35).align_to(key, LEFT)
         lt = ValueTracker(0.0)
@@ -146,7 +146,7 @@ class Grok(VoiceoverScene):
                         DashedVMobject(curve(wax, np.log10(N[:, 0]), N[:, 3], C.SURPRISE, 3), num_dashes=40))
         ratio = t_te / max(t_tr, 1)
         said1 = (
-            "Without weight decay, the same network never gets there. " if g["t_test_nowd"] is None else
+            "Without weight decay, the same network does not get there within this run. " if g["t_test_nowd"] is None else
             f"Without weight decay, it takes until step {int(g['t_test_nowd']):,}. "
         )
         with self.voiceover(

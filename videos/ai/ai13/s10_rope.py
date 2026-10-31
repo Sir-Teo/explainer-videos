@@ -35,27 +35,62 @@ class Rope(VoiceoverScene):
         wl = np.asarray(r["wavelength"])
         n = len(th)
         m = ValueTracker(0.0)
-        dials = VGroup(*[dial() for _ in range(n)]).arrange(RIGHT, buff=0.14).move_to(UP * 0.4)
-        start = np.random.default_rng(3).uniform(0, 2 * PI, n)  # the query's own angles, before any rotation
+        # Two rows keep every pair readable at video scale. The arrows and their
+        # halos rotate as rigid groups: the angles still use the cached theta_j.
+        dials = VGroup()
+        for j in range(n):
+            center = np.array([-5.25 + 1.5 * (j % 8), 1.25 - 1.8 * (j // 8), 0])
+            face = dial(radius=0.48).move_to(center)
+            ticks = VGroup(*[Line(center + 0.43 * np.array([np.cos(t), np.sin(t), 0]),
+                                  center + 0.48 * np.array([np.cos(t), np.sin(t), 0]),
+                                  color=GREY_C, stroke_width=1, stroke_opacity=0.6)
+                             for t in np.arange(12) * TAU / 12])
+            dials.add(VGroup(face, ticks))
+        back = RoundedRectangle(width=12.5, height=3.8, corner_radius=0.18,
+                                stroke_color=GREY_D, stroke_width=1,
+                                fill_color="#101620", fill_opacity=0.7).move_to([0, 0.1, 0])
+        start = np.random.default_rng(3).uniform(0, TAU, n)
+        key_start = np.random.default_rng(9).uniform(0, TAU, n)
 
-        def hands():
-            return VGroup(*[Line(d.get_center(), d.get_center() + 0.3 * np.array([math.cos(a0 + m.get_value() * t),
-                                                                                   math.sin(a0 + m.get_value() * t), 0]),
-                                 color=Q, stroke_width=3)
-                            for d, a0, t in zip(dials, start, th)])
+        def orbit_hands(angles, color, length):
+            group = VGroup()
+            for d, a0, theta in zip(dials, angles, th):
+                c = d.get_center()
+                tip = c + length * np.array([np.cos(a0), np.sin(a0), 0])
+                hand = VGroup(Arc(radius=length, start_angle=a0, angle=-0.65, arc_center=c,
+                                  color=color, stroke_width=5, stroke_opacity=0.13),
+                              Line(c, tip, color=color, stroke_width=3),
+                              glow_dot(tip, color=color, radius=0.035, layers=3, opacity=0.45))
+                # Absolute tracker angles avoid accumulated numerical drift.
+                def turn(h, a=a0, t=theta, center=c):
+                    desired = a + m.get_value() * t
+                    h.rotate(desired - h.orbit_angle, about_point=center)
+                    h.orbit_angle = desired
+                hand.orbit_angle = a0
+                hand.add_updater(turn)
+                group.add(hand)
+            return group
 
-        hs = always_redraw(hands)
-        wls = VGroup(*[MathTex(f"{v:,.0f}".replace(",", "{,}") if v >= 10 else f"{v:.1f}", font_size=17, color=GREY_B)
-                       .next_to(d, DOWN, buff=0.12) for d, v in zip(dials, wl)])
-        wlab = label(r"characters per full turn", font_size=22, color=GREY_A).next_to(wls, DOWN, buff=0.15)
-        pairs = label(rf"a query's ${2 * n}$ numbers, \ taken in ${n}$ pairs: \ each pair is an arrow", font_size=26,
-                      color=GREY_A).to_edge(UP, buff=0.5)
-        counter = VGroup(label(r"position", font_size=30, color=POS), Integer(0, font_size=36, color=POS))
-        counter.arrange(RIGHT, buff=0.25).next_to(dials, UP, buff=0.6)
+        hs = orbit_hands(start, Q, 0.40)
+        ks = orbit_hands(key_start, K, 0.31)
+        wls = VGroup(*[MathTex(f"{v:,.0f}".replace(",", "{,}") if v >= 10 else f"{v:.1f}",
+                              font_size=22, color=GREY_A).next_to(d, DOWN, buff=0.13)
+                       for d, v in zip(dials, wl)])
+        wlab = label(r"characters per full turn", font_size=23, color=GREY_A).move_to([0, -2.03, 0])
+        pairs = label(rf"a query's ${2 * n}$ numbers, \ taken in ${n}$ pairs: \ each pair is an arrow", font_size=28,
+                      color=GREY_A).to_edge(UP, buff=0.38)
+        counter = VGroup(label(r"position", font_size=27, color=POS), Integer(0, font_size=34, color=POS))
+        counter.arrange(RIGHT, buff=0.25).move_to([-4.6, 2.6, 0])
         counter[1].add_updater(lambda t: t.set_value(int(round(m.get_value()))))
+        qlegend = VGroup(Line(LEFT * 0.18, RIGHT * 0.18, color=Q, stroke_width=4),
+                         label(r"query", font_size=24, color=Q)).arrange(RIGHT, buff=0.15)
+        klegend = VGroup(Line(LEFT * 0.18, RIGHT * 0.18, color=K, stroke_width=4),
+                         label(r"key", font_size=24, color=K)).arrange(RIGHT, buff=0.15)
+        qlegend.move_to([3.4, 2.6, 0])
+        klegend.move_to([5.1, 2.6, 0])
         colors = {r"m": POS, r"\theta_j": GREY_A}
         f = cmath(r"\begin{pmatrix} \cos m\theta_j & -\sin m\theta_j \\ \sin m\theta_j & \cos m\theta_j \end{pmatrix}",
-                  font_size=36).to_edge(DOWN, buff=0.85).shift(LEFT * 2.5)
+                  font_size=36).move_to([-2.5, -2.85, 0])
         fl = cmath(r"\theta_j = 10000^{-2j/32}", font_size=34, colors=colors).next_to(f, RIGHT, buff=0.8)
         cite_ = cite(r"J.~Su et al., \textit{RoFormer: Enhanced Transformer with Rotary Position Embedding} (2021)", corner=DR)
         with self.voiceover(
@@ -67,17 +102,20 @@ class Rope(VoiceoverScene):
             "<bookmark mark='c'/> Keys are turned the same way. Like the hands of a clock, fast hands tell you the "
             "position nearby, slow hands where you are in a long text. This is RoPE, rotary position embedding."
         ) as vo:
-            self.play(FadeIn(pairs), LaggedStart(*[FadeIn(d) for d in dials], lag_ratio=0.05), FadeIn(hs), Write(f),
-                      FadeIn(fl))
+            self.play(FadeIn(pairs), FadeIn(back),
+                      LaggedStart(*[FadeIn(d, scale=0.85) for d in dials], lag_ratio=0.05),
+                      FadeIn(hs), FadeIn(qlegend), Write(f), FadeIn(fl))
             vo.wait_until("a")
             self.play(FadeIn(counter), Indicate(f, scale_factor=1.04))
             vo.wait_until("b")
             self.play(m.animate.set_value(40), FadeIn(wls), FadeIn(wlab), run_time=6.0, rate_func=linear)
             vo.wait_until("c")
-            self.play(FadeIn(cite_), m.animate.set_value(60), run_time=3.0, rate_func=linear)
+            self.play(FadeIn(ks), FadeIn(klegend), FadeIn(cite_))
+            self.play(m.animate.set_value(60), run_time=3.0, rate_func=linear)
         self.wait(0.3)
         counter[1].clear_updaters()
         hs.clear_updaters()
+        ks.clear_updaters()
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -148,7 +186,7 @@ class Rope(VoiceoverScene):
         readout[3].add_updater(lambda t: t.set_value(int(round(nk.get_value()))))
         score = VGroup(label(r"score", font_size=28, color=A), DecimalNumber(0, num_decimal_places=3, font_size=32, color=A))
         score.arrange(RIGHT, buff=0.2).move_to([1.6, 1.35, 0], aligned_edge=LEFT)
-        score[1].add_updater(lambda t: t.set_value(1.6 * 1.3 * math.cos(qa + mq.get_value() * th - ka - nk.get_value() * th) / 2))
+        score[1].add_updater(lambda t: t.set_value(1.6 * 1.3 * math.cos(qa + mq.get_value() * th - ka - nk.get_value() * th)))
         colors = {r"m": Q, r"n": K, r"q": Q, r"k": K}
         f = cmath(r"(R_{", r"m", r"}\,", r"q", r")\cdot(R_{", r"n", r"}\,", r"k", r")", "=", r"q", r"\cdot", r"R_{", r"n",
                   r"-", r"m", r"}\,", r"k", colors=colors, font_size=40).move_to([2.6, 0.6, 0])
@@ -268,8 +306,8 @@ class Rope(VoiceoverScene):
             "Google's Gemma: its fastest pairs build sharp positional patterns, like looking exactly one token back, "
             "while its slowest pairs, which hardly turn, seem to carry meaning. <bookmark mark='a'/> " + verdict
             + " <bookmark mark='b'/> Designers have taken the hint. Qwen3-Next rotates only 64 of each head's 256 "
-            "numbers and leaves the rest alone; Gemma 3 slows its global layers' clocks a hundredfold, with a base "
-            "of a million instead of ten thousand, so that they turn slowly over long documents."
+            "numbers and leaves the rest alone; Gemma 3 raises the global layers' base a hundredfold, "
+            "from ten thousand to a million. That slows the low-frequency pairs most and leaves the fastest pair unchanged."
         ) as vo:
             self.play(FadeIn(facts[0]), FadeIn(top), FadeIn(ch.base),
                       LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch.bars], lag_ratio=0.05), FadeIn(xl))

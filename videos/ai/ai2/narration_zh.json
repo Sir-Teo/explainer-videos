@@ -109,16 +109,6 @@
    "en": "Here are the two searches on the same map. <bookmark mark='a'/> Dijkstra spreads in every direction; A star's frontier leans toward the goal, flows around the wall, and stops. <bookmark mark='b'/> Both find the same shortest path, of length 30.4. Dijkstra expanded 2,636 cells; A star, 239. <bookmark mark='c'/> Their shapes are no accident. Call the optimal cost C star. Dijkstra only expands cells closer than C star to the start, and no path beats a straight line, so they lie in a circle of radius C star. A star only expands cells whose g plus h is below C star, so they lie in an ellipse with the start and the goal as its foci. <bookmark mark='d'/> We checked every expanded cell: 100 percent inside the circle, 100 percent inside the ellipse.",
    "zh": "这是两种搜索在同一张地图上。<bookmark mark='a'/>迪杰斯特拉向四面八方扩散；A星的边界朝目标倾斜，绕过墙，然后停下。<bookmark mark='b'/>两者找到的是同一条最短路径，长度30.4。迪杰斯特拉扩展了2636个格子；A星，239个。<bookmark mark='c'/>它们的形状不是偶然的。把最优代价记作C星。迪杰斯特拉只扩展离起点比C星近的格子，而没有路径比直线更短，所以这些格子落在半径为C星的圆里。A星只扩展g加h低于C星的格子，所以它们落在一个以起点和目标为焦点的椭圆里。<bookmark mark='d'/>我们检查了每一个被扩展的格子：100%在圆内，100%在椭圆内。"
   },
-  "e9ece7594bbe": {
-   "scene": "AStar",
-   "en": "Why is A star's path the shortest? <bookmark mark='a'/> Call h admissible if it never overestimates: h of n is at most h star of n, the true cost to a goal. <bookmark mark='b'/> Then A star is optimal. Suppose a worse goal, G two, sits on the frontier. Some state n on an optimal path is on the frontier too. <bookmark mark='c'/> Its f is g plus h, <bookmark mark='d'/> at most g plus h star, because h is admissible, <bookmark mark='e'/> which is exactly C star, because n lies on an optimal path. <bookmark mark='f'/> G two costs more than C star, and its h is zero. So n always comes off the frontier first, and the optimal goal before G two.",
-   "zh": "为什么A星的路径是最短的？<bookmark mark='a'/>如果h从不高估，就说它是可采纳的：h(n)至多是h星(n)，也就是到目标的真实代价。<bookmark mark='b'/>于是A星是最优的。假设边界上有一个更差的目标G2。最优路径上一定也有某个状态n在边界上。<bookmark mark='c'/>它的f是g加h，<bookmark mark='d'/>由于h可采纳，这至多是g加h星，<bookmark mark='e'/>而由于n在最优路径上，这恰好就是C星。<bookmark mark='f'/>G2的代价比C星大，而它的h是0。所以n总是先离开边界，最优目标也先于G2离开边界。"
-  },
-  "617c677f99ab": {
-   "scene": "AStar",
-   "en": "On graphs A star wants a little more. <bookmark mark='a'/> Call h consistent if, for every step from n to n prime, h of n is at most the step's cost plus h of n prime: a triangle inequality, which the straight-line distance obeys. <bookmark mark='b'/> Then f never decreases along a path. f of n prime is g of n, plus the step, plus h of n prime; <bookmark mark='c'/> by consistency, at least g of n plus h of n: <bookmark mark='d'/> f of n. <bookmark mark='e'/> So states come off the frontier in order of f, and the first time A star expands a state, it has its best path.",
-   "zh": "在图上，A星需要的条件更多一点。<bookmark mark='a'/>如果对每一步从n到n撇，h(n)至多是这一步的代价加上h(n撇)，就说h是一致的：这是一个三角不等式，直线距离满足它。<bookmark mark='b'/>于是沿着一条路径，f从不下降。f(n撇)等于g(n)，加上这一步，再加上h(n撇)；<bookmark mark='c'/>由一致性，这至少是g(n)加h(n)：<bookmark mark='d'/>也就是f(n)。<bookmark mark='e'/>所以状态按f的顺序离开边界，A星第一次扩展一个状态时，就已经有了到它的最佳路径。"
-  },
   "4dcd749134ad": {
    "scene": "AStar",
    "en": "One map proves little, so we ran 200 random ones. <bookmark mark='a'/> On the median map, Dijkstra expands 3,336 cells and A star 552: about 17 percent of the work, for the same optimal paths. <bookmark mark='b'/> Weight h by two, and weighted A star expands a median of 62, with paths 10 percent longer on average, never more than twice the optimum. <bookmark mark='c'/> Greedy search ignores g altogether: 47 cells, but paths 16 percent longer, with no guarantee. Speed against optimality.",
@@ -478,6 +468,16 @@
    "scene": "Outro",
    "en": "Russell and Norvig's textbook is the place to go deeper: everything in this part is in it. For the history, Nils Nilsson's The Quest for Artificial Intelligence. Thanks for watching, and see you in Part 3.",
    "zh": "想深入学习，最好去读拉塞尔和诺维格的教科书：本部分的一切都在里面。至于历史，可以读尼尔斯·尼尔森的《人工智能的探索》。感谢观看，第3部分见。"
+  },
+  "89b3f7dd0124": {
+   "scene": "AStar",
+   "en": "Why is A star's path the shortest? <bookmark mark='a'/> Call h admissible if it never overestimates: h of n is at most h star of n, the true cost to a goal, and h is zero at goals. <bookmark mark='b'/> In tree search, or graph search that reopens a state when a cheaper path is found, A star is optimal. Suppose a worse goal, G two, sits on the frontier. Some state n on an optimal path is on the frontier too. <bookmark mark='c'/> Its f is g plus h, <bookmark mark='d'/> at most g plus h star, because h is admissible, <bookmark mark='e'/> which is exactly C star, because n lies on an optimal path. <bookmark mark='f'/> G two costs more than C star, and its h is zero. So n always comes off the frontier first, and the optimal goal before G two.",
+   "zh": "为什么A星的路径是最短的？<bookmark mark='a'/>如果h从不高估，就说它是可采纳的：h(n)至多是h星(n)，也就是到目标的真实代价，而且在目标处h是0。<bookmark mark='b'/>用树搜索，或者在找到更便宜的路径时重新打开状态的图搜索，A星就是最优的。假设边界上有一个更差的目标G2。最优路径上一定也有某个状态n在边界上。<bookmark mark='c'/>它的f是g加h，<bookmark mark='d'/>由于h可采纳，这至多是g加h星，<bookmark mark='e'/>而由于n在最优路径上，g加h星恰好就是C星。<bookmark mark='f'/>G2的代价比C星大，而它的h是0。所以n总是先离开边界，最优目标也先于G2离开边界。"
+  },
+  "94aa10f0eba3": {
+   "scene": "AStar",
+   "en": "To avoid reopening states on graphs, A star wants a little more. <bookmark mark='a'/> Call h consistent if, for every step from n to n prime, h of n is at most the step's cost plus h of n prime: a triangle inequality, which the straight-line distance obeys. <bookmark mark='b'/> Then f never decreases along a path. f of n prime is g of n, plus the step, plus h of n prime; <bookmark mark='c'/> by consistency, at least g of n plus h of n: <bookmark mark='d'/> f of n. <bookmark mark='e'/> So states come off the frontier in order of f, and the first time A star expands a state, it has its best path.",
+   "zh": "要在图上避免重新打开状态，A星需要的条件更多一点。<bookmark mark='a'/>如果对每一步从n到n撇，h(n)至多是这一步的代价加上h(n撇)，就说h是一致的：这是一个三角不等式，直线距离满足它。<bookmark mark='b'/>于是沿着一条路径，f从不下降。f(n撇)等于g(n)，加上这一步，再加上h(n撇)；<bookmark mark='c'/>由一致性，这至少是g(n)加h(n)：<bookmark mark='d'/>也就是f(n)。<bookmark mark='e'/>所以状态按f的顺序离开边界，A星第一次扩展一个状态时，就已经有了到它的最佳路径。"
   }
  },
  "title_en": "AI, Built: Part 2, Thinking Machines",

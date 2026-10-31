@@ -177,14 +177,15 @@ class Bell(VoiceoverScene):
         colors = {r"S_k": DATA, r"\mathcal{N}(0, 1)": MODEL}
         thm = cmath(r"\frac{S_k - k\mu}{\sigma\sqrt{k}}", r"\;\longrightarrow\;", r"\mathcal{N}(0, 1)", colors=colors,
                     font_size=40).to_corner(UL, buff=0.5)
-        thm_n = label(r"the central limit theorem \ (Laplace, 1810): \ whatever the pieces look like", font_size=26,
+        thm_n = label(r"central limit theorem: \ i.i.d. draws, \ $0 < \sigma^2 < \infty$", font_size=26,
                       color=GREY_A)
         thm_n.next_to(thm, DOWN, buff=0.2).align_to(thm, LEFT)
         width = label(r"the spread of a sum grows like $\sqrt{k}$", font_size=28, color=C.BITS).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Why a bell, and why so often? One die: six flat bars. <bookmark mark='a'/> Two dice: a triangle. Three: "
             "already rounding off. <bookmark mark='b'/> Six, twelve: the bell. <bookmark mark='c'/> That's the "
-            "central limit theorem: add many independent pieces, whatever their shape, and the sum is bell-shaped, "
+            "central limit theorem: add independent draws from the same distribution, with positive finite "
+            "variance. After centering and rescaling, the sum approaches a bell, "
             "<bookmark mark='d'/> with a spread that grows like the square root of their number. Laplace proved it in "
             "1810."
         ) as vo:
@@ -286,8 +287,8 @@ class Bell(VoiceoverScene):
         with self.voiceover(
             "So convolve again and again. One exponential, all on one side. <bookmark mark='a'/> Two, three, five: "
             "each convolution smooths and spreads it. <bookmark mark='b'/> Ten, thirty: the lopsidedness fades, "
-            "and what is left is the bell. Convolution is an averaging, and the only shape that averaging leaves "
-            "unchanged, up to scale, is the bell."
+            "and what is left is the bell. Among nondegenerate distributions with finite variance, the bell is "
+            "the only shape preserved when independent copies are added and then centered and rescaled."
         ) as vo:
             self.play(Create(ax2), FadeIn(xl), FadeIn(nl), Create(shapes[0]), FadeIn(tag), Create(bell), FadeIn(bl2))
             cur = shapes[0]

@@ -19,6 +19,41 @@ from explainer.paths import video_dir
 IS_TPL = lambda k: k.startswith(('f"', "f'", '"', "'"))  # noqa: E731
 
 
+@lru_cache(maxsize=16384)
+def _source_body(s: str) -> str:
+    match = re.match(r"(f?)(\"\"\"|'''|\"|')", s)
+    quote = match[2]
+    text = s[match.end():]
+    closed = False
+    if text.endswith(quote):
+        try:
+            node = ast.parse(s, mode="eval").body
+        except SyntaxError:
+            pass
+        else:
+            if isinstance(node, (ast.Constant, ast.JoinedStr)):
+                text = text[:-len(quote)]
+                closed = True
+    # Preserve a complete key's closing delimiter. It must not become a prefix
+    # of a different conditional branch with another sentence appended.
+    return match[1] + text.replace("\\'", "'").replace('\\"', '"') + ("\0" if closed else "")
+
+
+def source_startswith(source: str, prefix: str) -> bool:
+    """Match source prefixes independently of ast.unparse's outer quote choice.
+
+    F-string quoting can change when a computed expression uses a string key or
+    an English sentence gains an apostrophe. Both spellings describe the same
+    template; translation keys are often deliberately incomplete expressions.
+    """
+    if source.startswith(prefix):
+        return True
+    if not (IS_TPL(source) and IS_TPL(prefix)):
+        return False
+
+    return _source_body(source).startswith(_source_body(prefix))
+
+
 def table(video: str) -> dict:
     path = video_dir(video) / "zh_lines.py"
     if not path.exists():
@@ -155,7 +190,7 @@ class Translator:
         for key, tr in sorted(self.zh.items(), key=lambda kv: -len(kv[0])):
             if not IS_TPL(key):
                 continue
-            for src in [s for s in self.tpls if s.startswith(key)]:
+            for src in [s for s in self.tpls if source_startswith(s, key)]:
                 rx, names = self.tpls[src]
                 m = rx.match(en)
                 if m:

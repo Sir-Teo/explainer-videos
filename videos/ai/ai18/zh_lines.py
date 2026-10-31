@@ -368,10 +368,10 @@ _DATA = {
     "f'Now the gradients are {A['accum']} times smaller":
         "现在梯度在舍入时小了{A['accum']}倍，不带损失缩放的FP16把其中{100 * zero:.0f}%冲成了零：它最后落后FP32 {d_noscale:.2f}奈特。带损失缩放，和FP32只差{abs(d_scaled):.3f}。这正是损失缩放要防止的失败。",
 
-    "f'Now FP16 without loss scaling flushes":
+    "f'Now FP16 without loss scaling flushes {100 * zero:.0f} percent of the gradients to zero and ends {d_noscale:.2f} nats behind FP32; loss scaling recovers part of the gap.'":
         "现在不带损失缩放的FP16，把{100 * zero:.0f}%的梯度冲成了零，最后落后FP32 {d_noscale:.2f}奈特；损失缩放挽回了一部分差距。",
 
-    'f"Now FP16 without loss scaling flushes {100 * zero:.0f} percent of the gradient values':
+    'f"Now FP16 without loss scaling flushes {100 * zero:.0f} percent of the gradient values to zero and ends {d_noscale:.2f} nats behind FP32, and here loss scaling doesn\'t close the gap."':
         "现在不带损失缩放的FP16，把{100 * zero:.0f}%的梯度值冲成了零，最后落后FP32 {d_noscale:.2f}奈特，而在这里，损失缩放也没能补上这个差距。",
 
     "f'Even now, with {100 * zero:.0f} percent":

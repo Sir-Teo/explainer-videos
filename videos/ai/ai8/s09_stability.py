@@ -34,9 +34,9 @@ class Stability(VoiceoverScene):
         rings = VGroup(*[Circle(radius=0.14, color=C.BITS, stroke_width=3).move_to(dots[i]) for i in sv])
         others = VGroup(*[dt for i, dt in enumerate(dots) if i not in sv])
         thm = theorem_card(r"sample compression",
-                           card_body(r"if a learner's rule can be rebuilt from $k$ of its $n$ examples, \ and it "
-                                     r"fits all $n$, \ then with probability $1 - \delta$:",
-                                     r"R \le \dfrac{k \ln n + \ln(1/\delta)}{n - k}", width=5.6, font_size=21),
+                           card_body(r"a fixed reconstructor uses $k<n$ of $n$ IID examples and "
+                                     r"fits all $n$: \ with probability $1-\delta$, \ simultaneously for every $k$:",
+                                     r"R \le \dfrac{k \ln n + \ln((n+1)/\delta)}{n - k}", width=5.6, font_size=21),
                            who=r"N.~Littlestone \& M.~Warmuth (1986)", width=6.4, font_size=21).to_corner(UR, buff=0.3)
         res = VGroup(
             label(rf"${c['n']}$ points, \ ${c['k']}$ support vectors: \ $R \le {c['bound']:.3f}$", font_size=24, color=BOUND),
@@ -53,7 +53,7 @@ class Stability(VoiceoverScene):
             f"<bookmark mark='a'/> Only {c['k']} points touch the margin: the support vectors. "
             + again
             + "<bookmark mark='b'/> Littlestone and Warmuth showed in 1986 that such a learner generalizes like one "
-            "with k parameters: its error is at most about k log n over n. <bookmark mark='c'/> Here that's "
+            "with k parameters: its error is at most about k log n over n. The confidence term also pays for choosing k from the data. <bookmark mark='c'/> Here that's "
             f"{100 * c['bound']:.1f} percent, much tighter than the VC bound for lines. On the pages the machine "
             f"needs {c['k_pages']} support vectors, and the bound is {c['bound_pages']:.2f}: a rule is only as "
             "simple as the examples it needs. Compression is also how the network bounds of the last chapter got "

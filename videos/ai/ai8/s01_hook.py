@@ -119,8 +119,12 @@ class Hook(VoiceoverScene):
             r"the puzzles: \ random labels, \ implicit bias, \ double descent, \ benign overfitting, \ flat minima",
             r"when the world moves: \ distribution shift; \ and what language models memorize",
         ], font_size=23).move_to(DOWN * 0.45)
+        assumptions = note(r"statistical guarantees assume IID samples; \ book pages illustrate the calculations",
+                           font_size=20).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "This is Part 8 of AI, Built: fitting and generalizing, or why models work on data they've never seen. "
+            "Statistical guarantees assume independent samples from one distribution; our correlated book pages "
+            "illustrate the calculations. "
             "<bookmark mark='a'/> In it: risk, the quantity we really care about, and the best any model could do; "
             "bias and variance, derived; <bookmark mark='b'/> how one rule's score on test data can be trusted, and "
             "what changes when we choose among many; <bookmark mark='c'/> capacity, measured three ways, each with "
@@ -129,7 +133,7 @@ class Hook(VoiceoverScene):
             "<bookmark mark='f'/> and finally what happens when the test data comes from somewhere else, and what a "
             "language model remembers word for word."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(sub), FadeIn(smap))
+            self.play(FadeIn(title), FadeIn(sub), FadeIn(smap), FadeIn(assumptions))
             vo.wait_until("a")
             self.play(FadeOut(smap), FadeOut(sub), FadeIn(obj.head), FadeIn(obj.rows[0], shift=UP * 0.1))
             for k, mk in enumerate("bcdef"):

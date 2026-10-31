@@ -34,8 +34,8 @@ class Spectra(VoiceoverScene):
         d = load("mp")["random"]
         ev, q, lo, hi = np.asarray(d["ev"]), float(d["q"]), float(d["lo"]), float(d["hi"])
         thm = theorem_card(r"the Marchenko--Pastur law",
-                           r"$W$ is $N \times M$ with independent entries of mean $0$ and variance $1$. \ As "
-                           r"$N, M \to \infty$ with $N/M \to q$, \ the eigenvalues of $WW^{\top}/M$ fill "
+                           r"$W$ is $N \times M$ with i.i.d. entries of mean $0$ and variance $1$. \ As "
+                           r"$N, M \to \infty$ with $N/M \to q \in (0,1]$, \ the eigenvalues of $WW^{\top}/M$ fill "
                            r"$\big[(1-\sqrt q)^2,\ (1+\sqrt q)^2\big]$ \ with density \ "
                            r"$\dfrac{\sqrt{(\lambda_+ - \lambda)(\lambda - \lambda_-)}}{2\pi q \lambda}$.",
                            who=r"V.~Marchenko \& L.~Pastur (1967)", width=6.4).to_corner(UL, buff=0.25)
@@ -161,7 +161,8 @@ class Spectra(VoiceoverScene):
             "<bookmark mark='a'/> In 2019 Charles Martin and Michael Mahoney fitted such tails across hundreds of "
             "trained networks: exponents nearly always between 1.5 and 5, and within a family, heavier tails went with "
             f"better test accuracy. <bookmark mark='b'/> Fitted to all 48 of GPT-2's matrices: {n_in} fall in that "
-            f"range; our layer has alpha {s['alpha']:.2f}. Random matrices have no tail at all."
+            f"range; our layer has alpha {s['alpha']:.2f}. The independent Gaussian reference has a compact limiting "
+            "bulk, rather than a power-law tail."
         ) as vo:
             self.play(FadeIn(g), FadeIn(rule), FadeIn(fit))
             vo.wait_until("a")

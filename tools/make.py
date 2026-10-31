@@ -78,7 +78,12 @@ def depends_on(video: str) -> dict[str, set | None]:
     for f in me.rglob("*.py"):
         src = f.read_text()
         for name, alias in _ALIAS.findall(src):
-            add(name, set(re.findall(rf"\b{alias}\.load\(\s*\"(\w+)\"", src)))
+            items = set(re.findall(rf"\b{alias}\.load\(\s*\"(\w+)\"", src))
+            # Part 31's final board reads completed results through _result(cN,
+            # "item"). They are dependencies too: otherwise a fresh build omits
+            # the earlier models without reporting that their data is missing.
+            items.update(re.findall(rf"\b_result\(\s*{alias}\s*,\s*\"(\w+)\"", src))
+            add(name, items)
         for name, alias in _LOAD_ALIAS.findall(src):
             add(name, set(re.findall(rf"\b{alias}\(\s*\"(\w+)\"", src)))
         for name in _COMMON_LOAD.findall(src):

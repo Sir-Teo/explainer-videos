@@ -62,15 +62,17 @@ class Metrics(VoiceoverScene):
             label(r"Austen", font_size=22, color=AUSTEN), nums[2], nums[3])
         for i, c_ in enumerate(cells):
             c_.move_to([2.0 + 1.9 * (i % 3), 1.9 - 0.7 * (i // 3), 0])
+        number_centres = [n_.get_center().copy() for n_ in nums]
 
         def upd(i):
             def f(m):
                 tp, fp = counts(thr.get_value())
-                m.set_value([tp, P - tp, fp, N - fp][i])
+                m.set_value([tp, P - tp, fp, N - fp][i]).move_to(number_centres[i])
             return f
 
         for i, n_ in enumerate(nums):
             n_.add_updater(upd(i))
+            n_.update()
         tv = DecimalNumber(1.0, num_decimal_places=2, font_size=30, color=WHITE)
         tv.add_updater(lambda m: m.set_value(thr.get_value()))
         tb = VGroup(VGroup(label(r"threshold", font_size=26, color=WHITE), tv).arrange(RIGHT, buff=0.2).move_to([3.9, 2.8, 0]),

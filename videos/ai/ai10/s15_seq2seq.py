@@ -79,7 +79,7 @@ class Seq2Seq(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def architecture(self):
-        src, tgt = "the cat sat".split(), "le chat assis".split()
+        src, tgt = "the cat sat".split(), "le chat était assis".split()
         enc = VGroup(*[Circle(radius=0.32, stroke_color=ENC, stroke_width=2.5, fill_color=ENC, fill_opacity=0.15)
                        for _ in src]).arrange(RIGHT, buff=0.8).move_to([-4.0, 0.2, 0])
         dec = VGroup(*[Circle(radius=0.32, stroke_color=DEC, stroke_width=2.5, fill_color=DEC, fill_opacity=0.15)
@@ -210,7 +210,7 @@ class Seq2Seq(VoiceoverScene):
         tail = ("But look at the most probable text: it goes round in circles, what Ari Holtzman and colleagues "
                 "later called neural text degeneration; for open-ended writing, sampling is used instead." if rep else
                 "For open-ended writing the most probable text is often dull, which is why language models sample "
-                "instead; for translation, where one answer is right, beam search won.")
+                "instead; for translation, where the aim is a faithful rendering, beam search became common.")
         with self.voiceover(
             "Writing the most probable output exactly would mean searching every possible sequence. Greedy "
             "decoding takes the single best word at each step instead. <bookmark mark='a'/> Beam search keeps a "

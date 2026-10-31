@@ -32,7 +32,7 @@ class Ridge(VoiceoverScene):
             cmath(r"Z\mathbf{w}", "=", r"\sum_j \mathbf{u}_j", r"\frac{d_j^2}{d_j^2 + \lambda}", r"\,(\mathbf{u}_j^{\top}\mathbf{y})",
                   font_size=36, colors=colors),
         ]
-        whys = [why(r"fit, \ plus a price on size"), why(r"gradient $= 0$; \ always invertible"),
+        whys = [why(r"fit, \ plus a price on size"), why(r"gradient $= 0$; \ invertible for $\lambda > 0$"),
                 why(r"$Z = UDV^{\top}$ \ (Part 3)"), why(r"the fit, \\ direction by direction")]
         rows[0].shift(RIGHT * 0)
         step = ladder(self, rows, whys, keep=4, top=1.3, x=-0.9, buff=0.42, align_index=1, edge=6.8)
@@ -44,7 +44,7 @@ class Ridge(VoiceoverScene):
         with self.voiceover(
             "Seventy weights can lean on accidents of the training pages. Ridge regression puts a price on their "
             "size: the squared error, plus lambda times the squared length of the weights. <bookmark mark='a'/> Set "
-            "the gradient to zero. Adding lambda to the diagonal makes the matrix invertible, always: that's how Hoerl "
+            "the gradient to zero. Adding a positive lambda to the diagonal makes the matrix invertible: that's how Hoerl "
             "and Kennard rescued nearly repeating columns in 1970. <bookmark mark='b'/> Now use the singular value "
             "decomposition from Part 3. <bookmark mark='c'/> The fit is a sum over directions in the data: each "
             "direction's share of the target, times a factor, d squared over d squared plus lambda. "

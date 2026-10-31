@@ -35,13 +35,13 @@ class Temperature(VoiceoverScene):
         rows = [
             cmath(r"\theta_{k+1}", "=", r"\theta_k - \eta\,\nabla L(\theta_k) - \eta\,\xi_k", r",\quad \operatorname{Cov}\xi_k = \Sigma/B",
                   font_size=34),
-            cmath(r"\theta_{k+1} - \theta_k", "=", r"-\nabla L\;\eta - \sqrt{\eta}\,\sqrt{\eta / B}\;\Sigma^{1/2} z_k",
+            cmath(r"\theta_{k+1} - \theta_k", r"\approx", r"-\nabla L\;\eta - \sqrt{\eta}\,\sqrt{\eta / B}\;\Sigma^{1/2} z_k",
                   r",\quad z_k \sim \mathcal{N}(0, I)", font_size=34, colors=cl),
             cmath(r"d\theta", "=", r"-\nabla L(\theta)\,dt", "+", r"\sqrt{\eta / B}", r"\;\Sigma^{1/2}\,dW_t", font_size=38,
                   colors=cl),
         ]
         whys = [why(r"the batch's gradient: \ the true one plus noise"),
-                why(r"write $\eta = dt$, \ the noise as $\sqrt{dt}$ times a Gaussian"),
+                why(r"Gaussian noise approximation; \ write $\eta = dt$"),
                 why(r"Euler--Maruyama, \ read backwards (Part 5)")]
         step = ladder(self, rows, whys, keep=3, top=2.2, x=-2.0, buff=0.6, edge=6.9)
         cite_ = cite(r"Q.~Li, C.~Tai \& W.~E (2017); \ S.~Mandt, M.~Hoffman \& D.~Blei (2017); \ S.~Smith \& Q.~Le (2018)",
@@ -50,10 +50,10 @@ class Temperature(VoiceoverScene):
             "How big is the cloud? Part five's stochastic differential equations answer it. <bookmark mark='a'/> A "
             "step of stochastic gradient descent is the true gradient step, plus the batch's noise, with covariance "
             "sigma over B. <bookmark mark='b'/> Call the step size eta a small time interval, dt. The noise term is "
-            "then the square root of dt, times a Gaussian, times the square root of eta over B. "
-            "<bookmark mark='c'/> That is exactly one Euler step of a stochastic differential equation: a push "
+            "approximated by the square root of dt, times a Gaussian, times the square root of eta over B. "
+            "<bookmark mark='c'/> This Gaussian surrogate is one Euler step of a stochastic differential equation: a push "
             "downhill, plus random kicks whose strength is eta over B. The learning rate and the batch size enter "
-            "only through their ratio. Physicists would call it a temperature."
+            "through their ratio in this approximation. It acts like a temperature; general SGD noise need not be isotropic or thermal."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
             for k, mk in enumerate("abc"):
@@ -76,22 +76,22 @@ class Temperature(VoiceoverScene):
             cmath(r"\mathbb{E}\,\|\theta - \theta^*\|^2 = \operatorname{tr} S", r"\approx",
                   r"\frac{\eta}{2B}\,\operatorname{tr}\!\big(H^{-1} C\big)", font_size=34),
         ]
-        whys = [why(r"$S$: \ the cloud's covariance, \ unchanged by a step"),
+        whys = [why(r"stationary covariance; \ stable local quadratic model"),
                 why(r"drop the $\eta^2 H S H$ term: \ small $\eta$"),
                 why(r"multiply by $H^{-1}$, \ take the trace")]
         step = ladder(self, rows, whys, keep=3, top=2.1, x=-1.6, buff=0.6, edge=6.9)
         tr = float(t["trHinvC"])
         fact = label(rf"for our loss: \ $\operatorname{{tr}}(H^{{-1}}C) = {tr:.2f}$, \ close to $2$, \ the number of "
-                     r"weights: \\ at the bottom of a log-loss, \ the noise's covariance $C$ is nearly the curvature $H$",
+                     r"weights: \\ for a well-specified likelihood, \ $C \approx H$ near the optimum",
                      font_size=22, color=C.BITS).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Near the bottom the gradient is the Hessian times the distance, and the cloud stops changing: its "
+            "Near a strict minimum, assume stable small steps and nearly constant noise covariance. Linearize the gradient as the Hessian times the distance. The cloud then approaches a stationary covariance: its "
             "covariance S comes out of each step the same as it went in. <bookmark mark='a'/> That is an equation "
             "for S. <bookmark mark='b'/> For small steps it simplifies to H S plus S H equals eta over B times the "
             "noise's covariance C. <bookmark mark='c'/> Take the trace: the cloud's mean squared size is eta over two "
             f"B, times the trace of H inverse C. <bookmark mark='d'/> For our two-weight loss that trace is {tr:.2f}, "
-            "close to two, because at the bottom of a log-loss the gradient's noise and the curvature are nearly "
-            "the same matrix."
+            "close to two. For a well-specified likelihood at its population optimum, the score covariance and Hessian match; our example is close to "
+            "that idealization."
         ) as vo:
             self.play(FadeIn(head))
             step(0)
@@ -173,9 +173,10 @@ class Temperature(VoiceoverScene):
                                r"by $k$ too, \ and the noise per unit of progress is unchanged. \ With a short warmup "
                                r"it trained ImageNet with batches of $8{,}192$ in one hour \ (Goyal et al., 2017).",
                                width=6.6, font_size=22).to_corner(UL, buff=0.35)
-        adam = definition_card(r"\dots and for Adam, \ a square root", r"Adam divides by the gradient's size, which a bigger "
-                               r"batch also changes: \ its SDE says scale the learning rate by $\sqrt{k}$ \ (Malladi, Lyu, "
-                               r"Panigrahi \& Arora, 2022).", width=6.6, font_size=22, color=C.MODEL_Q)
+        adam = definition_card(r"\dots and for Adam, \ a square root", r"In the SDE regime, for batch $\times k$: \ "
+                               r"$\eta' = \sqrt{k}\eta$, \ $1-\beta_i' = k(1-\beta_i)$, \ "
+                               r"$\epsilon' = \epsilon/\sqrt{k}$ \ (Malladi, Lyu, Panigrahi \& Arora, 2022).",
+                               width=6.6, font_size=21, color=C.MODEL_Q)
         adam.next_to(rule, DOWN, buff=0.35).align_to(rule, LEFT)
         # the rule breaks: steps to a target against batch, schematic hyperbola
         ax = Axes(x_range=[0, 4, 1], y_range=[0, 4, 1], x_length=4.6, y_length=3.6, tips=False,
@@ -193,7 +194,7 @@ class Temperature(VoiceoverScene):
             "learning rate by k too: the temperature stays the same. In 2017 a Facebook team used it, with a short "
             "warmup, to train an ImageNet classifier on batches of eight thousand images in one hour. "
             "<bookmark mark='b'/> For Adam, which divides by the gradient's size, the analysis says scale by root k "
-            "instead. <bookmark mark='c'/> And past a critical batch size the noise is already small, and bigger "
+            "within the SDE regime, while also scaling the momentum time scales and epsilon. It is not a universal large-batch rule. <bookmark mark='c'/> And past a critical batch size the noise is already small, and bigger "
             "batches stop buying fewer steps; Part twelve measures where."
         ) as vo:
             self.play(FadeIn(rule, shift=UP * 0.2))
@@ -265,12 +266,12 @@ class Temperature(VoiceoverScene):
 
     def takeaway(self):
         r = np.asarray(load("temperature")["ratio"])
-        t = takeaway_card(r"SGD runs at a temperature $\eta/B$",
-                          r"Its stationary cloud has size $\frac{\eta}{2B}\operatorname{tr}(H^{-1}C)$ \ (measured here: "
+        t = takeaway_card(r"SGD noise: \ an approximate temperature $\eta/B$",
+                          r"In the stable local, small-step model, its stationary cloud has size $\frac{\eta}{2B}\operatorname{tr}(H^{-1}C)$ \ (measured here: "
                           rf"${r.min():.2f}$ to ${r.max():.2f}$ times that). \ Same ratio, \ same noise: \ the linear "
                           r"scaling rule.", r"Next: \ how big can $\eta$ be at all?")
         with self.voiceover(
-            "So stochastic gradient descent runs at a temperature, eta over B, which sets the size of the cloud it "
+            "In this local, small-step approximation, SGD has an effective temperature, eta over B, which sets the size of the cloud it "
             "ends in, and keeping that ratio fixed is the linear scaling rule. But how large can the step itself be?"
         ):
             self.play(FadeIn(t[0], shift=UP * 0.2))

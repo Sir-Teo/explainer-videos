@@ -151,7 +151,7 @@ class PACBayes(VoiceoverScene):
                             r"optimize the PAC-Bayes bound itself", width=5.0, font_size=17, color=HIST)
         hist.to_corner(DR, buff=0.2)
         verdict = (f"So the bound: the cloud's true error is at most {100 * p['bound']:.0f} percent. Loose next to the "
-                   f"{100 * p['test_Q']:.1f} percent it actually gets on the test pages, but a real guarantee for a "
+                   f"{100 * p['test_Q']:.1f} percent it actually gets on the test pages, and a bound under the theorem's assumptions for a "
                    "network with far more weights than data, where the VC bound is meaningless."
                    if nonvac else
                    f"The bound comes to {100 * p['bound']:.0f} percent, no better than a coin; the cloud actually "
@@ -159,7 +159,7 @@ class PACBayes(VoiceoverScene):
         with self.voiceover(
             f"Now our own. A network with {p['params']:,} weights, trained on {p['n']} pages: twenty times more "
             "weights than examples. Following Dziugaite and Roy's recipe from 2017, the prior is a Gaussian centred "
-            "on the network's random starting weights, chosen before seeing any page. <bookmark mark='a'/> Train "
+            "on its random starting weights. These book pages are correlated and their preprocessing is fitted: this illustrates the calculation, rather than certifying the theorem's IID risk. <bookmark mark='a'/> Train "
             f"briefly, then make the weights a cloud: a Gaussian around them, and optimize the bound itself, "
             f"for {steps:,} steps. Watch the KL: from {kl0:.0f} nats it settles near {kl1:.0f}, while the cloud "
             "widens wherever the weights don't matter. <bookmark mark='b'/> The final account. "

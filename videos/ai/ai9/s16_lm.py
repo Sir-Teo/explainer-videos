@@ -24,7 +24,7 @@ def board_rows():
     except FileNotFoundError:
         raw = c1.load("raw")
         rows = [
-            dict(key="ascii", label="plain text file", bits=8.0, part=1, kind="baseline"),
+            dict(key="ascii", label="plain text file", bits=8 * raw["n_bytes"] / raw["n_chars"], part=1, kind="baseline"),
             dict(key="uniform", label=f"uniform over its {raw['passage_symbols']} symbols", bits=raw["uniform"], part=1,
                  kind="count"),
             dict(key="order0", label="letter frequencies", bits=raw["rows"][0]["test"], part=1, kind="count"),
@@ -88,11 +88,11 @@ class NeuralLM(VoiceoverScene):
                      corner=DR)
         tag = note(r"schematic: \ a few of the units and wires").to_corner(UL, buff=0.25).shift(DOWN * 0.35)
         hc = history_card(2003, r"Yoshua Bengio, R\'ejean Ducharme, Pascal Vincent \& Christian Jauvin",
-                          r"\textit{A Neural Probabilistic Language Model}: \ the first neural language model, \ for words",
+                          r"\textit{A Neural Probabilistic Language Model}: \ an influential neural language model, \ for words",
                           width=6.4, color=C.HUMAN).move_to([2.6, 1.4, 0])
         with self.voiceover(
             "Now let's use a network for the task that runs through this whole series: guess the next character. In "
-            "2003 Yoshua Bengio, Rejean Ducharme, Pascal Vincent and Christian Jauvin built the first neural language "
+            "2003 Yoshua Bengio, Rejean Ducharme, Pascal Vincent and Christian Jauvin published an influential neural language "
             f"model, for words. Here is its design, for characters. Take the last {n} characters. "
             f"<bookmark mark='a'/> Each character becomes a vector of {e} numbers, looked up in a table that is "
             "itself learned. <bookmark mark='b'/> The vectors go through one hidden layer of tanh units. "

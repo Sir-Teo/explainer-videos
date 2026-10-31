@@ -133,7 +133,7 @@ class Layers(VoiceoverScene):
         J = np.asarray(d["J_ln"])
         eig = np.asarray(d["eig_ln"])
         assert d["ln_diff"] < 1e-10
-        n_zero = int((np.abs(eig) < 1e-3).sum())
+        n_small = int((np.abs(eig) < 1e-3).sum())
         rows = [
             cmath(r"y", r"=", r"\frac{x - \mu\,\mathbf 1}{\sigma}, \quad \sigma = \sqrt{v + \epsilon}", font_size=36),
             cmath(r"J", r"=", r"\frac{1}{\sigma}\Big(I - \tfrac1n \mathbf 1 \mathbf 1^\top - \tfrac1n\, y\, y^\top\Big)",
@@ -148,16 +148,17 @@ class Layers(VoiceoverScene):
         ev = VGroup(label(r"eigenvalues:", font_size=24, color=GREY_A),
                     MathTex(r",\ ".join(sci(abs(v), 0) if abs(v) < 1e-3 else f"{v:.3f}" for v in eig), font_size=28,
                             color=GRAD),
-                    label(r"two (almost) zero: \ along $\mathbf 1$, \ and along $y$", font_size=24, color=GRAD),
-                    label(r"the loss cannot see the mean or the overall size", font_size=24, color=GREY_A))
+                    label(r"mean: \ eigenvalue $0$; \ scale: \ $\epsilon/\sigma^3$", font_size=24, color=GRAD),
+                    label(r"mean is removed; \ scale sensitivity is suppressed", font_size=24, color=GREY_A))
         ev.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([2.8, -1.6, 0])
         with self.voiceover(
-            "Last, layer norm: subtract the mean of the vector, divide by its spread. <bookmark mark='a'/> The mean "
+            "Last, layer norm: subtract the mean of the vector, divide by its spread, before any learned scale and "
+            "shift. <bookmark mark='a'/> The mean "
             "and the spread move when x moves, so the Jacobian has two corrections: a projection that removes the "
-            "direction of all ones, and another that removes y itself, all divided by sigma. <bookmark mark='b'/> "
-            f"Computed for six numbers, {n_zero} of its eigenvalues are zero, up to the tiny epsilon, and the rest "
-            "equal: a gradient flowing back through layer norm loses whatever would have changed the mean or the "
-            "overall size of the vector. Those are exactly the things the layer throws away."
+            "direction of all ones, and another that suppresses the radial direction, all divided by sigma. "
+            f"<bookmark mark='b'/> Computed for six numbers, {n_small} eigenvalues have magnitude below one "
+            "thousandth, and the rest are equal. Mean shifts are removed exactly; scale changes are strongly "
+            "suppressed, with a small remaining sensitivity from epsilon."
         ) as vo:
             step(0)
             vo.wait_until("a")

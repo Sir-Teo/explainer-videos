@@ -109,6 +109,7 @@ class Margins(VoiceoverScene):
             label(rf"below $0.5$ \ with the same margins: \ $n \approx {fmt_int(m['n_half'])}$", font_size=22,
                   color=GREY_A),
             label(rf"actual test error: \ ${100 * (1 - m['test_acc']):.1f}\%$", font_size=22, color=TEST),
+            label(r"normalized margins; \ confidence paid for $40$ choices of $\gamma$", font_size=18, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(key, DOWN, buff=0.35).align_to(key, LEFT)
         vac = m["best_bound"] >= 0.5
         hist = history_card(1998, r"P.~Bartlett", r"\textit{The size of the weights is more important than the size "

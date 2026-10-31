@@ -8,9 +8,9 @@ history. Every number on screen comes from a real computation, a model trained o
 the video, or from a published configuration or report, cited. Schematics are labeled `schematic` and made-up
 examples `illustrative`. Videos are `ai1` … `ai31`.
 
-The chapter-by-chapter plan, and the standard every part meets, are in [`SYLLABUS.md`](SYLLABUS.md). Parts are
-being rebuilt to that standard one by one, starting with Part 26; the parts not yet rebuilt are the earlier,
-shorter cuts, and their outros still name the old next part.
+The chapter-by-chapter plan and production standard are in [`SYLLABUS.md`](SYLLABUS.md). All 31 parts have chapter
+sources and bilingual narration tables. Generated videos from the earlier 20-part cut must be rebuilt against the
+current manifests; the presence of source files or an old export does not indicate that a part has passed QA.
 
 ## The story
 
@@ -36,14 +36,40 @@ idea led to the next.
 Three devices hold it together:
 
 1. **The scoreboard** (`explainer.ai.scoreboard`): one fixed passage, chapter 2 of Dashiell Hammett's *The Maltese
-   Falcon* (1930), in the US public domain and on Project Gutenberg since 1 January 2026, after every model on the
-   board was trained. Each row is a model's bits per character on it. Part 1 computes the passage and the first
+   Falcon* (1930), in the US public domain and on Project Gutenberg since 1 January 2026. It is held out of the
+   training data for the models we build here. Earlier editions may have reached pretrained models; the Gutenberg
+   release date does not establish that their training data is uncontaminated. Each row is a model's bits per
+   character on it. Part 1 computes the passage and the first
    rows (`.cache/ai1/scoreboard.json`); later parts add the models they build (Kneser–Ney and an ∞-gram in Part 7,
    a neural n-gram in Part 9, a character LSTM in Part 10, a small transformer in Part 13, and more), all trained on
    the same thirty novels.
 2. **Payoffs**: each idea is introduced with "where this comes back" (`explainer.ai.payoff_card`), and the later
    part opens by calling back to it.
 3. **The timeline strip** (`explainer.ai.timeline`, 1940–2030) on every chapter card.
+
+## QA evidence
+
+Run chapters in manifest order, with a separate process and evidence folder for each one:
+
+```bash
+python tools/qa_series.py ai1 --cached-only                 # animation endpoints and translation/layout checks
+python tools/qa_series.py ai1 --lang zh --cached-only       # Chinese layout
+python tools/qa_series.py ai1 --motion --cached-only --timeout 1200  # real silent playback and dead-air scans
+python tools/qa_audio.py ai1 --lang en                    # production voice, captured narration, signal/timing QA
+python tools/qa_report.py                                 # renders/qa/series/index.html
+```
+
+`--series ai --resume` continues the whole series, rechecking changed source or data. Missing data is reported
+without starting a second training job. Evidence includes frames, contact sheets, logs and input signatures.
+Endpoint checks do not examine intermediate animation frames. Silent playback does not verify synthesized
+narration. Both the visual review and narrated playback must be completed before production approval.
+Audio checks use the actual English narration captured by the chapter run (including computed results),
+translate it for Chinese, and retain its provenance. Start the documented narration server first. Signal/timing
+checks and the server's ASR checks provide review evidence; listening remains a separate check.
+
+The numbering migration renames generated files; it does not update their embedded titles, chapter markers,
+frames, or narration. Rebuild older cuts from the current manifests before production approval. The local QA
+index includes the legacy-export audit and any narrated previews alongside the chapter evidence.
 
 ## How it looks
 

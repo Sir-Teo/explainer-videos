@@ -32,7 +32,7 @@ class Quadratic(VoiceoverScene):
         rows = [
             cmath(r"x_{t+1}", r"=", r"x_t - \eta H x_t = (I - \eta H)\, x_t", font_size=36),
             cmath(r"c_{i,\,t+1}", r"=", r"(1 - \eta \lambda_i)\, c_{i,\,t}", font_size=36),
-            cmath(r"\text{converges}", r"\iff", r"\eta < 2 / \lambda_{\max}", font_size=36),
+            cmath(r"\text{converges}", r"\iff", r"0 < \eta < 2 / \lambda_{\max}", font_size=36),
             cmath(r"\text{rate}", r"=", r"\max_i |1 - \eta\lambda_i| \;\ge\; \frac{\kappa - 1}{\kappa + 1}", font_size=36),
         ]
         whys = [why(r"$f = \frac12 x^\top H x$, \ so $\nabla f = H x$", font_size=22),
@@ -40,15 +40,16 @@ class Quadratic(VoiceoverScene):
                 why(r"$|1 - \eta\lambda_i| < 1$ for every $i$", font_size=22),
                 why(r"best at $\eta = 2/(\lambda_{\min} + \lambda_{\max})$; \\ $\kappa = \lambda_{\max}/\lambda_{\min}$", font_size=22)]
         step = ladder(self, rows, whys, keep=4, top=2.6, x=-2.4, buff=0.6, edge=6.9)
-        head = label(r"gradient descent on a quadratic, \ exactly", font_size=28, color=GREY_A).to_edge(UP, buff=0.3)
+        head = label(r"gradient descent on a quadratic bowl, \ $H = H^\top \succ 0$", font_size=28, color=GREY_A)
+        head.to_edge(UP, buff=0.3)
         dc = definition_card(r"condition number $\kappa$", r"the ratio of the largest curvature to the smallest, "
                              r"$\lambda_{\max} / \lambda_{\min}$", width=7.0, font_size=21).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Near a minimum every smooth loss looks like a quadratic bowl, and on a bowl gradient descent can be "
-            "solved exactly. <bookmark mark='a'/> Each step multiplies the position by I minus eta H. "
+            "On a quadratic bowl with a positive-definite Hessian, gradient descent can be solved exactly. "
+            "<bookmark mark='a'/> Each step multiplies the position by I minus eta H. "
             "<bookmark mark='b'/> In the Hessian's eigenvectors that matrix is diagonal, so each coordinate shrinks "
             "on its own, by one minus eta times its eigenvalue. <bookmark mark='c'/> Every factor must be less than one "
-            "in size, so the step must be smaller than two over the largest curvature. <bookmark mark='d'/> And the "
+            "in size, so the step must be positive and smaller than two over the largest curvature. <bookmark mark='d'/> And the "
             "slowest coordinate sets the pace. The best step balances the two extremes, and the rate is kappa minus "
             "one over kappa plus one, where kappa, the condition number, is the largest curvature over the smallest."
         ) as vo:

@@ -99,6 +99,19 @@ def loglog_slope(x, y, lo=None) -> float:
     return float(np.polyfit(np.log(x[keep]), np.log(y[keep]), 1)[0])
 
 
+def mean_seed_loss(values):
+    """Mean over every seed; a diverged seed makes that rate ineligible."""
+    values = np.asarray(values, float)
+    return np.where(np.isfinite(values), values, np.inf).mean(axis=0)
+
+
+def best_rate_index(values):
+    means = mean_seed_loss(values)
+    if not np.isfinite(means).any():
+        raise ValueError("No learning rate completed successfully for every seed")
+    return int(np.argmin(means))
+
+
 # ---------------------------------------------------------------------------
 # 1. Infinitely wide
 # ---------------------------------------------------------------------------
@@ -292,15 +305,15 @@ def compute_mup():
         for w in MUP_WIDTHS:
             v = np.array([[part[f"{mode}_{w}_{lr:.3e}_{s}"] for lr in MUP_LRS] for s in (0, 1)])
             out[f"{mode}{w}"] = v  # seeds x learning rates
-        bests[mode] = [float(np.log10(MUP_LRS[int(np.nanargmin(np.nanmean(out[f'{mode}{w}'], 0)))])) for w in MUP_WIDTHS]
-        best_loss[mode] = [float(np.nanmin(np.nanmean(out[f"{mode}{w}"], 0))) for w in MUP_WIDTHS]
+        bests[mode] = [float(np.log10(MUP_LRS[int(best_rate_index(out[f'{mode}{w}']))])) for w in MUP_WIDTHS]
+        best_loss[mode] = [float(np.min(mean_seed_loss(out[f"{mode}{w}"]))) for w in MUP_WIDTHS]
     out["bests"], out["best_loss"] = bests, best_loss
     out["drift"] = {m: max(v) - min(v) for m, v in bests.items()}
     # the cost of tuning the small model and copying its rate: the big model's loss at the small model's best rate
     out["copy_loss"] = {}
     for mode in ("sp", "mup"):
-        i_small = int(np.nanargmin(np.nanmean(out[f"{mode}{MUP_WIDTHS[0]}"], 0)))
-        out["copy_loss"][mode] = float(np.nanmean(out[f"{mode}{MUP_WIDTHS[-1]}"], 0)[i_small])
+        i_small = int(best_rate_index(out[f"{mode}{MUP_WIDTHS[0]}"]))
+        out["copy_loss"][mode] = float(mean_seed_loss(out[f"{mode}{MUP_WIDTHS[-1]}"])[i_small])
     return out
 
 
@@ -332,14 +345,14 @@ def compute_depth():
     for a in ALPHAS:
         for d in DEPTHS:
             out[f"a{a}_d{d}"] = np.array([[part[f"{d}_{a}_{lr:.3e}_{s}"] for lr in DEPTH_LRS] for s in (0, 1)])
-        bests[str(a)] = [float(np.log10(DEPTH_LRS[int(np.nanargmin(np.nanmean(out[f'a{a}_d{d}'], 0)))])) for d in DEPTHS]
-        best_loss[str(a)] = [float(np.nanmin(np.nanmean(out[f"a{a}_d{d}"], 0))) for d in DEPTHS]
+        bests[str(a)] = [float(np.log10(DEPTH_LRS[int(best_rate_index(out[f'a{a}_d{d}']))])) for d in DEPTHS]
+        best_loss[str(a)] = [float(np.min(mean_seed_loss(out[f"a{a}_d{d}"]))) for d in DEPTHS]
     out["bests"], out["best_loss"] = bests, best_loss
     out["drift"] = {a: max(v) - min(v) for a, v in bests.items()}
     out["copy_loss"] = {}
     for a in ALPHAS:
-        i0 = int(np.nanargmin(np.nanmean(out[f"a{a}_d{DEPTHS[0]}"], 0)))
-        out["copy_loss"][str(a)] = float(np.nanmean(out[f"a{a}_d{DEPTHS[-1]}"], 0)[i0])
+        i0 = int(best_rate_index(out[f"a{a}_d{DEPTHS[0]}"]))
+        out["copy_loss"][str(a)] = float(mean_seed_loss(out[f"a{a}_d{DEPTHS[-1]}"])[i0])
     return out
 
 

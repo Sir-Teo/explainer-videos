@@ -358,6 +358,15 @@
   "within $0.1$ bits of $H$: \\ $17\\%$": "离 $H$ 不超过 $0.1$ 比特：\\ $17\\%$",
   "within $0.1$ bits of $H$: \\ $20\\%$": "离 $H$ 不超过 $0.1$ 比特：\\ $20\\%$",
   "within $0.1$ bits of $H$: \\ $59\\%$": "离 $H$ 不超过 $0.1$ 比特：\\ $59\\%$",
-  "within $0.1$ bits of $H$: \\ $99\\%$": "离 $H$ 不超过 $0.1$ 比特：\\ $99\\%$"
- }
+  "within $0.1$ bits of $H$: \\ $99\\%$": "离 $H$ 不超过 $0.1$ 比特：\\ $99\\%$",
+  "held out of our training; \\ pretrained models may have seen earlier copies": "未用于我们自己的训练；预训练模型可能见过更早的版本",
+  "the lower bound requires ideal probability ordering": "下界要求按真正的条件概率作理想排序",
+  "counting guesser (illustrative): \\ $6$ letters of context": "计数猜测者（演示）：$6$个字母的上下文"
+ },
+ "patterns": [
+  [
+   "\\\\text\\{ideal lower:\\}",
+   "\\\\text{理想猜测下界：}"
+  ]
+ ]
 }

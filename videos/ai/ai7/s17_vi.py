@@ -80,7 +80,7 @@ class VI(VoiceoverScene):
         colors2 = {r"\mathrm{ELBO}(q)": Q, r"\mathrm{KL}\big(q \,\|\, p(z \mid x)\big)": Q}
         elbo = cmath(r"\log p(x)", "=", r"\mathrm{ELBO}(q)", "+", r"\mathrm{KL}\big(q \,\|\, p(z \mid x)\big)",
                      colors=colors2, font_size=34).to_edge(DOWN, buff=0.35).to_edge(RIGHT, buff=0.4)
-        en = label(r"raise the bound, \ and the gap closes \ (VAEs, Part 20)", font_size=24, color=GREY_A)
+        en = label(r"raise the bound, \ and the gap narrows \ (VAEs, Part 20)", font_size=24, color=GREY_A)
         en.next_to(elbo, UP, buff=0.15)
         post_card = gloss(r"posterior", r"what we believe about the hidden things \\ after seeing the data", before_after(),
                           corner=DR, width=4.4, color=P)
@@ -158,7 +158,7 @@ class VI(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.6, x=-2.4, buff=0.55, edge=6.8)
         head = label(r"Where the identity comes from", font_size=32).to_edge(UP, buff=0.25)
         em = VGroup(label(r"EM (chapter 4): \ $q$ = the exact posterior, \ so KL $= 0$", font_size=24, color=GREY_A),
-                    label(r"variational inference: \ $q$ from a simple family, \ so KL $> 0$", font_size=24, color=Q))
+                    label(r"variational inference: \ restricted $q$ family, \ KL $\ge 0$", font_size=24, color=Q))
         em.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Where does that identity come from? Three lines. The log probability of the data doesn't depend on "
@@ -166,8 +166,8 @@ class VI(VoiceoverScene):
             "over the posterior. <bookmark mark='b'/> Multiply and divide by q, and split the log in two. "
             "<bookmark mark='c'/> The first part is the ELBO, the evidence lower bound; the second is the KL "
             "divergence from q to the true posterior. <bookmark mark='d'/> It's chapter four's EM bound again. EM "
-            "can make the KL zero, because there the posterior is computable. Variational inference can't, so it "
-            "settles for the best q in a family it can handle, and the gap is what it gives up."
+            "can make the KL zero, because there the posterior is computable. With a restricted family, variational inference "
+            "may leave a positive gap, even at the best q it can represent."
         ) as vo:
             self.play(FadeIn(head))
             step(0)

@@ -52,7 +52,7 @@ class LSTM(VoiceoverScene):
             "exactly one: a memory cell connected to itself with weight one, and no squashing. "
             "<bookmark mark='b'/> An error signal can ride it back across any number of steps without fading: the "
             "constant error carousel. <bookmark mark='c'/> Around it, learned gates decide when to write to the "
-            "cell and when to read it; in 2000 Felix Gers added a forget gate, to clear it."
+            "cell and when to read it; Gers, Schmidhuber and Fred Cummins later added a forget gate, to clear it."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
@@ -139,23 +139,23 @@ class LSTM(VoiceoverScene):
         rows = [
             cmath(r"\frac{\partial c_t}{\partial c_{t-1}}", r"=", r"\mathrm{diag}(f_t)", r"+", r"\ldots",
                   colors=colors, font_size=38),
-            cmath(r"\frac{\partial c_T}{\partial c_k}", r"\approx", r"\prod_{t=k+1}^{T} \mathrm{diag}(f_t)",
+            cmath(r"\left.\frac{\partial c_T}{\partial c_k}\right|_{\text{direct cell path}}", r"=", r"\prod_{t=k+1}^{T} \mathrm{diag}(f_t)",
                   font_size=38),
             cmath(r"f^{\,T-k} = \tfrac12", r"\iff", r"T - k = \frac{\ln 2}{-\ln f}", font_size=38),
             cmath(r"f = 0.99", r"\Rightarrow", r"\text{about } 69 \text{ steps}", font_size=38),
         ]
         rows[1][2].set_color(GATEC)
         whys = [why(r"along the belt; \ the rest goes through the gates"),
-                why(r"the product the RNN had, \ with gates in place of $W$"),
-                why(r"a forget gate held at $f$: \ the memory's half-life"),
+                why(r"the direct cell-state path; \\ other gate paths contribute too"),
+                why(r"a fixed $0<f<1$: \ half-life along the direct path"),
                 why(r"$f = 1$: \ forever, \ the original carousel")]
         step = ladder(self, rows, whys, keep=4, top=2.6, x=-2.2, align_index=1, edge=6.8)
         with self.voiceover(
             "Why does the gradient survive? <bookmark mark='a'/> Differentiate the cell state with respect to "
             "the previous one. Along the belt, it's just the forget gate, a diagonal matrix of numbers between zero "
-            "and one; the other paths run through the gates, and they are small. <bookmark mark='b'/> So back "
-            "across many steps, the gradient is multiplied by the product of the forget gates, which the network "
-            "learns, in place of the fixed matrix W. <bookmark mark='c'/> A forget gate held at f halves the "
+            "and one. Other paths run through the gates and need not be small. <bookmark mark='b'/> Along the direct cell-state path, back "
+            "across many steps, that contribution is multiplied by the product of the forget gates, which the network "
+            "learns. The full gradient includes the other paths too. <bookmark mark='c'/> A forget gate held at f halves this direct "
             "memory every ln 2 over minus ln f steps. <bookmark mark='d'/> At 0.99, about sixty-nine steps; at "
             "exactly one, Hochreiter's original carousel, forever."
         ) as vo:

@@ -5,7 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import DEPTH_COLORS, HIST, MUP, PART, SP, band, load, predict_card, table_card, takeaway_card
+from videos.ai.ai12.common import (DEPTH_COLORS, HIST, MUP, PART, SP, best_rate_index, load, mean_seed_loss,
+                                  predict_card, sweep_plot, table_card, takeaway_card)
 
 ALPHA_COL = {0.0: SP, 0.5: C.BITS, 1.0: MUP}
 SPOKEN = {0.0: "no scaling at all", 0.5: "one over root L", 1.0: "CompleteP"}
@@ -98,10 +99,12 @@ class Depth(VoiceoverScene):
             lines, bests = VGroup(), VGroup()
             for dd, col in zip(depths, DEPTH_COLORS):
                 v = np.asarray(d[f"a{a}_d{dd}"])
-                v = np.where(np.isfinite(v), np.minimum(v, hi), hi).mean(0)
-                lines.add(curve(ax, lrs, v, col, 2.8))
-                i = int(np.argmin(v))
-                bests.add(Dot(ax.c2p(lrs[i], v[i]), radius=0.08, color=col))
+                mean = mean_seed_loss(v)
+                plot = sweep_plot(ax, lrs, v, col, lo, hi)
+                lines.add(VGroup(plot[1], plot[2]))
+                i = best_rate_index(v)
+                if lo <= mean[i] <= hi:
+                    bests.add(Dot(ax.c2p(lrs[i], mean[i]), radius=0.08, color=col))
             xt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=18, color=GREY_B).next_to(ax.c2p(v, lo), DOWN, buff=0.08)
                           for v in range(math.ceil(lrs[0]), math.floor(lrs[-1]) + 1)])
             t = label(ALPHA_NAME[a], font_size=24, color=ALPHA_COL[a]).next_to(ax, UP, buff=0.15)
@@ -113,11 +116,10 @@ class Depth(VoiceoverScene):
         key = VGroup(label(r"depth", font_size=22, color=GREY_A),
                      *[label(str(v), font_size=22, color=c) for v, c in zip(depths, DEPTH_COLORS)]).arrange(RIGHT, buff=0.4)
         key.to_edge(UP, buff=0.3)
-        yn = label(rf"held-out bits after ${int(d['steps'])}$ steps, \ against the learning rate \ (mean of two seeds; "
-                   rf"width ${int(d['width'])}$)", font_size=20, color=GREY_A).next_to(key, DOWN, buff=0.12)
+        yn = label(rf"held-out bits after ${int(d['steps'])}$ steps \ (two seeds; \ width ${int(d['width'])}$; "
+                   r"triangles: \ off-scale or unstable)", font_size=20, color=GREY_A).next_to(key, DOWN, buff=0.12)
         dr = {float(k): v for k, v in d["drift"].items()}
-        b0 = [lrs[int(np.argmin(np.where(np.isfinite(np.asarray(d[f"a0.0_d{dd}"])), np.asarray(d[f"a0.0_d{dd}"]), 9.0).mean(0)))]
-              for dd in (depths[0], depths[-1])]
+        b0 = [lrs[best_rate_index(d[f"a0.0_d{dd}"])] for dd in (depths[0], depths[-1])]
         dir0 = "lower" if b0[1] < b0[0] - 1e-9 else ("higher" if b0[1] > b0[0] + 1e-9 else "the same")
         order = sorted(alphas, key=lambda a: dr[a])
         best_a = order[0]

@@ -141,9 +141,10 @@ class Outro(VoiceoverScene):
             r"\ Do the same for the forward difference, \ and compare how each scales with $u$.",
             r"With a checkpoint every $k$ layers of $n$, memory is $n/k + k$. \ Show $k = \sqrt n$ is best; \ with "
             r"two levels of checkpoints, \ show memory $O(n^{1/3})$ is possible.",
-            r"Gradient descent on $\tfrac12 x^\top H x$ with $\eta = 2/(\lambda_{\min} + \lambda_{\max})$: \ show the "
-            r"error shrinks by $(\kappa - 1)/(\kappa + 1)$ per step, \ and about $\tfrac{\kappa}{2}\ln\tfrac1\epsilon$ "
-            r"steps reach $\epsilon$.",
+            r"For $H = H^\top \succ 0$, \ gradient descent on $\tfrac12 x^\top H x$ with "
+            r"$\eta = 2/(\lambda_{\min} + \lambda_{\max})$: \ show the error shrinks by at most "
+            r"$(\kappa - 1)/(\kappa + 1)$ per step, \ and for large $\kappa$, \ about "
+            r"$\tfrac{\kappa}{2}\ln\tfrac1\epsilon$ steps reduce it by a factor $\epsilon$.",
             r"Maximize $\mathbb E_\pi[r] - \beta\,\mathrm{KL}(\pi \,\|\, \pi_{\mathrm{ref}})$ over distributions $\pi$ "
             r"with a Lagrange multiplier, \ and show $\pi^* \propto \pi_{\mathrm{ref}}\, e^{r/\beta}$, \ with value "
             r"$\beta \log \textstyle\sum_a \pi_{\mathrm{ref}}(a)\, e^{r(a)/\beta}$.",

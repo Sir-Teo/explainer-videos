@@ -66,7 +66,7 @@ class Scoreboard(VoiceoverScene):
                     ("already beats the largest GPT-2" if q06 < gxl else f"gets {q06:.2f} bits per character"))
         with self.voiceover(
             "Here's the board, for the Falcon passage as printed: capitals, punctuation, everything. "
-            "<bookmark mark='a'/> Plain text spends eight bits per character. <bookmark mark='b'/> The passage uses "
+            "<bookmark mark='a'/> Plain text spends about eight bits per character. <bookmark mark='b'/> The passage uses "
             f"only {raw['passage_symbols']} different symbols, so a blind guess among them costs "
             f"{b['uniform']:.2f} bits. <bookmark mark='c'/> Letter frequencies, "
             f"counted in our thirty books, bring it to {b['order0']:.2f}, <bookmark mark='d'/> and one character of "

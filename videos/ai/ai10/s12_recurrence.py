@@ -86,14 +86,14 @@ class Recurrence(VoiceoverScene):
         rows = [
             cmath(r"\frac{\partial L}{\partial h_k}", r"=", r"\frac{\partial L}{\partial h_T}\,"
                   r"\frac{\partial h_T}{\partial h_k}", font_size=36),
-            cmath(r"\frac{\partial h_T}{\partial h_k}", r"=", r"\prod_{t=k+1}^{T}", r"\mathrm{diag}\big(\tanh'(a_t)"
+            cmath(r"\frac{\partial h_T}{\partial h_k}", r"=", r"\overleftarrow{\prod_{t=k+1}^{T}}", r"\mathrm{diag}\big(\tanh'(a_t)"
                   r"\big)", r"W", colors=colors, font_size=36),
             cmath(r"\Big\|\frac{\partial h_T}{\partial h_k}\Big\|", r"\le", r"\prod_{t=k+1}^{T}", r"1", r"\cdot",
                   r"\sigma_{\max}(W)", r"=", r"\sigma_{\max}(W)^{\,T-k}", colors=colors, font_size=36),
         ]
         rows[2][7].set_color(HC)
-        whys = [why(r"the chain rule, \ back through time"),
-                why(r"one Jacobian per step: \ $a_t = W h_{t-1} + U x_t + b$"),
+        whys = [why(r"final-state loss $L(h_T)$: \ the chain rule back through time"),
+                why(r"later Jacobians on the left; \ $a_t = W h_{t-1} + U x_t + b$"),
                 why(r"norms multiply at most; \ $|\tanh'| \le 1$")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-2.6, align_index=1, edge=6.8)
         cases = VGroup(label(r"$\sigma_{\max} < 1$: \ the gradient vanishes, \ exponentially fast", font_size=26,
@@ -106,7 +106,7 @@ class Recurrence(VoiceoverScene):
         cite_ = cite(r"Werbos (1990); \ Hochreiter (1991); \ Bengio, Simard \& Frasconi (1994)", corner=DL)
         with self.voiceover(
             "To train it, unroll it and backpropagate, as Paul Werbos described in 1990: backpropagation through "
-            "time. <bookmark mark='a'/> The gradient with respect to an early state h k passes through every later "
+            "time. <bookmark mark='a'/> For a loss on the final state, the gradient with respect to an early state h k passes through every later "
             "state. <bookmark mark='b'/> Each step back multiplies it by that step's Jacobian: the tanh's slopes "
             "times the same matrix W, again and again. <bookmark mark='c'/> The slopes are at most one, so the "
             "product is at most the largest singular value of W, raised to the number of steps. "
@@ -140,9 +140,10 @@ class Recurrence(VoiceoverScene):
                   yfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.0, -0.4, 0])
         A = ax.ax
         cl = lambda a: np.clip(a, ylo, yhi)  # noqa: E731
+        visible = lambda a: np.where((a >= ylo) & (a <= yhi), a, np.nan)  # noqa: E731
         tanh_c = VGroup(*[VGroup(band(A, ks, cl(LO[i]), cl(HI[i]), RHO_C[r], 0.15),
-                                 curve(A, ks, cl(M[i]), RHO_C[r], 4)) for i, r in enumerate(rhos)])
-        lin_c = VGroup(*[DashedVMobject(curve(A, ks, cl(LM[i]), RHO_C[r], 2.5), num_dashes=40)
+                                 curve(A, ks, visible(M[i]), RHO_C[r], 4)) for i, r in enumerate(rhos)])
+        lin_c = VGroup(*[DashedVMobject(curve(A, ks, visible(LM[i]), RHO_C[r], 2.5), num_dashes=40)
                          for i, r in enumerate(rhos)])
         leg = legend([(RHO_C[r], rf"largest eigenvalue of $W$: \ ${r:g}$") for r in rhos], font_size=22)
         leg.to_corner(UR, buff=0.4)

@@ -41,6 +41,7 @@ from datetime import date
 import numpy as np
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import locked_item
 from videos.ai.ai14 import facts as F
 
 CACHE = Cache("ai14")
@@ -228,13 +229,18 @@ def compute_aa():
 # ---------------------------------------------------------------------------
 # Our own lineage: training
 # ---------------------------------------------------------------------------
+@locked_item(lambda name, kind, shape: CACHE.path(name))
 def _train(name, kind, shape):
     from videos.ai.ai14 import lm
 
     CACHE.dir.mkdir(parents=True, exist_ok=True)
+    # Weights and replay metadata are one result. A failed forced retraining
+    # must not leave an old completion marker describing new weights.
+    CACHE.path(name).unlink(missing_ok=True)
     return lm.train(name, kind, shape, TOKENS, CACHE.dir)
 
 
+@locked_item(lambda name: CACHE.path(name))
 def _trained(name):
     """One of our trained models, training it (or resuming its checkpoint) first if it isn't cached yet, so that
     `python -m videos.ai.ai14.compute` alone rebuilds everything."""

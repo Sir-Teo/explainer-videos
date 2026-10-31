@@ -84,7 +84,7 @@
   "7f48f50312db": {
    "scene": "Momentum",
    "en": "Why does it work, and how fast? On a quadratic, every direction of the valley is separate. <bookmark mark='a'/> Along a direction of curvature lambda, the update is a recurrence in the last two positions. <bookmark mark='b'/> Try powers of a number z, and z must solve a quadratic equation. <bookmark mark='c'/> When its roots are complex, the position spirals inward, and shrinks by exactly the square root of beta every step, whatever lambda is. <bookmark mark='d'/> So choose eta and beta to put every curvature between mu and L into that spiralling regime: the two ends of the range just on its edge. <bookmark mark='e'/> Solving, the square root of beta is root kappa minus one over root kappa plus one. <bookmark mark='f'/> That is about one minus two over root kappa: the steps now grow with the square root of the condition number. A thousand becomes about thirty.",
-   "zh": "它为什么有效，又有多快？在二次函数上，山谷的每个方向是独立的。<bookmark mark='a'/>沿着曲率为λ的方向，更新是关于最近两个位置的递推。<bookmark mark='b'/>试试z的幂，z就必须满足一个二次方程。<bookmark mark='c'/>当它的根是复数时，位置会螺旋式地向内收缩，而且不管λ是多少，每一步都恰好缩小为β的平方根倍。<bookmark mark='d'/>所以选择η和β，让μ到L之间的每一个曲率都落进这个螺旋区：让区间的两端正好在它的边上。<bookmark mark='e'/>解出来，β的平方根等于根号κ减1，除以根号κ加1。<bookmark mark='f'/>这大约是1减根号κ分之2：步数现在随条件数的平方根增长。一千变成了大约三十。"
+   "zh": "它为什么有效，又有多快？在二次函数上，山谷的每个方向是独立的。<bookmark mark='a'/>沿着曲率为λ的方向，更新是关于最近两个位置的递推。<bookmark mark='b'/>试试z的幂，z就必须满足一个二次方程。<bookmark mark='c'/>当它的根是复数时，不管λ是多少，根的模都是β的平方根。这决定振荡的包络，而不是每一步位置的缩小比例。<bookmark mark='d'/>所以选择η和β，让μ到L之间的每一个曲率都落进这个螺旋区：让区间的两端正好在它的边上。<bookmark mark='e'/>解出来，β的平方根等于根号κ减1，除以根号κ加1。端点处的重根还可能给衰减乘上k因子。<bookmark mark='f'/>κ较大时，根的模约为1减根号κ分之2：步数现在随条件数的平方根增长。一千变成了大约三十。"
   },
   "ac53f1cadb68": {
    "scene": "Momentum",
@@ -109,7 +109,7 @@
   "6fd218866015": {
    "scene": "SGD",
    "en": "The loss of a model is an average over its training examples, and so is its gradient. Computing it exactly means going through all the data for every single step; real models train on trillions of words. <bookmark mark='a'/> Instead, average over a small random batch. <bookmark mark='b'/> On average that estimate is exactly right, and its noise shrinks as the batch grows: the covariance falls like one over B. <bookmark mark='c'/> Herbert Robbins and Sutton Monro, statisticians at North Carolina, asked in 1951 when steps along such noisy estimates still reach the answer.",
-   "zh": "一个模型的损失是对所有训练样本的平均，它的梯度也是。要精确地算出来，每走一步都得把全部数据过一遍；真实的模型要在几万亿个词上训练。<bookmark mark='a'/>换个办法：只在一小批随机样本上取平均。<bookmark mark='b'/>平均来说，这个估计完全正确，它的噪声随批量变大而缩小：协方差像B分之1那样下降。<bookmark mark='c'/>1951年，北卡罗来纳的两位统计学家赫伯特·罗宾斯和萨顿·门罗问：沿着这种带噪声的估计走，什么时候仍然能到达答案？"
+   "zh": "一个模型的损失是对所有训练样本的平均，它的梯度也是。要精确地算出来，每走一步都得把全部数据过一遍；真实的模型要在几万亿个词上训练。<bookmark mark='a'/>换个办法：只在一小批随机样本上取平均。<bookmark mark='b'/>平均来说，这个估计完全正确。独立抽样时，协方差像B分之1那样下降；不放回抽样还要乘上有限总体修正因子。<bookmark mark='c'/>1951年，北卡罗来纳的两位统计学家赫伯特·罗宾斯和萨顿·门罗问：沿着这种带噪声的估计走，什么时候仍然能到达答案？"
   },
   "d0fb7ed4ee24": {
    "scene": "SGD",
@@ -139,7 +139,7 @@
   "0c8093b1b9f7": {
    "scene": "Temperature",
    "en": "How big is the cloud? Part five's stochastic differential equations answer it. <bookmark mark='a'/> A step of stochastic gradient descent is the true gradient step, plus the batch's noise, with covariance sigma over B. <bookmark mark='b'/> Call the step size eta a small time interval, dt. The noise term is then the square root of dt, times a Gaussian, times the square root of eta over B. <bookmark mark='c'/> That is exactly one Euler step of a stochastic differential equation: a push downhill, plus random kicks whose strength is eta over B. The learning rate and the batch size enter only through their ratio. Physicists would call it a temperature.",
-   "zh": "这团云有多大？第5部分的随机微分方程能回答。<bookmark mark='a'/>随机梯度下降的一步，就是真梯度的一步，加上这一批的噪声，协方差是Σ除以B。<bookmark mark='b'/>把步长η看成一小段时间dt。噪声项于是等于dt的平方根，乘以一个高斯变量，再乘以η除以B的平方根。<bookmark mark='c'/>这恰好是一个随机微分方程的一步欧拉格式：向下坡的推力，加上强度为η除以B的随机踢动。学习率和批量大小只通过它们的比值起作用。物理学家会把它叫作温度。"
+   "zh": "这团云有多大？第5部分的随机微分方程能回答。<bookmark mark='a'/>随机梯度下降的一步，就是真梯度的一步，加上这一批的噪声，协方差是Σ除以B。<bookmark mark='b'/>把步长η看成一小段时间dt。在高斯近似下，噪声项约为dt的平方根，乘以一个高斯变量，再乘以η除以B的平方根。<bookmark mark='c'/>这个高斯替代模型对应一个随机微分方程的一步欧拉格式：向下坡的推力，加上强度为η除以B的随机踢动。在这个近似下，学习率和批量通过它们的比值影响噪声，类似温度；一般的SGD噪声未必各向同性，也未必是热噪声。"
   },
   "21eeb5080c55": {
    "scene": "Temperature",
@@ -154,7 +154,7 @@
   "372f41062c7a": {
    "scene": "Temperature",
    "en": "This explains a rule found by experiment. <bookmark mark='a'/> Multiply the batch by k, and the learning rate by k too: the temperature stays the same. In 2017 a Facebook team used it, with a short warmup, to train an ImageNet classifier on batches of eight thousand images in one hour. <bookmark mark='b'/> For Adam, which divides by the gradient's size, the analysis says scale by root k instead. <bookmark mark='c'/> And past a critical batch size the noise is already small, and bigger batches stop buying fewer steps; Part twelve measures where.",
-   "zh": "这解释了凭实验找到的一条规则。<bookmark mark='a'/>把批量乘以k，学习率也乘以k：温度不变。2017年，Facebook的一个团队用它，再加上短暂的预热，用每批八千张图片，在一小时内训练出了一个ImageNet分类器。<bookmark mark='b'/>对Adam来说，它要除以梯度的大小，分析说应该乘以k的平方根。<bookmark mark='c'/>而超过临界批量之后，噪声已经很小，更大的批量就不再能换来更少的步数；第12部分会测出在哪里。"
+   "zh": "这解释了凭实验找到的一条规则。<bookmark mark='a'/>把批量乘以k，学习率也乘以k：温度不变。2017年，Facebook的一个团队用它，再加上短暂的预热，用每批八千张图片，在一小时内训练出了一个ImageNet分类器。<bookmark mark='b'/>对Adam来说，在SDE适用范围内，学习率乘以k的平方根，同时也要缩放动量时间尺度和epsilon。这不是适用于任意大批量的通用法则。<bookmark mark='c'/>而超过临界批量之后，噪声已经很小，更大的批量就不再能换来更少的步数；第12部分会测出在哪里。"
   },
   "18b74e55659c": {
    "scene": "Temperature",
@@ -209,7 +209,7 @@
   "5927e3d0eec2": {
    "scene": "Adam",
    "en": "One learning rate for every weight is a strange choice: some weights see large gradients, others tiny ones. <bookmark mark='a'/> In 2011 John Duchi, Elad Hazan and Yoram Singer proposed AdaGrad: divide each weight's step by the root of its summed squared gradients. <bookmark mark='b'/> A rare word gets a big step when it does appear. <bookmark mark='c'/> The catch: the sum only grows, so every step shrinks like one over root t, and a long run slows to a crawl.",
-   "zh": "所有权重共用一个学习率，是个奇怪的选择：有些权重的梯度很大，有些很小。<bookmark mark='a'/>2011年，约翰·杜奇、埃拉德·哈赞和约拉姆·辛格提出了AdaGrad：用每个权重梯度平方累计和的平方根，去除它的步长。<bookmark mark='b'/>一个罕见的词，一旦出现，就迈一大步。<bookmark mark='c'/>问题在于：这个和只增不减，每一步都像根号t分之1那样缩小，长时间的训练会慢得像爬。"
+   "zh": "所有权重共用一个学习率，是个奇怪的选择：有些权重的梯度很大，有些很小。<bookmark mark='a'/>2011年，约翰·杜奇、埃拉德·哈赞和约拉姆·辛格提出了AdaGrad：用每个权重梯度平方累计和的平方根，去除它的步长。<bookmark mark='b'/>一个罕见的词，一旦出现，就迈一大步。<bookmark mark='c'/>问题在于：这个和只增不减，对稳定的梯度，每一步都像根号t分之1那样缩小，长时间的训练会慢得像爬。"
   },
   "6045ca04af6c": {
    "scene": "Adam",
@@ -314,7 +314,7 @@
   "ac966f062bd9": {
    "scene": "Shampoo",
    "en": "Here is a surprise hidden in Shampoo. Switch off its memory, so the two factors come from the current gradient alone. <bookmark mark='a'/> Write the gradient by its singular value decomposition, from part three. <bookmark mark='b'/> Then L to the minus a quarter, and R to the minus a quarter, are built from the same singular vectors, with the singular values raised to minus a half. <bookmark mark='c'/> Multiply out, and every singular value cancels: what is left is U V transpose, the gradient with all its singular values set to one. Jeremy Bernstein and Laker Newhouse pointed this out in 2024. <bookmark mark='d'/> Remember that matrix: it is Muon's step.",
-   "zh": "Shampoo里藏着一个惊喜。把它的记忆关掉，让两个因子只来自当前的梯度。<bookmark mark='a'/>用第3部分的奇异值分解写出梯度。<bookmark mark='b'/>于是L的负四分之一次方和R的负四分之一次方，由同样的奇异向量构成，奇异值则变成负二分之一次方。<bookmark mark='c'/>乘出来，所有奇异值都消掉了：剩下的是U乘V转置，也就是把所有奇异值都设成1的梯度。杰里米·伯恩斯坦和莱克·纽豪斯在2024年指出了这一点。<bookmark mark='d'/>记住这个矩阵：它就是Muon的一步。"
+   "zh": "Shampoo里藏着一个惊喜。把它的记忆关掉，让两个因子只来自当前的梯度。<bookmark mark='a'/>只保留非零奇异方向，用第3部分的紧致奇异值分解写出梯度。<bookmark mark='b'/>于是L的负四分之一次方和R的负四分之一次方，在非零支撑上由同样的奇异向量构成，奇异值则变成负二分之一次方。<bookmark mark='c'/>乘出来，所有非零奇异值都消掉了：剩下的是U乘V转置，也就是把所有非零奇异值都设成1的梯度。杰里米·伯恩斯坦和莱克·纽豪斯在2024年指出了这一点。<bookmark mark='d'/>记住这个矩阵：它就是Muon的一步。"
   },
   "a637429c4925": {
    "scene": "Shampoo",

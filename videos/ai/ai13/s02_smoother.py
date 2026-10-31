@@ -202,8 +202,7 @@ class Smoother(VoiceoverScene):
         with self.voiceover(
             "Here is the definition for the rest of this part. <bookmark mark='a'/> Attention scores each key against "
             "the query with a dot product divided by the square root of d, turns the scores into weights with a "
-            "softmax, and returns the weighted average of the values. <bookmark mark='b'/> It entered neural "
-            "networks in 2014, when Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio let a translation network "
+            "softmax, and returns the weighted average of the values. <bookmark mark='b'/> In 2014, Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio let a neural translation network "
             "look back at its source sentence, as in Part 10; in 2017 it became the whole network. "
             "<bookmark mark='c'/> A question: if every key is the same, what does attention return? "
             "<bookmark mark='d'/> Every weight is one over n: the plain average of the values. Attention can only "

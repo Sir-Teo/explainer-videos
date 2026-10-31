@@ -208,11 +208,11 @@ class Probability(VoiceoverScene):
             "<bookmark mark='d'/> This is conditional probability: B given A is the probability of both, divided "
             "by that of A."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(grid[i * 27:(i + 1) * 27]) for i in range(27)], lag_ratio=0.08),
+            self.play(FadeIn(head),
+                      LaggedStart(*[FadeIn(grid[i * 27:(i + 1) * 27]) for i in range(27)], lag_ratio=0.08),
                       FadeIn(rows), FadeIn(cols), FadeIn(rl), FadeIn(cl), run_time=2.5)
-            self.play(FadeIn(row_note))
+            vo.wait_until("a")
+            self.play(Indicate(grid[ti * 27:(ti + 1) * 27], scale_factor=1.03), FadeIn(row_note))
             vo.wait_until("d")
             self.play(*[ReplacementTransform(grid[k], cells[k]) for k in range(729)], FadeOut(rows), FadeOut(cols),
                       FadeOut(rl), FadeOut(cl), FadeOut(row_note), run_time=2.2)

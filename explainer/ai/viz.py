@@ -126,8 +126,11 @@ def glow_dot(point, color=YELLOW, radius=0.08, layers=5, spread=3.2, opacity=0.5
 
 def code_block(lines, font_size=24, color=GREY_A, font="DejaVu Sans Mono", buff=0.14) -> VGroup:
     """Lines of code as Text, one per line, keeping their indentation (Text drops leading spaces)."""
-    em = Text("M" * 20, font=font, font_size=font_size).width / 20
-    rows = VGroup(*[Text(s.strip() or ".", font=font, font_size=font_size, color=color) for s in lines])
+    from explainer.zh_text import verbatim
+
+    with verbatim():
+        em = Text("M" * 20, font=font, font_size=font_size).width / 20
+        rows = VGroup(*[Text(s.strip() or ".", font=font, font_size=font_size, color=color) for s in lines])
     rows.arrange(DOWN, aligned_edge=LEFT, buff=buff)
     for r, s in zip(rows, lines):
         if not s.strip():
@@ -300,12 +303,19 @@ class Cloud3D(VGroup):
         for i, d in enumerate(self.dots):
             d.add_updater(self._dot_updater(i))
         self.labels = VGroup()
+        self.leaders = VGroup()
         self.label_of = {}
+        self._label_offsets = {}
+        self._label_buff = label_buff
         for i, lab in (labels or {}).items():
-            lab.add_updater(self._label_updater(i, label_buff))
             self.labels.add(lab)
             self.label_of[i] = lab
-        self.add(self.dots, self.labels)
+            self.leaders.add(Line(ORIGIN, RIGHT * 0.01, color=lab.get_color(), stroke_width=1, stroke_opacity=0))
+        # FadeIn on a subset of labels can detach their container from the scene.
+        # A data point stays present throughout the shot, so it drives layout.
+        if self.label_of and len(self.dots):
+            self.dots[0].add_updater(lambda dot: self._layout_labels())
+        self.add(self.dots, self.leaders, self.labels)
         self.update()
 
     def project(self, p):
@@ -325,11 +335,59 @@ class Cloud3D(VGroup):
             d.set_opacity(float(np.clip(0.55 + 0.45 * depth, 0.3, 1.0)))
         return upd
 
-    def _label_updater(self, i, buff):
-        def upd(m):
-            pos, _ = self.project(self.xyz[i])
-            m.next_to(pos, UR, buff=buff)
-        return upd
+    def _layout_labels(self):
+        """Keep callouts readable as the projection turns, without moving data.
+
+        Reuse a label's relative position until it collides with another label.
+        This keeps the layout stable through rotation, with leaders identifying
+        the actual points when labels need to move away from a dense cluster.
+        """
+        placed = []
+        left, right = -config.frame_width / 2 + 0.3, config.frame_width / 2 - 0.3
+        bottom, top = -config.frame_height / 2 + 0.65, config.frame_height / 2 - 0.4
+
+        def overlap(box, other):
+            return max(0, min(box[1], other[1]) - max(box[0], other[0]) + 0.08) * max(
+                0, min(box[3], other[3]) - max(box[2], other[2]) + 0.06)
+
+        for (i, lab), leader in zip(self.label_of.items(), self.leaders):
+            anchor, _ = self.project(self.xyz[i])
+            w, h = lab.width, lab.height
+            alpha = float(lab.get_fill_opacity())
+            base = np.array([w / 2 + self._label_buff, h / 2 + self._label_buff, 0])
+            previous = self._label_offsets.get(i, base)
+            if alpha < 0.02:
+                lab.move_to(anchor + previous)
+                leader.set_stroke(opacity=0)
+                continue
+            offsets = [previous]
+            for gap in (self._label_buff, 0.3, 0.5, 0.75, 1.0, 1.35, 1.8, 2.4, 3.0):
+                for dx, dy in ((1, 1), (-1, 1), (1, -1), (-1, -1), (1, 0), (-1, 0), (0, 1), (0, -1)):
+                    offsets.append(np.array([dx * (w / 2 + gap), dy * (h / 2 + gap), 0]))
+            best, cost = previous, float("inf")
+            for offset in offsets:
+                x, y = (anchor + offset)[:2]
+                box = (x - w / 2, x + w / 2, y - h / 2, y + h / 2)
+                outside = (max(0, left - box[0]) + max(0, box[1] - right) +
+                           max(0, bottom - box[2]) + max(0, box[3] - top))
+                collision = sum(overlap(box, other) for other in placed)
+                value = 1000 * outside + 1000 * collision + np.linalg.norm(offset - previous) + 0.05 * np.linalg.norm(offset)
+                if value < cost:
+                    best, cost = offset, value
+                if outside == 0 and collision == 0 and np.array_equal(offset, previous):
+                    break
+            self._label_offsets[i] = best
+            lab.move_to(anchor + best)
+            x, y = lab.get_center()[:2]
+            placed.append((x - w / 2, x + w / 2, y - h / 2, y + h / 2))
+            # End the leader at the nearest point on the label's bounding box.
+            endpoint = np.array([np.clip(anchor[0], x - w / 2, x + w / 2),
+                                 np.clip(anchor[1], y - h / 2, y + h / 2), 0])
+            distance = np.linalg.norm(endpoint - anchor)
+            if distance > 0.18:
+                leader.put_start_and_end_on(anchor, endpoint).set_stroke(opacity=0.45 * alpha)
+            else:
+                leader.set_stroke(opacity=0)
 
     def look_at(self, p, zoom: float) -> list:
         """Animations that bring data point ``p`` to the centre at magnification ``zoom``."""
@@ -380,9 +438,29 @@ def contour_lines(ax: Axes, f, x_range, y_range, levels, n=(160, 120), colors=(S
 # Plots: axes with a few ticks, curves, bands of spread, legends
 # ---------------------------------------------------------------------------
 def curve(ax, xs, ys, color, stroke_width=3, smooth=False) -> VMobject:
-    pts = [ax.c2p(x, y) for x, y in zip(xs, ys) if np.isfinite(y)]
+    """Plot finite runs separately, preserving gaps at poles or omitted values."""
     m = VMobject(color=color, stroke_width=stroke_width)
-    return m.set_points_smoothly(pts) if smooth else m.set_points_as_corners(pts)
+    run = []
+
+    def flush():
+        if not run:
+            return
+        pts = run if len(run) > 1 else [run[0], run[0]]
+        path = VMobject()
+        if smooth:
+            path.set_points_smoothly(pts)
+        else:
+            path.set_points_as_corners(pts)
+        m.add_subpath(path.points)
+        run.clear()
+
+    for x, y in zip(xs, ys):
+        if np.isfinite(x) and np.isfinite(y):
+            run.append(ax.c2p(x, y))
+        else:
+            flush()
+    flush()
+    return m
 
 
 def band(ax, xs, lo, hi, color, opacity=0.18) -> VMobject:

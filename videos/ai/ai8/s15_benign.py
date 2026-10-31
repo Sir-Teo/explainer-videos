@@ -28,10 +28,15 @@ class Benign(VoiceoverScene):
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([0, -0.6, 0])
         smooth = ax.plot(f, x_range=[-3, 3], color=MEAS, stroke_width=4)
         grid = np.linspace(-3, 3, 1600)
+        # Nearby spikes overlap. Solve for their coefficients so the pictured
+        # interpolant actually reaches every label, as the narration claims.
+        gram = np.exp(-((xs[:, None] - xs[None, :]) / 0.025) ** 2)
+        coefficients = np.linalg.solve(gram, ys - f(xs))
 
         def spiky(x):
-            return f(x) + sum((y - f(a)) * np.exp(-((x - a) / 0.025) ** 2) for a, y in zip(xs, ys))
+            return f(x) + sum(c * np.exp(-((x - a) / 0.025) ** 2) for a, c in zip(xs, coefficients))
 
+        assert np.allclose(spiky(xs), ys, rtol=0, atol=1e-10)
         sp = VMobject(color=C.BITS, stroke_width=2.5).set_points_as_corners([ax.c2p(x, spiky(x)) for x in grid])
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.07, color=WHITE) for a, b in zip(xs, ys)])
         cw = np.polyfit(xs, ys, 11)
@@ -43,8 +48,8 @@ class Benign(VoiceoverScene):
         tag = note(r"schematic").to_corner(DR, buff=0.25)
         with self.voiceover(
             "Double descent showed fits that pass through every noisy label and still do well. How can fitting "
-            "noise exactly be harmless? <bookmark mark='a'/> One way to interpolate is to bend the whole curve to "
-            "reach every point; that spoils predictions everywhere. <bookmark mark='b'/> Another is to follow the "
+            "noise exactly be harmless? <bookmark mark='a'/> One way to chase noisy labels is to bend the whole curve; "
+            "that spoils predictions elsewhere. <bookmark mark='b'/> Another is to follow the "
             "smooth truth almost everywhere, and reach each noisy label with a thin spike that touches almost no "
             "other input. That fit has zero training error, and on new data it's nearly as good as the truth. "
             "In high dimensions, the spikes come for free."

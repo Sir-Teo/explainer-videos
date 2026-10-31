@@ -21,7 +21,8 @@ class GaussMarkov(VoiceoverScene):
     # ------------------------------------------------------------------
     def theorem(self):
         card = theorem_card(r"Gauss--Markov",
-                            r"If the noise has mean $0$, the same variance $\sigma^2$ everywhere, and no correlation, "
+                            r"For $\mathbf y = A\boldsymbol\beta + \boldsymbol\epsilon$ with $A$ full column rank, "
+                            r"if the noise has mean $0$, the same variance $\sigma^2$ everywhere, and no correlation, "
                             r"then among all \emph{linear unbiased} estimates of $\boldsymbol\beta$, least squares has "
                             r"the smallest variance.", who=r"Gauss (1821); \ Markov (1900)", width=9.6, font_size=22)
         card.to_edge(UP, buff=0.25)

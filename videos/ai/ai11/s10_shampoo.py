@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import OPT_COLORS, PART, lag, takeaway_card
+from videos.ai.ai11.common import OPT_COLORS, PART, lag, panel, takeaway_card
 
 SH, SO, MU, AD = OPT_COLORS["shampoo"], OPT_COLORS["soap"], OPT_COLORS["muon"], OPT_COLORS["adam"]
 
@@ -46,12 +46,12 @@ class Shampoo(VoiceoverScene):
             cmath(r"\Big(\sum_t g_t g_t^\top\Big)^{-1/2} g", r",\quad", r"g = \mathrm{vec}(G)", font_size=32),
             cmath(r"L_t", "=", r"\sum_{s \le t} G_s G_s^\top", r",\quad", r"R_t", "=", r"\sum_{s \le t} G_s^\top G_s",
                   font_size=32, colors=cl),
-            cmath(r"\sum_t g_t g_t^\top", r"\preceq", r"r\, L_t^{1/2} \otimes R_t^{1/2}", font_size=32, colors=cl),
+            cmath(r"\sum_t g_t g_t^\top", r"\preceq", r"r\, R_t^{1/2} \otimes L_t^{1/2}", font_size=32, colors=cl),
             cmath(r"W", r"\leftarrow", r"W - \eta\, L_t^{-1/4}\, G_t\, R_t^{-1/4}", font_size=36,
                   colors={r"W - \eta\, L_t^{-1/4}\, G_t\, R_t^{-1/4}": SH}),
         ]
-        whys = [why(r"full-matrix AdaGrad: \ an $mn \times mn$ matrix"), why(r"two small ones: \ $m \times m$ and $n \times n$"),
-                why(r"Gupta et al.'s bound, \ $r$ the rank"), why(r"$(A \otimes B)^{-1/2} = A^{-1/2} \otimes B^{-1/2}$, \ in matrix form")]
+        whys = [why(r"column-wise $\mathrm{vec}$; \ full-matrix AdaGrad: $mn \times mn$"), why(r"two small ones: \ $m \times m$ and $n \times n$"),
+                why(r"Gupta et al.'s bound; \ $r \ge \max_s \mathrm{rank}(G_s)$"), why(r"$(A \otimes B)^{-1/2} = A^{-1/2} \otimes B^{-1/2}$, \ in matrix form")]
         step = ladder(self, rows, whys, keep=4, top=1.9, x=-2.0, buff=0.45, edge=6.9)
         kn = label(r"the Kronecker trick of K-FAC, \ with factors built from the gradient alone", font_size=22, color=SH)
         kn.to_edge(DOWN, buff=0.4)
@@ -85,18 +85,18 @@ class Shampoo(VoiceoverScene):
                   font_size=34),
             cmath(r"L^{-1/4}\, G\, R^{-1/4}", "=", r"U V^\top", font_size=40, colors=cl),
         ]
-        whys = [why(r"the SVD (Part 3)"), why(r"$GG^\top = U\Sigma^2 U^\top$, \ $G^\top G = V \Sigma^2 V^\top$"),
+        whys = [why(r"compact SVD on nonzero singular directions (Part 3)"), why(r"$GG^\top = U\Sigma^2 U^\top$, \ $G^\top G = V \Sigma^2 V^\top$"),
                 why(r"every singular value set to $1$")]
         step = ladder(self, rows, whys, keep=3, top=2.0, x=-1.0, buff=0.6, edge=6.9)
         res = label(r"the gradient, \ orthogonalized: \ Muon's step \ (Chapter 10)", font_size=28, color=MU).to_edge(DOWN, buff=0.9)
         cite_ = cite(r"J.~Bernstein \& L.~Newhouse, \textit{Old Optimizer, New Norm: An Anthology} (2024)", corner=DR)
         with self.voiceover(
             "Here is a surprise hidden in Shampoo. Switch off its memory, so the two factors come from the current "
-            "gradient alone. <bookmark mark='a'/> Write the gradient by its singular value decomposition, from part "
+            "gradient alone. <bookmark mark='a'/> Use the compact singular value decomposition on its nonzero singular directions, from part "
             "three. <bookmark mark='b'/> Then L to the minus a quarter, and R to the minus a quarter, are built from "
             "the same singular vectors, with the singular values raised to minus a half. <bookmark mark='c'/> "
-            "Multiply out, and every singular value cancels: what is left is U V transpose, the gradient with all "
-            "its singular values set to one. Jeremy Bernstein and Laker Newhouse pointed this out in 2024. "
+            "Multiply out, using inverse roots on that nonzero support, and every nonzero singular value cancels: what is left is U V transpose, the gradient with all "
+            "its nonzero singular values set to one. Jeremy Bernstein and Laker Newhouse pointed this out in 2024. "
             "<bookmark mark='d'/> Remember that matrix: it is Muon's step."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
@@ -148,18 +148,31 @@ class Shampoo(VoiceoverScene):
         A = rng_.normal(size=(12, 12)) @ np.diag(np.geomspace(3, 0.1, 12)) @ rng_.normal(size=(12, 12)) / 4
         U, S, Vt = np.linalg.svd(A)
         rot = U.T @ A @ Vt.T
-        cx = [-5.2, -2.1, 1.0, 4.1]
-        pics = Group(grid_picture(A, [cx[0], 0.8, 0]), grid_picture(rot, [cx[1], 0.8, 0]),
-                     grid_picture(np.sign(rot) * np.minimum(np.abs(rot), 0.25 * np.abs(rot).max()), [cx[2], 0.8, 0]),
-                     grid_picture(U @ (np.sign(rot) * np.minimum(np.abs(rot), 0.25 * np.abs(rot).max())) @ Vt, [cx[3], 0.8, 0]))
-        caps = VGroup(label(r"the gradient $G$", font_size=20, color=GREY_A),
-                      label(r"$Q_L^\top G\, Q_R$: \ in Shampoo's \\ eigenbases", font_size=20, color=SO),
-                      label(r"Adam, \\ coordinate by coordinate", font_size=20, color=AD),
-                      label(r"rotated back", font_size=20, color=SO))
+        cx = [-5.0, -1.65, 1.65, 5.0]
+        pics = Group(grid_picture(A, [cx[0], 0.7, 0], size=2.05),
+                     grid_picture(rot, [cx[1], 0.7, 0], size=2.05),
+                     grid_picture(np.sign(rot) * np.minimum(np.abs(rot), 0.25 * np.abs(rot).max()), [cx[2], 0.7, 0], size=2.05),
+                     grid_picture(U @ (np.sign(rot) * np.minimum(np.abs(rot), 0.25 * np.abs(rot).max())) @ Vt,
+                                  [cx[3], 0.7, 0], size=2.05))
+        caps = VGroup(label(r"the gradient $G$", font_size=23, color=GREY_A),
+                      label(r"$Q_L^\top G\, Q_R$ \\ Shampoo's eigenbases", font_size=23, color=SO),
+                      label(r"Adam, \\ coordinate by coordinate", font_size=23, color=AD),
+                      label(r"rotated back", font_size=23, color=SO))
         for c_, p_ in zip(caps, pics):
+            if c_.width > 2.55:
+                c_.scale_to_fit_width(2.55)
             c_.next_to(p_, DOWN, buff=0.15)
-        arrows = VGroup(*[Arrow(pics[i].get_right(), pics[i + 1].get_left(), buff=0.15, color=GREY_B, stroke_width=3,
-                                max_tip_length_to_length_ratio=0.25) for i in range(3)])
+        stage_colors = [GREY_B, SO, AD, SO]
+        stages = VGroup(*[VGroup(panel(2.8, 3.9, center=[x, 0.4, 0], color=col),
+                                 label(title, font_size=25, color=col).move_to([x, 2.05, 0]))
+                          for x, title, col in zip(cx, (r"Gradient", r"1. Rotate", r"2. Adapt", r"3. Rotate back"), stage_colors)])
+        head = label(r"SOAP: \ rotate, \ adapt, \ rotate back", font_size=38).to_edge(UP, buff=0.35)
+        arrows = VGroup(*[Arrow([cx[i] + 1.4, 0.7, 0], [cx[i + 1] - 1.4, 0.7, 0], buff=0.04,
+                                color=GREY_B, stroke_width=3, max_tip_length_to_length_ratio=0.35) for i in range(3)])
+        signed_key = VGroup(Dot(radius=0.06, color=C.TRUE_P), label(r"negative", font_size=21, color=GREY_A),
+                            Dot(radius=0.06, color=C.MODEL_Q), label(r"positive", font_size=21, color=GREY_A),
+                            label(r"colour scaled within each matrix", font_size=19, color=GREY_B))
+        signed_key.arrange(RIGHT, buff=0.16).move_to([0, -1.72, 0])
         sch = note(r"schematic").to_corner(UR, buff=0.3)
         hist = history_card(2024, r"Nikhil Vyas, Depen Morwani, \dots, Sham Kakade \ (Harvard)",
                             r"SOAP: \ ShampoO with Adam in the Preconditioner's eigenbasis. \ Reported: \ over $40\%$ fewer "
@@ -174,13 +187,13 @@ class Shampoo(VoiceoverScene):
             "and sixty million parameters. Shampoo, it turns out, is close to a cheap form of Adam in its own "
             "eigenbasis. SOAP runs in our race too."
         ) as vo:
-            self.play(FadeIn(pics[0]), FadeIn(caps[0]), FadeIn(sch))
+            self.play(FadeIn(head), FadeIn(stages[0]), FadeIn(pics[0]), FadeIn(caps[0]), FadeIn(sch), FadeIn(signed_key))
             vo.wait_until("a")
-            self.play(GrowArrow(arrows[0]), FadeIn(pics[1]), FadeIn(caps[1]))
+            self.play(GrowArrow(arrows[0]), FadeIn(stages[1]), FadeIn(pics[1]), FadeIn(caps[1]))
             vo.wait_until("b")
-            self.play(GrowArrow(arrows[1]), FadeIn(pics[2]), FadeIn(caps[2]))
+            self.play(GrowArrow(arrows[1]), FadeIn(stages[2]), FadeIn(pics[2]), FadeIn(caps[2]))
             vo.wait_until("c")
-            self.play(GrowArrow(arrows[2]), FadeIn(pics[3]), FadeIn(caps[3]))
+            self.play(GrowArrow(arrows[2]), FadeIn(stages[3]), FadeIn(pics[3]), FadeIn(caps[3]))
             self.play(FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()

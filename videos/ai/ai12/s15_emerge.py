@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, NCOL, PART, QUANT, SP, load, predict_card, takeaway_card
+from videos.ai.ai12.common import HIST, NCOL, PART, QUANT, SP, load, predict_card, takeaway_card, visible_values
 
 LEN_COLORS = {1: "#7FD3FF", 2: C.INTERVAL, 4: C.BITS, 8: C.SURPRISE}
 
@@ -39,7 +39,7 @@ class Emerge(VoiceoverScene):
         fl = VGroup(*[MathTex(rf"p^{{{L}}}", font_size=24, color=LEN_COLORS[L]).next_to(ax.c2p(0.92, 0.92 ** L), LEFT, buff=0.1)
                       for L in (1, 2, 4, 8)])
         xl = label(r"$p$: \ each token right", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.1)
-        yl = label(r"all $L$ tokens right", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1)
+        yl = label(r"all $L$ tokens right \ (independent-token model)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1)
         cards = VGroup(
             history_card(2022, r"Wei et al.\ (Google)", r"abilities that seemed to switch on with scale: \ "
                          r"arithmetic, \ word puzzles, \ multi-step questions \ (a later list counted $137$)", width=5.8,
@@ -52,7 +52,7 @@ class Emerge(VoiceoverScene):
             "absent in smaller models, present in larger ones, and so not predictable from the smaller ones. They "
             "called them emergent. <bookmark mark='a'/> In 2023, Rylan Schaeffer, Brando Miranda and Sanmi Koyejo at "
             "Stanford pointed at how they were scored. Most were graded all or nothing: is the whole answer exactly "
-            "right? <bookmark mark='b'/> If each token is right with probability p, an answer of L tokens is right "
+            "right? <bookmark mark='b'/> In a simple model with independent tokens, each right with the same probability p, an answer of L tokens is right "
             "with probability p to the L. A steady rise in p becomes, for long answers, a curve that lies flat and "
             "then shoots up. <bookmark mark='c'/> Score the same models smoothly, and the jumps disappear: a "
             "mirage, they said, made by the metric."
@@ -166,9 +166,9 @@ class Emerge(VoiceoverScene):
         yn = label(r"each subtask's loss at the end \ (bits)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         T = fin.shape[1]
         sel = [0, 3, 7, 12, 20] if T > 20 else list(range(min(5, T)))
-        lines = VGroup(*[curve(ax, lx, np.minimum(fin[:, k], 1.1), interpolate_color(ManimColor(QUANT), ManimColor(C.BITS), j / 4), 3)
+        lines = VGroup(*[curve(ax, lx, visible_values(fin[:, k], 0, 1.1), interpolate_color(ManimColor(QUANT), ManimColor(C.BITS), j / 4), 3)
                          for j, k in enumerate(sel)])
-        mean = curve(ax, lx, np.minimum(np.asarray(q["mean"], float)[:, :, -1].mean(1), 1.1), WHITE, 4)
+        mean = curve(ax, lx, visible_values(np.asarray(q["mean"], float)[:, :, -1].mean(1), 0, 1.1), WHITE, 4)
         lg = VGroup(label(r"coloured: \ five subtasks, \ common to rare", font_size=20, color=QUANT),
                     label(r"white: \ the average", font_size=20, color=WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         lg.arrange(RIGHT, buff=0.5).next_to(xn, DOWN, buff=0.15).align_to(ax, LEFT)

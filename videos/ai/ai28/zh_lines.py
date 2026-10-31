@@ -665,12 +665,12 @@ ZH = {
     "f'With no thought at all it gets {n}-digit lists right {100 * at0:.0f} percent of the time, and":
         '完全不思考时，它在{n}个数字的列表上答对{100 * at0:.0f}%，完整地思考是{100 * full:.0f}%，但并不是每多一步都有帮助。',
 
-    'f"Thinking all {n} steps reaches':
+    'f"Thinking all {n} steps reaches {100 * full:.0f} percent with {t_full} tokens. A vote over answers given at once, at the same budget, manages {100 * v_at:.0f}, and with every token we allowed, {100 * v_best:.0f}. On a problem that is a chain of small steps, the chain wins: votes can\'t add up digits that no single try added correctly."':
         "完整地思考{n}步，用{t_full}个词元达到{100 * full:.0f}%。对直接给出的答案投票，在同样的预算下只有{100 * v_at:.0f}%，"
         "用上我们允许的全部词元，也只有{100 * v_best:.0f}%。在一个由许多小步骤组成的问题上，思维链赢了："
         "投票没法把任何一次尝试都没加对的数字加对。",
 
-    "f'Thinking all {n} steps reaches":
+    "f'Thinking all {n} steps reaches {100 * full:.0f} percent with {t_full} tokens, and a vote over answers given at once reaches {100 * v_best:.0f} with the tokens we allowed.'":
         '完整地思考{n}步，用{t_full}个词元达到{100 * full:.0f}%；对直接给出的答案投票，用我们允许的词元达到{100 * v_best:.0f}%。',
 
     'The simplest parallel strategy with a checker is best-of-N:':

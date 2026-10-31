@@ -193,9 +193,11 @@ class Kernels(VoiceoverScene, ThreeDScene):
         k = load("kernel")
         ev, es = np.asarray(k["ev2"]), np.asarray(k["ev_sig"])
         n = len(ev)
-        thm = theorem_card(r"Mercer (1909)", r"$K$ is a dot product of some features, \ $K(\mathbf{x}, \mathbf{z}) = "
-                           r"\varphi(\mathbf{x})\cdot\varphi(\mathbf{z})$, \ exactly when every Gram matrix "
-                           r"$[K(\mathbf{x}_i, \mathbf{x}_j)]$ has no negative eigenvalues.", width=6.0, font_size=21)
+        thm = theorem_card(r"positive semidefinite kernels", r"For real symmetric $K$, \ a feature map with "
+                           r"$K(\mathbf{x}, \mathbf{z}) = "
+                           r"\varphi(\mathbf{x})\cdot\varphi(\mathbf{z})$ exists exactly when every Gram matrix "
+                           r"$[K(\mathbf{x}_i, \mathbf{x}_j)]$ has no negative eigenvalues.",
+                           who=r"Aronszajn (1950)", width=6.0, font_size=21)
         thm.to_corner(UL, buff=0.3)
         lo = float(min(es.min(), 0)) * 1.1
         hi = float(max(ev.max(), es.max())) * 1.1
@@ -213,8 +215,9 @@ class Kernels(VoiceoverScene, ThreeDScene):
         rounding = abs(k["min_ev2"]) < 1e-9
         smallest = "zero, up to rounding." if rounding else f"{k['min_ev2']:.2g}."
         with self.voiceover(
-            "Which similarity scores are allowed? Mercer's theorem, from 1909: a kernel is a dot product of some "
-            "features exactly when every matrix of its values on a set of points has no negative eigenvalues. "
+            "Which similarity scores are allowed? For a real symmetric similarity function, a feature-space "
+            "dot product exists exactly when every Gram matrix is positive semidefinite: it has no negative "
+            "eigenvalues. "
             f"<bookmark mark='a'/> On the {n} training pages, the Gaussian kernel's smallest eigenvalue is {smallest} "
             "<bookmark mark='b'/> A popular impostor, the hyperbolic tangent of a dot product, has "
             f"{k['n_neg_sig']} negative eigenvalues: no features could produce it, and an SVM built on it is no "
@@ -239,10 +242,11 @@ class Kernels(VoiceoverScene, ThreeDScene):
             cmath(r"\|f\|^2", "=", r"\Big\|\sum_i \alpha_i K(\mathbf{x}_i, \cdot\,)\Big\|^2 + \|f_\perp\|^2", font_size=34,
                   colors=colors),
         ]
-        whys = [why(r"any loss, \ a penalty on size"), why(r"split: \ in the span of the data, \ or not"),
+        whys = [why(r"any loss, \ a positive penalty $\lambda > 0$"), why(r"split: \ in the span of the data, \ or not"),
                 why(r"$f_\perp$ is invisible \\ at the data"), why(r"$f_\perp$ only costs: \ $f_\perp = 0$")]
         step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.2, buff=0.36, edge=6.8)
-        thm = theorem_card(r"the representer theorem", r"the best $f$ is $\sum_i \alpha_i K(\mathbf{x}_i, \cdot\,)$: "
+        thm = theorem_card(r"the representer theorem", r"any minimizer for $\lambda > 0$ is "
+                           r"$f = \sum_i \alpha_i K(\mathbf{x}_i, \cdot\,)$: "
                            r"one number per training point", who=r"Kimeldorf \& Wahba (1971); \ Sch\"olkopf, Herbrich \& "
                            r"Smola (2001)", width=6.8, font_size=21).to_edge(DOWN, buff=0.25).to_edge(LEFT, buff=0.3)
         chk = VGroup(label(rf"ridge in ${k['rep_dims']:,}$ random Gaussian features:".replace(",", "{,}"), font_size=21,
@@ -254,7 +258,7 @@ class Kernels(VoiceoverScene, ThreeDScene):
         head = label(r"Why one weight per page is enough", font_size=30).to_edge(UP, buff=0.25)
         with self.voiceover(
             "One more guarantee makes kernels practical. <bookmark mark='a'/> Fit any function with any loss, plus "
-            "a penalty on its size. <bookmark mark='b'/> Split the function into a part built from the kernel at the "
+            "a positive penalty on its squared size. <bookmark mark='b'/> Split the function into a part built from the kernel at the "
             "training points, and a part perpendicular to all of them. <bookmark mark='c'/> At the training points, "
             "the perpendicular part is invisible: it changes no prediction. <bookmark mark='d'/> It only adds to the "
             "size. So it must be zero, and the answer is a weighted sum of kernels at the training points: the "

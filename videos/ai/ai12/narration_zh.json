@@ -107,7 +107,7 @@
   "af2f9e806011": {
    "scene": "MuP",
    "en": "Here is the whole idea, in one layer. Its output is a sum of n weights times n inputs. <bookmark mark='a'/> At the start the weights are random, so the n terms have random signs and mostly cancel: by the central limit theorem, the sum grows like the square root of n. Divide the starting weights by the square root of n, and the output stays the same size at any width. <bookmark mark='b'/> Training is different. The gradient of a layer is an outer product: the error signal times the input. <bookmark mark='c'/> So the step, applied to that input, gives a sum of n terms that all have the same sign: it grows like n, not its square root. <bookmark mark='d'/> If every layer should keep changing by about the same amount at any width, the learning rate must shrink like one over n. Greg Yang and Edward Hu worked this out for every layer of any network in 2021, and called it the maximal update parametrization: mu-P.",
-   "zh": "整个想法，用一层就能说清。它的输出是n个权重乘以n个输入的和。<bookmark mark='a'/>开始时权重是随机的，所以这n项的符号随机，大多互相抵消：由中心极限定理，总和像n的平方根那样增长。把起始权重除以n的平方根，输出在任何宽度上都保持同样大小。<bookmark mark='b'/>训练就不一样了。一层的梯度是一个外积：误差信号乘以输入。<bookmark mark='c'/>所以这一步作用到那个输入上，得到的是n个符号全都相同的项之和：它像n那样增长，而不是n的平方根。<bookmark mark='d'/>如果希望每一层在任何宽度上都变化差不多的量，学习率就必须像n分之一那样缩小。杨格和爱德华·胡在2021年为任意网络的每一层推导出了这一点，称之为最大更新参数化：μP。"
+   "zh": "整个想法，用一层就能说清。它的输出是n个权重乘以n个输入的和。<bookmark mark='a'/>开始时权重是随机的，所以这n项的符号随机，大多互相抵消：由中心极限定理，总和像n的平方根那样增长。把起始权重除以n的平方根，输出在任何宽度上都保持同样大小。<bookmark mark='b'/>训练就不一样了。一层的梯度是一个外积：误差信号乘以输入。在这个局部计算中，先假设误差信号是一阶量。<bookmark mark='c'/>所以这一步作用到那个输入上，得到的是n个符号全都相同的项之和：它像n那样增长，而不是n的平方根。<bookmark mark='d'/>如果希望这一层在任何宽度上都变化差不多的量，局部学习率就必须像n分之一那样缩小。完整网络还必须考虑误差经过其他层时如何随宽度缩放。杨格和爱德华·胡在2021年为一大类网络推导出了这些规则，称之为最大更新参数化：μP。"
   },
   "4e155e8cbf78": {
    "scene": "MuP",
@@ -142,7 +142,7 @@
   "e446ca34c291": {
    "scene": "Transfer",
    "en": "Now the test that matters: sweep the learning rate at three widths, sixty-four to a thousand and twenty-four, two seeds each, the usual way first. <bookmark mark='a'/> The best learning rate drifts as the model grows: from about 1 times ten to the minus 2 at the smallest to 3 times ten to the minus 3 at the largest, 0.6 powers of ten. Tune the small model, copy its rate, and the big one is mistuned. <bookmark mark='b'/> In mu-P the valleys line up: the best rate moves by 0.0 at most. <bookmark mark='c'/> And wider is better at every rate: 2.88 bits at the smallest width, 2.67 at the largest.",
-   "zh": "现在是关键的检验：在三个宽度上扫描学习率，从64到1024，每个两个种子，先用通常的做法。<bookmark mark='a'/>最佳学习率随着模型变大而漂移：从最小模型的大约1乘以10的负2次方，到最大模型的3乘以10的负3次方，差了0.6个数量级。调好小模型，照搬它的学习率，大模型就调错了。<bookmark mark='b'/>在μP里，这些山谷对齐了：最佳学习率至多移动0.0个数量级。<bookmark mark='c'/>而且在每个学习率上，都是越宽越好：最小宽度2.88比特，最大宽度2.67比特。"
+   "zh": "现在是关键的检验：在三个宽度上扫描学习率，从64到1024，每个两个种子，先用通常的做法。<bookmark mark='a'/>最佳学习率随着模型变大而漂移：从最小模型的大约1乘以10的负2次方，到最大模型的3乘以10的负3次方，差了0.6个数量级。调好小模型，照搬它的学习率，大模型就调错了。<bookmark mark='b'/>在μP里，这些山谷对齐了：最佳学习率至多移动0.0个数量级。<bookmark mark='c'/>And wider is better at every rate: 2.88 bits at the smallest width, 2.67 at the largest."
   },
   "5dc4183874a9": {
    "scene": "Transfer",
@@ -192,7 +192,7 @@
   "3b68bd13ff53": {
    "scene": "Batch",
    "en": "Part eleven showed that a small batch gives a noisy gradient. How big should the batch be? In 2018, Sam McCandlish and colleagues at OpenAI answered with one step of algebra. <bookmark mark='a'/> Expand the loss after one step to second order: the gradient helps, the curvature and the batch's noise hurt. <bookmark mark='b'/> Choose the best step size. <bookmark mark='c'/> The best gain is the noise-free gain divided by one plus a ratio, the noise scale over the batch: how many examples it takes for the gradient's signal to beat its noise. <bookmark mark='d'/> So the number of steps to reach a loss falls as the batch grows, and the number of examples rises. <bookmark mark='e'/> Eliminate the batch, and steps and examples trade off along a hyperbola. Far below the noise scale, doubling the batch halves the steps for free; far above it, it only wastes examples.",
-   "zh": "第11部分说过，小批量给出的梯度有噪声。那批量应该多大？2018年，OpenAI的萨姆·麦坎德利什和同事用一步代数回答了这个问题。<bookmark mark='a'/>把走一步之后的损失展开到二阶：梯度有帮助，曲率和批量的噪声有害。<bookmark mark='b'/>选出最好的步长。<bookmark mark='c'/>最好的收益，等于没有噪声时的收益，除以1加上一个比值：噪声尺度比批量。噪声尺度说的是，要多少个样本，梯度的信号才能压过它的噪声。<bookmark mark='d'/>所以，随着批量变大，达到某个损失所需的步数下降，而样本数上升。<bookmark mark='e'/>把批量消去，步数和样本数就沿着一条双曲线互相权衡。远低于噪声尺度时，批量加倍，步数减半，不花代价；远高于它时，只是浪费样本。"
+   "zh": "第11部分说过，小批量给出的梯度有噪声。那批量应该多大？2018年，OpenAI的萨姆·麦坎德利什和同事用一步代数回答了这个问题。<bookmark mark='a'/>假设样本独立，沿梯度的曲率为正，把走一步之后的损失展开到二阶。梯度有帮助；曲率和噪声限制了步长。<bookmark mark='b'/>在这个局部模型里选出最好的步长。<bookmark mark='c'/>最好的收益，等于没有噪声时的收益，除以1加上一个比值：噪声尺度比批量。噪声尺度说的是，要多少个样本，梯度的信号才能压过它的噪声。<bookmark mark='d'/>得到的经验模型预测，随着批量变大，达到某个损失所需的步数下降，而样本数上升。<bookmark mark='e'/>把批量消去，步数和样本数就沿着一条双曲线互相权衡。远低于噪声尺度时，批量加倍，步数减半，不花代价；远高于它时，只是浪费样本。"
   },
   "ad3a197d0db7": {
    "scene": "Batch",
@@ -222,7 +222,7 @@
   "a81b20945ac4": {
    "scene": "Laws",
    "en": "In 2017, Joel Hestness and colleagues at Baidu measured how the error of networks for translation, language, images and speech falls as the data grows. <bookmark mark='a'/> Each curve had three parts: too little data to learn anything; then a straight line on log axes, a power law; then a floor that more data cannot pass. <bookmark mark='b'/> Better architectures moved the line down, but they barely changed its slope: for language models, about minus 0.07. <bookmark mark='c'/> In 2020, Jared Kaplan, Sam McCandlish and colleagues at OpenAI found the same for parameters, data and compute together, over seven orders of magnitude, and concluded that a model eight times bigger needs only five times the data. Part fourteen told how that led to GPT-3. Here we measure such laws ourselves.",
-   "zh": "2017年，百度的乔尔·赫斯特内斯和同事，测量了用于翻译、语言、图像和语音的网络，误差怎样随数据增长而下降。<bookmark mark='a'/>每条曲线都有三段：数据太少，什么也学不到；然后是对数坐标上的一条直线，一条幂律；然后是一个下限，再多的数据也过不去。<bookmark mark='b'/>更好的架构把直线往下移，却几乎不改变它的斜率：对语言模型，大约是负0.07。<bookmark mark='c'/>2020年，OpenAI的贾里德·卡普兰、萨姆·麦坎德利什和同事，在参数、数据和算力上一起发现了同样的规律，跨越7个数量级，并得出结论：大8倍的模型，只需要5倍的数据。第14部分讲过这怎样导向了GPT-3。这里，我们自己来测这样的定律。"
+   "zh": "2017年，百度的乔尔·赫斯特内斯和同事，测量了用于翻译、语言、图像和语音的网络，误差怎样随数据增长而下降。<bookmark mark='a'/>每条曲线都有三段：数据太少，什么也学不到；然后是对数坐标上的一条直线，一条幂律；然后是一个下限，再多的数据也过不去。<bookmark mark='b'/>更好的架构把直线往下移，却几乎不改变它的斜率：对语言模型，大约是负0.07。<bookmark mark='c'/>2020年，OpenAI的贾里德·卡普兰、萨姆·麦坎德利什和同事，在参数、数据和算力上一起发现了同样的规律，跨越7个数量级，并得出结论：大8倍的模型，只需要5倍的数据。第14部分会讲这怎样导向了GPT-3。这里，我们自己来测这样的定律。"
   },
   "0b112de40c7e": {
    "scene": "Laws",
@@ -352,7 +352,7 @@
   "7b001073c25d": {
    "scene": "Data",
    "en": "How close are we? In 2024, Pablo Villalobos and colleagues at Epoch AI estimated the stock of usable public text at about four times ten to the fourteen tokens, after allowing for quality and repetition, and projected that training sets would reach it between 2026 and 2032, most likely in 2028. <bookmark mark='a'/> Repeating stretches it: Muennighoff's four epochs are nearly free. <bookmark mark='b'/> Alibaba's Qwen3, in 2025, was pretrained on about thirty-six trillion tokens: nearly a tenth of the whole stock, in one model. <bookmark mark='c'/> So the field is looking for more: rephrased text, synthetic text and other kinds of data, the subject of part eighteen.",
-   "zh": "我们离那一步有多近？2024年，Epoch AI的巴勃罗·比利亚洛博斯和同事估计，在考虑了质量和重复之后，可用的公开文本存量大约是4乘以10的14次方个词元，并预测训练集会在2026年到2032年之间用到这个量，最可能是2028年。<bookmark mark='a'/>重复可以把它拉长：明尼霍夫的4遍几乎不花代价。<bookmark mark='b'/>阿里巴巴的Qwen3在2025年用大约36万亿个词元做了预训练：一个模型，就用掉了全部存量的将近十分之一。<bookmark mark='c'/>所以这个领域在寻找更多：改写的文本、合成的文本和其他种类的数据，这是第18部分的主题。"
+   "zh": "我们离那一步有多近？2024年，Epoch AI的巴勃罗·比利亚洛博斯和同事预测，考虑质量和重复后，2028年交汇点的可用公开文本存量大约是4乘以10的14次方个词元，训练集会在2026年到2032年之间达到这个量，最可能是2028年。<bookmark mark='a'/>重复可以把它拉长：明尼霍夫的4遍几乎不花代价。<bookmark mark='b'/>阿里巴巴的Qwen3在2025年用大约36万亿个词元做了预训练，其中包含合成数据。训练词元数不等于不同的人类文本数量。<bookmark mark='c'/>所以这个领域在寻找更多：改写的文本、合成的文本和其他种类的数据，这是第18部分的主题。"
   },
   "6e4388b9eeb9": {
    "scene": "Data",
@@ -422,7 +422,7 @@
   "a2053e6b791c": {
    "scene": "Emerge",
    "en": "In 2022, Jason Wei and colleagues at Google collected abilities that seemed to switch on with scale: absent in smaller models, present in larger ones, and so not predictable from the smaller ones. They called them emergent. <bookmark mark='a'/> In 2023, Rylan Schaeffer, Brando Miranda and Sanmi Koyejo at Stanford pointed at how they were scored. Most were graded all or nothing: is the whole answer exactly right? <bookmark mark='b'/> If each token is right with probability p, an answer of L tokens is right with probability p to the L. A steady rise in p becomes, for long answers, a curve that lies flat and then shoots up. <bookmark mark='c'/> Score the same models smoothly, and the jumps disappear: a mirage, they said, made by the metric.",
-   "zh": "2022年，谷歌的杰森·魏和同事，收集了一批似乎随规模突然出现的能力：小模型没有，大模型有，所以无法从小模型预测出来。他们称之为涌现。<bookmark mark='a'/>2023年，斯坦福的赖兰·谢弗、布兰多·米兰达和桑米·科耶霍，把矛头指向了评分的方式。大多数能力的评分是全对或全错：整个答案是不是完全正确？<bookmark mark='b'/>如果每个词元正确的概率是p，那么一个L个词元的答案完全正确的概率就是p的L次方。p平稳地上升，对长答案来说，就变成一条先平躺、后猛冲的曲线。<bookmark mark='c'/>换成平滑的评分，给同样的模型打分，跳跃就消失了：他们说，这是一个幻象，由度量造成。"
+   "zh": "2022年，谷歌的杰森·魏和同事，收集了一批似乎随规模突然出现的能力：小模型没有，大模型有，所以无法从小模型预测出来。他们称之为涌现。<bookmark mark='a'/>2023年，斯坦福的赖兰·谢弗、布兰多·米兰达和桑米·科耶霍，把矛头指向了评分的方式。大多数能力的评分是全对或全错：整个答案是不是完全正确？<bookmark mark='b'/>在一个简单模型里，词元相互独立，每个词元正确的概率都是p，那么一个L个词元的答案完全正确的概率就是p的L次方。p平稳地上升，对长答案来说，就变成一条先平躺、后猛冲的曲线。<bookmark mark='c'/>换成平滑的评分，给同样的模型打分，跳跃就消失了：他们说，这是一个幻象，由度量造成。"
   },
   "b94f61bf01a0": {
    "scene": "Emerge",
@@ -457,7 +457,7 @@
   "53207abf839c": {
    "scene": "Grok",
    "en": "It memorizes the entries it was shown within about 75 steps, and for a long time it gets the unseen ones no better than chance. <bookmark mark='a'/> Keep training anyway. 21 times as long, at step 1,550, accuracy on the unseen entries shoots up to nearly a hundred percent. The network has found the rule. They called it grokking. <bookmark mark='b'/> Without weight decay, the same network never gets there. Weight decay keeps squeezing the weights, and a lookup table of memorized answers costs more weight than the rule.",
-   "zh": "它在大约75步之内，就记住了给它看过的那些条目；而在很长一段时间里，它对没见过的条目，猜得并不比随机好。<bookmark mark='a'/>还是继续训练。训练到21倍那么久，在第1550步，没见过的条目上的准确率猛地升到将近100%。网络找到了规则。他们把这叫作顿悟。<bookmark mark='b'/>没有权重衰减，同一个网络永远到不了那里。权重衰减不停地挤压权重，而一张背下来的答案表，比规则要花更多的权重。"
+   "zh": "它在大约75步之内，就记住了给它看过的那些条目；而在很长一段时间里，它对没见过的条目，猜得并不比随机好。<bookmark mark='a'/>还是继续训练。训练到21倍那么久，在第1550步，没见过的条目上的准确率猛地升到将近100%。网络找到了规则。他们把这叫作顿悟。<bookmark mark='b'/>Without weight decay, the same network never gets there. 权重衰减不停地挤压权重，而一张背下来的答案表，比规则要花更多的权重。"
   },
   "86fd94a79087": {
    "scene": "Grok",
@@ -532,7 +532,7 @@
   "6a218326c975": {
    "scene": "Frontier",
    "en": "What can a scaling law actually tell us? Test ours the way laboratories use theirs. Fit Chinchilla's formula on only our 28 cheapest runs, and predict the other 21, up to 14 times costlier. <bookmark mark='a'/> On average the prediction is off by 0.046 bits, 0.104 at worst, and almost always on the high side: the costlier runs come out better than the cheap ones predicted. <bookmark mark='b'/> That is the sense in which pretraining has not stalled: at every scale we tried, the loss fell at least as fast as the law promised. But the curve was always slow. With Kaplan's exponent for compute, 0.05, halving the loss takes a million times the compute. What is debated is not the curve, but whether each step down it buys enough capability to be worth its price.",
-   "zh": "一条规模定律到底能告诉我们什么？像各个实验室用它们的定律那样，来检验我们的。只用我们最便宜的28次训练拟合Chinchilla的公式，去预测另外21次，最贵的要贵上14倍。<bookmark mark='a'/>平均来说，预测偏差0.046比特，最差0.104，而且几乎总是偏高：更贵的训练，结果比便宜的训练预测的更好。<bookmark mark='b'/>正是在这个意义上，预训练没有停滞：在我们试过的每个规模上，损失下降得至少和定律承诺的一样快。但这条曲线一向很慢。用卡普兰的算力指数0.05，损失减半需要100万倍的算力。争论的不是曲线，而是沿着它往下走的每一步，买到的能力值不值那个价钱。"
+   "zh": "一条规模定律到底能告诉我们什么？像各个实验室用它们的定律那样，来检验我们的。只用我们最便宜的28次训练拟合Chinchilla的公式，去预测另外21次，最贵的要贵上14倍。<bookmark mark='a'/>平均来说，预测偏差0.046比特，最差0.104, and almost always on the high side: the costlier runs come out better than the cheap ones predicted. <bookmark mark='b'/> That is the sense in which pretraining has not stalled: at every scale we tried, the loss fell at least as fast as the law promised. 但这条曲线一向很慢。用卡普兰的算力指数0.05，损失减半需要100万倍的算力。争论的不是曲线，而是沿着它往下走的每一步，买到的能力值不值那个价钱。"
   },
   "bd3f3b53a774": {
    "scene": "Frontier",

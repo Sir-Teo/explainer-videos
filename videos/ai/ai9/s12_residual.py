@@ -50,7 +50,7 @@ class Residual(VoiceoverScene):
         colors = {r"I": RES}
         jac = cmath(r"\frac{\partial h_{\ell+1}}{\partial h_\ell}", "=", r"I", "+", r"\frac{\partial f_\ell}{\partial h_\ell}",
                     colors=colors, font_size=38).move_to([4.8, 1.2, 0])
-        jl = label(r"the identity always gets through: \\ gradients reach the first layers", font_size=24, color=GREY_A)
+        jl = label(r"the identity skip path helps \\ gradients reach early layers", font_size=24, color=GREY_A)
         jl.next_to(jac, DOWN, buff=0.3)
         wl = label(r"the skip path: \ a plain wire \\ for the gradient", font_size=24, color=RES).next_to(jl, DOWN, buff=0.45)
         cite_ = cite(r"K.~He, X.~Zhang, S.~Ren \& J.~Sun, \textit{Deep Residual Learning for Image Recognition} (2015)",
@@ -61,9 +61,9 @@ class Residual(VoiceoverScene):
             "stack. In December 2015, Kaiming He and colleagues published a fix so simple it's now everywhere. "
             "<bookmark mark='a'/> Instead of each layer replacing what came before, let it add to it. The layers "
             "become small corrections to a stream of numbers flowing straight through: the residual stream. "
-            "<bookmark mark='b'/> By the chain rule, the derivative of each block is the identity plus a little "
-            "extra. <bookmark mark='w'/> The skip path passes the gradient back unchanged, like a plain wire, so "
-            "gradients always have a clear path back to the first layer. Every transformer in this "
+            "<bookmark mark='b'/> By the chain rule, the derivative of each block is the identity plus the residual derivative, an "
+            "extra term. <bookmark mark='w'/> The skip path passes its gradient contribution back unchanged, like a plain wire, helping "
+            "gradients reach the first layer. The other branches can still amplify or cancel that contribution, so the skip is an aid rather than a guarantee. Every transformer in this "
             "series is built this way."
         ) as vo:
             self.play(FadeIn(plain), FadeIn(pt), FadeIn(cite_))
@@ -99,7 +99,7 @@ class Residual(VoiceoverScene):
         first = int(R[np.argmax(R[:, 2] > 0.99), 0]) if (R[:, 2] > 0.99).any() else None
         plain_says = ("never learns anything: it's stuck at a coin flip" if pf < 0.6 else
                       f"learns only slowly, to {100 * pf:.0f} percent")
-        res_says = (f"learn the spirals completely, within {first:,} steps" if first is not None and rf > 0.99 else
+        res_says = (f"exceed 99 percent accuracy on the spirals within {first:,} steps" if first is not None and rf > 0.99 else
                     f"reach {100 * rf:.0f} percent of the points")
         with self.voiceover(
             "Here it is on the spirals, with forty layers of thirty-two units. <bookmark mark='a'/> The plain stack "

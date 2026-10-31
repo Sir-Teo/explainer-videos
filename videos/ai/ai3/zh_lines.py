@@ -57,7 +57,7 @@ ZH = {
         "两个向量有多像？<bookmark mark='a'/>把它们逐个坐标相乘，再加起来：这就是点积，也叫内积。它是对称的，对每个位置都是线性的，一个向量和自己的点积，就是它长度的平方。<bookmark mark='b'/>画一个三角形，三条边是a、b和a减b。第三条边的平方，是一个点积。<bookmark mark='c'/>把它展开。<bookmark mark='d'/>欧几里得的余弦定理，从另一条路算出同一条边。<bookmark mark='e'/>两相比较：点积等于两个长度，乘以它们夹角的余弦。",
 
     'Is that cosine always between minus one and one':
-        "这个余弦总在负1和1之间吗？哪怕在768维里？这就是柯西–施瓦茨不等式。<bookmark mark='a'/>对任何数t，a减t乘b的长度的平方，都不可能是负的。<bookmark mark='b'/>把它展开：一条关于t的抛物线。<bookmark mark='c'/>一条从不跌到0以下的抛物线，最多只有一个根，所以它的判别式不可能是正的。<bookmark mark='d'/>整理一下：点积至多是两个长度的乘积。<bookmark mark='e'/>转动b，看着：只有当b和a对齐时，抛物线才碰到0。所以两个词之间的夹角，是有意义的。",
+        "这个余弦总在负1和1之间吗？哪怕在768维里？这就是柯西–施瓦茨不等式。<bookmark mark='a'/>对任何数t，a减t乘b的长度的平方，都不可能是负的。<bookmark mark='b'/>如果b是零向量，不等式显然成立。否则，把它展开：一条关于t的抛物线。<bookmark mark='c'/>一条从不跌到0以下的抛物线，最多只有一个根，所以它的判别式不可能是正的。<bookmark mark='d'/>整理一下：点积至多是两个长度的乘积。<bookmark mark='e'/>转动b，看着：只有当b和a对齐时，抛物线才碰到0。所以两个词之间的夹角，是有意义的。",
 
     'f"Divide by the two lengths and you get the cosine similarity':
         "除以两个长度，就得到余弦相似度，它在负1到1之间。<bookmark mark='a'/>拿GPT-2的词来说：dog和puppy，{c[1]:.2f}。dog和cat，{c[3]:.2f}。dog和tobacco，{c[2]:.2f}。<bookmark mark='b'/>在768维里画不出夹角，但可以算出来：把两串数逐个相乘，再加起来。",
@@ -153,7 +153,7 @@ ZH = {
         "特征值是一个多项式的根，768乘768的矩阵，多项式就是768次的；而从阿贝尔起，我们知道四次以上没有求根公式。所以计算机只能迭代。<bookmark mark='a'/>从任意一点出发，乘A，缩放到长度1，重复。<bookmark mark='b'/>每乘一次，都偏向A拉伸得最多的方向，箭头就转到了最大特征值的特征向量上。",
 
     'Why it works takes four lines.':
-        "为什么有效，四行就够了。<bookmark mark='a'/>把起点写在特征向量基下。<bookmark mark='b'/>乘k次，每一部分都被它的特征值的k次方拉伸。<bookmark mark='c'/>把最大的提出来：其他每一部分，都乘上一个小于1的比值的k次方。<bookmark mark='d'/>所以夹角按λ2比λ1的k次方缩小：在对数坐标上是一条直线。<bookmark mark='e'/>特征值的估计还要快一倍，因为瑞利商在极大值处，方向上的小误差几乎不改变它。",
+        "为什么有效，四行就够了。<bookmark mark='a'/>取一个对称矩阵，起点沿主特征向量的分量必须非零。把起点写在标准正交的特征向量基下。<bookmark mark='b'/>乘k次，每一部分都被它的特征值的k次方拉伸。<bookmark mark='c'/>把最大的提出来：其他每一部分，都乘上一个小于1的比值的k次方。<bookmark mark='d'/>所以夹角按λ2比λ1的k次方缩小：在对数坐标上是一条直线。<bookmark mark='e'/>特征值的估计还要快一倍，因为瑞利商在驻点处，方向上的小误差几乎不改变它。",
 
     'f"Now real matrices.':
         "现在看真实的矩阵。<bookmark mark='a'/>GPT-2那50257个词元向量的协方差，768乘768：它最大的两个特征值之比是{dg['ratio']:.3f}，误差每一步缩小到{dg['rate_measured']:.3f}倍，一直降到机器的舍入误差。随机的起点几乎垂直于答案，正弦是{s0:.4f}；第14章会解释原因。<bookmark mark='b'/>第1部分的字母表：比值是{dl['ratio']:.3f}，实测{dl['rate_measured']:.3f}。<bookmark mark='c'/>虚线是预测：{verdict}。",
@@ -167,10 +167,10 @@ ZH = {
     'Chapter seven.': '第7章。奇异值分解。',
 
     'Not every matrix is symmetric.':
-        "不是每个矩阵都对称。很多甚至不是方阵。<bookmark mark='a'/>但每一个矩阵，无一例外，都只做三件事：转一下，沿坐标轴拉伸，再转一下。<bookmark mark='b'/>这就是奇异值分解：A等于U乘Σ乘V转置。",
+        "不是每个矩阵都对称。很多甚至不是方阵。<bookmark mark='a'/>但每一个矩阵，无一例外，都能分成三个因子：一次正交坐标变换，沿坐标轴拉伸或投影，再一次正交变换。这些坐标变换可以是旋转，也可以是反射。我们的例子用的是两次旋转。<bookmark mark='b'/>这就是奇异值分解：A等于U乘Σ乘V转置。",
 
     'Where do the turns and stretches come from?':
-        "这些旋转和拉伸是从哪里来的？<bookmark mark='a'/>A转置A是对称的，而且从不为负：x转置A转置A x是一个长度的平方。<bookmark mark='b'/>所以谱定理给了它一组互相垂直的特征向量v，特征值是σ的平方。<bookmark mark='c'/>把每个v送进A，再除以σ。<bookmark mark='d'/>这些u也互相垂直，长度为1。<bookmark mark='e'/>所以A把互相垂直的v送到互相垂直的u，按σ拉伸：这就是分解。<bookmark mark='f'/>贝尔特拉米和若尔当在1873和1874年发现了它；吉恩·戈卢布和威廉·卡汉1965年的算法，计算机至今还在用。",
+        "这些旋转和拉伸是从哪里来的？<bookmark mark='a'/>A转置A是对称的，而且从不为负：x转置A转置A x是一个长度的平方。<bookmark mark='b'/>所以谱定理给了它一组互相垂直的特征向量v，特征值是σ的平方。<bookmark mark='c'/>对非零σ，把每个v送进A，再除以σ。若有零奇异值，就把两边补成完整的标准正交基。<bookmark mark='d'/>这些u也互相垂直，长度为1。<bookmark mark='e'/>所以A把互相垂直的v送到互相垂直的u，按σ拉伸：这就是分解。<bookmark mark='f'/>贝尔特拉米和若尔当在1873和1874年发现了它；吉恩·戈卢布和威廉·卡汉1965年的算法，计算机至今还在用。",
 
     'The stretches are the singular values.':
         "这些拉伸倍数，就是奇异值。<bookmark mark='a'/>单位圆总是变成一个椭圆，奇异值就是它的半轴。<bookmark mark='b'/>让一个单位向量转一整圈，看它的像有多长。最长的时候就是σ1：矩阵能把任何向量拉伸的最大倍数。这叫谱范数。",
@@ -225,7 +225,7 @@ ZH = {
         "条件数到了10的{ex(dead32)}次方，32位的答案就根本不算答案了。",
 
     'f"The spectral norm has become an optimizer.':
-        "谱范数变成了一个优化器。<bookmark mark='a'/>沿着梯度G，谱大小为1的哪一步让损失变化最大？用奇异值分解写出G。<bookmark mark='b'/>每个对角元至多是1，所以最好的一步是U乘V转置：把梯度的每个拉伸都设成1。<bookmark mark='c'/>这就是Muon的更新，用五次牛顿–舒尔茨迭代算出来，这些矩阵乘法把奇异值推向1。在一个真实的梯度上，开始时有{100 * tiny:.0f}%的奇异值不到最大值的百分之一。<bookmark mark='d'/>五步之后，{100 * near:.0f}%落在0.6到1.3之间。第11部分会搭建这个优化器。",
+        "谱范数变成了一个优化器。<bookmark mark='a'/>沿着梯度G，谱大小为1的哪一步让损失变化最大？用奇异值分解写出G。<bookmark mark='b'/>每个对角元至多是1，所以最好的一步是U乘V转置：把梯度的每个拉伸都设成1。<bookmark mark='c'/>这就是Muon的归一化方向；下降时取它的负方向。用五次牛顿–舒尔茨迭代算出来，这些矩阵乘法把奇异值推向1。在一个真实的梯度上，开始时有{100 * tiny:.0f}%的奇异值不到最大值的百分之一。<bookmark mark='d'/>五步之后，{100 * near:.0f}%落在0.6到1.3之间。第11部分会搭建这个优化器。",
 
     # ---------------------------------------------------------------- Spectra
     'Chapter ten.': '第10章。随机矩阵，以及训练往网络权重里写进了什么。',
@@ -246,7 +246,7 @@ ZH = {
     "f'Only {sh_above} remain beyond the edge.'": "只有{sh_above}个还在边界之外。",
 
     'f"The escapees thin out slowly':
-        "跑出去的特征值慢慢变稀，像幂律一样：密度按λ的负α次方下降。<bookmark mark='a'/>2019年，查尔斯·马丁和迈克尔·马奥尼在几百个训练过的网络上拟合了这样的尾巴：指数几乎总在1.5到5之间，而在同一族模型里，尾巴越重，测试准确率越好。<bookmark mark='b'/>拟合GPT-2全部48个矩阵：有{n_in}个落在这个范围里；我们看的那一层，α是{s['alpha']:.2f}。随机矩阵根本没有尾巴。",
+        "跑出去的特征值慢慢变稀，像幂律一样：密度按λ的负α次方下降。<bookmark mark='a'/>2019年，查尔斯·马丁和迈克尔·马奥尼在几百个训练过的网络上拟合了这样的尾巴：指数几乎总在1.5到5之间，而在同一族模型里，尾巴越重，测试准确率越好。<bookmark mark='b'/>拟合GPT-2全部48个矩阵：有{n_in}个落在这个范围里；我们看的那一层，α是{s['alpha']:.2f}。独立高斯参考矩阵的极限主体有紧支撑，而不是幂律尾部。",
 
     'f"The same in this series\' small novels model.':
         "这个系列在小说上训练的小模型，也是一样。<bookmark mark='a'/>初始化时，它的{n}个矩阵是随机的：总共{sum(a_in)}个特征值越界。<bookmark mark='b'/>训练之后，{every}{min(a_tr)}到{max(a_tr)}个落在边界之外。训练在一片噪声的海洋里，写下了一点结构。",
@@ -255,7 +255,7 @@ ZH = {
     'Chapter eleven.': '第11章。梯度是低秩的。',
 
     'A gradient is a matrix too':
-        "梯度也是一个矩阵，有它自己的奇异值。<bookmark mark='a'/>一层把每个词元的向量x变成W x。<bookmark mark='b'/>根据链式法则，也就是第4部分的主题，一个权重的梯度，是对各个词元，把那个输出处的误差乘上输入，再加起来。<bookmark mark='c'/>所以梯度是一些外积之和，每个词元贡献一个秩1的块。<bookmark mark='d'/>它的秩至多是词元的个数，实际上还低得多：误差和输入集中在几个共同的方向上。",
+        "梯度也是一个矩阵，有它自己的奇异值。<bookmark mark='a'/>一层把每个词元的向量x变成W x。<bookmark mark='b'/>根据链式法则，也就是第4部分的主题，一个权重的梯度，是对各个词元，把那个输出处的误差乘上输入，再加起来。<bookmark mark='c'/>所以梯度是一些外积之和，每个词元贡献一个秩1的块。<bookmark mark='d'/>它的秩至多是词元的个数。实际中，它往往是近似低秩的：误差和输入集中在几个共同的方向上。",
 
     'f"Here is a real gradient, from a small transformer':
         "这是一个真实的梯度，来自一个在小说上训练的小Transformer：一个{shape[0]}乘{shape[1]}的矩阵。<bookmark mark='a'/>它的奇异值，从大到小，对数坐标。第一步时，它们下降得很慢。<bookmark mark='b'/>几步之后就塌了下去：到第{pk['step']}步，前八个方向承载了梯度的{100 * pk['top8']:.1f}%。<bookmark mark='c'/>后来谱又慢慢填回来：到第{last['step']}步，前八个方向仍然承载着{100 * last['top8']:.0f}%，而方向一共有{n}个。",
@@ -296,7 +296,7 @@ ZH = {
         "第1部分的计数模型，把每个词都当成一座孤岛。办法来自语言学里的一个老想法。<bookmark mark='a'/>1954年，泽利格·哈里斯指出，出现在相同上下文里的词，意思往往相近。<bookmark mark='b'/>1957年，约翰·弗斯说：要了解一个词，就看它和什么词为伴。<bookmark mark='c'/>1990年，斯科特·迪尔韦斯特、苏珊·杜迈斯和同事把它变成了算法：数一数词在文档里出现的次数，做奇异值分解，按意义而不是按拼写来检索。",
 
     'f"We\'ll do it with the thirty novels.':
-        "我们用那三十部小说来做。<bookmark mark='a'/>取最常见的一万个词，数每一对词在四个词以内同时出现多少次：一亿个格子，来自{w['n_words'] / 1000000.0:.2f}百万词的文本。<bookmark mark='b'/>再按第1部分的办法，把计数变成意外度：两个词相遇的次数，是偶然相遇的多少倍，取对数，就是点互信息。只留下它的正的部分。<bookmark mark='c'/>monday和morning：{w['show_pairs'][0][3]:.2f}。the和of一起出现了{int(w['show_pairs'][-1][2]):,}次，可它们和什么词都相遇：{w['show_pairs'][-1][3]:.2f}。",
+        "我们用那三十部小说来做。<bookmark mark='a'/>取最常见的一万个词，数每一对词在四个词以内同时出现多少次：一亿个格子，来自{w['n_words'] / 1000000.0:.2f}百万词的文本。<bookmark mark='b'/>再按第1部分的办法，把计数变成意外度：两个词相遇的次数，是偶然相遇的多少倍，取对数，就是点互信息。只留下它的正的部分。<bookmark mark='c'/>monday和morning：{w['show_pairs'][0][3]:.2f}。the和of一起出现了{int(w['show_pairs'][-1][2]):,}次，可它们和什么词都相遇：{w['show_pairs'][-1][3]:.2f}。<bookmark mark='d'/>做SVD用的表，还会先把上下文分布取四分之三次方并归一化，再只保留正值。",
 
     'f"Keep the table\'s hundred strongest directions':
         "用奇异值分解，留下这张表最强的一百个方向。<bookmark mark='a'/>每个词得到一百个数。<bookmark mark='b'/>与相同的词为伴的词，最后靠得很近。星期一的近邻是：{', '.join(say['monday'])}。数字三的近邻是：{', '.join(say['three'])}。狗和船也各自找到了同伴。{extra}没有人给它一本词典。",
@@ -323,13 +323,13 @@ ZH = {
     'Chapter thirteen.': '第13章。word2vec，原来是换了个样子的计数。',
 
     'f"In 2013 Tomas Mikolov and colleagues at Google':
-        "2013年，谷歌的托马斯·米科洛夫和同事用一个猜谜游戏学习词向量。<bookmark mark='a'/>每个词有两个向量，一个在它作为中心词时用，一个在它作为邻居时用。<bookmark mark='b'/>损失函数通过逻辑函数，提高一个词和它真实邻居的点积，并降低它和{K}个随机词的点积。<bookmark mark='c'/>这就是带负采样的跳字模型，word2vec的核心：便宜到几小时就能学完几十亿个词。",
+        "2013年，谷歌的托马斯·米科洛夫和同事用一个猜谜游戏学习词向量。<bookmark mark='a'/>每个词有两个向量，一个在它作为中心词时用，一个在它作为邻居时用。<bookmark mark='b'/>训练会通过逻辑函数，提高一个词和它真实邻居的点积，并降低它和{K}个随机词的点积。<bookmark mark='c'/>这就是带负采样的跳字模型，word2vec的核心：便宜到几小时就能学完几十亿个词。",
 
     'f"We trained it on the novels':
         "我们在小说上训练它，用和计数时一样的词和窗口。四个词和它们的最近邻，下面是损失。<bookmark mark='a'/>开始时是随机的。<bookmark mark='b'/>{steps[1]}步之后，近邻都是最常见的词：它们最先被推动。<bookmark mark='c'/>到第{steps[mid]:,}步，意义出现了：three和{', '.join(snaps[mid]['three'][:3])}在一起。<bookmark mark='d'/>到最后，monday和{proper(snaps[-1]['monday'][0])}在一起，father和{snaps[-1]['father'][0]}在一起。没有任何东西告诉它，什么是一天，什么是亲戚。",
 
     'Why do guessing and counting agree?':
-        "为什么猜测和计数会一致？2014年，奥默·列维和约阿夫·戈德堡说明了原因。<bookmark mark='a'/>把一个词和一个上下文的损失收集起来：这一对作为真实邻居出现若干次，作为负样本出现的次数，大约是k乘这个词的计数，再乘这个上下文的采样概率。<bookmark mark='b'/>把它们的点积x当作自由的；令导数为0。<bookmark mark='c'/>两个逻辑函数项之比是e的x次方。<bookmark mark='d'/>取对数：最好的点积，就是点互信息减去log k。word2vec分解的，正是计数的那张表，只是平移了一下。",
+        "为什么猜测和计数会一致？2014年，奥默·列维和约阿夫·戈德堡说明了原因。<bookmark mark='a'/>把一个词和一个上下文的损失收集起来：这一对作为真实邻居出现若干次，作为负样本出现的次数，大约是k乘这个词的计数，再乘这个上下文的采样概率。<bookmark mark='b'/>把它们的点积x当作自由的；令导数为0。<bookmark mark='c'/>两个逻辑函数项之比是e的x次方。<bookmark mark='d'/>取对数：这使对数目标达到最大。如果负样本服从经验上下文分布，最好的点积就是点互信息减去log k。若像我们的训练一样，用平滑后的负采样分布，就把它的采样概率代入同一个对数计数比：这是广义的平移点互信息。",
 
     'f"Let\'s check it on the':
         "来检验一下，用最常见的{V}个词，这时损失可以完全最小化。<bookmark mark='a'/>每个向量{dims[0]}个数时，每个点积都是自由的：它们落在平移后的点互信息上，中位误差{r0['median_err']:.3f}。<bookmark mark='b'/>{dims[1]}个数时，点散开了：{r1['median_err']:.2f}。<bookmark mark='c'/>{dims[2]}个数时，{r2['median_err']:.2f}。短的向量，只能装下这张表的一个低秩版本。",
@@ -356,16 +356,16 @@ ZH = {
     'Chapter fourteen.': '第14章。生活在768维。',
 
     'f"Our intuition comes from three dimensions':
-        "我们的直觉来自三维，到了768维，它会误导我们。<bookmark mark='a'/>两个随机方向：在二维，什么角度都有。<bookmark mark='b'/>在三维，直角附近已经最常见。<bookmark mark='c'/>在一百维，夹角平均只偏离90度{sd[100]:.1f}度，<bookmark mark='d'/>在768维，只偏离{sd[768]:.1f}度。",
+        "我们的直觉来自三维，到了768维，它会误导我们。<bookmark mark='a'/>两个随机方向：在二维，什么角度都有。<bookmark mark='b'/>在三维，直角附近已经最常见。<bookmark mark='c'/>在一百维，夹角围绕90度的标准差是{sd[100]:.1f}度，<bookmark mark='d'/>在768维，标准差是{sd[768]:.1f}度。",
 
     'f"Why? <bookmark mark=\'a\'/> The cosine':
         "为什么？<bookmark mark='a'/>余弦是点积除以两个长度，而每个长度都接近根号d，后面会看到。<bookmark mark='b'/>点积是d个独立乘积之和，每个均值为0、方差为1：方差是d。<bookmark mark='c'/>除以d的平方：余弦的方差是d分之1。<bookmark mark='d'/>从d等于2到{int(ds[-1])}实测，点都落在线上；在768维，{var[k768]:.5f}，对比{1 / 768:.5f}。",
 
     'f"So high-dimensional space is roomy.':
-        "所以高维空间很宽敞。<bookmark mark='a'/>768维里一万个随机方向：每一对的夹角都在{h['worst_angle']:.0f}到{180 - h['worst_angle']:.0f}度之间。<bookmark mark='b'/>模型把一个概念，也就是一个特征，存成一个方向；只要这些方向近似垂直就行，特征就可以远多于维数：这叫叠加，第30部分就靠它读懂模型。",
+        "所以高维空间很宽敞。<bookmark mark='a'/>768维里一万个随机方向：每一对的夹角都在{angle_low}到{angle_high}度之间。<bookmark mark='b'/>模型把一个概念，也就是一个特征，存成一个方向；只要这些方向近似垂直就行，特征就可以远多于维数：这叫叠加，第30部分就靠它读懂模型。",
 
     'f"Now lengths.':
-        "再看长度。<bookmark mark='a'/>d越大，一个随机向量的长度越集中在根号d附近。<bookmark mark='b'/>它的平方是d个平方之和，<bookmark mark='c'/>均值是d，方差是2d。<bookmark mark='d'/>平方根在d附近，每变化1只变化2倍根号d分之1，所以长度的散布大约是根号2分之1，不管d是多少：长度在长，散布不长。在768维实测，{nsd[k768]:.3f}。",
+        "再看长度。<bookmark mark='a'/>d越大，一个随机向量的长度越集中在根号d附近。<bookmark mark='b'/>它的平方是d个平方之和，<bookmark mark='c'/>均值是d，方差是2d。<bookmark mark='d'/>平方根在d附近，每变化1只变化2倍根号d分之1，所以长度的散布在d很大时，大约是根号2分之1：长度不断增长，散布则趋近一个常数。在768维实测，{nsd[k768]:.3f}。",
 
     'f"Volume is stranger.':
         "体积更奇怪。它按半径的d次方增长，所以半径为99%的内球，只占体积的0.99的d次方。<bookmark mark='a'/>在三维，最外面百分之一的壳占体积的{100 * shell['3']:.1f}%。在一百维，{100 * shell['100']:.1f}%。<bookmark mark='b'/>在768维，{100 * shell['768']:.2f}%：一个高维的球，几乎全是皮。",
@@ -377,7 +377,7 @@ ZH = {
         "一个听起来不可能的推论。<bookmark mark='a'/>把GPT-2的一千个向量乘上同一个随机矩阵，把768个数压成几个。<bookmark mark='b'/>压到{ks[0]}个，距离全乱了；{ks[1]}个、{ks[2]}个：好一些。<bookmark mark='c'/>到{ks[3]}个，有{w_a:.0f}%的距离变化不到10%；到{ks[4]}个，{w_b:.1f}%。",
 
     'f"The Johnson-Lindenstrauss lemma, from 1984':
-        "约翰逊–林登斯特劳斯引理，1984年，这里用的是达斯古普塔和古普塔2003年的形式。<bookmark mark='a'/>要让n个点之间的每个距离平方都保持在1加减ε倍以内，随机投影到大约4 log n除以ε平方维就够了。<bookmark mark='b'/>对我们的一千个点、10%的误差：{int(j['jl_k']):,}维。起始的维数根本没有出现。我们来证明它。",
+        "约翰逊–林登斯特劳斯引理，1984年，这里用的是达斯古普塔和古普塔2003年的形式。<bookmark mark='a'/>要让n个点之间的每个距离平方都保持在1加减ε倍以内，随机投影到与log n除以ε平方成比例的维数就够了。<bookmark mark='b'/>对我们的一千个点、10%的误差：{int(j['jl_k']):,}维。起始的维数根本没有出现。我们来证明它。",
 
     'Fix one pair, and let x be their difference':
         "固定一对点，令x是它们的差，长度为1。<bookmark mark='a'/>R x的每个坐标，都是一些独立正态数之和：仍是正态的，方差为1。<bookmark mark='b'/>长度的平方是k个这样的平方之和：卡方分布，均值为k。<bookmark mark='c'/>切尔诺夫的技巧：对e的t倍它次方用马尔可夫不等式，而它的平均值我们确切知道。<bookmark mark='d'/>选最好的t，再估计对数：拉长超过ε的概率随k指数下降，缩短也一样。<bookmark mark='e'/>对所有点对用联合界：一旦k达到4 log n除以那个小量，出任何差错的概率都小于1。好的投影一定存在，而随机的投影至少以n分之1的概率成功。",
@@ -386,7 +386,7 @@ ZH = {
         "现在看数据。<bookmark mark='a'/>对一对点，变化超过{100 * eps:.0f}%的概率，正好是一个卡方尾巴，黄色那条。<bookmark mark='b'/>全部499500对点的实测比例就落在它上面：最大的差距是{worst_gap:.4f}。<bookmark mark='c'/>虚线的切尔诺夫界在上方，它本该如此：在{int(k768['k'])}维，是{k768['chernoff']:.2f}，而精确值是{k768['exact_fail']:.3f}。",
 
     'f"The lemma promises every pair at once.':
-        "引理保证的是所有点对同时成立。<bookmark mark='a'/>所有点对里最差的那一对，每个k取五个随机矩阵。<bookmark mark='b'/>联合界给出的保证，从k等于{int(first_b['k'])}开始：在{int(last['k'])}维，它保证{last['bound_eps']:.2f}，而最差的一对实测是{np.mean(last['worst']):.2f}。<bookmark mark='c'/>而且没有任何映射能好太多：2017年，卡斯珀·格林·拉森和杰拉尼·纳尔逊证明了，log n除以ε平方在常数倍以内是最优的。",
+        "引理保证的是所有点对同时成立。<bookmark mark='a'/>所有点对里最差的那一对，每个k取五个随机矩阵。<bookmark mark='b'/>联合界给出的保证，从k等于{int(first_b['k'])}开始：在{int(last['k'])}维，它保证{last['bound_eps']:.2f}，而最差的一对实测是{np.mean(last['worst']):.2f}。<bookmark mark='c'/>而且在最坏的情况下，没有任何映射能好太多：2017年，卡斯珀·格林·拉森和杰拉尼·纳尔逊证明了，log n除以ε平方在常数倍以内是最优的。",
 
     # ---------------------------------------------------------------- Geometry
     'Chapter sixteen.': '第16章。GPT-2歪斜的空间。',

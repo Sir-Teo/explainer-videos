@@ -58,7 +58,7 @@ class Laws(VoiceoverScene):
             "changed its slope: for language models, about minus 0.07. <bookmark mark='c'/> In 2020, Jared Kaplan, "
             "Sam McCandlish and colleagues at OpenAI found the same for parameters, data and compute together, over "
             "seven orders of magnitude, and concluded that a model eight times bigger needs only five times the "
-            "data. Part fourteen told how that led to GPT-3. Here we measure such laws ourselves."
+            "data. Part fourteen will show how that led to GPT-3. Here we measure such laws ourselves."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(sch), FadeIn(h1, shift=LEFT * 0.1))
             vo.wait_until("a")
@@ -114,7 +114,7 @@ class Laws(VoiceoverScene):
         side = VGroup(label(r"one run per width at a constant rate,", font_size=22, color=WHITE),
                       label(r"and at each length a short branch", font_size=22, color=C.BITS),
                       label(r"that cools the rate to zero:", font_size=22, color=C.BITS),
-                      label(r"a full schedule's result \\ for a fifth of the cost", font_size=22, color=GREY_A))
+                      label(r"estimate a full schedule's result \\ for a fifth of the extra cost", font_size=22, color=GREY_A))
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.95, 0.6, 0])
         # the usual way first: a separate run, with its own decaying schedule, for every length
         x_lo, x_hi = top.x_range[0], top.x_range[1]
@@ -137,8 +137,8 @@ class Laws(VoiceoverScene):
             "planned for a million characters and stopped halfway is not a good half-million-character run, because "
             "its learning rate never came down. <bookmark mark='a'/> So we use a trick from 2024. Train each width "
             "once at a constant rate, <bookmark mark='b'/> and at every length we want, branch off and cool the "
-            "rate to zero over the last fifth. <bookmark mark='c'/> Each branch lands where a full schedule of "
-            "that length would, and the trunk carries on. <bookmark mark='d'/> "
+            "rate to zero over the last fifth. <bookmark mark='c'/> Each branch estimates the result of a full "
+            "schedule of that length, while the trunk carries on. Agreement is empirical, and must be checked. <bookmark mark='d'/> "
             f"{len(widths)} widths, from {widths[0]} to {widths[-1]:,} units, lengths from two to the sixteen to two "
             f"to the twenty-four characters: {n_runs} finished runs in {hours:.1f} hours of one processor."
         ) as vo:

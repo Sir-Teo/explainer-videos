@@ -642,7 +642,8 @@
   "SGD, \\\\ planted $16\\times$": "SGD，\\\\ 植入$16\\times$",
   "DP-SGD, \\\\ planted $16\\times$": "DP-SGD，\\\\ 植入$16\\times$",
   "held-out bits per character: \\ SGD $2.53$, \\ DP-SGD $3.20$": "留出文本上每字符的比特数：\\ SGD $2.53$，\\ DP-SGD $3.20$",
-  "DP-SGD: \\ $\\varepsilon = 1.6$, \\ $\\delta = 10^{-5}$": "DP-SGD：\\ $\\varepsilon = 1.6$，\\ $\\delta = 10^{-5}$"
+  "DP-SGD: \\ $\\varepsilon = 1.6$, \\ $\\delta = 10^{-5}$": "DP-SGD：\\ $\\varepsilon = 1.6$，\\ $\\delta = 10^{-5}$",
+  "a $1930$ novel, \\ a $2026$ Gutenberg edition: \\ held out of our models' training; \\ exposure in pretrained models is unknown": "$1930$年的小说，$2026$年的古登堡版本：未用于我们自己的模型训练；预训练模型是否见过，尚不清楚"
  },
  "patterns": [
   [

@@ -1,4 +1,4 @@
-"""Shared instruments for the AI series (videos/ai/ai1 ... ai30), *AI, Built*.
+"""Shared instruments for the AI series (videos/ai/ai1 ... ai31), *AI, Built*.
 
     from explainer.ai import *
 
@@ -205,6 +205,7 @@ def timeline(lit=(), width=12.0, show_labels=True, font_size=18) -> VGroup:
         g.add(Line([X(yr), -0.06, 0], [X(yr), 0.06, 0], color=GREY_D, stroke_width=1.5))
         g.add(Text(str(yr), font_size=14, color=GREY_D).next_to([X(yr), 0, 0], DOWN, buff=0.12))
     labels = VGroup()
+    anchors = []
     side = 1
     for yr, name in TIMELINE:
         on = yr in lit
@@ -215,6 +216,7 @@ def timeline(lit=(), width=12.0, show_labels=True, font_size=18) -> VGroup:
             t.next_to(d, UP if side > 0 else DOWN, buff=0.14 if side > 0 else 0.4)
             side = -side
             labels.add(t)
+            anchors.append(d)
     # keep the lit labels apart and inside the frame
     for row in (1, -1):
         same = sorted([t for t in labels if np.sign(t.get_y()) == row], key=lambda t: t.get_x())
@@ -230,8 +232,18 @@ def timeline(lit=(), width=12.0, show_labels=True, font_size=18) -> VGroup:
                     same[i].shift(LEFT * (0.2 - gap))
         if same and same[0].get_left()[0] < -6.9:
             same[0].shift(RIGHT * (-6.9 - same[0].get_left()[0]))
-    g.add(labels)
+    # Dense eras displace labels to keep them readable. Tie each displaced label
+    # back to its own year so its nearest dot cannot imply a different date.
+    leaders = VGroup()
+    for t, d in zip(labels, anchors):
+        if abs(t.get_x() - d.get_x()) > 0.1:
+            above = t.get_y() > 0
+            start = d.get_top() if above else d.get_bottom()
+            end = t.get_bottom() if above else t.get_top()
+            leaders.add(Line(start, end, color=C.BITS, stroke_width=1, stroke_opacity=0.4))
+    g.add(leaders, labels)
     g.labels = labels
+    g.leaders = leaders
     return g
 
 

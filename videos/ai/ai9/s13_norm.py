@@ -116,13 +116,13 @@ class Norm(VoiceoverScene):
                          for d, c in zip(dirs, cols)])
         rms = cmath(r"\operatorname{RMSNorm}(h)", r"=", r"g \odot \frac{h}{\sqrt{\tfrac1d \sum_i h_i^2}}", font_size=32)
         rms.move_to([3.4, 2.6, 0])
-        rl = label(r"no mean, \ no shift: \ every vector onto one sphere", font_size=22, color=GREY_A).next_to(rms, DOWN, buff=0.15)
+        rl = label(r"before gain, \ $\epsilon=0$: \\ nonzero vectors onto one sphere", font_size=22, color=GREY_A).next_to(rms, DOWN, buff=0.15)
         cite_ = cite(r"B.~Zhang \& R.~Sennrich, \textit{Root Mean Square Layer Normalization} (2019)", corner=DR)
         with self.voiceover(
             "Here is what layer normalization does to one vector. <bookmark mark='a'/> Shift its numbers so they "
             "average zero, <bookmark mark='b'/> then squash them so their spread is one. <bookmark mark='c'/> In "
             "2019 Biao Zhang and Rico Sennrich asked whether the shift is needed at all. Their RMSNorm only divides "
-            "by the root mean square, the typical size of the numbers. Geometrically, it sends every vector, long or "
+            "by the root mean square, the typical size of the numbers. Before the learned gain, and ignoring the small epsilon used in practice, it sends every nonzero vector, long or "
             "short, onto the same sphere, keeping only its direction. <bookmark mark='d'/> It's cheaper, works as "
             "well, and is what Llama, Qwen and DeepSeek use."
         ) as vo:
@@ -149,7 +149,7 @@ class Norm(VoiceoverScene):
                 cmath(r"\frac{\partial y}{\partial h}\, h", r"=", r"0", font_size=34),
                 cmath(r"\frac{\partial\, \mathrm{LN}}{\partial h}", r"=", r"\frac{1}{\sigma}\big(I - \tfrac1d \mathbf{1}"
                       r"\mathbf{1}^{\top} - \hat u \hat u^{\top}\big)", font_size=34)]
-        whys = [why(r"RMSNorm, \ without the gain"), why(r"quotient rule; \ $\hat h = h / \|h\|$"),
+        whys = [why(r"RMSNorm: \ gain $1$, \ $\epsilon=0$, \ $h\ne0$"), why(r"quotient rule; \ $\hat h = h / \|h\|$"),
                 why(r"stretching $h$ changes nothing"), why(r"LayerNorm: \ blind to shifts too")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-3.6, buff=0.5, edge=6.9)
         d = int(n["d"])
@@ -174,10 +174,10 @@ class Norm(VoiceoverScene):
         scale_l = label(rf"double $h$: \ the output is unchanged, \\ the Jacobian halves \ (${sc[1, 2]:.2f} \to {sc[2, 2]:.2f}$)",
                         font_size=24, color=GREY_A).move_to([-3.6, -2.5, 0])
         with self.voiceover(
-            "What does normalization do to the gradient? Take RMSNorm without its gain. <bookmark mark='a'/> Its "
+            "What does normalization do to the gradient? Take RMSNorm without its gain, set epsilon to zero, and assume nonzero inputs. <bookmark mark='a'/> Its "
             "derivative, by the quotient rule, is a constant times the identity minus the projection onto h's own "
             "direction. <bookmark mark='b'/> So stretching h changes nothing, and the gradient never points along h: "
-            "the layer only cares about direction. LayerNorm's derivative also removes the all-ones direction, since "
+            "the idealized layer only cares about direction. Real implementations add epsilon, so that radial invariance is approximate. For nonconstant inputs, LayerNorm's derivative also removes the all-ones direction, since "
             f"shifting every number at once changes nothing either. <bookmark mark='c'/> Measured with autograd at "
             f"d equals {d}: RMSNorm's Jacobian has {d - z_rms} equal singular values and {z_rms} zero; LayerNorm's, "
             f"{d - z_ln} and {z_ln}, exactly as derived. <bookmark mark='d'/> And the constant in front is one over "

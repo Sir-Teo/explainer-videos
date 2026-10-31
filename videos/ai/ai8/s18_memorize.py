@@ -116,7 +116,7 @@ class Memorization(VoiceoverScene):
             f"passages rarely repeat: no 64-token passage occurs more than {mmax} times. <bookmark mark='a'/> "
             f"Prompted with the first 32 tokens of a training passage, it reproduces the next 32 exactly in {n_ex} "
             f"cases out of {n_tried} tried. <bookmark mark='b'/> " + further
-            + "<bookmark mark='c'/> A small model that saw its text a few times stores the style, not the words. "
+            + "<bookmark mark='c'/> This small model rarely reproduces these tested passages exactly; that does not establish that it memorized none of its training text. "
             "What makes words stick is repetition."
         ) as vo:
             self.play(FadeIn(G), FadeIn(xl), FadeIn(xt), FadeIn(info[0]), FadeIn(info[1]))
@@ -214,7 +214,7 @@ class Memorization(VoiceoverScene):
             (2025, r"A.~F.~Cooper et al.", r"Llama 3.1 70B has memorized large parts of some books, \ the first "
                    r"\textit{Harry Potter} almost entirely"),
             (2025, r"Munich Regional Court, \ GEMA v.\ OpenAI", r"lyrics memorized in a model's weights are a "
-                   r"reproduction; \ not yet final"),
+                   r"reproduction; \ appealable at the time"),
             (2025, r"High Court, \ Getty Images v.\ Stability AI", r"the image model's weights are not an infringing "
                    r"copy"),
             (2026, r"A.~Ahmed, A.~F.~Cooper et al.", r"near-complete books extracted from some production chat models"),
@@ -222,17 +222,17 @@ class Memorization(VoiceoverScene):
         cards = VGroup(*[history_card(y, w, t, width=4.3, font_size=18, color=HIST) for y, w, t in items])
         cards.arrange_in_grid(rows=2, cols=3, buff=(0.2, 0.35), cell_alignment=UL).move_to(UP * 0.1)
         head = label(r"Memorization, \ 2022--2026", font_size=34).to_edge(UP, buff=0.3)
-        foot = note(r"US rulings of June 2025 (Bartz v.\ Anthropic; \ Kadrey v.\ Meta) \ found training itself fair use; "
-                    r"\ the law is unsettled").to_edge(DOWN, buff=0.2)
+        foot = note(r"June 2025: \ Bartz and Kadrey found training fair use on their records; \\ "
+                    r"Bartz rejected fair use for pirated library copies. \ No blanket rule.").to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "Since then, memorization has become a practical and legal question. <bookmark mark='a'/> Deduplicating "
             "training data reduces it. <bookmark mark='b'/> In 2023 Nasr and colleagues found that asking a chat "
             "model to repeat one word forever made it drift into reciting training data. <bookmark mark='c'/> In "
             "2025 Cooper and colleagues showed that some open-weight models have memorized large parts of popular "
-            "books. <bookmark mark='d'/> Courts disagree on what that means. In November 2025 a Munich court held "
-            "that song lyrics memorized in a model are a copy, a ruling not yet final, <bookmark mark='e'/> while "
-            "London's High Court held that an image model's weights were not one. American judges that June had "
-            "found training itself to be fair use. <bookmark mark='f'/> And in early 2026 researchers reported "
+            "books. <bookmark mark='d'/> Legal outcomes depend on the jurisdiction, model and evidence. In November 2025 a Munich court held "
+            "that song lyrics memorized in a model are a copy, an appealable ruling at the time, <bookmark mark='e'/> while "
+            "London's High Court held that the image model's weights at issue were not one. In the June 2025 Bartz and Kadrey cases, American judges had "
+            "found the training uses fair on the records before them. Bartz separately rejected fair use for pirated library copies. <bookmark mark='f'/> And in early 2026 researchers reported "
             "extracting near-complete books from production chat models. Whether a model has learned or copied "
             "is no longer only a question for learning theory."
         ) as vo:

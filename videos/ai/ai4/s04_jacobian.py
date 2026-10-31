@@ -111,7 +111,7 @@ class Jacobian(VoiceoverScene):
                         (np.array([-0.5, -0.5]), np.array([0.5, -0.5]), np.array([0.5, 0.5]), np.array([-0.5, 0.5]))],
                       stroke_width=0, fill_color=GRAD, fill_opacity=0.55)
         arrow_ = Arrow([-4.1, -1.4, 0], [-3.1, -1.4, 0], color=GREY_B, stroke_width=4)
-        dl = MathTex(rf"\text{{area}} \times \det J = {det:.2f}", font_size=34, color=GRAD).move_to([-3.4, -3.0, 0])
+        dl = MathTex(rf"\text{{area factor}} = |\det J| = {abs(det):.2f}", font_size=34, color=GRAD).move_to([-3.4, -3.0, 0])
         colors = {r"J_{f \circ g}(x)": WHITE, r"J_f(g(x))": GRAD, r"J_g(x)": VALUE}
         chain = cmath(r"J_{f \circ g}(x)", "=", r"J_f(g(x))", r"\,", r"J_g(x)", colors=colors, font_size=44)
         chain.move_to([3.4, -1.55, 0])
@@ -130,8 +130,8 @@ class Jacobian(VoiceoverScene):
         with self.voiceover(
             "In general, a map from n numbers to m numbers has an m by n Jacobian: one row per output, one column "
             "per input, the one matrix that makes the straight-line guess best. A gradient is the special case of a "
-            "single output. <bookmark mark='a'/> The Jacobian's determinant, from part three, says how much the "
-            "map stretches area near the point. <bookmark mark='b'/> And the chain rule for maps is matrix "
+            "single output. <bookmark mark='a'/> For this two-dimensional map, the absolute value of the Jacobian's "
+            "determinant, from part three, gives the local area factor. <bookmark mark='b'/> And the chain rule for maps is matrix "
             "multiplication: the Jacobian of one map after another is the product of their Jacobians, each taken "
             "where its input lands. That product is the whole of backpropagation, as chapter five will show."
         ) as vo:

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import FIT, HIST, NCOL, PART, QUANT, lag, load, predict_card, takeaway_card, width_ramp
+from videos.ai.ai12.common import FIT, HIST, NCOL, PART, QUANT, lag, load, predict_card, takeaway_card, visible_values, width_ramp
 
 DIM_COLORS = ["#7FD3FF", C.INTERVAL, C.BITS, C.SURPRISE]
 
@@ -193,9 +193,9 @@ class Power(VoiceoverScene):
                       for v in np.linspace(0, steps.max(), 5)])
         xn = label(r"training steps", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
         yn = label(rf"each subtask's loss \ (bits), \ width ${widths[wi]}$", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
-        sub = VGroup(*[curve(ax, steps, np.minimum(run[:, k], 1.1), interpolate_color(ManimColor(QUANT), ManimColor(GREY_D), k / T),
+        sub = VGroup(*[curve(ax, steps, visible_values(run[:, k], 0, 1.1), interpolate_color(ManimColor(QUANT), ManimColor(GREY_D), k / T),
                              2.2).set_stroke(opacity=0.9) for k in range(T)])
-        avg = curve(ax, steps, np.minimum(mean[wi, 0], 1.1), WHITE, 4)
+        avg = curve(ax, steps, visible_values(mean[wi, 0], 0, 1.1), WHITE, 4)
         al = label(r"white: \ the average", font_size=20, color=WHITE).next_to(yn, RIGHT, buff=0.4)
         # right: the average loss at the end, against the number of subtasks learned, with the theory's curve
         fin = mean[:, :, -1]  # widths x seeds

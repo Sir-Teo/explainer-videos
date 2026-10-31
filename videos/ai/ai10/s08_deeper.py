@@ -46,8 +46,8 @@ class Deeper(VoiceoverScene):
         head = label(r"ILSVRC: \ the winning top-5 error, \ year by year", font_size=30).to_edge(UP, buff=0.4)
         cite_ = cite(r"Russakovsky et al.\ (2015); \ He et al.\ (2015); \ Hu et al.\ (2017); \ Recht et al.\ (2019)",
                      corner=DR)
-        recht = label(r"2019, \ Recht et al.: \ a fresh test set made the same way; \\ every model $11$--$14$ "
-                      r"points less accurate, \ the ranking nearly unchanged", font_size=22, color=HIST).move_to([2.6, 1.6, 0])
+        recht = label(r"2019, \ Recht et al.: \ a fresh test set made the same way; \\ best model: \ top-5 $96\% \to 90\%$; "
+                      r"top-1 $83\% \to 72\%$", font_size=22, color=HIST).move_to([2.6, 1.6, 0])
         keep_in_frame(recht)
         with self.voiceover(
             "After 2012 the contest became a race to go deeper. <bookmark mark='a'/> The winning error, year by "
@@ -56,8 +56,8 @@ class Deeper(VoiceoverScene):
             "<bookmark mark='b'/> In 2014 Andrej Karpathy trained himself on the task and labelled test images by "
             f"hand: he missed {HUMAN_TOP5} percent. The networks passed him in 2015. <bookmark mark='c'/> By the "
             f"contest's last year, 2017, the winner missed {ILSVRC[-1][2]} percent. <bookmark mark='d'/> When "
-            "Benjamin Recht and colleagues later built a fresh test set the same way, every model lost eleven to "
-            "fourteen points of accuracy, though the ranking barely changed. Part 31 asks what benchmarks can tell us."
+            "Benjamin Recht and colleagues carefully rebuilt a test set, the strongest classifier dropped from "
+            "96 to 90 percent top-five accuracy, and from 83 to 72 percent top-one accuracy. The ranking barely changed. Part 31 asks what benchmarks can tell us."
         ) as vo:
             self.play(FadeIn(head), Create(base), FadeIn(cite_))
             self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.1) for b in bars[:3]], lag_ratio=0.3))
@@ -191,7 +191,7 @@ class Deeper(VoiceoverScene):
         der = cmath(r"\frac{\partial y}{\partial x}", r"=", r"I", r"+", r"\frac{\partial F}{\partial x}",
                     colors={r"I": KERNEL, r"\frac{\partial F}{\partial x}": FMAP}, font_size=40)
         der.move_to([-3.5, -1.3, 0])
-        dl = label(r"a path the gradient can always take: \ Part 9", font_size=22, color=GRADC).next_to(der, DOWN,
+        dl = label(r"an identity path helps gradient flow: \ Part 9", font_size=22, color=GRADC).next_to(der, DOWN,
                                                                                                      buff=0.3)
         bn = label(r"batch normalization (Ioffe \& Szegedy, 2015): \ each layer's inputs kept at mean 0, \ "
                    r"variance 1", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
@@ -203,8 +203,8 @@ class Deeper(VoiceoverScene):
             "overfitting, just harder to train. Batch normalization, from that year, had helped, but not enough. "
             "<bookmark mark='b'/> Their fix: "
             "let each pair of layers learn only a correction F of x, added to its input. <bookmark mark='c'/> The "
-            "block's derivative is the identity plus F's: a path along which the gradient always passes, however "
-            "deep the stack, as Part 9 derived. <bookmark mark='d'/> A hundred and fifty-two layers won 2015 at "
+            "block's derivative is the identity plus F's: an identity path that helps gradients reach early "
+            "layers, as Part 9 showed. <bookmark mark='d'/> A hundred and fifty-two layers won 2015 at "
             f"{ILSVRC[5][2]} percent. Highway networks, months earlier, had built the same path with gates."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))

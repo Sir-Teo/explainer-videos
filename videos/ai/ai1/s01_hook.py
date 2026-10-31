@@ -282,9 +282,9 @@ class Hook(VoiceoverScene):
             "guesses at one time: a word, a piece of a word, or a punctuation mark. Here is a line of a 1930 "
             "novel, cut the way GPT-2 cuts it."
         ) as vo:
-            self.play(FadeOut(left), FadeOut(right), FadeOut(cap), FadeOut(tag))
             vo.wait_until("a")
-            self.play(FadeIn(tok_card, shift=UP * 0.2))
+            self.play(FadeOut(left), FadeOut(right), FadeOut(cap), FadeOut(tag),
+                      FadeIn(tok_card, shift=UP * 0.2))
         self.wait(0.5)
         self.clear_scene()
 
@@ -360,16 +360,18 @@ class Hook(VoiceoverScene):
         src = note(rf"Dashiell Hammett, \textit{{The Maltese Falcon}} (1930), chapter 2: \ ${sb['chars']:,}$ "
                    r"characters. \ Public domain, and on Project Gutenberg, since 1 January 2026".replace(",", "{,}"),
                    font_size=20).next_to(quote, DOWN, buff=0.2)
+        heldout = note(r"held out of our training; \ pretrained models may have seen earlier copies", font_size=20)
+        heldout.next_to(src, DOWN, buff=0.14)
         board = scoreboard(rows, shown=1, row_h=0.36, font_size=20).scale(0.92).to_edge(DOWN, buff=0.25)
         low = min(r["bits"] for r in rows if "bits" in r)
         goal = "to below one" if low < 1 else f"to {low:.2f} bits per character, and beyond"
         with self.voiceover(
-            "And we'll keep score. Here is a page of The Maltese Falcon, from 1930. It entered the public domain "
-            "on the first of January 2026, after every model in this part was trained, so none can have learned "
-            "it by heart. <bookmark mark='a'/> As plain text, it takes eight bits per character. "
+            "And we'll keep score. Here is a page of The Maltese Falcon, from 1930. Its Project Gutenberg edition "
+            "appeared in January 2026. We hold it out of the models we train here. For pretrained models, earlier "
+            "copies may have been in their training data. <bookmark mark='a'/> As plain text, it takes about eight bits per character. "
             f"<bookmark mark='b'/> The series explains how the numbers on this board come down: from eight, {goal}."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(quote), FadeIn(src), FadeIn(board))
+            self.play(FadeIn(head), FadeIn(quote), FadeIn(src), FadeIn(heldout), FadeIn(board))
             vo.wait_until("a")
             self.play(Indicate(board.rows[0], color=WHITE, scale_factor=1.04))
             vo.wait_until("b")

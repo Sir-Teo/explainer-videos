@@ -89,7 +89,7 @@ class JL(VoiceoverScene):
     def statement(self):
         j = load("jl")
         thm = theorem_card(r"the Johnson--Lindenstrauss lemma",
-                           r"For any $n$ points and $0 < \varepsilon < 1$, \ if $k \ge \dfrac{4 \ln n}{\varepsilon^2/2 - "
+                           r"For any $n \ge 2$ points and $0 < \varepsilon < 1$, \ if $k \ge \dfrac{4 \ln n}{\varepsilon^2/2 - "
                            r"\varepsilon^3/3}$, \ a random Gaussian map $f(\mathbf{x}) = R\mathbf{x}/\sqrt{k}$ keeps "
                            r"every squared distance within a factor $1 \pm \varepsilon$, \ with probability at least "
                            r"$1/n$.", who=r"W.~Johnson \& J.~Lindenstrauss (1984); \ this form: S.~Dasgupta \& "
@@ -101,7 +101,7 @@ class JL(VoiceoverScene):
         with self.voiceover(
             "The Johnson-Lindenstrauss lemma, from 1984, in Dasgupta and Gupta's form of 2003. <bookmark mark='a'/> To "
             "keep every squared distance among n points within one plus or minus epsilon, a random projection to about "
-            "four log n over epsilon squared dimensions suffices. <bookmark mark='b'/> For our thousand points at ten "
+            "log n over epsilon squared dimensions, up to a constant, suffices. <bookmark mark='b'/> For our thousand points at ten "
             f"percent: {int(j['jl_k']):,}. The starting dimension doesn't appear at all. Let's prove it."
         ) as vo:
             self.play(FadeIn(thm, shift=DOWN * 0.2))
@@ -122,7 +122,8 @@ class JL(VoiceoverScene):
             cmath(r"P\big(|R\mathbf{x}|^2 \ge (1+\varepsilon)k\big)", r"\le",
                   r"\big((1+\varepsilon)e^{-\varepsilon}\big)^{k/2} \le e^{-k(\varepsilon^2/2 - \varepsilon^3/3)/2}",
                   font_size=32),
-            cmath(r"P(\text{any pair fails})", r"\le", r"n^2\, e^{-k(\varepsilon^2/2 - \varepsilon^3/3)/2} < 1",
+            cmath(r"P(\text{any pair fails})", r"\le", r"n(n-1)\,e^{-k(\varepsilon^2/2-\varepsilon^3/3)/2}"
+                  r" \le 1-1/n",
                   font_size=32),
         ]
         whys = [why(r"$|\mathbf{x}| = 1$: \ a sum of independent normals \\ is normal, variance $\sum x_j^2 = 1$",
@@ -222,13 +223,13 @@ class JL(VoiceoverScene):
         last = fine[-1]
         first_b = next(f for f in fine if f["bound_eps"] == f["bound_eps"])
         hist = history_card(2017, r"K.~Larsen \& J.~Nelson",
-                            r"proved that no map at all, \ random or not, \ can do much better: \ $k$ must grow like "
+                            r"worst-case point sets require \ $k$ to grow like "
                             r"$\log n / \varepsilon^2$", color=HIST, width=5.0).to_corner(DR, buff=0.25)
         with self.voiceover(
             "The lemma promises every pair at once. <bookmark mark='a'/> The worst pair of all, five random matrices "
             f"per k. <bookmark mark='b'/> The union bound's guarantee, from k of {int(first_b['k'])}: at "
             f"{int(last['k'])} it promises {last['bound_eps']:.2f}, and the worst pair measured "
-            f"{np.mean(last['worst']):.2f}. <bookmark mark='c'/> And no map can do much better: in 2017 Kasper Green "
+            f"{np.mean(last['worst']):.2f}. <bookmark mark='c'/> In the worst case no map can do much better: in 2017 Kasper Green "
             "Larsen and Jelani Nelson proved log n over epsilon squared optimal, up to a constant."
         ) as vo:
             self.play(FadeIn(g))

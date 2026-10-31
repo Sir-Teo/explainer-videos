@@ -104,7 +104,8 @@ class Fisher(VoiceoverScene):
                 why(r"unbiased: \ $\mathbb{E}[\hat\theta] = \theta$, \ differentiated"),
                 why(r"Cauchy--Schwarz; \ $n$ points add their information")]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=-2.0, buff=0.3, edge=6.8)
-        thm = theorem_card(r"Cram\'er--Rao", r"an unbiased estimate from $n$ independent points has variance at least "
+        thm = theorem_card(r"Cram\'er--Rao", r"under regularity conditions, \ an unbiased estimate from $n$ i.i.d. "
+                           r"draws has variance at least "
                            r"$1 / (n\, I(\theta))$", who=r"C.~R.~Rao (1945), \ H.~Cram\'er (1946)", width=6.2,
                            color=BOUND).to_corner(DR, buff=0.25)
         sa = Axes(x_range=[-6, 6, 2], y_range=[-1.2, 1.2, 1], x_length=5.0, y_length=1.7, tips=False,
@@ -117,7 +118,8 @@ class Fisher(VoiceoverScene):
         with self.voiceover(
             "There is, and Fisher found the key in 1925. <bookmark mark='a'/> The score is the slope of the "
             "log-likelihood in the parameter: how much each observation pulls the estimate. <bookmark mark='b'/> "
-            "At the true value it averages to zero, because the density always integrates to one. "
+            "When differentiation can pass under the integral, it averages to zero at the true value, because "
+            "the density always integrates to one. "
             "<bookmark mark='c'/> Its variance is the Fisher information: how sharply the data pins theta down. "
             f"For the Cauchy it is one half; over two hundred thousand draws we measure {sv:.3f}. "
             "<bookmark mark='d'/> An unbiased estimate moves one for one with theta, so its covariance with the "

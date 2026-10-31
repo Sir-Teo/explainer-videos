@@ -433,7 +433,7 @@
   "fde3cefbe2c4": {
    "scene": "ARC",
    "en": "So in March 2026 came ARC-AGI-3: interactive games, with no instructions. The player must explore, work out what the goal is, and plan, and is scored by how efficiently it gets there, against people. <bookmark mark='a'/> People could solve every game. At launch, every frontier model scored below one percent. <bookmark mark='b'/> In September, ARC Prize measured OpenAI's GPT-6 Astra at 62.7 percent with their standard harness. <bookmark mark='c'/> Each new test has fallen faster than the last. And what solves them looks like every chapter of this part: propose, check, refine, in a loop.",
-   "zh": "所以在2026年3月，ARC-AGI-3来了：交互式的游戏，没有任何说明。玩家必须探索，弄清目标是什么，再做规划，得分看它达到目标的效率，跟人比。<bookmark mark='a'/>人能解出每一个游戏。发布时，所有前沿模型的得分都不到1%。<bookmark mark='b'/>到了9月，ARC Prize用他们的标准测试框架测得OpenAI的GPT-6 Astra为62.7%。<bookmark mark='c'/>每一个新测试都比上一个倒得更快。而解开它们的方法，就像这一部分的每一章一样：提出，检查，改进，循环往复。"
+   "zh": "所以在2026年3月，ARC-AGI-3来了：交互式的游戏，没有任何说明。玩家必须探索，弄清目标是什么，再做规划，得分看它达到目标的效率，跟人比。<bookmark mark='a'/>人能解出每一个游戏。发布时，所有前沿模型的得分都不到1%。<bookmark mark='b'/>到了9月，ARC Prize用他们的标准测试框架测得OpenAI的GPT-6 Astra为62.7%。<bookmark mark='c'/>每一个新测试，被攀升的速度都比上一个更快。而解开它们的方法，就像这一部分的每一章一样：提出，检查，改进，循环往复。"
   },
   "ce0f9bb8b2dc": {
    "scene": "Outro",

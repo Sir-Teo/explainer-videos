@@ -67,20 +67,10 @@
    "en": "A thousand make it unmistakable. <bookmark mark='a'/> Counting paths gives the exact chances: twelve choose k, out of two to the twelve. <bookmark mark='b'/> The smooth curve hugging them is the bell, the normal distribution, with a centre mu and a width sigma, here six and the square root of three. De Moivre found it in 1733, as the limit of exactly these counts.",
    "zh": "1000个球，形状就毫无疑问了。<bookmark mark='a'/>数一数路径就得到精确的概率：12选k，除以2的12次方。<bookmark mark='b'/>贴着它们的那条光滑曲线，就是钟形曲线，也就是正态分布，它有中心μ和宽度σ，这里是6和根号3。棣莫弗在1733年找到了它，正是这些计数的极限。"
   },
-  "07d334bf8377": {
-   "scene": "Bell",
-   "en": "Why a bell, and why so often? One die: six flat bars. <bookmark mark='a'/> Two dice: a triangle. Three: already rounding off. <bookmark mark='b'/> Six, twelve: the bell. <bookmark mark='c'/> That's the central limit theorem: add many independent pieces, whatever their shape, and the sum is bell-shaped, <bookmark mark='d'/> with a spread that grows like the square root of their number. Laplace proved it in 1810.",
-   "zh": "为什么是钟形，又为什么这么常见？一颗骰子：六根一样高的柱子。<bookmark mark='a'/>两颗：一个三角形。三颗：已经开始变圆。<bookmark mark='b'/>六颗、十二颗：钟形曲线。<bookmark mark='c'/>这就是中心极限定理：把许多独立的小块加起来，不管每一块是什么形状，和都是钟形的，<bookmark mark='d'/>而它的宽度，随块数的平方根增长。拉普拉斯在1810年证明了它。"
-  },
   "47b6bdb1a00c": {
    "scene": "Bell",
    "en": "Why? Two dice add up to s in every way of splitting s: x on one die, s minus x on the other. <bookmark mark='a'/> For densities the sum becomes an integral, a convolution. <bookmark mark='b'/> Picture it with a lopsided piece, the exponential. Flip a copy, slide it to s, multiply: the area of the overlap is the density of the sum at s. <bookmark mark='c'/> Slide s along, and the area traces out the density of two pieces. <bookmark mark='d'/> n pieces take n minus one convolutions.",
    "zh": "为什么？两颗骰子加起来等于s，有多少种把s拆开的方法：一颗是x，另一颗是s减x。<bookmark mark='a'/>换成密度，求和就变成积分，也就是卷积。<bookmark mark='b'/>用一个歪向一边的分布来画：指数分布。把它翻过来，滑到s，再相乘：重叠部分的面积，就是和在s处的密度。<bookmark mark='c'/>让s一路滑过去，这个面积就描出两块之和的密度。<bookmark mark='d'/>n块，就要做n减1次卷积。"
-  },
-  "79759e814619": {
-   "scene": "Bell",
-   "en": "So convolve again and again. One exponential, all on one side. <bookmark mark='a'/> Two, three, five: each convolution smooths and spreads it. <bookmark mark='b'/> Ten, thirty: the lopsidedness fades, and what is left is the bell. Convolution is an averaging, and the only shape that averaging leaves unchanged, up to scale, is the bell.",
-   "zh": "那就一次又一次地卷积。一个指数分布，全都挤在一边。<bookmark mark='a'/>两个、三个、五个：每次卷积都把它抹平、摊开。<bookmark mark='b'/>十个、三十个：歪斜消失了，剩下的就是钟形曲线。卷积是一种平均，而在平均之下，除了缩放，唯一不变的形状就是钟形曲线。"
   },
   "cb905932fe2f": {
    "scene": "Bell",
@@ -146,11 +136,6 @@
    "scene": "Fisher",
    "en": "Here is a distribution with heavy tails, the Cauchy. It looks like a bell, but its tails are so heavy that it has no average: now and then a draw lands absurdly far out. <bookmark mark='a'/> Try to estimate its centre from a hundred draws. The sample average is useless: its spread never shrinks; the middle half of the averages spans 1.9 at 5 draws and still 1.9 at 500. <bookmark mark='b'/> The median does much better, <bookmark mark='c'/> and maximum likelihood better still. Is there a best possible?",
    "zh": "这是一个尾巴很重的分布：柯西分布。它看起来像钟形曲线，但尾巴重到没有平均值：时不时就有一次抽样落到离谱的远处。<bookmark mark='a'/>试着用100次抽样估计它的中心。样本平均值毫无用处：它的离散程度永远不缩小；平均值的中间一半，在5次抽样时跨度1.9，到500次时仍是1.9。<bookmark mark='b'/>中位数好得多，<bookmark mark='c'/>最大似然更好。有没有一个最好的极限？"
-  },
-  "13294f2e8eee": {
-   "scene": "Fisher",
-   "en": "There is, and Fisher found the key in 1925. <bookmark mark='a'/> The score is the slope of the log-likelihood in the parameter: how much each observation pulls the estimate. <bookmark mark='b'/> At the true value it averages to zero, because the density always integrates to one. <bookmark mark='c'/> Its variance is the Fisher information: how sharply the data pins theta down. For the Cauchy it is one half; over two hundred thousand draws we measure 0.500. <bookmark mark='d'/> An unbiased estimate moves one for one with theta, so its covariance with the score is one. <bookmark mark='e'/> And Cauchy-Schwarz says a covariance squared is at most the product of the variances. So no unbiased estimate can have variance below one over n times the information: the Cramer-Rao bound, proved by Rao in 1945 and Cramer in 1946.",
-   "zh": "有，费希尔在1925年找到了关键。<bookmark mark='a'/>分数是对数似然对参数的斜率：每个观测把估计往哪边拉、拉多大。<bookmark mark='b'/>在真实值处，它的平均为零，因为密度的积分永远是1。<bookmark mark='c'/>它的方差就是费希尔信息：数据把θ钉得有多牢。柯西分布的费希尔信息是二分之一；在20万次抽样上，我们测得0.500。<bookmark mark='d'/>一个无偏估计随θ一比一地移动，所以它和分数的协方差是1。<bookmark mark='e'/>柯西-施瓦茨不等式说，协方差的平方至多是两个方差的乘积。所以，任何无偏估计的方差，都不可能低于n乘以信息的倒数：这就是克拉默-拉奥下界，由拉奥在1945年、克拉默在1946年证明。"
   },
   "e68b1c9de93d": {
    "scene": "Fisher",
@@ -551,6 +536,21 @@
    "scene": "Outro",
    "en": "Blitzstein and Hwang's Introduction to Probability is a friendly place to start; MacKay's book has the best chapters on Monte Carlo methods, and Levin and Peres's on mixing. Thanks for watching, and see you in part six.",
    "zh": "布利茨坦和黄的《概率导论》是很友好的入门书；麦凯的书里有讲蒙特卡洛方法最好的几章，莱文和佩雷斯的书则讲混合。感谢观看，第6部分见。"
+  },
+  "8f278c4b2df1": {
+   "scene": "Bell",
+   "en": "Why a bell, and why so often? One die: six flat bars. <bookmark mark='a'/> Two dice: a triangle. Three: already rounding off. <bookmark mark='b'/> Six, twelve: the bell. <bookmark mark='c'/> That's the central limit theorem: add independent draws from the same distribution, with positive finite variance. After centering and rescaling, the sum approaches a bell, <bookmark mark='d'/> with a spread that grows like the square root of their number. Laplace proved it in 1810.",
+   "zh": "为什么是钟形，又为什么这么常见？一颗骰子：六根一样高的柱子。<bookmark mark='a'/>两颗：一个三角形。三颗：已经开始变圆。<bookmark mark='b'/>六颗、十二颗：钟形曲线。<bookmark mark='c'/>这就是中心极限定理：把来自同一分布的独立抽样加起来，且方差为有限正数。减去均值、再缩放后，和的分布趋近钟形，<bookmark mark='d'/>而它的宽度，随块数的平方根增长。拉普拉斯在1810年证明了它。"
+  },
+  "cf9ac792050d": {
+   "scene": "Bell",
+   "en": "So convolve again and again. One exponential, all on one side. <bookmark mark='a'/> Two, three, five: each convolution smooths and spreads it. <bookmark mark='b'/> Ten, thirty: the lopsidedness fades, and what is left is the bell. Among nondegenerate distributions with finite variance, the bell is the only shape preserved when independent copies are added and then centered and rescaled.",
+   "zh": "那就一次又一次地卷积。一个指数分布，全都挤在一边。<bookmark mark='a'/>两个、三个、五个：每次卷积都把它抹平、摊开。<bookmark mark='b'/>十个、三十个：歪斜消失了，剩下的就是钟形曲线。在方差有限的非退化分布中，只有钟形曲线能在独立副本相加、再减去均值并缩放后，保持原来的形状。"
+  },
+  "45b9c3c6b506": {
+   "scene": "Fisher",
+   "en": "There is, and Fisher found the key in 1925. <bookmark mark='a'/> The score is the slope of the log-likelihood in the parameter: how much each observation pulls the estimate. <bookmark mark='b'/> When differentiation can pass under the integral, it averages to zero at the true value, because the density always integrates to one. <bookmark mark='c'/> Its variance is the Fisher information: how sharply the data pins theta down. For the Cauchy it is one half; over two hundred thousand draws we measure 0.500. <bookmark mark='d'/> An unbiased estimate moves one for one with theta, so its covariance with the score is one. <bookmark mark='e'/> And Cauchy-Schwarz says a covariance squared is at most the product of the variances. So no unbiased estimate can have variance below one over n times the information: the Cramer-Rao bound, proved by Rao in 1945 and Cramer in 1946.",
+   "zh": "有，费希尔在1925年找到了关键。<bookmark mark='a'/>分数是对数似然对参数的斜率：每个观测把估计往哪边拉、拉多大。<bookmark mark='b'/>当求导可以移入积分号时，它在真实值处的平均为零，因为密度的积分永远是1。<bookmark mark='c'/>它的方差就是费希尔信息：数据把θ钉得有多牢。柯西分布的费希尔信息是二分之一；在20万次抽样上，我们测得0.500。<bookmark mark='d'/>一个无偏估计随θ一比一地移动，所以它和分数的协方差是1。<bookmark mark='e'/>柯西-施瓦茨不等式说，协方差的平方至多是两个方差的乘积。所以，任何无偏估计的方差，都不可能低于n乘以信息的倒数：这就是克拉默-拉奥下界，由拉奥在1945年、克拉默在1946年证明。"
   }
  },
  "title_en": "AI, Built: Part 5, Randomness in Motion",
