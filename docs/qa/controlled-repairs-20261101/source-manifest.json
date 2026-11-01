@@ -1,0 +1,93 @@
+{
+  "base_commit": "5f1771120999868beda1dcabfdf62b1130723f1d",
+  "scope": "Reviewed Counting timing, Part6Chinese typography, and Part7Hook throughHMM scene polish",
+  "source_replacements": [
+    {
+      "path": "videos/ai/ai1/s10_counting.py",
+      "before_sha256": "d3f5b5218d27c5af539ee0dcc7f214302cbbfa09f42e572647cf4e9047d8e2ab",
+      "after_sha256": "0e3481607fba375d54389bf21a5907dc52b1c222a7105eab03f17b692577d486",
+      "bytes": 25589
+    },
+    {
+      "path": "videos/ai/ai6/_zh_prose.py",
+      "before_sha256": null,
+      "after_sha256": "804ffc02a9be83f7960a8e46e154fa4eebbf5216138281ec09b219aac670e9c9",
+      "bytes": 6117
+    },
+    {
+      "path": "videos/ai/ai6/s11_kernels.py",
+      "before_sha256": "1f78f5561e61e9806effc8415f835da09cb0a56fec84d5cfd85432e4509bb237",
+      "after_sha256": "f2ee49e6da1784643df7e186ec89192b2844a9d8d2ed249aca96cf2dea474d87",
+      "bytes": 20610
+    },
+    {
+      "path": "videos/ai/ai6/s18_contest.py",
+      "before_sha256": "104c27ae8743b7383b0768235e4a40b0e5b2524fb8edfd2312c88d99b27399b7",
+      "after_sha256": "bb7ba517b6605dd11dbf7367bc9fc053c3ccfc11bc69f69bb7680c6bfee16189",
+      "bytes": 19216
+    },
+    {
+      "path": "videos/ai/ai6/s19_outro.py",
+      "before_sha256": "8beb51936ca3a0894a2ad1cd2466e975a6cb5f9d3973b8c26e8ddfe5b2fca571",
+      "after_sha256": "749f6ee28d026cda299e80d0ad709c3163c0d8bddb45f9a32f6eb0630c513b2e",
+      "bytes": 18156
+    },
+    {
+      "path": "videos/ai/ai7/common.py",
+      "before_sha256": "89cf6cb6060d3a2f03db5bf1a379dc942a5e7857399d987ffca172d0d99275f2",
+      "after_sha256": "8cd8db85ff95647074f581b922d66e9e5c4ab06fd2c5e7f02a448e6727376f87",
+      "bytes": 7928
+    },
+    {
+      "path": "videos/ai/ai7/s01_hook.py",
+      "before_sha256": "ab212b8577cf937ce46dce3cd4e2b8b708d205d9ab92af23c65ffd9a8c0c7f09",
+      "after_sha256": "92b6c58eecd5848f0b0ca71060d498ca8d55259a56cf55745d20b6de40ebcba9",
+      "bytes": 11595
+    },
+    {
+      "path": "videos/ai/ai7/s02_pca.py",
+      "before_sha256": "4d2d6ee86e83b955a5cc1048378ca3f98537401c2c4a4254cac4ede74015185b",
+      "after_sha256": "76b64f990e51993ffd96316baebc27ee3b8cd2a6f24e4a34bf2ae1ace9e19fcb",
+      "bytes": 21507
+    },
+    {
+      "path": "videos/ai/ai7/s03_ppca.py",
+      "before_sha256": "2ee73a20601d70417b946904c67a9ad1cc8aa330cad2db268c8b1fa0b1c44681",
+      "after_sha256": "e48d03e37f8c6ed0fe3af0065d2c4574c62789f4ba5da414eac5711f55e0a375",
+      "bytes": 14894
+    },
+    {
+      "path": "videos/ai/ai7/s04_ica.py",
+      "before_sha256": "44d24354a386e89977d6a1c77d88466a7cde848436ee5fc6ade0de793ea9fe9d",
+      "after_sha256": "dcbfff865fbb5cbdb9637e81c5cfb2eae2a40aa348a43dfbdffe312c8571689b",
+      "bytes": 13611
+    },
+    {
+      "path": "videos/ai/ai7/s05_em.py",
+      "before_sha256": "2967721ae87e6f036d4d8abac1904a6f640d1507a6bde038ab279059914c1ede",
+      "after_sha256": "aa69b05ba560e35386525efd14fc91cfa064a51a6424156bb0075d54cbb97a82",
+      "bytes": 20974
+    },
+    {
+      "path": "videos/ai/ai7/s06_lda.py",
+      "before_sha256": "32d426faf024c15643ffbe4a906ccd14451d7e4ea4bc0f23ab95586d5b7ab9ce",
+      "after_sha256": "2035119a53235bcc22810c01b68cff6ceb7e87bcab9f1034c1220fb8a0f7f0f5",
+      "bytes": 13294
+    },
+    {
+      "path": "videos/ai/ai7/s07_hmm.py",
+      "before_sha256": "463c764548b55fc2be730c822894a26c592db528e51ee1f9d6a83b7218f4d340",
+      "after_sha256": "3eaa341699257ec94c85db71b2bd8d591f60dfbe1db1b07608abd975b96a7d22",
+      "bytes": 15786
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "before_sha256": "07ea145aa599b86a88048d765909d8816ec0dacda95d679f30cbbadf972bd32e",
+      "after_sha256": "7f8adb1e6e7d26cbbb8abb0b2f907ca2961fcebed70f9c37671f8ee9706f63bf",
+      "bytes": 2446206
+    }
+  ],
+  "scientific_producer_or_cache_payloads_included": false,
+  "new_tests_included": false,
+  "review_scope": "Native endpoints and selected encoded motion; continuous perception, real narration/listening and final4K remain open"
+}

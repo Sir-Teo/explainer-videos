@@ -19,10 +19,37 @@ def sci_tex(v: float) -> str:
     return rf"{v / 10 ** e:.1f}\!\times\!10^{{{e}}}"
 
 
+def caption(text, **kwargs):
+    """Align this chapter's Chinese prose; keep English and standalone math intact."""
+    mob = label(text, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return prose(mob)
+    return mob
+
+
+def history_box(*args, compact=False, **kwargs):
+    mob = history_card(*args, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import card
+        mob = card(mob)
+    if compact:
+        # Keep the observation letters below the history card visible.
+        mob.head.arrange(RIGHT, buff=0.22, aligned_edge=DOWN)
+        inner = VGroup(mob.head, mob.body).arrange(DOWN, aligned_edge=LEFT, buff=0.10)
+        mob.box.stretch_to_fit_height(inner.height + 0.32)
+        mob.box.set_fill(opacity=1)
+        mob[1].stretch_to_fit_height(mob.box.height - 0.28)
+        mob[1].move_to(mob.box.get_left() + RIGHT * 0.12)
+        inner.move_to(mob.box).align_to(mob.box, LEFT).shift(RIGHT * 0.24)
+        mob.submobjects[-1] = inner
+    return mob
+
+
 class HMM(VoiceoverScene):
     def construct(self):
         card_in(self, 6, r"Hidden Markov models", r"What hidden states are the letters coming from?",
-                "Chapter six. Hidden Markov models.")
+                "Chapter six. Hidden Markov models.", zh_prose_rows=(0,))
         self.model()
         self.forward()
         self.viterbi()
@@ -38,9 +65,9 @@ class HMM(VoiceoverScene):
         al = MathTex(r"A", font_size=30, color=HIDDEN).next_to(VGroup(zs[0], zs[1]), UP, buff=0.1)
         bl = MathTex(r"B", font_size=30, color=SEEN).next_to(edge(zs[0], xs[0]), LEFT, buff=0.1)
         defs = VGroup(
-            label(r"hidden states $z_t$: \ a Markov chain, \ $A_{ij} = p(z_{t+1} = j \mid z_t = i)$", font_size=24,
+            caption(r"hidden states $z_t$: \ a Markov chain, \ $A_{ij} = p(z_{t+1} = j \mid z_t = i)$", font_size=24,
                   color=HIDDEN),
-            label(r"each state emits a letter: \ $B_j(x) = p(x_t = x \mid z_t = j)$", font_size=24, color=SEEN),
+            caption(r"each state emits a letter: \ $B_j(x) = p(x_t = x \mid z_t = j)$", font_size=24, color=SEEN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.6).to_edge(LEFT, buff=0.5)
         # the trained two-state model of the letters (fitted in the next chapter)
         W = 0.12
@@ -54,9 +81,9 @@ class HMM(VoiceoverScene):
             rows.add(g)
         rows.arrange(DOWN, buff=0.45).move_to([4.6, 0.9, 0])
         rl = VGroup(*[MathTex(rf"B_{s + 1}", font_size=26, color=HIDDEN).next_to(rows[s], LEFT, buff=0.15) for s in range(2)])
-        tag = label(r"two states for the books' letters \\ (trained in the next chapter)", font_size=20,
+        tag = caption(r"two states for the books' letters \\ (trained in the next chapter)", font_size=20,
                     color=GREY_A).next_to(rows, UP, buff=0.2)
-        h1 = history_card(1966, r"L.~Baum \& T.~Petrie", r"probabilistic functions of Markov chains; \ Baum--Welch "
+        h1 = history_box(1966, r"L.~Baum \& T.~Petrie", r"probabilistic functions of Markov chains; \ Baum--Welch "
                           r"training, 1970", width=4.6).move_to([4.6, -2.2, 0])
         preference = ("The first emission table favours spaces and vowels, the second consonants."
                       if set(h["vowel_side"]) == set(" aeiou") else
@@ -113,13 +140,13 @@ class HMM(VoiceoverScene):
         colors = {r"\alpha_t(j)": FWD, r"\alpha_{t-1}(i)": FWD, r"A_{ij}": HIDDEN, r"B_j(x_t)": SEEN}
         eq = VGroup(cmath(r"\alpha_t(j)", r"=", r"\sum_i", r"\alpha_{t-1}(i)", r"\,", r"A_{ij}", r"\,", r"B_j(x_t)",
                           colors=colors, font_size=40),
-                    label(r"$\alpha_t(j) = p(x_1 \dots x_t,\ z_t = j)$: \ sum over the state before, \ by Markov",
+                    caption(r"$\alpha_t(j) = p(x_1 \dots x_t,\ z_t = j)$: \ sum over the state before, \ by Markov",
                           font_size=22, color=GREY_A)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         tot = al[-1].sum()
-        res = label(rf"$p(\text{{there}}\sqcup) = \sum_j \alpha_6(j) = {sci_tex(tot)}$ \ $=$ \ the sum over all "
+        res = caption(rf"$p(\text{{there}}\sqcup) = \sum_j \alpha_6(j) = {sci_tex(tot)}$ \ $=$ \ the sum over all "
                     rf"$2^{T} = {2 ** T}$ paths \ (checked)", font_size=24, color=FWD)
         res.to_edge(UP, buff=0.25)
-        cost = label(rf"cost: \ $T \cdot S^2$ instead of $S^T$; \ for the whole sentence, ${f['n']} \times 4$ against "
+        cost = caption(rf"cost: \ $T \cdot S^2$ instead of $S^T$; \ for the whole sentence, ${f['n']} \times 4$ against "
                      rf"$2^{{{f['n']}}}$", font_size=22, color=GREY_A).next_to(res, DOWN, buff=0.12)
         with self.voiceover(
             "First: how likely is a sentence? Summing over every possible sequence of hidden states would take two to "
@@ -168,10 +195,10 @@ class HMM(VoiceoverScene):
         eq = VGroup(cmath(r"\delta_t(j)", r"=", r"\max_i", r"\delta_{t-1}(i)", r"\,", r"A_{ij}", r"\,", r"B_j(x_t)",
                           colors={r"\delta_t(j)": VIT, r"\delta_{t-1}(i)": VIT, r"A_{ij}": HIDDEN, r"B_j(x_t)": SEEN},
                           font_size=40),
-                    label(r"the same sweep with the sum replaced by a max, \ remembering the winner", font_size=22,
+                    caption(r"the same sweep with the sum replaced by a max, \ remembering the winner", font_size=22,
                           color=GREY_A)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
-        h = history_card(1967, r"Andrew Viterbi", r"decoding convolutional codes; \ later Qualcomm's co-founder",
-                         width=4.8).to_corner(UR, buff=0.25)
+        h = history_box(1967, r"Andrew Viterbi", r"decoding convolutional codes; \ later Qualcomm's co-founder",
+                         width=4.8, font_size=18, compact=True).to_corner(UR, buff=0.25)
         with self.voiceover(
             "Second: which hidden states produced the letters? Change one thing: replace the sum with a maximum. "
             "<bookmark mark='a'/> Now each circle holds the probability of the single best path into it, and we "
@@ -207,10 +234,10 @@ class HMM(VoiceoverScene):
                                 fill_opacity=0.9).next_to(letters[i], DOWN, buff=0.35) for i, s in enumerate(st)])
         links = VGroup(*[Line(marks[i].get_center(), marks[i + 1].get_center(), color=HIDDEN, stroke_width=1.5)
                          for i in range(len(st) - 1)])
-        head = label(r"Viterbi: \ the most likely complete hidden-state sequence", font_size=30).to_edge(UP, buff=0.6)
-        key = VGroup(label(r"$s_1$", font_size=28, color=VOWEL), label(r"$s_2$", font_size=28, color=CONSONANT))
+        head = caption(r"Viterbi: \ the most likely complete hidden-state sequence", font_size=30).to_edge(UP, buff=0.6)
+        key = VGroup(caption(r"$s_1$", font_size=28, color=VOWEL), caption(r"$s_2$", font_size=28, color=CONSONANT))
         key.arrange(RIGHT, buff=0.6).next_to(marks, DOWN, buff=0.5)
-        note_ = label(r"the full path uses emissions and transitions; \ the states were never named",
+        note_ = caption(r"the full path uses emissions and transitions; \ the states were never named",
                       font_size=24, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Here's Shannon's sentence from part one, with one most likely complete hidden-state sequence. "

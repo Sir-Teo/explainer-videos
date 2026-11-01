@@ -269,6 +269,9 @@ class Outro(VoiceoverScene):
              r"Soudry et al.\ (2018); \ Grinsztajn, Oyallon \& Varoquaux (2022); \ Hollmann et al., \textit{TabPFN} "
              r"(\textit{Nature}, 2025); \ Prior Labs, \textit{TabPFN-2.5} (2025), \textit{TabPFN-3} (2026); \ Purucker et "
              r"al., \textit{Beyond IID} (2026)"])
+        if zh():
+            from videos.ai.ai6._zh_prose import references
+            card = references(card)
         credit = note(narration_credit(), font_size=18).to_edge(DOWN, buff=0.15)
         if card.get_bottom()[1] < credit.get_top()[1] + 0.1:
             card.shift(UP * (credit.get_top()[1] + 0.1 - card.get_bottom()[1]))

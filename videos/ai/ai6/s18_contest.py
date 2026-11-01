@@ -111,11 +111,29 @@ class Contest(VoiceoverScene):
         card = history_card(2001, r"Leo Breiman, \ \textit{Statistical Modeling: The Two Cultures}",
                             r"data modeling: \ assume how the data was made, \ then estimate it \ (his estimate: $98\%$ of "
                             r"statisticians). \ Algorithmic modeling: \ treat nature as a black box, \ judge by predictions "
-                            r"on new data \ ($2\%$).", color=HIST, width=10.5, font_size=26).to_edge(UP, buff=0.35)
+                            r"on new data \ ($2\%$).", color=HIST, width=10.5, font_size=26)
+        if zh():
+            from videos.ai.ai6._zh_prose import card as prose_card, prose
+            card = prose_card(card)
+        card.to_edge(UP, buff=0.35)
         events = [(2006, r"Netflix Prize: \\ \$1M for $10\%$"), (2009, r"won by a blend \\ of hundreds of models"),
                   (2010, r"Kaggle"), (2015, r"XGBoost: \ $17$ of $29$ \\ Kaggle winners")]
         axis, skel, marks = era_strip(events, y0=-2.1, width=4.6, font_size=20)
         cite_ = note(r"Chen \& Guestrin (2016): \ solutions on Kaggle's blog in 2015")
+        if zh():
+            # Only the two mixed-script timeline captions need the prose
+            # baseline/leading repair. Keep each block on its original side
+            # of the stem and move its skeleton year with the visible year.
+            for i in (0, 3):
+                old_words = marks[i][2]
+                words = VGroup(old_words[0].copy(), prose(old_words[1])).arrange(DOWN, buff=0.06)
+                edge = DOWN if i % 2 == 0 else UP
+                words.move_to(old_words.get_bottom() if i % 2 == 0 else old_words.get_top(), aligned_edge=edge)
+                keep_in_frame(words, margin=0.12)
+                marks[i].remove(old_words)
+                marks[i].add(words)
+                skel[i][2].move_to(words[0])
+            cite_ = prose(cite_)
         with self.voiceover(
             "In 2001 Leo Breiman, who had left statistics for consulting and come back, described two cultures. "
             "Most statisticians assumed a model of how the data was made, and estimated it. A few, mostly outside "

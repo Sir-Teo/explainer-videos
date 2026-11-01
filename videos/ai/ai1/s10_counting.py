@@ -239,13 +239,16 @@ class Counting(VoiceoverScene):
                       LaggedStart(*[FadeIn(q) for q in g2], lag_ratio=0.002), FadeIn(l2), run_time=1.6)
             vo.wait_until("a")
             self.play(Create(c), run_time=2.0)
-            vo.wait_until("b")
+            if zh():
+                vo.wait_until("b")
             others = VGroup(*[q for q in g2 if q is not th])
             self.play(FadeOut(others), th.animate.scale(27).move_to([cx, cy, 0]), ReplacementTransform(l2, lth),
                       run_time=1.4)
             self.play(FadeIn(sub, lag_ratio=0.002), FadeOut(th), run_time=1.0)
             self.play(sub.animate.scale(1 / 27).move_to(home), FadeIn(img), ReplacementTransform(lth, l4), run_time=1.6)
             self.remove(sub)
+            if not zh():
+                vo.wait_until("b")
             self.play(FadeOut(img), FadeOut(l4), FadeIn(facts[0]), FadeIn(facts[1]))
             vo.wait_until("c")
             self.play(FadeIn(facts[2]))

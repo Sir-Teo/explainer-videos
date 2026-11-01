@@ -9,6 +9,15 @@ W_C = C.MODEL_Q  # the loading matrix W
 NOISE = C.SURPRISE  # the noise sigma^2
 
 
+def caption(text, **kwargs):
+    """Align this chapter's Chinese prose without changing formula objects."""
+    mob = label(text, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return prose(mob)
+    return mob
+
+
 def ppca_verdict(best, score, full):
     comparison = ("higher than" if round(score, 1) > round(full, 1) else
                   "lower than" if round(score, 1) < round(full, 1) else
@@ -21,7 +30,7 @@ def ppca_verdict(best, score, full):
 class PPCA(VoiceoverScene):
     def construct(self):
         card_in(self, 2, r"PCA as a probability model", r"Can PCA say how likely a new page is?",
-                "Chapter two. PCA as a probability model.")
+                "Chapter two. PCA as a probability model.", zh_prose_rows=(0, 1, 2))
         self.model()
         self.solution()
         self.heldout()
@@ -38,15 +47,21 @@ class PPCA(VoiceoverScene):
         zs = g.normal(size=160)
         eps = g.normal(size=(160, 2)) * np.sqrt(s2)
         w = u * np.sqrt(l1 - s2)
-        ax = Axes(x_range=[-3.2, 3.2, 1], y_range=[-3.2, 3.2, 1], x_length=5.0, y_length=5.0, tips=False,
+        line_samples = zs[:, None] * w
+        noisy_samples = line_samples + eps
+        # Show the original seeded samples. Equal scales preserve the model's
+        # geometry; viewport margins replace clipping in either sample space.
+        extent = max(3.2, float(np.ceil(np.abs(np.vstack([line_samples, noisy_samples])).max() * 10.5) / 10))
+        latent_extent = max(3.0, float(np.ceil(np.abs(zs).max() * 10.5) / 10))
+        ax = Axes(x_range=[-extent, extent, 1], y_range=[-extent, extent, 1], x_length=5.0, y_length=5.0, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([3.6, -0.6, 0])
-        names = VGroup(data_text("the", font=MONO, font_size=20, color=GREY_A).next_to(ax.x_axis.get_right(), DOWN, buff=0.1),
-                       data_text("not", font=MONO, font_size=20, color=GREY_A).next_to(ax.y_axis.get_top(), RIGHT, buff=0.1))
-        zl = NumberLine(x_range=[-3, 3, 1], length=3.4, color=HIDDEN, include_numbers=False).move_to([3.6, 2.85, 0])
+        names = VGroup(data_text("the", font=MONO, font_size=20, color=GREY_A).next_to(ax.x_axis.get_right(), RIGHT, buff=0.15),
+                       data_text("not", font=MONO, font_size=20, color=GREY_A).next_to(ax.y_axis.get_top(), UP, buff=0.15))
+        zl = NumberLine(x_range=[-latent_extent, latent_extent, 1], length=3.4, color=HIDDEN, include_numbers=False).move_to([3.6, 2.85, 0])
         zlab = MathTex(r"z", font_size=30, color=HIDDEN).next_to(zl, LEFT, buff=0.2)
-        zdots = VGroup(*[Dot(zl.n2p(float(np.clip(z, -3, 3))), radius=0.035, color=HIDDEN) for z in zs])
-        on_line = VGroup(*[Dot(ax.c2p(*(z * w)), radius=0.035, color=W_C) for z in zs])
-        noisy = VGroup(*[Dot(ax.c2p(*np.clip(z * w + e, -3.1, 3.1)), radius=0.035, color=SEEN) for z, e in zip(zs, eps)])
+        zdots = VGroup(*[Dot(zl.n2p(float(z)), radius=0.035, color=HIDDEN) for z in zs])
+        on_line = VGroup(*[Dot(ax.c2p(*q), radius=0.035, color=W_C) for q in line_samples])
+        noisy = VGroup(*[Dot(ax.c2p(*q), radius=0.035, color=SEEN) for q in noisy_samples])
         wline = Line(ax.c2p(*(-3.2 * u)), ax.c2p(*(3.2 * u)), color=W_C, stroke_width=2, stroke_opacity=0.6)
         rows = VGroup(
             cmath(r"z", r"\sim", r"\mathcal{N}(0,\, I_k)", colors={r"z": HIDDEN}, font_size=38),
@@ -60,10 +75,13 @@ class PPCA(VoiceoverScene):
         gz = node(r"z", [-5.2, -2.2, 0])
         gx = node(r"x", [-3.4, -2.2, 0], hidden=False)
         gm = VGroup(gz, gx, edge(gz, gx))
-        gl = label(r"$k$ hidden factors \\ $\to$ $d$ observed rates", font_size=22, color=GREY_A).next_to(gm, RIGHT, buff=0.4)
+        gl = caption(r"$k$ hidden factors \\ $\to$ $d$ observed rates", font_size=22, color=GREY_A).next_to(gm, RIGHT, buff=0.4)
         tag = note(r"samples from the model fitted to two rates", font_size=20).next_to(ax, DOWN, buff=0.15)
         hc = history_card(1999, r"M.~Tipping \& C.~Bishop; \ S.~Roweis (1998)", r"PCA as a model with hidden factors",
                           width=5.0).move_to([-3.4, 1.4, 0])
+        if zh():
+            from videos.ai.ai6._zh_prose import card as prose_card
+            hc = prose_card(hc).move_to(hc)
         with self.voiceover(
             "PCA finds directions, but it isn't a probability model: it can't say how likely a new page is. In the "
             "late nineteen nineties, Michael Tipping and Christopher Bishop, and independently Sam Roweis, gave it one. "
@@ -73,7 +91,7 @@ class PPCA(VoiceoverScene):
             "sheet. <bookmark mark='d'/> Add it up, and a page is Gaussian, with covariance W W transpose plus sigma "
             "squared times the identity: a few big directions, and a fog around them."
         ) as vo:
-            self.play(FadeIn(gm), FadeIn(gl), Create(ax), FadeIn(names))
+            self.play(FadeIn(gm), FadeIn(gl), Create(ax))
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeOut(hc))
@@ -81,7 +99,9 @@ class PPCA(VoiceoverScene):
             vo.wait_until("b")
             self.play(Write(rows[1]), Create(wline), TransformFromCopy(zdots, on_line), run_time=1.8)
             vo.wait_until("c")
-            self.play(Write(rows[2]), ReplacementTransform(on_line, noisy), FadeIn(tag), run_time=1.8)
+            # Name the observed rates once the flying latent markers have
+            # landed; the mapping animation stays clear of both axis words.
+            self.play(Write(rows[2]), ReplacementTransform(on_line, noisy), FadeIn(tag), FadeIn(names), run_time=1.8)
             vo.wait_until("d")
             self.play(Write(rows[3]))
         self.wait(0.3)
@@ -97,18 +117,21 @@ class PPCA(VoiceoverScene):
                    cmath(r"\sigma^2_{\mathrm{ML}}", r"=", r"\frac{1}{d - k} \sum_{j > k} \lambda_j", colors=colors,
                          font_size=36)).arrange(DOWN, aligned_edge=LEFT, buff=0.3),
             who=r"M.~E.~Tipping \& C.~M.~Bishop (1999)", width=7.6).move_to([-2.6, 0.9, 0])
-        notes = VGroup(label(r"$U_k$: \ the top $k$ eigenvectors \ (chapter 1)", font_size=24, color=C.BITS),
-                       label(r"the noise: \ the average variance left out", font_size=24, color=NOISE),
-                       label(r"$\sigma^2 \to 0$: \ plain PCA again", font_size=24, color=GREY_A))
+        notes = VGroup(caption(r"$U_k$: \ the top $k$ eigenvectors \ (chapter 1)", font_size=24, color=C.BITS),
+                       caption(r"the noise: \ the average variance left out", font_size=24, color=NOISE),
+                       caption(r"$\sigma^2 \to 0$: \ plain PCA again", font_size=24, color=GREY_A))
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(thm, DOWN, buff=0.45).align_to(thm, LEFT)
-        lam = np.asarray(p["vals"])[:30]
+        lam = np.asarray(p["vals"])
         k = 5
-        bars_ = VGroup(*[Rectangle(width=0.11, height=max(0.33 * v, 0.02), stroke_width=0,
+        bar_step = 4.2 / len(lam)
+        bars_ = VGroup(*[Rectangle(width=0.78 * bar_step, height=max(0.33 * v, 0.02), stroke_width=0,
                                    fill_color=C.BITS if i < k else NOISE, fill_opacity=0.85)
-                         .move_to([2.0 + 0.14 * i, -2.3 + 0.33 * v / 2, 0]) for i, v in enumerate(lam)])
+                         .move_to([2.0 + bar_step * i, -2.3 + 0.33 * v / 2, 0]) for i, v in enumerate(lam)])
+        bar_index = VGroup(MathTex("1", font_size=16, color=GREY_B).next_to(bars_[0], DOWN, buff=0.1),
+                           MathTex(str(len(lam)), font_size=16, color=GREY_B).next_to(bars_[-1], DOWN, buff=0.1))
         s2 = float(np.asarray(p["vals"])[k:].mean())
-        fog = DashedLine([1.9, -2.3 + 0.33 * s2, 0], [2.0 + 0.14 * 30, -2.3 + 0.33 * s2, 0], color=WHITE, stroke_width=3)
-        bl = label(rf"the eigenvalues, \ $k = {k}$ kept: \\ the rest become the fog $\sigma^2 = {s2:.2f}$", font_size=22,
+        fog = DashedLine([1.9, -2.3 + 0.33 * s2, 0], [2.0 + bar_step * len(lam), -2.3 + 0.33 * s2, 0], color=WHITE, stroke_width=3)
+        bl = caption(rf"the eigenvalues, \ $k = {k}$ kept: \\ the rest become the fog $\sigma^2 = {s2:.2f}$", font_size=22,
                    color=GREY_A).next_to(bars_, UP, buff=0.3)
         with self.voiceover(
             "The best W and sigma, by maximum likelihood, come out in closed form. <bookmark mark='a'/> W's columns "
@@ -118,7 +141,9 @@ class PPCA(VoiceoverScene):
             "<bookmark mark='c'/> Shrink the noise to zero and you get plain PCA back. So PCA was always the limit of "
             "a probability model, and now it has a likelihood."
         ) as vo:
-            self.play(FadeIn(thm, shift=UP * 0.2), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars_], lag_ratio=0.03))
+            # Preserve the former 30-bar reveal's duration with all70 directions.
+            self.play(FadeIn(thm, shift=UP * 0.2), FadeIn(bar_index),
+                      LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars_], lag_ratio=0.03, run_time=1.87))
             vo.wait_until("a")
             self.play(FadeIn(notes[0]), FadeIn(bl))
             vo.wait_until("b")
@@ -140,6 +165,11 @@ class PPCA(VoiceoverScene):
                  ylabel=r"log-likelihood per page (nats)", xticks=[0, 10, 20, 30, 40, 50, 60, 70],
                  yticks=[round(v) for v in np.linspace(lo + 1, hi - 1, 4)], yfmt=lambda v: f"{v:g}",
                  center=[-1.4, -0.3, 0])
+        if zh():
+            from videos.ai.ai6._zh_prose import prose
+            old = g.xlabel
+            g.xlabel = prose(old)
+            g.submobjects[g.submobjects.index(old)] = g.xlabel
         ax = g.ax
         ks = np.arange(d)
         ctr = curve(ax, ks, tr, GREY_B, 3)
@@ -148,7 +178,11 @@ class PPCA(VoiceoverScene):
         fl = DashedLine(ax.c2p(0, full), ax.c2p(d, full), color=GREY_C, stroke_width=2)
         lg = legend([(GREY_B, rf"the ${p['n_train']}$ training pages"), (C.BITS, rf"the ${p['n_test']}$ validation pages"),
                      (GREY_C, r"a full $70 \times 70$ covariance")], font_size=22).move_to([4.9, 1.6, 0])
-        res = label(rf"chosen: \ $k = {best}$ \\ ${100 * p['training_share_best']:.0f}\%$ of training variance", font_size=26,
+        if zh():
+            for row in lg:
+                old = row[1]
+                row.submobjects[1] = prose(old).align_to(old, LEFT)
+        res = caption(rf"chosen: \ $k = {best}$ \\ ${100 * p['training_share_best']:.0f}\%$ of training variance", font_size=26,
                     color=C.BITS).move_to([4.6, -0.6, 0])
         verdict = ppca_verdict(best, float(te[best]), full)
         with self.voiceover(
@@ -174,8 +208,8 @@ class PPCA(VoiceoverScene):
                  (2013, r"the variational autoencoder", r"a network in place of $W$ \\ (Part 20)", HIDDEN)]
         boxes = VGroup()
         for yr, name, sub, col in items:
-            t = VGroup(label(str(yr), font_size=34, color=col), label(name, font_size=26),
-                       label(sub, font_size=20, color=GREY_A)).arrange(DOWN, buff=0.15)
+            t = VGroup(caption(str(yr), font_size=34, color=col), caption(name, font_size=26),
+                       caption(sub, font_size=20, color=GREY_A)).arrange(DOWN, buff=0.15)
             box = RoundedRectangle(width=3.8, height=t.height + 0.5, corner_radius=0.15, stroke_color=col,
                                    stroke_width=2, fill_color="#0B0F17", fill_opacity=0.9)
             boxes.add(VGroup(box, t.move_to(box)))
@@ -183,7 +217,7 @@ class PPCA(VoiceoverScene):
         arrs = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.1, color=GREY_B) for a, b in zip(boxes, boxes[1:])])
         gm = VGroup(node(r"z", [-0.8, -2.4, 0]), node(r"x", [0.8, -2.4, 0], hidden=False))
         gm.add(edge(gm[0], gm[1]))
-        gl = label(r"the same picture in all three: \ hidden $z$, observed $x$", font_size=24, color=GREY_A)
+        gl = caption(r"the same picture in all three: \ hidden $z$, observed $x$", font_size=24, color=GREY_A)
         gl.next_to(gm, DOWN, buff=0.25)
         with self.voiceover(
             "Probabilistic PCA sits in a family. <bookmark mark='a'/> Charles Spearman's factor analysis, from "

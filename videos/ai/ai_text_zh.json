@@ -19459,6 +19459,7 @@
     "how do we follow one voice at a party? \\ the cocktail-party problem": "在聚会上，我们怎样跟住一个人的声音？\\ 鸡尾酒会问题",
     "the two microphones, \\\\ moment by moment": "两个麦克风，\\\\ 逐个时刻",
     "whitened (PCA): \\\\ uncorrelated, \\ still mixed": "白化后（PCA）：\\\\ 不相关，\\ 仍然混合",
+    "ICA: \\\\ estimated source axes": "ICA：\\\\ 估计的声源坐标轴",
     "angle of the unmixing direction": "分离方向的角度",
     "kurtosis": "峰度",
     "a Gaussian: \\ $0$": "高斯分布：\\ $0$",

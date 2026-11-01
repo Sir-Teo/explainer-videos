@@ -6,6 +6,28 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai7.common import BOUND, HIDDEN, MONO, PART, SEEN, TOPIC_COLORS, card_in, edge, load, node
 
 
+def caption(text, **kwargs):
+    """Align this scene's Chinese inline prose without changing its wording."""
+    mob = label(text, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return prose(mob)
+    return mob
+
+
+def caption_note(text, **kwargs):
+    kwargs.setdefault("color", GREY_B)
+    return caption(text, **kwargs)
+
+
+def history_box(*args, **kwargs):
+    mob = history_card(*args, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import card
+        return card(mob)
+    return mob
+
+
 def word_col(words, color, font_size=20, buff=0.08) -> VGroup:
     return VGroup(*[data_text(w, font=MONO, font_size=font_size, color=color) for w in words]).arrange(DOWN, buff=buff)
 
@@ -21,7 +43,7 @@ def bound_prefix(rounds, bounds, current_round):
 class Topics(VoiceoverScene):
     def construct(self):
         card_in(self, 5, r"Topic models", r"What is a book about, if nobody tells us the themes?",
-                "Chapter five. Topic models.")
+                "Chapter five. Topic models.", zh_prose_rows=(0,))
         self.story()
         self.train()
         self.result()
@@ -44,15 +66,15 @@ class Topics(VoiceoverScene):
                       MathTex(r"K", font_size=26, color=GREY_B).next_to(pk.get_corner(DR), UL, buff=0.06))
         graph = VGroup(a, th, z, w, b, arrows, pn, pd, pk, tags).move_to([-3.0, 0.2, 0])
         story = VGroup(
-            label(r"1. \ each topic $k$: \ a distribution $\beta_k$ over words", font_size=24, color=HIDDEN),
-            label(r"2. \ each section $d$: \ a mix of topics, \ $\theta_d \sim \mathrm{Dirichlet}(\alpha)$", font_size=24,
+            caption(r"1. \ each topic $k$: \ a distribution $\beta_k$ over words", font_size=24, color=HIDDEN),
+            caption(r"2. \ each section $d$: \ a mix of topics, \ $\theta_d \sim \mathrm{Dirichlet}(\alpha)$", font_size=24,
                   color=HIDDEN),
-            label(r"3. \ each word: \ pick a topic $z \sim \theta_d$, \ then a word $w \sim \beta_z$", font_size=24,
+            caption(r"3. \ each word: \ pick a topic $z \sim \theta_d$, \ then a word $w \sim \beta_z$", font_size=24,
                   color=SEEN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.4, 0.6, 0])
-        h = history_card(2003, r"D.~Blei, A.~Ng \& M.~Jordan", r"latent Dirichlet allocation \ (after T.~Hofmann's "
+        h = history_box(2003, r"D.~Blei, A.~Ng \& M.~Jordan", r"latent Dirichlet allocation \ (after T.~Hofmann's "
                          r"probabilistic latent semantic analysis, 1999)", width=6.0).to_edge(DOWN, buff=0.35)
-        not6 = note(r"not Part 6's LDA \ (Fisher's discriminant): \ the same initials, \ a different idea",
+        not6 = caption_note(r"not Part 6's LDA \ (Fisher's discriminant): \ the same initials, \ a different idea",
                     font_size=20).to_corner(UR, buff=0.3)
         with self.voiceover(
             "A mixture model gives each page one hidden source. But a book is about several things at once. In "
@@ -84,19 +106,32 @@ class Topics(VoiceoverScene):
         show = sorted(np.argsort(-share)[:6].tolist())
         snaps = l["snaps"]
         keys = sorted(snaps, key=int)
-        cols = VGroup()
-        for j, k in enumerate(show):
-            cols.add(word_col(snaps[keys[0]][k][:6], TOPIC_COLORS[k], font_size=22))
-        cols.arrange(RIGHT, buff=0.35)
-        w0 = cols.width
-        if cols.width > 8.6:
-            cols.width = 8.6
-        fscale = cols.width / w0
-        cols.move_to([0, 0.5, 0]).to_edge(LEFT, buff=0.4)
-        heads = VGroup(*[label(rf"topic {j + 1}", font_size=22, color=TOPIC_COLORS[k]).next_to(c, UP, buff=0.2)
+        # Later snapshots can contain wider words than the initial random
+        # sections. Reserve fixed slots from all cached snapshots so adjacent
+        # columns stay separate throughout the word transformations.
+        snapshot_cols = {
+            key: VGroup(*[word_col(snaps[key][k][:6], TOPIC_COLORS[k], font_size=22) for k in show])
+            for key in keys
+        }
+        widths = [max(snapshot_cols[key][j].width for key in keys) for j in range(len(show))]
+        slots = VGroup(*[Rectangle(width=width, height=0.01) for width in widths]).arrange(RIGHT, buff=0.35)
+        fscale = min(1.0, 8.6 / slots.width)
+        slots.scale(fscale).move_to([0, 0.5, 0]).to_edge(LEFT, buff=0.4)
+        for snapshot in snapshot_cols.values():
+            for column, slot in zip(snapshot, slots):
+                column.scale(fscale).move_to(slot)
+        cols = snapshot_cols[keys[0]]
+        heads = VGroup(*[caption(rf"topic {j + 1}", font_size=22, color=TOPIC_COLORS[k]).next_to(c, UP, buff=0.2)
                          for j, (k, c) in enumerate(zip(show, cols))])
         g = axes([0, int(bound_rounds[-1]), 10], [float(bounds.min()) - 0.05, float(bounds.max()) + 0.05, 0.2], x_length=3.6,
                  y_length=2.4, xlabel=r"round of variational EM", ylabel=r"bound per word (nats)", center=[4.9, -1.3, 0])
+        if zh():
+            from videos.ai.ai6._zh_prose import prose
+            for name in ("xlabel", "ylabel"):
+                original = getattr(g, name)
+                aligned = prose(original)
+                g.submobjects[g.submobjects.index(original)] = aligned
+                setattr(g, name, aligned)
         it = ValueTracker(0)
 
         def bound_curve():
@@ -105,8 +140,8 @@ class Topics(VoiceoverScene):
 
         bc = always_redraw(bound_curve)
         rv = Integer(0, font_size=34)
-        rl = VGroup(label(r"round", font_size=26, color=GREY_A), rv).arrange(RIGHT, buff=0.15).move_to([4.9, 1.6, 0])
-        info = label(rf"${l['D']:,}$ sections of ${l['seg']:,}$ words \ $\cdot$ \ the ${l['V']:,}$ commonest content words "
+        rl = VGroup(caption(r"round", font_size=26, color=GREY_A), rv).arrange(RIGHT, buff=0.15).move_to([4.9, 1.6, 0])
+        info = caption(rf"${l['D']:,}$ sections of ${l['seg']:,}$ words \ $\cdot$ \ the ${l['V']:,}$ commonest content words "
                      rf"\ $\cdot$ \ $K = {l['K']}$ topics".replace(",", "{,}"), font_size=22, color=GREY_A).to_edge(DOWN, buff=0.3)
         mono = bool(l["monotone"])
         rise = ("In this run the recorded bound never decreases." if mono else
@@ -125,11 +160,7 @@ class Topics(VoiceoverScene):
             vo.wait_until("b")
             self.add(bc)
             for key in keys[1:]:
-                new = VGroup()
-                for c, k in zip(cols, show):
-                    nc = word_col(snaps[key][k][:6], TOPIC_COLORS[k], font_size=22)
-                    nc.scale(fscale).move_to(c)
-                    new.add(nc)
+                new = snapshot_cols[key]
                 self.play(*[Transform(c, n_) for c, n_ in zip(cols, new)], it.animate.set_value(int(key)),
                           ChangeDecimalToValue(rv, int(key)), run_time=1.4)
         bc.clear_updaters()
@@ -143,15 +174,19 @@ class Topics(VoiceoverScene):
         tiles = VGroup()
         for k in range(K):
             ws = word_col(l["top"][k][:4], TOPIC_COLORS[k], font_size=19, buff=0.05)
-            bk = label(rf"\textit{{{l['main'][k]}}}", font_size=16, color=GREY_B)
+            bk = caption(rf"\textit{{{l['main'][k]}}}", font_size=16, color=GREY_B)
             if bk.width > 2.0:
                 bk.width = 2.0
             t = VGroup(ws, bk).arrange(DOWN, buff=0.12)
             box = RoundedRectangle(width=2.2, height=t.height + 0.3, corner_radius=0.1, stroke_color=TOPIC_COLORS[k],
                                    stroke_width=1.5)
             tiles.add(VGroup(box, t.move_to(box)))
-        tiles.arrange_in_grid(rows=2, cols=6, buff=(0.15, 0.25)).to_edge(UP, buff=0.35)
-        cap = note(r"each topic's top words, \ and the novel where it is commonest", font_size=20).next_to(tiles, DOWN, buff=0.1)
+        tiles.arrange_in_grid(rows=2, cols=6, buff=(0.15, 0.25))
+        # Keep the outer highlights within a comfortable frame margin while
+        # retaining the gaps between adjacent highlighted cards.
+        tiles.width = 13.4
+        tiles.to_edge(UP, buff=0.35)
+        cap = caption_note(r"each topic's top words, \ and the novel where it is commonest", font_size=20).next_to(tiles, DOWN, buff=0.1)
         # one section, its words coloured by their likeliest topic, and its mixture
         words, tops = l["ex_words"][:60], l["ex_topic"][:60]
         lines, row = VGroup(), VGroup()
@@ -170,7 +205,7 @@ class Topics(VoiceoverScene):
         th = np.asarray(l["ex_theta"])
         bx = VGroup(*[Rectangle(width=0.2, height=max(2.2 * v, 0.01), stroke_width=0, fill_color=TOPIC_COLORS[k],
                                 fill_opacity=0.9).move_to([3.3 + 0.28 * k, -3.2 + 1.1 * v, 0]) for k, v in enumerate(th)])
-        bl = label(rf"this section's mix: \ \textit{{{l['ex_title']}}}", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.15)
+        bl = caption(rf"this section's mix: \ \textit{{{l['ex_title']}}}", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.15)
         top2 = np.argsort(-th)[:2]
         c3 = np.argsort(-np.asarray(l["main_share"]))[:3]
         with self.voiceover(

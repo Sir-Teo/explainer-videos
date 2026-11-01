@@ -80,9 +80,14 @@ def spin_pca(pic: VGroup, cov2, theta: ValueTracker):
 # ---------------------------------------------------------------------------
 # Small instruments
 # ---------------------------------------------------------------------------
-def card_in(scene, k, title, question, voice, lit=()):
+def card_in(scene, k, title, question, voice, lit=(), *, zh_prose_rows=()):
     """The chapter card under its one-line voiceover."""
     card = chapter_card(k, title, question, lit=lit, part=PART)
+    if zh() and zh_prose_rows:
+        from videos.ai.ai6._zh_prose import prose
+        for i in zh_prose_rows:
+            old = card[0][i]
+            card[0].submobjects[i] = prose(old)
     with scene.voiceover(voice):
         scene.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
     scene.play(FadeOut(card))
