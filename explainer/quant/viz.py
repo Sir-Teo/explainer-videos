@@ -199,7 +199,8 @@ def price_surface(ax3: ThreeDAxes, f, x_range, y_range, resolution=(36, 30), z_l
 def smile_points3d(ax3: ThreeDAxes, k, T, iv, color=None, radius=0.035) -> VGroup:
     """The Surface's quotes as small spheres at (log-moneyness, maturity, implied vol)."""
     color = color or QC.IMPLIED
-    return VGroup(*[Dot3D(ax3.c2p(a, b, c), radius=radius, color=color) for a, b, c in zip(k, T, iv)])
+    # low-resolution spheres: hundreds of full-resolution ones make a Cairo render crawl
+    return VGroup(*[Dot3D(ax3.c2p(a, b, c), radius=radius, color=color, resolution=(4, 4)) for a, b, c in zip(k, T, iv)])
 
 
 # ---------------------------------------------------------------------------

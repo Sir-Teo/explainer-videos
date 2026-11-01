@@ -55,10 +55,7 @@ class Implied(VoiceoverScene, ThreeDScene):
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(quote, DOWN, buff=0.5).align_to(quote, LEFT)
         rows_lab = VGroup(label(r"initial guess: Corrado--Miller", font_size=20, color=GREY_B),
                           label(r"then Newton steps, kept inside a bisection bracket", font_size=20, color=GREY_B))
-        rows_lab[0].next_to(rows[0], RIGHT, buff=0.25)
-        rows_lab[1].next_to(rows[1], RIGHT, buff=0.25)
-        for m in rows_lab:
-            keep_in_frame(m, margin=0.2)
+        rows_lab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(rows, DOWN, buff=0.3).align_to(rows, LEFT)
         with self.voiceover(
             "The formula has five inputs. Four can be looked up: the price of the underlying, the strike, the time "
             "and the interest rate. The fifth, volatility, cannot. So traders turn the formula around: given the "
@@ -191,7 +188,7 @@ class Implied(VoiceoverScene, ThreeDScene):
         row = d["surface_row"]
         head = VGroup(*[label(t, font_size=22, color=GREY_B) for t in
                         (r"model", r"part", r"in sample", r"next day", r"arbitrage", r"parameters")])
-        xs = [-4.4, -0.6, 0.6, 2.2, 3.8, 5.4]
+        xs = [-6.6, -1.0, 0.5, 2.1, 3.7, 5.3]
         for h, x in zip(head, xs):
             h.move_to([x, 0, 0], aligned_edge=LEFT if x == xs[0] else ORIGIN)
         rows = VGroup(head)
@@ -205,16 +202,18 @@ class Implied(VoiceoverScene, ThreeDScene):
             m.move_to([x, 0, 0], aligned_edge=LEFT if x == xs[0] else ORIGIN)
         rows.add(first)
         for name, part in FUTURE_ROWS:
-            r = VGroup(label(name, font_size=22, color=GREY_D), MathTex(str(part), font_size=24, color=GREY_D),
+            r = VGroup(label(name, font_size=22, color=GREY_C), MathTex(str(part), font_size=24, color=GREY_C),
                        *[MathTex(r"?", font_size=26, color=GREY_D) for _ in range(4)])
             for m, x in zip(r, xs):
                 m.move_to([x, 0, 0], aligned_edge=LEFT if x == xs[0] else ORIGIN)
             rows.add(r)
         for i, r in enumerate(rows):
             r.shift(DOWN * i * 0.62)
-        for r in rows[2:]:
-            r[0].scale_to_fit_width(min(r[0].width, 3.6))
-        rows.move_to(DOWN * 0.3)
+        for r in rows[1:]:
+            if r[0].width > 5.0:
+                r[0].scale_to_fit_width(5.0)
+            r[0].move_to([xs[0], r[0].get_y(), 0], aligned_edge=LEFT)
+        rows.set_y(-0.3)
         title = label(r"The Surface: the series' pricing scoreboard", font_size=36).to_edge(UP, buff=0.5)
         unit = note(r"vega-weighted RMSE of implied volatility, in vol points; next day: 11 December, parameters "
                     r"held; arbitrage: calendar violations", font_size=20).to_edge(DOWN, buff=0.4)
