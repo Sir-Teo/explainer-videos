@@ -20845,7 +20845,15 @@
     "target $\\mathrm{Var}(x\\mid x<0)$: \\ $0.341$": "目标$\\mathrm{Var}(x\\mid x<0)$：\\ $0.341$",
     "finite-step particles: \\ $L^1$ distance $1.19\\to0.23$; \\ discretization can bias equilibrium": "有限步长粒子：\\ $L^1$距离$1.19\\to0.23$；\\ 离散化可能使平衡分布偏移",
     "histogram error: \\ exact bin-average density, \\ conditioned on $[-4,4]$": "直方图误差：\\ 精确的分箱平均密度，\\ 条件窗口为$[-4,4]$",
-    "$p$ rug: first $400$ draws plus all hits above $4$; \\ $q$ rug: first $400$ draws \\\\ both estimates use all $10{,}000$ draws each": "$p$刻线：前$400$次抽样，加上全部大于$4$的命中；\\ $q$刻线：前$400$次抽样 \\\\ 两种估计各自使用全部$10{,}000$次抽样"
+    "$p$ rug: first $400$ draws plus all hits above $4$; \\ $q$ rug: first $400$ draws \\\\ both estimates use all $10{,}000$ draws each": "$p$刻线：前$400$次抽样，加上全部大于$4$的命中；\\ $q$刻线：前$400$次抽样 \\\\ 两种估计各自使用全部$10{,}000$次抽样",
+    "score directions; \\ lengths rescaled": "分数方向；\\ 长度经过缩放",
+    "$n$ independent pieces: \\ $n-1$ convolutions": "$n$个独立随机量：\\ 卷积$n-1$次",
+    "minimum fixed $n$ \\\\ fair coins": "最小固定 $n$ \\\\ 均匀硬币",
+    "$(z_1, z_2)$: \\ independent bells \\ (full-sample CDF gap $0.0018$)": "$(z_1, z_2)$：\\ 独立的钟形分布（全样本累积分布最大差距 $0.0018$）",
+    "$600$ actual draws; \\ circles at radii $1$ and $2$": "$600$ 个真实样本；\\ 圆的半径为 $1$ 和 $2$",
+    "vertical zoom: $[2.6,3.7]$ \\\\ triangles: estimates outside this window": "纵轴放大：$[2.6,3.7]$ \\\\ 三角标记超出显示范围的估计值",
+    "means over $400$ paths, $t = 1$ \\\\ $\\pm$: across-path standard deviation": "在$400$条路径上取均值，$t = 1$ \\\\ $\\pm$表示路径间的标准差",
+    "greedy: \\ surprise $0.54$, \\\\ but $35\\%$ of its 4-token runs repeat": "贪心：\\ 意外度$0.54$，\\\\ 连续4词元片段中$35\\%$重复"
   },
   "phrases": {
     "width": "宽度",

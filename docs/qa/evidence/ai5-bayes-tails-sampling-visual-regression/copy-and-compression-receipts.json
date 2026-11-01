@@ -1,0 +1,488 @@
+[
+  {
+    "file": "after/en/Bayes/result.json.gz",
+    "original_sha256": "3f43c89c75e92751d902bbebf12dce9b84f0959cd13794e5be0eb0ad89caf52d",
+    "original_bytes": 116036,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/en/Bayes/text.jsonl.gz",
+    "original_sha256": "b91fd51804948ed63e8e9189b764eb6f53e59213c8a7fae1a51a45821ea4d503",
+    "original_bytes": 14949,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/en/Bayes/freeze.json.gz",
+    "original_sha256": "e3b73e2f4caa5e8fe3f2af9aeeda5ecaa221705a147ca3ff9b9aa97ecc6b18b5",
+    "original_bytes": 14269,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/en/Bayes/result.json.gz",
+    "original_sha256": "9838ca964d9ec8169cafb27c987f7e57cda57ebabcb985f7fb89a922960e6939",
+    "original_bytes": 116035,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/en/Bayes/freeze.json.gz",
+    "original_sha256": "c9b5dee93adf113acc59f97f43a9ba58c547cf9482e89794e107d2999beaea37",
+    "original_bytes": 8137,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/en/Bayes/sheet.png",
+    "original_sha256": "ef4ad835ffa5864780aded2de0e271ad740e7812de0276b52bd0b50e6b624a14",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/en/Bayes/sheet.png",
+    "original_sha256": "3abdc4e501b2dc1150f402e9d9c1bdb65427596c05a0831b7d94080da0331dc9",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Bayes/017_00162.8s.png",
+    "original_sha256": "df1db41561f98737225aec83701464ef101230da743680c37ae3cd36381b263d",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Tails/result.json.gz",
+    "original_sha256": "baef5a87fd4f56c990e2dcf32654480846c0939fe95bb339f418b048a969fdb7",
+    "original_bytes": 63680,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/en/Tails/text.jsonl.gz",
+    "original_sha256": "1ffebd6eed1acb60a8108fa86984d2059a4fb90cee9db753943a20d32de4c55b",
+    "original_bytes": 6170,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/en/Tails/freeze.json.gz",
+    "original_sha256": "a6aa4421e813f409630d49a97869fcfbabd11d6c8d31191c8b380cd19fbff88d",
+    "original_bytes": 11879,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/en/Tails/result.json.gz",
+    "original_sha256": "c54484727b422d3ed2a12c5f14c6f7a907995fd6fbf0bee6bc48ff9176acead9",
+    "original_bytes": 64352,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/en/Tails/freeze.json.gz",
+    "original_sha256": "694c77376f260bc4c506f6a8f07d3e9a87d8dcb0e85876e7fca8849bfaea6b85",
+    "original_bytes": 8137,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/en/Tails/sheet.png",
+    "original_sha256": "27dcea34a77f5794acca41624497875c794a2ac5a8bc9668b7825363f699f2a3",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/en/Tails/sheet.png",
+    "original_sha256": "69cadf706f95870e843e5334411cc3258a6224326206a791c7d6cc8163a244e4",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Tails/007_00061.2s.png",
+    "original_sha256": "06116ba5c41fb643f15aa84edcce96f696ca3dbfb3ee27ef15cef695062f84a4",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Tails/008_00070.5s.png",
+    "original_sha256": "3b195741abe51c73f267d3ee050aa78fd8a62be5172736efa6fade193e9750cd",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Tails/009_00076.0s.png",
+    "original_sha256": "bac13ca99afd49c21b629819e6dd0cee998b08ab5f1b3c0fc4b7568cad9532fb",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Tails/014_00120.8s.png",
+    "original_sha256": "51cd0e1ea3ac7deabdacce3ef77f068f8691b032a8ca5792f74dff6d1ed4bbdb",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Tails/015_00133.3s.png",
+    "original_sha256": "7fce1d9f7e21ec4805a7863e0dbc5dbe6708a163e0fda52b5274176e79323169",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Tails/016_00151.2s.png",
+    "original_sha256": "2236c5a6b9d66a956124b8c330bd1104651a9d007c84dfae9af2953b5f77b40d",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Sampling/result.json.gz",
+    "original_sha256": "7f231a8ed56c1f319382025376dc97ba186319bbd70dfa2658f8fe53ed03ebd1",
+    "original_bytes": 69417,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/en/Sampling/text.jsonl.gz",
+    "original_sha256": "84d18cd795c54dc1a7fb17533fd12a45dcbd125bcad0a6f838d40758a6c78bfe",
+    "original_bytes": 10148,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/en/Sampling/freeze.json.gz",
+    "original_sha256": "7166f8c5a393a0ed8b7f807b840470daeb5a6dc23d166064b0eafce68926a069",
+    "original_bytes": 13312,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/en/Sampling/result.json.gz",
+    "original_sha256": "509e61498d95633f00150716726aba2ea9367fa326fece58ca2b7640d5bda50d",
+    "original_bytes": 68992,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/en/Sampling/freeze.json.gz",
+    "original_sha256": "d4155a2d342331b22a12090493e3b213d68a573ee073f53e35cbef012af7a536",
+    "original_bytes": 7795,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/en/Sampling/sheet.png",
+    "original_sha256": "14588cc68bd8f3d9607862f8f752570e3fb91eef781e79a161e4aa6fb8136e8d",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/en/Sampling/sheet.png",
+    "original_sha256": "c42829fbb1819a1cbe88ad5eaae0f895cfb2362621e0b0132404603c6c3f1135",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Sampling/010_00098.3s.png",
+    "original_sha256": "4bc7f62e8fed94d2fc06470bd625906067b3f95d897d8892b798a9daf69c35e4",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/en/Sampling/011_00103.8s.png",
+    "original_sha256": "fd24f664eca15119076a7f331f123243463f5d6a768065114d78f26054843f5f",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Bayes/result.json.gz",
+    "original_sha256": "45744df7f4c304c82d85cc5f645d85414a832a788c62b07d792c8f848f13d337",
+    "original_bytes": 119232,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/zh/Bayes/text.jsonl.gz",
+    "original_sha256": "b0d07a7c8bc5388d38b4945f38eb4e8a96a7abc6fdfaf406ff42a0cf77e740a2",
+    "original_bytes": 14952,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/zh/Bayes/freeze.json.gz",
+    "original_sha256": "9df684d5e61725975c7b1eab0b9f8a3af96cc525845aa7e5549b6736d9778ad7",
+    "original_bytes": 12887,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/zh/Bayes/result.json.gz",
+    "original_sha256": "0aa39a6b187045e9642b11e612d9aaf2db964677e5bd79f421457331e10c3ade",
+    "original_bytes": 119233,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/zh/Bayes/freeze.json.gz",
+    "original_sha256": "1a5210dc4186f9d6204fb85372cd74c4ea9eb39e5beff237ca15c29909170112",
+    "original_bytes": 7445,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/zh/Bayes/sheet.png",
+    "original_sha256": "5711b5dc8103f690494a67ef7276627d9a896a27944a367723df94b10866ba9c",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/zh/Bayes/sheet.png",
+    "original_sha256": "860af236cd6cb25de143667a21f41122ecd0f0ca1c1e84e7b673a0fc87070c4a",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Bayes/015_00162.9s.png",
+    "original_sha256": "42191e6782aad48700d027f905fe6753881d7774b574d2a507d9e652c6f98571",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Tails/result.json.gz",
+    "original_sha256": "65bcb8019b098dd4211a4cb7828d2b113f9e001d265449c2f0d306fb7fac7779",
+    "original_bytes": 84282,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/zh/Tails/text.jsonl.gz",
+    "original_sha256": "e66b6aac53a6f2060c99f9ddcc90476ba0ea7c911bc11fe3f0744face8205431",
+    "original_bytes": 6173,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/zh/Tails/freeze.json.gz",
+    "original_sha256": "7402786da9a9ac48bfe9578b75881d8ba0b437abcbf5b9d331fd5079e05d3e95",
+    "original_bytes": 12265,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/zh/Tails/result.json.gz",
+    "original_sha256": "606d772fe02725144f56cf787e76e2f19a63111ea58773a0c55eee102d9caddc",
+    "original_bytes": 84261,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/zh/Tails/freeze.json.gz",
+    "original_sha256": "d57352c637c981832b516caf422dd787ffaba42c349f7195ee52672a47280456",
+    "original_bytes": 7673,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/zh/Tails/sheet.png",
+    "original_sha256": "d95cd5ac7e93102aba14cc5638d600f77409e7ed0aa40ee1e8e03dfd74a4cc0a",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/zh/Tails/sheet.png",
+    "original_sha256": "0fbfc41243c44ae94825cb398a6353ccbb41522e228e7bcd0f953e468437a7fe",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Tails/007_00062.1s.png",
+    "original_sha256": "b20370f8a7a7d2f0bfe03038ddc203defbe49e36ad5284b677de8d2023798fe9",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Tails/008_00072.6s.png",
+    "original_sha256": "1608ea3c074b513879e286b1943663e7e5145a86d8352762e33e9e946641f5cf",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Tails/009_00079.3s.png",
+    "original_sha256": "d2baff2cb3368818acd105d7ce9f0aee2088fa0720f9c596cd5ed0782082d3ba",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Tails/014_00125.3s.png",
+    "original_sha256": "0e8b92b64e138ba9b726aead8330dd50976a711d5eb214cf2e807d34f6469fd0",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Tails/015_00134.0s.png",
+    "original_sha256": "68b2755dcbce284420eff036c50ebc1a19ca0e7f58410ffd3f48a850afca8c10",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Tails/016_00139.3s.png",
+    "original_sha256": "00f28c09d4ecedca0abf0a9b3430d16a25f17f1700c2696723993bc910bf9809",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Tails/017_00162.9s.png",
+    "original_sha256": "65b3b3f0535c74cc88c33e24719f56fdcc57b2ec4c6f743a8339985955ef93cf",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Sampling/result.json.gz",
+    "original_sha256": "07ab24701fdded5b969800da00881e774066bf876d78034ecddd4fd1a8cfbf6f",
+    "original_bytes": 87707,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/zh/Sampling/text.jsonl.gz",
+    "original_sha256": "41ee9f26f7b1c6451a72cd759d80706d859b604f276389f773787188924d7bbb",
+    "original_bytes": 10151,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/zh/Sampling/freeze.json.gz",
+    "original_sha256": "c1f5e673ea24c2c61094e741424c89817ce6ac5251a71c5a6304b63596b4b533",
+    "original_bytes": 13284,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/zh/Sampling/result.json.gz",
+    "original_sha256": "2be3e3f0f74ee1cd800226f3f5e9815f1e876d5b2afa4e023f7724f95eaa0631",
+    "original_bytes": 87278,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "before/zh/Sampling/freeze.json.gz",
+    "original_sha256": "b6716c236e9e738159062fb0988f81596c7fea373e1d37f9708b2478be97b4d1",
+    "original_bytes": 7780,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "after/zh/Sampling/sheet.png",
+    "original_sha256": "f5b84ea6a05c6850ecdbf7251906fbc0fe65cb876cee01f5a6976560a1c5ba17",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/zh/Sampling/sheet.png",
+    "original_sha256": "fea1fa7bc0641747e98b596fe85e783e6f21259b480d97f873d6aba9151d5ef7",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Sampling/010_00098.2s.png",
+    "original_sha256": "7e7f581a42f4f18deb738dc140fd369a003a0bed1bd5b91c9c154cd75854f447",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "after/zh/Sampling/011_00104.5s.png",
+    "original_sha256": "b78b2902dfe6638d7c6d267c75c27bc69b292fa377ce2510bd2f59f5386fa51a",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/en/Bayes/017_00162.8s.png",
+    "original_sha256": "8f6df08563fff662a954e6e301c88a7da1fd3cacf0968340f636da753763d4e5",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/zh/Bayes/015_00162.9s.png",
+    "original_sha256": "b52cf390d9b8bcd34bb331fe0931303c420483ffb2de782e2a032fce2ff14904",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/en/Tails/009_00076.0s.png",
+    "original_sha256": "f239b4f6f2d2e153a3d53bd37490d0b8ee55d978584857bc120e7a066f8e6f17",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/zh/Tails/009_00079.3s.png",
+    "original_sha256": "8ae08c09e595ee88f06db22a987d57b21dbe4d366cf89656292e7f3356450080",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/en/Tails/015_00133.3s.png",
+    "original_sha256": "e617efbf6880edf86f4c398a8b5ca686fc7fdb69e4352ae50d3e13412c4827dd",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/zh/Tails/017_00162.9s.png",
+    "original_sha256": "08396dd8d3c8a156a018b0555228f4a3309ae98eee54cfcd53813c225bbfc38b",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/en/Sampling/011_00103.8s.png",
+    "original_sha256": "d01b9f5c3653d528c857a4b45eb7b6a62b81cda1dcfe056c3839aa1727029098",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "before/zh/Sampling/011_00104.5s.png",
+    "original_sha256": "0f5d62ddda048c379ef4ce97d6c93093614dc68d3df0c5afd3fc919b02b6afe2",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "source-before/s06_bayes.py.gz",
+    "original_sha256": "5a6a6790f29dd7c40738911441b2c3c229991caed08bba40a5271a564135b498",
+    "original_bytes": 18471,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "source-after/s06_bayes.py.gz",
+    "original_sha256": "0645e4f1b3aac621a89376265e4cd092b13dae0326023c3e1f5b03a21f233f16",
+    "original_bytes": 18628,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "source-diff/s06_bayes.py.patch",
+    "original_sha256": "ab190731aaae2b3c805659b4cae3916debc1578757d5254a23abccae5deb6a01",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "source-before/s09_tails.py.gz",
+    "original_sha256": "25569b1fe39b30ce7c82eb65a001ab53c7d8dc4b52e2d892828e8087cf8f3d84",
+    "original_bytes": 14669,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "source-after/s09_tails.py.gz",
+    "original_sha256": "905e4f10672b19a101ffdcbb465b2b92304455858d2751dc797b3631225c3a6f",
+    "original_bytes": 14776,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "source-diff/s09_tails.py.patch",
+    "original_sha256": "8e94169a5f93cd8901ca65d1c4d28ba52c89109b8bff9b1f8e560c00f8a48a3f",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "source-before/s10_sampling.py.gz",
+    "original_sha256": "ab88ab437476a1ab5bb24f31a3a7933a2766b0bce56993956d82c062d392764e",
+    "original_bytes": 19227,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "source-after/s10_sampling.py.gz",
+    "original_sha256": "0602dce119320294dd573ab004bc230742e5ba466d908af12e348476eaae6787",
+    "original_bytes": 19944,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "source-diff/s10_sampling.py.patch",
+    "original_sha256": "9625740208ed4295fe60d29b7d8232ebd2b064ba2b9b164c0314d819b11c6084",
+    "kind": "exact bytes"
+  },
+  {
+    "file": "source-after/plotting.py.gz",
+    "original_sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+    "original_bytes": 3599,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "geometry/source-freeze-and-handoff.json.gz",
+    "original_sha256": "65f7838ecbd3af8c2fae9a2e9466358c091490b7baaf471aca46ddfac6fe2781",
+    "original_bytes": 15442,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "geometry/geometry-en.json.gz",
+    "original_sha256": "cec4fe23ac9f38da93adb78fe74f34c0b550142e8d517bd6be2a104531e6ce41",
+    "original_bytes": 3675,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "geometry/geometry-zh.json.gz",
+    "original_sha256": "5905780a9982e662f5b14df1f5cf17715ee1545c7e2b8c996a246a4c88f4cb11",
+    "original_bytes": 3690,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "geometry/actual-clipped-curves.json.gz",
+    "original_sha256": "6926df6220f58c3c36b7aa3eeb5e2acf9aca23e857038d5d4ab191194708a90c",
+    "original_bytes": 1332,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "geometry/proposed-caption-overlay.json.gz",
+    "original_sha256": "34a890d05520b31acafcf985e1d423f5259188674b80b25594e9fbe9ad2e3563",
+    "original_bytes": 506,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "geometry/tests.log.gz",
+    "original_sha256": "909871d692286aac221c6cfeae592ed9d85b167582b996382fa648c19cd4a6ed",
+    "original_bytes": 1119,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "baseline-five-chapter-review.json.gz",
+    "original_sha256": "261466250b573a716e5897379bc5141aa2118475ccb2ac2c59e2967e1d6f6288",
+    "original_bytes": 113863,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "comparison-map.json.gz",
+    "original_sha256": "653eb9e93443ef6d546c87d4cf7dd59f1dc3cf88fbecbdd3fd321b0532d68cff",
+    "original_bytes": 87099,
+    "kind": "gzip; exact decompressed bytes"
+  },
+  {
+    "file": "review.json.gz",
+    "original_sha256": "e8bd6268707745c93e24f69ad19cb648a854e36d55458b70a5662bf21419b28f",
+    "original_bytes": 118120,
+    "kind": "gzip; exact decompressed bytes"
+  }
+]

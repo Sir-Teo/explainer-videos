@@ -202,10 +202,11 @@ class Brownian(VoiceoverScene):
         d = load("qv")
         path, pq = np.asarray(d["path"]), np.asarray(d["path_qv"])
         ns, qm, qs, tvm = (np.asarray(d[k], float) for k in ("ns", "qv_mean", "qv_sd", "tv_mean"))
-        ax = Axes(x_range=[0, 1, 0.25], y_range=[-1.5, 1.5, 0.5], x_length=6.0, y_length=2.4, tips=False,
+        path_bound = max(1.5, float(np.max(np.abs(path))) + 0.1)
+        ax = Axes(x_range=[0, 1, 0.25], y_range=[-path_bound, path_bound, 0.5], x_length=6.0, y_length=2.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4, 1.6, 0])
         tt = np.linspace(0, 1, len(path))
-        pc = curve(ax, tt, np.clip(path, -1.5, 1.5), color=WALK, stroke_width=1.8)
+        pc = curve(ax, tt, path, color=WALK, stroke_width=1.8)
         pl = label(r"one Brownian path, \ $2^{14}$ steps", font_size=22, color=WALK).next_to(ax, UP, buff=0.1)
         bx = Axes(x_range=[0, 1, 0.25], y_range=[0, 1.1, 0.5], x_length=6.0, y_length=2.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.4, -1.7, 0])
@@ -226,7 +227,7 @@ class Brownian(VoiceoverScene):
                              rf"$\sum|\Delta W| = {tvm[i]:.1f}$", font_size=23, color=GREY_A)
                        for j, i in zip((4, 8, 14), k)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         tbl.move_to([3.4, -1.3, 0])
-        tl = label(r"over $400$ paths, \ $t = 1$", font_size=20, color=GREY_A).next_to(tbl, UP, buff=0.12).align_to(tbl, LEFT)
+        tl = label(r"means over $400$ paths, $t = 1$ \\ $\pm$: across-path standard deviation", font_size=20, color=GREY_A).next_to(tbl, UP, buff=0.12).align_to(tbl, LEFT)
         rule = label(r"$(dW)^2 = dt$", font_size=40, color=C.BITS).next_to(tbl, DOWN, buff=0.35)
         with self.voiceover(
             "Brownian paths have one more property that changes calculus. Square each tiny step and add the squares. "

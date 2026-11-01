@@ -25,8 +25,6 @@ CHAPTERS = {
 }
 
 ZH = {
-    'Here are six hundred dots, scattered completely at random.': "这里有600个点，完全随机地散布着。<bookmark mark='a'/>现在，让每个点随意游荡。每一刻，它都会被随机地轻踢一下，同时还被一片箭头场轻轻推一把。<bookmark mark='b'/>看看随机性会搭出什么来。",
-    "This is, in miniature, how today's image and video generators work.": "这就是当今图像和视频生成器工作方式的缩影。它们从噪声出发，让它一次一小步、随机地流动，最后变成一幅画面。<bookmark mark='a'/>那些箭头就是全部的秘密：网络要学的，正是它们。我们会在第21部分把它们搭出来。",
     'Run it the other way, with the arrows gone': "反过来运行，去掉箭头，这些字母又溶解回噪声。<bookmark mark='a'/>两个方向都是随机运动，描述它们的，是同一套数学。",
     'The mathematics is older than computers.': "这套数学比计算机还要古老。它始于1654年，帕斯卡和费马在通信中讨论：一局没下完的赌博，赌注该怎么分。<bookmark mark='a'/>伯努利证明了平均值会稳定下来；<bookmark mark='b'/>棣莫弗找到了钟形曲线；<bookmark mark='c'/>贝叶斯和拉普拉斯从结果倒推原因；<bookmark mark='d'/>高斯用它拟合行星轨道。<bookmark mark='e'/>爱因斯坦解释了花粉的抖动，<bookmark mark='f'/>费希尔让似然成为拟合模型的方法，<bookmark mark='g'/>伊藤清给随机运动配上了自己的微积分。<bookmark mark='h'/>在洛斯阿拉莫斯，最早的计算机被用来做采样，<bookmark mark='i'/>而今天，同样的想法决定着聊天机器人写出的每一个词，也把噪声变成图画。",
     'This is Part 5 of AI, Built, the last of the foundations.': "这是《人工智能，从零搭建》的第5部分，也是基础篇的最后一部分。<bookmark mark='a'/>这一部分讲：为什么和总是呈钟形，在一维和多维中；拟合、精度与信念；平均值会偏离多远；怎样抽取样本，以及语言模型怎样挑选下一个词；马尔可夫链与蒙特卡洛；还有随机运动，以及它自己的一套微积分。每一个结果，都在这里、在一台笔记本电脑上算出来。",
@@ -205,6 +203,8 @@ ZH = {
     "f'The estimate is above the exact probability by {100 * (estimate / truth - 1):.1f} percent.'": '这个估计值高于精确概率{100 * (estimate / truth - 1):.1f}%。',
     "f'The {n:,} direct draws contain {hits} hits. {comparison}'": '{n:,}次直接抽样中有{hits}次命中。{comparison}',
     "f'No hits appeared in the {n:,} direct draws. Zero is the estimate, not a claim that the event is impossible.'": '全部{n:,}次直接抽样都没有命中。估计值为零，并不表示这个事件不可能发生。',
+    "Here are six hundred dots, scattered completely at random. <bookmark mark='a'/> Now let each one wander. Each step adds a random kick and a drift: the current position divided by two, plus the score. The green arrows show only score directions, with their lengths rescaled. <bookmark mark='b'/> Watch what the randomness builds.": "这里有600个点，完全随机地散落着。<bookmark mark='a'/>现在让它们各自游走。每一步都加上一个随机踢动和一个漂移：当前位置的一半，再加上分数。绿色箭头只显示分数的方向，长度经过了缩放。<bookmark mark='b'/>看这些随机运动会构建出什么。",
+    "This is, in miniature, how today's image and video generators work. They start from noise and let it flow, one random step at a time, into a picture. <bookmark mark='a'/> Here the score is computed exactly from our toy letter distribution. A generative model learns the score component; the other drift term is already known. We'll build it in part twenty-one.": "这就是今天图像和视频生成器工作方式的一个缩影。它们从噪声出发，通过一步步随机运动，流成一幅图。<bookmark mark='a'/>这里的分数，是从我们的玩具字母分布精确计算出来的。生成模型学习的是分数这一部分，另一项漂移则是已知的。我们会在第21部分搭建它。",
 }
 
 PHRASES = {

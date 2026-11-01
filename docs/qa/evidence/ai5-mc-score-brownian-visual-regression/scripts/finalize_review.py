@@ -1,0 +1,25 @@
+from pathlib import Path
+import datetime,hashlib,json
+O=Path(__file__).parent;B=Path('/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review');R=Path('/workspace/explainer-videos')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+d=json.loads((O/'comparison.json').read_text());views=[]
+for row in d['rows']:
+ if row['rgb_equal']:continue
+ row['review_status']='accepted-actual-native-view'
+ views.append({'case':row['case'],'file':row['file'],'time':row['time'],'path':row['after_path'],'png_sha256':row['after_png_sha256'],'rgb_sha256':row['after_rgb']['sha256'],'actual_view':True,'view_scale':'Native854x480originalPNG','logged_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'finding':'No new endpoint layout/readability/factual-visual defect observed; bounded correction is visible as intended.'})
+assert len(views)==16
+for row in d['rows']:
+ assert sha(Path(row['before_path']))==row['before_png_sha256'];assert sha(Path(row['after_path']))==row['after_png_sha256']
+for p in (O/'cases').iterdir():
+ frozen=json.loads((p/'freeze.json').read_text())
+ for f in frozen['copied_files']:assert sha(p/f['path'])==f['sha256']
+ for s in frozen['source_observations']:assert sha(R/s['original_path'])==s['sha256']
+ for i in frozen['inputs']:assert sha(R/i['original_path'])==i['sha256']
+ # Original canonical record and captured frames remain the exact reviewed bytes.
+ src=R/'renders/qa/series/ai5'/frozen['lang']/frozen['scene']
+ for f in frozen['copied_files']:assert sha(src/f['path'])==f['sha256']
+(O/'comparison-reviewed.json').write_text(json.dumps(d,indent=2)+'\n');(O/'native-view-receipts.json').write_text(json.dumps(views,indent=2)+'\n')
+ni=sum(r['rgb_equal'] and any('native854' in x['view_scale'] for x in r['baseline_actual_view_receipts']) for r in d['rows'])
+report={'status':'accepted-selected-endpoint-regression','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'cases':d['cases'],'coverage':{'fresh_cases':6,'fresh_states':93,'exact_png_inherited':77,'RGB_only_inherited':0,'changed_states_directly_viewed_native':16,'unchanged_native_followups_inherited':ni,'baseline_all8cases_states':130,'baseline_original_native_followups':32,'current_case_scope':'OnlyMonteCarlo/ScoreFn/BrownianENZH;MCMC37states/8nativeviews remain preserved historicalbeforecoverage, not a fresh/currentbroadfingerprint certification.'},'review_conclusions':['MCdarts ENZH actualimages show explicit2.6/3.7verticalzoom, outside-estimate triangle indicators and true crop instead of flat data caps. Markers/numbers/plot/captions are separated; the shaded band remains properly cropped to the window. Final3.158readout unchanged.','ScoreFn ENZH both changed derive states show a genuinely straight score line through the viewport with no horizontal caps. Math/why labels and the Gaussian illustration remain readable.','Brownian ENZH all4changed states show the unclamped path in the expanded local range. The new mean/±across-pathSD caption is readable and separate from the measured table/formula; unchanged envelopes continue to mean scale curves, not hard bounds.','Rare-hit/cohort/ESS and ESsmoothedstar/diagnostics are byte-identical to actuallyreviewedbeforeimages, including native priority views. Allnarrationobjects,durations,selectedtimes/reasons andinputsignatures match exactly.'],'source_freeze':{'s13_montecarlo.py':'8482b9b708b90e40129f8202238693faf2dc293770d517870404f67db8d93483','s14_scorefn.py':'ac6365273d50125deecd4b175108178d69fadbefbf18e16c918cb473dc2574b9','s16_brownian.py':'3d7f660bf678fa94324fd8c85e70a3cd50bb2d138abc78fe43b28627944623fa','plotting.py':'1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845'},'post_review_identity_verification':'AllfrozenPNG/rawrecord/text/log/sheet canonicalbytes and direct/sharedsource/inputbytes still match; no source edits or rerenders by reviewer.','raw_runtime':'All6rawstatusespassedwithzero warnings; originalvisual_review andfull/narratedplaybackpendingflags preserved. This private endpoint acceptance does not rewrite rawrecords or promote production status.','root_integration_evidence':'Root-owned full507test receipt/log retained separately; observedlog states507passed47.923s. Thisreviewdidnotrerun numerical experiments/fullsuite.','remaining_limits':['No movie/full-motion/dense-transition/continuousperceptual viewing or encodedframe decode.','TheinitialMC4.000readout andfirsttriangle state are not capturedbyendpointimages; only earlier source/Manimgeometry fixtures coverthem. Freshmotionverification remainsrequired.','No narration/audio/listening/synchronization or native1080/4K approval.','No player/responsive behavior approval.','Sourcecopy observations are not proof ofhistorical in-memoryimports; baseline/currentbroadfingerprints differ and remainexplicit.','No production/Libraryupload/publish performedbythisreview.']}
+(O/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps({'report_sha256':sha(O/'report.json'),'coverage':report['coverage']},indent=2))

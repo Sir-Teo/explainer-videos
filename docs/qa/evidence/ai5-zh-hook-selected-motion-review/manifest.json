@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "scope": "One Chinese Hook exact-movie selected-image review only.",
+  "created_at": "2026-11-01T02:35:00.100027+00:00",
+  "files": {
+    "README.md": {
+      "sha256": "5671ea92b8b9c4ef771da63aba9c2f30672c39b7567effba7dadc2702918b4b5",
+      "bytes": 2850
+    },
+    "audit--result.json.gz": {
+      "sha256": "b08d95d0fb7029a699743be66daee5315ed825bca8266f41bf6775993480fc05",
+      "bytes": 26203
+    },
+    "dense-final-field/sheet-001.png": {
+      "sha256": "0c4146a99aa934b476ab619424894ed8fc629797497795e9f5e7d3053ccc8f54",
+      "bytes": 629930
+    },
+    "dense-final-field/sheet-002.png": {
+      "sha256": "8daa9f256d8549980e4b3c22fce2a5adf84f034d9ca510232059c6b16d973829",
+      "bytes": 601124
+    },
+    "dense-final-field/sheet-003.png": {
+      "sha256": "9f5e98a8769a22896a70beae20610188c6f0e2c0523f5409d7ad59cc40f85123",
+      "bytes": 568080
+    },
+    "dense-final-field/sheet-004.png": {
+      "sha256": "ae6b75a083999321a6e9204e8b2b52d9f4ca8f00a16c841786c8f050db338175",
+      "bytes": 516597
+    },
+    "dense-final-field/sheet-005.png": {
+      "sha256": "6be26608c2454ecfbeeee657c964561c7c9661f9c99beeb0448545a1ebf2211b",
+      "bytes": 551454
+    },
+    "dense-final-field/sheet-006.png": {
+      "sha256": "f33a2f919f3dee2dddc46ee61f482a8339add487a31851a8c177dc9af6de411a",
+      "bytes": 297026
+    },
+    "dense-final-field--map.json.gz": {
+      "sha256": "4d47a7a5f2ea76e233c41f66035aa782c48334e3b87b6508362dcc27171cb3b8",
+      "bytes": 2058
+    },
+    "native/0000073_000004.867s.png": {
+      "sha256": "4e0c6d45a0f706a0814755fc0299b37b84752339ee41c14d867fa3ad1a58e7b0",
+      "bytes": 163731
+    },
+    "native/0000469_000031.267s.png": {
+      "sha256": "a801e3f17634487eb6133fdea3d9c0fbadf97cc5da4975f62d82058dd019daee",
+      "bytes": 130768
+    },
+    "native/0000501_000033.400s.png": {
+      "sha256": "6ae09b15c08b40143cad18358a9acd0dfdf3a3c9c69feca9d1fb722eaad272cb",
+      "bytes": 130788
+    },
+    "native/0001531_000102.067s.png": {
+      "sha256": "6470ee973e6c4988027d17b42986ee3977a7cd75bcf7b6f445fc2acabf389f7b",
+      "bytes": 73768
+    },
+    "native/0001672_000111.467s.png": {
+      "sha256": "e4105dcd5f1d3e7280c1bf55c918898f8aced6c82aac9fcbe05472867bd05ab3",
+      "bytes": 59654
+    },
+    "native/0001779_000118.600s.png": {
+      "sha256": "a5fbfa14bf41ddfffa2822b20e51471960bce9a467a4b8d1a05d14677fd14624",
+      "bytes": 86189
+    },
+    "render-result.original.json.gz": {
+      "sha256": "0e5d2fcdd2e294de11fe14134453172604dbf1b3f8d6f508a91e932c950715ea",
+      "bytes": 16485
+    },
+    "review.json.gz": {
+      "sha256": "c155e9cf6a7959ceca834db750806d68ef205e259053817d105a82c769df2db9",
+      "bytes": 6748
+    },
+    "snapshot.json.gz": {
+      "sha256": "29f64c5b388bf282d8dc537e82ff03d530c9386f8e3ef339c8d4f97a6ad808ca",
+      "bytes": 1069
+    },
+    "source-at-review/tools/qa_motion.py.gz": {
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "bytes": 6507
+    },
+    "source-at-review/videos/ai/ai5/common.py.gz": {
+      "sha256": "a1996a3d153face461f6dd9784123a90e399bc09152026ba5859ea62ee599abe",
+      "bytes": 3609
+    },
+    "source-at-review/videos/ai/ai5/s01_hook.py.gz": {
+      "sha256": "604a26953e65acfb682b6a50a2b1476fcf99456c0030c50424d0913132c374b3",
+      "bytes": 3252
+    },
+    "source-at-review/videos/ai/ai5/zh_lines.py.gz": {
+      "sha256": "36fedc5f45b42f50b4c9def37a0a7beb74c1f06cd0409f9c4c920756183d70ee",
+      "bytes": 33770
+    },
+    "translation-drift.json.gz": {
+      "sha256": "1cfc201822412f896c3097d1f1dc2ec603fb65c24786078ea472e64f910b318c",
+      "bytes": 1262
+    },
+    "unique-review/sheet-009.png": {
+      "sha256": "9240ce5817b70029eab2863512eb2a47357d2b3dad0f0487662f7e24dbc1a340",
+      "bytes": 652951
+    },
+    "unique-review/sheet-031.png": {
+      "sha256": "cff1daa50fa2a9efdf349d990a51b0fd54d7484c16c8d75954252aef7e236644",
+      "bytes": 262092
+    },
+    "unique-review/sheet-034.png": {
+      "sha256": "33b8993ac1c11c07b7576b0389f7d317bebc07bdb6344d22f3884880737aadec",
+      "bytes": 268760
+    },
+    "unique-review/sheet-036.png": {
+      "sha256": "0788fcaaec1c40509cc6140553f5c9a777dd88defb46d12b60fddb35be9b6560",
+      "bytes": 332736
+    },
+    "unique-review--map.json.gz": {
+      "sha256": "79e0295cfb9b34d67dee05a7b2b1000d8a21f642dae543920f9e87683fc4b523",
+      "bytes": 41197
+    }
+  }
+}

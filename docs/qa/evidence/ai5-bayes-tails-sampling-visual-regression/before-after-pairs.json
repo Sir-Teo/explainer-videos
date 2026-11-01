@@ -1,0 +1,58 @@
+[
+  {
+    "before": "before/en/Bayes/017_00162.8s.png",
+    "after": "after/en/Bayes/017_00162.8s.png",
+    "before_sha256": "8f6df08563fff662a954e6e301c88a7da1fd3cacf0968340f636da753763d4e5",
+    "after_sha256": "df1db41561f98737225aec83701464ef101230da743680c37ae3cd36381b263d",
+    "observed_change": "MLE curve crop: artificial plateau replaced by two visible subpaths."
+  },
+  {
+    "before": "before/zh/Bayes/015_00162.9s.png",
+    "after": "after/zh/Bayes/015_00162.9s.png",
+    "before_sha256": "b52cf390d9b8bcd34bb331fe0931303c420483ffb2de782e2a032fce2ff14904",
+    "after_sha256": "42191e6782aad48700d027f905fe6753881d7774b574d2a507d9e652c6f98571",
+    "observed_change": "Same crop with unchanged Chinese derivation/legend."
+  },
+  {
+    "before": "before/en/Tails/009_00076.0s.png",
+    "after": "after/en/Tails/009_00076.0s.png",
+    "before_sha256": "f239b4f6f2d2e153a3d53bd37490d0b8ee55d978584857bc120e7a066f8e6f17",
+    "after_sha256": "bac13ca99afd49c21b629819e6dd0cee998b08ab5f1b3c0fc4b7568cad9532fb",
+    "observed_change": "Exponential schematic exits viewport without false horizontal cap."
+  },
+  {
+    "before": "before/zh/Tails/009_00079.3s.png",
+    "after": "after/zh/Tails/009_00079.3s.png",
+    "before_sha256": "8ae08c09e595ee88f06db22a987d57b21dbe4d366cf89656292e7f3356450080",
+    "after_sha256": "d2baff2cb3368818acd105d7ce9f0aee2088fa0720f9c596cd5ed0782082d3ba",
+    "observed_change": "Same clipped exponential under Chinese derivation."
+  },
+  {
+    "before": "before/en/Tails/015_00133.3s.png",
+    "after": "after/en/Tails/015_00133.3s.png",
+    "before_sha256": "e617efbf6880edf86f4c398a8b5ca686fc7fdb69e4352ae50d3e13412c4827dd",
+    "after_sha256": "7fce1d9f7e21ec4805a7863e0dbc5dbe6708a163e0fda52b5274176e79323169",
+    "observed_change": "Minimum-fixed-n row now fits on two lines;262/281distinction preserved."
+  },
+  {
+    "before": "before/zh/Tails/017_00162.9s.png",
+    "after": "after/zh/Tails/017_00162.9s.png",
+    "before_sha256": "08396dd8d3c8a156a018b0555228f4a3309ae98eee54cfcd53813c225bbfc38b",
+    "after_sha256": "65b3b3f0535c74cc88c33e24719f56fdcc57b2ec4c6f743a8339985955ef93cf",
+    "observed_change": "Chinese two-line row, lattice qualification and crosslinks remain clear."
+  },
+  {
+    "before": "before/en/Sampling/011_00103.8s.png",
+    "after": "after/en/Sampling/011_00103.8s.png",
+    "before_sha256": "d01b9f5c3653d528c857a4b45eb7b6a62b81cda1dcfe056c3839aa1727029098",
+    "after_sha256": "fd24f664eca15119076a7f331f123243463f5d6a768065114d78f26054843f5f",
+    "observed_change": "All600realGaussianpoints fit; physical circle radii and full-sampleKS qualifier clear."
+  },
+  {
+    "before": "before/zh/Sampling/011_00104.5s.png",
+    "after": "after/zh/Sampling/011_00104.5s.png",
+    "before_sha256": "0f5d62ddda048c379ef4ce97d6c93093614dc68d3df0c5afd3fc919b02b6afe2",
+    "after_sha256": "b78b2902dfe6638d7c6d267c75c27bc69b292fa377ce2510bd2f59f5386fa51a",
+    "observed_change": "Chinese cohort/radii/full-sampleKS captions are readable without collision."
+  }
+]

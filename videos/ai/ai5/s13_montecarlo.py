@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai5.common import DATA, MODEL, PART, curve, load, normal_pdf
+from videos.ai.ai5.plotting import clipped_curve
 
 TAIL = C.SURPRISE
 
@@ -68,9 +69,13 @@ class MonteCarlo(VoiceoverScene):
                         for p, i in zip(pts, inside)])
         ax = Axes(x_range=[0, math.log10(N), 1], y_range=[2.6, 3.7, 0.5], x_length=5.4, y_length=3.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([3.4, 0.0, 0])
-        xl = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, 2.6), DOWN, buff=0.12)
+        xl = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, 2.6), DOWN, buff=0.18)
                       for t, v in (("1", 0), ("10", 1), ("100", 2), ("1{,}000", 3))])
         xn = label(r"darts thrown", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.5)
+        yl = VGroup(*[MathTex(f"{v:g}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.16)
+                      for v in (2.6, 3.7)])
+        zoom_note = label(r"vertical zoom: $[2.6,3.7]$ \\ triangles: estimates outside this window",
+                          font_size=18, color=GREY_A).next_to(ax, UP, buff=0.15)
         pi_l = DashedLine(ax.c2p(0, math.pi), ax.c2p(math.log10(N), math.pi), color=WHITE, stroke_width=2)
         pi_t = MathTex(r"\pi", font_size=34).next_to(pi_l, RIGHT, buff=0.1)
         ns = np.unique(np.round(np.logspace(0, math.log10(N), 300)).astype(int))
@@ -80,12 +85,25 @@ class MonteCarlo(VoiceoverScene):
         t = ValueTracker(1)
 
         def path():
-            n = max(int(t.get_value()), 2)
+            n = max(int(t.get_value()), 1)
             m = ns[ns <= n]
-            return VMobject(color=C.BITS, stroke_width=3).set_points_as_corners(
-                [ax.c2p(math.log10(k), float(np.clip(est[k - 1], 2.6, 3.7))) for k in m] or [ax.c2p(0, 3)])
+            return clipped_curve(ax, np.log10(m), est[m - 1], x_bounds=(0, math.log10(N)),
+                                 y_bounds=(2.6, 3.7), color=C.BITS, stroke_width=3)
+
+        def offscale():
+            markers = VGroup()
+            for k in ns[ns <= max(int(t.get_value()), 1)]:
+                value = float(est[k - 1])
+                if value < 2.6 or value > 3.7:
+                    marker = Triangle(color=C.BITS, fill_opacity=1, stroke_width=0).scale(0.07)
+                    if value < 2.6:
+                        marker.rotate(PI)
+                    marker.move_to(ax.c2p(math.log10(k), 3.7 if value > 3.7 else 2.6))
+                    markers.add(marker)
+            return markers
 
         trace = always_redraw(path)
+        boundary_marks = always_redraw(offscale)
         ev = DecimalNumber(4.0, num_decimal_places=3, font_size=40, color=C.BITS)
         ev.add_updater(lambda m: m.set_value(est[max(int(t.get_value()), 1) - 1]))
         colors = {r"\pi": DATA}
@@ -103,8 +121,8 @@ class MonteCarlo(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(why), Write(f))
             vo.wait_until("b")
-            self.play(Create(ax), FadeIn(xl), FadeIn(xn), Create(pi_l), FadeIn(pi_t), FadeIn(ev))
-            self.add(trace)
+            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(zoom_note), FadeIn(xn), Create(pi_l), FadeIn(pi_t), FadeIn(ev))
+            self.add(trace, boundary_marks)
             self.play(t.animate.set_value(24), run_time=1.0, rate_func=linear)
             self.play(LaggedStart(*[FadeIn(x, scale=0.3) for x in dots[24:shown]], lag_ratio=0.002),
                       t.animate.set_value(N), run_time=6.0, rate_func=linear)
@@ -115,6 +133,7 @@ class MonteCarlo(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(band))
         trace.clear_updaters()
+        boundary_marks.clear_updaters()
         ev.clear_updaters()
         self.wait(0.3)
         self.clear_scene()

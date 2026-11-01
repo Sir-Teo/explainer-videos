@@ -1,0 +1,481 @@
+{
+  "scope": "Sixcases/103endpoint image appearances:84exactRGBA/dimension matches inherit actual prior image-review scope; all19changedimages actually viewed individually at native854x480. No current sheet-view claim is needed for inherited images; provided sheets support human navigation.",
+  "review_json_uncompressed_sha256": "e8bd6268707745c93e24f69ad19cb648a854e36d55458b70a5662bf21419b28f",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3655,
+      "sha256": "19a78f701bfad342d3858cf43a95a5021814bdedea857d1ab83aff52e5ea436d"
+    },
+    {
+      "path": "after/en/Bayes/017_00162.8s.png",
+      "bytes": 75211,
+      "sha256": "df1db41561f98737225aec83701464ef101230da743680c37ae3cd36381b263d"
+    },
+    {
+      "path": "after/en/Bayes/freeze.json.gz",
+      "bytes": 3352,
+      "sha256": "3175e0070fca8a081cc6753fa927a77b1bedb0654e21c1dc1ea71e93cb8d7713"
+    },
+    {
+      "path": "after/en/Bayes/result.json.gz",
+      "bytes": 14165,
+      "sha256": "2778b045688745669d63ae8c487b9f413036c1d451db19af24939ab607da76ba"
+    },
+    {
+      "path": "after/en/Bayes/sheet.png",
+      "bytes": 228858,
+      "sha256": "ef4ad835ffa5864780aded2de0e271ad740e7812de0276b52bd0b50e6b624a14"
+    },
+    {
+      "path": "after/en/Bayes/text.jsonl.gz",
+      "bytes": 1302,
+      "sha256": "45ea5375ab95fd0821702797d8aa97da8fe69ceac9a147d5fa77147a77d91935"
+    },
+    {
+      "path": "after/en/Sampling/010_00098.3s.png",
+      "bytes": 98060,
+      "sha256": "4bc7f62e8fed94d2fc06470bd625906067b3f95d897d8892b798a9daf69c35e4"
+    },
+    {
+      "path": "after/en/Sampling/011_00103.8s.png",
+      "bytes": 106891,
+      "sha256": "fd24f664eca15119076a7f331f123243463f5d6a768065114d78f26054843f5f"
+    },
+    {
+      "path": "after/en/Sampling/freeze.json.gz",
+      "bytes": 3226,
+      "sha256": "c98972816251a2c7f205b7a168d3020f11d36d4c77c4276783bf204ef1b26321"
+    },
+    {
+      "path": "after/en/Sampling/result.json.gz",
+      "bytes": 13148,
+      "sha256": "1ab41a77ac73a8f5791910efe03930519245b92fa55d798ed52dca3269ffeed6"
+    },
+    {
+      "path": "after/en/Sampling/sheet.png",
+      "bytes": 274447,
+      "sha256": "14588cc68bd8f3d9607862f8f752570e3fb91eef781e79a161e4aa6fb8136e8d"
+    },
+    {
+      "path": "after/en/Sampling/text.jsonl.gz",
+      "bytes": 1409,
+      "sha256": "8f2f13cd96ad63fb5193e04d883526d7d0246c3a3b63f9e26ef7919da000e1c0"
+    },
+    {
+      "path": "after/en/Tails/007_00061.2s.png",
+      "bytes": 42306,
+      "sha256": "06116ba5c41fb643f15aa84edcce96f696ca3dbfb3ee27ef15cef695062f84a4"
+    },
+    {
+      "path": "after/en/Tails/008_00070.5s.png",
+      "bytes": 49068,
+      "sha256": "3b195741abe51c73f267d3ee050aa78fd8a62be5172736efa6fade193e9750cd"
+    },
+    {
+      "path": "after/en/Tails/009_00076.0s.png",
+      "bytes": 55904,
+      "sha256": "bac13ca99afd49c21b629819e6dd0cee998b08ab5f1b3c0fc4b7568cad9532fb"
+    },
+    {
+      "path": "after/en/Tails/014_00120.8s.png",
+      "bytes": 22310,
+      "sha256": "51cd0e1ea3ac7deabdacce3ef77f068f8691b032a8ca5792f74dff6d1ed4bbdb"
+    },
+    {
+      "path": "after/en/Tails/015_00133.3s.png",
+      "bytes": 32937,
+      "sha256": "7fce1d9f7e21ec4805a7863e0dbc5dbe6708a163e0fda52b5274176e79323169"
+    },
+    {
+      "path": "after/en/Tails/016_00151.2s.png",
+      "bytes": 46688,
+      "sha256": "2236c5a6b9d66a956124b8c330bd1104651a9d007c84dfae9af2953b5f77b40d"
+    },
+    {
+      "path": "after/en/Tails/freeze.json.gz",
+      "bytes": 3066,
+      "sha256": "d72a90910a887772bbe88c966aa20f143c66ddd588f6ae68e156ba8447e01321"
+    },
+    {
+      "path": "after/en/Tails/result.json.gz",
+      "bytes": 11205,
+      "sha256": "5e8f9f9752b13b4e9423f581a537bbe3ceae88fe0b7d0b8ad4f295d6f493485c"
+    },
+    {
+      "path": "after/en/Tails/sheet.png",
+      "bytes": 205157,
+      "sha256": "27dcea34a77f5794acca41624497875c794a2ac5a8bc9668b7825363f699f2a3"
+    },
+    {
+      "path": "after/en/Tails/text.jsonl.gz",
+      "bytes": 1055,
+      "sha256": "67e8756180fcad3dbbd9da2f5c055a86266885e5e3470036a714d9a3a18294a1"
+    },
+    {
+      "path": "after/zh/Bayes/015_00162.9s.png",
+      "bytes": 75860,
+      "sha256": "42191e6782aad48700d027f905fe6753881d7774b574d2a507d9e652c6f98571"
+    },
+    {
+      "path": "after/zh/Bayes/freeze.json.gz",
+      "bytes": 3134,
+      "sha256": "1b94dcfd9eca8da57703b704d71b1f4662c66a6fec4ccd000bebb34530eb5e6d"
+    },
+    {
+      "path": "after/zh/Bayes/result.json.gz",
+      "bytes": 19990,
+      "sha256": "2aa847067813249aa7d8bdfc42bb5babd5be912a5a6812f9fe56b7f763a9fc3e"
+    },
+    {
+      "path": "after/zh/Bayes/sheet.png",
+      "bytes": 192780,
+      "sha256": "5711b5dc8103f690494a67ef7276627d9a896a27944a367723df94b10866ba9c"
+    },
+    {
+      "path": "after/zh/Bayes/text.jsonl.gz",
+      "bytes": 1320,
+      "sha256": "437db0b5dc51d25c80ff73462caae2413087e46fd6434a39487434647945dda3"
+    },
+    {
+      "path": "after/zh/Sampling/010_00098.2s.png",
+      "bytes": 101404,
+      "sha256": "7e7f581a42f4f18deb738dc140fd369a003a0bed1bd5b91c9c154cd75854f447"
+    },
+    {
+      "path": "after/zh/Sampling/011_00104.5s.png",
+      "bytes": 112013,
+      "sha256": "b78b2902dfe6638d7c6d267c75c27bc69b292fa377ce2510bd2f59f5386fa51a"
+    },
+    {
+      "path": "after/zh/Sampling/freeze.json.gz",
+      "bytes": 3227,
+      "sha256": "bb89d9312b563b63ee7dd56c9b603e9ce5e7542f352f587bd812609794735bba"
+    },
+    {
+      "path": "after/zh/Sampling/result.json.gz",
+      "bytes": 19380,
+      "sha256": "60a0fe7e6171f6f72f6c376b61ed7ec2da780f63e710542ec52338f87562220f"
+    },
+    {
+      "path": "after/zh/Sampling/sheet.png",
+      "bytes": 276103,
+      "sha256": "f5b84ea6a05c6850ecdbf7251906fbc0fe65cb876cee01f5a6976560a1c5ba17"
+    },
+    {
+      "path": "after/zh/Sampling/text.jsonl.gz",
+      "bytes": 1428,
+      "sha256": "e131139ded72757d1e861870377cb46643b7267c1ab1ea06b9cdb6d3309b9b54"
+    },
+    {
+      "path": "after/zh/Tails/007_00062.1s.png",
+      "bytes": 44129,
+      "sha256": "b20370f8a7a7d2f0bfe03038ddc203defbe49e36ad5284b677de8d2023798fe9"
+    },
+    {
+      "path": "after/zh/Tails/008_00072.6s.png",
+      "bytes": 50865,
+      "sha256": "1608ea3c074b513879e286b1943663e7e5145a86d8352762e33e9e946641f5cf"
+    },
+    {
+      "path": "after/zh/Tails/009_00079.3s.png",
+      "bytes": 55943,
+      "sha256": "d2baff2cb3368818acd105d7ce9f0aee2088fa0720f9c596cd5ed0782082d3ba"
+    },
+    {
+      "path": "after/zh/Tails/014_00125.3s.png",
+      "bytes": 24128,
+      "sha256": "0e8b92b64e138ba9b726aead8330dd50976a711d5eb214cf2e807d34f6469fd0"
+    },
+    {
+      "path": "after/zh/Tails/015_00134.0s.png",
+      "bytes": 27675,
+      "sha256": "68b2755dcbce284420eff036c50ebc1a19ca0e7f58410ffd3f48a850afca8c10"
+    },
+    {
+      "path": "after/zh/Tails/016_00139.3s.png",
+      "bytes": 36744,
+      "sha256": "00f28c09d4ecedca0abf0a9b3430d16a25f17f1700c2696723993bc910bf9809"
+    },
+    {
+      "path": "after/zh/Tails/017_00162.9s.png",
+      "bytes": 53252,
+      "sha256": "65b3b3f0535c74cc88c33e24719f56fdcc57b2ec4c6f743a8339985955ef93cf"
+    },
+    {
+      "path": "after/zh/Tails/freeze.json.gz",
+      "bytes": 3164,
+      "sha256": "53b84322e08b9008779436addd33957ff4f26c77b2870f4d190be2662f63626a"
+    },
+    {
+      "path": "after/zh/Tails/result.json.gz",
+      "bytes": 17346,
+      "sha256": "b7a08cef5d9b86ff6fbbdaaa6aa0eaf5c44bd689211d7bba48b0adb93791e0e0"
+    },
+    {
+      "path": "after/zh/Tails/sheet.png",
+      "bytes": 207321,
+      "sha256": "d95cd5ac7e93102aba14cc5638d600f77409e7ed0aa40ee1e8e03dfd74a4cc0a"
+    },
+    {
+      "path": "after/zh/Tails/text.jsonl.gz",
+      "bytes": 1076,
+      "sha256": "b094bb3a9b4d1e53034a7dc6ec7c461816aea1e7a064a8318fe2c3083975238e"
+    },
+    {
+      "path": "baseline-five-chapter-review.json.gz",
+      "bytes": 24338,
+      "sha256": "816b83ade6654498b0112f9534ca9d2267b9f38dc102954aacef715a5fff97b1"
+    },
+    {
+      "path": "before/en/Bayes/017_00162.8s.png",
+      "bytes": 75411,
+      "sha256": "8f6df08563fff662a954e6e301c88a7da1fd3cacf0968340f636da753763d4e5"
+    },
+    {
+      "path": "before/en/Bayes/freeze.json.gz",
+      "bytes": 2950,
+      "sha256": "88301827ef3fc17eb4c1bb6834e421dcac4b7e44e4bfd2f58ef5477d377ef55d"
+    },
+    {
+      "path": "before/en/Bayes/result.json.gz",
+      "bytes": 14164,
+      "sha256": "67ae583d19189705b434b4e8d2e99586fb4a8b43f2a592c741f4b7d5377dfec3"
+    },
+    {
+      "path": "before/en/Bayes/sheet.png",
+      "bytes": 228900,
+      "sha256": "3abdc4e501b2dc1150f402e9d9c1bdb65427596c05a0831b7d94080da0331dc9"
+    },
+    {
+      "path": "before/en/Sampling/011_00103.8s.png",
+      "bytes": 111404,
+      "sha256": "d01b9f5c3653d528c857a4b45eb7b6a62b81cda1dcfe056c3839aa1727029098"
+    },
+    {
+      "path": "before/en/Sampling/freeze.json.gz",
+      "bytes": 2849,
+      "sha256": "dcfc0b3106e717f461f0b8b34bc3ab28c259ce54c2a90b1323ee3dcd6354ea97"
+    },
+    {
+      "path": "before/en/Sampling/result.json.gz",
+      "bytes": 13065,
+      "sha256": "622d09dcf6e3ced705f3c41bf81d1ea34efd1b973297af79b78cdbfa434c03f0"
+    },
+    {
+      "path": "before/en/Sampling/sheet.png",
+      "bytes": 279918,
+      "sha256": "c42829fbb1819a1cbe88ad5eaae0f895cfb2362621e0b0132404603c6c3f1135"
+    },
+    {
+      "path": "before/en/Tails/009_00076.0s.png",
+      "bytes": 55937,
+      "sha256": "f239b4f6f2d2e153a3d53bd37490d0b8ee55d978584857bc120e7a066f8e6f17"
+    },
+    {
+      "path": "before/en/Tails/015_00133.3s.png",
+      "bytes": 32725,
+      "sha256": "e617efbf6880edf86f4c398a8b5ca686fc7fdb69e4352ae50d3e13412c4827dd"
+    },
+    {
+      "path": "before/en/Tails/freeze.json.gz",
+      "bytes": 2860,
+      "sha256": "24f98f97e962cb3d1a527c973207ff74ce2d961a0bdb54e58a4fe7c160e0cb8f"
+    },
+    {
+      "path": "before/en/Tails/result.json.gz",
+      "bytes": 11268,
+      "sha256": "1993961f76797d0d1067e0240d0e0be8343bec53b03d843dc437e31a8ec67b3d"
+    },
+    {
+      "path": "before/en/Tails/sheet.png",
+      "bytes": 204505,
+      "sha256": "69cadf706f95870e843e5334411cc3258a6224326206a791c7d6cc8163a244e4"
+    },
+    {
+      "path": "before/zh/Bayes/015_00162.9s.png",
+      "bytes": 76051,
+      "sha256": "b52cf390d9b8bcd34bb331fe0931303c420483ffb2de782e2a032fce2ff14904"
+    },
+    {
+      "path": "before/zh/Bayes/freeze.json.gz",
+      "bytes": 2757,
+      "sha256": "15a57ae133ee8477510229a913fe3a9f76ef2a14e8780ee760e14d44911515e5"
+    },
+    {
+      "path": "before/zh/Bayes/result.json.gz",
+      "bytes": 19989,
+      "sha256": "5e96c7a153884688521da47fc0b87f2c8963455ec5faa0e3b9672b76562cc7d9"
+    },
+    {
+      "path": "before/zh/Bayes/sheet.png",
+      "bytes": 192826,
+      "sha256": "860af236cd6cb25de143667a21f41122ecd0f0ca1c1e84e7b673a0fc87070c4a"
+    },
+    {
+      "path": "before/zh/Sampling/011_00104.5s.png",
+      "bytes": 115473,
+      "sha256": "0f5d62ddda048c379ef4ce97d6c93093614dc68d3df0c5afd3fc919b02b6afe2"
+    },
+    {
+      "path": "before/zh/Sampling/freeze.json.gz",
+      "bytes": 2844,
+      "sha256": "182fa54e24391948360aaa6b52e8a7817ff943899609b62e786abb18bbba8c50"
+    },
+    {
+      "path": "before/zh/Sampling/result.json.gz",
+      "bytes": 19282,
+      "sha256": "0015783bd08c90796915b5040cc6e012701de15688c80c72363394a313548ed2"
+    },
+    {
+      "path": "before/zh/Sampling/sheet.png",
+      "bytes": 281189,
+      "sha256": "fea1fa7bc0641747e98b596fe85e783e6f21259b480d97f873d6aba9151d5ef7"
+    },
+    {
+      "path": "before/zh/Tails/009_00079.3s.png",
+      "bytes": 55975,
+      "sha256": "8ae08c09e595ee88f06db22a987d57b21dbe4d366cf89656292e7f3356450080"
+    },
+    {
+      "path": "before/zh/Tails/017_00162.9s.png",
+      "bytes": 53227,
+      "sha256": "08396dd8d3c8a156a018b0555228f4a3309ae98eee54cfcd53813c225bbfc38b"
+    },
+    {
+      "path": "before/zh/Tails/freeze.json.gz",
+      "bytes": 2824,
+      "sha256": "008e9131467bf5a5a577dd016e52085b266fdc8d5519555a30dd1b3d41dd68f2"
+    },
+    {
+      "path": "before/zh/Tails/result.json.gz",
+      "bytes": 17328,
+      "sha256": "faf604f62ee1d91fa93d4ba5a8e2d1c8bd11212d6657bf68b5b1c82d297afcd6"
+    },
+    {
+      "path": "before/zh/Tails/sheet.png",
+      "bytes": 207418,
+      "sha256": "0fbfc41243c44ae94825cb398a6353ccbb41522e228e7bcd0f953e468437a7fe"
+    },
+    {
+      "path": "before-after-pairs.json",
+      "bytes": 3033,
+      "sha256": "73e12c2fd94a76df995b669d7dab38f11f9b6afe64bbac3eaffcd4bc0c767d3c"
+    },
+    {
+      "path": "comparison-map.json.gz",
+      "bytes": 14925,
+      "sha256": "4df18ce9ccdabea08995b335281819ddcb748ff97140d90cf4e7a3832b9b35c6"
+    },
+    {
+      "path": "copy-and-compression-receipts.json",
+      "bytes": 17339,
+      "sha256": "64eb91d8dcf18fc61163110b30c798e811d908362fced5599878e40e00aeb1a3"
+    },
+    {
+      "path": "geometry/actual-clipped-curves.json.gz",
+      "bytes": 531,
+      "sha256": "0685f0cae0a0aa1a19aa56502a3d32bccff9edec97b9c44e17fdfe8cf1873375"
+    },
+    {
+      "path": "geometry/geometry-en.json.gz",
+      "bytes": 1547,
+      "sha256": "60cd30c1f44380d4e244e9a0c851e127bc4fd0d12612b5b12945c6359ae79734"
+    },
+    {
+      "path": "geometry/geometry-zh.json.gz",
+      "bytes": 1631,
+      "sha256": "405251d5455c856c7cbfc0d5bd10eb9869388ed6cb5b1e6d2c4dd87bfbd52e0e"
+    },
+    {
+      "path": "geometry/proposed-caption-overlay.json.gz",
+      "bytes": 409,
+      "sha256": "d30af43f2a19085da71266da1c3c46a30a8b3158a83b567ef71d0d51b044fbf1"
+    },
+    {
+      "path": "geometry/source-freeze-and-handoff.json.gz",
+      "bytes": 4857,
+      "sha256": "2eb87eebf53e4bb14d08e446455923181b74f402b0737582e687ec1be941f4ee"
+    },
+    {
+      "path": "geometry/tests.log.gz",
+      "bytes": 306,
+      "sha256": "cd7b65b00c04715176cb07f291e20b5d758546241e6efa8625f5f5998ef0ca45"
+    },
+    {
+      "path": "review.json.gz",
+      "bytes": 17162,
+      "sha256": "956e5304a7cdab6a9f00399fb9cc89bbba64b033182355d1d99d4f1df831abfb"
+    },
+    {
+      "path": "source-after/plotting.py.gz",
+      "bytes": 1385,
+      "sha256": "ae99840220670981c1bc87ddb98aea3ec7ace1ff26d21d88fd833ad6dd07758c"
+    },
+    {
+      "path": "source-after/s06_bayes.py.gz",
+      "bytes": 5889,
+      "sha256": "5e25aaff5fe76fac0ce3839983e5d821120ec91cf4feb1e7f21c58bc4357196e"
+    },
+    {
+      "path": "source-after/s09_tails.py.gz",
+      "bytes": 4762,
+      "sha256": "3a678bab62c06ba0db9540955c99e10c3ed292cbf0fd6ab3349dd47568de90df"
+    },
+    {
+      "path": "source-after/s10_sampling.py.gz",
+      "bytes": 6475,
+      "sha256": "fd49eba687d047370b65d85f962c6eecd50653674500548f0cb4f6ec08f9b51b"
+    },
+    {
+      "path": "source-before/s06_bayes.py.gz",
+      "bytes": 5853,
+      "sha256": "e330a8904946c1e22e615039520e76fc0d72711322f315c09140264739d35d97"
+    },
+    {
+      "path": "source-before/s09_tails.py.gz",
+      "bytes": 4728,
+      "sha256": "75f6885c2d4334d732bcc3ecc17be96f0f0b2149db6afe9c01da6286ae1c79b4"
+    },
+    {
+      "path": "source-before/s10_sampling.py.gz",
+      "bytes": 6184,
+      "sha256": "f8214113af7e8b580200dce3ba8649943de98757b2dfa5651325b2e4d6fd5aa4"
+    },
+    {
+      "path": "source-diff/s06_bayes.py.patch.gz",
+      "bytes": 691,
+      "sha256": "d0d1005d0a1988e6249a9aba90093d9d67624addf06858b86ddc00f30a6a1adb"
+    },
+    {
+      "path": "source-diff/s09_tails.py.patch.gz",
+      "bytes": 761,
+      "sha256": "58f504bbcae9df39c7eb7963beba694aa0b582fcb3401bece6b3e23c2a403f2d"
+    },
+    {
+      "path": "source-diff/s10_sampling.py.patch.gz",
+      "bytes": 1299,
+      "sha256": "5751a53925e074100d75a2570ffabef09f710c4bf50cf048f85a3bc176698149"
+    }
+  ],
+  "lossless_source_diff_archives": [
+    {
+      "decoded_original_path": "source-diff/s06_bayes.py.patch",
+      "stored_path": "source-diff/s06_bayes.py.patch.gz",
+      "decoded_sha256": "ab190731aaae2b3c805659b4cae3916debc1578757d5254a23abccae5deb6a01",
+      "decoded_bytes": 1494
+    },
+    {
+      "decoded_original_path": "source-diff/s09_tails.py.patch",
+      "stored_path": "source-diff/s09_tails.py.patch.gz",
+      "decoded_sha256": "8e94169a5f93cd8901ca65d1c4d28ba52c89109b8bff9b1f8e560c00f8a48a3f",
+      "decoded_bytes": 1540
+    },
+    {
+      "decoded_original_path": "source-diff/s10_sampling.py.patch",
+      "stored_path": "source-diff/s10_sampling.py.patch.gz",
+      "decoded_sha256": "9625740208ed4295fe60d29b7d8232ebd2b064ba2b9b164c0314d819b11c6084",
+      "decoded_bytes": 3003
+    }
+  ]
+}

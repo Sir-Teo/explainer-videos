@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai5.common import DATA, PART, curve, hist_shape, load
+from videos.ai.ai5.plotting import clipped_curve
 
 BOUNDS = {"markov": "#B39DDB", "cheb": C.INTERVAL, "chern": C.BITS, "hoeff": C.MODEL_Q}
 NAMES = {"markov": r"Markov", "cheb": r"Chebyshev", "chern": r"Chernoff", "hoeff": r"Hoeffding"}
@@ -99,7 +100,8 @@ class Tails(VoiceoverScene):
             xs_ = np.linspace(0, 3, 120)
             step_ = VGroup(Line(a_.c2p(0, 0), a_.c2p(1.5, 0), color=C.SURPRISE, stroke_width=4),
                            Line(a_.c2p(1.5, 1), a_.c2p(3, 1), color=C.SURPRISE, stroke_width=4))
-            g_ = curve(a_, xs_, np.minimum(f(xs_), 2.2), color=C.BITS, stroke_width=3)
+            g_ = clipped_curve(a_, xs_, f(xs_), x_bounds=(0, 3), y_bounds=(0, 2.2),
+                               color=C.BITS, stroke_width=3)
             return VGroup(a_, step_, g_, label(fl, font_size=20, color=GREY_A).next_to(a_, UP, buff=0.08))
 
         t1 = trick(lambda v: v / 1.5, r"$\mathbf{1}[X \ge a] \le X/a$", -4.6)
@@ -193,7 +195,7 @@ class Tails(VoiceoverScene):
         head.to_edge(UP, buff=0.45)
         vals = [need[k2] for _, k2 in keys] + [need["exact"]]
         cols = [BOUNDS[k] for k, _ in keys] + [WHITE]
-        names = [NAMES[k] for k, _ in keys] + [r"minimum fixed $n$, \ fair coins"]
+        names = [NAMES[k] for k, _ in keys] + [r"minimum fixed $n$ \\ fair coins"]
         top = max(vals)
         rows = VGroup()
         for v, c_, nm in zip(vals, cols, names):

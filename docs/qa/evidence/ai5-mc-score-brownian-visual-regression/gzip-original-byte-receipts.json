@@ -1,0 +1,596 @@
+[
+  {
+    "path": "comparison.json.gz",
+    "source_observation": "/workspace/explainer-videos/docs/qa/evidence/ai5-mc-score-brownian-visual-regression/comparison.json",
+    "decoded_bytes": 285581,
+    "decoded_sha256": "fa72a329f044f1f681ef76acfed0a9a0d6b355d28b67761eaece0ff363d5fc59"
+  },
+  {
+    "path": "current-native-view-receipts.json.gz",
+    "source_observation": "/workspace/explainer-videos/docs/qa/evidence/ai5-mc-score-brownian-visual-regression/current-native-view-receipts.json",
+    "decoded_bytes": 12132,
+    "decoded_sha256": "85c32c3e46b14a631f275611827722d8aa67296c92386a85804eb44a03e10a10"
+  },
+  {
+    "path": "baseline-view-receipts.json.gz",
+    "source_observation": "/workspace/explainer-videos/docs/qa/evidence/ai5-mc-score-brownian-visual-regression/baseline-view-receipts.json",
+    "decoded_bytes": 26910,
+    "decoded_sha256": "a21737425b26ef1014bd724ec4f815a4a402f22cf8a4a2ad3ac56be9218402ea"
+  },
+  {
+    "path": "baseline/report.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/report.json",
+    "decoded_bytes": 44161,
+    "decoded_sha256": "fc6032b58859848caccdd46f1edb0846c6974d1f2ef8ccbb99064bd0e5b62742"
+  },
+  {
+    "path": "baseline/readout-crosscheck.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/readout-crosscheck.json",
+    "decoded_bytes": 3230,
+    "decoded_sha256": "544f62f3b3b355211c6174b50ed8232a95b412b22eab4365ab80a72ef5a585a5"
+  },
+  {
+    "path": "raw/before/en-Brownian/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-Brownian-6f20b815a3b4faff/result.json",
+    "decoded_bytes": 48026,
+    "decoded_sha256": "6f20b815a3b4faff0ba8fa18400f8c6661e18b4245be1d2f70522ea4b93bc70a"
+  },
+  {
+    "path": "raw/before/en-Brownian/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-Brownian-6f20b815a3b4faff/text.jsonl",
+    "decoded_bytes": 5448,
+    "decoded_sha256": "96e9506fd2b9dc24e5aa43e03e7d481e70c6f5c244a2d70c0bb78f8a9621fee0"
+  },
+  {
+    "path": "raw/before/en-Brownian/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-Brownian-6f20b815a3b4faff/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/before/en-Brownian/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-Brownian-6f20b815a3b4faff/freeze.json",
+    "decoded_bytes": 6152,
+    "decoded_sha256": "d23103a978fc52f5adb43978fc0286be67516216ac91e80326e8f708c3219b77"
+  },
+  {
+    "path": "raw/before/en-MCMC/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-MCMC-4309e6b708f2cbb2/result.json",
+    "decoded_bytes": 74404,
+    "decoded_sha256": "4309e6b708f2cbb2d75e42c71bba55a9f9234c1d633f37af874f7003cb467e8d"
+  },
+  {
+    "path": "raw/before/en-MCMC/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-MCMC-4309e6b708f2cbb2/text.jsonl",
+    "decoded_bytes": 7470,
+    "decoded_sha256": "805fa014f0134ef75332e4f223dd918a43b184b4098977cb93a223b35c8bb241"
+  },
+  {
+    "path": "raw/before/en-MCMC/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-MCMC-4309e6b708f2cbb2/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/before/en-MCMC/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-MCMC-4309e6b708f2cbb2/freeze.json",
+    "decoded_bytes": 7222,
+    "decoded_sha256": "293fa71c03ddeb8da73dc8eeed34780dfd7da09594c53666b8bf7ab38aaee4a1"
+  },
+  {
+    "path": "raw/before/en-MonteCarlo/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-MonteCarlo-c80b74a4965df0b7/result.json",
+    "decoded_bytes": 76620,
+    "decoded_sha256": "c80b74a4965df0b7c101c8174e80b543d661439a1bc7ab22fb57cc867b40621d"
+  },
+  {
+    "path": "raw/before/en-MonteCarlo/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-MonteCarlo-c80b74a4965df0b7/text.jsonl",
+    "decoded_bytes": 7942,
+    "decoded_sha256": "3b5c833e83baffdae53a02f5b5dc18ffc8858bd1281fde901b68e62b23370144"
+  },
+  {
+    "path": "raw/before/en-MonteCarlo/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-MonteCarlo-c80b74a4965df0b7/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/before/en-MonteCarlo/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-MonteCarlo-c80b74a4965df0b7/freeze.json",
+    "decoded_bytes": 7379,
+    "decoded_sha256": "3118065e3dd464c8dc8add2602dba508c0a3a4c19f2560eb1134107125b8831d"
+  },
+  {
+    "path": "raw/before/en-ScoreFn/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-ScoreFn-356b7f15592a5ea8/result.json",
+    "decoded_bytes": 65551,
+    "decoded_sha256": "356b7f15592a5ea870f52a089f3960df9a25b1a0981a404cc133178e9f5bfb11"
+  },
+  {
+    "path": "raw/before/en-ScoreFn/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-ScoreFn-356b7f15592a5ea8/text.jsonl",
+    "decoded_bytes": 6493,
+    "decoded_sha256": "acea596a6e4214cfc063384aba6961b85315f3227ca3317a7253bf10f508bc9e"
+  },
+  {
+    "path": "raw/before/en-ScoreFn/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-ScoreFn-356b7f15592a5ea8/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/before/en-ScoreFn/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/en-ScoreFn-356b7f15592a5ea8/freeze.json",
+    "decoded_bytes": 6154,
+    "decoded_sha256": "71e979da77023abe54f8675304bf19910397c09fa0392171a37287129671854f"
+  },
+  {
+    "path": "raw/before/zh-Brownian/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-Brownian-53a0207781fdce88/result.json",
+    "decoded_bytes": 61392,
+    "decoded_sha256": "53a0207781fdce8822616c57c5a58a53bb83ffbdfc26d3bdb4aec1baa30e03c4"
+  },
+  {
+    "path": "raw/before/zh-Brownian/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-Brownian-53a0207781fdce88/text.jsonl",
+    "decoded_bytes": 5451,
+    "decoded_sha256": "ee8d8b29d30d3fd4f15b70aa6a94d3f71b2e3e6af4afae4aeb435d5bed2d87f3"
+  },
+  {
+    "path": "raw/before/zh-Brownian/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-Brownian-53a0207781fdce88/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/before/zh-Brownian/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-Brownian-53a0207781fdce88/freeze.json",
+    "decoded_bytes": 6303,
+    "decoded_sha256": "374788e311013074ed5b44ce34a4f45dd02ad34baa25e3d7164879def3b7ec84"
+  },
+  {
+    "path": "raw/before/zh-MCMC/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-MCMC-6e3f05dd5194bbcd/result.json",
+    "decoded_bytes": 102961,
+    "decoded_sha256": "6e3f05dd5194bbcd8eec762afc0c9e44c13b3316b7b67a06209cd9a942d073c1"
+  },
+  {
+    "path": "raw/before/zh-MCMC/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-MCMC-6e3f05dd5194bbcd/text.jsonl",
+    "decoded_bytes": 7495,
+    "decoded_sha256": "7ed5a3125aa9eb5a63b7b2bffe44bc0d829a072f694823af16e1c8ccbb583373"
+  },
+  {
+    "path": "raw/before/zh-MCMC/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-MCMC-6e3f05dd5194bbcd/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/before/zh-MCMC/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-MCMC-6e3f05dd5194bbcd/freeze.json",
+    "decoded_bytes": 7377,
+    "decoded_sha256": "abda6956d1cb7d98d53579a1e6dea518547e80890713bacf7b23da0320536456"
+  },
+  {
+    "path": "raw/before/zh-MonteCarlo/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-MonteCarlo-5565a36173404284/result.json",
+    "decoded_bytes": 99370,
+    "decoded_sha256": "5565a361734042848172c3be9287ba76e0af82a885c7a52c0b4086af66d35053"
+  },
+  {
+    "path": "raw/before/zh-MonteCarlo/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-MonteCarlo-5565a36173404284/text.jsonl",
+    "decoded_bytes": 7983,
+    "decoded_sha256": "33227bb7de856931d59897c11788c7747491872bcf8f5621185bf2a36a027de3"
+  },
+  {
+    "path": "raw/before/zh-MonteCarlo/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-MonteCarlo-5565a36173404284/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/before/zh-MonteCarlo/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-MonteCarlo-5565a36173404284/freeze.json",
+    "decoded_bytes": 7379,
+    "decoded_sha256": "45ee9f912f8154d4037068c2e2c2237b0b6110aa75456e42699b04f56252e437"
+  },
+  {
+    "path": "raw/before/zh-ScoreFn/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-ScoreFn-f87e494229cf036c/result.json",
+    "decoded_bytes": 87063,
+    "decoded_sha256": "f87e494229cf036cad2516069878efcfcc8c409a4fb713fcb43223afb78888bd"
+  },
+  {
+    "path": "raw/before/zh-ScoreFn/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-ScoreFn-f87e494229cf036c/text.jsonl",
+    "decoded_bytes": 6496,
+    "decoded_sha256": "8c769f648d67d7833737e8c0cccbd80876b2f720f6f811f7c640729da60dc4c7"
+  },
+  {
+    "path": "raw/before/zh-ScoreFn/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-ScoreFn-f87e494229cf036c/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/before/zh-ScoreFn/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/cases/zh-ScoreFn-f87e494229cf036c/freeze.json",
+    "decoded_bytes": 6165,
+    "decoded_sha256": "d743aff15386a1d8cffee41e36415ebeb62be8cd63a2e60374be25b927f86982"
+  },
+  {
+    "path": "raw/after/en-Brownian/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-Brownian-24671303c5a73c50/result.json",
+    "decoded_bytes": 48212,
+    "decoded_sha256": "24671303c5a73c5050e576d624e15efd7664d4f796e2399d0b211b8d2606021a"
+  },
+  {
+    "path": "raw/after/en-Brownian/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-Brownian-24671303c5a73c50/text.jsonl",
+    "decoded_bytes": 5495,
+    "decoded_sha256": "d4769c9f0380a953aa8d6974c5027ff33db3adc5fb0a13773e022cc523173522"
+  },
+  {
+    "path": "raw/after/en-Brownian/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-Brownian-24671303c5a73c50/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/after/en-Brownian/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-Brownian-24671303c5a73c50/freeze.json",
+    "decoded_bytes": 6419,
+    "decoded_sha256": "3aceb537bd4e881cbbfba14ae882af99f6b491828428dbdac9c8389a799cf0ac"
+  },
+  {
+    "path": "raw/after/en-MonteCarlo/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-MonteCarlo-16b184acdbd5fab5/result.json",
+    "decoded_bytes": 77668,
+    "decoded_sha256": "16b184acdbd5fab5c755c0b20f548571427e22b0d554fde9a6bc7fe676785385"
+  },
+  {
+    "path": "raw/after/en-MonteCarlo/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-MonteCarlo-16b184acdbd5fab5/text.jsonl",
+    "decoded_bytes": 8219,
+    "decoded_sha256": "8b4d35afc3358da7aaf780b2a9962046455a12ed01923aa594fce416e56fcc68"
+  },
+  {
+    "path": "raw/after/en-MonteCarlo/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-MonteCarlo-16b184acdbd5fab5/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/after/en-MonteCarlo/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-MonteCarlo-16b184acdbd5fab5/freeze.json",
+    "decoded_bytes": 7646,
+    "decoded_sha256": "8c017ad19e4929f51817e5c6a90d464de1068e2bdb2fee300e06770fc6f20065"
+  },
+  {
+    "path": "raw/after/en-ScoreFn/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-ScoreFn-b4a428f944ce86a1/result.json",
+    "decoded_bytes": 65551,
+    "decoded_sha256": "b4a428f944ce86a15a8c6634d4b26555296fd89059405379b636103cd9aebace"
+  },
+  {
+    "path": "raw/after/en-ScoreFn/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-ScoreFn-b4a428f944ce86a1/text.jsonl",
+    "decoded_bytes": 6493,
+    "decoded_sha256": "acea596a6e4214cfc063384aba6961b85315f3227ca3317a7253bf10f508bc9e"
+  },
+  {
+    "path": "raw/after/en-ScoreFn/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-ScoreFn-b4a428f944ce86a1/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/after/en-ScoreFn/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/en-ScoreFn-b4a428f944ce86a1/freeze.json",
+    "decoded_bytes": 6421,
+    "decoded_sha256": "5e3fcf3130533a6166f98a8f3355beda39756e2134394367b8aef14b6a3fcf6e"
+  },
+  {
+    "path": "raw/after/zh-Brownian/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-Brownian-523156f624de1312/result.json",
+    "decoded_bytes": 61599,
+    "decoded_sha256": "523156f624de131296acab1e18ec3e9c06b9afa483a8cf98ddbe591a0a77c003"
+  },
+  {
+    "path": "raw/after/zh-Brownian/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-Brownian-523156f624de1312/text.jsonl",
+    "decoded_bytes": 5498,
+    "decoded_sha256": "e00b01e82d77b45c7b7ed1a0ec2d4b926407fdd4a367aa5ed15a8d1a02c1ba99"
+  },
+  {
+    "path": "raw/after/zh-Brownian/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-Brownian-523156f624de1312/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/after/zh-Brownian/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-Brownian-523156f624de1312/freeze.json",
+    "decoded_bytes": 6570,
+    "decoded_sha256": "e865cd8436ade6bf9623b85c6b472884c57f659c18bff276be870503aafac88a"
+  },
+  {
+    "path": "raw/after/zh-MonteCarlo/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-MonteCarlo-e5fca69a5517f60c/result.json",
+    "decoded_bytes": 100453,
+    "decoded_sha256": "e5fca69a5517f60c40753f96c8b3e4b02229c98af24e22f7ce09d93febd150c3"
+  },
+  {
+    "path": "raw/after/zh-MonteCarlo/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-MonteCarlo-e5fca69a5517f60c/text.jsonl",
+    "decoded_bytes": 8260,
+    "decoded_sha256": "b30a849cee3b3006fb6679ca3a4ca318693014caa0a57b624f08c5462930dc05"
+  },
+  {
+    "path": "raw/after/zh-MonteCarlo/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-MonteCarlo-e5fca69a5517f60c/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/after/zh-MonteCarlo/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-MonteCarlo-e5fca69a5517f60c/freeze.json",
+    "decoded_bytes": 7647,
+    "decoded_sha256": "a02dfd126fd9ec0d5a6c1a4c322bbf7554c4ea7549f6c2667eb4cca3c2381113"
+  },
+  {
+    "path": "raw/after/zh-ScoreFn/result.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-ScoreFn-be49948cb04cb80d/result.json",
+    "decoded_bytes": 87062,
+    "decoded_sha256": "be49948cb04cb80dc5f41bd96d325cfb099da5ae713d433c485285bc4f20af03"
+  },
+  {
+    "path": "raw/after/zh-ScoreFn/text.jsonl.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-ScoreFn-be49948cb04cb80d/text.jsonl",
+    "decoded_bytes": 6496,
+    "decoded_sha256": "8c769f648d67d7833737e8c0cccbd80876b2f720f6f811f7c640729da60dc4c7"
+  },
+  {
+    "path": "raw/after/zh-ScoreFn/render.log.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-ScoreFn-be49948cb04cb80d/render.log",
+    "decoded_bytes": 0,
+    "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "raw/after/zh-ScoreFn/freeze.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/cases/zh-ScoreFn-be49948cb04cb80d/freeze.json",
+    "decoded_bytes": 6432,
+    "decoded_sha256": "c9a8e851443867bb6da1f1db0d2c3ea7db4a13e13f03ae8f952234c4e1090ce2"
+  },
+  {
+    "path": "sources/before/s13_montecarlo.py.gz",
+    "source_observation": "/workspace/runtime/ai5-local-plot-readability-repair/before/s13_montecarlo.py",
+    "decoded_bytes": 20882,
+    "decoded_sha256": "8c3cdd59dd3c9ba011cfbafd6f3390c135c99a516f09cbad4bb937e369da5356"
+  },
+  {
+    "path": "sources/before/s14_scorefn.py.gz",
+    "source_observation": "/workspace/runtime/ai5-local-plot-readability-repair/before/s14_scorefn.py",
+    "decoded_bytes": 15152,
+    "decoded_sha256": "92063dd40001297d9c9d08cd3510b2a54ee2bf951fa8d5f9cbb9e226e412f3e9"
+  },
+  {
+    "path": "sources/before/s16_brownian.py.gz",
+    "source_observation": "/workspace/runtime/ai5-local-plot-readability-repair/before/s16_brownian.py",
+    "decoded_bytes": 15820,
+    "decoded_sha256": "c345dbc5050d57821810f294e1597782813d9d17a860099cd14b698e2a8ca3bf"
+  },
+  {
+    "path": "sources/after/s13_montecarlo.py.gz",
+    "source_observation": "/workspace/explainer-videos/videos/ai/ai5/s13_montecarlo.py",
+    "decoded_bytes": 21918,
+    "decoded_sha256": "8482b9b708b90e40129f8202238693faf2dc293770d517870404f67db8d93483"
+  },
+  {
+    "path": "sources/after/s14_scorefn.py.gz",
+    "source_observation": "/workspace/explainer-videos/videos/ai/ai5/s14_scorefn.py",
+    "decoded_bytes": 15229,
+    "decoded_sha256": "ac6365273d50125deecd4b175108178d69fadbefbf18e16c918cb473dc2574b9"
+  },
+  {
+    "path": "sources/after/s16_brownian.py.gz",
+    "source_observation": "/workspace/explainer-videos/videos/ai/ai5/s16_brownian.py",
+    "decoded_bytes": 15924,
+    "decoded_sha256": "3d7f660bf678fa94324fd8c85e70a3cd50bb2d138abc78fe43b28627944623fa"
+  },
+  {
+    "path": "sources/after/plotting.py.gz",
+    "source_observation": "/workspace/explainer-videos/videos/ai/ai5/plotting.py",
+    "decoded_bytes": 3599,
+    "decoded_sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845"
+  },
+  {
+    "path": "source-observations/before/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py",
+    "decoded_bytes": 8633,
+    "decoded_sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7"
+  },
+  {
+    "path": "source-observations/before/36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/source-blobs/36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c.json",
+    "decoded_bytes": 2435655,
+    "decoded_sha256": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c"
+  },
+  {
+    "path": "source-observations/before/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg",
+    "decoded_bytes": 325,
+    "decoded_sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e"
+  },
+  {
+    "path": "source-observations/before/4023945dadc1658884846f07e14db3c638a8dbdce74c850eabdbd780fb35b078.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/source-blobs/4023945dadc1658884846f07e14db3c638a8dbdce74c850eabdbd780fb35b078.py",
+    "decoded_bytes": 22393,
+    "decoded_sha256": "4023945dadc1658884846f07e14db3c638a8dbdce74c850eabdbd780fb35b078"
+  },
+  {
+    "path": "source-observations/before/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py",
+    "decoded_bytes": 82756,
+    "decoded_sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba"
+  },
+  {
+    "path": "source-observations/before/8c3cdd59dd3c9ba011cfbafd6f3390c135c99a516f09cbad4bb937e369da5356.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/source-blobs/8c3cdd59dd3c9ba011cfbafd6f3390c135c99a516f09cbad4bb937e369da5356.py",
+    "decoded_bytes": 20882,
+    "decoded_sha256": "8c3cdd59dd3c9ba011cfbafd6f3390c135c99a516f09cbad4bb937e369da5356"
+  },
+  {
+    "path": "source-observations/before/92063dd40001297d9c9d08cd3510b2a54ee2bf951fa8d5f9cbb9e226e412f3e9.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/source-blobs/92063dd40001297d9c9d08cd3510b2a54ee2bf951fa8d5f9cbb9e226e412f3e9.py",
+    "decoded_bytes": 15152,
+    "decoded_sha256": "92063dd40001297d9c9d08cd3510b2a54ee2bf951fa8d5f9cbb9e226e412f3e9"
+  },
+  {
+    "path": "source-observations/before/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py",
+    "decoded_bytes": 31773,
+    "decoded_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16"
+  },
+  {
+    "path": "source-observations/before/c345dbc5050d57821810f294e1597782813d9d17a860099cd14b698e2a8ca3bf.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/source-blobs/c345dbc5050d57821810f294e1597782813d9d17a860099cd14b698e2a8ca3bf.py",
+    "decoded_bytes": 15820,
+    "decoded_sha256": "c345dbc5050d57821810f294e1597782813d9d17a860099cd14b698e2a8ca3bf"
+  },
+  {
+    "path": "source-observations/before/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-mcmc-brownian-endpoint-review/source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py",
+    "decoded_bytes": 25379,
+    "decoded_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+  },
+  {
+    "path": "source-observations/after/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py",
+    "decoded_bytes": 8633,
+    "decoded_sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7"
+  },
+  {
+    "path": "source-observations/after/1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/source-blobs/1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845.py",
+    "decoded_bytes": 3599,
+    "decoded_sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845"
+  },
+  {
+    "path": "source-observations/after/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg",
+    "decoded_bytes": 325,
+    "decoded_sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e"
+  },
+  {
+    "path": "source-observations/after/3d7f660bf678fa94324fd8c85e70a3cd50bb2d138abc78fe43b28627944623fa.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/source-blobs/3d7f660bf678fa94324fd8c85e70a3cd50bb2d138abc78fe43b28627944623fa.py",
+    "decoded_bytes": 15924,
+    "decoded_sha256": "3d7f660bf678fa94324fd8c85e70a3cd50bb2d138abc78fe43b28627944623fa"
+  },
+  {
+    "path": "source-observations/after/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py",
+    "decoded_bytes": 82756,
+    "decoded_sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba"
+  },
+  {
+    "path": "source-observations/after/6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231.json.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/source-blobs/6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231.json",
+    "decoded_bytes": 2436592,
+    "decoded_sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231"
+  },
+  {
+    "path": "source-observations/after/8482b9b708b90e40129f8202238693faf2dc293770d517870404f67db8d93483.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/source-blobs/8482b9b708b90e40129f8202238693faf2dc293770d517870404f67db8d93483.py",
+    "decoded_bytes": 21918,
+    "decoded_sha256": "8482b9b708b90e40129f8202238693faf2dc293770d517870404f67db8d93483"
+  },
+  {
+    "path": "source-observations/after/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py",
+    "decoded_bytes": 31773,
+    "decoded_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16"
+  },
+  {
+    "path": "source-observations/after/ac6365273d50125deecd4b175108178d69fadbefbf18e16c918cb473dc2574b9.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/source-blobs/ac6365273d50125deecd4b175108178d69fadbefbf18e16c918cb473dc2574b9.py",
+    "decoded_bytes": 15229,
+    "decoded_sha256": "ac6365273d50125deecd4b175108178d69fadbefbf18e16c918cb473dc2574b9"
+  },
+  {
+    "path": "source-observations/after/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py.gz",
+    "source_observation": "/workspace/runtime/ai5-mc-score-brownian-visual-regression/source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py",
+    "decoded_bytes": 25379,
+    "decoded_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+  },
+  {
+    "path": "source-repair/report.json.gz",
+    "source_observation": "/workspace/runtime/ai5-local-plot-readability-repair/report.json",
+    "decoded_bytes": 6402,
+    "decoded_sha256": "fce2d4600ecc48736fb8e9f7ce1f51707f1db6bf819fbe864ec19d5ab5dd0374"
+  },
+  {
+    "path": "source-repair/proposed-zh-overlay.json.gz",
+    "source_observation": "/workspace/runtime/ai5-local-plot-readability-repair/proposed-zh-overlay.json",
+    "decoded_bytes": 2318,
+    "decoded_sha256": "e0a57e0c8641f982e5b961aee92f7da9e9231a70dcc061bc07af62f0e738e186"
+  },
+  {
+    "path": "source-repair/geometry-results.json.gz",
+    "source_observation": "/workspace/runtime/ai5-local-plot-readability-repair/geometry-results.json",
+    "decoded_bytes": 2466,
+    "decoded_sha256": "3686b0d60a4868704bac9c2352664056f3c5c2626ca553e0f323da6f0d9e725f"
+  },
+  {
+    "path": "source-repair/tests-final.log.gz",
+    "source_observation": "/workspace/runtime/ai5-local-plot-readability-repair/tests-final.log",
+    "decoded_bytes": 1010,
+    "decoded_sha256": "546b45758b2564819a50a2bce160e6178f953a4d22cbad183f5d2f295de63c07"
+  },
+  {
+    "path": "source-repair/tests-caught-out-of-scope-spacing.log.gz",
+    "source_observation": "/workspace/runtime/ai5-local-plot-readability-repair/tests-caught-out-of-scope-spacing.log",
+    "decoded_bytes": 2195,
+    "decoded_sha256": "e39673b7ee10cb5c8561405186adf2bda09940e8665f5c3a29a975008254dd3a"
+  },
+  {
+    "path": "source-repair/test_and_geometry.py.gz",
+    "source_observation": "/workspace/runtime/ai5-local-plot-readability-repair/test_and_geometry.py",
+    "decoded_bytes": 8777,
+    "decoded_sha256": "d2e65a1b7a2a3210b0fac09c98b680d89463bb30cb0747a87ad9ca22820acf43"
+  },
+  {
+    "path": "source-repair/make_overlay.py.gz",
+    "source_observation": "/workspace/runtime/ai5-local-plot-readability-repair/make_overlay.py",
+    "decoded_bytes": 2019,
+    "decoded_sha256": "5562c5a13a0d66eb6a6ea89f7a37fac80fe5cb08f8abdb6d49955a19412c8f6a"
+  },
+  {
+    "path": "root-integration/full-unittest.log.gz",
+    "source_observation": "/workspace/runtime/integrated-20261101-ai5-visual-repairs/full-unittest.log",
+    "decoded_bytes": 86701,
+    "decoded_sha256": "61df2d8b69617ebd1486e8ddc57af5b1f56c67321cdc61519748c66278a34812"
+  },
+  {
+    "path": "root-integration/receipt.json.gz",
+    "source_observation": "/workspace/runtime/integrated-20261101-ai5-visual-repairs/receipt.json",
+    "decoded_bytes": 416,
+    "decoded_sha256": "394415c8125d6207dc82d21746c8ef237c9d243f62f21e17f368fef88c92b4c1"
+  },
+  {
+    "path": "root-integration/source-before.json.gz",
+    "source_observation": "/workspace/runtime/integrated-20261101-ai5-visual-repairs/source-before.json",
+    "decoded_bytes": 233382,
+    "decoded_sha256": "44ba6b4be4c5b52ae588f2a6c05cad81466dcf07a7b58648efa1f05b7e198e5c"
+  },
+  {
+    "path": "root-integration/source-after.json.gz",
+    "source_observation": "/workspace/runtime/integrated-20261101-ai5-visual-repairs/source-after.json",
+    "decoded_bytes": 233382,
+    "decoded_sha256": "44ba6b4be4c5b52ae588f2a6c05cad81466dcf07a7b58648efa1f05b7e198e5c"
+  }
+]

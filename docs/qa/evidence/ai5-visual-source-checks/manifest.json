@@ -1,0 +1,49 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1147,
+      "sha256": "4e66130709b43323a28b4470f41a1b6759601b73b0a5781bdad647afb615cc85"
+    },
+    {
+      "path": "caption-merge.json.gz",
+      "bytes": 934,
+      "sha256": "8bbdf9962fd7bf435a871dee73f18ab95f44ac0a2251198dc69fe246df12b2d8"
+    },
+    {
+      "path": "full-tests-receipt.json.gz",
+      "bytes": 291,
+      "sha256": "f352553a726ae31a5dec366f44f66762190409b5511b903f3addbbec1f4d0c0a"
+    },
+    {
+      "path": "full-tests.log.gz",
+      "bytes": 15804,
+      "sha256": "4d04c07a3854f67105ea7c52b6ad63e2659fdef25a84a95d8abc7d928b03aa08"
+    },
+    {
+      "path": "hook-caption-merge.json.gz",
+      "bytes": 1400,
+      "sha256": "7e1dd25d4e294256b5c6b255756efc3780a2da18dd9399b58a12949f594e2e68"
+    },
+    {
+      "path": "hook-source-freeze.json.gz",
+      "bytes": 865,
+      "sha256": "e88c9d14b74d3020078b0ea6036d19c58021d166de34ff04b11f8a9495b4f76a"
+    },
+    {
+      "path": "hook-source-repair.md.gz",
+      "bytes": 1062,
+      "sha256": "6b028873d37087fc8416effe6591857ed44e09d6c591b0fe370ab14d81980268"
+    },
+    {
+      "path": "source-after.json.gz",
+      "bytes": 74827,
+      "sha256": "1aa2a267d3ebe5f19ad015696490e698755cfe29234658bcdc7755ab3c406779"
+    },
+    {
+      "path": "source-before.json.gz",
+      "bytes": 74827,
+      "sha256": "1aa2a267d3ebe5f19ad015696490e698755cfe29234658bcdc7755ab3c406779"
+    }
+  ]
+}

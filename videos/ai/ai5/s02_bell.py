@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai5.common import DATA, HIST, MODEL, PART, curve, hist_shape, load, normal_pdf
+from videos.ai.ai5.plotting import clipped_curve
 
 DX, DY = 0.36, 0.27  # peg spacing
 TOP = 3.0  # height of the first peg
@@ -216,7 +217,7 @@ class Bell(VoiceoverScene):
         ]
         whys = [why(r"every way to split $s$ \\ into $x$ and $s - x$", font_size=22),
                 why(r"densities: \ the sum becomes an integral", font_size=22),
-                why(r"independent pieces: \ convolve $n$ times", font_size=22)]
+                why(r"$n$ independent pieces: \ $n-1$ convolutions", font_size=22)]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=-2.6, buff=0.35, edge=6.8)
         # the picture: f(x) = e^{-x} and its flipped copy g(s - x) sliding, the overlap's area traced as (f * f)(s)
         ax = Axes(x_range=[-0.5, 6.5, 1], y_range=[0, 1.1, 0.5], x_length=6.0, y_length=2.4, tips=False,
@@ -277,7 +278,8 @@ class Bell(VoiceoverScene):
         zg, dens, show = np.asarray(d["zg"]), np.asarray(d["exp_dens"]), [int(v) for v in d["show"]]
         ax2 = Axes(x_range=[-4, 4, 1], y_range=[0, 1.0, 0.25], x_length=9.0, y_length=4.4, tips=False,
                    axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-0.8, -0.5, 0])
-        shapes = [curve(ax2, zg, np.minimum(dd, 1.0), color=DATA, stroke_width=4) for dd in dens]
+        shapes = [clipped_curve(ax2, zg, dd, x_bounds=(-4, 4), y_bounds=(0, 1),
+                                color=DATA, stroke_width=4) for dd in dens]
         bell = curve(ax2, zg, normal_pdf(zg), color=MODEL, stroke_width=3).set_stroke(opacity=0.8)
         bl2 = label(r"the bell", font_size=26, color=MODEL).next_to(ax2.c2p(1.3, normal_pdf(1.3)), UR, buff=0.1)
         nv = Integer(1, font_size=44, color=DATA)

@@ -1,0 +1,1336 @@
+[
+  {
+    "kind": "before",
+    "case": "en-Brownian-6f20b815a3b4faff",
+    "lang": "en",
+    "scene": "Brownian",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/e0593709df77ca22870cbc884ea7774db90d4453bde731a5eaad033d67b6f920.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s16_brownian.py",
+        "bytes": 15820,
+        "sha256": "c345dbc5050d57821810f294e1597782813d9d17a860099cd14b698e2a8ca3bf",
+        "copy": "source-blobs/c345dbc5050d57821810f294e1597782813d9d17a860099cd14b698e2a8ca3bf.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2435655,
+        "sha256": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c",
+        "copy": "source-blobs/36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/brownian.json",
+        "bytes": 862,
+        "sha256": "86abef85fc5da364cee0a16e68bf5c7d020038997402c1bc29709936a89531a3",
+        "copy": "input-blobs/86abef85fc5da364cee0a16e68bf5c7d020038997402c1bc29709936a89531a3.json",
+        "record_signature": [
+          862,
+          1793497473732373512
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/brownian.npz",
+        "bytes": 187313,
+        "sha256": "1cfcf9f519997921bd996bc1d2505ad9593e3f1dcdab59e398954adcdae4052c",
+        "copy": "input-blobs/1cfcf9f519997921bd996bc1d2505ad9593e3f1dcdab59e398954adcdae4052c.npz",
+        "record_signature": [
+          187313,
+          1793497473729203750
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/qv.json",
+        "bytes": 951,
+        "sha256": "b02a179ddbbd4392d5052e6b439a7bd183f1f0acaf934fdfeab75fc59d39f9a2",
+        "copy": "input-blobs/b02a179ddbbd4392d5052e6b439a7bd183f1f0acaf934fdfeab75fc59d39f9a2.json",
+        "record_signature": [
+          951,
+          1793497477293840828
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/qv.npz",
+        "bytes": 18136,
+        "sha256": "7a25f2e5bd8b2e9b013934d727983cb209998b4ef4487df6d9c643fd8a930e8f",
+        "copy": "input-blobs/7a25f2e5bd8b2e9b013934d727983cb209998b4ef4487df6d9c643fd8a930e8f.npz",
+        "record_signature": [
+          18136,
+          1793497477292985823
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "before",
+    "case": "en-MCMC-4309e6b708f2cbb2",
+    "lang": "en",
+    "scene": "MCMC",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/92ddc74873bf6cd977a04fdd47281d0b0d03b2fbc13f67cb232f198fd792c4e8.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s15_mcmc.py",
+        "bytes": 22393,
+        "sha256": "4023945dadc1658884846f07e14db3c638a8dbdce74c850eabdbd780fb35b078",
+        "copy": "source-blobs/4023945dadc1658884846f07e14db3c638a8dbdce74c850eabdbd780fb35b078.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2435655,
+        "sha256": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c",
+        "copy": "source-blobs/36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/mcmc.json",
+        "bytes": 984,
+        "sha256": "f9cad98c290f0c8c7fa7af8a42778201829a589aaa67b895f22535765c0b92c2",
+        "copy": "input-blobs/f9cad98c290f0c8c7fa7af8a42778201829a589aaa67b895f22535765c0b92c2.json",
+        "record_signature": [
+          984,
+          1793497458357110225
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/mcmc.npz",
+        "bytes": 45565,
+        "sha256": "3336f93eaf342badedfe383650b84a0cd445a741fc6b7a1ea9d94457ec4481ac",
+        "copy": "input-blobs/3336f93eaf342badedfe383650b84a0cd445a741fc6b7a1ea9d94457ec4481ac.npz",
+        "record_signature": [
+          45565,
+          1793497458356724815
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/langevin.json",
+        "bytes": 1125,
+        "sha256": "e54e74c146d2a8038f6df17154b354a0dbd5f50a5a2cd9c2c021e02029d95fb0",
+        "copy": "input-blobs/e54e74c146d2a8038f6df17154b354a0dbd5f50a5a2cd9c2c021e02029d95fb0.json",
+        "record_signature": [
+          1125,
+          1793497470293017944
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/langevin.npz",
+        "bytes": 891896,
+        "sha256": "1d5ca59b70f5291f01a67cacb8bd251edb853ead6a1437dade1a32623db827cc",
+        "copy": "input-blobs/1d5ca59b70f5291f01a67cacb8bd251edb853ead6a1437dade1a32623db827cc.npz",
+        "record_signature": [
+          891896,
+          1793497470289213744
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "before",
+    "case": "en-MonteCarlo-c80b74a4965df0b7",
+    "lang": "en",
+    "scene": "MonteCarlo",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/d9586bdadc3d2ac54529fd91f76f77b889c124498e3b41230337004cf5cb5ca4.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s13_montecarlo.py",
+        "bytes": 20882,
+        "sha256": "8c3cdd59dd3c9ba011cfbafd6f3390c135c99a516f09cbad4bb937e369da5356",
+        "copy": "source-blobs/8c3cdd59dd3c9ba011cfbafd6f3390c135c99a516f09cbad4bb937e369da5356.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2435655,
+        "sha256": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c",
+        "copy": "source-blobs/36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/montecarlo.json",
+        "bytes": 1134,
+        "sha256": "2def215c589cc0e49959568e669a4502d58dc6145ae087a5159bd5a3f0f8fb8c",
+        "copy": "input-blobs/2def215c589cc0e49959568e669a4502d58dc6145ae087a5159bd5a3f0f8fb8c.json",
+        "record_signature": [
+          1134,
+          1793497447007060784
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/montecarlo.npz",
+        "bytes": 210740,
+        "sha256": "64266f11af6d567035197ebe84999f967224c50c2d1dd833a605222e6229c876",
+        "copy": "input-blobs/64266f11af6d567035197ebe84999f967224c50c2d1dd833a605222e6229c876.npz",
+        "record_signature": [
+          210740,
+          1793497447001273494
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/ess.json",
+        "bytes": 1182,
+        "sha256": "99c49bc1a6976b31b6ee9f1e43c754a7a30e2aa94b2868e7737cb5d452237b35",
+        "copy": "input-blobs/99c49bc1a6976b31b6ee9f1e43c754a7a30e2aa94b2868e7737cb5d452237b35.json",
+        "record_signature": [
+          1182,
+          1793497450654586612
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/ess.npz",
+        "bytes": 1301,
+        "sha256": "261645d5bcd2ad974b00033db9035fcee2be5b7a94bb04cfa3baf84d8180b164",
+        "copy": "input-blobs/261645d5bcd2ad974b00033db9035fcee2be5b7a94bb04cfa3baf84d8180b164.npz",
+        "record_signature": [
+          1301,
+          1793497450653913916
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "before",
+    "case": "en-ScoreFn-356b7f15592a5ea8",
+    "lang": "en",
+    "scene": "ScoreFn",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/70bbbbe148558a95c1514c3bdb62cde398eefdebbe72652ed8c48d28606de938.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s14_scorefn.py",
+        "bytes": 15152,
+        "sha256": "92063dd40001297d9c9d08cd3510b2a54ee2bf951fa8d5f9cbb9e226e412f3e9",
+        "copy": "source-blobs/92063dd40001297d9c9d08cd3510b2a54ee2bf951fa8d5f9cbb9e226e412f3e9.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2435655,
+        "sha256": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c",
+        "copy": "source-blobs/36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/scorefn.json",
+        "bytes": 1516,
+        "sha256": "3dd951d0bae2a74346e9ad53c0042617fb5b012bbf4b6e6c1edc57c18be1fbaf",
+        "copy": "input-blobs/3dd951d0bae2a74346e9ad53c0042617fb5b012bbf4b6e6c1edc57c18be1fbaf.json",
+        "record_signature": [
+          1516,
+          1793497454912369129
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/scorefn.npz",
+        "bytes": 45029,
+        "sha256": "1bf35422acc6eb193d091efa0dbdd82bc3d83f0f1d99f2e7d210f00ba9e02603",
+        "copy": "input-blobs/1bf35422acc6eb193d091efa0dbdd82bc3d83f0f1d99f2e7d210f00ba9e02603.npz",
+        "record_signature": [
+          45029,
+          1793497454910563086
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "before",
+    "case": "zh-Brownian-53a0207781fdce88",
+    "lang": "zh",
+    "scene": "Brownian",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/84aa99f3b78c6983d2eb49c77d9ac227d7c2c6c3006ee4d571277a268f227ce8.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s16_brownian.py",
+        "bytes": 15820,
+        "sha256": "c345dbc5050d57821810f294e1597782813d9d17a860099cd14b698e2a8ca3bf",
+        "copy": "source-blobs/c345dbc5050d57821810f294e1597782813d9d17a860099cd14b698e2a8ca3bf.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2435655,
+        "sha256": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c",
+        "copy": "source-blobs/36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/brownian.json",
+        "bytes": 862,
+        "sha256": "86abef85fc5da364cee0a16e68bf5c7d020038997402c1bc29709936a89531a3",
+        "copy": "input-blobs/86abef85fc5da364cee0a16e68bf5c7d020038997402c1bc29709936a89531a3.json",
+        "record_signature": [
+          862,
+          1793497473732373512
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/brownian.npz",
+        "bytes": 187313,
+        "sha256": "1cfcf9f519997921bd996bc1d2505ad9593e3f1dcdab59e398954adcdae4052c",
+        "copy": "input-blobs/1cfcf9f519997921bd996bc1d2505ad9593e3f1dcdab59e398954adcdae4052c.npz",
+        "record_signature": [
+          187313,
+          1793497473729203750
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/qv.json",
+        "bytes": 951,
+        "sha256": "b02a179ddbbd4392d5052e6b439a7bd183f1f0acaf934fdfeab75fc59d39f9a2",
+        "copy": "input-blobs/b02a179ddbbd4392d5052e6b439a7bd183f1f0acaf934fdfeab75fc59d39f9a2.json",
+        "record_signature": [
+          951,
+          1793497477293840828
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/qv.npz",
+        "bytes": 18136,
+        "sha256": "7a25f2e5bd8b2e9b013934d727983cb209998b4ef4487df6d9c643fd8a930e8f",
+        "copy": "input-blobs/7a25f2e5bd8b2e9b013934d727983cb209998b4ef4487df6d9c643fd8a930e8f.npz",
+        "record_signature": [
+          18136,
+          1793497477292985823
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "before",
+    "case": "zh-MCMC-6e3f05dd5194bbcd",
+    "lang": "zh",
+    "scene": "MCMC",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/bfe3df60638018b8a9118e25f3de9e02d87abbacbb518e4844153d333ffb8db3.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s15_mcmc.py",
+        "bytes": 22393,
+        "sha256": "4023945dadc1658884846f07e14db3c638a8dbdce74c850eabdbd780fb35b078",
+        "copy": "source-blobs/4023945dadc1658884846f07e14db3c638a8dbdce74c850eabdbd780fb35b078.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2435655,
+        "sha256": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c",
+        "copy": "source-blobs/36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/mcmc.json",
+        "bytes": 984,
+        "sha256": "f9cad98c290f0c8c7fa7af8a42778201829a589aaa67b895f22535765c0b92c2",
+        "copy": "input-blobs/f9cad98c290f0c8c7fa7af8a42778201829a589aaa67b895f22535765c0b92c2.json",
+        "record_signature": [
+          984,
+          1793497458357110225
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/mcmc.npz",
+        "bytes": 45565,
+        "sha256": "3336f93eaf342badedfe383650b84a0cd445a741fc6b7a1ea9d94457ec4481ac",
+        "copy": "input-blobs/3336f93eaf342badedfe383650b84a0cd445a741fc6b7a1ea9d94457ec4481ac.npz",
+        "record_signature": [
+          45565,
+          1793497458356724815
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/langevin.json",
+        "bytes": 1125,
+        "sha256": "e54e74c146d2a8038f6df17154b354a0dbd5f50a5a2cd9c2c021e02029d95fb0",
+        "copy": "input-blobs/e54e74c146d2a8038f6df17154b354a0dbd5f50a5a2cd9c2c021e02029d95fb0.json",
+        "record_signature": [
+          1125,
+          1793497470293017944
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/langevin.npz",
+        "bytes": 891896,
+        "sha256": "1d5ca59b70f5291f01a67cacb8bd251edb853ead6a1437dade1a32623db827cc",
+        "copy": "input-blobs/1d5ca59b70f5291f01a67cacb8bd251edb853ead6a1437dade1a32623db827cc.npz",
+        "record_signature": [
+          891896,
+          1793497470289213744
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "before",
+    "case": "zh-MonteCarlo-5565a36173404284",
+    "lang": "zh",
+    "scene": "MonteCarlo",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/6a79288e01a87c7368ec0b7f01dad0bfb82725dafba821094f5522a74c25cc48.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s13_montecarlo.py",
+        "bytes": 20882,
+        "sha256": "8c3cdd59dd3c9ba011cfbafd6f3390c135c99a516f09cbad4bb937e369da5356",
+        "copy": "source-blobs/8c3cdd59dd3c9ba011cfbafd6f3390c135c99a516f09cbad4bb937e369da5356.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2435655,
+        "sha256": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c",
+        "copy": "source-blobs/36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/montecarlo.json",
+        "bytes": 1134,
+        "sha256": "2def215c589cc0e49959568e669a4502d58dc6145ae087a5159bd5a3f0f8fb8c",
+        "copy": "input-blobs/2def215c589cc0e49959568e669a4502d58dc6145ae087a5159bd5a3f0f8fb8c.json",
+        "record_signature": [
+          1134,
+          1793497447007060784
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/montecarlo.npz",
+        "bytes": 210740,
+        "sha256": "64266f11af6d567035197ebe84999f967224c50c2d1dd833a605222e6229c876",
+        "copy": "input-blobs/64266f11af6d567035197ebe84999f967224c50c2d1dd833a605222e6229c876.npz",
+        "record_signature": [
+          210740,
+          1793497447001273494
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/ess.json",
+        "bytes": 1182,
+        "sha256": "99c49bc1a6976b31b6ee9f1e43c754a7a30e2aa94b2868e7737cb5d452237b35",
+        "copy": "input-blobs/99c49bc1a6976b31b6ee9f1e43c754a7a30e2aa94b2868e7737cb5d452237b35.json",
+        "record_signature": [
+          1182,
+          1793497450654586612
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/ess.npz",
+        "bytes": 1301,
+        "sha256": "261645d5bcd2ad974b00033db9035fcee2be5b7a94bb04cfa3baf84d8180b164",
+        "copy": "input-blobs/261645d5bcd2ad974b00033db9035fcee2be5b7a94bb04cfa3baf84d8180b164.npz",
+        "record_signature": [
+          1301,
+          1793497450653913916
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "before",
+    "case": "zh-ScoreFn-f87e494229cf036c",
+    "lang": "zh",
+    "scene": "ScoreFn",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/8585e4a442b92cd5dced0c849c0919644e470f0af446822b6b2358bbb12a7ba4.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s14_scorefn.py",
+        "bytes": 15152,
+        "sha256": "92063dd40001297d9c9d08cd3510b2a54ee2bf951fa8d5f9cbb9e226e412f3e9",
+        "copy": "source-blobs/92063dd40001297d9c9d08cd3510b2a54ee2bf951fa8d5f9cbb9e226e412f3e9.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2435655,
+        "sha256": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c",
+        "copy": "source-blobs/36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/scorefn.json",
+        "bytes": 1516,
+        "sha256": "3dd951d0bae2a74346e9ad53c0042617fb5b012bbf4b6e6c1edc57c18be1fbaf",
+        "copy": "input-blobs/3dd951d0bae2a74346e9ad53c0042617fb5b012bbf4b6e6c1edc57c18be1fbaf.json",
+        "record_signature": [
+          1516,
+          1793497454912369129
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/scorefn.npz",
+        "bytes": 45029,
+        "sha256": "1bf35422acc6eb193d091efa0dbdd82bc3d83f0f1d99f2e7d210f00ba9e02603",
+        "copy": "input-blobs/1bf35422acc6eb193d091efa0dbdd82bc3d83f0f1d99f2e7d210f00ba9e02603.npz",
+        "record_signature": [
+          45029,
+          1793497454910563086
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "after",
+    "case": "en-Brownian-24671303c5a73c50",
+    "lang": "en",
+    "scene": "Brownian",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/848e989da815749f19547e900424d33356f793908391b251360cb77a6e3a6635.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s16_brownian.py",
+        "bytes": 15924,
+        "sha256": "3d7f660bf678fa94324fd8c85e70a3cd50bb2d138abc78fe43b28627944623fa",
+        "copy": "source-blobs/3d7f660bf678fa94324fd8c85e70a3cd50bb2d138abc78fe43b28627944623fa.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2436592,
+        "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+        "copy": "source-blobs/6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/plotting.py",
+        "bytes": 3599,
+        "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+        "copy": "source-blobs/1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/brownian.json",
+        "bytes": 862,
+        "sha256": "86abef85fc5da364cee0a16e68bf5c7d020038997402c1bc29709936a89531a3",
+        "copy": "input-blobs/86abef85fc5da364cee0a16e68bf5c7d020038997402c1bc29709936a89531a3.json",
+        "record_signature": [
+          862,
+          1793497473732373512
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/brownian.npz",
+        "bytes": 187313,
+        "sha256": "1cfcf9f519997921bd996bc1d2505ad9593e3f1dcdab59e398954adcdae4052c",
+        "copy": "input-blobs/1cfcf9f519997921bd996bc1d2505ad9593e3f1dcdab59e398954adcdae4052c.npz",
+        "record_signature": [
+          187313,
+          1793497473729203750
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/qv.json",
+        "bytes": 951,
+        "sha256": "b02a179ddbbd4392d5052e6b439a7bd183f1f0acaf934fdfeab75fc59d39f9a2",
+        "copy": "input-blobs/b02a179ddbbd4392d5052e6b439a7bd183f1f0acaf934fdfeab75fc59d39f9a2.json",
+        "record_signature": [
+          951,
+          1793497477293840828
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/qv.npz",
+        "bytes": 18136,
+        "sha256": "7a25f2e5bd8b2e9b013934d727983cb209998b4ef4487df6d9c643fd8a930e8f",
+        "copy": "input-blobs/7a25f2e5bd8b2e9b013934d727983cb209998b4ef4487df6d9c643fd8a930e8f.npz",
+        "record_signature": [
+          18136,
+          1793497477292985823
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "after",
+    "case": "en-MonteCarlo-16b184acdbd5fab5",
+    "lang": "en",
+    "scene": "MonteCarlo",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/35608b1c08c04954911e05f151ab375da2f9fb0034ab2dec305dc164224c0f85.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s13_montecarlo.py",
+        "bytes": 21918,
+        "sha256": "8482b9b708b90e40129f8202238693faf2dc293770d517870404f67db8d93483",
+        "copy": "source-blobs/8482b9b708b90e40129f8202238693faf2dc293770d517870404f67db8d93483.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2436592,
+        "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+        "copy": "source-blobs/6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/plotting.py",
+        "bytes": 3599,
+        "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+        "copy": "source-blobs/1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/montecarlo.json",
+        "bytes": 1134,
+        "sha256": "2def215c589cc0e49959568e669a4502d58dc6145ae087a5159bd5a3f0f8fb8c",
+        "copy": "input-blobs/2def215c589cc0e49959568e669a4502d58dc6145ae087a5159bd5a3f0f8fb8c.json",
+        "record_signature": [
+          1134,
+          1793497447007060784
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/montecarlo.npz",
+        "bytes": 210740,
+        "sha256": "64266f11af6d567035197ebe84999f967224c50c2d1dd833a605222e6229c876",
+        "copy": "input-blobs/64266f11af6d567035197ebe84999f967224c50c2d1dd833a605222e6229c876.npz",
+        "record_signature": [
+          210740,
+          1793497447001273494
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/ess.json",
+        "bytes": 1182,
+        "sha256": "99c49bc1a6976b31b6ee9f1e43c754a7a30e2aa94b2868e7737cb5d452237b35",
+        "copy": "input-blobs/99c49bc1a6976b31b6ee9f1e43c754a7a30e2aa94b2868e7737cb5d452237b35.json",
+        "record_signature": [
+          1182,
+          1793497450654586612
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/ess.npz",
+        "bytes": 1301,
+        "sha256": "261645d5bcd2ad974b00033db9035fcee2be5b7a94bb04cfa3baf84d8180b164",
+        "copy": "input-blobs/261645d5bcd2ad974b00033db9035fcee2be5b7a94bb04cfa3baf84d8180b164.npz",
+        "record_signature": [
+          1301,
+          1793497450653913916
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "after",
+    "case": "en-ScoreFn-b4a428f944ce86a1",
+    "lang": "en",
+    "scene": "ScoreFn",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/fbe4cbb79130cec43a17b69e63da5065692e7740b6267c0456b630b88ad65e93.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s14_scorefn.py",
+        "bytes": 15229,
+        "sha256": "ac6365273d50125deecd4b175108178d69fadbefbf18e16c918cb473dc2574b9",
+        "copy": "source-blobs/ac6365273d50125deecd4b175108178d69fadbefbf18e16c918cb473dc2574b9.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2436592,
+        "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+        "copy": "source-blobs/6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/plotting.py",
+        "bytes": 3599,
+        "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+        "copy": "source-blobs/1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/scorefn.json",
+        "bytes": 1516,
+        "sha256": "3dd951d0bae2a74346e9ad53c0042617fb5b012bbf4b6e6c1edc57c18be1fbaf",
+        "copy": "input-blobs/3dd951d0bae2a74346e9ad53c0042617fb5b012bbf4b6e6c1edc57c18be1fbaf.json",
+        "record_signature": [
+          1516,
+          1793497454912369129
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/scorefn.npz",
+        "bytes": 45029,
+        "sha256": "1bf35422acc6eb193d091efa0dbdd82bc3d83f0f1d99f2e7d210f00ba9e02603",
+        "copy": "input-blobs/1bf35422acc6eb193d091efa0dbdd82bc3d83f0f1d99f2e7d210f00ba9e02603.npz",
+        "record_signature": [
+          45029,
+          1793497454910563086
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "after",
+    "case": "zh-Brownian-523156f624de1312",
+    "lang": "zh",
+    "scene": "Brownian",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/19c4a790c119f161d5d2331e73193e07c59cc048f5a80dfd3c07322274aefcde.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s16_brownian.py",
+        "bytes": 15924,
+        "sha256": "3d7f660bf678fa94324fd8c85e70a3cd50bb2d138abc78fe43b28627944623fa",
+        "copy": "source-blobs/3d7f660bf678fa94324fd8c85e70a3cd50bb2d138abc78fe43b28627944623fa.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2436592,
+        "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+        "copy": "source-blobs/6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/plotting.py",
+        "bytes": 3599,
+        "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+        "copy": "source-blobs/1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/brownian.json",
+        "bytes": 862,
+        "sha256": "86abef85fc5da364cee0a16e68bf5c7d020038997402c1bc29709936a89531a3",
+        "copy": "input-blobs/86abef85fc5da364cee0a16e68bf5c7d020038997402c1bc29709936a89531a3.json",
+        "record_signature": [
+          862,
+          1793497473732373512
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/brownian.npz",
+        "bytes": 187313,
+        "sha256": "1cfcf9f519997921bd996bc1d2505ad9593e3f1dcdab59e398954adcdae4052c",
+        "copy": "input-blobs/1cfcf9f519997921bd996bc1d2505ad9593e3f1dcdab59e398954adcdae4052c.npz",
+        "record_signature": [
+          187313,
+          1793497473729203750
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/qv.json",
+        "bytes": 951,
+        "sha256": "b02a179ddbbd4392d5052e6b439a7bd183f1f0acaf934fdfeab75fc59d39f9a2",
+        "copy": "input-blobs/b02a179ddbbd4392d5052e6b439a7bd183f1f0acaf934fdfeab75fc59d39f9a2.json",
+        "record_signature": [
+          951,
+          1793497477293840828
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/qv.npz",
+        "bytes": 18136,
+        "sha256": "7a25f2e5bd8b2e9b013934d727983cb209998b4ef4487df6d9c643fd8a930e8f",
+        "copy": "input-blobs/7a25f2e5bd8b2e9b013934d727983cb209998b4ef4487df6d9c643fd8a930e8f.npz",
+        "record_signature": [
+          18136,
+          1793497477292985823
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "after",
+    "case": "zh-MonteCarlo-e5fca69a5517f60c",
+    "lang": "zh",
+    "scene": "MonteCarlo",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/96a9ffd476f201923cd2790af6769cdb0f5c33c56baa4a116df6559f817488cd.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s13_montecarlo.py",
+        "bytes": 21918,
+        "sha256": "8482b9b708b90e40129f8202238693faf2dc293770d517870404f67db8d93483",
+        "copy": "source-blobs/8482b9b708b90e40129f8202238693faf2dc293770d517870404f67db8d93483.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2436592,
+        "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+        "copy": "source-blobs/6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/plotting.py",
+        "bytes": 3599,
+        "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+        "copy": "source-blobs/1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/montecarlo.json",
+        "bytes": 1134,
+        "sha256": "2def215c589cc0e49959568e669a4502d58dc6145ae087a5159bd5a3f0f8fb8c",
+        "copy": "input-blobs/2def215c589cc0e49959568e669a4502d58dc6145ae087a5159bd5a3f0f8fb8c.json",
+        "record_signature": [
+          1134,
+          1793497447007060784
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/montecarlo.npz",
+        "bytes": 210740,
+        "sha256": "64266f11af6d567035197ebe84999f967224c50c2d1dd833a605222e6229c876",
+        "copy": "input-blobs/64266f11af6d567035197ebe84999f967224c50c2d1dd833a605222e6229c876.npz",
+        "record_signature": [
+          210740,
+          1793497447001273494
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/ess.json",
+        "bytes": 1182,
+        "sha256": "99c49bc1a6976b31b6ee9f1e43c754a7a30e2aa94b2868e7737cb5d452237b35",
+        "copy": "input-blobs/99c49bc1a6976b31b6ee9f1e43c754a7a30e2aa94b2868e7737cb5d452237b35.json",
+        "record_signature": [
+          1182,
+          1793497450654586612
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/ess.npz",
+        "bytes": 1301,
+        "sha256": "261645d5bcd2ad974b00033db9035fcee2be5b7a94bb04cfa3baf84d8180b164",
+        "copy": "input-blobs/261645d5bcd2ad974b00033db9035fcee2be5b7a94bb04cfa3baf84d8180b164.npz",
+        "record_signature": [
+          1301,
+          1793497450653913916
+        ],
+        "signature_current": true
+      }
+    ]
+  },
+  {
+    "kind": "after",
+    "case": "zh-ScoreFn-be49948cb04cb80d",
+    "lang": "zh",
+    "scene": "ScoreFn",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "sheet_asset": "images/d62a702be98b8b55a4a210ae48c9395158c24fd2b51163a78d155944b39adabf.png",
+    "source_observations": [
+      {
+        "original_path": "videos/ai/ai5/s14_scorefn.py",
+        "bytes": 15229,
+        "sha256": "ac6365273d50125deecd4b175108178d69fadbefbf18e16c918cb473dc2574b9",
+        "copy": "source-blobs/ac6365273d50125deecd4b175108178d69fadbefbf18e16c918cb473dc2574b9.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/common.py",
+        "bytes": 8633,
+        "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "copy": "source-blobs/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/zh_lines.py",
+        "bytes": 82756,
+        "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "copy": "source-blobs/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py"
+      },
+      {
+        "original_path": "videos/ai/ai_text_zh.json",
+        "bytes": 2436592,
+        "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+        "copy": "source-blobs/6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231.json"
+      },
+      {
+        "original_path": "explainer/ai/viz.py",
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "copy": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py"
+      },
+      {
+        "original_path": "videos/ai/ai5/plotting.py",
+        "bytes": 3599,
+        "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+        "copy": "source-blobs/1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845.py"
+      },
+      {
+        "original_path": "tools/qa_series.py",
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "copy": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py"
+      },
+      {
+        "original_path": "manim.cfg",
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "copy": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.cfg"
+      }
+    ],
+    "inputs": [
+      {
+        "original_path": ".cache/ai5/scorefn.json",
+        "bytes": 1516,
+        "sha256": "3dd951d0bae2a74346e9ad53c0042617fb5b012bbf4b6e6c1edc57c18be1fbaf",
+        "copy": "input-blobs/3dd951d0bae2a74346e9ad53c0042617fb5b012bbf4b6e6c1edc57c18be1fbaf.json",
+        "record_signature": [
+          1516,
+          1793497454912369129
+        ],
+        "signature_current": true
+      },
+      {
+        "original_path": ".cache/ai5/scorefn.npz",
+        "bytes": 45029,
+        "sha256": "1bf35422acc6eb193d091efa0dbdd82bc3d83f0f1d99f2e7d210f00ba9e02603",
+        "copy": "input-blobs/1bf35422acc6eb193d091efa0dbdd82bc3d83f0f1d99f2e7d210f00ba9e02603.npz",
+        "record_signature": [
+          45029,
+          1793497454910563086
+        ],
+        "signature_current": true
+      }
+    ]
+  }
+]

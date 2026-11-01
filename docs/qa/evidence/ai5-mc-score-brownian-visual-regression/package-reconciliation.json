@@ -1,0 +1,10 @@
+{
+  "utc": "2026-11-01T02:35:26.392989+00:00",
+  "first_attempt": "Local packaging stopped at README table construction: KeyError lang in aggregatecase entries. All immutable raw/image copies had alreadycompleted; no render/source/data mutation occurred.",
+  "original_script_sha256": "b8fecd9bee6130c8373a28b329a461b69cfa664a4a571ba8e19e263c6231c828",
+  "preserved_original_script": "scripts/package-first-attempt.py.gz",
+  "verified_prior_gzip_payloads": 99,
+  "verified_prior_image_assets": 130,
+  "resolution": "Read lang/scene from aggregate caseidentifier; resume only README/manifest finalization after verifying every retained gzip/image byte identity. No productionoperation retry.",
+  "status": "reconciled-before-finalization"
+}
