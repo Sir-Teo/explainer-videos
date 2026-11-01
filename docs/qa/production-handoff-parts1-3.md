@@ -1,5 +1,25 @@
 # Parts 1–3: reviewed cloud production handoff
 
+## Part 1 roadmap plus reviewed Part 3 sources — controlled rerender overlay v4
+
+Use explicit **`--overlay part1-roadmap-and-part3-v4`** only for the original **`927fba668656a682b3e29a288de64130ddc680dd`** tree with exactly these three replacements:
+
+| Repository path | Required SHA256 | Bytes |
+|---|---|---:|
+| `videos/ai/ai1/s01_hook.py` | `7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8` | 23,484 |
+| `videos/ai/ai3/s08_svd.py` | `2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b` | 12,273 |
+| `videos/ai/ai3/s19_outro.py` | `e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24` | 17,361 |
+
+**Part 1 Hook is a controlled narrated-rerender candidate, not accepted repaired production output.** The actual original narrated opening had late roadmap act requests because several bookmark gaps were shorter than its fixed1.2s reveals. The [source repair evidence](evidence/ai1-opening-roadmap-narrated-timing-repair/README.md) binds the original diagnostic (`libfile_6408958bd530819199ca41708bb7a1e6`), exact before/after source and four measured scheduling tests. Source patch **`03e3ab6eeeac77396e0ffff081f64af945f6c636`** caps only nonfinal roadmap reveals to the next actual bookmark gap minus a frame, while preserving narration/bookmarks/audio/TTS keys. Actual repaired4K narrated timing/native readability, playback, listening and synchronization remain **unobserved/unaccepted** by this gate.
+
+The [v4 manifest](evidence/production-handoff-parts1-3/overlays/part1-roadmap-and-part3-v4.json) pins all three before/after identities and existing evidence receipts, with **no optional repository additions**. It permits exact base plus those replacements or an equivalent exact three-source commit; no full later HEAD is approved. The separate Part3-only v3 manifest stays immutable and still rejects the new Part1 Hook. Default/v1/v2 remain strict. Keep helper/metadata outside the production checkout.
+
+```bash
+python "$HANDOFF_DIR/verify_handoff.py" --repo "$CLOUD_REPO" --strict-external --overlay part1-roadmap-and-part3-v4
+```
+
+[Bounded cloud gate evidence](evidence/production-handoff-parts1-3/overlay-roadmap-v4-checks/README.md) records54 portable tests and actual strict268-file fixture checks. These checks do not render, load models, recompute numerical results or approve a new narration candidate. All frozen source/cache/runtime/public-model/optional-audio and inherited-producer-guard gates remain. The existing separately authorized novels base supplement is private Library **`libfile_f134e147968881918fc96c1c227cdc88`**, version0; its files are not duplicated in this metadata release. The local task remains canceled; root/production owner controls the narrow cloud narrated rerender and subsequent acceptance.
+
 ## Combined Part 3 source overlay v3 — current cloud selection
 
 The explicit **`--overlay part3-svd-outro-production-v3`** selection permits base **`927fba668656a682b3e29a288de64130ddc680dd`** plus exactly these two reviewed source files:

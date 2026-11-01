@@ -435,7 +435,139 @@ class OverlayPreflightTests(unittest.TestCase):
             self.assertRejected(result, text)
 
 
+    def install_roadmap_fixture(self):
+        self.install_combined_fixture()
+        self.write(preflight.SVD, self.before)
+        self.write(preflight.OUTRO, self.outro_before)
+        self.hook_before = b'original narrated roadmap schedule\n'
+        self.hook_after = b'controlled next-bookmark bounded roadmap schedule\n'
+        self.write(preflight.HOOK, self.hook_before)
+        self.cmd('add', preflight.HOOK)
+        self.commit('base fixture with original Part1 Hook')
+        self.base = self.cmd('rev-parse', 'HEAD').strip()
+        p = patch.object(preflight, 'BASE', self.base)
+        p.start(); self.addCleanup(p.stop)
+        source = json.loads((self.meta / 'reviewed-source-inventory.json').read_text())
+        source['commit'] = self.base
+        source['files'].append(self.row(preflight.HOOK, self.hook_before))
+        self.json('reviewed-source-inventory.json', source)
+        self.overlay['base_commit'] = self.base; self.repin_fixture_manifest()
+        self.combined['base_commit'] = self.base; self.repin_combined_fixture()
+        self.roadmap = json.loads(json.dumps(self.combined))
+        self.roadmap['overlay_id'] = preflight.ROADMAP
+        self.roadmap['source_replacements'].insert(0, {
+            'before': self.row(preflight.HOOK, self.hook_before),
+            'after': self.row(preflight.HOOK, self.hook_after)})
+        self.roadmap['production_acceptance'] = {'repaired_part1_output_accepted': False}
+        self.repin_roadmap_fixture()
+        self.write(preflight.SVD, self.combined_svd_after)
+        self.write(preflight.OUTRO, self.outro_after)
+        self.write(preflight.HOOK, self.hook_after)
+        return preflight.ROADMAP
+
+    def repin_roadmap_fixture(self):
+        relative = 'overlays/' + preflight.ROADMAP + '.json'
+        self.json(relative, self.roadmap)
+        self.known[preflight.ROADMAP] = (relative, sha((self.meta / relative).read_bytes()))
+
+    def test_roadmap_exact_three_worktree_preserves_strict_checks(self):
+        name = self.install_roadmap_fixture()
+        result = preflight.verify(self.repo, overlay_id=name, strict_external=True, optional_audio=True)
+        self.assertEqual(result['errors'], [])
+        self.assertEqual(result['checked_files'], 10)
+
+    def test_roadmap_exact_three_source_only_commit_is_accepted(self):
+        name = self.install_roadmap_fixture()
+        self.cmd('add', preflight.HOOK, preflight.SVD, preflight.OUTRO)
+        self.commit('exact three controlled/reviewed scene replacements only')
+        self.assertEqual(preflight.verify(self.repo, overlay_id=name)['errors'], [])
+
+    def test_roadmap_requires_all_three_exact_sources(self):
+        name = self.install_roadmap_fixture()
+        for path, before, after in [(preflight.HOOK, self.hook_before, self.hook_after),
+                                    (preflight.SVD, self.before, self.combined_svd_after),
+                                    (preflight.OUTRO, self.outro_before, self.outro_after)]:
+            with self.subTest(path=path):
+                self.write(path, before)
+                self.assertRejected(preflight.verify(self.repo, overlay_id=name), path)
+                self.write(path, after)
+
+    def test_roadmap_does_not_expand_v3_v2_v1_or_default(self):
+        self.install_roadmap_fixture()
+        v2 = self.install_polish_fixture()
+        for name in [None, 'svd-reveal-v1', v2, preflight.COMBINED]:
+            with self.subTest(overlay=name):
+                self.assertRejected(preflight.verify(self.repo, overlay_id=name), preflight.HOOK)
+        self.write(preflight.HOOK, self.hook_before)
+        self.assertEqual(preflight.verify(self.repo, overlay_id=preflight.COMBINED)['errors'], [])
+
+    def test_roadmap_manifest_tamper_and_wrong_base_or_path_fail(self):
+        name = self.install_roadmap_fixture()
+        self.roadmap['production_acceptance']['repaired_part1_output_accepted'] = True
+        self.json('overlays/' + name + '.json', self.roadmap)
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'manifest hash mismatch')
+        self.roadmap['base_commit'] = '0' * 40; self.repin_roadmap_fixture()
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'identity/base mismatch')
+        self.roadmap['base_commit'] = self.base
+        self.roadmap['source_replacements'][0]['after']['path'] = 'videos/ai/ai1/unreviewed.py'
+        self.repin_roadmap_fixture()
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'unreviewed path')
+
+    def test_roadmap_rejects_fourth_source_or_extra_repository_evidence(self):
+        name = self.install_roadmap_fixture()
+        self.roadmap['source_replacements'].append({
+            'before': self.row('explainer/unchanged.py', b'value = 1\n'),
+            'after': self.row('explainer/unchanged.py', b'value = 2\n')})
+        self.repin_roadmap_fixture()
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'unreviewed path')
+        self.roadmap['source_replacements'].pop()
+        self.roadmap['optional_evidence_files'] = [self.row(self.evidence_path, self.evidence_bytes)]
+        self.repin_roadmap_fixture()
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'unreviewed path')
+
+    def test_roadmap_unrelated_head_index_and_untracked_producer_fail(self):
+        name = self.install_roadmap_fixture()
+        self.write('README.md', b'unrelated new branch file\n'); self.cmd('add', '.')
+        self.commit('three scene files with forbidden unrelated README')
+        self.write('explainer/unchanged.py', b'wrong shared source\n'); self.cmd('add', 'explainer/unchanged.py')
+        self.write('explainer/unreviewed_producer.py', b'raise AssertionError("do not import")\n')
+        result = preflight.verify(self.repo, overlay_id=name)
+        for text in ['Overlay HEAD contains unrelated', 'Overlay index contains unrelated', 'unreviewed_producer.py']:
+            self.assertRejected(result, text)
+
+    def test_roadmap_strict_schema_and_frozen_cache_runtime_model_audio_failures(self):
+        name = self.install_roadmap_fixture()
+        for value in (1, True, '2', 3):
+            self.roadmap['schema_version'] = value; self.repin_roadmap_fixture()
+            self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'schema_version must be exactly 2')
+        self.roadmap['schema_version'] = 2; self.repin_roadmap_fixture()
+        self.cache.unlink(); self.audio.write_bytes(b'wrong speech')
+        (self.snapshot / 'model.safetensors').unlink()
+        with patch.object(preflight.importlib.metadata, 'version', return_value='wrong runtime'):
+            result = preflight.verify(self.repo, overlay_id=name, strict_external=True, optional_audio=True)
+        for text in ['.cache/result.json', '.cache/real.wav', 'model.safetensors', 'Package torch:']:
+            self.assertRejected(result, text)
+
+
 class ReviewedManifestIdentityTests(unittest.TestCase):
+    def test_roadmap_manifest_pins_candidate_only_and_exact_three_sources(self):
+        errors = []
+        overlay = preflight.load_overlay(preflight.ROADMAP, errors)
+        self.assertEqual(errors, [])
+        self.assertEqual(overlay['base_commit'], preflight.BASE)
+        replacements = preflight.source_replacements(overlay)
+        self.assertEqual([r['after']['path'] for r in replacements], [preflight.HOOK, preflight.SVD, preflight.OUTRO])
+        self.assertEqual([r['after']['sha256'] for r in replacements], [
+            '7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8',
+            '2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b',
+            'e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24'])
+        self.assertFalse(overlay['production_acceptance']['repaired_part1_output_observed'])
+        self.assertFalse(overlay['production_acceptance']['repaired_part1_output_accepted'])
+        self.assertEqual(overlay['optional_evidence_files'], [])
+        for row in overlay['evidence_receipts']:
+            raw = (ROOT / row['path']).read_bytes()
+            self.assertEqual((len(raw), sha(raw)), (row['bytes'], row['sha256']))
+
     def test_combined_manifest_binds_only_exact_two_sources_and_review_receipts(self):
         errors = []
         overlay = preflight.load_overlay(preflight.COMBINED, errors)
