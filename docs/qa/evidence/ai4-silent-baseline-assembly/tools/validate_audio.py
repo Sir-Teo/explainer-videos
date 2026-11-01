@@ -1,0 +1,11 @@
+from pathlib import Path
+import json,gzip,hashlib,subprocess,sys,time,datetime,shutil
+base=Path(sys.argv[1]);r=json.loads((base/'assembly-receipt.json').read_text());movie=Path(r['final']);assert hashlib.sha256(movie.read_bytes()).hexdigest()==r['final_sha256'];out=base/'validation';out.mkdir(exist_ok=True);assert shutil.disk_usage(base).free>=512*1024**2
+start=time.monotonic();cmd=['ffprobe','-v','error','-err_detect','explode','-threads','1','-select_streams','a:0','-show_frames','-show_entries','frame=best_effort_timestamp_time,pkt_dts_time,pkt_duration_time,nb_samples','-of','json',str(movie)];p=subprocess.run(cmd,capture_output=True,check=True);assert not p.stderr;raw=p.stdout;(out/'audio-frame-times.json.gz').write_bytes(gzip.compress(raw,mtime=0));frames=json.loads(raw)['frames'];assert frames;pts=[float(x['best_effort_timestamp_time']) for x in frames];assert all(b>a for a,b in zip(pts,pts[1:]));samples=sum(int(x['nb_samples']) for x in frames)
+cmd2=['ffmpeg','-nostdin','-v','error','-xerror','-threads','1','-i',str(movie),'-map','0:a:0','-vn','-sn','-threads','1','-c:a','pcm_s16le','-f','s16le','pipe:1'];p=subprocess.Popen(cmd2,stdout=subprocess.PIPE,stderr=subprocess.PIPE);sha=hashlib.sha256();n=0;nonzero=0
+while True:
+ b=p.stdout.read(1024*1024)
+ if not b:break
+ sha.update(b);n+=len(b);nonzero+=len(b)-b.count(0)
+stderr=p.stderr.read();rc=p.wait();assert rc==0 and not stderr;assert n==samples*2*2;assert nonzero==0
+report={'scope':'FullAACframe decode and full stereo16bitPCMdecode; provesdigital silence in preview, not listening/narration/audioqualityapproval.','movie_sha256':r['final_sha256'],'audio_frames_decoded':len(frames),'samples_per_channel':samples,'PCM_bytes':n,'PCM_sha256':sha.hexdigest(),'nonzero_PCM_bytes':nonzero,'audio_pts_strictly_increasing':True,'first_pts':pts[0],'last_pts':pts[-1],'minimum_frame_gap':min(b-a for a,b in zip(pts,pts[1:])),'maximum_frame_gap':max(b-a for a,b in zip(pts,pts[1:])),'commands':[cmd,cmd2],'exit_codes':[0,0],'stderr':['',''],'seconds':round(time.monotonic()-start,3),'completed_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()};(out/'audio-validation.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))

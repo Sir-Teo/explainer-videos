@@ -1,0 +1,494 @@
+{
+  "schema": 1,
+  "reviewed_utc": "2026-11-01T00:50:19.508300+00:00",
+  "scope": "Bounded Part4 narrated/history-card claims and six bibliography book records; source-level primary/issuer/publisher evidence, not exhaustive history or visual/audio reapproval.",
+  "categories": {
+    "metadata-only": 7,
+    "corrected": 1,
+    "unverified": 3,
+    "qualified": 5,
+    "supported": 8
+  },
+  "claims": [
+    {
+      "id": "leibniz-1684",
+      "scene_refs": [
+        "s01_hook.py:81",
+        "s02_derivative.py:149",
+        "s02_derivative.py:166"
+      ],
+      "claim": "Leibniz Nova methodus printed1684; dx/dy; Newton fluxions1660s; first printed calculus.",
+      "status": "metadata-only",
+      "evidence": "Smithsonian original-item catalog confirms author, October1684 Acta eruditorum extract, pp467–473.",
+      "source_urls": [
+        "https://www.si.edu/object/siris_sil_698366"
+      ],
+      "limits": "Original pages and priority comparison were not read; dx/dy and Newton1660s were not independently established from original manuscripts in this pass."
+    },
+    {
+      "id": "lagrange-1788",
+      "scene_refs": [
+        "s01_hook.py:82",
+        "s16_lagrange.py:97",
+        "s16_lagrange.py:108"
+      ],
+      "claim": "Lagrange1788 Mecanique analytique, constrained mechanics/multipliers.",
+      "status": "metadata-only",
+      "evidence": "HKUST institutional rare-book catalog confirms first edition, author, Paris publisher and1788.",
+      "source_urls": [
+        "https://digitalcollections.hkust.edu.hk/Detail/objects/b523122"
+      ],
+      "limits": "Original multiplier passage not inspected. This is not proof that1788 was first discovery; no invention-priority correction asserted."
+    },
+    {
+      "id": "cauchy-1847",
+      "scene_refs": [
+        "s03_gradient.py:218",
+        "s03_gradient.py:233",
+        "README.md:160"
+      ],
+      "claim": "Cauchy1847 three-page note, orbit equations, sum-of-squares descent.",
+      "status": "metadata-only",
+      "evidence": "Original journal table-of-contents transcription identifies title at536; repository cites536–538. Original BnF page was located.",
+      "source_urls": [
+        "https://fr.wikisource.org/wiki/Comptes_rendus_de_l%E2%80%99Acad%C3%A9mie_des_sciences/Tome_25,_1847/Table_des_mati%C3%A8res",
+        "https://gallica.bnf.fr/ark:/12148/bpt6k2982c/f540.item"
+      ],
+      "limits": "BnF original returned403. Orbit/sum-of-squares wording not verified from original text; secondary Lemarechal is listed in README but not substituted for primary evidence."
+    },
+    {
+      "id": "cauchy-superlative",
+      "scene_refs": [
+        "s03_gradient.py:232",
+        "zh_lines.py:67"
+      ],
+      "claim": "Walking downhill is the oldest method in this series.",
+      "status": "corrected",
+      "evidence": "Literal superlative conflicts with this part’s earlier dated calculus and Newton root method. Parent authorized changing only the English sentence and its Chinese narration lookup/value. Replacement: Walking downhill this way is a standard optimization method.",
+      "source_urls": [],
+      "limits": "Source/bilingual validation only. Fresh rendered Gradient case identities and revised timing require parent regression; old outputs retain historical identities."
+    },
+    {
+      "id": "karush-1939",
+      "scene_refs": [
+        "s17_kkt.py:91",
+        "README.md:254"
+      ],
+      "claim": "Karush1939 Chicago masters thesis gives inequality optimality conditions.",
+      "status": "unverified",
+      "evidence": "Institutional catalog target was identified but could not be read.",
+      "source_urls": [
+        "https://catalog.lib.uchicago.edu/vufind/Record/4111654"
+      ],
+      "limits": "Catalog access403; no original thesis read and no credentials/paywall bypass attempted. This pass neither validates the full theorem/priority wording nor declares it false."
+    },
+    {
+      "id": "kuhn-tucker-1951",
+      "scene_refs": [
+        "s17_kkt.py:95",
+        "s17_kkt.py:103",
+        "README.md:254"
+      ],
+      "claim": "Kuhn and Tucker1951 nonlinear programming conditions.",
+      "status": "metadata-only",
+      "evidence": "UCPress publisher chapter citation confirms authors,1951,pp481–492. Berkeley catalog search metadata dates the symposium1950.",
+      "source_urls": [
+        "https://www.degruyterbrill.com/document/doi/10.1525/9780520411586-036/html",
+        "https://digicoll.lib.berkeley.edu/record/112776?ln=en"
+      ],
+      "limits": "Full chapter unavailable;1951 is publication year, not a verified discovery date. Berkeley page403. Constraint qualification statement was not re-proved from original chapter."
+    },
+    {
+      "id": "wengert-1964",
+      "scene_refs": [
+        "s08_library.py:160",
+        "s08_library.py:169",
+        "README.md:161"
+      ],
+      "claim": "Wengert1964, General Electric, elementary program steps carrying values and derivatives.",
+      "status": "qualified",
+      "evidence": "Publisher-deposited abstract/metadata mirrored by CiNii confirms author affiliation, CACM7(8)463–464,August1964 and elementary-step derivative method.",
+      "source_urls": [
+        "https://cir.nii.ac.jp/crid/1360294647096439936",
+        "https://dl.acm.org/doi/10.1145/355586.364791"
+      ],
+      "limits": "ACM page403; publisher abstract mirror, not full original paper, was read. No priority claim beyond the actual dated example validated."
+    },
+    {
+      "id": "linnainmaa-1970-1976",
+      "scene_refs": [
+        "s06_modes.py:215",
+        "s06_modes.py:230",
+        "README.md:163"
+      ],
+      "claim": "Linnainmaa1970 masters thesis on reverse accumulation/roundoff,1976 BIT paper.",
+      "status": "qualified",
+      "evidence": "1976 publisher abstract describes Taylor coefficients for local roundoff; its reference2 explicitly cites the1970 Helsinki masters thesis and title.",
+      "source_urls": [
+        "https://doi.org/10.1007/BF01931367"
+      ],
+      "limits": "1970 thesis existence/title supported through the author’s published citation; Finnish original and reverse algorithm were not inspected. Not a complete first-invention audit."
+    },
+    {
+      "id": "werbos-1974-1982",
+      "scene_refs": [
+        "s06_modes.py:218",
+        "s06_modes.py:232",
+        "README.md:163"
+      ],
+      "claim": "Werbos1974 Harvard thesis proposes network training; worked out1982.",
+      "status": "qualified",
+      "evidence": "Author-hosted retrospective says ordered-derivative chain rule was proved in his1974 Harvard thesis. Author-hosted1990 original paper page1 was inspected via scanned-page OCR and discusses the general backward derivative method and1974 dynamic-model application.",
+      "source_urls": [
+        "https://werbos.com/Mind.htm",
+        "https://werbos.com/Neural/BTT.pdf"
+      ],
+      "limits": "1974 thesis itself and1982 application were not read; author retrospective supports general1974 link but not the exact network-priority/1982 sentence. OCR page1 is partial and not a thesis substitute."
+    },
+    {
+      "id": "control-1960-1961",
+      "scene_refs": [
+        "s06_modes.py:225",
+        "s06_modes.py:235",
+        "README.md:164"
+      ],
+      "claim": "Kelley1960 and Bryson1961 backward recursions for flight paths/control.",
+      "status": "unverified",
+      "evidence": "Actual scene claim and README attribution were inventoried. No original control paper was read in this bounded pass.",
+      "source_urls": [],
+      "limits": "Dates/technical priority remain unverified here; README currently points to a later history review."
+    },
+    {
+      "id": "rhw-1986",
+      "scene_refs": [
+        "s01_hook.py:88",
+        "s06_modes.py:221",
+        "s06_modes.py:233"
+      ],
+      "claim": "Rumelhart,Hinton,Williams1986 learn hidden representations using backprop.",
+      "status": "supported",
+      "evidence": "Nature publisher abstract explicitly connects backward weight adjustment with hidden units learning task-relevant features; author/date/volume/pages agree.",
+      "source_urls": [
+        "https://www.nature.com/articles/323533a0"
+      ],
+      "limits": "Publisher abstract only; no claim that these authors invented all backpropagation."
+    },
+    {
+      "id": "ieee-754-1985",
+      "scene_refs": [
+        "s10_floats.py:41",
+        "s10_floats.py:71",
+        "README.md:255"
+      ],
+      "claim": "IEEE7541985 standardizes binary formats, operations and rounding; Kahan a principal architect.",
+      "status": "qualified",
+      "evidence": "IEEE issuer page confirms1985 publication and binary formats/basic operations/exceptions scope. Berkeley institutional Kahan bio calls him the primary architect.",
+      "source_urls": [
+        "https://standards.ieee.org/ieee/754/993/",
+        "https://eecs.berkeley.edu/book/turing-colloquium/schedule-3/kahan/"
+      ],
+      "limits": "Detailed1985 normative rounding clauses not accessed; full standard not purchased. Attribution denotes major contribution, not sole authorship. Current2019 standard was not substituted for1985 clauses."
+    },
+    {
+      "id": "fp8-2022",
+      "scene_refs": [
+        "s01_hook.py:89",
+        "s10_floats.py:77",
+        "README.md:165"
+      ],
+      "claim": "Micikevicius etal2022 E4M3/E5M2 layouts; E4M3 maximum448, no infinities.",
+      "status": "supported",
+      "evidence": "Original arXiv v2 section3/Table1 gives4/3 and5/2 fields, E4M3 finite max448/no infinity and E5M2 IEEE-like special values.",
+      "source_urls": [
+        "https://arxiv.org/html/2209.05433v2",
+        "https://arxiv.org/abs/2209.05433"
+      ],
+      "limits": "2022 dates these particular proposed encodings, not invention of all8-bit floating point. Paper itself cites prior FP8 work. No universal claim all training arithmetic is8bit validated."
+    },
+    {
+      "id": "checkpoint-1992",
+      "scene_refs": [
+        "s12_memory.py:101",
+        "s12_memory.py:113"
+      ],
+      "claim": "Griewank1992 recursive checkpointing: log storage, log overhead, nlogn total work.",
+      "status": "supported",
+      "evidence": "Publisher abstract bounds temporal and spatial growth relative to original evaluation by a logarithmic factor;1992 issue date confirmed (online posting2011 is distinct).",
+      "source_urls": [
+        "https://www.tandfonline.com/doi/abs/10.1080/10556789208805505"
+      ],
+      "limits": "Abstract-level asymptotic support; not a proof of this repository’s physical-memory use."
+    },
+    {
+      "id": "checkpoint-2016",
+      "scene_refs": [
+        "s12_memory.py:103",
+        "s12_memory.py:113"
+      ],
+      "claim": "Chen,Xu,Zhang,Guestrin2016 sqrt-depth checkpointing for deep networks.",
+      "status": "supported",
+      "evidence": "Original abstract and introductory/related-work sections describe O(sqrt(n)) memory with recomputation and explicitly acknowledge existing AD checkpointing.",
+      "source_urls": [
+        "https://arxiv.org/abs/1604.06174",
+        "https://arxiv.org/pdf/1604.06174"
+      ],
+      "limits": "Supports bringing the method to deep nets, not first invention of checkpointing; model assumptions apply."
+    },
+    {
+      "id": "flashattention-recompute",
+      "scene_refs": [
+        "s12_memory.py:116"
+      ],
+      "claim": "FlashAttention recomputes attention weights in backward pass.",
+      "status": "unverified",
+      "evidence": "Actual claim inventoried but original FlashAttention paper was not inspected in this bounded pass.",
+      "source_urls": [],
+      "limits": "Existing source claim is not independently certified here."
+    },
+    {
+      "id": "newton-1669-1690-1740",
+      "scene_refs": [
+        "s13_newton.py:130",
+        "s13_newton.py:138",
+        "README.md:168"
+      ],
+      "claim": "Newton1669,Raphson1690,Simpson1740 multivariate/minimum developments.",
+      "status": "metadata-only",
+      "evidence": "SIAM confirms cited Ypma1995 historical article and bibliography identity.",
+      "source_urls": [
+        "https://epubs.siam.org/doi/10.1137/1037125"
+      ],
+      "limits": "Original17th/18th-century works were not read; publisher historical-article identity is not primary verification of every date/detail."
+    },
+    {
+      "id": "hvp-1994",
+      "scene_refs": [
+        "s14_hvp.py:117",
+        "s14_hvp.py:124",
+        "README.md:256"
+      ],
+      "claim": "Pearlmutter1994 fast exact Hv without forming H, cost comparable to gradient.",
+      "status": "supported",
+      "evidence": "MITPress original publisher abstract describes direct Hessian-vector multiplication through the R operator, avoiding explicit Hessian with gradient-comparable computational cost.",
+      "source_urls": [
+        "https://doi.org/10.1162/neco.1994.6.1.147",
+        "https://mural.maynoothuniversity.ie/id/eprint/5501/"
+      ],
+      "limits": "Exact refers to derivative algorithm versus finite differences; no claim of zero floating-point error."
+    },
+    {
+      "id": "svm-1992",
+      "scene_refs": [
+        "s17_kkt.py:261",
+        "s17_kkt.py:271",
+        "README.md:256"
+      ],
+      "claim": "Boser,Guyon,Vapnik1992 optimal-margin classifier dual/support patterns.",
+      "status": "qualified",
+      "evidence": "Conference record preserves original abstract: margin maximization and solution using supporting patterns; authors,COLT1992,pp144–152,DOI agree.",
+      "source_urls": [
+        "https://mlanthology.org/colt/1992/boser1992colt-training/",
+        "https://doi.org/10.1145/130385.130401"
+      ],
+      "limits": "Linked legacy svms.org PDF redirected to unrelated content; not accepted as paper evidence. Original dual derivation/intercept equality not read in this pass, so support limited to abstract/metadata."
+    },
+    {
+      "id": "svm-1995",
+      "scene_refs": [
+        "s17_kkt.py:261",
+        "README.md:256"
+      ],
+      "claim": "Cortes and Vapnik1995 Support-vector networks.",
+      "status": "metadata-only",
+      "evidence": "Springer publisher confirms title, authors,September1995,MachineLearning20 pp273–297.",
+      "source_urls": [
+        "https://doi.org/10.1007/BF00994018"
+      ],
+      "limits": "No full-paper theorem/algorithm audit."
+    },
+    {
+      "id": "deq-2019",
+      "scene_refs": [
+        "s18_implicit.py:229",
+        "s18_implicit.py:239",
+        "README.md:260"
+      ],
+      "claim": "Bai,Kolter,Koltun2019 fixed-point/equilibrium networks and implicit gradients.",
+      "status": "supported",
+      "evidence": "Original preprint abstract describes rootfinding for weight-tied fixed points and implicit differentiation;2019 initial submission and NeurIPS reference agree.",
+      "source_urls": [
+        "https://arxiv.org/abs/1909.01377"
+      ],
+      "limits": "Supports paper example, not global convergence of every learned fixed point or this repository’s toy implementation."
+    },
+    {
+      "id": "optnet-2017",
+      "scene_refs": [
+        "s18_implicit.py:239",
+        "s18_implicit.py:243",
+        "README.md:259"
+      ],
+      "claim": "Amos and Kolter2017 differentiable optimization/QP layers.",
+      "status": "supported",
+      "evidence": "Original preprint abstract describes optimization layers and differentiating through them;initial2017 submission/ICML2017 agree.",
+      "source_urls": [
+        "https://arxiv.org/abs/1703.00443"
+      ],
+      "limits": "Abstract-level example check, not every solver assumption."
+    },
+    {
+      "id": "imaml-2019",
+      "scene_refs": [
+        "s18_implicit.py:240",
+        "s18_implicit.py:244",
+        "README.md:260"
+      ],
+      "claim": "Rajeswaran etal2019 iMAML implicit differentiation through inner optimization.",
+      "status": "supported",
+      "evidence": "Original abstract describes gradients based on the inner optimum rather than differentiating the entire optimization path;2019 authors/date agree.",
+      "source_urls": [
+        "https://arxiv.org/abs/1909.04630"
+      ],
+      "limits": "Abstract-level example check; approximation and inner-stationarity conditions remain relevant."
+    },
+    {
+      "id": "books-six",
+      "scene_refs": [
+        "README.md:249",
+        "s19_outro.py:221"
+      ],
+      "claim": "Six listed book author/edition/year entries.",
+      "status": "metadata-only",
+      "evidence": "Publisher/author metadata agrees: GriewankWalther2ed2008;NocedalWright2ed2006;BoydVandenberghe2004;Higham2ed2002;GoodfellowBengioCourville2016. BlondelRoulet2024 author citation explicitly labels arXiv book draft/preprint.",
+      "source_urls": [
+        "https://epubs.siam.org/doi/book/10.1137/1.9780898717761",
+        "https://epubs.siam.org/doi/pdf/10.1137/1.9780898717761.fm",
+        "https://link.springer.com/book/10.1007/978-0-387-40065-5",
+        "https://www.cambridge.org/gb/universitypress/subjects/statistics-probability/optimization-or-and-risk/convex-optimization",
+        "https://epubs.siam.org/doi/book/10.1137/1.9780898718027",
+        "https://epubs.siam.org/doi/10.1137/1.9780898717778",
+        "https://mitpress.mit.edu/9780262035613/deep-learning/",
+        "https://diffprog.github.io/cite.html"
+      ],
+      "limits": "Metadata check only, not reading or approving all textbook content.2024 Elements is a book draft/preprint, not a verified2024commercial-edition claim."
+    }
+  ],
+  "limits": [
+    "No production render, numerical compute, cache mutation, full paper redistribution, paid access, new credentials, local-computer action, commit or push by reviewer.",
+    "Unreviewed original thesis details and priority claims remain explicitly limited. Metadata-only is not full-text support.",
+    "Remaining README paper entries/framework chronology/Jaynes dice story/saddle literature were not exhaustively checked.",
+    "Sources were read through public web snapshots during2026-11-01; no inference that a date alone validates all surrounding narration."
+  ],
+  "repair": {
+    "authorized_by": "parent/root after exact issue report",
+    "files": [
+      {
+        "path": "videos/ai/ai4/s03_gradient.py",
+        "before_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+        "after_sha256": "10bac01890e68e3f86915521de9cf3b6729fe9e7934750d629360464263ceb33"
+      },
+      {
+        "path": "videos/ai/ai4/zh_lines.py",
+        "before_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "after_sha256": "ec04b2f4c18551b990707465209d3f4472d3b098ccf16e61a1d2d558bb089e08"
+      }
+    ],
+    "single_en_sentence_replacement": true,
+    "single_zh_sentence_and_lookup_prefix_replacement": true,
+    "all_other_scene_ast_identical": true,
+    "bookmarks_identical": true,
+    "all_data_expressions_animation_calls_and_run_time_arguments_identical": true,
+    "speech_words_changed_so_old_audio_timing_not_reusable_without_regression": true,
+    "fresh_render_review": "pending parent; this receipt does not approve new rendered Gradient artifacts"
+  },
+  "source_inventory_before": {
+    "captured_utc": "2026-11-01T00:48:53.458312+00:00",
+    "files": [
+      {
+        "path": "videos/ai/ai4/s04_jacobian.py",
+        "sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783"
+      },
+      {
+        "path": "videos/ai/ai4/s11_vcurve.py",
+        "sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8"
+      },
+      {
+        "path": "videos/ai/ai4/s10_floats.py",
+        "sha256": "98288d25f6a2fb37d0742a9385e078425265b86696e2336928b049683148682b"
+      },
+      {
+        "path": "videos/ai/ai4/s12_memory.py",
+        "sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4"
+      },
+      {
+        "path": "videos/ai/ai4/s05_layers.py",
+        "sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc"
+      },
+      {
+        "path": "videos/ai/ai4/s07_backprop.py",
+        "sha256": "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c"
+      },
+      {
+        "path": "videos/ai/ai4/s13_newton.py",
+        "sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19"
+      },
+      {
+        "path": "videos/ai/ai4/s02_derivative.py",
+        "sha256": "b072470cd31ea9009eb3f663c8db03e73705cacea4c86dfad83b367df880ecec"
+      },
+      {
+        "path": "videos/ai/ai4/s14_hvp.py",
+        "sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb"
+      },
+      {
+        "path": "videos/ai/ai4/s18_implicit.py",
+        "sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181"
+      },
+      {
+        "path": "videos/ai/ai4/s16_lagrange.py",
+        "sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee"
+      },
+      {
+        "path": "videos/ai/ai4/s17_kkt.py",
+        "sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26"
+      },
+      {
+        "path": "videos/ai/ai4/s08_library.py",
+        "sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9"
+      },
+      {
+        "path": "videos/ai/ai4/s01_hook.py",
+        "sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955"
+      },
+      {
+        "path": "videos/ai/ai4/s03_gradient.py",
+        "sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830"
+      },
+      {
+        "path": "videos/ai/ai4/s09_train.py",
+        "sha256": "49f9e2da42f74283fc989608a10e5ad82cb6dea33a4bd4fac9329d85a7970f78"
+      },
+      {
+        "path": "videos/ai/ai4/s06_modes.py",
+        "sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0"
+      },
+      {
+        "path": "videos/ai/ai4/s19_outro.py",
+        "sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765"
+      },
+      {
+        "path": "videos/ai/ai4/s15_quadratic.py",
+        "sha256": "8b387c3a6f707b35b275bfb56a2daba1219707bd6e8c573bbf8ca2456390d68e"
+      },
+      {
+        "path": "videos/ai/ai4/README.md",
+        "sha256": "1095c935e47faee3b9ace0b1d798ed02b3a1ab7f5d5cf2a402e088d03e1b6b42"
+      },
+      {
+        "path": "videos/ai/ai4/zh_lines.py",
+        "sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d"
+      }
+    ]
+  },
+  "tests_log": "narration-tests.log"
+}

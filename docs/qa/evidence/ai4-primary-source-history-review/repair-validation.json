@@ -1,0 +1,33 @@
+{
+  "scope": "Actual revised paragraph through real Translator; source text and AST checks, no scene imports/render/compute.",
+  "english": "Walking downhill this way is a standard optimization method. <bookmark mark='a'/> In 1847 Augustin-Louis Cauchy, wanting to solve the equations of an orbit, wrote them as a sum of squares and proposed stepping against its gradient. <bookmark mark='b'/> Written today: the next point is the current one, minus a step size eta times the gradient there. <bookmark mark='c'/> How large a step, and how fast it arrives, depends on the curvature, which comes in chapter fourteen and again in Part 11.",
+  "chinese": "这样一路走下坡，是一种标准的优化方法。<bookmark mark='a'/>1847年，奥古斯丁–路易·柯西想解出一条轨道的方程组，就把它们写成一个平方和，并提出逆着它的梯度一步步走。<bookmark mark='b'/>用今天的写法：下一个点，等于当前的点，减去步长η乘以那里的梯度。<bookmark mark='c'/>步子该多大，多快能走到，取决于曲率，这要到第14章，再到第11部分去讲。",
+  "bookmarks_identical": true,
+  "unrelated_inventoried_files_unchanged": [
+    "videos/ai/ai4/s04_jacobian.py",
+    "videos/ai/ai4/s11_vcurve.py",
+    "videos/ai/ai4/s10_floats.py",
+    "videos/ai/ai4/s12_memory.py",
+    "videos/ai/ai4/s05_layers.py",
+    "videos/ai/ai4/s07_backprop.py",
+    "videos/ai/ai4/s13_newton.py",
+    "videos/ai/ai4/s02_derivative.py",
+    "videos/ai/ai4/s14_hvp.py",
+    "videos/ai/ai4/s18_implicit.py",
+    "videos/ai/ai4/s16_lagrange.py",
+    "videos/ai/ai4/s17_kkt.py",
+    "videos/ai/ai4/s08_library.py",
+    "videos/ai/ai4/s01_hook.py",
+    "videos/ai/ai4/s09_train.py",
+    "videos/ai/ai4/s06_modes.py",
+    "videos/ai/ai4/s19_outro.py",
+    "videos/ai/ai4/s15_quadratic.py",
+    "videos/ai/ai4/README.md"
+  ],
+  "tests": {
+    "passed": 20,
+    "seconds": 12.125
+  },
+  "source_sha256": "10bac01890e68e3f86915521de9cf3b6729fe9e7934750d629360464263ceb33",
+  "zh_sha256": "ec04b2f4c18551b990707465209d3f4472d3b098ccf16e61a1d2d558bb089e08"
+}

@@ -1,0 +1,225 @@
+{
+  "scope": "Every packaged payload except this manifest; actual compressed-byte identities; no MP4/cache/model copies.",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 2852,
+      "sha256": "71a4035c26c69bb0dae744a6ecc49abe6b8345a32617d5184e7370e0fc5b4552"
+    },
+    {
+      "file": "en/baseline-endpoint-record.json.gz",
+      "bytes": 11807,
+      "sha256": "2ac58fafce6dee9ab8150cdeb4cecd3d0df5e2ce0e8d4fae4311ea85b95ba5a1"
+    },
+    {
+      "file": "en/complete-motion-map.json.gz",
+      "bytes": 60056,
+      "sha256": "f84ac818492001bf9655c018c5e2d45426c610e0f50997c33f70d0a01b11313b"
+    },
+    {
+      "file": "en/fresh-endpoint-record.json.gz",
+      "bytes": 11561,
+      "sha256": "9ea742239dbd34fcf3c983b5759279254d4185664530d464e2f2134d8ee98d6e"
+    },
+    {
+      "file": "en/fresh-motion-record.json.gz",
+      "bytes": 11091,
+      "sha256": "0781c4b387176cebe8edcf22dabb57e7fde394df6d1780537311d1df2c617aa2"
+    },
+    {
+      "file": "en/native/0000831_000055.400s.png",
+      "bytes": 19642,
+      "sha256": "a9f1730f4e10e6c2a17b10105177520174b25de85f0cddcd1cbb1791839f03a4"
+    },
+    {
+      "file": "en/native/0002136_000142.399s.png",
+      "bytes": 167156,
+      "sha256": "2304ae8ee470105c81bb90c0b53e48262890fe9006b34089b44d628945df206e"
+    },
+    {
+      "file": "en/native/0002318_000154.533s.png",
+      "bytes": 183727,
+      "sha256": "1865ef422db53d37db7dc43023390e50b2d6a406f350ad896da4b995a7448a57"
+    },
+    {
+      "file": "en/native/0002396_000159.733s.png",
+      "bytes": 196995,
+      "sha256": "f0e2293b658edcabb95389d1bd70ac1b1d39ca67e830907866d0510bc5678b00"
+    },
+    {
+      "file": "en/native-review.json.gz",
+      "bytes": 475,
+      "sha256": "f6a5826aa737433f964b31bd59acee1e2e017f22d03db71fab2a653a5269a57e"
+    },
+    {
+      "file": "en/novel-viewed-pages/sheet-001.png",
+      "bytes": 180962,
+      "sha256": "593dd1708c71fef7a03a5ffd3266a1eae5a20d34b8a03fd791013c0e496fd568"
+    },
+    {
+      "file": "en/novel-viewed-pages/sheet-002.png",
+      "bytes": 550765,
+      "sha256": "c626dcccd27d053efc2b662fcf39d0d54db7294d375bd6eb21981c1c775fc59d"
+    },
+    {
+      "file": "en/novel-viewed-pages/sheet-003.png",
+      "bytes": 437742,
+      "sha256": "df9fc84fa5c02c7a65bf4fc41cb99af1a42a2d485251f884d6c7154cbbf509ba"
+    },
+    {
+      "file": "en/original-motion-record.json.gz",
+      "bytes": 11266,
+      "sha256": "bcb5ab09173489eba3079697f0fda666fdacdbb2caa6e1954c20b2f790df5209"
+    },
+    {
+      "file": "en/raw-audit.json.gz",
+      "bytes": 34576,
+      "sha256": "382eab131f557225217aadbcf4e363aadacef02d0fafe0f6c17873dd9a5aadde"
+    },
+    {
+      "file": "endpoint-comparison.json.gz",
+      "bytes": 5463,
+      "sha256": "bd3216b4172bd7c2321637bf759480e2f7d51207c5b7dc4e171c0293b5222f82"
+    },
+    {
+      "file": "primary-source-repair/gradient-history-wording.patch.gz",
+      "bytes": 985,
+      "sha256": "c7137d66e7204ce194bb7451d3b75a7283a827132c04b2f3cc4a071cf9884a4f"
+    },
+    {
+      "file": "primary-source-repair/narration-tests.log.gz",
+      "bytes": 770,
+      "sha256": "668a1583eac1fdb068ccc2bf6d292f5d120cf1c4a1f2aca604feeb40ad2e92fb"
+    },
+    {
+      "file": "primary-source-repair/repair-validation.json.gz",
+      "bytes": 1199,
+      "sha256": "449510236423d61eabd28a12794391672e5c5d91efd6a51e3c9d6dd5917bdcd1"
+    },
+    {
+      "file": "primary-source-repair/report.json.gz",
+      "bytes": 7624,
+      "sha256": "cc3740a0d7e43701181b051b8b6a94688c8cc98d9fe0195432e824170ea5672b"
+    },
+    {
+      "file": "procedures/finalize.py.gz",
+      "bytes": 2691,
+      "sha256": "0afa9f8e7b44b4cd5eb5044aa825db082690900640641b836bf95f6aedcd6a61"
+    },
+    {
+      "file": "procedures/prepare_inheritance.py.gz",
+      "bytes": 1347,
+      "sha256": "58966e3599675f4bc71bf8d9594b61168fe47fc23c9d1280de9420999e79d9d7"
+    },
+    {
+      "file": "report.json.gz",
+      "bytes": 2517,
+      "sha256": "b8c4ab5cbf1c92a2146de4dc698ef771c2a79be5f886a5ee4dad65e38712289a"
+    },
+    {
+      "file": "source-at-freeze/explainer/ai/viz.py.gz",
+      "bytes": 10483,
+      "sha256": "ea38260518e3e5ba072775355dae69b43209d43e315c6e9f0ceaee7719230411"
+    },
+    {
+      "file": "source-at-freeze/tools/qa_motion.py.gz",
+      "bytes": 6507,
+      "sha256": "bc76b6a2f4f0b0c878359c9fa4a758f4d8e096338aebf90cbd46e5aac317938e"
+    },
+    {
+      "file": "source-at-freeze/tools/qa_series.py.gz",
+      "bytes": 7934,
+      "sha256": "4c9b96ab7f0fd02814af9a0d1b3e26efd9503767498574749bb13a6802096af3"
+    },
+    {
+      "file": "source-at-freeze/videos/ai/ai4/common.py.gz",
+      "bytes": 2210,
+      "sha256": "a055a4f9709b0bd1ad960074662260e31932afa96f1cf60e68fd43fcce115c3b"
+    },
+    {
+      "file": "source-at-freeze/videos/ai/ai4/narration_zh.json.gz",
+      "bytes": 36203,
+      "sha256": "76bd924a8a6a83df159c3e893903136b3912c73c11f1af604591c19402606a8e"
+    },
+    {
+      "file": "source-at-freeze/videos/ai/ai4/s03_gradient.py.gz",
+      "bytes": 5097,
+      "sha256": "91f9cf99d097d106cb013ea94d634eec15982a1a0670a702c28658769b482c52"
+    },
+    {
+      "file": "source-at-freeze/videos/ai/ai4/zh_lines.py.gz",
+      "bytes": 41092,
+      "sha256": "4437ea49cbca11bb9c3a0e42126413963195fc6a4a173a210d76acc804faa5ca"
+    },
+    {
+      "file": "source-at-freeze/videos/ai/ai_text_zh.json.gz",
+      "bytes": 881407,
+      "sha256": "50ed4c0ddaf30f466907e06fb369e6cf19aa9aebe16a13ce50f2a0d758774580"
+    },
+    {
+      "file": "source-freeze.json.gz",
+      "bytes": 1005,
+      "sha256": "2d7151e8c6749cc545f89d873548a3a04a82a1080fc38afb4a0f499e0702d9db"
+    },
+    {
+      "file": "zh/baseline-endpoint-record.json.gz",
+      "bytes": 16986,
+      "sha256": "c67ff6e4823a474195de41ca3c597cbcbf647e638d5ab16593925b2c49f74f8f"
+    },
+    {
+      "file": "zh/complete-motion-map.json.gz",
+      "bytes": 62860,
+      "sha256": "2eca4e24fef3c352dd20bbf07cdf245fb4de597f10f2aa6f4619976a9500724b"
+    },
+    {
+      "file": "zh/fresh-endpoint-record.json.gz",
+      "bytes": 17194,
+      "sha256": "869e68d3bc787f185eb555cc53beedf7a814ee41156472a93533045c7344b499"
+    },
+    {
+      "file": "zh/fresh-motion-record.json.gz",
+      "bytes": 16742,
+      "sha256": "5a39917f8037e5459cd23b9f928cdcfd4e2cbe09a1fb21bd2be2c9b3e4ec12d4"
+    },
+    {
+      "file": "zh/native/0002189_000145.933s.png",
+      "bytes": 168710,
+      "sha256": "8332d25aa4aa7ca2967489769ddf03cb36148b4ef04d36c0dcf3fc23bf662066"
+    },
+    {
+      "file": "zh/native/0002378_000158.533s.png",
+      "bytes": 180491,
+      "sha256": "d445ca4857d117b18081c8b001eb5d6447fc19ff9a7b31ddcaad3dbf1f72796c"
+    },
+    {
+      "file": "zh/native/0002421_000161.399s.png",
+      "bytes": 183332,
+      "sha256": "b094dfa3b10ee08f84713a295fae324af062ceb7d2ff5e8a59b26833515bef1f"
+    },
+    {
+      "file": "zh/native-review.json.gz",
+      "bytes": 423,
+      "sha256": "47f0a4a22b5108ea328bad621af0d4bcc2108d856dd692d81f4a244c377a2d58"
+    },
+    {
+      "file": "zh/novel-viewed-pages/sheet-001.png",
+      "bytes": 584448,
+      "sha256": "fa8c3eeecc4d72a10c8a7fd851ed7ff01f4c7deb8c9093b92e4f0878485553eb"
+    },
+    {
+      "file": "zh/novel-viewed-pages/sheet-002.png",
+      "bytes": 1002798,
+      "sha256": "65bbe274bedfff9970ce0f098355b594d26c27ebbf8831d59d4b998911e66013"
+    },
+    {
+      "file": "zh/original-motion-record.json.gz",
+      "bytes": 16492,
+      "sha256": "67ff635d619e872cc58941d90560232f139d1446e8e444192cf0af0d53f2c37d"
+    },
+    {
+      "file": "zh/raw-audit.json.gz",
+      "bytes": 36402,
+      "sha256": "80fa39b437a16904c6e897987b438fe85bb0dc0a0efabaede3be7765bfabc63a"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "captured_utc": "2026-11-01T00:48:53.458312+00:00",
+  "files": [
+    {
+      "path": "videos/ai/ai4/s04_jacobian.py",
+      "sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783"
+    },
+    {
+      "path": "videos/ai/ai4/s11_vcurve.py",
+      "sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8"
+    },
+    {
+      "path": "videos/ai/ai4/s10_floats.py",
+      "sha256": "98288d25f6a2fb37d0742a9385e078425265b86696e2336928b049683148682b"
+    },
+    {
+      "path": "videos/ai/ai4/s12_memory.py",
+      "sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4"
+    },
+    {
+      "path": "videos/ai/ai4/s05_layers.py",
+      "sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc"
+    },
+    {
+      "path": "videos/ai/ai4/s07_backprop.py",
+      "sha256": "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c"
+    },
+    {
+      "path": "videos/ai/ai4/s13_newton.py",
+      "sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19"
+    },
+    {
+      "path": "videos/ai/ai4/s02_derivative.py",
+      "sha256": "b072470cd31ea9009eb3f663c8db03e73705cacea4c86dfad83b367df880ecec"
+    },
+    {
+      "path": "videos/ai/ai4/s14_hvp.py",
+      "sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb"
+    },
+    {
+      "path": "videos/ai/ai4/s18_implicit.py",
+      "sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181"
+    },
+    {
+      "path": "videos/ai/ai4/s16_lagrange.py",
+      "sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee"
+    },
+    {
+      "path": "videos/ai/ai4/s17_kkt.py",
+      "sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26"
+    },
+    {
+      "path": "videos/ai/ai4/s08_library.py",
+      "sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9"
+    },
+    {
+      "path": "videos/ai/ai4/s01_hook.py",
+      "sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955"
+    },
+    {
+      "path": "videos/ai/ai4/s03_gradient.py",
+      "sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830"
+    },
+    {
+      "path": "videos/ai/ai4/s09_train.py",
+      "sha256": "49f9e2da42f74283fc989608a10e5ad82cb6dea33a4bd4fac9329d85a7970f78"
+    },
+    {
+      "path": "videos/ai/ai4/s06_modes.py",
+      "sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0"
+    },
+    {
+      "path": "videos/ai/ai4/s19_outro.py",
+      "sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765"
+    },
+    {
+      "path": "videos/ai/ai4/s15_quadratic.py",
+      "sha256": "8b387c3a6f707b35b275bfb56a2daba1219707bd6e8c573bbf8ca2456390d68e"
+    },
+    {
+      "path": "videos/ai/ai4/README.md",
+      "sha256": "1095c935e47faee3b9ace0b1d798ed02b3a1ab7f5d5cf2a402e088d03e1b6b42"
+    },
+    {
+      "path": "videos/ai/ai4/zh_lines.py",
+      "sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d"
+    }
+  ]
+}

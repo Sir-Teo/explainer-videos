@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 14931,
+      "sha256": "de71e26f255c1adf9f8d30997bdd9dcca06bddf20f349e2a3c54a3169ff5af3c"
+    },
+    {
+      "path": "gradient-history-wording.patch.gz",
+      "bytes": 985,
+      "sha256": "0d68f418bbca6d5c35cee5b31f029de1731bee18696321fa2ab83b67bd3405f9"
+    },
+    {
+      "path": "narration-tests.log",
+      "bytes": 3486,
+      "sha256": "c882ea63ce1c2679eae8caf8008b43fa1c87a8c1a6a5f8ac1ba96a6c5b3e411e"
+    },
+    {
+      "path": "repair-validation.json",
+      "bytes": 2095,
+      "sha256": "6a4398e2ccb5455853d451e2dd06f212c98158759ba834c20ffd652839e8dd0a"
+    },
+    {
+      "path": "report.json",
+      "bytes": 22311,
+      "sha256": "376f4e1eed406264d7ed70dd5e2afb5e5c3edc2f7a13a57b23d0565a0fb745a1"
+    },
+    {
+      "path": "s03_gradient.py.before",
+      "bytes": 15915,
+      "sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830"
+    },
+    {
+      "path": "source-inventory-before.json",
+      "bytes": 3036,
+      "sha256": "ec7ceeb6bf6ffb8e16a3cc98e95358ec29a87b64d5397e14959f205577af6f4b"
+    },
+    {
+      "path": "zh_lines.py.before",
+      "bytes": 108379,
+      "sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d"
+    }
+  ],
+  "lossless_archive_notes": [
+    {
+      "decoded_original_path": "gradient-history-wording.patch",
+      "stored_path": "gradient-history-wording.patch.gz",
+      "decoded_bytes": 2189,
+      "decoded_sha256": "d16f7c2b3f8c693b8e42aca47c040b323abd6692bc9f568052b036b2a751a8e7",
+      "reason": "Preserve exact original whitespace bytes in lossless archive; no evidence-content edits."
+    }
+  ]
+}

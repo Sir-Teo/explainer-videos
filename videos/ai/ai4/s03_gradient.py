@@ -229,7 +229,7 @@ class Gradient(VoiceoverScene, ThreeDScene):
                    color=GREY_B).to_edge(DOWN, buff=0.3).align_to(hist, LEFT)
         tag = note(r"illustrative path").next_to(ax, DOWN, buff=0.05).align_to(ax, RIGHT)
         with self.voiceover(
-            "Walking downhill this way is the oldest method in this series. <bookmark mark='a'/> In 1847 Augustin-Louis "
+            "Walking downhill this way is a standard optimization method. <bookmark mark='a'/> In 1847 Augustin-Louis "
             "Cauchy, wanting to solve the equations of an orbit, wrote them as a sum of squares and proposed stepping "
             "against its gradient. <bookmark mark='b'/> Written today: the next point is the current one, minus a "
             "step size eta times the gradient there. <bookmark mark='c'/> How large a step, and how fast it arrives, "

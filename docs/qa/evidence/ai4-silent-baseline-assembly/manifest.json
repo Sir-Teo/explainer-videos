@@ -1,0 +1,2684 @@
+{
+  "created_utc": "2026-11-01T00:55:48.814263+00:00",
+  "status": "Historicalpre-history-qualificationbaseline,notfinalcurrentsourceapproval",
+  "copies": [
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/baseline-summary.json",
+      "original_sha256": "a1b2104b186e46f0d29e9440d4c00e383ee7b61f28f76a9473f542fbe131dfe4",
+      "package_path": "receipts/baseline-summary.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/baseline-manifest.json",
+      "original_sha256": "54e414e421e9c31c013f3fab49af5913b07fadd4b093efccf15fd9f378dd6034",
+      "package_path": "receipts/baseline-manifest.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/input-freeze.json",
+      "original_sha256": "a3741855a4a2f671a4cd64c71f132956dea9cd6a940c082f4c960d07bc3cb3ac",
+      "package_path": "receipts/input-freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/canonical-preview-map.json",
+      "original_sha256": "83fa053f20854ba7c4986aa57f250a063445ad0beb6838f18ed9eb80adad395c",
+      "package_path": "receipts/canonical-preview-map.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/canonical-identity-freeze.json",
+      "original_sha256": "ecd78b014e0906e448fc85639ce4ff4b434cb70c8a9d4e4d60efe873351ee714",
+      "package_path": "receipts/canonical-identity-freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/canonical-crosscheck.json",
+      "original_sha256": "011de74eaacceaafcc303ccfce200a06d3cba0ca0d90a24e9e7eb807f1e5df95",
+      "package_path": "receipts/canonical-crosscheck.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/postassembly-identity-check.json",
+      "original_sha256": "692588ddbb523466fb879d82f230b9105621a0d6ec32e2b4bb05ee1e1f46ab54",
+      "package_path": "receipts/postassembly-identity-check.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/tool-environment.json",
+      "original_sha256": "0c35b069b15a2c1b1a85ed527cb27ffe1e7e841f91a71fe81b2f5b9340082bef",
+      "package_path": "receipts/tool-environment.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/history-qualification-pending.json",
+      "original_sha256": "e927720869ef7cd70ce28dd4fac9a774248bbbf9e6d8b434bf563bc1bea85a68",
+      "package_path": "receipts/history-qualification-pending.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/freeze-reconciliation.json",
+      "original_sha256": "bd7586b39cd5ea645cf8b33969372198c1f419dc7d6c1895b64f8f477e6222d6",
+      "package_path": "receipts/freeze-reconciliation.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en-join-review.json",
+      "original_sha256": "5fae1ab510fd05f32d0e98e7b543de0e2df29dbe6b9a4162fab11890c5f0dcb8",
+      "package_path": "receipts/en-join-review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh-join-review.json",
+      "original_sha256": "fc0e288e3d04a850391018d3aad1777b39434af44f1954ef4d1402fdbdae7a46",
+      "package_path": "receipts/zh-join-review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en-join-review.md",
+      "original_sha256": "3365d31aaa6d7f6d8bebae11080f53de02121fcad145008b13193ca2ae5dbbd4",
+      "package_path": "receipts/en-join-review.md",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh-join-review.md",
+      "original_sha256": "afbeaae9393b24734d3f92aa5632958fa81289542381af5eb975b5f188e5852c",
+      "package_path": "receipts/zh-join-review.md.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/assembly-receipt.json",
+      "original_sha256": "a155fe182bbcafabdc4c136c212e57a60c4794770e6ba0f344a0b53e30f99a8a",
+      "package_path": "en/assembly-receipt.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/assembly-progress.json",
+      "original_sha256": "a155fe182bbcafabdc4c136c212e57a60c4794770e6ba0f344a0b53e30f99a8a",
+      "package_path": "en/assembly-progress.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/validation.json",
+      "original_sha256": "308fcf20a2cdb62b42a49d720691cd1b0f91239e1daa30cf336cb66f381ed764",
+      "package_path": "en/validation/validation.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/audio-validation.json",
+      "original_sha256": "531ad88e7ceedf7eb9976791a9eff980940ae5c7b053f242581deb80ab3032cc",
+      "package_path": "en/validation/audio-validation.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/subtitle-boundaries.json",
+      "original_sha256": "fff08a995f0237ca903980acb722e58148bc47a283b7deb149a1378d736ca901",
+      "package_path": "en/validation/subtitle-boundaries.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/final-probe.json",
+      "original_sha256": "0cb7c5302f789eb2150ac4dfff020802387284a9451591d493aa1f67fc7f2bf9",
+      "package_path": "en/validation/final-probe.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/video-frame-times.json.gz",
+      "original_sha256": "a9ffee94b0cb3c567571ddb149ccfb139f93fd918fea3a2f7f9b79dd0c7949ad",
+      "package_path": "en/validation/video-frame-times.json.gz",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/audio-frame-times.json.gz",
+      "original_sha256": "2996506c80f86bdf4532516d1674af61d1edb018ab59a38fed27cb4656d22c2e",
+      "package_path": "en/validation/audio-frame-times.json.gz",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/packet-times.json.gz",
+      "original_sha256": "37f20ad30873dcc707492df31ed2deb849f9271087ae837ea39c5d54bb21044d",
+      "package_path": "en/validation/packet-times.json.gz",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-selection.json",
+      "original_sha256": "f3147c814170910f7c01539cc2ad447afb4309c61c6a47d46dc6a1ef936ebb11",
+      "package_path": "en/validation/join-selection.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-review.json",
+      "original_sha256": "6c1691b8408231971a312f09e1163315b9ef43bedf430e33cb55204282fda9e6",
+      "package_path": "en/validation/join-review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/ai4-silent-preview-en-480p15.srt",
+      "original_sha256": "9cc71b3bd9448125a922d542cb1a490bd6fe9f78c8777517943cdcd40e3fdcf8",
+      "package_path": "en/ai4-silent-preview-en-480p15.srt",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/ai4-silent-preview-en-480p15.chapters.txt",
+      "original_sha256": "36f025303fa0fcad8993513cb2cf816ba38767644cb75e48179d32d63ecba8e8",
+      "package_path": "en/ai4-silent-preview-en-480p15.chapters.txt",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en-assembly.log",
+      "original_sha256": "b7120cf3014e794d29147d43a742b6a4f9ffe6f859a23d7442d5f4fd2603dd19",
+      "package_path": "en/logs/en-assembly.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en-validation.log",
+      "original_sha256": "5a44ebfdee9b5d143146f24718d22e55e81929073c88e0eb49ca220e8ee4d146",
+      "package_path": "en/logs/en-validation.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en-audio-validation.log",
+      "original_sha256": "531ad88e7ceedf7eb9976791a9eff980940ae5c7b053f242581deb80ab3032cc",
+      "package_path": "en/logs/en-audio-validation.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-001.png",
+      "original_sha256": "687874452b3de40fecbdb3fcba787a79e39b49de49e7cce44cb48f554d9a1829",
+      "package_path": "en/sheets/sheet-001.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-002.png",
+      "original_sha256": "c7e7ee5ac041b4dbe1a03fd75b82b3dfbd58e024ddce7831d3715babaa22d8e3",
+      "package_path": "en/sheets/sheet-002.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-003.png",
+      "original_sha256": "97a33983309398b541e8e897f8e25de76d19c203fe03a3243bd1fc82a89142db",
+      "package_path": "en/sheets/sheet-003.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-004.png",
+      "original_sha256": "509843d9aad175327275351124aa14156250bdebe6a9815aa7df7c587dc7ff07",
+      "package_path": "en/sheets/sheet-004.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-005.png",
+      "original_sha256": "bb19928d410d95171f1ea9481ff2361fac20d90369679546fc418712a7e41658",
+      "package_path": "en/sheets/sheet-005.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-006.png",
+      "original_sha256": "684e83eafba20755fa9f579eca253369e122c1c281cbd0daa0b76c392abd3f8b",
+      "package_path": "en/sheets/sheet-006.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-007.png",
+      "original_sha256": "c65793f8299d86b2dc435dec05adbb045e5d598f315b9bf3147e4bc5e58fe8e4",
+      "package_path": "en/sheets/sheet-007.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-008.png",
+      "original_sha256": "763661ea6b227fc18a68e6fe16a57c641c0fa4c6a58c41b49997c5dd9312bf2c",
+      "package_path": "en/sheets/sheet-008.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-009.png",
+      "original_sha256": "3f585081ed2156b5e554ee7f786817804c9133cbb5309cb45e3446dffe3122a1",
+      "package_path": "en/sheets/sheet-009.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-010.png",
+      "original_sha256": "09cae8ade77ad6d599de5037d98a00dbab759fc2356615a9e3db4648559212e0",
+      "package_path": "en/sheets/sheet-010.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-011.png",
+      "original_sha256": "9bb3c7c2de6d226ab4ddcf1d8c3825ea31479cd6c5868709293f8c5f71b2b2c5",
+      "package_path": "en/sheets/sheet-011.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-012.png",
+      "original_sha256": "797eed393f633624672618e13742cd676f113d60e84d0ad67cd5bd66d5f8963d",
+      "package_path": "en/sheets/sheet-012.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-013.png",
+      "original_sha256": "283ac58cae3b95e55b287596d9ce3dab9ea5e8e19280fa981bcb7700d49c81ff",
+      "package_path": "en/sheets/sheet-013.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-014.png",
+      "original_sha256": "94b39261b6744be97fb95d42f8c7cc84583b3d8adb69c36e1dc8c003f1d0a04d",
+      "package_path": "en/sheets/sheet-014.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-015.png",
+      "original_sha256": "6694f465882470f6f9a95da797730898bd22cab2bda439a485cf20a3decef203",
+      "package_path": "en/sheets/sheet-015.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-016.png",
+      "original_sha256": "a3b5e87bb15229b6743298ff1948c6430f31fb8b96dfbd96dc74ce717e8a0b4c",
+      "package_path": "en/sheets/sheet-016.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-017.png",
+      "original_sha256": "df6f6303eb4ed2a4e04310815bd76c3393fe4c609aff065631b97aa66a28a404",
+      "package_path": "en/sheets/sheet-017.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-018.png",
+      "original_sha256": "55bad0a0a9f2f0f0203ae338d1fa63249919e4cd0d6bb8f29081a65e4f595ee1",
+      "package_path": "en/sheets/sheet-018.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-019.png",
+      "original_sha256": "4a16eec6db8cfa2a672c2c430ed4fe9ce2406f1c5fcf64a3f029bb658a735507",
+      "package_path": "en/sheets/sheet-019.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-020.png",
+      "original_sha256": "2726c12273192b0bd49177b5d96f635634ae07b8ab48a97655ca1ea0dfe72e9f",
+      "package_path": "en/sheets/sheet-020.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-021.png",
+      "original_sha256": "01d01503386882892108d042a9ec1f455ed388125aaf36b800b86df73949d602",
+      "package_path": "en/sheets/sheet-021.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-022.png",
+      "original_sha256": "2f1bfd6e68b68d72a8f2315588929f64fe79205c0683dbdec4ea234e502ddbb5",
+      "package_path": "en/sheets/sheet-022.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-023.png",
+      "original_sha256": "05ead189bbf85d6d74faadbff59f5b7f476fa9c7d60b3c6460d754469eec2992",
+      "package_path": "en/sheets/sheet-023.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-024.png",
+      "original_sha256": "22bd62ec5cb26b02b36f3d274f9e2f17920dc4d005462b35cbf5d1fb76f126cf",
+      "package_path": "en/sheets/sheet-024.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-025.png",
+      "original_sha256": "1475c1d9bcb7ab6918d54c5fd4ca17179a85afd4604c52338d60db2616e90f52",
+      "package_path": "en/sheets/sheet-025.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-026.png",
+      "original_sha256": "a5ff35f670a3a643d7881da31f86f8d6cfb9f4dffb763e661ec3ac4e70a97b26",
+      "package_path": "en/sheets/sheet-026.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-027.png",
+      "original_sha256": "592284d31da9e92d48c11bf44f8511c076c76fccd32a7e440c9accd54b8d6f40",
+      "package_path": "en/sheets/sheet-027.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-028.png",
+      "original_sha256": "8029a4e177c00b17bf30f319bb31b35af028b05300c903368076b22cde5ff12b",
+      "package_path": "en/sheets/sheet-028.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-029.png",
+      "original_sha256": "f2ca7c22b387113b062fada24cd45745f2c1cd9eb594667cd83bc991694ef628",
+      "package_path": "en/sheets/sheet-029.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-030.png",
+      "original_sha256": "5f8310550c602e18effce48631d47d77eb5dee4651c0ba63f29610c8de69a3d6",
+      "package_path": "en/sheets/sheet-030.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-031.png",
+      "original_sha256": "a92a6bf4536b4307013376187dc920cc3ebe4a9fc439946d715528e4e25ca7a2",
+      "package_path": "en/sheets/sheet-031.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-032.png",
+      "original_sha256": "715fa658fcc5fa888a0cc4fcafc64718037ecc5bd1246f59fd65a2677b6f8d01",
+      "package_path": "en/sheets/sheet-032.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-033.png",
+      "original_sha256": "f2673f65e3a2662b2921649ebf988b2314a8dbbaa2c6a9d37b06a9629589f0a9",
+      "package_path": "en/sheets/sheet-033.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-034.png",
+      "original_sha256": "d28cafb94bbb9241c6b0051b624ccd5f00bcfe8f2ce705c5c15c2908efa2ced8",
+      "package_path": "en/sheets/sheet-034.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-035.png",
+      "original_sha256": "8d4117d8650309d685ff0059bee288d66c76f05790db60cd29b8ab5982e70664",
+      "package_path": "en/sheets/sheet-035.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-036.png",
+      "original_sha256": "95b64218cef7ea109d35339fb1c4f7dc5a63c1ccabfaba4e95cd34ed41af4895",
+      "package_path": "en/sheets/sheet-036.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-037.png",
+      "original_sha256": "85757a232a9d8654bd8a7e0c3b7b9c12ade95778536d0a6ca174a26baca1ada8",
+      "package_path": "en/sheets/sheet-037.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-038.png",
+      "original_sha256": "1cdc220a4ce3a9bf25ef528a1af20284ea861f077affd22e52b71fb5831b2448",
+      "package_path": "en/sheets/sheet-038.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-039.png",
+      "original_sha256": "90fff10d10d65b75448bc541bff0d02e18ffffcc313252d51b411f0fa4c1162b",
+      "package_path": "en/sheets/sheet-039.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-040.png",
+      "original_sha256": "1dac908592462ed7fa63deede921617ef8d7e004d579e7984f88a1d919bd95e6",
+      "package_path": "en/sheets/sheet-040.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/review-pages/sheet-041.png",
+      "original_sha256": "912ce2a1242f19a635f5527d1b7ac9082dab18b989e5efc5bbaa81effcb3b522",
+      "package_path": "en/sheets/sheet-041.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0001816.png",
+      "original_sha256": "6a650c7c304897f15496f8d6fce9220995d5b2b0386a2afa23469ae8ffb38e62",
+      "package_path": "en/native/join-01-before-frame-0001816.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0001846.png",
+      "original_sha256": "085616c87f9339f8cd25f73f4f18e773a2496dead423842608e8f716cb3bcb8c",
+      "package_path": "en/native/join-01-after-frame-0001846.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0004218.png",
+      "original_sha256": "bf838b4f585dbd0abcf5a4ac82a886932a7af107dbcf7b6f32fab63f4c82e1b9",
+      "package_path": "en/native/join-02-before-frame-0004218.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0004248.png",
+      "original_sha256": "5216a65cd22f6828841cbbd5a5a8e798624378fef1e15f986dcdb31a813c7f28",
+      "package_path": "en/native/join-02-after-frame-0004248.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0006775.png",
+      "original_sha256": "e2e2b137171aae5b1cca4c5014f197d9e3fdf400310c0cc63f7f74b226549333",
+      "package_path": "en/native/join-03-before-frame-0006775.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0006805.png",
+      "original_sha256": "31323bd0368704d7fef12ce1dc1654d8aa4f13f546ad63a5a3f0c924bcd7abef",
+      "package_path": "en/native/join-03-after-frame-0006805.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0008807.png",
+      "original_sha256": "00bc096a54435de1314aaade08c9cef8b1602a29fac6d3adb891055246428374",
+      "package_path": "en/native/join-04-before-frame-0008807.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0008837.png",
+      "original_sha256": "f1d20464627efaa9fbdf3c4e90b360ddc07bcc94fb1ad3116a2a836987a720f1",
+      "package_path": "en/native/join-04-after-frame-0008837.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0011142.png",
+      "original_sha256": "413f7ae71bfe15e47e4672ae5879f49d844405b5fe6968063801591bc0eb10cb",
+      "package_path": "en/native/join-05-before-frame-0011142.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0011172.png",
+      "original_sha256": "2508e54d640287de96ba9cd2b195bbdb46c434f6b4e750cfd9e1d0c13fb58bea",
+      "package_path": "en/native/join-05-after-frame-0011172.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0014232.png",
+      "original_sha256": "318fda3e5d703a25409a146cd01cd4ab3136796482a3eb1269786729852214d4",
+      "package_path": "en/native/join-06-before-frame-0014232.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0014262.png",
+      "original_sha256": "30a5ccb87a5ecf8bb2eda8e78bea9f6e54a1fb53dab9347d2cba3d678c5965ff",
+      "package_path": "en/native/join-06-after-frame-0014262.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0017207.png",
+      "original_sha256": "bfea21f46aa0285f7036604637f149d13a450e194b4bc7be0a366a5abe82c583",
+      "package_path": "en/native/join-07-before-frame-0017207.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0017237.png",
+      "original_sha256": "4718c1d22c2eb6f1bcf63b23d229437d4b87c794c07de34f121080abb16febdd",
+      "package_path": "en/native/join-07-after-frame-0017237.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0019523.png",
+      "original_sha256": "ed29fa7cde4dbe7e3a80a748956489b605ddd5cccb3eedbef02e286d1ce4c2ec",
+      "package_path": "en/native/join-08-before-frame-0019523.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0019553.png",
+      "original_sha256": "921af54537102f33bbafc20f4ea8b8eca67512d8ccc351903bf115d7d00f496e",
+      "package_path": "en/native/join-08-after-frame-0019553.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0022267.png",
+      "original_sha256": "a1ad2afa494c1690e48ee448bef5525129d93b12bfddd54a0673b9480a37544e",
+      "package_path": "en/native/join-09-before-frame-0022267.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0022297.png",
+      "original_sha256": "f4c83b42b941cf88397e6a79783632cdca73466cdd7244d83898a3fb29cd5cb8",
+      "package_path": "en/native/join-09-after-frame-0022297.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0025664.png",
+      "original_sha256": "791119893bffec85182c5a2fbc5edc36a046575b7632ef78ade3a36105e1fdd9",
+      "package_path": "en/native/join-10-before-frame-0025664.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0025694.png",
+      "original_sha256": "dfe7582fbb8df7470d55302be2d4a5a7d7a54258799b0dfb43799d04de9915da",
+      "package_path": "en/native/join-10-after-frame-0025694.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0028224.png",
+      "original_sha256": "3b0304aca3ec01b7055c62199ace1ec45941e82eade48f207d83d51ca3b7a4df",
+      "package_path": "en/native/join-11-before-frame-0028224.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0028254.png",
+      "original_sha256": "a9b104747fab899d2c1588e31cc7be5d777210c54b278b692c8af5bd270161d7",
+      "package_path": "en/native/join-11-after-frame-0028254.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0030725.png",
+      "original_sha256": "bd2dc851f813212d9b92e6800ff9c1b308cfbdb842e0a30c5b03cd3e8e6c8ea5",
+      "package_path": "en/native/join-12-before-frame-0030725.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0030755.png",
+      "original_sha256": "706b710c4c641add9a779c68eb87db104b4dbdca5686a7c617b310cb3d166f8c",
+      "package_path": "en/native/join-12-after-frame-0030755.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0032832.png",
+      "original_sha256": "f3a55cc1daa98393302ebf57c17c7178dce579a5db6b0a322de7397280882dce",
+      "package_path": "en/native/join-13-before-frame-0032832.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0032862.png",
+      "original_sha256": "6699d32b8639b46bca0742ead6dfe00dfe87e623d46cf2905b9b8f5b1f38b5c2",
+      "package_path": "en/native/join-13-after-frame-0032862.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0035186.png",
+      "original_sha256": "8aece770ac31f577116ad9534bccf151f7ab3fd3d403a98a4a7c0b87916d30e4",
+      "package_path": "en/native/join-14-before-frame-0035186.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0035216.png",
+      "original_sha256": "f8e8be8b6e58e9845bb88f428c216fd06b5d57b0a94f8977d2c543d7ec974fcd",
+      "package_path": "en/native/join-14-after-frame-0035216.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0038353.png",
+      "original_sha256": "ce914329863fe139891e1370e55d267130c3a4877f6ff6cda77c3057bd510c5d",
+      "package_path": "en/native/join-15-before-frame-0038353.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0038383.png",
+      "original_sha256": "58b4f902ba2e4a38ce5fdc2acc856e97f26ef31e6d8303c70281868922b0c005",
+      "package_path": "en/native/join-15-after-frame-0038383.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0041099.png",
+      "original_sha256": "2e92e4ed3c29dbc1cbfdc104af0d5729d868c46ca06c411c2a12641a98b06542",
+      "package_path": "en/native/join-16-before-frame-0041099.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0041129.png",
+      "original_sha256": "5bfc455b2cfec128aa891f5a372ae78c74261f9449a9950d36b127638b896c96",
+      "package_path": "en/native/join-16-after-frame-0041129.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0044123.png",
+      "original_sha256": "49eb860132d439e668701d0194642e517bf12f03d9e45e9366bdd122b6c2312f",
+      "package_path": "en/native/join-17-before-frame-0044123.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0044153.png",
+      "original_sha256": "b46a025ae42629a4e76afd06664376ddfb377baa57daef12387f5767c8b96ed0",
+      "package_path": "en/native/join-17-after-frame-0044153.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0046674.png",
+      "original_sha256": "85c5692ae7d3700667906ec6bbc66bad3f21f6bc7646aa38ac3d72a7d8614331",
+      "package_path": "en/native/join-18-before-frame-0046674.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/en/validation/join-frames/frame-0046704.png",
+      "original_sha256": "15518d2031a35b1c6889638f93d42da204375c6ee908746467c9c2d26ddb484d",
+      "package_path": "en/native/join-18-after-frame-0046704.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/assembly-receipt.json",
+      "original_sha256": "f78da0d8171b40d8d84f41b76248c236c288158c7231eaafebf2e0b1e464230a",
+      "package_path": "zh/assembly-receipt.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/assembly-progress.json",
+      "original_sha256": "f78da0d8171b40d8d84f41b76248c236c288158c7231eaafebf2e0b1e464230a",
+      "package_path": "zh/assembly-progress.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/validation.json",
+      "original_sha256": "ed56707aedce05fcb4e1f5107c9af807e8f11d367079f621ff15a4e21088bc28",
+      "package_path": "zh/validation/validation.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/audio-validation.json",
+      "original_sha256": "6fbb2e5e4f17700ff9889694bd8a18e9250a60e2ac9ccd183956edc31e08acda",
+      "package_path": "zh/validation/audio-validation.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/subtitle-boundaries.json",
+      "original_sha256": "78bac7f7570e12aacf2b1ccc925fb5dc6ecc8cf7235f9b67fb74f3a97b1d3b85",
+      "package_path": "zh/validation/subtitle-boundaries.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/final-probe.json",
+      "original_sha256": "5dad08013eae821f67e188cc4578979c436757f867c02b35a9b17a984d3d5ccb",
+      "package_path": "zh/validation/final-probe.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/video-frame-times.json.gz",
+      "original_sha256": "bd3ccfb35dd440bf1b52896a0d0ea600479c185fd7620256afd9acf739decb98",
+      "package_path": "zh/validation/video-frame-times.json.gz",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/audio-frame-times.json.gz",
+      "original_sha256": "12c875c5f28d81817388fab63a201df163b05fa99bfac9f1c3f9b21d52af59d1",
+      "package_path": "zh/validation/audio-frame-times.json.gz",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/packet-times.json.gz",
+      "original_sha256": "0dc9c60f2e89009e33b778ea89e46aef8e1cbd7fa252b628814a38d57c74cae1",
+      "package_path": "zh/validation/packet-times.json.gz",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-selection.json",
+      "original_sha256": "29bb59b05d8bac840648619ec107f4f43050ff25a99e521dbcbb9ad10e122f70",
+      "package_path": "zh/validation/join-selection.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-review.json",
+      "original_sha256": "41bf0f9c1dc84bea4bc06e15c0b2f35f8abd71445b9eaf4c48a3ca472ba2b5a6",
+      "package_path": "zh/validation/join-review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/ai4-silent-preview-zh-480p15.srt",
+      "original_sha256": "734619c94c6b2cc2b7e344c9e0fc4c1ef5197d9a11fd7b4593f6ff87d0547d55",
+      "package_path": "zh/ai4-silent-preview-zh-480p15.srt",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/ai4-silent-preview-zh-480p15.chapters.txt",
+      "original_sha256": "bf742f8afc44f09fc28360e15b98de5ba0c6e657eb72a2543038c890c027ff0b",
+      "package_path": "zh/ai4-silent-preview-zh-480p15.chapters.txt",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh-assembly.log",
+      "original_sha256": "2675c60d83bec26e74e268242702a058c4d2bee991f574b6bf7dbd930e61ea68",
+      "package_path": "zh/logs/zh-assembly.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh-validation.log",
+      "original_sha256": "ed6d529f45ea3f3934c51fbc578a70a21e01a0b2d49efafa3fbf8e132faeeb9e",
+      "package_path": "zh/logs/zh-validation.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh-audio-validation.log",
+      "original_sha256": "6fbb2e5e4f17700ff9889694bd8a18e9250a60e2ac9ccd183956edc31e08acda",
+      "package_path": "zh/logs/zh-audio-validation.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-001.png",
+      "original_sha256": "de6effdde82996152b51bf31d5837e27028115ef374dbd0fd915ca978ee63393",
+      "package_path": "zh/sheets/sheet-001.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-002.png",
+      "original_sha256": "1a803c92f467dc887eb15b9d7bb5abe621e155daef94f8c8653afcefa14cd929",
+      "package_path": "zh/sheets/sheet-002.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-003.png",
+      "original_sha256": "0c98c06c389efb19f640cb1c252dd37d9ade868a2312377cd852e31ace5ad4e0",
+      "package_path": "zh/sheets/sheet-003.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-004.png",
+      "original_sha256": "6014236293c2122429c41eb10d1b5efd014ad560c3a801a9da35612d6f583b4e",
+      "package_path": "zh/sheets/sheet-004.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-005.png",
+      "original_sha256": "1ac2a45b27113840d34932b357311196e675f75da31fe19130c649d6ebf77cfa",
+      "package_path": "zh/sheets/sheet-005.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-006.png",
+      "original_sha256": "19722ace5979d422a76f994a48b63c00ac9a6aa00a39309744bc70ff09347908",
+      "package_path": "zh/sheets/sheet-006.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-007.png",
+      "original_sha256": "ad742353fbdda34c568fb6d52da1823baaed5fe816b3aa2ad0d675cd284bbdf5",
+      "package_path": "zh/sheets/sheet-007.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-008.png",
+      "original_sha256": "65cbb6c16fd89c81c1399a263abc0ccb6fa56ec7f056d389cda7f6aa26697e08",
+      "package_path": "zh/sheets/sheet-008.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-009.png",
+      "original_sha256": "ca09aa384da595fdab437da5ebaaac27d7be80e291dd9df37e12e3866d83521d",
+      "package_path": "zh/sheets/sheet-009.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-010.png",
+      "original_sha256": "0f9acf0422ffdb3cb7516ad9203e817f6e98076a57f64555e38907a15e53fa54",
+      "package_path": "zh/sheets/sheet-010.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-011.png",
+      "original_sha256": "7f6bd7572eb83180ae945f0b43ccd3c923fe3c9344871fdfbfc10075ce5eaa23",
+      "package_path": "zh/sheets/sheet-011.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-012.png",
+      "original_sha256": "ab5e1bd1e75a05a9fa4f53181d4320d2785913bb20690d0a07391612e54e7af4",
+      "package_path": "zh/sheets/sheet-012.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-013.png",
+      "original_sha256": "f75b60bdc8c60afd877ff4f8e7ac95ea7ff8deaeeb43ef0ea55ca0e845530928",
+      "package_path": "zh/sheets/sheet-013.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-014.png",
+      "original_sha256": "503cc3a404b2384722457dfdce531f30064b6e60a20751b6bb469d57599064ce",
+      "package_path": "zh/sheets/sheet-014.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-015.png",
+      "original_sha256": "119d969c2d925842db4d42627523e22e346012b83e981a0f3eaef5aa8570daf7",
+      "package_path": "zh/sheets/sheet-015.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-016.png",
+      "original_sha256": "35138b6a2c4c5e23c288edb20eb34652d75279e6dc7ae2d04497788080b6b142",
+      "package_path": "zh/sheets/sheet-016.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-017.png",
+      "original_sha256": "2abc5e498f1fb1a786132bed57a1188b0d61588e95f8b24dcc133a517dfd8ca5",
+      "package_path": "zh/sheets/sheet-017.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-018.png",
+      "original_sha256": "b305a442c4a057ce10f1f9205c6f24b14e3347fbb92c04a7aef4bfda14d912a5",
+      "package_path": "zh/sheets/sheet-018.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-019.png",
+      "original_sha256": "46de56a1ff378909c41939d646dac54a927c3129d2fb9048ed606b8e41a07809",
+      "package_path": "zh/sheets/sheet-019.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-020.png",
+      "original_sha256": "8fd4934ed5b1d35515a29104025ea78f536bfb69c89d32ea3e544f5393a279f7",
+      "package_path": "zh/sheets/sheet-020.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-021.png",
+      "original_sha256": "c2165f63474d2b828bde28631a2ddae97a931afa9af18f47388b3526937d9312",
+      "package_path": "zh/sheets/sheet-021.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-022.png",
+      "original_sha256": "a29e7276f5cf47a50ba1e44f3bbcc00ba1bf5238d46c3c3355f920e7a038fe19",
+      "package_path": "zh/sheets/sheet-022.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-023.png",
+      "original_sha256": "706147275a8f27354e6e72ad40a5272416ae4082d66f9c31ac2071979a01e4e2",
+      "package_path": "zh/sheets/sheet-023.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-024.png",
+      "original_sha256": "96a760c727ed5bf11489cabb8a7d06e42e461d68fd4ab9573d5d83b3f2d31299",
+      "package_path": "zh/sheets/sheet-024.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-025.png",
+      "original_sha256": "af476c00f66bc493d6584fb482ebff5a4596845ff93928f69c6933757ffde75e",
+      "package_path": "zh/sheets/sheet-025.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-026.png",
+      "original_sha256": "0fe1d69b7bea3a6c43bd21e6dde2e5fa17940ed388fdf9bfe2615338abac6a1b",
+      "package_path": "zh/sheets/sheet-026.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-027.png",
+      "original_sha256": "baf71d7533ce8fc8f5f5689513a37fd75303d2846bcec908b18661768a26214c",
+      "package_path": "zh/sheets/sheet-027.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-028.png",
+      "original_sha256": "0e004bc6c41b14bf61096b98bce4e7b75fec6e39c34c2a4ba87d44ee21bdeae2",
+      "package_path": "zh/sheets/sheet-028.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-029.png",
+      "original_sha256": "3fa334b11ab85a47881d578ebe6a4c2c49a7d39741e3d5e5b351b8f60328cc52",
+      "package_path": "zh/sheets/sheet-029.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-030.png",
+      "original_sha256": "f0be675617b0312a1b49ce47288e759f33d6f10ee0aacbcccfada1be299e5ffe",
+      "package_path": "zh/sheets/sheet-030.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-031.png",
+      "original_sha256": "cd0905b68963fc8dda27ff2dd5ae2af89c8368bac1523d187add4fb16f69a795",
+      "package_path": "zh/sheets/sheet-031.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-032.png",
+      "original_sha256": "d1bac844921e4cfac1ea3c077d7b3760fc22859b2a3da8768cc1a67f3e8f9055",
+      "package_path": "zh/sheets/sheet-032.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-033.png",
+      "original_sha256": "d6c9f696f8b2c13c93642899b422120f91bd69664b454cec7a54117d324cc0ae",
+      "package_path": "zh/sheets/sheet-033.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-034.png",
+      "original_sha256": "fb1d5142a1f0e9f9ed2be4538039b9c99e332c2eab32d8436e36791b8dc112f0",
+      "package_path": "zh/sheets/sheet-034.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-035.png",
+      "original_sha256": "0d0cad3eef8198194ca953c51b93864374f42a8ed8d5dc31e3c0518ea7c06321",
+      "package_path": "zh/sheets/sheet-035.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-036.png",
+      "original_sha256": "203702fe8a96334575a6573db0cced6398ca2badfd357a8e8b34cc4e834ae943",
+      "package_path": "zh/sheets/sheet-036.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-037.png",
+      "original_sha256": "78353e3d14b4e2646b7d65113e2659d6b2e864a0b36d91fdcf6e1496576bf6d7",
+      "package_path": "zh/sheets/sheet-037.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-038.png",
+      "original_sha256": "f41c589a9399b34c5e49d8bbd38fc356f5d76ea45eb49461199fb229f59bb1ed",
+      "package_path": "zh/sheets/sheet-038.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-039.png",
+      "original_sha256": "0a2d55aece0f505b9ef198f3320dc09bf125c062e4694781290e2cab731588f0",
+      "package_path": "zh/sheets/sheet-039.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-040.png",
+      "original_sha256": "1297fcec5a77f50a397f1124a0e67a0297dc7a441d0707c2fe19d9ee5f7c857f",
+      "package_path": "zh/sheets/sheet-040.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/review-pages/sheet-041.png",
+      "original_sha256": "b8effd5ed248da35b4f293f080f305bd66f94ce43fe6d4a4d7c895636268e529",
+      "package_path": "zh/sheets/sheet-041.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0002086.png",
+      "original_sha256": "5ae794f1d31448d15426489674d9e95877d6046544763854ec72e9e6db53eeb7",
+      "package_path": "zh/native/join-01-before-frame-0002086.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0002116.png",
+      "original_sha256": "0bcc797463cefc9085b357bc3a96bbd3cf236f1b76c137b97c548065aaec860b",
+      "package_path": "zh/native/join-01-after-frame-0002116.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0004520.png",
+      "original_sha256": "e6caae9715e4a2b648ee149319b35d9ec241cd51fe0d71e6ec8e58cbea180f9d",
+      "package_path": "zh/native/join-02-before-frame-0004520.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0004550.png",
+      "original_sha256": "3ee0564fc619205aa5e486f8faf79ba8b14fe57f7be639329bb73c29637ceb6c",
+      "package_path": "zh/native/join-02-after-frame-0004550.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0007119.png",
+      "original_sha256": "0c28469f56b0472855489c0f6c7d379ac0586688dc1d7ac1ce6e9e1e28fbc78f",
+      "package_path": "zh/native/join-03-before-frame-0007119.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0007149.png",
+      "original_sha256": "f91ff5057cc33992a7e5ccab28b66da8f12011862dd1582a5438a96e9c4eb334",
+      "package_path": "zh/native/join-03-after-frame-0007149.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0009392.png",
+      "original_sha256": "16e89eb07803ed74570b844b82cd10f2a277d6af7b0cc6df74867ff2addcbfda",
+      "package_path": "zh/native/join-04-before-frame-0009392.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0009422.png",
+      "original_sha256": "cff24cf221cf4536bf61ec019cfad4d51a1124e8b8c5772eb3b274ebbbb1e983",
+      "package_path": "zh/native/join-04-after-frame-0009422.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0011868.png",
+      "original_sha256": "48fc7c477c064c1a71ddb9894949aa3119297c1d1c959af70649c561f7131c0c",
+      "package_path": "zh/native/join-05-before-frame-0011868.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0011898.png",
+      "original_sha256": "6ffca938c4514db9186c565721d96a2b1a3f21d40bac57d9df0683063903ee03",
+      "package_path": "zh/native/join-05-after-frame-0011898.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0015406.png",
+      "original_sha256": "209c84cfa681f377f09d03a8d931af471995e6699a3b364a339d56e2b0dc3f76",
+      "package_path": "zh/native/join-06-before-frame-0015406.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0015436.png",
+      "original_sha256": "364e026c0309d3cc16a09c366702909cef2f32314700cb9b220020c2fc53a25a",
+      "package_path": "zh/native/join-06-after-frame-0015436.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0018501.png",
+      "original_sha256": "49323b0c45179a65140d6141f9b7c91f5acea2e44f614fabf13f0acbb9fa95ef",
+      "package_path": "zh/native/join-07-before-frame-0018501.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0018531.png",
+      "original_sha256": "94724e9207f0aa6661ef9b8e49b0e5e57279ce633a56dcb03720f780ec4183b4",
+      "package_path": "zh/native/join-07-after-frame-0018531.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0021049.png",
+      "original_sha256": "01883634077942831973a563ee69a327494bed0b1b96086f27404e05ede445ad",
+      "package_path": "zh/native/join-08-before-frame-0021049.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0021079.png",
+      "original_sha256": "802cfa8bd5af7dd1c960f4c551313e00abb46867ea17541ee662fb267c4c370a",
+      "package_path": "zh/native/join-08-after-frame-0021079.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0024017.png",
+      "original_sha256": "404ef9390f63bfd28c7006c53856240858289c94da1c9f3d15e908d351671d74",
+      "package_path": "zh/native/join-09-before-frame-0024017.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0024047.png",
+      "original_sha256": "992afbd6507cb932d195fa089477aa282d6099fa474fdce721b54ea85b1ade69",
+      "package_path": "zh/native/join-09-after-frame-0024047.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0027182.png",
+      "original_sha256": "dad8ac5d15e6e247d455106cc5284616e5a049e95cb31d283a11a6809e93ac43",
+      "package_path": "zh/native/join-10-before-frame-0027182.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0027212.png",
+      "original_sha256": "96357d92f2d2385b01fb4bc2ebf1d54dda4de4d130c1f5692901b165036a07f6",
+      "package_path": "zh/native/join-10-after-frame-0027212.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0029920.png",
+      "original_sha256": "3e5fe571b6383f78c666117c5ca7743e3b3121dd19af8d18e5c6cf08e8b9ff36",
+      "package_path": "zh/native/join-11-before-frame-0029920.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0029950.png",
+      "original_sha256": "f04a111177f3b2c7242d5fa4a0cc96fa72d8e4f15e111bb8329079f314d177de",
+      "package_path": "zh/native/join-11-after-frame-0029950.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0032663.png",
+      "original_sha256": "64dadb49cca2f45205afd19d1dc0066a1600c97fd0a50c982624121bd8380688",
+      "package_path": "zh/native/join-12-before-frame-0032663.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0032693.png",
+      "original_sha256": "4236867fe171696d604034179605cb3c01ffc30958afaac3e0f48914f000dc39",
+      "package_path": "zh/native/join-12-after-frame-0032693.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0035086.png",
+      "original_sha256": "b8606854d123f1e029d372814750c7c1214dbbfdc06f9b484b315381be843302",
+      "package_path": "zh/native/join-13-before-frame-0035086.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0035116.png",
+      "original_sha256": "8325563ed83271b4003e2478cf903f3824fb0300d633bb26dd6dcd7136f7d075",
+      "package_path": "zh/native/join-13-after-frame-0035116.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0037797.png",
+      "original_sha256": "a5b6e17d68174c38d95f6be21748b6ae07ef327414bd348dbdc65085a13045a3",
+      "package_path": "zh/native/join-14-before-frame-0037797.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0037827.png",
+      "original_sha256": "ab68763d03d6a4305f8cb607d0f24bdc6b4fd49ba56aa6916632440dbd9e16a7",
+      "package_path": "zh/native/join-14-after-frame-0037827.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0040892.png",
+      "original_sha256": "9f7c839621602fb71c5cd6223ad6a21c9c620903bbaa5b3ee98ece8bdfc27775",
+      "package_path": "zh/native/join-15-before-frame-0040892.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0040922.png",
+      "original_sha256": "1fca9d79981f72edff2342bc2f9dbee88a911d61fc875f76ddbe5cc9cd66cda2",
+      "package_path": "zh/native/join-15-after-frame-0040922.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0043794.png",
+      "original_sha256": "c19fc413b419cba38631ae8be0590e3894868a6ee44adcfa7c62967c57527b65",
+      "package_path": "zh/native/join-16-before-frame-0043794.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0043824.png",
+      "original_sha256": "e41acdaa2c7478dff97f720de174db7c8087def50e74344ae16da7ae3a38dba4",
+      "package_path": "zh/native/join-16-after-frame-0043824.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0046943.png",
+      "original_sha256": "6fbc5253fdde5b8cb88869f8e225a408d2afe35e57629d7a3b3c5f26c2748c4b",
+      "package_path": "zh/native/join-17-before-frame-0046943.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0046973.png",
+      "original_sha256": "2bee1863279f4151a66688f79b9b322b7a8bafbc31a6a9c2efa9a42ca9f10087",
+      "package_path": "zh/native/join-17-after-frame-0046973.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0049596.png",
+      "original_sha256": "14678c06b30a0df332662ed0cd085a91716820a0d48399109a08b41d47cc08d2",
+      "package_path": "zh/native/join-18-before-frame-0049596.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/zh/validation/join-frames/frame-0049626.png",
+      "original_sha256": "d39adbaf22e6eddb67cd414734a043ce04101577d00aa7b120a5219fac836633",
+      "package_path": "zh/native/join-18-after-frame-0049626.png",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/explainer/lang.py",
+      "original_sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+      "package_path": "source-observations/explainer/lang.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/explainer/voiceover.py",
+      "original_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+      "package_path": "source-observations/explainer/voiceover.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/explainer/tts.py",
+      "original_sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+      "package_path": "source-observations/explainer/tts.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/tools/build.py",
+      "original_sha256": "12337229386de13d5c4090f7d07a389ef1d06745a78896493398a38699f1affc",
+      "package_path": "source-observations/tools/build.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/tools/qa_motion.py",
+      "original_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "package_path": "source-observations/tools/qa_motion.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/tools/qa_series.py",
+      "original_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "package_path": "source-observations/tools/qa_series.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai_text_zh.json",
+      "original_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+      "package_path": "source-observations/videos/ai/ai_text_zh.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s04_jacobian.py",
+      "original_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+      "package_path": "source-observations/videos/ai/ai4/s04_jacobian.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s11_vcurve.py",
+      "original_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "package_path": "source-observations/videos/ai/ai4/s11_vcurve.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s10_floats.py",
+      "original_sha256": "98288d25f6a2fb37d0742a9385e078425265b86696e2336928b049683148682b",
+      "package_path": "source-observations/videos/ai/ai4/s10_floats.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s12_memory.py",
+      "original_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "package_path": "source-observations/videos/ai/ai4/s12_memory.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s05_layers.py",
+      "original_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+      "package_path": "source-observations/videos/ai/ai4/s05_layers.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s07_backprop.py",
+      "original_sha256": "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c",
+      "package_path": "source-observations/videos/ai/ai4/s07_backprop.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s13_newton.py",
+      "original_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "package_path": "source-observations/videos/ai/ai4/s13_newton.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/manifest.py",
+      "original_sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+      "package_path": "source-observations/videos/ai/ai4/manifest.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s02_derivative.py",
+      "original_sha256": "b072470cd31ea9009eb3f663c8db03e73705cacea4c86dfad83b367df880ecec",
+      "package_path": "source-observations/videos/ai/ai4/s02_derivative.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/contracts.py",
+      "original_sha256": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+      "package_path": "source-observations/videos/ai/ai4/contracts.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s14_hvp.py",
+      "original_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "package_path": "source-observations/videos/ai/ai4/s14_hvp.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s18_implicit.py",
+      "original_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+      "package_path": "source-observations/videos/ai/ai4/s18_implicit.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/compute.py",
+      "original_sha256": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+      "package_path": "source-observations/videos/ai/ai4/compute.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s16_lagrange.py",
+      "original_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+      "package_path": "source-observations/videos/ai/ai4/s16_lagrange.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s17_kkt.py",
+      "original_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+      "package_path": "source-observations/videos/ai/ai4/s17_kkt.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s08_library.py",
+      "original_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+      "package_path": "source-observations/videos/ai/ai4/s08_library.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/__init__.py",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "package_path": "source-observations/videos/ai/ai4/__init__.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s01_hook.py",
+      "original_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+      "package_path": "source-observations/videos/ai/ai4/s01_hook.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/cache_contract.py",
+      "original_sha256": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+      "package_path": "source-observations/videos/ai/ai4/cache_contract.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s03_gradient.py",
+      "original_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+      "package_path": "source-observations/videos/ai/ai4/s03_gradient.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s09_train.py",
+      "original_sha256": "49f9e2da42f74283fc989608a10e5ad82cb6dea33a4bd4fac9329d85a7970f78",
+      "package_path": "source-observations/videos/ai/ai4/s09_train.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/common.py",
+      "original_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+      "package_path": "source-observations/videos/ai/ai4/common.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s06_modes.py",
+      "original_sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+      "package_path": "source-observations/videos/ai/ai4/s06_modes.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s19_outro.py",
+      "original_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+      "package_path": "source-observations/videos/ai/ai4/s19_outro.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/s15_quadratic.py",
+      "original_sha256": "8b387c3a6f707b35b275bfb56a2daba1219707bd6e8c573bbf8ca2456390d68e",
+      "package_path": "source-observations/videos/ai/ai4/s15_quadratic.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/videos/ai/ai4/zh_lines.py",
+      "original_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+      "package_path": "source-observations/videos/ai/ai4/zh_lines.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/current-reviewed/source/explainer/ai/viz.py",
+      "original_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "package_path": "source-observations/explainer/ai/viz.py.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/assemble.py",
+      "original_sha256": "22352a452e1ca446f3b34e5f27717558623d4b591b2e28a514b3f4e152e900b1",
+      "package_path": "tools/assemble.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/freeze_inputs.py",
+      "original_sha256": "8bd7c07f3fd90ba6ff5c1dde4f67c07ea9e8e829cf9cc3a46ca75eec7e6d5212",
+      "package_path": "tools/freeze_inputs.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/validate.py",
+      "original_sha256": "7361dd68b808c72bf4235479531ae0860eb8d841f2a40ae5ac7abfdbd53c1057",
+      "package_path": "tools/validate.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/validate_audio.py",
+      "original_sha256": "db635c7d8c97a1685cbcb67b25518c14ddfc741581f30222a30b697365a1cbeb",
+      "package_path": "tools/validate_audio.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/validate_subtitle_boundaries.py",
+      "original_sha256": "72fe1ea48bb3dc4812f59f3fb2f5ae229c52434ea11c826b3e6f78a6effd40c2",
+      "package_path": "tools/validate_subtitle_boundaries.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/prepare_joins.py",
+      "original_sha256": "30b49cf765d43b21730849fe3934b5061b5768154636ae52c35581ac7dfe4a68",
+      "package_path": "tools/prepare_joins.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/track_joins.py",
+      "original_sha256": "a287e3b50169426bd30d933917109edd0836bb7cfb6757c872d249b46bbcca9b",
+      "package_path": "tools/track_joins.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-silent-preview-assembly/finalize_baseline.py",
+      "original_sha256": "d30937d05b0fb7bab620e52d3d60be29778333d8716dcc2cd5aaec4b3dc2bd8a",
+      "package_path": "tools/finalize_baseline.py",
+      "compression": null
+    }
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3429,
+      "sha256": "eea9084193db8ae6b19eeef0a6a02cdf9783632dad0a35e11db0942ccd1a1056"
+    },
+    {
+      "path": "en/ai4-silent-preview-en-480p15.chapters.txt",
+      "bytes": 714,
+      "sha256": "36f025303fa0fcad8993513cb2cf816ba38767644cb75e48179d32d63ecba8e8"
+    },
+    {
+      "path": "en/ai4-silent-preview-en-480p15.srt",
+      "bytes": 78476,
+      "sha256": "9cc71b3bd9448125a922d542cb1a490bd6fe9f78c8777517943cdcd40e3fdcf8"
+    },
+    {
+      "path": "en/assembly-progress.json.gz",
+      "bytes": 13196,
+      "sha256": "17c5441ac296093dc8cc5a4a71717b215ed9a3eb3332b68d56e190d331433984"
+    },
+    {
+      "path": "en/assembly-receipt.json.gz",
+      "bytes": 13196,
+      "sha256": "17c5441ac296093dc8cc5a4a71717b215ed9a3eb3332b68d56e190d331433984"
+    },
+    {
+      "path": "en/logs/en-assembly.log.gz",
+      "bytes": 661,
+      "sha256": "0ffac791ecd88a692be6cb27e5994ea68723e46e438b13f235d26c718a31dafa"
+    },
+    {
+      "path": "en/logs/en-audio-validation.log.gz",
+      "bytes": 727,
+      "sha256": "ab9df7deea61a88bbd935bcb639169b3614c6db2531cc5ed3a906de334bceaea"
+    },
+    {
+      "path": "en/logs/en-validation.log.gz",
+      "bytes": 616,
+      "sha256": "bdce00c56f7c6482e49b54cb6eda2ef75cc93b2157e65087f35857e2e29884f0"
+    },
+    {
+      "path": "en/native/join-01-after-frame-0001846.png",
+      "bytes": 28344,
+      "sha256": "085616c87f9339f8cd25f73f4f18e773a2496dead423842608e8f716cb3bcb8c"
+    },
+    {
+      "path": "en/native/join-01-before-frame-0001816.png",
+      "bytes": 85182,
+      "sha256": "6a650c7c304897f15496f8d6fce9220995d5b2b0386a2afa23469ae8ffb38e62"
+    },
+    {
+      "path": "en/native/join-02-after-frame-0004248.png",
+      "bytes": 32026,
+      "sha256": "5216a65cd22f6828841cbbd5a5a8e798624378fef1e15f986dcdb31a813c7f28"
+    },
+    {
+      "path": "en/native/join-02-before-frame-0004218.png",
+      "bytes": 61236,
+      "sha256": "bf838b4f585dbd0abcf5a4ac82a886932a7af107dbcf7b6f32fab63f4c82e1b9"
+    },
+    {
+      "path": "en/native/join-03-after-frame-0006805.png",
+      "bytes": 33140,
+      "sha256": "31323bd0368704d7fef12ce1dc1654d8aa4f13f546ad63a5a3f0c924bcd7abef"
+    },
+    {
+      "path": "en/native/join-03-before-frame-0006775.png",
+      "bytes": 199094,
+      "sha256": "e2e2b137171aae5b1cca4c5014f197d9e3fdf400310c0cc63f7f74b226549333"
+    },
+    {
+      "path": "en/native/join-04-after-frame-0008837.png",
+      "bytes": 31582,
+      "sha256": "f1d20464627efaa9fbdf3c4e90b360ddc07bcc94fb1ad3116a2a836987a720f1"
+    },
+    {
+      "path": "en/native/join-04-before-frame-0008807.png",
+      "bytes": 92233,
+      "sha256": "00bc096a54435de1314aaade08c9cef8b1602a29fac6d3adb891055246428374"
+    },
+    {
+      "path": "en/native/join-05-after-frame-0011172.png",
+      "bytes": 41961,
+      "sha256": "2508e54d640287de96ba9cd2b195bbdb46c434f6b4e750cfd9e1d0c13fb58bea"
+    },
+    {
+      "path": "en/native/join-05-before-frame-0011142.png",
+      "bytes": 76626,
+      "sha256": "413f7ae71bfe15e47e4672ae5879f49d844405b5fe6968063801591bc0eb10cb"
+    },
+    {
+      "path": "en/native/join-06-after-frame-0014262.png",
+      "bytes": 36312,
+      "sha256": "30a5ccb87a5ecf8bb2eda8e78bea9f6e54a1fb53dab9347d2cba3d678c5965ff"
+    },
+    {
+      "path": "en/native/join-06-before-frame-0014232.png",
+      "bytes": 86631,
+      "sha256": "318fda3e5d703a25409a146cd01cd4ab3136796482a3eb1269786729852214d4"
+    },
+    {
+      "path": "en/native/join-07-after-frame-0017237.png",
+      "bytes": 33445,
+      "sha256": "4718c1d22c2eb6f1bcf63b23d229437d4b87c794c07de34f121080abb16febdd"
+    },
+    {
+      "path": "en/native/join-07-before-frame-0017207.png",
+      "bytes": 71594,
+      "sha256": "bfea21f46aa0285f7036604637f149d13a450e194b4bc7be0a366a5abe82c583"
+    },
+    {
+      "path": "en/native/join-08-after-frame-0019553.png",
+      "bytes": 30519,
+      "sha256": "921af54537102f33bbafc20f4ea8b8eca67512d8ccc351903bf115d7d00f496e"
+    },
+    {
+      "path": "en/native/join-08-before-frame-0019523.png",
+      "bytes": 104912,
+      "sha256": "ed29fa7cde4dbe7e3a80a748956489b605ddd5cccb3eedbef02e286d1ce4c2ec"
+    },
+    {
+      "path": "en/native/join-09-after-frame-0022297.png",
+      "bytes": 35488,
+      "sha256": "f4c83b42b941cf88397e6a79783632cdca73466cdd7244d83898a3fb29cd5cb8"
+    },
+    {
+      "path": "en/native/join-09-before-frame-0022267.png",
+      "bytes": 134027,
+      "sha256": "a1ad2afa494c1690e48ee448bef5525129d93b12bfddd54a0673b9480a37544e"
+    },
+    {
+      "path": "en/native/join-10-after-frame-0025694.png",
+      "bytes": 33230,
+      "sha256": "dfe7582fbb8df7470d55302be2d4a5a7d7a54258799b0dfb43799d04de9915da"
+    },
+    {
+      "path": "en/native/join-10-before-frame-0025664.png",
+      "bytes": 86730,
+      "sha256": "791119893bffec85182c5a2fbc5edc36a046575b7632ef78ade3a36105e1fdd9"
+    },
+    {
+      "path": "en/native/join-11-after-frame-0028254.png",
+      "bytes": 35559,
+      "sha256": "a9b104747fab899d2c1588e31cc7be5d777210c54b278b692c8af5bd270161d7"
+    },
+    {
+      "path": "en/native/join-11-before-frame-0028224.png",
+      "bytes": 99671,
+      "sha256": "3b0304aca3ec01b7055c62199ace1ec45941e82eade48f207d83d51ca3b7a4df"
+    },
+    {
+      "path": "en/native/join-12-after-frame-0030755.png",
+      "bytes": 34506,
+      "sha256": "706b710c4c641add9a779c68eb87db104b4dbdca5686a7c617b310cb3d166f8c"
+    },
+    {
+      "path": "en/native/join-12-before-frame-0030725.png",
+      "bytes": 94990,
+      "sha256": "bd2dc851f813212d9b92e6800ff9c1b308cfbdb842e0a30c5b03cd3e8e6c8ea5"
+    },
+    {
+      "path": "en/native/join-13-after-frame-0032862.png",
+      "bytes": 32369,
+      "sha256": "6699d32b8639b46bca0742ead6dfe00dfe87e623d46cf2905b9b8f5b1f38b5c2"
+    },
+    {
+      "path": "en/native/join-13-before-frame-0032832.png",
+      "bytes": 151407,
+      "sha256": "f3a55cc1daa98393302ebf57c17c7178dce579a5db6b0a322de7397280882dce"
+    },
+    {
+      "path": "en/native/join-14-after-frame-0035216.png",
+      "bytes": 32627,
+      "sha256": "f8e8be8b6e58e9845bb88f428c216fd06b5d57b0a94f8977d2c543d7ec974fcd"
+    },
+    {
+      "path": "en/native/join-14-before-frame-0035186.png",
+      "bytes": 94750,
+      "sha256": "8aece770ac31f577116ad9534bccf151f7ab3fd3d403a98a4a7c0b87916d30e4"
+    },
+    {
+      "path": "en/native/join-15-after-frame-0038383.png",
+      "bytes": 34121,
+      "sha256": "58b4f902ba2e4a38ce5fdc2acc856e97f26ef31e6d8303c70281868922b0c005"
+    },
+    {
+      "path": "en/native/join-15-before-frame-0038353.png",
+      "bytes": 200836,
+      "sha256": "ce914329863fe139891e1370e55d267130c3a4877f6ff6cda77c3057bd510c5d"
+    },
+    {
+      "path": "en/native/join-16-after-frame-0041129.png",
+      "bytes": 38765,
+      "sha256": "5bfc455b2cfec128aa891f5a372ae78c74261f9449a9950d36b127638b896c96"
+    },
+    {
+      "path": "en/native/join-16-before-frame-0041099.png",
+      "bytes": 51906,
+      "sha256": "2e92e4ed3c29dbc1cbfdc104af0d5729d868c46ca06c411c2a12641a98b06542"
+    },
+    {
+      "path": "en/native/join-17-after-frame-0044153.png",
+      "bytes": 37255,
+      "sha256": "b46a025ae42629a4e76afd06664376ddfb377baa57daef12387f5767c8b96ed0"
+    },
+    {
+      "path": "en/native/join-17-before-frame-0044123.png",
+      "bytes": 94652,
+      "sha256": "49eb860132d439e668701d0194642e517bf12f03d9e45e9366bdd122b6c2312f"
+    },
+    {
+      "path": "en/native/join-18-after-frame-0046704.png",
+      "bytes": 19444,
+      "sha256": "15518d2031a35b1c6889638f93d42da204375c6ee908746467c9c2d26ddb484d"
+    },
+    {
+      "path": "en/native/join-18-before-frame-0046674.png",
+      "bytes": 90705,
+      "sha256": "85c5692ae7d3700667906ec6bbc66bad3f21f6bc7646aa38ac3d72a7d8614331"
+    },
+    {
+      "path": "en/sheets/sheet-001.png",
+      "bytes": 366585,
+      "sha256": "687874452b3de40fecbdb3fcba787a79e39b49de49e7cce44cb48f554d9a1829"
+    },
+    {
+      "path": "en/sheets/sheet-002.png",
+      "bytes": 78456,
+      "sha256": "c7e7ee5ac041b4dbe1a03fd75b82b3dfbd58e024ddce7831d3715babaa22d8e3"
+    },
+    {
+      "path": "en/sheets/sheet-003.png",
+      "bytes": 288961,
+      "sha256": "97a33983309398b541e8e897f8e25de76d19c203fe03a3243bd1fc82a89142db"
+    },
+    {
+      "path": "en/sheets/sheet-004.png",
+      "bytes": 94541,
+      "sha256": "509843d9aad175327275351124aa14156250bdebe6a9815aa7df7c587dc7ff07"
+    },
+    {
+      "path": "en/sheets/sheet-005.png",
+      "bytes": 550131,
+      "sha256": "bb19928d410d95171f1ea9481ff2361fac20d90369679546fc418712a7e41658"
+    },
+    {
+      "path": "en/sheets/sheet-006.png",
+      "bytes": 324417,
+      "sha256": "684e83eafba20755fa9f579eca253369e122c1c281cbd0daa0b76c392abd3f8b"
+    },
+    {
+      "path": "en/sheets/sheet-007.png",
+      "bytes": 228410,
+      "sha256": "c65793f8299d86b2dc435dec05adbb045e5d598f315b9bf3147e4bc5e58fe8e4"
+    },
+    {
+      "path": "en/sheets/sheet-008.png",
+      "bytes": 275797,
+      "sha256": "763661ea6b227fc18a68e6fe16a57c641c0fa4c6a58c41b49997c5dd9312bf2c"
+    },
+    {
+      "path": "en/sheets/sheet-009.png",
+      "bytes": 133448,
+      "sha256": "3f585081ed2156b5e554ee7f786817804c9133cbb5309cb45e3446dffe3122a1"
+    },
+    {
+      "path": "en/sheets/sheet-010.png",
+      "bytes": 333704,
+      "sha256": "09cae8ade77ad6d599de5037d98a00dbab759fc2356615a9e3db4648559212e0"
+    },
+    {
+      "path": "en/sheets/sheet-011.png",
+      "bytes": 110960,
+      "sha256": "9bb3c7c2de6d226ab4ddcf1d8c3825ea31479cd6c5868709293f8c5f71b2b2c5"
+    },
+    {
+      "path": "en/sheets/sheet-012.png",
+      "bytes": 385833,
+      "sha256": "797eed393f633624672618e13742cd676f113d60e84d0ad67cd5bd66d5f8963d"
+    },
+    {
+      "path": "en/sheets/sheet-013.png",
+      "bytes": 103958,
+      "sha256": "283ac58cae3b95e55b287596d9ce3dab9ea5e8e19280fa981bcb7700d49c81ff"
+    },
+    {
+      "path": "en/sheets/sheet-014.png",
+      "bytes": 300393,
+      "sha256": "94b39261b6744be97fb95d42f8c7cc84583b3d8adb69c36e1dc8c003f1d0a04d"
+    },
+    {
+      "path": "en/sheets/sheet-015.png",
+      "bytes": 143439,
+      "sha256": "6694f465882470f6f9a95da797730898bd22cab2bda439a485cf20a3decef203"
+    },
+    {
+      "path": "en/sheets/sheet-016.png",
+      "bytes": 241054,
+      "sha256": "a3b5e87bb15229b6743298ff1948c6430f31fb8b96dfbd96dc74ce717e8a0b4c"
+    },
+    {
+      "path": "en/sheets/sheet-017.png",
+      "bytes": 348920,
+      "sha256": "df6f6303eb4ed2a4e04310815bd76c3393fe4c609aff065631b97aa66a28a404"
+    },
+    {
+      "path": "en/sheets/sheet-018.png",
+      "bytes": 127906,
+      "sha256": "55bad0a0a9f2f0f0203ae338d1fa63249919e4cd0d6bb8f29081a65e4f595ee1"
+    },
+    {
+      "path": "en/sheets/sheet-019.png",
+      "bytes": 467033,
+      "sha256": "4a16eec6db8cfa2a672c2c430ed4fe9ce2406f1c5fcf64a3f029bb658a735507"
+    },
+    {
+      "path": "en/sheets/sheet-020.png",
+      "bytes": 103329,
+      "sha256": "2726c12273192b0bd49177b5d96f635634ae07b8ab48a97655ca1ea0dfe72e9f"
+    },
+    {
+      "path": "en/sheets/sheet-021.png",
+      "bytes": 408933,
+      "sha256": "01d01503386882892108d042a9ec1f455ed388125aaf36b800b86df73949d602"
+    },
+    {
+      "path": "en/sheets/sheet-022.png",
+      "bytes": 124135,
+      "sha256": "2f1bfd6e68b68d72a8f2315588929f64fe79205c0683dbdec4ea234e502ddbb5"
+    },
+    {
+      "path": "en/sheets/sheet-023.png",
+      "bytes": 349833,
+      "sha256": "05ead189bbf85d6d74faadbff59f5b7f476fa9c7d60b3c6460d754469eec2992"
+    },
+    {
+      "path": "en/sheets/sheet-024.png",
+      "bytes": 192372,
+      "sha256": "22bd62ec5cb26b02b36f3d274f9e2f17920dc4d005462b35cbf5d1fb76f126cf"
+    },
+    {
+      "path": "en/sheets/sheet-025.png",
+      "bytes": 248483,
+      "sha256": "1475c1d9bcb7ab6918d54c5fd4ca17179a85afd4604c52338d60db2616e90f52"
+    },
+    {
+      "path": "en/sheets/sheet-026.png",
+      "bytes": 313870,
+      "sha256": "a5ff35f670a3a643d7881da31f86f8d6cfb9f4dffb763e661ec3ac4e70a97b26"
+    },
+    {
+      "path": "en/sheets/sheet-027.png",
+      "bytes": 137754,
+      "sha256": "592284d31da9e92d48c11bf44f8511c076c76fccd32a7e440c9accd54b8d6f40"
+    },
+    {
+      "path": "en/sheets/sheet-028.png",
+      "bytes": 581101,
+      "sha256": "8029a4e177c00b17bf30f319bb31b35af028b05300c903368076b22cde5ff12b"
+    },
+    {
+      "path": "en/sheets/sheet-029.png",
+      "bytes": 107086,
+      "sha256": "f2ca7c22b387113b062fada24cd45745f2c1cd9eb594667cd83bc991694ef628"
+    },
+    {
+      "path": "en/sheets/sheet-030.png",
+      "bytes": 387423,
+      "sha256": "5f8310550c602e18effce48631d47d77eb5dee4651c0ba63f29610c8de69a3d6"
+    },
+    {
+      "path": "en/sheets/sheet-031.png",
+      "bytes": 118377,
+      "sha256": "a92a6bf4536b4307013376187dc920cc3ebe4a9fc439946d715528e4e25ca7a2"
+    },
+    {
+      "path": "en/sheets/sheet-032.png",
+      "bytes": 532467,
+      "sha256": "715fa658fcc5fa888a0cc4fcafc64718037ecc5bd1246f59fd65a2677b6f8d01"
+    },
+    {
+      "path": "en/sheets/sheet-033.png",
+      "bytes": 312558,
+      "sha256": "f2673f65e3a2662b2921649ebf988b2314a8dbbaa2c6a9d37b06a9629589f0a9"
+    },
+    {
+      "path": "en/sheets/sheet-034.png",
+      "bytes": 207079,
+      "sha256": "d28cafb94bbb9241c6b0051b624ccd5f00bcfe8f2ce705c5c15c2908efa2ced8"
+    },
+    {
+      "path": "en/sheets/sheet-035.png",
+      "bytes": 178948,
+      "sha256": "8d4117d8650309d685ff0059bee288d66c76f05790db60cd29b8ab5982e70664"
+    },
+    {
+      "path": "en/sheets/sheet-036.png",
+      "bytes": 155049,
+      "sha256": "95b64218cef7ea109d35339fb1c4f7dc5a63c1ccabfaba4e95cd34ed41af4895"
+    },
+    {
+      "path": "en/sheets/sheet-037.png",
+      "bytes": 391106,
+      "sha256": "85757a232a9d8654bd8a7e0c3b7b9c12ade95778536d0a6ca174a26baca1ada8"
+    },
+    {
+      "path": "en/sheets/sheet-038.png",
+      "bytes": 108733,
+      "sha256": "1cdc220a4ce3a9bf25ef528a1af20284ea861f077affd22e52b71fb5831b2448"
+    },
+    {
+      "path": "en/sheets/sheet-039.png",
+      "bytes": 394760,
+      "sha256": "90fff10d10d65b75448bc541bff0d02e18ffffcc313252d51b411f0fa4c1162b"
+    },
+    {
+      "path": "en/sheets/sheet-040.png",
+      "bytes": 91409,
+      "sha256": "1dac908592462ed7fa63deede921617ef8d7e004d579e7984f88a1d919bd95e6"
+    },
+    {
+      "path": "en/sheets/sheet-041.png",
+      "bytes": 80921,
+      "sha256": "912ce2a1242f19a635f5527d1b7ac9082dab18b989e5efc5bbaa81effcb3b522"
+    },
+    {
+      "path": "en/validation/audio-frame-times.json.gz",
+      "bytes": 998708,
+      "sha256": "2996506c80f86bdf4532516d1674af61d1edb018ab59a38fed27cb4656d22c2e"
+    },
+    {
+      "path": "en/validation/audio-validation.json.gz",
+      "bytes": 727,
+      "sha256": "ab9df7deea61a88bbd935bcb639169b3614c6db2531cc5ed3a906de334bceaea"
+    },
+    {
+      "path": "en/validation/final-probe.json.gz",
+      "bytes": 2236,
+      "sha256": "e95c533d9107a2a95f2a693005e209c110d7c569a4058ca6e83537e5fd212e60"
+    },
+    {
+      "path": "en/validation/join-review.json.gz",
+      "bytes": 35411,
+      "sha256": "c169839d9bdbe0b47a52ff13793626e103c69b83efcedad7e0618c893c37251d"
+    },
+    {
+      "path": "en/validation/join-selection.json.gz",
+      "bytes": 22077,
+      "sha256": "72b1fadb71527de3ad5fb9054628a79f5eedc36a8036ce4064ebe403468422e8"
+    },
+    {
+      "path": "en/validation/packet-times.json.gz",
+      "bytes": 1446277,
+      "sha256": "37f20ad30873dcc707492df31ed2deb849f9271087ae837ea39c5d54bb21044d"
+    },
+    {
+      "path": "en/validation/subtitle-boundaries.json.gz",
+      "bytes": 52484,
+      "sha256": "599915b0047546cde4ec97a42fd570c72c0f1e8e159309695883f6be6fa1874a"
+    },
+    {
+      "path": "en/validation/validation.json.gz",
+      "bytes": 5470,
+      "sha256": "7802c981d6753b8d62df8802959b07417c75a8dad02d075a9951bbfbbbd9f801"
+    },
+    {
+      "path": "en/validation/video-frame-times.json.gz",
+      "bytes": 294089,
+      "sha256": "a9ffee94b0cb3c567571ddb149ccfb139f93fd918fea3a2f7f9b79dd0c7949ad"
+    },
+    {
+      "path": "receipts/baseline-manifest.json.gz",
+      "bytes": 49129,
+      "sha256": "b1a95e6c4680e3e715778cc952fd45198cf7ee2607374051a20239b950edaf6e"
+    },
+    {
+      "path": "receipts/baseline-summary.json.gz",
+      "bytes": 2632,
+      "sha256": "19069269b872401c163814c1c47d5f13377a742b8cec027247cb03b3e503e0fa"
+    },
+    {
+      "path": "receipts/canonical-crosscheck.json.gz",
+      "bytes": 3754,
+      "sha256": "c1b86008a0f967b8a2cf019826cc84243c89e69cf14af06dd634d6658b23b90c"
+    },
+    {
+      "path": "receipts/canonical-identity-freeze.json.gz",
+      "bytes": 4383,
+      "sha256": "05a80d788cbaf95f6d933dcabe854ce8079cdb2703c28bdd8b2c92bff61b4bde"
+    },
+    {
+      "path": "receipts/canonical-preview-map.json.gz",
+      "bytes": 78411,
+      "sha256": "658869eab1694650f95255ddb1566a41dd1ff7854a2082f60873cf5ee384619a"
+    },
+    {
+      "path": "receipts/en-join-review.json.gz",
+      "bytes": 1016,
+      "sha256": "13a9eca1308ded4cc5edcb02de4c3fbd51269a0d39de6e87b24f91c740320bd5"
+    },
+    {
+      "path": "receipts/en-join-review.md",
+      "bytes": 800,
+      "sha256": "3365d31aaa6d7f6d8bebae11080f53de02121fcad145008b13193ca2ae5dbbd4"
+    },
+    {
+      "path": "receipts/freeze-reconciliation.json.gz",
+      "bytes": 266,
+      "sha256": "70d35287a29ad1c6b0be5357f0ae776482c2b451063846b67259d1db7e198e27"
+    },
+    {
+      "path": "receipts/history-qualification-pending.json.gz",
+      "bytes": 477,
+      "sha256": "2cb329dde2c51388aa896b4c2db3c4a0f3b5193dde2f985889daf2805a822752"
+    },
+    {
+      "path": "receipts/input-freeze.json.gz",
+      "bytes": 21310,
+      "sha256": "b8a3f07775d749acf5201dcb963ee5b4d4fa9d42e02aee4cd37bcfe15f32aab5"
+    },
+    {
+      "path": "receipts/postassembly-identity-check.json.gz",
+      "bytes": 2701,
+      "sha256": "7d1ca5127b64b06f9adc26a0bfe8dc43146df6e3402d8560c0deb2880dba9ca8"
+    },
+    {
+      "path": "receipts/tool-environment.json.gz",
+      "bytes": 1003,
+      "sha256": "39ef49fb64c9c19299bdb97af796626e252298ebf8e7c2367d35c150282c4a61"
+    },
+    {
+      "path": "receipts/zh-join-review.json.gz",
+      "bytes": 40587,
+      "sha256": "77218c18510487905087e0a437097a9cc022bccfe8ccec0a66009e458d5a41a2"
+    },
+    {
+      "path": "receipts/zh-join-review.md.gz",
+      "bytes": 2149,
+      "sha256": "b6d7eddf806f5358a5381b6d33af3c29cfaa17c633a026cca8885591aef472b5"
+    },
+    {
+      "path": "source-observations/explainer/ai/viz.py.gz",
+      "bytes": 10483,
+      "sha256": "dde628602d8128cda334fa1a7eb6b8bb7204e835ecc14ae09d6a646b5111d5af"
+    },
+    {
+      "path": "source-observations/explainer/lang.py.gz",
+      "bytes": 2823,
+      "sha256": "88dc26733378196fd4350d20873b9966a89f2c78b8eb191d74e1f391f3a4a503"
+    },
+    {
+      "path": "source-observations/explainer/tts.py.gz",
+      "bytes": 13788,
+      "sha256": "0d38d28e1ad14760305e71a9c68adcf50ca5bbe4090b45cf7f34f0306c77a76c"
+    },
+    {
+      "path": "source-observations/explainer/voiceover.py.gz",
+      "bytes": 4096,
+      "sha256": "b22f2829fecc4c155e063fa6859ce018e36ceb9b276cf2fe820126df8217c6ef"
+    },
+    {
+      "path": "source-observations/tools/build.py.gz",
+      "bytes": 4676,
+      "sha256": "1ceed7d2bead77b3a7cd66ec0aa1349e301f0ea991006129ea20c0bea6b18624"
+    },
+    {
+      "path": "source-observations/tools/qa_motion.py.gz",
+      "bytes": 6507,
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2"
+    },
+    {
+      "path": "source-observations/tools/qa_series.py.gz",
+      "bytes": 7934,
+      "sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/__init__.py.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/cache_contract.py.gz",
+      "bytes": 3124,
+      "sha256": "2c6b946269057ed14f6cd201611302db407ad4d7bc65407466b004eb7fdba5dd"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/common.py.gz",
+      "bytes": 2210,
+      "sha256": "87ef4a5b96e96f8b791a9b75d455d8f2f0743ee5ae430eca5f4cb94efc4934d9"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/compute.py.gz",
+      "bytes": 22831,
+      "sha256": "c8140e6ffa2e3c14021bac9ae2019554ddfdfb00c9c8ce09b05b1d6fa96a7927"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/contracts.py.gz",
+      "bytes": 3149,
+      "sha256": "9c21c6967252ddd535d1f6a934e28e5e0fc444dd46f4071a0b0c5ebd36d6901b"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/manifest.py.gz",
+      "bytes": 703,
+      "sha256": "e90cf2533c05781b93a0cac14f3bfbbfc9eca8205eacfb9468611dfea28e0c19"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s01_hook.py.gz",
+      "bytes": 3708,
+      "sha256": "00c5fb92a7b7beba9e2290bbd1a65fa8be8843b9b463ff225a8652cae8c23f12"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s02_derivative.py.gz",
+      "bytes": 5329,
+      "sha256": "753ba94b1094a5beb26d67077b5495a09b6a034b7f0468462608079edfbcc170"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s03_gradient.py.gz",
+      "bytes": 5096,
+      "sha256": "33f949db9a4fcf6f34c7dc8e5e714c8980dc8679ffa6cacdb54d00b037ae72cf"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s04_jacobian.py.gz",
+      "bytes": 4914,
+      "sha256": "e5804a9b933926638a4386b3b8a4c5334fee9fb7ae1a6984f5f7eb2f86616ef0"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s05_layers.py.gz",
+      "bytes": 3570,
+      "sha256": "1fd470e5cc2105dd843bb33573d8bcafe55a4d0dff18d71a097ead308c5ea77d"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s06_modes.py.gz",
+      "bytes": 4994,
+      "sha256": "186fda9bfb87de1ebb835c448e97d44075083b50e6aaf86017dca87aa9bcd83b"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s07_backprop.py.gz",
+      "bytes": 5431,
+      "sha256": "e26104108babf96dc5257a630b2c1361389eae4b297d67774d7e41c0ca0bb4c8"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s08_library.py.gz",
+      "bytes": 4564,
+      "sha256": "85ce8ebce8a5e62632ce68dc35514979b76b19393e6cacb7b0fe21aa3bd02022"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s09_train.py.gz",
+      "bytes": 6922,
+      "sha256": "2329c018b8819ff74742019bed0587eacef1381ffe1cd742aa6f9c8dc74892ed"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s10_floats.py.gz",
+      "bytes": 5295,
+      "sha256": "32bb2c4f3d62e798891474d4902ebec7164130d10d2fdc138656da1a3d9b5e40"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s11_vcurve.py.gz",
+      "bytes": 4761,
+      "sha256": "9a27b15c47db086210c37ac4aaddc1e4f3b51361106b958461ae119a13a59c8c"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s12_memory.py.gz",
+      "bytes": 4376,
+      "sha256": "1cd047d97bc4b5bd2831d783c843d1dd70743b6213d8963732acf34d52bf6e56"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s13_newton.py.gz",
+      "bytes": 4930,
+      "sha256": "7f16a3731cef475b39247d51eb80ff4a91bed18ed1c020b2505cda47b393000b"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s14_hvp.py.gz",
+      "bytes": 6548,
+      "sha256": "89acf6b0bcf15ef2ee3bec91d3186cdcd7ab0b55b52e43476db5ac0129039094"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s15_quadratic.py.gz",
+      "bytes": 6764,
+      "sha256": "1e389d386a7777395e66770934d5b186608d0dc24e46e5b68629283bd7810466"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s16_lagrange.py.gz",
+      "bytes": 4852,
+      "sha256": "d865b83bb72cd92b856f91a38438260cc77ebca9cac982cb3da0e578a5e45f06"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s17_kkt.py.gz",
+      "bytes": 6040,
+      "sha256": "7cb14377f073fc4ee3496ba6e80e3563f47f0131b5079419a7b8d5db972745d3"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s18_implicit.py.gz",
+      "bytes": 5425,
+      "sha256": "8105c3b21224562343dbbcaab807f6cb7e7c9249f702131e2046501219aae9c1"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/s19_outro.py.gz",
+      "bytes": 6162,
+      "sha256": "487deeef6ab62008be74aab6b9b74bbd09a36ee213c9deb7c378f67d11894a14"
+    },
+    {
+      "path": "source-observations/videos/ai/ai4/zh_lines.py.gz",
+      "bytes": 41090,
+      "sha256": "e006af58d907e2fa89f6a5331321ef4c965d7ae4f88f79bc85d7beaf76af3b4b"
+    },
+    {
+      "path": "source-observations/videos/ai/ai_text_zh.json.gz",
+      "bytes": 881407,
+      "sha256": "c96653d5e0263880d828cf48e287393ccd81edf56ba032bfbe37239b6390f445"
+    },
+    {
+      "path": "tools/assemble.py",
+      "bytes": 5011,
+      "sha256": "22352a452e1ca446f3b34e5f27717558623d4b591b2e28a514b3f4e152e900b1"
+    },
+    {
+      "path": "tools/finalize_baseline.py",
+      "bytes": 7985,
+      "sha256": "d30937d05b0fb7bab620e52d3d60be29778333d8716dcc2cd5aaec4b3dc2bd8a"
+    },
+    {
+      "path": "tools/freeze_inputs.py",
+      "bytes": 4719,
+      "sha256": "8bd7c07f3fd90ba6ff5c1dde4f67c07ea9e8e829cf9cc3a46ca75eec7e6d5212"
+    },
+    {
+      "path": "tools/prepare_joins.py",
+      "bytes": 2245,
+      "sha256": "30b49cf765d43b21730849fe3934b5061b5768154636ae52c35581ac7dfe4a68"
+    },
+    {
+      "path": "tools/track_joins.py",
+      "bytes": 1726,
+      "sha256": "a287e3b50169426bd30d933917109edd0836bb7cfb6757c872d249b46bbcca9b"
+    },
+    {
+      "path": "tools/validate.py",
+      "bytes": 7901,
+      "sha256": "7361dd68b808c72bf4235479531ae0860eb8d841f2a40ae5ac7abfdbd53c1057"
+    },
+    {
+      "path": "tools/validate_audio.py",
+      "bytes": 2239,
+      "sha256": "db635c7d8c97a1685cbcb67b25518c14ddfc741581f30222a30b697365a1cbeb"
+    },
+    {
+      "path": "tools/validate_subtitle_boundaries.py",
+      "bytes": 1657,
+      "sha256": "72fe1ea48bb3dc4812f59f3fb2f5ae229c52434ea11c826b3e6f78a6effd40c2"
+    },
+    {
+      "path": "zh/ai4-silent-preview-zh-480p15.chapters.txt",
+      "bytes": 647,
+      "sha256": "bf742f8afc44f09fc28360e15b98de5ba0c6e657eb72a2543038c890c027ff0b"
+    },
+    {
+      "path": "zh/ai4-silent-preview-zh-480p15.srt",
+      "bytes": 76699,
+      "sha256": "734619c94c6b2cc2b7e344c9e0fc4c1ef5197d9a11fd7b4593f6ff87d0547d55"
+    },
+    {
+      "path": "zh/assembly-progress.json.gz",
+      "bytes": 13107,
+      "sha256": "4ae448fe708626b7c05a56ea1ec083d89b730159496c4b5c8ada56361663a7b7"
+    },
+    {
+      "path": "zh/assembly-receipt.json.gz",
+      "bytes": 13107,
+      "sha256": "4ae448fe708626b7c05a56ea1ec083d89b730159496c4b5c8ada56361663a7b7"
+    },
+    {
+      "path": "zh/logs/zh-assembly.log.gz",
+      "bytes": 738,
+      "sha256": "0ec9037139c362cc76958583e527dd8831f916d6c26e7847d9b45328d3fb3ab8"
+    },
+    {
+      "path": "zh/logs/zh-audio-validation.log.gz",
+      "bytes": 726,
+      "sha256": "a8032391e7c6bfda3b369fd37b1f45cd875acb72a7b84b07ad9f1dc569cbd019"
+    },
+    {
+      "path": "zh/logs/zh-validation.log.gz",
+      "bytes": 617,
+      "sha256": "63c3cfd08a4761976d48e3b30e7edaec7a330cb4ef9840f3b91dafd0881c4571"
+    },
+    {
+      "path": "zh/native/join-01-after-frame-0002116.png",
+      "bytes": 27877,
+      "sha256": "0bcc797463cefc9085b357bc3a96bbd3cf236f1b76c137b97c548065aaec860b"
+    },
+    {
+      "path": "zh/native/join-01-before-frame-0002086.png",
+      "bytes": 83368,
+      "sha256": "5ae794f1d31448d15426489674d9e95877d6046544763854ec72e9e6db53eeb7"
+    },
+    {
+      "path": "zh/native/join-02-after-frame-0004550.png",
+      "bytes": 32115,
+      "sha256": "3ee0564fc619205aa5e486f8faf79ba8b14fe57f7be639329bb73c29637ceb6c"
+    },
+    {
+      "path": "zh/native/join-02-before-frame-0004520.png",
+      "bytes": 62162,
+      "sha256": "e6caae9715e4a2b648ee149319b35d9ec241cd51fe0d71e6ec8e58cbea180f9d"
+    },
+    {
+      "path": "zh/native/join-03-after-frame-0007149.png",
+      "bytes": 39530,
+      "sha256": "f91ff5057cc33992a7e5ccab28b66da8f12011862dd1582a5438a96e9c4eb334"
+    },
+    {
+      "path": "zh/native/join-03-before-frame-0007119.png",
+      "bytes": 199544,
+      "sha256": "0c28469f56b0472855489c0f6c7d379ac0586688dc1d7ac1ce6e9e1e28fbc78f"
+    },
+    {
+      "path": "zh/native/join-04-after-frame-0009422.png",
+      "bytes": 36956,
+      "sha256": "cff24cf221cf4536bf61ec019cfad4d51a1124e8b8c5772eb3b274ebbbb1e983"
+    },
+    {
+      "path": "zh/native/join-04-before-frame-0009392.png",
+      "bytes": 97231,
+      "sha256": "16e89eb07803ed74570b844b82cd10f2a277d6af7b0cc6df74867ff2addcbfda"
+    },
+    {
+      "path": "zh/native/join-05-after-frame-0011898.png",
+      "bytes": 38890,
+      "sha256": "6ffca938c4514db9186c565721d96a2b1a3f21d40bac57d9df0683063903ee03"
+    },
+    {
+      "path": "zh/native/join-05-before-frame-0011868.png",
+      "bytes": 75750,
+      "sha256": "48fc7c477c064c1a71ddb9894949aa3119297c1d1c959af70649c561f7131c0c"
+    },
+    {
+      "path": "zh/native/join-06-after-frame-0015436.png",
+      "bytes": 33920,
+      "sha256": "364e026c0309d3cc16a09c366702909cef2f32314700cb9b220020c2fc53a25a"
+    },
+    {
+      "path": "zh/native/join-06-before-frame-0015406.png",
+      "bytes": 84188,
+      "sha256": "209c84cfa681f377f09d03a8d931af471995e6699a3b364a339d56e2b0dc3f76"
+    },
+    {
+      "path": "zh/native/join-07-after-frame-0018531.png",
+      "bytes": 32798,
+      "sha256": "94724e9207f0aa6661ef9b8e49b0e5e57279ce633a56dcb03720f780ec4183b4"
+    },
+    {
+      "path": "zh/native/join-07-before-frame-0018501.png",
+      "bytes": 72239,
+      "sha256": "49323b0c45179a65140d6141f9b7c91f5acea2e44f614fabf13f0acbb9fa95ef"
+    },
+    {
+      "path": "zh/native/join-08-after-frame-0021079.png",
+      "bytes": 34669,
+      "sha256": "802cfa8bd5af7dd1c960f4c551313e00abb46867ea17541ee662fb267c4c370a"
+    },
+    {
+      "path": "zh/native/join-08-before-frame-0021049.png",
+      "bytes": 103679,
+      "sha256": "01883634077942831973a563ee69a327494bed0b1b96086f27404e05ede445ad"
+    },
+    {
+      "path": "zh/native/join-09-after-frame-0024047.png",
+      "bytes": 35500,
+      "sha256": "992afbd6507cb932d195fa089477aa282d6099fa474fdce721b54ea85b1ade69"
+    },
+    {
+      "path": "zh/native/join-09-before-frame-0024017.png",
+      "bytes": 133461,
+      "sha256": "404ef9390f63bfd28c7006c53856240858289c94da1c9f3d15e908d351671d74"
+    },
+    {
+      "path": "zh/native/join-10-after-frame-0027212.png",
+      "bytes": 32336,
+      "sha256": "96357d92f2d2385b01fb4bc2ebf1d54dda4de4d130c1f5692901b165036a07f6"
+    },
+    {
+      "path": "zh/native/join-10-before-frame-0027182.png",
+      "bytes": 89858,
+      "sha256": "dad8ac5d15e6e247d455106cc5284616e5a049e95cb31d283a11a6809e93ac43"
+    },
+    {
+      "path": "zh/native/join-11-after-frame-0029950.png",
+      "bytes": 34369,
+      "sha256": "f04a111177f3b2c7242d5fa4a0cc96fa72d8e4f15e111bb8329079f314d177de"
+    },
+    {
+      "path": "zh/native/join-11-before-frame-0029920.png",
+      "bytes": 99533,
+      "sha256": "3e5fe571b6383f78c666117c5ca7743e3b3121dd19af8d18e5c6cf08e8b9ff36"
+    },
+    {
+      "path": "zh/native/join-12-after-frame-0032693.png",
+      "bytes": 28514,
+      "sha256": "4236867fe171696d604034179605cb3c01ffc30958afaac3e0f48914f000dc39"
+    },
+    {
+      "path": "zh/native/join-12-before-frame-0032663.png",
+      "bytes": 98722,
+      "sha256": "64dadb49cca2f45205afd19d1dc0066a1600c97fd0a50c982624121bd8380688"
+    },
+    {
+      "path": "zh/native/join-13-after-frame-0035116.png",
+      "bytes": 30432,
+      "sha256": "8325563ed83271b4003e2478cf903f3824fb0300d633bb26dd6dcd7136f7d075"
+    },
+    {
+      "path": "zh/native/join-13-before-frame-0035086.png",
+      "bytes": 151494,
+      "sha256": "b8606854d123f1e029d372814750c7c1214dbbfdc06f9b484b315381be843302"
+    },
+    {
+      "path": "zh/native/join-14-after-frame-0037827.png",
+      "bytes": 33410,
+      "sha256": "ab68763d03d6a4305f8cb607d0f24bdc6b4fd49ba56aa6916632440dbd9e16a7"
+    },
+    {
+      "path": "zh/native/join-14-before-frame-0037797.png",
+      "bytes": 95303,
+      "sha256": "a5b6e17d68174c38d95f6be21748b6ae07ef327414bd348dbdc65085a13045a3"
+    },
+    {
+      "path": "zh/native/join-15-after-frame-0040922.png",
+      "bytes": 32763,
+      "sha256": "1fca9d79981f72edff2342bc2f9dbee88a911d61fc875f76ddbe5cc9cd66cda2"
+    },
+    {
+      "path": "zh/native/join-15-before-frame-0040892.png",
+      "bytes": 201314,
+      "sha256": "9f7c839621602fb71c5cd6223ad6a21c9c620903bbaa5b3ee98ece8bdfc27775"
+    },
+    {
+      "path": "zh/native/join-16-after-frame-0043824.png",
+      "bytes": 41708,
+      "sha256": "e41acdaa2c7478dff97f720de174db7c8087def50e74344ae16da7ae3a38dba4"
+    },
+    {
+      "path": "zh/native/join-16-before-frame-0043794.png",
+      "bytes": 50099,
+      "sha256": "c19fc413b419cba38631ae8be0590e3894868a6ee44adcfa7c62967c57527b65"
+    },
+    {
+      "path": "zh/native/join-17-after-frame-0046973.png",
+      "bytes": 32371,
+      "sha256": "2bee1863279f4151a66688f79b9b322b7a8bafbc31a6a9c2efa9a42ca9f10087"
+    },
+    {
+      "path": "zh/native/join-17-before-frame-0046943.png",
+      "bytes": 99971,
+      "sha256": "6fbc5253fdde5b8cb88869f8e225a408d2afe35e57629d7a3b3c5f26c2748c4b"
+    },
+    {
+      "path": "zh/native/join-18-after-frame-0049626.png",
+      "bytes": 20479,
+      "sha256": "d39adbaf22e6eddb67cd414734a043ce04101577d00aa7b120a5219fac836633"
+    },
+    {
+      "path": "zh/native/join-18-before-frame-0049596.png",
+      "bytes": 91248,
+      "sha256": "14678c06b30a0df332662ed0cd085a91716820a0d48399109a08b41d47cc08d2"
+    },
+    {
+      "path": "zh/sheets/sheet-001.png",
+      "bytes": 366248,
+      "sha256": "de6effdde82996152b51bf31d5837e27028115ef374dbd0fd915ca978ee63393"
+    },
+    {
+      "path": "zh/sheets/sheet-002.png",
+      "bytes": 76731,
+      "sha256": "1a803c92f467dc887eb15b9d7bb5abe621e155daef94f8c8653afcefa14cd929"
+    },
+    {
+      "path": "zh/sheets/sheet-003.png",
+      "bytes": 287224,
+      "sha256": "0c98c06c389efb19f640cb1c252dd37d9ade868a2312377cd852e31ace5ad4e0"
+    },
+    {
+      "path": "zh/sheets/sheet-004.png",
+      "bytes": 93776,
+      "sha256": "6014236293c2122429c41eb10d1b5efd014ad560c3a801a9da35612d6f583b4e"
+    },
+    {
+      "path": "zh/sheets/sheet-005.png",
+      "bytes": 535349,
+      "sha256": "1ac2a45b27113840d34932b357311196e675f75da31fe19130c649d6ebf77cfa"
+    },
+    {
+      "path": "zh/sheets/sheet-006.png",
+      "bytes": 335190,
+      "sha256": "19722ace5979d422a76f994a48b63c00ac9a6aa00a39309744bc70ff09347908"
+    },
+    {
+      "path": "zh/sheets/sheet-007.png",
+      "bytes": 242979,
+      "sha256": "ad742353fbdda34c568fb6d52da1823baaed5fe816b3aa2ad0d675cd284bbdf5"
+    },
+    {
+      "path": "zh/sheets/sheet-008.png",
+      "bytes": 290603,
+      "sha256": "65cbb6c16fd89c81c1399a263abc0ccb6fa56ec7f056d389cda7f6aa26697e08"
+    },
+    {
+      "path": "zh/sheets/sheet-009.png",
+      "bytes": 143931,
+      "sha256": "ca09aa384da595fdab437da5ebaaac27d7be80e291dd9df37e12e3866d83521d"
+    },
+    {
+      "path": "zh/sheets/sheet-010.png",
+      "bytes": 328723,
+      "sha256": "0f9acf0422ffdb3cb7516ad9203e817f6e98076a57f64555e38907a15e53fa54"
+    },
+    {
+      "path": "zh/sheets/sheet-011.png",
+      "bytes": 103159,
+      "sha256": "7f6bd7572eb83180ae945f0b43ccd3c923fe3c9344871fdfbfc10075ce5eaa23"
+    },
+    {
+      "path": "zh/sheets/sheet-012.png",
+      "bytes": 374467,
+      "sha256": "ab5e1bd1e75a05a9fa4f53181d4320d2785913bb20690d0a07391612e54e7af4"
+    },
+    {
+      "path": "zh/sheets/sheet-013.png",
+      "bytes": 103437,
+      "sha256": "f75b60bdc8c60afd877ff4f8e7ac95ea7ff8deaeeb43ef0ea55ca0e845530928"
+    },
+    {
+      "path": "zh/sheets/sheet-014.png",
+      "bytes": 286667,
+      "sha256": "503cc3a404b2384722457dfdce531f30064b6e60a20751b6bb469d57599064ce"
+    },
+    {
+      "path": "zh/sheets/sheet-015.png",
+      "bytes": 140592,
+      "sha256": "119d969c2d925842db4d42627523e22e346012b83e981a0f3eaef5aa8570daf7"
+    },
+    {
+      "path": "zh/sheets/sheet-016.png",
+      "bytes": 234898,
+      "sha256": "35138b6a2c4c5e23c288edb20eb34652d75279e6dc7ae2d04497788080b6b142"
+    },
+    {
+      "path": "zh/sheets/sheet-017.png",
+      "bytes": 338442,
+      "sha256": "2abc5e498f1fb1a786132bed57a1188b0d61588e95f8b24dcc133a517dfd8ca5"
+    },
+    {
+      "path": "zh/sheets/sheet-018.png",
+      "bytes": 135191,
+      "sha256": "b305a442c4a057ce10f1f9205c6f24b14e3347fbb92c04a7aef4bfda14d912a5"
+    },
+    {
+      "path": "zh/sheets/sheet-019.png",
+      "bytes": 474820,
+      "sha256": "46de56a1ff378909c41939d646dac54a927c3129d2fb9048ed606b8e41a07809"
+    },
+    {
+      "path": "zh/sheets/sheet-020.png",
+      "bytes": 106105,
+      "sha256": "8fd4934ed5b1d35515a29104025ea78f536bfb69c89d32ea3e544f5393a279f7"
+    },
+    {
+      "path": "zh/sheets/sheet-021.png",
+      "bytes": 406795,
+      "sha256": "c2165f63474d2b828bde28631a2ddae97a931afa9af18f47388b3526937d9312"
+    },
+    {
+      "path": "zh/sheets/sheet-022.png",
+      "bytes": 124719,
+      "sha256": "a29e7276f5cf47a50ba1e44f3bbcc00ba1bf5238d46c3c3355f920e7a038fe19"
+    },
+    {
+      "path": "zh/sheets/sheet-023.png",
+      "bytes": 341482,
+      "sha256": "706147275a8f27354e6e72ad40a5272416ae4082d66f9c31ac2071979a01e4e2"
+    },
+    {
+      "path": "zh/sheets/sheet-024.png",
+      "bytes": 194021,
+      "sha256": "96a760c727ed5bf11489cabb8a7d06e42e461d68fd4ab9573d5d83b3f2d31299"
+    },
+    {
+      "path": "zh/sheets/sheet-025.png",
+      "bytes": 237610,
+      "sha256": "af476c00f66bc493d6584fb482ebff5a4596845ff93928f69c6933757ffde75e"
+    },
+    {
+      "path": "zh/sheets/sheet-026.png",
+      "bytes": 327723,
+      "sha256": "0fe1d69b7bea3a6c43bd21e6dde2e5fa17940ed388fdf9bfe2615338abac6a1b"
+    },
+    {
+      "path": "zh/sheets/sheet-027.png",
+      "bytes": 117823,
+      "sha256": "baf71d7533ce8fc8f5f5689513a37fd75303d2846bcec908b18661768a26214c"
+    },
+    {
+      "path": "zh/sheets/sheet-028.png",
+      "bytes": 562007,
+      "sha256": "0e004bc6c41b14bf61096b98bce4e7b75fec6e39c34c2a4ba87d44ee21bdeae2"
+    },
+    {
+      "path": "zh/sheets/sheet-029.png",
+      "bytes": 109855,
+      "sha256": "3fa334b11ab85a47881d578ebe6a4c2c49a7d39741e3d5e5b351b8f60328cc52"
+    },
+    {
+      "path": "zh/sheets/sheet-030.png",
+      "bytes": 381214,
+      "sha256": "f0be675617b0312a1b49ce47288e759f33d6f10ee0aacbcccfada1be299e5ffe"
+    },
+    {
+      "path": "zh/sheets/sheet-031.png",
+      "bytes": 119375,
+      "sha256": "cd0905b68963fc8dda27ff2dd5ae2af89c8368bac1523d187add4fb16f69a795"
+    },
+    {
+      "path": "zh/sheets/sheet-032.png",
+      "bytes": 527678,
+      "sha256": "d1bac844921e4cfac1ea3c077d7b3760fc22859b2a3da8768cc1a67f3e8f9055"
+    },
+    {
+      "path": "zh/sheets/sheet-033.png",
+      "bytes": 311021,
+      "sha256": "d6c9f696f8b2c13c93642899b422120f91bd69664b454cec7a54117d324cc0ae"
+    },
+    {
+      "path": "zh/sheets/sheet-034.png",
+      "bytes": 193134,
+      "sha256": "fb1d5142a1f0e9f9ed2be4538039b9c99e332c2eab32d8436e36791b8dc112f0"
+    },
+    {
+      "path": "zh/sheets/sheet-035.png",
+      "bytes": 177670,
+      "sha256": "0d0cad3eef8198194ca953c51b93864374f42a8ed8d5dc31e3c0518ea7c06321"
+    },
+    {
+      "path": "zh/sheets/sheet-036.png",
+      "bytes": 158586,
+      "sha256": "203702fe8a96334575a6573db0cced6398ca2badfd357a8e8b34cc4e834ae943"
+    },
+    {
+      "path": "zh/sheets/sheet-037.png",
+      "bytes": 405374,
+      "sha256": "78353e3d14b4e2646b7d65113e2659d6b2e864a0b36d91fdcf6e1496576bf6d7"
+    },
+    {
+      "path": "zh/sheets/sheet-038.png",
+      "bytes": 100048,
+      "sha256": "f41c589a9399b34c5e49d8bbd38fc356f5d76ea45eb49461199fb229f59bb1ed"
+    },
+    {
+      "path": "zh/sheets/sheet-039.png",
+      "bytes": 380422,
+      "sha256": "0a2d55aece0f505b9ef198f3320dc09bf125c062e4694781290e2cab731588f0"
+    },
+    {
+      "path": "zh/sheets/sheet-040.png",
+      "bytes": 96375,
+      "sha256": "1297fcec5a77f50a397f1124a0e67a0297dc7a441d0707c2fe19d9ee5f7c857f"
+    },
+    {
+      "path": "zh/sheets/sheet-041.png",
+      "bytes": 81714,
+      "sha256": "b8effd5ed248da35b4f293f080f305bd66f94ce43fe6d4a4d7c895636268e529"
+    },
+    {
+      "path": "zh/validation/audio-frame-times.json.gz",
+      "bytes": 1061165,
+      "sha256": "12c875c5f28d81817388fab63a201df163b05fa99bfac9f1c3f9b21d52af59d1"
+    },
+    {
+      "path": "zh/validation/audio-validation.json.gz",
+      "bytes": 726,
+      "sha256": "a8032391e7c6bfda3b369fd37b1f45cd875acb72a7b84b07ad9f1dc569cbd019"
+    },
+    {
+      "path": "zh/validation/final-probe.json.gz",
+      "bytes": 2372,
+      "sha256": "762b08f00dc1f5fec705143c4a34f2b2b7b32701443bcfd8fbeb555d5f2dad86"
+    },
+    {
+      "path": "zh/validation/join-review.json.gz",
+      "bytes": 34473,
+      "sha256": "f12b94744e8dfe4ca3b122d4fcc2b91e837022bd5aa8f91cdfd229c73f77fba5"
+    },
+    {
+      "path": "zh/validation/join-selection.json.gz",
+      "bytes": 22016,
+      "sha256": "5ecac4b1162524004e60c52e8cf3e2a84af1ee9bec3dd48ce3c7ac65ad48fb83"
+    },
+    {
+      "path": "zh/validation/packet-times.json.gz",
+      "bytes": 1537301,
+      "sha256": "0dc9c60f2e89009e33b778ea89e46aef8e1cbd7fa252b628814a38d57c74cae1"
+    },
+    {
+      "path": "zh/validation/subtitle-boundaries.json.gz",
+      "bytes": 52125,
+      "sha256": "f242877395f4a6664c4d04c20be374c42a7a2199d5f5ceea0ee1b584d985ec5c"
+    },
+    {
+      "path": "zh/validation/validation.json.gz",
+      "bytes": 5620,
+      "sha256": "94bd236ce988b4bd8862d0cd0263e0a71b08c28e9f958005f2f5a574016cbe4b"
+    },
+    {
+      "path": "zh/validation/video-frame-times.json.gz",
+      "bytes": 313943,
+      "sha256": "bd3ccfb35dd440bf1b52896a0d0ea600479c185fd7620256afd9acf739decb98"
+    }
+  ],
+  "lossless_archive_notes": [
+    {
+      "decoded_original_path": "receipts/zh-join-review.md",
+      "stored_path": "receipts/zh-join-review.md.gz",
+      "decoded_bytes": 4544,
+      "decoded_sha256": "afbeaae9393b24734d3f92aa5632958fa81289542381af5eb975b5f188e5852c",
+      "reason": "Preserve exact original whitespace bytes in lossless archive; no evidence-content edits."
+    }
+  ]
+}
