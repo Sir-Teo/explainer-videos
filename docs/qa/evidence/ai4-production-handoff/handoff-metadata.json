@@ -1,0 +1,2869 @@
+{
+  "created_utc": "2026-11-01T02:44:18.460146+00:00",
+  "scope": "Immutable metadata handoff only; no archive packaging/upload or production render. Compute/cache definitions and already completed data were imported/loaded, with all producers fail-on-call; no producer executed and no model was loaded. Scientific and preview acceptance scopes remain separate.",
+  "recommended_source_commit": "1927e6b7a99192344bd4c00ca7aae3abdd499369",
+  "source_inventory": [
+    {
+      "path": "videos/ai/ai4/README.md",
+      "pinned_bytes": 28578,
+      "pinned_sha256": "1095c935e47faee3b9ace0b1d798ed02b3a1ab7f5d5cf2a402e088d03e1b6b42",
+      "working_tree": {
+        "bytes": 28578,
+        "sha256": "1095c935e47faee3b9ace0b1d798ed02b3a1ab7f5d5cf2a402e088d03e1b6b42",
+        "mtime_ns": 1793486699481339776
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/__init__.py",
+      "pinned_bytes": 0,
+      "pinned_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "working_tree": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mtime_ns": 1793446993038232642
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/cache_contract.py",
+      "pinned_bytes": 8767,
+      "pinned_sha256": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+      "working_tree": {
+        "bytes": 8767,
+        "sha256": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+        "mtime_ns": 1793485312324721689
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/common.py",
+      "pinned_bytes": 4944,
+      "pinned_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+      "working_tree": {
+        "bytes": 4944,
+        "sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "mtime_ns": 1793446993041254432
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/compute.py",
+      "pinned_bytes": 72334,
+      "pinned_sha256": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+      "working_tree": {
+        "bytes": 72334,
+        "sha256": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+        "mtime_ns": 1793485455044105157
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/contracts.py",
+      "pinned_bytes": 8587,
+      "pinned_sha256": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+      "working_tree": {
+        "bytes": 8587,
+        "sha256": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+        "mtime_ns": 1793485313248716809
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/manifest.py",
+      "pinned_bytes": 1375,
+      "pinned_sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+      "working_tree": {
+        "bytes": 1375,
+        "sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+        "mtime_ns": 1793446993041254432
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/narration_zh.json",
+      "pinned_bytes": 92145,
+      "pinned_sha256": "fdbb9cecfb54ee7172bfc932bcb4aaefdb590f5e51ebd0d78b1d50662bcecd8e",
+      "working_tree": {
+        "bytes": 92145,
+        "sha256": "fdbb9cecfb54ee7172bfc932bcb4aaefdb590f5e51ebd0d78b1d50662bcecd8e",
+        "mtime_ns": 1793446993041254432
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s01_hook.py",
+      "pinned_bytes": 10327,
+      "pinned_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+      "working_tree": {
+        "bytes": 10327,
+        "sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+        "mtime_ns": 1793484548370703777
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s02_derivative.py",
+      "pinned_bytes": 16319,
+      "pinned_sha256": "b072470cd31ea9009eb3f663c8db03e73705cacea4c86dfad83b367df880ecec",
+      "working_tree": {
+        "bytes": 16319,
+        "sha256": "b072470cd31ea9009eb3f663c8db03e73705cacea4c86dfad83b367df880ecec",
+        "mtime_ns": 1793487714541576020
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s03_gradient.py",
+      "pinned_bytes": 15913,
+      "pinned_sha256": "10bac01890e68e3f86915521de9cf3b6729fe9e7934750d629360464263ceb33",
+      "working_tree": {
+        "bytes": 15913,
+        "sha256": "10bac01890e68e3f86915521de9cf3b6729fe9e7934750d629360464263ceb33",
+        "mtime_ns": 1793494133458597380
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s04_jacobian.py",
+      "pinned_bytes": 13760,
+      "pinned_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+      "working_tree": {
+        "bytes": 13760,
+        "sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+        "mtime_ns": 1793484667582579912
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s05_layers.py",
+      "pinned_bytes": 11141,
+      "pinned_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+      "working_tree": {
+        "bytes": 11141,
+        "sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+        "mtime_ns": 1793484746758375520
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s06_modes.py",
+      "pinned_bytes": 15882,
+      "pinned_sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+      "working_tree": {
+        "bytes": 15882,
+        "sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "mtime_ns": 1793485130321162732
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s07_backprop.py",
+      "pinned_bytes": 16772,
+      "pinned_sha256": "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c",
+      "working_tree": {
+        "bytes": 16772,
+        "sha256": "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c",
+        "mtime_ns": 1793488584328879605
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s08_library.py",
+      "pinned_bytes": 13790,
+      "pinned_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+      "working_tree": {
+        "bytes": 13790,
+        "sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+        "mtime_ns": 1793486996559562733
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s09_train.py",
+      "pinned_bytes": 20931,
+      "pinned_sha256": "49f9e2da42f74283fc989608a10e5ad82cb6dea33a4bd4fac9329d85a7970f78",
+      "working_tree": {
+        "bytes": 20931,
+        "sha256": "49f9e2da42f74283fc989608a10e5ad82cb6dea33a4bd4fac9329d85a7970f78",
+        "mtime_ns": 1793489759592095710
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s10_floats.py",
+      "pinned_bytes": 15510,
+      "pinned_sha256": "98288d25f6a2fb37d0742a9385e078425265b86696e2336928b049683148682b",
+      "working_tree": {
+        "bytes": 15510,
+        "sha256": "98288d25f6a2fb37d0742a9385e078425265b86696e2336928b049683148682b",
+        "mtime_ns": 1793490108976910699
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s11_vcurve.py",
+      "pinned_bytes": 14041,
+      "pinned_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "working_tree": {
+        "bytes": 14041,
+        "sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+        "mtime_ns": 1793485197176967409
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s12_memory.py",
+      "pinned_bytes": 12530,
+      "pinned_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "working_tree": {
+        "bytes": 12530,
+        "sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+        "mtime_ns": 1793485198412963463
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s13_newton.py",
+      "pinned_bytes": 14032,
+      "pinned_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "working_tree": {
+        "bytes": 14032,
+        "sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+        "mtime_ns": 1793485421856374778
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s14_hvp.py",
+      "pinned_bytes": 20004,
+      "pinned_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "working_tree": {
+        "bytes": 20004,
+        "sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+        "mtime_ns": 1793485632815861583
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s15_quadratic.py",
+      "pinned_bytes": 20132,
+      "pinned_sha256": "8b387c3a6f707b35b275bfb56a2daba1219707bd6e8c573bbf8ca2456390d68e",
+      "working_tree": {
+        "bytes": 20132,
+        "sha256": "8b387c3a6f707b35b275bfb56a2daba1219707bd6e8c573bbf8ca2456390d68e",
+        "mtime_ns": 1793491417986487868
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s16_lagrange.py",
+      "pinned_bytes": 14707,
+      "pinned_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+      "working_tree": {
+        "bytes": 14707,
+        "sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+        "mtime_ns": 1793485612959928133
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s17_kkt.py",
+      "pinned_bytes": 18234,
+      "pinned_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+      "working_tree": {
+        "bytes": 18234,
+        "sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+        "mtime_ns": 1793485186437002126
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s18_implicit.py",
+      "pinned_bytes": 16898,
+      "pinned_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+      "working_tree": {
+        "bytes": 16898,
+        "sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+        "mtime_ns": 1793485613919925355
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/s19_outro.py",
+      "pinned_bytes": 16025,
+      "pinned_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+      "working_tree": {
+        "bytes": 16025,
+        "sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+        "mtime_ns": 1793485732119567801
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/text_zh_add.json",
+      "pinned_bytes": 70957,
+      "pinned_sha256": "fb4794f9fb2405911c102be34b57606669ed3f6cca7a05a9f84206aa6e604780",
+      "working_tree": {
+        "bytes": 70957,
+        "sha256": "fb4794f9fb2405911c102be34b57606669ed3f6cca7a05a9f84206aa6e604780",
+        "mtime_ns": 1793446993041254432
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai4/zh_lines.py",
+      "pinned_bytes": 108390,
+      "pinned_sha256": "ec04b2f4c18551b990707465209d3f4472d3b098ccf16e61a1d2d558bb089e08",
+      "working_tree": {
+        "bytes": 108390,
+        "sha256": "ec04b2f4c18551b990707465209d3f4472d3b098ccf16e61a1d2d558bb089e08",
+        "mtime_ns": 1793494133459432467
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "explainer/ai/autodiff.py",
+      "pinned_bytes": 7798,
+      "pinned_sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+      "working_tree": {
+        "bytes": 7798,
+        "sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+        "mtime_ns": 1793484825558137747
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "explainer/ai/viz.py",
+      "pinned_bytes": 31773,
+      "pinned_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "working_tree": {
+        "bytes": 31773,
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "mtime_ns": 1793491895709263781
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "explainer/ai/cache.py",
+      "pinned_bytes": 6276,
+      "pinned_sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+      "working_tree": {
+        "bytes": 6276,
+        "sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+        "mtime_ns": 1793446992919289348
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "explainer/cache_lock.py",
+      "pinned_bytes": 1521,
+      "pinned_sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+      "working_tree": {
+        "bytes": 1521,
+        "sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+        "mtime_ns": 1793446992919841131
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai1/compute.py",
+      "pinned_bytes": 78448,
+      "pinned_sha256": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa",
+      "working_tree": {
+        "bytes": 78448,
+        "sha256": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa",
+        "mtime_ns": 1793448698326740514
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "pinned_bytes": 2428895,
+      "pinned_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+      "working_tree": {
+        "bytes": 2436592,
+        "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+        "mtime_ns": 1793499657491033436
+      },
+      "working_matches_pin": false
+    },
+    {
+      "path": "pyproject.toml",
+      "pinned_bytes": 1417,
+      "pinned_sha256": "b96e090cb4fbdd2e42308ae7cb73986c56817c87191fe2e3830242e48e52d8d8",
+      "working_tree": {
+        "bytes": 1417,
+        "sha256": "b96e090cb4fbdd2e42308ae7cb73986c56817c87191fe2e3830242e48e52d8d8",
+        "mtime_ns": 1793446992920356210
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "requirements-lock.txt",
+      "pinned_bytes": 2697,
+      "pinned_sha256": "a7973833329bcb5957c0246fcdc302950b349512765298aaf9c037cbd93d805c",
+      "working_tree": {
+        "bytes": 2697,
+        "sha256": "a7973833329bcb5957c0246fcdc302950b349512765298aaf9c037cbd93d805c",
+        "mtime_ns": 1793446992920356210
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "tools/qa_series.py",
+      "pinned_bytes": 25379,
+      "pinned_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "working_tree": {
+        "bytes": 25379,
+        "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "mtime_ns": 1793453104106929780
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "tools/build.py",
+      "pinned_bytes": 11900,
+      "pinned_sha256": "12337229386de13d5c4090f7d07a389ef1d06745a78896493398a38699f1affc",
+      "working_tree": {
+        "bytes": 11900,
+        "sha256": "12337229386de13d5c4090f7d07a389ef1d06745a78896493398a38699f1affc",
+        "mtime_ns": 1793446992921103790
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "tools/qa_audio.py",
+      "pinned_bytes": 8280,
+      "pinned_sha256": "674ad76c62ad395d456b1165e89c694976e2dbd2cbff7312be31f6f078e4fbdd",
+      "working_tree": {
+        "bytes": 8280,
+        "sha256": "674ad76c62ad395d456b1165e89c694976e2dbd2cbff7312be31f6f078e4fbdd",
+        "mtime_ns": 1793447222506860048
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "tools/qa_motion.py",
+      "pinned_bytes": 19437,
+      "pinned_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "working_tree": {
+        "bytes": 19437,
+        "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+        "mtime_ns": 1793455688551546879
+      },
+      "working_matches_pin": true
+    },
+    {
+      "path": "manim.cfg",
+      "pinned_bytes": 325,
+      "pinned_sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+      "working_tree": {
+        "bytes": 325,
+        "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+        "mtime_ns": 1793446992920356210
+      },
+      "working_matches_pin": true
+    }
+  ],
+  "items": [
+    {
+      "item": "params",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "params",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "e6e2b847bfc2c64d88033c4b21281d6cee2a3fe11d7865a448243215fc6a659c",
+        "arrays_sha256": null,
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/params.json": {
+          "bytes": 2976,
+          "sha256": "dd82dbfb1106c320a094ad9c926d619708e4f362e1d11753bd434a54f8e7d46b",
+          "mtime_ns": 1793485500246547643
+        },
+        ".cache/ai4/params.npz": null
+      },
+      "top_level_keys": [
+        "gpt2",
+        "qwen3_4b",
+        "provenance",
+        "_cache"
+      ],
+      "array_shapes": {}
+    },
+    {
+      "item": "linapprox",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "linapprox",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "8d07c33e334c37e4b445011891243b26475cbcdec55173ea29a7bca25e3907fc",
+        "arrays_sha256": "780209e6338b0d3c433085d65db609c5f4e4ac67b63dbfee883209f0eeb8e852",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/linapprox.json": {
+          "bytes": 1260,
+          "sha256": "54857b13b400b68e3f37a662bca7d1eb2ba0ede2a3be11bdb36124b4002290e0",
+          "mtime_ns": 1793485501071779790
+        },
+        ".cache/ai4/linapprox.npz": {
+          "bytes": 9402,
+          "sha256": "780209e6338b0d3c433085d65db609c5f4e4ac67b63dbfee883209f0eeb8e852",
+          "mtime_ns": 1793485501066178673
+        }
+      },
+      "top_level_keys": [
+        "p0",
+        "d1",
+        "d2",
+        "slope",
+        "slope_bad",
+        "ratio",
+        "pslope",
+        "g_ang",
+        "best_ang",
+        "gnorm",
+        "dmax",
+        "_cache",
+        "hs",
+        "err",
+        "err_bad",
+        "rs",
+        "perr",
+        "ang",
+        "D",
+        "grad"
+      ],
+      "array_shapes": {
+        "hs": [
+          33
+        ],
+        "err": [
+          33
+        ],
+        "err_bad": [
+          33
+        ],
+        "rs": [
+          25
+        ],
+        "perr": [
+          25
+        ],
+        "ang": [
+          721
+        ],
+        "D": [
+          721
+        ],
+        "grad": [
+          2
+        ]
+      }
+    },
+    {
+      "item": "depth",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "depth",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "1d55c0c67b33d909f6f93af69166b99bc82f9e3bcf9f1b6e766afb77836791a4",
+        "arrays_sha256": "99c400d91780e257c42230bf17f629fde21e43b8f2991ed0862e3c9e7d6ed4a4",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/depth.json": {
+          "bytes": 1028,
+          "sha256": "1ffd989907645c43fc7da0d2b3529b727a3fb3baee307d33f0d93f310a069965",
+          "mtime_ns": 1793485502538881986
+        },
+        ".cache/ai4/depth.npz": {
+          "bytes": 10344,
+          "sha256": "99c400d91780e257c42230bf17f629fde21e43b8f2991ed0862e3c9e7d6ed4a4",
+          "mtime_ns": 1793485502533420789
+        }
+      },
+      "top_level_keys": [
+        "w",
+        "L",
+        "seeds",
+        "gains",
+        "_cache",
+        "mean0",
+        "lo0",
+        "hi0",
+        "mean1",
+        "lo1",
+        "hi1",
+        "mean2",
+        "lo2",
+        "hi2",
+        "mean3",
+        "lo3",
+        "hi3",
+        "mean4",
+        "lo4",
+        "hi4"
+      ],
+      "array_shapes": {
+        "mean0": [
+          60
+        ],
+        "lo0": [
+          60
+        ],
+        "hi0": [
+          60
+        ],
+        "mean1": [
+          60
+        ],
+        "lo1": [
+          60
+        ],
+        "hi1": [
+          60
+        ],
+        "mean2": [
+          60
+        ],
+        "lo2": [
+          60
+        ],
+        "hi2": [
+          60
+        ],
+        "mean3": [
+          60
+        ],
+        "lo3": [
+          60
+        ],
+        "hi3": [
+          60
+        ],
+        "mean4": [
+          60
+        ],
+        "lo4": [
+          60
+        ],
+        "hi4": [
+          60
+        ]
+      }
+    },
+    {
+      "item": "jacobians",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "jacobians",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "28f2d1cd83e8169fb073ca26c34665586e5534dd99f33c31ecf0dd2270856166",
+        "arrays_sha256": "42131a5f8fdb3b9b8c98315ed288315e11605377fa99fa5d676673d32b889405",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/jacobians.json": {
+          "bytes": 1302,
+          "sha256": "fe9010b7e51e5f03af564f47aaa5622947bb5fea5b62aa70dc040effe8680936",
+          "mtime_ns": 1793485503367900583
+        },
+        ".cache/ai4/jacobians.npz": {
+          "bytes": 4075,
+          "sha256": "42131a5f8fdb3b9b8c98315ed288315e11605377fa99fa5d676673d32b889405",
+          "mtime_ns": 1793485503363293357
+        }
+      },
+      "top_level_keys": [
+        "sm_diff",
+        "sm_null",
+        "sigma",
+        "eps",
+        "ln_diff",
+        "ln_null1",
+        "ln_nully",
+        "mm_diff",
+        "jac_entries",
+        "jac_bytes",
+        "vjp_flops",
+        "T",
+        "d",
+        "_cache",
+        "z",
+        "p",
+        "J_sm",
+        "J_sm_lib",
+        "eig_sm",
+        "x",
+        "y",
+        "J_ln",
+        "J_ln_lib",
+        "eig_ln",
+        "X",
+        "W",
+        "G",
+        "dX",
+        "dW"
+      ],
+      "array_shapes": {
+        "z": [
+          5
+        ],
+        "p": [
+          5
+        ],
+        "J_sm": [
+          5,
+          5
+        ],
+        "J_sm_lib": [
+          5,
+          5
+        ],
+        "eig_sm": [
+          5
+        ],
+        "x": [
+          6
+        ],
+        "y": [
+          6
+        ],
+        "J_ln": [
+          6,
+          6
+        ],
+        "J_ln_lib": [
+          6,
+          6
+        ],
+        "eig_ln": [
+          6
+        ],
+        "X": [
+          4,
+          3
+        ],
+        "W": [
+          3,
+          2
+        ],
+        "G": [
+          4,
+          2
+        ],
+        "dX": [
+          4,
+          3
+        ],
+        "dW": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "item": "modes",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "modes",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "444749e2490a92ad307ffabc67338f26a94cbf733ed886405f8bc3e0e806abd5",
+        "arrays_sha256": "8195705ae313dbdb6285752bb58628e6a8db6d43bed323cbc520b5e551907bfe",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/modes.json": {
+          "bytes": 11969,
+          "sha256": "50461982b3a240ab55985bca9d9faf8a340a059cc46401da0c7f1f6df7ff1216",
+          "mtime_ns": 1793485505716573205
+        },
+        ".cache/ai4/modes.npz": {
+          "bytes": 1491,
+          "sha256": "8195705ae313dbdb6285752bb58628e6a8db6d43bed323cbc520b5e551907bfe",
+          "mtime_ns": 1793485505712094881
+        }
+      },
+      "top_level_keys": [
+        "sizes",
+        "H",
+        "agree",
+        "lib_diff",
+        "P",
+        "B",
+        "madds_fwd",
+        "madds_rev",
+        "madds_primal",
+        "t_param_fwd",
+        "t_param_rev",
+        "grad_diff",
+        "net",
+        "work_count",
+        "benchmark",
+        "_cache",
+        "fwd",
+        "rev",
+        "primal",
+        "t_fwd",
+        "t_rev"
+      ],
+      "array_shapes": {
+        "fwd": [
+          5,
+          5
+        ],
+        "rev": [
+          5,
+          5
+        ],
+        "primal": [
+          5,
+          5
+        ],
+        "t_fwd": [
+          5,
+          5
+        ],
+        "t_rev": [
+          5,
+          5
+        ]
+      }
+    },
+    {
+      "item": "tiny",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "tiny",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "8f516672df17eec0bd72993c566a7bda5b53a916513b71cb59f4499b52140c81",
+        "arrays_sha256": null,
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/tiny.json": {
+          "bytes": 1259,
+          "sha256": "728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218",
+          "mtime_ns": 1793485507092588435
+        },
+        ".cache/ai4/tiny.npz": null
+      },
+      "top_level_keys": [
+        "inputs",
+        "values",
+        "grads",
+        "_cache"
+      ],
+      "array_shapes": {}
+    },
+    {
+      "item": "mlp2",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "mlp2",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "e2c0f16cb39ce0b960314ac366eaa369f0b323aa42421b266623ad4a5566672d",
+        "arrays_sha256": "b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/mlp2.json": {
+          "bytes": 1106,
+          "sha256": "a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034",
+          "mtime_ns": 1793485509109867484
+        },
+        ".cache/ai4/mlp2.npz": {
+          "bytes": 2532,
+          "sha256": "b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d",
+          "mtime_ns": 1793485509104534415
+        }
+      },
+      "top_level_keys": [
+        "B",
+        "dims",
+        "loss",
+        "d_lib",
+        "d_torch",
+        "y0",
+        "n_params",
+        "_cache",
+        "sv_one",
+        "sv_all",
+        "x0",
+        "d1_0",
+        "d2_0",
+        "a1_0",
+        "q0",
+        "dW1_0",
+        "dW1",
+        "dW2"
+      ],
+      "array_shapes": {
+        "sv_one": [
+          4
+        ],
+        "sv_all": [
+          4
+        ],
+        "x0": [
+          4
+        ],
+        "d1_0": [
+          5
+        ],
+        "d2_0": [
+          3
+        ],
+        "a1_0": [
+          5
+        ],
+        "q0": [
+          3
+        ],
+        "dW1_0": [
+          5,
+          4
+        ],
+        "dW1": [
+          5,
+          4
+        ],
+        "dW2": [
+          3,
+          5
+        ]
+      }
+    },
+    {
+      "item": "tape",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "tape",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "4f00ce3b1eeef3138a3cc38634136cf6179b4890a7381860d988afd9da51e98d",
+        "arrays_sha256": null,
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/tape.json": {
+          "bytes": 2975,
+          "sha256": "f9a4acf8cac97f337e7df105dd208e02a5bdea42579abd08453bb50d15f26099",
+          "mtime_ns": 1793485510363191905
+        },
+        ".cache/ai4/tape.npz": null
+      },
+      "top_level_keys": [
+        "tape",
+        "n_tape",
+        "tape2",
+        "n_tape2",
+        "wgrad",
+        "_cache"
+      ],
+      "array_shapes": {}
+    },
+    {
+      "item": "check",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "check",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "2f8e458a528db317becd8de5e7e2ef80220aabedbd35386617d8f08ca07a1d74",
+        "arrays_sha256": null,
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/check.json": {
+          "bytes": 1344,
+          "sha256": "591e5d04e43d7346dc9beab8aa062cc22baf1ab131f47a9b97e4144019454828",
+          "mtime_ns": 1793485512327055822
+        },
+        ".cache/ai4/check.npz": null
+      },
+      "top_level_keys": [
+        "loss",
+        "torch_loss",
+        "torch_diff",
+        "fd_diff",
+        "shown",
+        "n_params",
+        "_cache"
+      ],
+      "array_shapes": {}
+    },
+    {
+      "item": "train",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "train",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+            "videos/ai/ai1/compute.py": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {
+          "ai1/train.txt": "51f51a196c17cf5222811570c9d21acacae92fb754267d29a2ffa8dca7f3d2b8",
+          "ai1/valid.txt": "a2ca0736ae115afb121503da07dd5625f469354cbf78f9626c2a182cceb58a54"
+        },
+        "payload_sha256": "ecd6565d446c0e4c2b741a8556c842e2ff9455ea3067b4f15b846dae0b0f4164",
+        "arrays_sha256": "757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/train.json": {
+          "bytes": 1919,
+          "sha256": "1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd",
+          "mtime_ns": 1793485520890721666
+        },
+        ".cache/ai4/train.npz": {
+          "bytes": 49378,
+          "sha256": "757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6",
+          "mtime_ns": 1793485520884249435
+        }
+      },
+      "top_level_keys": [
+        "bits_train",
+        "bits_valid",
+        "H_cond",
+        "corr",
+        "steps",
+        "batch",
+        "lr",
+        "metrics",
+        "snap_steps",
+        "_cache",
+        "curve",
+        "z_final",
+        "logp",
+        "logcond",
+        "snaps",
+        "snaps_logp"
+      ],
+      "array_shapes": {
+        "curve": [
+          61,
+          2
+        ],
+        "z_final": [
+          27,
+          27
+        ],
+        "logp": [
+          27,
+          27
+        ],
+        "logcond": [
+          27,
+          27
+        ],
+        "snaps": [
+          4,
+          27,
+          27
+        ],
+        "snaps_logp": [
+          4,
+          27,
+          27
+        ]
+      }
+    },
+    {
+      "item": "grad0",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "grad0",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+            "videos/ai/ai1/compute.py": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {
+          "ai1/train.txt": "51f51a196c17cf5222811570c9d21acacae92fb754267d29a2ffa8dca7f3d2b8"
+        },
+        "payload_sha256": "e6b17fb337bad2faae468400120216cb6ddc34ffe5f250a60aea6fe9adac9381",
+        "arrays_sha256": "be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/grad0.json": {
+          "bytes": 1258,
+          "sha256": "12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d",
+          "mtime_ns": 1793485524085653580
+        },
+        ".cache/ai4/grad0.npz": {
+          "bytes": 4161,
+          "sha256": "be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf",
+          "mtime_ns": 1793485524081312196
+        }
+      },
+      "top_level_keys": [
+        "diff",
+        "pairs",
+        "top",
+        "_cache",
+        "grad"
+      ],
+      "array_shapes": {
+        "grad": [
+          27,
+          27
+        ]
+      }
+    },
+    {
+      "item": "gdlr",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "gdlr",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+            "videos/ai/ai1/compute.py": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {
+          "ai1/train.txt": "51f51a196c17cf5222811570c9d21acacae92fb754267d29a2ffa8dca7f3d2b8"
+        },
+        "payload_sha256": "9ebf25dd21f1a925cc060e1cb3ca4b655fe071d74dd64d8582ebba7979746526",
+        "arrays_sha256": "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/gdlr.json": {
+          "bytes": 1925,
+          "sha256": "6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d",
+          "mtime_ns": 1793485528530780235
+        },
+        ".cache/ai4/gdlr.npz": {
+          "bytes": 16144,
+          "sha256": "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770",
+          "mtime_ns": 1793485528525572771
+        }
+      },
+      "top_level_keys": [
+        "lam0",
+        "eta0",
+        "lam_star",
+        "eta_star",
+        "H_cond",
+        "steps",
+        "metrics",
+        "etas",
+        "last_mean",
+        "last_spread",
+        "monotone",
+        "_cache",
+        "bitcurve0",
+        "lamcurve0",
+        "bitcurve1",
+        "lamcurve1",
+        "bitcurve2",
+        "lamcurve2",
+        "bitcurve3",
+        "lamcurve3",
+        "bitcurve4",
+        "lamcurve4"
+      ],
+      "array_shapes": {
+        "bitcurve0": [
+          301
+        ],
+        "lamcurve0": [
+          121
+        ],
+        "bitcurve1": [
+          301
+        ],
+        "lamcurve1": [
+          121
+        ],
+        "bitcurve2": [
+          301
+        ],
+        "lamcurve2": [
+          121
+        ],
+        "bitcurve3": [
+          301
+        ],
+        "lamcurve3": [
+          121
+        ],
+        "bitcurve4": [
+          301
+        ],
+        "lamcurve4": [
+          121
+        ]
+      }
+    },
+    {
+      "item": "floats",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "floats",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "1a29fdba2d8e76366e2b79d6c1534a4a761765b724c8120f55c12c871f23158b",
+        "arrays_sha256": "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/floats.json": {
+          "bytes": 2908,
+          "sha256": "db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291",
+          "mtime_ns": 1793485530573099124
+        },
+        ".cache/ai4/floats.npz": {
+          "bytes": 8682,
+          "sha256": "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af",
+          "mtime_ns": 1793485530568456683
+        }
+      },
+      "top_level_keys": [
+        "info",
+        "rounding",
+        "acc_steps",
+        "acc_inc",
+        "lse_naive_e",
+        "lse_naive_p",
+        "lse",
+        "fp16_e",
+        "overflow_at",
+        "_cache",
+        "xs",
+        "ulp_fp64",
+        "ulp_fp32",
+        "ulp_bf16",
+        "ulp_fp16",
+        "ulp_e5m2",
+        "ulp_e4m3",
+        "acc_fp32",
+        "acc_fp16",
+        "acc_bf16",
+        "acc_bf16_fp32acc",
+        "lse_z",
+        "lse_p",
+        "fp16_shift_p"
+      ],
+      "array_shapes": {
+        "xs": [
+          561
+        ],
+        "ulp_fp64": [
+          561
+        ],
+        "ulp_fp32": [
+          561
+        ],
+        "ulp_bf16": [
+          561
+        ],
+        "ulp_fp16": [
+          561
+        ],
+        "ulp_e5m2": [
+          561
+        ],
+        "ulp_e4m3": [
+          561
+        ],
+        "acc_fp32": [
+          100
+        ],
+        "acc_fp16": [
+          100
+        ],
+        "acc_bf16": [
+          100
+        ],
+        "acc_bf16_fp32acc": [
+          100
+        ],
+        "lse_z": [
+          3
+        ],
+        "lse_p": [
+          3
+        ],
+        "fp16_shift_p": [
+          3
+        ]
+      }
+    },
+    {
+      "item": "cancel",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "cancel",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "d7d4fe4873ff3b497181614624a814ae62518f9cb714de5a057b9f9387ceafbb",
+        "arrays_sha256": "5a5b8b4a9dd0e98622c752a08e41ae0e6a0cc603c711834d55b79f00c95d12c5",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/cancel.json": {
+          "bytes": 1058,
+          "sha256": "54ff8197234c963ec3a9f77179b7b56081bf423062f2a471b302753c0027c8bd",
+          "mtime_ns": 1793485531783804074
+        },
+        ".cache/ai4/cancel.npz": {
+          "bytes": 13398,
+          "sha256": "5a5b8b4a9dd0e98622c752a08e41ae0e6a0cc603c711834d55b79f00c95d12c5",
+          "mtime_ns": 1793485531779701964
+        }
+      },
+      "top_level_keys": [
+        "x0",
+        "naive32_x0",
+        "stable32_x0",
+        "cos32_x0",
+        "x_dead32",
+        "_cache",
+        "xs",
+        "exact",
+        "naive_fp32",
+        "stable_fp32",
+        "naive_fp64",
+        "stable_fp64",
+        "pred_fp32",
+        "pred_fp64"
+      ],
+      "array_shapes": {
+        "xs": [
+          241
+        ],
+        "exact": [
+          241
+        ],
+        "naive_fp32": [
+          241
+        ],
+        "stable_fp32": [
+          241
+        ],
+        "naive_fp64": [
+          241
+        ],
+        "stable_fp64": [
+          241
+        ],
+        "pred_fp32": [
+          241
+        ],
+        "pred_fp64": [
+          241
+        ]
+      }
+    },
+    {
+      "item": "vcurve",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "vcurve",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "f9ff04de1a5a0b56547bf26c962f1fa5ebad5fe70d829e311ecef0bc54cd397b",
+        "arrays_sha256": "1cf395be1f6990d194f54cdea2191b0cce6d688ebea8f4d180a67fc8f7be5a36",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/vcurve.json": {
+          "bytes": 2007,
+          "sha256": "9ace458a11f411e45e819fd0ae36c4da72929197553b4fc693627d5cf69ed748",
+          "mtime_ns": 1793485532692758913
+        },
+        ".cache/ai4/vcurve.npz": {
+          "bytes": 24452,
+          "sha256": "1cf395be1f6990d194f54cdea2191b0cce6d688ebea8f4d180a67fc8f7be5a36",
+          "mtime_ns": 1793485532687241067
+        }
+      },
+      "top_level_keys": [
+        "ndir",
+        "precision_comparison",
+        "slope_right_fp64",
+        "slope_left_fp64",
+        "slope_right_fp32",
+        "slope_left_fp32",
+        "pred",
+        "meas",
+        "at_1e-6_fp64",
+        "loss",
+        "_cache",
+        "hs",
+        "directions",
+        "central_fp64",
+        "forward_fp64",
+        "central_fp64_all",
+        "central_fp32",
+        "forward_fp32",
+        "central_fp32_all"
+      ],
+      "array_shapes": {
+        "hs": [
+          66
+        ],
+        "directions": [
+          8,
+          256
+        ],
+        "central_fp64": [
+          66
+        ],
+        "forward_fp64": [
+          66
+        ],
+        "central_fp64_all": [
+          8,
+          66
+        ],
+        "central_fp32": [
+          66
+        ],
+        "forward_fp32": [
+          66
+        ],
+        "central_fp32_all": [
+          8,
+          66
+        ]
+      }
+    },
+    {
+      "item": "checkpoint",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "checkpoint",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "5fb4b49e1a71fe7b6e0987b317ae89ff0f5d0008622474de025c23ebf01622de",
+        "arrays_sha256": "8135a9935603452cb6ce25ec9d1574da203fe5cab573584b2397a77f4f424469",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/checkpoint.json": {
+          "bytes": 2304,
+          "sha256": "0391abde8b3713b8f20be2802287b2b8692324c01e5de4ab98fc0febae33c63e",
+          "mtime_ns": 1793485536036558615
+        },
+        ".cache/ai4/checkpoint.npz": {
+          "bytes": 1579,
+          "sha256": "8135a9935603452cb6ce25ec9d1574da203fe5cab573584b2397a77f4f424469",
+          "mtime_ns": 1793485536032836075
+        }
+      },
+      "top_level_keys": [
+        "n",
+        "kbest",
+        "klo",
+        "khi",
+        "worst",
+        "ns",
+        "best_k",
+        "best_peak",
+        "t_all",
+        "t_ck",
+        "store_all_peak",
+        "store_all_evals",
+        "none_peak",
+        "none_evals",
+        "memory_scope",
+        "benchmark",
+        "_cache",
+        "ks",
+        "peak",
+        "evals"
+      ],
+      "array_shapes": {
+        "ks": [
+          256
+        ],
+        "peak": [
+          256
+        ],
+        "evals": [
+          256
+        ]
+      }
+    },
+    {
+      "item": "newton",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "newton",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "21e26358e096eeaf612332d82d36912f754e046268951f201b270264e302c225",
+        "arrays_sha256": "cd585eec6c75ee16d000bd2d4fdb8caabb15b5e7dc010186b6da46d8e2ecf7ae",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/newton.json": {
+          "bytes": 1763,
+          "sha256": "31e2ae53cedb1a006fc44a5530233547e6869ac926c33ad7a138de052273a769",
+          "mtime_ns": 1793485537386520306
+        },
+        ".cache/ai4/newton.npz": {
+          "bytes": 60968,
+          "sha256": "cd585eec6c75ee16d000bd2d4fdb8caabb15b5e7dc010186b6da46d8e2ecf7ae",
+          "mtime_ns": 1793485537377184737
+        }
+      },
+      "top_level_keys": [
+        "lam",
+        "f_star",
+        "kappa",
+        "eta",
+        "newton_steps",
+        "L",
+        "convergence",
+        "reference",
+        "gd_err_stride",
+        "gd_steps",
+        "_cache",
+        "X",
+        "y",
+        "w_star",
+        "eig",
+        "newton",
+        "newton_err",
+        "newton_gnorm",
+        "gd",
+        "gd_path_steps",
+        "newton_path_steps",
+        "gd_err",
+        "gd_err_steps",
+        "gd_err_full_first"
+      ],
+      "array_shapes": {
+        "X": [
+          400,
+          2
+        ],
+        "y": [
+          400
+        ],
+        "w_star": [
+          2
+        ],
+        "eig": [
+          2
+        ],
+        "newton": [
+          13,
+          2
+        ],
+        "newton_err": [
+          13
+        ],
+        "newton_gnorm": [
+          13
+        ],
+        "gd": [
+          2363,
+          2
+        ],
+        "gd_path_steps": [
+          2363
+        ],
+        "newton_path_steps": [
+          13
+        ],
+        "gd_err": [
+          2363
+        ],
+        "gd_err_steps": [
+          2363
+        ],
+        "gd_err_full_first": [
+          200
+        ]
+      }
+    },
+    {
+      "item": "hessian",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "hessian",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "61e48817df751298fea509c56a42a38ee345ff3f19d74878bedc8e1b17ed0068",
+        "arrays_sha256": "62e973a235a30103b1c5422d5aa26ab7cec99c8c2de731731e2e162edc143b0f",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/hessian.json": {
+          "bytes": 14800,
+          "sha256": "7af7632ad2585faa1483355f40ac47a5de16564fcdd7bd6daba01d48eb3d6edf",
+          "mtime_ns": 1793485543701476357
+        },
+        ".cache/ai4/hessian.npz": {
+          "bytes": 451866,
+          "sha256": "62e973a235a30103b1c5422d5aa26ab7cec99c8c2de731731e2e162edc143b0f",
+          "mtime_ns": 1793485543692125503
+        }
+      },
+      "top_level_keys": [
+        "P",
+        "sizes",
+        "steps",
+        "keep",
+        "hv_full_diff",
+        "fd_best_h",
+        "fd_best",
+        "t_grad",
+        "t_hvp",
+        "lam_top",
+        "lam_power",
+        "lam_dominant",
+        "spectrum_thresholds",
+        "metrics",
+        "benchmark",
+        "loss0",
+        "acc0",
+        "top0",
+        "nout0",
+        "flat0",
+        "nneg0",
+        "loss1",
+        "acc1",
+        "top1",
+        "nout1",
+        "flat1",
+        "nneg1",
+        "loss2",
+        "acc2",
+        "top2",
+        "nout2",
+        "flat2",
+        "nneg2",
+        "loss3",
+        "acc3",
+        "top3",
+        "nout3",
+        "flat3",
+        "nneg3",
+        "loss4",
+        "acc4",
+        "top4",
+        "nout4",
+        "flat4",
+        "nneg4",
+        "loss5",
+        "acc5",
+        "top5",
+        "nout5",
+        "flat5",
+        "nneg5",
+        "n_outliers",
+        "frac_flat",
+        "n_neg",
+        "lam_min",
+        "n_outliers0",
+        "_cache",
+        "curve",
+        "X",
+        "y",
+        "grid_xs",
+        "hs",
+        "fd_err",
+        "lam_est",
+        "eig0",
+        "region0",
+        "eig1",
+        "region1",
+        "eig2",
+        "region2",
+        "eig3",
+        "region3",
+        "eig4",
+        "region4",
+        "eig5",
+        "region5"
+      ],
+      "array_shapes": {
+        "curve": [
+          301,
+          2
+        ],
+        "X": [
+          300,
+          2
+        ],
+        "y": [
+          300
+        ],
+        "grid_xs": [
+          56
+        ],
+        "hs": [
+          37
+        ],
+        "fd_err": [
+          37
+        ],
+        "lam_est": [
+          300
+        ],
+        "eig0": [
+          371
+        ],
+        "region0": [
+          3136,
+          3
+        ],
+        "eig1": [
+          371
+        ],
+        "region1": [
+          3136,
+          3
+        ],
+        "eig2": [
+          371
+        ],
+        "region2": [
+          3136,
+          3
+        ],
+        "eig3": [
+          371
+        ],
+        "region3": [
+          3136,
+          3
+        ],
+        "eig4": [
+          371
+        ],
+        "region4": [
+          3136,
+          3
+        ],
+        "eig5": [
+          371
+        ],
+        "region5": [
+          3136,
+          3
+        ]
+      }
+    },
+    {
+      "item": "valley",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "valley",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "a02f4bc3b9a0fda6f93adae507181cc647dbb3ad46c3e0a4dbbc934c45a449ee",
+        "arrays_sha256": "3aeaf22153629a49f964737b278baf892b45263832af16cd80085fc866977fdb",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/valley.json": {
+          "bytes": 1195,
+          "sha256": "f7f4bed471579263dcd844d5480617a5a31600fd453d648fdf8941f1f03337ed",
+          "mtime_ns": 1793485545476174082
+        },
+        ".cache/ai4/valley.npz": {
+          "bytes": 3615,
+          "sha256": "3aeaf22153629a49f964737b278baf892b45263832af16cd80085fc866977fdb",
+          "mtime_ns": 1793485545472088327
+        }
+      },
+      "top_level_keys": [
+        "gd_steps_to_1pct",
+        "convergence",
+        "_cache",
+        "H",
+        "start",
+        "gd",
+        "momentum",
+        "newton",
+        "gd_f"
+      ],
+      "array_shapes": {
+        "H": [
+          2,
+          2
+        ],
+        "start": [
+          2
+        ],
+        "gd": [
+          61,
+          2
+        ],
+        "momentum": [
+          61,
+          2
+        ],
+        "newton": [
+          2,
+          2
+        ],
+        "gd_f": [
+          61
+        ]
+      }
+    },
+    {
+      "item": "quad",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "quad",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "971727e8a151cdee9e578b1162fe497f33f616a52951daf0a6196f48f7ff8a65",
+        "arrays_sha256": "607e72f60e66b381cf3e589e1390fe9e08433da3d4f05a3f4f96c937a2fa6ddf",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/quad.json": {
+          "bytes": 8319,
+          "sha256": "c3e92425573a15609d909de84fd1f77f20f2b9915cefd80b883acc8f25d47a54",
+          "mtime_ns": 1793485546392702964
+        },
+        ".cache/ai4/quad.npz": {
+          "bytes": 13335,
+          "sha256": "607e72f60e66b381cf3e589e1390fe9e08433da3d4f05a3f4f96c937a2fa6ddf",
+          "mtime_ns": 1793485546387706720
+        }
+      },
+      "top_level_keys": [
+        "kappas",
+        "rate_opt",
+        "rate_opt_pred",
+        "rate_L",
+        "rate_L_pred",
+        "steps_opt",
+        "steps_L",
+        "y0s",
+        "esc",
+        "esc_pred",
+        "stuck_grad",
+        "convergence",
+        "_cache",
+        "etas",
+        "final",
+        "stuck",
+        "stuck_point",
+        "loss_plateau",
+        "path_1e-02",
+        "path_1e-06",
+        "path_1e-10"
+      ],
+      "array_shapes": {
+        "etas": [
+          49
+        ],
+        "final": [
+          49
+        ],
+        "stuck": [
+          301,
+          2
+        ],
+        "stuck_point": [
+          2
+        ],
+        "loss_plateau": [
+          400
+        ],
+        "path_1e-02": [
+          44,
+          2
+        ],
+        "path_1e-06": [
+          140,
+          2
+        ],
+        "path_1e-10": [
+          237,
+          2
+        ]
+      }
+    },
+    {
+      "item": "lagrange",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "lagrange",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "7146fb7a918f33820bccebad82d99b1d4bc7f1c94661249b45ceb70e4ca726af",
+        "arrays_sha256": "8b4647394b4649def0abee2255517195c959f51ce7460251b236cc0c0118e3c2",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/lagrange.json": {
+          "bytes": 2142,
+          "sha256": "997f01d384d1584922d7d6819ac9fadd59c482f7f17a37a82e0aad1869851c1a",
+          "mtime_ns": 1793485547271908844
+        },
+        ".cache/ai4/lagrange.npz": {
+          "bytes": 31259,
+          "sha256": "8b4647394b4649def0abee2255517195c959f51ce7460251b236cc0c0118e3c2",
+          "mtime_ns": 1793485547267386301
+        }
+      },
+      "top_level_keys": [
+        "t_star",
+        "lam",
+        "resid",
+        "f_star",
+        "beta",
+        "dice_diff",
+        "H_dice",
+        "kl_beta",
+        "rl_diff",
+        "solvers",
+        "comparisons",
+        "solver_cap",
+        "_cache",
+        "th",
+        "fv",
+        "tang",
+        "x_star",
+        "grad_f",
+        "grad_g",
+        "A",
+        "C",
+        "p_dice",
+        "pref",
+        "rew",
+        "pi_star"
+      ],
+      "array_shapes": {
+        "th": [
+          1441
+        ],
+        "fv": [
+          1441
+        ],
+        "tang": [
+          1441
+        ],
+        "x_star": [
+          2
+        ],
+        "grad_f": [
+          2
+        ],
+        "grad_g": [
+          2
+        ],
+        "A": [
+          2
+        ],
+        "C": [
+          2
+        ],
+        "p_dice": [
+          6
+        ],
+        "pref": [
+          6
+        ],
+        "rew": [
+          6
+        ],
+        "pi_star": [
+          6
+        ]
+      }
+    },
+    {
+      "item": "kkt",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "kkt",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "8fdbe7b1f2147393f6496fc20580d4386bcd4726613d1cfa74e3ab01bf963c52",
+        "arrays_sha256": "3a5801822133e7b6fd058c0cdd2010aeccb949181dce475d01b8e260d090f9eb",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/kkt.json": {
+          "bytes": 2496,
+          "sha256": "12d5b57c09b35ba2c3ed9babfabe102f7b4cc3626f40fce7cb8708115d0a87be",
+          "mtime_ns": 1793485548402818979
+        },
+        ".cache/ai4/kkt.npz": {
+          "bytes": 8976,
+          "sha256": "3a5801822133e7b6fd058c0cdd2010aeccb949181dce475d01b8e260d090f9eb",
+          "mtime_ns": 1793485548397832387
+        }
+      },
+      "top_level_keys": [
+        "b",
+        "p_star",
+        "d_star",
+        "gap",
+        "sv",
+        "slack",
+        "width",
+        "nc_p",
+        "nc_x",
+        "nc_d",
+        "nc_lam",
+        "nc_gap",
+        "solvers",
+        "residuals",
+        "tolerances",
+        "grid",
+        "solver_cap",
+        "tight_margin_indices",
+        "_cache",
+        "X",
+        "y",
+        "w",
+        "alpha",
+        "margins",
+        "w_dual",
+        "lams",
+        "toy_dual",
+        "nc_l",
+        "nc_dual"
+      ],
+      "array_shapes": {
+        "X": [
+          20,
+          2
+        ],
+        "y": [
+          20
+        ],
+        "w": [
+          2
+        ],
+        "alpha": [
+          20
+        ],
+        "margins": [
+          20
+        ],
+        "w_dual": [
+          2
+        ],
+        "lams": [
+          81
+        ],
+        "toy_dual": [
+          81
+        ],
+        "nc_l": [
+          601
+        ],
+        "nc_dual": [
+          601
+        ]
+      }
+    },
+    {
+      "item": "deq",
+      "current_at_inspection": true,
+      "actual_guarded_load": true,
+      "completion_metadata": {
+        "schema_version": 1,
+        "recipe": {
+          "item": "deq",
+          "schema_version": 1,
+          "source_hashes": {
+            "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+            "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+            "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+            "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+          },
+          "libraries": {
+            "numpy": "2.5.4",
+            "scipy": "1.18.1",
+            "torch": "2.15.0+cpu"
+          },
+          "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+        },
+        "dependencies": {},
+        "payload_sha256": "7546d54ebe298e29dae3aa1a25d3c73bcb68435afeaf78e90939def8c8cc3302",
+        "arrays_sha256": "58a4432638927ca493eb96a00f2c2da06d3b76eb57c975007dc85eebec1f4aca",
+        "origin": "producer-save"
+      },
+      "payloads": {
+        ".cache/ai4/deq.json": {
+          "bytes": 2163,
+          "sha256": "61bb4b3f16c415311ac922342f8a56f8fa489698e34699ea519bc2b96619fa9d",
+          "mtime_ns": 1793485556755506662
+        },
+        ".cache/ai4/deq.npz": {
+          "bytes": 9766,
+          "sha256": "58a4432638927ca493eb96a00f2c2da06d3b76eb57c975007dc85eebec1f4aca",
+          "mtime_ns": 1793485556750392520
+        }
+      },
+      "top_level_keys": [
+        "iters",
+        "rho",
+        "slope",
+        "rate",
+        "keep",
+        "lr",
+        "steps",
+        "end_diff",
+        "d",
+        "final_loss",
+        "first_loss",
+        "solves",
+        "parameter_count",
+        "initial_state_dimension",
+        "training_state_dimension",
+        "contraction_caps",
+        "gradient_scope",
+        "_cache",
+        "Ks",
+        "errs",
+        "xs",
+        "ys",
+        "gx",
+        "fits",
+        "curve",
+        "iters_curve"
+      ],
+      "array_shapes": {
+        "Ks": [
+          60
+        ],
+        "errs": [
+          60
+        ],
+        "xs": [
+          48
+        ],
+        "ys": [
+          48
+        ],
+        "gx": [
+          90
+        ],
+        "fits": [
+          6,
+          90
+        ],
+        "curve": [
+          161,
+          2
+        ],
+        "iters_curve": [
+          161,
+          2
+        ]
+      }
+    }
+  ],
+  "item_count": 23,
+  "present_payload_count": 42,
+  "optional_npz_absence_items": [
+    "params",
+    "tiny",
+    "tape",
+    "check"
+  ],
+  "total_payload_bytes": 796899,
+  "producer_calls": 0,
+  "payload_signatures_unchanged": true,
+  "needed_part1_corpus": {
+    ".cache/ai1/train.txt": {
+      "bytes": 23728683,
+      "sha256": "51f51a196c17cf5222811570c9d21acacae92fb754267d29a2ffa8dca7f3d2b8",
+      "mtime_ns": 1793447274638842815
+    },
+    ".cache/ai1/valid.txt": {
+      "bytes": 1242871,
+      "sha256": "a2ca0736ae115afb121503da07dd5625f469354cbf78f9626c2a182cceb58a54",
+      "mtime_ns": 1793447274646842931
+    }
+  },
+  "upstream_part1_historical_lineage_limit": "These raw current bytes are exact dependencies consumed/recorded by freshPart4producer; this handoff does not reconstruct oldPart1artifact generation.",
+  "runtime": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "executable": "/workspace/explainer-videos/.venv/bin/python",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "installed_distribution_versions": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "torch": "2.15.0+cpu",
+      "manim": "0.22.0",
+      "manimpango": "0.7.0",
+      "Pillow": "13.0.0",
+      "transformers": "5.22.1",
+      "tokenizers": "0.23.3"
+    },
+    "cached_recipe_libraries": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "torch": "2.15.0+cpu"
+    },
+    "lockfile_torch": "2.14.1",
+    "lockfile_transformers": "5.20.1",
+    "discrepancy": "Reviewed cache recipes require torch2.15.0+cpu; exact2.14.1lock installation or GPU/cu-suffixed runtime makes currentness false. Do not fake version metadata, weaken guard, or retag caches. Reconcile renderer environment before any scene load."
+  },
+  "params_provenance": {
+    "gpt2": 124439808,
+    "qwen3_4b": 4022468096,
+    "provenance": {
+      "gpt2": {
+        "source": "pinned-safetensors-headers",
+        "repo": "openai-community/gpt2",
+        "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+        "files": [
+          {
+            "path": "model.safetensors",
+            "header_sha256": "a41dc5e8c2f45cd5f533b4f081e7777de1f8faa3b2527134d4230ae531127b21",
+            "header_bytes": 14283
+          }
+        ],
+        "config_sha256": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+        "index_sha256": null,
+        "tied_weight_policy": "declared tied lm_head counted once; GPT2 causal-mask buffers excluded",
+        "excluded": [
+          "h.7.attn.bias",
+          "h.2.attn.bias",
+          "h.4.attn.bias",
+          "h.0.attn.bias",
+          "h.8.attn.bias",
+          "h.11.attn.bias",
+          "h.3.attn.bias",
+          "h.9.attn.bias",
+          "h.5.attn.bias",
+          "h.6.attn.bias",
+          "h.1.attn.bias",
+          "h.10.attn.bias"
+        ],
+        "error": null,
+        "historical_date": null,
+        "observed_utc": "2026-10-31T22:24:55.680251+00:00"
+      },
+      "qwen3_4b": {
+        "source": "pinned-safetensors-headers",
+        "repo": "Qwen/Qwen3-4B-Base",
+        "revision": "906bfd4b4dc7f14ee4320094d8b41684abff8539",
+        "files": [
+          {
+            "path": "model-00001-of-00003.safetensors",
+            "header_sha256": "a8f45f72beda0f33ad73b7c94747c4c5bace94e3770a90810e9a23ec0a6a6abd",
+            "header_bytes": 20000
+          },
+          {
+            "path": "model-00002-of-00003.safetensors",
+            "header_sha256": "55d8e8decb2976c9758e922be1274c003bf57dd8ac5f7c4a74dd91ee39fc0351",
+            "header_bytes": 25232
+          },
+          {
+            "path": "model-00003-of-00003.safetensors",
+            "header_sha256": "19f753c0ae5015a4f6110a351070e77ff01c59ec37dd2c12fbae4f3c7eb1a0d1",
+            "header_bytes": 552
+          }
+        ],
+        "config_sha256": "304b2545a258d35620f1d4bf46940c0471d9baa00715ff8e77f84c2fca5057c1",
+        "index_sha256": "d6c42883a895dfef5b0080ed2116a1bcd764f558406b98923d675978a1abf29c",
+        "tied_weight_policy": "declared tied lm_head counted once; GPT2 causal-mask buffers excluded",
+        "excluded": [],
+        "error": null,
+        "historical_date": null,
+        "observed_utc": "2026-10-31T22:25:00.239027+00:00"
+      }
+    }
+  },
+  "preview_map": {
+    "path": "docs/qa/ai4-final-preview-map.json",
+    "sha256": "33071a124497a163341b0ddff5cbf3e6423a43fb1c2a412c8a48374346963656",
+    "counts": {
+      "manifest_scenes": 19,
+      "canonical_bilingual_movies": 38,
+      "canonical_movie_hashes_matched_to_completed_review": 38,
+      "current_native1080_endpoint_pngs_matched_to_actual_review": 537,
+      "selected_time_appearances_current_cohorts": 13670,
+      "decoded_frames_automatically_current_movies": 101192,
+      "motion_statuses_raw": {
+        "passed": 36,
+        "needs-review": 2
+      },
+      "motion_warning_count_raw": 2,
+      "motion_aggregate_fingerprint_current_at_observation": 2
+    },
+    "native_scope": {
+      "baseline_native_images_actually_reviewed": 537,
+      "fresh_backprop_train_source_specific_appearances": 60,
+      "fresh_floats_source_specific_appearances": 32,
+      "fresh_quadratic_source_specific_appearances": 32,
+      "quadratic_fresh_exact_baseline_inherited": 24,
+      "quadratic_new_changed_direct_native_views": 8,
+      "scope": "Fresh supplements replace corresponding baseline states, not124additional distinct chapter endpoints. None establishes full native1080 motion."
+    },
+    "numeric_integrity_reference": {
+      "proof": {
+        "path": "docs/qa/evidence/shared-contour-exact-level-repair/cache-load-verification.json.gz",
+        "sha256": "624167f938cd7eb12e8c8a7125676e571acac54adb87902b04e1ef90bd67e779"
+      },
+      "parts": {
+        "ai3": 17,
+        "ai4": 23
+      },
+      "actual_guarded_loads": 40,
+      "producer_calls": 0,
+      "payload_signatures_unchanged": 76,
+      "scope": "Previously completed current-schema/integrity and actual load proof; no new numerical producers or scientific calculation. Original8Part3 postproduction-attestation provenance limits retained."
+    }
+  },
+  "assembly": {
+    "path": "docs/qa/evidence/ai4-history-qualified-assembly/receipts/summary.json.gz",
+    "compressed_sha256": "9e5822d9752496ee5af931bb9cb399641cf7f9799b32dfe86b4d11f3e70839b3",
+    "uncompressed_sha256": "d76d666e8e2b93f633a54edb3228d483c960996985d8df727d63b36c9bc7b557",
+    "historical_source_commit": "c16a525da73107d6aa8332b942cb5c206dc8107e",
+    "status": "PASS for current history-qualified silent preview assembly, technicalchecks and scopedjoinregression. Not narrated/continuous/productionapproval.",
+    "cases": [
+      {
+        "language": "en",
+        "movie": "/workspace/runtime/ai4-silent-preview-assembly/history-qualified/en/ai4-silent-preview-en-480p15.mp4",
+        "movie_sha256": "bda4603fef4a06b72d06182b550c4688c8e2661d128ee391899cdcfbf8532782",
+        "movie_bytes": 31319908,
+        "duration": 3267.356125,
+        "video_frames_decoded": 49010,
+        "audio_frames_decoded": 153165,
+        "full_PCM_bytes_decoded": 627363840,
+        "nonzero_PCM_bytes": 0,
+        "chapters": 19,
+        "softsubtitle_cues": 966,
+        "subtitle": "/workspace/runtime/ai4-silent-preview-assembly/history-qualified/en/ai4-silent-preview-en-480p15.srt",
+        "subtitle_sha256": "d224a78909aa1047521fb845ad581a3f0d76a109471f7ff09f484bfd3f819075",
+        "chapter_list": "/workspace/runtime/ai4-silent-preview-assembly/history-qualified/en/ai4-silent-preview-en-480p15.chapters.txt",
+        "chapter_list_sha256": "560637dfdc690995e8d8e952cfab83c717ea218b28279a0ebcd47915a54763e1",
+        "join_times_accounted": 342,
+        "unaffected_join_times_exactPNG_inherited": 304,
+        "fresh_affected_join_times": 38,
+        "fresh_exactPNG_representatives_viewed": 37,
+        "fresh_sheets_actually_viewed": 5,
+        "fresh_native_context_images_viewed": 4,
+        "unaffected_native_pairs_exactPNG_inherited": 16,
+        "maximum_selected_frame_window": "allframeswithin\u00b1.4splus\u00b1.6/.8/1saroundall18joins",
+        "assembly_receipt_sha256": "8c505634ffcf024b7e5a90a953ad22e43fc6c2ed6a85f3f077846334017e9dfa",
+        "validation_sha256": "fad639881ba7f134aff36a9f9175d2494fa5f7ae0c8a3d10b6061713977096e6",
+        "audio_validation_sha256": "2242bddd60fd1c1749f84b9241f56dc2d98b43c16d94a71456ed8ff81578ebff",
+        "subtitle_boundaries_sha256": "90db2223a9dd2f6173818c8f91796a9e854e40a7f8f9fa5caa8a17704f9581d2",
+        "join_review_sha256": "d3dbbd9c525f30122573b93cd2166fe83f11a24df34e043a135544a9a60db925",
+        "first_videoPTS": 0.021029,
+        "last_videoPTS": 3267.28112,
+        "minimum_videoPTSgap": 0.06634099999973841,
+        "maximum_videoPTSgap": 0.06699300000013864,
+        "packetDTSmonotonic": {
+          "0": {
+            "packets": 49010,
+            "first": -0.112305,
+            "last": 3267.147786
+          },
+          "1": {
+            "packets": 153165,
+            "first": 0.0,
+            "last": 3267.334792
+          },
+          "2": {
+            "packets": 1044,
+            "first": 0.0,
+            "last": 3260.531
+          }
+        },
+        "movie_identity_verified_at_handoff": {
+          "bytes": 31319908,
+          "sha256": "bda4603fef4a06b72d06182b550c4688c8e2661d128ee391899cdcfbf8532782",
+          "mtime_ns": 1793494800292838045
+        }
+      },
+      {
+        "language": "zh",
+        "movie": "/workspace/runtime/ai4-silent-preview-assembly/history-qualified/zh/ai4-silent-preview-zh-480p15.mp4",
+        "movie_sha256": "322c81224ea983f72c3e01ce6daa9a16e173e036713bcc1bfbc901158a9c6dd0",
+        "movie_bytes": 32065039,
+        "duration": 3478.819813,
+        "video_frames_decoded": 52182,
+        "audio_frames_decoded": 163077,
+        "full_PCM_bytes_decoded": 667963392,
+        "nonzero_PCM_bytes": 0,
+        "chapters": 19,
+        "softsubtitle_cues": 959,
+        "subtitle": "/workspace/runtime/ai4-silent-preview-assembly/history-qualified/zh/ai4-silent-preview-zh-480p15.srt",
+        "subtitle_sha256": "c76ab494da4ce25d51b8775c9e7c8df1dd601fbb23035b7184eaa87d140bbd85",
+        "chapter_list": "/workspace/runtime/ai4-silent-preview-assembly/history-qualified/zh/ai4-silent-preview-zh-480p15.chapters.txt",
+        "chapter_list_sha256": "b32e891f5178def53317d38032c0566315ede47f115d210b5f608d620ff96166",
+        "join_times_accounted": 342,
+        "unaffected_join_times_exactPNG_inherited": 304,
+        "fresh_affected_join_times": 38,
+        "fresh_exactPNG_representatives_viewed": 37,
+        "fresh_sheets_actually_viewed": 5,
+        "fresh_native_context_images_viewed": 4,
+        "unaffected_native_pairs_exactPNG_inherited": 16,
+        "maximum_selected_frame_window": "allframeswithin\u00b1.4splus\u00b1.6/.8/1saroundall18joins",
+        "assembly_receipt_sha256": "1e86ab8252c19927377b4893a619f96c1eb76eff1d94f61e0c6a731db7c3a228",
+        "validation_sha256": "94e652e37137332cb8cecc9a52e654288a680f74855d5443d9505510d2a5b1ef",
+        "audio_validation_sha256": "9900cc5d5d43691673a1cf5843e3ad14bd66680c09cf676b329bcb878e5f339d",
+        "subtitle_boundaries_sha256": "508e76cf6a4a6c4f5f68f59cb1ae18f55dcc3123b0aecf54d00b6a5e6cebfde2",
+        "join_review_sha256": "b3c1d23eb6fcbcdd6f6446c6f54171fab000eb3eadfb6ccbcf79a7d2f2d72a52",
+        "first_videoPTS": 0.021029,
+        "last_videoPTS": 3478.747526,
+        "minimum_videoPTSgap": 0.06634099999973841,
+        "maximum_videoPTSgap": 0.06699300000002495,
+        "packetDTSmonotonic": {
+          "0": {
+            "packets": 52182,
+            "first": -0.112305,
+            "last": 3478.614193
+          },
+          "1": {
+            "packets": 163077,
+            "first": 0.0,
+            "last": 3478.798479
+          },
+          "2": {
+            "packets": 1032,
+            "first": 0.0,
+            "last": 3473.282
+          }
+        },
+        "movie_identity_verified_at_handoff": {
+          "bytes": 32065039,
+          "sha256": "322c81224ea983f72c3e01ce6daa9a16e173e036713bcc1bfbc901158a9c6dd0",
+          "mtime_ns": 1793494808694090806
+        }
+      }
+    ],
+    "technical_verdict": "Full101192finalvideo+316242AACframesdecoded, digitalPCMzero, strictvideo/audioPTS+packetDTSmonotonic,19chaptermetadata/framecountsumchecks,all1925softsubtitlecueschapterboundedandexacttext/msroundtrip.",
+    "join_verdict": "All36joins accounted:4affectedjoinsdirectlyreviewed74representatives/10sheets+8nativeimagescover76times(2exactduplicatetimes),other32joins608times+32nativepairs exactPNG inheritedfromactualbaselineproof. No regressionobserved.",
+    "known_warnings_preserved": [
+      [
+        "en",
+        "Layers",
+        "needs-review",
+        [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ]
+      ],
+      [
+        "en",
+        "GradCheck",
+        "needs-review",
+        [
+          {
+            "kind": "dead-air-review",
+            "report": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 171 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 171 s\n   0:56.75   1.5 s   [  +56.8 s]\n"
+          }
+        ]
+      ]
+    ],
+    "remaining_gaps": [
+      "Fullcontinuousperceptualviewingofthetwoprograms",
+      "Realnarration, listening, pronunciationsandaudiosynchronization",
+      "4Kproduction/playerbehavior andlocalproductionapproval"
+    ]
+  },
+  "shared_global_table": {
+    "pin_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+    "current_working_sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+    "working_matches_pin": false,
+    "prior4142_caption_lookup_differences": 0,
+    "lookup_scope": "142capturedPart1\u20134textcollections/4142observedkeys only; archived oldglobal equals1927pin. LaterPart5caption changes have scoped matching-rule supplements, not blanket currentHEAD approval.",
+    "prior_table_archive": {
+      "path": "docs/qa/evidence/ai5-source-review/prior-global-caption-table.json.gz",
+      "compressed_sha256": "c96653d5e0263880d828cf48e287393ccd81edf56ba032bfbe37239b6390f445",
+      "uncompressed_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182"
+    },
+    "existing_scoped_proofs": [
+      {
+        "path": "docs/qa/evidence/ai5-source-review/prior-part-caption-comparison.json.gz",
+        "compressed_sha256": "ba245084de390276b2ffffa9debc459d0beaf2439816302133682da680781cc6",
+        "uncompressed_sha256": "a467e6ae43bc4e172612c957cba1eb53a893ab9e41f10063e2a1015c005c3d6e"
+      },
+      {
+        "path": "docs/qa/evidence/ai5-source-review/prior-part-observed-caption-keys.json.gz",
+        "compressed_sha256": "18a7608fff059edcf3e3336df25be5017ff95d3971f88721ee78be15d0253aa7",
+        "uncompressed_sha256": "65cea943301fe5a80a3d34c06b30b54c558ede43f5a85eaf33a32a2c32960494"
+      },
+      {
+        "path": "docs/qa/evidence/ai5-visual-source-checks/hook-caption-merge.json.gz",
+        "compressed_sha256": "7e1dd25d4e294256b5c6b255756efc3780a2da18dd9399b58a12949f594e2e68",
+        "uncompressed_sha256": "b85c09398e7c582130c2286982d4170022942d08105430bf14d9cee29ccf2adc"
+      },
+      {
+        "path": "docs/qa/evidence/ai5-visual-source-checks/caption-merge.json.gz",
+        "compressed_sha256": "8bbdf9962fd7bf435a871dee73f18ab95f44ac0a2251198dc69fe246df12b2d8",
+        "uncompressed_sha256": "40ad74ab97c6c6a5d2102418c2d42f6de7fb53a0ff41e43000881a1b36cc0b7d"
+      }
+    ]
+  },
+  "limits": [
+    "Recommended commit binds reviewed Part4 source/global helpers. Whole currentHEAD has laterPart5 table additions and is not blanket certified.",
+    "Current schema/recipe/integrity checks and guarded loads are not new numerical scientific validation.",
+    "Selected preview image/joins and native1080 endpoints do not approve continuous perception, real narration, listening/synchronization, final4K/player delivery or any future output.",
+    "Production renderer must require current before every loader/upgrade and patch every producer fail-on-call before scene imports. Use strict environment and frozen payload identities, not normal auto-computing load.",
+    "Part4 models are numeric counts from pinned headers; cached rendering needs no fullQwen/GPT2weights or new header network access.",
+    "No public deployment, CI/local-computer tasks, upload or large archive copying occurred."
+  ]
+}

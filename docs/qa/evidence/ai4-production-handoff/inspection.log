@@ -1,0 +1,17 @@
+{
+  "items": 23,
+  "payloads": 42,
+  "payload_bytes": 796899,
+  "producer_calls": 0,
+  "optional_npz_absence_items": [
+    "params",
+    "tiny",
+    "tape",
+    "check"
+  ],
+  "all_part4_source_files_match_pin": true,
+  "working_pin_differences": [
+    "videos/ai/ai_text_zh.json"
+  ],
+  "record_sha256": "78e8b6ac3ff90d1cc7cf40963008e0c2f0466dfcb6f1918629eb4b78d675087d"
+}

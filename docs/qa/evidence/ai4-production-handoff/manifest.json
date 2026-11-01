@@ -1,0 +1,27 @@
+{
+  "scope": "Metadata only; no numerical payload or movie copies.",
+  "recommended_source_commit": "1927e6b7a99192344bd4c00ca7aae3abdd499369",
+  "files": {
+    "cloud-metadata-inspection.py": {
+      "bytes": 8942,
+      "sha256": "770dac752a8258cb89009d5cfaea819d4d45a84924f3841c5824016ca1725aaf"
+    },
+    "handoff-metadata.json": {
+      "bytes": 89578,
+      "sha256": "ede648ec398554573b3f295a0c4f72873e92404166f59bb2b744d81e25ae6580"
+    },
+    "inspection.log": {
+      "bytes": 374,
+      "sha256": "22ac43787701acb4cd18b7c91a65d26b985e71cdcbc2e061a1168650fbaf44ff"
+    },
+    "payload-files.sha256": {
+      "bytes": 3708,
+      "sha256": "6fef0b35c322b059d19228e11baaf4cba778c83dce71668e3bee04da9e93ce65"
+    }
+  },
+  "handoff_document": {
+    "path": "docs/qa/production-handoff-part4.md",
+    "bytes": 9845,
+    "sha256": "6a84c6bde7a5879807767c7c474ac89f549a5a7f59d72fa70e4ba4e3a1be60b5"
+  }
+}
