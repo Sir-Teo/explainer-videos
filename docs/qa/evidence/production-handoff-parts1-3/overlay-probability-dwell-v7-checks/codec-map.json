@@ -1,0 +1,594 @@
+[
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/actual-checks-receipt.json",
+    "package_path": "actual-checks-receipt.json.gz",
+    "raw_bytes": 33678,
+    "raw_sha256": "17cf74262e2734899b6e825b8561474501d46089e83dccd834784acba627c692",
+    "gzip_bytes": 3791,
+    "gzip_sha256": "846188b497046d6c15a81c432b4de38455cbaf5aef2716dfd5c5bdf9063bb90c"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/actual-data-before-after.json",
+    "package_path": "actual-data-before-after.json.gz",
+    "raw_bytes": 108239,
+    "raw_sha256": "afc394a65e8f36209882303ec15292060db6106c0b46a90fe02a8aa0fb231a5a",
+    "gzip_bytes": 11614,
+    "gzip_sha256": "a3e4d4c7200a68e7c680fa61f4c7445ae2d2b47521ef670adbcc8f648b3db4c2"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/old-fixture-git-before.json",
+    "package_path": "old-fixture-git-before.json.gz",
+    "raw_bytes": 2780,
+    "raw_sha256": "b6762e3cfc2597cf3ed355c11f2f86927c8536c5a293affdf15d930b052a237a",
+    "gzip_bytes": 771,
+    "gzip_sha256": "be835ca6d8149b351dc010212ee545dd8349efc735f96d31f385b75a150abc9b"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/old-fixture-git-after.json",
+    "package_path": "old-fixture-git-after.json.gz",
+    "raw_bytes": 2780,
+    "raw_sha256": "b6762e3cfc2597cf3ed355c11f2f86927c8536c5a293affdf15d930b052a237a",
+    "gzip_bytes": 771,
+    "gzip_sha256": "be835ca6d8149b351dc010212ee545dd8349efc735f96d31f385b75a150abc9b"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/actual-context-preparation.json",
+    "package_path": "actual-context-preparation.json.gz",
+    "raw_bytes": 117456,
+    "raw_sha256": "9f89bd657bf1127235c6875f1a25f04349d7a52314ee64d57d19fd42bead766a",
+    "gzip_bytes": 21377,
+    "gzip_sha256": "c13ef959e46d05ebbfa57a8f4d80aa31426f3b661c9e183f21e1b002fc917ed2"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/actual-checks-in-progress.json",
+    "package_path": "actual-checks-in-progress.json.gz",
+    "raw_bytes": 23794,
+    "raw_sha256": "0e445fc215e49466486d3219d84bd591876fd37e4f46720c3b7d9ebc496d66ca",
+    "gzip_bytes": 2336,
+    "gzip_sha256": "f81ea3547c3f18fc59dfce30054c10f8131e6d1d6322877444769aa6ea577ee9"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/actual-run.log",
+    "package_path": "actual-run.log.gz",
+    "raw_bytes": 996,
+    "raw_sha256": "598651b543b0b705f68af02d1ba88a4c579d0d6c777d91c8f6b3f64c551489c9",
+    "gzip_bytes": 365,
+    "gzip_sha256": "b04c582bc654ad03deaaf92526f049dbf6dc4736aae666feb19469c3d186c777"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/registered-focused-tests.log",
+    "package_path": "registered-focused-tests.log.gz",
+    "raw_bytes": 16276,
+    "raw_sha256": "68ad4c30c7b92b104d3a95b60ef8c5f90287ea48c1bab9a1b5482940dd7c5f18",
+    "gzip_bytes": 2072,
+    "gzip_sha256": "8759e185c1faf89d6f157b534c99c16abf52d44347b362af2f32c55638326371"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/registration.json",
+    "package_path": "registration.json.gz",
+    "raw_bytes": 1080,
+    "raw_sha256": "8f506b3076a137975315d4e8727da4fef67b3e34485612829d4902e45c9f2d64",
+    "gzip_bytes": 574,
+    "gzip_sha256": "ef531522909074ff47d98e10beff3b29c45ec179fb21460c51c84a714c5fc38b"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/read-only-reuse-plan.json",
+    "package_path": "read-only-reuse-plan.json.gz",
+    "raw_bytes": 2203,
+    "raw_sha256": "b7dd8e2157538454e05a83a65ef24daf80435701ed45377cbd4d5708f2c46e00",
+    "gzip_bytes": 1201,
+    "gzip_sha256": "c9a7b0193101b9ee8ec8b7dfbc545ebf4e28997294080c268cfa9b2eb2f7781d"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/existing-v6-fixture-input-hash-proof.json",
+    "package_path": "existing-v6-fixture-input-hash-proof.json.gz",
+    "raw_bytes": 55756,
+    "raw_sha256": "4231a6fb3c2acd9d5d3d47a8bd0270f723df16866b87205b268cb494780abcdc",
+    "gzip_bytes": 10934,
+    "gzip_sha256": "26145975b64e198ddb9bc70f07db20051b2f2adc4ae5f55b3c7b189fcc3ed00b"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/actual-clean-base-strict.json",
+    "package_path": "actual-clean-base-strict.json.gz",
+    "raw_bytes": 511,
+    "raw_sha256": "997b559d766865e46becebfb5f925fa297145917624e266d93e7bbf258c30d65",
+    "gzip_bytes": 331,
+    "gzip_sha256": "2905bf8ff69cf1f045e0da34299dc251b1ccc6a17b42f9020cb62fe81dd12d38"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/actual-clean-base-strict.stderr.txt",
+    "package_path": "actual-clean-base-strict.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/private-preparation-receipt.json",
+    "package_path": "private-preparation-receipt.json.gz",
+    "raw_bytes": 1298,
+    "raw_sha256": "0645402c155a7073487b43fc14852f3369bf40418d282b43c01568104ca78234",
+    "gzip_bytes": 798,
+    "gzip_sha256": "3bc3cad51ced13fb98b86029a2e9edc2dbbe13225180aecc18c85da67c309f8d"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/private-preparation-manifest.json",
+    "package_path": "private-preparation-manifest.json.gz",
+    "raw_bytes": 3276,
+    "raw_sha256": "95cb07e663d5139b9058691559afd0214b10cc0fe63ce886f2928d6c15862d8e",
+    "gzip_bytes": 1301,
+    "gzip_sha256": "2c0d889d581a1a3b5c03ecfc6d1532f688b96cbb115c1dcabcbb16db2375a78b"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/preparation.json",
+    "package_path": "preparation.json.gz",
+    "raw_bytes": 4471,
+    "raw_sha256": "043952d11c4173dde6a806985e4cdf6cb576791b46f93ec2f47783f61dfa43bd",
+    "gzip_bytes": 1212,
+    "gzip_sha256": "a5e261aa4e008de4c94d2bba663c28f299acfe100e63d867172b7231510bc779"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/portable-tests.log",
+    "package_path": "portable-tests.log.gz",
+    "raw_bytes": 2060,
+    "raw_sha256": "326aa6978541fbaf52292360ed1c06abb047c0025a552c90daacfb018454480a",
+    "gzip_bytes": 518,
+    "gzip_sha256": "20e1dc60d8fed4b7b940adea61d46ebf5d2b6845391c9de1c5a6d50b10247cb7"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-clean-base-strict.json",
+    "package_path": "actual-outcomes/v7-clean-base-strict.json.gz",
+    "raw_bytes": 511,
+    "raw_sha256": "997b559d766865e46becebfb5f925fa297145917624e266d93e7bbf258c30d65",
+    "gzip_bytes": 331,
+    "gzip_sha256": "2905bf8ff69cf1f045e0da34299dc251b1ccc6a17b42f9020cb62fe81dd12d38"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-clean-base-strict.stderr.txt",
+    "package_path": "actual-outcomes/v7-clean-base-strict.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-exact-five-source-worktree.json",
+    "package_path": "actual-outcomes/v7-exact-five-source-worktree.json.gz",
+    "raw_bytes": 570,
+    "raw_sha256": "b4dfc32e865978382ea8a0d36db748f47eb72c0acbb6ffd5e25729b67faeb478",
+    "gzip_bytes": 373,
+    "gzip_sha256": "7c8502c7b41d7148324640a9d0d2ab60caf6133a5d04a1b7e135f2b37cf29f4c"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-exact-five-source-worktree.stderr.txt",
+    "package_path": "actual-outcomes/v7-exact-five-source-worktree.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-default-rejects-new-source.json",
+    "package_path": "actual-outcomes/v7-default-rejects-new-source.json.gz",
+    "raw_bytes": 1139,
+    "raw_sha256": "0d7bb2b71aa86181882756b22d3cbcd5771cda9f53e5b1d5e784433aa16ff98f",
+    "gzip_bytes": 460,
+    "gzip_sha256": "73903d5e731c771263facbc3363da5fdf2f206ecaf10e78995df4fbfcba9e34d"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-default-rejects-new-source.stderr.txt",
+    "package_path": "actual-outcomes/v7-default-rejects-new-source.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v1-rejects-new-source.json",
+    "package_path": "actual-outcomes/v7-v1-rejects-new-source.json.gz",
+    "raw_bytes": 1678,
+    "raw_sha256": "246cd6e727abe20c7f07fefea2dffb5b9bfd40bf387ab4424846129e61f12cf7",
+    "gzip_bytes": 568,
+    "gzip_sha256": "cb4bb48c9beed065fdbfc3b4648c5b934a34108458bbd8e32aceee81652ea188"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v1-rejects-new-source.stderr.txt",
+    "package_path": "actual-outcomes/v7-v1-rejects-new-source.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v2-rejects-new-source.json",
+    "package_path": "actual-outcomes/v7-v2-rejects-new-source.json.gz",
+    "raw_bytes": 1395,
+    "raw_sha256": "6a397daf553d148dd3381f775da180243ecf3d7ff8f5713279410b59222af224",
+    "gzip_bytes": 518,
+    "gzip_sha256": "4abba0e7fa8cb9f4f3a861691bd6b9fab117c45a3dc4a3c959348a2ac8a5a982"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v2-rejects-new-source.stderr.txt",
+    "package_path": "actual-outcomes/v7-v2-rejects-new-source.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v3-rejects-new-source.json",
+    "package_path": "actual-outcomes/v7-v3-rejects-new-source.json.gz",
+    "raw_bytes": 1189,
+    "raw_sha256": "75181abbca356dd4dfee653197de32948cb10c610c5e1818574dc392b21323c1",
+    "gzip_bytes": 502,
+    "gzip_sha256": "146198fc0142895523f0220a84c90eafa41b519daa582a9352edddeb72736c85"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v3-rejects-new-source.stderr.txt",
+    "package_path": "actual-outcomes/v7-v3-rejects-new-source.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v4-rejects-new-source.json",
+    "package_path": "actual-outcomes/v7-v4-rejects-new-source.json.gz",
+    "raw_bytes": 977,
+    "raw_sha256": "5d37b294733e9d72d2fa7a26d2561783ae2f2990c353862b0f534e08b680e7ea",
+    "gzip_bytes": 488,
+    "gzip_sha256": "390b1ccd14a68329b4da9414fbe68814c6391d232a027e9eaad46a733fb62476"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v4-rejects-new-source.stderr.txt",
+    "package_path": "actual-outcomes/v7-v4-rejects-new-source.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v5-rejects-new-source.json",
+    "package_path": "actual-outcomes/v7-v5-rejects-new-source.json.gz",
+    "raw_bytes": 1098,
+    "raw_sha256": "4b99e3b35fcaf24f24fb7625a6c05fc1650c6c10242849ee803807407f3268af",
+    "gzip_bytes": 529,
+    "gzip_sha256": "1d33922a417e3c422ca1705e4d8c68dccd75c81ae75d01eac31a3f521f0b639c"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v5-rejects-new-source.stderr.txt",
+    "package_path": "actual-outcomes/v7-v5-rejects-new-source.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v6-rejects-new-source.json",
+    "package_path": "actual-outcomes/v7-v6-rejects-new-source.json.gz",
+    "raw_bytes": 890,
+    "raw_sha256": "09ee78e41c54b13f0886068e0b2adfee0dc2ee78a4ccc8df925b699bee5624b4",
+    "gzip_bytes": 495,
+    "gzip_sha256": "f2d87a78a5aa406cd88effbb3fce1d7351d8997c579b493e08f4c85d11e24c7c"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v6-rejects-new-source.stderr.txt",
+    "package_path": "actual-outcomes/v7-v6-rejects-new-source.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v6-still-accepts-exact-old-five.json",
+    "package_path": "actual-outcomes/v7-v6-still-accepts-exact-old-five.json.gz",
+    "raw_bytes": 556,
+    "raw_sha256": "f14363f5a7160f62bb5d8e0333886ee7935d460bd801bc3ad299da4abefc7003",
+    "gzip_bytes": 364,
+    "gzip_sha256": "59a0da11e2adb068c1cdd4ebd11579f5fa81f07697cd222600f1ce419748b233"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-v6-still-accepts-exact-old-five.stderr.txt",
+    "package_path": "actual-outcomes/v7-v6-still-accepts-exact-old-five.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-old-probability.json",
+    "package_path": "actual-outcomes/v7-rejects-old-probability.json.gz",
+    "raw_bytes": 904,
+    "raw_sha256": "f8da45b41e52684d422104e78b466758c7a91293b7f18162e60b9f5f1d2310eb",
+    "gzip_bytes": 493,
+    "gzip_sha256": "3022bd05ed5b540b9075ac90c63ace1483b94aa5ce80ecee36e9dea18846cc39"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-old-probability.stderr.txt",
+    "package_path": "actual-outcomes/v7-rejects-old-probability.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-unrelated-worktree-source.json",
+    "package_path": "actual-outcomes/v7-rejects-unrelated-worktree-source.json.gz",
+    "raw_bytes": 749,
+    "raw_sha256": "3fe520db032b89e529edfbedf030fa3656fa7eab75ce9bca9ba08bd4dec706b1",
+    "gzip_bytes": 463,
+    "gzip_sha256": "39e9eeb89a296a5df0d02e42b001e946ed347468778af52e260f769862c132f4"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-unrelated-worktree-source.stderr.txt",
+    "package_path": "actual-outcomes/v7-rejects-unrelated-worktree-source.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-untracked-producer.json",
+    "package_path": "actual-outcomes/v7-rejects-untracked-producer.json.gz",
+    "raw_bytes": 680,
+    "raw_sha256": "1dfb6c78aeb5eedffd7f88d5a5eb0d0c264fc5aaec2de16bba0003fe9fc22631",
+    "gzip_bytes": 431,
+    "gzip_sha256": "9c5c28638e382ea47fc3de7d96b1d88757d773111d2106784abdb19bb6536eb6"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-untracked-producer.stderr.txt",
+    "package_path": "actual-outcomes/v7-rejects-untracked-producer.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-missing-reused-link.json",
+    "package_path": "actual-outcomes/v7-rejects-missing-reused-link.json.gz",
+    "raw_bytes": 691,
+    "raw_sha256": "ec96f375104ee7f88ab4924313da326ad05d0e21860ec4f9d9e254d8542a19a8",
+    "gzip_bytes": 431,
+    "gzip_sha256": "7d9db302a944b9ff0ddc58d67700ad39a42fb8bd841f6940fdd4d626a3b7cde8"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-missing-reused-link.stderr.txt",
+    "package_path": "actual-outcomes/v7-rejects-missing-reused-link.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-tampered-independent-input.json",
+    "package_path": "actual-outcomes/v7-rejects-tampered-independent-input.json.gz",
+    "raw_bytes": 691,
+    "raw_sha256": "ec96f375104ee7f88ab4924313da326ad05d0e21860ec4f9d9e254d8542a19a8",
+    "gzip_bytes": 431,
+    "gzip_sha256": "7d9db302a944b9ff0ddc58d67700ad39a42fb8bd841f6940fdd4d626a3b7cde8"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-tampered-independent-input.stderr.txt",
+    "package_path": "actual-outcomes/v7-rejects-tampered-independent-input.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-runtime-version-fixture.json",
+    "package_path": "actual-outcomes/v7-rejects-runtime-version-fixture.json.gz",
+    "raw_bytes": 687,
+    "raw_sha256": "74ea67dcc1b1d775c657572b69e2bcf0af1e9cc30a802f418be87ee3074c1eab",
+    "gzip_bytes": 447,
+    "gzip_sha256": "fc850038158d8f6483c6315deab49dcdd7f18bbb5aa4b159956b06a6e5c9ed24"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-runtime-version-fixture.stderr.txt",
+    "package_path": "actual-outcomes/v7-rejects-runtime-version-fixture.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-exact-five-source-commit.json",
+    "package_path": "actual-outcomes/v7-exact-five-source-commit.json.gz",
+    "raw_bytes": 570,
+    "raw_sha256": "b4dfc32e865978382ea8a0d36db748f47eb72c0acbb6ffd5e25729b67faeb478",
+    "gzip_bytes": 373,
+    "gzip_sha256": "7c8502c7b41d7148324640a9d0d2ab60caf6133a5d04a1b7e135f2b37cf29f4c"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-exact-five-source-commit.stderr.txt",
+    "package_path": "actual-outcomes/v7-exact-five-source-commit.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-unrelated-HEAD.json",
+    "package_path": "actual-outcomes/v7-rejects-unrelated-HEAD.json.gz",
+    "raw_bytes": 897,
+    "raw_sha256": "04dda6d006fd1419ed459188c906a933d376f5398f9fff89c6bbcfcb178c6376",
+    "gzip_bytes": 492,
+    "gzip_sha256": "927c8cc62f9074e8a93eeb8dced34eec5a1d39ef5153f2ca53e4eab161104dc7"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-rejects-unrelated-HEAD.stderr.txt",
+    "package_path": "actual-outcomes/v7-rejects-unrelated-HEAD.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-final-source-only-strict.json",
+    "package_path": "actual-outcomes/v7-final-source-only-strict.json.gz",
+    "raw_bytes": 570,
+    "raw_sha256": "b4dfc32e865978382ea8a0d36db748f47eb72c0acbb6ffd5e25729b67faeb478",
+    "gzip_bytes": 373,
+    "gzip_sha256": "7c8502c7b41d7148324640a9d0d2ab60caf6133a5d04a1b7e135f2b37cf29f4c"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/v7-final-source-only-strict.stderr.txt",
+    "package_path": "actual-outcomes/v7-final-source-only-strict.stderr.txt.gz",
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/s01_hook.py.base927.gz",
+    "package_path": "source-before-base927/s01_hook.py.base927.gz",
+    "raw_bytes": 23077,
+    "raw_sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+    "gzip_bytes": 7449,
+    "gzip_sha256": "c3809b467349cc1846eb37ed6319451c8cfcc2c563e2868a09aab95867b60653"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/s02_probability.py.base927.gz",
+    "package_path": "source-before-base927/s02_probability.py.base927.gz",
+    "raw_bytes": 24663,
+    "raw_sha256": "f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620",
+    "gzip_bytes": 7093,
+    "gzip_sha256": "72c360196174d8d0a6154bb2fb92a0e321cedabf26e59afe4692407c3e581e7d"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/s03_surprise.py.base927.gz",
+    "package_path": "source-before-base927/s03_surprise.py.base927.gz",
+    "raw_bytes": 23704,
+    "raw_sha256": "5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8",
+    "gzip_bytes": 6663,
+    "gzip_sha256": "bb12e2a761ac948d0c9509a4d2ffd8951fa1cc5632167c3c03e0777ec8e04e52"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/s08_svd.py.base927.gz",
+    "package_path": "source-before-base927/s08_svd.py.base927.gz",
+    "raw_bytes": 11730,
+    "raw_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+    "gzip_bytes": 3926,
+    "gzip_sha256": "fd580ef6aefb64265d668c5231b42ae0736ae0765a35b69fc4b4b14dcb14e7c3"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/s19_outro.py.base927.gz",
+    "package_path": "source-before-base927/s19_outro.py.base927.gz",
+    "raw_bytes": 16807,
+    "raw_sha256": "4e1d29200637256128acf72ecffd0f02caaf6733a4222808dd0b32bf82981ed7",
+    "gzip_bytes": 6079,
+    "gzip_sha256": "f3065e629882236964c5f8c6d9f2429778fef0c9a732568dd9741ff4c6148361"
+  },
+  {
+    "original_path": "/workspace/explainer-videos/videos/ai/ai1/s01_hook.py",
+    "package_path": "reviewed-source-after/s01_hook.py.gz",
+    "raw_bytes": 23484,
+    "raw_sha256": "7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8",
+    "gzip_bytes": 7596,
+    "gzip_sha256": "6df45703e3a4bfa71266eaf05e05b0e4d22496c9044119018632a83082ac12ff"
+  },
+  {
+    "original_path": "/workspace/explainer-videos/videos/ai/ai1/s02_probability.py",
+    "package_path": "reviewed-source-after/s02_probability.py.gz",
+    "raw_bytes": 25970,
+    "raw_sha256": "5e856dd92a662a8a7f1bfc370e57e0c937722c5e2f9c35e99960e1cfd80724ea",
+    "gzip_bytes": 7611,
+    "gzip_sha256": "f88d8c10baddd37df1bc6572951d9c90359adcb39906f716223730f38ab5ff2b"
+  },
+  {
+    "original_path": "/workspace/explainer-videos/videos/ai/ai1/s03_surprise.py",
+    "package_path": "reviewed-source-after/s03_surprise.py.gz",
+    "raw_bytes": 24700,
+    "raw_sha256": "64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55",
+    "gzip_bytes": 7071,
+    "gzip_sha256": "38ee56de36176b39d91f9fa4fde4c913ecfaa96cd30b84475cd040173132d5c7"
+  },
+  {
+    "original_path": "/workspace/explainer-videos/videos/ai/ai3/s08_svd.py",
+    "package_path": "reviewed-source-after/s08_svd.py.gz",
+    "raw_bytes": 12273,
+    "raw_sha256": "2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b",
+    "gzip_bytes": 4144,
+    "gzip_sha256": "c1885e7e5c05fc3cd903028c6d924c78409a6d84d8ad05221173d5e8f664e89f"
+  },
+  {
+    "original_path": "/workspace/explainer-videos/videos/ai/ai3/s19_outro.py",
+    "package_path": "reviewed-source-after/s19_outro.py.gz",
+    "raw_bytes": 17361,
+    "raw_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+    "gzip_bytes": 6367,
+    "gzip_sha256": "a6b99cd96023ab3b50265e81390bd59de70f7a663e0c667ce2bba0e9cc9bc448"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/prepare_actual_context.py",
+    "package_path": "reproduction/prepare_actual_context.py.gz",
+    "raw_bytes": 4606,
+    "raw_sha256": "a13bbf72c05de129f8e2d489217bb8be8a9a829d5bc7f9d8b78ab0d96a6381f9",
+    "gzip_bytes": 1970,
+    "gzip_sha256": "b64e1747ba4ac54e4fc987ed2c35eb7bfce6eaa83d5d2bdbd66148c67a25e3d8"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/register_final.py",
+    "package_path": "reproduction/register_final.py.gz",
+    "raw_bytes": 5564,
+    "raw_sha256": "6a7a4cdeb136527393a54654785209881ec86eee857c041e2d91febcf4fa262a",
+    "gzip_bytes": 2502,
+    "gzip_sha256": "acc15d5614ade09b7d70af2d0f918e0a70384526437f929429075d9e9a292c97"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/run_actual_checks.py",
+    "package_path": "reproduction/run_actual_checks.py.gz",
+    "raw_bytes": 9480,
+    "raw_sha256": "89748c7ca684b33ce86a1bdeced748ffc897e70695544c2bad8200635116a8e6",
+    "gzip_bytes": 3695,
+    "gzip_sha256": "ab1bf3b658eef69c0f97874f783e787f73e805d84b4167555c7a32eb839cc389"
+  },
+  {
+    "original_path": "/workspace/runtime/probability-numeric-dwell-overlay-v7-private/test_numeric_dwell_overlay.py",
+    "package_path": "reproduction/test_numeric_dwell_overlay.py.gz",
+    "raw_bytes": 9235,
+    "raw_sha256": "fd4daee7b0214e1c77b318b0e3c8df31e585a6b003986bb8a297f77c27274664",
+    "gzip_bytes": 2495,
+    "gzip_sha256": "a244aab42e087e2db3e25342abfb2fd240a592966fed38a8198e681a0d913b6d"
+  },
+  {
+    "original_path": "/workspace/explainer-videos/tests/test_production_handoff_probability_dwell_overlay.py",
+    "package_path": "new-repository-test.py.gz",
+    "raw_bytes": 11260,
+    "raw_sha256": "a2104fe0a8f1c52d8d08f0d4555533b4106c38f9189c7f7c3d43618b89ad1516",
+    "gzip_bytes": 3122,
+    "gzip_sha256": "79760fb1a87a38e12945a5a530224aae71f262ac816a46e8a2d38eebc2b0607d"
+  },
+  {
+    "original_path": "/workspace/explainer-videos/docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+    "package_path": "registered-helper.py.gz",
+    "raw_bytes": 14654,
+    "raw_sha256": "6362af754a9b42dd06a3c1b7f2665929f94ae35fc64f6ea19ca175affd0bcb25",
+    "gzip_bytes": 4801,
+    "gzip_sha256": "bf8f2375ba91bfe9d919844b4834317d34f99fdaa14496f7b0516395ffbf80ca"
+  },
+  {
+    "original_path": "/workspace/explainer-videos/docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7.json",
+    "package_path": "reviewed-overlay.json.gz",
+    "raw_bytes": 13558,
+    "raw_sha256": "f501b221cb5e92608a32e7570dcfbe145dd4ab02e6fc8c62643ae9d1b9651bd9",
+    "gzip_bytes": 4468,
+    "gzip_sha256": "92034a0c0cc115a11f52f3d93f74ca6a5407d793ea6e64ad2a44b9e6c66927b3"
+  },
+  {
+    "original_path": "/workspace/explainer-videos/docs/qa/evidence/production-handoff-parts1-3/manifest-probability-dwell-part3-v7.json",
+    "package_path": "root-release.json.gz",
+    "raw_bytes": 8344,
+    "raw_sha256": "28fb4522b10562cdc003a0648681c9a1392ef5c840935ade975afbc49b364548",
+    "gzip_bytes": 2563,
+    "gzip_sha256": "aecc69162b3d08d51233f394ab0b967a187b3648d90578a81113e2fc09860ec4"
+  },
+  {
+    "original_path": "/workspace/explainer-videos/docs/qa/evidence/ai1-probability-numeric-dwell-source-repair/source.patch.gz",
+    "package_path": "numeric-dwell-source.patch.gz",
+    "raw_bytes": 826,
+    "raw_sha256": "35eb669e7aa001d5fad63f44f8422cb99e984209fcfc3d7a614325c5426100bd",
+    "gzip_bytes": 452,
+    "gzip_sha256": "109ff13454fa1b851a9fdc0e497b915fe6fc667e1fd9a0fa5614eebc51b00d16"
+  }
+]

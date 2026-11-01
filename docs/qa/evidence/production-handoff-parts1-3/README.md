@@ -26,3 +26,16 @@ The explicit **`part1-probability-roadmap-and-part3-v5`** is now a concrete four
 
 
 The explicit **`part1-surprise-probability-roadmap-and-part3-v6`** adds only reviewed Surprise6456 to the exact v5 source set on base927: five source replacements, no optional target files or later branch/Part6 tree permission. [V6 checks](overlay-surprise-v6-checks/README.md) retain78 gate tests and18 actual strict cloud-fixture outcomes. Source-span/cue-budget clearance is controlled-rerender only; actual short-stage readability/listening/sync/4K acceptance remains open. Two saved fact-file reconstruction hashes are internally verified, with no independent remote whole-file expected hash or unavailable master-WAV hash assertion. `historical/surprise-v6-before/` preserves the pre-v6 helper/tests/docs/release; `manifest-surprise-part3-v6.json` is additive. All old manifests and original66 test sources stay byte-exact. No app source, scientific data, voice, upload or production run was edited/executed by the gate owner.
+
+
+### Exact v7 Probability numeric-result dwell overlay
+
+`part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7` permits only base `927fba668656a682b3e29a288de64130ddc680dd` plus these five exact source replacements: Hook `7230ac4c…`, Probability `5e856dd9…`, Surprise `64567666…`, SVD `2c01a4a7…`, and Outro `e874a8da…`. The full hashes, byte counts and Git blobs are bound by its schema2 manifest. It authorizes no extra repository files or moving branch HEAD.
+
+Probability now reserves a1.5-second finished numeric-display hold. This is controlled source clearance for a fresh narrated rerender; repaired readability, actual frame/bookmark timing, listening/synchronization, total output duration and production appearance remain pending. The11 speech-block metadata identities and18 bookmark names are preserved; an unchanged whole-movie duration is not claimed.
+
+Use the explicit v7 ID with the existing `--strict-external --optional-audio` preflight against a source-only cloud checkout. Default and v1–v6 modes reject the new Probability bytes; v6 continues to accept its exact previous `50ff2a79…` source set. Cache signatures, runtime versions, pinned public-model files, optional real-audio hashes and producer/render safeguards remain unchanged. No relaxed runtime/data/audio policy is introduced.
+
+A new cloud fixture passed the actual268-file strict gate. It reused156 existing frozen inputs through ignored data symlinks without copying their80.9MB contents; source replacements remained independent regular files. Existing policy already permits hash-checked data links and rejects source symlinks. Nineteen actual outcomes covered exact worktree/source-only commit acceptance and default/old-mode, unrelated-source/HEAD/producer, missing/tampered-data and runtime-version rejection. All156 original payload hashes/sizes/mtimes/inodes/link counts, original fixture Git files and public-model witnesses stayed exact. The512MiB resource hard stop remained active. These checks load no model, synthesize no speech and grant no rendered-output approval.
+
+See `manifest-probability-dwell-part3-v7.json` and `overlay-probability-dwell-v7-checks/` for release pins, raw outcomes and limits. Earlier manifests/tests remain byte-exact.

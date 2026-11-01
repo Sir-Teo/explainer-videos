@@ -1,0 +1,108 @@
+{
+  "at": "2026-11-01T10:41:46.663378+00:00",
+  "files": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/verify_handoff.py",
+      "bytes": 14134,
+      "sha256": "d6ca66b0f32cca9bcbe0352e8240ac1daa87dfea76b8e10a9d4490a5123ad1c6"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest-surprise-part3-v6.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/manifest-surprise-part3-v6.json",
+      "bytes": 54506,
+      "sha256": "ab5c22ae30336730f93c4212dd1dedf093eb1d26853f40613102ff190ff90f8e"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/README.md",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/README.md",
+      "bytes": 6878,
+      "sha256": "6e2047e16e76cc6a91b97d9fd82fb9c9f82675a2c05b7b198c8c0a081ef19d2c"
+    },
+    {
+      "path": "docs/qa/production-handoff-parts1-3.md",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/production-handoff-parts1-3.md",
+      "bytes": 35201,
+      "sha256": "0f101f51c6a3741b2ef710f85620514133c005d893d56ef551e64ae5e3ba6ba9"
+    },
+    {
+      "path": "tests/test_production_handoff_overlay.py",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/test_production_handoff_overlay.py",
+      "bytes": 34069,
+      "sha256": "3babfe70739a7146df1c4f84176ae80452722b770a4c22c0c83b8efdeecb2a69"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_overlay.py",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/test_production_handoff_probability_overlay.py",
+      "bytes": 11273,
+      "sha256": "dbb041ef929150098126b49f3df048fafec4a5edbc36f52c0543f388543f8a44"
+    },
+    {
+      "path": "tests/test_production_handoff_surprise_overlay.py",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/test_production_handoff_surprise_overlay.py",
+      "bytes": 11302,
+      "sha256": "1c9faef1e99a12056c2a73a057aa3b680878b065571c39dd598f3b6c5e57196e"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-roadmap-and-part3-v5.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/part1-probability-roadmap-and-part3-v5.json",
+      "bytes": 8593,
+      "sha256": "6bc668f43c97b0d9867b2ab323c2d337599a5c4417c9fb5eb01644d7e9a7dbce"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-roadmap-and-part3-v4.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/part1-roadmap-and-part3-v4.json",
+      "bytes": 5609,
+      "sha256": "f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-surprise-probability-roadmap-and-part3-v6.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/part1-surprise-probability-roadmap-and-part3-v6.json",
+      "bytes": 11065,
+      "sha256": "916421ce802ab387df104242a54e7d4e2d9b5869825ea52df069b95b8c5d345c"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part3-svd-outro-production-v3.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/part3-svd-outro-production-v3.json",
+      "bytes": 3597,
+      "sha256": "69a16ca2846362919dfd8e9a024120fb3cba19264a643ad70b994c65f427f178"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-production-polish-v2.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/svd-production-polish-v2.json",
+      "bytes": 1456,
+      "sha256": "631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-reveal-v1.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/svd-reveal-v1.json",
+      "bytes": 32227,
+      "sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/cache-inventory.json",
+      "historical_path": null,
+      "bytes": 46061,
+      "sha256": "8cf34dd7acc11ba29eb37fa6881c70f706f7209301540145d679fd4dad3d2af4"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/reviewed-source-inventory.json",
+      "historical_path": null,
+      "bytes": 30831,
+      "sha256": "1c9eb76a370a5b74b79b7a0aa5b7e8f9300bfe4cd00ed494f3801d3ac50a79f2"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/external-validation-dependencies.json",
+      "historical_path": null,
+      "bytes": 7325,
+      "sha256": "9e60b6b1545b517c79107d27ae3a1e835adf6b0859cd3051dbfb1eabcd688480"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/real-information-audio.json",
+      "historical_path": null,
+      "bytes": 10569,
+      "sha256": "a1da73b811d29cc6675dbff5c1d095bb31228ae3cea97ea21c10366cc83a06c5"
+    }
+  ],
+  "scope": "Observed exactpre-v7helper/docs/tests/oldoverlaypins; no priorfile changed. Rootpublishedsource8dbbeforecontrollednewProbabilitydwell."
+}

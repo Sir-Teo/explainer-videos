@@ -1,0 +1,380 @@
+[
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/README.md",
+    "source_sha256": "ee07d2b16f1bc1183c8c0b76457dd2e1ad15d071c395ae1bff85887b5503a0a8",
+    "source_bytes": 2732,
+    "stored": "private-candidate-history/README.md.gz",
+    "stored_sha256": "2b705f97de139e461199d43542d3e8e1351fc6e6c751c32bd77d52fe33d3438f",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/after-validation-plan.json",
+    "source_sha256": "cec2fd03524e3d67e7e1abae9e15fcce668b65a45dc06d3a5252bc29f71504df",
+    "source_bytes": 2893,
+    "stored": "private-candidate-history/after-validation-plan.json.gz",
+    "stored_sha256": "a3d51ebc24e4551699025b00e47ef17c7953c2a29c0f2466b1fbad0c17a362de",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/existing-cue-checks.log",
+    "source_sha256": "22b17cbab91d7c6ecd73c51953f9507e5aab78c3e8810d083f26c0d7e32ede60",
+    "source_bytes": 874,
+    "stored": "private-candidate-history/existing-cue-checks.log.gz",
+    "stored_sha256": "fd14e94693f92e972f044787e95394c105974a6d40c87afc9a53badde80a4947",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/freeze_candidate.py",
+    "source_sha256": "9fc0761e0ca4a352c706e26c4e3b8fe23f22f29a5c4dc99db35628f46e523250",
+    "source_bytes": 9165,
+    "stored": "private-candidate-history/freeze_candidate.py.gz",
+    "stored_sha256": "b731d5cdf5f6b8b7b4cb69afea470e6dacb3167b2fd289a8cf6a34a98b9755fd",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/handoff.json",
+    "source_sha256": "d9287ea9f73b82c2ce14b3f7a6b2a7a931d268de87f6a69bcb54c46454535212",
+    "source_bytes": 1424,
+    "stored": "private-candidate-history/handoff.json.gz",
+    "stored_sha256": "1eb072ec7a38cf30e02468204469da6297ec4e0f1ce5f0558155d922e92a9cc2",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/invariants.json",
+    "source_sha256": "485f57a6585c5bc5f81ae394e845b889b9b45794f1eddbd51ef6ac11b2720c95",
+    "source_bytes": 1230,
+    "stored": "private-candidate-history/invariants.json.gz",
+    "stored_sha256": "1ac16e794feb4406be4729ec40b6bd235c4d3ae49a2d80eb9718c854aaf82087",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/library-receipt-facts.json",
+    "source_sha256": "ddfff706e8aba4b8a962e28192c3dae898d96ab002e383c5375a9e78cb19acba",
+    "source_bytes": 4500,
+    "stored": "private-candidate-history/library-receipt-facts.json.gz",
+    "stored_sha256": "0f8754dab796b3fafada5c91e0e9c36ca12dcc6a9226068c68e32fa60855165a",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/measure_write_defaults.py",
+    "source_sha256": "894c7b0e124801996b38c8ab58981ab7cc9aa5274b2ac50b1e508abdca50078a",
+    "source_bytes": 2115,
+    "stored": "private-candidate-history/measure_write_defaults.py.gz",
+    "stored_sha256": "2060b3ed09c3f8f60bef3358a0edabcb2d7d1f17b51d3b57c8b26119423440b8",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/phase-probes.json",
+    "source_sha256": "9fd630f20c0b66fe429772a601362f8396a01dc4974159bb83e29977735e1f54",
+    "source_bytes": 138021,
+    "stored": "private-candidate-history/phase-probes.json.gz",
+    "stored_sha256": "f4615c15128ec36755dd004074d47b34da34d285b18aa0a23617d0e76dcc04e5",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/prepare_candidate.py",
+    "source_sha256": "603096f91fec2a010172fd43514312526bac43132a6d12b4de9ed7fcbae9ac15",
+    "source_bytes": 1154,
+    "stored": "private-candidate-history/prepare_candidate.py.gz",
+    "stored_sha256": "26276417f3134d67d0c402c744fd55b5a8a05be8fa1cc7d00678546a326a9e91",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/probe.log",
+    "source_sha256": "e2d2c2c366a29a3fd1f6f8c03f7a709a8cd00249ec6f80ee821e08a3cbefef1e",
+    "source_bytes": 1171,
+    "stored": "private-candidate-history/probe.log.gz",
+    "stored_sha256": "5cd729481f562be07b3e35ee8e0b6d2b6c3e9ed388d789503b5af5f34ecf672e",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/probe_candidate.py",
+    "source_sha256": "26e91081eec2ce84cbc2ab752581df0d9cb872829015ee99982d49909555faca",
+    "source_bytes": 11170,
+    "stored": "private-candidate-history/probe_candidate.py.gz",
+    "stored_sha256": "7270b770b0f5551bd211af7b244b0f578ae66112554a3e0332d651141c238699",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/production-v2-receipt.json",
+    "source_sha256": "754ad929b44f63b66ab52ccacb947e954dc6407c4d6170ce42b1962e0ac6b373",
+    "source_bytes": 9361,
+    "stored": "private-candidate-history/production-v2-receipt.json.gz",
+    "stored_sha256": "9b0d7d5ec909202d83f595471e41ec440e88b828ea2faccbd74143adf19e16ce",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/receipt-phase-reconciliation.json",
+    "source_sha256": "4dd04a8f0288cd5c50a2009b626d7080cb47a4e46210c616dfbec3949337bb16",
+    "source_bytes": 896,
+    "stored": "private-candidate-history/receipt-phase-reconciliation.json.gz",
+    "stored_sha256": "87d68ae248d2a71cdd619962c61a0e7c2b0130109bd79c13ffd4a6f7343d56fa",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/run_existing_cue_checks.py",
+    "source_sha256": "9e3613df1481c0bb3d266b96534bdf992d13a159c8ded68ab35ee9d6e45a6d43",
+    "source_bytes": 752,
+    "stored": "private-candidate-history/run_existing_cue_checks.py.gz",
+    "stored_sha256": "e7b3fd8a49df988f1c3b3fef9ee12a0e798a55eb296b652c4d69e7c6d41ddc43",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/s02_probability.before.py",
+    "source_sha256": "50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed",
+    "source_bytes": 25682,
+    "stored": "private-candidate-history/s02_probability.before.py.gz",
+    "stored_sha256": "5ebe239acde8f944d83266e979d0dd644912c926d17fcd12097c26ac2342b6cb",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/s02_probability.proposed.py",
+    "source_sha256": "5e856dd92a662a8a7f1bfc370e57e0c937722c5e2f9c35e99960e1cfd80724ea",
+    "source_bytes": 25970,
+    "stored": "private-candidate-history/s02_probability.proposed.py.gz",
+    "stored_sha256": "f88d8c10baddd37df1bc6572951d9c90359adcb39906f716223730f38ab5ff2b",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/source.patch",
+    "source_sha256": "35eb669e7aa001d5fad63f44f8422cb99e984209fcfc3d7a614325c5426100bd",
+    "source_bytes": 826,
+    "stored": "private-candidate-history/source.patch.raw.gz",
+    "stored_sha256": "109ff13454fa1b851a9fdc0e497b915fe6fc667e1fd9a0fa5614eebc51b00d16",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/source.patch.gz",
+    "source_sha256": "109ff13454fa1b851a9fdc0e497b915fe6fc667e1fd9a0fa5614eebc51b00d16",
+    "source_bytes": 452,
+    "stored": "private-candidate-history/source.patch.gz",
+    "stored_sha256": "109ff13454fa1b851a9fdc0e497b915fe6fc667e1fd9a0fa5614eebc51b00d16",
+    "encoding": "identity",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/voiceover.observed.py",
+    "source_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+    "source_bytes": 10700,
+    "stored": "private-candidate-history/voiceover.observed.py.gz",
+    "stored_sha256": "b22f2829fecc4c155e063fa6859ce018e36ceb9b276cf2fe820126df8217c6ef",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/write-defaults.json",
+    "source_sha256": "ccd08ae641aeb8e3b75f9fc687d56cc6086d57880c2c13ab3aef4a453437d18b",
+    "source_bytes": 509,
+    "stored": "private-candidate-history/write-defaults.json.gz",
+    "stored_sha256": "d15ca1fc0ee27c9b584c8efaf2c4caf3b73f9c5d85960669ee750ae044a82071",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/write-defaults.log",
+    "source_sha256": "5df63b501ed597ef15b36288296369ff52dcd175ca3d75e74d4ea03d5b7de623",
+    "source_bytes": 492,
+    "stored": "private-candidate-history/write-defaults.log.gz",
+    "stored_sha256": "cdac9a40f41166d42b7e9ae5946dec5206f24134cb79df600f29323b7ec022cf",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/file-manifest.json",
+    "source_sha256": "249a5feb86aa19e42aba632f8ae12fad3b9bf0e02e0a730fe974284abad5901f",
+    "source_bytes": 3192,
+    "stored": "private-candidate-history/original-file-manifest.json",
+    "stored_sha256": "249a5feb86aa19e42aba632f8ae12fad3b9bf0e02e0a730fe974284abad5901f",
+    "encoding": "identity",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/production-v2-receipt.json",
+    "source_sha256": "754ad929b44f63b66ab52ccacb947e954dc6407c4d6170ce42b1962e0ac6b373",
+    "source_bytes": 9361,
+    "stored": "production-v2-receipt.json.gz",
+    "stored_sha256": "9b0d7d5ec909202d83f595471e41ec440e88b828ea2faccbd74143adf19e16ce",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/library-receipt-facts.json",
+    "source_sha256": "ddfff706e8aba4b8a962e28192c3dae898d96ab002e383c5375a9e78cb19acba",
+    "source_bytes": 4500,
+    "stored": "library-receipt-facts.json.gz",
+    "stored_sha256": "0f8754dab796b3fafada5c91e0e9c36ca12dcc6a9226068c68e32fa60855165a",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/invariants.json",
+    "source_sha256": "485f57a6585c5bc5f81ae394e845b889b9b45794f1eddbd51ef6ac11b2720c95",
+    "source_bytes": 1230,
+    "stored": "invariants.json.gz",
+    "stored_sha256": "1ac16e794feb4406be4729ec40b6bd235c4d3ae49a2d80eb9718c854aaf82087",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/phase-probes.json",
+    "source_sha256": "9fd630f20c0b66fe429772a601362f8396a01dc4974159bb83e29977735e1f54",
+    "source_bytes": 138021,
+    "stored": "phase-probes.json.gz",
+    "stored_sha256": "f4615c15128ec36755dd004074d47b34da34d285b18aa0a23617d0e76dcc04e5",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/write-defaults.json",
+    "source_sha256": "ccd08ae641aeb8e3b75f9fc687d56cc6086d57880c2c13ab3aef4a453437d18b",
+    "source_bytes": 509,
+    "stored": "write-defaults.json.gz",
+    "stored_sha256": "d15ca1fc0ee27c9b584c8efaf2c4caf3b73f9c5d85960669ee750ae044a82071",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/receipt-phase-reconciliation.json",
+    "source_sha256": "4dd04a8f0288cd5c50a2009b626d7080cb47a4e46210c616dfbec3949337bb16",
+    "source_bytes": 896,
+    "stored": "receipt-phase-reconciliation.json.gz",
+    "stored_sha256": "87d68ae248d2a71cdd619962c61a0e7c2b0130109bd79c13ffd4a6f7343d56fa",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/after-validation-plan.json",
+    "source_sha256": "cec2fd03524e3d67e7e1abae9e15fcce668b65a45dc06d3a5252bc29f71504df",
+    "source_bytes": 2893,
+    "stored": "after-validation-plan.json.gz",
+    "stored_sha256": "a3d51ebc24e4551699025b00e47ef17c7953c2a29c0f2466b1fbad0c17a362de",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-candidate/source.patch.gz",
+    "source_sha256": "109ff13454fa1b851a9fdc0e497b915fe6fc667e1fd9a0fa5614eebc51b00d16",
+    "source_bytes": 452,
+    "stored": "source.patch.gz",
+    "stored_sha256": "109ff13454fa1b851a9fdc0e497b915fe6fc667e1fd9a0fa5614eebc51b00d16",
+    "encoding": "identity",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-applied/s02_probability.before.py",
+    "source_sha256": "50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed",
+    "source_bytes": 25682,
+    "stored": "applied/s02_probability.before.py.gz",
+    "stored_sha256": "5ebe239acde8f944d83266e979d0dd644912c926d17fcd12097c26ac2342b6cb",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-applied/s02_probability.after.py",
+    "source_sha256": "5e856dd92a662a8a7f1bfc370e57e0c937722c5e2f9c35e99960e1cfd80724ea",
+    "source_bytes": 25970,
+    "stored": "applied/s02_probability.after.py.gz",
+    "stored_sha256": "f88d8c10baddd37df1bc6572951d9c90359adcb39906f716223730f38ab5ff2b",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-applied/test_ai1_probability_timing.before.py",
+    "source_sha256": "25d5d88d691d558d29c4ecf21317414308e6585f05c68025f27569c5187ee6d4",
+    "source_bytes": 8425,
+    "stored": "applied/test_ai1_probability_timing.before.py.gz",
+    "stored_sha256": "66f6646364ad6f6a70d5a39c92a3e3350735b449a5b3241e8ebcf0b1ce3b1964",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-applied/apply-receipt.json",
+    "source_sha256": "63adc313487282d3c115bf1efce3d3aa8d2e06e50d45681391b6e40cb9f8a44f",
+    "source_bytes": 502,
+    "stored": "applied/apply-receipt.json.gz",
+    "stored_sha256": "371577e2e5be95adcd246498340400de55d607b4cf0cc05aa1d588a682814b8d",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-applied/focused-tests.log",
+    "source_sha256": "08b7a65f3c7be6ebd7b7c3f4e10260d50fda601a95b9e01c0a5b3bb70fdbb0ab",
+    "source_bytes": 1600,
+    "stored": "applied/focused-tests.log.gz",
+    "stored_sha256": "6645c739883a700fc2c0426b79c8dfcc0f1317b2483917e13560a3e5206fb33e",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-applied/focused-tests-initial.log",
+    "source_sha256": "14c2185cc3d04f61bc7f5bb1b7d163bd0392e6ee0fe4e2867b2b4387a8264ea2",
+    "source_bytes": 4291,
+    "stored": "applied/focused-tests-initial.log.gz",
+    "stored_sha256": "df23b9c74be7874ac568c1e17ef89cca6e46857c312942fb35a883b029228726",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/explainer-videos/tests/test_ai1_probability_timing.py",
+    "source_sha256": "0e764ecec3877fdc3c27bca3d55812acfbc8554e70e739e3457b9f7cfda038f8",
+    "source_bytes": 17091,
+    "stored": "applied/test_ai1_probability_timing.after.py.gz",
+    "stored_sha256": "d056a18fafd375f001108eb0bb8e7478adffd21131960b74609553c0f2aeb9b3",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-applied/test.patch",
+    "source_sha256": "c631690b38ecd6c2650ff720800884aa1e46c289e8484cb0ed00da5bd43d1276",
+    "source_bytes": 10383,
+    "stored": "test.patch.gz",
+    "stored_sha256": "8d5af7529a4694ae4cc027e9c9d3c6f97583f0bc89c97d3e86118122f409fc4b",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-applied/historical-five-tests.log",
+    "source_sha256": "d7379c110e5ff74f13201d2630e3ff4a1d8134ccca46bb97ebcb19e7746460a9",
+    "source_bytes": 927,
+    "stored": "historical-five-tests.log.gz",
+    "stored_sha256": "9f8b0b10d1f4fa81af676b3bfa652cba4f05b5da4936eba17418c5e28198e687",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/integrated-20261101-five-chapter-batch/receipt.json",
+    "source_sha256": "8bb605504d6d0d5ba4b7dca996d7eb4eff60c4346c8cf6833d1fca7e182c88ab",
+    "source_bytes": 838,
+    "stored": "historical-full641-receipt.json.gz",
+    "stored_sha256": "724ed131f97de7932bf61e159f3f5b5b3463ca0474459849b065b01e9a18f421",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  },
+  {
+    "source": "/workspace/runtime/ai1-probability-numeric-dwell-applied/historical-test-source-reference.json",
+    "source_sha256": "5f99aae47c7eb2aef80e9df401069b1cacad837d69f26dd8da173b9f847c0146",
+    "source_bytes": 790,
+    "stored": "historical-test-source-reference.json.gz",
+    "stored_sha256": "f58d98532ff3de10ebd0a7c33649a9a48052419af7b019fdc0354e3295483007",
+    "encoding": "verbatim-gzip",
+    "decoded_bytes_equal": true
+  }
+]

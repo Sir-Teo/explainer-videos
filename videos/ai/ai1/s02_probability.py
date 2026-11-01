@@ -337,6 +337,11 @@ class Probability(VoiceoverScene):
             vo.wait_until("c")
             morph(self, eqs[1], eqs[2], run_time=1.2)
             self.play(Write(num))
+            num_readable_at = self.renderer.time
+        # Credit the voiceover tail and pad before adding a finished-line reading hold.
+        num_hold_remaining = 1.5 - (self.renderer.time - num_readable_at)
+        if num_hold_remaining > 0:
+            self.wait(num_hold_remaining)
         cap = label(r"exact, for any distribution: \ no assumption has been made", font_size=30, color=C.BITS)
         cap2 = label(r"a text's probability $=$ a product of next-symbol guesses", font_size=30, color=GREY_A)
         box = SurroundingRectangle(eqs[3], color=C.BITS, buff=0.25, corner_radius=0.1)

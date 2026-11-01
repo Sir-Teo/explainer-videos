@@ -1,0 +1,52 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 2109,
+    "sha256": "0fe87fe263fb4052fb98c49f2794e01a59d8ebd3af60951df67f8aca03eb506e"
+  },
+  {
+    "path": "full-unittest.log.gz",
+    "bytes": 19823,
+    "sha256": "816b2ef306cb00440dec19ba2f10ff4ec3f6b7b2ebf63e808ea332dcfb284c27"
+  },
+  {
+    "path": "part6-execution-capacity-checkpoint.json",
+    "bytes": 2923,
+    "sha256": "1a406a3d57d053e51ef233e0e8d86af951fd7c3f4be0de96181edee1f9fff42f"
+  },
+  {
+    "path": "prospective-index-check.json",
+    "bytes": 251,
+    "sha256": "9e80024456310622287341ab52777173a5bb4977d6cbcd574a352d18fac829c3"
+  },
+  {
+    "path": "receipt.json.gz",
+    "bytes": 569,
+    "sha256": "2882f9acd2bf44b2171ad634569692f4756b6674d8db2523efd3abc23ca11a44"
+  },
+  {
+    "path": "source-after.json.gz",
+    "bytes": 77112,
+    "sha256": "42f12786cced27b58f4520af62ab24ff5e3e916a4e45be21a18c25cd469820cc"
+  },
+  {
+    "path": "source-before.json.gz",
+    "bytes": 77112,
+    "sha256": "42f12786cced27b58f4520af62ab24ff5e3e916a4e45be21a18c25cd469820cc"
+  },
+  {
+    "path": "summary.json",
+    "bytes": 523,
+    "sha256": "a973ea5fe9223b00fea9734943f69735624f361d46acd81d692aed8b534657c0"
+  },
+  {
+    "path": "test-runner.py.gz",
+    "bytes": 1601,
+    "sha256": "81e00f3213b4837b5b698f9cbe30c120785906bb35cd90efc36d57193b433b5b"
+  },
+  {
+    "path": "test-storage-observations.json.gz",
+    "bytes": 598,
+    "sha256": "9d3f190d946cae526e0072191ada6782edf78eb8fdc42f3789a38d4a5b249b6d"
+  }
+]

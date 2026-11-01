@@ -1,6 +1,6 @@
 # Current cloud QA checkpoint
 
-Observed 2026-11-01T10:12:31.276944+00:00. Progress, **not full-series production approval**.
+Observed 2026-11-01T10:46:19.954613+00:00. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Current checked candidate has Tree9aa,Forests569,AdaBoost9dace,Contest104c,Outro0f613; local Chinese29600967/global captions89f967. [Exact source/test inventory](evidence/ai6-five-chapter-integrated-tests-20261101/README.md) binds the publication index; preceding source publication f559 remains the pin of the execution-input archive. No merge, deployment or CI/CD.
 
@@ -15,6 +15,8 @@ All**641 tests passed in54.406seconds**, with all**1532 source/configuration ide
 New local rendering and decoding remain held below the unchanged768MiB guard; native captures retain their1.2GiB start gate. A verified operation reclaimed220,078,080bytes from28 completed zero-WAV copies without changing bytes or numerical inputs; only verified duplicate test-restoration copies were later removed. Unproven environment/dictionary/cache removal was withheld. Existing evidence, speech and all numerical inputs remain preserved.
 
 Current local reviewers retain LDA,KNN,Kernels,SVM,Metrics. Their execution-only inputs are saved in Library`libfile_34ae49e30a5881918e0e194a534698ac` (23,570,717bytes), sourcef559, reusing data/corpus from accepted`libfile_3158cc8861448191a951cd71b6549e14` (41,613,077bytes). No execution host is assigned and no new job started. Current five-chapter source changes above require the newly published pin for their own after work; the older archives are not retagged.
+
+Part1 Probability now has a source-applied finished-result dwell repair (SHA5e856dd9), preserving all eleven utterance masters. Seven focused tests pass. Exact strictv7 registration has19 expected actual-fixture outcomes and268 final checks, with all156 original inputs unchanged. All657 integrated tests pass in59.613 seconds with1535 source/configuration identities unchanged. Fresh rendered pacing, narrated synchronization, listening and production-output validation remain pending. [Integrated scope and capacity handoff](evidence/probability-dwell-v7-integrated-tests-20261101/README.md). [Source proof](evidence/ai1-probability-numeric-dwell-source-repair/README.md).
 
 Part1 Surprise remains source-cleared at commit`bcc5a4a14c964934e57138133da59a914c90070f` under exact strictv6 overlay on base927. [Production gate](production-handoff-parts1-3.md). Its actual narrated readability/pacing/listening/4K gates remain with production. Parts7–31 QA has not been silently marked complete or skipped.
 
@@ -167,4 +169,4 @@ Lasso baselinepair106pages/37endpoints andLogistic baselinepair115pages/38endpoi
 
 Latest621-test publicationcandidate alsoincludesapprovedNaiveBayes096duncapped90thpercentileband/transitionrepairs. Actualbaselinepair818selectedtimes/26endpoints/18nativefollowups isclosed; freshrepairedENZHafterreviewpending. [Source/beforeevidence](evidence/ai6-naivebayes-baseline-motion-review/README.md), [621testscope](evidence/probability-v5-nb-integrated-tests-20261101/README.md). Existing12currentselectedpreviewcasesremainacceptedatdeclaredscope; post-c80P6review-ledgerupdatesareseparatefromproductionclearance.
 
-Latest verified source publication: `8db4f0399a1490f905c8367151eeeb3bae9e051b`. GradientBoosting adds two existing native endpoint cases, for16 total;22 fresh native case captures remain pending. [Native proof](evidence/ai6-gradientboosting-native1080-endpoint-review/README.md). No new renderer/decoder or production approval.
+Frozen Part6 source publication: `8db4f0399a1490f905c8367151eeeb3bae9e051b`. GradientBoosting adds two existing native endpoint cases, for16 total;22 fresh native case captures remain pending. [Native proof](evidence/ai6-gradientboosting-native1080-endpoint-review/README.md). No new renderer/decoder or production approval.

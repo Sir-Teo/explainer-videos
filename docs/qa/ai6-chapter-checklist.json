@@ -9,7 +9,7 @@
   "source_integration_evidence": "evidence/ai6-source-integration/README.md",
   "source_teaching_evidence": "evidence/ai6-scene-teaching-source-repairs/README.md",
   "source_core_evidence": "evidence/ai6-producer-cache-source-repairs/README.md",
-  "scope": "All22 numerical items/263 independent checks complete. Seventeen selected-image cases accepted at previously declared scopes and14 native1080 endpoint cases reviewed. Five-chapter source fixes and merged Chinese text pass641 tests/1532 unchanged source identities; fresh rendered-after acceptance remains pending. Twelve parent cloud baseline cases have completed their bounded selected/native-UI review, with five chapters requiring repair regressions. Local render/extraction/native-start guards remain intact.",
+  "scope": "All22 numerical items/263 independent checks complete. Seventeen selected-image cases accepted at previously declared scopes and16 native1080 endpoint cases reviewed. Five-chapter source fixes and merged Chinese text pass641 tests/1532 unchanged source identities; fresh rendered-after acceptance remains pending. Twelve parent cloud baseline cases have completed their bounded selected/native-UI review, with five chapters requiring repair regressions. Local render/extraction/native-start guards remain intact.",
   "cases": [
     {
       "position": 1,

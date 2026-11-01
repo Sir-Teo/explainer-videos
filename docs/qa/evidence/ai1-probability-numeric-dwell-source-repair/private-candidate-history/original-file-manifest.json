@@ -1,0 +1,112 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 2732,
+    "sha256": "ee07d2b16f1bc1183c8c0b76457dd2e1ad15d071c395ae1bff85887b5503a0a8"
+  },
+  {
+    "path": "after-validation-plan.json",
+    "bytes": 2893,
+    "sha256": "cec2fd03524e3d67e7e1abae9e15fcce668b65a45dc06d3a5252bc29f71504df"
+  },
+  {
+    "path": "existing-cue-checks.log",
+    "bytes": 874,
+    "sha256": "22b17cbab91d7c6ecd73c51953f9507e5aab78c3e8810d083f26c0d7e32ede60"
+  },
+  {
+    "path": "freeze_candidate.py",
+    "bytes": 9165,
+    "sha256": "9fc0761e0ca4a352c706e26c4e3b8fe23f22f29a5c4dc99db35628f46e523250"
+  },
+  {
+    "path": "handoff.json",
+    "bytes": 1424,
+    "sha256": "d9287ea9f73b82c2ce14b3f7a6b2a7a931d268de87f6a69bcb54c46454535212"
+  },
+  {
+    "path": "invariants.json",
+    "bytes": 1230,
+    "sha256": "485f57a6585c5bc5f81ae394e845b889b9b45794f1eddbd51ef6ac11b2720c95"
+  },
+  {
+    "path": "library-receipt-facts.json",
+    "bytes": 4500,
+    "sha256": "ddfff706e8aba4b8a962e28192c3dae898d96ab002e383c5375a9e78cb19acba"
+  },
+  {
+    "path": "measure_write_defaults.py",
+    "bytes": 2115,
+    "sha256": "894c7b0e124801996b38c8ab58981ab7cc9aa5274b2ac50b1e508abdca50078a"
+  },
+  {
+    "path": "phase-probes.json",
+    "bytes": 138021,
+    "sha256": "9fd630f20c0b66fe429772a601362f8396a01dc4974159bb83e29977735e1f54"
+  },
+  {
+    "path": "prepare_candidate.py",
+    "bytes": 1154,
+    "sha256": "603096f91fec2a010172fd43514312526bac43132a6d12b4de9ed7fcbae9ac15"
+  },
+  {
+    "path": "probe.log",
+    "bytes": 1171,
+    "sha256": "e2d2c2c366a29a3fd1f6f8c03f7a709a8cd00249ec6f80ee821e08a3cbefef1e"
+  },
+  {
+    "path": "probe_candidate.py",
+    "bytes": 11170,
+    "sha256": "26e91081eec2ce84cbc2ab752581df0d9cb872829015ee99982d49909555faca"
+  },
+  {
+    "path": "production-v2-receipt.json",
+    "bytes": 9361,
+    "sha256": "754ad929b44f63b66ab52ccacb947e954dc6407c4d6170ce42b1962e0ac6b373"
+  },
+  {
+    "path": "receipt-phase-reconciliation.json",
+    "bytes": 896,
+    "sha256": "4dd04a8f0288cd5c50a2009b626d7080cb47a4e46210c616dfbec3949337bb16"
+  },
+  {
+    "path": "run_existing_cue_checks.py",
+    "bytes": 752,
+    "sha256": "9e3613df1481c0bb3d266b96534bdf992d13a159c8ded68ab35ee9d6e45a6d43"
+  },
+  {
+    "path": "s02_probability.before.py",
+    "bytes": 25682,
+    "sha256": "50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed"
+  },
+  {
+    "path": "s02_probability.proposed.py",
+    "bytes": 25970,
+    "sha256": "5e856dd92a662a8a7f1bfc370e57e0c937722c5e2f9c35e99960e1cfd80724ea"
+  },
+  {
+    "path": "source.patch",
+    "bytes": 826,
+    "sha256": "35eb669e7aa001d5fad63f44f8422cb99e984209fcfc3d7a614325c5426100bd"
+  },
+  {
+    "path": "source.patch.gz",
+    "bytes": 452,
+    "sha256": "109ff13454fa1b851a9fdc0e497b915fe6fc667e1fd9a0fa5614eebc51b00d16"
+  },
+  {
+    "path": "voiceover.observed.py",
+    "bytes": 10700,
+    "sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b"
+  },
+  {
+    "path": "write-defaults.json",
+    "bytes": 509,
+    "sha256": "ccd08ae641aeb8e3b75f9fc687d56cc6086d57880c2c13ab3aef4a453437d18b"
+  },
+  {
+    "path": "write-defaults.log",
+    "bytes": 492,
+    "sha256": "5df63b501ed597ef15b36288296369ff52dcd175ca3d75e74d4ea03d5b7de623"
+  }
+]

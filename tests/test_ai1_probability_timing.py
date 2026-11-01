@@ -1,14 +1,21 @@
 """Actual cached-speech cue budgets, without models, audio writes or renders."""
 import ast
 import copy
+from contextlib import contextmanager
+from functools import lru_cache
 import gzip
 import hashlib
+import importlib.util
 import json
 import math
 from pathlib import Path
+import platform
 import re
 from types import SimpleNamespace
+import types
 import unittest
+
+import numpy as np
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -79,6 +86,104 @@ SPECS = [
 ]
 
 
+@lru_cache(maxsize=1)
+def reading_hold_sources():
+    """Read installed timing rules without importing/rendering Manim scenes."""
+    package = Path(importlib.util.find_spec("manim").origin).parent
+    scene = ast.parse((package / "scene/scene.py").read_text())
+    creation = ast.parse((package / "animation/creation.py").read_text())
+    voiceover = ast.parse((ROOT / "explainer/voiceover.py").read_text())
+    write = next(n for n in creation.body if isinstance(n, ast.ClassDef) and n.name == "Write")
+    find = lambda tree, name: next(n for n in ast.walk(tree)
+                                   if isinstance(n, ast.FunctionDef) and n.name == name)
+    return (find(scene, "get_time_progression"), find(scene, "validate_run_time"),
+            find(write, "_set_default_config_from_length"), find(voiceover, "voiceover"),
+            find(voiceover, "_strip_bookmarks"), next(n for n in voiceover.body
+                if isinstance(n, ast.ClassDef) and n.name == "VoiceoverTracker"))
+
+
+def reading_hold_case(fps, phase, *, apply_hold=True, residual_audio=None):
+    """Run the actual post-c numeric reveal/context exit/hold on cached speech.
+
+    Animation geometry is mocked. Frame progression/minimum durations and
+    voiceover exit are installed source, not a renderer or speech provider.
+    Synthetic longer speech tests residual credit; it is not observed Chinese.
+    """
+    from explainer import lang
+    progression, validate, write_default, context, strip, tracker = reading_hold_sources()
+    cfg = type("Config", (dict,), {"__getattr__": dict.__getitem__})(frame_rate=fps, progress_bar="none")
+    env = {"np": np, "config": cfg, "tqdm": lambda times, **kw: times,
+           "platform": platform, "logger": SimpleNamespace(warning=lambda *a: None)}
+    quantizer = ast.ClassDef(name="Quantizer", bases=[], keywords=[], decorator_list=[],
+                            body=copy.deepcopy([progression, validate, write_default]))
+    future = ast.ImportFrom(module="__future__", names=[ast.alias(name="annotations")], level=0)
+    exec(compile(ast.fix_missing_locations(ast.Module([future, quantizer], type_ignores=[])),
+                 "installed-frame-timing", "exec"), env)
+    quant = env["Quantizer"]()
+    quant.renderer = SimpleNamespace(skip_animations=False)
+    # Actual cached numeric-constructor fixture has 31 point-bearing members;
+    # see ai1-probability-numeric-dwell-source-repair/write-defaults.json.gz.
+    write_time, _ = quant._set_default_config_from_length(
+        SimpleNamespace(family_members_with_points=lambda: [None] * 31), None, None)
+    tree = ast.parse(SOURCE.read_text())
+    chain = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "chain_rule")
+    block = next(n for n in chain.body if isinstance(n, ast.With))
+    last_cue = next(i for i, n in enumerate(block.body)
+                    if isinstance(n, ast.Expr) and ast.unparse(n) == "vo.wait_until('c')")
+    tail = copy.deepcopy(block.body[last_cue + 1:])
+    hold = copy.deepcopy([n for n in chain.body
+        if (isinstance(n, ast.Assign) and ast.unparse(n.targets[0]) == "num_hold_remaining")
+        or (isinstance(n, ast.If) and ast.unparse(n.test) == "num_hold_remaining > 0")])
+    cached = DIAGNOSTIC["schedule-report.json"]["narration"][6]
+    cue = marks(cached)["c"]
+    scene = SimpleNamespace(renderer=SimpleNamespace(time=0.0), _narration=[])
+    def advance(duration):
+        duration = quant.validate_run_time(duration, advance)
+        scene.renderer.time += len(quant.get_time_progression(duration, "no-render")) / fps
+    scene.wait = advance
+    finished = []
+    def play(*args, **kw):
+        advance(kw.get("run_time", write_time))
+        if any(a == ("Write", ("num",), {}) for a in args):
+            finished.append(scene.renderer.time)
+    scene.play = play
+    scene._add_narration = lambda *a: None
+    duration = cached["duration"]
+    if residual_audio is not None:
+        # Same frame-quantized post-c morph+Write completion as the actual tail.
+        completion = cue + phase / fps
+        for request in (1.2, write_time):
+            completion += len(quant.get_time_progression(request, "no-render")) / fps
+        duration = completion + residual_audio
+    utterance = SimpleNamespace(duration=duration, audio_path="not-opened-existing-master",
+        words=[SimpleNamespace(text=w, start=s-cached["start"], end=e-cached["start"])
+               for w, s, e in cached["words"]])
+    english = SimpleNamespace(clean=lambda s: lang.clean(s, "en"),
+                              tokens=lambda s: lang.tokens(s, "en"),
+                              translate=lambda s, *_: s)
+    env.update(contextmanager=contextmanager, lang=english, Path=Path,
+               inspect=SimpleNamespace(getfile=lambda _: str(SOURCE)),
+               tts=SimpleNamespace(synthesize=lambda _: utterance), _BOOKMARK=MARK)
+    exec(compile(ast.fix_missing_locations(ast.Module(
+        [copy.deepcopy(future), copy.deepcopy(strip), copy.deepcopy(tracker), copy.deepcopy(context)],
+        type_ignores=[])), "actual-voiceover-cached-metadata", "exec"), env)
+    scene.voiceover = types.MethodType(env["voiceover"], scene)
+    env.update(self=scene, eqs=[0, 1, 2, 3], num="num",
+               Write=lambda *a, **kw: ("Write", a, kw),
+               morph=lambda self, *a, run_time=1.4, **kw: advance(run_time))
+    with scene.voiceover(cached["raw"]):
+        scene.renderer.time = cue + phase / fps
+        exec(compile(ast.fix_missing_locations(ast.Module(tail, type_ignores=[])),
+                     "actual-numeric-reveal-tail", "exec"), env)
+    assert len(finished) == 1
+    existing = scene.renderer.time - finished[0]
+    before = scene.renderer.time
+    if apply_hold:
+        exec(compile(ast.fix_missing_locations(ast.Module(hold, type_ignores=[])),
+                     "actual-adaptive-reading-hold", "exec"), env)
+    return existing, scene.renderer.time-finished[0], scene.renderer.time-before
+
+
 class ProbabilityTiming(unittest.TestCase):
     def test_verified_diagnostic_source_and_all_eleven_masters(self):
         raw = gzip.decompress((EVIDENCE / "readable-diagnostic.json.gz").read_bytes())
@@ -136,11 +241,31 @@ class ProbabilityTiming(unittest.TestCase):
             def visit_FunctionDef(self, node):
                 if node.name == "_bookmark_run_times":
                     return None
-                return self.generic_visit(node)
+                previous = getattr(self, "method", None)
+                self.method = node.name
+                result = self.generic_visit(node)
+                self.method = previous
+                return result
             def visit_Assign(self, node):
+                if (getattr(self, "method", None) == "chain_rule"
+                        and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name)):
+                    expected = {
+                        "num_readable_at": "num_readable_at = self.renderer.time",
+                        "num_hold_remaining": "num_hold_remaining = 1.5 - (self.renderer.time - num_readable_at)",
+                    }.get(node.targets[0].id)
+                    if expected:
+                        assert ast.dump(node) == ast.dump(ast.parse(expected).body[0])
+                        return None
                 if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name):
                     if node.value.func.id == "_bookmark_run_times":
                         return None
+                return self.generic_visit(node)
+            def visit_If(self, node):
+                if (getattr(self, "method", None) == "chain_rule"
+                        and ast.unparse(node.test) == "num_hold_remaining > 0"):
+                    expected = ast.parse("if num_hold_remaining > 0:\n    self.wait(num_hold_remaining)").body[0]
+                    assert ast.dump(node) == ast.dump(expected)
+                    return None
                 return self.generic_visit(node)
             def visit_Call(self, node):
                 if ((isinstance(node.func, ast.Attribute) and node.func.attr == "play")
@@ -154,6 +279,30 @@ class ProbabilityTiming(unittest.TestCase):
             a = [n for n in ast.walk(old) if isinstance(n, ast.FunctionDef) and n.name == name]
             b = [n for n in ast.walk(new) if isinstance(n, ast.FunctionDef) and n.name == name]
             self.assertEqual([ast.dump(n) for n in a], [ast.dump(n) for n in b])
+
+    def test_finished_numeric_result_gets_reading_dwell_at_actual_frame_rates(self):
+        for fps in (15, 30, 60):
+            for phase in (0, .49, 1):
+                with self.subTest(fps=fps, phase=phase):
+                    existing, held, added = reading_hold_case(fps, phase)
+                    self.assertGreaterEqual(held, 1.5 - 1e-10)
+                    self.assertLessEqual(held, 1.5 + 1/fps + 1e-9)
+                    self.assertLessEqual(existing, .2 + 1e-9)
+                    self.assertGreater(added, 1.3)
+                    self.assertLessEqual(added, 1.5-existing + 1/fps + 1e-9)
+
+    def test_numeric_dwell_credits_residual_speech_and_existing_context_padding(self):
+        for fps in (15, 30, 60):
+            for phase in (0, .49, 1):
+                for residual in (0, .35, 1, 1.5, 2, 4):
+                    with self.subTest(fps=fps, phase=phase, residual=residual):
+                        existing, held, added = reading_hold_case(fps, phase, residual_audio=residual)
+                        self.assertGreaterEqual(held, 1.5 - 1e-10)
+                        if existing >= 1.5:
+                            self.assertEqual(added, 0)
+                            self.assertEqual(held, existing)
+                        else:
+                            self.assertLessEqual(added, 1.5-existing + 1/fps + 1e-9)
 
 
 if __name__ == "__main__":

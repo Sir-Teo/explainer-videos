@@ -1,0 +1,11 @@
+# V7 exact Probability numeric-result dwell gate
+
+Registered ID: `part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7`. Only base927 plus Hook7230 / Probability5e856d / Surprise6456 / SVD2c01 / Outroe874 are accepted. Source files must remain exact regular files. This grants controlled narrated-rerender permission, not repaired readability, listening, synchronization, runtime, whole-output-duration or production-resolution approval.
+
+The actual new cloud context passed268 strict source/cache/runtime/public-model/optional-audio file checks. Nineteen expected outcomes include exact worktree and source-only commit acceptance; default/v1–v6 rejection of the new source; v6 acceptance of its previous50ff source; v7 rejection of that old source; unrelated source/HEAD/producer and missing/tampered input rejection; and an explicitly mocked wrong-runtime-version rejection. The version-negative is a metadata fixture, not an actual installed-version change.
+
+No80MB input copy was made. All156 original frozen inputs were reused through ignored data symlinks under existing policy. Original target hashes, sizes, mtimes, inodes, link counts, mode/device, original fixture Git files and pinned public-model witnesses remained exact. One **new-context** link was temporarily absent/replaced with tiny wrong independent bytes for negative tests; its old target was never written, renamed, chmodded or hardlinked. Source symlink rejection remains unchanged. The512MiB resource guard remained active.
+
+Focused tests:92 passed in5.774s, comprising the unchanged78 existing tests and14 new tests. Prior private preparation had12 synthetic checks, kept separate. All v1–v6 manifests, old test bytes and frozen cache/source/dependency/audio inventories remain exact. Full `verify()` and other guard function ASTs remain unchanged.
+
+`report.json` lists exact pins and limits. `codec-map.json` binds every compressed raw log/ledger/source/patch; original wrapper bytes and decompressed hashes were verified. Historical private “pending” records are preserved as history. The root integrated-suite result is separate; earlier641-test scope is not relabeled. No model, scene, producer, renderer, decoder, TTS, deployment or upload operation was run.

@@ -1,0 +1,11 @@
+{
+  "observed_utc": "2026-11-01T10:49:51.302787+00:00",
+  "tests": 657,
+  "unittest_elapsed_seconds": 59.613,
+  "entire_recorded_run_seconds": 63.29592974699335,
+  "source_config_identities_unchanged": 1535,
+  "minimum_observed_free_bytes": 562921472,
+  "additional_write_hardstop_free_bytes": 536870912,
+  "test_scope": "Current integrated source/helper/manifest/test suite; not actual fresh rendered pacing or audio/listening acceptance",
+  "history": "Previous641-test receipt remains separate; counts are not added."
+}

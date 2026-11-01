@@ -1,0 +1,70 @@
+{
+  "observed_utc": "2026-11-01T10:48:48.868018+00:00",
+  "state": "PENDING parent assignment of a separate authorized cloud execution host; no new scene render/decoder started here",
+  "action": "Execute prepared Part6 cached-only after renders and remaining decode/native captures, returning input-bound view-ready evidence to existing reviewers",
+  "source_commit": "8db4f0399a1490f905c8367151eeeb3bae9e051b",
+  "source_scope": "Exact frozen Part6 source/data integration. Later Probability v7 source change does not refresh old Part6 movie identities or require unrelated source updates.",
+  "prepared_request": {
+    "path": "docs/qa/evidence/ai6-five-chapter-source-integration/execution-capacity-request.json",
+    "sha256": "00f3cc5a0eebf7f02f3b72592719c2fd8d53b24ee956fd115cdbcb5e381e208b"
+  },
+  "amendments_to_historical_request": {
+    "native1080_already_reviewed_cases": 16,
+    "native1080_existing_review_remaining": [],
+    "reason": "GradientBoosting EN/ZH existing native endpoints reviewed after request preparation; no fresh renders implied"
+  },
+  "selected_image_cases_accepted_at_declared_scope": 17,
+  "fresh_repaired_bilingual_chapters": [
+    "LDA",
+    "KNN",
+    "Kernels",
+    "Trees",
+    "Forests",
+    "AdaBoost",
+    "Contest",
+    "Outro"
+  ],
+  "decode_only_remaining": [
+    "SVM:en",
+    "SVM:zh",
+    "Metrics:zh"
+  ],
+  "bounded_additional_review": "GradientBoosting short dense proof transitions; no new visual defect established",
+  "fresh_native_bilingual_chapters": [
+    "Newton",
+    "NaiveBayes",
+    "LDA",
+    "KNN",
+    "Kernels",
+    "Trees",
+    "Forests",
+    "AdaBoost",
+    "Metrics",
+    "Contest",
+    "Outro"
+  ],
+  "guards": {
+    "local_free_bytes": 562995200,
+    "capture_decode_min_free_bytes": 805306368,
+    "native_capture_start_free_bytes": 1288490188,
+    "additional_write_hardstop_free_bytes": 536870912,
+    "preserve": "All unique evidence, scientific payloads, speech and checkpoints; no eviction or weakened guard"
+  },
+  "outcome": "Not denied or uncertain: work has not started because execution capacity is unavailable in this workspace. Supported saved inputs and source are ready; parent host assignment is pending.",
+  "library_inputs": [
+    {
+      "id": "libfile_3158cc8861448191a951cd71b6549e14",
+      "version": 0,
+      "bytes": 41613077,
+      "sha256": "a3f9a113f93166796fd226f2fa733b60c032def432b5fe7f533cba6185a4d3e2"
+    },
+    {
+      "id": "libfile_34ae49e30a5881918e0e194a534698ac",
+      "version": 0,
+      "bytes": 23570717,
+      "sha256": "767d185a59d007024a3351e4f5bf07fd1cd51bce4ddc97fefe43b76bdf3e10c3"
+    }
+  ],
+  "ownership": "Existing reviewer ownership and single source/compute owner retained; receiving worker executes only explicitly assigned cases and performs no recomputation or source edits.",
+  "next_series_item": "Finish current Part6 visual gates before Part7; Parts7-31 remain pending, not complete."
+}
