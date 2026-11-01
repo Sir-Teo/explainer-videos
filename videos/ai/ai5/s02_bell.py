@@ -260,7 +260,7 @@ class Bell(VoiceoverScene):
             step(0)
             self.play(Create(ax), Create(f_c), FadeIn(lab[0]))
             vo.wait_until("a")
-            step(1)
+            step(1, transform=False)
             vo.wait_until("b")
             self.play(Create(g_c), FadeIn(ov), FadeIn(lab[1:]))
             vo.wait_until("c")
@@ -268,7 +268,7 @@ class Bell(VoiceoverScene):
             self.add(trace)
             self.play(s.animate.set_value(6.4), run_time=4.0, rate_func=linear)
             vo.wait_until("d")
-            step(2)
+            step(2, transform=False)
         for m in (g_c, ov, trace):
             m.clear_updaters()
         self.wait(0.3)
