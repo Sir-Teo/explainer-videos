@@ -1,9 +1,14 @@
 # Current cloud QA checkpoint
 
-Observed 01 November 2026, 05:34 UTC. Progress, **not full-series production approval**.
+Observed 01 November 2026, 06:00 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified push before this checkpoint:
-`2d7dbbdf6e2e471e145a3129d856bf89d2a98c4a` (strict scoped Part1/3 production gate; earlier b6649e39 freezes Part6 numerical/source repairs). No merge, deployment, CI/CD or runners.
+`bbe8770d6aa36e9b43d8be4f4ed6859e38d7c267` (Part6 numerical generation/scientific evidence; later final candidate source bytes are explicitly inventoried below). No merge, deployment, CI/CD or runners.
+
+
+Latest Part6 checkpoint supersedes historical details below: **22numerical items completed;263independent arithmetic/inference checks passed.** Hook and LeastSquares now have accepted bilingual selected-image preview regressions (4of38cases at that declared scope). Hook visibly distinguishes training/held-out pages and discloses632drawn/7outsideview. Three LeastSquares copied-row ghost reveals are removed; exactduration/narration/subtitles/silentWAV/data invariants hold. Ridge has source-local copied-row and reverse-traversal repairs; freshEN/ZH runtime passes arecomplete, actualselectedreviewpending. Remainingcases advance inmanifestorder, withnative1080endpoint capture prepared. No narrated/listening/4K approval follows.
+
+The frozen final-candidate repository suite passed**601tests in56.401s**, all**1,523source/config identities** unchanged during execution. [Exact scope](evidence/ai6-integrated-tests-20261101-visual-candidate/README.md). Two furtheradditivecaptionmerges preserve all5,541retained Part1–5outputs; currenttable0e4bad42 also preserves238actualcapturedHook/LeastSquares/Ridge outputs fromapplicableprior tables. [Caption evidence](evidence/ai6-preview-caption-integration/README.md). Earlier575/518runs remainhistorical andcountsarenotadded.
 
 Part 1: all 17 chapters in both languages have endpoint captures, complete silent renders and selected-time
 review. The frozen baseline covers 15,194 selected times from 109,941 automatically decoded frames; scoped
@@ -144,3 +149,6 @@ Part5source/datahandoff is saved in Library `libfile_31f193f835c08191910421e5e33
 
 
 Part1 production found actual narrated-roadmap reveal delays up to0.79seconds. Source scheduling fix03e3ab6e and strict exact-triple overlay gate2d7dbbdf are pushed, authorizing a controlled rerender with existing narration only. Repaired output timing/native/readability/listening approval is pending; prior silent review did not catch this production timing defect. [Evidence](evidence/ai1-opening-roadmap-narrated-timing-repair/README.md).
+
+
+Storage recovery05:46UTC converted only proved-zero aligned interiors of180inactive Part1–5 silent-QA WAVs to sparse allocation, preserving complete bytes/hashes/paths/inodes/size/mode/originalmtime. Physical allocation recovered1,644,777,472bytes and306protected numerical/trained/corpus/currentPart6 signatures remained exact. No source/movie/image/speech/model was deleted and no disk guard lowered. [Receipt](evidence/cloud-capacity-20261101-silent-wav-sparse/README.md).

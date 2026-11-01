@@ -68,7 +68,7 @@ class Contest(VoiceoverScene):
             "Here's the contest: twelve named procedures on the same ten folds of these same-five-novel pages, "
             "with a fixed full-corpus dictionary and settings fixed in "
             f"advance. <bookmark mark='a'/> With two rates, every method lands between {100 * lo2:.0f} and "
-            f"{100 * hi2:.0f} percent: two numbers simply don't hold more. <bookmark mark='b'/> With all seventy, "
+            f"{100 * hi2:.0f} percent for these tested procedures on these folds. <bookmark mark='b'/> With all seventy, "
             f"the best is {best70['name']}, at {100 * best70['70']['cv']:.1f} percent. A single tree manages "
             f"{100 * tree70:.0f}. {line_s} "
             "<bookmark mark='c'/> The lesson of classical machine learning: the description of the data mattered "

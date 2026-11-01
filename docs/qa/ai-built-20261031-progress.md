@@ -1,11 +1,8 @@
-# AI, Built cloud QA progress — 31 October 2026
+# AI, Built cloud QA progress
 
-**Production approval remains pending for all 31 parts.** Work proceeds in part order. Part 1 now has complete
-bilingual endpoint and selected-time silent-motion coverage plus one narrated English chapter. Part 2 source/data
-and bilingual selected-frame passes are complete at preview scope, with narration/production gaps open. Part 3
-source repairs and ready-scene rendered review are active; Part 4 has read-only preparation findings, and Parts 5–31
-remain queued. The [current status](STATUS.md)
-and [Part 2 chapter checklist](ai2-chapter-checklist.md) supersede older dated checkpoints below.
+**Production approval remains pending for all31 parts.** Current checkpoint:1November2026. Parts1–5 have scoped bilingual source/data/endpoint and selected silent-motion review, with exact late-repair regressions and production/audio gaps retained in their ledgers. Actual narrated Part1opening production exposed a roadmap timing defect; its scoped source repair is cleared for rerender, not accepted final output. Part6 has22 completed numerical items,263 independent arithmetic/inference checks and bilingual Hook baseline selected review. Hook legend polish and LeastSquares motion repair are under fresh render validation; subsequent Part6chapters are being rendered in manifest order. Parts7–31remainqueued.
+
+[Current status](STATUS.md), [Part2](ai2-chapter-checklist.md), [Part3](ai3-chapter-checklist.md), [Part4](ai4-chapter-checklist.md), [Part5](ai5-chapter-checklist.md), [Part6](ai6-chapter-checklist.md), and the [production/listening queue](remaining-production-qa.md) supersede older dated checkpoints below. No selected-image pass is promoted to continuous perception, listening or production approval.
 
 Baseline: `af170318c179bfb56fa28aafe73477c56f5b80d8`. Branch: `qa/ai-series-cloud-20261031`.
 The checkout is `/workspace/explainer-videos`; the unrelated mounted repository was left untouched.

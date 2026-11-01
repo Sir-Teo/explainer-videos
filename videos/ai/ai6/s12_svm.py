@@ -207,8 +207,11 @@ class SVM(VoiceoverScene):
 
         rd = always_redraw(readout)
         kk = s["kkt"]
-        kkt = label(rf"KKT at $C = 1$, \ page by page: \ ${kk['outside'] + kk['bound_out']}$ violations",
-                    font_size=22, color=GOOD).move_to([4.2, -0.6, 0])
+        kkt = VGroup(
+            label(r"KKT at $C = 1$: \ margin tolerance $10^{-3}$", font_size=22, color=GREY_A),
+            label(rf"outside/bound violations: \ ${kk['outside'] + kk['bound_out']}$", font_size=22, color=GOOD),
+            label(rf"free-margin residual: \ ${sci_tex(kk['free_off'])}$", font_size=22, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.2, -0.6, 0])
         hist = history_card(1995, r"Cortes \& Vapnik", r"after Vapnik \& Chervonenkis (1963) and Boser, Guyon \& "
                             r"Vapnik's kernels (1992): \ for a decade, the method to beat", color=HIST, width=5.4)
         hist.move_to([4.0, -2.2, 0])
@@ -219,7 +222,9 @@ class SVM(VoiceoverScene):
             f"{Cs[0]:g}, standing in the street is cheap: {c0['n_sv']} of the {s['n_train']} pages are support "
             f"vectors, and the boundary barely bends. <bookmark mark='b'/> Raise C, and the street narrows: at "
             f"{Cs[-1]:g}, {cb['n_sv']} support vectors, and the boundary bends around the pages. Every solution is "
-            "checked: the dual and the primal agree, and every page obeys its KKT condition. <bookmark mark='c'/> "
+            "checked numerically: the displayed relative primal-dual gaps show the approximation. At C equals one, "
+            f"{kk['outside'] + kk['bound_out']} outside or bound points fail the margin checks at a tolerance of "
+            "one thousandth; the maximum free-margin residual is shown separately. <bookmark mark='c'/> "
             f"Ten-fold cross-validation picks C equals {cvC:g} and a kernel width of {cvg:g}, and gets "
             f"{100 * s['acc_cv2']:.0f} percent of the held-out pages right; with all seventy rates, "
             f"{100 * s['acc70_rbf']:.1f}. <bookmark mark='d'/> From 1995 until deep networks took over around 2012, "

@@ -109,6 +109,18 @@ class Hook(VoiceoverScene):
         if task.get_right()[0] > 6.8:
             task.shift(LEFT * (task.get_right()[0] - 6.8))
         test = np.asarray(p["test"], bool)
+        # page_dots may filter out-of-window pages: retain its original page IDs.
+        for dot in dots:
+            if test[dot.page]:
+                dot.set_fill(opacity=0.45)
+        splitnote = VGroup(
+            VGroup(Dot(radius=0.055, color=WHITE, fill_opacity=0.85, stroke_width=0),
+                   label(rf"training pages: ${int((~test).sum())}$", font_size=22, color=GREY_A)).arrange(RIGHT, buff=0.14),
+            VGroup(Dot(radius=0.055, color=WHITE, fill_opacity=0.45, stroke_width=0),
+                   label(rf"held-out pages: ${int(test.sum())}$", font_size=22, color=GREY_A)).arrange(RIGHT, buff=0.14),
+            label(r"fixed full-corpus lexicon", font_size=22, color=GREY_B),
+            label(rf"${len(dots)}$ shown; ${n - len(dots)}$ outside view", font_size=20, color=GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DR, buff=0.6).shift(UP * 0.45)
         with self.voiceover(
             "Take just two of those numbers, how often a page says 'the' and how often it says 'not', and every "
             f"page becomes a point. <bookmark mark='a'/> {n} pages from five novels. The two authors mostly sit "
@@ -121,7 +133,7 @@ class Hook(VoiceoverScene):
             self.play(Create(ax), FadeIn(plane[1:]), run_time=0.8)
             self.play(LaggedStart(*[FadeIn(d, scale=0.4) for d in dots], lag_ratio=0.004), FadeIn(key), run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(books))
+            self.play(FadeIn(books), FadeIn(splitnote))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(t) for t in task], lag_ratio=0.4), run_time=2.0)
         self.wait(0.3)
@@ -176,7 +188,7 @@ class Hook(VoiceoverScene):
             r"Fisher's discriminant; \ nearest neighbours and the curse of dimensionality",
             r"kernels and support vector machines, \ with the dual derived",
             r"trees, \ forests and boosting, \ up to XGBoost",
-            r"keeping score: \ ROC curves, \ cross-validation, \ and a contest of every method",
+            r"keeping score: \ ROC curves, \ cross-validation, \ and a contest of representative methods",
         ], font_size=27).move_to(DOWN * 0.35)
         with self.voiceover(
             "This is Part 6 of AI, Built, and the start of act two: learning from data. <bookmark mark='a'/> In it: "

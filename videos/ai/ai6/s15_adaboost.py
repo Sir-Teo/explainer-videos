@@ -159,17 +159,19 @@ class AdaBoost(VoiceoverScene):
         res = VGroup(label(rf"training error $0$ at round ${z0}$" if z0 else r"training error never $0$", font_size=22,
                            color=GREY_A),
                      label(rf"held-out error then: \ ${100 * te_z:.1f}\%$", font_size=22, color=HL),
-                     label(rf"best: \ ${100 * te.min():.1f}\%$, \ round ${best}$", font_size=22, color=HL)
+                     label(rf"best: \ ${100 * te.min():.1f}\%$, \ round ${best}$", font_size=22, color=HL),
+                     label(rf"final: \ ${100 * te[-1]:.1f}\%$, \ round ${n}$", font_size=22, color=HL)
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(bound, DOWN, buff=0.35).align_to(key, LEFT)
         if z0 is None:
             say = (f"The training error never reaches zero in these {n} rounds; its final value is "
                    f"{100 * tr[-1]:.1f} percent. The held-out error ends at {100 * te[-1]:.1f} percent, "
                    f"with its lowest observed value {100 * te.min():.1f} percent at round {best}.")
         elif keeps:
-            say = (f"The training error hits zero at round {z0}, yet the held-out error keeps falling, from "
-                   f"{100 * te_z:.1f} to {100 * te.min():.1f} percent at round {best}: the exponential loss keeps "
-                   "pushing the margins wider even after every page is right, a puzzle that Schapire and colleagues "
-                   "explained with margins in 1998.")
+            say = (f"The training error hits zero at round {z0}, with held-out error {100 * te_z:.1f} percent. "
+                   f"Its lowest observed held-out error is {100 * te.min():.1f} percent at round {best}; the final "
+                   f"value after {n} rounds is {100 * te[-1]:.1f} percent. Exponential loss can keep pushing on "
+                   "the margins even after every training page is right, a connection Schapire and colleagues "
+                   "studied in 1998.")
         else:
             say = (f"The training error hits zero at round {z0}, and the held-out error is {100 * te_z:.1f} percent; "
                    "more rounds don't improve it.")

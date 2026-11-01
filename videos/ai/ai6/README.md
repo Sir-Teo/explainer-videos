@@ -96,7 +96,8 @@ and Brier scores. The large-sample qualifier on the nearest-neighbor error bound
 * **11. The widest street.** The margin derived (min ½‖w‖²); the toy's 3 support vectors; hinge, logistic,
   exponential and 0–1 losses; the dual derived with Lagrange multipliers and KKT (Part 4 owns them); complementary
   slackness; SMO (Platt 1998; Fan, Chen & Lin's working-set rule) written out and run on the pages with a Gaussian
-  kernel: C from 0.01 to 100, support vectors 407 → 169, primal and dual agree to 10⁻⁶, no KKT violations;
+  kernel: C from 0.01 to 100, support vectors 407 → 169, relative primal-dual gaps up to 3.8 × 10⁻⁶. At C = 1,
+  outside/bound margin checks have zero violations at tolerance 10⁻³; the maximum free-margin residual is 5.6 × 10⁻⁵.
   the ten-fold cross-validated grid over C and γ (best 83.9%, 12 of the 25 settings within a point of it, worst
   54.9% at tiny C); cross-validation picks C = 0.1, γ = 0.1 (81% held out); 99.5% with all 70 rates. Cortes & Vapnik (1995).
 * **12. Trees.** The learned depth-3 tree and its boxes; Gini, entropy and error rate; why a strictly concave
@@ -110,7 +111,8 @@ and Brier scores. The large-sample qualifier on the nearest-neighbor error bound
   tree 93.7%, bagging 99.5%, forest 100% (191 of 191); out-of-bag estimate 98%.
 * **14. AdaBoost.** Freund & Schapire (1997); the weights piling onto hard pages (2 rates); the exponential-loss
   derivation of α = ½ log((1 − ε)/ε) (Friedman, Hastie & Tibshirani 2000), checked against a numerical search
-  (3 × 10⁻⁶); on 70 rates the training error reaches 0 at round 19 while the held-out error keeps falling, 3.7% to 0.5%
+  (3 × 10⁻⁶); on 70 rates the training error reaches 0 at round 19, with held-out error 3.7%. The observed held-out
+  minimum is 0.5% at round 45; the final value at round 400 is 1.6%, so the improvement is not monotone
   (margins: Schapire et al. 1998). Viola & Jones (2001): rectangle features, a boosted cascade, 384 × 288 at 15 frames a
   second on a 700 MHz Pentium III (schematic).
 * **15. Gradient boosting, second order.** Friedman (2001); XGBoost's second-order objective, leaf weight
@@ -126,7 +128,8 @@ and Brier scores. The large-sample qualifier on the nearest-neighbor error bound
   rates: 0.034); one 70/30 split's accuracy ranges 77.5–88.5% over 100 splits, ten-fold cross-validation over 20
   shuffles 82.9–83.7%.
 * **17. The contest, and two cultures.** Every method on the same ten folds of all 639 pages (mean ± s.d.): with 2
-  rates 76–83%; with 70, logistic regression and the Gaussian SVM 99.5%, the lasso 99.4%, LDA and least squares 99.2%,
+  rates, the tested procedures score 76–83% on these folds, an empirical comparison rather than an information ceiling;
+  with 70, logistic regression and the Gaussian SVM 99.5%, the lasso 99.4%, LDA and least squares 99.2%,
   AdaBoost 99.1%, the forest 98.4%, gradient boosting 98.3%, k-NN 98.3%, naive Bayes 95.8%, one tree 93.0%. Breiman's
   two cultures (2001); the Netflix Prize (2006–09), Kaggle (2010), XGBoost in 17 of 29 Kaggle-blog winners of 2015;
   why trees still win on tables (Grinsztajn, Oyallon & Varoquaux 2022); foundation models for tables: TabPFN
