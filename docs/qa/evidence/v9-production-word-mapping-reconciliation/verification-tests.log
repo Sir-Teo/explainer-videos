@@ -1,0 +1,8 @@
+test_all_22_targets_match_after_actual_display_word_mapping (test_ai1_production_word_mapping.ProductionWordMapping.test_all_22_targets_match_after_actual_display_word_mapping) ... ok
+test_exact_production_receipt_and_source_functions (test_ai1_production_word_mapping.ProductionWordMapping.test_exact_production_receipt_and_source_functions) ... ok
+test_prefix_current_owner_master_and_alignment_match_historical_proof (test_ai1_production_word_mapping.ProductionWordMapping.test_prefix_current_owner_master_and_alignment_match_historical_proof) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.058s
+
+OK

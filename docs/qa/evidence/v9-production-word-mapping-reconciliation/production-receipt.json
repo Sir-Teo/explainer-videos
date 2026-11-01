@@ -1,0 +1,512 @@
+{
+  "created_utc": "2026-11-01T16:33:23.199542+00:00",
+  "scope": "Production-owner current byte/master/alignment confirmation. Actual original source functions with actual lang.norm; no rendering/synthesis/models/data recomputation/listening approval. Scene annotation placeholder used only to load original Tracker class, not to calculate alignment.",
+  "source_gate": "810fe991600f98b2c14f3dcc4a501c329fb4e3af",
+  "release_manifest_sha256": "144f26dd4d00995a9bf14c032bd4f0b39da306234f4fe11356332d19bacda2a3",
+  "actual_source_function_files": [
+    {
+      "path": "explainer/lang.py",
+      "sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b"
+    },
+    {
+      "path": "explainer/tts.py",
+      "sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032"
+    },
+    {
+      "path": "explainer/voiceover.py",
+      "sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b"
+    }
+  ],
+  "actual_tts_norm_is_lang_norm": true,
+  "all30speech_files_hash_size_mtime_unchanged": true,
+  "Prefix": {
+    "key": "86a8352c7e3815ea",
+    "master_bytes": 1189520,
+    "master_sha256": "099dffe6f458b46652cecea65727f19d16191a1e99107085fb158b546834488f",
+    "cache_metadata_sha256": "97f7f5edaef426ca971ac27de6f10e2e1809add7f3892de5fb1611d657cac20b",
+    "duration_seconds": 12.39,
+    "raw_tokens": [
+      [
+        "Watch",
+        0.12,
+        0.44
+      ],
+      [
+        "it",
+        0.44,
+        0.52
+      ],
+      [
+        "decode",
+        0.52,
+        0.92
+      ],
+      [
+        "Right",
+        1.37,
+        1.77
+      ],
+      [
+        "right",
+        2.0100000000000002,
+        2.33
+      ],
+      [
+        "left",
+        2.6500000000000004,
+        3.13
+      ],
+      [
+        "c",
+        3.29,
+        3.69
+      ],
+      [
+        "Back",
+        4.0600000000000005,
+        4.300000000000001
+      ],
+      [
+        "to",
+        4.380000000000001,
+        4.380000000000001
+      ],
+      [
+        "the",
+        4.380000000000001,
+        4.460000000000001
+      ],
+      [
+        "top",
+        4.460000000000001,
+        4.86
+      ],
+      [
+        "Left",
+        5.260000000000001,
+        5.74
+      ],
+      [
+        "a",
+        6.140000000000001,
+        6.460000000000001
+      ],
+      [
+        "Right",
+        6.82,
+        7.140000000000001
+      ],
+      [
+        "left",
+        7.300000000000001,
+        7.7
+      ],
+      [
+        "b",
+        7.86,
+        8.18
+      ],
+      [
+        "Right",
+        8.530000000000001,
+        8.930000000000001
+      ],
+      [
+        "five",
+        9.170000000000002,
+        9.57
+      ],
+      [
+        "times",
+        9.57,
+        10.05
+      ],
+      [
+        "f",
+        10.13,
+        10.290000000000001
+      ],
+      [
+        "No",
+        10.710000000000003,
+        11.030000000000003
+      ],
+      [
+        "separators",
+        11.030000000000003,
+        11.590000000000003
+      ],
+      [
+        "needed",
+        11.590000000000003,
+        11.990000000000002
+      ]
+    ],
+    "display_words_count": 23,
+    "v9_source_sha256": "3a9c939d8c0b0ac97bfec9b978f86bbac6049497ccffa92b6485787e4f3fd01e",
+    "v9_clean_text_matches_existing_metadata": true,
+    "v9_bookmark_alignment": [
+      {
+        "mark": "c_right1",
+        "display_index": 3,
+        "word": "Right,",
+        "relative_start_seconds": 1.37
+      },
+      {
+        "mark": "c_right2",
+        "display_index": 4,
+        "word": "right,",
+        "relative_start_seconds": 2.0100000000000002
+      },
+      {
+        "mark": "c_left",
+        "display_index": 5,
+        "word": "left:",
+        "relative_start_seconds": 2.6500000000000004
+      },
+      {
+        "mark": "c_leaf",
+        "display_index": 6,
+        "word": "c.",
+        "relative_start_seconds": 3.29
+      },
+      {
+        "mark": "a_left",
+        "display_index": 11,
+        "word": "Left:",
+        "relative_start_seconds": 5.260000000000001
+      },
+      {
+        "mark": "a_leaf",
+        "display_index": 12,
+        "word": "a.",
+        "relative_start_seconds": 6.140000000000001
+      },
+      {
+        "mark": "b_right",
+        "display_index": 13,
+        "word": "Right,",
+        "relative_start_seconds": 6.82
+      },
+      {
+        "mark": "b_left",
+        "display_index": 14,
+        "word": "left:",
+        "relative_start_seconds": 7.300000000000001
+      },
+      {
+        "mark": "b_leaf",
+        "display_index": 15,
+        "word": "b.",
+        "relative_start_seconds": 7.86
+      },
+      {
+        "mark": "f_path",
+        "display_index": 16,
+        "word": "Right",
+        "relative_start_seconds": 8.530000000000001
+      },
+      {
+        "mark": "f_leaf",
+        "display_index": 19,
+        "word": "f.",
+        "relative_start_seconds": 10.13
+      }
+    ]
+  },
+  "CrossEntropy_c_reconciliation": {
+    "utterance_key": "0c35b58d8418e05b",
+    "cache_metadata_sha256": "6b7b57ad78151fb58f81c6a3b778aa6a77482fbaf02e86f442c2ad3965ffd199",
+    "master_sha256": "b4e9cca5ecf782f25de9e10ffe2f81a9046d59ae8f6ab6058d630b575d13b05e",
+    "display_token_count": 72,
+    "raw_alignment_token_count": 73,
+    "compound_display_token": {
+      "index": 33,
+      "text": "Kullback–Leibler",
+      "start": 11.860000000000001,
+      "end": 12.82
+    },
+    "raw_compound_tokens": [
+      {
+        "index": 33,
+        "text": "Kullback",
+        "start": 11.860000000000001,
+        "end": 12.420000000000002
+      },
+      {
+        "index": 34,
+        "text": "Leibler",
+        "start": 12.420000000000002,
+        "end": 12.82
+      }
+    ],
+    "bookmark_display_index": 41,
+    "correct_display_target": {
+      "word": "Swapping",
+      "raw_token_index": 42,
+      "relative_seconds": 15.97,
+      "global_seconds": 59.23
+    },
+    "direct_raw_index_counterfactual": {
+      "raw_index": 41,
+      "word": "1951",
+      "relative_seconds": 14.5
+    },
+    "difference_seconds": 1.47,
+    "explanation": "Raw alignment splits Kullback–Leibler into two tokens; display tokenization keeps one word. Original tts.align_words maps raw tokens to display words before VoiceoverTracker indexes41. Direct raw-token indexing reproduces14.50s at1951; correct production target is15.97s atSwapping. No normalization/audio/metadata edit required."
+  },
+  "all22CrossEntropy_prior_actual_targets_reproduced": [
+    {
+      "block_index": 1,
+      "block_start": 4.83,
+      "mark": "a",
+      "utterance_key": "dfe12e195ce86f53",
+      "display_index": 32,
+      "word": "Say",
+      "relative_target_seconds": 9.39,
+      "computed_global_target_seconds": 14.22,
+      "original_actual_runtime_target_seconds": 14.22
+    },
+    {
+      "block_index": 2,
+      "block_start": 27.07,
+      "mark": "a",
+      "utterance_key": "2364721a0dbac829",
+      "display_index": 3,
+      "word": "with",
+      "relative_target_seconds": 0.92,
+      "computed_global_target_seconds": 27.990000000000002,
+      "original_actual_runtime_target_seconds": 27.990000000000002
+    },
+    {
+      "block_index": 2,
+      "block_start": 27.07,
+      "mark": "b",
+      "utterance_key": "2364721a0dbac829",
+      "display_index": 14,
+      "word": "Now",
+      "relative_target_seconds": 5.87,
+      "computed_global_target_seconds": 32.94,
+      "original_actual_runtime_target_seconds": 32.94
+    },
+    {
+      "block_index": 3,
+      "block_start": 43.26,
+      "mark": "a",
+      "utterance_key": "0c35b58d8418e05b",
+      "display_index": 5,
+      "word": "and",
+      "relative_target_seconds": 1.6400000000000001,
+      "computed_global_target_seconds": 44.9,
+      "original_actual_runtime_target_seconds": 44.9
+    },
+    {
+      "block_index": 3,
+      "block_start": 43.26,
+      "mark": "b",
+      "utterance_key": "0c35b58d8418e05b",
+      "display_index": 26,
+      "word": "Second,",
+      "relative_target_seconds": 9.540000000000001,
+      "computed_global_target_seconds": 52.8,
+      "original_actual_runtime_target_seconds": 52.8
+    },
+    {
+      "block_index": 3,
+      "block_start": 43.26,
+      "mark": "c",
+      "utterance_key": "0c35b58d8418e05b",
+      "display_index": 41,
+      "word": "Swapping",
+      "relative_target_seconds": 15.97,
+      "computed_global_target_seconds": 59.23,
+      "original_actual_runtime_target_seconds": 59.23
+    },
+    {
+      "block_index": 4,
+      "block_start": 70.88000000000001,
+      "mark": "a",
+      "utterance_key": "1629e4ba9afeaf43",
+      "display_index": 11,
+      "word": "The",
+      "relative_target_seconds": 4.4799999999999995,
+      "computed_global_target_seconds": 75.36000000000001,
+      "original_actual_runtime_target_seconds": 75.36000000000001
+    },
+    {
+      "block_index": 4,
+      "block_start": 70.88000000000001,
+      "mark": "b",
+      "utterance_key": "1629e4ba9afeaf43",
+      "display_index": 27,
+      "word": "Minus",
+      "relative_target_seconds": 9.26,
+      "computed_global_target_seconds": 80.14000000000001,
+      "original_actual_runtime_target_seconds": 80.14000000000001
+    },
+    {
+      "block_index": 4,
+      "block_start": 70.88000000000001,
+      "mark": "c",
+      "utterance_key": "1629e4ba9afeaf43",
+      "display_index": 43,
+      "word": "Move",
+      "relative_target_seconds": 14.44,
+      "computed_global_target_seconds": 85.32000000000001,
+      "original_actual_runtime_target_seconds": 85.32000000000001
+    },
+    {
+      "block_index": 4,
+      "block_start": 70.88000000000001,
+      "mark": "d",
+      "utterance_key": "1629e4ba9afeaf43",
+      "display_index": 47,
+      "word": "Inside,",
+      "relative_target_seconds": 16.189999999999998,
+      "computed_global_target_seconds": 87.07000000000001,
+      "original_actual_runtime_target_seconds": 87.07000000000001
+    },
+    {
+      "block_index": 4,
+      "block_start": 70.88000000000001,
+      "mark": "e",
+      "utterance_key": "1629e4ba9afeaf43",
+      "display_index": 51,
+      "word": "and",
+      "relative_target_seconds": 18.189999999999998,
+      "computed_global_target_seconds": 89.07000000000001,
+      "original_actual_runtime_target_seconds": 89.07000000000001
+    },
+    {
+      "block_index": 5,
+      "block_start": 93.82000000000002,
+      "mark": "a",
+      "utterance_key": "b53e76aa01be0e62",
+      "display_index": 19,
+      "word": "The",
+      "relative_target_seconds": 7.21,
+      "computed_global_target_seconds": 101.03000000000002,
+      "original_actual_runtime_target_seconds": 101.03000000000002
+    },
+    {
+      "block_index": 5,
+      "block_start": 93.82000000000002,
+      "mark": "b",
+      "utterance_key": "b53e76aa01be0e62",
+      "display_index": 39,
+      "word": "It",
+      "relative_target_seconds": 14.49,
+      "computed_global_target_seconds": 108.31000000000002,
+      "original_actual_runtime_target_seconds": 108.31000000000002
+    },
+    {
+      "block_index": 5,
+      "block_start": 93.82000000000002,
+      "mark": "c",
+      "utterance_key": "b53e76aa01be0e62",
+      "display_index": 69,
+      "word": "That",
+      "relative_target_seconds": 24.04,
+      "computed_global_target_seconds": 117.86000000000001,
+      "original_actual_runtime_target_seconds": 117.86000000000001
+    },
+    {
+      "block_index": 6,
+      "block_start": 123.25000000000003,
+      "mark": "a",
+      "utterance_key": "390078cc2a58ce2f",
+      "display_index": 7,
+      "word": "Autoregressive",
+      "relative_target_seconds": 2.3,
+      "computed_global_target_seconds": 125.55000000000003,
+      "original_actual_runtime_target_seconds": 125.55000000000003
+    },
+    {
+      "block_index": 6,
+      "block_start": 123.25000000000003,
+      "mark": "n",
+      "utterance_key": "390078cc2a58ce2f",
+      "display_index": 34,
+      "word": "Usually",
+      "relative_target_seconds": 11.4,
+      "computed_global_target_seconds": 134.65000000000003,
+      "original_actual_runtime_target_seconds": 134.65000000000003
+    },
+    {
+      "block_index": 6,
+      "block_start": 123.25000000000003,
+      "mark": "b",
+      "utterance_key": "390078cc2a58ce2f",
+      "display_index": 51,
+      "word": "It's",
+      "relative_target_seconds": 17.9,
+      "computed_global_target_seconds": 141.15000000000003,
+      "original_actual_runtime_target_seconds": 141.15000000000003
+    },
+    {
+      "block_index": 6,
+      "block_start": 123.25000000000003,
+      "mark": "c",
+      "utterance_key": "390078cc2a58ce2f",
+      "display_index": 61,
+      "word": "Training",
+      "relative_target_seconds": 21.339999999999996,
+      "computed_global_target_seconds": 144.59000000000003,
+      "original_actual_runtime_target_seconds": 144.59000000000003
+    },
+    {
+      "block_index": 6,
+      "block_start": 123.25000000000003,
+      "mark": "d",
+      "utterance_key": "390078cc2a58ce2f",
+      "display_index": 67,
+      "word": "the",
+      "relative_target_seconds": 23.739999999999995,
+      "computed_global_target_seconds": 146.99,
+      "original_actual_runtime_target_seconds": 146.99
+    },
+    {
+      "block_index": 7,
+      "block_start": 152.23000000000005,
+      "mark": "a",
+      "utterance_key": "c624ca341afe38d4",
+      "display_index": 54,
+      "word": "Minimizing",
+      "relative_target_seconds": 16.84,
+      "computed_global_target_seconds": 169.07000000000005,
+      "original_actual_runtime_target_seconds": 169.07000000000005
+    },
+    {
+      "block_index": 7,
+      "block_start": 152.23000000000005,
+      "mark": "b",
+      "utterance_key": "c624ca341afe38d4",
+      "display_index": 67,
+      "word": "pulls",
+      "relative_target_seconds": 21.16,
+      "computed_global_target_seconds": 173.39000000000004,
+      "original_actual_runtime_target_seconds": 173.39000000000004
+    },
+    {
+      "block_index": 8,
+      "block_start": 178.63000000000005,
+      "mark": "a",
+      "utterance_key": "a75617a70550454f",
+      "display_index": 4,
+      "word": "q",
+      "relative_target_seconds": 1.08,
+      "computed_global_target_seconds": 179.71000000000006,
+      "original_actual_runtime_target_seconds": 179.71000000000006
+    }
+  ],
+  "declared_but_not_wait_requested_marks": [
+    {
+      "block_index": 8,
+      "mark": "b",
+      "reason": "Declared mark not present in actual wait_until request trace; not counted as a reproduced request"
+    }
+  ],
+  "v9_applied_to_active_Counting_root": false,
+  "remaining": "Fresh new-root source/cache/inherited guard gates and all-request timing preflight before repaired4K renders; encoded reveal/pacing/sync/listening remain open.",
+  "final_acceptance": false
+}

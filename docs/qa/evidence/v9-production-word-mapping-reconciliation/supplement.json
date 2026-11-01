@@ -1,0 +1,35 @@
+{
+  "recorded_utc": "2026-11-01T16:58:17.741437+00:00",
+  "source_gate_commit": "810fe991600f98b2c14f3dcc4a501c329fb4e3af",
+  "release_manifest_sha256": "144f26dd4d00995a9bf14c032bd4f0b39da306234f4fe11356332d19bacda2a3",
+  "overlay_id": "part1-prefix-crossentropy-arithmetic-and-part3-v9",
+  "overlay_sha256": "b9e8d095b0b8b14d1d9d2b62d01dd5bb1d64c0c6184eadabbba8885878e3de5a",
+  "helper_sha256": "94e7484fa9c61288dd2e52b1458bb926628a76d4b101c682712948f0a72e3e07",
+  "production_owner_receipt": {
+    "library_id": "libfile_95e42ec9984c81919fa46e63eeff56cd",
+    "bytes": 14539,
+    "sha256": "57793eeddae6188ee631687dd18d606a7333fb210432cea2d1b085c05c4ce5f5"
+  },
+  "disposition": {
+    "CrossEntropy_c_alignment": "RESOLVED: actual align_words display index41 is Swapping15.97s; direct rawtoken index41 is1951at14.50s and is not the production path. All22original actual request targets independently reproduced.",
+    "Prefix_current_master": "CONFIRMED BY PRODUCTION OWNER:1189520bytes/SHA099dffe6f458b46652cecea65727f19d16191a1e99107085fb158b546834488f; root verified exact receipt/source identities and independently reproduced23word/11cue mapping, without locally reading audio bytes.",
+    "historical_v9_OPEN_fields": "Preserved unchanged as publication-time state; this hash-bound supplement satisfies those two external prerequisites without changing source permissions or marking outputs accepted."
+  },
+  "root_tests": {
+    "count": 3,
+    "seconds": 0.058,
+    "outcome": "passed",
+    "scope": "Actual source Word/align_words/_strip_bookmarks/Tracker and lang.norm; preserved metadata only, no TTS/backend/model/Scene/render/audio I/O.",
+    "initial_fixture_error": "Missing AST lineno in newly constructed future-import fixed with ast.fix_missing_locations; initial log preserved."
+  },
+  "all_original_release_files_and_ten_source_rows_verified_unchanged": true,
+  "remaining": [
+    "Isolated production source/cache/inherited fail-on-producer gates",
+    "Fresh v9 all-request timing preflight against preserved masters",
+    "Actual encoded edge/letter timing, readable dwell and pacing",
+    "Chinese narration alignment and listening",
+    "Production output/complete-episode joins"
+  ],
+  "production_output_accepted": false,
+  "narration_audio_metadata_or_scene_source_modified": false
+}

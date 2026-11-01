@@ -1,0 +1,22 @@
+{
+  "README.md": {
+    "bytes": 2061,
+    "sha256": "d9df9505fcbd75d7eeb3b33fe9a583dc6f4638736feaa66aba26378b409365b4"
+  },
+  "initial-ast-fixture-error.log": {
+    "bytes": 2938,
+    "sha256": "e2bb3d6e6b044caa45a89ab99db2b5728ff850daf28ef152ab3cd09b7da1f237"
+  },
+  "production-receipt.json": {
+    "bytes": 14539,
+    "sha256": "57793eeddae6188ee631687dd18d606a7333fb210432cea2d1b085c05c4ce5f5"
+  },
+  "supplement.json": {
+    "bytes": 2314,
+    "sha256": "38c6a124bda4fd89ce0823016e96d4ec2bacebd2b21ec71d0bb69bfd3a8b1498"
+  },
+  "verification-tests.log": {
+    "bytes": 652,
+    "sha256": "ba1de8cb7f00e5e40214c59b1185ccb227a6518e359c413140362eacda84373c"
+  }
+}

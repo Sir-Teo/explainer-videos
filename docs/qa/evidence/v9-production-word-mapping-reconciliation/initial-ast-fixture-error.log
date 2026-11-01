@@ -1,0 +1,38 @@
+test_all_22_targets_match_after_actual_display_word_mapping (test_ai1_production_word_mapping.ProductionWordMapping.test_all_22_targets_match_after_actual_display_word_mapping) ... ERROR
+test_exact_production_receipt_and_source_functions (test_ai1_production_word_mapping.ProductionWordMapping.test_exact_production_receipt_and_source_functions) ... ok
+test_prefix_current_owner_master_and_alignment_match_historical_proof (test_ai1_production_word_mapping.ProductionWordMapping.test_prefix_current_owner_master_and_alignment_match_historical_proof) ... ERROR
+
+======================================================================
+ERROR: test_all_22_targets_match_after_actual_display_word_mapping (test_ai1_production_word_mapping.ProductionWordMapping.test_all_22_targets_match_after_actual_display_word_mapping)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/explainer-videos/tests/test_ai1_production_word_mapping.py", line 82, in test_all_22_targets_match_after_actual_display_word_mapping
+    voice, words = tracker(block['raw'], aligned)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/tests/test_ai1_production_word_mapping.py", line 44, in tracker
+    api = production_api()
+          ^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/tests/test_ai1_production_word_mapping.py", line 39, in production_api
+    exec(compile(ast.Module(nodes, type_ignores=[]), 'actual-production-word-mapping', 'exec'), scope)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: required field "lineno" missing from stmt
+
+======================================================================
+ERROR: test_prefix_current_owner_master_and_alignment_match_historical_proof (test_ai1_production_word_mapping.ProductionWordMapping.test_prefix_current_owner_master_and_alignment_match_historical_proof)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/explainer-videos/tests/test_ai1_production_word_mapping.py", line 119, in test_prefix_current_owner_master_and_alignment_match_historical_proof
+    voice, words = tracker(raw, aligned)
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/tests/test_ai1_production_word_mapping.py", line 44, in tracker
+    api = production_api()
+          ^^^^^^^^^^^^^^^^
+  File "/workspace/explainer-videos/tests/test_ai1_production_word_mapping.py", line 39, in production_api
+    exec(compile(ast.Module(nodes, type_ignores=[]), 'actual-production-word-mapping', 'exec'), scope)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: required field "lineno" missing from stmt
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.044s
+
+FAILED (errors=2)
