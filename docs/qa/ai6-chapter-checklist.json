@@ -1,6 +1,6 @@
 {
   "part": "ai6",
-  "observed_utc": "2026-11-01T10:12:31.276944+00:00",
+  "observed_utc": "2026-11-01T10:28:38.694203+00:00",
   "chapters": 19,
   "bilingual_cases": 38,
   "numerical_items": 22,
@@ -555,12 +555,13 @@
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Parent bounded historical pass:14EN/15ZH endpoints,37EN/38ZH four-second samples and representative formula originals/native UI progress/end; no established new defect. Dense short equation-transition extension proposed from source/word timings; no unverified code repair applied.",
-      "native1080_endpoints": "Pending.",
+      "native1080_endpoints": "Both native cases:29 held states on8 prepared pages at960x540tiles plus8 original1920 followups actually viewed. No settled defect.186 actual constructor rows/10 captured VO records compare identically from206/0850 to89f/296;21of23 used sourcegraph files and4 data signatures exact. Empty native input logs disclosed; frozen480constructor inputs supply that equivalence, not fabricated native logs.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "selected_image_case_accepted_at_declared_scope": false,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
-      "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md"
+      "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
+      "native1080_evidence": "evidence/ai6-gradientboosting-native1080-endpoint-review/README.md"
     },
     {
       "position": 16,
@@ -572,12 +573,13 @@
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Parent bounded historical pass:14EN/15ZH endpoints,37EN/38ZH four-second samples and representative formula originals/native UI progress/end; no established new defect. Dense short equation-transition extension proposed from source/word timings; no unverified code repair applied.",
-      "native1080_endpoints": "Pending.",
+      "native1080_endpoints": "Both native cases:29 held states on8 prepared pages at960x540tiles plus8 original1920 followups actually viewed. No settled defect.186 actual constructor rows/10 captured VO records compare identically from206/0850 to89f/296;21of23 used sourcegraph files and4 data signatures exact. Empty native input logs disclosed; frozen480constructor inputs supply that equivalence, not fabricated native logs.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "selected_image_case_accepted_at_declared_scope": false,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
-      "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md"
+      "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
+      "native1080_evidence": "evidence/ai6-gradientboosting-native1080-endpoint-review/README.md"
     },
     {
       "position": 17,
@@ -704,7 +706,7 @@
   },
   "actual_endpoint_capture_cases_completed": 38,
   "actual_silent_movie_cases_completed": 38,
-  "native1080_endpoint_cases_accepted": 14,
+  "native1080_endpoint_cases_accepted": 16,
   "runtime_index_observed_utc": "2026-11-01T06:39:48.335366+00:00",
   "runtime_index_captured_passes": 64,
   "runtime_index_planned_passes": 64,
@@ -733,5 +735,6 @@
     "timed_native_UI_cases": 12,
     "evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
     "scope": "Historical silent854 previews, not continuous/narrated/final-resolution approval"
-  }
+  },
+  "latest_verified_source_publication": "8db4f0399a1490f905c8367151eeeb3bae9e051b"
 }

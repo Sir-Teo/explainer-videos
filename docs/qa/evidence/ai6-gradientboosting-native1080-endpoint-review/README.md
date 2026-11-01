@@ -1,0 +1,9 @@
+# Part6 GradientBoosting native endpoint review
+
+Both existing EN/ZH captures were actually reviewed: **29 held states** across **8 prepared pages at960×540 per native image**, with **8 separate original1920×1080 follow-ups**. No corrective settled clipping, CJK/Greek, annotation collision or chart-readability defect was confirmed. Original images remain unchanged; this packet includes four sampled original pages and all eight critical native follow-ups, with complete state/page/time/hash maps.
+
+The dense Taylor/leaf/gain derivation, actualG/H values, gain92.797 versus true loss drop100.55(nats,summed), round200 readouts of0.294bits and77.5% and final green/orange comparison charts were checked. Endpoint inspection does not approve proof-transition motion or playback continuity.
+
+The f994e9a6… scene and21 of23 observed shared/core/source files remain exact. Historical global206…/localZH0850… were compared with current global89f…/localZH296… using actual frozen constructor/narration inputs: **186 rows** (78unique per language) and **10 captured native utterances**, with zero output differences. Four xgb/pages payload SHA/size/mtime signatures are unchanged. Empty native caption-input logs are explicitly retained: the input comparison uses real480witness constructor logs under the identical source/helper/data graph, plus recorded native displayed texts; it does not invent native call logging.
+
+All raw statuses, warnings and aggregate fingerprints are preserved. See `report.json`, compressed rawplans/records, exact source blobs and `codec-map.json` for provenance. No new capture, decode, pagegeneration, render, refit, producer/model/data load or shared-source edit was performed. Native held endpoints do not establish1080motion, listening, synchronization, continuousplayback,4K or assembly acceptance.

@@ -1,0 +1,551 @@
+[
+  {
+    "path": "source-blobs/f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/videos/ai/ai6/s16_gboost.py",
+    "codec": "gzip",
+    "raw_sha256": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
+    "raw_bytes": 13945,
+    "stored_sha256": "5a7431a56d092593ae85007f38c751125fd02aac96e38cdf04a82c59dd84c3d3",
+    "stored_bytes": 4673
+  },
+  {
+    "path": "source-blobs/1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/videos/ai/ai6/common.py",
+    "codec": "gzip",
+    "raw_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+    "raw_bytes": 9415,
+    "stored_sha256": "2f0afe61a44325121ef07e1471b31fa35858167ff54f656ca5695fa73acdb789",
+    "stored_bytes": 3942
+  },
+  {
+    "path": "source-blobs/d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/videos/ai/ai6/compute.py",
+    "codec": "gzip",
+    "raw_sha256": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+    "raw_bytes": 81289,
+    "stored_sha256": "bb1a4e4297ce1b944901ac5a034670a3de7936485e934fd6318470159cbdc94b",
+    "stored_bytes": 25702
+  },
+  {
+    "path": "source-blobs/9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/videos/ai/ai6/cache_contract.py",
+    "codec": "gzip",
+    "raw_sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+    "raw_bytes": 23866,
+    "stored_sha256": "4d48f508d25dfe87d713934bb5baa8ff8b95238ee29de1fa8b392849b165de89",
+    "stored_bytes": 7017
+  },
+  {
+    "path": "source-blobs/dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/videos/ai/ai6/contracts.py",
+    "codec": "gzip",
+    "raw_sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+    "raw_bytes": 23046,
+    "stored_sha256": "e6d950621619407f3fa4e29bf3d649e46466f4e4407a779b7d1ad86ff1f83294",
+    "stored_bytes": 6809
+  },
+  {
+    "path": "source-blobs/0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/videos/ai/ai6/zh_lines.py",
+    "codec": "gzip",
+    "raw_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+    "raw_bytes": 77583,
+    "stored_sha256": "89381de1b997727bb1f58723c8a912e69da21c0ce5aefda51447d7443e1b6fd6",
+    "stored_bytes": 28491
+  },
+  {
+    "path": "source-blobs/29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f.gz",
+    "original_path": "/workspace/explainer-videos/videos/ai/ai6/zh_lines.py",
+    "codec": "gzip",
+    "raw_sha256": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+    "raw_bytes": 79393,
+    "stored_sha256": "c8cbef6bc437fad98a494bd75a1779f125f51f5bb7a0be80ab1d2ec072ab4e1d",
+    "stored_bytes": 28866
+  },
+  {
+    "path": "source-blobs/bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/videos/ai/ai6/text_zh_add.json",
+    "codec": "gzip",
+    "raw_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73",
+    "raw_bytes": 64040,
+    "stored_sha256": "a5a0a2cb605a00cd9cccb61dce9feb5c243240adc21f3d7545c2010de446e5ac",
+    "stored_bytes": 23800
+  },
+  {
+    "path": "source-blobs/10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/videos/ai/ai6/narration_zh.json",
+    "codec": "gzip",
+    "raw_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+    "raw_bytes": 100230,
+    "stored_sha256": "e959b9ee70e6acb3b7cfab793fc3284b0c493565044134ad5512b1aa78717215",
+    "stored_bytes": 39937
+  },
+  {
+    "path": "source-blobs/20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/videos/ai/ai_text_zh.json",
+    "codec": "gzip",
+    "raw_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+    "raw_bytes": 2440019,
+    "stored_sha256": "7276faa9505120625908facd80a3c23880e383cc31427f0c708cebc4ecf0f513",
+    "stored_bytes": 886227
+  },
+  {
+    "path": "source-blobs/89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46.gz",
+    "original_path": "/workspace/explainer-videos/videos/ai/ai_text_zh.json",
+    "codec": "gzip",
+    "raw_sha256": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+    "raw_bytes": 2440829,
+    "stored_sha256": "eda6883a2195648af8632ca6b312de164b65b84dae7a49bc262d0b47f91f1cfd",
+    "stored_bytes": 886554
+  },
+  {
+    "path": "source-blobs/41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/ai/__init__.py",
+    "codec": "gzip",
+    "raw_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+    "raw_bytes": 18937,
+    "stored_sha256": "91c50b9f36036861ceb3b5b85434995f3b6cf8698ae9d8c54cbcd18419bf69ca",
+    "stored_bytes": 6926
+  },
+  {
+    "path": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/ai/viz.py",
+    "codec": "gzip",
+    "raw_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+    "raw_bytes": 31773,
+    "stored_sha256": "dde628602d8128cda334fa1a7eb6b8bb7204e835ecc14ae09d6a646b5111d5af",
+    "stored_bytes": 10483
+  },
+  {
+    "path": "source-blobs/22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/ai/lecture.py",
+    "codec": "gzip",
+    "raw_sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+    "raw_bytes": 6055,
+    "stored_sha256": "bb8af91d3d478ae033b6d385563601f23c0a724f98530a8fb474df6832af7d5f",
+    "stored_bytes": 2086
+  },
+  {
+    "path": "source-blobs/1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/ai/fonts.py",
+    "codec": "gzip",
+    "raw_sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+    "raw_bytes": 1964,
+    "stored_sha256": "9be9fdcd42284554e5fa5697214d4bb985a1ecc65ff570e7a3d788c3b00035e2",
+    "stored_bytes": 912
+  },
+  {
+    "path": "source-blobs/379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/analysis/__init__.py",
+    "codec": "gzip",
+    "raw_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+    "raw_bytes": 30850,
+    "stored_sha256": "1092edb463e57cbc4bfae9d6151a690c440335551061f4310e48d633dc3ccf73",
+    "stored_bytes": 11076
+  },
+  {
+    "path": "source-blobs/3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/voiceover.py",
+    "codec": "gzip",
+    "raw_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+    "raw_bytes": 10700,
+    "stored_sha256": "b22f2829fecc4c155e063fa6859ce018e36ceb9b276cf2fe820126df8217c6ef",
+    "stored_bytes": 4096
+  },
+  {
+    "path": "source-blobs/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/lang.py",
+    "codec": "gzip",
+    "raw_sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+    "raw_bytes": 6956,
+    "stored_sha256": "88dc26733378196fd4350d20873b9966a89f2c78b8eb191d74e1f391f3a4a503",
+    "stored_bytes": 2823
+  },
+  {
+    "path": "source-blobs/400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/tts.py",
+    "codec": "gzip",
+    "raw_sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+    "raw_bytes": 40277,
+    "stored_sha256": "0d38d28e1ad14760305e71a9c68adcf50ca5bbe4090b45cf7f34f0306c77a76c",
+    "stored_bytes": 13788
+  },
+  {
+    "path": "source-blobs/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/zh_text.py",
+    "codec": "gzip",
+    "raw_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+    "raw_bytes": 8305,
+    "stored_sha256": "a0bd959eba1ae04d088aef631e8edbd075392f0b2705162f323a6785a4d135d2",
+    "stored_bytes": 3515
+  },
+  {
+    "path": "source-blobs/b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/zh_templates.py",
+    "codec": "gzip",
+    "raw_sha256": "b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432",
+    "raw_bytes": 9496,
+    "stored_sha256": "aafb2fbbf93f63d5b73026508b14d156fcf0a81be9f7ded3fbe79d923cf7b75e",
+    "stored_bytes": 3478
+  },
+  {
+    "path": "source-blobs/f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/cache_lock.py",
+    "codec": "gzip",
+    "raw_sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+    "raw_bytes": 1521,
+    "stored_sha256": "2c838ec16aeb71dae182d10dc8d18e35f05b47c2b6ea0659b2102b01e4cc9cc9",
+    "stored_bytes": 668
+  },
+  {
+    "path": "source-blobs/c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/paths.py",
+    "codec": "gzip",
+    "raw_sha256": "c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413",
+    "raw_bytes": 798,
+    "stored_sha256": "1d922265e79d879fdbda3b044cfc1d435c8ae31bc5b9b90a7790340db04e6212",
+    "stored_bytes": 464
+  },
+  {
+    "path": "source-blobs/71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/explainer/ai/cache.py",
+    "codec": "gzip",
+    "raw_sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+    "raw_bytes": 6276,
+    "stored_sha256": "5801a2e646019cf07ca1419b42369150cb8b81ce3b94ec33248858d7f20c976a",
+    "stored_bytes": 2232
+  },
+  {
+    "path": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/source-before/tools/qa_series.py",
+    "codec": "gzip",
+    "raw_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+    "raw_bytes": 25379,
+    "stored_sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf",
+    "stored_bytes": 7934
+  },
+  {
+    "path": "cases/en-GradientBoosting/start.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/start.json",
+    "codec": "gzip",
+    "raw_sha256": "158930778d4cc9feb14b19052fe2c8df91602c57109b1dd1b2b500fda0796f8a",
+    "raw_bytes": 14716,
+    "stored_sha256": "756312c56a3774f5350f33ea45abbeae6d39758fcb4ab9f79294b0b28577ced0",
+    "stored_bytes": 2825
+  },
+  {
+    "path": "cases/en-GradientBoosting/receipt.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/receipt.json",
+    "codec": "gzip",
+    "raw_sha256": "cc1740f7bc6e524134e711437d7852848a1652a2c428df75bf504dcf27bf9a86",
+    "raw_bytes": 27963,
+    "stored_sha256": "4a6e20da4b820a3211be3c2dcf64e5b71867b563bfb5771ca3a37d6bed9860b1",
+    "stored_bytes": 4528
+  },
+  {
+    "path": "cases/en-GradientBoosting/plan.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/plan.json",
+    "codec": "gzip",
+    "raw_sha256": "59b0268146fa63d62d213e57b826e6d9b18ed3770cea0822830dd2315b6ba590",
+    "raw_bytes": 42107,
+    "stored_sha256": "4581578e1e2b4bf843671c99423d465173ab29b5271d94ef95f934326090a074",
+    "stored_bytes": 5354
+  },
+  {
+    "path": "cases/en-GradientBoosting/guarded-reads.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/guarded-reads.json",
+    "codec": "gzip",
+    "raw_sha256": "1f561041d271e0986c241557a07c317319989dc6384453eca9bb7b820de345ff",
+    "raw_bytes": 3892,
+    "stored_sha256": "b6e9c57fb819e6b26994af7a984a69162366ed3fe3f8fbcb548dbd59c8470100",
+    "stored_bytes": 1169
+  },
+  {
+    "path": "cases/en-GradientBoosting/used-caption-narration-scope.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/used-caption-narration-scope.json",
+    "codec": "gzip",
+    "raw_sha256": "a136947e6c69502c1053dfdd58caa8e30f7f0318d5b5f8303ab2cd3aa3484ab2",
+    "raw_bytes": 111259,
+    "stored_sha256": "61477ae82a96030c926a50e62c343b107a720d05bede8513a7271199fc3a022f",
+    "stored_bytes": 17412
+  },
+  {
+    "path": "cases/en-GradientBoosting/views.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/views.json",
+    "codec": "gzip",
+    "raw_sha256": "a9e7825a54d7c46bc111323dc1ce01295c289c742104d0ee73133f95b6139b50",
+    "raw_bytes": 4522,
+    "stored_sha256": "ce37c741ceec7889b8aa9ec4ffa93b044e13d1c559f5eb363243e2212ec7d298",
+    "stored_bytes": 1062
+  },
+  {
+    "path": "cases/en-GradientBoosting/native--result.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/native/result.json",
+    "codec": "gzip",
+    "raw_sha256": "a289011a696bec07248caec407a20567c8dc7292c17bb6b47abf6479acb09644",
+    "raw_bytes": 60405,
+    "stored_sha256": "8db8fd9859a9ce5e7e70a1818e1bae47f28556a14981fc51e68f079fe6889ec2",
+    "stored_bytes": 11228
+  },
+  {
+    "path": "cases/en-GradientBoosting/native--text.jsonl.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/native/text.jsonl",
+    "codec": "gzip",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "stored_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "stored_bytes": 20
+  },
+  {
+    "path": "cases/en-GradientBoosting/standard480-witness--result.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/standard480-witness/result.json",
+    "codec": "gzip",
+    "raw_sha256": "11e7949f13ba9f6575df068c982c4ec3d78e46477d84e0d02072202a15a49a0e",
+    "raw_bytes": 59965,
+    "stored_sha256": "3566e69a5fca1e3aac48d99c4de484c4fefe39d8a658a97694d0b269512e2730",
+    "stored_bytes": 10968
+  },
+  {
+    "path": "cases/en-GradientBoosting/standard480-witness--text.jsonl.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/standard480-witness/text.jsonl",
+    "codec": "gzip",
+    "raw_sha256": "5ecfcc72284ad366d96e5fe68e1c54a56cbf7438f57130199152a5dec7080932",
+    "raw_bytes": 8550,
+    "stored_sha256": "e16effc3d8f46b95700f5c4b4639be2ea15e5fa2742eb358209014156cde561e",
+    "stored_bytes": 1170
+  },
+  {
+    "path": "viewed-sample-pages/en-page-002.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/pages/page-002.png",
+    "codec": "identity",
+    "raw_sha256": "ffc9456177fa7ee8dce5b611e1435b8a0b8b8e51d37c480e0ea5f4fcc71f33e4",
+    "raw_bytes": 209935,
+    "stored_sha256": "ffc9456177fa7ee8dce5b611e1435b8a0b8b8e51d37c480e0ea5f4fcc71f33e4",
+    "stored_bytes": 209935
+  },
+  {
+    "path": "viewed-sample-pages/en-page-004.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/pages/page-004.png",
+    "codec": "identity",
+    "raw_sha256": "52473c5b610d4f57d2aa238cf7bdd5ada23c12589c77cd17cabda2df136f8c4f",
+    "raw_bytes": 86648,
+    "stored_sha256": "52473c5b610d4f57d2aa238cf7bdd5ada23c12589c77cd17cabda2df136f8c4f",
+    "stored_bytes": 86648
+  },
+  {
+    "path": "viewed-native/en-004_00050.4s.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/native/004_00050.4s.png",
+    "codec": "identity",
+    "raw_sha256": "84b9fe222b6b274d51020633da7d99b899305541810026ab3ef1d3df14dff233",
+    "raw_bytes": 186881,
+    "stored_sha256": "84b9fe222b6b274d51020633da7d99b899305541810026ab3ef1d3df14dff233",
+    "stored_bytes": 186881
+  },
+  {
+    "path": "viewed-native/en-008_00080.9s.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/native/008_00080.9s.png",
+    "codec": "identity",
+    "raw_sha256": "dbe81008a7ce5468d809a716b616c17f0665f9ea2478e5a8526160c6571e51cf",
+    "raw_bytes": 102194,
+    "stored_sha256": "dbe81008a7ce5468d809a716b616c17f0665f9ea2478e5a8526160c6571e51cf",
+    "stored_bytes": 102194
+  },
+  {
+    "path": "viewed-native/en-010_00102.7s.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/native/010_00102.7s.png",
+    "codec": "identity",
+    "raw_sha256": "a556b38708901f47a252b319ebba600cbf8d102e0fd0c91a52f02da6eb5fc2d6",
+    "raw_bytes": 178238,
+    "stored_sha256": "a556b38708901f47a252b319ebba600cbf8d102e0fd0c91a52f02da6eb5fc2d6",
+    "stored_bytes": 178238
+  },
+  {
+    "path": "viewed-native/en-013_00141.3s.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-GradientBoosting/native/013_00141.3s.png",
+    "codec": "identity",
+    "raw_sha256": "1673f901c6c09963e1ab57f063027fbafffd01a6f4edde10e092f90ef58e5c2a",
+    "raw_bytes": 120579,
+    "stored_sha256": "1673f901c6c09963e1ab57f063027fbafffd01a6f4edde10e092f90ef58e5c2a",
+    "stored_bytes": 120579
+  },
+  {
+    "path": "cases/zh-GradientBoosting/start.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/start.json",
+    "codec": "gzip",
+    "raw_sha256": "4f57e82a4e2513e1a4d9d16887953574d1543c81959f69c1febf16c3bbdaa258",
+    "raw_bytes": 15097,
+    "stored_sha256": "621cc71ae6096170ec15cee9ce973d5f7c4a2165f4e28c2440e1e11f26921a3a",
+    "stored_bytes": 2878
+  },
+  {
+    "path": "cases/zh-GradientBoosting/receipt.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/receipt.json",
+    "codec": "gzip",
+    "raw_sha256": "d7027d228b1778d51ebf0ed95056899f8876afc615a7f4e0c3e0e6e61f4c5cbc",
+    "raw_bytes": 28352,
+    "stored_sha256": "61e95bcc8f97db94c4517465be414e2479ace4fc582c10a185a15cc1371ce8cc",
+    "stored_bytes": 4589
+  },
+  {
+    "path": "cases/zh-GradientBoosting/plan.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/plan.json",
+    "codec": "gzip",
+    "raw_sha256": "08c8a7f534cb33cb7b19a8ba3a66f0236fad5cb0d0d02b9525ef7590b3689874",
+    "raw_bytes": 47552,
+    "stored_sha256": "c345543bfb4c7fad720901bab6369ae66b68c0025701064c0fed87df8b3aa893",
+    "stored_bytes": 5887
+  },
+  {
+    "path": "cases/zh-GradientBoosting/guarded-reads.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/guarded-reads.json",
+    "codec": "gzip",
+    "raw_sha256": "e0b53a24fa0a0ca7566374ef8787ac0cd78337adf7a6e28c249d6118f8616211",
+    "raw_bytes": 3893,
+    "stored_sha256": "cf996303a325b7aaafe60448c1b75efa2f88b29625658462549d7685e0b19434",
+    "stored_bytes": 1171
+  },
+  {
+    "path": "cases/zh-GradientBoosting/used-caption-narration-scope.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/used-caption-narration-scope.json",
+    "codec": "gzip",
+    "raw_sha256": "e2387fb9b373ae63d3cc1573ebd1d5a737e803d9379d71d969f660eff78cce0a",
+    "raw_bytes": 158275,
+    "stored_sha256": "08b977dd37f3e4632f2f91dca33c71d5a7f02076cd41131e2be93739ab7de7c6",
+    "stored_bytes": 27760
+  },
+  {
+    "path": "cases/zh-GradientBoosting/views.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/views.json",
+    "codec": "gzip",
+    "raw_sha256": "18bf72a650ee6e3875bdd97e99fa28789ca2b0ef782baf234f271f0d99d2718e",
+    "raw_bytes": 4534,
+    "stored_sha256": "ff392210031cbb772b135b09730ae07b062efe5cb26da3b40cdbf5130bb030b0",
+    "stored_bytes": 1060
+  },
+  {
+    "path": "cases/zh-GradientBoosting/native--result.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/native/result.json",
+    "codec": "gzip",
+    "raw_sha256": "673c15c95b108b77f57c5734bae748be8d4685446e02edc77fd334060ad37886",
+    "raw_bytes": 80392,
+    "stored_sha256": "3dec0f6f06a4e1d024c628ea4821fc33692846422002c398b7262997a6c6318c",
+    "stored_bytes": 16653
+  },
+  {
+    "path": "cases/zh-GradientBoosting/native--text.jsonl.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/native/text.jsonl",
+    "codec": "gzip",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "stored_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "stored_bytes": 20
+  },
+  {
+    "path": "cases/zh-GradientBoosting/standard480-witness--result.json.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/standard480-witness/result.json",
+    "codec": "gzip",
+    "raw_sha256": "a32408d14c323c3e6744065ce1c4bb060b22a36ec538dba98e2692cdd5d7072b",
+    "raw_bytes": 79954,
+    "stored_sha256": "215f86e45bdc9137686ae391af6ef37c926157199076bb3cbd3b7870a180b51d",
+    "stored_bytes": 16377
+  },
+  {
+    "path": "cases/zh-GradientBoosting/standard480-witness--text.jsonl.gz",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/standard480-witness/text.jsonl",
+    "codec": "gzip",
+    "raw_sha256": "9c391cd4562ad13a2201708b099bbe60afe4ad41c5ba74b86e412eecff13b785",
+    "raw_bytes": 8553,
+    "stored_sha256": "8340ec27bbb9719e2452da1200c40f23e75341fd34e0e2db305cef9924c5f7dd",
+    "stored_bytes": 1191
+  },
+  {
+    "path": "viewed-sample-pages/zh-page-002.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/pages/page-002.png",
+    "codec": "identity",
+    "raw_sha256": "8982b5f6b564bb549863dc7402c17444abcbfa5d72f202100b52be34b3540574",
+    "raw_bytes": 213331,
+    "stored_sha256": "8982b5f6b564bb549863dc7402c17444abcbfa5d72f202100b52be34b3540574",
+    "stored_bytes": 213331
+  },
+  {
+    "path": "viewed-sample-pages/zh-page-004.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/pages/page-004.png",
+    "codec": "identity",
+    "raw_sha256": "332b6a2f50be5687b190c4d8cb639b23c391240be6fa148ca91ef3d6da6e74b0",
+    "raw_bytes": 143941,
+    "stored_sha256": "332b6a2f50be5687b190c4d8cb639b23c391240be6fa148ca91ef3d6da6e74b0",
+    "stored_bytes": 143941
+  },
+  {
+    "path": "viewed-native/zh-004_00053.8s.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/native/004_00053.8s.png",
+    "codec": "identity",
+    "raw_sha256": "d8359a5b2654466e7c3d2ecabe32a3de565d35076261cf3935b6120107a1cadd",
+    "raw_bytes": 192986,
+    "stored_sha256": "d8359a5b2654466e7c3d2ecabe32a3de565d35076261cf3935b6120107a1cadd",
+    "stored_bytes": 192986
+  },
+  {
+    "path": "viewed-native/zh-008_00086.8s.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/native/008_00086.8s.png",
+    "codec": "identity",
+    "raw_sha256": "7c939891a43d5a1df00ef9f7f869e0435f015a4dc629d565dacfcc827a58bb2e",
+    "raw_bytes": 102267,
+    "stored_sha256": "7c939891a43d5a1df00ef9f7f869e0435f015a4dc629d565dacfcc827a58bb2e",
+    "stored_bytes": 102267
+  },
+  {
+    "path": "viewed-native/zh-011_00109.6s.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/native/011_00109.6s.png",
+    "codec": "identity",
+    "raw_sha256": "547d1f8d1744991e814ceb271c064d49178eb29d1f4ca1fb493d1dc4ba8c879a",
+    "raw_bytes": 185401,
+    "stored_sha256": "547d1f8d1744991e814ceb271c064d49178eb29d1f4ca1fb493d1dc4ba8c879a",
+    "stored_bytes": 185401
+  },
+  {
+    "path": "viewed-native/zh-014_00148.1s.png",
+    "original_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-GradientBoosting/native/014_00148.1s.png",
+    "codec": "identity",
+    "raw_sha256": "cfa0fe270ce639407176f5bff7bfa569d759220eee9d9a8f46142432ebf9624a",
+    "raw_bytes": 120413,
+    "stored_sha256": "cfa0fe270ce639407176f5bff7bfa569d759220eee9d9a8f46142432ebf9624a",
+    "stored_bytes": 120413
+  },
+  {
+    "path": "equivalence.json.gz",
+    "original_path": "/workspace/runtime/ai6-gradientboosting-native1080-review/equivalence.json",
+    "codec": "gzip",
+    "raw_sha256": "1d42fd2ac0a9f2fc69faa5f4a57e5ac684980b7a48bedb6740d41291fe6f7224",
+    "raw_bytes": 114131,
+    "stored_sha256": "8621997fcd8a23c11ee87fb98861fadc8c1104090577747725807c3041e49467",
+    "stored_bytes": 19650
+  },
+  {
+    "path": "actual-view-checkpoint.json.gz",
+    "original_path": "/workspace/runtime/ai6-gradientboosting-native1080-review/actual-view-checkpoint.json",
+    "codec": "gzip",
+    "raw_sha256": "2746e6662d82a745e21fee13a7eb1cbef5a4fd06e215a5da488f63e8d32b675a",
+    "raw_bytes": 895,
+    "stored_sha256": "e2dfae8f9acee16ea0f5938cba2450d16bcb36beed8f34e458e33d0c1bf21818",
+    "stored_bytes": 427
+  },
+  {
+    "path": "equivalence.log.gz",
+    "original_path": "/workspace/runtime/ai6-gradientboosting-native1080-review/equivalence.log",
+    "codec": "gzip",
+    "raw_sha256": "f5f339a838dea6d43be361efeb03eeafc8181509f891dc43a6c3633e0ae6b5bc",
+    "raw_bytes": 731,
+    "stored_sha256": "8b59ea29e942106deb3666dd4526d9fd14130143e42aa0020dc15102af04de07",
+    "stored_bytes": 229
+  },
+  {
+    "path": "reproduce-pure-equivalence.py",
+    "original_path": "/workspace/runtime/ai6-gradientboosting-native1080-review/reconcile.py",
+    "codec": "identity",
+    "raw_sha256": "eb60eaae0e0de29e7208d6e24abf1eae3940a5017ab8fa612030871c4d59f169",
+    "raw_bytes": 7761,
+    "stored_sha256": "eb60eaae0e0de29e7208d6e24abf1eae3940a5017ab8fa612030871c4d59f169",
+    "stored_bytes": 7761
+  }
+]

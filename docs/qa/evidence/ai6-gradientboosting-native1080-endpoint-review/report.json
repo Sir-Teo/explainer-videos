@@ -1,0 +1,4209 @@
+{
+  "completed_utc": "2026-11-01T10:25:10.893927+00:00",
+  "scope": "Existing native1920x1080 EN/ZH GradientBoosting held endpoints only; independent of prior480/fullmovie review.",
+  "totals": {
+    "cases": 2,
+    "held_endpoint_states": 29,
+    "existing_scaled_pages_actually_viewed": 8,
+    "original1920_followups_actually_viewed": 8,
+    "actual_constructor_rows_compared": 186,
+    "captured_narration_records_compared": 10
+  },
+  "cases": [
+    {
+      "case": "en/GradientBoosting",
+      "native_states": 14,
+      "prepared_pages_actually_viewed": 4,
+      "original1920_followups_actually_viewed": 4,
+      "actual_page_views": [
+        {
+          "page": 1,
+          "file": "pages/page-001.png",
+          "sha256": "b4203b5b258b47b82cf6b892219433956adf24c0b68b0a22d948d65a602d7fd4",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "tile_size": [
+            960,
+            540
+          ],
+          "review_scale": "50% per native1920x1080 frame; critical unscaled views required separately",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "All chronological held states actually viewed at960×540tiles; Greek/CJK, leaf objective/gain, true-drop annotation, rounds/readouts and two comparison charts readable without confirmed clipping/collision."
+        },
+        {
+          "page": 2,
+          "file": "pages/page-002.png",
+          "sha256": "ffc9456177fa7ee8dce5b611e1435b8a0b8b8e51d37c480e0ea5f4fcc71f33e4",
+          "frame_indices": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "tile_size": [
+            960,
+            540
+          ],
+          "review_scale": "50% per native1920x1080 frame; critical unscaled views required separately",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "All chronological held states actually viewed at960×540tiles; Greek/CJK, leaf objective/gain, true-drop annotation, rounds/readouts and two comparison charts readable without confirmed clipping/collision."
+        },
+        {
+          "page": 3,
+          "file": "pages/page-003.png",
+          "sha256": "78eed107fa8c21395fe046c51ad6e4fe366112dcb1b5609a2e42384e7971562b",
+          "frame_indices": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "tile_size": [
+            960,
+            540
+          ],
+          "review_scale": "50% per native1920x1080 frame; critical unscaled views required separately",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "All chronological held states actually viewed at960×540tiles; Greek/CJK, leaf objective/gain, true-drop annotation, rounds/readouts and two comparison charts readable without confirmed clipping/collision."
+        },
+        {
+          "page": 4,
+          "file": "pages/page-004.png",
+          "sha256": "52473c5b610d4f57d2aa238cf7bdd5ada23c12589c77cd17cabda2df136f8c4f",
+          "frame_indices": [
+            12,
+            13
+          ],
+          "tile_size": [
+            960,
+            540
+          ],
+          "review_scale": "50% per native1920x1080 frame; critical unscaled views required separately",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "All chronological held states actually viewed at960×540tiles; Greek/CJK, leaf objective/gain, true-drop annotation, rounds/readouts and two comparison charts readable without confirmed clipping/collision."
+        }
+      ],
+      "actual_native_views": [
+        {
+          "index": 4,
+          "file": "native/004_00050.4s.png",
+          "time": 50.410681458897926,
+          "sha256": "84b9fe222b6b274d51020633da7d99b899305541810026ab3ef1d3df14dff233",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "Original1920×1080 actually viewed: dense proof, gain-versus-true-drop or chart/readout limits as applicable.",
+          "scope": "Held endpoint only; no continuous/motion/audio approval."
+        },
+        {
+          "index": 8,
+          "file": "native/008_00080.9s.png",
+          "time": 80.87342756680732,
+          "sha256": "dbe81008a7ce5468d809a716b616c17f0665f9ea2478e5a8526160c6571e51cf",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "Original1920×1080 actually viewed: dense proof, gain-versus-true-drop or chart/readout limits as applicable.",
+          "scope": "Held endpoint only; no continuous/motion/audio approval."
+        },
+        {
+          "index": 10,
+          "file": "native/010_00102.7s.png",
+          "time": 102.66976046698873,
+          "sha256": "a556b38708901f47a252b319ebba600cbf8d102e0fd0c91a52f02da6eb5fc2d6",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "Original1920×1080 actually viewed: dense proof, gain-versus-true-drop or chart/readout limits as applicable.",
+          "scope": "Held endpoint only; no continuous/motion/audio approval."
+        },
+        {
+          "index": 13,
+          "file": "native/013_00141.3s.png",
+          "time": 141.2888287037037,
+          "sha256": "1673f901c6c09963e1ab57f063027fbafffd01a6f4edde10e092f90ef58e5c2a",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "Original1920×1080 actually viewed: dense proof, gain-versus-true-drop or chart/readout limits as applicable.",
+          "scope": "Held endpoint only; no continuous/motion/audio approval."
+        }
+      ],
+      "all_original_frames": [
+        {
+          "file": "000_00001.0s.png",
+          "time": 1.0,
+          "reason": "narration-end",
+          "coverage": 0.01647907021604938,
+          "texts": [
+            {
+              "text": "Part 6 \\textperiodcentered\\ Chapter 15",
+              "bounds": [
+                -1.2373827958333319,
+                1.2373827958333319,
+                1.1645911125000001,
+                1.425819825
+              ]
+            },
+            {
+              "text": "Gradient boosting, second order",
+              "bounds": [
+                -3.914534812499999,
+                3.914534812499999,
+                0.35406808125,
+                0.8645911125
+              ]
+            },
+            {
+              "text": "How does XGBoost choose a split?",
+              "bounds": [
+                -2.3622499531249987,
+                2.3622499531249987,
+                -0.22581982499999997,
+                0.054068081249999955
+              ]
+            },
+            {
+              "text": "1950",
+              "bounds": [
+                -4.897184241666667,
+                -4.436149091666667,
+                -3.1,
+                -2.9523437500000003
+              ]
+            },
+            {
+              "text": "1970",
+              "bounds": [
+                -2.230517575,
+                -1.769482425,
+                -3.1,
+                -2.9523437500000003
+              ]
+            },
+            {
+              "text": "1990",
+              "bounds": [
+                0.43614909166666693,
+                0.897184241666667,
+                -3.1,
+                -2.9523437500000003
+              ]
+            },
+            {
+              "text": "2010",
+              "bounds": [
+                3.099300133333334,
+                3.5673665333333338,
+                -3.1,
+                -2.9523437500000003
+              ]
+            },
+            {
+              "text": "2030",
+              "bounds": [
+                5.7659668,
+                6.2340332,
+                -3.1,
+                -2.9523437500000003
+              ]
+            },
+            {
+              "text": "2001\\; random forests; Viola--Jones",
+              "bounds": [
+                0.7472328333333327,
+                3.5194338333333333,
+                -2.62734375,
+                -2.45959779375
+              ]
+            }
+          ],
+          "index": 0,
+          "sha256": "82056dac4ab67bc8bb2ad97a4a883524b89cc7bf4b11957aae61da15c3cba0ab",
+          "bytes": 81987,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "001_00006.2s.png",
+          "time": 6.231458333333333,
+          "reason": "narrated-hold-12.0s",
+          "coverage": 0.011530671296296296,
+          "texts": [
+            {
+              "text": "F_{m+1}(\\mathbf{x}) = F_m(\\mathbf{x}) + \\eta\\, f_m(\\mathbf{x})",
+              "bounds": [
+                -2.176677910416694,
+                2.176677910416637,
+                3.3471565000000005,
+                3.7
+              ]
+            },
+            {
+              "text": "$f_m$: \\ a small tree that walks downhill on the loss",
+              "bounds": [
+                -2.4280973750000276,
+                2.428097374999971,
+                3.0393939541666675,
+                3.2471565000000004
+              ]
+            },
+            {
+              "text": "J.~Friedman (2001); \\ T.~Chen \\& C.~Guestrin, \\textit{XGBoost} (2016)",
+              "bounds": [
+                0.7298312673611123,
+                6.911111111111111,
+                -3.8,
+                -3.5716894999999997
+              ]
+            },
+            {
+              "text": "\\sum_i \\ell(y_i, F_i + f_i) + \\Omega(f) \\;\\approx\\; \\sum_i \\big[\\ell_i + g_i f_i + \\tfrac12 h_i f_i^2\\big] + \\gamma T + \\tfrac12\\lambda\\sum_j w_j^2",
+              "bounds": [
+                -5.118497109374999,
+                4.205191140625001,
+                1.5924437499999997,
+                2.3
+              ]
+            },
+            {
+              "text": "Taylor, to second order; \\\\ $g_i = p_i - y_i$, \\ $h_i = p_i(1 - p_i)$",
+              "bounds": [
+                1.6587467239583358,
+                4.205191140625001,
+                0.9274458333333333,
+                1.37244375
+              ]
+            }
+          ],
+          "index": 1,
+          "sha256": "9488d3dd7c088b48f04c4ffc2ca432e68653dffac85b138953b36de53fa17e89",
+          "bytes": 103356,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "002_00034.4s.png",
+          "time": 34.380871160794904,
+          "reason": "narrated-hold-4.8s",
+          "coverage": 0.014716435185185185,
+          "texts": [
+            {
+              "text": "F_{m+1}(\\mathbf{x}) = F_m(\\mathbf{x}) + \\eta\\, f_m(\\mathbf{x})",
+              "bounds": [
+                -2.176677910416694,
+                2.176677910416637,
+                3.3471565000000005,
+                3.7
+              ]
+            },
+            {
+              "text": "$f_m$: \\ a small tree that walks downhill on the loss",
+              "bounds": [
+                -2.4280973750000276,
+                2.428097374999971,
+                3.0393939541666675,
+                3.2471565000000004
+              ]
+            },
+            {
+              "text": "J.~Friedman (2001); \\ T.~Chen \\& C.~Guestrin, \\textit{XGBoost} (2016)",
+              "bounds": [
+                0.7298312673611123,
+                6.911111111111111,
+                -3.8,
+                -3.5716894999999997
+              ]
+            },
+            {
+              "text": "\\sum_i \\ell(y_i, F_i + f_i) + \\Omega(f) \\;\\approx\\; \\sum_i \\big[\\ell_i + g_i f_i + \\tfrac12 h_i f_i^2\\big] + \\gamma T + \\tfrac12\\lambda\\sum_j w_j^2",
+              "bounds": [
+                -5.118497109374999,
+                4.205191140625001,
+                1.5924437499999997,
+                2.3
+              ]
+            },
+            {
+              "text": "Taylor, to second order; \\\\ $g_i = p_i - y_i$, \\ $h_i = p_i(1 - p_i)$",
+              "bounds": [
+                1.6587467239583358,
+                4.205191140625001,
+                0.9274458333333333,
+                1.37244375
+              ]
+            },
+            {
+              "text": "\\text{obj} = \\sum_j \\big[G_j w_j + \\tfrac12 (H_j + \\lambda)\\, w_j^2\\big] + \\gamma T",
+              "bounds": [
+                -2.2397699999999996,
+                3.0733323125000003,
+                -0.1801104166666666,
+                0.5274458333333334
+              ]
+            },
+            {
+              "text": "a tree: \\ one weight $w_j$ per leaf",
+              "bounds": [
+                3.4733323125,
+                6.237750479166666,
+                0.0701186770833334,
+                0.27721673958333337
+              ]
+            }
+          ],
+          "index": 2,
+          "sha256": "3b9da8f70f2121fa32f6606b2180c41655ae96c4c88bd120c9912cd2ab4bbaf5",
+          "bytes": 128321,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "003_00041.8s.png",
+          "time": 41.77924514453474,
+          "reason": "narrated-hold-6.0s",
+          "coverage": 0.01873119212962963,
+          "texts": [
+            {
+              "text": "F_{m+1}(\\mathbf{x}) = F_m(\\mathbf{x}) + \\eta\\, f_m(\\mathbf{x})",
+              "bounds": [
+                -2.176677910416694,
+                2.176677910416637,
+                3.3471565000000005,
+                3.7
+              ]
+            },
+            {
+              "text": "$f_m$: \\ a small tree that walks downhill on the loss",
+              "bounds": [
+                -2.4280973750000276,
+                2.428097374999971,
+                3.0393939541666675,
+                3.2471565000000004
+              ]
+            },
+            {
+              "text": "J.~Friedman (2001); \\ T.~Chen \\& C.~Guestrin, \\textit{XGBoost} (2016)",
+              "bounds": [
+                0.7298312673611123,
+                6.911111111111111,
+                -3.8,
+                -3.5716894999999997
+              ]
+            },
+            {
+              "text": "\\sum_i \\ell(y_i, F_i + f_i) + \\Omega(f) \\;\\approx\\; \\sum_i \\big[\\ell_i + g_i f_i + \\tfrac12 h_i f_i^2\\big] + \\gamma T + \\tfrac12\\lambda\\sum_j w_j^2",
+              "bounds": [
+                -5.118497109374999,
+                4.205191140625001,
+                1.5924437499999997,
+                2.3
+              ]
+            },
+            {
+              "text": "Taylor, to second order; \\\\ $g_i = p_i - y_i$, \\ $h_i = p_i(1 - p_i)$",
+              "bounds": [
+                1.6587467239583358,
+                4.205191140625001,
+                0.9274458333333333,
+                1.37244375
+              ]
+            },
+            {
+              "text": "\\text{obj} = \\sum_j \\big[G_j w_j + \\tfrac12 (H_j + \\lambda)\\, w_j^2\\big] + \\gamma T",
+              "bounds": [
+                -2.2397699999999996,
+                3.0733323125000003,
+                -0.1801104166666666,
+                0.5274458333333334
+              ]
+            },
+            {
+              "text": "a tree: \\ one weight $w_j$ per leaf",
+              "bounds": [
+                3.4733323125,
+                6.237750479166666,
+                0.0701186770833334,
+                0.27721673958333337
+              ]
+            },
+            {
+              "text": "w_j^* = -\\frac{G_j}{H_j + \\lambda}, \\qquad \\text{obj}^* = -\\tfrac12\\sum_j \\frac{G_j^2}{H_j + \\lambda} + \\gamma T",
+              "bounds": [
+                -2.172795875,
+                4.436415593749999,
+                -1.4944167291666666,
+                -0.5801104166666666
+              ]
+            },
+            {
+              "text": "each leaf: \\ a parabola's bottom",
+              "bounds": [
+                1.6081251979166673,
+                4.436415593749999,
+                -1.9010086666666668,
+                -1.7144167291666668
+              ]
+            }
+          ],
+          "index": 3,
+          "sha256": "040042e7eb24690bedb05cbbaaf0503f1ec3789719e3fa23e4c5b0c5bdd9f251",
+          "bytes": 156629,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "004_00050.4s.png",
+          "time": 50.410681458897926,
+          "reason": "narration-end",
+          "coverage": 0.023794849537037036,
+          "texts": [
+            {
+              "text": "F_{m+1}(\\mathbf{x}) = F_m(\\mathbf{x}) + \\eta\\, f_m(\\mathbf{x})",
+              "bounds": [
+                -2.176677910416694,
+                2.176677910416637,
+                3.3471565000000005,
+                3.7
+              ]
+            },
+            {
+              "text": "$f_m$: \\ a small tree that walks downhill on the loss",
+              "bounds": [
+                -2.4280973750000276,
+                2.428097374999971,
+                3.0393939541666675,
+                3.2471565000000004
+              ]
+            },
+            {
+              "text": "J.~Friedman (2001); \\ T.~Chen \\& C.~Guestrin, \\textit{XGBoost} (2016)",
+              "bounds": [
+                0.7298312673611123,
+                6.911111111111111,
+                -3.8,
+                -3.5716894999999997
+              ]
+            },
+            {
+              "text": "\\sum_i \\ell(y_i, F_i + f_i) + \\Omega(f) \\;\\approx\\; \\sum_i \\big[\\ell_i + g_i f_i + \\tfrac12 h_i f_i^2\\big] + \\gamma T + \\tfrac12\\lambda\\sum_j w_j^2",
+              "bounds": [
+                -5.118497109374999,
+                4.205191140625001,
+                1.5924437499999997,
+                2.3
+              ]
+            },
+            {
+              "text": "Taylor, to second order; \\\\ $g_i = p_i - y_i$, \\ $h_i = p_i(1 - p_i)$",
+              "bounds": [
+                1.6587467239583358,
+                4.205191140625001,
+                0.9274458333333333,
+                1.37244375
+              ]
+            },
+            {
+              "text": "\\text{obj} = \\sum_j \\big[G_j w_j + \\tfrac12 (H_j + \\lambda)\\, w_j^2\\big] + \\gamma T",
+              "bounds": [
+                -2.2397699999999996,
+                3.0733323125000003,
+                -0.1801104166666666,
+                0.5274458333333334
+              ]
+            },
+            {
+              "text": "a tree: \\ one weight $w_j$ per leaf",
+              "bounds": [
+                3.4733323125,
+                6.237750479166666,
+                0.0701186770833334,
+                0.27721673958333337
+              ]
+            },
+            {
+              "text": "w_j^* = -\\frac{G_j}{H_j + \\lambda}, \\qquad \\text{obj}^* = -\\tfrac12\\sum_j \\frac{G_j^2}{H_j + \\lambda} + \\gamma T",
+              "bounds": [
+                -2.172795875,
+                4.436415593749999,
+                -1.4944167291666666,
+                -0.5801104166666666
+              ]
+            },
+            {
+              "text": "each leaf: \\ a parabola's bottom",
+              "bounds": [
+                1.6081251979166673,
+                4.436415593749999,
+                -1.9010086666666668,
+                -1.7144167291666668
+              ]
+            },
+            {
+              "text": "\\text{gain} = \\tfrac12\\Big[\\frac{G_L^2}{H_L + \\lambda} + \\frac{G_R^2}{H_R + \\lambda} - \\frac{(G_L + G_R)^2}{H_L + H_R + \\lambda}\\Big] - \\gamma",
+              "bounds": [
+                -2.3694924999999993,
+                4.518573999999999,
+                -3.0339314166666664,
+                -2.3010086666666663
+              ]
+            },
+            {
+              "text": "split one leaf in two",
+              "bounds": [
+                4.918574,
+                6.699907062500001,
+                -2.7607660104166665,
+                -2.5741740729166662
+              ]
+            }
+          ],
+          "index": 4,
+          "sha256": "84b9fe222b6b274d51020633da7d99b899305541810026ab3ef1d3df14dff233",
+          "bytes": 186881,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "005_00058.8s.png",
+          "time": 58.836999999999996,
+          "reason": "narrated-hold-9.8s",
+          "coverage": 0.006377797067901234,
+          "texts": [
+            {
+              "text": "round one: \\ every page at $p = \\tfrac12$, \\ so $g = \\pm\\tfrac12$, \\ $h = \\tfrac14$",
+              "bounds": [
+                -2.614025253124972,
+                2.6140252531250288,
+                3.4252577208333337,
+                3.7
+              ]
+            },
+            {
+              "text": "``mrs'' $\\le 0.5$?",
+              "bounds": [
+                -4.1486359833333335,
+                -2.6513640166666663,
+                1.886405146875,
+                2.113594853125
+              ]
+            },
+            {
+              "text": "yes",
+              "bounds": [
+                -4.6168010625,
+                -4.35,
+                0.9822332916666667,
+                1.1177667083333334
+              ]
+            },
+            {
+              "text": "no",
+              "bounds": [
+                -2.4499999999999997,
+                -2.243574666666667,
+                1.002366125,
+                1.097633875
+              ]
+            }
+          ],
+          "index": 5,
+          "sha256": "4c957758818887ffcd5e5264c1f7b7ccda0781406dbd6c222df23b6f181fe7ca",
+          "bytes": 43961,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "006_00070.0s.png",
+          "time": 69.97722503516174,
+          "reason": "narrated-hold-2.0s",
+          "coverage": 0.015064621913580246,
+          "texts": [
+            {
+              "text": "round one: \\ every page at $p = \\tfrac12$, \\ so $g = \\pm\\tfrac12$, \\ $h = \\tfrac14$",
+              "bounds": [
+                -2.614025253124972,
+                2.6140252531250288,
+                3.4252577208333337,
+                3.7
+              ]
+            },
+            {
+              "text": "``mrs'' $\\le 0.5$?",
+              "bounds": [
+                -4.1486359833333335,
+                -2.6513640166666663,
+                1.886405146875,
+                2.113594853125
+              ]
+            },
+            {
+              "text": "yes",
+              "bounds": [
+                -4.6168010625,
+                -4.35,
+                0.9822332916666667,
+                1.1177667083333334
+              ]
+            },
+            {
+              "text": "no",
+              "bounds": [
+                -2.4499999999999997,
+                -2.243574666666667,
+                1.002366125,
+                1.097633875
+              ]
+            },
+            {
+              "text": "G = -84.0",
+              "bounds": [
+                -5.813750718749999,
+                -4.3862492812500005,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 57.5",
+              "bounds": [
+                -5.712329234374998,
+                -4.487670765625001,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            },
+            {
+              "text": "G = 62.0",
+              "bounds": [
+                -2.2926765468749974,
+                -1.107323453125002,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 54.5",
+              "bounds": [
+                -2.312329234374998,
+                -1.0876707656250013,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            }
+          ],
+          "index": 6,
+          "sha256": "721bfd157c462b050f1eebf33019e30a5fb1b7cd71624a8ec58f9eeadfde7a49",
+          "bytes": 58554,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "007_00074.0s.png",
+          "time": 73.99461837787153,
+          "reason": "narrated-hold-5.9s",
+          "coverage": 0.019016685956790125,
+          "texts": [
+            {
+              "text": "round one: \\ every page at $p = \\tfrac12$, \\ so $g = \\pm\\tfrac12$, \\ $h = \\tfrac14$",
+              "bounds": [
+                -2.614025253124972,
+                2.6140252531250288,
+                3.4252577208333337,
+                3.7
+              ]
+            },
+            {
+              "text": "``mrs'' $\\le 0.5$?",
+              "bounds": [
+                -4.1486359833333335,
+                -2.6513640166666663,
+                1.886405146875,
+                2.113594853125
+              ]
+            },
+            {
+              "text": "yes",
+              "bounds": [
+                -4.6168010625,
+                -4.35,
+                0.9822332916666667,
+                1.1177667083333334
+              ]
+            },
+            {
+              "text": "no",
+              "bounds": [
+                -2.4499999999999997,
+                -2.243574666666667,
+                1.002366125,
+                1.097633875
+              ]
+            },
+            {
+              "text": "G = -84.0",
+              "bounds": [
+                -5.813750718749999,
+                -4.3862492812500005,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 57.5",
+              "bounds": [
+                -5.712329234374998,
+                -4.487670765625001,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            },
+            {
+              "text": "G = 62.0",
+              "bounds": [
+                -2.2926765468749974,
+                -1.107323453125002,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 54.5",
+              "bounds": [
+                -2.312329234374998,
+                -1.0876707656250013,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            },
+            {
+              "text": "the gain formula: \\ $92.797$",
+              "bounds": [
+                0.5960212437500014,
+                3.7994475770833356,
+                0.94438770625,
+                1.2091033520833334
+              ]
+            },
+            {
+              "text": "the objective, evaluated leaf by leaf: \\ $92.797$",
+              "bounds": [
+                0.5960212437500014,
+                6.203978756249999,
+                0.45996264791666663,
+                0.72438770625
+              ]
+            }
+          ],
+          "index": 7,
+          "sha256": "9062db2c06ba8780c30f2e05e87faac65697074129120583cee699744d57e095",
+          "bytes": 86296,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "008_00080.9s.png",
+          "time": 80.87342756680732,
+          "reason": "narration-end",
+          "coverage": 0.021069155092592592,
+          "texts": [
+            {
+              "text": "round one: \\ every page at $p = \\tfrac12$, \\ so $g = \\pm\\tfrac12$, \\ $h = \\tfrac14$",
+              "bounds": [
+                -2.614025253124972,
+                2.6140252531250288,
+                3.4252577208333337,
+                3.7
+              ]
+            },
+            {
+              "text": "``mrs'' $\\le 0.5$?",
+              "bounds": [
+                -4.1486359833333335,
+                -2.6513640166666663,
+                1.886405146875,
+                2.113594853125
+              ]
+            },
+            {
+              "text": "yes",
+              "bounds": [
+                -4.6168010625,
+                -4.35,
+                0.9822332916666667,
+                1.1177667083333334
+              ]
+            },
+            {
+              "text": "no",
+              "bounds": [
+                -2.4499999999999997,
+                -2.243574666666667,
+                1.002366125,
+                1.097633875
+              ]
+            },
+            {
+              "text": "G = -84.0",
+              "bounds": [
+                -5.813750718749999,
+                -4.3862492812500005,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 57.5",
+              "bounds": [
+                -5.712329234374998,
+                -4.487670765625001,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            },
+            {
+              "text": "G = 62.0",
+              "bounds": [
+                -2.2926765468749974,
+                -1.107323453125002,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 54.5",
+              "bounds": [
+                -2.312329234374998,
+                -1.0876707656250013,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            },
+            {
+              "text": "the gain formula: \\ $92.797$",
+              "bounds": [
+                0.5960212437500014,
+                3.7994475770833356,
+                0.94438770625,
+                1.2091033520833334
+              ]
+            },
+            {
+              "text": "the objective, evaluated leaf by leaf: \\ $92.797$",
+              "bounds": [
+                0.5960212437500014,
+                6.203978756249999,
+                0.45996264791666663,
+                0.72438770625
+              ]
+            },
+            {
+              "text": "the true drop in log loss: \\ $100.55$ \\ (nats, summed)",
+              "bounds": [
+                0.5960212437500005,
+                6.011283143750001,
+                -0.00910335208333335,
+                0.23996264791666666
+              ]
+            }
+          ],
+          "index": 8,
+          "sha256": "dbe81008a7ce5468d809a716b616c17f0665f9ea2478e5a8526160c6571e51cf",
+          "bytes": 102194,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "009_00091.5s.png",
+          "time": 91.54625,
+          "reason": "narrated-hold-2.7s",
+          "coverage": 0.023875385802469135,
+          "texts": [
+            {
+              "text": "``the'' per $1{,}000$ words",
+              "bounds": [
+                -4.457146629166665,
+                -2.302853370833334,
+                -3.0727397166666672,
+                -2.8700000000000006
+              ]
+            },
+            {
+              "text": "``not''",
+              "bounds": [
+                -6.924229608333331,
+                -6.4357703916666615,
+                2.020000000000001,
+                2.180958897916667
+              ]
+            },
+            {
+              "text": "depth-$3$ trees, \\ $\\eta = 0.3$, \\ $\\lambda = 1$",
+              "bounds": [
+                3.9283182027777768,
+                6.9111111111111105,
+                -3.8,
+                -3.592237454166667
+              ]
+            }
+          ],
+          "index": 9,
+          "sha256": "ea886c9538ad6579b601438be17db8d8fd137d0afa33e844a5cdcfefdadeec96",
+          "bytes": 134539,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "010_00102.7s.png",
+          "time": 102.66976046698873,
+          "reason": "narration-end",
+          "coverage": 0.2734428047839506,
+          "texts": [
+            {
+              "text": "``the'' per $1{,}000$ words",
+              "bounds": [
+                -4.457146629166665,
+                -2.302853370833334,
+                -3.0727397166666672,
+                -2.8700000000000006
+              ]
+            },
+            {
+              "text": "``not''",
+              "bounds": [
+                -6.924229608333331,
+                -6.4357703916666615,
+                2.020000000000001,
+                2.180958897916667
+              ]
+            },
+            {
+              "text": "depth-$3$ trees, \\ $\\eta = 0.3$, \\ $\\lambda = 1$",
+              "bounds": [
+                3.9283182027777768,
+                6.9111111111111105,
+                -3.8,
+                -3.592237454166667
+              ]
+            },
+            {
+              "text": "\\text{round } 1",
+              "bounds": [
+                2.7923392875,
+                4.4076607125,
+                2.0662515625,
+                2.3337484375
+              ]
+            },
+            {
+              "text": "training loss, \\ bits:",
+              "bounds": [
+                2.062126897916672,
+                4.074917497916668,
+                1.5441469562500003,
+                1.7683063562500003
+              ]
+            },
+            {
+              "text": "0",
+              "bounds": [
+                4.224917497916668,
+                4.3472504020833345,
+                1.556268172916667,
+                1.7561851395833337
+              ]
+            },
+            {
+              "text": ".",
+              "bounds": [
+                4.375250402083334,
+                4.406051568749999,
+                1.556268172916667,
+                1.5870693395833337
+              ]
+            },
+            {
+              "text": "2",
+              "bounds": [
+                4.434051568749999,
+                4.549991781249997,
+                1.556268172916667,
+                1.749792447916667
+              ]
+            },
+            {
+              "text": "9",
+              "bounds": [
+                4.577991781249996,
+                4.6985812479166595,
+                1.556268172916667,
+                1.7561851395833337
+              ]
+            },
+            {
+              "text": "4",
+              "bounds": [
+                4.72658124791666,
+                4.855306843749994,
+                1.556268172916667,
+                1.7529887937500004
+              ]
+            },
+            {
+              "text": "held-out pages right:",
+              "bounds": [
+                2.062126897916672,
+                4.283386597916674,
+                1.1949647229166669,
+                1.419124122916667
+              ]
+            },
+            {
+              "text": "7",
+              "bounds": [
+                4.433386597916673,
+                4.558044114583339,
+                1.1899418895833334,
+                1.3927646437500003
+              ]
+            },
+            {
+              "text": "7",
+              "bounds": [
+                4.5860441145833395,
+                4.7107016312500045,
+                1.1899418895833334,
+                1.3927646437500003
+              ]
+            },
+            {
+              "text": ".",
+              "bounds": [
+                4.738701631250005,
+                4.76950279791667,
+                1.1899418895833334,
+                1.2207430562500001
+              ]
+            },
+            {
+              "text": "5",
+              "bounds": [
+                4.79750279791667,
+                4.9134430104166675,
+                1.1899418895833334,
+                1.3898588562500003
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                2.2911336093749983,
+                2.3527774406249993,
+                -2.5088854270833334,
+                -2.3844769645833335
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                3.892038529519155,
+                4.054741242019154,
+                -2.5129950145833333,
+                -2.3844769645833335
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                5.496772837163311,
+                5.752875655913311,
+                -2.5129950145833333,
+                -2.3844769645833335
+              ]
+            },
+            {
+              "text": "74\\%",
+              "bounds": [
+                1.8806596687499995,
+                2.2019555249999985,
+                -2.3397571645833333,
+                -2.1891967645833335
+              ]
+            },
+            {
+              "text": "78\\%",
+              "bounds": [
+                1.88065966875,
+                2.201955524999999,
+                -1.7064238312499995,
+                -1.5558634312499995
+              ]
+            },
+            {
+              "text": "82\\%",
+              "bounds": [
+                1.8780444750000012,
+                2.201955524999999,
+                -1.073090497916667,
+                -0.9225300979166672
+              ]
+            },
+            {
+              "text": "86\\%",
+              "bounds": [
+                1.8780444750000012,
+                2.201955524999999,
+                -0.43975716458333347,
+                -0.28919676458333354
+              ]
+            },
+            {
+              "text": "rounds",
+              "bounds": [
+                3.9220030562499995,
+                4.521907993749999,
+                -2.9108032354166666,
+                -2.7644769645833334
+              ]
+            }
+          ],
+          "index": 10,
+          "sha256": "a556b38708901f47a252b319ebba600cbf8d102e0fd0c91a52f02da6eb5fc2d6",
+          "bytes": 178238,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "011_00123.0s.png",
+          "time": 122.95179166666667,
+          "reason": "narrated-hold-7.4s",
+          "coverage": 0.009990837191358024,
+          "texts": [
+            {
+              "text": "1",
+              "bounds": [
+                -6.002206052083334,
+                -5.93371290625,
+                -2.2868161000000002,
+                -2.1485844750000003
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                -3.624657132813876,
+                -3.4438763411472104,
+                -2.2913823083333336,
+                -2.1485844750000003
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                -1.2428533385444187,
+                -0.9582946510444188,
+                -2.2913823083333336,
+                -2.1485844750000003
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                -6.156452625,
+                -6.087959479166667,
+                1.3638381740384613,
+                1.5020697990384613
+              ]
+            },
+            {
+              "text": "0.1",
+              "bounds": [
+                -6.328262625,
+                -6.087959479166667,
+                -0.02306031474359005,
+                0.11973751858974324
+              ]
+            },
+            {
+              "text": "0.01",
+              "bounds": [
+                -6.432040520833333,
+                -6.087959479166667,
+                -1.4076756993589745,
+                -1.2648778660256412
+              ]
+            },
+            {
+              "text": "rounds \\ (all $70$ rates)",
+              "bounds": [
+                -4.208030642708333,
+                -2.127888315625002,
+                -2.7568949750000002,
+                -2.528584475
+              ]
+            },
+            {
+              "text": "training loss, \\ bits per page",
+              "bounds": [
+                -5.967959479166668,
+                -3.2405551979166662,
+                1.751415525,
+                1.9568949750000004
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                1.2527154166666663,
+                1.3212085625000003,
+                -2.320491901041667,
+                -2.182260276041667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                3.3695115421304687,
+                3.550292333797134,
+                -2.3250581093750005,
+                -2.182260276041667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                5.49056254259427,
+                5.775121230094269,
+                -2.3250581093750005,
+                -2.182260276041667
+              ]
+            },
+            {
+              "text": "85\\%",
+              "bounds": [
+                0.8070608229166689,
+                1.1669619895833332,
+                -2.1459049427083334,
+                -1.9786156093750003
+              ]
+            },
+            {
+              "text": "90\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                -0.9459049427083326,
+                -0.7786156093749992
+              ]
+            },
+            {
+              "text": "95\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                0.25409505729166537,
+                0.4213843906249988
+              ]
+            },
+            {
+              "text": "100\\%",
+              "bounds": [
+                0.7130380104166667,
+                1.166961989583334,
+                1.4540950572916667,
+                1.6213843906249998
+              ]
+            },
+            {
+              "text": "rounds",
+              "bounds": [
+                3.4570142739583334,
+                4.116909705208333,
+                -2.7232191739583334,
+                -2.562260276041667
+              ]
+            },
+            {
+              "text": "held-out pages right",
+              "bounds": [
+                1.2869619895833333,
+                3.2662924562500013,
+                1.7177397239583332,
+                1.9232191739583335
+              ]
+            },
+            {
+              "text": "second order: \\ leaf $= -G/(H + \\lambda)$",
+              "bounds": [
+                -3.532384420833332,
+                -0.12820161041666744,
+                3.4216895,
+                3.65
+              ]
+            },
+            {
+              "text": "first order: \\ leaf $=$ mean of $-g$",
+              "bounds": [
+                0.47179838958333264,
+                3.532384420833332,
+                3.4319634770833334,
+                3.6397260229166664
+              ]
+            }
+          ],
+          "index": 11,
+          "sha256": "25584624df9d708eeb481db0b10ff9fe196c1dc585c20c775fa8230191de2ca9",
+          "bytes": 71602,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "012_00132.3s.png",
+          "time": 132.34438425925924,
+          "reason": "narrated-hold-6.9s",
+          "coverage": 0.014943576388888888,
+          "texts": [
+            {
+              "text": "1",
+              "bounds": [
+                -6.002206052083334,
+                -5.93371290625,
+                -2.2868161000000002,
+                -2.1485844750000003
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                -3.624657132813876,
+                -3.4438763411472104,
+                -2.2913823083333336,
+                -2.1485844750000003
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                -1.2428533385444187,
+                -0.9582946510444188,
+                -2.2913823083333336,
+                -2.1485844750000003
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                -6.156452625,
+                -6.087959479166667,
+                1.3638381740384613,
+                1.5020697990384613
+              ]
+            },
+            {
+              "text": "0.1",
+              "bounds": [
+                -6.328262625,
+                -6.087959479166667,
+                -0.02306031474359005,
+                0.11973751858974324
+              ]
+            },
+            {
+              "text": "0.01",
+              "bounds": [
+                -6.432040520833333,
+                -6.087959479166667,
+                -1.4076756993589745,
+                -1.2648778660256412
+              ]
+            },
+            {
+              "text": "rounds \\ (all $70$ rates)",
+              "bounds": [
+                -4.208030642708333,
+                -2.127888315625002,
+                -2.7568949750000002,
+                -2.528584475
+              ]
+            },
+            {
+              "text": "training loss, \\ bits per page",
+              "bounds": [
+                -5.967959479166668,
+                -3.2405551979166662,
+                1.751415525,
+                1.9568949750000004
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                1.2527154166666663,
+                1.3212085625000003,
+                -2.320491901041667,
+                -2.182260276041667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                3.3695115421304687,
+                3.550292333797134,
+                -2.3250581093750005,
+                -2.182260276041667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                5.49056254259427,
+                5.775121230094269,
+                -2.3250581093750005,
+                -2.182260276041667
+              ]
+            },
+            {
+              "text": "85\\%",
+              "bounds": [
+                0.8070608229166689,
+                1.1669619895833332,
+                -2.1459049427083334,
+                -1.9786156093750003
+              ]
+            },
+            {
+              "text": "90\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                -0.9459049427083326,
+                -0.7786156093749992
+              ]
+            },
+            {
+              "text": "95\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                0.25409505729166537,
+                0.4213843906249988
+              ]
+            },
+            {
+              "text": "100\\%",
+              "bounds": [
+                0.7130380104166667,
+                1.166961989583334,
+                1.4540950572916667,
+                1.6213843906249998
+              ]
+            },
+            {
+              "text": "rounds",
+              "bounds": [
+                3.4570142739583334,
+                4.116909705208333,
+                -2.7232191739583334,
+                -2.562260276041667
+              ]
+            },
+            {
+              "text": "held-out pages right",
+              "bounds": [
+                1.2869619895833333,
+                3.2662924562500013,
+                1.7177397239583332,
+                1.9232191739583335
+              ]
+            },
+            {
+              "text": "second order: \\ leaf $= -G/(H + \\lambda)$",
+              "bounds": [
+                -3.532384420833332,
+                -0.12820161041666744,
+                3.4216895,
+                3.65
+              ]
+            },
+            {
+              "text": "first order: \\ leaf $=$ mean of $-g$",
+              "bounds": [
+                0.47179838958333264,
+                3.532384420833332,
+                3.4319634770833334,
+                3.6397260229166664
+              ]
+            }
+          ],
+          "index": 12,
+          "sha256": "b822e2b0922c024e2a7d0aa37eec598322258e917899c57f05037505f75163b2",
+          "bytes": 97019,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "013_00141.3s.png",
+          "time": 141.2888287037037,
+          "reason": "narration-end",
+          "coverage": 0.021702835648148146,
+          "texts": [
+            {
+              "text": "1",
+              "bounds": [
+                -6.002206052083334,
+                -5.93371290625,
+                -2.2868161000000002,
+                -2.1485844750000003
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                -3.624657132813876,
+                -3.4438763411472104,
+                -2.2913823083333336,
+                -2.1485844750000003
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                -1.2428533385444187,
+                -0.9582946510444188,
+                -2.2913823083333336,
+                -2.1485844750000003
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                -6.156452625,
+                -6.087959479166667,
+                1.3638381740384613,
+                1.5020697990384613
+              ]
+            },
+            {
+              "text": "0.1",
+              "bounds": [
+                -6.328262625,
+                -6.087959479166667,
+                -0.02306031474359005,
+                0.11973751858974324
+              ]
+            },
+            {
+              "text": "0.01",
+              "bounds": [
+                -6.432040520833333,
+                -6.087959479166667,
+                -1.4076756993589745,
+                -1.2648778660256412
+              ]
+            },
+            {
+              "text": "rounds \\ (all $70$ rates)",
+              "bounds": [
+                -4.208030642708333,
+                -2.127888315625002,
+                -2.7568949750000002,
+                -2.528584475
+              ]
+            },
+            {
+              "text": "training loss, \\ bits per page",
+              "bounds": [
+                -5.967959479166668,
+                -3.2405551979166662,
+                1.751415525,
+                1.9568949750000004
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                1.2527154166666663,
+                1.3212085625000003,
+                -2.320491901041667,
+                -2.182260276041667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                3.3695115421304687,
+                3.550292333797134,
+                -2.3250581093750005,
+                -2.182260276041667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                5.49056254259427,
+                5.775121230094269,
+                -2.3250581093750005,
+                -2.182260276041667
+              ]
+            },
+            {
+              "text": "85\\%",
+              "bounds": [
+                0.8070608229166689,
+                1.1669619895833332,
+                -2.1459049427083334,
+                -1.9786156093750003
+              ]
+            },
+            {
+              "text": "90\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                -0.9459049427083326,
+                -0.7786156093749992
+              ]
+            },
+            {
+              "text": "95\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                0.25409505729166537,
+                0.4213843906249988
+              ]
+            },
+            {
+              "text": "100\\%",
+              "bounds": [
+                0.7130380104166667,
+                1.166961989583334,
+                1.4540950572916667,
+                1.6213843906249998
+              ]
+            },
+            {
+              "text": "rounds",
+              "bounds": [
+                3.4570142739583334,
+                4.116909705208333,
+                -2.7232191739583334,
+                -2.562260276041667
+              ]
+            },
+            {
+              "text": "held-out pages right",
+              "bounds": [
+                1.2869619895833333,
+                3.2662924562500013,
+                1.7177397239583332,
+                1.9232191739583335
+              ]
+            },
+            {
+              "text": "second order: \\ leaf $= -G/(H + \\lambda)$",
+              "bounds": [
+                -3.532384420833332,
+                -0.12820161041666744,
+                3.4216895,
+                3.65
+              ]
+            },
+            {
+              "text": "first order: \\ leaf $=$ mean of $-g$",
+              "bounds": [
+                0.47179838958333264,
+                3.532384420833332,
+                3.4319634770833334,
+                3.6397260229166664
+              ]
+            }
+          ],
+          "index": 13,
+          "sha256": "1673f901c6c09963e1ab57f063027fbafffd01a6f4edde10e092f90ef58e5c2a",
+          "bytes": 120579,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "native_raw_status": "passed",
+      "native_raw_warnings": [],
+      "native_raw_fingerprint": "0e0a5d65eb91fe8c7ee939d431b98965602b63a95221ef3453238343fa838b0f",
+      "historical480_raw_status": "passed",
+      "historical480_raw_warnings": [],
+      "historical480_raw_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+      "caption_constructor_rows": 93,
+      "unique_caption_inputs": 78,
+      "caption_output_differences": 0,
+      "captured_narration_records": 5,
+      "narration_output_differences": 0,
+      "source_graph_comparison": [
+        {
+          "path": "videos/ai/ai6/s16_gboost.py",
+          "captured_sha256": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
+          "current_sha256": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/common.py",
+          "captured_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+          "current_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/compute.py",
+          "captured_sha256": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+          "current_sha256": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/cache_contract.py",
+          "captured_sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+          "current_sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/contracts.py",
+          "captured_sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+          "current_sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/zh_lines.py",
+          "captured_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+          "current_sha256": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+          "exact": false
+        },
+        {
+          "path": "videos/ai/ai6/text_zh_add.json",
+          "captured_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73",
+          "current_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/narration_zh.json",
+          "captured_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+          "current_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "captured_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+          "current_sha256": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+          "exact": false
+        },
+        {
+          "path": "explainer/ai/__init__.py",
+          "captured_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+          "current_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+          "exact": true
+        },
+        {
+          "path": "explainer/ai/viz.py",
+          "captured_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+          "current_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+          "exact": true
+        },
+        {
+          "path": "explainer/ai/lecture.py",
+          "captured_sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+          "current_sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+          "exact": true
+        },
+        {
+          "path": "explainer/ai/fonts.py",
+          "captured_sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+          "current_sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+          "exact": true
+        },
+        {
+          "path": "explainer/analysis/__init__.py",
+          "captured_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+          "current_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+          "exact": true
+        },
+        {
+          "path": "explainer/voiceover.py",
+          "captured_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+          "current_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+          "exact": true
+        },
+        {
+          "path": "explainer/lang.py",
+          "captured_sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+          "current_sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+          "exact": true
+        },
+        {
+          "path": "explainer/tts.py",
+          "captured_sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+          "current_sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+          "exact": true
+        },
+        {
+          "path": "explainer/zh_text.py",
+          "captured_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+          "current_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+          "exact": true
+        },
+        {
+          "path": "explainer/zh_templates.py",
+          "captured_sha256": "b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432",
+          "current_sha256": "b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432",
+          "exact": true
+        },
+        {
+          "path": "explainer/cache_lock.py",
+          "captured_sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+          "current_sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+          "exact": true
+        },
+        {
+          "path": "explainer/paths.py",
+          "captured_sha256": "c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413",
+          "current_sha256": "c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413",
+          "exact": true
+        },
+        {
+          "path": "explainer/ai/cache.py",
+          "captured_sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+          "current_sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+          "exact": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "captured_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "current_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "exact": true
+        }
+      ],
+      "data_signatures": [
+        {
+          "path": ".cache/ai6/xgb.json",
+          "sha256": "db3161db48faf8e4c917569b6a5ebb91def328953828817e31a0be5f4dfab1b7",
+          "captured_signature": [
+            60014,
+            1793509719357752481
+          ],
+          "current_signature": [
+            60014,
+            1793509719357752481
+          ],
+          "actual_current": {
+            "path": "/workspace/explainer-videos/.cache/ai6/xgb.json",
+            "sha256": "db3161db48faf8e4c917569b6a5ebb91def328953828817e31a0be5f4dfab1b7",
+            "bytes": 60014,
+            "mtime_ns": 1793509719357752481
+          },
+          "equal": true
+        },
+        {
+          "path": ".cache/ai6/xgb.npz",
+          "sha256": "b5a41d8479aa8050403ebd1dabebca39171fba998e7b1469b3562eea7f8b2365",
+          "captured_signature": [
+            18751,
+            1793509719352411909
+          ],
+          "current_signature": [
+            18751,
+            1793509719352411909
+          ],
+          "actual_current": {
+            "path": "/workspace/explainer-videos/.cache/ai6/xgb.npz",
+            "sha256": "b5a41d8479aa8050403ebd1dabebca39171fba998e7b1469b3562eea7f8b2365",
+            "bytes": 18751,
+            "mtime_ns": 1793509719352411909
+          },
+          "equal": true
+        },
+        {
+          "path": ".cache/ai6/pages.json",
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+          "captured_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "current_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "actual_current": {
+            "path": "/workspace/explainer-videos/.cache/ai6/pages.json",
+            "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+            "bytes": 4425,
+            "mtime_ns": 1793509481979465950
+          },
+          "equal": true
+        },
+        {
+          "path": ".cache/ai6/pages.npz",
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+          "captured_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "current_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "actual_current": {
+            "path": "/workspace/explainer-videos/.cache/ai6/pages.npz",
+            "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+            "bytes": 46636,
+            "mtime_ns": 1793509481978270662
+          },
+          "equal": true
+        }
+      ],
+      "captured_table_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+      "current_table_sha256": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+      "captured_local_zh_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+      "current_local_zh_sha256": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f"
+    },
+    {
+      "case": "zh/GradientBoosting",
+      "native_states": 15,
+      "prepared_pages_actually_viewed": 4,
+      "original1920_followups_actually_viewed": 4,
+      "actual_page_views": [
+        {
+          "page": 1,
+          "file": "pages/page-001.png",
+          "sha256": "a1578606b06ad251e47c3495bfdda640da018c05d97ec9c7baa5ae716f61e594",
+          "frame_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "tile_size": [
+            960,
+            540
+          ],
+          "review_scale": "50% per native1920x1080 frame; critical unscaled views required separately",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "All chronological held states actually viewed at960×540tiles; Greek/CJK, leaf objective/gain, true-drop annotation, rounds/readouts and two comparison charts readable without confirmed clipping/collision."
+        },
+        {
+          "page": 2,
+          "file": "pages/page-002.png",
+          "sha256": "8982b5f6b564bb549863dc7402c17444abcbfa5d72f202100b52be34b3540574",
+          "frame_indices": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "tile_size": [
+            960,
+            540
+          ],
+          "review_scale": "50% per native1920x1080 frame; critical unscaled views required separately",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "All chronological held states actually viewed at960×540tiles; Greek/CJK, leaf objective/gain, true-drop annotation, rounds/readouts and two comparison charts readable without confirmed clipping/collision."
+        },
+        {
+          "page": 3,
+          "file": "pages/page-003.png",
+          "sha256": "ad61db23ff5dbd70d3a393610e0cd169b2c51f72d28bc4286c372a3f96864a3b",
+          "frame_indices": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "tile_size": [
+            960,
+            540
+          ],
+          "review_scale": "50% per native1920x1080 frame; critical unscaled views required separately",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "All chronological held states actually viewed at960×540tiles; Greek/CJK, leaf objective/gain, true-drop annotation, rounds/readouts and two comparison charts readable without confirmed clipping/collision."
+        },
+        {
+          "page": 4,
+          "file": "pages/page-004.png",
+          "sha256": "332b6a2f50be5687b190c4d8cb639b23c391240be6fa148ca91ef3d6da6e74b0",
+          "frame_indices": [
+            12,
+            13,
+            14
+          ],
+          "tile_size": [
+            960,
+            540
+          ],
+          "review_scale": "50% per native1920x1080 frame; critical unscaled views required separately",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "All chronological held states actually viewed at960×540tiles; Greek/CJK, leaf objective/gain, true-drop annotation, rounds/readouts and two comparison charts readable without confirmed clipping/collision."
+        }
+      ],
+      "actual_native_views": [
+        {
+          "index": 4,
+          "file": "native/004_00053.8s.png",
+          "time": 53.84079489664065,
+          "sha256": "d8359a5b2654466e7c3d2ecabe32a3de565d35076261cf3935b6120107a1cadd",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "Original1920×1080 actually viewed: dense proof, gain-versus-true-drop or chart/readout limits as applicable.",
+          "scope": "Held endpoint only; no continuous/motion/audio approval."
+        },
+        {
+          "index": 8,
+          "file": "native/008_00086.8s.png",
+          "time": 86.81554929748066,
+          "sha256": "7c939891a43d5a1df00ef9f7f869e0435f015a4dc629d565dacfcc827a58bb2e",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "Original1920×1080 actually viewed: dense proof, gain-versus-true-drop or chart/readout limits as applicable.",
+          "scope": "Held endpoint only; no continuous/motion/audio approval."
+        },
+        {
+          "index": 11,
+          "file": "native/011_00109.6s.png",
+          "time": 109.58941196951781,
+          "sha256": "547d1f8d1744991e814ceb271c064d49178eb29d1f4ca1fb493d1dc4ba8c879a",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "Original1920×1080 actually viewed: dense proof, gain-versus-true-drop or chart/readout limits as applicable.",
+          "scope": "Held endpoint only; no continuous/motion/audio approval."
+        },
+        {
+          "index": 14,
+          "file": "native/014_00148.1s.png",
+          "time": 148.05185156474306,
+          "sha256": "cfa0fe270ce639407176f5bff7bfa569d759220eee9d9a8f46142432ebf9624a",
+          "viewed_utc": "2026-11-01T10:23:39.433158+00:00",
+          "observation": "Original1920×1080 actually viewed: dense proof, gain-versus-true-drop or chart/readout limits as applicable.",
+          "scope": "Held endpoint only; no continuous/motion/audio approval."
+        }
+      ],
+      "all_original_frames": [
+        {
+          "file": "000_00001.0s.png",
+          "time": 1.0,
+          "reason": "narration-end",
+          "coverage": 0.014992766203703704,
+          "texts": [
+            {
+              "text": "第6部分 \\textperiodcentered\\ 第15章",
+              "bounds": [
+                -1.339995985416666,
+                1.3405771312499979,
+                1.1776255583333333,
+                1.4568700541666666
+              ]
+            },
+            {
+              "text": "二阶的梯度提升",
+              "bounds": [
+                -1.9398194437499987,
+                1.940379862499997,
+                0.3379618208333335,
+                0.8776255583333332
+              ]
+            },
+            {
+              "text": "XGBoost怎样选择分割？",
+              "bounds": [
+                -1.675747140625,
+                1.675747140625,
+                -0.25687005416666686,
+                0.03796182083333344
+              ]
+            },
+            {
+              "text": "1950",
+              "bounds": [
+                -4.897184241666667,
+                -4.436149091666667,
+                -3.1,
+                -2.9523437500000003
+              ]
+            },
+            {
+              "text": "1970",
+              "bounds": [
+                -2.230517575,
+                -1.769482425,
+                -3.1,
+                -2.9523437500000003
+              ]
+            },
+            {
+              "text": "1990",
+              "bounds": [
+                0.43614909166666693,
+                0.897184241666667,
+                -3.1,
+                -2.9523437500000003
+              ]
+            },
+            {
+              "text": "2010",
+              "bounds": [
+                3.099300133333334,
+                3.5673665333333338,
+                -3.1,
+                -2.9523437500000003
+              ]
+            },
+            {
+              "text": "2030",
+              "bounds": [
+                5.7659668,
+                6.2340332,
+                -3.1,
+                -2.9523437500000003
+              ]
+            },
+            {
+              "text": "2001\\; 随机森林；维奥拉--琼斯",
+              "bounds": [
+                0.9153356864583333,
+                3.3517045927083338,
+                -2.62734375,
+                -2.4480162375
+              ]
+            }
+          ],
+          "index": 0,
+          "sha256": "578f90296b1ec3973290fb685c5f6bcb8dc58783548c0c294d5e903dfcc9c41e",
+          "bytes": 78309,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "001_00006.4s.png",
+          "time": 6.377875,
+          "reason": "narrated-hold-11.5s",
+          "coverage": 0.0114819637345679,
+          "texts": [
+            {
+              "text": "F_{m+1}(\\mathbf{x}) = F_m(\\mathbf{x}) + \\eta\\, f_m(\\mathbf{x})",
+              "bounds": [
+                -2.176677910416694,
+                2.176677910416637,
+                3.3471565000000005,
+                3.7
+              ]
+            },
+            {
+              "text": "$f_m$：\\ 一棵沿损失下坡走的小树",
+              "bounds": [
+                -1.5049312093750282,
+                1.5053878468749726,
+                3.0231838958333337,
+                3.2471565000000004
+              ]
+            },
+            {
+              "text": "J.~弗里德曼（2001）；\\ 陈天奇与C.~Guestrin，\\textit{XGBoost}（2016）",
+              "bounds": [
+                0.6649919965277773,
+                6.9111111111111105,
+                -3.8,
+                -3.5716894999999997
+              ]
+            },
+            {
+              "text": "\\sum_i \\ell(y_i, F_i + f_i) + \\Omega(f) \\;\\approx\\; \\sum_i \\big[\\ell_i + g_i f_i + \\tfrac12 h_i f_i^2\\big] + \\gamma T + \\tfrac12\\lambda\\sum_j w_j^2",
+              "bounds": [
+                -5.118497109374999,
+                4.205191140625001,
+                1.5924437499999997,
+                2.3
+              ]
+            },
+            {
+              "text": "泰勒展开到二阶；\\\\ $g_i = p_i - y_i$，\\ $h_i = p_i(1 - p_i)$",
+              "bounds": [
+                1.578099973958338,
+                4.205191140625001,
+                0.9098036458333334,
+                1.3724437499999997
+              ]
+            }
+          ],
+          "index": 1,
+          "sha256": "c5e313958dab5e0def9e3f3a4676ecfbc2360723abf8d43ed13813c9339eef6d",
+          "bytes": 104608,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "002_00035.9s.png",
+          "time": 35.86033624031001,
+          "reason": "narrated-hold-5.6s",
+          "coverage": 0.015118634259259259,
+          "texts": [
+            {
+              "text": "F_{m+1}(\\mathbf{x}) = F_m(\\mathbf{x}) + \\eta\\, f_m(\\mathbf{x})",
+              "bounds": [
+                -2.176677910416694,
+                2.176677910416637,
+                3.3471565000000005,
+                3.7
+              ]
+            },
+            {
+              "text": "$f_m$：\\ 一棵沿损失下坡走的小树",
+              "bounds": [
+                -1.5049312093750282,
+                1.5053878468749726,
+                3.0231838958333337,
+                3.2471565000000004
+              ]
+            },
+            {
+              "text": "J.~弗里德曼（2001）；\\ 陈天奇与C.~Guestrin，\\textit{XGBoost}（2016）",
+              "bounds": [
+                0.6649919965277773,
+                6.9111111111111105,
+                -3.8,
+                -3.5716894999999997
+              ]
+            },
+            {
+              "text": "\\sum_i \\ell(y_i, F_i + f_i) + \\Omega(f) \\;\\approx\\; \\sum_i \\big[\\ell_i + g_i f_i + \\tfrac12 h_i f_i^2\\big] + \\gamma T + \\tfrac12\\lambda\\sum_j w_j^2",
+              "bounds": [
+                -5.118497109374999,
+                4.205191140625001,
+                1.5924437499999997,
+                2.3
+              ]
+            },
+            {
+              "text": "泰勒展开到二阶；\\\\ $g_i = p_i - y_i$，\\ $h_i = p_i(1 - p_i)$",
+              "bounds": [
+                1.578099973958338,
+                4.205191140625001,
+                0.9098036458333334,
+                1.3724437499999997
+              ]
+            },
+            {
+              "text": "\\text{目标} = \\sum_j \\big[G_j w_j + \\tfrac12 (H_j + \\lambda)\\, w_j^2\\big] + \\gamma T",
+              "bounds": [
+                -2.3690756875,
+                3.0733323124999985,
+                -0.19775260416666662,
+                0.5098036458333335
+              ]
+            },
+            {
+              "text": "一棵树：\\ 每片叶子一个权重$w_j$",
+              "bounds": [
+                3.4733323124999993,
+                6.239047916666663,
+                0.043966729166666635,
+                0.2680843125000002
+              ]
+            }
+          ],
+          "index": 2,
+          "sha256": "4588e46165d338996af25a854cf5d2b11604e88f12b4848f0a9d4480d38ba267",
+          "bytes": 131221,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "003_00044.1s.png",
+          "time": 44.07997448320402,
+          "reason": "narrated-hold-7.2s",
+          "coverage": 0.01935040509259259,
+          "texts": [
+            {
+              "text": "F_{m+1}(\\mathbf{x}) = F_m(\\mathbf{x}) + \\eta\\, f_m(\\mathbf{x})",
+              "bounds": [
+                -2.176677910416694,
+                2.176677910416637,
+                3.3471565000000005,
+                3.7
+              ]
+            },
+            {
+              "text": "$f_m$：\\ 一棵沿损失下坡走的小树",
+              "bounds": [
+                -1.5049312093750282,
+                1.5053878468749726,
+                3.0231838958333337,
+                3.2471565000000004
+              ]
+            },
+            {
+              "text": "J.~弗里德曼（2001）；\\ 陈天奇与C.~Guestrin，\\textit{XGBoost}（2016）",
+              "bounds": [
+                0.6649919965277773,
+                6.9111111111111105,
+                -3.8,
+                -3.5716894999999997
+              ]
+            },
+            {
+              "text": "\\sum_i \\ell(y_i, F_i + f_i) + \\Omega(f) \\;\\approx\\; \\sum_i \\big[\\ell_i + g_i f_i + \\tfrac12 h_i f_i^2\\big] + \\gamma T + \\tfrac12\\lambda\\sum_j w_j^2",
+              "bounds": [
+                -5.118497109374999,
+                4.205191140625001,
+                1.5924437499999997,
+                2.3
+              ]
+            },
+            {
+              "text": "泰勒展开到二阶；\\\\ $g_i = p_i - y_i$，\\ $h_i = p_i(1 - p_i)$",
+              "bounds": [
+                1.578099973958338,
+                4.205191140625001,
+                0.9098036458333334,
+                1.3724437499999997
+              ]
+            },
+            {
+              "text": "\\text{目标} = \\sum_j \\big[G_j w_j + \\tfrac12 (H_j + \\lambda)\\, w_j^2\\big] + \\gamma T",
+              "bounds": [
+                -2.3690756875,
+                3.0733323124999985,
+                -0.19775260416666662,
+                0.5098036458333335
+              ]
+            },
+            {
+              "text": "一棵树：\\ 每片叶子一个权重$w_j$",
+              "bounds": [
+                3.4733323124999993,
+                6.239047916666663,
+                0.043966729166666635,
+                0.2680843125000002
+              ]
+            },
+            {
+              "text": "w_j^* = -\\frac{G_j}{H_j + \\lambda}, \\qquad \\text{目标}^* = -\\tfrac12\\sum_j \\frac{G_j^2}{H_j + \\lambda} + \\gamma T",
+              "bounds": [
+                -2.172795874999998,
+                4.61802415625,
+                -1.5120589166666665,
+                -0.5977526041666665
+              ]
+            },
+            {
+              "text": "每片叶子：\\ 一条抛物线的谷底",
+              "bounds": [
+                1.9340266562500013,
+                4.618127927083334,
+                -1.9335948333333333,
+                -1.7320589166666664
+              ]
+            }
+          ],
+          "index": 3,
+          "sha256": "f51d93fccc515e9a626bad88f0dc41b2405e30edc270e826e8465f4668794309",
+          "bytes": 161612,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "004_00053.8s.png",
+          "time": 53.84079489664065,
+          "reason": "narration-end",
+          "coverage": 0.02451147762345679,
+          "texts": [
+            {
+              "text": "F_{m+1}(\\mathbf{x}) = F_m(\\mathbf{x}) + \\eta\\, f_m(\\mathbf{x})",
+              "bounds": [
+                -2.176677910416694,
+                2.176677910416637,
+                3.3471565000000005,
+                3.7
+              ]
+            },
+            {
+              "text": "$f_m$：\\ 一棵沿损失下坡走的小树",
+              "bounds": [
+                -1.5049312093750282,
+                1.5053878468749726,
+                3.0231838958333337,
+                3.2471565000000004
+              ]
+            },
+            {
+              "text": "J.~弗里德曼（2001）；\\ 陈天奇与C.~Guestrin，\\textit{XGBoost}（2016）",
+              "bounds": [
+                0.6649919965277773,
+                6.9111111111111105,
+                -3.8,
+                -3.5716894999999997
+              ]
+            },
+            {
+              "text": "\\sum_i \\ell(y_i, F_i + f_i) + \\Omega(f) \\;\\approx\\; \\sum_i \\big[\\ell_i + g_i f_i + \\tfrac12 h_i f_i^2\\big] + \\gamma T + \\tfrac12\\lambda\\sum_j w_j^2",
+              "bounds": [
+                -5.118497109374999,
+                4.205191140625001,
+                1.5924437499999997,
+                2.3
+              ]
+            },
+            {
+              "text": "泰勒展开到二阶；\\\\ $g_i = p_i - y_i$，\\ $h_i = p_i(1 - p_i)$",
+              "bounds": [
+                1.578099973958338,
+                4.205191140625001,
+                0.9098036458333334,
+                1.3724437499999997
+              ]
+            },
+            {
+              "text": "\\text{目标} = \\sum_j \\big[G_j w_j + \\tfrac12 (H_j + \\lambda)\\, w_j^2\\big] + \\gamma T",
+              "bounds": [
+                -2.3690756875,
+                3.0733323124999985,
+                -0.19775260416666662,
+                0.5098036458333335
+              ]
+            },
+            {
+              "text": "一棵树：\\ 每片叶子一个权重$w_j$",
+              "bounds": [
+                3.4733323124999993,
+                6.239047916666663,
+                0.043966729166666635,
+                0.2680843125000002
+              ]
+            },
+            {
+              "text": "w_j^* = -\\frac{G_j}{H_j + \\lambda}, \\qquad \\text{目标}^* = -\\tfrac12\\sum_j \\frac{G_j^2}{H_j + \\lambda} + \\gamma T",
+              "bounds": [
+                -2.172795874999998,
+                4.61802415625,
+                -1.5120589166666665,
+                -0.5977526041666665
+              ]
+            },
+            {
+              "text": "每片叶子：\\ 一条抛物线的谷底",
+              "bounds": [
+                1.9340266562500013,
+                4.618127927083334,
+                -1.9335948333333333,
+                -1.7320589166666664
+              ]
+            },
+            {
+              "text": "\\text{增益} = \\tfrac12\\Big[\\frac{G_L^2}{H_L + \\lambda} + \\frac{G_R^2}{H_R + \\lambda} - \\frac{(G_L + G_R)^2}{H_L + H_R + \\lambda}\\Big] - \\gamma",
+              "bounds": [
+                -2.4220021875,
+                4.518574000000001,
+                -3.0665175833333334,
+                -2.333594833333333
+              ]
+            },
+            {
+              "text": "把一片叶子分成两片",
+              "bounds": [
+                4.918574000000001,
+                6.765813520833333,
+                -2.7987486145833333,
+                -2.601363802083333
+              ]
+            }
+          ],
+          "index": 4,
+          "sha256": "d8359a5b2654466e7c3d2ecabe32a3de565d35076261cf3935b6120107a1cadd",
+          "bytes": 192986,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "005_00063.9s.png",
+          "time": 63.91041666666666,
+          "reason": "narrated-hold-9.3s",
+          "coverage": 0.006563946759259259,
+          "texts": [
+            {
+              "text": "第一轮：\\ 每一页都在$p = \\tfrac12$，\\ 所以$g = \\pm\\tfrac12$，\\ $h = \\tfrac14$",
+              "bounds": [
+                -2.5266801885416386,
+                2.5266801885416954,
+                3.4252577208333337,
+                3.7
+              ]
+            },
+            {
+              "text": "“mrs” $\\le 0.5$？",
+              "bounds": [
+                -4.182122710416667,
+                -2.6178772895833324,
+                1.886405146875,
+                2.113594853125
+              ]
+            },
+            {
+              "text": "是",
+              "bounds": [
+                -4.540327916666666,
+                -4.35,
+                0.95203403125,
+                1.1479659687500001
+              ]
+            },
+            {
+              "text": "否",
+              "bounds": [
+                -2.4499999999999997,
+                -2.260087166666666,
+                0.95566625,
+                1.14433375
+              ]
+            }
+          ],
+          "index": 5,
+          "sha256": "161f9bdb776107f15a86fd603ddfbd39183a2f444ff74cbbbe45e7bbc05b432c",
+          "bytes": 44477,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "006_00074.5s.png",
+          "time": 74.47605983527133,
+          "reason": "narrated-hold-2.3s",
+          "coverage": 0.015250771604938271,
+          "texts": [
+            {
+              "text": "第一轮：\\ 每一页都在$p = \\tfrac12$，\\ 所以$g = \\pm\\tfrac12$，\\ $h = \\tfrac14$",
+              "bounds": [
+                -2.5266801885416386,
+                2.5266801885416954,
+                3.4252577208333337,
+                3.7
+              ]
+            },
+            {
+              "text": "“mrs” $\\le 0.5$？",
+              "bounds": [
+                -4.182122710416667,
+                -2.6178772895833324,
+                1.886405146875,
+                2.113594853125
+              ]
+            },
+            {
+              "text": "是",
+              "bounds": [
+                -4.540327916666666,
+                -4.35,
+                0.95203403125,
+                1.1479659687500001
+              ]
+            },
+            {
+              "text": "否",
+              "bounds": [
+                -2.4499999999999997,
+                -2.260087166666666,
+                0.95566625,
+                1.14433375
+              ]
+            },
+            {
+              "text": "G = -84.0",
+              "bounds": [
+                -5.813750718749999,
+                -4.3862492812500005,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 57.5",
+              "bounds": [
+                -5.712329234374998,
+                -4.487670765625001,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            },
+            {
+              "text": "G = 62.0",
+              "bounds": [
+                -2.2926765468749974,
+                -1.107323453125002,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 54.5",
+              "bounds": [
+                -2.312329234374998,
+                -1.0876707656250013,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            }
+          ],
+          "index": 6,
+          "sha256": "697fc0e1ea7bf3d225b3da56b106a8011f3c4c0c049a77c07b43d4ace7c60a3b",
+          "bytes": 59075,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "007_00078.8s.png",
+          "time": 78.7873425387597,
+          "reason": "narrated-hold-7.0s",
+          "coverage": 0.01849440586419753,
+          "texts": [
+            {
+              "text": "第一轮：\\ 每一页都在$p = \\tfrac12$，\\ 所以$g = \\pm\\tfrac12$，\\ $h = \\tfrac14$",
+              "bounds": [
+                -2.5266801885416386,
+                2.5266801885416954,
+                3.4252577208333337,
+                3.7
+              ]
+            },
+            {
+              "text": "“mrs” $\\le 0.5$？",
+              "bounds": [
+                -4.182122710416667,
+                -2.6178772895833324,
+                1.886405146875,
+                2.113594853125
+              ]
+            },
+            {
+              "text": "是",
+              "bounds": [
+                -4.540327916666666,
+                -4.35,
+                0.95203403125,
+                1.1479659687500001
+              ]
+            },
+            {
+              "text": "否",
+              "bounds": [
+                -2.4499999999999997,
+                -2.260087166666666,
+                0.95566625,
+                1.14433375
+              ]
+            },
+            {
+              "text": "G = -84.0",
+              "bounds": [
+                -5.813750718749999,
+                -4.3862492812500005,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 57.5",
+              "bounds": [
+                -5.712329234374998,
+                -4.487670765625001,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            },
+            {
+              "text": "G = 62.0",
+              "bounds": [
+                -2.2926765468749974,
+                -1.107323453125002,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 54.5",
+              "bounds": [
+                -2.312329234374998,
+                -1.0876707656250013,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            },
+            {
+              "text": "增益公式：\\ $92.797$",
+              "bounds": [
+                0.8936751249999997,
+                3.2385694541666643,
+                0.9488916520833328,
+                1.2246492437499998
+              ]
+            },
+            {
+              "text": "逐片叶子计算的目标：\\ $92.797$",
+              "bounds": [
+                0.8936751249999997,
+                4.687967549999998,
+                0.44441675624999977,
+                0.728891652083333
+              ]
+            }
+          ],
+          "index": 7,
+          "sha256": "c3be090189e4ba91ac94d519587503190ec65ad8efa558a876c7e47711712d4d",
+          "bytes": 82696,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "008_00086.8s.png",
+          "time": 86.81554929748066,
+          "reason": "narration-end",
+          "coverage": 0.02093412422839506,
+          "texts": [
+            {
+              "text": "第一轮：\\ 每一页都在$p = \\tfrac12$，\\ 所以$g = \\pm\\tfrac12$，\\ $h = \\tfrac14$",
+              "bounds": [
+                -2.5266801885416386,
+                2.5266801885416954,
+                3.4252577208333337,
+                3.7
+              ]
+            },
+            {
+              "text": "“mrs” $\\le 0.5$？",
+              "bounds": [
+                -4.182122710416667,
+                -2.6178772895833324,
+                1.886405146875,
+                2.113594853125
+              ]
+            },
+            {
+              "text": "是",
+              "bounds": [
+                -4.540327916666666,
+                -4.35,
+                0.95203403125,
+                1.1479659687500001
+              ]
+            },
+            {
+              "text": "否",
+              "bounds": [
+                -2.4499999999999997,
+                -2.260087166666666,
+                0.95566625,
+                1.14433375
+              ]
+            },
+            {
+              "text": "G = -84.0",
+              "bounds": [
+                -5.813750718749999,
+                -4.3862492812500005,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 57.5",
+              "bounds": [
+                -5.712329234374998,
+                -4.487670765625001,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            },
+            {
+              "text": "G = 62.0",
+              "bounds": [
+                -2.2926765468749974,
+                -1.107323453125002,
+                -0.14342465625,
+                0.0829140625
+              ]
+            },
+            {
+              "text": "H = 54.5",
+              "bounds": [
+                -2.312329234374998,
+                -1.0876707656250013,
+                -0.4829140625,
+                -0.26342465625
+              ]
+            },
+            {
+              "text": "增益公式：\\ $92.797$",
+              "bounds": [
+                0.8936751249999997,
+                3.2385694541666643,
+                0.9488916520833328,
+                1.2246492437499998
+              ]
+            },
+            {
+              "text": "逐片叶子计算的目标：\\ $92.797$",
+              "bounds": [
+                0.8936751249999997,
+                4.687967549999998,
+                0.44441675624999977,
+                0.728891652083333
+              ]
+            },
+            {
+              "text": "对数损失的真实下降：\\ $100.55$ \\ （奈特，求和）",
+              "bounds": [
+                0.8936751249999997,
+                5.906324875000001,
+                -0.024649243749999994,
+                0.2244167562499998
+              ]
+            }
+          ],
+          "index": 8,
+          "sha256": "7c939891a43d5a1df00ef9f7f869e0435f015a4dc629d565dacfcc827a58bb2e",
+          "bytes": 102267,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "009_00096.9s.png",
+          "time": 96.87783333333333,
+          "reason": "narrated-hold-2.8s",
+          "coverage": 0.024381751543209877,
+          "texts": [
+            {
+              "text": "每$1{,}000$词中``the''的次数",
+              "bounds": [
+                -4.740249676041667,
+                -2.019522028125001,
+                -3.0937443083333336,
+                -2.8700000000000006
+              ]
+            },
+            {
+              "text": "“not”",
+              "bounds": [
+                -6.924229608333331,
+                -6.4357703916666615,
+                2.020000000000001,
+                2.180958897916667
+              ]
+            },
+            {
+              "text": "深度$3$的树，\\ $\\eta = 0.3$，\\ $\\lambda = 1$",
+              "bounds": [
+                3.880705734027777,
+                6.9111111111111105,
+                -3.8,
+                -3.5730593666666666
+              ]
+            }
+          ],
+          "index": 9,
+          "sha256": "d7f610124f63acdfc770f8f89d7bd2ab1fc6bc3ce3589f205261e8fe8a7a7d49",
+          "bytes": 139368,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "010_00105.1s.png",
+          "time": 105.14933510708187,
+          "reason": "narrated-hold-2.0s",
+          "coverage": 0.27283950617283953,
+          "texts": [
+            {
+              "text": "每$1{,}000$词中``the''的次数",
+              "bounds": [
+                -4.740249676041667,
+                -2.019522028125001,
+                -3.0937443083333336,
+                -2.8700000000000006
+              ]
+            },
+            {
+              "text": "“not”",
+              "bounds": [
+                -6.924229608333331,
+                -6.4357703916666615,
+                2.020000000000001,
+                2.180958897916667
+              ]
+            },
+            {
+              "text": "深度$3$的树，\\ $\\eta = 0.3$，\\ $\\lambda = 1$",
+              "bounds": [
+                3.880705734027777,
+                6.9111111111111105,
+                -3.8,
+                -3.5730593666666666
+              ]
+            },
+            {
+              "text": "\\text{第}1\\text{轮}",
+              "bounds": [
+                3.053423943750001,
+                4.14657605625,
+                2.02515566875,
+                2.3748443312500003
+              ]
+            },
+            {
+              "text": "训练损失，\\ 比特：",
+              "bounds": [
+                2.304657952083339,
+                4.114371527083339,
+                1.48455789375,
+                1.7251556687500003
+              ]
+            },
+            {
+              "text": "0",
+              "bounds": [
+                4.264371527083338,
+                4.3867044312500045,
+                1.5048982979166667,
+                1.7048152645833334
+              ]
+            },
+            {
+              "text": ".",
+              "bounds": [
+                4.414704431250004,
+                4.445505597916669,
+                1.5048982979166667,
+                1.5356994645833335
+              ]
+            },
+            {
+              "text": "4",
+              "bounds": [
+                4.473505597916669,
+                4.602231193750003,
+                1.5048982979166667,
+                1.7016189187500002
+              ]
+            },
+            {
+              "text": "0",
+              "bounds": [
+                4.630231193750003,
+                4.752564097916668,
+                1.5048982979166667,
+                1.7048152645833334
+              ]
+            },
+            {
+              "text": "2",
+              "bounds": [
+                4.780564097916669,
+                4.896504310416666,
+                1.5048982979166667,
+                1.6984225729166669
+              ]
+            },
+            {
+              "text": "留出书页判对：",
+              "bounds": [
+                2.304657952083339,
+                3.843387727083338,
+                1.1303943354166666,
+                1.3645163854166666
+              ]
+            },
+            {
+              "text": "8",
+              "bounds": [
+                3.993387727083338,
+                4.113977193750001,
+                1.1303528270833332,
+                1.33026979375
+              ]
+            },
+            {
+              "text": "0",
+              "bounds": [
+                4.141977193750002,
+                4.264310097916667,
+                1.1303528270833332,
+                1.33026979375
+              ]
+            },
+            {
+              "text": ".",
+              "bounds": [
+                4.292310097916667,
+                4.323111264583332,
+                1.1303528270833332,
+                1.16115399375
+              ]
+            },
+            {
+              "text": "6",
+              "bounds": [
+                4.3511112645833325,
+                4.471700731249996,
+                1.1303528270833332,
+                1.33026979375
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                2.2911336093749983,
+                2.3527774406249993,
+                -2.482318385416667,
+                -2.357909922916667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                3.892038529519155,
+                4.054741242019154,
+                -2.4864279729166667,
+                -2.357909922916667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                5.496772837163311,
+                5.752875655913311,
+                -2.4864279729166667,
+                -2.357909922916667
+              ]
+            },
+            {
+              "text": "74\\%",
+              "bounds": [
+                1.8806596687499995,
+                2.2019555249999985,
+                -2.3131901229166667,
+                -2.162629722916667
+              ]
+            },
+            {
+              "text": "78\\%",
+              "bounds": [
+                1.88065966875,
+                2.201955524999999,
+                -1.679856789583333,
+                -1.529296389583333
+              ]
+            },
+            {
+              "text": "82\\%",
+              "bounds": [
+                1.8780444750000012,
+                2.201955524999999,
+                -1.0465234562500005,
+                -0.8959630562500006
+              ]
+            },
+            {
+              "text": "86\\%",
+              "bounds": [
+                1.8780444750000012,
+                2.201955524999999,
+                -0.4131901229166669,
+                -0.262629722916667
+              ]
+            },
+            {
+              "text": "轮数",
+              "bounds": [
+                4.021976274999999,
+                4.422142316666665,
+                -2.937370277083333,
+                -2.737909922916667
+              ]
+            }
+          ],
+          "index": 10,
+          "sha256": "05e477bb3cd3b73afebb9d071d0a1d0558033613b5f28c4802ba663fc3303d57",
+          "bytes": 179416,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "011_00109.6s.png",
+          "time": 109.58941196951781,
+          "reason": "narration-end",
+          "coverage": 0.27436149691358025,
+          "texts": [
+            {
+              "text": "每$1{,}000$词中``the''的次数",
+              "bounds": [
+                -4.740249676041667,
+                -2.019522028125001,
+                -3.0937443083333336,
+                -2.8700000000000006
+              ]
+            },
+            {
+              "text": "“not”",
+              "bounds": [
+                -6.924229608333331,
+                -6.4357703916666615,
+                2.020000000000001,
+                2.180958897916667
+              ]
+            },
+            {
+              "text": "深度$3$的树，\\ $\\eta = 0.3$，\\ $\\lambda = 1$",
+              "bounds": [
+                3.880705734027777,
+                6.9111111111111105,
+                -3.8,
+                -3.5730593666666666
+              ]
+            },
+            {
+              "text": "\\text{第}1\\text{轮}",
+              "bounds": [
+                2.960023837500001,
+                4.2399761625,
+                2.02515566875,
+                2.3748443312500003
+              ]
+            },
+            {
+              "text": "训练损失，\\ 比特：",
+              "bounds": [
+                2.304657952083339,
+                4.114371527083339,
+                1.48455789375,
+                1.7251556687500003
+              ]
+            },
+            {
+              "text": "0",
+              "bounds": [
+                4.264371527083338,
+                4.3867044312500045,
+                1.5048982979166667,
+                1.7048152645833334
+              ]
+            },
+            {
+              "text": ".",
+              "bounds": [
+                4.414704431250004,
+                4.445505597916669,
+                1.5048982979166667,
+                1.5356994645833335
+              ]
+            },
+            {
+              "text": "2",
+              "bounds": [
+                4.473505597916669,
+                4.589445810416667,
+                1.5048982979166667,
+                1.6984225729166669
+              ]
+            },
+            {
+              "text": "9",
+              "bounds": [
+                4.617445810416666,
+                4.73803527708333,
+                1.5048982979166667,
+                1.7048152645833334
+              ]
+            },
+            {
+              "text": "4",
+              "bounds": [
+                4.76603527708333,
+                4.894760872916664,
+                1.5048982979166667,
+                1.7016189187500002
+              ]
+            },
+            {
+              "text": "留出书页判对：",
+              "bounds": [
+                2.304657952083339,
+                3.843387727083338,
+                1.1303943354166666,
+                1.3645163854166666
+              ]
+            },
+            {
+              "text": "7",
+              "bounds": [
+                3.9933877270833382,
+                4.118045243750004,
+                1.1303528270833332,
+                1.3331755812500001
+              ]
+            },
+            {
+              "text": "7",
+              "bounds": [
+                4.146045243750004,
+                4.270702760416669,
+                1.1303528270833332,
+                1.3331755812500001
+              ]
+            },
+            {
+              "text": ".",
+              "bounds": [
+                4.29870276041667,
+                4.329503927083334,
+                1.1303528270833332,
+                1.16115399375
+              ]
+            },
+            {
+              "text": "5",
+              "bounds": [
+                4.357503927083335,
+                4.473444139583332,
+                1.1303528270833332,
+                1.33026979375
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                2.2911336093749983,
+                2.3527774406249993,
+                -2.482318385416667,
+                -2.357909922916667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                3.892038529519155,
+                4.054741242019154,
+                -2.4864279729166667,
+                -2.357909922916667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                5.496772837163311,
+                5.752875655913311,
+                -2.4864279729166667,
+                -2.357909922916667
+              ]
+            },
+            {
+              "text": "74\\%",
+              "bounds": [
+                1.8806596687499995,
+                2.2019555249999985,
+                -2.3131901229166667,
+                -2.162629722916667
+              ]
+            },
+            {
+              "text": "78\\%",
+              "bounds": [
+                1.88065966875,
+                2.201955524999999,
+                -1.679856789583333,
+                -1.529296389583333
+              ]
+            },
+            {
+              "text": "82\\%",
+              "bounds": [
+                1.8780444750000012,
+                2.201955524999999,
+                -1.0465234562500005,
+                -0.8959630562500006
+              ]
+            },
+            {
+              "text": "86\\%",
+              "bounds": [
+                1.8780444750000012,
+                2.201955524999999,
+                -0.4131901229166669,
+                -0.262629722916667
+              ]
+            },
+            {
+              "text": "轮数",
+              "bounds": [
+                4.021976274999999,
+                4.422142316666665,
+                -2.937370277083333,
+                -2.737909922916667
+              ]
+            }
+          ],
+          "index": 11,
+          "sha256": "547d1f8d1744991e814ceb271c064d49178eb29d1f4ca1fb493d1dc4ba8c879a",
+          "bytes": 185401,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "012_00130.4s.png",
+          "time": 130.41966666666667,
+          "reason": "narrated-hold-6.1s",
+          "coverage": 0.010402681327160494,
+          "texts": [
+            {
+              "text": "1",
+              "bounds": [
+                -6.002206052083334,
+                -5.93371290625,
+                -2.295948529166667,
+                -2.157716904166667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                -3.624657132813876,
+                -3.4438763411472104,
+                -2.3005147375000004,
+                -2.157716904166667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                -1.2428533385444187,
+                -0.9582946510444188,
+                -2.3005147375000004,
+                -2.157716904166667
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                -6.156452625,
+                -6.087959479166667,
+                1.3547057448717945,
+                1.4929373698717945
+              ]
+            },
+            {
+              "text": "0.1",
+              "bounds": [
+                -6.328262625,
+                -6.087959479166667,
+                -0.03219274391025684,
+                0.11060508942307645
+              ]
+            },
+            {
+              "text": "0.01",
+              "bounds": [
+                -6.432040520833333,
+                -6.087959479166667,
+                -1.4168081285256413,
+                -1.274010295192308
+              ]
+            },
+            {
+              "text": "轮数 \\ （全部70个词频）",
+              "bounds": [
+                -4.344900182291667,
+                -1.991018776041668,
+                -2.7660274041666666,
+                -2.5377169041666665
+              ]
+            },
+            {
+              "text": "训练损失，\\ 每页比特",
+              "bounds": [
+                -5.967959479166668,
+                -3.9250371187500015,
+                1.7422830958333333,
+                1.9660274041666668
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                1.2527154166666663,
+                1.3212085625000003,
+                -2.299487332291667,
+                -2.161255707291667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                3.3695115421304687,
+                3.550292333797134,
+                -2.3040535406250005,
+                -2.161255707291667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                5.49056254259427,
+                5.775121230094269,
+                -2.3040535406250005,
+                -2.161255707291667
+              ]
+            },
+            {
+              "text": "85\\%",
+              "bounds": [
+                0.8070608229166689,
+                1.1669619895833332,
+                -2.1249003739583334,
+                -1.9576110406250002
+              ]
+            },
+            {
+              "text": "90\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                -0.9249003739583326,
+                -0.7576110406249992
+              ]
+            },
+            {
+              "text": "95\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                0.2750996260416654,
+                0.4423889593749988
+              ]
+            },
+            {
+              "text": "100\\%",
+              "bounds": [
+                0.7130380104166667,
+                1.166961989583334,
+                1.4750996260416667,
+                1.6423889593749998
+              ]
+            },
+            {
+              "text": "轮数",
+              "bounds": [
+                3.566984814583333,
+                4.0071674604166665,
+                -2.760662096875,
+                -2.541255707291667
+              ]
+            },
+            {
+              "text": "留出书页判对率",
+              "bounds": [
+                1.2869619895833333,
+                2.8506606416666656,
+                1.7387442927083332,
+                1.9606620968750001
+              ]
+            },
+            {
+              "text": "二阶：\\ 叶子$= -G/(H + \\lambda)$",
+              "bounds": [
+                -2.907069632291665,
+                -0.20900533020833323,
+                3.4159817375,
+                3.6500000000000004
+              ]
+            },
+            {
+              "text": "一阶：\\ 叶子$=$ $-g$的均值",
+              "bounds": [
+                0.39099466979166664,
+                2.9075262468750003,
+                3.4200913260416668,
+                3.6458904114583337
+              ]
+            }
+          ],
+          "index": 12,
+          "sha256": "01f2f3576373d382daada22b43495669d315d8a5bcd50a45d1865ebb8e351b97",
+          "bytes": 71141,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "013_00138.6s.png",
+          "time": 138.56864743037613,
+          "reason": "narrated-hold-7.5s",
+          "coverage": 0.015366512345679012,
+          "texts": [
+            {
+              "text": "1",
+              "bounds": [
+                -6.002206052083334,
+                -5.93371290625,
+                -2.295948529166667,
+                -2.157716904166667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                -3.624657132813876,
+                -3.4438763411472104,
+                -2.3005147375000004,
+                -2.157716904166667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                -1.2428533385444187,
+                -0.9582946510444188,
+                -2.3005147375000004,
+                -2.157716904166667
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                -6.156452625,
+                -6.087959479166667,
+                1.3547057448717945,
+                1.4929373698717945
+              ]
+            },
+            {
+              "text": "0.1",
+              "bounds": [
+                -6.328262625,
+                -6.087959479166667,
+                -0.03219274391025684,
+                0.11060508942307645
+              ]
+            },
+            {
+              "text": "0.01",
+              "bounds": [
+                -6.432040520833333,
+                -6.087959479166667,
+                -1.4168081285256413,
+                -1.274010295192308
+              ]
+            },
+            {
+              "text": "轮数 \\ （全部70个词频）",
+              "bounds": [
+                -4.344900182291667,
+                -1.991018776041668,
+                -2.7660274041666666,
+                -2.5377169041666665
+              ]
+            },
+            {
+              "text": "训练损失，\\ 每页比特",
+              "bounds": [
+                -5.967959479166668,
+                -3.9250371187500015,
+                1.7422830958333333,
+                1.9660274041666668
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                1.2527154166666663,
+                1.3212085625000003,
+                -2.299487332291667,
+                -2.161255707291667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                3.3695115421304687,
+                3.550292333797134,
+                -2.3040535406250005,
+                -2.161255707291667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                5.49056254259427,
+                5.775121230094269,
+                -2.3040535406250005,
+                -2.161255707291667
+              ]
+            },
+            {
+              "text": "85\\%",
+              "bounds": [
+                0.8070608229166689,
+                1.1669619895833332,
+                -2.1249003739583334,
+                -1.9576110406250002
+              ]
+            },
+            {
+              "text": "90\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                -0.9249003739583326,
+                -0.7576110406249992
+              ]
+            },
+            {
+              "text": "95\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                0.2750996260416654,
+                0.4423889593749988
+              ]
+            },
+            {
+              "text": "100\\%",
+              "bounds": [
+                0.7130380104166667,
+                1.166961989583334,
+                1.4750996260416667,
+                1.6423889593749998
+              ]
+            },
+            {
+              "text": "轮数",
+              "bounds": [
+                3.566984814583333,
+                4.0071674604166665,
+                -2.760662096875,
+                -2.541255707291667
+              ]
+            },
+            {
+              "text": "留出书页判对率",
+              "bounds": [
+                1.2869619895833333,
+                2.8506606416666656,
+                1.7387442927083332,
+                1.9606620968750001
+              ]
+            },
+            {
+              "text": "二阶：\\ 叶子$= -G/(H + \\lambda)$",
+              "bounds": [
+                -2.907069632291665,
+                -0.20900533020833323,
+                3.4159817375,
+                3.6500000000000004
+              ]
+            },
+            {
+              "text": "一阶：\\ 叶子$=$ $-g$的均值",
+              "bounds": [
+                0.39099466979166664,
+                2.9075262468750003,
+                3.4200913260416668,
+                3.6458904114583337
+              ]
+            }
+          ],
+          "index": 13,
+          "sha256": "9e620f4c4ad9e782fc548340a1d63a4e8650fe6d96141545ac08adba009f7596",
+          "bytes": 96600,
+          "size": [
+            1920,
+            1080
+          ]
+        },
+        {
+          "file": "014_00148.1s.png",
+          "time": 148.05185156474306,
+          "reason": "narration-end",
+          "coverage": 0.022199074074074072,
+          "texts": [
+            {
+              "text": "1",
+              "bounds": [
+                -6.002206052083334,
+                -5.93371290625,
+                -2.295948529166667,
+                -2.157716904166667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                -3.624657132813876,
+                -3.4438763411472104,
+                -2.3005147375000004,
+                -2.157716904166667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                -1.2428533385444187,
+                -0.9582946510444188,
+                -2.3005147375000004,
+                -2.157716904166667
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                -6.156452625,
+                -6.087959479166667,
+                1.3547057448717945,
+                1.4929373698717945
+              ]
+            },
+            {
+              "text": "0.1",
+              "bounds": [
+                -6.328262625,
+                -6.087959479166667,
+                -0.03219274391025684,
+                0.11060508942307645
+              ]
+            },
+            {
+              "text": "0.01",
+              "bounds": [
+                -6.432040520833333,
+                -6.087959479166667,
+                -1.4168081285256413,
+                -1.274010295192308
+              ]
+            },
+            {
+              "text": "轮数 \\ （全部70个词频）",
+              "bounds": [
+                -4.344900182291667,
+                -1.991018776041668,
+                -2.7660274041666666,
+                -2.5377169041666665
+              ]
+            },
+            {
+              "text": "训练损失，\\ 每页比特",
+              "bounds": [
+                -5.967959479166668,
+                -3.9250371187500015,
+                1.7422830958333333,
+                1.9660274041666668
+              ]
+            },
+            {
+              "text": "1",
+              "bounds": [
+                1.2527154166666663,
+                1.3212085625000003,
+                -2.299487332291667,
+                -2.161255707291667
+              ]
+            },
+            {
+              "text": "10",
+              "bounds": [
+                3.3695115421304687,
+                3.550292333797134,
+                -2.3040535406250005,
+                -2.161255707291667
+              ]
+            },
+            {
+              "text": "100",
+              "bounds": [
+                5.49056254259427,
+                5.775121230094269,
+                -2.3040535406250005,
+                -2.161255707291667
+              ]
+            },
+            {
+              "text": "85\\%",
+              "bounds": [
+                0.8070608229166689,
+                1.1669619895833332,
+                -2.1249003739583334,
+                -1.9576110406250002
+              ]
+            },
+            {
+              "text": "90\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                -0.9249003739583326,
+                -0.7576110406249992
+              ]
+            },
+            {
+              "text": "95\\%",
+              "bounds": [
+                0.8070608229166694,
+                1.1669619895833336,
+                0.2750996260416654,
+                0.4423889593749988
+              ]
+            },
+            {
+              "text": "100\\%",
+              "bounds": [
+                0.7130380104166667,
+                1.166961989583334,
+                1.4750996260416667,
+                1.6423889593749998
+              ]
+            },
+            {
+              "text": "轮数",
+              "bounds": [
+                3.566984814583333,
+                4.0071674604166665,
+                -2.760662096875,
+                -2.541255707291667
+              ]
+            },
+            {
+              "text": "留出书页判对率",
+              "bounds": [
+                1.2869619895833333,
+                2.8506606416666656,
+                1.7387442927083332,
+                1.9606620968750001
+              ]
+            },
+            {
+              "text": "二阶：\\ 叶子$= -G/(H + \\lambda)$",
+              "bounds": [
+                -2.907069632291665,
+                -0.20900533020833323,
+                3.4159817375,
+                3.6500000000000004
+              ]
+            },
+            {
+              "text": "一阶：\\ 叶子$=$ $-g$的均值",
+              "bounds": [
+                0.39099466979166664,
+                2.9075262468750003,
+                3.4200913260416668,
+                3.6458904114583337
+              ]
+            }
+          ],
+          "index": 14,
+          "sha256": "cfa0fe270ce639407176f5bff7bfa569d759220eee9d9a8f46142432ebf9624a",
+          "bytes": 120413,
+          "size": [
+            1920,
+            1080
+          ]
+        }
+      ],
+      "native_raw_status": "passed",
+      "native_raw_warnings": [],
+      "native_raw_fingerprint": "0e0a5d65eb91fe8c7ee939d431b98965602b63a95221ef3453238343fa838b0f",
+      "historical480_raw_status": "passed",
+      "historical480_raw_warnings": [],
+      "historical480_raw_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+      "caption_constructor_rows": 93,
+      "unique_caption_inputs": 78,
+      "caption_output_differences": 0,
+      "captured_narration_records": 5,
+      "narration_output_differences": 0,
+      "source_graph_comparison": [
+        {
+          "path": "videos/ai/ai6/s16_gboost.py",
+          "captured_sha256": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
+          "current_sha256": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/common.py",
+          "captured_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+          "current_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/compute.py",
+          "captured_sha256": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+          "current_sha256": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/cache_contract.py",
+          "captured_sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+          "current_sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/contracts.py",
+          "captured_sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+          "current_sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/zh_lines.py",
+          "captured_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+          "current_sha256": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+          "exact": false
+        },
+        {
+          "path": "videos/ai/ai6/text_zh_add.json",
+          "captured_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73",
+          "current_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai6/narration_zh.json",
+          "captured_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+          "current_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+          "exact": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "captured_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+          "current_sha256": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+          "exact": false
+        },
+        {
+          "path": "explainer/ai/__init__.py",
+          "captured_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+          "current_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+          "exact": true
+        },
+        {
+          "path": "explainer/ai/viz.py",
+          "captured_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+          "current_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+          "exact": true
+        },
+        {
+          "path": "explainer/ai/lecture.py",
+          "captured_sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+          "current_sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+          "exact": true
+        },
+        {
+          "path": "explainer/ai/fonts.py",
+          "captured_sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+          "current_sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+          "exact": true
+        },
+        {
+          "path": "explainer/analysis/__init__.py",
+          "captured_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+          "current_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+          "exact": true
+        },
+        {
+          "path": "explainer/voiceover.py",
+          "captured_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+          "current_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+          "exact": true
+        },
+        {
+          "path": "explainer/lang.py",
+          "captured_sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+          "current_sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+          "exact": true
+        },
+        {
+          "path": "explainer/tts.py",
+          "captured_sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+          "current_sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+          "exact": true
+        },
+        {
+          "path": "explainer/zh_text.py",
+          "captured_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+          "current_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+          "exact": true
+        },
+        {
+          "path": "explainer/zh_templates.py",
+          "captured_sha256": "b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432",
+          "current_sha256": "b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432",
+          "exact": true
+        },
+        {
+          "path": "explainer/cache_lock.py",
+          "captured_sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+          "current_sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+          "exact": true
+        },
+        {
+          "path": "explainer/paths.py",
+          "captured_sha256": "c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413",
+          "current_sha256": "c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413",
+          "exact": true
+        },
+        {
+          "path": "explainer/ai/cache.py",
+          "captured_sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+          "current_sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+          "exact": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "captured_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "current_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "exact": true
+        }
+      ],
+      "data_signatures": [
+        {
+          "path": ".cache/ai6/xgb.json",
+          "sha256": "db3161db48faf8e4c917569b6a5ebb91def328953828817e31a0be5f4dfab1b7",
+          "captured_signature": [
+            60014,
+            1793509719357752481
+          ],
+          "current_signature": [
+            60014,
+            1793509719357752481
+          ],
+          "actual_current": {
+            "path": "/workspace/explainer-videos/.cache/ai6/xgb.json",
+            "sha256": "db3161db48faf8e4c917569b6a5ebb91def328953828817e31a0be5f4dfab1b7",
+            "bytes": 60014,
+            "mtime_ns": 1793509719357752481
+          },
+          "equal": true
+        },
+        {
+          "path": ".cache/ai6/xgb.npz",
+          "sha256": "b5a41d8479aa8050403ebd1dabebca39171fba998e7b1469b3562eea7f8b2365",
+          "captured_signature": [
+            18751,
+            1793509719352411909
+          ],
+          "current_signature": [
+            18751,
+            1793509719352411909
+          ],
+          "actual_current": {
+            "path": "/workspace/explainer-videos/.cache/ai6/xgb.npz",
+            "sha256": "b5a41d8479aa8050403ebd1dabebca39171fba998e7b1469b3562eea7f8b2365",
+            "bytes": 18751,
+            "mtime_ns": 1793509719352411909
+          },
+          "equal": true
+        },
+        {
+          "path": ".cache/ai6/pages.json",
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+          "captured_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "current_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "actual_current": {
+            "path": "/workspace/explainer-videos/.cache/ai6/pages.json",
+            "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+            "bytes": 4425,
+            "mtime_ns": 1793509481979465950
+          },
+          "equal": true
+        },
+        {
+          "path": ".cache/ai6/pages.npz",
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+          "captured_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "current_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "actual_current": {
+            "path": "/workspace/explainer-videos/.cache/ai6/pages.npz",
+            "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+            "bytes": 46636,
+            "mtime_ns": 1793509481978270662
+          },
+          "equal": true
+        }
+      ],
+      "captured_table_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+      "current_table_sha256": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+      "captured_local_zh_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+      "current_local_zh_sha256": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f"
+    }
+  ],
+  "current_source_sha256": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
+  "current_global_caption_sha256": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+  "current_local_zh_sha256": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+  "source_scope": "21of23 observed source/helper/core files are byte-exact current; only globalcaption/localZH changed. Direct f994scene/common/producer/cache/sharedhelpers unchanged. No aggregate rawfingerprint updated or blanket waiver for peer scene edits.",
+  "caption_scope": "Historical206global/0850local maps versus current89fglobal/296local:93 actual constructor rows (78unique) per language and5 captured native narration records per language yield0 output differences. Native text input logs are empty; constructor inputs come from actual frozen480witness logs under identical scene/helper/data. Native displayed-text records retained; no fabricated native call-log claim.",
+  "data_scope": "Actual xgb.json/xgb.npz/pages.json/pages.npz SHA/bytes/mtime rechecked exact. No defaultloader/producer/model import or metric recomputation.",
+  "findings": [
+    {
+      "status": "no corrective settled defect confirmed",
+      "observations": [
+        "Taylor approximation, logistic gradient/Hessian, regrouped leaf objective, optimum weight and split-gain formula are legible at inspected scales; Greek/subscripts/CJK clear and contained.",
+        "Actual G/H leaf readouts fit; gain92.797 and leaf-objective92.797 distinguished from true log-loss drop100.55(nats,summed).",
+        "Round200 preview retains training loss0.294bits and held-out77.5%, with labeled small accuracy plot and decision regions; annotations remain outside plot and fit.",
+        "Final comparison preserves green second-order versus orange first-order keys, logarithmic rounds/loss ticks and heldout percentage bounds; no native endpoint overlap or clipping confirmed."
+      ]
+    }
+  ],
+  "limits": [
+    "All29states viewed at960x540tiles on8existing1920x1144pages;8original1920x1080followups viewed directly, not all29 originals unscaled.",
+    "No capture, renderer, video decode, pagegeneration, numerical/model/producer execution or source/cache/data/audio edit. Metadata/evidence copies only.",
+    "Native and historical480 rawrecords statuses/warnings/fingerprints retained verbatim. Scoped equivalence is separate from rawfingerprint currentness.",
+    "No1080motion/continuousplayback/narrationlistening/sync/4K/assembly or wholePart6 approval.",
+    "Dense proof motion windows35.72–37.05/43.11–44.45/51.75–53.08 remain separate parent-owned review; not covered by this native endpoint gate."
+  ]
+}
