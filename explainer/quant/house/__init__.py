@@ -10,4 +10,4 @@ explicitly (``from explainer.quant.house import bs, hedge``).
 * :mod:`surface` (Parts 1, 10, 12): the frozen options surface (the series' pricing scoreboard).
 """
 
-from explainer.quant.house import bs, hedge, paths, trees  # noqa: F401
+from explainer.quant.house import bs, hedge, paths, surface, trees  # noqa: F401
