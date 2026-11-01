@@ -1,9 +1,9 @@
 # Quant, Built: textbooks, papers and the industry library
 
-The series' reading, kept in one place. Part 1 lists the textbooks the series covers, with the parts each one maps
-to. Part 2 maps the core textbooks topic by topic, so nothing they teach is missed. Part 3 is the industry and
-history library. Part 4 is the paper list for every part: the classic papers, the frontier, and industry and
-official sources.
+The series' reading, kept in one place. Section 1 lists the textbooks the series covers, with the parts each one
+maps to. Section 2 maps the core textbooks topic by topic, so nothing they teach is missed. Section 3 is the industry
+and history library. Section 4 is the paper list for each of the 30 parts: the classic papers, the frontier, and
+industry and official sources.
 
 **Status.** This is a plan. Chapter numbers refer to the editions named and are checked against each book's table
 of contents in Phase 0 ([`SYLLABUS.md`](SYLLABUS.md#7-phases)). Every citation (authors, year, title, venue) is
@@ -18,166 +18,166 @@ Short names (left) are the ones [`SYLLABUS.md`](SYLLABUS.md) uses.
 
 | Short name | Book | Parts |
 |---|---|---|
-| Hull OFOD | Hull, *Options, Futures, and Other Derivatives* (11th ed., 2021) | 2, 9–13, 15, 16, 18–22, 40 |
-| Bodie–Kane–Marcus | Bodie, Kane, Marcus, *Investments* (12th ed.) | 1–3, 23, 24, 30 |
-| Luenberger | Luenberger, *Investment Science* (2nd ed., 2013) | 3, 18, 23 |
-| Berk–DeMarzo | Berk, DeMarzo, *Corporate Finance* | 3 |
-| Brealey–Myers–Allen | Brealey, Myers, Allen, *Principles of Corporate Finance* | 3 |
-| Damodaran | Damodaran, *Investment Valuation* (3rd ed.) | 3 |
-| Koller et al. | Koller, Goedhart, Wessels (McKinsey), *Valuation* | 3 |
-| Harris | Harris, *Trading and Exchanges: Market Microstructure for Practitioners* (2003) | 2, 35 |
-| Mishkin | Mishkin, *The Economics of Money, Banking, and Financial Markets* | 2, 18 |
+| Hull OFOD | Hull, *Options, Futures, and Other Derivatives* (11th ed., 2021) | 2, 6–11, 13–16, 29 |
+| Bodie–Kane–Marcus | Bodie, Kane, Marcus, *Investments* (12th ed.) | 1, 2, 17, 18, 22 |
+| Luenberger | Luenberger, *Investment Science* (2nd ed., 2013) | 2, 13, 17, 18 |
+| Berk–DeMarzo | Berk, DeMarzo, *Corporate Finance* | 2 |
+| Brealey–Myers–Allen | Brealey, Myers, Allen, *Principles of Corporate Finance* | 2 |
+| Damodaran | Damodaran, *Investment Valuation* (3rd ed.) | 2, 18 |
+| Koller et al. | Koller, Goedhart, Wessels (McKinsey), *Valuation* | 2, 18 |
+| Harris | Harris, *Trading and Exchanges: Market Microstructure for Practitioners* (2003) | 2, 25 |
+| Mishkin | Mishkin, *The Economics of Money, Banking, and Financial Markets* | 2, 13 |
 
 ### Probability, stochastic calculus and continuous-time finance
 
 | Short name | Book | Parts |
 |---|---|---|
-| Shreve I | Shreve, *Stochastic Calculus for Finance I: The Binomial Asset Pricing Model* (2004) | 4, 9 |
-| Shreve II | Shreve, *Stochastic Calculus for Finance II: Continuous-Time Models* (2004) | 5, 9, 10, 15, 19 |
-| Björk | Björk, *Arbitrage Theory in Continuous Time* (4th ed., 2020) | 5, 8, 9, 10, 19 |
-| Baxter–Rennie | Baxter, Rennie, *Financial Calculus* (1996) | 9, 10 |
-| Joshi *Concepts* | Joshi, *The Concepts and Practice of Mathematical Finance* (2nd ed., 2008) | 9, 10, 16 |
-| Wilmott PWOQF | Wilmott, *Paul Wilmott on Quantitative Finance* (2nd ed., 2006) | 10, 15, 16 |
-| Musiela–Rutkowski | Musiela, Rutkowski, *Martingale Methods in Financial Modelling* (2nd ed., 2005) | 9, 19 |
-| Karatzas–Shreve | Karatzas, Shreve, *Brownian Motion and Stochastic Calculus* (1991); *Methods of Mathematical Finance* (1998) | 5, 8 |
-| Øksendal | Øksendal, *Stochastic Differential Equations* (6th ed., 2003) | 5, 8 |
-| Williams | Williams, *Probability with Martingales* (1991) | 4 |
-| Duffie DAPT | Duffie, *Dynamic Asset Pricing Theory* (3rd ed., 2001) | 9, 19, 20, 23 |
-| Delbaen–Schachermayer | Delbaen, Schachermayer, *The Mathematics of Arbitrage* (2006) | 9 |
-| Föllmer–Schied | Föllmer, Schied, *Stochastic Finance: An Introduction in Discrete Time* (4th ed., 2016) | 4, 9, 40 |
-| Cont–Tankov | Cont, Tankov, *Financial Modelling with Jump Processes* (2004) | 1, 5, 13 |
-| Pham | Pham, *Continuous-time Stochastic Control and Optimization with Financial Applications* (2009) | 8 |
-| Touzi | Touzi, *Optimal Stochastic Control, Stochastic Target Problems, and Backward SDE* (2013) | 8 |
-| Carmona–Delarue | Carmona, Delarue, *Probabilistic Theory of Mean Field Games* (2018) | 8, 37, 42 |
-| Friz–Hairer | Friz, Hairer, *A Course on Rough Paths* (2nd ed., 2020) | 5, 14 |
+| Shreve I | Shreve, *Stochastic Calculus for Finance I: The Binomial Asset Pricing Model* (2004) | 3, 6 |
+| Shreve II | Shreve, *Stochastic Calculus for Finance II: Continuous-Time Models* (2004) | 3, 6, 7, 10, 14 |
+| Björk | Björk, *Arbitrage Theory in Continuous Time* (4th ed., 2020) | 3, 5–7, 14 |
+| Baxter–Rennie | Baxter, Rennie, *Financial Calculus* (1996) | 6, 7 |
+| Joshi *Concepts* | Joshi, *The Concepts and Practice of Mathematical Finance* (2nd ed., 2008) | 6, 7, 11 |
+| Wilmott PWOQF | Wilmott, *Paul Wilmott on Quantitative Finance* (2nd ed., 2006) | 7, 10, 11 |
+| Musiela–Rutkowski | Musiela, Rutkowski, *Martingale Methods in Financial Modelling* (2nd ed., 2005) | 6, 14 |
+| Karatzas–Shreve | Karatzas, Shreve, *Brownian Motion and Stochastic Calculus* (1991); *Methods of Mathematical Finance* (1998) | 3, 5 |
+| Øksendal | Øksendal, *Stochastic Differential Equations* (6th ed., 2003) | 3, 5 |
+| Williams | Williams, *Probability with Martingales* (1991) | 3 |
+| Duffie DAPT | Duffie, *Dynamic Asset Pricing Theory* (3rd ed., 2001) | 6, 14, 15, 17 |
+| Delbaen–Schachermayer | Delbaen, Schachermayer, *The Mathematics of Arbitrage* (2006) | 6 |
+| Föllmer–Schied | Föllmer, Schied, *Stochastic Finance: An Introduction in Discrete Time* (4th ed., 2016) | 3, 6, 29 |
+| Cont–Tankov | Cont, Tankov, *Financial Modelling with Jump Processes* (2004) | 1, 3, 9 |
+| Pham | Pham, *Continuous-time Stochastic Control and Optimization with Financial Applications* (2009) | 5 |
+| Touzi | Touzi, *Optimal Stochastic Control, Stochastic Target Problems, and Backward SDE* (2013) | 5 |
+| Carmona–Delarue | Carmona, Delarue, *Probabilistic Theory of Mean Field Games* (2018) | 5, 26, 27, 29 |
+| Friz–Hairer | Friz, Hairer, *A Course on Rough Paths* (2nd ed., 2020) | 3, 9 |
 
 ### Volatility, derivatives practice and exotics
 
 | Short name | Book | Parts |
 |---|---|---|
-| Natenberg | Natenberg, *Option Volatility and Pricing* (2nd ed., 2015) | 11 |
-| Sinclair | Sinclair, *Volatility Trading* (2nd ed., 2013); *Positional Option Trading* (2020) | 11, 12 |
-| Taleb | Taleb, *Dynamic Hedging* (1997) | 10, 11, 15 |
-| Bennett | Bennett, *Trading Volatility* (2014) | 11, 12 |
-| Gatheral | Gatheral, *The Volatility Surface* (2006) | 12–14 |
-| Bergomi | Bergomi, *Stochastic Volatility Modeling* (2016) | 12, 13 |
-| Rebonato *Vol* | Rebonato, *Volatility and Correlation* (2nd ed., 2004) | 12, 15 |
-| Lewis | Lewis, *Option Valuation under Stochastic Volatility* (2000) | 13 |
-| *Rough Volatility* | Bayer, Friz, Fukasawa, Gatheral, Jacquier, Rosenbaum (eds.), *Rough Volatility* (SIAM, 2023) | 14 |
-| Guyon–Henry-Labordère | Guyon, Henry-Labordère, *Nonlinear Option Pricing* (2013) | 13–15 |
-| Henry-Labordère | Henry-Labordère, *Model-free Hedging: A Martingale Optimal Transport Viewpoint* (2017) | 9 |
-| Bouzoubaa–Osseiran | Bouzoubaa, Osseiran, *Exotic Options and Hybrids* (2010) | 15 |
+| Natenberg | Natenberg, *Option Volatility and Pricing* (2nd ed., 2015) | 8 |
+| Sinclair | Sinclair, *Volatility Trading* (2nd ed., 2013); *Positional Option Trading* (2020) | 8 |
+| Taleb | Taleb, *Dynamic Hedging* (1997) | 7, 8, 10 |
+| Bennett | Bennett, *Trading Volatility* (2014) | 8 |
+| Gatheral | Gatheral, *The Volatility Surface* (2006) | 8, 9 |
+| Bergomi | Bergomi, *Stochastic Volatility Modeling* (2016) | 8, 9 |
+| Rebonato *Vol* | Rebonato, *Volatility and Correlation* (2nd ed., 2004) | 8, 10 |
+| Lewis | Lewis, *Option Valuation under Stochastic Volatility* (2000) | 9 |
+| *Rough Volatility* | Bayer, Friz, Fukasawa, Gatheral, Jacquier, Rosenbaum (eds.), *Rough Volatility* (SIAM, 2023) | 9 |
+| Guyon–Henry-Labordère | Guyon, Henry-Labordère, *Nonlinear Option Pricing* (2013) | 9, 10 |
+| Henry-Labordère | Henry-Labordère, *Model-free Hedging: A Martingale Optimal Transport Viewpoint* (2017) | 6 |
+| Bouzoubaa–Osseiran | Bouzoubaa, Osseiran, *Exotic Options and Hybrids* (2010) | 10 |
 
 ### Numerical methods and machine learning for pricing
 
 | Short name | Book | Parts |
 |---|---|---|
-| Glasserman | Glasserman, *Monte Carlo Methods in Financial Engineering* (2003) | 16 |
-| Savine | Savine, *Modern Computational Finance: AAD and Parallel Simulations* (2018) | 16, 21 |
-| Andersen–Piterbarg | Andersen, Piterbarg, *Interest Rate Modeling*, vols. I–III (2010) | 16, 19 |
-| Duffy | Duffy, *Finite Difference Methods in Financial Engineering* (2006) | 16 |
-| Seydel | Seydel, *Tools for Computational Finance* (6th ed., 2017) | 16 |
-| Oosterlee–Grzelak | Oosterlee, Grzelak, *Mathematical Modeling and Computation in Finance* (2019) | 13, 16 |
-| Dixon–Halperin–Bilokon | Dixon, Halperin, Bilokon, *Machine Learning in Finance: From Theory to Practice* (2020) | 17, 27 |
+| Glasserman | Glasserman, *Monte Carlo Methods in Financial Engineering* (2003) | 11 |
+| Savine | Savine, *Modern Computational Finance: AAD and Parallel Simulations* (2018) | 11, 15 |
+| Andersen–Piterbarg | Andersen, Piterbarg, *Interest Rate Modeling*, vols. I–III (2010) | 11, 14 |
+| Duffy | Duffy, *Finite Difference Methods in Financial Engineering* (2006) | 11 |
+| Seydel | Seydel, *Tools for Computational Finance* (6th ed., 2017) | 11 |
+| Oosterlee–Grzelak | Oosterlee, Grzelak, *Mathematical Modeling and Computation in Finance* (2019) | 9, 11 |
+| Dixon–Halperin–Bilokon | Dixon, Halperin, Bilokon, *Machine Learning in Finance: From Theory to Practice* (2020) | 12, 20 |
 
 ### Fixed income, credit and XVA
 
 | Short name | Book | Parts |
 |---|---|---|
-| Tuckman–Serrat | Tuckman, Serrat, *Fixed Income Securities* (4th ed., 2022) | 2, 18 |
-| Fabozzi | Fabozzi (ed.), *The Handbook of Fixed Income Securities* (9th ed.) | 18, 19 |
-| Veronesi | Veronesi, *Fixed Income Securities* (2010) | 18, 19 |
-| Burghardt | Burghardt et al., *The Treasury Bond Basis* (3rd ed., 2005) | 18, 22 |
-| Brigo–Mercurio | Brigo, Mercurio, *Interest Rate Models: Theory and Practice* (2nd ed., 2006) | 19 |
-| Rebonato *Rates* | Rebonato, *Bond Pricing and Yield Curve Modeling* (2018) | 19 |
-| James–Webber | James, Webber, *Interest Rate Modelling* (2000) | 19 |
-| O'Kane | O'Kane, *Modelling Single-name and Multi-name Credit Derivatives* (2008) | 20 |
-| Schönbucher | Schönbucher, *Credit Derivatives Pricing Models* (2003) | 20 |
-| Duffie–Singleton | Duffie, Singleton, *Credit Risk* (2003) | 20 |
-| Lando | Lando, *Credit Risk Modeling* (2004) | 20 |
-| Gregory | Gregory, *The xVA Challenge* (4th ed., 2020) | 21 |
-| Green | Green, *XVA: Credit, Funding and Capital Valuation Adjustments* (2015) | 21 |
-| Brigo–Morini–Pallavicini | Brigo, Morini, Pallavicini, *Counterparty Credit Risk, Collateral and Funding* (2013) | 21 |
+| Tuckman–Serrat | Tuckman, Serrat, *Fixed Income Securities* (4th ed., 2022) | 2, 13 |
+| Fabozzi | Fabozzi (ed.), *The Handbook of Fixed Income Securities* (9th ed.) | 13, 14 |
+| Veronesi | Veronesi, *Fixed Income Securities* (2010) | 13, 14 |
+| Burghardt | Burghardt et al., *The Treasury Bond Basis* (3rd ed., 2005) | 13, 16 |
+| Brigo–Mercurio | Brigo, Mercurio, *Interest Rate Models: Theory and Practice* (2nd ed., 2006) | 14 |
+| Rebonato *Rates* | Rebonato, *Bond Pricing and Yield Curve Modeling* (2018) | 14 |
+| James–Webber | James, Webber, *Interest Rate Modelling* (2000) | 14 |
+| O'Kane | O'Kane, *Modelling Single-name and Multi-name Credit Derivatives* (2008) | 15 |
+| Schönbucher | Schönbucher, *Credit Derivatives Pricing Models* (2003) | 15 |
+| Duffie–Singleton | Duffie, Singleton, *Credit Risk* (2003) | 15 |
+| Lando | Lando, *Credit Risk Modeling* (2004) | 15 |
+| Gregory | Gregory, *The xVA Challenge* (4th ed., 2020) | 15 |
+| Green | Green, *XVA: Credit, Funding and Capital Valuation Adjustments* (2015) | 15 |
+| Brigo–Morini–Pallavicini | Brigo, Morini, Pallavicini, *Counterparty Credit Risk, Collateral and Funding* (2013) | 15 |
 
 ### FX and commodities
 
 | Short name | Book | Parts |
 |---|---|---|
-| Clark | Clark, *Foreign Exchange Option Pricing: A Practitioner's Guide* (2011) | 22 |
-| Wystup | Wystup, *FX Options and Structured Products* (2nd ed., 2017) | 22 |
-| Geman | Geman, *Commodities and Commodity Derivatives* (2005) | 22 |
-| Eydeland–Wolyniec | Eydeland, Wolyniec, *Energy and Power Risk Management* (2003) | 22 |
+| Clark | Clark, *Foreign Exchange Option Pricing: A Practitioner's Guide* (2011) | 16 |
+| Wystup | Wystup, *FX Options and Structured Products* (2nd ed., 2017) | 16 |
+| Geman | Geman, *Commodities and Commodity Derivatives* (2005) | 16 |
+| Eydeland–Wolyniec | Eydeland, Wolyniec, *Energy and Power Risk Management* (2003) | 16 |
 
 ### Asset pricing and empirical finance
 
 | Short name | Book | Parts |
 |---|---|---|
-| Cochrane | Cochrane, *Asset Pricing* (rev. ed., 2005) | 6, 9, 23–25 |
-| Campbell | Campbell, *Financial Decisions and Markets: A Course in Asset Pricing* (2018) | 23, 24 |
-| CLM | Campbell, Lo, MacKinlay, *The Econometrics of Financial Markets* (1997) | 1, 6, 7, 23, 35 |
-| Back | Back, *Asset Pricing and Portfolio Choice Theory* (2nd ed., 2017) | 8, 23, 35 |
-| Bali–Engle–Murray | Bali, Engle, Murray, *Empirical Asset Pricing: The Cross Section of Stock Returns* (2016) | 6, 24, 25 |
-| Ang | Ang, *Asset Management: A Systematic Approach to Factor Investing* (2014) | 24, 30, 32 |
-| Ilmanen | Ilmanen, *Expected Returns* (2011); *Investing Amid Low Expected Returns* (2022) | 24, 32 |
-| Shleifer | Shleifer, *Inefficient Markets: An Introduction to Behavioral Finance* (2000) | 23 |
-| Hayashi | Hayashi, *Econometrics* (2000) | 6 |
-| Tsay | Tsay, *Analysis of Financial Time Series* (3rd ed., 2010) | 7 |
-| Hamilton | Hamilton, *Time Series Analysis* (1994) | 7 |
-| Aït-Sahalia–Jacod | Aït-Sahalia, Jacod, *High-Frequency Financial Econometrics* (2014) | 7 |
+| Cochrane | Cochrane, *Asset Pricing* (rev. ed., 2005) | 4, 6, 17–19 |
+| Campbell | Campbell, *Financial Decisions and Markets: A Course in Asset Pricing* (2018) | 17, 18 |
+| CLM | Campbell, Lo, MacKinlay, *The Econometrics of Financial Markets* (1997) | 1, 4, 17, 25 |
+| Back | Back, *Asset Pricing and Portfolio Choice Theory* (2nd ed., 2017) | 5, 17, 25 |
+| Bali–Engle–Murray | Bali, Engle, Murray, *Empirical Asset Pricing: The Cross Section of Stock Returns* (2016) | 4, 18, 19 |
+| Ang | Ang, *Asset Management: A Systematic Approach to Factor Investing* (2014) | 18, 22, 23 |
+| Ilmanen | Ilmanen, *Expected Returns* (2011); *Investing Amid Low Expected Returns* (2022) | 18, 23 |
+| Shleifer | Shleifer, *Inefficient Markets: An Introduction to Behavioral Finance* (2000) | 17 |
+| Hayashi | Hayashi, *Econometrics* (2000) | 4 |
+| Tsay | Tsay, *Analysis of Financial Time Series* (3rd ed., 2010) | 4 |
+| Hamilton | Hamilton, *Time Series Analysis* (1994) | 4 |
+| Aït-Sahalia–Jacod | Aït-Sahalia, Jacod, *High-Frequency Financial Econometrics* (2014) | 4 |
 
 ### Machine learning, portfolios and systematic investing
 
 | Short name | Book | Parts |
 |---|---|---|
-| Kelly–Xiu | Kelly, Xiu, "Financial Machine Learning," *Foundations and Trends in Finance* (2023) | 17, 25, 27, 28 |
-| López de Prado AFML | López de Prado, *Advances in Financial Machine Learning* (2018) | 26, 27, 30 |
-| López de Prado MLAM | López de Prado, *Machine Learning for Asset Managers* (2020) | 27, 30 |
-| Jansen | Jansen, *Machine Learning for Algorithmic Trading* (2nd ed., 2020) | 27 |
-| Grinold–Kahn | Grinold, Kahn, *Active Portfolio Management* (2nd ed., 2000) | 30, 31 |
-| Isichenko | Isichenko, *Quantitative Portfolio Management: The Art and Science of Statistical Arbitrage* (2021) | 26, 29, 31, 34 |
-| Paleologo APM | Paleologo, *Advanced Portfolio Management: A Quant's Guide for Fundamental Investors* (2021) | 30, 31 |
-| Paleologo EQI | Paleologo, *The Elements of Quantitative Investing* (2025) *(verify)* | 31, 34 |
-| Chincarini–Kim | Chincarini, Kim, *Quantitative Equity Portfolio Management* (2006) | 30, 31 |
-| Qian–Hua–Sorensen | Qian, Hua, Sorensen, *Quantitative Equity Portfolio Management* (2007) | 31 |
-| Meucci | Meucci, *Risk and Asset Allocation* (2005) | 30 |
-| Pedersen | Pedersen, *Efficiently Inefficient* (2015) | 2, 24, 32, 33 |
-| Kakushadze–Serur | Kakushadze, Serur, *151 Trading Strategies* (2018) | 29, 32 |
-| Tulchinsky | Tulchinsky et al. (WorldQuant), *Finding Alphas* (2nd ed., 2019) | 29 |
-| Chan | Chan, *Algorithmic Trading* (2013); *Quantitative Trading* (2nd ed., 2021) | 33 |
-| Pole | Pole, *Statistical Arbitrage* (2007) | 33 |
-| Vidyamurthy | Vidyamurthy, *Pairs Trading* (2004) | 33 |
-| Clenow | Clenow, *Following the Trend* (2nd ed., 2023) | 32 |
-| Greyserman–Kaminski | Greyserman, Kaminski, *Trend Following with Managed Futures* (2014) | 32 |
-| Narang | Narang, *Inside the Black Box* (2nd ed., 2013) | 31, 34 |
+| Kelly–Xiu | Kelly, Xiu, "Financial Machine Learning," *Foundations and Trends in Finance* (2023) | 12, 19–21 |
+| López de Prado AFML | López de Prado, *Advances in Financial Machine Learning* (2018) | 19, 20, 22 |
+| López de Prado MLAM | López de Prado, *Machine Learning for Asset Managers* (2020) | 20, 22 |
+| Jansen | Jansen, *Machine Learning for Algorithmic Trading* (2nd ed., 2020) | 20 |
+| Grinold–Kahn | Grinold, Kahn, *Active Portfolio Management* (2nd ed., 2000) | 22 |
+| Isichenko | Isichenko, *Quantitative Portfolio Management: The Art and Science of Statistical Arbitrage* (2021) | 19, 21, 22, 24 |
+| Paleologo APM | Paleologo, *Advanced Portfolio Management: A Quant's Guide for Fundamental Investors* (2021) | 22 |
+| Paleologo EQI | Paleologo, *The Elements of Quantitative Investing* (2025) *(verify)* | 22, 24 |
+| Chincarini–Kim | Chincarini, Kim, *Quantitative Equity Portfolio Management* (2006) | 22 |
+| Qian–Hua–Sorensen | Qian, Hua, Sorensen, *Quantitative Equity Portfolio Management* (2007) | 22 |
+| Meucci | Meucci, *Risk and Asset Allocation* (2005) | 22 |
+| Pedersen | Pedersen, *Efficiently Inefficient* (2015) | 2, 18, 23 |
+| Kakushadze–Serur | Kakushadze, Serur, *151 Trading Strategies* (2018) | 21, 23 |
+| Tulchinsky | Tulchinsky et al. (WorldQuant), *Finding Alphas* (2nd ed., 2019) | 21 |
+| Chan | Chan, *Algorithmic Trading* (2013); *Quantitative Trading* (2nd ed., 2021) | 23 |
+| Pole | Pole, *Statistical Arbitrage* (2007) | 23 |
+| Vidyamurthy | Vidyamurthy, *Pairs Trading* (2004) | 23 |
+| Clenow | Clenow, *Following the Trend* (2nd ed., 2023) | 23 |
+| Greyserman–Kaminski | Greyserman, Kaminski, *Trend Following with Managed Futures* (2014) | 23 |
+| Narang | Narang, *Inside the Black Box* (2nd ed., 2013) | 22, 24 |
 
 ### Market microstructure, execution and market making
 
 | Short name | Book | Parts |
 |---|---|---|
-| O'Hara | O'Hara, *Market Microstructure Theory* (1995) | 35 |
-| Hasbrouck | Hasbrouck, *Empirical Market Microstructure* (2007) | 35, 37 |
-| Foucault–Pagano–Röell | Foucault, Pagano, Röell, *Market Liquidity: Theory, Evidence, and Policy* (2nd ed., 2023) | 35, 38 |
-| Bouchaud et al. | Bouchaud, Bonart, Donier, Gould, *Trades, Quotes and Prices* (2018) | 36, 37 |
-| Abergel et al. | Abergel, Anane, Chakraborti, Jedidi, Toke, *Limit Order Books* (2016) | 36 |
-| Cartea–Jaimungal–Penalva | Cartea, Jaimungal, Penalva, *Algorithmic and High-Frequency Trading* (2015) | 36–38 |
-| Guéant | Guéant, *The Financial Mathematics of Market Liquidity* (2016) | 37, 38 |
-| Lehalle–Laruelle | Lehalle, Laruelle (eds.), *Market Microstructure in Practice* (2nd ed., 2018) | 37, 38 |
-| Kissell | Kissell, *The Science of Algorithmic Trading and Portfolio Management* (2013) | 37 |
-| Gastineau | Gastineau, *The Exchange-Traded Funds Manual* (2nd ed., 2010) | 38 |
+| O'Hara | O'Hara, *Market Microstructure Theory* (1995) | 25 |
+| Hasbrouck | Hasbrouck, *Empirical Market Microstructure* (2007) | 25, 26 |
+| Foucault–Pagano–Röell | Foucault, Pagano, Röell, *Market Liquidity: Theory, Evidence, and Policy* (2nd ed., 2023) | 25, 27 |
+| Bouchaud et al. | Bouchaud, Bonart, Donier, Gould, *Trades, Quotes and Prices* (2018) | 25, 26 |
+| Abergel et al. | Abergel, Anane, Chakraborti, Jedidi, Toke, *Limit Order Books* (2016) | 25 |
+| Cartea–Jaimungal–Penalva | Cartea, Jaimungal, Penalva, *Algorithmic and High-Frequency Trading* (2015) | 25–27 |
+| Guéant | Guéant, *The Financial Mathematics of Market Liquidity* (2016) | 26, 27 |
+| Lehalle–Laruelle | Lehalle, Laruelle (eds.), *Market Microstructure in Practice* (2nd ed., 2018) | 26, 27 |
+| Kissell | Kissell, *The Science of Algorithmic Trading and Portfolio Management* (2013) | 26 |
+| Gastineau | Gastineau, *The Exchange-Traded Funds Manual* (2nd ed., 2010) | 27 |
 
 ### Crypto, risk and crises
 
 | Short name | Book | Parts |
 |---|---|---|
-| Harvey–Ramachandran–Santoro | Harvey, Ramachandran, Santoro, *DeFi and the Future of Finance* (2021) | 39 |
-| Narayanan et al. | Narayanan, Bonneau, Felten, Miller, Goldfeder, *Bitcoin and Cryptocurrency Technologies* (2016) | 39 |
-| QRM | McNeil, Frey, Embrechts, *Quantitative Risk Management* (rev. ed., 2015) | 7, 20, 40 |
-| Jorion | Jorion, *Value at Risk* (3rd ed., 2006) | 40 |
-| Hull RMFI | Hull, *Risk Management and Financial Institutions* (6th ed., 2023) | 21, 40 |
-| Brunnermeier–Oehmke | Brunnermeier, Oehmke, "Bubbles, Financial Crises, and Systemic Risk," *Handbook of the Economics of Finance* (2013) | 41 |
-| Kindleberger–Aliber | Kindleberger, Aliber, *Manias, Panics, and Crashes* (7th ed., 2015) | 41 |
-| Gorton | Gorton, *Slapped by the Invisible Hand* (2010) | 41 |
-| Duffie *Banks* | Duffie, *How Big Banks Fail and What to Do about It* (2010) | 21, 41 |
+| Harvey–Ramachandran–Santoro | Harvey, Ramachandran, Santoro, *DeFi and the Future of Finance* (2021) | 28 |
+| Narayanan et al. | Narayanan, Bonneau, Felten, Miller, Goldfeder, *Bitcoin and Cryptocurrency Technologies* (2016) | 28 |
+| QRM | McNeil, Frey, Embrechts, *Quantitative Risk Management* (rev. ed., 2015) | 4, 15, 29 |
+| Jorion | Jorion, *Value at Risk* (3rd ed., 2006) | 29 |
+| Hull RMFI | Hull, *Risk Management and Financial Institutions* (6th ed., 2023) | 15, 29 |
+| Brunnermeier–Oehmke | Brunnermeier, Oehmke, "Bubbles, Financial Crises, and Systemic Risk," *Handbook of the Economics of Finance* (2013) | 29 |
+| Kindleberger–Aliber | Kindleberger, Aliber, *Manias, Panics, and Crashes* (7th ed., 2015) | 29 |
+| Gorton | Gorton, *Slapped by the Invisible Hand* (2010) | 29 |
+| Duffie *Banks* | Duffie, *How Big Banks Fail and What to Do about It* (2010) | 15, 29 |
 
 ## 2. Coverage maps for the core textbooks
 
@@ -188,172 +188,172 @@ A part may not skip a topic that these books treat as core without saying where 
 | Topic | Part |
 |---|---|
 | Introduction; futures markets and CCPs; hedging with futures | 2 |
-| Interest rates; forward and futures prices; interest-rate futures | 18 |
-| Swaps | 18 |
-| Securitization and the 2007 credit crisis | 20, 41 |
-| XVAs, OIS discounting, funding | 21 |
-| Mechanics and properties of options; trading strategies | 2, 11 |
-| Binomial trees | 9 |
-| Wiener processes and Itô's lemma | 5 |
-| Black–Scholes–Merton | 10 |
-| Employee stock options | 3 |
-| Options on indices, currencies and futures; Black's model | 10, 22 |
-| The Greek letters | 10, 11 |
-| Volatility smiles and surfaces | 12 |
-| Basic numerical procedures | 16 |
-| Value at risk and expected shortfall | 40 |
-| Estimating volatilities and correlations | 7 |
-| Credit risk; credit derivatives | 20 |
-| Exotic options | 15 |
-| More on models and numerical procedures | 13, 16 |
-| Martingales and measures | 9 |
-| Interest-rate derivatives: standard market models; convexity, timing and quanto adjustments | 19 |
-| Equilibrium and no-arbitrage short-rate models; HJM and LMM; multiple zero curves | 19 |
-| Swaps revisited | 18, 19 |
-| Energy and commodity derivatives | 22 |
-| Real options | 3 |
+| Interest rates; forward and futures prices; interest-rate futures | 13 |
+| Swaps | 13 |
+| Securitization and the 2007 credit crisis | 15, 29 |
+| XVAs, OIS discounting, funding | 15 |
+| Mechanics and properties of options; trading strategies | 2, 8 |
+| Binomial trees | 6 |
+| Wiener processes and Itô's lemma | 3 |
+| Black–Scholes–Merton | 7 |
+| Employee stock options | 2 |
+| Options on indices, currencies and futures; Black's model | 7, 16 |
+| The Greek letters | 7, 8 |
+| Volatility smiles and surfaces | 8 |
+| Basic numerical procedures | 11 |
+| Value at risk and expected shortfall | 29 |
+| Estimating volatilities and correlations | 4 |
+| Credit risk; credit derivatives | 15 |
+| Exotic options | 10 |
+| More on models and numerical procedures | 9, 11 |
+| Martingales and measures | 6 |
+| Interest-rate derivatives: standard market models; convexity, timing and quanto adjustments | 14 |
+| Equilibrium and no-arbitrage short-rate models; HJM and LMM; multiple zero curves | 14 |
+| Swaps revisited | 13, 14 |
+| Energy and commodity derivatives | 16 |
+| Real options | 2 |
 | Derivatives mishaps | crisis files throughout |
 
 ### Shreve, *Stochastic Calculus for Finance* I and II
 
 | Chapter | Part |
 |---|---|
-| I.1 The binomial no-arbitrage pricing model | 9 |
-| I.2 Probability theory on coin-toss space | 4 |
-| I.3 State prices | 9 |
-| I.4 American derivative securities | 8, 10 |
-| I.5 Random walk | 4 |
-| I.6 Interest-rate-dependent assets | 19 |
-| II.1–2 General probability; information and conditioning | 4 |
-| II.3 Brownian motion | 5 |
-| II.4 Stochastic calculus | 5 |
-| II.5 Risk-neutral pricing | 9, 10 |
-| II.6 Connections with PDEs | 5, 16 |
-| II.7 Exotic options | 15 |
-| II.8 American derivative securities | 8, 10, 16 |
-| II.9 Change of numéraire | 9, 19, 22 |
-| II.10 Term-structure models | 19 |
-| II.11 Introduction to jump processes | 5, 13 |
+| I.1 The binomial no-arbitrage pricing model | 6 |
+| I.2 Probability theory on coin-toss space | 3 |
+| I.3 State prices | 6 |
+| I.4 American derivative securities | 5, 7 |
+| I.5 Random walk | 3 |
+| I.6 Interest-rate-dependent assets | 14 |
+| II.1–2 General probability; information and conditioning | 3 |
+| II.3 Brownian motion | 3 |
+| II.4 Stochastic calculus | 3 |
+| II.5 Risk-neutral pricing | 6, 7 |
+| II.6 Connections with PDEs | 3, 11 |
+| II.7 Exotic options | 10 |
+| II.8 American derivative securities | 5, 7, 11 |
+| II.9 Change of numéraire | 6, 14, 16 |
+| II.10 Term-structure models | 14 |
+| II.11 Introduction to jump processes | 3, 9 |
 
 ### Cochrane, *Asset Pricing*
 
 | Part of the book | Part |
 |---|---|
-| I. The consumption-based model, contingent claims, the SDF, mean–variance frontiers, factor models | 9, 23 |
-| II. Estimating and evaluating: GMM, regression-based tests, maximum likelihood | 6, 24 |
-| III. Bonds and options | 10, 18, 19 |
-| IV. Empirical survey: expected returns in time series and cross-section, the equity premium | 23–25 |
+| I. The consumption-based model, contingent claims, the SDF, mean–variance frontiers, factor models | 6, 17 |
+| II. Estimating and evaluating: GMM, regression-based tests, maximum likelihood | 4, 18 |
+| III. Bonds and options | 7, 13, 14 |
+| IV. Empirical survey: expected returns in time series and cross-section, the equity premium | 17–19 |
 
 ### Campbell–Lo–MacKinlay, *The Econometrics of Financial Markets*
 
 | Chapter | Part |
 |---|---|
-| 2 Predictability of asset returns | 1, 6 |
-| 3 Market microstructure | 35 |
-| 4 Event-study analysis | 6 |
-| 5 The CAPM; 6 Multifactor pricing models | 23, 24 |
-| 7 Present-value relations | 3, 23 |
-| 8 Intertemporal equilibrium models | 23 |
-| 9 Derivative pricing models | 10 |
-| 10 Fixed-income securities; 11 Term-structure models | 18, 19 |
-| 12 Nonlinearities in financial data | 7, 27 |
+| 2 Predictability of asset returns | 1, 4 |
+| 3 Market microstructure | 25 |
+| 4 Event-study analysis | 4 |
+| 5 The CAPM; 6 Multifactor pricing models | 17, 18 |
+| 7 Present-value relations | 2, 17 |
+| 8 Intertemporal equilibrium models | 17 |
+| 9 Derivative pricing models | 7 |
+| 10 Fixed-income securities; 11 Term-structure models | 13, 14 |
+| 12 Nonlinearities in financial data | 4, 20 |
 
 ### Gatheral, *The Volatility Surface*
 
 | Chapter | Part |
 |---|---|
-| Stochastic and local volatility; the Heston model | 12, 13 |
-| The implied volatility surface; the Heston fit | 12, 13 |
-| Jumps; modeling default | 13 |
-| Volatility surface asymptotics; dynamics of the surface | 12, 14 |
-| Barrier options; exotic cliquets | 15 |
-| Volatility derivatives | 12 |
+| Stochastic and local volatility; the Heston model | 8, 9 |
+| The implied volatility surface; the Heston fit | 8, 9 |
+| Jumps; modeling default | 9 |
+| Volatility surface asymptotics; dynamics of the surface | 8, 9 |
+| Barrier options; exotic cliquets | 10 |
+| Volatility derivatives | 8 |
 
 ### Glasserman, *Monte Carlo Methods in Financial Engineering*
 
 | Chapter | Part |
 |---|---|
-| Foundations; random numbers; sample paths | 5, 16 |
-| Variance reduction; quasi-Monte Carlo | 16 |
-| Discretization methods | 5, 16 |
-| Estimating sensitivities | 16 |
-| American options | 16 |
-| Applications in risk management | 40 |
+| Foundations; random numbers; sample paths | 3, 11 |
+| Variance reduction; quasi-Monte Carlo | 11 |
+| Discretization methods | 3, 11 |
+| Estimating sensitivities | 11 |
+| American options | 11 |
+| Applications in risk management | 29 |
 
 ### Tuckman–Serrat, *Fixed Income Securities*
 
 | Topic | Part |
 |---|---|
-| Prices, discount factors, spot and forward rates, yields | 18 |
-| One-factor and multi-factor risk metrics (DV01, key rates, PCA); empirical hedging | 18 |
-| The term structure: expectations, risk premium, convexity | 18, 19 |
-| Term-structure models | 19 |
-| Repo; notes and bond futures; swaps; short-term rate futures | 2, 18 |
-| Interest-rate options; mortgage-backed securities | 19 |
+| Prices, discount factors, spot and forward rates, yields | 13 |
+| One-factor and multi-factor risk metrics (DV01, key rates, PCA); empirical hedging | 13 |
+| The term structure: expectations, risk premium, convexity | 13, 14 |
+| Term-structure models | 14 |
+| Repo; notes and bond futures; swaps; short-term rate futures | 2, 13 |
+| Interest-rate options; mortgage-backed securities | 14 |
 
 ### Grinold–Kahn, *Active Portfolio Management*
 
 | Part of the book | Part |
 |---|---|
-| Foundations: consensus returns, risk, value added, information ratio, fundamental law | 23, 31 |
-| Expected returns and valuation: APT, valuation | 3, 23 |
-| Information processing: forecasting, information analysis, the information horizon | 26, 27, 31 |
-| Implementation: construction, costs and turnover, performance analysis, benchmark timing | 30, 31 |
+| Foundations: consensus returns, risk, value added, information ratio, fundamental law | 17, 22 |
+| Expected returns and valuation: APT, valuation | 2, 17 |
+| Information processing: forecasting, information analysis, the information horizon | 19, 20, 22 |
+| Implementation: construction, costs and turnover, performance analysis, benchmark timing | 22 |
 
 ### López de Prado, *Advances in Financial Machine Learning*
 
 | Chapter | Part |
 |---|---|
-| 2 Financial data structures (information-driven bars) | 27 |
-| 3 Labeling (triple barrier, meta-labeling); 4 sample weights | 27 |
-| 5 Fractionally differentiated features | 27 |
-| 6 Ensembles; 8 feature importance; 9 hyper-parameter tuning | 27 |
-| 7 Cross-validation in finance (purging, embargo) | 26 |
-| 10 Bet sizing | 8, 27 |
-| 11–15 Backtesting, synthetic data, backtest statistics, strategy risk | 26 |
-| 16 ML asset allocation (HRP) | 30 |
-| 17 Structural breaks; 18 entropy features; 19 microstructural features | 7, 27, 35 |
+| 2 Financial data structures (information-driven bars) | 20 |
+| 3 Labeling (triple barrier, meta-labeling); 4 sample weights | 20 |
+| 5 Fractionally differentiated features | 20 |
+| 6 Ensembles; 8 feature importance; 9 hyper-parameter tuning | 20 |
+| 7 Cross-validation in finance (purging, embargo) | 19 |
+| 10 Bet sizing | 5, 20 |
+| 11–15 Backtesting, synthetic data, backtest statistics, strategy risk | 19 |
+| 16 ML asset allocation (HRP) | 22 |
+| 17 Structural breaks; 18 entropy features; 19 microstructural features | 4, 20, 25 |
 
 ### McNeil–Frey–Embrechts, *Quantitative Risk Management*
 
 | Topic | Part |
 |---|---|
-| Risk measures, coherence, and regulation | 40 |
-| Empirical properties of financial data; financial time series | 1, 7 |
-| Extreme value theory | 40 |
-| Multivariate models, copulas and dependence; aggregate risk | 20, 40 |
-| Market risk | 40 |
-| Credit risk and portfolio credit derivatives | 20 |
-| Operational risk | 34 |
+| Risk measures, coherence, and regulation | 29 |
+| Empirical properties of financial data; financial time series | 1, 4 |
+| Extreme value theory | 29 |
+| Multivariate models, copulas and dependence; aggregate risk | 15, 29 |
+| Market risk | 29 |
+| Credit risk and portfolio credit derivatives | 15 |
+| Operational risk | 24 |
 
 ### Cartea–Jaimungal–Penalva, *Algorithmic and High-Frequency Trading*
 
 | Topic | Part |
 |---|---|
-| Electronic markets, the order book, empirical facts | 35, 36 |
-| Stochastic optimal control and stopping | 8 |
-| Optimal execution: continuous trading, limit and market orders, VWAP and POV | 37 |
-| Market making | 38 |
-| Pairs trading and statistical arbitrage | 33 |
-| Order imbalance | 36 |
+| Electronic markets, the order book, empirical facts | 25 |
+| Stochastic optimal control and stopping | 5 |
+| Optimal execution: continuous trading, limit and market orders, VWAP and POV | 26 |
+| Market making | 27 |
+| Pairs trading and statistical arbitrage | 23 |
+| Order imbalance | 25 |
 
 ### Bouchaud–Bonart–Donier–Gould, *Trades, Quotes and Prices*
 
 | Topic | Part |
 |---|---|
-| The limit order book, its stylized facts, simple models | 36 |
-| Order flow, its long memory, Hawkes processes | 36 |
-| Price impact, metaorders, the square-root law, latent liquidity, propagators | 37 |
-| Market making and market design, HFT | 35, 38 |
+| The limit order book, its stylized facts, simple models | 25 |
+| Order flow, its long memory, Hawkes processes | 25 |
+| Price impact, metaorders, the square-root law, latent liquidity, propagators | 26 |
+| Market making and market design, HFT | 25, 27 |
 
 ### O'Hara, *Market Microstructure Theory*
 
 | Topic | Part |
 |---|---|
-| Inventory models; sequential trade models | 35 |
-| Strategic trader models (Kyle) | 35 |
-| Information and the trading process; liquidity; price and volume | 35, 37 |
-| Market structure and design | 35, 38 |
+| Inventory models; sequential trade models | 25 |
+| Strategic trader models (Kyle) | 25 |
+| Information and the trading process; liquidity; price and volume | 25, 26 |
+| Market structure and design | 25, 27 |
 
 ## 3. The industry and history library
 
@@ -383,7 +383,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Lewis, *Going Infinite* (2023) and the FTX trial record.
 - Dalio, *Principles* (2017) (Bridgewater).
 
-**The interview tradition** (Part 34 and every part's desk questions)
+**The interview tradition** (Part 24 and every part's desk questions)
 - Zhou, *A Practical Guide to Quantitative Finance Interviews* (the *Green Book*, 2008).
 - Crack, *Heard on the Street* (latest ed.).
 - Joshi, Denson, Downes, *Quant Job Interview Questions and Answers* (2nd ed., 2013).
@@ -434,23 +434,12 @@ These books are not textbooks. They are the stories the series tells and the fir
 - SEC Staff (2021). *Staff Report on Equity and Options Market Structure Conditions in Early 2021*.
 - SEC (2024). Final rule on minimum pricing increments, access fees, and transparency (Rule 612 amendments).
 - SEBI (2023, 2024). Studies of profit and loss of individual traders in equity F&O.
-
-### Part 3 · Value, Accounting and the Firm
 - Modigliani, F., Miller, M. (1958). "The cost of capital, corporation finance and the theory of investment." *AER*.
 - Miller, M., Modigliani, F. (1961). "Dividend policy, growth, and the valuation of shares." *Journal of Business*.
 - Gordon, M. J., Shapiro, E. (1956). "Capital equipment analysis: the required rate of profit." *Management Science*.
 - Myers, S. (1977). "Determinants of corporate borrowing." *JFE*.
-- Ball, R., Brown, P. (1968). "An empirical evaluation of accounting income numbers." *Journal of Accounting Research*.
-- Bernard, V., Thomas, J. (1989). "Post-earnings-announcement drift: delayed price response or risk premium?" *JAR*.
-- Ohlson, J. (1995). "Earnings, book values, and dividends in equity valuation." *Contemporary Accounting Research*.
-- Sloan, R. (1996). "Do stock prices fully reflect information in accruals and cash flows about future earnings?" *The Accounting Review*.
-- Piotroski, J. (2000). "Value investing: the use of historical financial statement information to separate winners from losers." *JAR*.
-- Beneish, M. (1999). "The detection of earnings manipulation." *Financial Analysts Journal*.
-- Dechow, P., Ge, W., Larson, C., Sloan, R. (2011). "Predicting material accounting misstatements." *CAR*.
-- Novy-Marx, R. (2013). "The other side of value: the gross profitability premium." *JFE*.
-- Mitchell, M., Pulvino, T. (2001). "Characteristics of risk and return in risk arbitrage." *Journal of Finance*.
 
-### Part 4 · Martingales and Measure
+### Part 3 · Martingales and Stochastic Calculus
 - Kolmogorov, A. N. (1933). *Grundbegriffe der Wahrscheinlichkeitsrechnung*.
 - Ville, J. (1939). *Étude critique de la notion de collectif*.
 - Doob, J. L. (1953). *Stochastic Processes*.
@@ -459,8 +448,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Shafer, G., Vovk, V. (2001). *Probability and Finance: It's Only a Game!*; (2019) *Game-Theoretic Foundations for Probability and Finance*.
 - Ramdas, A., Grünwald, P., Vovk, V., Shafer, G. (2023). "Game-theoretic statistics and safe anytime-valid inference." *Statistical Science*.
 - Bank of England (1995). *Report of the Board of Banking Supervision Inquiry into the Circumstances of the Collapse of Barings*.
-
-### Part 5 · Stochastic Calculus
 - Wiener, N. (1923). "Differential space." *Journal of Mathematics and Physics*.
 - Itô, K. (1944). "Stochastic integral." *Proc. Imperial Academy Tokyo*; (1951) "On stochastic differential equations." *Memoirs of the AMS*.
 - Cameron, R., Martin, W. (1944). "Transformations of Wiener integrals under translations." *Annals of Mathematics*.
@@ -475,7 +462,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Lyons, T. (1998). "Differential equations driven by rough signals." *Revista Matemática Iberoamericana*.
 - Chevyrev, I., Kormilitzin, A. (2016). "A primer on the signature method in machine learning." arXiv.
 
-### Part 6 · Financial Econometrics
+### Part 4 · Financial Econometrics and Volatility
 - Fama, E., Fisher, L., Jensen, M., Roll, R. (1969). "The adjustment of stock prices to new information." *International Economic Review*.
 - Hansen, L. P. (1982). "Large sample properties of generalized method of moments estimators." *Econometrica*.
 - Hansen, L. P., Singleton, K. (1982). "Generalized instrumental variables estimation of nonlinear rational expectations models." *Econometrica*.
@@ -491,8 +478,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Petersen, M. (2009). "Estimating standard errors in finance panel data sets." *RFS*.
 - Chernozhukov, V., et al. (2018). "Double/debiased machine learning for treatment and structural parameters." *Econometrics Journal*.
 - Goyal, A., Welch, I., Zafirov, A. (2024). "A comprehensive 2022 look at the empirical performance of equity premium prediction." *RFS*.
-
-### Part 7 · Time Series and Volatility
 - Kalman, R. E. (1960). "A new approach to linear filtering and prediction problems." *J. Basic Engineering*.
 - Box, G., Jenkins, G. (1970). *Time Series Analysis: Forecasting and Control*.
 - Granger, C., Newbold, P. (1974). "Spurious regressions in econometrics." *Journal of Econometrics*.
@@ -519,7 +504,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Das, A., Kong, W., Sen, R., Zhou, Y. (2024). "A decoder-only foundation model for time-series forecasting." *ICML* (TimesFM).
 - Woo, G., et al. (2024). "Unified training of universal time series forecasting transformers." *ICML* (Moirai).
 
-### Part 8 · Decisions and Control
+### Part 5 · Decisions and Control
 - von Neumann, J., Morgenstern, O. (1944). *Theory of Games and Economic Behavior*.
 - Kelly, J. L. (1956). "A new interpretation of information rate." *Bell System Technical Journal*.
 - Bellman, R. (1957). *Dynamic Programming*.
@@ -541,7 +526,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Schulman, J., et al. (2017). "Proximal policy optimization algorithms." arXiv.
 - Peters, O. (2019). "The ergodicity problem in economics." *Nature Physics*.
 
-### Part 9 · No Arbitrage
+### Part 6 · No Arbitrage
 - Arrow, K. (1964). "The role of securities in the optimal allocation of risk-bearing." *REStud*; Debreu, G. (1959). *Theory of Value*.
 - Stoll, H. (1969). "The relationship between put and call option prices." *Journal of Finance*.
 - Ross, S. A. (1978). "A simple approach to the valuation of risky streams." *Journal of Business*.
@@ -559,7 +544,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Ross, S. A. (2015). "The recovery theorem." *Journal of Finance*.
 - Borovička, J., Hansen, L. P., Scheinkman, J. (2016). "Misspecified recovery." *Journal of Finance*.
 
-### Part 10 · Black–Scholes–Merton
+### Part 7 · Black–Scholes–Merton
 - Sprenkle, C. (1961). "Warrant prices as indicators of expectations and preferences." *Yale Economic Essays*; Boness, A. J. (1964). "Elements of a theory of stock-option value." *JPE*.
 - Black, F., Scholes, M. (1973). "The pricing of options and corporate liabilities." *JPE*.
 - Merton, R. C. (1973). "Theory of rational option pricing." *Bell Journal of Economics and Management Science*.
@@ -578,7 +563,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Haug, E. G., Taleb, N. N. (2011). "Option traders use (very) sophisticated heuristics, never the Black–Scholes–Merton formula." *JEBO*.
 - Jäckel, P. (2015). "Let's be rational." *Wilmott*.
 
-### Part 11 · Trading Options
+### Part 8 · The Volatility Surface and How It Trades
 - Carr, P., Madan, D. (1998). "Towards a theory of volatility trading." In *Volatility* (Risk Books).
 - Coval, J., Shumway, T. (2001). "Expected option returns." *Journal of Finance*.
 - Bakshi, G., Kapadia, N. (2003). "Delta-hedged gains and the negative market volatility risk premium." *RFS*.
@@ -591,8 +576,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Baldacci, B., Bergault, P., Guéant, O. (2021). "Algorithmic market making for options." *Quantitative Finance*.
 - SEBI (3 July 2025). Interim order in the matter of index manipulation by the Jane Street group *(the firm contests the allegations)*.
 - Millennium Management v. Jane Street (S.D.N.Y., 2024; settled) *(verify: court record)*.
-
-### Part 12 · The Volatility Surface
 - Derman, E., Kani, I. (1994). "Riding on a smile." *Risk*.
 - Dupire, B. (1994). "Pricing with a smile." *Risk*.
 - Rubinstein, M. (1994). "Implied binomial trees." *Journal of Finance*.
@@ -616,7 +599,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Dim, C., Eraker, B., Vilkov, G. (2024). "0DTEs: trading, gamma risk and volatility propagation." Working paper *(verify)*.
 - Cboe. *VIX White Paper*; Deribit. *DVOL methodology*.
 
-### Part 13 · Stochastic Volatility and Jumps
+### Part 9 · Stochastic, Rough and Path-Dependent Volatility
 - Merton, R. C. (1976). "Option pricing when underlying stock returns are discontinuous." *JFE*.
 - Hull, J., White, A. (1987). "The pricing of options on assets with stochastic volatilities." *Journal of Finance*.
 - Madan, D., Seneta, E. (1990). "The variance gamma model for share market returns." *Journal of Business*.
@@ -639,8 +622,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Gatheral, J. (2008). "Consistent modeling of SPX and VIX options." Bachelier Congress.
 - Guyon, J., Henry-Labordère, P. (2012). "Being particular about calibration." *Risk*.
 - Hagan, P., Kumar, D., Lesniewski, A., Woodward, D. (2014). "Arbitrage-free SABR." *Wilmott*.
-
-### Part 14 · Rough and Path-Dependent Volatility
 - Comte, F., Renault, E. (1998). "Long memory in continuous-time stochastic volatility models." *Mathematical Finance*.
 - Alòs, E., León, J., Vives, J. (2007). "On the short-time behavior of the implied volatility for jump-diffusion models with stochastic volatility." *Finance and Stochastics*.
 - Fukasawa, M. (2011). "Asymptotic analysis for stochastic volatility: martingale expansion." *Finance and Stochastics*.
@@ -664,7 +645,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Guyon, J. (2024). "Dispersion-constrained martingale Schrödinger problems and the exact joint S&P 500/VIX smile calibration puzzle." *Finance and Stochastics* *(verify: venue and year)*.
 - Cont, R., Das, P. (2024). "Rough volatility: fact or artefact?" *Sankhya B*.
 
-### Part 15 · Exotics and Structured Products
+### Part 10 · Exotics and Structured Products
 - Goldman, M. B., Sosin, H., Gatto, M. A. (1979). "Path dependent options: 'buy at the low, sell at the high'." *Journal of Finance*.
 - Kemna, A., Vorst, A. (1990). "A pricing method for options based on average asset values." *J. Banking & Finance*.
 - Reiner, E., Rubinstein, M. (1991). "Breaking down the barriers." *Risk*.
@@ -679,7 +660,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Célérier, C., Vallée, B. (2017). "Catering to investors through security design: headline rate and complexity." *QJE*.
 - Public sources on the 2024 A-share snowball knock-ins and on Korean HSCEI-linked ELS losses (exchange, regulator and central-bank reports) *(verify)*.
 
-### Part 16 · Computing Prices
+### Part 11 · Computing Prices
 - Crank, J., Nicolson, P. (1947). "A practical method for numerical evaluation of solutions of partial differential equations of the heat-conduction type." *Proc. Cambridge Phil. Soc.*
 - Boyle, P. (1977). "Options: a Monte Carlo approach." *JFE*.
 - Schwartz, E. (1977). "The valuation of warrants: implementing a new approach." *JFE*.
@@ -707,7 +688,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Stamatopoulos, N., et al. (2020). "Option pricing using quantum computers." *Quantum*.
 - Chakrabarti, S., et al. (2021). "A threshold for quantum advantage in derivative pricing." *Quantum*.
 
-### Part 17 · Deep Pricing and Hedging
+### Part 12 · Deep Pricing and Hedging
 - Hodges, S., Neuberger, A. (1989). "Optimal replication of contingent claims under transaction costs." *Review of Futures Markets*.
 - Hutchinson, J., Lo, A. W., Poggio, T. (1994). "A nonparametric approach to pricing and hedging derivative securities via learning networks." *Journal of Finance*.
 - Whalley, A. E., Wilmott, P. (1997). "An asymptotic analysis of an optimal hedging model for option pricing with transaction costs." *Mathematical Finance*.
@@ -730,7 +711,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Gierjatowicz, P., Sabate-Vidales, M., Šiška, D., Szpruch, L., Žurič, Ž. (2022). "Robust pricing and hedging via neural stochastic differential equations." *J. Computational Finance*.
 - Buehler, H., et al. (2022–2023). Follow-up deep-hedging papers from J.P. Morgan's team *(verify: titles)*.
 
-### Part 18 · Money, Bonds and the Curve
+### Part 13 · Money, Bonds and the Curve
 - Macaulay, F. (1938). *Some Theoretical Problems Suggested by the Movements of Interest Rates, Bond Yields and Stock Prices*.
 - Redington, F. M. (1952). "Review of the principles of life-office valuations." *J. Institute of Actuaries*.
 - Fisher, L., Weil, R. (1971). "Coping with the risk of interest-rate fluctuations." *Journal of Business*.
@@ -755,7 +736,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Jiang, E., Matvos, G., Piskorski, T., Seru, A. (2024). "Monetary tightening and U.S. bank fragility in 2023." *JFE*.
 - Bank of England (2022). *Financial Stability Report* (LDI); Federal Reserve (2023). *Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank*.
 
-### Part 19 · Term-Structure Models
+### Part 14 · Term-Structure Models
 - Vasicek, O. (1977). "An equilibrium characterization of the term structure." *JFE*.
 - Cox, J., Ingersoll, J., Ross, S. (1985). "A theory of the term structure of interest rates." *Econometrica*.
 - Ho, T., Lee, S.-B. (1986). "Term structure movements and pricing interest rate contingent claims." *Journal of Finance*.
@@ -783,7 +764,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Lyashenko, A., Mercurio, F. (2019). "Looking forward to backward-looking rates: a modeling framework for term rates replacing LIBOR." Working paper.
 - Bianchi, D., Büchner, M., Tamoni, A. (2021). "Bond risk premiums with machine learning." *RFS*.
 
-### Part 20 · Credit
+### Part 15 · Credit, Counterparty and XVA
 - Altman, E. (1968). "Financial ratios, discriminant analysis and the prediction of corporate bankruptcy." *Journal of Finance*.
 - Merton, R. C. (1974). "On the pricing of corporate debt: the risk structure of interest rates." *Journal of Finance*.
 - Black, F., Cox, J. (1976). "Valuing corporate securities: some effects of bond indenture provisions." *Journal of Finance*.
@@ -809,8 +790,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Haddad, V., Moreira, A., Muir, T. (2021). "When selling becomes viral: disruptions in debt markets in the COVID-19 crisis and the Fed's response." *RFS*.
 - Dickerson, A., Mueller, P., Robotti, C. (2023). "Priced risk in corporate bonds." *JFE*.
 - Block, J., Jang, Y. S., Kaplan, S., Schulze, A. (2024). "A survey of private debt funds." *Review of Corporate Finance Studies* *(verify)*.
-
-### Part 21 · Counterparty Risk, XVA and Clearing
 - Brigo, D., Masetti, M. (2005). "Risk neutral pricing of counterparty risk." In *Counterparty Credit Risk Modelling* (Risk Books).
 - Pykhtin, M., Zhu, S. (2007). "A guide to modelling counterparty credit risk." *GARP Risk Review*.
 - Piterbarg, V. (2010). "Funding beyond discounting." *Risk*.
@@ -826,7 +805,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Gnoatto, A., Picarelli, A., Reisinger, C. (2023). "Deep xVA solver: a neural network–based counterparty credit risk management framework." *SIAM J. Financial Mathematics*.
 - Public reviews of the March 2022 LME nickel episode (LME, FCA, Bank of England) *(verify)*.
 
-### Part 22 · FX, Commodities and the Basis
+### Part 16 · FX, Commodities and the Basis
 - Kaldor, N. (1939). "Speculation and economic stability." *REStud*.
 - Working, H. (1949). "The theory of price of storage." *AER*.
 - Brennan, M. (1958). "The supply of storage." *AER*.
@@ -854,7 +833,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Schrimpf, A., Shin, H. S., Sushko, V. (2020). "Leverage and margin spirals in fixed income markets during the Covid-19 crisis." *BIS Bulletin*.
 - Barth, D., Kahn, R. J. (2021). "Hedge funds and the Treasury cash-futures disconnect." OFR WP.
 
-### Part 23 · Risk and Return
+### Part 17 · Risk and Return
 - Markowitz, H. (1952). "Portfolio selection." *Journal of Finance*.
 - Tobin, J. (1958). "Liquidity preference as behavior towards risk." *REStud*.
 - Sharpe, W. (1964). "Capital asset prices: a theory of market equilibrium under conditions of risk." *Journal of Finance*.
@@ -894,7 +873,15 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Gabaix, X., Koijen, R. (2021). "In search of the origins of financial fluctuations: the inelastic markets hypothesis." NBER WP.
 - Haddad, V., Huebner, P., Loualiche, E. (2025). "How competitive is the stock market? Theory, evidence from portfolios, and implications for the rise of passive investing." *AER* *(verify)*.
 
-### Part 24 · Factors
+### Part 18 · Factors and Fundamentals
+- Ball, R., Brown, P. (1968). "An empirical evaluation of accounting income numbers." *Journal of Accounting Research*.
+- Bernard, V., Thomas, J. (1989). "Post-earnings-announcement drift: delayed price response or risk premium?" *JAR*.
+- Ohlson, J. (1995). "Earnings, book values, and dividends in equity valuation." *Contemporary Accounting Research*.
+- Sloan, R. (1996). "Do stock prices fully reflect information in accruals and cash flows about future earnings?" *The Accounting Review*.
+- Piotroski, J. (2000). "Value investing: the use of historical financial statement information to separate winners from losers." *JAR*.
+- Beneish, M. (1999). "The detection of earnings manipulation." *Financial Analysts Journal*.
+- Dechow, P., Ge, W., Larson, C., Sloan, R. (2011). "Predicting material accounting misstatements." *CAR*.
+- Novy-Marx, R. (2013). "The other side of value: the gross profitability premium." *JFE*.
 - Basu, S. (1977). "Investment performance of common stocks in relation to their price-earnings ratios." *Journal of Finance*.
 - Banz, R. (1981). "The relationship between return and market value of common stocks." *JFE*.
 - Black, F., Jensen, M., Scholes, M. (1972). "The capital asset pricing model: some empirical tests." In *Studies in the Theory of Capital Markets*.
@@ -930,7 +917,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Eisfeldt, A., Kim, E., Papanikolaou, D. (2022). "Intangible value." *Critical Finance Review*.
 - Ehsani, S., Linnainmaa, J. (2022). "Factor momentum and the momentum factor." *Journal of Finance*.
 
-### Part 25 · The Factor Zoo
+### Part 19 · The Factor Zoo and Backtesting
 - Connor, G., Korajczyk, R. (1986). "Performance measurement with the arbitrage pricing theory." *JFE*.
 - Cochrane, J. (2011). "Presidential address: Discount rates." *Journal of Finance*.
 - Harvey, C., Liu, Y., Zhu, H. (2016). "... and the cross-section of expected returns." *RFS*.
@@ -956,8 +943,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Bryzgalova, S., Huang, J., Julliard, C. (2023). "Bayesian solutions for the factor zoo: we just ran two quadrillion models." *Journal of Finance*.
 - Chen, A., Lopez-Lira, A., Zimmermann, T. (2024). "Does peer-reviewed research help predict stock returns?" Working paper *(verify)*.
 - Giglio, S., Xiu, D., Zhang, D. (2025). "Test assets and weak factors." *Journal of Finance* *(verify: year)*.
-
-### Part 26 · Backtesting Without Fooling Yourself
 - Brown, S., Goetzmann, W., Ibbotson, R., Ross, S. (1992). "Survivorship bias in performance studies." *RFS*.
 - Brock, W., Lakonishok, J., LeBaron, B. (1992). "Simple technical trading rules and the stochastic properties of stock returns." *Journal of Finance*.
 - Shumway, T. (1997). "The delisting bias in CRSP data." *Journal of Finance*.
@@ -976,7 +961,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Arnott, R., Harvey, C., Markowitz, H. (2019). "A backtesting protocol in the era of machine learning." *J. Financial Data Science*.
 - Grünwald, P., de Heide, R., Koolen, W. (2024). "Safe testing." *JRSS B*.
 
-### Part 27 · Machine Learning for Returns
+### Part 20 · Machine Learning for Returns
 - Rahimi, A., Recht, B. (2007). "Random features for large-scale kernel machines." *NeurIPS*.
 - Easley, D., López de Prado, M., O'Hara, M. (2012). "The volume clock: insights into the high-frequency paradigm." *JPM*.
 - Rapach, D., Strauss, J., Zhou, G. (2013). "International stock return predictability: what is the role of the United States?" *Journal of Finance*.
@@ -1004,7 +989,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Shi, Y., et al. (2025). "Kronos: a foundation model for the language of financial markets." arXiv *(verify)*.
 - Cong, L. W., Tang, K., Wang, J., Zhang, Y. (2021). "AlphaPortfolio: direct construction through deep reinforcement learning and interpretable AI." Working paper *(verify)*.
 
-### Part 28 · Text, LLMs and Alternative Data
+### Part 21 · LLMs, Text and Automated Research
 - Antweiler, W., Frank, M. (2004). "Is all that talk just noise? The information content of internet stock message boards." *Journal of Finance*.
 - Tetlock, P. (2007). "Giving content to investor sentiment: the role of media in the stock market." *Journal of Finance*.
 - Tetlock, P., Saar-Tsechansky, M., Macskassy, S. (2008). "More than words: quantifying language to measure firms' fundamentals." *Journal of Finance*.
@@ -1030,8 +1015,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Xiao, Y., Sun, E., Luo, D., Wang, W. (2024). "TradingAgents: multi-agents LLM financial trading framework." arXiv.
 - He, S., Lv, L., Manela, A., Wu, J. (2025). "Chronologically consistent large language models." Working paper *(verify)*.
 - Katona, Z., Painter, M., Patatoukas, P., Zeng, J. (2025). "On the capital market consequences of big data: evidence from outer space." *JFQA* *(verify)*.
-
-### Part 29 · Alpha Mining and Automated Research
 - Koza, J. (1992). *Genetic Programming*.
 - Neely, C., Weller, P., Dittmar, R. (1997). "Is technical analysis in the foreign exchange market profitable? A genetic programming approach." *JFQA*.
 - Allen, F., Karjalainen, R. (1999). "Using genetic algorithms to find technical trading rules." *JFE*.
@@ -1045,8 +1028,9 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Li, Y., et al. (2025). "R&D-Agent-Quant." arXiv *(verify)*.
 - Tang, Z., et al. (2025). "AlphaAgent." arXiv *(verify)*.
 - Public sources on the Chinese quant industry: Asset Management Association of China statistics; exchange and CSRC notices of February 2024 *(verify)*.
+- Lopez-Lira, A. (2025). "Can large language models trade? Testing financial theories with LLM agents in market simulations." Working paper *(verify)*.
 
-### Part 30 · Portfolio Construction
+### Part 22 · Portfolio Construction, Risk Models and Costs
 - Marchenko, V., Pastur, L. (1967). "Distribution of eigenvalues for some sets of random matrices." *Mat. Sbornik*.
 - Michaud, R. (1989). "The Markowitz optimization enigma: is 'optimized' optimal?" *FAJ*.
 - Best, M., Grauer, R. (1991). "On the sensitivity of mean-variance-efficient portfolios to changes in asset means." *RFS*.
@@ -1073,8 +1057,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Zhang, Z., Zohren, S., Roberts, S. (2020). "Deep learning for portfolio optimization." *J. Financial Data Science*.
 - Pedersen, L. H., Babu, A., Levine, A. (2021). "Enhanced portfolio optimization." *FAJ*.
 - Butler, A., Kwon, R. (2023). "Integrating prediction in mean-variance portfolio optimization." *Quantitative Finance*.
-
-### Part 31 · Risk Models, Costs and Trading Through Time
 - Rosenberg, B. (1974). "Extra-market components of covariance in security returns." *JFQA*.
 - Brinson, G., Hood, L. R., Beebower, G. (1986). "Determinants of portfolio performance." *FAJ*.
 - Perold, A. (1988). "The implementation shortfall: paper versus reality." *JPM*.
@@ -1096,10 +1078,10 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Collin-Dufresne, P., Daniel, K., Sağlam, M. (2020). "Liquidity regimes and optimal dynamic asset allocation." *JFE*.
 - Lou, D., Polk, C. (2022). "Comomentum: inferring arbitrage activity from return correlations." *RFS*.
 
-### Part 32 · Systematic Macro and Alternative Premia
+### Part 23 · Systematic Strategies
+- Mitchell, M., Pulvino, T. (2001). "Characteristics of risk and return in risk arbitrage." *Journal of Finance*.
 - Ariel, R. (1987). "A monthly effect in stock returns." *JFE*; Lakonishok, J., Smidt, S. (1988). "Are seasonal anomalies real? A ninety-year perspective." *RFS*.
 - Fung, W., Hsieh, D. (2001). "The risk in hedge fund strategies: theory and evidence from trend followers." *RFS*.
-- Mitchell, M., Pulvino, T. (2001). "Characteristics of risk and return in risk arbitrage." *Journal of Finance*.
 - Ilmanen, A. (2012). "Do financial markets reward buying or selling insurance and lottery tickets?" *FAJ*.
 - Asness, C., Frazzini, A., Pedersen, L. H. (2012). "Leverage aversion and risk parity." *FAJ*.
 - Moskowitz, T., Ooi, Y. H., Pedersen, L. H. (2012). "Time series momentum." *JFE*.
@@ -1115,8 +1097,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Cederburg, S., O'Doherty, M., Wang, F., Yan, X. (2020). "On the performance of volatility-managed portfolios." *JFE*.
 - Kelly, B., Moskowitz, T., Pruitt, S. (2021). "Understanding momentum and reversal." *JFE*.
 - Bridgewater Associates. "The All Weather Story" (public note).
-
-### Part 33 · Statistical Arbitrage
 - Lehmann, B. (1990). "Fads, martingales, and market efficiency." *QJE*.
 - Lo, A. W., MacKinlay, A. C. (1990). "When are contrarian profits due to stock market overreaction?" *RFS*.
 - Elliott, R., van der Hoek, J., Malcolm, W. (2005). "Pairs trading." *Quantitative Finance*.
@@ -1129,7 +1109,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Krauss, C. (2017). "Statistical arbitrage pairs trading strategies: review and outlook." *J. Economic Surveys*.
 - Guijarro-Ordonez, J., Pelger, M., Zanotti, G. (2022). "Deep learning statistical arbitrage." Working paper *(verify: venue)*.
 
-### Part 34 · Inside a Quant Firm
+### Part 24 · Inside a Quant Firm
 - Virtu Financial (2014). *Form S-1 Registration Statement*.
 - Minsky, Y. (2011). "OCaml for the masses." *ACM Queue*.
 - Agarwal, V., Mullally, K., Naik, N. (2015). "The economics and finance of hedge funds: a review of the academic literature." *Foundations and Trends in Finance*.
@@ -1140,7 +1120,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Jane Street debt-offering disclosures as reported in the financial press *(verify)*.
 - The industry library (Section 3).
 
-### Part 35 · Who Trades With Whom
+### Part 25 · Microstructure and the Order Book
 - Demsetz, H. (1968). "The cost of transacting." *QJE*.
 - Garman, M. (1976). "Market microstructure." *JFE*.
 - Ho, T., Stoll, H. (1981). "Optimal dealer pricing under transactions and return uncertainty." *JFE*.
@@ -1171,8 +1151,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Menkveld, A. (2016). "The economics of high-frequency trading: taking stock." *Annual Review of Financial Economics*.
 - Kirilenko, A., Kyle, A. S., Samadi, M., Tuzun, T. (2017). "The flash crash: high-frequency trading in an electronic market." *Journal of Finance*.
 - Cartea, Á., Jaimungal, S., Wang, Y. (2020). "Spoofing and price manipulation in order-driven markets." *Applied Mathematical Finance*.
-
-### Part 36 · The Limit Order Book
 - Smith, E., Farmer, J. D., Gillemot, L., Krishnamurthy, S. (2003). "Statistical theory of the continuous double auction." *Quantitative Finance*.
 - Lillo, F., Farmer, J. D. (2004). "The long memory of the efficient market." *Studies in Nonlinear Dynamics & Econometrics*.
 - Cont, R., Stoikov, S., Talreja, R. (2010). "A stochastic model for order book dynamics." *Operations Research*.
@@ -1196,7 +1174,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Prata, M., et al. (2024). "LOB-based deep learning models for stock price trend prediction: a benchmark study." *Artificial Intelligence Review*.
 - LOB-Bench (2025). Benchmark for generative order-book models *(verify: authors and venue)*.
 
-### Part 37 · Market Impact and Execution
+### Part 26 · Impact and Execution
 - Kraus, A., Stoll, H. (1972). "Price impacts of block trading on the New York Stock Exchange." *Journal of Finance*.
 - Bertsimas, D., Lo, A. W. (1998). "Optimal control of execution costs." *J. Financial Markets*.
 - Almgren, R., Chriss, N. (2000). "Optimal execution of portfolio transactions." *J. Risk*.
@@ -1221,7 +1199,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Ning, B., Lin, F. H. T., Jaimungal, S. (2021). "Double deep Q-learning for optimal execution." *Applied Mathematical Finance*.
 - Sato, Y., Kanazawa, K. (2025). Survey of the square-root law on the Tokyo Stock Exchange *(verify: title and venue)*.
 
-### Part 38 · Market Making, ETFs and the Speed Race
+### Part 27 · Market Making, ETFs and Machines
 - Avellaneda, M., Stoikov, S. (2008). "High-frequency trading in a limit order book." *Quantitative Finance*.
 - Comerton-Forde, C., Hendershott, T., Jones, C., Moulton, P., Seasholes, M. (2010). "Time variation in liquidity: the role of market-maker inventories and revenues." *Journal of Finance*.
 - Guéant, O., Lehalle, C.-A., Fernandez-Tapia, J. (2013). "Dealing with the inventory risk: a solution to the market making problem." *Mathematics and Financial Economics*.
@@ -1238,8 +1216,19 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Aquilina, M., Budish, E., O'Neill, P. (2022). "Quantifying the high-frequency trading 'arms race'." *QJE*.
 - Koont, N., Ma, Y., Pástor, Ľ., Zeng, Y. (2024). "Steering a ship in illiquid waters: active management of passive funds." *RFS* *(verify)*.
 - SEC (2013). Order in the matter of Knight Capital Americas LLC.
+- Arthur, W. B., Holland, J., LeBaron, B., Palmer, R., Tayler, P. (1997). "Asset pricing under endogenous expectations in an artificial stock market." In *The Economy as an Evolving Complex System II*.
+- Lux, T., Marchesi, M. (1999). "Scaling and criticality in a stochastic multi-agent model of a financial market." *Nature*.
+- LeBaron, B. (2006). "Agent-based computational finance." *Handbook of Computational Economics*.
+- Farmer, J. D., Foley, D. (2009). "The economy needs agent-based modelling." *Nature*.
+- Kearns, M., Nevmyvaka, Y. (2013). "Machine learning for market microstructure and high frequency trading." In *High Frequency Trading* (Risk Books).
+- Byrd, D., Hybinette, M., Balch, T. (2020). "ABIDES: towards high-fidelity multi-agent market simulation." *ACM SIGSIM-PADS*.
+- Vyetrenko, S., et al. (2020). "Get real: realism metrics for robust limit order book market simulations." *ICAIF*.
+- Calvano, E., Calzolari, G., Denicolò, V., Pastorello, S. (2020). "Artificial intelligence, algorithmic pricing, and collusion." *AER*.
+- Colliard, J.-E., Foucault, T., Lovo, S. (2022). "Algorithmic pricing and liquidity in securities markets." Working paper *(verify: venue)*.
+- Hambly, B., Xu, R., Yang, H. (2023). "Recent advances in reinforcement learning in finance." *Mathematical Finance*.
+- Dou, W., Goldstein, I., Ji, Y. (2024). "AI-powered trading, algorithmic collusion, and price efficiency." Working paper *(verify)*.
 
-### Part 39 · Crypto and DeFi
+### Part 28 · Crypto and DeFi
 - Diamond, D., Dybvig, P. (1983). "Bank runs, deposit insurance, and liquidity." *JPE*.
 - Nakamoto, S. (2008). "Bitcoin: a peer-to-peer electronic cash system."
 - Buterin, V. (2014). "Ethereum: a next-generation smart contract and decentralized application platform."
@@ -1262,7 +1251,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Budish, E. (2025). "Trust at scale: the economic limits of cryptocurrencies and blockchains." *QJE* *(verify)*.
 - SEC (2024). Order in the matter of Tai Mo Shan Limited (Terra USD).
 
-### Part 40 · Measuring Risk
+### Part 29 · Risk, Leverage and Crises
 - Sklar, A. (1959). "Fonctions de répartition à n dimensions et leurs marges."
 - Balkema, A., de Haan, L. (1974). "Residual life time at great age." *Annals of Probability*; Pickands, J. (1975). "Statistical inference using extreme order statistics." *Annals of Statistics*.
 - Hill, B. (1975). "A simple general approach to inference about the tail of a distribution." *Annals of Statistics*.
@@ -1286,8 +1275,6 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Glasserman, P., Kang, C., Kang, W. (2015). "Stress scenario selection by empirical likelihood." *Quantitative Finance*.
 - Fissler, T., Ziegel, J. (2016). "Higher order elicitability and Osband's principle." *Annals of Statistics*.
 - Basel Committee (2019). *Minimum Capital Requirements for Market Risk* (FRTB).
-
-### Part 41 · Leverage, Liquidity and Crises
 - Kindleberger, C. (1978). *Manias, Panics, and Crashes*; Minsky, H. (1986). *Stabilizing an Unstable Economy*.
 - Diamond, D., Dybvig, P. (1983). "Bank runs, deposit insurance, and liquidity." *JPE*.
 - Shleifer, A., Vishny, R. (1992). "Liquidation values and debt capacity: a market equilibrium approach." *Journal of Finance*; (2011) "Fire sales in finance and macroeconomics." *JEP*.
@@ -1316,26 +1303,12 @@ These books are not textbooks. They are the stories the series tells and the fir
 - He, Z., Nagel, S., Song, Z. (2022). "Treasury inconvenience yields during the COVID-19 crisis." *JFE*.
 - FINMA (2023). *Lessons Learned from the CS Crisis*; FSB (2023). *Enhancing the Resilience of Non-Bank Financial Intermediation*.
 - Jiang, E., Matvos, G., Piskorski, T., Seru, A. (2024). "Monetary tightening and U.S. bank fragility in 2023." *JFE*.
-
-### Part 42 · Machines in the Market
-- Arthur, W. B., Holland, J., LeBaron, B., Palmer, R., Tayler, P. (1997). "Asset pricing under endogenous expectations in an artificial stock market." In *The Economy as an Evolving Complex System II*.
-- Lux, T., Marchesi, M. (1999). "Scaling and criticality in a stochastic multi-agent model of a financial market." *Nature*.
-- LeBaron, B. (2006). "Agent-based computational finance." *Handbook of Computational Economics*.
-- Farmer, J. D., Foley, D. (2009). "The economy needs agent-based modelling." *Nature*.
-- Kearns, M., Nevmyvaka, Y. (2013). "Machine learning for market microstructure and high frequency trading." In *High Frequency Trading* (Risk Books).
 - Kirilenko, A., Lo, A. W. (2013). "Moore's law versus Murphy's law: algorithmic trading and its discontents." *JEP*.
-- Byrd, D., Hybinette, M., Balch, T. (2020). "ABIDES: towards high-fidelity multi-agent market simulation." *ACM SIGSIM-PADS*.
-- Vyetrenko, S., et al. (2020). "Get real: realism metrics for robust limit order book market simulations." *ICAIF*.
-- Calvano, E., Calzolari, G., Denicolò, V., Pastorello, S. (2020). "Artificial intelligence, algorithmic pricing, and collusion." *AER*.
 - Gensler, G., Bailey, L. (2020). "Deep learning and financial stability." Working paper.
 - Danielsson, J., Macrae, R., Uthemann, A. (2022). "Artificial intelligence and systemic risk." *J. Banking & Finance*.
-- Colliard, J.-E., Foucault, T., Lovo, S. (2022). "Algorithmic pricing and liquidity in securities markets." Working paper *(verify: venue)*.
-- Hambly, B., Xu, R., Yang, H. (2023). "Recent advances in reinforcement learning in finance." *Mathematical Finance*.
-- Dou, W., Goldstein, I., Ji, Y. (2024). "AI-powered trading, algorithmic collusion, and price efficiency." Working paper *(verify)*.
 - IMF (2024). *Global Financial Stability Report*, October, ch. 3 (AI and capital markets); FSB (2024). *The Financial Stability Implications of Artificial Intelligence*.
-- Lopez-Lira, A. (2025). "Can large language models trade? Testing financial theories with LLM agents in market simulations." Working paper *(verify)*.
 
-### Part 43 · Can You Beat the Market?
+### Part 30 · Can You Beat the Market?
 - Jensen, M. (1968). "The performance of mutual funds in the period 1945–1964." *Journal of Finance*.
 - Sharpe, W. (1991). "The arithmetic of active management." *FAJ*.
 - Lo, A. W. (2004). "The adaptive markets hypothesis." *JPM*.
