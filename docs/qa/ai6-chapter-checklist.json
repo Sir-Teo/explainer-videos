@@ -1,6 +1,6 @@
 {
   "part": "ai6",
-  "observed_utc": "2026-11-01T13:19:45.790014+00:00",
+  "observed_utc": "2026-11-01T13:29:58.860852+00:00",
   "chapters": 19,
   "bilingual_cases": 38,
   "numerical_items": 22,
@@ -9,7 +9,7 @@
   "source_integration_evidence": "evidence/ai6-source-integration/README.md",
   "source_teaching_evidence": "evidence/ai6-scene-teaching-source-repairs/README.md",
   "source_core_evidence": "evidence/ai6-producer-cache-source-repairs/README.md",
-  "scope": "All22 numerical items/263checks complete. Historical17 selected-image cases and16 native endpoint cases retain declared scope. Current-source selected acceptance16 excludes new NBZH fraction repair pending after-regression. Four chapters have independent bounded repaired-target closure only. Nine inactive retained fresh-case claims relinquished to parent; full-case review still pending. No Part7 generation/render.",
+  "scope": "All22 numerical items/263checks complete. Original17 selected-image approvals retained historically; current18 include TreesENZH full selected acceptance and exclude NBZH changed-source target pending. GBENZH full historical cohort reviewed but timing lead pending. Native16case count unchanged. Four bounded target closures do not imply full cohort acceptance; nine fresh review claims relinquished to parent. No Part7 execution.",
   "cases": [
     {
       "position": 1,
@@ -469,15 +469,17 @@
       "source_sha256_observed": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
       "source_state": "Only lower-plotY−2.45→−2.20 and countsX5→4.7 changed; actualENZH geometry confirms safe margins and no new overlap; narration/data/requested timings exact.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Parent selected-silent review:15 supplied endpoints per language plus37 English/40 Chinese decoded4-second samples, representative originals and native playback progress/end. No sampled contradiction established; two nonblocking safe-margin items identified. This is not dense/continuous/listening/final-resolution approval.",
-      "native1080_endpoints": "Pending.",
+      "selected_motion_review": "Independent complete supplied cohort433selectedframes on55chronologicalsheets perlanguage,866total. Both margin targets closed; source5886module/data identities retained. No unselected/continuous/audio/native-motion/4K approval.",
+      "native1080_endpoints": "Focused nativeEN73.9/135.4,ZH84.0/114.3/150.4s checks support margin/leaf/label readability. Not all native endpoint states or motion.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
+      "selected_image_case_accepted_at_declared_scope": true,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
       "source_repair_evidence": "evidence/ai6-trees-safe-margin-source-repair/README.md",
       "after_rendered_review": "NOT STARTED under current local capacity guard; parent retains baseline identity and after-review ownership.",
-      "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md"
+      "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
+      "source_sha256_before_latest_after_review": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
+      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md"
     },
     {
       "position": 13,
@@ -488,15 +490,17 @@
       "source_sha256_observed": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
       "source_state": "Only lower-plotY−2.45→−2.20 and countsX5→4.7 changed; actualENZH geometry confirms safe margins and no new overlap; narration/data/requested timings exact.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Parent selected-silent review:15 supplied endpoints per language plus37 English/40 Chinese decoded4-second samples, representative originals and native playback progress/end. No sampled contradiction established; two nonblocking safe-margin items identified. This is not dense/continuous/listening/final-resolution approval.",
-      "native1080_endpoints": "Pending.",
+      "selected_motion_review": "Independent complete supplied cohort433selectedframes on55chronologicalsheets perlanguage,866total. Both margin targets closed; source5886module/data identities retained. No unselected/continuous/audio/native-motion/4K approval.",
+      "native1080_endpoints": "Focused nativeEN73.9/135.4,ZH84.0/114.3/150.4s checks support margin/leaf/label readability. Not all native endpoint states or motion.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
+      "selected_image_case_accepted_at_declared_scope": true,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
       "source_repair_evidence": "evidence/ai6-trees-safe-margin-source-repair/README.md",
       "after_rendered_review": "NOT STARTED under current local capacity guard; parent retains baseline identity and after-review ownership.",
-      "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md"
+      "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
+      "source_sha256_before_latest_after_review": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
+      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md"
     },
     {
       "position": 14,
@@ -595,14 +599,17 @@
       "source_sha256_observed": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Parent bounded historical pass:14EN/15ZH endpoints,37EN/38ZH four-second samples and representative formula originals/native UI progress/end; no established new defect. Dense short equation-transition extension proposed from source/word timings; no unverified code repair applied.",
+      "selected_motion_review": "Independent full historical cohort370EN/386ZH selectedframes on47/49sheets, original movie/provenance retained. No new stable layout defect; GB-T1 caption/round mismatch remains pending source assessment.",
       "native1080_endpoints": "Both native cases:29 held states on8 prepared pages at960x540tiles plus8 original1920 followups actually viewed. No settled defect.186 actual constructor rows/10 captured VO records compare identically from206/0850 to89f/296;21of23 used sourcegraph files and4 data signatures exact. Empty native input logs disclosed; frozen480constructor inputs supply that equivalence, not fabricated native logs.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "selected_image_case_accepted_at_declared_scope": false,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
-      "native1080_evidence": "evidence/ai6-gradientboosting-native1080-endpoint-review/README.md"
+      "native1080_evidence": "evidence/ai6-gradientboosting-native1080-endpoint-review/README.md",
+      "full_selected_cohort_review_complete": true,
+      "GB_T1": "Atb narration says ten/thirty while loop startsround3; actual silentcaption/frame lead. Source scheduling assessment pending; no spoken failure claim.",
+      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md"
     },
     {
       "position": 16,
@@ -613,14 +620,17 @@
       "source_sha256_observed": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Parent bounded historical pass:14EN/15ZH endpoints,37EN/38ZH four-second samples and representative formula originals/native UI progress/end; no established new defect. Dense short equation-transition extension proposed from source/word timings; no unverified code repair applied.",
+      "selected_motion_review": "Independent full historical cohort370EN/386ZH selectedframes on47/49sheets, original movie/provenance retained. No new stable layout defect; GB-T1 caption/round mismatch remains pending source assessment.",
       "native1080_endpoints": "Both native cases:29 held states on8 prepared pages at960x540tiles plus8 original1920 followups actually viewed. No settled defect.186 actual constructor rows/10 captured VO records compare identically from206/0850 to89f/296;21of23 used sourcegraph files and4 data signatures exact. Empty native input logs disclosed; frozen480constructor inputs supply that equivalence, not fabricated native logs.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "selected_image_case_accepted_at_declared_scope": false,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
-      "native1080_evidence": "evidence/ai6-gradientboosting-native1080-endpoint-review/README.md"
+      "native1080_evidence": "evidence/ai6-gradientboosting-native1080-endpoint-review/README.md",
+      "full_selected_cohort_review_complete": true,
+      "GB_T1": "Atb narration says ten/thirty while loop startsround3; actual silentcaption/frame lead. Source scheduling assessment pending; no spoken failure claim.",
+      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md"
     },
     {
       "position": 17,
@@ -743,7 +753,9 @@
       "bounded_repair_target_closed": true,
       "bounded_repair_review_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
       "full_selected_cohort_after_review": "Pending; bounded repaired-target closure is not full-case acceptance.",
-      "new_polish_lead": "Problem8 wrapped final formula has tight line leading; no glyphcontact/numerical defect established. Source-local proposal pending."
+      "new_polish_lead": "Problem8 spacing source repair applied; actual after-native/motion pending. Recap timing target closure remains prior0f613source scope.",
+      "current_source_sha256": "8beb51936ca3a0894a2ad1cd2466e975a6cb5f9d3973b8c26e8ddfe5b2fca571",
+      "problem8_source_evidence": "evidence/ai6-outro-problem8-leading-source-repair/README.md"
     }
   ],
   "numerical_source_commit": "b6649e39995f128019948cb32831b1a3caeb3842",
@@ -794,6 +806,6 @@
   },
   "latest_verified_source_publication": "8db4f0399a1490f905c8367151eeeb3bae9e051b",
   "historical_selected_image_cases_accepted_at_declared_scope": 17,
-  "current_source_selected_image_cases_accepted_at_declared_scope": 16,
+  "current_source_selected_image_cases_accepted_at_declared_scope": 18,
   "fresh_review_routing_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md"
 }

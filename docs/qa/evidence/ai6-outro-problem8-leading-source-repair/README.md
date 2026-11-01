@@ -1,0 +1,11 @@
+# Outro Chinese problem8 line leading — source polish
+
+The parent reviewer and source owner viewed original native100.9s and encoded103s before witnesses. The final `-4G/(n+4lambda)` continuation is unusually close to its preceding Chinese line. This is a readability improvement; no numerical error or glyph contact was asserted. These witnesses and exact original review identities remain separate from the already closed Newton-recap timing repair.
+
+Only `s19_outro.py` changes,0f613477→8beb5193. After the original problem_set has laid out all eight statements, Chinese only rebuilds the last already-translated body with0.30em extra leading at its sole existing line break. Top-left, font size, width,67 glyph shapes/styles, other seven rows, heading and number8 remain exact. English does not access or reconstruct any row. Cleaned text, mathematics, voiceover, bookmarks, requested animations, data and common helpers remain unchanged. If future text has a different wrap count, this local adjustment safely does nothing.
+
+Actual constructor bounds increase the final body height by0.065380503worldunits and retain1.178580814worldunits of bottom margin. This cloud fixture's absolute bounds differ from the actual native before image, whose ink has143px bottom margin. No measured after-pixel inset, fresh native image or motion approval follows. The exact host must regress the changed Chinese problems window; all other code remains source-identical.
+
+The selected existing Part6 teaching/template checks were rerun against both current NBb776 and Outro8beb:24 tests pass, with31 selected source identities unchanged during the5.201second enclosing run. This supersedes only this scoped tested candidate, not all repository tests. Earlier765 whole-suite tests predate both patches. Actual constructor and normalized whole-module AST proofs are preserved. No permanent low-impact test was added.
+
+The codec map losslessly preserves included original files and raw patch bytes after one outer gzip decode. Original TeX/SVG constructor artifacts remain in runtime and are omitted explicitly. No after-render, data payload, audio, credential or transfer token is copied. Source clearance is for controlled host regression, not continuous playback/listening/4K acceptance.

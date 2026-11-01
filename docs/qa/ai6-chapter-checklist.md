@@ -1,6 +1,8 @@
 # Part6 chapter checklist
 
-Observed 2026-11-01T13:19:45.790014+00:00. **19 chapters /38 bilingual cases /22 numerical items.** All22 items and263 checks are complete. **17 historical selected-image cases** and**16 native1080 endpoint cases** retain their declared scope. Current-source selected acceptance is**16** pending the new NaiveBayesZH repair regression. Twelve parent baseline passes are complete with explicit four-second/sample/UI limits. Tree/Forest/Ada/Contest/Outro source repairs and Chinese merge pass641 tests/1532 unchanged identities plus6505 unchanged caption outputs; fresh after-render acceptance remains pending. The current environment retains all resource guards.
+Observed 2026-11-01T13:32:05.125448+00:00. **19 chapters / 38 bilingual cases / 22 numerical items.** All 22 numerical items and 263 checks are complete. Current source selected-image acceptance is **18**: the original 17 historical cases, plus Trees EN/ZH, with Chinese Naive Bayes held for its new targeted regression. **16 native endpoint cases** retain their declared scope. All fresh host captures are complete; review and production acceptance remain separate.
+
+Trees has full selected-cohort acceptance. Forests, AdaBoost, Contest and the Outro recap have bounded repair-target closure. Naive Bayes and Outro problem 8 have source repairs awaiting their targeted after-checks. Gradient Boosting has completed historical selected-cohort review with GB-T1 timing polish pending. Nine inactive fresh-review claims have been relinquished to the parent pool. Resource guards remain unchanged.
 
 | Position | Chapter | Actualcoverage/pendingwork |
 |---|---|---|
@@ -16,13 +18,13 @@ Observed 2026-11-01T13:19:45.790014+00:00. **19 chapters /38 bilingual cases /22
 | 10 | KNN: 9. Neighbours, and the curse of dimensionality  | Corrected Jensen target resolved per parent native/57frame receipt, English pixels exact. Full EN/ZH cohort relinquished to parent pool; historical source identities retained. |
 | 11 | Kernels: 10. Kernels: lifting without lifting  | Fresh packet ready; full EN/ZH selected/window review relinquished to parent pool; no active local review job. |
 | 12 | SVM: 11. The widest street  | Prior47 native states retain reviewed scope. Existing movies now decoded by host; full selected EN/ZH review relinquished to parent pool, not unstarted extraction. |
-| 13 | Trees: 12. Trees: twenty questions  | Parent assigned fresh full selected-cohort review after coordinate repair; independent result pending. |
+| 13 | Trees: 12. Trees: twenty questions  | Independent TreesENZH full selected cohort accepted: all110sheets/866selected frames, both margins closed. Native/audio/production limits remain. |
 | 14 | Forests: 13. Bagging and random forests  | Independent EN/ZH native/reveal-window review closes history-card/title repair target. Full selected cohort and production gates remain pending. |
 | 15 | AdaBoost: 14. AdaBoost and the exponential loss  | Independent EN/ZH native/reveal-window review closes measured-precision/floor disclosure targets. Full selected cohort and audio/production gates remain pending. |
-| 16 | GradientBoosting: 15. Gradient boosting, second order  | Prior native/dense-window scopes retained; parent assigned existing movie full selected-cohort review. No new renderer required. |
+| 16 | GradientBoosting: 15. Gradient boosting, second order  | Full historical ENZH selected cohorts reviewed (370/386frames); no stable layout defect, but GB-T1 caption/round timing lead pending source assessment. No current-global/native-motion/audio approval. |
 | 17 | Metrics: 16. Keeping score honestly  | EN prior full selected review retained. ZH movie decoded; full selected review relinquished to parent pool. New native endpoints retain separate, partial executor scope. |
 | 18 | Contest: 17. The contest, and two cultures  | Independent EN/ZH board/caption/native samples close tie/cap-disclosure target. Full selected cohort and production gates pending. |
-| 19 | Outro: Recap, problems, and what comes next  | Independent EN/ZH windows close Newton/concept cue repair target. New ZH problem8 tight-leading polish proposal pending; full selected/listening/production gates open. |
+| 19 | Outro: Recap, problems, and what comes next  | Independent EN/ZH windows close Newton/concept cue repair target. New ZH problem8 source spacing repair8beb applied, targeted after-regression pending; full selected/listening/production gates open. |
 
 [Exactcaseledger](ai6-chapter-checklist.json). [Numerical263checks](evidence/ai6-numerical-generation-scientific-audit/README.md), [604-testscope](evidence/ai6-integrated-tests-20261101-shared-chart-candidate/README.md), [sharedchartsourceproof](evidence/ai6-gauss-hbars-source-repair/README.md), [independentgeometryreview](evidence/ai6-hbars-independent-review/README.md). Runtimewarnings/sourceversions andperceptualgaps remainexplicit.
 
@@ -37,3 +39,5 @@ Observed 2026-11-01T13:19:45.790014+00:00. **19 chapters /38 bilingual cases /22
 Historical five-chapter source publication: `8db4f0399a1490f905c8367151eeeb3bae9e051b`. GradientBoosting adds two existing native endpoint cases, for16 total;22 fresh native case captures remain pending. [Native proof](evidence/ai6-gradientboosting-native1080-endpoint-review/README.md). No new renderer/decoder or production approval.
 
 [Fresh-host ownership reconciliation and independent bounded closures](evidence/ai6-fresh-host-review-checkpoint/README.md). [NaiveBayes source repair](evidence/ai6-naivebayes-fraction-depth-source-repair/README.md). The earlier765-test run predates this new source repair; its24 selected teaching/template tests pass with31 stable identities.
+
+[Trees full selected and GradientBoosting GB-T1 receipts](evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md). Current selected acceptance18 retains original17historically, adds Trees2 and holds NBZH1 for target regression. [Outro spacing source proof](evidence/ai6-outro-problem8-leading-source-repair/README.md);24 scoped tests/31stable identities cover NBb776+Outro8beb, no final whole-suite count.

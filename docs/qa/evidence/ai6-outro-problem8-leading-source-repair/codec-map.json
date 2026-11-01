@@ -1,0 +1,149 @@
+[
+  {
+    "group": "source-repair",
+    "original_path": "README.md",
+    "bytes": 2666,
+    "sha256": "956fb6555491c29b0d1c61199f88d0883d085bd50e46962357415912640691bc",
+    "encoded_path": "objects/956fb6555491c29b0d1c61199f88d0883d085bd50e46962357415912640691bc.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "applied-receipt.json",
+    "bytes": 1554,
+    "sha256": "938438b07fd0872d31e9b3ca8828230459128cf1bb603b44e93f081ef58892eb",
+    "encoded_path": "objects/938438b07fd0872d31e9b3ca8828230459128cf1bb603b44e93f081ef58892eb.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "candidate-invariants.json",
+    "bytes": 554,
+    "sha256": "dd374a92a35261db4ee4dfb7625b4239f21f4fe0793f3f0379f7febf73f93be8",
+    "encoded_path": "objects/dd374a92a35261db4ee4dfb7625b4239f21f4fe0793f3f0379f7febf73f93be8.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "candidate-s19_outro.py",
+    "bytes": 18044,
+    "sha256": "8beb51936ca3a0894a2ad1cd2466e975a6cb5f9d3973b8c26e8ddfe5b2fca571",
+    "encoded_path": "objects/8beb51936ca3a0894a2ad1cd2466e975a6cb5f9d3973b8c26e8ddfe5b2fca571.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "candidate.diff.gz",
+    "bytes": 497,
+    "sha256": "af42ddb6f7e4b254e4d19117170179af99d47b1943cae297edfea5de4e7e7a30",
+    "encoded_path": "objects/af42ddb6f7e4b254e4d19117170179af99d47b1943cae297edfea5de4e7e7a30.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "check_geometry.py",
+    "bytes": 6079,
+    "sha256": "30ec1e797204d4285c03e0840784cad933e37f0590bc408dcbf7bd974c110853",
+    "encoded_path": "objects/30ec1e797204d4285c03e0840784cad933e37f0590bc408dcbf7bd974c110853.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "file-manifest.json",
+    "bytes": 2133,
+    "sha256": "327c29fbc84381b64c79e5acf05eec7d885493f8e94746ba54b5a92cca767cc8",
+    "encoded_path": "objects/327c29fbc84381b64c79e5acf05eec7d885493f8e94746ba54b5a92cca767cc8.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "geometry.json",
+    "bytes": 20322,
+    "sha256": "d9d6e2ff6863a82b3b892c22667fdf5a8782ec99e78b6efe7ae31fc26aa63b86",
+    "encoded_path": "objects/d9d6e2ff6863a82b3b892c22667fdf5a8782ec99e78b6efe7ae31fc26aa63b86.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "geometry.log",
+    "bytes": 18572,
+    "sha256": "2fdfdbb3d04e62ee790e14200c3046daf49d285183bbfc43d2e2f5e11e3e0c91",
+    "encoded_path": "objects/2fdfdbb3d04e62ee790e14200c3046daf49d285183bbfc43d2e2f5e11e3e0c91.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "native-before-inset.json",
+    "bytes": 706,
+    "sha256": "14ac87e245fe20ef59e7f5767417131b844d06a906534343b87486c47d017610",
+    "encoded_path": "objects/14ac87e245fe20ef59e7f5767417131b844d06a906534343b87486c47d017610.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "proposal.json",
+    "bytes": 2053,
+    "sha256": "2e7617292c0501f902d5dab1dee194a68ae9ff19d9af56fb78397d4ced8907c4",
+    "encoded_path": "objects/2e7617292c0501f902d5dab1dee194a68ae9ff19d9af56fb78397d4ced8907c4.gz"
+  },
+  {
+    "group": "source-repair",
+    "original_path": "source-before.py.gz",
+    "bytes": 6452,
+    "sha256": "5c0e76509b3fd6ef5af78a42dd928ae56f671f1bd1acc8c06312fbc41f9444fa",
+    "encoded_path": "objects/5c0e76509b3fd6ef5af78a42dd928ae56f671f1bd1acc8c06312fbc41f9444fa.gz"
+  },
+  {
+    "group": "scoped-tests",
+    "original_path": "receipt.json",
+    "bytes": 541,
+    "sha256": "9dc8f0d088f0e8e1bba4f238935a21c0ea421940f42a215cf82a39d6e03f2677",
+    "encoded_path": "objects/9dc8f0d088f0e8e1bba4f238935a21c0ea421940f42a215cf82a39d6e03f2677.gz"
+  },
+  {
+    "group": "scoped-tests",
+    "original_path": "source-after.json",
+    "bytes": 4713,
+    "sha256": "281299aa47e7d1d50adb90aff95b877adce2c5ab574896d376baef6b84933efd",
+    "encoded_path": "objects/281299aa47e7d1d50adb90aff95b877adce2c5ab574896d376baef6b84933efd.gz"
+  },
+  {
+    "group": "scoped-tests",
+    "original_path": "source-before.json",
+    "bytes": 4713,
+    "sha256": "281299aa47e7d1d50adb90aff95b877adce2c5ab574896d376baef6b84933efd",
+    "encoded_path": "objects/281299aa47e7d1d50adb90aff95b877adce2c5ab574896d376baef6b84933efd.gz"
+  },
+  {
+    "group": "scoped-tests",
+    "original_path": "test_ai6_scene_teaching_repairs.py.log",
+    "bytes": 3265,
+    "sha256": "dfb9b919303eb661e3c77543e43c895ed2dcf59b5d49df839773265b3e02d008",
+    "encoded_path": "objects/dfb9b919303eb661e3c77543e43c895ed2dcf59b5d49df839773265b3e02d008.gz"
+  },
+  {
+    "group": "scoped-tests",
+    "original_path": "test_zh_templates.py.log",
+    "bytes": 1525,
+    "sha256": "6bcb1c7587e361744cd80e50005d23572413c2afb224ee645b8fffdc1f6d29b6",
+    "encoded_path": "objects/6bcb1c7587e361744cd80e50005d23572413c2afb224ee645b8fffdc1f6d29b6.gz"
+  },
+  {
+    "group": "scoped-tests",
+    "original_path": "executed-runner.py",
+    "bytes": 1793,
+    "sha256": "576796653253bfbac9604e3a451440c434dd5223d1cd5f08358d007ded0a28d3",
+    "encoded_path": "objects/576796653253bfbac9604e3a451440c434dd5223d1cd5f08358d007ded0a28d3.gz"
+  },
+  {
+    "group": "actual-before",
+    "original_path": "AI-Built-Part6-Outro-Fresh-Regression-20261101/captures/zh/native1080/completed/010_00100.9s.png",
+    "bytes": 312227,
+    "sha256": "7a96afef1406b74a07bcb7bc427e5c4440f5cc9f58f3538e6df7a1d808f095a2",
+    "encoded_path": "objects/7a96afef1406b74a07bcb7bc427e5c4440f5cc9f58f3538e6df7a1d808f095a2.gz"
+  },
+  {
+    "group": "actual-before",
+    "original_path": "outro-zh-movie-103s.png",
+    "bytes": 102110,
+    "sha256": "f391a7f579cb2563c7f7eb354f7f83d2bcb0cd28aca174f61effca5ece962beb",
+    "encoded_path": "objects/f391a7f579cb2563c7f7eb354f7f83d2bcb0cd28aca174f61effca5ece962beb.gz"
+  },
+  {
+    "group": "actual-before",
+    "original_path": "outro-zh-problem8-crop.png",
+    "bytes": 43492,
+    "sha256": "d73803c63e03c10f50238cf62c891065fcf39adb332e5399611636e69275ef12",
+    "encoded_path": "objects/d73803c63e03c10f50238cf62c891065fcf39adb332e5399611636e69275ef12.gz"
+  }
+]

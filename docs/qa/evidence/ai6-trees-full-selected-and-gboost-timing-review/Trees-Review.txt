@@ -1,0 +1,20 @@
+Trees EN then ZH — selected-cohort visual regression review, 2026-11-01
+
+RESULT: Both reported edge-margin defects are closed in the reviewed fresh packet. No new persistent collision/clipping established across all supplied chronological sheets. This is selected-cohort visual acceptance, not whole-video delivery acceptance.
+
+Coverage: EN all 55 sheets / 433 selected frames, 0–147.598372s; then ZH all 55 sheets / 433 selected frames, 0–161.798372s. Silent 854x480 nominal15fps decoded motion, dense selections nominal0.25s with maximum selected gap1.0s. Inspected native1920x1080 skipped-animation endpoints: EN73.9/135.4s; ZH84.0/114.3/150.4s. Native leaf crops used to resolve thumbnail crowding. Exact frame selections, timestamps, source indices, sheet hashes, native image hashes and movie hashes accompany this report.
+
+Repair closure:
+- Bottom threshold xlabel: EN73.9s and ZH84.0s now fully legible and clearly inside bottom edge (approximately30–45px visible clearance, not the historical~2px). Gain chart, x ticks and title remain separated. Reveal order remains chart/curves, best-threshold marker and explanatory text; see ZH81.4–83.933s and corresponding EN cohort.
+- Right held-out range: EN135.4s and ZH150.4s label is fully visible with comfortable right clearance (EN roughly40+px; ZH more). In ZH it enters149.465–150.198s after counts; remains readable through fade160.465–161.798s. EN analogous final selected sequence settles by135.198372s. Original~2.58px margin defect is closed.
+- Tree grid leaf labels appear crowded at sheet size; inspected unscaled native crops show separate words/branches, not merged labels.
+- Proof transforms contain temporary duplicate mathematical glyphs crossing their origin/annotation (EN~48.6–49.133 and53.133–53.8s; ZH53.533–54.067 and58.467–59.133s). They settle cleanly. This is a transient transform observation, not a persistent collision finding. No claim that every intervening frame is clean.
+- Native ZH114.3s confirms depth plot labels/citation readable and not clipped.
+
+Identity and source:
+Input libfile_4fa21ff00bc48191bead74accc1ad02e v0, 53483796bytes, SHA256 543410b8ef69527fd39ca0e7f6270793ce74118e703c885122214a5e9c41a7d3. Verified against delivery index libfile_9f4b9294e5cc81918c8c7a44854b95a4 v0, 7893bytes SHA2561555bd8a7736eb7662b9cf741d4d48ca38821be0d7a571ca4cfcef3c7eae0b5a. Archive CRC/path traversal/symlink safety checked; all301 payload lengths and hashes verified. Materialization warnings empty.
+Actual source fetched via GitHub connector from Sir-Teo/explainer-videos commit5886ad1b45446fc06f5e9a63a7bc0ce8caf7f8e1, videos/ai/ai6/s13_trees.py:16853bytes SHA2569aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06, matching both source-before manifests. Inspected source lines185–205 and240–270: scan chart center[-2.4,-2.2], y_length1.9; held-out label below counts, left-aligned. Source contents were read, not inferred from hashes. Numerical model correctness was not recomputed.
+EN movie SHA2562bd89ef9015ba2936d95b8e429457d5753556ed8cfa87e29badbbcb46dc37490.
+ZH movie SHA2567350f8f46d0f96dfdf748071b92071932b74e788e26fddec2989603e9aa5965c.
+
+Limits/warnings preserved: original packet, source manifests, logs, prior bounded review and historical findings remain unchanged. FFmpeg unused metadata/shortest warnings in original receipts remain warnings, not visual acceptance. All-source-frame automated decode is not all-frame human inspection. No listening, continuous perceptual playback, narration synchronization, native1080p motion, final4K, Drive delivery, or unselected-frame acceptance. No source edits, numerical producers, rerenders, push or desktop/browser UI performed. Companion JSON preserves original coverage limitations verbatim.

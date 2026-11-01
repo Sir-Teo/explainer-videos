@@ -1,0 +1,227 @@
+{
+  "status": "manual-selected-cohort-review-completed-with-timing-polish-finding",
+  "finding": "GB-T1",
+  "languages": {
+    "en": {
+      "movie_sha256": "25fde2c6ac3028fe06baff1822449f76bbed7dd055180888c754544502a59650",
+      "pages_inspected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "selected_frames_inspected": 370,
+      "original_resolution_checks": [
+        {
+          "source_frame": 756,
+          "time": 50.399674,
+          "reasons": [
+            "motion-011:after"
+          ],
+          "file": "frames/0000756_000050.400s.png",
+          "sha256": "f8936db1d3d1054ca99112c17429f3ed51df907103f61c411bf5cac816bc0b43"
+        },
+        {
+          "source_frame": 1227,
+          "time": 81.799349,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "frames/0001227_000081.799s.png",
+          "sha256": "da667e000469dd2b2eb478e1099c675b9719ef56873777f3b761815873a00c24"
+        },
+        {
+          "source_frame": 1446,
+          "time": 96.399349,
+          "reasons": [
+            "motion-029:dense"
+          ],
+          "file": "frames/0001446_000096.399s.png",
+          "sha256": "c0d01c0faf3df65e5b4acb78ca16fc797d100ec2127b02fe83136428372f239d"
+        },
+        {
+          "source_frame": 1457,
+          "time": 97.132682,
+          "reasons": [
+            "motion-029:dense"
+          ],
+          "file": "frames/0001457_000097.133s.png",
+          "sha256": "619526dbce9bb043257e37a4f81c91c0b6659fa73e4eb004d43981baae6b57b0"
+        },
+        {
+          "source_frame": 1567,
+          "time": 104.466016,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "frames/0001567_000104.466s.png",
+          "sha256": "36dbfe3ea51f34544419843cda0ef8b83884263137822479099af05686adcbe9"
+        },
+        {
+          "source_frame": 2140,
+          "time": 142.666016,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "frames/0002140_000142.666s.png",
+          "sha256": "e17836021b516faa783f6908dfe0d935a4bd7e3e6d8edb6131f08a664baa06d7"
+        }
+      ]
+    },
+    "zh": {
+      "movie_sha256": "bafecfcc81ea2750f00a74a9084b558ff6c146a3a88b96a4ea4d994b457ffc1b",
+      "pages_inspected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "selected_frames_inspected": 386,
+      "original_resolution_checks": [
+        {
+          "source_frame": 822,
+          "time": 54.799674,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "frames/0000822_000054.800s.png",
+          "sha256": "32c2374b8cc73611b5cc17b5f5d19d9f18c9cbf93177a349bfa0a18bd2408463"
+        },
+        {
+          "source_frame": 1296,
+          "time": 86.399349,
+          "reasons": [
+            "motion-021:after"
+          ],
+          "file": "frames/0001296_000086.399s.png",
+          "sha256": "142d0544a3d6281648ed52f3bf7cdd6801d3169f4222a3f75bdf7dc0df1819eb"
+        },
+        {
+          "source_frame": 1534,
+          "time": 102.266016,
+          "reasons": [
+            "motion-029:dense"
+          ],
+          "file": "frames/0001534_000102.266s.png",
+          "sha256": "72f55fb208e7db39b69ab8fcbf9f325b4e2341a6d247b7a37a40484ad174a3a7"
+        },
+        {
+          "source_frame": 1574,
+          "time": 104.932682,
+          "reasons": [
+            "motion-029:last-change"
+          ],
+          "file": "frames/0001574_000104.933s.png",
+          "sha256": "6aa81cc418dee85756fdffc8fb47294ad98f621e4ab060fdd0e97e8766d9282a"
+        },
+        {
+          "source_frame": 1622,
+          "time": 108.132682,
+          "reasons": [
+            "motion-030:dense",
+            "motion-030:midpoint"
+          ],
+          "file": "frames/0001622_000108.133s.png",
+          "sha256": "37f01ee9bb3d54fa6213c4e076a38d99f0bfbd924ce49d85b85d373f6b8e07d6"
+        },
+        {
+          "source_frame": 2221,
+          "time": 148.066016,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "frames/0002221_000148.066s.png",
+          "sha256": "bf5408cb7480e328b09717d8bca1f49916a730c23027f7f2e71a295594b5d2b6"
+        }
+      ]
+    }
+  }
+}
