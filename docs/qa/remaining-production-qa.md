@@ -9,7 +9,8 @@ are **not fully production-approved**. Their selected-frame visual passes are co
 | 2,16scenes×2languages | All32narrated cases pending; current movies use silent timing placeholders | No listening approval. OriginalLogicEN native playback had timed screenshots; current teaching-caption version has selected-frame review. | All32 preview movies480p15; English Hook also has a reviewed silent1080p motion pilot. Knowledge has41 bilingual native1080p endpoints. Broader production motion pending |
 | 3,19scenes×2languages | All 38 narrated cases pending; all 38 endpoint and silent-motion runtime cases exist, with current repaired selected-frame review tracked separately | EinsumEN native cloud playback with timed screenshots; no listening or continuous perceptual approval | Silent previews 480p15; selected native endpoints checked; broad production checks pending |
 | 4,19scenes×2languages | All38narrated cases pending; current silent bilingual assemblies and all36joins checked | No listening or continuous-perception approval | All38selected silent480p15 reviews and537native1080 endpoint states; full production motion pending |
-| 5–31 | Pending; follow per-part manifests and current source | Pending | Pending |
+| 5,19scenes×2languages | All38narrated cases pending; complete silent candidates and all36joins checked | No listening or continuous-perception approval | All38selected480p15 cases and604native1080endpoint states reviewed; fullproductionmotion pending; [frozen handoff](production-handoff-part5.md) |
+| 6–31 | Pending; Part6source repair/data-contract work underway | Pending | Pending |
 
 The next narration queue begins with Part1 in manifest order, retaining the completed InformationEnglish cache.
 Part2 then follows its16chapter manifest, both languages. Source/data and visual work may progress while these explicit
@@ -33,3 +34,5 @@ in a1364px display); Knowledge boundary anchors and caption clearance are now re
 No web-player application source is tracked in this repository. Responsive behavior of an external hosting player is outside this checkout; native exported-file playback remains a separate, applicable check. The QA HTML reports are evidence viewers, not the educational video product.
 
 Parts3and4 have separate silent full-part concatenation, chapter/subtitle and scoped join evidence. Narrated production joins, final loudness normalization, whole-part spoken pacing and listening remain pending; silent checks do not close those gates.
+
+Cloudproduction ownership update: the parent reports English/Chinese narrated4K SVDpilots in a separate cloud environment. User feedback accepts the English audio and asks for slower/more-natural Chinese; that comparison is pending with production owner. This does not approve post-polish SVDvisuals or other36Part3spoken cases. Existing fullpart gates remain open. This QA executor has evicted only its inactive public TTS/aligner model downloads under recorded capacity checks; generated speech/trained results survive, and any renewed narration here needs normal public model restoration. No local render resumes.
