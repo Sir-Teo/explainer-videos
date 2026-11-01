@@ -1,0 +1,11 @@
+# Part 6 KNN Jensen line spacing source repair
+
+This is a bounded source and actual-constructor geometry receipt. The execution host reported touching Chinese Jensen lines in native endpoints 012/013 and motion frame 1643; this owner has not viewed those images. The exact saved host report is included losslessly. Fresh rendered regression remains pending with that host.
+
+Only `s10_knn.py` changes: keep the original Jensen literal, pretranslate it in Chinese only, and replace its first TeX line break with `\\[0.4em]`. English constructor input and all English reason point arrays are exact before/after. The shared caption table is untouched. The table used here differs from the host table, but their exact Jensen outputs match.
+
+Separate properly initialized EN/ZH processes construct actual Tex and the source-selected side ladder, applying animation geometry without a Scene, Camera, frame renderer, decoder, scene import, or data load. All four proof-row point arrays and the other three reasons remain exact in each language. The Chinese line-union clearance increases by 0.083020729 world units (11.21 pixels at 1080), to 20.14 pixels; its bottom/frame inset is 44.12 pixels at 480. These are geometry measurements, not rendered-pixel approval. Cloud baseline x bounds match the host exactly, but y extent/height differ, so the cloud fixture does not reproduce host glyph contact.
+
+After mechanically reversing only the intended imports/local conditional/constructor argument, the entire module AST equals the before source. VO, bookmarks, math, charts, other methods and requested timing are unchanged. In-memory compile and targeted diff whitespace checks pass. An initial disposable probe syntax failure is preserved with its supersession noted; no permanent low-impact test was added. Earlier root full-suite runs predate this patch and are not attributed to it.
+
+`codec-map.json` binds every gzip payload to original raw bytes and SHA-256, including before/after sources, exact patch, executed probes and full receipts. Constructor TeX/SVG artifacts are not duplicated. No production data, models, videos, audio, credentials or native images are included. No source staging, commit or publication was performed by this owner.

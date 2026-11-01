@@ -1,0 +1,137 @@
+[
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/before.py",
+    "original_bytes": 17567,
+    "original_sha256": "41d47f51970ae54744df9a5ef04cb889c00e70695ff909123509b3145c6f57a7",
+    "payload": "before.py.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 5740,
+    "payload_sha256": "0dbb50012b14a8dd2db152ac0e81842849907def0afa5a58733b76f54dd7d93e"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/after.py",
+    "original_bytes": 17788,
+    "original_sha256": "31829859644b15f50fe57ee1cf5b3e697797398e82094ec2a12494f73915a953",
+    "payload": "after.py.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 5829,
+    "payload_sha256": "74a019cf73b8c433c765a009731a906d1127e5decd359650f9aaeca68cdda61b"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/probe.py",
+    "original_bytes": 4605,
+    "original_sha256": "9175ae922addc04f39f06a1741cc1f166fbb4b99acd4704a354257a5bca9d9a2",
+    "payload": "probe.py.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 2045,
+    "payload_sha256": "272aea57862b8cc6c1d211fb9a06ba4171f4a718a02d7a8bdaab338be9358f6d"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/verify_and_package.py",
+    "original_bytes": 9120,
+    "original_sha256": "17f69b4fdaedaace4011f282acfdbfd25689920891177c0d8db7bf613304f69f",
+    "payload": "verify_and_package.py.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 3926,
+    "payload_sha256": "a52b08a42d7e2105620091518e05643c9cd67ba4afabf6b2d21abc2abf7e8e54"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/source.patch",
+    "original_bytes": 1295,
+    "original_sha256": "d89249017e5463395db0cc923c5e3b6668370c9e4dfd8b209a717173880d58b9",
+    "payload": "source.patch.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 642,
+    "payload_sha256": "5143ba7d2509519fdfeac59b8ea15846bdc69d92d2ca990b03ad7a808657923e"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/input-caption-reconciliation.json",
+    "original_bytes": 746,
+    "original_sha256": "fc5c4162668175660c89fb9dbcd7a57fc3b1aea854a64be80111a18aa512df6e",
+    "payload": "input-caption-reconciliation.json.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 464,
+    "payload_sha256": "aa8d963f3c335a8328d049f0d7e978c2755ccc2b0b7dfb7942216673769bf9a9"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/exact-host-report.json",
+    "original_bytes": 3383,
+    "original_sha256": "409c7bdefb1a3970dd330775f367068884d1c16452331c707b5dcf727731eb95",
+    "payload": "exact-host-report.json.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 1616,
+    "payload_sha256": "f0b397f7791052160c183d6c5e38a3b18f4df79fab9eea525a6f35b1f34eb27e"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/geometry-en.json",
+    "original_bytes": 7696,
+    "original_sha256": "965ae8bf84c2e50ad025c70d12a64938a7b6309a8987960f8af80a6767573d31",
+    "payload": "geometry-en.json.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 1309,
+    "payload_sha256": "b8a2e4f9054164771bc5256320041dcf24cdb81e8920049262c072609871049a"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/geometry-zh.json",
+    "original_bytes": 7409,
+    "original_sha256": "b533820109f41d7355cbeb3a1f171ba2928fc6becf84dc68cc4ed4e73457a170",
+    "payload": "geometry-zh.json.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 1490,
+    "payload_sha256": "5304d3c042fd6af3b258e5a8f4235238536ee3adcf2c6f4660d068860069b1a2"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/geometry-en.log",
+    "original_bytes": 10031,
+    "original_sha256": "3cb0171f025e2cc8a637a6f46c32667931d73ca5bb71582b2c14cf8c7075a115",
+    "payload": "geometry-en.log.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 1305,
+    "payload_sha256": "a2cb5a72f26d8bfdb4a295cdeaa943367616fccbad16f12e5b8f6d117f314089"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/geometry-zh.log",
+    "original_bytes": 10872,
+    "original_sha256": "e4f984a2d1e59232a56141185eb64b826bacb8413a4dd6cb6d6c3cb3d464de49",
+    "payload": "geometry-zh.log.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 1489,
+    "payload_sha256": "9c499226222159a7a29981d44d41b64eb37938ef1f0004a84f6f58f75f222baf"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/initial-probe-syntax-failure.log",
+    "original_bytes": 241,
+    "original_sha256": "380a1041083dc987ab33a3ba2f6f11ef1aff7be1a5bb06b435bcac7671f614cf",
+    "payload": "initial-probe-syntax-failure.log.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 180,
+    "payload_sha256": "20a0844148ea21cc907c770198acfad0b5876446122e25153be31dde73ec99fe"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/diff-check.log",
+    "original_bytes": 62,
+    "original_sha256": "16da5b3dde89dd775fb59279eed2a7cda00c9f68f80bcacb47c9da8122e3996a",
+    "payload": "diff-check.log.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 79,
+    "payload_sha256": "643d06229d9efd222caa39c647b500738bc1a2acd1b5b4cc34e13587be941da0"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/verification.json",
+    "original_bytes": 2717,
+    "original_sha256": "72e2fde5b63c661926dd7888a53767ba980a0562150b3fea2ce4a7257159f242",
+    "payload": "verification.json.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 1482,
+    "payload_sha256": "031b94bffdbc6c852024ff253826e5fee73913b3a7ffc0033f2b943c48743358"
+  },
+  {
+    "original_runtime_path": "/workspace/runtime/ai6-knn-jensen-line-spacing-repair/packaging-environment-failure.json",
+    "original_bytes": 673,
+    "original_sha256": "7f6585bc77c4086128978ad15b9493b63cf4d768a14219bfe0367033fde62cb7",
+    "payload": "packaging-environment-failure.json.gz",
+    "codec": "gzip, lossless original bytes",
+    "payload_bytes": 404,
+    "payload_sha256": "e305bd1210e38c26dfc8141b3c298af21dbfca1adcb95ca6c6e1eb10ce4d65ba"
+  }
+]

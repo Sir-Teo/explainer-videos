@@ -326,7 +326,7 @@
       "title": "9. Neighbours, and the curse of dimensionality",
       "lang": "en",
       "source_sha256_observed": "41d47f51970ae54744df9a5ef04cb889c00e70695ff909123509b3145c6f57a7",
-      "source_state": "Published dynamic uncapped Cover-Hart domain, complete curse-band domain and three retained-copy reveal repairs; all narration/data/requested timing unchanged.",
+      "source_state": "Published dynamic uncapped Cover-Hart domain, complete curse-band domain and three retained-copy reveal repairs; all narration/data/requested timing unchanged. Parent fresh-host review established Chinese Jensen line contact at movieframe1643/109.533008s and native1080 endpoints. Scene-local Chinese0.4em line gap repaired; English/four-row constructor geometry unchanged. Fresh host after-render acceptance remains pending; historical source/movie records are not retagged.",
       "endpoints": "All 35 existing states actually reviewed on ten pages plus six original-resolution followups. Native endpoint evidence confirms 90th-percentile bands flattened at 40% although measured upper values reach 47.725%. Local repair pending.",
       "selected_motion_review": "SOURCE-BEFORE EN446/ZH477 selected times:754 unique images on96 viewed pages,35 endpoints and22 original-resolution followups.5409 frames decoded,4486 not individually inspected. Separate correctly initialized EN/ZH geometry fixtures pass; old misinitialized fixture retained as superseded. After review pending.",
       "native1080_endpoints": "Pending.",
@@ -337,7 +337,9 @@
       "source_publication_commit": "f559032f14e8eb499f3ccddd6151667eacfa3972",
       "evidence": "evidence/ai6-knn-visual-source-repair/README.md",
       "baseline_review_evidence": "evidence/ai6-knn-baseline-motion-review/README.md",
-      "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance."
+      "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance.",
+      "current_source_sha256": "31829859644b15f50fe57ee1cf5b3e697797398e82094ec2a12494f73915a953",
+      "jensen_spacing_evidence": "evidence/ai6-knn-jensen-line-spacing-repair/README.md"
     },
     {
       "position": 10,
@@ -346,7 +348,7 @@
       "title": "9. Neighbours, and the curse of dimensionality",
       "lang": "zh",
       "source_sha256_observed": "41d47f51970ae54744df9a5ef04cb889c00e70695ff909123509b3145c6f57a7",
-      "source_state": "Published dynamic uncapped Cover-Hart domain, complete curse-band domain and three retained-copy reveal repairs; all narration/data/requested timing unchanged.",
+      "source_state": "Published dynamic uncapped Cover-Hart domain, complete curse-band domain and three retained-copy reveal repairs; all narration/data/requested timing unchanged. Parent fresh-host review established Chinese Jensen line contact at movieframe1643/109.533008s and native1080 endpoints. Scene-local Chinese0.4em line gap repaired; English/four-row constructor geometry unchanged. Fresh host after-render acceptance remains pending; historical source/movie records are not retagged.",
       "endpoints": "All 35 existing states actually reviewed on ten pages plus six original-resolution followups. Native endpoint evidence confirms 90th-percentile bands flattened at 40% although measured upper values reach 47.725%. Local repair pending.",
       "selected_motion_review": "SOURCE-BEFORE EN446/ZH477 selected times:754 unique images on96 viewed pages,35 endpoints and22 original-resolution followups.5409 frames decoded,4486 not individually inspected. Separate correctly initialized EN/ZH geometry fixtures pass; old misinitialized fixture retained as superseded. After review pending.",
       "native1080_endpoints": "Pending.",
@@ -357,7 +359,9 @@
       "source_publication_commit": "f559032f14e8eb499f3ccddd6151667eacfa3972",
       "evidence": "evidence/ai6-knn-visual-source-repair/README.md",
       "baseline_review_evidence": "evidence/ai6-knn-baseline-motion-review/README.md",
-      "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance."
+      "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance.",
+      "current_source_sha256": "31829859644b15f50fe57ee1cf5b3e697797398e82094ec2a12494f73915a953",
+      "jensen_spacing_evidence": "evidence/ai6-knn-jensen-line-spacing-repair/README.md"
     },
     {
       "position": 11,

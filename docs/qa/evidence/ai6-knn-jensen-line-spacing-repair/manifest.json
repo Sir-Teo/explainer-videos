@@ -1,0 +1,94 @@
+{
+  "source_before_sha256": "41d47f51970ae54744df9a5ef04cb889c00e70695ff909123509b3145c6f57a7",
+  "source_after_sha256": "31829859644b15f50fe57ee1cf5b3e697797398e82094ec2a12494f73915a953",
+  "payload_count": 17,
+  "payload_bytes": 36768,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2243,
+      "sha256": "52852fa7b2456a7193460ae0985711d8ef34aff3e7881089a14e361978fa1390"
+    },
+    {
+      "path": "after.py.gz",
+      "bytes": 5829,
+      "sha256": "74a019cf73b8c433c765a009731a906d1127e5decd359650f9aaeca68cdda61b"
+    },
+    {
+      "path": "before.py.gz",
+      "bytes": 5740,
+      "sha256": "0dbb50012b14a8dd2db152ac0e81842849907def0afa5a58733b76f54dd7d93e"
+    },
+    {
+      "path": "codec-map.json",
+      "bytes": 6525,
+      "sha256": "c5b68b56dfb2ff252a0a424f58a0dd691798b7126325176ce3a12c414cc6bd37"
+    },
+    {
+      "path": "diff-check.log.gz",
+      "bytes": 79,
+      "sha256": "643d06229d9efd222caa39c647b500738bc1a2acd1b5b4cc34e13587be941da0"
+    },
+    {
+      "path": "exact-host-report.json.gz",
+      "bytes": 1616,
+      "sha256": "f0b397f7791052160c183d6c5e38a3b18f4df79fab9eea525a6f35b1f34eb27e"
+    },
+    {
+      "path": "geometry-en.json.gz",
+      "bytes": 1309,
+      "sha256": "b8a2e4f9054164771bc5256320041dcf24cdb81e8920049262c072609871049a"
+    },
+    {
+      "path": "geometry-en.log.gz",
+      "bytes": 1305,
+      "sha256": "a2cb5a72f26d8bfdb4a295cdeaa943367616fccbad16f12e5b8f6d117f314089"
+    },
+    {
+      "path": "geometry-zh.json.gz",
+      "bytes": 1490,
+      "sha256": "5304d3c042fd6af3b258e5a8f4235238536ee3adcf2c6f4660d068860069b1a2"
+    },
+    {
+      "path": "geometry-zh.log.gz",
+      "bytes": 1489,
+      "sha256": "9c499226222159a7a29981d44d41b64eb37938ef1f0004a84f6f58f75f222baf"
+    },
+    {
+      "path": "initial-probe-syntax-failure.log.gz",
+      "bytes": 180,
+      "sha256": "20a0844148ea21cc907c770198acfad0b5876446122e25153be31dde73ec99fe"
+    },
+    {
+      "path": "input-caption-reconciliation.json.gz",
+      "bytes": 464,
+      "sha256": "aa8d963f3c335a8328d049f0d7e978c2755ccc2b0b7dfb7942216673769bf9a9"
+    },
+    {
+      "path": "packaging-environment-failure.json.gz",
+      "bytes": 404,
+      "sha256": "e305bd1210e38c26dfc8141b3c298af21dbfca1adcb95ca6c6e1eb10ce4d65ba"
+    },
+    {
+      "path": "probe.py.gz",
+      "bytes": 2045,
+      "sha256": "272aea57862b8cc6c1d211fb9a06ba4171f4a718a02d7a8bdaab338be9358f6d"
+    },
+    {
+      "path": "source.patch.gz",
+      "bytes": 642,
+      "sha256": "5143ba7d2509519fdfeac59b8ea15846bdc69d92d2ca990b03ad7a808657923e"
+    },
+    {
+      "path": "verification.json.gz",
+      "bytes": 1482,
+      "sha256": "031b94bffdbc6c852024ff253826e5fee73913b3a7ffc0033f2b943c48743358"
+    },
+    {
+      "path": "verify_and_package.py.gz",
+      "bytes": 3926,
+      "sha256": "a52b08a42d7e2105620091518e05643c9cd67ba4afabf6b2d21abc2abf7e8e54"
+    }
+  ],
+  "scope": "Source/constructor geometry only; actual host before-image report; fresh rendered validation pending."
+}
