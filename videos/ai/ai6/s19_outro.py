@@ -205,6 +205,13 @@ class Outro(VoiceoverScene):
             r"For the logistic loss, \ derive XGBoost's leaf weight $-G/(H + \lambda)$ and split gain, \ and show that a "
             r"single leaf at $p = \tfrac12$ moves the log-odds by $-4G/(n + 4\lambda)$.",
         ], font_size=21)
+        if zh():
+            original = ps.rows[-1][1]
+            if original.tex_string.count(r"\\") == 1:
+                spaced = Tex(original.tex_string.replace(r"\\", r"\\[0.30em]"),
+                             font_size=original.font_size, color=WHITE)
+                spaced.move_to(original, aligned_edge=UL)
+                ps.rows[-1].remove(original).add(spaced)
         with self.voiceover(
             "Here are eight problems to try, from Gauss-Markov to XGBoost's gain. Pause here, and work through them; "
             "full solutions are in this part's notes."
