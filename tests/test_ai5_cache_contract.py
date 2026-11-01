@@ -360,6 +360,22 @@ class Part5PayloadMeaning(unittest.TestCase):
             broken = copy.deepcopy(d); broken[key] = value
             self.assertFalse(valid_structure('montecarlo', broken), key)
 
+    def test_rejection_sampling_ordinates_use_envelope_density_units(self):
+        from videos.ai.ai5.cache_contract import REQUIRED
+        d = {key: 0 for key in REQUIRED['draws'].split()}
+        d.update(M=2.5, p=np.array([.25, .75]), freq=np.array([.25, .75]),
+                 bm_u=np.array([[.2, .6]]), bm_z=np.array([[1., -1.]]),
+                 xp=np.array([.2, .8]), up=np.array([1.5, 2.5]), acc=np.array([True, False]))
+        self.assertTrue(valid_structure('draws', d))
+        for key, value in [('M', 0.), ('M', -1.), ('M', float('nan')), ('M', float('inf')),
+                           ('M', [2.5]), ('up', np.array([1.5, 2.5001])),
+                           ('up', np.array([-.1, 1.])), ('up', np.array([np.nan, 1.])),
+                           ('xp', np.array([1.1, .8])), ('xp', np.array([-.1, .8])),
+                           ('acc', np.array([1, 0])), ('acc', np.array([True])),
+                           ('acc', np.array([[True, False]]))]:
+            broken = copy.deepcopy(d); broken[key] = value
+            self.assertFalse(valid_structure('draws', broken), (key, value))
+
     def test_declared_required_fields_have_actual_source_publish_sites(self):
         import ast
         import re
