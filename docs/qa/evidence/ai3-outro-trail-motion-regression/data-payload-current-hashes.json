@@ -1,0 +1,302 @@
+{
+  "en": {
+    "checked_utc": "2026-11-01T01:13:26.239475+00:00",
+    "actual_consumed_payload_hashes": [
+      {
+        "path": ".cache/ai3/gpt2.json",
+        "sha256": "ce3c2bf421a1080583ee8a4953d4303d0daf7c3924abc2e1799bd42a24bd4528",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 11064
+      },
+      {
+        "path": ".cache/ai3/gpt2.npz",
+        "sha256": "e4f13b7a5f0ab76b12dd7c1b43d5d4fb12ca6cbda7e1e99f6b69b34743675ec4",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 72806
+      },
+      {
+        "path": ".cache/ai3/einsum.json",
+        "sha256": "3f1a995da95da380b0460736d7ebab5d9670c548e6b7d5b202c25d0af6c30af6",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 264
+      },
+      {
+        "path": ".cache/ai3/einsum.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/project.json",
+        "sha256": "df5963651d0f0d52cf199d47375c611d6925b507f0eae890c9eaf9fc28eee96f",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 3040
+      },
+      {
+        "path": ".cache/ai3/project.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/power.json",
+        "sha256": "2c66ad9e832d463ddb142e26b64a100c1ea6f683bfe99053151059e16ae36b9c",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 9905
+      },
+      {
+        "path": ".cache/ai3/power.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/image.json",
+        "sha256": "c0ee874791ca66a6715b9381bd3f03b33b06ddb3e775475c9b41d498a364c6b7",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 705
+      },
+      {
+        "path": ".cache/ai3/image.npz",
+        "sha256": "2c874e5daf872c3c4505e689bfe0350248e5271b3df77e5422a38f1684417de7",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 216127
+      },
+      {
+        "path": ".cache/ai3/norms.json",
+        "sha256": "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 12554
+      },
+      {
+        "path": ".cache/ai3/norms.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/mp.json",
+        "sha256": "ccf0cc95a19a419644e7440d1e6bf31058f38bbbfa2fb2a172591781afdcc033",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 82808
+      },
+      {
+        "path": ".cache/ai3/mp.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/galore.json",
+        "sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 129205
+      },
+      {
+        "path": ".cache/ai3/galore.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/sgns.json",
+        "sha256": "f24e09e0a99716fb1cfdd47ee35859e9f8044d80a9397b11d1bdb61d3d76398e",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 690222
+      },
+      {
+        "path": ".cache/ai3/sgns.npz",
+        "sha256": "6cdc02692c1c369359122ae696fe5606705dfd992f0939bdd60f6f97272b4754",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 446
+      },
+      {
+        "path": ".cache/ai3/highdim.json",
+        "sha256": "744e957772fb378a8f5248306754830f91a2c0539e61cc7f971b8ea61146ff14",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 1198
+      },
+      {
+        "path": ".cache/ai3/highdim.npz",
+        "sha256": "0dba73a53829821ee589a44fb21025da827c2b0f96162b52027bd0d9b8b12c70",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 2629
+      },
+      {
+        "path": ".cache/ai3/jl.json",
+        "sha256": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 5524
+      },
+      {
+        "path": ".cache/ai3/jl.npz",
+        "sha256": "d4701dae8bcb658feb0afbb8411c3f5e900a598bc7b8df6164df1a5c7fc63009",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 90809
+      },
+      {
+        "path": ".cache/ai3/mf.json",
+        "sha256": "54fe3aa992b5d0be1cba279804bdb72b5fe180fdf0bd5de16d01bdb6f57a0828",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 97019
+      },
+      {
+        "path": ".cache/ai3/mf.npz",
+        "sha256": "0ed655289ac8b221f405e820496624c70fbec4935cc594692abe9423ebfa1a34",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 130216
+      }
+    ],
+    "all_match": true
+  },
+  "zh": {
+    "checked_utc": "2026-11-01T01:13:26.242391+00:00",
+    "actual_consumed_payload_hashes": [
+      {
+        "path": ".cache/ai3/gpt2.json",
+        "sha256": "ce3c2bf421a1080583ee8a4953d4303d0daf7c3924abc2e1799bd42a24bd4528",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 11064
+      },
+      {
+        "path": ".cache/ai3/gpt2.npz",
+        "sha256": "e4f13b7a5f0ab76b12dd7c1b43d5d4fb12ca6cbda7e1e99f6b69b34743675ec4",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 72806
+      },
+      {
+        "path": ".cache/ai3/einsum.json",
+        "sha256": "3f1a995da95da380b0460736d7ebab5d9670c548e6b7d5b202c25d0af6c30af6",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 264
+      },
+      {
+        "path": ".cache/ai3/einsum.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/project.json",
+        "sha256": "df5963651d0f0d52cf199d47375c611d6925b507f0eae890c9eaf9fc28eee96f",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 3040
+      },
+      {
+        "path": ".cache/ai3/project.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/power.json",
+        "sha256": "2c66ad9e832d463ddb142e26b64a100c1ea6f683bfe99053151059e16ae36b9c",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 9905
+      },
+      {
+        "path": ".cache/ai3/power.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/image.json",
+        "sha256": "c0ee874791ca66a6715b9381bd3f03b33b06ddb3e775475c9b41d498a364c6b7",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 705
+      },
+      {
+        "path": ".cache/ai3/image.npz",
+        "sha256": "2c874e5daf872c3c4505e689bfe0350248e5271b3df77e5422a38f1684417de7",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 216127
+      },
+      {
+        "path": ".cache/ai3/norms.json",
+        "sha256": "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 12554
+      },
+      {
+        "path": ".cache/ai3/norms.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/mp.json",
+        "sha256": "ccf0cc95a19a419644e7440d1e6bf31058f38bbbfa2fb2a172591781afdcc033",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 82808
+      },
+      {
+        "path": ".cache/ai3/mp.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/galore.json",
+        "sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 129205
+      },
+      {
+        "path": ".cache/ai3/galore.npz",
+        "sha256": null,
+        "matches_prior_expected_absence": true,
+        "current_bytes": null
+      },
+      {
+        "path": ".cache/ai3/sgns.json",
+        "sha256": "f24e09e0a99716fb1cfdd47ee35859e9f8044d80a9397b11d1bdb61d3d76398e",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 690222
+      },
+      {
+        "path": ".cache/ai3/sgns.npz",
+        "sha256": "6cdc02692c1c369359122ae696fe5606705dfd992f0939bdd60f6f97272b4754",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 446
+      },
+      {
+        "path": ".cache/ai3/highdim.json",
+        "sha256": "744e957772fb378a8f5248306754830f91a2c0539e61cc7f971b8ea61146ff14",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 1198
+      },
+      {
+        "path": ".cache/ai3/highdim.npz",
+        "sha256": "0dba73a53829821ee589a44fb21025da827c2b0f96162b52027bd0d9b8b12c70",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 2629
+      },
+      {
+        "path": ".cache/ai3/jl.json",
+        "sha256": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 5524
+      },
+      {
+        "path": ".cache/ai3/jl.npz",
+        "sha256": "d4701dae8bcb658feb0afbb8411c3f5e900a598bc7b8df6164df1a5c7fc63009",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 90809
+      },
+      {
+        "path": ".cache/ai3/mf.json",
+        "sha256": "54fe3aa992b5d0be1cba279804bdb72b5fe180fdf0bd5de16d01bdb6f57a0828",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 97019
+      },
+      {
+        "path": ".cache/ai3/mf.npz",
+        "sha256": "0ed655289ac8b221f405e820496624c70fbec4935cc594692abe9423ebfa1a34",
+        "matches_prior_reviewed_data_hash": true,
+        "current_bytes": 130216
+      }
+    ],
+    "all_match": true
+  }
+}

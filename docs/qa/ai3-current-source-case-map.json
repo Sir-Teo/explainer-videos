@@ -1,0 +1,1325 @@
+{
+  "schema_version": 1,
+  "map_kind": "current38case artifact selection with historical927lineage and4scoped replacements",
+  "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+  "historical_baseline": {
+    "map": "ai3-final-source-case-map.json",
+    "map_sha256": "7cca99a8ce8a27f460fdd85ad273ace41ac757f1cd99abbdd04e51ad190d59b6",
+    "source_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+    "caption_table_sha256": "8e4ed21282fc336bebc5f6e7d1aea7e3c975d09da486c873913c84c98bf3cb0a",
+    "local_zh_sha256": "ad8a17ed7eddba7b8b8358186b39527f3f292434c8be6842bb63617efd930e36",
+    "identity_fields_scope": "Historical baseline metadata only; not current aggregate/source import attestation."
+  },
+  "replacement_cases": [
+    "en/Outro",
+    "en/SVD",
+    "zh/Outro",
+    "zh/SVD"
+  ],
+  "unreplaced_case_count": 34,
+  "unreplaced34_movie_direct_module_raw_record_bytes_verified_at_observation": true,
+  "replacement_evidence": {
+    "SVD": {
+      "source_sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+      "commit": "7c47c11e3802390141c9551ac376ebe4ddf31e0e",
+      "receipt": "evidence/ai3-svd-reveal-motion-regression/report.json",
+      "receipt_sha256": "7610a69d2d905e61a5edff94d689b55ab9eaa0d901868a4a155ef009f6a2a6f8"
+    },
+    "Outro": {
+      "source_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+      "commit": "6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0",
+      "source_test_before_receipt": "evidence/ai3-outro-path-front-repair/source-freeze.json.gz",
+      "full_scoped_visual_receipt": "evidence/ai3-outro-trail-motion-regression/summary.json",
+      "receipt_sha256": "239d39848a5d24a610e28c817d9286c6326b6393beed430d790bcae8366c069c"
+    }
+  },
+  "coverage": {
+    "historical_selected_times": 14729,
+    "historical_replaced_case_selected_times": {
+      "en/SVD": 227,
+      "en/Outro": 310,
+      "zh/SVD": 250,
+      "zh/Outro": 338
+    },
+    "replacement_current_cohort_times": {
+      "zh/SVD": 356,
+      "en/SVD": 338,
+      "zh/Outro": 372,
+      "en/Outro": 344
+    },
+    "current38case_review_cohort_times": 15014,
+    "current38case_automatically_decoded_frames": 101263,
+    "current38case_encoded_frames_not_individually_viewed": 86249,
+    "derivation": "14729 - (227+250+310+338) + (338+356+344+372) =15014. Replacement movie durations/framecounts unchanged by their exact receipts. Cohort counts include scoped dense repair windows, not one newly uniform sampling run.",
+    "four_replacement_direct_images": 264,
+    "four_replacement_exact_prior_image_inheritances": 1146,
+    "raw_warning_case_count": 5,
+    "raw_motion_status_counts": {
+      "needs-review": 5,
+      "passed": 33
+    }
+  },
+  "cases": {
+    "en/Hook": {
+      "scene": "Hook",
+      "lang": "en",
+      "title": "Where words live",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Hook_motion/media/videos/480p15/Hook.mp4",
+      "movie_sha256": "95df4c8f14da80b54fed12bba29380644fda8628f61ad6f5bc391a73544850f4",
+      "bytes": 2328660,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Hook_motion/result.json",
+      "record_sha256": "8bd5e522b090d87067a99a57f74e5a977d512c090714470c5a2c9cce3b16da65",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "bb41ce0ec7cad5a0ae5ec67bc8a18aa1ece1823714eaddc18b3339f408d6d275",
+      "source_file": "videos/ai/ai3/s01_hook.py",
+      "source_sha256": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Hook": {
+      "scene": "Hook",
+      "lang": "zh",
+      "title": "Where words live",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Hook_motion/media/videos/480p15/Hook.mp4",
+      "movie_sha256": "8e6c272b878fc2b9370c77e9e050caa817f774bda4816f0559408fecaf0a919b",
+      "bytes": 2445414,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Hook_motion/result.json",
+      "record_sha256": "43e7c502e5ebd4bc2d635cb61fdc20af1b4a1199d8a4df6d70cae0dbd7cbc5da",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "bb41ce0ec7cad5a0ae5ec67bc8a18aa1ece1823714eaddc18b3339f408d6d275",
+      "source_file": "videos/ai/ai3/s01_hook.py",
+      "source_sha256": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Vectors": {
+      "scene": "Vectors",
+      "lang": "en",
+      "title": "1. Vectors and the inner product",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Vectors_motion/media/videos/480p15/Vectors.mp4",
+      "movie_sha256": "7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2",
+      "bytes": 2262127,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Vectors_motion/result.json",
+      "record_sha256": "b8837a04bf07d3e4edef05d086f89406342c63c40e86dd3e25c60d16b4b77f07",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+      "source_file": "videos/ai/ai3/s02_vectors.py",
+      "source_sha256": "110a369b78476c6d4a302e9ff61dfbb5fe5e569a74e0843d2c249cc1eb5cb62e",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Vectors": {
+      "scene": "Vectors",
+      "lang": "zh",
+      "title": "1. Vectors and the inner product",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Vectors_motion/media/videos/480p15/Vectors.mp4",
+      "movie_sha256": "87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10",
+      "bytes": 2221000,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Vectors_motion/result.json",
+      "record_sha256": "11329c1f9034ce1869ce50075d28c5bad077be9b99579ea9dceaf20d0c7f8496",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+      "source_file": "videos/ai/ai3/s02_vectors.py",
+      "source_sha256": "110a369b78476c6d4a302e9ff61dfbb5fe5e569a74e0843d2c249cc1eb5cb62e",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Einsum": {
+      "scene": "Einsum",
+      "lang": "en",
+      "title": "2. Tensors and einsum",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Einsum_motion/media/videos/480p15/Einsum.mp4",
+      "movie_sha256": "5c0c27de2dd25f0ea8a363860c99125d9532dd97d17bec30b10299953ded554b",
+      "bytes": 1567723,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Einsum_motion/result.json",
+      "record_sha256": "aadabc0bedef6e34b8839fa280238c0866e73b156ea01264438c10c488a25578",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "render_fingerprint": "bca25458d4cd1163e65c538e053de04c14f32d8cfac81fa3a0b6f56bd5907c80",
+      "source_file": "videos/ai/ai3/s03_einsum.py",
+      "source_sha256": "4cf32fd13a907723f2478104b8be2de7dd38df693fa330558edb15d1716ed23e",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Einsum": {
+      "scene": "Einsum",
+      "lang": "zh",
+      "title": "2. Tensors and einsum",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Einsum_motion/media/videos/480p15/Einsum.mp4",
+      "movie_sha256": "359b168c7e2ef8cdb1042af8e3b577b45378e0adc3db29b0a69a4024ecd73b9d",
+      "bytes": 1483700,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Einsum_motion/result.json",
+      "record_sha256": "326b6916bdf4134c00a1801a5e8d70db0082cd7f146a90cdbedff81cdcaeb3e1",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "4382502c95ce4f56dc9a93df98e8b223497818c55a1d752d81093828cbeb4041",
+      "source_file": "videos/ai/ai3/s03_einsum.py",
+      "source_sha256": "4cf32fd13a907723f2478104b8be2de7dd38df693fa330558edb15d1716ed23e",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Matrices": {
+      "scene": "Matrices",
+      "lang": "en",
+      "title": "3. Matrices move space",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Matrices_motion/media/videos/480p15/Matrices.mp4",
+      "movie_sha256": "a4f4c8d78a61ede8f94fd45ba7a135f686562ad746dcc5d0232876791aa195d6",
+      "bytes": 3190424,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Matrices_motion/result.json",
+      "record_sha256": "c4b7f03f8a014898fb117c07ad51b18635c709bd9b6d515593937ccef60d4edd",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+      "source_file": "videos/ai/ai3/s04_matrices.py",
+      "source_sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Matrices": {
+      "scene": "Matrices",
+      "lang": "zh",
+      "title": "3. Matrices move space",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Matrices_motion/media/videos/480p15/Matrices.mp4",
+      "movie_sha256": "0a91c45415b27ba454521fa90fd83ffb6e2268ec7f51782258ca34ec7d00230a",
+      "bytes": 3192089,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Matrices_motion/result.json",
+      "record_sha256": "2d18a078cedbc9f853d123e5da2c42b4af34091e0b4f869a77079784848b0c29",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+      "source_file": "videos/ai/ai3/s04_matrices.py",
+      "source_sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Projection": {
+      "scene": "Projection",
+      "lang": "en",
+      "title": "4. Projection and least squares",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Projection_motion/media/videos/480p15/Projection.mp4",
+      "movie_sha256": "297327a764ec8f387a1e80849439994f382cf12826d0dd8e25aa76a3e6828183",
+      "bytes": 1876189,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Projection_motion/result.json",
+      "record_sha256": "d8423657fc24dbdea1e4bc937bf3930967923ada6e921811d41408b68c4bd0ff",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76",
+      "source_file": "videos/ai/ai3/s05_projection.py",
+      "source_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Projection": {
+      "scene": "Projection",
+      "lang": "zh",
+      "title": "4. Projection and least squares",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Projection_motion/media/videos/480p15/Projection.mp4",
+      "movie_sha256": "dd96725ed5939801abc7ee4872acdaedc2bbe7d0d1bd9dd58e892511908213db",
+      "bytes": 1836191,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Projection_motion/result.json",
+      "record_sha256": "b1a45f11fe34da80935290c3ac4c3201becd7370aad6a067699f400669bc0786",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "render_fingerprint": "a19275e5208e72af9e98ebf4dc23d4facc21b96dc771ad8a757b3fa5fe8567de",
+      "source_file": "videos/ai/ai3/s05_projection.py",
+      "source_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Eigen": {
+      "scene": "Eigen",
+      "lang": "en",
+      "title": "5. Directions that stay put",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Eigen_motion/media/videos/480p15/Eigen.mp4",
+      "movie_sha256": "a30c8c6c91b04b6cd3c3a3a73463caae54ff6371930cdc21d8ad3cca519bb37d",
+      "bytes": 2583323,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Eigen_motion/result.json",
+      "record_sha256": "f1483bfe90e825b6b90b621964203f67f92659e31a35af30205b9b493c30902c",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+      "source_file": "videos/ai/ai3/s06_eigen.py",
+      "source_sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Eigen": {
+      "scene": "Eigen",
+      "lang": "zh",
+      "title": "5. Directions that stay put",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Eigen_motion/media/videos/480p15/Eigen.mp4",
+      "movie_sha256": "851a46486dc8278affaa21b3bb8842f5cc93535683b5a3f67af53b86af105cbf",
+      "bytes": 2644255,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Eigen_motion/result.json",
+      "record_sha256": "00179b94b508a4950001e36d7ed7733d8e4d63d96a30d7edb67a5dbfd521dac0",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+      "source_file": "videos/ai/ai3/s06_eigen.py",
+      "source_sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Power": {
+      "scene": "Power",
+      "lang": "en",
+      "title": "6. Power iteration, run live",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Power_motion/media/videos/480p15/Power.mp4",
+      "movie_sha256": "8b790fba90fe4694c9fb3ab0b3f88de2851082a0e94db9dd0182379bb5dae73a",
+      "bytes": 1528116,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Power_motion/result.json",
+      "record_sha256": "0ad61dbd242b9bd4380d114a302c3aec05514d0cb351c6b2336418483a646276",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "aac43e545f10adf4c320ad7d5134e4e78c6481a6b6f845ca1c4f35fa92944c6a",
+      "source_file": "videos/ai/ai3/s07_power.py",
+      "source_sha256": "f67974683fafc9378f5ada7ea210ce1db8c1d507b9b972efad7c03aa803755b4",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Power": {
+      "scene": "Power",
+      "lang": "zh",
+      "title": "6. Power iteration, run live",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Power_motion/media/videos/480p15/Power.mp4",
+      "movie_sha256": "15380304cade3740dfab90886aba13bb1daec92a28f7848fe64688f57a7aacf0",
+      "bytes": 1537505,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Power_motion/result.json",
+      "record_sha256": "3fc6987089f5f8114ef9c72c95108127061c2ebece91864ba4866029c6808bf5",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "aac43e545f10adf4c320ad7d5134e4e78c6481a6b6f845ca1c4f35fa92944c6a",
+      "source_file": "videos/ai/ai3/s07_power.py",
+      "source_sha256": "f67974683fafc9378f5ada7ea210ce1db8c1d507b9b972efad7c03aa803755b4",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/SVD": {
+      "scene": "SVD",
+      "lang": "en",
+      "title": "7. Every matrix: turn, stretch, turn",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/SVD_motion/media/videos/480p15/SVD.mp4",
+      "movie_sha256": "de4be4f188407980d2c376f3e12faaac55c62f2c0e698e6858c3a2d1856943c6",
+      "bytes": 1891698,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/SVD_motion/result.json",
+      "record_sha256": "9d92f912fbd098bc4dc7e5c21c6e89e5d3f8fd381d496df9d340cf5f71270f86",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "5de4def17ecddfd50dee0deda94d26a269c71e2457d72c160c68926da7be1e90",
+      "source_file": "videos/ai/ai3/s08_svd.py",
+      "source_sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+      "replacement_source_code_commit": "6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0",
+      "review_scope_completed": "Other assigned reviewer completed encoded reveal-window + exact baseline selected cohort and480endpoints; no new native1080/continuous/listening approval.",
+      "review_receipt": "docs/qa/evidence/ai3-svd-reveal-motion-regression/report.json",
+      "frozen_movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/SVD_motion/media/videos/480p15/SVD.mp4",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "repair_source_commit": "7c47c11e3802390141c9551ac376ebe4ddf31e0e",
+      "current_review_cohort_times": 338,
+      "direct_changed_native_images": 72,
+      "exact_prior_image_inheritances": 266,
+      "review_evidence": "evidence/ai3-svd-reveal-motion-regression/report.json",
+      "review_evidence_sha256": "7610a69d2d905e61a5edff94d689b55ab9eaa0d901868a4a155ef009f6a2a6f8",
+      "selection_lineage": {
+        "kind": "scoped-reviewed-replacement",
+        "historical_movie_sha256": "59090e74b89b7dc10c8e0d85cafb6cd17bd7917f5a0e645a55bba13cc0fc59d0",
+        "historical_record_sha256": "2aa434f78b85f96d90e14ffe33af2a6cbc96c16323996bf7608ef76be6011e48",
+        "source_commit_scope": "Named local scene repair commit; not a claim that every historical capture imported this repository commit.",
+        "raw_status_warnings_and_fingerprint_unchanged": true
+      }
+    },
+    "zh/SVD": {
+      "scene": "SVD",
+      "lang": "zh",
+      "title": "7. Every matrix: turn, stretch, turn",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/SVD_motion/media/videos/480p15/SVD.mp4",
+      "movie_sha256": "1729ebf9a55ed16caf60e0303adf0fdbfcbfc3c0e07fb85b14ed3f80b224e350",
+      "bytes": 1901364,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/SVD_motion/result.json",
+      "record_sha256": "5473ee8faf48dc0b5d772c7f8d3de17757f1691913e10f24e7f560e45711ece3",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "5de4def17ecddfd50dee0deda94d26a269c71e2457d72c160c68926da7be1e90",
+      "source_file": "videos/ai/ai3/s08_svd.py",
+      "source_sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+      "replacement_source_code_commit": "6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0",
+      "review_scope_completed": "Other assigned reviewer completed encoded reveal-window + exact baseline selected cohort and480endpoints; no new native1080/continuous/listening approval.",
+      "review_receipt": "docs/qa/evidence/ai3-svd-reveal-motion-regression/report.json",
+      "frozen_movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/SVD_motion/media/videos/480p15/SVD.mp4",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "repair_source_commit": "7c47c11e3802390141c9551ac376ebe4ddf31e0e",
+      "current_review_cohort_times": 356,
+      "direct_changed_native_images": 72,
+      "exact_prior_image_inheritances": 284,
+      "review_evidence": "evidence/ai3-svd-reveal-motion-regression/report.json",
+      "review_evidence_sha256": "7610a69d2d905e61a5edff94d689b55ab9eaa0d901868a4a155ef009f6a2a6f8",
+      "selection_lineage": {
+        "kind": "scoped-reviewed-replacement",
+        "historical_movie_sha256": "e43b06c38430defdd5b918d0bdf91ca57512d802e0414d09d913b63432898f6e",
+        "historical_record_sha256": "134f9d79d60ef19b9559e329d6bc8f57529cfc108f546c62b1fb2fc7deaad929",
+        "source_commit_scope": "Named local scene repair commit; not a claim that every historical capture imported this repository commit.",
+        "raw_status_warnings_and_fingerprint_unchanged": true
+      }
+    },
+    "en/LowRank": {
+      "scene": "LowRank",
+      "lang": "en",
+      "title": "8. The best low-rank copy",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/LowRank_motion/media/videos/480p15/LowRank.mp4",
+      "movie_sha256": "ee94ff52e06f17eed3b48dac4a8402fe540198134ab8aee34acaaea47cc76ee0",
+      "bytes": 2067345,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/LowRank_motion/result.json",
+      "record_sha256": "62f52f2aca0a5e2fd2ab59f755cec87ebaf90cd05286e0fd9095ac1ade03c7b8",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "render_fingerprint": "b6996509e10f25b35447673ccc4bc2d853ce194583356afc425bf618f27a41ad",
+      "source_file": "videos/ai/ai3/s09_lowrank.py",
+      "source_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/LowRank": {
+      "scene": "LowRank",
+      "lang": "zh",
+      "title": "8. The best low-rank copy",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/LowRank_motion/media/videos/480p15/LowRank.mp4",
+      "movie_sha256": "28c2269472e9b48058accfd2f0c4aaa731057a609d08487fdcde7ed83fb23fa9",
+      "bytes": 2035106,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/LowRank_motion/result.json",
+      "record_sha256": "981fc8b3b82fbe570f35297a3848b372464feb3fa08eae43a53b4027fac6f030",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "render_fingerprint": "f884f1c15bc0688d3f3821c7ec94aacdc96fecbe12778a5e6110775cf9fa8685",
+      "source_file": "videos/ai/ai3/s09_lowrank.py",
+      "source_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Norms": {
+      "scene": "Norms",
+      "lang": "en",
+      "title": "9. How big is a matrix?",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Norms_motion/media/videos/480p15/Norms.mp4",
+      "movie_sha256": "f61e0783aedb8d3835d0c6a35e183b79aa9bd1527676b06d29c5704bf1f99ec1",
+      "bytes": 1832061,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Norms_motion/result.json",
+      "record_sha256": "ebed7c9558a5f16cac253b6549e53150f379b58bcb990e4f9ccefd37688a0f3a",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+      "source_file": "videos/ai/ai3/s10_norms.py",
+      "source_sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Norms": {
+      "scene": "Norms",
+      "lang": "zh",
+      "title": "9. How big is a matrix?",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Norms_motion/media/videos/480p15/Norms.mp4",
+      "movie_sha256": "b9b10cd3c0387e0a8458b179a70ce712e3e5b219ddfc2ffdf9bb04fbdea6946c",
+      "bytes": 1837135,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Norms_motion/result.json",
+      "record_sha256": "9844615b62e520345c24e5a7fdfcc2219ea58f6fc4173cd1965d59130878a5c9",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+      "source_file": "videos/ai/ai3/s10_norms.py",
+      "source_sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Spectra": {
+      "scene": "Spectra",
+      "lang": "en",
+      "title": "10. Random matrices and trained weights",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Spectra_motion/media/videos/480p15/Spectra.mp4",
+      "movie_sha256": "7024dfb0b2167e02a9252c9a9bd57bb98a1807da1b71b2d607aa3d4e304f57b9",
+      "bytes": 1141267,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Spectra_motion/result.json",
+      "record_sha256": "02d51ee90ba2ac4ebf939bc95da80ca1bcf1ee3c693704d7025ac989b56fbb34",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+      "source_file": "videos/ai/ai3/s11_spectra.py",
+      "source_sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Spectra": {
+      "scene": "Spectra",
+      "lang": "zh",
+      "title": "10. Random matrices and trained weights",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Spectra_motion/media/videos/480p15/Spectra.mp4",
+      "movie_sha256": "b7633c002f2d74cf643261375ed93f12e82a187a47e15ab7b8aeecf23a8406ed",
+      "bytes": 1209416,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Spectra_motion/result.json",
+      "record_sha256": "f16e390bd392f21f6b5b749e1938a09f17d6b03e689437169c8e0f3e0322f8e8",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+      "source_file": "videos/ai/ai3/s11_spectra.py",
+      "source_sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/GaLore": {
+      "scene": "GaLore",
+      "lang": "en",
+      "title": "11. Gradients are low rank",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/GaLore_motion/media/videos/480p15/GaLore.mp4",
+      "movie_sha256": "96bad2dcceb44603d729ae0fd3a83ca687590e7bf7254674affa2cb22dd93957",
+      "bytes": 1565971,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/GaLore_motion/result.json",
+      "record_sha256": "b5c910fa4b8912e295c8b03833eecc026334764f1d99bdddad8fac5acd38a8af",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "render_fingerprint": "51aaf237c79b1c68fa72ceb0845fbe5287a0b037f981ccb1ecbcb1e523190392",
+      "source_file": "videos/ai/ai3/s12_galore.py",
+      "source_sha256": "a5dbaa9950a3386c48974486571251dc85f851e7c2d0806223177feba80d4ed4",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/GaLore": {
+      "scene": "GaLore",
+      "lang": "zh",
+      "title": "11. Gradients are low rank",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/GaLore_motion/media/videos/480p15/GaLore.mp4",
+      "movie_sha256": "854037303c562b2d4ff68090a8753c93c704985183c512c10d2c64049fb65669",
+      "bytes": 1529889,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/GaLore_motion/result.json",
+      "record_sha256": "5c1a2f15d7cb281b3dbf102f9746d232066cab8dca52684d268ff9407db22950",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "8966088887529eb924e8bc206d08a81ff3f81bf0c0680ed42ffff3425655c287",
+      "source_file": "videos/ai/ai3/s12_galore.py",
+      "source_sha256": "a5dbaa9950a3386c48974486571251dc85f851e7c2d0806223177feba80d4ed4",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Words": {
+      "scene": "Words",
+      "lang": "en",
+      "title": "12. Word vectors from counting",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Words_motion/media/videos/480p15/Words.mp4",
+      "movie_sha256": "8f7cffbe6824b344def7088553a84cb7ee976f0100406802a44d9db78d3a5047",
+      "bytes": 2258420,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Words_motion/result.json",
+      "record_sha256": "97277e81b00dcbffa3b112cc6495f70c0734edfc08eed61a4fda466fed681c62",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "bb41ce0ec7cad5a0ae5ec67bc8a18aa1ece1823714eaddc18b3339f408d6d275",
+      "source_file": "videos/ai/ai3/s13_words.py",
+      "source_sha256": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Words": {
+      "scene": "Words",
+      "lang": "zh",
+      "title": "12. Word vectors from counting",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Words_motion/media/videos/480p15/Words.mp4",
+      "movie_sha256": "b716e8633a354264abcb32e4b90533830c6e2581f9608933606706ee76e4e1a9",
+      "bytes": 2222379,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Words_motion/result.json",
+      "record_sha256": "446b1fa09c85dd28969a0ebbe350c65f6731c7ed5a7af590cb34aa3202f98f72",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "bb41ce0ec7cad5a0ae5ec67bc8a18aa1ece1823714eaddc18b3339f408d6d275",
+      "source_file": "videos/ai/ai3/s13_words.py",
+      "source_sha256": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/SGNS": {
+      "scene": "SGNS",
+      "lang": "en",
+      "title": "13. word2vec is counting in disguise",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/SGNS_motion/media/videos/480p15/SGNS.mp4",
+      "movie_sha256": "9bcf4449c40f09728464d0952abb20daf0ab1926306febf55dfa83b195dfaf22",
+      "bytes": 2058940,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/SGNS_motion/result.json",
+      "record_sha256": "30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+      "source_file": "videos/ai/ai3/s14_sgns.py",
+      "source_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/SGNS": {
+      "scene": "SGNS",
+      "lang": "zh",
+      "title": "13. word2vec is counting in disguise",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/SGNS_motion/media/videos/480p15/SGNS.mp4",
+      "movie_sha256": "de4cd782c5be5884ca226b36dd714913ee0ddc20a2ccfe2df62a5ae92150090e",
+      "bytes": 2078481,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/SGNS_motion/result.json",
+      "record_sha256": "c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+      "source_file": "videos/ai/ai3/s14_sgns.py",
+      "source_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/HighDim": {
+      "scene": "HighDim",
+      "lang": "en",
+      "title": "14. Life in 768 dimensions",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/HighDim_motion/media/videos/480p15/HighDim.mp4",
+      "movie_sha256": "2a2fced91ba48283573ab976e136655a401043b9c2b3e976c1b2c312bc107349",
+      "bytes": 1422767,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/HighDim_motion/result.json",
+      "record_sha256": "8d8b4a20d50f87cdfaf6eaa2c6d7ba4c5491a77eb9514234daa88e28d3a0f154",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+      "source_file": "videos/ai/ai3/s15_highdim.py",
+      "source_sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/HighDim": {
+      "scene": "HighDim",
+      "lang": "zh",
+      "title": "14. Life in 768 dimensions",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/HighDim_motion/media/videos/480p15/HighDim.mp4",
+      "movie_sha256": "99740cf77fbda540bb2b8685ffa2881e9e57740ae2bb82cb704c32b4fa075473",
+      "bytes": 1390083,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/HighDim_motion/result.json",
+      "record_sha256": "4cb0f0de7a1fd96101c4a3fc02f50377e3d93d4aaf0576b0cef339c44552c950",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+      "source_file": "videos/ai/ai3/s15_highdim.py",
+      "source_sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/JL": {
+      "scene": "JL",
+      "lang": "en",
+      "title": "15. Johnson-Lindenstrauss, proved",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/JL_motion/media/videos/480p15/JL.mp4",
+      "movie_sha256": "8a426cb1f8c5828cca9b485b912c81c366270437e015ae1131b2bbb3503217fe",
+      "bytes": 1820600,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/JL_motion/result.json",
+      "record_sha256": "d8edbdf54c663cf94e23dd7683964b559fe3e4ba931f8dcb14a9a5ab7bc87533",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "source_file": "videos/ai/ai3/s16_jl.py",
+      "source_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/JL": {
+      "scene": "JL",
+      "lang": "zh",
+      "title": "15. Johnson-Lindenstrauss, proved",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/JL_motion/media/videos/480p15/JL.mp4",
+      "movie_sha256": "dad7819ed327049736bd1e3b44d8e197426bf6f1c9b1843bcc897450189ce0b3",
+      "bytes": 1836888,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/JL_motion/result.json",
+      "record_sha256": "83bb0f34f4392af584100ddbac0590868d2bbc4d171f06039a715aac5e857f8a",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "source_file": "videos/ai/ai3/s16_jl.py",
+      "source_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Geometry": {
+      "scene": "Geometry",
+      "lang": "en",
+      "title": "16. GPT-2's lopsided space",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Geometry_motion/media/videos/480p15/Geometry.mp4",
+      "movie_sha256": "361402267d88e047eb8acb438ff2406e9b61fde905b89bfdec27defc893537c4",
+      "bytes": 1331105,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Geometry_motion/result.json",
+      "record_sha256": "b9c379581b117ecc3d5530334b045525f23595f464e01e4d41c6fbeca4a402b2",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "source_file": "videos/ai/ai3/s17_geometry.py",
+      "source_sha256": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Geometry": {
+      "scene": "Geometry",
+      "lang": "zh",
+      "title": "16. GPT-2's lopsided space",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Geometry_motion/media/videos/480p15/Geometry.mp4",
+      "movie_sha256": "f4c0d0e30ce07a5b8432bfee4e1d515ffb6eaa3268c9ebb8c9c1a5c476570947",
+      "bytes": 1261301,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Geometry_motion/result.json",
+      "record_sha256": "6cf17312c23d4b4d013f40dc94624efed3818c086d6016e4101e7a6dea8041c6",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "source_file": "videos/ai/ai3/s17_geometry.py",
+      "source_sha256": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Netflix": {
+      "scene": "Netflix",
+      "lang": "en",
+      "title": "17. Low rank in the wild",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Netflix_motion/media/videos/480p15/Netflix.mp4",
+      "movie_sha256": "2896b2cacab43fdb85edccdd6699ca540f3a602659bcc87cb2a512b0ba5e90c2",
+      "bytes": 2211660,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Netflix_motion/result.json",
+      "record_sha256": "64c8d0901d3b39d0109b6c76799f03a97a8d67cd752cf8235132e11063efd701",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "bb41ce0ec7cad5a0ae5ec67bc8a18aa1ece1823714eaddc18b3339f408d6d275",
+      "source_file": "videos/ai/ai3/s18_netflix.py",
+      "source_sha256": "893ab4f1d48fa93876cd88c01b887a906aedc6e5fc19a70d54d6a56029e93a67",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "zh/Netflix": {
+      "scene": "Netflix",
+      "lang": "zh",
+      "title": "17. Low rank in the wild",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Netflix_motion/media/videos/480p15/Netflix.mp4",
+      "movie_sha256": "c462dc0e3521ebd88369550094af0d7d7165aa3b55b2cc257aa14f457f95df60",
+      "bytes": 2310778,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Netflix_motion/result.json",
+      "record_sha256": "35299d539166ca933cdbcb10c91517dfbb2c2af2ec2e7149b9bcce9264f95f90",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "bb41ce0ec7cad5a0ae5ec67bc8a18aa1ece1823714eaddc18b3339f408d6d275",
+      "source_file": "videos/ai/ai3/s18_netflix.py",
+      "source_sha256": "893ab4f1d48fa93876cd88c01b887a906aedc6e5fc19a70d54d6a56029e93a67",
+      "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval.",
+      "selection_lineage": {
+        "kind": "historical927-row-with-current-exact-byte-verification",
+        "historical_map": "ai3-final-source-case-map.json",
+        "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+        "movie_direct_scene_source_and_raw_record_match": true,
+        "limits": "Prior review scope retained. This byte check does not prove aggregate source freshness or historical imports."
+      }
+    },
+    "en/Outro": {
+      "scene": "Outro",
+      "lang": "en",
+      "title": "Recap, problems, and what comes next",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/Outro_motion/media/videos/480p15/Outro.mp4",
+      "movie_sha256": "2127ff2fde9514843a6fd4a5b7e376dbfaf13c44ed94afa1342d4a45f4cd63f6",
+      "bytes": 1651325,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/Outro_motion/result.json",
+      "record_sha256": "c8e4b8be1ecd03b165571ed7d9e8e1fe9ee5d47fa9d807a0da419701c88b31b2",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "9ad438171645c0def558f794ab620c2e3732457d09801f7b69841f8c7b4c6706",
+      "source_file": "videos/ai/ai3/s19_outro.py",
+      "source_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+      "replacement_source_code_commit": "6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0",
+      "review_scope_completed": "Assigned reviewer completed all encoded3second-animation+buffer frames, complete baseline selected-cohort regression by exactsame-time PNG inheritance/direct changed views and480endpoints; no new native1080/continuous/listening approval.",
+      "review_receipt": "docs/qa/evidence/ai3-outro-trail-motion-regression/summary.json",
+      "frozen_movie": "/workspace/runtime/ai3-outro-trail-final-review/en/Outro.mp4",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "repair_source_commit": "6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0",
+      "current_review_cohort_times": 344,
+      "direct_changed_native_images": 60,
+      "exact_prior_image_inheritances": 284,
+      "review_evidence": "evidence/ai3-outro-trail-motion-regression/summary.json",
+      "review_evidence_sha256": "239d39848a5d24a610e28c817d9286c6326b6393beed430d790bcae8366c069c",
+      "selection_lineage": {
+        "kind": "scoped-reviewed-replacement",
+        "historical_movie_sha256": "f99b2a8263bd613e741d0ed8f61c1ac9601732593445d0fbef874acc48682881",
+        "historical_record_sha256": "1fbc58992c516471511b1c425dfeb878b1c9ba38ec43a3a62f4b8fd9142f4a3f",
+        "source_commit_scope": "Named local scene repair commit; not a claim that every historical capture imported this repository commit.",
+        "raw_status_warnings_and_fingerprint_unchanged": true
+      }
+    },
+    "zh/Outro": {
+      "scene": "Outro",
+      "lang": "zh",
+      "title": "Recap, problems, and what comes next",
+      "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Outro_motion/media/videos/480p15/Outro.mp4",
+      "movie_sha256": "aa2af27f24b066bc463c61bb7a063bf5e261f8c4f44c754ed21baddd882d549e",
+      "bytes": 1673504,
+      "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/Outro_motion/result.json",
+      "record_sha256": "85e4c160cab4c500b4ff9713ebd6b2db55aa341320318362ac71c297ccd2e25e",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "9ad438171645c0def558f794ab620c2e3732457d09801f7b69841f8c7b4c6706",
+      "source_file": "videos/ai/ai3/s19_outro.py",
+      "source_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+      "replacement_source_code_commit": "6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0",
+      "review_scope_completed": "Assigned reviewer completed all encoded3second-animation+buffer frames, complete baseline selected-cohort regression by exactsame-time PNG inheritance/direct changed views and480endpoints; no new native1080/continuous/listening approval.",
+      "review_receipt": "docs/qa/evidence/ai3-outro-trail-motion-regression/summary.json",
+      "frozen_movie": "/workspace/runtime/ai3-outro-trail-final-review/zh/Outro.mp4",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "repair_source_commit": "6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0",
+      "current_review_cohort_times": 372,
+      "direct_changed_native_images": 60,
+      "exact_prior_image_inheritances": 312,
+      "review_evidence": "evidence/ai3-outro-trail-motion-regression/summary.json",
+      "review_evidence_sha256": "239d39848a5d24a610e28c817d9286c6326b6393beed430d790bcae8366c069c",
+      "selection_lineage": {
+        "kind": "scoped-reviewed-replacement",
+        "historical_movie_sha256": "56124f7e0155fd8cb5f581d6613184de64d30d3cce7392aade37d325ed3b9667",
+        "historical_record_sha256": "c01bf16ae4d80d02f586bed53805e0a0bd4139431e08d6ac5e73732f50098d16",
+        "source_commit_scope": "Named local scene repair commit; not a claim that every historical capture imported this repository commit.",
+        "raw_status_warnings_and_fingerprint_unchanged": true
+      }
+    }
+  },
+  "byte_verification": [
+    {
+      "case": "en/Hook",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "95df4c8f14da80b54fed12bba29380644fda8628f61ad6f5bc391a73544850f4",
+      "source_sha256": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86",
+      "record_sha256": "8bd5e522b090d87067a99a57f74e5a977d512c090714470c5a2c9cce3b16da65",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Hook",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "8e6c272b878fc2b9370c77e9e050caa817f774bda4816f0559408fecaf0a919b",
+      "source_sha256": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86",
+      "record_sha256": "43e7c502e5ebd4bc2d635cb61fdc20af1b4a1199d8a4df6d70cae0dbd7cbc5da",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Vectors",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2",
+      "source_sha256": "110a369b78476c6d4a302e9ff61dfbb5fe5e569a74e0843d2c249cc1eb5cb62e",
+      "record_sha256": "b8837a04bf07d3e4edef05d086f89406342c63c40e86dd3e25c60d16b4b77f07",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Vectors",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10",
+      "source_sha256": "110a369b78476c6d4a302e9ff61dfbb5fe5e569a74e0843d2c249cc1eb5cb62e",
+      "record_sha256": "11329c1f9034ce1869ce50075d28c5bad077be9b99579ea9dceaf20d0c7f8496",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Einsum",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "5c0c27de2dd25f0ea8a363860c99125d9532dd97d17bec30b10299953ded554b",
+      "source_sha256": "4cf32fd13a907723f2478104b8be2de7dd38df693fa330558edb15d1716ed23e",
+      "record_sha256": "aadabc0bedef6e34b8839fa280238c0866e73b156ea01264438c10c488a25578",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Einsum",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "359b168c7e2ef8cdb1042af8e3b577b45378e0adc3db29b0a69a4024ecd73b9d",
+      "source_sha256": "4cf32fd13a907723f2478104b8be2de7dd38df693fa330558edb15d1716ed23e",
+      "record_sha256": "326b6916bdf4134c00a1801a5e8d70db0082cd7f146a90cdbedff81cdcaeb3e1",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Matrices",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "a4f4c8d78a61ede8f94fd45ba7a135f686562ad746dcc5d0232876791aa195d6",
+      "source_sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "record_sha256": "c4b7f03f8a014898fb117c07ad51b18635c709bd9b6d515593937ccef60d4edd",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Matrices",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "0a91c45415b27ba454521fa90fd83ffb6e2268ec7f51782258ca34ec7d00230a",
+      "source_sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "record_sha256": "2d18a078cedbc9f853d123e5da2c42b4af34091e0b4f869a77079784848b0c29",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Projection",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "297327a764ec8f387a1e80849439994f382cf12826d0dd8e25aa76a3e6828183",
+      "source_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "record_sha256": "d8423657fc24dbdea1e4bc937bf3930967923ada6e921811d41408b68c4bd0ff",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Projection",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "dd96725ed5939801abc7ee4872acdaedc2bbe7d0d1bd9dd58e892511908213db",
+      "source_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "record_sha256": "b1a45f11fe34da80935290c3ac4c3201becd7370aad6a067699f400669bc0786",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Eigen",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "a30c8c6c91b04b6cd3c3a3a73463caae54ff6371930cdc21d8ad3cca519bb37d",
+      "source_sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "record_sha256": "f1483bfe90e825b6b90b621964203f67f92659e31a35af30205b9b493c30902c",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Eigen",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "851a46486dc8278affaa21b3bb8842f5cc93535683b5a3f67af53b86af105cbf",
+      "source_sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "record_sha256": "00179b94b508a4950001e36d7ed7733d8e4d63d96a30d7edb67a5dbfd521dac0",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Power",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "8b790fba90fe4694c9fb3ab0b3f88de2851082a0e94db9dd0182379bb5dae73a",
+      "source_sha256": "f67974683fafc9378f5ada7ea210ce1db8c1d507b9b972efad7c03aa803755b4",
+      "record_sha256": "0ad61dbd242b9bd4380d114a302c3aec05514d0cb351c6b2336418483a646276",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Power",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "15380304cade3740dfab90886aba13bb1daec92a28f7848fe64688f57a7aacf0",
+      "source_sha256": "f67974683fafc9378f5ada7ea210ce1db8c1d507b9b972efad7c03aa803755b4",
+      "record_sha256": "3fc6987089f5f8114ef9c72c95108127061c2ebece91864ba4866029c6808bf5",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/LowRank",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "ee94ff52e06f17eed3b48dac4a8402fe540198134ab8aee34acaaea47cc76ee0",
+      "source_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "record_sha256": "62f52f2aca0a5e2fd2ab59f755cec87ebaf90cd05286e0fd9095ac1ade03c7b8",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/LowRank",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "28c2269472e9b48058accfd2f0c4aaa731057a609d08487fdcde7ed83fb23fa9",
+      "source_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "record_sha256": "981fc8b3b82fbe570f35297a3848b372464feb3fa08eae43a53b4027fac6f030",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Norms",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "f61e0783aedb8d3835d0c6a35e183b79aa9bd1527676b06d29c5704bf1f99ec1",
+      "source_sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "record_sha256": "ebed7c9558a5f16cac253b6549e53150f379b58bcb990e4f9ccefd37688a0f3a",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Norms",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "b9b10cd3c0387e0a8458b179a70ce712e3e5b219ddfc2ffdf9bb04fbdea6946c",
+      "source_sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "record_sha256": "9844615b62e520345c24e5a7fdfcc2219ea58f6fc4173cd1965d59130878a5c9",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Spectra",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "7024dfb0b2167e02a9252c9a9bd57bb98a1807da1b71b2d607aa3d4e304f57b9",
+      "source_sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+      "record_sha256": "02d51ee90ba2ac4ebf939bc95da80ca1bcf1ee3c693704d7025ac989b56fbb34",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Spectra",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "b7633c002f2d74cf643261375ed93f12e82a187a47e15ab7b8aeecf23a8406ed",
+      "source_sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+      "record_sha256": "f16e390bd392f21f6b5b749e1938a09f17d6b03e689437169c8e0f3e0322f8e8",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/GaLore",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "96bad2dcceb44603d729ae0fd3a83ca687590e7bf7254674affa2cb22dd93957",
+      "source_sha256": "a5dbaa9950a3386c48974486571251dc85f851e7c2d0806223177feba80d4ed4",
+      "record_sha256": "b5c910fa4b8912e295c8b03833eecc026334764f1d99bdddad8fac5acd38a8af",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/GaLore",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "854037303c562b2d4ff68090a8753c93c704985183c512c10d2c64049fb65669",
+      "source_sha256": "a5dbaa9950a3386c48974486571251dc85f851e7c2d0806223177feba80d4ed4",
+      "record_sha256": "5c1a2f15d7cb281b3dbf102f9746d232066cab8dca52684d268ff9407db22950",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Words",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "8f7cffbe6824b344def7088553a84cb7ee976f0100406802a44d9db78d3a5047",
+      "source_sha256": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d",
+      "record_sha256": "97277e81b00dcbffa3b112cc6495f70c0734edfc08eed61a4fda466fed681c62",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Words",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "b716e8633a354264abcb32e4b90533830c6e2581f9608933606706ee76e4e1a9",
+      "source_sha256": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d",
+      "record_sha256": "446b1fa09c85dd28969a0ebbe350c65f6731c7ed5a7af590cb34aa3202f98f72",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/SGNS",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "9bcf4449c40f09728464d0952abb20daf0ab1926306febf55dfa83b195dfaf22",
+      "source_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673",
+      "record_sha256": "30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/SGNS",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "de4cd782c5be5884ca226b36dd714913ee0ddc20a2ccfe2df62a5ae92150090e",
+      "source_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673",
+      "record_sha256": "c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/HighDim",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "2a2fced91ba48283573ab976e136655a401043b9c2b3e976c1b2c312bc107349",
+      "source_sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "record_sha256": "8d8b4a20d50f87cdfaf6eaa2c6d7ba4c5491a77eb9514234daa88e28d3a0f154",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/HighDim",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "99740cf77fbda540bb2b8685ffa2881e9e57740ae2bb82cb704c32b4fa075473",
+      "source_sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "record_sha256": "4cb0f0de7a1fd96101c4a3fc02f50377e3d93d4aaf0576b0cef339c44552c950",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/JL",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "8a426cb1f8c5828cca9b485b912c81c366270437e015ae1131b2bbb3503217fe",
+      "source_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "record_sha256": "d8edbdf54c663cf94e23dd7683964b559fe3e4ba931f8dcb14a9a5ab7bc87533",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/JL",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "dad7819ed327049736bd1e3b44d8e197426bf6f1c9b1843bcc897450189ce0b3",
+      "source_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "record_sha256": "83bb0f34f4392af584100ddbac0590868d2bbc4d171f06039a715aac5e857f8a",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Geometry",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "361402267d88e047eb8acb438ff2406e9b61fde905b89bfdec27defc893537c4",
+      "source_sha256": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a",
+      "record_sha256": "b9c379581b117ecc3d5530334b045525f23595f464e01e4d41c6fbeca4a402b2",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Geometry",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "f4c0d0e30ce07a5b8432bfee4e1d515ffb6eaa3268c9ebb8c9c1a5c476570947",
+      "source_sha256": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a",
+      "record_sha256": "6cf17312c23d4b4d013f40dc94624efed3818c086d6016e4101e7a6dea8041c6",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/Netflix",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "2896b2cacab43fdb85edccdd6699ca540f3a602659bcc87cb2a512b0ba5e90c2",
+      "source_sha256": "893ab4f1d48fa93876cd88c01b887a906aedc6e5fc19a70d54d6a56029e93a67",
+      "record_sha256": "64c8d0901d3b39d0109b6c76799f03a97a8d67cd752cf8235132e11063efd701",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "zh/Netflix",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "c462dc0e3521ebd88369550094af0d7d7165aa3b55b2cc257aa14f457f95df60",
+      "source_sha256": "893ab4f1d48fa93876cd88c01b887a906aedc6e5fc19a70d54d6a56029e93a67",
+      "record_sha256": "35299d539166ca933cdbcb10c91517dfbb2c2af2ec2e7149b9bcce9264f95f90",
+      "all_equal_historical_row": true
+    },
+    {
+      "case": "en/SVD",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "de4be4f188407980d2c376f3e12faaac55c62f2c0e698e6858c3a2d1856943c6",
+      "source_sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+      "record_sha256": "9d92f912fbd098bc4dc7e5c21c6e89e5d3f8fd381d496df9d340cf5f71270f86",
+      "matches_closed_replacement_receipt": true,
+      "evidence_sha256": "7610a69d2d905e61a5edff94d689b55ab9eaa0d901868a4a155ef009f6a2a6f8"
+    },
+    {
+      "case": "zh/SVD",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "1729ebf9a55ed16caf60e0303adf0fdbfcbfc3c0e07fb85b14ed3f80b224e350",
+      "source_sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+      "record_sha256": "5473ee8faf48dc0b5d772c7f8d3de17757f1691913e10f24e7f560e45711ece3",
+      "matches_closed_replacement_receipt": true,
+      "evidence_sha256": "7610a69d2d905e61a5edff94d689b55ab9eaa0d901868a4a155ef009f6a2a6f8"
+    },
+    {
+      "case": "en/Outro",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "2127ff2fde9514843a6fd4a5b7e376dbfaf13c44ed94afa1342d4a45f4cd63f6",
+      "source_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+      "record_sha256": "c8e4b8be1ecd03b165571ed7d9e8e1fe9ee5d47fa9d807a0da419701c88b31b2",
+      "matches_closed_replacement_receipt": true,
+      "evidence_sha256": "239d39848a5d24a610e28c817d9286c6326b6393beed430d790bcae8366c069c"
+    },
+    {
+      "case": "zh/Outro",
+      "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+      "movie_sha256": "aa2af27f24b066bc463c61bb7a063bf5e261f8c4f44c754ed21baddd882d549e",
+      "source_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+      "record_sha256": "85e4c160cab4c500b4ff9713ebd6b2db55aa341320318362ac71c297ccd2e25e",
+      "matches_closed_replacement_receipt": true,
+      "evidence_sha256": "239d39848a5d24a610e28c817d9286c6326b6393beed430d790bcae8366c069c"
+    }
+  ],
+  "limits": [
+    "All38chapter review selections are closed within their documented preview scopes, not production sign-off.",
+    "Raw runtime statuses, warnings and render fingerprints are copied unchanged; no claim that broad aggregate source is current.",
+    "Direct source/movie/record bytes verified now do not establish historical imported shared/source bytes.",
+    "Original695native1080endpoint images and original all19chapter/36join silent assembly receipts remain historical; no new1080motion/listening/native playback or assembly refresh was performed here.",
+    "The old927source case map is preserved byte-for-byte; old assembled reels are not these four replacement movies.",
+    "Current cohort15014time appearances are a union of retained baseline selected coverage and four scoped repair cohorts; not every101263encoded frame was visually viewed."
+  ],
+  "integrated_source_tests": {
+    "receipt": "evidence/integrated-outro-gradient-20261101/receipt.json",
+    "receipt_sha256": "7d439b8939951a9087798ce17c3f2e03bf4100e407e9d3c28e9afcfba6d54300",
+    "tests": 421,
+    "returncode": 0,
+    "before_after_source_inventory_equal": true,
+    "both_replacement_source_hashes_match_tested_inventory": true,
+    "scope": "Historical exact frozen source/test run, including replacement modules. Not a new full-suite run or evidence of render/audio correctness."
+  }
+}

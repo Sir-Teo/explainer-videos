@@ -23,7 +23,7 @@ Part 3: all 19 sources were reviewed and all 17 numerical items completed. The n
 final validation loss3.5711395, training8,595.83seconds. All38 bilingual chapter cases have endpoint and full silent
 motion runtime records at observed versions. The baseline and first repaired selected-frame passes cover all19 chapters. Late native/factual checks have
 verified the final Power label, Outro captions and GaLore feasibility correction. Hook, Words and Netflix
-narration-only scope qualifications now have completed fresh bilingual timing/image regressions. The final
+narration-only scope qualifications now have completed fresh bilingual timing/image regressions. The historical927
 38-case map covers 14,729 selected times from 101,263 automatically decoded frames; 86,534 frames were not
 individually inspected. Five raw motion warnings remain preserved rather than relabeled as passes.
 The [chapter checklist](ai3-chapter-checklist.md) distinguishes actual review from runtime records and preserves
@@ -60,7 +60,7 @@ frames. All36 chapter joins have684 selected-time appearances,650 unique images,
 and72 native before/after context views. Chapters, subtitles and timestamps were checked. This does not establish
 continuous perceptual review, spoken synchronization, listening or production-resolution motion.
 
-A subsequent every-encoded-frame probe has confirmed a remaining Part 3 Outro descent marker/trail mismatch: the marker visibly lags the revealed line front. The isolated repair is published at `6b86ee8b…`; its fresh bilingual regression covers all98encoded-window frames,22changed holds and596exact prior-image inheritances (716selected appearances total). Twelve endpoints use ten exact matches and two changed native final-marker views. Current case-map packaging is underway; the older exact reels retain their historical reviews and are not current production approval. The separately reviewed SVD pilot source and audio inputs are unaffected.
+A subsequent every-encoded-frame probe has confirmed a remaining Part 3 Outro descent marker/trail mismatch: the marker visibly lags the revealed line front. The isolated repair is published at `6b86ee8b…`; its fresh bilingual regression covers all98encoded-window frames,22changed holds and596exact prior-image inheritances (716selected appearances total). Twelve endpoints use ten exact matches and two changed native final-marker views. The [current four-replacement map](ai3-current-source-case-map.md) now covers15,014selected times from101,263decoded frames, with five raw warning cases preserved;34unreplaced movie/module/record identities match the old baseline exactly. the older exact reels retain their historical reviews and are not current production approval. The separately reviewed SVD pilot source and audio inputs are unaffected.
 
 Part 4 now has current selected-image review for all 19 chapters and 38 bilingual silent previews:
 **13,670 selected times from 101,192 decoded frames**, plus 537 reviewed native1080 endpoints with scoped

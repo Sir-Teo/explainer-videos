@@ -1,0 +1,97 @@
+{
+  "completed_utc": "2026-11-01T01:12:40.267825+00:00",
+  "status": "scoped-bilingual-Outro-trail-repair-regression-closed",
+  "counts": {
+    "current_cohort_times": 716,
+    "current_direct_native_images": 120,
+    "current_actual_pages": 16,
+    "exact_same_time_PNG_inherited_times": 596,
+    "prior_full_selected_cohort_times": 648,
+    "every_encoded_window_frames": 98,
+    "additional_changed_trailing_hold_fade_cohort_frames": 22,
+    "native_motion_followups": 2,
+    "fresh480endpoints": 12,
+    "endpoint_exact_inheritances": 10,
+    "endpoint_individual_native_views": 2,
+    "automatically_decoded_frames": 4514,
+    "encoded_frames_not_individually_viewed": 3798
+  },
+  "cases": [
+    {
+      "lang": "en",
+      "source_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+      "movie": "/workspace/runtime/ai3-outro-trail-final-review/en/Outro.mp4",
+      "movie_sha256": "2127ff2fde9514843a6fd4a5b7e376dbfaf13c44ed94afa1342d4a45f4cd63f6",
+      "record": "/workspace/runtime/ai3-outro-trail-final-review/en/render-record.json",
+      "record_sha256": "c8e4b8be1ecd03b165571ed7d9e8e1fe9ee5d47fa9d807a0da419701c88b31b2",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "9ad438171645c0def558f794ab620c2e3732457d09801f7b69841f8c7b4c6706",
+      "old_movie_sha256": "f99b2a8263bd613e741d0ed8f61c1ac9601732593445d0fbef874acc48682881",
+      "cohort_times": 344,
+      "prior_selected_cohort_times": 310,
+      "direct_images": 60,
+      "exact_same_time_PNG_inheritances": 284,
+      "largest_cohort_time_gap_seconds": 1.0,
+      "encoded_frames_processed_to_EOF": 2159,
+      "encoded_frames_not_individually_viewed": 1815,
+      "narration_exact_equal": true,
+      "utterance_word_timing_exact_equal": true,
+      "input_path_size_mtime_signatures_exact_equal": true,
+      "full_movie_duration_equal": true,
+      "duration": 143.93333333333294,
+      "root_render_attestation": {
+        "jobs": [
+          "47415",
+          "35043"
+        ],
+        "outcome": "both completed exit0, passed0warnings",
+        "source_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+        "statement": "Parent reconciled both completed jobs and supplied exact movie/record hashes; no production compute. Other Part5 scene implementation does not alter these Part3 inputs/shared code."
+      }
+    },
+    {
+      "lang": "zh",
+      "source_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+      "movie": "/workspace/runtime/ai3-outro-trail-final-review/zh/Outro.mp4",
+      "movie_sha256": "aa2af27f24b066bc463c61bb7a063bf5e261f8c4f44c754ed21baddd882d549e",
+      "record": "/workspace/runtime/ai3-outro-trail-final-review/zh/render-record.json",
+      "record_sha256": "85e4c160cab4c500b4ff9713ebd6b2db55aa341320318362ac71c297ccd2e25e",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "9ad438171645c0def558f794ab620c2e3732457d09801f7b69841f8c7b4c6706",
+      "old_movie_sha256": "56124f7e0155fd8cb5f581d6613184de64d30d3cce7392aade37d325ed3b9667",
+      "cohort_times": 372,
+      "prior_selected_cohort_times": 338,
+      "direct_images": 60,
+      "exact_same_time_PNG_inheritances": 312,
+      "largest_cohort_time_gap_seconds": 1.0,
+      "encoded_frames_processed_to_EOF": 2355,
+      "encoded_frames_not_individually_viewed": 1983,
+      "narration_exact_equal": true,
+      "utterance_word_timing_exact_equal": true,
+      "input_path_size_mtime_signatures_exact_equal": true,
+      "full_movie_duration_equal": true,
+      "duration": 156.99999999999912,
+      "root_render_attestation": {
+        "jobs": [
+          "47415",
+          "35043"
+        ],
+        "outcome": "both completed exit0, passed0warnings",
+        "source_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+        "statement": "Parent reconciled both completed jobs and supplied exact movie/record hashes; no production compute. Other Part5 scene implementation does not alter these Part3 inputs/shared code."
+      }
+    }
+  ],
+  "observations": "Every encoded frame in each3-second descent+buffers inspected; marker now follows visible smooth trail front, with no origin ghost/late catch-up. All changed subsequent selected hold/fade frames inspected. Native critical middle and endpoint clear in both languages. Unchanged full-scene selected cohort inherits exact same-time PNG bytes only.",
+  "limits": [
+    "Per-encoded-frame image review in98explicit window frames, selected-time review elsewhere; not continuous perceptual playback/listening.",
+    "Silent854x480preview movies and480endpoint checks; no new1080/4K movie, narration/sync or player approval.",
+    "Current union716times is not an all4514-frame visual review;3798encoded frames remain individually unseen.",
+    "No authoritative old927case map or assembled reel overwritten. Four replacement metadata prepared separately; parent owns root acceptance/map publication.",
+    "One initial EN FFmpeg linear-sum select expression failed at filter parsing with zero PNG output; exact stderr/movie snapshot retained in en-first-select-expression-failure. Balanced select expression then completed full file. No unknown outcome."
+  ],
+  "prior_source_implementation_package": "docs/qa/evidence/ai3-outro-path-front-repair",
+  "no_new_production_source_edits": true
+}
