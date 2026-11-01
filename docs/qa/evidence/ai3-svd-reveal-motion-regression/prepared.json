@@ -1,0 +1,51 @@
+{
+  "prepared_utc": "2026-10-31T23:57:12.737043+00:00",
+  "source_before_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+  "shared_before_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+  "cases": [
+    {
+      "lang": "en",
+      "source_case": {
+        "scene": "SVD",
+        "lang": "en",
+        "title": "7. Every matrix: turn, stretch, turn",
+        "movie": "/workspace/explainer-videos/renders/qa/series/ai3/en/SVD_motion/media/videos/480p15/SVD.mp4",
+        "movie_sha256": "59090e74b89b7dc10c8e0d85cafb6cd17bd7917f5a0e645a55bba13cc0fc59d0",
+        "bytes": 1921843,
+        "result": "/workspace/explainer-videos/renders/qa/series/ai3/en/SVD_motion/result.json",
+        "record_sha256": "2aa434f78b85f96d90e14ffe33af2a6cbc96c16323996bf7608ef76be6011e48",
+        "runtime_status": "passed",
+        "warnings": [],
+        "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+        "source_file": "videos/ai/ai3/s08_svd.py",
+        "source_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+        "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval."
+      },
+      "movie_snapshot_sha256": "59090e74b89b7dc10c8e0d85cafb6cd17bd7917f5a0e645a55bba13cc0fc59d0",
+      "record_snapshot_sha256": "2aa434f78b85f96d90e14ffe33af2a6cbc96c16323996bf7608ef76be6011e48"
+    },
+    {
+      "lang": "zh",
+      "source_case": {
+        "scene": "SVD",
+        "lang": "zh",
+        "title": "7. Every matrix: turn, stretch, turn",
+        "movie": "/workspace/explainer-videos/renders/qa/series/ai3/zh/SVD_motion/media/videos/480p15/SVD.mp4",
+        "movie_sha256": "e43b06c38430defdd5b918d0bdf91ca57512d802e0414d09d913b63432898f6e",
+        "bytes": 1932504,
+        "result": "/workspace/explainer-videos/renders/qa/series/ai3/zh/SVD_motion/result.json",
+        "record_sha256": "134f9d79d60ef19b9559e329d6bc8f57529cfc108f546c62b1fb2fc7deaad929",
+        "runtime_status": "passed",
+        "warnings": [],
+        "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+        "source_file": "videos/ai/ai3/s08_svd.py",
+        "source_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+        "review_scope_approved_by_root": "Current final selected-frame + native1080 endpoint coverage at documented scales; no continuous/listening/full1080motion approval."
+      },
+      "movie_snapshot_sha256": "e43b06c38430defdd5b918d0bdf91ca57512d802e0414d09d913b63432898f6e",
+      "record_snapshot_sha256": "134f9d79d60ef19b9559e329d6bc8f57529cfc108f546c62b1fb2fc7deaad929"
+    }
+  ],
+  "audit_report_sha256": "c8b7dc73cdd64776d2bac292ecf573ba3e7ad4bf4905a1978c5d5cfa9c2132c7",
+  "scope": "Preparation only; authorized source mutation waits for parent pilot reconciliation."
+}

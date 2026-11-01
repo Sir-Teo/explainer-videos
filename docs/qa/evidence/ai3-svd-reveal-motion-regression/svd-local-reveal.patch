@@ -1,0 +1,13 @@
+diff --git a/videos/ai/ai3/s08_svd.py b/videos/ai/ai3/s08_svd.py
+index 43fd7a7..8fc5b92 100644
+--- a/videos/ai/ai3/s08_svd.py
++++ b/videos/ai/ai3/s08_svd.py
+@@ -122,7 +122,7 @@ class SVD(VoiceoverScene):
+             self.play(FadeIn(pic), FadeIn(pl))
+             for k_, mk in enumerate("abcde"):
+                 vo.wait_until(mk)
+-                step(k_)
++                step(k_, transform=False)
+             vo.wait_until("f")
+             self.play(FadeIn(hist, shift=UP * 0.2))
+         self.wait(0.3)

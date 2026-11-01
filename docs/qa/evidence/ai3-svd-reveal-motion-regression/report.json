@@ -1,0 +1,1671 @@
+{
+  "completed_utc": "2026-11-01T00:06:44.776969+00:00",
+  "scope": "Scoped reopening/replacement of EN/SVD and ZH/SVD chapter artifacts only, after one local reveal keyword. Existing otherPart3case approvals unchanged; old assembled reels remain old artifacts and are not reapproved.",
+  "counts": {
+    "prior_audit_encoded_frames": 304,
+    "prior_audit_pages": 38,
+    "after_review_cohort_frames": 694,
+    "changed_encoded_frames_directly_viewed": 144,
+    "exact_RGB_inherited_frames": 550,
+    "changed_pages_directly_viewed": 18,
+    "after_native_followups": 8,
+    "fresh_endpoints_directly_viewed": 26,
+    "endpoint_pages_directly_viewed": 4
+  },
+  "freeze": {
+    "frozen_utc": "2026-10-31T23:57:29.201067+00:00",
+    "source_before_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+    "source_after_sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+    "shared_ladder_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+    "single_text_replacement": true,
+    "AST_equal_after_removing_single_transform_false_keyword": true,
+    "changed_call_line": 125,
+    "data_geometry_narration_bookmarks_timing_other_AST_unchanged": true,
+    "authorization": "Parent clarified isolated local f00 pilot unaffected; cloud single-keyword edit authorized now. No local action.",
+    "render_validation": "pending fresh EN/ZH480 endpoint+motion by parent",
+    "original_movie_and_audit_snapshots": "before/ and before-audit/"
+  },
+  "patch_sha256": "1ce005daf5b4e57e688497cd058aeb041e6888fa7a9b70df4f2c36373a47831f",
+  "cases": [
+    {
+      "case": "en/SVD",
+      "source_sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+      "before_movie_sha256": "59090e74b89b7dc10c8e0d85cafb6cd17bd7917f5a0e645a55bba13cc0fc59d0",
+      "after_movie_sha256": "de4be4f188407980d2c376f3e12faaac55c62f2c0e698e6858c3a2d1856943c6",
+      "after_record_sha256": "9d92f912fbd098bc4dc7e5c21c6e89e5d3f8fd381d496df9d340cf5f71270f86",
+      "endpoint_record_sha256": "2d5ffe358ebbfd3d151760c312a63ee38e633313001c93cddefac56947e8edf6",
+      "warnings": [],
+      "endpoint_warnings": [],
+      "render_attestation": {
+        "jobs": [
+          "37344",
+          "90416"
+        ],
+        "statement": "Root reconciled EN+ZH endpoint/motion jobs exit0; source291bba0e and table20229b67 unchanged; shared ladder/viz untouched. Hashes match snapshots.",
+        "received_utc": "2026-11-01T00:05:36.045436+00:00"
+      },
+      "invariants": {
+        "narration_full_records_exact_equal": true,
+        "raw_EN_text_and_bookmarks_exact_equal": true,
+        "translated_text_exact_equal": true,
+        "utterance_duration_start_and_all_word_timestamps_exact_equal": true,
+        "input_path_size_mtime_signatures_exact_equal": true,
+        "before_narration_sha256": "23041620caf7a7e50cefa4eb4626d0ddde592af2878c396b7c8d963d5ca447f1",
+        "after_narration_sha256": "23041620caf7a7e50cefa4eb4626d0ddde592af2878c396b7c8d963d5ca447f1",
+        "before_movie_duration": 99.39999999999996,
+        "after_movie_duration": 99.39999999999996
+      },
+      "windows": [
+        {
+          "row": 1,
+          "bookmark": "b",
+          "bookmark_time": 41.12010582010578,
+          "first_frame": 613,
+          "last_frame": 650,
+          "criterion": "Includes 0.6s existing-row movement plus full1.2s copy reveal and settling context; quantization margin before/after."
+        },
+        {
+          "row": 2,
+          "bookmark": "c",
+          "bookmark_time": 46.43015873015868,
+          "first_frame": 693,
+          "last_frame": 730,
+          "criterion": "Includes 0.6s existing-row movement plus full1.2s copy reveal and settling context; quantization margin before/after."
+        },
+        {
+          "row": 3,
+          "bookmark": "d",
+          "bookmark_time": 55.007936507936456,
+          "first_frame": 822,
+          "last_frame": 859,
+          "criterion": "Includes 0.6s existing-row movement plus full1.2s copy reveal and settling context; quantization margin before/after."
+        },
+        {
+          "row": 4,
+          "bookmark": "e",
+          "bookmark_time": 58.684126984126934,
+          "first_frame": 877,
+          "last_frame": 914,
+          "criterion": "Includes 0.6s existing-row movement plus full1.2s copy reveal and settling context; quantization margin before/after."
+        }
+      ],
+      "cohort_frames": 338,
+      "direct_changed_frames": 72,
+      "exact_inherited_frames": 266,
+      "uncovered_source_intervals": [
+        {
+          "after_frame": 0,
+          "before_frame": 2,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 4,
+          "before_frame": 9,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 9,
+          "before_frame": 15,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 16,
+          "before_frame": 31,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 31,
+          "before_frame": 33,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 33,
+          "before_frame": 48,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 48,
+          "before_frame": 50,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 51,
+          "before_frame": 55,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 55,
+          "before_frame": 60,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 61,
+          "before_frame": 64,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 64,
+          "before_frame": 67,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 68,
+          "before_frame": 73,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 73,
+          "before_frame": 78,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 79,
+          "before_frame": 94,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 94,
+          "before_frame": 102,
+          "uncovered_encoded_frames": 7
+        },
+        {
+          "after_frame": 102,
+          "before_frame": 117,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 117,
+          "before_frame": 124,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 125,
+          "before_frame": 139,
+          "uncovered_encoded_frames": 13
+        },
+        {
+          "after_frame": 139,
+          "before_frame": 154,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 154,
+          "before_frame": 169,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 169,
+          "before_frame": 177,
+          "uncovered_encoded_frames": 7
+        },
+        {
+          "after_frame": 177,
+          "before_frame": 184,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 184,
+          "before_frame": 199,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 199,
+          "before_frame": 214,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 214,
+          "before_frame": 229,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 231,
+          "before_frame": 234,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 236,
+          "before_frame": 240,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 240,
+          "before_frame": 245,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 246,
+          "before_frame": 261,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 261,
+          "before_frame": 276,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 276,
+          "before_frame": 291,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 291,
+          "before_frame": 304,
+          "uncovered_encoded_frames": 12
+        },
+        {
+          "after_frame": 304,
+          "before_frame": 319,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 319,
+          "before_frame": 334,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 334,
+          "before_frame": 349,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 349,
+          "before_frame": 361,
+          "uncovered_encoded_frames": 11
+        },
+        {
+          "after_frame": 362,
+          "before_frame": 368,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 368,
+          "before_frame": 374,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 375,
+          "before_frame": 390,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 390,
+          "before_frame": 403,
+          "uncovered_encoded_frames": 12
+        },
+        {
+          "after_frame": 403,
+          "before_frame": 418,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 418,
+          "before_frame": 431,
+          "uncovered_encoded_frames": 12
+        },
+        {
+          "after_frame": 432,
+          "before_frame": 441,
+          "uncovered_encoded_frames": 8
+        },
+        {
+          "after_frame": 441,
+          "before_frame": 446,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 446,
+          "before_frame": 450,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 451,
+          "before_frame": 454,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 454,
+          "before_frame": 456,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 457,
+          "before_frame": 462,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 462,
+          "before_frame": 468,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 469,
+          "before_frame": 484,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 484,
+          "before_frame": 489,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 489,
+          "before_frame": 504,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 504,
+          "before_frame": 508,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 509,
+          "before_frame": 520,
+          "uncovered_encoded_frames": 10
+        },
+        {
+          "after_frame": 520,
+          "before_frame": 523,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 523,
+          "before_frame": 532,
+          "uncovered_encoded_frames": 8
+        },
+        {
+          "after_frame": 533,
+          "before_frame": 548,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 548,
+          "before_frame": 563,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 563,
+          "before_frame": 578,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 579,
+          "before_frame": 594,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 594,
+          "before_frame": 609,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 609,
+          "before_frame": 613,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 650,
+          "before_frame": 652,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 652,
+          "before_frame": 655,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 656,
+          "before_frame": 671,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 671,
+          "before_frame": 680,
+          "uncovered_encoded_frames": 8
+        },
+        {
+          "after_frame": 680,
+          "before_frame": 693,
+          "uncovered_encoded_frames": 12
+        },
+        {
+          "after_frame": 731,
+          "before_frame": 735,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 736,
+          "before_frame": 751,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 751,
+          "before_frame": 766,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 766,
+          "before_frame": 781,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 781,
+          "before_frame": 796,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 796,
+          "before_frame": 811,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 811,
+          "before_frame": 822,
+          "uncovered_encoded_frames": 10
+        },
+        {
+          "after_frame": 859,
+          "before_frame": 863,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 865,
+          "before_frame": 872,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 872,
+          "before_frame": 877,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 914,
+          "before_frame": 918,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 920,
+          "before_frame": 935,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 935,
+          "before_frame": 945,
+          "uncovered_encoded_frames": 9
+        },
+        {
+          "after_frame": 945,
+          "before_frame": 960,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 960,
+          "before_frame": 969,
+          "uncovered_encoded_frames": 8
+        },
+        {
+          "after_frame": 970,
+          "before_frame": 975,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 975,
+          "before_frame": 981,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 982,
+          "before_frame": 997,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 997,
+          "before_frame": 1012,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1012,
+          "before_frame": 1027,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1027,
+          "before_frame": 1042,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1042,
+          "before_frame": 1057,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1057,
+          "before_frame": 1072,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1072,
+          "before_frame": 1087,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1087,
+          "before_frame": 1101,
+          "uncovered_encoded_frames": 13
+        },
+        {
+          "after_frame": 1108,
+          "before_frame": 1114,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 1114,
+          "before_frame": 1121,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 1122,
+          "before_frame": 1124,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 1124,
+          "before_frame": 1126,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 1127,
+          "before_frame": 1132,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 1132,
+          "before_frame": 1138,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 1139,
+          "before_frame": 1154,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1154,
+          "before_frame": 1168,
+          "uncovered_encoded_frames": 13
+        },
+        {
+          "after_frame": 1169,
+          "before_frame": 1174,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 1174,
+          "before_frame": 1179,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 1180,
+          "before_frame": 1195,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1195,
+          "before_frame": 1210,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1210,
+          "before_frame": 1215,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 1215,
+          "before_frame": 1230,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1230,
+          "before_frame": 1245,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1245,
+          "before_frame": 1249,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 1250,
+          "before_frame": 1264,
+          "uncovered_encoded_frames": 13
+        },
+        {
+          "after_frame": 1264,
+          "before_frame": 1279,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1279,
+          "before_frame": 1287,
+          "uncovered_encoded_frames": 7
+        },
+        {
+          "after_frame": 1287,
+          "before_frame": 1294,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 1294,
+          "before_frame": 1309,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1309,
+          "before_frame": 1324,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1325,
+          "before_frame": 1327,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 1329,
+          "before_frame": 1332,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 1332,
+          "before_frame": 1335,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 1340,
+          "before_frame": 1355,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1355,
+          "before_frame": 1370,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1370,
+          "before_frame": 1385,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1385,
+          "before_frame": 1400,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1400,
+          "before_frame": 1405,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 1405,
+          "before_frame": 1420,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1420,
+          "before_frame": 1435,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1435,
+          "before_frame": 1450,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1450,
+          "before_frame": 1465,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1465,
+          "before_frame": 1469,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 1473,
+          "before_frame": 1475,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 1476,
+          "before_frame": 1482,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 1482,
+          "before_frame": 1488,
+          "uncovered_encoded_frames": 5
+        }
+      ],
+      "findings": [
+        {
+          "severity": "resolved",
+          "details": "All four Write reveals keep retained prior-row ink stable and readable. Every changed encoded frame inspected; no moving source-copy overlap remains. Final settled states and all selected unaffected points inherit only exactRGB matches."
+        }
+      ]
+    },
+    {
+      "case": "zh/SVD",
+      "source_sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+      "before_movie_sha256": "e43b06c38430defdd5b918d0bdf91ca57512d802e0414d09d913b63432898f6e",
+      "after_movie_sha256": "1729ebf9a55ed16caf60e0303adf0fdbfcbfc3c0e07fb85b14ed3f80b224e350",
+      "after_record_sha256": "5473ee8faf48dc0b5d772c7f8d3de17757f1691913e10f24e7f560e45711ece3",
+      "endpoint_record_sha256": "f99192685425e0be132d4aebd10863ecd455b127ae5ca9805621da7dd2765ab3",
+      "warnings": [],
+      "endpoint_warnings": [],
+      "render_attestation": {
+        "jobs": [
+          "37344",
+          "90416"
+        ],
+        "statement": "Root reconciled EN+ZH endpoint/motion jobs exit0; source291bba0e and table20229b67 unchanged; shared ladder/viz untouched. Hashes match snapshots.",
+        "received_utc": "2026-11-01T00:05:36.045436+00:00"
+      },
+      "invariants": {
+        "narration_full_records_exact_equal": true,
+        "raw_EN_text_and_bookmarks_exact_equal": true,
+        "translated_text_exact_equal": true,
+        "utterance_duration_start_and_all_word_timestamps_exact_equal": true,
+        "input_path_size_mtime_signatures_exact_equal": true,
+        "before_narration_sha256": "826183ffee1d71b1aef1c3c1c1ede77458922f1e17bb979cb8cbd80b87cb7cc1",
+        "after_narration_sha256": "826183ffee1d71b1aef1c3c1c1ede77458922f1e17bb979cb8cbd80b87cb7cc1",
+        "before_movie_duration": 105.26666666666645,
+        "after_movie_duration": 105.26666666666645
+      },
+      "windows": [
+        {
+          "row": 1,
+          "bookmark": "b",
+          "bookmark_time": 44.931451612903246,
+          "first_frame": 670,
+          "last_frame": 707,
+          "criterion": "Includes 0.6s existing-row movement plus full1.2s copy reveal and settling context; quantization margin before/after."
+        },
+        {
+          "row": 2,
+          "bookmark": "c",
+          "bookmark_time": 52.158133283320836,
+          "first_frame": 779,
+          "last_frame": 816,
+          "criterion": "Includes 0.6s existing-row movement plus full1.2s copy reveal and settling context; quantization margin before/after."
+        },
+        {
+          "row": 3,
+          "bookmark": "d",
+          "bookmark_time": 61.19148537134279,
+          "first_frame": 914,
+          "last_frame": 951,
+          "criterion": "Includes 0.6s existing-row movement plus full1.2s copy reveal and settling context; quantization margin before/after."
+        },
+        {
+          "row": 4,
+          "bookmark": "e",
+          "bookmark_time": 64.2886346586646,
+          "first_frame": 961,
+          "last_frame": 998,
+          "criterion": "Includes 0.6s existing-row movement plus full1.2s copy reveal and settling context; quantization margin before/after."
+        }
+      ],
+      "cohort_frames": 356,
+      "direct_changed_frames": 72,
+      "exact_inherited_frames": 284,
+      "uncovered_source_intervals": [
+        {
+          "after_frame": 0,
+          "before_frame": 2,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 4,
+          "before_frame": 9,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 9,
+          "before_frame": 15,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 16,
+          "before_frame": 28,
+          "uncovered_encoded_frames": 11
+        },
+        {
+          "after_frame": 28,
+          "before_frame": 40,
+          "uncovered_encoded_frames": 11
+        },
+        {
+          "after_frame": 41,
+          "before_frame": 48,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 48,
+          "before_frame": 55,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 56,
+          "before_frame": 59,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 59,
+          "before_frame": 62,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 63,
+          "before_frame": 68,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 68,
+          "before_frame": 73,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 74,
+          "before_frame": 89,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 89,
+          "before_frame": 101,
+          "uncovered_encoded_frames": 11
+        },
+        {
+          "after_frame": 101,
+          "before_frame": 116,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 116,
+          "before_frame": 128,
+          "uncovered_encoded_frames": 11
+        },
+        {
+          "after_frame": 129,
+          "before_frame": 143,
+          "uncovered_encoded_frames": 13
+        },
+        {
+          "after_frame": 143,
+          "before_frame": 158,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 158,
+          "before_frame": 173,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 173,
+          "before_frame": 181,
+          "uncovered_encoded_frames": 7
+        },
+        {
+          "after_frame": 181,
+          "before_frame": 188,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 188,
+          "before_frame": 203,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 203,
+          "before_frame": 218,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 218,
+          "before_frame": 233,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 235,
+          "before_frame": 237,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 237,
+          "before_frame": 239,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 240,
+          "before_frame": 244,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 244,
+          "before_frame": 249,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 250,
+          "before_frame": 265,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 265,
+          "before_frame": 280,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 280,
+          "before_frame": 295,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 295,
+          "before_frame": 310,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 310,
+          "before_frame": 325,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 325,
+          "before_frame": 331,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 331,
+          "before_frame": 346,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 346,
+          "before_frame": 361,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 361,
+          "before_frame": 376,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 376,
+          "before_frame": 391,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 391,
+          "before_frame": 406,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 406,
+          "before_frame": 411,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 412,
+          "before_frame": 418,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 418,
+          "before_frame": 424,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 425,
+          "before_frame": 440,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 440,
+          "before_frame": 454,
+          "uncovered_encoded_frames": 13
+        },
+        {
+          "after_frame": 454,
+          "before_frame": 469,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 469,
+          "before_frame": 481,
+          "uncovered_encoded_frames": 11
+        },
+        {
+          "after_frame": 485,
+          "before_frame": 487,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 488,
+          "before_frame": 494,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 494,
+          "before_frame": 500,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 501,
+          "before_frame": 504,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 504,
+          "before_frame": 506,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 507,
+          "before_frame": 510,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 510,
+          "before_frame": 514,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 515,
+          "before_frame": 517,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 519,
+          "before_frame": 534,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 534,
+          "before_frame": 540,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 540,
+          "before_frame": 555,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 555,
+          "before_frame": 559,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 560,
+          "before_frame": 571,
+          "uncovered_encoded_frames": 10
+        },
+        {
+          "after_frame": 571,
+          "before_frame": 574,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 574,
+          "before_frame": 583,
+          "uncovered_encoded_frames": 8
+        },
+        {
+          "after_frame": 584,
+          "before_frame": 599,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 599,
+          "before_frame": 614,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 614,
+          "before_frame": 629,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 629,
+          "before_frame": 633,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 633,
+          "before_frame": 648,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 648,
+          "before_frame": 663,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 663,
+          "before_frame": 670,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 707,
+          "before_frame": 709,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 709,
+          "before_frame": 712,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 713,
+          "before_frame": 728,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 728,
+          "before_frame": 743,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 743,
+          "before_frame": 752,
+          "uncovered_encoded_frames": 8
+        },
+        {
+          "after_frame": 752,
+          "before_frame": 767,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 767,
+          "before_frame": 779,
+          "uncovered_encoded_frames": 11
+        },
+        {
+          "after_frame": 818,
+          "before_frame": 820,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 822,
+          "before_frame": 837,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 837,
+          "before_frame": 852,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 852,
+          "before_frame": 867,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 867,
+          "before_frame": 869,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 869,
+          "before_frame": 884,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 884,
+          "before_frame": 899,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 899,
+          "before_frame": 914,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 951,
+          "before_frame": 955,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 957,
+          "before_frame": 960,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 998,
+          "before_frame": 1003,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 1004,
+          "before_frame": 1019,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1019,
+          "before_frame": 1034,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1034,
+          "before_frame": 1038,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 1038,
+          "before_frame": 1053,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1053,
+          "before_frame": 1068,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1068,
+          "before_frame": 1071,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 1072,
+          "before_frame": 1078,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 1078,
+          "before_frame": 1083,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 1084,
+          "before_frame": 1099,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1099,
+          "before_frame": 1114,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1114,
+          "before_frame": 1129,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1129,
+          "before_frame": 1144,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1144,
+          "before_frame": 1156,
+          "uncovered_encoded_frames": 11
+        },
+        {
+          "after_frame": 1156,
+          "before_frame": 1171,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1171,
+          "before_frame": 1186,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1186,
+          "before_frame": 1201,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1201,
+          "before_frame": 1216,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1216,
+          "before_frame": 1228,
+          "uncovered_encoded_frames": 11
+        },
+        {
+          "after_frame": 1232,
+          "before_frame": 1234,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 1235,
+          "before_frame": 1241,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 1241,
+          "before_frame": 1248,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 1249,
+          "before_frame": 1252,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 1254,
+          "before_frame": 1259,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 1259,
+          "before_frame": 1265,
+          "uncovered_encoded_frames": 5
+        },
+        {
+          "after_frame": 1266,
+          "before_frame": 1281,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1281,
+          "before_frame": 1284,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 1284,
+          "before_frame": 1299,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1299,
+          "before_frame": 1301,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 1302,
+          "before_frame": 1305,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 1305,
+          "before_frame": 1308,
+          "uncovered_encoded_frames": 2
+        },
+        {
+          "after_frame": 1313,
+          "before_frame": 1328,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1328,
+          "before_frame": 1343,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1343,
+          "before_frame": 1345,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 1345,
+          "before_frame": 1360,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1360,
+          "before_frame": 1375,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1377,
+          "before_frame": 1391,
+          "uncovered_encoded_frames": 13
+        },
+        {
+          "after_frame": 1391,
+          "before_frame": 1406,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1406,
+          "before_frame": 1414,
+          "uncovered_encoded_frames": 7
+        },
+        {
+          "after_frame": 1414,
+          "before_frame": 1421,
+          "uncovered_encoded_frames": 6
+        },
+        {
+          "after_frame": 1421,
+          "before_frame": 1436,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1436,
+          "before_frame": 1451,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1452,
+          "before_frame": 1454,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 1456,
+          "before_frame": 1461,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 1461,
+          "before_frame": 1466,
+          "uncovered_encoded_frames": 4
+        },
+        {
+          "after_frame": 1467,
+          "before_frame": 1482,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1482,
+          "before_frame": 1497,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1497,
+          "before_frame": 1512,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1512,
+          "before_frame": 1527,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1527,
+          "before_frame": 1542,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1542,
+          "before_frame": 1557,
+          "uncovered_encoded_frames": 14
+        },
+        {
+          "after_frame": 1565,
+          "before_frame": 1567,
+          "uncovered_encoded_frames": 1
+        },
+        {
+          "after_frame": 1568,
+          "before_frame": 1572,
+          "uncovered_encoded_frames": 3
+        },
+        {
+          "after_frame": 1572,
+          "before_frame": 1576,
+          "uncovered_encoded_frames": 3
+        }
+      ],
+      "findings": [
+        {
+          "severity": "resolved",
+          "details": "All four Write reveals keep retained prior-row ink stable and readable. Every changed encoded frame inspected; no moving source-copy overlap remains. Final settled states and all selected unaffected points inherit only exactRGB matches."
+        }
+      ]
+    }
+  ],
+  "before_after_figure": {
+    "file": "timed-before-after.png",
+    "sha256": "694d5027aa4dad0568531ccc872c2b4aa30272ca18b28e606ac4560ff35f8f86",
+    "mapping": [
+      {
+        "lang": "en",
+        "phase": "before",
+        "frame": 631,
+        "time": 42.06666666666667,
+        "source_png_sha256": "96bddf527a92405fee9e47d87a54dffc9575ad2bcbabff0f541b345f54d6a1cf",
+        "native_crop_xyxy": [
+          220,
+          30,
+          850,
+          180
+        ],
+        "scale": [
+          1,
+          1
+        ]
+      },
+      {
+        "lang": "en",
+        "phase": "after",
+        "frame": 631,
+        "time": 42.06666666666667,
+        "source_png_sha256": "5a0174dc49ee7df7c245c6ab063cdaa704b9a10ed553a6b2300ba6858db165f6",
+        "native_crop_xyxy": [
+          220,
+          30,
+          850,
+          180
+        ],
+        "scale": [
+          1,
+          1
+        ]
+      },
+      {
+        "lang": "zh",
+        "phase": "before",
+        "frame": 688,
+        "time": 45.86666666666667,
+        "source_png_sha256": "1d4f21e141932ea928458888d84abc8e5d7ee5f5d5fac1bb096aa681a13f355d",
+        "native_crop_xyxy": [
+          220,
+          30,
+          850,
+          180
+        ],
+        "scale": [
+          1,
+          1
+        ]
+      },
+      {
+        "lang": "zh",
+        "phase": "after",
+        "frame": 688,
+        "time": 45.86666666666667,
+        "source_png_sha256": "a00c46c777b3667cff97c1834239c825d8ddabaa39e47aace5e4fcfc5b10dc82",
+        "native_crop_xyxy": [
+          220,
+          30,
+          850,
+          180
+        ],
+        "scale": [
+          1,
+          1
+        ]
+      },
+      {
+        "lang": "en",
+        "phase": "before",
+        "frame": 893,
+        "time": 59.53333333333333,
+        "source_png_sha256": "5ddedc9c6b669a80aae7acf6d2e47d1604fc446de10bc019be40e28193dba70e",
+        "native_crop_xyxy": [
+          220,
+          150,
+          850,
+          300
+        ],
+        "scale": [
+          1,
+          1
+        ]
+      },
+      {
+        "lang": "en",
+        "phase": "after",
+        "frame": 893,
+        "time": 59.53333333333333,
+        "source_png_sha256": "73699a69ae0a2ae8e61e49f9e87bdd8676ef7b8b9ff6981b10727ef20ee3abbf",
+        "native_crop_xyxy": [
+          220,
+          150,
+          850,
+          300
+        ],
+        "scale": [
+          1,
+          1
+        ]
+      },
+      {
+        "lang": "zh",
+        "phase": "before",
+        "frame": 977,
+        "time": 65.13333333333334,
+        "source_png_sha256": "7aa8827ded162f8a261fdebb96add7cd0bbf8de0edcdd614aa7714290b80e8ad",
+        "native_crop_xyxy": [
+          220,
+          150,
+          850,
+          300
+        ],
+        "scale": [
+          1,
+          1
+        ]
+      },
+      {
+        "lang": "zh",
+        "phase": "after",
+        "frame": 977,
+        "time": 65.13333333333334,
+        "source_png_sha256": "89f955728bf2007f5a6b515d48ff2a52829ef4e79e2942b0c646714a32f9e81e",
+        "native_crop_xyxy": [
+          220,
+          150,
+          850,
+          300
+        ],
+        "scale": [
+          1,
+          1
+        ]
+      }
+    ],
+    "viewed": true,
+    "viewed_utc": "2026-11-01T00:07:19.855068+00:00",
+    "method": "Direct native pixel crops; all8before/aftercells inspected"
+  },
+  "limitations": [
+    "Every encoded frame covered only inside8explicit reveal windows; elsewhere prior complete selected-time cohort with exact RGB inheritance",
+    "No whole-scene continuous perceptual viewing or listening/audio approval",
+    "480p15 movie review and480p endpoints do not approve native1080/4K motion",
+    "Cloud source/text/timing equality is not a claim that the separately pinned local pilot or audio asset was inspected; parent owns its state reconciliation and approval"
+  ],
+  "publication": "Parent owns separate source+scoped-evidence commit; this child created no commit or push."
+}

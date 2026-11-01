@@ -122,7 +122,7 @@ class SVD(VoiceoverScene):
             self.play(FadeIn(pic), FadeIn(pl))
             for k_, mk in enumerate("abcde"):
                 vo.wait_until(mk)
-                step(k_)
+                step(k_, transform=False)
             vo.wait_until("f")
             self.play(FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)
