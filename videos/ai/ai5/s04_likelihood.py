@@ -155,7 +155,8 @@ class Likelihood(VoiceoverScene, ThreeDScene):
         self.set_camera_orientation(phi=60 * DEGREES, theta=-62 * DEGREES, zoom=0.8)
         with self.voiceover(
             "Score every possible bell, every centre and every width, and the scores form a landscape. "
-            "<bookmark mark='a'/> From part four, we know how to find its top: follow the gradient uphill. "
+            "<bookmark mark='a'/> In this Gaussian example, follow the gradient uphill toward the analytic "
+            "optimum. A general likelihood can have several peaks; a local climb alone does not certify its top. "
             f"<bookmark mark='b'/> At the summit, the centre is the balls' average, {m:.2f}, and the width is their "
             f"spread, {s_hat:.2f}, close to the square root of three that the pegs predict. For a bell, maximum likelihood "
             "comes out as the two most natural summaries of the data."

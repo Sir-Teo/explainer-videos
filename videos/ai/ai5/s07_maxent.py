@@ -218,7 +218,8 @@ class MaxEnt(VoiceoverScene):
         ax3 = VGroup(*[Rectangle(width=0.4, height=2.4 * v, stroke_width=0, fill_color=LAM, fill_opacity=0.85)
                        for v in sm]).arrange(RIGHT, buff=0.15, aligned_edge=DOWN)
         p3 = VGroup(ax3, label(r"fix the average energy", font_size=22, color=LAM).next_to(ax3, UP, buff=0.12),
-                    label(r"Gibbs: \ $p_i \propto e^{-E_i/T}$ \ = \ softmax", font_size=20, color=GREY_A).next_to(ax3, DOWN, buff=0.12))
+                    label(r"Gibbs: \ $p_i \propto e^{-\beta E_i}$, \ $\beta = 1/T$ \\ inverse temperature is the multiplier",
+                          font_size=20, color=GREY_A).next_to(ax3, DOWN, buff=0.12))
         panels = VGroup(p1, p2, p3).arrange(RIGHT, buff=0.55, aligned_edge=DOWN).scale(1.25).move_to(UP * 0.3)
         if panels.width > 13.2:
             panels.scale_to_fit_width(13.2)
@@ -233,7 +234,8 @@ class MaxEnt(VoiceoverScene):
             "distribution with a given spread. <bookmark mark='b'/> Fix the average distance from zero instead, and "
             "you get Laplace's double exponential. <bookmark mark='c'/> Fix the average energy of a physical "
             "system, and you get Boltzmann and Gibbs's distribution, e to the minus energy over temperature, where "
-            "the temperature is the Lagrange multiplier. With scores in place of energies, that is the softmax at "
+            "inverse temperature is the Lagrange multiplier, with Boltzmann's constant set to one. With scores "
+            "in place of negative energies, that is the softmax at "
             "the end of every language model. <bookmark mark='d'/> All of them are one family, the exponential "
             "family, and in it the gradient of the log normalizer is the average. So fitting one by maximum "
             "likelihood just matches the data's averages."

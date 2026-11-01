@@ -28,10 +28,20 @@ import math
 
 import numpy as np
 
-from explainer.ai.cache import Cache
+from .cache_contract import SchemaCache
+from .contracts import (coin_sample_sizes, es_gradient, left_halfspace_reference,
+                        mixture_bin_density, rosen_smoothed_gradient)
+from explainer.cache_lock import cache_lock
 
-CACHE = Cache("ai5")
-load = CACHE.load
+CACHE = SchemaCache("ai5")
+
+
+def load(name):
+    return CACHE.load(name)
+
+
+def cache_current(name):
+    return CACHE.current(name)
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -92,7 +102,11 @@ NS = [0, 10, 100, 1000, 10000]
 
 def compute_bayes():
     c1 = ai1()
-    t = c1.text("passage27").replace(" ", "")  # letters only
+    passage = c1.DATA_DIR / "passage.txt"
+    with cache_lock(passage):
+        if not passage.is_file():
+            raise FileNotFoundError("Part5/bayes needs completed Part1/passage.txt; no implicit corpus preparation")
+        t = c1.to27(passage.read_text()).replace(" ", "")  # fresh observed bytes, letters only
     assert len(t) > 10000
     e_true = t.count("e") / len(t)
     ps = np.linspace(0, 1, 2001)
@@ -156,12 +170,14 @@ def compute_temperature():
 # ---------------------------------------------------------------------------
 def compute_markov():
     c1 = ai1()
-    if not c1.path("bigram").exists():
-        c1._save("bigram", c1.ITEMS["bigram"]())
-    P = np.asarray(c1.load("bigram")["cond"])  # rows: the letter now; columns: the next
-    if not c1.path("letters").exists():
-        c1._save("letters", c1.ITEMS["letters"]())
-    freq = np.asarray(c1.load("letters")["p"])
+    inputs = {}
+    for item in ("bigram", "letters"):
+        with cache_lock(c1.path(item)):
+            if not c1.path(item).is_file():
+                raise FileNotFoundError(f"Part5/markov needs completed Part1/{item}; no implicit computation")
+            inputs[item] = SchemaCache._read_payload(c1.path(item))  # fresh locked bytes, no memoized/implicit producer
+    P = np.asarray(inputs["bigram"]["cond"])  # rows: current letter; columns: next
+    freq = np.asarray(inputs["letters"]["p"])
     start = c1.ALPHA27.index("q")
     d = np.zeros(27)
     d[start] = 1.0
@@ -220,7 +236,9 @@ def compute_montecarlo():
     assert abs(is_est - true) / true < 0.05
     return dict(pts=pts[:1500], inside=inside[:1500], est=est, N=N, Ns=Ns, rms=np.array(rms), slope=slope,
                 true=true, n=n, plain_hits=plain_hits, plain_est=plain_hits / n, is_est=is_est, is_y=y[:400],
-                is_w=wts[:400])
+                is_w=wts[:400], is_w_full=wts, plain_z=z,
+                plain_plot_indices=np.unique(np.r_[np.arange(min(400, n)), np.flatnonzero(z > 4)]),
+                plot_scope="Ordinary first400 plus every actual rare hit; proposal first400; estimates use all10000")
 
 
 # ---------------------------------------------------------------------------
@@ -243,7 +261,8 @@ def compute_mcmc():
     left = float(np.mean(chain[1000:, 0] < 0))
     # the true share of the left bump: 0.7 / (0.7 + 0.7 * 0.5) = 2/3
     assert abs(left - 2 / 3) < 0.12, left
-    return dict(chain=chain, accept=acc / 6000, left=left, true_left=2 / 3)
+    return dict(chain=chain, accept=acc / 6000, left=left, true_left=2 / 3,
+                true_left_halfspace=left_halfspace_reference()["mass"])
 
 
 # ---------------------------------------------------------------------------
@@ -310,18 +329,23 @@ def compute_diffusion():
             k += 1
     fp, hist = np.array(fp), np.array(hist)
     # the grid solution matches the exact noised density at alpha = e^{-t}, and so do the particles
-    fp_err, hist_err = [], []
+    fp_err, hist_err, exact_hist = [], [], []
+    hist_edges = np.linspace(-4, 4, 81)
     for k, tt in enumerate(fp_ts):
         a = math.exp(-tt)
         mu, var_ = math.sqrt(a) * data_mu, a * data_s ** 2 + (1 - a)
         exact = (data_w[:, None] * np.exp(-0.5 * (xs[None] - mu[:, None]) ** 2 / var_[:, None])
                  / np.sqrt(2 * math.pi * var_[:, None])).sum(0)
         fp_err.append(float(np.abs(fp[k] - exact).max()))
-        hist_err.append(float(np.abs(hist[k] - exact[2::5][:80]).max()))
+        bins = mixture_bin_density(hist_edges, mu, var_, data_w)
+        exact_hist.append(bins)
+        hist_err.append(float(np.abs(hist[k] - bins).max()))
     assert max(fp_err) < 0.01 and max(hist_err) < 0.08, (fp_err, hist_err)
     return dict(theta=theta, sigma=sigma, dt=dt, ou_paths=paths[:, ::4], ou_t=np.arange(0, n + 1, 4) * dt, ts=ts, ou_mean=mean,
                 ou_var=var, xs=xs, alphas=alphas, dens=dens, scores=np.array(scores), fp_ts=fp_ts, fp=fp, fp_hist=hist,
-                fp_err=fp_err, hist_err=hist_err)
+                fp_err=fp_err, hist_err=hist_err, hist_edges=hist_edges,
+                exact_hist_density=np.array(exact_hist),
+                hist_metric_scope="Maximum histogram-to-exact bin-average density error; both conditioned on [-4,4]")
 
 
 # ---------------------------------------------------------------------------
@@ -537,9 +561,14 @@ def compute_mlebias():
 
 
 def _cauchy_mle(x):
-    """The maximum-likelihood location of each row of x (standard Cauchy samples).  The likelihood can have several
-    peaks, so local climbs start from every data point (small samples) or from a grid around the median (large ones,
-    where the peak is near the median), and the highest peak wins."""
+    """Best observed multistart likelihood fit, with explicit convergence scope.
+
+    This finite search cannot certify the global Cauchy likelihood maximum.
+    Observation/quantile starts also cover separated clusters outside median±3.
+    """
+    x = np.asarray(x, float)
+    if x.ndim != 2 or not x.shape[0] or not x.shape[1] or not np.isfinite(x).all():
+        raise ValueError("finite nonempty rows required")
     R, n = x.shape
     med = np.median(x, 1)
 
@@ -558,16 +587,15 @@ def _cauchy_mle(x):
         u = x - t[:, None]
         return (2 * u / (1 + u * u)).sum(1)
 
-    starts = [x[:, j] for j in range(n)] + [med] if n <= 20 else [med + o for o in np.linspace(-3, 3, 25)]
-    best, best_ll = None, None
+    starts = ([x[:, j] for j in range(n)] + [med] if n <= 64 else
+              [med + o for o in np.linspace(-3, 3, 25)] +
+              list(np.quantile(x, [.02, .1, .25, .75, .9, .98], axis=1)))
+    best, best_ll = med.copy(), ll(med)
     for s0 in starts:
         t = climb(s0.copy())
         v = ll(t)
-        if best is None:
-            best, best_ll = t, v
-        else:
-            better = v > best_ll
-            best, best_ll = np.where(better, t, best), np.where(better, v, best_ll)
+        better = v > best_ll
+        best, best_ll = np.where(better, t, best), np.where(better, v, best_ll)
     # polish: bisection on the score, which falls through zero at the peak
     lo, hi = best - 0.05, best + 0.05
     for _ in range(12):
@@ -575,14 +603,18 @@ def _cauchy_mle(x):
         if not bad.any():
             break
         lo, hi = np.where(bad, best - 2 * (best - lo), lo), np.where(bad, best + 2 * (hi - best), hi)
+    bracketed = (score(lo) >= 0) & (score(hi) <= 0)
     for _ in range(60):
         mid = (lo + hi) / 2
         pos = score(mid) > 0
         lo, hi = np.where(pos, mid, lo), np.where(pos, hi, mid)
-    best = (lo + hi) / 2
-    u = x - best[:, None]
-    assert np.abs((2 * u / (1 + u * u)).sum(1)).max() < 1e-6
-    return best, med
+    polished = (lo + hi) / 2
+    improve = bracketed & (ll(polished) >= best_ll)
+    best = np.where(improve, polished, best)
+    residuals = np.abs(score(best))
+    report = dict(n=n, R=R, starts=len(starts), stationary_count=int((residuals < 1e-6).sum()),
+                  tolerance=1e-6, max_score_residual=float(residuals.max()), global_optimum_certified=False)
+    return best, med, report
 
 
 def compute_fisher():
@@ -594,9 +626,11 @@ def compute_fisher():
     R = 4000
     mle_v, med_v, mean_iqr, mle_v_se = [], [], [], []
     hists = {}
+    fit_reports = []
     for n in ns:
         x = g.standard_cauchy(size=(R, n))
-        t, med = _cauchy_mle(x)
+        t, med, fit_report = _cauchy_mle(x)
+        fit_reports.append(fit_report)
         mle_v.append(float(n * t.var()))
         med_v.append(float(n * med.var()))
         mle_v_se.append(float(n * t.var() * math.sqrt(2 / (R - 1))))
@@ -609,10 +643,11 @@ def compute_fisher():
     s = 2 * x / (1 + x * x)
     score_mean, score_var = float(s.mean()), float(s.var())
     assert abs(score_var - 0.5) < 0.01 and abs(score_mean) < 0.01
-    assert abs(mle_v[-1] - 2) < 0.25 and abs(med_v[-1] - math.pi ** 2 / 4) < 0.3
     return dict(ns=ns, R=R, mle_nvar=np.array(mle_v), med_nvar=np.array(med_v), mle_nvar_se=np.array(mle_v_se),
                 mean_iqr=np.array(mean_iqr), score_mean=score_mean, score_var=score_var, cr=2.0,
-                med_limit=math.pi ** 2 / 4, **hists)
+                med_limit=math.pi ** 2 / 4, fit_reports=fit_reports, global_optimum_certified=False,
+                fit_scope="Best observed multistart likelihood candidate; stationarity checked separately; global optimum not certified",
+                variance_se_scope="Gaussian-reference approximation; not a distribution-free error bar", **hists)
 
 
 # ---------------------------------------------------------------------------
@@ -749,14 +784,14 @@ def compute_tails():
     e0, d0 = 0.05, 0.05
     need = dict(chebyshev=math.ceil(0.25 / (e0 ** 2 * d0)), hoeffding=math.ceil(math.log(1 / d0) / (2 * e0 ** 2)),
                 chernoff=math.ceil(math.log(1 / d0) / kl(0.5 + e0)))
-    m = 1
-    while binom.sf(math.ceil(m * (0.5 + e0) - 1e-9) - 1, m, 0.5) > d0 or binom.sf(
-            math.ceil((m + 1) * (0.5 + e0) - 1e-9) - 1, m + 1, 0.5) > d0:
-        m += 1
-    need["exact"] = m
+    sizes = coin_sample_sizes(e0, d0)
+    need["exact"] = sizes["minimum"]
+    need["exact_eventual"] = sizes["eventual"]
     j = int(np.argmin(np.abs(eps - 0.1)))
     return dict(n=n, eps=eps, exact=exact, sim=sim, markov=markov, cheb=cheb, chern=chern, hoeff=hoeff, need=need,
-                e0=e0, d0=d0, j10=j, hist=np.bincount(np.rint(sims * n).astype(int), minlength=n + 1))
+                e0=e0, d0=d0, j10=j, sample_size_scope=sizes["scope"],
+                exact_tail_by_n=sizes["probabilities"], certified_cutoff=sizes["certified_cutoff"],
+                hist=np.bincount(np.rint(sims * n).astype(int), minlength=n + 1))
 
 
 # ---------------------------------------------------------------------------
@@ -913,7 +948,7 @@ def compute_ess():
     theory = n / (s ** 2 / math.sqrt(2 * s ** 2 - 1)) ** np.array(dims, float)
     # the rare-event example of the Monte Carlo chapter: its weights' ESS
     mc = load("montecarlo")
-    w = np.asarray(mc["is_w"])
+    w = np.asarray(mc["is_w_full"])
     return dict(s=s, n=n, dims=dims, ess=ess, top=top, theory=theory, ess_rare=float(w.sum() ** 2 / (w ** 2).sum()),
                 n_rare=len(w))
 
@@ -946,7 +981,7 @@ def compute_scorefn():
     # start (2,000 draws of a population of 16), plain, with the population's mean as baseline, and mirrored
     sig, pop, lr, steps = 0.1, 16, 0.02, 1000
     th0 = np.array([-1.2, 1.4])
-    gtrue = np.array([-2 * (1 - th0[0]) - 20 * th0[0] * (th0[1] - th0[0] ** 2), 10 * (th0[1] - th0[0] ** 2)])
+    gtrue = rosen_smoothed_gradient(th0, sig)
     gerr = {}
     for kind in ("plain", "base", "mirror"):
         gg = rng(1973)  # Rechenberg, 1973
@@ -956,12 +991,12 @@ def compute_scorefn():
             if kind == "mirror":
                 e = np.concatenate([e[: pop // 2], -e[: pop // 2]])
             F = _rosen(th0 + sig * e)
-            if kind != "plain":
-                F = F - F.mean()
-            e_.append(float((((F[:, None] * e).mean(0) / sig - gtrue) ** 2).sum()))
+            estimate = es_gradient(F, e, sig, kind)
+            e_.append(float(((estimate - gtrue) ** 2).sum()))
         gerr[kind] = float(np.mean(e_))
     runs = {"plain": [], "base": []}
     finals = {"plain": [], "base": []}
+    evaluations, actual_steps = {"plain": [], "base": []}, {"plain": [], "base": []}
     for kind in ("plain", "base"):
         for seed in range(8):
             gg = rng(2017 + seed)  # Salimans et al., 2017
@@ -970,13 +1005,13 @@ def compute_scorefn():
             for _ in range(steps):
                 e = gg.normal(size=(pop, 2))
                 F = _rosen(th + sig * e)
-                if kind == "base":
-                    F = F - F.mean()
-                th = th - lr * (F[:, None] * e).mean(0) / sig
+                th = th - lr * es_gradient(F, e, sig, kind)
                 path.append(th.copy())
                 if not np.isfinite(th).all() or np.abs(th).max() > 10:  # diverged
                     break
             path = np.array(path)
+            actual_steps[kind].append(len(path) - 1)
+            evaluations[kind].append(pop * (len(path) - 1))
             finals[kind].append(float(_rosen(th)) if np.abs(th).max() <= 10 else float("inf"))
             runs[kind].append(np.pad(path, ((0, steps + 1 - len(path)), (0, 0)), mode="edge")[::5])
     fp, fb = np.array(finals["plain"]), np.array(finals["base"])
@@ -985,7 +1020,12 @@ def compute_scorefn():
                 gerr_base=gerr["base"], gerr_mirror=gerr["mirror"], gnorm2=float((gtrue ** 2).sum()),
                 paths_plain=np.clip(np.array(runs["plain"]), -10, 10), paths_base=np.clip(np.array(runs["base"]), -10, 10),
                 final_plain=np.where(np.isfinite(fp), fp, -1.0), final_base=np.where(np.isfinite(fb), fb, -1.0),
-                div_plain=int((~np.isfinite(fp)).sum()), div_base=int((~np.isfinite(fb)).sum()))
+                div_plain=int((~np.isfinite(fp)).sum()), div_base=int((~np.isfinite(fb)).sum()),
+                gradient_reference=gtrue, gradient_reference_scope="Gaussian-smoothed objective gradient",
+                baseline_scope="Unbiased iid leave-one-out-equivalent correction; antithetic baseline cancels",
+                evaluation_scope="Equal per-run caps; early-stopped runs evaluate fewer probes",
+                evaluations_plain=np.array(evaluations["plain"]), evaluations_base=np.array(evaluations["base"]),
+                actual_steps_plain=np.array(actual_steps["plain"]), actual_steps_base=np.array(actual_steps["base"]))
 
 
 # ---------------------------------------------------------------------------
@@ -1093,6 +1133,9 @@ def compute_langevin():
     res.update(frames=np.array(frames)[:, :600], grids=np.array(grids), grid_t=np.array(gt), grid_steps=grid_at,
                target=target, gx=gx, gy=gy, l1=np.array(l1), flow_h=h, flow_left=float((P[:, 0] < 0).mean()))
     res["configs"] = [f"{k}{h}" for k, h in configs]
+    ref = left_halfspace_reference()
+    res["true_left_halfspace"] = ref["mass"]
+    res["true_spread_left_halfspace"] = ref["variance"]
     return res
 
 
