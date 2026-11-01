@@ -1142,5 +1142,61 @@
   "final_selected_appearances": 14729,
   "final_automatically_decoded_frames": 101263,
   "final_individually_unviewed_frames": 86534,
-  "final_case_map": "ai3-final-source-case-map.json"
+  "final_case_map": "ai3-final-source-case-map.json",
+  "current_four_case_replacement_update": {
+    "observed_utc": "2026-11-01T01:16:40.639154+00:00",
+    "current_case_map": "ai3-current-source-case-map.json",
+    "current_case_map_sha256": "277324bba18dc1fecc5e1404034b9c4303515243f49678549e221dc48f7905a2",
+    "historical_case_map_retained": "ai3-final-source-case-map.json",
+    "historical_case_map_sha256": "7cca99a8ce8a27f460fdd85ad273ace41ac757f1cd99abbdd04e51ad190d59b6",
+    "replacement_cases": [
+      "en/Outro",
+      "en/SVD",
+      "zh/Outro",
+      "zh/SVD"
+    ],
+    "current_review_coverage": {
+      "historical_selected_times": 14729,
+      "historical_replaced_case_selected_times": {
+        "en/SVD": 227,
+        "en/Outro": 310,
+        "zh/SVD": 250,
+        "zh/Outro": 338
+      },
+      "replacement_current_cohort_times": {
+        "zh/SVD": 356,
+        "en/SVD": 338,
+        "zh/Outro": 372,
+        "en/Outro": 344
+      },
+      "current38case_review_cohort_times": 15014,
+      "current38case_automatically_decoded_frames": 101263,
+      "current38case_encoded_frames_not_individually_viewed": 86249,
+      "derivation": "14729 - (227+250+310+338) + (338+356+344+372) =15014. Replacement movie durations/framecounts unchanged by their exact receipts. Cohort counts include scoped dense repair windows, not one newly uniform sampling run.",
+      "four_replacement_direct_images": 264,
+      "four_replacement_exact_prior_image_inheritances": 1146,
+      "raw_warning_case_count": 5,
+      "raw_motion_status_counts": {
+        "needs-review": 5,
+        "passed": 33
+      }
+    },
+    "evidence": {
+      "SVD": {
+        "source_sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+        "commit": "7c47c11e3802390141c9551ac376ebe4ddf31e0e",
+        "receipt": "evidence/ai3-svd-reveal-motion-regression/report.json",
+        "receipt_sha256": "7610a69d2d905e61a5edff94d689b55ab9eaa0d901868a4a155ef009f6a2a6f8"
+      },
+      "Outro": {
+        "source_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+        "commit": "6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0",
+        "source_test_before_receipt": "evidence/ai3-outro-path-front-repair/source-freeze.json.gz",
+        "full_scoped_visual_receipt": "evidence/ai3-outro-trail-motion-regression/summary.json",
+        "receipt_sha256": "239d39848a5d24a610e28c817d9286c6326b6393beed430d790bcae8366c069c"
+      }
+    },
+    "scope": "Additive current selection only. All prior checklist runtime/source/history/selected totals remain original dated fields, not silently rewritten. No new fullproduction/continuous/listening/native1080motion or assembly approval.",
+    "integrated_source_test_receipt": "evidence/integrated-outro-gradient-20261101/receipt.json"
+  }
 }

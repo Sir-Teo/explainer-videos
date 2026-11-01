@@ -44,3 +44,10 @@ and continuous perceptual review remain in the [open queue](remaining-production
 The [machine-readable snapshot](ai3-chapter-checklist.json) retains initial runtime/source fields with separately
 timestamped final review status. The [final source/artifact map](ai3-final-source-case-map.json) preserves exact
 movie and result hashes. Neither upgrades historical render fingerprints or unobserved branches.
+
+
+## Additive current replacement receipt — 2026-11-01T01:16:40.639154+00:00
+
+The dated table and totals above remain the historical snapshot at commit 927fba66. Use the separate [current case map](ai3-current-source-case-map.md) for English/Chinese SVD (`7c47c11e`, source `291bba0e…`) and Outro (`6b86ee8b`, source `e874a8da…`) replacements. Their scoped source, tests, encoded-window, selected-cohort and endpoint evidence is linked there. All 34 other movie, module and raw result bytes match their original rows at this observation.
+
+The current 38-case cohort is 15,014 times: historical 14,729 minus four old cohorts totaling 1,125, plus reviewed replacement cohorts totaling 1,410. Automatic decoding covers 101,263 frames; 86,249 remain individually unseen. Raw statuses, warnings and fingerprints are retained. Broad source freshness and historical imports remain unclaimed. Historical native 1080p endpoint and assembly receipts stay historical. No new assembly, continuous playback, listening or production sign-off is added. The [historical case map](ai3-final-source-case-map.json) retains its exact bytes and original name.
