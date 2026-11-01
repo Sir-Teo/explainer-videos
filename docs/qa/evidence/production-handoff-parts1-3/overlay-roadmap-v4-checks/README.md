@@ -1,0 +1,13 @@
+# Part1 roadmap + reviewed Part3: strict v4 source gate
+
+The explicit `part1-roadmap-and-part3-v4` permits exactly original base927 plus Hook7230, SVD2c01 and Outroe874, with no optional repository additions. Original default/v1/v2 and immutable Part3-only v3 selections do not expand. Complete later branch/commit trees are not accepted.
+
+**Part1 is a controlled narrated-rerender candidate, not accepted repaired output.** Its source repair/evidence at03e3ab6 binds the actual original4K diagnostic and four measured15/30/60fps scheduling tests. Source, voice and scientific/data scope stays as specified in those receipts. Actual repaired4K bookmark/reveal timing/readability, playback/listening/sync remain pending. This package does not perform or approve that render.
+
+All **54 portable tests passed in2.007s**, including the45 previous cases. New cases verify exact three-file worktree/source-only commit, every replacement required, old selections rejecting Hook, manifest tampering/false output acceptance/wrongbase/path/schema rejection, no fourth source/evidence additions, unrelated HEAD/index/untracked producer rejection and retained cache/runtime/model/audio failures. Real manifest tests bind all three source hashes and every existing review receipt.
+
+A fresh independent cloud base927 worktree completed **16 expected checks**. Clean base and exact three-source worktree/commit passed **268 strict file checks**; default/v1/v2/v3 rejected the extra source, v3 still accepted the exact Part3 pair without Hook, and missingHook/unrelatedsource/untrackedproducer/HEAD/cachemissing/tampered/runtime-version fixtures rejected. All156 independently copied inputs (80,858,842bytes) and read-only references rehash exactly afterward. The runtime-version negative explicitly mocks metadata; successful checks use actual versions. No old fixture/ref was mutated.
+
+`raw/` contains gzip-exact commands, raw JSON/stderr/outcomes, before/after source bytes, complete input/check ledgers and receipt. `tests/` preserves the tested portable source. Summary/manifest bind the helper, overlay, historical pre-v4 bytes and immutable prior manifests. The strict external and optional-audio checking AST bodies match pre-v4 exactly.
+
+No scene/model/producer import or execution, numerical job, TTS, render, source/data/voice edit or upload ran as part of this metadata task. Existing private novels-base supplement is external and is not duplicated. The local task stays canceled; root owns cloud publication and the narrow narrated-rerender request. All remaining source/runtime/cache/producer/listening/production-output gates remain.

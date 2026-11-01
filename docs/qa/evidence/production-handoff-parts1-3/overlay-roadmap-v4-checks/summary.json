@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-01T05:30:17.776704+00:00",
+  "overlay_id": "part1-roadmap-and-part3-v4",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "helper_sha256": "83a63ffd2f7d528fdecbc4fc63ce9f6fcda06f0838750a866e17ab39c4c511ae",
+  "overlay_sha256": "f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3",
+  "part1_source_patch_commit": "03e3ab6eeeac77396e0ffff081f64af945f6c636",
+  "part1_after_sha256": "7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8",
+  "part1_repaired_output_acceptance": false,
+  "portable_tests": {
+    "passed": 54,
+    "elapsed_seconds": 2.007,
+    "previous45_retained": true
+  },
+  "actual_fixture": {
+    "expected_checks": 16,
+    "all_expected": true,
+    "strict_files_per_check": 268,
+    "copied_inputs": 156,
+    "copied_input_bytes": 80858842,
+    "copies_and_readonly_references_hash_exact_after_checks": true,
+    "source_only_fixture_commit": "7caa14d50f040758480b6c9d1119d2832a43f5ad"
+  },
+  "prior_manifests": [
+    {
+      "path": "overlays/svd-reveal-v1.json",
+      "sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8",
+      "unchanged": true
+    },
+    {
+      "path": "overlays/svd-production-polish-v2.json",
+      "sha256": "631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca",
+      "unchanged": true
+    },
+    {
+      "path": "overlays/part3-svd-outro-production-v3.json",
+      "sha256": "69a16ca2846362919dfd8e9a024120fb3cba19264a643ad70b994c65f427f178",
+      "unchanged": true
+    }
+  ],
+  "historical_pre_v4": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/historical/roadmap-v4-before/verify_handoff.py",
+      "bytes": 12664,
+      "sha256": "3f0c9b40d7653e085959a68e5f056cbd6afb1cb32be57709cc4238715ab4e36f",
+      "matches_c83_pre_v4": true
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/historical/roadmap-v4-before/README.md",
+      "bytes": 4296,
+      "sha256": "078c22ea72b1286afbc8bb3544fcb02557d79a0893ab1673869b1d453072f7fc",
+      "matches_c83_pre_v4": true
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/historical/roadmap-v4-before/production-handoff-parts1-3.md",
+      "bytes": 24625,
+      "sha256": "ee41fe79f2a8143a5275aa411823032d9f94ec03892d3102d82e665aff575091",
+      "matches_c83_pre_v4": true
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/historical/roadmap-v4-before/test_production_handoff_overlay.py",
+      "bytes": 25960,
+      "sha256": "6a3783714cb7bf36d7d26310cef25c762176c113b450431a2b5b71f09d51522a",
+      "matches_c83_pre_v4": true
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/historical/roadmap-v4-before/manifest-combined-part3-v3.json",
+      "bytes": 18445,
+      "sha256": "a65e2160422e294af5e5677dc2f1e4c6be862d308872da3d7bf18ba75570bcb1",
+      "matches_c83_pre_v4": true
+    }
+  ],
+  "external_and_optional_audio_AST_unchanged": true,
+  "limits": [
+    "Exact source/file/runtime gate only; no scene, producer or model imports/runs, TTS or render.",
+    "P1 source cleared only for controlled narrated rerender; repaired4K timing/readability/playback/listening/sync acceptance remains pending.",
+    "Version-negative is explicit metadata mock; successful strict checks use actual installed runtime metadata/public model file hashes.",
+    "No narration candidate/voice/audio edits or approval, currentness weakening, data changes or duplicate Library upload.",
+    "Local task remains canceled; root/production owner controls cloud rerender and remaining acceptance."
+  ]
+}
