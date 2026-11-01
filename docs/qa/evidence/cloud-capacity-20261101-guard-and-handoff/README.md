@@ -1,0 +1,9 @@
+# Capacity guard and bounded cloud handoff
+
+A fixed, owner-confirmed set of28 completed independent silent WAV snapshots was made sparse only over fully verified zero interiors. Actual allocation recovered:220,078,080bytes. Whole-file bytes, size, inode, device, mode, original mtime, headers and tails remained exact. Changes to ctime are recorded explicitly. Protected306 input signatures and1532 source identities matched before/after that operation. This does not retroactively bind later approved scene changes.
+
+The owned-process visibility check had an unrelated `/dev/mqueue` stat warning; its incompleteness is retained, without a claim of global process absence. No diagnostic retry or alternate `/proc` probe occurred. Root reviewed the limitation and released only the fixed byte-preserving operation against completed-witness/owner-inactivity proofs. No file was deleted or reencoded.
+
+A further196 old Part3–5 runtime roots contained no eligible WAV snapshots. The dependency audit found only551,759,872bytes exclusive to the inactive TTS environment:1,366,790,144bytes already share main-environment inodes. Package versions differ and exact wheel restoration inputs are unavailable; bundled dictionaries/models were preserved. Remaining unique compiledSVGs offer163,651,584bytes, with retainedTeX and five successful sample regenerations, not a full6403-file restoration test. No environment or additional SVG removal was attempted.
+
+Available space remains below the805,306,368-byte render/extraction guard and the separate1.2GiB native-start gate. Existing-image reviews continue. The parent authorized a disjoint cloud handoff; the saved12-case source/data/preview package is recorded in [handoff evidence](../ai6-disjoint-cloud-review-handoff/README.md). No guard was weakened and no unique evidence, source, numerical cache, speech or checkpoint was deleted.

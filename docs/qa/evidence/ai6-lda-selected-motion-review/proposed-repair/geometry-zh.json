@@ -1,0 +1,92 @@
+{
+  "before": {
+    "source_sha256": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
+    "labels": [
+      {
+        "index": 0,
+        "glyph_bounds": [
+          -0.3078875583333339,
+          0.16788755833333424,
+          -0.46095889791666667,
+          -0.29999999999999993
+        ],
+        "glyph_point_sha256": "e9b5508d734533efb84330ed2efcb84afd309fccc6a8f1f42a11ad45cb817508",
+        "glyph_point_count": 384
+      },
+      {
+        "index": 1,
+        "glyph_bounds": [
+          -3.8884592166666683,
+          -3.4,
+          2.9495205510416667,
+          3.110479448958333
+        ],
+        "glyph_point_sha256": "817260edb3ba61e2eace45ca64236ff95b793723d25fccf65c89ed82a6317222",
+        "glyph_point_count": 376
+      }
+    ],
+    "sweep_y_min": -3.6199681374018,
+    "sweep_y_max": 3.2199681374017994,
+    "frame_half_height": 4.0,
+    "color_only_Indicate_181angles_x61phases_max_point_drift": 8.881784197001252e-16
+  },
+  "candidate": {
+    "source_sha256": "040444a4b6a6136d4f698503d831bc8ca581fa98108f112505e14046b3a1e01f",
+    "labels": [
+      {
+        "index": 0,
+        "glyph_bounds": [
+          -0.3078875583333339,
+          0.16788755833333424,
+          -0.46095889791666667,
+          -0.29999999999999993
+        ],
+        "glyph_point_sha256": "e9b5508d734533efb84330ed2efcb84afd309fccc6a8f1f42a11ad45cb817508",
+        "glyph_point_count": 384,
+        "background": {
+          "bounds": [
+            -0.3478875583333339,
+            0.20788755833333422,
+            -0.5009588979166667,
+            -0.2599999999999999
+          ],
+          "opacity": 1.0,
+          "color": "#0E1117",
+          "z_index": 5,
+          "background_z_index": 5,
+          "glyph_min_z_index": 5
+        }
+      },
+      {
+        "index": 1,
+        "glyph_bounds": [
+          -3.8884592166666683,
+          -3.4,
+          2.9495205510416667,
+          3.110479448958333
+        ],
+        "glyph_point_sha256": "817260edb3ba61e2eace45ca64236ff95b793723d25fccf65c89ed82a6317222",
+        "glyph_point_count": 376,
+        "background": {
+          "bounds": [
+            -3.9284592166666683,
+            -3.36,
+            2.9095205510416666,
+            3.150479448958333
+          ],
+          "opacity": 1.0,
+          "color": "#0E1117",
+          "z_index": 5,
+          "background_z_index": 5,
+          "glyph_min_z_index": 5
+        }
+      }
+    ],
+    "sweep_y_min": -3.6199681374018,
+    "sweep_y_max": 3.2199681374017994,
+    "frame_half_height": 4.0,
+    "color_only_Indicate_181angles_x61phases_max_point_drift": 8.881784197001252e-16
+  },
+  "scope": "Actual Manim objects from exact source AST fragments; no scene imports/data/model/producers/renders.181directionangles\u00d761color-onlyanimationphases. Names glyph points/positions byteexact; onlyindividual opaque.04masks+z5 added.",
+  "language": "zh"
+}

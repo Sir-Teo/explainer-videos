@@ -1,0 +1,1296 @@
+{
+  "images": [
+    {
+      "file": "images/en/endpoints/000_00001.0s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/000_00001.0s.png",
+      "sha256": "81b2d4aa6e13e6254c78b1eead18b4d7d3ea16716ef6225d70b14ff02260e633",
+      "bytes": 28960,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "f3ddeebcf557adc1ed405f63af8aeedcb0cdcf7cab44c6f0f4c5aecbfced7cd5",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/001_00005.5s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/001_00005.5s.png",
+      "sha256": "bdd55db6a0d56d2928db299b1017d4f28f31abe2f619a26e81c194977156df9f",
+      "bytes": 51936,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "f91a650a01b35fcdb9efd033902623c0bd2bae3c459643647c8420a369ff76c4",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/002_00016.6s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/002_00016.6s.png",
+      "sha256": "eef3214656fc5616f786f8cedbcdf271a758884f6943a46be744e236c896b758",
+      "bytes": 61357,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "eb4099c0eef1290898ccebd30d1ffc5682ed28fb708410946ca162e615c7150c",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/003_00028.5s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/003_00028.5s.png",
+      "sha256": "9fb1f821f688e5651da263f73584b868384e1687fc5d2b42ee292726fa7f0fe2",
+      "bytes": 76850,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "b5c1c70e97754885abea28a872166e048dc448bc66bad745138a1ddaff719f3a",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/004_00036.1s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/004_00036.1s.png",
+      "sha256": "aae467fb14fa3c256025643e7db3f45c1f4bdbefa8aad0407e709339ded5c291",
+      "bytes": 72234,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "105b6247189b92fa39e191e2112a4919b5307b7079b2267742d302f1ee09e5ac",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/005_00045.5s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/005_00045.5s.png",
+      "sha256": "1037e364f539155ad220047ab6e3102172acebe42ad9c2f8776f4c3576b78f95",
+      "bytes": 86973,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "95e457681d86bf7179afa67a04e38a92ae764a9bbad662fbbf258f7a832fef30",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/006_00053.5s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/006_00053.5s.png",
+      "sha256": "fe4288fdf35a6f23686520d25a114874eecaf8ad668bd77e41d09f5cf946c8f7",
+      "bytes": 81891,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "63622aa2c1d99b9034952bf6d86c7bc54799eb4569fc421aae1c04446a2d8c35",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/007_00066.0s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/007_00066.0s.png",
+      "sha256": "aedf0dc2505a09efa01f6ca8b22dbd3947db4b69aa0282d108a8d7156ecfac60",
+      "bytes": 82606,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "e50d939cf8c47019607a88af827b6ed0d7bfd6d2b1d1d0924cd789794ad7b017",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/008_00089.4s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/008_00089.4s.png",
+      "sha256": "9859c24f3ed49897392bc02b3f55901606c9505af125f041263216a745a87727",
+      "bytes": 23149,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "49e7824e52af3d39dc8801f0188b3f36a9e14f58bbc6c6165675680fc5238be7",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/009_00100.7s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/009_00100.7s.png",
+      "sha256": "d79bc6127a1dd143b056d9e8b41d09b672555fcc5386944735d1241d23d45e26",
+      "bytes": 47285,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "c445bd4278a52c2e862ff8e58b9d462fecc5e86ac37ec72c84f0e43a74daf2ce",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/010_00112.0s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/010_00112.0s.png",
+      "sha256": "f01ca262b77c127fb37cf76b6451c3f0b075e790c52d65549d0f06352cd9c801",
+      "bytes": 67610,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "b2caefeac63edc03f99119cac8d059e4696f75b14501e4c0f1dbf1c9b9d5fea3",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/011_00129.3s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/011_00129.3s.png",
+      "sha256": "f2bb37ee1e999be824e4f7009ce1d80dccdf35cea4ed2440bb7363a3d6bd389d",
+      "bytes": 57304,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "290554354410bb22acfb3fabe01cc684a35cc653edaa32ac797a99c458bd02ee",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/012_00138.7s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/012_00138.7s.png",
+      "sha256": "36d650dfbd92635f1ca2a7dc66048a27270460d80a082ec46810bf2899088d68",
+      "bytes": 68876,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "d512ddabc00ede8846c5dff5eff84f9f589028910b530b6e26aa7f8e021dc94a",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/013_00152.4s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/013_00152.4s.png",
+      "sha256": "c8db28d15036ff10031078f3b49e7e23525c659ccd57e6abcd4f92ab8f56aac7",
+      "bytes": 86390,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "62a0464f79eaec880ded95f79fcb2ccb58e3132bcc9c55ab7b553673a1778f64",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/014_00161.4s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/014_00161.4s.png",
+      "sha256": "dba0c0fdef470cec9efedef1ccfac05882c4e30d3da53ba77364c0525fe9247f",
+      "bytes": 106431,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "ce233840024f2e60ed801c616ef37641f746f0d3ae173397b2514bde43d0d11a",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/endpoints/015_00177.7s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/015_00177.7s.png",
+      "sha256": "1bf502aee4e184042a6c905749904370b970184c49148da8a65dc12f4099e042",
+      "bytes": 77051,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "b2745e0751648321c676ed3de8b0b39c13e556f9353cf49a75c5ccb6a8786eb8",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/en/pages/sheet-009.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/unique/sheet-009.png",
+      "sha256": "9cb9e47f4ede0ed35890623a789cc365effb4b6890351e853e31afe3f451caba",
+      "bytes": 491761,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "a3aa5ab8aac4aff58ee988f09e5855389a28e06b5ce0be13198473b0f64ae040",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/en/pages/sheet-019.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/unique/sheet-019.png",
+      "sha256": "3b34da8c96f99184fc7b9c36e8d0a0b34ba8bdd1ccd7345aa51d649b5d82fec3",
+      "bytes": 426527,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "e815b0c4647f3d777776204ddf7f45a77bff7c20724fb53197a4952ab1e6f47a",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/en/pages/sheet-026.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/unique/sheet-026.png",
+      "sha256": "db44a944ecde6b848ff21b8f25286227141429465db442dd5323b3fecc3360f3",
+      "bytes": 186271,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "9ccb2e6c4ad72fd0036892d4c9f939a31a01d7e5350fa5ef5790ca6a253a7cff",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/en/pages/sheet-028.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/unique/sheet-028.png",
+      "sha256": "9f3376d660fe27475d3acf2ecf438328454d78727fe34d252fa4ea3b15a0b5a8",
+      "bytes": 272207,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "d167211f8945106b51f71975e9536072cc029f541768ea80a8e2753240e53dfd",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/en/pages/sheet-038.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/unique/sheet-038.png",
+      "sha256": "08f1e1402cbf7e238b4ec6a9456da6701cfef0ab2c44e4f07268f504036d8069",
+      "bytes": 355463,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "66cd92503385a19df747beb8869add5a2214af897bac3b091a545c91cd2ff75a",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/en/pages/sheet-043.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/unique/sheet-043.png",
+      "sha256": "b7fdf0ff381806918dd941676e36e32623fa933753eec03e6068ece0522decd6",
+      "bytes": 406371,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "ecd51c658d634c9621202f8f8f64732b20387037f0331e3f1f6b2f632b30a2a0",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/en/critical/0000389_000025.933s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/audit/frames/0000389_000025.933s.png",
+      "sha256": "ab5d73b662c60dc3b22c052ef93b23287954af9eb4752e08fadc82aabd2e6eb7",
+      "bytes": 122215,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "dd4e1f6080aab06adb59f7156db2eae89f51b90f5cf3bacc0782ab2d0b7c7105",
+      "scope": "Original854x480 confirmation:65 rotating direction crosses not-label ink;150 emphasized direction crossescitation and clippedbottom;205 Gaussian assumption duplicated while retained original remains. Rootnotified, no edits."
+    },
+    {
+      "file": "images/en/critical/0000943_000062.867s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/audit/frames/0000943_000062.867s.png",
+      "sha256": "1b889717d2f8b1257be96c4152c06199e070a2caa06e21df792644891cdf327b",
+      "bytes": 129973,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "d8b208efbec64df1fadb7aba182cbc2c52d8757f535e1a3a8faa9edc19aadc95",
+      "scope": "Original854x480 confirmation:65 rotating direction crosses not-label ink;150 emphasized direction crossescitation and clippedbottom;205 Gaussian assumption duplicated while retained original remains. Rootnotified, no edits."
+    },
+    {
+      "file": "images/en/critical/0001440_000096.000s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/audit/frames/0001440_000096.000s.png",
+      "sha256": "a4156daa1e18bbe7b066aa8c67163a8e14e6c179f777ed34b1a003a40f15f877",
+      "bytes": 37063,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "c6cba0370bbd23b504eb113dfbb35a67d68fb9125cde069b828ba6235c0a701c",
+      "scope": "Original854x480 confirmation:65 rotating direction crosses not-label ink;150 emphasized direction crossescitation and clippedbottom;205 Gaussian assumption duplicated while retained original remains. Rootnotified, no edits."
+    },
+    {
+      "file": "images/en/critical/0001483_000098.866s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/audit/frames/0001483_000098.866s.png",
+      "sha256": "22b7db443bf474b6d5bc44ca2da0329eb1160751b889b3a22a18c8f42f881215",
+      "bytes": 53197,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "4ac95eb71182f4b34f243aec175b58a6b127b30807195deded76498c597bf71d",
+      "scope": "Original854x480 actualconfirmation ofbellsappend2/3 andeigenappend1/2/3 duplicatepredecessor glyphs; all6appendcallsnowindividuallynativeconfirmedEN includingearlier205."
+    },
+    {
+      "file": "images/en/critical/0001637_000109.133s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/audit/frames/0001637_000109.133s.png",
+      "sha256": "7896eced1453389bc6b927c04554b8aff3e8a2212d9fe4bb9e2e8052fc1539a0",
+      "bytes": 64819,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "0e66820201abcaeb5ff00963d155aac9abaab9c4823e58672ebba331f7a26685",
+      "scope": "Original854x480 actualconfirmation ofbellsappend2/3 andeigenappend1/2/3 duplicatepredecessor glyphs; all6appendcallsnowindividuallynativeconfirmedEN includingearlier205."
+    },
+    {
+      "file": "images/en/critical/0002052_000136.799s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/audit/frames/0002052_000136.799s.png",
+      "sha256": "a7ac77c0a58f1f73ccf8a07df8321f554b1da86a24d452b9d155788cc02e4557",
+      "bytes": 115089,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "c9cbe30bbafe28c4a548e4f35bec19e35045b2911ddfaedfe6e491b211e4219f",
+      "scope": "Original854x480 actualconfirmation ofbellsappend2/3 andeigenappend1/2/3 duplicatepredecessor glyphs; all6appendcallsnowindividuallynativeconfirmedEN includingearlier205."
+    },
+    {
+      "file": "images/en/critical/0002242_000149.466s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/audit/frames/0002242_000149.466s.png",
+      "sha256": "41536ae9535ac5eda4af6e94dbc245e2a46dd1817294428fb83917b4715403f1",
+      "bytes": 119474,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "e30142b6112771c65a30aeb9326d051566e359a3fcca2dab1454217f1253e906",
+      "scope": "Original854x480 actualconfirmation ofbellsappend2/3 andeigenappend1/2/3 duplicatepredecessor glyphs; all6appendcallsnowindividuallynativeconfirmedEN includingearlier205."
+    },
+    {
+      "file": "images/en/critical/0002340_000155.999s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/audit/frames/0002340_000155.999s.png",
+      "sha256": "7a7b985d0201d3a1c8af12b05d60d4d5b61695ca66269165f0830943219ce902",
+      "bytes": 133533,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "fc8a89b8f90d9b3b714cd9e64482b62231d43c95d0d0134a962c2bfd174d3d69",
+      "scope": "Original854x480 actualconfirmation ofbellsappend2/3 andeigenappend1/2/3 duplicatepredecessor glyphs; all6appendcallsnowindividuallynativeconfirmedEN includingearlier205."
+    },
+    {
+      "file": "images/zh/endpoints/000_00001.0s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/000_00001.0s.png",
+      "sha256": "ce719e57abf481ddb196641540a06419e738ac0b6577a6e8ac7d628031fb7ad1",
+      "bytes": 30205,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "6bac44ddef28228d1660039d736129005b4b5487b5e61f4a925d3e34ae98a305",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/001_00005.9s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/001_00005.9s.png",
+      "sha256": "a0e522cb65f774c4afca3dd8b1971f28a3f8ddb3914fee208b2d00651dfd9d92",
+      "bytes": 53444,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "58dea074479b761fe9b6131886ec956a3d6f1509923658a92e5a3716fb8b3e3c",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/002_00017.5s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/002_00017.5s.png",
+      "sha256": "a5df2772801717c006528869b5708bd36f8404288122a514275c577722623663",
+      "bytes": 61909,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "0400b2648e28a531014f1984c7a332e219beb562fddd3f7b625bb3adef7f26c7",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/003_00030.1s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/003_00030.1s.png",
+      "sha256": "b68280b0689d3ef7fe54be705904ebea3eac0db74ac4b123cda3a69e936ee89b",
+      "bytes": 76425,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "9a62b5210db2beba7f5442f53421fc2049bd6a840a30c0a92803c67fcda5eab7",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/004_00038.4s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/004_00038.4s.png",
+      "sha256": "5fc2165130b5d340cc275b91a3d6fda2ae83632b41209d180ca8ec9fbc066341",
+      "bytes": 72913,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "5732e8ae24980ea62c7028a0dee32aa012238425c8264d90ab089d0a54d9eb8f",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/005_00046.8s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/005_00046.8s.png",
+      "sha256": "25129811913f3ba0ffdbc59b3cf857dd2a7e1b6d018028a8793c7f83cb0ab441",
+      "bytes": 87012,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "4038dc6dc79baea5f7ce3ae6f60e48140c1422ec63bdcec8c0a85e1310f7ed64",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/006_00056.5s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/006_00056.5s.png",
+      "sha256": "108697bd914abb1806289c43f8729423f99ccc01800a0de66167f249dd6227da",
+      "bytes": 82006,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "3f77e2a9bd955e801d9f7dc0806a9f7fa17d8c87767c3b71bd3afc6e9e4bcf7e",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/007_00072.1s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/007_00072.1s.png",
+      "sha256": "b09979f15e1da6cf7ee08d2c2554888f59306f91a9a0a8dfb43182cecb03fad9",
+      "bytes": 83723,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "eae148dc23af1006780e992027db36ce6aabdff2261bc95da2ade4a39562bfb2",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/008_00095.7s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/008_00095.7s.png",
+      "sha256": "e84e4823cd5f7b46d947f06661336d5cf7b87231fe3caf16a06690ed296e2962",
+      "bytes": 24372,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "91b2f112b81b405975daaea8793775308cd978ee6bc7a2c3ecd88a287d699251",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/009_00106.2s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/009_00106.2s.png",
+      "sha256": "855adb47e5b5d6cb3f564b46882500891e199464b66c110c0d63dd4f56c05675",
+      "bytes": 37000,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "f31b3bac0052406f399b08c9e698a3c6d9882921713551d93eceafde867f40a4",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/010_00110.3s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/010_00110.3s.png",
+      "sha256": "a28d2c881b9b42d45753296033a56b8ad8e7c2dc2025a57d6ebdc47945c320fd",
+      "bytes": 49144,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "e87da07d31dcac17cf8360f3facfc77792406ff497a91b5478c9fb752f46d120",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/011_00120.3s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/011_00120.3s.png",
+      "sha256": "d310639fc5e3d7e01863a00949c78c446be3754c552515414a6705582c6ab00c",
+      "bytes": 69114,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "65a9bfad41da7da6554e1c08cd8d756fc5d8d9888eb2d3a626fe6e240fcbe147",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/012_00140.6s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/012_00140.6s.png",
+      "sha256": "73f32f0a7e6666575a3bdfac9ca1b792afab019463014c4bc352ab2384a0fbb0",
+      "bytes": 56823,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "e4b0fab0a7688d3b0a63a99e437d62716dbf219e20382c5dda42552d927034a3",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/013_00150.0s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/013_00150.0s.png",
+      "sha256": "cb19b0416ef3d6425cc71e322ed7ec4b4f877778a9b46dc64d9fb34c650a8704",
+      "bytes": 68975,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "1235b4fe09c5c4905e8cc53e2910d6b4867931066d72dab449a12a6fe1fc2832",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/014_00166.0s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/014_00166.0s.png",
+      "sha256": "29c7e3e7e03603b5449a9cce91b3d02ef884869e12e12e5014e7f5766649dbee",
+      "bytes": 86296,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "8785848ae6eb4246ef8694c6d90c9f9937fe23a024496648eb683463fac40097",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/015_00173.7s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/015_00173.7s.png",
+      "sha256": "472ed3ffbc4900c33bcd59c99c0506b25fb44e92d08403b8dcfe9dcc3c54ea03",
+      "bytes": 106975,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "aa80a019b825ae82afb7642f586b9ae1f4e1e145b2a6a17a192b32a8eebd2c69",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/endpoints/016_00193.7s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/016_00193.7s.png",
+      "sha256": "14428518f9b2426f1f38499402d92a44efee6528f6f046a5de3a29c6b0108b82",
+      "bytes": 78221,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGBA",
+      "decoded_RGB_sha256": "f24e842d50d20bd2132e2dee3c7520bf549f5509bbdde4825fd3a38d13357d9a",
+      "scope": "Actually viewed endpoint on854×480tile; all endpoint originals bundled byteexact."
+    },
+    {
+      "file": "images/zh/pages/sheet-008.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/unique/sheet-008.png",
+      "sha256": "b3aec37013af398626680c2fec539cf41b856b6a05c0870c44ba6c980405e787",
+      "bytes": 465313,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "3052cd13cb165f2cbdef59d32ecf7d70f88ef5645f8c36a5de66131f0d09d3df",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/zh/pages/sheet-019.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/unique/sheet-019.png",
+      "sha256": "d6ad276221727edb67ddb03209ff0a418b4663dcb49272973e4a37c819b9cc35",
+      "bytes": 418654,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "86390583373f7adae7cefb86b606147c36d0c8ea84d2af1d39a79ae0f158cf43",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/zh/pages/sheet-026.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/unique/sheet-026.png",
+      "sha256": "d003144afc48b822383817a540c5b985d9264a4fd706026c3c2b4b7e72ec5dd9",
+      "bytes": 200194,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "0d06da9190738183c8f1450da9470f5d35deca849dd733e771d3c603540139d1",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/zh/pages/sheet-028.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/unique/sheet-028.png",
+      "sha256": "39df3beadbf3f3d1168c6687b9bcbeba1bbbb4e91d70e25e186fe21e5fb443b8",
+      "bytes": 264605,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "6e9a7099d0a02c1b6bb577e61768b11c00cb79e3141572d601171ed20acbb1a1",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/zh/pages/sheet-037.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/unique/sheet-037.png",
+      "sha256": "0e2f51aa24f9db94e49cec762a8826a29f891736211371d033a1ac066d9e53c0",
+      "bytes": 408642,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "f422dc834b094e08e453d79fb5683e37d7ed2de6f03852bdae1e3ac530ea88e6",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/zh/pages/sheet-043.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/unique/sheet-043.png",
+      "sha256": "f2a88a0999823df1cbcf0d134db1fda06c7b176986add1eb90f79743e3add943",
+      "bytes": 405889,
+      "dimensions": [
+        1280,
+        1576
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "2ddc21ff4bd136d9d40961da6ce5ac17fad1d991cd9f64de74c66b75ad9e46b1",
+      "scope": "Actually viewed640px-wide tiles; representative page, not all51pages bundled."
+    },
+    {
+      "file": "images/zh/critical/0000412_000027.467s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/audit/frames/0000412_000027.467s.png",
+      "sha256": "4d0f295cdefac628e022b6890f361f857036d97ffc56147e17f78e9defcef65b",
+      "bytes": 122383,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "8f525f2e5419817ef308d6a381c946bc9d0edb179cfeea9e5daf7015cb103d88",
+      "scope": "Original854x480 followups:63/64 are bracketingclearcontrols, NOTactualaxisglyphstrike;145emphasislinecrossescitation+bottom;202/215/233bellsappend1–3 and295/318/342eigenappend1–3duplicatepredecessor. Exactunselectedcrossingframependingguard; ENaxisstrikeconfirmed separately."
+    },
+    {
+      "file": "images/zh/critical/0000416_000027.733s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/audit/frames/0000416_000027.733s.png",
+      "sha256": "c92f5cd1b531cb9ef6fe7c51bc85844911871d28cd28dc269d1345ce4259c00d",
+      "bytes": 123755,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "e4f0862a9581962b6d47960157d7b2bed6e98fce0788c2c0eed253086a37abc5",
+      "scope": "Original854x480 followups:63/64 are bracketingclearcontrols, NOTactualaxisglyphstrike;145emphasislinecrossescitation+bottom;202/215/233bellsappend1–3 and295/318/342eigenappend1–3duplicatepredecessor. Exactunselectedcrossingframependingguard; ENaxisstrikeconfirmed separately."
+    },
+    {
+      "file": "images/zh/critical/0001036_000069.067s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/audit/frames/0001036_000069.067s.png",
+      "sha256": "bc8c90968277237ec20b684589f1365adb1e44556d3c7ea08fecef3057c93231",
+      "bytes": 129229,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "a6cee08e9d11139fc751295440b67f003ddfccecc6d07bf98635a0164b8a22c7",
+      "scope": "Original854x480 followups:63/64 are bracketingclearcontrols, NOTactualaxisglyphstrike;145emphasislinecrossescitation+bottom;202/215/233bellsappend1–3 and295/318/342eigenappend1–3duplicatepredecessor. Exactunselectedcrossingframependingguard; ENaxisstrikeconfirmed separately."
+    },
+    {
+      "file": "images/zh/critical/0001566_000104.400s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/audit/frames/0001566_000104.400s.png",
+      "sha256": "274235f5a9c25d6dc06ad07b81720c073c33981b2323e36071450a7b0d686526",
+      "bytes": 38950,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "08b036fb914ec03a5eb6beba403cacd164faabed365334d7707d8054e02e4fd5",
+      "scope": "Original854x480 followups:63/64 are bracketingclearcontrols, NOTactualaxisglyphstrike;145emphasislinecrossescitation+bottom;202/215/233bellsappend1–3 and295/318/342eigenappend1–3duplicatepredecessor. Exactunselectedcrossingframependingguard; ENaxisstrikeconfirmed separately."
+    },
+    {
+      "file": "images/zh/critical/0001628_000108.533s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/audit/frames/0001628_000108.533s.png",
+      "sha256": "340c028196c3948976422fc049157c7f7b359a70958a200cb9e6878596eb6f02",
+      "bytes": 54152,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "c4f5bed0432d210365cffadc8404d025297f44e343e000bd5667a074b23a7d0a",
+      "scope": "Original854x480 followups:63/64 are bracketingclearcontrols, NOTactualaxisglyphstrike;145emphasislinecrossescitation+bottom;202/215/233bellsappend1–3 and295/318/342eigenappend1–3duplicatepredecessor. Exactunselectedcrossingframependingguard; ENaxisstrikeconfirmed separately."
+    },
+    {
+      "file": "images/zh/critical/0001763_000117.533s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/audit/frames/0001763_000117.533s.png",
+      "sha256": "f5ff5bce4c0ae29f30db5046eae48fb9ae5c40e84761b7b7abd203bd5e2bc5cf",
+      "bytes": 66990,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "f59574731e5b533ae8926a7fdcf363953f170d14cc3116b703ec37425e48e839",
+      "scope": "Original854x480 followups:63/64 are bracketingclearcontrols, NOTactualaxisglyphstrike;145emphasislinecrossescitation+bottom;202/215/233bellsappend1–3 and295/318/342eigenappend1–3duplicatepredecessor. Exactunselectedcrossingframependingguard; ENaxisstrikeconfirmed separately."
+    },
+    {
+      "file": "images/zh/critical/0002222_000148.133s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/audit/frames/0002222_000148.133s.png",
+      "sha256": "a3c668647b79b0dc1efdebb30124553371e49523afeaa7a92e5156663dc493ec",
+      "bytes": 113827,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "591ce84b61e89c898aec5eec8aae4d57583f1237fa786ecf8c2d45636db41334",
+      "scope": "Original854x480 followups:63/64 are bracketingclearcontrols, NOTactualaxisglyphstrike;145emphasislinecrossescitation+bottom;202/215/233bellsappend1–3 and295/318/342eigenappend1–3duplicatepredecessor. Exactunselectedcrossingframependingguard; ENaxisstrikeconfirmed separately."
+    },
+    {
+      "file": "images/zh/critical/0002447_000163.133s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/audit/frames/0002447_000163.133s.png",
+      "sha256": "459dd348b766810413c326a4e3fd6687b54c3933da22a969e5902694b0a576c9",
+      "bytes": 118806,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "9bb332a5d080487f45453fa4f77f8d0a046746eec6a4621502b17409504effc1",
+      "scope": "Original854x480 followups:63/64 are bracketingclearcontrols, NOTactualaxisglyphstrike;145emphasislinecrossescitation+bottom;202/215/233bellsappend1–3 and295/318/342eigenappend1–3duplicatepredecessor. Exactunselectedcrossingframependingguard; ENaxisstrikeconfirmed separately."
+    },
+    {
+      "file": "images/zh/critical/0002533_000168.866s.png",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/audit/frames/0002533_000168.866s.png",
+      "sha256": "421377f50afc16986f31771973c401c60e77913becbb0044967d4465b8e61b45",
+      "bytes": 134073,
+      "dimensions": [
+        854,
+        480
+      ],
+      "original_mode": "RGB",
+      "decoded_RGB_sha256": "409295fa3018170477dd6bc16396e304e1d8bfb491ee826a9878b9c0baf43ea2",
+      "scope": "Original854x480 followups:63/64 are bracketingclearcontrols, NOTactualaxisglyphstrike;145emphasislinecrossescitation+bottom;202/215/233bellsappend1–3 and295/318/342eigenappend1–3duplicatepredecessor. Exactunselectedcrossingframependingguard; ENaxisstrikeconfirmed separately."
+    }
+  ],
+  "lossless_compressed_originals": [
+    {
+      "file": "ledgers/en/plan.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/plan.json",
+      "original_sha256": "d67b7e575ece4b1ed2ebe8bdbfbfafb51fcc6585203414567cfd4274b9ff339a",
+      "gzip_sha256": "73a3d613713bec1563fc67fb98a97498c7bfab6a797566db59e7b29a9eded585",
+      "bytes": 270865
+    },
+    {
+      "file": "ledgers/en/views.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/views.json",
+      "original_sha256": "758a76c14f7bb5b35ecc6146b377d598a9a38e5f6c67e8771886d9b6856bce0f",
+      "gzip_sha256": "79143e934460e5e39ac76f3a0956e9374d9867f9cb9dff76b727ae4ee5cf275d",
+      "bytes": 45169
+    },
+    {
+      "file": "ledgers/en/freeze.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/freeze.json",
+      "original_sha256": "7f414ba94b4851b73cccef37c2d2c6098fcfc7ce26bcf8742cb548f184366c80",
+      "gzip_sha256": "a52385db4f1147a638f2f3ff4bec7a9a56267b8bcd61b4150c878ca2617abbd9",
+      "bytes": 2711
+    },
+    {
+      "file": "ledgers/en/source-before.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/source-before.json",
+      "original_sha256": "841007accc4dc7f8efc0f936dcd39a4f05ff88cbe9c45959d5d126a1016e9bc8",
+      "gzip_sha256": "edb8102a6c0543175a3cc5c991cbbbb2527d35826f55236433fed55b7c587d8b",
+      "bytes": 24727
+    },
+    {
+      "file": "ledgers/en/source-after.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/source-after.json",
+      "original_sha256": "9cd7c8696a4b27e836114976fcf44d409d81f021cb1811f24c6dc7584b70a6ec",
+      "gzip_sha256": "8d73f6438828f04a48c017d660f96c225d12b59789f184688f8c1b4efba83265",
+      "bytes": 24727
+    },
+    {
+      "file": "ledgers/en/data-before.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/data-before.json",
+      "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "gzip_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "bytes": 13968
+    },
+    {
+      "file": "ledgers/en/data-after.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/data-after.json",
+      "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "gzip_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "bytes": 13968
+    },
+    {
+      "file": "ledgers/en/command.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/command.json",
+      "original_sha256": "acf55e8d3730238f738fecb3b4c9511a57886b81d2bc573ca870ebf6e0037823",
+      "gzip_sha256": "46e03c20de3f727db97ad0614c39cd7ffdef5a2d1d1326c3750e93b88736ef32",
+      "bytes": 746
+    },
+    {
+      "file": "ledgers/en/receipt.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/receipt.json",
+      "original_sha256": "9259bd47e4b153aac1077c8e52c4038208248142be9a8bcd608264ac6c37f593",
+      "gzip_sha256": "fae88a82e91626cf48705f9ebbda80bc1b54e1c9b974f142ed71daeabde2688c",
+      "bytes": 9318
+    },
+    {
+      "file": "ledgers/en/scoped-current-equivalence.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/scoped-current-equivalence.json",
+      "original_sha256": "61cf19ded9d810a6a9b40c3e788c50448d65f2c1ea21aa43687f24e4553b2b75",
+      "gzip_sha256": "4cbf927eb32895b0a88f0443dde462b6ca4a093a1c7c2bb343379b7355fc8b8f",
+      "bytes": 22973
+    },
+    {
+      "file": "ledgers/en/audit--result.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/audit/result.json",
+      "original_sha256": "86f33fe55f9fb00f8064d16b902b5f0b60527c7c6b303d9fe72b56d48e6785fe",
+      "gzip_sha256": "b8e7702c9a4c88e0e921fb510123ef3c0e1d1e9a429c66ee3e272198665bad65",
+      "bytes": 195829
+    },
+    {
+      "file": "ledgers/en/frozen--result.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/frozen/result.json",
+      "original_sha256": "6f4eebea939a0bd0dbfb3da94925ce3eae64cf6fcff589eec6829540f1af62d4",
+      "gzip_sha256": "4291ef3501a62967e5820099801f0e0835ccbbe4f789dd549c8234c6b69ce3eb",
+      "bytes": 72787
+    },
+    {
+      "file": "ledgers/en/endpoints--result.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/result.json",
+      "original_sha256": "466b5e02f382644f13aa1eda004ed19e83331b6352264e0d06d6232901a82f7f",
+      "gzip_sha256": "bddbc9b4ee4c43a232acb797d55e8674ecd6eb38a59682a2a0f00fb940a403df",
+      "bytes": 69438
+    },
+    {
+      "file": "ledgers/en/endpoints--plan.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/plan.json",
+      "original_sha256": "1161eacf9f296dbd499929907dc74f4f8102e79698b78f65f650bdf1a2611cd7",
+      "gzip_sha256": "cede0cc3b38825c3438b92c6697762f7d3594953d64d31112f6c29302823f004",
+      "bytes": 4471
+    },
+    {
+      "file": "ledgers/en/endpoints--views.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/views.json",
+      "original_sha256": "c8b85c1c383cf1f54b66492c4a4ea57e95e684d382fbaf5cd82259ba8feb8883",
+      "gzip_sha256": "63e1649c694630985d2cd1f56ade519e755121410c0a2a0420bf88591b33045e",
+      "bytes": 2071
+    },
+    {
+      "file": "ledgers/en/endpoints--capture-receipt.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/capture-receipt.json",
+      "original_sha256": "fda40901002f6df6e7a74e116e16a6c5ad2f8a9282a05f160dc9ba336a3aed5b",
+      "gzip_sha256": "7a6eb4f501de6a3fc6bf3a425e8b973b0f80726c2b1e7a6f0317b382cab94202",
+      "bytes": 6861
+    },
+    {
+      "file": "ledgers/en/endpoints--capture-source-before.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/capture-source-before.json",
+      "original_sha256": "d8d3caa1d76b419b36a6ebd3ab2b95d84f1b98948f1b7255a3c106d4af93eee9",
+      "gzip_sha256": "08b7e18bc7d8f03bc6fae8cfaca0f083882835ae622a1db01a70aa2b12e2f5de",
+      "bytes": 24727
+    },
+    {
+      "file": "ledgers/en/endpoints--capture-source-after.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/capture-source-after.json",
+      "original_sha256": "dfbe78f94e4727e00279247c5857774e4207443f8848cd1abd66618d2762bd1b",
+      "gzip_sha256": "28ce3ab779dbfa6834c6f0e0323ea2e4c3ad8dd13e0adf6bd492205ec15d7da4",
+      "bytes": 24727
+    },
+    {
+      "file": "ledgers/en/endpoints--capture-data-before.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/capture-data-before.json",
+      "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "gzip_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "bytes": 13968
+    },
+    {
+      "file": "ledgers/en/endpoints--capture-data-after.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/endpoints/capture-data-after.json",
+      "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "gzip_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "bytes": 13968
+    },
+    {
+      "file": "ledgers/en/LDA.narration.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/frozen/media/videos/480p15/LDA.narration.json",
+      "original_sha256": "532d344a31768264f06000fd2c6794b320f6c2251a190118dd47ac23291b22d1",
+      "gzip_sha256": "4d9c9eb9a8ec9d40ea13f9b98e1224ff29069f9fd545667c4f6975d5ef39e148",
+      "bytes": 38090
+    },
+    {
+      "file": "ledgers/en/LDA.srt.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/frozen/media/videos/480p15/LDA.srt",
+      "original_sha256": "4c96ad1272a1ce12ae06fea1199b349331eb0daa728d448eea145e344f398221",
+      "gzip_sha256": "f8e0f7f31779fc71b39c9e265615886530ed7338f2ad393c2c99271af973705e",
+      "bytes": 4430
+    },
+    {
+      "file": "sources/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b-lang.py.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/historical-source/explainer/lang.py",
+      "original_sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+      "gzip_sha256": "88dc26733378196fd4350d20873b9966a89f2c78b8eb191d74e1f391f3a4a503",
+      "bytes": 6956
+    },
+    {
+      "file": "sources/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf-zh_text.py.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/historical-source/explainer/zh_text.py",
+      "original_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+      "gzip_sha256": "a0bd959eba1ae04d088aef631e8edbd075392f0b2705162f323a6785a4d135d2",
+      "bytes": 8305
+    },
+    {
+      "file": "sources/20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3-ai_text_zh.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/historical-source/videos/ai/ai_text_zh.json",
+      "original_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+      "gzip_sha256": "7276faa9505120625908facd80a3c23880e383cc31427f0c708cebc4ecf0f513",
+      "bytes": 2440019
+    },
+    {
+      "file": "sources/1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485-common.py.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/historical-source/videos/ai/ai6/common.py",
+      "original_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+      "gzip_sha256": "2f0afe61a44325121ef07e1471b31fa35858167ff54f656ca5695fa73acdb789",
+      "bytes": 9415
+    },
+    {
+      "file": "sources/6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42-s09_lda.py.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/historical-source/videos/ai/ai6/s09_lda.py",
+      "original_sha256": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
+      "gzip_sha256": "67ac7fdeccec92ee5cf50f388d45a53f5c4cdc022a85787d54c80694255d3b06",
+      "bytes": 20784
+    },
+    {
+      "file": "sources/0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b-zh_lines.py.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/historical-source/videos/ai/ai6/zh_lines.py",
+      "original_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+      "gzip_sha256": "89381de1b997727bb1f58723c8a912e69da21c0ce5aefda51447d7443e1b6fd6",
+      "bytes": 77583
+    },
+    {
+      "file": "sources/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16-viz.py.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/historical-source/explainer/ai/viz.py",
+      "original_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "gzip_sha256": "dde628602d8128cda334fa1a7eb6b8bb7204e835ecc14ae09d6a646b5111d5af",
+      "bytes": 31773
+    },
+    {
+      "file": "sources/41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf-__init__.py.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/historical-source/explainer/ai/__init__.py",
+      "original_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+      "gzip_sha256": "91c50b9f36036861ceb3b5b85434995f3b6cf8698ae9d8c54cbcd18419bf69ca",
+      "bytes": 18937
+    },
+    {
+      "file": "sources/1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e-qa_motion.py.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/source-at-review/tools/qa_motion.py",
+      "original_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "gzip_sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "bytes": 19437
+    },
+    {
+      "file": "sources/0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad-ai_text_zh.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/source-at-review/videos/ai/ai_text_zh.json",
+      "original_sha256": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+      "gzip_sha256": "4252fe4cc0a5111a276b5dcd60e65945f3a45ce066e6d51b30861e00b5ee950a",
+      "bytes": 2440358
+    },
+    {
+      "file": "sources/0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2-zh_lines.py.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/en/source-at-review/videos/ai/ai6/zh_lines.py",
+      "original_sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+      "gzip_sha256": "e7e522b44f300a063b9c03232b1d0046e84d414f06636af5a5d79f3f5e434c79",
+      "bytes": 77809
+    },
+    {
+      "file": "ledgers/zh/plan.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/plan.json",
+      "original_sha256": "5442b33d1ccb2aba8725b26d5926225a152f629f42e0b5dc46ae951fbe682a83",
+      "gzip_sha256": "037dcb08144323e50b3e541481044bb5e7cb94d66f701598652e77b3e29bde28",
+      "bytes": 272366
+    },
+    {
+      "file": "ledgers/zh/views.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/views.json",
+      "original_sha256": "e90964262ee6df111ecfbbe6ec0677f5a874faf2bf55b55c900c8d27d96e5893",
+      "gzip_sha256": "60dd61fbd36738240f14940f915f574e2cefd3734fa4a1150c89cc953ae2aaca",
+      "bytes": 45184
+    },
+    {
+      "file": "ledgers/zh/freeze.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/freeze.json",
+      "original_sha256": "6db36c816fc470cbb5d72fd43fd83afe4f6ceed8037e18a64c3d53488cae4e2c",
+      "gzip_sha256": "95664087bce80e8ed9e6fa527347dd1217fcbe6e03b306e39e9d7efb267cb7a2",
+      "bytes": 2710
+    },
+    {
+      "file": "ledgers/zh/source-before.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/source-before.json",
+      "original_sha256": "46416932d53815f36a8156133831ac102076f83954b8765cb45d527ea6cdbd22",
+      "gzip_sha256": "f9260aee8e14e45d44b91be6aeb563bbe4677ce1b2f37987079bdb0d582a75ff",
+      "bytes": 24727
+    },
+    {
+      "file": "ledgers/zh/source-after.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/source-after.json",
+      "original_sha256": "9737fcfbb9844b9e671cf816724c1022090bdef9318119a65cca643f53629f39",
+      "gzip_sha256": "36f61d072859121e424cd6854298eb36cf308e30d1a7eae1f6862b97e5d5bcb6",
+      "bytes": 24727
+    },
+    {
+      "file": "ledgers/zh/data-before.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/data-before.json",
+      "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "gzip_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "bytes": 13968
+    },
+    {
+      "file": "ledgers/zh/data-after.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/data-after.json",
+      "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "gzip_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "bytes": 13968
+    },
+    {
+      "file": "ledgers/zh/command.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/command.json",
+      "original_sha256": "c473aa054705f25d7b3c2724f4f0034178c64afcb6dbf5957d2c1b77baf7ac3a",
+      "gzip_sha256": "ff87e64f95ed362bf9d22e01f4d45de651a5c9bbd1b98cccf035640a1de784bd",
+      "bytes": 746
+    },
+    {
+      "file": "ledgers/zh/receipt.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/receipt.json",
+      "original_sha256": "d3d1605a543c62c229787645af90c585188306cb421247f1f1dbacd3fc8436a3",
+      "gzip_sha256": "a67c864a185ead91c03d80355deabc291d4a0f5d78d9a9e615088351f01afb4f",
+      "bytes": 9318
+    },
+    {
+      "file": "ledgers/zh/scoped-current-equivalence.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/scoped-current-equivalence.json",
+      "original_sha256": "4283d37690b0ad322fd9942936fd90a9061de7d5bd33fae54c31c8abe3e3f33e",
+      "gzip_sha256": "e9828cb0e1dc5ffc5c06bc86bbdaf6e7ac625e2f42a47f4e5980aacd75d73df8",
+      "bytes": 22979
+    },
+    {
+      "file": "ledgers/zh/audit--result.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/audit/result.json",
+      "original_sha256": "46c484019072eff841eb949ac2b200c85a1017a43de8f1e112b4fca10d1b5998",
+      "gzip_sha256": "665e1e537dd441ddf904476eba2f5b3c26b274769aa086d0c4b2bf3e2897dcda",
+      "bytes": 197883
+    },
+    {
+      "file": "ledgers/zh/frozen--result.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/frozen/result.json",
+      "original_sha256": "716e06df1e52640c8624354379646bcdc5fe1b5eaa169864233449d7d8d69280",
+      "gzip_sha256": "cfbae28c12bef2c1bfa8149b8509e970423b22a1b7dfec7c57765d6327ba8eae",
+      "bytes": 92862
+    },
+    {
+      "file": "ledgers/zh/endpoints--result.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/result.json",
+      "original_sha256": "6440139182d189f88f4d6e59ba114cc5f405f25e331d1b0a437171e747262c1f",
+      "gzip_sha256": "1a88db5e0bbd036851bf0dfb35dd0c82d20cbf6f5951cdf74fa15384de91df84",
+      "bytes": 92608
+    },
+    {
+      "file": "ledgers/zh/endpoints--plan.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/plan.json",
+      "original_sha256": "ac7d30ad10eed01baadd77c087afe5299fb34856a47800aed0f25bedce2c07a7",
+      "gzip_sha256": "e514ccb9bd2a4c99fab38cc49ff440245e2726652b5b3810f47006e2eb6572c7",
+      "bytes": 4721
+    },
+    {
+      "file": "ledgers/zh/endpoints--views.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/views.json",
+      "original_sha256": "4e19daa6e5b99f0267a8cb50ceaa0cc6e0a47a619856b6f176e291652efcd2e1",
+      "gzip_sha256": "b405368e13dac6f0adeaa5506c8a74f5bfde8abed8c1c85538c2312057c3d128",
+      "bytes": 2128
+    },
+    {
+      "file": "ledgers/zh/endpoints--capture-receipt.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/capture-receipt.json",
+      "original_sha256": "8e2b209d7d3ab92fb2f75ea3a37f9e4e735c99d61c2fc148dd0d26e2970613fd",
+      "gzip_sha256": "f0f0af276ac071072f6cae1501dfc1abf3da47be1371f51c3a1d54f0e4dc597c",
+      "bytes": 7182
+    },
+    {
+      "file": "ledgers/zh/endpoints--capture-source-before.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/capture-source-before.json",
+      "original_sha256": "3dbce6ff3fe414aafc4754abd13e8ddab2d817b9980b3361418c7aa732d13065",
+      "gzip_sha256": "4c4bbcc8ae99ba8ad131fe24393ae224f9bdffe44fead125693a74ce44f9604b",
+      "bytes": 24727
+    },
+    {
+      "file": "ledgers/zh/endpoints--capture-source-after.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/capture-source-after.json",
+      "original_sha256": "33bdb592a771d1e77a392da0e3dcca800ff69f28d3468a8bdceb45ab92e6e01d",
+      "gzip_sha256": "032f99619b6e0006bb495a5de91c0143c36cf649fd217db1b24f3bcf23480748",
+      "bytes": 24727
+    },
+    {
+      "file": "ledgers/zh/endpoints--capture-data-before.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/capture-data-before.json",
+      "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "gzip_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "bytes": 13968
+    },
+    {
+      "file": "ledgers/zh/endpoints--capture-data-after.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/endpoints/capture-data-after.json",
+      "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "gzip_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "bytes": 13968
+    },
+    {
+      "file": "ledgers/zh/LDA.narration.json.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/frozen/media/videos/480p15/LDA.narration.json",
+      "original_sha256": "f4bcc8afac7dd34e2a79b4033f6de6d5d1c97a613cc21563b70188e6c3166c1f",
+      "gzip_sha256": "861e2900f9cf896b56561f2f7c8f8529304af02c9e1377c8cf01b9a7ab0635da",
+      "bytes": 59474
+    },
+    {
+      "file": "ledgers/zh/LDA.srt.gz",
+      "original": "/workspace/runtime/ai6-lda-selected-review/zh/frozen/media/videos/480p15/LDA.srt",
+      "original_sha256": "8ad036b18314c3725b4ddeef7b09173e724867532c0f21fd9b8cd85c1ce6df83",
+      "gzip_sha256": "033a594c3e89c47dbdc8971d0b80fc260554530bcefdb774633cf90e0ec23d3d",
+      "bytes": 4375
+    }
+  ],
+  "source_registry": [
+    {
+      "sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+      "file": "sources/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b-lang.py.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/historical-source/explainer/lang.py",
+        "/workspace/runtime/ai6-lda-selected-review/en/source-at-review/explainer/lang.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/historical-source/explainer/lang.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/source-at-review/explainer/lang.py"
+      ]
+    },
+    {
+      "sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+      "file": "sources/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf-zh_text.py.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/historical-source/explainer/zh_text.py",
+        "/workspace/runtime/ai6-lda-selected-review/en/source-at-review/explainer/zh_text.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/historical-source/explainer/zh_text.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/source-at-review/explainer/zh_text.py"
+      ]
+    },
+    {
+      "sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+      "file": "sources/20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3-ai_text_zh.json.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/historical-source/videos/ai/ai_text_zh.json",
+        "/workspace/runtime/ai6-lda-selected-review/zh/historical-source/videos/ai/ai_text_zh.json"
+      ]
+    },
+    {
+      "sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+      "file": "sources/1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485-common.py.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/historical-source/videos/ai/ai6/common.py",
+        "/workspace/runtime/ai6-lda-selected-review/en/source-at-review/videos/ai/ai6/common.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/historical-source/videos/ai/ai6/common.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/source-at-review/videos/ai/ai6/common.py"
+      ]
+    },
+    {
+      "sha256": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
+      "file": "sources/6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42-s09_lda.py.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/historical-source/videos/ai/ai6/s09_lda.py",
+        "/workspace/runtime/ai6-lda-selected-review/en/source-at-review/videos/ai/ai6/s09_lda.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/historical-source/videos/ai/ai6/s09_lda.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/source-at-review/videos/ai/ai6/s09_lda.py"
+      ]
+    },
+    {
+      "sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+      "file": "sources/0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b-zh_lines.py.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/historical-source/videos/ai/ai6/zh_lines.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/historical-source/videos/ai/ai6/zh_lines.py"
+      ]
+    },
+    {
+      "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "file": "sources/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16-viz.py.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/historical-source/explainer/ai/viz.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/historical-source/explainer/ai/viz.py"
+      ]
+    },
+    {
+      "sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+      "file": "sources/41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf-__init__.py.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/historical-source/explainer/ai/__init__.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/historical-source/explainer/ai/__init__.py"
+      ]
+    },
+    {
+      "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "file": "sources/1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e-qa_motion.py.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/source-at-review/tools/qa_motion.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/source-at-review/tools/qa_motion.py"
+      ]
+    },
+    {
+      "sha256": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+      "file": "sources/0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad-ai_text_zh.json.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/source-at-review/videos/ai/ai_text_zh.json",
+        "/workspace/runtime/ai6-lda-selected-review/zh/source-at-review/videos/ai/ai_text_zh.json"
+      ]
+    },
+    {
+      "sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+      "file": "sources/0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2-zh_lines.py.gz",
+      "original_paths": [
+        "/workspace/runtime/ai6-lda-selected-review/en/source-at-review/videos/ai/ai6/zh_lines.py",
+        "/workspace/runtime/ai6-lda-selected-review/zh/source-at-review/videos/ai/ai6/zh_lines.py"
+      ]
+    }
+  ],
+  "all_runtime_originals_retained": true
+}

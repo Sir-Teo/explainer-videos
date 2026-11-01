@@ -1,0 +1,37 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 2384,
+    "sha256": "c1a76ae2e960cf5bbfff8ccdfe29f02cf7365b7d4e2039c36bbed54cfc61ee0f"
+  },
+  {
+    "path": "cache-inventory.json.gz",
+    "bytes": 13015,
+    "sha256": "be89eb7dd6ca22b885eb88666677ec03157dbc4c833d679232d0cf555d3a2026"
+  },
+  {
+    "path": "case-map.json.gz",
+    "bytes": 1622,
+    "sha256": "69a74010568aac8b30efe24054ea132961368f0423e126ad5e087c3814470830"
+  },
+  {
+    "path": "handoff-receipt.json.gz",
+    "bytes": 619,
+    "sha256": "4ca1dcb0ca73eba225a1a4da1c07c8e7dc708d749dd5d8fcf1c042f87f856951"
+  },
+  {
+    "path": "library-save-receipt.json.gz",
+    "bytes": 406,
+    "sha256": "d1a779bea580895283881ddfa5b00d0f42ddf1667edf2d1bf91c1e5bb0ddff2b"
+  },
+  {
+    "path": "parent-receiver-acceptance.json",
+    "bytes": 922,
+    "sha256": "1b12e9105f94cc504d22db5a38b42423d88621ed87f4dda17e09490aebf92a07"
+  },
+  {
+    "path": "source-context.json.gz",
+    "bytes": 1882,
+    "sha256": "2444f1dcc4fde5ba8a38ddaa04465796ac09d1a77635b36f63f82023a1ff0046"
+  }
+]

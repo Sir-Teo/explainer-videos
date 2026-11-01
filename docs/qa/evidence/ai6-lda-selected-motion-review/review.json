@@ -1,0 +1,91 @@
+{
+  "scope": "Part6LDA English/Chinese480p15 endpoint+time-indexed selected image review",
+  "cases": [
+    {
+      "language": "en",
+      "movie_sha256": "e240828bf1fd7166900e65215042748891be68bbf4a9c28449c4b0ef922730ed",
+      "movie_bytes": 2407691,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "historical_fingerprint": "e9c82fd185f519dcaef53f2bb9cb0d56afff9275000586d727fd611ad6154684",
+      "decoded_frames": 2751,
+      "selected_times": 491,
+      "exact_PNG_unique_actually_viewed": 408,
+      "actual_pages_viewed": 51,
+      "page_tile_width": 640,
+      "native_followups_actually_viewed": 8,
+      "endpoint_frames_actually_viewed": 16,
+      "endpoint_pages_viewed": 3,
+      "endpoint_tile_size": [
+        854,
+        480
+      ],
+      "unselected_encoded_frames": 2260,
+      "largest_selected_gap": 1.0,
+      "review_result": "held for three confirmed local motion/readability mechanisms; candidate prepared only",
+      "no_continuous_perceptual_or_audio_approval": true
+    },
+    {
+      "language": "zh",
+      "movie_sha256": "f87ff1d63b55aae835aca06f92b7c4851dfddc1fc89f35c1167d7f0e7766349c",
+      "movie_bytes": 2463613,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "historical_fingerprint": "e9c82fd185f519dcaef53f2bb9cb0d56afff9275000586d727fd611ad6154684",
+      "decoded_frames": 2952,
+      "selected_times": 497,
+      "exact_PNG_unique_actually_viewed": 408,
+      "actual_pages_viewed": 51,
+      "page_tile_width": 640,
+      "native_followups_actually_viewed": 9,
+      "endpoint_frames_actually_viewed": 17,
+      "endpoint_pages_viewed": 3,
+      "endpoint_tile_size": [
+        854,
+        480
+      ],
+      "unselected_encoded_frames": 2455,
+      "largest_selected_gap": 1.0,
+      "review_result": "held for three confirmed local motion/readability mechanisms; candidate prepared only",
+      "no_continuous_perceptual_or_audio_approval": true
+    }
+  ],
+  "selected_times": 988,
+  "actual_unique_states": 816,
+  "actual_motion_pages": 102,
+  "actual_native_followups": 17,
+  "actual_endpoints": 33,
+  "decoded_frames": 5703,
+  "unselected_encoded_frames": 4715,
+  "findings": [
+    {
+      "id": "axis-name-strike",
+      "scope": "actualENnative25.933s/frame389; samefixed-label/sourcegeometry exposure inZH",
+      "evidence": "images/en/critical/0000389_000025.933s.png",
+      "effect": "Rotating white direction line crosses not-label ink.",
+      "candidate": "Perindividual label opaque.04padding background/z5; no label glyph movement.",
+      "correction": "EarlierZHpage-levelstrike wordingnear27.467wasoverstated. ActualnativeZH27.467and27.733areclearbracketingcontrols; interveningencodedframeswere NOT visuallyreviewed. No ZHdirect-strike claim from these controls."
+    },
+    {
+      "id": "direction-emphasis-overflow",
+      "scope": "actualEN62.867s/frame943 andZH69.067s/frame1036",
+      "effect": "Default1.2scale grows line into citation and below frame during pulse.",
+      "candidate": "Indicate(dl,color=C.BITS,scale_factor=1.0); color/timing preserved."
+    },
+    {
+      "id": "retained-derivation-copy",
+      "scope": "ActualEN+ZH allsix appendcalls: bells1–3/eigen1–3, originalfollowupsindividuallyconfirmed",
+      "effect": "Copy morph visibly duplicates predecessor glyphs while original row is retained.",
+      "candidate": "Onlysix local step(k,transform=False), no sharedhelper change."
+    }
+  ],
+  "proposed_candidate_sha256": "040444a4b6a6136d4f698503d831bc8ca581fa98108f112505e14046b3a1e01f",
+  "repository_source_application": "not applied by thisreview; rootguard/signoff/renderpending",
+  "limits": [
+    "Wholefile RGB decoding is automaticanalysis, not continuousvisualperception.",
+    "Onlyselectedtimes are reviewed; allunextractedintervals/times preserved in complete audit.",
+    "854×480movies; pages640wide tiles plus17original480followups.",
+    "Silentmetadata only; audio/listening/sync, full1080motion/4K and playerbehavior unverified.",
+    "ExistingEPcaptures skipanimations/updaters; temporalreview separate."
+  ]
+}

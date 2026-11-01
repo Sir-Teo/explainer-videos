@@ -1,0 +1,41 @@
+{
+  "checked_utc": "2026-11-01T09:05:42.445384+00:00",
+  "source_config_files": 1532,
+  "all_tested_blobs_match_prospective_index": true,
+  "errors": [],
+  "manifest_checks": [
+    {
+      "package": "ai6-knn-baseline-motion-review",
+      "payloads_verified": 120
+    },
+    {
+      "package": "ai6-knn-visual-source-repair",
+      "payloads_verified": 34
+    },
+    {
+      "package": "ai6-lda-selected-motion-review",
+      "payloads_verified": 133
+    },
+    {
+      "package": "ai6-lda-local-motion-source-repair",
+      "payloads_verified": 15
+    },
+    {
+      "package": "ai6-kernels-append-source-repair",
+      "payloads_verified": 81
+    },
+    {
+      "package": "ai6-lda-knn-kernels-integrated-tests-20261101",
+      "payloads_verified": 7
+    },
+    {
+      "package": "cloud-capacity-20261101-guard-and-handoff",
+      "payloads_verified": 8
+    },
+    {
+      "package": "ai6-disjoint-cloud-review-handoff",
+      "payloads_verified": 7
+    }
+  ],
+  "exact_ignored_compressed_evidence_force_added": []
+}

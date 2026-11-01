@@ -1,0 +1,258 @@
+[
+  {
+    "stored_path": "apply/after-four-capture-plan.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-source-apply-20261101/after-four-capture-plan.json",
+    "original_bytes": 4739,
+    "original_sha256": "e82bb2c891b9dfb498efa988776f2224d6685b92dd6cd309eb38f0df244a410f",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "2cd6ad2ee48f141dca4aa916bcca8f14ccf890da8ffe132f540ff8ef8abce87c"
+  },
+  {
+    "stored_path": "apply/after.py.gz",
+    "original_path": "/workspace/runtime/ai6-knn-source-apply-20261101/after.py",
+    "original_bytes": 17567,
+    "original_sha256": "41d47f51970ae54744df9a5ef04cb889c00e70695ff909123509b3145c6f57a7",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "0dbb50012b14a8dd2db152ac0e81842849907def0afa5a58733b76f54dd7d93e"
+  },
+  {
+    "stored_path": "apply/apply-receipt.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-source-apply-20261101/apply-receipt.json",
+    "original_bytes": 1453,
+    "original_sha256": "ed01e06cff14bbd1e226aecd95e6aafdbdb02317bc1af3b6c2ad9df34c78f954",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "c463201e6661df90f5e54b28751f213f1e01899476fbe645a435d3a8b626f886"
+  },
+  {
+    "stored_path": "apply/before.py.gz",
+    "original_path": "/workspace/runtime/ai6-knn-source-apply-20261101/before.py",
+    "original_bytes": 16659,
+    "original_sha256": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "3126173ec5fd450eea267131a8bb128b7b55b5fae59d4991ead53fc4906c9e5f"
+  },
+  {
+    "stored_path": "apply/payloads-after.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-source-apply-20261101/payloads-after.json",
+    "original_bytes": 7606,
+    "original_sha256": "10d6a5f84a9f5751b224fbef49925c2e6544f496e4043744ae3ce780dc59791f",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "ff728b3e451470284ee340443bd744faf1bc4d0e0f168404f661da46ef124a57"
+  },
+  {
+    "stored_path": "apply/payloads-before.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-source-apply-20261101/payloads-before.json",
+    "original_bytes": 7606,
+    "original_sha256": "10d6a5f84a9f5751b224fbef49925c2e6544f496e4043744ae3ce780dc59791f",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "ff728b3e451470284ee340443bd744faf1bc4d0e0f168404f661da46ef124a57"
+  },
+  {
+    "stored_path": "apply/prepare_plan_and_packet.py.gz",
+    "original_path": "/workspace/runtime/ai6-knn-source-apply-20261101/prepare_plan_and_packet.py",
+    "original_bytes": 6778,
+    "original_sha256": "a00e5a4dbc2c9711b5e0e7918bb124a154c01ff32a8186fb45d2055cdf139df3",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "3ce56082407d0b34e78639d047fc6729ec6d9eae5a2e42955369717e385ed325"
+  },
+  {
+    "stored_path": "apply/source.patch.gz",
+    "original_path": "/workspace/runtime/ai6-knn-source-apply-20261101/source.patch",
+    "original_bytes": 3539,
+    "original_sha256": "20093bac6587a7b2d6b4a092134dc354a260b22d469acb930cb8b8cfce1f5b19",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "f9a63b90d35fb2eede3bdf451c5649f27904b9c482ba07232de55dc14bbdbbba"
+  },
+  {
+    "stored_path": "apply/sources-after.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-source-apply-20261101/sources-after.json",
+    "original_bytes": 2706,
+    "original_sha256": "ed60e2651cca3d4524670499e9b9a82d80c1d4b678a71228009a996e8de0f969",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "80312b68c5092be877395c5ad2abde7ff7da8a87ac50e88215a0018f3bf9a8ad"
+  },
+  {
+    "stored_path": "apply/sources-before.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-source-apply-20261101/sources-before.json",
+    "original_bytes": 2706,
+    "original_sha256": "347c9663848c9ad3f6327aa7ef4d22025e0fa2e490bf529c308e7276d96aec6f",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "3d899a9d226d349cf26244b72c2fc4577615cd9ca8665881d3bec08dd7b655ae"
+  },
+  {
+    "stored_path": "private-candidate-history/before.py.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/before.py",
+    "original_bytes": 16659,
+    "original_sha256": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "3126173ec5fd450eea267131a8bb128b7b55b5fae59d4991ead53fc4906c9e5f"
+  },
+  {
+    "stored_path": "private-candidate-history/candidate-freeze.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/candidate-freeze.json",
+    "original_bytes": 3152,
+    "original_sha256": "cd86ea55364efefe8db123d6e93f2f6254b5760fef9c54a2cd7fe698b9e3e435",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "a96d439d55ae04133a99f7a0df8b8e5aa0d0c7c3f6daed1ff2097295960f2fcb"
+  },
+  {
+    "stored_path": "private-candidate-history/candidate.patch.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/candidate.patch",
+    "original_bytes": 3543,
+    "original_sha256": "822f337dfc03edd514029251663da455c17bc3c2aecc9443f6112bedc0319aa0",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "034e907f0a9907d93e5677eb3ad4c262586a293605ec1a934197a535dc130210"
+  },
+  {
+    "stored_path": "private-candidate-history/candidate.py.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/candidate.py",
+    "original_bytes": 17567,
+    "original_sha256": "41d47f51970ae54744df9a5ef04cb889c00e70695ff909123509b3145c6f57a7",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "0dbb50012b14a8dd2db152ac0e81842849907def0afa5a58733b76f54dd7d93e"
+  },
+  {
+    "stored_path": "private-candidate-history/final-geometry-en.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/final-geometry-en.json",
+    "original_bytes": 21019,
+    "original_sha256": "bc9ecc4d7136060b7f6daf58c8d9c1a5341030eed37681b45b4fedbcf8ed2677",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "0831283f44ec499f8d8338cb60bf21fa28d7705464915189409fe0c9aa9a1680"
+  },
+  {
+    "stored_path": "private-candidate-history/final-geometry-en.log.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/final-geometry-en.log",
+    "original_bytes": 215,
+    "original_sha256": "b1cfe1e87da9cf38d49ddb91f876d85d080ce82df207e95d418b90c0372b6fd5",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "03e39d5827ddafffd84e917832d1ab1c13dbdb2889f23d2e9e659f6b86fb710f"
+  },
+  {
+    "stored_path": "private-candidate-history/final-geometry-zh.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/final-geometry-zh.json",
+    "original_bytes": 21024,
+    "original_sha256": "7c008fb908dfc9b86e03c143556a2298d18f84fa88ae200dc6d6b1785cf1e958",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "c6b71599a9af5be9cc2e2bfdbb59dfe495bc18cad86323213e32d8cf9786a180"
+  },
+  {
+    "stored_path": "private-candidate-history/final-geometry-zh.log.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/final-geometry-zh.log",
+    "original_bytes": 39031,
+    "original_sha256": "532ad96b53483c349db6b28fa3c55c374944786e70141ed996a020ea26724af2",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "ad214a44bc52725ac7a65f18c5900bce15d58780f53b7093d0207d2ff2fe91cf"
+  },
+  {
+    "stored_path": "private-candidate-history/final-geometry.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/final-geometry.json",
+    "original_bytes": 40680,
+    "original_sha256": "7764ba981b57d34b2973f6d955c6e0df4442d09c3357b500dfccdfa35526e568",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "374699f5815edfc1bfdf144307ce434d65fd6ad72010f8f44e8a818a44157eb6"
+  },
+  {
+    "stored_path": "private-candidate-history/final-geometry.log.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/final-geometry.log",
+    "original_bytes": 46037,
+    "original_sha256": "86d47a93c6d99c6a67da27728c2ed4f6b84649d98b96a1a8a0b1e4d41555a39f",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "244b36db78e3b1b36ada61eec7b07e7bb792743c9198319b3bcbc57a34de9a06"
+  },
+  {
+    "stored_path": "private-candidate-history/finalize_candidate.py.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/finalize_candidate.py",
+    "original_bytes": 1442,
+    "original_sha256": "a5f3c845d436fe05f456d32380c831844654b3bea585f3fedbad2d490bb70972",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "83a5ae893db632599bb33fc27cafbe43ee41c4d195c8827336858596809598e9"
+  },
+  {
+    "stored_path": "private-candidate-history/geometry.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/geometry.json",
+    "original_bytes": 21882,
+    "original_sha256": "47f48dcd0ddf527220a144d0090517e3c2c6ea02f5b40a9879e113f8d2f81ccb",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "329860d28fb6c856c2925d66812ecfa84c02f1a2e8fd8a5a6fc387196bd19484"
+  },
+  {
+    "stored_path": "private-candidate-history/geometry.log.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/geometry.log",
+    "original_bytes": 176,
+    "original_sha256": "2a5febf3d97d3e7b4f3e17ca0532c98629884aed9e0e50df632e6563b0479388",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "ac92205d2998f8791759ca6c29f85d893aef947d7249145981f43f716f848527"
+  },
+  {
+    "stored_path": "private-candidate-history/initial-final-fixture-import-failure.log.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/initial-final-fixture-import-failure.log",
+    "original_bytes": 216,
+    "original_sha256": "e35c3ca58d9ae5e1429ca033132333ea4474b0c440cb798f6b1338ad3fc6efd3",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "4a3e9ba12c0a881bfde8d2c71a79719203e032fbb1fd505bd26a9491b0eb5287"
+  },
+  {
+    "stored_path": "private-candidate-history/initial-final-fixture-withbody-comparison-failure.log.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/initial-final-fixture-withbody-comparison-failure.log",
+    "original_bytes": 208,
+    "original_sha256": "cafff6df85a9dac834f71d5ab5c9b1b024bf73120bbe63be16d41975fee67bb7",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "4f2892c1725547511d2f0b8e1541bac9fd5a6ff8de2f5ea48bfce8cde12f2692"
+  },
+  {
+    "stored_path": "private-candidate-history/initial-float-equality-fixture-failure.log.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/initial-float-equality-fixture-failure.log",
+    "original_bytes": 37984,
+    "original_sha256": "d5aaff5b57cac1964e4f0c84b3e6d343059a0487382017ebfbbf35b8487e1a43",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "23b30e81df7b89307c1c69aca4536c56cafd1f70a463bd613d69c80f8b646e33"
+  },
+  {
+    "stored_path": "private-candidate-history/initial-zh-video-selector-failure.log.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/initial-zh-video-selector-failure.log",
+    "original_bytes": 69,
+    "original_sha256": "8ce8023a6544fac12b02ec9ed9c3cc38796c0880224daeb3cb4bc3d592f61cac",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "915c29e30cead08f3a3dafa8e7a76bb9f9c48059c7a1a7c9c3fcc26333a01ab8"
+  },
+  {
+    "stored_path": "private-candidate-history/metadata.json.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/metadata.json",
+    "original_bytes": 477,
+    "original_sha256": "2bdd3e668136773c61c15f44b330c62833489ca9af0946c1695b97db2513334d",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "de6561b7d527dcd7c1aaa0ae133771a0d672580bb7421031e93f7ecc2340feeb"
+  },
+  {
+    "stored_path": "private-candidate-history/range-only-candidate.py.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/range-only-candidate.py",
+    "original_bytes": 17051,
+    "original_sha256": "815806e9812c8e40329c01e04898a178a3b6d8290abbd734c4b7d838f3f0a99b",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "96c6375db6492257278f1d44fdf1af0b661adee858511d1fb33326bf25338769"
+  },
+  {
+    "stored_path": "private-candidate-history/validate.py.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/validate.py",
+    "original_bytes": 3515,
+    "original_sha256": "adc93c6fa700f217a21ded76c557317d47686b08763bcc20f053644069916a9b",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "9128dd79dc505a2cc9f4645ff8739350f434b41fd8dbec4e3de7f62922ff78d4"
+  },
+  {
+    "stored_path": "private-candidate-history/validate_final.py.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/candidate/validate_final.py",
+    "original_bytes": 5209,
+    "original_sha256": "7cb0e17f646780112bf95617d612a8f2635ef2b66dfb8f7cd3a525fc9b9a5424",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "73de9ae671629db4b91f0a4a2a917383c9a9f85aeaec1c681ebd3eca9b145b6b"
+  },
+  {
+    "stored_path": "apply/actual-apply-script.py.gz",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/apply_approved_candidate.py",
+    "original_bytes": 4000,
+    "original_sha256": "36e528849241311d01027b7fbfdebc5a6ae4659106fb32c9591ee8219ffbeb80",
+    "codec": "gzip, exact original bytes",
+    "stored_sha256": "5acb33c7b3c6e5c76c401d589ac85e137a895495e0cb7ad2506c079b1f6292d5"
+  }
+]

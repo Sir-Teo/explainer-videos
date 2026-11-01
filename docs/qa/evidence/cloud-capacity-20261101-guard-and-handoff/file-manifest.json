@@ -1,0 +1,42 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1882,
+    "sha256": "b9d8b660dfc93d11ed1fdb9ac286f2a59892b17e0b8ce2fe9c8ff76f74f311b0"
+  },
+  {
+    "path": "dependency-environment-decision.json.gz",
+    "bytes": 2122,
+    "sha256": "e224198eab82239f1afb6fa2459da43ded27fb9503925b18d25dd0c6dbdeac48"
+  },
+  {
+    "path": "no-further-old-wave-candidates.json.gz",
+    "bytes": 2322,
+    "sha256": "a0b9239bf2ad40c60960461b67fee351310e65a146f441511cd1f93df570c6f8"
+  },
+  {
+    "path": "partial-visibility-diagnostic.json.gz",
+    "bytes": 712,
+    "sha256": "8c45fc159fc35b7d83f12f776a2bbc475c6e5721700673e69b815f23297d80c3"
+  },
+  {
+    "path": "remaining-svg-report.json.gz",
+    "bytes": 973,
+    "sha256": "1816a08a02154874f1c2deb71b55acec2658acd4e7af41c2bc1289b32edf16a0"
+  },
+  {
+    "path": "retained-private-full-audit-manifest.json.gz",
+    "bytes": 1289,
+    "sha256": "2fb7c0eb818d2d90f7b7076383def2ab0d6ab3cb90c831df79930d93a8304193"
+  },
+  {
+    "path": "zero-wave-plan.json.gz",
+    "bytes": 9686,
+    "sha256": "db4859e38fb3dceefe4d962357675e5ddfef20da14ea60576a2041ff418f92cd"
+  },
+  {
+    "path": "zero-wave-recovery.json.gz",
+    "bytes": 9006,
+    "sha256": "1d74917e16a4d60a88748c2df566b6f5260064529b2ff72d1bd3b2b7489de6b8"
+  }
+]

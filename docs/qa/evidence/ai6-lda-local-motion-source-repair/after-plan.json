@@ -1,0 +1,307 @@
+{
+  "state": "PREPARED ONLY; do not start without root release+resource guards",
+  "prepared_at": "2026-11-01T08:39:48.743651+00:00",
+  "source_pins": {
+    "videos/ai/ai6/s09_lda.py": "040444a4b6a6136d4f698503d831bc8ca581fa98108f112505e14046b3a1e01f",
+    "videos/ai/ai6/common.py": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+    "videos/ai/ai6/zh_lines.py": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+    "videos/ai/ai_text_zh.json": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+    "videos/ai/ai6/compute.py": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+    "videos/ai/ai6/cache_contract.py": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+    "videos/ai/ai6/contracts.py": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+    "explainer/ai/viz.py": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+    "explainer/ai/__init__.py": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+    "explainer/analysis/__init__.py": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+    "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+    "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+  },
+  "canonical_cases": [
+    {
+      "language": "en",
+      "mode": "endpoints",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "python",
+        "tools/qa_series.py",
+        "ai6",
+        "--lang",
+        "en",
+        "--only",
+        "LDA",
+        "--cached-only",
+        "--timeout",
+        "1200"
+      ]
+    },
+    {
+      "language": "en",
+      "mode": "motion",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "python",
+        "tools/qa_series.py",
+        "ai6",
+        "--lang",
+        "en",
+        "--only",
+        "LDA",
+        "--cached-only",
+        "--timeout",
+        "1200",
+        "--motion"
+      ]
+    },
+    {
+      "language": "zh",
+      "mode": "endpoints",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "python",
+        "tools/qa_series.py",
+        "ai6",
+        "--lang",
+        "zh",
+        "--only",
+        "LDA",
+        "--cached-only",
+        "--timeout",
+        "1200"
+      ]
+    },
+    {
+      "language": "zh",
+      "mode": "motion",
+      "command": [
+        "nice",
+        "-n",
+        "10",
+        "python",
+        "tools/qa_series.py",
+        "ai6",
+        "--lang",
+        "zh",
+        "--only",
+        "LDA",
+        "--cached-only",
+        "--timeout",
+        "1200",
+        "--motion"
+      ]
+    }
+  ],
+  "execution": "serial nice10, one numeric/BLAS thread, cached-only and silent; no producer/model/download/voice-provider calls",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "EXPLAINER_CACHED_ONLY": "1",
+    "EXPLAINER_TTS": "silent"
+  },
+  "start_guard": {
+    "free_disk_bytes_minimum": 805306368,
+    "shared_extraction_lock": "/workspace/runtime/ai4-tail-motion-review/extract.lock"
+  },
+  "baseline_root": "/workspace/runtime/ai6-lda-selected-review",
+  "baseline_manifest_sha256": "347d52370700e759cb2354f043e8b89078d0cec3b4ca8e851752e3a750984b23",
+  "after_output": "/workspace/runtime/ai6-lda-motion-regression",
+  "verification": [
+    "Verify baseline independent originals and canonical records before override; no hardlinks.",
+    "Fourfreshcases ENendpoints,motion\u2192ZHendpoints,motion; preserve rawfailures/warnings and copy2 movies+sidecars/source/data/textrecords.",
+    "Check source/actual-usedcaptions/narration/silentWAV/SRT/data hashes, bookmarks, durations/framecounts. No listening claim.",
+    "Fullfile RGBdecode+selecteddense.25/maxgap1; exact-PNG reuse only from actually reviewed baseline, allnewselectedstates actually viewed.",
+    "Everyencoded frame through sixappend windows and directionemphasis; inspectlabelcrossings during sweep atactualframe times. Nativecontrols plus steady endpoints.",
+    "Preserve unselected intervals; no continuousperception/4K/audio/native1080motion approval from480."
+  ],
+  "target_windows": {
+    "en": [
+      {
+        "baseline_interval": 5,
+        "first_frame": 321,
+        "last_frame": 426,
+        "start": 21.4,
+        "end": 28.4,
+        "requested_start": 21.2,
+        "requested_end": 28.599999999999998,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 6,
+        "first_frame": 492,
+        "last_frame": 525,
+        "start": 32.8,
+        "end": 35.0,
+        "requested_start": 32.599999999999994,
+        "requested_end": 35.2,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 13,
+        "first_frame": 935,
+        "last_frame": 951,
+        "start": 62.333333,
+        "end": 63.4,
+        "requested_start": 62.133333,
+        "requested_end": 63.6,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 20,
+        "first_frame": 1432,
+        "last_frame": 1447,
+        "start": 95.466341,
+        "end": 96.466341,
+        "requested_start": 95.266341,
+        "requested_end": 96.666341,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 22,
+        "first_frame": 1475,
+        "last_frame": 1494,
+        "start": 98.333008,
+        "end": 99.599674,
+        "requested_start": 98.133008,
+        "requested_end": 99.799674,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 24,
+        "first_frame": 1629,
+        "last_frame": 1644,
+        "start": 108.599674,
+        "end": 109.599674,
+        "requested_start": 108.39967399999999,
+        "requested_end": 109.799674,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 31,
+        "first_frame": 2044,
+        "last_frame": 2063,
+        "start": 136.266016,
+        "end": 137.532682,
+        "requested_start": 136.06601600000002,
+        "requested_end": 137.73268199999998,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 34,
+        "first_frame": 2234,
+        "last_frame": 2280,
+        "start": 148.932682,
+        "end": 151.999349,
+        "requested_start": 148.732682,
+        "requested_end": 152.19934899999998,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 36,
+        "first_frame": 2332,
+        "last_frame": 2347,
+        "start": 155.466016,
+        "end": 156.466016,
+        "requested_start": 155.266016,
+        "requested_end": 156.66601599999998,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      }
+    ],
+    "zh": [
+      {
+        "baseline_interval": 5,
+        "first_frame": 344,
+        "last_frame": 450,
+        "start": 22.933333,
+        "end": 30.0,
+        "requested_start": 22.733333000000002,
+        "requested_end": 30.2,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 6,
+        "first_frame": 527,
+        "last_frame": 575,
+        "start": 35.133333,
+        "end": 38.333333,
+        "requested_start": 34.933333,
+        "requested_end": 38.533333000000006,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 12,
+        "first_frame": 1028,
+        "last_frame": 1044,
+        "start": 68.533333,
+        "end": 69.6,
+        "requested_start": 68.333333,
+        "requested_end": 69.8,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 19,
+        "first_frame": 1558,
+        "last_frame": 1587,
+        "start": 103.866341,
+        "end": 105.799674,
+        "requested_start": 103.666341,
+        "requested_end": 105.999674,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 20,
+        "first_frame": 1620,
+        "last_frame": 1639,
+        "start": 107.999674,
+        "end": 109.266341,
+        "requested_start": 107.799674,
+        "requested_end": 109.466341,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 22,
+        "first_frame": 1755,
+        "last_frame": 1770,
+        "start": 116.999674,
+        "end": 117.999674,
+        "requested_start": 116.799674,
+        "requested_end": 118.199674,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 30,
+        "first_frame": 2214,
+        "last_frame": 2229,
+        "start": 147.599349,
+        "end": 148.599349,
+        "requested_start": 147.399349,
+        "requested_end": 148.79934899999998,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 33,
+        "first_frame": 2439,
+        "last_frame": 2454,
+        "start": 162.599349,
+        "end": 163.599349,
+        "requested_start": 162.399349,
+        "requested_end": 163.79934899999998,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      },
+      {
+        "baseline_interval": 37,
+        "first_frame": 2525,
+        "last_frame": 2544,
+        "start": 168.332682,
+        "end": 169.599349,
+        "requested_start": 168.13268200000002,
+        "requested_end": 169.79934899999998,
+        "scope": "everyencoded frame after verified timing invariance; retain original exacttimes"
+      }
+    ]
+  }
+}

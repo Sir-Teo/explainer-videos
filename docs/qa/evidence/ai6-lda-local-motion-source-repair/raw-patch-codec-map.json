@@ -1,0 +1,11 @@
+{
+  "reason": "Raw unified patch context contains significant whitespace. Preserve exact bytes via gzip; do not strip evidence.",
+  "original_manifest_sha256": "ec63db53db8c109d34f86dcb96e3cde75a2e4c46b76107042bdf23158415ba3a",
+  "original_patch_path": "candidate.patch",
+  "original_patch_bytes": 2275,
+  "original_patch_sha256": "bb085c88703f4cb34b7aec737b387599b007729cb58d66e0399c1bbf89deba00",
+  "packaged_patch_path": "candidate.patch.gz",
+  "packaged_patch_sha256": "0616b52231dde67a518584099ef9a5de14d5520a7d07097dcb316771b1e306f8",
+  "original_patch_mtime_ns": 1793521003400261381,
+  "original_patch_mode": 384
+}

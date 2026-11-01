@@ -1,0 +1,170 @@
+[
+  {
+    "package_path": "native/en-trick-step1-ghost.png",
+    "source_time": 98.466341,
+    "source_frame": 1477,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "15935a987de97b1f68ed2bf08d5684b4b40dd139e98ded8440ef44c140d6b68e"
+  },
+  {
+    "package_path": "native/en-trick-step1-clean.png",
+    "source_time": 99.199674,
+    "source_frame": 1488,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "80a416d36c6d01b659b8abdaf009e0f23d3d227a38519aca5c8fbc0e55c96362"
+  },
+  {
+    "package_path": "native/en-trick-step2-ghost.png",
+    "source_time": 101.066341,
+    "source_frame": 1516,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "d8e5659fb649a0d66c0c3ee7f70a82ab521237b860a191ea9756f18a4790bbc5"
+  },
+  {
+    "package_path": "native/en-trick-step2-clean.png",
+    "source_time": 102.066341,
+    "source_frame": 1531,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "5541313c203577aa48b9505726e31620b461aa0254208900d7d24d4501aa7778"
+  },
+  {
+    "package_path": "native/en-trick-step3-ghost.png",
+    "source_time": 116.866341,
+    "source_frame": 1753,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "b35fd472eb7a92d5edb5fb8eb9c6618cb1073bd128988b54ddd50b85bacfa689"
+  },
+  {
+    "package_path": "native/en-trick-step3-clean.png",
+    "source_time": 117.599674,
+    "source_frame": 1764,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "ba8e602cbf9620704f9b8204c3a1e6a610a3b53ac93f119c5085516371a0c816"
+  },
+  {
+    "package_path": "native/en-representer-step1-ghost.png",
+    "source_time": 181.532682,
+    "source_frame": 2723,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "660a46461b3fa2838ff3c0c473cda241723b21c70b41516fc027cd194e0b14c0"
+  },
+  {
+    "package_path": "native/en-representer-step1-clean.png",
+    "source_time": 182.532682,
+    "source_frame": 2738,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "0bbdd3ee1a6415ccf6b560215351dc4160053d6fd1731d3c5fb150a24ec4bae6"
+  },
+  {
+    "package_path": "native/en-representer-step2-ghost.png",
+    "source_time": 190.466016,
+    "source_frame": 2857,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "889358143e25f934c4fc6e9d710450a64424926dd0b48c179c4bd9fd87d70772"
+  },
+  {
+    "package_path": "native/en-representer-step2-clean.png",
+    "source_time": 191.466016,
+    "source_frame": 2872,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "129b6d6ace92d640c271f4db9c1ebd6d3de90a31481539d1127a22598b478767"
+  },
+  {
+    "package_path": "native/en-representer-step3-ghost.png",
+    "source_time": 195.799349,
+    "source_frame": 2937,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "1426b530b22f9a794ed63e9534ef91eebc18426ff442d2336bd948b56c30ff54"
+  },
+  {
+    "package_path": "native/en-representer-step3-clean.png",
+    "source_time": 196.532682,
+    "source_frame": 2948,
+    "classification": "actually viewed854x480 oldbaseline native; source-before only",
+    "sha256": "4e9400454f64206f4591de6b35010efde0fc202bb43de9cefab2201e379ab338"
+  },
+  {
+    "package_path": "native/en-endpoint-gaussian-grid-error.png",
+    "origins": [
+      {
+        "mode": "endpoints",
+        "index": 12,
+        "time": 119.88800264550265,
+        "file": "012_00119.9s.png",
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/completed/012_00119.9s.png"
+      },
+      {
+        "mode": "motion",
+        "index": 12,
+        "time": 119.66666666666534,
+        "file": "012_00119.7s.png",
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/completed/012_00119.7s.png"
+      }
+    ],
+    "classification": "actually viewed854x480 native endpoint oldbaseline",
+    "sha256": "0c30c9b80b4693440291082ba9b38732a5ba3c340200d99fc6c4dacd82c0083a"
+  },
+  {
+    "package_path": "native/en-endpoint-PSD-negative-tail.png",
+    "origins": [
+      {
+        "mode": "endpoints",
+        "index": 15,
+        "time": 159.44230506822612,
+        "file": "015_00159.4s.png",
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/completed/015_00159.4s.png"
+      },
+      {
+        "mode": "motion",
+        "index": 15,
+        "time": 159.1333333333317,
+        "file": "015_00159.1s.png",
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/completed/015_00159.1s.png"
+      }
+    ],
+    "classification": "actually viewed854x480 native endpoint oldbaseline",
+    "sha256": "09519dfe202272463af62ae6f3ce60200aee286fb0f5e82589073ccc1c52df6a"
+  },
+  {
+    "package_path": "native/zh-endpoint-gaussian-grid-error.png",
+    "origins": [
+      {
+        "mode": "endpoints",
+        "index": 11,
+        "time": 129.82091980855068,
+        "file": "011_00129.8s.png",
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/completed/011_00129.8s.png"
+      },
+      {
+        "mode": "motion",
+        "index": 11,
+        "time": 129.59999999999832,
+        "file": "011_00129.6s.png",
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/completed/011_00129.6s.png"
+      }
+    ],
+    "classification": "actually viewed854x480 native endpoint oldbaseline",
+    "sha256": "3d0edfae3bb00b8219b8016bfc32b2d2a4a9476aa68e53cb9ce5dc7b17d45002"
+  },
+  {
+    "package_path": "native/zh-endpoint-representer-final.png",
+    "origins": [
+      {
+        "mode": "endpoints",
+        "index": 20,
+        "time": 222.1997532882196,
+        "file": "020_00222.2s.png",
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/completed/020_00222.2s.png"
+      },
+      {
+        "mode": "motion",
+        "index": 20,
+        "time": 221.73333333333056,
+        "file": "020_00221.7s.png",
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/completed/020_00221.7s.png"
+      }
+    ],
+    "classification": "actually viewed854x480 native endpoint oldbaseline",
+    "sha256": "da592635f6ef263a6465df1900343cfdeec808425388bf6020737bd16528d6ab"
+  }
+]

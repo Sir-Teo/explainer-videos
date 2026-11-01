@@ -1,0 +1,29 @@
+{
+  "observed_utc": "2026-11-01T09:05:41.899418+00:00",
+  "authority": "Parent cloud reviewer report; not independently rerun here",
+  "status": "Receiver accepted exact handoff and owns the twelve cases",
+  "library_file_id": "libfile_3158cc8861448191a951cd71b6549e14",
+  "payload_members_verified": 663,
+  "safe_paths": true,
+  "captured_caption_translation_differences": 0,
+  "matched_scene_modules": 6,
+  "cases": [
+    "Trees:en",
+    "Trees:zh",
+    "Forests:en",
+    "Forests:zh",
+    "AdaBoost:en",
+    "AdaBoost:zh",
+    "GradientBoosting:en",
+    "GradientBoosting:zh",
+    "Contest:en",
+    "Contest:zh",
+    "Outro:en",
+    "Outro:zh"
+  ],
+  "historical_identity_preserved": "c80f10b / dc8391c; no retagging as current",
+  "outro_english_source_change_warning_retained": true,
+  "source_edits": false,
+  "data_recomputation": false,
+  "visual_status": "Trees review started; no case acceptance reported yet"
+}

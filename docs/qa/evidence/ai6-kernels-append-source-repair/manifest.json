@@ -1,0 +1,1353 @@
+{
+  "utc": "2026-11-01T08:46:55.668502+00:00",
+  "status": "SOURCE REPAIR APPLIED; RENDERED-AFTER REVIEW NOT STARTED",
+  "direct_source_sha256": "1e32812fc036802f11a70f52188052884f45f671947a5d464103cfce176cceaf",
+  "original_source_sha256": "1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082",
+  "source_apply_proof_sha256": "5b01f120d958b83237a24bfd90ba5052bd360c85d8b9e00a6e176cea80e0de55",
+  "baseline_before": {
+    "files": 784,
+    "bytes": 66276582,
+    "sha256": "16c604dd3caae204245bd89b0ece4a787c73e7be92cf65c1bd50220a0780e92c"
+  },
+  "baseline_after": {
+    "files": 784,
+    "bytes": 66276582,
+    "sha256": "16c604dd3caae204245bd89b0ece4a787c73e7be92cf65c1bd50220a0780e92c"
+  },
+  "all_originals_preserved": true,
+  "lossless_compression_verified": true,
+  "files": [
+    {
+      "package_path": "source/before-s11_kernels.py",
+      "package_sha256": "1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082",
+      "package_bytes": 18924,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-source-applied/before-s11_kernels.py",
+        "sha256": "1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082",
+        "bytes": 18924,
+        "mtime_ns": 1793507061445392086,
+        "nlink": 1,
+        "inode": 449786
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "source/after-s11_kernels.py",
+      "package_sha256": "1e32812fc036802f11a70f52188052884f45f671947a5d464103cfce176cceaf",
+      "package_bytes": 19026,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-source-applied/after-s11_kernels.py",
+        "sha256": "1e32812fc036802f11a70f52188052884f45f671947a5d464103cfce176cceaf",
+        "bytes": 19026,
+        "mtime_ns": 1793522686558801108,
+        "nlink": 1,
+        "inode": 449787
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "source/approved-candidate.patch",
+      "package_sha256": "c24356e59722e599241c90911fbb92eafc58c57a9501c0d01b43b6c7cf5599bd",
+      "package_bytes": 1217,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-write-candidate/candidate.patch",
+        "sha256": "c24356e59722e599241c90911fbb92eafc58c57a9501c0d01b43b6c7cf5599bd",
+        "bytes": 1217,
+        "mtime_ns": 1793522384398778076,
+        "nlink": 1,
+        "inode": 449763
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "proof/approved-candidate-invariants.json.gz",
+      "package_sha256": "641ce742381777cab06ab8b1ac777d3c1c9b3362833487c51e6a73909d9a333e",
+      "package_bytes": 4707,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-write-candidate/invariants.json",
+        "sha256": "f6ac2636083726e92ba8c9bf6524702688ac44e286dd55e1eee4bc1281aeb736",
+        "bytes": 19869,
+        "mtime_ns": 1793522384513395062,
+        "nlink": 1,
+        "inode": 449766
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "proof/approved-candidate-receipt.json.gz",
+      "package_sha256": "2a0996c3de6af6100aee8d950b14eb251d8100bf981e2634ed4d863d8fe8c02b",
+      "package_bytes": 996,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-write-candidate/receipt.json",
+        "sha256": "b96c7182684e4acdf4f780429bea0ede9bcbee915b1a0416ade3a9df2b08bde5",
+        "bytes": 3419,
+        "mtime_ns": 1793522413572118659,
+        "nlink": 1,
+        "inode": 449767
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "proof/source-apply-proof.json.gz",
+      "package_sha256": "8677c4a7eaa9fd2d9be99334e7b92300ec3dcd9ad14d485598d6e1beb3daf9df",
+      "package_bytes": 2839,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-source-applied/apply-proof.json",
+        "sha256": "5b01f120d958b83237a24bfd90ba5052bd360c85d8b9e00a6e176cea80e0de55",
+        "bytes": 9498,
+        "mtime_ns": 1793522686796006165,
+        "nlink": 1,
+        "inode": 449788
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "proof/prepared-four-case-after-plan.json.gz",
+      "package_sha256": "bc9996a169cc5c2454b36e4022865ab0feae10b994b0ec3945fd1c858111ff43",
+      "package_bytes": 2721,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-source-applied/prepared-four-case-after-plan.json",
+        "sha256": "ed9ed59e29b6b6352d3ad5c64ed4205f9f39c2502ad7c71ab076819b516f545c",
+        "bytes": 19869,
+        "mtime_ns": 1793522815429230376,
+        "nlink": 1,
+        "inode": 449796
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "proof/apply.log.gz",
+      "package_sha256": "9753415493e5ae9c4a1ff6695fcd54931476816037df661ba0528eae28e57d46",
+      "package_bytes": 316,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-source-applied/apply.log",
+        "sha256": "6f2dfa6e50c3c1b3ac98285fa5e6ebfe638629bfca42c38a8375b5551aa81093",
+        "bytes": 947,
+        "mtime_ns": 1793522686796006165,
+        "nlink": 1,
+        "inode": 449785
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/review.json.gz",
+      "package_sha256": "65563890f01ef6fe633c58a5c3f7beff3d66b2961f7736ddb52b41296abbe0dc",
+      "package_bytes": 14669,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/review.json",
+        "sha256": "ed1280ddfc80efe1899d75b98de01017b38ee870243e677aee454ff2c23bdcd2",
+        "bytes": 120255,
+        "mtime_ns": 1793521950006587877,
+        "nlink": 1,
+        "inode": 712016
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/preparation-index.json.gz",
+      "package_sha256": "52de62f9ffecd447752697c06f77bad97763105cbfbdb3888729b35bab4a87aa",
+      "package_bytes": 942,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/preparation-index.json",
+        "sha256": "de82e5a6a1abb40ec53632c19be2b2513a080dd1c95b1ccd27f42995033b7c28",
+        "bytes": 3251,
+        "mtime_ns": 1793520829582314426,
+        "nlink": 1,
+        "inode": 710727
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/used-source-table-reconciliation.json.gz",
+      "package_sha256": "8bd7da9b682fae0877f43b2ed712616c6cd85cb23d5011078c939d6df0f7e136",
+      "package_bytes": 9216,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/used-source-table-reconciliation.json",
+        "sha256": "a4f363fa1986747d7115848f8f50e2d7de97dfca9d1cf61480a94d2deeda2d2a",
+        "bytes": 56063,
+        "mtime_ns": 1793521585421202604,
+        "nlink": 1,
+        "inode": 710747
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/observed-readout-check.json.gz",
+      "package_sha256": "03f737b169223781bc0193fd19a36eb9e3052ae42d37060b7fd07a1fbce1fb12",
+      "package_bytes": 754,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/observed-readout-check.json",
+        "sha256": "bb3ffdecf3a46d00e053dc6a5ecdc36e00d3cf340f3eced421e0a6b53e27a32f",
+        "bytes": 1908,
+        "mtime_ns": 1793521766251985468,
+        "nlink": 1,
+        "inode": 710765
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory-preservation-checkpoint.json.gz",
+      "package_sha256": "7e5a7fe4636e0c0f4e8385304b809429bf6ce92dcb07b00018cc9e8b7a7974ac",
+      "package_bytes": 156,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/factory-preservation-checkpoint.json",
+        "sha256": "2dafe18247f399fc435b1d899317df9894e4f81aeabe82282b214af2ede526e3",
+        "bytes": 537,
+        "mtime_ns": 1793521690063092161,
+        "nlink": 1,
+        "inode": 710764
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/storage-clearance.json.gz",
+      "package_sha256": "d8cfedae50fdcf50320f5235c91b7816d9219db3e1d03ee5204c2e8a1c0fb657",
+      "package_bytes": 282,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/storage-clearance.json",
+        "sha256": "99c91329f3b2fb910166058f6b9a8424dd0097ae6d78b6ba19415e7b51fb8fd8",
+        "bytes": 359,
+        "mtime_ns": 1793521117402777525,
+        "nlink": 1,
+        "inode": 710772
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/storage-checks.jsonl.gz",
+      "package_sha256": "d582c38f9bf88faf8da6073a71a715c443b68b3e5852901f6d2f6ed67d88d7b8",
+      "package_bytes": 119,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/storage-checks.jsonl",
+        "sha256": "a53d49a6fc03f0b4defe06b0a98f56a09b76f0732bf3d19d5ac82c20211842a4",
+        "bytes": 109,
+        "mtime_ns": 1793521862859596987,
+        "nlink": 1,
+        "inode": 712013
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/partial-baseline-review.md.gz",
+      "package_sha256": "99b2d421277f01ee8406d45234db75cca94783163826595ab66476d5794e6799",
+      "package_bytes": 1565,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/review.md",
+        "sha256": "a6a85ab9f5f51ded27949ec02eefa7c5987904b9f1f8693413ee598ff1fcf395",
+        "bytes": 2866,
+        "mtime_ns": 1793521950006905947,
+        "nlink": 1,
+        "inode": 712017
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/en/existing-endpoint-index.json.gz",
+      "package_sha256": "ca283a884d2e07acefc2a94e6d0e1fe634be3ec0b971c90dd90258f917c8bf7a",
+      "package_bytes": 9393,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/existing-endpoint-index.json",
+        "sha256": "9f7fe4acc1e4ab53f6fedd593f8d2d75ec5d4d72cef0d9c46a47382a3bb852ff",
+        "bytes": 106707,
+        "mtime_ns": 1793520829400511388,
+        "nlink": 1,
+        "inode": 710721
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/en/views.json.gz",
+      "package_sha256": "efe72fad66df1f13b7ece8df9423064f5cb44d52ae9ff890a75b676c322fc991",
+      "package_bytes": 2819,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/views.json",
+        "sha256": "3a26ec63ad7a4029ff066c1948d6a4739637b8e04b2f8e3513c218b65995b8bd",
+        "bytes": 28997,
+        "mtime_ns": 1793520904066035240,
+        "nlink": 1,
+        "inode": 710722
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/endpoints/receipt.json.gz",
+      "package_sha256": "f28927279a0867c00d7a8afa1716e1d413d96a4a0f6c0d39f4d221c95bfe396a",
+      "package_bytes": 1976,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/receipt.json",
+        "sha256": "bec556ba51e83dcc3eea6cce26926083edbefb3bc4d48071263c5c3efdf0e406",
+        "bytes": 8995,
+        "mtime_ns": 1793514874313599191,
+        "nlink": 1,
+        "inode": 1062092
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/endpoints/command.json.gz",
+      "package_sha256": "e85fbcfd4a1c51339ca0486b063f87932949d9f0795f3909a628fae61847f4d9",
+      "package_bytes": 424,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/command.json",
+        "sha256": "232bfe98cf1717ff3a4215b48723c9434a6d110ce205a784cbb1d2c4d8dd1956",
+        "bytes": 734,
+        "mtime_ns": 1793514807310404928,
+        "nlink": 1,
+        "inode": 1061787
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/endpoints/source-before.json.gz",
+      "package_sha256": "b0979095dc8e65445842d4ebbb512edd9b40578a59da0b057702132c956434c4",
+      "package_bytes": 5734,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/source-before.json",
+        "sha256": "5cff947d667d5c192ea0c222783275360bc9d531fc1bf05d75dc9327f65d9239",
+        "bytes": 24727,
+        "mtime_ns": 1793514807284673045,
+        "nlink": 1,
+        "inode": 1061784
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/endpoints/source-after.json.gz",
+      "package_sha256": "2b5f1b2fe4a8d4f51b55e16b724e5b6cb63d066234cb03d74614ecd5e20b9433",
+      "package_bytes": 5731,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/source-after.json",
+        "sha256": "c2a9b8deb4d3a26671a2932343ab2a30c00c536884d068e49b7b8f92a37ada50",
+        "bytes": 24727,
+        "mtime_ns": 1793514874300179313,
+        "nlink": 1,
+        "inode": 1060127
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/endpoints/data-before.json.gz",
+      "package_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "package_bytes": 4469,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/data-before.json",
+        "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+        "bytes": 13968,
+        "mtime_ns": 1793514807310108030,
+        "nlink": 1,
+        "inode": 1061785
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/endpoints/data-after.json.gz",
+      "package_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "package_bytes": 4469,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/data-after.json",
+        "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+        "bytes": 13968,
+        "mtime_ns": 1793514874300490814,
+        "nlink": 1,
+        "inode": 1061806
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/endpoints/result.json.gz",
+      "package_sha256": "00555b66b7ce3b751602538171e3f43b467ded37b40fc1717c6c0d7ead39a848",
+      "package_bytes": 15693,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/completed/result.json",
+        "sha256": "db684837d652f21faf1b332c10ff72ed9b4e7ba8315f834da8450eab5b1bfb91",
+        "bytes": 82882,
+        "mtime_ns": 1793514872516411932,
+        "nlink": 1,
+        "inode": 1062088
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/endpoints/text.jsonl.gz",
+      "package_sha256": "66402745fe614b444be227944b9f2faea1bd6335c3b1c1464a043c079e5b68fe",
+      "package_bytes": 1648,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/completed/text.jsonl",
+        "sha256": "ae3e3e65f2e1bb694d7e5be4cce8f8592e69f5678764cadf648d2c948ada3567",
+        "bytes": 8922,
+        "mtime_ns": 1793514866670239656,
+        "nlink": 1,
+        "inode": 1062090
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/endpoints/copy-manifest.json.gz",
+      "package_sha256": "bc315d2243bb11273abb33a803df86e45d1898e2c322b1ff7479ddc54c9fe9a5",
+      "package_bytes": 1703,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/completed/copy-manifest.json",
+        "sha256": "f82ce92fc652e0243a3191b8afab81c96c9493a368ae67d7960f757963b213e9",
+        "bytes": 8045,
+        "mtime_ns": 1793514874312494806,
+        "nlink": 1,
+        "inode": 1062091
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/motion/receipt.json.gz",
+      "package_sha256": "d6c10c3835199cb6637873bbc865935746ffc93176062b6ae6fa7bc8267736a9",
+      "package_bytes": 2355,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/receipt.json",
+        "sha256": "1bbf1f71cbc92a5ca7efa953078ef7ce8c60b8979211e7e5bab907e541fdfd7f",
+        "bytes": 11230,
+        "mtime_ns": 1793514971103311612,
+        "nlink": 1,
+        "inode": 1062543
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/motion/command.json.gz",
+      "package_sha256": "5fb50af6d0e9f4bd70add6e5b9698b32f9a48b3a7bbd29555706bc6297dae356",
+      "package_bytes": 430,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/command.json",
+        "sha256": "5cb2cdf90345dcf69b248310503fb22757171f8d3509fcead1c850140411f9db",
+        "bytes": 750,
+        "mtime_ns": 1793514874392009869,
+        "nlink": 1,
+        "inode": 1062097
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/motion/source-before.json.gz",
+      "package_sha256": "cef014a99849e107cc54a4616602d9212f978df88c683b762ccd9eecb37d03f7",
+      "package_bytes": 5731,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/source-before.json",
+        "sha256": "71b7326b7699e1f5306f9ed4fc1336d8a2c00475794b1ba177f7599e274c3745",
+        "bytes": 24727,
+        "mtime_ns": 1793514874363053268,
+        "nlink": 1,
+        "inode": 1062094
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/motion/source-after.json.gz",
+      "package_sha256": "e0890d2ee6f033c60de9d12fa4d44970e8f80a0e8f5d98b6f5d9d340e667480c",
+      "package_bytes": 5734,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/source-after.json",
+        "sha256": "a1abd63fa3aace32870644603b6da463a8ff297fb0f001dfe85b1d5962e45af5",
+        "bytes": 24727,
+        "mtime_ns": 1793514971036755554,
+        "nlink": 1,
+        "inode": 1062505
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/motion/data-before.json.gz",
+      "package_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "package_bytes": 4469,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/data-before.json",
+        "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+        "bytes": 13968,
+        "mtime_ns": 1793514874391226469,
+        "nlink": 1,
+        "inode": 1062095
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/motion/data-after.json.gz",
+      "package_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "package_bytes": 4469,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/data-after.json",
+        "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+        "bytes": 13968,
+        "mtime_ns": 1793514971037052424,
+        "nlink": 1,
+        "inode": 1062506
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/motion/result.json.gz",
+      "package_sha256": "d7b8f9a388fe69508e45b86e21b74293860b8e88670d78c69ff370721be7c4ab",
+      "package_bytes": 15197,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/completed/result.json",
+        "sha256": "94d716c2af85d6a84ba77ffea586140633b70df99e2675a272f5f0a5d4aeb6aa",
+        "bytes": 83094,
+        "mtime_ns": 1793514969444937543,
+        "nlink": 1,
+        "inode": 1062539
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/motion/text.jsonl.gz",
+      "package_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "package_bytes": 20,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/completed/text.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "mtime_ns": 1793514874439690931,
+        "nlink": 1,
+        "inode": 1062541
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/motion/copy-manifest.json.gz",
+      "package_sha256": "d7da037b0e4be984acee1254f0dec33af2ada59cae2e822f99395674022e586f",
+      "package_bytes": 2074,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/completed/copy-manifest.json",
+        "sha256": "c329447ce026b7bb9a5ceb394b88eb04eb9c287b8330b090ff48a700679368ee",
+        "bytes": 10199,
+        "mtime_ns": 1793514971101994032,
+        "nlink": 1,
+        "inode": 1062542
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/en/motion/Kernels.narration.json.gz",
+      "package_sha256": "831a4ad6c42f14272561b0a64d04623cc82592bf94e74c3730bece7b16afeaff",
+      "package_bytes": 9767,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/completed/media/videos/480p15/Kernels.narration.json",
+        "sha256": "c8b0db94fca7e65a2fa2a02b3d24184ef7fdc5e95c8659aa59ea5580dddd29d5",
+        "bytes": 44989,
+        "mtime_ns": 1793514962160341108,
+        "nlink": 1,
+        "inode": 1062535
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/zh/existing-endpoint-index.json.gz",
+      "package_sha256": "ee70352214435ff176c5aca0f85898de5d80a9526fd06d5a4cdc2ce3a86ea50f",
+      "package_bytes": 9179,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/zh/existing-endpoint-index.json",
+        "sha256": "da3004eddbc03ae63d85c2f5f02deb9b2a7a64d1be4c54116f5fb5a07fba7776",
+        "bytes": 103661,
+        "mtime_ns": 1793520829581758553,
+        "nlink": 1,
+        "inode": 710725
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/zh/views.json.gz",
+      "package_sha256": "24d7dc1d2a5e6c7d3e8b561bf95982b2e1990b949e9058af73e6a70b26363247",
+      "package_bytes": 2717,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/zh/views.json",
+        "sha256": "5b7d23a87a053046181d65588bb0317b40b135ca487ac61f6898ddebd195562e",
+        "bytes": 27690,
+        "mtime_ns": 1793520977798652943,
+        "nlink": 1,
+        "inode": 710726
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/endpoints/receipt.json.gz",
+      "package_sha256": "b17fb51d2a4c7fe9164b6e3f2abcc913b5c322961d8ca65a611b8184435e40a3",
+      "package_bytes": 1927,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/receipt.json",
+        "sha256": "a33f53545d0ba612e6b9af6a210deea4a3ef651dd45baf11d9ce163c04eff97c",
+        "bytes": 8666,
+        "mtime_ns": 1793515106112881062,
+        "nlink": 1,
+        "inode": 1063022
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/endpoints/command.json.gz",
+      "package_sha256": "17265cb4f916a61b5a583bcb40e2a3a071329ece3d591ded6aaf84bf869f1f72",
+      "package_bytes": 426,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/command.json",
+        "sha256": "58fdbb6894241317ab7b1c972de2ff5ceb4d3e23f8f7ce095bd690192b68b0e2",
+        "bytes": 734,
+        "mtime_ns": 1793514971182832423,
+        "nlink": 1,
+        "inode": 1062549
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/endpoints/source-before.json.gz",
+      "package_sha256": "4707f8e52a66db4d4d51a87707ccae20d463c31966fd0cfb1623e1d654ba4fef",
+      "package_bytes": 5734,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/source-before.json",
+        "sha256": "afd383c49e52d89b7f31c1af6a2d3d48effcac8c8a59c89187ad18744251d0a7",
+        "bytes": 24727,
+        "mtime_ns": 1793514971152969244,
+        "nlink": 1,
+        "inode": 1062546
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/endpoints/source-after.json.gz",
+      "package_sha256": "4a8ccd7be0714b59cdde057c2b8a0ad1b3b82857ecff02a08fdfbd71bb1bde7b",
+      "package_bytes": 5735,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/source-after.json",
+        "sha256": "9c840d44fc5e482e72cc088dc65cbfa843eac05123a90062873880d3eeddb279",
+        "bytes": 24727,
+        "mtime_ns": 1793515106098787121,
+        "nlink": 1,
+        "inode": 1062821
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/endpoints/data-before.json.gz",
+      "package_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "package_bytes": 4469,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/data-before.json",
+        "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+        "bytes": 13968,
+        "mtime_ns": 1793514971182203692,
+        "nlink": 1,
+        "inode": 1062547
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/endpoints/data-after.json.gz",
+      "package_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "package_bytes": 4469,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/data-after.json",
+        "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+        "bytes": 13968,
+        "mtime_ns": 1793515106099137259,
+        "nlink": 1,
+        "inode": 1062833
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/endpoints/result.json.gz",
+      "package_sha256": "9c0901a650485dc5d0e020f7011a61e35f0ab2415b0de59ff6ba1e23eb555d5e",
+      "package_bytes": 24017,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/completed/result.json",
+        "sha256": "76bff4f90463dba7ed47bbbddf9e9195995c046859b88c20eb1dbd5f1fd8dc85",
+        "bytes": 107303,
+        "mtime_ns": 1793515104030522085,
+        "nlink": 1,
+        "inode": 1063018
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/endpoints/text.jsonl.gz",
+      "package_sha256": "4c8f24f01f2c842f931f881a40c0c4b0f429efbcc56315e213ace8c2b362f358",
+      "package_bytes": 1891,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/completed/text.jsonl",
+        "sha256": "76679ece87851717717092cbb9ef86f48a7d7e80613986945478ada3a18d6cb1",
+        "bytes": 9140,
+        "mtime_ns": 1793515097497557873,
+        "nlink": 1,
+        "inode": 1063020
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/endpoints/copy-manifest.json.gz",
+      "package_sha256": "9645b56704033c48869fd59ba039c1e3164d4546680e82479eab1cfa09554d0a",
+      "package_bytes": 1650,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/completed/copy-manifest.json",
+        "sha256": "0450eae88076eb4c6816a25fbe46907b95d3c1c5a684cf6c8f6a5d315de1fde8",
+        "bytes": 7730,
+        "mtime_ns": 1793515106111298550,
+        "nlink": 1,
+        "inode": 1063021
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/motion/receipt.json.gz",
+      "package_sha256": "9001b3019412b994ed006ebeed7071dc833595864cd7eea0c45c9ae2821be131",
+      "package_bytes": 2302,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/receipt.json",
+        "sha256": "a6a06e6f01655d9d26bddc433a81f045e1f72ae8bd8e5b4493170ebc1e817bc4",
+        "bytes": 10898,
+        "mtime_ns": 1793515219786547910,
+        "nlink": 1,
+        "inode": 1063484
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/motion/command.json.gz",
+      "package_sha256": "a39832cc8f4a42f0470e81d1e873cd68d4c834744f48c3fb697cef527a4bf70c",
+      "package_bytes": 431,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/command.json",
+        "sha256": "1949c1141cd63fad6da59433ba175ecbadd2e1cb92b0a5295a0a967187496d54",
+        "bytes": 750,
+        "mtime_ns": 1793515106197905629,
+        "nlink": 1,
+        "inode": 1063027
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/motion/source-before.json.gz",
+      "package_sha256": "4ef6a9dead3617ea69a3067f17f272270c1130226185b61c73674f6c7b11f3b0",
+      "package_bytes": 5734,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/source-before.json",
+        "sha256": "75a5f74b428fb9b5b843c11b8d8777d4c4f50306ddb1343e10dd6b2f32956a7c",
+        "bytes": 24727,
+        "mtime_ns": 1793515106169743645,
+        "nlink": 1,
+        "inode": 1063024
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/motion/source-after.json.gz",
+      "package_sha256": "2edc1e0cb3ca4399ceb745021bd26571b1f600ec379f3e437b3463401c3dcfb2",
+      "package_bytes": 5734,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/source-after.json",
+        "sha256": "390cada614cd54b142f808e6465e3b77575cad9b0850be8880db0c03b731a38f",
+        "bytes": 24727,
+        "mtime_ns": 1793515219738675858,
+        "nlink": 1,
+        "inode": 1063447
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/motion/data-before.json.gz",
+      "package_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "package_bytes": 4469,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/data-before.json",
+        "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+        "bytes": 13968,
+        "mtime_ns": 1793515106197585635,
+        "nlink": 1,
+        "inode": 1063025
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/motion/data-after.json.gz",
+      "package_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+      "package_bytes": 4469,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/data-after.json",
+        "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+        "bytes": 13968,
+        "mtime_ns": 1793515219738949884,
+        "nlink": 1,
+        "inode": 1063448
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/motion/result.json.gz",
+      "package_sha256": "280b958a0333524231245c25b7ee46b58b655cba739c0d9112951c34400e708b",
+      "package_bytes": 23883,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/completed/result.json",
+        "sha256": "e274f72af527bc151ae346bae73e028aefb1e20acd5de1fce48b476bd0d0ea64",
+        "bytes": 107534,
+        "mtime_ns": 1793515217469871745,
+        "nlink": 1,
+        "inode": 1063480
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/motion/text.jsonl.gz",
+      "package_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "package_bytes": 20,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/completed/text.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "mtime_ns": 1793515106241603637,
+        "nlink": 1,
+        "inode": 1063482
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/motion/copy-manifest.json.gz",
+      "package_sha256": "dd155cab79910bfaf8f663ac88b88ec97a601378216f4864006757a883dfd02e",
+      "package_bytes": 2020,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/completed/copy-manifest.json",
+        "sha256": "a53762e943f2333008b64af25fcf9f6d0ca35109743d88cdd4b3a99291bc75d6",
+        "bytes": 9880,
+        "mtime_ns": 1793515219784893230,
+        "nlink": 1,
+        "inode": 1063483
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/factory/zh/motion/Kernels.narration.json.gz",
+      "package_sha256": "b1a48b9e0464c320c1c9855d05824b332ce71fde8b7b6a6d5292da557292bada",
+      "package_bytes": 18136,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/completed/media/videos/480p15/Kernels.narration.json",
+        "sha256": "de906faf4011d8465424655bbbcbd127e070df4b28cbec247835d53830cb78f8",
+        "bytes": 69887,
+        "mtime_ns": 1793515210073875841,
+        "nlink": 1,
+        "inode": 1063476
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/en/transition-findings.json.gz",
+      "package_sha256": "b526954d5418310397dbb1846a1154c99de643b6f744b2ac8b71ca3bd86f35d3",
+      "package_bytes": 1367,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/transition-findings.json",
+        "sha256": "b49a34eb6e8c6820ce10137385b15f9c484d75a90a436c90b245f4316d6ceb2a",
+        "bytes": 7183,
+        "mtime_ns": 1793521542914311794,
+        "nlink": 1,
+        "inode": 710620
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/en/primary-review-checkpoint.json.gz",
+      "package_sha256": "f07076a0a5eb5e4a5c751ea8f4a3d32ca089e7031151a1a63ce953c03eba90f7",
+      "package_bytes": 6754,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/primary-review-checkpoint.json",
+        "sha256": "aea719dd4c3a1d33beb79757d570ca872b6f58256bc86996993a84765a38b853",
+        "bytes": 63718,
+        "mtime_ns": 1793521633644448158,
+        "nlink": 1,
+        "inode": 710762
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/en/encoded-window-preparation.json.gz",
+      "package_sha256": "fd8d3b54a30477cdc068a48f288a4586066fbe4021e6aebb6c709557eabeb6fa",
+      "package_bytes": 4370,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/encoded-window-preparation.json",
+        "sha256": "853eeebf904dd6cce04e22557c9e6836a76e5d7594fbd194eda241e65910da66",
+        "bytes": 20888,
+        "mtime_ns": 1793521835938725933,
+        "nlink": 1,
+        "inode": 712009
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/en/extraction-receipt.json.gz",
+      "package_sha256": "e9f5ccb7d59bd7e50fdd490ac9d0e4dc340b26dee127f257bf8ecea1d352ae28",
+      "package_bytes": 691,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/extraction-receipt.json",
+        "sha256": "0bca07e49ff8a8f156d890fc31bc2815f2f8cbeb18077a56273497690a1950cd",
+        "bytes": 1294,
+        "mtime_ns": 1793521140453943097,
+        "nlink": 1,
+        "inode": 710773
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/en/audit/result.json.gz",
+      "package_sha256": "2f12af1cd60f80e334240e96cbf85864e76c2d332338266ec4b91795d9565686",
+      "package_bytes": 42702,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/result.json",
+        "sha256": "3452bc9bc9ac8fc41ea53bf5cb6af2a3739d405534406ef8e1b6137597a5a5e3",
+        "bytes": 240563,
+        "mtime_ns": 1793521139736830116,
+        "nlink": 1,
+        "inode": 710776
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/en/audit/unique/review-plan.json.gz",
+      "package_sha256": "777734cf39d323da91f955eee29935cc929e86b82c2b42d77d42f37f047452cf",
+      "package_bytes": 73850,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/unique/review-plan.json",
+        "sha256": "4647a366c4ee348467db9c7be254fb649ece768c0fa2a234db2c5d6fed6c8679",
+        "bytes": 450738,
+        "mtime_ns": 1793521188474458686,
+        "nlink": 1,
+        "inode": 842748
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "baseline/en/audit/unique/views.json.gz",
+      "package_sha256": "ca84f54f160e4f26081218dba56cd86917a2aa00a9a662e815db870b29595750",
+      "package_bytes": 13223,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/unique/views.json",
+        "sha256": "51fdf5f6ca241d93f27b69e246865f84d5a50467b76031aa85604eafb50465e9",
+        "bytes": 85783,
+        "mtime_ns": 1793521585420011260,
+        "nlink": 1,
+        "inode": 842749
+      },
+      "compression": "gzip; decompress byte-exact original"
+    },
+    {
+      "package_path": "native/en-trick-step1-ghost.png",
+      "package_sha256": "15935a987de97b1f68ed2bf08d5684b4b40dd139e98ded8440ef44c140d6b68e",
+      "package_bytes": 19771,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0001477_000098.466s.png",
+        "sha256": "15935a987de97b1f68ed2bf08d5684b4b40dd139e98ded8440ef44c140d6b68e",
+        "bytes": 19771,
+        "mtime_ns": 1793521126609863298,
+        "nlink": 1,
+        "inode": 711067
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-trick-step1-clean.png",
+      "package_sha256": "80a416d36c6d01b659b8abdaf009e0f23d3d227a38519aca5c8fbc0e55c96362",
+      "package_bytes": 25979,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0001488_000099.200s.png",
+        "sha256": "80a416d36c6d01b659b8abdaf009e0f23d3d227a38519aca5c8fbc0e55c96362",
+        "bytes": 25979,
+        "mtime_ns": 1793521126629280141,
+        "nlink": 1,
+        "inode": 711070
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-trick-step2-ghost.png",
+      "package_sha256": "d8e5659fb649a0d66c0c3ee7f70a82ab521237b860a191ea9756f18a4790bbc5",
+      "package_bytes": 29665,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0001516_000101.066s.png",
+        "sha256": "d8e5659fb649a0d66c0c3ee7f70a82ab521237b860a191ea9756f18a4790bbc5",
+        "bytes": 29665,
+        "mtime_ns": 1793521126704602698,
+        "nlink": 1,
+        "inode": 711083
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-trick-step2-clean.png",
+      "package_sha256": "5541313c203577aa48b9505726e31620b461aa0254208900d7d24d4501aa7778",
+      "package_bytes": 32497,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0001531_000102.066s.png",
+        "sha256": "5541313c203577aa48b9505726e31620b461aa0254208900d7d24d4501aa7778",
+        "bytes": 32497,
+        "mtime_ns": 1793521126738680921,
+        "nlink": 1,
+        "inode": 711088
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-trick-step3-ghost.png",
+      "package_sha256": "b35fd472eb7a92d5edb5fb8eb9c6618cb1073bd128988b54ddd50b85bacfa689",
+      "package_bytes": 33855,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0001753_000116.866s.png",
+        "sha256": "b35fd472eb7a92d5edb5fb8eb9c6618cb1073bd128988b54ddd50b85bacfa689",
+        "bytes": 33855,
+        "mtime_ns": 1793521126999866732,
+        "nlink": 1,
+        "inode": 711127
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-trick-step3-clean.png",
+      "package_sha256": "ba8e602cbf9620704f9b8204c3a1e6a610a3b53ac93f119c5085516371a0c816",
+      "package_bytes": 39826,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0001764_000117.600s.png",
+        "sha256": "ba8e602cbf9620704f9b8204c3a1e6a610a3b53ac93f119c5085516371a0c816",
+        "bytes": 39826,
+        "mtime_ns": 1793521127020666132,
+        "nlink": 1,
+        "inode": 711130
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-representer-step1-ghost.png",
+      "package_sha256": "660a46461b3fa2838ff3c0c473cda241723b21c70b41516fc027cd194e0b14c0",
+      "package_bytes": 27047,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0002723_000181.533s.png",
+        "sha256": "660a46461b3fa2838ff3c0c473cda241723b21c70b41516fc027cd194e0b14c0",
+        "bytes": 27047,
+        "mtime_ns": 1793521128057439967,
+        "nlink": 1,
+        "inode": 711282
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-representer-step1-clean.png",
+      "package_sha256": "0bbdd3ee1a6415ccf6b560215351dc4160053d6fd1731d3c5fb150a24ec4bae6",
+      "package_bytes": 25781,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0002738_000182.533s.png",
+        "sha256": "0bbdd3ee1a6415ccf6b560215351dc4160053d6fd1731d3c5fb150a24ec4bae6",
+        "bytes": 25781,
+        "mtime_ns": 1793521128099095245,
+        "nlink": 1,
+        "inode": 711287
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-representer-step2-ghost.png",
+      "package_sha256": "889358143e25f934c4fc6e9d710450a64424926dd0b48c179c4bd9fd87d70772",
+      "package_bytes": 33792,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0002857_000190.466s.png",
+        "sha256": "889358143e25f934c4fc6e9d710450a64424926dd0b48c179c4bd9fd87d70772",
+        "bytes": 33792,
+        "mtime_ns": 1793521128241871992,
+        "nlink": 1,
+        "inode": 711305
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-representer-step2-clean.png",
+      "package_sha256": "129b6d6ace92d640c271f4db9c1ebd6d3de90a31481539d1127a22598b478767",
+      "package_bytes": 36411,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0002872_000191.466s.png",
+        "sha256": "129b6d6ace92d640c271f4db9c1ebd6d3de90a31481539d1127a22598b478767",
+        "bytes": 36411,
+        "mtime_ns": 1793521128284276481,
+        "nlink": 1,
+        "inode": 711310
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-representer-step3-ghost.png",
+      "package_sha256": "1426b530b22f9a794ed63e9534ef91eebc18426ff442d2336bd948b56c30ff54",
+      "package_bytes": 45375,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0002937_000195.799s.png",
+        "sha256": "1426b530b22f9a794ed63e9534ef91eebc18426ff442d2336bd948b56c30ff54",
+        "bytes": 45375,
+        "mtime_ns": 1793521128380033547,
+        "nlink": 1,
+        "inode": 711323
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-representer-step3-clean.png",
+      "package_sha256": "4e9400454f64206f4591de6b35010efde0fc202bb43de9cefab2201e379ab338",
+      "package_bytes": 50078,
+      "original": {
+        "path": "/workspace/runtime/ai6-kernels-selected-motion-review/en/audit/frames/0002948_000196.533s.png",
+        "sha256": "4e9400454f64206f4591de6b35010efde0fc202bb43de9cefab2201e379ab338",
+        "bytes": 50078,
+        "mtime_ns": 1793521128405742100,
+        "nlink": 1,
+        "inode": 711326
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-endpoint-gaussian-grid-error.png",
+      "package_sha256": "0c30c9b80b4693440291082ba9b38732a5ba3c340200d99fc6c4dacd82c0083a",
+      "package_bytes": 48737,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/completed/012_00119.9s.png",
+        "sha256": "0c30c9b80b4693440291082ba9b38732a5ba3c340200d99fc6c4dacd82c0083a",
+        "bytes": 48737,
+        "mtime_ns": 1793514842098234781,
+        "nlink": 1,
+        "inode": 1062078
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/en-endpoint-PSD-negative-tail.png",
+      "package_sha256": "09519dfe202272463af62ae6f3ce60200aee286fb0f5e82589073ccc1c52df6a",
+      "package_bytes": 46060,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/completed/015_00159.4s.png",
+        "sha256": "09519dfe202272463af62ae6f3ce60200aee286fb0f5e82589073ccc1c52df6a",
+        "bytes": 46060,
+        "mtime_ns": 1793514855754268006,
+        "nlink": 1,
+        "inode": 1062081
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/zh-endpoint-gaussian-grid-error.png",
+      "package_sha256": "3d0edfae3bb00b8219b8016bfc32b2d2a4a9476aa68e53cb9ce5dc7b17d45002",
+      "package_bytes": 48077,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/completed/011_00129.8s.png",
+        "sha256": "3d0edfae3bb00b8219b8016bfc32b2d2a4a9476aa68e53cb9ce5dc7b17d45002",
+        "bytes": 48077,
+        "mtime_ns": 1793515035749754812,
+        "nlink": 1,
+        "inode": 1063008
+      },
+      "compression": "independentcopy2; exactbytes"
+    },
+    {
+      "package_path": "native/zh-endpoint-representer-final.png",
+      "package_sha256": "da592635f6ef263a6465df1900343cfdeec808425388bf6020737bd16528d6ab",
+      "package_bytes": 85237,
+      "original": {
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/completed/020_00222.2s.png",
+        "sha256": "da592635f6ef263a6465df1900343cfdeec808425388bf6020737bd16528d6ab",
+        "bytes": 85237,
+        "mtime_ns": 1793515101765544542,
+        "nlink": 1,
+        "inode": 1063017
+      },
+      "compression": "independentcopy2; exactbytes"
+    }
+  ],
+  "selected_scope": {
+    "old_en_primary": {
+      "decoded": 3291,
+      "selected_times": 611,
+      "unique_PNGs": 498,
+      "actual_sheets": 63,
+      "actual_native_followups": 17,
+      "unselected_frames": 2680,
+      "scale": "854x480native;640x360tiles"
+    },
+    "old_en_zh_endpoints": {
+      "selected_times": 86,
+      "actual_unique_native_PNGs": 45
+    },
+    "actualcaption_translation_equivalence": 88,
+    "actualnarration_record_equivalence": 12,
+    "not_reviewed": [
+      "oldZHfullselectedmotion",
+      "oldallencodedproofwindows",
+      "allfreshaftercaptures"
+    ],
+    "four_after_captures": "NOTSTARTED"
+  },
+  "runtime_roots": {
+    "baseline": "/workspace/runtime/ai6-kernels-selected-motion-review",
+    "candidate": "/workspace/runtime/ai6-kernels-write-candidate",
+    "application": "/workspace/runtime/ai6-kernels-source-applied"
+  },
+  "native_examples": [
+    {
+      "package_path": "native/en-trick-step1-ghost.png",
+      "source_time": 98.466341,
+      "source_frame": 1477,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "15935a987de97b1f68ed2bf08d5684b4b40dd139e98ded8440ef44c140d6b68e"
+    },
+    {
+      "package_path": "native/en-trick-step1-clean.png",
+      "source_time": 99.199674,
+      "source_frame": 1488,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "80a416d36c6d01b659b8abdaf009e0f23d3d227a38519aca5c8fbc0e55c96362"
+    },
+    {
+      "package_path": "native/en-trick-step2-ghost.png",
+      "source_time": 101.066341,
+      "source_frame": 1516,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "d8e5659fb649a0d66c0c3ee7f70a82ab521237b860a191ea9756f18a4790bbc5"
+    },
+    {
+      "package_path": "native/en-trick-step2-clean.png",
+      "source_time": 102.066341,
+      "source_frame": 1531,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "5541313c203577aa48b9505726e31620b461aa0254208900d7d24d4501aa7778"
+    },
+    {
+      "package_path": "native/en-trick-step3-ghost.png",
+      "source_time": 116.866341,
+      "source_frame": 1753,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "b35fd472eb7a92d5edb5fb8eb9c6618cb1073bd128988b54ddd50b85bacfa689"
+    },
+    {
+      "package_path": "native/en-trick-step3-clean.png",
+      "source_time": 117.599674,
+      "source_frame": 1764,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "ba8e602cbf9620704f9b8204c3a1e6a610a3b53ac93f119c5085516371a0c816"
+    },
+    {
+      "package_path": "native/en-representer-step1-ghost.png",
+      "source_time": 181.532682,
+      "source_frame": 2723,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "660a46461b3fa2838ff3c0c473cda241723b21c70b41516fc027cd194e0b14c0"
+    },
+    {
+      "package_path": "native/en-representer-step1-clean.png",
+      "source_time": 182.532682,
+      "source_frame": 2738,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "0bbdd3ee1a6415ccf6b560215351dc4160053d6fd1731d3c5fb150a24ec4bae6"
+    },
+    {
+      "package_path": "native/en-representer-step2-ghost.png",
+      "source_time": 190.466016,
+      "source_frame": 2857,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "889358143e25f934c4fc6e9d710450a64424926dd0b48c179c4bd9fd87d70772"
+    },
+    {
+      "package_path": "native/en-representer-step2-clean.png",
+      "source_time": 191.466016,
+      "source_frame": 2872,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "129b6d6ace92d640c271f4db9c1ebd6d3de90a31481539d1127a22598b478767"
+    },
+    {
+      "package_path": "native/en-representer-step3-ghost.png",
+      "source_time": 195.799349,
+      "source_frame": 2937,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "1426b530b22f9a794ed63e9534ef91eebc18426ff442d2336bd948b56c30ff54"
+    },
+    {
+      "package_path": "native/en-representer-step3-clean.png",
+      "source_time": 196.532682,
+      "source_frame": 2948,
+      "classification": "actually viewed854x480 oldbaseline native; source-before only",
+      "sha256": "4e9400454f64206f4591de6b35010efde0fc202bb43de9cefab2201e379ab338"
+    },
+    {
+      "package_path": "native/en-endpoint-gaussian-grid-error.png",
+      "origins": [
+        {
+          "mode": "endpoints",
+          "index": 12,
+          "time": 119.88800264550265,
+          "file": "012_00119.9s.png",
+          "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/completed/012_00119.9s.png"
+        },
+        {
+          "mode": "motion",
+          "index": 12,
+          "time": 119.66666666666534,
+          "file": "012_00119.7s.png",
+          "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/completed/012_00119.7s.png"
+        }
+      ],
+      "classification": "actually viewed854x480 native endpoint oldbaseline",
+      "sha256": "0c30c9b80b4693440291082ba9b38732a5ba3c340200d99fc6c4dacd82c0083a"
+    },
+    {
+      "package_path": "native/en-endpoint-PSD-negative-tail.png",
+      "origins": [
+        {
+          "mode": "endpoints",
+          "index": 15,
+          "time": 159.44230506822612,
+          "file": "015_00159.4s.png",
+          "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/endpoints/completed/015_00159.4s.png"
+        },
+        {
+          "mode": "motion",
+          "index": 15,
+          "time": 159.1333333333317,
+          "file": "015_00159.1s.png",
+          "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/completed/015_00159.1s.png"
+        }
+      ],
+      "classification": "actually viewed854x480 native endpoint oldbaseline",
+      "sha256": "09519dfe202272463af62ae6f3ce60200aee286fb0f5e82589073ccc1c52df6a"
+    },
+    {
+      "package_path": "native/zh-endpoint-gaussian-grid-error.png",
+      "origins": [
+        {
+          "mode": "endpoints",
+          "index": 11,
+          "time": 129.82091980855068,
+          "file": "011_00129.8s.png",
+          "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/completed/011_00129.8s.png"
+        },
+        {
+          "mode": "motion",
+          "index": 11,
+          "time": 129.59999999999832,
+          "file": "011_00129.6s.png",
+          "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/completed/011_00129.6s.png"
+        }
+      ],
+      "classification": "actually viewed854x480 native endpoint oldbaseline",
+      "sha256": "3d0edfae3bb00b8219b8016bfc32b2d2a4a9476aa68e53cb9ce5dc7b17d45002"
+    },
+    {
+      "package_path": "native/zh-endpoint-representer-final.png",
+      "origins": [
+        {
+          "mode": "endpoints",
+          "index": 20,
+          "time": 222.1997532882196,
+          "file": "020_00222.2s.png",
+          "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/endpoints/completed/020_00222.2s.png"
+        },
+        {
+          "mode": "motion",
+          "index": 20,
+          "time": 221.73333333333056,
+          "file": "020_00221.7s.png",
+          "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/completed/020_00221.7s.png"
+        }
+      ],
+      "classification": "actually viewed854x480 native endpoint oldbaseline",
+      "sha256": "da592635f6ef263a6465df1900343cfdeec808425388bf6020737bd16528d6ab"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "syntax_compile": "PASS compile(source,filename,exec) without importing/executing scene",
+  "existing_focused_checks": {
+    "command": "python -m unittest discover -s tests -p test_ai6_scene_teaching_repairs.py -v",
+    "count": 12,
+    "seconds": 1.253,
+    "result": "PASS",
+    "log_sha256": "445c3986fba59861b190e77e642353113628c73420bacf14c9269f4c27777dd3"
+  },
+  "candidate_geometry_receipts": {
+    "en": "cfef6f542277d3fe094c8d74d977ac5eb868a05f35e258e467d6255c8488c321",
+    "zh": "778034940a33146c1a752e33519cd807bde33bb747bc49ab0044aaa497c0d168"
+  },
+  "candidate_invariants_sha256": "f2a30d3b0ccc21559cae2f7af36bd57837b3dd594d474e02ef2007342a983eb8",
+  "source_sha256_after_checks": "040444a4b6a6136d4f698503d831bc8ca581fa98108f112505e14046b3a1e01f",
+  "baseline_package_immutable_manifest_sha256": "347d52370700e759cb2354f043e8b89078d0cec3b4ca8e851752e3a750984b23",
+  "after_render_visual_state": "pending; source application is not rendered signoff",
+  "scope": "No newtests; existing mathematical teaching/whitening/prerequisite tests plus exact AST and bilingual actualManim fixtures."
+}

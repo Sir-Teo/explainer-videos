@@ -1,0 +1,946 @@
+[
+  {
+    "path": "baseline-review.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/baseline-review.json",
+    "original_bytes": 6427,
+    "original_sha256": "1390e33057f083ce3768deb8b942d626abfc8b73fdfaf5fa4be2f8cc86edaeb8",
+    "stored_sha256": "3ce8d0c2e35a2847f0ae07caa51c9a750dc63b10200e85cd0f7c0e8259187325"
+  },
+  {
+    "path": "freeze.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/freeze.json",
+    "original_bytes": 33649,
+    "original_sha256": "e9c3b86c2a0138bf8db95a91b5a6816c445f409302ba2a93b1084793f252421d",
+    "stored_sha256": "6f72affc5b636ffe224faa7b940d7272ad4af88eeea0d1eff2a01f22296e0d32"
+  },
+  {
+    "path": "index-at-freeze.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/index-at-freeze.json",
+    "original_bytes": 93417,
+    "original_sha256": "68ebbc0b22dc2ebc0cc32438ac7de7eac5ec17090b410bcfffaf428d3ed7345f",
+    "stored_sha256": "c4bb1231bb0d26fcf77dadc3d2fca75e7381b9bb77867cdb113d07eacac60bdf"
+  },
+  {
+    "path": "used-source-table-reconciliation.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/used-source-table-reconciliation.json",
+    "original_bytes": 15698,
+    "original_sha256": "1308e2d49a237d6d603647848777e708e996c6000389b7059180a3b51c3ca16e",
+    "stored_sha256": "3c8a507ca4e2961219d2a73bb9dda223fe84fd4ccce97a2bfe0e914ef965d444"
+  },
+  {
+    "path": "observed-whole-snapshot-deltas.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/observed-whole-snapshot-deltas.json",
+    "original_bytes": 2187,
+    "original_sha256": "6b2a5fa6ee21640e9f73b656c83928642c7b1ecd5a291186c0c4145b024de843",
+    "stored_sha256": "273fffb3e04baf374396f34643c7b61d81aaf6947ed5edd53f5d87c6a432c871"
+  },
+  {
+    "path": "local-narration-table-deltas.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/local-narration-table-deltas.json",
+    "original_bytes": 1811,
+    "original_sha256": "6eb528af536371c5f6fac7f7f92841cc66e114bc269cac55e8131838b032224f",
+    "stored_sha256": "bdcdd132696b56aaa18ac07f79e310c546d9a6cb0e01aa3794b583dab81ff188"
+  },
+  {
+    "path": "endpoint-native-findings.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/endpoint-native-findings.json",
+    "original_bytes": 26804,
+    "original_sha256": "bae2d253e502efa565930e30d70b1a780dc83ec31bab953057e9be5883fec94a",
+    "stored_sha256": "f5401d31788772bfaaa28c3a810f0bcd4eedb1208a01e86a9c3f2ececb3bd435"
+  },
+  {
+    "path": "primary-source-check.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/primary-source-check.json",
+    "original_bytes": 1062,
+    "original_sha256": "006d086efa2380cc05a07db8a6d941f289848e5c5c8a091dbd58bdd22fdb7e26",
+    "stored_sha256": "36903f7e188cb242c74b6462b47c6e1f5ba7c87f22b895840f7db85bff6e6988"
+  },
+  {
+    "path": "extract-complete.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/extract-complete.json",
+    "original_bytes": 122,
+    "original_sha256": "6aa225598b87ed80dad5856def5587fd22a036725dabc0defbbad516b0e479f9",
+    "stored_sha256": "5af18ff22e7606d4df56f6542006a357c30bb00f7bf81b9c58e8a2b9649ea88a"
+  },
+  {
+    "path": "extraction-resource-hold.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/extraction-resource-hold.json",
+    "original_bytes": 432,
+    "original_sha256": "95201307ab4df89d7bbe23c0422e0e660ff778e64c09fab5ba91e218b95dbcd3",
+    "stored_sha256": "fd485dc639344ac302be3e29d76ca64160ebca537b7a57f348df926f17f6843a"
+  },
+  {
+    "path": "prepare_metadata.py.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/prepare_metadata.py",
+    "original_bytes": 1892,
+    "original_sha256": "7e6205df14e1f7077c5e34d41090faa7abf971ce0c28fd048c187b2af3149c77",
+    "stored_sha256": "826bdd48fa644f32fe316920ac17cbbb928df8075a1a4a13b5884cc609582964"
+  },
+  {
+    "path": "review_helper.py.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/review_helper.py",
+    "original_bytes": 3401,
+    "original_sha256": "ad6e0ad815acd2ad7c29d5249d185b3de408a30f5410d34cf98e5db48fc10657",
+    "stored_sha256": "1e9dac3fb5640718680519b2b24d9f22779c227c59a009fa0d103126b1bea550"
+  },
+  {
+    "path": "extract.py.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/extract.py",
+    "original_bytes": 2090,
+    "original_sha256": "5ce97fb2738cccf751a4088cbbfffdb795d70d1fdfd798a492a84830fc91fece",
+    "stored_sha256": "2e306f8843a9a2348fba5ffc5c8d007eb5d58dfaa5c05ba543073d1e0da16b34"
+  },
+  {
+    "path": "close_baseline.py.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/close_baseline.py",
+    "original_bytes": 7425,
+    "original_sha256": "f5ce82ac9a2e6bbf49ba9778a6d28f58222bfced1681ddae4f8357d002947553",
+    "stored_sha256": "6a904a4ae4c9ed23cfe3feb7307b3e997c3cf722207b9dd4077c92a930adabdf"
+  },
+  {
+    "path": "observed-source/tools/qa_motion.py.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/observed-source/tools/qa_motion.py",
+    "original_bytes": 19437,
+    "original_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+    "stored_sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2"
+  },
+  {
+    "path": "observed-source/videos/ai/ai_text_zh.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/observed-source/videos/ai/ai_text_zh.json",
+    "original_bytes": 2440358,
+    "original_sha256": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+    "stored_sha256": "4252fe4cc0a5111a276b5dcd60e65945f3a45ce066e6d51b30861e00b5ee950a"
+  },
+  {
+    "path": "observed-source/videos/ai/ai6/s10_knn.py.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/observed-source/videos/ai/ai6/s10_knn.py",
+    "original_bytes": 16659,
+    "original_sha256": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
+    "stored_sha256": "3126173ec5fd450eea267131a8bb128b7b55b5fae59d4991ead53fc4906c9e5f"
+  },
+  {
+    "path": "observed-source/videos/ai/ai6/common.py.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/observed-source/videos/ai/ai6/common.py",
+    "original_bytes": 9415,
+    "original_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+    "stored_sha256": "2f0afe61a44325121ef07e1471b31fa35858167ff54f656ca5695fa73acdb789"
+  },
+  {
+    "path": "observed-source/videos/ai/ai6/zh_lines.py.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/observed-source/videos/ai/ai6/zh_lines.py",
+    "original_bytes": 77809,
+    "original_sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+    "stored_sha256": "e7e522b44f300a063b9c03232b1d0046e84d414f06636af5a5d79f3f5e434c79"
+  },
+  {
+    "path": "en/endpoints/raw-result.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints/raw-result.json",
+    "original_bytes": 89279,
+    "original_sha256": "dc2fd470fe79ba1bbfff6390816c79d2bbf5ba2db04de35ca921c3f393a6bbde",
+    "stored_sha256": "f2733d7d279376678bdf3a85285f4d657c965a6d23a6de9e407c64d48eec1f92"
+  },
+  {
+    "path": "en/endpoints/source-before.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints/source-before.json",
+    "original_bytes": 24727,
+    "original_sha256": "6e9597f59491d96a19b48ec8cf43d1fcdbe474fcfdb20d3b4f8308855310fa18",
+    "stored_sha256": "921178090cb147a4bc5bd48ab11a41100187855d5ffc9589a2479ad1d47c165c"
+  },
+  {
+    "path": "en/endpoints/receipt.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints/receipt.json",
+    "original_bytes": 7182,
+    "original_sha256": "8ff62888c68d73b067f3e0add436fc88fe829d74ae5e199f312a3d408bf61297",
+    "stored_sha256": "38edfc3f2aa89efe27120d47ddc34ac399709fbda234b17ba5943fa3e7eabdf6"
+  },
+  {
+    "path": "en/endpoints/source-after.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints/source-after.json",
+    "original_bytes": 24727,
+    "original_sha256": "6d09662fbc6d9e36697dbae2e4ad5c1f6c3e0f898da2afeee7bc180f68c0896f",
+    "stored_sha256": "ca61296b3b780ecd348df879bed2387403e0b61bd522dad6b0b8863d35577eb6"
+  },
+  {
+    "path": "en/endpoints/data-before.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints/data-before.json",
+    "original_bytes": 13968,
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "en/endpoints/command.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints/command.json",
+    "original_bytes": 730,
+    "original_sha256": "9163eb47227041bf6a7f780c420c5a0fe1c59c0e509512068cadd5b9023553bf",
+    "stored_sha256": "17ba4280e766715adbed3308b86476afec05a306efb3cb693f95560fe9b0d7aa"
+  },
+  {
+    "path": "en/endpoints/raw-text.jsonl.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints/raw-text.jsonl",
+    "original_bytes": 8165,
+    "original_sha256": "13d5ae2911c91a10e37a8f0538fab6278d513676ea5bc3cf1face2f50f8949e0",
+    "stored_sha256": "3f482319c5505b0f82d2df138eac3984bfe4bdbc5b23b83a147ac8ee972ada2b"
+  },
+  {
+    "path": "en/endpoints/data-after.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints/data-after.json",
+    "original_bytes": 13968,
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "en/endpoints/raw-copy-manifest.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints/raw-copy-manifest.json",
+    "original_bytes": 6306,
+    "original_sha256": "35eb75670c4663b23a977e526cae48ea6e437b84d429a1c0954812298d39373d",
+    "stored_sha256": "0fd62045aa172e43d4b0eb6efcffc40d64ef5f09d9cd8c7734d767d9bb14974d"
+  },
+  {
+    "path": "en/endpoints-views/plan.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints-views/plan.json",
+    "original_bytes": 76199,
+    "original_sha256": "7f27e0612fb19a53e210bb9f89f5d15808212c9f0d05c3b2c84d827b529e42a2",
+    "stored_sha256": "5ca256c64d036bb5b8dc914f431d84563ab93b02fa8fdaa2d23226864a0305aa"
+  },
+  {
+    "path": "en/endpoints-views/views.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints-views/views.json",
+    "original_bytes": 3973,
+    "original_sha256": "f72fd6d7c00b1b2d0139203b50e4060253745a9d548d5d7d32a1288062fda308",
+    "stored_sha256": "cb41c2deeb939bad6fdb3607e09e0d4bf3835df8bbd261f0433b1193bba8d925"
+  },
+  {
+    "path": "critical/en/endpoints/012_00112.1s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/10-KNN/en/endpoints/completed/012_00112.1s.png",
+    "original_bytes": 90582,
+    "original_sha256": "d6ae6fdc5dbf39e4a553f9f89d5e770cfe8d12fd97e0b2564f3a2f01068bcebb",
+    "stored_sha256": "d6ae6fdc5dbf39e4a553f9f89d5e770cfe8d12fd97e0b2564f3a2f01068bcebb"
+  },
+  {
+    "path": "critical/en/endpoints/006_00056.1s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/10-KNN/en/endpoints/completed/006_00056.1s.png",
+    "original_bytes": 74602,
+    "original_sha256": "677f0aa20d2d6198b2e6c085d506c9ab4069cbfd3dc0161095b1d30242dc3bc0",
+    "stored_sha256": "677f0aa20d2d6198b2e6c085d506c9ab4069cbfd3dc0161095b1d30242dc3bc0"
+  },
+  {
+    "path": "critical/en/endpoints/016_00164.9s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/10-KNN/en/endpoints/completed/016_00164.9s.png",
+    "original_bytes": 53144,
+    "original_sha256": "2c2a7457c7b2710432805ef04753a4ca3d32e29c53d49edeacbed22fea625ef4",
+    "stored_sha256": "2c2a7457c7b2710432805ef04753a4ca3d32e29c53d49edeacbed22fea625ef4"
+  },
+  {
+    "path": "en/endpoints-views/page-001.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints-views/page-001.png",
+    "original_bytes": 157948,
+    "original_sha256": "c1dacbe081f8590b981191f9130de8bf5c937843f0ba7f28f31e835fded0877c",
+    "stored_sha256": "c1dacbe081f8590b981191f9130de8bf5c937843f0ba7f28f31e835fded0877c"
+  },
+  {
+    "path": "en/endpoints-views/page-002.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints-views/page-002.png",
+    "original_bytes": 211391,
+    "original_sha256": "ef3b95af220a8bf9eba2a08a72fff6a7148959db25c9892296fbe3f510ebbd08",
+    "stored_sha256": "ef3b95af220a8bf9eba2a08a72fff6a7148959db25c9892296fbe3f510ebbd08"
+  },
+  {
+    "path": "en/endpoints-views/page-003.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints-views/page-003.png",
+    "original_bytes": 142818,
+    "original_sha256": "cab2dfb6b4d0b165b6090cc09d7b5bbe031559de89ea6e0f0ee36699b6c25819",
+    "stored_sha256": "cab2dfb6b4d0b165b6090cc09d7b5bbe031559de89ea6e0f0ee36699b6c25819"
+  },
+  {
+    "path": "en/endpoints-views/page-004.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints-views/page-004.png",
+    "original_bytes": 139096,
+    "original_sha256": "66c534dea4e98d8e5e2964618314447f534554bf65de1e1ee50b2388efa9ad02",
+    "stored_sha256": "66c534dea4e98d8e5e2964618314447f534554bf65de1e1ee50b2388efa9ad02"
+  },
+  {
+    "path": "en/endpoints-views/page-005.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/endpoints-views/page-005.png",
+    "original_bytes": 48417,
+    "original_sha256": "d48a518b88588ce4db07a28619218d2b9335d530f4570699acd4e4cafcbf5bea",
+    "stored_sha256": "d48a518b88588ce4db07a28619218d2b9335d530f4570699acd4e4cafcbf5bea"
+  },
+  {
+    "path": "en/motion/raw-result.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion/raw-result.json",
+    "original_bytes": 89534,
+    "original_sha256": "4b7d88f917ad389cee7a779caa99834a863a590db348e468a1e1fe8e06e51ba9",
+    "stored_sha256": "166802195c8e4e6b8bdf31da1b14316e0dd5666c7cd4891d8e8f350cb12e8a4d"
+  },
+  {
+    "path": "en/motion/source-before.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion/source-before.json",
+    "original_bytes": 24727,
+    "original_sha256": "ab6c82d1f43d5dc9b6d848fb5db495c0bfbf42e06f44f1b5fcfc34ce9324d5c7",
+    "stored_sha256": "f00b409f1750d9c08baf900b8a068c22b78e1674444895d03be191d6031e87c7"
+  },
+  {
+    "path": "en/motion/receipt.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion/receipt.json",
+    "original_bytes": 9317,
+    "original_sha256": "a3a61514d500ea12212a408a8143b481adb60cc24cef870c746fb8aa6e2613d0",
+    "stored_sha256": "0fe1345e1a172b54280c65baa5094adbfe6bf4cf7ed14601d573226d153247eb"
+  },
+  {
+    "path": "en/motion/source-after.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion/source-after.json",
+    "original_bytes": 24727,
+    "original_sha256": "2e4c19aa65849a25da91db82ba12a7a8439b0304649cb2e7ca764966349e69c8",
+    "stored_sha256": "d69af01c70df00243e409422ae94785f328e4855f10827f0634e7088800173b7"
+  },
+  {
+    "path": "en/motion/data-before.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion/data-before.json",
+    "original_bytes": 13968,
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "en/motion/command.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion/command.json",
+    "original_bytes": 746,
+    "original_sha256": "4474b838c3c61089f5738dd32d0d80af2dba10771572f2bd671e8a88726f5603",
+    "stored_sha256": "c40bb5ee882e1b627f1cef9ec85184a809dfdd3bb25f88a84d49b5649ffc9143"
+  },
+  {
+    "path": "en/motion/raw-text.jsonl.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion/raw-text.jsonl",
+    "original_bytes": 0,
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stored_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "path": "en/motion/data-after.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion/data-after.json",
+    "original_bytes": 13968,
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "en/motion/raw-copy-manifest.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion/raw-copy-manifest.json",
+    "original_bytes": 8360,
+    "original_sha256": "e2a8b7945dac9514a47bd838e0802a46299da9ec5358a96376f812eb3dd7e1d2",
+    "stored_sha256": "427866f4bd4960795aa51a69774b95307a226416e29a273464958236bd36f960"
+  },
+  {
+    "path": "en/motion-views/plan.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/plan.json",
+    "original_bytes": 285950,
+    "original_sha256": "27c4b87eea95204fb0272b6f9630cc4b1a769ce3f0a91f30469c1946092d5592",
+    "stored_sha256": "ffc5800051324004b58991391200248e04afaae3c48668acc8a812253640f2ea"
+  },
+  {
+    "path": "en/motion-views/views.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/views.json",
+    "original_bytes": 26907,
+    "original_sha256": "a8424b7b2ba96fd22568277fd29027aec1c5dd7d8053b3d868044a9d0c8c3e6b",
+    "stored_sha256": "6f69750f045178ede836058c01173ec9763db3174b47a4cb48a03b8b9e1b06fd"
+  },
+  {
+    "path": "critical/en/motion/0001338_000089.200s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/audit/frames/0001338_000089.200s.png",
+    "original_bytes": 87730,
+    "original_sha256": "5163c492d4e532e5d5803dfca3230619677923ef238923b7273008e297e12b6f",
+    "stored_sha256": "5163c492d4e532e5d5803dfca3230619677923ef238923b7273008e297e12b6f"
+  },
+  {
+    "path": "critical/en/motion/0001462_000097.466s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/audit/frames/0001462_000097.466s.png",
+    "original_bytes": 89949,
+    "original_sha256": "e3652683e8cb57221f5d806822adbf6162ab2f3484ed607c08b34782f88127d4",
+    "stored_sha256": "e3652683e8cb57221f5d806822adbf6162ab2f3484ed607c08b34782f88127d4"
+  },
+  {
+    "path": "critical/en/motion/0001573_000104.866s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/audit/frames/0001573_000104.866s.png",
+    "original_bytes": 97422,
+    "original_sha256": "f064673f98493091cd1fec53bf9d7da7e188f1233be8484261ef8808ec6f48f4",
+    "stored_sha256": "f064673f98493091cd1fec53bf9d7da7e188f1233be8484261ef8808ec6f48f4"
+  },
+  {
+    "path": "critical/en/motion/0001352_000090.133s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/audit/frames/0001352_000090.133s.png",
+    "original_bytes": 84493,
+    "original_sha256": "74f274734112fcce44025c0e039e5d9a080666c9a1907d37ef356a38228a15b3",
+    "stored_sha256": "74f274734112fcce44025c0e039e5d9a080666c9a1907d37ef356a38228a15b3"
+  },
+  {
+    "path": "critical/en/motion/0001476_000098.400s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/audit/frames/0001476_000098.400s.png",
+    "original_bytes": 91267,
+    "original_sha256": "50f40dbc63e938f9377ce64627107dec48daede9d42ad395eca361d7e10bf702",
+    "stored_sha256": "50f40dbc63e938f9377ce64627107dec48daede9d42ad395eca361d7e10bf702"
+  },
+  {
+    "path": "critical/en/motion/0001588_000105.866s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/audit/frames/0001588_000105.866s.png",
+    "original_bytes": 97775,
+    "original_sha256": "10cdf19b99ef436cc3671b609b6df6d33a4cebfac3fc05d976f1832a44c085af",
+    "stored_sha256": "10cdf19b99ef436cc3671b609b6df6d33a4cebfac3fc05d976f1832a44c085af"
+  },
+  {
+    "path": "critical/en/motion/0001740_000115.999s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/audit/frames/0001740_000115.999s.png",
+    "original_bytes": 112303,
+    "original_sha256": "342d8c18125133665fef12768302019dc590346913a823fc56f1756a821c2756",
+    "stored_sha256": "342d8c18125133665fef12768302019dc590346913a823fc56f1756a821c2756"
+  },
+  {
+    "path": "critical/en/motion/0002628_000175.199s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/audit/frames/0002628_000175.199s.png",
+    "original_bytes": 73261,
+    "original_sha256": "1860ad596881235a641d9c0f9bdea318fa8ea9bc9ada0b83b5df0f805a583332",
+    "stored_sha256": "1860ad596881235a641d9c0f9bdea318fa8ea9bc9ada0b83b5df0f805a583332"
+  },
+  {
+    "path": "en/motion-views/page-005.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/page-005.webp",
+    "original_bytes": 170208,
+    "original_sha256": "c95b3adc52e1c2bc888af4708b33443461aea9ca921195a98148f33ab8dc86f1",
+    "stored_sha256": "c95b3adc52e1c2bc888af4708b33443461aea9ca921195a98148f33ab8dc86f1"
+  },
+  {
+    "path": "en/motion-views/page-013.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/page-013.webp",
+    "original_bytes": 333730,
+    "original_sha256": "3630f7c8c4f29fb4e3ac2d4dcc9b9b11bd959864a55883a2ccb2065d0e48b54b",
+    "stored_sha256": "3630f7c8c4f29fb4e3ac2d4dcc9b9b11bd959864a55883a2ccb2065d0e48b54b"
+  },
+  {
+    "path": "en/motion-views/page-024.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/page-024.webp",
+    "original_bytes": 167366,
+    "original_sha256": "a7e4a2d66030768c841896b3791196d9526b73195b2eadd1a9c11dcf8db9078c",
+    "stored_sha256": "a7e4a2d66030768c841896b3791196d9526b73195b2eadd1a9c11dcf8db9078c"
+  },
+  {
+    "path": "en/motion-views/page-025.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/page-025.webp",
+    "original_bytes": 177750,
+    "original_sha256": "bae62ccd0f1947ad30d855d83b22e68a012476356645165e2275efed0d9f9ad4",
+    "stored_sha256": "bae62ccd0f1947ad30d855d83b22e68a012476356645165e2275efed0d9f9ad4"
+  },
+  {
+    "path": "en/motion-views/page-027.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/page-027.webp",
+    "original_bytes": 174896,
+    "original_sha256": "e73ee2f654e264f9f028e9964ba104f9e1503aaaeede16f0be017a625ef2b5d2",
+    "stored_sha256": "e73ee2f654e264f9f028e9964ba104f9e1503aaaeede16f0be017a625ef2b5d2"
+  },
+  {
+    "path": "en/motion-views/page-029.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/page-029.webp",
+    "original_bytes": 134898,
+    "original_sha256": "c929a72068b1087e57392d3d8ab4a5d070630bfb3b5e12d11fb241719b7ee4d3",
+    "stored_sha256": "c929a72068b1087e57392d3d8ab4a5d070630bfb3b5e12d11fb241719b7ee4d3"
+  },
+  {
+    "path": "en/motion-views/page-030.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/page-030.webp",
+    "original_bytes": 183794,
+    "original_sha256": "8aa6d01e65037853a5a997eaaabbbfecdcdd506f305f1eca5283cef50239d095",
+    "stored_sha256": "8aa6d01e65037853a5a997eaaabbbfecdcdd506f305f1eca5283cef50239d095"
+  },
+  {
+    "path": "en/motion-views/page-033.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/page-033.webp",
+    "original_bytes": 176518,
+    "original_sha256": "1199a15aa3c65fc7314e8d7987834fec1fa97a723aa747cb2424f45b7ff135a4",
+    "stored_sha256": "1199a15aa3c65fc7314e8d7987834fec1fa97a723aa747cb2424f45b7ff135a4"
+  },
+  {
+    "path": "en/motion-views/page-036.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/page-036.webp",
+    "original_bytes": 350272,
+    "original_sha256": "8c8d7fc8d5feffe755559fcb4a7432aa12cce5ec31d76a49a14a6dd4ea73269f",
+    "stored_sha256": "8c8d7fc8d5feffe755559fcb4a7432aa12cce5ec31d76a49a14a6dd4ea73269f"
+  },
+  {
+    "path": "en/motion-views/page-043.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/motion-views/page-043.webp",
+    "original_bytes": 124344,
+    "original_sha256": "d3bba76a238f05a785e7e4d053a45ae77ffb0a0634c838f4648fc0a963193000",
+    "stored_sha256": "d3bba76a238f05a785e7e4d053a45ae77ffb0a0634c838f4648fc0a963193000"
+  },
+  {
+    "path": "en/audit/result.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/en/audit/result.json",
+    "original_bytes": 178196,
+    "original_sha256": "1fdcbfd1f77a5f526eabb2d8aaeb69bf50b11b8d703ce9c89cf46c7934683110",
+    "stored_sha256": "9a9de3b3a6156ada3c76b5b18982dccf5d2aa077d91aa60c3e551dd7377fb587"
+  },
+  {
+    "path": "zh/endpoints/raw-result.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints/raw-result.json",
+    "original_bytes": 107993,
+    "original_sha256": "3eb1a2fc48b4bdd4f8a2e90987a95f1fcf6b8efc3327066f885d701621ae2d54",
+    "stored_sha256": "640669f15836c307ff0a8b00a5c8da39ea84b9095ea3579cb2ff9eec2187ab77"
+  },
+  {
+    "path": "zh/endpoints/source-before.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints/source-before.json",
+    "original_bytes": 24727,
+    "original_sha256": "8991698abe65c9f038e118e4bc8391cf71804e07983286b9b40faf6d524d37f5",
+    "stored_sha256": "7085f8bbff6e9137caa7f250ee309aea93748172de112f3a3eee68ab4f114f6d"
+  },
+  {
+    "path": "zh/endpoints/receipt.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints/receipt.json",
+    "original_bytes": 7505,
+    "original_sha256": "2b7315e240547069caf63f9d5ff266cd99b98ac56b82ac8b65fc41a729e8eb27",
+    "stored_sha256": "c32643d79aaffb7e379763031da9d03ef85e79b99136abbe2aecb71d3a49b4e8"
+  },
+  {
+    "path": "zh/endpoints/source-after.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints/source-after.json",
+    "original_bytes": 24727,
+    "original_sha256": "9d5a3c4214bf23bc0992294c511c94b622e819c01600da9c3273bbf44cd5b117",
+    "stored_sha256": "511e97bbb5cb22aa200f3bff0321eb296f9701f1253e758381c47e80d22149cc"
+  },
+  {
+    "path": "zh/endpoints/data-before.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints/data-before.json",
+    "original_bytes": 13968,
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "zh/endpoints/command.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints/command.json",
+    "original_bytes": 730,
+    "original_sha256": "fef0973cee3979535c4c4aeb9992e5407e34b00080560fc7d7719d35dad4f2db",
+    "stored_sha256": "9d532ebcd6292d9e1d1a3868a8bf7028b8deb9856c5b5f0875a693813d78fbe7"
+  },
+  {
+    "path": "zh/endpoints/raw-text.jsonl.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints/raw-text.jsonl",
+    "original_bytes": 8147,
+    "original_sha256": "f92a0880b5f8f125e1206583fca49e44f1ab330aba0cf97ddadaf2b1ea162512",
+    "stored_sha256": "f3fe205fed8ee5515299a06438dba75be8cfedb99aa50cce97305e5aa632cf1a"
+  },
+  {
+    "path": "zh/endpoints/data-after.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints/data-after.json",
+    "original_bytes": 13968,
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "zh/endpoints/raw-copy-manifest.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints/raw-copy-manifest.json",
+    "original_bytes": 6615,
+    "original_sha256": "fcaf9b731d0bb7960efa7ad85562016bed9d6f713bfb5de96b5ebabbab6842ea",
+    "stored_sha256": "9590a94bace5d6b730a7cf5f65a236fe9d9f2f390a7c7c01f7f46d43a714a9d4"
+  },
+  {
+    "path": "zh/endpoints-views/plan.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints-views/plan.json",
+    "original_bytes": 81601,
+    "original_sha256": "6fa4ff2a5b4ceda70887a86526626f56bb767990ad5064fa062e4e484b4536bf",
+    "stored_sha256": "fe5e2415b4a3934064194339d2a2203db8605f55d2398c023a5c31df51d9b35d"
+  },
+  {
+    "path": "zh/endpoints-views/views.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints-views/views.json",
+    "original_bytes": 3885,
+    "original_sha256": "2af8fa2a14887908cb77b4822e6dd158c443bbb9131fad58e21a564c18d2a81f",
+    "stored_sha256": "e2e7b8cef4beea5a47400a2a3e0390a07bbd42a690d547e8f9cf91e1633a5b19"
+  },
+  {
+    "path": "critical/zh/endpoints/013_00115.1s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/10-KNN/zh/endpoints/completed/013_00115.1s.png",
+    "original_bytes": 91626,
+    "original_sha256": "1191731134e00c37a13114573a7d27df7cb41da923d01f635d8571adc9bca5ba",
+    "stored_sha256": "1191731134e00c37a13114573a7d27df7cb41da923d01f635d8571adc9bca5ba"
+  },
+  {
+    "path": "critical/zh/endpoints/007_00058.5s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/10-KNN/zh/endpoints/completed/007_00058.5s.png",
+    "original_bytes": 76623,
+    "original_sha256": "ecd876731b094b744bbddbea8c8ac38d61a56e8c9e91d890c15a1cd56b4867d2",
+    "stored_sha256": "ecd876731b094b744bbddbea8c8ac38d61a56e8c9e91d890c15a1cd56b4867d2"
+  },
+  {
+    "path": "critical/zh/endpoints/017_00168.5s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/10-KNN/zh/endpoints/completed/017_00168.5s.png",
+    "original_bytes": 50618,
+    "original_sha256": "cb09d292abfd634367c54eda601bc90abb26d4825cd71e38834a6e0c1466d8f2",
+    "stored_sha256": "cb09d292abfd634367c54eda601bc90abb26d4825cd71e38834a6e0c1466d8f2"
+  },
+  {
+    "path": "zh/endpoints-views/page-001.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints-views/page-001.png",
+    "original_bytes": 153922,
+    "original_sha256": "a9f51a51d533cb086489c5f8364256d1118a9e5ef5705cad54ee3ae7da15e10b",
+    "stored_sha256": "a9f51a51d533cb086489c5f8364256d1118a9e5ef5705cad54ee3ae7da15e10b"
+  },
+  {
+    "path": "zh/endpoints-views/page-002.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints-views/page-002.png",
+    "original_bytes": 229970,
+    "original_sha256": "df439e1292fbe2a9838ab8d8ef0592996fb110c04ccecf19c60cac7b60c08895",
+    "stored_sha256": "df439e1292fbe2a9838ab8d8ef0592996fb110c04ccecf19c60cac7b60c08895"
+  },
+  {
+    "path": "zh/endpoints-views/page-003.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints-views/page-003.png",
+    "original_bytes": 128914,
+    "original_sha256": "981ad95dea96f5676b5e4f4cea4eb73c008ef2c62b2889c0a59b868166b385a0",
+    "stored_sha256": "981ad95dea96f5676b5e4f4cea4eb73c008ef2c62b2889c0a59b868166b385a0"
+  },
+  {
+    "path": "zh/endpoints-views/page-004.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints-views/page-004.png",
+    "original_bytes": 114873,
+    "original_sha256": "5eeee1c93114fe5964ff3a18eaa2bb8ff087d85f8de997673ab066adb3b9579a",
+    "stored_sha256": "5eeee1c93114fe5964ff3a18eaa2bb8ff087d85f8de997673ab066adb3b9579a"
+  },
+  {
+    "path": "zh/endpoints-views/page-005.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/endpoints-views/page-005.png",
+    "original_bytes": 61610,
+    "original_sha256": "745053aca391d688622da24c228a79fff4e18caa8c8f52d255972c8651555787",
+    "stored_sha256": "745053aca391d688622da24c228a79fff4e18caa8c8f52d255972c8651555787"
+  },
+  {
+    "path": "zh/motion/raw-result.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion/raw-result.json",
+    "original_bytes": 108256,
+    "original_sha256": "11a0902e119abc4195350d1d670a87755d0fea73fdc1c367d50b5fd48a8b27e8",
+    "stored_sha256": "493a3e72fa33b881eea0a5833205d8d8f5bab5adb6ccc5d8cf1a5c783a518f12"
+  },
+  {
+    "path": "zh/motion/source-before.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion/source-before.json",
+    "original_bytes": 24727,
+    "original_sha256": "dad8ce8822fec9ac0281c5b8ea2e85e868dfef7c65a476abbee2ba707b991e4b",
+    "stored_sha256": "efcd8d7950d2f6e8de5c02c418c86ed03216aa97bc3bdcf21e173899c11bbc92"
+  },
+  {
+    "path": "zh/motion/receipt.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion/receipt.json",
+    "original_bytes": 9643,
+    "original_sha256": "f347f854a936a7e53b7fc449227f18e00084e8ac7d8ae506e9b61a87ad1b57c3",
+    "stored_sha256": "e085e6b4d2865db9ad5e8843ad5315b3021690923f2a645f692ccc41f9cb200f"
+  },
+  {
+    "path": "zh/motion/source-after.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion/source-after.json",
+    "original_bytes": 24727,
+    "original_sha256": "20195952cac1884dbbdfd561ccb501a5dd8a1ab9224561e843f179780439c530",
+    "stored_sha256": "dfc189101b144b3a14ef22788350f73ca1b16d434715aad2397215f95fcaef92"
+  },
+  {
+    "path": "zh/motion/data-before.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion/data-before.json",
+    "original_bytes": 13968,
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "zh/motion/command.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion/command.json",
+    "original_bytes": 746,
+    "original_sha256": "66dd95ef997b53954640fce9f7b7bb67741e8864acfc4b4c915c24dc6ad51b39",
+    "stored_sha256": "6f707b847085bd5201795af6955a96077913124e2e7df76a4b5d54af6426b570"
+  },
+  {
+    "path": "zh/motion/raw-text.jsonl.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion/raw-text.jsonl",
+    "original_bytes": 0,
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stored_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+  },
+  {
+    "path": "zh/motion/data-after.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion/data-after.json",
+    "original_bytes": 13968,
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "zh/motion/raw-copy-manifest.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion/raw-copy-manifest.json",
+    "original_bytes": 8672,
+    "original_sha256": "b261657f5c29ed951e56f164197a3c6ce27a05907a1d03924fc569f733ca4595",
+    "stored_sha256": "892762fcdcdb3ae3134c04e4c526dcbc33e73e4abb0d169dad417f052fe20d4c"
+  },
+  {
+    "path": "zh/motion-views/plan.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/plan.json",
+    "original_bytes": 307013,
+    "original_sha256": "f28ca62ea243990c4781ac32b4587a4bd76beea317d9a70b38e48f3a00565fdf",
+    "stored_sha256": "3d480bb782dafe418936b3e12e2e39cbcb293945a79a4ff45870b22a5759386e"
+  },
+  {
+    "path": "zh/motion-views/views.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/views.json",
+    "original_bytes": 26990,
+    "original_sha256": "90b70f1ac54761c7db319f9e26ca359cb4942076759dcdda5976765993cf94cc",
+    "stored_sha256": "5fb4ca04250ed10bbc3dd2c3b624c8578650cae15a5407bbbde289e71638ff24"
+  },
+  {
+    "path": "critical/zh/motion/0001382_000092.133s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/audit/frames/0001382_000092.133s.png",
+    "original_bytes": 85864,
+    "original_sha256": "9c1c623349236fc1aa5f0984126a885be0a8225458fe54b8c4afb984aa9c1bfe",
+    "stored_sha256": "9c1c623349236fc1aa5f0984126a885be0a8225458fe54b8c4afb984aa9c1bfe"
+  },
+  {
+    "path": "critical/zh/motion/0001479_000098.600s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/audit/frames/0001479_000098.600s.png",
+    "original_bytes": 87992,
+    "original_sha256": "332d331c24e329cad8219937f68f1bbacdffcf99c3f77c576a3f57570d6fc952",
+    "stored_sha256": "332d331c24e329cad8219937f68f1bbacdffcf99c3f77c576a3f57570d6fc952"
+  },
+  {
+    "path": "critical/zh/motion/0001606_000107.066s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/audit/frames/0001606_000107.066s.png",
+    "original_bytes": 97041,
+    "original_sha256": "9f2eac02ff0effe1c5eddd1bb45f6077cf5ff693adf5dc1a7ebb920edb060239",
+    "stored_sha256": "9f2eac02ff0effe1c5eddd1bb45f6077cf5ff693adf5dc1a7ebb920edb060239"
+  },
+  {
+    "path": "critical/zh/motion/0001393_000092.866s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/audit/frames/0001393_000092.866s.png",
+    "original_bytes": 81316,
+    "original_sha256": "f924692c52b2573656ca28f06196ac1f8fb01493ecd44caab892d65cf4b8bc40",
+    "stored_sha256": "f924692c52b2573656ca28f06196ac1f8fb01493ecd44caab892d65cf4b8bc40"
+  },
+  {
+    "path": "critical/zh/motion/0001490_000099.333s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/audit/frames/0001490_000099.333s.png",
+    "original_bytes": 86939,
+    "original_sha256": "d73d26f1ca2af68b1aba0c6e39e8cca983b708850b93415756d6eefea5720c35",
+    "stored_sha256": "d73d26f1ca2af68b1aba0c6e39e8cca983b708850b93415756d6eefea5720c35"
+  },
+  {
+    "path": "critical/zh/motion/0001616_000107.733s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/audit/frames/0001616_000107.733s.png",
+    "original_bytes": 96402,
+    "original_sha256": "e660e3b9f28d78f08465064c071351a810220d7c1525e756fa49796e103493d2",
+    "stored_sha256": "e660e3b9f28d78f08465064c071351a810220d7c1525e756fa49796e103493d2"
+  },
+  {
+    "path": "critical/zh/motion/0001723_000114.866s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/audit/frames/0001723_000114.866s.png",
+    "original_bytes": 113069,
+    "original_sha256": "21493227d5a4559ec7f19820062c086c6de866fea0dcceaeee3717c25ad4f775",
+    "stored_sha256": "21493227d5a4559ec7f19820062c086c6de866fea0dcceaeee3717c25ad4f775"
+  },
+  {
+    "path": "critical/zh/motion/0002686_000179.066s.png",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/audit/frames/0002686_000179.066s.png",
+    "original_bytes": 70331,
+    "original_sha256": "f7765358e9712a160a2a60199ee57135573476d22728cc8fd1c8104ceffc28a7",
+    "stored_sha256": "f7765358e9712a160a2a60199ee57135573476d22728cc8fd1c8104ceffc28a7"
+  },
+  {
+    "path": "zh/motion-views/page-006.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/page-006.webp",
+    "original_bytes": 215346,
+    "original_sha256": "65a6812e2ed31148b0062bb13b83cc558b1699cd2d4cf4408be90c5131d97fc7",
+    "stored_sha256": "65a6812e2ed31148b0062bb13b83cc558b1699cd2d4cf4408be90c5131d97fc7"
+  },
+  {
+    "path": "zh/motion-views/page-014.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/page-014.webp",
+    "original_bytes": 295482,
+    "original_sha256": "f50060af83b910b25968054cbceaa0347b6e26bc25aaf9572c8a044fd5ff37ab",
+    "stored_sha256": "f50060af83b910b25968054cbceaa0347b6e26bc25aaf9572c8a044fd5ff37ab"
+  },
+  {
+    "path": "zh/motion-views/page-027.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/page-027.webp",
+    "original_bytes": 133518,
+    "original_sha256": "e0b53549ec7f6a75a4d38336006c0a64cea1044a637cde53dfaf4eb2bcab2618",
+    "stored_sha256": "e0b53549ec7f6a75a4d38336006c0a64cea1044a637cde53dfaf4eb2bcab2618"
+  },
+  {
+    "path": "zh/motion-views/page-028.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/page-028.webp",
+    "original_bytes": 147146,
+    "original_sha256": "0a0e37ce30436b9a5cf963c6ba343558a11a2a720725828ab554d13c76b6ca7f",
+    "stored_sha256": "0a0e37ce30436b9a5cf963c6ba343558a11a2a720725828ab554d13c76b6ca7f"
+  },
+  {
+    "path": "zh/motion-views/page-029.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/page-029.webp",
+    "original_bytes": 134784,
+    "original_sha256": "d8ae67d337579fddc6f61fe7f6552765d851e9d5ec5fca88c5fa9ddfc52f45d4",
+    "stored_sha256": "d8ae67d337579fddc6f61fe7f6552765d851e9d5ec5fca88c5fa9ddfc52f45d4"
+  },
+  {
+    "path": "zh/motion-views/page-031.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/page-031.webp",
+    "original_bytes": 152210,
+    "original_sha256": "da652700a486a4c7bb8b8d648f6d82f84b260bb4b71cf9ae22b08fc88f3a8fc8",
+    "stored_sha256": "da652700a486a4c7bb8b8d648f6d82f84b260bb4b71cf9ae22b08fc88f3a8fc8"
+  },
+  {
+    "path": "zh/motion-views/page-034.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/page-034.webp",
+    "original_bytes": 152764,
+    "original_sha256": "280663319952ca6dcd38fb8692705f9dd5c0ef5865300816e08f1504b7415675",
+    "stored_sha256": "280663319952ca6dcd38fb8692705f9dd5c0ef5865300816e08f1504b7415675"
+  },
+  {
+    "path": "zh/motion-views/page-038.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/page-038.webp",
+    "original_bytes": 211424,
+    "original_sha256": "d0301653eea3da424007eff4bed18b8c1fe6ee0f782250de4201d535a75bfcfe",
+    "stored_sha256": "d0301653eea3da424007eff4bed18b8c1fe6ee0f782250de4201d535a75bfcfe"
+  },
+  {
+    "path": "zh/motion-views/page-043.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/page-043.webp",
+    "original_bytes": 52444,
+    "original_sha256": "6350b2e139b874efed679cad1ed757ada66c38de83fae6e82980e87690a14985",
+    "stored_sha256": "6350b2e139b874efed679cad1ed757ada66c38de83fae6e82980e87690a14985"
+  },
+  {
+    "path": "zh/motion-views/page-048.webp",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/motion-views/page-048.webp",
+    "original_bytes": 157074,
+    "original_sha256": "afc440572e1e3d6841a85996a457d8fb2ab4d9f905a241dd24ddca4c2cb31558",
+    "stored_sha256": "afc440572e1e3d6841a85996a457d8fb2ab4d9f905a241dd24ddca4c2cb31558"
+  },
+  {
+    "path": "zh/audit/result.json.gz",
+    "codec": "gzip",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/zh/audit/result.json",
+    "original_bytes": 186429,
+    "original_sha256": "417eebc30e41d9490c83969cc4409d00371df081706e8dae7374499258ac4c6b",
+    "stored_sha256": "30357d9bc5d7fadedf0fba12896a2bab78292848f6c4c72b32bd26db8c94e777"
+  },
+  {
+    "path": "review.md",
+    "codec": "original bytes",
+    "original_path": "/workspace/runtime/ai6-knn-selected-review/baseline-review.md",
+    "original_bytes": 1503,
+    "original_sha256": "9b461b782a7b970239f77430b783f10faf63da2c7e483174bdbd95f1ad733fd8",
+    "stored_sha256": "9b461b782a7b970239f77430b783f10faf63da2c7e483174bdbd95f1ad733fd8"
+  }
+]

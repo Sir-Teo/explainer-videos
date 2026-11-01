@@ -1,0 +1,5 @@
+# Checked LDA/KNN/Kernels source candidate
+
+All638 repository unittest tests passed in55.728seconds on1November2026. The outer process completed in59.544seconds with return code zero. All1532 inventoried source/configuration identities were unchanged during the run. These candidate bytes were tested on base commit`03b0171a9e5199776ede77b922628f61b0e72921`; the publication index is checked separately against the exact before inventory.
+
+Three local scene files change: LDA axis-label protection and emphasis/reveal repairs; KNN uncapped statistical bands and retained-row reveals; and Kernels' six retained-row reveals. Their numerical payloads, narration and requested timings remain unchanged, with separate actual geometry/source proofs. **Fresh rendered-after acceptance is pending the storage/capability gate.** This source/test result does not establish motion readability, continuous perception, listening or production approval. Earlier638/621/604 runs remain historical and their counts are not added. Numerical threads are one; temporary producer tests intentionally use their normal fixture paths.

@@ -1,0 +1,19 @@
+test_actual_svm_curves_retain_true_losses_and_exponential_boundary (test_ai6_scene_teaching_repairs.ConsumerGeometryAndOutcomes.test_actual_svm_curves_retain_true_losses_and_exponential_boundary) ... ok
+test_adaboost_never_zero_and_reached_zero_are_different_observations (test_ai6_scene_teaching_repairs.ConsumerGeometryAndOutcomes.test_adaboost_never_zero_and_reached_zero_are_different_observations) ... ok
+test_contest_distinguishes_higher_equal_lower_and_nonfinite (test_ai6_scene_teaching_repairs.ConsumerGeometryAndOutcomes.test_contest_distinguishes_higher_equal_lower_and_nonfinite) ... ok
+test_logistic_narrates_legitimate_tied_and_weaker_feature_results (test_ai6_scene_teaching_repairs.ConsumerGeometryAndOutcomes.test_logistic_narrates_legitimate_tied_and_weaker_feature_results) ... ok
+test_stable_unbounded_logloss_values_fit_the_actual_display_range (test_ai6_scene_teaching_repairs.ConsumerGeometryAndOutcomes.test_stable_unbounded_logloss_values_fit_the_actual_display_range) ... ok
+test_actual_never_zero_sentence_has_a_computed_chinese_template (test_ai6_scene_teaching_repairs.LocalChineseNarration.test_actual_never_zero_sentence_has_a_computed_chinese_template) ... /workspace/explainer-videos/.venv/lib/python3.12/site-packages/pydub/utils.py:14: DeprecationWarning: 'audioop' is deprecated and slated for removal in Python 3.13
+  import audioop
+ok
+test_actual_whitening_narration_keeps_the_pullback_bookmark_in_chinese (test_ai6_scene_teaching_repairs.LocalChineseNarration.test_actual_whitening_narration_keeps_the_pullback_bookmark_in_chinese) ... ok
+test_new_outcome_sentences_translate_without_reversing_the_observation (test_ai6_scene_teaching_repairs.LocalChineseNarration.test_new_outcome_sentences_translate_without_reversing_the_observation) ... ok
+test_diagonal_whitening_and_normal_pullback_are_distinct_operations (test_ai6_scene_teaching_repairs.WhiteningGeometry.test_diagonal_whitening_and_normal_pullback_are_distinct_operations) ... ok
+test_eigen_implication_conditions_the_vector_not_just_positive_maximum (test_ai6_scene_teaching_repairs.WhiteningGeometry.test_eigen_implication_conditions_the_vector_not_just_positive_maximum) ... ok
+test_rejects_undefined_whitening_instead_of_fabricating_round_clouds (test_ai6_scene_teaching_repairs.WhiteningGeometry.test_rejects_undefined_whitening_instead_of_fabricating_round_clouds) ... ok
+test_rotated_covariance_uses_same_affine_map_for_contours_and_means (test_ai6_scene_teaching_repairs.WhiteningGeometry.test_rotated_covariance_uses_same_affine_map_for_contours_and_means) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.253s
+
+OK

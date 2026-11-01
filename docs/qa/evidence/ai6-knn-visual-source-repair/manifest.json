@@ -1,0 +1,177 @@
+{
+  "payload_count": 34,
+  "payload_bytes": 86491,
+  "scope": "Applied approved local KNN source plus geometry/checks; actual repaired render regression PENDING.",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2567,
+      "sha256": "afdb586c434acdd65a8ea2aa859010230e0b4f772eb4658563662f1e00880689"
+    },
+    {
+      "path": "apply/actual-apply-script.py.gz",
+      "bytes": 1745,
+      "sha256": "5acb33c7b3c6e5c76c401d589ac85e137a895495e0cb7ad2506c079b1f6292d5"
+    },
+    {
+      "path": "apply/after-four-capture-plan.json.gz",
+      "bytes": 1349,
+      "sha256": "2cd6ad2ee48f141dca4aa916bcca8f14ccf890da8ffe132f540ff8ef8abce87c"
+    },
+    {
+      "path": "apply/after.py.gz",
+      "bytes": 5740,
+      "sha256": "0dbb50012b14a8dd2db152ac0e81842849907def0afa5a58733b76f54dd7d93e"
+    },
+    {
+      "path": "apply/apply-receipt.json.gz",
+      "bytes": 800,
+      "sha256": "c463201e6661df90f5e54b28751f213f1e01899476fbe645a435d3a8b626f886"
+    },
+    {
+      "path": "apply/before.py.gz",
+      "bytes": 5480,
+      "sha256": "3126173ec5fd450eea267131a8bb128b7b55b5fae59d4991ead53fc4906c9e5f"
+    },
+    {
+      "path": "apply/payloads-after.json.gz",
+      "bytes": 2637,
+      "sha256": "ff728b3e451470284ee340443bd744faf1bc4d0e0f168404f661da46ef124a57"
+    },
+    {
+      "path": "apply/payloads-before.json.gz",
+      "bytes": 2637,
+      "sha256": "ff728b3e451470284ee340443bd744faf1bc4d0e0f168404f661da46ef124a57"
+    },
+    {
+      "path": "apply/prepare_plan_and_packet.py.gz",
+      "bytes": 3351,
+      "sha256": "3ce56082407d0b34e78639d047fc6729ec6d9eae5a2e42955369717e385ed325"
+    },
+    {
+      "path": "apply/source.patch.gz",
+      "bytes": 1343,
+      "sha256": "f9a63b90d35fb2eede3bdf451c5649f27904b9c482ba07232de55dc14bbdbbba"
+    },
+    {
+      "path": "apply/sources-after.json.gz",
+      "bytes": 1342,
+      "sha256": "80312b68c5092be877395c5ad2abde7ff7da8a87ac50e88215a0018f3bf9a8ad"
+    },
+    {
+      "path": "apply/sources-before.json.gz",
+      "bytes": 1341,
+      "sha256": "3d899a9d226d349cf26244b72c2fc4577615cd9ca8665881d3bec08dd7b655ae"
+    },
+    {
+      "path": "codec-map.json",
+      "bytes": 13513,
+      "sha256": "4700ae49823223b51ebd52d45e55779a8db1d8df9a78438f79e2c28184d7f44b"
+    },
+    {
+      "path": "private-candidate-history/before.py.gz",
+      "bytes": 5480,
+      "sha256": "3126173ec5fd450eea267131a8bb128b7b55b5fae59d4991ead53fc4906c9e5f"
+    },
+    {
+      "path": "private-candidate-history/candidate-freeze.json.gz",
+      "bytes": 1543,
+      "sha256": "a96d439d55ae04133a99f7a0df8b8e5aa0d0c7c3f6daed1ff2097295960f2fcb"
+    },
+    {
+      "path": "private-candidate-history/candidate.patch.gz",
+      "bytes": 1344,
+      "sha256": "034e907f0a9907d93e5677eb3ad4c262586a293605ec1a934197a535dc130210"
+    },
+    {
+      "path": "private-candidate-history/candidate.py.gz",
+      "bytes": 5740,
+      "sha256": "0dbb50012b14a8dd2db152ac0e81842849907def0afa5a58733b76f54dd7d93e"
+    },
+    {
+      "path": "private-candidate-history/final-geometry-en.json.gz",
+      "bytes": 2578,
+      "sha256": "0831283f44ec499f8d8338cb60bf21fa28d7705464915189409fe0c9aa9a1680"
+    },
+    {
+      "path": "private-candidate-history/final-geometry-en.log.gz",
+      "bytes": 183,
+      "sha256": "03e39d5827ddafffd84e917832d1ab1c13dbdb2889f23d2e9e659f6b86fb710f"
+    },
+    {
+      "path": "private-candidate-history/final-geometry-zh.json.gz",
+      "bytes": 2564,
+      "sha256": "c6b71599a9af5be9cc2e2bfdbb59dfe495bc18cad86323213e32d8cf9786a180"
+    },
+    {
+      "path": "private-candidate-history/final-geometry-zh.log.gz",
+      "bytes": 2637,
+      "sha256": "ad214a44bc52725ac7a65f18c5900bce15d58780f53b7093d0207d2ff2fe91cf"
+    },
+    {
+      "path": "private-candidate-history/final-geometry.json.gz",
+      "bytes": 2859,
+      "sha256": "374699f5815edfc1bfdf144307ce434d65fd6ad72010f8f44e8a818a44157eb6"
+    },
+    {
+      "path": "private-candidate-history/final-geometry.log.gz",
+      "bytes": 2672,
+      "sha256": "244b36db78e3b1b36ada61eec7b07e7bb792743c9198319b3bcbc57a34de9a06"
+    },
+    {
+      "path": "private-candidate-history/finalize_candidate.py.gz",
+      "bytes": 716,
+      "sha256": "83a5ae893db632599bb33fc27cafbe43ee41c4d195c8827336858596809598e9"
+    },
+    {
+      "path": "private-candidate-history/geometry.json.gz",
+      "bytes": 1534,
+      "sha256": "329860d28fb6c856c2925d66812ecfa84c02f1a2e8fd8a5a6fc387196bd19484"
+    },
+    {
+      "path": "private-candidate-history/geometry.log.gz",
+      "bytes": 165,
+      "sha256": "ac92205d2998f8791759ca6c29f85d893aef947d7249145981f43f716f848527"
+    },
+    {
+      "path": "private-candidate-history/initial-final-fixture-import-failure.log.gz",
+      "bytes": 186,
+      "sha256": "4a3e9ba12c0a881bfde8d2c71a79719203e032fbb1fd505bd26a9491b0eb5287"
+    },
+    {
+      "path": "private-candidate-history/initial-final-fixture-withbody-comparison-failure.log.gz",
+      "bytes": 174,
+      "sha256": "4f2892c1725547511d2f0b8e1541bac9fd5a6ff8de2f5ea48bfce8cde12f2692"
+    },
+    {
+      "path": "private-candidate-history/initial-float-equality-fixture-failure.log.gz",
+      "bytes": 2205,
+      "sha256": "23b30e81df7b89307c1c69aca4536c56cafd1f70a463bd613d69c80f8b646e33"
+    },
+    {
+      "path": "private-candidate-history/initial-zh-video-selector-failure.log.gz",
+      "bytes": 80,
+      "sha256": "915c29e30cead08f3a3dafa8e7a76bb9f9c48059c7a1a7c9c3fcc26333a01ab8"
+    },
+    {
+      "path": "private-candidate-history/metadata.json.gz",
+      "bytes": 340,
+      "sha256": "de6561b7d527dcd7c1aaa0ae133771a0d672580bb7421031e93f7ecc2340feeb"
+    },
+    {
+      "path": "private-candidate-history/range-only-candidate.py.gz",
+      "bytes": 5631,
+      "sha256": "96c6375db6492257278f1d44fdf1af0b661adee858511d1fb33326bf25338769"
+    },
+    {
+      "path": "private-candidate-history/validate.py.gz",
+      "bytes": 1681,
+      "sha256": "9128dd79dc505a2cc9f4645ff8739350f434b41fd8dbec4e3de7f62922ff78d4"
+    },
+    {
+      "path": "private-candidate-history/validate_final.py.gz",
+      "bytes": 2334,
+      "sha256": "73de9ae671629db4b91f0a4a2a917383c9a9f85aeaec1c681ebd3eca9b145b6b"
+    }
+  ]
+}

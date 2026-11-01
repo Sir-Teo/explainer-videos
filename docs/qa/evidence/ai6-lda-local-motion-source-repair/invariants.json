@@ -1,0 +1,36 @@
+{
+  "prepared_utc": "2026-11-01T08:16:43.427443+00:00",
+  "before_sha256": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
+  "candidate_sha256": "040444a4b6a6136d4f698503d831bc8ca581fa98108f112505e14046b3a1e01f",
+  "repository_source_unmodified": true,
+  "normalization_proof": "Entire AST identical after removing only per-axis-name background/z-order loop, six local step transform=False keywords, and single Indicate(dl)scale_factor=1.0.",
+  "voiceover_AST_exact": true,
+  "all_other_timing_math_data_geometry_AST_exact": true,
+  "exact_append_calls": {
+    "bells": [
+      1,
+      2,
+      3
+    ],
+    "eigen": [
+      1,
+      2,
+      3
+    ]
+  },
+  "approval_state": "runtime candidate only; physical repository application and rendered regression pending root signoff",
+  "geometry": {
+    "en": {
+      "file": "/workspace/runtime/ai6-lda-repair-candidate/geometry-en.json",
+      "sha256": "cfef6f542277d3fe094c8d74d977ac5eb868a05f35e258e467d6255c8488c321",
+      "result": "passed181angles\u00d761phases",
+      "max_point_drift": 8.881784197001252e-16
+    },
+    "zh": {
+      "file": "/workspace/runtime/ai6-lda-repair-candidate/geometry-zh.json",
+      "sha256": "778034940a33146c1a752e33519cd807bde33bb747bc49ab0044aaa497c0d168",
+      "result": "passed181angles\u00d761phases",
+      "max_point_drift": 8.881784197001252e-16
+    }
+  }
+}

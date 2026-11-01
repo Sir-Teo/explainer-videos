@@ -1,0 +1,22 @@
+[
+  {
+    "id": "axis-name-strike",
+    "scope": "actualENnative25.933s/frame389; samefixed-label/sourcegeometry exposure inZH",
+    "evidence": "images/en/critical/0000389_000025.933s.png",
+    "effect": "Rotating white direction line crosses not-label ink.",
+    "candidate": "Perindividual label opaque.04padding background/z5; no label glyph movement.",
+    "correction": "EarlierZHpage-levelstrike wordingnear27.467wasoverstated. ActualnativeZH27.467and27.733areclearbracketingcontrols; interveningencodedframeswere NOT visuallyreviewed. No ZHdirect-strike claim from these controls."
+  },
+  {
+    "id": "direction-emphasis-overflow",
+    "scope": "actualEN62.867s/frame943 andZH69.067s/frame1036",
+    "effect": "Default1.2scale grows line into citation and below frame during pulse.",
+    "candidate": "Indicate(dl,color=C.BITS,scale_factor=1.0); color/timing preserved."
+  },
+  {
+    "id": "retained-derivation-copy",
+    "scope": "ActualEN+ZH allsix appendcalls: bells1–3/eigen1–3, originalfollowupsindividuallyconfirmed",
+    "effect": "Copy morph visibly duplicates predecessor glyphs while original row is retained.",
+    "candidate": "Onlysix local step(k,transform=False), no sharedhelper change."
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "language": "zh",
+  "movie_sha256": "f87ff1d63b55aae835aca06f92b7c4851dfddc1fc89f35c1167d7f0e7766349c",
+  "movie_bytes": 2463613,
+  "raw_status": "passed",
+  "raw_warnings": [],
+  "historical_fingerprint": "e9c82fd185f519dcaef53f2bb9cb0d56afff9275000586d727fd611ad6154684",
+  "decoded_frames": 2952,
+  "selected_times": 497,
+  "exact_PNG_unique_actually_viewed": 408,
+  "actual_pages_viewed": 51,
+  "page_tile_width": 640,
+  "native_followups_actually_viewed": 9,
+  "endpoint_frames_actually_viewed": 17,
+  "endpoint_pages_viewed": 3,
+  "endpoint_tile_size": [
+    854,
+    480
+  ],
+  "unselected_encoded_frames": 2455,
+  "largest_selected_gap": 1.0,
+  "review_result": "held for three confirmed local motion/readability mechanisms; candidate prepared only",
+  "no_continuous_perceptual_or_audio_approval": true
+}

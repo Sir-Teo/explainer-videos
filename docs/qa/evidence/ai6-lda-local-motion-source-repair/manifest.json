@@ -1,0 +1,83 @@
+{
+  "files": [
+    {
+      "file": "RAW-PATCH-NORMALIZATION.md",
+      "bytes": 547,
+      "sha256": "4c88e52cf218845b971fc90f5a13e1c54373c1ec080450a8dcd6ade42c48f208"
+    },
+    {
+      "file": "README.md",
+      "bytes": 1999,
+      "sha256": "c44295906b294d1045f9c7a709f2b7b7b21ecf283161f2d352095cb40da66914"
+    },
+    {
+      "file": "after-plan.json",
+      "bytes": 10370,
+      "sha256": "9b0d025d01c5c111db1c0081006ed4f6199a20ece1d911db66a91f4d4a5ad7e6"
+    },
+    {
+      "file": "application.json",
+      "bytes": 918,
+      "sha256": "ab3070c25d6c442d5fbe46ca189edf8012bda4ff4f627307387deb4c10934f65"
+    },
+    {
+      "file": "candidate.patch.gz",
+      "bytes": 755,
+      "sha256": "0616b52231dde67a518584099ef9a5de14d5520a7d07097dcb316771b1e306f8"
+    },
+    {
+      "file": "focused-tests.log",
+      "bytes": 2670,
+      "sha256": "445c3986fba59861b190e77e642353113628c73420bacf14c9269f4c27777dd3"
+    },
+    {
+      "file": "geometry-en.json",
+      "bytes": 2876,
+      "sha256": "cfef6f542277d3fe094c8d74d977ac5eb868a05f35e258e467d6255c8488c321"
+    },
+    {
+      "file": "geometry-zh.json",
+      "bytes": 2876,
+      "sha256": "778034940a33146c1a752e33519cd807bde33bb747bc49ab0044aaa497c0d168"
+    },
+    {
+      "file": "geometry.py",
+      "bytes": 3805,
+      "sha256": "88650ea7a083a58b1bfa8bd3a622f404362b6fe6fd00e8a8889165d212b56253"
+    },
+    {
+      "file": "invariants.json",
+      "bytes": 1376,
+      "sha256": "f2a30d3b0ccc21559cae2f7af36bd57837b3dd594d474e02ef2007342a983eb8"
+    },
+    {
+      "file": "original-package-manifest.json.gz",
+      "bytes": 785,
+      "sha256": "1e1a97ccdf9f4748ab23edf0d12c82c691cf8b9d7f6e17a001b90b7e55439bd1"
+    },
+    {
+      "file": "raw-patch-codec-map.json",
+      "bytes": 622,
+      "sha256": "12817b36d822037de4ece4659b6fba059870a1b7507158d19c84105ed07d73d7"
+    },
+    {
+      "file": "s09_lda.after.py",
+      "bytes": 21141,
+      "sha256": "040444a4b6a6136d4f698503d831bc8ca581fa98108f112505e14046b3a1e01f"
+    },
+    {
+      "file": "s09_lda.before.py",
+      "bytes": 20784,
+      "sha256": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42"
+    },
+    {
+      "file": "verification.json",
+      "bytes": 1109,
+      "sha256": "558c7cc9dfc045251c506cdeec74a358d4e480623f91ef8b8f76079b0076cbc6"
+    }
+  ],
+  "file_count_excluding_manifest": 15,
+  "bytes_excluding_manifest": 72633,
+  "original_layout_restoration_verified": true,
+  "original_manifest_sha256": "ec63db53db8c109d34f86dcb96e3cde75a2e4c46b76107042bdf23158415ba3a"
+}
