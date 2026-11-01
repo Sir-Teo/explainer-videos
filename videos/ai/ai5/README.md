@@ -1,10 +1,9 @@
 # AI, Built — Part 5: Randomness in Motion
 
-Current QA checkpoint: the numerical summaries below retain historical baseline measurements while the corrected
-source is being recomputed and rendered. They are not current-v3 results or production approval. The decoder now
-uses an explicitly different boundary-preserving conditional metric; its old table must be replaced after the new
-run. Scoped source/tests and remaining gates are tracked in [the Part5 checklist](../../../docs/qa/ai5-chapter-checklist.md).
-
+Current QA checkpoint: all 28 corrected numerical items completed in the cloud, and all 56 payloads passed
+strict currentness and guarded-load checks without invoking a producer. Bilingual silent visual and motion review
+is in progress; narration, listening and production acceptance remain open. Current decoding results below use
+metric v3 and supersede the historical v2 table. See [the Part 5 checklist](../../../docs/qa/ai5-chapter-checklist.md).
 
 Part 5 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)
 and [the syllabus](../SYLLABUS.md)). A model hands us distributions: it is fitted by maximum likelihood, it is sampled
@@ -35,9 +34,9 @@ here, small and on a CPU, or cited.
   cross-entropy. The bias of σ̂², derived (E = (n−1)/n σ²) and measured on 40,000 samples of each size (0.800 at n = 5;
   Bessel's correction 0.999); Fisher (1922).
 * **4. How precise can an estimate be?** The Cauchy location: the sample average never improves (its interquartile
-  range stays near 2 from n = 5 to 500); the median and maximum likelihood do. Score, Fisher information (measured
+  range stays near 2 from n = 5 to 500); the median and a multistart likelihood fit do (global optimality is not certified). Score, Fisher information (measured
   variance of the Cauchy score 0.4998 against 1/2) and the Cramér–Rao bound derived (Fisher 1925; Rao 1945; Cramér
-  1946). Measured on 4,000 samples of each size: n·Var(MLE) falls from 4.72 at n = 5 to 2.02 at n = 500 (bound 2);
+  1946). Measured on 4,000 samples of each size: n·Var(the likelihood fit) falls from 4.74 at n = 5 to 2.02 at n = 500 (bound 2);
   the median levels at 2.49 (π²/4). The Fisher matrix in training: natural gradient (Amari 1998), EWC (Kirkpatrick et
   al. 2017), K-FAC and Shampoo (Part 11).
 * **5. Belief as a distribution.** Bayes's rule (Bayes 1763, Laplace 1774) on the frequency of "e" in Part 1's
@@ -66,8 +65,8 @@ here, small and on a CPU, or cited.
   et al. 2024; re-analysed by Schaeffer et al. 2025), the top-p cut sliding over two real GPT-2 distributions (an open
   one and a nearly certain one: at p = 0.9, 1,210 words against 1; min-p 0.1, 40 against 1). The experiment: the series' novels
   model uses 16 settings on 12 held-out passages: 8 continuations per stochastic setting, one for greedy; GPT-2 judges each by its surprise; at equal
-  diversity min-p's text is the judge's likeliest (0.900 against 0.966 nats per character for temperature alone);
-  greedy repeats 14% of its 4-grams (see *Computed results*).
+  diversity 0.85, top-k has the lowest interpolated surprise in this run (0.959 against 1.043 nats per character
+  for temperature alone); greedy repeats 35.1% of its token 4-grams (see *Computed results*).
 * **10. Chains with short memories.** A three-state chain from Part 1's letters; its stationary distribution as the
   eigenvector of eigenvalue 1 (Markov 1906, 1913); all 27 letters from "q", forgotten within five steps at the rate of
   the second eigenvalue, 0.30. Detailed balance derived; English is not reversible ("e" then space is 10 times as common
@@ -82,18 +81,19 @@ here, small and on a CPU, or cited.
 * **12. The gradient of an average.** The log-derivative trick derived; baselines (Glynn 1990; Williams 1992). For
   ∇ E[x²], x ~ N(1, 1): the estimate averages 1.998 (truly 2) with per-sample variance 30.0, 13.9 with the best
   baseline (b = 3.99), and 4.0 reparameterized (Kingma & Welling 2013). Evolution strategies (Salimans et al. 2017)
-  on a curved valley, 8 runs each at equal iteration caps (early divergence uses fewer probes). Historical uncorrected-baseline/unsmoothed-reference measurements were: the error of one gradient estimate is 399 plain, 14.8 with the
-  population's mean as baseline, 16.1 with mirrored probes (the gradient's own size: 28.9); with the same step size,
+  on a curved valley, 8 runs each at equal iteration caps (early divergence uses fewer probes). For the Gaussian-smoothed objective, the mean squared gradient-estimation error is 398.7 plain, 16.8 with an
+  unbiased leave-one-out-equivalent baseline, and 15.6 with mirrored probes (the squared reference-gradient norm is
+  37.2164). The smoothed optimum differs from the original objective's optimum. With the same step size,
   2 of 8 plain runs diverge, none with the baseline.
 * **13. Sampling the unsampleable.** Metropolis et al. (1953, MANIAC): the walk on a two-bump density, proposals
   accepted and rejected, 65% of the time in the bump that holds two thirds. Metropolis–Hastings derived from detailed
   balance (Hastings 1970). Langevin dynamics (Langevin 1908; MALA, Roberts & Tweedie 1996; SGLD, Welling & Teh 2011):
   1,500 particles from noise with their density evolving in 3D; L¹ distance from the target 1.19 → 0.23; 59% in the left
-  bump. Mixing measured, four samplers × 5 seeds × 20,000 steps: hops between the bumps and the spread within the left
-  one (truly 0.35) — random-walk Metropolis 70 hops, 0.34; small-step Langevin 13, 0.36; big-step Langevin 228 but
+  bump. Mixing measured, four samplers × 5 seeds × 20,000 steps: hops between the bumps and the conditional variance within the left
+  one (conditional variance 0.3414) — random-walk Metropolis 70 hops, 0.34; small-step Langevin 13, 0.36; big-step Langevin 228 but
   0.56 (biased); MALA 6, 0.34.
 * **14. Brownian motion.** Brown (1827); random walks with 8, 64, 1,024 steps of ±1/√n; Bachelier (1900), Wiener
-  (1923), Donsker's scaling limit; 60 paths inside ±√t, variances 0.25, 0.49, 0.74, 0.98 on 20,000 paths. Quadratic
+  (1923), Donsker's scaling limit; 60 paths shown against the mean ± one standard deviation, ±√t (not pathwise bounds), variances 0.25, 0.49, 0.74, 0.98 on 20,000 paths. Quadratic
   variation derived and measured on 400 paths: Σ(ΔW)² = 0.99 ± 0.32 with 16 steps, 0.999 ± 0.011 with 16,384, while
   Σ|ΔW| reaches 102 (Lévy 1940). A cloud in the plane; the heat equation; Einstein (1905), Perrin (1908).
 * **15. Itô's lemma.** ∫W dW with left points derived (½W² − ½) and checked on 2,000 paths (error 0.22 → 0.007 from
@@ -105,7 +105,7 @@ here, small and on a CPU, or cited.
   20,000 paths: strong error slope 0.54, weak error slope 0.95 (Maruyama 1955).
 * **17. The density's own law.** The Fokker–Planck equation derived from Itô's lemma by integration by parts (Fokker
   1914, Planck 1917, Kolmogorov 1931); solved on a grid for the OU process against 20,000 particles (histograms within
-  0.038, the grid within 0.0004 of the exact noised density); Langevin's stationary density is the target, derived;
+  0.0382 of exact bin-average densities conditioned on the plotted interval, the grid within 0.000411 of the exact density); Langevin's stationary density is the target, derived;
   Anderson's reverse-time SDE (1982) and the score, in 1D and in the plane (Part 21).
 * **Recap**, where it comes back, six problems, Part 6's teaser, references.
 
@@ -113,26 +113,51 @@ here, small and on a CPU, or cited.
 
 `python -m videos.ai.ai5.compute` writes every item to `.cache/ai5/`. The numbers quoted above, plus:
 
-* **Decoding** (`decoding`, about an hour on two threads under load, resumable setting by setting). The series'
-  novels model continues 12 held-out passages (32 tokens) by 40 tokens, 8 times each; GPT-2 small judges each
-  continuation by its negative log-likelihood given the passage, in nats per character (lower: likelier to the judge);
-  diversity is the share of distinct token pairs across a passage's 8 continuations; repetition the share of repeated
-  4-grams within one.
+* **Decoding** (`decoding`, resumable by setting). The novels model continues twelve deterministic held-out
+  prompts of 32 generator tokens. Each of fifteen stochastic settings generates eight 40-token continuations per
+  prompt; greedy generates one. These configuration totals are 1,452 generated continuations and 58,080 tokens.
+  Full generated strings and character counts were not retained for an independent raw-row recount.
 
-  | setting | GPT-2's surprise | diversity | repeated 4-grams | tokens kept (mean) |
-  |---|---|---|---|---|
-  | greedy | 0.627 | — | 14.0% | 1 |
-  | temperature 0.5 / 0.7 / 1.0 / 1.3 | 0.802 / 0.963 / 1.237 / 1.578 | 0.737 / 0.849 / 0.947 / 0.983 | 0.7 / 0.3 / 0 / 0% | all |
-  | top-k 5 / 20 / 100 | 0.810 / 0.955 / 1.121 | 0.747 / 0.884 / 0.921 | 0.5 / 0.1 / 0.1% | 5 / 20 / 100 |
-  | top-p 0.5 / 0.8 / 0.9 / 0.95 | 0.866 / 1.031 / 1.093 / 1.164 | 0.799 / 0.907 / 0.929 / 0.934 | 0.3 / 0.1 / 0.1 / 0.1% | 12 / 66 / 152 / 264 |
-  | min-p 0.02 / 0.05 / 0.1 / 0.2 | 1.017 / 0.933 / 0.891 / 0.800 | 0.893 / 0.885 / 0.840 / 0.750 | 0.0 / 0.1 / 0.2 / 0.7% | 49 / 23 / 12 / 6 |
-  | the novels' own text | 0.889 | | 0.0% | |
+  GPT-2 revision `607a30d783dfa663caf39e06633721c8d4cfcd7e` scores separately tokenized prompt/continuation
+  boundaries in nats per true continuation Unicode character, without silent truncation. This convention and
+  changed prompt selection make these results numerically incomparable with the old metric-v2 table. Diversity
+  pools generator-token bigrams within a prompt; repetition counts generator-token 4-grams, not word sequences.
 
-  Interpolated at diversity 0.85: temperature 0.966, top-k 0.919, top-p 0.943, min-p 0.900 nats per character. Paired
-  passage by passage at the closest settings (min-p 0.1 against temperature 0.7), min-p is likelier to the judge on 11
-  of 12 passages (mean difference 0.074 ± 0.021). One run; a setting's surprise varies by about ± 0.03 (standard error)
-  across the passages. Human text is as surprising to the judge as the model's at a temperature of about 0.6; greedy
-  decoding is the judge's favourite and the most repetitive.
+| Setting | NLL (nats/character) | Distinct token bigrams | Repeated token 4-grams | Mean tokens kept |
+|---|---:|---:|---:|---:|
+| greedy0.0 | 0.540234 | — | 35.1351% | 1.000 |
+| temp0.5 | 0.851139 | 0.695246 | 2.1396% | 4096.000 |
+| temp0.7 | 0.997609 | 0.833600 | 0.4223% | 4096.000 |
+| temp1.0 | 1.281646 | 0.936165 | 0.0282% | 4096.000 |
+| temp1.3 | 1.613097 | 0.989049 | 0.0000% | 4096.000 |
+| topk5 | 0.827322 | 0.733707 | 0.9009% | 5.000 |
+| topk20 | 0.997796 | 0.883814 | 0.0282% | 20.000 |
+| topk100 | 1.170755 | 0.923077 | 0.0845% | 100.000 |
+| topp0.5 | 0.885511 | 0.767628 | 0.5349% | 11.448 |
+| topp0.8 | 1.059453 | 0.889957 | 0.1126% | 63.650 |
+| topp0.9 | 1.147806 | 0.930288 | 0.0000% | 145.573 |
+| topp0.95 | 1.189928 | 0.928152 | 0.0282% | 272.284 |
+| minp0.02 | 1.042255 | 0.894765 | 0.0563% | 45.579 |
+| minp0.05 | 0.983257 | 0.846955 | 0.5068% | 21.750 |
+| minp0.1 | 0.902881 | 0.810897 | 0.4223% | 11.161 |
+| minp0.2 | 0.841291 | 0.709402 | 1.4640% | 5.484 |
+| Held-out human reference | 1.012341 | — | 0.0000% | — |
+
+
+  At diversity 0.85, linear interpolation within observed supports gives temperature 1.043026, top-k 0.959394,
+  top-p 1.002637 and min-p 0.987015 nats/character. All four rules cover this target; their common support is
+  [0.767628, 0.894765]. Top-k is lowest in this descriptive interpolation of one run. This does not establish
+  significance or generalization. Greedy has the lowest surprise and the most repetition; likelihood alone
+  does not measure text quality.
+
+  The mean across sixteen settings of SD(promptwise NLL/character)/√12 is 0.051391 nats/character; the mean
+  passage SD is 0.178025. This descriptive SE concerns an unweighted average of promptwise ratios. It is not
+  the uncertainty of the character-weighted headline score, passage-to-passage spread, a calibrated confidence
+  interval, or model/run-to-run uncertainty. Raw character weights were not saved to estimate weighted uncertainty.
+
+  Parent-recorded elapsed intervals were 651.410 seconds for decoding and 781.241 seconds summed across all
+  28 child processes, including setup/imports. The 56 payload files total 3,090,034 bytes. These observations
+  describe this cloud run, not a portable runtime promise.
 
 ## Run
 
@@ -145,8 +170,9 @@ python tools/build.py ai5 --lang zh              # Chinese
 python tools/qa_scene.py ai5 Decoding            # one chapter, silent, with a contact sheet
 ```
 
-The compute is seeded throughout and takes about an hour on a laptop, most of it the decoding experiment, which saves
-each setting as it finishes and resumes if interrupted. It uses one or two threads.
+The compute is seeded throughout. Decoding saves each setting and resumes only with matching consumed-input,
+producer and runtime identities. Runtime depends on hardware, dependencies and load; the measured cloud run is
+reported above. Use cached-only QA for frozen reviewed data rather than triggering a producer during rendering.
 
 ## Fact-check notes
 

@@ -1,5 +1,16 @@
 # Parts 1–3: local 4K/audio production handoff
 
+## Cloud reactivation — 2026-11-01
+
+**The current production target is the separate parent-owned cloud production task. The canceled local task remains stopped.** Local-owner/pilot instructions below are retained as dated history; they do not reactivate local execution. Part 4 now has its own [scoped cloud metadata handoff](production-handoff-part4.md), separate from this Parts 1–3 gate.
+
+The original transfer remains **144 files / 73,024,949 bytes**: the 141 core cache files plus three strict novels-validator extras. The three cache ZIPs are already saved in Library and were handed to the cloud owner by the parent; this update creates, changes and uploads no archive. Optional real speech is outside that total and retains its separate voice/listening gates.
+
+Keep source **`927fba668656a682b3e29a288de64130ddc680dd`** and the exact optional **`svd-reveal-v1`** manifest gate below. The later Part 3 Outro source **`e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24`** is excluded by the current gate; using it needs a new scoped manifest and production coordination. Neither its separate review nor a later branch HEAD silently expands this accepted source set.
+
+The observed numerical versions remain **Torch `2.15.0+cpu`, Transformers `5.22.1`, NumPy `2.5.4`**, versus lockfile Torch `2.14.1` / Transformers `5.20.1`. The cloud owner must resolve strict runtime/cache portability and inherit fail-on-call producer protection in every renderer. Do not fake versions, weaken currentness, rewrite cache metadata or trigger recomputation. New narration/listening/synchronization and actual production-output review remain required.
+
+
 Prepared in the cloud for the separate local owner `01a19439-c7ac-73a1-afe9-b5fd66b790ed`, relayed through the parent. **No command was run on the user's computer by this task.** No data archive, upload, model download, source/numerical change or publication was performed.
 
 Use the reviewed source release **`927fba668656a682b3e29a288de64130ddc680dd`** for full Parts 1–3. It is already remote; local work need not wait for Part 4. Preserve existing local changes and the running pilot: use a separate clean checkout/worktree rather than resetting it. Obtain this handoff/evidence directory separately when working at the older pin. [Source identities and manifest order](evidence/production-handoff-parts1-3/reviewed-source-inventory.json) cover 17 + 16 + 19 scenes, or **104 bilingual chapter cases**. “38 Part 3 cases” means 19 scenes × 2 languages.
