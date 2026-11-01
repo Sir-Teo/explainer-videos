@@ -1,15 +1,15 @@
 {
   "part": "ai6",
-  "observed_utc": "2026-11-01T04:58:22.613183+00:00",
+  "observed_utc": "2026-11-01T05:34:14.939021+00:00",
   "chapters": 19,
   "bilingual_cases": 38,
   "numerical_items": 22,
-  "default_items_completed": 0,
-  "actual_rendered_cases": 0,
+  "default_items_completed": 22,
+  "actual_rendered_cases": 2,
   "source_integration_evidence": "evidence/ai6-source-integration/README.md",
   "source_teaching_evidence": "evidence/ai6-scene-teaching-source-repairs/README.md",
   "source_core_evidence": "evidence/ai6-producer-cache-source-repairs/README.md",
-  "scope": "Source/code/translation gates only. No actual default-data, rendered, listening or production approval. Root owns one sequential numerical queue; scenes only render against completed validated inputs.",
+  "scope": "All22 default numerical CLI items completed; actual guarded scientific audit ongoing. Hook baseline EN/ZH endpoints and selected motion reviewed; additive visual legend polish and rerender regression pending. Next chapter rendering begins against complete inputs only. No narrated/listening/4K approval.",
   "cases": [
     {
       "position": 1,
@@ -18,11 +18,13 @@
       "title": "Who wrote this page?",
       "lang": "en",
       "source_sha256_observed": "2baeb217d490efb91218d3a2145610f35c17d4a3f037c1070920896ea93d173a",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "source_state": "Baseline selected review complete at source2baeb217; new split/viewport legend source pending regression.",
+      "endpoints": "All baseline EN15/ZH18 endpoint images inspected at native480p; no observed blocking defect.",
+      "selected_motion_review": "Baseline EN436/ZH444 selected times from2529/2852 decodedframes;88 sheets+14native followups viewed. Source-changing legend enhancement requires fresh regression.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits.",
+      "evidence": "evidence/ai6-hook-baseline-selected-motion-review/README.md"
     },
     {
       "position": 1,
@@ -31,11 +33,13 @@
       "title": "Who wrote this page?",
       "lang": "zh",
       "source_sha256_observed": "2baeb217d490efb91218d3a2145610f35c17d4a3f037c1070920896ea93d173a",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "source_state": "Baseline selected review complete at source2baeb217; new split/viewport legend source pending regression.",
+      "endpoints": "All baseline EN15/ZH18 endpoint images inspected at native480p; no observed blocking defect.",
+      "selected_motion_review": "Baseline EN436/ZH444 selected times from2529/2852 decodedframes;88 sheets+14native followups viewed. Source-changing legend enhancement requires fresh regression.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits.",
+      "evidence": "evidence/ai6-hook-baseline-selected-motion-review/README.md"
     },
     {
       "position": 2,
@@ -48,7 +52,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 2,
@@ -61,7 +66,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 3,
@@ -74,7 +80,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 3,
@@ -87,7 +94,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 4,
@@ -100,7 +108,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 4,
@@ -113,7 +122,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 5,
@@ -126,7 +136,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 5,
@@ -139,7 +150,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 6,
@@ -152,7 +164,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 6,
@@ -165,7 +178,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 7,
@@ -178,7 +192,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 7,
@@ -191,7 +206,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 8,
@@ -204,7 +220,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 8,
@@ -217,7 +234,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 9,
@@ -230,7 +248,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 9,
@@ -243,7 +262,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 10,
@@ -256,7 +276,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 10,
@@ -269,7 +290,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 11,
@@ -282,7 +304,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 11,
@@ -295,7 +318,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 12,
@@ -308,7 +332,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 12,
@@ -321,7 +346,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 13,
@@ -334,7 +360,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 13,
@@ -347,7 +374,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 14,
@@ -360,7 +388,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 14,
@@ -373,7 +402,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 15,
@@ -386,7 +416,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 15,
@@ -399,7 +430,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 16,
@@ -412,7 +444,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 16,
@@ -425,7 +458,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 17,
@@ -438,7 +472,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 17,
@@ -451,7 +486,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 18,
@@ -464,7 +500,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 18,
@@ -477,7 +514,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 19,
@@ -490,7 +528,8 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     },
     {
       "position": 19,
@@ -503,7 +542,11 @@
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending."
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; strict cached-only scientific audit in progress; no refits."
     }
-  ]
+  ],
+  "current_polished_rendered_cases": 0,
+  "numerical_source_commit": "b6649e39995f128019948cb32831b1a3caeb3842",
+  "numerical_completed_utc": "2026-11-01T05:09:55.484692+00:00"
 }
