@@ -1,29 +1,31 @@
 # Part 5 chapter checklist
 
-Observed **2026-11-01T03:30:22.388325+00:00**. Complete selected-image baseline review: **28/38 language cases, 12/19 chapters in both languages**. Current repaired-source selected-image acceptance: **11/38 cases, five chapters in both languages**, plus Chinese Bayes. These are image-scope counts, not production approval.
+Observed **2026-11-01T03:59:30.333657+00:00**. Complete selected-image baseline review: **37/38 language cases,18/19 bilingual chapters**. Current repaired-source selected-image acceptance: **32/38 cases,16/19 bilingual chapters**. Native1080 endpoint review covers17cases/299images; fullmotion/4K remains open. These are scoped image counts, not production approval.
 
-All28 corrected numerical items completed. Original silent movies rendered for all38cases. Current replacement renders, raw warnings and pending reviews are distinct in the [JSONledger](ai5-chapter-checklist.json). Narration, listening, synchronization, continuous perception and production resolution remain open.
+All28 numerical items completed. All38 original silent movies rendered. Current records, raw warnings, exact source hashes and package-ready flags are separate in the [JSON ledger](ai5-chapter-checklist.json). Narration, listening, synchronization, continuous perception and production motion remain open.
 
 | Position | Chapter | Current actual review / repair state |
 |---|---|---|
-| 1 | Hook: Out of noise | EN/ZH current selected-image review accepted. |
-| 2 | Bell: 1. The bell curve | Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC. |
-| 3 | Gauss: 2. Bells in many dimensions | Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC. |
-| 4 | Likelihood: 3. Fitting a bell: maximum likelihood | EN/ZH complete baseline; repaired selected-image regression active. |
-| 5 | Fisher: 4. How precise can an estimate be? | EN/ZH complete baseline; repaired selected-image regression active. |
-| 6 | Bayes: 5. Belief as a distribution | Current ZH selected review accepted; repaired EN regression pending. |
-| 7 | MaxEnt: 6. Maximum entropy | EN complete baseline; current ZH selected review active; repaired EN regression pending. |
-| 8 | Tails: 7. How far from the average? | EN complete baseline; current ZH selected review queued; repaired EN regression pending. |
-| 9 | Sampling: 8. Rolling loaded dice | EN complete baseline; repaired EN/ZH renders/regression underway. |
-| 10 | Decoding: 9. How a language model chooses | Repaired EN/ZH selected review accepted; evidence pushed03:08UTC. |
-| 11 | Markov: 10. Chains with short memories | Repaired EN/ZH selected review accepted; final Markov package ready. |
-| 12 | MonteCarlo: 11. Answers from random samples | EN/ZH complete baseline; cohort-sync repair frozen03:21UTC; fresh renders/regression underway. |
-| 13 | ScoreFn: 12. The gradient of an average | EN/ZH complete baseline; clean-reveal repair rendering/regression underway. |
-| 14 | MCMC: 13. Sampling the unsampleable | Complete silent renders; selected-image review active. |
-| 15 | Brownian: 14. Brownian motion | Complete silent renders; selected-image review pending. |
-| 16 | Ito: 15. Itô's lemma | EN/ZH complete baseline; repaired reveal regression active. |
-| 17 | SDE: 16. Randomness with a push | EN/ZH complete baseline; sequential-caption transition repair frozen; fresh regression queued. |
-| 18 | FokkerPlanck: 17. The density's own law | Complete silent renders; selected-image review queued. |
-| 19 | Outro: Recap, problems, and what comes next | EN complete baseline03:25UTC; ZH review active; tiny measured-point recap correction pending. |
+| 1 | Hook: Out of noise | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 2 | Bell: 1. The bell curve | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 3 | Gauss: 2. Bells in many dimensions | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 4 | Likelihood: 3. Fitting a bell: maximum likelihood | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 5 | Fisher: 4. How precise can an estimate be? | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 6 | Bayes: 5. Belief as a distribution | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 7 | MaxEnt: 6. Maximum entropy | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 8 | Tails: 7. How far from the average? | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 9 | Sampling: 8. Rolling loaded dice | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 10 | Decoding: 9. How a language model chooses | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 11 | Markov: 10. Chains with short memories | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 12 | MonteCarlo: 11. Answers from random samples | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 13 | ScoreFn: 12. The gradient of an average | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 14 | MCMC: 13. Sampling the unsampleable | Both original selected-image baselines complete; final repaired movies rendered; fresh changed-window/native review active. |
+| 15 | Brownian: 14. Brownian motion | Both original selected-image baselines complete; final repaired movies rendered; fresh changed-window/native review active. |
+| 16 | Ito: 15. Itô's lemma | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 17 | SDE: 16. Randomness with a push | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
+| 18 | FokkerPlanck: 17. The density's own law | EN complete baseline; ZH baseline34/55pages through104.33s atthischeckpoint; final repaired render/regression pending. |
+| 19 | Outro: Recap, problems, and what comes next | Current selected-image review accepted in both languages; exact inherited/new-image coverage retained. |
 
-Next checkpoint around03:55UTC will report actual newly closed regressions and remaining chapters. No access block; numerical work completed. Runtime/source warnings are retained, and no test count substitutes for visible/audible quality.
+The six old MC/ScoreFn/MCMC EN/ZH whole-movie witnesses were overwritten through hardlinks. Their old reviewed PNGs, source/raw records and stable review guards survive; before/after image comparison remains scoped to that evidence. Both Brownian and Fokker–Planck old movies are independently preserved. All new snapshots use independent copies.
+
+Current remaining selected-review gates: MCMC, Brownian and Fokker–Planck in both languages. No numerical job or access denial blocks QA. Next checkpoint around04:30UTC; actual render/review completion, not test counts, controls acceptance.
