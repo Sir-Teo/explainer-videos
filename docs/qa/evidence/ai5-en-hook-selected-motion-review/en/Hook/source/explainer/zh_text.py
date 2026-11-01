@@ -1,0 +1,212 @@
+"""On-screen text in Chinese for the Chinese masters of a series.
+
+Every Tex / MathTex / Text string is looked up in the series' table, videos/<series>/<series>_text_zh.json (keyed by
+the exact English string; e.g. videos/analysis/analysis_text_zh.json); strings that come out containing Chinese are
+typeset with xelatex + xeCJK (Fandol Song), the rest are unchanged. The series is that of the video being rendered
+(EXPLAINER_VIDEO, set by tools/build.py and tools/collect_text.py), or of the scene file on manim's command line.
+EXPLAINER_COLLECT_TEXT=<file.jsonl> records every string instead, to gather what needs translating.
+"""
+
+from __future__ import annotations
+
+import contextlib
+import inspect
+import json
+import os
+import re
+import sys
+from pathlib import Path
+
+from manim import Code, MathTex, Scene, Text
+
+from explainer import lang
+from explainer.paths import ANALYSIS_DATA, VIDEOS, video_dir
+
+COLLECT = os.environ.get("EXPLAINER_COLLECT_TEXT", "")
+CJK = re.compile(r"[\u3000-\u303f\u4e00-\u9fff\uff00-\uffef]")
+_MATH = re.compile(r"\$[^$]*\$|\\\(.*?\\\)")
+_CMD = re.compile(r"\\[A-Za-z]+")
+_ENV = re.compile(r"\\(?:begin|end)\{\w+\}(?:\{[^{}]*\})?")
+
+
+def needs_translation(s: str, math_mode: bool) -> bool:
+    """True if the string shows English words: in math mode only inside \\text{...}, else outside $...$."""
+    if math_mode:
+        s = " ".join(re.findall(r"\\text(?:bf|it)?\{([^{}]*)\}", s))
+    s = _CMD.sub(" ", _MATH.sub(" ", _ENV.sub(" ", s)))
+    return bool(re.search(r"[A-Za-z]{2,}", s))
+
+
+def table_path() -> Path:
+    """videos/<series>/<series>_text_zh.json for the series being rendered (the analysis series by default)."""
+    series = ANALYSIS_DATA
+    if os.environ.get("EXPLAINER_VIDEO"):
+        series = video_dir(os.environ["EXPLAINER_VIDEO"]).parent
+    else:
+        for a in sys.argv:
+            p = Path(a).resolve()
+            if a.endswith(".py") and p.parent.parent.parent == VIDEOS:
+                series = p.parent.parent
+                break
+    return series / f"{series.name}_text_zh.json"
+
+
+def _table() -> dict:
+    path = table_path()
+    return json.loads(path.read_text()) if path.exists() else {}
+
+
+def _scene() -> str:
+    for fr in inspect.stack()[2:12]:
+        obj = fr.frame.f_locals.get("self")
+        if isinstance(obj, Scene):
+            return type(obj).__name__
+    return ""
+
+
+_TABLE: dict | None = None
+_VERBATIM = [False]  # set by verbatim(): text that is data (words a model read or wrote) stays as it is
+
+
+@contextlib.contextmanager
+def verbatim():
+    previous = _VERBATIM[0]
+    _VERBATIM[0] = True
+    try:
+        yield
+    finally:
+        _VERBATIM[0] = previous
+
+
+# xeCJK drops a space that follows a Chinese character, so "\text{ 时 } d" would set as "时d": make it a control space
+_SPACE = re.compile(r"([\u3000-\u303f\u4e00-\u9fff\uff00-\uffef]) +\}")
+_TEXT_CMD = re.compile(r"(\\text(?:bf|it|rm)?\{)((?:\\[a-z]+\s*)*)([^{}]*)\}")
+
+
+# a number as it appears on screen: 12, 0.43, -3, 27{,}540, 1,560
+_NUM = re.compile(r"(?<![A-Za-z\\])-?\d+(?:(?:\{,\}|,|\.)\d+)*")
+_BY_NUMBERS: dict | None = None
+
+
+def _by_numbers() -> dict:
+    """Numeric caption templates, retaining the translation's number order.
+
+    Reordered numbers are safe to map only when their original values are unique;
+    otherwise the existing same-order rule avoids guessing which value moved.
+    """
+    global _BY_NUMBERS
+    if _BY_NUMBERS is None:
+        _BY_NUMBERS = {}
+        for en, zh in (_TABLE or {}).get("strings", {}).items():
+            ne = _NUM.findall(en)
+            nz = _NUM.findall(zh)
+            if not ne:
+                continue
+            if nz == ne:
+                order = tuple(range(len(ne)))
+            elif len(ne) == len(set(ne)) and len(nz) == len(ne) and set(nz) == set(ne):
+                order = tuple(ne.index(value) for value in nz)
+            else:
+                continue
+            _BY_NUMBERS.setdefault(_NUM.sub("\0", en), (_NUM.sub("\0", zh), len(ne), order))
+    return _BY_NUMBERS
+
+
+def translate(s: str) -> str:
+    """The Chinese for an on-screen string: an exact entry in "strings", else each \\text{...} phrase of a formula
+    from "phrases" (so animated readouts translate whatever their numbers), then the regex "patterns"."""
+    global _TABLE
+    if lang.LANG != "zh":
+        return s
+    if _TABLE is None:
+        _TABLE = _table()
+    if s in _TABLE.get("strings", {}):
+        return _SPACE.sub(r"\1\\ }", _TABLE["strings"][s])
+    # the same string with other numbers (a result that came out differently on this machine): any entry whose
+    # translation preserves the English numbers serves as a template, even when
+    # Chinese grammar changes their order.
+    hit = _by_numbers().get(_NUM.sub("\0", s))
+    if hit is not None:
+        nums = _NUM.findall(s)
+        if len(nums) == hit[1]:
+            it = iter(nums[i] for i in hit[2])
+            return _SPACE.sub(r"\1\\ }", re.sub("\0", lambda m: next(it), hit[0]))
+    phrases = _TABLE.get("phrases", {})
+
+    def phrase(m):
+        core = m.group(3)
+        zh = phrases.get(core.strip())
+        if zh is None:
+            return m.group(0)
+        lead, trail = core[:len(core) - len(core.lstrip())], core[len(core.rstrip()):]
+        return f"{m.group(1)}{m.group(2)}{lead}{zh}{trail}}}"
+
+    out = _TEXT_CMD.sub(phrase, s)
+    for pat, rep in _TABLE.get("patterns", []):
+        out = re.sub(pat, rep, out)
+    return _SPACE.sub(r"\1\\ }", out)
+
+
+# A Song (serif) face for Chinese plain text, the same style as the Fandol Song that TeX uses: macOS ships Songti SC;
+# on Linux, Noto Serif CJK SC (fonts-noto-cjk) or AR PL UMing (fonts-arphic-uming, pulled in by TeX Live's Chinese
+# support). The first one installed wins.
+CJK_FONTS = ("Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "AR PL UMing CN", "Noto Sans CJK SC")
+_CJK_FONT: list = []
+
+
+def cjk_font() -> str:
+    if not _CJK_FONT:
+        import manimpango
+
+        have = set(manimpango.list_fonts())
+        _CJK_FONT.append(next((f for f in CJK_FONTS if f in have), CJK_FONTS[0]))
+    return _CJK_FONT[0]
+
+
+def install(base_template) -> None:
+    zh_tex = base_template.copy()
+    zh_tex.tex_compiler, zh_tex.output_format = "xelatex", ".xdv"
+    # Greek outside math (α-β剪枝, δ规则) is set by the CJK font: Latin Modern has no Greek, and xelatex drops it silently
+    zh_tex.add_to_preamble(r"\usepackage{xeCJK}\setCJKmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]"
+                           r'\xeCJKDeclareCharClass{CJK}{"0391 -> "03A9, "03B1 -> "03C9}')
+
+    def record(s, kind, math_mode):
+        for fr in inspect.stack()[2:8]:  # wrapped_label measures partial lines: keep only its whole text
+            if fr.function == "wrapped_label" and s != fr.frame.f_locals.get("text"):
+                return
+        with open(COLLECT, "a") as f:
+            f.write(json.dumps({"s": s, "kind": kind, "scene": _scene(),
+                                "needs": needs_translation(s, math_mode)}, ensure_ascii=False) + "\n")
+
+    mathtex_init = MathTex.__init__
+
+    def patched_mathtex(self, *tex_strings, **kw):
+        math_mode = kw.get("tex_environment", "align*") != "center" and type(self).__name__ != "Tex"
+        if COLLECT:
+            for s in tex_strings:
+                record(s, type(self).__name__, math_mode)
+        if lang.LANG == "zh":
+            tex_strings = tuple(translate(s) for s in tex_strings)
+            if any(CJK.search(s) for s in tex_strings):
+                kw["tex_template"] = zh_tex
+        mathtex_init(self, *tex_strings, **kw)
+
+    text_init = Text.__init__
+    code_init = Code.__init__
+
+    def patched_code(self, *a, **kw):
+        # Source code is evidence too: identifiers and strings must survive
+        # translation, and must not be reported as missing Chinese captions.
+        with verbatim():
+            code_init(self, *a, **kw)
+
+    def patched_text(self, text, *a, **kw):
+        if COLLECT and not _VERBATIM[0]:
+            record(text, "Text", False)
+        if lang.LANG == "zh" and not _VERBATIM[0]:
+            text = translate(text)
+            if CJK.search(text):
+                kw["font"] = cjk_font()
+        text_init(self, text, *a, **kw)
+
+    MathTex.__init__, Text.__init__, Code.__init__ = patched_mathtex, patched_text, patched_code

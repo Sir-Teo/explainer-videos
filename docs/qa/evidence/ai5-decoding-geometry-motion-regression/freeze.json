@@ -1,0 +1,174 @@
+{
+  "source_sha256": "be8c9b419ea61ecc004d275ccbef276db838bec0a29f57801c8f4db52c63e693",
+  "source_bytes": 22630,
+  "table_sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+  "qa_motion_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+  "cases": [
+    {
+      "lang": "en",
+      "endpoints": {
+        "result_sha256": "8c4b8e0b32f17ecff4fd706b97b8a1f84c13bd4fb22ca47151c36b0fa1a61e97",
+        "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+        "status": "passed",
+        "warnings": [],
+        "duration": 208.94429166666671,
+        "inputs": {
+          ".cache/ai5/temperature.json": {
+            "recorded_signature": [
+              3337,
+              1793497438219760780
+            ],
+            "current_sha256": "e4387480e9de43c2bdba8d595339191737584485ba3ecfc886aff0327f5024f3"
+          },
+          ".cache/ai5/temperature.npz": {
+            "recorded_signature": [
+              332911,
+              1793497438217301649
+            ],
+            "current_sha256": "c9213b9aecf22a88c6bce9c40646274b34c249e3a33b03550312e8610dffc87e"
+          },
+          ".cache/ai5/decoding.json": {
+            "recorded_signature": [
+              28201,
+              1793498147623798962
+            ],
+            "current_sha256": "4b26aff88fe29f0e8e8b737933773150971a6e9ec8d0b9777941c79d3277da93"
+          },
+          ".cache/ai5/decoding.npz": {
+            "recorded_signature": [
+              707,
+              1793498147622602445
+            ],
+            "current_sha256": "63f82ba2326ffff36480f1ca4a6f3f961d572596e982239b05d4ae3961b10d9c"
+          }
+        }
+      },
+      "movie": {
+        "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Decoding_motion/media/videos/480p15/Decoding.mp4",
+        "frozen_copy": "/workspace/runtime/ai5-decoding-geometry-final-review/en/motion/Decoding.mp4",
+        "sha256": "b6aa9d6106a3d05ceb4c241af269e60de1f029e1d13eceaec6335e7d46e7b73b",
+        "bytes": 1992420
+      },
+      "motion": {
+        "result_sha256": "19501345f626036e79d7a5827d40418305e0b5b7aeec95bcc337ff8c5341d714",
+        "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+        "status": "passed",
+        "warnings": [],
+        "duration": 208.46666666666596,
+        "inputs": {
+          ".cache/ai5/temperature.json": {
+            "recorded_signature": [
+              3337,
+              1793497438219760780
+            ],
+            "current_sha256": "e4387480e9de43c2bdba8d595339191737584485ba3ecfc886aff0327f5024f3"
+          },
+          ".cache/ai5/temperature.npz": {
+            "recorded_signature": [
+              332911,
+              1793497438217301649
+            ],
+            "current_sha256": "c9213b9aecf22a88c6bce9c40646274b34c249e3a33b03550312e8610dffc87e"
+          },
+          ".cache/ai5/decoding.json": {
+            "recorded_signature": [
+              28201,
+              1793498147623798962
+            ],
+            "current_sha256": "4b26aff88fe29f0e8e8b737933773150971a6e9ec8d0b9777941c79d3277da93"
+          },
+          ".cache/ai5/decoding.npz": {
+            "recorded_signature": [
+              707,
+              1793498147622602445
+            ],
+            "current_sha256": "63f82ba2326ffff36480f1ca4a6f3f961d572596e982239b05d4ae3961b10d9c"
+          }
+        }
+      }
+    },
+    {
+      "lang": "zh",
+      "endpoints": {
+        "result_sha256": "f553c07792be5cb9266978d3c6ddb34c00011069ff915d36dd9b27e533dfb51b",
+        "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+        "status": "passed",
+        "warnings": [],
+        "duration": 223.3196666666667,
+        "inputs": {
+          ".cache/ai5/temperature.json": {
+            "recorded_signature": [
+              3337,
+              1793497438219760780
+            ],
+            "current_sha256": "e4387480e9de43c2bdba8d595339191737584485ba3ecfc886aff0327f5024f3"
+          },
+          ".cache/ai5/temperature.npz": {
+            "recorded_signature": [
+              332911,
+              1793497438217301649
+            ],
+            "current_sha256": "c9213b9aecf22a88c6bce9c40646274b34c249e3a33b03550312e8610dffc87e"
+          },
+          ".cache/ai5/decoding.json": {
+            "recorded_signature": [
+              28201,
+              1793498147623798962
+            ],
+            "current_sha256": "4b26aff88fe29f0e8e8b737933773150971a6e9ec8d0b9777941c79d3277da93"
+          },
+          ".cache/ai5/decoding.npz": {
+            "recorded_signature": [
+              707,
+              1793498147622602445
+            ],
+            "current_sha256": "63f82ba2326ffff36480f1ca4a6f3f961d572596e982239b05d4ae3961b10d9c"
+          }
+        }
+      },
+      "movie": {
+        "path": "/workspace/explainer-videos/renders/qa/series/ai5/zh/Decoding_motion/media/videos/480p15/Decoding.mp4",
+        "frozen_copy": "/workspace/runtime/ai5-decoding-geometry-final-review/zh/motion/Decoding.mp4",
+        "sha256": "e778f57cf4b0e5b27a6b3371c0918c639c11310bbdc6d1f0736e743f7b03eb8d",
+        "bytes": 2076932
+      },
+      "motion": {
+        "result_sha256": "ce30e2cfa003dfc2e02f3d16e1cb77240f3743cc405a4db61c49a379d8f67763",
+        "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+        "status": "passed",
+        "warnings": [],
+        "duration": 222.79999999999936,
+        "inputs": {
+          ".cache/ai5/temperature.json": {
+            "recorded_signature": [
+              3337,
+              1793497438219760780
+            ],
+            "current_sha256": "e4387480e9de43c2bdba8d595339191737584485ba3ecfc886aff0327f5024f3"
+          },
+          ".cache/ai5/temperature.npz": {
+            "recorded_signature": [
+              332911,
+              1793497438217301649
+            ],
+            "current_sha256": "c9213b9aecf22a88c6bce9c40646274b34c249e3a33b03550312e8610dffc87e"
+          },
+          ".cache/ai5/decoding.json": {
+            "recorded_signature": [
+              28201,
+              1793498147623798962
+            ],
+            "current_sha256": "4b26aff88fe29f0e8e8b737933773150971a6e9ec8d0b9777941c79d3277da93"
+          },
+          ".cache/ai5/decoding.npz": {
+            "recorded_signature": [
+              707,
+              1793498147622602445
+            ],
+            "current_sha256": "63f82ba2326ffff36480f1ca4a6f3f961d572596e982239b05d4ae3961b10d9c"
+          }
+        }
+      }
+    }
+  ]
+}

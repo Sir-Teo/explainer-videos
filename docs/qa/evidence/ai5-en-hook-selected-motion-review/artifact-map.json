@@ -1,0 +1,482 @@
+[
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/report.md",
+    "package_path": "report.md",
+    "sha256": "5bd7b763d9f9683738c2c01555e3a8bc66c2a62915c737ba7270f710e4b0e81a",
+    "bytes": 3544
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/report.json",
+    "package_path": "report.json",
+    "sha256": "682453164f6cb4309aa5303b60eda8510b56c950d7bb5297e8e54a43da66b957",
+    "bytes": 191371
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/prepare.py",
+    "package_path": "prepare.py",
+    "sha256": "e682606854c1a879a5393a21343626e6dde1d6e9882c004914237edca4b2904c",
+    "bytes": 4307
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/finalize.py",
+    "package_path": "finalize.py",
+    "sha256": "d44d74cc19ca6d056cf44c3997feb52012467f1a1fe9cf65f68d490dbd30691f",
+    "bytes": 13170
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/log_views.py",
+    "package_path": "log_views.py",
+    "sha256": "cf3cbec79a913288f73187ddccbcd2f5ffaf704510fdb969875c962ec4e517b4",
+    "bytes": 1266
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/freeze.json",
+    "package_path": "en/Hook/freeze.json",
+    "sha256": "3222ab43991e460391e245d86efd08ed56f173ca35074e84b4bb829df2d4cd8d",
+    "bytes": 6694
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/views.json",
+    "package_path": "en/Hook/views.json",
+    "sha256": "7951546c422d6d0f321fde230217e7f6d20e5e6851975f257286ccf772f0434a",
+    "bytes": 30450
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/ffprobe.json",
+    "package_path": "en/Hook/ffprobe.json",
+    "sha256": "caea267630700cf89f09469cd22d2ee5d1b68a55a62949c506189c2747d7f604",
+    "bytes": 657
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/original-result.json",
+    "package_path": "en/Hook/original-result.json",
+    "sha256": "f74812a0a1d714f3654de5a39704030b4856a535a9a5e775a17236ddfa3e5144",
+    "bytes": 63187
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/original-text.jsonl",
+    "package_path": "en/Hook/original-text.jsonl",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/original-render.log",
+    "package_path": "en/Hook/original-render.log",
+    "sha256": "bc67873f2325547c87192cd5f41ecc2641397b670eab4313335b5ac0d2451deb",
+    "bytes": 405
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit.log",
+    "package_path": "en/Hook/audit.log",
+    "sha256": "e761294ab11e8d8bf6c269f83b63e3eada9669e526b3fd88b58015f35f878d55",
+    "bytes": 96
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/result.json",
+    "package_path": "en/Hook/audit/result.json",
+    "sha256": "3944d4d5d3ffc6da170b6c7894e45968933fbfc8be842a280d7af0a800faaa73",
+    "bytes": 136720
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/review-plan.json",
+    "package_path": "en/Hook/unique/review-plan.json",
+    "sha256": "f45d68d8d91bb1192bd6300a235d85591cbba8952a0c6b2c72ce105646e0a737",
+    "bytes": 163949
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-001.png",
+    "package_path": "en/Hook/unique/sheet-001.png",
+    "sha256": "05fe38d23cde0060b32a07aa135cf10a45353018bf83c21602d1c5578e7d3f34",
+    "bytes": 209539
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-002.png",
+    "package_path": "en/Hook/unique/sheet-002.png",
+    "sha256": "ac0bfa6e9c267130808689002447dbfc6304db17e9dbb06dd6f17924483560bc",
+    "bytes": 452958
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-003.png",
+    "package_path": "en/Hook/unique/sheet-003.png",
+    "sha256": "035d39061f759ebc25cb1eba7cb15a2fa55d4279cafce3769e9f7d56e0763109",
+    "bytes": 640398
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-004.png",
+    "package_path": "en/Hook/unique/sheet-004.png",
+    "sha256": "aa8af1f933519566af5a6aee4d80ebc7226f9248fbd8415daa60db592af2caf6",
+    "bytes": 816925
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-005.png",
+    "package_path": "en/Hook/unique/sheet-005.png",
+    "sha256": "9f044e854b7b52a11affc62106575e1490ca5a6a04da864ccde4d111f645cd2a",
+    "bytes": 1037051
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-006.png",
+    "package_path": "en/Hook/unique/sheet-006.png",
+    "sha256": "385a4548f8451f07d35dab22638e802c424cb5a3e0dc97635cdea7ef36f59c34",
+    "bytes": 1087933
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-007.png",
+    "package_path": "en/Hook/unique/sheet-007.png",
+    "sha256": "11b0a809577551043fd1448b4cf0bba359919a2df4e9f08bf5ffd30fe816432d",
+    "bytes": 1072146
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-008.png",
+    "package_path": "en/Hook/unique/sheet-008.png",
+    "sha256": "7608dd91f410ee8f5fe23dec6c193b9c36b75a72d5e152a7c223b8c1bbb3fafd",
+    "bytes": 1027920
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-009.png",
+    "package_path": "en/Hook/unique/sheet-009.png",
+    "sha256": "baa0db43c7433e30176cb6e5a1c041c75f48110c0bd0336a1c570c5ce3b7f626",
+    "bytes": 631492
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-010.png",
+    "package_path": "en/Hook/unique/sheet-010.png",
+    "sha256": "6894ebc6574c7592bc6fc2c2d01386d1ac193134f4aaf66caa7f74cac7e8803c",
+    "bytes": 513614
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-011.png",
+    "package_path": "en/Hook/unique/sheet-011.png",
+    "sha256": "4690d0e9dc17fd1a96c82b723243d0efe52112b0e7d51283a9e8f7600f2812a7",
+    "bytes": 328861
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-012.png",
+    "package_path": "en/Hook/unique/sheet-012.png",
+    "sha256": "0e3a7e4758a2a976217e931abbdd53c3de7114141eae3ca924acd47465f0517c",
+    "bytes": 593035
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-013.png",
+    "package_path": "en/Hook/unique/sheet-013.png",
+    "sha256": "b14a6eb835d71233a51703b3d60153707a7a510af6dc6bf15f81376458d1878a",
+    "bytes": 620287
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-014.png",
+    "package_path": "en/Hook/unique/sheet-014.png",
+    "sha256": "f2b1d48863d7192820a7ad1935c30d6949f8822612cdeba70bc188e163c677f6",
+    "bytes": 540813
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-015.png",
+    "package_path": "en/Hook/unique/sheet-015.png",
+    "sha256": "9776946fb329ad8d95d4611a6a8562f00dff2ae4f87c1e51a5693108e45734b1",
+    "bytes": 523094
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-016.png",
+    "package_path": "en/Hook/unique/sheet-016.png",
+    "sha256": "68d0f5ac97749685b36da45f279b0fcc33014d5014e9f1e674d5e9e4683b0345",
+    "bytes": 411807
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-017.png",
+    "package_path": "en/Hook/unique/sheet-017.png",
+    "sha256": "7feef1119f5bf047a82838af78ce9683340cde0f485461996bd38936dde4515e",
+    "bytes": 105187
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-018.png",
+    "package_path": "en/Hook/unique/sheet-018.png",
+    "sha256": "8a1cb952901d1853a52420b6e02d63c342c1d87bdb35e2ab2d432d3cff469151",
+    "bytes": 133033
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-019.png",
+    "package_path": "en/Hook/unique/sheet-019.png",
+    "sha256": "60c1d3e612de0d67d9f79f0ae221fa770d8ffba77b104c0d3a523e0b6e014571",
+    "bytes": 149124
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-020.png",
+    "package_path": "en/Hook/unique/sheet-020.png",
+    "sha256": "e2fb59195171dfb6ba24fb9cc2760d66c76c0cfdab717ae3d4b274d4c6ab4db4",
+    "bytes": 182919
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-021.png",
+    "package_path": "en/Hook/unique/sheet-021.png",
+    "sha256": "d2ffe8b486ec352f0e926758d1d713a2595e53a55ca181b9b2cf9c3dc76c9e76",
+    "bytes": 188554
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-022.png",
+    "package_path": "en/Hook/unique/sheet-022.png",
+    "sha256": "6e22a853534f24530198a55fb5f4f1a5ff97fdf84e3f4c7bbaf82e5e1693fc8a",
+    "bytes": 201845
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-023.png",
+    "package_path": "en/Hook/unique/sheet-023.png",
+    "sha256": "87184a752073c7b94ebf51d77233adf9c7524927906870748f8c86f942959bdd",
+    "bytes": 220070
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-024.png",
+    "package_path": "en/Hook/unique/sheet-024.png",
+    "sha256": "2d73f888489c8275215cd4a7d6f747a456dd61066ccb339e5cbe5da812d60abc",
+    "bytes": 204603
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-025.png",
+    "package_path": "en/Hook/unique/sheet-025.png",
+    "sha256": "35c0624c8e7558fb9ff3703b0bf77e5b76b9b9693da7fdca42a47ab4c0ba8456",
+    "bytes": 203817
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-026.png",
+    "package_path": "en/Hook/unique/sheet-026.png",
+    "sha256": "028f7286025b81721a2a65ac794251a0788daf8bb62bc9940af1ae3d345bee9d",
+    "bytes": 215525
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-027.png",
+    "package_path": "en/Hook/unique/sheet-027.png",
+    "sha256": "ab798badc5408f2b9048f4f28629ea697c2241e497bad8357e84bc8f52a564c3",
+    "bytes": 230125
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-028.png",
+    "package_path": "en/Hook/unique/sheet-028.png",
+    "sha256": "87a3591eef38f33f5749ee77ffc828ed4eedcb539f86c9589281fcfb5e96ff60",
+    "bytes": 239090
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-029.png",
+    "package_path": "en/Hook/unique/sheet-029.png",
+    "sha256": "3a80887d1b7f21485e1810e1729638e9cfebcc39bb0a81eb77e0686f47df00b1",
+    "bytes": 242533
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-030.png",
+    "package_path": "en/Hook/unique/sheet-030.png",
+    "sha256": "c3b478496270d7fdabebed1e85610612d6f0151c1cf2c4a497811096fdde2f48",
+    "bytes": 259969
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-031.png",
+    "package_path": "en/Hook/unique/sheet-031.png",
+    "sha256": "6bf993c4bb3c382f129f617d5accb541d6ba72ae660fa2e688edd3822bce6dee",
+    "bytes": 275512
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-032.png",
+    "package_path": "en/Hook/unique/sheet-032.png",
+    "sha256": "e98552b6c310636fcfc019880ae9153e135b17fa0b746286a80104ae8f13fab2",
+    "bytes": 256710
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-033.png",
+    "package_path": "en/Hook/unique/sheet-033.png",
+    "sha256": "8e9bb58769ee0d8366bc2609592d1c2437e4a7e606ee3b20cf889cdd55af4bf4",
+    "bytes": 305392
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-034.png",
+    "package_path": "en/Hook/unique/sheet-034.png",
+    "sha256": "72eb756511ed3522d8f24fe20fb9a7b084dac0494e3c66d9ca6c9dbb68b2aba2",
+    "bytes": 553700
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-035.png",
+    "package_path": "en/Hook/unique/sheet-035.png",
+    "sha256": "31f33abab21454eeee8b8c8d1576a7228339bb0f1743b302c46528428a040159",
+    "bytes": 538541
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-036.png",
+    "package_path": "en/Hook/unique/sheet-036.png",
+    "sha256": "40920eeb3cc652f3d6f15689bd6f5529c82c084796b6a0d78128ee4a9d76a851",
+    "bytes": 316687
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000000_000000.000s.png",
+    "package_path": "en/Hook/audit/frames/0000000_000000.000s.png",
+    "sha256": "be60980329e27b0aa315c509f0e0ba52834d19ea8c1dc72ceb0e674849747ca7",
+    "bytes": 2330
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000076_000005.067s.png",
+    "package_path": "en/Hook/audit/frames/0000076_000005.067s.png",
+    "sha256": "60f16fd9024c99c13162b5cf4273d689a92e1a0cf642c9b16573274b9eea5cc2",
+    "bytes": 163901
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000374_000024.933s.png",
+    "package_path": "en/Hook/audit/frames/0000374_000024.933s.png",
+    "sha256": "d9ff76aee86e02fd3fa59e1b2f15d53185da30d775b48aa90cb79a00fc052093",
+    "bytes": 198487
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000444_000029.600s.png",
+    "package_path": "en/Hook/audit/frames/0000444_000029.600s.png",
+    "sha256": "ebd8bda702832889db82f7bda5a0b26f85642d1f3af62a5b72731b5adbd693e4",
+    "bytes": 129912
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000501_000033.400s.png",
+    "package_path": "en/Hook/audit/frames/0000501_000033.400s.png",
+    "sha256": "572db49ad8c2a7ba2fe8ab5ff66367f7b42a727af53da6ee0c4d9d4d013e515d",
+    "bytes": 68075
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000693_000046.200s.png",
+    "package_path": "en/Hook/audit/frames/0000693_000046.200s.png",
+    "sha256": "80650951d0b4bd4c41b6cc53c57592a0d1560765a4f7630f857a6c4019344cd9",
+    "bytes": 68685
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000877_000058.467s.png",
+    "package_path": "en/Hook/audit/frames/0000877_000058.467s.png",
+    "sha256": "dbba6031934e612b68af7f7ea4d4efbfe13abafd6684baeae3038a338111a793",
+    "bytes": 3082
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000907_000060.467s.png",
+    "package_path": "en/Hook/audit/frames/0000907_000060.467s.png",
+    "sha256": "c6cdee85eca7e305745b36b70f2227be482439b843c3e3489155cdf225d34741",
+    "bytes": 30240
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0001373_000091.533s.png",
+    "package_path": "en/Hook/audit/frames/0001373_000091.533s.png",
+    "sha256": "2f0eb1edefd506815e1ecb80f9921daf7379b3c192c438e53b58716004bdac9c",
+    "bytes": 69207
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0001486_000099.067s.png",
+    "package_path": "en/Hook/audit/frames/0001486_000099.067s.png",
+    "sha256": "e3cea498fddc7c888f20126842f21ad0c8f2a22f9f965af157172193816148af",
+    "bytes": 67239
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0001568_000104.533s.png",
+    "package_path": "en/Hook/audit/frames/0001568_000104.533s.png",
+    "sha256": "9ce20f9374e6821ae8de7891bbff6c53b5d7431e870f9359ac9e77e07a33b94a",
+    "bytes": 80597
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0001897_000126.467s.png",
+    "package_path": "en/Hook/audit/frames/0001897_000126.467s.png",
+    "sha256": "ebef5e5e8b0b62951d36c07064f383d77b4a8b1ccc89d16f3cbe3f2dc6e3139e",
+    "bytes": 82380
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0001908_000127.200s.png",
+    "package_path": "en/Hook/audit/frames/0001908_000127.200s.png",
+    "sha256": "3c976f98993e611c267ee3c5864087574260559c6b74d6453c46cff48b3d33e9",
+    "bytes": 12635
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/s01_hook.py",
+    "package_path": "en/Hook/source/videos/ai/ai5/s01_hook.py",
+    "sha256": "5a5f0dc5ff04c831baaf752a2fe8a71a5caf716b1f32e4710e441fb03b901e96",
+    "bytes": 8384
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/common.py",
+    "package_path": "en/Hook/source/videos/ai/ai5/common.py",
+    "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+    "bytes": 8633
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/compute.py",
+    "package_path": "en/Hook/source/videos/ai/ai5/compute.py",
+    "sha256": "6e61b12c65cbb90f4829195ba09cc366ababaa10c1226dfd809c24b4557996d8",
+    "bytes": 60814
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/manifest.py",
+    "package_path": "en/Hook/source/videos/ai/ai5/manifest.py",
+    "sha256": "20340d942ab7b80dfb610d23cc24acec2104434b4021d460ac44d18d9df9659c",
+    "bytes": 1285
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/cache_contract.py",
+    "package_path": "en/Hook/source/videos/ai/ai5/cache_contract.py",
+    "sha256": "8299c66149bdedeb11bd500f80b3aed6b5cdef3fb83fd66dae883e269d3ec538",
+    "bytes": 27481
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/zh_lines.py",
+    "package_path": "en/Hook/source/videos/ai/ai5/zh_lines.py",
+    "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+    "bytes": 82756
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/narration_zh.json",
+    "package_path": "en/Hook/source/videos/ai/ai5/narration_zh.json",
+    "sha256": "aee7be68a2d528f82713f6c3763effcf12bcee12b485ba42c66a15b10e3e197a",
+    "bytes": 101056
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai_text_zh.json",
+    "package_path": "en/Hook/source/videos/ai/ai_text_zh.json",
+    "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+    "bytes": 2436592
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/explainer/ai/viz.py",
+    "package_path": "en/Hook/source/explainer/ai/viz.py",
+    "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+    "bytes": 31773
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/explainer/analysis/__init__.py",
+    "package_path": "en/Hook/source/explainer/analysis/__init__.py",
+    "sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+    "bytes": 30850
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/explainer/lang.py",
+    "package_path": "en/Hook/source/explainer/lang.py",
+    "sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+    "bytes": 6956
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/explainer/zh_templates.py",
+    "package_path": "en/Hook/source/explainer/zh_templates.py",
+    "sha256": "b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432",
+    "bytes": 9496
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/explainer/zh_text.py",
+    "package_path": "en/Hook/source/explainer/zh_text.py",
+    "sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+    "bytes": 8305
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/tools/qa_series.py",
+    "package_path": "en/Hook/source/tools/qa_series.py",
+    "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+    "bytes": 25379
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/tools/qa_motion.py",
+    "package_path": "en/Hook/source/tools/qa_motion.py",
+    "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+    "bytes": 19437
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/inputs/.cache/ai5/shape.json",
+    "package_path": "en/Hook/inputs/.cache/ai5/shape.json",
+    "sha256": "c6bbd28f47c9e55c75b86a0173a00a503d66eac2277808d06ab78fe4ef9113f2",
+    "bytes": 904
+  },
+  {
+    "runtime_path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/inputs/.cache/ai5/shape.npz",
+    "package_path": "en/Hook/inputs/.cache/ai5/shape.npz",
+    "sha256": "795466e5cf23c537ab2f629b0dbd9f008f2542d86d93789ac5585703f2c3a0e3",
+    "bytes": 973620
+  }
+]

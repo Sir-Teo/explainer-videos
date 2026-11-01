@@ -1,0 +1,160 @@
+{
+  "frozen_utc": "2026-11-01T02:29:03.947476+00:00",
+  "case": "en/Hook",
+  "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/en/Hook_motion/media/videos/480p15/Hook.mp4",
+  "movie": "/workspace/runtime/ai5-hook-motion-review/en/Hook/Hook.mp4",
+  "movie_sha256": "0bc48a3c64fac28f12bed8210800ff34c98bf7cd3fb2d38da04a694507cc213c",
+  "movie_bytes": 3241006,
+  "original_record_sha256": "f74812a0a1d714f3654de5a39704030b4856a535a9a5e775a17236ddfa3e5144",
+  "raw_status": "needs-review",
+  "raw_warnings": [
+    {
+      "kind": "source-changed-during-render"
+    }
+  ],
+  "recorded_fingerprint": "364e505aef17f8a6ec293f451f7323e0e4d8f057baedc83298ec930ac9749fd1",
+  "recorded_duration": 127.26666666666642,
+  "original_files": [
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Hook_motion/result.json",
+      "frozen": "/workspace/runtime/ai5-hook-motion-review/en/Hook/original-result.json",
+      "sha256": "f74812a0a1d714f3654de5a39704030b4856a535a9a5e775a17236ddfa3e5144",
+      "bytes": 63187
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Hook_motion/text.jsonl",
+      "frozen": "/workspace/runtime/ai5-hook-motion-review/en/Hook/original-text.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Hook_motion/render.log",
+      "frozen": "/workspace/runtime/ai5-hook-motion-review/en/Hook/original-render.log",
+      "sha256": "bc67873f2325547c87192cd5f41ecc2641397b670eab4313335b5ac0d2451deb",
+      "bytes": 405
+    }
+  ],
+  "sources": [
+    {
+      "path": "videos/ai/ai5/s01_hook.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/s01_hook.py",
+      "sha256": "5a5f0dc5ff04c831baaf752a2fe8a71a5caf716b1f32e4710e441fb03b901e96",
+      "bytes": 8384
+    },
+    {
+      "path": "videos/ai/ai5/common.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/common.py",
+      "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+      "bytes": 8633
+    },
+    {
+      "path": "videos/ai/ai5/compute.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/compute.py",
+      "sha256": "6e61b12c65cbb90f4829195ba09cc366ababaa10c1226dfd809c24b4557996d8",
+      "bytes": 60814
+    },
+    {
+      "path": "videos/ai/ai5/manifest.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/manifest.py",
+      "sha256": "20340d942ab7b80dfb610d23cc24acec2104434b4021d460ac44d18d9df9659c",
+      "bytes": 1285
+    },
+    {
+      "path": "videos/ai/ai5/cache_contract.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/cache_contract.py",
+      "sha256": "8299c66149bdedeb11bd500f80b3aed6b5cdef3fb83fd66dae883e269d3ec538",
+      "bytes": 27481
+    },
+    {
+      "path": "videos/ai/ai5/zh_lines.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/zh_lines.py",
+      "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+      "bytes": 82756
+    },
+    {
+      "path": "videos/ai/ai5/narration_zh.json",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai5/narration_zh.json",
+      "sha256": "aee7be68a2d528f82713f6c3763effcf12bcee12b485ba42c66a15b10e3e197a",
+      "bytes": 101056
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/videos/ai/ai_text_zh.json",
+      "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+      "bytes": 2436592
+    },
+    {
+      "path": "explainer/ai/viz.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/explainer/ai/viz.py",
+      "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "bytes": 31773
+    },
+    {
+      "path": "explainer/analysis/__init__.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/explainer/analysis/__init__.py",
+      "sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+      "bytes": 30850
+    },
+    {
+      "path": "explainer/lang.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/explainer/lang.py",
+      "sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+      "bytes": 6956
+    },
+    {
+      "path": "explainer/zh_templates.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/explainer/zh_templates.py",
+      "sha256": "b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432",
+      "bytes": 9496
+    },
+    {
+      "path": "explainer/zh_text.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/explainer/zh_text.py",
+      "sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+      "bytes": 8305
+    },
+    {
+      "path": "tools/qa_series.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/tools/qa_series.py",
+      "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "bytes": 25379
+    },
+    {
+      "path": "tools/qa_motion.py",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/source/tools/qa_motion.py",
+      "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "bytes": 19437
+    }
+  ],
+  "inputs": [
+    {
+      "path": ".cache/ai5/shape.json",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/inputs/.cache/ai5/shape.json",
+      "sha256": "c6bbd28f47c9e55c75b86a0173a00a503d66eac2277808d06ab78fe4ef9113f2",
+      "recorded_size_mtime_ns": [
+        904,
+        1793497336713807083
+      ],
+      "observed_size_mtime_ns": [
+        904,
+        1793497336713807083
+      ],
+      "metadata_matches": true
+    },
+    {
+      "path": ".cache/ai5/shape.npz",
+      "snapshot": "/workspace/runtime/ai5-hook-motion-review/en/Hook/inputs/.cache/ai5/shape.npz",
+      "sha256": "795466e5cf23c537ab2f629b0dbd9f008f2542d86d93789ac5585703f2c3a0e3",
+      "recorded_size_mtime_ns": [
+        973620,
+        1793497336709697083
+      ],
+      "observed_size_mtime_ns": [
+        973620,
+        1793497336709697083
+      ],
+      "metadata_matches": true
+    }
+  ],
+  "scope": "Frozen actual silent movie/raw record/text/log and on-disk source/input identities. No assertion of historical imported-module equivalence; source-changed-during-render warning preserved."
+}

@@ -1,0 +1,783 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-001.png",
+      "sha256": "05fe38d23cde0060b32a07aa135cf10a45353018bf83c21602d1c5578e7d3f34",
+      "viewed_utc": "2026-11-01T02:29:49.599981+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed all 16 representatives: initial blank/fade to600dot cloud, holds and early boundary; sparse opening is expected fade, no overlay defect.",
+      "representatives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "page": 2,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-002.png",
+      "sha256": "ac0bfa6e9c267130808689002447dbfc6304db17e9dbb06dd6f17924483560bc",
+      "viewed_utc": "2026-11-01T02:29:49.599981+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed all 16 representatives: initial blank/fade to600dot cloud, holds and early boundary; sparse opening is expected fade, no overlay defect.",
+      "representatives": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "page": 3,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-003.png",
+      "sha256": "035d39061f759ebc25cb1eba7cb15a2fa55d4279cafce3769e9f7d56e0763109",
+      "viewed_utc": "2026-11-01T02:29:59.474918+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed all16 reps: score-field/tag fade-in, held field and first reverse-flow samples; arrow directions clear at sheet scale, tag queued native contrast/readability followup.",
+      "representatives": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "page": 4,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-004.png",
+      "sha256": "aa8af1f933519566af5a6aee4d80ebc7226f9248fbd8415daa60db592af2caf6",
+      "viewed_utc": "2026-11-01T02:29:59.474918+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed all16 reps: score-field/tag fade-in, held field and first reverse-flow samples; arrow directions clear at sheet scale, tag queued native contrast/readability followup.",
+      "representatives": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ]
+    },
+    {
+      "page": 5,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-005.png",
+      "sha256": "9f044e854b7b52a11affc62106575e1490ca5a6a04da864ccde4d111f645cd2a",
+      "viewed_utc": "2026-11-01T02:30:07.977980+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 chronological reverse-flow samples20.867\u201324.600s; colored cloud and score arrows separated, no unexpected overlay or image corruption.",
+      "representatives": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ]
+    },
+    {
+      "page": 6,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-006.png",
+      "sha256": "385a4548f8451f07d35dab22638e802c424cb5a3e0dc97635cdea7ef36f59c34",
+      "viewed_utc": "2026-11-01T02:30:07.977980+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 chronological reverse-flow samples20.867\u201324.600s; colored cloud and score arrows separated, no unexpected overlay or image corruption.",
+      "representatives": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "page": 7,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-007.png",
+      "sha256": "11b0a809577551043fd1448b4cf0bba359919a2df4e9f08bf5ffd30fe816432d",
+      "viewed_utc": "2026-11-01T02:30:17.832175+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 chronological reverse-flow reps24.867\u201328.333s: cloud narrows toward A/I; field and score-only label remain distinct, no held collision.",
+      "representatives": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "page": 8,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-008.png",
+      "sha256": "7608dd91f410ee8f5fe23dec6c193b9c36b75a72d5e152a7c223b8c1bbb3fafd",
+      "viewed_utc": "2026-11-01T02:30:17.832175+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 chronological reverse-flow reps24.867\u201328.333s: cloud narrows toward A/I; field and score-only label remain distinct, no held collision.",
+      "representatives": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ]
+    },
+    {
+      "page": 9,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-009.png",
+      "sha256": "baa0db43c7433e30176cb6e5a1c041c75f48110c0bd0336a1c570c5ce3b7f626",
+      "viewed_utc": "2026-11-01T02:30:27.645156+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps28.600\u201333.400s: AI letter formation/hold, field+tag fade out and clean letters remain. No stale arrow/legend remnants after fade.",
+      "representatives": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71
+      ]
+    },
+    {
+      "page": 10,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-010.png",
+      "sha256": "6894ebc6574c7592bc6fc2c2d01386d1ac193134f4aaf66caa7f74cac7e8803c",
+      "viewed_utc": "2026-11-01T02:30:27.645156+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps28.600\u201333.400s: AI letter formation/hold, field+tag fade out and clean letters remain. No stale arrow/legend remnants after fade.",
+      "representatives": [
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79
+      ]
+    },
+    {
+      "page": 11,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-011.png",
+      "sha256": "4690d0e9dc17fd1a96c82b723243d0efe52112b0e7d51283a9e8f7600f2812a7",
+      "viewed_utc": "2026-11-01T02:30:37.999350+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps34.400\u201348s: letter holds, short point-cloud crossfade and forward dissolution to noise. Temporary double point positions occur during intended0.8s crossfade; no held duplicate text or label issue.",
+      "representatives": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87
+      ]
+    },
+    {
+      "page": 12,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-012.png",
+      "sha256": "0e3a7e4758a2a976217e931abbdd53c3de7114141eae3ca924acd47465f0517c",
+      "viewed_utc": "2026-11-01T02:30:37.999350+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps34.400\u201348s: letter holds, short point-cloud crossfade and forward dissolution to noise. Temporary double point positions occur during intended0.8s crossfade; no held duplicate text or label issue.",
+      "representatives": [
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95
+      ]
+    },
+    {
+      "page": 13,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-013.png",
+      "sha256": "b14a6eb835d71233a51703b3d60153707a7a510af6dc6bf15f81376458d1878a",
+      "viewed_utc": "2026-11-01T02:30:45.296201+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 forward-noise reps48.200\u201353.267s; cloud dissolves/holds with no arrow remnants or unexpected screen elements.",
+      "representatives": [
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103
+      ]
+    },
+    {
+      "page": 14,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-014.png",
+      "sha256": "f2b1d48863d7192820a7ad1935c30d6949f8822612cdeba70bc188e163c677f6",
+      "viewed_utc": "2026-11-01T02:30:45.296201+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 forward-noise reps48.200\u201353.267s; cloud dissolves/holds with no arrow remnants or unexpected screen elements.",
+      "representatives": [
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111
+      ]
+    },
+    {
+      "page": 15,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-015.png",
+      "sha256": "9776946fb329ad8d95d4611a6a8562f00dff2ae4f87c1e51a5693108e45734b1",
+      "viewed_utc": "2026-11-01T02:30:58.280451+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps56.933\u201358.267s: late noise hold/subthreshold particle changes followed by scene fade. Dark residual particles only in in-flight fade; next timeline transition queued.",
+      "representatives": [
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119
+      ]
+    },
+    {
+      "page": 16,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-016.png",
+      "sha256": "68d0f5ac97749685b36da45f279b0fcc33014d5014e9f1e674d5e9e4683b0345",
+      "viewed_utc": "2026-11-01T02:30:58.280451+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps56.933\u201358.267s: late noise hold/subthreshold particle changes followed by scene fade. Dark residual particles only in in-flight fade; next timeline transition queued.",
+      "representatives": [
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127
+      ]
+    },
+    {
+      "page": 17,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-017.png",
+      "sha256": "7feef1119f5bf047a82838af78ce9683340cde0f485461996bd38936dde4515e",
+      "viewed_utc": "2026-11-01T02:31:11.881786+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps58.467\u201360.467s: blank/very dark transition to timeline and1654 reveal. Moving date briefly offsets skeleton date during FadeIn shift, settling to a single readable date by60.4s; ordinary reveal, not held ghost.",
+      "representatives": [
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135
+      ]
+    },
+    {
+      "page": 18,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-018.png",
+      "sha256": "8a1cb952901d1853a52420b6e02d63c342c1d87bdb35e2ab2d432d3cff469151",
+      "viewed_utc": "2026-11-01T02:31:11.881786+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps58.467\u201360.467s: blank/very dark transition to timeline and1654 reveal. Moving date briefly offsets skeleton date during FadeIn shift, settling to a single readable date by60.4s; ordinary reveal, not held ghost.",
+      "representatives": [
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143
+      ]
+    },
+    {
+      "page": 19,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-019.png",
+      "sha256": "60c1d3e612de0d67d9f79f0ae221fa770d8ffba77b104c0d3a523e0b6e014571",
+      "viewed_utc": "2026-11-01T02:31:21.629157+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps61.467\u201371.4s:1654 hold and1713/1733 reveals, completed labels readable at sheet scale and distinct. Dates temporarily shift over grey skeleton while appearing; settle cleanly.",
+      "representatives": [
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151
+      ]
+    },
+    {
+      "page": 20,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-020.png",
+      "sha256": "e2fb59195171dfb6ba24fb9cc2760d66c76c0cfdab717ae3d4b274d4c6ab4db4",
+      "viewed_utc": "2026-11-01T02:31:21.629157+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps61.467\u201371.4s:1654 hold and1713/1733 reveals, completed labels readable at sheet scale and distinct. Dates temporarily shift over grey skeleton while appearing; settle cleanly.",
+      "representatives": [
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159
+      ]
+    },
+    {
+      "page": 21,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-021.png",
+      "sha256": "d2ffe8b486ec352f0e926758d1d713a2595e53a55ca181b9b2cf9c3dc76c9e76",
+      "viewed_utc": "2026-11-01T02:31:31.216069+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 timeline reps71.467\u201376.333s:1733 hold,1763 Bayes reveal/hold; history title and not-to-scale note readable, no held overlap.",
+      "representatives": [
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167
+      ]
+    },
+    {
+      "page": 22,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-022.png",
+      "sha256": "6e22a853534f24530198a55fb5f4f1a5ff97fdf84e3f4c7bbaf82e5e1693fc8a",
+      "viewed_utc": "2026-11-01T02:31:31.216069+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 timeline reps71.467\u201376.333s:1733 hold,1763 Bayes reveal/hold; history title and not-to-scale note readable, no held overlap.",
+      "representatives": [
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175
+      ]
+    },
+    {
+      "page": 23,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-023.png",
+      "sha256": "87184a752073c7b94ebf51d77233adf9c7524927906870748f8c86f942959bdd",
+      "viewed_utc": "2026-11-01T02:31:40.569837+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 timeline reps76.400\u201378.4s:Gauss1809 and Einstein1905 reveal states. Dates/text settle clearly; alternating upper/lower labels do not collide.",
+      "representatives": [
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183
+      ]
+    },
+    {
+      "page": 24,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-024.png",
+      "sha256": "2d73f888489c8275215cd4a7d6f747a456dd61066ccb339e5cbe5da812d60abc",
+      "viewed_utc": "2026-11-01T02:31:40.569837+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 timeline reps76.400\u201378.4s:Gauss1809 and Einstein1905 reveal states. Dates/text settle clearly; alternating upper/lower labels do not collide.",
+      "representatives": [
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191
+      ]
+    },
+    {
+      "page": 25,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-025.png",
+      "sha256": "35c0624c8e7558fb9ff3703b0bf77e5b76b9b9693da7fdca42a47ab4c0ba8456",
+      "viewed_utc": "2026-11-01T02:31:49.546640+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps78.600\u201382.267s:Einstein hold and Fisher1922 reveal/hold; date and likelihood caption settled and bounded.",
+      "representatives": [
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199
+      ]
+    },
+    {
+      "page": 26,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-026.png",
+      "sha256": "028f7286025b81721a2a65ac794251a0788daf8bb62bc9940af1ae3d345bee9d",
+      "viewed_utc": "2026-11-01T02:31:49.546640+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps78.600\u201382.267s:Einstein hold and Fisher1922 reveal/hold; date and likelihood caption settled and bounded.",
+      "representatives": [
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207
+      ]
+    },
+    {
+      "page": 27,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-027.png",
+      "sha256": "ab798badc5408f2b9048f4f28629ea697c2241e497bad8357e84bc8f52a564c3",
+      "viewed_utc": "2026-11-01T02:31:58.508439+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps83.267\u201387.2s:Ito1944 and Metropolis1953 reveals/holds. Both caption blocks remain distinct from other milestones and note, no held date ghost.",
+      "representatives": [
+        208,
+        209,
+        210,
+        211,
+        212,
+        213,
+        214,
+        215
+      ]
+    },
+    {
+      "page": 28,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-028.png",
+      "sha256": "87a3591eef38f33f5749ee77ffc828ed4eedcb539f86c9589281fcfb5e96ff60",
+      "viewed_utc": "2026-11-01T02:31:58.508439+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps83.267\u201387.2s:Ito1944 and Metropolis1953 reveals/holds. Both caption blocks remain distinct from other milestones and note, no held date ghost.",
+      "representatives": [
+        216,
+        217,
+        218,
+        219,
+        220,
+        221,
+        222,
+        223
+      ]
+    },
+    {
+      "page": 29,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-029.png",
+      "sha256": "3a80887d1b7f21485e1810e1729638e9cfebcc39bb0a81eb77e0686f47df00b1",
+      "viewed_utc": "2026-11-01T02:32:08.825353+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps87.4\u201393.533s:Metropolis hold,2020 diffusion/nucleus reveal and completed10-event timeline. Rightmost text fits within frame; complete milestone/time-scaling layout queued native verification.",
+      "representatives": [
+        224,
+        225,
+        226,
+        227,
+        228,
+        229,
+        230,
+        231
+      ]
+    },
+    {
+      "page": 30,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-030.png",
+      "sha256": "c3b478496270d7fdabebed1e85610612d6f0151c1cf2c4a497811096fdde2f48",
+      "viewed_utc": "2026-11-01T02:32:08.825353+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps87.4\u201393.533s:Metropolis hold,2020 diffusion/nucleus reveal and completed10-event timeline. Rightmost text fits within frame; complete milestone/time-scaling layout queued native verification.",
+      "representatives": [
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239
+      ]
+    },
+    {
+      "page": 31,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-031.png",
+      "sha256": "6bf993c4bb3c382f129f617d5accb541d6ba72ae660fa2e688edd3822bce6dee",
+      "viewed_utc": "2026-11-01T02:32:22.177800+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps96.600\u201398.200s:completed timeline holds/fades into Part5 series map. Faint timeline/map only during fades, no held collision or excessive blank interval in selected states.",
+      "representatives": [
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247
+      ]
+    },
+    {
+      "page": 32,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-032.png",
+      "sha256": "e98552b6c310636fcfc019880ae9153e135b17fa0b746286a80104ae8f13fab2",
+      "viewed_utc": "2026-11-01T02:32:22.177800+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps96.600\u201398.200s:completed timeline holds/fades into Part5 series map. Faint timeline/map only during fades, no held collision or excessive blank interval in selected states.",
+      "representatives": [
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255
+      ]
+    },
+    {
+      "page": 33,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-033.png",
+      "sha256": "8e9bb58769ee0d8366bc2609592d1c2437e4a7e606ee3b20cf889cdd55af4bf4",
+      "viewed_utc": "2026-11-01T02:32:35.188523+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps98.267\u2013105.533s:series map reveal/hold then1s crossfade to objectives. Intentional simultaneous map/objective text during transition clears by104.467\u2013104.533; held objectives clean with all6rows visible.",
+      "representatives": [
+        256,
+        257,
+        258,
+        259,
+        260,
+        261,
+        262,
+        263
+      ]
+    },
+    {
+      "page": 34,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-034.png",
+      "sha256": "72eb756511ed3522d8f24fe20fb9a7b084dac0494e3c66d9ca6c9dbb68b2aba2",
+      "viewed_utc": "2026-11-01T02:32:35.188523+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed16 reps98.267\u2013105.533s:series map reveal/hold then1s crossfade to objectives. Intentional simultaneous map/objective text during transition clears by104.467\u2013104.533; held objectives clean with all6rows visible.",
+      "representatives": [
+        264,
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271
+      ]
+    },
+    {
+      "page": 35,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-035.png",
+      "sha256": "31f33abab21454eeee8b8c8d1576a7228339bb0f1743b302c46528428a040159",
+      "viewed_utc": "2026-11-01T02:32:47.868014+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed final15 reps106.533\u2013127.200s:all6objectives held and closing fade to nearblank last encoded frame. Text fully visible before fade; dark final image expected fade endpoint.",
+      "representatives": [
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279
+      ]
+    },
+    {
+      "page": 36,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/unique/sheet-036.png",
+      "sha256": "40920eeb3cc652f3d6f15689bd6f5529c82c084796b6a0d78128ee4a9d76a851",
+      "viewed_utc": "2026-11-01T02:32:47.868014+00:00",
+      "scale": "contact-sheet640px tile, original sheet detail",
+      "note": "Actually viewed final15 reps106.533\u2013127.200s:all6objectives held and closing fade to nearblank last encoded frame. Text fully visible before fade; dark final image expected fade endpoint.",
+      "representatives": [
+        280,
+        281,
+        282,
+        283,
+        284,
+        285,
+        286
+      ]
+    }
+  ],
+  "native": [
+    {
+      "selected_index": 0,
+      "source_frame": 0,
+      "time": 0.0,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000000_000000.000s.png",
+      "sha256": "be60980329e27b0aa315c509f0e0ba52834d19ea8c1dc72ceb0e674849747ca7",
+      "viewed_utc": "2026-11-01T02:33:04.110568+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 initial blank frame; opening FadeIn follows immediately in sampled sequence."
+    },
+    {
+      "selected_index": 21,
+      "source_frame": 76,
+      "time": 5.066667,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000076_000005.067s.png",
+      "sha256": "60f16fd9024c99c13162b5cf4273d689a92e1a0cf642c9b16573274b9eea5cc2",
+      "viewed_utc": "2026-11-01T02:33:04.136416+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 held field/tag: score directions; lengths rescaled is readable, green arrows distinct from particles, inset from all frame boundaries."
+    },
+    {
+      "selected_index": 57,
+      "source_frame": 374,
+      "time": 24.933333,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000374_000024.933s.png",
+      "sha256": "d9ff76aee86e02fd3fa59e1b2f15d53185da30d775b48aa90cb79a00fc052093",
+      "viewed_utc": "2026-11-01T02:33:04.164285+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 mid reverse flow: dense cloud and field/score-only label legible with no obstructing overlay."
+    },
+    {
+      "selected_index": 77,
+      "source_frame": 444,
+      "time": 29.6,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000444_000029.600s.png",
+      "sha256": "ebd8bda702832889db82f7bda5a0b26f85642d1f3af62a5b72731b5adbd693e4",
+      "viewed_utc": "2026-11-01T02:33:04.194236+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 formed AI with field: letters distinct, arrow field and label readable without overlap."
+    },
+    {
+      "selected_index": 88,
+      "source_frame": 501,
+      "time": 33.4,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000501_000033.400s.png",
+      "sha256": "572db49ad8c2a7ba2fe8ab5ff66367f7b42a727af53da6ee0c4d9d4d013e515d",
+      "viewed_utc": "2026-11-01T02:33:23.879760+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 letters after field/tag fade; no stale arrows or text remain."
+    },
+    {
+      "selected_index": 105,
+      "source_frame": 693,
+      "time": 46.2,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000693_000046.200s.png",
+      "sha256": "80650951d0b4bd4c41b6cc53c57592a0d1560765a4f7630f857a6c4019344cd9",
+      "viewed_utc": "2026-11-01T02:33:23.906635+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 forward-distribution letters just before dissolution; points distinct and bounded."
+    },
+    {
+      "selected_index": 148,
+      "source_frame": 877,
+      "time": 58.466667,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000877_000058.467s.png",
+      "sha256": "dbba6031934e612b68af7f7ea4d4efbfe13abafd6684baeae3038a338111a793",
+      "viewed_utc": "2026-11-01T02:33:23.932931+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 nearblank transition: tiny initial timeline-axis stroke atleft, no stale cloud; Create-axis start expected."
+    },
+    {
+      "selected_index": 163,
+      "source_frame": 907,
+      "time": 60.466667,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0000907_000060.467s.png",
+      "sha256": "c6cdee85eca7e305745b36b70f2227be482439b843c3e3489155cdf225d34741",
+      "viewed_utc": "2026-11-01T02:33:23.958292+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 timeline first revealed milestone;1654/date/caption readable, margins and not-to-scale note clear."
+    },
+    {
+      "selected_index": 266,
+      "source_frame": 1373,
+      "time": 91.533333,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0001373_000091.533s.png",
+      "sha256": "2f0eb1edefd506815e1ecb80f9921daf7379b3c192c438e53b58716004bdac9c",
+      "viewed_utc": "2026-11-01T02:33:44.200249+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 completed10milestone timeline: all names/dates/captions readable including left1654 and right2020, alternating rows separated and not-to-scale footer clear."
+    },
+    {
+      "selected_index": 295,
+      "source_frame": 1486,
+      "time": 99.066667,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0001486_000099.067s.png",
+      "sha256": "e3cea498fddc7c888f20126842f21ad0c8f2a22f9f965af157172193816148af",
+      "viewed_utc": "2026-11-01T02:33:44.229748+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 full series map: active Part5 highlighted, completed foundation text brighter than intentionally dim future parts; all groups bounded."
+    },
+    {
+      "selected_index": 307,
+      "source_frame": 1568,
+      "time": 104.533333,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0001568_000104.533s.png",
+      "sha256": "9ce20f9374e6821ae8de7891bbff6c53b5d7431e870f9359ac9e77e07a33b94a",
+      "viewed_utc": "2026-11-01T02:33:44.257221+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 first clean held6objective state: allnumbered rows readable, wrapped4/5lines separated, no map remnants."
+    },
+    {
+      "selected_index": 335,
+      "source_frame": 1897,
+      "time": 126.466667,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0001897_000126.467s.png",
+      "sha256": "ebef5e5e8b0b62951d36c07064f383d77b4a8b1ccc89d16f3cbe3f2dc6e3139e",
+      "viewed_utc": "2026-11-01T02:33:44.285570+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 final held objectives immediately before closing fade: title/all6rows readable and inside frame."
+    },
+    {
+      "selected_index": 341,
+      "source_frame": 1908,
+      "time": 127.2,
+      "path": "/workspace/runtime/ai5-hook-motion-review/en/Hook/audit/frames/0001908_000127.200s.png",
+      "sha256": "3c976f98993e611c267ee3c5864087574260559c6b74d6453c46cff48b3d33e9",
+      "viewed_utc": "2026-11-01T02:34:09.032201+00:00",
+      "scale": "original native854x480",
+      "note": "Actual original854x480 final encoded frame: expected nearblank fade endpoint with faint numbered-circle residues only, no held content defect."
+    }
+  ]
+}

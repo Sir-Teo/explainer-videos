@@ -1,0 +1,123 @@
+{
+  "scope": "Part5 Decoding only, final entropy-unit and monotone-CDF geometry regression",
+  "source_sha256": "be8c9b419ea61ecc004d275ccbef276db838bec0a29f57801c8f4db52c63e693",
+  "table_sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+  "cases": [
+    {
+      "lang": "en",
+      "raw_endpoint_status": "passed",
+      "raw_endpoint_warnings": [],
+      "raw_motion_status": "passed",
+      "raw_motion_warnings": [],
+      "movie_sha256": "b6aa9d6106a3d05ceb4c241af269e60de1f029e1d13eceaec6335e7d46e7b73b",
+      "movie_bytes": 1992420,
+      "duration": 208.466667,
+      "decoded": 3127,
+      "selected": 485,
+      "unique_actually_viewed": 353,
+      "exact_duplicate_representative_coverage": 132,
+      "chronological_pages_actually_viewed": 45,
+      "motion_intervals": 44,
+      "max_selected_gap_seconds": 1.0,
+      "unavoidable_source_gaps": [],
+      "unviewed_encoded_frames": 2642,
+      "native_movie_followups": 6,
+      "endpoints": 19,
+      "changed_endpoints_viewed": 6,
+      "exact_inherited_endpoints": 13,
+      "native_endpoint_followups": 2,
+      "raw_temporal_provenance": {
+        "record": "/workspace/explainer-videos/renders/qa/series/ai5/en/Decoding_motion/result.json",
+        "sha256": "19501345f626036e79d7a5827d40418305e0b5b7aeec95bcc337ff8c5341d714",
+        "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+        "status": "passed",
+        "current_source_and_inputs": true
+      },
+      "narration_identical": true,
+      "endpoint_duration_identical": true,
+      "endpoint_inputs_identical": true,
+      "visual_result": "both repairs clear; no new defect observed in reviewed scope"
+    },
+    {
+      "lang": "zh",
+      "raw_endpoint_status": "passed",
+      "raw_endpoint_warnings": [],
+      "raw_motion_status": "passed",
+      "raw_motion_warnings": [],
+      "movie_sha256": "e778f57cf4b0e5b27a6b3371c0918c639c11310bbdc6d1f0736e743f7b03eb8d",
+      "movie_bytes": 2076932,
+      "duration": 222.8,
+      "decoded": 3342,
+      "selected": 500,
+      "unique_actually_viewed": 364,
+      "exact_duplicate_representative_coverage": 136,
+      "chronological_pages_actually_viewed": 46,
+      "motion_intervals": 46,
+      "max_selected_gap_seconds": 1.0,
+      "unavoidable_source_gaps": [],
+      "unviewed_encoded_frames": 2842,
+      "native_movie_followups": 6,
+      "endpoints": 21,
+      "changed_endpoints_viewed": 6,
+      "exact_inherited_endpoints": 15,
+      "native_endpoint_followups": 2,
+      "raw_temporal_provenance": {
+        "record": "/workspace/explainer-videos/renders/qa/series/ai5/zh/Decoding_motion/result.json",
+        "sha256": "ce30e2cfa003dfc2e02f3d16e1cb77240f3743cc405a4db61c49a379d8f67763",
+        "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+        "status": "passed",
+        "current_source_and_inputs": true
+      },
+      "narration_identical": true,
+      "endpoint_duration_identical": true,
+      "endpoint_inputs_identical": true,
+      "visual_result": "both repairs clear; no new defect observed in reviewed scope"
+    }
+  ],
+  "findings": [],
+  "continuous_perceptual_playback": false,
+  "audio_listening_or_sync": false,
+  "production_resolution_or_frame_rate": false,
+  "scene_or_producer_execution_by_reviewer": false,
+  "prior_endpoint_baseline": "../ai5-decoding-outro-endpoint-review/",
+  "source_repair_proof": "../ai5-decoding-geometry-source/",
+  "captured_resolution": [
+    854,
+    480
+  ],
+  "selected_sheet_tile_resolution": [
+    640,
+    360
+  ],
+  "selected_sheet_scale": 0.7494145199063232,
+  "endpoint_paired_tile_resolution": [
+    854,
+    480
+  ],
+  "totals": {
+    "decoded": 6469,
+    "selected": 985,
+    "unique_actually_viewed": 717,
+    "exact_duplicate_representative_coverage": 268,
+    "chronological_pages_actually_viewed": 91,
+    "unviewed_encoded_frames": 5484,
+    "native_movie_followups": 12,
+    "endpoints": 40,
+    "changed_endpoints_viewed": 12,
+    "exact_inherited_endpoints": 28,
+    "native_endpoint_followups": 4
+  },
+  "close_integrity": [
+    {
+      "lang": "en",
+      "source_movie_inputs_results_selected_pngs_pages_and_endpoint_pairs": "exact hashes verified",
+      "selected_frames_mapped": 485
+    },
+    {
+      "lang": "zh",
+      "source_movie_inputs_results_selected_pngs_pages_and_endpoint_pairs": "exact hashes verified",
+      "selected_frames_mapped": 500
+    }
+  ],
+  "data_readout_qualification": "Headline NLL is character-weighted. Displayed meanSE is the mean standard error of unweighted prompt setting means, not a CI/SD or uncertainty interval for the weighted headline. Four-family comparison is interpolation within all four observed supports, descriptive for this single run."
+}

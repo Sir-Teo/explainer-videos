@@ -1,0 +1,659 @@
+"""The visual instruments of *AI, Built*, in the manner of 3Blue1Brown.
+
+The series' visual language, which every part follows:
+
+1. **One idea per frame, drawn big.**  The object of the sentence fills the frame; words on screen are few and
+   large.  The narration explains; the screen shows.
+2. **Continuity.**  Objects persist and turn into the next representation (``ReplacementTransform``,
+   :func:`morph`, ``MoveToTarget``) instead of fading out and new ones fading in.  ``clear_scene`` is for the end
+   of a thought, not the middle of one.
+3. **Color is meaning.**  A symbol has the same color in every equation and in the picture it describes
+   (:func:`cmath`, with the series' symbol colors in ``explainer.style.C``).
+4. **The camera narrates.**  Zoom into the detail that matters (:func:`frame_to`, a ``MovingCameraScene``), and
+   orbit a surface when the third dimension is the point (:func:`loss_surface`, a ``ThreeDScene``).
+5. **Live quantities.**  Values are ``ValueTracker``\\ s; bars (:class:`LiveBars`), dots on curves (:func:`glow_dot`)
+   and readouts follow them, so a change of parameter is seen continuously.
+6. **Real numbers.**  What is plotted is computed (the part's ``compute.py``) and asserted in the scene;
+   schematics and made-up examples are tagged.
+
+A scene that zooms is ``class X(VoiceoverScene, MovingCameraScene)``; one with a surface is
+``class X(VoiceoverScene, ThreeDScene)`` (labels then go through ``add_fixed_in_frame_mobjects``).
+"""
+
+from __future__ import annotations
+
+import math
+
+import numpy as np
+from manim import *  # noqa: F403
+
+from explainer.style import BACKGROUND, C  # noqa: F401
+
+
+# ---------------------------------------------------------------------------
+# Color-linked mathematics
+# ---------------------------------------------------------------------------
+def _key(tex: str) -> str:
+    return "".join(tex.split())
+
+
+def cmath(*tex: str, colors: dict | None = None, font_size=44, color=WHITE, **kw) -> MathTex:
+    """A formula whose terms are colored by meaning.  Split it into terms with ``{{ }}`` (or pass several strings);
+    a term whose TeX equals a key of ``colors`` (spaces ignored) takes that color.  Terms with the same TeX carry
+    over between the steps of a derivation, so :func:`morph` slides each one to its new place."""
+    m = MathTex(*tex, font_size=font_size, color=color, **kw)
+    if colors:
+        table = {_key(k): v for k, v in colors.items()}
+        for part in m.submobjects:
+            s = getattr(part, "tex_string", None)
+            if s is not None and _key(s) in table:
+                part.set_color(table[_key(s)])
+    return m
+
+
+def morph(scene: Scene, a: Mobject, b: Mobject, run_time: float = 1.4, key_map: dict | None = None,
+          path_arc: float = 0.0, **kw) -> None:
+    """One step of a derivation, in place: terms present in both formulas move to their new positions, the rest
+    fade out and in.  ``b`` should already be positioned."""
+    scene.play(TransformMatchingTex(a, b, key_map=key_map or {}, path_arc=path_arc, **kw), run_time=run_time)
+
+
+def term(m: MathTex, tex: str) -> VMobject:
+    """The first term of ``m`` whose TeX is ``tex`` (for braces, boxes and arrows that point at it)."""
+    for part in m.submobjects:
+        if _key(getattr(part, "tex_string", "")) == _key(tex):
+            return part
+    raise KeyError(tex)
+
+
+class CornerAxes(Axes):
+    """Axes whose two lines meet at the bottom-left corner whatever the ranges.  Manim draws each axis through the
+    other's zero, so a log-scale range that crosses or excludes zero puts an axis mid-chart or on the far side;
+    here the ranges are shifted to start at 0 internally, and ``c2p`` takes the original coordinates."""
+
+    def __init__(self, x_range, y_range, **kw):
+        self._off = (0.0, 0.0)  # Axes.__init__ itself calls coords_to_point with internal coordinates
+        super().__init__(x_range=[0, x_range[1] - x_range[0], *x_range[2:]],
+                         y_range=[0, y_range[1] - y_range[0], *y_range[2:]], **kw)
+        self._off = (float(x_range[0]), float(y_range[0]))
+
+    def coords_to_point(self, *coords):
+        ox, oy = self._off
+        if len(coords) == 1:
+            a = np.array(coords[0], float)
+            if a.ndim == 1:
+                a[0] -= ox
+                if len(a) > 1:
+                    a[1] -= oy
+            else:
+                a[:, 0] -= ox
+                a[:, 1] -= oy
+            return super().coords_to_point(a)
+        c = [np.asarray(v, float) for v in coords]
+        c[0] = c[0] - ox
+        c[1] = c[1] - oy
+        return super().coords_to_point(*c)
+
+
+def keep_in_frame(mob: Mobject, margin: float = 0.3) -> Mobject:
+    """Shift ``mob`` just enough to keep it inside the frame, ``margin`` from every edge."""
+    hw, hh = config.frame_width / 2 - margin, config.frame_height / 2 - margin
+    dx = min(0.0, hw - mob.get_right()[0]) + max(0.0, -hw - mob.get_left()[0])
+    dy = min(0.0, hh - mob.get_top()[1]) + max(0.0, -hh - mob.get_bottom()[1])
+    return mob.shift(RIGHT * dx + UP * dy)
+
+
+def brace_note(mob: Mobject, text: str, direction=DOWN, color=GREY_A, font_size=26, buff=0.1) -> VGroup:
+    """A brace under (or over) ``mob`` with a short colored note."""
+    from explainer.analysis import label
+
+    b = Brace(mob, direction, buff=buff, color=color)
+    t = label(text, font_size=font_size, color=color).next_to(b, direction, buff=0.1)
+    return VGroup(b, t)
+
+
+# ---------------------------------------------------------------------------
+# Points, glows, bars
+# ---------------------------------------------------------------------------
+def glow_dot(point, color=YELLOW, radius=0.08, layers=5, spread=3.2, opacity=0.55) -> VGroup:
+    """A dot with a soft halo, the marker for "here" on a curve or surface."""
+    g = VGroup()
+    for k in range(layers, 0, -1):
+        r = radius * (1 + (spread - 1) * k / layers)
+        g.add(Circle(radius=r, stroke_width=0, fill_color=color, fill_opacity=opacity * (1 - k / (layers + 1)) ** 2))
+    g.add(Dot(radius=radius, color=color))
+    g.move_to(point)
+    return g
+
+
+def code_block(lines, font_size=24, color=GREY_A, font="DejaVu Sans Mono", buff=0.14) -> VGroup:
+    """Lines of code as Text, one per line, keeping their indentation (Text drops leading spaces)."""
+    from explainer.zh_text import verbatim
+
+    with verbatim():
+        em = Text("M" * 20, font=font, font_size=font_size).width / 20
+        rows = VGroup(*[Text(s.strip() or ".", font=font, font_size=font_size, color=color) for s in lines])
+    rows.arrange(DOWN, aligned_edge=LEFT, buff=buff)
+    for r, s in zip(rows, lines):
+        if not s.strip():
+            r.set_opacity(0)
+        r.shift(RIGHT * em * (len(s) - len(s.lstrip(" "))))
+    return rows
+
+
+class LiveBars(VGroup):
+    """Bars whose heights follow ``ValueTracker``\\ s (``bars.trackers``), so a distribution can reshape on screen.
+
+    ``bars.to(values)`` gives the animations that take it to new heights; ``bars.bar(i)`` is the i-th bar as drawn
+    now.  Labels sit under the bars, values (if shown) over them."""
+
+    def __init__(self, values, max_value: float, height=3.2, bar_width=0.55, gap=0.25, colors=None,
+                 labels=None, label_font=26, label_color=GREY_A, show_values=False, digits=2, value_font=22,
+                 fill_opacity=0.9, baseline_color=GREY_D, label_mobs=None):
+        super().__init__()
+        n = len(values)
+        self.n, self.max_value, self.h, self.bw, self.gap = n, max_value, height, bar_width, gap
+        self.trackers = [ValueTracker(float(v)) for v in values]
+        colors = colors if colors is not None else [C.TRUE_P] * n
+        self.colors = [colors[i] if isinstance(colors, (list, tuple)) else colors for i in range(n)]
+        self.width_total = n * bar_width + (n - 1) * gap
+        self.x0 = -self.width_total / 2
+        self.base = Line([self.x0 - 0.15, 0, 0], [self.x0 + self.width_total + 0.15, 0, 0], color=baseline_color,
+                         stroke_width=1.5)
+        self.add(self.base)
+        self._bars = []
+        for i in range(n):
+            self._bars.append(always_redraw(self._maker(i, fill_opacity)))
+            self.add(self._bars[i])
+        self.values = VGroup()
+        if show_values:
+            for i in range(n):
+                d = DecimalNumber(values[i], num_decimal_places=digits, font_size=value_font, color=self.colors[i])
+                d.add_updater(self._value_updater(i))
+                self.values.add(d)
+            self.add(self.values)
+        self.labels = VGroup()
+        if label_mobs is not None:
+            self.labels = VGroup(*label_mobs)
+        elif labels is not None:
+            from explainer.analysis import label
+
+            self.labels = VGroup(*[label(t, font_size=label_font, color=label_color) for t in labels])
+        for i, lab in enumerate(self.labels):
+            lab.next_to([self._cx(i), 0, 0], DOWN, buff=0.18)
+        self.add(self.labels)
+
+    def _cx(self, i):
+        return self.x0 + i * (self.bw + self.gap) + self.bw / 2
+
+    def _maker(self, i, fill_opacity):
+        def make():
+            v = max(self.trackers[i].get_value(), 0.0)
+            h = max(self.h * v / self.max_value, 0.002)
+            left = self.base.get_start() + np.array([0.15 + i * (self.bw + self.gap), 0, 0])
+            r = Rectangle(width=self.bw, height=h, stroke_width=0, fill_color=self.colors[i], fill_opacity=fill_opacity)
+            r.move_to(left + np.array([self.bw / 2, h / 2, 0]))
+            return r
+        return make
+
+    def _value_updater(self, i):
+        def upd(d):
+            d.set_value(self.trackers[i].get_value())
+            d.next_to(self._bars[i], UP, buff=0.08)
+        return upd
+
+    def place(self, base_y: float, x: float = 0.0) -> "LiveBars":
+        """Put the baseline at height ``base_y``, centred on ``x`` (moving by the bounding box would depend on the
+        bars' current heights)."""
+        self.shift(np.array([x - self.base.get_x(), base_y - self.base.get_y(), 0]))
+        return self
+
+    def bar(self, i) -> Mobject:
+        return self._bars[i]
+
+    def to(self, values) -> list:
+        return [t.animate.set_value(float(v)) for t, v in zip(self.trackers, values)]
+
+    def freeze(self) -> "LiveBars":
+        """Stop following the trackers (before fading out)."""
+        for m in self.get_family():
+            m.clear_updaters()
+        return self
+
+
+# ---------------------------------------------------------------------------
+# The camera
+# ---------------------------------------------------------------------------
+FRAME_W = 14.222222222222221
+
+
+def frame_to(scene: Scene, target=None, width: float | None = None, margin: float = 1.25, center=None):
+    """The animation that moves a ``MovingCameraScene``'s frame onto ``target`` (a mobject or point), wide enough to
+    show it with ``margin`` around it (or exactly ``width`` units wide)."""
+    frame = scene.camera.frame
+    if center is None:
+        center = target.get_center() if isinstance(target, Mobject) else (target if target is not None else ORIGIN)
+    if width is None:
+        if isinstance(target, Mobject):
+            width = max(target.width, target.height * 16 / 9) * margin
+        else:
+            width = FRAME_W
+    return frame.animate.set(width=width).move_to(center)
+
+
+def frame_home(scene: Scene):
+    return scene.camera.frame.animate.set(width=FRAME_W).move_to(ORIGIN)
+
+
+def frame_scale(scene: Scene) -> float:
+    """How much the camera is zoomed out (1 at the default frame): multiply sizes of new labels by this."""
+    return scene.camera.frame.width / FRAME_W
+
+
+# ---------------------------------------------------------------------------
+# Surfaces
+# ---------------------------------------------------------------------------
+SURFACE_COLORS = ("#1B2A6B", "#2E6FB0", "#3FB8AF", "#F2D16B", "#F28C5B")
+
+
+def loss_surface(axes: ThreeDAxes, f, x_range, y_range, resolution=(40, 40), z_lo=None, z_hi=None,
+                 colors=SURFACE_COLORS, opacity=0.88, stroke_width=0.35, stroke_color="#0E1117") -> Surface:
+    """``z = f(x, y)`` over a rectangle, colored by height from deep blue (low) to warm (high), with a fine mesh."""
+    surf = Surface(lambda u, v: axes.c2p(u, v, f(u, v)), u_range=x_range, v_range=y_range, resolution=resolution,
+                   fill_opacity=opacity, stroke_width=stroke_width, stroke_color=stroke_color,
+                   checkerboard_colors=False)
+    if z_lo is None or z_hi is None:
+        xs = np.linspace(*x_range, 25)
+        ys = np.linspace(*y_range, 25)
+        zs = np.array([[f(x, y) for x in xs] for y in ys])
+        z_lo = float(zs.min()) if z_lo is None else z_lo
+        z_hi = float(zs.max()) if z_hi is None else z_hi
+    stops = np.linspace(z_lo, z_hi, len(colors))
+    surf.set_fill_by_value(axes=axes, colorscale=list(zip(colors, stops)), axis=2)
+    surf.set_fill(opacity=opacity)
+    return surf
+
+
+def surface_path(axes: ThreeDAxes, f, pts, color=YELLOW, lift=0.04, stroke_width=4) -> VMobject:
+    """A path drawn on the surface ``z = f(x, y)`` through the (x, y) points ``pts``."""
+    p3 = [axes.c2p(x, y, f(x, y)) + np.array([0, 0, lift]) for x, y in pts]
+    return VMobject(color=color, stroke_width=stroke_width).set_points_as_corners(p3)
+
+
+def surface_ball(axes: ThreeDAxes, f, x, y, color=YELLOW, radius=0.11) -> Mobject:
+    """A ball resting on the surface at (x, y)."""
+    return Dot3D(axes.c2p(x, y, f(x, y)) + np.array([0, 0, radius * 0.6]), radius=radius, color=color)
+
+
+# ---------------------------------------------------------------------------
+# A labelled cloud of points in 3D
+# ---------------------------------------------------------------------------
+class Cloud3D(VGroup):
+    """Points in 3D drawn by projection after turning them by ``cloud.angle`` (a ValueTracker, radians, about the
+    vertical axis) and tilting by ``cloud.tilt``: nearer points are larger and brighter, and labels (2D mobjects,
+    always facing the viewer) ride along with their points.  ``cloud.zoom`` and ``cloud.focus`` (a point in data
+    coordinates) move the view in, without a camera, so labels keep their size."""
+
+    def __init__(self, xyz, colors, scale=3.0, radius=0.075, tilt=0.35, center=ORIGIN, labels: dict | None = None,
+                 label_buff=0.1):
+        super().__init__()
+        self.xyz = np.asarray(xyz, float)
+        self.scale_, self.radius, self.center_ = scale, radius, np.asarray(center, float)
+        self.angle, self.tilt, self.zoom = ValueTracker(0.0), ValueTracker(tilt), ValueTracker(1.0)
+        self.focus = [ValueTracker(0.0) for _ in range(3)]
+        self.dots = VGroup(*[Dot(radius=radius, color=c) for c in colors])
+        for i, d in enumerate(self.dots):
+            d.add_updater(self._dot_updater(i))
+        self.labels = VGroup()
+        self.leaders = VGroup()
+        self.label_of = {}
+        self._label_offsets = {}
+        self._label_buff = label_buff
+        for i, lab in (labels or {}).items():
+            self.labels.add(lab)
+            self.label_of[i] = lab
+            self.leaders.add(Line(ORIGIN, RIGHT * 0.01, color=lab.get_color(), stroke_width=1, stroke_opacity=0))
+        # FadeIn on a subset of labels can detach their container from the scene.
+        # A data point stays present throughout the shot, so it drives layout.
+        if self.label_of and len(self.dots):
+            self.dots[0].add_updater(lambda dot: self._layout_labels())
+        self.add(self.dots, self.leaders, self.labels)
+        self.update()
+
+    def project(self, p):
+        f = np.array([t.get_value() for t in self.focus])
+        x, y, z = (np.asarray(p, float) - f)
+        a, t = self.angle.get_value(), self.tilt.get_value()
+        x, z = x * np.cos(a) + z * np.sin(a), -x * np.sin(a) + z * np.cos(a)
+        y, z = y * np.cos(t) - z * np.sin(t), y * np.sin(t) + z * np.cos(t)
+        s = self.scale_ * self.zoom.get_value()
+        return self.center_ + np.array([s * x, s * y, 0.0]), z
+
+    def _dot_updater(self, i):
+        def upd(d):
+            pos, depth = self.project(self.xyz[i])
+            k = float(np.clip(1 + 0.35 * depth, 0.55, 1.5))
+            d.set(width=2 * self.radius * k).move_to(pos)
+            d.set_opacity(float(np.clip(0.55 + 0.45 * depth, 0.3, 1.0)))
+        return upd
+
+    def _layout_labels(self):
+        """Keep callouts readable as the projection turns, without moving data.
+
+        Reuse a label's relative position until it collides with another label.
+        This keeps the layout stable through rotation, with leaders identifying
+        the actual points when labels need to move away from a dense cluster.
+        """
+        placed = []
+        left, right = -config.frame_width / 2 + 0.3, config.frame_width / 2 - 0.3
+        bottom, top = -config.frame_height / 2 + 0.65, config.frame_height / 2 - 0.4
+
+        def overlap(box, other):
+            return max(0, min(box[1], other[1]) - max(box[0], other[0]) + 0.08) * max(
+                0, min(box[3], other[3]) - max(box[2], other[2]) + 0.06)
+
+        for (i, lab), leader in zip(self.label_of.items(), self.leaders):
+            anchor, _ = self.project(self.xyz[i])
+            w, h = lab.width, lab.height
+            alpha = float(lab.get_fill_opacity())
+            base = np.array([w / 2 + self._label_buff, h / 2 + self._label_buff, 0])
+            previous = self._label_offsets.get(i, base)
+            if alpha < 0.02:
+                lab.move_to(anchor + previous)
+                leader.set_stroke(opacity=0)
+                continue
+            offsets = [previous]
+            for gap in (self._label_buff, 0.3, 0.5, 0.75, 1.0, 1.35, 1.8, 2.4, 3.0):
+                for dx, dy in ((1, 1), (-1, 1), (1, -1), (-1, -1), (1, 0), (-1, 0), (0, 1), (0, -1)):
+                    offsets.append(np.array([dx * (w / 2 + gap), dy * (h / 2 + gap), 0]))
+            best, cost = previous, float("inf")
+            for offset in offsets:
+                x, y = (anchor + offset)[:2]
+                box = (x - w / 2, x + w / 2, y - h / 2, y + h / 2)
+                outside = (max(0, left - box[0]) + max(0, box[1] - right) +
+                           max(0, bottom - box[2]) + max(0, box[3] - top))
+                collision = sum(overlap(box, other) for other in placed)
+                value = 1000 * outside + 1000 * collision + np.linalg.norm(offset - previous) + 0.05 * np.linalg.norm(offset)
+                if value < cost:
+                    best, cost = offset, value
+                if outside == 0 and collision == 0 and np.array_equal(offset, previous):
+                    break
+            self._label_offsets[i] = best
+            lab.move_to(anchor + best)
+            x, y = lab.get_center()[:2]
+            placed.append((x - w / 2, x + w / 2, y - h / 2, y + h / 2))
+            # End the leader at the nearest point on the label's bounding box.
+            endpoint = np.array([np.clip(anchor[0], x - w / 2, x + w / 2),
+                                 np.clip(anchor[1], y - h / 2, y + h / 2), 0])
+            distance = np.linalg.norm(endpoint - anchor)
+            if distance > 0.18:
+                leader.put_start_and_end_on(anchor, endpoint).set_stroke(opacity=0.45 * alpha)
+            else:
+                leader.set_stroke(opacity=0)
+
+    def look_at(self, p, zoom: float) -> list:
+        """Animations that bring data point ``p`` to the centre at magnification ``zoom``."""
+        return [t.animate.set_value(float(v)) for t, v in zip(self.focus, p)] + [self.zoom.animate.set_value(zoom)]
+
+
+# ---------------------------------------------------------------------------
+# Contour lines
+# ---------------------------------------------------------------------------
+def _contour_fraction(z1, z2, level):
+    """Keep ordinary interpolation unchanged; scale only overflowing differences."""
+    with np.errstate(over='ignore', invalid='ignore', divide='ignore'):
+        numerator, denominator = (level - z1, z2 - z1)
+        t = numerator / denominator
+    if all(math.isfinite(float(v)) for v in [numerator, denominator, t]) and 0 <= t <= 1:
+        return t
+    scale = max(abs(float(z1)), abs(float(z2)), abs(float(level)))
+    a, b, lv = (z1 / scale, z2 / scale, level / scale)
+    return (lv - a) / (b - a)
+
+
+def contour_segments(xs, ys, Z, level):
+    """Marching-squares segments, including exact-level vertices and edges.
+
+    Whole-level edges are emitted once beside non-flat cells; an entirely flat
+    grid emits nothing. Isolated zero points and flat-region interiors are not
+    represented. Nonzero four-crossing saddles retain perimeter-order pairing,
+    rather than an asymptotic decider. Integer axes must be exactly representable
+    in float64 before interpolation; intermediate coordinates have float64 precision.
+    """
+    xs, ys, Z = (np.asarray(xs), np.asarray(ys), np.asarray(Z))
+    if (xs.ndim != 1 or ys.ndim != 1 or len(xs) < 2 or len(ys) < 2
+            or Z.shape != (len(ys), len(xs))
+            or any(np.iscomplexobj(x) for x in [xs, ys, Z, level])):
+        raise ValueError('Expected real one-dimensional axes and matching rectangular Z.')
+    try:
+        finite = all(np.isfinite(x).all() for x in [xs, ys, Z, level])
+        increasing = np.all(xs[1:] > xs[:-1]) and np.all(ys[1:] > ys[:-1])
+    except TypeError as exc:
+        raise ValueError('Expected finite numeric input.') from exc
+    if np.ndim(level) != 0 or not finite or not increasing:
+        raise ValueError('Expected finite scalar level, finite values and strictly increasing axes.')
+    # Convert integer axes before subtraction to avoid int64 wraparound. Refuse
+    # lossy endpoints rather than silently shifting or collapsing coordinates.
+    safe_axes = []
+    for axis in (xs, ys):
+        if np.issubdtype(axis.dtype, np.integer):
+            floats = axis.astype(np.float64)
+            if any(int(a) != int(b) for a, b in zip(axis, floats)):
+                raise ValueError('Integer coordinates must be exactly representable as float64 geometry.')
+            axis = floats
+        safe_axes.append(axis)
+    xs, ys = safe_axes
+    segs, seen, cuts = ([], set(), {})
+    flat = (Z[:-1, :-1] == level) & (Z[:-1, 1:] == level) & (Z[1:, 1:] == level) & (Z[1:, :-1] == level)
+
+    def emit(a, b):
+        a, b = (tuple(a), tuple(b))
+        key = tuple(sorted((a, b)))
+        if a != b and key not in seen:
+            if not np.isfinite([a, b]).all():
+                raise ValueError('Nonfinite interpolated geometry.')
+            seen.add(key)
+            segs.append([a, b])
+
+    for i in range(len(ys) - 1):
+        for j in range(len(xs) - 1):
+            c = [(xs[j], ys[i], Z[i, j]), (xs[j + 1], ys[i], Z[i, j + 1]),
+                 (xs[j + 1], ys[i + 1], Z[i + 1, j + 1]), (xs[j], ys[i + 1], Z[i + 1, j])]
+            ids = [(i, j), (i, j + 1), (i + 1, j + 1), (i + 1, j)]
+            zeros = [k for k in range(4) if c[k][2] == level]
+            zero_edges = [k for k in range(4) if c[k][2] == level == c[(k + 1) % 4][2]]
+            if zero_edges:
+                # A bilinear cell with one zero edge and opposite signs across
+                # its far edge has a transverse branch. Split the shared zero
+                # edge at that branch so its T-junction remains connected.
+                if len(zeros) == 2:
+                    k = zero_edges[0]
+                    a, b = (c[k], c[(k + 1) % 4])
+                    d, e = (c[(k + 3) % 4], c[(k + 2) % 4])
+                    if d[2] < level < e[2] or e[2] < level < d[2]:
+                        t = _contour_fraction(d[2], e[2], level)
+                        p = (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
+                        q = (d[0] + t * (e[0] - d[0]), d[1] + t * (e[1] - d[1]))
+                        emit(p, q)
+                        key = tuple(sorted((ids[k], ids[(k + 1) % 4])))
+                        cuts.setdefault(key, []).append(p)
+                continue
+            pts = []
+            for k in range(4):
+                a, b = (c[k], c[(k + 1) % 4])
+                if a[2] < level < b[2] or b[2] < level < a[2]:
+                    t = _contour_fraction(a[2], b[2], level)
+                    pts.append((a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])))
+            if not zeros:
+                if len(pts) == 2:
+                    emit(*pts)
+                elif len(pts) == 4:
+                    emit(*pts[:2])
+                    emit(*pts[2:])
+            elif len(zeros) == 1:
+                k = zeros[0]
+                a, b = (c[(k - 1) % 4][2], c[(k + 1) % 4][2])
+                if a < level < b or b < level < a:
+                    pts.append(c[k][:2])
+                if len(pts) == 2:
+                    emit(*pts)
+            elif len(zeros) == 2:
+                other = [k for k in range(4) if k not in zeros]
+                a, b = (c[k][2] for k in other)
+                if a < level < b or b < level < a:
+                    emit(c[zeros[0]][:2], c[zeros[1]][:2])
+
+    def edge(a, b, neighbors):
+        if Z[a] != level or Z[b] != level:
+            return
+        # A plateau interface is meaningful only beside a non-flat cell. In
+        # particular, an entirely flat grid must not acquire a viewport outline.
+        if all(flat[k] for k in neighbors):
+            return
+        key = tuple(sorted((a, b)))
+        p = (xs[a[1]], ys[a[0]])
+        q = (xs[b[1]], ys[b[0]])
+        points = [p, q] + cuts.get(key, [])
+        axis = 0 if a[0] == b[0] else 1
+        points = sorted(set(points), key=lambda x: x[axis])
+        for u, v in zip(points, points[1:]):
+            emit(u, v)
+
+    for i in range(len(ys)):
+        for j in range(len(xs) - 1):
+            edge((i, j), (i, j + 1), [(r, j) for r in [i - 1, i] if 0 <= r < len(ys) - 1])
+    for i in range(len(ys) - 1):
+        for j in range(len(xs)):
+            edge((i, j), (i + 1, j), [(i, col) for col in [j - 1, j] if 0 <= col < len(xs) - 1])
+    return segs
+
+
+def contour_lines(ax: Axes, f, x_range, y_range, levels, n=(160, 120), colors=(SURFACE_COLORS[1], SURFACE_COLORS[3]),
+                  stroke_width=2.0) -> VGroup:
+    """The level sets of f(x, y) on ``ax``: one path per level, colored from low to high."""
+    xs, ys = np.linspace(*x_range, n[0] + 1), np.linspace(*y_range, n[1] + 1)
+    Z = np.array([[f(x, y) for x in xs] for y in ys])
+    out = VGroup()
+    lo, hi = min(levels), max(levels)
+    for lv in levels:
+        col = interpolate_color(ManimColor(colors[0]), ManimColor(colors[1]), (lv - lo) / max(hi - lo, 1e-9))
+        path = VMobject(color=col, stroke_width=stroke_width)
+        for a, b in contour_segments(xs, ys, Z, lv):
+            path.start_new_path(ax.c2p(*a))
+            path.add_line_to(ax.c2p(*b))
+        out.add(path)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Plots: axes with a few ticks, curves, bands of spread, legends
+# ---------------------------------------------------------------------------
+def curve(ax, xs, ys, color, stroke_width=3, smooth=False) -> VMobject:
+    """Plot finite runs separately, preserving gaps at poles or omitted values."""
+    m = VMobject(color=color, stroke_width=stroke_width)
+    run = []
+
+    def flush():
+        if not run:
+            return
+        pts = run if len(run) > 1 else [run[0], run[0]]
+        path = VMobject()
+        if smooth:
+            path.set_points_smoothly(pts)
+        else:
+            path.set_points_as_corners(pts)
+        m.add_subpath(path.points)
+        run.clear()
+
+    for x, y in zip(xs, ys):
+        if np.isfinite(x) and np.isfinite(y):
+            run.append(ax.c2p(x, y))
+        else:
+            flush()
+    flush()
+    return m
+
+
+def band(ax, xs, lo, hi, color, opacity=0.18) -> VMobject:
+    """The region between two curves (a spread across seeds)."""
+    top = [ax.c2p(x, y) for x, y in zip(xs, hi)]
+    bot = [ax.c2p(x, y) for x, y in zip(xs, lo)][::-1]
+    return Polygon(*top, *bot, stroke_width=0, fill_color=color, fill_opacity=opacity)
+
+
+def axes(x_range, y_range, x_length=6.0, y_length=3.6, xlabel="", ylabel="", xticks=None, yticks=None,
+         xfmt=None, yfmt=None, font_size=20, center=ORIGIN, log_x=False) -> VGroup:
+    """Plain axes with a few tick labels and names; ``ax`` is the first element. ``log_x``: x_range in log10."""
+    from explainer.analysis import label
+
+    ax = CornerAxes(x_range=x_range, y_range=y_range, x_length=x_length, y_length=y_length, tips=False,
+                    axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+    g = VGroup(ax)
+    xfmt = xfmt or (lambda v: (f"10^{{{int(v)}}}" if log_x else f"{v:g}"))
+    yfmt = yfmt or (lambda v: f"{v:g}")
+    for v in (xticks if xticks is not None else []):
+        g.add(MathTex(xfmt(v), font_size=font_size, color=GREY_B).next_to(ax.c2p(v, y_range[0]), DOWN, buff=0.12))
+    for v in (yticks if yticks is not None else []):
+        g.add(MathTex(yfmt(v), font_size=font_size, color=GREY_B).next_to(ax.c2p(x_range[0], v), LEFT, buff=0.12))
+    if xlabel:
+        xl = label(xlabel, font_size=font_size + 2, color=GREY_A)
+        xl.next_to(ax, DOWN, buff=0.5 if xticks is not None else 0.2)
+        g.add(xl)
+        g.xlabel = xl
+    if ylabel:
+        yl = label(ylabel, font_size=font_size + 2, color=GREY_A).next_to(ax, UP, buff=0.18).align_to(ax, LEFT)
+        g.add(yl)
+        g.ylabel = yl
+    g.ax = ax
+    g.move_to(center)
+    return g
+
+
+def legend(items, font_size=20, buff=0.18) -> VGroup:
+    """(color, text) rows with a short line swatch."""
+    from explainer.analysis import label
+
+    rows = VGroup()
+    for col, txt in items:
+        rows.add(VGroup(Line(ORIGIN, RIGHT * 0.4, color=col, stroke_width=5), label(txt, font_size=font_size, color=col))
+                 .arrange(RIGHT, buff=0.15))
+    return rows.arrange(DOWN, aligned_edge=LEFT, buff=buff)
+
+
+def tile_frame(caption, color, TW=3.0, TH=2.0):
+    """A recap tile: a dark rounded frame and its caption; the picture goes above the caption."""
+    from explainer.analysis import label
+
+    box = RoundedRectangle(width=TW + 0.3, height=TH + 0.75, corner_radius=0.15, stroke_color=GREY_D, stroke_width=1.5,
+                           fill_color="#121722", fill_opacity=1)
+    return box, label(caption, font_size=22, color=color).move_to(box.get_bottom() + UP * 0.28)
+
+
+def _boxes_overlap(a, b, pad=0.03) -> bool:
+    return not (a.get_right()[0] + pad < b.get_left()[0] or b.get_right()[0] + pad < a.get_left()[0]
+                or a.get_top()[1] + pad < b.get_bottom()[1] or b.get_top()[1] + pad < a.get_bottom()[1])
+
+
+def place_labels(dots, labels, buff=0.05, bounds=(-6.9, 6.9, -3.8, 3.8)):
+    """Put each dot's label beside it on the first side (of eight) where it overlaps no other dot and no label
+    already placed: scatter-plot names that do not sit on each other."""
+    placed = []
+    for i, (d, lab) in enumerate(zip(dots, labels)):
+        best = None
+        for b_ in (buff, buff + 0.22):
+            for dir_ in (UR, RIGHT, UL, DR, LEFT, DL, UP, DOWN):
+                lab.next_to(d, dir_, buff=b_)
+                inside = (lab.get_left()[0] > bounds[0] and lab.get_right()[0] < bounds[1]
+                          and lab.get_bottom()[1] > bounds[2] and lab.get_top()[1] < bounds[3])
+                clash = sum(_boxes_overlap(lab, o) for o in placed) + sum(
+                    _boxes_overlap(lab, dd, pad=0.0) for j, dd in enumerate(dots) if j != i)
+                score = clash + (0 if inside else 10) + (0.5 if b_ > buff else 0)
+                if best is None or score < best[0]:
+                    best = (score, dir_, b_)
+                if score == 0:
+                    break
+            if best[0] == 0:
+                break
+        lab.next_to(d, best[1], buff=best[2])
+        placed.append(lab)
+    return labels

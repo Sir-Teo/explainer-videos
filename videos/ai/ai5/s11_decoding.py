@@ -95,8 +95,14 @@ class Decoding(VoiceoverScene):
             return float(-(q * np.log2(q)).sum())
 
         hv = DecimalNumber(ent(), num_decimal_places=1, font_size=34, color=C.SURPRISE)
-        hv.add_updater(lambda m: m.set_value(ent()))
-        hrd = VGroup(label(r"entropy:", font_size=30), hv, label(r"bits", font_size=30)).arrange(RIGHT, buff=0.15)
+        entropy_unit = label(r"bits", font_size=30)
+
+        def update_entropy(m):
+            m.set_value(ent())
+            entropy_unit.next_to(m, RIGHT, buff=0.15)
+
+        hv.add_updater(update_entropy)
+        hrd = VGroup(label(r"entropy:", font_size=30), hv, entropy_unit).arrange(RIGHT, buff=0.15)
         hrd.next_to(trd, DOWN, buff=0.3)
         rv = DecimalNumber(100 * (1 - p1.sum()), num_decimal_places=0, font_size=30, color=GREY_A, unit=r"\%")
         rv.add_updater(lambda m: m.set_value(100 * (1 - softmax_T(z, Tt.get_value())[top].sum())))
@@ -183,7 +189,8 @@ class Decoding(VoiceoverScene):
             bars = VGroup(*[Rectangle(width=5.8 / N * 0.8, height=max(3.2 * min(v / hmax, 1.0), 0.004), stroke_width=0,
                                       fill_color=MODEL, fill_opacity=0.85).move_to(ax.c2p(i + 0.5, 0), aligned_edge=DOWN)
                             for i, v in enumerate(s[:N])])
-            cum = curve(ax, np.arange(N + 1), np.concatenate([[0], np.cumsum(s[:N])]), color=C.BITS, stroke_width=2.5)
+            cum = VMobject(color=C.BITS, stroke_width=2.5).set_points_as_corners(
+                [ax.c2p(x, y) for x, y in zip(np.arange(N + 1), np.concatenate([[0], np.cumsum(s[:N])]))])
             pt = data_text(prompt + " …", font="DejaVu Serif", font_size=20, color=WHITE).next_to(ax, UP, buff=0.55)
             if pt.width > 6.2:
                 pt.width = 6.2

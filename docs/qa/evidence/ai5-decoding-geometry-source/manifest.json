@@ -1,0 +1,38 @@
+{
+  "README.md": {
+    "bytes": 2586,
+    "sha256": "e563e53c48d81a9217bc94c2de2319d30e0b95d53053f491c28ce148a7d8fc60"
+  },
+  "ai5_decoding_cdf_contexts.json.gz": {
+    "bytes": 1178,
+    "sha256": "926103a8fe2e9fe20a17b22e294119f70b52681aa6672ba1a9902283d128fdb1"
+  },
+  "existing-decoder-tests.log.gz": {
+    "bytes": 996,
+    "sha256": "db602197fce97915d68910b129b88890ddae6d2737ce83288f1a8a36762deebb"
+  },
+  "geometry-tests.log.gz": {
+    "bytes": 329,
+    "sha256": "0b00585555fb720c63758bb1694b894c25057654db8dcec8ef8a57438d0e776d"
+  },
+  "production.patch.gz": {
+    "bytes": 811,
+    "sha256": "88bf260f564f5fb2c946e92b88fba3df93ea9d843231feeb16c177d1522c15b0"
+  },
+  "receipt.json.gz": {
+    "bytes": 1692,
+    "sha256": "9373303b3ce8768e098422804f37f7c4769c2e48db5f6a48dda9633d3fae247c"
+  },
+  "source-after.py.gz": {
+    "bytes": 7268,
+    "sha256": "139ea37659560e5e9f96e047c0eae425c07c5983698a0b16756a29a6f66b21b9"
+  },
+  "source-before.py.gz": {
+    "bytes": 7216,
+    "sha256": "803e27524bcfb9af2d6ac4635739590f0ec75c986563017c535475052daaf996"
+  },
+  "test_ai5_decoding_visual_geometry.py.gz": {
+    "bytes": 2507,
+    "sha256": "4d40832d6a493e926e269f8da240e32b8dec0688faf40186a1656bf35e0e451a"
+  }
+}
