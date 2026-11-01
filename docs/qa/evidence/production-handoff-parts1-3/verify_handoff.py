@@ -14,6 +14,8 @@ D = Path(__file__).resolve().parent
 BASE = '927fba668656a682b3e29a288de64130ddc680dd'
 SVD = 'videos/ai/ai3/s08_svd.py'
 KNOWN_OVERLAYS = {
+    'svd-production-polish-v2': ('overlays/svd-production-polish-v2.json',
+                               '631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca'),
     'svd-reveal-v1': ('overlays/svd-reveal-v1.json',
                       '30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8'),
 }
@@ -215,7 +217,7 @@ def main():
     parser.add_argument('--repo', type=Path, required=True)
     parser.add_argument('--strict-external', action='store_true')
     parser.add_argument('--optional-audio', action='store_true')
-    parser.add_argument('--overlay', help='Explicit reviewed overlay ID; only svd-reveal-v1 is supported.')
+    parser.add_argument('--overlay', help='Explicit reviewed overlay ID; svd-reveal-v1 or svd-production-polish-v2.')
     args = parser.parse_args()
     result = verify(args.repo, strict_external=args.strict_external,
                     optional_audio=args.optional_audio, overlay_id=args.overlay)

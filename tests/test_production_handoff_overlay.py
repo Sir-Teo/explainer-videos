@@ -260,8 +260,51 @@ class OverlayPreflightTests(unittest.TestCase):
         self.write(preflight.SVD, self.before)
         self.assertRejected(self.verify(), 'exact reviewed SVD after bytes')
 
+    def install_polish_fixture(self):
+        name = 'svd-production-polish-v2'
+        overlay = json.loads(json.dumps(self.overlay))
+        overlay['overlay_id'] = name
+        raw = b'reviewed production margin and name wrapping\n'
+        overlay['source_replacement']['after'] = self.row(preflight.SVD, raw)
+        overlay['optional_evidence_files'] = []
+        relative = 'overlays/' + name + '.json'
+        self.json(relative, overlay)
+        self.known[name] = (relative, sha((self.meta / relative).read_bytes()))
+        self.write(preflight.SVD, raw)
+        return name
+
+    def test_polish_requires_its_own_exact_overlay_selection(self):
+        name = self.install_polish_fixture()
+        self.assertEqual(preflight.verify(self.repo, overlay_id=name,
+                                         strict_external=True, optional_audio=True)['errors'], [])
+        self.assertRejected(self.verify(), 'exact reviewed SVD after bytes')
+        self.assertRejected(preflight.verify(self.repo), preflight.SVD)
+
+    def test_polish_selection_rejects_old_reveal_source(self):
+        name = self.install_polish_fixture()
+        self.write(preflight.SVD, self.after)
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'exact reviewed SVD after bytes')
+
+    def test_polish_keeps_unrelated_source_and_cache_checks(self):
+        name = self.install_polish_fixture()
+        self.write('explainer/unchanged.py', b'unreviewed shared change\n')
+        self.cache.write_bytes(b'changed data\n')
+        result = preflight.verify(self.repo, overlay_id=name)
+        self.assertRejected(result, 'explainer/unchanged.py')
+        self.assertRejected(result, '.cache/result.json')
+
 
 class ReviewedManifestIdentityTests(unittest.TestCase):
+    def test_polish_manifest_is_separate_and_binds_reviewed_scene(self):
+        errors = []
+        overlay = preflight.load_overlay('svd-production-polish-v2', errors)
+        self.assertEqual(errors, [])
+        self.assertEqual(overlay['base_commit'], '927fba668656a682b3e29a288de64130ddc680dd')
+        self.assertEqual(overlay['reviewed_patch_commit'], 'd7a9b0acfb15ad9c371f14acae5d8acab2644d6f')
+        self.assertEqual(overlay['source_replacement']['after']['sha256'],
+                         '2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b')
+        self.assertEqual(overlay['optional_evidence_files'], [])
+
     def test_real_overlay_binds_exact_base_patch_and_scene(self):
         errors = []
         overlay = preflight.load_overlay('svd-reveal-v1', errors)

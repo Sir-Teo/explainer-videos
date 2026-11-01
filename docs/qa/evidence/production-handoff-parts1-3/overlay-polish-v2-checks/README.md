@@ -1,0 +1,7 @@
+Explicit visual SVD overlay v2 preflight
+
+32 portable Git/file tests passed in1.031seconds. Actual sparse base927 worktree plus only the exact SVD2c01… file passed strict external/runtime/cache/model/optional-audio hash checks:268files, zero errors. Default and oldv1 selection rejected those new scene bytes; an unrelated README change was rejected and restored. No scene, numerical producer, normal loader or model was imported by the preflight. These checks are not the separate inherited renderer producer guard or production acceptance.
+
+The initial actual fixture used a .cache directory symlink. Git correctly treated it as an unreviewed file and the gate rejected it. The fixture was corrected to a normal ignored directory containing156exactly hashed core/extras/audio files, then passed without weakening any check. The failed result remains alongside the final actual result.
+
+The v1 manifest is unchanged. The new manifest is byte-pinned in verify_handoff.py. It permits one exact SVD file only, including the reviewed reveal fix and native4K margin/name-wrap polish, with no optional repository additions. Other source/tree/index/cache/runtime checks are unchanged. The later repaired Outro and any proposed new Mandarin narration are outside this visual-only overlay and require their own source review/gates. The production owner may create its authorized standalone Mandarin audio comparison separately; no full Chinese regeneration is approved by these receipts.
