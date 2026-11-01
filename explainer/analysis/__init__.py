@@ -310,6 +310,9 @@ def chapter_card(number, title: str, question: str = "", lit=(), part: int | Non
 # ---------------------------------------------------------------------------
 # The counterexample museum
 # ---------------------------------------------------------------------------
+_NO_LINE_START = set("，。、；：？！）》」』”’")  # Chinese punctuation a line may not begin with
+
+
 def _tex_words(text: str):
     r"""Split a Tex string into (separator, word) pairs at the spaces (plain or ``\ ``) that lie outside math and
     braces, so a line can be broken there without breaking the TeX."""
@@ -339,6 +342,8 @@ def _tex_words(text: str):
         elif "\u4e00" <= ch <= "\u9fff" and depth == 0 and not math:  # Chinese: a break may follow any character
             out.append((sep, cur + ch))
             cur, sep = "", ""
+        elif ch in _NO_LINE_START and not cur and out and depth == 0 and not math:
+            out[-1] = (out[-1][0], out[-1][1] + ch)  # closing punctuation never starts a line: keep it with the last
         else:
             cur += ch
         i += 1

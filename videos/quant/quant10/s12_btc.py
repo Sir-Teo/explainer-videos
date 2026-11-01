@@ -35,15 +35,15 @@ class BTC(VoiceoverScene):
         t1 = np.array([year_of(x) for x in b["dvol_t"]])
         t2 = np.array([year_of(x) for x in b["rv30_t"]])
         iv, rv = np.asarray(b["dvol"], float), np.asarray(b["rv30"], float)
-        g = axes([2021.25, 2026], [0.15, 1.25], x_length=11.6, y_length=4.4, xlabel=r"",
-                 ylabel=r"annualized volatility", xticks=[2022, 2023, 2024, 2025], yticks=[0.25, 0.5, 0.75, 1.0],
+        g = axes([2021.25, 2026], [0.15, 1.6], x_length=11.6, y_length=4.4, xlabel=r"",
+                 ylabel=r"annualized volatility", xticks=[2022, 2023, 2024, 2025], yticks=[0.5, 1.0, 1.5],
                  xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=20).shift(DOWN * 0.6)
         ax = g.ax
         l_iv = curve(ax, t1, iv, IMP, stroke_width=2.5)
-        l_rv = curve(ax, t2, np.minimum(rv, 1.24), REA, stroke_width=2)
+        l_rv = curve(ax, t2, np.minimum(rv, 1.59), REA, stroke_width=2)
         leg = legend([(IMP, r"implied: Deribit DVOL (30 days ahead)"),
                       (REA, r"realized over the next 30 days (Binance, hourly)")], font_size=22)
-        leg.move_to(ax.c2p(2024.9, 1.12))
+        leg.move_to(ax.c2p(2024.9, 1.42))
         setup = wrapped_label(
             rf"Every day at 08:00 UTC from {ts_date(b['start'][0], '%B %Y')}: sell a 30-day at-the-money call at "
             rf"DVOL, hedge every hour until expiry. {b['n']:,} trades.".replace(",", "{,}", 1), 6.4, 24, GREY_A)
@@ -68,7 +68,7 @@ class BTC(VoiceoverScene):
             vo.wait_until("b")
             spikes = np.where(rv - np.interp(t2, t1, iv) > 0.15)[0]
             if len(spikes):
-                marks = VGroup(*[Dot(ax.c2p(t2[i], min(rv[i], 1.24)), radius=0.05, color=LOSS) for i in spikes[::3]])
+                marks = VGroup(*[Dot(ax.c2p(t2[i], min(rv[i], 1.59)), radius=0.05, color=LOSS) for i in spikes[::3]])
                 self.play(LaggedStart(*[FadeIn(m, scale=2) for m in marks], lag_ratio=0.05))
         self.wait(0.3)
         self.clear_scene()
