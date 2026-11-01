@@ -142,21 +142,23 @@ class Ridge(VoiceoverScene):
                 [ax2.c2p(-a, b) for a, b in zip(lx, coef[:, j])]))
         names = VGroup(*[data_text(vocab[j], font="DejaVu Sans Mono", font_size=20, color=RIDGE)
                          .next_to(ax2.c2p(-lx[0], coef[0, j]), RIGHT, buff=0.08) for j in big])
-        zeros = int((np.abs(coef) < 1e-12).sum())
+        near_zero = int((np.abs(coef) < 1e-12).sum())
         best = int(r["best"])
         mk = DashedLine(ax2.c2p(-lx[best], -top), ax2.c2p(-lx[best], top), color=HL, stroke_width=2)
-        notes = VGroup(label(r"every weight shrinks smoothly", font_size=26, color=RIDGE),
-                       label(rf"weights exactly zero, \ at any $\lambda$: \ ${zeros}$", font_size=24, color=GREY_A),
+        notes = VGroup(label(r"coordinate paths vary smoothly", font_size=26, color=RIDGE),
+                       label(rf"sampled $|w|<10^{{-12}}$: \ ${near_zero}$", font_size=24, color=GREY_A),
                        label(r"Bayes: \ ridge is the most probable \\ weights under a bell-shaped prior \\ (Part 5); "
                              r"\ in networks, \ weight decay", font_size=22, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         notes.move_to([4.5, 0.4, 0])
         if notes.get_left()[0] < 2.0:
             notes.scale_to_fit_width(6.8 - 2.0).move_to([4.4, 0.4, 0])
-        say_zero = ("Not one weight ever reaches exactly zero." if zeros == 0 else
-                    f"Only {zeros} weights ever reach exactly zero.")
+        say_zero = ("No sampled coefficient magnitude falls below our numerical tolerance of ten to the minus twelve."
+                    if near_zero == 0 else
+                    f"At {near_zero} sampled coefficient-and-penalty pairs, its magnitude is below ten to the minus twelve.")
         with self.voiceover(
             "Here is what ridge does to the seventy weights, from a strong penalty to almost none. "
-            f"<bookmark mark='a'/> Every weight grows smoothly out of zero as lambda falls. {say_zero} "
+            "<bookmark mark='a'/> The coordinate paths vary smoothly as lambda falls; individual weights can turn or cross "
+            f"zero. The monotone shrinkage applies along the singular directions, not to every coordinate. {say_zero} "
             "<bookmark mark='b'/> Ridge has a second reading: it's the most probable set of weights if, before seeing "
             "any pages, you believed they were small, with a bell-shaped prior, as in Part 5. In neural networks the "
             "same penalty is called weight decay."

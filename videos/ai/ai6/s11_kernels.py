@@ -160,8 +160,9 @@ class Kernels(VoiceoverScene, ThreeDScene):
         errs = np.asarray(k["taylor_err"])
         g = plot([0.5, len(errs) + 0.5, 5], [-8, 0.2, 2], x_length=4.2, y_length=1.5, xticks=[1, 10, 20],
                  yticks=[0, -4, -8], yfmt=lambda v: f"10^{{{int(v)}}}", center=[3.4, -2.55, 0],
-                 xlabel=r"features kept", ylabel=r"error of the truncated Gaussian kernel")
+                 xlabel=r"1D powers kept", ylabel=r"maximum error on a $61 \times 61$ grid")
         tc = curve(g.ax, np.arange(1, len(errs) + 1), np.log10(errs), GOLD, stroke_width=3)
+        domain = note(r"1D: $x,z \in [-1.5,1.5]$, $\gamma=1$", font_size=17).next_to(g, UP, buff=0.06)
         within = next((w_ for lim_, w_ in ((1e-7, "a ten-millionth"), (1e-6, "a millionth"), (1e-5, "a hundred-thousandth"),
                                             (1e-3, "a thousandth")) if errs[-1] < lim_), f"{errs[-1]:.2f}")
         with self.voiceover(
@@ -171,7 +172,8 @@ class Kernels(VoiceoverScene, ThreeDScene):
             "from the two original numbers, never the six. Any method that only needs dot products, like the "
             "support vector machine, can run in the lifted space for free. <bookmark mark='d'/> The Gaussian "
             "kernel goes further. Expand it, and its features are every power of the coordinates: infinitely many. "
-            f"Kept to {len(errs)}, they already match it to within {within}."
+            f"For a one-dimensional check with gamma one, keep the first {len(errs)} powers. On a sixty-one by sixty-one "
+            f"grid with both inputs between minus one point five and one point five, the largest error is below {within}."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -184,7 +186,7 @@ class Kernels(VoiceoverScene, ThreeDScene):
             vo.wait_until("d")
             self.play(FadeOut(chk))
             step(3)
-            self.play(FadeIn(g), Create(tc))
+            self.play(FadeIn(g), FadeIn(domain), Create(tc))
         self.wait(0.3)
         self.clear_scene()
 

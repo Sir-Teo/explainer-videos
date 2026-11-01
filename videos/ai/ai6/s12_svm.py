@@ -75,7 +75,8 @@ class SVM(VoiceoverScene):
             "is the score over the length of w. <bookmark mark='c'/> Rescale w so the nearest points score exactly "
             "one; <bookmark mark='d'/> then the street is two over the length of w wide, <bookmark mark='e'/> and the "
             "widest street is the shortest w that keeps every point on its side. <bookmark mark='f'/> The street's "
-            f"edges rest on just {len(sv)} points, the support vectors. Move any other point, and nothing changes."
+            f"edges rest on just {len(sv)} points, the support vectors. Moving another point leaves this solution unchanged "
+            "as long as that point stays outside the same margin."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.03), FadeIn(tag))
             self.play(LaggedStart(*[Create(o) for o in others], lag_ratio=0.3), run_time=1.5)
@@ -96,15 +97,16 @@ class SVM(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def hinge(self):
-        g = plot([-2.5, 2.5, 1], [0, 3.2, 1], x_length=6.0, y_length=4.0, xticks=[-2, -1, 0, 1, 2], yticks=[0, 1, 2, 3],
+        g = plot([-2.5, 2.5, 1], [0, 4, 1], x_length=6.0, y_length=4.0, xticks=[-2, -1, 0, 1, 2], yticks=[0, 1, 2, 3, 4],
                  center=[-2.6, -0.5, 0], xlabel=r"the margin of a page, \ $y\,f(\mathbf{x})$", ylabel=r"loss")
         ax = g.ax
         m = np.linspace(-2.5, 2.5, 201)
         zero_one = VMobject(color=GREY_A, stroke_width=4).set_points_as_corners(
             [ax.c2p(-2.5, 1), ax.c2p(0, 1), ax.c2p(0, 0), ax.c2p(2.5, 0)])
-        hingec = curve(ax, m, np.minimum(np.maximum(0, 1 - m), 3.2), GOLD, stroke_width=5)
-        logc = curve(ax, m, np.minimum(np.log2(1 + np.exp(-m)), 3.2), C.TRUE_P, stroke_width=3, smooth=True)
-        expc = curve(ax, m[m > -1.15], np.exp(-m[m > -1.15]), "#B48EF0", stroke_width=3, smooth=True)
+        hingec = curve(ax, m, np.maximum(0, 1 - m), GOLD, stroke_width=5)
+        logc = curve(ax, m, np.log2(1 + np.exp(-m)), C.TRUE_P, stroke_width=3, smooth=True)
+        exp_m = np.r_[-math.log(4), m[m > -math.log(4)]]
+        expc = curve(ax, exp_m, np.exp(-exp_m), "#B48EF0", stroke_width=3, smooth=True)
         key = VGroup(label(r"right or wrong \ ($0$--$1$)", font_size=22, color=GREY_A),
                      label(r"hinge: \ $\max(0,\ 1 - yf)$ \ (SVM)", font_size=22, color=GOLD),
                      label(r"logistic: \ $\log_2(1 + e^{-yf})$", font_size=22, color=C.TRUE_P),
@@ -118,8 +120,9 @@ class SVM(VoiceoverScene):
             "Real authors overlap, so no street is empty. In 1995 Cortes and Vapnik let points stand in the street, "
             "or on the wrong side, at a price. <bookmark mark='a'/> The price is the hinge loss: zero for a page "
             "safely on its side, growing in a straight line as it crosses. <bookmark mark='b'/> Compare it with "
-            "being right or wrong, which can't be optimized, and with logistic regression's loss: both convex, "
-            "smooth stand-ins for counting mistakes. <bookmark mark='c'/> The constant C sets the price: large C, a "
+            "being right or wrong, which is difficult to optimize by gradients, and with logistic regression's loss. "
+            "Both are convex substitutes for counting mistakes; logistic loss is smooth, while hinge loss has a corner "
+            "at margin one. <bookmark mark='c'/> The constant C sets the price: large C, a "
             "narrow street that fights for every page; small C, a wide, forgiving one."
         ) as vo:
             self.play(FadeIn(g), FadeIn(cite_))

@@ -1,0 +1,227 @@
+[
+  {
+    "original_path": "patches/README.md.patch",
+    "original_bytes": 6418,
+    "original_sha256": "e5bcb3d85d53dc849bfcca83d44ba976a82b1e16b49df3259840a1302295b52c",
+    "stored_path": "patches/README.md.patch.gz",
+    "stored_bytes": 3200,
+    "stored_sha256": "4bab748ba68848f3c506d0c0939ad83efa8e170f387f6a0e94744932a680bbe4",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/beyondiid-s18_contest.py.patch",
+    "original_bytes": 3796,
+    "original_sha256": "3b4cb5fc699e8643ce0dc867b3d7a699be15456133576e8685ad704b58872c3f",
+    "stored_path": "patches/beyondiid-s18_contest.py.patch.gz",
+    "stored_bytes": 1414,
+    "stored_sha256": "e788eee01aaa1373aac418ed6c66978f902e1a38308ef9043910d3ae6ce922f7",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/text_zh_add.json.patch",
+    "original_bytes": 125853,
+    "original_sha256": "9f568d05ec13f52eb316f76d1f274b78e3642feec2dfdf2fac6634d6e6bb4d45",
+    "stored_path": "patches/text_zh_add.json.patch.gz",
+    "stored_bytes": 44793,
+    "stored_sha256": "09eeb579cc7cc95d03eabc90ee876d99b7a219f0c8a9faccd3697e63fd524190",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/argmax-vector-scope.patch",
+    "original_bytes": 905,
+    "original_sha256": "59774bb50b5d78c711d6de594d17a24e22ecb57c9e723b698dcf84a9a0790e9a",
+    "stored_path": "patches/argmax-vector-scope.patch.gz",
+    "stored_bytes": 319,
+    "stored_sha256": "531b354c52bf550ce4d9af0d99dd321ebd7e526d0d2cb4811685d813fe0ed094",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s17_metrics.py.patch",
+    "original_bytes": 5023,
+    "original_sha256": "0adba7f46a3b4822c07487d1f3faa3a196b3fb77bf1490d3bee48340cd61841d",
+    "stored_path": "patches/s17_metrics.py.patch.gz",
+    "stored_bytes": 1965,
+    "stored_sha256": "dea3a6eb6d8024aa7afae90e62f5ececd46b611645f9a4db7af79faeda6a4df5",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s09_lda.py.patch",
+    "original_bytes": 10509,
+    "original_sha256": "69909e6cd29f752388f7fba58764889050d9a533a7db8289abec35314f1024b4",
+    "stored_path": "patches/s09_lda.py.patch.gz",
+    "stored_bytes": 3935,
+    "stored_sha256": "85fc673be4f65e1b336e0ac73d3531304209526b1dafb4c5e7d59d1895aad51d",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s04_ridge.py.patch",
+    "original_bytes": 2609,
+    "original_sha256": "c459d3381081c0cf68de8a075f939870bb41a3c31d1c6b9f9a67ca3c707d6e22",
+    "stored_path": "patches/s04_ridge.py.patch.gz",
+    "stored_bytes": 1138,
+    "stored_sha256": "abc10d8bde9ca22a8218bb9a52480a4f3c6a7c1b4f35b43cb4d0d3768cb08484",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s13_trees.py.patch",
+    "original_bytes": 902,
+    "original_sha256": "e7a257cc3568ae2327b0cd2007d99ef7c49e5beb541680fc6237a1817ea894eb",
+    "stored_path": "patches/s13_trees.py.patch.gz",
+    "stored_bytes": 439,
+    "stored_sha256": "7d54405c7d12f0f7166f609a8abf832e15771e43c689e12f3e589e1bafa59629",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s18_contest.py.patch",
+    "original_bytes": 5721,
+    "original_sha256": "308058da015c50636ef746fdc1e09c915ca5998b8b7396fc1c0970c8d5866f38",
+    "stored_path": "patches/s18_contest.py.patch.gz",
+    "stored_bytes": 2132,
+    "stored_sha256": "bcfad6c74b45ecbedb8798a79c2a5eec9239aff850834f17d209a133e4876b10",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/zh_lines.py.patch",
+    "original_bytes": 16405,
+    "original_sha256": "3b3af97e16f3fa093790c9697e2525a3b0069937da57b5add0681a0d8c7a359b",
+    "stored_path": "patches/zh_lines.py.patch.gz",
+    "stored_bytes": 7255,
+    "stored_sha256": "3f9eb047cf54209f4fbf9381e4d0d9461a2d644a36e375fca7d2710fab5582e1",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s01_hook.py.patch",
+    "original_bytes": 2102,
+    "original_sha256": "efe1cf378549327c5e9221d7a1ce06d10b2375e513c2a836c139a0334905d3ce",
+    "stored_path": "patches/s01_hook.py.patch.gz",
+    "stored_bytes": 952,
+    "stored_sha256": "491609590be6c7ca677bcff3bb11a60bd59b8ffe911f356e092842f488cd0a19",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s15_adaboost.py.patch",
+    "original_bytes": 1124,
+    "original_sha256": "1360a3160349f6502b70ec89ec6e102265c64ef0c640efafedaf3cc7405209e3",
+    "stored_path": "patches/s15_adaboost.py.patch.gz",
+    "stored_bytes": 530,
+    "stored_sha256": "ce00c3740b95ffea90a96be2eecb92af8ef2155a792ba7f9d98a8ce764003f38",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s12_svm.py.patch",
+    "original_bytes": 3636,
+    "original_sha256": "e9244f783bf0c1ee372c60e8e917ec5ae5503389fd5912984ae303d10357a0ba",
+    "stored_path": "patches/s12_svm.py.patch.gz",
+    "stored_bytes": 1418,
+    "stored_sha256": "ded28e3d3a31a4c744dc3bca13764ea782e468e025b9c4c71d8220a1895c09fd",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s19_outro.py.patch",
+    "original_bytes": 1063,
+    "original_sha256": "94f9b146427e17ebcde5b27e3278276563a06d1ef53c6342cea44781045897b6",
+    "stored_path": "patches/s19_outro.py.patch.gz",
+    "stored_bytes": 551,
+    "stored_sha256": "a2a57d5dc31c260a95a935a0cd9cf791b51d5f9c6dd2329bdb75c90f78f29ba1",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/beyondiid-README.md.patch",
+    "original_bytes": 2672,
+    "original_sha256": "6443ef53c94a51e2617fe5407b0edaf1562c14308a67fb5179a5abc37453ace5",
+    "stored_path": "patches/beyondiid-README.md.patch.gz",
+    "stored_bytes": 1386,
+    "stored_sha256": "531784e34ecf923f9cd60c4c139dbb21fa66c365c42e94ed09630e40f444405b",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/beyondiid-zh_lines.py.patch",
+    "original_bytes": 3496,
+    "original_sha256": "4a5afb5902fc3296b14449f4e58154f41826ce37385b6bbddb84a6965d5d922d",
+    "stored_path": "patches/beyondiid-zh_lines.py.patch.gz",
+    "stored_bytes": 1434,
+    "stored_sha256": "9deccc62b3a3abb3ee11067fd1ef41a50974b7d536d61329732648c0451092e4",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s11_kernels.py.patch",
+    "original_bytes": 2000,
+    "original_sha256": "3fb7534e2a6214932bddc3bbbbc25046c277aee07378daced5394ecf353dd692",
+    "stored_path": "patches/s11_kernels.py.patch.gz",
+    "stored_bytes": 1013,
+    "stored_sha256": "2f59b62b83503cf546396570e5e229886c210c6a31fb1c4833b66313a33de805",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s06_logistic.py.patch",
+    "original_bytes": 1877,
+    "original_sha256": "5c875da05e9723e6b9aaf9002c2e4cacce680eb47998699ceb8ed3619cf5a39d",
+    "stored_path": "patches/s06_logistic.py.patch.gz",
+    "stored_bytes": 838,
+    "stored_sha256": "7ffbee24c4ff8c01fe8223c4fb4ed29b64ea374183225039f29d72a5d6b3beb7",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/s16_gboost.py.patch",
+    "original_bytes": 691,
+    "original_sha256": "36675a5cd4a2478833ceab6fd5e2e8833ddf22e172d700242f8bec6be7559406",
+    "stored_path": "patches/s16_gboost.py.patch.gz",
+    "stored_bytes": 336,
+    "stored_sha256": "ec4f41145e77684a4b718ecf3d417134d9063639459252e9ba2b9f963a4d494b",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "patches/beyondiid-text_zh_add.json.patch",
+    "original_bytes": 127275,
+    "original_sha256": "8d94fad6921a84a815f28b78e8bb20488c0499688b4549969d47f77f54a8373a",
+    "stored_path": "patches/beyondiid-text_zh_add.json.patch.gz",
+    "stored_bytes": 45434,
+    "stored_sha256": "c0168956fe7fcfc801de0c666eff2360b1da706b627125e511a977a41efdf226",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "history/pre-beyondiid-zh_lines.py.patch",
+    "original_bytes": 13206,
+    "original_sha256": "8f27adfb3a1c210ec17c822a71ca60039d6fc90f1d9cb03da1f811e887232833",
+    "stored_path": "history/pre-beyondiid-zh_lines.py.patch.gz",
+    "stored_bytes": 6284,
+    "stored_sha256": "0053cad165474d8247254369e4c76356533d55b5cef0988bad4b3b04a09b7ec2",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "history/pre-beyondiid-README.md.patch",
+    "original_bytes": 3806,
+    "original_sha256": "f747e994bf2afac16b79367afbcc806f16ba6c20804fa169710a35bfc55c97ac",
+    "stored_path": "history/pre-beyondiid-README.md.patch.gz",
+    "stored_bytes": 2014,
+    "stored_sha256": "e7e41e0d8d0359d0693152854fd9754d155742e59dceb66bf2abbbcbc1803659",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "history/pre-beyondiid-s18_contest.py.patch",
+    "original_bytes": 1995,
+    "original_sha256": "c7b3df1c8b17ebab13cd68ad178abd20e6cb51f7ed53b48ef56792f37c1fe5bb",
+    "stored_path": "history/pre-beyondiid-s18_contest.py.patch.gz",
+    "stored_bytes": 844,
+    "stored_sha256": "e4e11abebd937cf4e4e3ed83e39227cbfc4869ae0e6a82510884da0aaf5edc91",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "history/pre-beyondiid-text_zh_add.json.patch",
+    "original_bytes": 2673,
+    "original_sha256": "dd197b9ff714a9f452315b5182f7210cf6ea4472cf1135a42f0fe5d78ee73097",
+    "stored_path": "history/pre-beyondiid-text_zh_add.json.patch.gz",
+    "stored_bytes": 1564,
+    "stored_sha256": "1d2384c22a87f48f6d5edf42642f3fdc26c1c843f28383870f030f63ee4b0c5a",
+    "codec": "gzip; exact original bytes restored by decompression"
+  },
+  {
+    "original_path": "history/pre-argmax-s09_lda.py.patch",
+    "original_bytes": 10483,
+    "original_sha256": "4480eb1329b970d42069eeb170e7ae386c674f02b33503d06d6ea69f72843c1f",
+    "stored_path": "history/pre-argmax-s09_lda.py.patch.gz",
+    "stored_bytes": 3922,
+    "stored_sha256": "987a47edf6d90636d21424e0c648de3a3e257082970c6c22b8700018d995660f",
+    "codec": "gzip; exact original bytes restored by decompression"
+  }
+]

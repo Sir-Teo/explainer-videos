@@ -182,13 +182,19 @@ class Logistic(VoiceoverScene, ThreeDScene):
         if res.width > 4.4:  # the right-hand column beside the plot; longer in Chinese
             res.scale_to_fit_width(4.4)
         keep_in_frame(res)
-        note_ = label(r"seventy small words \\ are a fingerprint", font_size=28, color=GREY_A).next_to(a70, DOWN, buff=0.6)
+        note_ = label(r"fixed dictionary; \\ new chunks of the same five novels", font_size=24, color=GREY_A).next_to(a70, DOWN, buff=0.6)
         note_.align_to(a70, LEFT)
+        if lg["acc70"] > lg["acc2"]:
+            comparison = "Here the seventy-rate model scores higher than the two-rate model."
+        elif lg["acc70"] == lg["acc2"]:
+            comparison = "Here the seventy-rate and two-rate models tie."
+        else:
+            comparison = "Here the seventy-rate model scores lower than the two-rate model; more features need not help."
         with self.voiceover(
-            rf"Now the test: pages the method never saw. With two rates, the line gets {100 * lg['acc2']:.0f} "
+            rf"Now the test: chunks excluded from fitting, from the same five novels. With two rates, the line gets {100 * lg['acc2']:.0f} "
             "percent of them right. <bookmark mark='a'/> Give it all seventy rates instead, and the same method gets "
-            f"{round(lg['acc70'] * n_te)} of the {n_te} test pages right. A handful of small words, counted, are a "
-            "fingerprint."
+            f"{round(lg['acc70'] * n_te)} of the {n_te} test pages right. {comparison} This test does not establish "
+            "accuracy on a previously unseen novel."
         ) as vo:
             self.play(Create(ax), FadeIn(plane[1:]), FadeIn(img), Create(bl))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.01), FadeIn(a2), run_time=1.5)

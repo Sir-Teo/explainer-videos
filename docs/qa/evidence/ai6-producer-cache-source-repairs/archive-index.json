@@ -1,0 +1,594 @@
+[
+  {
+    "scope": "metadata-only assembly correction; no tests or production action",
+    "original_file": "/workspace/runtime/ai6-core-source-package-assembly-correction.json",
+    "original_bytes": 11453,
+    "original_sha256": "857b23a486bfebb01fda82f1670d32c252cde67e9d284def6070c981a384b357",
+    "file": "assembly-correction.json.gz",
+    "archive_sha256": "538e88039a36fb345406d94736c486b42675aa07b391c3fe474e3e2cb3880870"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/README.md",
+    "original_bytes": 2823,
+    "original_sha256": "f2c0f0a2495cd4ec8849334ef8045f7693782140bcc6c368dfadf85428fc733a",
+    "file": "final-owner/README.md.gz",
+    "archive_sha256": "8a9c21480790b44faf313ba622db4dfe7d362d07219adf6751d3a370e9cfdc85"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/bound-load-before-probe.json",
+    "original_bytes": 353,
+    "original_sha256": "80b1343085167465c36013410a695a7e5791a42a73e0d491088552646d392342",
+    "file": "final-owner/bound-load-before-probe.json.gz",
+    "archive_sha256": "11cec378542f3964bb543009b4b1b5ae9f8c0621677477a2dbea8e05062de930"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/compute-before.py",
+    "original_bytes": 79958,
+    "original_sha256": "9a382aa797733fb5d281864f7faca46ccbe135e9cb322749405424a3b3c21df3",
+    "file": "source-blobs/9a382aa797733fb5d281864f7faca46ccbe135e9cb322749405424a3b3c21df3.gz",
+    "archive_sha256": "b48d11223d2e7284a75c38b19238376db6192feeb5790832f3b55a00f8fe9325"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/compute.patch",
+    "original_bytes": 7099,
+    "original_sha256": "68fea3489e223d35d1958f673b3d1799c3ba84e48ad7a65886095ec3eee89774",
+    "file": "final-owner/compute.patch.gz",
+    "archive_sha256": "8647189b35d59b6f89dff558d19af406caece90a226be1d50b75eb5f9af90e22"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/focused-tests.log",
+    "original_bytes": 7150,
+    "original_sha256": "8605ad1fa42a62be1ced46872e4957179e717fff92c57fb9df09dd45b0b00417",
+    "file": "final-owner/focused-tests.log.gz",
+    "archive_sha256": "e7cab3b519110d66e8da5f28708d981af84842456232d0fc2c0ead2a828023a9"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/handoff.json",
+    "original_bytes": 5262,
+    "original_sha256": "c473c4613ba39bd207050d838155cd1f2bc8bb8e2fd2f3656d0c8561d9a86420",
+    "file": "final-owner/handoff.json.gz",
+    "archive_sha256": "6001d624cfdf53e43d2fdc0b2e1799b8bf1db9f4263f69f53448a0ae9b25dbc7"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/independent-clearance-reference.json",
+    "original_bytes": 1511,
+    "original_sha256": "c0c07bfa834854eeb855797a346061749f64547c6f88739d2a7183d4b3699322",
+    "file": "final-owner/independent-clearance-reference.json.gz",
+    "archive_sha256": "59bd18d987b04e0758c94dd64f412767095595cc7e33ee2a05374ddd1dd824b0"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/payload-manifest.json",
+    "original_bytes": 5721,
+    "original_sha256": "9ff9f21d35239ba7bafac6a74ce088122e8d23511cfe801c3912313f1b85cc4c",
+    "file": "final-owner/payload-manifest.json.gz",
+    "archive_sha256": "74660220ade477420bedfc6a23d08c78873ae6b9697dd000e292eefdeebec1a2"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/prelaunch-wrapper-correction.json",
+    "original_bytes": 305,
+    "original_sha256": "5340ace8906821b430acd34965dec52154bb6fea06ae543909bc68736c559d94",
+    "file": "final-owner/prelaunch-wrapper-correction.json.gz",
+    "archive_sha256": "e97b2b1c545a6f6a63edc58a807dfb7f268d7bbc118dd628fbb7fe309381a1a5"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/source-after.json",
+    "original_bytes": 1222,
+    "original_sha256": "e94a444247b14cf918b72fa8fd21071f6dfe9bc85c10605f9b862fea1bc79f7b",
+    "file": "final-owner/source-after.json.gz",
+    "archive_sha256": "7d6c65df2ef2a47a7d8552efc8c3b479100779e358b6bd5d5d335c44108b0a3b"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/source-before.json",
+    "original_bytes": 1222,
+    "original_sha256": "e94a444247b14cf918b72fa8fd21071f6dfe9bc85c10605f9b862fea1bc79f7b",
+    "file": "final-owner/source-before.json.gz",
+    "archive_sha256": "7d6c65df2ef2a47a7d8552efc8c3b479100779e358b6bd5d5d335c44108b0a3b"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/explainer/ai/cache.py",
+    "original_bytes": 6276,
+    "original_sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+    "file": "source-blobs/71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507.gz",
+    "archive_sha256": "5801a2e646019cf07ca1419b42369150cb8b81ce3b94ec33248858d7f20c976a"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/explainer/cache_lock.py",
+    "original_bytes": 1521,
+    "original_sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+    "file": "source-blobs/f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228.gz",
+    "archive_sha256": "2c838ec16aeb71dae182d10dc8d18e35f05b47c2b6ea0659b2102b01e4cc9cc9"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/tests/test_ai6_cache_contracts.py",
+    "original_bytes": 20646,
+    "original_sha256": "11a4ad0cdaf3763f853229c615f18fff4c853edf159f9d90f9bead276887e89b",
+    "file": "source-blobs/11a4ad0cdaf3763f853229c615f18fff4c853edf159f9d90f9bead276887e89b.gz",
+    "archive_sha256": "55539bae942abb0c7579a37463ebb608ba61bebd5424d03ea31019524ee16f81"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/tests/test_ai6_score_contracts.py",
+    "original_bytes": 7916,
+    "original_sha256": "da90b85070b7f9893287d6ea7d075b08c17210f673ba788727d76d23381cebc6",
+    "file": "source-blobs/da90b85070b7f9893287d6ea7d075b08c17210f673ba788727d76d23381cebc6.gz",
+    "archive_sha256": "298731e959f48928caf1da4b2049982f8a7ba5bd3f50d90d21d2d4b5768e471c"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/videos/ai/ai1/compute.py",
+    "original_bytes": 78448,
+    "original_sha256": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa",
+    "file": "source-blobs/0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa.gz",
+    "archive_sha256": "9b271d67e47dda1ab50854e347f2b2b936f44a0d9e5f0a6bd16fd14c5fe1482b"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/videos/ai/ai6/cache_contract.py",
+    "original_bytes": 23866,
+    "original_sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+    "file": "source-blobs/9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394.gz",
+    "archive_sha256": "4d48f508d25dfe87d713934bb5baa8ff8b95238ee29de1fa8b392849b165de89"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/videos/ai/ai6/compute.py",
+    "original_bytes": 81289,
+    "original_sha256": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+    "file": "source-blobs/d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc.gz",
+    "archive_sha256": "bb1a4e4297ce1b944901ac5a034670a3de7936485e934fd6318470159cbdc94b"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/videos/ai/ai6/contracts.py",
+    "original_bytes": 23046,
+    "original_sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+    "file": "source-blobs/dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2.gz",
+    "archive_sha256": "e6d950621619407f3fa4e29bf3d649e46466f4e4407a779b7d1ad86ff1f83294"
+  },
+  {
+    "scope": "final-owner",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/test-receipt.json",
+    "original_bytes": 1023,
+    "original_sha256": "456b4e8abba979d0442f16f325b1875e85ffbf948c7845346582739df354417d",
+    "file": "final-owner/test-receipt.json.gz",
+    "archive_sha256": "8e246e7284c5e1a6506f2a7730d3479e8688f5c1685598c1e51a569d1bcd4fa4"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/README.md",
+    "original_bytes": 2391,
+    "original_sha256": "ae03308ee38634f063e87cb2cbc005ab5a88e875ffa88da69de354767294d287",
+    "file": "historical-pre-dispatcher/README.md.gz",
+    "archive_sha256": "7aea9817a02d1b812ebd59499cf70311febf844bac50d8959b523b26378093b0"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/compute.patch",
+    "original_bytes": 6959,
+    "original_sha256": "3d2e8bb740df252041264e2badc440601e0c9e0bbaf389890d8e5958fa074cb2",
+    "file": "historical-pre-dispatcher/compute.patch.gz",
+    "archive_sha256": "1f90da7aca9f90cdb97adf4863a9e53ff4499dd7bfafa48eb04520b5c0fa5f67"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/focused-tests.log",
+    "original_bytes": 6963,
+    "original_sha256": "f54b929276d82f44dcdc3c835bbb2fc9e5af91b8a05cafb29e1a2e15f52bc628",
+    "file": "historical-pre-dispatcher/focused-tests.log.gz",
+    "archive_sha256": "57dd72b79aaeb3052def4c873ea04d27a6b95e8a8f1963609d017dbddcd29a87"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/handoff.json",
+    "original_bytes": 4908,
+    "original_sha256": "adc92211f2505e84284319769a05d6b3359b218f7a0247ec47bf4c9c7e400e36",
+    "file": "historical-pre-dispatcher/handoff.json.gz",
+    "archive_sha256": "ff10165fbe73c53d7230198f96dc1894cefc4c8d13dda84d884a4f9167c0a19a"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/source-after.json",
+    "original_bytes": 1222,
+    "original_sha256": "3dd540376fcc6fb74db6c3289c55aa518df7c72ab24d9acddf9abaf69b28eff1",
+    "file": "historical-pre-dispatcher/source-after.json.gz",
+    "archive_sha256": "44281d14790b1425f4b802c649f5110679cb969ac9a357f6c0d5d88d575105d6"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/source-before.json",
+    "original_bytes": 1222,
+    "original_sha256": "3dd540376fcc6fb74db6c3289c55aa518df7c72ab24d9acddf9abaf69b28eff1",
+    "file": "historical-pre-dispatcher/source-before.json.gz",
+    "archive_sha256": "44281d14790b1425f4b802c649f5110679cb969ac9a357f6c0d5d88d575105d6"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/sources/tests/test_ai6_score_contracts.py",
+    "original_bytes": 7402,
+    "original_sha256": "3b79d94aaf4c9e8620e40d11605103baed39046b31dcccbd2598d6c877aadb8f",
+    "file": "source-blobs/3b79d94aaf4c9e8620e40d11605103baed39046b31dcccbd2598d6c877aadb8f.gz",
+    "archive_sha256": "9d142eb0e33e3b8d93a1697bfb57b4b10d53be9ba1fa73b25245cf2f86d738d5"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/sources/videos/ai/ai6/compute.py",
+    "original_bytes": 81172,
+    "original_sha256": "5c2335de3a151a6acf2fe7fe4c0a69c329af52c392cb88f706412d460385ec2b",
+    "file": "source-blobs/5c2335de3a151a6acf2fe7fe4c0a69c329af52c392cb88f706412d460385ec2b.gz",
+    "archive_sha256": "cdbec150deb335f9c595e30f0cbaa519f736c0c5cbaf3a7f78496df2f1035093"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/test-receipt.json",
+    "original_bytes": 1036,
+    "original_sha256": "12238a28bb37030763c6832c9dbad1f7afb19d58106dbfcaec516f6988b5eafb",
+    "file": "historical-pre-dispatcher/test-receipt.json.gz",
+    "archive_sha256": "3f0e605e96065ee8490ab3fc262ad0a4d069935af56b3b8ef996d0825b5e2d57"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/core-probe-result.json",
+    "original_bytes": 16904,
+    "original_sha256": "dcf949c8a1de1fa08b9354a9c85cb4afe573a7dbe1f344bcb040b2a8589e010f",
+    "file": "independent-core/core-probe-result.json.gz",
+    "archive_sha256": "2921fa84855eb0b2d4d9a71c28b41f54119b9469db03937c858b6048d19f0ae6"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/core-probe.log",
+    "original_bytes": 941,
+    "original_sha256": "188d1e5e5862472777b3e3b6dfa7e5e6b6585b69fe5f5ce5c7ad6ffe0fcda61f",
+    "file": "independent-core/core-probe.log.gz",
+    "archive_sha256": "e34239937ca2373782eb8e45971dbb202e093a0cea30bb684a23cb7892f1ebc7"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/core_probe.py",
+    "original_bytes": 12444,
+    "original_sha256": "715c609244e118b292542ca6fe202afb10cc5d9b687d466bc83a3fb207bf1496",
+    "file": "independent-core/core_probe.py.gz",
+    "archive_sha256": "f20b24b89345f73df48073e5e6542098828e09ede6b041909c69f3f43a544b7d"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/finalize.py",
+    "original_bytes": 12794,
+    "original_sha256": "0e8850f21d7484556fde141834d00f34e6908f9a7e65108db7816a330b109144",
+    "file": "independent-core/finalize.py.gz",
+    "archive_sha256": "2a686c3c25eaa3d94b7e5af15479919cf757125384d157ab9a0ff747f525a949"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/focused42-tests.log",
+    "original_bytes": 7150,
+    "original_sha256": "ba136aead77274858c6e4192d696feec9ffe483d62ecc823648232f6fc0d2594",
+    "file": "independent-core/focused42-tests.log.gz",
+    "archive_sha256": "f91c80e916889bb01652c1334d1c92260efc024cc7396524335191f951efe041"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/manifest.json",
+    "original_bytes": 2167,
+    "original_sha256": "1c597c835e34652fa3a1756863fbf776e4f18ce143ff92f1e6297a101280deec",
+    "file": "independent-core/manifest.json.gz",
+    "archive_sha256": "ab1e30b6538b9fd923da32a1ab8fb8dea0444eddf3f8aff1591387f659ae1b60"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/oof-probe-result.json",
+    "original_bytes": 43939,
+    "original_sha256": "daf4acf6b8b2741f243d7d3e4ea52cfca230af335f1ea27de991558a53dfeca1",
+    "file": "independent-core/oof-probe-result.json.gz",
+    "archive_sha256": "c556da5a3b5e9c2b8394a2bcd3cbaccd8b9f4b56c4d35a613dce602e600e825f"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/oof-probe.log",
+    "original_bytes": 150,
+    "original_sha256": "d25464587afd2302eb9b2c0a0f98da44641dd8637b78243f8e56c533e94b3f4e",
+    "file": "independent-core/oof-probe.log.gz",
+    "archive_sha256": "d847c1f7e38ebb4e8520ba856f25aa9ec0a61676e575d79e7497928961609940"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/oof_probe.py",
+    "original_bytes": 3779,
+    "original_sha256": "a1644bb05d485109afc99db3e78bc75f50cf5ac57a7616accd83d7a5c87f28c7",
+    "file": "independent-core/oof_probe.py.gz",
+    "archive_sha256": "5ef729d922bf9eeef572a89984cf35a7d20fec6abc1d86232b5f3084d59b00f0"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/owner-handoff/handoff.json",
+    "original_bytes": 5262,
+    "original_sha256": "c473c4613ba39bd207050d838155cd1f2bc8bb8e2fd2f3656d0c8561d9a86420",
+    "file": "independent-core/owner-handoff/handoff.json.gz",
+    "archive_sha256": "6001d624cfdf53e43d2fdc0b2e1799b8bf1db9f4263f69f53448a0ae9b25dbc7"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/owner-handoff/source-after.json",
+    "original_bytes": 1222,
+    "original_sha256": "e94a444247b14cf918b72fa8fd21071f6dfe9bc85c10605f9b862fea1bc79f7b",
+    "file": "independent-core/owner-handoff/source-after.json.gz",
+    "archive_sha256": "7d6c65df2ef2a47a7d8552efc8c3b479100779e358b6bd5d5d335c44108b0a3b"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/owner-handoff/source-before.json",
+    "original_bytes": 1222,
+    "original_sha256": "e94a444247b14cf918b72fa8fd21071f6dfe9bc85c10605f9b862fea1bc79f7b",
+    "file": "independent-core/owner-handoff/source-before.json.gz",
+    "archive_sha256": "7d6c65df2ef2a47a7d8552efc8c3b479100779e358b6bd5d5d335c44108b0a3b"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/owner-handoff/test-receipt.json",
+    "original_bytes": 1023,
+    "original_sha256": "456b4e8abba979d0442f16f325b1875e85ffbf948c7845346582739df354417d",
+    "file": "independent-core/owner-handoff/test-receipt.json.gz",
+    "archive_sha256": "8e246e7284c5e1a6506f2a7730d3479e8688f5c1685598c1e51a569d1bcd4fa4"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/review.json",
+    "original_bytes": 6943,
+    "original_sha256": "795f1657827d104c06a4094f6a1870db312d59a24095a5590420394186aef4bf",
+    "file": "independent-core/review.json.gz",
+    "archive_sha256": "4ac0d0e193982830092f4db341c8784e0c7a8852a0d25044dfbac8cba3568ba0"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/review.md",
+    "original_bytes": 2365,
+    "original_sha256": "801829c50b561521a582e91cc9d13d7c4a7e88a17a94fbd3ea52f771e3591c90",
+    "file": "independent-core/review.md.gz",
+    "archive_sha256": "999030542726dd378537c5f07559d8fbb72a7c784751e81e208868a7d73f3af8"
+  },
+  {
+    "scope": "independent-core",
+    "original_file": "/workspace/runtime/ai6-independent-core-contract-review/schema-inventory.json",
+    "original_bytes": 20530,
+    "original_sha256": "a8a02e639d8ee873b9e87b52868a1d1dfc08d5c491c9ce595414c578486b9885",
+    "file": "independent-core/schema-inventory.json.gz",
+    "archive_sha256": "f0f585716cbc3a3bd7d13c5faa9bba9625a32f800f1c8c6f6f5cf7f86b06895d"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/before-source-identities.json",
+    "original_bytes": 908,
+    "original_sha256": "3bfade1f401bd43fa3253efb25313a8a5885af23377349ea983d075b122a4589",
+    "file": "independent-scene-math/before-source-identities.json.gz",
+    "archive_sha256": "406ac7dcd22710d0ee39bc3b7f6f268d43f191eb903fd6fa6c7d21e006783627"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/finalize.py",
+    "original_bytes": 7818,
+    "original_sha256": "3c0485cfcc6a149836ef95cefa420be52a62307f857913d4335f5a56973bb22c",
+    "file": "independent-scene-math/finalize.py.gz",
+    "archive_sha256": "362a9a9da65354471eec070b0ee2e0641cf738f20a7d252816888ea5a678aaf0"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/first-attempt-historical-row-lookup/before-source-identities.json",
+    "original_bytes": 908,
+    "original_sha256": "3bfade1f401bd43fa3253efb25313a8a5885af23377349ea983d075b122a4589",
+    "file": "independent-scene-math/first-attempt-historical-row-lookup/before-source-identities.json.gz",
+    "archive_sha256": "406ac7dcd22710d0ee39bc3b7f6f268d43f191eb903fd6fa6c7d21e006783627"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/first-attempt-historical-row-lookup/probe-result.json",
+    "original_bytes": 14814,
+    "original_sha256": "c9e576ff36c3fdbb42083b3fa2800f7828404ecfc7815b1e32ad785be58e2f1e",
+    "file": "independent-scene-math/first-attempt-historical-row-lookup/probe-result.json.gz",
+    "archive_sha256": "bf0476dff7f56f4021afec3eb8b16745283ec5e705cbe8756192b60b1efc3373"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/first-attempt-historical-row-lookup/probe.log",
+    "original_bytes": 2224,
+    "original_sha256": "ac7794dddc805adc0944fe4b6646b5961dba5aba37856f1e916d761b53673ea5",
+    "file": "independent-scene-math/first-attempt-historical-row-lookup/probe.log.gz",
+    "archive_sha256": "e61353bfc7be2790d2301c00de0ffd50aa7c3c7d437f403bbebaa8ded48d6d4f"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/first-attempt-historical-row-lookup/probe.py",
+    "original_bytes": 8228,
+    "original_sha256": "6ab93755f259ad7bc49bebd0ca88d3a27ac60163c67b31bccbacb01b8d514f47",
+    "file": "independent-scene-math/first-attempt-historical-row-lookup/probe.py.gz",
+    "archive_sha256": "4dc6d6222427d0edfe00608ba0dc5ab038dcf7a4b852ca9ac0b000f47dd9bcdd"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/manifest.json",
+    "original_bytes": 1983,
+    "original_sha256": "67aad01f2f84fd9355a5948db22f13d3848aa923dec3d62dc0d4e1abe9a2b7db",
+    "file": "independent-scene-math/manifest.json.gz",
+    "archive_sha256": "3ea9ff2b2ba6de810a28427ed912f06a5c5bbda01256de9ea604790f038e56fd"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/official-focused-tests.log",
+    "original_bytes": 2670,
+    "original_sha256": "b68a79df47419c843776574df6c18b80231dd177d35907998eb22ed753a7e646",
+    "file": "independent-scene-math/official-focused-tests.log.gz",
+    "archive_sha256": "85e791048d0dd22f7d8d2f40b20123a4594bff39fd888dd9bc9d0d44b954cfce"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/probe-result.json",
+    "original_bytes": 15370,
+    "original_sha256": "c1f9b0e3c3c547697899a50c3a09406add54f57b4972608585ae2e23c9204e72",
+    "file": "independent-scene-math/probe-result.json.gz",
+    "archive_sha256": "f73267ce25c81b88410fac01f58514b6f3079ba172609beb833837a31b1bd107"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/probe.log",
+    "original_bytes": 1282,
+    "original_sha256": "2b1da559b6c61d9e54d9059a4ca705d79e2623eb4ce732da5b198fa08b941e30",
+    "file": "independent-scene-math/probe.log.gz",
+    "archive_sha256": "8a3dcc6a2a2f2dd00df9436368bebf77af0a853e9b489b0c4ffe8a9f9cf50814"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/probe.py",
+    "original_bytes": 8368,
+    "original_sha256": "c0578834015f7999f87c062e4f224c558a2b1ea5d12a1c2a20b59ca55ce908ed",
+    "file": "independent-scene-math/probe.py.gz",
+    "archive_sha256": "f0d80fa131be909dff538ee6ffd5d62326aa694bd1a9095bf93bf2a89caf97f7"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/review.json",
+    "original_bytes": 6816,
+    "original_sha256": "b9fef293114f6671f658d809a3e48131b0d0a3b3bcd8d2a8a7924f31d85b3405",
+    "file": "independent-scene-math/review.json.gz",
+    "archive_sha256": "41ee78d3cecbb878b9329e8a183cfa8e31387bafaa911bdc295ee461ca242671"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/review.md",
+    "original_bytes": 1939,
+    "original_sha256": "9db14cbd884dcede946ac6e324ccb4978948fdb955a21b58ba7ac014b6db2a9e",
+    "file": "independent-scene-math/review.md.gz",
+    "archive_sha256": "3c6fb0db70ecfac617f1ac79f60e1e71f5cb22d9b07a79ed9027f9b463134ce8"
+  },
+  {
+    "scope": "independent-scene-math",
+    "original_file": "/workspace/runtime/ai6-independent-scene-math-review/reviewed-source-freeze.json",
+    "original_bytes": 12009,
+    "original_sha256": "553706b7bda34cb1641c786ce01f435b0585a2fc30823af84b34a75722b50eae",
+    "file": "independent-scene-math/reviewed-source-freeze.json.gz",
+    "archive_sha256": "399bd0dd63992e37da1cbc6cfe1f1176e6fc12b42e6a7fb7c0ac4a20f58bffa3"
+  },
+  {
+    "scope": "primary-factcheck",
+    "original_file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/build_receipt.py",
+    "original_bytes": 9111,
+    "original_sha256": "05757bc1d36a6e04713d6286815fdb8d1544ab2b165cbf153483b022a272642f",
+    "file": "primary-factcheck/build_receipt.py.gz",
+    "archive_sha256": "869d3d499e5573f4fc63b3601a8d8f5b406c850744b82ead22d845adc9159dff"
+  },
+  {
+    "scope": "primary-factcheck",
+    "original_file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/manifest.json",
+    "original_bytes": 1008,
+    "original_sha256": "e4c2617224a8b22f523818984d009b5bb8f4bcbdda78ae23a8ea4736d7bd4873",
+    "file": "primary-factcheck/manifest.json.gz",
+    "archive_sha256": "883ce3840abb0848670b0124fcdf894e599ffdaed0c7d12fc6ce1d0966063716"
+  },
+  {
+    "scope": "primary-factcheck",
+    "original_file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/report.json",
+    "original_bytes": 8381,
+    "original_sha256": "32cf91fa420bde7a804345011c15cc1bd27098c0b3400114193f62e74af596f6",
+    "file": "primary-factcheck/report.json.gz",
+    "archive_sha256": "d0cb723191070543bbe527f8e4b3787dec20458b0221c10eca2df2140b36e856"
+  },
+  {
+    "scope": "primary-factcheck",
+    "original_file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/report.md",
+    "original_bytes": 1385,
+    "original_sha256": "99641dfed723e05ba4a5727e26f2402a654a02f5f6bf3516ccecc6d1322d8b46",
+    "file": "primary-factcheck/report.md.gz",
+    "archive_sha256": "3cb19200367f30e9b3ad0c42573eef4976798f73b7b5fb414e29a2b313401b26"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/source-observations/videos/ai/ai6/README.md",
+    "original_bytes": 29501,
+    "original_sha256": "01c771710c4d29d56497a4e79e4ecfa38604e1db4943299e6c8be75511107e61",
+    "file": "source-blobs/01c771710c4d29d56497a4e79e4ecfa38604e1db4943299e6c8be75511107e61.gz",
+    "archive_sha256": "d83bac484a4a6a6be8f2d0322a07f8c9780d5b3f264ec713d2f5ed8281486421"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/source-observations/videos/ai/ai6/s18_contest.py",
+    "original_bytes": 17093,
+    "original_sha256": "8df5ffd458a0c00a1ff06c48e0e2f39e51e8aa36dffd79d147d9dfb3d36ba32c",
+    "file": "source-blobs/8df5ffd458a0c00a1ff06c48e0e2f39e51e8aa36dffd79d147d9dfb3d36ba32c.gz",
+    "archive_sha256": "025f2ba92890ede3e60421349ce8862faec0c59e91b7dcc5087fd58e83aee4e1"
+  },
+  {
+    "scope": "deduplicated exact source bytes",
+    "original_file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/source-observations/videos/ai/ai6/zh_lines.py",
+    "original_bytes": 74153,
+    "original_sha256": "692021154cdc330720cb95dc26118b7eb4bc2d7d64521d0fa3faa666d0f70aec",
+    "file": "source-blobs/692021154cdc330720cb95dc26118b7eb4bc2d7d64521d0fa3faa666d0f70aec.gz",
+    "archive_sha256": "2e978a6ec90396a2b32a23c673bddb3be6a9e2997119717f472272c43c3c755c"
+  },
+  {
+    "scope": "historical source-only preparation",
+    "original_file": "/workspace/runtime/ai6-data-evaluation-source-audit/report.json",
+    "original_bytes": 26658,
+    "original_sha256": "24bc412dcb6c38011fb4fbc471f3b039aa8f83539eb331b8f0ddfd4646e603c3",
+    "file": "initial-read-only-audit/report.json.gz",
+    "archive_sha256": "bec607c67618905ad04697a4c4185e3e404a380688742ae3a6238d7b75d77099"
+  },
+  {
+    "scope": "historical source-only preparation",
+    "original_file": "/workspace/runtime/ai6-data-evaluation-source-audit/report.md",
+    "original_bytes": 12706,
+    "original_sha256": "35859b599073f40535bb28c6981b107fbe6ea8a8084c27f12a263f79be101665",
+    "file": "initial-read-only-audit/report.md.gz",
+    "archive_sha256": "21d53ce8560d119dc16cfa6249e0f7b0576ae90f7e596162bb0a525b96b165fa"
+  },
+  {
+    "scope": "historical source-only preparation",
+    "original_file": "/workspace/runtime/ai6-data-evaluation-source-audit/source-freeze.json",
+    "original_bytes": 5223,
+    "original_sha256": "13ef28da196c92873df8bdac9944f6eacf275c85ffb7b1dcd04ee79c050d0d4e",
+    "file": "initial-read-only-audit/source-freeze.json.gz",
+    "archive_sha256": "7e202dff54ee17e852e8de7d710b2f9ea4b816682eaa5217c752546c19dd7c9c"
+  },
+  {
+    "scope": "historical source-only preparation",
+    "original_file": "/workspace/runtime/ai6-data-evaluation-source-audit/supplemental-source-freeze.json",
+    "original_bytes": 168,
+    "original_sha256": "7f97da0aab59fa7c356cd848357f145668c26fda79b2c3073b509bd63b45e6b3",
+    "file": "initial-read-only-audit/supplemental-source-freeze.json.gz",
+    "archive_sha256": "efba4bbef8556035f4bf346980de58c717c5f328c09153c3355f62f3cbcf7fcd"
+  },
+  {
+    "scope": "historical source-only preparation",
+    "original_file": "/workspace/runtime/ai6-data-evaluation-source-audit/tiny_fixtures.py",
+    "original_bytes": 5343,
+    "original_sha256": "101248b5dedf50841ee72e36dff20be5abdd1194997985993a063e0a693790d9",
+    "file": "initial-read-only-audit/tiny_fixtures.py.gz",
+    "archive_sha256": "02ef1546df4df314a6249a376f5be715428757d2a2586f65acb4fe73e8a40604"
+  },
+  {
+    "scope": "historical source-only preparation",
+    "original_file": "/workspace/runtime/ai6-data-evaluation-source-audit/tiny-fixture-results.json",
+    "original_bytes": 2780,
+    "original_sha256": "4c4d9ec9af8e59fe81d48385bedc316ad3a610124058a33660890d4f6178eb60",
+    "file": "initial-read-only-audit/tiny-fixture-results.json.gz",
+    "archive_sha256": "8b01b9ffce81cb315a09b29209e2c8c4c3c275926001a148e4737142a9b05e08"
+  },
+  {
+    "scope": "historical source-only preparation",
+    "original_file": "/workspace/runtime/ai6-data-evaluation-source-audit/tiny-fixtures.log",
+    "original_bytes": 2823,
+    "original_sha256": "66d398ed463f6acb5b6d25403262029a6855ad9bf4aca64a2bf518ba7a7dc189",
+    "file": "initial-read-only-audit/tiny-fixtures.log.gz",
+    "archive_sha256": "584c6ca190602df56e35b3796a3fe0c5daff2f195fedf7963f7c86af6b08b175"
+  }
+]

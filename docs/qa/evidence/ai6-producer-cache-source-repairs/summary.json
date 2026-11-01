@@ -1,0 +1,55 @@
+{
+  "scope": "Part6 precompute source/contract and synthetic-review evidence only",
+  "current_core_sha256": {
+    "compute.py": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+    "contracts.py": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+    "cache_contract.py": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394"
+  },
+  "owner_handoff_sha256": "c473c4613ba39bd207050d838155cd1f2bc8bb8e2fd2f3656d0c8561d9a86420",
+  "final_owner_test_count": 42,
+  "final_owner_unittest_elapsed_s": 2.543,
+  "historical_owner_test_count": 41,
+  "historical_owner_unittest_elapsed_s": 2.45,
+  "independent_core_review_sha256": "795f1657827d104c06a4094f6a1870db312d59a24095a5590420394186aef4bf",
+  "independent_core_synthetic_fixtures": 5,
+  "independent_all22_registered_payload_roundtrips": true,
+  "independent_scene_math": {
+    "focused_tests": 12,
+    "tiny_fixtures": 8,
+    "first_attempt": "7 passed/1 historical-source lookup error; retained, corrected and rerun"
+  },
+  "reviews": {
+    "independent-core": {
+      "file": "/workspace/runtime/ai6-independent-core-contract-review/manifest.json",
+      "sha256": "1c597c835e34652fa3a1756863fbf776e4f18ce143ff92f1e6297a101280deec",
+      "payload_entries": 15
+    },
+    "independent-scene-math": {
+      "file": "/workspace/runtime/ai6-independent-scene-math-review/manifest.json",
+      "sha256": "67aad01f2f84fd9355a5948db22f13d3848aa923dec3d62dc0d4e1abe9a2b7db",
+      "payload_entries": 13
+    },
+    "primary-factcheck": {
+      "file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/manifest.json",
+      "sha256": "e4c2617224a8b22f523818984d009b5bb8f4bcbdda78ae23a8ea4736d7bd4873",
+      "payload_entries": 6
+    }
+  },
+  "owner_original_manifest": {
+    "file": "/workspace/runtime/ai6-producer-cache-contract-repair/payload-manifest.json",
+    "sha256": "9ff9f21d35239ba7bafac6a74ce088122e8d23511cfe801c3912313f1b85cc4c",
+    "payload_entries": 34
+  },
+  "original_records_modified": false,
+  "source_current_exact_at_packaging": true,
+  "production_data_models_or_jobs_in_package": false,
+  "no_aggregated_or_default_test_count_claim": true,
+  "source_record_count": 20,
+  "distinct_source_blobs": 14,
+  "remaining_gates": [
+    "root full integrated suite receipt (running separately)",
+    "actual22-item default production and strict cached-only closure",
+    "actual numerical method/outcome checks",
+    "bilingual endpoints/motion/native/output/listening and production QA"
+  ]
+}

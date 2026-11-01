@@ -1,0 +1,17 @@
+{
+  "recorded_utc": "2026-11-01T04:42:44.192796+00:00",
+  "previous_source_freeze_sha256": "598a576b307207c4b2f623cc4fe859c53f8275f658d789dc2e58fe1522906a70",
+  "changed_source_identities": [
+    {
+      "path": "videos/ai/ai6/s09_lda.py",
+      "before": "8d925a877e1fa030b0dabf04bd1a8573f1244d5ac99b285628d4de3d0cab8bdd",
+      "after": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42"
+    }
+  ],
+  "prior_test_sha256": "48ad69b7472a9a98555bc714967060f1504ab2e30b879916fcfa9ac31b9b756c",
+  "current_test_sha256": "5a1afed145a3c16e4e77abd4b1dc513ea702083d24f75053090048b5408ba561",
+  "all_other_owned_sources_exactly_unchanged": true,
+  "caption_proposal_unchanged_sha256": "8925c09b4d06c3dd5f029df6a2644bdf3d0cf1348fd76138f2d9100a823ac929",
+  "change": "One formula antecedent: maxJ>0 replaced by w in argmaxJ. Narration, whitening geometry, producer/common/global/caches and all77ladder calls unchanged.",
+  "test": "12focusedtests passed in1.164s; concrete maxJpositive yet arbitrarywperpendicular-to-mean fails Jmaxeigenpair, while true maximizers satisfy it."
+}

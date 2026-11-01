@@ -1,0 +1,27 @@
+{
+  "added_strings": {
+    "coordinate paths vary smoothly": "原坐标系的权重路径平滑变化",
+    "1D powers kept": "保留的一维幂数",
+    "maximum error on a $61 \\times 61$ grid": "$61 \\times 61$网格上的最大误差",
+    "1D: $x,z \\in [-1.5,1.5]$, $\\gamma=1$": "一维：$x,z \\in [-1.5,1.5]$，$\\gamma=1$",
+    "whiten pooled covariance $\\Sigma_W=S_W/(n-2)$;\\\\ then connect the whitened means\\\\ (schematic ellipses, actual pooled covariance)": "白化合并协方差$\\Sigma_W=S_W/(n-2)$；\\\\ 再连接白化后的均值\\\\ （示意椭圆，实际合并协方差）",
+    "pull back the normal by $W^\\top$;\\\\ the intercept is a separate choice": "用$W^\\top$把法向量映回；\\\\ 截距另行选择",
+    "$S_W \\succ 0$, $\\Delta\\mu \\ne 0$; \\\\ largest positive eigenpair": "$S_W \\succ 0$，$\\Delta\\mu \\ne 0$；\\\\ 最大正特征值对应的方向",
+    "fixed dictionary; \\\\ new chunks of the same five novels": "固定词表；\\\\ 同样5部小说的新片段",
+    "ten-fold out-of-fold scores; \\ stable log loss from logits, no probability cap": "10折折外得分；\\ 从logit稳定计算对数损失，不截断概率"
+  },
+  "changed_existing_strings": {},
+  "removed_existing_strings": [],
+  "added_patterns": [
+    [
+      "^pairwise rank credit, half for ties: \\\\ \\$([\\d.]+)\\$$",
+      "成对排序得分，打平算一半：\\ $\\1$"
+    ],
+    [
+      "^sampled \\$\\|w\\|<10\\^\\{-12\\}\\$: \\\\ \\$(\\d+)\\$$",
+      "采样的$|w|<10^{-12}$：\\ $\\1$"
+    ]
+  ],
+  "removed_patterns": [],
+  "scope": "Part6 local proposal only. Root owns atomic global caption merge and earlier-Part lookup regression; no shared table write in this batch."
+}

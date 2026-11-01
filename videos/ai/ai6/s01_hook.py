@@ -75,7 +75,8 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "You might look for names or places. But in 1964, Mosteller and Wallace settled who wrote the disputed "
             "Federalist papers by counting small words, like upon, whilst and also. <bookmark mark='a'/> So describe each "
-            "page by how often it uses the seventy commonest words. <bookmark mark='b'/> This page says 'the' a lot "
+            "page with a fixed dictionary: the seventy commonest words in the full five-novel corpus, chosen without "
+            "author labels before any split. <bookmark mark='b'/> This page says 'the' a lot "
             "and 'not' very little, like Dickens. Austen says 'not', 'very' and 'be' far more often."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_), FadeIn(fed, shift=UP * 0.2))
@@ -112,8 +113,10 @@ class Hook(VoiceoverScene):
             "Take just two of those numbers, how often a page says 'the' and how often it says 'not', and every "
             f"page becomes a point. <bookmark mark='a'/> {n} pages from five novels. The two authors mostly sit "
             f"apart, but they overlap. We'll train on {int((~test).sum())} of them, and keep {int(test.sum())} "
-            "locked away to test on. <bookmark mark='b'/> Telling the authors apart is the oldest job in machine "
-            "learning: classification. Draw a line? Bend it? Ask the neighbours? Ask questions? This part tries them all."
+            "locked away from classifier fitting. These are new chunks of the same five novels, not a test on unseen "
+            "novels; scalers and classifiers are fitted only on training pages. <bookmark mark='b'/> Telling the authors "
+            "apart is classification, a central task in machine learning. Draw a line? Bend it? Ask the neighbours? "
+            "Ask questions? This part tries them all."
         ) as vo:
             self.play(Create(ax), FadeIn(plane[1:]), run_time=0.8)
             self.play(LaggedStart(*[FadeIn(d, scale=0.4) for d in dots], lag_ratio=0.004), FadeIn(key), run_time=2.5)

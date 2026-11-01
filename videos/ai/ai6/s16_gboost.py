@@ -24,7 +24,7 @@ class GradientBoosting(VoiceoverScene):
         colors = {r"g_i": FIRST, r"h_i": SECOND, r"G_j": FIRST, r"H_j": SECOND, r"G_L": FIRST, r"G_R": FIRST,
                   r"H_L": SECOND, r"H_R": SECOND, r"\lambda": HL}
         rows = [
-            cmath(r"\sum_i \ell(y_i, F_i + f_i)", r"\;\approx\;",
+            cmath(r"\sum_i \ell(y_i, F_i + f_i) + \Omega(f)", r"\;\approx\;",
                   r"\sum_i \big[\ell_i + g_i f_i + \tfrac12 h_i f_i^2\big] + \gamma T + \tfrac12\lambda\sum_j w_j^2",
                   font_size=30, colors=colors),
             cmath(r"\text{obj}", "=", r"\sum_j \big[G_j w_j + \tfrac12 (H_j + \lambda)\, w_j^2\big] + \gamma T",

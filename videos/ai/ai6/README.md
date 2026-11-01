@@ -5,12 +5,31 @@ and the start of Act II, *Learning from Data*. One task runs through it: who wro
 Dickens? Pages are 1,000-word chunks of five of Part 1's novels (639 pages: *Pride and Prejudice* and *Emma*;
 *A Tale of Two Cities*, *Great Expectations* and *A Christmas Carol*), each described, as Mosteller and Wallace
 described the Federalist papers, by how often it uses the 70 commonest words; 30% of the pages (191) are held out.
+The 70-word lexicon is fixed from the complete five-novel corpus without author labels before splitting; this is
+an unsupervised benchmark definition shared with Parts 7, 8 and 11. Classifier parameters and learned scalers use
+training pages only. The holdout evaluates new chunks from these same five novels, not previously unseen novels.
 The pictures use two of the numbers: how often a page says "the", and how often it says "not". Every method is
 written out in numpy in `compute.py` (no machine-learning library), every random choice is seeded, and every number
 on screen or in the narration is computed there. The numbers below are from the reference run (Linux, numpy 2.5);
 another machine can move the last digits, and the narration follows its own run.
 
 About 51 minutes; a hook, seventeen chapters and an outro.
+
+The evaluation is conditional on that fixed dictionary and five-novel corpus. Training/test curves over penalties,
+depths or rounds are descriptive diagnostics; they are not independent test sets at every point. Training-only
+cross-validation chooses the stated settings. The final contest compares twelve named, fixed procedures on the
+same folds; it is not a comparison at equal computational budgets, and tied mean scores are reported as ties.
+
+The LDA inset whitens the actual pooled within-author covariance with its inverse square root. It connects the
+means in whitened coordinates, then pulls that normal back with the transpose of the whitening map, giving the
+full inverse-covariance mean direction. Agreement with least squares means coefficient direction, not necessarily
+the same intercept or decision threshold. The positive maximizing eigenpair is distinct from zero-eigenvalue
+stationary directions. The Gaussian-kernel truncation check is one-dimensional, with gamma 1 and both inputs on
+a 61-point grid in [-1.5, 1.5]; its error is not a dimension-independent/global approximation guarantee.
+
+ROC area credits a tied positive/negative score pair by one half. Log loss is computed stably from out-of-fold
+logits in nats per page without a probability-clipping cap; probabilities are still used for reliability diagrams
+and Brier scores. The large-sample qualifier on the nearest-neighbor error bound also applies to the recap.
 
 ## Outline
 
@@ -29,7 +48,9 @@ About 51 minutes; a hook, seventeen chapters and an outro.
 * **3. Ridge.** Hoerl & Kennard (1970). Derived through the SVD: the fit along direction j is scaled by
   d_j²/(d_j² + λ). The 70 singular values of the standardized pages (63.4 down to 6.6), with 91% of the authorship
   signal along the first two directions; the shrinkage factors as λ grows; effective weights Σ d²/(d² + λ); the 70
-  coefficient paths (none ever exactly zero); ridge as the MAP estimate under a Gaussian prior, and weight decay.
+  coefficient paths (smooth, but not necessarily monotone in each coordinate); ridge as the MAP estimate under a
+  Gaussian prior, and weight decay. The near-zero count refers to sampled coefficient/penalty pairs below a
+  numerical tolerance, not mathematically exact zeros.
   Ten-fold cross-validation (mean ± 1 s.e.) picks λ ≈ 75 (54 effective weights), 99.5% on the held-out pages.
 * **4. The lasso.** Tibshirani (1996): the diamond's corner; the soft threshold derived from subgradients;
   coordinate descent (Friedman, Hastie & Tibshirani, glmnet 2010) along 61 penalties, KKT conditions checked at every
@@ -109,8 +130,14 @@ About 51 minutes; a hook, seventeen chapters and an outro.
   AdaBoost 99.1%, the forest 98.4%, gradient boosting 98.3%, k-NN 98.3%, naive Bayes 95.8%, one tree 93.0%. Breiman's
   two cultures (2001); the Netflix Prize (2006–09), Kaggle (2010), XGBoost in 17 of 29 Kaggle-blog winners of 2015;
   why trees still win on tables (Grinsztajn, Oyallon & Varoquaux 2022); foundation models for tables: TabPFN
-  (Hollmann et al., *Nature*, Jan 2025), TabPFN-2.5 (Nov 2025), TabPFN-3 (May 2026), and an independent check
-  (Purucker et al., *Beyond IID*, June 2026); how the classics live on inside today's models (the softmax, linear
+  (Hollmann et al., *Nature*, Jan 2025; the reported $2.8$-second comparison is its classification benchmark
+  configuration, against an ensemble tuned for four hours), TabPFN-2.5 (Nov 2025), and TabPFN-3 (May 2026;
+  its million-row capacity claim is at 200 features, and its TabArena lead is the authors' report). These dates
+  identify the cited publications or preprint submissions. The broader June 2026
+  [*Beyond IID* benchmark](https://arxiv.org/html/2606.30410v1) tests TabPFN-2.6, not TabPFN-3, and includes model
+  authors among its coauthors (see its Competing Interests disclosure). Foundation models are strong on small and
+  medium IID tables; traditional tree and deep baselines expose boundary cases on non-IID, large or high-dimensional
+  data. These findings are version- and task-specific. The chapter then shows how the classics live on inside today's models (the softmax, linear
   probes and weight decay, sparse autoencoders' L1, the neural tangent kernel and attention as a kernel smoother,
   retrieval, calibration).
 * **Outro.** Twelve pictures from the part's results; where it comes back (Parts 7, 8, 9, 11, 13, 31); eight
@@ -154,7 +181,7 @@ Friedman, Hastie & Tibshirani, *Additive Logistic Regression* (2000); Viola & Jo
 Boosted Cascade of Simple Features* (CVPR 2001); Friedman, *Greedy Function Approximation* (2001); Chen & Guestrin,
 *XGBoost* (KDD 2016); Breiman, *Statistical Modeling: The Two Cultures* (2001); Grinsztajn, Oyallon & Varoquaux, *Why
 do tree-based models still outperform deep learning on typical tabular data?* (NeurIPS 2022); Hollmann et al.,
-*Accurate predictions on small data with a tabular foundation model* (*Nature* 637, Jan 2025); Prior Labs, *TabPFN-2.5*
+[*Accurate predictions on small data with a tabular foundation model*](https://www.nature.com/articles/s41586-024-08328-6) (*Nature* 637, Jan 2025); Prior Labs, *TabPFN-2.5*
 (arXiv 2511.08667, Nov 2025) and *TabPFN-3* (arXiv 2605.13986, May 2026); Purucker et al., *Beyond IID: How General Are
 Tabular Foundation Models, Really?* (arXiv 2606.30410, June 2026).
 

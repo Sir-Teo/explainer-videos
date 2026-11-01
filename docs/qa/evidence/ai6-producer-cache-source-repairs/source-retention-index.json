@@ -1,0 +1,162 @@
+[
+  {
+    "scope": "original-before-implementation",
+    "path": "videos/ai/ai6/compute.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/compute-before.py",
+    "bytes": 79958,
+    "sha256": "9a382aa797733fb5d281864f7faca46ccbe135e9cb322749405424a3b3c21df3",
+    "source_blob": "source-blobs/9a382aa797733fb5d281864f7faca46ccbe135e9cb322749405424a3b3c21df3.gz"
+  },
+  {
+    "scope": "final-owner",
+    "path": "explainer/ai/cache.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/explainer/ai/cache.py",
+    "bytes": 6276,
+    "sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+    "source_blob": "source-blobs/71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507.gz"
+  },
+  {
+    "scope": "final-owner",
+    "path": "explainer/cache_lock.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/explainer/cache_lock.py",
+    "bytes": 1521,
+    "sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+    "source_blob": "source-blobs/f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228.gz"
+  },
+  {
+    "scope": "final-owner",
+    "path": "tests/test_ai6_cache_contracts.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/tests/test_ai6_cache_contracts.py",
+    "bytes": 20646,
+    "sha256": "11a4ad0cdaf3763f853229c615f18fff4c853edf159f9d90f9bead276887e89b",
+    "source_blob": "source-blobs/11a4ad0cdaf3763f853229c615f18fff4c853edf159f9d90f9bead276887e89b.gz"
+  },
+  {
+    "scope": "final-owner",
+    "path": "tests/test_ai6_score_contracts.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/tests/test_ai6_score_contracts.py",
+    "bytes": 7916,
+    "sha256": "da90b85070b7f9893287d6ea7d075b08c17210f673ba788727d76d23381cebc6",
+    "source_blob": "source-blobs/da90b85070b7f9893287d6ea7d075b08c17210f673ba788727d76d23381cebc6.gz"
+  },
+  {
+    "scope": "final-owner",
+    "path": "videos/ai/ai1/compute.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/videos/ai/ai1/compute.py",
+    "bytes": 78448,
+    "sha256": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa",
+    "source_blob": "source-blobs/0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa.gz"
+  },
+  {
+    "scope": "final-owner",
+    "path": "videos/ai/ai6/cache_contract.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/videos/ai/ai6/cache_contract.py",
+    "bytes": 23866,
+    "sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+    "source_blob": "source-blobs/9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394.gz"
+  },
+  {
+    "scope": "final-owner",
+    "path": "videos/ai/ai6/compute.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/videos/ai/ai6/compute.py",
+    "bytes": 81289,
+    "sha256": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+    "source_blob": "source-blobs/d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc.gz"
+  },
+  {
+    "scope": "final-owner",
+    "path": "videos/ai/ai6/contracts.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/sources/videos/ai/ai6/contracts.py",
+    "bytes": 23046,
+    "sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+    "source_blob": "source-blobs/dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2.gz"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "path": "explainer/ai/cache.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/sources/explainer/ai/cache.py",
+    "bytes": 6276,
+    "sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+    "source_blob": "source-blobs/71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507.gz"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "path": "explainer/cache_lock.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/sources/explainer/cache_lock.py",
+    "bytes": 1521,
+    "sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+    "source_blob": "source-blobs/f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228.gz"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "path": "tests/test_ai6_cache_contracts.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/sources/tests/test_ai6_cache_contracts.py",
+    "bytes": 20646,
+    "sha256": "11a4ad0cdaf3763f853229c615f18fff4c853edf159f9d90f9bead276887e89b",
+    "source_blob": "source-blobs/11a4ad0cdaf3763f853229c615f18fff4c853edf159f9d90f9bead276887e89b.gz"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "path": "tests/test_ai6_score_contracts.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/sources/tests/test_ai6_score_contracts.py",
+    "bytes": 7402,
+    "sha256": "3b79d94aaf4c9e8620e40d11605103baed39046b31dcccbd2598d6c877aadb8f",
+    "source_blob": "source-blobs/3b79d94aaf4c9e8620e40d11605103baed39046b31dcccbd2598d6c877aadb8f.gz"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "path": "videos/ai/ai1/compute.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/sources/videos/ai/ai1/compute.py",
+    "bytes": 78448,
+    "sha256": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa",
+    "source_blob": "source-blobs/0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa.gz"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "path": "videos/ai/ai6/cache_contract.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/sources/videos/ai/ai6/cache_contract.py",
+    "bytes": 23866,
+    "sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+    "source_blob": "source-blobs/9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394.gz"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "path": "videos/ai/ai6/compute.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/sources/videos/ai/ai6/compute.py",
+    "bytes": 81172,
+    "sha256": "5c2335de3a151a6acf2fe7fe4c0a69c329af52c392cb88f706412d460385ec2b",
+    "source_blob": "source-blobs/5c2335de3a151a6acf2fe7fe4c0a69c329af52c392cb88f706412d460385ec2b.gz"
+  },
+  {
+    "scope": "historical-pre-dispatcher",
+    "path": "videos/ai/ai6/contracts.py",
+    "original_file": "/workspace/runtime/ai6-producer-cache-contract-repair/pre-dispatcher/sources/videos/ai/ai6/contracts.py",
+    "bytes": 23046,
+    "sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+    "source_blob": "source-blobs/dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2.gz"
+  },
+  {
+    "scope": "primary-factcheck-source-observation",
+    "path": "videos/ai/ai6/README.md",
+    "original_file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/source-observations/videos/ai/ai6/README.md",
+    "bytes": 29501,
+    "sha256": "01c771710c4d29d56497a4e79e4ecfa38604e1db4943299e6c8be75511107e61",
+    "source_blob": "source-blobs/01c771710c4d29d56497a4e79e4ecfa38604e1db4943299e6c8be75511107e61.gz"
+  },
+  {
+    "scope": "primary-factcheck-source-observation",
+    "path": "videos/ai/ai6/s18_contest.py",
+    "original_file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/source-observations/videos/ai/ai6/s18_contest.py",
+    "bytes": 17093,
+    "sha256": "8df5ffd458a0c00a1ff06c48e0e2f39e51e8aa36dffd79d147d9dfb3d36ba32c",
+    "source_blob": "source-blobs/8df5ffd458a0c00a1ff06c48e0e2f39e51e8aa36dffd79d147d9dfb3d36ba32c.gz"
+  },
+  {
+    "scope": "primary-factcheck-source-observation",
+    "path": "videos/ai/ai6/zh_lines.py",
+    "original_file": "/workspace/runtime/ai6-tabpfn-primary-factcheck/source-observations/videos/ai/ai6/zh_lines.py",
+    "bytes": 74153,
+    "sha256": "692021154cdc330720cb95dc26118b7eb4bc2d7d64521d0fa3faa666d0f70aec",
+    "source_blob": "source-blobs/692021154cdc330720cb95dc26118b7eb4bc2d7d64521d0fa3faa666d0f70aec.gz"
+  }
+]

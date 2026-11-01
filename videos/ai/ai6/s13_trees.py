@@ -210,8 +210,8 @@ class Trees(VoiceoverScene):
             "question's gain is the parent's impurity minus its children's, weighted by size. <bookmark mark='c'/> "
             "The parent's share of Dickens is the average of its children's, <bookmark mark='d'/> so if the impurity "
             "curves strictly downward, Jensen's inequality makes every gain positive whenever the children differ. "
-            "The error rate is only a tent, flat on each side: a split that purifies both children can gain nothing "
-            "by it. <bookmark mark='e'/> Scan every threshold. "
+            "The error rate is a tent, linear on each side: different child class proportions can still give zero "
+            "gain if both lie on the same side of one half. <bookmark mark='e'/> Scan every threshold. "
             + say
         ) as vo:
             self.play(FadeIn(g))

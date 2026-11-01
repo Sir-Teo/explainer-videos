@@ -1,0 +1,216 @@
+{
+  "utc": "2026-11-01T04:37:43.889728+00:00",
+  "git_head_observed": "5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed",
+  "owned_source_files": [
+    {
+      "path": "videos/ai/ai6/README.md",
+      "before_sha256": "81824ebcdb94828995121a6392c0cb593fdade7ec65704533ee8d3c8c9909d9d",
+      "after_sha256": "01c771710c4d29d56497a4e79e4ecfa38604e1db4943299e6c8be75511107e61",
+      "bytes": 29501,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/narration_zh.json",
+      "before_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+      "after_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+      "bytes": 100230,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai6/s01_hook.py",
+      "before_sha256": "13821d405a3d765bec015976dd43b0f3481d82170bbdb3b32469e4114c310daa",
+      "after_sha256": "2baeb217d490efb91218d3a2145610f35c17d4a3f037c1070920896ea93d173a",
+      "bytes": 11785,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s02_lsq.py",
+      "before_sha256": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+      "after_sha256": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+      "bytes": 16148,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai6/s03_gauss.py",
+      "before_sha256": "9bb4b6fa8e2f0aa152cc9972de5661d979c1edcacfbca480c0bba5ee00619ee8",
+      "after_sha256": "9bb4b6fa8e2f0aa152cc9972de5661d979c1edcacfbca480c0bba5ee00619ee8",
+      "bytes": 15758,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai6/s04_ridge.py",
+      "before_sha256": "3385337f2cfc92c68d2658b56a9769ddcb6eb88ea5faa477cabeb4f58f4a1a4c",
+      "after_sha256": "53096a9fdc6135614c8350b999edd2affe5c132cf3dc013e73c3afba580f9fff",
+      "bytes": 14500,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s05_lasso.py",
+      "before_sha256": "94b3bd567f9bfed36c7d3da5e9054704d5d9e860491883a801c7175786c3f683",
+      "after_sha256": "94b3bd567f9bfed36c7d3da5e9054704d5d9e860491883a801c7175786c3f683",
+      "bytes": 18974,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai6/s06_logistic.py",
+      "before_sha256": "471f14b3a4b37358ac3e1b5231b9afc9d939ab986a1a013e76205dcf234e6186",
+      "after_sha256": "ff162bdaf883842051e241d4582fd8bfbcfe8389f4d1236088417c7db527f542",
+      "bytes": 16971,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s07_newton.py",
+      "before_sha256": "24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705",
+      "after_sha256": "24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705",
+      "bytes": 13659,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai6/s08_bayes.py",
+      "before_sha256": "2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf",
+      "after_sha256": "2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf",
+      "bytes": 13380,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai6/s09_lda.py",
+      "before_sha256": "1b211f769f4512a42f9a1a9c3e7379a7570984b3da28cb87ff34e38111d552f5",
+      "after_sha256": "8d925a877e1fa030b0dabf04bd1a8573f1244d5ac99b285628d4de3d0cab8bdd",
+      "bytes": 20758,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s10_knn.py",
+      "before_sha256": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
+      "after_sha256": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
+      "bytes": 16659,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai6/s11_kernels.py",
+      "before_sha256": "819c6c349de0fbbb5728ee64feca0d726556194cfe8476f130e6b9afd1b4aeb5",
+      "after_sha256": "1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082",
+      "bytes": 18924,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s12_svm.py",
+      "before_sha256": "e40c6254c3ab9b17e5f3550429847f4b6b5cfd9d3987e5dc51672357771858a6",
+      "after_sha256": "c9a778da1f5cd7c4d582a752f3124f4e8c18b3ebc0904db3cd69c33db157ecca",
+      "bytes": 18147,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s13_trees.py",
+      "before_sha256": "5a8b23871d73230a491d76d49b7d4918f071f8306d12b7abab4787b81fc96457",
+      "after_sha256": "fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d",
+      "bytes": 16854,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s14_forests.py",
+      "before_sha256": "19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b",
+      "after_sha256": "19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b",
+      "bytes": 11200,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai6/s15_adaboost.py",
+      "before_sha256": "bb02f561358b2a375bcd7f670b97ed0cda407d39133fe028b883175de263a49f",
+      "after_sha256": "bc2a0b9581df1bdda8bc4056ce121166c7b3f497fe8367f4266f361e401e9e90",
+      "bytes": 15130,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s16_gboost.py",
+      "before_sha256": "f81cf99f8bb55db1812e6ee30b2252d2723a0b50e3c56614f19254a0e13927cb",
+      "after_sha256": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
+      "bytes": 13945,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s17_metrics.py",
+      "before_sha256": "b64967d4ac24ce75164e741809929fe00285e18a5d6695a966a4856d9efc2f21",
+      "after_sha256": "75af4ebbda4db74fd4a0d65b6123a98df47c9b3e724ff06bac55dceeb36a653f",
+      "bytes": 14315,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s18_contest.py",
+      "before_sha256": "a023c00f37064eac61da9ebc58b5d20de11c1ca6419868c6137c9d22956e3915",
+      "after_sha256": "8df5ffd458a0c00a1ff06c48e0e2f39e51e8aa36dffd79d147d9dfb3d36ba32c",
+      "bytes": 17093,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/s19_outro.py",
+      "before_sha256": "3115ae2f41f8a050297b90f1334452e70d7fc9d071ffd71ba39182a3f2b0984d",
+      "after_sha256": "98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e",
+      "bytes": 16664,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/text_zh_add.json",
+      "before_sha256": "1cc02a8b118869bb0bb6435d40458c448d6d7b52614183e444d6d1306e3eb1f7",
+      "after_sha256": "6f275d76691c204f5d605323498a97af6ed03aef519d9a16f5eaa2ccfaa52827",
+      "bytes": 61701,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai6/zh_lines.py",
+      "before_sha256": "52b5065f3a06aee079bfa6fd6d7959a5fb01c820396ab671db8999768bdc7993",
+      "after_sha256": "692021154cdc330720cb95dc26118b7eb4bc2d7d64521d0fa3faa666d0f70aec",
+      "bytes": 74153,
+      "changed": true
+    }
+  ],
+  "focused_test": {
+    "path": "tests/test_ai6_scene_teaching_repairs.py",
+    "sha256": "48ad69b7472a9a98555bc714967060f1504ab2e30b879916fcfa9ac31b9b756c",
+    "tests": 11,
+    "returncode": 0,
+    "started_utc": "2026-11-01T04:37:42.521058+00:00",
+    "log_sha256": "c8ff27d5ac9e8149486bbd1387acc67ee7bab88ea307c9f7a04cad61dc045f73",
+    "owned_source_signatures_unchanged_across_test": true
+  },
+  "no_blanket_ladder_changes": {
+    "all77returned_step_ASTs_exactly_unchanged": true
+  },
+  "local_caption_additions": {
+    "strings": 9,
+    "patterns": 2,
+    "global_merge_pending_root": true
+  },
+  "translation_source_coverage": {
+    "covered": 126,
+    "total": 126,
+    "unknown_future_numeric_expansion_not_claimed": true
+  },
+  "repairs": {
+    "F01": "Actual pooled covariance inverse-square-root geometry and distinct transpose pullback; measured class means, shared schematic covariance ellipses; newpull bookmark translated.",
+    "F02": "Positive maximizing eigenpair stated with positive-definite within scatter and distinct means; zero stationary branch excluded.",
+    "F03": "LDA/least-squares agreement scoped to coefficient direction; threshold/intercept separate.",
+    "F04": "Smooth coordinate paths distinguished from monotone singular-direction shrinkage; sampled absolute magnitudes/tolerance counted.",
+    "F05": "Hinge convex/nonsmooth;0/1gradient difficulty qualified.",
+    "F06": "Non-support-point movement invariance restricted to staying outside same margin.",
+    "F07": "Taylor objective includesOmega(f) on the LHS.",
+    "F08": "Error impurity zero-gain example describes different proportions on same side1/2; no both-purer impossibility.",
+    "F09": "Outro nearest-neighbor bound explicitly large-sample.",
+    "F10": "Kernel numerical truncation panel explicitly1D/gamma1/grid61x61/[-1.5,1.5].",
+    "F11": "AdaBoost no-zero branch no longer says roundNone; actual outcomes preserved.",
+    "F12": "SVM hinge/logistic values unclamped in enlarged0..4window; exponential ends at exact true viewport intersection.",
+    "D01": "Fixed full-five-novel unsupervised lexicon/same-novel chunk scope explicit; training-only classifier/scaler protocol retained.",
+    "D04": "Existing stable-logloss payload consumed with uncapped adaptive display range; narration avoids automaticPlatt improvement claim.",
+    "D05": "AUC interpretation credits ties by one half.",
+    "D06": "Finite greater/equal/less/unavailable paired contest comparison;12named procedures/fixedfold scope.",
+    "D07": "Logistic70feature score can be higher,tied,lower; no forced preferred outcome in consumer."
+  },
+  "remaining": [
+    "No actual Part6 production computation/default outcome claims, scene construction, rendered output, continuous playback or audio/listening approval.",
+    "Root must atomically merge local caption delta with earlier-Part regression, then capture/fill actual fresh narration after data is ready.",
+    "Existing narration_zh.json preserved as historical rendered reference; current source templates cover all126lines but do not invent newly rendered numeric narration.",
+    "Conditional other plot clipping, KNNmetric/ring geometry and kernel-radius fallback remain for actual-data/motion review; no default failure assumed.",
+    "No blanket retained-ladder-row changes before actual motion evidence.",
+    "Part6compute/cache/common/helper implementation and full integrated test gate are separate owner/root work."
+  ]
+}

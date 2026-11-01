@@ -1,0 +1,72 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1797,
+    "sha256": "01497f2527e3e5a9f116134c89075290750be46165b83ff556b6914bbf0f0306"
+  },
+  {
+    "path": "ai6-cached-only-worker-preflight/receipt.json.gz",
+    "bytes": 710,
+    "sha256": "e18d452d68d90935309aec20e60c494acfee1aedc51c0ff53d7a4773a3df612e"
+  },
+  {
+    "path": "ai6-cached-only-worker-preflight/result.json.gz",
+    "bytes": 649,
+    "sha256": "f1c247031206fcf56e68ee51e9c98ba278b5485b37ec860a40de72dd1c2ef20d"
+  },
+  {
+    "path": "ai6-caption-integration/after-ai_text_zh.json.gz",
+    "bytes": 885822,
+    "sha256": "99ff584ffa80fee26556de39bb22054076fb9a87293d661e204d18578fde266b"
+  },
+  {
+    "path": "ai6-caption-integration/before-ai_text_zh.json.gz",
+    "bytes": 884841,
+    "sha256": "1e8a190e2fcd475d229ebce5f734ac065c2e2f688b330f3e182b063ea7f74b63"
+  },
+  {
+    "path": "ai6-caption-integration/report.json.gz",
+    "bytes": 18303,
+    "sha256": "c52e3e5239fb90247456227a3bc38ae6cac7d88d2387821db1b0e6aafa0a6527"
+  },
+  {
+    "path": "ai6-caption-integration/used-caption-results.json.gz",
+    "bytes": 423889,
+    "sha256": "62b0aa098a48d0b33e347192b5f5cccfdaf003bba1edc84b516f01b89f827b54"
+  },
+  {
+    "path": "ai6_cached_only_worker_preflight.py.gz",
+    "bytes": 1162,
+    "sha256": "1a2feaaec6ef2eac2e2be6f0b505af5dae85af798e0e08aa63375f61d32b3256"
+  },
+  {
+    "path": "integrated-20261101-ai6-source/full-unittest.log.gz",
+    "bytes": 17851,
+    "sha256": "09da9a016bd4108db6fadfff3121f22e7afe98c4bf062bac72fec49829ce4fc0"
+  },
+  {
+    "path": "integrated-20261101-ai6-source/receipt.json.gz",
+    "bytes": 613,
+    "sha256": "b12637a342fe4f6054f14c5e4344a3b616b132e7d6bdbeeed13118bb7cc14498"
+  },
+  {
+    "path": "integrated-20261101-ai6-source/source-after.json.gz",
+    "bytes": 75456,
+    "sha256": "9adea9a555cf39f21a6352f3c4380a662397a116e0831588e9210dcd0761a6f4"
+  },
+  {
+    "path": "integrated-20261101-ai6-source/source-before.json.gz",
+    "bytes": 75456,
+    "sha256": "9adea9a555cf39f21a6352f3c4380a662397a116e0831588e9210dcd0761a6f4"
+  },
+  {
+    "path": "merge_ai6_captions.py.gz",
+    "bytes": 2040,
+    "sha256": "04a6aa4bd0c804bc4a64fe574e532bce5252ef176ac2bb9dbc4bae3900f7e8ad"
+  },
+  {
+    "path": "run_ai6_frozen_suite.py.gz",
+    "bytes": 1066,
+    "sha256": "8699dd7b33a34c76d1a4cf71e7205b1d41fa096373430448c7065b9e54c108ef"
+  }
+]

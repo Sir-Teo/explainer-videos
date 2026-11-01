@@ -48,10 +48,24 @@ import re
 
 import numpy as np
 
-from explainer.ai.cache import Cache
+from .cache_contract import SchemaCache, canonical
+from .contracts import benchmark_protocol, score_summary
 
-CACHE = Cache("ai6")
-load = CACHE.load
+CACHE = SchemaCache("ai6")
+
+
+def load(name):
+    """Dispatch through the instance so cached-only QA hooks guard before generation."""
+    return CACHE.load(name)
+
+
+def cache_current(name):
+    """Read-only structural and observed-lineage validation; never runs an item."""
+    return CACHE.current(name)
+
+
+def cache_status(name):
+    return CACHE.status(name)
 
 AUSTEN = {1342: "Pride and Prejudice", 158: "Emma"}
 DICKENS = {98: "A Tale of Two Cities", 1400: "Great Expectations", 46: "A Christmas Carol"}
@@ -99,7 +113,7 @@ def compute_pages():
     assert set(PLOT) <= set(vocab) and 600 < len(y) < 700
     return dict(vocab=vocab, X=X, y=y, book=book, test=test, plot=list(PLOT), X2=X[:, j], example=text[ex],
                 example_label=int(y[ex]), example_i=ex, n_pages=len(y), n_austen=int((y == 0).sum()),
-                n_dickens=int((y == 1).sum()), titles={**AUSTEN, **DICKENS})
+                n_dickens=int((y == 1).sum()), titles={**AUSTEN, **DICKENS}, protocol=benchmark_protocol())
 
 
 def split():
@@ -497,7 +511,8 @@ def compute_logistic():
             break
         pz = sigmoid(Z2tr @ wt + bt)
         wt, bt = wt - lr * Z2tr.T @ (pz - ytr) / n, bt - lr * float((pz - ytr).mean())
-    assert acc70 > acc2 > 0.75 and eig.min() > 0
+    # A preferred ranking is an observation, not a correctness invariant.
+    assert np.isfinite([acc2, acc70, loss]).all() and np.isfinite(eig).all() and eig.min() > 0
     return dict(w=wr, b=b_raw, acc2=acc2, acc70=acc70, xs=xs, ys=ys, prob=prob, loss_bits=loss / math.log(2),
                 path=np.array(path), curve=np.array(curve[::5] + [curve[-1]]), hess_eig=eig, n_te=int(test.sum()))
 
@@ -566,15 +581,9 @@ def nb_fit(C, y, alpha=1.0):
     return w, float(math.log(pi / (1 - pi)))
 
 
-def reliability(p, y, bins=10):
-    e = np.linspace(0, 1, bins + 1)
-    k = np.clip(np.digitize(p, e[1:-1]), 0, bins - 1)
-    cnt = np.bincount(k, minlength=bins).astype(float)
-    conf = np.bincount(k, weights=p, minlength=bins) / np.maximum(cnt, 1)
-    frac = np.bincount(k, weights=y, minlength=bins) / np.maximum(cnt, 1)
-    ece = float((cnt * np.abs(conf - frac)).sum() / cnt.sum())
-    return dict(count=cnt, conf=conf, frac=frac, ece=ece, brier=float(((p - y) ** 2).mean()),
-                logloss=float(-np.mean(y * np.log(np.clip(p, 1e-12, 1)) + (1 - y) * np.log(np.clip(1 - p, 1e-12, 1)))))
+def reliability(p, y, bins=10, *, logits):
+    """Probability reliability/Brier and uncapped stable OOF-logit log loss."""
+    return score_summary(logits, y, p, bins)
 
 
 def platt(z, y):
@@ -589,18 +598,20 @@ def compute_calibration():
     f = kfold(y, seed=1950)
     yf = y.astype(float)
     P = {k: np.zeros(len(y)) for k in ("lr2", "lr70", "nb", "nb_platt")}
-    Znb = np.zeros(len(y))
+    Z = {k: np.zeros(len(y)) for k in P}
     for k in range(FOLDS):
         tr, va = f != k, f == k
         a, b_, _, _ = standardize(X2[tr], X2[va])
         w, c = newton_logreg(a, yf[tr], l2=0.0)
-        P["lr2"][va] = sigmoid(b_ @ w + c)
+        Z["lr2"][va] = b_ @ w + c
+        P["lr2"][va] = sigmoid(Z["lr2"][va])
         a, b_, _, _ = standardize(X[tr], X[va])
         w, c = newton_logreg(a, yf[tr], l2=1e-2)
-        P["lr70"][va] = sigmoid(b_ @ w + c)
+        Z["lr70"][va] = b_ @ w + c
+        P["lr70"][va] = sigmoid(Z["lr70"][va])
         w, c = nb_fit(X[tr], y[tr])
         z = X[va] @ w + c
-        Znb[va] = z
+        Z["nb"][va] = z
         P["nb"][va] = sigmoid(z)
         # Platt scaling, fitted on this fold's training pages only (their own cross-validated scores)
         f2 = kfold(y[tr], k=5, seed=1999 + k)
@@ -609,14 +620,21 @@ def compute_calibration():
             w2, c2 = nb_fit(X[tr][f2 != j], y[tr][f2 != j])
             zt[f2 == j] = X[tr][f2 == j] @ w2 + c2
         sa, sc = platt(zt, y[tr])
-        P["nb_platt"][va] = sigmoid(sa * z + sc)
-    out = {k: reliability(v, yf) for k, v in P.items()}
+        Z["nb_platt"][va] = sa * z + sc
+        P["nb_platt"][va] = sigmoid(Z["nb_platt"][va])
+    out = {k: reliability(v, yf, logits=Z[k]) for k, v in P.items()}
     out["acc"] = {k: acc_of(v, y) for k, v in P.items()}
-    out["nb_z"] = Znb
-    out["nb_extreme"] = float((np.abs(Znb) > math.log(1e6)).mean())  # beyond a million to one
-    out["nb_median_abs_z"] = float(np.median(np.abs(Znb)))
+    out["nb_z"] = Z["nb"]  # original public key retained
+    out["nb_extreme"] = float((np.abs(Z["nb"]) > math.log(1e6)).mean())  # beyond a million to one
+    out["nb_median_abs_z"] = float(np.median(np.abs(Z["nb"])))
     for k, v in P.items():
         out[f"p_{k}"] = v
+        out[f"z_{k}"] = Z[k]
+    out["fold_ids"] = f.copy()
+    out["evaluation"] = dict(folds=FOLDS, seed=1950, inner_platt_folds=5, fold_sha256=canonical(f.tolist()),
+                             prediction_cohort="all pages, each predicted once outside its fitting fold",
+                             score="stable binary log loss from OOF logits, nats per page; no probability cap",
+                             protocol=benchmark_protocol())
     return out
 
 
@@ -1259,9 +1277,10 @@ def compute_bagging():
     X, y, test, _ = split()
     Xtr, ytr, Xte, yte = X[~test], y[~test], X[test], y[test]
     Rs, T, m = 30, 50, 150
-    params = dict(Rs=Rs, T=T, m=m)
-    part = CACHE.partial("bagging", params)
     Bm = [1, 2, 3, 5, 10, 20, 30, 50]
+    params = dict(Rs=Rs, T=T, m=m, Bm=Bm, n_train=len(ytr), n_test=len(yte),
+                  seeds={str(mf): 2001 + mf for mf in (70, 8, 2)})
+    part = CACHE.partial("bagging", params)
     for mf in (70, 8, 2):
         key = f"mf{mf}"
         if key not in part:
@@ -1702,7 +1721,7 @@ def compute_board():
     held-out pages after training on the training pages; with the two plotted rates and with all 70."""
     X, y, test, X2 = split()
     f = kfold(y, seed=2025)
-    params = dict(folds=FOLDS, seed=2025, v=1)
+    params = dict(folds=FOLDS, seed=2025, v=2, fold_sha256=canonical(f.tolist()))
     part = CACHE.partial("board", params)
     rows = []
     for key, name, fn, thr, feats in methods():
@@ -1721,7 +1740,11 @@ def compute_board():
             row[str(nf)] = part[k_]
         rows.append(row)
     part.finish()
-    return dict(rows=rows, n=len(y), folds=FOLDS)
+    return dict(rows=rows, n=len(y), folds=FOLDS, fold_ids=f.copy(),
+                evaluation=dict(fold_sha256=canonical(f.tolist()), seed=2025,
+                                scoring="unweighted fold mean and sample standard deviation of accuracy",
+                                method_feature_cases=[f"{key}_{nf}" for key, _, _, _, feats in methods() for nf in feats],
+                                heldout="separate fixed 30-percent page split", protocol=benchmark_protocol()))
 
 
 def _plain(v):
@@ -1770,7 +1793,7 @@ ITEMS = {
     "board": compute_board,
 }
 ITEMS = {k: (v if k == "pages" else _item(v)) for k, v in ITEMS.items()}
-CACHE.items = ITEMS
+CACHE.bind(ITEMS)
 
 
 if __name__ == "__main__":

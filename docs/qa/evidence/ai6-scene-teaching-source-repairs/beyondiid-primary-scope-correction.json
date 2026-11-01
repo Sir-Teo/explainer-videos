@@ -1,0 +1,67 @@
+{
+  "recorded_utc": "2026-11-01T04:48:32.373318+00:00",
+  "previous_source_freeze_sha256": "553706b7bda34cb1641c786ce01f435b0585a2fc30823af84b34a75722b50eae",
+  "changed_source_identities": [
+    {
+      "path": "videos/ai/ai6/README.md",
+      "before": "01c771710c4d29d56497a4e79e4ecfa38604e1db4943299e6c8be75511107e61",
+      "after": "66af9b1a8dac410775c181704384406d84bf6946c4b7017c33fb28df1d6aae97"
+    },
+    {
+      "path": "videos/ai/ai6/s18_contest.py",
+      "before": "8df5ffd458a0c00a1ff06c48e0e2f39e51e8aa36dffd79d147d9dfb3d36ba32c",
+      "after": "52d42f40ed267dd75a6781263590c2ef3f8d6c49af43c9ab86c13aa8996f80d1"
+    },
+    {
+      "path": "videos/ai/ai6/text_zh_add.json",
+      "before": "6f275d76691c204f5d605323498a97af6ed03aef519d9a16f5eaa2ccfaa52827",
+      "after": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73"
+    },
+    {
+      "path": "videos/ai/ai6/zh_lines.py",
+      "before": "692021154cdc330720cb95dc26118b7eb4bc2d7d64521d0fa3faa666d0f70aec",
+      "after": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4"
+    }
+  ],
+  "all_other_owned_sources_exactly_unchanged": true,
+  "test_source_unchanged_sha256": "5a1afed145a3c16e4e77abd4b1dc513ea702083d24f75053090048b5408ba561",
+  "local_caption_strings": 12,
+  "local_caption_patterns": 2,
+  "all501baseline_caption_strings_unchanged": true,
+  "bookmarks": [
+    "a",
+    "b",
+    "c",
+    "d"
+  ],
+  "source_coverage": "126/126current source lines; actual numeric renders pending",
+  "sources": [
+    {
+      "url": "https://arxiv.org/html/2606.30410v1",
+      "sections": [
+        "Section5 Experimental Design",
+        "Competing Interests",
+        "Abstract"
+      ],
+      "facts": [
+        "TabPFN2.6tested,not3",
+        "model-authorcoauthorship/PriorLabsaffiliations",
+        "treeanddeepcomparators,boundarycasesnotuniversaltreeswin"
+      ]
+    },
+    {
+      "url": "https://www.nature.com/articles/s41586-024-08328-6",
+      "facts": [
+        "2.8sclassification result is benchmark/configuration-specific"
+      ]
+    },
+    {
+      "url": "https://arxiv.org/abs/2605.13986",
+      "facts": [
+        "1milliontrainingrowsat200features",
+        "authorreportedTabArenaresult"
+      ]
+    }
+  ],
+  "limits": "No new model/data computation, renderer, global table write, numeric narration capture, continuous playback or listening. All77stepcallASTs unchanged."
+}
