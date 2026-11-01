@@ -1,0 +1,166 @@
+{
+  "completed_utc": "2026-11-01T01:41:43.008778+00:00",
+  "scope": "New current-four-replacement Part3 silent English/Chinese preview assemblies; no local rendering/transport, Library, scene renders or data/model computation.",
+  "case_map_sha256": "277324bba18dc1fecc5e1404034b9c4303515243f49678549e221dc48f7905a2",
+  "historical_case_map_sha256": "7cca99a8ce8a27f460fdd85ad273ace41ac757f1cd99abbdd04e51ad190d59b6",
+  "input_freeze_sha256": "136860ad814a345b033772f3973333de22e4025c047a3e06cff93beb58466e85",
+  "cases": [
+    {
+      "lang": "en",
+      "movie": "/workspace/runtime/ai3-silent-preview-assembly/current-four-replacements/en/ai3-silent-preview-en-480p15.mp4",
+      "movie_sha256": "c472adc44341fee6fcf7dcb7c278e59cbb451838babf57a0c27d93cc19d76cb1",
+      "movie_bytes": 37177912,
+      "duration": 3281.809979,
+      "decoded_video_frames": 49227,
+      "decoded_audio_frames": 153842,
+      "decoded_samples_per_channel": 157534208,
+      "decoded_PCM_bytes": 630136832,
+      "nonzero_PCM_bytes": 0,
+      "video_pts_strictly_increasing": true,
+      "audio_pts_strictly_increasing": true,
+      "packet_dts_monotonic": {
+        "0": {
+          "packets": 49227,
+          "first": -0.112305,
+          "last": 3281.607031
+        },
+        "1": {
+          "packets": 153842,
+          "first": 0.0,
+          "last": 3281.788646
+        },
+        "2": {
+          "packets": 1090,
+          "first": 0.0,
+          "last": 3275.506
+        }
+      },
+      "first_video_pts": 0.021029,
+      "last_video_pts": 3281.740365,
+      "chapter_count": 19,
+      "subtitle_cues": 990,
+      "all_cues_within_chapter": true,
+      "soft_subtitle_exact_text_and_millisecond_timing": true,
+      "chapter_and_subtitle_bytes_equal_historical": true,
+      "joins": 18,
+      "join_selected_times": 342,
+      "exact_prior_view_join_PNG_inheritances": 342,
+      "new_directly_viewed_join_images": 0,
+      "native_context_exact_prior_view_inheritances": 36,
+      "assembly_seconds": 155.909,
+      "runtime_warning_cases": [
+        {
+          "scene": "Einsum",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "bca25458d4cd1163e65c538e053de04c14f32d8cfac81fa3a0b6f56bd5907c80"
+        },
+        {
+          "scene": "LowRank",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "b6996509e10f25b35447673ccc4bc2d853ce194583356afc425bf618f27a41ad"
+        },
+        {
+          "scene": "GaLore",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "51aaf237c79b1c68fa72ceb0845fbe5287a0b037f981ccb1ecbcb1e523190392"
+        }
+      ]
+    },
+    {
+      "lang": "zh",
+      "movie": "/workspace/runtime/ai3-silent-preview-assembly/current-four-replacements/zh/ai3-silent-preview-zh-480p15.mp4",
+      "movie_sha256": "d7cb13f96070b9d4b8867247df485bfadcb6cd917932d342892d39d986ba62b8",
+      "movie_bytes": 37267129,
+      "duration": 3469.088542,
+      "decoded_video_frames": 52036,
+      "decoded_audio_frames": 162619,
+      "decoded_samples_per_channel": 166521856,
+      "decoded_PCM_bytes": 666087424,
+      "nonzero_PCM_bytes": 0,
+      "video_pts_strictly_increasing": true,
+      "audio_pts_strictly_increasing": true,
+      "packet_dts_monotonic": {
+        "0": {
+          "packets": 52036,
+          "first": -0.112305,
+          "last": 3468.874935
+        },
+        "1": {
+          "packets": 162619,
+          "first": 0.0,
+          "last": 3469.067208
+        },
+        "2": {
+          "packets": 1141,
+          "first": 0.0,
+          "last": 3464.133
+        }
+      },
+      "first_video_pts": 0.021029,
+      "last_video_pts": 3469.008268,
+      "chapter_count": 19,
+      "subtitle_cues": 1039,
+      "all_cues_within_chapter": true,
+      "soft_subtitle_exact_text_and_millisecond_timing": true,
+      "chapter_and_subtitle_bytes_equal_historical": true,
+      "joins": 18,
+      "join_selected_times": 342,
+      "exact_prior_view_join_PNG_inheritances": 342,
+      "new_directly_viewed_join_images": 0,
+      "native_context_exact_prior_view_inheritances": 36,
+      "assembly_seconds": 164.141,
+      "runtime_warning_cases": [
+        {
+          "scene": "Projection",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "a19275e5208e72af9e98ebf4dc23d4facc21b96dc771ad8a757b3fa5fe8567de"
+        },
+        {
+          "scene": "LowRank",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "f884f1c15bc0688d3f3821c7ec94aacdc96fecbe12778a5e6110775cf9fa8685"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "video_frames_automatically_decoded": 101263,
+    "joins_covered": 36,
+    "selected_join_times": 684,
+    "join_PNG_times_inherited_only_by_exact_bytes": 684,
+    "new_actual_join_image_views": 0,
+    "native_context_appearances_inherited_only_by_exact_bytes": 72
+  },
+  "limitations": [
+    "Silent480p15preview, estimated narration/subtitle timing; no narration/listening/pronunciation/production loudness or spoken synchronization approval.",
+    "Automatic full-file decode is separate from perceptual viewing. All36join windows inherit exact images from prior actual visual proof; no new image viewing asserted where bytes matched.",
+    "Chapter-specific expanded selected-frame repair approvals remain separate. No full1080/4Kmotion, player/responsive browser or uninterrupted full-reel perceptual review.",
+    "Raw five chapter warning cases/fingerprints remain unchanged. Frozen current source observations do not establish historical worker imports or broad source freshness.",
+    "Old reels/bundles/source-case maps remain unchanged. This is new cloud QA assembly, not a local transport package or Library delivery."
+  ]
+}

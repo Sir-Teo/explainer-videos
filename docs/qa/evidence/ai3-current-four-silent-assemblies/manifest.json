@@ -1,0 +1,619 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "7bd59d3c0306b10e12106a9fe31b15c5151aefc21237b5b6e5f891fa150b0d74",
+      "bytes": 4000
+    },
+    {
+      "path": "current-source-case-map.json.gz",
+      "sha256": "1054d5f134ef218b3d9a8abd8a81a77398cf68136b4cbf36560f09db7bee3697",
+      "bytes": 12862
+    },
+    {
+      "path": "en/ai3-silent-preview-en-480p15.chapters.txt.gz",
+      "sha256": "98c31f68308b5b7bce0a1c9a3814825833639aa345476c511c366814d211976b",
+      "bytes": 459
+    },
+    {
+      "path": "en/ai3-silent-preview-en-480p15.srt.gz",
+      "sha256": "4b05ea8597a0197d6e2b8267ecec05058617c2a47202a64930a1b32f116bffa1",
+      "bytes": 28540
+    },
+    {
+      "path": "en/assembly-progress.json.gz",
+      "sha256": "5dd88d589de1e9e4ace3d8f2e5540ab85374c632780db03db5ca6584c323d67f",
+      "bytes": 12358
+    },
+    {
+      "path": "en/assembly-receipt.json.gz",
+      "sha256": "5dd88d589de1e9e4ace3d8f2e5540ab85374c632780db03db5ca6584c323d67f",
+      "bytes": 12358
+    },
+    {
+      "path": "en/chapter-records/00-Hook/Hook.narration.json.gz",
+      "sha256": "63296ea006ca05aeb3ed4a92d9ee760f170c744abec3ad1b9838ec59e9a284cf",
+      "bytes": 6048
+    },
+    {
+      "path": "en/chapter-records/00-Hook/result.json.gz",
+      "sha256": "1c70f9b29395e427156bc063666ac1386bacac45810c9e369a40df141f1a47bd",
+      "bytes": 14374
+    },
+    {
+      "path": "en/chapter-records/01-Vectors/Vectors.narration.json.gz",
+      "sha256": "b08ecf310b43eb1b2676205c9097c2ff5e5b591065c5b4620d97aaa595062902",
+      "bytes": 8579
+    },
+    {
+      "path": "en/chapter-records/01-Vectors/result.json.gz",
+      "sha256": "4d2fa2ad8b1db3a8ed66b2d89fb64cc4235a1cc417fd0570944694a6c16cdd61",
+      "bytes": 14413
+    },
+    {
+      "path": "en/chapter-records/02-Einsum/Einsum.narration.json.gz",
+      "sha256": "5ffddcd91d24feecc5ef84ead52f0bd7f351ae54723c89fda25e746e4c770a9a",
+      "bytes": 6890
+    },
+    {
+      "path": "en/chapter-records/02-Einsum/result.json.gz",
+      "sha256": "b22de53e8f806800777c9312525ee32bcd1216f50d40cb5674ff4638ec942b6f",
+      "bytes": 11764
+    },
+    {
+      "path": "en/chapter-records/03-Matrices/Matrices.narration.json.gz",
+      "sha256": "c60d3836d12acb430ec6eb7c76bcf23eb1cd30ab60b63975245fd2fc797d8cc9",
+      "bytes": 5801
+    },
+    {
+      "path": "en/chapter-records/03-Matrices/result.json.gz",
+      "sha256": "7633830587de10988d9c1d56295c74b64f62d30c8d3f773c567fd73a06d5fb90",
+      "bytes": 8478
+    },
+    {
+      "path": "en/chapter-records/04-Projection/Projection.narration.json.gz",
+      "sha256": "5af68ea75569800f724c5b1aac817a7c82fb19e67a5247c20efd7422cd0418fb",
+      "bytes": 8748
+    },
+    {
+      "path": "en/chapter-records/04-Projection/result.json.gz",
+      "sha256": "4d77037fcc96458e4f4debb09decd6362e4750ae8ae534cd349d09f4d04c6446",
+      "bytes": 14365
+    },
+    {
+      "path": "en/chapter-records/05-Eigen/Eigen.narration.json.gz",
+      "sha256": "2b4f71aaf500f3f9ec1381ac38d0c61f2927d9435e37b7d91bf488bdc29622d7",
+      "bytes": 6910
+    },
+    {
+      "path": "en/chapter-records/05-Eigen/result.json.gz",
+      "sha256": "e395a26f75118799c10c49f32af3fa26026e4cdf2d5beedab451a8e34c060938",
+      "bytes": 10353
+    },
+    {
+      "path": "en/chapter-records/06-Power/Power.narration.json.gz",
+      "sha256": "934694d337c07aae13d144f73ef087b868d8c7d1fce58b3a4bc8e110851fda28",
+      "bytes": 6281
+    },
+    {
+      "path": "en/chapter-records/06-Power/result.json.gz",
+      "sha256": "7d93f14d3a25a524c16091d9cf667753422cc1f5c994e2023137f6d69c3a242a",
+      "bytes": 10028
+    },
+    {
+      "path": "en/chapter-records/07-SVD/SVD.narration.json.gz",
+      "sha256": "74cbb424089cebf98ded2d81f4867ed85e8f2959c6e3f773b43242d48643f0f6",
+      "bytes": 4016
+    },
+    {
+      "path": "en/chapter-records/07-SVD/result.json.gz",
+      "sha256": "6016427d6224dcc69d2a264bc670c11cc8f9b1ff380bfab94e274fdc74e947a6",
+      "bytes": 6708
+    },
+    {
+      "path": "en/chapter-records/08-LowRank/LowRank.narration.json.gz",
+      "sha256": "7fa15f58683151e220e33121883e6b1db2de3dc46f4e2275072ba189372863fd",
+      "bytes": 7994
+    },
+    {
+      "path": "en/chapter-records/08-LowRank/result.json.gz",
+      "sha256": "7ac2c044e92084a206aa797a470d2e7433ae01527248f77cbb28f84d8044f912",
+      "bytes": 14456
+    },
+    {
+      "path": "en/chapter-records/09-Norms/Norms.narration.json.gz",
+      "sha256": "49b53ee25a600120b773bdb7ed7bd565bf8e8df9d6944cd9b20d33a427ba1a8f",
+      "bytes": 8410
+    },
+    {
+      "path": "en/chapter-records/09-Norms/result.json.gz",
+      "sha256": "2184ee159e7c900267fe8ddc15164251687624ff8482baa6b267c063c68ede5c",
+      "bytes": 14586
+    },
+    {
+      "path": "en/chapter-records/10-Spectra/Spectra.narration.json.gz",
+      "sha256": "b252db39adc78e3aecf0b5c212c2d6c31b21bd828878dbc1d7a11116d0c192b8",
+      "bytes": 7164
+    },
+    {
+      "path": "en/chapter-records/10-Spectra/result.json.gz",
+      "sha256": "94daa1fa8649b4b5e253925cc5acead78bfda75025b58a7c26ac04d0134a736a",
+      "bytes": 11941
+    },
+    {
+      "path": "en/chapter-records/11-GaLore/GaLore.narration.json.gz",
+      "sha256": "69e9abfed5075ccbf14c95dbab0a784cc2086e99b37c6c343df7b3140f6f971c",
+      "bytes": 9136
+    },
+    {
+      "path": "en/chapter-records/11-GaLore/result.json.gz",
+      "sha256": "f62a9e89fe500965df087a62eb016549e7385201d695fc44276dbb41d1821962",
+      "bytes": 15526
+    },
+    {
+      "path": "en/chapter-records/12-Words/Words.narration.json.gz",
+      "sha256": "1eb240f226a762b0e516f13819f57724befc31442f131124e73226f3039bc479",
+      "bytes": 8156
+    },
+    {
+      "path": "en/chapter-records/12-Words/result.json.gz",
+      "sha256": "2a740c8cdc36c81f1129886f2d5d5457ae840d70c11028f3f2b12758ae9e2e41",
+      "bytes": 13967
+    },
+    {
+      "path": "en/chapter-records/13-SGNS/SGNS.narration.json.gz",
+      "sha256": "a3ad36bc4ab68e30a714fc821146afa2da7e851251c4cddb59b9b61ad955ac83",
+      "bytes": 9750
+    },
+    {
+      "path": "en/chapter-records/13-SGNS/result.json.gz",
+      "sha256": "4d55ec4f66f8ed6f95f639eebd8f387d0a28aecb5099db8a3da25b53839d3379",
+      "bytes": 17755
+    },
+    {
+      "path": "en/chapter-records/14-HighDim/HighDim.narration.json.gz",
+      "sha256": "aa236717825eb4c3d8c6bb68b515ef7422b520d371f7930307ea041b3ddd49f9",
+      "bytes": 5831
+    },
+    {
+      "path": "en/chapter-records/14-HighDim/result.json.gz",
+      "sha256": "09b0e34425b5e3fa35b99455de6d5aec67d0f9edcb47c0c6c193ffecb33d40bd",
+      "bytes": 10298
+    },
+    {
+      "path": "en/chapter-records/15-JL/JL.narration.json.gz",
+      "sha256": "ff85f64620a8f259fac1d59d40a141501d46f5d8471219ac9ec93ed5be64a75c",
+      "bytes": 8135
+    },
+    {
+      "path": "en/chapter-records/15-JL/result.json.gz",
+      "sha256": "7b21fb4f7e653d123e47693e3bc5f6d766f4b57deb289c457cbcba5d8d1da014",
+      "bytes": 13098
+    },
+    {
+      "path": "en/chapter-records/16-Geometry/Geometry.narration.json.gz",
+      "sha256": "fc5caa628bae3374892e6f5b8782b1fbbcf0b4e90d12999518229b73387ee10b",
+      "bytes": 7376
+    },
+    {
+      "path": "en/chapter-records/16-Geometry/result.json.gz",
+      "sha256": "a85f519690859d35d8daa4e3639a3c3cd3f605dc7e1ec3ca5d52b176a8a1b844",
+      "bytes": 11456
+    },
+    {
+      "path": "en/chapter-records/17-Netflix/Netflix.narration.json.gz",
+      "sha256": "a2dd9a330c5f64dc9acc9ebd1d2059f37768c7c5ccf8bd55b0e045e9cfbbe911",
+      "bytes": 11620
+    },
+    {
+      "path": "en/chapter-records/17-Netflix/result.json.gz",
+      "sha256": "d4cae5f0fabcafeb24d074c7cdb23436c52d25b68e718e87ccd43be3842cfe30",
+      "bytes": 18195
+    },
+    {
+      "path": "en/chapter-records/18-Outro/Outro.narration.json.gz",
+      "sha256": "e39c699aa151603ade070e0d4c365c4f6e2bba22832b8d70a4119fd9d21228c8",
+      "bytes": 5741
+    },
+    {
+      "path": "en/chapter-records/18-Outro/result.json.gz",
+      "sha256": "f32b31df0a6be2061fddb01217ac2bf07efdde6689562158a6ab98406b846d6a",
+      "bytes": 11029
+    },
+    {
+      "path": "en/historical-delta.json.gz",
+      "sha256": "ad1a27510b6bacd14dc18fd87deefb2af669b1ef7457283907cd6aeb3e75659d",
+      "bytes": 399
+    },
+    {
+      "path": "en/validation/audio-frame-times.json.gz",
+      "sha256": "b3e88ad416d947cbad8e8f2e49340a4608d5312bc57e1a70c362131e8a823a4a",
+      "bytes": 997393
+    },
+    {
+      "path": "en/validation/audio-validation.json.gz",
+      "sha256": "3c8c79e72dafc31ba4bf561630f7cab7be959eebeee955945523467056b07f56",
+      "bytes": 736
+    },
+    {
+      "path": "en/validation/final-probe.json.gz",
+      "sha256": "209d9d026c82c962f8ad4fcc58fbec60504f2ab5d382cdbba808025328fe4f3f",
+      "bytes": 2231
+    },
+    {
+      "path": "en/validation/join-regression.json.gz",
+      "sha256": "51d843b57bf4c63ec2be87c998f32c7feb1e13ec7e2910f3c86ac44674e6a3bc",
+      "bytes": 48013
+    },
+    {
+      "path": "en/validation/join-selection.json.gz",
+      "sha256": "299724858cc29804e706db202fb32f760b1e9cf4763c3cc5ec06a113313b469a",
+      "bytes": 21922
+    },
+    {
+      "path": "en/validation/packet-times.json.gz",
+      "sha256": "9b3e5710890ce2a0da864d6375b33396b1fc5dc7ac85f52dc93defc1eafbd1af",
+      "bytes": 1448868
+    },
+    {
+      "path": "en/validation/subtitle-boundaries.json.gz",
+      "sha256": "1d87a8d1c732048eb20e240b377ebdc5035debf64fd4f68c3b6fb71a60758c20",
+      "bytes": 53878
+    },
+    {
+      "path": "en/validation/validation.json.gz",
+      "sha256": "15262ed1dd6fd9b8afea42a1b1c98cdf147a35bca59c201c1062b451086cc9c4",
+      "bytes": 5434
+    },
+    {
+      "path": "en/validation/video-frame-times.json.gz",
+      "sha256": "a7640cb5bcb85a536fa470054e57c51afc4bd42a728cba24200b8eecdbfb5782",
+      "bytes": 293661
+    },
+    {
+      "path": "input-freeze.json.gz",
+      "sha256": "cb501490912e23155a3099e49a8b4bf7d472732354ba718af5355aa698718606",
+      "bytes": 19347
+    },
+    {
+      "path": "logs/assemble-en.log.gz",
+      "sha256": "d82f327ef01fe2872736315fea29a34398b354fce17c23af47bfa0cc015a6fd4",
+      "bytes": 641
+    },
+    {
+      "path": "logs/assemble-zh.log.gz",
+      "sha256": "f6a8af9e7834c7b48501d2476624f5ec3d047c694e0dc5bc843695311f828126",
+      "bytes": 741
+    },
+    {
+      "path": "logs/audio-en.log.gz",
+      "sha256": "3c8c79e72dafc31ba4bf561630f7cab7be959eebeee955945523467056b07f56",
+      "bytes": 736
+    },
+    {
+      "path": "logs/audio-zh.log.gz",
+      "sha256": "daacef40375a454ea21a3d52dad167f43f1027163fcbd470997204b3b8cf8328",
+      "bytes": 737
+    },
+    {
+      "path": "logs/validate-en.log.gz",
+      "sha256": "953d61901c54cfea9f35dc02ba205a1fd9ea1120608d1418180b37963fbb1abb",
+      "bytes": 621
+    },
+    {
+      "path": "logs/validate-zh.log.gz",
+      "sha256": "09cbf78c3bc1b067c950a2b571dd8c0745046612658a2c8df1b610b9f9491d69",
+      "bytes": 632
+    },
+    {
+      "path": "post-integrity.json.gz",
+      "sha256": "5ce3ec78ee4a2cc0a419600534948a83b38c8fe23f2e58fcc7d5060ad63bd275",
+      "bytes": 2686
+    },
+    {
+      "path": "source-observations.json.gz",
+      "sha256": "bc56b82c9b254d18da980d08865e70fe59d7797e063e6da81fc4f026cf066758",
+      "bytes": 1121271
+    },
+    {
+      "path": "summary.json",
+      "sha256": "4ac589789bba6d5a775a8c20b7e98aae7cb0488435b5a063f684d37b83f698b1",
+      "bytes": 6232
+    },
+    {
+      "path": "tools/assemble.py.gz",
+      "sha256": "5c5c1b2e63ffa3b6a0ea97ae560df73d1a1cab5800533993f2351189358bede0",
+      "bytes": 2201
+    },
+    {
+      "path": "tools/compare_join_images.py.gz",
+      "sha256": "3e901f385c7f069d7ec89e6d624e8477331abbbaa8b890b11fc775a8c4be8ea7",
+      "bytes": 1542
+    },
+    {
+      "path": "tools/freeze_inputs.py.gz",
+      "sha256": "e47da0f125d1040a973bc82a698d285e6bcb13426c01a5fe08fe82e8514e448d",
+      "bytes": 2222
+    },
+    {
+      "path": "tools/package.py.gz",
+      "sha256": "bff7b5154e9e0aa2c8c93e57ffefc419024762a947699a23fc5c3bb05d6cca5f",
+      "bytes": 4871
+    },
+    {
+      "path": "tools/validate.py.gz",
+      "sha256": "6018ed59a36854eecfca8fd2b59e329f888dcae078ca14c1394633cb3b045ecd",
+      "bytes": 3158
+    },
+    {
+      "path": "tools/validate_audio.py.gz",
+      "sha256": "9d15c9d0af5dd84d6b335f86a4448fb1398574196bafe4cd2dfc9dd28009759b",
+      "bytes": 1111
+    },
+    {
+      "path": "tools/validate_subtitle_boundaries.py.gz",
+      "sha256": "d87337142e9bd30978817fa4227469f96e25eff412c64bb41724fd2762c552a3",
+      "bytes": 913
+    },
+    {
+      "path": "zh/ai3-silent-preview-zh-480p15.chapters.txt.gz",
+      "sha256": "44c2f90dc84c815eba808386d565f5fe80c9b602edf109c0192514a2afe9758f",
+      "bytes": 518
+    },
+    {
+      "path": "zh/ai3-silent-preview-zh-480p15.srt.gz",
+      "sha256": "5d67583a865b49b109026d2414bfc071e6be19295c5c8442654f9b7cd88b4a5a",
+      "bytes": 31019
+    },
+    {
+      "path": "zh/assembly-progress.json.gz",
+      "sha256": "43e39b496433224a196e293a912bd9308848fbb05467e6d0e7fc7fead2e5c279",
+      "bytes": 12366
+    },
+    {
+      "path": "zh/assembly-receipt.json.gz",
+      "sha256": "43e39b496433224a196e293a912bd9308848fbb05467e6d0e7fc7fead2e5c279",
+      "bytes": 12366
+    },
+    {
+      "path": "zh/chapter-records/00-Hook/Hook.narration.json.gz",
+      "sha256": "a906fdf0369d6ebcc5b45767052fa7372be0b0762af080a8a2ed64112f39f5d4",
+      "bytes": 12867
+    },
+    {
+      "path": "zh/chapter-records/00-Hook/result.json.gz",
+      "sha256": "59e8c3cca9e9bcc7381c82bfeec4d926cfe6177a3cce2b20e742b4a2c2179fe2",
+      "bytes": 21768
+    },
+    {
+      "path": "zh/chapter-records/01-Vectors/Vectors.narration.json.gz",
+      "sha256": "e3e56b8541878b2137372b68fb0a3a309a182d0f3304e14af145ed636357df3d",
+      "bytes": 14603
+    },
+    {
+      "path": "zh/chapter-records/01-Vectors/result.json.gz",
+      "sha256": "34af8471320d4e75d9419763bacd23a792059263aa6fc638ecc149f86bbf8484",
+      "bytes": 20715
+    },
+    {
+      "path": "zh/chapter-records/02-Einsum/Einsum.narration.json.gz",
+      "sha256": "d0a8104e021bada21f449f83a4b0d077a16064d12a3685c89fa9a2edb8e6af40",
+      "bytes": 11339
+    },
+    {
+      "path": "zh/chapter-records/02-Einsum/result.json.gz",
+      "sha256": "3bdc2a4bdf0a92ea33e1f612f5590bb40fc1ba68013a0c078e48910a4b1430dd",
+      "bytes": 16452
+    },
+    {
+      "path": "zh/chapter-records/03-Matrices/Matrices.narration.json.gz",
+      "sha256": "756141b998598ad81e8cdb7e50049ced58bceec90eead514039a9edf4f760b91",
+      "bytes": 9718
+    },
+    {
+      "path": "zh/chapter-records/03-Matrices/result.json.gz",
+      "sha256": "0d3b722648442e3d1f31b86580f0aaa5bc4bee600d345f51ed7cd7498a9dce1a",
+      "bytes": 12544
+    },
+    {
+      "path": "zh/chapter-records/04-Projection/Projection.narration.json.gz",
+      "sha256": "7b626f598bcb9b04ce0f19bdd5d8931843b4284b416def0c417980ae1bef1dad",
+      "bytes": 16102
+    },
+    {
+      "path": "zh/chapter-records/04-Projection/result.json.gz",
+      "sha256": "d633da1cf0f8cf74b74b224c49d0fc4947e6438f9e2127115e004df897ed496b",
+      "bytes": 22073
+    },
+    {
+      "path": "zh/chapter-records/05-Eigen/Eigen.narration.json.gz",
+      "sha256": "9939684679a44ec2d4ee822db53fb107c033c1bee998882b48150277baaddb03",
+      "bytes": 12881
+    },
+    {
+      "path": "zh/chapter-records/05-Eigen/result.json.gz",
+      "sha256": "3e23f61b813c41221bad6d27db8e13b71db91b3dfb8667199a5c65d0c8cd9c34",
+      "bytes": 16688
+    },
+    {
+      "path": "zh/chapter-records/06-Power/Power.narration.json.gz",
+      "sha256": "4e9dfc8c92c205ef5187f7069cc692eb5df4a159c0d6d40ceb3d33a08bc71b77",
+      "bytes": 11336
+    },
+    {
+      "path": "zh/chapter-records/06-Power/result.json.gz",
+      "sha256": "47e9a40f3ecc83f4ae2a30b852b594fd5c0cf0b03717c8a79b3d2fd4c1d3eb65",
+      "bytes": 15352
+    },
+    {
+      "path": "zh/chapter-records/07-SVD/SVD.narration.json.gz",
+      "sha256": "f392935525da00db7533aaa35daf0ebdb704661e05caa93dffa434c5ddf9e312",
+      "bytes": 8101
+    },
+    {
+      "path": "zh/chapter-records/07-SVD/result.json.gz",
+      "sha256": "cfc9cd736ebe2e2cf39adc20cc0d0b3636721c44b350b05714f5f79f1689a74c",
+      "bytes": 10919
+    },
+    {
+      "path": "zh/chapter-records/08-LowRank/LowRank.narration.json.gz",
+      "sha256": "9fac78d0103257c22604a197ba7bac7060109e65f55cb7e318d69bc5074b02a2",
+      "bytes": 13154
+    },
+    {
+      "path": "zh/chapter-records/08-LowRank/result.json.gz",
+      "sha256": "d5f32a8545486c0be9bea9d1ceb28e0144f2c4ab883f250d20db36228b66115a",
+      "bytes": 20006
+    },
+    {
+      "path": "zh/chapter-records/09-Norms/Norms.narration.json.gz",
+      "sha256": "4fd22a12b9b0cbfa7be58f9ec614dce68ad9733a5b4d576bdd5d032456a0c94d",
+      "bytes": 13627
+    },
+    {
+      "path": "zh/chapter-records/09-Norms/result.json.gz",
+      "sha256": "a04b1fc55d5bbb7799b7cc21fbcca2a3253c0a31bcf5a761dbca120a4c7b4979",
+      "bytes": 20202
+    },
+    {
+      "path": "zh/chapter-records/10-Spectra/Spectra.narration.json.gz",
+      "sha256": "79964c59613f2b4b0abbec59293266fe093ab901cecfe1e7faeb435b2fdf7cfe",
+      "bytes": 13523
+    },
+    {
+      "path": "zh/chapter-records/10-Spectra/result.json.gz",
+      "sha256": "7cbb3205d80bcb90fd48f856d61e91dc0273fe33cbfaa1a2f0ba1b49e9a54d0c",
+      "bytes": 18655
+    },
+    {
+      "path": "zh/chapter-records/11-GaLore/GaLore.narration.json.gz",
+      "sha256": "81d85ac60c13ef4771f5961bf203b0411c7e22bcf03ba17f475366f398c76bbf",
+      "bytes": 16460
+    },
+    {
+      "path": "zh/chapter-records/11-GaLore/result.json.gz",
+      "sha256": "e48dd1e034c39da5ec024c9b0ce80ec067de433836381e2ded207952ba3cbb42",
+      "bytes": 23273
+    },
+    {
+      "path": "zh/chapter-records/12-Words/Words.narration.json.gz",
+      "sha256": "357b49328c6d4854654eb49f22e42c05d299c234732a4d1d6883312c70ae1e99",
+      "bytes": 14733
+    },
+    {
+      "path": "zh/chapter-records/12-Words/result.json.gz",
+      "sha256": "d747fc815cd0f08bd80166b650db49a9d05675ca8b5de586f67b8c390a346f1b",
+      "bytes": 20839
+    },
+    {
+      "path": "zh/chapter-records/13-SGNS/SGNS.narration.json.gz",
+      "sha256": "8f718912aadd0189e7ea6c1e4d35f5911bc5ca9f97d5d548574c5df67663fd12",
+      "bytes": 16882
+    },
+    {
+      "path": "zh/chapter-records/13-SGNS/result.json.gz",
+      "sha256": "616cb1894198149dd43cf80655aaa6486235a7ab7b5e944316935d87f6a4f6bc",
+      "bytes": 25373
+    },
+    {
+      "path": "zh/chapter-records/14-HighDim/HighDim.narration.json.gz",
+      "sha256": "db1aa4e26178cbeb6af6ea2cd441721603d5ec37c886cfe8106593663c98cb97",
+      "bytes": 9668
+    },
+    {
+      "path": "zh/chapter-records/14-HighDim/result.json.gz",
+      "sha256": "363c9bee85f41a8854b31b0f49e1650c92a142c0d0a1131e3603ebf700b46325",
+      "bytes": 14357
+    },
+    {
+      "path": "zh/chapter-records/15-JL/JL.narration.json.gz",
+      "sha256": "673d4101c94fe7cbe6196af2a4d44d5860445969b597b2eaaf72bc5f035a404a",
+      "bytes": 14879
+    },
+    {
+      "path": "zh/chapter-records/15-JL/result.json.gz",
+      "sha256": "212866e0da0ef5cc6cca188431645f1c4b4264e6b580bdf29859c493092294e5",
+      "bytes": 20433
+    },
+    {
+      "path": "zh/chapter-records/16-Geometry/Geometry.narration.json.gz",
+      "sha256": "37d131f45a14d99f91738b00d85fe43409ac8c4347a81a5e5c24da58fd20ced1",
+      "bytes": 13425
+    },
+    {
+      "path": "zh/chapter-records/16-Geometry/result.json.gz",
+      "sha256": "10446f7ceac5eb5050061a5cb8c52ecfbb35ef5c7212c658201868371cf0b936",
+      "bytes": 17822
+    },
+    {
+      "path": "zh/chapter-records/17-Netflix/Netflix.narration.json.gz",
+      "sha256": "6a58b34e3f180458769eae643e04f6dc60933f27af6be67a732c062652334588",
+      "bytes": 22127
+    },
+    {
+      "path": "zh/chapter-records/17-Netflix/result.json.gz",
+      "sha256": "185fbdd8293dc2e7d0d115d50c5f62914d06d6ed38a185466981783bdcc4a159",
+      "bytes": 29310
+    },
+    {
+      "path": "zh/chapter-records/18-Outro/Outro.narration.json.gz",
+      "sha256": "21879e07e23d6dc167e576a524296aa2bc51c9fa8258bbd72b7e7bb83e173181",
+      "bytes": 12154
+    },
+    {
+      "path": "zh/chapter-records/18-Outro/result.json.gz",
+      "sha256": "9877c9f7c8ceaed84a7bca6510efb1b2c26a42a68e71e6cd87023b88e6fcf42b",
+      "bytes": 17770
+    },
+    {
+      "path": "zh/historical-delta.json.gz",
+      "sha256": "5db05e396b322b7b218b69679daf1930640cd8b7c226daa6ed186686d5a62972",
+      "bytes": 396
+    },
+    {
+      "path": "zh/validation/audio-frame-times.json.gz",
+      "sha256": "4ca7bbc4dce1b3f4c3ab1b3f1405aaa5e3b929e07553abe948488fc4515b882f",
+      "bytes": 1061060
+    },
+    {
+      "path": "zh/validation/audio-validation.json.gz",
+      "sha256": "daacef40375a454ea21a3d52dad167f43f1027163fcbd470997204b3b8cf8328",
+      "bytes": 737
+    },
+    {
+      "path": "zh/validation/final-probe.json.gz",
+      "sha256": "fc764af442c429c4e26552bc6c9a364849568957877e18be90f18c7d33eb781f",
+      "bytes": 2371
+    },
+    {
+      "path": "zh/validation/join-regression.json.gz",
+      "sha256": "1a98a79dcd4431a9f4da34ea81460dc0d20dffb6a57efbbfde577b7ee8f79c27",
+      "bytes": 48145
+    },
+    {
+      "path": "zh/validation/join-selection.json.gz",
+      "sha256": "d9305789ebd9438300c974b0e3111812c439a8a19038ffd32a4fc87df4929ace",
+      "bytes": 21996
+    },
+    {
+      "path": "zh/validation/packet-times.json.gz",
+      "sha256": "90f4e6a517c9aa53ff3a516dbcc40235b1f8ab1a6ec69cce5691c3d73cdd2cfe",
+      "bytes": 1533846
+    },
+    {
+      "path": "zh/validation/subtitle-boundaries.json.gz",
+      "sha256": "cdaaedd3bac632a28e794bb0a9ad4f1d9b8282ebf12779e4b5b7f9ebbd449bbf",
+      "bytes": 56403
+    },
+    {
+      "path": "zh/validation/validation.json.gz",
+      "sha256": "ab9ffea0834d09f8146c1aaab9d7d4c1b141a2af90ec46796907d77875e01c46",
+      "bytes": 5614
+    },
+    {
+      "path": "zh/validation/video-frame-times.json.gz",
+      "sha256": "89db0a53f325d3555d1ddfe70d3521d14908556d2f221ff9d12f4231ff89d824",
+      "bytes": 310234
+    }
+  ]
+}

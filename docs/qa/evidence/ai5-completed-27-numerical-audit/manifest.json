@@ -1,0 +1,54 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1299,
+      "sha256": "7f11a17aff677557ae5536ecc4f9f86cd458f6e52e154542f7d48ca1e012040b"
+    },
+    {
+      "path": "README.md.gz",
+      "bytes": 2405,
+      "sha256": "4c91833e1bc15574764645a253d7d719282d5d3f55aca302ea73a13471c29ec7"
+    },
+    {
+      "path": "audit.log.gz",
+      "bytes": 158,
+      "sha256": "e455843136371067a9b366e350bf7eca623b1fdd905041b7af6de24fcb25382b"
+    },
+    {
+      "path": "audit.py.gz",
+      "bytes": 5781,
+      "sha256": "81b4a7b3f098bd393aa7162191494b7c8a90c6004e42e9e618bfed8015e59b03"
+    },
+    {
+      "path": "failure.json.gz",
+      "bytes": 295,
+      "sha256": "b6540739c81e3cf9b25e588057e9436d89de9e79314d98680380652e7d1e7a9f"
+    },
+    {
+      "path": "initial-audit-with-invalid-unconditional-weight-assumption.py.gz",
+      "bytes": 5631,
+      "sha256": "42fdc3fe1c5e4e6de8938ecb18ce96d1f99a87c49abf6b15b385fcbcd297f48c"
+    },
+    {
+      "path": "initial-audit.log.gz",
+      "bytes": 519,
+      "sha256": "f565b6b6037ac532439d7ced969b4ff2a806caf607b294da3c63e6f800be69c9"
+    },
+    {
+      "path": "initial-failed-assumption.json.gz",
+      "bytes": 295,
+      "sha256": "b6540739c81e3cf9b25e588057e9436d89de9e79314d98680380652e7d1e7a9f"
+    },
+    {
+      "path": "manifest.json.gz",
+      "bytes": 562,
+      "sha256": "7055cfcd4fe6a5eb3490ec535ee392f6281ad22d5c0bb7b9f37dcafe8a28a594"
+    },
+    {
+      "path": "report.json.gz",
+      "bytes": 14859,
+      "sha256": "12e946287fdab373f9c2ad880088f0ea81586c3f2026cd7fc1039b8a6e4d891f"
+    }
+  ]
+}

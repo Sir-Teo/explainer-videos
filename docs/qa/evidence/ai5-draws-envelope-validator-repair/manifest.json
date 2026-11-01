@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1179,
+      "sha256": "0b8153e909900978b3b9e01dec24dca869b0810baa2ab2a3d2367d5a1deb921b"
+    },
+    {
+      "path": "full-tests-receipt.json.gz",
+      "bytes": 267,
+      "sha256": "5ae383c36a6ee99ceb4d45a043982073f670ee44bb3c2f2aa555976bfbcfa5f4"
+    },
+    {
+      "path": "full-tests.log.gz",
+      "bytes": 15272,
+      "sha256": "0f4a0e0c12569f3a6fd0f4aa80bbd76116901b00fd8389e06a44ca580fbc2c3f"
+    },
+    {
+      "path": "preservation.json.gz",
+      "bytes": 2090,
+      "sha256": "b6fee43f3b186fc1267d88f1796e3c85fc3ef1b29e48820184cb08505eccb6d9"
+    },
+    {
+      "path": "regeneration-comparison.json.gz",
+      "bytes": 2002,
+      "sha256": "5e8dd84e1821aeb8439f42c3e542cf4a890ef2799640aa4957e56db450b53ffb"
+    },
+    {
+      "path": "repair-report.json.gz",
+      "bytes": 2823,
+      "sha256": "63f420ed5aa5ebb42430bc55b6bc00bf68bf8e0b6fcf07b965d4cb7e711c4560"
+    },
+    {
+      "path": "test-source-after.json.gz",
+      "bytes": 74560,
+      "sha256": "2295becd9aced13da795a45b7e7c5018a39179085ddb70372a196ea3e471beea"
+    },
+    {
+      "path": "test-source-before.json.gz",
+      "bytes": 74560,
+      "sha256": "2295becd9aced13da795a45b7e7c5018a39179085ddb70372a196ea3e471beea"
+    }
+  ]
+}

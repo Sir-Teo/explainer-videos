@@ -206,7 +206,13 @@ def valid_structure(name, d):
             return (_prob(d["p"], axis=0) and _prob(d["freq"], np.asarray(d["p"]).shape, axis=0)
                     and _array(d["bm_u"], ndim=2, low=0, high=1) and np.asarray(d["bm_u"]).shape[1] == 2
                     and _array(d["bm_z"], np.asarray(d["bm_u"]).shape)
-                    and _array(d["up"], (len(d["xp"]),), low=0, high=1))
+                    and _array(d["M"], ()) and d["M"] > 0
+                    and _array(d["xp"], ndim=1, low=0, high=1)
+                    # Rejection ordinates have density units, not probability
+                    # units: they fill the proposal rectangle [0, 1] x [0, M].
+                    and _array(d["up"], (len(d["xp"]),), low=0, high=d["M"])
+                    and np.asarray(d["acc"]).shape == (len(d["xp"]),)
+                    and np.asarray(d["acc"]).dtype.kind == "b")
         if name == "scorefn":
             if not (_array(d["mu"], ()) and _integer(d["steps"], 1) and _integer(d["pop"], 1)):
                 return False
