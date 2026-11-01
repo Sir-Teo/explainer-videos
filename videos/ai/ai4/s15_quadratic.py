@@ -12,6 +12,49 @@ def saddle_f(x, y):
     return 0.5 * x * x - 0.5 * y * y + 0.25 * y ** 4
 
 
+def trajectory_reveal(path, dot):
+    """Reveal a measured polyline at on-screen arc-length speed, with its dot at the prefix end.
+
+    Create uses curve-index progress while MoveAlongPath uses arc length. Coupling
+    them through the same immutable full polyline preserves every measured corner
+    and avoids both mutating-path lag and unequal-segment progress mismatches.
+    The enclosing play retains its original duration and rate function.
+    """
+    full = path.copy()
+    curves = np.asarray(full.get_cubic_bezier_tuples())
+    if not len(curves):
+        raise ValueError("trajectory reveal requires at least one polyline segment")
+    # set_points_as_corners produces straight cubics with uniformly spaced handles.
+    handles = curves[:, :1] + np.linspace(0, 1, 4)[None, :, None] * (curves[:, -1:] - curves[:, :1])
+    if not np.allclose(curves, handles, rtol=1e-10, atol=1e-12):
+        raise ValueError("trajectory reveal expects set_points_as_corners geometry")
+    lengths = np.linalg.norm(curves[:, -1] - curves[:, 0], axis=1)
+    cumulative = np.cumsum(lengths)
+    total = float(cumulative[-1])
+
+    def reveal(group, alpha):
+        visible, marker = group
+        if not math.isfinite(alpha):
+            raise ValueError("trajectory progress must be finite")
+        progress = float(np.clip(alpha, 0, 1))
+        distance = progress * total
+        if progress == 0:
+            parameter = 0.0
+        elif progress == 1 or distance >= total:
+            parameter = 1.0
+        else:
+            # side='right' skips zero-length segments at an internal boundary.
+            index = int(np.searchsorted(cumulative, distance, side="right"))
+            before = float(cumulative[index - 1]) if index else 0.0
+            fraction = (distance - before) / lengths[index]
+            parameter = (index + fraction) / len(curves)
+        visible.pointwise_become_partial(full, 0, parameter)
+        marker.move_to(visible.get_end())
+
+    # Both belong to the animated family: Cairo must not cache the dot as static.
+    return UpdateFromAlphaFunc(VGroup(path, dot), reveal)
+
+
 def rate_comparison(gap):
     if not math.isfinite(gap):
         return "a finite comparison with the predicted rates is unavailable"
@@ -86,11 +129,11 @@ class Quadratic(VoiceoverScene):
             vo.wait_until("a")
             self.play(Indicate(rows[0], color=C.LR, scale_factor=1.04))
             vo.wait_until("b")
-            step(1)
+            step(1, transform=False)
             vo.wait_until("c")
-            step(2)
+            step(2, transform=False)
             vo.wait_until("d")
-            step(3)
+            step(3, transform=False)
             self.play(FadeIn(dc, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
@@ -135,14 +178,14 @@ class Quadratic(VoiceoverScene):
             self.play(Create(ax), LaggedStart(*[Create(c) for c in cont], lag_ratio=0.1), FadeIn(curv), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(dots["gd"]), FadeIn(lab["gd"]))
-            self.play(Create(paths["gd"]), MoveAlongPath(dots["gd"], paths["gd"]), run_time=3.5, rate_func=linear)
+            self.play(trajectory_reveal(paths["gd"], dots["gd"]), run_time=3.5, rate_func=linear)
             vo.wait_until("b")
             self.play(FadeIn(dots["momentum"]), FadeIn(lab["momentum"]))
-            self.play(Create(paths["momentum"]), MoveAlongPath(dots["momentum"], paths["momentum"]), run_time=3.0,
+            self.play(trajectory_reveal(paths["momentum"], dots["momentum"]), run_time=3.0,
                       rate_func=linear)
             vo.wait_until("c")
             self.play(FadeIn(dots["newton"]), FadeIn(lab["newton"]))
-            self.play(Create(paths["newton"]), MoveAlongPath(dots["newton"], paths["newton"]), run_time=1.0)
+            self.play(trajectory_reveal(paths["newton"], dots["newton"]), run_time=1.0)
         self.wait(0.3)
         self.clear_scene()
 
