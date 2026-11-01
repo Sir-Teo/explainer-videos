@@ -28,8 +28,17 @@ class Kernels(VoiceoverScene, ThreeDScene):
         hist = history_card(1958, r"Frank Rosenblatt", r"the perceptron: \ on every mistake, \ add the page to the "
                             r"weights, \ $\mathbf{w} \leftarrow \mathbf{w} + y\,\mathbf{x}$", color=HIST, width=5.6)
         hist.to_corner(UL, buff=0.3)
-        nov = theorem_card(r"Novikoff (1962)", r"if a line separates the data with margin $\gamma$, \ the perceptron "
-                           r"makes at most $(R/\gamma)^2$ mistakes", width=5.6, font_size=21).next_to(hist, DOWN, buff=0.25)
+        nov_statement = (r"if a line separates the data with margin $\gamma$, \ the perceptron "
+                         r"makes at most $(R/\gamma)^2$ mistakes")
+        if zh():
+            from explainer.zh_text import translate
+
+            # Translate the original complete caption before splitting its two
+            # clauses, so the squared bound has a real gap above its glyphs.
+            nov_statement = VGroup(*[label(row, font_size=21)
+                                     for row in translate(nov_statement).split(r"\ ", 1)])
+            nov_statement.arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        nov = theorem_card(r"Novikoff (1962)", nov_statement, width=5.6, font_size=21).next_to(hist, DOWN, buff=0.25)
         nov.align_to(hist, LEFT)
         P = np.array([[1.0, 1.0], [-1.0, -1.0], [1.0, -1.0], [-1.0, 1.0]])
         t = [1, 1, -1, -1]

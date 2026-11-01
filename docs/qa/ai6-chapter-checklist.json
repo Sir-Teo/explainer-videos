@@ -1,6 +1,6 @@
 {
   "part": "ai6",
-  "observed_utc": "2026-11-01T13:53:25.477537+00:00",
+  "observed_utc": "2026-11-01T15:28:31.690672+00:00",
   "chapters": 19,
   "bilingual_cases": 38,
   "numerical_items": 22,
@@ -9,7 +9,7 @@
   "source_integration_evidence": "evidence/ai6-source-integration/README.md",
   "source_teaching_evidence": "evidence/ai6-scene-teaching-source-repairs/README.md",
   "source_core_evidence": "evidence/ai6-producer-cache-source-repairs/README.md",
-  "scope": "All22 numerical items/263checks complete. Original17 selected-image approvals retained historically; current18 include TreesENZH full selected acceptance and exclude NBZH changed-source target pending. GBENZH full historical cohort reviewed but timing lead pending. Native16case count unchanged. Four bounded target closures do not imply full cohort acceptance; nine fresh review claims relinquished to parent. No Part7 execution.",
+  "scope": "All38 bilingual selected cohorts reviewed at recorded versions. Current29declared-scope acceptances,9source-repair/polish casesopen. NBZH inherits historical selectedscope+newtargetclosure, notfreshwholeafter.16nativeendpointcasecountunchanged; continuous/audio/nativemotion/4K/wholeepisodegates separate. All22numericalitems/263checks complete, noPart7generation.",
   "cases": [
     {
       "position": 1,
@@ -26,7 +26,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-hook-split-disclosure-regression/README.md",
       "native1080_evidence": "evidence/ai6-native1080-first-two-chapters/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 1,
@@ -43,7 +44,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-hook-split-disclosure-regression/README.md",
       "native1080_evidence": "evidence/ai6-native1080-first-two-chapters/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 2,
@@ -60,7 +62,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-lsq-reveal-regression/README.md",
       "native1080_evidence": "evidence/ai6-native1080-first-two-chapters/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 2,
@@ -77,7 +80,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-lsq-reveal-regression/README.md",
       "native1080_evidence": "evidence/ai6-native1080-first-two-chapters/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 3,
@@ -94,7 +98,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-gauss-hbars-motion-regression/README.md",
       "native1080_evidence": "evidence/ai6-native1080-gauss-review/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 3,
@@ -111,7 +116,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-gauss-hbars-motion-regression/README.md",
       "native1080_evidence": "evidence/ai6-native1080-gauss-review/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 4,
@@ -128,7 +134,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-ridge-motion-repair/README.md",
       "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 4,
@@ -145,7 +152,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-ridge-motion-repair/README.md",
       "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 5,
@@ -162,7 +170,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-lasso-motion-repair/README.md",
       "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 5,
@@ -179,7 +188,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-lasso-motion-repair/README.md",
       "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 6,
@@ -196,7 +206,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-logistic-motion-regression/README.md",
       "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 6,
@@ -213,7 +224,8 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-logistic-motion-regression/README.md",
       "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 7,
@@ -229,7 +241,8 @@
       "narration_listening_sync_4K": "Silent narration metadata changed intentionally: EN156.2s (+11.4667), ZH171.1333s (+15.4667). Actual speech, listening, synchronization and production-resolution motion remain pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-newton-motion-regression/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 7,
@@ -245,7 +258,8 @@
       "narration_listening_sync_4K": "Silent narration metadata changed intentionally: EN156.2s (+11.4667), ZH171.1333s (+15.4667). Actual speech, listening, synchronization and production-resolution motion remain pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-newton-motion-regression/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 8,
@@ -262,27 +276,31 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-naivebayes-motion-regression/README.md",
       "selected_image_case_accepted_at_declared_scope": true,
-      "current_source_sha256": "b776703ce534fc703c9c5caf697059c912d0c3a9b48ad8a0df04d51c887f103c",
-      "new_fraction_source_evidence": "evidence/ai6-naivebayes-fraction-depth-source-repair/README.md"
-    },
-    {
-      "position": 8,
-      "module": "s08_bayes",
-      "scene": "NaiveBayes",
-      "title": "7. Naive Bayes: generative or discriminative?",
-      "lang": "zh",
-      "source_sha256_observed": "096df1ad04b1b9c22c0ee27f5a925171f263153fc8bf179579a1e66b78ac9639",
-      "source_state": "Four repairs accepted after actual bilingual selected-image regression: uncapped percentile band, retained-copy reveals, card emphasis and calibration-point highlight. NewnativeZHfractioncontact confirmed, Chinese-only numerator-depth source repair applied; fresh controlled after-regression pending. EN constructor points and all other code exact; original baseline identities retained.",
-      "endpoints": "26 endpoint states: 20 exact previously reviewed PNGs and six new images on two pages. Fourteen current native-resolution 854x480 followups. No current 1080p claim.",
-      "selected_motion_review": "964 selected union times from 4756 decoded frames; 750 unique images = 383 exact previously reviewed PNG inheritances + 367 new actual views on 47 pages. All 244 encoded frames in ten repair windows covered. 3792 frames were not individually inspected.",
-      "native1080_endpoints": "Nativebefore35.4s actuallyviewed: three numerator/rule contacts. New source b776 requires after-native and changed-window regression; no blanket redo of unchanged accepted portions.",
-      "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-naivebayes-motion-regression/README.md",
-      "selected_image_case_accepted_at_declared_scope": false,
       "current_source_sha256": "b776703ce534fc703c9c5caf697059c912d0c3a9b48ad8a0df04d51c887f103c",
       "new_fraction_source_evidence": "evidence/ai6-naivebayes-fraction-depth-source-repair/README.md",
-      "historical_selected_image_case_accepted_at_declared_scope": true
+      "full_selected_cohort_review_complete_at_observed_version": true
+    },
+    {
+      "position": 8,
+      "module": "s08_bayes",
+      "scene": "NaiveBayes",
+      "title": "7. Naive Bayes: generative or discriminative?",
+      "lang": "zh",
+      "source_sha256_observed": "096df1ad04b1b9c22c0ee27f5a925171f263153fc8bf179579a1e66b78ac9639",
+      "source_state": "Four repairs accepted after actual bilingual selected-image regression: uncapped percentile band, retained-copy reveals, card emphasis and calibration-point highlight. NewnativeZHfractioncontact confirmed, Chinese-only numerator-depth source repair applied; fresh controlled after-regression pending. EN constructor points and all other code exact; original baseline identities retained.",
+      "endpoints": "26 endpoint states: 20 exact previously reviewed PNGs and six new images on two pages. Fourteen current native-resolution 854x480 followups. No current 1080p claim.",
+      "selected_motion_review": "964 selected union times from 4756 decoded frames; 750 unique images = 383 exact previously reviewed PNG inheritances + 367 new actual views on 47 pages. All 244 encoded frames in ten repair windows covered. 3792 frames were not individually inspected.",
+      "native1080_endpoints": "Parentnewtargetclearancepasses; originalnativebeforedefectretained. ENnativepixelsunchanged; no newallnativecasecount.",
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-naivebayes-motion-regression/README.md",
+      "selected_image_case_accepted_at_declared_scope": true,
+      "current_source_sha256": "b776703ce534fc703c9c5caf697059c912d0c3a9b48ad8a0df04d51c887f103c",
+      "new_fraction_source_evidence": "evidence/ai6-naivebayes-fraction-depth-source-repair/README.md",
+      "historical_selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "new_fraction_target_closed": true,
+      "current_acceptance_basis": "Historicalfullselectedcoverage+newindependentb776targetedclearanceclosure; no freshwholecohortorcontinuous/native-motionapproval."
     },
     {
       "position": 9,
@@ -291,7 +309,7 @@
       "title": "8. Fisher's direction",
       "lang": "en",
       "source_sha256_observed": "040444a4b6a6136d4f698503d831bc8ca581fa98108f112505e14046b3a1e01f",
-      "source_state": "Published local individual label masks, scale-one emphasis and six retained-copy reveal repairs; narration/data/requested timing unchanged.",
+      "source_state": "Full480EN/498ZHselectedcohorts reviewedwithhistogramunderlayfinding. New5541source removeswholepl+captionthroughinsets/restoresafter; hostafterpending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "SOURCE-BEFORE EN491/ZH497 selected times:816 unique images on102 actually viewed pages,33 endpoints and17 native followups. EN axis strike confirmed; historical Chinese strike overclaim corrected. Current-source after review pending.",
       "native1080_endpoints": "Pending.",
@@ -303,8 +321,10 @@
       "evidence": "evidence/ai6-lda-local-motion-source-repair/README.md",
       "baseline_review_evidence": "evidence/ai6-lda-selected-motion-review/README.md",
       "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance.",
-      "fresh_review_owner": "Relinquished by source owner to parent review pool; receiving assignment not yet confirmed.",
-      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00"
+      "fresh_review_owner": "Parent independent fullselectedcohort review complete; rootowns remaining source repairs. No inactive local queued claim.",
+      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "current_source_sha256": "5541bb021efdd1b253d78fa4f111c43b604fedb54fec33895c8fb0edccf82552"
     },
     {
       "position": 9,
@@ -313,7 +333,7 @@
       "title": "8. Fisher's direction",
       "lang": "zh",
       "source_sha256_observed": "040444a4b6a6136d4f698503d831bc8ca581fa98108f112505e14046b3a1e01f",
-      "source_state": "Published local individual label masks, scale-one emphasis and six retained-copy reveal repairs; narration/data/requested timing unchanged.",
+      "source_state": "Full480EN/498ZHselectedcohorts reviewedwithhistogramunderlayfinding. New5541source removeswholepl+captionthroughinsets/restoresafter; hostafterpending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "SOURCE-BEFORE EN491/ZH497 selected times:816 unique images on102 actually viewed pages,33 endpoints and17 native followups. EN axis strike confirmed; historical Chinese strike overclaim corrected. Current-source after review pending.",
       "native1080_endpoints": "Pending.",
@@ -325,8 +345,10 @@
       "evidence": "evidence/ai6-lda-local-motion-source-repair/README.md",
       "baseline_review_evidence": "evidence/ai6-lda-selected-motion-review/README.md",
       "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance.",
-      "fresh_review_owner": "Relinquished by source owner to parent review pool; receiving assignment not yet confirmed.",
-      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00"
+      "fresh_review_owner": "Parent independent fullselectedcohort review complete; rootowns remaining source repairs. No inactive local queued claim.",
+      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "current_source_sha256": "5541bb021efdd1b253d78fa4f111c43b604fedb54fec33895c8fb0edccf82552"
     },
     {
       "position": 10,
@@ -334,14 +356,14 @@
       "scene": "KNN",
       "title": "9. Neighbours, and the curse of dimensionality",
       "lang": "en",
-      "source_sha256_observed": "41d47f51970ae54744df9a5ef04cb889c00e70695ff909123509b3145c6f57a7",
+      "source_sha256_observed": "31829859644b15f50fe57ee1cf5b3e697797398e82094ec2a12494f73915a953",
       "source_state": "Published dynamic uncapped Cover-Hart domain, complete curse-band domain and three retained-copy reveal repairs; all narration/data/requested timing unchanged. Parent fresh-host review established Chinese Jensen line contact at movieframe1643/109.533008s and native1080 endpoints. Scene-local Chinese0.4em line gap repaired; English/four-row constructor geometry unchanged. Fresh host after-render acceptance remains pending; historical source/movie records are not retagged.",
       "endpoints": "All 35 existing states actually reviewed on ten pages plus six original-resolution followups. Native endpoint evidence confirms 90th-percentile bands flattened at 40% although measured upper values reach 47.725%. Local repair pending.",
-      "selected_motion_review": "SOURCE-BEFORE EN446/ZH477 selected times:754 unique images on96 viewed pages,35 endpoints and22 original-resolution followups.5409 frames decoded,4486 not individually inspected. Separate correctly initialized EN/ZH geometry fixtures pass; old misinitialized fixture retained as superseded. After review pending.",
+      "selected_motion_review": "Independent full443EN/471ZHcohort plus171Chinesecriticalframes/57Jensenwindow reviewed, currentcorrectednative108.9/115.1clear. Originalsource/movieversionspreserved.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
+      "selected_image_case_accepted_at_declared_scope": true,
       "baseline_source_sha256": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
       "source_publication_commit": "f559032f14e8eb499f3ccddd6151667eacfa3972",
       "evidence": "evidence/ai6-knn-visual-source-repair/README.md",
@@ -349,10 +371,12 @@
       "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance.",
       "current_source_sha256": "31829859644b15f50fe57ee1cf5b3e697797398e82094ec2a12494f73915a953",
       "jensen_spacing_evidence": "evidence/ai6-knn-jensen-line-spacing-repair/README.md",
-      "fresh_review_owner": "Relinquished by source owner to parent review pool; receiving assignment not yet confirmed.",
+      "fresh_review_owner": "Parent independent fullselectedcohort review complete; rootowns remaining source repairs. No inactive local queued claim.",
       "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00",
       "repair_target_after_review": "Parent reports corrected native endpoints and57appendframes resolve Jensen contact; English pixels exact. Full selected cohort pending.",
-      "repair_target_after_library": "libfile_e949ad959434819193baf8c04cd1ee15"
+      "repair_target_after_library": "libfile_e949ad959434819193baf8c04cd1ee15",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "source_sha256_before_latest_after_review": "41d47f51970ae54744df9a5ef04cb889c00e70695ff909123509b3145c6f57a7"
     },
     {
       "position": 10,
@@ -360,14 +384,14 @@
       "scene": "KNN",
       "title": "9. Neighbours, and the curse of dimensionality",
       "lang": "zh",
-      "source_sha256_observed": "41d47f51970ae54744df9a5ef04cb889c00e70695ff909123509b3145c6f57a7",
+      "source_sha256_observed": "31829859644b15f50fe57ee1cf5b3e697797398e82094ec2a12494f73915a953",
       "source_state": "Published dynamic uncapped Cover-Hart domain, complete curse-band domain and three retained-copy reveal repairs; all narration/data/requested timing unchanged. Parent fresh-host review established Chinese Jensen line contact at movieframe1643/109.533008s and native1080 endpoints. Scene-local Chinese0.4em line gap repaired; English/four-row constructor geometry unchanged. Fresh host after-render acceptance remains pending; historical source/movie records are not retagged.",
       "endpoints": "All 35 existing states actually reviewed on ten pages plus six original-resolution followups. Native endpoint evidence confirms 90th-percentile bands flattened at 40% although measured upper values reach 47.725%. Local repair pending.",
-      "selected_motion_review": "SOURCE-BEFORE EN446/ZH477 selected times:754 unique images on96 viewed pages,35 endpoints and22 original-resolution followups.5409 frames decoded,4486 not individually inspected. Separate correctly initialized EN/ZH geometry fixtures pass; old misinitialized fixture retained as superseded. After review pending.",
+      "selected_motion_review": "Independent full443EN/471ZHcohort plus171Chinesecriticalframes/57Jensenwindow reviewed, currentcorrectednative108.9/115.1clear. Originalsource/movieversionspreserved.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
+      "selected_image_case_accepted_at_declared_scope": true,
       "baseline_source_sha256": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
       "source_publication_commit": "f559032f14e8eb499f3ccddd6151667eacfa3972",
       "evidence": "evidence/ai6-knn-visual-source-repair/README.md",
@@ -375,10 +399,12 @@
       "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance.",
       "current_source_sha256": "31829859644b15f50fe57ee1cf5b3e697797398e82094ec2a12494f73915a953",
       "jensen_spacing_evidence": "evidence/ai6-knn-jensen-line-spacing-repair/README.md",
-      "fresh_review_owner": "Relinquished by source owner to parent review pool; receiving assignment not yet confirmed.",
+      "fresh_review_owner": "Parent independent fullselectedcohort review complete; rootowns remaining source repairs. No inactive local queued claim.",
       "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00",
       "repair_target_after_review": "Parent reports corrected native endpoints and57appendframes resolve Jensen contact; English pixels exact. Full selected cohort pending.",
-      "repair_target_after_library": "libfile_e949ad959434819193baf8c04cd1ee15"
+      "repair_target_after_library": "libfile_e949ad959434819193baf8c04cd1ee15",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "source_sha256_before_latest_after_review": "41d47f51970ae54744df9a5ef04cb889c00e70695ff909123509b3145c6f57a7"
     },
     {
       "position": 11,
@@ -387,7 +413,31 @@
       "title": "10. Kernels: lifting without lifting",
       "lang": "en",
       "source_sha256_observed": "1e32812fc036802f11a70f52188052884f45f671947a5d464103cfce176cceaf",
-      "source_state": "Published exactly six transform=False keywords; all narration/math/data/requested timing unchanged.",
+      "source_state": "Original1e328fullselectedreviewcomplete; English source-inherited unchanged. New1f78CHtwo-rowgap repair needsfreshhostafter; otheropticalbaselinepolishjudgmentsopen.",
+      "endpoints": "Pending actual cached-only capture after required data completes.",
+      "selected_motion_review": "SOURCE-BEFORE English611 selected /498 unique images /63 viewed pages +17 native followups;3291 decoded/2680 unselected. Both-language existing86 endpoint/bookmark states map to45 viewed original images. Chinese full motion and old encoded-window gaps remain explicit; current-source full after review pending.",
+      "native1080_endpoints": "Pending.",
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "selected_image_case_accepted_at_declared_scope": true,
+      "baseline_source_sha256": "1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082",
+      "source_publication_commit": "f559032f14e8eb499f3ccddd6151667eacfa3972",
+      "evidence": "evidence/ai6-kernels-append-source-repair/README.md",
+      "baseline_review_evidence": "evidence/ai6-kernels-append-source-repair/README.md",
+      "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance.",
+      "fresh_review_owner": "Parent independent fullselectedcohort review complete; rootowns remaining source repairs. No inactive local queued claim.",
+      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "current_source_sha256": "1f78f5561e61e9806effc8415f835da09cb0a56fec84d5cfd85432e4509bb237"
+    },
+    {
+      "position": 11,
+      "module": "s11_kernels",
+      "scene": "Kernels",
+      "title": "10. Kernels: lifting without lifting",
+      "lang": "zh",
+      "source_sha256_observed": "1e32812fc036802f11a70f52188052884f45f671947a5d464103cfce176cceaf",
+      "source_state": "Original1e328fullselectedreviewcomplete; English source-inherited unchanged. New1f78CHtwo-rowgap repair needsfreshhostafter; otheropticalbaselinepolishjudgmentsopen.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "SOURCE-BEFORE English611 selected /498 unique images /63 viewed pages +17 native followups;3291 decoded/2680 unselected. Both-language existing86 endpoint/bookmark states map to45 viewed original images. Chinese full motion and old encoded-window gaps remain explicit; current-source full after review pending.",
       "native1080_endpoints": "Pending.",
@@ -399,30 +449,10 @@
       "evidence": "evidence/ai6-kernels-append-source-repair/README.md",
       "baseline_review_evidence": "evidence/ai6-kernels-append-source-repair/README.md",
       "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance.",
-      "fresh_review_owner": "Relinquished by source owner to parent review pool; receiving assignment not yet confirmed.",
-      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00"
-    },
-    {
-      "position": 11,
-      "module": "s11_kernels",
-      "scene": "Kernels",
-      "title": "10. Kernels: lifting without lifting",
-      "lang": "zh",
-      "source_sha256_observed": "1e32812fc036802f11a70f52188052884f45f671947a5d464103cfce176cceaf",
-      "source_state": "Published exactly six transform=False keywords; all narration/math/data/requested timing unchanged.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "SOURCE-BEFORE English611 selected /498 unique images /63 viewed pages +17 native followups;3291 decoded/2680 unselected. Both-language existing86 endpoint/bookmark states map to45 viewed original images. Chinese full motion and old encoded-window gaps remain explicit; current-source full after review pending.",
-      "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
-      "baseline_source_sha256": "1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082",
-      "source_publication_commit": "f559032f14e8eb499f3ccddd6151667eacfa3972",
-      "evidence": "evidence/ai6-kernels-append-source-repair/README.md",
-      "baseline_review_evidence": "evidence/ai6-kernels-append-source-repair/README.md",
-      "after_rendered_review": "NOT STARTED: below unchanged storage guard. Source/code proof is not image acceptance.",
-      "fresh_review_owner": "Relinquished by source owner to parent review pool; receiving assignment not yet confirmed.",
-      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00"
+      "fresh_review_owner": "Parent independent fullselectedcohort review complete; rootowns remaining source repairs. No inactive local queued claim.",
+      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "current_source_sha256": "1f78f5561e61e9806effc8415f835da09cb0a56fec84d5cfd85432e4509bb237"
     },
     {
       "position": 12,
@@ -431,7 +461,7 @@
       "title": "11. The widest street",
       "lang": "en",
       "source_sha256_observed": "bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
+      "source_state": "Full472EN/506ZHhistoricalcohorts reviewed; bc176beforecontextf7a/c80retained. New5506labelsdistinguishunplottedCVchoice/fixed70fit fromshownsweep; freshafterpending.",
       "endpoints": "All47 original854 endpoint images reviewed on six unscaled pages with eight original-resolution followups. No settled defect found. Original EN source-change warning retained.",
       "selected_motion_review": "Not started: extraction guard held before FFmpeg launch; no partial audit or false pass.",
       "native1080_endpoints": "Both native cases:47 states actually reviewed on12 existing sheets at960x540tiles plus9 original1920x1080 followups. No settled corrective defect confirmed. Actual constructor/VO equivalence to0884/0c4 and unchanged usedscene/helper/data graph is recorded; later unrelated text additions do not refresh the broad historical fingerprint.",
@@ -439,8 +469,10 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "selected_image_case_accepted_at_declared_scope": false,
       "native1080_evidence": "evidence/ai6-svm-native1080-endpoint-review/README.md",
-      "fresh_review_owner": "Relinquished by source owner to parent review pool; receiving assignment not yet confirmed.",
-      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00"
+      "fresh_review_owner": "Parent independent fullselectedcohort review complete; rootowns remaining source repairs. No inactive local queued claim.",
+      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "current_source_sha256": "5506e501163a628101cc99dd8261f5374248b215da30055b53c3079f053cb656"
     },
     {
       "position": 12,
@@ -449,7 +481,7 @@
       "title": "11. The widest street",
       "lang": "zh",
       "source_sha256_observed": "bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
+      "source_state": "Full472EN/506ZHhistoricalcohorts reviewed; bc176beforecontextf7a/c80retained. New5506labelsdistinguishunplottedCVchoice/fixed70fit fromshownsweep; freshafterpending.",
       "endpoints": "All47 original854 endpoint images reviewed on six unscaled pages with eight original-resolution followups. No settled defect found. Original EN source-change warning retained.",
       "selected_motion_review": "Not started: extraction guard held before FFmpeg launch; no partial audit or false pass.",
       "native1080_endpoints": "Both native cases:47 states actually reviewed on12 existing sheets at960x540tiles plus9 original1920x1080 followups. No settled corrective defect confirmed. Actual constructor/VO equivalence to0884/0c4 and unchanged usedscene/helper/data graph is recorded; later unrelated text additions do not refresh the broad historical fingerprint.",
@@ -457,8 +489,10 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "selected_image_case_accepted_at_declared_scope": false,
       "native1080_evidence": "evidence/ai6-svm-native1080-endpoint-review/README.md",
-      "fresh_review_owner": "Relinquished by source owner to parent review pool; receiving assignment not yet confirmed.",
-      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00"
+      "fresh_review_owner": "Parent independent fullselectedcohort review complete; rootowns remaining source repairs. No inactive local queued claim.",
+      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "current_source_sha256": "5506e501163a628101cc99dd8261f5374248b215da30055b53c3079f053cb656"
     },
     {
       "position": 13,
@@ -479,7 +513,8 @@
       "after_rendered_review": "NOT STARTED under current local capacity guard; parent retains baseline identity and after-review ownership.",
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "source_sha256_before_latest_after_review": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
-      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md"
+      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md",
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 13,
@@ -500,7 +535,8 @@
       "after_rendered_review": "NOT STARTED under current local capacity guard; parent retains baseline identity and after-review ownership.",
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "source_sha256_before_latest_after_review": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
-      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md"
+      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md",
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 14,
@@ -515,14 +551,16 @@
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
+      "selected_image_case_accepted_at_declared_scope": true,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
       "source_repair_evidence": "evidence/ai6-forests-layout-source-repair/README.md",
       "after_rendered_review": "NOT STARTED under current local capacity guard; parent retains baseline identity and after-review ownership.",
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "bounded_repair_target_closed": true,
       "bounded_repair_review_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
-      "full_selected_cohort_after_review": "Pending; bounded repaired-target closure is not full-case acceptance."
+      "full_selected_cohort_after_review": "Parentcompletefullcohortreview,193sheetsbothchapters/languages,no newdefect.",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "full_selected_review_library": "libfile_fe8a735015448191a8f9f188196e7f47"
     },
     {
       "position": 14,
@@ -537,14 +575,16 @@
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
+      "selected_image_case_accepted_at_declared_scope": true,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
       "source_repair_evidence": "evidence/ai6-forests-layout-source-repair/README.md",
       "after_rendered_review": "NOT STARTED under current local capacity guard; parent retains baseline identity and after-review ownership.",
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "bounded_repair_target_closed": true,
       "bounded_repair_review_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
-      "full_selected_cohort_after_review": "Pending; bounded repaired-target closure is not full-case acceptance."
+      "full_selected_cohort_after_review": "Parentcompletefullcohortreview,193sheetsbothchapters/languages,no newdefect.",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "full_selected_review_library": "libfile_fe8a735015448191a8f9f188196e7f47"
     },
     {
       "position": 15,
@@ -559,14 +599,16 @@
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
+      "selected_image_case_accepted_at_declared_scope": true,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
       "source_repair_evidence": "evidence/ai6-adaboost-precision-floor-source-repair/README.md",
       "after_rendered_review": "NOT STARTED under current local capacity guard; parent retains baseline identity and after-review ownership.",
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "bounded_repair_target_closed": true,
       "bounded_repair_review_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
-      "full_selected_cohort_after_review": "Pending; bounded repaired-target closure is not full-case acceptance."
+      "full_selected_cohort_after_review": "Parentcompletefullcohortreview,193sheetsbothchapters/languages,no newdefect.",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "full_selected_review_library": "libfile_fe8a735015448191a8f9f188196e7f47"
     },
     {
       "position": 15,
@@ -581,14 +623,16 @@
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
+      "selected_image_case_accepted_at_declared_scope": true,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
       "source_repair_evidence": "evidence/ai6-adaboost-precision-floor-source-repair/README.md",
       "after_rendered_review": "NOT STARTED under current local capacity guard; parent retains baseline identity and after-review ownership.",
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "bounded_repair_target_closed": true,
       "bounded_repair_review_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
-      "full_selected_cohort_after_review": "Pending; bounded repaired-target closure is not full-case acceptance."
+      "full_selected_cohort_after_review": "Parentcompletefullcohortreview,193sheetsbothchapters/languages,no newdefect.",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "full_selected_review_library": "libfile_fe8a735015448191a8f9f188196e7f47"
     },
     {
       "position": 16,
@@ -608,11 +652,12 @@
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "native1080_evidence": "evidence/ai6-gradientboosting-native1080-endpoint-review/README.md",
       "full_selected_cohort_review_complete": true,
-      "GB_T1": "Source cue repair applied; unchanged cleaned speech/cache keys/data. Fresh EN/ZH plane after-regression including initial model1 reading/pacing remains pending. Historical full selected review stays attached to original source/movie identities.",
+      "GB_T1": "ec0cuewindowpassesactualparentafter; new34fpersistentpointlayerneedsfreshENZHfadecheck. Allcue/narration/dataASTunchangedfromec0.",
       "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md",
-      "current_source_sha256": "ec0a65fc2c9b6f7ed3a4340c14c14cc60f3de9ecf4d778ee690ad3ac761f37d6",
+      "current_source_sha256": "34f1f27cdb4a03e4918dbf4d2147f2eceeb70d861999e5a2350b90a86943a1b9",
       "current_local_zh_sha256": "a0f59d6710c75f2d3524aa5b0c782ad2cf271f2f97ed3167ce240ed8d87dcd0c",
-      "GB_T1_source_evidence": "evidence/ai6-gboost-count-cue-source-repair/README.md"
+      "GB_T1_source_evidence": "evidence/ai6-gboost-count-cue-source-repair/README.md",
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 16,
@@ -632,11 +677,12 @@
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "native1080_evidence": "evidence/ai6-gradientboosting-native1080-endpoint-review/README.md",
       "full_selected_cohort_review_complete": true,
-      "GB_T1": "Source cue repair applied; unchanged cleaned speech/cache keys/data. Fresh EN/ZH plane after-regression including initial model1 reading/pacing remains pending. Historical full selected review stays attached to original source/movie identities.",
+      "GB_T1": "ec0cuewindowpassesactualparentafter; new34fpersistentpointlayerneedsfreshENZHfadecheck. Allcue/narration/dataASTunchangedfromec0.",
       "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md",
-      "current_source_sha256": "ec0a65fc2c9b6f7ed3a4340c14c14cc60f3de9ecf4d778ee690ad3ac761f37d6",
+      "current_source_sha256": "34f1f27cdb4a03e4918dbf4d2147f2eceeb70d861999e5a2350b90a86943a1b9",
       "current_local_zh_sha256": "a0f59d6710c75f2d3524aa5b0c782ad2cf271f2f97ed3167ce240ed8d87dcd0c",
-      "GB_T1_source_evidence": "evidence/ai6-gboost-count-cue-source-repair/README.md"
+      "GB_T1_source_evidence": "evidence/ai6-gboost-count-cue-source-repair/README.md",
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 17,
@@ -652,7 +698,8 @@
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-metrics-en-full-selected-review/README.md",
-      "selected_image_case_accepted_at_declared_scope": true
+      "selected_image_case_accepted_at_declared_scope": true,
+      "full_selected_cohort_review_complete_at_observed_version": true
     },
     {
       "position": 17,
@@ -663,14 +710,16 @@
       "source_sha256_observed": "2f2885828585ad6464f5308e6ee97c10f188bbf668362444ebcaf7804a60ec86",
       "source_state": "Shared baseline alignment and visible70% cue reviewed in score windows. Additional local accuracy-group inset widens Chinese left margin; fresh target regression in progress.",
       "endpoints": "Current gutter repair endpoints: all32 newly reviewed states, with28 exact prior PNGs. Actual score windows cover885 encoded frames,179 RGB representatives. Whole-chapter and native1080 refresh pending.",
-      "selected_motion_review": "Score-target review remains accepted at scoped885-frame bilingual window coverage; whole-chapter Chinese extraction has not started because of the unchanged guard.",
+      "selected_motion_review": "Parentcomplete332selectedframes/42sheets,no newscopeddefect; originalhistoricalmovieidentityretained.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
       "evidence": "evidence/ai6-metrics-shared-bars-early-regression/README.md",
-      "selected_image_case_accepted_at_declared_scope": false,
-      "fresh_review_owner": "Relinquished by source owner to parent review pool; receiving assignment not yet confirmed.",
-      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00"
+      "selected_image_case_accepted_at_declared_scope": true,
+      "fresh_review_owner": "Parent independent fullselectedcohort review complete; rootowns remaining source repairs. No inactive local queued claim.",
+      "fresh_review_routing_observed_utc": "2026-11-01T13:19:45.790014+00:00",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "full_selected_review_library": "libfile_47ebed1e5b8c8191b35b3f6126abba14"
     },
     {
       "position": 18,
@@ -685,14 +734,16 @@
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
+      "selected_image_case_accepted_at_declared_scope": true,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
       "source_repair_evidence": "evidence/ai6-contest-tie-cap-source-repair/README.md",
       "after_rendered_review": "NOT STARTED under current local capacity guard; parent retains baseline identity and after-review ownership.",
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "bounded_repair_target_closed": true,
       "bounded_repair_review_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
-      "full_selected_cohort_after_review": "Pending; bounded repaired-target closure is not full-case acceptance."
+      "full_selected_cohort_after_review": "Parentcomplete205sheetsacrossbothchapters/languages,exactoldversions. Englishno newdefect; Chinesepercent/bibliographyminorpolishopen.",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "full_selected_review_library": "libfile_90c56ab9c1188191925d7635ba2c0dee"
     },
     {
       "position": 18,
@@ -714,7 +765,10 @@
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "bounded_repair_target_closed": true,
       "bounded_repair_review_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
-      "full_selected_cohort_after_review": "Pending; bounded repaired-target closure is not full-case acceptance."
+      "full_selected_cohort_after_review": "Parentcomplete205sheetsacrossbothchapters/languages,exactoldversions. Englishno newdefect; Chinesepercent/bibliographyminorpolishopen.",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "full_selected_review_library": "libfile_90c56ab9c1188191925d7635ba2c0dee",
+      "new_polish_lead": "Breiman98%/2%opticalbaselineandtight2%leadinginnative52.2s/heldwindow; no glyphcollision/meaninglossasserted. Queuedafterproductiontiming."
     },
     {
       "position": 19,
@@ -729,14 +783,16 @@
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "selected_image_case_accepted_at_declared_scope": false,
+      "selected_image_case_accepted_at_declared_scope": true,
       "review_owner": "Parent receiving cloud reviewer after exact handoff/caption/module verification; source edits remain root-owned.",
       "source_repair_evidence": "evidence/ai6-outro-concept-cue-source-repair/README.md",
       "after_rendered_review": "NOT STARTED under current local capacity guard; parent retains baseline identity and after-review ownership.",
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "bounded_repair_target_closed": true,
       "bounded_repair_review_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
-      "full_selected_cohort_after_review": "Pending; bounded repaired-target closure is not full-case acceptance."
+      "full_selected_cohort_after_review": "Parentcomplete205sheetsacrossbothchapters/languages,exactoldversions. Englishno newdefect; Chinesepercent/bibliographyminorpolishopen.",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "full_selected_review_library": "libfile_90c56ab9c1188191925d7635ba2c0dee"
     },
     {
       "position": 19,
@@ -758,10 +814,13 @@
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "bounded_repair_target_closed": true,
       "bounded_repair_review_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
-      "full_selected_cohort_after_review": "Pending; bounded repaired-target closure is not full-case acceptance.",
-      "new_polish_lead": "Problem8 spacing source repair applied; actual after-native/motion pending. Recap timing target closure remains prior0f613source scope.",
+      "full_selected_cohort_after_review": "Parentcomplete205sheetsacrossbothchapters/languages,exactoldversions. Englishno newdefect; Chinesepercent/bibliographyminorpolishopen.",
+      "new_polish_lead": "Separatebibliographyinlinebaseline/leading(141.6snative,141.264–167.131holds)inold0fsource; NOTfailureofnew8bebproblem8spacing. Queuedafterproductiontiming.",
       "current_source_sha256": "8beb51936ca3a0894a2ad1cd2466e975a6cb5f9d3973b8c26e8ddfe5b2fca571",
-      "problem8_source_evidence": "evidence/ai6-outro-problem8-leading-source-repair/README.md"
+      "problem8_source_evidence": "evidence/ai6-outro-problem8-leading-source-repair/README.md",
+      "full_selected_cohort_review_complete_at_observed_version": true,
+      "full_selected_review_library": "libfile_90c56ab9c1188191925d7635ba2c0dee",
+      "problem8_target_closed": true
     }
   ],
   "numerical_source_commit": "b6649e39995f128019948cb32831b1a3caeb3842",
@@ -812,13 +871,22 @@
   },
   "latest_verified_source_publication": "8db4f0399a1490f905c8367151eeeb3bae9e051b",
   "historical_selected_image_cases_accepted_at_declared_scope": 17,
-  "current_source_selected_image_cases_accepted_at_declared_scope": 18,
+  "current_source_selected_image_cases_accepted_at_declared_scope": 29,
   "fresh_review_routing_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
   "latest_source_test_scope": {
-    "tests": 768,
-    "seconds": 75.542,
-    "source_files": 1550,
+    "tests": 775,
+    "seconds": 80.192,
+    "source_files": 1551,
     "sources_unchanged": true,
-    "evidence": "evidence/ai6-gboost-count-cue-source-repair/README.md"
-  }
+    "evidence": "evidence/ai6-lda-kernels-svm-source-repairs/README.md"
+  },
+  "all_bilingual_selected_cohorts_reviewed_at_recorded_versions": 38,
+  "current_open_case_count": 9,
+  "latest_layout_source_tests": {
+    "count": 27,
+    "enclosing_seconds": 8.72171845799312,
+    "stable_source_files": 32,
+    "evidence": "evidence/ai6-lda-kernels-svm-source-repairs/README.md"
+  },
+  "final_delivery": "One complete episodevideo perlanguage; chapterfilesinternalonly."
 }
