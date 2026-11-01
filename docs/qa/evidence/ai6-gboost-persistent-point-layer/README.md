@@ -1,0 +1,7 @@
+# Gradient Boosting persistent training-point layer
+
+Fresh controlled EN/ZH review accepted the prior cue timing but observed training points fading behind the first raster before being brought forward. Source owner read the exact diagnostic and applied one call immediately after point construction: `dots.set_z_index(2)`. Its recursive default puts every point descendant above ordinary region images(z0), independent of insertion order and raster fade/copy order.
+
+Before sourceec0a65fc; after34f1f27cdb4a03e4918dbf4d2147f2eceeb70d861999e5a2350b90a86943a1b9. Removing just this call restores the entire prior module AST. Voiceover, bookmarks, positions, colors, data, readouts and requested animation timings are unchanged. Installed Manim0.22.0 depth/family-sort probes and61alpha raster FadeIn/FadeOut states preserve point priority and exact geometry/styles. No Scene, renderer, TeX, decoder, data or speech operation ran. Existing three cue tests were rerun successfully against this source; their timing scope is separate from actual visible output.
+
+The parent host must verify the repaired first raster fade and subsequent transitions in both languages. Prior fourteen-pass output and cue receipts retain their old source identity; no new actual frame/continuous/listening/production acceptance is claimed. All original diagnostics and probe bytes are losslessly retained through the codec map; no movie/audio/source input was deleted or regenerated.
