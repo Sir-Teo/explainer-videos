@@ -1,0 +1,48 @@
+[
+  {
+    "case": "cli-overlay-strict",
+    "command": [
+      "python",
+      "/workspace/explainer-videos/docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "--repo",
+      "/workspace/runtime/svd-overlay-preflight-review/actual-927-checkout",
+      "--strict-external",
+      "--overlay",
+      "svd-reveal-v1"
+    ],
+    "exit_code": 0,
+    "checked_files": 256,
+    "errors": []
+  },
+  {
+    "case": "cli-default-changed-scene",
+    "command": [
+      "python",
+      "/workspace/explainer-videos/docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "--repo",
+      "/workspace/runtime/svd-overlay-preflight-review/actual-927-checkout"
+    ],
+    "exit_code": 1,
+    "checked_files": 248,
+    "errors": [
+      "/workspace/runtime/svd-overlay-preflight-review/actual-927-checkout/videos/ai/ai3/s08_svd.py: missing/size/hash mismatch"
+    ]
+  },
+  {
+    "case": "cli-unknown-overlay",
+    "command": [
+      "python",
+      "/workspace/explainer-videos/docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "--repo",
+      "/workspace/runtime/svd-overlay-preflight-review/actual-927-checkout",
+      "--overlay",
+      "unreviewed"
+    ],
+    "exit_code": 1,
+    "checked_files": 248,
+    "errors": [
+      "Unknown reviewed overlay: unreviewed",
+      "/workspace/runtime/svd-overlay-preflight-review/actual-927-checkout/videos/ai/ai3/s08_svd.py: missing/size/hash mismatch"
+    ]
+  }
+]

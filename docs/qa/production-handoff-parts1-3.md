@@ -97,3 +97,16 @@ Outputs per part: `renders/aiN_2160p.mp4`, `.srt`, `.chapters.txt`; Chinese adds
 | 4 onward | Separate cloud QA continues. | **Part 4 is not production-ready and is excluded from this local expansion.** Parts 5–31 remain queued. |
 
 [Cloud status](STATUS.md), [production/listening queue](remaining-production-qa.md), [Part3 chapter checklist](ai3-chapter-checklist.md) and exact evidence retain historical fingerprints/warnings and distinguish selected frames from continuous perception. No tracked web-player application exists; external hosting responsiveness is not tested here. This handoff is a production plan and exact transfer inventory, not completed 4K/audio approval.
+
+
+## Explicit reviewed SVD reveal overlay
+
+The original `927fba668656a682b3e29a288de64130ddc680dd` gate remains the default. A separately reviewed SVD reveal fix may be checked only by explicitly selecting `--overlay svd-reveal-v1`. Its versioned [manifest](evidence/production-handoff-parts1-3/overlays/svd-reveal-v1.json) binds the original base, reviewed patch commit `7c47c11e3802390141c9551ac376ebe4ddf31e0e`, and the exact `videos/ai/ai3/s08_svd.py` replacement SHA256 `291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322` (11,747 bytes; before SHA `cd3b22f6…`, 11,730 bytes).
+
+Use an isolated checkout of the original base with that exact scene patch, or an equivalent source-only/cherry-picked tree. Only the 103 exact optional SVD review-evidence additions listed in the manifest are also permitted. The verifier checks HEAD, index and worktree against the base and rejects unrelated changes or nonignored untracked files. Keep `HANDOFF_DIR` outside this production checkout for overlay verification. Checking out a later branch HEAD, including `7c47c11` with its unrelated ancestors, is not a substitute for the bounded overlay. The separate f00 pilot equivalence does not authorize full-part f00 expansion.
+
+```bash
+python "$HANDOFF_DIR/verify_handoff.py" --repo "$PRODUCTION_REPO" --strict-external --overlay svd-reveal-v1
+```
+
+Unknown or altered manifests fail closed. Every original core-cache, other-source, external-data/model/revision, exact package-tag and optional-audio check remains effective; `current()` is unchanged. Without `--overlay`, the changed SVD scene still fails the original preflight. This adds no runtime producer guard and does not run production locally. The existing source/data-writer, compatible environment, inherited producer-guard, local-owner review and actual narrated/4K validation gates still apply. Historical verifier/manifest bytes are retained under `historical/v1/`; scoped cloud test receipts are under `overlay-checks/`.

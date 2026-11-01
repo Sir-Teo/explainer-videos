@@ -1,0 +1,12 @@
+{
+  "scope": "Read-only source/cache/dependency file hashes and package metadata only; no scene/producer imports, normal loads or model loads. Not a runtime inherited producer guard or visual/audio approval.",
+  "reviewed_overlay": "svd-reveal-v1",
+  "strict_external_requested": true,
+  "checked_files": 256,
+  "errors": [
+    "/workspace/runtime/svd-overlay-preflight-review/actual-927-checkout/.cache/novels/train.npy: missing/size/hash mismatch",
+    "/workspace/runtime/svd-overlay-preflight-review/actual-927-checkout/.cache/novels/valid.npy: missing/size/hash mismatch",
+    "/workspace/runtime/svd-overlay-preflight-review/actual-927-checkout/.cache/novels/tokenizer.json: missing/size/hash mismatch"
+  ],
+  "next_gate": "If no errors, run existing cached-only QA with all source/data writers stopped; full production still requires an inherited fail-on-call producer guard coordinated with parent."
+}

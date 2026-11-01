@@ -1,0 +1,27 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1456,
+    "sha256": "ea32b76701ab415ca0625a958e56ab77761e3ea59a1efb0518c7df3a579ddd6f"
+  },
+  {
+    "path": "handoff.json",
+    "bytes": 9214,
+    "sha256": "6d40e4e4f9ac30952deb1ee252181875ff34e4bb228f6ecd4a2259282010287c"
+  },
+  {
+    "path": "independent-verification.json",
+    "bytes": 1857,
+    "sha256": "cfcaa68ebc4e09bd7f8847278908e0133b833e6ac71d5a8c32e88511269cfc4f"
+  },
+  {
+    "path": "library-identities.json",
+    "bytes": 2294,
+    "sha256": "07a0520ab014344d7b59228b02f97103ede86f8e7fda74c089744e3bfaf537f9"
+  },
+  {
+    "path": "successful-save.json",
+    "bytes": 1863,
+    "sha256": "d32f3109614de5f290a1e223faf9477aed5d51e17632a2488fff56151599a1a2"
+  }
+]

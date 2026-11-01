@@ -1,0 +1,69 @@
+{
+  "scope": "Read-only preflight overlay implementation and cloud-only Git/file fixtures; no production scene/cache edits, producer/model imports or loading, rendering, downloads, user-computer execution, shared commits or push.",
+  "overlay_id": "svd-reveal-v1",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "reviewed_patch_commit": "7c47c11e3802390141c9551ac376ebe4ddf31e0e",
+  "versioned_overlay_manifest_sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8",
+  "verifier_sha256": "8206afbf9d97215232035edbae0348cfbd6c931e09f527b142aa3c4ea5fb76a4",
+  "portable_test_source": "tests/test_production_handoff_overlay.py",
+  "portable_test_source_sha256": "06f0a6ce70e54b8253351dcbfdcf8485daff29d687188e9f232afe8e97ce0705",
+  "portable_tests_passed": 28,
+  "portable_test_fixture_limits": "Tiny temporary Git/data/package-metadata/model-file fixtures exercise gate semantics. Payloads are not numerical/model/audio validation. Version responses mocked only in those portable tests; actual integration uses real installed package metadata and real cached model-file bytes.",
+  "actual_integration": {
+    "scope": "Cloud-only isolated clone.141 actual core+3 actual novels files copied; all256 strict file checks exercised, exact package metadata/GPT2 cache bytes hashed without importing packages/scenes/producers or loading models. Actual7c47patch applied --no-commit in private clone only; no shared refs/source/cache edits/download/render/local execution.",
+    "helper_sha256": "8206afbf9d97215232035edbae0348cfbd6c931e09f527b142aa3c4ea5fb76a4",
+    "overlay_manifest_sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8",
+    "cases": {
+      "actual-base-default": {
+        "errors": 0,
+        "checked_files": 248,
+        "result_sha256": "6708089f95d56014a06076c8ca0d23fc36b7c0b33066145b3732375bca230265"
+      },
+      "actual-after-without-overlay": {
+        "errors": 1,
+        "checked_files": 248,
+        "result_sha256": "233a2daf2739475d43e9c8a9c1d87b01eab45698d0cb6320cd37cd13100e3fac"
+      },
+      "actual-base-plus-exact-scene": {
+        "errors": 0,
+        "checked_files": 248,
+        "result_sha256": "ea8075e24d17a6856e2cccdf28ee135f1b7acc4b8762acc338fbeedf03824700"
+      },
+      "actual-strict-external-complete": {
+        "errors": 0,
+        "checked_files": 256,
+        "result_sha256": "e33cfd66a6baa431a88e910f276ffb7a0e4781b74e4ea2e01344d2ef95ae50e2"
+      },
+      "actual-reviewed-patch-staged": {
+        "errors": 0,
+        "checked_files": 256,
+        "result_sha256": "e33cfd66a6baa431a88e910f276ffb7a0e4781b74e4ea2e01344d2ef95ae50e2"
+      },
+      "actual-f00-plus-scene-rejected": {
+        "errors": 1222,
+        "checked_files": 248,
+        "result_sha256": "f2eb2bf6355664b8207977bdcc4cf7478a26e95ce8ac5fd689c4646340d47f9b"
+      },
+      "actual-final-accepted": {
+        "errors": 0,
+        "checked_files": 256,
+        "result_sha256": "e33cfd66a6baa431a88e910f276ffb7a0e4781b74e4ea2e01344d2ef95ae50e2"
+      }
+    },
+    "original_numerical_files_unchanged": true,
+    "earlier_strict_failure": "Prior exploratory run intentionally lacked3novels extras; rawactual-strict-external.json preserves3errors. Final complete run copied exact inventoried extras and retained every strict gate."
+  },
+  "historical_preservation": {
+    "verify_handoff.py": "9e13c7cce89c686198ed388cc0e4f9532b51ede7a9bda919c380789d3466e7ad",
+    "manifest.json": "3d1302321be62d489d3414be6eee0ba768bd8c4011f663922240eca95ee8c7cb",
+    "README.md": "e5e155c8b41106e1ddf6027f880619c6821ae91791450ee52ba0ad95f6cff365",
+    "production-handoff-parts1-3.md": "c2380a437373363765af024b58cecf4944185680637af45accecee2d092f8371"
+  },
+  "unchanged_gate_inventories": {
+    "cache-inventory.json": "8cf34dd7acc11ba29eb37fa6881c70f706f7209301540145d679fd4dad3d2af4",
+    "reviewed-source-inventory.json": "1c9eb76a370a5b74b79b7a0aa5b7e8f9300bfe4cd00ed494f3801d3ac50a79f2",
+    "external-validation-dependencies.json": "9e60b6b1545b517c79107d27ae3a1e835adf6b0859cd3051dbfb1eabcd688480",
+    "real-information-audio.json": "a1da73b811d29cc6675dbff5c1d095bb31228ae3cea97ea21c10366cc83a06c5"
+  },
+  "remaining_gates": "Local owner approval/process reconciliation; existing cached-only QA/current checks and inherited fail-on-call producer guard; actual narrated/4K/audio/playback validation. No runtime loader guard introduced."
+}

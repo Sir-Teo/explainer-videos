@@ -1,0 +1,8 @@
+{
+  "scope": "Read-only source/cache/dependency file hashes and package metadata only; no scene/producer imports, normal loads or model loads. Not a runtime inherited producer guard or visual/audio approval.",
+  "reviewed_overlay": null,
+  "strict_external_requested": false,
+  "checked_files": 248,
+  "errors": [],
+  "next_gate": "If no errors, run existing cached-only QA with all source/data writers stopped; full production still requires an inherited fail-on-call producer guard coordinated with parent."
+}

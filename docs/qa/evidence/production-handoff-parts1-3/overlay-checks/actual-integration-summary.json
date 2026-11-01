@@ -1,0 +1,44 @@
+{
+  "scope": "Cloud-only isolated clone.141 actual core+3 actual novels files copied; all256 strict file checks exercised, exact package metadata/GPT2 cache bytes hashed without importing packages/scenes/producers or loading models. Actual7c47patch applied --no-commit in private clone only; no shared refs/source/cache edits/download/render/local execution.",
+  "helper_sha256": "8206afbf9d97215232035edbae0348cfbd6c931e09f527b142aa3c4ea5fb76a4",
+  "overlay_manifest_sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8",
+  "cases": {
+    "actual-base-default": {
+      "errors": 0,
+      "checked_files": 248,
+      "result_sha256": "6708089f95d56014a06076c8ca0d23fc36b7c0b33066145b3732375bca230265"
+    },
+    "actual-after-without-overlay": {
+      "errors": 1,
+      "checked_files": 248,
+      "result_sha256": "233a2daf2739475d43e9c8a9c1d87b01eab45698d0cb6320cd37cd13100e3fac"
+    },
+    "actual-base-plus-exact-scene": {
+      "errors": 0,
+      "checked_files": 248,
+      "result_sha256": "ea8075e24d17a6856e2cccdf28ee135f1b7acc4b8762acc338fbeedf03824700"
+    },
+    "actual-strict-external-complete": {
+      "errors": 0,
+      "checked_files": 256,
+      "result_sha256": "e33cfd66a6baa431a88e910f276ffb7a0e4781b74e4ea2e01344d2ef95ae50e2"
+    },
+    "actual-reviewed-patch-staged": {
+      "errors": 0,
+      "checked_files": 256,
+      "result_sha256": "e33cfd66a6baa431a88e910f276ffb7a0e4781b74e4ea2e01344d2ef95ae50e2"
+    },
+    "actual-f00-plus-scene-rejected": {
+      "errors": 1222,
+      "checked_files": 248,
+      "result_sha256": "f2eb2bf6355664b8207977bdcc4cf7478a26e95ce8ac5fd689c4646340d47f9b"
+    },
+    "actual-final-accepted": {
+      "errors": 0,
+      "checked_files": 256,
+      "result_sha256": "e33cfd66a6baa431a88e910f276ffb7a0e4781b74e4ea2e01344d2ef95ae50e2"
+    }
+  },
+  "original_numerical_files_unchanged": true,
+  "earlier_strict_failure": "Prior exploratory run intentionally lacked3novels extras; rawactual-strict-external.json preserves3errors. Final complete run copied exact inventoried extras and retained every strict gate."
+}

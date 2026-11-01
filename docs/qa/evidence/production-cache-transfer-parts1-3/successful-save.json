@@ -1,0 +1,52 @@
+{
+  "source_pin": "927fba668656a682b3e29a288de64130ddc680dd",
+  "groups": [
+    {
+      "group": 1,
+      "library_file_id": "libfile_6e28dc0e18b08191b0840914e845fd5f",
+      "file_id": "file_000000005fd081f681c0f7fb9dd345eb",
+      "version": 0,
+      "bytes": 12910479,
+      "sha256": "665d9e95c77a64ffe7fd14e41061711d679acf49b802ec0b1d4c54c1f80f172f",
+      "xattrs_read_back": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "state": "Saved in Library; local materialization/native attachment delivery not confirmed"
+    },
+    {
+      "group": 2,
+      "library_file_id": "libfile_3c25ae17a12c8191b7f8f7346980370a",
+      "file_id": "file_0000000064c881f691aae2984b5eecf1",
+      "version": 0,
+      "bytes": 12911593,
+      "sha256": "fdb5af3832b44439ba1a01b438c330b40e990ba20d09ba9ba91b6ea730a1be9d",
+      "xattrs_read_back": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "state": "Saved in Library; local materialization/native attachment delivery not confirmed"
+    },
+    {
+      "group": 3,
+      "library_file_id": "libfile_50e0b9d456f08191a27f2a0c2a35704f",
+      "file_id": "file_000000008b6081f6beb548214705b89a",
+      "version": 0,
+      "bytes": 7484430,
+      "sha256": "24a25640c93131fbffee9ab05fa948109040212d6985bd31915d97f703d9233d",
+      "xattrs_read_back": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "state": "Saved in Library; local materialization/native attachment delivery not confirmed"
+    }
+  ],
+  "scope": "Data-only transfer. No producer execution, metadata re-attestation, platform-version override or local computer operation.",
+  "historical_preparation_receipt": "handoff.json no_upload=true describes the pre-upload preparation only."
+}

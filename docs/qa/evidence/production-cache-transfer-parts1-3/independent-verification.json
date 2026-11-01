@@ -1,0 +1,41 @@
+{
+  "method": "Independent stdlib ZIP/member verifier; no producer or scene imports",
+  "source_pin": "927fba668656a682b3e29a288de64130ddc680dd",
+  "archives": [
+    {
+      "path": "/workspace/runtime/production-cache-transfer-parts1-3/archives/AI-Built-Parts1-3-Frozen-Cache-Group01-of03-927fba66.zip",
+      "sha256": "665d9e95c77a64ffe7fd14e41061711d679acf49b802ec0b1d4c54c1f80f172f",
+      "bytes": 12910479,
+      "cache_files": 4,
+      "crc_and_sha_pass": true,
+      "only_allowlisted_data_and_documentary_metadata": true
+    },
+    {
+      "path": "/workspace/runtime/production-cache-transfer-parts1-3/archives/AI-Built-Parts1-3-Frozen-Cache-Group02-of03-927fba66.zip",
+      "sha256": "fdb5af3832b44439ba1a01b438c330b40e990ba20d09ba9ba91b6ea730a1be9d",
+      "bytes": 12911593,
+      "cache_files": 10,
+      "crc_and_sha_pass": true,
+      "only_allowlisted_data_and_documentary_metadata": true
+    },
+    {
+      "path": "/workspace/runtime/production-cache-transfer-parts1-3/archives/AI-Built-Parts1-3-Frozen-Cache-Group03-of03-927fba66.zip",
+      "sha256": "24a25640c93131fbffee9ab05fa948109040212d6985bd31915d97f703d9233d",
+      "bytes": 7484430,
+      "cache_files": 130,
+      "crc_and_sha_pass": true,
+      "only_allowlisted_data_and_documentary_metadata": true
+    }
+  ],
+  "exact_cache_files": 144,
+  "each_exactly_once": true,
+  "only_two_published_allowlists": true,
+  "raw_originals_rehashed_after_archives": true,
+  "every_crc_and_member_hash_verified": true,
+  "safe_relative_paths_regular_not_symlink_not_encrypted": true,
+  "all_groups_below_13000000_bytes": true,
+  "single_members_not_split": true,
+  "originals_after_builder_metadata_verification_retained": "/workspace/runtime/production-cache-transfer-parts1-3/originals-after-verification.json",
+  "upload_performed": false,
+  "validator_portability_resolved": false
+}

@@ -1,0 +1,7 @@
+# Reviewed Parts1–3 data transfer
+
+Exactly141core files and3novels extras (73,024,949 uncompressed bytes) were checked against the published allowlists and grouped once into three data-only ZIPs totalling33,306,502bytes. Each archive is below13MB. Full CRC/member-SHA/path/no-symlink checks passed, coverage is exactly144files with no duplication, and originals retained their content/mtime/inode/mode. Numerical cache payloads are retained in Library; external pretrained model downloads and audio/video are excluded, no ZIPs are committed here.
+
+`successful-save.json` gives the confirmed version0 Library identities, sizes, SHA256s and applied/read-back xattrs. The archived bytes remained exact after saving. Local materialization and attachment delivery have not been confirmed. Original `handoff.json` preparation statements are historical; the successful-save receipt is separate. No local pilot/job state is inferred and no local action was performed.
+
+These exact copied bytes do not resolve the full-part package-version/external-dependency or inherited-producer-guard gates. Keep sourcepin927fba66 and original sidecars unchanged; stop on incompatible normal validation. No validation weakening or re-attestation is supplied. Do not overwrite mismatching local files. The548MBGPT2validator weights, all TTS files, locks, videos, images and unrelated caches are excluded. See the published production handoff for exact paths and SHA manifests.
