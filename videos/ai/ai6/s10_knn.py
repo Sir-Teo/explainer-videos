@@ -4,7 +4,9 @@ import math
 
 import numpy as np
 
+from explainer import lang
 from explainer.ai import *  # noqa: F403
+from explainer.zh_text import translate as translate_caption
 from videos.ai.ai6.common import (AUSTEN, DICKENS, GOOD, HL, chapter, load, page_dots, page_plane, plot, pow10,
                                   regions, side_ladder)
 
@@ -149,10 +151,13 @@ class KNN(VoiceoverScene):
             cmath(r"2\eta(1-\eta)", "=", r"2r(1 - r) \;\ge\; r", font_size=32),
             cmath(r"\mathbb{E}\,2r(1-r)", r"\;\le\;", r"2R^*(1 - R^*)", font_size=32),
         ]
+        jensen = r"Jensen, \\ $R^* = \mathbb{E}\, r$"
+        if lang.LANG == "zh":
+            jensen = translate_caption(jensen).replace(r"\\", r"\\[0.4em]", 1)
         whys = [why(r"$\eta' = \eta(x')$: \\ the neighbour's coin", font_size=20),
                 why(r"$x' \to x$ \\ as $n \to \infty$", font_size=20),
                 why(r"$r = \min(\eta, 1 - \eta)$, \\ the best rule's error", font_size=20),
-                why(r"Jensen, \\ $R^* = \mathbb{E}\, r$", font_size=20)]
+                why(jensen, font_size=20)]
         step = side_ladder(self, rows, whys, -3.2, 3.5, keep=4, top=0.95, buff=0.26)
         ns = [int(n) for n in ch["ns"]]
         lx = np.log10(ns)
