@@ -1,0 +1,222 @@
+{
+  "created_utc": "2026-11-01T04:07:21.081773+00:00",
+  "scope": "Actual final EN/ZH MCMC and Brownian silent480p15 image regressions after only local retained-row direct Write changes. Every fresh-primary and original selected time, plus every encoded frame in ten bounded reveal windows, is covered by direct novel-image review or exact-PNG inheritance to fully viewed preserved original image ledgers.",
+  "cases": [
+    {
+      "case": "en/MCMC",
+      "movie_sha256": "7b9bc58cf7a200cf578293e075137e12779d34d95c7b324081e88f311c7eecf7",
+      "movie_bytes": 4304476,
+      "record_sha256": "61e7f52d4a2e122badefa915fd7df75e0e02575f5d64af8f125e734d14d983cf",
+      "direct_source_sha256": "95c38c1d058a07556f26dd86fd042dbdba8e137ff4083ea9350cbd0f919655af",
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "decoded_frames": 3313,
+      "fresh_primary_selected": 677,
+      "old_selected": 679,
+      "union_selected": 733,
+      "inherited_times_exact_png": 663,
+      "new_times_covered": 70,
+      "new_unique_pngs_actually_viewed": 69,
+      "changed_pages_actually_viewed": 9,
+      "new_native_followups": 4,
+      "all_encoded_repair_windows": [
+        {
+          "baseline_motion_index": 29,
+          "first_frame": 1419,
+          "last_frame": 1445
+        },
+        {
+          "baseline_motion_index": 31,
+          "first_frame": 1469,
+          "last_frame": 1491
+        },
+        {
+          "baseline_motion_index": 34,
+          "first_frame": 1562,
+          "last_frame": 1596
+        }
+      ],
+      "all_encoded_window_frames_covered": 85,
+      "unselected_frames": 2580,
+      "max_union_selected_time_gap": 1.0,
+      "narration_duration_inputs_identical": true,
+      "case_report_sha256": "9a71f30a620403b87b1c8ef7321dfcac5f09e0a7bb2d8e703358a6fdadca3d41"
+    },
+    {
+      "case": "en/Brownian",
+      "movie_sha256": "4689e45369662b2e93f57241ae0c0564b703b7aef28c498f4620d85df601e9ad",
+      "movie_bytes": 2567873,
+      "record_sha256": "45ec0faec9518f30749388154c8a55987fa866ee0be90fb7b9504b5431e2e979",
+      "direct_source_sha256": "780521544fd9ad5e9ab698bfeba6c8da2aa82b24b17433a93623dca69c444e9f",
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "dead-air-review",
+          "report": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 154 s\n   2:06.25   1.5 s   [  +126.2 s]\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 154 s\n   2:06.25   1.5 s   [  +126.2 s]\n"
+        }
+      ],
+      "decoded_frames": 2305,
+      "fresh_primary_selected": 475,
+      "old_selected": 479,
+      "union_selected": 501,
+      "inherited_times_exact_png": 462,
+      "new_times_covered": 39,
+      "new_unique_pngs_actually_viewed": 39,
+      "changed_pages_actually_viewed": 5,
+      "new_native_followups": 4,
+      "all_encoded_repair_windows": [
+        {
+          "baseline_motion_index": 34,
+          "first_frame": 1467,
+          "last_frame": 1488
+        },
+        {
+          "baseline_motion_index": 38,
+          "first_frame": 1512,
+          "last_frame": 1533
+        }
+      ],
+      "all_encoded_window_frames_covered": 44,
+      "unselected_frames": 1804,
+      "max_union_selected_time_gap": 1.000000000000007,
+      "narration_duration_inputs_identical": true,
+      "case_report_sha256": "21fd0d1c891dd866ebec5df1bb4e3736a7f645800a80adff9d1a51fd323f99f4"
+    },
+    {
+      "case": "zh/MCMC",
+      "movie_sha256": "a2f46275a50f705295ac3b3088556e405e244c95d90f9debf42a4e766ab5a04c",
+      "movie_bytes": 4515287,
+      "record_sha256": "33054831a960614c2726af3273912172b3ef206ca0f0c908d197f0f96cfc0b0d",
+      "direct_source_sha256": "95c38c1d058a07556f26dd86fd042dbdba8e137ff4083ea9350cbd0f919655af",
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "decoded_frames": 3580,
+      "fresh_primary_selected": 701,
+      "old_selected": 705,
+      "union_selected": 761,
+      "inherited_times_exact_png": 683,
+      "new_times_covered": 78,
+      "new_unique_pngs_actually_viewed": 78,
+      "changed_pages_actually_viewed": 10,
+      "new_native_followups": 16,
+      "all_encoded_repair_windows": [
+        {
+          "baseline_motion_index": 29,
+          "first_frame": 1530,
+          "last_frame": 1552
+        },
+        {
+          "baseline_motion_index": 31,
+          "first_frame": 1584,
+          "last_frame": 1606
+        },
+        {
+          "baseline_motion_index": 34,
+          "first_frame": 1701,
+          "last_frame": 1735
+        }
+      ],
+      "all_encoded_window_frames_covered": 81,
+      "unselected_frames": 2819,
+      "max_union_selected_time_gap": 1.0,
+      "narration_duration_inputs_identical": true,
+      "case_report_sha256": "722507306f36c61901f06bdc43579378d88d3f436e96b4d7bd4e610979b46c44"
+    },
+    {
+      "case": "zh/Brownian",
+      "movie_sha256": "951680c1f79757e55b173201fb0cc64bd575fbab8f981b13515043d07fedef77",
+      "movie_bytes": 2550973,
+      "record_sha256": "0b79944338d0cc38a570691cc110efbaeb79dd06495ff703997fa8be7e79c9d4",
+      "direct_source_sha256": "780521544fd9ad5e9ab698bfeba6c8da2aa82b24b17433a93623dca69c444e9f",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 2254,
+      "fresh_primary_selected": 453,
+      "old_selected": 459,
+      "union_selected": 479,
+      "inherited_times_exact_png": 440,
+      "new_times_covered": 39,
+      "new_unique_pngs_actually_viewed": 39,
+      "changed_pages_actually_viewed": 5,
+      "new_native_followups": 15,
+      "all_encoded_repair_windows": [
+        {
+          "baseline_motion_index": 31,
+          "first_frame": 1406,
+          "last_frame": 1427
+        },
+        {
+          "baseline_motion_index": 34,
+          "first_frame": 1445,
+          "last_frame": 1466
+        }
+      ],
+      "all_encoded_window_frames_covered": 44,
+      "unselected_frames": 1775,
+      "max_union_selected_time_gap": 1.000000000000007,
+      "narration_duration_inputs_identical": true,
+      "case_report_sha256": "52ab74fe1ac09b2a86207c0518b02184f016edfe5f37fdf261dfe5b57e0acd3e"
+    }
+  ],
+  "totals": {
+    "decoded_frames": 11452,
+    "fresh_primary_selected": 2306,
+    "old_selected": 2322,
+    "union_selected": 2474,
+    "inherited_times_exact_png": 2248,
+    "new_times_covered": 226,
+    "new_unique_pngs_actually_viewed": 225,
+    "changed_pages_actually_viewed": 29,
+    "new_native_followups": 39,
+    "all_encoded_window_frames_covered": 254,
+    "unselected_frames": 8978
+  },
+  "dead_air_additional_review": {
+    "case": "en/Brownian",
+    "every_encoded_range_seconds": [
+      125.8,
+      128.4
+    ],
+    "combined_before_after_times": 80,
+    "unique_images_actually_viewed": 39,
+    "pages_actually_viewed": 5,
+    "same_time_pairs_exact_png": 39,
+    "same_time_pairs_total": 40,
+    "additional_fresh_frames_beyond_main_union": 27,
+    "assessment": "Intentional QV fade, coincident initial particle point, then spreading cloud. No missing-scene/render failure. Warning and narrated pacing limit remain explicit.",
+    "receipt_sha256": "c1d29ca1febd57a8cec7117cb95f3b245d2a6d9bb5660f59fee04f664544631d"
+  },
+  "findings": [
+    "No new visual defect found in the covered final images. Direct Write removes transient copied-glyph interference while retaining prior equations and explanations.",
+    "Partial newly written glyphs are expected during Write. MCMC oldest-row fade and upward ladder shift are intentional and preserve the final hierarchy.",
+    "Narration objects, exact raw durations, data input signatures and current input bytes match the original captures; source AST differs only by three MCMC/two Brownian transform=False keywords.",
+    "The late Brownian initial-cloud state127.600s differs from its original by12pixels with maximum channel delta2; actually inspected, no factual/layout change."
+  ],
+  "source_invariants": {
+    "MCMC_sha256": "95c38c1d058a07556f26dd86fd042dbdba8e137ff4083ea9350cbd0f919655af",
+    "Brownian_sha256": "780521544fd9ad5e9ab698bfeba6c8da2aa82b24b17433a93623dca69c444e9f",
+    "no_numeric_cache_or_producer_changes": true
+  },
+  "baseline_preservation_limitation": "Six older MC/ScoreFn/MCMC MP4 hardlink witnesses were overwritten by canonical rerenders and no independent original copy was found. Inheritance here binds preserved original decoded PNG/audit/page-view evidence, not those altered aliases. Both old Brownian movies were independently copied and verified before overwrite. All four fresh movies are independent byte copies with full SHA checks. See the historical baseline package reconciliation receipt.",
+  "limits": [
+    "No continuous perceptual playback or listening/narration synchronization approval.",
+    "No native1080 or4K motion approval.",
+    "Decoded unselected frames remain unreviewed; exact gap lists retained.",
+    "Source snapshots observe bytes and do not prove historical in-memory imports.",
+    "Original raw source-change and Brownian dead-air warnings are preserved, not promoted to runtime passed.",
+    "This image review does not rerun numerical experiments or grant full production signoff."
+  ],
+  "package_exact_existing_payload_reuse": {
+    "receipt": "exact-payload-reuse.json",
+    "count": 25,
+    "bytes_avoided": 1305740
+  }
+}

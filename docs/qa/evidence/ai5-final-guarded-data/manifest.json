@@ -1,0 +1,32 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1206,
+    "sha256": "ead969a0922a2c443d250d5804fd50546e9aea3052885fefc608d72d3162950b"
+  },
+  {
+    "path": "ai5_final_guarded_data-attempt1-partial-inventory.py.gz",
+    "bytes": 958,
+    "sha256": "2cb62d4ae23bbf8e74cc31bdef5abf7582e001a7644b4f34322afe2a5884f690"
+  },
+  {
+    "path": "ai5_final_guarded_data.py.gz",
+    "bytes": 997,
+    "sha256": "b148e3f690bba45018df49b879861a854ee78acaf15c9765c82a4edeacd511cd"
+  },
+  {
+    "path": "payloads-after.json.gz",
+    "bytes": 3277,
+    "sha256": "589d35c9f7f0b72fbce4f01ef73ceb72f5f68541a075c53a8efe7f6b43916966"
+  },
+  {
+    "path": "payloads-before.json.gz",
+    "bytes": 3277,
+    "sha256": "589d35c9f7f0b72fbce4f01ef73ceb72f5f68541a075c53a8efe7f6b43916966"
+  },
+  {
+    "path": "receipt.json.gz",
+    "bytes": 2566,
+    "sha256": "87cdc17bf211821dafc6e7b3f8f4af84696a1b707caea9044723ddd6aac36cb6"
+  }
+]

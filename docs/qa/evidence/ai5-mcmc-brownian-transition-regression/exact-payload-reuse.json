@@ -1,0 +1,182 @@
+{
+  "created_utc": "2026-11-01T04:08:22.293453+00:00",
+  "baseline_manifest_sha256": "2dd66f36fd3fb15e4f525e703a4e7c06023b60bf27cb3c5810a3af6809f24f98",
+  "reused_payloads": [
+    {
+      "omitted_duplicate_path": "native/07cf359805e38b52e176b72fbe49489b7d90e72eadc43fdea3fa108d1c752bc8.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/07cf359805e38b52e176b72fbe49489b7d90e72eadc43fdea3fa108d1c752bc8.png",
+      "sha256": "07cf359805e38b52e176b72fbe49489b7d90e72eadc43fdea3fa108d1c752bc8",
+      "bytes": 63998,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/0c0fa897481948b2ebf0efe4d37558aaf721b2b4631e4472822df65451d91c56.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/0c0fa897481948b2ebf0efe4d37558aaf721b2b4631e4472822df65451d91c56.png",
+      "sha256": "0c0fa897481948b2ebf0efe4d37558aaf721b2b4631e4472822df65451d91c56",
+      "bytes": 104068,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/61ed7d64d257ee997f6d63e9244675e66d332be4b5586d69f5ef7296871dce34.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/61ed7d64d257ee997f6d63e9244675e66d332be4b5586d69f5ef7296871dce34.png",
+      "sha256": "61ed7d64d257ee997f6d63e9244675e66d332be4b5586d69f5ef7296871dce34",
+      "bytes": 10726,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/75a16f220204f13af5e4cc8c9e73bdd5489d5d704784f41993a7907fa646425e.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/75a16f220204f13af5e4cc8c9e73bdd5489d5d704784f41993a7907fa646425e.png",
+      "sha256": "75a16f220204f13af5e4cc8c9e73bdd5489d5d704784f41993a7907fa646425e",
+      "bytes": 91858,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/8a89914cb545ea9787974968b01c51bd0bd4041f0f7eaeab30a026321ee98989.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/8a89914cb545ea9787974968b01c51bd0bd4041f0f7eaeab30a026321ee98989.png",
+      "sha256": "8a89914cb545ea9787974968b01c51bd0bd4041f0f7eaeab30a026321ee98989",
+      "bytes": 45701,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/afa2d8ce51644c19ad6884e03c8ad1c55f949a9ebcb6dbd7385397cd7586f1b9.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/afa2d8ce51644c19ad6884e03c8ad1c55f949a9ebcb6dbd7385397cd7586f1b9.png",
+      "sha256": "afa2d8ce51644c19ad6884e03c8ad1c55f949a9ebcb6dbd7385397cd7586f1b9",
+      "bytes": 73814,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/b78aac1b337450e0c884f896a50a3f5a343a7a87dad6c70eb5554cd8e6d0b53e.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/b78aac1b337450e0c884f896a50a3f5a343a7a87dad6c70eb5554cd8e6d0b53e.png",
+      "sha256": "b78aac1b337450e0c884f896a50a3f5a343a7a87dad6c70eb5554cd8e6d0b53e",
+      "bytes": 268885,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/be60980329e27b0aa315c509f0e0ba52834d19ea8c1dc72ceb0e674849747ca7.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/be60980329e27b0aa315c509f0e0ba52834d19ea8c1dc72ceb0e674849747ca7.png",
+      "sha256": "be60980329e27b0aa315c509f0e0ba52834d19ea8c1dc72ceb0e674849747ca7",
+      "bytes": 2330,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/d789c292155c2965dd64d832691a6b0b516682385e5fe55c80062caf741cb49f.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/d789c292155c2965dd64d832691a6b0b516682385e5fe55c80062caf741cb49f.png",
+      "sha256": "d789c292155c2965dd64d832691a6b0b516682385e5fe55c80062caf741cb49f",
+      "bytes": 237974,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/dd3b4cf4794ab1057796b4b5ea332de4189d7ee623235bdbb4a44750bc9e20ac.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/dd3b4cf4794ab1057796b4b5ea332de4189d7ee623235bdbb4a44750bc9e20ac.png",
+      "sha256": "dd3b4cf4794ab1057796b4b5ea332de4189d7ee623235bdbb4a44750bc9e20ac",
+      "bytes": 85432,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/f235ddd9823c006a9d54dde903e1b3b9a7308236ff7346710ea4e01602f76bfa.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/f235ddd9823c006a9d54dde903e1b3b9a7308236ff7346710ea4e01602f76bfa.png",
+      "sha256": "f235ddd9823c006a9d54dde903e1b3b9a7308236ff7346710ea4e01602f76bfa",
+      "bytes": 80754,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "native/f351467161c07531b9d2cb253256c90d103201e0eed958cad8f920b64741c82b.png",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/native/f351467161c07531b9d2cb253256c90d103201e0eed958cad8f920b64741c82b.png",
+      "sha256": "f351467161c07531b9d2cb253256c90d103201e0eed958cad8f920b64741c82b",
+      "bytes": 87193,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7.py.gz",
+      "sha256": "a5b954a397f50bbc0d369c7302513906206c7b029f4cbd5662f1bac8d45315ec",
+      "bytes": 3609,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e.py.gz",
+      "sha256": "bc76b6a2f4f0b0c878359c9fa4a758f4d8e096338aebf90cbd46e5aac317938e",
+      "bytes": 6507,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/20340d942ab7b80dfb610d23cc24acec2104434b4021d460ac44d18d9df9659c.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/20340d942ab7b80dfb610d23cc24acec2104434b4021d460ac44d18d9df9659c.py.gz",
+      "sha256": "efe53be0c3d26abedf095b4287c7ef7a934092f5eab0273c796948530be31c13",
+      "bytes": 680,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d.py.gz",
+      "sha256": "9b7463801f863fbcbde50bbdfca2a2f68bea016ac7db4d4779d81806fc217d10",
+      "bytes": 11076,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba.py.gz",
+      "sha256": "da7ae47086ba2039c31342579bde61d5855dd05f20f293d5e9d3ac4478962188",
+      "bytes": 33770,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf.py.gz",
+      "sha256": "c9a2319cd2181484f47c07c5dce758d95ce14b194055b25f5e8171c41341fcd5",
+      "bytes": 3515,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/6e61b12c65cbb90f4829195ba09cc366ababaa10c1226dfd809c24b4557996d8.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/6e61b12c65cbb90f4829195ba09cc366ababaa10c1226dfd809c24b4557996d8.py.gz",
+      "sha256": "84412c1abee2e9656309c2c66906bcc826f7c5d177bac798432a08800b503f39",
+      "bytes": 20799,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/8299c66149bdedeb11bd500f80b3aed6b5cdef3fb83fd66dae883e269d3ec538.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/8299c66149bdedeb11bd500f80b3aed6b5cdef3fb83fd66dae883e269d3ec538.py.gz",
+      "sha256": "d9564b354762326411696f0212411894139606da8adea2f2420bcc16ab5656b4",
+      "bytes": 7712,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.py.gz",
+      "sha256": "ea38260518e3e5ba072775355dae69b43209d43e315c6e9f0ceaee7719230411",
+      "bytes": 10483,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/aee7be68a2d528f82713f6c3763effcf12bcee12b485ba42c66a15b10e3e197a.json.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/aee7be68a2d528f82713f6c3763effcf12bcee12b485ba42c66a15b10e3e197a.json.gz",
+      "sha256": "c8958335a0a5cb17cc7093b23b055d7e4df2634c9a70182b2dda4871511d369a",
+      "bytes": 40621,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432.py.gz",
+      "sha256": "fcb20c209c313eca3a8d451d53e17d7bb352737b1499d659438db22f9d5ab0af",
+      "bytes": 3478,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.py.gz",
+      "sha256": "4c9b96ab7f0fd02814af9a0d1b3e26efd9503767498574749bb13a6802096af3",
+      "bytes": 7934,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    },
+    {
+      "omitted_duplicate_path": "sources/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b.py.gz",
+      "reused_path": "../ai5-mc-score-mcmc-brownian-baseline-motion-review/sources/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b.py.gz",
+      "sha256": "ffcdab3728444f91b9fa08a5165fe4996dd0eb094e891b0cd6491f005afbde5a",
+      "bytes": 2823,
+      "basis": "Exact file SHA256 equality; runtime original and earlier bounded package payload retained."
+    }
+  ],
+  "scope": "Only byte-identical duplicate copies omitted from this new unpublished package; no runtime originals or earlier evidence modified."
+}

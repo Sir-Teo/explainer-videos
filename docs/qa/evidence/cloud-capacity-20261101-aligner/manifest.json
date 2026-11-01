@@ -1,0 +1,27 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1169,
+    "sha256": "c8dc025fbd69b750ed656a88035c48d9b63166714d6cbd1cc6fadad418009a2f"
+  },
+  {
+    "path": "driver.py.gz",
+    "bytes": 1318,
+    "sha256": "06f263be3c33c053d5a7ed30639fcd0cc6a150975af1d5c9fe6e137a2b6d38bb"
+  },
+  {
+    "path": "protected-after.json.gz",
+    "bytes": 14501,
+    "sha256": "d3e419cf7b9ac5db8e959df4634262894a8e3a22e8e133246144f63f44cd8382"
+  },
+  {
+    "path": "protected-before.json.gz",
+    "bytes": 14501,
+    "sha256": "d3e419cf7b9ac5db8e959df4634262894a8e3a22e8e133246144f63f44cd8382"
+  },
+  {
+    "path": "receipt.json.gz",
+    "bytes": 1302,
+    "sha256": "1b1370e719d80d9aeee61944805439380a0b810f799e0496e3de25afed087d34"
+  }
+]

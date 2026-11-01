@@ -1,0 +1,27 @@
+from pathlib import Path
+import json,hashlib,datetime
+P=Path(__file__).parent/'zh';R=Path('/workspace/explainer-videos');sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();now=datetime.datetime.now(datetime.timezone.utc).isoformat();plan=json.loads((P/'plan.json').read_text());vp=json.loads((P/'view-progress.json').read_text());old=Path(plan['before_actual_review']).parent;before=json.loads((old/'render-record.json').read_text());after=json.loads((P/'render-record.json').read_text());cmp=json.loads((P/'decoded-comparison.json').read_text());freeze=json.loads((P/'freeze.json').read_text())
+assert len(vp['actually_viewed_pages'])==len(plan['pages'])==26
+assert sha(P/'FokkerPlanck.mp4')==plan['movie_sha256']==cmp['after_movie_sha256'];assert sha(old/'FokkerPlanck.mp4')==cmp['before_movie_sha256'];assert before['duration']==after['duration'] and before['narration']==after['narration'] and before['inputs']==after['inputs'];assert sha(R/'videos/ai/ai5/s19_fokker.py')==plan['source_sha256']
+pages=[vp['actually_viewed_pages'][str(i)] for i in range(1,27)]
+for p in pages:assert sha(p['path'])==p['sha256'] and p['actually_viewed']
+idx={x['source_frame']:x for x in plan['all_time_mapping']};natives=[]
+for i in [348,405,444,487,1508,1547,2632,2642,2678]:
+ f=idx[i];assert sha(f['file'])==f['sha256'];natives.append({'source_frame':i,'time':f['time'],'file':f['file'],'sha256':f['sha256'],'actually_viewed':True,'detail':'Original854x480 individual frame','completion_attested_utc':now,'observation': 'Six new derivation rows write on separate lines beneath clean stationary retained identities; ordinary partial new glyphs are intentional.' if i<2000 else 'Old caption cleared, then gold new caption appears alone; moving particles continue through intentional brief caption gap and converge toward AI. No old/new caption overprint.'})
+vp['native_followups']=natives;(P/'view-progress.json').write_text(json.dumps(vp,indent=2)+'\n')
+page_by_frame={i:p for p in pages for i in p['source_frames']};rows=[]
+for f in plan['all_time_mapping']:
+ assert sha(f['file'])==f['sha256'];f=dict(f)
+ if f['source_frame'] in page_by_frame:f['coverage']='actual chronological sheet view';f['actual_view_page_sha256']=page_by_frame[f['source_frame']]['sha256']
+ else:assert f['exact_old_actual_matches'];f['coverage']='exact-PNG inheritance from completed original actual selected-image review'
+ rows.append(f)
+for rel,h in freeze['consumed_input_hashes'].items():assert sha(R/rel)==h
+review={'lang':'zh','accepted_scope':'Current selected-image visual regression complete, no remaining observed defect in inspected scope; no continuous/audible/production-motion approval.','completed_utc':now,'preparation_plan_sha256':sha(P/'plan.json'),'movie_sha256':plan['movie_sha256'],'source_sha256':plan['source_sha256'],'freeze_sha256':sha(P/'freeze.json'),'pages':pages,'native':natives,'all_time_mapping':rows,'endpoints':plan['endpoints'],'selected_union_times':len(rows),'every_encoded_window_frames':plan['every_encoded_proof_window_frames'],'nonwindow_exact_old_PNG_inherited_times':plan['nonwindow_exact_PNG_inherited_count'],'new_nonwindow_viewed_images':plan['new_nonwindow_selected_images_to_view'],'all_decoded_frames':cmp['decoded_frame_count'],'unselected_decoded_frames':cmp['decoded_frame_count']-len(rows),'duration_narration_bookmarks_input_signatures_exactly_baseline_equal':True,'current_inputs_unchanged':True,'raw_status':after['status'],'raw_warnings':after['warnings'],'limits':'All26after chronological sheets (197every-encoded changed-window/neighbor images plus3novel nonwindow images) and9native individual frames actually viewed.456other selected times inherit exact PNGs only from complete old actual review.2176remaining decoded frames unselected in this final pass. Automatic whole-file RGB equality/inequality is not continuous perceptual viewing.14fresh endpointPNG exactmatches inherit actual old endpoint review. Direct source hash observed at freeze; no assertion all historical imports or aggregate-source currency.'}
+(P/'review.json').write_text(json.dumps(review,indent=2)+'\n');(P/'review.md').write_text('''# ZH Fokker–Planck final selected regression
+
+All26 chronological after sheets were actually viewed:197every-encoded changed-window/neighbor images plus3novel nonwindow images. Nine original854×480 individual critical frames were also inspected. The other456selected times inherit exact PNGs from the completed actual original review. All14fresh endpoint images match prior actually inspected endpoint PNGs exactly.
+
+All six new-row Write reveals are clear, with retained identities stationary and sharp. The old green footer fades before the new gold footer appears; particles keep moving through the brief intentional caption gap. No copied-row doubling, simultaneous footer overprint, clipping or new corrective defect was observed in the inspected states. Duration, narration/bookmarks and consumed-input signatures match baseline exactly. Raw current motion status is passed, warnings[].
+
+656selected times /2832automatically decoded frames;2176frames remain unselected in this final pass. Both old/current full movie hashes remain independently preserved. This is time-indexed still-image and exact-PNG inheritance QA; continuous perceptual playback, listening/narrated sync and native1080 motion remain unverified.
+''');print('ZHfinalscopeclosed',len(pages),'pages',len(natives),'natives; report',sha(P/'review.json'))

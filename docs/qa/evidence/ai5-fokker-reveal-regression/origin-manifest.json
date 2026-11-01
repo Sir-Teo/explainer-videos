@@ -1,0 +1,470 @@
+[
+  {
+    "package_path": "en/review.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/review.json",
+    "original_sha256": "2ad143825a7ddd2d298d6f58548911b1e509beb9595c282bc996b66414bdf1f3",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/freeze.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/freeze.json",
+    "original_sha256": "6ee9c2c8c3cc5c70226532ceeac3f9a5bf769a146c9afe6a305506728e6deecc",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/preparation-plan.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/plan.json",
+    "original_sha256": "b082e3635fe20e2c2c05cf6db1a680374946a77c908a555b44b74120c5b8a65a",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/raw-motion-record.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/render-record.json",
+    "original_sha256": "823840cf23cd86cec693a21a9850665377019699c6425568762306a051bcfdee",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/all-frame-rgb-comparison.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/decoded-comparison.json",
+    "original_sha256": "60aaaa44e858d4dca998044102374489efe4855ca44097df748446f9639de206",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/pts-comparison.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/pts-comparison.json",
+    "original_sha256": "3f7eb22714e594698956709cf87124a2cb853bc8348b8ed52c6beeb2166deddd",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/completed-coverage-map.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/completed-coverage-map.json",
+    "original_sha256": "c586b3e60027388cf91e99358694e059d9065d7eb9e9d32fac45f7f0604544ef",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/fresh-temporal-audit.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/audit/result.json",
+    "original_sha256": "9774a67d41ca84d04e7144c47fc5c68d5a06ac48352421ea745493cb70c4092b",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/raw-endpoint-record.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/endpoints/result.json",
+    "original_sha256": "b9f2994036b9b4dbc05c526a37a0d2117a9430b23d4d4155b44b17388f303c24",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/review.md",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/review.md",
+    "original_sha256": "9971a2dda41a90a88109b8d05643a5eabe452e378dbe7c3aadba1ab5394f4aa9",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/before/review.json.gz",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/en-FokkerPlanck/842896444f939e53af0608f2e0c212527abd73a090b707cad2303b589783cc3b/review.json",
+    "original_sha256": "8d4c5174f7fc18d2cce6bc64cd1acd1b3737c959fbce6ae1163836217d6095d0",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/before/review-progress.json.gz",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/en-FokkerPlanck/842896444f939e53af0608f2e0c212527abd73a090b707cad2303b589783cc3b/review-progress.json",
+    "original_sha256": "95843843eadf082af6a5f97f0b59b03dbbe9d98f2542ff0bc253473cf17758a3",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/before/audit.json.gz",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/en-FokkerPlanck/842896444f939e53af0608f2e0c212527abd73a090b707cad2303b589783cc3b/audit.json",
+    "original_sha256": "260fe483fb797230ec55db55aae0003570c2dc254ecb6ce427106b2054f48d61",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/before/plan.json.gz",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/en-FokkerPlanck/842896444f939e53af0608f2e0c212527abd73a090b707cad2303b589783cc3b/plan.json",
+    "original_sha256": "4d6e9898d9ead3c2af8d5dbd98a18479feca93478bace27c0ffb6479ec151282",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/before/render-record.json.gz",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/en-FokkerPlanck/842896444f939e53af0608f2e0c212527abd73a090b707cad2303b589783cc3b/render-record.json",
+    "original_sha256": "c0f18d2aea953dc4d8017f1c9db1563377078052efbfbbb3101a04a940027439",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/before/review.md",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/en-FokkerPlanck/842896444f939e53af0608f2e0c212527abd73a090b707cad2303b589783cc3b/review.md",
+    "original_sha256": "8b3a8d8282f1a2b91041856c5c0875c850495cc441874ec2b1a1145f303ccec7",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/hist-comparison-plan.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/hist-comparison-plan.json",
+    "original_sha256": "8b698a133f75bd0f78a65072ce91d2e72d1b821be6fcb7060c20f3243593dd57",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "en/native-pairs/01-before-f0000317.png",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/audits/en-FokkerPlanck/frames/0000317_000021.133s.png",
+    "original_sha256": "182ac7fb6a9e89d67c9d756dbca8fcd6f116ffd5ceedc2ba730e3a044596cc21",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/native-pairs/01-after-f0000332.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/cohort-frames/0000332_000022.133s.png",
+    "original_sha256": "e06f7b83da4f0ac049ee5cea8f65a8b27abee19ee7d9c2c4fdc9adccaf2a8f03",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/native-pairs/02-before-f0001438.png",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/audits/en-FokkerPlanck/frames/0001438_000095.866s.png",
+    "original_sha256": "062c97b044e3f60392e278d02b829ab73d75de1e1e178ab4e821ca60d8f38417",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/native-pairs/02-after-f0001453.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/cohort-frames/0001453_000096.866s.png",
+    "original_sha256": "aad2612a3c0a3c80a608aa8ec93e56dca2887a1f26f485a25ac40656967432e6",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/native-pairs/03-before-f0002521.png",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/audits/en-FokkerPlanck/frames/0002521_000168.065s.png",
+    "original_sha256": "058e5ccb468bf6eb89b521c994079a9731bc9fb64ba8875ab37e45592abb3dd0",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/native-pairs/03-after-f0002532.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/cohort-frames/0002532_000168.799s.png",
+    "original_sha256": "867bfecdd40dc08c2cc82e7e4bb45b14a3539bf958e6e9e7da5285f91db141d9",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/examples/page-001.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/review-pages/proof-001.png",
+    "original_sha256": "12df8fa7d65710ebc9b2c11711268f1625ad3812c5fbf6a9ed5bbd0a10b53495",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/examples/page-020.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/review-pages/proof-020.png",
+    "original_sha256": "1e24e92380a4570979d7c1a3d0b6623b9fec842c5d0513ddac44f47ad8368b6e",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/examples/page-027.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/review-pages/proof-027.png",
+    "original_sha256": "3bab0d2650734e627ffc17e3ca3e228326393ed2f99c1761a6af663347e93732",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "en/examples/histogram-pairs-page004.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en/hist-pair-pages/page-004.png",
+    "original_sha256": "1a6e06a96b8e0a4cab8104fa117aba1b3f1f3194e2d167d9ead31d2c0c602271",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/review.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/review.json",
+    "original_sha256": "4b376a03f15d91fe8c474897ddf87dd1dd9b4f583f02de489f271c302f54a8e3",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/freeze.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/freeze.json",
+    "original_sha256": "c0b73679daef5d86fda4d925d862cc26b8c67f5900d3e4d0a9e321b36e67ed3d",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/preparation-plan.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/plan.json",
+    "original_sha256": "d761aac594586b691a8e0f0e5d2d4546f70b342cfc591382de093fa217c45545",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/raw-motion-record.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/render-record.json",
+    "original_sha256": "96511d9dba8a78c4de820e28cbf13b7049cfa479631d2af3253f41cbc26ff470",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/all-frame-rgb-comparison.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/decoded-comparison.json",
+    "original_sha256": "6863210dd088c7b547ec46f41251103490296476c262de850bb88fc0f8ca7384",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/pts-comparison.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/pts-comparison.json",
+    "original_sha256": "7d3f61f59a1e46826e43119b1c1965359a6f9fe8e9970ad88b92c23597991efd",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/completed-coverage-map.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/completed-coverage-map.json",
+    "original_sha256": "791aeaed00c2af6aad039028980720d63f3ec81e16deed990d703291d744b140",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/fresh-temporal-audit.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/audit/result.json",
+    "original_sha256": "5a4baa608eacff64e5915b4251fe26cc691a898e4e04337a80254c95dd2a4ee1",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/raw-endpoint-record.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/endpoints/result.json",
+    "original_sha256": "be623f5632a7047a9d40ee6462f5b06fe7b56a222c503cc2d10d6287a261de73",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/review.md",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/review.md",
+    "original_sha256": "f2771a70fb2d0a9a47df82d60e64a46f5bbecdd9cd594a6d2b1ada22bd595e26",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/before/review.json.gz",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/zh-FokkerPlanck/3e293d7b94b9ef8c28fc83fc90cd2b8c554acc79e88481ed21402270e993b43b/review.json",
+    "original_sha256": "6a4c2e316fe0093c90af2dc1f6c8c06219d68466000d9b28a0270af0059aad4a",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/before/review-progress.json.gz",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/zh-FokkerPlanck/3e293d7b94b9ef8c28fc83fc90cd2b8c554acc79e88481ed21402270e993b43b/review-progress.json",
+    "original_sha256": "51f86c980a5f4dd709ccf41ba157976787b62ac2dd20ba4f8c075c12c483b966",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/before/audit.json.gz",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/zh-FokkerPlanck/3e293d7b94b9ef8c28fc83fc90cd2b8c554acc79e88481ed21402270e993b43b/audit.json",
+    "original_sha256": "60db4334f7a22595611ea147cbc00ffac5f73e1fa9eb77641d4ee42b122ed064",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/before/plan.json.gz",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/zh-FokkerPlanck/3e293d7b94b9ef8c28fc83fc90cd2b8c554acc79e88481ed21402270e993b43b/plan.json",
+    "original_sha256": "3935e1059c6d6231816506f375d6ebe776223652a87b343079fe4446d5d686c5",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/before/render-record.json.gz",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/zh-FokkerPlanck/3e293d7b94b9ef8c28fc83fc90cd2b8c554acc79e88481ed21402270e993b43b/render-record.json",
+    "original_sha256": "7be12e950ef943cb659cbc7f6a264a0a2a7a5ae004c2930ebc2dc2f134a3a9e7",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/before/review.md",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/zh-FokkerPlanck/3e293d7b94b9ef8c28fc83fc90cd2b8c554acc79e88481ed21402270e993b43b/review.md",
+    "original_sha256": "6e858b6ff78794fe9ea9d7fbb8cfc79445269d421d84ffc5eed9bd9df55672c2",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/view-progress.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/view-progress.json",
+    "original_sha256": "15a98a694f228d02cc639a96b7c21f17d674610e302ccf8fb2ab4589d06fe91c",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "zh/native-pairs/01-before-f0000348.png",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/audits/zh-FokkerPlanck/frames/0000348_000023.200s.png",
+    "original_sha256": "45389b435b0ddfc01a5d8bc3449b72c90ca42b8ae7b21767a3bf5d66a7d3696a",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/native-pairs/01-after-f0000348.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/cohort-frames/0000348_000023.200s.png",
+    "original_sha256": "a3e5e8a777469ba31ad6ad645cdeb8d15a5f90eff494c584fdfce40dadcc7aaa",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/native-pairs/02-before-f0001508.png",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/audits/zh-FokkerPlanck/frames/0001508_000100.533s.png",
+    "original_sha256": "c17f993b704e0eb354c36ede40ae73cfcf060f9c3fdc198a61ec314cf1f15ebd",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/native-pairs/02-after-f0001508.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/cohort-frames/0001508_000100.533s.png",
+    "original_sha256": "1ae8a15967af82263c445a746d14888a384d216f656153ce9bc81f8affb540ad",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/native-pairs/03-before-f0002642.png",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/audits/zh-FokkerPlanck/frames/0002642_000176.132s.png",
+    "original_sha256": "f727148a61d151168e60546902b19ad8badae3bee9a6260259803481ba2b05b7",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/native-pairs/03-after-f0002642.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/cohort-frames/0002642_000176.132s.png",
+    "original_sha256": "64e59139acb75990ff09086819d97dbcde88a3b44d5a08ada388e23ff36d32cc",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/native-pairs/04-before-f0002691.png",
+    "original_path": "/workspace/runtime/ai5-ito-sde-fokker-motion-review/audits/zh-FokkerPlanck/frames/0002691_000179.399s.png",
+    "original_sha256": "14e82ad3417028e4cff2f28319eea2757dd285fa51b407d12c850d42d10c0f2a",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/native-pairs/04-after-f0002678.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/cohort-frames/0002678_000178.532s.png",
+    "original_sha256": "02fa28b2c1fee3ad1c986b28b0915edee02296a78de64d3caefab38e38bb1347",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/examples/page-001.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/review-pages/proof-001.png",
+    "original_sha256": "8d1a35418ee00a916a3a4ec8a409df29c22fae3110506fae1d4530adc5a6d9a6",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/examples/page-017.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/review-pages/proof-017.png",
+    "original_sha256": "dd40405ab62198c2dc9b08b58b55b17ee588aad80aa79babde111008589234a0",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "zh/examples/page-025.png",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/zh/review-pages/proof-025.png",
+    "original_sha256": "f6fc170f903486200d18432433407bb3a08404eaaed684df74473d6fb09597ae",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "source-repair/freeze.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-repair/freeze.json",
+    "original_sha256": "0128fb9a60eb1d4f2001d97c7cd1484c7ea59d445cc9436db0c998ed21004373",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "source-repair/before.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-repair/before.json",
+    "original_sha256": "2aa5d8ef5a67616ea204104b9994f09830e2b2bda5fe7172b5abc68784b976a3",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "source-repair/validation.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-repair/validation.json",
+    "original_sha256": "7857bce104476f3162137b07e7121ac2845f7504fbac403c9a2bce8cb19a2e48",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "source-repair/movie-preservation-reconciliation.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-repair/movie-preservation-reconciliation.json",
+    "original_sha256": "920ad42bba57641d624cfea9d61421f9b94cbc8518da990d64590b7997141906",
+    "encoding": "gzip, original exact bytes after decompression"
+  },
+  {
+    "package_path": "source-repair/before.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-repair/before.py",
+    "original_sha256": "2ba92eac205466fbb9c43280ef80ef14bbabde4da199aefe9bff6ba90f14864c",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "source-repair/after.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-repair/after.py",
+    "original_sha256": "7e33904756d634c988cc6b3db97f29a851788d7d64d7a111a33df0f75983bca7",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "source-repair/source.patch",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-repair/source.patch",
+    "original_sha256": "9a9f2a91c28a0c59f44ce6b9048995c03cbf89b9983207bd3469fa18d6715ecc",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "source-repair/validate.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-repair/validate.py",
+    "original_sha256": "8315e0d95bf32c90231dba1e78340dd173eaac1047f82b1e3e64e154fa12430b",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/analyze.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/analyze.py",
+    "original_sha256": "5058cf482851e097eade46d94ad642ff074d6f668e720cec76250b2e8c3942f3",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/compare_decode.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/compare_decode.py",
+    "original_sha256": "a62118e7d3d234bfc5697d94afdcdaea8eed41566ca00fec5028d272131b3eba",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/prepare_review_en.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/prepare_review_en.py",
+    "original_sha256": "1a091d4414fc6876346394c3b3a1989bc4a189277a7426814b068a54d44287a7",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/prepare_review_zh.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/prepare_review_zh.py",
+    "original_sha256": "edcf9e9e62abf8808c07a718d3a75fed0f44881528a8dfdb5b35c8d03c60d6dc",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/checkpoint.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/checkpoint.py",
+    "original_sha256": "82e35d2538d53524419af55c62cf93ace8c1432b9feb1cbf9e15e92eb0a704c6",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/close_root_en_review.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/close_root_en_review.py",
+    "original_sha256": "35482923025be5b416d6a6cbe7ad5b25b2781620d5c37cbd7473d19a857412f1",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/close_zh_review.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/close_zh_review.py",
+    "original_sha256": "36532188e27ff307434d49240361088a2898a6be6b692995db9c7822375cbc82",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/en_hist_compare.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en_hist_compare.py",
+    "original_sha256": "3142d56a11354b228927b1725edffae64fa3de3932a1f044ba5204f2ce1214fd",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/analyze.log",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/analyze.log",
+    "original_sha256": "13ee3b5826dfc293340b621499bf7d60e3db4086604113623b61bbc87daf50e0",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/en-prepare-review-attempt1-storage-guard.log",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en-prepare-review-attempt1-storage-guard.log",
+    "original_sha256": "2b0dcfa53b2e8b061bd1a8ce8c322066c9bf0f8ad9cade4479b5c339259f289c",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/en-prepare-review.log",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en-prepare-review.log",
+    "original_sha256": "2b0dcfa53b2e8b061bd1a8ce8c322066c9bf0f8ad9cade4479b5c339259f289c",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/en-prepare-review-attempt2.log",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/en-prepare-review-attempt2.log",
+    "original_sha256": "1d2bc77ab57b22b01de5e256800e8fba00b727ea93f33b796985edd530b1b62b",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/package.py",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/package.py",
+    "original_sha256": "2499d1d841b27bb14b0ebfb9754c37cfc33b53666eb871a90de646d0f6b51dec",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "helpers/qa_motion.py",
+    "original_path": "/workspace/explainer-videos/tools/qa_motion.py",
+    "original_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+    "encoding": "exact bytes"
+  },
+  {
+    "package_path": "review.json.gz",
+    "original_path": "/workspace/runtime/ai5-fokker-reveal-regression/review.json",
+    "original_sha256": "f4afee8179170a7673e4b79bf6152cd93cdbc3f889ba6291e4074ccb9f03856a",
+    "encoding": "gzip, original exact bytes after decompression"
+  }
+]
