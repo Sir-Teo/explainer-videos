@@ -41,7 +41,7 @@ from explainer.paths import video_dir, video_package  # noqa: E402
 
 VIDEOS = ROOT / "videos"
 LOGS = ROOT / "renders" / "make"
-BILINGUAL = {"ai", "analysis"}  # series with a Chinese edition (and Qwen3-TTS narration)
+BILINGUAL = {"ai", "analysis", "quant"}  # series with a Chinese edition (and Qwen3-TTS narration)
 
 
 def all_videos(series: str) -> list[str]:

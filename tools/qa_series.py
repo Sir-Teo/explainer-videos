@@ -34,6 +34,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from explainer.paths import video_dir  # noqa: E402
 OUT = ROOT / "renders" / "qa" / "series"
 
 
@@ -63,7 +64,7 @@ def visible_text_bounds(m, camera=None):
 
 def fingerprint(video):
     files = sorted((ROOT / "explainer").rglob("*.py"))
-    series = ROOT / "videos" / "ai"
+    series = video_dir(video).parent
     files += sorted(p for p in series.iterdir() if p.suffix in (".py", ".json"))
     # A change in Part 30 should not invalidate Part 1's long motion render.
     # Include the requested part and every part referenced by its Python code,

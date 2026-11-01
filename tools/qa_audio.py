@@ -31,7 +31,7 @@ def main():
     import numpy as np
     import soundfile as sf
     from explainer import lang, tts
-    from explainer.paths import video_package
+    from explainer.paths import video_dir, video_package
     from explainer.voiceover import _strip_bookmarks
     from tools.qa_series import OUT, fingerprint, inputs_current
 
@@ -65,7 +65,7 @@ def main():
         save()
         for i, line in enumerate(evidence["narration"]):
             raw = line["raw"]
-            spoken, _ = _strip_bookmarks(lang.translate(raw, ROOT / "videos" / "ai" / args.video, scene))
+            spoken, _ = _strip_bookmarks(lang.translate(raw, video_dir(args.video), scene))
             start = time.monotonic()
             try:
                 utterance = tts.synthesize(spoken)
