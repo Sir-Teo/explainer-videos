@@ -20853,7 +20853,8 @@
     "$600$ actual draws; \\ circles at radii $1$ and $2$": "$600$ 个真实样本；\\ 圆的半径为 $1$ 和 $2$",
     "vertical zoom: $[2.6,3.7]$ \\\\ triangles: estimates outside this window": "纵轴放大：$[2.6,3.7]$ \\\\ 三角标记超出显示范围的估计值",
     "means over $400$ paths, $t = 1$ \\\\ $\\pm$: across-path standard deviation": "在$400$条路径上取均值，$t = 1$ \\\\ $\\pm$表示路径间的标准差",
-    "greedy: \\ surprise $0.54$, \\\\ but $35\\%$ of its 4-token runs repeat": "贪心：\\ 意外度$0.54$，\\\\ 连续4词元片段中$35\\%$重复"
+    "greedy: \\ surprise $0.54$, \\\\ but $35\\%$ of its 4-token runs repeat": "贪心：\\ 意外度$0.54$，\\\\ 连续4词元片段中$35\\%$重复",
+    "square: first $\\min(N,1{,}500)$ darts \\\\ estimate and curve: all $N$ darts": "方框：显示前 $\\min(N,1{,}500)$ 枚飞镖 \\\\ 估计值与曲线：使用全部 $N$ 枚飞镖"
   },
   "phrases": {
     "width": "宽度",

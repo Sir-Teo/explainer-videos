@@ -1,0 +1,41 @@
+{
+  "payload_count": 7,
+  "payload_bytes": 734949,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2301,
+      "sha256": "ec3e902d33d0db8ced1b2a7df7f5072ef4ffbc62aaa1a927f12b514cb3ad584d"
+    },
+    {
+      "path": "inactive-png-consolidation/exact-link-ledger.json.gz",
+      "bytes": 698690,
+      "sha256": "22593d3353e183e662fad6ddc42664b4fac9a392a3f8857e824238733571950b"
+    },
+    {
+      "path": "inactive-public-qwen-base/historical-driver.py.gz",
+      "bytes": 1252,
+      "sha256": "2bc52a98821386de590eac9c03a7efe9c3feea4dbb76d18f1968fb5d466c667f"
+    },
+    {
+      "path": "inactive-public-qwen-base/protected-after.json.gz",
+      "bytes": 14501,
+      "sha256": "d3e419cf7b9ac5db8e959df4634262894a8e3a22e8e133246144f63f44cd8382"
+    },
+    {
+      "path": "inactive-public-qwen-base/protected-before.json.gz",
+      "bytes": 14501,
+      "sha256": "d3e419cf7b9ac5db8e959df4634262894a8e3a22e8e133246144f63f44cd8382"
+    },
+    {
+      "path": "inactive-public-qwen-base/receipt.json.gz",
+      "bytes": 1121,
+      "sha256": "4267628f24d287ebe6cff464c9d1a4989da00161284fe3ce3b1bd75669fbea5c"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 2583,
+      "sha256": "6d9c085d5397acd9a74802cee08eb3a8966d6944a828bd0cdbf8258632b5d51b"
+    }
+  ]
+}

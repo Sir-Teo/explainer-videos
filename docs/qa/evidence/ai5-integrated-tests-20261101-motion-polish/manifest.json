@@ -1,0 +1,41 @@
+{
+  "payload_count": 7,
+  "payload_bytes": 173638,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1691,
+      "sha256": "eeed655d98f1942cf7d5769e0253786b3743ecdf4728c62278c158fb4fe7922d"
+    },
+    {
+      "path": "full-unittest.log.gz",
+      "bytes": 16137,
+      "sha256": "e3a21d4be417a3dcb0773ebcbad5ab2d003845cd40dd1a4a9375457d3f455e1c"
+    },
+    {
+      "path": "historical-driver.py.gz",
+      "bytes": 1004,
+      "sha256": "96d936607f8a0ac2c04f966570a5f1e7ed187b1a4705c739e5d91c27583dfcb0"
+    },
+    {
+      "path": "receipt.json.gz",
+      "bytes": 496,
+      "sha256": "df1ef32e324c2e1c7275ae20deea6a1b64d9d565de5a78f6d27ee24360db97ff"
+    },
+    {
+      "path": "source-after.json.gz",
+      "bytes": 75203,
+      "sha256": "96e0d976906f6ecc1bc6cac6544f51a2c18fe7a5ac3c0568b5977be29ea62575"
+    },
+    {
+      "path": "source-before.json.gz",
+      "bytes": 75203,
+      "sha256": "96e0d976906f6ecc1bc6cac6544f51a2c18fe7a5ac3c0568b5977be29ea62575"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 3904,
+      "sha256": "938421de3a4fe9b59aba0879171351bdf44c1cf1bb62c1592a59e0a3e51e1ce0"
+    }
+  ]
+}

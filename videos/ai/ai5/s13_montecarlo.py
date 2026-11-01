@@ -11,6 +11,20 @@ from videos.ai.ai5.plotting import clipped_curve
 TAIL = C.SURPRISE
 
 
+def set_dart_prefix(dots, count):
+    """Show exactly the recorded prefix, including rewinds before the replay."""
+    shown = min(max(int(count), 0), len(dots))
+    previous = getattr(dots, "_visible_dart_count", None)
+    if previous is None:
+        for i, dot in enumerate(dots):
+            dot.set_opacity(1 if i < shown else 0)
+    elif shown != previous:
+        for i in range(min(previous, shown), max(previous, shown)):
+            dots[i].set_opacity(1 if i < shown else 0)
+    dots._visible_dart_count = shown
+    return dots
+
+
 def estimate_comparison(estimate, truth):
     if not (math.isfinite(estimate) and math.isfinite(truth)) or truth <= 0 or estimate < 0:
         return "The estimate or its positive reference probability is unavailable."
@@ -82,7 +96,9 @@ class MonteCarlo(VoiceoverScene):
         band_hi = [ax.c2p(math.log10(n), min(math.pi + 1.64 / math.sqrt(n), 3.7)) for n in ns]
         band_lo = [ax.c2p(math.log10(n), max(math.pi - 1.64 / math.sqrt(n), 2.6)) for n in ns]
         band = Polygon(*band_hi, *band_lo[::-1], stroke_width=0, fill_color=DATA, fill_opacity=0.14)
-        t = ValueTracker(1)
+        t = ValueTracker(0)
+        set_dart_prefix(dots, 0)
+        dots.add_updater(lambda m: set_dart_prefix(m, t.get_value()))
 
         def path():
             n = max(int(t.get_value()), 1)
@@ -111,21 +127,32 @@ class MonteCarlo(VoiceoverScene):
         VGroup(f, ev).arrange(RIGHT, buff=0.3).to_edge(UP, buff=0.35)
         why = label(r"the circle's share of the square: \ $\pi / 4$", font_size=26, color=GREY_A).next_to(sq, DOWN, buff=0.2)
         shown = len(dots)
+        shown_tex = f"{shown:,}".replace(",", "{,}")
+        cohort_note = label(rf"square: first $\min(N,{shown_tex})$ darts \\ estimate and curve: all $N$ darts",
+                            font_size=18, color=GREY_A).next_to(why, DOWN, buff=0.12)
+        count_value = Integer(1, font_size=24, color=C.BITS)
+        count_value.add_updater(lambda m: m.set_value(max(int(t.get_value()), 1)))
+        count_label = VGroup(MathTex("N=", font_size=24, color=GREY_A), count_value)
+        count_label.arrange(RIGHT, buff=0.1).next_to(xn, DOWN, buff=0.12)
         with self.voiceover(
             "Here's a strange way to compute pi: throw darts at a square, completely at random. <bookmark mark='a'/> "
             "The share inside the circle is the circle's share of the area, pi over four, so four times that share "
             "estimates pi. <bookmark mark='b'/> Watch it as the darts pile up: it lurches, then homes in."
         ) as vo:
             self.play(Create(sq), Create(circ))
-            self.play(LaggedStart(*[FadeIn(x, scale=0.3) for x in dots[:24]], lag_ratio=0.15), run_time=2.0)
+            self.add(dots)
+            self.play(t.animate.set_value(24), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(why), Write(f))
             vo.wait_until("b")
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(zoom_note), FadeIn(xn), Create(pi_l), FadeIn(pi_t), FadeIn(ev))
+            # Rewind the pictured cohort together with the graph's first estimate.
+            t.set_value(1)
+            dots.update(0)
+            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(zoom_note), FadeIn(xn), Create(pi_l), FadeIn(pi_t), FadeIn(ev),
+                      FadeIn(cohort_note), FadeIn(count_label))
             self.add(trace, boundary_marks)
             self.play(t.animate.set_value(24), run_time=1.0, rate_func=linear)
-            self.play(LaggedStart(*[FadeIn(x, scale=0.3) for x in dots[24:shown]], lag_ratio=0.002),
-                      t.animate.set_value(N), run_time=6.0, rate_func=linear)
+            self.play(t.animate.set_value(N), run_time=6.0, rate_func=linear)
         with self.voiceover(
             rf"After four thousand darts: {est[-1]:.3f}. <bookmark mark='a'/> The shaded band is how far off a run "
             "like this typically is, and it narrows like one over the square root of the number of darts."
@@ -135,6 +162,8 @@ class MonteCarlo(VoiceoverScene):
         trace.clear_updaters()
         boundary_marks.clear_updaters()
         ev.clear_updaters()
+        dots.clear_updaters()
+        count_value.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 

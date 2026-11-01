@@ -1,0 +1,876 @@
+{
+  "utc": "2026-11-01T04:01:50.202402+00:00",
+  "scope": "Four final MonteCarlo/ScoreFn EN/ZH silent preview selected-image regressions and70fresh native480 endpoint images; root actual review, qa_integrity packaging.",
+  "cases": [
+    {
+      "case": "en-MonteCarlo",
+      "movie_sha256": "b9d81e94ec10f6ed70f4c4815eacd12ae64d03d9c77641aa012b3fc8f74b4fd2",
+      "raw_record_sha256": "5b769614479f5b61e23c216bf4a1243f49795be7e821fef1b10bba00efbb0781",
+      "decoded": 3100,
+      "selected": 533,
+      "unique_png": 407,
+      "changed_png_actually_viewed_by_root": 72,
+      "changed_pages_actually_viewed_by_root": 9,
+      "inherited_exact_png": 335,
+      "final_native_followups_actually_viewed_by_root": 4,
+      "unselected_encoded_frames": 2567,
+      "max_selected_gap": 1.0000000000000142,
+      "duration": 206.666667,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_directory": "/workspace/runtime/ai5-root-selected-motion-review/en/MonteCarlo-final",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/en/MonteCarlo_motion/media/videos/480p15/MonteCarlo.mp4",
+      "source_at_review": [
+        {
+          "path": "videos/ai/ai5/s13_montecarlo.py",
+          "sha256": "34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5",
+          "bytes": 23262
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/montecarlo.json",
+          "sha256": "2def215c589cc0e49959568e669a4502d58dc6145ae087a5159bd5a3f0f8fb8c",
+          "size_mtime_ns": [
+            1134,
+            1793497447007060784
+          ]
+        },
+        {
+          "path": ".cache/ai5/montecarlo.npz",
+          "sha256": "64266f11af6d567035197ebe84999f967224c50c2d1dd833a605222e6229c876",
+          "size_mtime_ns": [
+            210740,
+            1793497447001273494
+          ]
+        },
+        {
+          "path": ".cache/ai5/ess.json",
+          "sha256": "99c49bc1a6976b31b6ee9f1e43c754a7a30e2aa94b2868e7737cb5d452237b35",
+          "size_mtime_ns": [
+            1182,
+            1793497450654586612
+          ]
+        },
+        {
+          "path": ".cache/ai5/ess.npz",
+          "sha256": "261645d5bcd2ad974b00033db9035fcee2be5b7a94bb04cfa3baf84d8180b164",
+          "size_mtime_ns": [
+            1301,
+            1793497450653913916
+          ]
+        }
+      ],
+      "audit_adjacent_provenance": null
+    },
+    {
+      "case": "zh-MonteCarlo",
+      "movie_sha256": "a8a08063ac4aaf94f379549acf919759735c042f9b83df8f5e09106707b3c78d",
+      "raw_record_sha256": "7baffd10865fc739b845e967320594d507c1c75fee4df9202e2378aa9614f181",
+      "decoded": 3214,
+      "selected": 523,
+      "unique_png": 413,
+      "changed_png_actually_viewed_by_root": 71,
+      "changed_pages_actually_viewed_by_root": 9,
+      "inherited_exact_png": 342,
+      "final_native_followups_actually_viewed_by_root": 4,
+      "unselected_encoded_frames": 2691,
+      "max_selected_gap": 1.0,
+      "duration": 214.266667,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_directory": "/workspace/runtime/ai5-root-selected-motion-review/zh/MonteCarlo-final",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/zh/MonteCarlo_motion/media/videos/480p15/MonteCarlo.mp4",
+      "source_at_review": [
+        {
+          "path": "videos/ai/ai5/s13_montecarlo.py",
+          "sha256": "34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5",
+          "bytes": 23262
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/montecarlo.json",
+          "sha256": "2def215c589cc0e49959568e669a4502d58dc6145ae087a5159bd5a3f0f8fb8c",
+          "size_mtime_ns": [
+            1134,
+            1793497447007060784
+          ]
+        },
+        {
+          "path": ".cache/ai5/montecarlo.npz",
+          "sha256": "64266f11af6d567035197ebe84999f967224c50c2d1dd833a605222e6229c876",
+          "size_mtime_ns": [
+            210740,
+            1793497447001273494
+          ]
+        },
+        {
+          "path": ".cache/ai5/ess.json",
+          "sha256": "99c49bc1a6976b31b6ee9f1e43c754a7a30e2aa94b2868e7737cb5d452237b35",
+          "size_mtime_ns": [
+            1182,
+            1793497450654586612
+          ]
+        },
+        {
+          "path": ".cache/ai5/ess.npz",
+          "sha256": "261645d5bcd2ad974b00033db9035fcee2be5b7a94bb04cfa3baf84d8180b164",
+          "size_mtime_ns": [
+            1301,
+            1793497450653913916
+          ]
+        }
+      ],
+      "audit_adjacent_provenance": null
+    },
+    {
+      "case": "en-ScoreFn",
+      "movie_sha256": "acab396770d0c74d4cf6b568c70c4531ed136adc82d92c778d1be0db8d376391",
+      "raw_record_sha256": "79df1fccc16868ef4d2a1fec35091ef85a8454d98b88fd4a523e8b8abd42a0d9",
+      "decoded": 2808,
+      "selected": 468,
+      "unique_png": 358,
+      "changed_png_actually_viewed_by_root": 25,
+      "changed_pages_actually_viewed_by_root": 4,
+      "inherited_exact_png": 333,
+      "final_native_followups_actually_viewed_by_root": 3,
+      "unselected_encoded_frames": 2340,
+      "max_selected_gap": 1.0,
+      "duration": 187.199674,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_directory": "/workspace/runtime/ai5-root-selected-motion-review/en/ScoreFn-final",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/en/ScoreFn_motion/media/videos/480p15/ScoreFn.mp4",
+      "source_at_review": [
+        {
+          "path": "videos/ai/ai5/s14_scorefn.py",
+          "sha256": "15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c",
+          "bytes": 15280
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/scorefn.json",
+          "sha256": "3dd951d0bae2a74346e9ad53c0042617fb5b012bbf4b6e6c1edc57c18be1fbaf",
+          "size_mtime_ns": [
+            1516,
+            1793497454912369129
+          ]
+        },
+        {
+          "path": ".cache/ai5/scorefn.npz",
+          "sha256": "1bf35422acc6eb193d091efa0dbdd82bc3d83f0f1d99f2e7d210f00ba9e02603",
+          "size_mtime_ns": [
+            45029,
+            1793497454910563086
+          ]
+        }
+      ],
+      "audit_adjacent_provenance": null
+    },
+    {
+      "case": "zh-ScoreFn",
+      "movie_sha256": "5aa5711aef561e6b30b49692e568aa5b99ad8816bd6f8b725a0f55654b5f80f2",
+      "raw_record_sha256": "0055c75cd1d44fdde330a140a30612cac2c5ce079aba2393d75a355a8e4c634d",
+      "decoded": 2991,
+      "selected": 481,
+      "unique_png": 364,
+      "changed_png_actually_viewed_by_root": 21,
+      "changed_pages_actually_viewed_by_root": 3,
+      "inherited_exact_png": 343,
+      "final_native_followups_actually_viewed_by_root": 3,
+      "unselected_encoded_frames": 2510,
+      "max_selected_gap": 1.0000000000000009,
+      "duration": 199.399674,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_directory": "/workspace/runtime/ai5-root-selected-motion-review/zh/ScoreFn-final",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/zh/ScoreFn_motion/media/videos/480p15/ScoreFn.mp4",
+      "source_at_review": [
+        {
+          "path": "videos/ai/ai5/s14_scorefn.py",
+          "sha256": "15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c",
+          "bytes": 15280
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/scorefn.json",
+          "sha256": "3dd951d0bae2a74346e9ad53c0042617fb5b012bbf4b6e6c1edc57c18be1fbaf",
+          "size_mtime_ns": [
+            1516,
+            1793497454912369129
+          ]
+        },
+        {
+          "path": ".cache/ai5/scorefn.npz",
+          "sha256": "1bf35422acc6eb193d091efa0dbdd82bc3d83f0f1d99f2e7d210f00ba9e02603",
+          "size_mtime_ns": [
+            45029,
+            1793497454910563086
+          ]
+        }
+      ],
+      "audit_adjacent_provenance": null
+    }
+  ],
+  "baseline": [
+    {
+      "case": "en-MonteCarlo",
+      "historical_movie_sha256": "7f06ca484da0e97cb5026b43bc92ff2723918dd5066bb1631502d905c27e13bc",
+      "original_movie_bytes_available": false,
+      "actual_original_pages": 51,
+      "actual_original_native_followups": 7,
+      "baseline_views_sha256": "d23a6f621ab015241396b2c9db4a01950c3da44b8c0cfff7988b03ea509a6863",
+      "source_guard_receipt_sha256": "e91ae9fe8d731629ff0874518c9f958000bb54458b57084fa4e18c2709741734"
+    },
+    {
+      "case": "zh-MonteCarlo",
+      "historical_movie_sha256": "29c86126bd9511f6600b517ec0360c936e0cabce2d924b556262637c4608d7f9",
+      "original_movie_bytes_available": false,
+      "actual_original_pages": 52,
+      "actual_original_native_followups": 6,
+      "baseline_views_sha256": "92e1062df213f034b6d625ba3b93712f1d5242f55006969277686e3bde645da1",
+      "source_guard_receipt_sha256": "89f5506cebdce985b6a2d66d0618118785280be7bfd1eb46334d7216e70993a7"
+    },
+    {
+      "case": "en-ScoreFn",
+      "historical_movie_sha256": "7b2cac34b7ff285b944c878a2c1b8c155ebd33af188ae0ba4fa68edd8b3ba707",
+      "original_movie_bytes_available": false,
+      "actual_original_pages": 46,
+      "actual_original_native_followups": 3,
+      "baseline_views_sha256": "ec8848fe1c7466c9821241c9fad1d512d96f8ff54623ee9de62d2a0813883db1",
+      "source_guard_receipt_sha256": "bf8aae4c388652528fdd8cd6219ef21249bbe1ae97d8ae89815e5efece74d36c"
+    },
+    {
+      "case": "zh-ScoreFn",
+      "historical_movie_sha256": "91587c0b7a689ceef8657293aa03ec2d2ad7e63d157adc8cdb0435519b644d3d",
+      "original_movie_bytes_available": false,
+      "actual_original_pages": 46,
+      "actual_original_native_followups": 3,
+      "baseline_views_sha256": "2e4c8ea532138cd4be4e59eaff1d8b28f25f2607d049cfe39d981618d376bd47",
+      "source_guard_receipt_sha256": "1fb73df4e37a883e198a44fba8d9d8b7b299c874a5f6b52dbae4b5447f4a6e31"
+    }
+  ],
+  "source_snapshots": {
+    "34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5": "source-snapshots/34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5-s13_montecarlo.py.gz",
+    "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7": "source-snapshots/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7-common.py.gz",
+    "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba": "source-snapshots/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba-zh_lines.py.gz",
+    "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef": "source-snapshots/c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef-ai_text_zh.json.gz",
+    "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845": "source-snapshots/1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845-plotting.py.gz",
+    "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e": "source-snapshots/1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e-qa_motion.py.gz",
+    "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3": "source-snapshots/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3-qa_series.py.gz",
+    "15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c": "source-snapshots/15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c-s14_scorefn.py.gz"
+  },
+  "limits": [
+    "No continuous perceptual playback, listening/narration synchronization, native1080motion or4K/final production approval.",
+    "Exact PNG SHA256 inheritance only; algorithmic full decoding is not actual viewing of every encoded frame.",
+    "Six historical MC/ScoreFn/MCMC whole movies were overwritten through hardlinks; original whole-movie bytes unavailable. Old selected PNGs/audits/guard records survive. No current old-movie equality or recreated old movie is claimed.",
+    "Raw final views.json files remain empty and are preserved unchanged; root completed actual review is recorded separately in root-review-attestation.json.",
+    "Source copies are source-at-review snapshots, not reconstructed historical import attestations.",
+    "Full518-test receipt covers MC/Score repairs and predates subsequent Brownian/Fokker-Planck changes; no broader current-suite claim."
+  ],
+  "endpoint_cases": [
+    {
+      "case": "en-MonteCarlo",
+      "raw_record_sha256": "af4f166f80cac9e9bb84fa20b8efc150fc803b4b4ed1b30bbde74b28d536a347",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "actual_images_viewed_by_root": 19,
+      "frames": [
+        {
+          "case": "en/MonteCarlo",
+          "time": 1.0,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/000_00001.0s.png",
+          "sha256": "b6f586ab78dc46a99eb3819935653f5df0aadf5e7d2aa711ef871fdc864de605"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 7.624050925925926,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/001_00007.6s.png",
+          "sha256": "a461ceed1cddbea8d9e2f048e6d8c45d883d79519b230f161b668c823d8c92b5"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 18.79442129629629,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/002_00018.8s.png",
+          "sha256": "a666ffd57321228c8963f8c7fe39c3a35d5d9c368eed4305f9fa3bfc9d97b92c"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 25.17749007936507,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/003_00025.2s.png",
+          "sha256": "927bfc1e1926b7aa5e4a4c03d63af4317a66ea14357e09cfe0cbf54824cec42c"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 36.307375,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/004_00036.3s.png",
+          "sha256": "5f7724d5be899fd5f6a7190a96003af968aaa1b8ac9c849d7113eb898028a833"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 40.851706065759636,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/005_00040.9s.png",
+          "sha256": "e445e5e1f5df90fa25c99d3eb386e3e15aa82a9f7bb3fc2f3823655b6ed50908"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 57.01005829554044,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/006_00057.0s.png",
+          "sha256": "365650fc1e4947ca428e77db7ae2fc034cba280fc0df59dac48651501865d82d"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 60.50722264739229,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/007_00060.5s.png",
+          "sha256": "488bff40433a2d865347eb0ad59ef882e2cad1897ffe9be503ada921f63c2f70"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 75.61189162887378,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/008_00075.6s.png",
+          "sha256": "f536824644ea189c43ded34ad283b08c4683723967bb0960e5face59521c3f6e"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 84.08338921341483,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/009_00084.1s.png",
+          "sha256": "447fad75f40de948ed21285113d3104338e0404db82e6d3664a84f57d28e34ad"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 91.94892866591081,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/010_00091.9s.png",
+          "sha256": "9173ad186131bb33b8e6c3f1d1ac33f5735597ea85f96fb17ad15729769e3976"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 103.76743329554044,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/011_00103.8s.png",
+          "sha256": "eb74f12a91abab19d53642c9d3e79ff8bd3b2536e82e98822a6a2aeab54626b7"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 114.67666116748018,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/012_00114.7s.png",
+          "sha256": "293c1852266393bc58abda0e2113c1809b557bc03fd3e4fa163aaf9179e9e66f"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 133.33882399111408,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/013_00133.3s.png",
+          "sha256": "fde0769b5314608d1251cba117aff0527d56208ffc572875b4b629ec05739938"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 138.0153370895784,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/014_00138.0s.png",
+          "sha256": "d775c0c65263ca5ea31d9b13be4c8e42f6d7692ec4b207a4c672f0ca3238a60e"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 149.63096491252327,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/015_00149.6s.png",
+          "sha256": "317f2d2c87d25a6d88da62958ca2580088cd88c00c08114bdb1c4a93feb5bc89"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 164.38959996220714,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/016_00164.4s.png",
+          "sha256": "eb270a81fdf74f35656014ce3e4b32a8f29475caedd4ed1129b95298773fe6f1"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 167.90800954826378,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/017_00167.9s.png",
+          "sha256": "2e45046dc823a6bbbda5de4dcde0f882c55e166fd3281d9672a0cfa7117dabe3"
+        },
+        {
+          "case": "en/MonteCarlo",
+          "time": 175.23562392734874,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/MonteCarlo/018_00175.2s.png",
+          "sha256": "565a7f6b9e324e21313c1c0e114f7abbfbd2e41476edf51782812944f480c0a0"
+        }
+      ]
+    },
+    {
+      "case": "zh-MonteCarlo",
+      "raw_record_sha256": "a8f04b6ea7c6d5bd6698c3828e5b6f1e44cb055e02370b554e86fe8a507d4c66",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "actual_images_viewed_by_root": 19,
+      "frames": [
+        {
+          "case": "zh/MonteCarlo",
+          "time": 1.0,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/000_00001.0s.png",
+          "sha256": "f1af37201ebb2cc1084e2f10e83ffab5ca68f70c40ec8c7ef7aede502f71af3e"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 8.23835709132575,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/001_00008.2s.png",
+          "sha256": "ec5ef6720869f2904d92d082e4d54b4d4834ba0ca4b8cc9e24a6c2ad3c615209"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 21.28028545662877,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/002_00021.3s.png",
+          "sha256": "b4299af0e58e95d83f288dbccbac809845181f989b5fd8512aedc246f7a3398f"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 28.052055953997648,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/003_00028.1s.png",
+          "sha256": "62c312c6b17974688c14119fff6cbea8b011427f65d1248b9adedfd55f4898b7"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 42.88833333333333,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/004_00042.9s.png",
+          "sha256": "5f7724d5be899fd5f6a7190a96003af968aaa1b8ac9c849d7113eb898028a833"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 47.9660949612403,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/005_00048.0s.png",
+          "sha256": "b1633eca0bba0008631a94a61ec7d88985469918ada6130dd9ba75116befe421"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 64.09000484496123,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/006_00064.1s.png",
+          "sha256": "5daebb83236bb204b3467c2df67396c9a8880bf7b430d9e08e046b1e0e2d8fe3"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 67.85254029589714,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/007_00067.9s.png",
+          "sha256": "79b6e7d1a0c929d10f5a251069b58ca032c716f6bb0f0cc73102096d984e3d64"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 80.12487984496124,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/008_00080.1s.png",
+          "sha256": "cf2934af278dc60c2b35ceab29f5a2d148efb111ce97e1b420881e80dfdafa50"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 89.27482447397564,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/009_00089.3s.png",
+          "sha256": "3cf556fd352f256c8cda6eaa1286b8dd6afcda5cee1124bf3e4fc676663da515"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 96.03728294573642,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/010_00096.0s.png",
+          "sha256": "af14685ca6176d4bb5b741d1a4ebae7c7ef8bc9c599c56feaa717024b5267dfe"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 107.64346317829458,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/011_00107.6s.png",
+          "sha256": "87f73bc282d855ce6952a4559a6e6ef979b9b75c9527bc9f102615d74f36b12b"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 120.14599196583129,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/012_00120.1s.png",
+          "sha256": "9fc7f7cddfb60d954a078ece4bea486df8e9442e37c2700dd6cb9ff9fd53d4a4"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 137.2842277131783,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/013_00137.3s.png",
+          "sha256": "638ac4cf9969d08a33ad19e8c5a7c10ff0d45d02f4ee880c75ca9dc9d3eb5cdd"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 142.55205717054264,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/014_00142.6s.png",
+          "sha256": "e7eb73247c9526456b6d909410385dfdefa5139afee2d3d688dc56012470b3db"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 153.71484786821702,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/015_00153.7s.png",
+          "sha256": "301304c83262c650b1ceb813dc12e60bbbebca46409927a871a554c1d025b5c6"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 169.6945881782946,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/016_00169.7s.png",
+          "sha256": "d9980ed16378b30f7d8338288ff81f156d2186b1d9cb262951db21a94567e849"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 172.63258603982894,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/017_00172.6s.png",
+          "sha256": "49baef2153d31edfb605df2e36a814ab2e73adf2ba40012336c6fb9e1bac36b2"
+        },
+        {
+          "case": "zh/MonteCarlo",
+          "time": 181.94800972333604,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/MonteCarlo/018_00181.9s.png",
+          "sha256": "ca4fa72cc6d1719e1599b7b4453e0ab5db78a08466f37e2ee4f5f631f52004fc"
+        }
+      ]
+    },
+    {
+      "case": "en-ScoreFn",
+      "raw_record_sha256": "76bac1adb18803b07f180d7dcd506f5e1c6196479d4b29a2b9d1e659ef2c352f",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "actual_images_viewed_by_root": 16,
+      "frames": [
+        {
+          "case": "en/ScoreFn",
+          "time": 1.0,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/000_00001.0s.png",
+          "sha256": "b11d62ba5f67906aac17f10284a54e6a4201fd77858ca301f8cd4e750825c8a5"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 6.642583333333333,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/001_00006.6s.png",
+          "sha256": "a8293df848f54a0cd24975e76847e796b05fc7e42a3507fc84618cc9ddf0314a"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 15.653390030441399,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/002_00015.7s.png",
+          "sha256": "3a1612f440a38eea2755179d33bb85a6384f9893a88951c1526c9e7cddb91ed9"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 30.50574923896498,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/003_00030.5s.png",
+          "sha256": "122a1c28576741d31183598914016a99284b9970483b35e11c20a79d1a169277"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 37.72958333333333,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/004_00037.7s.png",
+          "sha256": "43f1105d187b86fab26361d87bee89f71451a6c401876ca56713d532cc1329e9"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 43.86887313860252,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/005_00043.9s.png",
+          "sha256": "fdf3c5440bed015c8b4e2d082bba2adfba76c73dd6a10324c648935694eb8884"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 51.45459287896143,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/006_00051.5s.png",
+          "sha256": "152db3707c1295c580dbcb8d4bc25256c1f4192ed2a3e16f6ddfaf0eb95550c6"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 62.15638745704466,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/007_00062.2s.png",
+          "sha256": "ce43784ad6525fbe54345d62be9d8c787a30dddd3785edd69af2e602ae95ea7e"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 78.8055,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/008_00078.8s.png",
+          "sha256": "f84c48594488f8a68849af417723002ec57f8739682b2b77c879585b9926d5ba"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 90.88815107212474,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/009_00090.9s.png",
+          "sha256": "127b7206805440ca18f05541c0653ba3e85f25c015c9763f270ff4ac2238601e"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 99.30433040935672,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/010_00099.3s.png",
+          "sha256": "593f4fa4f06187ede6817a82d3623fc350b6c39b830bb0a9210025ce946aee06"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 109.98293664717352,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/011_00110.0s.png",
+          "sha256": "ac09456ad2761eb731378d933d9427b3a0aa7226a843a912a7b465e70cbc8de7"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 133.62770833333332,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/012_00133.6s.png",
+          "sha256": "a8db22609b9b3e05d4fb76c43117b06c2a5b21cf02853f517dac59ef4f33a71b"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 151.0955324074074,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/013_00151.1s.png",
+          "sha256": "c9131a8f9e4227d2b827755b5eca3cf7d5c28c2a88306f6cc8c0a6570e9c0f19"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 159.98615740740738,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/014_00160.0s.png",
+          "sha256": "9b15b3ec2a0e2dd442ae8e24a94b9f028034a78d0ba0618c405ff1272a9ec1d4"
+        },
+        {
+          "case": "en/ScoreFn",
+          "time": 175.68349537037034,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/en/ScoreFn/015_00175.7s.png",
+          "sha256": "42a58e24dcd6f98523c7355549b25c4d1fa9cf9104528faabeb7c964cb3f4fad"
+        }
+      ]
+    },
+    {
+      "case": "zh-ScoreFn",
+      "raw_record_sha256": "383a3593baa9cdc4bd686be15441769c25eca60a9c8504d2b297f3a886029b41",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "actual_images_viewed_by_root": 16,
+      "frames": [
+        {
+          "case": "zh/ScoreFn",
+          "time": 1.0,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/000_00001.0s.png",
+          "sha256": "1951abb5bfbaff29b88532d795d9f11d4d1d2c4ce684728b26b3439ddf6fefa6"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 6.143,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/001_00006.1s.png",
+          "sha256": "acf477a17fc463a333fe18a1f23ed1837acce823686c8ec03aa8062f8c158884"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 15.993649486695997,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/002_00016.0s.png",
+          "sha256": "0d0fc819f02d5e89202e03cba7c00a34a2e2499e5e7131e448edc4a5b6d9f747"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 30.360295202178897,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/003_00030.4s.png",
+          "sha256": "21f000dbd01155533f85c99a581cd042f1a65e317ef33b5016287a7ab6344dc1"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 36.25691666666666,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/004_00036.3s.png",
+          "sha256": "e3d6bb52b8bd11dffbc6bf4fafc9c033432e4a93aa352ea6981838982cda1c14"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 41.58549021132671,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/005_00041.6s.png",
+          "sha256": "30057fc5b900f603bcdecb3cb49e9777d0fa3ae5fdb1004327ccb574ca7bb2b2"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 48.52031468177554,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/006_00048.5s.png",
+          "sha256": "da39b40db5d6fe07790f41a9fc4ca471e382e82e094355f559067244f4ec5f64"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 60.90603531575571,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/007_00060.9s.png",
+          "sha256": "20161fc24b3c5e0cdaa4341d90cf09786cd65764b60547f7ee81072e33e8ede5"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 77.91854166666666,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/008_00077.9s.png",
+          "sha256": "4d0ac987e37ab89b315fd22c29714628cef82f427ee2dcb87340f769ea1b88d9"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 88.98566582475536,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/009_00089.0s.png",
+          "sha256": "740fa99440a75103dd5ba1b57a99ccb5ca7734c7ea595addb70d907227da781d"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 97.12666213940781,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/010_00097.1s.png",
+          "sha256": "c146b77af4df293e5d0c1cdedd8d1ce2c846dbcf138cc69ead7f0915230c3272"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 107.5807223757784,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/011_00107.6s.png",
+          "sha256": "04b51b508dafd3d980749a2fd71f36220038c1a7f7c3c5eaa3897ecec23d8bcf"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 132.82666666666665,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/012_00132.8s.png",
+          "sha256": "73a488e05d588a8d07b18e3f3b90dc1f45dbc5348c34ed7e91fa7e15cec694ae"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 153.41715520606775,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/013_00153.4s.png",
+          "sha256": "c81dd3d8bc298010dbd433865408099e11db836425a9c856f63ee0a33c57c9dd"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 166.0057029725058,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/014_00166.0s.png",
+          "sha256": "5168eb1dc496d64cfea3f509406f6c11e7b9a5f34480af29fcf1b02badaa1c0c"
+        },
+        {
+          "case": "zh/ScoreFn",
+          "time": 181.77891695945578,
+          "file": "/workspace/runtime/ai5-root-mc-score-endpoint-review/zh/ScoreFn/015_00181.8s.png",
+          "sha256": "555de7f6ca9a3f00fa43b197bc9fe8498de5429f9f01fe6bf1ff96d358c6f2cb"
+        }
+      ]
+    }
+  ],
+  "test_receipt": {
+    "receipt_sha256": "2706bc4432df41ada59a2ef1bd7189d99b88a7dc9773bba98bb7d8af6185d6c2",
+    "log_sha256": "ad721997ba9a318f97e289a80e1b90696bc6b9eef68bdec5229e2c1a9f578213",
+    "source_before_sha256": "d9d167093b2926a80b7fb396ce781ec048520f0bbf4e1d66a44157c1dc73a3fd",
+    "source_after_sha256": "d9d167093b2926a80b7fb396ce781ec048520f0bbf4e1d66a44157c1dc73a3fd",
+    "tests": 518,
+    "returncode": 0,
+    "sources_unchanged": true,
+    "inventoried_source_files": 1501,
+    "started_utc": "2026-11-01T03:36:42.405697+00:00",
+    "ended_utc": "2026-11-01T03:38:18.609704+00:00",
+    "scope": "Covers MC/Score source state; predates subsequent Brownian/Fokker-Planck changes. This is not a fresh broader current-source test run."
+  },
+  "totals": {
+    "decoded": 12113,
+    "selected": 2005,
+    "unique_png": 1542,
+    "changed_png_actually_viewed_by_root": 189,
+    "changed_pages_actually_viewed_by_root": 25,
+    "inherited_exact_png": 1353,
+    "final_native_followups_actually_viewed_by_root": 14,
+    "unselected_encoded_frames": 10108
+  },
+  "root_review_attestation": "root-review-attestation.json"
+}

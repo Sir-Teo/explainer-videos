@@ -1,0 +1,11 @@
+# Late cloud capacity receipts — 2026-11-01
+
+This package preserves two completed capacity actions. It did not repeat either action or modify caches, sources, movies or original receipts.
+
+The 03:40 UTC receipt records normal Hugging Face cache-manager removal of the inactive public `Qwen/Qwen3-0.6B-Base` snapshot `da87bfb608c14b7cf20ba1ce41287e8de496c0cd`. Its seven recorded files total **1,203,625,970 bytes**, matching the manager's expected freed-size field. All seven recorded snapshot/blob targets are absent at this read-only packaging check. The action-time open/mapped-file probe recorded no matching files. Before/after inventories of **245 protected numerical/model/corpus payloads** match exactly in path, byte count, SHA256 and mtime. These are action-time preservation receipts, not a new producer or science validation.
+
+The separate second inactive-PNG consolidation ledger records **13,136 replaced duplicate paths**, pointing to 7501 retained source paths. All ledger entries name PNGs, distinct original/retained paths, positive byte counts and exact SHA256 hashes. Its reported storage recovery is an **estimate of 1,019,281,408 bytes**; the summed logical sizes of replaced file entries are1,000,078,535 bytes. These two quantities are retained distinctly. No new filesystem-capacity delta was measured by this packaging task. The recorded scope is inactive Part3/4 and temporal PNGs, with original paths retained; no cache/model/movie/source mutation is claimed by this ledger.
+
+The PNG ledger describes equivalence at the recorded action. It is not an immutable-copy guarantee for aliases that may later be written. This archive verifies ledger structure and preserves raw recorded hashes/inodes; it does not claim to have rehashed all 13,136 current image paths after subsequent rendering.
+
+Full protected inventories, removal receipt, historical cache-manager driver and the complete PNG ledger are compressed without changing their original bytes. The driver is historical supporting evidence and was not executed. verification.json records original and compressed hashes; manifest.json hashes all packaged files. No credentials or downloaded model weights are packaged. Future use of the evicted public snapshot requires normal retrieval of that exact public revision.

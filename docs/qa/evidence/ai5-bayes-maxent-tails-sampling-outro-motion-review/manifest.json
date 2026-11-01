@@ -842,9 +842,9 @@
       "sha256": "eb965a4c098cb53f6cb8da36f988fce9be60d343f4e6359e145611920250bae4"
     },
     {
-      "path": "repairs/Bayes/repair.patch",
-      "bytes": 1067,
-      "sha256": "bac15c813e95f94773eb85797ca693d520ed36cdef00f184766c352df4875c52"
+      "path": "repairs/Bayes/repair.patch.gz",
+      "bytes": 311,
+      "sha256": "fc687f7fc777bc9ecc4d7319f922eb3fc652ea306464d8dddcd53a860f6efcf3"
     },
     {
       "path": "repairs/Bayes/s06_bayes-after.py.gz",
@@ -862,9 +862,9 @@
       "sha256": "c0728496ca876459c3b587c505651d72d827ca2a6d16c39e3c03403e4874a125"
     },
     {
-      "path": "repairs/MaxEnt/repair.patch",
-      "bytes": 576,
-      "sha256": "43486800b0241bf765de6a97d2012e2fd24b33476eae2d2ae7b337dab9357fe7"
+      "path": "repairs/MaxEnt/repair.patch.gz",
+      "bytes": 200,
+      "sha256": "1f8dc241d8f98fd6bd767226bd8e8ac802a97f7020c884920b005e2866dd4d08"
     },
     {
       "path": "repairs/MaxEnt/s07_maxent-after.py.gz",
@@ -887,9 +887,9 @@
       "sha256": "550bb95f02b4d928071f2d2628ba4ff80bfc0244d0cfac54f8e54c17287bc2e4"
     },
     {
-      "path": "repairs/Outro/repair.patch",
-      "bytes": 1155,
-      "sha256": "1a88e96f013de07fc61267ef60dd5149d9ee82506b272495d4315481c3d94f38"
+      "path": "repairs/Outro/repair.patch.gz",
+      "bytes": 541,
+      "sha256": "fa11e0ac66d3807f41afd920e0b76bfa04a7710578f6bac8922de34f72a0b6f6"
     },
     {
       "path": "repairs/Outro/s20_outro-after.py.gz",
@@ -927,9 +927,9 @@
       "sha256": "11decc5c41d94b6207888ee00a88daf343b4f638f766a86dbb27bfe24c74a7fb"
     },
     {
-      "path": "repairs/Tails/repair.patch",
-      "bytes": 611,
-      "sha256": "3b42a55e92e78382e2c04c894a68fe93f73a85609fa0711cb96a0307ef0f4ce4"
+      "path": "repairs/Tails/repair.patch.gz",
+      "bytes": 206,
+      "sha256": "f8659937311780da80dc790698c06b7e334cd654ca9ee5e07b0958c5a2ad9ffb"
     },
     {
       "path": "repairs/Tails/s09_tails-after.py.gz",
@@ -1072,6 +1072,6 @@
       "sha256": "d4fdcee4dcca4e999cd81ad173a7a2aa37fa538aa8b88e025be22dca21495f67"
     }
   ],
-  "payload_bytes": 8434048,
+  "payload_bytes": 8431412,
   "files_count": 214
 }

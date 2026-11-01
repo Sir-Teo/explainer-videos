@@ -1,0 +1,52 @@
+{
+  "scope": "Read-only receipt verification and exact archival, no cleanup rerun",
+  "qwen_revision": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+  "protected_inventory_records": 245,
+  "before_after_protected_equal": true,
+  "public_target_files": 7,
+  "public_target_files_absent_at_packaging": true,
+  "manager_expected_freed_bytes": 1203625970,
+  "reported_open_mapped_matches": 0,
+  "png_link_rows": 13136,
+  "png_retained_source_paths": 7501,
+  "png_logical_entry_bytes": 1000078535,
+  "png_estimated_recovered_bytes": 1019281408,
+  "png_all_current_paths_rehashed": false,
+  "archives": [
+    {
+      "original_path": "/workspace/runtime/capacity-inactive-qwen-base-20261101/receipt.json",
+      "original_bytes": 3705,
+      "original_sha256": "e5d006425b0c77c7486e65f85f974cc553ba28b96308d228f3402bfc09330a9c",
+      "archive_path": "inactive-public-qwen-base/receipt.json.gz",
+      "archive_sha256": "4267628f24d287ebe6cff464c9d1a4989da00161284fe3ce3b1bd75669fbea5c"
+    },
+    {
+      "original_path": "/workspace/runtime/capacity-inactive-qwen-base-20261101/protected-before.json",
+      "original_bytes": 52063,
+      "original_sha256": "4e7147b018053c113906506a0e70cae4d4c5a1fcffa7d2d90a051af43b03fad7",
+      "archive_path": "inactive-public-qwen-base/protected-before.json.gz",
+      "archive_sha256": "d3e419cf7b9ac5db8e959df4634262894a8e3a22e8e133246144f63f44cd8382"
+    },
+    {
+      "original_path": "/workspace/runtime/capacity-inactive-qwen-base-20261101/protected-after.json",
+      "original_bytes": 52063,
+      "original_sha256": "4e7147b018053c113906506a0e70cae4d4c5a1fcffa7d2d90a051af43b03fad7",
+      "archive_path": "inactive-public-qwen-base/protected-after.json.gz",
+      "archive_sha256": "d3e419cf7b9ac5db8e959df4634262894a8e3a22e8e133246144f63f44cd8382"
+    },
+    {
+      "original_path": "/workspace/runtime/reclaim_inactive_qwen_base.py",
+      "original_bytes": 2546,
+      "original_sha256": "9cde7841650d3e9054e6aef9bc060ae8e18bdb5ec00935c2b0f0758fde907996",
+      "archive_path": "inactive-public-qwen-base/historical-driver.py.gz",
+      "archive_sha256": "2bc52a98821386de590eac9c03a7efe9c3feea4dbb76d18f1968fb5d466c667f"
+    },
+    {
+      "original_path": "/workspace/runtime/inactive-png-consolidation-20261101-second.json",
+      "original_bytes": 6535989,
+      "original_sha256": "16e2977cc377e222561815b8065a3b8d0ad761b49955ddb99169b25372498925",
+      "archive_path": "inactive-png-consolidation/exact-link-ledger.json.gz",
+      "archive_sha256": "22593d3353e183e662fad6ddc42664b4fac9a392a3f8857e824238733571950b"
+    }
+  ]
+}
