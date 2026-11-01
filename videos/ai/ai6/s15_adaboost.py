@@ -161,7 +161,11 @@ class AdaBoost(VoiceoverScene):
                      label(rf"held-out error then: \ ${100 * te_z:.1f}\%$", font_size=22, color=HL),
                      label(rf"best: \ ${100 * te.min():.1f}\%$, \ round ${best}$", font_size=22, color=HL)
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(bound, DOWN, buff=0.35).align_to(key, LEFT)
-        if keeps:
+        if z0 is None:
+            say = (f"The training error never reaches zero in these {n} rounds; its final value is "
+                   f"{100 * tr[-1]:.1f} percent. The held-out error ends at {100 * te[-1]:.1f} percent, "
+                   f"with its lowest observed value {100 * te.min():.1f} percent at round {best}.")
+        elif keeps:
             say = (f"The training error hits zero at round {z0}, yet the held-out error keeps falling, from "
                    f"{100 * te_z:.1f} to {100 * te.min():.1f} percent at round {best}: the exponential loss keeps "
                    "pushing the margins wider even after every page is right, a puzzle that Schapire and colleagues "

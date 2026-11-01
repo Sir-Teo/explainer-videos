@@ -11,6 +11,35 @@ from videos.ai.ai6.compute import fisher_score
 U = 0.95  # screen units per standard deviation
 
 
+def whitening_geometry(covariance, means):
+    """The actual affine geometry for the inset: whiten, then pull a normal back.
+
+    The ellipses share the pooled covariance; they are not fitted class contours.
+    A common display scale is applied only after these coordinate operations.
+    """
+    covariance, means = np.asarray(covariance, float), np.asarray(means, float)
+    if (covariance.shape != (2, 2) or means.shape != (2, 2)
+            or not np.isfinite(covariance).all() or not np.isfinite(means).all()
+            or not np.allclose(covariance, covariance.T, rtol=1e-12, atol=1e-14)):
+        raise ValueError("finite symmetric 2x2 covariance and two finite 2D means required")
+    values, vectors = np.linalg.eigh(covariance)
+    if np.any(values <= 0):
+        raise ValueError("whitening requires positive-definite pooled covariance")
+    W = (vectors / np.sqrt(values)) @ vectors.T
+    centres = means - means.mean(axis=0)
+    delta = means[1] - means[0]
+    if not np.linalg.norm(delta) > 0:
+        raise ValueError("different class means required for a Fisher direction")
+    theta = np.linspace(0, 2 * math.pi, 65)
+    contour = (vectors * np.sqrt(values)) @ np.array([np.cos(theta), np.sin(theta)])
+    before = centres[:, None, :] + contour.T[None, :, :]
+    after = before @ W.T
+    delta_z = W @ delta
+    normal = W.T @ delta_z
+    return dict(W=W, centres=centres, before=before, after=after,
+                delta=delta, delta_z=delta_z, normal=normal)
+
+
 class LDA(VoiceoverScene):
     def construct(self):
         chapter(self, 8, r"Fisher's direction", r"Which way do the two authors look most different?",
@@ -101,29 +130,44 @@ class LDA(VoiceoverScene):
         cite_ = cite(r"R.~A.~Fisher, \textit{The Use of Multiple Measurements in Taxonomic Problems} (1936)", corner=UL)
         pl = always_redraw(piles)
         dl = always_redraw(direction)
-        # S_W^-1, pictured: whiten the pooled within-author scatter.
+        # Whitening and pulling the normal back are two different maps.
+        # These schematic ellipses use the actual class means and pooled covariance.
+        pooled = Sw / (len(A) + len(D) - 2)
+        geo = whitening_geometry(pooled, [A.mean(0), D.mean(0)])
+        span = np.max(np.abs(np.concatenate([geo["before"], geo["after"]], axis=0)), axis=(0, 1))
+        display_scale = min(1.7 / span[0], 0.75 / span[1])
         frame_ = Rectangle(width=3.6, height=1.7, stroke_opacity=0)
 
-        def two_clouds(round_):
-            if round_:
-                ca, cd = np.array([-1.0, -0.15, 0]), np.array([1.0, 0.15, 0])
-                shapes = [Circle(radius=0.42).move_to(c_) for c_ in (ca, cd)]
-            else:
-                ca, cd = np.array([-0.35, -0.3, 0]), np.array([0.35, 0.3, 0])
-                shapes = [Ellipse(width=2.2, height=0.42).rotate(-20 * DEGREES).move_to(c_) for c_ in (ca, cd)]
+        def two_clouds(pullback=False):
+            ca, cd = [np.r_[p * display_scale, 0] for p in geo["centres"]]
+            shapes = [VMobject().set_points_as_corners(
+                [np.r_[p * display_scale, 0] for p in contour]) for contour in geo["before"]]
             for sh, col in zip(shapes, (AUSTEN, DICKENS)):
                 sh.set_stroke(col, 2.5).set_fill(col, 0.25)
+            start, end = ca, cd
+            if pullback:
+                start = np.zeros(3)
+                end = np.r_[0.7 * geo["normal"] / np.linalg.norm(geo["normal"]), 0]
             return VGroup(*shapes, Dot(ca, radius=0.06, color=AUSTEN), Dot(cd, radius=0.06, color=DICKENS),
-                          Arrow(ca, cd, buff=0.08, color=WHITE, stroke_width=4, max_tip_length_to_length_ratio=0.2))
+                          Arrow(start, end, buff=0, color=WHITE, stroke_width=4,
+                                max_tip_length_to_length_ratio=0.2))
 
-        before = two_clouds(False)
+        before = two_clouds()
         before[4].set_opacity(0)
-        swc = gloss(r"$S_W^{-1}$", r"make pooled within-author scatter round,\\ then point from one "
-                    r"centre to the other", picture=VGroup(frame_, before), width=4.6)
+        swc = gloss(r"$W=\Sigma_W^{-1/2}$", r"whiten pooled covariance $\Sigma_W=S_W/(n-2)$;\\ "
+                    r"then connect the whitened means\\ (schematic ellipses, actual pooled covariance)",
+                    picture=VGroup(frame_, before), width=4.6)
         swc.move_to([3.9, -1.3, 0])
         sp = swc[1][-1]  # the card's copy of (frame, clouds)
-        after = VGroup(frame_.copy(), two_clouds(True))
-        after.scale(sp[0].width / frame_.width).move_to(sp[0])
+        matrix = np.eye(3)
+        matrix[:2, :2] = geo["W"]
+        after = before.copy().apply_matrix(matrix)
+        after[4].set_opacity(1)
+        after.scale(sp[0].width / frame_.width).shift(sp[0].get_center())
+        back = gloss(r"$\mathbf w=W^\top\Delta_z\propto S_W^{-1}\Delta$",
+                     r"pull back the normal by $W^\top$;\\ the intercept is a separate choice",
+                     picture=VGroup(frame_.copy(), two_clouds(pullback=True)), width=4.6)
+        back.move_to(swc)
         with self.voiceover(
             "In 1936, Ronald Fisher, separating species of iris by the sizes of their petals, asked a different question. Along which direction do the two groups look most "
             "different? <bookmark mark='a'/> Pick a direction, and squash every page onto it. Each author becomes a "
@@ -140,8 +184,10 @@ class LDA(VoiceoverScene):
         like_lr = (", the same as logistic regression." if abs(acc - load("logistic")["acc2"]) < 0.006 else ".")
         with self.voiceover(
             "The best direction has a formula: the difference between the two centres, corrected by the inverse of "
-            "the pooled spread within the authors. <bookmark mark='w'/> That correction means: stretch the space "
-            "until the pooled within-author scatter is round, then point from one centre to the other. "
+            "the pooled spread within the authors. <bookmark mark='w'/> First whiten the pooled covariance with its "
+            "inverse square root, W. In that space the pooled ellipses are round; connect the transformed means. "
+            "<bookmark mark='pull'/> Then pull that normal back with W transpose. The two inverse-square-root "
+            "maps together give the full inverse in Fisher's formula, up to an overall scale. "
             "<bookmark mark='a'/> Here, it leans mostly on 'not'. "
             "<bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets "
             f"{100 * acc:.0f} percent of the test pages right{like_lr} <bookmark mark='c'/> When each group is a bell "
@@ -151,9 +197,11 @@ class LDA(VoiceoverScene):
             self.play(FadeOut(jf), FadeOut(jax), FadeOut(jcurve), FadeOut(jdot), FadeOut(jl), FadeIn(wf), FadeIn(wn))
             vo.wait_until("w")
             self.play(FadeIn(swc))
-            self.play(Transform(sp[1], after[1]), run_time=1.6)
+            self.play(Transform(sp[1], after), run_time=1.6)
+            vo.wait_until("pull")
+            self.play(ReplacementTransform(swc, back), run_time=1.2)
             vo.wait_until("a")
-            self.play(FadeOut(swc), Indicate(dl, color=C.BITS))
+            self.play(FadeOut(back), Indicate(dl, color=C.BITS))
             vo.wait_until("b")
             ub = u_b
             perp = np.array([-ub[1], ub[0]])
@@ -215,14 +263,14 @@ class LDA(VoiceoverScene):
             cmath(r"J(\mathbf{w})", "=", r"\frac{\big(\mathbf{w}^{\top}(\boldsymbol\mu_D - \boldsymbol\mu_A)\big)^2}"
                   r"{\mathbf{w}^{\top}S_W\,\mathbf{w}} = \frac{\mathbf{w}^{\top}S_B\,\mathbf{w}}{\mathbf{w}^{\top}S_W\,\mathbf{w}}",
                   font_size=34, colors=colors),
-            cmath(r"\nabla J = 0", r"\;\Longleftrightarrow\;", r"S_B\,\mathbf{w} = J(\mathbf{w})\, S_W\,\mathbf{w}",
+            cmath(r"\mathbf{w}\in\operatorname{argmax} J", r"\;\Longrightarrow\;", r"S_B\,\mathbf{w} = J_{\max}\, S_W\,\mathbf{w}",
                   font_size=34, colors=colors),
             cmath(r"S_B\,\mathbf{w}", r"\;\propto\;", r"\boldsymbol\mu_D - \boldsymbol\mu_A", font_size=34, colors=colors),
             cmath(r"\mathbf{w}", r"\;\propto\;", r"S_W^{-1}(\boldsymbol\mu_D - \boldsymbol\mu_A)", font_size=34,
                   colors=colors),
         ]
         whys = [why(r"$S_B = \Delta\boldsymbol\mu\,\Delta\boldsymbol\mu^{\top}$: \\ between the authors"),
-                why(r"the quotient rule: \\ a generalized eigenproblem"), why(r"$S_B$ has rank one"),
+                why(r"$S_W \succ 0$, $\Delta\mu \ne 0$; \\ largest positive eigenpair"), why(r"$S_B$ has rank one"),
                 why(r"Fisher's direction")]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=-2.0, buff=0.36, edge=6.8)
         ev = ld["eigvals"]
@@ -259,12 +307,15 @@ class LDA(VoiceoverScene):
         mats_t = label(r"the two $70 \times 70$ scatter matrices \ (size of each entry)", font_size=20,
                        color=GREY_B).next_to(mats, UP, buff=0.15)
         names = ", ".join(f"'{w}'" for w in top[:3])
-        also = ("It also agrees with least squares on a zero-one target: with two classes, the two are the same line."
+        also = ("It also agrees with least squares on a zero-one target in coefficient direction. "
+                "The intercept and classification threshold are separate choices."
                 if same else "And least squares on a zero-one target points the same way.")
         with self.voiceover(
             "Where does the formula come from? <bookmark mark='a'/> Fisher's score is a ratio of two quadratic forms: "
             "the spread between the authors over the spread within them. <bookmark mark='b'/> Set its gradient to "
-            "zero, and you get a generalized eigenproblem: S B w equals J times S W w. <bookmark mark='c'/> But S B "
+            "zero, and you get a generalized eigenproblem. With positive within-class scatter and different means, "
+            "choose its largest positive eigenvalue; zero-eigenvalue stationary directions do not maximize the separation. "
+            "<bookmark mark='c'/> But S B "
             "has rank one: it only ever points along the difference of the means. <bookmark mark='d'/> So the "
             "answer is S W inverse times that difference. <bookmark mark='e'/> On all seventy rates, the eigensolver "
             f"finds one nonzero eigenvalue, and its eigenvector agrees with the formula to {ld['cos_eig']:.6f}. {also}"

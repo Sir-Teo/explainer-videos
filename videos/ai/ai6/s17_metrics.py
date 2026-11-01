@@ -79,7 +79,7 @@ class Metrics(VoiceoverScene):
                     cells)
         auc, mw = m["lr2"]["auc"], m["lr2"]["mw"]
         res = VGroup(label(rf"area under the curve: \ ${auc:.4f}$", font_size=26, color=ROCC),
-                     label(rf"share of (Dickens, Austen) pairs ranked the right way: \ ${mw:.4f}$", font_size=22, color=HL),
+                     label(rf"pairwise rank credit, half for ties: \ ${mw:.4f}$", font_size=22, color=HL),
                      label(rf"all $70$ rates: \ ${m['lr70']['auc']:.4f}$", font_size=22, color=GREY_A))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -1.9, 0])
         tag = note(r"logistic regression on two rates, \ each page predicted once by ten-fold cross-validation").to_edge(DOWN, buff=0.12)
@@ -88,7 +88,8 @@ class Metrics(VoiceoverScene):
             "strict, calling nothing Dickens. Lower the threshold: you find more of Dickens's pages, the hits, but "
             "start calling Austen's pages Dickens, the false alarms. <bookmark mark='b'/> The path traced out is the "
             "ROC curve, from radar operators in the Second World War. <bookmark mark='c'/> Its area has a beautiful "
-            "meaning: the chance that a random Dickens page scores higher than a random Austen page. Count all "
+            "meaning: the chance that a random Dickens page scores higher than a random Austen page, plus half the "
+            "chance of a tie. Count all "
             f"{P * N:,} pairs: {mw:.4f}, the area exactly."
         ) as vo:
             self.play(FadeIn(g), Create(diag), FadeIn(tag))
@@ -163,7 +164,8 @@ class Metrics(VoiceoverScene):
                  ("nb_platt", r"naive Bayes, \ Platt-scaled", "#B48EF0"), ("lr70", r"logistic, \ $70$ rates", C.REWARD)]
         accs = hbars([(nm, c["acc"][k], col) for k, nm, col in specs], width=3.6, lo=0.7, hi=1.0, font_size=22,
                      fmt=lambda v: rf"{100 * v:.1f}\%", name_width=3.2)
-        lls = hbars([(nm, c[k]["logloss"], col) for k, nm, col in specs], width=3.0, lo=0.0, hi=0.55, font_size=22,
+        loss_top = max(0.55, max(float(c[k]["logloss"]) for k, _, _ in specs) * 1.05)
+        lls = hbars([(nm, c[k]["logloss"], col) for k, nm, col in specs], width=3.0, lo=0.0, hi=loss_top, font_size=22,
                     fmt=lambda v: f"{v:.3f}", name_width=3.2)
         ta = label(r"accuracy \ (higher is better)", font_size=26).next_to(accs, UP, buff=0.3)
         tl = label(r"log loss, \ nats per page \ (lower is better)", font_size=26)
@@ -172,15 +174,15 @@ class Metrics(VoiceoverScene):
             r_[0].set_opacity(0)  # the names are already on the left
         tl.next_to(lls, UP, buff=0.3)
         gL = VGroup(tl, lls).move_to([3.6, 0.2, 0])
-        tag = note(r"ten-fold cross-validated probabilities, \ every page predicted once").to_edge(DOWN, buff=0.25)
+        tag = note(r"ten-fold out-of-fold scores; \ stable log loss from logits, no probability cap").to_edge(DOWN, buff=0.25)
         nb, l2 = c["nb"], c["lr2"]
         worse = nb["logloss"] > l2["logloss"] and c["acc"]["nb"] > c["acc"]["lr2"]
-        say = (f"Naive Bayes gets {100 * c['acc']['nb']:.0f} percent of the pages right, far more than two-rate logistic "
+        say = (f"Naive Bayes gets {100 * c['acc']['nb']:.0f} percent of the pages right, more than two-rate logistic "
                f"regression's {100 * c['acc']['lr2']:.0f}, yet its log loss is worse, {nb['logloss']:.2f} against "
-               f"{l2['logloss']:.2f}: when it's wrong, it's wrong at odds of a million to one, and the log loss "
-               f"charges for every digit of that confidence. Platt scaling brings it down to {c['nb_platt']['logloss']:.2f}."
+               f"{l2['logloss']:.2f}. Log loss charges for every digit of confidence in a wrong answer. "
+               f"After Platt scaling the measured loss is {c['nb_platt']['logloss']:.2f}."
                if worse else
-               f"Here the log loss tells the same story as accuracy: naive Bayes {nb['logloss']:.2f}, two-rate logistic "
+               f"Here are the measured log losses: naive Bayes {nb['logloss']:.2f}, two-rate logistic "
                f"regression {l2['logloss']:.2f}.")
         with self.voiceover(
             "Accuracy only counts right and wrong. A proper score, like part one's log loss, also charges for "
@@ -233,7 +235,8 @@ class Metrics(VoiceoverScene):
             f"wobbles by about {100 * fa.std():.0f} points, <bookmark mark='c'/> but their average is steady: twenty "
             f"different shuffles all land between {100 * ca.min():.1f} and {100 * ca.max():.1f}. "
             "<bookmark mark='d'/> The rule that keeps the whole contest honest: make every choice on the training "
-            "pages, and look at the test pages once, at the end."
+            "pages, and look at the test pages once, at the end. This measures new chunks from the same five novels, "
+            "with a fixed full-corpus dictionary; it does not measure transfer to an unseen novel."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")

@@ -55,12 +55,18 @@ class Contest(VoiceoverScene):
         tree70 = next(r for r in rows if r["key"] == "tree")["70"]["cv"]
         xgb70 = next(r for r in rows if r["key"] == "xgb")["70"]["cv"]
         lr70 = next(r for r in rows if r["key"] == "lr")["70"]["cv"]
-        linear_wins = lr70 >= xgb70
-        line_s = ("And the plain straight line, logistic regression, beats the boosted trees: on these pages the "
-                  "evidence really is a sum of small word effects, a line's home ground, as naive Bayes' formula "
-                  "already suggested." if linear_wins else "Boosted trees edge out the straight line here.")
+        if not (math.isfinite(lr70) and math.isfinite(xgb70)):
+            line_s = "A finite paired logistic-versus-boosting comparison is unavailable here."
+        elif lr70 > xgb70:
+            line_s = ("Logistic regression scores higher than boosted trees in these folds. "
+                      "On this fixed-corpus task, a sum of small word effects is a useful description.")
+        elif lr70 == xgb70:
+            line_s = "Logistic regression and boosted trees tie on mean accuracy in these folds."
+        else:
+            line_s = "Boosted trees score higher than logistic regression in these folds."
         with self.voiceover(
-            "Here's the whole contest, every method on the same ten folds of all the pages, its settings fixed in "
+            "Here's the contest: twelve named procedures on the same ten folds of these same-five-novel pages, "
+            "with a fixed full-corpus dictionary and settings fixed in "
             f"advance. <bookmark mark='a'/> With two rates, every method lands between {100 * lo2:.0f} and "
             f"{100 * hi2:.0f} percent: two numbers simply don't hold more. <bookmark mark='b'/> With all seventy, "
             f"the best is {best70['name']}, at {100 * best70['70']['cv']:.1f} percent. A single tree manages "
@@ -160,13 +166,13 @@ class Contest(VoiceoverScene):
         fm = VGroup(label(r"The frontier: \ foundation models for tables", font_size=30, color=GOOD),
                     label(r"a transformer pretrained on millions of \emph{synthetic} tables \\ reads the training rows "
                           r"and predicts in one forward pass", font_size=22, color=WHITE),
-                    label(r"TabPFN (\textit{Nature}, Jan 2025): \ up to $10{,}000$ rows; \ in $2.8$ s, \\ beats an "
-                          r"ensemble of baselines tuned for $4$ hours", font_size=22, color=GREY_A),
+                    label(r"TabPFN (\textit{Nature}, Jan 2025): \ up to $10{,}000$ rows; \ $2.8$ s \\ "
+                          r"reported classification benchmark; \ ensemble tuned for $4$ hours", font_size=22, color=GREY_A),
                     label(r"TabPFN-2.5 (Nov 2025): \ $50{,}000$ rows, \ $2{,}000$ columns", font_size=22, color=GREY_A),
-                    label(r"TabPFN-3 (May 2026): \ up to $10^6$ rows; \ first on TabArena \ (its authors' report)",
+                    label(r"TabPFN-3 (May 2026): \ $10^6$ rows at $200$ features; \\ first on TabArena \ (its authors' report)",
                           font_size=22, color=GREY_A),
-                    label(r"independent check (Purucker et al., June 2026): \ best on small and medium data; \\ trees "
-                          r"still lead on large, \ shifting \ or very wide tables", font_size=22, color=BAD))
+                    label(r"Beyond IID (June 2026): \ TabPFN-2.6, not 3; \ includes model authors \\ "
+                          r"boundary cases: \ tree and deep baselines", font_size=22, color=BAD))
         fm.arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.35)
         with self.voiceover(
             "Deep learning took over images, sound and language. Why not tables? In 2022, Grinsztajn, Oyallon and "
@@ -176,11 +182,14 @@ class Contest(VoiceoverScene):
             "jump in steps, which trees draw easily. <bookmark mark='b'/> The challenger is a transformer trained "
             "only on millions of synthetic tables, which reads your training rows as its prompt and predicts in one "
             "pass. TabPFN's second version, in Nature in January 2025, beat a four-hour tuned ensemble in under three "
-            "seconds, on tables of up to ten thousand rows. <bookmark mark='c'/> Its successors reach fifty "
-            "thousand rows, then, this May, a million, top of the TabArena leaderboard by their makers' count. "
-            "<bookmark mark='d'/> An independent benchmark in June found them best on small and medium tables, "
-            "while trees still lead on large, shifting or very wide ones. Trees and boosting are still the baseline "
-            "to beat."
+            "seconds in its reported classification benchmark configuration, on tables of up to ten thousand rows. "
+            "<bookmark mark='c'/> Its successors reach fifty thousand rows, then, in May 2026, a million rows at "
+            "two hundred features, top of the TabArena leaderboard by their makers' report. "
+            "<bookmark mark='d'/> A broader June 2026 benchmark included model authors among its coauthors and "
+            "tested TabPFN two point six, not TabPFN three. Foundation models were strong on small and medium "
+            "IID tables; traditional tree and deep models exposed boundary cases on non-IID, large or very wide "
+            "data. These are version- and task-specific comparisons, with both tree and deep models necessary "
+            "baselines."
         ) as vo:
             self.play(FadeIn(why_[0]), FadeIn(why_[1]), FadeIn(why_[5]), FadeIn(pic), FadeIn(pic_t))
             vo.wait_until("a")

@@ -20854,7 +20854,19 @@
     "vertical zoom: $[2.6,3.7]$ \\\\ triangles: estimates outside this window": "纵轴放大：$[2.6,3.7]$ \\\\ 三角标记超出显示范围的估计值",
     "means over $400$ paths, $t = 1$ \\\\ $\\pm$: across-path standard deviation": "在$400$条路径上取均值，$t = 1$ \\\\ $\\pm$表示路径间的标准差",
     "greedy: \\ surprise $0.54$, \\\\ but $35\\%$ of its 4-token runs repeat": "贪心：\\ 意外度$0.54$，\\\\ 连续4词元片段中$35\\%$重复",
-    "square: first $\\min(N,1{,}500)$ darts \\\\ estimate and curve: all $N$ darts": "方框：显示前 $\\min(N,1{,}500)$ 枚飞镖 \\\\ 估计值与曲线：使用全部 $N$ 枚飞镖"
+    "square: first $\\min(N,1{,}500)$ darts \\\\ estimate and curve: all $N$ darts": "方框：显示前 $\\min(N,1{,}500)$ 枚飞镖 \\\\ 估计值与曲线：使用全部 $N$ 枚飞镖",
+    "coordinate paths vary smoothly": "原坐标系的权重路径平滑变化",
+    "1D powers kept": "保留的一维幂数",
+    "maximum error on a $61 \\times 61$ grid": "$61 \\times 61$网格上的最大误差",
+    "1D: $x,z \\in [-1.5,1.5]$, $\\gamma=1$": "一维：$x,z \\in [-1.5,1.5]$，$\\gamma=1$",
+    "whiten pooled covariance $\\Sigma_W=S_W/(n-2)$;\\\\ then connect the whitened means\\\\ (schematic ellipses, actual pooled covariance)": "白化合并协方差$\\Sigma_W=S_W/(n-2)$；\\\\ 再连接白化后的均值\\\\ （示意椭圆，实际合并协方差）",
+    "pull back the normal by $W^\\top$;\\\\ the intercept is a separate choice": "用$W^\\top$把法向量映回；\\\\ 截距另行选择",
+    "$S_W \\succ 0$, $\\Delta\\mu \\ne 0$; \\\\ largest positive eigenpair": "$S_W \\succ 0$，$\\Delta\\mu \\ne 0$；\\\\ 最大正特征值对应的方向",
+    "fixed dictionary; \\\\ new chunks of the same five novels": "固定词表；\\\\ 同样5部小说的新片段",
+    "ten-fold out-of-fold scores; \\ stable log loss from logits, no probability cap": "10折折外得分；\\ 从logit稳定计算对数损失，不截断概率",
+    "Beyond IID (June 2026): \\ TabPFN-2.6, not 3; \\ includes model authors \\\\ boundary cases: \\ tree and deep baselines": "Beyond IID（2026年6月）：\\ 测试TabPFN-2.6而非3；\\ 有模型作者参与 \\\\ 边界情形：\\ 树与深度模型基线",
+    "TabPFN (\\textit{Nature}, Jan 2025): \\ up to $10{,}000$ rows; \\ $2.8$ s \\\\ reported classification benchmark; \\ ensemble tuned for $4$ hours": "TabPFN（\\textit{Nature}，2025年1月）：\\ 至多$10{,}000$行；\\ $2.8$秒 \\\\ 论文报告的分类基准配置；\\ 基线集成调参$4$小时",
+    "TabPFN-3 (May 2026): \\ $10^6$ rows at $200$ features; \\\\ first on TabArena \\ (its authors' report)": "TabPFN-3（2026年5月）：\\ $200$个特征时$10^6$行；\\\\ TabArena第一\\ （作者自己的报告）"
   },
   "phrases": {
     "width": "宽度",
@@ -23127,6 +23139,14 @@
     [
       "^computed:\\ \\\\\\ \\$([0-9]+)\\$\\ positions;\\ \\\\\\ \\$\\\\blacktriangledown\\$\\ =\\ capped\\ \\\\\\\\\\ \\$([0-9]+)\\$\\ unknown\\ optimal\\ lengths\\ omitted$",
       "计算结果：\\\\ $\\g<1>$个局面；\\\\ $\\\\blacktriangledown$表示达到上限 \\\\\\\\ 省略$\\g<2>$个最优解长未知的局面"
+    ],
+    [
+      "^pairwise rank credit, half for ties: \\\\ \\$([\\d.]+)\\$$",
+      "成对排序得分，打平算一半：\\ $\\1$"
+    ],
+    [
+      "^sampled \\$\\|w\\|<10\\^\\{-12\\}\\$: \\\\ \\$(\\d+)\\$$",
+      "采样的$|w|<10^{-12}$：\\ $\\1$"
     ]
   ]
 }

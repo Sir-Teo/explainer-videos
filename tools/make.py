@@ -43,6 +43,10 @@ VIDEOS = ROOT / "videos"
 LOGS = ROOT / "renders" / "make"
 BILINGUAL = {"ai", "analysis"}  # series with a Chinese edition (and Qwen3-TTS narration)
 
+# Raw files consumed without a load() call are invisible to the import scanner.
+# Part 6 reads the five downloaded novels before its first numerical item.
+EXPLICIT_COMPUTE_DEPENDENCIES = {"ai6": {"ai1": {"corpus"}}}
+
 
 def all_videos(series: str) -> list[str]:
     names = [p.parent.name for p in (VIDEOS / series).glob("*/manifest.py")]
@@ -74,6 +78,9 @@ def depends_on(video: str) -> dict[str, set | None]:
         if name in found and found[name] is None:
             return
         found[name] = None if items is None else (found.get(name) or set()) | items
+
+    for name, items in EXPLICIT_COMPUTE_DEPENDENCIES.get(video, {}).items():
+        add(name, items)
 
     for f in me.rglob("*.py"):
         src = f.read_text()
@@ -128,6 +135,10 @@ def compute(video: str, done: set, items: set | None = None) -> None:
     draws on first."""
     if video in done:
         return
+    # Selected-item calls from later parts need the raw-file prerequisite too.
+    # compute()'s item key deduplicates this when the full dependency walk repeats it.
+    for dep, required in EXPLICIT_COMPUTE_DEPENDENCIES.get(video, {}).items():
+        compute(dep, done, required)
     if items is None:
         done.add(video)
         for dep, its in depends_on(video).items():
