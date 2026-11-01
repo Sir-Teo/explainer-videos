@@ -249,7 +249,7 @@ ZH.update({
         "这是一个有约束的问题，第4部分的拉格朗日乘子能把它里外翻转。<bookmark mark='a'/>给每一页的约束配一个乘子α。<bookmark mark='b'/>令各个导数为零，就得出：权重是训练页本身的一个组合，而每个α都在0和C之间。<bookmark mark='c'/>代回去，问题就只和α有关，而书页只通过点积出现：换上一个核函数，街道就变弯了。<bookmark mark='d'/>KKT条件完成最后一步：每一页只要安全地离开街道，它的α就是零。只有支持向量才算数。<bookmark mark='e'/>普拉特的SMO一次解两个α，我们要运行的就是它。",
 
     'f"Now the pages, with a Gaussian kernel, solved by SMO.':
-        "现在回到书页上，用高斯核，由SMO求解。<bookmark mark='a'/>C等于{Cs[0]:g}时，站在街道里很便宜：{s['n_train']}页里有{c0['n_sv']}页是支持向量，边界几乎不弯。<bookmark mark='b'/>加大C，街道就变窄：C等于{Cs[-1]:g}时，有{cb['n_sv']}个支持向量，边界绕着书页弯曲。每一个解都经过检验：对偶问题和原问题的值一致，每一页都满足它的KKT条件。<bookmark mark='c'/>10折交叉验证选出C等于{cvC:g}、核宽度{cvg:g}，判对{100 * s['acc_cv2']:.0f}%的留出书页；用全部70个词频，是{100 * s['acc70_rbf']:.1f}%。<bookmark mark='d'/>从1995年直到2012年前后深度网络接手，它一直是要打败的那个方法。",
+        "现在回到书页上，用高斯核，由SMO求解。<bookmark mark='a'/>C等于{Cs[0]:g}时，站在街道里很便宜：{s['n_train']}页里有{c0['n_sv']}页是支持向量，边界几乎不弯。<bookmark mark='b'/>加大C，街道就变窄：C等于{Cs[-1]:g}时，有{cb['n_sv']}个支持向量，边界绕着书页弯曲。每一个解都经过数值检验：屏幕上的原对偶相对间隙显示了近似程度。在C等于1时，按千分之一的容差检查，有{kk['outside'] + kk['bound_out']}个街道外或上界点未通过间隔检查；自由支持向量的最大间隔残差另行显示。<bookmark mark='c'/>10折交叉验证选出C等于{cvC:g}、核宽度{cvg:g}，判对{100 * s['acc_cv2']:.0f}%的留出书页；用全部70个词频，是{100 * s['acc70_rbf']:.1f}%。<bookmark mark='d'/>从1995年直到2012年前后深度网络接手，它一直是要打败的那个方法。",
 
     # ---------------------------------------------------------------- Trees
     'Chapter twelve. Decision trees.': '第12章。决策树。',
@@ -301,8 +301,8 @@ ZH.update({
     'f"On all seventy rates, run four hundred rounds.':
         "在全部70个词频上，跑400轮。<bookmark mark='a'/>指数损失稳步下降。<bookmark mark='b'/>它总是在训练错误率的上方，因为只要判错，e的负间隔次方就至少是1。<bookmark mark='c'/>{say}",
 
-    "f'The training error hits zero at round {z0}, yet":
-        "训练错误率在第{z0}轮降到了零，可留出书页上的错误率还在下降，从{100 * te_z:.1f}%降到第{best}轮的{100 * te.min():.1f}%：即使每一页都判对了，指数损失还在把间隔推得更宽，这个谜，沙皮尔和同事们在1998年用间隔理论解释了。",
+    "f'The training error hits zero at round {z0}, with":
+        "训练错误率在第{z0}轮降到了零，此时留出错误率是{100 * te_z:.1f}%。观察到的最低留出错误率是第{best}轮的{100 * te.min():.1f}%；跑完{n}轮后的最终值是{100 * te[-1]:.1f}%。即使每个训练页都判对了，指数损失仍然可以继续作用于间隔，沙皮尔和同事们在1998年研究了这种联系。",
 
     'f"The training error hits zero at round {z0}, and':
         "训练错误率在第{z0}轮降到了零，留出书页上的错误率是{100 * te_z:.1f}%；再多跑几轮，也没有改善。",
@@ -466,7 +466,7 @@ ZH.update({
     "Here the seventy-rate model scores lower than the two-rate model; more features need not help.": "这里，70个词频的模型反而得分更低；更多特征未必有帮助。",
     "f\"The training error never reaches zero in these": "在这{n}轮中，训练错误率从未到零，最后是{100 * tr[-1]:.1f}%。留出错误率最后是{100 * te[-1]:.1f}%，观察到的最低值是第{best}轮的{100 * te.min():.1f}%。",
     "f\"Here are the measured log losses: naive Bayes": "这里测得的对数损失是：朴素贝叶斯{nb['logloss']:.2f}，两个词频的逻辑回归{l2['logloss']:.2f}。",
-    "f\"Here's the contest: twelve named procedures": "这是比赛：12种具名流程，在同样5部小说书页的相同10折上比较，使用固定的全语料词表，参数预先设定。<bookmark mark='a'/>只用两个词频时，各方法在{100 * lo2:.0f}%到{100 * hi2:.0f}%之间：两个数所含的信息有限。<bookmark mark='b'/>换成全部70个词频，最高的是{best70['name']}，{100 * best70['70']['cv']:.1f}%。单棵树是{100 * tree70:.0f}%。{line_s}<bookmark mark='c'/>经典机器学习的一课是：数据的描述，比方法的巧妙更重要。这70个小词，做了大部分工作。",
+    "f\"Here's the contest: twelve named procedures": "这是比赛：12种具名流程，在同样5部小说书页的相同10折上比较，使用固定的全语料词表，参数预先设定。<bookmark mark='a'/>只用两个词频时，这些受测流程在这些折上的准确率落在{100 * lo2:.0f}%到{100 * hi2:.0f}%之间。<bookmark mark='b'/>换成全部70个词频，最高的是{best70['name']}，{100 * best70['70']['cv']:.1f}%。单棵树是{100 * tree70:.0f}%。{line_s}<bookmark mark='c'/>经典机器学习的一课是：数据的描述，比方法的巧妙更重要。这70个小词，做了大部分工作。",
     "A finite paired logistic-versus-boosting comparison is unavailable here.": "这里没有可用的、有限的逻辑回归与提升树配对比较。",
     "Logistic regression scores higher than boosted trees in these folds.": "在这些折上，逻辑回归得分高于提升树。对这个固定语料任务，小词效应的和是一种有用的描述。",
     "Logistic regression and boosted trees tie on mean accuracy in these folds.": "在这些折上，逻辑回归和提升树的平均准确率打平。",

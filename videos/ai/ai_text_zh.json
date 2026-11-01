@@ -20866,7 +20866,13 @@
     "ten-fold out-of-fold scores; \\ stable log loss from logits, no probability cap": "10折折外得分；\\ 从logit稳定计算对数损失，不截断概率",
     "Beyond IID (June 2026): \\ TabPFN-2.6, not 3; \\ includes model authors \\\\ boundary cases: \\ tree and deep baselines": "Beyond IID（2026年6月）：\\ 测试TabPFN-2.6而非3；\\ 有模型作者参与 \\\\ 边界情形：\\ 树与深度模型基线",
     "TabPFN (\\textit{Nature}, Jan 2025): \\ up to $10{,}000$ rows; \\ $2.8$ s \\\\ reported classification benchmark; \\ ensemble tuned for $4$ hours": "TabPFN（\\textit{Nature}，2025年1月）：\\ 至多$10{,}000$行；\\ $2.8$秒 \\\\ 论文报告的分类基准配置；\\ 基线集成调参$4$小时",
-    "TabPFN-3 (May 2026): \\ $10^6$ rows at $200$ features; \\\\ first on TabArena \\ (its authors' report)": "TabPFN-3（2026年5月）：\\ $200$个特征时$10^6$行；\\\\ TabArena第一\\ （作者自己的报告）"
+    "TabPFN-3 (May 2026): \\ $10^6$ rows at $200$ features; \\\\ first on TabArena \\ (its authors' report)": "TabPFN-3（2026年5月）：\\ $200$个特征时$10^6$行；\\\\ TabArena第一\\ （作者自己的报告）",
+    "fixed full-corpus lexicon": "固定全语料词表",
+    "keeping score: \\ ROC curves, \\ cross-validation, \\ and a contest of representative methods": "记分：\\ ROC曲线、\\ 交叉验证，\\ 以及代表性方法的比赛",
+    "KKT at $C = 1$: \\ margin tolerance $10^{-3}$": "$C = 1$ 时的 KKT：\\ 间隔容差 $10^{-3}$",
+    "outside/bound violations: \\ $0$": "街道外／上界点未通过检查：\\ $0$",
+    "free-margin residual: \\ $5.6\\times 10^{-5}$": "自由点最大间隔残差：\\ $5.6\\times 10^{-5}$",
+    "final: \\ $1.6\\%$, \\ round $400$": "最终：\\ $1.6\\%$，\\ 第 $400$ 轮"
   },
   "phrases": {
     "width": "宽度",
@@ -23147,6 +23153,18 @@
     [
       "^sampled \\$\\|w\\|<10\\^\\{-12\\}\\$: \\\\ \\$(\\d+)\\$$",
       "采样的$|w|<10^{-12}$：\\ $\\1$"
+    ],
+    [
+      "^training pages: \\$(\\d+)\\$$",
+      "训练页：$\\1$"
+    ],
+    [
+      "^held-out pages: \\$(\\d+)\\$$",
+      "留出页：$\\1$"
+    ],
+    [
+      "^\\$(\\d+)\\$ shown; \\$(\\d+)\\$ outside view$",
+      "显示$\\1$页；$\\2$页在视野外"
     ]
   ]
 }

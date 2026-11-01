@@ -1,0 +1,34 @@
+{
+  "payloads": [
+    {
+      "path": "README.md",
+      "bytes": 1369,
+      "sha256": "2dfea4c92598589eefe093e8d54eea647b5ff1d517f818711a24d9fcefacaf76"
+    },
+    {
+      "path": "full-unittest.log.gz",
+      "bytes": 18456,
+      "sha256": "38450eea801a8ab859077b00a82808973238d85cc135fc1f3ebb1c1b0a239348"
+    },
+    {
+      "path": "receipt.json.gz",
+      "bytes": 554,
+      "sha256": "d12cd324d5753041a1be9a9a50e054407bb55c785ea52d50294dfc5fbb07ce2f"
+    },
+    {
+      "path": "run_ai6_final_candidate_tests.py.gz",
+      "bytes": 1291,
+      "sha256": "0e9cce2d94e75529c0748cd53143cbabdfad3cb6f9f9a6d62da6a83e33f3a035"
+    },
+    {
+      "path": "source-after.json.gz",
+      "bytes": 76448,
+      "sha256": "28a4a6e038c71449702a34d8e438a1ad16f8843da0a7aa509aec0600a73e391c"
+    },
+    {
+      "path": "source-before.json.gz",
+      "bytes": 76448,
+      "sha256": "28a4a6e038c71449702a34d8e438a1ad16f8843da0a7aa509aec0600a73e391c"
+    }
+  ]
+}

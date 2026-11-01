@@ -1,0 +1,346 @@
+[
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares/caption-table-equivalence.json",
+    "runtime_sha256": "5b2b41d5cb437ebee5774dcc280bd9aac856b893ccc6749dbe04811e95c35513",
+    "package": "en-LeastSquares/caption-table-equivalence.json.gz",
+    "sha256": "a2e5d6c0da2f8adc35e48fda112a9972c37cd0272bcfcc97500c55c720f8a9b1",
+    "bytes": 2697,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares/plan.json",
+    "runtime_sha256": "fa3f38624923b9262f50955f224a3d0c1b2ee3bd6e79d8c7e7b46a115c5c3843",
+    "package": "en-LeastSquares/plan.json.gz",
+    "sha256": "f8a06e34b1e6382b9735c63d42c6a85a011ec75384774953a91254d00015feff",
+    "bytes": 1395,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares/views.json",
+    "runtime_sha256": "0d5ff1e3358686a01e475a0021101c1b2d57eebbdb2cc498123233f3f1047195",
+    "package": "en-LeastSquares/views.json.gz",
+    "sha256": "ec1198be18c05f4a1418cc8bb0d68f95ef5de89998aa091498e03322736fedc4",
+    "bytes": 650,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares/complete.json",
+    "runtime_sha256": "7d24cb3cb764179334463c57ed8c6b34205c91bfc4c96017212fced09d975837",
+    "package": "en-LeastSquares/complete.json.gz",
+    "sha256": "5b3b3073875a0aacf93777eaa7300fa7bdecfbd5d95abe8ea598c7305dd0fb95",
+    "bytes": 1847,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares/start.json",
+    "runtime_sha256": "c2d29676df0244bd08f06af47bf158ca841346cd8b5613c1d683faf0d73814ec",
+    "package": "en-LeastSquares/start.json.gz",
+    "sha256": "8fa1086a100176824a9a63def97d5a1e908f1c179fb560048a61297e97e5a3be",
+    "bytes": 425,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares/frozen/result.json",
+    "runtime_sha256": "edb0e7cfb76cdd13e6aa98bd70cee60e0f039e151f37ec4ddf8472a63c9f76ab",
+    "package": "en-LeastSquares/render-result.original.json.gz",
+    "sha256": "b17a9b17f9d27a218e735d9c43ade834564d1350b7522063d1e1403315c122c0",
+    "bytes": 10465,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares/frozen/text.jsonl",
+    "runtime_sha256": "dbc65f9ad237ad276298d1cce9f6f4615803397cc1ff4b3db57dd8fae94bb12d",
+    "package": "en-LeastSquares/text.original.jsonl.gz",
+    "sha256": "e2c36ad82f30005b0f094c821032443d0eeab1e4e12ea797816fd1d0e7eb6d41",
+    "bytes": 1104,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/audit/result.json",
+    "runtime_sha256": "e67aad98e2696854450bb261c9ca05f49458c898cd58d6e0ab9adb2352812ec9",
+    "package": "en-LeastSquares_motion/audit.json.gz",
+    "sha256": "5aa6afbe81cacb5c17909182a19e00adaff499113d566e33702f556a670bce7c",
+    "bytes": 29451,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/reveals/viewed.json",
+    "runtime_sha256": "2bd28857089ff9b500bc6aa16675aeee2e89424d2fe1e0723f406a5d3c6254cc",
+    "package": "en-LeastSquares_motion/reveals-viewed.json.gz",
+    "sha256": "71971ae65686ee42facd6bc03a76d20116a44517642f5b299167107e1cf85013",
+    "bytes": 4248,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/plan.json",
+    "runtime_sha256": "21e3079107b7bf0905b6643874f089d610776eef6385d72189c99ff1c1ec3e9b",
+    "package": "en-LeastSquares_motion/plan.json.gz",
+    "sha256": "c898c1822a92aad55309cd24b7c18d427b9f9a3c0b72d92937a1cec36b68c9bc",
+    "bytes": 44962,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/views.json",
+    "runtime_sha256": "f2998a2a3a6538812f6c30d438c0c8fcad906ec733badf9242a6003f1a2fb39b",
+    "package": "en-LeastSquares_motion/views.json.gz",
+    "sha256": "d1fff727b623764f538b46b86e0d4e9513a31c75c3c275fd0d8636e1c1771b8e",
+    "bytes": 3610,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/complete.json",
+    "runtime_sha256": "7681b728ddba079106c5713ebef39fbd549162bba3e5fd044e7d4b4a8f6bac86",
+    "package": "en-LeastSquares_motion/complete.json.gz",
+    "sha256": "b80552d5316a99dc0fd77417fd4ee91665eff963013a980ffefac2316d7f352e",
+    "bytes": 2164,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/start.json",
+    "runtime_sha256": "c660fafa67e3cf5ffa0ce9dbeb310298adb0dbc4249567b873df09f7c41fcf74",
+    "package": "en-LeastSquares_motion/start.json.gz",
+    "sha256": "05fab9f1a9340b8113077b3b792ac2e1f3fee7a2ce7b1ce46c7c36829b8bb9c7",
+    "bytes": 425,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/frozen/result.json",
+    "runtime_sha256": "306f9897ff9641d00d40214ae3542a1eb5152cda680774d804b773bb9b946518",
+    "package": "en-LeastSquares_motion/render-result.original.json.gz",
+    "sha256": "837959c06bbfc5f204298dfce7109e4daea2121c6d9afe253233cbe01c60c8a9",
+    "bytes": 10224,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/frozen/text.jsonl",
+    "runtime_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "package": "en-LeastSquares_motion/text.original.jsonl.gz",
+    "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "bytes": 20,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares/caption-table-equivalence.json",
+    "runtime_sha256": "b8c99493c812cd6f6aeb53a43fa53b841c89e154dbbf0d1c6671bb96c6259f28",
+    "package": "zh-LeastSquares/caption-table-equivalence.json.gz",
+    "sha256": "0bdd84b474c8dcbe0880fa20689a933a66705f5049ba350a46a1fe88d23f6907",
+    "bytes": 2693,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares/plan.json",
+    "runtime_sha256": "5f18c6e5f83022f91cfafb43300787ba517a08ae4f1d72c7524def884212185f",
+    "package": "zh-LeastSquares/plan.json.gz",
+    "sha256": "6f5b48926632b2a63aff563036d1313e59a936f4e6018442ffd3fcaaae3c259b",
+    "bytes": 1541,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares/views.json",
+    "runtime_sha256": "244b3ea24a440e0e29ebbede8f03d462b741a7841cc38369b84870e8ef14c350",
+    "package": "zh-LeastSquares/views.json.gz",
+    "sha256": "2a0eb893c701b770878149b4ae415518e04098cd43bc0fa4de994f5cb9f861af",
+    "bytes": 452,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares/complete.json",
+    "runtime_sha256": "37cd11b8bba97a9db27486530130485dea63b324d0aae564187cd0c21b875335",
+    "package": "zh-LeastSquares/complete.json.gz",
+    "sha256": "4c499022c894a251e1430f83dc0c0e9bace8fa06a815993601af5eb6b87465fe",
+    "bytes": 1905,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares/start.json",
+    "runtime_sha256": "447c12bf9fb3baea3f565cd38027df7749715d65c7518bfa79ead483e1152d43",
+    "package": "zh-LeastSquares/start.json.gz",
+    "sha256": "9a39e9de51c4cd96ad813e27264dd68960ad7de1e57bd8855f97de4cb01d79c3",
+    "bytes": 422,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares/frozen/result.json",
+    "runtime_sha256": "d56a221e061f71408e049d09418a0d30dbdfeeb233d2d6561d19a66024020530",
+    "package": "zh-LeastSquares/render-result.original.json.gz",
+    "sha256": "bf378f1bc21daec5cec31440c0c4e34a6b03c8710a205d4811637f56f33f30b8",
+    "bytes": 17457,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares/frozen/text.jsonl",
+    "runtime_sha256": "38c30c440bef8b35c0ed13289c3324aaf3777866929244b172e5f6a6a9617d40",
+    "package": "zh-LeastSquares/text.original.jsonl.gz",
+    "sha256": "8a592b60badb502ecb342c1fadec5d14db75e5084e533e05234534e463abbc37",
+    "bytes": 1124,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/audit/result.json",
+    "runtime_sha256": "4a15a1d5e366f8ae5ab37a70b434413fd83aca02f3c67bf07ba7f2b49911122f",
+    "package": "zh-LeastSquares_motion/audit.json.gz",
+    "sha256": "55fc1d6fd9d585e9e7d9a6d8ae241ef1e36b6ec123442c711a2d0f3f91df5c03",
+    "bytes": 29562,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/reveals/viewed.json",
+    "runtime_sha256": "7d9b6279ada50813b160814c339d998edf30a501ab0ee0511404b911df10a73a",
+    "package": "zh-LeastSquares_motion/reveals-viewed.json.gz",
+    "sha256": "ba709059f1bd168b89d97f2cb88f739c634fbaef8c14399680e0263dc9df34af",
+    "bytes": 4160,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/plan.json",
+    "runtime_sha256": "600e88cdfd3a6d344cf9e6e36c66040d21805cce432772d413e015740b354b9e",
+    "package": "zh-LeastSquares_motion/plan.json.gz",
+    "sha256": "592f0c29a8d0b88263359ce0475fbdbac114d79612cef78a48d05dd1564b7fa8",
+    "bytes": 44724,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/views.json",
+    "runtime_sha256": "6b45a159b412ca314c508748d5f7146bb2e72131b307749be5a4a18d72e328bd",
+    "package": "zh-LeastSquares_motion/views.json.gz",
+    "sha256": "eb951d9289633414290f8a81d4c232283f465e004e143fea9c3dc13ece8107af",
+    "bytes": 3529,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/complete.json",
+    "runtime_sha256": "fe3e4c2a1186c9d674feb30dff89b9a2a4baf311f1e20feb6ac021ec49f16f9f",
+    "package": "zh-LeastSquares_motion/complete.json.gz",
+    "sha256": "b835581fb6f318d9f6a73c8c1a0d69ba6ef76ecc719ad7fdb04412c8c67e0519",
+    "bytes": 2226,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/start.json",
+    "runtime_sha256": "d5811e234709c0171f78b752f469a5d0361dd3f4e21cf0888b44b3d9aeaecb0f",
+    "package": "zh-LeastSquares_motion/start.json.gz",
+    "sha256": "00a779512e2d1e4424b01f726ca6c4e2eb26cbed904fada014f343dd33b402b8",
+    "bytes": 424,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/frozen/result.json",
+    "runtime_sha256": "088349be057cd3ec19e0e0cfca02517e3847e4d86c2968d89dcf960d2ab02eea",
+    "package": "zh-LeastSquares_motion/render-result.original.json.gz",
+    "sha256": "47a30d84a820b6e7c1fe793c608c766b875c5e10aeff498f5437dee6b7d5e6ba",
+    "bytes": 17287,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/frozen/text.jsonl",
+    "runtime_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "package": "zh-LeastSquares_motion/text.original.jsonl.gz",
+    "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "bytes": 20,
+    "encoding": "gzip; exact original bytes after decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/reveals/frames/0000639_000042.600s.png",
+    "runtime_sha256": "751cbebf056ca428e35793f183863b9b30d7b1c9709399032769abe3e674544e",
+    "package": "native/en-retained-row-before-639.png",
+    "sha256": "751cbebf056ca428e35793f183863b9b30d7b1c9709399032769abe3e674544e",
+    "bytes": 43114,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/unique/sheet-015.png",
+    "runtime_sha256": "8d971a28fc50a376069c998d2989884cb71b2c6032f0cc9cee57b3734ad1e752",
+    "package": "pages/en-likelihood-before.png",
+    "sha256": "8d971a28fc50a376069c998d2989884cb71b2c6032f0cc9cee57b3734ad1e752",
+    "bytes": 204644,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/reveals/frames/0000767_000051.133s.png",
+    "runtime_sha256": "89ca89bd2a2e25d42fa4265f212a2e51258627c7ee0d1a8e521f2d984c1b4560",
+    "package": "native/zh-retained-row-before-767.png",
+    "sha256": "89ca89bd2a2e25d42fa4265f212a2e51258627c7ee0d1a8e521f2d984c1b4560",
+    "bytes": 42904,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/unique/sheet-015.png",
+    "runtime_sha256": "c42d17f6ee644ad2424ba86af5db78fd2a5f0ed34746dd63d2f308a5c90e08ad",
+    "package": "pages/zh-likelihood-before.png",
+    "sha256": "c42d17f6ee644ad2424ba86af5db78fd2a5f0ed34746dd63d2f308a5c90e08ad",
+    "bytes": 187792,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares/frozen/011_00098.4s.png",
+    "runtime_sha256": "5df7fb041b6d449aba16feaa4d5396b414358eed9fda70c27674e951fe161c6f",
+    "package": "native/en-endpoint-011_00098.4s.png",
+    "sha256": "5df7fb041b6d449aba16feaa4d5396b414358eed9fda70c27674e951fe161c6f",
+    "bytes": 51408,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares/frozen/015_00146.7s.png",
+    "runtime_sha256": "291212d442f29ab31319d5394e374c4630732b7fe7d23397a144a6b3447faf11",
+    "package": "native/en-endpoint-015_00146.7s.png",
+    "sha256": "291212d442f29ab31319d5394e374c4630732b7fe7d23397a144a6b3447faf11",
+    "bytes": 56310,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares/frozen/012_00114.5s.png",
+    "runtime_sha256": "ff317b481edea27049d73eda75226fee5b7feb2edcbf6f383f844de6300a243b",
+    "package": "native/zh-endpoint-012_00114.5s.png",
+    "sha256": "ff317b481edea27049d73eda75226fee5b7feb2edcbf6f383f844de6300a243b",
+    "bytes": 51135,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares/frozen/016_00165.6s.png",
+    "runtime_sha256": "fa2c537a0fadf3619a3c25ee339e854d8e0272b31dfa63d99af4094d6e3951ed",
+    "package": "native/zh-endpoint-016_00165.6s.png",
+    "sha256": "fa2c537a0fadf3619a3c25ee339e854d8e0272b31dfa63d99af4094d6e3951ed",
+    "bytes": 58628,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-retained-row-repair/s02_lsq.before.py",
+    "runtime_sha256": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+    "package": "repair/s02_lsq.before.py",
+    "sha256": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+    "bytes": 16148,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-retained-row-repair/s02_lsq.after.py",
+    "runtime_sha256": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+    "package": "repair/s02_lsq.after.py",
+    "sha256": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+    "bytes": 16199,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-retained-row-repair/scene.patch",
+    "runtime_sha256": "4e145dd518f8b5caed22651777d2f9be38ce4e51c946be08d35c51147f99c3c5",
+    "package": "repair/scene.patch",
+    "sha256": "4e145dd518f8b5caed22651777d2f9be38ce4e51c946be08d35c51147f99c3c5",
+    "bytes": 617,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-retained-row-repair/freeze.json",
+    "runtime_sha256": "c60e22407361116ff9479ce73a80f78251920484895624be87952c7a4c45ca68",
+    "package": "repair/freeze.json",
+    "sha256": "c60e22407361116ff9479ce73a80f78251920484895624be87952c7a4c45ca68",
+    "bytes": 784,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/narration-table-equivalence.json",
+    "runtime_sha256": "3bc94a95274716a89cc99f642f9b7c9c3d1fbfc56660e9e846fbc04d6e6f2fd2",
+    "package": "zh-LeastSquares_motion/narration-table-equivalence.json.gz",
+    "sha256": "fceb1fbbcdf1a8610f7d257f90bef2093285a36e7d4ac3af09f7033f7cf080be",
+    "bytes": 3223,
+    "encoding": "gzip; exact original bytes after decompression"
+  }
+]

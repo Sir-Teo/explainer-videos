@@ -1,0 +1,46 @@
+{
+  "status": "source-frozen-awaiting-parent-bilingual-render-regression",
+  "source": "/workspace/explainer-videos/videos/ai/ai6/s04_ridge.py",
+  "source_sha256": "ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256",
+  "before_source_sha256": "53096a9fdc6135614c8350b999edd2affe5c132cf3dc013e73c3afba580f9fff",
+  "after_source_copy_sha256": "ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256",
+  "baseline_review": {
+    "path": "/workspace/runtime/ai6-ridge-lasso-motion-review/en-Ridge/2e2727aba7c9ad3dfb1e4b137f703d1ab49eaae984559b8ba6464640a4968672/review.json",
+    "sha256": "df4e8b0dabeff2e6f173cdd6ce1abb789f482ac71cd1e138b15b0bb96b2fd79c",
+    "selected": 452,
+    "unique_native_images_actually_viewed": 365,
+    "unscaled_chronological_pages_actually_viewed": 46,
+    "exact_duplicate_times": 87,
+    "decoded": 2505,
+    "unselected": 2053,
+    "max_selected_gap_s": 1.0,
+    "individual_native_followups": 7,
+    "motion_movie_sha256": "2e2727aba7c9ad3dfb1e4b137f703d1ab49eaae984559b8ba6464640a4968672",
+    "raw_status": "needs-review",
+    "raw_warning": "source-changed-during-render",
+    "chinese_before_movie": "not rendered; no Chinese before claim"
+  },
+  "fixes": [
+    "Only derive step1/2/3 transform=False: Write new row without retained source copy",
+    "Only paths vertex traversal reversed: exact reversed polyline vertices, starts stronglambda then weak"
+  ],
+  "invariants": [
+    "Normalized complete AST equals baseline after removing exactly3transformFalse keywords and restoring only path generator sequence",
+    "All source strings, VO/bookmarks, play calls, run times, data calls, positions, final path vertices and labels unchanged",
+    "Local ladder Write and former TransformMatchingTex branch share requested default1.2seconds; no total stage duration change requested"
+  ],
+  "tests": {
+    "path": "/workspace/runtime/ai6-ridge-reveal-repair/check_patch.py",
+    "sha256": "b09b0bf8ec0db9d0dfc0622427c5b49312cb9baa54cf6ae46f679c06eb4146c2",
+    "log": "/workspace/runtime/ai6-ridge-reveal-repair/tests.log",
+    "log_sha256": "432b560c6bc36de3a6f4155ded182ad205a66b6a14ef0d2fa277f3949a4e8830",
+    "passed": 3,
+    "scope": "AST and tiny actual-Manim polyline geometry; no production scene imports, cache/data loading, model/producer/render"
+  },
+  "limitations": [
+    "Fresh rendered repair not yet visually verified",
+    "Before movie only English; no Chinese historical movie",
+    "Selected time review not continuous perceptual playback or listening",
+    "Broad source warning preserved; later global-table merge does not retroactively establish historical global-current"
+  ]
+}

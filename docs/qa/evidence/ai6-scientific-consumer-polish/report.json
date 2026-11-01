@@ -1,0 +1,359 @@
+{
+  "schema_version": 1,
+  "packaged_utc": "2026-11-01T05:49:35.013899+00:00",
+  "source_freeze_handoff_sha256": "371b1f41532a9b036a8cf13b39905afd7c8ec63bd00d60655b04e545199478b1",
+  "sources": [
+    {
+      "path": "videos/ai/ai6/s12_svm.py",
+      "before_sha256": "c9a778da1f5cd7c4d582a752f3124f4e8c18b3ebc0904db3cd69c33db157ecca",
+      "after_sha256": "bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112"
+    },
+    {
+      "path": "videos/ai/ai6/s15_adaboost.py",
+      "before_sha256": "bc2a0b9581df1bdda8bc4056ce121166c7b3f497fe8367f4266f361e401e9e90",
+      "after_sha256": "be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12"
+    },
+    {
+      "path": "videos/ai/ai6/s18_contest.py",
+      "before_sha256": "52d42f40ed267dd75a6781263590c2ef3f8d6c49af43c9ab86c13aa8996f80d1",
+      "after_sha256": "7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2"
+    },
+    {
+      "path": "videos/ai/ai6/zh_lines.py",
+      "before_sha256": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+      "after_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b"
+    },
+    {
+      "path": "videos/ai/ai6/README.md",
+      "before_sha256": "66af9b1a8dac410775c181704384406d84bf6946c4b7017c33fb28df1d6aae97",
+      "after_sha256": "5ab0462e288591bc5044d1e69b132349358f7ec1944c62593d3f686502a87aa8"
+    },
+    {
+      "path": "tests/test_ai6_scene_teaching_repairs.py",
+      "before_sha256": "5a1afed145a3c16e4e77abd4b1dc513ea702083d24f75053090048b5408ba561",
+      "after_sha256": "14c70f29dfbcb7001c44c1619ad0c2f292ac170c7556b70ee85e51c0e50a56c9"
+    }
+  ],
+  "scope": "ThreePart6consumerqualifications, localChinese narration, READMEparity and anexistingfixtureupdate. No coreproducer/cache/sharedcaption/source edits by this packaging step.",
+  "source_changes": {
+    "s12_svm.py": "pages only: explicitly defined1e-3outside/bound margin-check tolerance, separatelydisplayedmaximumfree-marginresidual, approximateprimal-dual language. No claimthat these partialnumericalchecks prove all exactKKTconditions.",
+    "s15_adaboost.py": "curves only: observedminimum andfinalvalue replace monotoneimprovement implication; addsfinalerrorreadout. Actual70-rate min0.52356% at45, final1.57068% at400.",
+    "s18_contest.py": "board only: two-feature range explicitly describes testedprocedures onthese folds, without an information-ceiling claim.",
+    "s17_metrics.py": "NOTedited. ActualROCdisplaytracesalreadycontainstart/end states; onlyunusedthinnedroc_lr70/roc_nb arrays lackterminal(1,1). Authoritativefull-scoreAUC unchanged; no displayeddefectclaim."
+  },
+  "stages": {
+    "initial_tests": {
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 EXPLAINER_CACHED_ONLY=1 python -m unittest discover -s tests -p 'test_ai6*.py' -v",
+      "result": "55 tests:4failures/19errors due cached-only environment on intentionaltemporary-generation fixtures; rawlog retained. No source/data defect inferred."
+    },
+    "targeted_tests": {
+      "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 EXPLAINER_CACHED_ONLY=1 python -m unittest discover -s tests -p 'test_ai6_scene_teaching_repairs.py' -v",
+      "result": "12 existing tests passed in1.119s; oneexistingmethod gained a nonmonotone fixture, no new testmethod count."
+    },
+    "template_checks": {
+      "command": "python /workspace/runtime/ai6-scientific-consumer-polish/check_handoff.py",
+      "result": "6actual/branch English-Chinese Translator cases passed, allchanged fullparagraph bookmarks preserved."
+    },
+    "source_coverage": {
+      "command": "python tools/zh_lines.py ai6 --todo SVM AdaBoost Contest",
+      "result": "126of126source lines covered; existingunused-translation-key warnings retained."
+    },
+    "geometry": {
+      "commands": [
+        "python geometry.py en",
+        "python geometry.py zh"
+      ],
+      "result": "FinalbothlanguageactualManimTex/mobject bounds verified using a private4-key proposedcaptionoverlay. No scene/render execution.",
+      "fixture_failures": "Initialfixture GOOD name omission rawlog retained. A subsequent wildcard-import lang name collision caused JSON serialization failure and was corrected to review_language; separate intermediary rawlog was overwritten, so only this scoped attestation is retained."
+    },
+    "source_freeze": {
+      "command": "python freeze_handoff.py",
+      "result": "Ownedmethods/bookmarks/core/payloadimmutability verified; no unrelatedmethod AST changes."
+    }
+  },
+  "numerical_immutability": {
+    "source_sha256": {
+      "videos/ai/ai6/compute.py": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+      "videos/ai/ai6/contracts.py": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+      "videos/ai/ai6/cache_contract.py": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394"
+    },
+    "payload_count": 43,
+    "payloads": [
+      {
+        "path": ".cache/ai6/adaboost.json",
+        "sha256": "6ca25b8aa7cb334ba88b95db516b10342000ea0d055f4330b356cb28fbe2148b",
+        "bytes": 105340,
+        "mtime_ns": 1793509709381201279
+      },
+      {
+        "path": ".cache/ai6/adaboost.npz",
+        "sha256": "2b5328fc7c3efe1c3ecaf22f4f4b204404800ef13236f1b1a4a85cc4239765a4",
+        "bytes": 23138,
+        "mtime_ns": 1793509709373503739
+      },
+      {
+        "path": ".cache/ai6/bagging.json",
+        "sha256": "383c772f88a3e40886ac0498088c61aa9048302ab3359f613e50ce2ddc603688",
+        "bytes": 22925,
+        "mtime_ns": 1793509704694074513
+      },
+      {
+        "path": ".cache/ai6/board.json",
+        "sha256": "726ec9843ca5c96f30cb15b29ecad907b9e868851977eb824352adf89b373418",
+        "bytes": 17563,
+        "mtime_ns": 1793509794446423488
+      },
+      {
+        "path": ".cache/ai6/board.npz",
+        "sha256": "6366bb6d9a624ffeb7f0723a1ee3c6b96892b00b48a81f09a3f032f14339eee3",
+        "bytes": 801,
+        "mtime_ns": 1793509794445596927
+      },
+      {
+        "path": ".cache/ai6/calibration.json",
+        "sha256": "cb6dcbdb20c670fab73c274fd8d9aca25cd6db48e22934d3779d82b8ae92ea99",
+        "bytes": 13816,
+        "mtime_ns": 1793509529627862681
+      },
+      {
+        "path": ".cache/ai6/calibration.npz",
+        "sha256": "cb39416f045dd3241fd7d3111e97dd2b569ae31b3d7a6bde7b69d601bd8183b0",
+        "bytes": 42461,
+        "mtime_ns": 1793509529626115977
+      },
+      {
+        "path": ".cache/ai6/coverhart.json",
+        "sha256": "d39247b16e412830c94c246acb34559eba7bbd4d1ff1cc2f04760162d14b1b91",
+        "bytes": 2817,
+        "mtime_ns": 1793509625862835530
+      },
+      {
+        "path": ".cache/ai6/curse.json",
+        "sha256": "4345f923b0b1a77e3af9f0b4e5273e897a748b83f06ba6aecee65276b6119e4f",
+        "bytes": 10531,
+        "mtime_ns": 1793509633152296886
+      },
+      {
+        "path": ".cache/ai6/gaussmarkov.json",
+        "sha256": "c1b29607cecdf01b1fdf98d86d67a7504b773208e4a9acc2e52410843456c791",
+        "bytes": 3280,
+        "mtime_ns": 1793509486209432961
+      },
+      {
+        "path": ".cache/ai6/gaussmarkov.npz",
+        "sha256": "2ba9689060d826717f5cf81c81bfadb195d7a96b3e0dd645d82b1da047090e0e",
+        "bytes": 3170,
+        "mtime_ns": 1793509486208693166
+      },
+      {
+        "path": ".cache/ai6/irls.json",
+        "sha256": "c3da935ac12d1600eea2f5f450d77d95ee61cf0d993abcce64b66df4c7dc267f",
+        "bytes": 10671,
+        "mtime_ns": 1793509525970751346
+      },
+      {
+        "path": ".cache/ai6/irls.npz",
+        "sha256": "317e1160920893e47683ed0529696a64cf7b157ef97eacc9af23f8e1f4eaa82d",
+        "bytes": 700,
+        "mtime_ns": 1793509525970201943
+      },
+      {
+        "path": ".cache/ai6/kernel.json",
+        "sha256": "29a134e9ac3029e6b183fe7d2561ddb9838bc9f26c416f07eff82cf7df076c07",
+        "bytes": 9632,
+        "mtime_ns": 1793509637754346895
+      },
+      {
+        "path": ".cache/ai6/kernel.npz",
+        "sha256": "9868bd3f40a4fe600832a47d515fb3a45720fa17732baf18ee82e45f5cb5400c",
+        "bytes": 11510,
+        "mtime_ns": 1793509637753103707
+      },
+      {
+        "path": ".cache/ai6/knn.json",
+        "sha256": "a05cde8f5492a350574f3588286d8bcd152328dd8c5c2e1f51ff92adcefb9f18",
+        "bytes": 10192,
+        "mtime_ns": 1793509547833444438
+      },
+      {
+        "path": ".cache/ai6/knn.npz",
+        "sha256": "5ff06a3869744a25185048f37f8f60263bfa0a24b7ba4001aa81fdada84d0ba7",
+        "bytes": 45355,
+        "mtime_ns": 1793509547830095472
+      },
+      {
+        "path": ".cache/ai6/lasso.json",
+        "sha256": "17965418da0d05800bdd2d6be4d185316431f340626e24e5bff3fe9611bdfb22",
+        "bytes": 10627,
+        "mtime_ns": 1793509518563657867
+      },
+      {
+        "path": ".cache/ai6/lasso.npz",
+        "sha256": "68dfc52f9c0a8295ab11014f228357b71c11b2c004af3168da55bfb9facf0d8b",
+        "bytes": 48312,
+        "mtime_ns": 1793509518562119715
+      },
+      {
+        "path": ".cache/ai6/lda.json",
+        "sha256": "199b06230a7cef0dbe604b770667221ad3389c4b45e740fdebf6cbfe2f742fed",
+        "bytes": 9395,
+        "mtime_ns": 1793509539688996492
+      },
+      {
+        "path": ".cache/ai6/lda.npz",
+        "sha256": "45e1d990389b73a0dc788d3e53b8e4803826c3a896d804ac75057cd11689c3ba",
+        "bytes": 54782,
+        "mtime_ns": 1793509539686479834
+      },
+      {
+        "path": ".cache/ai6/logistic.json",
+        "sha256": "743ba31b2d56e50625ebced3b4499b43fae584c143aee56e99992a7a45fc7750",
+        "bytes": 9005,
+        "mtime_ns": 1793509522205355294
+      },
+      {
+        "path": ".cache/ai6/logistic.npz",
+        "sha256": "0aa11e641db2c9f6271d031bb226a33a698494bcd336504bcff3c5ec6274cce2",
+        "bytes": 111451,
+        "mtime_ns": 1793509522202114645
+      },
+      {
+        "path": ".cache/ai6/lsq.json",
+        "sha256": "cd270147b1deb0c10fe7e1603c949448cb0801c82a9b18680a2c610ae357efab",
+        "bytes": 8801,
+        "mtime_ns": 1793509489532183989
+      },
+      {
+        "path": ".cache/ai6/metrics.json",
+        "sha256": "6a402f3cb3ab92d8c2c6c721af617e7d8ee5ca2ff8b2be8335d6e39057b4f8ce",
+        "bytes": 15402,
+        "mtime_ns": 1793509727262722025
+      },
+      {
+        "path": ".cache/ai6/metrics.npz",
+        "sha256": "5da492a96cd18c8a086835ea43c203aea45391a1ca61c7a214fe6909b1a5ba6f",
+        "bytes": 11820,
+        "mtime_ns": 1793509727261056718
+      },
+      {
+        "path": ".cache/ai6/nbvslr.json",
+        "sha256": "858b72a5954ad99550ecdda1d59a18047f37514187e8efa1df24791c1246fb23",
+        "bytes": 13173,
+        "mtime_ns": 1793509535702702940
+      },
+      {
+        "path": ".cache/ai6/pages.json",
+        "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+        "bytes": 4425,
+        "mtime_ns": 1793509481979465950
+      },
+      {
+        "path": ".cache/ai6/pages.npz",
+        "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+        "bytes": 46636,
+        "mtime_ns": 1793509481978270662
+      },
+      {
+        "path": ".cache/ai6/preserved/bagging-20261101T050824918534-6796d6f1/bagging.partial.json",
+        "sha256": "acb26efbd9e5fca39739e8438f7fe3e2fb7e06fc9277e290fffda900f8df33bf",
+        "bytes": 5474,
+        "mtime_ns": 1793509697014226359
+      },
+      {
+        "path": ".cache/ai6/preserved/bagging-20261101T050824918534-6796d6f1/receipt.json",
+        "sha256": "20d6f83f93327b8adf7b822b0791c08c14b0231dff46002d31fe76ef6a639ea1",
+        "bytes": 336,
+        "mtime_ns": 1793509704919098829
+      },
+      {
+        "path": ".cache/ai6/preserved/board-20261101T050954681256-ebd5f931/board.partial.json",
+        "sha256": "fd495cef69fd9b12cfe839b7cf0705760b6003f50b2cc4f106e33c2cd847c083",
+        "bytes": 9551,
+        "mtime_ns": 1793509793747128643
+      },
+      {
+        "path": ".cache/ai6/preserved/board-20261101T050954681256-ebd5f931/receipt.json",
+        "sha256": "defc2fcf82eeb96b42190bf000f7c663e022441566dc88d98833d2a860d976f6",
+        "bytes": 332,
+        "mtime_ns": 1793509794681822326
+      },
+      {
+        "path": ".cache/ai6/ridge.json",
+        "sha256": "d91c02dd133467ef012f023fc1e570e01d5c6f6611cc832b4bca284923faf77b",
+        "bytes": 14117,
+        "mtime_ns": 1793509494113322260
+      },
+      {
+        "path": ".cache/ai6/ridge.npz",
+        "sha256": "9e8e74312aadbe1154a8009218d35847b42c1e37629723b573f1ba75da26e0b0",
+        "bytes": 31266,
+        "mtime_ns": 1793509494110918282
+      },
+      {
+        "path": ".cache/ai6/svm.json",
+        "sha256": "dc577f1bb0dec4040bf9acbb34a15bb39056bc05681f51108e260081e37f17db",
+        "bytes": 12803,
+        "mtime_ns": 1793509659741700107
+      },
+      {
+        "path": ".cache/ai6/svm.npz",
+        "sha256": "6c6c163a949b760623cce99302a5374dd4ad8be019661beae6b0df0f28a2d888",
+        "bytes": 1084649,
+        "mtime_ns": 1793509659737692481
+      },
+      {
+        "path": ".cache/ai6/trees.json",
+        "sha256": "c92e794289107138e0e646605a0770c24c4c1b23725db2b97fd148bd10f95fb0",
+        "bytes": 22683,
+        "mtime_ns": 1793509664750456107
+      },
+      {
+        "path": ".cache/ai6/trees.npz",
+        "sha256": "4cef5d816fbe75d67fed3ff0692f136c6dedd22fe08e10caebae9a8703161df4",
+        "bytes": 4252,
+        "mtime_ns": 1793509664748743973
+      },
+      {
+        "path": ".cache/ai6/xgb.json",
+        "sha256": "db3161db48faf8e4c917569b6a5ebb91def328953828817e31a0be5f4dfab1b7",
+        "bytes": 60014,
+        "mtime_ns": 1793509719357752481
+      },
+      {
+        "path": ".cache/ai6/xgb.npz",
+        "sha256": "b5a41d8479aa8050403ebd1dabebca39171fba998e7b1469b3562eea7f8b2365",
+        "bytes": 18751,
+        "mtime_ns": 1793509719352411909
+      },
+      {
+        "path": ".cache/ai6/zipf.json",
+        "sha256": "3c9e15024c4929ced3f729bbc6d8099e86f38e68199c156024e09d2ff3b137e4",
+        "bytes": 2047,
+        "mtime_ns": 1793509484962903523
+      },
+      {
+        "path": ".cache/ai6/zipf.npz",
+        "sha256": "6665844bcf130c27b940db5af5d948ff4dedd7a7ca76ed8e3a68d6b7e1c0f7ad",
+        "bytes": 3432,
+        "mtime_ns": 1793509484961955378
+      }
+    ],
+    "all_hash_size_mtime_match_previous_guarded_audit": true,
+    "no_default_producer_or_model_refit": true
+  },
+  "global_caption_scope": {
+    "proposal_sha256": "3c396bb9221c7e8a140921f7b8f440e1af8a3c029d51cb9cc925358742289a02",
+    "proposal_count": 4,
+    "observed_root_merged_table_sha256": "0e4bad42c0f78534fd66d1ad52caaff9d975ba1ae0940fe9f86ab9d610e3d47a",
+    "scope": "Observedtablehashonly. Rootownsatomicmerge and prior5541lookupregression/currentcaptionscope proof; not claimed complete here."
+  },
+  "remaining_gates": [
+    "FreshEN/ZHendpoint and selected-motion visualregressions pending for all changedscenes.",
+    "Changedutterances can alterduration; no timing-equivalence, listening or narration-sync approval.",
+    "Geometrychecks are mobjectboundingboxes/Texcompilation, not inspected renderedchapter images.",
+    "No native1080/4Kmotion or fullcontinuous playback approval.",
+    "Before/afterbytes are observations, not proof of historicalin-memory imports."
+  ],
+  "codec_map": "codec-map.json",
+  "raw_originals_retained": "/workspace/runtime/ai6-scientific-consumer-polish"
+}

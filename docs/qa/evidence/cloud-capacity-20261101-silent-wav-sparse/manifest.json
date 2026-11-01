@@ -1,0 +1,30 @@
+{
+  "payloads": [
+    {
+      "path": "README.md",
+      "bytes": 1628,
+      "sha256": "769765647411add5c361d892c624e577d895606ea2ef192b4ecd24364c5bb10b"
+    },
+    {
+      "path": "completed-run.log.gz",
+      "bytes": 440,
+      "sha256": "4bafea3530c0104bbdc34c58b16c3efe46a08645025da942d0dd01f2c969ec4e"
+    },
+    {
+      "path": "initial-checker-failure.log.gz",
+      "bytes": 410,
+      "sha256": "dba0d7e3815ae9a30d38c22df91d1a496e4ecf50f28c83480e9796641f57956b"
+    },
+    {
+      "path": "receipt.json.gz",
+      "bytes": 59882,
+      "sha256": "0d166fe786936e1a637622e2ac4e7d98977f02e0511063aaf8f89827da7a4082"
+    },
+    {
+      "path": "sparsify_inactive_silent_qa_wavs.py.gz",
+      "bytes": 1840,
+      "sha256": "3eda0860ab719a2163ea4f1f6c819c901f2e0dd41c2599654695e6291ad8adde"
+    }
+  ],
+  "scope": "Original full receipts and script gzip losslessly; hashes cover stored compressedbytes."
+}

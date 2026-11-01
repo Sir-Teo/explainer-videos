@@ -135,7 +135,12 @@ class ConsumerGeometryAndOutcomes(unittest.TestCase):
         self.assertNotIn("None", never)
         improved = execute(nodes, tr=np.array([.1, 0., 0.]), te=np.array([.2, .2, .1]), n=3)["say"]
         self.assertIn("hits zero at round 2", improved)
-        self.assertIn("keeps falling", improved)
+        self.assertIn("lowest observed held-out error", improved)
+        self.assertIn("final value after 3 rounds is 10.0 percent", improved)
+        nonmonotone = execute(nodes, tr=np.array([.1, 0., 0., 0.]), te=np.array([.2, .2, .1, .15]), n=4)["say"]
+        self.assertIn("10.0 percent at round 3", nonmonotone)
+        self.assertIn("final value after 4 rounds is 15.0 percent", nonmonotone)
+        self.assertNotIn("keeps falling", nonmonotone)
         unchanged = execute(nodes, tr=np.array([0., 0., 0.]), te=np.array([.1, .2, .2]), n=3)["say"]
         self.assertIn("more rounds don't improve it", unchanged)
 

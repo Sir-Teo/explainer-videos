@@ -54,11 +54,11 @@ class Ridge(VoiceoverScene):
             self.play(FadeIn(hist, shift=DOWN * 0.2))
             step(0)
             vo.wait_until("a")
-            step(1)
+            step(1, transform=False)
             vo.wait_until("b")
-            step(2)
+            step(2, transform=False)
             vo.wait_until("c")
-            step(3)
+            step(3, transform=False)
             vo.wait_until("d")
             self.play(FadeOut(hist), FadeIn(tail))
             self.play(Indicate(rows[3][3], color=RIDGE))
@@ -139,7 +139,7 @@ class Ridge(VoiceoverScene):
         for j in range(coef.shape[1]):
             hot = j in big
             lines.add(VMobject(color=RIDGE if hot else GREY_D, stroke_width=3 if hot else 1.2).set_points_as_corners(
-                [ax2.c2p(-a, b) for a, b in zip(lx, coef[:, j])]))
+                [ax2.c2p(-a, b) for a, b in zip(lx[::-1], coef[::-1, j])]))
         names = VGroup(*[data_text(vocab[j], font="DejaVu Sans Mono", font_size=20, color=RIDGE)
                          .next_to(ax2.c2p(-lx[0], coef[0, j]), RIGHT, buff=0.08) for j in big])
         near_zero = int((np.abs(coef) < 1e-12).sum())

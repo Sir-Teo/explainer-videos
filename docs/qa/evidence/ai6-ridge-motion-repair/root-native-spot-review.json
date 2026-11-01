@@ -1,0 +1,19 @@
+{
+  "utc": "2026-11-01T05:54:21.948780+00:00",
+  "frames": [
+    {
+      "path": "/workspace/runtime/ai6-ridge-lasso-motion-review/en-Ridge/2e2727aba7c9ad3dfb1e4b137f703d1ab49eaae984559b8ba6464640a4968672/audit/frames/0001275_000085.000s.png",
+      "bytes": 12826,
+      "sha256": "a907ed74b414722c95ec873d2fb3db2654a395b9b8912f31eedf87405b5546af",
+      "actually_viewed": true
+    },
+    {
+      "path": "/workspace/runtime/ai6-ridge-lasso-motion-review/en-Ridge/2e2727aba7c9ad3dfb1e4b137f703d1ab49eaae984559b8ba6464640a4968672/audit/frames/0000252_000016.800s.png",
+      "bytes": 30097,
+      "sha256": "2e959e7ca8a5d8ad172a4d0688c22938c0f1002a151c45a51e00d926a2044dac",
+      "actually_viewed": true
+    }
+  ],
+  "observations": "Frame16.8s visiblydoubles retainedobjectiveglyphs duringnextrowreveal. Frame85s hasonlyweak-penalty rightends visible on coefficientpath creation; traversalcontradicts strong\u2192weaknarration. Scope2nativeframes, notwholechapter review.",
+  "limitations": "Full46sheetbaseline review bymotion_coverage separate. No production/audio/continuous signoff."
+}

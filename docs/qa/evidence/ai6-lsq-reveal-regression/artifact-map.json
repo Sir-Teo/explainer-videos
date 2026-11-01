@@ -1,0 +1,322 @@
+[
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares/endpoint-inheritance.json",
+    "original_sha256": "005037f546bfcc552c7665b809e08b8f2340ed46ddfd50b9c1057533af8977e0",
+    "package": "en/endpoint-inheritance.json.gz",
+    "sha256": "e67270e5f3ca0fff0b945e094d452dc52c6f674e90a34c37c4a84ebe160fa7f9",
+    "bytes": 548,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares/complete.json",
+    "original_sha256": "6761a7dbb112e813435f843dd356b6910886d150d3623163b03f4250d93adce7",
+    "package": "en/endpoints-complete.json.gz",
+    "sha256": "7efe7fccd68ab64b3f519f8d4588be3f1f53b0e623aced68f1cdfac6dece8df6",
+    "bytes": 1843,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares/frozen/result.json",
+    "original_sha256": "a6124f1c2214e4ab45ec0c897d22b8f4a4b6cae6c88a995b84ec8846532bacc3",
+    "package": "en/endpoints-render-result.json.gz",
+    "sha256": "d8fd3f2c6252e1722ee29687e6e5fe11321f776e1e5901dec3d7877e1f56c608",
+    "bytes": 10463,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/plan.json",
+    "original_sha256": "3a0bdc3d826d80de8453601ef7fa235cd2f8a4a5376816e40201504cdcee9014",
+    "package": "en/plan.json.gz",
+    "sha256": "ae3d9fd5f56cbc30b4bb1618725bd666e18c042cd1aa1c6f85f7cdbcaeccdb35",
+    "bytes": 42192,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/inheritance.json",
+    "original_sha256": "587c1fb2ad6c7282a3814a2a59b2f3e002ba706c4a7756749aff5ed5f3aa9bbf",
+    "package": "en/inheritance.json.gz",
+    "sha256": "3f8521df6f8b7a6fdc41c2532f0f9d2712e86205f53f0100ada3481906a5dadb",
+    "bytes": 17990,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/views.json",
+    "original_sha256": "a1c3c643516a45279a4e8d16631d2de3b7a4bf005162c0cbb96867b09f3e81bd",
+    "package": "en/views.json.gz",
+    "sha256": "ab327000d1bdc9ac4ccd2a26a0e759c1401c350f265bfb8a99299d9bbb6fb228",
+    "bytes": 540,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/complete.json",
+    "original_sha256": "e6eed0ec01edcd187b07468e88e42caf11a1199f69508ccfee1009319c5e3759",
+    "package": "en/complete.json.gz",
+    "sha256": "084fab373e1aebb1ae8b06248f282322166a427c2fe50eacf7e21ebc07c243b1",
+    "bytes": 2095,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/start.json",
+    "original_sha256": "8b6c0582800333834d975543afff99e6df002695e4f600936f9172892b356169",
+    "package": "en/start.json.gz",
+    "sha256": "30e7b5a0b6407ad305322f223fd6630df09e1f3ad845847354604616126d065e",
+    "bytes": 423,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/invariants.json",
+    "original_sha256": "4ff59714dad41f85308a5e55fe08065a5102928edc8cc2354f48f98374519ce1",
+    "package": "en/invariants.json.gz",
+    "sha256": "ef2f7bd920501ead7bb226ffce8ac4d937ed8070eb54f1be96be2590954647f4",
+    "bytes": 459,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/audit/result.json",
+    "original_sha256": "377479e11561de65fa67c10c6766334154f8315d533325eb2aaba3638373218b",
+    "package": "en/audit.json.gz",
+    "sha256": "693b0036b5692b9bc7dd1807903b78ae12adf173a9d6d8b36a60fb59112df783",
+    "bytes": 28764,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/frozen/result.json",
+    "original_sha256": "7e0090dd1b48e333e6d400a7e68d6a68127af5820b75b19ee7d7d6c52a76f5bc",
+    "package": "en/render-result.original.json.gz",
+    "sha256": "1be681b4cea6c799ce028473e4e42a768e3fd52befb56539214971e1ffc5fead",
+    "bytes": 10186,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/reveals/viewed.json",
+    "original_sha256": "a098105f3274fba7b0095e37f1dd5808b74ffaae103847f697a016a9418cd1d6",
+    "package": "en/every-encoded-reveals-viewed.json.gz",
+    "sha256": "524447c3327e7c25c81c2dda6fcb624c6b40f0286c3c5c99f50cf4763f9c728f",
+    "bytes": 4334,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/unique/sheet-001.png",
+    "original_sha256": "4348ab87f1b6f0f67929597a38a7901cbc31842343ff0de75fbe74a326d0750f",
+    "package": "pages/en-new-selected-1.png",
+    "sha256": "4348ab87f1b6f0f67929597a38a7901cbc31842343ff0de75fbe74a326d0750f",
+    "bytes": 156498,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/unique/sheet-004.png",
+    "original_sha256": "0c14bd1b64ca7c94e5d6998fcb6a8d66818657545ffd4a950812f7b4e6b56209",
+    "package": "pages/en-new-selected-4.png",
+    "sha256": "0c14bd1b64ca7c94e5d6998fcb6a8d66818657545ffd4a950812f7b4e6b56209",
+    "bytes": 352923,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/reveals/sheet-001.png",
+    "original_sha256": "760a0c4715f68350b0dfd2ce888771ba5e50673d6a08cb5b5ef25a2368a85f2d",
+    "package": "pages/en-every-frame-reveal-1.png",
+    "sha256": "760a0c4715f68350b0dfd2ce888771ba5e50673d6a08cb5b5ef25a2368a85f2d",
+    "bytes": 134297,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/reveals/sheet-007.png",
+    "original_sha256": "1241f1f24ff2cb62ba9974fd1340c6d4100ae7953480f0aab374982f0dea1b97",
+    "package": "pages/en-every-frame-reveal-7.png",
+    "sha256": "1241f1f24ff2cb62ba9974fd1340c6d4100ae7953480f0aab374982f0dea1b97",
+    "bytes": 254579,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/reveals/frames/0000639_000042.600s.png",
+    "original_sha256": "751cbebf056ca428e35793f183863b9b30d7b1c9709399032769abe3e674544e",
+    "package": "native/en-before-639.png",
+    "sha256": "751cbebf056ca428e35793f183863b9b30d7b1c9709399032769abe3e674544e",
+    "bytes": 43114,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/reveals/frames/0000639_000042.600s.png",
+    "original_sha256": "1118108d692e0483f04df8cfcc7bd1f3008d1952fcf7454ba9ee2b53e9d2d27f",
+    "package": "native/en-after-639.png",
+    "sha256": "1118108d692e0483f04df8cfcc7bd1f3008d1952fcf7454ba9ee2b53e9d2d27f",
+    "bytes": 35007,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/reveals/frames/0000799_000053.266s.png",
+    "original_sha256": "8000ee99f53e771dbffdd533d92d2105ef46d5297e34109e8895f4cb2475809b",
+    "package": "native/en-after-799.png",
+    "sha256": "8000ee99f53e771dbffdd533d92d2105ef46d5297e34109e8895f4cb2475809b",
+    "bytes": 60521,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares/endpoint-inheritance.json",
+    "original_sha256": "feadc5762d63dd087d1c566dacfdb2c1d2eca3c987946b1e03baa085e1137741",
+    "package": "zh/endpoint-inheritance.json.gz",
+    "sha256": "d2c0541670e96cad0192ba3766eb22ef14e3f3f0cb6e701429136beffa705b54",
+    "bytes": 596,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares/complete.json",
+    "original_sha256": "6cba48634cdf03469127d1e3139db9082ac0975d98c2685843687190c014fc5f",
+    "package": "zh/endpoints-complete.json.gz",
+    "sha256": "9c52abf653239929f2705feef0d3515230c67de83ac6c4ada4b5f012953df332",
+    "bytes": 1900,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares/frozen/result.json",
+    "original_sha256": "53803bab2c7f71c1e567b5becbaaa68aeaec0961661043a365b81a1fa3d09de7",
+    "package": "zh/endpoints-render-result.json.gz",
+    "sha256": "462adad18c7d0990fa21d563b66e8c0d28074fec30f9eadce05941fc3823c539",
+    "bytes": 17459,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/plan.json",
+    "original_sha256": "23fe9d53ad038413db78574c7ff2cac6a600a4132af9094eabad889355f8d7ca",
+    "package": "zh/plan.json.gz",
+    "sha256": "2eecd908604f7acddf27074d43fa243fda8bed7140cc08f42df8f67e5df19f9c",
+    "bytes": 42198,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/inheritance.json",
+    "original_sha256": "b0ec1f90194336239cb7f92ca0e44c7974693b276f97c649e94d347a3a7e60b7",
+    "package": "zh/inheritance.json.gz",
+    "sha256": "04a8bba69e0b8f8f2860dbeb1773d8910c07f1ab462de3c6b712386f6168af3e",
+    "bytes": 17797,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/views.json",
+    "original_sha256": "184e595c399c31855fa0de254b0ba8ea362839fbeda8b16ac8c17b967d3986e5",
+    "package": "zh/views.json.gz",
+    "sha256": "4148baaac72d03d2edd49672e96b188dea807c4ff50b6768bd2e383b74221007",
+    "bytes": 523,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/complete.json",
+    "original_sha256": "28063b4a4f44622963244a0c635035b6a979108a03a750356ca9d10c8b3ffe51",
+    "package": "zh/complete.json.gz",
+    "sha256": "9ac4b7692d396369ceee072023afad3f78a9696b3a077b12c5c8ccf42404bbe5",
+    "bytes": 2186,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/start.json",
+    "original_sha256": "392a0a76f3b91af1e76be47b84e375c7a3044fb2204f5432998635d82736bf21",
+    "package": "zh/start.json.gz",
+    "sha256": "36c0e5ba23cd17f2bec8a99167f368e95e42a628321b0a00439a5f9c6cee55c8",
+    "bytes": 422,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/invariants.json",
+    "original_sha256": "5bfc07556694559f967901abc771585e7f6fb8ef987cf28aa5c78504bad3f86d",
+    "package": "zh/invariants.json.gz",
+    "sha256": "656f64da80759f54c37d4e7ed18027ea0a4ca8cbe713b6949c8ebb3d1f991bb2",
+    "bytes": 485,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/audit/result.json",
+    "original_sha256": "544d1e3ac0efa737ccd70b65ede1c36c0b8c92f6b79df13e7986c58c76e66b6a",
+    "package": "zh/audit.json.gz",
+    "sha256": "d72d45e11afc11fa0ec9b53483c15e5d001c14aa5f756d3dbd329c9f09c8f9d3",
+    "bytes": 28970,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/frozen/result.json",
+    "original_sha256": "c3481f40bdc96a0ee1e7309af9f70ab21c18a7f29b8ee29585b7c0d65d159946",
+    "package": "zh/render-result.original.json.gz",
+    "sha256": "8ebd964142427dda6de8547495da4fe55141f604f6c50ab6af0b5069278b7370",
+    "bytes": 17289,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/reveals/viewed.json",
+    "original_sha256": "91c6d10f952e90a4c9cc24621f77cf6cbe6ff5c2d6e5e4c9a12de3c1ec03c56b",
+    "package": "zh/every-encoded-reveals-viewed.json.gz",
+    "sha256": "c67d7be973420b9e98489d0357e503196703161810891d0000f720e3762009ad",
+    "bytes": 4240,
+    "encoding": "gzip exact decompression"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/unique/sheet-001.png",
+    "original_sha256": "ecbf03e79a70c2af92e0d82e874028867d75ab445abc6aea43fced78795ea255",
+    "package": "pages/zh-new-selected-1.png",
+    "sha256": "ecbf03e79a70c2af92e0d82e874028867d75ab445abc6aea43fced78795ea255",
+    "bytes": 160841,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/unique/sheet-004.png",
+    "original_sha256": "6effed11048312e63ee290938f02eb4548048f6a2cc9792d7dd8aa2c18178985",
+    "package": "pages/zh-new-selected-4.png",
+    "sha256": "6effed11048312e63ee290938f02eb4548048f6a2cc9792d7dd8aa2c18178985",
+    "bytes": 258264,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/reveals/sheet-001.png",
+    "original_sha256": "eda5312875783cdd561fd08b217a00a113791069a0ef8886137186d4bdad1f19",
+    "package": "pages/zh-every-frame-reveal-1.png",
+    "sha256": "eda5312875783cdd561fd08b217a00a113791069a0ef8886137186d4bdad1f19",
+    "bytes": 133293,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/reveals/sheet-007.png",
+    "original_sha256": "b3b759e7c3746bbc34369b254d0e6ac9d846669a323de25125d1e9b19bcf7929",
+    "package": "pages/zh-every-frame-reveal-7.png",
+    "sha256": "b3b759e7c3746bbc34369b254d0e6ac9d846669a323de25125d1e9b19bcf7929",
+    "bytes": 246202,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/reveals/frames/0000767_000051.133s.png",
+    "original_sha256": "89ca89bd2a2e25d42fa4265f212a2e51258627c7ee0d1a8e521f2d984c1b4560",
+    "package": "native/zh-before-767.png",
+    "sha256": "89ca89bd2a2e25d42fa4265f212a2e51258627c7ee0d1a8e521f2d984c1b4560",
+    "bytes": 42904,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/reveals/frames/0000767_000051.133s.png",
+    "original_sha256": "2e5d65e5c8466982e7881c5ccb556758fbda898c7ce47f5b0683ce06f26b79ab",
+    "package": "native/zh-after-767.png",
+    "sha256": "2e5d65e5c8466982e7881c5ccb556758fbda898c7ce47f5b0683ce06f26b79ab",
+    "bytes": 34545,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/reveals/frames/0000925_000061.667s.png",
+    "original_sha256": "ea7fe547e69f78379489e0874271e037d7d9312e9e110c7854f6459e2bafca54",
+    "package": "native/zh-after-925.png",
+    "sha256": "ea7fe547e69f78379489e0874271e037d7d9312e9e110c7854f6459e2bafca54",
+    "bytes": 58673,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-retained-row-repair/freeze.json",
+    "original_sha256": "c60e22407361116ff9479ce73a80f78251920484895624be87952c7a4c45ca68",
+    "package": "repair/freeze.json",
+    "sha256": "c60e22407361116ff9479ce73a80f78251920484895624be87952c7a4c45ca68",
+    "bytes": 784,
+    "encoding": "original bytes"
+  },
+  {
+    "runtime": "/workspace/runtime/ai6-lsq-retained-row-repair/scene.patch",
+    "original_sha256": "4e145dd518f8b5caed22651777d2f9be38ce4e51c946be08d35c51147f99c3c5",
+    "package": "repair/scene.patch",
+    "sha256": "4e145dd518f8b5caed22651777d2f9be38ce4e51c946be08d35c51147f99c3c5",
+    "bytes": 617,
+    "encoding": "original bytes"
+  }
+]

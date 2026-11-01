@@ -1,0 +1,25 @@
+{
+  "frozen_at": "2026-11-01T05:45:32.383748+00:00",
+  "before_sha256": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+  "after_sha256": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+  "only_changes": [
+    {
+      "line": 126,
+      "index": 1,
+      "transform": false
+    },
+    {
+      "line": 128,
+      "index": 2,
+      "transform": false
+    },
+    {
+      "line": 130,
+      "index": 3,
+      "transform": false
+    }
+  ],
+  "ast_identical_after_removing_only_three_new_keywords": true,
+  "invariants": "Every other AST node unchanged: narration/bookmarks/data loads/math/geometry/animation calls/timing arguments. Actual rerender timing/data/narration comparison pending.",
+  "baseline": "/workspace/runtime/ai6-lsq-gauss-review"
+}

@@ -1,0 +1,135 @@
+[
+  {
+    "stored": "hook/after-ai_text_zh.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-hook-caption-integration/after-ai_text_zh.json",
+    "original_bytes": 2439512,
+    "original_sha256": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "hook/before-ai_text_zh.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-hook-caption-integration/before-ai_text_zh.json",
+    "original_bytes": 2439000,
+    "original_sha256": "bd0a9a0ff4671f8211857804ff71cd380360ba7a9d318a210f563ca75b3f8caa",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "hook/caption-add.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-hook-caption-integration/caption-add.json",
+    "original_bytes": 554,
+    "original_sha256": "ea501f88ef313a3feafc0dd50c5245451309c3af3f626bd0e3b287c57a0e1014",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "hook/report.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-hook-caption-integration/report.json",
+    "original_bytes": 65947,
+    "original_sha256": "974bffd3717bde3758db819b0797572de5a0d3be679d3a342d26a96246f9de4b",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "hook/used-caption-results.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-hook-caption-integration/used-caption-results.json",
+    "original_bytes": 6005537,
+    "original_sha256": "48e32e9ea722c48a846ff7205765f5594e8ed955f00592ea909ac386a076376d",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "consumer/after-ai_text_zh.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-consumer-caption-integration/after-ai_text_zh.json",
+    "original_bytes": 2439899,
+    "original_sha256": "0e4bad42c0f78534fd66d1ad52caaff9d975ba1ae0940fe9f86ab9d610e3d47a",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "consumer/before-ai_text_zh.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-consumer-caption-integration/before-ai_text_zh.json",
+    "original_bytes": 2439512,
+    "original_sha256": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "consumer/caption-add.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-consumer-caption-integration/caption-add.json",
+    "original_bytes": 409,
+    "original_sha256": "3c396bb9221c7e8a140921f7b8f440e1af8a3c029d51cb9cc925358742289a02",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "consumer/report.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-consumer-caption-integration/report.json",
+    "original_bytes": 65915,
+    "original_sha256": "576ad5d1883944bf4a287fc4e8bf34ef9f4be2ae0f859aa763fb02d2c1ed5c63",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "consumer/used-caption-results.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-consumer-caption-integration/used-caption-results.json",
+    "original_bytes": 6005537,
+    "original_sha256": "48e32e9ea722c48a846ff7205765f5594e8ed955f00592ea909ac386a076376d",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "captured-case-equivalence/actual-results.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-current-caption-case-equivalence/actual-results.json",
+    "original_bytes": 123585,
+    "original_sha256": "c3183b33aac984840f8bc8c892fe8b2380c8b83a58ac303fb41e5dfaf1dd70a1",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "captured-case-equivalence/report.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-current-caption-case-equivalence/report.json",
+    "original_bytes": 6070,
+    "original_sha256": "0671a308f96b9e52e573a658c6cd20c9d4f9e2ddbf72ff3a854948f6178300e9",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "captured-case-equivalence/scoped-equivalence-report.json.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-current-caption-case-equivalence/scoped-equivalence-report.json",
+    "original_bytes": 4156,
+    "original_sha256": "252adfb98dc4eae4ddde5e4daddb50755749071e88c2e4fd5c0209225ff00183",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "merge_ai6_hook_captions.py.gz",
+    "original_runtime_path": "/workspace/runtime/merge_ai6_hook_captions.py",
+    "original_bytes": 3777,
+    "original_sha256": "2dacd649b999f137328cd4d7cc09dad7f1c6c339e196dc3a454d9122f79d4448",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "merge_ai6_consumer_captions.py.gz",
+    "original_runtime_path": "/workspace/runtime/merge_ai6_consumer_captions.py",
+    "original_bytes": 3407,
+    "original_sha256": "e16bccab294350bc09e0437ef6caf67a25f929774c0a17cc8206abb66209548b",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "check_ai6_captured_caption_equivalence.py.gz",
+    "original_runtime_path": "/workspace/runtime/check_ai6_captured_caption_equivalence.py",
+    "original_bytes": 2755,
+    "original_sha256": "c388fdf481eb9e8c4a7186f41bcb5b9e86cc07f20ff3ba740c0e0381abd72e34",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "ai6-hook-caption-merge.log.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-hook-caption-merge.log",
+    "original_bytes": 1385,
+    "original_sha256": "3f30f3a5ae04ce3e72ee5d34ec60ca29d084b50a42093135a37d37f6b2301097",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "ai6-consumer-caption-merge.log.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-consumer-caption-merge.log",
+    "original_bytes": 1353,
+    "original_sha256": "d16aecd651f364470560e92b9f5663d8418ce1ac0e25aabd67c039815c85eb64",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "ai6-current-caption-case-equivalence.log.gz",
+    "original_runtime_path": "/workspace/runtime/ai6-current-caption-case-equivalence.log",
+    "original_bytes": 2032,
+    "original_sha256": "421fab6b493751abe5bc21cbdc192ec69b9d88045601bd77fe29256abf6cafc2",
+    "codec": "gzip-verbatim"
+  }
+]

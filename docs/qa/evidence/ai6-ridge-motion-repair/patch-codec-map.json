@@ -1,0 +1,8 @@
+{
+  "stored": "patch.diff.gz",
+  "original": "patch.diff",
+  "original_bytes": 1338,
+  "original_sha256": "9894208b86ef13b6d0a67d0cf3be479aceec24908ea67bc54350a5a9f75e1ea0",
+  "codec": "gzip-verbatim",
+  "original_manifest_sha256": "d32c0d66bc495442e5ab02f0eca97f740a38ec55e140f22e3544b1548eb2eb9d"
+}

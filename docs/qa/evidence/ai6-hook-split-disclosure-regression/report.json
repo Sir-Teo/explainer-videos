@@ -1,0 +1,748 @@
+{
+  "completed_utc": "2026-11-01T05:46:46.565018+00:00",
+  "scope": "BilingualHook480p15silentselected-frameafterregression plus33actualfreshendpointstates, notcontinuous/narrated/nativeproductionapproval.",
+  "after_source_sha256": "a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d",
+  "render_global_caption_sha256": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4",
+  "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+  "selection": {
+    "dense_motion_seconds": 0.25,
+    "maximum_gap_seconds": 1,
+    "everyframe_decoding_is_computational_not_perceptual": true,
+    "complete_maps_and_gaps": "compressedmotionplan+auditreceipts",
+    "inheritance": "OnlybyteexactoriginalPNGhashes with allbaselinepages/hash/viewrecordsreverified; neverJPEG/perceptualsimilarity."
+  },
+  "cases": [
+    {
+      "case": "en/Hook",
+      "movie_sha256": "aa93e648909144ee59526bf5dcf97ca1d94776aecaf7bc1f4ed1530c62082748",
+      "movie_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/after-frozen/en/motion/Hook.mp4",
+      "duration_seconds": 168.599674,
+      "decoded_frames": 2529,
+      "selected_times": 436,
+      "unique_selected_original_pngs": 345,
+      "exact_original_png_inherited": 254,
+      "new_original_pngs_actually_viewed": 91,
+      "changed_pages_actually_viewed": 12,
+      "native_motion_followups_actually_viewed": 4,
+      "new_endpoint_states_actually_viewed": 15,
+      "endpoint_unscaled_pages_actually_viewed": 4,
+      "native_endpoint_followups_actually_viewed": 3,
+      "unselected_decoded_frames": 2093,
+      "unextracted_gap_intervals": 300,
+      "max_selected_gap_seconds": 1.0000000000000018,
+      "first_last_selected_time": [
+        0.0,
+        168.533008
+      ],
+      "raw_motion_status": "passed",
+      "raw_motion_warnings": [],
+      "raw_motion_fingerprint": "3667a81da1ec451d2cfa9b33982475c58ea324a6fd5d2cbfe1718cd3219d45ba",
+      "raw_endpoint_status": "passed",
+      "raw_endpoint_warnings": [],
+      "raw_result_sha256": "ba49d95f4a29f1012b029de16ef384a19cd94f3eb3b0d031b00c310097877ae4",
+      "narration_sidecar_sha256": "39e0b7eb6be3e3020b8e75aa5c22e8c75cac278f6b4ced996626e8e2866c752b",
+      "observed_render_input_files": [
+        {
+          "source": "/workspace/explainer-videos/.cache/ai6/pages.json",
+          "copy": "/workspace/runtime/ai6-hook-split-polish/v2/after-frozen/en/motion/input-snapshots/.cache/ai6/pages.json",
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+          "bytes": 4425,
+          "recorded_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "observed_signature": [
+            4425,
+            1793509481979465950
+          ]
+        },
+        {
+          "source": "/workspace/explainer-videos/.cache/ai6/pages.npz",
+          "copy": "/workspace/runtime/ai6-hook-split-polish/v2/after-frozen/en/motion/input-snapshots/.cache/ai6/pages.npz",
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+          "bytes": 46636,
+          "recorded_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "observed_signature": [
+            46636,
+            1793509481978270662
+          ]
+        }
+      ],
+      "render_source_observations": [
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai6/s01_hook.py",
+          "before_sha256": "a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d",
+          "after_sha256": "a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d"
+        },
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai6/common.py",
+          "before_sha256": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+          "after_sha256": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34"
+        },
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai6/zh_lines.py",
+          "before_sha256": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+          "after_sha256": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4"
+        },
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai6/text_zh_add.json",
+          "before_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73",
+          "after_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73"
+        },
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai6/narration_zh.json",
+          "before_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+          "after_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d"
+        },
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai_text_zh.json",
+          "before_sha256": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4",
+          "after_sha256": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4"
+        },
+        {
+          "path": "/workspace/explainer-videos/tools/qa_series.py",
+          "before_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "after_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+        },
+        {
+          "path": "/workspace/explainer-videos/tools/qa_motion.py",
+          "before_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "after_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+        },
+        {
+          "path": "/workspace/explainer-videos/explainer/voiceover.py",
+          "before_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+          "after_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b"
+        },
+        {
+          "path": "/workspace/explainer-videos/explainer/ai/__init__.py",
+          "before_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+          "after_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf"
+        },
+        {
+          "path": "/workspace/explainer-videos/explainer/ai/viz.py",
+          "before_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+          "after_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16"
+        },
+        {
+          "path": "/workspace/explainer-videos/explainer/analysis/__init__.py",
+          "before_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+          "after_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d"
+        },
+        {
+          "path": "/workspace/explainer-videos/explainer/zh_text.py",
+          "before_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+          "after_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf"
+        }
+      ],
+      "scope_verdict": "Allcurrentselectedimagescoveredbynewactualviews orverifiedexactbaselinePNGinheritance; no newblockingdefect. Rawstatus/warningspreserved; broadsource-currentness notclaimed.",
+      "findings": [
+        {
+          "id": "split-disclosure",
+          "status": "scopedpreviewaccepted",
+          "evidence": "Bilingualfour-rowcounts/intensityexamples/lexicon/viewportdisclosure readableandclearofbookheader/authorlegend/tasks/pointcloud. Dimpagesretainauthorhues; dataset448/191 anddrawn632/omitted7 valuesfaithful."
+        },
+        {
+          "id": "representative-methods",
+          "status": "scopedpreviewaccepted",
+          "evidence": "Planrowqualifiescontestscope; nativeheldobjectiveandchangedcrossfadefitbothlanguages."
+        },
+        {
+          "id": "existing-crossfade",
+          "status": "observation",
+          "evidence": "Seriesmapandobjectivesinterpolate/crossfadesimultaneously; transientopacityoverlap resolvesbeforeheldreading. Existingbaselinephenomenon, notretainedderivationcopy."
+        },
+        {
+          "id": "preview-smalllabels",
+          "status": "scopedlimitation",
+          "evidence": "Footernoteissecondarysmallat480p butreadableinnativefollowups; no1080/4K acceptanceinferred."
+        }
+      ],
+      "source_observation_copy_scope": "Before-renderfilesystemcopiesandafterhashobservations, nothistoricalimportattestation. LaterzhcopyismarkedlaterandallcapturedHooknarrationcheckedexactbaseline."
+    },
+    {
+      "case": "zh/Hook",
+      "movie_sha256": "a1cf6b0c033a67d92a0503c266d57b3b55b2f3360138162232ab7fc234c442be",
+      "movie_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/after-frozen/zh/motion/Hook.mp4",
+      "duration_seconds": 190.133008,
+      "decoded_frames": 2852,
+      "selected_times": 444,
+      "unique_selected_original_pngs": 345,
+      "exact_original_png_inherited": 256,
+      "new_original_pngs_actually_viewed": 89,
+      "changed_pages_actually_viewed": 12,
+      "native_motion_followups_actually_viewed": 4,
+      "new_endpoint_states_actually_viewed": 18,
+      "endpoint_unscaled_pages_actually_viewed": 5,
+      "native_endpoint_followups_actually_viewed": 3,
+      "unselected_decoded_frames": 2408,
+      "unextracted_gap_intervals": 315,
+      "max_selected_gap_seconds": 1.0,
+      "first_last_selected_time": [
+        0.0,
+        190.066341
+      ],
+      "raw_motion_status": "needs-review",
+      "raw_motion_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "raw_motion_fingerprint": "e5d815dccbffac4f5cdc5510fd1f2961e9903f0a3380b8ca02b2b734bf00be7e",
+      "raw_endpoint_status": "passed",
+      "raw_endpoint_warnings": [],
+      "raw_result_sha256": "b4242669ff12f2531fa8641b47a554f28f425221acfe7d9df6f646d5320028d2",
+      "narration_sidecar_sha256": "4e63643594c330877b9bb07ad0665e7ece5ffb0c2096b8452a58188be900537f",
+      "observed_render_input_files": [
+        {
+          "source": "/workspace/explainer-videos/.cache/ai6/pages.json",
+          "copy": "/workspace/runtime/ai6-hook-split-polish/v2/after-frozen/zh/motion/input-snapshots/.cache/ai6/pages.json",
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+          "bytes": 4425,
+          "recorded_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "observed_signature": [
+            4425,
+            1793509481979465950
+          ]
+        },
+        {
+          "source": "/workspace/explainer-videos/.cache/ai6/pages.npz",
+          "copy": "/workspace/runtime/ai6-hook-split-polish/v2/after-frozen/zh/motion/input-snapshots/.cache/ai6/pages.npz",
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+          "bytes": 46636,
+          "recorded_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "observed_signature": [
+            46636,
+            1793509481978270662
+          ]
+        }
+      ],
+      "render_source_observations": [
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai6/s01_hook.py",
+          "before_sha256": "a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d",
+          "after_sha256": "a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d"
+        },
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai6/common.py",
+          "before_sha256": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+          "after_sha256": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34"
+        },
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai6/zh_lines.py",
+          "before_sha256": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+          "after_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b"
+        },
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai6/text_zh_add.json",
+          "before_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73",
+          "after_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73"
+        },
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai6/narration_zh.json",
+          "before_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+          "after_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d"
+        },
+        {
+          "path": "/workspace/explainer-videos/videos/ai/ai_text_zh.json",
+          "before_sha256": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4",
+          "after_sha256": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4"
+        },
+        {
+          "path": "/workspace/explainer-videos/tools/qa_series.py",
+          "before_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "after_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+        },
+        {
+          "path": "/workspace/explainer-videos/tools/qa_motion.py",
+          "before_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "after_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+        },
+        {
+          "path": "/workspace/explainer-videos/explainer/voiceover.py",
+          "before_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+          "after_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b"
+        },
+        {
+          "path": "/workspace/explainer-videos/explainer/ai/__init__.py",
+          "before_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+          "after_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf"
+        },
+        {
+          "path": "/workspace/explainer-videos/explainer/ai/viz.py",
+          "before_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+          "after_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16"
+        },
+        {
+          "path": "/workspace/explainer-videos/explainer/analysis/__init__.py",
+          "before_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+          "after_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d"
+        },
+        {
+          "path": "/workspace/explainer-videos/explainer/zh_text.py",
+          "before_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+          "after_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf"
+        }
+      ],
+      "scope_verdict": "Allcurrentselectedimagescoveredbynewactualviews orverifiedexactbaselinePNGinheritance; no newblockingdefect. Rawstatus/warningspreserved; broadsource-currentness notclaimed.",
+      "findings": [
+        {
+          "id": "split-disclosure",
+          "status": "scopedpreviewaccepted",
+          "evidence": "Bilingualfour-rowcounts/intensityexamples/lexicon/viewportdisclosure readableandclearofbookheader/authorlegend/tasks/pointcloud. Dimpagesretainauthorhues; dataset448/191 anddrawn632/omitted7 valuesfaithful."
+        },
+        {
+          "id": "representative-methods",
+          "status": "scopedpreviewaccepted",
+          "evidence": "Planrowqualifiescontestscope; nativeheldobjectiveandchangedcrossfadefitbothlanguages."
+        },
+        {
+          "id": "existing-crossfade",
+          "status": "observation",
+          "evidence": "Seriesmapandobjectivesinterpolate/crossfadesimultaneously; transientopacityoverlap resolvesbeforeheldreading. Existingbaselinephenomenon, notretainedderivationcopy."
+        },
+        {
+          "id": "preview-smalllabels",
+          "status": "scopedlimitation",
+          "evidence": "Footernoteissecondarysmallat480p butreadableinnativefollowups; no1080/4K acceptanceinferred."
+        }
+      ],
+      "source_observation_copy_scope": "Before-renderfilesystemcopiesandafterhashobservations, nothistoricalimportattestation. LaterzhcopyismarkedlaterandallcapturedHooknarrationcheckedexactbaseline."
+    }
+  ],
+  "totals": {
+    "decoded_frames": 5381,
+    "selected_times": 880,
+    "unique_selected_original_pngs": 690,
+    "exact_original_png_inherited": 510,
+    "new_original_pngs_actually_viewed": 180,
+    "changed_pages_actually_viewed": 24,
+    "native_motion_followups_actually_viewed": 8,
+    "new_endpoint_states_actually_viewed": 33,
+    "endpoint_unscaled_pages_actually_viewed": 9,
+    "native_endpoint_followups_actually_viewed": 6,
+    "unselected_decoded_frames": 4501
+  },
+  "lossy_page_exports_and_before_after": [
+    {
+      "path": "en/viewed-page-exports/motion-sheet-001.jpg",
+      "sha256": "07b4223b939c049b4f6e0ab8556b913ef3d308d4e0ad8c978ca8681dfca6d638",
+      "original_png_sha256": "1cde965148b622bc2c5a15d70ff646370ee1b3e1b34189a24c6e627eed472416",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-001.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-002.jpg",
+      "sha256": "607e1aaf991a34b8904af1dcf175aac761d1f300d9db9165168025b1cdf41619",
+      "original_png_sha256": "a7f1852e39b8ed884d69ac71353399896fe9564e2631dbb5fd1d3de6a3060e88",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-002.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-003.jpg",
+      "sha256": "499993e68f18bbb10f9a9180b502adc9532baf4964cd8a62e6a8f2c11ac2372c",
+      "original_png_sha256": "c1224a828c8973baa0341832311773aed4f43377e8461553111fb53ba84fefe0",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-003.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-004.jpg",
+      "sha256": "19f6b8eb06781466733ffb2790ce2525be580827fe99baf6bbc8b42c7d7a06ac",
+      "original_png_sha256": "2d2cb7a8eee2ddb1280ab58f245dff67403165fe71e15a352075b7e9acf6daee",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-004.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-005.jpg",
+      "sha256": "cef0d93590410f65e3e587c5efe22a15bba19acd81a4e2ce533edaa50b67ada2",
+      "original_png_sha256": "5f8587b02b231b21213bff6ca0e81b5713ba70b7eb739dde2f7a5a1ec80cef37",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-005.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-006.jpg",
+      "sha256": "7920a015a779059497ad9f9e84eee119df60b3afe3b172f8deedcf6c1a35ea17",
+      "original_png_sha256": "5fd71a658d9514d357ca8a3f87aae2cda2e7d4d3087a435cafa3bcbae8566a92",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-006.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-007.jpg",
+      "sha256": "2e0f888b7c58d4a0c87b452654ea76e9b33d948b8c265a2c6ce35f56133f0727",
+      "original_png_sha256": "78e8e2ebe3c814f4ada2fb131d3c8b141d7340bdbe18fb55ba07052e2437c8ea",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-007.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-008.jpg",
+      "sha256": "1a0213475bd444291ad1732ba92971fe5e0909948c36bda3b3dc6afc6158f6e9",
+      "original_png_sha256": "8cef28c48784a09c2d5c296ed3bd5f57ce62737d5542b0d536bf5ba3bc750785",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-008.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-009.jpg",
+      "sha256": "bb287cda1b51c0fd54b50dc20ed08bf80f0eef46a19b85bbd6d5f780efa2740d",
+      "original_png_sha256": "14c6a64b1bbee7da28e746f0250e43e6fab070f99bbcac85e84dd533e71c9461",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-009.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-010.jpg",
+      "sha256": "65130e5f437c60d8949477b561f116b97a5577edc12b2bf33dfe65519d1c37c5",
+      "original_png_sha256": "253b7c1608264039e51b4395baf6a3cbbdb04041b2324355636639edb957e9c7",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-010.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-011.jpg",
+      "sha256": "c65e4d94a908aa541222394c64594cde5364a8a20d449f7c7235bc103c9838e3",
+      "original_png_sha256": "aec98f5890c6e4279ab2c9dec4de944b1809d1ab35b92d2760ebdd4676c32852",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-011.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/motion-sheet-012.jpg",
+      "sha256": "e5ce2c2bf3073ef86bfc8436417d143696e91b4aac43472c583af555ed6d3492",
+      "original_png_sha256": "9daf08af6c1f7ea4b495f1c631847fef8c35cb44534a9b4e723c3590e4ea4f76",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/en/changed/sheet-012.png",
+      "source_dimensions": [
+        1280,
+        788
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/endpoint-page-01.jpg",
+      "sha256": "241feb1c9949c7c7b117f7d3a4f5dacc9d9ace42e6f827f449db34309df482b1",
+      "original_png_sha256": "92d6d5d684a37650d98177e7f14ad80c39ae0fece8c645efb57f2f92d558c9a7",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/endpoint-review/en/page-01.png",
+      "source_dimensions": [
+        1708,
+        1008
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/endpoint-page-02.jpg",
+      "sha256": "92c87f983a4cb7bc1d592857b8d756b30d254da19270e410a90a03907d70ad06",
+      "original_png_sha256": "059bba9b48706901b3ba3fec0ab02e02b31c405c691f789a1d0099aa3340f87e",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/endpoint-review/en/page-02.png",
+      "source_dimensions": [
+        1708,
+        1008
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/endpoint-page-03.jpg",
+      "sha256": "0a38dcc357ab7175dbf52910819588236b9456c6d899c8f652287fdaeb745bff",
+      "original_png_sha256": "279f1680bde1955c8db856e4a7e9371b05d5ab7f48af8bca51aa85f79bd06c52",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/endpoint-review/en/page-03.png",
+      "source_dimensions": [
+        1708,
+        1008
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "en/viewed-page-exports/endpoint-page-04.jpg",
+      "sha256": "0753537ef53777dc987a2c27c6ca313c20961fba073c3b62369526476d67b243",
+      "original_png_sha256": "a8b374a79ad331057fd4dd48c8dfe2e9ad0fc883cbe00ff98959431c10bb4015",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/endpoint-review/en/page-04.png",
+      "source_dimensions": [
+        1708,
+        1008
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "before_after_kind": "cloud",
+      "lang": "en",
+      "before_original_sha256": "853619dc136f7cac0b1d02d0cda523ea2acf9bd9ffe55d9944e59cc2df001fe7",
+      "after_original_sha256": "462256b9fba0abd9109b671e4f331bcc55ded1ad8cdefb2a23bd10c780e1d4bd",
+      "before_review_owner": "root endpoint review; preserved originalrecord",
+      "after_actual_review": "allfreshendpointpages+nativefollowup byqa_integrity",
+      "before_time": 78.19441149766268,
+      "after_time": 78.19441149766268
+    },
+    {
+      "before_after_kind": "plan",
+      "lang": "en",
+      "before_original_sha256": "4fb3bf3a7843974d9e52cb9fdecf42f2daa0bc56bc377d078845acb20886dd22",
+      "after_original_sha256": "46c866d617067d099967cb5014e508b2de2bbed99faad98ee2132307af7bca52",
+      "before_review_owner": "root endpoint review; preserved originalrecord",
+      "after_actual_review": "allfreshendpointpages+nativefollowup byqa_integrity",
+      "before_time": 142.04818874643874,
+      "after_time": 142.04818874643874
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-001.jpg",
+      "sha256": "116b53062d49423bb540fee181911a1dd185841a1f729ba59525102465b31e9b",
+      "original_png_sha256": "5fdd23d69a91debc6644e497ee7e082161efdbf5fc541b4b9511242d43877e2d",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-001.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-002.jpg",
+      "sha256": "005d8112e6b3921e7495d4ee9fd52fa484cc11900e86d48faff3e6e0864a2cdc",
+      "original_png_sha256": "ecc34ea6f33d6594bf461e95d2915d981bc7f2b348e758c5eb8f2d14e77a87cb",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-002.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-003.jpg",
+      "sha256": "4bbf4b0ad3288d5c6b4fe58de500ba4fe177339ef78f92a1a0add9af0130bd9e",
+      "original_png_sha256": "bbc398ea2bbe069dff79d46b20f805ff255d9eb83f3b0657f779ddd2eac03efb",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-003.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-004.jpg",
+      "sha256": "2afd47f5b88ec60e1acd7f9364856c1562bf0cafc16f2e3696aa6d2f21f8cd63",
+      "original_png_sha256": "ea5c1b781be96a56d694c9b074351edd511ee7c016bf87a4bbe6316ec1f2bf4b",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-004.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-005.jpg",
+      "sha256": "1d5d6615207ce0b68a4133cb011a29deb6f378bd788b23de5eaaa43627c39988",
+      "original_png_sha256": "04c5a324f39ee000ef45773bc0b2c83950f46617454fbcda5e3c3bafa5dea28e",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-005.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-006.jpg",
+      "sha256": "74db8c3552ecf696325c0404b28e343601d8c69e994976d360358daedfab0791",
+      "original_png_sha256": "daf11663baa0c8f892051735741e491332685f3ec0f4148b3f5de515f1781009",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-006.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-007.jpg",
+      "sha256": "3d3d80d45868a06eb16d1d2909777e743c0308309fa4e03f99a7cd97b54ac874",
+      "original_png_sha256": "285acce97b455899192fe9f47d3b4e31fe019697a3cb3d4a291c2d4f3c39f73d",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-007.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-008.jpg",
+      "sha256": "99580c9886125148ff8efa7a2c02b6e8a51852a063975a4b3111fbf5f63fe9c9",
+      "original_png_sha256": "661fe651db75ee9b5808eacef30b67052139150a172816bc81666d22d436a89b",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-008.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-009.jpg",
+      "sha256": "b9abbffc3d4347d0bbf1ee75bddff1146254f2c50b9b9a3e2d1819a59d6c0eeb",
+      "original_png_sha256": "a5830d0e53f6611c0b30905663f4f56ab8319c3d35732d65cc6dca775dd0d730",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-009.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-010.jpg",
+      "sha256": "25720d2973b1f872d5738a545e9c1ca666ffb362df9f2871dbbeb3d118801262",
+      "original_png_sha256": "2d6115821dad09ea4461d650e7c344cc5522e5cccd6ec31c6c5e514b45b68c33",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-010.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-011.jpg",
+      "sha256": "84d2d08a347a4573ea63d2e0bcfcfd6ad13c7aa1b8d386aca11d8e2fc46d4606",
+      "original_png_sha256": "86a4d522afb8b462680f7282137719070a1e2ffaacf26e379d348790b5f60e55",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-011.png",
+      "source_dimensions": [
+        1280,
+        1576
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/motion-sheet-012.jpg",
+      "sha256": "c88843c9be55e18f7f721de8547cc9b12aed7b23a6eda5049255700359a3971e",
+      "original_png_sha256": "9660587cd4573122a45b56f39d698e1e5e06fba54d7d6476b3321785fdbb9e0f",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/motion-review/zh/changed/sheet-012.png",
+      "source_dimensions": [
+        1280,
+        394
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/endpoint-page-01.jpg",
+      "sha256": "82264b6f4e9956471abd7013654ba087929b1a276d17e8cb4f0b9b47f0981718",
+      "original_png_sha256": "400730c2797a856180d1513aa2888153c92847c765bc3a3dc7f2125b568a1c29",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/endpoint-review/zh/page-01.png",
+      "source_dimensions": [
+        1708,
+        1008
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/endpoint-page-02.jpg",
+      "sha256": "c8ecb36248395d7228f3e62d093fce71e609521ad87b6c79086aebf792e27bb4",
+      "original_png_sha256": "896c86c6517ec7f4a63bae6b5ff8502eba5668a625d4b1ab5edf3db94d376d78",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/endpoint-review/zh/page-02.png",
+      "source_dimensions": [
+        1708,
+        1008
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/endpoint-page-03.jpg",
+      "sha256": "fff464f7445d525fd252c58e1e89a1cde2370500defec46bf34767f399ecefea",
+      "original_png_sha256": "4043f90e2272807d0a88ae96780289aa7862b89653f95834c539331eb36c97f2",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/endpoint-review/zh/page-03.png",
+      "source_dimensions": [
+        1708,
+        1008
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/endpoint-page-04.jpg",
+      "sha256": "90d95e788f38f2bb56490ba99738c80ce5d2e752374b2170e70f4f7f33ec3692",
+      "original_png_sha256": "2d300b4c45a02fd352538d2f6f2f5aad4df5454ce8a3c254e88b36d10ad895bc",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/endpoint-review/zh/page-04.png",
+      "source_dimensions": [
+        1708,
+        1008
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "path": "zh/viewed-page-exports/endpoint-page-05.jpg",
+      "sha256": "1a013e4b142e1a66833b74c40687ce9d522f75abd17c197dc8ba960386de446e",
+      "original_png_sha256": "db46d53602297916f15334411e413435caed75bb9a117ac29b8f957cd799d664",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-split-polish/v2/endpoint-review/zh/page-05.png",
+      "source_dimensions": [
+        1708,
+        1008
+      ],
+      "scope": "LossyJPEG derivative of actuallyviewed originalPNG atsamestoredsize; inheritance uses originalPNGhash only, never thisexport."
+    },
+    {
+      "before_after_kind": "cloud",
+      "lang": "zh",
+      "before_original_sha256": "0e9befe8d256876368c8b381eb887d80363ffaff8998622b9e90c24860f897ea",
+      "after_original_sha256": "1eeec1bd6f40864c74f6b32f6515ffe9dcd4fe14167df4d6063238f9ab591e6e",
+      "before_review_owner": "root endpoint review; preserved originalrecord",
+      "after_actual_review": "allfreshendpointpages+nativefollowup byqa_integrity",
+      "before_time": 85.71570624753647,
+      "after_time": 85.71570624753647
+    },
+    {
+      "before_after_kind": "plan",
+      "lang": "zh",
+      "before_original_sha256": "6040b25e965d4e3b62e6e6ceab70b64fbe7b4c9b6f5c0c5cdd91153489e391c6",
+      "after_original_sha256": "57e592deb5dcf7da450f56f21e372fa9536eff12b72272d5f0046ac996d2d848",
+      "before_review_owner": "root endpoint review; preserved originalrecord",
+      "after_actual_review": "allfreshendpointpages+nativefollowup byqa_integrity",
+      "before_time": 161.5175263749788,
+      "after_time": 161.5175263749788
+    }
+  ],
+  "source_warning_resolution": "ZHrawneeds-review/source-changed-during-renderwarning retained. Peerchangedonlyunrelateds12/s15/s18andlocaltemplates/docs/tests; directHook/common/global/data pinned. ActualENZHHooknarrationJSONs arebyteexactbaseline39e0.../4e63..., all5raw+translatedtexts/durations/bookmarksinvariant; scopedimageapprovalnotblanketfreshfp.",
+  "resource_guards": "Baselineindependentcopyhashes verifiedbeforecanonicaloverwrite; aftermovies/results/sidecars/sources/inputs copiedwithcopy2 anddifferentinodes. Cached-onlyenv+workerflag,numericthreads1,nice10,>=768MiBdiskguards. Both extractionsheldrootsharedextract.lock. No productioncompute/model/TTSinference.",
+  "remaining": [
+    "4501decodedframesarevisuallyunselected; nofullcontinuousmotionperception.",
+    "No realnarration/listening/synchronizationapproval; silenttimingplaceholderclips containAACstreams.",
+    "1080/4Ktext/motion/pacing, actualnarratedproduction, later-source/globallookupcompatibilityandwholePart6gatesremainseparate.",
+    "No rawrecordstatus/fingerprint/warningreclassification andno source/data/tableeditsduringregressionreview."
+  ]
+}

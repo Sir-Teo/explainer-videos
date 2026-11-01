@@ -1,15 +1,15 @@
 {
   "part": "ai6",
-  "observed_utc": "2026-11-01T05:37:29.976130+00:00",
+  "observed_utc": "2026-11-01T06:00:41.878081+00:00",
   "chapters": 19,
   "bilingual_cases": 38,
   "numerical_items": 22,
   "default_items_completed": 22,
-  "actual_rendered_cases": 2,
+  "actual_rendered_cases": 6,
   "source_integration_evidence": "evidence/ai6-source-integration/README.md",
   "source_teaching_evidence": "evidence/ai6-scene-teaching-source-repairs/README.md",
   "source_core_evidence": "evidence/ai6-producer-cache-source-repairs/README.md",
-  "scope": "All22 default numerical CLI items completed; actual guarded scientific audit complete with263checks; consumer teaching/plot qualifications under repair. Hook baseline EN/ZH endpoints and selected motion reviewed; additive visual legend polish and rerender regression pending. Next chapter rendering begins against complete inputs only. No narrated/listening/4K approval.",
+  "scope": "22defaultnumerical items complete and263independent checks passed. Hook two current selected-image cases accepted at scopedpreviewcoverage; LeastSquares/Ridge baseline movies exposed retained-row/reveal-direction defects and repairs require actualnewrenderregression. Native1080/narration/listening/4K separate.",
   "cases": [
     {
       "position": 1,
@@ -17,14 +17,14 @@
       "scene": "Hook",
       "title": "Who wrote this page?",
       "lang": "en",
-      "source_sha256_observed": "2baeb217d490efb91218d3a2145610f35c17d4a3f037c1070920896ea93d173a",
-      "source_state": "Baseline selected review complete at source2baeb217; new split/viewport legend source pending regression.",
-      "endpoints": "All baseline EN15/ZH18 endpoint images inspected at native480p; no observed blocking defect.",
-      "selected_motion_review": "Baseline EN436/ZH444 selected times from2529/2852 decodedframes;88 sheets+14native followups viewed. Source-changing legend enhancement requires fresh regression.",
+      "source_sha256_observed": "a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d",
+      "source_state": "Split/viewport legend polished; actual selected preview regression complete atda401, scoped actualcaptions equivalent at0e4.",
+      "endpoints": "FreshEN15/ZH18states actuallyviewed9unscaledpages+6nativefollowups; no observedblockingdefect.",
+      "selected_motion_review": "880selected times from5381decodedframes:690distinct=510exactbaselineinherited+180newactualviews on24pages+8nativefollowups.4501unselected. ZHrawsource-changewarning retained.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-hook-baseline-selected-motion-review/README.md"
+      "evidence": "evidence/ai6-hook-split-disclosure-regression/README.md"
     },
     {
       "position": 1,
@@ -32,14 +32,14 @@
       "scene": "Hook",
       "title": "Who wrote this page?",
       "lang": "zh",
-      "source_sha256_observed": "2baeb217d490efb91218d3a2145610f35c17d4a3f037c1070920896ea93d173a",
-      "source_state": "Baseline selected review complete at source2baeb217; new split/viewport legend source pending regression.",
-      "endpoints": "All baseline EN15/ZH18 endpoint images inspected at native480p; no observed blocking defect.",
-      "selected_motion_review": "Baseline EN436/ZH444 selected times from2529/2852 decodedframes;88 sheets+14native followups viewed. Source-changing legend enhancement requires fresh regression.",
+      "source_sha256_observed": "a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d",
+      "source_state": "Split/viewport legend polished; actual selected preview regression complete atda401, scoped actualcaptions equivalent at0e4.",
+      "endpoints": "FreshEN15/ZH18states actuallyviewed9unscaledpages+6nativefollowups; no observedblockingdefect.",
+      "selected_motion_review": "880selected times from5381decodedframes:690distinct=510exactbaselineinherited+180newactualviews on24pages+8nativefollowups.4501unselected. ZHrawsource-changewarning retained.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-hook-baseline-selected-motion-review/README.md"
+      "evidence": "evidence/ai6-hook-split-disclosure-regression/README.md"
     },
     {
       "position": 2,
@@ -47,13 +47,14 @@
       "scene": "LeastSquares",
       "title": "1. Least squares",
       "lang": "en",
-      "source_sha256_observed": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "source_sha256_observed": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+      "source_state": "Three retained-row ghostreveal fixes accepted atfreshbilingualselectedpreviewscope.",
+      "endpoints": "All33endpointPNGbytes andtimestamps exactlybaseline, inherited fromactual priorviews.",
+      "selected_motion_review": "FreshEN404/ZH422selectedtimes:649distinct=588exactinherited+61newimages viewed8pages;125newencodedrevealframes viewed16pages+4nativefollowups. No ghost-copy crossing observed. RawZHsourcewarningretained; native1080/narration/4Kpending.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-lsq-reveal-regression/README.md"
     },
     {
       "position": 2,
@@ -61,13 +62,14 @@
       "scene": "LeastSquares",
       "title": "1. Least squares",
       "lang": "zh",
-      "source_sha256_observed": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "source_sha256_observed": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+      "source_state": "Three retained-row ghostreveal fixes accepted atfreshbilingualselectedpreviewscope.",
+      "endpoints": "All33endpointPNGbytes andtimestamps exactlybaseline, inherited fromactual priorviews.",
+      "selected_motion_review": "FreshEN404/ZH422selectedtimes:649distinct=588exactinherited+61newimages viewed8pages;125newencodedrevealframes viewed16pages+4nativefollowups. No ghost-copy crossing observed. RawZHsourcewarningretained; native1080/narration/4Kpending.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-lsq-reveal-regression/README.md"
     },
     {
       "position": 3,
@@ -103,13 +105,14 @@
       "scene": "Ridge",
       "title": "3. Ridge: shrinking the weak directions",
       "lang": "en",
-      "source_sha256_observed": "53096a9fdc6135614c8350b999edd2affe5c132cf3dc013e73c3afba580f9fff",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "source_sha256_observed": "ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256",
+      "source_state": "Three copied-row reveals andstrong→weakpathtraversal repaired; freshENZHruntimecomplete; selectedreviewpending.",
+      "endpoints": "FreshENZHruntimecapturespassed0warnings; actualview/geometryacceptance separate.",
+      "selected_motion_review": "ENbaseline452selectedtime review foundrealdefects. FreshEN167s/ZHmotionbothrawpassed0warning; actualcurrentselectedreviewpending.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-ridge-motion-repair/README.md"
     },
     {
       "position": 4,
@@ -117,13 +120,14 @@
       "scene": "Ridge",
       "title": "3. Ridge: shrinking the weak directions",
       "lang": "zh",
-      "source_sha256_observed": "53096a9fdc6135614c8350b999edd2affe5c132cf3dc013e73c3afba580f9fff",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "source_sha256_observed": "ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256",
+      "source_state": "Three copied-row reveals andstrong→weakpathtraversal repaired; freshENZHruntimecomplete; selectedreviewpending.",
+      "endpoints": "FreshENZHruntimecapturespassed0warnings; actualview/geometryacceptance separate.",
+      "selected_motion_review": "ENbaseline452selectedtime review foundrealdefects. FreshEN167s/ZHmotionbothrawpassed0warning; actualcurrentselectedreviewpending.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-ridge-motion-repair/README.md"
     },
     {
       "position": 5,
@@ -546,9 +550,12 @@
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
     }
   ],
-  "current_polished_rendered_cases": 0,
+  "current_polished_rendered_cases": 6,
   "numerical_source_commit": "b6649e39995f128019948cb32831b1a3caeb3842",
   "numerical_completed_utc": "2026-11-01T05:09:55.484692+00:00",
   "numerical_scientific_audit": "22 actual guarded loads, zero forbidden writes/producers, 263 independent arithmetic/inference checks passed; no refit or replicated training claim.",
-  "numerical_evidence": "evidence/ai6-numerical-generation-scientific-audit/README.md"
+  "numerical_evidence": "evidence/ai6-numerical-generation-scientific-audit/README.md",
+  "current_selected_image_cases_accepted": 4,
+  "source_current_table_sha256": "0e4bad42c0f78534fd66d1ad52caaff9d975ba1ae0940fe9f86ab9d610e3d47a",
+  "full_repository_tests": "601tests56.401s;1523source/configidentitiesunchanged, evidence/ai6-integrated-tests-20261101-visual-candidate/README.md"
 }

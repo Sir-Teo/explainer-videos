@@ -1,0 +1,53 @@
+{
+  "completed_at": "2026-11-01T05:58:09.723634+00:00",
+  "scope": "Only Part6 LeastSquares EN/ZH final keyword-only reveal repair and affected endpoint/movie identities. Earlier defective baseline remains immutable in sibling ai6-lsq-selected-motion-review. No other chapter/assembled reel/continuous-perception/audio/production-resolution approval.",
+  "cases": [
+    {
+      "case": "en/LeastSquares",
+      "source_sha256": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+      "movie_sha256": "d612bf12759ff3f1d4a374ccbd2e74c61a09f8d897120b95791b3fa29d9ed977",
+      "decoded": 2305,
+      "selected_timestamps": 404,
+      "unselected_source_frames": 1901,
+      "selected_unique": 326,
+      "exact_inherited_unique": 294,
+      "new_unique_actually_viewed": 32,
+      "new_pages_viewed": 4,
+      "tile_width": 640,
+      "max_selected_gap": 1.0,
+      "raw_status": "passed",
+      "warnings": [],
+      "additional_every_encoded_reveal_frames": 63,
+      "all_reveal_pages_viewed": 8,
+      "native_followups": 2,
+      "verdict": "Confirmed retained-row collision fixed; no new defect found in reviewed selected states/reveal windows."
+    },
+    {
+      "case": "zh/LeastSquares",
+      "source_sha256": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+      "movie_sha256": "2ec04e26df956dfecee00249496ba1e064b1b562d8839cc87bdd8f6975ec0845",
+      "decoded": 2609,
+      "selected_timestamps": 422,
+      "unselected_source_frames": 2187,
+      "selected_unique": 323,
+      "exact_inherited_unique": 294,
+      "new_unique_actually_viewed": 29,
+      "new_pages_viewed": 4,
+      "tile_width": 640,
+      "max_selected_gap": 1.0,
+      "raw_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "additional_every_encoded_reveal_frames": 62,
+      "all_reveal_pages_viewed": 8,
+      "native_followups": 2,
+      "verdict": "Confirmed retained-row collision fixed; no new defect found in reviewed selected states/reveal windows."
+    }
+  ],
+  "invariants": "All33 endpointPNG bytes and timestamps exact baseline. Both full-silent durations, all5narration records/language, narrationJSON/SRT/silentWAV bytes and inputJSON/NPZ hashes exact before/after. Direct scene/common/localZH/global/tools stable for both captures; ZH retains broad warning caused by other Part6 module edits.",
+  "limits": "All selected unique states either directly reviewed on declared640px tiles or exactPNG-inherited from actual baseline viewlogs; extra all125encoded reveal frames viewed on16pages with4native854x480followups. Unselected between-state gaps remain explicit in full audits. No continuous perceptual playback/listening or1080p/4K motion review.",
+  "baseline_manifest_sha256": "6b716fb68c6273fae50efad51e14b4605dc574d10ff3f114f6aa731b96d40905"
+}

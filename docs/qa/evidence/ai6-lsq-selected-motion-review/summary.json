@@ -1,0 +1,266 @@
+{
+  "created_utc": "2026-11-01T05:47:15.272524+00:00",
+  "scope": "Part6 chapter2 in manifest (LeastSquares, lecture Chapter1), English and Chinese. Complete full silent movie generation; selected-time visual review, not continuous perceptual playback/audio. Baseline immutable; current3keyword candidate awaits actual regression.",
+  "cases": [
+    {
+      "case": "en-LeastSquares",
+      "mode": "endpoints",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "fingerprint": "138fadd226bf808d0e1281f5d6c9c231fb3c7145dd91204e2803ca1cf61b171c",
+      "source_before": {
+        "videos/ai/ai6/s02_lsq.py": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+        "videos/ai/ai6/common.py": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+        "videos/ai/ai6/zh_lines.py": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+        "videos/ai/ai_text_zh.json": "bd0a9a0ff4671f8211857804ff71cd380360ba7a9d318a210f563ca75b3f8caa",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "source_after": {
+        "videos/ai/ai6/s02_lsq.py": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+        "videos/ai/ai6/common.py": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+        "videos/ai/ai6/zh_lines.py": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+        "videos/ai/ai_text_zh.json": "bd0a9a0ff4671f8211857804ff71cd380360ba7a9d318a210f563ca75b3f8caa",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "inputs": {
+        ".cache/ai6/zipf.json": {
+          "sha256": "3c9e15024c4929ced3f729bbc6d8099e86f38e68199c156024e09d2ff3b137e4",
+          "stat": [
+            2047,
+            1793509484962903523
+          ],
+          "record": [
+            2047,
+            1793509484962903523
+          ]
+        },
+        ".cache/ai6/zipf.npz": {
+          "sha256": "6665844bcf130c27b940db5af5d948ff4dedd7a7ca76ed8e3a68d6b7e1c0f7ad",
+          "stat": [
+            3432,
+            1793509484961955378
+          ],
+          "record": [
+            3432,
+            1793509484961955378
+          ]
+        }
+      },
+      "selected": 16,
+      "unique": 16,
+      "viewed_pages": 2,
+      "tile_width": 640,
+      "native_size": [
+        854,
+        480
+      ],
+      "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares",
+      "visual_status": "baseline endpoints reviewed; no confirmed endpoint defect"
+    },
+    {
+      "case": "en-LeastSquares_motion",
+      "mode": "motion",
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "fingerprint": "138fadd226bf808d0e1281f5d6c9c231fb3c7145dd91204e2803ca1cf61b171c",
+      "source_before": {
+        "videos/ai/ai6/s02_lsq.py": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+        "videos/ai/ai6/common.py": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+        "videos/ai/ai6/zh_lines.py": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+        "videos/ai/ai_text_zh.json": "bd0a9a0ff4671f8211857804ff71cd380360ba7a9d318a210f563ca75b3f8caa",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "source_after": {
+        "videos/ai/ai6/s02_lsq.py": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+        "videos/ai/ai6/common.py": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+        "videos/ai/ai6/zh_lines.py": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+        "videos/ai/ai_text_zh.json": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "inputs": {
+        ".cache/ai6/zipf.json": {
+          "sha256": "3c9e15024c4929ced3f729bbc6d8099e86f38e68199c156024e09d2ff3b137e4",
+          "stat": [
+            2047,
+            1793509484962903523
+          ],
+          "record": [
+            2047,
+            1793509484962903523
+          ]
+        },
+        ".cache/ai6/zipf.npz": {
+          "sha256": "6665844bcf130c27b940db5af5d948ff4dedd7a7ca76ed8e3a68d6b7e1c0f7ad",
+          "stat": [
+            3432,
+            1793509484961955378
+          ],
+          "record": [
+            3432,
+            1793509484961955378
+          ]
+        }
+      },
+      "selected": 414,
+      "unique": 335,
+      "viewed_pages": 42,
+      "tile_width": 640,
+      "native_size": [
+        854,
+        480
+      ],
+      "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion",
+      "visual_status": "baseline defect observed, repaired source awaiting regression",
+      "decoded": 2305,
+      "unselected": 1891,
+      "max_selected_gap": 1.0,
+      "movie_sha256": "9dcdcf39532daecb59e72261b408aa1063eb247aec8f9888a6862ca94990c15e",
+      "additional_reveal_frames": 63
+    },
+    {
+      "case": "zh-LeastSquares",
+      "mode": "endpoints",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "fingerprint": "3667a81da1ec451d2cfa9b33982475c58ea324a6fd5d2cbfe1718cd3219d45ba",
+      "source_before": {
+        "videos/ai/ai6/s02_lsq.py": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+        "videos/ai/ai6/common.py": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+        "videos/ai/ai6/zh_lines.py": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+        "videos/ai/ai_text_zh.json": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "source_after": {
+        "videos/ai/ai6/s02_lsq.py": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+        "videos/ai/ai6/common.py": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+        "videos/ai/ai6/zh_lines.py": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+        "videos/ai/ai_text_zh.json": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "inputs": {
+        ".cache/ai6/zipf.json": {
+          "sha256": "3c9e15024c4929ced3f729bbc6d8099e86f38e68199c156024e09d2ff3b137e4",
+          "stat": [
+            2047,
+            1793509484962903523
+          ],
+          "record": [
+            2047,
+            1793509484962903523
+          ]
+        },
+        ".cache/ai6/zipf.npz": {
+          "sha256": "6665844bcf130c27b940db5af5d948ff4dedd7a7ca76ed8e3a68d6b7e1c0f7ad",
+          "stat": [
+            3432,
+            1793509484961955378
+          ],
+          "record": [
+            3432,
+            1793509484961955378
+          ]
+        }
+      },
+      "selected": 17,
+      "unique": 17,
+      "viewed_pages": 3,
+      "tile_width": 640,
+      "native_size": [
+        854,
+        480
+      ],
+      "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares",
+      "visual_status": "baseline endpoints reviewed; no confirmed endpoint defect"
+    },
+    {
+      "case": "zh-LeastSquares_motion",
+      "mode": "motion",
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "fingerprint": "3667a81da1ec451d2cfa9b33982475c58ea324a6fd5d2cbfe1718cd3219d45ba",
+      "source_before": {
+        "videos/ai/ai6/s02_lsq.py": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+        "videos/ai/ai6/common.py": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+        "videos/ai/ai6/zh_lines.py": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+        "videos/ai/ai_text_zh.json": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "source_after": {
+        "videos/ai/ai6/s02_lsq.py": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+        "videos/ai/ai6/common.py": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+        "videos/ai/ai6/zh_lines.py": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+        "videos/ai/ai_text_zh.json": "da401f2e66a875261f0a135c9cda9326100ea5b9f8a7b70140712224537717b4",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "inputs": {
+        ".cache/ai6/zipf.json": {
+          "sha256": "3c9e15024c4929ced3f729bbc6d8099e86f38e68199c156024e09d2ff3b137e4",
+          "stat": [
+            2047,
+            1793509484962903523
+          ],
+          "record": [
+            2047,
+            1793509484962903523
+          ]
+        },
+        ".cache/ai6/zipf.npz": {
+          "sha256": "6665844bcf130c27b940db5af5d948ff4dedd7a7ca76ed8e3a68d6b7e1c0f7ad",
+          "stat": [
+            3432,
+            1793509484961955378
+          ],
+          "record": [
+            3432,
+            1793509484961955378
+          ]
+        }
+      },
+      "selected": 431,
+      "unique": 331,
+      "viewed_pages": 42,
+      "tile_width": 640,
+      "native_size": [
+        854,
+        480
+      ],
+      "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion",
+      "visual_status": "baseline defect observed, repaired source awaiting regression",
+      "decoded": 2609,
+      "unselected": 2178,
+      "max_selected_gap": 1.0,
+      "movie_sha256": "fdbe56fbd7d59603af9b6e40ea49831ad8600ae5d24717cff3ce4a345ae64448",
+      "additional_reveal_frames": 62
+    }
+  ],
+  "confirmed_findings": [
+    {
+      "id": "LSQ-retained-row-copy",
+      "source": "videos/ai/ai6/s02_lsq.py:126",
+      "description": "likelihood step1/2/3 retained append reveals duplicate prior glyphs before the copy crosses the new formula. Settled endpoints clean.",
+      "repair": "Only three existing step calls gain transform=False; shared ladder and all other AST unchanged."
+    }
+  ],
+  "notes": [
+    "3D finite plane patch crosses upperviewport, consistent with infinite-plane illustration; not claimed as a glyph-clipping defect. Native followups preserved.",
+    "Both original motion records remain needs-review for broad source-change warning. EN globaltable changed, ZH local narration table changed during render; direct scene/common stable.77actualcaptions/language evaluated bd0→da401 with0differences;5actualnarration blocks evaluated using frozen before/current localtables with exact translations and bookmarks, captured Chinese text equal after stripping bookmarks/whitespace. Only4unrelated SVM/Ada/Contest keys changed. Raw warning retained; no blanket current-fingerprint assertion.",
+    "Every full movie and narration/srt/wav sidecar was independently copied with shutil.copy2. Runtime originals and full image pages remain preserved; representative pages/native originals only are bundled.",
+    "No production-resolution full-motion, speech/listening, or continuous-perception signoff."
+  ]
+}

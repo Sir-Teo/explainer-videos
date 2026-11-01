@@ -1,0 +1,8 @@
+test_actual_path_expression_has_same_vertices_strong_to_weak (__main__.Checks.test_actual_path_expression_has_same_vertices_strong_to_weak) ... ok
+test_only_three_append_flags_and_exact_traversal_changed (__main__.Checks.test_only_three_append_flags_and_exact_traversal_changed) ... ok
+test_shared_ladder_write_branch_preserves_requested_duration (__main__.Checks.test_shared_ladder_write_branch_preserves_requested_duration) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.035s
+
+OK
