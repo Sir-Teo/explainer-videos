@@ -1,6 +1,6 @@
 # Part 6 chapter checklist
 
-Observed 2026-11-01T05:34:14.939021+00:00. **19 chapters /38 bilingual cases /22 numerical items.** All22 default numerical jobs completed at05:09:55UTC in315.344seconds against frozen b6649e39 sources. Actual guarded scientific checks are in progress. Two baseline Hook cases have endpoint and selected-motion review; new split/viewport legend polish remains under regression. No narration/listening/4K approval.
+Observed 2026-11-01T05:34:14.939021+00:00. **19 chapters /38 bilingual cases /22 numerical items.** All22 default numerical jobs completed at05:09:55UTC in315.344seconds against frozen b6649e39 sources. Actual22 guarded loads (zero writes/producers) and263 independent arithmetic/inference checks passed; consumer wording/ROC display qualifications are under repair. Two baseline Hook cases have endpoint and selected-motion review; new split/viewport legend polish remains under regression. No narration/listening/4K approval.
 
 | Position | Chapter | Actual output coverage |
 |---|---|---|
@@ -25,3 +25,5 @@ Observed 2026-11-01T05:34:14.939021+00:00. **19 chapters /38 bilingual cases /22
 | 19 | Outro: Recap, problems, and what comes next | Numerical inputs complete; EN/ZH rendered review, native1080, narration and4K pending. |
 
 [Exact case ledger](ai6-chapter-checklist.json). [Source integration](evidence/ai6-source-integration/README.md). [Hook baseline selected-motion evidence](evidence/ai6-hook-baseline-selected-motion-review/README.md). Numerical completion and decoded movies are separate from actual visual/audio acceptance.
+
+[Numerical generation and scientific audit](evidence/ai6-numerical-generation-scientific-audit/README.md) preserves actual22job receipts, source freeze, output identities and check limits.
