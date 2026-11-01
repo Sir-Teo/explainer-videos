@@ -184,6 +184,10 @@ def hbars(rows, width=4.0, lo=0.0, hi=1.0, bar_h=0.3, font_size=22, gap=0.16, fm
         val.next_to(bar, RIGHT, buff=0.12)
         g.add(row)
     g.arrange(DOWN, buff=gap, aligned_edge=LEFT)
+    if len(g):
+        x0 = g[0][1].get_left()[0]
+        for r in g:
+            r.shift((x0 - r[1].get_left()[0]) * RIGHT)
     for r in g:  # names flush right against the bars' common start
         x0 = r[1].get_left()[0]
         r[0].next_to([x0, r[1].get_y(), 0], LEFT, buff=0.2)
