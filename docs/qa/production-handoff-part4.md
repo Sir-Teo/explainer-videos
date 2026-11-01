@@ -90,3 +90,7 @@ Resolve this with genuinely compatible packages and exact frozen payload identit
 The preview map also references the historical **40 guarded Part 3+4 loads / zero producers / 76 unchanged artifacts** receipt. That proof and this current 23-item check are separate. Known representability-gap NaNs in format-spacing arrays and an unavailable fit slope remain documented in the [original data validation](evidence/ai4-data-source-validation/README.md), rather than being relabeled finite successful measurements.
 
 Remaining gates: cloud runtime/cache portability, the inherited per-renderer guard, real narration/listening/synchronization, continuous perception, final production-resolution geometry and current-output acceptance. The metadata handoff is complete; the production owner can request the small cache transfer after resolving transport and runtime.
+
+## Confirmed frozen payload transfer
+
+Library `libfile_f4c89a91670c81918ceb5d298b9f84b9`, version0: 761,466 bytes; archive SHA256 `f317945f1d258e2d1e85e4b43aaa8ad30aaa43c16a57185c190838a421e7a390`. Exactly42payloads/796,899bytes match the original source1927e6b7 handoff signatures, with optionalNPZabsence retained. [Archive manifest and successful Library receipt](evidence/ai4-payload-transfer/README.md). No duplicate earlier-transfer archive, numerical regeneration, metadata retag or new production approval. Cross-runtime inherited-producer-guard gate remains open.

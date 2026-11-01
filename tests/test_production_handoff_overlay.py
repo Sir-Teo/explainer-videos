@@ -293,8 +293,168 @@ class OverlayPreflightTests(unittest.TestCase):
         self.assertRejected(result, 'explainer/unchanged.py')
         self.assertRejected(result, '.cache/result.json')
 
+    def install_combined_fixture(self):
+        # Extend this test's actual base tree with its original Outro, without
+        # changing any historical one-source fixture/manifest behavior.
+        self.write(preflight.SVD, self.before)
+        self.outro_before = b'original outro\n'
+        self.outro_after = b'reviewed frontmost descent marker\n'
+        self.write(preflight.OUTRO, self.outro_before)
+        self.cmd('add', preflight.OUTRO)
+        self.commit('base fixture with original Outro')
+        self.base = self.cmd('rev-parse', 'HEAD').strip()
+        p = patch.object(preflight, 'BASE', self.base)
+        p.start(); self.addCleanup(p.stop)
+        source = json.loads((self.meta / 'reviewed-source-inventory.json').read_text())
+        source['commit'] = self.base
+        source['files'].append(self.row(preflight.OUTRO, self.outro_before))
+        self.json('reviewed-source-inventory.json', source)
+        self.overlay['base_commit'] = self.base
+        self.repin_fixture_manifest()
+        self.combined_svd_after = b'reviewed production margin and name wrapping\n'
+        self.combined = {
+            'schema_version': 2, 'overlay_id': preflight.COMBINED, 'base_commit': self.base,
+            'available_together_commit': self.base,
+            'reviewed_patch_commits': {'svd': 'd7a9b0acfb15ad9c371f14acae5d8acab2644d6f',
+                                       'outro': '6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0'},
+            'source_replacements': [
+                {'before': self.source_before, 'after': self.row(preflight.SVD, self.combined_svd_after)},
+                {'before': self.row(preflight.OUTRO, self.outro_before),
+                 'after': self.row(preflight.OUTRO, self.outro_after)}],
+            'optional_evidence_files': []}
+        self.repin_combined_fixture()
+        self.write(preflight.SVD, self.combined_svd_after)
+        self.write(preflight.OUTRO, self.outro_after)
+        return preflight.COMBINED
+
+    def repin_combined_fixture(self):
+        relative = 'overlays/' + preflight.COMBINED + '.json'
+        self.json(relative, self.combined)
+        self.known[preflight.COMBINED] = (relative, sha((self.meta / relative).read_bytes()))
+
+    def test_combined_exact_pair_at_base_preserves_all_strict_gates(self):
+        name = self.install_combined_fixture()
+        result = preflight.verify(self.repo, overlay_id=name, strict_external=True, optional_audio=True)
+        self.assertEqual(result['errors'], [])
+        self.assertEqual(result['checked_files'], 9)
+        self.assertEqual(self.cmd('rev-parse', 'HEAD').strip(), self.base)
+
+    def test_combined_equivalent_two_source_only_commit_is_accepted(self):
+        name = self.install_combined_fixture()
+        self.cmd('add', preflight.SVD, preflight.OUTRO)
+        self.commit('exact reviewed pair only')
+        self.assertEqual(preflight.verify(self.repo, overlay_id=name)['errors'], [])
+
+    def test_combined_requires_both_exact_files(self):
+        name = self.install_combined_fixture()
+        for path, before, after in [(preflight.SVD, self.before, self.combined_svd_after),
+                                    (preflight.OUTRO, self.outro_before, self.outro_after)]:
+            with self.subTest(path=path):
+                self.write(path, before)
+                result = preflight.verify(self.repo, overlay_id=name)
+                self.assertRejected(result, 'exact reviewed')
+                self.assertRejected(result, path)
+                self.write(path, after)
+
+    def test_combined_does_not_expand_default_or_one_source_v2(self):
+        self.install_combined_fixture()
+        v2 = self.install_polish_fixture()
+        self.assertRejected(preflight.verify(self.repo), preflight.OUTRO)
+        self.assertRejected(preflight.verify(self.repo, overlay_id=v2), preflight.OUTRO)
+
+    def test_combined_manifest_tamper_is_rejected(self):
+        name = self.install_combined_fixture()
+        self.combined['reviewed_patch_commits']['outro'] = '0' * 40
+        self.json('overlays/' + name + '.json', self.combined)
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'manifest hash mismatch')
+
+    def test_combined_wrong_base_and_second_path_are_rejected(self):
+        name = self.install_combined_fixture()
+        self.combined['base_commit'] = '0' * 40
+        self.repin_combined_fixture()
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'identity/base mismatch')
+        self.combined['base_commit'] = self.base
+        self.combined['source_replacements'][1]['after']['path'] = 'explainer/unreviewed.py'
+        self.repin_combined_fixture()
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'unreviewed path')
+
+    def test_combined_wrong_second_before_inventory_and_after_hash_fail(self):
+        name = self.install_combined_fixture()
+        self.write(preflight.OUTRO, b'other marker source\n')
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'exact reviewed Outro after bytes')
+        self.write(preflight.OUTRO, self.outro_after)
+        source = json.loads((self.meta / 'reviewed-source-inventory.json').read_text())
+        source['files'][-1]['sha256'] = '0' * 64
+        self.json('reviewed-source-inventory.json', source)
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'before identity mismatch')
+
+    def test_combined_no_third_source_or_optional_repository_files(self):
+        name = self.install_combined_fixture()
+        extra = {'before': self.row('explainer/unchanged.py', b'value = 1\n'),
+                 'after': self.row('explainer/unchanged.py', b'value = 2\n')}
+        self.combined['source_replacements'].append(extra)
+        self.repin_combined_fixture()
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'unreviewed path')
+        self.combined['source_replacements'].pop()
+        self.combined['optional_evidence_files'] = [self.row(self.evidence_path, self.evidence_bytes)]
+        self.repin_combined_fixture()
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'unreviewed path')
+
+    def test_combined_exact_schema_type_remains_required(self):
+        name = self.install_combined_fixture()
+        for value in (1, True, '2', 3):
+            self.combined['schema_version'] = value
+            self.repin_combined_fixture()
+            self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'schema_version must be exactly 2')
+
+    def test_combined_provenance_commit_is_not_a_moving_head_allowlist(self):
+        name = self.install_combined_fixture()
+        self.write('README.md', b'unrelated later branch documentation\n')
+        self.cmd('add', '.')
+        self.commit('later branch with both scenes and unrelated changes')
+        self.combined['available_together_commit'] = self.cmd('rev-parse', 'HEAD').strip()
+        self.repin_combined_fixture()
+        self.assertRejected(preflight.verify(self.repo, overlay_id=name), 'Overlay HEAD contains unrelated')
+
+    def test_combined_rejects_unrelated_worktree_index_and_untracked_source(self):
+        name = self.install_combined_fixture()
+        self.write('README.md', b'staged unrelated delta\n'); self.cmd('add', 'README.md')
+        self.write('README.md', b'original documentation\n')
+        self.write('explainer/new_producer.py', b'raise AssertionError("never import")\n')
+        result = preflight.verify(self.repo, overlay_id=name)
+        self.assertRejected(result, 'Overlay index contains unrelated')
+        self.assertRejected(result, 'explainer/new_producer.py')
+
+    def test_combined_missing_data_and_strict_runtime_model_audio_still_fail(self):
+        name = self.install_combined_fixture()
+        self.cache.unlink(); self.audio.write_bytes(b'tampered')
+        (self.snapshot / 'model.safetensors').unlink()
+        with patch.object(preflight.importlib.metadata, 'version', return_value='wrong exact version'):
+            result = preflight.verify(self.repo, overlay_id=name, strict_external=True, optional_audio=True)
+        for text in ('.cache/result.json', 'Package torch:', 'model.safetensors', '.cache/real.wav'):
+            self.assertRejected(result, text)
+
 
 class ReviewedManifestIdentityTests(unittest.TestCase):
+    def test_combined_manifest_binds_only_exact_two_sources_and_review_receipts(self):
+        errors = []
+        overlay = preflight.load_overlay(preflight.COMBINED, errors)
+        self.assertEqual(errors, [])
+        self.assertEqual(overlay['base_commit'], preflight.BASE)
+        self.assertEqual(overlay['schema_version'], 2)
+        replacements = preflight.source_replacements(overlay)
+        self.assertEqual([x['after']['path'] for x in replacements], [preflight.SVD, preflight.OUTRO])
+        self.assertEqual([x['after']['sha256'] for x in replacements],
+                         ['2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b',
+                          'e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24'])
+        self.assertEqual(overlay['available_together_commit'], '5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed')
+        self.assertEqual(overlay['reviewed_patch_commits']['outro'], '6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0')
+        self.assertEqual(overlay['optional_evidence_files'], [])
+        for row in overlay['evidence_receipts']:
+            p = ROOT / row['path']
+            self.assertEqual(p.stat().st_size, row['bytes'])
+            self.assertEqual(sha(p.read_bytes()), row['sha256'])
+
     def test_polish_manifest_is_separate_and_binds_reviewed_scene(self):
         errors = []
         overlay = preflight.load_overlay('svd-production-polish-v2', errors)
