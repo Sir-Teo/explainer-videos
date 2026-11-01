@@ -18,6 +18,17 @@ def cov_of(theta):
     return np.array([[s0 * s0, r * s0 * s1], [r * s0 * s1, s1 * s1]])
 
 
+def cavi_display_states(qs, elbo, kl, preview_updates=2):
+    """Keep each displayed contour and its scores on the same saved sweep."""
+    n = len(qs)
+    if n == 0 or len(elbo) != n or len(kl) != n or preview_updates < 0:
+        raise ValueError("CAVI needs aligned, nonempty saved states and a nonnegative preview")
+    indices = list(range(min(n, preview_updates + 1)))
+    if indices[-1] != n - 1:
+        indices.append(n - 1)
+    return [dict(index=i, sweep=i + 1, q=tuple(qs[i]), elbo=float(elbo[i]), kl=float(kl[i])) for i in indices]
+
+
 def before_after() -> VGroup:
     """A flat belief before the data, two bumps after it: the posterior in a picture."""
     def panel(f, color, word):
@@ -70,7 +81,7 @@ class VI(VoiceoverScene):
         colors = {r"q": Q, r"p": P}
         kf = VGroup(cmath(r"\mathrm{KL}(", r"q", r"\,\|\,", r"p", r")", r"=", colors=colors, font_size=40), klv)
         kf.arrange(RIGHT, buff=0.15).move_to([4.3, 2.4, 0])
-        keyq = label(r"$q$: \ the best single Gaussian", font_size=26, color=Q).next_to(kf, DOWN, buff=0.3)
+        keyq = label(r"$q$: \ a fitted Gaussian", font_size=26, color=Q).next_to(kf, DOWN, buff=0.3)
         keyp = label(r"$p$: \ the true posterior \ (Part 5's two bumps)", font_size=24, color=P).next_to(keyq, DOWN, buff=0.15)
         one = label(r"$\mathrm{KL}(q\,\|\,p)$: \ hides inside one bump", font_size=26, color=Q).next_to(keyp, DOWN, buff=0.45)
         pq_el = DashedVMobject(ellipse_2sd(ax, t_pq[:2], cov_of(t_pq), WHITE, stroke_width=3, k=1.0), num_dashes=30)
@@ -84,6 +95,8 @@ class VI(VoiceoverScene):
         en.next_to(elbo, UP, buff=0.15)
         post_card = gloss(r"posterior", r"what we believe about the hidden things \\ after seeing the data", before_after(),
                           corner=DR, width=4.4, color=P)
+        grid_note = note(r"grid approximation: \\ $p,q$ normalized inside this window", font_size=18)
+        grid_note.next_to(img, UP, buff=0.12).align_to(img, LEFT)
         # the identity as a bar: log p(x) = ELBO + KL, the KL part shrinking as q improves (schematic widths)
         BW, BH = 4.2, 0.42
         bx0 = 4.3 - BW / 2
@@ -108,10 +121,11 @@ class VI(VoiceoverScene):
             "we can't compute. <bookmark mark='p'/> The posterior is what we believe about the hidden things after "
             "seeing the data: part five's updated belief. Part five sampled such shapes with Markov chains. "
             "Variational inference does something else: it picks the closest shape from a simple family, here a "
-            "single Gaussian, and uses that instead. <bookmark mark='a'/> Closest in what sense? In part one's KL "
+            "single Gaussian, and uses that instead. Here both shapes are approximated on a finite grid and "
+            "normalized inside the displayed window. <bookmark mark='a'/> Closest in what sense? In part one's KL "
             "divergence, from q to p. Start from a poor guess, and slide the Gaussian downhill."
         ) as vo:
-            self.play(FadeIn(img), Create(frame_), FadeIn(keyp))
+            self.play(FadeIn(img), Create(frame_), FadeIn(keyp), FadeIn(grid_note))
             vo.wait_until("p")
             self.play(FadeIn(post_card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -122,7 +136,7 @@ class VI(VoiceoverScene):
             "It settles on one bump and ignores the other. This direction of KL punishes q for putting probability "
             "where p has almost none, so q hides inside a single mode, a single peak of the distribution. "
             "<bookmark mark='a'/> Measure the other way "
-            "round, from p to q, and the best Gaussian covers both bumps, spilling into the empty middle. Neither is "
+            "round, from p to q, and the fitted Gaussian covers both bumps, spilling into the empty middle. Neither is "
             "wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log "
             "probability of the data equals a lower bound, the ELBO, plus that KL. The ELBO is a score we can "
             "compute that always sits below the true one. <bookmark mark='c'/> Push it up, and the KL has to shrink, "
@@ -213,9 +227,14 @@ class VI(VoiceoverScene):
             return contour_lines(ax, f, (m0, m1), (t0, t1), [mode * fr for fr in (0.1, 0.4, 0.8)], n=(70, 60),
                                  colors=(Q, Q), stroke_width=3)
 
-        qc = [qden(q_) for q_ in qs[:3]]
         el = np.asarray(d["elbo"])
         kl = np.asarray(d["kl"])
+        states = cavi_display_states(qs, el, kl)
+        qc = [qden(state["q"]) for state in states]
+        final = states[-1]
+        preview_updates = min(2, len(qs) - 1)
+        last_sweep = final["sweep"]
+        sdq = 1 / math.sqrt(final["q"][1])
         rows = VGroup(
             cmath(r"q(\mu, \tau)", r"=", r"q(\mu)\, q(\tau)", font_size=34, colors={r"q(\mu, \tau)": Q}),
             cmath(r"\log q^*(\mu)", r"=", r"\mathbb{E}_{q(\tau)}\big[\log p(x, \mu, \tau)\big] + \text{const}", font_size=30,
@@ -223,16 +242,16 @@ class VI(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.3, 2.5, 0])
         rl = label(r"mean field: \ update each factor in turn \ (and the same for $\tau$)", font_size=20, color=GREY_A)
         rl.next_to(rows, DOWN, buff=0.15)
-        it = Integer(0, font_size=28, color=Q)
-        itl = VGroup(label(r"sweep", font_size=24, color=GREY_A), it).arrange(RIGHT, buff=0.12).move_to([2.0, 0.6, 0])
-        ev = DecimalNumber(el[0], num_decimal_places=3, font_size=28, color=Q)
+        it = Integer(states[0]["sweep"], font_size=28, color=Q)
+        itl = VGroup(label(r"saved sweep", font_size=24, color=GREY_A), it).arrange(RIGHT, buff=0.12).move_to([2.0, 0.6, 0])
+        ev = DecimalNumber(states[0]["elbo"], num_decimal_places=3, font_size=28, color=Q)
         evl = VGroup(label(r"ELBO:", font_size=24, color=GREY_A), ev).arrange(RIGHT, buff=0.12).next_to(itl, RIGHT, buff=0.6)
         chk = VGroup(label(r"the identity, checked:", font_size=22, color=GREY_A),
                      MathTex(rf"\log p(x) = {d['logp']:.3f}", font_size=30, color=C.BITS),
-                     MathTex(rf"\mathrm{{ELBO}} + \mathrm{{KL}} = {el[-1]:.3f} + {kl[-1]:.3f}", font_size=30, color=Q),
+                     MathTex(rf"\mathrm{{ELBO}} + \mathrm{{KL}} = {final['elbo']:.3f} + {final['kl']:.3f}", font_size=30, color=Q),
                      label(rf"(KL integrated on a grid; \ difference ${sci(max(d['gap'], 1e-12), 0)}$)", font_size=20,
                            color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -1.0, 0])
-        sd = label(rf"spread of $\mu$: \ true ${d['sd_mu_true']:.2f}$, \ mean field ${d['sd_mu_q']:.2f}$", font_size=22,
+        sd = label(rf"spread of $\mu$: \ true ${d['sd_mu_true']:.2f}$, \ mean field ${sdq:.2f}$", font_size=22,
                    color=Q).move_to([3.4, -2.9, 0])
         model = VGroup(label(rf"${d['N']}$ Austen pages: \ the rate of ``the''", font_size=24, color=GREY_A),
                        MathTex(r"x_n \sim \mathcal{N}(\mu,\, 1/\tau)", font_size=32),
@@ -240,10 +259,10 @@ class VI(VoiceoverScene):
                                font_size=30)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.3, 0.4, 0])
         key = legend([(P, r"exact posterior"), (Q, r"$q(\mu)\,q(\tau)$")], font_size=20)
         key.move_to(ax.get_corner(UR) + LEFT * key.width / 2 + DOWN * key.height / 2 + LEFT * 0.1 + DOWN * 0.1)
-        narrower = d["sd_mu_q"] < d["sd_mu_true"]
-        verdict = (f"Mean field is a little too sure of itself: q's spread for mu is {d['sd_mu_q']:.2f}, the truth's "
+        narrower = sdq < d["sd_mu_true"]
+        verdict = (f"Mean field is a little too sure of itself: q's spread for mu is {sdq:.2f}, the truth's "
                    f"{d['sd_mu_true']:.2f}, because it ignores how mu and tau lean on each other." if narrower else
-                   f"Here q's spread for mu is {d['sd_mu_q']:.2f}, the truth's {d['sd_mu_true']:.2f}.")
+                   f"Here q's spread for mu is {sdq:.2f}, the truth's {d['sd_mu_true']:.2f}.")
         with self.voiceover(
             f"Now a model where we can check everything. Take {d['N']} of Austen's pages and their rate of 'the'. Model "
             "it as a bell curve of unknown mean and unknown precision, with the usual conjugate prior, so the exact "
@@ -251,8 +270,9 @@ class VI(VoiceoverScene):
             "couldn't compute it, and looks for q of mu times q of tau: two independent factors, the mean-field "
             "family. <bookmark mark='b'/> Coordinate ascent updates one factor at a time: the best log q of one "
             "variable is the expected log joint, averaged over the other. <bookmark mark='c'/> Start q far too "
-            f"narrow. Each sweep raises the ELBO, and after {len(qs[:3]) - 1} sweeps it has converged. "
-            f"<bookmark mark='d'/> And the identity holds: log p of x, computed exactly, is {d['logp']:.2f}; the ELBO "
+            f"narrow. Each sweep raises the ELBO. These {preview_updates} early updates are a preview, not a "
+            f"convergence test. <bookmark mark='d'/> Now jump to saved sweep {last_sweep} for the check. "
+            f"The exact log probability of the data is {d['logp']:.2f}; the ELBO "
             f"plus the KL, integrated numerically, agree to the third decimal place. <bookmark mark='e'/> " + verdict
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(pc), FadeIn(key), FadeIn(model))
@@ -263,10 +283,15 @@ class VI(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeOut(model))
             self.play(FadeIn(qc[0]), FadeIn(itl), FadeIn(evl))
-            for i in (1, 2):
-                self.play(ReplacementTransform(qc[i - 1], qc[i]), ChangeDecimalToValue(it, i), ChangeDecimalToValue(ev, el[i]),
+            preview_end = min(2, len(states) - 1)
+            for i in range(1, preview_end + 1):
+                self.play(ReplacementTransform(qc[i - 1], qc[i]), ChangeDecimalToValue(it, states[i]["sweep"]),
+                          ChangeDecimalToValue(ev, states[i]["elbo"]),
                           run_time=1.5)
             vo.wait_until("d")
+            if preview_end != len(states) - 1:
+                self.play(ReplacementTransform(qc[preview_end], qc[-1]), ChangeDecimalToValue(it, final["sweep"]),
+                          ChangeDecimalToValue(ev, final["elbo"]), run_time=1.5)
             self.play(FadeIn(chk))
             vo.wait_until("e")
             self.play(FadeIn(sd))
@@ -301,7 +326,9 @@ class VI(VoiceoverScene):
         res = VGroup(label(rf"spread: \ ${r['score_sd']:.1f}$ \ vs \ ${r['rep_sd']:.1f}$", font_size=26),
                      label(rf"variance ${r['ratio']:.0f}\times$ smaller", font_size=26, color=Q))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, -0.4, 0])
-        tag = note(rf"$f(z) = (z - 2)^2$, \ $m = {r['m']}$; \ ${r['R']:,}$ draws each".replace(",", "{,}"), font_size=20)
+        tag = VGroup(note(rf"$f(z) = (z - 2)^2$, \ $m = {r['m']}$; \ ${r['R']:,}$ draws each".replace(",", "{,}"), font_size=20),
+                     note(r"edge bins include estimates outside $[-25,15]$", font_size=18, color=GREY_B))
+        tag.arrange(DOWN, buff=0.1)
         tag.next_to(res, DOWN, buff=0.3)
         hcard = history_card(2013, r"D.~Kingma \& M.~Welling; \ D.~Rezende, S.~Mohamed \& D.~Wierstra (2014)",
                              r"the reparameterization trick", width=5.0).to_corner(UL, buff=0.3)
@@ -311,7 +338,8 @@ class VI(VoiceoverScene):
             "the gradient of log q. It's unbiased, but noisy. <bookmark mark='b'/> In 2013 Diederik Kingma and Max "
             "Welling, and independently, a few months later, Danilo Rezende and colleagues, wrote the sample as the mean plus noise, so "
             "the gradient can flow through the sample itself: the reparameterization trick. "
-            f"<bookmark mark='c'/> Same expectation, same answer on average; but here its spread is {r['rep_sd']:.1f} "
+            f"<bookmark mark='c'/> The edge bins include estimates beyond the displayed range. Same expectation, "
+            f"same answer on average; but here its spread is {r['rep_sd']:.1f} "
             f"against {r['score_sd']:.1f}, a variance {r['ratio']:.0f} times smaller."
         ) as vo:
             self.play(Write(rows[0]), FadeIn(g), FadeIn(hcard))
@@ -339,7 +367,7 @@ class VI(VoiceoverScene):
         if row.width > 13.2:
             row.width = 13.2
         arrs = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.06, color=GREY_B, stroke_width=2.5) for a, b in zip(row, row[1:])])
-        old = label(r"CAVI, \ LDA (chapter 5): \ a separate optimization of $q$ for every data point", font_size=24,
+        old = label(r"local latent variables: \ a separate optimization of $q$ for each example", font_size=24,
                     color=GREY_A).to_edge(UP, buff=0.5)
         new = label(r"amortized: \ one network outputs $q$ for any $x$, \ trained on the ELBO", font_size=26, color=Q)
         new.next_to(old, DOWN, buff=0.25)
@@ -347,7 +375,8 @@ class VI(VoiceoverScene):
                     font_size=26, color=HIDDEN).next_to(row, DOWN, buff=0.7)
         tag = schematic_tag(DR)
         with self.voiceover(
-            "One more step. CAVI, and the topic model of chapter five, optimize a separate q for every data point. "
+            "One more step. Our CAVI example fit one shared posterior to the whole set of pages. For local latent "
+            "variables, such as chapter five's document mixtures, inference instead fits a separate q for each example. "
             "<bookmark mark='a'/> Instead, train one network, an encoder, to output q's parameters for any input: "
             "amortized inference. <bookmark mark='b'/> Sample z with the reparameterization trick, decode it back, "
             "and train both networks on the ELBO. <bookmark mark='c'/> That's the variational autoencoder, and part "

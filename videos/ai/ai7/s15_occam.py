@@ -41,8 +41,8 @@ class Occam(VoiceoverScene):
             "Chapter thirteen chose its length scale by a quantity we haven't explained: the marginal likelihood, also "
             "called the evidence. It is the probability of the data under the model, averaged over every function "
             "the prior allows. <bookmark mark='a'/> For a Gaussian process the average can be done exactly: the data "
-            "is Gaussian, with the kernel matrix plus noise as covariance. <bookmark mark='b'/> Take the log, and it "
-            "splits in two. <bookmark mark='c'/> One term measures the fit: how well the data agrees with the model's "
+            "is Gaussian, with the kernel matrix plus noise as covariance. <bookmark mark='b'/> Take the log: two "
+            "model-dependent terms and a normalization constant. <bookmark mark='c'/> One term measures the fit: how well the data agrees with the model's "
             "covariances. <bookmark mark='d'/> The other is a penalty for complexity: the log-determinant measures how "
             "many different datasets the model could have produced. A flexible model spreads its probability thin."
         ) as vo:
@@ -76,7 +76,8 @@ class Occam(VoiceoverScene):
         best = float(o["best_ell"])
         ib = int(np.argmax(tot))
         pk = Dot(ax.c2p(le[ib], tot[ib]), radius=0.1, color=EVID)
-        lg = legend([(FIT, r"data fit"), (COMP, r"complexity penalty"), (EVID, r"the sum: \ log evidence")], font_size=22)
+        lg = legend([(FIT, r"data fit"), (COMP, r"complexity penalty"),
+                     (EVID, r"log evidence: \\ terms $+$ constant")], font_size=22)
         lg.move_to([4.9, 1.6, 0])
         res = label(rf"best: \ $\ell = {best:.1f}$ pages", font_size=28, color=EVID).move_to([4.9, -0.2, 0])
         pics = VGroup(label(r"short $\ell$: \ wiggly, \ fits everything", font_size=20, color=GREY_A),
@@ -87,7 +88,8 @@ class Occam(VoiceoverScene):
             "and signal levels held where they were fitted. <bookmark mark='a'/> Short length scales make wiggly "
             "functions that can follow every page: the fit is good. Long ones are smooth and miss the pages. "
             "<bookmark mark='b'/> But wiggly functions could have made so many other datasets that they pay a large "
-            f"complexity penalty. <bookmark mark='c'/> The sum peaks in between, at about {best:.1f} pages. No "
+            f"complexity penalty. <bookmark mark='c'/> Together with the constant, the total log evidence peaks in "
+            f"between, at about {best:.1f} pages. No "
             "held-out data was needed: the evidence trades fit against complexity by itself. That's Bayesian Occam's "
             "razor."
         ) as vo:
@@ -160,22 +162,25 @@ class Occam(VoiceoverScene):
         dv = Integer(0, font_size=30, color=HIDDEN)
         dlab = VGroup(label(r"polynomial of degree", font_size=24, color=GREY_A), dv).arrange(RIGHT, buff=0.15)
         dlab.next_to(ax, UP, buff=0.2)
-        tag = note(rf"${len(xp)}$ points from a cubic, plus noise \ (seeded)", font_size=20).next_to(ax, DOWN, buff=0.2)
+        tag = VGroup(note(rf"${len(xp)}$ points from a cubic, plus noise \ (seeded)", font_size=20),
+                     note(r"curve: Bayesian posterior mean", font_size=20, color=HIDDEN))
+        tag.arrange(DOWN, buff=0.08).next_to(ax, DOWN, buff=0.2)
         g1 = axes([0, degs[-1], 2], [float(ev.min()) - 2, float(ev.max()) + 2, 5], x_length=4.6, y_length=2.2,
                   ylabel=r"log evidence", xticks=[0, 3, 6, 9, 12], center=[3.6, 1.5, 0])
         g2 = axes([0, degs[-1], 2], [0, float(rmse.max()) * 1.1, 0.1], x_length=4.6, y_length=1.8, xlabel=r"degree",
-                  ylabel=r"training error (RMS)", xticks=[0, 3, 6, 9, 12], center=[3.6, -1.7, 0])
+                  ylabel=r"OLS reference RMS", xticks=[0, 3, 6, 9, 12], center=[3.6, -1.7, 0])
         ce = curve(g1.ax, degs, ev, EVID, 4)
         cr = curve(g2.ax, degs, rmse, GREY_B, 3)
         pk = Dot(g1.ax.c2p(best, ev[best]), radius=0.09, color=EVID)
-        verdict = (f"The evidence peaks at degree {best}, the true degree, while the training error keeps falling all "
-                   f"the way to degree {degs[-1]}." if best == true else
-                   f"The evidence peaks at degree {best}; the true degree was {true}. The training error keeps falling "
-                   f"all the way to degree {degs[-1]}.")
+        verdict = (f"The evidence peaks at degree {best}, the true degree, while the separate least-squares "
+                   "reference error never rises as the degree grows." if best == true else
+                   f"The evidence peaks at degree {best}; the true degree was {true}. The separate least-squares "
+                   "reference error never rises as the degree grows.")
         with self.voiceover(
             f"One more test, where we know the answer: {len(xp)} points from a cubic curve, plus noise. Fit "
             "polynomials of every degree, from a flat line up to degree twelve, by Bayesian linear regression. "
-            "<bookmark mark='a'/> Higher degrees always fit the training points better. <bookmark mark='b'/> " +
+            "<bookmark mark='a'/> The lower chart uses a separate, unregularized least-squares fit. In that reference "
+            "family, training error cannot increase as degree grows. <bookmark mark='b'/> " +
             verdict + " <bookmark mark='c'/> Fit against complexity: the same trade-off, seen from the other side, is "
             "the subject of part eight."
         ) as vo:

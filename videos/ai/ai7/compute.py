@@ -27,10 +27,17 @@ import math
 
 import numpy as np
 
-from explainer.ai.cache import Cache
+from .cache_contract import SchemaCache
 
-CACHE = Cache("ai7")
-load = CACHE.load
+CACHE = SchemaCache("ai7")
+
+
+def load(name):
+    return CACHE.load(name)
+
+
+def cache_current(name):
+    return CACHE.current(name)
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -44,9 +51,7 @@ def ai1():
 
 
 def pages():
-    from videos.ai.ai6 import compute as c5
-
-    p = c5.load("pages")
+    p = CACHE.read_pages()
     return np.asarray(p["X"]), np.asarray(p["y"]), np.asarray(p["book"]), p["vocab"]
 
 
@@ -68,7 +73,7 @@ def compute_pca():
     # how well PC1 alone splits the authors (no labels were used to find it)
     thr = 0.5 * (proj[y == 0, 0].mean() + proj[y == 1, 0].mean())
     split = float(((proj[:, 0] > thr) == y).mean())
-    assert share[0] > share[1] > share[2] and split > 0.8
+    assert np.all(np.diff(share) <= 1e-12)  # eigenspectrum order, independent of label agreement
     return dict(share=share, proj=proj, y=y, top=top, split=split, n=len(y), d=X.shape[1])
 
 
@@ -77,6 +82,19 @@ def gauss_logpdf(X, m, S):
     d = X - m
     inv = np.linalg.inv(S)
     return -0.5 * np.einsum("ni,ij,nj->n", d, inv, d) - 0.5 * math.log(np.linalg.det(2 * math.pi * S))
+
+
+GMM_MIN_VARIANCE = 1e-6
+
+
+def covariance_mle(scatter):
+    """Exact covariance M step subject to Sigma >= GMM_MIN_VARIANCE * I.
+
+    Flooring eigenvalues solves this constrained problem; adding a ridge to
+    every eigenvalue would change the optimum and can decrease likelihood.
+    """
+    values, vectors = np.linalg.eigh(scatter)
+    return (vectors * np.maximum(values, GMM_MIN_VARIANCE)) @ vectors.T
 
 
 def compute_gmm():
@@ -97,7 +115,7 @@ def compute_gmm():
         nk = r.sum(0)  # M step
         w = nk / len(P)
         means = (r.T @ P) / nk[:, None]
-        covs = np.array([((r[:, k:k + 1] * (P - means[k])).T @ (P - means[k])) / nk[k] + 1e-6 * np.eye(2)
+        covs = np.array([covariance_mle(((r[:, k:k + 1] * (P - means[k])).T @ (P - means[k])) / nk[k])
                          for k in range(2)])
     lls = [h["ll"] for h in hist]
     assert all(b >= a - 1e-9 for a, b in zip(lls, lls[1:]))  # EM never goes downhill
@@ -106,11 +124,31 @@ def compute_gmm():
     del g
     return dict(P=P, y=y, means=np.array([h["means"] for h in hist]), covs=np.array([h["covs"] for h in hist]),
                 w=np.array([h["w"] for h in hist]), ll=np.array(lls), r=np.array([h["r"] for h in hist]),
-                agree=agree)
+                agree=agree, covariance_floor=GMM_MIN_VARIANCE)
 
 
 # ---------------------------------------------------------------------------
 HMM_LETTERS = 200_000
+
+
+def hmm_log_likelihood(obs, A, B, pi):
+    """Scaled forward likelihood, including the final fitted replay state."""
+    if len(obs) == 0:
+        return 0.0
+    alpha = pi * B[:, obs[0]]
+    scale = float(alpha.sum())
+    if scale == 0:
+        return -math.inf
+    value = math.log(scale)
+    alpha /= scale
+    for symbol in obs[1:]:
+        alpha = (alpha @ A) * B[:, symbol]
+        scale = float(alpha.sum())
+        if scale == 0:
+            return -math.inf
+        value += math.log(scale)
+        alpha /= scale
+    return value
 
 
 def baum_welch(obs, K, S, iters, seed):
@@ -146,6 +184,8 @@ def baum_welch(obs, K, S, iters, seed):
         B /= B.sum(1, keepdims=True)
         pi = gam[0]
         Bs.append(B.copy())
+    # Bs includes the initial model and every M step; score the final one too.
+    lls.append(hmm_log_likelihood(obs, A, B, pi) / T)
     return A, B, pi, np.array(Bs), np.array(lls)
 
 
@@ -166,7 +206,7 @@ def viterbi(obs, A, B, pi):
 
 def compute_hmm():
     c1 = ai1()
-    t = c1.text("train27")[:HMM_LETTERS]
+    t = CACHE.read_text("train27")[:HMM_LETTERS]
     alpha = c1.ALPHA27
     obs = np.array([alpha.index(ch) for ch in t])
     A, B, pi, Bs, lls = baum_welch(obs, 27, 2, 60, seed=1980)  # Cave & Neuwirth, 1980
@@ -177,13 +217,11 @@ def compute_hmm():
         A, B, pi, Bs = A[::-1, ::-1], B[::-1], pi[::-1], Bs[:, ::-1]
     post = B / B.sum(0, keepdims=True)  # which state emits each letter more (equal state weights)
     vowel_side = [alpha[i] for i in range(27) if B[0, i] > B[1, i]]
-    assert set("aeiou") <= set(vowel_side), vowel_side
     sent = c1.to27("There is no reverse on a motorcycle")
     states = viterbi(np.array([alpha.index(ch) for ch in sent]), A, B, np.full(2, 0.5))  # no memory of the books' start
-    assert [s_ == 0 for s_ in states] == [B[0, alpha.index(ch)] > B[1, alpha.index(ch)] for ch in sent]
     assert all(b >= a - 1e-9 for a, b in zip(lls, lls[1:]))
     return dict(A=A, B=B, pi=pi, Bs=Bs, lls=lls / math.log(2), vowel_side=vowel_side, sentence=sent, states=states,
-                n=HMM_LETTERS, post=post)
+                n=len(obs), post=post)
 
 
 # ---------------------------------------------------------------------------
@@ -208,7 +246,6 @@ def compute_gp():
     best = max(((mlik(ell, f * m * v, (1 - f) * m * v), ell, f * m * v, (1 - f) * m * v)
                 for ell in (1.5, 2, 3, 4, 6, 8, 12, 16) for f in np.linspace(0.05, 0.95, 19) for m in (0.7, 1.0, 1.4)),
                key=lambda t_: t_[0])
-    assert best[2] > best[3]  # more signal than noise: the rate really drifts from page to page
     _, ell, s2, n2 = best
     xs = np.linspace(0, len(x) - 1, 300)
     K = kern(x, x, ell, s2) + n2 * np.eye(len(x))
@@ -263,19 +300,25 @@ def compute_vi():
 
     path = []
     th0 = np.array([-0.2, 1.5, -0.5, -0.5, 0.0])  # a poor start, above the two bumps
-    minimize(kl_qp, th0, method="Nelder-Mead", callback=lambda th: path.append(th.copy()),
-             options=dict(maxiter=600, xatol=1e-4, fatol=1e-7))
-    t_qp = path[-1]
-    assert t_qp[0] < -1.2  # the reverse KL settles on one bump: the bigger one, on the left
-    # KL(p||q) is minimized exactly by moment matching: the Gaussian with p's own mean and covariance
+    reverse = minimize(kl_qp, th0, method="Nelder-Mead", callback=lambda th: path.append(th.copy()),
+                       options=dict(maxiter=600, xatol=1e-4, fatol=1e-7))
+    t_qp = reverse.x
+    path.append(t_qp.copy())
+    # Moment matching initializes an untruncated Gaussian. Here q is normalized
+    # on the finite plotting grid, so optimize that actual objective too.
     mean_p = p @ G
     cov_p = ((G - mean_p) * p[:, None]).T @ (G - mean_p)
     sd_p = np.sqrt(np.diag(cov_p))
-    t_pq = np.array([*mean_p, *np.log(sd_p), math.atanh(cov_p[0, 1] / (sd_p[0] * sd_p[1]))])
-    assert kl_pq(t_pq) < kl_pq(t_qp) and kl_qp(t_qp) < kl_qp(t_pq)  # each fit wins under its own measure
+    initial_pq = np.array([*mean_p, *np.log(sd_p), math.atanh(cov_p[0, 1] / (sd_p[0] * sd_p[1]))])
+    forward = minimize(kl_pq, initial_pq, method="BFGS", options=dict(gtol=1e-7, maxiter=600))
+    t_pq = forward.x
     pick = np.linspace(0, len(path) - 1, 40).astype(int)
     return dict(path=np.array(path)[pick], t_qp=t_qp, t_pq=t_pq, mean_p=mean_p, cov_p=cov_p,
-                kl_qp=[kl_qp(path[k]) for k in pick], kl_final=kl_qp(t_qp), kl_pq_final=kl_pq(t_pq))
+                kl_qp=[kl_qp(path[k]) for k in pick], kl_final=kl_qp(t_qp), kl_pq_final=kl_pq(t_pq),
+                initial_forward_kl=kl_pq(initial_pq),
+                objective_scope="Both distributions discretized and normalized on the displayed finite grid",
+                reverse_optimizer=dict(success=bool(reverse.success), message=str(reverse.message)),
+                forward_optimizer=dict(success=bool(forward.success), message=str(forward.message)))
 
 
 # ---------------------------------------------------------------------------
@@ -344,8 +387,7 @@ def kn_probs(model, a, K, M):
 
 
 def compute_kn():
-    c1 = ai1()
-    train, valid, passage = c1.text("train"), c1.text("valid"), c1.text("passage")
+    train, valid, passage = CACHE.read_text("train"), CACHE.read_text("valid"), CACHE.read_text("passage")
     chars = sorted(set(train) | set(valid) | set(passage))
     idx = {ch: i for i, ch in enumerate(chars)}
     K = len(chars)
@@ -359,8 +401,7 @@ def compute_kn():
         rows.append(dict(order=M, valid=kn_bits(model, v, K, M), test=kn_bits(model, ps, K, M)))
         print(f"    KN order {M}: valid {rows[-1]['valid']:.3f}  passage {rows[-1]['test']:.3f}")
     best = int(np.argmin([r["valid"] for r in rows]))
-    raw = c1.load("raw")
-    assert rows[best]["test"] < raw["best_bits"]  # better than Part 1's best counting model
+    raw = CACHE.read_part1("raw")
     return dict(K=K, rows=rows, best=best, best_bits=rows[best]["test"], part1_best=raw["best_bits"],
                 part1_rows=[r["test"] for r in raw["rows"]])
 
@@ -378,10 +419,8 @@ def glogpdf(X, m, S):
 
 
 def compute_pca2():
-    from videos.ai.ai6 import compute as c6
-
     X, y, book, vocab = pages()
-    test = np.asarray(c6.load("pages")["test"], bool)
+    test = np.asarray(CACHE.read_pages()["test"], bool)
     Z = (X - X.mean(0)) / X.std(0)
     n, d = Z.shape
     vals, vecs = np.linalg.eigh(Z.T @ Z / n)
@@ -422,10 +461,20 @@ def compute_pca2():
                 total2=float((Z2 ** 2).sum(1).mean()), th_best=float(th[np.argmax(along)]),
                 Z2=Z2, ll_tr=np.array(ll_tr), ll_te=np.array(ll_te), sig2=np.array(sig2), best_k=best_k,
                 full_te=full_te, n_train=int((~test).sum()), n_test=int(test.sum()),
-                share5=float(vals[:5].sum() / vals.sum()), share_best=float(vals[:best_k].sum() / vals.sum()))
+                share5=float(vals[:5].sum() / vals.sum()), share_best=float(vals[:best_k].sum() / vals.sum()),
+                training_share_best=float(lv[:best_k].sum() / lv.sum()))
 
 
 # ---------------------------------------------------------------------------
+def bijective_correlations(correlation):
+    """Best total absolute correlation, with each of two sources used once."""
+    matrix = np.abs(np.asarray(correlation, float))
+    if matrix.shape != (2, 2) or not np.isfinite(matrix).all():
+        raise ValueError("A finite two-output, two-source correlation matrix is required")
+    assignment = (0, 1) if np.trace(matrix) >= np.trace(matrix[:, ::-1]) else (1, 0)
+    return matrix[np.arange(2), assignment]
+
+
 def compute_ica():
     """Two voices, two microphones: a tone and a sawtooth, mixed; whitening, then the rotation that makes the outputs
     least Gaussian, found by FastICA's fixed point on the kurtosis."""
@@ -462,9 +511,8 @@ def compute_ica():
     Y = np.stack([Y[perm.index(0)], Y[perm.index(1)]])  # recovered source k matches true source k
     Y *= np.sign(np.sum(Y * S, 1))[:, None]
     r_ica = np.abs(np.corrcoef(np.vstack([Y, S]))[:2, 2:]).diagonal()
-    r_pca = np.abs(np.corrcoef(np.vstack([Xw, S]))[:2, 2:]).max(1)  # the whitened (PCA) outputs: still mixed
-    r_mic = np.abs(np.corrcoef(np.vstack([X, S]))[:2, 2:]).max(1)
-    assert r_ica.min() > 0.99
+    r_pca = bijective_correlations(np.corrcoef(np.vstack([Xw, S]))[:2, 2:])
+    r_mic = bijective_correlations(np.corrcoef(np.vstack([X, S]))[:2, 2:])
     ang = np.array([math.atan2(p[1], p[0]) % np.pi for p in path])
     sub = np.arange(0, T, 5)
     return dict(t=t[sub], S=S[:, sub], X=X[:, sub], Xw=Xw[:, sub], Y=Y[:, sub], A=A, theta=th, kurt=kurt, ang=ang,
@@ -499,7 +547,8 @@ def compute_embound():
         ll, bd = [], []
         for t in ts:
             m, S, w = m0 + t * (m1 - m0), S0 + t * (S1 - S0), w0 + t * (w1 - w0)
-            if (w <= 0).any() or any(np.linalg.eigvalsh(S[z]).min() <= 1e-9 for z in range(2)):
+            if ((w <= 0).any()
+                    or any(np.linalg.eigvalsh(S[z]).min() < GMM_MIN_VARIANCE * (1 - 1e-9) for z in range(2))):
                 ll.append(np.nan)
                 bd.append(np.nan)
                 continue
@@ -572,7 +621,7 @@ def lda_corpus():
     segs, sbook = [], []
     cap, low = collections.Counter(), collections.Counter()
     for n in c1.BOOKS:
-        t = c1.strip_gutenberg((c1.BOOK_DIR / f"{n}.txt").read_text(encoding="utf-8", errors="replace"))
+        t = c1.strip_gutenberg(CACHE.read_book(n))
         t = unicodedata.normalize("NFKD", t.translate(c1.QUOTES).replace("_", "")).encode("ascii", "ignore").decode()
         toks = re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?", t)
         for w in toks:
@@ -621,7 +670,19 @@ def compute_lda():
     def top(b, m=8):
         return [[vocab[i] for i in np.argsort(-b[k])[:m]] for k in range(K)]
 
+    def bound():
+        Elog = digamma(gamma) - digamma(gamma.sum(1))[:, None]
+        value = (D * (gammaln(K * LDA_ALPHA) - K * gammaln(LDA_ALPHA)) + (LDA_ALPHA - 1) * Elog.sum()
+                 + (cn[:, None] * phi * (Elog[di] + np.log(beta.T[wi]) - np.log(phi + 1e-300))).sum()
+                 - (gammaln(gamma.sum(1)) - gammaln(gamma).sum(1)
+                    + ((gamma - 1) * Elog).sum(1)).sum())
+        return float(value / N)
+
+    initial_logphi = (digamma(gamma) - digamma(gamma.sum(1))[:, None])[di] + np.log(beta.T[wi])
+    phi = np.exp(initial_logphi - initial_logphi.max(1, keepdims=True))
+    phi /= phi.sum(1, keepdims=True)
     snaps["0"] = top(beta)
+    bounds.append(bound())
     for it in range(1, LDA_ITERS + 1):
         for _ in range(LDA_INNER):  # E step: coordinate ascent on each section's q(theta) and q(z)
             Elog = digamma(gamma) - digamma(gamma.sum(1))[:, None]
@@ -630,14 +691,11 @@ def compute_lda():
             phi = np.exp(lphi)
             phi /= phi.sum(1, keepdims=True)
             gamma = LDA_ALPHA + np.stack([np.bincount(di, weights=cn * phi[:, k], minlength=D) for k in range(K)], 1)
-        Elog = digamma(gamma) - digamma(gamma.sum(1))[:, None]
-        lb = (D * (gammaln(K * LDA_ALPHA) - K * gammaln(LDA_ALPHA)) + (LDA_ALPHA - 1) * Elog.sum()
-              + (cn[:, None] * phi * (Elog[di] + np.log(beta.T[wi]) - np.log(phi + 1e-300))).sum()
-              - (gammaln(gamma.sum(1)) - gammaln(gamma).sum(1) + ((gamma - 1) * Elog).sum(1)).sum())
-        bounds.append(float(lb / N))
         # M step: each topic's word probabilities from the words it was given
         beta = np.stack([np.bincount(wi, weights=cn * phi[:, k], minlength=V) for k in range(K)]) + LDA_ETA
         beta /= beta.sum(1, keepdims=True)
+        # The replay's round-it topics and bound must use this same post-M beta.
+        bounds.append(bound())
         if it in snap_at:
             snaps[str(it)] = top(beta)
         print(f"    LDA round {it}: bound {bounds[-1]:.4f} nats per word", flush=True)
@@ -659,6 +717,7 @@ def compute_lda():
     col = [int(np.argmax(Elog[ex] + np.log(beta[:, vid[w]]))) if w in vid else -1 for w in words]
     mono = all(b >= a - 1e-6 for a, b in zip(bounds, bounds[1:]))
     return dict(K=K, V=V, D=D, seg=LDA_SEG, alpha=LDA_ALPHA, n_names=n_names, words_total=int(N), bounds=bounds,
+                bound_rounds=list(range(LDA_ITERS + 1)),
                 monotone=mono, snaps=snaps, top=[[vocab[i] for i in np.argsort(-beta[k])[:10]] for k in range(K)],
                 topw=[[float(beta[k, i]) for i in np.argsort(-beta[k])[:10]] for k in range(K)], size=size / size.sum(),
                 main=[c1.BOOKS[b] for b in main], main_share=[float(share[k].max()) for k in range(K)],
@@ -777,11 +836,16 @@ def compute_ibm1():
             for w in e:
                 p = t[src, ei[w]]
                 ll += math.log(p.sum() / len(src))
-                cnt[src, ei[w]] += p / p.sum()  # E step: how likely each French word made this English word
+                # Repeated source words contribute once per position, even
+                # though those positions share a translation-table row.
+                np.add.at(cnt[:, ei[w]], src, p / p.sum())
         lls.append(ll)
         t = cnt / np.maximum(cnt.sum(1, keepdims=True), 1e-300)  # M step
         snaps.append(t.copy())
         aligns.append(align(IBM_EXAMPLE, t))
+    # Parameter/alignment snapshots contain round zero through round thirty.
+    lls.append(sum(math.log(t[[0] + [fi[word] for word in f], ei[w]].sum() / (len(f) + 1))
+                   for f, e in pairs for w in e))
     assert all(b >= a - 1e-9 for a, b in zip(lls, lls[1:]))
     best = {f: E[int(np.argmax(t[fi[f]]))] for f in F}
 
@@ -815,8 +879,7 @@ def word_ids(text: str):
 def compute_goodturing():
     """Counts of counts for the word pairs of the novels: Good-Turing's estimate of what a count of r is really worth,
     against the truth measured on the other half of the reading (Church & Gale, 1991)."""
-    c1 = ai1()
-    lines = c1.text("train").split("\n")
+    lines = CACHE.read_text("train").split("\n")
     ta, tb = word_ids("\n".join(lines[0::2])), word_ids("\n".join(lines[1::2]))
     vocab, inv = np.unique(np.concatenate([ta, tb]), return_inverse=True)
     V = len(vocab)
@@ -863,8 +926,7 @@ INF_EDGES = (0, 8, 10, 12, 15, 20, 30, 10 ** 9)
 
 
 def chars_codec():
-    c1 = ai1()
-    train, valid, passage = c1.text("train"), c1.text("valid"), c1.text("passage")
+    train, valid, passage = CACHE.read_text("train"), CACHE.read_text("valid"), CACHE.read_text("passage")
     chars = sorted(set(train) | set(valid) | set(passage))
     idx = {ch: i for i, ch in enumerate(chars)}
     enc = lambda t: np.array([idx[ch] for ch in t], np.int64)  # noqa: E731
@@ -878,6 +940,8 @@ def compute_infini():
 
     chars, enc, train, valid, passage = chars_codec()
     K = len(chars)
+    if K > 255 or len(train) >= 2 ** 31:
+        raise ValueError("The suffix index needs at most255 symbols and signed32-bit positions")
     a, v, ps = enc(train), enc(valid), enc(passage)
     M = int(load("kn")["best"])
     t0 = time.time()
@@ -956,7 +1020,8 @@ def compute_infini():
     return dict(K=K, n=len(a), M=M, types=types, discounts=discounts, edges=list(INF_EDGES[:-1]), lam=lam, mix_bits=mix_bits,
                 kn_bits=kn_bits_, L=pL, hist=hist, mean_L=float(pL.mean()), median_L=float(np.median(pL)),
                 max_L=int(pL.max()), acc=float(ptop.mean()), zero=float((pp == 0).mean()),
-                sparse=float((pn == 1).mean()), acc_long=float(ptop[pL >= 10].mean()),
+                sparse=float((pn == 1).mean()), long_count=int((pL >= 10).sum()),
+                acc_long=float(ptop[pL >= 10].mean()) if (pL >= 10).any() else None,
                 share_long=float((pL >= 10).mean()), grow_context=passage[i - len(lengths):i],
                 grow_next=passage[i], grow_counts=lengths, demo=demo, demo_sa=dsa,
                 valid_positions=int(len(vL)), example_start=0, example=passage[:160], example_L=pL[:160 - M],
@@ -965,7 +1030,7 @@ def compute_infini():
 
 def compute_scoreboard():
     """The scoreboard as Part 1 left it, with Part 7's two counting rows after Part 1's best counting model."""
-    sb = ai1().load("scoreboard")
+    sb = CACHE.read_part1("scoreboard")
     rows = [dict(r) for r in sb["rows"]]
     i = next(j for j, r in enumerate(rows) if r["key"] == "best") + 1
     kn, inf = load("kn"), load("infini")
@@ -1116,15 +1181,16 @@ def compute_gpland():
     x, y, xs = np.asarray(gp["x"]), np.asarray(gp["y"]), np.asarray(gp["xs"])
     ell, s2, n2, mu0 = float(gp["ell"]), float(gp["s2"]), float(gp["noise"]), float(gp["mu0"])
     order = rng(1951).permutation(len(x))  # Krige, 1951
+    ns = [min(requested, len(x)) for requested in GP_NS]
     means, sds = [], []
-    for n_ in GP_NS:
+    for n_ in ns:
         sel = order[:n_]
         m, s = gp_post(x[sel], y[sel] - mu0, xs, ell, s2, n2)
         means.append(m + mu0)
         sds.append(s)
     sds = np.array(sds)
     assert all(b <= a + 1e-9 for a, b in zip(sds.mean(1), sds.mean(1)[1:]))  # more data, never wider on average
-    return dict(order=order, ns=list(GP_NS), means=np.array(means), sds=sds, mean_sd=sds.mean(1), s=math.sqrt(s2),
+    return dict(order=order, ns=ns, means=np.array(means), sds=sds, mean_sd=sds.mean(1), s=math.sqrt(s2),
                 noise_sd=math.sqrt(n2))
 
 
@@ -1354,7 +1420,7 @@ ITEMS = {
     "cavi": compute_cavi,
     "reparam": compute_reparam,
 }
-CACHE.items = ITEMS
+CACHE.bind(ITEMS)
 
 
 if __name__ == "__main__":

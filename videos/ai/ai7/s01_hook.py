@@ -28,7 +28,7 @@ class Hook(VoiceoverScene):
         cloud_scale = 2.65 / max(float(np.linalg.norm(xyz, axis=1).max()), 1e-9)
         cloud = Cloud3D(xyz, [GREY_B] * len(y), scale=cloud_scale, radius=0.045, tilt=0.4,
                         center=[-0.6, -0.1, 0])
-        head = label(r"$639$ pages, \ $70$ numbers each \ (Part 6) \ --- \ no authors given", font_size=30)
+        head = label(rf"${p['n']:,}$ pages, \ ${p['d']}$ numbers each \ (Part 6) \ --- \ no authors given".replace(",", "{,}"), font_size=30)
         head.to_edge(UP, buff=0.4)
         found = label(rf"two hidden groups, found from the data alone: \ ${100 * g['agree']:.0f}\%$ match the authors",
                       font_size=30, color=WHITE).to_edge(DOWN, buff=0.45)
@@ -36,7 +36,7 @@ class Hook(VoiceoverScene):
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.5).shift(DOWN * 0.7)
         q = label(r"?", font_size=80, color=HIDDEN).move_to([4.6, 0.4, 0])
         with self.voiceover(
-            "Here are part six's six hundred and thirty-nine pages again, each a point in seventy dimensions, seen "
+            f"Here are part six's {p['n']:,} pages again, each a point in {p['d']} dimensions, seen "
             "along the three directions in which they vary most. But this time, nobody tells us who wrote which. "
             "<bookmark mark='a'/> Can the data reveal its own hidden structure? <bookmark mark='b'/> A model that "
             "assumes there are two hidden sources, and fits them with no labels at all, finds two groups. "

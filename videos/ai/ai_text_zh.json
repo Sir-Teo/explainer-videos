@@ -20877,7 +20877,27 @@
     "all $70$ rates: \\ penalized gap $F-F_\\star$ \\ (nats per page)": "全部 $70$ 个词频：带惩罚目标差距 $F-F_\\star$（每页纳特）",
     "$F=\\text{mean cross-entropy}+\\frac{\\lambda}{2}\\|\\mathbf{w}\\|^2,\\quad\\lambda=0.01$": "$F=\\text{平均交叉熵}+\\frac{\\lambda}{2}\\|\\mathbf{w}\\|^2,\\quad\\lambda=0.01$",
     "plot floor: $10^{-4}$ \\\\ training error $0$ or positive loss \\\\ below $10^{-4}$ shares this baseline": "绘图下限：$10^{-4}$ \\\\ 训练错误率 $0$ 与低于下限的正损失 \\\\ 共用这条底线",
-    "bars: $70$--$100\\%$; \\ white: $\\pm$ one s.d. across folds \\\\ error bars capped at the displayed axis limits": "条形范围：$70$--$100\\%$；\\ 白线：各折的 $\\pm$ 一个标准差 \\\\ 误差线在显示坐标轴的上下限处截断"
+    "bars: $70$--$100\\%$; \\ white: $\\pm$ one s.d. across folds \\\\ error bars capped at the displayed axis limits": "条形范围：$70$--$100\\%$；\\ 白线：各折的 $\\pm$ 一个标准差 \\\\ 误差线在显示坐标轴的上下限处截断",
+    "correlation, \\ one-to-one matching to the two voices:": "相关系数，\\ 与两个声音作一一配对：",
+    "Exact E step + bound-improving M step": "精确 E 步 + 不降低下界的 M 步",
+    "log-likelihood, \\ from round 1": "对数似然，\\ 从第 1 轮起",
+    "M.~Tipping \\& C.~Bishop; \\ S.~Roweis (1998)": "M.~蒂平与 C.~毕晓普；\\ S.~罗维斯（1998）",
+    "Viterbi: \\ the most likely complete hidden-state sequence": "维特比：\\ 最可能的完整隐状态序列",
+    "the full path uses emissions and transitions; \\ the states were never named": "完整路径同时利用发射与转移；\\ 这些状态没有预先命名",
+    "emission preferences: \\ $s_1$ space and a, e, i, o, u; \\ $s_2$ consonants": "发射偏好：\\ $s_1$ 空格及a、e、i、o、u；\\ $s_2$ 辅音",
+    "two learned emission tables; \\ this fit is not an exact vowel/consonant split": "学到的两张发射表；\\ 这次拟合不是元音与辅音的精确划分",
+    "R.~L.~Cave \\& L.~P.~Neuwirth (1980); \\ L.~E.~Baum et al.\\ (1970)": "R.~L.~凯夫与L.~P.~诺伊维尔特（1980）；\\ L.~E.~鲍姆等（1970）",
+    "$m$: target length; $\\ell$: source length; $f_0$: NULL \\\\ fixed $m$; a length prior is needed across lengths": "$m$：目标长度；$\\ell$：源长度；$f_0$：NULL \\\\ 固定$m$；跨长度比较还需要长度先验",
+    "Why limit the context length?": "为什么要限制上下文长度？",
+    "log evidence: \\\\ terms $+$ constant": "对数证据：\\\\ 两项之和再加常数",
+    "curve: Bayesian posterior mean": "曲线：贝叶斯后验均值",
+    "OLS reference RMS": "最小二乘参照的均方根误差",
+    "relative EI (peak $1$)": "相对期望改进（峰值 $1$）",
+    "$q$: \\ a fitted Gaussian": "$q$：\\ 拟合出的高斯分布",
+    "grid approximation: \\\\ $p,q$ normalized inside this window": "网格近似：\\\\ $p,q$ 均在此窗口内归一化",
+    "saved sweep": "保存的轮次",
+    "edge bins include estimates outside $[-25,15]$": "边缘分箱包含 $[-25,15]$ 之外的估计",
+    "local latent variables: \\ a separate optimization of $q$ for each example": "局部隐变量：\\ 为每个样例单独优化一个 $q$"
   },
   "phrases": {
     "width": "宽度",
@@ -23170,6 +23190,46 @@
     [
       "^\\$(\\d+)\\$ shown; \\$(\\d+)\\$ outside view$",
       "显示$\\1$页；$\\2$页在视野外"
+    ],
+    [
+      "^label\\-chosen\\ cut,\\ on\\ these\\ pages:\\ \\\\\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\\\%\\$\\ sorted\\ right$",
+      "用标签选定的切分，在这组书页上：\\\\ $\\g<1>\\\\%$ 分对"
+    ],
+    [
+      "^the\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ validation\\ pages$",
+      "$\\g<1>$ 页验证书页"
+    ],
+    [
+      "^chosen:\\ \\\\\\ \\$k\\ =\\ (-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ \\\\\\\\\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\\\%\\$\\ of\\ training\\ variance$",
+      "选定：\\\\ $k = \\g<1>$ \\\\\\\\ 训练方差的 $\\g<2>\\\\%$"
+    ],
+    [
+      "^excess\\ kurtosis:\\ \\\\\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ and\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ for\\ the\\ whitened\\ mixes,\\ \\\\\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ and\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ for\\ the\\ voices$",
+      "超额峰度：\\\\ 白化混合为 $\\g<1>$ 和 $\\g<2>$，\\\\ 原声音为 $\\g<3>$ 和 $\\g<4>$"
+    ],
+    [
+      "^covariance eigenvalue floor: \\\\ (\\$[^$]+\\$)$",
+      "协方差特征值下限：\\\\ \\g<1>"
+    ],
+    [
+      "^\\$p\\(\\\\text\\{there\\}\\\\sqcup\\)\\ =\\ \\\\sum_j\\ \\\\alpha_(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\(j\\)\\ =\\ (-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\\\!\\\\times\\\\!(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\^\\{(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\}\\$\\ \\\\\\ \\$=\\$\\ \\\\\\ the\\ sum\\ over\\ all\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\^(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\ =\\ (-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ paths\\ \\\\\\ \\(checked\\)$",
+      "$p(\\\\text{there}\\\\sqcup) = \\\\sum_j \\\\alpha_\\g<1>(j) = \\g<2>\\\\!\\\\times\\\\!\\g<3>^{\\g<4>}$ \\\\ $=$ \\\\ 全部$\\g<5>^\\g<6> = \\g<7>$条路径之和（已核对）"
+    ],
+    [
+      "^one\\ rule:\\ \\\\\\ move\\ French\\ adjectives\\ before\\ the\\ noun:\\ \\\\\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$$",
+      "一条规则：\\\\ 把法语形容词移到名词前：\\\\ $\\g<1>$"
+    ],
+    [
+      "^\\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ bytes\\ each;\\ \\\\\\ about\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\ \\\\times\\ (-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ string\\ comparisons\\ per\\ count$",
+      "每项$\\g<1>$字节；\\\\ 每次计数约需$\\g<2> \\\\times \\g<3>$次字符串比较"
+    ],
+    [
+      "^no\\ fixed\\-order\\ count\\ table\\ \\\\\\\\\\ this\\ replay\\ caps\\ context\\ at\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ characters$",
+      "无需固定阶数的计数表 \\\\\\\\ 本次回放最多使用$\\g<1>$个上下文字符"
+    ],
+    [
+      "^\\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ length\\ bands\\ \\$b\\$\\ \\$\\\\times\\$\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ types\\ \\$s\\$:\\ \\\\\\\\\\ one\\ or\\ several\\ distinct\\ next\\ characters;\\ \\\\\\\\\\ weights\\ fitted\\ on\\ held\\-out\\ novel\\ text$",
+      "$\\g<1>$个长度区间$b$ $\\\\times$ $\\g<2>$种类型$s$：\\\\\\\\ 只有一种或多种不同的后续字符；\\\\\\\\ 在留出的小说文本上拟合权重"
     ]
   ]
 }

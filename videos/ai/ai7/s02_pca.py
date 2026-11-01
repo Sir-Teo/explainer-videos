@@ -224,8 +224,8 @@ class PCA(VoiceoverScene):
         chk = label(rf"largest difference: \ ${sci(max(dev, 1e-16), 1)}$ \ (rounding)", font_size=24, color=C.BITS)
         chk.next_to(ax, DOWN, buff=0.35)
         with self.voiceover(
-            "In practice, nobody forms the covariance matrix. Part three's singular value decomposition of the data "
-            "itself does the job: Z equals U, sigma, V transpose. <bookmark mark='a'/> The rows of V transpose are "
+            "A common alternative avoids forming the covariance matrix: part three's singular value decomposition "
+            "of the data itself. Z equals U, sigma, V transpose. <bookmark mark='a'/> The rows of V transpose are "
             "the principal directions, and each singular value, squared and divided by the number of pages, is an "
             "eigenvalue. <bookmark mark='b'/> On the pages the two agree to the last digits of floating point. "
             "Working on Z directly is also more accurate: squaring the data to make C squares its condition number."
@@ -304,12 +304,13 @@ class PCA(VoiceoverScene):
             arr = always_redraw(lambda vec=vec: Arrow(cl.project(np.zeros(3))[0], cl.project(vec)[0], buff=0,
                                                        color=GREY_A, stroke_width=3, max_tip_length_to_length_ratio=0.12))
             axes_.add(arr)
-        split = label(rf"one cut along direction 1: \ ${100 * p['split']:.0f}\%$ of pages sorted right", font_size=28,
+        split = label(rf"label-chosen cut, on these pages: \ ${100 * p['split']:.0f}\%$ sorted right", font_size=28,
                       color=WHITE).to_edge(DOWN, buff=0.4)
         cap = label(r"the pages along the first three directions", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Seen along the first three directions, the authors already sit apart. <bookmark mark='a'/> A single cut "
-            f"along the first direction sorts {100 * p['split']:.0f} percent of the pages correctly. PCA is part "
+            f"along the first direction sorts {100 * p['split']:.0f} percent of these same pages correctly. The "
+            "directions were fitted without author labels; we used the labels to choose the sign and this cut. PCA is part "
             "three's eigenvectors, put to work: the cheapest way to see a cloud of high-dimensional data."
         ) as vo:
             self.play(FadeIn(cl), FadeIn(axes_), FadeIn(cap))

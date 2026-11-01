@@ -8,6 +8,14 @@ from videos.ai.ai7.common import AUSTEN, BOUND, DICKENS, HIDDEN, LIKE, PART, ell
 COL = {r"q(z)": HIDDEN, r"\mathcal{B}(q, \theta)": BOUND, r"\log p(x; \theta)": LIKE, r"\ge": BOUND}
 
 
+def kmeans_verdict(agreement, em_agreement):
+    comparison = ("higher than" if round(100 * agreement) > round(100 * em_agreement) else
+                  "lower than" if round(100 * agreement) < round(100 * em_agreement) else
+                  "equal at the shown precision to")
+    return (f"It matches the authors {100 * agreement:.0f} percent of the time, {comparison} EM's "
+            f"{100 * em_agreement:.0f} percent. These are the agreements in this run, not a general ranking of the algorithms.")
+
+
 class EM(VoiceoverScene):
     def construct(self):
         card = chapter_card(4, r"Mixtures and EM", r"Which source made each point?", lit=(1977,), part=PART)
@@ -48,8 +56,9 @@ class EM(VoiceoverScene):
         lax = Axes(x_range=[0, len(ll), 10], y_range=[float(ll[1:].min()) - 0.05, float(ll.max()) + 0.05, 0.1], x_length=4.2,
                    y_length=2.2, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([4.4, -1.9, 0])
         lcurve = always_redraw(lambda: VMobject(color=C.BITS, stroke_width=3).set_points_as_corners(
-            [lax.c2p(k, ll[k]) for k in range(1, max(3, int(round(it.get_value())) + 1))]))
-        ll_l = label(r"log-likelihood: \ never goes down", font_size=22, color=C.BITS).next_to(lax, UP, buff=0.1)
+            [lax.c2p(k, ll[k]) for k in range(1, int(round(it.get_value())) + 1)])
+            if it.get_value() >= 2 else VMobject())
+        ll_l = label(r"log-likelihood, \ from round 1", font_size=22, color=C.BITS).next_to(lax, UP, buff=0.1)
         steps = VGroup(label(r"E: \ for each point, how likely \\ is each bell to have made it?", font_size=24),
                        label(r"M: \ refit each bell to its points, \\ weighted by those chances", font_size=24))
         steps.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.2, 1.6, 0])
@@ -59,6 +68,8 @@ class EM(VoiceoverScene):
         itl = VGroup(label(r"round", font_size=26, color=GREY_A), itv).arrange(RIGHT, buff=0.15).next_to(steps, UP, buff=0.35)
         res = label(rf"the two bells' points match the authors: \ ${100 * g['agree']:.0f}\%$", font_size=26,
                     color=WHITE).to_edge(DOWN, buff=0.25).set_x(-2.4)
+        floor_note = label(rf"covariance eigenvalue floor: \ ${sci(g['covariance_floor'], 1)}$", font_size=18,
+                           color=GREY_A).move_to([4.2, -3.25, 0])
         cite_ = cite(r"A.~P.~Dempster, N.~M.~Laird \& D.~B.~Rubin, \textit{Maximum Likelihood from Incomplete Data via the EM "
                      r"Algorithm} (1977)", corner=UR)
         mixdef = definition_card(r"a mixture of Gaussians",
@@ -88,12 +99,14 @@ class EM(VoiceoverScene):
             self.play(ReplacementTransform(e_box, m_box), FadeIn(steps[1]))
             self.play(it.animate.set_value(1), run_time=1.2)
         with self.voiceover(
-            "Then again: E, M, E, M. <bookmark mark='a'/> Each round can only raise the likelihood, so the bells "
-            "creep toward a fit. <bookmark mark='b'/> By the last round they've settled, and the pages each one "
+            "Then again: E, M, E, M. <bookmark mark='a'/> Here the exact posterior E step and the constrained M step "
+            "cannot lower the same likelihood. Each covariance has a fixed eigenvalue floor, and the M step "
+            "maximizes the bound within that constraint. <bookmark mark='b'/> By the last displayed round, the pages each bell "
             f"claims match the true authors {100 * g['agree']:.0f} percent of the time. Nobody told it there were "
-            "authors at all. EM fits any model with hidden parts, and it's the next chapter's engine too."
+            "authors at all. EM applies to many hidden-variable models when its E and M steps can be computed; "
+            "it's the next chapter's engine too."
         ) as vo:
-            self.play(FadeIn(itl), Create(lax), FadeIn(ll_l), FadeIn(lcurve))
+            self.play(FadeIn(itl), Create(lax), FadeIn(ll_l), FadeIn(lcurve), FadeIn(floor_note))
             for k in range(1, 8):
                 self.play(*colour(k), ChangeDecimalToValue(itv, k), run_time=0.45)
                 self.play(it.animate.set_value(k + 1), run_time=0.45)
@@ -130,10 +143,11 @@ class EM(VoiceoverScene):
                 why(r"the gap is a KL: \ zero when \\ $q$ is the posterior \ (the E step)"),
                 why(r"bound below; \ M step; \\ E step made it touch")]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-2.6, buff=0.55, edge=6.8)
-        head = label(r"Why EM never goes downhill", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"Exact E step + bound-improving M step", font_size=34).to_edge(UP, buff=0.25)
         box_ = None
         with self.voiceover(
-            "Why can't EM ever go downhill? Write the log-likelihood as a sum over the hidden choice z: which bell "
+            "When does EM avoid going downhill? Use the exact posterior in E, and do not lower the same bound in M. "
+            "Write the log-likelihood as a sum over the hidden choice z: which bell "
             "made this point. <bookmark mark='a'/> Multiply and divide by any distribution q over z. "
             "<bookmark mark='b'/> The log of an average is at least the average of the logs: that's Jensen's "
             "inequality, because the log curves downward. So we get a lower bound, B, that we can compute. "
@@ -141,7 +155,8 @@ class EM(VoiceoverScene):
             "z. It vanishes when q is the posterior, and that is the E step: it makes the bound touch. "
             "<bookmark mark='d'/> The M step then maximizes the bound over the parameters. Chain the three facts: the "
             "new likelihood is above the bound, the bound went up, and it started touching. The likelihood can never "
-            "fall. That's Dempster, Laird and Rubin's theorem, from 1977."
+            "fall under those conditions. This also covers a generalized EM step that increases the bound without "
+            "maximizing it. That's the principle in Dempster, Laird and Rubin's 1977 paper."
         ) as vo:
             self.play(FadeIn(head))
             step(0)
@@ -205,8 +220,8 @@ class EM(VoiceoverScene):
             "<bookmark mark='a'/> The green curve is the bound that round's E step built: always below, touching at "
             "the start. <bookmark mark='b'/> The M step jumps to the top of the green curve, and the yellow curve, "
             "above it, can only be higher there. <bookmark mark='c'/> The first step, from a poor start, is a leap; "
-            "later steps are small, and the curves flatten as EM settles. It never overshoots, and it never needs a "
-            "learning rate."
+            "later displayed steps are small. Each maximizing update raises the same bound within the feasible "
+            "set; these closed-form updates need no gradient learning rate."
         ) as vo:
             self.play(FadeIn(lg), FadeIn(xn), *[FadeIn(VGroup(p[0], p[1], p[2], p[3])) for p in panels], FadeIn(heads))
             vo.wait_until("a")
@@ -261,19 +276,17 @@ class EM(VoiceoverScene):
         res = label(rf"$k$-means: \ ${100 * km['agree']:.0f}\%$ match the authors \ (EM: \ ${100 * km['agree_em']:.0f}\%$)",
                     font_size=26).to_edge(DOWN, buff=0.3).set_x(-3.2)
         hist = cite(r"S.~Lloyd (1957, published 1982); \ J.~MacQueen (1967)", corner=DR)
-        softer = km["agree_em"] > km["agree"]
-        verdict = (f"It matches the authors {100 * km['agree']:.0f} percent of the time, a little below EM's "
-                   f"{100 * km['agree_em']:.0f}: hard choices throw away the doubt about pages near the border."
-                   if softer else
-                   f"It matches the authors {100 * km['agree']:.0f} percent of the time, as well as EM's "
-                   f"{100 * km['agree_em']:.0f}.")
+        verdict = kmeans_verdict(km["agree"], km["agree_em"])
         with self.voiceover(
             "Now make EM's choices hard. Instead of soft colours, each page joins whichever centre is nearest; then "
             "each centre moves to the mean of its pages. That's k-means, Stuart Lloyd's algorithm from Bell Labs in "
-            f"1957. <bookmark mark='a'/> From the same poor start, it settles in {km['iters']} rounds, and the "
-            "average squared distance falls every time. <bookmark mark='b'/> It really is EM: take bells that are "
-            "round and equal, and shrink their width. The soft colours harden, until every page is ninety-nine "
-            "percent sure. <bookmark mark='c'/> " + verdict
+            f"1957. <bookmark mark='a'/> From the same poor start, we display {km['iters']} recorded rounds, and the "
+            "average squared distance never rises. <bookmark mark='b'/> This is the small-variance limit of a "
+            "Gaussian-mixture EM model: take "
+            "round, equal-weight bells and take their width toward zero: points with a unique nearest centre make "
+            "hard choices, while exact distance ties can remain soft. At the smallest width shown, "
+            f"{100 * hard[-1]:.0f} percent of pages have responsibility above ninety-nine percent. "
+            "<bookmark mark='c'/> " + verdict
         ) as vo:
             self.play(Create(ax), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.002), FadeIn(rule), FadeIn(hist),
                       run_time=1.5)

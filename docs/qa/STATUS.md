@@ -1,6 +1,6 @@
 # Current cloud QA checkpoint
 
-Observed 2026-11-01T10:46:19.954613+00:00. Progress, **not full-series production approval**.
+Observed 2026-11-01T12:24:00.708229+00:00. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Current checked candidate has Tree9aa,Forests569,AdaBoost9dace,Contest104c,Outro0f613; local Chinese29600967/global captions89f967. [Exact source/test inventory](evidence/ai6-five-chapter-integrated-tests-20261101/README.md) binds the publication index; preceding source publication f559 remains the pin of the execution-input archive. No merge, deployment or CI/CD.
 
@@ -14,7 +14,7 @@ All**641 tests passed in54.406seconds**, with all**1532 source/configuration ide
 
 New local rendering and decoding remain held below the unchanged768MiB guard; native captures retain their1.2GiB start gate. A verified operation reclaimed220,078,080bytes from28 completed zero-WAV copies without changing bytes or numerical inputs; only verified duplicate test-restoration copies were later removed. Unproven environment/dictionary/cache removal was withheld. Existing evidence, speech and all numerical inputs remain preserved.
 
-Current local reviewers retain LDA,KNN,Kernels,SVM,Metrics. Their execution-only inputs are saved in Library`libfile_34ae49e30a5881918e0e194a534698ac` (23,570,717bytes), sourcef559, reusing data/corpus from accepted`libfile_3158cc8861448191a951cd71b6549e14` (41,613,077bytes). No execution host is assigned and no new job started. Current five-chapter source changes above require the newly published pin for their own after work; the older archives are not retagged.
+The separate fresh execution host is assigned Part6 regression work from exact source5886, reusing Library`libfile_34ae49e30a5881918e0e194a534698ac` (23,570,717bytes) and accepted`libfile_3158cc8861448191a951cd71b6549e14` (41,613,077bytes). Parent reports fresh LDA,KNN,Kernels,Trees EN/ZH captures and further Forests/AdaBoost/Contest/Outro execution underway. Capture/runtime completion does not increase accepted-case counts without actual reviewed receipts. The new KNN spacing-only source fix is published atcc58dbc430fcd86083d2d3e49b4b2ada34e65520 and needs its own fresh host regression; historical archives and original contact evidence are not retagged.
 
 Part1 Probability now has a source-applied finished-result dwell repair (SHA5e856dd9), preserving all eleven utterance masters. Seven focused tests pass. Exact strictv7 registration has19 expected actual-fixture outcomes and268 final checks, with all156 original inputs unchanged. At the preceding v7 publication,657 integrated tests passed in59.613 seconds with1535 source/configuration identities unchanged. Fresh rendered pacing, narrated synchronization, listening and production-output validation remain pending. [Integrated scope and capacity handoff](evidence/probability-dwell-v7-integrated-tests-20261101/README.md). [Source proof](evidence/ai1-probability-numeric-dwell-source-repair/README.md).
 
@@ -175,3 +175,5 @@ Frozen Part6 source publication: `8db4f0399a1490f905c8367151eeeb3bae9e051b`. Gra
 
 
 Part6 fresh-host review confirmed Chinese KNN Jensen glyph contact at movieframe1643/109.533008seconds and native1080 endpoints. The source-only spacing repair31829859 preserves English geometry, all four proof rows, chart, narration and timing. [Scoped proof](evidence/ai6-knn-jensen-line-spacing-repair/README.md). Local constructor metrics differ vertically from the host baseline, so fresh host render acceptance remains pending. Selected/native acceptance counts are not increased by this source fix.
+
+Part7 remains source preparation only:18 chapters/36 bilingual cases,24 planned numerical items,zero revised production items or rendered cases. The final765-test run passed in67.468seconds with1549 source/configuration identities unchanged; includes current KNN spacing and item-aware build dependencies. [Part7 ledger](ai7-chapter-checklist.md) and [exact integrated source scope](evidence/ai7-source-integration/README.md). All generation/render/audio/production gates stay open behind Part6. Earlier761/657/641 counts are historical and are not added. The actual in-memory source probes retain their earlier whole-module identities rather than being relabeled as final-source production runs.

@@ -58,12 +58,15 @@ class HMM(VoiceoverScene):
                     color=GREY_A).next_to(rows, UP, buff=0.2)
         h1 = history_card(1966, r"L.~Baum \& T.~Petrie", r"probabilistic functions of Markov chains; \ Baum--Welch "
                           r"training, 1970", width=4.6).move_to([4.6, -2.2, 0])
+        preference = ("The first emission table favours spaces and vowels, the second consonants."
+                      if set(h["vowel_side"]) == set(" aeiou") else
+                      "The two emission tables learn different letter preferences; this fit does not exactly split vowels from consonants.")
         with self.voiceover(
             "Hidden states can also unfold in time. A hidden Markov model has a state we can't see, moving like part "
             "five's Markov chain, with transition probabilities A. <bookmark mark='a'/> At every step the state emits "
             "something we can see, a letter, from its own table of chances, B. <bookmark mark='b'/> Here is a "
-            "two-state model of the letters in the books; we'll train it in the next chapter. One state prefers "
-            "vowels and the space, the other consonants. <bookmark mark='c'/> Leonard Baum and his colleagues worked "
+            f"two-state model of the letters in the books; we'll train it in the next chapter. {preference} "
+            "<bookmark mark='c'/> Leonard Baum and his colleagues worked "
             "out the mathematics in the late 1960s, at the Institute for Defense Analyses. Three questions follow. "
             "How likely is a sentence? Which states produced it? And how do we learn A and B?"
         ) as vo:
@@ -113,7 +116,7 @@ class HMM(VoiceoverScene):
                     label(r"$\alpha_t(j) = p(x_1 \dots x_t,\ z_t = j)$: \ sum over the state before, \ by Markov",
                           font_size=22, color=GREY_A)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         tot = al[-1].sum()
-        res = label(rf"$p(\text{{``there''}}) = \sum_j \alpha_6(j) = {sci_tex(tot)}$ \ $=$ \ the sum over all "
+        res = label(rf"$p(\text{{there}}\sqcup) = \sum_j \alpha_6(j) = {sci_tex(tot)}$ \ $=$ \ the sum over all "
                     rf"$2^{T} = {2 ** T}$ paths \ (checked)", font_size=24, color=FWD)
         res.to_edge(UP, buff=0.25)
         cost = label(rf"cost: \ $T \cdot S^2$ instead of $S^T$; \ for the whole sentence, ${f['n']} \times 4$ against "
@@ -128,7 +131,7 @@ class HMM(VoiceoverScene):
             f"letters. For 'there' and a space, that's about {tot * 1e7:.1f} in ten million, exactly the sum over all {2 ** T} paths. For the "
             f"whole {f['n']}-letter sentence, the sum has two to the {f['n']} terms; the sweep takes a few hundred "
             "multiplications. <bookmark mark='d'/> Part twenty-three's speech recognizers train with CTC, which runs "
-            "this very recursion over the ways of lining up sound with text."
+            "a related forward sum over the allowed ways of lining up sound with text, including blank labels."
         ) as vo:
             self.play(FadeIn(lets), FadeIn(rows), FadeIn(nodes), Create(edges), run_time=2.0)
             vo.wait_until("a")
@@ -204,15 +207,15 @@ class HMM(VoiceoverScene):
                                 fill_opacity=0.9).next_to(letters[i], DOWN, buff=0.35) for i, s in enumerate(st)])
         links = VGroup(*[Line(marks[i].get_center(), marks[i + 1].get_center(), color=HIDDEN, stroke_width=1.5)
                          for i in range(len(st) - 1)])
-        head = label(r"The most likely hidden states of Shannon's sentence \ (Viterbi)", font_size=30).to_edge(UP, buff=0.6)
+        head = label(r"Viterbi: \ the most likely complete hidden-state sequence", font_size=30).to_edge(UP, buff=0.6)
         key = VGroup(label(r"$s_1$", font_size=28, color=VOWEL), label(r"$s_2$", font_size=28, color=CONSONANT))
         key.arrange(RIGHT, buff=0.6).next_to(marks, DOWN, buff=0.5)
-        note_ = label(r"the same alternation Part 5's three-state chain had, \ but here the states were never named",
+        note_ = label(r"the full path uses emissions and transitions; \ the states were never named",
                       font_size=24, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Here's Shannon's sentence from part one, every letter labelled by its most likely hidden state. "
-            "<bookmark mark='a'/> Vowels and spaces on one side, consonants on the other, and the states alternate "
-            "the way English does, though nobody ever told the model what a vowel is."
+            "Here's Shannon's sentence from part one, with one most likely complete hidden-state sequence. "
+            "<bookmark mark='a'/> These colours come from the whole path, using both letter emissions and state "
+            "transitions, rather than choosing each state's label independently. Nobody told the model what a vowel is."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(l_) for l_ in letters], lag_ratio=0.03), run_time=1.5)
             self.play(LaggedStart(*[GrowFromCenter(m) for m in marks], lag_ratio=0.04), Create(links),

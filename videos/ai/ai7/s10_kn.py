@@ -149,12 +149,15 @@ class KneserNey(VoiceoverScene):
         l2 = label(rf"Kneser--Ney: \ ${kn[-1]:.2f}$ at ${M}$ characters", font_size=26, color=KN).next_to(l1, DOWN, buff=0.4)
         l2.align_to(l1, LEFT)
         best1 = int(np.argmin(p1))
+        trend = ("Across these measured orders, Kneser–Ney's passage score never rises."
+                 if np.all(np.diff(kn) <= 0) else
+                 "Kneser–Ney improves some of these scores, but more context does not improve every measured order.")
         with self.voiceover(
-            "Back to part one's scoreboard. The best counting model there used four characters of context and reached "
+            f"Back to part one's scoreboard. The best counting model on that scored passage used {best1} characters of context and reached "
             f"{p1[best1]:.2f} bits per character on the passage. <bookmark mark='a'/> Longer contexts should help, but "
             "they're rare: most long contexts in the passage appeared only a handful of times in thirty novels, if at "
-            "all. With part one's simple smoothing, the score gets worse beyond four characters. "
-            "<bookmark mark='b'/> Better smoothing keeps improving."
+            f"all. Part one's best passage score is at {best1} characters. "
+            f"<bookmark mark='b'/> {trend}"
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn))
             self.play(Create(c1), LaggedStart(*[FadeIn(d) for d in d1], lag_ratio=0.1), FadeIn(l1), run_time=2.0)
@@ -209,8 +212,8 @@ class KneserNey(VoiceoverScene):
             "absolute discounting: shave the fixed discount off every count you've seen, <bookmark mark='c'/> and use "
             "the savings to back off to a shorter context, one character fewer: blend the two. "
             "<bookmark mark='b'/> Second, judge the shorter contexts by their variety. In the novels, "
-            f"'{d['word']}' appears {d['word_count']:,} times, but only ever after "
-            f"{d['word_prev']} different word{'s' if d['word_prev'] != 1 else ''}, '{d['word_top_prev']}'. "
+            f"'{d['word']}' appears {d['word_count']:,} times, but its number of distinct predecessors is "
+            f"{d['word_prev']}; its most common predecessor is '{d['word_top_prev']}'. "
             f"'{d['other']}' is about as common, and follows {d['other_prev']:,} different words. "
             f"<bookmark mark='d'/> After an unfamiliar word, '{d['other']}' is the far better guess. So the shorter "
             "contexts count how many different contexts something follows, not how often it appears."
@@ -243,10 +246,10 @@ class KneserNey(VoiceoverScene):
         row = board.rows[i]
         glow = SurroundingRectangle(row, color=KN, buff=0.08, corner_radius=0.08)
         with self.voiceover(
-            f"With seven characters of context, Kneser–Ney reaches {k['best_bits']:.2f} bits per character on the "
-            "passage. <bookmark mark='a'/> For two decades, from speech recognition to machine translation, a "
+            f"With {k['best']} characters of context, selected on the validation books, Kneser–Ney reaches "
+            f"{k['best_bits']:.2f} bits per character on the passage. <bookmark mark='a'/> For two decades, from speech recognition to machine translation, a "
             "Kneser–Ney model was the language model in the noisy channel. Stanley Chen and Joshua Goodman's careful "
-            "comparison in 1998 found it the best of all the counting methods. But why stop at seven characters?"
+            f"comparison in 1998 found a modified Kneser–Ney variant best among the methods they tested. But why stop at {k['best']} characters?"
         ) as vo:
             self.play(FadeIn(board))
             vo.wait_until("a")
