@@ -11,6 +11,16 @@ FN = HIDDEN  # the unknown function
 DATA = DICKENS
 
 
+def gp_viewport(*values):
+    """One inclusive ordinate range for every state drawn in the same axes."""
+    arrays = [np.asarray(v, dtype=float).ravel() for v in values]
+    if not arrays or any(not len(v) or not np.isfinite(v).all() for v in arrays):
+        raise ValueError("GP viewport requires nonempty finite plotted values")
+    low, high = min(v.min() for v in arrays), max(v.max() for v in arrays)
+    span = high - low if high > low else max(abs(low), 1.0)
+    return float(low - 0.05 * span), float(high + 0.05 * span)
+
+
 class GP(VoiceoverScene):
     def construct(self):
         card_in(self, 13, r"Gaussian processes", r"What if the hidden thing is a whole function?",
@@ -24,20 +34,22 @@ class GP(VoiceoverScene):
         x, y, xs = np.asarray(g["x"]), np.asarray(g["y"]), np.asarray(g["xs"])
         mean, sd, prior, post = (np.asarray(g[k]) for k in ("mean", "sd", "prior", "post"))
         mean20, sd20, m20 = np.asarray(g["mean20"]), np.asarray(g["sd20"]), int(g["m20"])
-        ylo, yhi = 0.0, float(max(y.max(), (mean + 2 * sd).max(), prior.max())) * 1.05
+        ylo, yhi = gp_viewport(y, prior, post, mean, mean - 2 * sd, mean + 2 * sd,
+                              mean20, mean20 - 2 * sd20, mean20 + 2 * sd20)
         ax = Axes(x_range=[0, len(x), 25], y_range=[ylo, yhi, 10], x_length=10.4, y_length=4.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([0, -0.5, 0])
         xl = label(r"page of \textit{Great Expectations}", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.2)
-        yl = label(r"``her'' per $1{,}000$ words", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        yl = label(("每 $1{,}000$ 词中 ``her'' 的次数 \\\\ 阴影带：潜在函数 $f \\pm 2$ 条件标准差" if zh() else "``her'' per $1{,}000$ words \\\\ band: latent $f \\pm 2$ conditional SD"), font_size=20,
+                   color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.05, color=DICKENS) for a, b in zip(x, y)])
 
         def curve(v, color, sw=2.5, op=1.0):
-            return VMobject(color=color, stroke_width=sw, stroke_opacity=op).set_points_smoothly(
-                [ax.c2p(a, float(np.clip(b, ylo, yhi))) for a, b in zip(xs, v)])
+            return VMobject(color=color, stroke_width=sw, stroke_opacity=op).set_points_as_corners(
+                [ax.c2p(a, float(b)) for a, b in zip(xs, v)])
 
         def band(m, s, color=FN, op=0.22):
-            hi = [ax.c2p(a, float(np.clip(b, ylo, yhi))) for a, b in zip(xs, m + 2 * s)]
-            lo = [ax.c2p(a, float(np.clip(b, ylo, yhi))) for a, b in zip(xs[::-1], (m - 2 * s)[::-1])]
+            hi = [ax.c2p(a, float(b)) for a, b in zip(xs, m + 2 * s)]
+            lo = [ax.c2p(a, float(b)) for a, b in zip(xs[::-1], (m - 2 * s)[::-1])]
             return Polygon(*hi, *lo, stroke_width=0, fill_color=color, fill_opacity=op)
 
         pri = VGroup(*[curve(v, FN, 2, 0.8) for v in prior])
@@ -48,7 +60,8 @@ class GP(VoiceoverScene):
         colors = {r"f": FN}
         f = cmath(r"f", r"\sim", r"\mathcal{GP}\big(m,\; k(x, x')\big)", colors=colors, font_size=38).to_corner(UR, buff=0.4)
         kf = cmath(r"k(x, x') = s^2 e^{-(x - x')^2 / 2\ell^2}", font_size=30).next_to(f, DOWN, buff=0.2).align_to(f, RIGHT)
-        ell = label(rf"length scale $\ell = {g['ell']:g}$ pages, \ chosen by the data", font_size=24, color=C.BITS)
+        ell = label((f"全部书页拟合：\\ $\\ell = {g['ell']:g}$ 页 \\\\ 均值、核与噪声固定" if zh() else f"all-page fit: \\ $\\ell = {g['ell']:g}$ pages \\\\ mean, kernel and noise held fixed"), font_size=20,
+                    color=C.BITS)
         ell.next_to(kf, DOWN, buff=0.2).align_to(f, RIGHT)
 
         def mini_bell(xlab):
@@ -69,10 +82,11 @@ class GP(VoiceoverScene):
             "characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over "
             "functions; our kernel makes them smooth. Gaussian means bell-shaped: at every page, the value is uncertain, most likely near the "
             "middle of a bell. <bookmark mark='k'/> The kernel, k, says how strongly two pages' values move "
-            "together: strongly when the pages are close, hardly at all when they're far apart. Before seeing any "
-            "data, here are five functions drawn from it: wiggly, with a typical width "
-            "of wiggle, the length scale. <bookmark mark='b'/> Now condition on the pages. Only functions that pass "
-            "near the data survive."
+            "together: strongly when the pages are close, hardly at all when they're far apart. We already fitted "
+            "the mean, kernel and noise settings using all these pages. Here are five draws from that fitted "
+            "empirical-Bayes prior, before conditioning on the individual values again. Their typical width of "
+            "wiggle is the length scale. <bookmark mark='b'/> Now condition on the pages with those settings fixed. "
+            "The draws move toward functions compatible with the noisy observations."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.01),
                       run_time=2.0)
@@ -85,11 +99,13 @@ class GP(VoiceoverScene):
             self.play(FadeOut(k_card))
             self.play(*[Transform(a, b) for a, b in zip(pri, pos)], run_time=2.5)
         with self.voiceover(
-            "Their average is the best guess, and the band around it shows the uncertainty. "
-            f"<bookmark mark='a'/> The length scale, about {g['ell']:g} pages, wasn't set by hand: it's the one under "
-            "which the data was most probable. <bookmark mark='b'/> Show the model only the first twenty pages, and "
-            "with the kernel settings held fixed, the band opens wide beyond them. This is uncertainty under our model, "
-            "useful when deciding where to look next."
+            "The white curve is the conditional mean. The band is plus or minus two conditional standard "
+            "deviations of the latent function, given the fitted settings. It excludes observation noise and "
+            "uncertainty in those settings. "
+            f"<bookmark mark='a'/> The length scale, about {g['ell']:g} pages, was chosen by the all-page marginal "
+            "likelihood among the settings tried. <bookmark mark='b'/> Now condition only on the first "
+            f"{m20} pages, still holding the all-page fitted mean, kernel and noise fixed. This is a subset-conditioning "
+            "demonstration, not a held-out forecast: those later pages already helped choose the settings."
         ) as vo:
             self.play(FadeIn(mband), Create(mline), pri.animate.set_stroke(opacity=0.3))
             vo.wait_until("a")
@@ -127,8 +143,10 @@ class GP(VoiceoverScene):
             "page are jointly Gaussian, with covariances given by the kernel. <bookmark mark='a'/> And a Gaussian, "
             "conditioned on some of its coordinates, is still Gaussian. Completing the square gives its mean and "
             "variance. <bookmark mark='b'/> The mean is a weighted sum of the observed values: nearby pages weigh "
-            "the most in this example. <bookmark mark='c'/> With kernel settings fixed, the variance is the prior's, minus what the data explains. It "
-            "never looks at the values themselves, only at where the pages are. Rasmussen and Williams' book of "
+            "the most in this example. <bookmark mark='c'/> With mean and kernel settings fixed, the conditional "
+            "latent variance is the prior's, minus what conditioning explains. It depends on the page locations, "
+            "not directly on their observed values. But our fitted settings depend on all the values; this "
+            "plug-in variance omits their uncertainty. Rasmussen and Williams' book of "
             "2006 builds the whole subject on these two lines."
         ) as vo:
             self.play(FadeIn(head))
@@ -150,7 +168,7 @@ class GP(VoiceoverScene):
         means, sds = np.asarray(gl["means"]), np.asarray(gl["sds"])
         ns, order = [int(v) for v in gl["ns"]], np.asarray(gl["order"])
         msd = np.asarray(gl["mean_sd"])
-        ylo, yhi = -8.0, float(max(y.max(), (means + 2 * sds).max())) * 1.02
+        ylo, yhi = gp_viewport(y, means, means - 2 * sds, means + 2 * sds)
         ax = Axes(x_range=[0, len(x), 25], y_range=[ylo, yhi, 10], x_length=10.4, y_length=4.6, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([0, -0.7, 0])
         xl = label(r"page of \textit{Great Expectations}", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.15)
@@ -159,11 +177,11 @@ class GP(VoiceoverScene):
         def bandf():
             i = int(round(k.get_value()))
             m, s_ = means[i], sds[i]
-            hi = [ax.c2p(a, float(np.clip(b, ylo, yhi))) for a, b in zip(xs, m + 2 * s_)]
-            lo = [ax.c2p(a, float(np.clip(b, ylo, yhi))) for a, b in zip(xs[::-1], (m - 2 * s_)[::-1])]
+            hi = [ax.c2p(a, float(b)) for a, b in zip(xs, m + 2 * s_)]
+            lo = [ax.c2p(a, float(b)) for a, b in zip(xs[::-1], (m - 2 * s_)[::-1])]
             return VGroup(Polygon(*hi, *lo, stroke_width=0, fill_color=FN, fill_opacity=0.28),
-                          VMobject(color=WHITE, stroke_width=3).set_points_smoothly(
-                              [ax.c2p(a, float(np.clip(b, ylo, yhi))) for a, b in zip(xs, m)]))
+                          VMobject(color=WHITE, stroke_width=3).set_points_as_corners(
+                              [ax.c2p(a, float(b)) for a, b in zip(xs, m)]))
 
         def dotsf():
             i = int(round(k.get_value()))
@@ -174,14 +192,18 @@ class GP(VoiceoverScene):
         dd = always_redraw(dotsf)
         nv = Integer(0, font_size=30)
         sv = DecimalNumber(msd[0], num_decimal_places=2, font_size=30, color=FN)
-        read = VGroup(VGroup(label(r"pages seen:", font_size=24, color=GREY_A), nv).arrange(RIGHT, buff=0.15),
-                      VGroup(label(r"average uncertainty $\sigma_*$:", font_size=24, color=GREY_A), sv).arrange(RIGHT, buff=0.15))
+        read = VGroup(VGroup(label(('用于条件化的书页：' if zh() else 'conditioning pages:'), font_size=22, color=GREY_A), nv).arrange(RIGHT, buff=0.15),
+                      VGroup(label(('潜在函数条件标准差的均值：' if zh() else 'mean latent conditional SD:'), font_size=22, color=GREY_A), sv).arrange(RIGHT, buff=0.15))
         read.arrange(RIGHT, buff=0.8).to_edge(UP, buff=0.35)
-        tag = note(r"the pages arrive in a random order; \ the kernel's settings as fitted", font_size=20).next_to(read, DOWN, buff=0.1)
+        tag = note(('随机顺序条件化；潜在函数 $f \\pm 2$ 条件标准差 \\\\ 用全部书页拟合的均值、核与噪声固定' if zh() else 'random-order conditioning; latent $f \\pm 2$ conditional SD \\\\ all-page fitted mean, kernel and noise held fixed'),
+                   font_size=18).next_to(read, DOWN, buff=0.1)
         hist = cite(r"D.~Krige (1951), \ G.~Matheron (1963): \ kriging; \ C.~E.~Rasmussen \& C.~K.~I.~Williams (2006)", corner=DR)
         with self.voiceover(
-            "Now watch the band shrink as pages land, in a random order. With no data, it's the prior: the same "
-            "wide band everywhere. <bookmark mark='a'/> Each page pins the function down near it, and the band "
+            "Now reveal conditioning pages in a random order. At zero revealed pages, this is the fitted "
+            "empirical-Bayes prior; its mean, kernel and noise already used all the pages. We hold those settings "
+            "fixed throughout. The band is plus or minus two latent conditional standard deviations, not an "
+            "observation prediction band or full Bayesian uncertainty. <bookmark mark='a'/> Each conditioning page "
+            "reduces the uncertainty near it, and the band "
             "pinches there. <bookmark mark='b'/> With all " + f"{ns[-1]} pages, the average uncertainty has fallen "
             f"from {msd[0]:.1f} to {msd[-1]:.1f}. Between the pages, where the kernel says the rate could still "
             "wander, it stays open. <bookmark mark='c'/> Mining engineers did this first: Danie Krige estimated "

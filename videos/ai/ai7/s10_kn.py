@@ -49,8 +49,9 @@ class KneserNey(VoiceoverScene):
             for m in r_:
                 m.set_y(0.2 - 0.38 * i)
         tab.shift(RIGHT * 0.6)
-        foot = label(rf"word pairs in the novels: \ ${d['tokens']:,}$ words, \ two halves; \ ``held out'': the average count "
-                     r"in the other half".replace(",", "{,}"), font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
+        foot_text = (rf"计数半部：$N={d['bigram_trials_a']:,}$ 个词对；留出计数已按样本量换算" if zh() else
+                     rf"counting half: $N={d['bigram_trials_a']:,}$ word pairs; held-out counts scaled to the same sample size")
+        foot = label(foot_text.replace(",", "{,}"), font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
         nr_ = np.array([r_["Nr"] for r_ in rows[1:]])
         gnr = axes([0.5, len(nr_) + 0.5, 1], [0, 6, 1], x_length=5.2, y_length=2.2, xlabel=r"seen $r$ times",
                    ylabel=r"how many different word pairs", xticks=list(range(1, len(nr_) + 1)), yticks=[0, 2, 4, 6],
@@ -59,7 +60,8 @@ class KneserNey(VoiceoverScene):
                                  stroke_width=0, fill_color=C.MODEL_Q, fill_opacity=0.85).move_to(gnr.ax.c2p(k + 1, np.log10(v) / 2))
                        for k, v in enumerate(nr_)])
         r1 = rows[1]
-        close = abs(r1["gt"] - r1["held"]) < 0.1 and abs(rows[0]["gt"] - rows[0]["held"]) / rows[0]["held"] < 0.2
+        close = (abs(r1["gt"] - r1["held"]) < 0.1
+                 and abs(rows[0]["gt"] - rows[0]["held"]) < 0.2 * rows[0]["held"])
         verdict = (f"It works. A pair seen once in one half of the novels turns up on average {r1['held']:.2f} times in "
                    f"the other half; Good–Turing predicted {r1['gt']:.2f}, from counts alone."
                    if close else
@@ -134,20 +136,24 @@ class KneserNey(VoiceoverScene):
         p1 = np.asarray(k["part1_rows"])
         kn = np.array([r["test"] for r in k["rows"]])
         M = len(kn) - 1
-        ax = Axes(x_range=[0, M, 1], y_range=[1.8, 4.8, 0.5], x_length=8.0, y_length=4.8, tips=False,
+        plot_M = max(M, len(p1) - 1)
+        ax = Axes(x_range=[0, plot_M, 1], y_range=[1.8, 4.8, 0.5], x_length=8.0, y_length=4.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.4, -0.4, 0])
-        xl = VGroup(*[MathTex(str(i), font_size=24, color=GREY_B).next_to(ax.c2p(i, 1.8), DOWN, buff=0.12) for i in range(M + 1)])
+        xl = VGroup(*[MathTex(str(i), font_size=24, color=GREY_B).next_to(ax.c2p(i, 1.8), DOWN, buff=0.12) for i in range(plot_M + 1)])
         yl = VGroup(*[MathTex(f"{v:.1f}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
                       for v in (2.0, 3.0, 4.0)])
         xn = label(r"characters of context", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.55)
         yn = label(r"bits per character on the passage", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
-        c1 = VMobject(color=ADD, stroke_width=4).set_points_as_corners([ax.c2p(i, v) for i, v in enumerate(p1[:M + 1])])
-        d1 = VGroup(*[Dot(ax.c2p(i, v), radius=0.06, color=ADD) for i, v in enumerate(p1[:M + 1])])
+        c1 = VMobject(color=ADD, stroke_width=4).set_points_as_corners([ax.c2p(i, v) for i, v in enumerate(p1)])
+        d1 = VGroup(*[Dot(ax.c2p(i, v), radius=0.06, color=ADD) for i, v in enumerate(p1)])
         c2 = VMobject(color=KN, stroke_width=4).set_points_as_corners([ax.c2p(i, v) for i, v in enumerate(kn)])
         d2 = VGroup(*[Dot(ax.c2p(i, v), radius=0.06, color=KN) for i, v in enumerate(kn)])
         l1 = label(r"Part 1: \ add a little to every count", font_size=26, color=ADD).move_to([4.4, 1.2, 0])
         l2 = label(rf"Kneser--Ney: \ ${kn[-1]:.2f}$ at ${M}$ characters", font_size=26, color=KN).next_to(l1, DOWN, buff=0.4)
         l2.align_to(l1, LEFT)
+        cohort_note = label(r"KN：各阶共用同一评分后缀 \\ 第1部分：保留原来的起始位置" if zh() else
+                            r"KN: common scored suffix \\ Part 1: original scoring starts",
+                            font_size=18, color=GREY_B).next_to(l2, DOWN, buff=0.28).align_to(l1, LEFT)
         best1 = int(np.argmin(p1))
         trend = ("Across these measured orders, Kneser–Ney's passage score never rises."
                  if np.all(np.diff(kn) <= 0) else
@@ -156,15 +162,16 @@ class KneserNey(VoiceoverScene):
             f"Back to part one's scoreboard. The best counting model on that scored passage used {best1} characters of context and reached "
             f"{p1[best1]:.2f} bits per character on the passage. <bookmark mark='a'/> Longer contexts should help, but "
             "they're rare: most long contexts in the passage appeared only a handful of times in thirty novels, if at "
-            f"all. Part one's best passage score is at {best1} characters. "
-            f"<bookmark mark='b'/> {trend}"
+            "all. Part one's curve retains its original order-dependent scoring starts. "
+            f"<bookmark mark='b'/> Here every Kneser–Ney order scores the same {k['test_count']} passage characters, "
+            f"after the first {k['comparison_start']} characters. {trend}"
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn))
             self.play(Create(c1), LaggedStart(*[FadeIn(d) for d in d1], lag_ratio=0.1), FadeIn(l1), run_time=2.0)
             vo.wait_until("a")
             self.play(Indicate(d1[best1], scale_factor=1.8, color=WHITE))
             vo.wait_until("b")
-            self.play(Create(c2), LaggedStart(*[FadeIn(d) for d in d2], lag_ratio=0.1), FadeIn(l2), run_time=2.0)
+            self.play(Create(c2), LaggedStart(*[FadeIn(d) for d in d2], lag_ratio=0.1), FadeIn(l2), FadeIn(cohort_note), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -207,6 +214,11 @@ class KneserNey(VoiceoverScene):
         pl = label(r"to $h'$", font_size=22, color=C.SURPRISE).next_to(pile, DOWN, buff=0.12)
         moved = VGroup(*[s.copy().move_to([6.2, -1.3 + dh * (j + 0.5), 0]).set(width=0.55)
                          for j, s in enumerate(slices)])
+        continuation = (f"In the continuation distribution, '{d['other']}' gets more probability than '{d['word']}'. "
+                        if d["other_prev"] > d["word_prev"] else
+                        f"In the continuation distribution, '{d['word']}' gets more probability than '{d['other']}'. "
+                        if d["other_prev"] < d["word_prev"] else
+                        f"In the continuation distribution, '{d['word']}' and '{d['other']}' receive equal probability. ")
         with self.voiceover(
             "Reinhard Kneser and Hermann Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, "
             "absolute discounting: shave the fixed discount off every count you've seen, <bookmark mark='c'/> and use "
@@ -215,8 +227,8 @@ class KneserNey(VoiceoverScene):
             f"'{d['word']}' appears {d['word_count']:,} times, but its number of distinct predecessors is "
             f"{d['word_prev']}; its most common predecessor is '{d['word_top_prev']}'. "
             f"'{d['other']}' is about as common, and follows {d['other_prev']:,} different words. "
-            f"<bookmark mark='d'/> After an unfamiliar word, '{d['other']}' is the far better guess. So the shorter "
-            "contexts count how many different contexts something follows, not how often it appears."
+            f"<bookmark mark='d'/> {continuation}So the shorter contexts count how many different contexts "
+            "something follows, not how often it appears."
         ) as vo:
             self.play(Write(f), FadeIn(n1), FadeIn(cite_))
             vo.wait_until("a")
@@ -246,8 +258,10 @@ class KneserNey(VoiceoverScene):
         row = board.rows[i]
         glow = SurroundingRectangle(row, color=KN, buff=0.08, corner_radius=0.08)
         with self.voiceover(
-            f"With {k['best']} characters of context, selected on the validation books, Kneser–Ney reaches "
-            f"{k['best_bits']:.2f} bits per character on the passage. <bookmark mark='a'/> For two decades, from speech recognition to machine translation, a "
+            f"With {k['best']} characters of context, selected by comparing orders on one common validation suffix, "
+            f"Kneser–Ney reaches {k['best_bits']:.2f} bits per character on the passage after its first {k['best']} characters. "
+            "This benchmark keeps that selected order's own scoring start, matching the following infinity-gram comparison. "
+            "<bookmark mark='a'/> For two decades, from speech recognition to machine translation, a "
             "Kneser–Ney model was the language model in the noisy channel. Stanley Chen and Joshua Goodman's careful "
             f"comparison in 1998 found a modified Kneser–Ney variant best among the methods they tested. But why stop at {k['best']} characters?"
         ) as vo:

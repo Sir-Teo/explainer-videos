@@ -10,7 +10,9 @@ is trained has its training replayed on screen.
 
 Source QA preparation (2026-11-01): numerical and bilingual teaching repairs are recorded in
 [the source evidence](../../../docs/qa/evidence/ai7-source-preparation/README.md). Part 7 cache generation and
-rendered acceptance remain gated behind Part 6. The numerical examples below describe the historical recipe;
+rendered acceptance remain gated behind Part 6. A later source-only batch also fixes common-target KN comparisons,
+Good–Turing's word-pair trial denominator, fitted GP provenance and causal assumptions; its default results are still
+unknown. The numerical examples below describe the historical recipe;
 they have not yet been revalidated against the revised producers. Source tests do not approve motion, narration
 synchronization, listening or production-resolution output.
 
@@ -84,6 +86,10 @@ synchronization, listening or production-resolution output.
   adjustment +0.099, a randomized experiment +0.101. Pearl's ladder of causation; interventions on networks (Part 30).
 * **13. Gaussian processes.** The rate of "her" across *Great Expectations*: prior and posterior samples, the kernel,
   the mean and its band; the length scale (2 pages) by marginal likelihood; the band opening beyond the first 20 pages.
+  Mean, kernel and noise are fitted using all pages: the initial distribution is an empirical-Bayes fitted prior,
+  and the first-20-page display conditions on a subset with those settings fixed. It is not a held-out forecast.
+  The band is latent-function mean ±2 conditional standard deviations, excluding observation noise and uncertainty
+  in the fitted settings. Plot coordinates retain their values within an inclusive viewport.
   The posterior from Gaussian conditioning (Schur complement), step by step. The band shrinking as pages land in random
   order (average σ 6.34 → 2.60 over 186 pages). Krige (1951), Matheron, Rasmussen & Williams (2006).
 * **14. Bayesian Occam's razor.** The evidence p(y | θ) = ∫ p(y | f) p(f | θ) df, its log split into data fit and
@@ -179,16 +185,22 @@ the conditional independences of the chain (the next state depends only on the c
 state) remove x_1..x_{t−1} from the last two factors. Each of the T steps computes S values, each a sum of S
 products: O(T S²), against S^T paths for the brute-force sum.
 
-**5. Good–Turing's books balance.** Good–Turing gives each item seen once the count 1* = 2N_2/N_1. What total
+**5. Good–Turing's singleton mass transfer.** Assume N_1 > 0. Good–Turing gives each item seen once the count 1* = 2N_2/N_1. What total
 probability does it give all of them, and where did the rest of their mass go?
 
 *Solution.* N_1 items × (2N_2/N_1) / N = 2N_2/N, exactly the share of tokens that items seen twice had. In general the
 class seen r times receives the mass the class seen r + 1 times had, (r + 1)N_{r+1}/N; the class seen once gives its
 mass N_1/N to the unseen items, which is Good–Turing's estimate p(unseen) = N_1/N.
+Here N counts observations: for word pairs it is the number of bigram trials, not the number of words.
+The class-transfer identity does not ensure that the unsmoothed estimator normalizes when frequency classes are
+missing. With one type seen once and another seen three times, N=4 but N_2=N_4=0: both raw adjusted seen counts
+are zero, and estimated unseen mass is only 1/4. Practical models smooth the counts of counts and normalize;
+do not infer a complete probability distribution from the raw row formula alone.
 
 **6. The back-door formula.** For Z → X, Z → Y, X → Y, derive P(y | do(x)) = Σ_z P(y | x, z) P(z).
 
-*Solution.* The joint factorizes as P(z) P(x | z) P(y | x, z). Intervening on X removes the factor for X (it no
+*Solution.* Assume the stated causal graph is adequate, with no omitted confounding, consistent well-defined
+interventions and overlap in treatment assignment. The joint factorizes as P(z) P(x | z) P(y | x, z). Intervening on X removes the factor for X (it no
 longer listens to Z) and fixes X = x: P_do(x)(z, y) = P(z) P(y | x, z). Summing out z gives the formula. It differs from
 P(y | x) = Σ_z P(y | x, z) P(z | x), which weighs the strata by how often each z occurs among those who received x.
 
@@ -219,16 +231,20 @@ log p(x; θ_new) ≥ B(q, θ_new) ≥ B(q, θ_old) = log p(x; θ_old)。
 条件独立性（下一个状态只依赖当前状态，每个字母只依赖它的状态），把后两个因子里的 x_1..x_{t−1} 去掉。T 步中每一步算
 S 个值，每个值是 S 个乘积之和：O(T S²)，而暴力求和要遍历 S^T 条路径。
 
-**5. Good–Turing 的账是平的。** Good–Turing 给每个只见过一次的东西的计数是 1* = 2N_2/N_1。它们合起来得到多少概率？
+**5. Good–Turing 的单例质量转移。** 假设 N_1 > 0。Good–Turing 给每个只见过一次的东西的计数是 1* = 2N_2/N_1。它们合起来得到多少概率？
 其余的概率质量去了哪里？
 
 *解答。* N_1 个东西 × (2N_2/N_1) / N = 2N_2/N，恰好是见过两次的那一类原来占的比例。一般地，见过 r 次的那一类，得到
 见过 r + 1 次那一类原有的质量 (r + 1)N_{r+1}/N；见过一次的那一类，把自己的质量 N_1/N 让给了没见过的东西，这正是
 Good–Turing 的估计 p(没见过) = N_1/N。
+这里 N 是观测次数：对词对来说，是二元词对的试验数，不是词数。上面的类别质量转移并不保证原始估计在计数类别缺失时归一化。
+例如一种类型见过1次，另一种见过3次，N=4，但 N_2=N_4=0，两种已见类型的原始调整计数都是0，未见质量估计却只有1/4。
+实际模型需要平滑计数的计数并归一化，不能只凭原始逐行公式就宣称得到了完整概率分布。
 
 **6. 后门公式。** 对 Z → X、Z → Y、X → Y，推导 P(y | do(x)) = Σ_z P(y | x, z) P(z)。
 
-*解答。* 联合分布分解为 P(z) P(x | z) P(y | x, z)。对 X 进行干预，就删掉 X 的因子（它不再听 Z 的），并固定 X = x：
+*解答。* 假设这个因果图足以描述问题，没有遗漏混杂，干预有一致且明确的含义，而且各层里都有机会接受两种治疗。
+联合分布分解为 P(z) P(x | z) P(y | x, z)。对 X 进行干预，就删掉 X 的因子（它不再听 Z 的），并固定 X = x：
 P_do(x)(z, y) = P(z) P(y | x, z)。对 z 求和即得公式。它不同于 P(y | x) = Σ_z P(y | x, z) P(z | x)，后者按每个 z 在接受了 x
 的人中出现的频率来给各层加权。
 

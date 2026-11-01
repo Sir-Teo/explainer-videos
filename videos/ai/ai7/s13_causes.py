@@ -105,9 +105,11 @@ class Causes(VoiceoverScene):
                 why(r"$z$ blocks the back door, \\ and the treatment can't change it")]
         step = ladder(self, rows, whys, keep=2, top=2.5, x=1.6, buff=0.7, edge=6.9)
         adj = c["adjusted"]
-        res = VGroup(label(r"kidney stones, adjusted for size:", font_size=24, color=GREY_A),
+        res = VGroup(label(('按大小标准化后的观察成功率：' if zh() else 'size-standardized observational rates:'), font_size=22, color=GREY_A),
                      label(rf"open surgery ${100 * adj['A']:.0f}\%$, \ keyhole ${100 * adj['B']:.0f}\%$", font_size=28,
-                           color=CAUSE)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([2.6, -2.1, 0])
+                           color=CAUSE),
+                     label(('因果解释需正确因果图、无遗漏混杂，\\\\ 一致性与重叠性' if zh() else 'causal only with an adequate DAG, no omitted confounding, \\\\ consistency and overlap'),
+                           font_size=17, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([2.6, -2.1, 0])
         h = history_card(2000, r"Judea Pearl", r"\textit{Causality}: \ the $\mathrm{do}$-operator, the back-door "
                          r"criterion (1993), the do-calculus (1995); \ Turing Award 2011", width=5.6).to_corner(DL, buff=0.3)
         sd = VGroup(label(r"seeing: \ $P(\text{success} \mid \text{treatment})$", font_size=26, color=GREY_A),
@@ -121,11 +123,14 @@ class Causes(VoiceoverScene):
             "<bookmark mark='b'/> Judea Pearl's question is not 'what's the success rate among patients who got open "
             "surgery', but 'what would it be if we gave everyone open surgery': y given do x. Doing means cutting the "
             "arrows into the treatment: it's set by hand, not by the stone. <bookmark mark='c'/> And if a variable, "
-            "here stone size, blocks every back door, the effect of doing can be computed from data that was only "
-            "seen. Average over the size, <bookmark mark='d'/> using the success rate within each size, weighted by "
-            f"how common each size is in everyone. <bookmark mark='e'/> For the kidney stones, that favours "
-            f"{better}: {100 * adj['A']:.0f} against {100 * adj['B']:.0f} percent. This is the back-door adjustment; "
-            "Pearl's do-calculus says exactly when such a formula exists."
+            "here stone size, blocks every back door in an adequate causal graph, with no omitted confounding, "
+            "the observational adjustment can identify the effect. We also need consistency, so treatment denotes "
+            "the same well-defined intervention, and overlap: both treatments must be possible in each relevant "
+            "size stratum. Average over size, <bookmark mark='d'/> using the success rate within each size, weighted by "
+            f"how common each size is in everyone. <bookmark mark='e'/> The size-standardized kidney-stone rates favour "
+            f"{better}: {100 * adj['A']:.0f} against {100 * adj['B']:.0f} percent. Reading these as causal requires "
+            "those assumptions; the observational table alone cannot establish them. This is the back-door "
+            "adjustment, with its identification assumptions."
         ) as vo:
             self.play(FadeIn(g), FadeIn(sd[0]))
             vo.wait_until("a")
@@ -178,8 +183,8 @@ class Causes(VoiceoverScene):
         flipped = c["naive"] < 0 < c["adjusted_sim"]
         verdict = (f"Compare the treated with the untreated, and the treatment looks harmful: {c['naive']:+.2f}. "
                    f"Adjust for severity through the back door: {c['adjusted_sim']:+.3f}. Now run the experiment, "
-                   f"flipping a coin for every patient: {c['experiment']:+.3f}. The adjustment recovered what only an "
-                   "experiment could show."
+                   f"flipping a coin for every patient: {c['experiment']:+.3f}. In this specified simulation, the "
+                   "known causal structure makes the adjustment comparable to the randomized experiment."
                    if flipped else
                    f"The naive comparison gives {c['naive']:+.2f}, the adjustment {c['adjusted_sim']:+.3f}, and the "
                    f"experiment {c['experiment']:+.3f}.")

@@ -32,7 +32,7 @@ REQUIRED = {
     'hmm':'A B pi Bs lls vowel_side sentence states n post',
     'gp':'x y xs mean sd ell s2 noise prior post mean20 sd20 m20 mu0 n_pages',
     'vi':'path t_qp t_pq mean_p cov_p kl_qp kl_final kl_pq_final initial_forward_kl objective_scope reverse_optimizer forward_optimizer',
-    'kn':'K rows best best_bits part1_best part1_rows',
+    'kn':'K rows best best_bits comparison_best_bits comparison_start valid_count test_count selected_same_order part1_best part1_rows',
     'pca2':'vals kept err sv n d theta along lost total2 th_best Z2 ll_tr ll_te sig2 best_k full_te n_train n_test share5 share_best training_share_best',
     'ica':'t S X Xw Y A theta kurt ang iters r_ica r_pca r_mic kurt_src kurt_mix',
     'embound':'ts i0 i1 rounds ll bound',
@@ -40,7 +40,7 @@ REQUIRED = {
     'lda':'K V D seg alpha n_names words_total bounds bound_rounds monotone snaps top topw size main main_share ex_title ex_theta ex_words ex_topic book_titles share',
     'forward':'letters alpha brute delta back vpath T n logp_bits bits_per_letter A B_letters',
     'ibm1':'F E t lls align example best test hyp_gloss hyp_rule bleu_gloss bleu_rule n_train show show_best',
-    'goodturing':'rows discount V tokens types_a p_unseen example word word_count word_prev word_top_prev word_top_share other other_count other_prev',
+    'goodturing':'rows discount V tokens types_a bigram_trials_a bigram_trials_b singleton_types p_unseen example word word_count word_prev word_top_prev word_top_share other other_count other_prev',
     'infini':'K n M types discounts edges lam mix_bits kn_bits L hist mean_L median_L max_L acc zero sparse acc_long long_count share_long grow_context grow_next grow_counts demo demo_sa valid_positions example_start example example_L gain',
     'scoreboard':'rows new passage', 'dsep':'N collider fork',
     'bp':'n edges exact belief order msgs loopy_err loopy_final states bp_ops',
@@ -214,12 +214,25 @@ def _valid(name,d,cohort):
                 and all(isinstance(d[k],dict) and type(d[k].get('success')) is bool
                         and isinstance(d[k].get('message'),str) for k in ('reverse_optimizer','forward_optimizer')))
     if name=='kn':
-        rows=d['rows'];best=d['best']
+        rows=d['rows'];best=d['best'];start=d['comparison_start'];selected=d['selected_same_order']
         return (integer(d['K'],2) and isinstance(rows,list) and rows and integer(best,0,len(rows)-1)
+                and integer(start,0) and start==len(rows)-1
+                and integer(d['valid_count'],1) and integer(d['test_count'],1)
                 and all(isinstance(r,dict) and r.get('order')==i and scalar(r.get('valid'),0)
-                        and scalar(r.get('test'),0) for i,r in enumerate(rows))
+                        and scalar(r.get('test'),0) and integer(r.get('start'),0) and r.get('start')==start
+                        and integer(r.get('valid_count'),1) and r.get('valid_count')==d['valid_count']
+                        and integer(r.get('test_count'),1) and r.get('test_count')==d['test_count']
+                        for i,r in enumerate(rows))
                 and int(np.argmin([r['valid']for r in rows]))==best and s('part1_best',0)
-                and np.isclose(d['best_bits'],rows[best]['test']) and array(d['part1_rows'],ndim=1,low=0))
+                and s('comparison_best_bits',0) and np.isclose(d['comparison_best_bits'],rows[best]['test'])
+                and isinstance(selected,dict) and integer(selected.get('order'),0)
+                and integer(selected.get('start'),0) and selected.get('order')==selected.get('start')==best
+                and integer(selected.get('valid_count'),1) and integer(selected.get('test_count'),1)
+                and selected.get('valid_count')==d['valid_count']+start-best
+                and selected.get('test_count')==d['test_count']+start-best
+                and scalar(selected.get('valid'),0) and scalar(selected.get('test'),0)
+                and s('best_bits',0) and np.isclose(d['best_bits'],selected['test'])
+                and array(d['part1_rows'],ndim=1,low=0))
     if name=='pca2':
         n,z=d['n'],d['d']
         return (integer(n,3) and integer(z,3) and all(a(k,(z,)) for k in ('vals','sv','ll_tr','ll_te','sig2'))
@@ -271,8 +284,16 @@ def _valid(name,d,cohort):
         return ok
     if name=='goodturing':
         return (integer(d['V'],2) and integer(d['tokens'],1) and len(d['rows'])==9
+                and integer(d['bigram_trials_a'],1) and integer(d['bigram_trials_b'],1)
+                and d['tokens']==d['bigram_trials_a']+d['bigram_trials_b']+2
+                and integer(d['singleton_types'],0,d['bigram_trials_a'])
                 and all(isinstance(r,dict) and r.get('r')==i and all(scalar(r.get(k),0)for k in ('Nr','gt','held'))for i,r in enumerate(d['rows']))
-                and a('discount',(7,)) and s('p_unseen',0,1) and s('word_top_share',0,1))
+                and all(d['rows'][i]['Nr']>0 for i in range(9))
+                and d['singleton_types']==d['rows'][1]['Nr']
+                and a('discount',(7,)) and s('p_unseen',0,1)
+                and np.isclose(d['p_unseen'],d['singleton_types']/d['bigram_trials_a'],rtol=1e-12,atol=0)
+                and isinstance(d['word'],str) and isinstance(d['other'],str) and d['word']!=d['other']
+                and s('word_top_share',0,1))
     if name=='infini':
         l=np.asarray(d['L']);m=d['M'];n=len(l)
         long=l>=10

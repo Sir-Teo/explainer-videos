@@ -26,3 +26,6 @@ All 18 chapters have scoped source/analytical and bilingual preparation. **Zero 
 | Recap, problems, and where this comes back | Recorded at scoped source level | Pending; Part6 gate | Pending |
 
 [Bounded residual source risks](evidence/ai7-residual-source-risks/README.md) preserve current-code counterexamples and default-data uncertainty. They are an implementation/review queue, not completed fixes or rendered findings. No Part7 cache generation or rendering has started. New Part6 source triage takes priority.
+
+
+Latest bounded source preparation: common-target KN order scoring with natural-order downstream metric preserved; GT trial denominator/raw-estimator caveats and valid-outcome branches; inclusive raw-coordinate GP plots with empirical-Bayes/latent-band scope; observational causal assumptions; qualified ENZH recap. [Exact source/81-test scope](evidence/ai7-cohorts-gp-qualified-source-preparation/README.md). This is not an added total with the historical765-test run.59selected identities and242scientific payload hashes remain unchanged during the run. RealPart7cache remains absent; all36rendered cases/24defaultitems stay pending. Remaining PCA/PPCA/ICA viewport and cappedkmeans/state issues plus conditionalKNdiscount bars remain queued.
