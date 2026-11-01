@@ -4,7 +4,7 @@ Observed 2026-11-01T10:12:31.276944+00:00. Progress, **not full-series productio
 
 Branch: `qa/ai-series-cloud-20261031`. Current checked candidate has Tree9aa,Forests569,AdaBoost9dace,Contest104c,Outro0f613; local Chinese29600967/global captions89f967. [Exact source/test inventory](evidence/ai6-five-chapter-integrated-tests-20261101/README.md) binds the publication index; preceding source publication f559 remains the pin of the execution-input archive. No merge, deployment or CI/CD.
 
-Part6 has **22 numerical items /263 independent checks complete**, **17 accepted selected-image cases at declared scope** (first eight chapters ENZH plus Metrics English), and **14 native1080 endpoint cases reviewed** (first six chapters plus SVM, both languages). [Chapter ledger](ai6-chapter-checklist.md). Runtime capture completion is separate from actual current-source visual acceptance.
+Part6 has **22 numerical items /263 independent checks complete**, **17 accepted selected-image cases at declared scope** (first eight chapters ENZH plus Metrics English), and **16 native1080 endpoint cases reviewed** (first six chapters plus SVM and GradientBoosting, both languages). [Chapter ledger](ai6-chapter-checklist.md). Runtime capture completion is separate from actual current-source visual acceptance.
 
 The parent completed twelve historical silent baseline passes for Trees,Forests,AdaBoost,GradientBoosting,Contest,Outro:498 four-second samples,15 targeted images,162 endpoints and timed native UI checks. [Exact full-text receipts](evidence/ai6-parent-cloud-twelve-case-review/README.md). Five chapters need fresh repair regressions. GradientBoosting has no established new defect within its bounded checks; a short dense-transition extension is proposed, without an unverified repair. Historical source identities and OutroEN's warning remain intact.
 
@@ -166,3 +166,5 @@ Lasso baselinepair106pages/37endpoints andLogistic baselinepair115pages/38endpoi
 
 
 Latest621-test publicationcandidate alsoincludesapprovedNaiveBayes096duncapped90thpercentileband/transitionrepairs. Actualbaselinepair818selectedtimes/26endpoints/18nativefollowups isclosed; freshrepairedENZHafterreviewpending. [Source/beforeevidence](evidence/ai6-naivebayes-baseline-motion-review/README.md), [621testscope](evidence/probability-v5-nb-integrated-tests-20261101/README.md). Existing12currentselectedpreviewcasesremainacceptedatdeclaredscope; post-c80P6review-ledgerupdatesareseparatefromproductionclearance.
+
+Latest verified source publication: `8db4f0399a1490f905c8367151eeeb3bae9e051b`. GradientBoosting adds two existing native endpoint cases, for16 total;22 fresh native case captures remain pending. [Native proof](evidence/ai6-gradientboosting-native1080-endpoint-review/README.md). No new renderer/decoder or production approval.

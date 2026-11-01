@@ -1,6 +1,6 @@
 # Part6 chapter checklist
 
-Observed 2026-11-01T10:12:31.276944+00:00. **19 chapters /38 bilingual cases /22 numerical items.** All22 items and263 checks are complete. **17 selected-image cases** and**14 native1080 endpoint cases** are accepted at declared scope. Twelve parent baseline passes are complete with explicit four-second/sample/UI limits. Tree/Forest/Ada/Contest/Outro source repairs and Chinese merge pass641 tests/1532 unchanged identities plus6505 unchanged caption outputs; fresh after-render acceptance remains pending. The current environment retains all resource guards.
+Observed 2026-11-01T10:12:31.276944+00:00. **19 chapters /38 bilingual cases /22 numerical items.** All22 items and263 checks are complete. **17 selected-image cases** and**16 native1080 endpoint cases** are accepted at declared scope. Twelve parent baseline passes are complete with explicit four-second/sample/UI limits. Tree/Forest/Ada/Contest/Outro source repairs and Chinese merge pass641 tests/1532 unchanged identities plus6505 unchanged caption outputs; fresh after-render acceptance remains pending. The current environment retains all resource guards.
 
 | Position | Chapter | Actualcoverage/pendingwork |
 |---|---|---|
@@ -33,3 +33,5 @@ Observed 2026-11-01T10:12:31.276944+00:00. **19 chapters /38 bilingual cases /22
 [Current638-test source scope](evidence/ai6-lda-knn-kernels-integrated-tests-20261101/README.md). [Cloud handoff](evidence/ai6-disjoint-cloud-review-handoff/README.md). [Execution inputs; existing reviewers retained](evidence/ai6-five-chapter-execution-handoff/README.md).
 
 [641-test candidate](evidence/ai6-five-chapter-integrated-tests-20261101/README.md), [actual caption regression](evidence/ai6-five-chapter-caption-regression/README.md), [parent bounded baseline](evidence/ai6-parent-cloud-twelve-case-review/README.md).
+
+Latest verified source publication: `8db4f0399a1490f905c8367151eeeb3bae9e051b`. GradientBoosting adds two existing native endpoint cases, for16 total;22 fresh native case captures remain pending. [Native proof](evidence/ai6-gradientboosting-native1080-endpoint-review/README.md). No new renderer/decoder or production approval.
