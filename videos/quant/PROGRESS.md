@@ -34,12 +34,13 @@ Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitigno
 
 ## In progress
 
-- Chinese dry run of every chapter (`python tools/collect_text.py --lang zh quant10`, log
-  `renders/make/quant10_zh_dry.log`): TeX and layout asserts.
+- Nothing running. Part 10 is complete in both languages up to narration: silent English build, Chinese dry run of all
+  15 chapters clean, Chinese previews of Hook, BTC and LTCM reviewed.
 
 ## Next
 
-1. Chinese silent previews of the dense chapters (`python tools/qa_scene.py quant10 <Scene> --lang zh`); then narrated
-   builds (`python tools/make.py quant10`) in both languages.
+1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
+   time on CPU, so not in a 4-core cloud container): `python tools/make.py quant10` (English and Chinese, 1080p30),
+   or `tools/colab_narrate.py` on a Colab GPU. Then `tools/dead_air.py` on the narrated cut.
 2. Review with the user; lock the standard; then Part 1.
 3. Phase 0 remainder: `qa_report.py` and `package_uploads.py` still list only the AI series.
