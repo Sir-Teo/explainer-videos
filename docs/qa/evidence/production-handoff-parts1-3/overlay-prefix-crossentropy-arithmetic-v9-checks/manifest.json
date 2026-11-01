@@ -1,0 +1,105 @@
+{
+  "scope": "Bounded source preflight evidence; no production approval",
+  "files": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/README.md",
+      "bytes": 3144,
+      "sha256": "a4d880801287ac96803cacf122a461fc36942446bd58729f441d134d608e6056"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/actual-checks.json.gz",
+      "bytes": 1146,
+      "sha256": "a4391ac384917280a7574a6c20ca2385ef1c86b27f10ea4cbb52f7002f270904"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/actual-run.log",
+      "bytes": 105,
+      "sha256": "ea3b25cd130f48ed5d089f171586a62c94773b631ad1e949b911c78088fbed5f"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/actual-v7-before.json",
+      "bytes": 570,
+      "sha256": "b4dfc32e865978382ea8a0d36db748f47eb72c0acbb6ffd5e25729b67faeb478"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/actual-v7-before.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/final-focused-tests.log.gz",
+      "bytes": 2839,
+      "sha256": "573d76760488b7e7a041d9f885657570cb8c0f4204c3683b282159045519590d"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/fixture-after-equals-before.json",
+      "bytes": 239,
+      "sha256": "871ec2efefe503376d5b95be647cf753edfcfff84fc18ed0cf34d924ebe7faee"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/fixture-before.json.gz",
+      "bytes": 139782,
+      "sha256": "9837d594807b8d8e0a747034adca02a302b26f81fac1ba2d4381a0d8022f9d47"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/focused-first-failure.log.gz",
+      "bytes": 3188,
+      "sha256": "87384d1b2c4186f623a7c6d5db992ce2784f7a919ab0cc269dc385be7f6b6db5"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/prefix-source-review/file-manifest.json",
+      "bytes": 2799,
+      "sha256": "c56f475dc450c6c2fb930a1d62f34c5455e6a4c98d299f9ce6ade7cab7ab9732"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/prefix-source-review/source.patch.gz",
+      "bytes": 1078,
+      "sha256": "e21e79aeaa5169539cfbf1ca2ba8e9d78f97adce451970de95834de252fc0021"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/prefix-source-review/timing-receipt.json.gz",
+      "bytes": 5380,
+      "sha256": "21ec112a42d5cf6d54a8a0425eb9eb12121308645430b831403c6f2c304c6b0f"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/private-index-v4-equivalence.json",
+      "bytes": 164,
+      "sha256": "397be325b2828bccc35977bc1235b8c9e868aff5fbaf6f33ce7fb8f398274820"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/real-git-preparation.json",
+      "bytes": 877,
+      "sha256": "838d27175ecae78a08e4bae34bb9a6596fb0d4051b30411185db1d190040684a"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/restoration.json",
+      "bytes": 1221,
+      "sha256": "246d082e8e105e4f6afc26cfcf018af8c92b99b38e9a9743865732cc63324bc1"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/run_actual.py.gz",
+      "bytes": 2554,
+      "sha256": "65654f71d9ee5096b51cdb725d7d1865ac77822baef468c663fa6b7d96cb9df2"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/snapshot_fixture.py.gz",
+      "bytes": 1156,
+      "sha256": "d43255c6076b1d5087d4f68e9689e08d76761eb95de77fac1a23c895dbc8432b"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/source-write-target-ownership.json",
+      "bytes": 5500,
+      "sha256": "152cd424e20b0060f1a08389a9fdc1c7d487943a40cca7a4f8baaeea57e7f755"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/summary.json",
+      "bytes": 4764,
+      "sha256": "9db67ed4043363ebe0bdb1722e3a887162a28bad561e66892f7bf46b22d97b2c"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/tested-source-inventory.json",
+      "bytes": 3157,
+      "sha256": "bf0204aa67626806ce7b99006f22689338ded06f5218f9c68731ecf3318b9ba4"
+    }
+  ]
+}

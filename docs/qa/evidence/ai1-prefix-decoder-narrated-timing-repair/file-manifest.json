@@ -1,0 +1,77 @@
+{
+  "files": [
+    {
+      "path": "README.txt",
+      "bytes": 2038,
+      "sha256": "1e7599faa148007ff34f32bd727f36ff94b4fa9f6569283664348a852a723a1f"
+    },
+    {
+      "path": "compatibility-test.patch.gz",
+      "bytes": 766,
+      "sha256": "3623220842142f042c1d156faaabc4761cbc0a4113f900221a3efaa1c049ffe8",
+      "decompressed_bytes": 2141,
+      "decompressed_sha256": "88dd5a320e015a76fbc289b5d8e13fa9c128b58d21e1e9f88bb6bf71c16d5639"
+    },
+    {
+      "path": "compatibility.log",
+      "bytes": 1466,
+      "sha256": "0072c99105e3697d5ff2e49b9b62d99d81598634ab10d87e9545c7fc39768c1b"
+    },
+    {
+      "path": "exact-ZH-bookmark-proposal.json",
+      "bytes": 2380,
+      "sha256": "83ee8a022f110b9a1465c5553cb1b7cb645089f27aac65488ac6075a1c715694"
+    },
+    {
+      "path": "focused-first.log",
+      "bytes": 1284,
+      "sha256": "d90555b43d40887f22ee571085b6cbcf28b7019cd0cd2c558f4aba934e1cc8b4"
+    },
+    {
+      "path": "preparation.json",
+      "bytes": 600,
+      "sha256": "d1ff22260061d5e61ac3e30019cef2603a423c765392019d906c9923e933452f"
+    },
+    {
+      "path": "source-after.py.gz",
+      "bytes": 7862,
+      "sha256": "ae524e113188dc4f32056501eca689245dc83417c3130dab219075a06f9b3289",
+      "decompressed_bytes": 26258,
+      "decompressed_sha256": "3a9c939d8c0b0ac97bfec9b978f86bbac6049497ccffa92b6485787e4f3fd01e"
+    },
+    {
+      "path": "source-before.py.gz",
+      "bytes": 7516,
+      "sha256": "59e089288d447f48667c54b4c759d72a4887e3521edccaf1517810e5c34a505f",
+      "decompressed_bytes": 24707,
+      "decompressed_sha256": "4592ba3674a83dca35bf52455367b32dc1ee8a53df93e27e5676f50387a7e7e8"
+    },
+    {
+      "path": "source.patch.gz",
+      "bytes": 1078,
+      "sha256": "e21e79aeaa5169539cfbf1ca2ba8e9d78f97adce451970de95834de252fc0021",
+      "decompressed_bytes": 3101,
+      "decompressed_sha256": "719f0c4cd5990cb84d3dd2cbb3ed7984e4be053bf0e6d040dcee3ea8b57a3f72"
+    },
+    {
+      "path": "test_ai1_entropy_prefix_timing.py.gz",
+      "bytes": 5852,
+      "sha256": "c174b968ffabf336368b089cf90c66e70b305624665127a265313d903949b473",
+      "decompressed_bytes": 20090,
+      "decompressed_sha256": "ae0781b791c5c227e8ce61a25564ea1323e970f61bf7a0e9bccbf131be51c273"
+    },
+    {
+      "path": "test_ai1_prefix_decoder_timing.py.gz",
+      "bytes": 4872,
+      "sha256": "6e9a0606da1dc1a1d101c67a4fabc6e2efbf09d87fa4b1c9b4504561d4683122",
+      "decompressed_bytes": 15688,
+      "decompressed_sha256": "02e7fa160f00d31f92a828525105a479a1a605577c77262020c4edd9fff52c5b"
+    },
+    {
+      "path": "timing-receipt.json",
+      "bytes": 86179,
+      "sha256": "f7d9236c35312c67b8ef1455b8fed679ea925343263e6c2322b0a168d73b5b89"
+    }
+  ],
+  "scope": "Source/control-clock proof only; conditional English master identity; no production acceptance"
+}

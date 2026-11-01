@@ -1,0 +1,24 @@
+{
+  "source_path": "videos/ai/ai1/zh_lines.py",
+  "source_before_sha256": "ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411",
+  "source_after_sha256": "959bea5c8d43d569158908b7d37a4678c2db1ce29c3c978cfb8b9f373d4093b7",
+  "source_after_bytes": 68638,
+  "only_AST_delta": "One existing Watch it decode. mapping value; eleven markup anchors only. Entire module AST exact after restoring that literal.",
+  "ordered_marks": [
+    "c_right1",
+    "c_right2",
+    "c_left",
+    "c_leaf",
+    "a_left",
+    "a_leaf",
+    "b_right",
+    "b_left",
+    "b_leaf",
+    "f_path",
+    "f_leaf"
+  ],
+  "cleaned_original_Chinese_exact": true,
+  "source_scope": "No spoken wording/other mapping/geometry/math/data/shared-helper/audio-byte changes. Actual source translation/marks and production alignment still require checks.",
+  "English_source_owner": "motion_foundations, Prefix only",
+  "production_approval": false
+}

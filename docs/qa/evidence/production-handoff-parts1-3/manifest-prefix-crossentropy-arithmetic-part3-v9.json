@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-01T16:07:08.224218+00:00",
+  "overlay_id": "part1-prefix-crossentropy-arithmetic-and-part3-v9",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "scope": "ExactTEN-source read-only hash/runtime preflight and source-only controlled actual preflight clearance. Not production loaderguard, no audio/render/visual approval.",
+  "release_files": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "bytes": 16214,
+      "sha256": "94e7484fa9c61288dd2e52b1458bb926628a76d4b101c682712948f0a72e3e07"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-prefix-crossentropy-arithmetic-and-part3-v9.json",
+      "bytes": 32228,
+      "sha256": "b9e8d095b0b8b14d1d9d2b62d01dd5bb1d64c0c6184eadabbba8885878e3de5a"
+    },
+    {
+      "path": "tests/test_production_handoff_crossentropy_overlay.py",
+      "bytes": 17308,
+      "sha256": "23ab4bed6a3255fb4a3f48907cd278f6bcd2fe8d6d88bfbf0e48c2712b5c5ed0"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_dwell_overlay.py",
+      "bytes": 13467,
+      "sha256": "0126c7014c708724118acf905edd528bac56ee70618ff4c6ee4afb38fde737a8"
+    },
+    {
+      "path": "tests/test_production_handoff_entropy_prefix_overlay.py",
+      "bytes": 13725,
+      "sha256": "c48f9c089132d07fd6bc0e37a4a407a4999b8e8a461c5ce3e18921f121910209"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/README.md",
+      "bytes": 12170,
+      "sha256": "99367da7077fdfc79a27a6d6d4d9511a2c9c7209defab46d6da1ae3cdfa2e98c"
+    },
+    {
+      "path": "docs/qa/production-handoff-parts1-3.md",
+      "bytes": 40493,
+      "sha256": "128aa88eb31a49d670389e148697844a601d52b6ec03e76794e717402b76bdcd"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/summary.json",
+      "bytes": 4764,
+      "sha256": "9db67ed4043363ebe0bdb1722e3a887162a28bad561e66892f7bf46b22d97b2c"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-prefix-crossentropy-arithmetic-v9-checks/manifest.json",
+      "bytes": 5166,
+      "sha256": "aa108d44ba6c6f13e0186f26721f5d3d8be768ef86b88148e0051f4cfdf66c8d"
+    }
+  ],
+  "helper_sha256": "94e7484fa9c61288dd2e52b1458bb926628a76d4b101c682712948f0a72e3e07",
+  "overlay_sha256": "b9e8d095b0b8b14d1d9d2b62d01dd5bb1d64c0c6184eadabbba8885878e3de5a",
+  "exact_source_rows": [
+    {
+      "before": {
+        "path": "videos/ai/ai1/s01_hook.py",
+        "bytes": 23077,
+        "sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+        "git_mode": "100644",
+        "git_blob": "51995a7544c9750271c268f5bfa0ed3666f2e30d"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s01_hook.py",
+        "bytes": 23484,
+        "sha256": "7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8",
+        "git_mode": "100644",
+        "git_blob": "adae9662d6193f4fef075daedf4859352e6c467e"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/s02_probability.py",
+        "bytes": 24663,
+        "sha256": "f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620",
+        "git_mode": "100644",
+        "git_blob": "133cd5ca27678520687280efc4661a3dd2668845"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s02_probability.py",
+        "bytes": 25970,
+        "sha256": "5e856dd92a662a8a7f1bfc370e57e0c937722c5e2f9c35e99960e1cfd80724ea",
+        "git_mode": "100644",
+        "git_blob": "b94c5bec91d1b5fcf761ddb0a1b514dd163b2456"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/s03_surprise.py",
+        "bytes": 23704,
+        "sha256": "5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8",
+        "git_mode": "100644",
+        "git_blob": "91c552c31f9a88bcfa29df2f59a7cfbe06edc811"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s03_surprise.py",
+        "bytes": 24700,
+        "sha256": "64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55",
+        "git_mode": "100644",
+        "git_blob": "e6d8c7b74a568fb404d632f5daa2ddfbfb91ebb4"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/s04_entropy.py",
+        "bytes": 29406,
+        "sha256": "8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c",
+        "git_mode": "100644",
+        "git_blob": "733e7f87c3ebf9327b034e00765734853c0b3531"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s04_entropy.py",
+        "bytes": 30806,
+        "sha256": "338c43429a0087d9cbba25e945bba2dfbad09fd40afeb2eef9f7ce68c62dcc49",
+        "git_mode": "100644",
+        "git_blob": "8f1fcb4385a75fd99900a108375a40a91597bb93"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/s05_prefix.py",
+        "bytes": 23419,
+        "sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+        "git_mode": "100644",
+        "git_blob": "87bdb7e83764a8c52dfebc878c5f7d34ef14ea49"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s05_prefix.py",
+        "bytes": 26258,
+        "sha256": "3a9c939d8c0b0ac97bfec9b978f86bbac6049497ccffa92b6485787e4f3fd01e",
+        "git_mode": "100644",
+        "git_blob": "5be6bf43bcab32af4c3d4f538995f5f3aa33040a"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/s08_cross_entropy.py",
+        "bytes": 23968,
+        "sha256": "149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f",
+        "git_mode": "100644",
+        "git_blob": "da816888cf0d0c2626e56deba2f62476ff4f0ef8"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s08_cross_entropy.py",
+        "bytes": 25445,
+        "sha256": "5d4a5d584d68b8167d63b5949c4a0d214f1271b9f201e1382f3e6b64f566d15f",
+        "git_mode": "100644",
+        "git_blob": "00c8f028b1613caad91891bebd0026bded2d71df"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/s09_arithmetic.py",
+        "bytes": 29057,
+        "sha256": "565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83",
+        "git_mode": "100644",
+        "git_blob": "a11411c341153279f98c4923724433baa7df4f01"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s09_arithmetic.py",
+        "bytes": 29984,
+        "sha256": "bb35007c0827e7a53660c89efc6e917f2f45a744434256628550f3799ee947c9",
+        "git_mode": "100644",
+        "git_blob": "0d995df613f7b50d6669f80c0ab05065f2fe23e1"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/zh_lines.py",
+        "bytes": 68358,
+        "sha256": "ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411",
+        "git_mode": "100644",
+        "git_blob": "364b6c6f9fd05f3ac4e0cd7ba94427c49ed79969"
+      },
+      "after": {
+        "path": "videos/ai/ai1/zh_lines.py",
+        "bytes": 68638,
+        "sha256": "959bea5c8d43d569158908b7d37a4678c2db1ce29c3c978cfb8b9f373d4093b7",
+        "git_mode": "100644",
+        "git_blob": "ea75e519ad074619cf897e1759edde8364f4774a"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai3/s08_svd.py",
+        "bytes": 11730,
+        "sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+        "git_mode": "100644",
+        "git_blob": "43fd7a7d8a4b21754550c8a09dea3ed387ac3a4c"
+      },
+      "after": {
+        "path": "videos/ai/ai3/s08_svd.py",
+        "bytes": 12273,
+        "sha256": "2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b",
+        "git_mode": "100644",
+        "git_blob": "85d98e597659e3c3b5596efc8b57d1c72c0dca79"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai3/s19_outro.py",
+        "bytes": 16807,
+        "sha256": "4e1d29200637256128acf72ecffd0f02caaf6733a4222808dd0b32bf82981ed7",
+        "git_mode": "100644",
+        "git_blob": "585b962a101c85561b89d9ac2e7c4686b344bd2e"
+      },
+      "after": {
+        "path": "videos/ai/ai3/s19_outro.py",
+        "bytes": 17361,
+        "sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+        "git_mode": "100644",
+        "git_blob": "23373891f4d38c3ce5917027d3e289a7a7d0ee5b"
+      }
+    }
+  ],
+  "actual_source_preflight_checks": 26,
+  "strict_files_checked": 268,
+  "gate_test_run": {
+    "count": 124,
+    "seconds": 9.661,
+    "status": "passed",
+    "new_v9_tests": 17,
+    "earlier_gate_tests": 107,
+    "log": "final-focused-tests.log.gz"
+  },
+  "root_application_run_separate": {
+    "count": 42,
+    "seconds": 11.895,
+    "root_reported_status": "passed",
+    "receipt": "docs/qa/evidence/part1-controlled-timing-integration-v9-candidate/manifest.json",
+    "sha256": "04d8a8f7e5aadc0e2fc11e2a776d315848ce42a66eb1e876de5269f4e8553c0b",
+    "scope": "Separate root run; not a combined166test suite."
+  },
+  "prior_history": "historical/crossentropy-v9-before/preserved-pins.json",
+  "production_acceptance": "PENDING controlledactualpreflight/master/alignment/readability/listening/output gates; see exactoverlay andsummary"
+}

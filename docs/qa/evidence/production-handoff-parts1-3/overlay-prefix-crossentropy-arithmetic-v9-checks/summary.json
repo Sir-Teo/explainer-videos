@@ -1,0 +1,82 @@
+{
+  "scope": "ExactTEN-source read-only hash/runtime preflight and source-only controlled actual preflight clearance. Not production loaderguard, no audio/render/visual approval.",
+  "overlay_id": "part1-prefix-crossentropy-arithmetic-and-part3-v9",
+  "base": "927fba668656a682b3e29a288de64130ddc680dd",
+  "source_paths": [
+    "videos/ai/ai1/s01_hook.py",
+    "videos/ai/ai1/s02_probability.py",
+    "videos/ai/ai1/s03_surprise.py",
+    "videos/ai/ai1/s04_entropy.py",
+    "videos/ai/ai1/s05_prefix.py",
+    "videos/ai/ai1/s08_cross_entropy.py",
+    "videos/ai/ai1/s09_arithmetic.py",
+    "videos/ai/ai1/zh_lines.py",
+    "videos/ai/ai3/s08_svd.py",
+    "videos/ai/ai3/s19_outro.py"
+  ],
+  "helper": {
+    "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+    "bytes": 16214,
+    "sha256": "94e7484fa9c61288dd2e52b1458bb926628a76d4b101c682712948f0a72e3e07"
+  },
+  "overlay": {
+    "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-prefix-crossentropy-arithmetic-and-part3-v9.json",
+    "bytes": 32228,
+    "sha256": "b9e8d095b0b8b14d1d9d2b62d01dd5bb1d64c0c6184eadabbba8885878e3de5a"
+  },
+  "gate_tests": {
+    "count": 124,
+    "seconds": 9.661,
+    "status": "passed",
+    "new_v9_tests": 17,
+    "earlier_gate_tests": 107,
+    "log": "final-focused-tests.log.gz"
+  },
+  "application_timing_tests_separate": {
+    "count": 42,
+    "seconds": 11.895,
+    "root_reported_status": "passed",
+    "receipt": "docs/qa/evidence/part1-controlled-timing-integration-v9-candidate/manifest.json",
+    "sha256": "04d8a8f7e5aadc0e2fc11e2a776d315848ce42a66eb1e876de5269f4e8553c0b",
+    "scope": "Separate root run; not a combined166test suite."
+  },
+  "actual_probe": {
+    "checks": 26,
+    "all_expected_outcomes": true,
+    "strict_checked_files": 268,
+    "exactTEN_initial_and_final": "passed0errors",
+    "prior_modes": "default andeveryv1-v8mode rejectten-source tree; isolatednewPrefix/newZH rejectedbyv8",
+    "older_v8_revalidation": "exactoldseven pass after allnewchanges reverted",
+    "v9_requires_newPrefix": "old4592 rejected",
+    "fixture_context": "RealalternateGitHEADbase927/indexexactbasetree, objectalternates readonly originalGitstore. No mockedGit/results. OriginalfixtureHEADa338 anditsindex were not modified.",
+    "real_index_compression": "Privateindexv4 changes representation only; exactbasetree unchanged; originalindex untouched.",
+    "fixture_cleanup": "All148originalregular mode/mtime/inode/nlink/size/hash,156symlink/targetsignatures, originalHEAD/index/untrackedstate anddirectorymodes/mtimes equalbefore. read-drivenatime/nonrestorablectime excluded explicitly.",
+    "source_write_safety": "All10targets verifiedregularnlink1, insidefixture realpath, distinctROOTlive source inodes; no externalinputs written."
+  },
+  "diagnostic_comparator_exception": "Only3new labelpairsCE/Arithmetic/AI1ZH at exactexisting lookup. Existingv7comparator requires all5post-v7diagnostic additions then removesonlythose for originalguardASTcomparison. Newv9comparator requires/removesonly3relativev8; fullverify andallguardlogic exact.",
+  "historical_v8_receipt_resolution": "Currenttimingtest changedlegitimately fornewPrefixcompatibility. Onlyoldv8receipt for test_ai1_entropy_prefix_timing.py18630B/22ee58 resolves exactpreservedhistoricalgzip. The oldv8manifest andruntime sourcevalidation remain strict andunchanged.",
+  "first_new_test_failure": "Preserved focused-first-failure.log.gz: a newtestnormalizer accidentally retained2diagnostic entries. Fixedexactfilter; no productionguard changed to make a testpass. Prerename124testpass separatelypreserved.",
+  "prior_artifact_protection": {
+    "frozen_rows": 21,
+    "changed_predecessor_files_only": [
+      "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "tests/test_production_handoff_entropy_prefix_overlay.py",
+      "tests/test_production_handoff_probability_dwell_overlay.py"
+    ],
+    "all18other_artifact_bytes_unchanged": true,
+    "oldmutablebytes_preserved": true
+  },
+  "remaining_production_gates": [
+    "CEalignment21/22only: unmodifiedc15.97versus14.50requires currenthost reconciliation.",
+    "Prefixmaster86a8352c7e3815ea1189520B/SHA099dffe6\u2026+23tokenalignment confirmation byproductionowner; not verifiedaudiohere.",
+    "ActualfutureZHspeechalignment/readability/listening, actualafterencodedmotion/timing andproductionoutputacceptance.",
+    "Fullrepositorysuite not runbythisworker; root42applicationtests and124gate-tests are separate scoped runs."
+  ],
+  "operation_limits": {
+    "private_final_bytes": 888478,
+    "private_cap_bytes": 1000000,
+    "disk_floor_bytes": 536870912,
+    "free_after_probe": 538423296,
+    "no_scene_model_tts_producer_render_decode_or_audio_generation": true
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "scope": "Read-only planned source write-target ownership audit before any v9 mutation",
+  "source_targets": [
+    {
+      "path": "videos/ai/ai1/s01_hook.py",
+      "fixture_realpath": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/videos/ai/ai1/s01_hook.py",
+      "live_source_realpath": "/workspace/explainer-videos/videos/ai/ai1/s01_hook.py",
+      "fixture_inode": 972030,
+      "live_inode": 262416,
+      "fixture_nlink": 1,
+      "original_fixture_sha256": "7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8",
+      "fixture_matches_original_snapshot": true
+    },
+    {
+      "path": "videos/ai/ai1/s02_probability.py",
+      "fixture_realpath": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/videos/ai/ai1/s02_probability.py",
+      "live_source_realpath": "/workspace/explainer-videos/videos/ai/ai1/s02_probability.py",
+      "fixture_inode": 972031,
+      "live_inode": 262417,
+      "fixture_nlink": 1,
+      "original_fixture_sha256": "5e856dd92a662a8a7f1bfc370e57e0c937722c5e2f9c35e99960e1cfd80724ea",
+      "fixture_matches_original_snapshot": true
+    },
+    {
+      "path": "videos/ai/ai1/s03_surprise.py",
+      "fixture_realpath": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/videos/ai/ai1/s03_surprise.py",
+      "live_source_realpath": "/workspace/explainer-videos/videos/ai/ai1/s03_surprise.py",
+      "fixture_inode": 972032,
+      "live_inode": 262418,
+      "fixture_nlink": 1,
+      "original_fixture_sha256": "64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55",
+      "fixture_matches_original_snapshot": true
+    },
+    {
+      "path": "videos/ai/ai1/s04_entropy.py",
+      "fixture_realpath": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/videos/ai/ai1/s04_entropy.py",
+      "live_source_realpath": "/workspace/explainer-videos/videos/ai/ai1/s04_entropy.py",
+      "fixture_inode": 972033,
+      "live_inode": 262419,
+      "fixture_nlink": 1,
+      "original_fixture_sha256": "8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c",
+      "fixture_matches_original_snapshot": true
+    },
+    {
+      "path": "videos/ai/ai1/s05_prefix.py",
+      "fixture_realpath": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/videos/ai/ai1/s05_prefix.py",
+      "live_source_realpath": "/workspace/explainer-videos/videos/ai/ai1/s05_prefix.py",
+      "fixture_inode": 972034,
+      "live_inode": 262420,
+      "fixture_nlink": 1,
+      "original_fixture_sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+      "fixture_matches_original_snapshot": true
+    },
+    {
+      "path": "videos/ai/ai1/s08_cross_entropy.py",
+      "fixture_realpath": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/videos/ai/ai1/s08_cross_entropy.py",
+      "live_source_realpath": "/workspace/explainer-videos/videos/ai/ai1/s08_cross_entropy.py",
+      "fixture_inode": 972037,
+      "live_inode": 314972,
+      "fixture_nlink": 1,
+      "original_fixture_sha256": "149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f",
+      "fixture_matches_original_snapshot": true
+    },
+    {
+      "path": "videos/ai/ai1/s09_arithmetic.py",
+      "fixture_realpath": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/videos/ai/ai1/s09_arithmetic.py",
+      "live_source_realpath": "/workspace/explainer-videos/videos/ai/ai1/s09_arithmetic.py",
+      "fixture_inode": 972038,
+      "live_inode": 315265,
+      "fixture_nlink": 1,
+      "original_fixture_sha256": "565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83",
+      "fixture_matches_original_snapshot": true
+    },
+    {
+      "path": "videos/ai/ai1/zh_lines.py",
+      "fixture_realpath": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/videos/ai/ai1/zh_lines.py",
+      "live_source_realpath": "/workspace/explainer-videos/videos/ai/ai1/zh_lines.py",
+      "fixture_inode": 972048,
+      "live_inode": 262434,
+      "fixture_nlink": 1,
+      "original_fixture_sha256": "ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411",
+      "fixture_matches_original_snapshot": true
+    },
+    {
+      "path": "videos/ai/ai3/s08_svd.py",
+      "fixture_realpath": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/videos/ai/ai3/s08_svd.py",
+      "live_source_realpath": "/workspace/explainer-videos/videos/ai/ai3/s08_svd.py",
+      "fixture_inode": 972098,
+      "live_inode": 263101,
+      "fixture_nlink": 1,
+      "original_fixture_sha256": "2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b",
+      "fixture_matches_original_snapshot": true
+    },
+    {
+      "path": "videos/ai/ai3/s19_outro.py",
+      "fixture_realpath": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/videos/ai/ai3/s19_outro.py",
+      "live_source_realpath": "/workspace/explainer-videos/videos/ai/ai3/s19_outro.py",
+      "fixture_inode": 972109,
+      "live_inode": 263112,
+      "fixture_nlink": 1,
+      "original_fixture_sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+      "fixture_matches_original_snapshot": true
+    }
+  ],
+  "all156symlink_paths_excluded_from_write_set": true,
+  "live_source_files_or_external_data_never_write_targets": true,
+  "future_requirement": "Repeat these regular/realpath/containment/inode/nlink/snapshot guards immediately before mutation and restore source bytes/mode/mtime finally; final registered sourcecount/afterhashes still pending."
+}

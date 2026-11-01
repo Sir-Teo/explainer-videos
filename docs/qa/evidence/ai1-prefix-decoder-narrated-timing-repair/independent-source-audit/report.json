@@ -1,0 +1,140 @@
+{
+  "created_utc": "2026-11-01T15:55:34.809722+00:00",
+  "scope": "Independent read-only source/provenance audit. No tests/source/provider/cache/audio/model/data/Scene/render/decoder mutation; no new ZIP or audio inspected.",
+  "source_hashes": {
+    "old_pre_repair_f048": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+    "v8_4592": "4592ba3674a83dca35bf52455367b32dc1ee8a53df93e27e5676f50387a7e7e8",
+    "current_decoder_3a9": "3a9c939d8c0b0ac97bfec9b978f86bbac6049497ccffa92b6485787e4f3fd01e"
+  },
+  "current_source_bytes": 26258,
+  "old_exact_diagnostic": {
+    "compressed_path": "/workspace/explainer-videos/docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair/prefix-exact-diagnostic.json.gz",
+    "raw_bytes": 117579,
+    "raw_sha256": "cd2d5105756b7a202c936c459f35e1b15460817fa1edfd0339c778969eaa234c",
+    "gzip_sha256": "e4ac31ea2ac6ab1497b4a652dc652cb63fe7f115a3c4ac99678b55aff3671d54"
+  },
+  "old_v8_decoder_With_AST_exact": true,
+  "old_v8_entire_prefix_method_AST_exact": true,
+  "new_module_AST_outside_decoder_and_added_exact_wait_helper_exact_to4592": true,
+  "cleaned_EN_old_new_exact": true,
+  "old_new_EN_clean_text": "Watch it decode. Right, right, left: c. Back to the top. Left: a. Right, left: b. Right five times: f. No separators needed.",
+  "EN_clean_text_sha256": "5944b242783e90debc11df92fec513ad66f440e420547ed9884b41a120131c62",
+  "all23English_tokens_match_preserved_alignment_after_norm": true,
+  "new11word_indices": [
+    {
+      "mark": "c_right1",
+      "English_token_index": 3,
+      "old_aligned_token": "Right",
+      "old_relative_start": 1.37
+    },
+    {
+      "mark": "c_right2",
+      "English_token_index": 4,
+      "old_aligned_token": "right",
+      "old_relative_start": 2.0100000000000002
+    },
+    {
+      "mark": "c_left",
+      "English_token_index": 5,
+      "old_aligned_token": "left",
+      "old_relative_start": 2.6500000000000004
+    },
+    {
+      "mark": "c_leaf",
+      "English_token_index": 6,
+      "old_aligned_token": "c",
+      "old_relative_start": 3.29
+    },
+    {
+      "mark": "a_left",
+      "English_token_index": 11,
+      "old_aligned_token": "Left",
+      "old_relative_start": 5.260000000000001
+    },
+    {
+      "mark": "a_leaf",
+      "English_token_index": 12,
+      "old_aligned_token": "a",
+      "old_relative_start": 6.140000000000001
+    },
+    {
+      "mark": "b_right",
+      "English_token_index": 13,
+      "old_aligned_token": "Right",
+      "old_relative_start": 6.82
+    },
+    {
+      "mark": "b_left",
+      "English_token_index": 14,
+      "old_aligned_token": "left",
+      "old_relative_start": 7.300000000000001
+    },
+    {
+      "mark": "b_leaf",
+      "English_token_index": 15,
+      "old_aligned_token": "b",
+      "old_relative_start": 7.86
+    },
+    {
+      "mark": "f_path",
+      "English_token_index": 16,
+      "old_aligned_token": "Right",
+      "old_relative_start": 8.530000000000001
+    },
+    {
+      "mark": "f_leaf",
+      "English_token_index": 19,
+      "old_aligned_token": "f",
+      "old_relative_start": 10.13
+    }
+  ],
+  "cleaned_ZH_old_new_exact": true,
+  "old_new_ZH_clean_text": "看它怎么解码。向右、向右、向左：c。回到顶端。向左：a。向右、再向左：b。连续向右五次：f。完全不需要任何分隔符。",
+  "ZH_clean_text_sha256": "555fb159c69d4cf7304d6a2a8199ca73094626fc5f0bab3b8e8f4b882a32b09b",
+  "ZH_old_published_table_commit": "dd94ba3a4128bb46322d0308cf8c950e88387dc5",
+  "ZH_old_table_sha256": "ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411",
+  "ZH_current_table_sha256": "959bea5c8d43d569158908b7d37a4678c2db1ce29c3c978cfb8b9f373d4093b7",
+  "ZH_new_structural_token_indices": {
+    "c_right1": 6,
+    "c_right2": 8,
+    "c_left": 10,
+    "c_leaf": 12,
+    "a_left": 17,
+    "a_leaf": 19,
+    "b_right": 20,
+    "b_left": 22,
+    "b_leaf": 25,
+    "f_path": 26,
+    "f_leaf": 32
+  },
+  "ZH_mark_order_matches_EN_exact": true,
+  "ZH_alignment_scope": "Only textual/CJK token-boundary preservation verified. No current recorded Chinese audio alignment or master supplied/checked.",
+  "old_decoder_key": "86a8352c7e3815ea",
+  "old_duration": 12.39,
+  "old_master_metadata": {
+    "key": "86a8352c7e3815ea",
+    "path": "/workspace/cloud-production/jobs/c97a9b9401b12fc99b5242252c0d3d9bef41311b5d7d93573998b175569fb51b/audio-masters/en/86a8352c7e3815ea.float.wav",
+    "bytes": 1189520,
+    "sha256": "099dffe6f458b46652cecea65727f19d16191a1e99107085fb158b546834488f"
+  },
+  "cache_key_contract": {
+    "source": "explainer/tts.py cache_key lines789–796; VoiceoverScene.voiceover strips marks before synthesize.",
+    "fact": "Cleaned EN/ZH speech inputs are identical, so same cache-version/backend/voice/speed/language/to_spoken policy produces identical cache_key input and no audio regeneration requirement.",
+    "limit": "No production environment or audio opened; equality of actual current production cache version/voice/policy/master bytes is conditional, not independently verified. Raw narration lookup hashes may change from added marks; updated ZH template is observed with matching11marks, preserving cleaned text."
+  },
+  "timing_contract_source_review": {
+    "positive_wait": "_decoder_wait_until waits every strictlypositive actual cue gap; unlike Tracker1/60 early-return threshold, it never intentionally starts before word. Already-late events stay late.",
+    "positive_and_impossible_budget": "_bookmark_run_times uses actual remaining cue and frame guard, returns>=oneframe for each stage. For physically impossible deadlines it cannot create time; neither helper certifies synchronization/readability in that case.",
+    "scoped_production_condition": "New edge/letter sequencing is word-anchored in source; actual encoded after-results/pacing/reading are not approved by this independent source-only audit."
+  },
+  "old_scene_times_scope": "Old diagnostic blockstart52.75 and c/a/b/f times56.04/58.89/60.61/62.88 are historical only. Parent reports newcab58.5,cabf60.5,fword62.863; no newsceneoffset inferred from near−1/60 difference.",
+  "mandatory_acceptance_blocker": {
+    "state": "PENDING production master confirmation and actual host regression",
+    "required_current_decoder_key": "86a8352c7e3815ea",
+    "required_master_bytes": 1189520,
+    "required_master_sha256": "099dffe6f458b46652cecea65727f19d16191a1e99107085fb158b546834488f",
+    "action": "Production host must confirm actual reused master hash/size (and matching cached word metadata/voice contract) before applying historical alignment as current audio proof. Then review actual after video visible bit/edge/letter event onsets/completions and holds.",
+    "not_claimed": "New ZIP inspected, new audio listened/hashed, new frame/movie offsets reconstructed, actual after timeline/production acceptance."
+  },
+  "source_observed_stable_before_after": true
+}

@@ -2,6 +2,7 @@
 import ast
 import copy
 import hashlib
+import gzip
 import json
 from pathlib import Path
 import unittest
@@ -165,7 +166,15 @@ class EntropyPrefixReviewedManifestTests(unittest.TestCase):
         self.assertFalse(manifest['production_acceptance']['prefix_repaired_output_observed'])
         self.assertFalse(manifest['production_acceptance']['prefix_repaired_output_accepted'])
         for row in manifest['entropy_prefix_evidence_receipts']:
-            raw=(ROOT/row['path']).read_bytes();self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
+            if row['path']=='tests/test_ai1_entropy_prefix_timing.py':
+                # The current test adds Prefixdecoder compatibility. V8 keeps
+                # its actual historical test receipt, not a rewritten hash.
+                self.assertEqual((row['bytes'],row['sha256']),
+                    (18630,'22ee58e639f43e2b1e084383161a3f3fc1332255985974f9361b7619f48062d3'))
+                raw=gzip.decompress((ROOT/'docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair/test_ai1_entropy_prefix_timing.py.gz').read_bytes())
+            else:
+                raw=(ROOT/row['path']).read_bytes()
+            self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
 
     def test_prior_bytes_remain_exact_except_precisely_disclosed_v7_test_and_dispatch(self):
         history=D/'historical/entropy-prefix-v8-before';rows=json.loads((history/'preserved-pins.json').read_text())['files']

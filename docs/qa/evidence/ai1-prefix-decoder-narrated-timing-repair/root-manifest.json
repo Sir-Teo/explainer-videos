@@ -1,0 +1,70 @@
+{
+  "README.txt": {
+    "bytes": 2038,
+    "sha256": "1e7599faa148007ff34f32bd727f36ff94b4fa9f6569283664348a852a723a1f"
+  },
+  "ROOT_README.md": {
+    "bytes": 2493,
+    "sha256": "2f6d46232ab6d1c60e958a74623156e2cb177e3eecaf05889f338c2e8d51217f"
+  },
+  "compatibility-test.patch.gz": {
+    "bytes": 766,
+    "sha256": "3623220842142f042c1d156faaabc4761cbc0a4113f900221a3efaa1c049ffe8"
+  },
+  "compatibility.log": {
+    "bytes": 1466,
+    "sha256": "0072c99105e3697d5ff2e49b9b62d99d81598634ab10d87e9545c7fc39768c1b"
+  },
+  "exact-ZH-bookmark-proposal.json": {
+    "bytes": 2380,
+    "sha256": "83ee8a022f110b9a1465c5553cb1b7cb645089f27aac65488ac6075a1c715694"
+  },
+  "file-manifest.json": {
+    "bytes": 2799,
+    "sha256": "c56f475dc450c6c2fb930a1d62f34c5455e6a4c98d299f9ce6ade7cab7ab9732"
+  },
+  "focused-first.log": {
+    "bytes": 1284,
+    "sha256": "d90555b43d40887f22ee571085b6cbcf28b7019cd0cd2c558f4aba934e1cc8b4"
+  },
+  "independent-source-audit/README.md": {
+    "bytes": 990,
+    "sha256": "d789566944028e588d41e7a35171fe9fa79aedf93b99bdab78607f2f28b2181b"
+  },
+  "independent-source-audit/manifest.json": {
+    "bytes": 334,
+    "sha256": "f4dd91bfd85acc264a40624718408cdeb1f94a29cf8120dae63773f3c2e95564"
+  },
+  "independent-source-audit/report.json": {
+    "bytes": 6890,
+    "sha256": "a41c9a2f9f7b4522672867f013a1824e0fb196ad4547603fc299d1dae96cccf4"
+  },
+  "preparation.json": {
+    "bytes": 600,
+    "sha256": "d1ff22260061d5e61ac3e30019cef2603a423c765392019d906c9923e933452f"
+  },
+  "source-after.py.gz": {
+    "bytes": 7862,
+    "sha256": "ae524e113188dc4f32056501eca689245dc83417c3130dab219075a06f9b3289"
+  },
+  "source-before.py.gz": {
+    "bytes": 7516,
+    "sha256": "59e089288d447f48667c54b4c759d72a4887e3521edccaf1517810e5c34a505f"
+  },
+  "source.patch.gz": {
+    "bytes": 1078,
+    "sha256": "e21e79aeaa5169539cfbf1ca2ba8e9d78f97adce451970de95834de252fc0021"
+  },
+  "test_ai1_entropy_prefix_timing.py.gz": {
+    "bytes": 5852,
+    "sha256": "c174b968ffabf336368b089cf90c66e70b305624665127a265313d903949b473"
+  },
+  "test_ai1_prefix_decoder_timing.py.gz": {
+    "bytes": 4872,
+    "sha256": "6e9a0606da1dc1a1d101c67a4fabc6e2efbf09d87fa4b1c9b4504561d4683122"
+  },
+  "timing-receipt.json": {
+    "bytes": 86179,
+    "sha256": "f7d9236c35312c67b8ef1455b8fed679ea925343263e6c2322b0a168d73b5b89"
+  }
+}

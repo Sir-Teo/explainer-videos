@@ -1,0 +1,25 @@
+{
+  "all148regular_metadata_hashes_unchanged": true,
+  "all156external_link_and_target_metadata_hashes_unchanged": true,
+  "original_HEAD_index_and_untracked_state_unchanged": true,
+  "directories_modes_mtimes_unchanged": true,
+  "no_numeric_speech_model_target_written": true,
+  "private_real_git_context": {
+    "scope": "REAL alternate Git metadata, no mocked Git/output; original v7 Git metadata remains untouched",
+    "git_dir": "/workspace/runtime/crossentropy-overlay-v9-private/real-git",
+    "worktree": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927",
+    "object_database_readonly_alternate": "/workspace/runtime/part1-probability-numeric-dwell-v7-base927/.git/objects",
+    "HEAD": "927fba668656a682b3e29a288de64130ddc680dd",
+    "index_exact_base_tree": true,
+    "original_HEAD": "a338b45df68d48432767498fe3d77828382b276c",
+    "original_index_source_deltas_reset_in_PRIVATE_index_only": [
+      "videos/ai/ai1/s01_hook.py",
+      "videos/ai/ai1/s02_probability.py",
+      "videos/ai/ai1/s03_surprise.py",
+      "videos/ai/ai3/s08_svd.py",
+      "videos/ai/ai3/s19_outro.py"
+    ],
+    "no_source_worktree_mutation_yet": true,
+    "all_new_git_metadata_modes": "0600;directories0700"
+  }
+}

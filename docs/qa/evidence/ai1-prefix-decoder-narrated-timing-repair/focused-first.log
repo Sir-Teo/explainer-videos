@@ -1,0 +1,11 @@
+test_direction_edges_bits_and_five_edge_phrase_remain_in_code_order (test_ai1_prefix_decoder_timing.PrefixDecoderTiming.test_direction_edges_bits_and_five_edge_phrase_remain_in_code_order) ... ok
+test_exact_word_wait_fixes_real_tracker_sub_sixtieth_early_return (test_ai1_prefix_decoder_timing.PrefixDecoderTiming.test_exact_word_wait_fixes_real_tracker_sub_sixtieth_early_return) ... ok
+test_only_owned_decoder_span_and_wait_helper_change_geometry_stays_exact (test_ai1_prefix_decoder_timing.PrefixDecoderTiming.test_only_owned_decoder_span_and_wait_helper_change_geometry_stays_exact) ... ok
+test_original_nested_loop_reproduces_early_complete_prefixes (test_ai1_prefix_decoder_timing.PrefixDecoderTiming.test_original_nested_loop_reproduces_early_complete_prefixes) ... ok
+test_same_verified_old_decoder_ast_words_and_conditional_master_identity (test_ai1_prefix_decoder_timing.PrefixDecoderTiming.test_same_verified_old_decoder_ast_words_and_conditional_master_identity) ... ok
+test_word_anchored_visible_onsets_completions_and_retained_reading_time (test_ai1_prefix_decoder_timing.PrefixDecoderTiming.test_word_anchored_visible_onsets_completions_and_retained_reading_time) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.842s
+
+OK

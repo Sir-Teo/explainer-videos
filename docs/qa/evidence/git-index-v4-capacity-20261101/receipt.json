@@ -1,0 +1,16 @@
+{
+  "action": "Git index v2 to v4 path compression, explicit one-command operation; no config edit",
+  "before_bytes": 2212071,
+  "after_bytes": 1303581,
+  "before_sha256": "15bac08956a1c917d8d6c0f80fab55b4465b81bc4dd7c7add01c6f696e2a2099",
+  "after_sha256": "8c51da1d08a56a43dfc807d9f3ca481a5c15eebe50089d338785a27a104eeeec",
+  "all_staged_paths_modes_object_ids_identical": true,
+  "entries_sha256_before_after": "9fa270562b256add62b41fcce11e118071477382dc526ae8ee329b66c640ba58",
+  "before_available_bytes": 538423296,
+  "after_available_bytes": 539332608,
+  "available_bytes_recovered": 909312,
+  "hard_floor_bytes": 536870912,
+  "no_staged_diff_before_after": true,
+  "enclosing_seconds": 0.039026737213134766,
+  "scope": "Only authorized repository Git index encoding changed; no source, cache, master, artifact or model deletion/modification; no external write."
+}

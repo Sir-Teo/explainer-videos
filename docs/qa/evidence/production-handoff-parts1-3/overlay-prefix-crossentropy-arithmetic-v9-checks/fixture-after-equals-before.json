@@ -1,0 +1,4 @@
+{
+  "before_and_after_canonical_snapshot_sha256": "66c0741b765ae580640bf7d23b086129d3903d8bc833711f60ef91bd05a82b31",
+  "full_after_mapping": "byte-identical canonical JSON to decompressed fixture-before.json.gz; not redundantly copied"
+}

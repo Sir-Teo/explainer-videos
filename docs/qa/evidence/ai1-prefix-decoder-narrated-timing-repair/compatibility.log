@@ -1,0 +1,12 @@
+test_adaptive_actual_calls_fit_with_installed_frame_rounding_and_adverse_phase (test_ai1_entropy_prefix_timing.EntropyPrefixTiming.test_adaptive_actual_calls_fit_with_installed_frame_rounding_and_adverse_phase) ... ok
+test_entire_source_preserves_all_non_timing_AST_and_voiceovers (test_ai1_entropy_prefix_timing.EntropyPrefixTiming.test_entire_source_preserves_all_non_timing_AST_and_voiceovers) ... ok
+test_exact_diagnostics_word_targets_and_provided_master_metadata (test_ai1_entropy_prefix_timing.EntropyPrefixTiming.test_exact_diagnostics_word_targets_and_provided_master_metadata) ... ok
+test_generous_and_physically_impossible_cues_are_not_conflated (test_ai1_entropy_prefix_timing.EntropyPrefixTiming.test_generous_and_physically_impossible_cues_are_not_conflated) ... ok
+test_ladder_adapter_restores_class_and_instance_play_on_success_and_exception (test_ai1_entropy_prefix_timing.EntropyPrefixTiming.test_ladder_adapter_restores_class_and_instance_play_on_success_and_exception) ... ok
+test_original_actual_spans_reproduce_three_reported_late_cues (test_ai1_entropy_prefix_timing.EntropyPrefixTiming.test_original_actual_spans_reproduce_three_reported_late_cues) ... ok
+test_retained_settled_formula_and_coin_states_have_reading_time (test_ai1_entropy_prefix_timing.EntropyPrefixTiming.test_retained_settled_formula_and_coin_states_have_reading_time) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 3.520s
+
+OK

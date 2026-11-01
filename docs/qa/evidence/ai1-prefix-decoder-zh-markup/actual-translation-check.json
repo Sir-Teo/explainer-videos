@@ -1,0 +1,22 @@
+{
+  "old_table_key": "bbaae5114389",
+  "new_template_key": "faa5907628ec",
+  "marks": [
+    "c_right1",
+    "c_right2",
+    "c_left",
+    "c_leaf",
+    "a_left",
+    "a_leaf",
+    "b_right",
+    "b_left",
+    "b_leaf",
+    "f_path",
+    "f_leaf"
+  ],
+  "translation_clean_exact": true,
+  "English_clean_exact": true,
+  "source_sha256_observed": "3a9c939d8c0b0ac97bfec9b978f86bbac6049497ccffa92b6485787e4f3fd01e",
+  "Chinese_sha256_observed": "959bea5c8d43d569158908b7d37a4678c2db1ce29c3c978cfb8b9f373d4093b7",
+  "scope": "Actual lang.translate table/template path verified without audio/provider/scene/render; first root attempt before runtime activation failed import Manim, no source mutation; activated check passed."
+}

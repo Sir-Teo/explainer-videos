@@ -19,6 +19,11 @@ PROBABILITY = 'videos/ai/ai1/s02_probability.py'
 SURPRISE = 'videos/ai/ai1/s03_surprise.py'
 ENTROPY = 'videos/ai/ai1/s04_entropy.py'
 PREFIX = 'videos/ai/ai1/s05_prefix.py'
+CROSS_ENTROPY = 'videos/ai/ai1/s08_cross_entropy.py'
+ARITHMETIC = 'videos/ai/ai1/s09_arithmetic.py'
+AI1_ZH = 'videos/ai/ai1/zh_lines.py'
+CROSS_ENTROPY_OVERLAY = 'part1-prefix-crossentropy-arithmetic-and-part3-v9'
+# V9 permits only its exact ten-source controlled-preflight manifest, never output approval.
 ENTROPY_PREFIX_OVERLAY = 'part1-entropy-prefix-timing-and-part3-v8'
 # V8 authorizes only its exact seven-source controlled-rerender manifest; no output approval.
 NUMERIC_DWELL_OVERLAY = 'part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7'
@@ -29,6 +34,8 @@ PROBABILITY_OVERLAY = 'part1-probability-roadmap-and-part3-v5'
 ROADMAP = 'part1-roadmap-and-part3-v4'
 COMBINED = 'part3-svd-outro-production-v3'
 KNOWN_OVERLAYS = {
+    CROSS_ENTROPY_OVERLAY: ('overlays/part1-prefix-crossentropy-arithmetic-and-part3-v9.json',
+                            'b9e8d095b0b8b14d1d9d2b62d01dd5bb1d64c0c6184eadabbba8885878e3de5a'),
     ENTROPY_PREFIX_OVERLAY: ('overlays/part1-entropy-prefix-timing-and-part3-v8.json',
                              '826263149e508e3e54500164d716c571fafab3b6129cca1eb33c712e7a31549f'),
     NUMERIC_DWELL_OVERLAY: ('overlays/part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7.json',
@@ -72,7 +79,7 @@ def load_overlay(name, errors):
     except (OSError, ValueError) as exc:
         errors.append('Overlay manifest unavailable/invalid: ' + type(exc).__name__)
         return None
-    version = 2 if name in (COMBINED, ROADMAP, PROBABILITY_OVERLAY, SURPRISE_OVERLAY, NUMERIC_DWELL_OVERLAY, ENTROPY_PREFIX_OVERLAY) else 1
+    version = 2 if name in (COMBINED, ROADMAP, PROBABILITY_OVERLAY, SURPRISE_OVERLAY, NUMERIC_DWELL_OVERLAY, ENTROPY_PREFIX_OVERLAY, CROSS_ENTROPY_OVERLAY) else 1
     if (not isinstance(overlay, dict) or type(overlay.get('schema_version')) is not int
             or overlay['schema_version'] != version):
         errors.append(f'Overlay manifest schema_version must be exactly {version}.')
@@ -88,7 +95,8 @@ def load_overlay(name, errors):
         replacements = source_replacements(overlay)
         before = [row['before']['path'] for row in replacements]
         after = [row['after']['path'] for row in replacements]
-        expected_paths = ([HOOK, PROBABILITY, SURPRISE, ENTROPY, PREFIX, SVD, OUTRO] if name == ENTROPY_PREFIX_OVERLAY
+        expected_paths = ([HOOK, PROBABILITY, SURPRISE, ENTROPY, PREFIX, CROSS_ENTROPY, ARITHMETIC, AI1_ZH, SVD, OUTRO] if name == CROSS_ENTROPY_OVERLAY
+                          else [HOOK, PROBABILITY, SURPRISE, ENTROPY, PREFIX, SVD, OUTRO] if name == ENTROPY_PREFIX_OVERLAY
                           else [HOOK, PROBABILITY, SURPRISE, SVD, OUTRO] if name in (SURPRISE_OVERLAY, NUMERIC_DWELL_OVERLAY)
                           else [HOOK, PROBABILITY, SVD, OUTRO] if name == PROBABILITY_OVERLAY
                           else [HOOK, SVD, OUTRO] if name == ROADMAP
@@ -101,7 +109,7 @@ def load_overlay(name, errors):
         # Multi-source releases deliberately authorize no extra repository
         # files. Its pinned review receipts are external metadata, not a broad
         # whitelist for copying an evidence/producer tree into the target.
-        if name in (COMBINED, ROADMAP, PROBABILITY_OVERLAY, SURPRISE_OVERLAY, NUMERIC_DWELL_OVERLAY, ENTROPY_PREFIX_OVERLAY):
+        if name in (COMBINED, ROADMAP, PROBABILITY_OVERLAY, SURPRISE_OVERLAY, NUMERIC_DWELL_OVERLAY, ENTROPY_PREFIX_OVERLAY, CROSS_ENTROPY_OVERLAY):
             valid_paths = valid_paths and evidence == []
     except (KeyError, TypeError, AttributeError):
         valid_paths = False
@@ -188,7 +196,9 @@ def overlay_tree_checks(repo, head, overlay, errors):
                 or target.stat().st_size != after['bytes'] or digest(target) != after['sha256']):
             label = {SVD: 'SVD', OUTRO: 'Outro', HOOK: 'Part1 Hook',
                      PROBABILITY: 'Part1 Probability', SURPRISE: 'Part1 Surprise',
-                     ENTROPY: 'Part1 Entropy', PREFIX: 'Part1 Prefix'}[after['path']]
+                     ENTROPY: 'Part1 Entropy', PREFIX: 'Part1 Prefix',
+                     CROSS_ENTROPY: 'Part1 CrossEntropy', ARITHMETIC: 'Part1 Arithmetic',
+                     AI1_ZH: 'Part1 Chinese narration'}[after['path']]
             errors.append(f'Overlay requires the exact reviewed {label} after bytes: ' + after['path'])
 
 

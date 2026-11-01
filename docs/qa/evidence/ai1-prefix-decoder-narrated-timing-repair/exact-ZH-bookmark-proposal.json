@@ -1,0 +1,78 @@
+{
+  "key": "Watch it decode.",
+  "old_zh": "看它怎么解码。向右、向右、向左：c。回到顶端。向左：a。向右、再向左：b。连续向右五次：f。完全不需要任何分隔符。",
+  "new_zh": "看它怎么解码。<bookmark mark='c_right1'/>向右、<bookmark mark='c_right2'/>向右、<bookmark mark='c_left'/>向左：<bookmark mark='c_leaf'/>c。回到顶端。<bookmark mark='a_left'/>向左：<bookmark mark='a_leaf'/>a。<bookmark mark='b_right'/>向右、<bookmark mark='b_left'/>再向左：<bookmark mark='b_leaf'/>b。<bookmark mark='f_path'/>连续向右五次：<bookmark mark='f_leaf'/>f。完全不需要任何分隔符。",
+  "ordered_marks": [
+    "c_right1",
+    "c_right2",
+    "c_left",
+    "c_leaf",
+    "a_left",
+    "a_leaf",
+    "b_right",
+    "b_left",
+    "b_leaf",
+    "f_path",
+    "f_leaf"
+  ],
+  "following_English_token_indices": [
+    {
+      "mark": "c_right1",
+      "token_index": 3,
+      "old_verified_relative_word_start": 1.37
+    },
+    {
+      "mark": "c_right2",
+      "token_index": 4,
+      "old_verified_relative_word_start": 2.01
+    },
+    {
+      "mark": "c_left",
+      "token_index": 5,
+      "old_verified_relative_word_start": 2.65
+    },
+    {
+      "mark": "c_leaf",
+      "token_index": 6,
+      "old_verified_relative_word_start": 3.29
+    },
+    {
+      "mark": "a_left",
+      "token_index": 11,
+      "old_verified_relative_word_start": 5.26
+    },
+    {
+      "mark": "a_leaf",
+      "token_index": 12,
+      "old_verified_relative_word_start": 6.14
+    },
+    {
+      "mark": "b_right",
+      "token_index": 13,
+      "old_verified_relative_word_start": 6.82
+    },
+    {
+      "mark": "b_left",
+      "token_index": 14,
+      "old_verified_relative_word_start": 7.3
+    },
+    {
+      "mark": "b_leaf",
+      "token_index": 15,
+      "old_verified_relative_word_start": 7.86
+    },
+    {
+      "mark": "f_path",
+      "token_index": 16,
+      "old_verified_relative_word_start": 8.53
+    },
+    {
+      "mark": "f_leaf",
+      "token_index": 19,
+      "old_verified_relative_word_start": 10.13
+    }
+  ],
+  "old_cleaned_zh_sha256": "555fb159c69d4cf7304d6a2a8199ca73094626fc5f0bab3b8e8f4b882a32b09b",
+  "ZH_module_observed_before_sha256": "959bea5c8d43d569158908b7d37a4678c2db1ce29c3c978cfb8b9f373d4093b7",
+  "ownership": "Proposalonly; rootownsmarkup-onlyZHmerge, noZHwritebythisowner."
+}

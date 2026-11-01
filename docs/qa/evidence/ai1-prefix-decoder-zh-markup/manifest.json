@@ -1,0 +1,22 @@
+{
+  "actual-translation-check.json": {
+    "bytes": 723,
+    "sha256": "ba260a929ba529a692d10f40a709a2ad122d09834962365f1358709a233491b6"
+  },
+  "receipt.json": {
+    "bytes": 921,
+    "sha256": "8142b4297676be7a3ab9bd7020db6ea0a3739b91b4c879542cf4ef06bc746f0c"
+  },
+  "source-after.py.gz": {
+    "bytes": 26720,
+    "sha256": "3995b471c7178e843c486c5530c2f27356e09a6a7fdcc4a49734626e527f1176"
+  },
+  "source-before.py.gz": {
+    "bytes": 26654,
+    "sha256": "d4087ab792fadcf43fba23f6b0f11642f83a75f3f843f7287db077772341d4dc"
+  },
+  "source.patch.gz": {
+    "bytes": 977,
+    "sha256": "c61ff0eac6d6752390d007ef7456a48ddb22e4dc358b7ace410c5c0d1c490e24"
+  }
+}

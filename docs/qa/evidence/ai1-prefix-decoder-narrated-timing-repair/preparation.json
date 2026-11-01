@@ -1,0 +1,8 @@
+{
+  "created_utc": "2026-11-01T15:45:07.965213+00:00",
+  "source_before_sha256": "4592ba3674a83dca35bf52455367b32dc1ee8a53df93e27e5676f50387a7e7e8",
+  "source_after_sha256": "3a9c939d8c0b0ac97bfec9b978f86bbac6049497ccffa92b6485787e4f3fd01e",
+  "source_after_bytes": 26258,
+  "patch_raw_sha256": "719f0c4cd5990cb84d3dd2cbb3ed7984e4be053bf0e6d040dcee3ea8b57a3f72",
+  "scope": "Markup-onlyspeechchanges; actualdecoderedge/lettertimingchanged. NoZH/provider/model/data/render/decoder/TeXwrite. Existingoldmasterstrictverificationisrequiredonproductionhost; no newZIPdownload/frame/audioidentityclaim."
+}

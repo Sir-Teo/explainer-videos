@@ -1,0 +1,10 @@
+{
+  "started_utc": "2026-11-01T15:57:50.763861+00:00",
+  "enclosing_seconds": 12.213666439056396,
+  "exit_code": 0,
+  "stable_selected_source_identities": 35,
+  "source_unchanged": true,
+  "minimum_free_bytes_observed": 538992640,
+  "hard_storage_floor_bytes": 536870912,
+  "scope": "Seven Part1 timing suites only, not full repository or strict production gate tests. Current frozen Prefix3a9/Chinese959bea/Arithmeticbb350/CrossEntropy5d4. No production render/audio/listening approval."
+}

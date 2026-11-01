@@ -1,0 +1,90 @@
+{
+  "scope": "Exacttenappsource pins plus helper and all focused gate-test files. Root42applicationtimingtests are a separate receipt, not counted as part of this124test run.",
+  "files": [
+    {
+      "path": "videos/ai/ai1/s01_hook.py",
+      "bytes": 23484,
+      "sha256": "7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8"
+    },
+    {
+      "path": "videos/ai/ai1/s02_probability.py",
+      "bytes": 25970,
+      "sha256": "5e856dd92a662a8a7f1bfc370e57e0c937722c5e2f9c35e99960e1cfd80724ea"
+    },
+    {
+      "path": "videos/ai/ai1/s03_surprise.py",
+      "bytes": 24700,
+      "sha256": "64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55"
+    },
+    {
+      "path": "videos/ai/ai1/s04_entropy.py",
+      "bytes": 30806,
+      "sha256": "338c43429a0087d9cbba25e945bba2dfbad09fd40afeb2eef9f7ce68c62dcc49"
+    },
+    {
+      "path": "videos/ai/ai1/s05_prefix.py",
+      "bytes": 26258,
+      "sha256": "3a9c939d8c0b0ac97bfec9b978f86bbac6049497ccffa92b6485787e4f3fd01e"
+    },
+    {
+      "path": "videos/ai/ai1/s08_cross_entropy.py",
+      "bytes": 25445,
+      "sha256": "5d4a5d584d68b8167d63b5949c4a0d214f1271b9f201e1382f3e6b64f566d15f"
+    },
+    {
+      "path": "videos/ai/ai1/s09_arithmetic.py",
+      "bytes": 29984,
+      "sha256": "bb35007c0827e7a53660c89efc6e917f2f45a744434256628550f3799ee947c9"
+    },
+    {
+      "path": "videos/ai/ai1/zh_lines.py",
+      "bytes": 68638,
+      "sha256": "959bea5c8d43d569158908b7d37a4678c2db1ce29c3c978cfb8b9f373d4093b7"
+    },
+    {
+      "path": "videos/ai/ai3/s08_svd.py",
+      "bytes": 12273,
+      "sha256": "2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b"
+    },
+    {
+      "path": "videos/ai/ai3/s19_outro.py",
+      "bytes": 17361,
+      "sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "bytes": 16214,
+      "sha256": "94e7484fa9c61288dd2e52b1458bb926628a76d4b101c682712948f0a72e3e07"
+    },
+    {
+      "path": "tests/test_production_handoff_crossentropy_overlay.py",
+      "bytes": 17308,
+      "sha256": "23ab4bed6a3255fb4a3f48907cd278f6bcd2fe8d6d88bfbf0e48c2712b5c5ed0"
+    },
+    {
+      "path": "tests/test_production_handoff_entropy_prefix_overlay.py",
+      "bytes": 13725,
+      "sha256": "c48f9c089132d07fd6bc0e37a4a407a4999b8e8a461c5ce3e18921f121910209"
+    },
+    {
+      "path": "tests/test_production_handoff_overlay.py",
+      "bytes": 34069,
+      "sha256": "3babfe70739a7146df1c4f84176ae80452722b770a4c22c0c83b8efdeecb2a69"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_dwell_overlay.py",
+      "bytes": 13467,
+      "sha256": "0126c7014c708724118acf905edd528bac56ee70618ff4c6ee4afb38fde737a8"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_overlay.py",
+      "bytes": 11273,
+      "sha256": "dbb041ef929150098126b49f3df048fafec4a5edbc36f52c0543f388543f8a44"
+    },
+    {
+      "path": "tests/test_production_handoff_surprise_overlay.py",
+      "bytes": 11302,
+      "sha256": "1c9faef1e99a12056c2a73a057aa3b680878b065571c39dd598f3b6c5e57196e"
+    }
+  ]
+}

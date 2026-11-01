@@ -185,7 +185,7 @@ ZH = {
         "所以给常见的符号短码字，就像摩尔斯电码给e一个点。但要小心。<bookmark mark='a'/>如果e是0，t是1，a是01，那么01可能是e加t，也可能是a。<bookmark mark='b'/>解决办法是无前缀码：没有哪个码字是另一个码字的开头。<bookmark mark='c'/>这样，码字就是一棵二叉树的叶子：0往左，1往右，解码时从顶上往下走，走到叶子为止。",
 
     "Watch it decode.":
-        "看它怎么解码。向右、向右、向左：c。回到顶端。向左：a。向右、再向左：b。连续向右五次：f。完全不需要任何分隔符。",
+        "看它怎么解码。<bookmark mark='c_right1'/>向右、<bookmark mark='c_right2'/>向右、<bookmark mark='c_left'/>向左：<bookmark mark='c_leaf'/>c。回到顶端。<bookmark mark='a_left'/>向左：<bookmark mark='a_leaf'/>a。<bookmark mark='b_right'/>向右、<bookmark mark='b_left'/>再向左：<bookmark mark='b_leaf'/>b。<bookmark mark='f_path'/>连续向右五次：<bookmark mark='f_leaf'/>f。完全不需要任何分隔符。",
 
     'f"Prefix-free codes obey a budget, and the tree shows why.':
         "无前缀码要遵守一个预算，这棵树说明了原因。<bookmark mark='a'/>把树一直长到最长码字的深度：{lmax}层，底部有{2 ** lmax}片叶子。<bookmark mark='b'/>长度为l的码字位于第l层，它下面的一切都不能再用了，所以它占掉了底部2的l max减l次方片叶子。<bookmark mark='c'/>没有哪个码字是另一个的开头，所以这些份额从不重叠：加起来至多{2 ** lmax}片。<bookmark mark='d'/>除以2的l max次方：对所有码字，2的负码长次方之和至多是1。这就是克拉夫特不等式，出自莱昂·克拉夫特1949年的硕士论文。",

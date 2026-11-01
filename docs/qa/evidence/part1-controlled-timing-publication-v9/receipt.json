@@ -1,0 +1,17 @@
+{
+  "publication_parent_commit": "dd94ba3a4128bb46322d0308cf8c950e88387dc5",
+  "release_manifest_sha256": "144f26dd4d00995a9bf14c032bd4f0b39da306234f4fe11356332d19bacda2a3",
+  "selected_tested_source_union": 44,
+  "actual_current_bytes_match_both_test_inventories": true,
+  "application_tests": {
+    "count": 42,
+    "seconds": 11.895
+  },
+  "gate_tests": {
+    "count": 124,
+    "seconds": 9.661
+  },
+  "actual_source_cases": 26,
+  "strict_files_checked": 268,
+  "scope": "Separate scopes; not a combined total or final current whole-repository suite. Final index equivalence is verified before publication. All production-output acceptance gates remain separate."
+}

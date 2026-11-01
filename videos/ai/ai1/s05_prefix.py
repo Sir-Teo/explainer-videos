@@ -50,6 +50,13 @@ def _bookmark_ladder_step(scene, step, index, vo, mark):
             del scene.play
 
 
+def _decoder_wait_until(scene, vo, mark):
+    """Do not start a decoder reveal before its word, even a sub-frame early."""
+    gap = vo.mark_time(mark) - vo.elapsed()
+    if gap > 0:
+        scene.wait(gap)
+
+
 class Prefix(VoiceoverScene):
     def construct(self):
         self.card()
@@ -156,16 +163,36 @@ class Prefix(VoiceoverScene):
         bits = Text(msg, font=MONO, font_size=34, color=C.BITS).next_to(rule, DOWN, buff=0.4)
         out = VGroup()
         with self.voiceover(
-            "Watch it decode. Right, right, left: c. Back to the top. Left: a. Right, left: b. Right five times: f. "
-            "No separators needed."
-        ):
+            "Watch it decode. <bookmark mark='c_right1'/>Right, <bookmark mark='c_right2'/>right, "
+            "<bookmark mark='c_left'/>left: <bookmark mark='c_leaf'/>c. Back to the top. "
+            "<bookmark mark='a_left'/>Left: <bookmark mark='a_leaf'/>a. "
+            "<bookmark mark='b_right'/>Right, <bookmark mark='b_left'/>left: <bookmark mark='b_leaf'/>b. "
+            "<bookmark mark='f_path'/>Right five times: <bookmark mark='f_leaf'/>f. No separators needed."
+        ) as vo:
             self.play(FadeIn(bits))
             pos = 0
+            cues = {
+                "c": (("c_right1", "c_right2", "c_left"), "c_leaf"),
+                "a": (("a_left",), "a_leaf"),
+                "b": (("b_right", "b_left"), "b_leaf"),
+                "f": (("f_path",), "f_leaf"),
+            }
             for sym in "cabf":
                 c = SMALL[sym]
                 path = VGroup(*[tree.edges[c[:k + 1]].copy().set_stroke(WHITE, 6) for k in range(len(c))])
-                self.play(*[bits[pos + k].animate.set_color(WHITE) for k in range(len(c))],
-                          LaggedStart(*[Create(e) for e in path], lag_ratio=0.6), run_time=0.4 + 0.25 * len(c))
+                path_marks, leaf_mark = cues[sym]
+                if sym == "f":
+                    _decoder_wait_until(self, vo, path_marks[0])
+                    path_time, = _bookmark_run_times(vo, leaf_mark, 0.4 + 0.25 * len(c))
+                    self.play(LaggedStart(*[AnimationGroup(bits[pos + k].animate.set_color(WHITE), Create(path[k]))
+                                           for k in range(len(c))], lag_ratio=0.6), run_time=path_time)
+                else:
+                    for k, mark in enumerate(path_marks):
+                        _decoder_wait_until(self, vo, mark)
+                        next_mark = path_marks[k + 1] if k + 1 < len(path_marks) else leaf_mark
+                        path_time, = _bookmark_run_times(vo, next_mark, (0.4 + 0.25 * len(c)) / len(c))
+                        self.play(bits[pos + k].animate.set_color(WHITE), Create(path[k]), run_time=path_time)
+                _decoder_wait_until(self, vo, leaf_mark)
                 o = letter(sym, font_size=34, color=C.TRUE_P)
                 out.add(o)
                 out.arrange(RIGHT, buff=0.15).next_to(bits, RIGHT, buff=0.6)

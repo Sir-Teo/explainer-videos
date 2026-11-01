@@ -48,3 +48,18 @@ See `manifest-probability-dwell-part3-v7.json` and `overlay-probability-dwell-v7
 Entropy/Prefix source clearance follows actual supplied word clocks and frame-phase tests plus constructor checks; it authorizes controlled rerender only. Short Entropy motions request approximately0.179/0.306/0.221seconds, with retained settled proof state at least2.1507seconds in the clock probe. No repaired encoded output, actual readability/listening/sync or production acceptance is claimed.
 
 The verifier adds only two diagnostic labels for the new source paths beyond explicit v8 manifest dispatch. Its fullverify and all acceptance guards are unchanged. The existing v7 AST-comparison test is deliberately revised to require those exact two dictionary pairs at the exact existing label assignment, remove only those pairs, and compare every remaining guard AST. Its original bytes and prior helper/docs/manifests/tests are preserved under `historical/entropy-prefix-v8-before/`; current v7 test bytes are therefore explicitly not called unchanged. Other old tests/manifests/inventories remain byte-exact.
+
+
+## Strict v9 controlled preflight
+
+`part1-prefix-crossentropy-arithmetic-and-part3-v9` accepts exactly base927 plus ten source replacements: Hook, Probability, Surprise, Entropy, Prefix, CrossEntropy, Arithmetic, local AI1 Chinese narration, SVD and Outro. Use its pinned overlay JSON and helper; copying a whole current checkout is rejected. Older v8/v7 modes retain their previous pins and reject the changed Prefix and Chinese files.
+
+From the handoff metadata folder containing the helper:
+
+```sh
+python verify_handoff.py --repo /path/to/frozen-checkout --strict-external --optional-audio --overlay part1-prefix-crossentropy-arithmetic-and-part3-v9
+```
+
+This is source/hash preflight, not output or audio approval. CrossEntropy's unmatched c request(15.97s supplied versus14.50s reconstructed;21/22 matched) needs host reconciliation. Production must separately confirm Prefix master86a8352c7e3815ea:1,189,520 bytes, SHA099dffe6f458b46652cecea65727f19d16191a1e99107085fb158b546834488f, and its23-token alignment. Chinese speech alignment, narrated sync/listening, encoded readability/pacing and production output remain pending. This source gate authorizes no new audio or metadata regeneration.
+
+The v9 evidence records124 focused gate tests and26 actual source cases with268 strict file checks. Root's42 application timing tests are separate. Original fixture and input signatures were restored unchanged. See `overlay-prefix-crossentropy-arithmetic-v9-checks/README.md` and `manifest-prefix-crossentropy-arithmetic-part3-v9.json`.
