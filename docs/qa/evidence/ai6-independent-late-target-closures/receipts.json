@@ -1,0 +1,47 @@
+{
+  "recorded_utc": "2026-11-01T16:45:37.549169+00:00",
+  "attribution": "Trusted parent delegation reports; root did not download/review these new packages locally. Exact source identities and target acceptance were independently checked by parent reviewers.",
+  "host_execution": {
+    "passes": 22,
+    "source_commit": "804e7a6dc5c8a7c098b504281d9fe33bf7b356bf",
+    "index_library_id": "libfile_658bdfe7b17c8191ae0eb337289d8f6d",
+    "sha256": "565a5729e5602ce61406ec2a638bd86ad42acff745a7746b0399338e139d7889",
+    "scientific_inputs": "unchanged",
+    "audio": "silent timing placeholders"
+  },
+  "kernels_svm": {
+    "library_id": "libfile_c6da94359b0881919de9872e8bcf789a",
+    "version": 0,
+    "bytes": 699550,
+    "sha256": "7270980f671d081779a9f2c0313ad011cf1107e849c5b88928f16241c73c07a3",
+    "accepted_targets": [
+      "KernelsZH K-ZH-T1 body gap18pixels",
+      "SVMEN SVM-V1",
+      "SVMZH SVM-V1"
+    ],
+    "host_prose_correction": "All23English Kernels native images identical, not22.",
+    "remaining": "Chinese inline numeral/year baseline polish separate/open"
+  },
+  "lda_gboost": {
+    "library_id": "libfile_4858d78578188191babb807a8182ccbf",
+    "version": 0,
+    "bytes": 1464012,
+    "sha256": "d187077e091e8f87dfb884f8a7a99759bf2a8efd42afeef6389122eb13e531c4",
+    "review_scope": "219LDA and202GB critical frames across bilingual packets plus native witnesses; counts are not asserted separately for each language.",
+    "accepted_targets": [
+      "LDAEN/ZH inset layering",
+      "GradientBoostingEN/ZH point layering/count targets"
+    ]
+  },
+  "ledger": {
+    "accepted_cases": 35,
+    "remaining_cases": 3,
+    "remaining": [
+      "KernelsZH inline baselines",
+      "ContestZH percentage baselines",
+      "OutroZH bibliography typography"
+    ],
+    "native_endpoint_case_count_unchanged": 16
+  },
+  "limits": "Targeted repaired-window closure plus historical selected cohorts; no full after-cohort, continuous perception, audio/listening/sync, fullnative-motion/4K or complete-episode approval."
+}
