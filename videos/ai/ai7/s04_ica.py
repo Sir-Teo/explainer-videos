@@ -9,6 +9,23 @@ MIC = GREY_B
 KURT = C.SURPRISE
 
 
+def caption(text, **kwargs):
+    """Align this chapter's Chinese inline prose; keep formula objects intact."""
+    mob = label(text, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return prose(mob)
+    return mob
+
+
+def aligned_history(*args, **kwargs):
+    mob = history_card(*args, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import card
+        return card(mob).move_to(mob)
+    return mob
+
+
 def wave(t, y, width=4.4, height=0.9, color=WHITE, stroke_width=2.5, n=400) -> VMobject:
     t, y = np.asarray(t)[:n], np.asarray(y)[:n]
     xs = (t - t[0]) / (t[-1] - t[0]) * width - width / 2
@@ -19,7 +36,7 @@ def wave(t, y, width=4.4, height=0.9, color=WHITE, stroke_width=2.5, n=400) -> V
 class ICA(VoiceoverScene):
     def construct(self):
         card_in(self, 3, r"The cocktail party", r"Two voices, two microphones: can we unmix them?",
-                "Chapter three. The cocktail party.")
+                "Chapter three. The cocktail party.", zh_prose_rows=(0,))
         self.problem()
         self.rotate()
         self.result()
@@ -30,18 +47,18 @@ class ICA(VoiceoverScene):
         t, S, X, A = np.asarray(d["t"]), np.asarray(d["S"]), np.asarray(d["X"]), np.asarray(d["A"])
         vs = VGroup(wave(t, S[0], color=VOICE1), wave(t, S[1], color=VOICE2)).arrange(DOWN, buff=0.7).move_to([-3.8, 0.6, 0])
         ms = VGroup(wave(t, X[0], color=MIC), wave(t, X[1], color=MIC)).arrange(DOWN, buff=0.7).move_to([3.8, 0.6, 0])
-        vl = VGroup(label(r"voice 1", font_size=24, color=VOICE1).next_to(vs[0], UP, buff=0.12),
-                    label(r"voice 2", font_size=24, color=VOICE2).next_to(vs[1], UP, buff=0.12))
-        ml = VGroup(label(r"microphone 1", font_size=24, color=MIC).next_to(ms[0], UP, buff=0.12),
-                    label(r"microphone 2", font_size=24, color=MIC).next_to(ms[1], UP, buff=0.12))
+        vl = VGroup(caption(r"voice 1", font_size=24, color=VOICE1).next_to(vs[0], UP, buff=0.12),
+                    caption(r"voice 2", font_size=24, color=VOICE2).next_to(vs[1], UP, buff=0.12))
+        ml = VGroup(caption(r"microphone 1", font_size=24, color=MIC).next_to(ms[0], UP, buff=0.12),
+                    caption(r"microphone 2", font_size=24, color=MIC).next_to(ms[1], UP, buff=0.12))
         mix = VGroup(*[Arrow(vs[i].get_right(), ms[j].get_left(), buff=0.25, color=VOICE1 if i == 0 else VOICE2,
                              stroke_width=1.5 + 3 * A[j, i], max_tip_length_to_length_ratio=0.06)
                        for i in range(2) for j in range(2)])
         eq = cmath(r"x", r"=", r"A", r"\,s", colors={r"x": MIC, r"A": GREY_A, r"\,s": VOICE1}, font_size=48)
         eq.to_edge(DOWN, buff=1.0)
-        unk = label(r"we hear $x$; \ both $A$ and $s$ are unknown", font_size=26, color=GREY_A).next_to(eq, DOWN, buff=0.2)
+        unk = caption(r"we hear $x$; \ both $A$ and $s$ are unknown", font_size=26, color=GREY_A).next_to(eq, DOWN, buff=0.2)
         tag = note(r"illustrative signals: \ a tone and a sawtooth", font_size=20).to_corner(UR, buff=0.3)
-        h = history_card(1953, r"Colin Cherry", r"how do we follow one voice at a party? \ the cocktail-party "
+        h = aligned_history(1953, r"Colin Cherry", r"how do we follow one voice at a party? \ the cocktail-party "
                          r"problem", width=5.4).move_to([0, 2.6, 0])
         with self.voiceover(
             "In 1953 the psychologist Colin Cherry asked how we manage to follow one voice in a noisy room: the "
@@ -70,8 +87,9 @@ class ICA(VoiceoverScene):
         sub = np.arange(0, X.shape[1], 2)
 
         def scatter(P, center, size=3.0, color=MIC):
-            lim = 3.0
-            pts = np.clip(P[:, sub].T, -lim, lim) / lim * size / 2
+            samples = P[:, sub].T
+            lim = max(3.0, float(np.ceil(np.abs(samples).max() * 10.5) / 10))
+            pts = samples / lim * size / 2
             frame = Square(size + 0.15, stroke_color=GREY_D, stroke_width=1).move_to(center)
             return VGroup(frame, VGroup(*[Dot(np.array([x, y, 0]) + center, radius=0.025, color=color,
                                               fill_opacity=0.75) for x, y in pts]))
@@ -80,21 +98,21 @@ class ICA(VoiceoverScene):
         Xs = Xc / Xc.std()
         left = scatter(Xs * 1.4, np.array([-4.6, 0.6, 0]))
         mid = scatter(Xw, np.array([-0.9, 0.6, 0]))
-        ll = label(r"the two microphones, \\ moment by moment", font_size=22, color=GREY_A).next_to(left, DOWN, buff=0.15)
-        mlab = label(r"whitened (PCA): \\ uncorrelated, \ still mixed", font_size=22, color=GREY_A).next_to(mid, DOWN, buff=0.15)
+        ll = caption(r"the two microphones, \\ moment by moment", font_size=22, color=GREY_A).next_to(left, DOWN, buff=0.15)
+        mlab = caption(r"whitened (PCA): \\ uncorrelated, \ still mixed", font_size=22, color=GREY_A).next_to(mid, DOWN, buff=0.15)
         g = axes([0, np.pi, 1], [float(kurt.min()) - 0.1, 0.2, 0.5], x_length=4.2, y_length=2.6,
                  xlabel=r"angle of the unmixing direction", ylabel=r"kurtosis", center=[4.4, 0.9, 0])
         ax = g.ax
         kc = curve(ax, th, kurt, KURT, 3)
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(np.pi, 0), color=GREY_C, stroke_width=1.5)
-        zl = label(r"a Gaussian: \ $0$", font_size=18, color=GREY_B).next_to(zero, UP, buff=0.05).align_to(zero, RIGHT)
+        zl = caption(r"a Gaussian: \ $0$", font_size=18, color=GREY_B).next_to(zero, UP, buff=0.05).align_to(zero, RIGHT)
         k = ValueTracker(0)
         c0 = mid[0].get_center()
 
         def wline():
             a = ang[min(int(round(k.get_value())), len(ang) - 1)]
             u = np.array([np.cos(a), np.sin(a), 0])
-            return Line(c0 - 1.6 * u, c0 + 1.6 * u, color=VOICE1, stroke_width=4)
+            return Line(c0 - 1.45 * u, c0 + 1.45 * u, color=VOICE1, stroke_width=4)
 
         def wdot():
             a = ang[min(int(round(k.get_value())), len(ang) - 1)]
@@ -103,9 +121,9 @@ class ICA(VoiceoverScene):
         wl = always_redraw(wline)
         wd = always_redraw(wdot)
         kdef = cmath(r"\mathrm{kurt}(y)", r"=", r"\mathbb{E}[y^4] - 3", font_size=34).move_to([4.4, -1.4, 0])
-        kn = label(r"$0$ for a bell curve; \ negative for a tone or a sawtooth", font_size=20, color=GREY_A)
+        kn = caption(r"$0$ for a bell curve; \ negative for a tone or a sawtooth", font_size=20, color=GREY_A)
         kn.next_to(kdef, DOWN, buff=0.15)
-        clt = label(rf"excess kurtosis: \ ${d['kurt_mix'][0]:.2f}$ and ${d['kurt_mix'][1]:.2f}$ "
+        clt = caption(rf"excess kurtosis: \ ${d['kurt_mix'][0]:.2f}$ and ${d['kurt_mix'][1]:.2f}$ "
                     rf"for the whitened mixes, \ ${d['kurt_src'][0]:.2f}$ and ${d['kurt_src'][1]:.2f}$ for the voices",
                     font_size=22, color=C.BITS).to_edge(DOWN, buff=0.35)
         ks = np.asarray(d["kurt_src"])
@@ -115,9 +133,10 @@ class ICA(VoiceoverScene):
         else:
             clt_say = (f"Here the voices have kurtosis {ks[0]:.2f} and {ks[1]:.2f}, and the whitened mixtures "
                        f"{km[0]:.2f} and {km[1]:.2f}.")
-        unc = label(r"uncorrelated $\neq$ independent: \\ turned by any angle, \\ a white cloud stays white", font_size=24,
+        unc = caption(r"uncorrelated $\neq$ independent: \\ turned by any angle, \\ a white cloud stays white", font_size=24,
                     color=GREY_A).move_to([4.3, 0.8, 0])
-        it = label(rf"FastICA: \ ${d['iters']}$ fixed-point steps", font_size=22, color=VOICE1).next_to(g, DOWN, buff=0.1)
+        it = caption(rf"FastICA: \ ${d['iters']}$ fixed-point steps", font_size=22, color=VOICE1).next_to(g, DOWN, buff=0.1)
+        recovered = caption(r"ICA: \\ estimated source axes", font_size=22, color=GREY_A).move_to(mlab)
         with self.voiceover(
             "Plot the two microphones against each other, moment by moment, and the mixing shows as a slanted, "
             "squashed shape. <bookmark mark='a'/> First, whiten: chapter one's principal components, rescaled to "
@@ -145,7 +164,8 @@ class ICA(VoiceoverScene):
             self.play(k.animate.set_value(len(ang) - 1), FadeIn(it), run_time=3.0, rate_func=linear)
             wl.clear_updaters()
             wd.clear_updaters()
-            self.play(Rotate(VGroup(mid[1], wl), angle=-float(ang[-1]), about_point=c0), run_time=2.0)
+            self.play(Rotate(VGroup(mid[1], wl), angle=-float(ang[-1]), about_point=c0),
+                      Transform(mlab, recovered), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -160,21 +180,21 @@ class ICA(VoiceoverScene):
             rec = DashedVMobject(wave(t, Y[i], width=6.2, height=1.0, color=WHITE, stroke_width=2), num_dashes=120)
             tw.add(VGroup(true, rec))
         tw.arrange(DOWN, buff=0.8).move_to([-3.0, 1.0, 0])
-        tl = VGroup(label(r"voice 1 (wide) \ and what ICA recovered (dashed)", font_size=22, color=VOICE1).next_to(tw[0], UP, buff=0.12),
-                    label(r"voice 2", font_size=22, color=VOICE2).next_to(tw[1], UP, buff=0.12))
+        tl = VGroup(caption(r"voice 1 (wide) \ and what ICA recovered (dashed)", font_size=22, color=VOICE1).next_to(tw[0], UP, buff=0.12),
+                    caption(r"voice 2", font_size=22, color=VOICE2).next_to(tw[1], UP, buff=0.12))
         rows = VGroup(
-            label(r"correlation, \ one-to-one matching to the two voices:", font_size=24, color=GREY_A),
-            label(rf"a microphone: \ ${r_mic.min():.2f}$ and ${r_mic.max():.2f}$", font_size=26, color=MIC),
-            label(rf"PCA (whitening): \ ${r_pca.min():.2f}$ and ${r_pca.max():.2f}$", font_size=26, color=GREY_A),
-            label(rf"ICA: \ ${r_ica.min():.4f}$ and ${r_ica.max():.4f}$", font_size=26, color=C.BITS),
+            caption(r"correlation, \ one-to-one matching to the two voices:", font_size=24, color=GREY_A),
+            caption(rf"a microphone: \ ${r_mic.min():.2f}$ and ${r_mic.max():.2f}$", font_size=26, color=MIC),
+            caption(rf"PCA (whitening): \ ${r_pca.min():.2f}$ and ${r_pca.max():.2f}$", font_size=26, color=GREY_A),
+            caption(rf"ICA: \ ${r_ica.min():.4f}$ and ${r_ica.max():.4f}$", font_size=26, color=C.BITS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([-3.0, -2.2, 0])
         hist = VGroup(
-            history_card(1986, r"J.~H\'erault \& C.~Jutten", r"blind separation with a neural circuit", width=4.6),
-            history_card(1995, r"A.~Bell \& T.~Sejnowski", r"infomax ICA; \ in 1997, ICA of natural images gives edge "
+            aligned_history(1986, r"J.~H\'erault \& C.~Jutten", r"blind separation with a neural circuit", width=4.6),
+            aligned_history(1995, r"A.~Bell \& T.~Sejnowski", r"infomax ICA; \ in 1997, ICA of natural images gives edge "
                          r"detectors", width=4.6),
-            history_card(1999, r"A.~Hyv\"arinen", r"FastICA", width=4.6),
+            aligned_history(1999, r"A.~Hyv\"arinen", r"FastICA", width=4.6),
         ).arrange(DOWN, buff=0.2, aligned_edge=LEFT).move_to([4.3, 0.4, 0])
-        use = label(r"today: \ cleaning brain recordings; \\ sparse dictionaries of features (Part 30)", font_size=22,
+        use = caption(r"today: \ cleaning brain recordings; \\ sparse dictionaries of features (Part 30)", font_size=22,
                     color=GREY_A).next_to(hist, DOWN, buff=0.25)
         good = r_ica.min() > 0.99
         verdict = (f"The two outputs follow the voices with correlations of {r_ica.min():.4f} and better. Whitening alone "

@@ -27,6 +27,9 @@ class Kernels(VoiceoverScene, ThreeDScene):
         s = load("svm")
         hist = history_card(1958, r"Frank Rosenblatt", r"the perceptron: \ on every mistake, \ add the page to the "
                             r"weights, \ $\mathbf{w} \leftarrow \mathbf{w} + y\,\mathbf{x}$", color=HIST, width=5.6)
+        if zh():
+            from videos.ai.ai6._zh_prose import card as prose_card, prose
+            hist = prose_card(hist)
         hist.to_corner(UL, buff=0.3)
         nov_statement = (r"if a line separates the data with margin $\gamma$, \ the perceptron "
                          r"makes at most $(R/\gamma)^2$ mistakes")
@@ -37,8 +40,12 @@ class Kernels(VoiceoverScene, ThreeDScene):
             # clauses, so the squared bound has a real gap above its glyphs.
             nov_statement = VGroup(*[label(row, font_size=21)
                                      for row in translate(nov_statement).split(r"\ ", 1)])
+            nov_statement = VGroup(*[prose(row) for row in nov_statement])
             nov_statement.arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        nov = theorem_card(r"Novikoff (1962)", nov_statement, width=5.6, font_size=21).next_to(hist, DOWN, buff=0.25)
+        nov = theorem_card(r"Novikoff (1962)", nov_statement, width=5.6, font_size=21)
+        if zh():
+            nov = prose_card(nov)
+        nov.next_to(hist, DOWN, buff=0.25)
         nov.align_to(hist, LEFT)
         P = np.array([[1.0, 1.0], [-1.0, -1.0], [1.0, -1.0], [-1.0, 1.0]])
         t = [1, 1, -1, -1]
@@ -56,6 +63,11 @@ class Kernels(VoiceoverScene, ThreeDScene):
         toy = label(rf"on the separable toy of the next chapter: \ ${s['perc_mistakes']}$ mistake"
                     + ("s" if s["perc_mistakes"] != 1 else "") + rf", \ bound ${s['perc_bound']:.0f}$",
                     font_size=20, color=GREY_A).next_to(nov, DOWN, buff=0.15).align_to(nov, LEFT)
+        if zh():
+            toy = prose(toy).next_to(nov, DOWN, buff=0.15).align_to(nov, LEFT)
+            mk = prose(mk).next_to(ax, DOWN, buff=0.2)
+            lift = prose(lift).next_to(mk, DOWN, buff=0.12)
+            mp = prose(mp).to_corner(DL, buff=0.3)
         with self.voiceover(
             "In 1958 Frank Rosenblatt's perceptron learned a line from examples: each time it misclassifies a page, "
             "add that page to the weights. <bookmark mark='a'/> If some line separates the data with a margin, "
@@ -209,12 +221,20 @@ class Kernels(VoiceoverScene, ThreeDScene):
                            r"\varphi(\mathbf{x})\cdot\varphi(\mathbf{z})$ exists exactly when every Gram matrix "
                            r"$[K(\mathbf{x}_i, \mathbf{x}_j)]$ has no negative eigenvalues.",
                            who=r"Aronszajn (1950)", width=6.0, font_size=21)
+        if zh():
+            from videos.ai.ai6._zh_prose import card as prose_card, prose
+            thm = prose_card(thm)
         thm.to_corner(UL, buff=0.3)
         lo = float(min(es.min(), 0)) * 1.1
         hi = float(max(ev.max(), es.max())) * 1.1
         g = plot([0, n, 100], [lo, hi, 100], x_length=6.0, y_length=4.2, xticks=[0, 200, 400], yticks=[-200, 0, 200],
                  center=[3.3, -0.3, 0], xlabel=rf"eigenvalues of the ${n} \times {n}$ Gram matrix, \ largest first",
                  ylabel=r"eigenvalue")
+        if zh():
+            old_xlabel = g.xlabel
+            g.xlabel = prose(old_xlabel)
+            g.remove(old_xlabel)
+            g.add(g.xlabel)
         ax = g.ax
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(n, 0), color=GREY_B, stroke_width=1.5)
         ce = curve(ax, np.arange(n), ev, GOOD, stroke_width=4)
@@ -222,6 +242,8 @@ class Kernels(VoiceoverScene, ThreeDScene):
         lg = VGroup(label(rf"Gaussian kernel: \ smallest ${sci_tex(k['min_ev2'])}$", font_size=22, color=GOOD),
                     label(rf"$\tanh(\mathbf{{x}}\cdot\mathbf{{z}} - 1)$: \ ${k['n_neg_sig']}$ negative, \ smallest "
                           rf"${k['min_sig']:.0f}$", font_size=22, color=BAD)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        if zh():
+            lg = prose(lg)
         lg.next_to(thm, DOWN, buff=0.4).align_to(thm, LEFT)
         rounding = abs(k["min_ev2"]) < 1e-9
         smallest = "zero, up to rounding." if rounding else f"{k['min_ev2']:.2g}."
@@ -255,16 +277,24 @@ class Kernels(VoiceoverScene, ThreeDScene):
         ]
         whys = [why(r"any loss, \ a positive penalty $\lambda > 0$"), why(r"split: \ in the span of the data, \ or not"),
                 why(r"$f_\perp$ is invisible \\ at the data"), why(r"$f_\perp$ only costs: \ $f_\perp = 0$")]
+        if zh():
+            from videos.ai.ai6._zh_prose import card as prose_card, prose
+            whys = [prose(row) for row in whys]
         step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.2, buff=0.36, edge=6.8)
         thm = theorem_card(r"the representer theorem", r"any minimizer for $\lambda > 0$ is "
                            r"$f = \sum_i \alpha_i K(\mathbf{x}_i, \cdot\,)$: "
                            r"one number per training point", who=r"Kimeldorf \& Wahba (1971); \ Sch\"olkopf, Herbrich \& "
-                           r"Smola (2001)", width=6.8, font_size=21).to_edge(DOWN, buff=0.25).to_edge(LEFT, buff=0.3)
+                           r"Smola (2001)", width=6.8, font_size=21)
+        if zh():
+            thm = prose_card(thm)
+        thm.to_edge(DOWN, buff=0.25).to_edge(LEFT, buff=0.3)
         chk = VGroup(label(rf"ridge in ${k['rep_dims']:,}$ random Gaussian features:".replace(",", "{,}"), font_size=21,
                            color=GREY_A),
                      label(rf"the answer outside the data's span: \ ${sci_tex(k['rep_resid'])}$", font_size=21, color=HL),
                      label(rf"kernel ridge on two rates: \ ${100 * k['krr_acc']:.0f}\%$ of held-out pages",
                            font_size=21, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        if zh():
+            chk = prose(chk)
         chk.to_corner(DR, buff=0.35)
         head = label(r"Why one weight per page is enough", font_size=30).to_edge(UP, buff=0.25)
         with self.voiceover(

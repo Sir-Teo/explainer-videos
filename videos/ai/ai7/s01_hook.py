@@ -29,9 +29,16 @@ class Hook(VoiceoverScene):
         cloud = Cloud3D(xyz, [GREY_B] * len(y), scale=cloud_scale, radius=0.045, tilt=0.4,
                         center=[-0.6, -0.1, 0])
         head = label(rf"${p['n']:,}$ pages, \ ${p['d']}$ numbers each \ (Part 6) \ --- \ no authors given".replace(",", "{,}"), font_size=30)
+        if zh():
+            from videos.ai.ai6._zh_prose import prose
+            head = prose(label(rf"第6部分的${p['n']:,}$页，每页${p['d']}$个数值：未提供作者标签".replace(",", "{,}"),
+                               font_size=30))
         head.to_edge(UP, buff=0.4)
         found = label(rf"two hidden groups, found from the data alone: \ ${100 * g['agree']:.0f}\%$ match the authors",
-                      font_size=30, color=WHITE).to_edge(DOWN, buff=0.45)
+                      font_size=30, color=WHITE)
+        if zh():
+            found = prose(found)
+        found.to_edge(DOWN, buff=0.45)
         key = VGroup(label(r"Austen", font_size=26, color=AUSTEN), label(r"Dickens", font_size=26, color=DICKENS))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.5).shift(DOWN * 0.7)
         q = label(r"?", font_size=80, color=HIDDEN).move_to([4.6, 0.4, 0])
@@ -70,10 +77,25 @@ class Hook(VoiceoverScene):
             (2003, r"topic \\ models", -1),
             (2006, r"Gaussian \\ processes", 2),
         ], y=0.35, font_size=21)
+        if not zh():
+            keep_in_frame(items[0][2], margin=0.22)
+        if zh():
+            from videos.ai.ai6._zh_prose import prose
+            # Keep mixed Chinese/Latin timeline captions on their stem side.
+            for i in (4, 6):
+                old = items[i][2]
+                words = prose(old, leading=0.06)
+                words.next_to(items[i][1].get_end(), UP, buff=0.06)
+                items[i].remove(old)
+                items[i].add(words)
         rules = label(r"rules written by experts \ (Part 2) \ $\longrightarrow$ \ probabilities learned from data",
-                      font_size=28, color=C.BITS).to_edge(DOWN, buff=0.3)
+                      font_size=28, color=C.BITS)
         lives = label(r"today: \ the ELBO, \ mixtures of experts, \ the forward algorithm, \ $n$-grams over trillions",
-                      font_size=26, color=HIDDEN).to_edge(DOWN, buff=0.3)
+                      font_size=26, color=HIDDEN)
+        if zh():
+            rules, lives = prose(rules), prose(lives)
+        rules.to_edge(DOWN, buff=0.3)
+        lives.to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "How did we get here? In 1901 Karl Pearson asked for the line that passes closest to a cloud of points. In "
             "1933 Harold Hotelling asked for the directions of greatest variance, and called them principal "
@@ -113,9 +135,21 @@ class Hook(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def plan(self):
-        title = label(rf"Part {PART}: \ Statistical ML", font_size=52).to_edge(UP, buff=0.6)
+        title = label(rf"Part {PART}: \ Statistical ML", font_size=52)
+        if zh():
+            from videos.ai.ai6._zh_prose import prose
+            title = prose(title)
+        title.to_edge(UP, buff=0.6)
         sub = label(r"models with hidden parts", font_size=32, color=HIDDEN).next_to(title, DOWN, buff=0.25)
         smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 1.0)
+        if zh():
+            # Keep the accepted grid positions and highlight; align only prose.
+            for col in smap.cols:
+                old = col.head
+                col.head = prose(old).align_to(old, LEFT)
+                col.submobjects[0] = col.head
+                for i, old in enumerate(list(col.rows)):
+                    col.rows.submobjects[i] = prose(old).align_to(old, LEFT)
         obj = objectives_card([
             r"hidden directions and sources: \ principal components, \ probabilistic PCA, \ the cocktail party",
             r"mixtures and the EM algorithm, \ proved; \ $k$-means; \ topic models",
@@ -124,6 +158,26 @@ class Hook(VoiceoverScene):
             r"graphical models, \ belief propagation, \ and cause and effect",
             r"Gaussian processes, \ Occam's razor, \ Bayesian optimization, \ variational inference",
         ], font_size=26)
+        if zh():
+            # Preserve each number's top alignment while rebuilding only prose.
+            for row in obj.rows:
+                old = row[1]
+                # A split span must not translate an already translated name
+                # again (the short lookup adds "平滑" to Kneser--Ney).
+                literal = old.get_tex_string().replace("Kneser--Ney", "{Kneser--Ney}")
+                translated = Tex(literal, font_size=old.font_size, color=old.get_color())
+                txt = prose(translated).move_to(old)
+                row.remove(old)
+                row.add(txt)
+                row.arrange(RIGHT, buff=0.3, aligned_edge=UP)
+                row[0].align_to(txt, UP).shift(DOWN * 0.02)
+            obj.rows.arrange(DOWN, aligned_edge=LEFT, buff=0.26)
+            obj.arrange(DOWN, buff=0.5)
+            obj.rows.align_to(obj, LEFT)
+            obj.head.set_x(0)
+            if obj.height > 7.2:
+                obj.height = 7.2
+            obj.move_to(ORIGIN)
         with self.voiceover(
             "This is part seven of AI, Built: models with hidden parts, directions, sources, states and functions "
             "that we never observe, only infer. <bookmark mark='a'/> In this part: hidden directions and sources, from "

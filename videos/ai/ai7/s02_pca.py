@@ -9,10 +9,19 @@ KEEP = C.MODEL_Q  # the spread kept along a direction
 LOSE = C.SURPRISE  # the squared distance lost
 
 
+def caption(text, **kwargs):
+    """Opt-in Chinese prose alignment; formulas and English keep their paths."""
+    mob = label(text, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return prose(mob)
+    return mob
+
+
 class PCA(VoiceoverScene):
     def construct(self):
         card_in(self, 1, r"Principal components, two ways", r"Where does the data vary most?",
-                "Chapter one. Principal components, two ways.")
+                "Chapter one. Principal components, two ways.", zh_prose_rows=(0,))
         self.twoways()
         self.derive()
         self.spectrum()
@@ -26,11 +35,14 @@ class PCA(VoiceoverScene):
         Z2 = np.asarray(p["Z2"])
         th_grid, along, lost = np.asarray(p["theta"]), np.asarray(p["along"]), np.asarray(p["lost"])
         total, th_best = float(p["total2"]), float(p["th_best"])
-        ax = Axes(x_range=[-3.2, 3.2, 1], y_range=[-3.2, 3.2, 1], x_length=5.8, y_length=5.8, tips=False,
+        # Equal scales preserve angles. Bound the radius so every original
+        # point and its orthogonal projection stays visible at every angle.
+        extent = max(3.2, float(np.ceil(np.linalg.norm(Z2, axis=1).max() * 1.05)))
+        ax = Axes(x_range=[-extent, extent, 1], y_range=[-extent, extent, 1], x_length=5.8, y_length=5.8, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-3.6, -0.35, 0])
-        names = VGroup(data_text("the", font=MONO, font_size=22, color=GREY_A).next_to(ax.x_axis.get_right(), DOWN, buff=0.1),
-                       data_text("not", font=MONO, font_size=22, color=GREY_A).next_to(ax.y_axis.get_top(), RIGHT, buff=0.1))
-        P = np.clip(Z2, -3.1, 3.1)
+        names = VGroup(data_text("the", font=MONO, font_size=22, color=GREY_A).next_to(ax.x_axis.get_right(), RIGHT, buff=0.15),
+                       data_text("not", font=MONO, font_size=22, color=GREY_A).next_to(ax.y_axis.get_top(), UP, buff=0.15))
+        P = Z2
         dots = VGroup(*[Dot(ax.c2p(*q), radius=0.035, color=GREY_B, fill_opacity=0.8) for q in P])
         th = ValueTracker(th_best - 1.2)
         sub = np.arange(0, len(P), 6)
@@ -38,7 +50,8 @@ class PCA(VoiceoverScene):
         def u():
             return np.array([np.cos(th.get_value()), np.sin(th.get_value())])
 
-        line = always_redraw(lambda: Line(ax.c2p(*(-3.4 * u())), ax.c2p(*(3.4 * u())), color=KEEP, stroke_width=4))
+        line = always_redraw(lambda: Line(ax.c2p(*(-0.98 * extent * u())), ax.c2p(*(0.98 * extent * u())),
+                                        color=KEEP, stroke_width=4))
         segs = always_redraw(lambda: VGroup(*[Line(ax.c2p(*P[i]), ax.c2p(*((P[i] @ u()) * u())), color=LOSE,
                                                    stroke_width=1.6, stroke_opacity=0.8) for i in sub]))
 
@@ -55,20 +68,20 @@ class PCA(VoiceoverScene):
                                                 fill_color=LOSE, fill_opacity=0.9)
                               .move_to([x_bar, -2.2 + H * interp(along) / total + H * interp(lost) / total / 2, 0]))
         topl = DashedLine([x_bar - 0.8, -2.2 + H, 0], [x_bar + 0.8, -2.2 + H, 0], color=WHITE, stroke_width=2)
-        tl = label(rf"total $= {total:.2f}$", font_size=24).next_to(topl, UP, buff=0.1)
+        tl = caption(rf"total $= {total:.2f}$", font_size=24).next_to(topl, UP, buff=0.1)
         kv = DecimalNumber(interp(along), num_decimal_places=2, font_size=30, color=KEEP)
         kv.add_updater(lambda m: m.set_value(interp(along)))
         lv = DecimalNumber(interp(lost), num_decimal_places=2, font_size=30, color=LOSE)
         lv.add_updater(lambda m: m.set_value(interp(lost)))
-        kl = VGroup(label(r"spread along the line \\ (Hotelling: \ make it big)", font_size=22, color=KEEP), kv)
+        kl = VGroup(caption(r"spread along the line \\ (Hotelling: \ make it big)", font_size=22, color=KEEP), kv)
         kl.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.3, -1.2, 0])
-        ll_ = VGroup(label(r"mean squared distance \\ (Pearson: \ make it small)", font_size=22, color=LOSE), lv)
+        ll_ = VGroup(caption(r"mean squared distance \\ (Pearson: \ make it small)", font_size=22, color=LOSE), lv)
         ll_.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.3, 1.0, 0])
         h1 = history_card(1901, r"Karl Pearson", r"\textit{On lines and planes of closest fit to systems of points in "
                           r"space}", width=5.4).move_to([3.4, 1.9, 0])
         h2 = history_card(1933, r"Harold Hotelling", r"\textit{Analysis of a complex of statistical variables into "
                           r"principal components}", width=5.4).next_to(h1, DOWN, buff=0.25)
-        pyth = label(r"Pythagoras, for every page: \ $\|x\|^2 = $ (along)$^2 + $ (across)$^2$", font_size=26,
+        pyth = caption(r"Pythagoras, for every page: \ $\|x\|^2 = $ (along)$^2 + $ (across)$^2$", font_size=26,
                      color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Pearson and Hotelling asked two different questions. <bookmark mark='h'/> Here are the pages again, on "
@@ -120,9 +133,12 @@ class PCA(VoiceoverScene):
                 why(r"multiply by $\mathbf{u}^{\top}$: \\ the spread is the eigenvalue"),
                 why(r"Pythagoras: \ lost $=$ total $-$ kept"),
                 why(r"$k$ directions: \ the eigenvalues \\ left out")]
+        if zh():
+            from videos.ai.ai6._zh_prose import prose
+            whys = [prose(w) for w in whys]
         step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.6, buff=0.55, edge=6.8)
-        head = label(r"Why the answer is an eigenvector", font_size=34).to_edge(UP, buff=0.3)
-        chk = label(rf"on the pages, $k = 5$: \ error $= {err[5]:.2f} =$ the $65$ eigenvalues left out \ "
+        head = caption(r"Why the answer is an eigenvector", font_size=34).to_edge(UP, buff=0.3)
+        chk = caption(rf"on the pages, $k = 5$: \ error $= {err[5]:.2f} =$ the $65$ eigenvalues left out \ "
                     r"(checked for every $k$)", font_size=24, color=C.BITS).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Here's why, in a few lines. The spread of the data along a unit vector u is u transpose C u, where C is "
@@ -171,19 +187,19 @@ class PCA(VoiceoverScene):
                 col = interpolate_color(dark, pos if v > 0 else neg, abs(v) ** 0.7)
                 heat.add(Square(cell, stroke_width=0, fill_color=col, fill_opacity=1)
                          .move_to([-4.3 - 1.8 + (j + 0.5) * cell, 0.9 + 1.8 - (i + 0.5) * cell, 0]))
-        hl = label(r"the $70 \times 70$ covariance matrix: \\ how every pair of word rates moves together", font_size=24,
+        hl = caption(r"the $70 \times 70$ covariance matrix: \\ how every pair of word rates moves together", font_size=24,
                    color=GREY_A).next_to(heat, DOWN, buff=0.25)
         colors = {r"\mathbf{v}": C.BITS, r"\lambda": C.MODEL_Q}
         eig = cmath(r"C", r"\,", r"\mathbf{v}", "=", r"\lambda", r"\,", r"\mathbf{v}", colors=colors, font_size=46)
         eig.move_to([2.4, 2.6, 0])
-        en = label(r"symmetric: \ perpendicular eigenvectors \ (Part 3)", font_size=24, color=GREY_A).next_to(eig, DOWN, buff=0.15)
+        en = caption(r"symmetric: \ perpendicular eigenvectors \ (Part 3)", font_size=24, color=GREY_A).next_to(eig, DOWN, buff=0.15)
         k = 15
         bars = VGroup(*[Rectangle(width=0.26, height=max(18 * s, 0.02), stroke_width=0, fill_color=C.MODEL_Q,
                                   fill_opacity=0.85).move_to([0.1 + 0.36 * i, -2.4 + 9 * s, 0]) for i, s in enumerate(share[:k])])
         base = Line([-0.1, -2.4, 0], [0.1 + 0.36 * k, -2.4, 0], color=GREY_C)
         pct = VGroup(*[MathTex(rf"{100 * share[i]:.1f}\%", font_size=22, color=C.MODEL_Q).next_to(bars[i], UP, buff=0.06)
                        for i in range(3)])
-        bl = label(r"share of all the variation, \ direction by direction", font_size=24, color=GREY_A)
+        bl = caption(r"share of all the variation, \ direction by direction", font_size=24, color=GREY_A)
         bl.next_to(base, DOWN, buff=0.2).align_to(base, LEFT)
         with self.voiceover(
             "Principal components find the directions in which data varies the most. Start with the covariance "
@@ -210,18 +226,18 @@ class PCA(VoiceoverScene):
         dev = float(np.max(np.abs(sv ** 2 / n - vals)))
         colors = {r"V^{\top}": C.BITS, r"\Sigma": C.MODEL_Q}
         eq = cmath(r"Z", r"=", r"U", r"\Sigma", r"V^{\top}", colors=colors, font_size=60).move_to([-3.2, 1.6, 0])
-        zl = label(rf"the data: \ ${n}$ pages $\times$ ${p['d']}$ rates", font_size=24, color=GREY_A)
+        zl = caption(rf"the data: \ ${n}$ pages $\times$ ${p['d']}$ rates", font_size=24, color=GREY_A)
         zl.next_to(eq, DOWN, buff=0.3)
-        vl = label(r"rows of $V^{\top}$: \ the principal directions", font_size=26, color=C.BITS).next_to(zl, DOWN, buff=0.35)
-        sl = label(r"$\sigma_i^2 / n$: \ the eigenvalues $\lambda_i$", font_size=26, color=C.MODEL_Q).next_to(vl, DOWN, buff=0.2)
+        vl = caption(r"rows of $V^{\top}$: \ the principal directions", font_size=26, color=C.BITS).next_to(zl, DOWN, buff=0.35)
+        sl = caption(r"$\sigma_i^2 / n$: \ the eigenvalues $\lambda_i$", font_size=26, color=C.MODEL_Q).next_to(vl, DOWN, buff=0.2)
         VGroup(vl, sl).align_to(zl, LEFT)
         ax = Axes(x_range=[0, 20, 5], y_range=[0, float(vals[0]) * 1.1, 2], x_length=5.2, y_length=3.6, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.4, 0.1, 0])
         ev = VGroup(*[Dot(ax.c2p(i + 1, vals[i]), radius=0.07, color=C.MODEL_Q) for i in range(20)])
         sd = VGroup(*[Circle(radius=0.12, color=C.BITS, stroke_width=2).move_to(ax.c2p(i + 1, sv[i] ** 2 / n)) for i in range(20)])
-        axl = label(r"the first $20$: \ eigenvalues (dots) \\ and $\sigma_i^2/n$ (rings)", font_size=22, color=GREY_A)
+        axl = caption(r"the first $20$: \ eigenvalues (dots) \\ and $\sigma_i^2/n$ (rings)", font_size=22, color=GREY_A)
         axl.next_to(ax, UP, buff=0.15)
-        chk = label(rf"largest difference: \ ${sci(max(dev, 1e-16), 1)}$ \ (rounding)", font_size=24, color=C.BITS)
+        chk = caption(rf"largest difference: \ ${sci(max(dev, 1e-16), 1)}$ \ (rounding)", font_size=24, color=C.BITS)
         chk.next_to(ax, DOWN, buff=0.35)
         with self.voiceover(
             "A common alternative avoids forming the covariance matrix: part three's singular value decomposition "
@@ -256,20 +272,20 @@ class PCA(VoiceoverScene):
                 t = data_text(w, font=MONO, font_size=20, color=GREY_A).next_to(bar, RIGHT if v > 0 else LEFT, buff=0.1)
                 rows.add(VGroup(bar, t))
             axis = Line([0, 0.25, 0], [0, -0.38 * (len(words) - 1) - 0.25, 0], color=GREY_C, stroke_width=2)
-            head = label(title, font_size=30).next_to(axis, UP, buff=0.35)
-            ends = VGroup(label(lo, font_size=24, color=c_lo).next_to(axis, DOWN, buff=0.3).shift(LEFT * 1.3),
-                          label(hi, font_size=24, color=c_hi).next_to(axis, DOWN, buff=0.3).shift(RIGHT * 1.3))
+            head = caption(title, font_size=30).next_to(axis, UP, buff=0.35)
+            ends = VGroup(caption(lo, font_size=24, color=c_lo).next_to(axis, DOWN, buff=0.3).shift(LEFT * 1.3),
+                          caption(hi, font_size=24, color=c_hi).next_to(axis, DOWN, buff=0.3).shift(RIGHT * 1.3))
             panels.add(VGroup(head, axis, rows, ends))
         panels[0].move_to([-3.4, -0.2, 0])
         panels[1].move_to([3.4, -0.2, 0])
         d1 = sorted(top["0"], key=lambda t: -abs(t[1]))[:3]
-        parts = [label(r"direction 1 $=$", font_size=28, color=GREY_A)]
+        parts = [caption(r"direction 1 $=$", font_size=28, color=GREY_A)]
         for i, (w, v) in enumerate(d1):
             sgn = "-" if v < 0 else ("+" if i else "")
             parts += [MathTex(rf"{sgn}{abs(v):.2f}\times", font_size=30, color=C.MODEL_Q),
                       data_text(w, font=MONO, font_size=24, color=WHITE)]
         parts += [MathTex(r"+\;\cdots", font_size=30, color=C.MODEL_Q),
-                  label(rf"(all ${p['d']}$ word rates)", font_size=24, color=GREY_A)]
+                  caption(rf"(all ${p['d']}$ word rates)", font_size=24, color=GREY_A)]
         recipe = VGroup(*parts).arrange(RIGHT, buff=0.14).to_edge(UP, buff=0.35)
         keep_in_frame(recipe)
         with self.voiceover(
@@ -304,9 +320,9 @@ class PCA(VoiceoverScene):
             arr = always_redraw(lambda vec=vec: Arrow(cl.project(np.zeros(3))[0], cl.project(vec)[0], buff=0,
                                                        color=GREY_A, stroke_width=3, max_tip_length_to_length_ratio=0.12))
             axes_.add(arr)
-        split = label(rf"label-chosen cut, on these pages: \ ${100 * p['split']:.0f}\%$ sorted right", font_size=28,
+        split = caption(rf"label-chosen cut, on these pages: \ ${100 * p['split']:.0f}\%$ sorted right", font_size=28,
                       color=WHITE).to_edge(DOWN, buff=0.4)
-        cap = label(r"the pages along the first three directions", font_size=28).to_edge(UP, buff=0.4)
+        cap = caption(r"the pages along the first three directions", font_size=28).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Seen along the first three directions, the authors already sit apart. <bookmark mark='a'/> A single cut "
             f"along the first direction sorts {100 * p['split']:.0f} percent of these same pages correctly. The "

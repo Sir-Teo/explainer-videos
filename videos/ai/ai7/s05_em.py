@@ -8,6 +8,23 @@ from videos.ai.ai7.common import AUSTEN, BOUND, DICKENS, HIDDEN, LIKE, PART, ell
 COL = {r"q(z)": HIDDEN, r"\mathcal{B}(q, \theta)": BOUND, r"\log p(x; \theta)": LIKE, r"\ge": BOUND}
 
 
+def caption(text, **kwargs):
+    """Align this chapter's Chinese prose without changing formula objects."""
+    mob = label(text, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return prose(mob)
+    return mob
+
+
+def citation(text, **kwargs):
+    mob = cite(text, **kwargs)
+    if zh():
+        from videos.ai.ai6._zh_prose import prose
+        return prose(mob)
+    return mob
+
+
 def kmeans_verdict(agreement, em_agreement):
     comparison = ("higher than" if round(100 * agreement) > round(100 * em_agreement) else
                   "lower than" if round(100 * agreement) < round(100 * em_agreement) else
@@ -19,6 +36,12 @@ def kmeans_verdict(agreement, em_agreement):
 class EM(VoiceoverScene):
     def construct(self):
         card = chapter_card(4, r"Mixtures and EM", r"Which source made each point?", lit=(1977,), part=PART)
+        if zh():
+            from videos.ai.ai6._zh_prose import prose
+            for i in (0, 1):
+                card[0].submobjects[i] = prose(card[0][i])
+            labels = card[1].labels
+            labels.submobjects[:] = [prose(t) for t in labels]
         with self.voiceover("Chapter four. Mixtures, and the EM algorithm."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -40,9 +63,8 @@ class EM(VoiceoverScene):
         lo, hi = P.min(0) - 0.4, P.max(0) + 0.4
         ax = Axes(x_range=[lo[0], hi[0], 2], y_range=[lo[1], hi[1], 2], x_length=7.6, y_length=5.6, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-2.4, -0.3, 0])
-        names = VGroup(label(r"direction 1", font_size=22, color=GREY_A).next_to(ax.x_axis.get_right(), DOWN, buff=0.12)
-                       .shift(LEFT * 0.6),
-                       label(r"direction 2", font_size=22, color=GREY_A).next_to(ax.y_axis, UP, buff=0.08))
+        names = VGroup(caption(r"direction 1", font_size=22, color=GREY_A).next_to(ax.x_axis.get_right(), RIGHT, buff=0.15),
+                       caption(r"direction 2", font_size=22, color=GREY_A).next_to(ax.y_axis, UP, buff=0.08))
         dots = VGroup(*[Dot(ax.c2p(*p), radius=0.045, color=GREY_B, fill_opacity=0.85) for p in P])
         it = ValueTracker(0)
 
@@ -58,19 +80,19 @@ class EM(VoiceoverScene):
         lcurve = always_redraw(lambda: VMobject(color=C.BITS, stroke_width=3).set_points_as_corners(
             [lax.c2p(k, ll[k]) for k in range(1, int(round(it.get_value())) + 1)])
             if it.get_value() >= 2 else VMobject())
-        ll_l = label(r"log-likelihood, \ from round 1", font_size=22, color=C.BITS).next_to(lax, UP, buff=0.1)
-        steps = VGroup(label(r"E: \ for each point, how likely \\ is each bell to have made it?", font_size=24),
-                       label(r"M: \ refit each bell to its points, \\ weighted by those chances", font_size=24))
+        ll_l = caption(r"log-likelihood, \ from round 1", font_size=22, color=C.BITS).next_to(lax, UP, buff=0.1)
+        steps = VGroup(caption(r"E: \ for each point, how likely \\ is each bell to have made it?", font_size=24),
+                       caption(r"M: \ refit each bell to its points, \\ weighted by those chances", font_size=24))
         steps.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.2, 1.6, 0])
         e_box = SurroundingRectangle(steps[0], color=C.BITS, buff=0.1, corner_radius=0.08)
         m_box = SurroundingRectangle(steps[1], color=C.BITS, buff=0.1, corner_radius=0.08)
         itv = Integer(0, font_size=30, color=WHITE)
-        itl = VGroup(label(r"round", font_size=26, color=GREY_A), itv).arrange(RIGHT, buff=0.15).next_to(steps, UP, buff=0.35)
-        res = label(rf"the two bells' points match the authors: \ ${100 * g['agree']:.0f}\%$", font_size=26,
+        itl = VGroup(caption(r"round", font_size=26, color=GREY_A), itv).arrange(RIGHT, buff=0.15).next_to(steps, UP, buff=0.35)
+        res = caption(rf"the two bells' points match the authors: \ ${100 * g['agree']:.0f}\%$", font_size=26,
                     color=WHITE).to_edge(DOWN, buff=0.25).set_x(-2.4)
-        floor_note = label(rf"covariance eigenvalue floor: \ ${sci(g['covariance_floor'], 1)}$", font_size=18,
+        floor_note = caption(rf"covariance eigenvalue floor: \ ${sci(g['covariance_floor'], 1)}$", font_size=18,
                            color=GREY_A).move_to([4.2, -3.25, 0])
-        cite_ = cite(r"A.~P.~Dempster, N.~M.~Laird \& D.~B.~Rubin, \textit{Maximum Likelihood from Incomplete Data via the EM "
+        cite_ = citation(r"A.~P.~Dempster, N.~M.~Laird \& D.~B.~Rubin, \textit{Maximum Likelihood from Incomplete Data via the EM "
                      r"Algorithm} (1977)", corner=UR)
         mixdef = definition_card(r"a mixture of Gaussians",
                                  cmath(r"p(x)", r"=", r"\sum_{k} \pi_k\, \mathcal{N}(x \mid \mu_k, \Sigma_k)", font_size=34),
@@ -142,8 +164,11 @@ class EM(VoiceoverScene):
                 why(r"Jensen: \ $\log$ is concave, \\ $\log$ of an average $\ge$ average of $\log$s"),
                 why(r"the gap is a KL: \ zero when \\ $q$ is the posterior \ (the E step)"),
                 why(r"bound below; \ M step; \\ E step made it touch")]
+        if zh():
+            from videos.ai.ai6._zh_prose import prose
+            whys = [prose(w) for w in whys]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-2.6, buff=0.55, edge=6.8)
-        head = label(r"Exact E step + bound-improving M step", font_size=34).to_edge(UP, buff=0.25)
+        head = caption(r"Exact E step + bound-improving M step", font_size=34).to_edge(UP, buff=0.25)
         box_ = None
         with self.voiceover(
             "When does EM avoid going downhill? Use the exact posterior in E, and do not lower the same bound in M. "
@@ -200,19 +225,23 @@ class EM(VoiceoverScene):
             p2 = Dot(ax.c2p(1, ll[r][i1]), radius=0.07, color=LIKE)
             up = Arrow(ax.c2p(1, bd[r][i1]), ax.c2p(1, ll[r][i1]), buff=0.05, color=GREY_A, stroke_width=2,
                        max_tip_length_to_length_ratio=0.3) if ll[r][i1] - bd[r][i1] > 0.05 * (hi_ - lo_) else VGroup()
-            ticks = VGroup(label(rf"round ${k}$", font_size=20, color=GREY_A).next_to(ax.c2p(0, lo_), DOWN, buff=0.1),
-                           label(rf"round ${k + 1}$", font_size=20, color=GREY_A).next_to(ax.c2p(1, lo_), DOWN, buff=0.1))
+            ticks = VGroup(caption(rf"round ${k}$", font_size=20, color=GREY_A).next_to(ax.c2p(0, lo_), DOWN, buff=0.1),
+                           caption(rf"round ${k + 1}$", font_size=20, color=GREY_A).next_to(ax.c2p(1, lo_), DOWN, buff=0.1))
             vlines = VGroup(DashedLine(ax.c2p(0, lo_), ax.c2p(0, hi_), color=GREY_D, stroke_width=1),
                             DashedLine(ax.c2p(1, lo_), ax.c2p(1, hi_), color=GREY_D, stroke_width=1))
             pan = VGroup(ax, vlines, ticks, c_l, c_b, p0, p1, p2, up)
             panels.add(pan)
             anims.append((c_b, p0, p1, p2, up))
         panels.arrange(RIGHT, buff=0.6).move_to(DOWN * 0.3)
-        heads = VGroup(*[label(rf"from round ${k}$ to round ${k + 1}$", font_size=24).next_to(p, UP, buff=0.15)
+        heads = VGroup(*[caption(rf"from round ${k}$ to round ${k + 1}$", font_size=24).next_to(p, UP, buff=0.15)
                          for k, p in zip((0, 1, 4), panels)])
         lg = legend([(LIKE, r"the log-likelihood"), (BOUND, r"the bound the E step built")], font_size=22)
+        if zh():
+            from videos.ai.ai6._zh_prose import prose
+            for row in lg:
+                row.submobjects[1] = prose(row[1]).align_to(row[1], LEFT)
         lg.arrange(RIGHT, buff=0.6).to_edge(UP, buff=0.3)
-        xn = label(r"along the straight line in parameter space from one round's parameters to the next "
+        xn = caption(r"along the straight line in parameter space from one round's parameters to the next "
                    r"\ (computed on the pages)", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "Here's that bound for real, on the pages. Each panel follows a straight line through the parameters, "
@@ -263,19 +292,26 @@ class EM(VoiceoverScene):
         st = always_redraw(cents)
         bl_ = always_redraw(border)
         jv = DecimalNumber(J[0], num_decimal_places=2, font_size=30, color=C.BITS)
-        jl = VGroup(label(r"mean squared distance to the nearest centre:", font_size=22, color=GREY_A), jv)
+        jl = VGroup(caption(r"mean squared distance to the nearest centre:", font_size=22, color=GREY_A), jv)
         jl.arrange(RIGHT, buff=0.15).to_edge(UP, buff=0.35).shift(LEFT * 1.5)
-        rule = VGroup(label(r"E, made hard: \ each point joins its nearest centre", font_size=24),
-                      label(r"M: \ each centre moves to the mean of its points", font_size=24)).arrange(DOWN, aligned_edge=LEFT,
+        rule = VGroup(caption(r"E, made hard: \ each point joins its nearest centre", font_size=24),
+                      caption(r"M: \ each centre moves to the mean of its points", font_size=24)).arrange(DOWN, aligned_edge=LEFT,
                                                                                                     buff=0.2)
         rule.move_to([3.8, 1.9, 0])
         sig, hard = np.asarray(km["sigma"]), np.asarray(km["hard"])
         g2 = axes([0, len(sig) - 1, 1], [0, 1, 0.5], x_length=4.2, y_length=2.0, xlabel=r"bells of width $\sigma$, shrinking",
                   ylabel=r"pages $99\%$ sure of their bell", yticks=[0, 1], center=[3.8, -1.2, 0])
+        if zh():
+            from videos.ai.ai6._zh_prose import prose
+            for attr in ("xlabel", "ylabel"):
+                old = getattr(g2, attr)
+                new = prose(old)
+                g2.submobjects[g2.submobjects.index(old)] = new
+                setattr(g2, attr, new)
         hc = curve(g2.ax, np.arange(len(sig)), hard, HIDDEN, 3)
-        res = label(rf"$k$-means: \ ${100 * km['agree']:.0f}\%$ match the authors \ (EM: \ ${100 * km['agree_em']:.0f}\%$)",
+        res = caption(rf"$k$-means: \ ${100 * km['agree']:.0f}\%$ match the authors \ (EM: \ ${100 * km['agree_em']:.0f}\%$)",
                     font_size=26).to_edge(DOWN, buff=0.3).set_x(-3.2)
-        hist = cite(r"S.~Lloyd (1957, published 1982); \ J.~MacQueen (1967)", corner=DR)
+        hist = citation(r"S.~Lloyd (1957, published 1982); \ J.~MacQueen (1967)", corner=DR)
         verdict = kmeans_verdict(km["agree"], km["agree_em"])
         with self.voiceover(
             "Now make EM's choices hard. Instead of soft colours, each page joins whichever centre is nearest; then "
