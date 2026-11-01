@@ -1,0 +1,49 @@
+{
+  "status": "bilingual-scoped-selected-image-review-complete",
+  "observed_utc": "2026-11-01T06:13:13.893749+00:00",
+  "source": "videos/ai/ai6/s04_ridge.py",
+  "direct_source_sha256": "ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256",
+  "english": {
+    "movie_sha256": "e984fcadeae51dd5d911ce1b21cf06264e2d7bc18066e28d7274830309136994",
+    "selected": 581,
+    "decoded": 2505,
+    "unselected": 1924,
+    "new_unique_actually_viewed": 152,
+    "new_pages_actually_viewed": 19,
+    "exact_prior_PNG_times": 424,
+    "new_exact_duplicate_times": 5,
+    "all_encoded_window_frames": 198,
+    "native_individual_followups": 2,
+    "endpoints": 15,
+    "endpoint_coverage": "all15exactpriornativePNG"
+  },
+  "chinese": {
+    "movie_sha256": "3b323dbb49ba20154fdd7ffbed8c9298af4550dc37121bed0a952f9066e7ccaf",
+    "selected": 587,
+    "decoded": 2727,
+    "unselected": 2140,
+    "unique_actually_viewed": 490,
+    "pages_actually_viewed": 62,
+    "exact_duplicate_times": 97,
+    "all_encoded_window_frames": 186,
+    "native_individual_followups": 3,
+    "endpoints": 15,
+    "endpoint_coverage": "all15directnativeimageson2unscaledsheetsplusindividual003",
+    "historical_movie": "never rendered; no before comparison"
+  },
+  "raw_records": "fresh4passes passed/zero warnings; historicalENneeds-review/source-change remains preserved",
+  "baseline_review_sha256": "df4e8b0dabeff2e6f173cdd6ce1abb789f482ac71cd1e138b15b0bb96b2fd79c",
+  "runtime_en_review_sha256": "427bec3e6b4e8bcd31dbdac4a9ec85ad132fc01d54d014233e5e63e6a56a2191",
+  "runtime_zh_review_sha256": "02a575c1d008b0299ac136a82b4c9a5f304a3c9e2163a3e7503a9be3255c70ed",
+  "findings": {
+    "RIDGE-M01": "repaired; all3sourceappendwrites distinct inactualbothlanguages",
+    "RIDGE-M02": "repaired; strongleft-to-weakrightcurvecreation verified bothlanguages"
+  },
+  "limits": [
+    "Source/data snapshots establish scoped observed identities, not unrecorded historical imports",
+    "No continuous whole-file perceptual playback",
+    "No audio/listening/synchronization approval",
+    "No native-production-resolution approval",
+    "All31seriesQA not completed by this scoped chapter review"
+  ]
+}

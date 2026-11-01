@@ -1,0 +1,872 @@
+{
+  "artifacts": [
+    {
+      "path": "receipts/data-immutability-final.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/data-immutability-final.json",
+      "decoded_sha256": "44865622b94e4ba0b117d47574911d3a0e75c9dd8b6bdbe97e9565c768b1a1b5",
+      "decoded_bytes": 14938,
+      "encoded_sha256": "3432b79f4eb607bb820161d4a992da41d816e4111e5efb8de06324267cdee820"
+    },
+    {
+      "path": "receipts/en/audit/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/result.json",
+      "decoded_sha256": "77db6f30a9c4fcd75ef103dfce7febc4437d0093fc6620a1eb0173f01b003990",
+      "decoded_bytes": 199226,
+      "encoded_sha256": "fd5c8253d132edcbc838dc5a83cda742c70b21880e763654ab857bd4b07fade4"
+    },
+    {
+      "path": "receipts/en/audit.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit.log",
+      "decoded_sha256": "fc266a33b4a8f8a4ba1da9e78cadbb39bcc792b429ee7347ece8ae567b381b7f",
+      "decoded_bytes": 96,
+      "encoded_sha256": "98eaddfe419265bf8ce64b3f4bf0bf42af006321a0e8d293fafc8258fd50d274"
+    },
+    {
+      "path": "receipts/en/endpoints/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints/command.json",
+      "decoded_sha256": "ff8238de2d2ffa4a467ad95433541677659a364d7ebb2de695d954647b8c977c",
+      "decoded_bytes": 735,
+      "encoded_sha256": "ab3bce54f1574859e7c74b9d12f86d8bd0858ac6adf2ce48d4c7bebe017dcc1e"
+    },
+    {
+      "path": "receipts/en/endpoints/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/en/endpoints/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/en/endpoints/raw-copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints/raw-copy-manifest.json",
+      "decoded_sha256": "1bbb76aeb75ab8be2c39bc967d9c6f9b6508e7f31428e0302988cf25d6cf9fdb",
+      "decoded_bytes": 7142,
+      "encoded_sha256": "2c82a7584022b3cbd3d4318ec9cf5164a47b2874ab23d9429e7dd3bc9b6aa116"
+    },
+    {
+      "path": "receipts/en/endpoints/raw-result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints/raw-result.json",
+      "decoded_sha256": "128ca7fcae6ba5af318c875f115b24406ea6d1df177d806703d29d090fb309a1",
+      "decoded_bytes": 58894,
+      "encoded_sha256": "fe9e0727c7b830db950243c8e54f4e37d2796792f4aa00fe6ca600654015bf41"
+    },
+    {
+      "path": "receipts/en/endpoints/raw-text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints/raw-text.jsonl",
+      "decoded_sha256": "188b143bdb9fc2a49a0fc0f702aa6a5adbe5bce0ee67b7414433b4876b4b14dd",
+      "decoded_bytes": 7943,
+      "encoded_sha256": "458e4056c66d30be0e6b2758870029f7b45a17c0123df99d1eeb66823dfd160e"
+    },
+    {
+      "path": "receipts/en/endpoints/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints/receipt.json",
+      "decoded_sha256": "12ece4bf5408e3c6f6456a995d2a5ef14d211d791a9d414b00862f3d31ca21bb",
+      "decoded_bytes": 8051,
+      "encoded_sha256": "9f89c919c402f3375ba077f1afa365009aa88e0939e42cef1fd58410d871370d"
+    },
+    {
+      "path": "receipts/en/endpoints/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints/source-after.json",
+      "decoded_sha256": "35960cfca23f8327f1f843742177f7742e1d4dad557d5c9edba04e069ed6e05f",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "0a4b15063e07a3a285f74a6a0c05f5bb2bc2b42fd1c774aa95bd0c393ddb4ccd"
+    },
+    {
+      "path": "receipts/en/endpoints/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints/source-before.json",
+      "decoded_sha256": "1642445623aac69721f1ed882533769faeff0b213ba6de417e2e1c867ed95f13",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "4e58ea37343af18c0cf03822d41363fdeaccdaa222ac7ff367e8ffd42679ef0f"
+    },
+    {
+      "path": "receipts/en/endpoints-views/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints-views/plan.json",
+      "decoded_sha256": "6dfa81a02b8185212bf2f813c9f54afae460c84daef678c169b8072974e8df29",
+      "decoded_bytes": 42626,
+      "encoded_sha256": "1c75ea0e262e642495a1dc3c377a46c5c153bf01ed0940c051ff0ebefb7af2f3"
+    },
+    {
+      "path": "receipts/en/endpoints-views/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints-views/views.json",
+      "decoded_sha256": "74514b8b9e230d89e73efda4366e3eb26b17da1b24f6a27994ed495c70a89f68",
+      "decoded_bytes": 5536,
+      "encoded_sha256": "adad4ba510638906cc9e87827c2c7711461d67cbf0b11a2a3dd05a6756de7d53"
+    },
+    {
+      "path": "receipts/en/motion/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion/command.json",
+      "decoded_sha256": "6b72b5b563f84e003bd336ce98716de4d73778a8b4f5da82f06df2f93894a7a6",
+      "decoded_bytes": 751,
+      "encoded_sha256": "4507837bc4bf51029469af2aa151d1e847144552624062256599581dcfa779be"
+    },
+    {
+      "path": "receipts/en/motion/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/en/motion/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/en/motion/raw-copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion/raw-copy-manifest.json",
+      "decoded_sha256": "0cf59d2ac82432641d89f960119d041a535f686abe34fc192f846e3a1e9018c2",
+      "decoded_bytes": 9303,
+      "encoded_sha256": "d1612801b02a47b1f864b4c0e2ed44c08a2f119275fcfb7da1a28b0c4503c544"
+    },
+    {
+      "path": "receipts/en/motion/raw-result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion/raw-result.json",
+      "decoded_sha256": "487ab5a08d386f6db7dcfa4c667ba3351fb6751da82ccfb269f59c10ba18eae6",
+      "decoded_bytes": 59179,
+      "encoded_sha256": "e45374f65720b59ee54db7df89ed2223fd71c256dac16d9c1f8380df044eb07b"
+    },
+    {
+      "path": "receipts/en/motion/raw-text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion/raw-text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/en/motion/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion/receipt.json",
+      "decoded_sha256": "d1553b4fb1ad9f62dac8366c43e0b7e2868a2b0f198dd40c0247e4a36bef252e",
+      "decoded_bytes": 10294,
+      "encoded_sha256": "fa8008e03279dbec26ded36b67b5e589fca4b7b36ad68810e32751c53e1360d3"
+    },
+    {
+      "path": "receipts/en/motion/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion/source-after.json",
+      "decoded_sha256": "ce58c49cb70c32d578f5511391cc0d800e0d36d32a969ffde37a258ba8e3c544",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "e68bc94ca45d75dcb932191f8e436713137ddc73886fc1f4b02787a6c7ab4b28"
+    },
+    {
+      "path": "receipts/en/motion/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion/source-before.json",
+      "decoded_sha256": "57607275503fcd077b3cc1b87df7a8fc368c6ce5f067120558c7629f73d4c6bf",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "9a81e91d7d25102fc823258ba50978d478d1f1a3d99501289383a3e3a30b4d12"
+    },
+    {
+      "path": "receipts/en/motion-views/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion-views/plan.json",
+      "decoded_sha256": "6c4167896eef050743dc7383856312a8e9689148ba3cb3e462494a28f76f77ad",
+      "decoded_bytes": 326127,
+      "encoded_sha256": "b5b380b9b20c5c4876c6b2e31f0c3e7119c12a54614384fa2c0896648dfe3c87"
+    },
+    {
+      "path": "receipts/en/motion-views/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion-views/views.json",
+      "decoded_sha256": "ac818fc2814a425d4f5bc343b5ef59c05b5ce76b5292aec7e11f672b9372cf86",
+      "decoded_bytes": 34124,
+      "encoded_sha256": "6a0c8d9a14e02a0900ce4b7f035c1b725c554fbd40bdbd436584989c61407b2f"
+    },
+    {
+      "path": "receipts/extract-complete.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/extract-complete.json",
+      "decoded_sha256": "173b4d34daeb8f5b5e29a354a43834bc83d906604db3a45337b925aa5a2c848d",
+      "decoded_bytes": 123,
+      "encoded_sha256": "afc634fa587d2d6582c0b030457bc8d3457253f4acdb5016011a1a672725a707"
+    },
+    {
+      "path": "receipts/finalize.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/finalize.py",
+      "decoded_sha256": "d94b0fc87a6bc2ceb5143e47a66de1f94399c95903420822715273e098bf0333",
+      "decoded_bytes": 10283,
+      "encoded_sha256": "150b7b2ff38c8c6ee84c4502cfc5887f2f2f9d0476f2ac144f902d5c8932473d"
+    },
+    {
+      "path": "receipts/freeze.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/freeze.json",
+      "decoded_sha256": "4458a07cfa7ea4d16f17d9b8453d600ddc69182351bc8e5e80efa9d5f1ee7226",
+      "decoded_bytes": 35979,
+      "encoded_sha256": "f5285e04b46517e8edd6051bb34ae20273f08e8255cb44a3f048313dad3f1a44"
+    },
+    {
+      "path": "receipts/index-at-freeze.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/index-at-freeze.json",
+      "decoded_sha256": "29704a3aa9537cc0c56d7f5a462b1a6601eb3783a9c4509d201763b5522f2213",
+      "decoded_bytes": 34507,
+      "encoded_sha256": "04c167a5e52017df5c1204b84373fd59f0a0c7725818a280f8d0cf1ebb0ca07f"
+    },
+    {
+      "path": "receipts/local-repair/after.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/local-repair/after.py",
+      "decoded_sha256": "c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032",
+      "decoded_bytes": 17039,
+      "encoded_sha256": "a76c3d887bbf378d8e64b932d835a99090915ce62325a9e0c1717c2ce9e7d62b"
+    },
+    {
+      "path": "receipts/local-repair/before.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/local-repair/before.py",
+      "decoded_sha256": "ff162bdaf883842051e241d4582fd8bfbcfe8389f4d1236088417c7db527f542",
+      "decoded_bytes": 16971,
+      "encoded_sha256": "3345c708573b25f703e939d1d6e0d4d855594b169fd6316b04150b7336767c04"
+    },
+    {
+      "path": "receipts/local-repair/existing-twelve-tests.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/local-repair/existing-twelve-tests.log",
+      "decoded_sha256": "a1d9ef6abcc2197bb5ae989b43b4e86cce348a4c2c6a5ba85d8a097f34af163b",
+      "decoded_bytes": 2670,
+      "encoded_sha256": "4f8a97d103dda04a881cdbd58a3c5f5f0184d1d7656d40061a540a844a4174b6"
+    },
+    {
+      "path": "receipts/local-repair/freeze.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/local-repair/freeze.json",
+      "decoded_sha256": "477acfd57a16ec53babbe11694c44f38a419264b66a5f72d2e0368a2b4e46e5f",
+      "decoded_bytes": 963,
+      "encoded_sha256": "525c2bc226b6579667b44d3a8ed86cd432d797042aa1bd67eeb3f79b200793be"
+    },
+    {
+      "path": "receipts/local-repair/source.patch.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/local-repair/source.patch",
+      "decoded_sha256": "a40e5c86c80d08dda9b4e859ef8c3f82392fab37a38ab4efbc5f924c39defae0",
+      "decoded_bytes": 601,
+      "encoded_sha256": "3e4cb8e3f6e7fa5c64ba220d3fa2b4b72575a457a3c7ef9170d9ff4f2de891eb"
+    },
+    {
+      "path": "receipts/observed-source/tools/qa_motion.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/observed-source/tools/qa_motion.py",
+      "decoded_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "decoded_bytes": 19437,
+      "encoded_sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2"
+    },
+    {
+      "path": "receipts/observed-source/videos/ai/ai6/common.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/observed-source/videos/ai/ai6/common.py",
+      "decoded_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+      "decoded_bytes": 9415,
+      "encoded_sha256": "2f0afe61a44325121ef07e1471b31fa35858167ff54f656ca5695fa73acdb789"
+    },
+    {
+      "path": "receipts/observed-source/videos/ai/ai6/s06_logistic.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/observed-source/videos/ai/ai6/s06_logistic.py",
+      "decoded_sha256": "ff162bdaf883842051e241d4582fd8bfbcfe8389f4d1236088417c7db527f542",
+      "decoded_bytes": 16971,
+      "encoded_sha256": "3345c708573b25f703e939d1d6e0d4d855594b169fd6316b04150b7336767c04"
+    },
+    {
+      "path": "receipts/observed-source/videos/ai/ai6/zh_lines.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/observed-source/videos/ai/ai6/zh_lines.py",
+      "decoded_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+      "decoded_bytes": 77583,
+      "encoded_sha256": "89381de1b997727bb1f58723c8a912e69da21c0ce5aefda51447d7443e1b6fd6"
+    },
+    {
+      "path": "receipts/observed-source/videos/ai/ai_text_zh.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/observed-source/videos/ai/ai_text_zh.json",
+      "decoded_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+      "decoded_bytes": 2440019,
+      "encoded_sha256": "7276faa9505120625908facd80a3c23880e383cc31427f0c708cebc4ecf0f513"
+    },
+    {
+      "path": "receipts/preparation.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/preparation.log",
+      "decoded_sha256": "8a433544366ab7cde6e2a65b7175deda78d510a7d8255cb99b4ae2d21fc3b6e4",
+      "decoded_bytes": 98,
+      "encoded_sha256": "fbc24fca5a19426b4cbbc35e03a6f4ab92d3644c6ad9007927f7be449b764377"
+    },
+    {
+      "path": "receipts/prepare.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/prepare.py",
+      "decoded_sha256": "ee772a962eb0e369de90d529d79f2b5276a4c5421a58eb45101e5e0054bd2ca6",
+      "decoded_bytes": 3690,
+      "encoded_sha256": "1fe57f8c19f0f41bcd6923e5de1d5f354e7e86f59086891deadc559fa543bd85"
+    },
+    {
+      "path": "receipts/report.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/report.json",
+      "decoded_sha256": "cfcccd7f63c7862cbbf6c219b2b73e1e6c023f29d41371c65118a99defe98113",
+      "decoded_bytes": 153501,
+      "encoded_sha256": "de15069d316bc17dd53a5881cf63c88034955ef17431f9ebe4e7f0281a6e2b02"
+    },
+    {
+      "path": "receipts/report.md.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/report.md",
+      "decoded_sha256": "0c8449557e53deb4349da2d44accf4e890df3dc315daac25d12b602bfd9e3455",
+      "decoded_bytes": 1600,
+      "encoded_sha256": "7905a709dfe4ff5b8d27ea8445c58bd2912b10b2aef09e59128f631448e5f998"
+    },
+    {
+      "path": "receipts/review_helper.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/review_helper.py",
+      "decoded_sha256": "76126d9d94c79ee0fac421bbcb9a35c442c96d28ffa7f3b482a3ef2208a8d953",
+      "decoded_bytes": 3346,
+      "encoded_sha256": "2040ad60a92e4de7d939c181e59b491f3c80a0c63042b3418819222c83d65d38"
+    },
+    {
+      "path": "receipts/source-scope-reconciliation.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/source-scope-reconciliation.json",
+      "decoded_sha256": "5e7d1565c4bf4db4f18eaa54eb0b31a2854dbcde076fcef4c96d8f9f91e5dd98",
+      "decoded_bytes": 958,
+      "encoded_sha256": "5ddf8ce29629558f0a89cc51c17826b88fd33428a5e97f57c93082584d408348"
+    },
+    {
+      "path": "receipts/zh/audit/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit/result.json",
+      "decoded_sha256": "674e84f72afdd2c7a3f67a9fa3017e1fdf72a6f7b36e23d68376c1e5894c2f89",
+      "decoded_bytes": 211878,
+      "encoded_sha256": "c13fa4a041cd9395185869a714cb28ea9f44e12c7b16c14cde6393f10457070d"
+    },
+    {
+      "path": "receipts/zh/audit.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit.log",
+      "decoded_sha256": "41ee3ce070e99868e7a88827786c60f4f3c974a021295570a58439cfd2f88e89",
+      "decoded_bytes": 96,
+      "encoded_sha256": "36be199bf41391d4a102b5d1cc00b517480623143929735de3da7c3a907b6d29"
+    },
+    {
+      "path": "receipts/zh/endpoints/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints/command.json",
+      "decoded_sha256": "df9a6b7516210bccc69d12e67e0b6296dcac47e9be332b9595e36e835baaaa01",
+      "decoded_bytes": 735,
+      "encoded_sha256": "0dc677fcd5211fd2ecd43e0a714c0148990412bf08a2cd50bbddbc357903a644"
+    },
+    {
+      "path": "receipts/zh/endpoints/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/zh/endpoints/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/zh/endpoints/raw-copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints/raw-copy-manifest.json",
+      "decoded_sha256": "52a5cb815a21a2b72b331156bffd10e7409c7d8ac6e24f0a4b6e61e3096567a8",
+      "decoded_bytes": 7142,
+      "encoded_sha256": "d9669144d16be9151a7af3121d2e8e4e4d92127c53aeccc445da7a46450dfbec"
+    },
+    {
+      "path": "receipts/zh/endpoints/raw-result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints/raw-result.json",
+      "decoded_sha256": "09dfd507a57c2aefdbd466ab50f5c118b198e7b8d38b705c4c2388b839dcfce2",
+      "decoded_bytes": 78656,
+      "encoded_sha256": "d5910d50c0d698c914a5b7b05e265d18aabf689d5ab1cca135ae93714a5029f7"
+    },
+    {
+      "path": "receipts/zh/endpoints/raw-text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints/raw-text.jsonl",
+      "decoded_sha256": "34387706ccf40db0124c51fefaa9e2ab534f827e79c36d6c119110a511509927",
+      "decoded_bytes": 7946,
+      "encoded_sha256": "9939b94354ddebecf205012d337b63e6fd0f65d1bd9100d1b1e1224063d3827f"
+    },
+    {
+      "path": "receipts/zh/endpoints/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints/receipt.json",
+      "decoded_sha256": "ab2e7ba81d0faa0836966f8951fbb4463bfa22d3394e7985218192de27853f7e",
+      "decoded_bytes": 8051,
+      "encoded_sha256": "0b47ad01d021b56f7d690a3cb9c93e303a8bdee327f087fb16926a260ac3d34b"
+    },
+    {
+      "path": "receipts/zh/endpoints/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints/source-after.json",
+      "decoded_sha256": "b4b91bd0936f5027752ef2bc1d92b6824c0833415cddef5c4bdc19fd4c8cb718",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "9a8e0070dea182e3dfcc1044a5d20966f5d95d79cc736c0e6b2acf4cf4cd59ae"
+    },
+    {
+      "path": "receipts/zh/endpoints/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints/source-before.json",
+      "decoded_sha256": "c66a54ae8261233f066aede0385aa940c65a2e65f455bd4e3a9f7f867dc86a1f",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "7e5d9d90de16a5fdd02ed14bdee462e084329ee94e9092bb380169521bd1fa37"
+    },
+    {
+      "path": "receipts/zh/endpoints-views/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints-views/plan.json",
+      "decoded_sha256": "88f964292c15cded14bee2d418a05d698cb908e50028fc22352b4f6c4768cfce",
+      "decoded_bytes": 44560,
+      "encoded_sha256": "fbddd6068cfaa772021eb46c3f92cbcc7493a893bb95c44f1df63d56d31945b8"
+    },
+    {
+      "path": "receipts/zh/endpoints-views/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints-views/views.json",
+      "decoded_sha256": "9230642373a27e648514a38f191c7e9636d4e367266c66f799f898fc2d7b71ab",
+      "decoded_bytes": 5471,
+      "encoded_sha256": "4d362126e782d5c5b6351f54fd406d35d64297251157bd1a6bf4d401181ca692"
+    },
+    {
+      "path": "receipts/zh/motion/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion/command.json",
+      "decoded_sha256": "7f7bbff13e915f0f2695ecc5ba2e8a605a8f60a9810960e534463972504f868a",
+      "decoded_bytes": 751,
+      "encoded_sha256": "4182e55540fa4b81591c5b54eff1ef604db4be8025002ee355629ffc0737ae56"
+    },
+    {
+      "path": "receipts/zh/motion/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/zh/motion/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/zh/motion/raw-copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion/raw-copy-manifest.json",
+      "decoded_sha256": "d6bf880dbdb2f1515b39a6b63e9802b425888701f25361588ad06c7843fd1e42",
+      "decoded_bytes": 9304,
+      "encoded_sha256": "20b7ed298ddb2863ecaac1c69bc7487c7055cdca24270eaaf75ffd9c434cf558"
+    },
+    {
+      "path": "receipts/zh/motion/raw-result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion/raw-result.json",
+      "decoded_sha256": "f70a3edaedba66973d05836b90e204a46410602f31ffe6c4d143b7786f80169c",
+      "decoded_bytes": 78956,
+      "encoded_sha256": "23cc927d0e730d968b9e6649fcdf49d26cea9b3aea9df635cca3ccdb2c254faa"
+    },
+    {
+      "path": "receipts/zh/motion/raw-text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion/raw-text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/zh/motion/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion/receipt.json",
+      "decoded_sha256": "104edc4f7498228de8525618ea7ae1507337bb527a15a34adb5a1e7e6f00e8fb",
+      "decoded_bytes": 10295,
+      "encoded_sha256": "97a331cefd51d9fdde984b66a22cdf2842b7245d57470d8bf91e628b32a60ac4"
+    },
+    {
+      "path": "receipts/zh/motion/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion/source-after.json",
+      "decoded_sha256": "8b8cd81348289dd98a9e1083bbdd084441e57bf125bc513d3a823158e22e23fb",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "595d9dd0b3da9e1889856244cef0cb280bdb1556a2f38d23bd428367c213b866"
+    },
+    {
+      "path": "receipts/zh/motion/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion/source-before.json",
+      "decoded_sha256": "607726162de8b012105e24ee48af945ad50037bc574e3c24dfae416a968eb756",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "1b3381368a271cb875407c773b0ab9628b490a9007f3b8fc2c27b6401eed888c"
+    },
+    {
+      "path": "receipts/zh/motion-views/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion-views/plan.json",
+      "decoded_sha256": "2cb4ad3f127049c1a186cf5706135f1b604900b66326290ae8a64b255e1b3602",
+      "decoded_bytes": 346813,
+      "encoded_sha256": "7d4b54ec94377e4cdb369ee61ec05239c5b5be168455c7f391786fba6d342fb7"
+    },
+    {
+      "path": "receipts/zh/motion-views/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion-views/views.json",
+      "decoded_sha256": "d3ac9b1f9c52d76c5750cdbc26a49d036b5a0691d82e7b1760c5b618fbc1a9a1",
+      "decoded_bytes": 32212,
+      "encoded_sha256": "5cca7ce64b44dd9cfb609fd80e6f49b1ef5c40e5ba1ff1879df1e539826ff396"
+    },
+    {
+      "path": "critical-originals/en/endpoints/0003.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/en/endpoints/completed/003_00022.2s.png",
+      "original_sha256": "4ef7c9f279c1ee0d2f6df541794a070b1aeefc6ee9562899e28bc6223e5edb63",
+      "bytes": 73146
+    },
+    {
+      "path": "critical-originals/en/endpoints/0006.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/en/endpoints/completed/006_00051.3s.png",
+      "original_sha256": "ae70788181a534f365b014973ce633b0e7ae5e5b43b34bfee4cce8f608e4edd2",
+      "bytes": 90348
+    },
+    {
+      "path": "critical-originals/en/endpoints/0012.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/en/endpoints/completed/012_00091.6s.png",
+      "original_sha256": "74cf400ce8ced8bd025552f303f7315fdbf4c9b4337ab2c4ee8e90e32e4823b6",
+      "bytes": 58305
+    },
+    {
+      "path": "critical-originals/en/endpoints/0016.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/en/endpoints/completed/016_00124.8s.png",
+      "original_sha256": "03ccf54f390092a49d6bb704a5c85c7b5e8584af54e3cf51ced7ee654058c909",
+      "bytes": 81294
+    },
+    {
+      "path": "critical-originals/en/endpoints/0018.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/en/endpoints/completed/018_00149.2s.png",
+      "original_sha256": "b0d914b2cb9b6c47a908d7ffd86975eea633b5c9b4d1e56803b95400205e31e1",
+      "bytes": 59055
+    },
+    {
+      "path": "representative-pages/en/endpoints/001.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints-views/page-001.png",
+      "original_sha256": "ccefe131549e21c70022f397f1c531972af2ffcd3cda42a6c927975436418389",
+      "bytes": 144843
+    },
+    {
+      "path": "representative-pages/en/endpoints/002.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints-views/page-002.png",
+      "original_sha256": "4f933ee2f707ae8d0f0f7bd97a5be28cfee7ad440475e3034ff1599a0cd5d05e",
+      "bytes": 173302
+    },
+    {
+      "path": "representative-pages/en/endpoints/003.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints-views/page-003.png",
+      "original_sha256": "6e9b870c67478e9f0a1c456c4331f1e9bb107e351ffa7e51d06c49929290fbf9",
+      "bytes": 80975
+    },
+    {
+      "path": "representative-pages/en/endpoints/004.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints-views/page-004.png",
+      "original_sha256": "c12d1599d0b68e346ba901ed91ee3e50b23a165e7e5f0d4001e1cf7e0af58100",
+      "bytes": 180853
+    },
+    {
+      "path": "representative-pages/en/endpoints/005.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/endpoints-views/page-005.png",
+      "original_sha256": "146a3e9481de515ff6b04a8fd745ed996f9967f653415fc0c8c6c488a2b534d9",
+      "bytes": 172733
+    },
+    {
+      "path": "critical-originals/en/motion/0231.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0000982_000065.466s.png",
+      "original_sha256": "7ac249ac999f6a6b5a0788b3629c39a3d5cf129db081ec81c8138885ad05d163",
+      "bytes": 25062
+    },
+    {
+      "path": "critical-originals/en/motion/0249.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0001054_000070.266s.png",
+      "original_sha256": "e8feb878468186c1f00103a9842fa06ac6dc6e5c5cb5c290443b6dcdc829d1eb",
+      "bytes": 30015
+    },
+    {
+      "path": "critical-originals/en/motion/0271.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0001150_000076.666s.png",
+      "original_sha256": "7553a973423bf51aa9968cba3cd64b4db5cd460bdab6e92b5128a8ac72c5876f",
+      "bytes": 37764
+    },
+    {
+      "path": "critical-originals/en/motion/0291.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0001251_000083.400s.png",
+      "original_sha256": "373886ded8320141982b8fd020dd301a447cc703db8bdcfa4491783f3453d9cc",
+      "bytes": 48910
+    },
+    {
+      "path": "critical-originals/en/motion/0236.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0000997_000066.466s.png",
+      "original_sha256": "2dd473d773d79a9ac7ceb2ae78ae4de9583a345225063c4649b93e24d2f14260",
+      "bytes": 21766
+    },
+    {
+      "path": "critical-originals/en/motion/0383.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0001772_000118.132s.png",
+      "original_sha256": "41a74efe6da31e3324d7659ed1a1305c6bec5434e58301379868e8335173e928",
+      "bytes": 112077
+    },
+    {
+      "path": "critical-originals/en/motion/0386.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0001783_000118.865s.png",
+      "original_sha256": "a3b6732591db55c92521d0697a31a93d7fc6c24bce704b434e765b3e65bfa7db",
+      "bytes": 111670
+    },
+    {
+      "path": "critical-originals/en/motion/0398.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0001828_000121.865s.png",
+      "original_sha256": "4118bcfd661ef4dd55726d598b21cab1d9e655a3fe4313ed00587c5ced9e837d",
+      "bytes": 113665
+    },
+    {
+      "path": "representative-pages/en/motion/008.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion-views/page-008.png",
+      "original_sha256": "7b648fedb0ced0f0aabfff1c98a2a5d610cbe987420f8a9aaa37d624d71c4da8",
+      "bytes": 367358
+    },
+    {
+      "path": "representative-pages/en/motion/020.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion-views/page-020.png",
+      "original_sha256": "a9e7826d4b2461a78c3e26274f611bde045346533a190bcb77f4a51f5ccadf5e",
+      "bytes": 522541
+    },
+    {
+      "path": "representative-pages/en/motion/027.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion-views/page-027.png",
+      "original_sha256": "dbd91441e324047fc5995f40a0910112f66f29e56987376261133a3d24160a9d",
+      "bytes": 133149
+    },
+    {
+      "path": "representative-pages/en/motion/032.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion-views/page-032.png",
+      "original_sha256": "16b2bbffb9133b6054ee828e8d43079e0d1826d9b30ce28c6d67c6bdfed17579",
+      "bytes": 223396
+    },
+    {
+      "path": "representative-pages/en/motion/044.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion-views/page-044.png",
+      "original_sha256": "2b751a1232e4f3c218532b46c12f5bd14376e8e71b204d9ed7e357cb586708af",
+      "bytes": 539145
+    },
+    {
+      "path": "representative-pages/en/motion/054.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/motion-views/page-054.png",
+      "original_sha256": "f9b058abb82194b5166c2f0ad0f4172bceb45090297e0ea1e66c7a3949b50bdc",
+      "bytes": 313799
+    },
+    {
+      "path": "critical-originals/zh/endpoints/0003.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/zh/endpoints/completed/003_00025.5s.png",
+      "original_sha256": "e64e1eb69027b78b9770acbea4f4e411b4016ddab3fd89333fd40a87f617d5c2",
+      "bytes": 75376
+    },
+    {
+      "path": "critical-originals/zh/endpoints/0006.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/zh/endpoints/completed/006_00057.2s.png",
+      "original_sha256": "59397ff1b96df51afc1d00f95fe482f1e131f44f02e0186f71becee11acc2107",
+      "bytes": 91850
+    },
+    {
+      "path": "critical-originals/zh/endpoints/0012.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/zh/endpoints/completed/012_00101.8s.png",
+      "original_sha256": "623aa753df78ef7078042e8fb35656ba56621b9069db09a325f63cf1f1a9dd6a",
+      "bytes": 56213
+    },
+    {
+      "path": "critical-originals/zh/endpoints/0016.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/zh/endpoints/completed/016_00137.1s.png",
+      "original_sha256": "132e2dce30b1738c3fac7056df8535cb5a462621f00fe64da355335d5fd06c2c",
+      "bytes": 86169
+    },
+    {
+      "path": "critical-originals/zh/endpoints/0018.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/zh/endpoints/completed/018_00162.8s.png",
+      "original_sha256": "d3b72f9624f96485fe0f42b9709f0a6f3c3123c4b7e1221699c19e964fde9a22",
+      "bytes": 59771
+    },
+    {
+      "path": "representative-pages/zh/endpoints/001.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints-views/page-001.png",
+      "original_sha256": "e299316d8a60676ddaf0b63af2328b0ce089b853885f0dcb813e389b978e2d6c",
+      "bytes": 145559
+    },
+    {
+      "path": "representative-pages/zh/endpoints/002.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints-views/page-002.png",
+      "original_sha256": "a9b812ca262b6add8392d32dddab4599daf3c091b115bdc9df1eb4374cb04c62",
+      "bytes": 173891
+    },
+    {
+      "path": "representative-pages/zh/endpoints/003.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints-views/page-003.png",
+      "original_sha256": "2d90e89810ea5ba91aada09dcedcc054298ad0f9cf7f115bc6ec14cfd1168a85",
+      "bytes": 77697
+    },
+    {
+      "path": "representative-pages/zh/endpoints/004.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints-views/page-004.png",
+      "original_sha256": "064e6749694a472a511f12e7c780b2781d5d9d665a5998b10ad968f3587ab6d0",
+      "bytes": 180644
+    },
+    {
+      "path": "representative-pages/zh/endpoints/005.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/endpoints-views/page-005.png",
+      "original_sha256": "982e4716688c42ea98bd20eecd8779ea59a4ee36e6d9334c0234a7f5f18a11ec",
+      "bytes": 175457
+    },
+    {
+      "path": "critical-originals/zh/motion/0259.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit/frames/0001110_000074.000s.png",
+      "original_sha256": "934dc94d1641bf2965c391de509481dd5e14883d8a7b5f79f0b13c0978c23722",
+      "bytes": 23567
+    },
+    {
+      "path": "critical-originals/zh/motion/0277.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit/frames/0001192_000079.466s.png",
+      "original_sha256": "672b6c3ad1e97082f5e90c424a9482eca6733455d2aaf6b6c3e72ad1c97a85d2",
+      "bytes": 29666
+    },
+    {
+      "path": "critical-originals/zh/motion/0295.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit/frames/0001287_000085.800s.png",
+      "original_sha256": "4c2f120041a029e597b437fb492b55a9b333647573168bc8e5eb192a665e3bee",
+      "bytes": 36978
+    },
+    {
+      "path": "critical-originals/zh/motion/0315.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit/frames/0001385_000092.333s.png",
+      "original_sha256": "903bcf5688111c4637d486e09cb3d3b738ea4249156ab37df188f386b51da6e3",
+      "bytes": 48068
+    },
+    {
+      "path": "critical-originals/zh/motion/0264.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit/frames/0001125_000075.000s.png",
+      "original_sha256": "3b027d2098086ac1d7dcf9f337ddb791693aaf885c364af2a48be9f8b22344bc",
+      "bytes": 20778
+    },
+    {
+      "path": "representative-pages/zh/motion/008.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion-views/page-008.png",
+      "original_sha256": "58eb20bcd36d7bf86bb7e5274327d9b5fe715ff0dcdf362ceef3ada5c0877c8c",
+      "bytes": 453523
+    },
+    {
+      "path": "representative-pages/zh/motion/023.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion-views/page-023.png",
+      "original_sha256": "4dfcbf8be37d77421f92c4e676ca542810f833a7a1ad764166158560b892f0b2",
+      "bytes": 504013
+    },
+    {
+      "path": "representative-pages/zh/motion/030.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion-views/page-030.png",
+      "original_sha256": "d44bbcfedf3dc62a18d59658173dd889f720f8ba3506d7e2cd46e3ab60e4576b",
+      "bytes": 130379
+    },
+    {
+      "path": "representative-pages/zh/motion/037.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion-views/page-037.png",
+      "original_sha256": "673a63df4a586a66f432327099ce889fc9d666ba91b7ec1dccd84706a6efdde6",
+      "bytes": 252438
+    },
+    {
+      "path": "representative-pages/zh/motion/047.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion-views/page-047.png",
+      "original_sha256": "095900a2a95d79ebedf13b6459de51355162e71099b6032a0caf6ebbf1d4dbb4",
+      "bytes": 404032
+    },
+    {
+      "path": "representative-pages/zh/motion/056.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/motion-views/page-056.png",
+      "original_sha256": "8171c6002a8a86bfb179e659c691abdbeda083058d3d1f367a0a17c23f36300d",
+      "bytes": 315334
+    }
+  ],
+  "preservation": "Lossless gzip/identity. No normalization of raw patches, logs or JSON."
+}

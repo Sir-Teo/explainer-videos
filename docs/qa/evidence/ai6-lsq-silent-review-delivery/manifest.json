@@ -1,0 +1,39 @@
+{
+  "created_utc": "2026-11-01T06:10:01.696201+00:00",
+  "source_commit_after": "f7a06179d329d7bf160f015470f87ed2921afdff",
+  "clips": [
+    {
+      "version": "before",
+      "lang": "en",
+      "source_sha256": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+      "archive_movie": "en/before-LeastSquares-SILENT-QA.mp4",
+      "movie_bytes": 1344165,
+      "movie_sha256": "9dcdcf39532daecb59e72261b408aa1063eb247aec8f9888a6862ca94990c15e"
+    },
+    {
+      "version": "before",
+      "lang": "zh",
+      "source_sha256": "7a4547ff3e707693a0702d15eadc5e16170b3cbb7030718251d6128d45d8ca71",
+      "archive_movie": "zh/before-LeastSquares-SILENT-QA.mp4",
+      "movie_bytes": 1367214,
+      "movie_sha256": "fdbe56fbd7d59603af9b6e40ea49831ad8600ae5d24717cff3ce4a345ae64448"
+    },
+    {
+      "version": "after",
+      "lang": "en",
+      "source_sha256": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+      "archive_movie": "en/after-LeastSquares-SILENT-QA.mp4",
+      "movie_bytes": 1296074,
+      "movie_sha256": "d612bf12759ff3f1d4a374ccbd2e74c61a09f8d897120b95791b3fa29d9ed977"
+    },
+    {
+      "version": "after",
+      "lang": "zh",
+      "source_sha256": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+      "archive_movie": "zh/after-LeastSquares-SILENT-QA.mp4",
+      "movie_bytes": 1320991,
+      "movie_sha256": "2ec04e26df956dfecee00249496ba1e064b1b562d8839cc87bdd8f6975ec0845"
+    }
+  ],
+  "scope": "Silent lowresolution QA comparison only. Numerics/voiceover unchanged; no TTS, producer, render or audio acceptance."
+}

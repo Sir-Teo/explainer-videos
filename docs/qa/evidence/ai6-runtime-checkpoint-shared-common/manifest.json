@@ -1,0 +1,29 @@
+{
+  "payloads": [
+    {
+      "path": "README.md",
+      "bytes": 910,
+      "sha256": "ad5f64bb688afbfcef3386ce3679275a791191f03f2afef5187fe2f7027f11b8"
+    },
+    {
+      "path": "common-drift-stop.json.gz",
+      "bytes": 557,
+      "sha256": "61774fc915b5cf87be61755d60c7d6eceae0f77a0c1eb6691f85e44a667e54be"
+    },
+    {
+      "path": "final-gate-completed-index.json.gz",
+      "bytes": 3113,
+      "sha256": "04c167a5e52017df5c1204b84373fd59f0a0c7725818a280f8d0cf1ebb0ca07f"
+    },
+    {
+      "path": "original-20-pass-index.json.gz",
+      "bytes": 2298,
+      "sha256": "4fd06d3c8235d4131b40efa7f3906ef5382e515ce21902b53fa3e1470f906413"
+    },
+    {
+      "path": "root-common-scope-clearance.json.gz",
+      "bytes": 801,
+      "sha256": "dc3fff50be55edea749109727dc92b8896c865771301f567f00ac135ea35089e"
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "closed_at": "2026-11-01T06:34:44.397557+00:00",
+  "status": "accepted within complete selected-frame plus bounded every-encoded-window scope; no new defects",
+  "cases": [
+    {
+      "selected": 18,
+      "decoded": null,
+      "window_frames": 0,
+      "union_times": 18,
+      "unique": 18,
+      "inherited_unique": 15,
+      "fresh_unique": 3,
+      "case": "en-GaussMarkov",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "actual_new_pages": 1,
+      "tile_width": 640,
+      "native_originals": 2,
+      "result_sha256": "1b736b6ac78b6edab142dc5996a5d8c42b7d71c2c98624f6fd3a203f3266c9bc",
+      "coverage_sha256": "862d98098850af4f1e8765ec0a282569578ae921c292a04d4d41f546001ea96f",
+      "source": {
+        "videos/ai/ai6/s03_gauss.py": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb",
+        "videos/ai/ai6/common.py": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+        "videos/ai/ai6/zh_lines.py": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+        "videos/ai/ai_text_zh.json": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "movie": null
+    },
+    {
+      "selected": 468,
+      "decoded": 2312,
+      "window_frames": 230,
+      "union_times": 606,
+      "unique": 535,
+      "inherited_unique": 308,
+      "fresh_unique": 227,
+      "case": "en-GaussMarkov_motion",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "actual_new_pages": 29,
+      "tile_width": 640,
+      "native_originals": 2,
+      "result_sha256": "fc6d9eae74fc8875a8c621775d7a56ff1283470a033825861ae3621ccb2db2e5",
+      "coverage_sha256": "6081791aa579b9824307f77c5ef6da4e10044883936c57cf46b047470b76d69c",
+      "source": {
+        "videos/ai/ai6/s03_gauss.py": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb",
+        "videos/ai/ai6/common.py": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+        "videos/ai/ai6/zh_lines.py": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+        "videos/ai/ai_text_zh.json": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "movie": {
+        "sha256": "0ff9b278a6db1148a629fe413aa430f8ecdf65d5bf8e32814777010adf125746",
+        "runtime": "/workspace/runtime/ai6-gauss-regression/en-GaussMarkov_motion/frozen/media/videos/480p15/GaussMarkov.mp4",
+        "bytes": 1713785
+      },
+      "window_image_changes": 160,
+      "remaining_unselected_source_frames": 1706,
+      "largest_selected_gap": 1.0
+    },
+    {
+      "selected": 18,
+      "decoded": null,
+      "window_frames": 0,
+      "union_times": 18,
+      "unique": 18,
+      "inherited_unique": 15,
+      "fresh_unique": 3,
+      "case": "zh-GaussMarkov",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "actual_new_pages": 1,
+      "tile_width": 640,
+      "native_originals": 2,
+      "result_sha256": "63fb1beddba9b2d36256d64967b7c84523cb4e8d81871b540412d4d9a6c71ac5",
+      "coverage_sha256": "81cf0999c40d76d229a8b2dfdb79c159cf0e7907e8c485a357edb1ee0b4d99b7",
+      "source": {
+        "videos/ai/ai6/s03_gauss.py": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb",
+        "videos/ai/ai6/common.py": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+        "videos/ai/ai6/zh_lines.py": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+        "videos/ai/ai_text_zh.json": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "movie": null
+    },
+    {
+      "selected": 469,
+      "decoded": 2541,
+      "window_frames": 217,
+      "union_times": 602,
+      "unique": 517,
+      "inherited_unique": 299,
+      "fresh_unique": 218,
+      "case": "zh-GaussMarkov_motion",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "actual_new_pages": 28,
+      "tile_width": 640,
+      "native_originals": 2,
+      "result_sha256": "f4a15464907dd1800a36a9be4518816c4876a688cd7c02c3c4164ad8352aebac",
+      "coverage_sha256": "4e882c2b0b4aeae6593d7f8f3118baf09ab2c4d0c525d921152bdffbef6adfdb",
+      "source": {
+        "videos/ai/ai6/s03_gauss.py": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb",
+        "videos/ai/ai6/common.py": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+        "videos/ai/ai6/zh_lines.py": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+        "videos/ai/ai_text_zh.json": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+        "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+      },
+      "movie": {
+        "sha256": "1d03c82b550acd6847a4797656c7a7cbe3c1b92c688632d81f2a8ed65aae49a3",
+        "runtime": "/workspace/runtime/ai6-gauss-regression/zh-GaussMarkov_motion/frozen/media/videos/480p15/GaussMarkov.mp4",
+        "bytes": 1720942
+      },
+      "window_image_changes": 160,
+      "remaining_unselected_source_frames": 1939,
+      "largest_selected_gap": 1.000000000000007
+    }
+  ],
+  "frozen_source": {
+    "videos/ai/ai6/common.py": {
+      "before": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+      "after": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485"
+    },
+    "videos/ai/ai6/s03_gauss.py": {
+      "before": "9bb4b6fa8e2f0aa152cc9972de5661d979c1edcacfbca480c0bba5ee00619ee8",
+      "after": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb"
+    },
+    "videos/ai/ai6/s17_metrics.py": {
+      "before": "75af4ebbda4db74fd4a0d65b6123a98df47c9b3e724ff06bac55dceeb36a653f",
+      "after": "77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6"
+    }
+  },
+  "global_caption_table_at_capture": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+  "scope": [
+    "Four actual cached-only/silent captures, independent copy2 output preserving old originals. All rawpassed0warnings.",
+    "Fullautomatic selected EN468/ZH469 plus every encoded8repair-window frame EN230/ZH217; union1208timestamps. Exact before-PNG viewing inheritance607unique states plus445fresh actualimages on57chronological640px-tile pages.",
+    "All36settled endpoints covered by30exactinheritance+6fresh actualviews;8aftercritical854x480native followups.",
+    "Silent narration JSON/SRT/WAV bytes, inputhashes, durations/bookmarks and80actuallyusedcaptions perlang identical beforeafter.",
+    "Seven retained append reveals fixed; bar origins now common and color-only quantitative emphasis preserves source geometry."
+  ],
+  "not_claimed": [
+    "Continuous wholeclip perceptual viewing; outsideunion3645encodedframes remain unselected.",
+    "Narration listening/voiced sync,1080p motion orproduction4Kapproval.",
+    "Metrics rendered approval; both actualfutureMetricsmovies/endpoints/nativechecks remain separate root queue.",
+    "WholePart6 orassembledreel approval."
+  ],
+  "proof_paths": {
+    "baseline_source_package": "docs/qa/evidence/ai6-gauss-hbars-source-repair",
+    "runtime": "/workspace/runtime/ai6-gauss-regression"
+  },
+  "no_active_jobs_owned": true
+}

@@ -90,7 +90,7 @@ class Lasso(VoiceoverScene):
         head = label(r"Keep the weights in a budget", font_size=34).to_edge(UP, buff=0.3)
         w_end = constrained(0.9, project_l1)
         assert abs(w_end[1]) < 1e-9 < abs(w_end[0])  # the diamond's corner: w2 exactly zero
-        zero = label(r"$w_2 = 0$ \ exactly", font_size=28, color=LASSO).next_to(R[0].c2p(0.9, 0), DR, buff=0.6)
+        zero = label(r"$w_2 = 0$ \ exactly", font_size=28, color=LASSO).move_to(R[0].c2p(1.6, -1.55))
         with self.voiceover(
             "A penalty is a budget. <bookmark mark='a'/> Here are two weights, and the contour lines of the loss, "
             "whose lowest point is out here. <bookmark mark='b'/> Ridge's budget on the squared length is a circle. "
@@ -109,7 +109,7 @@ class Lasso(VoiceoverScene):
                 self.play(FadeIn(t), FadeIn(region), FadeIn(touch))
             vo.wait_until("c")
             self.play(L[3].animate.set_value(0.9), R[3].animate.set_value(0.9), run_time=4.0)
-            self.play(FadeIn(zero), Indicate(R[5], color=LASSO))
+            self.play(FadeIn(zero), Indicate(R[5], color=LASSO, scale_factor=1.0))
         for P in (L, R):
             P[4].clear_updaters()
             P[5].clear_updaters()
@@ -138,7 +138,7 @@ class Lasso(VoiceoverScene):
             [ax.c2p(-3, -2), ax.c2p(-lam, 0), ax.c2p(lam, 0), ax.c2p(3, 2)])
         zone = Rectangle(width=ax.c2p(lam, 0)[0] - ax.c2p(-lam, 0)[0], height=0.2, stroke_width=0, fill_color=LASSO,
                          fill_opacity=0.25).move_to(ax.c2p(0, 0))
-        zl = label(r"$|z| \le \lambda$: \ exactly $0$", font_size=22, color=LASSO).next_to(zone, DOWN, buff=0.35)
+        zl = label(r"$|z| \le \lambda$: \ exactly $0$", font_size=22, color=LASSO).next_to(zone, DOWN, buff=0.35).shift(RIGHT * 0.9)
         cd = VGroup(label(r"coordinate descent:", font_size=26, color=WHITE),
                     label(r"visit each word in turn; \ set its weight \\ to the soft threshold of what it would \\ "
                           r"explain alone; \ repeat until nothing moves", font_size=22, color=GREY_A))
@@ -156,9 +156,9 @@ class Lasso(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(g), Create(ident))
             vo.wait_until("b")
-            step(1)
+            step(1, transform=False)
             vo.wait_until("c")
-            step(2)
+            step(2, transform=False)
             self.play(Create(st))
             vo.wait_until("d")
             self.play(FadeIn(zone), FadeIn(zl))

@@ -1,0 +1,49 @@
+{
+  "payloads": [
+    {
+      "path": "README.md",
+      "bytes": 934,
+      "sha256": "d8433b342cd10e16f389c371368298897cd5d62f323af84cdf8e809f4426e772"
+    },
+    {
+      "path": "after-ai_text_zh.json.gz",
+      "bytes": 886227,
+      "sha256": "7276faa9505120625908facd80a3c23880e383cc31427f0c708cebc4ecf0f513"
+    },
+    {
+      "path": "ai6-hbars-caption-merge.log.gz",
+      "bytes": 733,
+      "sha256": "5e4e0d914c5eea3bc2ecd23b4e39e52520616542622a9d788941b74f91ecb33d"
+    },
+    {
+      "path": "before-ai_text_zh.json.gz",
+      "bytes": 886178,
+      "sha256": "131fe1407681f7b8dabb1e2876913d60e40587488ed7840d2c1eead611b9621f"
+    },
+    {
+      "path": "caption-add.json.gz",
+      "bytes": 147,
+      "sha256": "842a2502f2ef645a20e8d99d1218b169779984a18be5dc3cfe8d7af93cd29d79"
+    },
+    {
+      "path": "codec-map.json",
+      "bytes": 1407,
+      "sha256": "55cb6f6a5df4b32d225c59bf494b6c2c8d9ae7233b21d81814a34b125191196b"
+    },
+    {
+      "path": "merge_ai6_hbars_captions.py.gz",
+      "bytes": 1483,
+      "sha256": "459616e7256e00424e21e0c94e155c16295af302ad05004e9a0b77b89c2be365"
+    },
+    {
+      "path": "report.json.gz",
+      "bytes": 16713,
+      "sha256": "8e9b74615008b3237367261103dc8826590c50003e1ecad804a4d6f399b82e7a"
+    },
+    {
+      "path": "used-caption-results.json.gz",
+      "bytes": 423889,
+      "sha256": "62b0aa098a48d0b33e347192b5f5cccfdaf003bba1edc84b516f01b89f827b54"
+    }
+  ]
+}

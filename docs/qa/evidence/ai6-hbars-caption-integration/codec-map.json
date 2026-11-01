@@ -1,0 +1,44 @@
+[
+  {
+    "stored": "after-ai_text_zh.json.gz",
+    "original_bytes": 2440019,
+    "original_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "before-ai_text_zh.json.gz",
+    "original_bytes": 2439899,
+    "original_sha256": "0e4bad42c0f78534fd66d1ad52caaff9d975ba1ae0940fe9f86ab9d610e3d47a",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "caption-add.json.gz",
+    "original_bytes": 142,
+    "original_sha256": "f2cf4b77a35e0d3c48b84deaa5fa171968c537188f66bca4b244504d6b55bacd",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "report.json.gz",
+    "original_bytes": 65646,
+    "original_sha256": "0c9a39cbe66e33bf979573f2604f3a19be2939c49dd2587fe713869adbe0898f",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "used-caption-results.json.gz",
+    "original_bytes": 6005537,
+    "original_sha256": "48e32e9ea722c48a846ff7205765f5594e8ed955f00592ea909ac386a076376d",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "merge_ai6_hbars_captions.py.gz",
+    "original_bytes": 3438,
+    "original_sha256": "89d9fb71bbf4b91a36f3ca9d6121f191d5d7dfd26173af28e5e62c57a23d529d",
+    "codec": "gzip-verbatim"
+  },
+  {
+    "stored": "ai6-hbars-caption-merge.log.gz",
+    "original_bytes": 1084,
+    "original_sha256": "9040c07210017fe883f2410fe5f42c796f087ef26c54211978945d8ad57b100d",
+    "codec": "gzip-verbatim"
+  }
+]

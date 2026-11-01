@@ -1,0 +1,191 @@
+{
+  "payloads": [
+    {
+      "path": "README.md",
+      "bytes": 3669,
+      "sha256": "cdf7558898c0224434f87a64c82793d07ae89f6b64466259bc1f5517d544880c"
+    },
+    {
+      "path": "codec-map.json",
+      "bytes": 13735,
+      "sha256": "f00816edcade7aacc50f0e63596a529185c323d31465347be7142152ffca05d7"
+    },
+    {
+      "path": "packaging-receipt.json",
+      "bytes": 1931,
+      "sha256": "cbecc215ad6fe511ae647533abde4b684c9502d70ec990e6d2537141fc77536b"
+    },
+    {
+      "path": "receipts/baseline-en.json.gz",
+      "bytes": 2253,
+      "sha256": "97c28fe86bfbc18f1ac3af28c3e2dcf94456394a6f201e6852dfb1411373af3a"
+    },
+    {
+      "path": "receipts/baseline-en.log.gz",
+      "bytes": 332,
+      "sha256": "6581a1318fd526a6f790cfb0fcad9a32031c92d61f0b9957ba42815cd0850e07"
+    },
+    {
+      "path": "receipts/baseline-zh.json.gz",
+      "bytes": 2220,
+      "sha256": "e5d60efb668a6149090b534893f8156c1720b5bf3414d515780875e0f332bd03"
+    },
+    {
+      "path": "receipts/baseline-zh.log.gz",
+      "bytes": 1510,
+      "sha256": "0b1964e98e1e5a7a3d2bb323e56c322a22b9381cd68a22e8c033453072e4b2ad"
+    },
+    {
+      "path": "receipts/baseline.json.gz",
+      "bytes": 411,
+      "sha256": "f6d11c34e09d7b310dca9d48ad315835428895d1f0bdeb78ad7ff6f1c2324f3c"
+    },
+    {
+      "path": "receipts/candidate-caption-overlay.json.gz",
+      "bytes": 338,
+      "sha256": "b43d1bea6d90b0c249d8e30ce982e085a8ff1c130ceb8edc1631daff456673da"
+    },
+    {
+      "path": "receipts/candidate-en.json.gz",
+      "bytes": 2184,
+      "sha256": "4c26386c7ff508f639897d377427554e593bd58ebf2296c5f555c544787e5f4d"
+    },
+    {
+      "path": "receipts/candidate-en.log.gz",
+      "bytes": 544,
+      "sha256": "404ebcfdcbb5f517fea863dfceed2ead7260ea648cdc99c67979fbe8d669421b"
+    },
+    {
+      "path": "receipts/candidate-zh.json.gz",
+      "bytes": 2187,
+      "sha256": "89ccc3001448f946638d205044a301464263f8f3a3d20793e8610b42a1038829"
+    },
+    {
+      "path": "receipts/candidate-zh.log.gz",
+      "bytes": 585,
+      "sha256": "6e28225d3910d8328e86c845c64f681a556c3962bd463938879d667eddf46cb2"
+    },
+    {
+      "path": "receipts/existing-three-tests.log.gz",
+      "bytes": 237,
+      "sha256": "224c34ad3e2413105481adec07afbbc335b658b39c92c31ac2a094ed9436ac2d"
+    },
+    {
+      "path": "receipts/extended-baseline-en.json.gz",
+      "bytes": 924,
+      "sha256": "2b19c97f1f4ddc532d77f506fbf6c532c744eead673d92b3ebfa1b65e25fda72"
+    },
+    {
+      "path": "receipts/extended-baseline-en.log.gz",
+      "bytes": 697,
+      "sha256": "fdfa389c783147144dbcde8d3e49af135d62ee895a83d97f25bcedb0cdcf12e1"
+    },
+    {
+      "path": "receipts/extended-baseline-zh.json.gz",
+      "bytes": 911,
+      "sha256": "7d271ab5c1b5e761a34b7c5b0968ef4e0055c3522675dbb5480e95f64a40bf0c"
+    },
+    {
+      "path": "receipts/extended-baseline-zh.log.gz",
+      "bytes": 696,
+      "sha256": "0ad1c14b0e8712d2db3da76094b9f57ef32a4c824bfd2ba7715d6b1ec7944c9d"
+    },
+    {
+      "path": "receipts/extended-candidate-en.json.gz",
+      "bytes": 951,
+      "sha256": "a8e69a4444ba38459bf10ca2e6fa720a9d827b6d1e189153eab8c98699a1a421"
+    },
+    {
+      "path": "receipts/extended-candidate-en.log.gz",
+      "bytes": 679,
+      "sha256": "4835f9ef08e7f31def12cd607588bfefcf84727ae3bc1480409f37d8a79f287e"
+    },
+    {
+      "path": "receipts/extended-candidate-zh.json.gz",
+      "bytes": 970,
+      "sha256": "17a64dc2608d1f2e81e37529effdfad7920d7964b790352db353b607c3f7271a"
+    },
+    {
+      "path": "receipts/extended-candidate-zh.log.gz",
+      "bytes": 688,
+      "sha256": "75614ea2ec25fa196a59be9479a6cc3e5547d73744fdf1aa77c914350da66c2e"
+    },
+    {
+      "path": "receipts/extended.py.gz",
+      "bytes": 1563,
+      "sha256": "fc5ecc707b6d15c9f042a004223b3a013cf9b76210c341cda81d509a22444ac7"
+    },
+    {
+      "path": "receipts/geometry-initial.py.gz",
+      "bytes": 2451,
+      "sha256": "302e581ad43fca671929dd0aa01e5ca7ce906ff0b4963dd1f83f873333d24ba3"
+    },
+    {
+      "path": "receipts/geometry.py.gz",
+      "bytes": 2590,
+      "sha256": "d67730b6a7845fb78e4e8cc6dea1a534c959cdce1890cde2f05b6615d5ef8495"
+    },
+    {
+      "path": "receipts/observed-caption-table.json.gz",
+      "bytes": 886178,
+      "sha256": "131fe1407681f7b8dabb1e2876913d60e40587488ed7840d2c1eead611b9621f"
+    },
+    {
+      "path": "receipts/owner-freeze-observed.json.gz",
+      "bytes": 1513,
+      "sha256": "598893c1831ee155852f31442504af5c0e83b261a8ba173564ef23a592c732ed"
+    },
+    {
+      "path": "receipts/report.json.gz",
+      "bytes": 2562,
+      "sha256": "94ab2f991fd4a0cb5266e0cdad35b183d404ed2f16f7d7d4e4a2c0260c5fe170"
+    },
+    {
+      "path": "receipts/report.md.gz",
+      "bytes": 1196,
+      "sha256": "73a33361a5791bc502bae90086e461088739477029587a78e8078acb4d7c8f1b"
+    },
+    {
+      "path": "receipts/source-ast-audit.json.gz",
+      "bytes": 497,
+      "sha256": "7ee0f7733ade4b8b8a9ab046ca3ffc7e09225cc2e9a3fa7ab239668cdab4e582"
+    },
+    {
+      "path": "runtime-original-manifest.json.gz",
+      "bytes": 1911,
+      "sha256": "336c120bf4729ef67d7bbcc10d46624daf942e026e8236ce7521648dc93e5c3d"
+    },
+    {
+      "path": "source-observations/baseline/videos/ai/ai6/common.py.gz",
+      "bytes": 3912,
+      "sha256": "06dbcc43889227f36c9dbf7430ac07b22e8533d798b4078149df3d6249857311"
+    },
+    {
+      "path": "source-observations/baseline/videos/ai/ai6/s03_gauss.py.gz",
+      "bytes": 4963,
+      "sha256": "3141266849d9dee6e3c8684d2a391a955ed38242ab8a8022a7454d127ebe5c10"
+    },
+    {
+      "path": "source-observations/baseline/videos/ai/ai6/s17_metrics.py.gz",
+      "bytes": 4655,
+      "sha256": "1cab1b38d15ce1562eb6643595b25fd6a33a4c9109583f08acd5553bf33a83d8"
+    },
+    {
+      "path": "source-observations/candidate/videos/ai/ai6/common.py.gz",
+      "bytes": 3942,
+      "sha256": "2f0afe61a44325121ef07e1471b31fa35858167ff54f656ca5695fa73acdb789"
+    },
+    {
+      "path": "source-observations/candidate/videos/ai/ai6/s03_gauss.py.gz",
+      "bytes": 4977,
+      "sha256": "f4bb36e5bcd18320beec24449034c519efb2e7da5a8c84d99bed7118feadd1f5"
+    },
+    {
+      "path": "source-observations/candidate/videos/ai/ai6/s17_metrics.py.gz",
+      "bytes": 4666,
+      "sha256": "cd1ce3332d510430e1515d07054686c6f5f1160129e6b9b68ee4fa1098db4a0c"
+    }
+  ],
+  "total_payload_bytes": 966228,
+  "scope": "Independent source and geometry review; rendered and listening gates remain open."
+}

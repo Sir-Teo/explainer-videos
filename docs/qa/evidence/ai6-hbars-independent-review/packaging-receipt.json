@@ -1,0 +1,42 @@
+{
+  "created_utc": "2026-11-01T06:27:42.330049+00:00",
+  "runtime_report_original_sha256": "a406cf2edc6b2362ff92788a9ee5e04f48641a86cde8a7d237d81534ee2fbcb9",
+  "runtime_manifest_original_sha256": "b41d3a37610b0c7614b5fcc210f7ca75272c5e629ec6dd7e5e2b0c8fd7b4f96c",
+  "candidate_current_source_checks": [
+    {
+      "relative_path": "videos/ai/ai6/common.py",
+      "current_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+      "matches_reviewed_candidate": true
+    },
+    {
+      "relative_path": "videos/ai/ai6/s03_gauss.py",
+      "current_sha256": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb",
+      "matches_reviewed_candidate": true
+    },
+    {
+      "relative_path": "videos/ai/ai6/s17_metrics.py",
+      "current_sha256": "77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6",
+      "matches_reviewed_candidate": true
+    }
+  ],
+  "two_chart_input_files_unchanged": [
+    {
+      "path": "/workspace/explainer-videos/.cache/ai6/gaussmarkov.json",
+      "bytes": 3280,
+      "sha256": "c1b29607cecdf01b1fdf98d86d67a7504b773208e4a9acc2e52410843456c791",
+      "mtime_ns": 1793509486209432961
+    },
+    {
+      "path": "/workspace/explainer-videos/.cache/ai6/calibration.json",
+      "bytes": 13816,
+      "sha256": "cb6dcbdb20c670fab73c274fd8d9aca25cd6db48e22934d3779d82b8ae92ea99",
+      "mtime_ns": 1793509529627862681
+    }
+  ],
+  "current_repository_global_table_sha256_observation": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+  "review_used_frozen_table_sha256": "0e4bad42c0f78534fd66d1ad52caaff9d975ba1ae0940fe9f86ab9d610e3d47a",
+  "current_table_is_not_claimed_equal_to_private_review_table": true,
+  "raw_numeric_payloads_copied": false,
+  "geometry_media_copied": false,
+  "fullsuite_scope": "Three existing tests independently passed; older601 suite baseline-only. No assertion about later root suite/caption pipeline."
+}

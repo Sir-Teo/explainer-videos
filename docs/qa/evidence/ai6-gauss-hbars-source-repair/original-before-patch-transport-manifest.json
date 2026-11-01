@@ -1,0 +1,311 @@
+{
+  "files": [
+    {
+      "path": "artifact-map.json",
+      "sha256": "949a806e5fdeb733eeae45a6181be1a0f5b5a93423f0a355ef30ac064151a093",
+      "bytes": 21122
+    },
+    {
+      "path": "README.md",
+      "sha256": "854834c6e4d385241f9aaec0821b4889f74e46f3ccaf26a08fb4cd87abf4485f",
+      "bytes": 1942
+    },
+    {
+      "path": "review.json",
+      "sha256": "8a87d6787cf6157969662c5a37c64a2889dd4c035da74a89542f89c0d497bcd7",
+      "bytes": 3234
+    },
+    {
+      "path": "candidate/scene-helper.patch",
+      "sha256": "f0c43f69f9fe8c594a5d15cf9baae1eb84b22b6d0418b1090bd6f4fd1a107f17",
+      "bytes": 2961
+    },
+    {
+      "path": "candidate/after-geometry-en.json",
+      "sha256": "e34e276426afd54cd1c37a44bf1e6bd22c9793ac40850b5960ba501f18e8d8fe",
+      "bytes": 7670
+    },
+    {
+      "path": "candidate/before-geometry-zh.json",
+      "sha256": "2e5ee3f5566023c3b65812c0021c622d9f88a076c392f5ba5cfe4543175826a8",
+      "bytes": 7715
+    },
+    {
+      "path": "candidate/before-geometry-en.json",
+      "sha256": "9de9b5aff1f84f6317b5743f31aa5701c3a5af2eac37232225cf560fb59fa507",
+      "bytes": 7659
+    },
+    {
+      "path": "candidate/test_ai6_hbars_geometry.py",
+      "sha256": "f0b5d78b2cf042d4b61e0e6a022092d61163c4f807dacfc316dbbc8865c5950e",
+      "bytes": 3445
+    },
+    {
+      "path": "candidate/test.log",
+      "sha256": "e44b8756b78cc1f79666bc50c3340ab933d8c3c9b050ad186a776ad1e8c4c1f7",
+      "bytes": 664
+    },
+    {
+      "path": "candidate/after-geometry-zh.json",
+      "sha256": "3e812f7b13fbc40dd5678fc97b8a2d6014194bf1471541061df59e1f96dadfc1",
+      "bytes": 7713
+    },
+    {
+      "path": "candidate/geometry.py",
+      "sha256": "c8e1c2f76de0ea162f45ba25a28881559709fe740beadbec3d74140b7407296c",
+      "bytes": 4278
+    },
+    {
+      "path": "candidate/freeze.json",
+      "sha256": "83969827985e5c7af4064fb045225936f0fda175723b57f3200f1fe0ad309cea",
+      "bytes": 4892
+    },
+    {
+      "path": "candidate/caption-overlay.json",
+      "sha256": "d8c07a0fbd517a790ece206d8f6ae286b279db7adb040168401efeaceb0511e5",
+      "bytes": 451
+    },
+    {
+      "path": "before/videos/ai/ai6/common.py.gz",
+      "sha256": "364b12b80845ed5da25be86f42f0762d39fe73b0e067b96aa899752e47ad7069",
+      "bytes": 3922
+    },
+    {
+      "path": "before/videos/ai/ai6/s03_gauss.py.gz",
+      "sha256": "cc82247127fe9bec6214e06d2302ce9567739574eb7baeb830ea8f155ea2ba7f",
+      "bytes": 4976
+    },
+    {
+      "path": "before/videos/ai/ai6/s17_metrics.py.gz",
+      "sha256": "3ade060077c49db21182fc97b9bb1cb643d972356f05f1b8fdfb58e3f215b090",
+      "bytes": 4670
+    },
+    {
+      "path": "baseline/en-GaussMarkov_motion/complete.json.gz",
+      "sha256": "bfafac3bf2d50e6ef917838e61ecbd8d2ba122aa87f5023fa7411477ca9f66d6",
+      "bytes": 2466
+    },
+    {
+      "path": "baseline/en-GaussMarkov_motion/start.json.gz",
+      "sha256": "37da68bc8aa52a3807330b12bce03b2f3611058fd3acb8be467af516a2429e83",
+      "bytes": 434
+    },
+    {
+      "path": "baseline/en-GaussMarkov_motion/plan.json.gz",
+      "sha256": "e769335e4ceac22c72cd02783fbdc1a3baa339585676a66a8f716e0bc7a113f7",
+      "bytes": 53141
+    },
+    {
+      "path": "baseline/en-GaussMarkov_motion/views.json.gz",
+      "sha256": "763d46ec721f16ed34fec1657c11c6520856c757efabee6c6c30ac851cc4ebca",
+      "bytes": 4343
+    },
+    {
+      "path": "baseline/en-GaussMarkov/complete.json.gz",
+      "sha256": "66171b6c7d20ea117efaaa7f5360b33e6fe0e066f8332627e5fc15ad8134705f",
+      "bytes": 2353
+    },
+    {
+      "path": "baseline/en-GaussMarkov/start.json.gz",
+      "sha256": "fd737a9823a4007dc031f4b14eb7381143e296aa55cd8248847a3922ee47bb50",
+      "bytes": 434
+    },
+    {
+      "path": "baseline/en-GaussMarkov/plan.json.gz",
+      "sha256": "9db4840fc9cc58175a64f4d8ff3337aa03d80632ad20903445c1f9cc4fcb6dd3",
+      "bytes": 1589
+    },
+    {
+      "path": "baseline/en-GaussMarkov/views.json.gz",
+      "sha256": "3e37bd97f6152200023ba63854799cd8de252b63db542589333f825ef570847b",
+      "bytes": 1120
+    },
+    {
+      "path": "baseline/zh-GaussMarkov_motion/complete.json.gz",
+      "sha256": "34ecc93009e6bd1f5c6767bc264dc08340d7832d8e1252b75e81aae3a5a2c30b",
+      "bytes": 2474
+    },
+    {
+      "path": "baseline/zh-GaussMarkov_motion/start.json.gz",
+      "sha256": "12601b42a239a0788835af4c4d0765fa363227b407368aa3a48cc1edbb202a13",
+      "bytes": 434
+    },
+    {
+      "path": "baseline/zh-GaussMarkov_motion/plan.json.gz",
+      "sha256": "da776f5fc8f8f5a4f3880d1e3671b239908c099e8ad7eba8d4f7cf6c0bfe1040",
+      "bytes": 53475
+    },
+    {
+      "path": "baseline/zh-GaussMarkov_motion/views.json.gz",
+      "sha256": "cbedb7851c9ff12231b12cd68d3f26817482b37c46de9369a932aed1f1629fef",
+      "bytes": 4390
+    },
+    {
+      "path": "baseline/zh-GaussMarkov/complete.json.gz",
+      "sha256": "393885b9743ecd833886bd19417c27413daf18b3936ac8e4d9c0ea356788c7b2",
+      "bytes": 2215
+    },
+    {
+      "path": "baseline/zh-GaussMarkov/start.json.gz",
+      "sha256": "c0b8023c3f681e3812076a78e8d0eff93a1f75ce6b0f74f85b67433acc0a4e21",
+      "bytes": 433
+    },
+    {
+      "path": "baseline/zh-GaussMarkov/plan.json.gz",
+      "sha256": "25ed39169380d6d8c943cb645f005f7b2e3e8262819a94fdaf1632a826d3e94c",
+      "bytes": 1607
+    },
+    {
+      "path": "baseline/zh-GaussMarkov/views.json.gz",
+      "sha256": "23e22d70e0bde3ed51b8f1e233509f4fe64667718ce343d3340c4aae48a44271",
+      "bytes": 833
+    },
+    {
+      "path": "baseline/en-GaussMarkov_motion/frozen/result.json.gz",
+      "sha256": "3619886bef7a225600c6317f1149c209a26cc3ba52e3ed6b0374e81c6208f446",
+      "bytes": 11176
+    },
+    {
+      "path": "baseline/en-GaussMarkov_motion/frozen/text.jsonl.gz",
+      "sha256": "6fd689076f0b58a8e61e8691a8fd3cd3c4f7217174163cbf8a55d24d2aa6c47c",
+      "bytes": 31
+    },
+    {
+      "path": "baseline/en-GaussMarkov_motion/reveals/viewed.json.gz",
+      "sha256": "da6de4400033dfb87444f77787fb7ce9d2f60e636a6a9e45300fab948c085c3d",
+      "bytes": 471
+    },
+    {
+      "path": "baseline/en-GaussMarkov_motion/reveals/plan.json.gz",
+      "sha256": "268d0ad66cd3c54fb449656fc445159de0bd22c7c24e2b70a774d79fe123e62d",
+      "bytes": 13605
+    },
+    {
+      "path": "baseline/en-GaussMarkov_motion/audit/result.json.gz",
+      "sha256": "9a1902e524876723746718181f3dc41dcb1de1306e14304e8f015da0682b1306",
+      "bytes": 33617
+    },
+    {
+      "path": "baseline/en-GaussMarkov/frozen/result.json.gz",
+      "sha256": "44c727cef7fc0a75731002ba2915fabd65dada637510483117a332deb0b3acc5",
+      "bytes": 11380
+    },
+    {
+      "path": "baseline/en-GaussMarkov/frozen/text.jsonl.gz",
+      "sha256": "55d2c5e2467eebbf40d2b65f92127263ff5ffd46f7fcc1849bc98432e6068f89",
+      "bytes": 1335
+    },
+    {
+      "path": "baseline/zh-GaussMarkov_motion/frozen/result.json.gz",
+      "sha256": "19a867b89cae796300ee697c32efa04a9890228d8e54576b927401febe4d0ea9",
+      "bytes": 18247
+    },
+    {
+      "path": "baseline/zh-GaussMarkov_motion/frozen/text.jsonl.gz",
+      "sha256": "6fd689076f0b58a8e61e8691a8fd3cd3c4f7217174163cbf8a55d24d2aa6c47c",
+      "bytes": 31
+    },
+    {
+      "path": "baseline/zh-GaussMarkov_motion/reveals/viewed.json.gz",
+      "sha256": "b1218e5a3e0870bb94b989e9c1137387f2e5f71edbcfd74e550d440afc5fff32",
+      "bytes": 383
+    },
+    {
+      "path": "baseline/zh-GaussMarkov_motion/reveals/plan.json.gz",
+      "sha256": "f278023885ad773e7d67b9ec79b933ce94ba6edc2ac95569c086d92789985c0b",
+      "bytes": 12848
+    },
+    {
+      "path": "baseline/zh-GaussMarkov_motion/audit/result.json.gz",
+      "sha256": "232a72ed895d0ff443eae6d2605c7702cca4eda5b05367280dff323992358614",
+      "bytes": 33996
+    },
+    {
+      "path": "baseline/zh-GaussMarkov/frozen/result.json.gz",
+      "sha256": "547a6d70c179babd82e5a7e3de671581f2ae07747368cb40759c92e1b6ed0a5c",
+      "bytes": 18340
+    },
+    {
+      "path": "baseline/zh-GaussMarkov/frozen/text.jsonl.gz",
+      "sha256": "ae58f85c10d8016762cc93275584dc72bb87eea6251c4f815039ecb8150fb5e7",
+      "bytes": 1451
+    },
+    {
+      "path": "after/videos/ai/ai6/common.py.gz",
+      "sha256": "91a524701614ed0858c8de9960e96f21a9fb0057e089fb1a65660c55b981939a",
+      "bytes": 3952
+    },
+    {
+      "path": "after/videos/ai/ai6/s03_gauss.py.gz",
+      "sha256": "41aab85c867de557c1f7e2991317ebef28a52d9998105edd007cf3eba7b6a848",
+      "bytes": 4990
+    },
+    {
+      "path": "after/videos/ai/ai6/s17_metrics.py.gz",
+      "sha256": "36787be8951f2e27b502690a6b458feaaa2078801361bd91d9ea1088501798ce",
+      "bytes": 4681
+    },
+    {
+      "path": "images/en-GaussMarkov_motion/native-0001390_000092.666s.png",
+      "sha256": "58243e9e6b0ce40ca07b9f224702d1e65601a983ef0bd8a9ae13c42ac84913b9",
+      "bytes": 78369
+    },
+    {
+      "path": "images/en-GaussMarkov_motion/native-0001859_000123.933s.png",
+      "sha256": "3cb82bc768ad39c9f36e0a1761f6ac12b3efce14f9a81681b30e1663c0621d17",
+      "bytes": 59410
+    },
+    {
+      "path": "images/en-GaussMarkov_motion/sheet-007.png",
+      "sha256": "d16363324df04ce96b93677f52c8d3bc6b8f77ed2df2bfc602621c3e4c586989",
+      "bytes": 231175
+    },
+    {
+      "path": "images/en-GaussMarkov/017_00146.1s.png",
+      "sha256": "e2202bc955107b1ff38000040c9ce1dc1aa85243ae88f9d370ef0718f42df08c",
+      "bytes": 70014
+    },
+    {
+      "path": "images/en-GaussMarkov/005_00047.5s.png",
+      "sha256": "54d59e1bbff50188ced87f645d7e7a389f6738b7cde1f60d03be195baa01cd3c",
+      "bytes": 70639
+    },
+    {
+      "path": "images/en-GaussMarkov/010_00088.7s.png",
+      "sha256": "fa6d0c2095945106d88c8164300a07a392f4e1e9b994a52d5921fbd0487ddd65",
+      "bytes": 44438
+    },
+    {
+      "path": "images/zh-GaussMarkov_motion/native-0001507_000100.466s.png",
+      "sha256": "1e6f620a7c771f7b39195bc5179dc426b82cf083d78a1da3627565497f219bc7",
+      "bytes": 79822
+    },
+    {
+      "path": "images/zh-GaussMarkov_motion/native-0002070_000138.000s.png",
+      "sha256": "ac1abb76330b0d4c650c05b9f74d053a63938c31a8c7ce766c5c60af2496998c",
+      "bytes": 63200
+    },
+    {
+      "path": "images/zh-GaussMarkov_motion/sheet-042.png",
+      "sha256": "ad91aa8767c08b8b95120ffa632315df2d8cc1c0a0ca9e0592a92cd183bf0e48",
+      "bytes": 310755
+    },
+    {
+      "path": "images/zh-GaussMarkov/005_00052.9s.png",
+      "sha256": "6a17d9a91edc1f676a3feb8497343836b9a79c8122087b32ba461f683a1faa28",
+      "bytes": 68818
+    },
+    {
+      "path": "images/zh-GaussMarkov/017_00161.7s.png",
+      "sha256": "e3d0d619114309439e671d0fa448f186517e28dbeadba4530954b8ef61370aa8",
+      "bytes": 73988
+    },
+    {
+      "path": "images/zh-GaussMarkov/010_00096.8s.png",
+      "sha256": "57f4304e5c488029d44c3e18017b5adac948bb0b2db487017df4b18bfd7cad0c",
+      "bytes": 45707
+    }
+  ],
+  "count": 61,
+  "bytes": 1585924
+}

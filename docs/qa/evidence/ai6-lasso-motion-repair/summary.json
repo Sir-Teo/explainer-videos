@@ -1,0 +1,39 @@
+{
+  "scope": "Part6 Lasso full selected-time baseline EN/ZH actual native image review, authorized local source repair and isolated geometry checks; fresh actual visual regression pending.",
+  "source_before_sha256": "94b3bd567f9bfed36c7d3da5e9054704d5d9e860491883a801c7175786c3f683",
+  "candidate_sha256": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9",
+  "cases": {
+    "en": {
+      "movie": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/05-Lasso/en/motion/completed/media/videos/480p15/Lasso.mp4",
+      "movie_sha256": "d9f33e685138c910dce3910a7dafe6678f43e8ebb2f5268bcf09d30de955d0e1",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 2479,
+      "selected_times": 475,
+      "unselected_frames": 2004,
+      "direct_unique_images": 413,
+      "actual_pages": 52,
+      "exact_duplicate_times": 62,
+      "individual_native_followups": 5,
+      "max_selected_gap": 1.0,
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "review_sha256": "cd7807983c38dccb70cdded111bb141f5a7fcbc57686183a0590e022595f3d12"
+    },
+    "zh": {
+      "movie": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/05-Lasso/zh/motion/completed/media/videos/480p15/Lasso.mp4",
+      "movie_sha256": "b6f8ce966099ba4e54ae015efff98eb3f997ad9c09c509f22d9442ea29d9ac82",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 2706,
+      "selected_times": 512,
+      "unselected_frames": 2194,
+      "direct_unique_images": 429,
+      "actual_pages": 54,
+      "exact_duplicate_times": 83,
+      "individual_native_followups": 5,
+      "max_selected_gap": 1.0,
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "review_sha256": "9cc8881e7b761c42f71f98e5c77bd1217b65fb15e50ff202ca483b834034a648"
+    }
+  }
+}

@@ -1,0 +1,408 @@
+[
+  {
+    "bundle": "candidate/freeze.json",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/freeze.json",
+    "original_sha256": "83969827985e5c7af4064fb045225936f0fda175723b57f3200f1fe0ad309cea",
+    "bundle_sha256": "83969827985e5c7af4064fb045225936f0fda175723b57f3200f1fe0ad309cea",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "candidate/scene-helper.patch",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/scene-helper.patch",
+    "original_sha256": "f0c43f69f9fe8c594a5d15cf9baae1eb84b22b6d0418b1090bd6f4fd1a107f17",
+    "bundle_sha256": "f0c43f69f9fe8c594a5d15cf9baae1eb84b22b6d0418b1090bd6f4fd1a107f17",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "candidate/geometry.py",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/geometry.py",
+    "original_sha256": "c8e1c2f76de0ea162f45ba25a28881559709fe740beadbec3d74140b7407296c",
+    "bundle_sha256": "c8e1c2f76de0ea162f45ba25a28881559709fe740beadbec3d74140b7407296c",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "candidate/before-geometry-en.json",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/before-geometry-en.json",
+    "original_sha256": "9de9b5aff1f84f6317b5743f31aa5701c3a5af2eac37232225cf560fb59fa507",
+    "bundle_sha256": "9de9b5aff1f84f6317b5743f31aa5701c3a5af2eac37232225cf560fb59fa507",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "candidate/before-geometry-zh.json",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/before-geometry-zh.json",
+    "original_sha256": "2e5ee3f5566023c3b65812c0021c622d9f88a076c392f5ba5cfe4543175826a8",
+    "bundle_sha256": "2e5ee3f5566023c3b65812c0021c622d9f88a076c392f5ba5cfe4543175826a8",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "candidate/after-geometry-en.json",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/after-geometry-en.json",
+    "original_sha256": "e34e276426afd54cd1c37a44bf1e6bd22c9793ac40850b5960ba501f18e8d8fe",
+    "bundle_sha256": "e34e276426afd54cd1c37a44bf1e6bd22c9793ac40850b5960ba501f18e8d8fe",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "candidate/after-geometry-zh.json",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/after-geometry-zh.json",
+    "original_sha256": "3e812f7b13fbc40dd5678fc97b8a2d6014194bf1471541061df59e1f96dadfc1",
+    "bundle_sha256": "3e812f7b13fbc40dd5678fc97b8a2d6014194bf1471541061df59e1f96dadfc1",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "candidate/caption-overlay.json",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/caption-overlay.json",
+    "original_sha256": "d8c07a0fbd517a790ece206d8f6ae286b279db7adb040168401efeaceb0511e5",
+    "bundle_sha256": "d8c07a0fbd517a790ece206d8f6ae286b279db7adb040168401efeaceb0511e5",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "candidate/test.log",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/test.log",
+    "original_sha256": "e44b8756b78cc1f79666bc50c3340ab933d8c3c9b050ad186a776ad1e8c4c1f7",
+    "bundle_sha256": "e44b8756b78cc1f79666bc50c3340ab933d8c3c9b050ad186a776ad1e8c4c1f7",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "before/videos/ai/ai6/s03_gauss.py.gz",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/before/videos/ai/ai6/s03_gauss.py",
+    "original_sha256": "9bb4b6fa8e2f0aa152cc9972de5661d979c1edcacfbca480c0bba5ee00619ee8",
+    "bundle_sha256": "cc82247127fe9bec6214e06d2302ce9567739574eb7baeb830ea8f155ea2ba7f",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "before/videos/ai/ai6/common.py.gz",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/before/videos/ai/ai6/common.py",
+    "original_sha256": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+    "bundle_sha256": "364b12b80845ed5da25be86f42f0762d39fe73b0e067b96aa899752e47ad7069",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "before/videos/ai/ai6/s17_metrics.py.gz",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/before/videos/ai/ai6/s17_metrics.py",
+    "original_sha256": "75af4ebbda4db74fd4a0d65b6123a98df47c9b3e724ff06bac55dceeb36a653f",
+    "bundle_sha256": "3ade060077c49db21182fc97b9bb1cb643d972356f05f1b8fdfb58e3f215b090",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "after/videos/ai/ai6/s03_gauss.py.gz",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/after/videos/ai/ai6/s03_gauss.py",
+    "original_sha256": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb",
+    "bundle_sha256": "41aab85c867de557c1f7e2991317ebef28a52d9998105edd007cf3eba7b6a848",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "after/videos/ai/ai6/common.py.gz",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/after/videos/ai/ai6/common.py",
+    "original_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+    "bundle_sha256": "91a524701614ed0858c8de9960e96f21a9fb0057e089fb1a65660c55b981939a",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "after/videos/ai/ai6/s17_metrics.py.gz",
+    "runtime": "/workspace/runtime/ai6-gauss-hbars-repair/after/videos/ai/ai6/s17_metrics.py",
+    "original_sha256": "77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6",
+    "bundle_sha256": "36787be8951f2e27b502690a6b458feaaa2078801361bd91d9ea1088501798ce",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "candidate/test_ai6_hbars_geometry.py",
+    "runtime": "/workspace/explainer-videos/tests/test_ai6_hbars_geometry.py",
+    "original_sha256": "f0b5d78b2cf042d4b61e0e6a022092d61163c4f807dacfc316dbbc8865c5950e",
+    "bundle_sha256": "f0b5d78b2cf042d4b61e0e6a022092d61163c4f807dacfc316dbbc8865c5950e",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov/start.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov/start.json",
+    "original_sha256": "bd2ad9943a611b05e591e56b8a66db3631251e1b765d27c3ed8379895c8cc3d5",
+    "bundle_sha256": "fd737a9823a4007dc031f4b14eb7381143e296aa55cd8248847a3922ee47bb50",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov/complete.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov/complete.json",
+    "original_sha256": "545e9c34b22abf599ab2c9c573c1d84993e2f855148b60cc4b1824b7519a77c4",
+    "bundle_sha256": "66171b6c7d20ea117efaaa7f5360b33e6fe0e066f8332627e5fc15ad8134705f",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov/plan.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov/plan.json",
+    "original_sha256": "50c1acb60bbfa08657f907ddac1ad28c33f4b32cee0b5404319ca7474061d7f7",
+    "bundle_sha256": "9db4840fc9cc58175a64f4d8ff3337aa03d80632ad20903445c1f9cc4fcb6dd3",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov/views.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov/views.json",
+    "original_sha256": "5fc45192da7e22eb1007eda63146147d02c60b3dd4d32edcb635ddff8c8f0447",
+    "bundle_sha256": "3e37bd97f6152200023ba63854799cd8de252b63db542589333f825ef570847b",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov/frozen/result.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov/frozen/result.json",
+    "original_sha256": "100f7b6e4f497a146e1f6110125fc599e7cc85efccb768d5ce33b76fab60b75b",
+    "bundle_sha256": "44c727cef7fc0a75731002ba2915fabd65dada637510483117a332deb0b3acc5",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov/frozen/text.jsonl.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov/frozen/text.jsonl",
+    "original_sha256": "0e85754de39d47b782e49a03e09cb71f3cd12a7f74d607413ad33b1d3959a19e",
+    "bundle_sha256": "55d2c5e2467eebbf40d2b65f92127263ff5ffd46f7fcc1849bc98432e6068f89",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "images/en-GaussMarkov/005_00047.5s.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov/frozen/005_00047.5s.png",
+    "original_sha256": "54d59e1bbff50188ced87f645d7e7a389f6738b7cde1f60d03be195baa01cd3c",
+    "bundle_sha256": "54d59e1bbff50188ced87f645d7e7a389f6738b7cde1f60d03be195baa01cd3c",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "images/en-GaussMarkov/010_00088.7s.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov/frozen/010_00088.7s.png",
+    "original_sha256": "fa6d0c2095945106d88c8164300a07a392f4e1e9b994a52d5921fbd0487ddd65",
+    "bundle_sha256": "fa6d0c2095945106d88c8164300a07a392f4e1e9b994a52d5921fbd0487ddd65",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "images/en-GaussMarkov/017_00146.1s.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov/frozen/017_00146.1s.png",
+    "original_sha256": "e2202bc955107b1ff38000040c9ce1dc1aa85243ae88f9d370ef0718f42df08c",
+    "bundle_sha256": "e2202bc955107b1ff38000040c9ce1dc1aa85243ae88f9d370ef0718f42df08c",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov_motion/start.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/start.json",
+    "original_sha256": "665f408fd4e1f3c1752609a2639a95ca839d2fddb5ef8896aaa99380af9792dc",
+    "bundle_sha256": "37da68bc8aa52a3807330b12bce03b2f3611058fd3acb8be467af516a2429e83",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov_motion/complete.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/complete.json",
+    "original_sha256": "ead9d036839b559719bfad1ac0c6745f5d1984fd6ab0d3f94795963e6e4327eb",
+    "bundle_sha256": "bfafac3bf2d50e6ef917838e61ecbd8d2ba122aa87f5023fa7411477ca9f66d6",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov_motion/plan.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/plan.json",
+    "original_sha256": "8b70120a8424dfd09f80dc6df0f3f87d59f0221026beae59a30a81d5b912e43b",
+    "bundle_sha256": "e769335e4ceac22c72cd02783fbdc1a3baa339585676a66a8f716e0bc7a113f7",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov_motion/views.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/views.json",
+    "original_sha256": "e400278fffe6ca401833b962c9a8a92b2a15125a7d820858fc004b85ed1a61f6",
+    "bundle_sha256": "763d46ec721f16ed34fec1657c11c6520856c757efabee6c6c30ac851cc4ebca",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov_motion/frozen/result.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/frozen/result.json",
+    "original_sha256": "b34f353856914af9168ad8d0387e2462dea151091ebabcf9284996507d32232c",
+    "bundle_sha256": "3619886bef7a225600c6317f1149c209a26cc3ba52e3ed6b0374e81c6208f446",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov_motion/frozen/text.jsonl.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/frozen/text.jsonl",
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bundle_sha256": "6fd689076f0b58a8e61e8691a8fd3cd3c4f7217174163cbf8a55d24d2aa6c47c",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov_motion/audit/result.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/audit/result.json",
+    "original_sha256": "ef14c4e90a1ab6a18595fbe15a6179860cfb376ee1652301b066961d73104340",
+    "bundle_sha256": "9a1902e524876723746718181f3dc41dcb1de1306e14304e8f015da0682b1306",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov_motion/reveals/plan.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/reveals/plan.json",
+    "original_sha256": "fbab51c61850f0c1aa5b3128b4eba094c63e4c83dff9c0a2996f2f47ecf80671",
+    "bundle_sha256": "268d0ad66cd3c54fb449656fc445159de0bd22c7c24e2b70a774d79fe123e62d",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/en-GaussMarkov_motion/reveals/viewed.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/reveals/viewed.json",
+    "original_sha256": "6a7a5751723af372c62908e0a0cde3726f64b07ed3a9572ff0c02e992e39587b",
+    "bundle_sha256": "da6de4400033dfb87444f77787fb7ce9d2f60e636a6a9e45300fab948c085c3d",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "images/en-GaussMarkov_motion/sheet-007.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/unique/sheet-007.png",
+    "original_sha256": "d16363324df04ce96b93677f52c8d3bc6b8f77ed2df2bfc602621c3e4c586989",
+    "bundle_sha256": "d16363324df04ce96b93677f52c8d3bc6b8f77ed2df2bfc602621c3e4c586989",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "images/en-GaussMarkov_motion/native-0001390_000092.666s.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/reveals/frames/0001390_000092.666s.png",
+    "original_sha256": "58243e9e6b0ce40ca07b9f224702d1e65601a983ef0bd8a9ae13c42ac84913b9",
+    "bundle_sha256": "58243e9e6b0ce40ca07b9f224702d1e65601a983ef0bd8a9ae13c42ac84913b9",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "images/en-GaussMarkov_motion/native-0001859_000123.933s.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/reveals/frames/0001859_000123.933s.png",
+    "original_sha256": "3cb82bc768ad39c9f36e0a1761f6ac12b3efce14f9a81681b30e1663c0621d17",
+    "bundle_sha256": "3cb82bc768ad39c9f36e0a1761f6ac12b3efce14f9a81681b30e1663c0621d17",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov/start.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov/start.json",
+    "original_sha256": "16fa973d22d8eb601807274d6c8224df644a61646b7c8d831062ac7d38166ea0",
+    "bundle_sha256": "c0b8023c3f681e3812076a78e8d0eff93a1f75ce6b0f74f85b67433acc0a4e21",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov/complete.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov/complete.json",
+    "original_sha256": "3017db264da19cc9b6bc3c2ca17912a6b1dd02f10c2f62a35cd6478530d69daf",
+    "bundle_sha256": "393885b9743ecd833886bd19417c27413daf18b3936ac8e4d9c0ea356788c7b2",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov/plan.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov/plan.json",
+    "original_sha256": "80f649a6bdfc65b957b46f59ce7ae53e70ce564bb6c1f8464dcb34b9b4eed2ee",
+    "bundle_sha256": "25ed39169380d6d8c943cb645f005f7b2e3e8262819a94fdaf1632a826d3e94c",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov/views.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov/views.json",
+    "original_sha256": "84b727b517656a15a31935a3f28a8bd8a9adb7851b8cf455861d4be3c79fb866",
+    "bundle_sha256": "23e22d70e0bde3ed51b8f1e233509f4fe64667718ce343d3340c4aae48a44271",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov/frozen/result.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov/frozen/result.json",
+    "original_sha256": "6d5fb15149307a323f4d20199b6c70807a01883cde6cf99cb231230c65fcb8c0",
+    "bundle_sha256": "547a6d70c179babd82e5a7e3de671581f2ae07747368cb40759c92e1b6ed0a5c",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov/frozen/text.jsonl.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov/frozen/text.jsonl",
+    "original_sha256": "31084358ef91ff5badd0f0c778374ed08ffeccad36a1d0d5b1a40f7128088984",
+    "bundle_sha256": "ae58f85c10d8016762cc93275584dc72bb87eea6251c4f815039ecb8150fb5e7",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "images/zh-GaussMarkov/005_00052.9s.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov/frozen/005_00052.9s.png",
+    "original_sha256": "6a17d9a91edc1f676a3feb8497343836b9a79c8122087b32ba461f683a1faa28",
+    "bundle_sha256": "6a17d9a91edc1f676a3feb8497343836b9a79c8122087b32ba461f683a1faa28",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "images/zh-GaussMarkov/010_00096.8s.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov/frozen/010_00096.8s.png",
+    "original_sha256": "57f4304e5c488029d44c3e18017b5adac948bb0b2db487017df4b18bfd7cad0c",
+    "bundle_sha256": "57f4304e5c488029d44c3e18017b5adac948bb0b2db487017df4b18bfd7cad0c",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "images/zh-GaussMarkov/017_00161.7s.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov/frozen/017_00161.7s.png",
+    "original_sha256": "e3d0d619114309439e671d0fa448f186517e28dbeadba4530954b8ef61370aa8",
+    "bundle_sha256": "e3d0d619114309439e671d0fa448f186517e28dbeadba4530954b8ef61370aa8",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov_motion/start.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/start.json",
+    "original_sha256": "cbe8bb5663982497dd90a22f69c2f8fcff3097cef5d57cad4d24a0aa408ebc7d",
+    "bundle_sha256": "12601b42a239a0788835af4c4d0765fa363227b407368aa3a48cc1edbb202a13",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov_motion/complete.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/complete.json",
+    "original_sha256": "3f0b0943bc7bbfc983c8ae739aefbf2507d284413fcb7b80ee5f483db4f81820",
+    "bundle_sha256": "34ecc93009e6bd1f5c6767bc264dc08340d7832d8e1252b75e81aae3a5a2c30b",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov_motion/plan.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/plan.json",
+    "original_sha256": "5723d21822447a60be411f26b816a3a8dfee508e65ad534625d6e3eb82920a92",
+    "bundle_sha256": "da776f5fc8f8f5a4f3880d1e3671b239908c099e8ad7eba8d4f7cf6c0bfe1040",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov_motion/views.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/views.json",
+    "original_sha256": "66d722d0096fe556d2d505f136e20049700d53c1bfe40d7f516e84c96e9a1407",
+    "bundle_sha256": "cbedb7851c9ff12231b12cd68d3f26817482b37c46de9369a932aed1f1629fef",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov_motion/frozen/result.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/frozen/result.json",
+    "original_sha256": "857e52b8ede7ed5a0c3ffb7fc24853be55bf500c1266ccdf9546d8c2d6053bdd",
+    "bundle_sha256": "19a867b89cae796300ee697c32efa04a9890228d8e54576b927401febe4d0ea9",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov_motion/frozen/text.jsonl.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/frozen/text.jsonl",
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bundle_sha256": "6fd689076f0b58a8e61e8691a8fd3cd3c4f7217174163cbf8a55d24d2aa6c47c",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov_motion/audit/result.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/audit/result.json",
+    "original_sha256": "18cbe48c58ec8b70a4b7a97617a69942970ff175c385604d9b050a0d8fdb7201",
+    "bundle_sha256": "232a72ed895d0ff443eae6d2605c7702cca4eda5b05367280dff323992358614",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov_motion/reveals/plan.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/reveals/plan.json",
+    "original_sha256": "3cc5ed19871dbe9c52c244267a86cf3b6e1d5456b5967f5cdad50418b85c0cae",
+    "bundle_sha256": "f278023885ad773e7d67b9ec79b933ce94ba6edc2ac95569c086d92789985c0b",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "baseline/zh-GaussMarkov_motion/reveals/viewed.json.gz",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/reveals/viewed.json",
+    "original_sha256": "8a04ba10638d9df85942c02eaa89d3da41e0e21c6cb65c8c7075ae8b4d389b6f",
+    "bundle_sha256": "b1218e5a3e0870bb94b989e9c1137387f2e5f71edbcfd74e550d440afc5fff32",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "images/zh-GaussMarkov_motion/sheet-042.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/unique/sheet-042.png",
+    "original_sha256": "ad91aa8767c08b8b95120ffa632315df2d8cc1c0a0ca9e0592a92cd183bf0e48",
+    "bundle_sha256": "ad91aa8767c08b8b95120ffa632315df2d8cc1c0a0ca9e0592a92cd183bf0e48",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "images/zh-GaussMarkov_motion/native-0001507_000100.466s.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/reveals/frames/0001507_000100.466s.png",
+    "original_sha256": "1e6f620a7c771f7b39195bc5179dc426b82cf083d78a1da3627565497f219bc7",
+    "bundle_sha256": "1e6f620a7c771f7b39195bc5179dc426b82cf083d78a1da3627565497f219bc7",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "images/zh-GaussMarkov_motion/native-0002070_000138.000s.png",
+    "runtime": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/reveals/frames/0002070_000138.000s.png",
+    "original_sha256": "ac1abb76330b0d4c650c05b9f74d053a63938c31a8c7ce766c5c60af2496998c",
+    "bundle_sha256": "ac1abb76330b0d4c650c05b9f74d053a63938c31a8c7ce766c5c60af2496998c",
+    "gzip_exact": false
+  }
+]

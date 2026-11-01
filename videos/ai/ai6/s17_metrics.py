@@ -167,7 +167,7 @@ class Metrics(VoiceoverScene):
         loss_top = max(0.55, max(float(c[k]["logloss"]) for k, _, _ in specs) * 1.05)
         lls = hbars([(nm, c[k]["logloss"], col) for k, nm, col in specs], width=3.0, lo=0.0, hi=loss_top, font_size=22,
                     fmt=lambda v: f"{v:.3f}", name_width=3.2)
-        ta = label(r"accuracy \ (higher is better)", font_size=26).next_to(accs, UP, buff=0.3)
+        ta = label(r"accuracy \\ bars start at $70\%$ (higher is better)", font_size=26).next_to(accs, UP, buff=0.3)
         tl = label(r"log loss, \ nats per page \ (lower is better)", font_size=26)
         gA = VGroup(ta, accs).move_to([-3.4, 0.2, 0])
         for r_ in lls:

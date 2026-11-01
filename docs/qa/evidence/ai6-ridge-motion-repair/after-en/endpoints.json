@@ -1,0 +1,1979 @@
+{
+  "scene": "Ridge",
+  "lang": "en",
+  "raw_record_sha256": "497f80cd0784e06c8c52f7bf21cd20492dce5d6e3142a81eb29dcf71de8d7207",
+  "raw_status": "passed",
+  "raw_warnings": [],
+  "fingerprint": "967c8366b8df2c9f8635dfd7afd787cffab61f5a903d2390e83f124f446455bf",
+  "frames": [
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/000_00001.0s.png",
+      "sha256": "d682c9b3ea8da8090007f9fcd22560e70c3743ac599b74aaacaf0d164eab8fca",
+      "time": 1.0,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "000_00001.0s.png",
+        "time": 1.0,
+        "reason": "narration-end",
+        "coverage": 0.020596701795472287,
+        "texts": [
+          {
+            "text": "Part 6 \\textperiodcentered\\ Chapter 3",
+            "bounds": [
+              -1.1659005895833328,
+              1.1659005895833328,
+              1.1633769218749999,
+              1.4246056343749998
+            ]
+          },
+          {
+            "text": "Ridge: shrinking the weak directions",
+            "bounds": [
+              -4.480087021874997,
+              4.480087021874997,
+              0.359018271875,
+              0.863376921875
+            ]
+          },
+          {
+            "text": "How do you stop a model leaning on noise?",
+            "bounds": [
+              -2.9453511875,
+              2.9453511875,
+              -0.22460563437499992,
+              0.05901827187499997
+            ]
+          },
+          {
+            "text": "1950",
+            "bounds": [
+              -4.897184241666667,
+              -4.436149091666667,
+              -3.1,
+              -2.9523437500000003
+            ]
+          },
+          {
+            "text": "1970",
+            "bounds": [
+              -2.230517575,
+              -1.769482425,
+              -3.1,
+              -2.9523437500000003
+            ]
+          },
+          {
+            "text": "1990",
+            "bounds": [
+              0.43614909166666693,
+              0.897184241666667,
+              -3.1,
+              -2.9523437500000003
+            ]
+          },
+          {
+            "text": "2010",
+            "bounds": [
+              3.099300133333334,
+              3.5673665333333338,
+              -3.1,
+              -2.9523437500000003
+            ]
+          },
+          {
+            "text": "2030",
+            "bounds": [
+              5.7659668,
+              6.2340332,
+              -3.1,
+              -2.9523437500000003
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/000_00001.0s.png",
+        "sha256": "d682c9b3ea8da8090007f9fcd22560e70c3743ac599b74aaacaf0d164eab8fca",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/001_00006.2s.png",
+      "sha256": "d69108059a2bc94ea7f21fc32e23663d12f512a87bd94ca72b5ebb325797a33c",
+      "time": 6.231458333333333,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "001_00006.2s.png",
+        "time": 6.231458333333333,
+        "reason": "narrated-hold-9.8s",
+        "coverage": 0.014124707259953162,
+        "texts": [
+          {
+            "text": "1970",
+            "bounds": [
+              -6.431111111111111,
+              -5.654437944444442,
+              3.1102532083333334,
+              3.4000000000000004
+            ]
+          },
+          {
+            "text": "Hoerl \\& Kennard",
+            "bounds": [
+              -6.431111111111111,
+              -4.706195129861112,
+              2.8817600666666667,
+              3.0502532083333334
+            ]
+          },
+          {
+            "text": "\\begin{tabular}{@{}l@{}}ridge regression,\\ for chemical-plant data whose\\\\columns nearly repeated\\end{tabular}",
+            "bounds": [
+              -6.431111111111111,
+              -2.188144798611112,
+              2.263819025,
+              2.701760066666667
+            ]
+          },
+          {
+            "text": "\\min_{\\mathbf{w}} \\;\\|\\mathbf{y} - Z\\mathbf{w}\\|^2 + \\lambda\\|\\mathbf{w}\\|^2",
+            "bounds": [
+              -3.363927431249999,
+              0.7378606687500002,
+              0.7463665749999999,
+              1.3
+            ]
+          },
+          {
+            "text": "fit, \\ plus a price on size",
+            "bounds": [
+              1.1378606687500004,
+              3.6732748187500004,
+              0.9112281249999999,
+              1.13513845
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/001_00006.2s.png",
+        "sha256": "d69108059a2bc94ea7f21fc32e23663d12f512a87bd94ca72b5ebb325797a33c",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/002_00018.7s.png",
+      "sha256": "1803a76810cffaaad5e9f999e71bef2da4ec4df5990f957f10bdc540fcd9f3e4",
+      "time": 18.670888028515233,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "002_00018.7s.png",
+        "time": 18.670888028515233,
+        "reason": "narrated-hold-8.4s",
+        "coverage": 0.0178986143637783,
+        "texts": [
+          {
+            "text": "1970",
+            "bounds": [
+              -6.431111111111111,
+              -5.654437944444442,
+              3.1102532083333334,
+              3.4000000000000004
+            ]
+          },
+          {
+            "text": "Hoerl \\& Kennard",
+            "bounds": [
+              -6.431111111111111,
+              -4.706195129861112,
+              2.8817600666666667,
+              3.0502532083333334
+            ]
+          },
+          {
+            "text": "\\begin{tabular}{@{}l@{}}ridge regression,\\ for chemical-plant data whose\\\\columns nearly repeated\\end{tabular}",
+            "bounds": [
+              -6.431111111111111,
+              -2.188144798611112,
+              2.263819025,
+              2.701760066666667
+            ]
+          },
+          {
+            "text": "\\min_{\\mathbf{w}} \\;\\|\\mathbf{y} - Z\\mathbf{w}\\|^2 + \\lambda\\|\\mathbf{w}\\|^2",
+            "bounds": [
+              -3.363927431249999,
+              0.7378606687500002,
+              0.7463665749999999,
+              1.3
+            ]
+          },
+          {
+            "text": "fit, \\ plus a price on size",
+            "bounds": [
+              1.1378606687500004,
+              3.6732748187500004,
+              0.9112281249999999,
+              1.13513845
+            ]
+          },
+          {
+            "text": "(Z^{\\top}Z + \\lambda I)\\,\\mathbf{w} = Z^{\\top}\\mathbf{y}",
+            "bounds": [
+              -3.4648239374999976,
+              0.09983317499999989,
+              -0.10278368749999994,
+              0.326366575
+            ]
+          },
+          {
+            "text": "gradient $= 0$; \\ invertible for $\\lambda > 0$",
+            "bounds": [
+              0.499833175,
+              4.1656184750000005,
+              -0.0016581187499999789,
+              0.22524100625000004
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/002_00018.7s.png",
+        "sha256": "1803a76810cffaaad5e9f999e71bef2da4ec4df5990f957f10bdc540fcd9f3e4",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/003_00033.4s.png",
+      "sha256": "ccc8c1970e2e6d7bcec2e79ab612527bcdc6d1caef2419030a1daeb5cddaacd8",
+      "time": 33.35820366273355,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "003_00033.4s.png",
+        "time": 33.35820366273355,
+        "reason": "narrated-hold-8.0s",
+        "coverage": 0.026732045277127244,
+        "texts": [
+          {
+            "text": "1970",
+            "bounds": [
+              -6.431111111111111,
+              -5.654437944444442,
+              3.1102532083333334,
+              3.4000000000000004
+            ]
+          },
+          {
+            "text": "Hoerl \\& Kennard",
+            "bounds": [
+              -6.431111111111111,
+              -4.706195129861112,
+              2.8817600666666667,
+              3.0502532083333334
+            ]
+          },
+          {
+            "text": "\\begin{tabular}{@{}l@{}}ridge regression,\\ for chemical-plant data whose\\\\columns nearly repeated\\end{tabular}",
+            "bounds": [
+              -6.431111111111111,
+              -2.188144798611112,
+              2.263819025,
+              2.701760066666667
+            ]
+          },
+          {
+            "text": "\\min_{\\mathbf{w}} \\;\\|\\mathbf{y} - Z\\mathbf{w}\\|^2 + \\lambda\\|\\mathbf{w}\\|^2",
+            "bounds": [
+              -3.363927431249999,
+              0.7378606687500002,
+              0.7463665749999999,
+              1.3
+            ]
+          },
+          {
+            "text": "fit, \\ plus a price on size",
+            "bounds": [
+              1.1378606687500004,
+              3.6732748187500004,
+              0.9112281249999999,
+              1.13513845
+            ]
+          },
+          {
+            "text": "(Z^{\\top}Z + \\lambda I)\\,\\mathbf{w} = Z^{\\top}\\mathbf{y}",
+            "bounds": [
+              -3.4648239374999976,
+              0.09983317499999989,
+              -0.10278368749999994,
+              0.326366575
+            ]
+          },
+          {
+            "text": "gradient $= 0$; \\ invertible for $\\lambda > 0$",
+            "bounds": [
+              0.499833175,
+              4.1656184750000005,
+              -0.0016581187499999789,
+              0.22524100625000004
+            ]
+          },
+          {
+            "text": "\\mathbf{w} = V\\,(D^2 + \\lambda I)^{-1} D\\, U^{\\top}\\mathbf{y}",
+            "bounds": [
+              -1.4558387624999973,
+              2.906130300000002,
+              -0.9519339499999998,
+              -0.5227836874999999
+            ]
+          },
+          {
+            "text": "$Z = UDV^{\\top}$ \\ (Part 3)",
+            "bounds": [
+              3.3061303000000026,
+              5.614667425,
+              -0.8741822562499999,
+              -0.6005353812499998
+            ]
+          },
+          {
+            "text": "Z\\mathbf{w} = \\sum_j \\mathbf{u}_j \\frac{d_j^2}{d_j^2 + \\lambda} \\,(\\mathbf{u}_j^{\\top}\\mathbf{y})",
+            "bounds": [
+              -1.7252660999999976,
+              2.5126048125000016,
+              -2.469101525,
+              -1.3719339499999998
+            ]
+          },
+          {
+            "text": "the fit, \\\\ direction by direction",
+            "bounds": [
+              2.9126048125000024,
+              5.238859962500002,
+              -2.1832823625,
+              -1.6577531125
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/003_00033.4s.png",
+        "sha256": "ccc8c1970e2e6d7bcec2e79ab612527bcdc6d1caef2419030a1daeb5cddaacd8",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/004_00043.4s.png",
+      "sha256": "17d71a667c588d8a51575edecc404d93fb328c4b9cbb02f2e62c1ee4adb22a0e",
+      "time": 43.365709398557854,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "004_00043.4s.png",
+        "time": 43.365709398557854,
+        "reason": "narration-end",
+        "coverage": 0.021018735362997656,
+        "texts": [
+          {
+            "text": "\\min_{\\mathbf{w}} \\;\\|\\mathbf{y} - Z\\mathbf{w}\\|^2 + \\lambda\\|\\mathbf{w}\\|^2",
+            "bounds": [
+              -3.363927431249999,
+              0.7378606687500002,
+              0.7463665749999999,
+              1.3
+            ]
+          },
+          {
+            "text": "fit, \\ plus a price on size",
+            "bounds": [
+              1.1378606687500004,
+              3.6732748187500004,
+              0.9112281249999999,
+              1.13513845
+            ]
+          },
+          {
+            "text": "(Z^{\\top}Z + \\lambda I)\\,\\mathbf{w} = Z^{\\top}\\mathbf{y}",
+            "bounds": [
+              -3.4648239374999976,
+              0.09983317499999989,
+              -0.10278368749999994,
+              0.326366575
+            ]
+          },
+          {
+            "text": "gradient $= 0$; \\ invertible for $\\lambda > 0$",
+            "bounds": [
+              0.499833175,
+              4.1656184750000005,
+              -0.0016581187499999789,
+              0.22524100625000004
+            ]
+          },
+          {
+            "text": "\\mathbf{w} = V\\,(D^2 + \\lambda I)^{-1} D\\, U^{\\top}\\mathbf{y}",
+            "bounds": [
+              -1.4558387624999973,
+              2.906130300000002,
+              -0.9519339499999998,
+              -0.5227836874999999
+            ]
+          },
+          {
+            "text": "$Z = UDV^{\\top}$ \\ (Part 3)",
+            "bounds": [
+              3.3061303000000026,
+              5.614667425,
+              -0.8741822562499999,
+              -0.6005353812499998
+            ]
+          },
+          {
+            "text": "Z\\mathbf{w} = \\sum_j \\mathbf{u}_j \\frac{d_j^2}{d_j^2 + \\lambda} \\,(\\mathbf{u}_j^{\\top}\\mathbf{y})",
+            "bounds": [
+              -1.7252660999999976,
+              2.5126048125000016,
+              -2.469101525,
+              -1.3719339499999998
+            ]
+          },
+          {
+            "text": "the fit, \\\\ direction by direction",
+            "bounds": [
+              2.9126048125000024,
+              5.238859962500002,
+              -2.1832823625,
+              -1.6577531125
+            ]
+          },
+          {
+            "text": "least squares: \\ every factor is $1$",
+            "bounds": [
+              2.567511098611112,
+              6.210080521527779,
+              3.354462445833333,
+              3.6
+            ]
+          },
+          {
+            "text": "ridge: \\ weak directions shrink most",
+            "bounds": [
+              2.567511098611112,
+              6.71111111111111,
+              2.9916230958333334,
+              3.2344624458333335
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/004_00043.4s.png",
+        "sha256": "17d71a667c588d8a51575edecc404d93fb328c4b9cbb02f2e62c1ee4adb22a0e",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/005_00053.5s.png",
+      "sha256": "f45f9deb8fff07da066799a04c16afb8013abc5464689dd0552982f6436d7c99",
+      "time": 53.48329166666666,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "005_00053.5s.png",
+        "time": 53.48329166666666,
+        "reason": "narrated-hold-4.5s",
+        "coverage": 0.04030786494925839,
+        "texts": [
+          {
+            "text": "0",
+            "bounds": [
+              -5.150659822916667,
+              -5.063279177083334,
+              0.8052596187499972,
+              0.9480574520833305
+            ]
+          },
+          {
+            "text": "20",
+            "bounds": [
+              -5.252154614583331,
+              -5.063279177083334,
+              1.3497606890425802,
+              1.4925585223759135
+            ]
+          },
+          {
+            "text": "40",
+            "bounds": [
+              -5.256720822916666,
+              -5.063279177083334,
+              1.8931202072518296,
+              2.0382011447518296
+            ]
+          },
+          {
+            "text": "60",
+            "bounds": [
+              -5.253815052083331,
+              -5.063279177083334,
+              2.4387628296277457,
+              2.5815606629610794
+            ]
+          },
+          {
+            "text": "singular value $d_j$ \\ (how much the pages vary that way)",
+            "bounds": [
+              -4.943279177083334,
+              0.5153996895833314,
+              2.9566585354166692,
+              3.1947403812500026
+            ]
+          },
+          {
+            "text": "the $448$ training pages, \\ $70$ standardized rates",
+            "bounds": [
+              2.351382792361112,
+              6.9111111111111105,
+              3.5945205499999995,
+              3.8
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/005_00053.5s.png",
+        "sha256": "f45f9deb8fff07da066799a04c16afb8013abc5464689dd0552982f6436d7c99",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/006_00060.0s.png",
+      "sha256": "3a3fdd5710559874de098d1c96b9fdf5bd6b9766939c7b165b1def439a063e11",
+      "time": 60.0066554414003,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "006_00060.0s.png",
+        "time": 60.0066554414003,
+        "reason": "narrated-hold-5.1s",
+        "coverage": 0.049836553473848556,
+        "texts": [
+          {
+            "text": "0",
+            "bounds": [
+              -5.150659822916667,
+              -5.063279177083334,
+              0.8052596187499972,
+              0.9480574520833305
+            ]
+          },
+          {
+            "text": "20",
+            "bounds": [
+              -5.252154614583331,
+              -5.063279177083334,
+              1.3497606890425802,
+              1.4925585223759135
+            ]
+          },
+          {
+            "text": "40",
+            "bounds": [
+              -5.256720822916666,
+              -5.063279177083334,
+              1.8931202072518296,
+              2.0382011447518296
+            ]
+          },
+          {
+            "text": "60",
+            "bounds": [
+              -5.253815052083331,
+              -5.063279177083334,
+              2.4387628296277457,
+              2.5815606629610794
+            ]
+          },
+          {
+            "text": "singular value $d_j$ \\ (how much the pages vary that way)",
+            "bounds": [
+              -4.943279177083334,
+              0.5153996895833314,
+              2.9566585354166692,
+              3.1947403812500026
+            ]
+          },
+          {
+            "text": "the $448$ training pages, \\ $70$ standardized rates",
+            "bounds": [
+              2.351382792361112,
+              6.9111111111111105,
+              3.5945205499999995,
+              3.8
+            ]
+          },
+          {
+            "text": "0",
+            "bounds": [
+              -5.20140721875,
+              -5.114026572916667,
+              -1.2185972041666668,
+              -1.0757993708333335
+            ]
+          },
+          {
+            "text": "4",
+            "bounds": [
+              -5.205973427083333,
+              -5.114026572916667,
+              -0.6443812864938521,
+              -0.5038665573271853
+            ]
+          },
+          {
+            "text": "8",
+            "bounds": [
+              -5.200161906249998,
+              -5.114026572916667,
+              -0.0724484729877039,
+              0.07034936034562939
+            ]
+          },
+          {
+            "text": "$|\\mathbf{u}_j^{\\top}\\mathbf{y}|$ \\ (how much of the authorship lies that way)",
+            "bounds": [
+              -4.994026572916667,
+              0.011976329166664468,
+              0.33280171250000007,
+              0.6185972041666667
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/006_00060.0s.png",
+        "sha256": "3a3fdd5710559874de098d1c96b9fdf5bd6b9766939c7b165b1def439a063e11",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/007_00069.1s.png",
+      "sha256": "44caed2ed38d5f166d1c8ede344c8e0fb456ceecff289f0f56e84af7fe66346b",
+      "time": 69.0598010527651,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "007_00069.1s.png",
+        "time": 69.0598010527651,
+        "reason": "narrated-hold-2.6s",
+        "coverage": 0.128612900078064,
+        "texts": [
+          {
+            "text": "0",
+            "bounds": [
+              -5.150659822916667,
+              -5.063279177083334,
+              0.8052596187499972,
+              0.9480574520833305
+            ]
+          },
+          {
+            "text": "20",
+            "bounds": [
+              -5.252154614583331,
+              -5.063279177083334,
+              1.3497606890425802,
+              1.4925585223759135
+            ]
+          },
+          {
+            "text": "40",
+            "bounds": [
+              -5.256720822916666,
+              -5.063279177083334,
+              1.8931202072518296,
+              2.0382011447518296
+            ]
+          },
+          {
+            "text": "60",
+            "bounds": [
+              -5.253815052083331,
+              -5.063279177083334,
+              2.4387628296277457,
+              2.5815606629610794
+            ]
+          },
+          {
+            "text": "singular value $d_j$ \\ (how much the pages vary that way)",
+            "bounds": [
+              -4.943279177083334,
+              0.5153996895833314,
+              2.9566585354166692,
+              3.1947403812500026
+            ]
+          },
+          {
+            "text": "the $448$ training pages, \\ $70$ standardized rates",
+            "bounds": [
+              2.351382792361112,
+              6.9111111111111105,
+              3.5945205499999995,
+              3.8
+            ]
+          },
+          {
+            "text": "0",
+            "bounds": [
+              -5.20140721875,
+              -5.114026572916667,
+              -1.2185972041666668,
+              -1.0757993708333335
+            ]
+          },
+          {
+            "text": "4",
+            "bounds": [
+              -5.205973427083333,
+              -5.114026572916667,
+              -0.6443812864938521,
+              -0.5038665573271853
+            ]
+          },
+          {
+            "text": "8",
+            "bounds": [
+              -5.200161906249998,
+              -5.114026572916667,
+              -0.0724484729877039,
+              0.07034936034562939
+            ]
+          },
+          {
+            "text": "$|\\mathbf{u}_j^{\\top}\\mathbf{y}|$ \\ (how much of the authorship lies that way)",
+            "bounds": [
+              -4.994026572916667,
+              0.011976329166664468,
+              0.33280171250000007,
+              0.6185972041666667
+            ]
+          },
+          {
+            "text": "1",
+            "bounds": [
+              -4.824221113703053,
+              -4.755727967869718,
+              -3.6061916354166668,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "10",
+            "bounds": [
+              -3.7395198661971834,
+              -3.5587390745305174,
+              -3.61075784375,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "20",
+            "bounds": [
+              -2.475961555311032,
+              -2.2870861178110347,
+              -3.61075784375,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "30",
+            "bounds": [
+              -1.2091861402582151,
+              -1.018650265258218,
+              -3.61075784375,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "40",
+            "bounds": [
+              0.05696660812793486,
+              0.25040825396126654,
+              -3.6130409479166667,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "50",
+            "bounds": [
+              1.3268553460974184,
+              1.5157307835974154,
+              -3.61075784375,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "60",
+            "bounds": [
+              2.593630761150235,
+              2.7841666361502324,
+              -3.61075784375,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "70",
+            "bounds": [
+              3.862689280369718,
+              4.050319384536383,
+              -3.61283340625,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "0",
+            "bounds": [
+              -5.1241157500000005,
+              -5.0367351041666675,
+              -3.4193589270833336,
+              -3.27656109375
+            ]
+          },
+          {
+            "text": "0.5",
+            "bounds": [
+              -5.283264895833333,
+              -5.0367351041666675,
+              -2.7693589270833336,
+              -2.62656109375
+            ]
+          },
+          {
+            "text": "1",
+            "bounds": [
+              -5.105228250000002,
+              -5.0367351041666675,
+              -2.117075822916667,
+              -1.9788441979166669
+            ]
+          },
+          {
+            "text": "the factor $d_j^2/(d_j^2 + \\lambda)$",
+            "bounds": [
+              -4.916735104166667,
+              -2.750349752083336,
+              -1.867960010416667,
+              -1.5869590520833337
+            ]
+          },
+          {
+            "text": "\\lambda = 1",
+            "bounds": [
+              3.8701805194444434,
+              4.807884219444444,
+              3.012225,
+              3.25
+            ]
+          },
+          {
+            "text": "\\text{effective weights} = 69.7",
+            "bounds": [
+              3.8701805194444434,
+              6.811111111111111,
+              2.6275093541666665,
+              2.892225
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/007_00069.1s.png",
+        "sha256": "44caed2ed38d5f166d1c8ede344c8e0fb456ceecff289f0f56e84af7fe66346b",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/008_00074.7s.png",
+      "sha256": "cdcd20eb4f6b640bd4e30988d1b7b17d30aceeb3452f4a70903d25182efc470b",
+      "time": 74.69805574581429,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "008_00074.7s.png",
+        "time": 74.69805574581429,
+        "reason": "narration-end",
+        "coverage": 0.07781762295081968,
+        "texts": [
+          {
+            "text": "0",
+            "bounds": [
+              -5.150659822916667,
+              -5.063279177083334,
+              0.8052596187499972,
+              0.9480574520833305
+            ]
+          },
+          {
+            "text": "20",
+            "bounds": [
+              -5.252154614583331,
+              -5.063279177083334,
+              1.3497606890425802,
+              1.4925585223759135
+            ]
+          },
+          {
+            "text": "40",
+            "bounds": [
+              -5.256720822916666,
+              -5.063279177083334,
+              1.8931202072518296,
+              2.0382011447518296
+            ]
+          },
+          {
+            "text": "60",
+            "bounds": [
+              -5.253815052083331,
+              -5.063279177083334,
+              2.4387628296277457,
+              2.5815606629610794
+            ]
+          },
+          {
+            "text": "singular value $d_j$ \\ (how much the pages vary that way)",
+            "bounds": [
+              -4.943279177083334,
+              0.5153996895833314,
+              2.9566585354166692,
+              3.1947403812500026
+            ]
+          },
+          {
+            "text": "the $448$ training pages, \\ $70$ standardized rates",
+            "bounds": [
+              2.351382792361112,
+              6.9111111111111105,
+              3.5945205499999995,
+              3.8
+            ]
+          },
+          {
+            "text": "0",
+            "bounds": [
+              -5.20140721875,
+              -5.114026572916667,
+              -1.2185972041666668,
+              -1.0757993708333335
+            ]
+          },
+          {
+            "text": "4",
+            "bounds": [
+              -5.205973427083333,
+              -5.114026572916667,
+              -0.6443812864938521,
+              -0.5038665573271853
+            ]
+          },
+          {
+            "text": "8",
+            "bounds": [
+              -5.200161906249998,
+              -5.114026572916667,
+              -0.0724484729877039,
+              0.07034936034562939
+            ]
+          },
+          {
+            "text": "$|\\mathbf{u}_j^{\\top}\\mathbf{y}|$ \\ (how much of the authorship lies that way)",
+            "bounds": [
+              -4.994026572916667,
+              0.011976329166664468,
+              0.33280171250000007,
+              0.6185972041666667
+            ]
+          },
+          {
+            "text": "1",
+            "bounds": [
+              -4.824221113703053,
+              -4.755727967869718,
+              -3.6061916354166668,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "10",
+            "bounds": [
+              -3.7395198661971834,
+              -3.5587390745305174,
+              -3.61075784375,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "20",
+            "bounds": [
+              -2.475961555311032,
+              -2.2870861178110347,
+              -3.61075784375,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "30",
+            "bounds": [
+              -1.2091861402582151,
+              -1.018650265258218,
+              -3.61075784375,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "40",
+            "bounds": [
+              0.05696660812793486,
+              0.25040825396126654,
+              -3.6130409479166667,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "50",
+            "bounds": [
+              1.3268553460974184,
+              1.5157307835974154,
+              -3.61075784375,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "60",
+            "bounds": [
+              2.593630761150235,
+              2.7841666361502324,
+              -3.61075784375,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "70",
+            "bounds": [
+              3.862689280369718,
+              4.050319384536383,
+              -3.61283340625,
+              -3.467960010416667
+            ]
+          },
+          {
+            "text": "0",
+            "bounds": [
+              -5.1241157500000005,
+              -5.0367351041666675,
+              -3.4193589270833336,
+              -3.27656109375
+            ]
+          },
+          {
+            "text": "0.5",
+            "bounds": [
+              -5.283264895833333,
+              -5.0367351041666675,
+              -2.7693589270833336,
+              -2.62656109375
+            ]
+          },
+          {
+            "text": "1",
+            "bounds": [
+              -5.105228250000002,
+              -5.0367351041666675,
+              -2.117075822916667,
+              -1.9788441979166669
+            ]
+          },
+          {
+            "text": "the factor $d_j^2/(d_j^2 + \\lambda)$",
+            "bounds": [
+              -4.916735104166667,
+              -2.750349752083336,
+              -1.867960010416667,
+              -1.5869590520833337
+            ]
+          },
+          {
+            "text": "\\lambda = 1",
+            "bounds": [
+              3.8669841736111095,
+              5.229024073611112,
+              2.955437933333333,
+              3.25
+            ]
+          },
+          {
+            "text": "\\text{effective weights} = 69.7",
+            "bounds": [
+              3.8669841736111095,
+              6.81111111111111,
+              2.5707222874999998,
+              2.835437933333333
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/008_00074.7s.png",
+        "sha256": "cdcd20eb4f6b640bd4e30988d1b7b17d30aceeb3452f4a70903d25182efc470b",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/009_00088.1s.png",
+      "sha256": "a08eab23487d7137a9fffba33fba0f9762246fb948f6c515faa07ce248bfc204",
+      "time": 88.12029166666666,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "009_00088.1s.png",
+        "time": 88.12029166666666,
+        "reason": "narrated-hold-2.3s",
+        "coverage": 0.052502927400468385,
+        "texts": [
+          {
+            "text": "10^{5}",
+            "bounds": [
+              -6.362495354166667,
+              -6.100041270833334,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "10^{3}",
+            "bounds": [
+              -4.096482489583334,
+              -3.832720802083333,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "10^{1}",
+            "bounds": [
+              -1.82683740625,
+              -1.569032552083333,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "10^{-1}",
+            "bounds": [
+              0.3749680208333337,
+              0.7624953541666675,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "$\\lambda$, \\ weaker $\\longrightarrow$",
+            "bounds": [
+              -3.5546974864583327,
+              -2.107839138541667,
+              -3.2439954354166667,
+              -3.0414840145833337
+            ]
+          },
+          {
+            "text": "the $70$ weights",
+            "bounds": [
+              -6.2312683125,
+              -4.808915993750003,
+              2.238515985416666,
+              2.4439954354166664
+            ]
+          },
+          {
+            "text": "she",
+            "bounds": [
+              0.6487316875000005,
+              1.1050793375000005,
+              -2.539382080059524,
+              -2.324538330059524
+            ]
+          },
+          {
+            "text": "that",
+            "bounds": [
+              0.6487316875000015,
+              1.2723156875000015,
+              1.0687746587588092,
+              1.2836184087588092
+            ]
+          },
+          {
+            "text": "not",
+            "bounds": [
+              0.6487316875000013,
+              1.0964855875000015,
+              -1.6674743997133166,
+              -1.4682556497133166
+            ]
+          },
+          {
+            "text": "very",
+            "bounds": [
+              0.6487316875000005,
+              1.2934094375000007,
+              -1.4162469028235718,
+              -1.2029656528235717
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/009_00088.1s.png",
+        "sha256": "a08eab23487d7137a9fffba33fba0f9762246fb948f6c515faa07ce248bfc204",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/010_00091.4s.png",
+      "sha256": "b4024b8c99c69eeaa267c69c87d07590401a6d699a9eeac35c3fb5f0c33dd973",
+      "time": 91.41764616402115,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "010_00091.4s.png",
+        "time": 91.41764616402115,
+        "reason": "narrated-hold-16.1s",
+        "coverage": 0.05657689305230289,
+        "texts": [
+          {
+            "text": "10^{5}",
+            "bounds": [
+              -6.362495354166667,
+              -6.100041270833334,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "10^{3}",
+            "bounds": [
+              -4.096482489583334,
+              -3.832720802083333,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "10^{1}",
+            "bounds": [
+              -1.82683740625,
+              -1.569032552083333,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "10^{-1}",
+            "bounds": [
+              0.3749680208333337,
+              0.7624953541666675,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "$\\lambda$, \\ weaker $\\longrightarrow$",
+            "bounds": [
+              -3.5546974864583327,
+              -2.107839138541667,
+              -3.2439954354166667,
+              -3.0414840145833337
+            ]
+          },
+          {
+            "text": "the $70$ weights",
+            "bounds": [
+              -6.2312683125,
+              -4.808915993750003,
+              2.238515985416666,
+              2.4439954354166664
+            ]
+          },
+          {
+            "text": "she",
+            "bounds": [
+              0.6487316875000005,
+              1.1050793375000005,
+              -2.539382080059524,
+              -2.324538330059524
+            ]
+          },
+          {
+            "text": "that",
+            "bounds": [
+              0.6487316875000015,
+              1.2723156875000015,
+              1.0687746587588092,
+              1.2836184087588092
+            ]
+          },
+          {
+            "text": "not",
+            "bounds": [
+              0.6487316875000013,
+              1.0964855875000015,
+              -1.6674743997133166,
+              -1.4682556497133166
+            ]
+          },
+          {
+            "text": "very",
+            "bounds": [
+              0.6487316875000005,
+              1.2934094375000007,
+              -1.4162469028235718,
+              -1.2029656528235717
+            ]
+          },
+          {
+            "text": "coordinate paths vary smoothly",
+            "bounds": [
+              2.634987933333334,
+              6.365012066666666,
+              1.0946586322916667,
+              1.3372281510416668
+            ]
+          },
+          {
+            "text": "sampled $|w|<10^{-12}$: \\ $0$",
+            "bounds": [
+              2.634987933333334,
+              5.245435758333334,
+              0.5262421572916667,
+              0.7946586322916667
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/010_00091.4s.png",
+        "sha256": "b4024b8c99c69eeaa267c69c87d07590401a6d699a9eeac35c3fb5f0c33dd973",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/011_00108.5s.png",
+      "sha256": "8b9da981921e5e01d202adf78aee8cb98b153a7a589c90be19a97a7592ea3290",
+      "time": 108.4732017195767,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "011_00108.5s.png",
+        "time": 108.4732017195767,
+        "reason": "narration-end",
+        "coverage": 0.06171448087431694,
+        "texts": [
+          {
+            "text": "10^{5}",
+            "bounds": [
+              -6.362495354166667,
+              -6.100041270833334,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "10^{3}",
+            "bounds": [
+              -4.096482489583334,
+              -3.832720802083333,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "10^{1}",
+            "bounds": [
+              -1.82683740625,
+              -1.569032552083333,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "10^{-1}",
+            "bounds": [
+              0.3749680208333337,
+              0.7624953541666675,
+              -2.8482196187500004,
+              -2.661484014583334
+            ]
+          },
+          {
+            "text": "$\\lambda$, \\ weaker $\\longrightarrow$",
+            "bounds": [
+              -3.5546974864583327,
+              -2.107839138541667,
+              -3.2439954354166667,
+              -3.0414840145833337
+            ]
+          },
+          {
+            "text": "the $70$ weights",
+            "bounds": [
+              -6.2312683125,
+              -4.808915993750003,
+              2.238515985416666,
+              2.4439954354166664
+            ]
+          },
+          {
+            "text": "she",
+            "bounds": [
+              0.6487316875000005,
+              1.1050793375000005,
+              -2.539382080059524,
+              -2.324538330059524
+            ]
+          },
+          {
+            "text": "that",
+            "bounds": [
+              0.6487316875000015,
+              1.2723156875000015,
+              1.0687746587588092,
+              1.2836184087588092
+            ]
+          },
+          {
+            "text": "not",
+            "bounds": [
+              0.6487316875000013,
+              1.0964855875000015,
+              -1.6674743997133166,
+              -1.4682556497133166
+            ]
+          },
+          {
+            "text": "very",
+            "bounds": [
+              0.6487316875000005,
+              1.2934094375000007,
+              -1.4162469028235718,
+              -1.2029656528235717
+            ]
+          },
+          {
+            "text": "coordinate paths vary smoothly",
+            "bounds": [
+              2.634987933333334,
+              6.365012066666666,
+              1.0946586322916667,
+              1.3372281510416668
+            ]
+          },
+          {
+            "text": "sampled $|w|<10^{-12}$: \\ $0$",
+            "bounds": [
+              2.634987933333334,
+              5.245435758333334,
+              0.5262421572916667,
+              0.7946586322916667
+            ]
+          },
+          {
+            "text": "Bayes: \\ ridge is the most probable \\\\ weights under a bell-shaped prior \\\\ (Part 5); \\ in networks, \\ weight decay",
+            "bounds": [
+              2.634987933333334,
+              6.279237516666665,
+              -0.5372281510416668,
+              0.22624215729166658
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/011_00108.5s.png",
+        "sha256": "8b9da981921e5e01d202adf78aee8cb98b153a7a589c90be19a97a7592ea3290",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/012_00132.4s.png",
+      "sha256": "e8a95abf9c60d10eca4092fd0e323667cf27a37e837f2e4398783b66b5b0c471",
+      "time": 132.41658333333328,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "012_00132.4s.png",
+        "time": 132.41658333333328,
+        "reason": "narrated-hold-6.6s",
+        "coverage": 0.030723067915690867,
+        "texts": [
+          {
+            "text": "10^{-1}",
+            "bounds": [
+              -5.976112291666668,
+              -5.5885849583333345,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{0}",
+            "bounds": [
+              -4.814374760416669,
+              -4.550322489583334,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{1}",
+            "bounds": [
+              -3.7112510520833357,
+              -3.4534461979166684,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{2}",
+            "bounds": [
+              -2.6135756666666685,
+              -2.3511215833333345,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{3}",
+            "bounds": [
+              -1.5142294687500024,
+              -1.2504677812500018,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{4}",
+            "bounds": [
+              -0.4153191354166683,
+              -0.1493781145833344,
+              -2.4816359937500003,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{5}",
+            "bounds": [
+              0.6864243333333313,
+              0.9488784166666653,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "0",
+            "bounds": [
+              -5.989729270833333,
+              -5.902348625000002,
+              -2.244846410416667,
+              -2.1020485770833335
+            ]
+          },
+          {
+            "text": "0.1",
+            "bounds": [
+              -6.142651770833334,
+              -5.902348625000002,
+              -0.7063848719551287,
+              -0.5635870386217954
+            ]
+          },
+          {
+            "text": "0.2",
+            "bounds": [
+              -6.1488784166666655,
+              -5.902348625000001,
+              0.8320766665064101,
+              0.9748744998397434
+            ]
+          },
+          {
+            "text": "$\\lambda$",
+            "bounds": [
+              -2.538855476041668,
+              -2.425841773958335,
+              -2.83486300625,
+              -2.6734474937500003
+            ]
+          },
+          {
+            "text": "squared error on held-out folds \\ (ten folds)",
+            "bounds": [
+              -5.782348625000001,
+              -1.5381974270833383,
+              2.00655250625,
+              2.23486300625
+            ]
+          },
+          {
+            "text": "the training pages, \\ in ten folds",
+            "bounds": [
+              2.134876836458335,
+              5.2651231635416655,
+              1.5960045677083332,
+              1.8039954322916665
+            ]
+          },
+          {
+            "text": "held back: \\ measure the error",
+            "bounds": [
+              2.36111696875,
+              5.03888303125,
+              0.5996782968750001,
+              0.7460045677083333
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/012_00132.4s.png",
+        "sha256": "e8a95abf9c60d10eca4092fd0e323667cf27a37e837f2e4398783b66b5b0c471",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/013_00141.9s.png",
+      "sha256": "7ed090da197e960914e385c59a441fd088c55ae70c499a90b779b759dfb0feb2",
+      "time": 141.9017685185185,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "013_00141.9s.png",
+        "time": 141.9017685185185,
+        "reason": "narrated-hold-8.9s",
+        "coverage": 0.01762539032006245,
+        "texts": [
+          {
+            "text": "10^{-1}",
+            "bounds": [
+              -5.976112291666668,
+              -5.5885849583333345,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{0}",
+            "bounds": [
+              -4.814374760416669,
+              -4.550322489583334,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{1}",
+            "bounds": [
+              -3.7112510520833357,
+              -3.4534461979166684,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{2}",
+            "bounds": [
+              -2.6135756666666685,
+              -2.3511215833333345,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{3}",
+            "bounds": [
+              -1.5142294687500024,
+              -1.2504677812500018,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{4}",
+            "bounds": [
+              -0.4153191354166683,
+              -0.1493781145833344,
+              -2.4816359937500003,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{5}",
+            "bounds": [
+              0.6864243333333313,
+              0.9488784166666653,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "0",
+            "bounds": [
+              -5.989729270833333,
+              -5.902348625000002,
+              -2.244846410416667,
+              -2.1020485770833335
+            ]
+          },
+          {
+            "text": "0.1",
+            "bounds": [
+              -6.142651770833334,
+              -5.902348625000002,
+              -0.7063848719551287,
+              -0.5635870386217954
+            ]
+          },
+          {
+            "text": "0.2",
+            "bounds": [
+              -6.1488784166666655,
+              -5.902348625000001,
+              0.8320766665064101,
+              0.9748744998397434
+            ]
+          },
+          {
+            "text": "$\\lambda$",
+            "bounds": [
+              -2.538855476041668,
+              -2.425841773958335,
+              -2.83486300625,
+              -2.6734474937500003
+            ]
+          },
+          {
+            "text": "squared error on held-out folds \\ (ten folds)",
+            "bounds": [
+              -5.782348625000001,
+              -1.5381974270833383,
+              2.00655250625,
+              2.23486300625
+            ]
+          },
+          {
+            "text": "cross-validation picks $\\lambda \\approx 75$",
+            "bounds": [
+              1.9271711750000002,
+              5.282257595833332,
+              1.1016313833333333,
+              1.3412328666666666
+            ]
+          },
+          {
+            "text": "about $54$ effective weights of $70$",
+            "bounds": [
+              1.9271711750000002,
+              5.332797900000001,
+              0.6947322583333333,
+              0.9216313833333334
+            ]
+          },
+          {
+            "text": "held-out pages there: \\ $99.5\\%$",
+            "bounds": [
+              1.9271711750000002,
+              5.034166725,
+              0.27662515833333323,
+              0.5147322583333334
+            ]
+          },
+          {
+            "text": "with almost no penalty: \\ $100.0\\%$",
+            "bounds": [
+              1.9271711750000002,
+              5.472828825000001,
+              -0.14123286666666668,
+              0.0966251583333333
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/013_00141.9s.png",
+        "sha256": "7ed090da197e960914e385c59a441fd088c55ae70c499a90b779b759dfb0feb2",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    },
+    {
+      "file": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/endpoints/completed/014_00151.8s.png",
+      "sha256": "338835410ac690a049b6d222acd6bbcced8b2342a00b4d3a7724785513fb4c0c",
+      "time": 151.75755555555557,
+      "coverage": "exact-prior-reviewed-PNG",
+      "prior": {
+        "file": "014_00151.8s.png",
+        "time": 151.75755555555557,
+        "reason": "narration-end",
+        "coverage": 0.022321428571428572,
+        "texts": [
+          {
+            "text": "10^{-1}",
+            "bounds": [
+              -5.976112291666668,
+              -5.5885849583333345,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{0}",
+            "bounds": [
+              -4.814374760416669,
+              -4.550322489583334,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{1}",
+            "bounds": [
+              -3.7112510520833357,
+              -3.4534461979166684,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{2}",
+            "bounds": [
+              -2.6135756666666685,
+              -2.3511215833333345,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{3}",
+            "bounds": [
+              -1.5142294687500024,
+              -1.2504677812500018,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{4}",
+            "bounds": [
+              -0.4153191354166683,
+              -0.1493781145833344,
+              -2.4816359937500003,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "10^{5}",
+            "bounds": [
+              0.6864243333333313,
+              0.9488784166666653,
+              -2.480183097916667,
+              -2.2934474937500005
+            ]
+          },
+          {
+            "text": "0",
+            "bounds": [
+              -5.989729270833333,
+              -5.902348625000002,
+              -2.244846410416667,
+              -2.1020485770833335
+            ]
+          },
+          {
+            "text": "0.1",
+            "bounds": [
+              -6.142651770833334,
+              -5.902348625000002,
+              -0.7063848719551287,
+              -0.5635870386217954
+            ]
+          },
+          {
+            "text": "0.2",
+            "bounds": [
+              -6.1488784166666655,
+              -5.902348625000001,
+              0.8320766665064101,
+              0.9748744998397434
+            ]
+          },
+          {
+            "text": "$\\lambda$",
+            "bounds": [
+              -2.538855476041668,
+              -2.425841773958335,
+              -2.83486300625,
+              -2.6734474937500003
+            ]
+          },
+          {
+            "text": "squared error on held-out folds \\ (ten folds)",
+            "bounds": [
+              -5.782348625000001,
+              -1.5381974270833383,
+              2.00655250625,
+              2.23486300625
+            ]
+          },
+          {
+            "text": "cross-validation picks $\\lambda \\approx 75$",
+            "bounds": [
+              1.9271711750000002,
+              5.282257595833332,
+              1.1016313833333333,
+              1.3412328666666666
+            ]
+          },
+          {
+            "text": "about $54$ effective weights of $70$",
+            "bounds": [
+              1.9271711750000002,
+              5.332797900000001,
+              0.6947322583333333,
+              0.9216313833333334
+            ]
+          },
+          {
+            "text": "held-out pages there: \\ $99.5\\%$",
+            "bounds": [
+              1.9271711750000002,
+              5.034166725,
+              0.27662515833333323,
+              0.5147322583333334
+            ]
+          },
+          {
+            "text": "with almost no penalty: \\ $100.0\\%$",
+            "bounds": [
+              1.9271711750000002,
+              5.472828825000001,
+              -0.14123286666666668,
+              0.0966251583333333
+            ]
+          },
+          {
+            "text": "shrink every direction (ridge) \\ or drop the thin ones (Part 7's PCA); \\ why a little bias pays: \\ Part 8",
+            "bounds": [
+              -5.002434926041637,
+              5.002434926041694,
+              -3.75,
+              -3.5216895
+            ]
+          }
+        ],
+        "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/endpoints/completed/014_00151.8s.png",
+        "sha256": "338835410ac690a049b6d222acd6bbcced8b2342a00b4d3a7724785513fb4c0c",
+        "actually_viewed": true,
+        "detail": "individual original854x480",
+        "observation": "Title/history and ridge derivation rows/reasons fit;70-direction bars and effectiveweight readouts clear; coefficient labels separated and no monotonic coordinate claim; CV/heldout panel readable and honest. No blocking held-state defect observed."
+      }
+    }
+  ],
+  "limits": "Endpoint-only; exact previously native-viewed PNG reuse where stated"
+}

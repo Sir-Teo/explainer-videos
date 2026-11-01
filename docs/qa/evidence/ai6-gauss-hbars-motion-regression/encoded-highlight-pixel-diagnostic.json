@@ -1,0 +1,370 @@
+{
+  "en": {
+    "scope": "Diagnostic actual encoded saturated-fill scanline,15emphasis frames. Color/compression-dependent threshold; not exact object geometry and no pass/fail threshold. Initial zero-spread assumption rejected by observed1pixel ENedge variation; criterion was not relaxed to declare a pixel-perfect pass. Exact object geometry is independently established by actualManim-point interpolation test.",
+    "roi": [
+      190,
+      269,
+      315,
+      270
+    ],
+    "frame_rows": [
+      {
+        "source_frame": 1381,
+        "time": 92.066341,
+        "image_sha256": "f41f1edc53b2f53e4d072922bfb3c1f5a17533ac87f6709c5e7258c4e75f8ebc",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1382,
+        "time": 92.133008,
+        "image_sha256": "67938828039ec380020c1624965f364b442a0e97ff9bbf13cb7b93fcb6d11d3c",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1383,
+        "time": 92.199674,
+        "image_sha256": "06f4b560f2c804071d01e51030a49fb4af983c3924d4051d65ba921027c4baa0",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1384,
+        "time": 92.266341,
+        "image_sha256": "7c8f2f382da887597fa8b685376097e5896200d332f934f0a640cfc5ea408bb9",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1385,
+        "time": 92.333008,
+        "image_sha256": "508dd413c7cfc794dfdd8d344ebda26a38117d1cef16544e098195e67cf0e4a1",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1386,
+        "time": 92.399674,
+        "image_sha256": "6b1e15da8059ff53437fb827a276eaac444660a7c7846fbd4f5e1a2f5128db56",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1387,
+        "time": 92.466341,
+        "image_sha256": "6f17931f8c6d916fdf54d1c6670317228ce946380406a1be9c3960e5d827f4fd",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1388,
+        "time": 92.533008,
+        "image_sha256": "19fc65aa2c8e519252dd898e3f89cce2a31d2db7ea6697032bd0321283028399",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1389,
+        "time": 92.599674,
+        "image_sha256": "c7c0842b6d4102e8e6bc20bede420d24a52c922ba0b80375e58de9e87c56e235",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1390,
+        "time": 92.666341,
+        "image_sha256": "bd72c92f0afeb69fad9ace82981313710d0e05734d45a33700bcae3c86db0c5c",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1391,
+        "time": 92.733008,
+        "image_sha256": "e2b77164c759e16f485026ccd4bd8dc1375dc469ecf0575bc097fd2c7a8dc662",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1392,
+        "time": 92.799674,
+        "image_sha256": "159901af6d1b602a80e9b09d7840e474eae2d7c55bdf1bbcb4098e563cf175d4",
+        "scanline_y": 269,
+        "bar_color_run": [
+          202,
+          309
+        ],
+        "width_inclusive": 108
+      },
+      {
+        "source_frame": 1393,
+        "time": 92.866341,
+        "image_sha256": "535f710cd9a85a8f4523e08abf44a9a535a92d61627e69d9efc0ec9683c31d9f",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1394,
+        "time": 92.933008,
+        "image_sha256": "f855cf9d363357bcfa773e4391461cfe7ba3c8b80586a98f63c5350c3d65beb4",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1395,
+        "time": 92.999674,
+        "image_sha256": "fdf86f8887b7e1a559c2121df3048f7e67282edb574eb8034ecc249773e86bee",
+        "scanline_y": 269,
+        "bar_color_run": [
+          201,
+          309
+        ],
+        "width_inclusive": 109
+      }
+    ],
+    "unique_runs": [
+      [
+        201,
+        309
+      ],
+      [
+        202,
+        309
+      ]
+    ]
+  },
+  "zh": {
+    "scope": "Diagnostic actual encoded saturated-fill scanline,15emphasis frames. Color/compression-dependent threshold; not exact object geometry and no pass/fail threshold. Initial zero-spread assumption rejected by observed1pixel ENedge variation; criterion was not relaxed to declare a pixel-perfect pass. Exact object geometry is independently established by actualManim-point interpolation test.",
+    "roi": [
+      160,
+      269,
+      285,
+      270
+    ],
+    "frame_rows": [
+      {
+        "source_frame": 1498,
+        "time": 99.866341,
+        "image_sha256": "a92cdd8e31483b3d703fec22a0566d7f7f205859438b893aee999c4f0842b9e9",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1499,
+        "time": 99.933008,
+        "image_sha256": "2453a2e8602e76ef282f5f40df9149c8f3dedf45e72703b035fe5abe6e1f594b",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1500,
+        "time": 99.999674,
+        "image_sha256": "e408a1cd71058ca516f913e75f5d3bcac4ee9386136c32cbe8fad824dc1b1532",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1501,
+        "time": 100.066341,
+        "image_sha256": "3ea436a154019d74a4467ce3437deb281885eff7b7ee433ce0c49313f3d06f1c",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1502,
+        "time": 100.133008,
+        "image_sha256": "294e7d1615470a2876281162f5ab259863c1e54ff9beb79b62dadf3416b67944",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1503,
+        "time": 100.199674,
+        "image_sha256": "78ab2b0bac0da03cc965653fcd3d81de63dd15397212b7d3007d846d53de550e",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1504,
+        "time": 100.266341,
+        "image_sha256": "8b6437a18de63a17b4c115aadc6622a93b3dbd6c9c800c94e9e630823fd44ebf",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1505,
+        "time": 100.333008,
+        "image_sha256": "28a7e571385a02715aa183a06759100c1484bbb4e8471e84e68e8d806def1b95",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1506,
+        "time": 100.399674,
+        "image_sha256": "499e0df0d515f933baeaaac4ead99d8e3ee87411bf1215b93c8f4fe554a5c14b",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1507,
+        "time": 100.466341,
+        "image_sha256": "6cf68e187beed6936bbfb94b193e986e2bf0e2424a8f96f9a7a7666743803a18",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1508,
+        "time": 100.533008,
+        "image_sha256": "f94d12832c4c518064917db5e6e735b2ff85cd46a7efd19d6eea0b07a36284b9",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1509,
+        "time": 100.599674,
+        "image_sha256": "f16cd92aecf79b5192bbdffdf6ccd042df58a6e759581cfb082b311e2ee1cf8e",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1510,
+        "time": 100.666341,
+        "image_sha256": "646b49024c88eb52755f139757ff913647ebd59ffedb47953a1ebb695ebbe4ae",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1511,
+        "time": 100.733008,
+        "image_sha256": "36ed630ae0733f1ec0e9241feef555155c1ff219cba46adc5b73815c2e65fc54",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      },
+      {
+        "source_frame": 1512,
+        "time": 100.799674,
+        "image_sha256": "dc45e3a3a1ca51c7a70919701577f5eb32be86589eb712b1f8a01d71d812e731",
+        "scanline_y": 269,
+        "bar_color_run": [
+          170,
+          278
+        ],
+        "width_inclusive": 109
+      }
+    ],
+    "unique_runs": [
+      [
+        170,
+        278
+      ]
+    ]
+  }
+}

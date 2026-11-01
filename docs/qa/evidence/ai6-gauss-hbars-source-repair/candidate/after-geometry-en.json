@@ -1,0 +1,224 @@
+{
+  "phase": "after",
+  "lang": "en",
+  "source": {
+    "videos/ai/ai6/common.py": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+    "videos/ai/ai6/s03_gauss.py": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb",
+    "videos/ai/ai6/s17_metrics.py": "77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6"
+  },
+  "data": {
+    ".cache/ai6/gaussmarkov.json": "c1b29607cecdf01b1fdf98d86d67a7504b773208e4a9acc2e52410843456c791",
+    ".cache/ai6/calibration.json": "cb6dcbdb20c670fab73c274fd8d9aca25cd6db48e22934d3779d82b8ae92ea99"
+  },
+  "scope": "actual Manim objects from consumer AST, complete raw cached JSON; no scene import/render/producer",
+  "prospective_private_overlay": false,
+  "charts": {
+    "gauss-vb": {
+      "rows": [
+        {
+          "value": 0.010322675811428128,
+          "bar_left": -3.765283892321314,
+          "bar_right": -0.9575160716128637,
+          "width": 2.80776782070845,
+          "expected_width": 2.80776782070845,
+          "y": 0.8780448375,
+          "name_width": 2.881862520833333,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "least squares, \\ bell-shaped noise",
+          "value_text": "0.0103"
+        },
+        {
+          "value": 0.011524142743784173,
+          "bar_left": -3.765283892321314,
+          "bar_right": -0.6307170660120192,
+          "width": 3.1345668263092947,
+          "expected_width": 3.1345668263092943,
+          "y": 0.41804483749999993,
+          "name_width": 2.6292907291666685,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "Theil--Sen, \\ bell-shaped noise",
+          "value_text": "0.0115"
+        },
+        {
+          "value": 0.010054222243787998,
+          "bar_left": -3.765283892321314,
+          "bar_right": -1.030535442010979,
+          "width": 2.734748450310335,
+          "expected_width": 2.734748450310335,
+          "y": -0.04195516250000009,
+          "name_width": 2.3088939166666647,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "least squares, \\ heavy tails",
+          "value_text": "0.0101"
+        },
+        {
+          "value": 0.006677401830748507,
+          "bar_left": -3.765283892321314,
+          "bar_right": -1.9490305943577204,
+          "width": 1.8162532979635935,
+          "expected_width": 1.8162532979635937,
+          "y": -0.5019551624999999,
+          "name_width": 2.056322145833332,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "Theil--Sen, \\ heavy tails",
+          "value_text": "0.0067"
+        }
+      ],
+      "bar_origin_spread": 0.0,
+      "baseline": 0,
+      "range_top": 0.0125,
+      "width": 3.4,
+      "group_bounds": [
+        -6.847146413154647,
+        0.04714641315464663,
+        -0.6519551624999999,
+        1.4519551625
+      ]
+    },
+    "metrics-accs": {
+      "rows": [
+        {
+          "value": 0.8325508607198748,
+          "bar_left": -4.139958889040491,
+          "bar_right": -2.5493485604019934,
+          "width": 1.5906103286384976,
+          "expected_width": 1.5906103286384983,
+          "y": 0.4839393927083332,
+          "name_width": 1.5732662458333353,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "logistic, \\ $2$ rates",
+          "value_text": "83.3\\%"
+        },
+        {
+          "value": 0.9561815336463224,
+          "bar_left": -4.139958889040491,
+          "bar_right": -1.0657804852846229,
+          "width": 3.074178403755868,
+          "expected_width": 3.074178403755869,
+          "y": 0.023939392708333174,
+          "name_width": 2.255256689583333,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "naive Bayes, \\ $70$ words",
+          "value_text": "95.6\\%"
+        },
+        {
+          "value": 0.9561815336463224,
+          "bar_left": -4.139958889040491,
+          "bar_right": -1.0657804852846229,
+          "width": 3.074178403755868,
+          "expected_width": 3.074178403755869,
+          "y": -0.43606060729166696,
+          "name_width": 2.5572109520833335,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "naive Bayes, \\ Platt-scaled",
+          "value_text": "95.6\\%"
+        },
+        {
+          "value": 0.9953051643192489,
+          "bar_left": -4.139958889040491,
+          "bar_right": -0.596296917209505,
+          "width": 3.543661971830986,
+          "expected_width": 3.5436619718309865,
+          "y": -0.8960606072916668,
+          "name_width": 1.6874219312500012,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "logistic, \\ $70$ rates",
+          "value_text": "99.5\\%"
+        }
+      ],
+      "bar_origin_spread": 0.0,
+      "baseline": 0.7,
+      "range_top": 1,
+      "width": 3.6,
+      "group_bounds": [
+        -6.897169841123825,
+        0.09716984112382532,
+        -1.0460606072916667,
+        1.4460606072916666
+      ],
+      "heading": {
+        "text": "accuracy \\\\ bars start at $70\\%$ (higher is better)",
+        "bounds": [
+          -5.4663736302083334,
+          -1.3336263697916664,
+          0.9339393927083333,
+          1.4460606072916666
+        ]
+      }
+    },
+    "metrics-lls": {
+      "rows": [
+        {
+          "value": 0.3781108848525146,
+          "bar_left": 3.363070867294563,
+          "bar_right": 5.425493875581005,
+          "width": 2.0624230082864425,
+          "expected_width": 2.062423008286443,
+          "y": 0.6050892499999999,
+          "name_width": 1.5732662458333353,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "logistic, \\ $2$ rates",
+          "value_text": "0.378"
+        },
+        {
+          "value": 0.4784539048044941,
+          "bar_left": 3.363070867294563,
+          "bar_right": 5.972819438955439,
+          "width": 2.6097485716608766,
+          "expected_width": 2.609748571660877,
+          "y": 0.14508925,
+          "name_width": 2.255256689583333,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "naive Bayes, \\ $70$ words",
+          "value_text": "0.478"
+        },
+        {
+          "value": 0.08799097364223515,
+          "bar_left": 3.363070867294563,
+          "bar_right": 3.8430216326158453,
+          "width": 0.47995076532128245,
+          "expected_width": 0.47995076532128256,
+          "y": -0.3149107500000001,
+          "name_width": 2.5572109520833335,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "naive Bayes, \\ Platt-scaled",
+          "value_text": "0.088"
+        },
+        {
+          "value": 0.03382645360851878,
+          "bar_left": 3.363070867294563,
+          "bar_right": 3.5475787960683016,
+          "width": 0.18450792877373878,
+          "expected_width": 0.1845079287737388,
+          "y": -0.7749107499999999,
+          "name_width": 1.6874219312500003,
+          "name_gap": 0.20000000000000018,
+          "value_gap": 0.1200000000000001,
+          "name_text": "logistic, \\ $70$ rates",
+          "value_text": "0.034"
+        }
+      ],
+      "bar_origin_spread": 0.0,
+      "baseline": 0,
+      "range_top": 0.55,
+      "width": 3.0,
+      "group_bounds": [
+        0.6058599152112292,
+        6.59414008478877,
+        -0.9249107499999998,
+        1.32491075
+      ]
+    }
+  }
+}

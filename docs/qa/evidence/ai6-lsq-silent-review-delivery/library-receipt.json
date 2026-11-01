@@ -1,0 +1,12 @@
+{
+  "operation": "create_library_file",
+  "status": "succeeded",
+  "library_file_id": "libfile_6b3ec8b0ede48191b1412b74604be280",
+  "file_id": "file_00000000238c81f6bd4f6a73b8a91316",
+  "file_name": "AI-Built-Part6-LeastSquares-SILENT-QA-Before-After.zip",
+  "current_version_number": 0,
+  "file_size_bytes": 4083200,
+  "sha256": "fd8cd435485bc8d917b2e2f4046677392415020efb689a241d5cd87bdf231309",
+  "local_identity_helper_exit_code": 0,
+  "scope": "Privatepersistent4movie silent480QAcomparison only; noDrive/publicplatformdelivery/productionacceptance claimed."
+}

@@ -1,0 +1,34 @@
+{
+  "payloads": [
+    {
+      "path": "README.md",
+      "bytes": 1186,
+      "sha256": "9912336f87c5be696d662d4512706605e8c04f72e65a9b97a3419fc044586a18"
+    },
+    {
+      "path": "full-unittest.log.gz",
+      "bytes": 18573,
+      "sha256": "7c61588bcafe32685e935bca9aa2870e0173f5ac5a9d3a95a39521706a1fc24c"
+    },
+    {
+      "path": "receipt.json.gz",
+      "bytes": 554,
+      "sha256": "42b8d57125f72e1eaa6817cdea6ee0a1009584e2ad7a46b890302f6afaefac3f"
+    },
+    {
+      "path": "run_ai6_lasso_logistic_candidate_tests.py.gz",
+      "bytes": 1297,
+      "sha256": "0d0085e78f22820bfad75c24271fed6e855817c9751e15ab8c55ecf5f586ec50"
+    },
+    {
+      "path": "source-after.json.gz",
+      "bytes": 76502,
+      "sha256": "93386377b233867607c782689fc1202fe1f79f6f290a2593a0202fccf4b01a05"
+    },
+    {
+      "path": "source-before.json.gz",
+      "bytes": 76502,
+      "sha256": "93386377b233867607c782689fc1202fe1f79f6f290a2593a0202fccf4b01a05"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "recorded_utc": "2026-11-01T06:17:49.604010+00:00",
+  "status": "authentication-failed-before-materialization",
+  "action": "SupportedLibrarysearch-result library_download.py consumer-local helper, selection000, destinationmaterialized",
+  "target": {
+    "library_file_id": "libfile_77b16ea755508191841d9a3f2ae31b9b",
+    "file_id": "file_000000009db881f6852a4afcdbc1d910",
+    "name": "AI_Built_Part1_Probability_Narrated_Timing_QA_Evidence_v1.zip",
+    "size_bytes_from_authoritative_title_search": 23110,
+    "expected_sha256_from_parent": "fb4485f6f63b58883201c9d8d05401a180d53bfc8147bf8538599229ebc6c417"
+  },
+  "exact_error": "library download request failed: hosted apps tools/list request failed with HTTP status 401",
+  "exit_code": 1,
+  "installed_files_verified": [],
+  "zip_sha256_verified": false,
+  "source_before_patch_verified_against_diagnostic": false,
+  "fresh_helpers": [
+    {
+      "name": "library_download.py",
+      "sha256": "40ae124387a59ce27f9ce193352f2e9f69b13ac4163ae5c0895bb53b4c67523f",
+      "bytes": 45070
+    },
+    {
+      "name": "library_file_transfer.py",
+      "sha256": "acd44c7471495a240e4f2d97037fe6f83c48793ab98938801e5393f5584a029b",
+      "bytes": 16286
+    },
+    {
+      "name": "library_hosted_apps.py",
+      "sha256": "cf40f74293ed9f4739c9ce2bca38003155a278420c375fb412de633efed7dbf8",
+      "bytes": 15838
+    },
+    {
+      "name": "library_upload.py",
+      "sha256": "b11e4929596e321366c2f7291890fbb6d6bf8b413ae6d24593e9548f9bf50f23",
+      "bytes": 44877
+    }
+  ],
+  "not_a_policy_or_auto_review_denial": true,
+  "no_retry_or_alternate_materialization": true,
+  "no_scene_patch": true,
+  "independent_work": "Read-onlyP1ProbabilitysourceAST; localsourcef7da930fexact927,11voiceoverblocks. Sourcecausalhypothesesrecordedseparately,notactualdiagnosticvalidation.",
+  "pending": "Normalhelperauthenticationrepairwithmateriallynewevidence, orproducerparenttrustedrelayoftiming/source/masterdiagnosticfacts. UnrelatedLibrarycreatesuccessisnottransferauthreadiness."
+}

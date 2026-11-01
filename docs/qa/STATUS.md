@@ -1,14 +1,18 @@
 # Current cloud QA checkpoint
 
-Observed 01 November 2026, 06:00 UTC. Progress, **not full-series production approval**.
+Observed 01 November 2026, 06:40 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified push before this checkpoint:
-`bbe8770d6aa36e9b43d8be4f4ed6859e38d7c267` (Part6 numerical generation/scientific evidence; later final candidate source bytes are explicitly inventoried below). No merge, deployment, CI/CD or runners.
+`f7a06179d329d7bf160f015470f87ed2921afdff` (firstPart6polish/revealbatch; later sharedchartcandidate bytes areexplicitlyinventoried below). No merge, deployment, CI/CD or runners.
 
 
-Latest Part6 checkpoint supersedes historical details below: **22numerical items completed;263independent arithmetic/inference checks passed.** Hook and LeastSquares now have accepted bilingual selected-image preview regressions (4of38cases at that declared scope). Hook visibly distinguishes training/held-out pages and discloses632drawn/7outsideview. Three LeastSquares copied-row ghost reveals are removed; exactduration/narration/subtitles/silentWAV/data invariants hold. Ridge has source-local copied-row and reverse-traversal repairs; freshEN/ZH runtime passes arecomplete, actualselectedreviewpending. Remainingcases advance inmanifestorder, withnative1080endpoint capture prepared. No narrated/listening/4K approval follows.
+Latest Part6 checkpoint (06:40UTC): **22numericalitems/263scientificchecks complete;8selected-image ENZHcases accepted** acrossHook,LeastSquares,GaussMarkov,Ridge. Fourfirst-two-chapter nativeendpointcases have66states/18scaledpages/14original1920followups reviewed. Allremainingnarration/listening/4K andlatercasegates stayopen. Rootfactorysnapshot observed31/64passes in the remaining16chaptercapturequeue; itisnotvisualacceptance. [Chapterledger](ai6-chapter-checklist.md).
 
-The frozen final-candidate repository suite passed**601tests in56.401s**, all**1,523source/config identities** unchanged during execution. [Exact scope](evidence/ai6-integrated-tests-20261101-visual-candidate/README.md). Two furtheradditivecaptionmerges preserve all5,541retained Part1–5outputs; currenttable0e4bad42 also preserves238actualcapturedHook/LeastSquares/Ridge outputs fromapplicableprior tables. [Caption evidence](evidence/ai6-preview-caption-integration/README.md). Earlier575/518runs remainhistorical andcountsarenotadded.
+SharedPart6hbars nowaligns baselinesin all3actualconsumercharts whilepreservingnumericwidths; Metrics visiblydisclosesaccuracybars startat70%. Gauss's7copyreveals andquantitativeemphasis arefixed, with1208uniontimes/all447targetencodedframescovered. Metrics actualbilingual/nativechecks remainpending, includingnarrowpositiveChineseleftgutter. [Source/geometry](evidence/ai6-gauss-hbars-source-repair/README.md), [independentreview](evidence/ai6-hbars-independent-review/README.md), [Gaussmotion](evidence/ai6-gauss-hbars-motion-regression/README.md).
+
+The consolidatedsourcebatch afterLasso/Logistic localrepairs passed**604tests55.842s**, all**1524source/configidentities** unchanged. [Currenttestscope](evidence/ai6-integrated-tests-20261101-lasso-logistic-candidate/README.md). Earlier604/60.720s shared-only scope is retained separately. Its1keyadditivecaptionmerge preservesall5541retainedPart1–5outputs. [Captionproof](evidence/ai6-hbars-caption-integration/README.md). Earlier601/575/518runs remainhistorical; countsarenotadded. [Nativefirst4evidence](evidence/ai6-native1080-first-two-chapters/README.md). A private4movie silentbefore/afterLeastSquaresLibrarycomparison issaved separately,clearlyQA-only.
+
+Part1Probability hasanotherparent-reportedactualnarratedtimingfailure(11masters/159.28s;overruns.15/1.94/.46s). Itscompactdiagnosticwasfoundbut supporteddlfailedHTTP401beforeinstallingbytes. Source/speech unchanged; exacttrace/sourcefacts ornormaltransferauthrepairneededbeforeapprovedpatch. No retry/bypass; inactivev5prepisprivatelyparked,andpublishedv4/defaultgates remainunchanged. [Exactblocker/source-onlylimits](evidence/ai1-probability-narrated-timing-blocked-preparation/README.md). Part6workcontinues.
 
 Part 1: all 17 chapters in both languages have endpoint captures, complete silent renders and selected-time
 review. The frozen baseline covers 15,194 selected times from 109,941 automatically decoded frames; scoped
@@ -152,3 +156,6 @@ Part1 production found actual narrated-roadmap reveal delays up to0.79seconds. S
 
 
 Storage recovery05:46UTC converted only proved-zero aligned interiors of180inactive Part1–5 silent-QA WAVs to sparse allocation, preserving complete bytes/hashes/paths/inodes/size/mode/originalmtime. Physical allocation recovered1,644,777,472bytes and306protected numerical/trained/corpus/currentPart6 signatures remained exact. No source/movie/image/speech/model was deleted and no disk guard lowered. [Receipt](evidence/cloud-capacity-20261101-silent-wav-sparse/README.md).
+
+
+Lasso baselinepair106pages/37endpoints andLogistic baselinepair115pages/38endpoints areactuallyreviewed. Lasso5localizedoptimum/annotation/revealfixes andLogistic4localizedrowrevealfixes are source/geometryvalidated; freshbothlanguageendpoint+motionaftercapturesareactivewithseparateowners. No aftervisualacceptance isyetclaimed. [Lassobefore/source](evidence/ai6-lasso-motion-repair/README.md), [Logisticbefore/source](evidence/ai6-logistic-baseline-motion-review/README.md).

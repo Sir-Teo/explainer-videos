@@ -20872,7 +20872,8 @@
     "KKT at $C = 1$: \\ margin tolerance $10^{-3}$": "$C = 1$ 时的 KKT：\\ 间隔容差 $10^{-3}$",
     "outside/bound violations: \\ $0$": "街道外／上界点未通过检查：\\ $0$",
     "free-margin residual: \\ $5.6\\times 10^{-5}$": "自由点最大间隔残差：\\ $5.6\\times 10^{-5}$",
-    "final: \\ $1.6\\%$, \\ round $400$": "最终：\\ $1.6\\%$，\\ 第 $400$ 轮"
+    "final: \\ $1.6\\%$, \\ round $400$": "最终：\\ $1.6\\%$，\\ 第 $400$ 轮",
+    "accuracy \\\\ bars start at $70\\%$ (higher is better)": "准确率 \\\\ 条形从 $70\\%$ 起（越高越好）"
   },
   "phrases": {
     "width": "宽度",

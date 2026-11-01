@@ -1,0 +1,19 @@
+{
+  "payloads": [
+    {
+      "path": "README.md",
+      "bytes": 1201,
+      "sha256": "4b7a673954eab4b9913bf5fcea21fa103f6d32dc9b64001494ee27be0d9fc491"
+    },
+    {
+      "path": "source-only-proposal.md",
+      "bytes": 2834,
+      "sha256": "b0d42b30de48f83e3861ffde6f2baf5901c3ce35753e5f0e7ddfd4674b5c52ae"
+    },
+    {
+      "path": "transport-failure.json",
+      "bytes": 2025,
+      "sha256": "bae9d847fbca26f109ce6c1e58e82ce56632d0af912580a5ecfb036ef89b9c30"
+    }
+  ]
+}

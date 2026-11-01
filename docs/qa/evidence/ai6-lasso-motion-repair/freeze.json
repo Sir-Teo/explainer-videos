@@ -1,0 +1,189 @@
+{
+  "frozen_utc": "2026-11-01T06:42:58.397044+00:00",
+  "source": "/workspace/explainer-videos/videos/ai/ai6/s05_lasso.py",
+  "source_sha256": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9",
+  "before_sha256": "94b3bd567f9bfed36c7d3da5e9054704d5d9e860491883a801c7175786c3f683",
+  "invariants": {
+    "status": "passed",
+    "allowed_five_changes": {
+      "caption_positions": 2,
+      "append_flags": 2,
+      "indicate_scale": 1
+    },
+    "all_other_ast_exact": true,
+    "all_strings_including_VO_bookmarks_and_caption_words_exact": true,
+    "all_play_wait_duration_expressions_exact_except_approved_Indicate_keyword": true,
+    "ladder_requested_duration": 1.2,
+    "ladder_write_branch_preserves_duration": true,
+    "data_model_shared_changes": false,
+    "before_sha256": "94b3bd567f9bfed36c7d3da5e9054704d5d9e860491883a801c7175786c3f683",
+    "after_sha256": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9"
+  },
+  "geometry": {
+    "en": {
+      "language": "en",
+      "scope": "Isolated actual-Manim label/axes/contour constructors; no scene render/data loads/import of Part6 scene or producer.",
+      "shapes_caption_before": [
+        4.166666666666666,
+        6.121338383333335,
+        -2.0112287125000003,
+        -1.7500000000000002
+      ],
+      "shapes_caption_after": [
+        3.367108586111109,
+        5.3217803027777775,
+        -2.98561435625,
+        -2.72438564375
+      ],
+      "active_contour": [
+        3.2108111202069356,
+        6.812213953252069,
+        -2.0091013514222356,
+        0.8096352421405628
+      ],
+      "footer": [
+        -2.4669388677082758,
+        2.4669388677083894,
+        -3.8,
+        -3.5945205499999995
+      ],
+      "threshold_caption_before": [
+        3.0857469322916673,
+        4.871650442708331,
+        -2.2186529708333333,
+        -1.9903424708333333
+      ],
+      "threshold_caption_after": [
+        3.985746932291667,
+        5.7716504427083315,
+        -2.2186529708333333,
+        -1.9903424708333333
+      ],
+      "identity_endpoints": [
+        [
+          2.292032020833332,
+          -3.2403424708333333,
+          0.0
+        ],
+        [
+          5.665365354166665,
+          0.15965752916666634,
+          0.0
+        ]
+      ],
+      "geometry_unchanged": [
+        "ident",
+        "st",
+        "zone"
+      ],
+      "indicate_samples": 41,
+      "status": "passed"
+    },
+    "zh": {
+      "language": "zh",
+      "scope": "Isolated actual-Manim label/axes/contour constructors; no scene render/data loads/import of Part6 scene or producer.",
+      "shapes_caption_before": [
+        4.166666666666666,
+        5.69796485,
+        -2.0266292958333336,
+        -1.7500000000000002
+      ],
+      "shapes_caption_after": [
+        3.5787953527777763,
+        5.11009353611111,
+        -2.993314647916667,
+        -2.716685352083333
+      ],
+      "active_contour": [
+        3.2108111202069356,
+        6.812213953252069,
+        -2.0091013514222356,
+        0.8096352421405628
+      ],
+      "footer": [
+        -1.5872146124999995,
+        1.5872146124999995,
+        -3.8,
+        -3.577397239583333
+      ],
+      "threshold_caption_before": [
+        3.104812155208333,
+        4.852585219791665,
+        -2.2139725968749997,
+        -1.9806392677083333
+      ],
+      "threshold_caption_after": [
+        4.004812155208334,
+        5.752585219791666,
+        -2.2139725968749997,
+        -1.9806392677083333
+      ],
+      "identity_endpoints": [
+        [
+          2.292032020833332,
+          -3.2306392677083333,
+          0.0
+        ],
+        [
+          5.665365354166665,
+          0.1693607322916663,
+          0.0
+        ]
+      ],
+      "geometry_unchanged": [
+        "ident",
+        "st",
+        "zone"
+      ],
+      "indicate_samples": 41,
+      "status": "passed"
+    }
+  },
+  "rendered_after_acceptance": "pending parent-owned fresh EN/ZH endpoints and motion; no after-render claim",
+  "baseline_reviews": {
+    "en": "/workspace/runtime/ai6-ridge-lasso-motion-review/en-Lasso/d9f33e685138c910dce3910a7dafe6678f43e8ebb2f5268bcf09d30de955d0e1/review.json",
+    "zh": "/workspace/runtime/ai6-ridge-lasso-motion-review/zh-Lasso/b6f8ce966099ba4e54ae015efff98eb3f997ad9c09c509f22d9442ea29d9ac82/review.json"
+  },
+  "files": {
+    "check_geometry.py": {
+      "sha256": "13bd5a5f320aee1092e0578b66cad9cdcc9b15ddb333df65cdd6c75f7b84e87d",
+      "bytes": 4098
+    },
+    "geometry-zh.json": {
+      "sha256": "ee6e839bb25ba7fe4bdb9b495dd926799dfbb12d9d15fd88e01e3a1c7723535c",
+      "bytes": 1179
+    },
+    "before.py": {
+      "sha256": "94b3bd567f9bfed36c7d3da5e9054704d5d9e860491883a801c7175786c3f683",
+      "bytes": 18974
+    },
+    "after.py": {
+      "sha256": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9",
+      "bytes": 19035
+    },
+    "geometry-en.log": {
+      "sha256": "b26f71c543b96b608a05fe9d5b4a3cc569d573a4ddda6ed453b6485516f7d509",
+      "bytes": 10520
+    },
+    "geometry-en.json": {
+      "sha256": "2df5b4afeb2600d1a694a0d3b086042bb452b849b42e39e69a1eb7ba33b299f9",
+      "bytes": 1183
+    },
+    "check_invariants.py": {
+      "sha256": "e72df14e09937b31a5c59521ff5586e8e156f4c0aed1d1c04388a7221d291382",
+      "bytes": 3015
+    },
+    "invariants.json": {
+      "sha256": "c9fe45a29666b7fa441ffdd9ff3643bbb1638779db1116539c4a713a1677ad83",
+      "bytes": 615
+    },
+    "patch.diff": {
+      "sha256": "1b17377ec854d82671af0cf079560176da9f0483b54fc6120e57233d5f829468",
+      "bytes": 2610
+    },
+    "geometry-zh.log": {
+      "sha256": "00766390fe6389c4b3e63985cde796310e183326bf1649c66b8c272a380e8230",
+      "bytes": 10319
+    }
+  }
+}

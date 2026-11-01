@@ -1,0 +1,8 @@
+test_actual_variance_emphasis_keeps_bar_geometry_at_every_encoded_phase (test_ai6_hbars_geometry.QuantitativeBars.test_actual_variance_emphasis_keeps_bar_geometry_at_every_encoded_phase) ... ok
+test_empty_rows_and_legacy_outside_range_lengths_remain_defined (test_ai6_hbars_geometry.QuantitativeBars.test_empty_rows_and_legacy_outside_range_lengths_remain_defined) ... ok
+test_unequal_label_widths_share_baseline_and_preserve_encoded_distances (test_ai6_hbars_geometry.QuantitativeBars.test_unequal_label_widths_share_baseline_and_preserve_encoded_distances) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.294s
+
+OK

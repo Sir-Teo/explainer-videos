@@ -2,8 +2,218 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 2724,
-      "sha256": "c20e7c1d25dd92c522e1eb9c9b77e9f98ae7188d80228e13e5cff656f2c5a530"
+      "bytes": 3650,
+      "sha256": "d83644d1768ddc2ba4f72457da3cccb6015d3575f7c148f23cc6b432388f8eb3"
+    },
+    {
+      "path": "after-en/README.md",
+      "bytes": 1458,
+      "sha256": "e1a7f99a47582310212abf13547deb4a279d52c19fac78810c9de83f537a626f"
+    },
+    {
+      "path": "after-en/after-0000252_000016.800s.png",
+      "bytes": 27426,
+      "sha256": "7ef19122da1d77bf71ff15d48b6c0976ef20a75c1134bdd9cffa28cd1b70b7ee"
+    },
+    {
+      "path": "after-en/after-0000417_000027.800s.png",
+      "bytes": 36125,
+      "sha256": "04e46541b1b3be32cf4325d5e58ea6098d0c5c57aea7d51c6bdbb40ce7d5e645"
+    },
+    {
+      "path": "after-en/after-0000472_000031.466s.png",
+      "bytes": 45591,
+      "sha256": "c584a9c20f8455ac4638dadd2f71e0b6ab8f00fc904ddf1858c9873fce6791ee"
+    },
+    {
+      "path": "after-en/after-0001275_000085.000s.png",
+      "bytes": 12603,
+      "sha256": "cc8966821af77ca32f697b6d521e5d91956e1b71799dfa5c488886cdbe077ed4"
+    },
+    {
+      "path": "after-en/audit-result.json.gz",
+      "bytes": 32024,
+      "sha256": "9629a33d61bd4626440abc0efdaef0507f5587f87de2115c031728f26db183a8"
+    },
+    {
+      "path": "after-en/close_regression.py",
+      "bytes": 2347,
+      "sha256": "7866e686d18a797f185dccb5f1a97061e7d5aa9688d38768075636e599fbd8a2"
+    },
+    {
+      "path": "after-en/command.json.gz",
+      "bytes": 430,
+      "sha256": "16e00bf073ea0b26201ea591520f9dd6e759d96745e7b4c06cf9f006c0dc385f"
+    },
+    {
+      "path": "after-en/data-after.json.gz",
+      "bytes": 4469,
+      "sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "after-en/data-before.json.gz",
+      "bytes": 4469,
+      "sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "after-en/endpoints.json",
+      "bytes": 61760,
+      "sha256": "36454ee9b9e6c6a5b9f33a86bf3128dc440224a8bf77c6fa192405a24697501f"
+    },
+    {
+      "path": "after-en/freeze.json.gz",
+      "bytes": 1477,
+      "sha256": "c94bab43211939109a69473335b609e87148d42be789eb04750bb11f23bda748"
+    },
+    {
+      "path": "after-en/owner-copy-manifest.json.gz",
+      "bytes": 1659,
+      "sha256": "e238b22acc0019bbf8e37dbeeba16daa20e0068229fa7a8062c069922d3b8395"
+    },
+    {
+      "path": "after-en/plan_regression.py",
+      "bytes": 4401,
+      "sha256": "b10c6d5ce7243dadc63fa7ebc6b557ef6d85dfd21dd3027f327a8aec3b862a9d"
+    },
+    {
+      "path": "after-en/receipt.json.gz",
+      "bytes": 1933,
+      "sha256": "0f0bbea901cac3c0af2e12d153f6bf7e38c7449fc7b3bef59eed0eb788c53fcf"
+    },
+    {
+      "path": "after-en/regression-plan.json.gz",
+      "bytes": 41166,
+      "sha256": "2ad1bfb325fd5a69cf4592aa9eb8becbe999b86b7bb6f6ca18d7d6acd1e32339"
+    },
+    {
+      "path": "after-en/regression-review.json.gz",
+      "bytes": 45997,
+      "sha256": "bdd5fa0178691628ad9e5530752832b84603d3eef79cd42c39147c2b743414bb"
+    },
+    {
+      "path": "after-en/render-record.json.gz",
+      "bytes": 12192,
+      "sha256": "a45ff24f7afa7dc970b6ca45871f9c56dd8eaa00016695b027e84b067563e2db"
+    },
+    {
+      "path": "after-en/source-after.json.gz",
+      "bytes": 5735,
+      "sha256": "9ef6e42d3bc9e09b7414abd7fe2d4d9c22313c1acd0aa5827ce9aa7ea18efbd0"
+    },
+    {
+      "path": "after-en/source-before.json.gz",
+      "bytes": 5732,
+      "sha256": "d205ee5ac9a3b857ca19c05b593dbe8ea531a90624319d030e78c4e137338b21"
+    },
+    {
+      "path": "after-zh/README.md",
+      "bytes": 1778,
+      "sha256": "d4471dab5b51be2716997d6cfc69fba482e247e13f3aa19267a375c3309143ca"
+    },
+    {
+      "path": "after-zh/audit-result.json.gz",
+      "bytes": 33474,
+      "sha256": "a7623ae725ff61fa07423c75afd72fcb9537026b739209dae583b8fced3eb660"
+    },
+    {
+      "path": "after-zh/command.json.gz",
+      "bytes": 431,
+      "sha256": "fb773e61f6526117f1fc212f6b73b3f3963b2d7556827a037e8a528a992d9082"
+    },
+    {
+      "path": "after-zh/current-0000252_000016.800s.png",
+      "bytes": 27369,
+      "sha256": "c092ab0442cc360227aacd89d795f870128aa6d4295cda1739385baeee97249b"
+    },
+    {
+      "path": "after-zh/current-0001335_000089.000s.png",
+      "bytes": 15970,
+      "sha256": "28e455fc0728c5653d2200270daf91cae6ffe020282f05ba2fc092211932bed7"
+    },
+    {
+      "path": "after-zh/data-after.json.gz",
+      "bytes": 4469,
+      "sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "after-zh/data-before.json.gz",
+      "bytes": 4469,
+      "sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "after-zh/endpoint-003_00033.6s.png",
+      "bytes": 47225,
+      "sha256": "6b09b23c0c42f8d348b42031a7c46b01582144d4f86c7774c2cd80a939f2bf59"
+    },
+    {
+      "path": "after-zh/endpoint-008_00077.9s.png",
+      "bytes": 39916,
+      "sha256": "0233c1ea5cd10651728b9f844d39f87883e841763430382c5e5da6f5da4d131c"
+    },
+    {
+      "path": "after-zh/endpoint-011_00117.3s.png",
+      "bytes": 76884,
+      "sha256": "32d90279f9f5589ffa6855e4a40181665a84ffbf57cc0af3edfbde3d58395c54"
+    },
+    {
+      "path": "after-zh/endpoint-014_00164.6s.png",
+      "bytes": 47056,
+      "sha256": "589862bfffff8b414f536746d5a8cd164f9013045b0164133c53069f80949af9"
+    },
+    {
+      "path": "after-zh/endpoints-page-1.png",
+      "bytes": 204007,
+      "sha256": "8ce67301cc9f502b2962e6c9ae6e46bfe105b894b585f7d000ec5b780c135c98"
+    },
+    {
+      "path": "after-zh/endpoints-page-2.png",
+      "bytes": 260883,
+      "sha256": "23ce0185902eb7ec2309080c9dc57e5ab5d1ef4b5cfd0c3ed0e032f6b9bc2628"
+    },
+    {
+      "path": "after-zh/endpoints.json",
+      "bytes": 53149,
+      "sha256": "52a70db835b85b5495f0a8b4e4a3650bf34164230435003cfdf6cdf5b776a0b4"
+    },
+    {
+      "path": "after-zh/freeze.json.gz",
+      "bytes": 1483,
+      "sha256": "e03ad9adb2e2e4de7c641c7b0a2b6b9e1fbe24278024a72452420ff9db935a4e"
+    },
+    {
+      "path": "after-zh/owner-copy-manifest.json.gz",
+      "bytes": 1677,
+      "sha256": "fd0b13e06aa7dbe297b4c22acb63c8b035a65369bb06c909cfa3dad8b15d20b2"
+    },
+    {
+      "path": "after-zh/receipt.json.gz",
+      "bytes": 1950,
+      "sha256": "707206bcdaafb5749abf71f8e56c996cf350d2f96c7320bcddf868ada545e42f"
+    },
+    {
+      "path": "after-zh/regression-plan.json.gz",
+      "bytes": 42459,
+      "sha256": "f1774e2eca4007ed3339856d1db95ab19d358e9c5186f7275a4c54f57b93f186"
+    },
+    {
+      "path": "after-zh/regression-review.json.gz",
+      "bytes": 55984,
+      "sha256": "f05884c830ce4a8ab82c76dc70fb7bb9fdcb5a0a53454cee98731e63d2df9118"
+    },
+    {
+      "path": "after-zh/render-record.json.gz",
+      "bytes": 18462,
+      "sha256": "18b8a3e6ab0347d32018428dc9022a2a14e930ca7dc03f4d027a8f749a67eb6d"
+    },
+    {
+      "path": "after-zh/source-after.json.gz",
+      "bytes": 5735,
+      "sha256": "9c30210cd3f719b999f99d972d689148c968c46711dffdbc843a158c0f8dc2d6"
+    },
+    {
+      "path": "after-zh/source-before.json.gz",
+      "bytes": 5734,
+      "sha256": "1fe3e8d4df2d0662bb7d7eeb3216acd69184700b1f4341528e90e23fa6537c1e"
     },
     {
       "path": "after.py.gz",
@@ -114,6 +324,11 @@
       "path": "before.py.gz",
       "bytes": 4792,
       "sha256": "cd71ea3cf6d6ad8b255adf599958e96b523e2ed99419df67ebacba525395307e"
+    },
+    {
+      "path": "bilingual-regression-summary.json",
+      "bytes": 2178,
+      "sha256": "0d6a0ff6f30fbeee4da9b52949ef4adf1048bd4b4e368b9e673d90eb0c2f2b6a"
     },
     {
       "path": "check_patch.py",

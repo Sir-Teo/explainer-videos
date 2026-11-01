@@ -1,0 +1,10 @@
+{
+  "strings": {
+    "accuracy \\\\ bars start at $70\\%$ (higher is better)": "准确率 \\\\ 条形从 $70\\%$ 起（越高越好）"
+  },
+  "scope": "Prospective exact single caption; no shared table edit. Accuracy bars encode distance above70%, not full zero-baseline length.",
+  "source": "videos/ai/ai6/s17_metrics.py::scores.ta",
+  "obsolete_keys": {
+    "accuracy \\ (higher is better)": "Retain globally if another scene still uses it."
+  }
+}

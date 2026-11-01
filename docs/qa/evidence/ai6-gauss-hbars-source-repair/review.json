@@ -1,0 +1,71 @@
+{
+  "time": "2026-11-01T06:22:19.373258+00:00",
+  "stage": "complete actual before selected review plus frozen source/object candidate; rendered after validation pending",
+  "cases": [
+    {
+      "case": "en-GaussMarkov",
+      "decoded": null,
+      "selected": 18,
+      "unique": 18,
+      "pages_actually_viewed": 3,
+      "tile_width": 640,
+      "native_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": []
+    },
+    {
+      "case": "en-GaussMarkov_motion",
+      "decoded": 2312,
+      "selected": 460,
+      "unique": 402,
+      "pages_actually_viewed": 51,
+      "tile_width": 640,
+      "native_followups": 0,
+      "raw_status": "passed",
+      "raw_warnings": []
+    },
+    {
+      "case": "zh-GaussMarkov",
+      "decoded": null,
+      "selected": 18,
+      "unique": 18,
+      "pages_actually_viewed": 3,
+      "tile_width": 640,
+      "native_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": []
+    },
+    {
+      "case": "zh-GaussMarkov_motion",
+      "decoded": 2541,
+      "selected": 472,
+      "unique": 403,
+      "pages_actually_viewed": 51,
+      "tile_width": 640,
+      "native_followups": 0,
+      "raw_status": "passed",
+      "raw_warnings": []
+    }
+  ],
+  "before_every_encoded_windows_preserved": {
+    "en": 230,
+    "zh": 217,
+    "scope": "7retained append windows plus quantitative Indicate; allmaps preserved. Additional before every-encoded visual review is limited to explicitly logged pages/natives, not entire447-frame set."
+  },
+  "findings": [
+    "Bar-origin misalignment actual Gauss image evidence, independently reproduced actualManim all3callers ENZH. Metrics remains source/object scope, no actual rendered Metrics review yet.",
+    "Retained equation copies briefly double glyphs/cross notes on7append calls in both actual clips.",
+    "Default1.2 quantitative row emphasis scales bars and transiently clips EN left label; stored data/permanentbar lengths remain valid.",
+    "Metrics accuracy chart lacks visible70%lengthbaseline cue; candidate adds explicit2lineheading.",
+    "Suspected EN TheilSen footer clip withdrawn after original native crop; full text fits."
+  ],
+  "tests": "3scoped realManim geometry/animation unit tests pass .294s; historical601fullsuite predates candidate; independent reviewer source/object approval separate runtime receipt.",
+  "limits": [
+    "No after-render claim yet. Fresh Gauss ENZH EP/fullsilentselected and fresh Metrics ENZH EP/motion/native required.",
+    "640px selected contact-page tiles plus original854x480criticalfollowups, not1080native/fullproductionmotion.",
+    "Timeindexed selected scope has unselected gaps preserved in complete audit maps; no continuous perceptual playback or audio/narration listening claim.",
+    "All rawbaseline statuses/warnings retained; later aggregate source changes do not retroactively rewrite rawrecords.",
+    "No data/models/producers/core/globaltable/mainZH edits; prospective singlecaption overlay awaits root merge."
+  ],
+  "ledger_correction": "Three repeated EN-native entries appended during ZH logging were removed; actual EN original-size coverage is the three earlier verified unique images, not six. Raw pre-correction ledger retained privately."
+}
