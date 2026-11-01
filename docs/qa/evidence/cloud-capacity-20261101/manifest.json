@@ -1,0 +1,25 @@
+{
+  "scope": "Existing normal public-download eviction and unchanged protected signatures; no new eviction.",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1504,
+      "sha256": "6a055712c77d46d385e71f08038c280324448745937201cc3ec156e1f69dcc1c"
+    },
+    {
+      "path": "inactive-public-text-download/driver.py.gz",
+      "bytes": 1887,
+      "sha256": "e6c5ec4a5b11add53b9c5c87d4296402b522228ca4b71b7296e307011ed4a1d0"
+    },
+    {
+      "path": "inactive-public-text-download/receipt.json",
+      "bytes": 31279,
+      "sha256": "713750a7361a98f509f0780bde89e4381cc23e209bcce1287adfb6ed43526f83"
+    },
+    {
+      "path": "index.json",
+      "bytes": 1423,
+      "sha256": "65578e4782878ba6915dc2c0b2c589455fd3c88912803c2b0848858c362467b3"
+    }
+  ]
+}

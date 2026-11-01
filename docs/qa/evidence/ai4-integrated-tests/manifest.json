@@ -1,0 +1,45 @@
+{
+  "scope": "Current additive test evidence; historical runs remain separately scoped.",
+  "files": [
+    {
+      "path": "2026-11-01-preview-full-417-receipt.json",
+      "bytes": 2318,
+      "sha256": "33030fa38dd4ca59ea2f9c3c49c2b71d48aec697df91f67bb3ca4aee8367c7c0"
+    },
+    {
+      "path": "2026-11-01-preview-full-417-tests.log.gz",
+      "bytes": 13017,
+      "sha256": "e3bb5f70c8ef53a86c4d7b5cb55fbad32c7172f88c3c01128b43dd822cd7b43b"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2156,
+      "sha256": "8766074404f7536ed11adb636be014fe4a406f2a41dd80664ae6adac5376800e"
+    },
+    {
+      "path": "full-unittest.log.gz",
+      "bytes": 11513,
+      "sha256": "26dae1b75858f1864ed8485e80eb8b907e4fdf2104600231737191423d3a62d7"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 6189,
+      "sha256": "2e09bd4b721880476988939d6701e484a9ba6bc9500fd45035309aee16f4ad28"
+    },
+    {
+      "path": "source-freeze-receipt.json",
+      "bytes": 545,
+      "sha256": "992861934c4f06d0ebfebe8dfde7b17754b7539bd34a9f0d58e62c94b0bc1b42"
+    },
+    {
+      "path": "source-freeze-unittest.log.gz",
+      "bytes": 11523,
+      "sha256": "856a9c375a029b2af3ca39d5971438cfbd96383b2ba314d5de8ba1095b04384a"
+    },
+    {
+      "path": "source-freeze.json",
+      "bytes": 4726,
+      "sha256": "78ae73eecb1353e844474140bbb4ed7ae58148e0a9dd57c96b7a50320e8f3059"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "movie": "/workspace/runtime/ai4-native-playback-handoff/AI-Built-Part04-Quadratic-EN-repaired-silent-480p15.mp4",
+  "sha256": "175e46307ba5a93acbea5d6a177bd536d39fd301732e1a9a8b0c0a0a74c3fc1a",
+  "bytes": 1874518,
+  "language": "en",
+  "duration_seconds": 211.13333333333236,
+  "pixel_size": [
+    854,
+    480
+  ],
+  "fps": 15,
+  "narration": "silent preview",
+  "source_sha256": "8b387c3a6f707b35b275bfb56a2daba1219707bd6e8c573bbf8ca2456390d68e",
+  "shared_viz_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+  "existing_review": "docs/qa/evidence/ai4-quadratic-motion-regression and ai4-quadratic-native1080-regression; changed spans all encoded frames plus selected full clip, no continuous perceptual/listening approval",
+  "publication_commit": "ad5c72ce20dd4ec955a46b23a5087acd43fcd05a",
+  "library": {
+    "status": "succeeded",
+    "library_file_id": "libfile_5fd0acd0081c8191923ce11f325bf275",
+    "version": 0,
+    "file_id": "file_00000000c16481f6919cbe7b95e32193",
+    "bytes": 1874518,
+    "xattr_readback": "0"
+  },
+  "delivery_scope": "Saved in Library; native attachment, materialization and desktop playback not established by this receipt.",
+  "observed_utc": "2026-11-01T00:53:37.365891+00:00"
+}

@@ -1,0 +1,28 @@
+{
+  "date_utc": "2026-11-01",
+  "action": "Normal Hugging Face cache-manager eviction of one canonical inactive pretrained text-model download",
+  "repo_id": "Qwen/Qwen3-1.7B-Base",
+  "revision": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+  "public": true,
+  "ungated": true,
+  "download_inventory_logical_bytes_reclaimed": 3452676482,
+  "filesystem_free_before": 1527758848,
+  "filesystem_free_after": 4980502528,
+  "filesystem_free_delta": 3452743680,
+  "protected_file_signatures_unchanged": 188,
+  "signature_fields": [
+    "bytes",
+    "mtime_ns",
+    "sha256"
+  ],
+  "receipt": "inactive-public-text-download/receipt.json",
+  "receipt_sha256": "713750a7361a98f509f0780bde89e4381cc23e209bcce1287adfb6ed43526f83",
+  "driver": "inactive-public-text-download/driver.py.gz",
+  "driver_sha256": "e6c5ec4a5b11add53b9c5c87d4296402b522228ca4b71b7296e307011ed4a1d0",
+  "limits": [
+    "Original sources, generated speech, numerical payloads, raw corpus, trained/custom checkpoints, GPT2 validator weights and other model repositories remain.",
+    "Future recomputation needing this public text model requires a normal authorized redownload of the pinned revision.",
+    "No local-computer, credentials, network-policy, validation-metadata or producer operation."
+  ],
+  "validation_scope": "Existing eviction indexed; protected signatures rechecked read-only. No new eviction, model load/download or production operation."
+}

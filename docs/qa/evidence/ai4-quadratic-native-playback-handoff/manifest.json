@@ -1,0 +1,14 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "2ad0fb45b390005d9a1e9104ed4a3d7645d3e950504f0326b37955c7b7633d32",
+      "bytes": 498
+    },
+    {
+      "path": "receipt.json",
+      "sha256": "07ccabe8fbc7302413512e2974c12f2a1989690361e4743ac44e083cf18a7063",
+      "bytes": 1250
+    }
+  ]
+}

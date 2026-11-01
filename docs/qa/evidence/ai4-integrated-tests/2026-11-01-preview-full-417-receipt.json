@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "scope": "Additive historical full-repository unittest result; no final-source or render/audio approval. Historical352test receipts/logs preserved unchanged.",
+  "date_utc": "2026-11-01",
+  "tests": 417,
+  "seconds": 42.694,
+  "outcome": "OK",
+  "exit_code_source": "Not embedded in raw log; successful unittest terminator observed, parent reports successful run.",
+  "original_runtime_log": "/workspace/runtime/ai4-final-preview-full-tests.log",
+  "original_log_bytes": 70673,
+  "original_log_sha256": "792fd276e8f305ea5d60d45229181cb8022eddfe767437dab326f58e03e8a618",
+  "original_log_filesystem_mtime_utc": "2026-11-01T00:38:52.584425+00:00",
+  "compressed_log": "2026-11-01-preview-full-417-tests.log.gz",
+  "compressed_log_sha256": "e3bb5f70c8ef53a86c4d7b5cb55fbad32c7172f88c3c01128b43dd822cd7b43b",
+  "source_scope": {
+    "complete_test_time_source_snapshot": "Not supplied with log; current checkout hashes are not retroactively asserted as test-time provenance.",
+    "parent_reported_ordering": "Before subsequent Gradient history sentence EN/ZH repair.",
+    "later_changed_files": [
+      {
+        "path": "videos/ai/ai4/s03_gradient.py",
+        "before_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+        "after_sha256": "10bac01890e68e3f86915521de9cf3b6729fe9e7934750d629360464263ceb33"
+      },
+      {
+        "path": "videos/ai/ai4/zh_lines.py",
+        "before_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "after_sha256": "ec04b2f4c18551b990707465209d3f4472d3b098ccf16e61a1d2d558bb089e08"
+      }
+    ],
+    "separate_followup_evidence": "../ai4-primary-source-history-review/",
+    "separate_followup_tests": {
+      "passed": 20,
+      "seconds": 12.125
+    },
+    "followup_validation_sha256": "6a4398e2ccb5455853d451e2dd06f212c98158759ba834c20ffd652839e8dd0a",
+    "followup_narration_log_sha256": "c882ea63ce1c2679eae8caf8008b43fa1c87a8c1a6a5f8ac1ba96a6c5b3e411e"
+  },
+  "limits": [
+    "417 is the complete suite actually logged. The separate20narration tests are not a final437-test suite.",
+    "Later10bac018/ec04b2f4 wording was not included in this417-test run.",
+    "Automated tests do not establish playback/listening, narrated sync, production-resolution quality or delivery."
+  ]
+}
