@@ -1,4 +1,13 @@
-# Parts 1–3: local 4K/audio production handoff
+# Parts 1–3: reviewed cloud production handoff
+
+## Explicit SVD production-polish overlay v2
+
+The new optional selection **`--overlay svd-production-polish-v2`** binds base927 plus exactly one replacement: `videos/ai/ai3/s08_svd.py`, SHA256 **`2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b`** (12,273 bytes). Source patch commit **`d7a9b0acfb15ad9c371f14acae5d8acab2644d6f`** and complete native evidence commit **`86da3b0df913b80966cfba4547cbcb952e9a64a4`** are published. This includes v1's clean reveals plus the sigma1 inset (27→132 native blank pixel columns) and unbroken Chinese name/semantic wrapping. [Native evidence](evidence/ai3-svd-production-margin-polish/README.md).
+
+Use the current verifier/manifest from this metadata release **outside** the pinned production worktree; the older saved cache ZIPs contain historical v1 metadata and are not replaced. The original v1 manifest and default gate are unchanged. The new [v2 manifest](evidence/production-handoff-parts1-3/overlays/svd-production-polish-v2.json) permits no other source or optional repository change. [Preflight evidence](evidence/production-handoff-parts1-3/overlay-polish-v2-checks/README.md) records32tests plus an actual base927 strict268file pass and negative checks. New native endpoints are geometry evidence, not a new narrated production-movie acceptance.
+
+English narration/audio inputs, Chinese utterances, bookmarks and requested animation timings are unchanged by this visual overlay. The separately requested slower/natural Mandarin sample belongs to the production owner and remains an acoustic/alignment experiment; this overlay does not integrate it. The later corrected Outro **e874a8da…** is still outside this one-file gate. Full Part3 should use a separately reviewed combined source gate before production expansion; Parts1–2 and the cache-independent SVD pilot have their own existing scopes.
+
 
 ## Cloud reactivation — 2026-11-01
 
