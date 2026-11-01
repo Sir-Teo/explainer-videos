@@ -143,19 +143,26 @@ class Outro(VoiceoverScene):
         tiles = self.tiles()
         head = label(rf"Part {PART}, in twelve pictures", font_size=36).to_edge(UP, buff=0.2)
         with self.voiceover(
-            "Let's take stock. Principal components are the covariance's eigenvectors: the line of greatest spread, "
-            "and the line closest to the data, at once; add noise, and they become a probability model. Independent "
-            "components unmixed two voices. EM fits any model with hidden parts and can never go downhill; k-means "
-            "is its hard version, and a topic model a mixture of mixtures. Hidden Markov models found vowels with "
-            "no labels, and EM's alignments started statistical translation. Good–Turing and Kneser–Ney counted "
+            "Let's take stock. <bookmark mark='pca'/> Principal components are the covariance's eigenvectors: the line of greatest spread, "
+            "and the line closest to the data, at once; add noise, and they become a probability model. "
+            "<bookmark mark='ica'/> Independent components unmixed two voices. <bookmark mark='em'/> With an exact "
+            "posterior E step and an M step that never lowers the same bound, EM cannot lower the likelihood. "
+            "K-means is its small-variance limit, <bookmark mark='topics'/> and a topic model is a mixture of mixtures. "
+            "<bookmark mark='hmm'/> Hidden Markov models found vowels with no labels, "
+            "<bookmark mark='alignment'/> and EM's alignments started statistical translation. "
+            "<bookmark mark='counting'/> Good–Turing and Kneser–Ney counted "
             "what hadn't been seen, and a suffix array counted contexts of any length. Graphs gave us independence, "
-            "message passing, and, with do, cause and effect. Gaussian processes put probabilities on whole "
-            "functions, chose their own length scale by Occam's razor, and chose where to look next. And variational "
+            "<bookmark mark='graphs'/> message passing, and, <bookmark mark='causes'/> with do, cause and effect. "
+            "<bookmark mark='gp'/> Gaussian processes put probabilities on whole "
+            "functions, chose their own length scale by Occam's razor, <bookmark mark='optimization'/> and chose where to look next. "
+            "<bookmark mark='vi'/> And variational "
             "inference turned an impossible posterior into an optimization."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15, scale=0.95) for t in tiles], lag_ratio=0.85),
-                      run_time=max(4.0, vo.duration - 2.0))
+            self.play(FadeIn(head), run_time=0.35)
+            for cue, tile in zip(("pca", "ica", "em", "topics", "hmm", "alignment", "counting",
+                                  "graphs", "causes", "gp", "optimization", "vi"), tiles):
+                vo.wait_until(cue)
+                self.play(FadeIn(tile, shift=UP * 0.15, scale=0.95), run_time=0.35)
         self.wait(0.3)
         self.clear_scene()
 
@@ -172,17 +179,20 @@ class Outro(VoiceoverScene):
             (r"Kneser--Ney: \ the row to beat", [9]),
         ], font_size=24)
         with self.voiceover(
-            "Hidden parts come back everywhere. Model 1's alignments return as attention, a soft alignment learned "
-            "inside the network, in part thirteen. State-space models, in part fifteen, carry a hidden state through "
-            "time, and mixtures of experts, in part sixteen, are mixtures with a learned way of choosing. The forward "
-            "algorithm trains speech recognizers in part twenty-three. An infinitely wide network is a Gaussian "
-            "process, in part twelve. The ELBO and the reparameterization trick train autoencoders and diffusion "
-            "models. Setting a network's activations by hand is the do operator, in part thirty. And Kneser–Ney is "
+            "Hidden parts come back everywhere. <bookmark mark='alignment'/> Model 1's alignments return as attention, a soft alignment learned "
+            "inside the network, in part thirteen. <bookmark mark='state'/> State-space models, in part fifteen, carry a hidden state through "
+            "time, <bookmark mark='experts'/> and mixtures of experts, in part sixteen, are mixtures with a learned way of choosing. "
+            "<bookmark mark='forward'/> The forward algorithm trains speech recognizers in part twenty-three. "
+            "<bookmark mark='gp'/> An infinitely wide network is a Gaussian "
+            "process, in part twelve. <bookmark mark='elbo'/> The ELBO and the reparameterization trick train autoencoders and diffusion "
+            "models. <bookmark mark='causes'/> Setting a network's activations by hand is the do operator, in part thirty. "
+            "<bookmark mark='counting'/> And Kneser–Ney is "
             "the row the first neural language model has to beat, in part nine."
         ) as vo:
-            self.play(FadeIn(card.head))
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in card.rows], lag_ratio=0.4),
-                      run_time=max(3.0, vo.duration - 1.5))
+            self.play(FadeIn(card.head), run_time=0.35)
+            for cue, row in zip(("alignment", "state", "experts", "forward", "gp", "elbo", "causes", "counting"), card.rows):
+                vo.wait_until(cue)
+                self.play(FadeIn(row, shift=RIGHT * 0.1), run_time=0.35)
         self.wait(0.3)
         self.clear_scene()
 

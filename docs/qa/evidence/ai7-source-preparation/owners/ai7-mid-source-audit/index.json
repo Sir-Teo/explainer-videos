@@ -1,0 +1,585 @@
+{
+  "owner": "ai7-mid-source-audit",
+  "runtime_root": "/workspace/runtime/ai7-mid-source-audit",
+  "file_count": 64,
+  "raw_original_bytes": 931513,
+  "archive_scope": "Historical/source-preparation only. No final table/integrated test/render or actual production scientific signoff.",
+  "files": [
+    {
+      "original_relative_path": "audit-report.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/audit-report.json",
+      "original_bytes": 25152,
+      "original_sha256": "2eb98b67847f0ade3e8cbfcacd6e0b9c35bbc9dd5a5e6987497a5093c92209e2",
+      "object": "../../objects/2eb98b67847f0ade3e8cbfcacd6e0b9c35bbc9dd5a5e6987497a5093c92209e2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "audit-report.md",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/audit-report.md",
+      "original_bytes": 12863,
+      "original_sha256": "943d52b148e1d0602d62e33fc13e09da39ef464e5485486c06c656da2b6089f5",
+      "object": "../../objects/943d52b148e1d0602d62e33fc13e09da39ef464e5485486c06c656da2b6089f5.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "ibm-addat-counterfactual-full.json.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/ibm-addat-counterfactual-full.json.gz",
+      "original_bytes": 44454,
+      "original_sha256": "edeaca474bfd07b53e23ef9c885dc3b62bdd210f7a8b6900ebbd3364e3b5c17f",
+      "object": "../../objects/edeaca474bfd07b53e23ef9c885dc3b62bdd210f7a8b6900ebbd3364e3b5c17f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "ibm-original-full.json.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/ibm-original-full.json.gz",
+      "original_bytes": 44352,
+      "original_sha256": "46f36edf9ab042a3fdde57fa1659f3bbe3f27217e8ad16074864571660333372",
+      "object": "../../objects/46f36edf9ab042a3fdde57fa1659f3bbe3f27217e8ad16074864571660333372.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "ibm-results.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/ibm-results.json",
+      "original_bytes": 6961,
+      "original_sha256": "fc33395a5222e86202d97ccbd3df6be8280b89f6c7d31c873a8054fb50fd8c38",
+      "object": "../../objects/fc33395a5222e86202d97ccbd3df6be8280b89f6c7d31c873a8054fb50fd8c38.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "ibm_check.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/ibm_check.log",
+      "original_bytes": 6961,
+      "original_sha256": "fc33395a5222e86202d97ccbd3df6be8280b89f6c7d31c873a8054fb50fd8c38",
+      "object": "../../objects/fc33395a5222e86202d97ccbd3df6be8280b89f6c7d31c873a8054fb50fd8c38.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "ibm_check.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/ibm_check.py",
+      "original_bytes": 4049,
+      "original_sha256": "674750ab6b488427a45d1b38afc2ee4cc1c2b40d9b2874cf4ce2294acde60ab1",
+      "object": "../../objects/674750ab6b488427a45d1b38afc2ee4cc1c2b40d9b2874cf4ce2294acde60ab1.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/after/s07_hmm.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/s07_hmm.py",
+      "original_bytes": 14712,
+      "original_sha256": "463c764548b55fc2be730c822894a26c592db528e51ee1f9d6a83b7218f4d340",
+      "object": "../../objects/463c764548b55fc2be730c822894a26c592db528e51ee1f9d6a83b7218f4d340.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/after/s08_baumwelch.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/s08_baumwelch.py",
+      "original_bytes": 14420,
+      "original_sha256": "3e365218f56baac8f14416d327d8a322d0fbdaae47045463e579680ed366f2dd",
+      "object": "../../objects/3e365218f56baac8f14416d327d8a322d0fbdaae47045463e579680ed366f2dd.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/after/s09_translation.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/s09_translation.py",
+      "original_bytes": 14657,
+      "original_sha256": "31f1a69922addcc30cc639553c95d9cc7c50010c29fc0cbe4c0220c81c903299",
+      "object": "../../objects/31f1a69922addcc30cc639553c95d9cc7c50010c29fc0cbe4c0220c81c903299.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/after/s10_kn.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/s10_kn.py",
+      "original_bytes": 17717,
+      "original_sha256": "4f70e0fb9f443160594e9ec7d73f767e50df632449c85ffd1551380109b45b6a",
+      "object": "../../objects/4f70e0fb9f443160594e9ec7d73f767e50df632449c85ffd1551380109b45b6a.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/after/s11_infini.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/s11_infini.py",
+      "original_bytes": 13118,
+      "original_sha256": "1372a6797934c27a0968343c4642f80d2504388965da825a1eb4a50a24e493b5",
+      "object": "../../objects/1372a6797934c27a0968343c4642f80d2504388965da825a1eb4a50a24e493b5.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/after/test_ai7_counting_scene_claims.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/test_ai7_counting_scene_claims.py",
+      "original_bytes": 7418,
+      "original_sha256": "5d15ed8a470026d1dfa625967144a20a4d4b74d6170d943b65ba1d2f38bf3ff9",
+      "object": "../../objects/5d15ed8a470026d1dfa625967144a20a4d4b74d6170d943b65ba1d2f38bf3ff9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/before/s07_hmm.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/before/s07_hmm.py",
+      "original_bytes": 14409,
+      "original_sha256": "1b953d893843bbde1f368818fe95cb042498e53418049fcb9c0f6e18792bc58c",
+      "object": "../../objects/1b953d893843bbde1f368818fe95cb042498e53418049fcb9c0f6e18792bc58c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/before/s08_baumwelch.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/before/s08_baumwelch.py",
+      "original_bytes": 13711,
+      "original_sha256": "dd78bdd41d022ea9d305a4576025c39bda9b338954087c2374d7f8c5fcad5258",
+      "object": "../../objects/dd78bdd41d022ea9d305a4576025c39bda9b338954087c2374d7f8c5fcad5258.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/before/s09_translation.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/before/s09_translation.py",
+      "original_bytes": 14163,
+      "original_sha256": "42c3e3b7f5b3d892bb6dd4e31f63265ea5f62fed0cd12f0584c405532f841951",
+      "object": "../../objects/42c3e3b7f5b3d892bb6dd4e31f63265ea5f62fed0cd12f0584c405532f841951.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/before/s10_kn.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/before/s10_kn.py",
+      "original_bytes": 17404,
+      "original_sha256": "fe1c33680c7474ae1eec3af41d5ef1224df7a50e7a7eb15e78aa3415f52efe47",
+      "object": "../../objects/fe1c33680c7474ae1eec3af41d5ef1224df7a50e7a7eb15e78aa3415f52efe47.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/before/s11_infini.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/before/s11_infini.py",
+      "original_bytes": 12464,
+      "original_sha256": "7c3670e098433cf1fc3ef3f232cf13dc758b0f5d954bf87e28f29e8142419070",
+      "object": "../../objects/7c3670e098433cf1fc3ef3f232cf13dc758b0f5d954bf87e28f29e8142419070.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/bookmark-and-play-invariants.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/bookmark-and-play-invariants.json",
+      "original_bytes": 3591,
+      "original_sha256": "ea8249bd80f8ae3814b7bcbd9cf1a4f037d6841315f22dd52912840c172642f1",
+      "object": "../../objects/ea8249bd80f8ae3814b7bcbd9cf1a4f037d6841315f22dd52912840c172642f1.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/caption-add.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/caption-add.json",
+      "original_bytes": 2114,
+      "original_sha256": "23cc625cb0decd45ff98975af069910906e740f5941210d95f60575d04a627a6",
+      "object": "../../objects/23cc625cb0decd45ff98975af069910906e740f5941210d95f60575d04a627a6.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/caption-proposal-scope.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/caption-proposal-scope.json",
+      "original_bytes": 1663,
+      "original_sha256": "c425b66b4ed9e3ba547b47407dbda3d88f49cf37ffb1f35f871f5bd09749ef5c",
+      "object": "../../objects/c425b66b4ed9e3ba547b47407dbda3d88f49cf37ffb1f35f871f5bd09749ef5c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/captions.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/captions.py",
+      "original_bytes": 2940,
+      "original_sha256": "b26c25184834a560328b299f7e38d04ddfd15717a4591355ad41dc86fa3d9135",
+      "object": "../../objects/b26c25184834a560328b299f7e38d04ddfd15717a4591355ad41dc86fa3d9135.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/diff-check.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/diff-check.json",
+      "original_bytes": 344,
+      "original_sha256": "15b2b67441ffdf233a77f8711dc6f2c71d3c5def4d145c7a776013a44ca0561f",
+      "object": "../../objects/15b2b67441ffdf233a77f8711dc6f2c71d3c5def4d145c7a776013a44ca0561f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/final-focused-tests.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/final-focused-tests.log",
+      "original_bytes": 1178,
+      "original_sha256": "fe070ae555bb1e2799ab0fc2a8bc7f958f6f660146fa25aad1a40952ea9c2f91",
+      "object": "../../objects/fe070ae555bb1e2799ab0fc2a8bc7f958f6f660146fa25aad1a40952ea9c2f91.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/final-overlay-verification.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/final-overlay-verification.log",
+      "original_bytes": 67,
+      "original_sha256": "01d7bb5d09835560977789ce8f591fcdc16452900ef3b0fdc19e49a0c249eaa0",
+      "object": "../../objects/01d7bb5d09835560977789ce8f591fcdc16452900ef3b0fdc19e49a0c249eaa0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/focused-tests.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/focused-tests.log",
+      "original_bytes": 1178,
+      "original_sha256": "658d7c431f71ad4c29c649a4bda6181d5ecab0c700e33bc7a0a4185a1413b6b5",
+      "object": "../../objects/658d7c431f71ad4c29c649a4bda6181d5ecab0c700e33bc7a0a4185a1413b6b5.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/freeze.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/freeze.py",
+      "original_bytes": 5521,
+      "original_sha256": "b3d98b89cfeb65bff42b2feeafad994c0074b5f51ca04cfd912263fe92a70ada",
+      "object": "../../objects/b3d98b89cfeb65bff42b2feeafad994c0074b5f51ca04cfd912263fe92a70ada.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/geometry-en.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/geometry-en.json",
+      "original_bytes": 5141,
+      "original_sha256": "45488d0953f1682e46e608890105abbd54fa6052969591cf4e97f07c9149cbf1",
+      "object": "../../objects/45488d0953f1682e46e608890105abbd54fa6052969591cf4e97f07c9149cbf1.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/geometry-en.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/geometry-en.log",
+      "original_bytes": 5141,
+      "original_sha256": "45488d0953f1682e46e608890105abbd54fa6052969591cf4e97f07c9149cbf1",
+      "object": "../../objects/45488d0953f1682e46e608890105abbd54fa6052969591cf4e97f07c9149cbf1.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/geometry-zh.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/geometry-zh.json",
+      "original_bytes": 6135,
+      "original_sha256": "3e1035621bffbf6ac2d4e6eb158916001fd89eeb36a29d243f84f32a6d044859",
+      "object": "../../objects/3e1035621bffbf6ac2d4e6eb158916001fd89eeb36a29d243f84f32a6d044859.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/geometry-zh.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/geometry-zh.log",
+      "original_bytes": 6135,
+      "original_sha256": "3e1035621bffbf6ac2d4e6eb158916001fd89eeb36a29d243f84f32a6d044859",
+      "object": "../../objects/3e1035621bffbf6ac2d4e6eb158916001fd89eeb36a29d243f84f32a6d044859.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/geometry_check.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/geometry_check.py",
+      "original_bytes": 3473,
+      "original_sha256": "0b3894c170187aaacff5ba6a59839b3f5abe26274056227dc4c81db0dd52d7ff",
+      "object": "../../objects/0b3894c170187aaacff5ba6a59839b3f5abe26274056227dc4c81db0dd52d7ff.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/initial-geometry-scope-failure.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/initial-geometry-scope-failure.log",
+      "original_bytes": 10798,
+      "original_sha256": "27edc2f81a107b404468f3924816646a537ac6599f5cac29d459b097e1bd9737",
+      "object": "../../objects/27edc2f81a107b404468f3924816646a537ac6599f5cac29d459b097e1bd9737.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/initial-leading-branch-failure.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/initial-leading-branch-failure.log",
+      "original_bytes": 589,
+      "original_sha256": "e748b9ffea94b7d79a4889ecc78b5a30bce1a33fd087be264c3f15c4fdc11a4b",
+      "object": "../../objects/e748b9ffea94b7d79a4889ecc78b5a30bce1a33fd087be264c3f15c4fdc11a4b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/initial-unpositioned-summary-en.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/initial-unpositioned-summary-en.json",
+      "original_bytes": 2659,
+      "original_sha256": "3af99bafae40406d31b979a651077ae13c33116f9fac1309e33c096fbdacb3ab",
+      "object": "../../objects/3af99bafae40406d31b979a651077ae13c33116f9fac1309e33c096fbdacb3ab.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/initial-unpositioned-summary-zh.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/initial-unpositioned-summary-zh.json",
+      "original_bytes": 2689,
+      "original_sha256": "07f0679df6cf30d28511a7b802327faf9eb6bac40711a2e4142bac896bbad689",
+      "object": "../../objects/07f0679df6cf30d28511a7b802327faf9eb6bac40711a2e4142bac896bbad689.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/leading-branch-before-fix.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/leading-branch-before-fix.py",
+      "original_bytes": 14391,
+      "original_sha256": "24696a4c8e663d947cf12b165da6f9a5b500a761d81901b82f90054b64654443",
+      "object": "../../objects/24696a4c8e663d947cf12b165da6f9a5b500a761d81901b82f90054b64654443.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/leading-branch-overlay-before-fix.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/leading-branch-overlay-before-fix.json",
+      "original_bytes": 57297,
+      "original_sha256": "66067837dcf5dc5b3ad98ed59f8385f7d994f8996e8d048a8e93c5959e1b05a7",
+      "object": "../../objects/66067837dcf5dc5b3ad98ed59f8385f7d994f8996e8d048a8e93c5959e1b05a7.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/list_changes.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/list_changes.py",
+      "original_bytes": 879,
+      "original_sha256": "a7129676ec21e69d7e7a93b7347db43138963315c6f3026978d8abf3daf33baf",
+      "object": "../../objects/a7129676ec21e69d7e7a93b7347db43138963315c6f3026978d8abf3daf33baf.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/make_handoff.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/make_handoff.py",
+      "original_bytes": 12245,
+      "original_sha256": "f558a5752af8fcb002578dc830da9597e3270edd354d46aa72428a99fd19fdcc",
+      "object": "../../objects/f558a5752af8fcb002578dc830da9597e3270edd354d46aa72428a99fd19fdcc.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/overlay-verification.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/overlay-verification.json",
+      "original_bytes": 61779,
+      "original_sha256": "d041da76008a0eb6a12d4782e4e6096273e4daf29773d7f66ca67bd615985a31",
+      "object": "../../objects/d041da76008a0eb6a12d4782e4e6096273e4daf29773d7f66ca67bd615985a31.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/proposed-zh-overlay.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/proposed-zh-overlay.json",
+      "original_bytes": 57471,
+      "original_sha256": "8314793eda2f241fe168846a9228a1b65ca66cf011c7e526fb0584270f4edbcd",
+      "object": "../../objects/8314793eda2f241fe168846a9228a1b65ca66cf011c7e526fb0584270f4edbcd.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/source-freeze.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/source-freeze.json",
+      "original_bytes": 4618,
+      "original_sha256": "58a0861052492ac746c7d0dcd77654f8ffaf5d6d975419958f22cf819d04c5ff",
+      "object": "../../objects/58a0861052492ac746c7d0dcd77654f8ffaf5d6d975419958f22cf819d04c5ff.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/source.patch",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/source.patch",
+      "original_bytes": 26769,
+      "original_sha256": "5ad584e332be00aa15e99dfc20901f5db0b32b3b8c92dbf65fb4a7a4d0fc9c32",
+      "object": "../../objects/5ad584e332be00aa15e99dfc20901f5db0b32b3b8c92dbf65fb4a7a4d0fc9c32.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/verify_overlay.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/verify_overlay.py",
+      "original_bytes": 3619,
+      "original_sha256": "86dbadf373f1b4db7aab2f66ccdd118f3a6ed8d4768385ce1427af7e5a826f94",
+      "object": "../../objects/86dbadf373f1b4db7aab2f66ccdd118f3a6ed8d4768385ce1427af7e5a826f94.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/voiceover-change-index.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/voiceover-change-index.log",
+      "original_bytes": 2211,
+      "original_sha256": "fe970a8950cf5580185c4cc3959400695b6c39f39a13f3f9a57d571b5c9bf6f3",
+      "object": "../../objects/fe970a8950cf5580185c4cc3959400695b6c39f39a13f3f9a57d571b5c9bf6f3.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation/voiceover-changes.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/voiceover-changes.json",
+      "original_bytes": 17879,
+      "original_sha256": "851e5020d2382eb53ec11847b15725d59805944684e4049a004833b9697e8503",
+      "object": "../../objects/851e5020d2382eb53ec11847b15725d59805944684e4049a004833b9697e8503.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-5886ad1b/README.md",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/README.md",
+      "original_bytes": 23546,
+      "original_sha256": "349dbdf8e4ac4c8d552ee1fc9bf87675928be09c94f5f95bf42d57540ee7bbf0",
+      "object": "../../objects/349dbdf8e4ac4c8d552ee1fc9bf87675928be09c94f5f95bf42d57540ee7bbf0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-5886ad1b/compute.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/compute.py",
+      "original_bytes": 63423,
+      "original_sha256": "e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f",
+      "object": "../../objects/e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-5886ad1b/infini.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/infini.py",
+      "original_bytes": 4174,
+      "original_sha256": "e61b7df243725e1236144af42e4b6a400d420559dfde4abd4e3c6edc6a40f11a",
+      "object": "../../objects/e61b7df243725e1236144af42e4b6a400d420559dfde4abd4e3c6edc6a40f11a.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-5886ad1b/manifest.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/manifest.py",
+      "original_bytes": 1176,
+      "original_sha256": "eb994076e76f310e4afb81b31c930b135de266a5c10d22fabe6be92353cac89f",
+      "object": "../../objects/eb994076e76f310e4afb81b31c930b135de266a5c10d22fabe6be92353cac89f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-5886ad1b/s07_hmm.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/s07_hmm.py",
+      "original_bytes": 14409,
+      "original_sha256": "1b953d893843bbde1f368818fe95cb042498e53418049fcb9c0f6e18792bc58c",
+      "object": "../../objects/1b953d893843bbde1f368818fe95cb042498e53418049fcb9c0f6e18792bc58c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-5886ad1b/s08_baumwelch.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/s08_baumwelch.py",
+      "original_bytes": 13649,
+      "original_sha256": "97407d64af34c5d0620f63d638095f9db15ebadbde9ce31000427ec75e585618",
+      "object": "../../objects/97407d64af34c5d0620f63d638095f9db15ebadbde9ce31000427ec75e585618.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-5886ad1b/s09_translation.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/s09_translation.py",
+      "original_bytes": 14072,
+      "original_sha256": "eea50be0228f023bcd782187b67151b2cb0c230eb61c31695553789cb766dd63",
+      "object": "../../objects/eea50be0228f023bcd782187b67151b2cb0c230eb61c31695553789cb766dd63.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-5886ad1b/s10_kn.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/s10_kn.py",
+      "original_bytes": 17404,
+      "original_sha256": "fe1c33680c7474ae1eec3af41d5ef1224df7a50e7a7eb15e78aa3415f52efe47",
+      "object": "../../objects/fe1c33680c7474ae1eec3af41d5ef1224df7a50e7a7eb15e78aa3415f52efe47.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-5886ad1b/s11_infini.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/s11_infini.py",
+      "original_bytes": 12464,
+      "original_sha256": "7c3670e098433cf1fc3ef3f232cf13dc758b0f5d954bf87e28f29e8142419070",
+      "object": "../../objects/7c3670e098433cf1fc3ef3f232cf13dc758b0f5d954bf87e28f29e8142419070.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-5886ad1b/zh_lines.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/zh_lines.py",
+      "original_bytes": 63213,
+      "original_sha256": "0aefc4840aee9c88371de719b5fb4d35db9fae6a603a4b6902f2bafbb5476ac9",
+      "object": "../../objects/0aefc4840aee9c88371de719b5fb4d35db9fae6a603a4b6902f2bafbb5476ac9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "source-baseline-pins.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-pins.json",
+      "original_bytes": 1616,
+      "original_sha256": "9c6407496f813b2e6e57bba8d6f99f57ceb28d19ae84c04698fad8c6bcf63ef5",
+      "object": "../../objects/9c6407496f813b2e6e57bba8d6f99f57ceb28d19ae84c04698fad8c6bcf63ef5.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "synthetic-results.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/synthetic-results.json",
+      "original_bytes": 2579,
+      "original_sha256": "4fcf356e6ecde99bdd2526e252498167a241011a667a0ee5d101fc137dfdb894",
+      "object": "../../objects/4fcf356e6ecde99bdd2526e252498167a241011a667a0ee5d101fc137dfdb894.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "synthetic_checks.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/synthetic_checks.log",
+      "original_bytes": 2579,
+      "original_sha256": "4fcf356e6ecde99bdd2526e252498167a241011a667a0ee5d101fc137dfdb894",
+      "object": "../../objects/4fcf356e6ecde99bdd2526e252498167a241011a667a0ee5d101fc137dfdb894.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "synthetic_checks.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/synthetic_checks.py",
+      "original_bytes": 5382,
+      "original_sha256": "014937084bd37d74b4ae2e98cd2b666d5c124a63b950a2df677fc9dabb335580",
+      "object": "../../objects/014937084bd37d74b4ae2e98cd2b666d5c124a63b950a2df677fc9dabb335580.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "translation-fixture-report.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/translation-fixture-report.json",
+      "original_bytes": 53420,
+      "original_sha256": "2023723b505163a1ea4c25bd90a52a3eae80fcd0fe09a1b7d01718db1db8b1fc",
+      "object": "../../objects/2023723b505163a1ea4c25bd90a52a3eae80fcd0fe09a1b7d01718db1db8b1fc.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "translation_check.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/translation_check.py",
+      "original_bytes": 2655,
+      "original_sha256": "c337326be39ba5adaf433187bb8fe7d69053b9497363a1e65c446dcdd0480193",
+      "object": "../../objects/c337326be39ba5adaf433187bb8fe7d69053b9497363a1e65c446dcdd0480193.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "write_audit.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/write_audit.py",
+      "original_bytes": 16253,
+      "original_sha256": "9ef1a686ae19ae48443ff9397fd22be611e95726a5f421cb8f57282f759ed976",
+      "object": "../../objects/9ef1a686ae19ae48443ff9397fd22be611e95726a5f421cb8f57282f759ed976.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    }
+  ]
+}

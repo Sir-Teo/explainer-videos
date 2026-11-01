@@ -1,0 +1,851 @@
+{
+  "files": [
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/11b6f5c5f683b988.svg",
+      "bytes": 29166,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/11b6f5c5f683b988.tex",
+      "bytes": 1012,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/13eafed60afdd833.svg",
+      "bytes": 27341,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/13eafed60afdd833.tex",
+      "bytes": 991,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/1a226e860ab148cb.svg",
+      "bytes": 20878,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/1a226e860ab148cb.tex",
+      "bytes": 960,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/4d40c976de71a175.svg",
+      "bytes": 11828,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/4d40c976de71a175.tex",
+      "bytes": 1481,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/72a5025706e67bbe.svg",
+      "bytes": 21661,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/72a5025706e67bbe.tex",
+      "bytes": 1232,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/7ec2eb5a471f167a.svg",
+      "bytes": 20984,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/7ec2eb5a471f167a.tex",
+      "bytes": 949,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/8d19bd530f6c02f9.svg",
+      "bytes": 19649,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/8d19bd530f6c02f9.tex",
+      "bytes": 941,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/9b31ccbb95a407ea.svg",
+      "bytes": 20366,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/9b31ccbb95a407ea.tex",
+      "bytes": 957,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/adfe4dda986bb2df.svg",
+      "bytes": 30579,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/adfe4dda986bb2df.tex",
+      "bytes": 1004,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/c37e26f3dc310fee.svg",
+      "bytes": 17932,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/en/Tex/c37e26f3dc310fee.tex",
+      "bytes": 956,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/0b97d525bda915ef.svg",
+      "bytes": 86636,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/0b97d525bda915ef.tex",
+      "bytes": 1169,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/14a829fb3115b512.svg",
+      "bytes": 67749,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/14a829fb3115b512.tex",
+      "bytes": 1107,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/2035f38a65144b00.svg",
+      "bytes": 65301,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/2035f38a65144b00.tex",
+      "bytes": 1111,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/4029881f2314e763.svg",
+      "bytes": 47132,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/4029881f2314e763.tex",
+      "bytes": 1099,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/4d40c976de71a175.svg",
+      "bytes": 11828,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/4d40c976de71a175.tex",
+      "bytes": 1481,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/60a09905c4222e6c.svg",
+      "bytes": 38013,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/60a09905c4222e6c.tex",
+      "bytes": 1096,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/72a5025706e67bbe.svg",
+      "bytes": 21661,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/72a5025706e67bbe.tex",
+      "bytes": 1232,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/8d0503124a5ec791.svg",
+      "bytes": 57707,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/8d0503124a5ec791.tex",
+      "bytes": 1136,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/8d19bd530f6c02f9.svg",
+      "bytes": 19649,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/8d19bd530f6c02f9.tex",
+      "bytes": 941,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/beb831b68ea12572.svg",
+      "bytes": 49933,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "implementation/geometry-artifacts/zh/Tex/beb831b68ea12572.tex",
+      "bytes": 1152,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "path": "source-baseline-5886ad1b/__pycache__/zh_lines.cpython-312.pyc",
+      "bytes": 64208,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/0053fe82ebb20424.svg",
+      "bytes": 4083,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/0053fe82ebb20424.tex",
+      "bytes": 891,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/0533b9885ded2f4d.svg",
+      "bytes": 1709,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/0533b9885ded2f4d.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/080869b90255454e.svg",
+      "bytes": 14644,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/080869b90255454e.tex",
+      "bytes": 918,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/121ea05100b80a98.svg",
+      "bytes": 10222,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/121ea05100b80a98.tex",
+      "bytes": 911,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/14cceedac41b710c.svg",
+      "bytes": 12083,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/14cceedac41b710c.tex",
+      "bytes": 910,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/168630d0e6c514bb.svg",
+      "bytes": 573,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/168630d0e6c514bb.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/3991fe1f1e0f9f1f.svg",
+      "bytes": 11029,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/3991fe1f1e0f9f1f.tex",
+      "bytes": 901,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/41d0271d8c23598e.svg",
+      "bytes": 1270,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/41d0271d8c23598e.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/4b1458cff756269c.svg",
+      "bytes": 21589,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/4b1458cff756269c.tex",
+      "bytes": 941,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/557ac5c6e6b15b97.svg",
+      "bytes": 1189,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/557ac5c6e6b15b97.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/5d65267b826362f8.svg",
+      "bytes": 3553,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/5d65267b826362f8.tex",
+      "bytes": 887,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/5fbdbdafd0b901fb.svg",
+      "bytes": 10435,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/5fbdbdafd0b901fb.tex",
+      "bytes": 905,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/696b03f9f1591280.svg",
+      "bytes": 2873,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/696b03f9f1591280.tex",
+      "bytes": 886,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/6d9418712dfbc0b7.svg",
+      "bytes": 1594,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/6d9418712dfbc0b7.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/6fdc50ca300ad957.svg",
+      "bytes": 18252,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/6fdc50ca300ad957.tex",
+      "bytes": 930,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/86327e734c6d274b.svg",
+      "bytes": 837,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/86327e734c6d274b.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/93c17a6aa5f817e5.svg",
+      "bytes": 3401,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/93c17a6aa5f817e5.tex",
+      "bytes": 888,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/93de8a7a90b96a22.svg",
+      "bytes": 1463,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/93de8a7a90b96a22.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/99e7c29d782fbb27.svg",
+      "bytes": 628,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/99e7c29d782fbb27.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/9f2d70962db78b5d.svg",
+      "bytes": 14402,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/9f2d70962db78b5d.tex",
+      "bytes": 913,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/a8646c63d0749311.svg",
+      "bytes": 17751,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/a8646c63d0749311.tex",
+      "bytes": 929,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/c8b98e230178f605.svg",
+      "bytes": 9393,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/c8b98e230178f605.tex",
+      "bytes": 899,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/c9be8aaad4578667.svg",
+      "bytes": 7703,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/c9be8aaad4578667.tex",
+      "bytes": 894,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/d684e68a32de5883.svg",
+      "bytes": 3720,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/d684e68a32de5883.tex",
+      "bytes": 887,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/deb7af5430ed6a01.svg",
+      "bytes": 21768,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/en/Tex/deb7af5430ed6a01.tex",
+      "bytes": 941,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/0533b9885ded2f4d.svg",
+      "bytes": 1709,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/0533b9885ded2f4d.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/08ec9e3e3ada9485.svg",
+      "bytes": 13816,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/08ec9e3e3ada9485.tex",
+      "bytes": 1060,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/168630d0e6c514bb.svg",
+      "bytes": 573,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/168630d0e6c514bb.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/22e6f05b97caaadf.svg",
+      "bytes": 16892,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/22e6f05b97caaadf.tex",
+      "bytes": 1045,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/41d0271d8c23598e.svg",
+      "bytes": 1270,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/41d0271d8c23598e.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/557ac5c6e6b15b97.svg",
+      "bytes": 1189,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/557ac5c6e6b15b97.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/5d65267b826362f8.svg",
+      "bytes": 3553,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/5d65267b826362f8.tex",
+      "bytes": 887,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/696b03f9f1591280.svg",
+      "bytes": 2873,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/696b03f9f1591280.tex",
+      "bytes": 886,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/6d9418712dfbc0b7.svg",
+      "bytes": 1594,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/6d9418712dfbc0b7.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/73b7ddbcf5abba9d.svg",
+      "bytes": 22456,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/73b7ddbcf5abba9d.tex",
+      "bytes": 1086,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/7632c9f0763d78c2.svg",
+      "bytes": 3495,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/7632c9f0763d78c2.tex",
+      "bytes": 1037,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/842269246e8b529b.svg",
+      "bytes": 13110,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/842269246e8b529b.tex",
+      "bytes": 1046,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/85b210a8456fb771.svg",
+      "bytes": 33554,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/85b210a8456fb771.tex",
+      "bytes": 1072,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/86327e734c6d274b.svg",
+      "bytes": 837,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/86327e734c6d274b.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/8eda505b55240a48.svg",
+      "bytes": 14761,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/8eda505b55240a48.tex",
+      "bytes": 1042,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/8f9b9139f5b1d975.svg",
+      "bytes": 24391,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/8f9b9139f5b1d975.tex",
+      "bytes": 1060,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/9387071101fb7a78.svg",
+      "bytes": 27542,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/9387071101fb7a78.tex",
+      "bytes": 1064,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/93de8a7a90b96a22.svg",
+      "bytes": 1463,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/93de8a7a90b96a22.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/99e7c29d782fbb27.svg",
+      "bytes": 628,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/99e7c29d782fbb27.tex",
+      "bytes": 884,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/9ddafcdddecd2836.svg",
+      "bytes": 18233,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/9ddafcdddecd2836.tex",
+      "bytes": 1045,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/c44822f20dc85cfc.svg",
+      "bytes": 5744,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/c44822f20dc85cfc.tex",
+      "bytes": 1039,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/caa7c227e4c444b2.svg",
+      "bytes": 37337,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/caa7c227e4c444b2.tex",
+      "bytes": 1081,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/d684e68a32de5883.svg",
+      "bytes": 3720,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/d684e68a32de5883.tex",
+      "bytes": 887,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/d96a71ff3aaa3aa5.svg",
+      "bytes": 36822,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/d96a71ff3aaa3aa5.tex",
+      "bytes": 1075,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/fa4d1f5e3575cba5.svg",
+      "bytes": 40342,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "path": "text-geometry/zh/Tex/fa4d1f5e3575cba5.tex",
+      "bytes": 1091,
+      "reason": "generated geometry/TeX/cache artifact excluded"
+    }
+  ],
+  "reason": "No generated TeX/SVG geometry caches, __pycache__, .venv, live .cache numerical payloads, models, movies or audio are copied."
+}

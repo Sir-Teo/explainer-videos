@@ -1,0 +1,189 @@
+{
+  "owner": "ai7-pca-topics-source-audit",
+  "runtime_root": "/workspace/runtime/ai7-pca-topics-source-audit",
+  "file_count": 20,
+  "raw_original_bytes": 348817,
+  "archive_scope": "Historical/source-preparation only. No final table/integrated test/render or actual production scientific signoff.",
+  "files": [
+    {
+      "original_relative_path": "analytic-execution.log",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/analytic-execution.log",
+      "original_bytes": 5299,
+      "original_sha256": "97066b9859edc079fe119ae3e3e6f22a999cf8f80b2c4410291e373703eccbb2",
+      "object": "../../objects/97066b9859edc079fe119ae3e3e6f22a999cf8f80b2c4410291e373703eccbb2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "analytic-results.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/analytic-results.json",
+      "original_bytes": 5299,
+      "original_sha256": "97066b9859edc079fe119ae3e3e6f22a999cf8f80b2c4410291e373703eccbb2",
+      "object": "../../objects/97066b9859edc079fe119ae3e3e6f22a999cf8f80b2c4410291e373703eccbb2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "analytic_fixtures.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/analytic_fixtures.py",
+      "original_bytes": 9872,
+      "original_sha256": "c2b0e28bc7fbbb44b6e5a31d868474b5ec8aa81f12e3d02e57419743c810a1b0",
+      "object": "../../objects/c2b0e28bc7fbbb44b6e5a31d868474b5ec8aa81f12e3d02e57419743c810a1b0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "bilingual-results.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/bilingual-results.json",
+      "original_bytes": 51567,
+      "original_sha256": "0ffa0d7aaa7d8fd871df465fd30f5f229a152bfff23961d5306d9d7ef9c360e3",
+      "object": "../../objects/0ffa0d7aaa7d8fd871df465fd30f5f229a152bfff23961d5306d9d7ef9c360e3.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "bilingual_source_checks.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/bilingual_source_checks.py",
+      "original_bytes": 1883,
+      "original_sha256": "375e326e0eee080caa49b1261899a48a0067a627bb8f037acf451463b863c368",
+      "object": "../../objects/375e326e0eee080caa49b1261899a48a0067a627bb8f037acf451463b863c368.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "fixture-execution-notes.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/fixture-execution-notes.json",
+      "original_bytes": 501,
+      "original_sha256": "f54a84a9ec071acef2a7c4a535bc132da368d62e9fccb6a98b8aa217ac6bfcf8",
+      "object": "../../objects/f54a84a9ec071acef2a7c4a535bc132da368d62e9fccb6a98b8aa217ac6bfcf8.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "inventory.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/inventory.json",
+      "original_bytes": 2197,
+      "original_sha256": "8afb9c6be0e970430e6e0d89b95a1d98b6d0ee75cc6706d25ceefb91e5ed3217",
+      "object": "../../objects/8afb9c6be0e970430e6e0d89b95a1d98b6d0ee75cc6706d25ceefb91e5ed3217.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "manifest.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/manifest.json",
+      "original_bytes": 3163,
+      "original_sha256": "2e265a8914ef77fed9561079aea1e8d28cf7ddc376e0eb268a92aa5da3bcbd98",
+      "object": "../../objects/2e265a8914ef77fed9561079aea1e8d28cf7ddc376e0eb268a92aa5da3bcbd98.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest bytes preserved"
+    },
+    {
+      "original_relative_path": "report.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/report.json",
+      "original_bytes": 14850,
+      "original_sha256": "e46cf697530dbe66db288af1d915799117a1eab42c2a63ee06feaa5509b0a025",
+      "object": "../../objects/e46cf697530dbe66db288af1d915799117a1eab42c2a63ee06feaa5509b0a025.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "report.md",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/report.md",
+      "original_bytes": 18659,
+      "original_sha256": "2a86df1d039dab1afda133af3069d246ec86e079f94e43d44738d632bd2adb1f",
+      "object": "../../objects/2a86df1d039dab1afda133af3069d246ec86e079f94e43d44738d632bd2adb1f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source/videos/ai/ai7/README.md",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/README.md",
+      "original_bytes": 23546,
+      "original_sha256": "349dbdf8e4ac4c8d552ee1fc9bf87675928be09c94f5f95bf42d57540ee7bbf0",
+      "object": "../../objects/349dbdf8e4ac4c8d552ee1fc9bf87675928be09c94f5f95bf42d57540ee7bbf0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source/videos/ai/ai7/common.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/common.py",
+      "original_bytes": 7717,
+      "original_sha256": "89cf6cb6060d3a2f03db5bf1a379dc942a5e7857399d987ffca172d0d99275f2",
+      "object": "../../objects/89cf6cb6060d3a2f03db5bf1a379dc942a5e7857399d987ffca172d0d99275f2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source/videos/ai/ai7/compute.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/compute.py",
+      "original_bytes": 63423,
+      "original_sha256": "e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f",
+      "object": "../../objects/e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source/videos/ai/ai7/manifest.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/manifest.py",
+      "original_bytes": 1176,
+      "original_sha256": "eb994076e76f310e4afb81b31c930b135de266a5c10d22fabe6be92353cac89f",
+      "object": "../../objects/eb994076e76f310e4afb81b31c930b135de266a5c10d22fabe6be92353cac89f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source/videos/ai/ai7/s02_pca.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/s02_pca.py",
+      "original_bytes": 20677,
+      "original_sha256": "cf961f8bb3c927ef4badb1070c8689d91a9f7e789b18b744cf340d54744aaa25",
+      "object": "../../objects/cf961f8bb3c927ef4badb1070c8689d91a9f7e789b18b744cf340d54744aaa25.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source/videos/ai/ai7/s03_ppca.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/s03_ppca.py",
+      "original_bytes": 12942,
+      "original_sha256": "95f383587557eafd3f99ed670043ee4be610a915c27137a869b1b7c841403aca",
+      "object": "../../objects/95f383587557eafd3f99ed670043ee4be610a915c27137a869b1b7c841403aca.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source/videos/ai/ai7/s04_ica.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/s04_ica.py",
+      "original_bytes": 12803,
+      "original_sha256": "054862c66ecb0cb684487fdb137849da2cf4236ab067a3a5d8baebfcacd1828b",
+      "object": "../../objects/054862c66ecb0cb684487fdb137849da2cf4236ab067a3a5d8baebfcacd1828b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source/videos/ai/ai7/s05_em.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/s05_em.py",
+      "original_bytes": 18675,
+      "original_sha256": "0c5fd5c3931a730620f873cc973fd359d922ee29d9c0d9cac33b12007dad3176",
+      "object": "../../objects/0c5fd5c3931a730620f873cc973fd359d922ee29d9c0d9cac33b12007dad3176.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source/videos/ai/ai7/s06_lda.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/s06_lda.py",
+      "original_bytes": 11355,
+      "original_sha256": "c381a5befb904f5e8a36366a38b7ea46acabdf7ff1bfb7837aceadccc9b23aa9",
+      "object": "../../objects/c381a5befb904f5e8a36366a38b7ea46acabdf7ff1bfb7837aceadccc9b23aa9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source/videos/ai/ai7/zh_lines.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/zh_lines.py",
+      "original_bytes": 63213,
+      "original_sha256": "0aefc4840aee9c88371de719b5fb4d35db9fae6a603a4b6902f2bafbb5476ac9",
+      "object": "../../objects/0aefc4840aee9c88371de719b5fb4d35db9fae6a603a4b6902f2bafbb5476ac9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    }
+  ]
+}

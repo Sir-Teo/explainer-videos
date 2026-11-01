@@ -1,0 +1,297 @@
+{
+  "owner": "ai7-bayesian-scene-repairs",
+  "runtime_root": "/workspace/runtime/ai7-bayesian-scene-repairs",
+  "file_count": 32,
+  "raw_original_bytes": 260604,
+  "archive_scope": "Historical/source-preparation only. No final table/integrated test/render or actual production scientific signoff.",
+  "files": [
+    {
+      "original_relative_path": "README.md",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/README.md",
+      "original_bytes": 2239,
+      "original_sha256": "8ed37bedac033d95d874f7d597d410a1f25299ba3794d706562684c975099096",
+      "object": "../../objects/8ed37bedac033d95d874f7d597d410a1f25299ba3794d706562684c975099096.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "after/s12_graphs.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/after/s12_graphs.py",
+      "original_bytes": 18822,
+      "original_sha256": "4bd99868ef0708661afde9a07536f0193c76b06a7d9eee68e42031bc3b2e6356",
+      "object": "../../objects/4bd99868ef0708661afde9a07536f0193c76b06a7d9eee68e42031bc3b2e6356.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "after/s15_occam.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/after/s15_occam.py",
+      "original_bytes": 12437,
+      "original_sha256": "53e37044b16b63d24ef2d20b2db8afe831047fad12146dadc8454a727c9937a0",
+      "object": "../../objects/53e37044b16b63d24ef2d20b2db8afe831047fad12146dadc8454a727c9937a0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "after/s16_bayesopt.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/after/s16_bayesopt.py",
+      "original_bytes": 8849,
+      "original_sha256": "8fea4db768f042c3a2f547392622d69eaeac1b7b1b0950b097670d06afbe3106",
+      "object": "../../objects/8fea4db768f042c3a2f547392622d69eaeac1b7b1b0950b097670d06afbe3106.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "after/s17_vi.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/after/s17_vi.py",
+      "original_bytes": 24999,
+      "original_sha256": "0eda59e707b61015383a946347a0e1b51ab124f387d8d3786fd5743348242cdb",
+      "object": "../../objects/0eda59e707b61015383a946347a0e1b51ab124f387d8d3786fd5743348242cdb.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "after/test_ai7_bayesian_scene_claims.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/after/test_ai7_bayesian_scene_claims.py",
+      "original_bytes": 4741,
+      "original_sha256": "f971551a40d1e575add9160b54a6d31ea56c9f1e33f97552766799bbdf0cad70",
+      "object": "../../objects/f971551a40d1e575add9160b54a6d31ea56c9f1e33f97552766799bbdf0cad70.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "before/s12_graphs.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/before/s12_graphs.py",
+      "original_bytes": 18780,
+      "original_sha256": "b1b07d91b83d52413c043bf51a3beb22cdb0b2191c8b74c5552975c14b911b96",
+      "object": "../../objects/b1b07d91b83d52413c043bf51a3beb22cdb0b2191c8b74c5552975c14b911b96.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "before/s15_occam.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/before/s15_occam.py",
+      "original_bytes": 12062,
+      "original_sha256": "d8889429e408b9390a21558ceb922734be85a69ce53c8ef4218df795e268e525",
+      "object": "../../objects/d8889429e408b9390a21558ceb922734be85a69ce53c8ef4218df795e268e525.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "before/s16_bayesopt.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/before/s16_bayesopt.py",
+      "original_bytes": 8800,
+      "original_sha256": "51c770e446298a325e3241f4416ac5937028b50eabc62d75e37e9f9cd0aadb96",
+      "object": "../../objects/51c770e446298a325e3241f4416ac5937028b50eabc62d75e37e9f9cd0aadb96.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "before/s17_vi.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/before/s17_vi.py",
+      "original_bytes": 23152,
+      "original_sha256": "1336cd75665bf51f265e1ed5d6f519a3e40219aa480a7b6532b3449cdb75db4b",
+      "object": "../../objects/1336cd75665bf51f265e1ed5d6f519a3e40219aa480a7b6532b3449cdb75db4b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "before-sha256.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/before-sha256.json",
+      "original_bytes": 347,
+      "original_sha256": "746085e116f4bf1eeb94d1fb09b05bc9e73ed0e3af958fc9120aaf39f17ed5e6",
+      "object": "../../objects/746085e116f4bf1eeb94d1fb09b05bc9e73ed0e3af958fc9120aaf39f17ed5e6.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "check_source_scope.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/check_source_scope.py",
+      "original_bytes": 4817,
+      "original_sha256": "8c02484fc2a281b6078aa7d29066fd178df72b82df3523f8d14f1d109dcf7199",
+      "object": "../../objects/8c02484fc2a281b6078aa7d29066fd178df72b82df3523f8d14f1d109dcf7199.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "check_text_bounds.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/check_text_bounds.py",
+      "original_bytes": 3457,
+      "original_sha256": "cde6338fbd0a9dc8f8511e3249b8085ead2b38921bac54a4f9e290ee7eb10f6f",
+      "object": "../../objects/cde6338fbd0a9dc8f8511e3249b8085ead2b38921bac54a4f9e290ee7eb10f6f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "check_translation_overlay.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/check_translation_overlay.py",
+      "original_bytes": 2548,
+      "original_sha256": "6851603145e7f7da3a8db0d2644cd70b74fcc4b51a978e326ee5ccf802533e75",
+      "object": "../../objects/6851603145e7f7da3a8db0d2644cd70b74fcc4b51a978e326ee5ccf802533e75.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "file-manifest.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/file-manifest.json",
+      "original_bytes": 4549,
+      "original_sha256": "f137cf7d9ac1097036cdb391b262a8e8ab35f433be37808ce651fa9693492e33",
+      "object": "../../objects/f137cf7d9ac1097036cdb391b262a8e8ab35f433be37808ce651fa9693492e33.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest bytes preserved"
+    },
+    {
+      "original_relative_path": "focused-tests.log",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/focused-tests.log",
+      "original_bytes": 670,
+      "original_sha256": "fb859af2badae6286630d420c22b12136bec77dae3535a64d98a22b805289bfa",
+      "object": "../../objects/fb859af2badae6286630d420c22b12136bec77dae3535a64d98a22b805289bfa.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "freeze.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/freeze.json",
+      "original_bytes": 3691,
+      "original_sha256": "98a25753568e5075038bd3abedfd9b7b95b263f3d6f199f48095dadfa001fbc2",
+      "object": "../../objects/98a25753568e5075038bd3abedfd9b7b95b263f3d6f199f48095dadfa001fbc2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "freeze_handoff.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/freeze_handoff.py",
+      "original_bytes": 5725,
+      "original_sha256": "c3e7ab177f526225f66125c7d0de3de46e16732fe76b681f1a798031b1e52c88",
+      "object": "../../objects/c3e7ab177f526225f66125c7d0de3de46e16732fe76b681f1a798031b1e52c88.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "patches/s12_graphs.py.patch.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/patches/s12_graphs.py.patch.gz",
+      "original_bytes": 876,
+      "original_sha256": "35029eed4d86f86764124031fae7517fc111d734ea92713d3e98a8da678c656b",
+      "object": "../../objects/35029eed4d86f86764124031fae7517fc111d734ea92713d3e98a8da678c656b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "patches/s15_occam.py.patch.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/patches/s15_occam.py.patch.gz",
+      "original_bytes": 1987,
+      "original_sha256": "002f1e14e63e81b3b110ea952a3d98b94cf2168d39108267b5c68e35875950cc",
+      "object": "../../objects/002f1e14e63e81b3b110ea952a3d98b94cf2168d39108267b5c68e35875950cc.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "patches/s16_bayesopt.py.patch.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/patches/s16_bayesopt.py.patch.gz",
+      "original_bytes": 782,
+      "original_sha256": "62b23ec408047f2f9f9d7671ee7f3869155e3afda8d51659b1e5b12b34faca08",
+      "object": "../../objects/62b23ec408047f2f9f9d7671ee7f3869155e3afda8d51659b1e5b12b34faca08.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "patches/s17_vi.py.patch.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/patches/s17_vi.py.patch.gz",
+      "original_bytes": 4900,
+      "original_sha256": "9a733900edcd5e97a51c3d06afa1309ce2eb21215626a79735bff1036154f6a4",
+      "object": "../../objects/9a733900edcd5e97a51c3d06afa1309ce2eb21215626a79735bff1036154f6a4.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "prepare_translation_handoff.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/prepare_translation_handoff.py",
+      "original_bytes": 5509,
+      "original_sha256": "06c854b5fbd821c9f2371568acef44c991c0332a83dd97de950446aa23d397ac",
+      "object": "../../objects/06c854b5fbd821c9f2371568acef44c991c0332a83dd97de950446aa23d397ac.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source-scope.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/source-scope.json",
+      "original_bytes": 1155,
+      "original_sha256": "125f4c0a35dbd8892d92338602f03a4b42c8614e510a9b9fbc1c8117404e1b07",
+      "object": "../../objects/125f4c0a35dbd8892d92338602f03a4b42c8614e510a9b9fbc1c8117404e1b07.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "source-scope.log",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/source-scope.log",
+      "original_bytes": 1122,
+      "original_sha256": "070e9497dff58a79064d0b559300b03bf8d5f034c85bd5aab0aa0016ee9f222a",
+      "object": "../../objects/070e9497dff58a79064d0b559300b03bf8d5f034c85bd5aab0aa0016ee9f222a.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "text-bounds-en.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/text-bounds-en.json",
+      "original_bytes": 1629,
+      "original_sha256": "f847810b4d259dfc046f21fd908d872f5eaa27a9806b4c08237e9df153ddf2aa",
+      "object": "../../objects/f847810b4d259dfc046f21fd908d872f5eaa27a9806b4c08237e9df153ddf2aa.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "text-bounds-en.log",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/text-bounds-en.log",
+      "original_bytes": 19407,
+      "original_sha256": "a60b56e7747b2925bb761df4f5375ec75e034a59126ef764e99181f6ef057228",
+      "object": "../../objects/a60b56e7747b2925bb761df4f5375ec75e034a59126ef764e99181f6ef057228.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "text-bounds-zh.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/text-bounds-zh.json",
+      "original_bytes": 1638,
+      "original_sha256": "cfc9d46685841bcf69023e1aa49c186a6f983f39c6fbcb02df78cfad280c1903",
+      "object": "../../objects/cfc9d46685841bcf69023e1aa49c186a6f983f39c6fbcb02df78cfad280c1903.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "text-bounds-zh.log",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/text-bounds-zh.log",
+      "original_bytes": 18955,
+      "original_sha256": "8538647cef054b2701bfc0e33a35b20fe267ea4a07d53a4a944456e3bfdaf417",
+      "object": "../../objects/8538647cef054b2701bfc0e33a35b20fe267ea4a07d53a4a944456e3bfdaf417.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "translation-handoff.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/translation-handoff.json",
+      "original_bytes": 10898,
+      "original_sha256": "39ca1329fa3777d7dbf9523fc4debb3f90e41ba0ba5764688ae352651c67a40f",
+      "object": "../../objects/39ca1329fa3777d7dbf9523fc4debb3f90e41ba0ba5764688ae352651c67a40f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "translation-overlay-check.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/translation-overlay-check.json",
+      "original_bytes": 30616,
+      "original_sha256": "6a22b5589d89aafde387b43bf6b9c8ac776fdaf18127eeb4c2b810f20f0917b3",
+      "object": "../../objects/6a22b5589d89aafde387b43bf6b9c8ac776fdaf18127eeb4c2b810f20f0917b3.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "translation-overlay-check.log",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/translation-overlay-check.log",
+      "original_bytes": 445,
+      "original_sha256": "0f336d098f7c4b83c6f2d42fab5c5f65f3460ae578ab17f47fe3775e4aef8563",
+      "object": "../../objects/0f336d098f7c4b83c6f2d42fab5c5f65f3460ae578ab17f47fe3775e4aef8563.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    }
+  ]
+}

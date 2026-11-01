@@ -181,8 +181,8 @@ class Graphs(VoiceoverScene):
             f"rainy days and {100 * fk['p_s_nr']:.0f} percent of dry ones. Given the clouds, the link disappears. "
             "<bookmark mark='c'/> The collider is the strange one. Rain and the sprinkler are independent, but both "
             "wet the grass, and observing the wet grass connects them. " + verdict + " <bookmark mark='d'/> Pearl and "
-            "his students turned these three cases into a rule, d-separation, that reads every independence off the "
-            "picture."
+            "his students turned these three cases into a rule, d-separation, that reads the conditional "
+            "independences implied by the picture."
         ) as vo:
             self.play(FadeIn(names), FadeIn(pans))
             vo.wait_until("a")
@@ -255,8 +255,8 @@ class Graphs(VoiceoverScene):
             "the probability of one variable, we'd have to sum over all the others, every combination. Judea Pearl's "
             "belief propagation, from 1982, sends messages instead. <bookmark mark='b'/> Each circle tells its "
             "neighbour what it believes, given everything on its own side. Leaves first, up to the root, <bookmark "
-            "mark='c'/> then back down. <bookmark mark='d'/> Multiply the messages arriving at a circle, and you have "
-            f"its exact probability. On a tree it is exact: " + exact_say + " <bookmark mark='e'/> Add one factor "
+            "mark='c'/> then back down. <bookmark mark='d'/> Multiply the incoming messages by the local factor, "
+            f"then normalize, and you have its exact probability. On a tree it is exact: " + exact_say + " <bookmark mark='e'/> Add one factor "
             f"that closes a loop, and the same messages, passed round and round, are only approximate, off by about "
             f"{loopy:.4f} here. Yet loopy belief "
             "propagation decodes the error-correcting codes in phones and satellite links, and its messages are the "

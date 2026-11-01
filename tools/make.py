@@ -25,6 +25,7 @@ Narration comes from the TTS server (README: "Narration"); --silent builds witho
 from __future__ import annotations
 
 import argparse
+import importlib
 import os
 import re
 import socket
@@ -46,6 +47,17 @@ BILINGUAL = {"ai", "analysis"}  # series with a Chinese edition (and Qwen3-TTS n
 # Raw files consumed without a load() call are invisible to the import scanner.
 # Part 6 reads the five downloaded novels before its first numerical item.
 EXPLICIT_COMPUTE_DEPENDENCIES = {"ai6": {"ai1": {"corpus"}}}
+DEPENDENCY_PROVIDERS = {"ai7": "videos.ai.ai7.contracts"}
+
+
+def declared_dependencies(video: str, items=None):
+    """Pure metadata for guarded readers, including selected-item prerequisites."""
+    found = {name: set(required) for name, required in EXPLICIT_COMPUTE_DEPENDENCIES.get(video, {}).items()}
+    provider = DEPENDENCY_PROVIDERS.get(video)
+    if provider:
+        for name, required in importlib.import_module(provider).build_dependencies(items).items():
+            found.setdefault(name, set()).update(required)
+    return found
 
 
 def all_videos(series: str) -> list[str]:
@@ -79,7 +91,7 @@ def depends_on(video: str) -> dict[str, set | None]:
             return
         found[name] = None if items is None else (found.get(name) or set()) | items
 
-    for name, items in EXPLICIT_COMPUTE_DEPENDENCIES.get(video, {}).items():
+    for name, items in declared_dependencies(video).items():
         add(name, items)
 
     for f in me.rglob("*.py"):
@@ -95,7 +107,7 @@ def depends_on(video: str) -> dict[str, set | None]:
             add(name, set(re.findall(rf"\b{alias}\(\s*\"(\w+)\"", src)))
         for name in _COMMON_LOAD.findall(src):
             add(name, None)
-        for name in re.findall(r"Cache\(\"(\w+)\"\)", src):
+        for name in re.findall(r"(?<!\w)Cache\(\"(\w+)\"\)", src):
             add(name, None)
         if re.search(r"explainer\.ai\.novels|from explainer\.ai import novels|explainer\.ai import .*\bnovels\b", src):
             found["novels"] = None
@@ -137,7 +149,7 @@ def compute(video: str, done: set, items: set | None = None) -> None:
         return
     # Selected-item calls from later parts need the raw-file prerequisite too.
     # compute()'s item key deduplicates this when the full dependency walk repeats it.
-    for dep, required in EXPLICIT_COMPUTE_DEPENDENCIES.get(video, {}).items():
+    for dep, required in declared_dependencies(video, items).items():
         compute(dep, done, required)
     if items is None:
         done.add(video)

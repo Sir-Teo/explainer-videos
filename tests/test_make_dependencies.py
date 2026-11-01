@@ -35,6 +35,35 @@ class DependencyTests(unittest.TestCase):
         self.assertIn("lm", deps["ai9"])
         self.assertIn("tf", deps["ai13"])
 
+    def test_statistical_ml_declares_guarded_readers_without_all_part6_items(self):
+        deps = depends_on("ai7")
+        self.assertEqual(deps['ai6'], {'pages'})
+        self.assertEqual(deps['ai1'], {'corpus', 'raw', 'scoreboard'})
+
+    def test_selected_kn_prepares_text_and_raw_without_pages_or_models(self):
+        with patch('tools.make.run') as run:
+            compute('ai7', set(), {'kn'})
+        commands = [call.args[0][2:] for call in run.call_args_list]
+        self.assertEqual(commands, [
+            ['videos.ai.ai1.compute', 'corpus', 'raw'],
+            ['videos.ai.ai7.compute', 'kn'],
+        ])
+
+    def test_local_infini_dependency_also_prepares_kn_external_inputs(self):
+        with patch('tools.make.run') as run:
+            compute('ai7', set(), {'infini'})
+        commands = [call.args[0][2:] for call in run.call_args_list]
+        self.assertEqual(commands, [
+            ['videos.ai.ai1.compute', 'corpus', 'raw'],
+            ['videos.ai.ai7.compute', 'infini'],
+        ])
+
+    def test_self_contained_ica_does_not_prepare_unrelated_data(self):
+        with patch('tools.make.run') as run:
+            compute('ai7', set(), {'ica'})
+        self.assertEqual([call.args[0][2:] for call in run.call_args_list],
+                         [['videos.ai.ai7.compute', 'ica']])
+
 
 if __name__ == "__main__":
     unittest.main()

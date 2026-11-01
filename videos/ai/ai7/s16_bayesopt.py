@@ -75,7 +75,7 @@ class BayesOpt(VoiceoverScene):
                  yticks=[round(v, 2) for v in np.linspace(ylo + 0.005, yhi - 0.005, 3)], center=[-1.9, 1.0, 0])
         ax = g.ax
         ge = axes([0, 1, 0.2], [0, 1, 0.5], x_length=8.0, y_length=1.3, xlabel=r"the discount $D$",
-                  ylabel=r"expected improvement", xticks=[0, 0.25, 0.5, 0.75, 1.0], center=[-1.9, -2.3, 0])
+                  ylabel=r"relative EI (peak $1$)", xticks=[0, 0.25, 0.5, 0.75, 1.0], center=[-1.9, -2.3, 0])
         ae = ge.ax
         tr = DashedVMobject(curve(ax, grid, np.clip(truth, ylo, yhi), TRUTH, 2), num_dashes=60)
         trl = label(r"the true curve: \\ $31$ evaluations, \\ never shown to the optimizer", font_size=18, color=TRUTH)
@@ -117,7 +117,8 @@ class BayesOpt(VoiceoverScene):
                     f"The discounts estimated from counts of counts do as well, {b['gt_bits']:.4f}.")
         with self.voiceover(
             "Here it runs. Two random tries to start. The grey band is the Gaussian process's belief about the "
-            "score; the yellow curve below is the expected improvement, and its peak is where to look next. "
+            "score; the yellow curve below is expected improvement, rescaled to a peak of one at each step. "
+            "Its peak is where to look next. "
             "<bookmark mark='a'/> Each new score lands, the band pinches there, and the next look moves. Mostly it "
             "heads for low scores, and now and then it checks a place where the band is still wide. "
             "<bookmark mark='b'/> " + verdict + " <bookmark mark='b2'/> " + verdict2 + " <bookmark mark='c'/> "

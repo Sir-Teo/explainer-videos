@@ -105,7 +105,7 @@ class ICA(VoiceoverScene):
         kdef = cmath(r"\mathrm{kurt}(y)", r"=", r"\mathbb{E}[y^4] - 3", font_size=34).move_to([4.4, -1.4, 0])
         kn = label(r"$0$ for a bell curve; \ negative for a tone or a sawtooth", font_size=20, color=GREY_A)
         kn.next_to(kdef, DOWN, buff=0.15)
-        clt = label(rf"mixtures are more Gaussian: \ kurtosis ${d['kurt_mix'][0]:.2f}$ and ${d['kurt_mix'][1]:.2f}$ "
+        clt = label(rf"excess kurtosis: \ ${d['kurt_mix'][0]:.2f}$ and ${d['kurt_mix'][1]:.2f}$ "
                     rf"for the whitened mixes, \ ${d['kurt_src'][0]:.2f}$ and ${d['kurt_src'][1]:.2f}$ for the voices",
                     font_size=22, color=C.BITS).to_edge(DOWN, buff=0.35)
         ks = np.asarray(d["kurt_src"])
@@ -123,12 +123,13 @@ class ICA(VoiceoverScene):
             "squashed shape. <bookmark mark='a'/> First, whiten: chapter one's principal components, rescaled to "
             "unit spread. The two outputs are now uncorrelated. But they're still mixed: turn this white cloud by "
             "any angle, and it stays uncorrelated, so correlation alone can never tell us which way is right. "
-            "<bookmark mark='b'/> The key is the central limit theorem. A blend of independent signals is more "
-            "Gaussian than the signals themselves. Measure Gaussian-ness by the kurtosis, the fourth moment minus "
-            "three: zero for a bell curve. " + clt_say +
+            "<bookmark mark='b'/> The central limit theorem motivates looking for non-Gaussian directions in "
+            "mixtures of independent signals. Here the contrast is excess kurtosis: for a centered, unit-variance "
+            "output, the fourth moment minus three. A Gaussian gives zero, though zero alone does not prove "
+            "Gaussianity. " + clt_say +
             f" <bookmark mark='c'/> So turn the direction until the output is as far from Gaussian as "
-            f"possible. Aapo Hyvärinen's FastICA does it with a fixed-point step, and here it lands in "
-            f"{d['iters']} steps."
+            f"possible. Aapo Hyvärinen's FastICA does it with a fixed-point step; here we record "
+            f"{d['iters']} fixed-point steps."
         ) as vo:
             self.play(FadeIn(left), FadeIn(ll), run_time=1.5)
             vo.wait_until("a")
@@ -162,7 +163,7 @@ class ICA(VoiceoverScene):
         tl = VGroup(label(r"voice 1 (wide) \ and what ICA recovered (dashed)", font_size=22, color=VOICE1).next_to(tw[0], UP, buff=0.12),
                     label(r"voice 2", font_size=22, color=VOICE2).next_to(tw[1], UP, buff=0.12))
         rows = VGroup(
-            label(r"how closely each output follows its voice \ (correlation):", font_size=24, color=GREY_A),
+            label(r"correlation, \ one-to-one matching to the two voices:", font_size=24, color=GREY_A),
             label(rf"a microphone: \ ${r_mic.min():.2f}$ and ${r_mic.max():.2f}$", font_size=26, color=MIC),
             label(rf"PCA (whitening): \ ${r_pca.min():.2f}$ and ${r_pca.max():.2f}$", font_size=26, color=GREY_A),
             label(rf"ICA: \ ${r_ica.min():.4f}$ and ${r_ica.max():.4f}$", font_size=26, color=C.BITS),

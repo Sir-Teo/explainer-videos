@@ -1,0 +1,78 @@
+{
+  "created_utc": "2026-11-01T11:45:52.891108+00:00",
+  "checks": [
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "manifest_path": "manifest.json",
+      "original_manifest_sha256": "2e265a8914ef77fed9561079aea1e8d28cf7ddc376e0eb268a92aa5da3bcbd98",
+      "all_listed_files_verified": 19,
+      "status": "passed"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "manifest_path": "manifest.json",
+      "original_manifest_sha256": "d03dac17a34f73257e2895006182dd078750a9b897a315c045bfcf446b07c5b3",
+      "all_listed_files_verified": 29,
+      "status": "passed"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "manifest_path": "file-manifest.json",
+      "original_manifest_sha256": "a27b5ccce226bc51c2adc0ddbbc9a77d3c3158e057c32106a09965cbb6283bb4",
+      "all_listed_files_verified": 22,
+      "status": "passed"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "manifest_path": "file-manifest.json",
+      "original_manifest_sha256": "f137cf7d9ac1097036cdb391b262a8e8ab35f433be37808ce651fa9693492e33",
+      "all_listed_files_verified": 31,
+      "status": "passed"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "manifest_path": "manifest.json",
+      "original_manifest_sha256": "b4c57ae7baf86ccee89bdb9b3319265c608910eba6510f582bd7e5a6a7e7b89c",
+      "all_listed_files_verified": 6,
+      "status": "passed"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "source_baseline_pins_verified": 10,
+      "frozen_after_source_copies_verified": 6,
+      "translation_and_caption_receipt_hashes_verified": true,
+      "original_source_freeze_sha256": "58a0861052492ac746c7d0dcd77654f8ffaf5d6d975419958f22cf819d04c5ff",
+      "status": "passed; existing source/receipt inventories, not a retrospective all-file manifest"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "handoff_focused_test_log_SHA_verified": true,
+      "candidate_files_observations": [
+        {
+          "path": "videos/ai/ai7/cache_contract.py",
+          "historical_handoff_sha256": "c6266270e7244cbbd830b954059bd1206aed5efaa52ec23c6d3aed4495e82fe5",
+          "current_observed_sha256": "c6266270e7244cbbd830b954059bd1206aed5efaa52ec23c6d3aed4495e82fe5",
+          "current_bytes_equal_historical": true,
+          "scope": "Observation only. Original handoff remains unmodified; current checkout/test not archived or relabelled as historical tested bytes."
+        },
+        {
+          "path": "videos/ai/ai7/contracts.py",
+          "historical_handoff_sha256": "d0c5baf0f2eca5a4da27d149a5ad7a833d2163edb73a33f33ffc70ad07fca73a",
+          "current_observed_sha256": "d0c5baf0f2eca5a4da27d149a5ad7a833d2163edb73a33f33ffc70ad07fca73a",
+          "current_bytes_equal_historical": true,
+          "scope": "Observation only. Original handoff remains unmodified; current checkout/test not archived or relabelled as historical tested bytes."
+        },
+        {
+          "path": "tests/test_ai7_cache_contracts.py",
+          "historical_handoff_sha256": "017157abf70e45a2a659178b68b7574dcce507c0bbc2fd6aff21f451497f334f",
+          "current_observed_sha256": "6fd284bb8b375ce274355ab749d153cdbcf35537f254dd3d029e15a6e98d553c",
+          "current_bytes_equal_historical": false,
+          "scope": "Observation only. Original handoff remains unmodified; current checkout/test not archived or relabelled as historical tested bytes."
+        }
+      ],
+      "portability_delta_attestation": "Parent root reports removal only of the test /workspace disk assertion. This pack does not revalidate that delta or call current bytes the historical017-tested candidate. Root will append its correction/final test receipt."
+    }
+  ],
+  "limits": "Original owner manifests and explicit middle source/receipt inventories verified. Supplemental unmanifested runtime files preserved at observed hashes; no claim all were original-manifest listed.",
+  "current_cache_test_warning": "Historical017 test identity differs from current6fd portability-adjusted bytes. Current test source is not archived as the historical candidate."
+}

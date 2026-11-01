@@ -8,6 +8,12 @@ infinity-gram over the thirty novels (after 2024's infini-gram). It reuses Part 
 70 word rates each) and Part 1's books, and every method is written out in numpy in `compute.py`; every model that
 is trained has its training replayed on screen.
 
+Source QA preparation (2026-11-01): numerical and bilingual teaching repairs are recorded in
+[the source evidence](../../../docs/qa/evidence/ai7-source-preparation/README.md). Part 7 cache generation and
+rendered acceptance remain gated behind Part 6. The numerical examples below describe the historical recipe;
+they have not yet been revalidated against the revised producers. Source tests do not approve motion, narration
+synchronization, listening or production-resolution output.
+
 ## Outline
 
 * **Structure nobody labelled.** The pages along their three main directions, uncoloured; a two-component mixture
@@ -108,12 +114,17 @@ From the repo root:
 python tools/make.py ai7                    # everything: compute, then English and Chinese builds
 python -m videos.ai.ai7.compute             # just the numbers (.cache/ai7), about 15 CPU-minutes on one core
 python -m videos.ai.ai7.compute infini lda  # specific items; --force to recompute
+python -m videos.ai.ai7.compute --check    # read-only cache status; missing/stale results fail
 python tools/build.py ai7                   # English
 python tools/build.py ai7 --lang zh         # Chinese
 ```
 
-The computation reads Part 1's thirty novels (`.cache/ai1`, built by Part 1's compute on first use) and Part 6's
-pages (`.cache/ai6`). Every random choice is seeded. The suffix array (`infini.py`) sorts 23.7 million suffixes by
+The computation requires Part 1's existing thirty novels, text and score artifacts (`.cache/ai1`) and current
+Part 6 pages (`.cache/ai6`). The make command explicitly prepares the inputs needed by the requested items;
+requesting only `kn` does not build the unrelated page experiments or model-backed scoreboard. Direct loaders
+never download missing upstream data, and cached-only mode rejects missing, legacy or stale results before
+generation. Recomputed results preserve replaced bytes; Bayesopt resumes only pieces with matching observed
+source, runtime and consumed-input identities. Every random choice is seeded. The suffix array (`infini.py`) sorts 23.7 million suffixes by
 prefix doubling in numpy (about a minute, under 1.5 GB of memory) and is not cached; the Bayesian optimization saves
 each evaluation as it goes (`CACHE.partial`), so an interrupted run resumes. No multiprocessing, no torch.
 

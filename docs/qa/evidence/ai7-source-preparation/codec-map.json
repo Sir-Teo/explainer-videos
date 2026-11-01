@@ -1,0 +1,1797 @@
+{
+  "codec": "One deterministic gzip object per exact ORIGINAL byte SHA; decompress once yields the original file bytes. If original was .gz, its gzip wrapper bytes are preserved too.",
+  "all_original_aliases": [
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "analytic-execution.log",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/analytic-execution.log",
+      "original_bytes": 5299,
+      "original_sha256": "97066b9859edc079fe119ae3e3e6f22a999cf8f80b2c4410291e373703eccbb2",
+      "object": "../../objects/97066b9859edc079fe119ae3e3e6f22a999cf8f80b2c4410291e373703eccbb2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "analytic-results.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/analytic-results.json",
+      "original_bytes": 5299,
+      "original_sha256": "97066b9859edc079fe119ae3e3e6f22a999cf8f80b2c4410291e373703eccbb2",
+      "object": "../../objects/97066b9859edc079fe119ae3e3e6f22a999cf8f80b2c4410291e373703eccbb2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "analytic_fixtures.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/analytic_fixtures.py",
+      "original_bytes": 9872,
+      "original_sha256": "c2b0e28bc7fbbb44b6e5a31d868474b5ec8aa81f12e3d02e57419743c810a1b0",
+      "object": "../../objects/c2b0e28bc7fbbb44b6e5a31d868474b5ec8aa81f12e3d02e57419743c810a1b0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "bilingual-results.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/bilingual-results.json",
+      "original_bytes": 51567,
+      "original_sha256": "0ffa0d7aaa7d8fd871df465fd30f5f229a152bfff23961d5306d9d7ef9c360e3",
+      "object": "../../objects/0ffa0d7aaa7d8fd871df465fd30f5f229a152bfff23961d5306d9d7ef9c360e3.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "bilingual_source_checks.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/bilingual_source_checks.py",
+      "original_bytes": 1883,
+      "original_sha256": "375e326e0eee080caa49b1261899a48a0067a627bb8f037acf451463b863c368",
+      "object": "../../objects/375e326e0eee080caa49b1261899a48a0067a627bb8f037acf451463b863c368.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "fixture-execution-notes.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/fixture-execution-notes.json",
+      "original_bytes": 501,
+      "original_sha256": "f54a84a9ec071acef2a7c4a535bc132da368d62e9fccb6a98b8aa217ac6bfcf8",
+      "object": "../../objects/f54a84a9ec071acef2a7c4a535bc132da368d62e9fccb6a98b8aa217ac6bfcf8.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "inventory.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/inventory.json",
+      "original_bytes": 2197,
+      "original_sha256": "8afb9c6be0e970430e6e0d89b95a1d98b6d0ee75cc6706d25ceefb91e5ed3217",
+      "object": "../../objects/8afb9c6be0e970430e6e0d89b95a1d98b6d0ee75cc6706d25ceefb91e5ed3217.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "manifest.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/manifest.json",
+      "original_bytes": 3163,
+      "original_sha256": "2e265a8914ef77fed9561079aea1e8d28cf7ddc376e0eb268a92aa5da3bcbd98",
+      "object": "../../objects/2e265a8914ef77fed9561079aea1e8d28cf7ddc376e0eb268a92aa5da3bcbd98.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest bytes preserved"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "report.json",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/report.json",
+      "original_bytes": 14850,
+      "original_sha256": "e46cf697530dbe66db288af1d915799117a1eab42c2a63ee06feaa5509b0a025",
+      "object": "../../objects/e46cf697530dbe66db288af1d915799117a1eab42c2a63ee06feaa5509b0a025.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "report.md",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/report.md",
+      "original_bytes": 18659,
+      "original_sha256": "2a86df1d039dab1afda133af3069d246ec86e079f94e43d44738d632bd2adb1f",
+      "object": "../../objects/2a86df1d039dab1afda133af3069d246ec86e079f94e43d44738d632bd2adb1f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "source/videos/ai/ai7/README.md",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/README.md",
+      "original_bytes": 23546,
+      "original_sha256": "349dbdf8e4ac4c8d552ee1fc9bf87675928be09c94f5f95bf42d57540ee7bbf0",
+      "object": "../../objects/349dbdf8e4ac4c8d552ee1fc9bf87675928be09c94f5f95bf42d57540ee7bbf0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "source/videos/ai/ai7/common.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/common.py",
+      "original_bytes": 7717,
+      "original_sha256": "89cf6cb6060d3a2f03db5bf1a379dc942a5e7857399d987ffca172d0d99275f2",
+      "object": "../../objects/89cf6cb6060d3a2f03db5bf1a379dc942a5e7857399d987ffca172d0d99275f2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "source/videos/ai/ai7/compute.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/compute.py",
+      "original_bytes": 63423,
+      "original_sha256": "e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f",
+      "object": "../../objects/e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "source/videos/ai/ai7/manifest.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/manifest.py",
+      "original_bytes": 1176,
+      "original_sha256": "eb994076e76f310e4afb81b31c930b135de266a5c10d22fabe6be92353cac89f",
+      "object": "../../objects/eb994076e76f310e4afb81b31c930b135de266a5c10d22fabe6be92353cac89f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "source/videos/ai/ai7/s02_pca.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/s02_pca.py",
+      "original_bytes": 20677,
+      "original_sha256": "cf961f8bb3c927ef4badb1070c8689d91a9f7e789b18b744cf340d54744aaa25",
+      "object": "../../objects/cf961f8bb3c927ef4badb1070c8689d91a9f7e789b18b744cf340d54744aaa25.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "source/videos/ai/ai7/s03_ppca.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/s03_ppca.py",
+      "original_bytes": 12942,
+      "original_sha256": "95f383587557eafd3f99ed670043ee4be610a915c27137a869b1b7c841403aca",
+      "object": "../../objects/95f383587557eafd3f99ed670043ee4be610a915c27137a869b1b7c841403aca.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "source/videos/ai/ai7/s04_ica.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/s04_ica.py",
+      "original_bytes": 12803,
+      "original_sha256": "054862c66ecb0cb684487fdb137849da2cf4236ab067a3a5d8baebfcacd1828b",
+      "object": "../../objects/054862c66ecb0cb684487fdb137849da2cf4236ab067a3a5d8baebfcacd1828b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "source/videos/ai/ai7/s05_em.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/s05_em.py",
+      "original_bytes": 18675,
+      "original_sha256": "0c5fd5c3931a730620f873cc973fd359d922ee29d9c0d9cac33b12007dad3176",
+      "object": "../../objects/0c5fd5c3931a730620f873cc973fd359d922ee29d9c0d9cac33b12007dad3176.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "source/videos/ai/ai7/s06_lda.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/s06_lda.py",
+      "original_bytes": 11355,
+      "original_sha256": "c381a5befb904f5e8a36366a38b7ea46acabdf7ff1bfb7837aceadccc9b23aa9",
+      "object": "../../objects/c381a5befb904f5e8a36366a38b7ea46acabdf7ff1bfb7837aceadccc9b23aa9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-pca-topics-source-audit",
+      "original_relative_path": "source/videos/ai/ai7/zh_lines.py",
+      "original_absolute_path": "/workspace/runtime/ai7-pca-topics-source-audit/source/videos/ai/ai7/zh_lines.py",
+      "original_bytes": 63213,
+      "original_sha256": "0aefc4840aee9c88371de719b5fb4d35db9fae6a603a4b6902f2bafbb5476ac9",
+      "object": "../../objects/0aefc4840aee9c88371de719b5fb4d35db9fae6a603a4b6902f2bafbb5476ac9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "README.md",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/README.md",
+      "original_bytes": 3120,
+      "original_sha256": "3970bf1531eb9da8e07f9d1aa148994a009cb06e8972d305b0996c6a2638d386",
+      "object": "../../objects/3970bf1531eb9da8e07f9d1aa148994a009cb06e8972d305b0996c6a2638d386.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "after/s02_pca.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/after/s02_pca.py",
+      "original_bytes": 20796,
+      "original_sha256": "4d2d6ee86e83b955a5cc1048378ca3f98537401c2c4a4254cac4ede74015185b",
+      "object": "../../objects/4d2d6ee86e83b955a5cc1048378ca3f98537401c2c4a4254cac4ede74015185b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "after/s03_ppca.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/after/s03_ppca.py",
+      "original_bytes": 13159,
+      "original_sha256": "2ee73a20601d70417b946904c67a9ad1cc8aa330cad2db268c8b1fa0b1c44681",
+      "object": "../../objects/2ee73a20601d70417b946904c67a9ad1cc8aa330cad2db268c8b1fa0b1c44681.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "after/s04_ica.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/after/s04_ica.py",
+      "original_bytes": 12875,
+      "original_sha256": "44d24354a386e89977d6a1c77d88466a7cde848436ee5fc6ade0de793ea9fe9d",
+      "object": "../../objects/44d24354a386e89977d6a1c77d88466a7cde848436ee5fc6ade0de793ea9fe9d.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "after/s05_em.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/after/s05_em.py",
+      "original_bytes": 19722,
+      "original_sha256": "2967721ae87e6f036d4d8abac1904a6f640d1507a6bde038ab279059914c1ede",
+      "object": "../../objects/2967721ae87e6f036d4d8abac1904a6f640d1507a6bde038ab279059914c1ede.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "after/s06_lda.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/after/s06_lda.py",
+      "original_bytes": 11869,
+      "original_sha256": "32d426faf024c15643ffbe4a906ccd14451d7e4ea4bc0f23ab95586d5b7ab9ce",
+      "object": "../../objects/32d426faf024c15643ffbe4a906ccd14451d7e4ea4bc0f23ab95586d5b7ab9ce.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "before/s02_pca.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/before/s02_pca.py",
+      "original_bytes": 20677,
+      "original_sha256": "cf961f8bb3c927ef4badb1070c8689d91a9f7e789b18b744cf340d54744aaa25",
+      "object": "../../objects/cf961f8bb3c927ef4badb1070c8689d91a9f7e789b18b744cf340d54744aaa25.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "before/s03_ppca.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/before/s03_ppca.py",
+      "original_bytes": 12942,
+      "original_sha256": "95f383587557eafd3f99ed670043ee4be610a915c27137a869b1b7c841403aca",
+      "object": "../../objects/95f383587557eafd3f99ed670043ee4be610a915c27137a869b1b7c841403aca.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "before/s04_ica.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/before/s04_ica.py",
+      "original_bytes": 12803,
+      "original_sha256": "054862c66ecb0cb684487fdb137849da2cf4236ab067a3a5d8baebfcacd1828b",
+      "object": "../../objects/054862c66ecb0cb684487fdb137849da2cf4236ab067a3a5d8baebfcacd1828b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "before/s05_em.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/before/s05_em.py",
+      "original_bytes": 18715,
+      "original_sha256": "24bfbcd51b21ebab4a27c10717b0e359daa6c77e3a2f542e20995ec09b7fce4f",
+      "object": "../../objects/24bfbcd51b21ebab4a27c10717b0e359daa6c77e3a2f542e20995ec09b7fce4f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "before/s06_lda.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/before/s06_lda.py",
+      "original_bytes": 11355,
+      "original_sha256": "c381a5befb904f5e8a36366a38b7ea46acabdf7ff1bfb7837aceadccc9b23aa9",
+      "object": "../../objects/c381a5befb904f5e8a36366a38b7ea46acabdf7ff1bfb7837aceadccc9b23aa9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "before-inventory.json",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/before-inventory.json",
+      "original_bytes": 911,
+      "original_sha256": "1d84e380fafeb23d11e2c20c290da525105599925e41654efcd21da3b8066362",
+      "object": "../../objects/1d84e380fafeb23d11e2c20c290da525105599925e41654efcd21da3b8066362.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "caption-lookup-proof.json",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/caption-lookup-proof.json",
+      "original_bytes": 1700,
+      "original_sha256": "89262382f8c3827d7ba14dbd3ea9ee8e733e78d921d98d44520b7779cf04a835",
+      "object": "../../objects/89262382f8c3827d7ba14dbd3ea9ee8e733e78d921d98d44520b7779cf04a835.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "final-receipt.json",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/final-receipt.json",
+      "original_bytes": 1276,
+      "original_sha256": "6e95673147f8996d8723db99cd3a7ef6786cd83e9f171724c56389dfcec356a8",
+      "object": "../../objects/6e95673147f8996d8723db99cd3a7ef6786cd83e9f171724c56389dfcec356a8.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "focused-tests-final.log",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/focused-tests-final.log",
+      "original_bytes": 1518,
+      "original_sha256": "f26749483ace0308963195e0ffd207740dc2be4c63d4d26456fb7be1d2ae5a46",
+      "object": "../../objects/f26749483ace0308963195e0ffd207740dc2be4c63d4d26456fb7be1d2ae5a46.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "focused-tests-reader-final.log",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/focused-tests-reader-final.log",
+      "original_bytes": 1518,
+      "original_sha256": "85490e37156c6a621cbde3091ca59f8002d2630682d167e8850f47f55cbfebd4",
+      "object": "../../objects/85490e37156c6a621cbde3091ca59f8002d2630682d167e8850f47f55cbfebd4.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "focused-tests.log",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/focused-tests.log",
+      "original_bytes": 2411,
+      "original_sha256": "7501c1dd5e993bae80e4413c12df74cf55ee745b1e7cd5c9a81b3d3b874b437f",
+      "object": "../../objects/7501c1dd5e993bae80e4413c12df74cf55ee745b1e7cd5c9a81b3d3b874b437f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "freeze-output.log",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/freeze-output.log",
+      "original_bytes": 1286,
+      "original_sha256": "34a6ff6265687ecbff6f376adda9821a7bbbaea81b504f11806cc2761aaf9f37",
+      "object": "../../objects/34a6ff6265687ecbff6f376adda9821a7bbbaea81b504f11806cc2761aaf9f37.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "manifest.json",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/manifest.json",
+      "original_bytes": 4555,
+      "original_sha256": "d03dac17a34f73257e2895006182dd078750a9b897a315c045bfcf446b07c5b3",
+      "object": "../../objects/d03dac17a34f73257e2895006182dd078750a9b897a315c045bfcf446b07c5b3.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest bytes preserved"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "overlay-verification.json",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/overlay-verification.json",
+      "original_bytes": 30638,
+      "original_sha256": "11b28aa942abcd8d0cb54b449337d481a582484912d9d1e67ea83f851a1e7af1",
+      "object": "../../objects/11b28aa942abcd8d0cb54b449337d481a582484912d9d1e67ea83f851a1e7af1.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "prepare_handoff.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/prepare_handoff.py",
+      "original_bytes": 10299,
+      "original_sha256": "244dda57f5fb07a261d12e716a8113b67c4a0c81a3f2317dad4b66cb64cba7ce",
+      "object": "../../objects/244dda57f5fb07a261d12e716a8113b67c4a0c81a3f2317dad4b66cb64cba7ce.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "s02_pca.patch",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/s02_pca.patch",
+      "original_bytes": 2455,
+      "original_sha256": "67c095854f4dccc214c2474a406d78e2c396440614bcc674dcc0b6adc23f054c",
+      "object": "../../objects/67c095854f4dccc214c2474a406d78e2c396440614bcc674dcc0b6adc23f054c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "s03_ppca.patch",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/s03_ppca.patch",
+      "original_bytes": 5371,
+      "original_sha256": "2cfec42ad3ace19a347f8cfb41f38db894f76fe957f97ca2e72196bcf0efcec4",
+      "object": "../../objects/2cfec42ad3ace19a347f8cfb41f38db894f76fe957f97ca2e72196bcf0efcec4.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "s04_ica.patch",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/s04_ica.patch",
+      "original_bytes": 3156,
+      "original_sha256": "a59b0509edffa81bb8966533502eb2ed42b295fe113edf2ea0131f7602616ce2",
+      "object": "../../objects/a59b0509edffa81bb8966533502eb2ed42b295fe113edf2ea0131f7602616ce2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "s05_em.patch",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/s05_em.patch",
+      "original_bytes": 8263,
+      "original_sha256": "38f40e0949920318d295409b20027c5b09fc61f1909693d2d29b0ad19d59ad28",
+      "object": "../../objects/38f40e0949920318d295409b20027c5b09fc61f1909693d2d29b0ad19d59ad28.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "s06_lda.patch",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/s06_lda.patch",
+      "original_bytes": 4316,
+      "original_sha256": "c7adca3566c617e9a1c7184701af5d4841ed90154919541f0eadbbe2f4436da4",
+      "object": "../../objects/c7adca3566c617e9a1c7184701af5d4841ed90154919541f0eadbbe2f4436da4.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "source-freeze.json",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/source-freeze.json",
+      "original_bytes": 1302,
+      "original_sha256": "f893f0b5da9d8f63458f666dd4e3e0b44352a499746bb4b9cd552bf42a602d5e",
+      "object": "../../objects/f893f0b5da9d8f63458f666dd4e3e0b44352a499746bb4b9cd552bf42a602d5e.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "test_ai7_latent_model_claims.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/test_ai7_latent_model_claims.py",
+      "original_bytes": 7060,
+      "original_sha256": "1c981dab8ce582d778d1f0d8cced76526aafe2599876f258ae6093e1a879080a",
+      "object": "../../objects/1c981dab8ce582d778d1f0d8cced76526aafe2599876f258ae6093e1a879080a.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "translation-overlay.json",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/translation-overlay.json",
+      "original_bytes": 42139,
+      "original_sha256": "70030d3404c965dc7b5b4efd6ea79e82a52b057afa64783d222295ca13a6a1c4",
+      "object": "../../objects/70030d3404c965dc7b5b4efd6ea79e82a52b057afa64783d222295ca13a6a1c4.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-latent-scene-repairs",
+      "original_relative_path": "verify_overlay.py",
+      "original_absolute_path": "/workspace/runtime/ai7-latent-scene-repairs/verify_overlay.py",
+      "original_bytes": 4607,
+      "original_sha256": "890650e5b84f4b8a2eccca648030f2b85d208f14e2d823781a1b94fe9b03ad71",
+      "object": "../../objects/890650e5b84f4b8a2eccca648030f2b85d208f14e2d823781a1b94fe9b03ad71.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "audit-report.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/audit-report.json",
+      "original_bytes": 25152,
+      "original_sha256": "2eb98b67847f0ade3e8cbfcacd6e0b9c35bbc9dd5a5e6987497a5093c92209e2",
+      "object": "../../objects/2eb98b67847f0ade3e8cbfcacd6e0b9c35bbc9dd5a5e6987497a5093c92209e2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "audit-report.md",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/audit-report.md",
+      "original_bytes": 12863,
+      "original_sha256": "943d52b148e1d0602d62e33fc13e09da39ef464e5485486c06c656da2b6089f5",
+      "object": "../../objects/943d52b148e1d0602d62e33fc13e09da39ef464e5485486c06c656da2b6089f5.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "ibm-addat-counterfactual-full.json.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/ibm-addat-counterfactual-full.json.gz",
+      "original_bytes": 44454,
+      "original_sha256": "edeaca474bfd07b53e23ef9c885dc3b62bdd210f7a8b6900ebbd3364e3b5c17f",
+      "object": "../../objects/edeaca474bfd07b53e23ef9c885dc3b62bdd210f7a8b6900ebbd3364e3b5c17f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "ibm-original-full.json.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/ibm-original-full.json.gz",
+      "original_bytes": 44352,
+      "original_sha256": "46f36edf9ab042a3fdde57fa1659f3bbe3f27217e8ad16074864571660333372",
+      "object": "../../objects/46f36edf9ab042a3fdde57fa1659f3bbe3f27217e8ad16074864571660333372.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "ibm-results.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/ibm-results.json",
+      "original_bytes": 6961,
+      "original_sha256": "fc33395a5222e86202d97ccbd3df6be8280b89f6c7d31c873a8054fb50fd8c38",
+      "object": "../../objects/fc33395a5222e86202d97ccbd3df6be8280b89f6c7d31c873a8054fb50fd8c38.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "ibm_check.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/ibm_check.log",
+      "original_bytes": 6961,
+      "original_sha256": "fc33395a5222e86202d97ccbd3df6be8280b89f6c7d31c873a8054fb50fd8c38",
+      "object": "../../objects/fc33395a5222e86202d97ccbd3df6be8280b89f6c7d31c873a8054fb50fd8c38.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "ibm_check.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/ibm_check.py",
+      "original_bytes": 4049,
+      "original_sha256": "674750ab6b488427a45d1b38afc2ee4cc1c2b40d9b2874cf4ce2294acde60ab1",
+      "object": "../../objects/674750ab6b488427a45d1b38afc2ee4cc1c2b40d9b2874cf4ce2294acde60ab1.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/after/s07_hmm.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/s07_hmm.py",
+      "original_bytes": 14712,
+      "original_sha256": "463c764548b55fc2be730c822894a26c592db528e51ee1f9d6a83b7218f4d340",
+      "object": "../../objects/463c764548b55fc2be730c822894a26c592db528e51ee1f9d6a83b7218f4d340.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/after/s08_baumwelch.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/s08_baumwelch.py",
+      "original_bytes": 14420,
+      "original_sha256": "3e365218f56baac8f14416d327d8a322d0fbdaae47045463e579680ed366f2dd",
+      "object": "../../objects/3e365218f56baac8f14416d327d8a322d0fbdaae47045463e579680ed366f2dd.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/after/s09_translation.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/s09_translation.py",
+      "original_bytes": 14657,
+      "original_sha256": "31f1a69922addcc30cc639553c95d9cc7c50010c29fc0cbe4c0220c81c903299",
+      "object": "../../objects/31f1a69922addcc30cc639553c95d9cc7c50010c29fc0cbe4c0220c81c903299.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/after/s10_kn.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/s10_kn.py",
+      "original_bytes": 17717,
+      "original_sha256": "4f70e0fb9f443160594e9ec7d73f767e50df632449c85ffd1551380109b45b6a",
+      "object": "../../objects/4f70e0fb9f443160594e9ec7d73f767e50df632449c85ffd1551380109b45b6a.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/after/s11_infini.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/s11_infini.py",
+      "original_bytes": 13118,
+      "original_sha256": "1372a6797934c27a0968343c4642f80d2504388965da825a1eb4a50a24e493b5",
+      "object": "../../objects/1372a6797934c27a0968343c4642f80d2504388965da825a1eb4a50a24e493b5.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/after/test_ai7_counting_scene_claims.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/after/test_ai7_counting_scene_claims.py",
+      "original_bytes": 7418,
+      "original_sha256": "5d15ed8a470026d1dfa625967144a20a4d4b74d6170d943b65ba1d2f38bf3ff9",
+      "object": "../../objects/5d15ed8a470026d1dfa625967144a20a4d4b74d6170d943b65ba1d2f38bf3ff9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/before/s07_hmm.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/before/s07_hmm.py",
+      "original_bytes": 14409,
+      "original_sha256": "1b953d893843bbde1f368818fe95cb042498e53418049fcb9c0f6e18792bc58c",
+      "object": "../../objects/1b953d893843bbde1f368818fe95cb042498e53418049fcb9c0f6e18792bc58c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/before/s08_baumwelch.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/before/s08_baumwelch.py",
+      "original_bytes": 13711,
+      "original_sha256": "dd78bdd41d022ea9d305a4576025c39bda9b338954087c2374d7f8c5fcad5258",
+      "object": "../../objects/dd78bdd41d022ea9d305a4576025c39bda9b338954087c2374d7f8c5fcad5258.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/before/s09_translation.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/before/s09_translation.py",
+      "original_bytes": 14163,
+      "original_sha256": "42c3e3b7f5b3d892bb6dd4e31f63265ea5f62fed0cd12f0584c405532f841951",
+      "object": "../../objects/42c3e3b7f5b3d892bb6dd4e31f63265ea5f62fed0cd12f0584c405532f841951.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/before/s10_kn.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/before/s10_kn.py",
+      "original_bytes": 17404,
+      "original_sha256": "fe1c33680c7474ae1eec3af41d5ef1224df7a50e7a7eb15e78aa3415f52efe47",
+      "object": "../../objects/fe1c33680c7474ae1eec3af41d5ef1224df7a50e7a7eb15e78aa3415f52efe47.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/before/s11_infini.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/before/s11_infini.py",
+      "original_bytes": 12464,
+      "original_sha256": "7c3670e098433cf1fc3ef3f232cf13dc758b0f5d954bf87e28f29e8142419070",
+      "object": "../../objects/7c3670e098433cf1fc3ef3f232cf13dc758b0f5d954bf87e28f29e8142419070.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/bookmark-and-play-invariants.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/bookmark-and-play-invariants.json",
+      "original_bytes": 3591,
+      "original_sha256": "ea8249bd80f8ae3814b7bcbd9cf1a4f037d6841315f22dd52912840c172642f1",
+      "object": "../../objects/ea8249bd80f8ae3814b7bcbd9cf1a4f037d6841315f22dd52912840c172642f1.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/caption-add.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/caption-add.json",
+      "original_bytes": 2114,
+      "original_sha256": "23cc625cb0decd45ff98975af069910906e740f5941210d95f60575d04a627a6",
+      "object": "../../objects/23cc625cb0decd45ff98975af069910906e740f5941210d95f60575d04a627a6.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/caption-proposal-scope.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/caption-proposal-scope.json",
+      "original_bytes": 1663,
+      "original_sha256": "c425b66b4ed9e3ba547b47407dbda3d88f49cf37ffb1f35f871f5bd09749ef5c",
+      "object": "../../objects/c425b66b4ed9e3ba547b47407dbda3d88f49cf37ffb1f35f871f5bd09749ef5c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/captions.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/captions.py",
+      "original_bytes": 2940,
+      "original_sha256": "b26c25184834a560328b299f7e38d04ddfd15717a4591355ad41dc86fa3d9135",
+      "object": "../../objects/b26c25184834a560328b299f7e38d04ddfd15717a4591355ad41dc86fa3d9135.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/diff-check.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/diff-check.json",
+      "original_bytes": 344,
+      "original_sha256": "15b2b67441ffdf233a77f8711dc6f2c71d3c5def4d145c7a776013a44ca0561f",
+      "object": "../../objects/15b2b67441ffdf233a77f8711dc6f2c71d3c5def4d145c7a776013a44ca0561f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/final-focused-tests.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/final-focused-tests.log",
+      "original_bytes": 1178,
+      "original_sha256": "fe070ae555bb1e2799ab0fc2a8bc7f958f6f660146fa25aad1a40952ea9c2f91",
+      "object": "../../objects/fe070ae555bb1e2799ab0fc2a8bc7f958f6f660146fa25aad1a40952ea9c2f91.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/final-overlay-verification.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/final-overlay-verification.log",
+      "original_bytes": 67,
+      "original_sha256": "01d7bb5d09835560977789ce8f591fcdc16452900ef3b0fdc19e49a0c249eaa0",
+      "object": "../../objects/01d7bb5d09835560977789ce8f591fcdc16452900ef3b0fdc19e49a0c249eaa0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/focused-tests.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/focused-tests.log",
+      "original_bytes": 1178,
+      "original_sha256": "658d7c431f71ad4c29c649a4bda6181d5ecab0c700e33bc7a0a4185a1413b6b5",
+      "object": "../../objects/658d7c431f71ad4c29c649a4bda6181d5ecab0c700e33bc7a0a4185a1413b6b5.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/freeze.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/freeze.py",
+      "original_bytes": 5521,
+      "original_sha256": "b3d98b89cfeb65bff42b2feeafad994c0074b5f51ca04cfd912263fe92a70ada",
+      "object": "../../objects/b3d98b89cfeb65bff42b2feeafad994c0074b5f51ca04cfd912263fe92a70ada.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/geometry-en.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/geometry-en.json",
+      "original_bytes": 5141,
+      "original_sha256": "45488d0953f1682e46e608890105abbd54fa6052969591cf4e97f07c9149cbf1",
+      "object": "../../objects/45488d0953f1682e46e608890105abbd54fa6052969591cf4e97f07c9149cbf1.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/geometry-en.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/geometry-en.log",
+      "original_bytes": 5141,
+      "original_sha256": "45488d0953f1682e46e608890105abbd54fa6052969591cf4e97f07c9149cbf1",
+      "object": "../../objects/45488d0953f1682e46e608890105abbd54fa6052969591cf4e97f07c9149cbf1.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/geometry-zh.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/geometry-zh.json",
+      "original_bytes": 6135,
+      "original_sha256": "3e1035621bffbf6ac2d4e6eb158916001fd89eeb36a29d243f84f32a6d044859",
+      "object": "../../objects/3e1035621bffbf6ac2d4e6eb158916001fd89eeb36a29d243f84f32a6d044859.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/geometry-zh.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/geometry-zh.log",
+      "original_bytes": 6135,
+      "original_sha256": "3e1035621bffbf6ac2d4e6eb158916001fd89eeb36a29d243f84f32a6d044859",
+      "object": "../../objects/3e1035621bffbf6ac2d4e6eb158916001fd89eeb36a29d243f84f32a6d044859.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/geometry_check.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/geometry_check.py",
+      "original_bytes": 3473,
+      "original_sha256": "0b3894c170187aaacff5ba6a59839b3f5abe26274056227dc4c81db0dd52d7ff",
+      "object": "../../objects/0b3894c170187aaacff5ba6a59839b3f5abe26274056227dc4c81db0dd52d7ff.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/initial-geometry-scope-failure.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/initial-geometry-scope-failure.log",
+      "original_bytes": 10798,
+      "original_sha256": "27edc2f81a107b404468f3924816646a537ac6599f5cac29d459b097e1bd9737",
+      "object": "../../objects/27edc2f81a107b404468f3924816646a537ac6599f5cac29d459b097e1bd9737.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/initial-leading-branch-failure.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/initial-leading-branch-failure.log",
+      "original_bytes": 589,
+      "original_sha256": "e748b9ffea94b7d79a4889ecc78b5a30bce1a33fd087be264c3f15c4fdc11a4b",
+      "object": "../../objects/e748b9ffea94b7d79a4889ecc78b5a30bce1a33fd087be264c3f15c4fdc11a4b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/initial-unpositioned-summary-en.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/initial-unpositioned-summary-en.json",
+      "original_bytes": 2659,
+      "original_sha256": "3af99bafae40406d31b979a651077ae13c33116f9fac1309e33c096fbdacb3ab",
+      "object": "../../objects/3af99bafae40406d31b979a651077ae13c33116f9fac1309e33c096fbdacb3ab.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/initial-unpositioned-summary-zh.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/initial-unpositioned-summary-zh.json",
+      "original_bytes": 2689,
+      "original_sha256": "07f0679df6cf30d28511a7b802327faf9eb6bac40711a2e4142bac896bbad689",
+      "object": "../../objects/07f0679df6cf30d28511a7b802327faf9eb6bac40711a2e4142bac896bbad689.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/leading-branch-before-fix.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/leading-branch-before-fix.py",
+      "original_bytes": 14391,
+      "original_sha256": "24696a4c8e663d947cf12b165da6f9a5b500a761d81901b82f90054b64654443",
+      "object": "../../objects/24696a4c8e663d947cf12b165da6f9a5b500a761d81901b82f90054b64654443.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/leading-branch-overlay-before-fix.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/leading-branch-overlay-before-fix.json",
+      "original_bytes": 57297,
+      "original_sha256": "66067837dcf5dc5b3ad98ed59f8385f7d994f8996e8d048a8e93c5959e1b05a7",
+      "object": "../../objects/66067837dcf5dc5b3ad98ed59f8385f7d994f8996e8d048a8e93c5959e1b05a7.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/list_changes.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/list_changes.py",
+      "original_bytes": 879,
+      "original_sha256": "a7129676ec21e69d7e7a93b7347db43138963315c6f3026978d8abf3daf33baf",
+      "object": "../../objects/a7129676ec21e69d7e7a93b7347db43138963315c6f3026978d8abf3daf33baf.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/make_handoff.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/make_handoff.py",
+      "original_bytes": 12245,
+      "original_sha256": "f558a5752af8fcb002578dc830da9597e3270edd354d46aa72428a99fd19fdcc",
+      "object": "../../objects/f558a5752af8fcb002578dc830da9597e3270edd354d46aa72428a99fd19fdcc.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/overlay-verification.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/overlay-verification.json",
+      "original_bytes": 61779,
+      "original_sha256": "d041da76008a0eb6a12d4782e4e6096273e4daf29773d7f66ca67bd615985a31",
+      "object": "../../objects/d041da76008a0eb6a12d4782e4e6096273e4daf29773d7f66ca67bd615985a31.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/proposed-zh-overlay.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/proposed-zh-overlay.json",
+      "original_bytes": 57471,
+      "original_sha256": "8314793eda2f241fe168846a9228a1b65ca66cf011c7e526fb0584270f4edbcd",
+      "object": "../../objects/8314793eda2f241fe168846a9228a1b65ca66cf011c7e526fb0584270f4edbcd.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/source-freeze.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/source-freeze.json",
+      "original_bytes": 4618,
+      "original_sha256": "58a0861052492ac746c7d0dcd77654f8ffaf5d6d975419958f22cf819d04c5ff",
+      "object": "../../objects/58a0861052492ac746c7d0dcd77654f8ffaf5d6d975419958f22cf819d04c5ff.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/source.patch",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/source.patch",
+      "original_bytes": 26769,
+      "original_sha256": "5ad584e332be00aa15e99dfc20901f5db0b32b3b8c92dbf65fb4a7a4d0fc9c32",
+      "object": "../../objects/5ad584e332be00aa15e99dfc20901f5db0b32b3b8c92dbf65fb4a7a4d0fc9c32.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/verify_overlay.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/verify_overlay.py",
+      "original_bytes": 3619,
+      "original_sha256": "86dbadf373f1b4db7aab2f66ccdd118f3a6ed8d4768385ce1427af7e5a826f94",
+      "object": "../../objects/86dbadf373f1b4db7aab2f66ccdd118f3a6ed8d4768385ce1427af7e5a826f94.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/voiceover-change-index.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/voiceover-change-index.log",
+      "original_bytes": 2211,
+      "original_sha256": "fe970a8950cf5580185c4cc3959400695b6c39f39a13f3f9a57d571b5c9bf6f3",
+      "object": "../../objects/fe970a8950cf5580185c4cc3959400695b6c39f39a13f3f9a57d571b5c9bf6f3.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "implementation/voiceover-changes.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/implementation/voiceover-changes.json",
+      "original_bytes": 17879,
+      "original_sha256": "851e5020d2382eb53ec11847b15725d59805944684e4049a004833b9697e8503",
+      "object": "../../objects/851e5020d2382eb53ec11847b15725d59805944684e4049a004833b9697e8503.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-5886ad1b/README.md",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/README.md",
+      "original_bytes": 23546,
+      "original_sha256": "349dbdf8e4ac4c8d552ee1fc9bf87675928be09c94f5f95bf42d57540ee7bbf0",
+      "object": "../../objects/349dbdf8e4ac4c8d552ee1fc9bf87675928be09c94f5f95bf42d57540ee7bbf0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-5886ad1b/compute.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/compute.py",
+      "original_bytes": 63423,
+      "original_sha256": "e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f",
+      "object": "../../objects/e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-5886ad1b/infini.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/infini.py",
+      "original_bytes": 4174,
+      "original_sha256": "e61b7df243725e1236144af42e4b6a400d420559dfde4abd4e3c6edc6a40f11a",
+      "object": "../../objects/e61b7df243725e1236144af42e4b6a400d420559dfde4abd4e3c6edc6a40f11a.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-5886ad1b/manifest.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/manifest.py",
+      "original_bytes": 1176,
+      "original_sha256": "eb994076e76f310e4afb81b31c930b135de266a5c10d22fabe6be92353cac89f",
+      "object": "../../objects/eb994076e76f310e4afb81b31c930b135de266a5c10d22fabe6be92353cac89f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-5886ad1b/s07_hmm.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/s07_hmm.py",
+      "original_bytes": 14409,
+      "original_sha256": "1b953d893843bbde1f368818fe95cb042498e53418049fcb9c0f6e18792bc58c",
+      "object": "../../objects/1b953d893843bbde1f368818fe95cb042498e53418049fcb9c0f6e18792bc58c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-5886ad1b/s08_baumwelch.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/s08_baumwelch.py",
+      "original_bytes": 13649,
+      "original_sha256": "97407d64af34c5d0620f63d638095f9db15ebadbde9ce31000427ec75e585618",
+      "object": "../../objects/97407d64af34c5d0620f63d638095f9db15ebadbde9ce31000427ec75e585618.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-5886ad1b/s09_translation.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/s09_translation.py",
+      "original_bytes": 14072,
+      "original_sha256": "eea50be0228f023bcd782187b67151b2cb0c230eb61c31695553789cb766dd63",
+      "object": "../../objects/eea50be0228f023bcd782187b67151b2cb0c230eb61c31695553789cb766dd63.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-5886ad1b/s10_kn.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/s10_kn.py",
+      "original_bytes": 17404,
+      "original_sha256": "fe1c33680c7474ae1eec3af41d5ef1224df7a50e7a7eb15e78aa3415f52efe47",
+      "object": "../../objects/fe1c33680c7474ae1eec3af41d5ef1224df7a50e7a7eb15e78aa3415f52efe47.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-5886ad1b/s11_infini.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/s11_infini.py",
+      "original_bytes": 12464,
+      "original_sha256": "7c3670e098433cf1fc3ef3f232cf13dc758b0f5d954bf87e28f29e8142419070",
+      "object": "../../objects/7c3670e098433cf1fc3ef3f232cf13dc758b0f5d954bf87e28f29e8142419070.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-5886ad1b/zh_lines.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-5886ad1b/zh_lines.py",
+      "original_bytes": 63213,
+      "original_sha256": "0aefc4840aee9c88371de719b5fb4d35db9fae6a603a4b6902f2bafbb5476ac9",
+      "object": "../../objects/0aefc4840aee9c88371de719b5fb4d35db9fae6a603a4b6902f2bafbb5476ac9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "source-baseline-pins.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/source-baseline-pins.json",
+      "original_bytes": 1616,
+      "original_sha256": "9c6407496f813b2e6e57bba8d6f99f57ceb28d19ae84c04698fad8c6bcf63ef5",
+      "object": "../../objects/9c6407496f813b2e6e57bba8d6f99f57ceb28d19ae84c04698fad8c6bcf63ef5.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "synthetic-results.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/synthetic-results.json",
+      "original_bytes": 2579,
+      "original_sha256": "4fcf356e6ecde99bdd2526e252498167a241011a667a0ee5d101fc137dfdb894",
+      "object": "../../objects/4fcf356e6ecde99bdd2526e252498167a241011a667a0ee5d101fc137dfdb894.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "synthetic_checks.log",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/synthetic_checks.log",
+      "original_bytes": 2579,
+      "original_sha256": "4fcf356e6ecde99bdd2526e252498167a241011a667a0ee5d101fc137dfdb894",
+      "object": "../../objects/4fcf356e6ecde99bdd2526e252498167a241011a667a0ee5d101fc137dfdb894.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "synthetic_checks.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/synthetic_checks.py",
+      "original_bytes": 5382,
+      "original_sha256": "014937084bd37d74b4ae2e98cd2b666d5c124a63b950a2df677fc9dabb335580",
+      "object": "../../objects/014937084bd37d74b4ae2e98cd2b666d5c124a63b950a2df677fc9dabb335580.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "translation-fixture-report.json",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/translation-fixture-report.json",
+      "original_bytes": 53420,
+      "original_sha256": "2023723b505163a1ea4c25bd90a52a3eae80fcd0fe09a1b7d01718db1db8b1fc",
+      "object": "../../objects/2023723b505163a1ea4c25bd90a52a3eae80fcd0fe09a1b7d01718db1db8b1fc.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "translation_check.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/translation_check.py",
+      "original_bytes": 2655,
+      "original_sha256": "c337326be39ba5adaf433187bb8fe7d69053b9497363a1e65c446dcdd0480193",
+      "object": "../../objects/c337326be39ba5adaf433187bb8fe7d69053b9497363a1e65c446dcdd0480193.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-mid-source-audit",
+      "original_relative_path": "write_audit.py",
+      "original_absolute_path": "/workspace/runtime/ai7-mid-source-audit/write_audit.py",
+      "original_bytes": 16253,
+      "original_sha256": "9ef1a686ae19ae48443ff9397fd22be611e95726a5f421cb8f57282f759ed976",
+      "object": "../../objects/9ef1a686ae19ae48443ff9397fd22be611e95726a5f421cb8f57282f759ed976.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "analytic-results.json",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/analytic-results.json",
+      "original_bytes": 9212,
+      "original_sha256": "c6ebecfb912a30989d27cc3ebf25a0528b6cd5d9c3489b7cc41a4af7752f8360",
+      "object": "../../objects/c6ebecfb912a30989d27cc3ebf25a0528b6cd5d9c3489b7cc41a4af7752f8360.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "analytic.log",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/analytic.log",
+      "original_bytes": 453,
+      "original_sha256": "38f2e51b42102be03114f7c1c76bc0b1d9be74b03ab367025a35d52ecffcc8f7",
+      "object": "../../objects/38f2e51b42102be03114f7c1c76bc0b1d9be74b03ab367025a35d52ecffcc8f7.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai5/compute.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai5/compute.py.gz",
+      "original_bytes": 20799,
+      "original_sha256": "0f0a7cdf7525b2bf06c0cb67bb40f5b6bfae22e406354afa4e7e7fc1c9c007a8",
+      "object": "../../objects/0f0a7cdf7525b2bf06c0cb67bb40f5b6bfae22e406354afa4e7e7fc1c9c007a8.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/README.md.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/README.md.gz",
+      "original_bytes": 11001,
+      "original_sha256": "65d0e85f8a7f5df4c1455b9b25a4acddacac5b8e01361bbbc42490964d71c79f",
+      "object": "../../objects/65d0e85f8a7f5df4c1455b9b25a4acddacac5b8e01361bbbc42490964d71c79f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/common.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/common.py.gz",
+      "original_bytes": 3191,
+      "original_sha256": "93d8bbe7f1ec6dbec750a5994775b1297e59f73746ff89cb960a84afb800d667",
+      "object": "../../objects/93d8bbe7f1ec6dbec750a5994775b1297e59f73746ff89cb960a84afb800d667.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/compute.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/compute.py.gz",
+      "original_bytes": 21712,
+      "original_sha256": "44da7b8e982986d596671a729e851595ef84fad52753315aaf2528a92237e370",
+      "object": "../../objects/44da7b8e982986d596671a729e851595ef84fad52753315aaf2528a92237e370.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/manifest.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/manifest.py.gz",
+      "original_bytes": 631,
+      "original_sha256": "ed5f40e3cfc74a62bd17f01ecc6873446a8701033583933db2a4d01e54d26f7b",
+      "object": "../../objects/ed5f40e3cfc74a62bd17f01ecc6873446a8701033583933db2a4d01e54d26f7b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/s12_graphs.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s12_graphs.py.gz",
+      "original_bytes": 5710,
+      "original_sha256": "ba9589d5dad971a0752aaf1d50a668ad06af6f49f6dcc0f8463c372a16e1c3c9",
+      "object": "../../objects/ba9589d5dad971a0752aaf1d50a668ad06af6f49f6dcc0f8463c372a16e1c3c9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/s13_causes.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s13_causes.py.gz",
+      "original_bytes": 4298,
+      "original_sha256": "f3e3a3b6c9a04043db89fda2a681b7850e96da23a77cfd8399578f9ddd6c0f53",
+      "object": "../../objects/f3e3a3b6c9a04043db89fda2a681b7850e96da23a77cfd8399578f9ddd6c0f53.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/s14_gp.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s14_gp.py.gz",
+      "original_bytes": 4258,
+      "original_sha256": "6d2f5c1084bc2693bdbf104e4f18c5415841c5fec23f5ec58d2bdb5f32672390",
+      "object": "../../objects/6d2f5c1084bc2693bdbf104e4f18c5415841c5fec23f5ec58d2bdb5f32672390.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/s15_occam.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s15_occam.py.gz",
+      "original_bytes": 4122,
+      "original_sha256": "f3301af9e3b8a3898c56e92e8dd73c9edb2cb44cee16b3246af3ef7bcdd30d7d",
+      "object": "../../objects/f3301af9e3b8a3898c56e92e8dd73c9edb2cb44cee16b3246af3ef7bcdd30d7d.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/s16_bayesopt.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s16_bayesopt.py.gz",
+      "original_bytes": 3294,
+      "original_sha256": "f38fc2a3a8229c355aa41d593aeaeb54e3892e5024211aef8c392d58f70d1e08",
+      "object": "../../objects/f38fc2a3a8229c355aa41d593aeaeb54e3892e5024211aef8c392d58f70d1e08.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/s17_vi.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s17_vi.py.gz",
+      "original_bytes": 7419,
+      "original_sha256": "0e48e00ff36259896b35ee9d13ced86066c5054b670262f63f2ce21fee5c198b",
+      "object": "../../objects/0e48e00ff36259896b35ee9d13ced86066c5054b670262f63f2ce21fee5c198b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/text_zh_add.json.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/text_zh_add.json.gz",
+      "original_bytes": 18953,
+      "original_sha256": "ec4c76369e1282813e43533d7badca82a1580a0cce75acb34282b6a593175a4c",
+      "object": "../../objects/ec4c76369e1282813e43533d7badca82a1580a0cce75acb34282b6a593175a4c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "baseline/videos/ai/ai7/zh_lines.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/zh_lines.py.gz",
+      "original_bytes": 25286,
+      "original_sha256": "d67b9288cb7a9ba2325c5b9f697b187b4460d0d79c3daa85c170c0e96aa8f2af",
+      "object": "../../objects/d67b9288cb7a9ba2325c5b9f697b187b4460d0d79c3daa85c170c0e96aa8f2af.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "check_analytic.py",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/check_analytic.py",
+      "original_bytes": 11042,
+      "original_sha256": "0802484dd7592df4070fbc811621a4100908009cf4407ffc58ba0be053044115",
+      "object": "../../objects/0802484dd7592df4070fbc811621a4100908009cf4407ffc58ba0be053044115.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "check_translation_coverage.py",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/check_translation_coverage.py",
+      "original_bytes": 2445,
+      "original_sha256": "49d6564a5adb9ab52793ad1abbbaccafe43a33c963579d0813c49c5fb52c9924",
+      "object": "../../objects/49d6564a5adb9ab52793ad1abbbaccafe43a33c963579d0813c49c5fb52c9924.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "file-manifest.json",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/file-manifest.json",
+      "original_bytes": 3406,
+      "original_sha256": "a27b5ccce226bc51c2adc0ddbbc9a77d3c3158e057c32106a09965cbb6283bb4",
+      "object": "../../objects/a27b5ccce226bc51c2adc0ddbbc9a77d3c3158e057c32106a09965cbb6283bb4.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest bytes preserved"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "report.json",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/report.json",
+      "original_bytes": 17310,
+      "original_sha256": "26d6054f62f0b62bbdb5ada71d9675164376fdd521438cdc9615724fbdadb090",
+      "object": "../../objects/26d6054f62f0b62bbdb5ada71d9675164376fdd521438cdc9615724fbdadb090.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "report.md",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/report.md",
+      "original_bytes": 4703,
+      "original_sha256": "05a296e8ec50576344fd7b13dc8241b74a502972692c1cfc3f2cc79dccab7ae0",
+      "object": "../../objects/05a296e8ec50576344fd7b13dc8241b74a502972692c1cfc3f2cc79dccab7ae0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "translation-coverage.json",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/translation-coverage.json",
+      "original_bytes": 30056,
+      "original_sha256": "86123ffd1ed6be36447e803fff0579e9ad529287ef1b9e869dba082683f183bc",
+      "object": "../../objects/86123ffd1ed6be36447e803fff0579e9ad529287ef1b9e869dba082683f183bc.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "translation-coverage.log",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/translation-coverage.log",
+      "original_bytes": 445,
+      "original_sha256": "0f336d098f7c4b83c6f2d42fab5c5f65f3460ae578ab17f47fe3775e4aef8563",
+      "object": "../../objects/0f336d098f7c4b83c6f2d42fab5c5f65f3460ae578ab17f47fe3775e4aef8563.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-tail-readonly-source-audit",
+      "original_relative_path": "write_report.py",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/write_report.py",
+      "original_bytes": 10129,
+      "original_sha256": "a2eb336f98165e7be13891710c4c30d4157dbf940dda4744d023e7ca134f3302",
+      "object": "../../objects/a2eb336f98165e7be13891710c4c30d4157dbf940dda4744d023e7ca134f3302.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "README.md",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/README.md",
+      "original_bytes": 2239,
+      "original_sha256": "8ed37bedac033d95d874f7d597d410a1f25299ba3794d706562684c975099096",
+      "object": "../../objects/8ed37bedac033d95d874f7d597d410a1f25299ba3794d706562684c975099096.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "after/s12_graphs.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/after/s12_graphs.py",
+      "original_bytes": 18822,
+      "original_sha256": "4bd99868ef0708661afde9a07536f0193c76b06a7d9eee68e42031bc3b2e6356",
+      "object": "../../objects/4bd99868ef0708661afde9a07536f0193c76b06a7d9eee68e42031bc3b2e6356.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "after/s15_occam.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/after/s15_occam.py",
+      "original_bytes": 12437,
+      "original_sha256": "53e37044b16b63d24ef2d20b2db8afe831047fad12146dadc8454a727c9937a0",
+      "object": "../../objects/53e37044b16b63d24ef2d20b2db8afe831047fad12146dadc8454a727c9937a0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "after/s16_bayesopt.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/after/s16_bayesopt.py",
+      "original_bytes": 8849,
+      "original_sha256": "8fea4db768f042c3a2f547392622d69eaeac1b7b1b0950b097670d06afbe3106",
+      "object": "../../objects/8fea4db768f042c3a2f547392622d69eaeac1b7b1b0950b097670d06afbe3106.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "after/s17_vi.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/after/s17_vi.py",
+      "original_bytes": 24999,
+      "original_sha256": "0eda59e707b61015383a946347a0e1b51ab124f387d8d3786fd5743348242cdb",
+      "object": "../../objects/0eda59e707b61015383a946347a0e1b51ab124f387d8d3786fd5743348242cdb.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "after/test_ai7_bayesian_scene_claims.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/after/test_ai7_bayesian_scene_claims.py",
+      "original_bytes": 4741,
+      "original_sha256": "f971551a40d1e575add9160b54a6d31ea56c9f1e33f97552766799bbdf0cad70",
+      "object": "../../objects/f971551a40d1e575add9160b54a6d31ea56c9f1e33f97552766799bbdf0cad70.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "before/s12_graphs.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/before/s12_graphs.py",
+      "original_bytes": 18780,
+      "original_sha256": "b1b07d91b83d52413c043bf51a3beb22cdb0b2191c8b74c5552975c14b911b96",
+      "object": "../../objects/b1b07d91b83d52413c043bf51a3beb22cdb0b2191c8b74c5552975c14b911b96.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "before/s15_occam.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/before/s15_occam.py",
+      "original_bytes": 12062,
+      "original_sha256": "d8889429e408b9390a21558ceb922734be85a69ce53c8ef4218df795e268e525",
+      "object": "../../objects/d8889429e408b9390a21558ceb922734be85a69ce53c8ef4218df795e268e525.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "before/s16_bayesopt.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/before/s16_bayesopt.py",
+      "original_bytes": 8800,
+      "original_sha256": "51c770e446298a325e3241f4416ac5937028b50eabc62d75e37e9f9cd0aadb96",
+      "object": "../../objects/51c770e446298a325e3241f4416ac5937028b50eabc62d75e37e9f9cd0aadb96.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "before/s17_vi.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/before/s17_vi.py",
+      "original_bytes": 23152,
+      "original_sha256": "1336cd75665bf51f265e1ed5d6f519a3e40219aa480a7b6532b3449cdb75db4b",
+      "object": "../../objects/1336cd75665bf51f265e1ed5d6f519a3e40219aa480a7b6532b3449cdb75db4b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "before-sha256.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/before-sha256.json",
+      "original_bytes": 347,
+      "original_sha256": "746085e116f4bf1eeb94d1fb09b05bc9e73ed0e3af958fc9120aaf39f17ed5e6",
+      "object": "../../objects/746085e116f4bf1eeb94d1fb09b05bc9e73ed0e3af958fc9120aaf39f17ed5e6.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "check_source_scope.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/check_source_scope.py",
+      "original_bytes": 4817,
+      "original_sha256": "8c02484fc2a281b6078aa7d29066fd178df72b82df3523f8d14f1d109dcf7199",
+      "object": "../../objects/8c02484fc2a281b6078aa7d29066fd178df72b82df3523f8d14f1d109dcf7199.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "check_text_bounds.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/check_text_bounds.py",
+      "original_bytes": 3457,
+      "original_sha256": "cde6338fbd0a9dc8f8511e3249b8085ead2b38921bac54a4f9e290ee7eb10f6f",
+      "object": "../../objects/cde6338fbd0a9dc8f8511e3249b8085ead2b38921bac54a4f9e290ee7eb10f6f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "check_translation_overlay.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/check_translation_overlay.py",
+      "original_bytes": 2548,
+      "original_sha256": "6851603145e7f7da3a8db0d2644cd70b74fcc4b51a978e326ee5ccf802533e75",
+      "object": "../../objects/6851603145e7f7da3a8db0d2644cd70b74fcc4b51a978e326ee5ccf802533e75.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "file-manifest.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/file-manifest.json",
+      "original_bytes": 4549,
+      "original_sha256": "f137cf7d9ac1097036cdb391b262a8e8ab35f433be37808ce651fa9693492e33",
+      "object": "../../objects/f137cf7d9ac1097036cdb391b262a8e8ab35f433be37808ce651fa9693492e33.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest bytes preserved"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "focused-tests.log",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/focused-tests.log",
+      "original_bytes": 670,
+      "original_sha256": "fb859af2badae6286630d420c22b12136bec77dae3535a64d98a22b805289bfa",
+      "object": "../../objects/fb859af2badae6286630d420c22b12136bec77dae3535a64d98a22b805289bfa.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "freeze.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/freeze.json",
+      "original_bytes": 3691,
+      "original_sha256": "98a25753568e5075038bd3abedfd9b7b95b263f3d6f199f48095dadfa001fbc2",
+      "object": "../../objects/98a25753568e5075038bd3abedfd9b7b95b263f3d6f199f48095dadfa001fbc2.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "freeze_handoff.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/freeze_handoff.py",
+      "original_bytes": 5725,
+      "original_sha256": "c3e7ab177f526225f66125c7d0de3de46e16732fe76b681f1a798031b1e52c88",
+      "object": "../../objects/c3e7ab177f526225f66125c7d0de3de46e16732fe76b681f1a798031b1e52c88.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "patches/s12_graphs.py.patch.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/patches/s12_graphs.py.patch.gz",
+      "original_bytes": 876,
+      "original_sha256": "35029eed4d86f86764124031fae7517fc111d734ea92713d3e98a8da678c656b",
+      "object": "../../objects/35029eed4d86f86764124031fae7517fc111d734ea92713d3e98a8da678c656b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "patches/s15_occam.py.patch.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/patches/s15_occam.py.patch.gz",
+      "original_bytes": 1987,
+      "original_sha256": "002f1e14e63e81b3b110ea952a3d98b94cf2168d39108267b5c68e35875950cc",
+      "object": "../../objects/002f1e14e63e81b3b110ea952a3d98b94cf2168d39108267b5c68e35875950cc.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "patches/s16_bayesopt.py.patch.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/patches/s16_bayesopt.py.patch.gz",
+      "original_bytes": 782,
+      "original_sha256": "62b23ec408047f2f9f9d7671ee7f3869155e3afda8d51659b1e5b12b34faca08",
+      "object": "../../objects/62b23ec408047f2f9f9d7671ee7f3869155e3afda8d51659b1e5b12b34faca08.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "patches/s17_vi.py.patch.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/patches/s17_vi.py.patch.gz",
+      "original_bytes": 4900,
+      "original_sha256": "9a733900edcd5e97a51c3d06afa1309ce2eb21215626a79735bff1036154f6a4",
+      "object": "../../objects/9a733900edcd5e97a51c3d06afa1309ce2eb21215626a79735bff1036154f6a4.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "prepare_translation_handoff.py",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/prepare_translation_handoff.py",
+      "original_bytes": 5509,
+      "original_sha256": "06c854b5fbd821c9f2371568acef44c991c0332a83dd97de950446aa23d397ac",
+      "object": "../../objects/06c854b5fbd821c9f2371568acef44c991c0332a83dd97de950446aa23d397ac.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "source-scope.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/source-scope.json",
+      "original_bytes": 1155,
+      "original_sha256": "125f4c0a35dbd8892d92338602f03a4b42c8614e510a9b9fbc1c8117404e1b07",
+      "object": "../../objects/125f4c0a35dbd8892d92338602f03a4b42c8614e510a9b9fbc1c8117404e1b07.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "source-scope.log",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/source-scope.log",
+      "original_bytes": 1122,
+      "original_sha256": "070e9497dff58a79064d0b559300b03bf8d5f034c85bd5aab0aa0016ee9f222a",
+      "object": "../../objects/070e9497dff58a79064d0b559300b03bf8d5f034c85bd5aab0aa0016ee9f222a.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "text-bounds-en.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/text-bounds-en.json",
+      "original_bytes": 1629,
+      "original_sha256": "f847810b4d259dfc046f21fd908d872f5eaa27a9806b4c08237e9df153ddf2aa",
+      "object": "../../objects/f847810b4d259dfc046f21fd908d872f5eaa27a9806b4c08237e9df153ddf2aa.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "text-bounds-en.log",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/text-bounds-en.log",
+      "original_bytes": 19407,
+      "original_sha256": "a60b56e7747b2925bb761df4f5375ec75e034a59126ef764e99181f6ef057228",
+      "object": "../../objects/a60b56e7747b2925bb761df4f5375ec75e034a59126ef764e99181f6ef057228.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "text-bounds-zh.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/text-bounds-zh.json",
+      "original_bytes": 1638,
+      "original_sha256": "cfc9d46685841bcf69023e1aa49c186a6f983f39c6fbcb02df78cfad280c1903",
+      "object": "../../objects/cfc9d46685841bcf69023e1aa49c186a6f983f39c6fbcb02df78cfad280c1903.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "text-bounds-zh.log",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/text-bounds-zh.log",
+      "original_bytes": 18955,
+      "original_sha256": "8538647cef054b2701bfc0e33a35b20fe267ea4a07d53a4a944456e3bfdaf417",
+      "object": "../../objects/8538647cef054b2701bfc0e33a35b20fe267ea4a07d53a4a944456e3bfdaf417.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "translation-handoff.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/translation-handoff.json",
+      "original_bytes": 10898,
+      "original_sha256": "39ca1329fa3777d7dbf9523fc4debb3f90e41ba0ba5764688ae352651c67a40f",
+      "object": "../../objects/39ca1329fa3777d7dbf9523fc4debb3f90e41ba0ba5764688ae352651c67a40f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "translation-overlay-check.json",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/translation-overlay-check.json",
+      "original_bytes": 30616,
+      "original_sha256": "6a22b5589d89aafde387b43bf6b9c8ac776fdaf18127eeb4c2b810f20f0917b3",
+      "object": "../../objects/6a22b5589d89aafde387b43bf6b9c8ac776fdaf18127eeb4c2b810f20f0917b3.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-bayesian-scene-repairs",
+      "original_relative_path": "translation-overlay-check.log",
+      "original_absolute_path": "/workspace/runtime/ai7-bayesian-scene-repairs/translation-overlay-check.log",
+      "original_bytes": 445,
+      "original_sha256": "0f336d098f7c4b83c6f2d42fab5c5f65f3460ae578ab17f47fe3775e4aef8563",
+      "object": "../../objects/0f336d098f7c4b83c6f2d42fab5c5f65f3460ae578ab17f47fe3775e4aef8563.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "original_relative_path": "compute-baseline.py",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/compute-baseline.py",
+      "original_bytes": 63423,
+      "original_sha256": "e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f",
+      "object": "../../objects/e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "original_relative_path": "focused-tests.log",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/focused-tests.log",
+      "original_bytes": 7853,
+      "original_sha256": "174ad67c1c1e7f5b3485f63a6bfeb9a9f199eff551071aaafeb7c4ffa1e71b8a",
+      "object": "../../objects/174ad67c1c1e7f5b3485f63a6bfeb9a9f199eff551071aaafeb7c4ffa1e71b8a.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "original_relative_path": "implementation-handoff-before-root-hardening.json",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/implementation-handoff-before-root-hardening.json",
+      "original_bytes": 1738,
+      "original_sha256": "b3d15fc8bbf06982db4f6c2367b46f27f0cc21bb968b55858cf1067821e7249c",
+      "object": "../../objects/b3d15fc8bbf06982db4f6c2367b46f27f0cc21bb968b55858cf1067821e7249c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "original_relative_path": "implementation-handoff.json",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/implementation-handoff.json",
+      "original_bytes": 2446,
+      "original_sha256": "85037d35803754c12e8c79f40de5ec61647bb0db326b96a4e39913e62b11a21e",
+      "object": "../../objects/85037d35803754c12e8c79f40de5ec61647bb0db326b96a4e39913e62b11a21e.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "original_relative_path": "manifest.json",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/manifest.json",
+      "original_bytes": 957,
+      "original_sha256": "b4c57ae7baf86ccee89bdb9b3319265c608910eba6510f582bd7e5a6a7e7b89c",
+      "object": "../../objects/b4c57ae7baf86ccee89bdb9b3319265c608910eba6510f582bd7e5a6a7e7b89c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest bytes preserved"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "original_relative_path": "report.json",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/report.json",
+      "original_bytes": 21370,
+      "original_sha256": "41392e63de7785ca533a2109c4112b5a79eab9ba2044d0bdff6051f989056a99",
+      "object": "../../objects/41392e63de7785ca533a2109c4112b5a79eab9ba2044d0bdff6051f989056a99.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "original_relative_path": "report.md",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/report.md",
+      "original_bytes": 12919,
+      "original_sha256": "b2b94f23efc9c795d00a14ef10c2c439955f0f357b0521ab483ea01f113663ea",
+      "object": "../../objects/b2b94f23efc9c795d00a14ef10c2c439955f0f357b0521ab483ea01f113663ea.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "original_relative_path": "tiny-cache-probes.json",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/tiny-cache-probes.json",
+      "original_bytes": 1991,
+      "original_sha256": "639c4f21a1e36904c3bc938ebd148b90e1bf152364b2a2133a477b30515668d3",
+      "object": "../../objects/639c4f21a1e36904c3bc938ebd148b90e1bf152364b2a2133a477b30515668d3.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "original_relative_path": "tiny_cache_probes.py",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/tiny_cache_probes.py",
+      "original_bytes": 4205,
+      "original_sha256": "72be32be1008c29f0ed75973682ec84e46718ee228a176fac254e3ab60670f08",
+      "object": "../../objects/72be32be1008c29f0ed75973682ec84e46718ee228a176fac254e3ab60670f08.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "owner": "ai7-cache-provenance-audit",
+      "original_relative_path": "write_report.py",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/write_report.py",
+      "original_bytes": 15903,
+      "original_sha256": "7575c049567b7918388d0355a44a51f528ea18afa42bdc1b81c5028704d91d1b",
+      "object": "../../objects/7575c049567b7918388d0355a44a51f528ea18afa42bdc1b81c5028704d91d1b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    }
+  ],
+  "unique_original_byte_objects": 161,
+  "deduplication": "Byte-exact only. Identical raw compute baselines and shared source snapshots reference one object. Existing differently encoded historical .gz wrappers retain their own original identity."
+}

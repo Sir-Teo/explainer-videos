@@ -1,0 +1,23 @@
+{
+  "observed_utc": "2026-11-01T12:23:14.516318+00:00",
+  "base_commit": "cc58dbc430fcd86083d2d3e49b4b2ada34e65520",
+  "scope": "Preparatory source and unit-test integration only. Part7 generation, cache publication, scene/render, spoken audio, playback and final acceptance remain gated behind Part6.",
+  "part7_cache_exists": false,
+  "tests": {
+    "count": 765,
+    "seconds": 67.468,
+    "receipt": "final-integrated-tests/receipt.json",
+    "source_files": 1549,
+    "unchanged_during_run": true
+  },
+  "historical_probe_scope": "Root in-memory VI/ICA and seven-structure probes retain their exact earlier whole-compute hashes. They are historical source-preparation observations, not asserted to have run against the final whole module or completed production data. Current numerical regression coverage is the final full unittest run.",
+  "central_scope": "Original owner manifest/freeze and later Topics supplement are separate verbatim records. The final Topics literal-key addition closes source --todo coverage at111/111 and has its actual two-outcome regression. The earlier6505 retained-caption zero-change result is historical; its global table bytes equal current.",
+  "portability": "Removed only a permanent /workspace disk assertion from the cache unit test for platform portability. Cloud runtime test/capture disk guards remain unchanged. Original017157ab test identity stays in the owner packet; final6fd284bb is covered by final suite.",
+  "build_dependency_scope": "Item-aware pure contract metadata restores guarded-reader prerequisites and excludes UpstreamCache from the generic Cache regex. Static31-part discovery changed only ai7; actual subprocess commands tested with mocked runner, no compute jobs invoked.",
+  "limitations": [
+    "No Part7 production cache directory or data generation.",
+    "No Part7 rendered images, movies, scene playback, native resolution, narration synthesis or listening acceptance.",
+    "Declared-data structures and synthetic fixtures do not prove outcomes of not-yet-run production experiments.",
+    "Changed speech requires language-specific synthesis/alignment and downstream timing/perceptual validation."
+  ]
+}

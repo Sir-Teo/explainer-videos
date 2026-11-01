@@ -10,6 +10,14 @@ def word_col(words, color, font_size=20, buff=0.08) -> VGroup:
     return VGroup(*[data_text(w, font=MONO, font_size=font_size, color=color) for w in words]).arrange(DOWN, buff=buff)
 
 
+def bound_prefix(rounds, bounds, current_round):
+    rounds, bounds = np.asarray(rounds), np.asarray(bounds)
+    if rounds.ndim != 1 or bounds.ndim != 1 or len(rounds) != len(bounds):
+        raise ValueError("one bound value is required for each recorded round")
+    keep = rounds <= current_round
+    return rounds[keep], bounds[keep]
+
+
 class Topics(VoiceoverScene):
     def construct(self):
         card_in(self, 5, r"Topic models", r"What is a book about, if nobody tells us the themes?",
@@ -71,6 +79,7 @@ class Topics(VoiceoverScene):
     def train(self):
         l = load("lda")
         bounds = np.asarray(l["bounds"])
+        bound_rounds = np.asarray(l["bound_rounds"])
         share = np.asarray(l["main_share"])
         show = sorted(np.argsort(-share)[:6].tolist())
         snaps = l["snaps"]
@@ -86,24 +95,29 @@ class Topics(VoiceoverScene):
         cols.move_to([0, 0.5, 0]).to_edge(LEFT, buff=0.4)
         heads = VGroup(*[label(rf"topic {j + 1}", font_size=22, color=TOPIC_COLORS[k]).next_to(c, UP, buff=0.2)
                          for j, (k, c) in enumerate(zip(show, cols))])
-        g = axes([0, len(bounds), 10], [float(bounds.min()) - 0.05, float(bounds.max()) + 0.05, 0.2], x_length=3.6,
+        g = axes([0, int(bound_rounds[-1]), 10], [float(bounds.min()) - 0.05, float(bounds.max()) + 0.05, 0.2], x_length=3.6,
                  y_length=2.4, xlabel=r"round of variational EM", ylabel=r"bound per word (nats)", center=[4.9, -1.3, 0])
-        it = ValueTracker(1)
-        bc = always_redraw(lambda: curve(g.ax, np.arange(1, int(it.get_value()) + 1), bounds[:int(it.get_value())], BOUND, 3)
-                           if it.get_value() >= 2 else VMobject())
+        it = ValueTracker(0)
+
+        def bound_curve():
+            xs, ys = bound_prefix(bound_rounds, bounds, it.get_value())
+            return curve(g.ax, xs, ys, BOUND, 3) if len(xs) >= 2 else VMobject()
+
+        bc = always_redraw(bound_curve)
         rv = Integer(0, font_size=34)
         rl = VGroup(label(r"round", font_size=26, color=GREY_A), rv).arrange(RIGHT, buff=0.15).move_to([4.9, 1.6, 0])
         info = label(rf"${l['D']:,}$ sections of ${l['seg']:,}$ words \ $\cdot$ \ the ${l['V']:,}$ commonest content words "
                      rf"\ $\cdot$ \ $K = {l['K']}$ topics".replace(",", "{,}"), font_size=22, color=GREY_A).to_edge(DOWN, buff=0.3)
         mono = bool(l["monotone"])
-        rise = ("and, like every EM, it never falls" if mono else "though, with the smoothing we add, not on every round")
+        rise = ("In this run the recorded bound never decreases." if mono else
+                "With our smoothing and finite updates, this recorded bound can decrease; the plot shows the measured trace.")
         with self.voiceover(
             f"We cut the thirty novels into {l['D']:,} sections of {l['seg']:,} words, keep the {l['V']:,} commonest "
             "words that aren't names or little function words, and ask for twelve topics. "
             "<bookmark mark='a'/> The topics start as the words of a few random sections: noise. Blei's original "
             "method fits them by variational EM, which chapter sixteen will explain: an E step that guesses each "
             "section's mix, and an M step that rebuilds each topic from the words assigned to it. "
-            f"<bookmark mark='b'/> Watch six of the topics take shape. The bound on the likelihood climbs, {rise}."
+            f"<bookmark mark='b'/> Watch six of the topics take shape, alongside the bound scored after each round. {rise}"
         ) as vo:
             self.play(FadeIn(info), FadeIn(g), FadeIn(rl), FadeIn(cols), FadeIn(heads))
             vo.wait_until("a")
@@ -116,7 +130,7 @@ class Topics(VoiceoverScene):
                     nc = word_col(snaps[key][k][:6], TOPIC_COLORS[k], font_size=22)
                     nc.scale(fscale).move_to(c)
                     new.add(nc)
-                self.play(*[Transform(c, n_) for c, n_ in zip(cols, new)], it.animate.set_value(max(int(key), 1)),
+                self.play(*[Transform(c, n_) for c, n_ in zip(cols, new)], it.animate.set_value(int(key)),
                           ChangeDecimalToValue(rv, int(key)), run_time=1.4)
         bc.clear_updaters()
         self.wait(0.3)

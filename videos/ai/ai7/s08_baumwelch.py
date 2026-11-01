@@ -30,7 +30,7 @@ class BaumWelch(VoiceoverScene):
             cmath(r"\gamma_t(i)", r"=", r"\frac{\alpha_t(i)\, \beta_t(i)}{p(x)}", colors=colors, font_size=36),
             cmath(r"\xi_t(i, j)", r"=", r"\frac{\alpha_t(i)\, A_{ij}\, B_j(x_{t+1})\, \beta_{t+1}(j)}{p(x)}",
                   colors=colors, font_size=36),
-            cmath(r"A_{ij}", r"\leftarrow", r"\frac{\sum_t \xi_t(i, j)}{\sum_t \gamma_t(i)}", r"\qquad",
+            cmath(r"A_{ij}", r"\leftarrow", r"\frac{\sum_{t<T} \xi_t(i, j)}{\sum_{t<T} \gamma_t(i)}", r"\qquad",
                   r"B_j(x)", r"\leftarrow", r"\frac{\sum_{t:\, x_t = x} \gamma_t(j)}{\sum_t \gamma_t(j)}", colors=colors,
                   font_size=36),
         ]
@@ -51,8 +51,8 @@ class BaumWelch(VoiceoverScene):
             "the chain was in state i at time t. That's the E step's soft colouring, one per letter. "
             "<bookmark mark='c'/> The same trick gives the chance of each move, from i to j, at each moment. "
             "<bookmark mark='d'/> The M step just counts: expected moves from i to j, over expected visits to i; "
-            "expected emissions of each letter, over expected visits. EM's theorem guarantees every round raises the "
-            "likelihood."
+            "expected emissions of each letter, over expected visits. For transitions, leave out the final time, "
+            "which has no outgoing move. Exact E and M steps cannot decrease the likelihood; at a fixed point it stays unchanged."
         ) as vo:
             self.play(FadeIn(head), FadeIn(em))
             vo.wait_until("a")
@@ -71,7 +71,7 @@ class BaumWelch(VoiceoverScene):
     def learn(self):
         h = load("hmm")
         A, Bs, lls = np.asarray(h["A"]), np.asarray(h["Bs"]), np.asarray(h["lls"])
-        assert set("aeiou") <= set(h["vowel_side"])
+        assert len(Bs) == len(lls), "Each replay model needs its own likelihood"
         s_pos = [np.array([-5.0, 1.9, 0]), np.array([-5.0, -1.1, 0])]
         states = VGroup(*[VGroup(Circle(radius=0.45, color=HIDDEN, stroke_width=4, fill_color=BACKGROUND, fill_opacity=1)
                                  .move_to(p_), MathTex(rf"s_{k + 1}", font_size=36, color=HIDDEN).move_to(p_))
@@ -107,9 +107,12 @@ class BaumWelch(VoiceoverScene):
         bitl = VGroup(label(r"bits per letter:", font_size=24, color=GREY_A), bits).arrange(RIGHT, buff=0.15)
         bitl.next_to(itl, DOWN, buff=0.15).align_to(itl, RIGHT)
         head = label(r"Each hidden state emits letters from its own table", font_size=28).to_edge(UP, buff=0.3).shift(LEFT * 1.0)
-        found = label(r"$s_1$: \ space and a, e, i, o, u \quad $s_2$: \ every consonant", font_size=28, color=WHITE)
+        exact_partition = set(h["vowel_side"]) == set(" aeiou")
+        found_text = (r"emission preferences: \ $s_1$ space and a, e, i, o, u; \ $s_2$ consonants" if exact_partition else
+                      r"two learned emission tables; \ this fit is not an exact vowel/consonant split")
+        found = label(found_text, font_size=26, color=WHITE)
         found.to_edge(DOWN, buff=0.25)
-        cite_ = cite(r"R.~J.~Cave \& L.~P.~Neuwirth (1980); \ L.~E.~Baum et al.\ (1970)", corner=UR).shift(DOWN * 0.9)
+        cite_ = cite(r"R.~L.~Cave \& L.~P.~Neuwirth (1980); \ L.~E.~Baum et al.\ (1970)", corner=UR).shift(DOWN * 0.9)
         n_it = len(Bs) - 1
         with self.voiceover(
             f"Give it two hidden states, {h['n']:,} letters of the books, and random first guesses. "
@@ -118,12 +121,16 @@ class BaumWelch(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(states), FadeIn(bar_g), FadeIn(labs), Create(links), FadeIn(itl), FadeIn(bitl))
             vo.wait_until("b")
             for k in (1, 2, 3, 5, 8, 12, 20, 35, n_it):
-                self.play(it.animate.set_value(k), ChangeDecimalToValue(itv, k), ChangeDecimalToValue(bits, -lls[min(k, len(lls) - 1)]),
+                self.play(it.animate.set_value(k), ChangeDecimalToValue(itv, k), ChangeDecimalToValue(bits, -lls[k]),
                           run_time=0.8)
+        partition_voice = ("The first emission table favours space and a, e, i, o and u; the second favours consonants."
+                           if exact_partition else
+                           "This fit learns different letter preferences, but not an exact split of vowels and consonants.")
         with self.voiceover(
-            "One state ends up with the space, and a, e, i, o and u. The other takes every consonant. "
-            f"<bookmark mark='a'/> And they take turns: after one, the other, about {100 * A[0, 1]:.0f} percent of "
-            "the time. Nobody mentioned vowels. Cave and Neuwirth found exactly this in 1980."
+            f"The learned emission tables: {partition_voice} <bookmark mark='a'/> From the first state, the chain switches to the second "
+            f"{100 * A[0, 1]:.0f} percent of the time; from the second back to the first, {100 * A[1, 0]:.0f} percent. "
+            "These are two directional probabilities. Nobody supplied vowel labels. Cave and Neuwirth studied this "
+            "two-state English-letter experiment in 1980."
         ) as vo:
             self.play(FadeIn(found), FadeIn(cite_))
             vo.wait_until("a")

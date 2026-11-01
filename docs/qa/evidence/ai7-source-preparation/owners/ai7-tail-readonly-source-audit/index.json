@@ -1,0 +1,216 @@
+{
+  "owner": "ai7-tail-readonly-source-audit",
+  "runtime_root": "/workspace/runtime/ai7-tail-readonly-source-audit",
+  "file_count": 23,
+  "raw_original_bytes": 219875,
+  "archive_scope": "Historical/source-preparation only. No final table/integrated test/render or actual production scientific signoff.",
+  "files": [
+    {
+      "original_relative_path": "analytic-results.json",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/analytic-results.json",
+      "original_bytes": 9212,
+      "original_sha256": "c6ebecfb912a30989d27cc3ebf25a0528b6cd5d9c3489b7cc41a4af7752f8360",
+      "object": "../../objects/c6ebecfb912a30989d27cc3ebf25a0528b6cd5d9c3489b7cc41a4af7752f8360.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "analytic.log",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/analytic.log",
+      "original_bytes": 453,
+      "original_sha256": "38f2e51b42102be03114f7c1c76bc0b1d9be74b03ab367025a35d52ecffcc8f7",
+      "object": "../../objects/38f2e51b42102be03114f7c1c76bc0b1d9be74b03ab367025a35d52ecffcc8f7.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai5/compute.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai5/compute.py.gz",
+      "original_bytes": 20799,
+      "original_sha256": "0f0a7cdf7525b2bf06c0cb67bb40f5b6bfae22e406354afa4e7e7fc1c9c007a8",
+      "object": "../../objects/0f0a7cdf7525b2bf06c0cb67bb40f5b6bfae22e406354afa4e7e7fc1c9c007a8.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/README.md.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/README.md.gz",
+      "original_bytes": 11001,
+      "original_sha256": "65d0e85f8a7f5df4c1455b9b25a4acddacac5b8e01361bbbc42490964d71c79f",
+      "object": "../../objects/65d0e85f8a7f5df4c1455b9b25a4acddacac5b8e01361bbbc42490964d71c79f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/common.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/common.py.gz",
+      "original_bytes": 3191,
+      "original_sha256": "93d8bbe7f1ec6dbec750a5994775b1297e59f73746ff89cb960a84afb800d667",
+      "object": "../../objects/93d8bbe7f1ec6dbec750a5994775b1297e59f73746ff89cb960a84afb800d667.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/compute.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/compute.py.gz",
+      "original_bytes": 21712,
+      "original_sha256": "44da7b8e982986d596671a729e851595ef84fad52753315aaf2528a92237e370",
+      "object": "../../objects/44da7b8e982986d596671a729e851595ef84fad52753315aaf2528a92237e370.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/manifest.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/manifest.py.gz",
+      "original_bytes": 631,
+      "original_sha256": "ed5f40e3cfc74a62bd17f01ecc6873446a8701033583933db2a4d01e54d26f7b",
+      "object": "../../objects/ed5f40e3cfc74a62bd17f01ecc6873446a8701033583933db2a4d01e54d26f7b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/s12_graphs.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s12_graphs.py.gz",
+      "original_bytes": 5710,
+      "original_sha256": "ba9589d5dad971a0752aaf1d50a668ad06af6f49f6dcc0f8463c372a16e1c3c9",
+      "object": "../../objects/ba9589d5dad971a0752aaf1d50a668ad06af6f49f6dcc0f8463c372a16e1c3c9.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/s13_causes.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s13_causes.py.gz",
+      "original_bytes": 4298,
+      "original_sha256": "f3e3a3b6c9a04043db89fda2a681b7850e96da23a77cfd8399578f9ddd6c0f53",
+      "object": "../../objects/f3e3a3b6c9a04043db89fda2a681b7850e96da23a77cfd8399578f9ddd6c0f53.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/s14_gp.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s14_gp.py.gz",
+      "original_bytes": 4258,
+      "original_sha256": "6d2f5c1084bc2693bdbf104e4f18c5415841c5fec23f5ec58d2bdb5f32672390",
+      "object": "../../objects/6d2f5c1084bc2693bdbf104e4f18c5415841c5fec23f5ec58d2bdb5f32672390.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/s15_occam.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s15_occam.py.gz",
+      "original_bytes": 4122,
+      "original_sha256": "f3301af9e3b8a3898c56e92e8dd73c9edb2cb44cee16b3246af3ef7bcdd30d7d",
+      "object": "../../objects/f3301af9e3b8a3898c56e92e8dd73c9edb2cb44cee16b3246af3ef7bcdd30d7d.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/s16_bayesopt.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s16_bayesopt.py.gz",
+      "original_bytes": 3294,
+      "original_sha256": "f38fc2a3a8229c355aa41d593aeaeb54e3892e5024211aef8c392d58f70d1e08",
+      "object": "../../objects/f38fc2a3a8229c355aa41d593aeaeb54e3892e5024211aef8c392d58f70d1e08.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/s17_vi.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/s17_vi.py.gz",
+      "original_bytes": 7419,
+      "original_sha256": "0e48e00ff36259896b35ee9d13ced86066c5054b670262f63f2ce21fee5c198b",
+      "object": "../../objects/0e48e00ff36259896b35ee9d13ced86066c5054b670262f63f2ce21fee5c198b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/text_zh_add.json.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/text_zh_add.json.gz",
+      "original_bytes": 18953,
+      "original_sha256": "ec4c76369e1282813e43533d7badca82a1580a0cce75acb34282b6a593175a4c",
+      "object": "../../objects/ec4c76369e1282813e43533d7badca82a1580a0cce75acb34282b6a593175a4c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "baseline/videos/ai/ai7/zh_lines.py.gz",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/baseline/videos/ai/ai7/zh_lines.py.gz",
+      "original_bytes": 25286,
+      "original_sha256": "d67b9288cb7a9ba2325c5b9f697b187b4460d0d79c3daa85c170c0e96aa8f2af",
+      "object": "../../objects/d67b9288cb7a9ba2325c5b9f697b187b4460d0d79c3daa85c170c0e96aa8f2af.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "check_analytic.py",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/check_analytic.py",
+      "original_bytes": 11042,
+      "original_sha256": "0802484dd7592df4070fbc811621a4100908009cf4407ffc58ba0be053044115",
+      "object": "../../objects/0802484dd7592df4070fbc811621a4100908009cf4407ffc58ba0be053044115.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "check_translation_coverage.py",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/check_translation_coverage.py",
+      "original_bytes": 2445,
+      "original_sha256": "49d6564a5adb9ab52793ad1abbbaccafe43a33c963579d0813c49c5fb52c9924",
+      "object": "../../objects/49d6564a5adb9ab52793ad1abbbaccafe43a33c963579d0813c49c5fb52c9924.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "file-manifest.json",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/file-manifest.json",
+      "original_bytes": 3406,
+      "original_sha256": "a27b5ccce226bc51c2adc0ddbbc9a77d3c3158e057c32106a09965cbb6283bb4",
+      "object": "../../objects/a27b5ccce226bc51c2adc0ddbbc9a77d3c3158e057c32106a09965cbb6283bb4.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest bytes preserved"
+    },
+    {
+      "original_relative_path": "report.json",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/report.json",
+      "original_bytes": 17310,
+      "original_sha256": "26d6054f62f0b62bbdb5ada71d9675164376fdd521438cdc9615724fbdadb090",
+      "object": "../../objects/26d6054f62f0b62bbdb5ada71d9675164376fdd521438cdc9615724fbdadb090.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "report.md",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/report.md",
+      "original_bytes": 4703,
+      "original_sha256": "05a296e8ec50576344fd7b13dc8241b74a502972692c1cfc3f2cc79dccab7ae0",
+      "object": "../../objects/05a296e8ec50576344fd7b13dc8241b74a502972692c1cfc3f2cc79dccab7ae0.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "translation-coverage.json",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/translation-coverage.json",
+      "original_bytes": 30056,
+      "original_sha256": "86123ffd1ed6be36447e803fff0579e9ad529287ef1b9e869dba082683f183bc",
+      "object": "../../objects/86123ffd1ed6be36447e803fff0579e9ad529287ef1b9e869dba082683f183bc.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "translation-coverage.log",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/translation-coverage.log",
+      "original_bytes": 445,
+      "original_sha256": "0f336d098f7c4b83c6f2d42fab5c5f65f3460ae578ab17f47fe3775e4aef8563",
+      "object": "../../objects/0f336d098f7c4b83c6f2d42fab5c5f65f3460ae578ab17f47fe3775e4aef8563.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "write_report.py",
+      "original_absolute_path": "/workspace/runtime/ai7-tail-readonly-source-audit/write_report.py",
+      "original_bytes": 10129,
+      "original_sha256": "a2eb336f98165e7be13891710c4c30d4157dbf940dda4744d023e7ca134f3302",
+      "object": "../../objects/a2eb336f98165e7be13891710c4c30d4157dbf940dda4744d023e7ca134f3302.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    }
+  ]
+}

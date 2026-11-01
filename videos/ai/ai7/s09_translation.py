@@ -95,22 +95,29 @@ class Translation(VoiceoverScene):
                          for i, w in enumerate(en)])
         gl = label(r"$p(\text{this French word made this English word})$", font_size=20, color=ALIGN).next_to(grid, DOWN, buff=0.2)
         colors = {r"t(e_j \mid f_i)": ALIGN}
-        eq = cmath(r"P(e \mid f)", r"\propto", r"\prod_j \sum_{i}", r"t(e_j \mid f_i)", colors=colors, font_size=34)
+        eq = cmath(r"P(e \mid f,m)", r"=", r"\frac{1}{(\ell+1)^m}",
+                   r"\prod_{j=1}^{m}\sum_{i=0}^{\ell}", r"t(e_j \mid f_i)", colors=colors, font_size=30)
+        eq.scale_to_fit_width(min(eq.width, 8.8))
         eq.to_edge(UP, buff=0.25).shift(RIGHT * 2.2)
-        en_ = label(r"IBM Model 1: \ every alignment equally likely", font_size=20, color=GREY_A).next_to(eq, DOWN, buff=0.1)
+        en_ = label(r"$m$: target length; $\ell$: source length; $f_0$: NULL \\ fixed $m$; a length prior is needed across lengths",
+                    font_size=19, color=GREY_A).next_to(eq, DOWN, buff=0.1)
         rv = Integer(0, font_size=30)
         rl = VGroup(label(r"EM round", font_size=24, color=GREY_A), rv).arrange(RIGHT, buff=0.15).move_to([5.7, 1.4, 0])
-        g = axes([0, len(lls), 10], [float(lls.min()) - 5, float(lls.max()) + 5, 20], x_length=2.6, y_length=1.8,
+        assert len(A) == len(lls), "Each alignment snapshot needs its own likelihood"
+        g = axes([0, len(lls) - 1, 10], [float(lls.min()) - 5, float(lls.max()) + 5, 20], x_length=2.6, y_length=1.8,
                  ylabel=r"log-likelihood", font_size=16, center=[5.7, -1.0, 0])
-        it = ValueTracker(1)
-        lc = always_redraw(lambda: curve(g.ax, np.arange(1, int(it.get_value()) + 1), lls[:int(it.get_value())], C.BITS, 3)
-                           if it.get_value() >= 2 else VMobject())
+        it = ValueTracker(0)
+        lc = always_redraw(lambda: curve(g.ax, np.arange(int(it.get_value()) + 1), lls[:int(it.get_value()) + 1], C.BITS, 3)
+                           if it.get_value() >= 1 else VMobject())
         best = d["show_best"]
         with self.voiceover(
             f"Here's IBM's Model 1, on a tiny parallel corpus of {d['n_train']} French and English sentences that we "
             "wrote. <bookmark mark='a'/> The model has one table: t of e given f, the chance that a French word turns "
-            "into an English word. Each English word picks some French word to come from, any of them equally "
-            "likely, and the words that align are hidden. <bookmark mark='b'/> EM again. Start with every "
+            "into an English word. Here we condition on the English length, and learn the direct English-given-French "
+            "table, reversing the earlier noisy-channel direction. Each English word chooses equally among the French "
+            "positions and NULL; the normalization is one over the number of choices, for every English word. "
+            "Comparing different output lengths also needs a length prior. The alignments are hidden. "
+            "<bookmark mark='b'/> EM again. Start with every "
             "translation equally likely. <bookmark mark='c'/> In the E step, each English word spreads its credit over "
             "the French words in its sentence; in the M step, the table is rebuilt from that credit. Because 'chat' "
             "appears exactly where 'cat' does, the credit piles up, and 'le' is pushed toward 'the', which frees "
@@ -168,7 +175,7 @@ class Translation(VoiceoverScene):
         nums = VGroup(*[label(rf"$p_{n + 1} = {pn[n]:.2f}$", font_size=24, color=C.BITS) for n in range(4)])
         nums.arrange(RIGHT, buff=0.35).move_to([3.4, -1.1, 0])
         s1 = label(rf"BLEU, word by word: \ ${b1['bleu']:.2f}$", font_size=28, color=EN).next_to(nums, DOWN, buff=0.3)
-        s2 = label(rf"with one rule, \ adjectives after their noun: \ ${b2['bleu']:.2f}$", font_size=26, color=C.BITS)
+        s2 = label(rf"one rule: \ move French adjectives before the noun: \ ${b2['bleu']:.2f}$", font_size=26, color=C.BITS)
         s2.next_to(s1, DOWN, buff=0.25)
         fixes = VGroup(*[SurroundingRectangle(r[1], color=C.SURPRISE, buff=0.05) for r, h1, (f, e) in
                          zip(rows, d["hyp_gloss"], tests) if h1 != e])

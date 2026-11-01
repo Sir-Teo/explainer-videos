@@ -9,6 +9,15 @@ W_C = C.MODEL_Q  # the loading matrix W
 NOISE = C.SURPRISE  # the noise sigma^2
 
 
+def ppca_verdict(best, score, full):
+    comparison = ("higher than" if round(score, 1) > round(full, 1) else
+                  "lower than" if round(score, 1) < round(full, 1) else
+                  "equal at the shown precision to")
+    return (f"On these validation pages, {best} hidden directions score {score:.1f} nats per page, "
+            f"{comparison} the full covariance's {full:.1f}. We used these pages to choose k, so this is "
+            "not a fresh test. This comparison does not identify which directions are true signal.")
+
+
 class PPCA(VoiceoverScene):
     def construct(self):
         card_in(self, 2, r"PCA as a probability model", r"Can PCA say how likely a new page is?",
@@ -53,11 +62,11 @@ class PPCA(VoiceoverScene):
         gm = VGroup(gz, gx, edge(gz, gx))
         gl = label(r"$k$ hidden factors \\ $\to$ $d$ observed rates", font_size=22, color=GREY_A).next_to(gm, RIGHT, buff=0.4)
         tag = note(r"samples from the model fitted to two rates", font_size=20).next_to(ax, DOWN, buff=0.15)
-        hc = history_card(1999, r"M.~Tipping \& C.~Bishop; \ S.~Roweis", r"PCA as a model with hidden factors",
+        hc = history_card(1999, r"M.~Tipping \& C.~Bishop; \ S.~Roweis (1998)", r"PCA as a model with hidden factors",
                           width=5.0).move_to([-3.4, 1.4, 0])
         with self.voiceover(
-            "PCA finds directions, but it isn't a model of the data: it can't say how likely a new page is. In 1999 "
-            "Michael Tipping and Christopher Bishop, and independently Sam Roweis, turned it into one. "
+            "PCA finds directions, but it isn't a probability model: it can't say how likely a new page is. In the "
+            "late nineteen nineties, Michael Tipping and Christopher Bishop, and independently Sam Roweis, gave it one. "
             "<bookmark mark='a'/> Imagine each page begins as a few hidden numbers, z, drawn from a standard bell "
             "curve. <bookmark mark='b'/> A matrix W maps them up into the seventy word rates, onto a flat sheet "
             "through the data. <bookmark mark='c'/> Then noise of the same size in every direction blurs the "
@@ -137,21 +146,16 @@ class PPCA(VoiceoverScene):
         cte = curve(ax, ks, te, C.BITS, 4)
         pk = Dot(ax.c2p(best, te[best]), radius=0.09, color=C.BITS)
         fl = DashedLine(ax.c2p(0, full), ax.c2p(d, full), color=GREY_C, stroke_width=2)
-        lg = legend([(GREY_B, rf"the ${p['n_train']}$ training pages"), (C.BITS, rf"the ${p['n_test']}$ held-out pages"),
+        lg = legend([(GREY_B, rf"the ${p['n_train']}$ training pages"), (C.BITS, rf"the ${p['n_test']}$ validation pages"),
                      (GREY_C, r"a full $70 \times 70$ covariance")], font_size=22).move_to([4.9, 1.6, 0])
-        res = label(rf"best: \ $k = {best}$ \ (${100 * p['share_best']:.0f}\%$ of the variance)", font_size=26,
+        res = label(rf"chosen: \ $k = {best}$ \\ ${100 * p['training_share_best']:.0f}\%$ of training variance", font_size=26,
                     color=C.BITS).move_to([4.6, -0.6, 0])
-        better = te[best] > full
-        if better:
-            verdict = (f"Held-out pages are most likely with {best} hidden directions, at {te[best]:.1f} nats per page, "
-                       f"better than a full covariance, at {full:.1f}: the other directions are mostly noise.")
-        else:
-            verdict = (f"Held-out pages peak at {best} hidden directions, at {te[best]:.1f} nats per page, but a full "
-                       f"covariance does as well, at {full:.1f}: on these pages every direction carries a little signal.")
+        verdict = ppca_verdict(best, float(te[best]), full)
         with self.voiceover(
-            "A likelihood lets us choose how many hidden directions to keep, on pages the model never saw. Fit on "
-            f"part six's {p['n_train']} training pages, score the {p['n_test']} held-out ones. <bookmark mark='a'/> On "
-            "the training pages, every extra direction helps. <bookmark mark='b'/> " + verdict
+            "A likelihood lets us choose how many hidden directions to keep. Fit on "
+            f"part six's {p['n_train']} training pages, use the {p['n_test']} held-out pages for validation and model "
+            "selection. <bookmark mark='a'/> On the training pages, adding directions cannot lower the maximum "
+            "likelihood, though ties are possible. <bookmark mark='b'/> " + verdict
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg))
             self.play(Create(ctr), run_time=1.5)
@@ -185,7 +189,8 @@ class PPCA(VoiceoverScene):
             "Probabilistic PCA sits in a family. <bookmark mark='a'/> Charles Spearman's factor analysis, from "
             "1904, is the same model with a separate noise level for every variable. <bookmark mark='b'/> "
             "Probabilistic PCA ties them into one, which is why the eigenvectors fall out. <bookmark mark='c'/> And "
-            "replace the matrix W with a neural network, and you have the variational autoencoder of part twenty: "
+            "replace W with a neural decoder and add a learned variational encoder, and you reach the variational "
+            "autoencoder of part twenty: "
             "the same hidden z, the same picture, a curved sheet instead of a flat one."
         ) as vo:
             self.play(FadeIn(gm), FadeIn(gl))

@@ -1,0 +1,36 @@
+[
+  {
+    "group": "central-bilingual",
+    "original_path": "before-ai_text_zh.json.gz",
+    "bytes": 886554,
+    "sha256": "eda6883a2195648af8632ca6b312de164b65b84dae7a49bc262d0b47f91f1cfd",
+    "encoded_path": "objects/eda6883a2195648af8632ca6b312de164b65b84dae7a49bc262d0b47f91f1cfd.gz",
+    "encoded_bytes": 886847,
+    "encoded_sha256": "777faf68e8ced0e14d73eec857f1ffbc351f5ea0008fb671db75cc27e7aaae5b",
+    "encoded_copy_in_this_packet": false,
+    "original_runtime_copy_preserved": true,
+    "decoded_bytes": 2440829,
+    "decoded_sha256": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+    "decoded_git_blob_sha1": "fb82aad96971ec8b38d7419ca5c1318cfbdece5c",
+    "source_path": "videos/ai/ai_text_zh.json",
+    "source_commit": "cc58dbc430fcd86083d2d3e49b4b2ada34e65520",
+    "scope": "Large gzip wrapper omitted from repository packet to avoid duplicating the complete tracked caption table. Exact historical wrapper and raw data remain in cloud runtime; original owner manifest is preserved. The raw table is recoverable from the specified Git blob, not asserted recoverable as the identical original gzip wrapper."
+  },
+  {
+    "group": "central-bilingual",
+    "original_path": "after-ai_text_zh.json.gz",
+    "bytes": 888592,
+    "sha256": "ac78dd60deccc1da1a2fa02c2650e94ca259b28fb34f3cb89a0341061fa85b62",
+    "encoded_path": "objects/ac78dd60deccc1da1a2fa02c2650e94ca259b28fb34f3cb89a0341061fa85b62.gz",
+    "encoded_bytes": 888885,
+    "encoded_sha256": "b09cdcb59d16eac6c1bad2303be3b9d19ee9a9d169f7749b037b7271e5e1c9b5",
+    "encoded_copy_in_this_packet": false,
+    "original_runtime_copy_preserved": true,
+    "decoded_bytes": 2446128,
+    "decoded_sha256": "07ea145aa599b86a88048d765909d8816ec0dacda95d679f30cbbadf972bd32e",
+    "decoded_git_blob_sha1": "01906bc6f49e23940af6abebcdffe80455a40f24",
+    "source_path": "videos/ai/ai_text_zh.json",
+    "source_commit": "publication candidate bound by final tested-source/index proof",
+    "scope": "Large gzip wrapper omitted from repository packet to avoid duplicating the complete tracked caption table. Exact historical wrapper and raw data remain in cloud runtime; original owner manifest is preserved. The raw table is recoverable from the specified Git blob, not asserted recoverable as the identical original gzip wrapper."
+  }
+]

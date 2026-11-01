@@ -1,0 +1,99 @@
+{
+  "owner": "ai7-cache-provenance-audit",
+  "runtime_root": "/workspace/runtime/ai7-cache-provenance-audit",
+  "file_count": 10,
+  "raw_original_bytes": 132805,
+  "archive_scope": "Historical/source-preparation only. No final table/integrated test/render or actual production scientific signoff.",
+  "files": [
+    {
+      "original_relative_path": "compute-baseline.py",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/compute-baseline.py",
+      "original_bytes": 63423,
+      "original_sha256": "e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f",
+      "object": "../../objects/e5bf1ab70c67e7c51f012ad66e96db60406ec92c7363c4715bbda16e2793d28f.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "focused-tests.log",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/focused-tests.log",
+      "original_bytes": 7853,
+      "original_sha256": "174ad67c1c1e7f5b3485f63a6bfeb9a9f199eff551071aaafeb7c4ffa1e71b8a",
+      "object": "../../objects/174ad67c1c1e7f5b3485f63a6bfeb9a9f199eff551071aaafeb7c4ffa1e71b8a.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation-handoff-before-root-hardening.json",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/implementation-handoff-before-root-hardening.json",
+      "original_bytes": 1738,
+      "original_sha256": "b3d15fc8bbf06982db4f6c2367b46f27f0cc21bb968b55858cf1067821e7249c",
+      "object": "../../objects/b3d15fc8bbf06982db4f6c2367b46f27f0cc21bb968b55858cf1067821e7249c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "implementation-handoff.json",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/implementation-handoff.json",
+      "original_bytes": 2446,
+      "original_sha256": "85037d35803754c12e8c79f40de5ec61647bb0db326b96a4e39913e62b11a21e",
+      "object": "../../objects/85037d35803754c12e8c79f40de5ec61647bb0db326b96a4e39913e62b11a21e.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "frozen/receipt-linked or supplemental runtime observation; see scope receipt"
+    },
+    {
+      "original_relative_path": "manifest.json",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/manifest.json",
+      "original_bytes": 957,
+      "original_sha256": "b4c57ae7baf86ccee89bdb9b3319265c608910eba6510f582bd7e5a6a7e7b89c",
+      "object": "../../objects/b4c57ae7baf86ccee89bdb9b3319265c608910eba6510f582bd7e5a6a7e7b89c.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest bytes preserved"
+    },
+    {
+      "original_relative_path": "report.json",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/report.json",
+      "original_bytes": 21370,
+      "original_sha256": "41392e63de7785ca533a2109c4112b5a79eab9ba2044d0bdff6051f989056a99",
+      "object": "../../objects/41392e63de7785ca533a2109c4112b5a79eab9ba2044d0bdff6051f989056a99.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "report.md",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/report.md",
+      "original_bytes": 12919,
+      "original_sha256": "b2b94f23efc9c795d00a14ef10c2c439955f0f357b0521ab483ea01f113663ea",
+      "object": "../../objects/b2b94f23efc9c795d00a14ef10c2c439955f0f357b0521ab483ea01f113663ea.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "tiny-cache-probes.json",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/tiny-cache-probes.json",
+      "original_bytes": 1991,
+      "original_sha256": "639c4f21a1e36904c3bc938ebd148b90e1bf152364b2a2133a477b30515668d3",
+      "object": "../../objects/639c4f21a1e36904c3bc938ebd148b90e1bf152364b2a2133a477b30515668d3.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "tiny_cache_probes.py",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/tiny_cache_probes.py",
+      "original_bytes": 4205,
+      "original_sha256": "72be32be1008c29f0ed75973682ec84e46718ee228a176fac254e3ab60670f08",
+      "object": "../../objects/72be32be1008c29f0ed75973682ec84e46718ee228a176fac254e3ab60670f08.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    },
+    {
+      "original_relative_path": "write_report.py",
+      "original_absolute_path": "/workspace/runtime/ai7-cache-provenance-audit/write_report.py",
+      "original_bytes": 15903,
+      "original_sha256": "7575c049567b7918388d0355a44a51f528ea18afa42bdc1b81c5028704d91d1b",
+      "object": "../../objects/7575c049567b7918388d0355a44a51f528ea18afa42bdc1b81c5028704d91d1b.gz",
+      "object_codec": "gzip of exact original bytes (original .gz files remain .gz bytes after this outer decoding)",
+      "input_manifest_status": "owner-original-manifest verified"
+    }
+  ]
+}
