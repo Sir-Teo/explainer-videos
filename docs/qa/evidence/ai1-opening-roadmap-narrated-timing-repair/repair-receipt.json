@@ -1,0 +1,195 @@
+{
+  "recorded_utc": "2026-11-01T05:23:47.940728+00:00",
+  "scope": "Actual narrated-production timing diagnosis and minimal source-only scheduling repair. Proposed source cleared only for root-coordinated rerender; repaired output not yet observed or approved.",
+  "library": {
+    "library_file_id": "libfile_6408958bd530819199ca41708bb7a1e6",
+    "version": 0,
+    "bytes": 28912512,
+    "sha256": "3762b21fa104bb5733062f65a3e1d936c284e53c459a3984a0cf44bf6a57997a",
+    "route": "Known-ID prepare_materialize, current skill companion helpers, consumer-local materialize with identity attrs; exact bytes/SHA and all ZIP CRC verified.",
+    "helper_sources": [
+      {
+        "name": "library_file_transfer.py",
+        "sha256": "acd44c7471495a240e4f2d97037fe6f83c48793ab98938801e5393f5584a029b"
+      },
+      {
+        "name": "library_hosted_apps.py",
+        "sha256": "cf40f74293ed9f4739c9ce2bca38003155a278420c375fb412de633efed7dbf8"
+      }
+    ]
+  },
+  "actual_candidate": {
+    "movie_sha256": "9c168aa23f5150d669b4629d0c4eee0755fdf0f7934e76943dcf53850dac382b",
+    "movie_bytes": 31402586,
+    "width": 3840,
+    "height": 2160,
+    "r_frame_rate": "60/1",
+    "avg_frame_rate": "60/1",
+    "duration_seconds": 190.26666666666668,
+    "scope": "Part1 EN opening Hook only, not full Part1.",
+    "original_float_master_sha256": "e635e3133f5d0054a2cb8d63008e2c794593800a2cdc0e359bedf6362a52f752",
+    "float_master_local_copy_supplied": false,
+    "independent_checks": "Exact archive/movie hashes, ZIPCRC, actual ffprobe, six native image views including3selectedmovie seekextracts. Original full decode/loudness results are producer-reported receipt, not independently repeated here.",
+    "perceptual_listening": "Not performed/approved."
+  },
+  "production_source_base": "927fba668656a682b3e29a288de64130ddc680dd",
+  "before_source_sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+  "after_source_sha256": "7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8",
+  "patch_sha256": "84ddab13a3c65276203a6cb6357cf70f047f8f127d320f1175e0591c20e0e002",
+  "observed_bookmark_rows": [
+    {
+      "scene": "Hook",
+      "mark": "a",
+      "block_start": 130.8666666666655,
+      "target_seconds": 134.0266666666655,
+      "actual_seconds": 134.0166666666667,
+      "late_seconds": 0
+    },
+    {
+      "scene": "Hook",
+      "mark": "b",
+      "block_start": 130.8666666666655,
+      "target_seconds": 134.9066666666655,
+      "actual_seconds": 135.21666666666766,
+      "late_seconds": 0.3100000000021623
+    },
+    {
+      "scene": "Hook",
+      "mark": "c",
+      "block_start": 130.8666666666655,
+      "target_seconds": 136.0266666666655,
+      "actual_seconds": 136.41666666666862,
+      "late_seconds": 0.39000000000311275
+    },
+    {
+      "scene": "Hook",
+      "mark": "d",
+      "block_start": 130.8666666666655,
+      "target_seconds": 136.82666666666552,
+      "actual_seconds": 137.61666666666957,
+      "late_seconds": 0.7900000000040563
+    },
+    {
+      "scene": "Hook",
+      "mark": "e",
+      "block_start": 130.8666666666655,
+      "target_seconds": 138.5066666666655,
+      "actual_seconds": 138.81666666667053,
+      "late_seconds": 0.3100000000050329
+    },
+    {
+      "scene": "Hook",
+      "mark": "f",
+      "block_start": 130.8666666666655,
+      "target_seconds": 139.8666666666655,
+      "actual_seconds": 140.01666666667148,
+      "late_seconds": 0.15000000000597424
+    }
+  ],
+  "observed_adjacent_gaps_seconds": [
+    0.88,
+    1.12,
+    0.8,
+    1.68,
+    1.36
+  ],
+  "original_max_lateness_seconds": 0.7900000000040563,
+  "diagnosis": "Fixed1.2s act reveal overran spoken gaps. wait_until is future-only, so lateness accumulated to.79s; provided and independently extracted native states support missing/partial nextact rows around requested marks.",
+  "repair": "In Hook.question only: cap each nonfinal reveal at min(1.2,max(1/fps,next_bookmark_time-elapsed-1/fps)); finalreveal1.2 unchanged. Existing six act headings/rows, animations, colors, positions, and reveal order preserved.",
+  "invariants": {
+    "all_voiceover_call_asts_exact": true,
+    "all_wait_until_call_asts_exact": true,
+    "all_wait_call_asts_exact": true,
+    "all_clear_scene_call_asts_exact": true,
+    "play_call_count_exact": true,
+    "all_other_Hook_methods_exact": true,
+    "English_and_Chinese_narration_text_bookmarks_unmodified": true,
+    "TTS_keys_spoken_forms_and_audio_masters_unmodified": true,
+    "shared_helpers_tables_scientific_data_unmodified_by_this_task": true
+  },
+  "tests": {
+    "count": 4,
+    "elapsed_seconds": 0.153,
+    "returncode": 0,
+    "source_sha256": "4ecd82bd541ca9fbbce58e6560f74261927c36846acf410cf0e1ed4efc2dcc52",
+    "log_sha256": "479b694b6a758f319cb4764ef56879203b754276e9a2cf06c31ed12a5d753b11",
+    "scope": "Actual scheduling AST with observedtargettimes; conservative whole-frame rounding15/30/60fps, actualfirstcheckpointphase, generousgaps/finalduration, positivityforlate/sub-framegaps. No renderer/models/producers/TTS.",
+    "limitation": "Sub-frame/previously missed marks cannot be guaranteed recoverable; floor is one positive frame. Actual observed gaps >=.8s, so this is not needed to claim the fixedcase."
+  },
+  "native_views": [
+    {
+      "file": "native-before/native4K-quarter.png",
+      "sha256": "e3df01ac9c20aaa7091bdcd3214cd92e8984b97832b17400e8f1983b2d406e29",
+      "dimensions": [
+        3840,
+        2160
+      ],
+      "actually_viewed": true,
+      "view_scope": "Original3840x2160file via view_image(original); selected native image, no continuous perceptual review.",
+      "time_scope": "producer-supplied named native snapshot; original exacttimestamp not inferred"
+    },
+    {
+      "file": "native-before/native4K-ending.png",
+      "sha256": "bf34876308d3f4d56623cb585b5a0445cc3a59b2ba27075fab8a425143d39ead",
+      "dimensions": [
+        3840,
+        2160
+      ],
+      "actually_viewed": true,
+      "view_scope": "Original3840x2160file via view_image(original); selected native image, no continuous perceptual review.",
+      "time_scope": "producer-supplied named native snapshot; original exacttimestamp not inferred"
+    },
+    {
+      "file": "native-before/native4K-roadmap-after-b.png",
+      "sha256": "317493a31056253192aeddbcc58fa67682f02a42665ae1f7439e0692c8f09e5b",
+      "dimensions": [
+        3840,
+        2160
+      ],
+      "actually_viewed": true,
+      "view_scope": "Original3840x2160file via view_image(original); selected native image, no continuous perceptual review.",
+      "time_scope": "producer-supplied named native snapshot; original exacttimestamp not inferred"
+    },
+    {
+      "file": "native-before/original-136.8333s.png",
+      "sha256": "ccfb8851eca580d2c53e4b45b8cae6a00341246691a76d65828bdfbeee141ac8",
+      "dimensions": [
+        3840,
+        2160
+      ],
+      "actually_viewed": true,
+      "view_scope": "Original3840x2160file via view_image(original); selected native image, no continuous perceptual review.",
+      "time_scope": "requested ffmpeg seektime in filename; no independently captured per-image PTS"
+    },
+    {
+      "file": "native-before/original-137.6167s.png",
+      "sha256": "0c49b79caf62dd048ef156f60fde093f37bb3ca62eec8f34c9a01e04d7f4aefb",
+      "dimensions": [
+        3840,
+        2160
+      ],
+      "actually_viewed": true,
+      "view_scope": "Original3840x2160file via view_image(original); selected native image, no continuous perceptual review.",
+      "time_scope": "requested ffmpeg seektime in filename; no independently captured per-image PTS"
+    },
+    {
+      "file": "native-before/original-134.9000s.png",
+      "sha256": "7d6f7c8de9f4c496c8702429fee7077e97d717647fadbdd2299ab1f8e058d8c5",
+      "dimensions": [
+        3840,
+        2160
+      ],
+      "actually_viewed": true,
+      "view_scope": "Original3840x2160file via view_image(original); selected native image, no continuous perceptual review.",
+      "time_scope": "requested ffmpeg seektime in filename; no independently captured per-image PTS"
+    }
+  ],
+  "remaining_gates": [
+    "Parent-coordinated scoped source-overlay manifest/pinned production tree and rerender with original unchanged speech/float masters.",
+    "Actual fresh 4K60 bookmark log/frame/visual timeline regression; no inherited after-timing pass from source fixtures.",
+    "Check rapid row reveals/readability and holds in actual native narrated output.",
+    "New opening listening/continuous perceptual review and full-part production/mux/joins are separate pending gates.",
+    "Do not overwrite/relabel old190.2667s diagnostic as repaired/final."
+  ],
+  "no_external_write": "No Librarycreate/replace/share/upload, no publication/commit/push; only authorized materialization. No production renderer or numerical producer ran."
+}

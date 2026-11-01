@@ -316,8 +316,14 @@ class Hook(VoiceoverScene):
             for k, mark in enumerate("abcdef"):
                 vo.wait_until(mark)
                 col = m.cols[k]
+                reveal_time = 1.2
+                if k + 1 < len(m.cols):
+                    # Rapid spoken act names can be less than 1.2 seconds apart.
+                    # Leave one frame for rounding before the next bookmark.
+                    frame = 1 / config.frame_rate
+                    reveal_time = min(reveal_time, max(frame, vo.mark_time("abcdef"[k + 1]) - vo.elapsed() - frame))
                 self.play(Indicate(col.head, color=WHITE, scale_factor=1.05),
-                          LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in col.rows], lag_ratio=0.15), run_time=1.2)
+                          LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in col.rows], lag_ratio=0.15), run_time=reveal_time)
             self.play(Create(m.box))
         self.wait(0.3)
         self.clear_scene()
