@@ -1,9 +1,9 @@
 # Current cloud QA checkpoint
 
-Observed 01 November 2026, 04:38 UTC. Progress, **not full-series production approval**.
+Observed 01 November 2026, 05:34 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified push before this checkpoint:
-`5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed` (final Part5scene source, selected-review and data/test evidence). No merge, deployment, CI/CD or runners.
+`2d7dbbdf6e2e471e145a3129d856bf89d2a98c4a` (strict scoped Part1/3 production gate; earlier b6649e39 freezes Part6 numerical/source repairs). No merge, deployment, CI/CD or runners.
 
 Part 1: all 17 chapters in both languages have endpoint captures, complete silent renders and selected-time
 review. The frozen baseline covers 15,194 selected times from 109,941 automatically decoded frames; scoped
@@ -140,4 +140,7 @@ Cloud SVD production-polish overlay `svd-production-polish-v2` is separately gat
 
 Storage guard recovery04:10UTC: normal public forced-aligner cache eviction restored about2.4GiB free, after checking no visible open/mapped model blobs and245protected numerical/trained/corpus signatures unchanged. Generated speech and unique QA evidence remain. Future alignment here requires normal exact-revision redownload. [Receipt](evidence/cloud-capacity-20261101-aligner/README.md).
 
-Part5source/datahandoff is saved in Library `libfile_31f193f835c08191910421e5e333cd51`,version1,7,399,093bytes, frozen to5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed. [Production handoff](production-handoff-part5.md). Separate cloudproduction owner can begin gated narrated4Kpilots; allopenproduction/listeningconditions remain. Part6core/cache and scene/ENZHrepairs are in progress, with no actualPart6 numerical job/render started.
+Part5source/datahandoff is saved in Library `libfile_31f193f835c08191910421e5e333cd51`,version2,7,402,112bytes,SHA256e3d670688e0f11ab7816df0e32b8105abb71e622410db0c2a705993b00755b50, frozen to5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed. [Production handoff](production-handoff-part5.md). The required existing novels base.pt/base.json are separately saved in supplement `libfile_f134e147968881918fc96c1c227cdc88`,version0,25,420,113bytes; the three earlier Parts1–3 archives supply tokenizer/train/valid and Part1 inputs. Separate cloudproduction owner can begin gated narrated4Kpilots; allopenproduction/listeningconditions remain. Part6 source/core repairs are pushed at b6649e39. All22 actual default numerical items completed at05:09:55UTC in315.344seconds with strict cache-current checks; the independent guarded scientific audit is ongoing. Hook EN/ZH baseline endpoints and880 selectedtimes from5381decodedframes have actual review; split/viewport legend polish is pending rerender regression, and LeastSquares is next. [Part6chapter ledger](ai6-chapter-checklist.md). Narrated/audio, native1080 and4K gates remain open.
+
+
+Part1 production found actual narrated-roadmap reveal delays up to0.79seconds. Source scheduling fix03e3ab6e and strict exact-triple overlay gate2d7dbbdf are pushed, authorizing a controlled rerender with existing narration only. Repaired output timing/native/readability/listening approval is pending; prior silent review did not catch this production timing defect. [Evidence](evidence/ai1-opening-roadmap-narrated-timing-repair/README.md).

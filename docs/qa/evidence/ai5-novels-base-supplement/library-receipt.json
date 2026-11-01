@@ -1,0 +1,25 @@
+{
+  "status": "succeeded",
+  "operation": "create_library_file",
+  "library_file_id": "libfile_f134e147968881918fc96c1c227cdc88",
+  "file_id": "file_00000000a29081f68902c133b6d20d7f",
+  "version": 0,
+  "filename": "novels-base-ai5-5fc8eeab-supplement.zip",
+  "library_path": "/novels-base-ai5-5fc8eeab-supplement.zip",
+  "bytes": 25420113,
+  "sha256": "c29a92b2f3329d1aa4532d188c2ed73c2465d5606b4463c7fb9930144b945550",
+  "source_commit": "5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed",
+  "payload_count": 2,
+  "payload_bytes": 27418739,
+  "manifest_sha256": "3886862dd0ad321feef07c3be9cfee1f67930901ee3f791b464b631fd657da60",
+  "safe_private_receipt_sha256": "9ee1468c326a7c8e8f2438c6dbf56b7965b52c58d541023e6fb71dcaf992afe4",
+  "safe_fields_used": [
+    "status",
+    "library_file_id",
+    "file_id",
+    "file_name",
+    "current_version_number",
+    "file_size_bytes"
+  ],
+  "receipt_scope": "Whitelisted structuredContent identity/status/version/size only; no raw private result, signed URLs or identity attributes stored."
+}

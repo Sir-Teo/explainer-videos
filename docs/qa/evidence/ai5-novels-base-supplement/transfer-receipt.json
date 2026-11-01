@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-01T05:21:09.167898+00:00",
+  "archive_path": "/workspace/runtime/novels-base-production-transfer/novels-base-ai5-5fc8eeab-supplement.zip",
+  "archive_bytes": 25420113,
+  "archive_sha256": "c29a92b2f3329d1aa4532d188c2ed73c2465d5606b4463c7fb9930144b945550",
+  "archive_member_count": 4,
+  "payload_count": 2,
+  "payload_bytes": 27418739,
+  "part5_source_commit": "5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed",
+  "manifest_sha256": "3886862dd0ad321feef07c3be9cfee1f67930901ee3f791b464b631fd657da60",
+  "readme_sha256": "58b6b6c137616aaf45653df86ad5c80b3fb0d8b47d16ece5dd4b04b8da2b2188",
+  "source_before": [
+    {
+      "path": ".cache/novels/base.pt",
+      "bytes": 27390812,
+      "sha256": "90eca681bbdbff27bb716f71f16184ec224cd249013debd68d84e84314ff7b2e",
+      "mtime_ns": 1793475518817294215,
+      "mode": "0o600"
+    },
+    {
+      "path": ".cache/novels/base.json",
+      "bytes": 27927,
+      "sha256": "a331122a02408f73856cd0e89cd4a5bca897cd293f86313f38de2d8b2605efe2",
+      "mtime_ns": 1793475518805904781,
+      "mode": "0o600"
+    }
+  ],
+  "source_after": [
+    {
+      "path": ".cache/novels/base.pt",
+      "bytes": 27390812,
+      "sha256": "90eca681bbdbff27bb716f71f16184ec224cd249013debd68d84e84314ff7b2e",
+      "mtime_ns": 1793475518817294215,
+      "mode": "0o600"
+    },
+    {
+      "path": ".cache/novels/base.json",
+      "bytes": 27927,
+      "sha256": "a331122a02408f73856cd0e89cd4a5bca897cd293f86313f38de2d8b2605efe2",
+      "mtime_ns": 1793475518805904781,
+      "mode": "0o600"
+    }
+  ],
+  "source_bytes_mtime_mode_unchanged": true,
+  "decompressed_payloads": [
+    {
+      "path": ".cache/novels/base.pt",
+      "bytes": 27390812,
+      "sha256": "90eca681bbdbff27bb716f71f16184ec224cd249013debd68d84e84314ff7b2e"
+    },
+    {
+      "path": ".cache/novels/base.json",
+      "bytes": 27927,
+      "sha256": "a331122a02408f73856cd0e89cd4a5bca897cd293f86313f38de2d8b2605efe2"
+    }
+  ],
+  "zip_crc_all_members_passed": true,
+  "root_upload_required": true,
+  "upload_performed": false,
+  "scope": "One stdlib file-only private supplement, no model/torch imports, loads, inference, producers, retraining, downloads, renders or TTS."
+}

@@ -1,0 +1,477 @@
+{
+  "schema_version": 1,
+  "completed_utc": "2026-11-01T05:22:31.545850+00:00",
+  "scope": "Complete chronological selected-time baseline image review of frozenPart6HookEN/ZH480p15movies, not continuous viewing.",
+  "cases": [
+    {
+      "case": "en/Hook",
+      "source_sha256": "3a3c6e1ef8308cf79515581a95ca1f8351a951ea3c2ad417549786c592e19e38",
+      "duration_seconds": 168.599674,
+      "first_selected_time": 0.0,
+      "last_selected_time": 168.533008,
+      "decoded_frames": 2529,
+      "selected_frames": 436,
+      "unselected_decoded_frames": 2093,
+      "unique_original_pngs_actually_viewed": 347,
+      "exact_png_hash_reuse_count": 89,
+      "unique_pages_actually_viewed": 44,
+      "native_followups_actually_viewed": 7,
+      "largest_selected_time_gap_seconds": 1.0000000000000018,
+      "unextracted_gap_interval_count": 300,
+      "all_unextracted_gaps_receipt": "en/receipts/audit--result.json.gz",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "source_commit_from_root_freeze": "b6649e39995f128019948cb32831b1a3caeb3842",
+      "source_observation_sha256": "2baeb217d490efb91218d3a2145610f35c17d4a3f037c1070920896ea93d173a",
+      "raw_render_fingerprint": "64e67a6b8edc46b543ec854e0eaec00f5956ad08be63aa727a99fc42890ba167",
+      "inputs": {
+        ".cache/ai6/pages.json": {
+          "recorded_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d"
+        },
+        ".cache/ai6/pages.npz": {
+          "recorded_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4"
+        }
+      },
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "streams": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 854,
+            "height": 480,
+            "r_frame_rate": "15/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "r_frame_rate": "0/0"
+          }
+        ]
+      },
+      "findings": [
+        {
+          "id": "known-split-disclosure",
+          "severity": "enhancement",
+          "status": "root-owner already assigned",
+          "evidence_time": 79.133,
+          "finding": "Cloud has639-page/book header but no on-screen train/test/vocabulary-fit disclosure; frozen voiceover contains split and same-novel qualifications."
+        },
+        {
+          "id": "crossfades",
+          "severity": "observation",
+          "finding": "History card crosses bars during concurrent fade; later seriesmap crosses objective text during concurrent fade. They resolve before held reading states; not classified as a held-state defect."
+        },
+        {
+          "id": "small-timeline",
+          "severity": "minor-preview-readability",
+          "evidence_time": 129.533,
+          "finding": "Complete12-event timeline body labels are small at480p but separated and readable on native followup with effort; sourcefontsize18 and educationaloverview. No clipping, stem-through-year or held ghost defect established."
+        }
+      ],
+      "verdict": "sampled-image baseline review complete; no new blocking defect; known split-disclosure enhancement pending separate owner regression"
+    },
+    {
+      "case": "zh/Hook",
+      "source_sha256": "de3f558d2612f557b40c6007397b45cc8e2b09de2008ee2dffde36ad6a189cc9",
+      "duration_seconds": 190.133008,
+      "first_selected_time": 0.0,
+      "last_selected_time": 190.066341,
+      "decoded_frames": 2852,
+      "selected_frames": 444,
+      "unselected_decoded_frames": 2408,
+      "unique_original_pngs_actually_viewed": 347,
+      "exact_png_hash_reuse_count": 97,
+      "unique_pages_actually_viewed": 44,
+      "native_followups_actually_viewed": 7,
+      "largest_selected_time_gap_seconds": 1.0,
+      "unextracted_gap_interval_count": 315,
+      "all_unextracted_gaps_receipt": "zh/receipts/audit--result.json.gz",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "source_commit_from_root_freeze": "b6649e39995f128019948cb32831b1a3caeb3842",
+      "source_observation_sha256": "2baeb217d490efb91218d3a2145610f35c17d4a3f037c1070920896ea93d173a",
+      "raw_render_fingerprint": "64e67a6b8edc46b543ec854e0eaec00f5956ad08be63aa727a99fc42890ba167",
+      "inputs": {
+        ".cache/ai6/pages.json": {
+          "recorded_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d"
+        },
+        ".cache/ai6/pages.npz": {
+          "recorded_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4"
+        }
+      },
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "streams": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 854,
+            "height": 480,
+            "r_frame_rate": "15/1"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "r_frame_rate": "0/0"
+          }
+        ]
+      },
+      "findings": [
+        {
+          "id": "known-split-disclosure",
+          "severity": "enhancement",
+          "status": "root-owner already assigned",
+          "evidence_time": 86.6,
+          "finding": "Cloud has639-page/book header but no on-screen train/test/vocabulary-fit disclosure; frozen voiceover contains split and same-novel qualifications."
+        },
+        {
+          "id": "crossfades",
+          "severity": "observation",
+          "finding": "History card crosses bars during concurrent fade; later seriesmap crosses objective text during concurrent fade. They resolve before held reading states; not classified as a held-state defect."
+        },
+        {
+          "id": "small-timeline",
+          "severity": "minor-preview-readability",
+          "evidence_time": 147.866,
+          "finding": "Complete12-event Chinese timeline body labels small at480p but separated; native followup readable with effort. No clipping or held stem-through-year demonstrated."
+        }
+      ],
+      "verdict": "sampled-image baseline review complete; no new blocking defect; known split-disclosure enhancement pending separate owner regression"
+    }
+  ],
+  "totals": {
+    "decoded": 5381,
+    "selected": 880,
+    "unique_pages_actually_viewed": 88,
+    "native_followups": 14,
+    "unselected_decoded_frames": 4501,
+    "per_case_distinct_png_views_sum": 694,
+    "globally_distinct_png_sha256": 676
+  },
+  "view_scale": "1280px sheets at originalpixel dimensions,640px tiles from854x480source; critical native854x480followups.",
+  "coverage_rule": "Every selected time maps to an actually viewed representative with exact PNGSHA equality only. No perceptual-similarity reuse. Repeated static holds can have distinct encoderPNG identities and were reviewed as listed.",
+  "limits": [
+    "Every decoded frame was analyzed, but only selected frames were visually reviewed.",
+    "Dense selection0.25s in detectedmotion; maximum gap1s including static/slow changes, with EN1.8e-15 floatingpoint reporting epsilon.",
+    "No continuous perceptual playback, listening, narratedsync, native1080/4Kmotion or finalsource approval.",
+    "Allrawpasses/warnings preserved; laterworkingtree/globalchanges cannot retroactively establish loaded-source equivalence.",
+    "Rootfrozen sourcecommitb664 is provenance attestation; observedbytes snapshots alone do not prove historical in-memory imports.",
+    "Known root-owned on-screen split/vocabulary disclosure addition is not present in these baseline movies; new renders require regression."
+  ],
+  "resource_and_storage": {
+    "free_disk_after_review": 1851269120,
+    "start_floor_bytes": 805306368,
+    "stop_floor_bytes": 536870912,
+    "lock_used": "/workspace/runtime/qa-motion-extraction.lock",
+    "lock_note": "Both audits finished before root identified existing sharedlock. No furtherextraction undertaken; futureuse /workspace/runtime/ai4-tail-motion-review/extract.lock.",
+    "witnesses": "Originalrootbaseline and reviewerwitness are independentcopy2 files, not hardlinks. Allpreserved; noMP4inrepo package.",
+    "package_compaction": "Only16representative originalPNG pages plus all14criticalnative PNGs retained here; all88originalviewedpages remain runtime. No lossy image exports in final package."
+  },
+  "compressed_receipts": [
+    {
+      "path": "en/receipts/baseline-freeze.json.gz",
+      "sha256": "eda07e4bbc370bc6a5b40a645346ad66a6004d0c4758bd4c7a5bd6ca23c04b23",
+      "decoded_original_sha256": "81a1776400cd6690accebbb06b2ccf5fa0e5d6b23f8d39c649880b01879a82b6",
+      "decoded_original_bytes": 2343
+    },
+    {
+      "path": "en/receipts/pre-audit.json.gz",
+      "sha256": "d1df6504b13902b60586c3598f7844dcd37e209c764320d0bdade11939103854",
+      "decoded_original_sha256": "b1536f873c4cd5c8b65c1f3a5f6c3126cf0c5596d7c72eb0d9ac34146e6d4f64",
+      "decoded_original_bytes": 3838
+    },
+    {
+      "path": "en/receipts/plan.json.gz",
+      "sha256": "722fb12cc3a0ed812b7f7c3160c585f8fb23163d60a5b690caa07df392072be1",
+      "decoded_original_sha256": "dc614deac85273df6cf1539758a88a0b1b0ece72bf35533e490f5a41ddbd163c",
+      "decoded_original_bytes": 234659
+    },
+    {
+      "path": "en/receipts/views.json.gz",
+      "sha256": "b0c7fd88ce4f92183c293766abb992ab10b53c22b968d231a1dcbc6a23f9f09a",
+      "decoded_original_sha256": "1c99469b8716c9fea901ce83835a29d6686236b81af9565dbd154fb46dca05a5",
+      "decoded_original_bytes": 23758
+    },
+    {
+      "path": "en/receipts/native-plan.json.gz",
+      "sha256": "38a7e1e6244f4af4ee6e2fc579045c2e403d42c709dd0a567784f6b0fb1cd863",
+      "decoded_original_sha256": "0dbbe4407d8b553e1c2d8056a5b23e47e5ca7658bf5ea4b99a0e42622284fb29",
+      "decoded_original_bytes": 1919
+    },
+    {
+      "path": "en/receipts/audit.log.gz",
+      "sha256": "f6a315080cda3d7e61fd342049e2b699ff697ab5475e872e8530808074cff509",
+      "decoded_original_sha256": "dd2ac7ec7432347b08cdfb05718aa140de73588bd53fc5e82db789b8e714bd17",
+      "decoded_original_bytes": 96
+    },
+    {
+      "path": "en/receipts/witness--result.json.gz",
+      "sha256": "6977a7e0907287bca4dad8cfeada792cf3683ee934d44a607264ebd150ee3fd7",
+      "decoded_original_sha256": "dcbdf02bceebe8a87acb7ea10d0095ab759472a0f9a0ed88211233a9e208f5ea",
+      "decoded_original_bytes": 84713
+    },
+    {
+      "path": "en/receipts/witness--Hook.narration.json.gz",
+      "sha256": "6b5e790a1b35de6977a717074eb7f987dd81bb7b3eeb9edada7041a5fc0af594",
+      "decoded_original_sha256": "39e0b7eb6be3e3020b8e75aa5c22e8c75cac278f6b4ced996626e8e2866c752b",
+      "decoded_original_bytes": 33806
+    },
+    {
+      "path": "en/receipts/witness--s01_hook.py.gz",
+      "sha256": "598f9d9833ebcf89815c39ed9edc4e8e365a2052d5ffdd6062249ef4d7145112",
+      "decoded_original_sha256": "2baeb217d490efb91218d3a2145610f35c17d4a3f037c1070920896ea93d173a",
+      "decoded_original_bytes": 11785
+    },
+    {
+      "path": "en/receipts/witness--common.py.gz",
+      "sha256": "06dbcc43889227f36c9dbf7430ac07b22e8533d798b4078149df3d6249857311",
+      "decoded_original_sha256": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+      "decoded_original_bytes": 9290
+    },
+    {
+      "path": "en/receipts/audit--result.json.gz",
+      "sha256": "75aa089743783a1be255e4dbde34580aad134f8350ee57855be1cec83de1c66a",
+      "decoded_original_sha256": "41c6445b27c3d607bf3bc9b81e42cb7d6b071d3f32e3aa3300cbe5647b6e91d5",
+      "decoded_original_bytes": 173255
+    },
+    {
+      "path": "en/observed-source/tools/qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "decoded_original_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "decoded_original_bytes": 19437
+    },
+    {
+      "path": "en/observed-source/tools/qa_series.py.gz",
+      "sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf",
+      "decoded_original_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "decoded_original_bytes": 25379
+    },
+    {
+      "path": "en/observed-source/videos/ai/ai6/zh_lines.py.gz",
+      "sha256": "4565e2855a7cf098a9b073e7fd4bbb0445728400b33da0af6157a141719449fd",
+      "decoded_original_sha256": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+      "decoded_original_bytes": 77342
+    },
+    {
+      "path": "en/observed-source/videos/ai/ai_text_zh.json.gz",
+      "sha256": "99ff584ffa80fee26556de39bb22054076fb9a87293d661e204d18578fde266b",
+      "decoded_original_sha256": "bd0a9a0ff4671f8211857804ff71cd380360ba7a9d318a210f563ca75b3f8caa",
+      "decoded_original_bytes": 2439000
+    },
+    {
+      "path": "zh/receipts/baseline-freeze.json.gz",
+      "sha256": "34ba42d7860ffbffa8edd99083b030b9dce51f3a43e590ff464d77afbc2a229f",
+      "decoded_original_sha256": "fd6d348b47b19c80f5ec0f55dfa3b9ed772dfbe57dac522cd3045ec2aa929a54",
+      "decoded_original_bytes": 2344
+    },
+    {
+      "path": "zh/receipts/pre-audit.json.gz",
+      "sha256": "5fe53069f55b6308562a4b4c2e0e629022a43f5505ae0b828d45e4a6c6e56ba0",
+      "decoded_original_sha256": "7f85607127b83e5fc481ce08bdbc05e6824bde84af829ae89daa02bad810afee",
+      "decoded_original_bytes": 3839
+    },
+    {
+      "path": "zh/receipts/plan.json.gz",
+      "sha256": "45df44f854bdddf3b23b3fe083025102fa989bbf07c31c37c1c88ae221c83676",
+      "decoded_original_sha256": "327293d870ab5685a1136fd1ed93f968a44dde4599320f4f57a2e346cc153184",
+      "decoded_original_bytes": 238530
+    },
+    {
+      "path": "zh/receipts/views.json.gz",
+      "sha256": "6ba044cc56e77086985409420c4f13e626af80ec865c13b88eeca8117396278f",
+      "decoded_original_sha256": "12b568254a68d2b4562b289bcd9e9e72480b2712e2888c580b031de23e74b2c3",
+      "decoded_original_bytes": 23883
+    },
+    {
+      "path": "zh/receipts/native-plan.json.gz",
+      "sha256": "00bc7b528704ad414f50125dae0adb6cb879c6a20d6834b5f1e4714709d039cb",
+      "decoded_original_sha256": "cb0e1e5aa7a5236ebc70aca12668741f0eb73a451976d5d6f88073d0f055d6a6",
+      "decoded_original_bytes": 1907
+    },
+    {
+      "path": "zh/receipts/audit.log.gz",
+      "sha256": "0a8e95c5951c62baecf81e43b9e2279a5391d0d8df63c5d6873e3a223f25154e",
+      "decoded_original_sha256": "139b52838b043f9a6a6f614dbbabf5d89c656393ef29e2d17f85ba63f9acc9cf",
+      "decoded_original_bytes": 96
+    },
+    {
+      "path": "zh/receipts/witness--result.json.gz",
+      "sha256": "18175f807a01b398fe0368f0f125af2f31fe49b216b8a402138dbdc179f60367",
+      "decoded_original_sha256": "b1509c4799e64916862f07872821863df0e044b2386d401e9125fb6174581c91",
+      "decoded_original_bytes": 116116
+    },
+    {
+      "path": "zh/receipts/witness--Hook.narration.json.gz",
+      "sha256": "f5c2c3e4ad83bdb63b9c91e7203eea441a7850407dd0a97c0d7354b7e04e278e",
+      "decoded_original_sha256": "4e63643594c330877b9bb07ad0665e7ece5ffb0c2096b8452a58188be900537f",
+      "decoded_original_bytes": 55741
+    },
+    {
+      "path": "zh/receipts/witness--s01_hook.py.gz",
+      "sha256": "598f9d9833ebcf89815c39ed9edc4e8e365a2052d5ffdd6062249ef4d7145112",
+      "decoded_original_sha256": "2baeb217d490efb91218d3a2145610f35c17d4a3f037c1070920896ea93d173a",
+      "decoded_original_bytes": 11785
+    },
+    {
+      "path": "zh/receipts/witness--common.py.gz",
+      "sha256": "06dbcc43889227f36c9dbf7430ac07b22e8533d798b4078149df3d6249857311",
+      "decoded_original_sha256": "5870a5e593cc3c35c45ad7cf668a769d93eec9cfea7088a084dd113939fe2a34",
+      "decoded_original_bytes": 9290
+    },
+    {
+      "path": "zh/receipts/audit--result.json.gz",
+      "sha256": "4ad92e837e89185cf3d2de1ff579bd27535deb947f6a94cdad95be25891c7d46",
+      "decoded_original_sha256": "4eb9fbf147c205053fdb93433b7c4fb23c31e6aa38c6a9d228ca16910cb14e35",
+      "decoded_original_bytes": 177296
+    },
+    {
+      "path": "zh/observed-source/tools/qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "decoded_original_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "decoded_original_bytes": 19437
+    },
+    {
+      "path": "zh/observed-source/tools/qa_series.py.gz",
+      "sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf",
+      "decoded_original_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "decoded_original_bytes": 25379
+    },
+    {
+      "path": "zh/observed-source/videos/ai/ai6/zh_lines.py.gz",
+      "sha256": "4565e2855a7cf098a9b073e7fd4bbb0445728400b33da0af6157a141719449fd",
+      "decoded_original_sha256": "3c8ce5a581fae09fa510a07b7977f0f906579cdb8a7a00df0279a4bc461eedb4",
+      "decoded_original_bytes": 77342
+    },
+    {
+      "path": "zh/observed-source/videos/ai/ai_text_zh.json.gz",
+      "sha256": "99ff584ffa80fee26556de39bb22054076fb9a87293d661e204d18578fde266b",
+      "decoded_original_sha256": "bd0a9a0ff4671f8211857804ff71cd380360ba7a9d318a210f563ca75b3f8caa",
+      "decoded_original_bytes": 2439000
+    }
+  ],
+  "representative_lossless_pages": [
+    {
+      "path": "en/representative-viewed-pages/sheet-002.png",
+      "sha256": "8d2e5f28c3e13d9cf421498bc02e27ee0c47a3462654a696a2ad4436e8846d2e",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/en/unique/sheet-002.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "en/representative-viewed-pages/sheet-006.png",
+      "sha256": "2c652c2d76442f1a9b86df0d37956e079a817fc2633ded237dfb608c05ede410",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/en/unique/sheet-006.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "en/representative-viewed-pages/sheet-008.png",
+      "sha256": "0460d8a5110e0ef5f135ea9928c89c9a9a258d1969f4bb1601bdf37e20fb3782",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/en/unique/sheet-008.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "en/representative-viewed-pages/sheet-015.png",
+      "sha256": "51080fb647a23b026284498cdef4b0d7c043a12f292c650ee736beac2ac08630",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/en/unique/sheet-015.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "en/representative-viewed-pages/sheet-018.png",
+      "sha256": "ff3a1454f476eeb824bd2be6a8d3ec205f8a6eef617649d7dadcb6d2dcaab5fb",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/en/unique/sheet-018.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "en/representative-viewed-pages/sheet-031.png",
+      "sha256": "77b9539c006e625a402c75062ddd0aa640dc74dde2ee578f56363f034d2d8722",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/en/unique/sheet-031.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "en/representative-viewed-pages/sheet-038.png",
+      "sha256": "1267e3824c1ac22c14de1765e48b6678465d86b1a1162fad401517fc5b6d3536",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/en/unique/sheet-038.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "en/representative-viewed-pages/sheet-042.png",
+      "sha256": "1f4b320d09fa46faac3f18436bc07a1dc66c07f18d80739d04db895d06afff38",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/en/unique/sheet-042.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "zh/representative-viewed-pages/sheet-003.png",
+      "sha256": "823618ea0deba4a61fa0bd8fe8f8e99cc684bad460d96acb0224d79f6e2d4a60",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/zh/unique/sheet-003.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "zh/representative-viewed-pages/sheet-006.png",
+      "sha256": "cd202702be28c5f358a1a01f768d948e71e6746a1fd6877a4b8c468b156d99d9",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/zh/unique/sheet-006.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "zh/representative-viewed-pages/sheet-008.png",
+      "sha256": "f25457ef9f5e147b65e1392b01a634ca5eec9b98334bfcf70e4220e5a7fe70e2",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/zh/unique/sheet-008.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "zh/representative-viewed-pages/sheet-015.png",
+      "sha256": "ab59d93c02483163ca7ac31089fa49a7c100ec426c89f0f1160ca27b7e1f64c2",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/zh/unique/sheet-015.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "zh/representative-viewed-pages/sheet-018.png",
+      "sha256": "64b47c533978ebccb142e5cf7c94e71180b37b20aea42324ecfa78518e8ede46",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/zh/unique/sheet-018.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "zh/representative-viewed-pages/sheet-032.png",
+      "sha256": "cb475b2983e4c47d8fb95eabf2465045583149b3e24e2db6a179f388fef1227f",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/zh/unique/sheet-032.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "zh/representative-viewed-pages/sheet-038.png",
+      "sha256": "c0b645f5d87188f07350e1dc19e360c10e079e9c0bb0c7297840cabce6514fc9",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/zh/unique/sheet-038.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    },
+    {
+      "path": "zh/representative-viewed-pages/sheet-042.png",
+      "sha256": "fd7b63f554e0faac2c61def82aecc4bf9775095f0955d5ae2e194b19190a25a4",
+      "original_runtime_path": "/workspace/runtime/ai6-hook-baseline-motion-review/zh/unique/sheet-042.png",
+      "scope": "Byte-exact originalPNG, representative subset of actually viewed88pages."
+    }
+  ]
+}

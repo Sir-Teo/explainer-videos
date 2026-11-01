@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-01T05:21:07.803491+00:00",
+  "purpose": "Private authorized supplemental transfer of existing novels base model and metadata required by the Part5 decoding dependency validator.",
+  "part5_source_commit": "5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed",
+  "payload_count": 2,
+  "payload_bytes": 27418739,
+  "payloads": [
+    {
+      "path": ".cache/novels/base.pt",
+      "bytes": 27390812,
+      "sha256": "90eca681bbdbff27bb716f71f16184ec224cd249013debd68d84e84314ff7b2e",
+      "mtime_ns": 1793475518817294215,
+      "mode": "0o600"
+    },
+    {
+      "path": ".cache/novels/base.json",
+      "bytes": 27927,
+      "sha256": "a331122a02408f73856cd0e89cd4a5bca897cd293f86313f38de2d8b2605efe2",
+      "mtime_ns": 1793475518805904781,
+      "mode": "0o600"
+    }
+  ],
+  "exclusions": [
+    "Already transferred .cache/novels/tokenizer.json, train.npy, valid.npy",
+    "Part1 corpus/train/valid and all other earlier core cache files",
+    "Public GPT2 model weights and tokenizer snapshot",
+    "Movies, TTS, credentials, new/retrained checkpoints"
+  ],
+  "limits": "File transfer only. No training, tensor/model load, inference, producer execution, metadata rewriting, numerical recomputation or production approval. Existing producer runtime/source/dependency identities must remain unchanged."
+}

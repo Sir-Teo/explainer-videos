@@ -1,0 +1,27 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1685,
+    "sha256": "9072cc4d3e8d1cc3f81b736e769559a18fd6bb73f8bb27941f8297de14fa4732"
+  },
+  {
+    "path": "archive-README.md",
+    "bytes": 1370,
+    "sha256": "58b6b6c137616aaf45653df86ad5c80b3fb0d8b47d16ece5dd4b04b8da2b2188"
+  },
+  {
+    "path": "library-receipt.json",
+    "bytes": 1028,
+    "sha256": "5773b47cdcf30ee8b56fa1ecc23563060cecf25d925e2fd9ec67c66baa21b141"
+  },
+  {
+    "path": "payload-manifest.json",
+    "bytes": 1345,
+    "sha256": "3886862dd0ad321feef07c3be9cfee1f67930901ee3f791b464b631fd657da60"
+  },
+  {
+    "path": "transfer-receipt.json",
+    "bytes": 2211,
+    "sha256": "8be4589b140d7dacc631a51851d107c0db6c206f1e9f424c6b71bf855079fc5a"
+  }
+]

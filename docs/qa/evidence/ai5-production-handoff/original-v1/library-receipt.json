@@ -1,0 +1,22 @@
+{
+  "status": "succeeded",
+  "library_file_id": "libfile_31f193f835c08191910421e5e333cd51",
+  "file_id": "file_000000000a8081f6968833a17f4036e3",
+  "version": 1,
+  "filename": "ai5-source-data-and-silent-review-handoff-20261101.zip",
+  "library_path": "/ai5-source-data-and-silent-review-handoff-20261101.zip",
+  "bytes": 7399093,
+  "sha256": "e2ce1aa5ad20f8b69e598390ca8c038e0d6e93288de9c9be060ef428264d1565",
+  "source_commit": "5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed",
+  "local_identity_helper_exit_code": 0,
+  "history": [
+    {
+      "version": 0,
+      "bytes": 7399083,
+      "sha256": "5c5b9ad8d02b0b4647677bc6ab88f1d81cb5b9f762c4034381da4be55c3f2973"
+    }
+  ],
+  "replacement_status": "succeeded",
+  "expected_prior_version": 0,
+  "reason": "Correct command-line flag spacing; source/data/preview identities unchanged"
+}

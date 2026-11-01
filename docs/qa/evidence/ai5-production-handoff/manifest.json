@@ -1,18 +1,18 @@
 [
   {
     "path": "README.md",
-    "bytes": 1926,
-    "sha256": "ec2233c386cadeb5f6a8fbcbb1192f2b0714f9b6be309b074a813b3cb9b1099f"
+    "bytes": 3237,
+    "sha256": "3c6c464474618214372aed85989cab9e98d7db655025c4ba04d141561edfeede"
   },
   {
     "path": "archive-manifest.json.gz",
-    "bytes": 3184,
-    "sha256": "30db774fb12374e80c095122a447688eae6d792bcfc1ad758e1d8f3dd7490af0"
+    "bytes": 3242,
+    "sha256": "a1e93bdc2098b3bb1bf074a5d8bac65fa245bd582f82e328c399144c7d5b6aaa"
   },
   {
     "path": "archive-receipt.json.gz",
-    "bytes": 263,
-    "sha256": "18621ae5f2bb6443e7a6e40452ca24b6339ab183aadf2750f9807340324c4607"
+    "bytes": 5356,
+    "sha256": "1c8167f2e6bc87834a17405ca2bed4e2ed71cf7e7424378a85c2a516de48f537"
   },
   {
     "path": "build_handoff-attempt1-root-metadata-path.py.gz",
@@ -25,14 +25,24 @@
     "sha256": "5a9758d3d88f5361dfcc9d5437f17f115e6acd1a0828d8e40ef756f4f6cd61a9"
   },
   {
+    "path": "correct_handoff.py.gz",
+    "bytes": 4847,
+    "sha256": "3bb1313e07ada1c665ef4ca35d1d4553d8c97e5b1e864a234e40c5de147a802c"
+  },
+  {
     "path": "handoff.json.gz",
-    "bytes": 10204,
-    "sha256": "2beb665710988fd82f5861688572e236a28e0bce9731b26be01b0a419d3850ff"
+    "bytes": 11400,
+    "sha256": "da99f866870926b849a650e42b578ce8aa5929491d57284a58df0f6b835441c0"
   },
   {
     "path": "library-receipt.json",
-    "bytes": 833,
-    "sha256": "ed9e6a8aaa9b16040959ca17956eb88b83d0b89b96a2f9315648ea804bd9d35b"
+    "bytes": 1980,
+    "sha256": "ee2007aa8e25178747bc1b3cbfb9a7944834f8c0b9f2f4de186666472292c63c"
+  },
+  {
+    "path": "metadata-correction.json.gz",
+    "bytes": 1079,
+    "sha256": "8ef1a4e5f948b4743568ac2378e461ea4f201afa249b9b2377befb879c2cb661"
   },
   {
     "path": "original-v0/README.md.gz",
@@ -53,5 +63,40 @@
     "path": "original-v0/handoff.json.gz",
     "bytes": 10205,
     "sha256": "9555a2d97739c24217f4563470c3c62d278e3383b5a96ec8b4d8b59e9d6ca117"
+  },
+  {
+    "path": "original-v1/README.md.gz",
+    "bytes": 1098,
+    "sha256": "080f4620dd3224119dbf45069ecf3dd2e2559ee9ca261fd288fcb92015fb68e4"
+  },
+  {
+    "path": "original-v1/archive-manifest.json.gz",
+    "bytes": 3184,
+    "sha256": "30db774fb12374e80c095122a447688eae6d792bcfc1ad758e1d8f3dd7490af0"
+  },
+  {
+    "path": "original-v1/archive-receipt.json.gz",
+    "bytes": 263,
+    "sha256": "18621ae5f2bb6443e7a6e40452ca24b6339ab183aadf2750f9807340324c4607"
+  },
+  {
+    "path": "original-v1/handoff.json.gz",
+    "bytes": 10204,
+    "sha256": "2beb665710988fd82f5861688572e236a28e0bce9731b26be01b0a419d3850ff"
+  },
+  {
+    "path": "original-v1/library-receipt.json",
+    "bytes": 833,
+    "sha256": "ed9e6a8aaa9b16040959ca17956eb88b83d0b89b96a2f9315648ea804bd9d35b"
+  },
+  {
+    "path": "original-v1/manifest.json",
+    "bytes": 1656,
+    "sha256": "3138f5855ff7028358bf03f64a1e257e4af5b31c5b41442f7d1e36ca0c83aa0a"
+  },
+  {
+    "path": "version-correction-proof.json.gz",
+    "bytes": 5356,
+    "sha256": "1c8167f2e6bc87834a17405ca2bed4e2ed71cf7e7424378a85c2a516de48f537"
   }
 ]
