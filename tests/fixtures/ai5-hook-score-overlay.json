@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "scope": "Private Hook-only proposal; no main ZH/global changes.",
+  "ZH_updates": {
+    "Here are six hundred dots, scattered completely at random. <bookmark mark='a'/> Now let each one wander. Each step adds a random kick and a drift: the current position divided by two, plus the score. The green arrows show only score directions, with their lengths rescaled. <bookmark mark='b'/> Watch what the randomness builds.": "这里有600个点，完全随机地散落着。<bookmark mark='a'/>现在让它们各自游走。每一步都加上一个随机踢动和一个漂移：当前位置的一半，再加上分数。绿色箭头只显示分数的方向，长度经过了缩放。<bookmark mark='b'/>看这些随机运动会构建出什么。",
+    "This is, in miniature, how today's image and video generators work. They start from noise and let it flow, one random step at a time, into a picture. <bookmark mark='a'/> Here the score is computed exactly from our toy letter distribution. A generative model learns the score component; the other drift term is already known. We'll build it in part twenty-one.": "这就是今天图像和视频生成器工作方式的一个缩影。它们从噪声出发，通过一步步随机运动，流成一幅图。<bookmark mark='a'/>这里的分数，是从我们的玩具字母分布精确计算出来的。生成模型学习的是分数这一部分，另一项漂移则是已知的。我们会在第21部分搭建它。"
+  },
+  "strings": {
+    "score directions; \\ lengths rescaled": "分数方向；\\ 长度经过缩放"
+  },
+  "obsolete_keys": {
+    "Here are six hundred dots, scattered completely at random.": "Here are six hundred dots, scattered completely at random. <bookmark mark='a'/> Now let each one wander. Each step adds a random kick and a drift: the current position divided by two, plus the score. The green arrows show only score directions, with their lengths rescaled. <bookmark mark='b'/> Watch what the randomness builds.",
+    "This is, in miniature, how today's image and video generators work.": "This is, in miniature, how today's image and video generators work. They start from noise and let it flow, one random step at a time, into a picture. <bookmark mark='a'/> Here the score is computed exactly from our toy letter distribution. A generative model learns the score component; the other drift term is already known. We'll build it in part twenty-one."
+  },
+  "voiceovers": [
+    {
+      "voiceover_index": 0,
+      "en": "Here are six hundred dots, scattered completely at random. <bookmark mark='a'/> Now let each one wander. Each step adds a random kick and a drift: the current position divided by two, plus the score. The green arrows show only score directions, with their lengths rescaled. <bookmark mark='b'/> Watch what the randomness builds.",
+      "old_en": "Here are six hundred dots, scattered completely at random. <bookmark mark='a'/> Now let each one wander. At every moment it gets a small random kick, plus a gentle push from a field of arrows. <bookmark mark='b'/> Watch what the randomness builds.",
+      "zh": "这里有600个点，完全随机地散落着。<bookmark mark='a'/>现在让它们各自游走。每一步都加上一个随机踢动和一个漂移：当前位置的一半，再加上分数。绿色箭头只显示分数的方向，长度经过了缩放。<bookmark mark='b'/>看这些随机运动会构建出什么。"
+    },
+    {
+      "voiceover_index": 1,
+      "en": "This is, in miniature, how today's image and video generators work. They start from noise and let it flow, one random step at a time, into a picture. <bookmark mark='a'/> Here the score is computed exactly from our toy letter distribution. A generative model learns the score component; the other drift term is already known. We'll build it in part twenty-one.",
+      "old_en": "This is, in miniature, how today's image and video generators work. They start from noise and let it flow, one random step at a time, into a picture. <bookmark mark='a'/> The arrows are the whole secret: they're what a network learns. We'll build them in part twenty-one.",
+      "zh": "这就是今天图像和视频生成器工作方式的一个缩影。它们从噪声出发，通过一步步随机运动，流成一幅图。<bookmark mark='a'/>这里的分数，是从我们的玩具字母分布精确计算出来的。生成模型学习的是分数这一部分，另一项漂移则是已知的。我们会在第21部分搭建它。"
+    }
+  ]
+}

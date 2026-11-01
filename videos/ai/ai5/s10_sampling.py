@@ -12,6 +12,16 @@ ACC, REJ = "#5BD17A", C.SURPRISE
 GUM = "#B39DDB"  # Gumbel noise and its picks
 
 
+def normal_scatter_scale(points, radius=2.04):
+    """Fit the actual finite cohort, preserving every point and coordinate unit."""
+    points = np.asarray(points, float)
+    if (points.ndim != 2 or points.shape[1] != 2 or not len(points)
+            or not np.isfinite(points).all() or not math.isfinite(radius) or radius <= 0):
+        raise ValueError("finite nonempty two-coordinate points and positive radius required")
+    extent = max(2.5, math.ceil((float(np.abs(points).max()) + 0.1) * 2) / 2)
+    return radius / extent
+
+
 class Sampling(VoiceoverScene):
     def construct(self):
         self.card()
@@ -180,16 +190,18 @@ class Sampling(VoiceoverScene):
                                                                  font_size=22),
                 why(r"$r^2/2$ is exponential: \ inverse CDF", font_size=22)]
         step = ladder(self, rows, whys, keep=3, top=3.3, x=-1.8, buff=0.32, edge=6.8)
-        S = 0.85
+        S = normal_scatter_scale(Z)
         sq = Square(2.4, color=GREY_B, stroke_width=2).move_to([-3.6, -1.6, 0])
         ud = VGroup(*[Dot(sq.get_corner(DL) + 2.4 * np.array([a, b, 0]), radius=0.025, color=C.BITS) for a, b in U])
         c0 = np.array([3.0, -1.6, 0])
-        zd = VGroup(*[Dot(c0 + S * np.array([a, b, 0]), radius=0.025, color=C.BITS) for a, b in np.clip(Z, -2.4, 2.4)])
+        zd = VGroup(*[Dot(c0 + S * np.array([a, b, 0]), radius=0.025, color=C.BITS) for a, b in Z])
         ring = VGroup(Circle(radius=S, color=MODEL, stroke_width=2), Circle(radius=2 * S, color=MODEL,
                                                                             stroke_width=1.5).set_stroke(opacity=0.5)).move_to(c0)
         ul = label(r"$(u_1, u_2)$, \ uniform", font_size=22, color=GREY_A).next_to(sq, DOWN, buff=0.12)
-        zl = label(rf"$(z_1, z_2)$: \ independent bells \ (largest CDF gap ${float(d['ks_bm']):.4f}$)", font_size=22,
+        zl = label(rf"$(z_1, z_2)$: \ independent bells \ (full-sample CDF gap ${float(d['ks_bm']):.4f}$)", font_size=22,
                    color=GREY_A).next_to(c0 + DOWN * 2.1, DOWN, buff=0.0)
+        view_note = label(rf"${len(Z)}$ actual draws; \ circles at radii $1$ and $2$", font_size=20,
+                          color=GREY_A).move_to(c0 + UP * 2.2)
         arr = Arrow(sq.get_right() + RIGHT * 0.2, c0 + LEFT * 2.3, buff=0.1, color=GREY_B, stroke_width=3)
         cite_ = cite(r"G.~E.~P.~Box \& M.~E.~Muller (1958)", corner=UR)
         with self.voiceover(
@@ -204,7 +216,7 @@ class Sampling(VoiceoverScene):
             vo.wait_until("a")
             vo.wait_until("b")
             step(1)
-            self.play(GrowArrow(arr), TransformFromCopy(ud, zd), Create(ring), FadeIn(zl), run_time=2.0)
+            self.play(GrowArrow(arr), TransformFromCopy(ud, zd), Create(ring), FadeIn(zl), FadeIn(view_note), run_time=2.0)
             vo.wait_until("c")
             step(2)
         self.wait(0.3)

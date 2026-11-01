@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai5.common import DATA, MODEL, PART, curve, load, normal_pdf
+from videos.ai.ai5.plotting import clipped_curve
 from videos.ai.ai5.contracts import rosen_smoothed_minimum, rosen_smoothed_value
 
 SF = C.INTERVAL  # the score-function estimate
@@ -86,7 +87,7 @@ class ScoreFn(VoiceoverScene):
                    axis_config={"stroke_color": GREY_C, "include_ticks": False}).to_corner(DR, buff=0.4)
         xx = np.linspace(-3, 3, 150)
         pic = VGroup(pa_, curve(pa_, xx, 4 * normal_pdf(xx), color=DATA, stroke_width=3),
-                     curve(pa_, xx, np.clip(xx, -2.5, 2.5), color=SF, stroke_width=3),
+                     clipped_curve(pa_, xx, xx, x_bounds=(-3, 3), y_bounds=(-2.5, 2.5), color=SF, stroke_width=3),
                      label(r"for a bell $\mathcal{N}(\mu, 1)$: \ the score is $x - \mu$", font_size=20, color=SF)
                      .next_to(pa_, UP, buff=0.1).align_to(pa_, LEFT))
         with self.voiceover(

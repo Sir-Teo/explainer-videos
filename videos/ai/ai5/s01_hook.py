@@ -41,7 +41,7 @@ class Hook(VoiceoverScene):
         G = np.stack(np.meshgrid(gx, gy), -1).reshape(-1, 2)
 
         def field():
-            tt = max(T * (1 - t.get_value() / n), 0.06)
+            tt = float(np.clip(T * (1 - t.get_value() / n), 0.0, T))
             S = score_at(data, G / K, tt)
             mag = np.linalg.norm(S, axis=1) + 1e-9
             ref = np.percentile(mag, 90)
@@ -54,25 +54,28 @@ class Hook(VoiceoverScene):
             return out
 
         arrows = always_redraw(field)
+        score_tag = label(r"score directions; \ lengths rescaled", font_size=22, color=SCORE).to_corner(DL, buff=0.35)
         with self.voiceover(
             "Here are six hundred dots, scattered completely at random. <bookmark mark='a'/> Now let each one wander. "
-            "At every moment it gets a small random kick, plus a gentle push from a field of arrows. "
+            "Each step adds a random kick and a drift: the current position divided by two, plus the score. "
+            "The green arrows show only score directions, with their lengths rescaled. "
             "<bookmark mark='b'/> Watch what the randomness builds."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(d, scale=0.3) for d in dots], lag_ratio=0.002), run_time=2.0)
             self.add(dots)  # the group itself, so its updater runs
             vo.wait_until("a")
-            self.play(FadeIn(arrows), run_time=1.0)
+            self.play(FadeIn(arrows), FadeIn(score_tag), run_time=1.0)
             vo.wait_until("b")
         with self.voiceover(
             "This is, in miniature, how today's image and video generators work. They start from noise and let it "
-            "flow, one random step at a time, into a picture. <bookmark mark='a'/> The arrows are the whole secret: "
-            "they're what a network learns. We'll build them in part twenty-one."
+            "flow, one random step at a time, into a picture. <bookmark mark='a'/> Here the score is computed "
+            "exactly from our toy letter distribution. A generative model learns the score component; the other "
+            "drift term is already known. We'll build it in part twenty-one."
         ) as vo:
             self.play(t.animate.set_value(n), run_time=9.0, rate_func=lambda a: 1 - (1 - a) ** 2.2)
             arrows.clear_updaters()
             vo.wait_until("a")
-            self.play(FadeOut(arrows))
+            self.play(FadeOut(arrows), FadeOut(score_tag))
         dots.clear_updaters()
         # and back: the letters dissolve
         start = fwd[0]
@@ -108,7 +111,7 @@ class Hook(VoiceoverScene):
         ]
         axis, marks, skel = era_strip(events)
         head = label(r"How we got here", font_size=42).to_edge(UP, buff=0.3)
-        tag = note(r"milestones evenly spaced, \ not to scale").to_corner(DR, buff=0.2)
+        tag = note(r"milestones evenly spaced, \ not to scale").to_corner(DR, buff=0.35)
         with self.voiceover(
             "The mathematics is older than computers. It began in 1654, in letters between Pascal and Fermat about "
             "splitting the stakes of an unfinished game. <bookmark mark='a'/> Bernoulli proved that averages settle; "

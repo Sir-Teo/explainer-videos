@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai5.common import DATA, MODEL, MONO, PART, curve, load
+from videos.ai.ai5.plotting import clipped_curve
 
 X0, X1 = -5.6, 5.6  # the plot's horizontal extent on screen
 YB, YH = -3.0, 3.3  # its baseline and height
@@ -265,8 +266,10 @@ class Bayes(VoiceoverScene):
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.6, -2.3, 0])
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=DATA) for a, b in zip(x, y)])
         truth = curve(ax, xt_, np.sin(2 * np.pi * xt_), color=GREY_B, stroke_width=2).set_stroke(opacity=0.6)
-        fm = curve(ax, xt_, np.clip(np.asarray(d["fit_mle"]), -1.6, 1.6), color=C.SURPRISE, stroke_width=3)
-        fb = curve(ax, xt_, np.clip(np.asarray(d["fit_best"]), -1.6, 1.6), color=C.BITS, stroke_width=3.5)
+        fm = clipped_curve(ax, xt_, np.asarray(d["fit_mle"]), x_bounds=(0, 1), y_bounds=(-1.6, 1.6),
+                           color=C.SURPRISE, stroke_width=3)
+        fb = clipped_curve(ax, xt_, np.asarray(d["fit_best"]), x_bounds=(0, 1), y_bounds=(-1.6, 1.6),
+                           color=C.BITS, stroke_width=3.5)
         leg = VGroup(label(r"maximum likelihood", font_size=20, color=C.SURPRISE),
                      label(r"MAP, \ best $\lambda$", font_size=20, color=C.BITS),
                      label(r"the truth, \ $\sin 2\pi x$", font_size=20, color=GREY_B)).arrange(RIGHT, buff=0.25)
