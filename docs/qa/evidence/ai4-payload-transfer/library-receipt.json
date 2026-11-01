@@ -1,0 +1,11 @@
+{
+  "status": "succeeded",
+  "library_file_id": "libfile_f4c89a91670c81918ceb5d298b9f84b9",
+  "file_id": "file_00000000d09c81f6b1273be1437b0333",
+  "version": 0,
+  "filename": "ai4-frozen-payloads-1927e6b7-20261101.zip",
+  "bytes": 761466,
+  "sha256": "f317945f1d258e2d1e85e4b43aaa8ad30aaa43c16a57185c190838a421e7a390",
+  "source_commit": "1927e6b7a99192344bd4c00ca7aae3abdd499369",
+  "local_identity_helper_exit_code": 0
+}

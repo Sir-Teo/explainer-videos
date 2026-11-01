@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-01T05:15:06.825050+00:00",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "overlay_id": "part3-svd-outro-production-v3",
+  "overlay_sha256": "69a16ca2846362919dfd8e9a024120fb3cba19264a643ad70b994c65f427f178",
+  "helper_sha256": "3f0c9b40d7653e085959a68e5f056cbd6afb1cb32be57709cc4238715ab4e36f",
+  "portable_tests": {
+    "count": 45,
+    "elapsed_seconds": 1.713,
+    "result": "passed",
+    "before_extension_count": 32,
+    "before_extension_elapsed_seconds": 1.031
+  },
+  "actual_fixture_checks": {
+    "count": 14,
+    "all_expected_results": true,
+    "strict_files_per_check": 268,
+    "successful_modes": [
+      "clean original base",
+      "exact two-source worktree",
+      "equivalent exact two-source commit"
+    ],
+    "source_only_fixture_commit": "4ae42ac0b4dc4690d5525effbd0dc6d399558b80",
+    "rejected_unrelated_commit": "f679fb1f52dfeeac71e3cfec40281d9f12a39b8b"
+  },
+  "independent_copied_inputs": {
+    "files": 156,
+    "bytes": 80858842,
+    "verified_against_readonly_reference_after_checks": true,
+    "independent_inodes": true
+  },
+  "historical_pre_v3": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/historical/combined-v3-before/verify_handoff.py",
+      "bytes": 11110,
+      "sha256": "75ab6cfc709e0580849daed3c0d280ab1c8e0a666333126c83af06e0c26dcf05",
+      "matches_pre_v3_committed_content": true
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/historical/combined-v3-before/README.md",
+      "bytes": 3344,
+      "sha256": "8ab8ae219dbc18e04d40fc6fc41418298f9fe6c086c1b901fc5ae0d6ff461d4c",
+      "matches_pre_v3_committed_content": true
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/historical/combined-v3-before/production-handoff-parts1-3.md",
+      "bytes": 21364,
+      "sha256": "2262ff308c27199fa7b6e2be9c73e7dadbf536cc1babb5780f7d50c1e5d64801",
+      "matches_pre_v3_committed_content": true
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/historical/combined-v3-before/test_production_handoff_overlay.py",
+      "bytes": 16472,
+      "sha256": "7a3536a83371d51f6cb4c377eec45a1b0e211a47918f02380619ab8556eb4553",
+      "matches_pre_v3_committed_content": true
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/historical/combined-v3-before/manifest-production-polish-v2.json",
+      "bytes": 7404,
+      "sha256": "8636a10a83bdbaf0820885ed2c67500840f4656cc37eff61908750fa20f439ef",
+      "matches_pre_v3_committed_content": true
+    }
+  ],
+  "legacy_manifests": [
+    {
+      "path": "overlays/svd-reveal-v1.json",
+      "sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8",
+      "bytes": 32227,
+      "unchanged": true
+    },
+    {
+      "path": "overlays/svd-production-polish-v2.json",
+      "sha256": "631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca",
+      "bytes": 1456,
+      "unchanged": true
+    }
+  ],
+  "orchestration_note": "All14 expected checks completed in initial run; receipt aggregation then stopped on a preparation-record key mismatch. Original wrapper/log preserved. Corrected reference_file/path mapping resumed only reference/hash aggregation; no checks or fixture operations retried.",
+  "limits": [
+    "Cloud fixture and metadata preflight only; no production render, TTS or model load/inference.",
+    "Runtime-version negative uses an explicit metadata mock, not falsified installed packages. Successful checks use actual installed package metadata.",
+    "No inherited renderer producer guard, current() override, numerical recomputation, new narration candidate approval, manual listening or production-video approval.",
+    "The local task remains canceled; the parent owns separate cloud production. No new Library/cache transfer.",
+    "Commit5fc provenance and reviewed commits may contain other files; complete later HEAD trees are not accepted by this overlay."
+  ]
+}

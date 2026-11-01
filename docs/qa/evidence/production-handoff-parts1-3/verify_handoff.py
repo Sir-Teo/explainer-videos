@@ -13,7 +13,11 @@ from pathlib import Path
 D = Path(__file__).resolve().parent
 BASE = '927fba668656a682b3e29a288de64130ddc680dd'
 SVD = 'videos/ai/ai3/s08_svd.py'
+OUTRO = 'videos/ai/ai3/s19_outro.py'
+COMBINED = 'part3-svd-outro-production-v3'
 KNOWN_OVERLAYS = {
+    COMBINED: ('overlays/part3-svd-outro-production-v3.json',
+               '69a16ca2846362919dfd8e9a024120fb3cba19264a643ad70b994c65f427f178'),
     'svd-production-polish-v2': ('overlays/svd-production-polish-v2.json',
                                '631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca'),
     'svd-reveal-v1': ('overlays/svd-reveal-v1.json',
@@ -45,9 +49,10 @@ def load_overlay(name, errors):
     except (OSError, ValueError) as exc:
         errors.append('Overlay manifest unavailable/invalid: ' + type(exc).__name__)
         return None
+    version = 2 if name == COMBINED else 1
     if (not isinstance(overlay, dict) or type(overlay.get('schema_version')) is not int
-            or overlay['schema_version'] != 1):
-        errors.append('Overlay manifest schema_version must be exactly 1.')
+            or overlay['schema_version'] != version):
+        errors.append(f'Overlay manifest schema_version must be exactly {version}.')
         return None
     if hashlib.sha256(raw).hexdigest() != expected:
         errors.append('Overlay manifest hash mismatch; only the exact reviewed manifest is accepted.')
@@ -56,16 +61,34 @@ def load_overlay(name, errors):
     if overlay['overlay_id'] != name or overlay['base_commit'] != BASE:
         errors.append('Overlay identity/base mismatch.')
         return None
-    replacement = overlay['source_replacement']
-    paths = [replacement['before']['path'], replacement['after']['path']]
-    evidence = overlay['optional_evidence_files']
-    if (paths != [SVD, SVD]
-            or len({row['path'] for row in evidence}) != len(evidence)
-            or any(not row['path'].startswith('docs/qa/evidence/ai3-svd-reveal-motion-regression/')
-                   or '..' in Path(row['path']).parts for row in evidence)):
+    try:
+        replacements = source_replacements(overlay)
+        before = [row['before']['path'] for row in replacements]
+        after = [row['after']['path'] for row in replacements]
+        expected_paths = [SVD, OUTRO] if name == COMBINED else [SVD]
+        evidence = overlay['optional_evidence_files']
+        valid_paths = (before == after == expected_paths
+                       and len({row['path'] for row in evidence}) == len(evidence)
+                       and all(row['path'].startswith('docs/qa/evidence/ai3-svd-reveal-motion-regression/')
+                               and '..' not in Path(row['path']).parts for row in evidence))
+        # The combined release deliberately authorizes no extra repository
+        # files. Its pinned review receipts are external metadata, not a broad
+        # whitelist for copying an evidence/producer tree into the target.
+        if name == COMBINED:
+            valid_paths = valid_paths and evidence == []
+    except (KeyError, TypeError, AttributeError):
+        valid_paths = False
+    if not valid_paths:
         errors.append('Overlay contains an invalid or unreviewed path.')
         return None
     return overlay
+
+
+def source_replacements(overlay):
+    """Historical schema1 stays one-source; only the explicit schema2 is paired."""
+    if overlay['schema_version'] == 2:
+        return overlay['source_replacements']
+    return [overlay['source_replacement']]
 
 
 def tree(repo, revision):
@@ -79,24 +102,26 @@ def tree(repo, revision):
 
 
 def overlay_tree_checks(repo, head, overlay, errors):
-    """Allow one exact tree delta, not a new source HEAD or a relaxed loader."""
+    """Allow only the exact selected tree deltas, never a moving source HEAD."""
     base = tree(repo, BASE)
     current = tree(repo, head)
-    replacement = overlay['source_replacement']
-    before, after = replacement['before'], replacement['after']
+    replacements = source_replacements(overlay)
     signature = lambda row: (row['git_mode'], 'blob', row['git_blob'])
-    if before['path'] != SVD or after['path'] != SVD or base.get(SVD) != signature(before):
-        errors.append('Overlay source path/base blob mismatch.')
-        return
+    for replacement in replacements:
+        before, after = replacement['before'], replacement['after']
+        if before['path'] != after['path'] or base.get(before['path']) != signature(before):
+            errors.append('Overlay source path/base blob mismatch.')
+            return
     optional = {row['path']: row for row in overlay['optional_evidence_files']}
-    allowed = {SVD: after, **optional}
+    allowed = {row['after']['path']: row['after'] for row in replacements}
+    allowed.update(optional)
     for path in sorted(base.keys() | current.keys()):
         if base.get(path) != current.get(path):
             row = allowed.get(path)
             if row is None or current.get(path) != signature(row):
                 errors.append('Overlay HEAD contains unrelated or unreviewed tree change: ' + path)
     # A non-base commit must actually contain the reviewed scene replacement.
-    if head != BASE and current.get(SVD) != signature(after):
+    if head != BASE and any(current.get(row['after']['path']) != signature(row['after']) for row in replacements):
         errors.append('Overlay HEAD must be base 927 or an exact reviewed SVD overlay tree.')
     indexed = {}
     for record in git(repo, 'ls-files', '--stage', '-z').split(b'\0'):
@@ -129,11 +154,13 @@ def overlay_tree_checks(repo, head, overlay, errors):
               or target.stat().st_size != row['bytes'] or digest(target) != row['sha256']):
             errors.append('Overlay worktree file missing/size/hash/type mismatch: ' + path)
     # An entirely clean base tree is not the requested overlay.
-    target = repo / SVD
-    if (target.is_symlink() or not target.is_file()
-            or bool(target.stat().st_mode & 0o111) != (after['git_mode'] == '100755')
-            or target.stat().st_size != after['bytes'] or digest(target) != after['sha256']):
-        errors.append('Overlay requires the exact reviewed SVD after bytes: ' + SVD)
+    for replacement in replacements:
+        after = replacement['after']; target = repo / after['path']
+        if (target.is_symlink() or not target.is_file()
+                or bool(target.stat().st_mode & 0o111) != (after['git_mode'] == '100755')
+                or target.stat().st_size != after['bytes'] or digest(target) != after['sha256']):
+            label = 'SVD' if after['path'] == SVD else 'Outro'
+            errors.append(f'Overlay requires the exact reviewed {label} after bytes: ' + after['path'])
 
 
 def verify(repo, *, strict_external=False, optional_audio=False, overlay_id=None):
@@ -164,15 +191,15 @@ def verify(repo, *, strict_external=False, optional_audio=False, overlay_id=None
             errors.append('Overlay source inventory must retain original base ' + BASE)
         else:
             overlay_tree_checks(repo, head, overlay, errors)
-    replacement = overlay['source_replacement'] if overlay is not None else None
+    replacements = source_replacements(overlay) if overlay is not None else []
     source_rows = list(sources['files'])
-    if replacement is not None:
-        matches = [row for row in source_rows if row['path'] == SVD]
+    for replacement in replacements:
         before = replacement['before']
+        matches = [row for row in source_rows if row['path'] == before['path']]
         if (len(matches) != 1 or any(matches[0][k] != before[k] for k in ['path', 'bytes', 'sha256'])):
             errors.append('Overlay source inventory before identity mismatch.')
         else:
-            source_rows = [replacement['after'] if row['path'] == SVD else row for row in source_rows]
+            source_rows = [replacement['after'] if row['path'] == before['path'] else row for row in source_rows]
     for row in core['files'] + source_rows:
         check(repo / row['path'], row)
     if strict_external:
@@ -217,7 +244,7 @@ def main():
     parser.add_argument('--repo', type=Path, required=True)
     parser.add_argument('--strict-external', action='store_true')
     parser.add_argument('--optional-audio', action='store_true')
-    parser.add_argument('--overlay', help='Explicit reviewed overlay ID; svd-reveal-v1 or svd-production-polish-v2.')
+    parser.add_argument('--overlay', help='Explicit reviewed overlay ID; svd-reveal-v1, svd-production-polish-v2, or part3-svd-outro-production-v3.')
     args = parser.parse_args()
     result = verify(args.repo, strict_external=args.strict_external,
                     optional_audio=args.optional_audio, overlay_id=args.overlay)

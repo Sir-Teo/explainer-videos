@@ -1,5 +1,27 @@
 # Parts 1–3: reviewed cloud production handoff
 
+## Combined Part 3 source overlay v3 — current cloud selection
+
+The explicit **`--overlay part3-svd-outro-production-v3`** selection permits base **`927fba668656a682b3e29a288de64130ddc680dd`** plus exactly these two reviewed source files:
+
+| Repository path | Required SHA256 | Bytes |
+|---|---|---:|
+| `videos/ai/ai3/s08_svd.py` | `2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b` | 12,273 |
+| `videos/ai/ai3/s19_outro.py` | `e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24` | 17,361 |
+
+The [versioned manifest](evidence/production-handoff-parts1-3/overlays/part3-svd-outro-production-v3.json) pins the original before identities, exact after blobs/modes/bytes, and source-patch identities **`d7a9b0acfb15ad9c371f14acae5d8acab2644d6f`** (SVD reveal/margin/name wrapping) and **`6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0`** (Outro descent-front marker). Six hash-pinned review receipts bind the existing SVD/Outro evidence. Those commits also contain evidence or tests; only their two scene-file contents are authorized as production-tree replacements. There are **no optional extra repository files** in this overlay.
+
+Both files are available at **`5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed`**; that commit is retrieval provenance, **not an accepted full HEAD/tree**. Use either the exact base with these two worktree replacements or a commit whose complete tree differs from the base by exactly those two replacements. Unrelated HEAD, index, worktree or untracked non-ignored file changes fail. Keep the current handoff helper/metadata **outside** that production checkout.
+
+```bash
+python "$HANDOFF_DIR/verify_handoff.py" --repo "$CLOUD_REPO" --strict-external --overlay part3-svd-outro-production-v3
+# --optional-audio checks only the original six exact Information EN WAV/JSON pairs.
+```
+
+[Verification evidence](evidence/production-handoff-parts1-3/overlay-combined-v3-checks/README.md) records **45 portable tests** and **14 actual cloud-fixture outcomes**, including clean-base and exact two-source worktree/commit passes with **268 strict file checks**. Default verification still rejects the replacements. The existing `svd-reveal-v1` and `svd-production-polish-v2` flags retain their original narrower behavior and reject the additional Outro; their manifests and historical receipts remain unchanged. The earlier sections below describe those selections and dated local work, and do not limit or broaden this explicitly selected v3 gate.
+
+This is a source/file/runtime preflight, not a production renderer, inherited producer guard, numerical recomputation, new narration candidate approval or audio/listening/4K acceptance. Every original cache, other-source, package-version, public-model-file and optional-audio check remains in force. The f00 cache-independent pilot remains separate and does not authorize full parts. English/Chinese utterances, bookmarks and requested timings of these two visual repairs are covered by their existing scoped evidence; a new Mandarin sample is still a separate acoustic/alignment gate. The canceled local task remains stopped; the parent owns cloud production and remaining output gates. The already confirmed 73 MB Library transfer is unchanged and is not duplicated here.
+
 ## Explicit SVD production-polish overlay v2
 
 The new optional selection **`--overlay svd-production-polish-v2`** binds base927 plus exactly one replacement: `videos/ai/ai3/s08_svd.py`, SHA256 **`2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b`** (12,273 bytes). Source patch commit **`d7a9b0acfb15ad9c371f14acae5d8acab2644d6f`** and complete native evidence commit **`86da3b0df913b80966cfba4547cbcb952e9a64a4`** are published. This includes v1's clean reveals plus the sigma1 inset (27→132 native blank pixel columns) and unbroken Chinese name/semantic wrapping. [Native evidence](evidence/ai3-svd-production-margin-polish/README.md).

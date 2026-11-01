@@ -1,0 +1,13 @@
+# Combined Part 3 source overlay v3: bounded cloud preflight proof
+
+`part3-svd-outro-production-v3` permits exactly base927 plus SVD `2c01a4a7…` and Outro `e874a8da…`. No optional repository files are allowed. The complete later commit containing both files is not accepted. Existing review receipts are pinned in the overlay; no new scene/audio acceptance is inferred.
+
+All **45 portable Git/file tests passed in 1.713 s** (the original32 also passed before extension). They cover the exact pair, equivalent source-only commit, unknown/tampered/wrong-base/path/schema manifests, missing/wrong/extra sources, unrelated HEAD/index/worktree/untracked source changes, cache/model/audio tampering and strict package metadata. Historical default/v1/v2 cases remain covered.
+
+The actual new isolated cloud sparse worktree started at exact927. Its **156 copied cache/extras/optional-audio files, 80,858,842 bytes**, have independent inodes; original references and copies rehash exactly after checks. **14 expected outcomes** are retained: clean base and exact two-source worktree/commit modes pass **268 strict file checks**; default/v1/v2, absent Outro, unrelated source/untracked producer/HEAD, missing/tampered data and an explicit package-metadata mismatch fixture reject. The successful runtime checks use actual installed versions and public GPT-2 file hashes. The version-negative is deliberately mocked metadata, not a changed runtime or false successful version claim. The private source-only fixture commit is a test artifact and was not pushed.
+
+After all14 checks completed, the receipt aggregator stopped on a preparation-record field-name mismatch. The first wrapper/log is preserved; only aggregation resumed using the existing outcomes and corrected `reference_file`/`path` keys. No fixture or check was retried. See raw receipt/original logs.
+
+`raw/` preserves gzip-exact preparation, commands, all result JSON/stderr, source-only patch extracts, original/after source bytes, ledgers and receipts. `tests/` contains both logs and the tested portable test source. `summary.json` records source/helper/overlay identities, legacy-manifest checks and historical-byte verification. Gzip raw hashes are indexed in this directory's manifest.
+
+These are read-only preflight checks in a cloud fixture, not a production renderer or inherited fail-on-call producer guard. No scene/producer/model import, inference, download, numerical run, TTS, new narration approval, listening or full-resolution movie approval occurred. Source/cache/package/public-model/optional-audio gates remain effective. The canceled local task stays stopped; no transfer was repeated. The parent owns remaining cloud production and output gates.

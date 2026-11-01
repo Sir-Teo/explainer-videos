@@ -1,0 +1,84 @@
+{
+  "schema_version": 2,
+  "overlay_id": "part3-svd-outro-production-v3",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "available_together_commit": "5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed",
+  "reviewed_patch_commits": {
+    "svd": "d7a9b0acfb15ad9c371f14acae5d8acab2644d6f",
+    "outro": "6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0"
+  },
+  "scope": "Exactly base927 plus two reviewed Part3 scene replacements: SVD clean reveals/native-margin/Chinese-name wrapping and Outro frontmost descent marker. All other HEAD/index/worktree, source/cache/external/package/model/audio checks remain strict. The available-together commit is provenance only and is not an allowed full HEAD. No production/audio/alternate-narration acceptance follows.",
+  "source_replacements": [
+    {
+      "before": {
+        "path": "videos/ai/ai3/s08_svd.py",
+        "bytes": 11730,
+        "sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+        "git_mode": "100644",
+        "git_blob": "43fd7a7d8a4b21754550c8a09dea3ed387ac3a4c"
+      },
+      "after": {
+        "path": "videos/ai/ai3/s08_svd.py",
+        "bytes": 12273,
+        "sha256": "2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b",
+        "git_mode": "100644",
+        "git_blob": "85d98e597659e3c3b5596efc8b57d1c72c0dca79"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai3/s19_outro.py",
+        "bytes": 16807,
+        "sha256": "4e1d29200637256128acf72ecffd0f02caaf6733a4222808dd0b32bf82981ed7",
+        "git_mode": "100644",
+        "git_blob": "585b962a101c85561b89d9ac2e7c4686b344bd2e"
+      },
+      "after": {
+        "path": "videos/ai/ai3/s19_outro.py",
+        "bytes": 17361,
+        "sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+        "git_mode": "100644",
+        "git_blob": "23373891f4d38c3ce5917027d3e289a7a7d0ee5b"
+      }
+    }
+  ],
+  "optional_evidence_files": [],
+  "evidence_references": [
+    "docs/qa/evidence/ai3-svd-production-margin-polish/README.md",
+    "docs/qa/evidence/ai3-outro-path-front-repair/README.md",
+    "docs/qa/evidence/ai3-outro-trail-motion-regression/README.md"
+  ],
+  "unchanged_inputs": "Reviewed narration/bookmark/requested timings and scientific input data are unchanged by these visual source repairs; their prior scoped receipts remain separate. No new narration candidate is approved.",
+  "evidence_receipts": [
+    {
+      "path": "docs/qa/evidence/ai3-svd-production-margin-polish/README.md",
+      "bytes": 3009,
+      "sha256": "7abe9ed720f8df833ea052da8ed13262f3d5ec519aed49ccdde8874da2397831"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-production-margin-polish/manifest.json",
+      "bytes": 5135,
+      "sha256": "72574ec67c7cf8679c48bd8c5095b904e8660c2fbc9a3c31f96fa77abe5eb157"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-outro-path-front-repair/README.md",
+      "bytes": 3699,
+      "sha256": "ad0fd986fda505f5b3d1948836a7cf329ceb94c768b7e4117749ac45b464e25e"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-outro-path-front-repair/manifest.json",
+      "bytes": 1889,
+      "sha256": "bfd3358e12433a40e2ca5c058e33711ec1ec7bcf19021ffdf156fdecf163a25c"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-outro-trail-motion-regression/README.md",
+      "bytes": 4227,
+      "sha256": "4ee87fd3a1e036bf3b1098e9e604050c95c093d38d60b52552b4dc44f311e032"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-outro-trail-motion-regression/manifest.json",
+      "bytes": 3748,
+      "sha256": "945f7a4183f8cee6193a7df924f37feb1a640e439d324de67c1c67349d1cf5c2"
+    }
+  ]
+}

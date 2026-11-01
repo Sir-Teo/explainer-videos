@@ -1,0 +1,32 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1870,
+    "sha256": "f3960a29eea48c1db440424764ffadd3fe1408ebf2811ec89f9457577864f9c2"
+  },
+  {
+    "path": "archive-manifest.json.gz",
+    "bytes": 2398,
+    "sha256": "725b8b9c69d12a0d6930c02c464258af9ca0bf58d9019b3d6ac438f765c56a49"
+  },
+  {
+    "path": "archive-receipt.json.gz",
+    "bytes": 237,
+    "sha256": "8d796ef5b19677a1ee2d37d7bee1ff06ac1eaf43d1d4475967af97ab39288078"
+  },
+  {
+    "path": "build.py.gz",
+    "bytes": 2033,
+    "sha256": "d27504ee95bf8ac30bab5c4309a72fea2d911c8b0c9faa967f850003b4afda40"
+  },
+  {
+    "path": "library-receipt.json",
+    "bytes": 424,
+    "sha256": "bd22508c3d8290b2dd950dd27f5763cbb76cb1ae7b46f415113c8a64feb0867b"
+  },
+  {
+    "path": "transfer-manifest.json.gz",
+    "bytes": 2932,
+    "sha256": "af30e9eb26397a0e68c4f6ff43937b7c62c3f411e9469e317ba4f75e5ab0b0a4"
+  }
+]
