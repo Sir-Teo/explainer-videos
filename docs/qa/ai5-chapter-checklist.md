@@ -1,25 +1,29 @@
-# Part5 chapter checklist
+# Part 5 chapter checklist
 
-All19chapters/38bilingual cases remain pending actual-data, endpoint, silent-motion and visual review. The [source correction evidence](evidence/ai5-source-review/README.md) records bounded audits/tests, not completion. Narration/listening, production resolution, continuous perception and player checks remain separate.
+Observed **2026-11-01T03:30:22.388325+00:00**. Complete selected-image baseline review: **28/38 language cases, 12/19 chapters in both languages**. Current repaired-source selected-image acceptance: **11/38 cases, five chapters in both languages**, plus Chinese Bayes. These are image-scope counts, not production approval.
 
-| Position | Chapter | EN endpoint/motion/visual | ZH endpoint/motion/visual |
-|---|---|---|---|
-| 1 | Hook: Out of noise | Pending | Pending |
-| 2 | Bell: 1. The bell curve | Pending | Pending |
-| 3 | Gauss: 2. Bells in many dimensions | Pending | Pending |
-| 4 | Likelihood: 3. Fitting a bell: maximum likelihood | Pending | Pending |
-| 5 | Fisher: 4. How precise can an estimate be? | Pending | Pending |
-| 6 | Bayes: 5. Belief as a distribution | Pending | Pending |
-| 7 | MaxEnt: 6. Maximum entropy | Pending | Pending |
-| 8 | Tails: 7. How far from the average? | Pending | Pending |
-| 9 | Sampling: 8. Rolling loaded dice | Pending | Pending |
-| 10 | Decoding: 9. How a language model chooses | Pending | Pending |
-| 11 | Markov: 10. Chains with short memories | Pending | Pending |
-| 12 | MonteCarlo: 11. Answers from random samples | Pending | Pending |
-| 13 | ScoreFn: 12. The gradient of an average | Pending | Pending |
-| 14 | MCMC: 13. Sampling the unsampleable | Pending | Pending |
-| 15 | Brownian: 14. Brownian motion | Pending | Pending |
-| 16 | Ito: 15. Itô's lemma | Pending | Pending |
-| 17 | SDE: 16. Randomness with a push | Pending | Pending |
-| 18 | FokkerPlanck: 17. The density's own law | Pending | Pending |
-| 19 | Outro: Recap, problems, and what comes next | Pending | Pending |
+All28 corrected numerical items completed. Original silent movies rendered for all38cases. Current replacement renders, raw warnings and pending reviews are distinct in the [JSONledger](ai5-chapter-checklist.json). Narration, listening, synchronization, continuous perception and production resolution remain open.
+
+| Position | Chapter | Current actual review / repair state |
+|---|---|---|
+| 1 | Hook: Out of noise | EN/ZH current selected-image review accepted. |
+| 2 | Bell: 1. The bell curve | Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC. |
+| 3 | Gauss: 2. Bells in many dimensions | Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC. |
+| 4 | Likelihood: 3. Fitting a bell: maximum likelihood | EN/ZH complete baseline; repaired selected-image regression active. |
+| 5 | Fisher: 4. How precise can an estimate be? | EN/ZH complete baseline; repaired selected-image regression active. |
+| 6 | Bayes: 5. Belief as a distribution | Current ZH selected review accepted; repaired EN regression pending. |
+| 7 | MaxEnt: 6. Maximum entropy | EN complete baseline; current ZH selected review active; repaired EN regression pending. |
+| 8 | Tails: 7. How far from the average? | EN complete baseline; current ZH selected review queued; repaired EN regression pending. |
+| 9 | Sampling: 8. Rolling loaded dice | EN complete baseline; repaired EN/ZH renders/regression underway. |
+| 10 | Decoding: 9. How a language model chooses | Repaired EN/ZH selected review accepted; evidence pushed03:08UTC. |
+| 11 | Markov: 10. Chains with short memories | Repaired EN/ZH selected review accepted; final Markov package ready. |
+| 12 | MonteCarlo: 11. Answers from random samples | EN/ZH complete baseline; cohort-sync repair frozen03:21UTC; fresh renders/regression underway. |
+| 13 | ScoreFn: 12. The gradient of an average | EN/ZH complete baseline; clean-reveal repair rendering/regression underway. |
+| 14 | MCMC: 13. Sampling the unsampleable | Complete silent renders; selected-image review active. |
+| 15 | Brownian: 14. Brownian motion | Complete silent renders; selected-image review pending. |
+| 16 | Ito: 15. Itô's lemma | EN/ZH complete baseline; repaired reveal regression active. |
+| 17 | SDE: 16. Randomness with a push | EN/ZH complete baseline; sequential-caption transition repair frozen; fresh regression queued. |
+| 18 | FokkerPlanck: 17. The density's own law | Complete silent renders; selected-image review queued. |
+| 19 | Outro: Recap, problems, and what comes next | EN complete baseline03:25UTC; ZH review active; tiny measured-point recap correction pending. |
+
+Next checkpoint around03:55UTC will report actual newly closed regressions and remaining chapters. No access block; numerical work completed. Runtime/source warnings are retained, and no test count substitutes for visible/audible quality.
