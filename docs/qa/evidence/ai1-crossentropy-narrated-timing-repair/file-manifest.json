@@ -1,0 +1,50 @@
+{
+  "files": {
+    "README.md": {
+      "bytes": 2669,
+      "sha256": "f96ea7e743d28e8b7bc84c1c28c2225ba2df63b89c7859e0be5c108f303fc3ec"
+    },
+    "codec-map.json": {
+      "bytes": 2992,
+      "sha256": "605b53cc703620e5e2554a273054010781cdd9e20cb118856ceda0984cb4f94f"
+    },
+    "collect-proof.py.gz": {
+      "bytes": 4825,
+      "sha256": "6aa9b267e9e3e868622772cbc7f1adc2f23c7983d205227138aba4f1502eecf3"
+    },
+    "exact-diagnostic.json.gz": {
+      "bytes": 21298,
+      "sha256": "65f439a84dc64687ab8f62e0d98c0f6f0f392e01b832f18bd2beacc67152557e"
+    },
+    "focused-tests.log.gz": {
+      "bytes": 389,
+      "sha256": "908afcbdeb166732cd30619aeb864f50190a8965c2fe8976b2bf603d12801ac2"
+    },
+    "initial-focused-failure.log.gz": {
+      "bytes": 613,
+      "sha256": "9a864811ab7417fa72ca49d39d9ec71b2fb6460031338be1f59b5707d206632b"
+    },
+    "phase-proof.json.gz": {
+      "bytes": 2314,
+      "sha256": "60972bd16ac8022989064f46cc0c528dde5ee0db53e751e9ff23943f9efe4508"
+    },
+    "repair-receipt.json": {
+      "bytes": 15081,
+      "sha256": "fcd4e4ad7b9c62f8129fc12155f021f419126a5d0a287971e62e1030ddb33978"
+    },
+    "source-after.py.gz": {
+      "bytes": 8065,
+      "sha256": "ffd3c1b417914b00acbd53280ef93a26099dc7128a478651801d19289c8ca98b"
+    },
+    "source-before.py.gz": {
+      "bytes": 7526,
+      "sha256": "35d61bc25f15d98d004c043740e17fd806d63416dcc545525e498a6e95190688"
+    },
+    "source.patch.gz": {
+      "bytes": 1160,
+      "sha256": "f65453095865389cdaae0c0d6897b1efa0a764213e69586a07180f405b2f3afc"
+    }
+  },
+  "payload_bytes": 66932,
+  "source_after_sha256": "5d4a5d584d68b8167d63b5949c4a0d214f1271b9f201e1382f3e6b64f566d15f"
+}

@@ -1,0 +1,15 @@
+{
+  "observed_utc": "2026-11-01T15:08:38.092213+00:00",
+  "scope": "Reviewed source/focused tests only. Strictv9 is NOTregistered; controlled live execution remains held until exactPrefix/Chinese mapping identities and finalgate verification.",
+  "source_sha256": "5d4a5d584d68b8167d63b5949c4a0d214f1271b9f201e1382f3e6b64f566d15f",
+  "root_focused_test_log": "root-focused-final.log",
+  "metadata_alignment": "OPEN:21/22consistent; untouchedc15.97vs14.50 needs hostreconciliation.",
+  "preserved": "Nine originalspeech-master identities andallspokencontent. Noaudio bytes transferred/regenerated.",
+  "prefix_dependency": {
+    "library_id": "libfile_a3fd2b5516088191b90d656b60ce4e76",
+    "bytes": 6038286,
+    "sha256": "c48c597aeaa977dd56dbc6d351e400397922f8531f3ddf5e8c2d7cae6c4c48e1",
+    "state": "ZIPdirectreadunavailable; guardedcapacity prevents materialization. Compactexactsource/word/eventextractpendingparent."
+  },
+  "final_delivery": "One completeepisodevideo perlanguage; chapteroutputsinternalonly."
+}

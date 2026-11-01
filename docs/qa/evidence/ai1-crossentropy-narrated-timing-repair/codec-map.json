@@ -1,0 +1,66 @@
+[
+  {
+    "runtime_original": "/workspace/runtime/ai1-crossentropy-timing-repair/exact-host-report.json",
+    "payload": "exact-diagnostic.json.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 144865,
+    "raw_sha256": "0f461bd770ccf3baeb8ec1cdf1cdb8b9430b82ea9e86d1a17ad7d473b56e92ad",
+    "payload_sha256": "65f439a84dc64687ab8f62e0d98c0f6f0f392e01b832f18bd2beacc67152557e"
+  },
+  {
+    "runtime_original": "/workspace/runtime/ai1-crossentropy-timing-repair/before.py",
+    "payload": "source-before.py.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 23968,
+    "raw_sha256": "149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f",
+    "payload_sha256": "35d61bc25f15d98d004c043740e17fd806d63416dcc545525e498a6e95190688"
+  },
+  {
+    "runtime_original": "/workspace/runtime/ai1-crossentropy-timing-repair/after.py",
+    "payload": "source-after.py.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 25445,
+    "raw_sha256": "5d4a5d584d68b8167d63b5949c4a0d214f1271b9f201e1382f3e6b64f566d15f",
+    "payload_sha256": "ffd3c1b417914b00acbd53280ef93a26099dc7128a478651801d19289c8ca98b"
+  },
+  {
+    "runtime_original": "/workspace/runtime/ai1-crossentropy-timing-repair/source.patch",
+    "payload": "source.patch.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 2682,
+    "raw_sha256": "efd20d689680b381bd818d0b8e06c6cae927d1f75047122c92b1a4ec5f47ee31",
+    "payload_sha256": "f65453095865389cdaae0c0d6897b1efa0a764213e69586a07180f405b2f3afc"
+  },
+  {
+    "runtime_original": "/workspace/runtime/ai1-crossentropy-timing-repair/phase-proof.json",
+    "payload": "phase-proof.json.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 30194,
+    "raw_sha256": "ad6ebc13442ca2a8a81cb768fe63cea872ed9fc7bfd0f46621fe3491851a9e53",
+    "payload_sha256": "60972bd16ac8022989064f46cc0c528dde5ee0db53e751e9ff23943f9efe4508"
+  },
+  {
+    "runtime_original": "/workspace/runtime/ai1-crossentropy-timing-repair/focused-tests.log",
+    "payload": "focused-tests.log.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 1411,
+    "raw_sha256": "41dbd93610226e7cc624e620211d7b2e71c2c7d0a5a26de4b9b31b3bb8e77bba",
+    "payload_sha256": "908afcbdeb166732cd30619aeb864f50190a8965c2fe8976b2bf603d12801ac2"
+  },
+  {
+    "runtime_original": "/workspace/runtime/ai1-crossentropy-timing-repair/focused-tests-initial-alignment-discrepancy.log",
+    "payload": "initial-focused-failure.log.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 2159,
+    "raw_sha256": "92963feff77e711b127fe7dca4d4185ccf8f203e869360d233b2050f5752d922",
+    "payload_sha256": "9a864811ab7417fa72ca49d39d9ec71b2fb6460031338be1f59b5707d206632b"
+  },
+  {
+    "runtime_original": "/workspace/runtime/ai1-crossentropy-timing-repair/collect_proof.py",
+    "payload": "collect-proof.py.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 11726,
+    "raw_sha256": "ea18f24485d5a9ce3617c9465dc853f0ff2f7b279d4e02c2f786ceea84391a54",
+    "payload_sha256": "6aa9b267e9e3e868622772cbc7f1adc2f23c7983d205227138aba4f1502eecf3"
+  }
+]

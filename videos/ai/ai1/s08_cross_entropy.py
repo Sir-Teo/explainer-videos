@@ -8,6 +8,39 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai1.common import ALPHA27, MONO, PART, letter, load, plain_axes, polyline
 
 
+def _bookmark_run_times(vo, mark, *nominal):
+    """Fit sequential plays before this utterance's cue, allowing frame rounding.
+
+    Impossible deadlines retain positive one-frame plays, not a synchronization
+    guarantee. The actual cue and current elapsed time determine every budget.
+    """
+    frame = 1 / config.frame_rate
+    floor = len(nominal) * frame
+    budget = vo.mark_time(mark) - vo.elapsed() - (len(nominal) + 1) * frame
+    scale = min(1.0, max(0.0, (budget - floor) / (sum(nominal) - floor)))
+    return tuple((frame + (duration - frame) * scale for duration in nominal))
+
+
+def _bookmark_ladder_step(scene, step, index, vo, mark, *nominal):
+    """Budget only this ladder step's scroll, transform and emphasis plays."""
+    run_times = iter(_bookmark_run_times(vo, mark, *nominal))
+    original_play = scene.play
+    had_override = 'play' in scene.__dict__
+    original_override = scene.__dict__.get('play')
+
+    def timed_play(*animations, **kwargs):
+        kwargs['run_time'] = next(run_times)
+        return original_play(*animations, **kwargs)
+    scene.play = timed_play
+    try:
+        return step(index)
+    finally:
+        if had_override:
+            scene.play = original_override
+        else:
+            del scene.play
+
+
 def slivers(p, h, W=11.0, y0=-2.5, scale=0.3, order=None, color=C.SURPRISE, opacity=0.8) -> VGroup:
     """Rectangles of width W p[i] and height scale * h[i], laid out in ``order``; ``g[i]`` is symbol i's."""
     order = list(range(len(p))) if order is None else list(order)
@@ -158,8 +191,9 @@ class CrossEntropy(VoiceoverScene):
             f"Swapping e and z costs {KL:.2f} bits per symbol. The letter frequencies of our thirty books, used on "
             f"the Falcon passage, {books_said}."
         ) as vo:
-            self.play(FadeOut(self.parts))
-            self.play(Write(rows[0]))
+            intro_times = _bookmark_run_times(vo, "a", 1.0, 2.0)
+            self.play(FadeOut(self.parts), run_time=intro_times[0])
+            self.play(Write(rows[0]), run_time=intro_times[1])
             vo.wait_until("a")
             self.play(TransformMatchingTex(rows[0].copy(), rows[1]))
             self.play(GrowFromCenter(b1), FadeIn(t1))
@@ -220,9 +254,9 @@ class CrossEntropy(VoiceoverScene):
             vo.wait_until("b")
             step(0)
             vo.wait_until("c")
-            step(1)
+            _bookmark_ladder_step(self, step, 1, vo, "d", 0.6, 1.2, 0.5)
             vo.wait_until("d")
-            step(2)
+            _bookmark_ladder_step(self, step, 2, vo, "e", 0.6, 1.2, 0.8)
             vo.wait_until("e")
             step(3)
         with self.voiceover(

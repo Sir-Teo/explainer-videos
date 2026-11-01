@@ -1,0 +1,12 @@
+test_actual_adaptive_spans_and_animation_order_at_frame_phases (test_ai1_crossentropy_timing.CrossEntropyTiming.test_actual_adaptive_spans_and_animation_order_at_frame_phases) ... ok
+test_actual_original_spans_reproduce_all_three_observed_overruns (test_ai1_crossentropy_timing.CrossEntropyTiming.test_actual_original_spans_reproduce_all_three_observed_overruns) ... ok
+test_entire_non_timing_source_AST_and_nine_voiceovers_are_exact (test_ai1_crossentropy_timing.CrossEntropyTiming.test_entire_non_timing_source_AST_and_nine_voiceovers_are_exact) ... ok
+test_exact_source_diagnostic_all_nine_blocks_22_cues_and_master_identities (test_ai1_crossentropy_timing.CrossEntropyTiming.test_exact_source_diagnostic_all_nine_blocks_22_cues_and_master_identities) ... ok
+test_generous_and_physically_impossible_cues_remain_distinct (test_ai1_crossentropy_timing.CrossEntropyTiming.test_generous_and_physically_impossible_cues_remain_distinct) ... ok
+test_ladder_adapter_restores_class_and_instance_play_after_exception (test_ai1_crossentropy_timing.CrossEntropyTiming.test_ladder_adapter_restores_class_and_instance_play_after_exception) ... ok
+test_retained_proof_rows_have_reading_time_after_completion (test_ai1_crossentropy_timing.CrossEntropyTiming.test_retained_proof_rows_have_reading_time_after_completion) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 3.388s
+
+OK
