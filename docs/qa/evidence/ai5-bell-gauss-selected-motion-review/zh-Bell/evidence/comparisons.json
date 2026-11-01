@@ -1,0 +1,36 @@
+[
+  {
+    "source_frame": 1881,
+    "time": 125.399674,
+    "native_size": [
+      854,
+      480
+    ],
+    "before": {
+      "file": "evidence/reveal1-before.png",
+      "sha256": "88b4aa66ffc2361271cd6fc4f7cfb9e1f18814d5562c41071ae76d9425947f73"
+    },
+    "after": {
+      "file": "evidence/reveal1-after.png",
+      "sha256": "ec30640cd742fe1b4674c637e190a67886afb79cb2ee8bffd9f55d2f70497478"
+    },
+    "actual_view": "Both original and repaired states directly viewed at native854x480; complete windows also reviewed on640x360 tiles/exact-PNG mappings."
+  },
+  {
+    "source_frame": 2205,
+    "time": 146.999674,
+    "native_size": [
+      854,
+      480
+    ],
+    "before": {
+      "file": "evidence/reveal2-before.png",
+      "sha256": "fb6abcefedd4121f09cde6182d656c79c08d5987ac012c7d39d9d164da28155c"
+    },
+    "after": {
+      "file": "evidence/reveal2-after.png",
+      "sha256": "e79ebde967996c05c3fee354bb8f6156f5b8bd559da3572a26f2886fbc5da64f"
+    },
+    "actual_view": "Both original and repaired states directly viewed at native854x480; complete windows also reviewed on640x360 tiles/exact-PNG mappings."
+  }
+]

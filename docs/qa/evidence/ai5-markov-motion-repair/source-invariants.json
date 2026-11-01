@@ -1,0 +1,17 @@
+{
+  "before_source_sha256": "ee015f53334d641a8b3f6b4f3b95a020513b0ec5667ad7e25c8a5ed8d9ea323f",
+  "after_source_sha256": "6c7ee6d58ffa4096340c3c5be933d9006d48879f3561acdc277fc45fedc7e30e",
+  "allowed_exact_AST_transformations": {
+    "range": 1,
+    "ghost_height": 2,
+    "ghost_range": 2,
+    "returned_step_options": 3
+  },
+  "whole_AST_equal_after_only_declared_transformations": true,
+  "voiceover_expressions_identical": true,
+  "self_play_calls_identical": true,
+  "wait_calls_identical": true,
+  "wait_until_bookmarks_identical": true,
+  "factory_has_no_transform_keyword": true,
+  "scene_or_producer_imports": 0
+}

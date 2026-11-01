@@ -1,0 +1,104 @@
+{
+  "timestamp": "2026-11-01T02:47:46.930686+00:00",
+  "movie": {
+    "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Bell_motion/media/videos/480p15/Bell.mp4",
+    "sha256": "e19ab874b61ef39e8f3f06071e7a0f47a21b84b8208a0dc581ecd4c440e03b54",
+    "bytes": 1827580
+  },
+  "raw_record_sha256": "48f84e7fd172296e2eb7057887bac99c20447c17a09263f9d28bab9629c08b8e",
+  "raw_status": "passed",
+  "raw_fingerprint": "bfc2662ae7fbee18cbe54f9c44c87cf870bbcd8138106cb7fb7466dba256da0b",
+  "raw_warnings": [],
+  "source_at_review": {
+    "videos/ai/ai5/s02_bell.py": "f559484126011f7aae46fe30b932eaee37f406615d764029121524ae80db7249",
+    "videos/ai/ai5/common.py": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+    "videos/ai/ai5/plotting.py": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+    "videos/ai/ai5/zh_lines.py": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+    "videos/ai/ai_text_zh.json": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+    "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+  },
+  "inputs": {
+    ".cache/ai5/lln.json": {
+      "sha256": "c1de442e94bf10f55f4175e5d07685f40a9a70900a84e99dd837476c84e3fad7",
+      "bytes": 869,
+      "mtime_ns": 1793497351934615521,
+      "raw_record_stat": [
+        869,
+        1793497351934615521
+      ],
+      "stat_matches": true
+    },
+    ".cache/ai5/lln.npz": {
+      "sha256": "f1194f901932cf579012c5e43f38ec79cd0d3f9103a37b938f1fc54b0457bcaa",
+      "bytes": 4866,
+      "mtime_ns": 1793497351934150312,
+      "raw_record_stat": [
+        4866,
+        1793497351934150312
+      ],
+      "stat_matches": true
+    },
+    ".cache/ai5/galton.json": {
+      "sha256": "800c710a355915e025bec3fbd84d936a6d8ff4ef3799a277ba9977ee1d880a9d",
+      "bytes": 914,
+      "mtime_ns": 1793497348701914816,
+      "raw_record_stat": [
+        914,
+        1793497348701914816
+      ],
+      "stat_matches": true
+    },
+    ".cache/ai5/galton.npz": {
+      "sha256": "f2b4db4767a7939b910ebfbe4ab224ee45c3f2e4c628e69cbadae68c4fca73a7",
+      "bytes": 4498,
+      "mtime_ns": 1793497348701242062,
+      "raw_record_stat": [
+        4498,
+        1793497348701242062
+      ],
+      "stat_matches": true
+    },
+    ".cache/ai5/clt.json": {
+      "sha256": "04fba7203756cefc67a8433266ac145b0e9e7e77a8d1fb6cfe67717aa8ffaf3b",
+      "bytes": 895,
+      "mtime_ns": 1793497340201860575,
+      "raw_record_stat": [
+        895,
+        1793497340201860575
+      ],
+      "stat_matches": true
+    },
+    ".cache/ai5/clt.npz": {
+      "sha256": "01bb53f7321c54a2e2efc270fb795847fb0ec048421c9811a1acd69f752ed6ea",
+      "bytes": 1524,
+      "mtime_ns": 1793497340201350400,
+      "raw_record_stat": [
+        1524,
+        1793497340201350400
+      ],
+      "stat_matches": true
+    },
+    ".cache/ai5/conv.json": {
+      "sha256": "c368b553bb6976e754189cfaf0721c16f40f3b31c69880aad7fe41118c09640a",
+      "bytes": 1134,
+      "mtime_ns": 1793497345069185557,
+      "raw_record_stat": [
+        1134,
+        1793497345069185557
+      ],
+      "stat_matches": true
+    },
+    ".cache/ai5/conv.npz": {
+      "sha256": "e5a64f6c92ec93b3c22130185c70f9d730635fec9f516925b61fde6f3fd4fc17",
+      "bytes": 11717,
+      "mtime_ns": 1793497345068345287,
+      "raw_record_stat": [
+        11717,
+        1793497345068345287
+      ],
+      "stat_matches": true
+    }
+  },
+  "source_linkage": "Direct module source snapshotted at review; parent has kept Bell/Gauss frozen. Historical aggregate warning retained. Not a blanket current-fingerprint assertion.",
+  "coverage": "Pending selected-image review, not continuous perception/audio."
+}

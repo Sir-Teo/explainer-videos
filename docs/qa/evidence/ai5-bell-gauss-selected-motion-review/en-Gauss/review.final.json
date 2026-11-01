@@ -1,0 +1,163 @@
+{
+  "case": "en-Gauss",
+  "before": {
+    "case": "en-Gauss",
+    "recorded_at": "2026-11-01T03:08:14.940476+00:00",
+    "movie_sha256": "a22c3c7a2ba39373a3ae87ca30305616177a1580a8fbedf7a6bc4324069f19cb",
+    "selected_times": 447,
+    "unique_images_actually_viewed": 360,
+    "exact_duplicate_selected_times": 87,
+    "pages_actually_viewed": 45,
+    "sheet_image_scale": "640x360 per image",
+    "native_followups": [
+      {
+        "file": "audit/frames/0000845_000056.333s.png",
+        "sha256": "5468eecb0a657f4a4efe91e0c28af45a02d3baebb8a2e38c3734d295d0b0da39",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      },
+      {
+        "file": "audit/frames/0000477_000031.800s.png",
+        "sha256": "44a15167f15adf4867a8f63baca385ab14bdc1d3f2f0e83fd73a2c2ec69cbc0e",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      },
+      {
+        "file": "audit/frames/0001228_000081.866s.png",
+        "sha256": "0c0e071e19897e1e64295206328bfa2d2cba50119531f4702c4d8feecfefa1aa",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      },
+      {
+        "file": "audit/frames/0001489_000099.266s.png",
+        "sha256": "5d4ad633eb84fdb801e9f2ba6619314cdbabffca489818f91bed18e434d1d906",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      },
+      {
+        "file": "audit/frames/0002280_000151.999s.png",
+        "sha256": "35dfc9cfeb2c45e8b9fef119dce854601c0f6fc494b815f7fbe7ebe7d43094e5",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      }
+    ],
+    "audit_sha256": "d3a95bd4f359b0af471f27677884ed46ed77a303b7bb3394f64c6ee344d76638",
+    "map_sha256": "8c3bf19847d88b729e3151777b73bdbffda6f5784736a361fafaa98e41783f4d",
+    "raw_status": "needs-review",
+    "raw_warnings": [
+      {
+        "kind": "source-changed-during-render"
+      }
+    ],
+    "source_linkage": "Direct module source snapshotted at review; parent has kept Bell/Gauss frozen. Historical aggregate warning retained. Not a blanket current-fingerprint assertion.",
+    "findings": [
+      {
+        "id": "GAUSS-REVEAL-01",
+        "status": "confirmed-before-repair",
+        "description": "Four retained-row copies overlap their original glyphs during derive steps1\u20134. All four visible in chronological selected images; critical original native evidence retained. Bounded four transform=False keyword repair now frozen; new artifact review pending."
+      }
+    ],
+    "other_findings": "No additional corrective visual defect in viewed states. Settled Gaussian/conditional formulas, empirical table, scatter/ellipse mapping, regression and application cards remain readable.",
+    "continuous_perceptual_playback": false,
+    "audio_listening_sync": false,
+    "full_resolution_motion": false,
+    "unextracted_gaps_ledger": "audit/result.json#unextracted_frame_gaps",
+    "coverage_limits": [
+      "Every source frame was decoded and analyzed, not visually inspected.",
+      "Only listed native-resolution times were extracted; review of those images is pending.",
+      "Low-resolution RGB thresholds can miss small or subtle spatial/channel changes.",
+      "Maximum-gap samples cover slow/subthreshold changes only at the listed times, not continuously.",
+      "Static interval midpoints are samples, not proof that their full intervals are unchanged.",
+      "Full perceptual playback and listening remain unverified."
+    ]
+  },
+  "current_movie": {
+    "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Gauss_motion/media/videos/480p15/Gauss.mp4",
+    "sha256": "b0cc3268ca04d51bd752aa63fade1ba6f0788bccc468842eeab4b6c6876820a5",
+    "bytes": 1798540
+  },
+  "raw_status": "passed",
+  "raw_warnings": [],
+  "fingerprint": "69cb6b072c34c2bf899170a6f2b47ffb7f23260e8e5b024473277c1d966fe78a",
+  "current_source_at_review": {
+    "videos/ai/ai5/s03_gauss.py": "a913a45fd52683d2423e417262fa47588b165560335ae5e30957323630e44127",
+    "videos/ai/ai5/common.py": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+    "videos/ai/ai5/plotting.py": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+    "videos/ai/ai5/zh_lines.py": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+    "videos/ai/ai_text_zh.json": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+    "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+  },
+  "inputs": {
+    ".cache/ai5/gauss.json": {
+      "sha256": "76f46d04a04ecf4ae3600a792589ceb9d42208419947b737c5f50cf2ab1cd66f",
+      "bytes": 1098,
+      "mtime_ns": 1793497355829225340,
+      "raw_record_stat": [
+        1098,
+        1793497355829225340
+      ],
+      "stat_matches": true,
+      "equals_before_sha256": true
+    },
+    ".cache/ai5/gauss.npz": {
+      "sha256": "e7827e1dc4b73e9c04a57dfda9710c3b313f7eb53e55c55681afe5ed844062c5",
+      "bytes": 67278,
+      "mtime_ns": 1793497355826850416,
+      "raw_record_stat": [
+        67278,
+        1793497355826850416
+      ],
+      "stat_matches": true,
+      "equals_before_sha256": true
+    }
+  },
+  "current_selected_times": 443,
+  "exact_PNG_inherited_selected_times": 419,
+  "new_selected_unique_images_actually_viewed": 24,
+  "new_selected_pages_actually_viewed": 3,
+  "every_encoded_reveal_times": 147,
+  "every_encoded_reveal_ranges": [
+    [
+      835,
+      868
+    ],
+    [
+      927,
+      959
+    ],
+    [
+      1038,
+      1073
+    ],
+    [
+      1184,
+      1227
+    ]
+  ],
+  "additional_times_beyond_current_selected": 87,
+  "union_current_selected_and_dense_times": 530,
+  "largest_selected_time_gap": 1.0,
+  "all_new_reveal_pages_viewed": true,
+  "narration_records_exact_equal": true,
+  "duration_exact_equal": true,
+  "all_encoded_timestamps_exact_equal": true,
+  "all_input_SHA256_equal": true,
+  "verdict": "Accepted for this selected-image and bounded every-frame scope; observed copy-overlap defects resolved, no additional corrective visual defect.",
+  "continuous_perceptual_playback": false,
+  "listening_sync": false
+}

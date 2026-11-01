@@ -1,0 +1,343 @@
+{
+  "scope": "Part5 Markov bilingual selected-motion visual repair and fresh endpoint regression",
+  "source_invariants": {
+    "before_source_sha256": "ee015f53334d641a8b3f6b4f3b95a020513b0ec5667ad7e25c8a5ed8d9ea323f",
+    "after_source_sha256": "6c7ee6d58ffa4096340c3c5be933d9006d48879f3561acdc277fc45fedc7e30e",
+    "allowed_exact_AST_transformations": {
+      "range": 1,
+      "ghost_height": 2,
+      "ghost_range": 2,
+      "returned_step_options": 3
+    },
+    "whole_AST_equal_after_only_declared_transformations": true,
+    "voiceover_expressions_identical": true,
+    "self_play_calls_identical": true,
+    "wait_calls_identical": true,
+    "wait_until_bookmarks_identical": true,
+    "factory_has_no_transform_keyword": true,
+    "scene_or_producer_imports": 0
+  },
+  "reviewers": {
+    "baseline_en": "root actual56pages/5natives, preserved views ledger",
+    "final_en": "root actual15changedpages/119newPNGviews/4natives with330exactPNGuniqueinheritance from viewed baseline",
+    "final_zh": "motion_foundations actual58pages/463uniquePNGviews/7natives"
+  },
+  "cases": [
+    {
+      "scope": "en-before",
+      "movie_sha256": "2fa54cf5a9f293bdc1804863ef50907d48205f3e36ed90d6f312fd94af580285",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "duration": 188.132031,
+      "decoded": 2822,
+      "selected": 539,
+      "unique": 446,
+      "duplicate_selected": 93,
+      "max_selected_gap": 1.0000000000000142,
+      "unviewed_encoded_frames": 2283,
+      "audit_adjacent_provenance": null,
+      "source_file_freeze": [
+        {
+          "path": "videos/ai/ai5/s12_markov.py",
+          "sha256": "ee015f53334d641a8b3f6b4f3b95a020513b0ec5667ad7e25c8a5ed8d9ea323f",
+          "bytes": 21552
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+          "bytes": 2436592
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs": [
+        {
+          "path": ".cache/ai5/markov.json",
+          "sha256": "9ee957ab57ca8595a173b6d422f69cd8dcfd9382fbd4f22eca0613828b23e611",
+          "size_mtime_ns": [
+            3523,
+            1793497425618745948
+          ]
+        },
+        {
+          "path": ".cache/ai5/markov.npz",
+          "sha256": "ff914575313ee9b6e4025dac0e3ff7aea146982e9ad72f840a33600653f315b7",
+          "size_mtime_ns": [
+            9145,
+            1793497425617481352
+          ]
+        },
+        {
+          "path": ".cache/ai5/mixing.json",
+          "sha256": "c0ec7d57e1b76d2ae06e0d7b1e6940d6e0fe2a5693d0dc4322c8c16bd3ad69fa",
+          "size_mtime_ns": [
+            1256,
+            1793497442987888424
+          ]
+        },
+        {
+          "path": ".cache/ai5/mixing.npz",
+          "sha256": "d59b984e503001d0a3f6bd9585bf3c7e30c34e0c94030153523d65d3cd79dcd3",
+          "size_mtime_ns": [
+            4410,
+            1793497442986797970
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "en-final",
+      "movie_sha256": "527a2aeb06b91ea6004823b36a84e0ab2e99916b0bb8fd5cae149f1adf782cc4",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "duration": 188.132031,
+      "decoded": 2822,
+      "selected": 542,
+      "unique": 449,
+      "duplicate_selected": 93,
+      "max_selected_gap": 1.0000000000000142,
+      "unviewed_encoded_frames": 2280,
+      "audit_adjacent_provenance": null,
+      "source_file_freeze": [
+        {
+          "path": "videos/ai/ai5/s12_markov.py",
+          "sha256": "6c7ee6d58ffa4096340c3c5be933d9006d48879f3561acdc277fc45fedc7e30e",
+          "bytes": 21774
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+          "bytes": 2436592
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs": [
+        {
+          "path": ".cache/ai5/markov.json",
+          "sha256": "9ee957ab57ca8595a173b6d422f69cd8dcfd9382fbd4f22eca0613828b23e611",
+          "size_mtime_ns": [
+            3523,
+            1793497425618745948
+          ]
+        },
+        {
+          "path": ".cache/ai5/markov.npz",
+          "sha256": "ff914575313ee9b6e4025dac0e3ff7aea146982e9ad72f840a33600653f315b7",
+          "size_mtime_ns": [
+            9145,
+            1793497425617481352
+          ]
+        },
+        {
+          "path": ".cache/ai5/mixing.json",
+          "sha256": "c0ec7d57e1b76d2ae06e0d7b1e6940d6e0fe2a5693d0dc4322c8c16bd3ad69fa",
+          "size_mtime_ns": [
+            1256,
+            1793497442987888424
+          ]
+        },
+        {
+          "path": ".cache/ai5/mixing.npz",
+          "sha256": "d59b984e503001d0a3f6bd9585bf3c7e30c34e0c94030153523d65d3cd79dcd3",
+          "size_mtime_ns": [
+            4410,
+            1793497442986797970
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "zh-final",
+      "movie_sha256": "dd6719a5eaa0c8a0ae30c43dc86ae63ce9302881c7e0c7322f43983ec52717df",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "duration": 192.998698,
+      "decoded": 2895,
+      "selected": 552,
+      "unique": 463,
+      "duplicate_selected": 89,
+      "max_selected_gap": 1.0,
+      "unviewed_encoded_frames": 2343,
+      "audit_adjacent_provenance": null,
+      "source_file_freeze": [
+        {
+          "path": "videos/ai/ai5/s12_markov.py",
+          "sha256": "6c7ee6d58ffa4096340c3c5be933d9006d48879f3561acdc277fc45fedc7e30e",
+          "bytes": 21774
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+          "bytes": 2436592
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs": [
+        {
+          "path": ".cache/ai5/markov.json",
+          "sha256": "9ee957ab57ca8595a173b6d422f69cd8dcfd9382fbd4f22eca0613828b23e611",
+          "size_mtime_ns": [
+            3523,
+            1793497425618745948
+          ]
+        },
+        {
+          "path": ".cache/ai5/markov.npz",
+          "sha256": "ff914575313ee9b6e4025dac0e3ff7aea146982e9ad72f840a33600653f315b7",
+          "size_mtime_ns": [
+            9145,
+            1793497425617481352
+          ]
+        },
+        {
+          "path": ".cache/ai5/mixing.json",
+          "sha256": "c0ec7d57e1b76d2ae06e0d7b1e6940d6e0fe2a5693d0dc4322c8c16bd3ad69fa",
+          "size_mtime_ns": [
+            1256,
+            1793497442987888424
+          ]
+        },
+        {
+          "path": ".cache/ai5/mixing.npz",
+          "sha256": "d59b984e503001d0a3f6bd9585bf3c7e30c34e0c94030153523d65d3cd79dcd3",
+          "size_mtime_ns": [
+            4410,
+            1793497442986797970
+          ]
+        }
+      ]
+    }
+  ],
+  "findings_resolved": [
+    "First empirical occupancy bar can be100percent:0.6display range overprinted header/counter; range1.0andstationaryreference mapping corrected.",
+    "Retained proof rows doubled during later reveals; transform=False applied to returned step(0/1/2), not ladder factory."
+  ],
+  "remaining_limits": [
+    "Continuous perceptual playback, audio/narration listening/synchronization, production resolution/frame rate and unsampled encoded frames remain unverified.",
+    "Exact PNG inheritance only; file decoding is not manual frame viewing.",
+    "Known skipped-animation endpoint updater distinction: step1 endpoint retains q100percent while motion actually transitions correctly to u; endpoint alone is not motion proof."
+  ],
+  "rejected_intermediate_attempt": [
+    {
+      "lang": "en",
+      "status": "failed",
+      "error": "TypeError: ladder() got an unexpected keyword argument 'transform'",
+      "warnings": [],
+      "result_sha256": "4e5029e1475b0149dac71f8f83737fd4a40024b4ffe78194f4a055a1de07b6a9",
+      "source_sha256": "fb63ce7b8cb7c73591ba86b843f596675e7656457fcb6bc816128e76635c5b74",
+      "resolution": "Removed unsupported transform keyword from ladder factory; passed transform=False to three returned step calls; successful current movies reviewed separately."
+    },
+    {
+      "lang": "zh",
+      "status": "failed",
+      "error": "TypeError: ladder() got an unexpected keyword argument 'transform'",
+      "warnings": [],
+      "result_sha256": "5b51aef5bda34315bab63eda675a5aebc66a6987c451de1641b4ce4d185a95a5",
+      "source_sha256": "fb63ce7b8cb7c73591ba86b843f596675e7656457fcb6bc816128e76635c5b74",
+      "resolution": "Removed unsupported transform keyword from ladder factory; passed transform=False to three returned step calls; successful current movies reviewed separately."
+    }
+  ],
+  "endpoint_regression": [
+    {
+      "lang": "en",
+      "before_result_sha256": "09b324b1ae80ee3703481ed76fd5fae024dc9e5defe5d3924081f0e996b74bae",
+      "after_result_sha256": "5ccdfb85a9cc385f2f220511511241e53c6a0c5a2026a3ec9f09c39ae8ba7f78",
+      "before_status": "passed",
+      "before_warnings": [],
+      "after_status": "passed",
+      "after_warnings": [],
+      "narration_identical": true,
+      "duration_identical": true,
+      "inputs_identical": true,
+      "exact_inherited": 14,
+      "changed": 2,
+      "baseline_complete_review_sha256": "261466250b573a716e5897379bc5141aa2118475ccb2ac2c59e2967e1d6f6288"
+    },
+    {
+      "lang": "zh",
+      "before_result_sha256": "155db1bd4b7f7b8416f3ebc6cac03d0e118ac2cd457e0afed7d9315c46cd8e21",
+      "after_result_sha256": "ee65a614b7ec53d0197cfb8f4f11f08aa3e7a0f126fb7c614866e8e741b47395",
+      "before_status": "passed",
+      "before_warnings": [],
+      "after_status": "passed",
+      "after_warnings": [],
+      "narration_identical": true,
+      "duration_identical": true,
+      "inputs_identical": true,
+      "exact_inherited": 14,
+      "changed": 2,
+      "baseline_complete_review_sha256": "261466250b573a716e5897379bc5141aa2118475ccb2ac2c59e2967e1d6f6288"
+    }
+  ]
+}

@@ -1,0 +1,233 @@
+{
+  "case": "zh-Bell",
+  "before": {
+    "case": "zh-Bell",
+    "movie_sha256": "c38104ab47b51f0ecad6d42820610dbef334759754f6523ee024bfa90cf8f8f5",
+    "selected_times": 645,
+    "unique_images_actually_viewed": 547,
+    "exact_duplicate_selected_times": 98,
+    "pages_actually_viewed": 69,
+    "sheet_image_scale": "640x360 per image",
+    "native_followups": [
+      {
+        "file": "audit/frames/0000978_000065.200s.png",
+        "sha256": "b18455af0d7603c95c94e901a804ff15896ee3bc022201eff8beb4cb3410f432",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      },
+      {
+        "file": "audit/frames/0001428_000095.200s.png",
+        "sha256": "55984f86dd7985d44a1da7cfb3600971b0bc5ebb4a965009ab65496181372da3",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      },
+      {
+        "file": "audit/frames/0001881_000125.400s.png",
+        "sha256": "88b4aa66ffc2361271cd6fc4f7cfb9e1f18814d5562c41071ae76d9425947f73",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      },
+      {
+        "file": "audit/frames/0002205_000147.000s.png",
+        "sha256": "fb6abcefedd4121f09cde6182d656c79c08d5987ac012c7d39d9d164da28155c",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      },
+      {
+        "file": "audit/frames/0002229_000148.600s.png",
+        "sha256": "ad7da9844ce7081a721d70997d3b1c0e550bcafecc3e5da4a669c2eaeaed2245",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      },
+      {
+        "file": "audit/frames/0002272_000151.466s.png",
+        "sha256": "675c65fcac119261274df31bff4bd58493ae3c0bad6827787658e410e4f6a54a",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      },
+      {
+        "file": "audit/frames/0003194_000212.933s.png",
+        "sha256": "40d984eb2b4cdfeeaa6b4c47ab4a8acb28b0fabbbecdc3cb0acd397d14a211dd",
+        "size": [
+          854,
+          480
+        ],
+        "viewed": true
+      }
+    ],
+    "audit_sha256": "9666fe0fb36fd110cb0b64cbffeda18e3d9f5ba3b8eec89909a7a19c69f525c2",
+    "map_sha256": "78ce9cc0ba8a68c996466946a460a0f423c6b05e8f01d7ba3f2adc5d6088ff3c",
+    "raw_status": "passed",
+    "raw_warnings": [],
+    "findings": [
+      {
+        "id": "BELL-REVEAL-01",
+        "status": "confirmed-before-repair",
+        "description": "Two retained-row copies overlap originals during convolution steps1/2; every encoded frame across both windows reviewed separately."
+      }
+    ],
+    "other_findings": "No additional corrective defect in viewed states. Nonnegative true-clipped density and n\u22121 convolution caption fixed prior to these movies; observed coherent binomial/CLT/density/rate sequence.",
+    "continuous_perceptual_playback": false,
+    "audio_listening_sync": false,
+    "full_resolution_motion": false,
+    "coverage_limits": [
+      "Every source frame was decoded and analyzed, not visually inspected.",
+      "Only listed native-resolution times were extracted; review of those images is pending.",
+      "Low-resolution RGB thresholds can miss small or subtle spatial/channel changes.",
+      "Maximum-gap samples cover slow/subthreshold changes only at the listed times, not continuously.",
+      "Static interval midpoints are samples, not proof that their full intervals are unchanged.",
+      "Full perceptual playback and listening remain unverified."
+    ],
+    "unextracted_gaps_ledger": "audit/result.json#unextracted_frame_gaps"
+  },
+  "current_movie": {
+    "path": "/workspace/explainer-videos/renders/qa/series/ai5/zh/Bell_motion/media/videos/480p15/Bell.mp4",
+    "sha256": "4b297a1321760e9081c2937599f84c9ee41c5ad4fc0ebfc5a92ace55fe6908e4",
+    "bytes": 1856283
+  },
+  "raw_status": "passed",
+  "raw_warnings": [],
+  "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+  "current_source_at_review": {
+    "videos/ai/ai5/s02_bell.py": "c4025027c65a62e4bb5f904802cacb357a2927b7f43434cda7adafe05dd42898",
+    "videos/ai/ai5/common.py": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+    "videos/ai/ai5/plotting.py": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+    "videos/ai/ai5/zh_lines.py": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+    "videos/ai/ai_text_zh.json": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+    "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+  },
+  "inputs": {
+    ".cache/ai5/lln.json": {
+      "sha256": "c1de442e94bf10f55f4175e5d07685f40a9a70900a84e99dd837476c84e3fad7",
+      "bytes": 869,
+      "mtime_ns": 1793497351934615521,
+      "raw_record_stat": [
+        869,
+        1793497351934615521
+      ],
+      "stat_matches": true,
+      "equals_before_sha256": true
+    },
+    ".cache/ai5/lln.npz": {
+      "sha256": "f1194f901932cf579012c5e43f38ec79cd0d3f9103a37b938f1fc54b0457bcaa",
+      "bytes": 4866,
+      "mtime_ns": 1793497351934150312,
+      "raw_record_stat": [
+        4866,
+        1793497351934150312
+      ],
+      "stat_matches": true,
+      "equals_before_sha256": true
+    },
+    ".cache/ai5/galton.json": {
+      "sha256": "800c710a355915e025bec3fbd84d936a6d8ff4ef3799a277ba9977ee1d880a9d",
+      "bytes": 914,
+      "mtime_ns": 1793497348701914816,
+      "raw_record_stat": [
+        914,
+        1793497348701914816
+      ],
+      "stat_matches": true,
+      "equals_before_sha256": true
+    },
+    ".cache/ai5/galton.npz": {
+      "sha256": "f2b4db4767a7939b910ebfbe4ab224ee45c3f2e4c628e69cbadae68c4fca73a7",
+      "bytes": 4498,
+      "mtime_ns": 1793497348701242062,
+      "raw_record_stat": [
+        4498,
+        1793497348701242062
+      ],
+      "stat_matches": true,
+      "equals_before_sha256": true
+    },
+    ".cache/ai5/clt.json": {
+      "sha256": "04fba7203756cefc67a8433266ac145b0e9e7e77a8d1fb6cfe67717aa8ffaf3b",
+      "bytes": 895,
+      "mtime_ns": 1793497340201860575,
+      "raw_record_stat": [
+        895,
+        1793497340201860575
+      ],
+      "stat_matches": true,
+      "equals_before_sha256": true
+    },
+    ".cache/ai5/clt.npz": {
+      "sha256": "01bb53f7321c54a2e2efc270fb795847fb0ec048421c9811a1acd69f752ed6ea",
+      "bytes": 1524,
+      "mtime_ns": 1793497340201350400,
+      "raw_record_stat": [
+        1524,
+        1793497340201350400
+      ],
+      "stat_matches": true,
+      "equals_before_sha256": true
+    },
+    ".cache/ai5/conv.json": {
+      "sha256": "c368b553bb6976e754189cfaf0721c16f40f3b31c69880aad7fe41118c09640a",
+      "bytes": 1134,
+      "mtime_ns": 1793497345069185557,
+      "raw_record_stat": [
+        1134,
+        1793497345069185557
+      ],
+      "stat_matches": true,
+      "equals_before_sha256": true
+    },
+    ".cache/ai5/conv.npz": {
+      "sha256": "e5a64f6c92ec93b3c22130185c70f9d730635fec9f516925b61fde6f3fd4fc17",
+      "bytes": 11717,
+      "mtime_ns": 1793497345068345287,
+      "raw_record_stat": [
+        11717,
+        1793497345068345287
+      ],
+      "stat_matches": true,
+      "equals_before_sha256": true
+    }
+  },
+  "current_selected_times": 645,
+  "exact_PNG_inherited_selected_times": 629,
+  "new_selected_unique_images_actually_viewed": 16,
+  "new_selected_pages_actually_viewed": 2,
+  "every_encoded_reveal_times": 44,
+  "every_encoded_reveal_ranges": [
+    [
+      1873,
+      1894
+    ],
+    [
+      2197,
+      2218
+    ]
+  ],
+  "additional_times_beyond_current_selected": 27,
+  "union_current_selected_and_dense_times": 672,
+  "largest_selected_time_gap": 1.0,
+  "all_new_reveal_pages_viewed": true,
+  "narration_records_exact_equal": true,
+  "duration_exact_equal": true,
+  "all_encoded_timestamps_exact_equal": true,
+  "all_input_SHA256_equal": true,
+  "verdict": "Accepted for this selected-image and bounded every-frame scope; observed copy-overlap defects resolved, no additional corrective visual defect.",
+  "continuous_perceptual_playback": false,
+  "listening_sync": false
+}

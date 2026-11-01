@@ -1,0 +1,70 @@
+[
+  {
+    "source_frame": 845,
+    "time": 56.332682,
+    "native_size": [
+      854,
+      480
+    ],
+    "before": {
+      "file": "evidence/reveal1-before.png",
+      "sha256": "5468eecb0a657f4a4efe91e0c28af45a02d3baebb8a2e38c3734d295d0b0da39"
+    },
+    "after": {
+      "file": "evidence/reveal1-after.png",
+      "sha256": "1b5d3a763bc8dea99554151e773b9f3190c680f183cf685e773e23cb8dd2382b"
+    },
+    "actual_view": "Both original and repaired states directly viewed at native854x480; complete windows also reviewed on640x360 tiles/exact-PNG mappings."
+  },
+  {
+    "source_frame": 937,
+    "time": 62.466016,
+    "native_size": [
+      854,
+      480
+    ],
+    "before": {
+      "file": "evidence/reveal2-before.png",
+      "sha256": "adb3aa67d071b61e95d8973d7a5ab797af87eee98307029266a82ef3857c9d77"
+    },
+    "after": {
+      "file": "evidence/reveal2-after.png",
+      "sha256": "9ca50c42861f90d66a5fa80d2b9097e2c05c1683e5248cffdbf15f3bbbad9d25"
+    },
+    "actual_view": "Both original and repaired states directly viewed at native854x480; complete windows also reviewed on640x360 tiles/exact-PNG mappings."
+  },
+  {
+    "source_frame": 1046,
+    "time": 69.732682,
+    "native_size": [
+      854,
+      480
+    ],
+    "before": {
+      "file": "evidence/reveal3-before.png",
+      "sha256": "6008614544b69fb89e76d8118431bf8724f45ef9a9c3308bb0697b965f0911c6"
+    },
+    "after": {
+      "file": "evidence/reveal3-after.png",
+      "sha256": "7e1bf5c9d799616893a4cf33d5ebd87f85e2ae917b459e2d24a30eb00f45f30f"
+    },
+    "actual_view": "Both original and repaired states directly viewed at native854x480; complete windows also reviewed on640x360 tiles/exact-PNG mappings."
+  },
+  {
+    "source_frame": 1200,
+    "time": 79.999349,
+    "native_size": [
+      854,
+      480
+    ],
+    "before": {
+      "file": "evidence/reveal4-before.png",
+      "sha256": "c8aea11703a41ef9fde0a58dc11b976796a6f8aec03b29bb4e44d21953db001b"
+    },
+    "after": {
+      "file": "evidence/reveal4-after.png",
+      "sha256": "e05e955645e2b8b442801342ffcfe188637121682576eab1a048e93a3c23ec63"
+    },
+    "actual_view": "Both original and repaired states directly viewed at native854x480; complete windows also reviewed on640x360 tiles/exact-PNG mappings."
+  }
+]

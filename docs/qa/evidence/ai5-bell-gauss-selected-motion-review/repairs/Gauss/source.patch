@@ -1,0 +1,20 @@
+--- before/videos/ai/ai5/s03_gauss.py
++++ after/videos/ai/ai5/s03_gauss.py
+@@ -144,13 +144,13 @@
+             vo.wait_until("a")
+             self.play(FadeIn(pic[4:]))
+             vo.wait_until("b")
+-            step(1)
++            step(1, transform=False)
+             vo.wait_until("c")
+-            step(2)
++            step(2, transform=False)
+             vo.wait_until("d")
+-            step(3)
++            step(3, transform=False)
+             vo.wait_until("e")
+-            step(4)
++            step(4, transform=False)
+             self.play(FadeIn(res))
+         self.wait(0.3)
+         self.clear_scene()

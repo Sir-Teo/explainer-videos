@@ -1,0 +1,18 @@
+{
+  "frozen_at": "2026-11-01T02:59:21.989249+00:00",
+  "before_sha256": "f559484126011f7aae46fe30b932eaee37f406615d764029121524ae80db7249",
+  "after_sha256": "c4025027c65a62e4bb5f904802cacb357a2927b7f43434cda7adafe05dd42898",
+  "only_two_step_keywords_added": [
+    "step(1, transform=False)",
+    "step(2, transform=False)"
+  ],
+  "all_other_AST_identical": true,
+  "narration_bookmarks_data_geometry_timings_unchanged": true,
+  "shared_ladder_untouched": true,
+  "before_review": "/workspace/runtime/ai5-bell-gauss-selected-motion-review",
+  "before_every_encoded_frames": {
+    "en-Bell": 44,
+    "zh-Bell": 44
+  },
+  "actual_appearance_after_fix": "Pending fresh root bilingual endpoints/movies and exact-pixel regression."
+}

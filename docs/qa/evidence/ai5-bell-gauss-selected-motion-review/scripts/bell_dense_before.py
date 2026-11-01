@@ -1,0 +1,5 @@
+from pathlib import Path
+import json,importlib.util
+O=Path('/workspace/runtime/ai5-bell-gauss-selected-motion-review');spec=importlib.util.spec_from_file_location('qm','/workspace/explainer-videos/tools/qa_motion.py');qm=importlib.util.module_from_spec(spec);spec.loader.exec_module(qm)
+for case,ranges in [('en-Bell',[(1776,1797),(2094,2115)]),('zh-Bell',[(1873,1894),(2197,2218)])]:
+ D=O/case;sn=json.loads((D/'snapshot.json').read_text());movie=Path(sn['movie']['path']);assert qm.sha256(movie)==sn['movie']['sha256'];_,times=qm.probe(movie);frames=[{'source_frame':i,'time':times[i],'reasons':[f'every-encoded-reveal-{j+1}']} for j,(lo,hi) in enumerate(ranges) for i in range(lo,hi+1)];F=D/'dense-reveals-before';qm.extract(movie,F/'frames',frames);pages=qm.sheets(F,frames);(F/'map.json').write_text(json.dumps({'movie_sha256':qm.sha256(movie),'ranges_inclusive':ranges,'frames':frames,'pages':pages,'viewed_pages':[],'scope':'All44encodedframes across2copy-reveal windows, beforeauthorizedlocalfix.'},indent=2)+'\n');print(case,len(frames),len(pages),flush=True)

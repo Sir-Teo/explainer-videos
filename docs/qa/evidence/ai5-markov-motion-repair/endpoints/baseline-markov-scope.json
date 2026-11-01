@@ -1,0 +1,575 @@
+{
+  "source_complete_review_sha256": "261466250b573a716e5897379bc5141aa2118475ccb2ac2c59e2967e1d6f6288",
+  "cases": [
+    {
+      "lang": "en",
+      "scene": "Markov",
+      "freeze_json": "/workspace/runtime/ai5-bayes-maxent-tails-sampling-markov-endpoints/en/Markov/freeze.json",
+      "freeze_sha256": "d002e776fc5f926ac15e85fbce270194f5cb8b611a52e5886dc269d676f637e6",
+      "raw_result_sha256": "09b324b1ae80ee3703481ed76fd5fae024dc9e5defe5d3924081f0e996b74bae",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "fingerprint_at_render": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+      "source_at_review": {
+        "videos/ai/ai5/s12_markov.py": "ee015f53334d641a8b3f6b4f3b95a020513b0ec5667ad7e25c8a5ed8d9ea323f",
+        "videos/ai/ai5/common.py": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "videos/ai/ai5/zh_lines.py": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "videos/ai/ai_text_zh.json": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c",
+        "explainer/ai/viz.py": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16"
+      },
+      "input_identities": {
+        ".cache/ai5/markov.json": {
+          "sha256": "9ee957ab57ca8595a173b6d422f69cd8dcfd9382fbd4f22eca0613828b23e611",
+          "bytes": 3523,
+          "mtime_ns": 1793497425618745948,
+          "record_signature_matches": true
+        },
+        ".cache/ai5/markov.npz": {
+          "sha256": "ff914575313ee9b6e4025dac0e3ff7aea146982e9ad72f840a33600653f315b7",
+          "bytes": 9145,
+          "mtime_ns": 1793497425617481352,
+          "record_signature_matches": true
+        },
+        ".cache/ai5/mixing.json": {
+          "sha256": "c0ec7d57e1b76d2ae06e0d7b1e6940d6e0fe2a5693d0dc4322c8c16bd3ad69fa",
+          "bytes": 1256,
+          "mtime_ns": 1793497442987888424,
+          "record_signature_matches": true
+        },
+        ".cache/ai5/mixing.npz": {
+          "sha256": "d59b984e503001d0a3f6bd9585bf3c7e30c34e0c94030153523d65d3cd79dcd3",
+          "bytes": 4410,
+          "mtime_ns": 1793497442986797970,
+          "record_signature_matches": true
+        }
+      },
+      "sheet": {
+        "path": "/workspace/runtime/ai5-bayes-maxent-tails-sampling-markov-endpoints/en/Markov/sheet.png",
+        "sha256": "1b7eb9cfd7d599c752e6a403568385b06cb8671709d4c094be64888a58f03654",
+        "all_thumbnails_actually_viewed": true
+      },
+      "native_image_count": 5,
+      "frames": [
+        {
+          "file": "000_00001.0s.png",
+          "time": 1.0,
+          "reason": "narration-end",
+          "sha256": "c70a87c9de041380cfee51170f863b433d5da52dbe4e01e52bd2b6ea2b06fc91",
+          "rgb_sha256": "c84f582edaaa6ed7b48a25e4f84e56c468135c7bcbb88aecaa04ff4ab2797f8e",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "001_00004.9s.png",
+          "time": 4.9314583333333335,
+          "reason": "narrated-hold-6.8s",
+          "sha256": "08ff47e841944781ab70d3f5108a1be376b536cce899a0c87e39493783f1b92c",
+          "rgb_sha256": "be5008a1c963ef5e3699c0dee6122efdcdf598f4691b989657885a8a26eba75c",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "002_00013.7s.png",
+          "time": 13.719241639027084,
+          "reason": "narrated-hold-12.9s",
+          "sha256": "4ef174e132fbe2141fcd382cca1959509b296b3887af271d0da2a2e0210ce39a",
+          "rgb_sha256": "c608585fc6e9c04e9210a65eee529f1452773a9277ed13288e04466628514b29",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": true
+        },
+        {
+          "file": "003_00033.1s.png",
+          "time": 33.0645152708679,
+          "reason": "narration-end",
+          "sha256": "4fb0987001a0a9c85a081a1f3c7cd31cc69f844906dcb1f68d35b24199def03f",
+          "rgb_sha256": "47e69a762e14dbb97fb1dac6278aac82d127eb6a30b113493a693fa4d8b78355",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "004_00046.0s.png",
+          "time": 45.99451527086784,
+          "reason": "narration-end",
+          "sha256": "3018c428984fbfd320565b7bdd9dbad2df8f70b5eea7af0be3e3061f524c312d",
+          "rgb_sha256": "d5f0d6fcdb2eae91d10afdf46bb75862b5ce9b7b24499a7cf8a75d06819fefdb",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "005_00051.3s.png",
+          "time": 51.28672360420123,
+          "reason": "narrated-hold-7.6s",
+          "sha256": "9bc184b7cff6aee74982fdc6bbef6d3a44e33b0ef439147b59f099ae3af5f83a",
+          "rgb_sha256": "b455d86239492b155e8a12d801de36e0ec91d5f72d13c2a5903594c822b068ee",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "006_00060.9s.png",
+          "time": 60.926670694148314,
+          "reason": "narration-end",
+          "sha256": "3829a7b838f8a960d48b40cceb6a661efeb6667ccac2b98c2db887918edb2471",
+          "rgb_sha256": "bfe4216260089aabe9edda264289ad44a791253df5150447034e516f8bc8074d",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": true
+        },
+        {
+          "file": "007_00073.0s.png",
+          "time": 73.03484860420123,
+          "reason": "narrated-hold-4.6s",
+          "sha256": "0222ac545aa80c316a7a1b2c77576d4999e56ffe8b44a08bbbd4b1ce21b980f6",
+          "rgb_sha256": "5dc3d8a80fbd46984455a7fda7e415339c062ee47396fb0bd274b16df3a633d3",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "008_00078.5s.png",
+          "time": 78.50731592446267,
+          "reason": "narrated-hold-2.4s",
+          "sha256": "e140e7ad74e33b5df7c685f089076d6394339c8a4c38c6fb95821fe1b8a8a7a5",
+          "rgb_sha256": "9f355e780d10c02986b88ea84a1959e1be87976d7e4ac414c196d7df5b47960a",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": true
+        },
+        {
+          "file": "009_00087.5s.png",
+          "time": 87.54345426868929,
+          "reason": "narrated-hold-2.6s",
+          "sha256": "49d3f7400d32da8bad13dd2728124814185faa774118208fa24e8b6764951e9f",
+          "rgb_sha256": "b3768fce9a5cd40f1027836f059a3a6f88cdbf5d98c4d097db3a1a22fa893528",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "010_00091.2s.png",
+          "time": 91.15225056498555,
+          "reason": "narration-end",
+          "sha256": "f6cfb70c682c4b1eba79e1e2ff1b713610ea85f108b1d16af2dbc25f31ea165a",
+          "rgb_sha256": "b7d11a2d43e7ea0ff1ac3c8631a782c46348f64c2fd6a2e1f049a14edfc3ddbb",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "011_00102.3s.png",
+          "time": 102.3200152708679,
+          "reason": "narrated-hold-3.8s",
+          "sha256": "b4651e99f3ee2670de6bfa5d732d82474c691a240a7f0f133499000239fa68f7",
+          "rgb_sha256": "90c50ac9c0f4264822a5ba8bca37406bd1b366faffe865107da26194edf5d091",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "012_00107.8s.png",
+          "time": 107.83853378938642,
+          "reason": "narrated-hold-7.3s",
+          "sha256": "a68ef2ec36ec369b0bc7e5a39e3c56882ee4a821bea864e00ddac4e9418ac797",
+          "rgb_sha256": "920c37b317519b58d496a59ba831b660df1358535dcfe73ee96966475fd4eec6",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "013_00122.3s.png",
+          "time": 122.3264125772652,
+          "reason": "narration-end",
+          "sha256": "42490e0d562e6062a9a4230a6dff5995eef8b3772fd99baac8c6d3b327bc157c",
+          "rgb_sha256": "bc829eaac3ae6429de38e571cda816a8767cff96b75532405fb67c4881a7eb54",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": true
+        },
+        {
+          "file": "014_00144.8s.png",
+          "time": 144.83664027086792,
+          "reason": "narrated-hold-7.1s",
+          "sha256": "a7d9eaa6bd812d30cfe7c2db29da95122fbff837500ac3684bec363d3195b91f",
+          "rgb_sha256": "9dae86e3ebed2693ef2440aaba3c5d5b339143d3c6b0b4a36a28f1f70dab420c",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "015_00172.7s.png",
+          "time": 172.70785566101537,
+          "reason": "narration-end",
+          "sha256": "8e0831e3cbf4253741b5cc212ca8221be011ec2cda950b74557fc7895c3b857c",
+          "rgb_sha256": "bf0ca949675172f5b3036529c2b9326dbbc5f4a2b1559ebe38e69fe30e36577e",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": true
+        }
+      ],
+      "review_checklist": [
+        "Three-state directed graph, edge values/arrows/selfloops and empirical frequency bars inspected.",
+        "Row convention, normalized transition matrix, stationary left eigenvector and numeric stationary probabilities inspected.",
+        "27-letter capped probability bars have explicit true-height tags; frequency outlines/TV plot inspected.",
+        "Detailed-balance summation correctly sums a row after swapping via balance; real English pair-flow asymmetry retained.",
+        "41-site potential/two-well trace, mixing-vs-relaxation log plot and displayed theoretical bounds inspected.",
+        "Step1 screenshot still showing q=100% is an endpoint consistency lead, not yet a demonstrated full-motion defect."
+      ],
+      "unreviewed_scope": [
+        "Every frame between endpoint samples",
+        "Continuous playback and perceptual transitions",
+        "Narration generation/listening/synchronization",
+        "Native1080 endpoints and full1080 motion",
+        "Not every glyph in non-native-follow-up frames was examined at854 width"
+      ]
+    },
+    {
+      "lang": "zh",
+      "scene": "Markov",
+      "freeze_json": "/workspace/runtime/ai5-bayes-maxent-tails-sampling-markov-endpoints/zh/Markov/freeze.json",
+      "freeze_sha256": "f352678b3c7021af96479b0e6d1059e3d32867133319fbaf7b83ebdb06f8cdcd",
+      "raw_result_sha256": "155db1bd4b7f7b8416f3ebc6cac03d0e118ac2cd457e0afed7d9315c46cd8e21",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "fingerprint_at_render": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+      "source_at_review": {
+        "videos/ai/ai5/s12_markov.py": "ee015f53334d641a8b3f6b4f3b95a020513b0ec5667ad7e25c8a5ed8d9ea323f",
+        "videos/ai/ai5/common.py": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+        "videos/ai/ai5/zh_lines.py": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+        "videos/ai/ai_text_zh.json": "36f44c1715e872cfed694bf43f9ff76611b41001795db3deeaefbf5fb036d98c",
+        "explainer/ai/viz.py": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16"
+      },
+      "input_identities": {
+        ".cache/ai5/markov.json": {
+          "sha256": "9ee957ab57ca8595a173b6d422f69cd8dcfd9382fbd4f22eca0613828b23e611",
+          "bytes": 3523,
+          "mtime_ns": 1793497425618745948,
+          "record_signature_matches": true
+        },
+        ".cache/ai5/markov.npz": {
+          "sha256": "ff914575313ee9b6e4025dac0e3ff7aea146982e9ad72f840a33600653f315b7",
+          "bytes": 9145,
+          "mtime_ns": 1793497425617481352,
+          "record_signature_matches": true
+        },
+        ".cache/ai5/mixing.json": {
+          "sha256": "c0ec7d57e1b76d2ae06e0d7b1e6940d6e0fe2a5693d0dc4322c8c16bd3ad69fa",
+          "bytes": 1256,
+          "mtime_ns": 1793497442987888424,
+          "record_signature_matches": true
+        },
+        ".cache/ai5/mixing.npz": {
+          "sha256": "d59b984e503001d0a3f6bd9585bf3c7e30c34e0c94030153523d65d3cd79dcd3",
+          "bytes": 4410,
+          "mtime_ns": 1793497442986797970,
+          "record_signature_matches": true
+        }
+      },
+      "sheet": {
+        "path": "/workspace/runtime/ai5-bayes-maxent-tails-sampling-markov-endpoints/zh/Markov/sheet.png",
+        "sha256": "201bf7194d1232196c94a8efc03ba9956d13ea5c09baadb2147bafc0b75b2efc",
+        "all_thumbnails_actually_viewed": true
+      },
+      "native_image_count": 5,
+      "frames": [
+        {
+          "file": "000_00001.0s.png",
+          "time": 1.0,
+          "reason": "narration-end",
+          "sha256": "c43bc63211999ca5877b812e3e57bca5e94e0dcf0e19a0b3ba7b181d7986be5e",
+          "rgb_sha256": "a51aa304e36bedb6caaff3f3e7265250f70d4728e05a6c5e1d03ec1bd40388d2",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "001_00005.3s.png",
+          "time": 5.310458333333333,
+          "reason": "narrated-hold-6.9s",
+          "sha256": "77a9f82fbfcf09bb5e9aa4503e38031529ca2b9722985b50faa7a54bc5c81757",
+          "rgb_sha256": "7d8a7042b1293071300a0f86bc3af3878bc0c3ef1aae867a216a7a5b100a3da0",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "002_00014.2s.png",
+          "time": 14.206619995107998,
+          "reason": "narrated-hold-11.3s",
+          "sha256": "e8fe325610fb6c88682911d7837f1ca61ca1e26a1010fa29ebe57dd0731914ed",
+          "rgb_sha256": "ca137ec9ab83397105adb27c4eabae0a1bc404ecd277f50dd622a25e474f9e88",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": true
+        },
+        {
+          "file": "003_00031.9s.png",
+          "time": 31.9335560980658,
+          "reason": "narration-end",
+          "sha256": "3d5c2f247fc4bbc6b7736ba08e04fce35744376825acdd94148f999af5291a66",
+          "rgb_sha256": "61370dd1f313ca8c59c4a0263cc2906aab5f3ccefb5755dd40a6557017cbe1a0",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "004_00044.9s.png",
+          "time": 44.86355609806574,
+          "reason": "narration-end",
+          "sha256": "b6e8971823e55c19dd7edfd593559a31d058b435c7443cee2e19dbef44f6c29e",
+          "rgb_sha256": "ebb346b8bd8c950ca6fc404d941145fcbebe86777e327161aad56ac9b0d18aa5",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "005_00050.7s.png",
+          "time": 50.7416810980658,
+          "reason": "narrated-hold-8.2s",
+          "sha256": "5313d2e53a0c2c94409db1920c47656a79156c154d7ea3f1afb6787a68bdc52b",
+          "rgb_sha256": "f62814e81e490245d87770c3371c2f2f5b66c18e26f54ea12628e84c9f28ba68",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "006_00061.0s.png",
+          "time": 60.95843585493683,
+          "reason": "narration-end",
+          "sha256": "aa7b6f62000f1ca5667c4daaa47c933325adb5384e1c280e39fb808c13d74bd7",
+          "rgb_sha256": "c4eb65737af63aaa145a10937605f1dbc6516bc607136c94f650862be80886b0",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": true
+        },
+        {
+          "file": "007_00075.6s.png",
+          "time": 75.55676443139913,
+          "reason": "narrated-hold-6.3s",
+          "sha256": "e6e05bd59acc3bc7de1c7dfdbe6b302d318db4e1214cd00e0bab8ebffac4003c",
+          "rgb_sha256": "56fde2d50283480511620806f352c5b0422b69a65655f7d9c43aafb94f0788a7",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "008_00082.7s.png",
+          "time": 82.71176948701087,
+          "reason": "narrated-hold-1.8s",
+          "sha256": "21c698c1cc71684e3140ba97283d1d6b1499c74be625776a75bd63262d8a2e75",
+          "rgb_sha256": "b0849e161428875f58825877f82cde0225c572a268a175e7de095559ab19879d",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": true
+        },
+        {
+          "file": "009_00091.3s.png",
+          "time": 91.349939355565,
+          "reason": "narrated-hold-2.4s",
+          "sha256": "c77b786bb839a9293d9efdd414a336c844f3645873c8e719c6d339b601fea1f2",
+          "rgb_sha256": "e85d5ceab9fa2bcb5ea65b4842f406b4baead11930e881785ad388edea6ddc98",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "010_00094.7s.png",
+          "time": 94.74427707042844,
+          "reason": "narration-end",
+          "sha256": "fa7fd43ec490fb751266e06ad5ab57e5a35d5f573fef923a3937b869e936d5c6",
+          "rgb_sha256": "ea290291181e6681ae93505300d118b9b5035c742c911f51f7cc07f4c653abf1",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "011_00106.9s.png",
+          "time": 106.9009310980658,
+          "reason": "narrated-hold-4.3s",
+          "sha256": "b4651e99f3ee2670de6bfa5d732d82474c691a240a7f0f133499000239fa68f7",
+          "rgb_sha256": "90c50ac9c0f4264822a5ba8bca37406bd1b366faffe865107da26194edf5d091",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "012_00112.9s.png",
+          "time": 112.88009475543977,
+          "reason": "narrated-hold-7.2s",
+          "sha256": "3815a113911d44947d68c34a0956ee6d9d4d378172ff97e3de273233d0eb336f",
+          "rgb_sha256": "286be159dc82ce64bd88a4843a5777c79081301a2620f552b4b65d4f2e538f6c",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "013_00127.3s.png",
+          "time": 127.25552448243675,
+          "reason": "narration-end",
+          "sha256": "d0baeceb2b2412c91906aaf5c58efde879ec7253dd1aa7794d9d76422d39420c",
+          "rgb_sha256": "922d861492acdaffe5859ae284146e08f8a432d9db373529654c96f0d29c0326",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": true
+        },
+        {
+          "file": "014_00150.9s.png",
+          "time": 150.94276443139916,
+          "reason": "narrated-hold-5.6s",
+          "sha256": "bfcf85326ad616a1acf3cb16bcf4a9aca581c1be41727990db75b7d26a12d400",
+          "rgb_sha256": "269ca559890bf385e9270b583ff44041149e9ee40cfce3c0633a5ed3ff525081",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": false
+        },
+        {
+          "file": "015_00176.4s.png",
+          "time": 176.40345033072208,
+          "reason": "narration-end",
+          "sha256": "30ddbd7af7279a105dc7236926354ff0ccb4ad7cf64046934ad0834a1a9c5fd9",
+          "rgb_sha256": "a9f99d9bdb3b93fa00ce9da2943d7bcba1423b6a098e6d01ddc12ad635034e5f",
+          "dimensions": [
+            854,
+            480
+          ],
+          "viewed_on_sheet": true,
+          "viewed_native": true
+        }
+      ],
+      "review_checklist": [
+        "Three-state directed graph, edge values/arrows/selfloops and empirical frequency bars inspected.",
+        "Row convention, normalized transition matrix, stationary left eigenvector and numeric stationary probabilities inspected.",
+        "27-letter capped probability bars have explicit true-height tags; frequency outlines/TV plot inspected.",
+        "Detailed-balance summation correctly sums a row after swapping via balance; real English pair-flow asymmetry retained.",
+        "41-site potential/two-well trace, mixing-vs-relaxation log plot and displayed theoretical bounds inspected.",
+        "Step1 screenshot still showing q=100% is an endpoint consistency lead, not yet a demonstrated full-motion defect."
+      ],
+      "unreviewed_scope": [
+        "Every frame between endpoint samples",
+        "Continuous playback and perceptual transitions",
+        "Narration generation/listening/synchronization",
+        "Native1080 endpoints and full1080 motion",
+        "Not every glyph in non-native-follow-up frames was examined at854 width"
+      ]
+    }
+  ],
+  "related_findings": [
+    {
+      "id": "endpoint-updater-consistency",
+      "classification": "unresolved capture/playback distinction; not a claimed continuous-animation bug",
+      "cases": [
+        "en/Markov",
+        "zh/Markov",
+        "en/MaxEnt",
+        "zh/MaxEnt"
+      ],
+      "native_evidence": [
+        "en/Markov/008_00078.5s.png",
+        "zh/Markov/008_00082.7s.png"
+      ],
+      "other_sheet_evidence": [
+        "en/MaxEnt/009_00091.8s.png",
+        "zh/MaxEnt/009_00089.7s.png"
+      ],
+      "impact": "Markov step1 still visually shows q=100% although TVplot advances; MaxEnt step60/mean4.498 still shows uniform bars, with next endpoint correct. These could be skipped-animation/updater capture artifacts.",
+      "proposal": "Verify held states and transitions in actual full-motion movie before classifying cause or editing scene/shared QA code."
+    }
+  ]
+}

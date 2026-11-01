@@ -1,0 +1,104 @@
+{
+  "case": "zh-Gauss",
+  "recorded_at": "2026-11-01T03:08:14.944053+00:00",
+  "movie_sha256": "10543fe33e9bedfa34adcef195d403d60a8a4034570126e28ca22bb36c19fe01",
+  "selected_times": 438,
+  "unique_images_actually_viewed": 354,
+  "exact_duplicate_selected_times": 84,
+  "pages_actually_viewed": 45,
+  "sheet_image_scale": "640x360 per image",
+  "native_followups": [
+    {
+      "file": "audit/frames/0000476_000031.733s.png",
+      "sha256": "ca868a3f6cb4455d8159414872981b845f2d0bc610f1acd296c678330b990f9b",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0000848_000056.533s.png",
+      "sha256": "768e4e26ab305def056aa7c0b31b06d4a98f93c4fb9e6f9b4a2506adb7438cb7",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0001046_000069.733s.png",
+      "sha256": "fb144be4269e238cba09f2d1fbcd3b4f411c306e1221c0bedad6d295541fcba1",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0001152_000076.800s.png",
+      "sha256": "5015adc8352d4199f3ace940ce43615bb604b3123be8ba19a7f97dcb5b489ae1",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0001193_000079.533s.png",
+      "sha256": "28ca29677f3eceadc2ff4a1dc16b5e96f937301861723b35b1b1b49884614b5a",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0001417_000094.466s.png",
+      "sha256": "c221d5452ae9a540b84b365b7eb849ce3bbe8c29971d761b1ccd12f5c0225114",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0002247_000149.799s.png",
+      "sha256": "112469b5d7daa4ef3766f3e6f621bb871e2e6d0e0eab4cf6d44dd5138c1badde",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    }
+  ],
+  "audit_sha256": "63a9a24f908b261a9414f332adba08aedc356cf5130aaf50c47280952c40fd13",
+  "map_sha256": "15af05e5238c7777d9e795d6cad7f8b50bcfeeddae7262fe42c777a555996117",
+  "raw_status": "needs-review",
+  "raw_warnings": [
+    {
+      "kind": "source-changed-during-render"
+    }
+  ],
+  "source_linkage": "Direct module source snapshotted at review; parent has kept Bell/Gauss frozen. Historical aggregate warning retained. Not a blanket current-fingerprint assertion.",
+  "findings": [
+    {
+      "id": "GAUSS-REVEAL-01",
+      "status": "confirmed-before-repair",
+      "description": "Four retained-row copies overlap their original glyphs during derive steps1\u20134. All four visible in chronological selected images; critical original native evidence retained. Bounded four transform=False keyword repair now frozen; new artifact review pending."
+    }
+  ],
+  "other_findings": "No additional corrective visual defect in viewed states. Settled Gaussian/conditional formulas, empirical table, scatter/ellipse mapping, regression and application cards remain readable.",
+  "continuous_perceptual_playback": false,
+  "audio_listening_sync": false,
+  "full_resolution_motion": false,
+  "unextracted_gaps_ledger": "audit/result.json#unextracted_frame_gaps",
+  "coverage_limits": [
+    "Every source frame was decoded and analyzed, not visually inspected.",
+    "Only listed native-resolution times were extracted; review of those images is pending.",
+    "Low-resolution RGB thresholds can miss small or subtle spatial/channel changes.",
+    "Maximum-gap samples cover slow/subthreshold changes only at the listed times, not continuously.",
+    "Static interval midpoints are samples, not proof that their full intervals are unchanged.",
+    "Full perceptual playback and listening remain unverified."
+  ]
+}

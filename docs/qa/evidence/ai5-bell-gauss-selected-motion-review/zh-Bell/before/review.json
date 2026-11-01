@@ -1,0 +1,98 @@
+{
+  "case": "zh-Bell",
+  "movie_sha256": "c38104ab47b51f0ecad6d42820610dbef334759754f6523ee024bfa90cf8f8f5",
+  "selected_times": 645,
+  "unique_images_actually_viewed": 547,
+  "exact_duplicate_selected_times": 98,
+  "pages_actually_viewed": 69,
+  "sheet_image_scale": "640x360 per image",
+  "native_followups": [
+    {
+      "file": "audit/frames/0000978_000065.200s.png",
+      "sha256": "b18455af0d7603c95c94e901a804ff15896ee3bc022201eff8beb4cb3410f432",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0001428_000095.200s.png",
+      "sha256": "55984f86dd7985d44a1da7cfb3600971b0bc5ebb4a965009ab65496181372da3",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0001881_000125.400s.png",
+      "sha256": "88b4aa66ffc2361271cd6fc4f7cfb9e1f18814d5562c41071ae76d9425947f73",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0002205_000147.000s.png",
+      "sha256": "fb6abcefedd4121f09cde6182d656c79c08d5987ac012c7d39d9d164da28155c",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0002229_000148.600s.png",
+      "sha256": "ad7da9844ce7081a721d70997d3b1c0e550bcafecc3e5da4a669c2eaeaed2245",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0002272_000151.466s.png",
+      "sha256": "675c65fcac119261274df31bff4bd58493ae3c0bad6827787658e410e4f6a54a",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    },
+    {
+      "file": "audit/frames/0003194_000212.933s.png",
+      "sha256": "40d984eb2b4cdfeeaa6b4c47ab4a8acb28b0fabbbecdc3cb0acd397d14a211dd",
+      "size": [
+        854,
+        480
+      ],
+      "viewed": true
+    }
+  ],
+  "audit_sha256": "9666fe0fb36fd110cb0b64cbffeda18e3d9f5ba3b8eec89909a7a19c69f525c2",
+  "map_sha256": "78ce9cc0ba8a68c996466946a460a0f423c6b05e8f01d7ba3f2adc5d6088ff3c",
+  "raw_status": "passed",
+  "raw_warnings": [],
+  "findings": [
+    {
+      "id": "BELL-REVEAL-01",
+      "status": "confirmed-before-repair",
+      "description": "Two retained-row copies overlap originals during convolution steps1/2; every encoded frame across both windows reviewed separately."
+    }
+  ],
+  "other_findings": "No additional corrective defect in viewed states. Nonnegative true-clipped density and n\u22121 convolution caption fixed prior to these movies; observed coherent binomial/CLT/density/rate sequence.",
+  "continuous_perceptual_playback": false,
+  "audio_listening_sync": false,
+  "full_resolution_motion": false,
+  "coverage_limits": [
+    "Every source frame was decoded and analyzed, not visually inspected.",
+    "Only listed native-resolution times were extracted; review of those images is pending.",
+    "Low-resolution RGB thresholds can miss small or subtle spatial/channel changes.",
+    "Maximum-gap samples cover slow/subthreshold changes only at the listed times, not continuously.",
+    "Static interval midpoints are samples, not proof that their full intervals are unchanged.",
+    "Full perceptual playback and listening remain unverified."
+  ],
+  "unextracted_gaps_ledger": "audit/result.json#unextracted_frame_gaps"
+}

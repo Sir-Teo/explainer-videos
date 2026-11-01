@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-11-01T02:47:46.944364+00:00",
+  "movie": {
+    "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Gauss_motion/media/videos/480p15/Gauss.mp4",
+    "sha256": "a22c3c7a2ba39373a3ae87ca30305616177a1580a8fbedf7a6bc4324069f19cb",
+    "bytes": 1837175
+  },
+  "raw_record_sha256": "54b0046a38f5a8a58138271695b12fb3e1be5d1f8700dad1fb5c6c315dcb72f1",
+  "raw_status": "needs-review",
+  "raw_fingerprint": "bfc2662ae7fbee18cbe54f9c44c87cf870bbcd8138106cb7fb7466dba256da0b",
+  "raw_warnings": [
+    {
+      "kind": "source-changed-during-render"
+    }
+  ],
+  "source_at_review": {
+    "videos/ai/ai5/s03_gauss.py": "0c71b81e0398ca08ca76cf2780faca844527e71925df620daf86117b3f3168d4",
+    "videos/ai/ai5/common.py": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+    "videos/ai/ai5/plotting.py": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+    "videos/ai/ai5/zh_lines.py": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+    "videos/ai/ai_text_zh.json": "6220e391fe7c9bf714f5ad363b6ae8eeff3815b84f901ae5b1e5a5ec1ff9b231",
+    "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+  },
+  "inputs": {
+    ".cache/ai5/gauss.json": {
+      "sha256": "76f46d04a04ecf4ae3600a792589ceb9d42208419947b737c5f50cf2ab1cd66f",
+      "bytes": 1098,
+      "mtime_ns": 1793497355829225340,
+      "raw_record_stat": [
+        1098,
+        1793497355829225340
+      ],
+      "stat_matches": true
+    },
+    ".cache/ai5/gauss.npz": {
+      "sha256": "e7827e1dc4b73e9c04a57dfda9710c3b313f7eb53e55c55681afe5ed844062c5",
+      "bytes": 67278,
+      "mtime_ns": 1793497355826850416,
+      "raw_record_stat": [
+        67278,
+        1793497355826850416
+      ],
+      "stat_matches": true
+    }
+  },
+  "source_linkage": "Direct module source snapshotted at review; parent has kept Bell/Gauss frozen. Historical aggregate warning retained. Not a blanket current-fingerprint assertion.",
+  "coverage": "Pending selected-image review, not continuous perception/audio."
+}
