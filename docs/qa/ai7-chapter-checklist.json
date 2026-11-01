@@ -1,12 +1,12 @@
 {
   "part": "ai7",
-  "observed_utc": "2026-11-01T12:24:00.708229+00:00",
+  "observed_utc": "2026-11-01T14:13:07.407719+00:00",
   "chapters": 18,
   "bilingual_cases": 36,
   "numerical_items": 24,
   "default_items_completed": 0,
   "actual_rendered_cases": 0,
-  "source_scope": "Preparatory source work only while Part6 rendered acceptance remains open. Synthetic and small in-memory audit probes are not production computation.",
+  "source_scope": "Preparatory source work only while Part6 rendered acceptance remains open. Synthetic and small in-memory audit probes are not production computation. Bounded residual audits add conditional coordinate/state/cohort risks, GP prior provenance and causal-assumption follow-ups. No new source repair or production operation from this follow-up.",
   "source_evidence": "evidence/ai7-source-preparation/README.md",
   "integration_evidence": "evidence/ai7-source-integration/README.md",
   "source_tests": {
@@ -627,5 +627,6 @@
       "production_approval": "Pending.",
       "selected_image_case_accepted_at_declared_scope": false
     }
-  ]
+  ],
+  "residual_source_review": "evidence/ai7-residual-source-risks/README.md"
 }
