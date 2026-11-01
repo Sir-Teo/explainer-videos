@@ -156,8 +156,14 @@ class KNN(VoiceoverScene):
         step = side_ladder(self, rows, whys, -3.2, 3.5, keep=4, top=0.95, buff=0.26)
         ns = [int(n) for n in ch["ns"]]
         lx = np.log10(ns)
-        g = plot([0.9, 4.1, 1], [0.15, 0.4, 0.05], x_length=5.2, y_length=4.2, xticks=[1, 2, 3, 4],
-                 yticks=[0.2, 0.25, 0.3, 0.35, 0.4], xfmt=lambda v: pow10(int(v)), yfmt=lambda v: rf"{100 * v:.0f}\%",
+        # Domain includes every measured mean/percentile and theoretical reference.
+        values = [Rs, lim, bnd] + [ch[key][str(n)][field]
+                  for key in ("e1", "ek") for n in ns for field in ("mean", "lo", "hi")]
+        bottom = max(0, math.floor((min(values) - 0.05) / 0.05) * 0.05)
+        top = math.ceil(1.08 * max(values) / 0.05) * 0.05
+        ticks = np.arange(bottom, top + 1e-9, 0.05).tolist()
+        g = plot([0.9, 4.1, 1], [bottom, top, 0.05], x_length=5.2, y_length=4.2, xticks=[1, 2, 3, 4],
+                 yticks=ticks, xfmt=lambda v: pow10(int(v)), yfmt=lambda v: rf"{100 * v:.0f}\%",
                  center=[3.9, 0.0, 0], xlabel=r"training points $n$", ylabel=r"error on fresh points")
         ax = g.ax
 
@@ -172,7 +178,7 @@ class KNN(VoiceoverScene):
         for key, col in (("e1", NN1), ("ek", NNK)):
             m = [ch[key][str(n)]["mean"] for n in ns]
             lo = [ch[key][str(n)]["lo"] for n in ns]
-            hi = [min(ch[key][str(n)]["hi"], 0.4) for n in ns]
+            hi = [ch[key][str(n)]["hi"] for n in ns]
             art.append(VGroup(band(ax, lx, lo, hi, col, opacity=0.2), curve(ax, lx, m, col, stroke_width=4),
                               VGroup(*[Dot(ax.c2p(a, b), radius=0.04, color=col) for a, b in zip(lx, m)])))
         key_ = VGroup(label(r"$1$ neighbour", font_size=20, color=NN1), label(r"$\sqrt{n}$ neighbours", font_size=20, color=NNK))
@@ -196,11 +202,11 @@ class KNN(VoiceoverScene):
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
-            step(1)
+            step(1, transform=False)
             vo.wait_until("c")
-            step(2)
+            step(2, transform=False)
             vo.wait_until("d")
-            step(3)
+            step(3, transform=False)
             vo.wait_until("e")
             for a in art:
                 self.play(FadeIn(a[0]), Create(a[1]), FadeIn(a[2]), run_time=1.3)
@@ -231,7 +237,13 @@ class KNN(VoiceoverScene):
         cubes.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, 0.2, 0])
         noise = [int(m) for m in cu["noise"]]
         lxn = np.log10(np.maximum(noise, 1))
-        g2 = plot([0, 3, 1], [0.85, 1.0, 0.05], x_length=4.8, y_length=3.6, xticks=[0, 1, 2, 3], yticks=[0.85, 0.9, 0.95, 1.0],
+        # Include the full measured uncertainty bands with one tick of clearance.
+        noise_values = [cu[key][str(n)][field] for key in ("knn", "lr")
+                        for n in noise for field in ("mean", "lo", "hi")]
+        noise_bottom = max(0, math.floor((min(noise_values) - 0.01) / 0.05) * 0.05)
+        noise_top = min(1, math.ceil(max(noise_values) / 0.05) * 0.05)
+        noise_ticks = np.arange(noise_bottom, noise_top + 1e-9, 0.05).tolist()
+        g2 = plot([0, 3, 1], [noise_bottom, noise_top, 0.05], x_length=4.8, y_length=3.6, xticks=[0, 1, 2, 3], yticks=noise_ticks,
                   xfmt=lambda v: "0" if v == 0 else pow10(int(v)), yfmt=lambda v: rf"{100 * v:.0f}\%", center=[3.4, -0.3, 0],
                   xlabel=r"pure-noise columns added to the $70$ rates", ylabel=r"held-out pages right")
         art = []
