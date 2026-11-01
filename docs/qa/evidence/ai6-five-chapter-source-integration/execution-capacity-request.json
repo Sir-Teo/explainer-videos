@@ -1,0 +1,202 @@
+{
+  "prepared_utc": "2026-11-01T10:15:39.299763+00:00",
+  "status": "PREPARED ONLY: parent execution-host assignment pending; no new local job started",
+  "review_ownership": "Current local reviewers retain LDA/KNN/Kernels/SVM/Metrics. Parent reviewer owns after visual review for Trees/Forests/AdaBoost/Contest/Outro. Execution worker produces evidence only.",
+  "source_authority": {
+    "inventory": "../ai6-five-chapter-integrated-tests-20261101/source-before.json.gz",
+    "decompressed_inventory_sha256": "1781b7bf4d4328889a07e02a19d17d90da7157bf934f75201d37464c1dc3c68f",
+    "source_files": 1532,
+    "rule": "Use exact published commit carrying this tested inventory, supplied in publication checkpoint. Never an unfrozen moving HEAD or old archive overlay alone."
+  },
+  "dependencies": [
+    {
+      "library_file_id": "libfile_3158cc8861448191a951cd71b6549e14",
+      "version": 0,
+      "bytes": 41613077,
+      "sha256": "a3f9a113f93166796fd226f2fa733b60c032def432b5fe7f533cba6185a4d3e2",
+      "role": "complete P6 numerical payloads/public corpus and twelve historical before previews"
+    },
+    {
+      "library_file_id": "libfile_34ae49e30a5881918e0e194a534698ac",
+      "version": 0,
+      "bytes": 23570717,
+      "sha256": "767d185a59d007024a3351e4f5bf07fd1cd51bce4ddc97fefe43b76bdf3e10c3",
+      "role": "other five chapters existing baseline/currentMetrics movies, provenance and historical plans; f559 pin is not retagged"
+    }
+  ],
+  "environment": {
+    "EXPLAINER_CACHED_ONLY": "1",
+    "EXPLAINER_TTS": "silent",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "capability_preflight": [
+    "Fresh isolated repository worktree; preserve unrelated/model-comparison outputs.",
+    "Verify all source/input hashes and true currentness for all22 items with producers forbidden. Missing/stale/runtime mismatch stops, never relabel or silently recompute.",
+    "For strict P6 numerical-cache recipe: CPython3.12.14, NumPy2.5.4, x86_64,little-endian,allthree numerical thread variables1. Record actual Manim/TeX/fonts/FFmpeg versions separately.",
+    "Do not run against incomplete computation. All frozen22 items are supplied. No synthesis/model/producer/default training or downloads.",
+    "Keep >=805306368 free bytes before/during/after capture/extraction, and native start>=1.2GiB. Preserve independent copy2 movie/sidecar/source snapshots, never movie hardlinks."
+  ],
+  "fresh_low_preview_cases": [
+    {
+      "scene": "LDA",
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "passes": [
+        "cached-only endpoints",
+        "full silent480 motion"
+      ],
+      "after_review": "Actual complete chronological selected cohort plus every encoded repaired-motion window; disclose inherited/novel/unselected frames and all raw warnings"
+    },
+    {
+      "scene": "KNN",
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "passes": [
+        "cached-only endpoints",
+        "full silent480 motion"
+      ],
+      "after_review": "Actual complete chronological selected cohort plus every encoded repaired-motion window; disclose inherited/novel/unselected frames and all raw warnings"
+    },
+    {
+      "scene": "Kernels",
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "passes": [
+        "cached-only endpoints",
+        "full silent480 motion"
+      ],
+      "after_review": "Actual complete chronological selected cohort plus every encoded repaired-motion window; disclose inherited/novel/unselected frames and all raw warnings"
+    },
+    {
+      "scene": "Trees",
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "passes": [
+        "cached-only endpoints",
+        "full silent480 motion"
+      ],
+      "after_review": "Actual complete chronological selected cohort plus every encoded repaired-motion window; disclose inherited/novel/unselected frames and all raw warnings"
+    },
+    {
+      "scene": "Forests",
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "passes": [
+        "cached-only endpoints",
+        "full silent480 motion"
+      ],
+      "after_review": "Actual complete chronological selected cohort plus every encoded repaired-motion window; disclose inherited/novel/unselected frames and all raw warnings"
+    },
+    {
+      "scene": "AdaBoost",
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "passes": [
+        "cached-only endpoints",
+        "full silent480 motion"
+      ],
+      "after_review": "Actual complete chronological selected cohort plus every encoded repaired-motion window; disclose inherited/novel/unselected frames and all raw warnings"
+    },
+    {
+      "scene": "Contest",
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "passes": [
+        "cached-only endpoints",
+        "full silent480 motion"
+      ],
+      "after_review": "Actual complete chronological selected cohort plus every encoded repaired-motion window; disclose inherited/novel/unselected frames and all raw warnings"
+    },
+    {
+      "scene": "Outro",
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "passes": [
+        "cached-only endpoints",
+        "full silent480 motion"
+      ],
+      "after_review": "Actual complete chronological selected cohort plus every encoded repaired-motion window; disclose inherited/novel/unselected frames and all raw warnings"
+    }
+  ],
+  "existing_movie_decode_only": [
+    {
+      "scene": "SVM",
+      "languages": [
+        "en",
+        "zh"
+      ]
+    },
+    {
+      "scene": "Metrics",
+      "languages": [
+        "zh"
+      ]
+    }
+  ],
+  "gradient_boosting_extension": {
+    "status": "SOURCE LEAD ONLY, no established new defect or code repair",
+    "english_movie_sha256": "25fde2c6ac3028fe06baff1822449f76bbed7dd055180888c754544502a59650",
+    "english_source_derived_windows_seconds": [
+      [
+        35.716079,
+        37.049413
+      ],
+      [
+        43.114453,
+        44.447787
+      ],
+      [
+        51.74589,
+        53.079223
+      ]
+    ],
+    "request": "Inspect dense/every-encoded existing transitions before declaring comprehensive closure; source/no speech-derived forecast is not a visual finding."
+  },
+  "native1080_fresh_scenes": [
+    "Newton",
+    "NaiveBayes",
+    "LDA",
+    "KNN",
+    "Kernels",
+    "Trees",
+    "Forests",
+    "AdaBoost",
+    "Metrics",
+    "Contest",
+    "Outro"
+  ],
+  "native1080_existing_review_remaining": [
+    "GradientBoosting:en",
+    "GradientBoosting:zh"
+  ],
+  "native1080_already_reviewed_cases": 14,
+  "source_hashes": {
+    "videos/ai/ai6/s13_trees.py": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
+    "videos/ai/ai6/s14_forests.py": "5695aabdd4ff39c68135a5a3de172077e4f5d26cf9b8f546741c8f45ffbf6018",
+    "videos/ai/ai6/s15_adaboost.py": "9dace46b8fa80a1fcf5d8fa51af867875275dda791916647d8e16c1f243cbbd7",
+    "videos/ai/ai6/s18_contest.py": "104c27ae8743b7383b0768235e4a40b0e5b2524fb8edfd2312c88d99b27399b7",
+    "videos/ai/ai6/s19_outro.py": "0f613477aa043c40f1622d482caef005511f01ed0613ada91cc3a01ab626ea8e",
+    "videos/ai/ai6/zh_lines.py": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+    "videos/ai/ai_text_zh.json": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46"
+  },
+  "return_policy": "Return bounded input-bound movies/sidecars/source/data ledgers and view-ready lossless sheets/critical originals to case owners. Keep full unique frame witnesses on execution host; no partial output or test count is visual approval. Parent coordinates Library transfer; no final Drive upload/publication implied.",
+  "remaining_assembly_gate": "After case/source closure, assemble current ENZH whole silent reels and review all36 joins, subtitles/provenance. Narration/listening/production-resolution gates remain separate."
+}

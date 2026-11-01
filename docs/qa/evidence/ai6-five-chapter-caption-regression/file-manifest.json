@@ -1,0 +1,22 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 831,
+    "sha256": "f452a210c0a717df6a4542e7fe45e3f1c6d2cb9d1dd026e45728be2b06a741a5"
+  },
+  {
+    "path": "check_ai6_five_batch_captions.py.gz",
+    "bytes": 1562,
+    "sha256": "36e4e39f6a5977873545458f69d5f8458a6e8b6bee6f341b4554fc13ce8c09d0"
+  },
+  {
+    "path": "report.json.gz",
+    "bytes": 2172,
+    "sha256": "9714a4ad82cc33f190dcd56fc37e0fe7ebad8b60a6a580159c618c9ccb418c85"
+  },
+  {
+    "path": "used-results.json.gz",
+    "bytes": 268068,
+    "sha256": "1907a0c5e7cf355895e7050a1ea86491295ded9428b03ab4a7481b2d530642e0"
+  }
+]

@@ -1,0 +1,573 @@
+{
+  "utc": "2026-11-01T07:19:58.733778+00:00",
+  "git_head": "c80f10b45c1466d7aadcbb58abca91b6ea05dd5b",
+  "qa_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+  "table_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+  "files": [
+    {
+      "path": "explainer/__init__.py",
+      "bytes": 400,
+      "sha256": "531701c46ef97fc3d33b960cb42d267053c9098bcbfe186e55b72dc7bdde6ed7",
+      "blob": "source-blobs/531701c46ef97fc3d33b960cb42d267053c9098bcbfe186e55b72dc7bdde6ed7.gz"
+    },
+    {
+      "path": "explainer/ai/__init__.py",
+      "bytes": 18937,
+      "sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+      "blob": "source-blobs/41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf.gz"
+    },
+    {
+      "path": "explainer/ai/autodiff.py",
+      "bytes": 7798,
+      "sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+      "blob": "source-blobs/2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0.gz"
+    },
+    {
+      "path": "explainer/ai/cache.py",
+      "bytes": 6276,
+      "sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+      "blob": "source-blobs/71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507.gz"
+    },
+    {
+      "path": "explainer/ai/fonts.py",
+      "bytes": 1964,
+      "sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+      "blob": "source-blobs/1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13.gz"
+    },
+    {
+      "path": "explainer/ai/games.py",
+      "bytes": 11296,
+      "sha256": "332ba7f10a4ab786608c70a3f9f0f334497ae3e07fd6b29a5fab71e8940b6fce",
+      "blob": "source-blobs/332ba7f10a4ab786608c70a3f9f0f334497ae3e07fd6b29a5fab71e8940b6fce.gz"
+    },
+    {
+      "path": "explainer/ai/lecture.py",
+      "bytes": 6055,
+      "sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+      "blob": "source-blobs/22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb.gz"
+    },
+    {
+      "path": "explainer/ai/novels.py",
+      "bytes": 7081,
+      "sha256": "d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032",
+      "blob": "source-blobs/d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032.gz"
+    },
+    {
+      "path": "explainer/ai/viz.py",
+      "bytes": 31773,
+      "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "blob": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.gz"
+    },
+    {
+      "path": "explainer/analysis/__init__.py",
+      "bytes": 30850,
+      "sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+      "blob": "source-blobs/379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d.gz"
+    },
+    {
+      "path": "explainer/analysis/complexplot.py",
+      "bytes": 3436,
+      "sha256": "91bf1049a40ffaaebd6e1e57b83840e56a756d72cd49613f4bbe7d160f48a58c",
+      "blob": "source-blobs/91bf1049a40ffaaebd6e1e57b83840e56a756d72cd49613f4bbe7d160f48a58c.gz"
+    },
+    {
+      "path": "explainer/analysis/contours.py",
+      "bytes": 2528,
+      "sha256": "6c52377ee995ea0db7a7fbcfe8cb672dc41985d9aebc10496a3efeaf2b6db0fe",
+      "blob": "source-blobs/6c52377ee995ea0db7a7fbcfe8cb672dc41985d9aebc10496a3efeaf2b6db0fe.gz"
+    },
+    {
+      "path": "explainer/analysis/dashboard.py",
+      "bytes": 10691,
+      "sha256": "20146dcf999aa8ca58f97ea828eaa34da97986a3ebea1afd74f3f530b2469607",
+      "blob": "source-blobs/20146dcf999aa8ca58f97ea828eaa34da97986a3ebea1afd74f3f530b2469607.gz"
+    },
+    {
+      "path": "explainer/analysis/gameboard.py",
+      "bytes": 9366,
+      "sha256": "706ad5eed1fe0854604026137d09731dd679e54b9b570cb6753084d67d16bd6b",
+      "blob": "source-blobs/706ad5eed1fe0854604026137d09731dd679e54b9b570cb6753084d67d16bd6b.gz"
+    },
+    {
+      "path": "explainer/analysis/proofmap.py",
+      "bytes": 4609,
+      "sha256": "196386f5e47b82efd7884369f7901ece1a3a144edea745d7d54042a764e1a2de",
+      "blob": "source-blobs/196386f5e47b82efd7884369f7901ece1a3a144edea745d7d54042a764e1a2de.gz"
+    },
+    {
+      "path": "explainer/cache_lock.py",
+      "bytes": 1521,
+      "sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+      "blob": "source-blobs/f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228.gz"
+    },
+    {
+      "path": "explainer/compat.py",
+      "bytes": 691,
+      "sha256": "b422d736f14b5b873bf242713d1e1d5f0901f5322fe81e9e91edc60dcd82f661",
+      "blob": "source-blobs/b422d736f14b5b873bf242713d1e1d5f0901f5322fe81e9e91edc60dcd82f661.gz"
+    },
+    {
+      "path": "explainer/data/__init__.py",
+      "bytes": 120,
+      "sha256": "4894412fa7cb01eb3eb9cb293f91f7d4a8430b80e2d8580cfaf2c21f026c5df1",
+      "blob": "source-blobs/4894412fa7cb01eb3eb9cb293f91f7d4a8430b80e2d8580cfaf2c21f026c5df1.gz"
+    },
+    {
+      "path": "explainer/data/crawl.py",
+      "bytes": 10414,
+      "sha256": "651675cee1829c94d92e4acf63ce73ac6e5a878daae07bb08777a979b0f2d48c",
+      "blob": "source-blobs/651675cee1829c94d92e4acf63ce73ac6e5a878daae07bb08777a979b0f2d48c.gz"
+    },
+    {
+      "path": "explainer/fluids/__init__.py",
+      "bytes": 153,
+      "sha256": "1c33e2455da69d3f8112c421b4588099896d36932bd1060bcd026bf4c89bad62",
+      "blob": "source-blobs/1c33e2455da69d3f8112c421b4588099896d36932bd1060bcd026bf4c89bad62.gz"
+    },
+    {
+      "path": "explainer/fluids/colormaps.py",
+      "bytes": 1997,
+      "sha256": "117cfbdcd6f4f5569cf7f99cdf91ab68a6144425ecaedbc68bea3571148a6bcc",
+      "blob": "source-blobs/117cfbdcd6f4f5569cf7f99cdf91ab68a6144425ecaedbc68bea3571148a6bcc.gz"
+    },
+    {
+      "path": "explainer/fluids/lbm.py",
+      "bytes": 7935,
+      "sha256": "c9b32bd52ac9d3f4e51f9d573c48ae9506c959c2d83e599eaf747ee834f80920",
+      "blob": "source-blobs/c9b32bd52ac9d3f4e51f9d573c48ae9506c959c2d83e599eaf747ee834f80920.gz"
+    },
+    {
+      "path": "explainer/fluids/spectral.py",
+      "bytes": 5877,
+      "sha256": "0d817ec6801fc2903a8e74a8952449cd59664a9ef45548f10303003b503bb37e",
+      "blob": "source-blobs/0d817ec6801fc2903a8e74a8952449cd59664a9ef45548f10303003b503bb37e.gz"
+    },
+    {
+      "path": "explainer/lang.py",
+      "bytes": 6956,
+      "sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+      "blob": "source-blobs/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b.gz"
+    },
+    {
+      "path": "explainer/lm/__init__.py",
+      "bytes": 317,
+      "sha256": "de512b032db0cca06bf05c58b06917a1e7024dd8213d6b9730f1abf76fe8e111",
+      "blob": "source-blobs/de512b032db0cca06bf05c58b06917a1e7024dd8213d6b9730f1abf76fe8e111.gz"
+    },
+    {
+      "path": "explainer/lm/bpe.py",
+      "bytes": 1568,
+      "sha256": "b15b01a3311aee840ba65e2a6c4592bfed137e3b278bcc85babaae0c87f3b5bf",
+      "blob": "source-blobs/b15b01a3311aee840ba65e2a6c4592bfed137e3b278bcc85babaae0c87f3b5bf.gz"
+    },
+    {
+      "path": "explainer/lm/gpt2.py",
+      "bytes": 7355,
+      "sha256": "fffb03c58f574d989901764a535495da6808bab700e5b07879db1da013bcdfa8",
+      "blob": "source-blobs/fffb03c58f574d989901764a535495da6808bab700e5b07879db1da013bcdfa8.gz"
+    },
+    {
+      "path": "explainer/lm/pocket.py",
+      "bytes": 19996,
+      "sha256": "163fab83580f701f663c7226b26cde0c455fc6aca174af26bc99d26bcdd966ff",
+      "blob": "source-blobs/163fab83580f701f663c7226b26cde0c455fc6aca174af26bc99d26bcdd966ff.gz"
+    },
+    {
+      "path": "explainer/lm/tiny_gpt.py",
+      "bytes": 5603,
+      "sha256": "25681bdcdb4ce5d90961e9195f3fd3df76d7ca55dcb7cc4e3ead027f131e55aa",
+      "blob": "source-blobs/25681bdcdb4ce5d90961e9195f3fd3df76d7ca55dcb7cc4e3ead027f131e55aa.gz"
+    },
+    {
+      "path": "explainer/paths.py",
+      "bytes": 798,
+      "sha256": "c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413",
+      "blob": "source-blobs/c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413.gz"
+    },
+    {
+      "path": "explainer/style.py",
+      "bytes": 18021,
+      "sha256": "6953684ba6d3131e15a349b76b8ba94b70f1c56699c20e049a46d5407c8b74c6",
+      "blob": "source-blobs/6953684ba6d3131e15a349b76b8ba94b70f1c56699c20e049a46d5407c8b74c6.gz"
+    },
+    {
+      "path": "explainer/tts.py",
+      "bytes": 40277,
+      "sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+      "blob": "source-blobs/400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032.gz"
+    },
+    {
+      "path": "explainer/voiceover.py",
+      "bytes": 10700,
+      "sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+      "blob": "source-blobs/3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b.gz"
+    },
+    {
+      "path": "explainer/zh_templates.py",
+      "bytes": 9496,
+      "sha256": "b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432",
+      "blob": "source-blobs/b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432.gz"
+    },
+    {
+      "path": "explainer/zh_text.py",
+      "bytes": 8305,
+      "sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+      "blob": "source-blobs/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf.gz"
+    },
+    {
+      "path": "videos/ai/__init__.py",
+      "bytes": 81,
+      "sha256": "f00a2efefc723e5182fb23f1c284e6692d58176d473ea73aafc5bcfa2501f8d7",
+      "blob": "source-blobs/f00a2efefc723e5182fb23f1c284e6692d58176d473ea73aafc5bcfa2501f8d7.gz"
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "bytes": 2440019,
+      "sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+      "blob": "source-blobs/20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3.gz"
+    },
+    {
+      "path": "videos/ai/ai_upload.json",
+      "bytes": 5253,
+      "sha256": "f5581226c179c7d62fd326744db03329700ed73dc21a36db44581c63c03ac55f",
+      "blob": "source-blobs/f5581226c179c7d62fd326744db03329700ed73dc21a36db44581c63c03ac55f.gz"
+    },
+    {
+      "path": "videos/ai/ai6/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "blob": "source-blobs/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gz"
+    },
+    {
+      "path": "videos/ai/ai6/cache_contract.py",
+      "bytes": 23866,
+      "sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+      "blob": "source-blobs/9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394.gz"
+    },
+    {
+      "path": "videos/ai/ai6/common.py",
+      "bytes": 9415,
+      "sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+      "blob": "source-blobs/1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485.gz"
+    },
+    {
+      "path": "videos/ai/ai6/compute.py",
+      "bytes": 81289,
+      "sha256": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+      "blob": "source-blobs/d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc.gz"
+    },
+    {
+      "path": "videos/ai/ai6/contracts.py",
+      "bytes": 23046,
+      "sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+      "blob": "source-blobs/dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2.gz"
+    },
+    {
+      "path": "videos/ai/ai6/manifest.py",
+      "bytes": 1389,
+      "sha256": "d0a2c12502dfd644eee3940734140dd3d228c15dfa66c3155168c9dc9badfccf",
+      "blob": "source-blobs/d0a2c12502dfd644eee3940734140dd3d228c15dfa66c3155168c9dc9badfccf.gz"
+    },
+    {
+      "path": "videos/ai/ai6/narration_zh.json",
+      "bytes": 100230,
+      "sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+      "blob": "source-blobs/10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s01_hook.py",
+      "bytes": 12718,
+      "sha256": "a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d",
+      "blob": "source-blobs/a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s02_lsq.py",
+      "bytes": 16199,
+      "sha256": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+      "blob": "source-blobs/0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s03_gauss.py",
+      "bytes": 15895,
+      "sha256": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb",
+      "blob": "source-blobs/37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s04_ridge.py",
+      "bytes": 14560,
+      "sha256": "ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256",
+      "blob": "source-blobs/ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s05_lasso.py",
+      "bytes": 19035,
+      "sha256": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9",
+      "blob": "source-blobs/bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s06_logistic.py",
+      "bytes": 17039,
+      "sha256": "c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032",
+      "blob": "source-blobs/c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s07_newton.py",
+      "bytes": 13659,
+      "sha256": "24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705",
+      "blob": "source-blobs/24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s08_bayes.py",
+      "bytes": 13380,
+      "sha256": "2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf",
+      "blob": "source-blobs/2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s09_lda.py",
+      "bytes": 20784,
+      "sha256": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
+      "blob": "source-blobs/6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s10_knn.py",
+      "bytes": 16659,
+      "sha256": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
+      "blob": "source-blobs/d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s11_kernels.py",
+      "bytes": 18924,
+      "sha256": "1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082",
+      "blob": "source-blobs/1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s12_svm.py",
+      "bytes": 18606,
+      "sha256": "bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112",
+      "blob": "source-blobs/bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s13_trees.py",
+      "bytes": 16854,
+      "sha256": "fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d",
+      "blob": "source-blobs/fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s14_forests.py",
+      "bytes": 11200,
+      "sha256": "19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b",
+      "blob": "source-blobs/19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s15_adaboost.py",
+      "bytes": 15331,
+      "sha256": "be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12",
+      "blob": "source-blobs/be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s16_gboost.py",
+      "bytes": 13945,
+      "sha256": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
+      "blob": "source-blobs/f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s17_metrics.py",
+      "bytes": 14337,
+      "sha256": "77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6",
+      "blob": "source-blobs/77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s18_contest.py",
+      "bytes": 17420,
+      "sha256": "7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2",
+      "blob": "source-blobs/7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2.gz"
+    },
+    {
+      "path": "videos/ai/ai6/s19_outro.py",
+      "bytes": 16664,
+      "sha256": "98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e",
+      "blob": "source-blobs/98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e.gz"
+    },
+    {
+      "path": "videos/ai/ai6/text_zh_add.json",
+      "bytes": 64040,
+      "sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73",
+      "blob": "source-blobs/bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73.gz"
+    },
+    {
+      "path": "videos/ai/ai6/zh_lines.py",
+      "bytes": 77583,
+      "sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+      "blob": "source-blobs/0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b.gz"
+    },
+    {
+      "path": "videos/ai/ai1/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "blob": "source-blobs/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gz"
+    },
+    {
+      "path": "videos/ai/ai1/coder.py",
+      "bytes": 5734,
+      "sha256": "802ba281240adec1b0ff72831fe66fb569163e326495170c94b4badafbb7a69a",
+      "blob": "source-blobs/802ba281240adec1b0ff72831fe66fb569163e326495170c94b4badafbb7a69a.gz"
+    },
+    {
+      "path": "videos/ai/ai1/common.py",
+      "bytes": 16482,
+      "sha256": "f1262659e073baff2ff2c786ea8e4c12a9adf53aff70209cc21629e81c7ca48f",
+      "blob": "source-blobs/f1262659e073baff2ff2c786ea8e4c12a9adf53aff70209cc21629e81c7ca48f.gz"
+    },
+    {
+      "path": "videos/ai/ai1/compute.py",
+      "bytes": 78448,
+      "sha256": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa",
+      "blob": "source-blobs/0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa.gz"
+    },
+    {
+      "path": "videos/ai/ai1/manifest.py",
+      "bytes": 1486,
+      "sha256": "335fe7ea82257be43fbda9e06dd67231cd6ee04f5a7bbf93fa71eded36d9512d",
+      "blob": "source-blobs/335fe7ea82257be43fbda9e06dd67231cd6ee04f5a7bbf93fa71eded36d9512d.gz"
+    },
+    {
+      "path": "videos/ai/ai1/narration_zh.json",
+      "bytes": 109726,
+      "sha256": "c13b04dcd43fbb4c85c621ef9b245a9fce10d174ef018c6a3dfe0f8457398151",
+      "blob": "source-blobs/c13b04dcd43fbb4c85c621ef9b245a9fce10d174ef018c6a3dfe0f8457398151.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s01_hook.py",
+      "bytes": 23484,
+      "sha256": "7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8",
+      "blob": "source-blobs/7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s02_probability.py",
+      "bytes": 24663,
+      "sha256": "f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620",
+      "blob": "source-blobs/f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s03_surprise.py",
+      "bytes": 23704,
+      "sha256": "5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8",
+      "blob": "source-blobs/5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s04_entropy.py",
+      "bytes": 29406,
+      "sha256": "8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c",
+      "blob": "source-blobs/8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s05_prefix.py",
+      "bytes": 23419,
+      "sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+      "blob": "source-blobs/f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s06_huffman.py",
+      "bytes": 20144,
+      "sha256": "a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a",
+      "blob": "source-blobs/a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s07_typical.py",
+      "bytes": 23829,
+      "sha256": "1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4",
+      "blob": "source-blobs/1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s08_cross_entropy.py",
+      "bytes": 23968,
+      "sha256": "149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f",
+      "blob": "source-blobs/149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s09_arithmetic.py",
+      "bytes": 29057,
+      "sha256": "565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83",
+      "blob": "source-blobs/565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s10_counting.py",
+      "bytes": 25504,
+      "sha256": "d3f5b5218d27c5af539ee0dcc7f214302cbbfa09f42e572647cf4e9047d8e2ab",
+      "blob": "source-blobs/d3f5b5218d27c5af539ee0dcc7f214302cbbfa09f42e572647cf4e9047d8e2ab.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s11_shannon.py",
+      "bytes": 11557,
+      "sha256": "8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901",
+      "blob": "source-blobs/8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s12_likelihood.py",
+      "bytes": 19190,
+      "sha256": "d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f",
+      "blob": "source-blobs/d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s13_information.py",
+      "bytes": 18624,
+      "sha256": "8f788f0a5ee0b6c8d3f39e2b814d6c8490933a068fc706715ef08911c8bfa18a",
+      "blob": "source-blobs/8f788f0a5ee0b6c8d3f39e2b814d6c8490933a068fc706715ef08911c8bfa18a.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s14_knowledge.py",
+      "bytes": 13554,
+      "sha256": "7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f",
+      "blob": "source-blobs/7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s15_units.py",
+      "bytes": 12257,
+      "sha256": "92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46",
+      "blob": "source-blobs/92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s16_scoreboard.py",
+      "bytes": 17742,
+      "sha256": "210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449",
+      "blob": "source-blobs/210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449.gz"
+    },
+    {
+      "path": "videos/ai/ai1/s17_outro.py",
+      "bytes": 17213,
+      "sha256": "8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01",
+      "blob": "source-blobs/8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01.gz"
+    },
+    {
+      "path": "videos/ai/ai1/text_zh_add.json",
+      "bytes": 39331,
+      "sha256": "4ee7f26834a904b5c402e08ac82825a2968c191d356b43bb6b07cb9f63e71620",
+      "blob": "source-blobs/4ee7f26834a904b5c402e08ac82825a2968c191d356b43bb6b07cb9f63e71620.gz"
+    },
+    {
+      "path": "videos/ai/ai1/zh_lines.py",
+      "bytes": 68358,
+      "sha256": "ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411",
+      "blob": "source-blobs/ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411.gz"
+    },
+    {
+      "path": "tools/qa_series.py",
+      "bytes": 25379,
+      "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "blob": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.gz"
+    },
+    {
+      "path": "tools/dead_air.py",
+      "bytes": 3602,
+      "sha256": "6a50dc8a1c97ed2d50af4836060b2eff88e3b9f84fb48136b0cf064e7e1abac5",
+      "blob": "source-blobs/6a50dc8a1c97ed2d50af4836060b2eff88e3b9f84fb48136b0cf064e7e1abac5.gz"
+    },
+    {
+      "path": "manim.cfg",
+      "bytes": 325,
+      "sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+      "blob": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.gz"
+    }
+  ],
+  "note": "Actual observed source bytes; HEAD is context and does not attest uncommitted changes."
+}

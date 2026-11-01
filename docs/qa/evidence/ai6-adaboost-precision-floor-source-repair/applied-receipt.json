@@ -1,0 +1,32 @@
+{
+  "observed_utc": "2026-11-01T10:04:56.901887+00:00",
+  "status": "APPLIED source only; new after endpoint/motion validation NOT STARTED",
+  "applied_scene_sha256": "9dace46b8fa80a1fcf5d8fa51af867875275dda791916647d8e16c1f243cbbd7",
+  "actual_combined_local_ZH_sha256": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+  "actual_global_caption_sha256": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+  "private_local_ZH_candidate_sha256": "7b67d21afe7fe1c3d0fb76d73c576c2cd142387e97410ea0f025eddff874dddc",
+  "private_local_ZH_is_not_the_combined_applied_file": true,
+  "effective_actual_Ada_local_value_matches_private_proposal": true,
+  "actual_global_floor_caption_matches_proposal": true,
+  "original_four_endpoint_PNGs_byte_preserved": true,
+  "current_cache_JSON_sha256": "6ca25b8aa7cb334ba88b95db516b10342000ea0d055f4330b356cb28fbe2148b",
+  "current_cache_NPZ_sha256": "2b5328fc7c3efe1c3ecaf22f4f4b204404800ef13236f1b1a4a85cc4239765a4",
+  "root_all43_numeric_signatures_unchanged": true,
+  "root_fullsuite": {
+    "tests": 641,
+    "test_elapsed_seconds": 54.406,
+    "wall_seconds": 58.12151628600259,
+    "source_files": 1532,
+    "source_before_after_unchanged": true
+  },
+  "root_live_whole_module_checks": 7,
+  "root_retained_caption_outputs": 6505,
+  "root_changed_retained_caption_outputs": 0,
+  "timing_equivalence": "NOT CLAIMED: derive VO wording changed; new EN/ZH silent sidecars/durations/visual captures pending",
+  "new_actual_render_visual_listening_approval": false,
+  "execution_by_this_packaging_task": "file/hash/gzip/JSON/AST verification only; no renderer/decoder/producer/provider/test-suite/source mutation",
+  "root_integration_report_sha256": "3ac4864bf78115d4e2432f614cf2f395b1530e6545582247b632b302be9eb06d",
+  "root_live_check_sha256": "77b3c83cf6976079a63cf2714f328edb3550ab97658b3f9d5e1b2b3473769123",
+  "root_suite_receipt_sha256": "8bb605504d6d0d5ba4b7dca996d7eb4eff60c4346c8cf6833d1fca7e182c88ab",
+  "root_caption_report_sha256": "607bf97a3ca864287081c87faa208b5ab0ba444437171232d548572a987c1de2"
+}

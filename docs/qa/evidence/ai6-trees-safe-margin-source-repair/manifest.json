@@ -1,0 +1,111 @@
+{
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 2299,
+      "sha256": "5bf01c87965a6da408bb19b26c0a144b88769e1b92bc562def3122fcc2fc379f"
+    },
+    {
+      "file": "after-plan.json",
+      "bytes": 3677,
+      "sha256": "d6e9640ab419e6618af5f04802643cc87c8d1e291d8ca941b8ae7d4e08fa2f1b"
+    },
+    {
+      "file": "application.json",
+      "bytes": 1223,
+      "sha256": "2ff60eff31be142b7aeff23240bd9c24a405293d43c80f6df4ae79d4c6518bdb"
+    },
+    {
+      "file": "before-image-map.json",
+      "bytes": 2015,
+      "sha256": "85663ff8041ec30f248dd34ae9d4f45e227c21a9d0636f35fa7c1748ea13d064"
+    },
+    {
+      "file": "before-native/en/008_00073.9s.png",
+      "bytes": 77196,
+      "sha256": "f2ec2aba9540ab13fb0ffbb7fd85f2457e8648b50f92826c22b394376db354cc"
+    },
+    {
+      "file": "before-native/en/014_00135.4s.png",
+      "bytes": 78516,
+      "sha256": "caa6f557b4fccfc9f566f5f859f0d2ef79b09b560bf49e8eb793bed58637c515"
+    },
+    {
+      "file": "before-native/zh/008_00084.0s.png",
+      "bytes": 81172,
+      "sha256": "1f13aa3bfa84afa98656608227950b4864d0ea57d571142ac3ee138751368000"
+    },
+    {
+      "file": "before-native/zh/014_00150.4s.png",
+      "bytes": 84826,
+      "sha256": "62e41edc83639779ffc94319aa9f8999a992a0451c3c549bbb8c2185cf97e2c0"
+    },
+    {
+      "file": "candidate-original-manifest.json",
+      "bytes": 6213,
+      "sha256": "fa6a01ac9dbaaa7b0956ccff399222bca3793bf1d9033b04547d7eeca9b79dc3"
+    },
+    {
+      "file": "candidate.patch.gz",
+      "bytes": 701,
+      "sha256": "2c1d3c82fabd08cd653d814af904e0935a6cfcd3ae980fc54ebcf30aa50caa52"
+    },
+    {
+      "file": "codec-map.json",
+      "bytes": 465,
+      "sha256": "dec18a814d1f3a40a5f2aa532eff1821cab71b29960decd3b0077a07ec1a6dd5"
+    },
+    {
+      "file": "geometry-en.json",
+      "bytes": 6184,
+      "sha256": "980e3a786e8e589c2fe4035df1f267efb9b597d617a6b15b504580ad30cc784c"
+    },
+    {
+      "file": "geometry-en.log",
+      "bytes": 465,
+      "sha256": "2e26d2f0b6e7b12ff629a7247abffae056bd5ec3d5d52a146f6426eccab9023c"
+    },
+    {
+      "file": "geometry-zh.json",
+      "bytes": 6266,
+      "sha256": "6e04faaecd03f572e5657c686c832fb46827808bf741f0cedfaefa20f7840990"
+    },
+    {
+      "file": "geometry-zh.log",
+      "bytes": 471,
+      "sha256": "8728c8f0ae56c41ab5c76d90c3f2461bfeeff06bba3abf4573e1c93669048c44"
+    },
+    {
+      "file": "geometry.py",
+      "bytes": 5411,
+      "sha256": "9076bf41518271dda4fc3079ae7e9fde1e3f10d46e5f4336eb65ca2c5ca4810a"
+    },
+    {
+      "file": "preparation.json",
+      "bytes": 7491,
+      "sha256": "57e561234301aa745f080ab2fab1b70b84a65415ad391b13a56cf3a10c3027e2"
+    },
+    {
+      "file": "report.json",
+      "bytes": 6902,
+      "sha256": "15a62df575f396128778d8d893acae3f9704a5166aeb95e41ca6115a0daf42ea"
+    },
+    {
+      "file": "report.md",
+      "bytes": 1329,
+      "sha256": "124a045f95a163e3e980b1b96c1f3893a8845c0f07adf24e304dee7c86c7f2a5"
+    },
+    {
+      "file": "s13_trees.after.py",
+      "bytes": 16853,
+      "sha256": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06"
+    },
+    {
+      "file": "s13_trees.before.py",
+      "bytes": 16854,
+      "sha256": "fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d"
+    }
+  ],
+  "file_count_excluding_manifest": 21,
+  "bytes_excluding_manifest": 406529
+}

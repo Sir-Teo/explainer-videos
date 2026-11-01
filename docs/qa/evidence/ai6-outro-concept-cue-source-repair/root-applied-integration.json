@@ -1,0 +1,46 @@
+{
+  "applied_utc": "2026-11-01T09:49:06.472464+00:00",
+  "source_files": [
+    {
+      "path": "videos/ai/ai6/s15_adaboost.py",
+      "before_sha256": "be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12",
+      "after_sha256": "9dace46b8fa80a1fcf5d8fa51af867875275dda791916647d8e16c1f243cbbd7"
+    },
+    {
+      "path": "videos/ai/ai6/s18_contest.py",
+      "before_sha256": "7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2",
+      "after_sha256": "104c27ae8743b7383b0768235e4a40b0e5b2524fb8edfd2312c88d99b27399b7"
+    },
+    {
+      "path": "videos/ai/ai6/s19_outro.py",
+      "before_sha256": "98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e",
+      "after_sha256": "0f613477aa043c40f1622d482caef005511f01ed0613ada91cc3a01ab626ea8e"
+    }
+  ],
+  "local_ZH_before": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+  "local_ZH_after": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+  "local_ZH_existing_values_changed": [
+    "Why those weights, and that alpha?",
+    "f\"Here's the contest: twelve named procedures"
+  ],
+  "local_ZH_new_keys": [
+    "No finite seventy-rate mean accuracy is available here.",
+    "f\"{best70['name']} has the highest mean accuracy, at {100 * best70['70']['cv']:.1f} percent.\"",
+    "f'{len(leaders70)} procedures tie for the highest mean accuracy, at {100 * best_mean:.1f} percent.'",
+    "Let's take stock. <bookmark mark='linear'/> Least squares is a projection"
+  ],
+  "all_other_local_ZH_code_and_values_exact": true,
+  "global_before": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+  "global_after": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+  "global_added_exact_strings": 2,
+  "global_old_entries_and_patterns_preserved": true,
+  "protected_numeric_files": 43,
+  "protected_numeric_signatures_unchanged": true,
+  "render_decode_provider_producer_executed": false,
+  "after_visual_and_timing_review": "PENDING separate authorized execution capacity; no acceptance from compilation or forecasts",
+  "corrected_utc": "2026-11-01T09:56:06.507742+00:00",
+  "effective_ZH_update_blocks": 11,
+  "effective_final_runtime_dictionary_exact_expected": true,
+  "merge_regression": "Initial merge edited only the first ZH dictionary; an existing later ZH.update overrode Contest. Actual whole-module Translator caught this before publication. Corrected from original0c4 at last effective entries; failed attempt retained.",
+  "all_non_ZH_dictionary_code_exact": true
+}

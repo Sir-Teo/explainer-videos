@@ -1,0 +1,95 @@
+{
+  "base_zh_lines_sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+  "source_before_sha256": "98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e",
+  "candidate_source_sha256": "0f613477aa043c40f1622d482caef005511f01ed0613ada91cc3a01ab626ea8e",
+  "ZH_updates": {
+    "Let's take stock. <bookmark mark='linear'/> Least squares is a projection": "我们来盘点一下。<bookmark mark='linear'/>最小二乘法是一次投影，在线性无偏估计里是最好的。<bookmark mark='penalties'/>岭回归收缩弱的方向；套索回归的软阈值挑选词语。<bookmark mark='logistic_newton'/>逻辑回归是一只凸的碗，牛顿法几步就找到碗底。<bookmark mark='bayes'/>朴素贝叶斯学得快，却一直有偏差，而且过于自信。<bookmark mark='neighbours'/>在大样本极限下，单个邻居的错误率至多是最好规则的两倍，但在很多维里，邻居们就被淹没了。<bookmark mark='kernels'/>核函数不抬升地抬升，支持向量机的对偶问题只需要它们。<bookmark mark='averaging'/>把树平均起来，能把方差降到由相关性决定的下限；<bookmark mark='boosting'/>提升法沿着指数损失往下走，XGBoost迈的是牛顿步。<bookmark mark='evaluation'/>而一个诚实的分数，需要对的曲线，和没碰过的测试页。"
+  },
+  "PHRASES": {},
+  "strings": {},
+  "obsolete_keys": {
+    "Let's take stock. Least squares is a projection": "Superseded for thisrecap bynewbookmark-bearing sourceprefix; rootmayretainhistoricalentry ifneeded."
+  },
+  "cue_groups": [
+    {
+      "name": "linear",
+      "english_anchor": "Least squares is a projection",
+      "chinese_anchor": "最小二乘法是一次投影",
+      "tile_indices": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "penalties",
+      "english_anchor": "Ridge shrinks",
+      "chinese_anchor": "岭回归收缩",
+      "tile_indices": [
+        2,
+        3
+      ]
+    },
+    {
+      "name": "logistic_newton",
+      "english_anchor": "Logistic regression",
+      "chinese_anchor": "逻辑回归",
+      "tile_indices": [
+        4
+      ]
+    },
+    {
+      "name": "bayes",
+      "english_anchor": "Naive Bayes",
+      "chinese_anchor": "朴素贝叶斯",
+      "tile_indices": [
+        5
+      ]
+    },
+    {
+      "name": "neighbours",
+      "english_anchor": "In the large-sample limit",
+      "chinese_anchor": "在大样本极限下",
+      "tile_indices": [
+        6
+      ]
+    },
+    {
+      "name": "kernels",
+      "english_anchor": "Kernels lift",
+      "chinese_anchor": "核函数不抬升",
+      "tile_indices": [
+        7,
+        8
+      ]
+    },
+    {
+      "name": "averaging",
+      "english_anchor": "Averaging trees",
+      "chinese_anchor": "把树平均起来",
+      "tile_indices": [
+        9
+      ]
+    },
+    {
+      "name": "boosting",
+      "english_anchor": "boosting walks",
+      "chinese_anchor": "提升法沿着",
+      "tile_indices": [
+        10
+      ]
+    },
+    {
+      "name": "evaluation",
+      "english_anchor": "And an honest score",
+      "chinese_anchor": "而一个诚实的分数",
+      "tile_indices": [
+        11
+      ]
+    }
+  ],
+  "cleaned_english_before": "Let's take stock. Least squares is a projection, and among linear unbiased estimates the best. Ridge shrinks the weak directions; the lasso's soft thresholds choose words. Logistic regression is a convex bowl, and Newton's method finds its bottom in a few steps. Naive Bayes learns fast but stays wrong, and overconfident on these pages. In the large-sample limit, a single neighbour errs at most twice as often as the best rule, but neighbours drown in many dimensions. Kernels lift without lifting, and the support vector machine's dual needs only them. Averaging trees cuts variance down to a floor set by their correlation; boosting walks down the exponential loss, and XGBoost takes Newton steps. And an honest score needs the right curve and untouched test pages.",
+  "cleaned_english_after": "Let's take stock. Least squares is a projection, and among linear unbiased estimates the best. Ridge shrinks the weak directions; the lasso's soft thresholds choose words. Logistic regression is a convex bowl, and Newton's method finds its bottom in a few steps. Naive Bayes learns fast but stays wrong, and overconfident on these pages. In the large-sample limit, a single neighbour errs at most twice as often as the best rule, but neighbours drown in many dimensions. Kernels lift without lifting, and the support vector machine's dual needs only them. Averaging trees cuts variance down to a floor set by their correlation; boosting walks down the exponential loss, and XGBoost takes Newton steps. And an honest score needs the right curve and untouched test pages.",
+  "cleaned_chinese_before": "我们来盘点一下。最小二乘法是一次投影，在线性无偏估计里是最好的。岭回归收缩弱的方向；套索回归的软阈值挑选词语。逻辑回归是一只凸的碗，牛顿法几步就找到碗底。朴素贝叶斯学得快，却一直有偏差，而且过于自信。在大样本极限下，单个邻居的错误率至多是最好规则的两倍，但在很多维里，邻居们就被淹没了。核函数不抬升地抬升，支持向量机的对偶问题只需要它们。把树平均起来，能把方差降到由相关性决定的下限；提升法沿着指数损失往下走，XGBoost迈的是牛顿步。而一个诚实的分数，需要对的曲线，和没碰过的测试页。",
+  "cleaned_chinese_after": "我们来盘点一下。最小二乘法是一次投影，在线性无偏估计里是最好的。岭回归收缩弱的方向；套索回归的软阈值挑选词语。逻辑回归是一只凸的碗，牛顿法几步就找到碗底。朴素贝叶斯学得快，却一直有偏差，而且过于自信。在大样本极限下，单个邻居的错误率至多是最好规则的两倍，但在很多维里，邻居们就被淹没了。核函数不抬升地抬升，支持向量机的对偶问题只需要它们。把树平均起来，能把方差降到由相关性决定的下限；提升法沿着指数损失往下走，XGBoost迈的是牛顿步。而一个诚实的分数，需要对的曲线，和没碰过的测试页。",
+  "state": "PRIVATE overlayonly; do notmutate mainzh/global"
+}

@@ -1,0 +1,9 @@
+# Integrated measured-score, disclosure and recap repairs
+
+Root applied exact AdaBoost9dace,Contest104c andOutro0f613 candidates after Tree9aa andForests569 had been applied locally. Forty-three numerical file hashes/sizes/mtimes remain unchanged. The effective local Chinese table changes only the intended AdaBoost and Contest values and adds four needed variants. The two global disclosure captions preserve every prior entry/pattern.
+
+The real whole-module Translator caught an integration mistake before publication: editing the first dictionary left a later ZH.update overriding Contest. Its failed input/report are retained under initial-merge-attempt. Corrected merging starts from the original0c4 table and edits the last effective entries across all11 ZH blocks. Actual combined translation, both caption lookups and Outro's9 concept marks pass seven live checks; three additional repository tests cover nested real-Translator two-way/unique/three-way outcomes. The original failure was independently reproduced and is retained in the Contest packet. No faulty table was committed.
+
+The final local table is SHA256`29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f`; global captions`89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46`. Historical scripts are an execution journal, including the corrected merger, not standalone production instructions. All before/after source bytes are compressed verbatim.
+
+Source compilation, text checks and timing forecasts are separate from actual after-render approval. AdaBoost/Contest narration changed and require fresh alignment; Outro preserves cleaned spoken text and per-utterance keys but changes scheduling. No camera, decoder, speech provider, numerical producer or model ran during integration. Fresh EN/ZH visual, timing, native-resolution, listening and production gates remain pending.

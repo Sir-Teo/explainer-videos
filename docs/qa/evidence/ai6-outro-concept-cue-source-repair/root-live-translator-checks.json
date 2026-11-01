@@ -1,0 +1,49 @@
+{
+  "completed_utc": "2026-11-01T09:56:07.360509+00:00",
+  "checks": [
+    {
+      "name": "actual merged Ada English paragraph translates to corrected Chinese",
+      "passed": true
+    },
+    {
+      "name": "actual merged Contest nested joint-best paragraph",
+      "passed": true
+    },
+    {
+      "name": "actual merged Outro marked translation",
+      "passed": true
+    },
+    {
+      "name": "actual merged Outro clean Chinese exact original",
+      "passed": true
+    },
+    {
+      "name": "actual merged Outro nine ordered named cue groups",
+      "passed": true
+    },
+    {
+      "name": "actual marked English clean original",
+      "passed": true
+    },
+    {
+      "name": "two exact live global captions",
+      "passed": true
+    }
+  ],
+  "count": 7,
+  "source_scope": "Actual current merged modules/localZH/globaltable and real Translator/bookmark parser, no private table patch. No camera, renderer, decoder, model, synthesis, producer or data load.",
+  "local_ZH_sha256": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+  "global_caption_sha256": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+  "actual_Contest_Chinese": "这是比赛：12种具名流程，在同样5部小说书页的相同10折上比较，使用固定的全语料词表，参数预先设定。<bookmark mark='a'/>只用两个词频时，这些受测流程在这些折上的准确率落在76%到83%之间。<bookmark mark='b'/>换成全部70个词频，2种流程并列取得最高平均准确率，为99.5%。单棵树是93%。在这些折上，逻辑回归得分高于提升树。对这个固定语料任务，小词效应的和是一种有用的描述。<bookmark mark='c'/>经典机器学习的一课是：数据的描述，比方法的巧妙更重要。这70个小词，做了大部分工作。",
+  "actual_Outro_bookmarks": {
+    "linear": 7,
+    "penalties": 29,
+    "logistic_newton": 50,
+    "bayes": 70,
+    "neighbours": 90,
+    "kernels": 129,
+    "averaging": 153,
+    "boosting": 174,
+    "evaluation": 193
+  }
+}

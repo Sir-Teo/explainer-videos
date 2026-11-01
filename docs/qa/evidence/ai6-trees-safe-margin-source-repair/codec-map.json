@@ -1,0 +1,10 @@
+{
+  "file": "candidate.patch.gz",
+  "codec": "gzip",
+  "original_file": "/workspace/runtime/ai6-trees-margin-candidate/candidate.patch",
+  "original_sha256": "c07d5f45b91bd814d9f2ca67ef48ede11e4228b3b1e2c91b18be1dc040a63faf",
+  "original_bytes": 1408,
+  "encoded_sha256": "2c1d3c82fabd08cd653d814af904e0935a6cfcd3ae980fc54ebcf30aa50caa52",
+  "decoded_bytes_exact": true,
+  "normalization": "none; literal raw patch bytes including escapes and newlines preserved"
+}

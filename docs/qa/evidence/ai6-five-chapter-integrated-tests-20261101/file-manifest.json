@@ -1,0 +1,37 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 912,
+    "sha256": "c16d3cdf396982a5abd99a90e8e65ecb1d2f4cf2a3854d1128807895ff917f6b"
+  },
+  {
+    "path": "full-unittest.log.gz",
+    "bytes": 19464,
+    "sha256": "16eb8b4576a0b0a0250bfbf45af3375716cec3fcdcbd4f2180a80d7a9485b8dc"
+  },
+  {
+    "path": "prospective-index-check.json",
+    "bytes": 1232,
+    "sha256": "2a0ca067e0eb16a96f113f9331f5e615dbec1b3b22ee5232db2000a766deb05b"
+  },
+  {
+    "path": "receipt.json.gz",
+    "bytes": 556,
+    "sha256": "724ed131f97de7932bf61e159f3f5b5b3463ca0474459849b065b01e9a18f421"
+  },
+  {
+    "path": "run_ai6_five_chapter_batch_tests.py.gz",
+    "bytes": 1292,
+    "sha256": "15d5f77e3c0d719ab6b5a47e3775fc99e6b08cc640fb7a0c6c270cc89f2de685"
+  },
+  {
+    "path": "source-after.json.gz",
+    "bytes": 76934,
+    "sha256": "afb73447989ab7b37c6a3c3fb077b2f4e353d1dd3ac797845b92625898d5632e"
+  },
+  {
+    "path": "source-before.json.gz",
+    "bytes": 76934,
+    "sha256": "afb73447989ab7b37c6a3c3fb077b2f4e353d1dd3ac797845b92625898d5632e"
+  }
+]

@@ -1,0 +1,88 @@
+{
+  "state": "PREPARED ONLY; root/parent executionhost+resource release required",
+  "source_candidate_sha256": "0f613477aa043c40f1622d482caef005511f01ed0613ada91cc3a01ab626ea8e",
+  "private_zh_proposal_sha256": "a4f5b1d4d31c63565a7d1d29bd79ac53138443194cea73dd59708fd5a7268e51",
+  "environment": {
+    "EXPLAINER_TTS": "silent",
+    "EXPLAINER_CACHED_ONLY": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "disk_start_guard_bytes": 805306368,
+  "commands": [
+    [
+      "nice",
+      "-n",
+      "10",
+      "python",
+      "tools/qa_series.py",
+      "ai6",
+      "--only",
+      "Outro",
+      "--lang",
+      "en",
+      "--cached-only",
+      "--timeout",
+      "1200"
+    ],
+    [
+      "nice",
+      "-n",
+      "10",
+      "python",
+      "tools/qa_series.py",
+      "ai6",
+      "--only",
+      "Outro",
+      "--lang",
+      "en",
+      "--cached-only",
+      "--timeout",
+      "1200",
+      "--motion"
+    ],
+    [
+      "nice",
+      "-n",
+      "10",
+      "python",
+      "tools/qa_series.py",
+      "ai6",
+      "--only",
+      "Outro",
+      "--lang",
+      "zh",
+      "--cached-only",
+      "--timeout",
+      "1200"
+    ],
+    [
+      "nice",
+      "-n",
+      "10",
+      "python",
+      "tools/qa_series.py",
+      "ai6",
+      "--only",
+      "Outro",
+      "--lang",
+      "zh",
+      "--cached-only",
+      "--timeout",
+      "1200",
+      "--motion"
+    ]
+  ],
+  "after_checks": [
+    "Rootappliescandidate+mergesexactprivateZHproposalwithotherapproveddeltas; keepbeforeoldmovie/source identities.",
+    "FreshbilingualEP+fullsilentmovie; copy2 exactnewmovie/sidecars/sourceinputs/rawrecord beforeinspection.",
+    "Realcapturemust resolve9bookmarks inexactsameorder; no synthprovider/modelcalls or hidden numericalcompute.",
+    "Comparecleanedspokenstrings and per-utterancecachekeys/WAVhashes; allowintendedrawmarkerfield/schedulingdifferences, checkactualdurations/sidecars instead offalse byteidentity.",
+    "Parentreviewsallchangedrecap frames through9reveals, everyencoded criticalNewtonlead andheldstates; recordactualzero/partial/fulltilevisibilityagainstactualword/SRTcue times.",
+    "Verifytile4settledbeforeNewtonname inbothlanguages, all12finaltilesreadable withpositivehold, no missingtiles/reordering/layoutregression.",
+    "KeepENhistoricalProbabilitysourcewarning; broaderfingerprintchangesfromdisjointpart6edits require scopedactualusedsource/caption/narration receipts, neverretagoldrawstatus.",
+    "No claimcontinuousperception/listening/production4K/native1080motion fromthis480silentregression."
+  ],
+  "owner": "Parent wholeOutro reviewer; thischild schedulingcandidate only, no duplicatewholemovie pass"
+}

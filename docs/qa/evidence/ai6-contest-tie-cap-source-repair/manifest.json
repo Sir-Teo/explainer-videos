@@ -1,0 +1,170 @@
+{
+  "payload_files": 41,
+  "payload_bytes": 1358906,
+  "files": {
+    "README.md": {
+      "bytes": 2119,
+      "sha256": "730fa27e479e0488b302392ebf5eb218000cbf23a7e16905e2a98037a61dd0d9"
+    },
+    "applied-sources/tests/test_ai6_scene_teaching_repairs.py.gz": {
+      "bytes": 4563,
+      "sha256": "7de59854bb2c29e130fd50b62bdfa27396dcf4d67408772530bafda9f229a7eb"
+    },
+    "applied-sources/videos/ai/ai6/s18_contest.py.gz": {
+      "bytes": 6072,
+      "sha256": "9d4aee796b2e3a4241ad18db5e98a5d734e7640dc1a26d0e3dcd5e645da6a388"
+    },
+    "applied-sources/videos/ai/ai6/zh_lines.py.gz": {
+      "bytes": 28866,
+      "sha256": "c8cbef6bc437fad98a494bd75a1779f125f51f5bb7a0be80ab1d2ec072ab4e1d"
+    },
+    "applied-sources/videos/ai/ai_text_zh.json.gz": {
+      "bytes": 886554,
+      "sha256": "eda6883a2195648af8632ca6b312de164b65b84dae7a49bc262d0b47f91f1cfd"
+    },
+    "codec-map.json": {
+      "bytes": 15834,
+      "sha256": "8c9630e19816d2e48546ec8364cbf89d6709dd20e00badf2d5f6573bec110a29"
+    },
+    "historical-private/README.md.gz": {
+      "bytes": 1071,
+      "sha256": "bf3e520df67d20f840a70389f36741ab289cff926229d3a8924836a26e39adae"
+    },
+    "historical-private/actual-board-audit.json.gz": {
+      "bytes": 1592,
+      "sha256": "2ef2c75eb2abfefb32835bc2a745af13ec549cf087f7030e6bef19d879907fbf"
+    },
+    "historical-private/before/en-003_00023.3s.png": {
+      "bytes": 68458,
+      "sha256": "3db88cc1f78c4dc3ae26d631d0a10ffea335c7ebfc6192ecab826bb6abfff09d"
+    },
+    "historical-private/before/en-raw-endpoint-result.json.gz": {
+      "bytes": 17078,
+      "sha256": "82fe1141faa85dd051f53512afa276ce1eadc2b713fe42f08129ada1725c0ffc"
+    },
+    "historical-private/before/zh-003_00024.4s.png": {
+      "bytes": 74806,
+      "sha256": "8a231c3937ab2d917dfe1ef61a90fc3ed02012994d8b26209db3c0570ca6169b"
+    },
+    "historical-private/before/zh-raw-endpoint-result.json.gz": {
+      "bytes": 27352,
+      "sha256": "33d2a98f55cbef5663c977d25d11a12b3cdb0c0e71113c28cd79641527b38dfe"
+    },
+    "historical-private/before-s18_contest.py.gz": {
+      "bytes": 5840,
+      "sha256": "c332ec28807194a4fcd21ac8a078577943f09bb11560345dd4010343c635031f"
+    },
+    "historical-private/candidate.patch.gz": {
+      "bytes": 1371,
+      "sha256": "43265970be7188bb217aa13fa4dc200c5ae3a2b340b050e8bd7901e80bb0b43b"
+    },
+    "historical-private/check_candidate.py.gz": {
+      "bytes": 2764,
+      "sha256": "1fdb98466e97f94915d14d1b9ff6428d352d64ca96613704f28ec084f13210ba"
+    },
+    "historical-private/check_geometry.py.gz": {
+      "bytes": 1980,
+      "sha256": "68ef383d9291cba43b1b97299fc9ac58d452fba203128e2c647fddac749b37ce"
+    },
+    "historical-private/fixture-corrections.json.gz": {
+      "bytes": 147,
+      "sha256": "2602dbbbe8c041466d34e3ed9d7562e4946ab9ab832c480b87ec452f1e9d8b81"
+    },
+    "historical-private/geometry-en.json.gz": {
+      "bytes": 1586,
+      "sha256": "d2b871b549e054e80ec8a70da5c839769fe33369e9dd1e3e2e7b6e9f9b00a25d"
+    },
+    "historical-private/geometry-en.log.gz": {
+      "bytes": 1126,
+      "sha256": "20a262227cf9a9d126bf097fee2954932a6bb64b6d44aa25f493909e788cbc0c"
+    },
+    "historical-private/geometry-zh.json.gz": {
+      "bytes": 1742,
+      "sha256": "0017f56931554bc50155f115e885b95b0a79e358b163be5af58126e83aee466d"
+    },
+    "historical-private/geometry-zh.log.gz": {
+      "bytes": 1283,
+      "sha256": "64c81fc29dd88b0b58b6899bb6e1895ce6be508c0fb1e7796abf3da0c383c7e3"
+    },
+    "historical-private/handoff.json.gz": {
+      "bytes": 5680,
+      "sha256": "72ef96728ea2ea6f7302683f08bea53bd347c5d36e8df575fc2ccbb10dc49620"
+    },
+    "historical-private/original-manifest.json.gz": {
+      "bytes": 1268,
+      "sha256": "4d6ed2e4a278df38ca4e253f2eb54228e89fd7f01f2c61fb58b300e33cd15d28"
+    },
+    "historical-private/s18_contest.py.gz": {
+      "bytes": 6072,
+      "sha256": "9d4aee796b2e3a4241ad18db5e98a5d734e7640dc1a26d0e3dcd5e645da6a388"
+    },
+    "historical-private/source-translation-fixtures.json.gz": {
+      "bytes": 1679,
+      "sha256": "6f3f0c4acc30f7488001aadbb5114620185906a9572f534934e9ec5760a1a48a"
+    },
+    "historical-private/source-translation-fixtures.log.gz": {
+      "bytes": 662,
+      "sha256": "a2a65be78b97d9e4610028b34285f3c2c0ddaf0c33ba120c889071ea2689db0f"
+    },
+    "historical-private/translation-overlay.json.gz": {
+      "bytes": 1139,
+      "sha256": "5e62e21df3ac86f0bbc52b179befbe40d37ef06ca7c0c0407c1c1b733c48ffd7"
+    },
+    "integrated-suite-reference/full-unittest.log.gz": {
+      "bytes": 19464,
+      "sha256": "16eb8b4576a0b0a0250bfbf45af3375716cec3fcdcbd4f2180a80d7a9485b8dc"
+    },
+    "integrated-suite-reference/receipt.json.gz": {
+      "bytes": 556,
+      "sha256": "724ed131f97de7932bf61e159f3f5b5b3463ca0474459849b065b01e9a18f421"
+    },
+    "integrated-suite-reference/source-after.json.gz": {
+      "bytes": 76934,
+      "sha256": "afb73447989ab7b37c6a3c3fb077b2f4e353d1dd3ac797845b92625898d5632e"
+    },
+    "integrated-suite-reference/source-before.json.gz": {
+      "bytes": 76934,
+      "sha256": "afb73447989ab7b37c6a3c3fb077b2f4e353d1dd3ac797845b92625898d5632e"
+    },
+    "real-module-regressions/real-module-translation-initial-probe.json.gz": {
+      "bytes": 649,
+      "sha256": "322051566c5910b7789cceaa4208e71eb79c7203ca04a8bfc6e57ac20e7991a1"
+    },
+    "real-module-regressions/repository-real-translator-regression.log.gz": {
+      "bytes": 350,
+      "sha256": "48bdd3863f91bb1640db158284651c0b1a1e0c04ae632b5fa61f501be349d6e5"
+    },
+    "real-module-regressions/repository-regression-receipt.json.gz": {
+      "bytes": 856,
+      "sha256": "ac141736d53d05ddf37e1bd48884f3dcd61d4de8ff8cc3c5e31da4f68dc8147c"
+    },
+    "report.json": {
+      "bytes": 4640,
+      "sha256": "4de964336ea3c218d5e3b3aaa1b6c0e39648b61536863dfbe8cf361aadf8cbbf"
+    },
+    "root-integration/caption-add.json.gz": {
+      "bytes": 391,
+      "sha256": "88d1e04d8bfe2e1f435baa621940a52b9886f79847f16d3ee4a0de249637e25b"
+    },
+    "root-integration/live-text-check.json.gz": {
+      "bytes": 1146,
+      "sha256": "c685d639d72d2b7565aa82c7e742bddb6c270255ad31c8ef840e902e70bece70"
+    },
+    "root-integration/local-ZH-delta.json.gz": {
+      "bytes": 1658,
+      "sha256": "3d78bf820b1e30da787cf673841e1f34e31b95668ad851bf372d70cf46243be4"
+    },
+    "root-integration/numeric-after.json.gz": {
+      "bytes": 2637,
+      "sha256": "ff728b3e451470284ee340443bd744faf1bc4d0e0f168404f661da46ef124a57"
+    },
+    "root-integration/numeric-before.json.gz": {
+      "bytes": 2637,
+      "sha256": "ff728b3e451470284ee340443bd744faf1bc4d0e0f168404f661da46ef124a57"
+    },
+    "root-integration/report.json.gz": {
+      "bytes": 1350,
+      "sha256": "a997191f22d9465c830f2c9c959396387b7c88bcc504dc391d369409e1afcf56"
+    }
+  }
+}

@@ -138,7 +138,7 @@ class Forests(VoiceoverScene):
         n = len(fa)
         lo = 0.8
         g = plot([0, n, 50], [lo, 1.0, 0.05], x_length=7.4, y_length=4.2, xticks=[0, 100, 200, 300],
-                 yticks=[0.8, 0.85, 0.9, 0.95, 1.0], yfmt=lambda v: rf"{100 * v:.0f}\%", center=[-2.0, -0.4, 0],
+                 yticks=[0.8, 0.85, 0.9, 0.95, 1.0], yfmt=lambda v: rf"{100 * v:.0f}\%", center=[-2.0, -0.85, 0],
                  xlabel=r"trees in the forest \ (all $70$ rates)", ylabel=r"pages right")
         ax = g.ax
         one = DashedLine(ax.c2p(0, b["one_tree"]), ax.c2p(n, b["one_tree"]), color=GREY_B, stroke_width=2)
@@ -154,7 +154,7 @@ class Forests(VoiceoverScene):
             key, DOWN, buff=0.35).align_to(key, LEFT)
         keep_in_frame(oob)
         hist = history_card(2001, r"Leo Breiman", r"random forests, \ after Ho's random decision forests (1995) "
-                            r"and his own bagging (1996)", color=HIST, width=5.2).to_corner(UL, buff=0.2)
+                            r"and his own bagging (1996)", color=HIST, width=5.2).to_corner(UR, buff=0.3)
         n_te = int(np.asarray(load("pages")["test"], bool).sum())
         with self.voiceover(
             f"Grow a forest of {n} on all the training pages. <bookmark mark='a'/> One full tree gets "

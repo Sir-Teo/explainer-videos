@@ -1,0 +1,22 @@
+{
+  "utc": "2026-11-01T09:20:45.903888+00:00",
+  "cases": [
+    {
+      "case": "en/SVM",
+      "states": 23,
+      "pages": 6,
+      "native_followups": 4,
+      "views_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/en-SVM/views.json",
+      "views_sha256": "a66a8c144c5cf3bf79e17ae48ce743689acddd904cf336a4fa49ae5675e5b535"
+    },
+    {
+      "case": "zh/SVM",
+      "states": 24,
+      "pages": 6,
+      "native_followups": 5,
+      "views_path": "/workspace/runtime/ai6-native1080-preparation/run-c80f10b4-remaining34/zh-SVM/views.json",
+      "views_sha256": "6031b2ce582bd339247a974739426917da24f2a6a698a74c3004d7a5dfad7086"
+    }
+  ],
+  "scope": "Views completed before ledger creation; all47 preparedstates,12sheets,9originalnativefollowups. No imagesgenerated, rendered ordecoded."
+}

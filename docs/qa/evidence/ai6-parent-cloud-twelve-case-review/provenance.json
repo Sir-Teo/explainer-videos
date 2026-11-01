@@ -1,0 +1,30 @@
+{
+  "observed_utc": "2026-11-01T09:59:52.889428+00:00",
+  "files": [
+    {
+      "library_file_id": "libfile_c45e8357d4ac8191896053ec093c250f",
+      "source_bytes": 11011,
+      "source_sha256": "8a4e962f381ba351193f53f2c30fbac3e5be468a479c8509c7fd7200be47c621",
+      "exact_all_text_bytes_verified": true,
+      "read_start": 1,
+      "read_end": 219,
+      "total_lines": 219
+    },
+    {
+      "library_file_id": "libfile_819c45f650788191a96cddb08dd3e184",
+      "source_bytes": 7211,
+      "source_sha256": "48c6d7c99232266d77999ce075f7bdba02478358639a86a604e59e52fd8fd3be",
+      "exact_all_text_bytes_verified": true,
+      "read_start": 1,
+      "read_end": 38,
+      "total_lines": 38
+    }
+  ],
+  "evidence_zip": {
+    "library_file_id": "libfile_6b9e77ac93ac8191951653b347719b0f",
+    "bytes": 20166220,
+    "sha256": "71f8e0432f7864553ba85af5a13350273345a10c0b804c7c6ebced2caeafcfff",
+    "materialized_here": false,
+    "verification_scope": "Parent-reported saved identity; not independently downloaded here"
+  }
+}

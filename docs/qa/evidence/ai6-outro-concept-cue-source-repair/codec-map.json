@@ -1,0 +1,29 @@
+{
+  "encoding": "gzip lossless, no normalization",
+  "files": [
+    {
+      "file": "applied-source/zh_lines.applied.py.gz",
+      "original": "/workspace/explainer-videos/videos/ai/ai6/zh_lines.py",
+      "original_sha256": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+      "gzip_sha256": "c8cbef6bc437fad98a494bd75a1779f125f51f5bb7a0be80ab1d2ec072ab4e1d",
+      "original_bytes": 79393,
+      "decoded_bytes_exact": true
+    },
+    {
+      "file": "candidate.patch.gz",
+      "original": "/workspace/runtime/ai6-outro-recap-cue-candidate/candidate.patch",
+      "original_sha256": "ae3825cd665f4e2f36687ca2fea45a4f5e5af2c1d1d622acd2cf7ac7eed98c00",
+      "gzip_sha256": "a8474d586544f80a996d6c77ae13d066743efb6a32f7dadb29cd68c0e5beeb47",
+      "original_bytes": 3454,
+      "decoded_bytes_exact": true
+    },
+    {
+      "file": "root-full-unittest.log.gz",
+      "original": "/workspace/runtime/integrated-20261101-five-chapter-batch/full-unittest.log",
+      "original_sha256": "98554d13ffac08fcd44330c699f0c93fdc5d942ac01daedd105db6a5bf877a37",
+      "gzip_sha256": "16eb8b4576a0b0a0250bfbf45af3375716cec3fcdcbd4f2180a80d7a9485b8dc",
+      "original_bytes": 110641,
+      "decoded_bytes_exact": true
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "nice",
+    "-n",
+    "10",
+    "/workspace/explainer-videos/.venv/bin/python",
+    "/workspace/explainer-videos/tools/qa_series.py",
+    "ai6",
+    "--worker",
+    "Outro",
+    "--lang",
+    "zh",
+    "--cached-only",
+    "--motion"
+  ],
+  "cwd": "/workspace/explainer-videos",
+  "env_overrides": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "EXPLAINER_CACHED_ONLY": "1",
+    "EXPLAINER_TTS": "silent"
+  },
+  "timeout_seconds": 1200,
+  "heartbeat_seconds": 30,
+  "minimum_free_bytes": 805306368,
+  "approved_table_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+  "driver_sha256": "a3ba29a272b86c9e66ebae4acc3caa7dfdba5beb22fe35de7265aa6530adf478"
+}

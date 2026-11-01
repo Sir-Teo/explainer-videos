@@ -158,6 +158,77 @@ class ConsumerGeometryAndOutcomes(unittest.TestCase):
 
 
 class LocalChineseNarration(unittest.TestCase):
+    @staticmethod
+    def contest_spoken(rows):
+        """Evaluate the actual scalar verdict/VO nodes, never the scene or loader."""
+        source = tree("s18_contest.py")
+        helper = next(n for n in source.body
+                      if isinstance(n, ast.FunctionDef) and n.name == "board_leaders")
+        board = method("s18_contest.py", "board")
+        names = {"a2", "lo2", "hi2", "leaders70", "winner_s", "best70", "best_mean",
+                 "tree70", "xgb70", "lr70", "line_s"}
+        nodes = [helper]
+        for node in board.body:
+            if isinstance(node, ast.Assign) and len(node.targets) == 1:
+                target = node.targets[0]
+                targets = target.elts if isinstance(target, ast.Tuple) else [target]
+                if all(isinstance(t, ast.Name) and t.id in names for t in targets):
+                    nodes.append(node)
+            elif (isinstance(node, ast.If)
+                  and any(assigned(n, "winner_s") or assigned(n, "line_s") for n in ast.walk(node))):
+                nodes.append(node)
+        scope = execute(nodes, rows=rows)
+        argument = next(n.args[0] for n in ast.walk(board)
+                        if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                        and n.func.attr == "voiceover")
+        english = eval(compile(ast.Expression(argument), "actual-contest-voiceover", "eval"), scope)
+        return english, [r["key"] for r in scope["leaders70"]]
+
+    @staticmethod
+    def contest_rows(lr=.9953365384615385, svm=.9953365384615385, lasso=.993798076923077):
+        return [{"key": key, "name": name, "2": {"cv": .8}, "70": {"cv": score}}
+                for key, name, score in [
+                    ("lr", "logistic regression", lr),
+                    ("svm_rbf", "Gaussian-kernel SVM", svm),
+                    ("lasso", "lasso", lasso),
+                    ("tree", "one tree (depth 4)", .9297077228327228),
+                    ("xgb", "gradient boosting (100)", .9827621336996337),
+                ]]
+
+    def translated_contest(self, rows):
+        from explainer.zh_templates import Translator
+        english, leaders = self.contest_spoken(rows)
+        # Load the real complete module: a later ZH.update must not resurrect the
+        # old single-winner template after an earlier dictionary was repaired.
+        chinese = Translator("ai6")(english)
+        self.assertIsNotNone(chinese)
+        self.assertNotRegex(chinese, r"\{[^{}]+\}")
+        bookmarks = lambda s: re.findall(r"<bookmark mark=['\"]([^'\"]+)['\"]/>", s)
+        self.assertEqual(bookmarks(english), ["a", "b", "c"])
+        self.assertEqual(bookmarks(chinese), bookmarks(english))
+        return english, chinese, leaders
+
+    def test_actual_contest_two_way_top_tie_survives_late_translation_updates(self):
+        english, chinese, leaders = self.translated_contest(self.contest_rows())
+        self.assertEqual(leaders, ["lr", "svm_rbf"])
+        self.assertIn("2 procedures tie", english)
+        self.assertIn("2种流程并列", chinese)
+        self.assertIn("99.5%", chinese)
+        self.assertNotIn("最高的是逻辑回归", chinese)
+
+    def test_actual_contest_unique_mean_is_not_tied_by_display_rounding(self):
+        _, chinese, leaders = self.translated_contest(self.contest_rows(lr=.99536, svm=.99534))
+        self.assertEqual(leaders, ["lr"])
+        self.assertIn("逻辑回归", chinese)
+        self.assertIn("99.5%", chinese)
+        self.assertNotIn("并列", chinese)
+
+    def test_actual_contest_three_way_top_tie_retains_every_leader_and_count(self):
+        _, chinese, leaders = self.translated_contest(self.contest_rows(lasso=.9953365384615385))
+        self.assertEqual(leaders, ["lr", "svm_rbf", "lasso"])
+        self.assertIn("3种流程并列", chinese)
+        self.assertIn("99.5%", chinese)
+
     def test_new_outcome_sentences_translate_without_reversing_the_observation(self):
         from explainer.zh_templates import Translator
         tr = Translator("ai6")

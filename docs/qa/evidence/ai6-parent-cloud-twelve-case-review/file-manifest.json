@@ -1,0 +1,22 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1361,
+    "sha256": "306c6752d6a5be9bd92e2d91a3470f784455e5942c97464b72d8fba578eba189"
+  },
+  {
+    "path": "findings.txt.gz",
+    "bytes": 3857,
+    "sha256": "616f0290272d12feb4d6b21658adbbeca8f022e4093f26092b13dfd13379d20e"
+  },
+  {
+    "path": "provenance.json",
+    "bytes": 1030,
+    "sha256": "e054461acbe4d582d5cf2f04f863ee39005baf22ef58ef677e793a51d467e91d"
+  },
+  {
+    "path": "review.json.gz",
+    "bytes": 2533,
+    "sha256": "97fbf9360de97198b0c513791268cbfb7d7a03489fd6d93746ac55449bf8a037"
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "checked_utc": "2026-11-01T10:19:02.173511+00:00",
+  "source_config_files": 1532,
+  "all_tested_blobs_match_prospective_index": true,
+  "errors": [],
+  "manifest_checks": [
+    {
+      "package": "ai6-trees-safe-margin-source-repair",
+      "payloads_verified": 21
+    },
+    {
+      "package": "ai6-forests-layout-source-repair",
+      "payloads_verified": 45
+    },
+    {
+      "package": "ai6-adaboost-precision-floor-source-repair",
+      "payloads_verified": 40
+    },
+    {
+      "package": "ai6-contest-tie-cap-source-repair",
+      "payloads_verified": 41
+    },
+    {
+      "package": "ai6-outro-concept-cue-source-repair",
+      "payloads_verified": 50
+    },
+    {
+      "package": "ai6-svm-native1080-endpoint-review",
+      "payloads_verified": 64
+    },
+    {
+      "package": "ai6-five-chapter-source-integration",
+      "payloads_verified": 24
+    },
+    {
+      "package": "ai6-five-chapter-caption-regression",
+      "payloads_verified": 4
+    },
+    {
+      "package": "ai6-five-chapter-integrated-tests-20261101",
+      "payloads_verified": 7
+    },
+    {
+      "package": "ai6-parent-cloud-twelve-case-review",
+      "payloads_verified": 4
+    }
+  ],
+  "exact_ignored_compressed_evidence_force_added": []
+}

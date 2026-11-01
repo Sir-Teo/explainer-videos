@@ -12,6 +12,15 @@ AUTH = ("#E86F8A", "#58A6FF")
 LO = 0.70  # the bars start at 70% right
 
 
+def board_leaders(rows):
+    """All procedures tied at the highest finite seventy-rate fold mean."""
+    finite = [r for r in rows if "70" in r and math.isfinite(r["70"]["cv"])]
+    if not finite:
+        return []
+    best = max(r["70"]["cv"] for r in finite)
+    return [r for r in finite if r["70"]["cv"] == best]
+
+
 class Contest(VoiceoverScene):
     def construct(self):
         chapter(self, 17, r"The contest, and two cultures", r"Which method wins, and why do trees still rule tables?",
@@ -48,10 +57,18 @@ class Contest(VoiceoverScene):
                 val = MathTex(rf"{100 * a:.1f}", font_size=22, color=col).move_to([x0 + W + 0.45, yv, 0])
                 g.add(VGroup(bar, err, val))
             lines.add(g)
-        scale = note(r"bars start at $70\%$; \ white: \ $\pm$ one s.d. over the ten folds").to_corner(DR, buff=0.15)
+        scale = note(r"bars: $70$--$100\%$; \ white: $\pm$ one s.d. across folds \\ error bars capped at the displayed axis limits", font_size=20).to_corner(DR, buff=0.20)
         a2 = [r["2"]["cv"] for r in rows if "2" in r]
         lo2, hi2 = min(a2), max(a2)
-        best70 = max(rows, key=lambda r: r["70"]["cv"] if "70" in r else 0)
+        leaders70 = board_leaders(rows)
+        if not leaders70:
+            winner_s = "No finite seventy-rate mean accuracy is available here."
+        elif len(leaders70) == 1:
+            best70 = leaders70[0]
+            winner_s = f"{best70['name']} has the highest mean accuracy, at {100 * best70['70']['cv']:.1f} percent."
+        else:
+            best_mean = leaders70[0]["70"]["cv"]
+            winner_s = f"{len(leaders70)} procedures tie for the highest mean accuracy, at {100 * best_mean:.1f} percent."
         tree70 = next(r for r in rows if r["key"] == "tree")["70"]["cv"]
         xgb70 = next(r for r in rows if r["key"] == "xgb")["70"]["cv"]
         lr70 = next(r for r in rows if r["key"] == "lr")["70"]["cv"]
@@ -69,7 +86,7 @@ class Contest(VoiceoverScene):
             "with a fixed full-corpus dictionary and settings fixed in "
             f"advance. <bookmark mark='a'/> With two rates, every method lands between {100 * lo2:.0f} and "
             f"{100 * hi2:.0f} percent for these tested procedures on these folds. <bookmark mark='b'/> With all seventy, "
-            f"the best is {best70['name']}, at {100 * best70['70']['cv']:.1f} percent. A single tree manages "
+            f"{winner_s} A single tree manages "
             f"{100 * tree70:.0f}. {line_s} "
             "<bookmark mark='c'/> The lesson of classical machine learning: the description of the data mattered "
             "more than the cleverness of the method. Choosing seventy small words did most of the work."
@@ -81,7 +98,11 @@ class Contest(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(g[2]) for g in lines], lag_ratio=0.1), run_time=2.0)
             vo.wait_until("c")
-            self.play(Indicate(lines[rows.index(best70)][2], color=WHITE, scale_factor=1.05), run_time=1.0)
+            if leaders70:
+                self.play(*[Indicate(lines[rows.index(r)][2], color=WHITE, scale_factor=1.05)
+                            for r in leaders70], run_time=1.0)
+            else:
+                self.wait(1.0)
         self.wait(0.3)
         self.clear_scene()
 

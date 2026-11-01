@@ -1,0 +1,13 @@
+# Applied AdaBoost precision and plot-floor source repair
+
+The applied scene now says the numerical alpha search agrees with the formula “to within a few millionths here,” with aligned Chinese. Its cached largest difference is3.1611917665763656×10^-6 (displayed3.2×10^-6), which did not support the former sixth-decimal claim.
+
+A three-line bilingual cue below the readouts explains that zero training error and positive loss below10^-4 share the plotted baseline. Existing numerical arrays, curve vertices/flooring, equations, other methods, bookmarks and requested animation timings are preserved. Training error first reaches zero at round19; positive exponential loss first passes below the plotfloor at78 and finishes at3.209364758370775×10^-17. The cue discloses censoring rather than asserting those values are equal.
+
+The direct applied scene is9dace46b…; the actual combined local Chinese file is29600967… and global captions89f96750…. The private local Chinese7b67d21a… was a proposal-only file and was not copied over concurrent merged entries. Actual effective final dictionary values and exact live floor-caption lookup were verified. Full hashes are in `applied-receipt.json`.
+
+The original private “not applied” records are retained verbatim in `private-candidate-history/` as history. Its original manifest still describes its original filenames; `codec-map.json` maps those to stored gzip files and verifies decoded byte equality. Raw patch bytes are gzip only, with no plain patch normalization. Four original854×480 endpoint witnesses were actually viewed and retain exact PNG bytes. Those are BEFORE images, not new applied output.
+
+Private checks cover AST scope, actual Translator behavior and isolated actual-mobject EN/ZH bounds, with no scene/camera render. Root integration additionally records641passing tests in54.406seconds with1532source/config files unchanged, seven actual merged translation/bookmark checks,6505retained caption outputs withzerochanges, and43unchanged numerical file signatures. These checks do not substitute for new rendered review. The combined root report candidly preserves an initial overwritten-dictionary merge attempt that was corrected and live-verified before publication.
+
+New after captures and visual/timing validation have NOT STARTED. Changed derive narration requires fresh EN/ZH durations/sidecars; no timing equivalence, listening, audio synchronization, continuous playback or production-resolution approval is claimed. The prepared after plan remains in the historical candidate packet and applies after root controlled capture release. No model/audio/movie payloads or geometry cache are included.

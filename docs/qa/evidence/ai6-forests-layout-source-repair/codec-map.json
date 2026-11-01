@@ -1,0 +1,346 @@
+[
+  {
+    "path": "private-candidate-history/README.md.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/README.md",
+    "original_sha256": "97235e6ee3147908087d1e1459e2b3e3b5acbab8ae0c656fd8afeeeefc662d22",
+    "original_bytes": 1598,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "b65f27ac15b27fa44520154cf7c2e9db5b348256abc80a0fbf984a6df8ed4d4b"
+  },
+  {
+    "path": "private-candidate-history/before.py.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/before.py",
+    "original_sha256": "19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b",
+    "original_bytes": 11200,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "445f2075ce4fbafd1864ade89a580d8473eeff8b763f53608bfa5c434c177a46"
+  },
+  {
+    "path": "private-candidate-history/candidate.patch.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/candidate.patch",
+    "original_sha256": "7a7eeaea413b30347f9959f7a80b2df344ab7bad233614cbd3342cf1db032613",
+    "original_bytes": 1297,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "e6107be0adfa7ff60547e8278b5de02114d02f9551385204e2c48b47d512e90a"
+  },
+  {
+    "path": "private-candidate-history/candidate.py.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/candidate.py",
+    "original_sha256": "5695aabdd4ff39c68135a5a3de172077e4f5d26cf9b8f546741c8f45ffbf6018",
+    "original_bytes": 11201,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "d1daa98e73cd409a7661689e8bb4e47d6f17587eae5800b9d7ba66a0a2ea80f0"
+  },
+  {
+    "path": "private-candidate-history/current-payload-inventory.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/current-payload-inventory.json",
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "original_bytes": 13968,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "private-candidate-history/current-source-observation.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/current-source-observation.json",
+    "original_sha256": "a24c74a786d81ef55567a9d1c32a798fe42a548d0c3fcb1dff7c3e70d9613485",
+    "original_bytes": 886,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "86d8f4b2cd61b2eec68ec6330a94b30b5eb48c50b08407713374740d228311cb"
+  },
+  {
+    "path": "private-candidate-history/en/009_00103.9s.png",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/en/009_00103.9s.png",
+    "original_sha256": "dc04c1d38d535e90492f086e473f34591563b19e923109aaac4f535e01e30865",
+    "original_bytes": 64119,
+    "codec": "originalPNGbytes",
+    "stored_sha256": "dc04c1d38d535e90492f086e473f34591563b19e923109aaac4f535e01e30865"
+  },
+  {
+    "path": "private-candidate-history/en/copy-manifest.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/en/copy-manifest.json",
+    "original_sha256": "289a6167bd1c5919b2131f6940db7184a2da3bfc44a4f9dc48975f1349a90a25",
+    "original_bytes": 4254,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "e965cbe95262121b8fa02925b19884259fd24e8d97779ee11ac78f24794d1637"
+  },
+  {
+    "path": "private-candidate-history/en/data-after.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/en/data-after.json",
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "original_bytes": 13968,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "private-candidate-history/en/data-before.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/en/data-before.json",
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "original_bytes": 13968,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "private-candidate-history/en/receipt.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/en/receipt.json",
+    "original_sha256": "4e98dc9085d2ae1f3db3830c3505c2aeb2935afe05023e983aa25a5241649c4e",
+    "original_bytes": 5035,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "ac5399b3d438c6290e958acd9394a2d305b7b40d0c7bc71e4d2f519d8e37a05e"
+  },
+  {
+    "path": "private-candidate-history/en/result.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/en/result.json",
+    "original_sha256": "b0c61b6698af026b4f73f6e08c252edc47eab2a0d14f34f8c943f597debf2155",
+    "original_bytes": 50660,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "25d7d00b1cdf48bfd652c1d7363cbfb542ad192d2c1b1dd9da99c0159e523471"
+  },
+  {
+    "path": "private-candidate-history/en/source-after.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/en/source-after.json",
+    "original_sha256": "4ecb67dd1895d728bfc22c6e7fdfb942a36767491d363b28478260079cc27dbf",
+    "original_bytes": 24727,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "bec88a5b7a7a729be6cc168adc29361df0599fe065edfda3a0e8aff3d38a4603"
+  },
+  {
+    "path": "private-candidate-history/en/source-before.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/en/source-before.json",
+    "original_sha256": "c567dc6b5de1ebcc4ae4530db8d33716ae07913aa9c1efb75f1d811e8080c1bd",
+    "original_bytes": 24727,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "7a006304b690d5d0883a3568700dea873c2c00aef77328b7ef1118185320e599"
+  },
+  {
+    "path": "private-candidate-history/finalize.py.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/finalize.py",
+    "original_sha256": "5b2a3966528fde7fb08c17530316f56452d2298ad39033f9aa3066b59bbc3b4b",
+    "original_bytes": 5903,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "4dd8dff3a1472c36065a27cb72621b269586dad41b70e6cadc6f74081ac035c5"
+  },
+  {
+    "path": "private-candidate-history/freeze.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/freeze.json",
+    "original_sha256": "d2a847d5b60be7199a1cba40874d043b9b6cfd523d0d9488a746fef8ff9a971c",
+    "original_bytes": 8666,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "e48de74b2bbf3d7f16366c1ca8184410ac13c07ec958849e4dabeaae4cc98a20"
+  },
+  {
+    "path": "private-candidate-history/geometry-en.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/geometry-en.json",
+    "original_sha256": "f5b9fb4c39b43a0653a4bf26c9d2aaf80b2c2f1a5b0144d44536dabe56ca6cdc",
+    "original_bytes": 7617,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "3ae5d2a4eb48b40daa83c3f566a1c389169da30f6a6e2bf5f957d3d94ecd96b4"
+  },
+  {
+    "path": "private-candidate-history/geometry-en.log.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/geometry-en.log",
+    "original_sha256": "f5a68aa53c395632ab3818a47ac7d9e674d7a701ef93d83cd84c6a8f6fb820ab",
+    "original_bytes": 5003,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "a43cc94aaf37e0bdfd60b900098612f609ef979d8ae8404dcbcb11e14e6ef0e6"
+  },
+  {
+    "path": "private-candidate-history/geometry-zh.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/geometry-zh.json",
+    "original_sha256": "7b2321fe619bdbeed931366f4d6059bf62d3652233fbb206a5b851ce1fb02253",
+    "original_bytes": 7647,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "afe1ed6b4045a9452959f24afbdf9f114b67418bd326d831cdada487b3361c86"
+  },
+  {
+    "path": "private-candidate-history/geometry-zh.log.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/geometry-zh.log",
+    "original_sha256": "47265f398daba829045715c2bb5b052e92ff820291332f17e5f8a6d68b1c6ceb",
+    "original_bytes": 5006,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "47ffb99be4658359ad32429d9c090186134e65fbdaa07b605e8b5446e0c977d6"
+  },
+  {
+    "path": "private-candidate-history/geometry.py.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/geometry.py",
+    "original_sha256": "e02408ab3ee5defce817a2e676045d4367098669606253efc69a7e03d64cb749",
+    "original_bytes": 5313,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "f6ca658bc5917e1f488d0876db0b4eddccb9062b1b7a6732bf48ccbd30beb41c"
+  },
+  {
+    "path": "private-candidate-history/initial-union-bbox-en.log.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/initial-union-bbox-en.log",
+    "original_sha256": "a7d7146c82ffeabdee3663da7c50671115962c1a9d4971b61f3919b606360d38",
+    "original_bytes": 25041,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "3307f10462bc3e384873b2fdf1c3e4f34896d0acb7a5c9887ce82ded6339ef4c"
+  },
+  {
+    "path": "private-candidate-history/initial-union-bbox-zh.log.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/initial-union-bbox-zh.log",
+    "original_sha256": "5e47ae21bddfbe6edec71e003e58780cb3ba6f40d8ce689948ef65cc30aee725",
+    "original_bytes": 33335,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "090be02220e2f5d065c6c639d6ac2acdbc39a066eaf4b9526ce0de28eab491b9"
+  },
+  {
+    "path": "private-candidate-history/initial.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/initial.json",
+    "original_sha256": "bd8cc1db367c70c2de4334fc30ac660147b6c47984a84042ce1b8c1220f41d22",
+    "original_bytes": 1218,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "981975c8e8787fc5907930acbe8f37cd62845975cd80c4ca6261825bb487517d"
+  },
+  {
+    "path": "private-candidate-history/zh/010_00112.6s.png",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/zh/010_00112.6s.png",
+    "original_sha256": "bc3f83c649026af22039876fdca5e961c7c8121f325ed2ac87d0316497f65de9",
+    "original_bytes": 70194,
+    "codec": "originalPNGbytes",
+    "stored_sha256": "bc3f83c649026af22039876fdca5e961c7c8121f325ed2ac87d0316497f65de9"
+  },
+  {
+    "path": "private-candidate-history/zh/copy-manifest.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/zh/copy-manifest.json",
+    "original_sha256": "378fd62c7dea42200e874cbe6fdf99d5e1c02862b91cd25da3dcadcba7ee5c45",
+    "original_bytes": 4570,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "7aa796e05285f6699387083236c4cd2aeddc85db5df2e58691590d8b4c42c9ce"
+  },
+  {
+    "path": "private-candidate-history/zh/data-after.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/zh/data-after.json",
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "original_bytes": 13968,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "private-candidate-history/zh/data-before.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/zh/data-before.json",
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "original_bytes": 13968,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "private-candidate-history/zh/receipt.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/zh/receipt.json",
+    "original_sha256": "e82ac12b7b520a276137e5da44e77b8980a164fba81d97ad39eba859ff30e299",
+    "original_bytes": 5366,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "a61900672c1b0c87cd5cd99cb422b7c93539c2d37c06dd430e7285d0cfd8a7b9"
+  },
+  {
+    "path": "private-candidate-history/zh/result.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/zh/result.json",
+    "original_sha256": "b5676d99ffc50c1dbdd0b20de16c3a8bbe14fc942fc6fcd3acc625cec4c4ebc0",
+    "original_bytes": 67121,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "286a6cec34d052549562b0f2ecc6fc564bdcfdc6117cb2eea58f152536a48866"
+  },
+  {
+    "path": "private-candidate-history/zh/source-after.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/zh/source-after.json",
+    "original_sha256": "490012c0641b70a80211085fab3f6879878fbaa70c255b9b8ea9e8da9452d1d4",
+    "original_bytes": 24727,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "439b8fc04a95ef48eaa4c596ab1afa30e04fd62b5894c84b6850f9c5b44c27d2"
+  },
+  {
+    "path": "private-candidate-history/zh/source-before.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-layout-candidate/zh/source-before.json",
+    "original_sha256": "6e3cfda57cf4ddfc9160f3d69fa5a43985c53dcdf132fb8e4055dcec5e0f233c",
+    "original_bytes": 24727,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "afc0d76c0f8f73b39cfb2791d1c2b0d5f62b3548e12d0e70352096c7a42d7328"
+  },
+  {
+    "path": "applied/after.py.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/after.py",
+    "original_sha256": "5695aabdd4ff39c68135a5a3de172077e4f5d26cf9b8f546741c8f45ffbf6018",
+    "original_bytes": 11201,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "d1daa98e73cd409a7661689e8bb4e47d6f17587eae5800b9d7ba66a0a2ea80f0"
+  },
+  {
+    "path": "applied/apply-receipt.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/apply-receipt.json",
+    "original_sha256": "7590ad489ac13a602b52a5d99a939eab9e7ca27d2da03d7ea52585472a59ffa1",
+    "original_bytes": 1241,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "17cbf629b652a509cfa90b14b3ba901b6f135d1132cf7601cfeb2e8969e7059e"
+  },
+  {
+    "path": "applied/before.py.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/before.py",
+    "original_sha256": "19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b",
+    "original_bytes": 11200,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "445f2075ce4fbafd1864ade89a580d8473eeff8b763f53608bfa5c434c177a46"
+  },
+  {
+    "path": "applied/compile-diff-check-receipt.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/compile-diff-check-receipt.json",
+    "original_sha256": "39c6ccc2b3fff76f915e030cff76d81ee92e177c6e3bc6b2f147290b3c1cc91c",
+    "original_bytes": 504,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "904475c9dd946119a45a4392048ba73503a9d3a37d695267303d6883adafec94"
+  },
+  {
+    "path": "applied/packet.py.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/packet.py",
+    "original_sha256": "38b1e824341244bc758e02df5cfffe65973cf33282994d7cf64bac74e8348901",
+    "original_bytes": 7004,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "fe05d296927cdcb3c3bc7ac2f36d4eb7b1e27089244557807c433a2db1cbf427"
+  },
+  {
+    "path": "applied/payloads-after.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/payloads-after.json",
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "original_bytes": 13968,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "applied/payloads-before.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/payloads-before.json",
+    "original_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+    "original_bytes": 13968,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+  },
+  {
+    "path": "applied/prepared-four-case-after-plan.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/prepared-four-case-after-plan.json",
+    "original_sha256": "874a56513c5bd769ecd49fb46d24360d76c0b49c0daddb5247ffee1b6a7f467b",
+    "original_bytes": 3434,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "6041de3966541f69d47c0e8d2a55003302dcca7109b5d74afa9885b6cdeef19a"
+  },
+  {
+    "path": "applied/source.patch.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/source.patch",
+    "original_sha256": "93063a346b67b83d3e7900a5ced8f8b315836880698d778de8dc893e11dfd3c1",
+    "original_bytes": 1293,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "9da8174488d77a1dd0cd94bc99918b82b1293b69d29e1c99664f9395fa649dfd"
+  },
+  {
+    "path": "applied/sources-after.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/sources-after.json",
+    "original_sha256": "0014256e58a6ff4d2e25ec48cf2e1c3e3d6b8128a82a3c2fbbf4a32fcc2bfa7b",
+    "original_bytes": 2706,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "c311cf055e1649c8bd6cf8f7fdb73932f8cbe79a42439a1293651b6cbd669924"
+  },
+  {
+    "path": "applied/sources-before.json.gz",
+    "original_path": "/workspace/runtime/ai6-forests-source-applied/sources-before.json",
+    "original_sha256": "db7fa4659e463a8c0bac142acc415ac1de243e3eb8acdf22ce3d3b8e52049d2f",
+    "original_bytes": 2706,
+    "codec": "gzip exactoriginalbytes",
+    "stored_sha256": "0cab36aae56c04167c036a3b12ba2f6030da08d79cb6024f90d5085271a18391"
+  }
+]

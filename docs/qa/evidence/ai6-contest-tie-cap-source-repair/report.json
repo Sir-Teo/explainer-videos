@@ -1,0 +1,85 @@
+{
+  "assembled_utc": "2026-11-01T10:04:55.818294+00:00",
+  "state": "APPLIED SOURCE CANDIDATE; AFTER-RENDER ACCEPTANCE PENDING",
+  "target": "videos/ai/ai6/s18_contest.py",
+  "before_source_sha256": "7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2",
+  "applied_source_sha256": "104c27ae8743b7383b0768235e4a40b0e5b2524fb8edfd2312c88d99b27399b7",
+  "applied_source_exact_private_candidate": true,
+  "applied_sources": {
+    "videos/ai/ai6/s18_contest.py": "104c27ae8743b7383b0768235e4a40b0e5b2524fb8edfd2312c88d99b27399b7",
+    "videos/ai/ai6/zh_lines.py": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+    "videos/ai/ai_text_zh.json": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+    "tests/test_ai6_scene_teaching_repairs.py": "b16595703b9286cb7e06858490eb563e2b0318c7bc7c0bbda6848ecab5f3bc65"
+  },
+  "private_original_manifest_sha256": "5a56ced9fb4fa6226a498b75ae901c3fa164b6bb8e47d9bc12a78c6c2a0a13f4",
+  "historical_private_state": "Original private README/handoff/manifest still say NOT APPLIED. Their exact bytes are preserved as historical preparation, not altered to claim later integration.",
+  "technical_findings": {
+    "board_json_sha256": "726ec9843ca5c96f30cb15b29ecad907b9e868851977eb824352adf89b373418",
+    "exact_top_mean": 0.9953365384615385,
+    "exact_top_sample_sd": 0.007509171468762143,
+    "leaders": [
+      "lr",
+      "svm_rbf"
+    ],
+    "two_rate_cases": 10,
+    "two_rate_lower_caps": 0,
+    "two_rate_upper_caps": 0,
+    "seventy_rate_cases": 12,
+    "seventy_rate_lower_caps": 0,
+    "seventy_rate_upper_caps": 8
+  },
+  "repair_scope": [
+    "Select all exact finite top means in original order and narrate ties without inventing ties from rounded displays. Actual2-way, unique and3-way alternatives covered.",
+    "Highlight every co-leader in the existing1second emphasis. Unchanged earlier animation/play calls, bookmarks and other scene methods; no equal narration duration claim.",
+    "Explicit20pt two-line70–100% error-bar axis-cap disclosure; means/SDs/bar/error numerical geometry unchanged."
+  ],
+  "verification": {
+    "private_actual_AST_translation_invariant_checks": 15,
+    "actual_Manim_geometry_languages": [
+      "en",
+      "zh"
+    ],
+    "geometry_alpha_states_per_language": 42,
+    "legend_bottom_and_right_margin_world": 0.2,
+    "legend_chart_gap_world": {
+      "en": 0.40271897916666655,
+      "zh": 0.40105852083333327
+    },
+    "repository_real_Translator_tests": 3,
+    "repository_focused_elapsed_s": 1.085,
+    "root_live_whole_module_checks": 7,
+    "root_full_suite": {
+      "tests": 641,
+      "elapsed_s": 54.406,
+      "source_blobs": 1532,
+      "before_after_exact": true,
+      "scope": "Actual root integrated five-chapter current-source suite, not a newly added641-test suite owned by this packet. Raw receipt/log and1532-row source ledgers copied verbatim."
+    }
+  },
+  "late_override_bug": {
+    "initial_real_module_probe_local_zh_sha256": "7b4bc6cc2124a1fef5fddde505600ddc312414ee91092fada0ceb96911842e05",
+    "outcome": "Reproduced once: ValueError unresolved best70 placeholders after a later ZH.update overwrote the new main paragraph.",
+    "repair": "Root updated the last-effective entry across complete module semantics; actual applied combinedZH29600967 differs from the literal private overlay and includes peer-approved changes.",
+    "final_actual_tests": "Real Translator(ai6) loads complete current local module; two-way/unique/three-way scene expressions all translate without unresolvedfields and retain bookmarks."
+  },
+  "before_visual_evidence": {
+    "originals": 2,
+    "resolution": [
+      854,
+      480
+    ],
+    "times": {
+      "en": 23.3069338088088,
+      "zh": 24.38711356130454
+    },
+    "scope": "Original preview endpoint003 images actually viewed and copied byte-exact; no Contest native1080 capture existed."
+  },
+  "limits": [
+    "Fresh EN/ZH endpoints/fullselectedmotion have not started; no after visual approval.",
+    "Three winner-branch fragments and main narration change wording; actual duration/bookmark synchronization/pacing/listening remain unverified.",
+    "Manim geometry compiles local labels and checks bounds only; no camera/Scene/movie render performed by owner.",
+    "No numerical refit, data/cache/model/source/test change by packaging. Numeric root protection ledgers retained.",
+    "Historical private metadata remains unchanged; applied current combined maps are separately pinned.",
+    "No plain patch included: exact raw unified diff is gzip wrapped and SHA/decompression verified, including all context whitespace."
+  ]
+}

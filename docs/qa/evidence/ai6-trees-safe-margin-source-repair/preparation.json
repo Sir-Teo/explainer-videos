@@ -1,0 +1,137 @@
+{
+  "prepared_at": "2026-11-01T09:07:43.891416+00:00",
+  "before_source_sha256": "fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d",
+  "candidate_sha256": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
+  "geometry_delta": {
+    "counts_center_x": [
+      5.0,
+      4.7
+    ],
+    "gain_chart_center_y": [
+      -2.45,
+      -2.2
+    ]
+  },
+  "all_other_AST_exact": true,
+  "VO_math_data_calls_timing_exact": true,
+  "state": "candidate ONLY; no scene application/render/producer",
+  "existing_native_evidence": [
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/en/endpoints/completed/008_00073.9s.png",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/008_00073.9s.png",
+      "sha256": "f2ec2aba9540ab13fb0ffbb7fd85f2457e8648b50f92826c22b394376db354cc",
+      "bytes": 77196,
+      "scope": "four actual native854endpointviews only; no fullcase review"
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/en/endpoints/completed/014_00135.4s.png",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/014_00135.4s.png",
+      "sha256": "caa6f557b4fccfc9f566f5f859f0d2ef79b09b560bf49e8eb793bed58637c515",
+      "bytes": 78516,
+      "scope": "four actual native854endpointviews only; no fullcase review"
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/en/endpoints/completed/result.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/result.json",
+      "sha256": "82c20b78806da1ff6b56f1c4e6491fa43f143ffb1d738c0d4e6d323287acb270",
+      "bytes": 95365,
+      "scope": "four actual native854endpointviews only; no fullcase review"
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/en/endpoints/completed/text.jsonl",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/text.jsonl",
+      "sha256": "a0fb881a8b24538530dfcd6a6815d5808d2220512104c351c95e9721a09c105e",
+      "bytes": 11797,
+      "scope": "four actual native854endpointviews only; no fullcase review"
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/en/endpoints/receipt.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/capture-receipt.json",
+      "sha256": "a02c9aae8c328a7fc88575370017944ab135ffebad96c85873fa7a434dec79fa",
+      "bytes": 6613
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/en/endpoints/source-before.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/capture-source-before.json",
+      "sha256": "bb32410993183b94a42fc26100e214cde1aab68c3410b6fed504c194179eaf29",
+      "bytes": 24727
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/en/endpoints/source-after.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/capture-source-after.json",
+      "sha256": "5fafbebdb738bf2ee40131021e59e88e1a8e756d62e8b0602e0a8538305b9389",
+      "bytes": 24727
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/en/endpoints/data-before.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/capture-data-before.json",
+      "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "bytes": 13968
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/en/endpoints/data-after.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/capture-data-after.json",
+      "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "bytes": 13968
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/zh/endpoints/completed/008_00084.0s.png",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/008_00084.0s.png",
+      "sha256": "1f13aa3bfa84afa98656608227950b4864d0ea57d571142ac3ee138751368000",
+      "bytes": 81172,
+      "scope": "four actual native854endpointviews only; no fullcase review"
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/zh/endpoints/completed/014_00150.4s.png",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/014_00150.4s.png",
+      "sha256": "62e41edc83639779ffc94319aa9f8999a992a0451c3c549bbb8c2185cf97e2c0",
+      "bytes": 84826,
+      "scope": "four actual native854endpointviews only; no fullcase review"
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/zh/endpoints/completed/result.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/result.json",
+      "sha256": "78d8e1253d61f62e5e3f81cf05e23b6931f67e22637c58b327726936c6007df8",
+      "bytes": 113778,
+      "scope": "four actual native854endpointviews only; no fullcase review"
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/zh/endpoints/completed/text.jsonl",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/text.jsonl",
+      "sha256": "05e932779001833d96a98dea7114055722a872f00ecab1038ed8cfc9ae55ae42",
+      "bytes": 11800,
+      "scope": "four actual native854endpointviews only; no fullcase review"
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/zh/endpoints/receipt.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/capture-receipt.json",
+      "sha256": "f0da3bc4ebca4824cb0455b0854656abc2526842382bc82df19d4af8d233c9e1",
+      "bytes": 6614
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/zh/endpoints/source-before.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/capture-source-before.json",
+      "sha256": "5af7c74e8e19ff2264cf53ba649bd4ee715214109fd44f6fb91a115109764cd8",
+      "bytes": 24727
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/zh/endpoints/source-after.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/capture-source-after.json",
+      "sha256": "0cc7b557d065d5f9ef028bc22673cb11115d4bd7350504bb1abfd18461e2bc0b",
+      "bytes": 24727
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/zh/endpoints/data-before.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/capture-data-before.json",
+      "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "bytes": 13968
+    },
+    {
+      "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/13-Trees/zh/endpoints/data-after.json",
+      "copy": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/capture-data-after.json",
+      "sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "bytes": 13968
+    }
+  ],
+  "actual_raw_trees_json_sha256": "c92e794289107138e0e646605a0770c24c4c1b23725db2b97fd148bd10f95fb0"
+}

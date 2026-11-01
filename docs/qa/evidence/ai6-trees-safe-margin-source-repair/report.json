@@ -1,0 +1,129 @@
+{
+  "state": "RUNTIME CANDIDATE ONLY; physicalsource unchanged; actualafterrenders pending",
+  "completed_at": "2026-11-01T09:12:57.173824+00:00",
+  "source_before": "fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d",
+  "candidate_sha256": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
+  "full_AST_exact_after_normalizing_only_two_coordinates": true,
+  "narration_bookmarks_math_data_timing_calls_unchanged": true,
+  "fresh_process_commands": {
+    "en": "EXPLAINER_VIDEO=ai6 EXPLAINER_LANG=en OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python geometry.py",
+    "zh": "EXPLAINER_VIDEO=ai6 EXPLAINER_LANG=zh OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python geometry.py"
+  },
+  "geometry_proofs": {
+    "en": {
+      "sha256": "980e3a786e8e589c2fe4035df1f267efb9b597d617a6b15b504580ad30cc784c",
+      "before_right_margin": 2.5835437345702004,
+      "candidate_right_margin": 20.597606234570243,
+      "before_bottom_margin": 2.586301500000001,
+      "candidate_bottom_margin": 17.5863015,
+      "candidate_icon_to_counts_gap": 86.94458067832038,
+      "candidate_upper_plot_gap": 45.042466500000025,
+      "no_new_BBox_overlap": true
+    },
+    "zh": {
+      "sha256": "6e04faaecd03f572e5657c686c832fb46827808bf741f0cedfaefa20f7840990",
+      "before_right_margin": 63.78738390800788,
+      "candidate_right_margin": 81.80144640800786,
+      "before_bottom_margin": 2.0589037500000096,
+      "candidate_bottom_margin": 17.05890375000001,
+      "candidate_icon_to_counts_gap": 56.315379795117224,
+      "candidate_upper_plot_gap": 43.542465250000035,
+      "no_new_BBox_overlap": true
+    }
+  },
+  "shared_source_stable_through_fixtures": [
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai_text_zh.json",
+      "before": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+      "after": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+      "unchanged": true
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai6/common.py",
+      "before": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+      "after": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+      "unchanged": true
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai6/zh_lines.py",
+      "before": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+      "after": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+      "unchanged": true
+    },
+    {
+      "path": "/workspace/explainer-videos/explainer/ai/viz.py",
+      "before": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "after": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "unchanged": true
+    },
+    {
+      "path": "/workspace/explainer-videos/explainer/analysis/__init__.py",
+      "before": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+      "after": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+      "unchanged": true
+    }
+  ],
+  "actual_cached_data": {
+    ".cache/ai6/trees.json": "c92e794289107138e0e646605a0770c24c4c1b23725db2b97fd148bd10f95fb0",
+    ".cache/ai6/trees.npz": "4cef5d816fbe75d67fed3ff0692f136c6dedd22fe08e10caebae9a8703161df4"
+  },
+  "actual_before_image_views": [
+    {
+      "file": "evidence-before/zh/014_00150.4s.png",
+      "sha256": "62e41edc83639779ffc94319aa9f8999a992a0451c3c549bbb8c2185cf97e2c0",
+      "dimensions": [
+        854,
+        480
+      ],
+      "decoded_RGB_sha256": "f7fb1535a77ab137a56720bae4c37e007cfc16faa293b9eaf6b6a819c8ebf906",
+      "actual_view": "opened individually at original854×480 pixels; intact glyphs; no existing clipping claim",
+      "observations": "tight rightmargin for ENfinalrange; tightbottommargin for bothgain xlabels. ZHfinalrangealreadycomfortablyinsideframe."
+    },
+    {
+      "file": "evidence-before/zh/008_00084.0s.png",
+      "sha256": "1f13aa3bfa84afa98656608227950b4864d0ea57d571142ac3ee138751368000",
+      "dimensions": [
+        854,
+        480
+      ],
+      "decoded_RGB_sha256": "113b3ac4e1595d18b403aa96e83d3772748344cf1149a1b6eb33da81e5049d6f",
+      "actual_view": "opened individually at original854×480 pixels; intact glyphs; no existing clipping claim",
+      "observations": "tight rightmargin for ENfinalrange; tightbottommargin for bothgain xlabels. ZHfinalrangealreadycomfortablyinsideframe."
+    },
+    {
+      "file": "evidence-before/en/014_00135.4s.png",
+      "sha256": "caa6f557b4fccfc9f566f5f859f0d2ef79b09b560bf49e8eb793bed58637c515",
+      "dimensions": [
+        854,
+        480
+      ],
+      "decoded_RGB_sha256": "10b6d88cab47764539d1df51b80da63664701f2ef4b2332f0fc4389bb5348704",
+      "actual_view": "opened individually at original854×480 pixels; intact glyphs; no existing clipping claim",
+      "observations": "tight rightmargin for ENfinalrange; tightbottommargin for bothgain xlabels. ZHfinalrangealreadycomfortablyinsideframe."
+    },
+    {
+      "file": "evidence-before/en/008_00073.9s.png",
+      "sha256": "f2ec2aba9540ab13fb0ffbb7fd85f2457e8648b50f92826c22b394376db354cc",
+      "dimensions": [
+        854,
+        480
+      ],
+      "decoded_RGB_sha256": "553eaa3d053df0fd39c916c9c3833e50a1484b3c936bf35a2fc87cd22c5d2390",
+      "actual_view": "opened individually at original854×480 pixels; intact glyphs; no existing clipping claim",
+      "observations": "tight rightmargin for ENfinalrange; tightbottommargin for bothgain xlabels. ZHfinalrangealreadycomfortablyinsideframe."
+    }
+  ],
+  "initial_fixture_failure": "First EN object fixture supplied JSONwithoutcompanionNPZ, so scan_not_t wasmissing; initial log preserved. Correctedfixture directlyreads both immutable rawfiles, no producer/load()/recompute. Both final fresh-languagefixtures PASS.",
+  "evidence_plan": [
+    "Keep all four actual beforePNG/raw/source/data hashes and complete candidate/source proofs.",
+    "After root applies/release: fresh bilingual Tree endpoints and fullsilentmovies in cache-only mode; preserve rawwarnings and exactsource fingerprints.",
+    "Parent Tree baseline reviewer inspects every actually changed endpoint and relevant encoded held states at original854; targetright/bottom margins≥15px and inspect nearestgrid/readout/upperplot/derivation context.",
+    "Only exactPNG/pixel equality can inherit already-viewed baseline states; geometryfixture is not rendered after approval.",
+    "Root controls render/extract resources; do not start while free disk<768MiB; no TTS/model/producer/globalcaption/CI action."
+  ],
+  "limits": [
+    "Only four before endpoints were viewed; no duplicate fullTreecase review.",
+    "ActualManim layout fixtures only, no new image/video renders or decodedmovies.",
+    "No source application, afterimage approval, continuousperception/audio/native1080motion/4K claim."
+  ]
+}

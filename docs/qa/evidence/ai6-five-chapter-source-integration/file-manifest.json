@@ -1,0 +1,122 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1879,
+    "sha256": "a81ba7625cd44a4bda50ffc6fa4b69f03c5437ad71d321c1729482e06f8b142f"
+  },
+  {
+    "path": "after/ai_text_zh.json.gz",
+    "bytes": 886554,
+    "sha256": "eda6883a2195648af8632ca6b312de164b65b84dae7a49bc262d0b47f91f1cfd"
+  },
+  {
+    "path": "after/s15_adaboost.py.gz",
+    "bytes": 5154,
+    "sha256": "1f9e2483748256814a4f2b8c5bfcd775de3d70a1493629fc27cf971286d40af9"
+  },
+  {
+    "path": "after/s18_contest.py.gz",
+    "bytes": 6072,
+    "sha256": "9d4aee796b2e3a4241ad18db5e98a5d734e7640dc1a26d0e3dcd5e645da6a388"
+  },
+  {
+    "path": "after/s19_outro.py.gz",
+    "bytes": 6452,
+    "sha256": "5c0e76509b3fd6ef5af78a42dd928ae56f671f1bd1acc8c06312fbc41f9444fa"
+  },
+  {
+    "path": "after/zh_lines.py.gz",
+    "bytes": 28866,
+    "sha256": "c8cbef6bc437fad98a494bd75a1779f125f51f5bb7a0be80ab1d2ec072ab4e1d"
+  },
+  {
+    "path": "before/ai_text_zh.json.gz",
+    "bytes": 886365,
+    "sha256": "4252fe4cc0a5111a276b5dcd60e65945f3a45ce066e6d51b30861e00b5ee950a"
+  },
+  {
+    "path": "before/s15_adaboost.py.gz",
+    "bytes": 5068,
+    "sha256": "bb6d8234ba87354f0f9bbb55e418eec618ec7ccd6ba1b5eb92907a305a4ca60b"
+  },
+  {
+    "path": "before/s18_contest.py.gz",
+    "bytes": 5840,
+    "sha256": "c332ec28807194a4fcd21ac8a078577943f09bb11560345dd4010343c635031f"
+  },
+  {
+    "path": "before/s19_outro.py.gz",
+    "bytes": 6150,
+    "sha256": "474248296a6387eaafac6b68a08f48b689a3d3e9467276f3181e2fbde63b7c82"
+  },
+  {
+    "path": "before/zh_lines.py.gz",
+    "bytes": 28581,
+    "sha256": "e7e522b44f300a063b9c03232b1d0046e84d414f06636af5a5d79f3f5e434c79"
+  },
+  {
+    "path": "caption-add.json.gz",
+    "bytes": 391,
+    "sha256": "88d1e04d8bfe2e1f435baa621940a52b9886f79847f16d3ee4a0de249637e25b"
+  },
+  {
+    "path": "caption-helper.log.gz",
+    "bytes": 53,
+    "sha256": "ac988ca7e47abda7989b37b9930f2f19b7ab283f4cef337d1f6f037ad84076bd"
+  },
+  {
+    "path": "check_live.py.gz",
+    "bytes": 1472,
+    "sha256": "23caa9c9c2b5563da6d7826bde79281fdb9a4c56d5728ffeac21737ba31f5650"
+  },
+  {
+    "path": "execution-capacity-request.json",
+    "bytes": 7820,
+    "sha256": "00f3cc5a0eebf7f02f3b72592719c2fd8d53b24ee956fd115cdbcb5e381e208b"
+  },
+  {
+    "path": "fix_effective_zh_merge.py.gz",
+    "bytes": 1633,
+    "sha256": "e44e47566a378d7d3d833ca8c38254d8abd9ebcad69859543176e2a0419c7715"
+  },
+  {
+    "path": "initial-merge-attempt/report.json.gz",
+    "bytes": 1122,
+    "sha256": "19a2f35333acac3b60edff8df88c5f1fd5e3ef9fde907d2df80cac2325fd2d0f"
+  },
+  {
+    "path": "initial-merge-attempt/zh_lines.py.gz",
+    "bytes": 29145,
+    "sha256": "b2b86ec4c66b5e46c38cc410c87c3f6fd5843c7861892776d1b6cb9d64acd1d4"
+  },
+  {
+    "path": "integrate_ai6_five_chapter_source_batch.py.gz",
+    "bytes": 2686,
+    "sha256": "cfb4607800a2647ee863cfa8ce3f37774fee7d6e10a23f33c9207e32525c271b"
+  },
+  {
+    "path": "live-text-check.json.gz",
+    "bytes": 1146,
+    "sha256": "c685d639d72d2b7565aa82c7e742bddb6c270255ad31c8ef840e902e70bece70"
+  },
+  {
+    "path": "local-ZH-delta.json.gz",
+    "bytes": 1658,
+    "sha256": "3d78bf820b1e30da787cf673841e1f34e31b95668ad851bf372d70cf46243be4"
+  },
+  {
+    "path": "numeric-after.json.gz",
+    "bytes": 2637,
+    "sha256": "ff728b3e451470284ee340443bd744faf1bc4d0e0f168404f661da46ef124a57"
+  },
+  {
+    "path": "numeric-before.json.gz",
+    "bytes": 2637,
+    "sha256": "ff728b3e451470284ee340443bd744faf1bc4d0e0f168404f661da46ef124a57"
+  },
+  {
+    "path": "report.json.gz",
+    "bytes": 1350,
+    "sha256": "a997191f22d9465c830f2c9c959396387b7c88bcc504dc391d369409e1afcf56"
+  }
+]

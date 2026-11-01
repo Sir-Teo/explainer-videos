@@ -1,0 +1,367 @@
+{
+  "lang": "zh",
+  "source_before_sha256": "98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e",
+  "candidate_sha256": "0f613477aa043c40f1622d482caef005511f01ed0613ada91cc3a01ab626ea8e",
+  "local_zh_base_sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+  "private_zh_proposal_sha256": "a4f5b1d4d31c63565a7d1d29bd79ac53138443194cea73dd59708fd5a7268e51",
+  "cleaned_spoken_cache_identity_verified": true,
+  "existing_cache_identity": {
+    "key": "f7e307b156ba80c6",
+    "existing_wav_sha256": "7fb15e17daeae075924652f1a6c8b0a6f125504eb27a8a7453c97eabf2449a71",
+    "existing_wav_bytes": 2695244,
+    "existing_metadata_sha256": "afd9634f8bc4f967d487da28c757419b71950d02af1aaa95d5f82b39684ab0a8",
+    "backend": "silent",
+    "voice": "af_heart",
+    "speed": 1.0,
+    "no_synthesize_call": true
+  },
+  "group_schedule": [
+    {
+      "name": "linear",
+      "tile_indices": [
+        0,
+        1
+      ],
+      "cue_word_start": 2.1151162790697673,
+      "next_group_or_line_end": 7.819767441860469,
+      "start_predicted": 2.0666666666666664,
+      "fully_settled_predicted": 2.8,
+      "settled_hold_before_next_group": 5.019767441860469
+    },
+    {
+      "name": "penalties",
+      "tile_indices": [
+        2,
+        3
+      ],
+      "cue_word_start": 7.819767441860469,
+      "next_group_or_line_end": 13.265116279069757,
+      "start_predicted": 7.8,
+      "fully_settled_predicted": 8.533333333333333,
+      "settled_hold_before_next_group": 4.731782945736423
+    },
+    {
+      "name": "logistic_newton",
+      "tile_indices": [
+        4
+      ],
+      "cue_word_start": 13.265116279069757,
+      "next_group_or_line_end": 18.45116279069765,
+      "start_predicted": 13.2,
+      "fully_settled_predicted": 13.933333333333332,
+      "settled_hold_before_next_group": 4.51782945736432
+    },
+    {
+      "name": "bayes",
+      "tile_indices": [
+        5
+      ],
+      "cue_word_start": 18.45116279069765,
+      "next_group_or_line_end": 23.637209302325545,
+      "start_predicted": 18.4,
+      "fully_settled_predicted": 19.133333333333333,
+      "settled_hold_before_next_group": 4.503875968992212
+    },
+    {
+      "name": "neighbours",
+      "tile_indices": [
+        6
+      ],
+      "cue_word_start": 23.637209302325545,
+      "next_group_or_line_end": 33.749999999999936,
+      "start_predicted": 23.6,
+      "fully_settled_predicted": 24.333333333333336,
+      "settled_hold_before_next_group": 9.4166666666666
+    },
+    {
+      "name": "kernels",
+      "tile_indices": [
+        7,
+        8
+      ],
+      "cue_word_start": 33.749999999999936,
+      "next_group_or_line_end": 39.97325581395341,
+      "start_predicted": 33.733333333333334,
+      "fully_settled_predicted": 34.46666666666667,
+      "settled_hold_before_next_group": 5.506589147286739
+    },
+    {
+      "name": "averaging",
+      "tile_indices": [
+        9
+      ],
+      "cue_word_start": 39.97325581395341,
+      "next_group_or_line_end": 45.418604651162696,
+      "start_predicted": 39.93333333333334,
+      "fully_settled_predicted": 40.66666666666667,
+      "settled_hold_before_next_group": 4.751937984496024
+    },
+    {
+      "name": "boosting",
+      "tile_indices": [
+        10
+      ],
+      "cue_word_start": 45.418604651162696,
+      "next_group_or_line_end": 50.345348837209194,
+      "start_predicted": 45.400000000000006,
+      "fully_settled_predicted": 46.13333333333334,
+      "settled_hold_before_next_group": 4.212015503875854
+    },
+    {
+      "name": "evaluation",
+      "tile_indices": [
+        11
+      ],
+      "cue_word_start": 50.345348837209194,
+      "next_group_or_line_end": 56.15,
+      "start_predicted": 50.33333333333334,
+      "fully_settled_predicted": 51.06666666666668,
+      "settled_hold_before_next_group": 5.0833333333333215
+    }
+  ],
+  "newton": {
+    "spoken_name_start": 15.858139534883703,
+    "old_schedule": {
+      "tile": 4,
+      "start_predicted": 18.788405797101447,
+      "settled_predicted": 24.020289855072466,
+      "run_time_requested": 54.15,
+      "type": "olduniformLaggedStart"
+    },
+    "candidate_schedule": {
+      "tile": 4,
+      "start_predicted": 13.2,
+      "settled_predicted": 13.933333333333332,
+      "run_time_requested": 0.7,
+      "type": "namedgroupFadeIn"
+    },
+    "predicted_settled_lead_before_named_word": 1.9248062015503713
+  },
+  "complete_source_call_runs": {
+    "before": {
+      "identity": {
+        "clean": "我们来盘点一下。最小二乘法是一次投影，在线性无偏估计里是最好的。岭回归收缩弱的方向；套索回归的软阈值挑选词语。逻辑回归是一只凸的碗，牛顿法几步就找到碗底。朴素贝叶斯学得快，却一直有偏差，而且过于自信。在大样本极限下，单个邻居的错误率至多是最好规则的两倍，但在很多维里，邻居们就被淹没了。核函数不抬升地抬升，支持向量机的对偶问题只需要它们。把树平均起来，能把方差降到由相关性决定的下限；提升法沿着指数损失往下走，XGBoost迈的是牛顿步。而一个诚实的分数，需要对的曲线，和没碰过的测试页。",
+        "spoken": "我们来盘点一下。最小二乘法是一次投影，在线性无偏估计里是最好的。岭回归收缩弱的方向；套索回归的软阈值挑选词语。逻辑回归是一只凸的碗，牛顿法几步就找到碗底。朴素贝叶斯学得快，却一直有偏差，而且过于自信。在大样本极限下，单个邻居的错误率至多是最好规则的两倍，但在很多维里，邻居们就被淹没了。核函数不抬升地抬升，支持向量机的对偶问题只需要它们。把树平均起来，能把方差降到由相关性决定的下限；提升法沿着指数损失往下走，XGBoost迈的是牛顿步。而一个诚实的分数，需要对的曲线，和没碰过的测试页。",
+        "silent_cache_key": "f7e307b156ba80c6",
+        "raw_english": "Let's take stock. Least squares is a projection, and among linear unbiased estimates the best. Ridge shrinks the weak directions; the lasso's soft thresholds choose words. Logistic regression is a convex bowl, and Newton's method finds its bottom in a few steps. Naive Bayes learns fast but stays wrong, and overconfident on these pages. In the large-sample limit, a single neighbour errs at most twice as often as the best rule, but neighbours drown in many dimensions. Kernels lift without lifting, and the support vector machine's dual needs only them. Averaging trees cuts variance down to a floor set by their correlation; boosting walks down the exponential loss, and XGBoost takes Newton steps. And an honest score needs the right curve and untouched test pages.",
+        "translated_marked": "我们来盘点一下。最小二乘法是一次投影，在线性无偏估计里是最好的。岭回归收缩弱的方向；套索回归的软阈值挑选词语。逻辑回归是一只凸的碗，牛顿法几步就找到碗底。朴素贝叶斯学得快，却一直有偏差，而且过于自信。在大样本极限下，单个邻居的错误率至多是最好规则的两倍，但在很多维里，邻居们就被淹没了。核函数不抬升地抬升，支持向量机的对偶问题只需要它们。把树平均起来，能把方差降到由相关性决定的下限；提升法沿着指数损失往下走，XGBoost迈的是牛顿步。而一个诚实的分数，需要对的曲线，和没碰过的测试页。",
+        "marks": {}
+      },
+      "cue_times": {},
+      "tile_schedule": [
+        {
+          "tile": 0,
+          "start_predicted": 1.0,
+          "settled_predicted": 6.231884057971015,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 1,
+          "start_predicted": 5.447101449275362,
+          "settled_predicted": 10.678985507246377,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 2,
+          "start_predicted": 9.894202898550724,
+          "settled_predicted": 15.12608695652174,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 3,
+          "start_predicted": 14.341304347826085,
+          "settled_predicted": 19.5731884057971,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 4,
+          "start_predicted": 18.788405797101447,
+          "settled_predicted": 24.020289855072466,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 5,
+          "start_predicted": 23.235507246376812,
+          "settled_predicted": 28.467391304347824,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 6,
+          "start_predicted": 27.68260869565217,
+          "settled_predicted": 32.91449275362319,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 7,
+          "start_predicted": 32.129710144927536,
+          "settled_predicted": 37.36159420289855,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 8,
+          "start_predicted": 36.576811594202894,
+          "settled_predicted": 41.80869565217392,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 9,
+          "start_predicted": 41.02391304347826,
+          "settled_predicted": 46.25579710144927,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 10,
+          "start_predicted": 45.471014492753625,
+          "settled_predicted": 50.70289855072463,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        {
+          "tile": 11,
+          "start_predicted": 49.91811594202898,
+          "settled_predicted": 55.15,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        }
+      ],
+      "predicted_next_block_start": 57.533333333333324,
+      "actual_supplied_next_block_start": 57.53333333333444
+    },
+    "candidate": {
+      "identity": {
+        "clean": "我们来盘点一下。最小二乘法是一次投影，在线性无偏估计里是最好的。岭回归收缩弱的方向；套索回归的软阈值挑选词语。逻辑回归是一只凸的碗，牛顿法几步就找到碗底。朴素贝叶斯学得快，却一直有偏差，而且过于自信。在大样本极限下，单个邻居的错误率至多是最好规则的两倍，但在很多维里，邻居们就被淹没了。核函数不抬升地抬升，支持向量机的对偶问题只需要它们。把树平均起来，能把方差降到由相关性决定的下限；提升法沿着指数损失往下走，XGBoost迈的是牛顿步。而一个诚实的分数，需要对的曲线，和没碰过的测试页。",
+        "spoken": "我们来盘点一下。最小二乘法是一次投影，在线性无偏估计里是最好的。岭回归收缩弱的方向；套索回归的软阈值挑选词语。逻辑回归是一只凸的碗，牛顿法几步就找到碗底。朴素贝叶斯学得快，却一直有偏差，而且过于自信。在大样本极限下，单个邻居的错误率至多是最好规则的两倍，但在很多维里，邻居们就被淹没了。核函数不抬升地抬升，支持向量机的对偶问题只需要它们。把树平均起来，能把方差降到由相关性决定的下限；提升法沿着指数损失往下走，XGBoost迈的是牛顿步。而一个诚实的分数，需要对的曲线，和没碰过的测试页。",
+        "silent_cache_key": "f7e307b156ba80c6",
+        "raw_english": "Let's take stock. <bookmark mark='linear'/> Least squares is a projection, and among linear unbiased estimates the best. <bookmark mark='penalties'/> Ridge shrinks the weak directions; the lasso's soft thresholds choose words. <bookmark mark='logistic_newton'/> Logistic regression is a convex bowl, and Newton's method finds its bottom in a few steps. <bookmark mark='bayes'/> Naive Bayes learns fast but stays wrong, and overconfident on these pages. <bookmark mark='neighbours'/> In the large-sample limit, a single neighbour errs at most twice as often as the best rule, but neighbours drown in many dimensions. <bookmark mark='kernels'/> Kernels lift without lifting, and the support vector machine's dual needs only them. <bookmark mark='averaging'/> Averaging trees cuts variance down to a floor set by their correlation; <bookmark mark='boosting'/> boosting walks down the exponential loss, and XGBoost takes Newton steps. <bookmark mark='evaluation'/> And an honest score needs the right curve and untouched test pages.",
+        "translated_marked": "我们来盘点一下。<bookmark mark='linear'/>最小二乘法是一次投影，在线性无偏估计里是最好的。<bookmark mark='penalties'/>岭回归收缩弱的方向；套索回归的软阈值挑选词语。<bookmark mark='logistic_newton'/>逻辑回归是一只凸的碗，牛顿法几步就找到碗底。<bookmark mark='bayes'/>朴素贝叶斯学得快，却一直有偏差，而且过于自信。<bookmark mark='neighbours'/>在大样本极限下，单个邻居的错误率至多是最好规则的两倍，但在很多维里，邻居们就被淹没了。<bookmark mark='kernels'/>核函数不抬升地抬升，支持向量机的对偶问题只需要它们。<bookmark mark='averaging'/>把树平均起来，能把方差降到由相关性决定的下限；<bookmark mark='boosting'/>提升法沿着指数损失往下走，XGBoost迈的是牛顿步。<bookmark mark='evaluation'/>而一个诚实的分数，需要对的曲线，和没碰过的测试页。",
+        "marks": {
+          "linear": 7,
+          "penalties": 29,
+          "logistic_newton": 50,
+          "bayes": 70,
+          "neighbours": 90,
+          "kernels": 129,
+          "averaging": 153,
+          "boosting": 174,
+          "evaluation": 193
+        }
+      },
+      "cue_times": {
+        "linear": 2.1151162790697673,
+        "penalties": 7.819767441860469,
+        "logistic_newton": 13.265116279069757,
+        "bayes": 18.45116279069765,
+        "neighbours": 23.637209302325545,
+        "kernels": 33.749999999999936,
+        "averaging": 39.97325581395341,
+        "boosting": 45.418604651162696,
+        "evaluation": 50.345348837209194
+      },
+      "tile_schedule": [
+        {
+          "tile": 0,
+          "start_predicted": 2.0666666666666664,
+          "settled_predicted": 2.8,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 1,
+          "start_predicted": 2.0666666666666664,
+          "settled_predicted": 2.8,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 2,
+          "start_predicted": 7.8,
+          "settled_predicted": 8.533333333333333,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 3,
+          "start_predicted": 7.8,
+          "settled_predicted": 8.533333333333333,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 4,
+          "start_predicted": 13.2,
+          "settled_predicted": 13.933333333333332,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 5,
+          "start_predicted": 18.4,
+          "settled_predicted": 19.133333333333333,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 6,
+          "start_predicted": 23.6,
+          "settled_predicted": 24.333333333333336,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 7,
+          "start_predicted": 33.733333333333334,
+          "settled_predicted": 34.46666666666667,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 8,
+          "start_predicted": 33.733333333333334,
+          "settled_predicted": 34.46666666666667,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 9,
+          "start_predicted": 39.93333333333334,
+          "settled_predicted": 40.66666666666667,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 10,
+          "start_predicted": 45.400000000000006,
+          "settled_predicted": 46.13333333333334,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        {
+          "tile": 11,
+          "start_predicted": 50.33333333333334,
+          "settled_predicted": 51.06666666666668,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        }
+      ],
+      "predicted_next_block_start": 57.53333333333334,
+      "actual_supplied_next_block_start": 57.53333333333444
+    }
+  },
+  "model": "Exact recap method AST executed with no-camera scheduling stubs, real lang.translate/privateTranslator, realbookmarkstrip andVoiceoverTracker. FreshCairo15fpsmodel: dynamicplay=len(np.arange(0,run_time,1/fps))/fps; frozenwait=int(duration*fps)/fps; wait_until usesactual1/60threshold. Baseline nextblock reproducedwithinoneframe.",
+  "limits": [
+    "Pure source/actualsilentwordtimestamp prediction, not newrender/pixel/listening approval.",
+    "Silentwordtimings are estimated uniformtoken timing; realspokenvoice alignment still needs actualspeech review.",
+    "Cleanedtext/spoken/cachekeys are exact; animation scheduling intentionallychanges. Predicted blockduration agreement does not prove actualtotalduration/audioequivalence.",
+    "When futurecuegap falls belowoneframe, a oneframefade can overrun; actualsupplied9group budgets all leavepositiveheldtime."
+  ]
+}

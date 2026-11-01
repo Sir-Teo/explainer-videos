@@ -1,0 +1,187 @@
+1
+00:00:00,300 --> 00:00:01,519
+Let's take stock.
+
+2
+00:00:01,519 --> 00:00:03,551
+Least squares is a projection,
+
+3
+00:00:03,551 --> 00:00:06,396
+and among linear unbiased estimates the best.
+
+4
+00:00:06,396 --> 00:00:08,427
+Ridge shrinks the weak directions;
+
+5
+00:00:08,427 --> 00:00:10,866
+the lasso's soft thresholds choose words.
+
+6
+00:00:10,866 --> 00:00:13,304
+Logistic regression is a convex bowl,
+
+7
+00:00:13,304 --> 00:00:17,368
+and Newton's method finds its bottom in a few steps.
+
+8
+00:00:17,368 --> 00:00:20,212
+Naive Bayes learns fast but stays wrong,
+
+9
+00:00:20,212 --> 00:00:22,244
+and overconfident on these pages.
+
+10
+00:00:22,244 --> 00:00:25,089
+In the large-sample limit, a single neighbour
+
+11
+00:00:25,089 --> 00:00:29,152
+errs at most twice as often as the best rule,
+
+12
+00:00:29,152 --> 00:00:31,591
+but neighbours drown in many dimensions.
+
+13
+00:00:31,591 --> 00:00:34,435
+Kernels lift without lifting, and the support
+
+14
+00:00:34,435 --> 00:00:36,873
+vector machine's dual needs only them.
+
+15
+00:00:36,873 --> 00:00:41,750
+Averaging trees cuts variance down to a floor set by their correlation;
+
+16
+00:00:41,750 --> 00:00:44,188
+boosting walks down the exponential loss,
+
+17
+00:00:44,188 --> 00:00:46,220
+and XGBoost takes Newton steps.
+
+18
+00:00:46,220 --> 00:00:52,596
+And an honest score needs the right curve and untouched test pages.
+
+19
+00:00:52,833 --> 00:00:54,880
+All of it comes back.
+
+20
+00:00:54,880 --> 00:00:57,335
+Cross-entropy, gradients and curvature are how
+
+21
+00:00:57,335 --> 00:01:01,019
+every network in Parts 9 and 11 is trained,
+
+22
+00:01:01,019 --> 00:01:04,702
+and the softmax is logistic regression with many classes.
+
+23
+00:01:04,702 --> 00:01:07,157
+Part 7 builds the statistical models:
+
+24
+00:01:07,157 --> 00:01:08,794
+principal components, mixtures, Bayes.
+
+25
+00:01:08,794 --> 00:01:12,478
+Part 8 asks why a model generalizes at all,
+
+26
+00:01:12,478 --> 00:01:14,933
+and meets the neural tangent kernel,
+
+27
+00:01:14,933 --> 00:01:18,207
+a network that behaves like a kernel machine.
+
+28
+00:01:18,207 --> 00:01:21,481
+Part 13 reads attention as a kernel smoother,
+
+29
+00:01:21,481 --> 00:01:24,756
+and Part 31 asks the same question of
+
+30
+00:01:24,756 --> 00:01:28,030
+language models that we asked of naive Bayes:
+
+31
+00:01:28,030 --> 00:01:31,167
+are its probabilities honest?
+
+32
+00:01:31,433 --> 00:01:36,080
+Here are eight problems to try, from Gauss-Markov to XGBoost's gain.
+
+33
+00:01:36,080 --> 00:01:38,615
+Pause here, and work through them;
+
+34
+00:01:38,615 --> 00:01:43,072
+full solutions are in this part's notes.
+
+35
+00:01:49,100 --> 00:01:49,915
+Next time:
+
+36
+00:01:49,915 --> 00:01:51,138
+statistical machine learning.
+
+37
+00:01:51,138 --> 00:01:56,029
+Every method in this part was told who wrote each training page.
+
+38
+00:01:56,029 --> 00:02:01,328
+Part 7 takes the labels away and asks what structure is there anyway:
+
+39
+00:02:01,328 --> 00:02:03,774
+the directions the pages spread along,
+
+40
+00:02:03,774 --> 00:02:09,757
+the clusters they fall into, and the hidden causes behind them.
+
+41
+00:02:10,033 --> 00:02:13,713
+For more, The Elements of Statistical Learning by Hastie,
+
+42
+00:02:13,713 --> 00:02:16,575
+Tibshirani and Friedman covers every method here,
+
+43
+00:02:16,575 --> 00:02:19,845
+by three of the people who built them;
+
+44
+00:02:19,845 --> 00:02:21,889
+Bishop's Pattern Recognition and Machine
+
+45
+00:02:21,889 --> 00:02:23,934
+Learning gives the probabilistic view;
+
+46
+00:02:23,934 --> 00:02:27,613
+and Schölkopf and Smola's Learning with Kernels the kernels.
+
+47
+00:02:27,613 --> 00:02:31,293
+Thanks for watching, and see you in Part 7.

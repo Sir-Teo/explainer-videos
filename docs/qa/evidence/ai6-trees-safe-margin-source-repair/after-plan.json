@@ -1,0 +1,102 @@
+{
+  "state": "PREPARED ONLY; parent Tree reviewer owns fresh artifact review; rootrelease/resources required before execution",
+  "prepared_at": "2026-11-01T09:22:29.657426+00:00",
+  "source_pins_at_preparation": {
+    "videos/ai/ai6/s13_trees.py": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
+    "videos/ai/ai6/common.py": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+    "videos/ai/ai6/zh_lines.py": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+    "videos/ai/ai_text_zh.json": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+    "videos/ai/ai6/compute.py": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+    "videos/ai/ai6/cache_contract.py": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+    "videos/ai/ai6/contracts.py": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+    "explainer/ai/viz.py": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+    "explainer/analysis/__init__.py": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+    "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+    "tools/qa_motion.py": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+  },
+  "commands": [
+    [
+      "nice",
+      "-n",
+      "10",
+      "python",
+      "tools/qa_series.py",
+      "ai6",
+      "--lang",
+      "en",
+      "--only",
+      "Trees",
+      "--cached-only",
+      "--timeout",
+      "1200"
+    ],
+    [
+      "nice",
+      "-n",
+      "10",
+      "python",
+      "tools/qa_series.py",
+      "ai6",
+      "--lang",
+      "en",
+      "--only",
+      "Trees",
+      "--cached-only",
+      "--timeout",
+      "1200",
+      "--motion"
+    ],
+    [
+      "nice",
+      "-n",
+      "10",
+      "python",
+      "tools/qa_series.py",
+      "ai6",
+      "--lang",
+      "zh",
+      "--only",
+      "Trees",
+      "--cached-only",
+      "--timeout",
+      "1200"
+    ],
+    [
+      "nice",
+      "-n",
+      "10",
+      "python",
+      "tools/qa_series.py",
+      "ai6",
+      "--lang",
+      "zh",
+      "--only",
+      "Trees",
+      "--cached-only",
+      "--timeout",
+      "1200",
+      "--motion"
+    ]
+  ],
+  "environment": {
+    "EXPLAINER_CACHED_ONLY": "1",
+    "EXPLAINER_TTS": "silent",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "start_guard_min_free_bytes": 805306368,
+  "shared_extraction_lock": "/workspace/runtime/ai4-tail-motion-review/extract.lock",
+  "workflow": [
+    "Verify currentTreeapprovedpin+finalrootbatchsource/table gate.",
+    "Retain independent oldcase movie/sidecar/source/input records; do not rewrite parentbaseline identities.",
+    "FreshENZH480 endpoints+fullsilentmovies serial cached-only nice10; copy2 completed artifacts independently, preserve rawfailure/source-change warnings.",
+    "Parent manually inspects every changed endpoint plus encodedheldcontexts: gain chart/thresholdlabel andfinal count+accuracy panel. Native854targetright/bottommargin\u226515px, inspect nearestgrid/readouts/upperplot/derivation.",
+    "Confirm all actualcapturedcaption/narration/timing/data values unchanged; exactPNG/pixel reuse only for genuinely identical already-viewed states.",
+    "After-source objectfixture is not rendered acceptance; continuousperception/audio/native1080motion/4K gates remain separate."
+  ],
+  "numerical_cache_pins": {
+    ".cache/ai6/trees.json": "c92e794289107138e0e646605a0770c24c4c1b23725db2b97fd148bd10f95fb0",
+    ".cache/ai6/trees.npz": "4cef5d816fbe75d67fed3ff0692f136c6dedd22fe08e10caebae9a8703161df4"
+  }
+}

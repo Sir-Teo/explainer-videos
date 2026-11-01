@@ -185,7 +185,7 @@ class Trees(VoiceoverScene):
         step = side_ladder(self, rows, whys, 3.4, 3.3, keep=3, top=3.2, buff=0.4)
         th = np.asarray(t["scan_not_t"])
         sc = plot([float(th.min()), float(th.max()), 4], [0, 1.05, 0.5], x_length=6.0, y_length=1.9,
-                  xticks=[4, 8, 12, 16], yticks=[0, 1], center=[-2.4, -2.45, 0],
+                  xticks=[4, 8, 12, 16], yticks=[0, 1], center=[-2.4, -2.2, 0],
                   xlabel=r"threshold on ``not'' \ (per $1{,}000$ words)", ylabel=r"gain, \ scaled to its best")
         sa = sc.ax
         scans = VGroup()
@@ -252,7 +252,7 @@ class Trees(VoiceoverScene):
         icons.scale_to_fit_width(8.8).move_to([-2.2, -0.4, 0])
         counts = VGroup(*[label(rf"\texttt{{{w}}} \ first: \ ${sum(r[0] == w for r in roots)}$ of ${len(roots)}$",
                                 font_size=24, color=col[w]) for w in words])
-        counts.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([5.0, 1.2, 0])
+        counts.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.7, 1.2, 0])
         accl = label(rf"held-out pages: \ ${100 * acc.min():.0f}\%$ to ${100 * acc.max():.0f}\%$", font_size=24,
                      color=WHITE).next_to(counts, DOWN, buff=0.4).align_to(counts, LEFT)
         head = label(rf"The same recipe on ${len(roots)}$ resamples of the training pages \ (all $70$ rates, \ depth $3$)",

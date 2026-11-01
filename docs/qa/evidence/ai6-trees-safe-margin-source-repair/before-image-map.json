@@ -1,0 +1,46 @@
+[
+  {
+    "file": "before-native/zh/014_00150.4s.png",
+    "runtime_original": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/014_00150.4s.png",
+    "sha256": "62e41edc83639779ffc94319aa9f8999a992a0451c3c549bbb8c2185cf97e2c0",
+    "dimensions": [
+      854,
+      480
+    ],
+    "decoded_RGB_sha256": "f7fb1535a77ab137a56720bae4c37e007cfc16faa293b9eaf6b6a819c8ebf906",
+    "actual_view": "individually inspected original pixels; intact glyphs, nonblocking safe-margin polish only"
+  },
+  {
+    "file": "before-native/zh/008_00084.0s.png",
+    "runtime_original": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/zh/008_00084.0s.png",
+    "sha256": "1f13aa3bfa84afa98656608227950b4864d0ea57d571142ac3ee138751368000",
+    "dimensions": [
+      854,
+      480
+    ],
+    "decoded_RGB_sha256": "113b3ac4e1595d18b403aa96e83d3772748344cf1149a1b6eb33da81e5049d6f",
+    "actual_view": "individually inspected original pixels; intact glyphs, nonblocking safe-margin polish only"
+  },
+  {
+    "file": "before-native/en/014_00135.4s.png",
+    "runtime_original": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/014_00135.4s.png",
+    "sha256": "caa6f557b4fccfc9f566f5f859f0d2ef79b09b560bf49e8eb793bed58637c515",
+    "dimensions": [
+      854,
+      480
+    ],
+    "decoded_RGB_sha256": "10b6d88cab47764539d1df51b80da63664701f2ef4b2332f0fc4389bb5348704",
+    "actual_view": "individually inspected original pixels; intact glyphs, nonblocking safe-margin polish only"
+  },
+  {
+    "file": "before-native/en/008_00073.9s.png",
+    "runtime_original": "/workspace/runtime/ai6-trees-margin-candidate/evidence-before/en/008_00073.9s.png",
+    "sha256": "f2ec2aba9540ab13fb0ffbb7fd85f2457e8648b50f92826c22b394376db354cc",
+    "dimensions": [
+      854,
+      480
+    ],
+    "decoded_RGB_sha256": "553eaa3d053df0fd39c916c9c3833e50a1484b3c936bf35a2fc87cd22c5d2390",
+    "actual_view": "individually inspected original pixels; intact glyphs, nonblocking safe-margin polish only"
+  }
+]

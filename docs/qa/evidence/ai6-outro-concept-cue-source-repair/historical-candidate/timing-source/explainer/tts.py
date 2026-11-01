@@ -1,0 +1,826 @@
+"""Text-to-speech backend for narration.
+
+* Default backend: Kokoro-82M (Apache-2.0), an open neural TTS that runs on CPU
+  and returns per-word timestamps, which we use for bookmark-level sync.
+* ``EXPLAINER_TTS=silent`` swaps in a silent backend that only *estimates*
+  durations.  Handy for fast layout iterations or machines without the model.
+
+Every utterance is cached on disk under ``.cache/tts`` keyed by
+(backend, voice, speed, spoken text), so re-rendering a scene never
+re-synthesizes unchanged lines.
+"""
+
+from __future__ import annotations
+
+import difflib
+import hashlib
+import json
+import os
+import re
+import wave
+from dataclasses import dataclass, field
+from pathlib import Path
+
+from . import lang
+from .cache_lock import locked_item
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+CACHE_DIR = Path(os.environ.get("EXPLAINER_CACHE", REPO_ROOT / ".cache")) / "tts"
+SAMPLE_RATE = 24_000
+VOICE = os.environ.get("EXPLAINER_VOICE", "af_heart")
+SPEED = float(os.environ.get("EXPLAINER_SPEED", "1.0"))
+BACKEND = os.environ.get("EXPLAINER_TTS", "kokoro")
+_CACHE_VERSION = 2
+
+# ---------------------------------------------------------------------------
+# Pronunciation lexicon.  Maps display text -> text the TTS engine should read.
+# Kokoro (misaki G2P) accepts inline IPA overrides: [word](/ipa/).
+# ---------------------------------------------------------------------------
+LEXICON: list[tuple[str, str]] = [
+    (r"Navier[–—-]Stokes", "[Navier](/nævjˈeɪ/) Stokes"),
+    (r"\bNavier\b", "[Navier](/nævjˈeɪ/)"),
+    (r"\bLeray\b", "[Leray](/ləɹˈeɪ/)"),
+    (r"\bKármán\b", "[Karman](/kˈɑɹmɑn/)"),
+    (r"\bRe\b", "[Re](/ˌɑɹˈi/)"),  # "R-E"
+    (r"\bdy\b", "[dy](/dˌiwˈI/)"),  # "dee-why", not "die"
+    (r"\bdz\b", "[dz](/dˌizˈi/)"),
+    (r"\bm a\b", "[m](/ˈɛm/) [a](/ˈA/)"),  # "F equals m a": letters, not "Emma"
+    (r"\bmu\b", "[mu](/mjˈu/)"),
+    (r"\bnu\b", "[nu](/nˈu/)"),
+    (r"\brho\b", "[rho](/ɹˈO/)"),
+    (r"\bCórdoba\b", "[Córdoba](/kˈɔɹdəbə/)"),
+    (r"\bMartínez-Zoroa\b", "[Martínez](/mɑɹtˈinɛz/) [Zoroa](/zəɹˈOə/)"),
+    (r"\bAlpöge\b", "[Alpöge](/ˈɑlpəɡə/)"),
+    (r"\bGELU\b", "[GELU](/ʤˈilu/)"),
+    # Technical terms outside the G2P dictionary (would otherwise go to the espeak fallback).
+    (r"\b[Ss]oftmax\b", r"[\g<0>](/sˈɔftmæks/)"),
+    (r"\b[Ll]ogits\b", r"[\g<0>](/lˈOʤɪts/)"),
+    (r"\b[Ll]ogit\b", r"[\g<0>](/lˈOʤɪt/)"),
+    (r"\bEiffel\b", "[Eiffel](/ˈIfᵊl/)"),
+    (r"\b[Bb]ackpropagation\b", r"[\g<0>](/bˌækpɹˌɑpəɡˈAʃən/)"),
+    (r"\b[Tt]okenizer\b", r"[\g<0>](/tˈOkənˌIzəɹ/)"),
+    (r"\b[Cc]ompleter\b", r"[\g<0>](/kəmplˈiTəɹ/)"),
+    (r"\b[Ss]ubword\b", r"[\g<0>](/sˈʌbwˌɜɹd/)"),
+    (r"\b[Ss]uperposition\b", r"[\g<0>](/sˌupəɹpəzˈɪʃən/)"),  # the G2P dictionary drops the "p"
+    (r"\b[Pp]retraining\b", r"[\g<0>](/pɹˌitɹˈAnɪŋ/)"),  # "pree-training", not "pr'training"
+    (r"\bGloucester\b", "[Gloucester](/ɡlˈɔstəɹ/)"),
+    (r"\bjetliner's\b", "[jetliner's](/ʤˈɛtlˌInəɹz/)"),  # dictionary entry drops the r
+    # Markets (videos/markets/opposing_forces)
+    (r"\bP/E\b", "[P/E](/pˌiˈi/)"),  # "pee-ee", not "pee slash ee"
+    (r"\bS&P\b", "S and P"),
+    (r"\bBernanke\b", "[Bernanke](/bəɹnˈæŋki/)"),
+    (r"\bJurrien\b", "[Jurrien](/jˈʊɹiən/)"),  # Dutch first name: "YUR-ee-en"
+    (r"\bTimmer's\b", "[Timmer's](/tˈɪməɹz/)"),
+    (r"\bTimmer\b", "[Timmer](/tˈɪməɹ/)"),
+    (r"\bHemingway\b", "[Hemingway](/hˈɛmɪŋwˌA/)"),
+    (r"\bBloomberg\b", "[Bloomberg](/blˈumbɜɹɡ/)"),
+    (r"\bselloffs\b", "sell offs"),
+    # The Riemann hypothesis (videos/math/riemann)
+    (r"Landau[–—-]Siegel", "Landau Siegel"),  # no pause at the dash; names follow below
+    (r"\bli of\b", "[li](/ˌɛlˈI/) of"),  # the logarithmic integral: "L I of x"
+    (r"\bchi\b", "[chi](/kˈI/)"),
+    (r"\bpsi\b", "[psi](/sˈI/)"),
+    (r"\bMöbius\b", "[Möbius](/mˈObiəs/)"),
+    (r"\bMertens\b", "[Mertens](/mˈɜɹtənz/)"),
+    (r"\bDirichlet\b", "[Dirichlet](/dˌɪɹɪʃlˈA/)"),
+    (r"\bEisenstein\b", "[Eisenstein](/ˈIzənʃtˌIn/)"),
+    (r"\bChebyshev\b", "[Chebyshev](/ʧˈɛbɪʃɛf/)"),
+    (r"\bHadamard\b", "[Hadamard](/hˌædəmˈɑɹd/)"),
+    (r"\bde la Vallée Poussin\b", "de la [Vallée](/vælˈA/) [Poussin](/pusˈæn/)"),
+    (r"\bvon Mangoldt\b", "von [Mangoldt](/mˈɑnɡɔlt/)"),
+    (r"\bvon Koch\b", "[von Koch](/fɔn kˈɔk/)"),
+    (r"\bVon Koch\b", "[Von Koch](/fɔn kˈɔk/)"),
+    (r"\bSiegel\b", "[Siegel](/zˈiɡəl/)"),
+    (r"\bLandau\b", "[Landau](/lˈændW/)"),
+    (r"\bVinogradov\b", "[Vinogradov](/vˌinəɡɹˈɑdɔf/)"),
+    (r"\bKorobov\b", "[Korobov](/kˈɔɹəbɔf/)"),
+    (r"\bTrudgian\b", "[Trudgian](/tɹˈʌʤiən/)"),
+    (r"\bOdlyzko\b", "[Odlyzko](/ɑdlˈɪzkO/)"),
+    (r"\bte Riele\b", "[te Riele](/tə ɹˈilə/)"),
+    (r"\bKummer\b", "[Kummer](/kˈʊməɹ/)"),
+    (r"\bKubota\b", "[Kubota](/kubˈOtə/)"),
+    (r"\bHasse\b", "[Hasse](/hˈɑsə/)"),
+    (r"\bJacobi's\b", "[Jacobi's](/ʤəkˈObiz/)"),
+    (r"\bGoldmakher\b", "[Goldmakher](/ɡˈOldmɑkəɹ/)"),
+    (r"\bLouvel\b", "[Louvel](/luvˈɛl/)"),
+    (r"\bRadziwiłł\b", "[Radziwiłł](/ɹɑʤˈiviw/)"),
+    (r"\bConrey\b", "[Conrey](/kˈɑnɹi/)"),
+    (r"\bidoneal\b", "[idoneal](/ɪdˈOniəl/)"),
+    (r"\bsextic\b", "[sextic](/sˈɛkstɪk/)"),
+    (r"\bFourier\b", "[Fourier](/fˈʊɹiˌA/)"),  # heard as "four year"
+    (r"\bPoisson\b", "[Poisson](/pwɑsˈOn/)"),  # "pwah-SOHN"; heard as "poison" without this
+    (r"\bquasi\b", "[quasi](/kwˈɑzi/)"),
+    # Open frontier models (videos/ml/open_models)
+    (r"\bMiMo-V2\.6-Pro\b", "[MiMo](/mˈimO/) V two point six Pro"),
+    (r"\bMiMo-V2-Flash\b", "[MiMo](/mˈimO/) V two Flash"),
+    (r"\bMiMo\b", "[MiMo](/mˈimO/)"),
+    (r"\bXiaomi's\b", "[Xiaomi's](/ʃˈWmiz/)"),
+    (r"\bXiaomi\b", "[Xiaomi](/ʃˈWmi/)"),
+    (r"\bGLM-(\d)\.(\d)\b", r"G L M \1 point \2"),
+    (r"\bGLM-(\d)\b", r"G L M \1"),
+    (r"\bGLM\b", "G L M"),
+    (r"\bZ\.ai's\b", "Z dot A I's"),
+    (r"\bZ\.ai\b", "Z dot A I"),
+    (r"\bKimi\b", "[Kimi](/kˈimi/)"),
+    (r"\bK3's\b", "K three's"),
+    (r"\bK3\b", "K three"),
+    (r"\bK2\b", "K two"),
+    (r"\bgpt-oss\b", "G P T [oss](/ˈɑs/)"),
+    (r"\bMLA\b", "M L A"),
+    (r"\bKDA\b", "K D A"),
+    (r"\bMuon\b", "[Muon](/mjˈuɑn/)"),
+    (r"\bSwiGLU\b", "[SwiGLU](/swˈiɡlu/)"),  # "swee-glue"
+    (r"\b[Qq]uantile\b", r"[\g<0>](/kwˈɑntIl/)"),  # heard as "quantal" without this
+    (r"\bSiTU-GLU\b", "[SiTU](/sˈitu/) [GLU](/ɡlˈu/)"),
+    (r"\bLatentMoE\b", "Latent M O E"),
+    (r"\bReLU\b", "[ReLU](/ɹˈɛlu/)"),
+    (r"\btanh\b", "[tanh](/tˈænʧ/)"),
+    (r"\bWidrow\b", "[Widrow](/wˈɪdɹO/)"),
+    (r"\bDeepSeek's\b", "Deep Seek's"),
+    (r"\bDeepSeek\b", "Deep Seek"),
+    # Training frontier models (videos/ml/frontier)
+    (r"\bQK-norm\b", "Q K norm"),
+    (r"\bNVFP4\b", "N V F P four"),
+    (r"\bFP8\b", "F P eight"),
+    (r"\bFP4\b", "F P four"),
+    (r"\bE4M3\b", "E four M three"),
+    (r"\bE2M1\b", "E two M one"),
+    (r"\b[Bb]float16\b", "B float sixteen"),
+    (r"\bAdamW\b", "Adam W"),
+    (r"\bDeepSeek-V(\d)\b", r"DeepSeek V \1"),
+    (r"\bDeepSeek-R1-Zero\b", "DeepSeek R one Zero"),
+    (r"\bR1's\b", "R one's"),
+    (r"\bR1\b", "R one"),
+    (r"\bKimi K(\d)\b", r"Kimi K \1"),
+    (r"\bH100s\b", "H one hundreds"),
+    (r"\bH100\b", "H one hundred"),
+    (r"\bH800s\b", "H eight hundreds"),
+    (r"\bOLMo\b", "[OLMo](/ˈOlmO/)"),
+    (r"\bAI2's\b", "A I two's"),
+    (r"\bAIME\b", "[AIME](/ˈAm/)"),
+    (r"\bMoE\b", "M O E"),
+    (r"\bFSDP\b", "F S D P"),
+    (r"\bGRPO's\b", "G R P O's"),
+    (r"\bGRPO\b", "G R P O"),
+    (r"\bDAPO's\b", "[DAPO's](/dˈɑpOz/)"),
+    (r"\bDPO\b", "D P O"),
+    (r"\bRLHF\b", "R L H F"),
+    (r"\bKL\b", "K L"),
+    (r"\bRL\b", "R L"),
+    (r"\bOPT\b", "O P T"),
+    (r"\bPaLM\b", "Palm"),
+    (r"\bLIMA\b", "[LIMA](/lˈimə/)"),
+    (r"\bSWE-bench\b", "S W E bench"),
+    (r"\bMinHash\b", "min hash"),
+    (r"\bIsoFLOP\b", "iso flop"),
+    (r"\bMuonClip\b", "[Muon](/mjˈuɑn/) Clip"),
+    (r"\bMuon's\b", "[Muon's](/mjˈuɑnz/)"),
+    (r"\bDualPipe\b", "Dual Pipe"),
+    (r"\bNVLink\b", "N V Link"),
+    (r"\bMegatron-LM\b", "Megatron L M"),
+    (r"\bQwen3's\b", "[Qwen](/ʧwˈɛn/) three's"),
+    (r"\bQwen(\d)", r"[Qwen](/ʧwˈɛn/) \1"),
+    (r"\bQwen\b", "[Qwen](/ʧwˈɛn/)"),
+    (r"\bTülu\b", "[Tülu](/tˈulu/)"),
+    (r"\bNemotron\b", "[Nemotron](/nˈɛmətɹɑn/)"),
+    (r"\bJaccard\b", "[Jaccard](/ʒəkˈɑɹd/)"),
+    (r"\bTrafilatura\b", "[Trafilatura](/tɹˌɑfilətˈʊɹə/)"),
+    (r"\bnanochat\b", "nano chat"),
+    (r"\bGopher\b", "[Gopher](/ɡˈOfəɹ/)"),
+    # Reinforcement learning, derived (videos/ml/rl).  GRPO, DPO, KL, RL, R1, DeepSeek are handled above.
+    (r"\bDr\. G R P O\b", "Doctor G R P O"),
+    (r"\bTRPO\b", "T R P O"),
+    (r"\bPPO\b", "P P O"),
+    (r"\bGAE\b", "G A E"),
+    (r"\bRLOO\b", "R L O O"),
+    (r"\bRLVR\b", "R L V R"),
+    (r"\bREINFORCE\b", "reinforce"),
+    (r"\bDAPO\b", "[DAPO](/dˈɑpO/)"),
+    (r"\bGSPO\b", "G S P O"),
+    (r"\bCISPO\b", "[CISPO](/sˈɪspO/)"),
+    (r"\bScaleRL\b", "Scale R L"),
+    (r"\bLoRA\b", "[LoRA](/lˈɔɹə/)"),
+    (r"\bvLLM\b", "V L L M"),
+    (r"\bDeepSeekMath\b", "Deep Seek Math"),
+    (r"\bGumbel\b", "[Gumbel](/ɡˈʊmbəl/)"),
+    (r"\bKakade\b", "[Kakade](/kəkˈɑdA/)"),
+    (r"\bLangford\b", "[Langford](/lˈæŋfəɹd/)"),
+    (r"\bargmax\b", "arg max"),
+    (r"\bfloat32\b", "float thirty-two"),
+    (r"\bbfloat16\b", "B float sixteen"),
+    (r"\bfloat16\b", "float sixteen"),
+    (r"\bo1\b", "O one"),
+    (r"\bo3\b", "O three"),
+    (r"\bxAI\b", "x A I"),
+    (r"\bProRL\b", "Pro R L"),
+    (r"\b([Rr])eweight", r"\1e-weight"),  # not in the G2P dictionary: "reweighted" came out as "related"
+    # Stochastic calculus (videos/math/stochastic)
+    (r"\bItô's\b", "[Itô's](/ˈitOz/)"),  # "EE-toh", not "eye-toe"
+    (r"\bItô\b(?!')", "[Itô](/ˈitO/)"),  # (?!') / (?<!\[): don't rewrite inside a link made by an earlier rule
+    (r"\bStratonovich\b", "[Stratonovich](/stɹˌætənˈOvɪʧ/)"),
+    (r"\bGirsanov's\b", "[Girsanov's](/ɡɪɹsˈɑnəfs/)"),
+    (r"\bGirsanov\b(?!')", "[Girsanov](/ɡɪɹsˈɑnəf/)"),
+    (r"\bFokker[–—-]Planck\b", "[Fokker](/fˈɑkəɹ/) [Planck](/plˈɑŋk/)"),
+    (r"\bFeynman[–—-]Kac\b", "Feynman [Kac](/kˈɑts/)"),
+    (r"(?<!\[)\bKac\b", "[Kac](/kˈɑts/)"),
+    (r"\bOrnstein[–—-]Uhlenbeck\b", "[Ornstein](/ˈɔɹnstIn/) [Uhlenbeck](/ˈuləŋbɛk/)"),
+    (r"\bEuler[–—-]Maruyama\b", "[Euler](/ˈYləɹ/) [Maruyama](/mˌɑɹujˈɑmə/)"),
+    (r"\bRiemann[–—-]Stieltjes\b", "Riemann [Stieltjes](/stˈiltjəs/)"),
+    (r"\bWong[–—-]Zakai\b", "Wong [Zakai](/zɑkˈI/)"),
+    (r"\bBlack[–—-]Scholes\b", "Black [Scholes](/ʃˈOlz/)"),
+    (r"(?<!\[)\bScholes\b", "[Scholes](/ʃˈOlz/)"),
+    (r"\bKolmogorov\b", "[Kolmogorov](/kˌOlməɡˈɔɹəf/)"),
+    (r"\bBachelier\b", "[Bachelier](/bˌɑʃəljˈA/)"),
+    (r"\bLévy\b", "[Lévy](/lAvˈi/)"),
+    (r"\bKakutani\b", "[Kakutani](/kˌɑkutˈɑni/)"),
+    (r"\bLangevin\b", "[Langevin](/lˌɑnʒəvˈæn/)"),
+    (r"\bDonsker's\b", "[Donsker's](/dˈɑnskəɹz/)"),
+    (r"\bKramers\b", "[Kramers](/kɹˈɑməɹz/)"),
+    # Trading systems (videos/markets/trading)
+    (r"\bSPY\b", "S P Y"),
+    (r"\bIVV\b", "I V V"),
+    (r"\bVOO\b", "V O O"),
+    (r"\bFPGAs\b", "F P G A's"),
+    (r"\bFPGA\b", "F P G A"),
+    (r"\bSEC\b", "S E C"),
+    (r"\bCME\b", "C M E"),
+    (r"\bETFs\b", "E T F's"),
+    (r"\bETF\b", "E T F"),
+    (r"\bUDP\b", "U D P"),
+    (r"\bTLB\b", "T L B"),
+    (r"\bPTP\b", "P T P"),
+    (r"\bJX\b", "J X"),
+    (r"\bSTAC-T0\b", "stack T zero"),
+    (r"\bHardcaml\b", "Hard [Caml](/kˈæməl/)"),
+    (r"\bOCaml\b", "[OCaml](/ˈOkæməl/)"),
+    (r"\bCarteret\b", "[Carteret](/kˈɑɹtəɹˌɛt/)"),
+    (r"\bMahwah\b", "[Mahwah](/mˈɑwɑ/)"),
+    (r"\bSecaucus\b", "[Secaucus](/sɪkˈɔkəs/)"),
+    (r"\bAvellaneda\b", "[Avellaneda](/ˌævəjənˈAdə/)"),
+    (r"\bStoikov's\b", "[Stoikov's](/stˈɔɪkɔfs/)"),
+    (r"(?<!\[)\bStoikov\b(?!')", "[Stoikov](/stˈɔɪkɔf/)"),
+    (r"\bExegy's\b", "[Exegy's](/ˈɛksəʤiz/)"),
+    (r"\bAquilina\b", "[Aquilina](/ˌækwɪlˈinə/)"),
+    (r"\bAllegheny\b", "[Allegheny](/ˌæləɡˈAni/)"),
+    # Quantum mechanics (videos/physics/quantum)
+    (r"\bSchrödinger's\b", "[Schrödinger's](/ʃɹˈOdɪŋəɹz/)"),
+    (r"(?<!\[)\bSchrödinger\b(?!')", "[Schrödinger](/ʃɹˈOdɪŋəɹ/)"),
+    (r"\bHeisenberg's\b", "[Heisenberg's](/hˈIzənbɜɹɡz/)"),
+    (r"(?<!\[)\bHeisenberg\b(?!')", "[Heisenberg](/hˈIzənbɜɹɡ/)"),
+    (r"\bde Broglie's\b", "də [Broglie's](/bɹˈYz/)"),
+    (r"\bde Broglie\b(?!')", "də [Broglie](/bɹˈY/)"),
+    (r"\b[Hh]ermitian\b", r"[\g<0>](/hɜɹmˈɪʃən/)"),
+    (r"\bStern[–—-]Gerlach\b", "Stern [Gerlach](/ɡˈɛɹlɑk/)"),
+    (r"(?<!\[)\bGerlach\b", "[Gerlach](/ɡˈɛɹlɑk/)"),
+    (r"\bTonomura\b", "[Tonomura](/tˌOnəmˈʊɹə/)"),
+    (r"\bEhrenfest's\b", "[Ehrenfest's](/ˈɛɹənfˌɛsts/)"),
+    (r"(?<!\[)\bEhrenfest\b(?!')", "[Ehrenfest](/ˈɛɹənfˌɛst/)"),
+    (r"\bWigner\b", "[Wigner](/wˈɪɡnəɹ/)"),
+    (r"\bBloch\b", "[Bloch](/blˈɑk/)"),
+    (r"\bPauli\b", "[Pauli](/pˈWli/)"),
+    (r"\bLarmor\b", "[Larmor](/lˈɑɹmɔɹ/)"),
+    (r"\bRydberg\b", "[Rydberg](/ɹˈɪdbɜɹɡ/)"),
+    (r"\bBalmer\b", "[Balmer](/bˈɑlməɹ/)"),
+    (r"\bLyman\b", "[Lyman](/lˈImən/)"),
+    (r"\bLaguerre\b", "[Laguerre](/ləɡˈɛɹ/)"),
+    (r"\bLegendre\b", "[Legendre](/ləʒˈɑndɹə/)"),
+    (r"\bHermite\b", "[Hermite](/ɛɹmˈit/)"),
+    (r"\bCauchy[–—-]Schwarz\b", "[Cauchy](/kOʃˈi/) [Schwarz](/ʃwˈɔɹts/)"),
+    (r"\bTsirelson's\b", "[Tsirelson's](/tsɪɹˈɛlsənz/)"),
+    (r"(?<!\[)\bTsirelson\b(?!')", "[Tsirelson](/tsɪɹˈɛlsən/)"),
+    (r"\bZeilinger\b", "[Zeilinger](/zˈIlɪŋəɹ/)"),
+    (r"\bAlain Aspect\b", "[Alain](/ælˈæn/) [Aspect](/æspˈɛ/)"),
+    (r"\bClauser\b", "[Clauser](/klˈWzəɹ/)"),
+    (r"\bGamow\b", "[Gamow](/ɡˈæmɔf/)"),
+    (r"\bDirac\b", "[Dirac](/dɪɹˈæk/)"),
+    (r"\bvon Neumann\b", "von [Neumann](/nˈYmɑn/)"),
+    (r"\bGoudsmit\b", "[Goudsmit](/ɡˈWdsmɪt/)"),
+    (r"(?<!\[)\bUhlenbeck\b", "[Uhlenbeck](/ˈuləŋbɛk/)"),
+    (r"\bDevoret\b", "[Devoret](/dəvɔɹˈA/)"),
+    (r"\bMartinis\b", "[Martinis](/mɑɹtˈinɪs/)"),
+    (r"\bTalbot\b", "[Talbot](/tˈɔlbət/)"),
+    (r"\bThaller\b", "[Thaller](/tˈɑləɹ/)"),
+    (r"\bKennard\b", "[Kennard](/kˈɛnəɹd/)"),
+    (r"\bGermer\b", "[Germer](/ɡˈɜɹməɹ/)"),
+    (r"\bHelgoland\b", "[Helgoland](/hˈɛlɡOlˌænd/)"),
+    (r"\bGöttingen\b", "[Göttingen](/ɡˈɜtɪŋən/)"),
+    (r"\bHensen\b", "[Hensen](/hˈɛnsən/)"),
+    (r"\b[Qq]ubits\b", r"[\g<0>](/kjˈubɪts/)"),
+    (r"\b[Qq]ubit\b", r"[\g<0>](/kjˈubɪt/)"),
+    (r"\bPlanck's\b", "[Planck's](/plˈɑŋks/)"),
+    (r"(?<!\[)\bPlanck\b(?!')", "[Planck](/plˈɑŋk/)"),
+    (r"\bBohr's\b", "[Bohr's](/bˈɔɹz/)"),
+    (r"(?<!\[)\bBohr\b(?!')", "[Bohr](/bˈɔɹ/)"),
+    (r"\bpicometers\b", "[picometers](/pˈikOmˌitəɹz/)"),
+    (r"\bbiprism\b", "[biprism](/bˈIpɹˌɪzəm/)"),
+    (r"\bbetween a and b\b", "between [a](/ˈA/) and b"),
+    (r"\bCHSH\b", "C H S H"),
+    (r"\bh-bar\b", "[h-bar](/ˈAʧ bˈɑɹ/)"),
+    # General relativity (videos/physics/relativity)
+    (r"\bSchwarzschild's\b", "[Schwarzschild's](/ʃwˈɔɹtsʃˌIldz/)"),
+    (r"\bSchwarzschild\b(?!')", "[Schwarzschild](/ʃwˈɔɹtsʃˌIld/)"),
+    (r"\bChristoffel\b", "[Christoffel](/kɹɪstˈɔfəl/)"),
+    (r"\bRicci\b", "[Ricci](/ɹˈiʧi/)"),
+    (r"\bMinkowski\b", "[Minkowski](/mɪŋkˈɔfski/)"),
+    (r"\bEötvös\b", "[Eötvös](/ˈɜtvɜʃ/)"),
+    (r"\bBianchi\b", "[Bianchi](/biˈɑŋki/)"),
+    (r"\bGrossmann\b", "[Grossmann](/ɡɹˈOsmən/)"),
+    (r"\bPríncipe\b", "[Príncipe](/pɹˈinsipə/)"),
+    (r"\bSobral\b", "[Sobral](/sObɹˈɑl/)"),
+    (r"\bRebka\b", "[Rebka](/ɹˈɛbkə/)"),
+    (r"\bFoucault's\b", "[Foucault's](/fukˈOz/)"),
+    (r"\bFoucault\b(?!')", "[Foucault](/fukˈO/)"),
+    (r"\bLe Verrier\b", "[Le Verrier](/lə vɛɹiˈA/)"),
+    (r"\bKretschmann\b", "[Kretschmann](/kɹˈɛʧmən/)"),
+    (r"\bFriedmann\b", "[Friedmann](/fɹˈidmən/)"),
+    (r"\bLemaître\b", "[Lemaître](/ləmˈɛtɹə/)"),
+    (r"\bLevi-Civita\b", "[Levi](/lˈɛvi/) [Civita](/ʧˈivitə/)"),
+    (r"\bPalatini\b", "[Palatini](/pˌɑlɑtˈini/)"),
+    (r"\bWeyl\b", "[Weyl](/vˈIl/)"),
+    (r"\bBirkhoff's\b", "[Birkhoff's](/bˈɜɹkhɔfs/)"),
+    (r"\bFlamm's\b", "[Flamm's](/flˈɑmz/)"),
+    (r"\bTheorema Egregium\b", "[Theorema](/θiəɹˈimə/) [Egregium](/ɪɡɹˈiʤiəm/)"),
+    (r"\bLIGO's\b", "[LIGO's](/lˈIɡOz/)"),
+    (r"\bLIGO\b(?!')", "[LIGO](/lˈIɡO/)"),
+    (r"\bMössbauer\b", "[Mössbauer](/mˈɜsbWəɹ/)"),
+    (r"\bCrommelin\b", "[Crommelin](/kɹˈɑməlɪn/)"),
+    (r"\bSoldner\b", "[Soldner](/zˈɔldnəɹ/)"),
+    (r"\b[Cc]ovectors\b", r"[\g<0>](/kˈOvɛktəɹz/)"),
+    (r"\b[Cc]ovector\b", r"[\g<0>](/kˈOvɛktəɹ/)"),
+    (r"\bintegrands\b", "[integrands](/ˈɪntəɡɹˌændz/)"),
+    # General relativity, part 2 (videos/physics/relativity2)
+    (r"\bSzekeres\b", "[Szekeres](/sˈɛkəɹˌɛʃ/)"),
+    (r"\bRaychaudhuri's\b", "[Raychaudhuri's](/ɹˌAʧˈWdʊɹiz/)"),
+    (r"\bRaychaudhuri\b(?!')", "[Raychaudhuri](/ɹˌAʧˈWdʊɹi/)"),
+    (r"\bAmal\b", "[Amal](/əmˈɑl/)"),
+    (r"\bKhalatnikov\b", "[Khalatnikov](/kəlˈɑtnɪkɔf/)"),
+    (r"\bLifshitz\b", "[Lifshitz](/lˈɪfʃɪts/)"),
+    (r"\bLense\b", "[Lense](/lˈɛnzə/)"),
+    (r"\bThirring\b", "[Thirring](/tˈɪɹɪŋ/)"),
+    (r"\bChristodoulou\b", "[Christodoulou](/kɹˌɪstədˈulu/)"),
+    (r"\bDemetrios\b", "[Demetrios](/dəmˈitɹiəs/)"),
+    (r"\bBekenstein\b", "[Bekenstein](/bˈɛkənstˌIn/)"),
+    (r"\bTullio\b", "[Tullio](/tˈuljO/)"),
+    (r"\bRegge\b", "[Regge](/ɹˈɛʤA/)"),
+    (r"\bPoincaré's\b", "[Poincaré's](/pwˌæŋkɑɹˈAz/)"),
+    (r"\bPoincaré\b(?!')", "[Poincaré](/pwˌæŋkɑɹˈA/)"),
+    (r"\bBoltzmann\b", "[Boltzmann](/bˈOltsmən/)"),
+    (r"\binspiral\b", "[inspiral](/ˈɪnspˌIɹəl/)"),  # not in the G2P dictionary ("insperil")
+    (r"\bringdown\b", "[ringdown](/ɹˈɪŋdˌWn/)"),
+    (r"\bcomoving\b", "[comoving](/kˌOmˈuvɪŋ/)"),  # "co-moving", not "commoving"
+    (r"\bmilliarcseconds\b", "[milliarcseconds](/mˌɪliˈɑɹksˌɛkəndz/)"),  # not in the G2P dictionary
+    (r"\bmicro-arcseconds\b", "[micro-arcseconds](/mˌIkɹOˈɑɹksˌɛkəndz/)"),
+    (r"\bKerr's\b", "[Kerr's](/kˈɜɹz/)"),  # Roy Kerr says "cur", not "care"
+    (r"\bKerr\b(?!')", "[Kerr](/kˈɜɹ/)"),
+    (r"\bM87\b", "M eighty-seven"),
+    (r"\bDESI's\b", "[DESI's](/dˈɛziz/)"),
+    (r"\bDESI\b(?!')", "[DESI](/dˈɛzi/)"),
+    (r"\bergosphere\b", "[ergosphere](/ˈɜɹɡOsfˌɪɹ/)"),
+    (r"\bergosurface\b", "[ergosurface](/ˈɜɹɡOsˌɜɹfəs/)"),
+    (r"\bquasinormal\b", "[quasinormal](/kwˌAzInˈɔɹməl/)"),
+    (r"\bgravitomagnetic\b", "[gravitomagnetic](/ɡɹˌævɪtOmæɡnˈɛtɪk/)"),
+    (r"\bgravitomagnetism\b", "[gravitomagnetism](/ɡɹˌævɪtOmˈæɡnətˌɪzəm/)"),
+    # Quantum mechanics, part 2 (videos/physics/quantum2)
+    (r"Aharonov[–—-]Bohm", "[Aharonov](/ɑhɑɹˈOnɔf/) [Bohm](/bˈOm/)"),
+    (r"(?<!\[)\bAharonov\b", "[Aharonov](/ɑhɑɹˈOnɔf/)"),
+    (r"(?<!\[)\bBohm\b", "[Bohm](/bˈOm/)"),
+    (r"\bWentzel\b", "[Wentzel](/vˈɛntsəl/)"),
+    (r"\bBrillouin\b", "[Brillouin](/bɹijˈuæn/)"),
+    (r"Bohr[–—-]Sommerfeld", "[Bohr](/bˈɔɹ/) [Sommerfeld](/zˈɔməɹfɛlt/)"),
+    (r"(?<!\[)\bSommerfeld\b", "[Sommerfeld](/zˈɔməɹfɛlt/)"),
+    (r"\bNuttall\b", "[Nuttall](/nˈʌtɔl/)"),
+    (r"\bKronig\b", "[Kronig](/kɹˈOnɪɡ/)"),
+    (r"\bZitterbewegung\b", "[Zitterbewegung](/tsˈɪtəɹbəvˌAɡʊŋ/)"),
+    (r"\bHaroche's\b", "[Haroche's](/ɑɹˈɔʃɪz/)"),
+    (r"\bHaroche\b(?!')", "[Haroche](/ɑɹˈɔʃ/)"),
+    (r"Euler[–—-]Lagrange", "[Euler](/ˈɔɪləɹ/) [Lagrange](/ləɡɹˈAnʤ/)"),
+    (r"\bCornu\b", "[Cornu](/kɔɹnˈu/)"),
+    (r"\bHund's\b", "[Hund's](/hˈʊnts/)"),
+    (r"\bSchwinger\b", "[Schwinger](/ʃwˈɪŋəɹ/)"),
+    (r"\bHong, Ou and Mandel\b", "Hong, [Ou](/ˈO/) and Mandel"),
+    (r"\banyons\b", "[anyons](/ˈæniɑnz/)"),
+    (r"\bGurney\b", "[Gurney](/ɡˈɜɹni/)"),
+    (r"\bGeiger\b", "[Geiger](/ɡˈIɡəɹ/)"),
+    (r"\bsuperpositions\b", "[superpositions](/sˌupəɹpəzˈɪʃənz/)"),
+    # Analysis, from the real line to functional analysis (videos/analysis/analysis1-10)
+    (r"Bolzano[–—-]Weierstrass", "[Bolzano](/bOltsˈɑnO/) [Weierstrass](/vˈIəɹʃtɹˌɑs/)"),
+    (r"\bDedekind's\b", "[Dedekind's](/dˈAdəkˌɪnts/)"),
+    (r"\bDedekind\b(?!')", "[Dedekind](/dˈAdəkˌɪnt/)"),
+    (r"(?<!\[)\bCauchy's\b", "[Cauchy's](/kOʃˈiz/)"),
+    (r"(?<!\[)\bCauchy\b(?![\]'–—-])", "[Cauchy](/kOʃˈi/)"),
+    (r"\bWeierstrass's\b", "[Weierstrass's](/vˈIəɹʃtɹˌɑsɪz/)"),
+    (r"(?<!\[)\bWeierstrass\b(?![\]'])", "[Weierstrass](/vˈIəɹʃtɹˌɑs/)"),
+    (r"(?<!\[)\bBolzano\b", "[Bolzano](/bOltsˈɑnO/)"),
+    (r"Heine[–—-]Borel", "[Heine](/hˈInə/) [Borel](/bɔɹˈɛl/)"),
+    (r"(?<!\[)\bBorel\b", "[Borel](/bɔɹˈɛl/)"),
+    (r"(?<!\[)\bHeine\b", "[Heine](/hˈInə/)"),
+    (r"(?<!\[)\bLagrange\b(?!\])", "[Lagrange](/ləɡɹˈAnʤ/)"),
+    (r"\bRudin's\b", "[Rudin's](/ɹˈudɪnz/)"),
+    (r"\bRudin\b(?!')", "[Rudin](/ɹˈudɪn/)"),
+    (r"\bMéray\b", "[Méray](/mAɹˈA/)"),
+    (r"\bLiouville\b", "[Liouville](/ljuvˈil/)"),
+    (r"\bLindemann\b", "[Lindemann](/lˈɪndəmən/)"),
+    (r"\bArchimedean\b", "[Archimedean](/ˌɑɹkəmˈidiən/)"),
+    (r"\bArzelà\b", "[Arzelà](/ɑɹʦˈɛlə/)"),
+    (r"\bAscoli\b", "[Ascoli](/ˈæskOli/)"),
+    (r"\bHausdorff\b", "[Hausdorff](/hˈWsdɔɹf/)"),
+    (r"\bThomae's\b", "[Thomae's](/tˈOmAz/)"),
+    (r"\bsup\b", "[sup](/sˈup/)"),  # "soup", as analysts say it
+    (r"\bsups\b", "[sups](/sˈups/)"),
+    (r"\binf\b", "[inf](/ˈɪnf/)"),
+    (r"\bsupremum\b", "[supremum](/supɹˈiməm/)"),
+    (r"\binfimum\b", "[infimum](/ɪnfˈIməm/)"),
+    (r"\bsubcover\b", "[subcover](/sˈʌbkˌʌvəɹ/)"),
+    (r"\bsubcovers\b", "[subcovers](/sˈʌbkˌʌvəɹz/)"),
+    (r"\btaxicab\b", "[taxicab](/tˈæksikˌæb/)"),
+    (r"\bOresme\b", "[Oresme](/ɔɹˈɛm/)"),
+    (r"\bDarboux's\b", "[Darboux's](/dɑɹbˈuz/)"),
+    (r"\bDarboux\b(?!')", "[Darboux](/dɑɹbˈu/)"),
+    (r"\bL['’]H[oô]pital's\b", "[L'Hôpital's](/lˌOpitˈɑlz/)"),
+    (r"\bL['’]H[oô]pital\b(?!')", "[L'Hôpital](/lˌOpitˈɑl/)"),
+    (r"\bThomae\b(?!')", "[Thomae](/tˈOmA/)"),
+    (r"(?<!\[)\bEuler's\b", "[Euler's](/ˈYləɹz/)"),
+    (r"(?<!\[)\bEuler\b(?![\]'–—-])", "[Euler](/ˈYləɹ/)"),
+    (r"\bBanach\b", "[Banach](/bˈɑnɑk/)"),
+    (r"\bBaire's\b", "[Baire's](/bˈɛɹz/)"),
+    (r"\bBaire\b(?!')", "[Baire](/bˈɛɹ/)"),
+    (r"\bFubini's\b", "[Fubini's](/fubˈiniz/)"),
+    (r"\bFubini\b(?!')", "[Fubini](/fubˈini/)"),
+    (r"(?<!\[)\bStieltjes\b(?!\])", "[Stieltjes](/stˈiltjəs/)"),
+    (r"\bSchoenberg\b", "[Schoenberg](/ʃˈɜɹnbɜɹɡ/)"),
+    (r"\bDini's\b", "[Dini's](/dˈiniz/)"),
+    (r"\bDini\b(?!')", "[Dini](/dˈini/)"),
+    (r"\bPeano's\b", "[Peano's](/piˈɑnOz/)"),
+    (r"\bPeano\b(?!')", "[Peano](/piˈɑnO/)"),
+    (r"\bFejér's\b", "[Fejér's](/fˈɛjAɹz/)"),
+    (r"\bFejér\b(?!')", "[Fejér](/fˈɛjAɹ/)"),
+    (r"\bMollerup\b", "[Mollerup](/mˈɔləɹʊp/)"),
+    (r"\bPicard's\b", "[Picard's](/pikˈɑɹz/)"),
+    (r"\bPicard\b(?!')", "[Picard](/pikˈɑɹ/)"),
+    (r"\bPoincaré's\b", "[Poincaré's](/pwæŋkɑɹˈAz/)"),
+    (r"\bPoincaré\b(?!')", "[Poincaré](/pwæŋkɑɹˈA/)"),
+    (r"Runge[–—-]Kutta", "[Runge](/ɹˈʊŋə/) [Kutta](/kˈʊtə/)"),
+    (r"\bDescartes\b", "[Descartes](/dAkˈɑɹt/)"),
+    (r"\bFatou's\b", "[Fatou's](/fætˈuz/)"),
+    (r"\bFatou\b(?!')", "[Fatou](/fætˈu/)"),
+    (r"\bUrysohn's\b", "[Urysohn's](/ˈʊɹisˌɔnz/)"),
+    (r"\bUrysohn\b(?!')", "[Urysohn](/ˈʊɹisˌɔn/)"),
+    (r"\bEgorov's\b", "[Egorov's](/jɛɡˈɔɹəfs/)"),
+    (r"\bEgorov\b(?!')", "[Egorov](/jɛɡˈɔɹəf/)"),
+    (r"\bLusin's\b", "[Lusin's](/lˈuzɪnz/)"),
+    (r"\bLusin\b(?!')", "[Lusin](/lˈuzɪn/)"),
+    (r"\bVitali's\b", "[Vitali's](/vitˈɑliz/)"),
+    (r"\bVitali\b(?!')", "[Vitali](/vitˈɑli/)"),
+    (r"\bTonelli's\b", "[Tonelli's](/tənˈɛliz/)"),
+    (r"\bTonelli\b(?!')", "[Tonelli](/tənˈɛli/)"),
+    (r"\bCarathéodory\b", "[Carathéodory](/kˌɑɹətˌAˈɔdəɹi/)"),
+    (r"\b[Dd]u Bois[–—-]Reymond\b", "[du Bois-Reymond](/dˌu bwˈɑ ɹAmˈɔn/)"),
+    (r"\bParseval's\b", "[Parseval's](/pˌɑɹsəvˈɑlz/)"),
+    (r"\bParseval\b(?!')", "[Parseval](/pˌɑɹsəvˈɑl/)"),
+    (r"\bLebesgue's\b", "[Lebesgue's](/ləbˈɛɡz/)"),
+    (r"(?<!\[)\bLebesgue\b(?![\]'])", "[Lebesgue](/ləbˈɛɡ/)"),
+    (r"\bLipschitz\b", "[Lipschitz](/lˈɪpʃɪts/)"),
+    (r"\bAbel's\b", "[Abel's](/ˈɑbəlz/)"),
+    (r"\bAbel\b(?!')", "[Abel](/ˈɑbəl/)"),
+    (r"(?<!\[)(?<!von )(?<!Von )\bKoch\b(?!\])", "[Koch](/kˈɔk/)"),
+    (r"\bHölder's\b", "[Hölder's](/hˈɜldəɹz/)"),
+    (r"\bHölder\b(?!')", "[Hölder](/hˈɜldəɹ/)"),
+    (r"\bJensen's\b", "[Jensen's](/jˈɛnsənz/)"),
+    (r"\bJensen\b(?!')", "[Jensen](/jˈɛnsən/)"),
+    (r"Radon[–—-]Nikodym", "[Radon](/ɹˈAdɔn/) [Nikodym](/nˈikədɪm/)"),
+    (r"(?<!\[)\bRadon\b(?!\])", "[Radon](/ɹˈAdɔn/)"),
+    (r"(?<!\[)\bNikodym\b(?!\])", "[Nikodym](/nˈikədɪm/)"),
+    (r"Riesz[–—-]Fischer", "[Riesz](/ɹˈis/) [Fischer](/fˈɪʃəɹ/)"),
+    (r"(?<!\[)\bRiesz's\b", "[Riesz's](/ɹˈisɪz/)"),
+    (r"(?<!\[)\bRiesz\b(?![\]'])", "[Riesz](/ɹˈis/)"),
+    (r"Gram[–—-]Schmidt", "Gram [Schmidt](/ʃmˈɪt/)"),
+    (r"Hardy[–—-]Littlewood", "Hardy Littlewood"),
+    (r"\bFréchet\b", "[Fréchet](/fɹAʃˈA/)"),
+    (r"\bLegendre's\b", "[Legendre's](/ləʒˈɑndɹəz/)"),
+    (r"\bGoursat's\b", "[Goursat's](/ɡʊɹsˈɑz/)"),
+    (r"\bGoursat\b(?!')", "[Goursat](/ɡʊɹsˈɑ/)"),
+    (r"\bMorera's\b", "[Morera's](/mɔɹˈɛɹəz/)"),
+    (r"\bMorera\b(?!')", "[Morera](/mɔɹˈɛɹə/)"),
+    (r"\bRouché's\b", "[Rouché's](/ɹuʃˈAz/)"),
+    (r"\bRouché\b(?!')", "[Rouché](/ɹuʃˈA/)"),
+    (r"\bMontel's\b", "[Montel's](/mɔntˈɛlz/)"),
+    (r"\bMontel\b(?!')", "[Montel](/mɔntˈɛl/)"),
+    (r"(?<!\[)\bRunge's\b", "[Runge's](/ɹˈʊŋəz/)"),
+    (r"(?<!\[)\bRunge\b(?![\]'–—-])", "[Runge](/ɹˈʊŋə/)"),
+    (r"Phragmén[–—-]Lindelöf", "[Phragmén](/fɹɑɡmˈAn/) [Lindelöf](/lˈɪndəlˌɜf/)"),
+    (r"Schwarz[–—-]Christoffel", "[Schwarz](/ʃwˈɔɹts/) [Christoffel](/kɹɪstˈɔfəl/)"),
+    (r"Mittag[–—-]Leffler", "[Mittag](/mˈɪtɑɡ/) [Leffler](/lˈɛflər/)"),
+    (r"\bBlaschke\b", "[Blaschke](/blˈɑʃkə/)"),
+    (r"\bBeurling's\b", "[Beurling's](/bˈɜɹlɪŋz/)"),
+    (r"\bBeurling\b(?!')", "[Beurling](/bˈɜɹlɪŋ/)"),
+    (r"\bMergelyan\b", "[Mergelyan](/mɛɹɡəlˈjɑn/)"),
+    (r"\bKakutani\b", "[Kakutani](/kɑkutˈɑni/)"),
+    (r"\bGelfand\b", "[Gelfand](/ɡˈɛlfənd/)"),
+    (r"\bMazur\b", "[Mazur](/mˈɑzʊɹ/)"),
+    (r"\bSteinhaus\b", "[Steinhaus](/ʃtˈInhWs/)"),
+    (r"\bAlaoglu\b", "[Alaoglu](/ˌɑlɑˈOɡlu/)"),
+    (r"Krein[–—-]Milman", "[Krein](/kɹˈAn/) [Milman](/mˈɪlmən/)"),
+    (r"(?<!\[)\bKrein\b(?!\])", "[Krein](/kɹˈAn/)"),
+    (r"(?<!\[)\bMilman\b(?!\])", "[Milman](/mˈɪlmən/)"),
+    (r"\bGrothendieck\b", "[Grothendieck](/ɡɹˈOtəndˌik/)"),
+    (r"\bTychonoff's\b", "[Tychonoff's](/tˈɪxənɔfs/)"),
+    (r"\bTychonoff\b(?!')", "[Tychonoff](/tˈɪxənɔf/)"),
+    (r"Hellinger[–—-]Toeplitz", "[Hellinger](/hˈɛlɪŋəɹ/) [Toeplitz](/tˈOplɪts/)"),
+    (r"\bFredholm\b", "[Fredholm](/fɹˈAdhOlm/)"),
+    (r"\bSchauder\b", "[Schauder](/ʃˈWdəɹ/)"),
+    (r"\bGoldstine's\b", "[Goldstine's](/ɡˈOldstInz/)"),
+    (r"\bCarleson\b", "[Carleson](/kˈɑɹləsən/)"),
+    (r"\bProkhorov\b", "[Prokhorov](/pɹˈɔxəɹəf/)"),
+    (r"\bMüntz\b", "[Müntz](/mˈʏnts/)"),
+    (r"\bSzász\b", "[Szász](/sˈɑs/)"),
+    (r"\bHaar\b", "[Haar](/hˈɑɹ/)"),
+    (r"\bHeaviside\b", "[Heaviside](/hˈɛvisˌId/)"),
+    (r"\bSchwartz\b", "[Schwartz](/ʃwˈɑɹts/)"),
+    (r"\bPlancherel\b", "[Plancherel](/plɑnʃəɹˈɛl/)"),
+    (r"\bSobolev's\b", "[Sobolev's](/sˈɔbəlɛfs/)"),
+    (r"\bSobolev\b(?!')", "[Sobolev](/sˈɔbəlɛf/)"),
+    (r"Malgrange[–—-]Ehrenpreis", "[Malgrange](/mɑlɡɹˈɑnʒ/) [Ehrenpreis](/ˈɛɹənpɹIs/)"),
+    (r"Paley[–—-]Wiener", "[Paley](/pˈAli/) [Wiener](/wˈinəɹ/)"),
+    (r"(?<!\[)\bWiener's\b", "[Wiener's](/wˈinəɹz/)"),
+    (r"(?<!\[)\bWiener\b(?![\]'])", "[Wiener](/wˈinəɹ/)"),
+    (r"\bTauberian\b", "[Tauberian](/tWbˈɪɹiən/)"),
+    (r"\bIngham\b", "[Ingham](/ˈɪŋəm/)"),
+    (r"Denjoy[–—-]Carleman", "[Denjoy](/dɑnʒwˈɑ/) [Carleman](/kˈɑɹləmɑn/)"),
+    (r"\bVolterra\b", "[Volterra](/vOltˈɛɹə/)"),
+    (r"\bNaimark\b", "[Naimark](/nˈImɑɹk/)"),
+    (r"\bSegal\b", "[Segal](/sˈiɡəl/)"),
+    (r"\bLomonosov's\b", "[Lomonosov's](/lɑmənˈɔsəfs/)"),
+    (r"\bWielandt's\b", "[Wielandt's](/vˈilɑnts/)"),
+    (r"\bRayleigh\b", "[Rayleigh](/ɹˈAli/)"),
+    (r"\bCayley\b", "[Cayley](/kˈAli/)"),
+    (r"(?<![\[a-z])Neumann\b(?!\])", "[Neumann](/nˈYmɑn/)"),
+    (r"\bxi\b", "[xi](/zˈI/)"),
+    (r"(?<!\[)\bMalgrange\b(?!\])", "[Malgrange](/mɑlɡɹˈɑnʒ/)"),
+    # A capital A in mid-sentence is a symbol (a set, a matrix, a potential), never the article: say "ay", not "uh".
+    (r"(?<=[a-z,;:] )A['’]s\b", "[A's](/ˈAz/)"),
+    (r"(?<=[a-z,;:] )A\b(?!['’])", "[A](/ˈA/)"),
+    # Likewise a lowercase a followed by an index (a n, a k, a i) is the sequence a, not the article.
+    (r"\ba(?= [nkij]\b(?!-))", "[a](/ˈA/)"),
+    (r"(?<=\bf of )a\b", "[a](/ˈA/)"),  # f of a
+    (r"\ba(?= (?:to|and) b\b)", "[a](/ˈA/)"),  # from a to b
+    (r"(?<=\bat )a(?= and\b)", "[a](/ˈA/)"),  # down at a and up at b
+    (r"–|—", ", "),  # en/em dashes -> a short pause
+]
+
+
+# Plain-text respellings for the neural backends (which read text, not IPA).  Grown by listening:
+# tools/check_narration.py transcribes every line and diffs it against the script.
+_ZH_FUNCTION_NAMES = {"sin", "cos", "tan", "log", "ln", "exp", "sup", "inf", "lim", "max", "min", "det", "arg"}
+
+RESPELL: dict[str, list[tuple[str, str]]] = {
+    "en": [
+        (r"(?<=\w)–(?=\w)", " "),  # a compound name, Heine–Borel, is read straight through
+        (r"\s*[–—]\s*", ", "),
+    ],
+    "zh": [
+        (r"(?<=\w)–(?=\w)", ""),  # 海涅–博雷尔 -> 海涅博雷尔
+        (r"—", "，"),
+        (r"(?<=[A-Za-zα-ωΑ-Ω])_(?=[A-Za-z0-9α-ω{])", " "),  # x_n -> "x n"
+        (r"[{}]", ""),
+        (r"(?<=[A-Za-z])\*", "星"),  # x* -> "x 星" (and weak-star, 弱*, below)
+        # function spaces, written with superscripts so the subtitles read L², Lᵖ, ℓ², H²: "L 2", "L p", "小l 2", "H 2"
+        (r"ℓ", "小l"),
+        (r"(?<=[LlH])([¹²ᵖˢ])", lambda m: " " + {"¹": "1", "²": "2", "ᵖ": "p", "ˢ": "s"}[m.group(1)]),
+        (r"(?<=[Ll])∞", " 无穷"),
+        (r"(?<=[LlH])\^([a-z0-9])", r" \1"),  # no superscript q exists: L^q -> "L q"
+        (r"(?<=[A-Za-z弱])\*", "星"),  # the weak-star topology: 弱* -> "弱星"
+        # a short run of Latin letters is a product of variables, read letter by letter (inx -> "i n x", so "it"
+        # isn't the English word), except the function names
+        (r"(?<![A-Za-z])[A-Za-z]{2,3}(?![A-Za-z])",
+         lambda m: m.group(0) if m.group(0).lower() in _ZH_FUNCTION_NAMES else " ".join(m.group(0))),
+    ],
+}
+
+
+def to_spoken(text: str) -> str:
+    if BACKEND in ("kokoro", "silent"):
+        for pattern, repl in LEXICON:
+            text = re.sub(pattern, repl, text)
+        return text
+    for pattern, repl in RESPELL.get(lang.LANG, []):
+        text = re.sub(pattern, repl, text)
+    return text
+
+
+@dataclass
+class Word:
+    text: str
+    start: float
+    end: float
+
+
+@dataclass
+class Utterance:
+    text: str
+    audio_path: Path
+    duration: float
+    words: list[Word] = field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# Word alignment: map display words onto TTS tokens via their letters.
+# ---------------------------------------------------------------------------
+_norm = lang.norm
+
+
+def align_words(display_text: str, tokens: list[tuple[str, float, float]], duration: float) -> list[Word]:
+    dwords = lang.tokens(display_text)
+    if not dwords:
+        return []
+    d_chars, d_owner = [], []
+    for i, w in enumerate(dwords):
+        for ch in _norm(w):
+            d_chars.append(ch)
+            d_owner.append(i)
+    t_chars, t_owner = [], []
+    for j, (tt, _, _) in enumerate(tokens):
+        for ch in _norm(tt):
+            t_chars.append(ch)
+            t_owner.append(j)
+
+    starts: list[float | None] = [None] * len(dwords)
+    ends: list[float | None] = [None] * len(dwords)
+    sm = difflib.SequenceMatcher(None, "".join(d_chars), "".join(t_chars), autojunk=False)
+    for a, b, size in sm.get_matching_blocks():
+        for k in range(size):
+            wi, tj = d_owner[a + k], t_owner[b + k]
+            ts, te = tokens[tj][1], tokens[tj][2]
+            starts[wi] = ts if starts[wi] is None else min(starts[wi], ts)
+            ends[wi] = te if ends[wi] is None else max(ends[wi], te)
+
+    # Fill gaps (words with no letters, or unmatched) by linear interpolation.
+    known = [i for i, s in enumerate(starts) if s is not None]
+    if not known:
+        n = len(dwords)
+        return [Word(w, duration * i / n, duration * (i + 1) / n) for i, w in enumerate(dwords)]
+    for i in range(len(dwords)):
+        if starts[i] is None:
+            prev = max((k for k in known if k < i), default=None)
+            nxt = min((k for k in known if k > i), default=None)
+            s = ends[prev] if prev is not None else 0.0
+            e = starts[nxt] if nxt is not None else duration
+            starts[i], ends[i] = s, e
+    return [Word(w, float(s), float(e)) for w, s, e in zip(dwords, starts, ends)]
+
+
+# ---------------------------------------------------------------------------
+# Backends
+# ---------------------------------------------------------------------------
+_pipeline = None
+
+
+def _kokoro_pipeline():
+    global _pipeline
+    if _pipeline is None:
+        import warnings
+
+        warnings.filterwarnings("ignore")
+        from kokoro import KPipeline
+
+        _pipeline = KPipeline(lang_code=VOICE[0], repo_id="hexgrad/Kokoro-82M")
+    return _pipeline
+
+
+def _synth_kokoro(spoken: str):
+    import numpy as np
+
+    pipe = _kokoro_pipeline()
+    chunks, tokens, offset = [], [], 0.0
+    for result in pipe(spoken, voice=VOICE, speed=SPEED):
+        audio = result.audio
+        if audio is None:
+            continue
+        audio = audio.numpy() if hasattr(audio, "numpy") else np.asarray(audio)
+        for tok in result.tokens or []:
+            if tok.start_ts is None or tok.end_ts is None:
+                continue
+            tokens.append((tok.text, offset + tok.start_ts, offset + tok.end_ts))
+        chunks.append(audio)
+        offset += len(audio) / SAMPLE_RATE
+    audio = np.concatenate(chunks) if chunks else np.zeros(SAMPLE_RATE // 2, dtype="float32")
+    return audio, tokens
+
+
+def _synth_silent(spoken: str):
+    import numpy as np
+
+    plain = re.sub(r"\[([^\]]*)\]\(/[^)]*/\)", r"\1", spoken)
+    if lang.LANG == "en":
+        words = plain.split()
+        # ~2.7 words/s plus punctuation pauses, roughly matching Kokoro's pacing.
+        dur = 0.4 + len(words) / 2.7 + 0.25 * len(re.findall(r"[.,;:?!]", plain))
+    else:
+        words = lang.tokens(plain)  # one per character (or run of Latin letters and digits)
+        # ~4.3 characters/s plus pauses at the punctuation, roughly Qwen3-TTS's Mandarin pacing.
+        dur = 0.4 + len(words) / 4.3 + 0.25 * len(re.findall(r"[，。、；：？！]", plain))
+    tokens, t = [], 0.3
+    per = (dur - 0.4) / max(len(words), 1)
+    for w in words:
+        tokens.append((w, t, t + per))
+        t += per
+    return np.zeros(int(dur * SAMPLE_RATE), dtype="float32"), tokens
+
+
+SERVER = os.environ.get("EXPLAINER_TTS_SERVER", "http://127.0.0.1:8765")
+
+
+def _synth_server(spoken: str, out: Path) -> tuple[float, list]:
+    """Neural TTS served by tools/tts_server.py (its own environment): it writes ``out`` and returns
+    the duration and the forced-aligned word (Chinese: character) timings."""
+    import urllib.request
+
+    import time
+    import urllib.error
+
+    body = json.dumps({"text": spoken, "lang": lang.LANG, "voice": VOICE, "speed": SPEED, "out": str(out)})
+    req = urllib.request.Request(f"{SERVER}/synth", data=body.encode(), headers={"Content-Type": "application/json"})
+    for attempt in range(180):  # a server being restarted (it takes a minute to load) is waited for, up to 30 min
+        try:
+            with urllib.request.urlopen(req, timeout=24 * 3600) as resp:
+                meta = json.loads(resp.read())
+            return meta["duration"], meta["tokens"]
+        except urllib.error.HTTPError:
+            raise  # the server answered: a real error
+        except (urllib.error.URLError, ConnectionError, OSError):
+            if attempt == 179:
+                raise
+            time.sleep(10)
+
+
+def _write_wav(path: Path, audio) -> None:
+    import numpy as np
+
+    pcm = (np.clip(audio, -1, 1) * 32767).astype("<i2")
+    with wave.open(str(path), "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(SAMPLE_RATE)
+        wf.writeframes(pcm.tobytes())
+
+
+_profile_cache: list | None = None
+
+
+def _profile_settings() -> list:
+    """A server voice's model and settings (speaker, style prompt, sampling) for the cache key, so editing a profile
+    in tools/voices.json re-synthesizes its lines instead of reusing audio made with the old settings."""
+    global _profile_cache
+    if BACKEND in ("kokoro", "silent"):
+        return []
+    if _profile_cache is None:
+        prof = json.loads((REPO_ROOT / "tools" / "voices.json").read_text()).get(VOICE, {})
+        _profile_cache = [prof.get("model"), prof.get("voices", {}).get(lang.LANG)]
+    return _profile_cache
+
+
+def narration_credit() -> str:
+    """Who reads the narration, for the credits: the server profiles name their model in tools/voices.json."""
+    if BACKEND in ("kokoro", "silent"):
+        return "Kokoro-82M"
+    profiles = json.loads((REPO_ROOT / "tools" / "voices.json").read_text())
+    return profiles.get(VOICE, {}).get("credit", VOICE)
+
+
+def cache_key(text: str) -> tuple[str, str, str]:
+    """(cleaned text, spoken form, cache key) of a narration line: ``<key>.wav/.json`` in the TTS cache."""
+    text = lang.clean(text)
+    spoken = to_spoken(text)
+    key_parts = [_CACHE_VERSION, BACKEND, VOICE, SPEED, spoken] + ([lang.LANG] if lang.LANG != "en" else [])
+    key_parts += _profile_settings()
+    key = hashlib.sha1(json.dumps(key_parts).encode()).hexdigest()[:16]
+    return text, spoken, key
+
+
+@locked_item(lambda text: CACHE_DIR / f"{cache_key(text)[2]}.json")
+def synthesize(text: str) -> Utterance:
+    """Return audio + word timings for ``text`` (display text, no markup)."""
+    text, spoken, key = cache_key(text)
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    wav_path = CACHE_DIR / f"{key}.wav"
+    meta_path = CACHE_DIR / f"{key}.json"
+
+    if wav_path.exists() and meta_path.exists():
+        meta = json.loads(meta_path.read_text())
+    else:
+        # Atomic, process-unique temp files: parallel scene renders share this cache.
+        tmp = wav_path.with_suffix(f".{os.getpid()}.tmp.wav")
+        if BACKEND in ("kokoro", "silent"):
+            synth = _synth_silent if BACKEND == "silent" else _synth_kokoro
+            audio, tokens = synth(spoken)
+            _write_wav(tmp, audio)
+            duration = len(audio) / SAMPLE_RATE
+        else:
+            duration, tokens = _synth_server(spoken, tmp)
+        tmp.replace(wav_path)
+        meta = {"text": text, "spoken": spoken, "duration": duration, "tokens": tokens}
+        tmp_meta = meta_path.with_suffix(f".{os.getpid()}.tmp.json")
+        tmp_meta.write_text(json.dumps(meta, ensure_ascii=False, indent=1))
+        tmp_meta.replace(meta_path)
+
+    words = align_words(text, [tuple(t) for t in meta["tokens"]], meta["duration"])
+    return Utterance(text=text, audio_path=wav_path, duration=meta["duration"], words=words)

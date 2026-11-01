@@ -1,0 +1,10 @@
+{
+  "original_package_manifest": "manifest.json",
+  "original_package_manifest_sha256": "cd305b1930decb6eb9d27795641e7803b242c0be503eced9e467e614f0da7d58",
+  "original_logical_path": "historical-candidate/candidate.patch",
+  "original_patch_sha256": "ae3825cd665f4e2f36687ca2fea45a4f5e5af2c1d1d622acd2cf7ac7eed98c00",
+  "original_patch_bytes": 3454,
+  "current_path": "historical-candidate/candidate.patch.gz",
+  "current_sha256": "a8474d586544f80a996d6c77ae13d066743efb6a32f7dadb29cd68c0e5beeb47",
+  "note": "Original manifest/codec map and README remain historical logical-layout witnesses. This additive map and file-manifest.json describe current publication layout; no raw patch whitespace stripped."
+}

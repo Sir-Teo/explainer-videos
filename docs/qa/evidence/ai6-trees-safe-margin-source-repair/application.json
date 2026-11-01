@@ -1,0 +1,25 @@
+{
+  "applied_at": "2026-11-01T09:21:21.519497+00:00",
+  "source": "/workspace/explainer-videos/videos/ai/ai6/s13_trees.py",
+  "before_sha256": "fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d",
+  "after_sha256": "9aa41d7ca6be3655d32bc89ee351ec34a94a9dc4239d2edfe14022b48b012d06",
+  "mode_preserved": 384,
+  "atomic_replace": true,
+  "independent_before_after_copies": true,
+  "root_approval": "Exactfrozen9aa41candidate; onlygainchartcenterY+0.25 andcountcolumnX\u22120.3",
+  "whole_AST_after_normalizing_two_coordinates_exact": true,
+  "narration_bookmarks_math_data_timing_calls_exact": true,
+  "compile_in_memory": "PASS; no scene import/execution",
+  "geometry_proof": {
+    "en": {
+      "path": "/workspace/runtime/ai6-trees-margin-candidate/geometry-en.json",
+      "sha256": "980e3a786e8e589c2fe4035df1f267efb9b597d617a6b15b504580ad30cc784c"
+    },
+    "zh": {
+      "path": "/workspace/runtime/ai6-trees-margin-candidate/geometry-zh.json",
+      "sha256": "6e04faaecd03f572e5657c686c832fb46827808bf741f0cedfaefa20f7840990"
+    }
+  },
+  "after_render_visual_approval": "pending; parentowns old/newTreecase identity; no newrender/decode started",
+  "no_shared_global_producer_cache_changes": true
+}

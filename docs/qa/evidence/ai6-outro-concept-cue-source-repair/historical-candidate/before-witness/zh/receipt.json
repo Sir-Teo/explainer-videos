@@ -1,0 +1,134 @@
+{
+  "utc": "2026-11-01T07:36:52.509410+00:00",
+  "scene": "Outro",
+  "lang": "zh",
+  "mode": "motion",
+  "process_returncode": 0,
+  "elapsed_seconds": 181.615,
+  "aborted": null,
+  "runtime_record_status": "passed",
+  "runtime_completed": true,
+  "raw_warnings": [],
+  "source_changed": false,
+  "data_changed": false,
+  "record_input_signatures_current": true,
+  "needs_reconcile": false,
+  "outcome": "runtime-complete",
+  "visual_review": "pending",
+  "continuous_playback": "unverified",
+  "audio_listening": "unverified",
+  "production_resolution": "unverified",
+  "freeze": {
+    "present": true,
+    "record_sha256": "7cea1b829cde7cf5083e39c06e0516bbba66a151bc851bc70272fef957c38884",
+    "runtime_status": "passed",
+    "raw_warnings": [],
+    "artifacts": [
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/000_00055.2s.png",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/000_00055.2s.png",
+        "bytes": 75839,
+        "sha256": "6d2985047ac92bd22457c059e81389c18e324cdaf51645db12dd06776ffc7825",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/001_00095.9s.png",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/001_00095.9s.png",
+        "bytes": 60689,
+        "sha256": "8c115ed00c49e4df53f74e96d89e10b3863833080ee3ca29a0d48837ea6d7d86",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/002_00100.7s.png",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/002_00100.7s.png",
+        "bytes": 112843,
+        "sha256": "082544a94ac703c136dd89f13893f78b9c67edc60537c6b10c5c9b8e1d6d5d36",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/003_00118.9s.png",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/003_00118.9s.png",
+        "bytes": 60717,
+        "sha256": "ce43eb0e7fa0c652c5276d0be201a7a2a54ffff2868a34310cefb0ef8b7ba34c",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/004_00128.5s.png",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/004_00128.5s.png",
+        "bytes": 60925,
+        "sha256": "9aef4cfc4bf8b1a700a4ee7d2b401465c30bfd85f8c4ded9048a5ee1d21a9186",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/005_00141.3s.png",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/005_00141.3s.png",
+        "bytes": 164831,
+        "sha256": "9b127850020bbaac73bc077ecadca71a766389ea794a89594d39edae3b352be6",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/dead_air.log",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/dead_air.log",
+        "bytes": 133,
+        "sha256": "74617c886684c5d4b21645b2c0fb4987fbead6f4258ea421136383144a951edd",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/media/videos/480p15/Outro.mp4",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/media/videos/480p15/Outro.mp4",
+        "bytes": 1754470,
+        "sha256": "bf8b044f78533c2a6fae71f88357f33fd5e4c619c04d3fe341c0f37f9bf460a8",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/media/videos/480p15/Outro.narration.json",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/media/videos/480p15/Outro.narration.json",
+        "bytes": 47562,
+        "sha256": "a833b447c264c9bd12abbdd7a1970fb728fcd246b4078380f7ba4f0f7850b0f3",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/media/videos/480p15/Outro.srt",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/media/videos/480p15/Outro.srt",
+        "bytes": 3600,
+        "sha256": "d189a9b6f38b5fa7763990bb3fcfb1dd94cc332a774f4f61334a0a0e99b7ca3b",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/media/videos/480p15/Outro.wav",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/media/videos/480p15/Outro.wav",
+        "bytes": 7930844,
+        "sha256": "d7f6c94d726fce548294b4f5bf29140544fe3568b7d4f640137f57db1348ead8",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/motion_sheet.png",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/motion_sheet.png",
+        "bytes": 1026718,
+        "sha256": "7a05f53b180cde3d5231d6518318510d4961e24a5aaf66afd04323370a209038",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/result.json",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/result.json",
+        "bytes": 65498,
+        "sha256": "7cea1b829cde7cf5083e39c06e0516bbba66a151bc851bc70272fef957c38884",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/sheet.png",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/sheet.png",
+        "bytes": 247252,
+        "sha256": "c1b93320402f249a68837efba28810cc3c5da2dddd03e11398af1beb8a779a38",
+        "independent_copy2": true
+      },
+      {
+        "source": "renders/qa/series/ai6/zh/Outro_motion/text.jsonl",
+        "destination": "runs/20261101T072821/19-Outro/zh/motion/completed/text.jsonl",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "independent_copy2": true
+      }
+    ]
+  }
+}

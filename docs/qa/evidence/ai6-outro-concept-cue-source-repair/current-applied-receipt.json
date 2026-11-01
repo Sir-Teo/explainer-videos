@@ -1,0 +1,65 @@
+{
+  "observed_applied_utc": "2026-11-01T10:06:34.701019+00:00",
+  "root_applied_utc": "2026-11-01T09:49:06.472464+00:00",
+  "root_corrected_effective_ZH_utc": "2026-11-01T09:56:06.507742+00:00",
+  "source_before_sha256": "98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e",
+  "source_applied_sha256": "0f613477aa043c40f1622d482caef005511f01ed0613ada91cc3a01ab626ea8e",
+  "local_ZH_base_sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+  "local_ZH_applied_sha256": "29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f",
+  "global_caption_applied_sha256": "89f96750476f9684e003084695f24f6902ffe0b2fc049387d3111dbef5ffef46",
+  "actual_whole_merged_ZH_dictionary_recap_exact_private_proposal": true,
+  "actual_nine_ordered_bookmark_names": [
+    "linear",
+    "penalties",
+    "logistic_newton",
+    "bayes",
+    "neighbours",
+    "kernels",
+    "averaging",
+    "boosting",
+    "evaluation"
+  ],
+  "source_equals_frozen_candidate": true,
+  "historical_candidate_manifest_sha256": "42bcf9006263b23b085eef1a4d5773922af231adc06066f91cf2e9e516067691",
+  "root_live_actual_Translator_checks": {
+    "count": 7,
+    "all_passed": true,
+    "proof_sha256": "77b3c83cf6976079a63cf2714f328edb3550ab97658b3f9d5e1b2b3473769123"
+  },
+  "repository_suite": {
+    "methods": 641,
+    "test_runtime_seconds": 54.406,
+    "root_guarded_elapsed_seconds": 58.12151628600259,
+    "passed": true,
+    "critical_source_files_stable": 1532,
+    "receipt_sha256": "8bb605504d6d0d5ba4b7dca996d7eb4eff60c4346c8cf6833d1fca7e182c88ab",
+    "scope": "Repositorysuite/mergedsource guards only, not rendered/perceptual/audio approval"
+  },
+  "current_cache_byte_identity": [
+    {
+      "lang": "en",
+      "existing_perutterance_silent_TTS_cache_key": "bb47a5e89379c25c",
+      "wav_sha256_now": "6d430ff326b516b74b30a845a20438b8ed7d605975cb43570048143965f55d54",
+      "metadata_sha256_now": "742d0de6e0045ea703c48176baff4cffc4bd04fa70cb447ba4f192885a8ba5fa",
+      "bytes_unchanged_from_preflight": true,
+      "tts_or_provider_invoked": false
+    },
+    {
+      "lang": "zh",
+      "existing_perutterance_silent_TTS_cache_key": "f7e307b156ba80c6",
+      "wav_sha256_now": "7fb15e17daeae075924652f1a6c8b0a6f125504eb27a8a7453c97eabf2449a71",
+      "metadata_sha256_now": "afd9634f8bc4f967d487da28c757419b71950d02af1aaa95d5f82b39684ab0a8",
+      "bytes_unchanged_from_preflight": true,
+      "tts_or_provider_invoked": false
+    }
+  ],
+  "scope_and_limits": [
+    "Child packages root-applied change only; child made no source/localZH/global edits in thispackaging turn.",
+    "Historical notapplied records remain verbatim; application occurred later by root.",
+    "No numerical/cache/model/provider/render/decoder activity. WAVfiles read only for SHA.",
+    "Cleanedspoken/perutteranceTTScacheidentity exact, but newrawmarkers/source-narrationlookuphashes intentionallydiffer.",
+    "Cue schedules are predictions from suppliedsilentestimatedwordmetadata; no timeline/assembledaudio or totalduration identity inferred.",
+    "All freshbilingualaftervisual/actualnarratedsync/listening/native1080motion/4Kgates remainpending; parentownswholeOutrocase review.",
+    "HistoricalENneeds-review/sourcewarning and Probability-onlycause remainunchanged/notretagged."
+  ]
+}

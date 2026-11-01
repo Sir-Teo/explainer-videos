@@ -20875,7 +20875,9 @@
     "final: \\ $1.6\\%$, \\ round $400$": "最终：\\ $1.6\\%$，\\ 第 $400$ 轮",
     "accuracy \\\\ bars start at $70\\%$ (higher is better)": "准确率 \\\\ 条形从 $70\\%$ 起（越高越好）",
     "all $70$ rates: \\ penalized gap $F-F_\\star$ \\ (nats per page)": "全部 $70$ 个词频：带惩罚目标差距 $F-F_\\star$（每页纳特）",
-    "$F=\\text{mean cross-entropy}+\\frac{\\lambda}{2}\\|\\mathbf{w}\\|^2,\\quad\\lambda=0.01$": "$F=\\text{平均交叉熵}+\\frac{\\lambda}{2}\\|\\mathbf{w}\\|^2,\\quad\\lambda=0.01$"
+    "$F=\\text{mean cross-entropy}+\\frac{\\lambda}{2}\\|\\mathbf{w}\\|^2,\\quad\\lambda=0.01$": "$F=\\text{平均交叉熵}+\\frac{\\lambda}{2}\\|\\mathbf{w}\\|^2,\\quad\\lambda=0.01$",
+    "plot floor: $10^{-4}$ \\\\ training error $0$ or positive loss \\\\ below $10^{-4}$ shares this baseline": "绘图下限：$10^{-4}$ \\\\ 训练错误率 $0$ 与低于下限的正损失 \\\\ 共用这条底线",
+    "bars: $70$--$100\\%$; \\ white: $\\pm$ one s.d. across folds \\\\ error bars capped at the displayed axis limits": "条形范围：$70$--$100\\%$；\\ 白线：各折的 $\\pm$ 一个标准差 \\\\ 误差线在显示坐标轴的上下限处截断"
   },
   "phrases": {
     "width": "宽度",

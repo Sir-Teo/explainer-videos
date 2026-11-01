@@ -1,0 +1,184 @@
+{
+  "completed_at": "2026-11-01T09:43:43.830901+00:00",
+  "state": "RUNTIME CANDIDATE+PRIVATE LOCAL-ZH PROPOSAL ONLY; notapplied/rerendered",
+  "source_before_sha256": "98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e",
+  "candidate_sha256": "0f613477aa043c40f1622d482caef005511f01ed0613ada91cc3a01ab626ea8e",
+  "local_zh_base_sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+  "private_zh_proposal_sha256": "a4f5b1d4d31c63565a7d1d29bd79ac53138443194cea73dd59708fd5a7268e51",
+  "nine_groups": [
+    {
+      "name": "linear",
+      "english_anchor": "Least squares is a projection",
+      "chinese_anchor": "最小二乘法是一次投影",
+      "tile_indices": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "penalties",
+      "english_anchor": "Ridge shrinks",
+      "chinese_anchor": "岭回归收缩",
+      "tile_indices": [
+        2,
+        3
+      ]
+    },
+    {
+      "name": "logistic_newton",
+      "english_anchor": "Logistic regression",
+      "chinese_anchor": "逻辑回归",
+      "tile_indices": [
+        4
+      ]
+    },
+    {
+      "name": "bayes",
+      "english_anchor": "Naive Bayes",
+      "chinese_anchor": "朴素贝叶斯",
+      "tile_indices": [
+        5
+      ]
+    },
+    {
+      "name": "neighbours",
+      "english_anchor": "In the large-sample limit",
+      "chinese_anchor": "在大样本极限下",
+      "tile_indices": [
+        6
+      ]
+    },
+    {
+      "name": "kernels",
+      "english_anchor": "Kernels lift",
+      "chinese_anchor": "核函数不抬升",
+      "tile_indices": [
+        7,
+        8
+      ]
+    },
+    {
+      "name": "averaging",
+      "english_anchor": "Averaging trees",
+      "chinese_anchor": "把树平均起来",
+      "tile_indices": [
+        9
+      ]
+    },
+    {
+      "name": "boosting",
+      "english_anchor": "boosting walks",
+      "chinese_anchor": "提升法沿着",
+      "tile_indices": [
+        10
+      ]
+    },
+    {
+      "name": "evaluation",
+      "english_anchor": "And an honest score",
+      "chinese_anchor": "而一个诚实的分数",
+      "tile_indices": [
+        11
+      ]
+    }
+  ],
+  "preflight_proof": {
+    "en": {
+      "file": "/workspace/runtime/ai6-outro-recap-cue-candidate/preflight-en.json",
+      "sha256": "23bc2cf588a856b290ea169cd74aa553120d54c4bf01e2187df75be8bd7c6ddc",
+      "tts_cache_key": "bb47a5e89379c25c",
+      "existing_silent_wav_sha256": "6d430ff326b516b74b30a845a20438b8ed7d605975cb43570048143965f55d54",
+      "cleaned_spoken_identity": true,
+      "Newton": {
+        "spoken_name_start": 13.710222222222217,
+        "old_schedule": {
+          "tile": 4,
+          "start_predicted": 17.161100644122385,
+          "settled_predicted": 21.9143655394525,
+          "run_time_requested": 49.19629166666667,
+          "type": "olduniformLaggedStart"
+        },
+        "candidate_schedule": {
+          "tile": 4,
+          "start_predicted": 10.8,
+          "settled_predicted": 11.533333333333333,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        "predicted_settled_lead_before_named_word": 2.176888888888884
+      },
+      "minimum_settled_hold_before_next_group": 3.7531851851851457,
+      "predicted_next_block_start": 52.53333333333334
+    },
+    "zh": {
+      "file": "/workspace/runtime/ai6-outro-recap-cue-candidate/preflight-zh.json",
+      "sha256": "633b9cf5522e84712a26eb9be1d90bf216d165bec98bc1f929606ab6e06e5fd5",
+      "tts_cache_key": "f7e307b156ba80c6",
+      "existing_silent_wav_sha256": "7fb15e17daeae075924652f1a6c8b0a6f125504eb27a8a7453c97eabf2449a71",
+      "cleaned_spoken_identity": true,
+      "Newton": {
+        "spoken_name_start": 15.858139534883703,
+        "old_schedule": {
+          "tile": 4,
+          "start_predicted": 18.788405797101447,
+          "settled_predicted": 24.020289855072466,
+          "run_time_requested": 54.15,
+          "type": "olduniformLaggedStart"
+        },
+        "candidate_schedule": {
+          "tile": 4,
+          "start_predicted": 13.2,
+          "settled_predicted": 13.933333333333332,
+          "run_time_requested": 0.7,
+          "type": "namedgroupFadeIn"
+        },
+        "predicted_settled_lead_before_named_word": 1.9248062015503713
+      },
+      "minimum_settled_hold_before_next_group": 4.212015503875854,
+      "predicted_next_block_start": 57.53333333333334
+    }
+  },
+  "source_invariants": {
+    "tile_geometry_order_math_data_and_all_nonrecap_methods_AST_exact": true,
+    "all12_tiles_revealed_exactly_once_in_original_order": true,
+    "tile_FadeIn_shift_UP_point15_and_scale_point95_preserved": true,
+    "source_scheduling_and_bookmark_markers_intentionally_changed": true,
+    "cleaned_spoken_ENZH_and_existing_per_utterance_silent_TTS_cache_key_exact": true,
+    "source_narration_lookup_hash_changes_with_addedmarkers": "expected; newprivateZHentry required",
+    "narration_JSON_raw_field_byte_identity": "notclaimed: newmarkerschange rawfield",
+    "whole_assembled_audio_or_scene_duration_identity": "notclaimed: timingintentionallychanges, silentmodelis prediction only"
+  },
+  "warnings": {
+    "en": {
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "historical_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+      "observed_source_changes": {
+        "videos/ai/ai1/s02_probability.py": [
+          "f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620",
+          "50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed"
+        ]
+      },
+      "treatment": "Retain rawstatus andwarning unchanged; no fingerprintretag. MainOutro/directsource stable in factoryrecords; ENwarningonlyhistoricalai1Probability."
+    },
+    "zh": {
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "historical_fingerprint": "9e37c994c7613e11c19df3ef4bb723e16a68bd5009c152ee5816ac5c21e567b3",
+      "observed_source_changes": {},
+      "treatment": "Retain rawstatus andwarning unchanged; no fingerprintretag. MainOutro/directsource stable in factoryrecords; ENwarningonlyhistoricalai1Probability."
+    }
+  },
+  "no_synth_or_producer_or_model_or_render_or_decoder_calls": true,
+  "parent_owns_full_Outro_before_after_visual_scope": true,
+  "limits": [
+    "Onlysource+suppliedsilentwordtimestamps/SRTmetadata read; no newframes/movieperception/audio listening.",
+    "Uniformsilenttoken timing is not actualspeech alignment; productionvoice/bookmark synchronization mustbeverified with actualnarration.",
+    "FreshCairo15fpsroundingmodel matchesbeforefirstnextblock withinoneframe; thiscalibration doesnotgrant actualafterduration approval.",
+    "All9actualgroupbudgets leavepositiveheldtime; hypotheticalsubframefuturecuegaps mayoverrunbyoneframe."
+  ]
+}
