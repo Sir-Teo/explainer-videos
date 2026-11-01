@@ -1,0 +1,22 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1673,
+    "sha256": "2e56a4c5b11f21231eb5e81be46050d06ac99b8018891d92178e0d2ca1a06c50"
+  },
+  {
+    "path": "execution-input-map.json.gz",
+    "bytes": 26329,
+    "sha256": "fbfa3585d8d56e10138308efb730e856902848bb8ae88832fa03a9d6ae4770de"
+  },
+  {
+    "path": "handoff-receipt.json.gz",
+    "bytes": 470,
+    "sha256": "95844e450357d1866a9b5da0f46dc8711bb365fe68051d77571966d5aaa83b69"
+  },
+  {
+    "path": "library-save-receipt.json.gz",
+    "bytes": 437,
+    "sha256": "ee433c5dab0c1ca0e87b09f2486c9a68cc9b0f56ea96d69cce13d52cdd8c3077"
+  }
+]
