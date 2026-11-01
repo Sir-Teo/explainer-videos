@@ -12,3 +12,6 @@ Manim videos with local neural narration. See README.md for layout and build com
 - *AI, Built* (`videos/ai/`): thirty-one parts (`ai1` … `ai31`); the series plan is `videos/ai/README.md`, the
   chapter-by-chapter syllabus and the lecture standard every part meets are `videos/ai/SYLLABUS.md`; shared
   instruments in `explainer/ai/`.
+- *Quant, Built* (`videos/quant/`, planned): thirty-three parts (`quant1` … `quant33`, distinct from the physics
+  `quantum`/`quantum2`); the series plan is `videos/quant/README.md`, the syllabus, standard, data plan and phases are
+  `videos/quant/SYLLABUS.md`; it follows `videos/ai/LECTURE_GUIDE.md`; shared instruments will go in `explainer/quant/`.

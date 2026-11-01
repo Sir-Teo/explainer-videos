@@ -3,7 +3,7 @@
 Math, physics, ML and markets explainers in the style of 3Blue1Brown, built entirely in code with
 [Manim Community](https://www.manim.community/) and narrated by a local neural voice. Only the code is stored here;
 every video builds from source. Each video lives in `videos/<series>/<name>/` with its own README (outline and sources); the series are
-`ai`, `analysis`, `physics`, `math`, `ml` and `markets`. Videos are always addressed by name (`tools/build.py quantum`).
+`ai`, `analysis`, `physics`, `math`, `ml` and `markets`, with `quant` planned. Videos are always addressed by name (`tools/build.py quantum`).
 
 | Video | Length | Build |
 |---|---|---|
@@ -22,12 +22,13 @@ every video builds from source. Each video lives in `videos/<series>/<name>/` wi
 | Quantum Mechanics, Part 2 | 57 min | `python -m videos.physics.quantum2.compute && python tools/build.py quantum2` |
 | Analysis, Built (10 parts: real, complex and functional analysis; English and Chinese) | 5 h 20 min | `python -m videos.analysis.analysisN.compute && python tools/build.py analysisN` |
 | AI, Built (31 parts: [the plan](videos/ai/README.md); English and Chinese) | 30–60 min each | `python tools/make.py ai1` … `ai31`, or `--series ai` |
+| Quant, Built (33 parts, planned: [the plan](videos/quant/README.md), [syllabus](videos/quant/SYLLABUS.md)) | 30–60 min each | not yet written |
 
 ## Layout
 
 ```
 explainer/   shared toolkit: style, TTS, voiceover, language tables, paths (explainer/paths.py finds a video by name)
-videos/      one package per video, grouped by series: ai/ analysis/ physics/ math/ ml/ markets/
+videos/      one package per video, grouped by series: ai/ analysis/ physics/ math/ ml/ markets/ quant/
 tools/       build, narration, QA, publishing scripts (run from the repo root)
 docs/        CREDITS.md
 renders/ published/ media/ .cache/   generated, git-ignored
