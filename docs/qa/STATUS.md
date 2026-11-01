@@ -1,9 +1,9 @@
 # Current cloud QA checkpoint
 
-Observed 01 November 2026, 00:54 UTC. Progress, **not full-series production approval**.
+Observed 01 November 2026, 01:16 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified push before this checkpoint:
-`ad5c72ce20dd4ec955a46b23a5087acd43fcd05a` (Part 4 visual/data baseline and evidence; the later Gradient history sentence is excluded). No merge, deployment, CI/CD or runners.
+`c16a525da73107d6aa8332b942cb5c206dc8107e` (current Part4 source and chapter evidence; later assembly receipts are included in this checkpoint). No merge, deployment, CI/CD or runners.
 
 Part 1: all 17 chapters in both languages have endpoint captures, complete silent renders and selected-time
 review. The frozen baseline covers 15,194 selected times from 109,941 automatically decoded frames; scoped
@@ -60,57 +60,44 @@ frames. All36 chapter joins have684 selected-time appearances,650 unique images,
 and72 native before/after context views. Chapters, subtitles and timestamps were checked. This does not establish
 continuous perceptual review, spoken synchronization, listening or production-resolution motion.
 
-A subsequent every-encoded-frame probe has confirmed a remaining Part 3 Outro descent marker/trail mismatch: the marker visibly lags the revealed line front. That short animation is reopened for a scoped repair; the older exact reels retain their historical reviews and are not current production approval. The separately reviewed SVD pilot source and audio inputs are unaffected.
+A subsequent every-encoded-frame probe has confirmed a remaining Part 3 Outro descent marker/trail mismatch: the marker visibly lags the revealed line front. The isolated repair is published at `6b86ee8b…`; its fresh bilingual regression covers all98encoded-window frames,22changed holds and596exact prior-image inheritances (716selected appearances total). Twelve endpoints use ten exact matches and two changed native final-marker views. Current case-map packaging is underway; the older exact reels retain their historical reviews and are not current production approval. The separately reviewed SVD pilot source and audio inputs are unaffected.
 
-Part 4's reviewed **pre-history-correction baseline** now covers all 19 chapters and 38 bilingual silent 480p15
-movie cases: **13,669 selected-time appearances from 101,207 automatically decoded frames**, plus **537 actually
-reviewed native 1920×1080 endpoint images**. The [preserved baseline map](historical/ai4-final-preview-map-pre-gradient-history-20261101T004138Z.md) binds every exact
-canonical movie to completed selected-image evidence. Its raw statuses remain 34 passed / 4 needs-review with four
-warnings; only 2/38 matched its conservative aggregate fingerprint at that map's observation. Historical records,
-current=false fields and unviewed-frame gaps remain intact. Selected images and skipped-animation native
-endpoints do not establish continuous perception, narration/listening or full 1080p motion.
+Part 4 now has current selected-image review for all 19 chapters and 38 bilingual silent previews:
+**13,670 selected times from 101,192 decoded frames**, plus 537 reviewed native1080 endpoints with scoped
+replacement supplements. The current map preserves raw statuses: 36 passed, two needs-review with two warnings.
+These runtime statuses are separate from actual visual acceptance. [Current case map](ai4-final-preview-map.md).
 
-All 23 numerical jobs completed in 63.72 seconds of item runtime, including fresh pinned header reads for both
-model counts. The independent completed-data audit retained 278 scope-labelled checks. A later shared-helper
-regression verified **17 Part 3 + 23 Part 4 current validators and actual cache loads**, with producers replaced by
-fail-on-call sentinels: **zero producer calls; all 76 JSON/NPZ/sidecar hashes, sizes and mtimes unchanged**. The eight
-Part3 postproduction-attestation items retain their disclosed historical provenance limits; this proves cache
-integrity/loadability, not a new scientific calculation.
+Repairs cover the misleading Derivative secant, doubled Backprop/Train/Floats equations, Quadratic marker lag and
+sixteen missing contour segments, alongside the eight original mathematical qualifications. The shared contour
+comparison covers all six actual Parts1–4 callsites; five retain exact coordinates/order. Forty guarded Part3/4
+cache loads invoked zero producers and preserved all76 payload signatures. Historical postproduction-attestation
+limits remain unchanged. [Contour evidence](evidence/shared-contour-exact-level-repair/README.md).
 
-Motion inspection repaired the Derivative tangent/error-gap demonstration and the Backprop/Train/Floats copied-row
-reveals. Quadratic now couples dots to their visible trajectory fronts, writes its local derivation rows in place,
-and closes sixteen missing exact-level contour segments. Fresh bilingual whole-movie selected coverage, targeted
-changed-span/every-encoded-window review and native1080 checks passed within their declared scope. The native
-supplements cover 60 Backprop/Train appearances, 32 Floats and 32 Quadratic; the final Quadratic supplement uses 24 exact
-reviewed image inheritances plus 8 changed states inspected at full native resolution. These replace corresponding
-baseline endpoints, not 124 additional distinct chapter states.
+The corrected Gradient historical wording has fresh bilingual endpoint and motion acceptance. All38 settled PNGs
+match prior reviewed bytes;966selected times use922exact prior-image inheritances,36new unique inspected images
+and8exact duplicates, plus7native followups. This replaces the old two case records while preserving their baseline.
+[Gradient regression](evidence/ai4-gradient-history-regression/README.md).
 
-The [shared contour repair](evidence/shared-contour-exact-level-repair/README.md) compares all six actual Parts 1–4
-callsites. Five calls retain exact legacy segment coordinates/order; only the Quadratic valley grid changes,
-restoring 16 segments and closing 16 interior degree-one endpoints. Gradient's apparent open outer arcs were expected
-display-window clips. All-flat grids retain no-contour output; plateau interfaces, exact vertices/edges, integer
-geometry and legacy nonzero-saddle pairing have explicit tests and limitations. Existing movies are not relabelled
-source-current by this comparison.
+The current complete silent assemblies run **54:27.356 English /57:58.820 Chinese**. Full decoding covers101,192video
+and316,242AACframes; decoded PCM is digitally zero. PTS/DTS,19chapters/language and all1,925subtitle cues pass.
+All36joins are accounted for:32inherit exact previously viewed PNGs, while four affected joins have74fresh images
+on10inspected sheets and8native contexts. Both original pre-correction assemblies remain unchanged.
+[Assembly evidence](evidence/ai4-history-qualified-assembly/README.md). This is silent selected-window review,
+not continuous perception, spoken synchronization, listening or production-resolution motion approval.
 
-A subsequent primary-source history audit found Gradient's old optimization-history superlative too strong.
-The minimal English scene/narration source is frozen at `10bac018…`, with Chinese narration mapping `ec04b2f4…`;
-the global caption table remains `20229b67…`. Fresh English/Chinese endpoint runtime checks have 19 images per language
-and passed with zero warnings. Their actual image comparison and new motion-review inheritance are pending;
-fresh bilingual motion jobs have now completed with passed/zero-warning runtime records. The baseline map and assembly freeze remain pre-correction until
-those actual regressions close and replacement identities are deliberately recorded. No new final Gradient movie
-or assembly approval is claimed here.
+The subsequent full suite passed **421 tests in68.405seconds**, return code0, with all1,482inventoried source and
+configuration files identical before/after. It includes the Gradient history and Outro trail changes. The recorded
+Git HEAD predates explicitly listed local files; full SHA inventories bind the tested bytes. The older417/20and352
+runs remain historical; no counts are added together. [Frozen test receipt](evidence/integrated-outro-gradient-20261101/README.md).
 
-The last full repository run passed **417 tests in 42.694 seconds**, before that history-sentence edit. **20 separate
-narration tests** passed afterward. These are distinct runs, not a 437-test full-suite result. Earlier 352-test
-checkpoints remain historical. The [original chapter checklist](ai4-chapter-checklist.md) retains its earlier
-snapshot fields; scoped source, selected-motion and native evidence is linked by the later map. Part 4 production,
-complete narration/listening and continuous-perception gates remain open.
-Parts5–31 remain queued; all31 parts and553 chapters remain in scope. The explicit
+Part5 source/data preparation is now active in order. No Part5 production computation or rendering has started;
+source corrections and their cache contracts must freeze first. Parts6–31 remain queued; all31 parts and553chapters
+remain in scope. The explicit
 [narration/production queue](remaining-production-qa.md) retains listening, sync, subjective pacing, continuous
 perception and full-part export gaps. No tracked web-player application exists; an external host's responsive
 behavior is outside this checkout.
 
-Storage is about 3.6 GiB free at this observation (the preceding handoff checkpoint was about 3.8 GiB). Normal Hugging Face cache-manager eviction of one inactive public pretrained TTS
+Storage is about3.1GiB free at this observation; original unique evidence and completed numerical data are preserved. Normal Hugging Face cache-manager eviction of one inactive public pretrained TTS
 revision recovered about4.54GB, after verifying its public metadata and absence of known active TTS services.
 All68 Part3/Part 4 numerical artifact signatures remained unchanged. Generated voices/speech, trained checkpoints,
 original sources and unique QA evidence remain. Future TTS requires a normal public redownload of that revision.
@@ -141,5 +128,3 @@ the explicit reviewed `svd-reveal-v1` scene overlay. Three handoff cache archive
 about 33.3 MB total. Local producer guards, exact package/version and external model/corpus identities, ownership
 and actual narrated/4K review gates remain open. No validator weakening, automatic regeneration, full-part local
 expansion or new local runtime result is implied by cloud evidence or archive persistence.
-
-Update 01 November 2026, 01:05 UTC: the [Gradient history regression](evidence/ai4-gradient-history-regression/README.md) has now closed both fresh chapter image gates: 966 selected appearances, 922 exact RGB inheritances, 36 new unique images actually viewed on five sheets, eight new duplicates and seven native checks. All 38 fresh 480p endpoint PNGs match reviewed baseline bytes/RGB. The [history-qualified map](ai4-final-preview-map.md) now replaces only those two movie identities: 13,670 selected appearances / 101,192 decoded frames; raw 36 passed / 2 needs-review and two warnings remain. The old map is preserved unchanged. Existing Gradient native 1080p geometry evidence remains historical; no fresh 1080p timing or full-resolution motion claim follows. Assembly replacement/join validation is separately owned and is not claimed complete by this chapter review.

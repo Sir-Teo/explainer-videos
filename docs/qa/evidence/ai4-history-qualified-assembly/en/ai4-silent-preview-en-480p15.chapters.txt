@@ -1,0 +1,19 @@
+0:00 Four billion derivatives
+2:02 1. The derivative
+4:42 2. Many inputs: the gradient
+7:31 3. Maps that bend: the Jacobian
+9:47 4. The Jacobians of real layers
+12:22 5. Forwards or backwards?
+15:48 6. Backpropagation, by hand
+19:07 7. Calculus in a few pages of code
+21:41 8. Training with our library
+24:44 9. Numbers in a computer
+28:31 10. Cancellation, and the gradient check
+31:21 11. Memory: storing or recomputing
+34:08 12. Curvature, and Newton's method
+36:28 13. Hessian-vector products
+39:05 14. Descent on a quadratic; saddles
+42:37 15. Constraints: Lagrange multipliers
+45:40 16. Inequalities, KKT and duality
+49:01 17. Differentiating through a fixed point
+51:51 Recap, problems, and what comes next
