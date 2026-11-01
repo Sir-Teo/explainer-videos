@@ -128,3 +128,5 @@ the explicit reviewed `svd-reveal-v1` scene overlay. Three handoff cache archive
 about 33.3 MB total. Local producer guards, exact package/version and external model/corpus identities, ownership
 and actual narrated/4K review gates remain open. No validator weakening, automatic regeneration, full-part local
 expansion or new local runtime result is implied by cloud evidence or archive persistence.
+
+Local-render cancellation,01:25UTC: the local task and its jobs were stopped and archived; existing artifacts are preserved. Unfinished local-overlayv2 work was moved out of the active repository and the frozenv1 helper restored exactly. Cloud series QA continues. A separate parent-owned cloud production task is gated by its own Drive/access and production checks; this QA task does not start production exports or duplicate Drive uploads.

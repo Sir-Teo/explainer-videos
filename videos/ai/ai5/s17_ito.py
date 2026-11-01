@@ -175,8 +175,8 @@ class Ito(VoiceoverScene):
                          r"diffusion models are run backwards \ (Part 21)", width=4.3, font_size=24),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.3)
         head = label(r"A calculus for random motion", font_size=38).to_edge(UP, buff=0.4)
-        strat = label(r"midpoints instead: \ Stratonovich's integral (1966), \ ordinary chain rule, \ but it peeks at "
-                      r"the future", font_size=22, color=MID).to_edge(DOWN, buff=0.5)
+        strat = label(r"It\^o: \ left points, non-anticipating \\ Stratonovich: \ midpoint limit, ordinary chain rule; "
+                      r"\ both admit numerical schemes", font_size=22, color=MID).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "This calculus has a dramatic history. <bookmark mark='a'/> In 1940, Wolfgang Doeblin, a young "
             "mathematician serving in the French army, mailed the Academy of Sciences a sealed envelope; he died "
@@ -184,7 +184,9 @@ class Ito(VoiceoverScene):
             "published the stochastic integral in 1944 and the formula in 1951. <bookmark mark='c'/> Black, Scholes "
             "and Merton priced options with it in 1973, and it is the working tool for running diffusion models in "
             "part twenty-one. <bookmark mark='d'/> Midpoints give Stratonovich's integral, with the ordinary chain "
-            "rule, but they peek at the future; the left point is what a simulation can actually compute."
+            "rule. The left-point Itô integral uses only information available before each increment. Midpoint "
+            "limits define a different integral, which also has numerical schemes; one must use the matching "
+            "drift and interpretation."
         ) as vo:
             self.play(FadeIn(head))
             for k, mk in enumerate("abc"):

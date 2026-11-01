@@ -54,14 +54,14 @@ class Tails(VoiceoverScene):
         tl = label(rf"$\bar X - \tfrac12 \ge {eps:g}$: \ probability ${ex:.4f}$", font_size=26, color=TAIL)
         tl.next_to(eps_l.get_end(), RIGHT, buff=0.15)
         head = label(r"$1{,}000{,}000$ runs of $100$ flips", font_size=30).to_edge(UP, buff=0.4)
-        q = label(r"a bound that needs no picture: \ only that each flip lies in $[0, 1]$", font_size=26, color=C.BITS)
+        q = label(r"independent draws in $[0,1]$: \ a bound without knowing the distribution's shape", font_size=25, color=C.BITS)
         q.to_edge(UP, buff=1.0)
         with self.voiceover(
             "The law of large numbers says an average settles. Learning from data needs more: how often is it still "
             "far off? A million runs of a hundred fair flips. <bookmark mark='a'/> The share of heads reaches "
             f"{0.5 + eps:g} in a fraction {ex:.3f} of them. <bookmark mark='b'/> Here we can count, but a model's test "
-            "data never shows us this picture. We need a guarantee that holds whatever the distribution, knowing only "
-            "that each value lies between zero and one."
+            "data never shows us this picture. For independent draws, we need a guarantee that holds whatever the "
+            "distribution's shape, knowing that each value lies between zero and one."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(xl),
                       LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.02), run_time=2.0)
@@ -169,7 +169,7 @@ class Tails(VoiceoverScene):
             f"{vals['markov']:.2f}. <bookmark mark='b'/> Chebyshev's falls like one over epsilon squared: "
             f"{vals['cheb']:.2f}. <bookmark mark='c'/> Chernoff's and Hoeffding's fall exponentially, and nearly "
             f"coincide here: {vals['chern']:.3f} and {vals['hoeff']:.3f}. {verdict} Hoeffding's is still "
-            f"{ratio:.0f} times the true {ex[j]:.3f}: the price of knowing nothing about the shape."
+            f"{ratio:.0f} times the true {ex[j]:.3f}: a conservative bound rather than the exact binomial tail."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(leg[:2]))
             self.play(Create(truth), LaggedStart(*[FadeIn(x) for x in sdots], lag_ratio=0.05), run_time=1.5)
@@ -193,7 +193,7 @@ class Tails(VoiceoverScene):
         head.to_edge(UP, buff=0.45)
         vals = [need[k2] for _, k2 in keys] + [need["exact"]]
         cols = [BOUNDS[k] for k, _ in keys] + [WHITE]
-        names = [NAMES[k] for k, _ in keys] + [r"exact, \ for fair coins"]
+        names = [NAMES[k] for k, _ in keys] + [r"minimum fixed $n$, \ fair coins"]
         top = max(vals)
         rows = VGroup()
         for v, c_, nm in zip(vals, cols, names):
@@ -209,12 +209,16 @@ class Tails(VoiceoverScene):
         uses = VGroup(label(r"Part 8: \ how far a model's test score can be from its true error", font_size=24, color=GREY_A),
                       label(r"Part 26: \ the bonus in UCB, \ exploring a slot machine", font_size=24, color=GREY_A))
         uses.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.45)
+        lattice = label(rf"coin-count lattice: \ first qualifying $n={need['exact']}$; \ all $n\ge {need['exact_eventual']}$ qualify",
+                        font_size=21, color=GREY_B).move_to([0, -2.15, 0])
         with self.voiceover(
             f"Turn it around. How many flips guarantee that the share overshoots by {e0:g} at most {100 * d0:g} "
             f"percent of the time? <bookmark mark='a'/> Chebyshev's bound asks for {need['chebyshev']:,}; Hoeffding's, "
-            f"{need['hoeffding']:,}; Chernoff's, {need['chernoff']:,}. <bookmark mark='b'/> For fair coins the truth "
-            f"is {need['exact']}: the best bound asks for {best / need['exact']:.1f} times as many, the price of "
-            "holding for every distribution. <bookmark mark='c'/> Part eight uses exactly this to bound a model's "
+            f"{need['hoeffding']:,}; Chernoff's, {need['chernoff']:,}. <bookmark mark='b'/> For fair coins the smallest "
+            f"qualifying fixed sample size is {need['exact']}. Integer coin counts make the exact tail oscillate: "
+            f"every sample size from {need['exact_eventual']} onward qualifies. The best bound asks for "
+            f"{best / need['exact']:.1f} times the minimum; bounds are conservative, even for known fair coins. "
+            "<bookmark mark='c'/> Part eight uses exactly this to bound a model's "
             "true error from its test score, and part twenty-six used Hoeffding's bound to explore."
         ) as vo:
             self.play(FadeIn(head), *[FadeIn(r[0]) for r in rows])
@@ -222,7 +226,7 @@ class Tails(VoiceoverScene):
             for r in rows[:3]:
                 self.play(GrowFromEdge(r[1], LEFT), FadeIn(r[2]), run_time=0.8)
             vo.wait_until("b")
-            self.play(GrowFromEdge(rows[3][1], LEFT), FadeIn(rows[3][2]))
+            self.play(GrowFromEdge(rows[3][1], LEFT), FadeIn(rows[3][2]), FadeIn(lattice))
             vo.wait_until("c")
             self.play(FadeIn(uses))
         self.wait(0.3)

@@ -5,6 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
+from videos.ai.ai5.decoding_contract import comparison, judge_verdict
 from videos.ai.ai5.common import DATA, MODEL, MONO, PART, curve, load, printable
 
 TEMP = "#FF6B8B"  # the temperature dial
@@ -29,6 +30,21 @@ def kept(p, kind, v):
     return int((s >= v * s[0]).sum())
 
 
+def comparison_verdict(result, spoken):
+    """Do not call an observed subset a comparison of all four rules."""
+    at, best = result["at"], result["best"]
+    if not at:
+        return "No rule covers this target diversity; no interpolation or ranking is available here."
+    scope = ("All four rules cover this target diversity." if result["all_rules"] else
+             f"Only {len(at)} of the four rules cover this target diversity; the others are not ranked here.")
+    if len(at) == 1:
+        return f"At the target diversity, {scope} One value alone cannot establish a winner."
+    if result["spread"] < 0.02:
+        return f"At the target diversity, {scope} Their interpolated surprises differ by only {result['spread']:.3f} nats per character."
+    return f"At the target diversity, {scope} Among the covered rules, {spoken[best]} has the lowest interpolated surprise, {at[best]:.3f} nats per character."
+
+
+
 class Decoding(VoiceoverScene):
     def construct(self):
         self.card()
@@ -37,7 +53,7 @@ class Decoding(VoiceoverScene):
         self.experiment()
 
     def card(self):
-        card = chapter_card(9, r"How a language model chooses", r"How adventurous should the next word be?", lit=(2019,),
+        card = chapter_card(9, r"How a language model chooses", r"How adventurous should the next token be?", lit=(2019,),
                             part=PART)
         with self.voiceover("Chapter nine. How a language model chooses."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
@@ -64,7 +80,7 @@ class Decoding(VoiceoverScene):
             tr.add_updater(lambda m, i=i: m.set_value(float(softmax_T(z, Tt.get_value())[top[i]])))
         prompt = data_text(d["prompt"] + " …", font="DejaVu Serif", font_size=26, color=WHITE).to_edge(UP, buff=0.4)
         prompt.set_x(-2.0)
-        sub = label(r"GPT-2's ten favourite next words, \ out of $50{,}257$", font_size=24, color=GREY_A)
+        sub = label(r"GPT-2's ten favourite next tokens, \ out of $50{,}257$", font_size=24, color=GREY_A)
         sub.next_to(prompt, DOWN, buff=0.2).align_to(prompt, LEFT)
         colors = {r"T": TEMP, r"z_i": MODEL, r"z_j": MODEL}
         f = cmath(r"q_i \;\propto\; \exp\!\big(", r"z_i", r"\,/\,", r"T", r"\big)", colors=colors, font_size=44)
@@ -88,7 +104,7 @@ class Decoding(VoiceoverScene):
         rest.arrange(RIGHT, buff=0.15).next_to(hrd, DOWN, buff=0.3)
         with self.voiceover(
             "A language model ends every step with a distribution over its vocabulary, and decoding picks from it. "
-            "<bookmark mark='a'/> Here's GPT-2's distribution for the word after: Spade sat down in the armchair, "
+            "<bookmark mark='a'/> Here's GPT-2's distribution for the token after: Spade sat down in the armchair, "
             f"and. Its favourite gets only {100 * p1[0]:.0f} percent. <bookmark mark='b'/> The first dial is "
             "temperature: divide the scores by T before the softmax, the Gibbs distribution of chapter six."
         ) as vo:
@@ -100,7 +116,7 @@ class Decoding(VoiceoverScene):
             self.play(Write(f), FadeIn(trd), FadeIn(hrd))
         with self.voiceover(
             "Turn it down, below one, and the distribution sharpens toward the favourites. <bookmark mark='a'/> Turn "
-            "it up, and it flattens, until any word at all might come next. <bookmark mark='b'/> The entropy follows "
+            "it up, and it flattens, until any token at all might come next. <bookmark mark='b'/> The entropy follows "
             f"the dial: {d['H0.5']:.1f} bits at a half, {d['H1.0']:.1f} at one, {d['H2.0']:.1f} at two."
         ) as vo:
             self.play(Tt.animate.set_value(0.5), run_time=2.5)
@@ -140,7 +156,7 @@ class Decoding(VoiceoverScene):
             "Here's what comes out. <bookmark mark='a'/> Always taking the favourite is safe and flat. "
             "<bookmark mark='b'/> At a half, still sensible. <bookmark mark='c'/> At one, sampling the model's own "
             "distribution, it's stranger and more varied. <bookmark mark='d'/> At two, it falls apart: the tail of "
-            "fifty thousand unlikely words, each tiny, together wins too often."
+            "fifty thousand unlikely tokens, each tiny, together wins too often."
         ) as vo:
             self.play(FadeIn(ph))
             for k, m in enumerate("abcd"):
@@ -171,7 +187,7 @@ class Decoding(VoiceoverScene):
             pt = data_text(prompt + " …", font="DejaVu Serif", font_size=20, color=WHITE).next_to(ax, UP, buff=0.55)
             if pt.width > 6.2:
                 pt.width = 6.2
-            sc = label(rf"bars: \ the {N} likeliest words, \ largest ${100 * s[0]:.0f}\%$", font_size=18, color=GREY_A)
+            sc = label(rf"bars: \ the {N} likeliest tokens, \ largest ${100 * s[0]:.0f}\%$", font_size=18, color=GREY_A)
             sc.next_to(ax, UP, buff=0.12)
             cl = label(r"running total", font_size=18, color=C.BITS).next_to(ax.c2p(N, float(np.cumsum(s[:N])[-1])), DOWN, buff=0.12).shift(LEFT * 0.7)
             panels.add(VGroup(ax, bars, cum, pt, sc, cl))
@@ -197,13 +213,13 @@ class Decoding(VoiceoverScene):
         k09 = (kept(s0, "topp", 0.9), kept(s1, "topp", 0.9))
         m01 = (kept(s0, "minp", 0.1), kept(s1, "minp", 0.1))
         with self.voiceover(
-            "Temperature reshapes the distribution, but the long tail of unlikely words is always there. The other "
+            "Temperature reshapes the distribution, but the long tail of unlikely tokens is always there. The other "
             "dials cut it off. <bookmark mark='a'/> Two real moments for GPT-2: an open one, where the favourite has "
             f"{100 * s0[0]:.0f} percent, and a nearly certain one, where it has {100 * s1[0]:.0f}. <bookmark "
-            "mark='b'/> Top-k keeps a fixed number of words: too many in the second case, too few in the first. "
-            "<bookmark mark='c'/> Top-p, nucleus sampling, keeps the fewest words whose probabilities add up to p, so "
-            f"the cut adapts: at nine tenths it keeps {k09[0]:,} words in the open case and {k09[1]} in the certain "
-            "one. <bookmark mark='d'/> Min-p keeps every word at least a fraction as likely as the favourite: at a "
+            "mark='b'/> Top-k keeps a fixed number of tokens: too many in the second case, too few in the first. "
+            "<bookmark mark='c'/> Top-p, nucleus sampling, keeps the fewest tokens whose probabilities add up to p, so "
+            f"the cut adapts: at nine tenths it keeps {k09[0]:,} tokens in the open case and {k09[1]} in the certain "
+            "one. <bookmark mark='d'/> Min-p keeps every token at least a fraction as likely as the favourite: at a "
             f"tenth, {m01[0]} and {m01[1]}."
         ) as vo:
             self.play(FadeIn(panels[0][:3]), FadeIn(panels[0][3:]), FadeIn(panels[1]))
@@ -227,79 +243,67 @@ class Decoding(VoiceoverScene):
         kinds, vals = [str(k) for k in d["kinds"]], [float(v) for v in d["values"]]
         human, greedy = d["human"], d["greedy0.0"]
         hn = float(human["nll"])
+        n_settings = len(d["settings"])
+        n_prompts, n_samples = int(d["prompt_count"]), int(d["stochastic_samples"])
         pts = {k: sorted([(float(d[s]["div"]), float(d[s]["nll"]), v) for s, kk, v in zip(d["settings"], kinds, vals)
                           if kk == k]) for k in RULES}
-        ax = Axes(x_range=[0.7, 1.0, 0.1], y_range=[0.5, 1.7, 0.25], x_length=7.0, y_length=4.6, tips=False,
+        # Show actual finite coordinates, with no clipping to an old measured run.
+        summary = comparison([(k, d[key]) for key, k in zip(d["settings"], kinds) if k in RULES], RULES)
+        xlo = max(0.0, math.floor(min(0.85, *(a for P in pts.values() for a, _, _ in P)) * 10) / 10 - 0.02)
+        xhi = min(1.02, math.ceil(max(0.85, *(a for P in pts.values() for a, _, _ in P)) * 10) / 10 + 0.02)
+        ylo = max(0.0, math.floor(min(hn, float(greedy["nll"]), *(b for P in pts.values() for _, b, _ in P)) * 4) / 4 - 0.05)
+        yhi = math.ceil(max(hn, float(greedy["nll"]), *(b for P in pts.values() for _, b, _ in P)) * 4) / 4 + 0.1
+        ax = Axes(x_range=[xlo, xhi, 0.1], y_range=[ylo, yhi, 0.25], x_length=7.0, y_length=4.6, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.0, -0.4, 0])
-        xt = VGroup(*[MathTex(f"{v:.1f}", font_size=22, color=GREY_B).next_to(ax.c2p(v, 0.5), DOWN, buff=0.1) for v in (0.7, 0.8, 0.9, 1.0)])
-        yt = VGroup(*[MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to(ax.c2p(0.7, v), LEFT, buff=0.1) for v in (0.5, 1.0, 1.5)])
-        xl = label(r"diversity: \ distinct word pairs across $8$ continuations", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
+        xt = VGroup(*[MathTex(f"{v:.1f}", font_size=22, color=GREY_B).next_to(ax.c2p(v, ylo), DOWN, buff=0.1) for v in np.arange(math.ceil(xlo * 10) / 10, xhi + 1e-8, 0.1)])
+        yt = VGroup(*[MathTex(f"{v:.2f}", font_size=22, color=GREY_B).next_to(ax.c2p(xlo, v), LEFT, buff=0.1) for v in np.linspace(ylo, yhi, 4)])
+        xl = label(r"diversity: \ distinct token pairs across $8$ sampled continuations", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         yl = label(r"GPT-2's surprise at the text \ (nats per character; \ lower: likelier)", font_size=22,
                    color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
-        hline = DashedLine(ax.c2p(0.7, hn), ax.c2p(1.0, hn), color=WHITE, stroke_width=2.5)
-        hl = label(rf"the novels' own text: \ ${hn:.2f}$", font_size=20, color=WHITE).next_to(ax.c2p(0.7, hn), UR, buff=0.08)
+        hline = DashedLine(ax.c2p(xlo, hn), ax.c2p(xhi, hn), color=WHITE, stroke_width=2.5)
+        hl = label(rf"the novels' own text: \ ${hn:.2f}$", font_size=20, color=WHITE).next_to(ax.c2p(xlo, hn), UR, buff=0.08)
         lines = VGroup()
         for k, P in pts.items():
-            P_ = [(min(max(a, 0.7), 1.0), min(b, 1.7)) for a, b, _ in P]
+            P_ = [(a, b) for a, b, _ in P]
             lines.add(VGroup(VMobject(color=RULES[k], stroke_width=3).set_points_as_corners([ax.c2p(a, b) for a, b in P_]),
                              *[Dot(ax.c2p(a, b), radius=0.06, color=RULES[k]) for a, b in P_]))
         leg = VGroup(*[label(RULE_NAMES[k], font_size=22, color=RULES[k]) for k in RULES]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         leg.next_to(ax, RIGHT, buff=0.25).align_to(ax, UP)
         # quality at a common diversity, for each rule
         dstar = 0.85
-        at = {}
-        for k, P in pts.items():
-            xs_, ys_ = [p[0] for p in P], [p[1] for p in P]
-            if xs_[0] <= dstar <= xs_[-1]:
-                at[k] = float(np.interp(dstar, xs_, ys_))
-        vline = DashedLine(ax.c2p(dstar, 0.5), ax.c2p(dstar, 1.7), color=GREY_B, stroke_width=1.5)
+        at = summary["at"]
+        vline = DashedLine(ax.c2p(dstar, ylo), ax.c2p(dstar, yhi), color=GREY_B, stroke_width=1.5)
         tbl = VGroup(label(rf"at diversity ${dstar}$:", font_size=20, color=GREY_A),
                      *[label(rf"{RULE_NAMES[k]}: \ ${at[k]:.3f}$", font_size=20, color=RULES[k]) for k in at])
         tbl.arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
         rep_g = float(greedy["rep"])
         rep_s = max(float(d[s]["rep"]) for s, k in zip(d["settings"], kinds) if k != "greedy")
-        se = float(np.mean([np.std(d[s_]["nll_prompt"], ddof=1) / math.sqrt(len(d[s_]["nll_prompt"]))
+        mean_se = float(np.mean([np.std(d[s_]["nll_prompt"], ddof=1) / math.sqrt(len(d[s_]["nll_prompt"]))
                             for s_ in d["settings"]]))
-        sel = note(rf"one run; \ a setting's surprise varies by about $\pm{se:.2f}$ across the passages").to_edge(DOWN, buff=0.15)
-        gl = label(rf"greedy: \ surprise ${float(greedy['nll']):.2f}$, \\ but ${100 * rep_g:.0f}\%$ of its 4-word runs repeat",
+        sel = note(rf"mean standard error of setting means: ${mean_se:.2f}$ nats/character \ (not passage SD or CI)", font_size=20).to_edge(DOWN, buff=0.15)
+        gl = label(rf"greedy: \ surprise ${float(greedy['nll']):.2f}$, \\ but ${100 * rep_g:.0f}\%$ of its 4-token runs repeat",
                    font_size=20, color=TEMP).next_to(tbl, DOWN, buff=0.35).align_to(tbl, LEFT)
-        # the verdict, from the numbers
-        best = min(at, key=at.get) if at else None
-        spread = (max(at.values()) - min(at.values())) if at else 0.0
-        if best is None:
-            v1 = "The rules cover different ranges of diversity, so they can't be compared at one point."
-        elif spread < 0.02:
-            v1 = (f"At the same diversity the four rules are almost indistinguishable: within {spread:.3f} nats per "
-                  "character of each other.")
-        else:
-            if best != "temp":
-                # the closest pair of settings in diversity, compared passage by passage
-                cand = [(abs(float(d[a]["div"]) - float(d[b]["div"])), a, b) for a, ka in zip(d["settings"], kinds)
-                        if ka == best for b, kb in zip(d["settings"], kinds) if kb == "temp"]
-                _, sa, sb = min(cand)
-                diff = np.asarray(d[sb]["nll_prompt"]) - np.asarray(d[sa]["nll_prompt"])
-                wins = int((diff > 0).sum())
-                v1 = (f"At the same diversity, {SPOKEN[best]} gives the text the judge finds likeliest, {at[best]:.3f} "
-                      f"nats per character, against {at['temp']:.3f} for temperature alone; at the closest pair of "
-                      f"settings it wins on {wins} of the {len(diff)} passages.")
-            else:
-                v1 = (f"At the same diversity, temperature alone does as well as any truncation rule here: "
-                      f"{at['temp']:.3f} nats per character.")
+        # Rank only settings actually observed at the target; never extrapolate.
+        v1 = comparison_verdict(summary, SPOKEN)
+        gn = float(greedy["nll"])
+        g_judge = judge_verdict(gn, [float(d[key]["nll"]) for key, k in zip(d["settings"], kinds) if k != "greedy"])
         tp = [(v, float(d[s]["nll"])) for s, k, v in zip(d["settings"], kinds, vals) if k == "temp"]
-        Th = float(np.interp(hn, [b for _, b in tp], [a for a, _ in tp])) if tp[0][1] <= hn <= tp[-1][1] else None
+        tp.sort()
+        Th = (float(np.interp(hn, [b for _, b in tp], [a for a, _ in tp]))
+              if all(tp[i][1] < tp[i+1][1] for i in range(len(tp)-1)) and tp[0][1] <= hn <= tp[-1][1] else None)
         mono = all(np.corrcoef([a for a, _, _ in P], [b for _, b, _ in P])[0, 1] > 0.5 for P in pts.values() if len(P) > 2)
-        v0 = ("Every rule trades the same way: settings that write text the judge finds likelier also make the "
-              "continuations of a passage more alike." if mono else
-              "The rules do not all trade predictability against diversity in the same way.")
+        v0 = ("In this run, higher diversity tends to accompany higher surprise within each rule." if mono else
+              "The rules do not all show the same predictability-diversity trend in this run.")
         v2 = (f"Human prose sits between: as surprising to the judge as our model's text at a temperature of about "
-              f"{Th:.1f}." if Th else "")
+              f"{Th:.1f}." if Th is not None else "")
         with self.voiceover(
             "Which rule writes best? We tested them on the series' own small model, trained on the thirty novels: "
-            "twelve passages it never saw, eight continuations each, seventeen settings. A larger model, GPT-2, "
-            f"judges each continuation by how surprising it finds it. <bookmark mark='a'/> {v0} <bookmark mark='b'/> "
-            f"{v1} <bookmark mark='c'/> Greedy decoding is the judge's favourite, and yet {100 * rep_g:.0f} percent of "
-            f"its four-word runs repeat, against at most {100 * rep_s:.1f} percent for any sampled setting: likelihood "
-            f"rewards loops. {v2} That is Holtzman's point: good text isn't the likeliest text."
+            f"{n_prompts} held-out passages, {n_samples} sampled continuations per passage for each stochastic "
+            f"setting, and one greedy continuation per passage: {n_settings} settings total. A larger model, GPT-2, "
+            f"scores separately tokenized continuations in nats per continuation character. <bookmark mark='a'/> {v0} <bookmark mark='b'/> "
+            f"{v1} <bookmark mark='c'/> {g_judge}; {100 * rep_g:.0f} percent of "
+            f"its four-token runs repeat, against at most {100 * rep_s:.1f} percent for any sampled setting. "
+            f"{v2} Likelihood alone does not measure text quality."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), Create(hline), FadeIn(hl))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(leg), run_time=2.5)
@@ -341,13 +345,12 @@ class Decoding(VoiceoverScene):
         if ph.width > 12.6:
             ph.width = 12.6
         tag = note(r"the series' novels model, \ one of its continuations under each rule").to_edge(DOWN, buff=0.2)
-        g_txt = str(d["greedy0.0"]["ex_prompt"][0]).split()
-        loops = len(g_txt) - len(set(zip(g_txt, g_txt[1:], g_txt[2:]))) > 2
-        g_line = ("Greedy decoding circles back on itself, again and again." if loops else
-                  "Greedy decoding plays it safe, and stays flat.")
+        loops = float(d["greedy0.0"]["rep"]) > 0
+        g_line = ("In this run, greedy decoding repeats some four-token sequences." if loops else
+                  "In this run, greedy decoding has no repeated four-token sequences.")
         with self.voiceover(
             "Here is one passage, continued four ways. <bookmark mark='a'/> " + g_line + " <bookmark mark='b'/> Pure "
-            "sampling wanders off. <bookmark mark='c'/> The truncation rules stay in between. Min-p, proposed in 2024 "
+            "sampling uses the untruncated distribution. <bookmark mark='c'/> The other examples restrict its tail. Min-p, proposed in 2024 "
             "to allow higher temperatures, was challenged by a 2025 re-analysis that found its evidence weaker than "
             "reported. Part nineteen adds the other half of decoding: constraining what may be written at all."
         ) as vo:

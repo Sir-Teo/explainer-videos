@@ -87,10 +87,10 @@ class FokkerPlanck(VoiceoverScene):
                   r"\frac{\partial^2 p}{\partial x^2}", font_size=36),
             cmath(r"p = \pi:", r"\quad", r"-\pi'' + \pi'' = 0", font_size=36, colors={r"-\pi'' + \pi'' = 0": SCORE}),
         ]
-        whys = [why(r"Langevin dynamics \ (Chapter 13)"), why(r"Fokker--Planck"), why(r"$\pi$ does not move: \ stationary")]
+        whys = [why(r"continuous-time Langevin dynamics"), why(r"Fokker--Planck"), why(r"$\pi$ does not move: \ stationary")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.0, buff=0.55, edge=6.8, align_index=None)
         l1 = np.asarray(d["l1"])
-        res = label(rf"Chapter 13's particles: \ distance from $p$ falling from ${l1[0]:.2f}$ to ${l1[-1]:.2f}$", font_size=26,
+        res = label(rf"finite-step particles: \ $L^1$ distance ${l1[0]:.2f}\to{l1[-1]:.2f}$; \ discretization can bias equilibrium", font_size=23,
                     color=WALK).to_edge(DOWN, buff=0.3)
         ax = Axes(x_range=[-4, 4, 1], y_range=[0, 0.5, 0.25], x_length=8.0, y_length=1.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0, -2.0, 0])
@@ -109,8 +109,9 @@ class FokkerPlanck(VoiceoverScene):
             "Now the promise from chapter thirteen. Langevin dynamics has drift the score of a target pi, and noise "
             "of variance two. <bookmark mark='a'/> Put that into Fokker-Planck. <bookmark mark='b'/> If the density "
             "is pi, the drift term gives minus pi double prime, the noise term plus pi double prime, and they "
-            "cancel: pi never moves. That is why the particles of chapter thirteen settled onto the bumps, and why "
-            "Langevin dynamics samples anything whose score we know."
+            "cancel: pi is invariant for the continuous-time process, under the usual smoothness and boundary "
+            "conditions. Reaching it also requires mixing. The finite-step particles of chapter thirteen only "
+            "approximate this process; unadjusted discretization can shift the equilibrium."
         ) as vo:
             self.play(FadeIn(pic))
             step(0)
@@ -139,7 +140,7 @@ class FokkerPlanck(VoiceoverScene):
         fpe = cmath(r"\frac{\partial p}{\partial t}", "=", r"-\frac{\partial}{\partial x}\big(", r"f", r"\,", r"p",
                     r"\big)", "+", r"\tfrac12", r"g^2", r"\frac{\partial^2 p}{\partial x^2}", colors=colors, font_size=42)
         fpe.to_edge(UP, buff=0.45)
-        fpn = label(r"the Fokker--Planck equation: \ the density's own law, \ no randomness left", font_size=26,
+        fpn = label(r"histogram error: \ exact bin-average density, \ conditioned on $[-4,4]$", font_size=23,
                     color=GREY_A).next_to(fpe, DOWN, buff=0.25)
         legend = VGroup(label(r"$20{,}000$ random particles", font_size=24, color=DATA),
                         label(r"the equation's solution", font_size=24, color=MODEL))
@@ -148,8 +149,10 @@ class FokkerPlanck(VoiceoverScene):
         with self.voiceover(
             "Check it on the Ornstein-Uhlenbeck process. <bookmark mark='a'/> Start with data that has two peaks, and "
             "let every point drift toward zero and jiggle. <bookmark mark='b'/> Twenty thousand particles and the "
-            f"equation solved on a grid move together: the histograms stay within {max(d['hist_err']):.3f} of the "
-            f"solution, and the solution within {max(d['fp_err']):.4f} of the exact answer. <bookmark mark='c'/> Wait "
+            f"equation solved on a grid move together: the histogram densities stay within {max(d['hist_err']):.3f} "
+            "of the exact bin-average density, with both normalized on the shown window from minus four to four. "
+            f"The grid stays within {max(d['fp_err']):.4f} of the exact "
+            "answer. <bookmark mark='c'/> Wait "
             "long enough, and every trace of the data is gone: a plain standard bell. That's what a diffusion model "
             "does to its training images."
         ) as vo:
@@ -173,7 +176,8 @@ class FokkerPlanck(VoiceoverScene):
         colors = {r"f(x)": DRIFT, r"\nabla \log p_t(x)": SCORE, r"g\,d\bar W_t": NOISE, r"g^2": NOISE}
         rev = cmath(r"dx", "=", r"\big[", r"f(x)", "-", r"g^2", r"\nabla \log p_t(x)", r"\big]\,dt", "+",
                     r"g\,d\bar W_t", colors=colors, font_size=44).to_edge(UP, buff=0.4)
-        rn = label(r"time running backwards \ (Anderson, 1982)", font_size=24, color=GREY_A).next_to(rev, DOWN, buff=0.85)
+        rn = label(r"time running backwards; \ $g$ is independent of position \ (Anderson, 1982)", font_size=22,
+                   color=GREY_A).next_to(rev, DOWN, buff=0.85)
         sb = brace_note(term(rev, r"\nabla \log p_t(x)"), r"the score", color=SCORE, font_size=28)
         ax = Axes(x_range=[-4, 4, 1], y_range=[0, 0.6, 0.2], x_length=10.0, y_length=3.0, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0, -1.0, 0])
@@ -192,7 +196,8 @@ class FokkerPlanck(VoiceoverScene):
         al.next_to(ax, DOWN, buff=0.85)
         with self.voiceover(
             "Can the film run backwards, from the bell to the data? In 1982 Brian Anderson showed that, reversed in "
-            "time, it is another stochastic differential equation, with one extra term: <bookmark mark='a'/> the "
+            "time, it is another stochastic differential equation. For the spatially constant noise coefficient "
+            "used here, the reverse drift has one extra term: <bookmark mark='a'/> the "
             "score, the slope of the log of the density at that moment, an arrow saying which way the data gets "
             "likelier. <bookmark mark='b'/> It points uphill, toward the data."
         ) as vo:

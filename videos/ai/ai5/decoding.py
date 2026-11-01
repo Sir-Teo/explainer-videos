@@ -16,6 +16,9 @@ Each setting is saved as it finishes (``CACHE.partial``), so a killed run resume
 from __future__ import annotations
 
 import math
+from pathlib import Path
+
+from . import decoding_contract as contract
 
 import numpy as np
 
@@ -29,19 +32,27 @@ SETTINGS = (
 )
 
 
+def configuration():
+    return dict(settings=SETTINGS, prompts=PROMPTS, samples=SAMPLES, prompt_len=PROMPT_LEN, gen_len=GEN_LEN,
+                prompt_seed=2020, generation_seed_base=100, greedy_samples=1)
+
+
+def cache_identity(repo_root=None, hub_dir=None):
+    """Pure pre-model API used by the Part 5 cache recipe."""
+    root = Path(repo_root) if repo_root is not None else Path(__file__).resolve().parents[3]
+    return contract.cache_identity(root, configuration(), hub_dir)
+
+
 def gpt2():
-    """GPT-2 small from the local Hugging Face cache (downloaded once if it isn't there)."""
+    """The reviewed GPT-2 snapshot, strictly local; missing files never download."""
+    path = contract.snapshot_dir()
+    for name in contract.GPT2_FILES:
+        contract.file_identity(path / name)
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    for local in (True, False):
-        try:
-            tok = AutoTokenizer.from_pretrained("openai-community/gpt2", local_files_only=local)
-            model = AutoModelForCausalLM.from_pretrained("openai-community/gpt2", local_files_only=local)
-            return tok, model.eval()
-        except OSError:
-            if not local:
-                raise
-    raise RuntimeError
+    tok = AutoTokenizer.from_pretrained(str(path), local_files_only=True)
+    model = AutoModelForCausalLM.from_pretrained(str(path), local_files_only=True)
+    return tok, model.eval()
 
 
 def filter_probs(p, kind: str, v: float):
@@ -49,8 +60,8 @@ def filter_probs(p, kind: str, v: float):
     import torch
 
     if kind == "topk":
-        kth = torch.topk(p, int(v), dim=-1).values[..., -1:]
-        q = torch.where(p >= kth, p, torch.zeros_like(p))
+        values, indices = torch.topk(p, int(v), dim=-1)
+        q = torch.zeros_like(p).scatter(-1, indices, values)
     elif kind == "topp":
         s, i = torch.sort(p, dim=-1, descending=True)
         c = torch.cumsum(s, -1)
@@ -63,26 +74,27 @@ def filter_probs(p, kind: str, v: float):
     return q / q.sum(-1, keepdim=True)
 
 
-def prompts(valid: np.ndarray, seed: int = 2020):
-    """Twelve 32-token prompts from the held-out text, each starting after a line break, with the real next 40."""
-    from explainer.ai import novels
-
-    g = np.random.Generator(np.random.PCG64(seed))
-    nl = [i for i in range(novels.tokenizer().get_vocab_size()) if "\n" in novels.decode([i])]
+def prompts(valid: np.ndarray, tokenizer, seed: int = 2020):
+    """Deterministically select admissible held-out segments; fail if insufficient."""
+    if valid.ndim != 1 or len(valid) < PROMPT_LEN + GEN_LEN:
+        raise ValueError("Held-out token array is too short for a prompt and continuation")
+    nl = [i for i in range(tokenizer.get_vocab_size()) if "\n" in tokenizer.decode([i], skip_special_tokens=False)]
+    eot = tokenizer.token_to_id("<|endoftext|>")
+    if not nl or eot is None:
+        raise ValueError("Novels tokenizer needs newline tokens and <|endoftext|>")
     is_nl = np.isin(valid, nl)
-    out, used = [], set()
-    while len(out) < PROMPTS:
-        s = int(g.integers(0, len(valid) - 200))
-        nxt = np.nonzero(is_nl[s:s + 400])[0]
-        if not len(nxt):
-            continue
-        a = s + int(nxt[0]) + 1
+    starts = np.flatnonzero(is_nl) + 1
+    starts = starts[starts + PROMPT_LEN + GEN_LEN <= len(valid)]
+    g = np.random.Generator(np.random.PCG64(seed))
+    out = []
+    for a in g.permutation(starts):
         seg = valid[a:a + PROMPT_LEN + GEN_LEN]
-        if a in used or np.isin(seg, nl).sum() > 2 or (seg == novels.special("<|endoftext|>")).any():
+        if np.isin(seg, nl).sum() > 2 or (seg == eot).any():
             continue
-        used.add(a)
         out.append(seg.astype(np.int64))
-    return np.stack(out)
+        if len(out) == PROMPTS:
+            return np.stack(out)
+    raise ValueError(f"Only {len(out)} admissible held-out prompts; need {PROMPTS}")
 
 
 def generate(model, ids, kind: str, v: float, seed: int):
@@ -109,22 +121,33 @@ def generate(model, ids, kind: str, v: float, seed: int):
 
 
 def judge(tok, model, prompt_texts, cont_texts):
-    """GPT-2's negative log-likelihood of each continuation given its prompt: (nats, characters)."""
+    """Boundary-preserving conditional NLL and true continuation character count.
+
+    v3 encodes the two strings separately, avoiding a BPE token that crosses the
+    boundary and charges prompt characters to the continuation. No text is
+    silently truncated; empty or over-context examples fail explicitly.
+    """
     import torch
 
+    if len(prompt_texts) != len(cont_texts):
+        raise ValueError("Prompt and continuation cohorts differ")
+    limit = getattr(model.config, "max_position_embeddings", None) or getattr(model.config, "n_positions", 1024)
     out = []
     with torch.no_grad():
         for a, b in zip(prompt_texts, cont_texts):
-            pa = tok(a)["input_ids"]
-            full = tok(a + b)["input_ids"][:1024]
-            k = len(pa)
-            while k > 0 and full[:k] != pa[:k]:  # the boundary, if the tokenizer merged across it
-                k -= 1
-            x = torch.tensor([full])
-            lp = torch.log_softmax(model(x).logits[0, :-1].double(), -1)
-            tgt = x[0, 1:]
-            nll = -lp[torch.arange(len(tgt)), tgt][k - 1:].sum().item()
-            out.append((nll, len(tok.decode(full[k:]))))
+            pa = tok(a, add_special_tokens=False)["input_ids"]
+            cb = tok(b, add_special_tokens=False)["input_ids"]
+            if not pa or not cb or not b:
+                raise ValueError("Judge needs nonempty prompt and continuation text/tokens")
+            if len(pa) + len(cb) > limit:
+                raise ValueError(f"Judge context exceeds {limit} tokens; no continuation was truncated")
+            x = torch.tensor([pa + cb])
+            logits = model(x).logits[0, len(pa)-1:-1].double()
+            lp = torch.log_softmax(logits, -1)
+            nll = -lp[torch.arange(len(cb)), torch.tensor(cb)].sum().item()
+            if not math.isfinite(nll):
+                raise ValueError("Nonfinite judge NLL")
+            out.append((nll, len(b)))
     return out
 
 
@@ -143,19 +166,35 @@ def rep4(r) -> float:
 
 
 def compute(cache) -> dict:
+    from explainer.cache_lock import cache_lock
+    with cache_lock(cache.path("decoding")):
+        return _compute(cache)
+
+
+def _compute(cache) -> dict:
     import torch
 
-    from explainer.ai import novels
+    from tokenizers import Tokenizer
+    from explainer.lm import pocket
 
-    torch.set_grad_enabled(False)
-    model = novels.load_base()
-    _, valid = novels.token_arrays()
-    P = prompts(valid)
-    ptexts = [novels.decode(p[:PROMPT_LEN]) for p in P]
+    identity = cache_identity()  # fail before tokenizer/model construction; no implicit upstream producers
+    root = Path(__file__).resolve().parents[3]
+    tokenizer = Tokenizer.from_file(str(root / ".cache/novels/tokenizer.json"))
+    decode = lambda ids: tokenizer.decode([int(i) for i in ids], skip_special_tokens=False)
+    valid = np.load(root / ".cache/novels/valid.npy", allow_pickle=False)
+    if valid.ndim != 1 or valid.dtype != np.uint16 or (valid.size and valid.max() >= tokenizer.get_vocab_size()):
+        raise ValueError("Held-out novels array has invalid shape, dtype or token IDs")
+    P = prompts(valid, tokenizer)
+    ptexts = [decode(p[:PROMPT_LEN]) for p in P]
+    identity["selected_prompts_sha256"] = contract.prompt_identity(P, ptexts)
+    part = contract.checked_partial(cache, identity, [f"{k}{v}" for k, v in SETTINGS], PROMPTS)
+    ck = torch.load(root / ".cache/novels/base.pt", map_location="cpu", weights_only=True)
+    model = pocket.PocketGPT(pocket.Config(**ck["config"]))
+    model.load_state_dict(ck["model"])
+    model.eval()
     tok, judge_model = gpt2()
-    part = cache.partial("decoding", dict(settings=SETTINGS, prompts=PROMPTS, samples=SAMPLES, gen=GEN_LEN, v=2))
     if "human" not in part:
-        human = [novels.decode(p[PROMPT_LEN:]) for p in P]
+        human = [decode(p[PROMPT_LEN:]) for p in P]
         j = judge(tok, judge_model, ptexts, human)
         part["human"] = dict(nll=sum(a for a, _ in j) / sum(c for _, c in j), rep=float(np.mean(
             [rep4(p[PROMPT_LEN:]) for p in P])), text=human[0])
@@ -166,7 +205,7 @@ def compute(cache) -> dict:
         n_s = 1 if kind == "greedy" else SAMPLES
         ids = np.repeat(P[:, :PROMPT_LEN], n_s, 0)
         cont, kept = generate(model, ids, kind, v, seed=100 + si)
-        texts = [novels.decode(c) for c in cont]
+        texts = [decode(c) for c in cont]
         j = judge(tok, judge_model, [ptexts[i // n_s] for i in range(len(cont))], texts)
         per_prompt = [cont[i * n_s:(i + 1) * n_s] for i in range(PROMPTS)]
         nll_p = [sum(a for a, _ in j[i * n_s:(i + 1) * n_s]) / sum(c for _, c in j[i * n_s:(i + 1) * n_s])
@@ -178,12 +217,16 @@ def compute(cache) -> dict:
         print(f"    {key}: nll {part[key]['nll']:.3f} nats/char, distinct-2 {part[key]['div']}, "
               f"rep-4 {part[key]['rep']:.3f}, kept {kept:.1f}", flush=True)
     # the same prompts' novels-model next-token distribution after the first prompt, for the picture
-    z = model(torch.tensor(P[:1, :PROMPT_LEN]))[0, -1].double()
-    p0 = torch.softmax(z, -1).numpy()
+    with torch.no_grad():
+        z = model(torch.tensor(P[:1, :PROMPT_LEN]))[0, -1].double()
+        p0 = torch.softmax(z, -1).numpy()
     top = np.argsort(-p0)[:60]
-    out = dict(settings=[f"{k}{v}" for k, v in SETTINGS], kinds=[k for k, _ in SETTINGS], values=[v for _, v in SETTINGS],
-               prompt0=ptexts[0], prompt3=ptexts[3], human=part["human"], next_p=p0[top], next_tok=[novels.decode([int(i)])
+    out = dict(provenance=identity, metric_version=contract.METRIC_VERSION, prompt_count=PROMPTS, stochastic_samples=SAMPLES, greedy_samples=1, settings=[f"{k}{v}" for k, v in SETTINGS], kinds=[k for k, _ in SETTINGS], values=[v for _, v in SETTINGS],
+               prompt0=ptexts[0], prompt3=ptexts[3], human=part["human"], next_p=p0[top], next_tok=[decode([int(i)])
                                                                                                  for i in top])
     for kind, v in SETTINGS:
         out[f"{kind}{v}"] = part[f"{kind}{v}"]
+    final_identity = cache_identity()
+    if any(identity[k] != final_identity[k] for k in final_identity):
+        raise RuntimeError("Decoding inputs changed during computation; result not published")
     return out

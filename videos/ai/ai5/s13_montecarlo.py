@@ -10,6 +10,36 @@ from videos.ai.ai5.common import DATA, MODEL, PART, curve, load, normal_pdf
 TAIL = C.SURPRISE
 
 
+def estimate_comparison(estimate, truth):
+    if not (math.isfinite(estimate) and math.isfinite(truth)) or truth <= 0 or estimate < 0:
+        return "The estimate or its positive reference probability is unavailable."
+    if estimate < truth:
+        return f"The estimate is below the exact probability by {100 * (1 - estimate / truth):.1f} percent."
+    if estimate > truth:
+        return f"The estimate is above the exact probability by {100 * (estimate / truth - 1):.1f} percent."
+    return "The estimate equals the exact probability."
+
+
+def direct_estimate_summary(hits, n, estimate, truth):
+    if hits == 0:
+        return (f"No hits appeared in the {n:,} direct draws. Zero is the estimate, "
+                "not a claim that the event is impossible.")
+    comparison = estimate_comparison(estimate, truth)
+    return f"The {n:,} direct draws contain {hits} hits. {comparison}"
+
+
+def direct_rug_samples(samples, indices, n, hits):
+    """Display only genuine positions, with every rare hit included exactly once."""
+    z, selected = np.asarray(samples, float), np.asarray(indices, int)
+    if z.ndim != 1 or len(z) != n or not np.isfinite(z).all():
+        raise ValueError("direct samples do not match their declared finite cohort")
+    expected = np.unique(np.r_[np.arange(min(400, n)), np.flatnonzero(z > 4)])
+    if not np.array_equal(selected, expected) or int(np.count_nonzero(z > 4)) != hits:
+        raise ValueError("rug indices or hit count do not match the recorded draws")
+    shown = z[selected]
+    return shown, np.flatnonzero(shown > 4)
+
+
 class MonteCarlo(VoiceoverScene):
     def construct(self):
         self.card()
@@ -136,9 +166,8 @@ class MonteCarlo(VoiceoverScene):
         d = load("montecarlo")
         true, plain, hits, is_est = float(d["true"]), float(d["plain_est"]), int(d["plain_hits"]), float(d["is_est"])
         n = int(d["n"])
-        assert hits / n / true > 3 and abs(is_est / true - 1) < 0.05
         ax = Axes(x_range=[-4, 8, 1], y_range=[0, 0.45, 0.1], x_length=11.0, y_length=2.8, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([0, -0.2, 0])
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([0, 0, 0])
         xs = np.linspace(-4, 8, 300)
         p = curve(ax, xs, normal_pdf(xs), color=DATA, stroke_width=4)
         q = curve(ax, xs, normal_pdf(xs, 4.0), color=MODEL, stroke_width=4)
@@ -147,10 +176,7 @@ class MonteCarlo(VoiceoverScene):
         x4 = ax.c2p(4, 0)
         edge = DashedLine(x4, x4 + UP * 3.0, color=TAIL, stroke_width=2.5)
         tail_l = label(r"above $4$", font_size=26, color=TAIL).next_to(edge.get_end(), RIGHT, buff=0.12)
-        g = np.random.default_rng(5)
-        zs = g.normal(size=400)
-        zs = np.where(zs > 4, 3.9, zs)
-        zs[:hits] = np.linspace(4.21, 4.47, hits) if hits > 1 else [4.21] * hits  # the real run's hits above 4
+        zs, hit_positions = direct_rug_samples(d["plain_z"], d["plain_plot_indices"], n, hits)
         rug_p = VGroup(*[Line(ax.c2p(z, 0) + DOWN * 0.12, ax.c2p(z, 0) + DOWN * 0.32,
                               color=TAIL if z > 4 else DATA, stroke_width=2.5 if z > 4 else 1.2) for z in zs])
         ys = np.asarray(d["is_y"])
@@ -163,24 +189,31 @@ class MonteCarlo(VoiceoverScene):
                    .replace(",", "{,}").replace("{{,}}", "{,}"), font_size=28, color=DATA)
         r2 = label(rf"draw from $q$, \ weight by $p/q$: \ ${is_est * 1e5:.2f}$ in $100{{,}}000$", font_size=28, color=MODEL)
         VGroup(r1, r2).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.3)
+        sample_note = label(rf"$p$ rug: first ${min(400, n)}$ draws plus all hits above $4$; \ $q$ rug: first ${len(ys)}$ draws"
+                            rf" \\ both estimates use all ${n:,}$ draws each".replace(",", "{,}"),
+                            font_size=18, color=GREY_A).move_to([0, -2.4, 0])
         colors = {r"p(x)": DATA, r"q(x)": MODEL, r"\mathbb{E}_p": DATA, r"\mathbb{E}_q": MODEL}
         f = cmath(r"\mathbb{E}_p", r"[f(x)]", "=", r"\mathbb{E}_q", r"\Big[f(x)\,", r"\frac{p(x)}{q(x)}", r"\Big]",
                   colors=colors, font_size=40).move_to([3.6, 2.3, 0])
+        direct_verdict = direct_estimate_summary(hits, n, plain, true)
+        weighted_verdict = estimate_comparison(is_est, true)
         with self.voiceover(
             "Monte Carlo has one weakness: rare events. How often does a standard bell land above four? Exactly, "
-            f"about {true * 1e5:.1f} times in a hundred thousand. <bookmark mark='a'/> Draw {n:,} samples, and only "
-            f"{hits} land there: off by a factor of {plain / true:.0f}."
+            f"about {true * 1e5:.1f} times in a hundred thousand. <bookmark mark='a'/> {direct_verdict} "
+            "The rug shows the first four hundred recorded direct draws, plus every rare hit from the full run."
         ) as vo:
             self.play(FadeIn(head), Create(ax), Create(p), FadeIn(pl))
             self.play(Create(edge), FadeIn(tail_l), FadeIn(truth))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r) for r in rug_p], lag_ratio=0.004), run_time=1.5)
-            self.play(*[Indicate(rug_p[i], color=TAIL, scale_factor=2.5) for i in range(hits)], FadeIn(r1))
+            self.play(*[Indicate(rug_p[int(i)], color=TAIL, scale_factor=1.0) for i in hit_positions],
+                      FadeIn(r1), FadeIn(sample_note))
         with self.voiceover(
             "The fix is to cheat, and then correct for it. <bookmark mark='a'/> Draw from a bell that lands out there "
             "half the time. <bookmark mark='b'/> Then weight each sample by how much likelier it is under the real "
-            "distribution than under the one you drew from. <bookmark mark='c'/> Same number of samples, and the "
-            f"answer is within {100 * abs(is_est / true - 1):.1f} percent: importance sampling."
+            "distribution than under the one you drew from. The proposal rug shows its first four hundred "
+            f"recorded draws. <bookmark mark='c'/> Both estimates use all {n:,} draws each. For importance "
+            f"sampling, {weighted_verdict} A single run is evidence, not a guarantee of improvement."
         ) as vo:
             vo.wait_until("a")
             self.play(Create(q), FadeIn(ql), LaggedStart(*[FadeIn(r) for r in rug_q], lag_ratio=0.004), run_time=1.8)
@@ -232,7 +265,8 @@ class MonteCarlo(VoiceoverScene):
         n, s = int(d["n"]), float(d["s"])
         f = cmath(r"\mathrm{ESS}", "=", r"\frac{\big(\sum_i w_i\big)^2}{\sum_i w_i^2}", font_size=40,
                   colors={r"\mathrm{ESS}": C.BITS}).move_to([3.6, 2.2, 0])
-        fn = label(r"how many of the weighted samples really count", font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.15)
+        fn = label(r"weight concentration diagnostic \\ always between $1$ and $n$", font_size=22,
+                   color=GREY_A).next_to(f, DOWN, buff=0.15)
         ax = CornerAxes(x_range=[0, 2.4, 1], y_range=[-3, 4, 1], x_length=6.4, y_length=4.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.8, -0.5, 0])
         xt = VGroup(*[MathTex(str(int(v)), font_size=20, color=GREY_B).next_to(ax.c2p(math.log10(v), -3), DOWN, buff=0.1)
@@ -243,29 +277,36 @@ class MonteCarlo(VoiceoverScene):
         yl = label(rf"effective samples, \ of ${n:,}$".replace(",", "{,}"), font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         lx = np.log10(dims)
         dd = np.linspace(1, 250, 200)
-        thc = curve(ax, np.log10(dd), np.maximum(np.log10(n / (s ** 2 / math.sqrt(2 * s ** 2 - 1)) ** dd), -3),
-                    color=WHITE, stroke_width=2.5)
+        log_proxy = math.log10(n) - dd * math.log10(s ** 2 / math.sqrt(2 * s ** 2 - 1))
+        visible = (log_proxy >= -3) & (log_proxy <= 4)
+        thc = curve(ax, np.log10(dd[visible]), log_proxy[visible], color=WHITE, stroke_width=2.5)
+        floor = DashedLine(ax.c2p(0, 0), ax.c2p(2.4, 0), color=GREY_C, stroke_width=1.5)
         dots = VGroup(*[Dot(ax.c2p(a, math.log10(v)), radius=0.045, color=C.BITS, fill_opacity=0.8)
                         for row in ess for a, v in zip(lx, row)])
         leg = VGroup(label(r"measured, \ five seeds", font_size=20, color=C.BITS),
-                     label(r"theory: \ $n\,\big(s^2/\sqrt{2s^2 - 1}\big)^{-d}$", font_size=20, color=WHITE))
+                     label(r"large-$n$ proxy: \ $n/\mathbb{E}_q[w^2]$ \\ $n\,\big(s^2/\sqrt{2s^2 - 1}\big)^{-d}$",
+                           font_size=20, color=WHITE))
         leg.arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax.c2p(0.05, -1.4), RIGHT, buff=0.0)
         setup = label(rf"target: \ a standard bell in $d$ dimensions; \\ proposal: \ ${s:g}\times$ wider", font_size=22,
                       color=GREY_A).next_to(fn, DOWN, buff=0.45).align_to(fn, LEFT)
         m = ess.mean(0)
         i50, i200 = list(dims).index(50), list(dims).index(200)
+        proxy_note = ("It is below one, so it cannot be a finite-sample weight count." if th[i200] < 1 else
+                      "It is a population-moment approximation, not an exact finite-sample count.")
         with self.voiceover(
-            "Importance sampling has a weakness of its own: the weights. <bookmark mark='a'/> Count how many samples "
-            "are really doing the work, the effective sample size. <bookmark mark='b'/> Aim at a bell with a proposal "
+            "Importance sampling has a weakness of its own: the weights. <bookmark mark='a'/> This weight-based "
+            "effective sample size diagnoses their concentration; it always lies between one and n. "
+            "<bookmark mark='b'/> Aim at a bell with a proposal "
             f"just {100 * (s - 1):.0f} percent wider. In one dimension, {m[0]:,.0f} of {n:,} samples count; in fifty, "
-            f"{m[i50]:.0f}; in two hundred the measurement says {m[i200]:.0f}, and theory says even that is too "
-            f"hopeful: {th[i200]:.3f}. A handful of samples carry all the weight. <bookmark mark='c'/> That is why "
+            f"{m[i50]:.0f}; in two hundred the diagnostic says {m[i200]:.0f}. The population-moment, large-n proxy "
+            f"is {th[i200]:.3f}. {proxy_note} Rare large weights can be missing from "
+            "a finite run, so the diagnostic alone does not certify accuracy. <bookmark mark='c'/> That is why "
             "reinforcement learning clips its importance ratios, in part twenty-six."
         ) as vo:
             self.play(Write(f), FadeIn(fn))
             vo.wait_until("a")
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(setup))
             vo.wait_until("b")
-            self.play(Create(thc), LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.02), FadeIn(leg), run_time=2.0)
+            self.play(Create(floor), Create(thc), LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.02), FadeIn(leg), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()

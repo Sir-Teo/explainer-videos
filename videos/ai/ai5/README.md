@@ -1,5 +1,11 @@
 # AI, Built — Part 5: Randomness in Motion
 
+Current QA checkpoint: the numerical summaries below retain historical baseline measurements while the corrected
+source is being recomputed and rendered. They are not current-v3 results or production approval. The decoder now
+uses an explicitly different boundary-preserving conditional metric; its old table must be replaced after the new
+run. Scoped source/tests and remaining gates are tracked in [the Part5 checklist](../../../docs/qa/ai5-chapter-checklist.md).
+
+
 Part 5 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)
 and [the syllabus](../SYLLABUS.md)). A model hands us distributions: it is fitted by maximum likelihood, it is sampled
 to write, its gradients are averages over random choices, and the newest image generators are random motion run
@@ -48,7 +54,7 @@ here, small and on a CPU, or cited.
   exponential family and moment matching.
 * **7. How far from the average?** A million runs of 100 fair flips; Markov, Chebyshev, Chernoff and Hoeffding
   derived in a chain; against the exact tail at ε = 0.1 (0.0284): 0.83, 0.25, 0.134, 0.135. Flips needed to guarantee
-  P(overshoot ≥ 0.05) ≤ 0.05: Chebyshev 2,000, Hoeffding 600, Chernoff 599, the truth 281. Part 8's generalization
+  P(overshoot ≥ 0.05) ≤ 0.05: Chebyshev 2,000, Hoeffding 600, Chernoff 599, the smallest qualifying fixed sample size 262; all sample sizes from 281 onward qualify (the exact binomial tail oscillates with integer counts). Part 8's generalization
   bounds; Part 26's UCB.
 * **8. Rolling loaded dice.** Inverse-CDF sampling (letters; exponentials: KS 0.006); von Neumann's rejection
   sampling (1951; Beta(2, 5), 40.3% kept, 1/M = 40.7% predicted); Box–Muller derived (1958; KS 0.002, correlation
@@ -59,7 +65,7 @@ here, small and on a CPU, or cited.
   13.5 bits at T = ½, 1, 2) and its samples; top-k (Fan et al. 2018), top-p (Holtzman et al. 2020) and min-p (Nguyen
   et al. 2024; re-analysed by Schaeffer et al. 2025), the top-p cut sliding over two real GPT-2 distributions (an open
   one and a nearly certain one: at p = 0.9, 1,210 words against 1; min-p 0.1, 40 against 1). The experiment: the series' novels
-  model writes 8 continuations of 12 held-out passages under 17 settings; GPT-2 judges each by its surprise; at equal
+  model uses 16 settings on 12 held-out passages: 8 continuations per stochastic setting, one for greedy; GPT-2 judges each by its surprise; at equal
   diversity min-p's text is the judge's likeliest (0.900 against 0.966 nats per character for temperature alone);
   greedy repeats 14% of its 4-grams (see *Computed results*).
 * **10. Chains with short memories.** A three-state chain from Part 1's letters; its stationary distribution as the
@@ -72,11 +78,11 @@ here, small and on a CPU, or cited.
   π from 4,000 darts; the error's slope −0.50 over 200 runs at nine sizes; a rare event, P(Z > 4) = 3.17 × 10⁻⁵:
   two hits in 10,000 plain draws, within 1% by importance sampling. The effective sample size of importance weights
   against dimension (proposal 1.25× wider): 4,671 of 5,000 in one dimension, 184 in fifty, 10.5 measured in two
-  hundred, where theory says 0.005.
+  hundred, where the population-moment large-sample proxy is 0.005; this proxy is not the exact finite-sample ESS.
 * **12. The gradient of an average.** The log-derivative trick derived; baselines (Glynn 1990; Williams 1992). For
   ∇ E[x²], x ~ N(1, 1): the estimate averages 1.998 (truly 2) with per-sample variance 30.0, 13.9 with the best
   baseline (b = 3.99), and 4.0 reparameterized (Kingma & Welling 2013). Evolution strategies (Salimans et al. 2017)
-  on a curved valley, 8 runs each at equal budgets: the error of one gradient estimate is 399 plain, 14.8 with the
+  on a curved valley, 8 runs each at equal iteration caps (early divergence uses fewer probes). Historical uncorrected-baseline/unsmoothed-reference measurements were: the error of one gradient estimate is 399 plain, 14.8 with the
   population's mean as baseline, 16.1 with mirrored probes (the gradient's own size: 28.9); with the same step size,
   2 of 8 plain runs diverge, none with the baseline.
 * **13. Sampling the unsampleable.** Metropolis et al. (1953, MANIAC): the walk on a two-bump density, proposals

@@ -195,8 +195,10 @@ class Gauss(VoiceoverScene):
         hc = history_card(1886, r"Francis Galton", r"heights of parents and children: \ elliptical contours, \ and "
                           r"``regression towards mediocrity''", width=4.6).next_to(tbl, DOWN, buff=0.25)
         good = abs(m_e - m_th) < 0.03 and abs(v_e / v_th - 1) < 0.05
-        verdict = ("Both agree with the formulas to within the sampling error." if good else
-                   "Close, but not within the sampling error: the strip has a width, and that biases it a little.")
+        verdict = ("Both meet our checks: mean error below 0.03 and relative variance error below five percent."
+                   if good else
+                   "At least one stated tolerance is exceeded. Sampling fluctuation and the finite strip width "
+                   "both affect this comparison.")
         with self.voiceover(
             "Check it on samples. Draw four hundred thousand points and keep the ones in a thin strip where x two "
             f"is {a:g}. <bookmark mark='a'/> Their x one values form a bell. The formulas predict its mean, "
@@ -224,8 +226,8 @@ class Gauss(VoiceoverScene):
                          width=4.3, font_size=24),
             history_card(r"1990s", r"Gaussian processes", r"a bell over whole functions: \ conditioning on data "
                          r"\emph{is} the regression", width=4.3, font_size=24),
-            history_card(2020, r"diffusion models \ (Part 21)", r"the step back from noise is a Gaussian conditional, "
-                         r"\ computed by this formula", width=4.3, font_size=24),
+            history_card(2020, r"diffusion models \ (Part 21)", r"the training posterior is Gaussian \ when the clean "
+                         r"sample is also given; \ the learned reverse uses a Gaussian model", width=4.3, font_size=23),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.3)
         head = label(r"Conditioning a Gaussian, \ at work", font_size=36).to_edge(UP, buff=0.4)
         f = cmath(r"x_a \mid x_b", r"\;\sim\;", r"\mathcal{N}\big(\mu_a + \Sigma_{ab}\Sigma_{bb}^{-1}(x_b - \mu_b),\;"
@@ -234,8 +236,9 @@ class Gauss(VoiceoverScene):
             "This one formula does a great deal of work. <bookmark mark='a'/> In 1960, Rudolf Kalman used it to "
             "track a moving object, conditioning on each new measurement; his filter navigated Apollo. "
             "<bookmark mark='b'/> A Gaussian process puts a bell over whole functions, and fitting it to data is "
-            "this conditioning. <bookmark mark='c'/> And in part twenty-one, each step of a diffusion model back "
-            "from noise is a Gaussian conditional, written down with exactly this formula."
+            "this conditioning. <bookmark mark='c'/> In diffusion training, the clean sample is also given: "
+            "the posterior of the previous noisy step is then exactly Gaussian. The learned reverse step does "
+            "not know that clean sample; a Gaussian transition is an approximation, not this exact posterior."
         ) as vo:
             self.play(FadeIn(head), FadeIn(f))
             for k, mk in enumerate("abc"):

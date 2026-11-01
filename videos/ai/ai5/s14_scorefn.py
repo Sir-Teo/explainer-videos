@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai5.common import DATA, MODEL, PART, curve, load, normal_pdf
+from videos.ai.ai5.contracts import rosen_smoothed_minimum, rosen_smoothed_value
 
 SF = C.INTERVAL  # the score-function estimate
 REP = C.MODEL_Q  # the reparameterized estimate
@@ -123,7 +124,7 @@ class ScoreFn(VoiceoverScene):
         yt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(-2, v), LEFT, buff=0.1) for v in (0, 20, 40, 60)])
         xl = label(r"baseline $b$", font_size=24, color=BASE).next_to(xt, DOWN, buff=0.1)
         yl = label(r"variance of one sample's estimate", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
-        cv = curve(ax, bs, np.minimum(vb, 70), color=SF, stroke_width=4)
+        cv = curve(ax, bs, vb, color=SF, stroke_width=4)
         d0 = Dot(ax.c2p(0, v0), radius=0.08, color=PLAIN)
         l0 = label(rf"no baseline: \ ${v0:.1f}$", font_size=22, color=PLAIN).next_to(d0, UR, buff=0.12)
         ds = Dot(ax.c2p(bstar, vstar), radius=0.08, color=BASE)
@@ -138,7 +139,8 @@ class ScoreFn(VoiceoverScene):
             "The catch is noise. Take a case we can check: the gradient of the average of x squared, for a bell "
             f"centred at one; the answer is two. <bookmark mark='a'/> The estimator gets it right on average, "
             f"{mean_sf:.3f} over {n_:,} samples, but one sample's estimate has a variance of {v0:.0f}. "
-            "<bookmark mark='b'/> A baseline cuts that: the best one here, near the average of f, brings it to "
+            "<bookmark mark='b'/> A baseline cuts that. Its variance-minimizing value weights f by the squared score; "
+            f"here it is {bstar:.2f}, and brings the variance to "
             f"{vstar:.0f}. <bookmark mark='c'/> When f does have a slope, there is a better way: write the sample as "
             f"mu plus noise and differentiate through it, the reparameterization trick, with variance {vrep:.0f}. "
             "Variational autoencoders train that way, in part twenty; rewards and judges need the score function."
@@ -160,14 +162,17 @@ class ScoreFn(VoiceoverScene):
         sig, pop, lr, steps = float(d["sig"]), int(d["pop"]), float(d["lr"]), int(d["steps"])
         gp, gb, gm, g2 = (float(d[k]) for k in ("gerr_plain", "gerr_base", "gerr_mirror", "gnorm2"))
         dp, db = int(d["div_plain"]), int(d["div_base"])
+        optimum = rosen_smoothed_minimum(sig)
+        minimum = float(rosen_smoothed_value(optimum, sig))
 
         def panel(P, col, title, x0):
             ax = Axes(x_range=[-1.6, 1.6, 1], y_range=[-0.6, 2.2, 1], x_length=5.6, y_length=4.4, tips=False,
                       axis_config={"stroke_width": 0}).move_to([x0, -0.7, 0])
-            cont = contour_lines(ax, valley, (-1.6, 1.6), (-0.6, 2.2), [0.05, 0.3, 1, 3, 8], n=(80, 70), stroke_width=1.4)
+            excess = lambda x, y: float(rosen_smoothed_value([x, y], sig) - minimum)
+            cont = contour_lines(ax, excess, (-1.6, 1.6), (-0.6, 2.2), [0.05, 0.3, 1, 3, 8], n=(80, 70), stroke_width=1.4)
             cont.set_stroke(opacity=0.6)
             fr = SurroundingRectangle(ax, buff=0, color=GREY_D, stroke_width=1.5)
-            star = Star(n=5, outer_radius=0.13, color=C.BITS, fill_opacity=1).move_to(ax.c2p(1, 1))
+            star = Star(n=5, outer_radius=0.13, color=C.BITS, fill_opacity=1).move_to(ax.c2p(*optimum))
             t = label(title, font_size=24, color=col).next_to(fr, UP, buff=0.12)
             return ax, VGroup(fr, cont, star, t)
 
@@ -180,7 +185,9 @@ class ScoreFn(VoiceoverScene):
                 k = max(int(tr.get_value()), 1)
                 g = VGroup()
                 for run in P:
-                    pts = [ax.c2p(*np.clip(p, [-1.6, -0.6], [1.6, 2.2])) for p in run[:k + 1]]
+                    finite_prefix = run[:k + 1]
+                    finite_prefix = finite_prefix[np.isfinite(finite_prefix).all(axis=1)]
+                    pts = [ax.c2p(*np.clip(p, [-1.6, -0.6], [1.6, 2.2])) for p in finite_prefix]
                     g.add(VMobject(color=col, stroke_width=2, stroke_opacity=0.75).set_points_as_corners(pts))
                     g.add(Dot(pts[-1], radius=0.04, color=col))
                 return g
@@ -190,32 +197,33 @@ class ScoreFn(VoiceoverScene):
         head = cmath(r"\nabla \mathbb{E}_\varepsilon\big[f(\theta + \sigma\varepsilon)\big]", "=",
                      r"\tfrac{1}{\sigma}\, \mathbb{E}\big[f(\theta + \sigma\varepsilon)\,\varepsilon\big]", font_size=34)
         head.to_edge(UP, buff=0.3)
-        hn = label(rf"evolution strategies: \ ${pop}$ random probes a step, \ $8$ runs each, \ same step size", font_size=22,
+        hn = label(rf"evolution strategies: \ ${pop}$ probes/step, \ $8$ runs each, \ equal step caps", font_size=22,
                    color=GREY_A).next_to(head, DOWN, buff=0.12)
+        scope_note = label(r"iid baseline corrected by $N/(N-1)$; \ early stops held, \ paths clipped at the view edge",
+                           font_size=18, color=GREY_B).next_to(hn, DOWN, buff=0.12)
+        star_note = label(r"contours and star: \ smoothed objective and its exact minimum", font_size=18,
+                          color=C.BITS).next_to(scope_note, DOWN, buff=0.1)
         dv = VGroup(label(rf"diverged: \ ${dp}$ of $8$", font_size=22, color=PLAIN),
                     label(rf"diverged: \ ${db}$ of $8$", font_size=22, color=BASE))
         for lab_, fr_ in zip(dv, (g1[0], g2_[0])):
             lab_.next_to(fr_.get_corner(DL), UR, buff=0.12)
-        res = VGroup(label(rf"error of one gradient estimate: \ ${gp:.0f}$ \ (the gradient's own size: ${g2:.0f}$)",
+        res = VGroup(label(rf"smoothed-gradient MSE: \ ${gp:.0f}$ \ (squared gradient norm: ${g2:.0f}$)",
                            font_size=22, color=PLAIN),
                      label(rf"with the baseline: \ ${gb:.0f}$; \ mirrored probes: \ ${gm:.0f}$", font_size=22, color=BASE))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_edge(DOWN, buff=0.2)
-        if dp > db == 0:
-            verdict = f"Without the baseline, {dp} of the 8 runs blow up and leave the picture; with it, none do."
-        elif dp > db:
-            verdict = f"Without the baseline, {dp} of the 8 runs blow up; with it, only {db} do."
-        else:
-            verdict = f"Here both reach the valley floor: {dp} plain runs and {db} with a baseline blow up."
+        verdict = (f"With equal per-run caps, {dp} plain runs and {db} corrected-baseline runs stop on divergence. "
+                   "The others reach the iteration cap; that alone does not certify convergence.")
         with self.voiceover(
             "The same estimator trains models with no gradient at all. Smooth f by adding noise to the parameters, "
             "and its gradient is an average of f at random probes, times the probe: evolution strategies, used by "
             "Salimans and colleagues at OpenAI in 2017 to train simulated robots and Atari players. <bookmark mark='a'/> Here it "
-            "descends a curved valley, sixteen probes a step. <bookmark mark='b'/> The baseline matters: measured at "
-            f"the start, the squared error of one gradient estimate is {gp:.0f} without it and {gb:.0f} with it, "
-            f"when the gradient itself is only {g2:.0f} in size. <bookmark mark='c'/> {verdict} Reinforcement "
+            "descends a curved valley, sixteen probes a step. We correct the same-batch baseline by N over N minus one "
+            "to keep the iid estimate unbiased. <bookmark mark='b'/> Measured against the smoothed objective at "
+            f"the start, the mean squared error of one estimate is {gp:.0f} without it and {gb:.0f} with it; "
+            f"the gradient's squared norm is {g2:.0f}. <bookmark mark='c'/> {verdict} Reinforcement "
             "learning's policy gradients are this estimator, with baselines, in part twenty-six."
         ) as vo:
-            self.play(Write(head), FadeIn(hn), FadeIn(g1), FadeIn(g2_))
+            self.play(Write(head), FadeIn(hn), FadeIn(scope_note), FadeIn(star_note), FadeIn(g1), FadeIn(g2_))
             self.add(pa, pb)
             self.play(tr.animate.set_value(len(PP[0]) // 8), run_time=4.0, rate_func=linear)
             vo.wait_until("a")

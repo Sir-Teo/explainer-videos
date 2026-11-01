@@ -106,15 +106,17 @@ class Outro(VoiceoverScene):
         need = dict(t["need"])
         lg = load("langevin")
         with self.voiceover(
-            "Let's take stock. Sums of many independent pieces become bells, by repeated convolution, with a gap "
-            f"that shrinks like one over the square root of n. Conditioning a bell gives a bell. Maximum likelihood "
-            f"reaches Fisher's bound: for the Cauchy, n times its variance came down to {float(f['mle_nvar'][-1]):.2f} "
+            "Let's take stock. Centered, rescaled sums of independent, identically distributed pieces with positive "
+            "finite variance approach a bell. With a finite third absolute moment, Berry-Esseen bounds the gap by "
+            "a constant over the square root of n. Conditioning a bell gives a bell. In regular models, maximum "
+            f"likelihood is asymptotically efficient: for our Cauchy fit, n times its measured variance is {float(f['mle_nvar'][-1]):.2f} "
             "against the bound of two. Bayes's rule is counting, and a prior is a regularizer. Maximum entropy gives "
             "the exponential family, softmax included. Hoeffding's bound needed "
             f"{need['hoeffding']} flips where {need['exact']} sufficed, and held everywhere. Sampling turns uniform "
             "numbers into anything; decoding trades diversity for predictability. Chains forget at the rate of "
-            "their spectral gap; Monte Carlo errors fall like one over root n, and importance weights collapse in "
-            "high dimensions. Metropolis and Langevin sample shapes we can only evaluate, and random motion has its "
+            "their spectral gap in the lazy reversible setting; Monte Carlo errors with finite variance fall like "
+            "one over root n, and importance weights can collapse in high dimensions. Metropolis corrections "
+            "preserve the target; fixed-step unadjusted Langevin can bias it. Random motion has its "
             "own calculus, whose density obeys Fokker and Planck's law."
         ) as vo:
             self.play(FadeIn(head))

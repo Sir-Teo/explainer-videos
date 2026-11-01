@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
@@ -8,6 +10,55 @@ from videos.ai.ai5.common import (DATA, PART, SCORE, WALK, ParticleFlow, curve, 
 from videos.ai.ai5.compute import density2, rng
 
 ACCEPT, REJECT = "#5BD17A", C.SURPRISE
+
+
+def halfspace_summary(left, target):
+    """Compare the measured x<0 statistic with the matching analytic partition."""
+    if not (math.isfinite(left) and math.isfinite(target)):
+        return "The measured occupancy or its halfspace reference is unavailable."
+    return (f"On the x less than zero side, the measured share is {100 * left:.1f} percent, "
+            f"against the target's {100 * target:.1f} percent.")
+
+
+def flow_summary(start, end):
+    if not (math.isfinite(start) and math.isfinite(end)):
+        return "A density-distance endpoint is unavailable."
+    if end < start:
+        return f"The estimated density's distance from the target falls from {start:.2f} to {end:.2f}."
+    if end > start:
+        return f"The estimated density's distance from the target rises from {start:.2f} to {end:.2f}."
+    return f"The estimated density's distance from the target stays at {end:.2f}."
+
+
+def mixing_summary(hops, spread, target):
+    """Report ranks and variances without inferring rejection or finite-run exactness."""
+    big, mala, rwm = hops["ula0.3"], hops["mala0.3"], hops["rwm0.7"]
+    if all(math.isfinite(v) for v in hops.values()):
+        if big > max(v for k, v in hops.items() if k != "ula0.3"):
+            rank = "Big-step Langevin has the most measured hops."
+        elif big == max(hops.values()):
+            rank = "Big-step Langevin is tied for the most measured hops."
+        else:
+            rank = "Big-step Langevin does not have the most measured hops."
+        if mala < rwm:
+            comparison = "MALA makes fewer measured hops than random-walk Metropolis."
+        elif mala > rwm:
+            comparison = "MALA makes more measured hops than random-walk Metropolis."
+        else:
+            comparison = "MALA and random-walk Metropolis have equal measured hop counts."
+    else:
+        rank = "An incomplete hop statistic prevents a full ranking."
+        comparison = "The hop comparison is unavailable."
+    if math.isfinite(spread["ula0.3"]) and math.isfinite(target):
+        variance = (f"Its variance conditional on x less than zero is {spread['ula0.3']:.3f}, "
+                    f"against the target's {target:.3f}; fixed-step Langevin can bias equilibrium.")
+    else:
+        variance = "The big-step conditional variance or its reference is unavailable."
+    if math.isfinite(spread["mala0.3"]):
+        corrected = f"MALA's measured conditional variance is {spread['mala0.3']:.3f}."
+    else:
+        corrected = "MALA's conditional variance is unavailable."
+    return rank, variance, comparison, corrected
 
 
 class MCMC(VoiceoverScene, ThreeDScene):
@@ -93,25 +144,24 @@ class MCMC(VoiceoverScene, ThreeDScene):
         # many steps: the visits pile up like the density
         pts = chain[17::3]
         visits = VGroup(*[Dot(ax.c2p(*p), radius=0.028, color=WHITE, fill_opacity=0.75) for p in pts])
-        assert abs(float(d["left"]) - 2 / 3) < 0.05
         # a running count, as the walk goes: the share of the visits drawn so far that are in the left bump
         in_left = np.cumsum(pts[:, 0] < 0) / np.arange(1, len(pts) + 1)
         left = float(in_left[-1])
-        assert abs(left - 2 / 3) < 0.05
-        share = label(rf"time in the left bump: \ ${100 * left:.0f}\%$ \\ its share of the density: \ $67\%$",
+        target_left = float(d["true_left_halfspace"])
+        share = label(rf"visits with $x<0$: \ ${100 * left:.1f}\%$ \\ target mass there: \ ${100 * target_left:.1f}\%$",
                       font_size=24, color=WHITE)
         share.next_to(cancel, DOWN, buff=0.4).align_to(cancel, LEFT)
         j = ValueTracker(0)
         run_v = DecimalNumber(100 * in_left[0], num_decimal_places=0, unit=r"\%", font_size=30, color=WALK)
-        run_l = label(r"time in the left bump, so far:", font_size=24, color=WALK)
+        run_l = label(r"visits with $x<0$, so far:", font_size=24, color=WALK)
         running = VGroup(run_l, run_v).arrange(RIGHT, buff=0.15)
         running.next_to(cancel, DOWN, buff=0.4).align_to(cancel, LEFT)
         keep_in_frame(running)
+        occupancy = halfspace_summary(left, target_left)
         with self.voiceover(
             "Only the ratio appears, so the unknown constant cancels. <bookmark mark='a'/> Keep walking: the visits "
             "pile up like the density, because this Markov chain's stationary distribution is the one we wanted. "
-            "<bookmark mark='b'/> The left bump holds two thirds of the probability, and the walker spends "
-            f"{100 * left:.0f} percent of its time there. This made Bayesian statistics practical in the 1990s, and "
+            f"<bookmark mark='b'/> {occupancy} This made Bayesian statistics practical in the 1990s, and "
             "physicists still sample molecules this way."
         ) as vo:
             self.play(FadeIn(cancel))
@@ -195,7 +245,7 @@ class MCMC(VoiceoverScene, ThreeDScene):
         eq = cmath(r"dx", "=", r"\nabla \log p(x)\,dt", "+", r"\sqrt{2}\,dW_t", font_size=36,
                    colors={r"\nabla \log p(x)\,dt": SCORE}).to_corner(UL, buff=0.35)
         ula = cmath(r"x \leftarrow x + h\, \nabla \log p(x) + \sqrt{2h}\,\xi", font_size=28).next_to(eq, DOWN, buff=0.2).align_to(eq, LEFT)
-        lab = label(r"the push: \ the score, \ uphill toward likelier places; \\ the kicks: \ Brownian", font_size=20,
+        lab = label(r"continuous-time target: $p$; \ fixed-step ULA can be biased \\ the push: score; \ kicks: Brownian", font_size=20,
                     color=GREY_A).next_to(ula, DOWN, buff=0.15).align_to(eq, LEFT)
         # readouts, one per saved density (fixed-in-frame mobjects must not be rebuilt by number animations)
         reads = []
@@ -205,7 +255,7 @@ class MCMC(VoiceoverScene, ThreeDScene):
             r_.arrange(DOWN, aligned_edge=RIGHT, buff=0.12).to_corner(UR, buff=0.4)
             reads.append(r_)
         tl, ll = reads[0], VectorizedPoint()
-        key = label(r"surface: \ the particles' density; \ mesh: \ the target $p$", font_size=20, color=GREY_A)
+        key = label(r"surface: KDE of $1{,}500$ particles; \ dots: $600$ shown \\ mesh: target $p$", font_size=20, color=GREY_A)
         key.next_to(reads[0], DOWN, buff=0.12).align_to(reads[0], RIGHT)
         hc = cite(r"P.~Langevin (1908); \ G.~Roberts \& R.~Tweedie (1996); \ M.~Welling \& Y.~W.~Teh (2011)", corner=DL)
         fixed = [eq, ula, lab, key, hc] + reads
@@ -215,18 +265,17 @@ class MCMC(VoiceoverScene, ThreeDScene):
         self.set_camera_orientation(phi=62 * DEGREES, theta=-62 * DEGREES, zoom=0.78)
         n_frames = len(frames) - 1
         frame_of = [s / 5 for s in steps_at]  # frames are saved every 5 steps
-        good = left > 0.6
-        verdict = (f"{100 * left:.0f} percent of the particles are in the left bump, close to its two thirds."
-                   if good else f"{100 * left:.0f} percent are in the left bump, short of its two thirds: some are "
-                   "still on the wrong side of the valley.")
+        distance = flow_summary(float(l1[0]), float(l1[-1]))
+        verdict = halfspace_summary(left, float(d["true_left_halfspace"]))
         with self.voiceover(
             "There is another way to explore, from physics. In 1908 Paul Langevin wrote a particle's motion in a "
             "fluid as a push plus random kicks. <bookmark mark='a'/> Make the push the score, the slope of log p, "
             "uphill toward likelier places, and the kicks Brownian; in small steps it is one line of code. <bookmark "
             "mark='b'/> Fifteen hundred particles start as noise; above them, their density. <bookmark mark='c'/> It "
-            f"flows onto the two bumps, and its distance from the target falls from {l1[0]:.2f} to {l1[-1]:.2f}, about "
-            f"as low as smoothing allows. {verdict} <bookmark mark='d'/> Its long-run distribution is p itself, as "
-            "chapter seventeen proves. With mini-batch scores it sampled neural networks' weights in 2011, and with "
+            f"moves under the score. {distance} For occupancy, {verdict} <bookmark mark='d'/> The continuous-time "
+            "process has p as an invariant distribution, as chapter seventeen proves under regularity conditions. "
+            "Mixing takes time, and the finite-step unadjusted scheme can bias equilibrium. With mini-batch "
+            "scores it sampled neural networks' weights in 2011, and with "
             "learned scores, the first score-based image models."
         ) as vo:
             self.play(FadeIn(eq), FadeIn(hc), Create(axes), FadeIn(floor), FadeIn(flow), FadeIn(surfs[0]), FadeIn(tl),
@@ -271,36 +320,39 @@ class MCMC(VoiceoverScene, ThreeDScene):
 
         def stat(c, k):
             v = np.asarray(d[f"{c}_{k}"], float)
-            return float(v.mean())
+            return float(v.mean()) if len(v) and np.isfinite(v).all() else math.nan
 
-        rows = VGroup(label(r"hops", font_size=20, color=GREY_A), label(r"spread", font_size=20, color=GREY_A))
-        rows.arrange(RIGHT, buff=0.55)
+        rows = VGroup(label(r"hops", font_size=20, color=GREY_A), label(r"variance, $x<0$", font_size=20, color=GREY_A))
+        rows[0].set_x(4.0)
+        rows[1].set_x(5.6)
         tbl = VGroup()
         for c in cfg:
-            tbl.add(VGroup(MathTex(f"{stat(c, 'hops'):.0f}", font_size=26, color=cols[c]),
-                           MathTex(f"{stat(c, 'spread'):.2f}", font_size=26, color=cols[c])).arrange(RIGHT, buff=0.6))
+            cells = []
+            for key, digits in (("hops", 0), ("spread", 3)):
+                value = stat(c, key)
+                cells.append(MathTex(f"{value:.{digits}f}", font_size=26, color=cols[c]) if math.isfinite(value)
+                             else label(r"unavailable", font_size=18, color=GREY_B))
+            tbl.add(VGroup(*cells).arrange(RIGHT, buff=0.6))
         for r, tr in zip(tbl, traces):
-            r.move_to([4.6, tr.get_y(), 0])
-        rows.next_to(tbl, UP, buff=0.25).set_x(4.6)
-        truth = label(r"true spread: \ $0.35$", font_size=20, color=WHITE).next_to(tbl, DOWN, buff=0.2).set_x(4.6)
-        tag = note(r"hops between the bumps in $19{,}000$ steps, \ and the spread within the left bump: \ means of five "
-                   r"seeds").to_edge(DOWN, buff=0.2)
+            for cell, column_x in zip(r, (4.0, 5.6)):
+                cell.move_to([column_x, tr.get_y(), 0])
+        for heading in rows:
+            heading.set_y(tbl.get_top()[1] + 0.4)
+        target_spread = float(d["true_spread_left_halfspace"])
+        truth = label(rf"target $\mathrm{{Var}}(x\mid x<0)$: \ ${target_spread:.3f}$", font_size=20,
+                      color=WHITE).next_to(tbl, DOWN, buff=0.2).set_x(4.6)
+        tag = note(r"post-burn-in hops and variance for $x<0$: \ means of five seeds \\ unavailable if a seed "
+                   r"statistic is incomplete").to_edge(DOWN, buff=0.2)
         h = {c: stat(c, "hops") for c in cfg}
         sp = {c: stat(c, "spread") for c in cfg}
-        best_hops = max(cfg, key=lambda c: h[c])
-        biased = abs(sp["ula0.3"] - 0.35) > 0.08
-        v1 = (f"The big-step Langevin hops between the bumps most, {h['ula0.3']:.0f} times, but its spread is "
-              f"{sp['ula0.3']:.2f} where the truth is 0.35: without a correction, a big step blurs the target." if biased
-              else f"The big-step Langevin hops {h['ula0.3']:.0f} times and keeps the spread at {sp['ula0.3']:.2f}.")
-        v2 = (f"Adding the Metropolis correction removes the bias, {sp['mala0.3']:.2f}, but its proposals across the "
-              f"valley are mostly refused: {h['mala0.3']:.0f} hops." if h["mala0.3"] < h["rwm0.7"] else
-              f"Adding the Metropolis correction removes the bias, {sp['mala0.3']:.2f}, and hops {h['mala0.3']:.0f} times.")
+        rank, variance, comparison, corrected = mixing_summary(h, sp, target_spread)
         with self.voiceover(
             "How well do they mix? Run four samplers for twenty thousand steps each, five times, and follow one "
-            f"coordinate. <bookmark mark='a'/> Plain Metropolis crosses between the bumps about {h['rwm0.7']:.0f} "
-            f"times, with the right spread. Langevin with small steps crosses only {h['ula0.05']:.0f} times. "
-            f"<bookmark mark='b'/> {v1} <bookmark mark='c'/> {v2} Every sampler trades exactness for speed, and "
-            "two bumps far apart defeat them all; part twenty-one's way out is to sample a blurred version first."
+            "coordinate. <bookmark mark='a'/> The table reports post-burn-in hops and the coordinate's variance "
+            f"conditional on x less than zero. <bookmark mark='b'/> {rank} For the variance, {variance} "
+            f"<bookmark mark='c'/> {comparison} For MALA's variance, {corrected} The Metropolis correction "
+            "preserves the target distribution; a finite chain still needs to mix. Hop counts alone do not "
+            "identify why transitions are rare. Part twenty-one samples blurred versions first."
         ) as vo:
             self.play(FadeIn(tt), LaggedStart(*[FadeIn(t) for t in traces], lag_ratio=0.2), FadeIn(rows), FadeIn(tag))
             vo.wait_until("a")
