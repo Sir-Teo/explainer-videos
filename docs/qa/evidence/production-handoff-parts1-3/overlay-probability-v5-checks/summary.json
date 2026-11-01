@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-01T07:30:58.794086+00:00",
+  "overlay_id": "part1-probability-roadmap-and-part3-v5",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "helper_sha256": "6df0af1c969468fdfaacd2a6fdd2d632fcae5956e749a45ec5843614ee86c344",
+  "overlay_sha256": "6bc668f43c97b0d9867b2ab323c2d337599a5c4417c9fb5eb01644d7e9a7dbce",
+  "new_test_source_sha256": "dbb041ef929150098126b49f3df048fafec4a5edbc36f52c0543f388543f8a44",
+  "original54_test_source_sha256": "3babfe70739a7146df1c4f84176ae80452722b770a4c22c0c83b8efdeecb2a69",
+  "probability_after_sha256": "50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed",
+  "probability_source_status": "Reviewed candidate cleared only for controlled narrated rerender",
+  "repaired_probability_output_accepted": false,
+  "guard_tests": {
+    "passed": 66,
+    "elapsed_seconds": 3.083,
+    "old54_test_file_byte_exact": true,
+    "new_separate_tests": 12
+  },
+  "source_owner_timing_tests": {
+    "passed": 5,
+    "elapsed_seconds": 0.214,
+    "frame_budget_probes": 27,
+    "scope": "Separate source-owner source-span checks, not full repository test count or output approval."
+  },
+  "actual_fixture": {
+    "checks": 17,
+    "all_expected": true,
+    "strict_file_checks_per_case": 268,
+    "independent_copied_inputs": 156,
+    "copied_input_bytes": 80858842,
+    "original_references_and_copies_exact_after_checks": true,
+    "public_model_weights_copied": false,
+    "source_only_fixture_commit": "64ace25ec559a2ed345487dd60fd11ec1266072c"
+  },
+  "unchanged_prior_manifests": [
+    {
+      "path": "overlays/svd-reveal-v1.json",
+      "sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8",
+      "bytes": 32227,
+      "unchanged": true
+    },
+    {
+      "path": "overlays/svd-production-polish-v2.json",
+      "sha256": "631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca",
+      "bytes": 1456,
+      "unchanged": true
+    },
+    {
+      "path": "overlays/part3-svd-outro-production-v3.json",
+      "sha256": "69a16ca2846362919dfd8e9a024120fb3cba19264a643ad70b994c65f427f178",
+      "bytes": 3597,
+      "unchanged": true
+    },
+    {
+      "path": "overlays/part1-roadmap-and-part3-v4.json",
+      "sha256": "f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3",
+      "bytes": 5609,
+      "unchanged": true
+    }
+  ],
+  "external_and_optional_audio_check_AST_unchanged": true,
+  "new_actual_diagnostic": {
+    "library_file_id": "libfile_feb51a90381481919a09a3c54f87440e",
+    "bytes": 69858,
+    "sha256": "7f773060879f7b8c4b83262fd37bc207e462c6fda9a4c35389697aeb5f8eee5e",
+    "read_scope": "qa_integrity read all2670lines/3pages and reconstructed exact newJSON; compressed exact bytes in source evidence. This gate did not retry the failedoldZIP download.",
+    "old_zip_transfer": "Failed401 before transfer; never installed or hash-verified by this work. NewJSON route is separate new authorized evidence.",
+    "actual_master_scope": "11 narration/word-timing records; master IDs/hashes are producer-reported, not independently downloaded audio-byte/listening approval."
+  },
+  "limits": [
+    "Gate/file/runtime checks only; no scene/producer/model imports or numerical job, TTS, audio edit or production render.",
+    "P1Probability output readability/pacing/listening/bookmark synchronization and4K acceptance remain pending.",
+    "Version-negative is explicit metadata mock; successful cases use actual installed versions and public-model file hashes.",
+    "Old ZIP failure remains a failed untransferred action; new JSON evidence is a distinct authorized route.",
+    "Prior604full-suite result predates Probability/v5 and is not relabeled as a final combined suite; root runs/reports new full suite separately.",
+    "This gate permits exactfour sources only; laterP6/other source changes in the samebranch are not included."
+  ]
+}

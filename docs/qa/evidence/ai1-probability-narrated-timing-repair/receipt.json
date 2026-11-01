@@ -1,0 +1,298 @@
+{
+  "completed_utc": "2026-11-01T07:23:19.504643+00:00",
+  "scope": "Source-owner sequential scheduling repair against actual verified cached-speech preflight; not actual rendered-motion/listening approval.",
+  "source_base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "source_path": "videos/ai/ai1/s02_probability.py",
+  "before": {
+    "sha256": "f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620",
+    "bytes": 24663
+  },
+  "after": {
+    "sha256": "50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed",
+    "bytes": 25682
+  },
+  "readable_diagnostic": {
+    "library_file_id": "libfile_feb51a90381481919a09a3c54f87440e",
+    "filename": "Probability_Narrated_Timing_Source_QA_Exact_Diagnostic.json",
+    "read_lines": 2670,
+    "read_calls": 3,
+    "bytes": 69858,
+    "sha256": "7f773060879f7b8c4b83262fd37bc207e462c6fda9a4c35389697aeb5f8eee5e",
+    "exact_parent_expected_bytes_and_hash_match": true
+  },
+  "historical_zip": {
+    "library_file_id": "libfile_77b16ea755508191841d9a3f2ae31b9b",
+    "download_outcome": "failed before transfer: hosted apps tools/list HTTP401",
+    "zip_bytes_installed": 0,
+    "zip_sha_verified_locally": false,
+    "retry_performed": false,
+    "original_member_hashes": "Supplied within new exact readable diagnostic; not verified original ZIP/member bytes locally."
+  },
+  "actual_audio_scope": {
+    "utterances": 11,
+    "sum_duration_seconds": 159.28,
+    "master_identifiers_and_hashes_preserved_from_producer": {
+      "source_root": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/explainer-videos",
+      "lang": "en",
+      "backend": "server",
+      "scene": "Probability",
+      "job_key": "fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b",
+      "voice_identity_sha256": "57c00c9290971b454265f7fb37efd2d1b0e6fa097d08cafe4ad975524f877bed",
+      "utterances": [
+        {
+          "key": "7f5da3ffb433b77c",
+          "spoken": "Chapter one. Before we can score a guess, we need a way to write one down.",
+          "duration": 4.88,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/7f5da3ffb433b77c.float.wav",
+          "float_master_sha256": "fdfcd9796fca6f8541e1b7f407d11d5953e67bc1ab76a279d26e9c41656237c7",
+          "files": [
+            {
+              "filename": "7f5da3ffb433b77c.wav",
+              "sha256": "aad802bb340e06e70a1b6d51eaa1556293a852a3017b2dc916464bce7f11a141"
+            },
+            {
+              "filename": "7f5da3ffb433b77c.json",
+              "sha256": "ea73b24c73f8b1e7687632555a5c433ef1228ff190038acd8bc0a0516790f56a"
+            }
+          ]
+        },
+        {
+          "key": "60fc6e1b05545545",
+          "spoken": "Take 30 novels, from Pride and Prejudice to The Great Gatsby, and count every symbol: Shannon's alphabet of twenty-six letters and the space, capitals and punctuation dropped. That's 22.8 million symbols. The most common is the space, about one symbol in 5. Then e, one in 10.",
+          "duration": 18.5,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/60fc6e1b05545545.float.wav",
+          "float_master_sha256": "a2ef934c0e9553cd4f35987fe36daeb37930ec47eb72fc08f9d3dbb03bb419b0",
+          "files": [
+            {
+              "filename": "60fc6e1b05545545.wav",
+              "sha256": "7898f6d9151f97d1677bbd652b5a4a5f45cb81698ba7e802f16cf74314b17391"
+            },
+            {
+              "filename": "60fc6e1b05545545.json",
+              "sha256": "9ed2f578fa608e85b7e7e470f127f7e594b8a0489928b2c059499031e5816696"
+            }
+          ]
+        },
+        {
+          "key": "72a0879e30becd08",
+          "spoken": "Sorted, the familiar order appears: space, e, t, a, o, n. The rarest, z, turns up about once in 1,900 symbols.",
+          "duration": 9.65,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/72a0879e30becd08.float.wav",
+          "float_master_sha256": "2f7be18bc830153b4581ae5207d3b5657f1107914009253211c82e6b71c444e0",
+          "files": [
+            {
+              "filename": "72a0879e30becd08.wav",
+              "sha256": "b1fa99678a16bf58b12e485022d0bbe59e3ec53803d61eb096333eecfa46342c"
+            },
+            {
+              "filename": "72a0879e30becd08.json",
+              "sha256": "ab17f67bc1cff851c1ce53c9d3f8efabedba73ff08fa98e4be149ee40e90faef"
+            }
+          ]
+        },
+        {
+          "key": "3453c94c973032ed",
+          "spoken": "This is a probability distribution: a number for each possibility, none negative, adding up to one. Stack the bars end to end, and they fill a bar of length one, a sliver per symbol, as wide as its probability. A guess, written down, shares one unit of belief among the possibilities.",
+          "duration": 18.0,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/3453c94c973032ed.float.wav",
+          "float_master_sha256": "2e9479562329ee055799bb7a669f28ef21920dd89f04be0bb2f029309326039c",
+          "files": [
+            {
+              "filename": "3453c94c973032ed.wav",
+              "sha256": "cd215d4ebb079bc301f309664af10a4d0b72a02361d94c963abcadb5414944b4"
+            },
+            {
+              "filename": "3453c94c973032ed.json",
+              "sha256": "5e01d20df44acfdfbb24f90cbae6e8de8c3d95cf92298c993a5792eb01b9bd39"
+            }
+          ]
+        },
+        {
+          "key": "c81adaf02df513d3",
+          "spoken": "But we rarely guess from nothing. Once you know the previous letter, the odds change. Here is the whole table: each row is a previous symbol, each square how likely the next one is. This is conditional probability: B given A is the probability of both, divided by that of A.",
+          "duration": 16.23,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/c81adaf02df513d3.float.wav",
+          "float_master_sha256": "a7f2c58c625ba2ef83ed8d49193a71f465e0aa781e5945bd092bc8d65bfc6201",
+          "files": [
+            {
+              "filename": "c81adaf02df513d3.wav",
+              "sha256": "e93660d6089382415aa1438c866e47801a75b30d6ed6407842b82656511592d5"
+            },
+            {
+              "filename": "c81adaf02df513d3.json",
+              "sha256": "9a43227b512f77d985debb48412e4df2560c025e76dfd6b78c4aa30e5f9fd32d"
+            }
+          ]
+        },
+        {
+          "key": "3cfe1f1a3589238e",
+          "spoken": "In our books, q appears 18,496 times, and all but 27 are followed by u. So u given q is 0.9985. After a space, though, almost anything can come next: a new word is starting.",
+          "duration": 15.81,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/3cfe1f1a3589238e.float.wav",
+          "float_master_sha256": "4f9f16da8c03d387207add67aa842c0f83531d138df8338d59784b719a9771c7",
+          "files": [
+            {
+              "filename": "3cfe1f1a3589238e.wav",
+              "sha256": "42586e48f1dec474b7acc59d7604b0481a37f80ad50dd888799b68d28d1df22a"
+            },
+            {
+              "filename": "3cfe1f1a3589238e.json",
+              "sha256": "5a2adc7efeb35dcc223eeade6fc9c0886fb7538dfa3e88c6762e4f3a2b3b40ac"
+            }
+          ]
+        },
+        {
+          "key": "a7fb898848bb71a1",
+          "spoken": "Multiply that definition out, and you get a rule for whole strings. The probability of two symbols is the probability of the first, times the probability of the second given the first. For three, treat the first two as a single event, and substitute.",
+          "duration": 14.07,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/a7fb898848bb71a1.float.wav",
+          "float_master_sha256": "3c0cbd5ad813d1c34119656f384e7aa99c26918a41b60cc74190b056c3ed6645",
+          "files": [
+            {
+              "filename": "a7fb898848bb71a1.wav",
+              "sha256": "ee188bc6b7f9ccd9c9ace4f9f82a1b1b70650462551ad5aaa483eff26218d032"
+            },
+            {
+              "filename": "a7fb898848bb71a1.json",
+              "sha256": "62806e5760cff1d0ae0a2f66f5481f3a66804034f6e05835297188435ff7b052"
+            }
+          ]
+        },
+        {
+          "key": "deb8955bfb723b49",
+          "spoken": "And so on, one symbol at a time. A whole text's probability is a product of next-symbol guesses, each knowing everything before it. This is the chain rule, and it is exact: no assumption made. It's why a machine that only guesses the next symbol can score, or write, a whole text.",
+          "duration": 17.67,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/deb8955bfb723b49.float.wav",
+          "float_master_sha256": "f918a58f865c78f7080ae31d41909613419cd0405d2acad1941edc7130893a4a",
+          "files": [
+            {
+              "filename": "deb8955bfb723b49.wav",
+              "sha256": "4a2548502631fa10399818a1dd30a86627c999e1dbc3fede34a955002c8c292f"
+            },
+            {
+              "filename": "deb8955bfb723b49.json",
+              "sha256": "556bb8c6a93c6a6cf5319db980d584ad47344e2ebd76d8218156a55351c8aa1b"
+            }
+          ]
+        },
+        {
+          "key": "5851bea2b02969b7",
+          "spoken": "Here's the chain rule as a picture. Someone has written, he said, and we want the chance that the next three letters are t, h, e. The first bar shares the whole unit of belief among the 27 next symbols, given the last three: i, d, space. t gets a sliver 0.155 wide.",
+          "duration": 18.25,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/5851bea2b02969b7.float.wav",
+          "float_master_sha256": "606bc07ca014436ce7d2723b0aa81e6b3ac93106b54106fefc22c2082f38353e",
+          "files": [
+            {
+              "filename": "5851bea2b02969b7.wav",
+              "sha256": "3b6eb91184bf5a97469779a1409744bec292a0040a6a70b95c43531b63cb316c"
+            },
+            {
+              "filename": "5851bea2b02969b7.json",
+              "sha256": "f082784ae0258ac2a75ca080e8d08a05d052745f0bcdf153e6d4c03c6e16bce2"
+            }
+          ]
+        },
+        {
+          "key": "24dd2911a531c7ab",
+          "spoken": "Now zoom into that sliver and share it out again, by the probabilities after d, space, t. h takes 61 percent of it. Zoom again: after space, t, h, e takes 70 percent. The final sliver's width is the product, 0.0666: the probability of the whole string.",
+          "duration": 19.0,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/24dd2911a531c7ab.float.wav",
+          "float_master_sha256": "f07d789d38bb8f6aad465d3b89a0a4c21ecc483a63ede0e8cd0871a5ba33836b",
+          "files": [
+            {
+              "filename": "24dd2911a531c7ab.wav",
+              "sha256": "8195d8aeaec9b32f7e3a86c3ef903b1e5ddfa8ca179eddb4fcad1ab8207a73b7"
+            },
+            {
+              "filename": "24dd2911a531c7ab.json",
+              "sha256": "a31b3084d2a96faf38ea1d36cd0bd3e1b7b730b0da31a84b572d9ac945384c6c"
+            }
+          ]
+        },
+        {
+          "key": "64f34a406f8254ac",
+          "spoken": "Keep this picture in mind: nested slivers, each one a guess. In chapter eight, it becomes a way to compress text.",
+          "duration": 7.22,
+          "float_master": "/workspace/cloud-production/jobs/fa228eb72d9731e8759f809df952c960ae41c99f1aaf5cb37a2edfb084dd726b/audio-masters/en/64f34a406f8254ac.float.wav",
+          "float_master_sha256": "b888b0c58473fa70c89db9895a158559e46d0d3371edcdac885eb68fc9eb5083",
+          "files": [
+            {
+              "filename": "64f34a406f8254ac.wav",
+              "sha256": "174ab7134c2e8878af4718d37a840442aaa62e2c6b0c7d4026c6073cb3a6fe90"
+            },
+            {
+              "filename": "64f34a406f8254ac.json",
+              "sha256": "ba47e88c4c5fbb5c67048cd73b1ea26028f792360c7f1ab73487ff82d7f8bc9d"
+            }
+          ]
+        }
+      ]
+    },
+    "audio_bytes_downloaded_or_changed": false,
+    "hashes_locally_verified_against_master_bytes": false
+  },
+  "measured_preflight_overruns": [
+    {
+      "scene": "Probability",
+      "mark": "b",
+      "block_start": 6.03,
+      "target_seconds": 18.79,
+      "actual_seconds": 18.94,
+      "late_seconds": 0.15000000000000213
+    },
+    {
+      "scene": "Probability",
+      "mark": "c",
+      "block_start": 90.49000000000001,
+      "target_seconds": 103.36000000000001,
+      "actual_seconds": 105.30000000000001,
+      "late_seconds": 1.9399999999999977
+    },
+    {
+      "scene": "Probability",
+      "mark": "a",
+      "block_start": 108.65000000000002,
+      "target_seconds": 111.39000000000001,
+      "actual_seconds": 111.85000000000002,
+      "late_seconds": 0.46000000000000796
+    }
+  ],
+  "preflight_limitations": "Actual verified cached speech, endpoint-only animation skipping. Predictive schedule check; no frame-rounded fullmotion, visual readability, actual hearing or futurevideo approval.",
+  "fix": "Scene-local proportional sequential duration budget from vo.mark_time minus vo.elapsed; nominal lengths retained when possible, positive one-frame floors and one rounding frame per play plus a cue frame reserve. No parallelization/order change.",
+  "invariants": {
+    "voiceover_context_expressions_ast_exact": 11,
+    "bookmarks": 18,
+    "all_animation_calls_arguments_and_order_except_run_time_ast_exact": true,
+    "other_scene_math_data_layout_ast_exact": true,
+    "changed_animation_duration_calls": 8,
+    "shared_helpers_or_audio_changed": false
+  },
+  "focused_test": {
+    "methods": 5,
+    "exit": 0,
+    "log": "focused-unittest.log.gz",
+    "actual_source_span_probes": 27,
+    "fps": [
+      15,
+      30,
+      60
+    ],
+    "adverse_frame_phases": [
+      0,
+      0.49,
+      1
+    ],
+    "old_overruns_reproduced": [
+      0.15,
+      1.94,
+      0.46
+    ],
+    "new_all_probe_deadlines_fit_at_least_one_frame": true
+  },
+  "source_owner_clearance": "Controlled rerender permitted on exactly this after-source. Production owner must verify actual frame-rounded motion/bookmark arrivals, sequential readability and narrated pacing before final approval. No full4K render or hearing performed here.",
+  "remaining": [
+    "Actual narrated full-motion rerender and exact cue checkpoints at production fps",
+    "Perceptual readability/pacing, listening and audio synchronization",
+    "Strict v5 overlay source gate and parent-controlled publication"
+  ]
+}

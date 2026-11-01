@@ -1,5 +1,29 @@
 # Parts 1–3: reviewed cloud production handoff
 
+## Probability + roadmap + reviewed Part 3 — controlled source gate v5
+
+The explicit **`--overlay part1-probability-roadmap-and-part3-v5`** permits **only** original base **`927fba668656a682b3e29a288de64130ddc680dd`** plus these four exact source replacements:
+
+| Repository path | Required SHA256 | Bytes |
+|---|---|---:|
+| `videos/ai/ai1/s01_hook.py` | `7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8` | 23,484 |
+| `videos/ai/ai1/s02_probability.py` | `50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed` | 25,682 |
+| `videos/ai/ai3/s08_svd.py` | `2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b` | 12,273 |
+| `videos/ai/ai3/s19_outro.py` | `e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24` | 17,361 |
+
+The [v5 manifest](evidence/production-handoff-parts1-3/overlays/part1-probability-roadmap-and-part3-v5.json) pins every before/after path, size, SHA256, Git blob/mode and source-review receipt. The Probability before source is exactly base927 SHA`f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620` (24,663 bytes). **There are no optional repository additions and no later full-HEAD authorization.** Part6 or other patches published on the same branch are excluded. Keep helper/metadata outside the target checkout, and extract only these exact source bytes into the base tree (or an equivalently exact four-source-only tree).
+
+**Probability50ff is cleared only for a controlled narrated rerender. Repaired motion/readability, pacing, listening, synchronization and final4K output are not approved by this gate.** The [actual source packet](evidence/ai1-probability-narrated-timing-repair/README.md) contains a new readable diagnostic, exact patch and five focused timing tests/27 frame-budget probes. New plainJSON Library`libfile_feb51a90381481919a09a3c54f87440e` is69,858 bytes, SHA`7f773060879f7b8c4b83262fd37bc207e462c6fda9a4c35389697aeb5f8eee5e`, read/reconstructed in full by the source owner and independently hash-checked from its saved compressed bytes for this gate. It reproduces the old0.15/1.94/0.46s lateness. The old ZIP route failed401 before transfer; it was not installed/hash-verified or retried. The new JSON is separate authorized evidence. Master IDs/hashes are producer-reported; audio bytes were not downloaded/listened to by this work.
+
+The repair changes eight duration arguments across three sequential spans plus a local VO-relative budget helper. All11 VO expressions,18 bookmarks, mathematics, animation objects/order/playcount, layout and speech keys/masters remain unchanged by AST/source checks. Other three replacement identities retain their earlier scopes. New narration candidates and voice-profile changes remain separate.
+
+```bash
+python "$HANDOFF_DIR/verify_handoff.py" --repo "$CLOUD_REPO" --strict-external --overlay part1-probability-roadmap-and-part3-v5
+# Optional existing Information audio remains the same exact six-pair whitelist.
+```
+
+[Actual v5 gate evidence](evidence/production-handoff-parts1-3/overlay-probability-v5-checks/README.md) records66 portable tests and17 actual isolated-cloud outcomes, including strict268-file base/four-source worktree/commit passes, old-default/v1–v4 rejection, originalv4 acceptance without Probability, and retained data/runtime/HEAD rejection cases. Every original source/cache/runtime/public-model/optional-audio check remains; this does not implement an inherited renderer producer guard or approve output. Earlier v1–v4 manifests and the original54-test file stay byte-exact. Old full-suite604 receipts predate Probability/v5 and are not a new combined suite claim; root runs/releases any new full suite separately. No data/model/archive transfer or local task is reactivated.
+
 ## Part 1 roadmap plus reviewed Part 3 sources — controlled rerender overlay v4
 
 Use explicit **`--overlay part1-roadmap-and-part3-v4`** only for the original **`927fba668656a682b3e29a288de64130ddc680dd`** tree with exactly these three replacements:

@@ -1,0 +1,59 @@
+{
+  "scope": "Preparation only, not a production source overlay manifest or approval.",
+  "proposed_overlay_id": "part1-probability-roadmap-and-part3-v5",
+  "candidate_probability_supplied": false,
+  "registered_for_production": false,
+  "actual_copied_input_preflight_attempted": false,
+  "expected_closed_paths": [
+    "videos/ai/ai1/s01_hook.py",
+    "videos/ai/ai1/s02_probability.py",
+    "videos/ai/ai3/s08_svd.py",
+    "videos/ai/ai3/s19_outro.py"
+  ],
+  "production_manifest_exists": false,
+  "tests": {
+    "passed": 66,
+    "seconds": 2.873,
+    "original_tests_byte_exact": true,
+    "original54_preserved": true,
+    "new_synthetic_or_hold": 12
+  },
+  "helper_preparation_sha256": "1a29c49a435bb06429f924db324c1b33e6134961df1142d08f93b6e8fb4bff0b",
+  "existing_v4_manifest_sha256": "f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3",
+  "original_tests_sha256": "3babfe70739a7146df1c4f84176ae80452722b770a4c22c0c83b8efdeecb2a69",
+  "new_synthetic_tests_sha256": "4e05e280308b395931f0384b100180c65246aa7ce351cb15ae9794bdf35ed097",
+  "external_and_audio_AST_unchanged": true,
+  "library_failure_relay": {
+    "action": "search-result library_download",
+    "target": "libfile_77b16ea755508191841d9a3f2ae31b9b",
+    "reason": "HTTP401 hosted-apps tools/list before transfer",
+    "installed_bytes": false,
+    "this_task_retry_delegation_or_bypass": false
+  },
+  "remaining": [
+    "Actual parent-supplied Probability diagnostic/patch review",
+    "Exact reviewed Probability after identity and evidence receipts",
+    "Only then register byte-pinned v5 manifest and run fresh independent strict frozen-input fixture",
+    "Repaired narrated output remains separate timing/playback/listening acceptance gate"
+  ],
+  "payloads": [
+    {
+      "path": "initial-state.json.gz",
+      "bytes": 429,
+      "sha256": "5e5edc4a33b4888548db49b84f527c07f564d0d22dc8c40b9e5e023af076af70",
+      "raw_sha256": "63024977ae10fad81fcb180e93c074847eda8981b3376b870947377d755ec954"
+    },
+    {
+      "path": "synthetic-tests.log.gz",
+      "bytes": 1589,
+      "sha256": "e5c38cc52834d3d47f6e593ebcc12aa633278101c58f8c8ec7d87ddfffb27433",
+      "raw_sha256": "6b89bf5c00aaf4f66546dc54ecae1ecf02c8475d4a2b483340be6ff4498974e4"
+    },
+    {
+      "path": "synthetic-tests.py.gz",
+      "bytes": 2721,
+      "sha256": "06332233954c87936a24b20edd6c1342bb62230005412572feb85e63b50bc77f",
+      "raw_sha256": "4e05e280308b395931f0384b100180c65246aa7ce351cb15ae9794bdf35ed097"
+    }
+  ]
+}

@@ -15,9 +15,14 @@ BASE = '927fba668656a682b3e29a288de64130ddc680dd'
 SVD = 'videos/ai/ai3/s08_svd.py'
 OUTRO = 'videos/ai/ai3/s19_outro.py'
 HOOK = 'videos/ai/ai1/s01_hook.py'
+PROBABILITY = 'videos/ai/ai1/s02_probability.py'
+PROBABILITY_OVERLAY = 'part1-probability-roadmap-and-part3-v5'
+# V5 is registered only by the exact reviewed manifest byte pin below.
 ROADMAP = 'part1-roadmap-and-part3-v4'
 COMBINED = 'part3-svd-outro-production-v3'
 KNOWN_OVERLAYS = {
+    PROBABILITY_OVERLAY: ('overlays/part1-probability-roadmap-and-part3-v5.json',
+                          '6bc668f43c97b0d9867b2ab323c2d337599a5c4417c9fb5eb01644d7e9a7dbce'),
     ROADMAP: ('overlays/part1-roadmap-and-part3-v4.json',
               'f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3'),
     COMBINED: ('overlays/part3-svd-outro-production-v3.json',
@@ -53,7 +58,7 @@ def load_overlay(name, errors):
     except (OSError, ValueError) as exc:
         errors.append('Overlay manifest unavailable/invalid: ' + type(exc).__name__)
         return None
-    version = 2 if name in (COMBINED, ROADMAP) else 1
+    version = 2 if name in (COMBINED, ROADMAP, PROBABILITY_OVERLAY) else 1
     if (not isinstance(overlay, dict) or type(overlay.get('schema_version')) is not int
             or overlay['schema_version'] != version):
         errors.append(f'Overlay manifest schema_version must be exactly {version}.')
@@ -69,7 +74,8 @@ def load_overlay(name, errors):
         replacements = source_replacements(overlay)
         before = [row['before']['path'] for row in replacements]
         after = [row['after']['path'] for row in replacements]
-        expected_paths = ([HOOK, SVD, OUTRO] if name == ROADMAP
+        expected_paths = ([HOOK, PROBABILITY, SVD, OUTRO] if name == PROBABILITY_OVERLAY
+                          else [HOOK, SVD, OUTRO] if name == ROADMAP
                           else [SVD, OUTRO] if name == COMBINED else [SVD])
         evidence = overlay['optional_evidence_files']
         valid_paths = (before == after == expected_paths
@@ -79,7 +85,7 @@ def load_overlay(name, errors):
         # Multi-source releases deliberately authorize no extra repository
         # files. Its pinned review receipts are external metadata, not a broad
         # whitelist for copying an evidence/producer tree into the target.
-        if name in (COMBINED, ROADMAP):
+        if name in (COMBINED, ROADMAP, PROBABILITY_OVERLAY):
             valid_paths = valid_paths and evidence == []
     except (KeyError, TypeError, AttributeError):
         valid_paths = False
@@ -164,7 +170,8 @@ def overlay_tree_checks(repo, head, overlay, errors):
         if (target.is_symlink() or not target.is_file()
                 or bool(target.stat().st_mode & 0o111) != (after['git_mode'] == '100755')
                 or target.stat().st_size != after['bytes'] or digest(target) != after['sha256']):
-            label = {SVD: 'SVD', OUTRO: 'Outro', HOOK: 'Part1 Hook'}[after['path']]
+            label = {SVD: 'SVD', OUTRO: 'Outro', HOOK: 'Part1 Hook',
+                     PROBABILITY: 'Part1 Probability'}[after['path']]
             errors.append(f'Overlay requires the exact reviewed {label} after bytes: ' + after['path'])
 
 
@@ -249,7 +256,7 @@ def main():
     parser.add_argument('--repo', type=Path, required=True)
     parser.add_argument('--strict-external', action='store_true')
     parser.add_argument('--optional-audio', action='store_true')
-    parser.add_argument('--overlay', help='Explicit reviewed overlay ID; svd-reveal-v1, svd-production-polish-v2, part3-svd-outro-production-v3, or part1-roadmap-and-part3-v4.')
+    parser.add_argument('--overlay', help='Explicit reviewed overlay ID; svd-reveal-v1, svd-production-polish-v2, part3-svd-outro-production-v3, part1-roadmap-and-part3-v4, or part1-probability-roadmap-and-part3-v5.')
     args = parser.parse_args()
     result = verify(args.repo, strict_external=args.strict_external,
                     optional_audio=args.optional_audio, overlay_id=args.overlay)

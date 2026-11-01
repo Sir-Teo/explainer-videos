@@ -1,0 +1,8 @@
+{
+  "created_utc": "2026-11-01T07:26:15.240275+00:00",
+  "runtime_report_sha256": "dfbe89752c3b893774b58c523a543b33852dc21783edb71ac4df831d8477ea04",
+  "repair_freeze_sha256": "0f2c3cac1cf95b6a39fd3153cd6935f8c5436bd2ca6edb1e263964a065fe59c9",
+  "scope": "Complete paired baseline selected-image review and source-only repairs; fresh repaired output acceptance pending.",
+  "full_runtime_originals_retained": true,
+  "all_payloads_verified": true
+}

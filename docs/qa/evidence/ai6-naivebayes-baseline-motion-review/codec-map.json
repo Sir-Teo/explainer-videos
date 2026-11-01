@@ -1,0 +1,871 @@
+{
+  "artifacts": [
+    {
+      "path": "receipts/data-immutability-final.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/data-immutability-final.json",
+      "decoded_sha256": "44865622b94e4ba0b117d47574911d3a0e75c9dd8b6bdbe97e9565c768b1a1b5",
+      "decoded_bytes": 14938,
+      "encoded_sha256": "3432b79f4eb607bb820161d4a992da41d816e4111e5efb8de06324267cdee820"
+    },
+    {
+      "path": "receipts/en/audit/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/result.json",
+      "decoded_sha256": "d132ef977bbe3290c8a8ae1540fac3e782c2591cdda946a8e2af0c08bf68b4e8",
+      "decoded_bytes": 157458,
+      "encoded_sha256": "5a338646f9045161627580477d7383c1197e5e94526a005900ccdc3801778e94"
+    },
+    {
+      "path": "receipts/en/audit.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit.log",
+      "decoded_sha256": "597a954861c64f0a1cc5c766201267f281f23ac0864e86f1ec8bed0f7b84103d",
+      "decoded_bytes": 96,
+      "encoded_sha256": "194e3b2796774b818378c19a945373e07e68a6ef75c21a0a03209e6939a3be80"
+    },
+    {
+      "path": "receipts/en/endpoints/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints/command.json",
+      "decoded_sha256": "359b4d71c417fab49d676d0d79c22dc1b1fd5ba45a89b93e8e30cdc6880938e6",
+      "decoded_bytes": 737,
+      "encoded_sha256": "2cc6fcc35d8c616dda5ffad4b9de514501322e5984c97977689c4f38567af28a"
+    },
+    {
+      "path": "receipts/en/endpoints/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/en/endpoints/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/en/endpoints/raw-copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints/raw-copy-manifest.json",
+      "decoded_sha256": "9bf4762e725a665ed9513d4fa0ff7e4127ac9e29113945aeda3db92f996f97b6",
+      "decoded_bytes": 5298,
+      "encoded_sha256": "cdab4b8d5043f888fcfe8faf88577f6c131b54ed1efe946735a7233509d8539f"
+    },
+    {
+      "path": "receipts/en/endpoints/raw-result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints/raw-result.json",
+      "decoded_sha256": "982763a875a89deb5f18b57a8ff7edf813453131c80c2e5a1ced20f6fa196936",
+      "decoded_bytes": 63731,
+      "encoded_sha256": "2c6d868d52695a7a34a8f7aa37458c866b02ade807388f6efd7c0fe10db1919d"
+    },
+    {
+      "path": "receipts/en/endpoints/raw-text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints/raw-text.jsonl",
+      "decoded_sha256": "4b026e3a2891650f4ea49ee52d1b4915a5050de0f8a91af68a98ec4263d26caf",
+      "decoded_bytes": 8145,
+      "encoded_sha256": "b30eef054fcb14949d0fd4043cb9dd35f69996755dc5d5a43c6ae9a4a6a368f7"
+    },
+    {
+      "path": "receipts/en/endpoints/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints/receipt.json",
+      "decoded_sha256": "d0e5d5e8abea77572d54d52ebaf8f7a832efd4f058296bc14fd894a5c88afabc",
+      "decoded_bytes": 6125,
+      "encoded_sha256": "3f77f51587c8d488c6065739d831b4323369c4e434509b85444651ff20936c65"
+    },
+    {
+      "path": "receipts/en/endpoints/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints/source-after.json",
+      "decoded_sha256": "d98692d4c82c9a5e1657c21e90bea622f207c2e0ade91387266991d9ab01cb93",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "3d5e67882ba44a4e494db4df7bd902969aca3d7a252b00b6a50ced38402afb8d"
+    },
+    {
+      "path": "receipts/en/endpoints/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints/source-before.json",
+      "decoded_sha256": "b1bba1979c57b0440170ec01921a594de82601b729c048725ad034f2ecc4d37e",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "2418573c55fcefb7d899eef2d0f59232ea1270116b0af369f3297eebcf71b7c6"
+    },
+    {
+      "path": "receipts/en/endpoints-views/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints-views/plan.json",
+      "decoded_sha256": "52306d8ec9332feda5ec0487d06de707562900795e6ba97b4e7886cb2e5cfa1e",
+      "decoded_bytes": 49440,
+      "encoded_sha256": "dfe3998d59fd2b2ffcb8038144a224c81f5eb3a2848c773d07c10348a3b06835"
+    },
+    {
+      "path": "receipts/en/endpoints-views/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints-views/views.json",
+      "decoded_sha256": "22fe7029ad024eb6d6392f142bbbceefdaa2dd4aa3a22bd2db238970c8574ca8",
+      "decoded_bytes": 3439,
+      "encoded_sha256": "75a38c8490983df551715722625ec793d4299672541fbba049ea4ba6e9cc469a"
+    },
+    {
+      "path": "receipts/en/motion/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion/command.json",
+      "decoded_sha256": "ca12da2f99b6e1208971de11cd6cec7d18718da9c78150492e1ad4da007aa88c",
+      "decoded_bytes": 753,
+      "encoded_sha256": "700456a22b3f7f12c78489b78d5570f91378c135ac19a9c91e3f2e064a66d519"
+    },
+    {
+      "path": "receipts/en/motion/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/en/motion/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/en/motion/raw-copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion/raw-copy-manifest.json",
+      "decoded_sha256": "25cca4cdbd012e2bed4f6436b6f763aafa15da284b26c9acb963ca86b448fcc4",
+      "decoded_bytes": 7475,
+      "encoded_sha256": "145ac0ed984856397a2cc01d43e7c6602d00afdc1a4548ce1dbb4bbd0a47c7ac"
+    },
+    {
+      "path": "receipts/en/motion/raw-result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion/raw-result.json",
+      "decoded_sha256": "a78a240e9cf93568f21fa64e78174d78412bc1e307a121a038ea1d0236f28982",
+      "decoded_bytes": 64000,
+      "encoded_sha256": "f62c53894699a139be6aa457220f80c95949b6aeb55bd8c9e3d1d76411018e64"
+    },
+    {
+      "path": "receipts/en/motion/raw-text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion/raw-text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/en/motion/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion/receipt.json",
+      "decoded_sha256": "f3ec767e1dd9f73bf0222706f7979edc2b550fed78c7a707bf31e61eb35d478b",
+      "decoded_bytes": 8381,
+      "encoded_sha256": "13d2ef6b9df4586e0f635722e36ee1e0e4168e5a5a23f66f3b0d297d5e2b470e"
+    },
+    {
+      "path": "receipts/en/motion/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion/source-after.json",
+      "decoded_sha256": "9b712430ee0ef04b683a784b1433d83fba8d36b9759747df279326408037f7e5",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "0b0f8ac61eb6a1319f76b3328e82daef7d509a66d196920279e6e3a14e6999ad"
+    },
+    {
+      "path": "receipts/en/motion/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion/source-before.json",
+      "decoded_sha256": "98bae3fef2cb800bf959530436cffa3b2ccb21767ccffe88c579d0a07e1241ae",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "6fef993354763c2d329c4ad04414e8561339abd2cde8e41834f1b0cbdf601206"
+    },
+    {
+      "path": "receipts/en/motion-views/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion-views/plan.json",
+      "decoded_sha256": "10812763674cc62597866ae2b6ee458c97002c9f9c344548312b4a1baa131932",
+      "decoded_bytes": 258109,
+      "encoded_sha256": "f58b3c0dc852ebf8a1daa7112eca556f14fa482dd9b5432cfe09b08bd0938c22"
+    },
+    {
+      "path": "receipts/en/motion-views/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion-views/views.json",
+      "decoded_sha256": "a6e56aede79d3721ff92c74710ddacd550069408721934b907a818df60d7bf1a",
+      "decoded_bytes": 23774,
+      "encoded_sha256": "5d288f3d99ed4071a300a2ee8ed7e8f1da5508af42c21c675d5cc07054a114a7"
+    },
+    {
+      "path": "receipts/extract-complete.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/extract-complete.json",
+      "decoded_sha256": "883fbb340bcdb5de6f212c355b84cd29b7b44af64dc12ade64dca316632521a3",
+      "decoded_bytes": 123,
+      "encoded_sha256": "3c6e5af6ae3e6608a6676e2310ef9582b1851d52137055e982b3feb5ec460bf2"
+    },
+    {
+      "path": "receipts/finalize.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/finalize.py",
+      "decoded_sha256": "401096166a109d7a7c7496cfdf964e38a0d8136b49cba2f35006ecf27258fd0c",
+      "decoded_bytes": 11545,
+      "encoded_sha256": "8ec461bffadfde6448b807595a71a97e6ee30950355fab969fca0fbe56cdd44a"
+    },
+    {
+      "path": "receipts/freeze.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/freeze.json",
+      "decoded_sha256": "eed3f7e1cf65602aed46308b6c6c9fea230339b7d76cd55ca321114979ae1f52",
+      "decoded_bytes": 28743,
+      "encoded_sha256": "993c437851e5f75ccf8a6e81f82b182cc5f11558f7f8940b8ec90db097e090f3"
+    },
+    {
+      "path": "receipts/index-at-freeze.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/index-at-freeze.json",
+      "decoded_sha256": "39ffb10552e4c740f4d6187ac0598c1b277dc768da665e998c4bb52eeaf2e14a",
+      "decoded_bytes": 76843,
+      "encoded_sha256": "c05b2f29b9b47248e115bc3b69f4fc63104b0cbec04238135edd2361931401cc"
+    },
+    {
+      "path": "receipts/local-repair/after.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/local-repair/after.py",
+      "decoded_sha256": "096df1ad04b1b9c22c0ee27f5a925171f263153fc8bf179579a1e66b78ac9639",
+      "decoded_bytes": 13915,
+      "encoded_sha256": "ca76026143b67eac4b85cb4686c6e26bf1d6633378c388b82521d0a27e6a9c53"
+    },
+    {
+      "path": "receipts/local-repair/before.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/local-repair/before.py",
+      "decoded_sha256": "2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf",
+      "decoded_bytes": 13380,
+      "encoded_sha256": "36dfe15d58ae2b0de59af38b65191042ff48e013d782e5abf7430f55146d0b1d"
+    },
+    {
+      "path": "receipts/local-repair/existing-twelve-tests.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/local-repair/existing-twelve-tests.log",
+      "decoded_sha256": "15b7ed8822df382243d316c4d5103b4834afcf327c6424c2a462e7e672396128",
+      "decoded_bytes": 2670,
+      "encoded_sha256": "4f8a7780a9f6a8f3a4a41754d911502151e9f577c3efde2b741e184f307edebf"
+    },
+    {
+      "path": "receipts/local-repair/freeze.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/local-repair/freeze.json",
+      "decoded_sha256": "0f2c3cac1cf95b6a39fd3153cd6935f8c5436bd2ca6edb1e263964a065fe59c9",
+      "decoded_bytes": 856,
+      "encoded_sha256": "73bf856def91ba81557afea686fa0096e1533f7ad67814761fbaa64477cd4681"
+    },
+    {
+      "path": "receipts/local-repair/geometry.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/local-repair/geometry.json",
+      "decoded_sha256": "6f5111ddad3b82bc2ffd3f05fffea6d9c30adfac94126fc16376a3d512689abc",
+      "decoded_bytes": 53446,
+      "encoded_sha256": "f55f941f0536d33b6a3b1c517890472a2101371f5d624dd44a35cf4707e14928"
+    },
+    {
+      "path": "receipts/local-repair/geometry.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/local-repair/geometry.log",
+      "decoded_sha256": "11ca6d96a3c54680c7a091751089b51e28d0d6e83104cbf2449e2af0de17c35e",
+      "decoded_bytes": 35476,
+      "encoded_sha256": "ac65c729c7613f1d945c9447058f7dfda282d1d83d0af6f32133d76f17046420"
+    },
+    {
+      "path": "receipts/local-repair/initial-env-import-failure.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/local-repair/initial-env-import-failure.log",
+      "decoded_sha256": "c6481539d15663bd000e0519e357d9483549a83baf85805d0b12a59b7591f9a9",
+      "decoded_bytes": 220,
+      "encoded_sha256": "f234ffb986bd917f3fae6d29d6a5db761d2c1e53f40f3b088126eb55fc990564"
+    },
+    {
+      "path": "receipts/local-repair/source.patch.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/local-repair/source.patch",
+      "decoded_sha256": "8eafe00ccb76c509de19bf719c0be8a159e9123d6d15ee8e3b3466b3e8d5a8ee",
+      "decoded_bytes": 2978,
+      "encoded_sha256": "56ec632dcf5a400fddbdaeeef7b6285f1d527143c625993e3eb9907f5bc84ff5"
+    },
+    {
+      "path": "receipts/local-repair/validate.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/local-repair/validate.py",
+      "decoded_sha256": "5b9b7661226ca07fb673cedd09073441be06f51118acf0669809da263da272b1",
+      "decoded_bytes": 7435,
+      "encoded_sha256": "2c2bb4e2b638044a746460b654ad4399cbbba5eb6957d1cc5cd444ddb3de6075"
+    },
+    {
+      "path": "receipts/observed-source/tools/qa_motion.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/observed-source/tools/qa_motion.py",
+      "decoded_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "decoded_bytes": 19437,
+      "encoded_sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2"
+    },
+    {
+      "path": "receipts/observed-source/videos/ai/ai6/common.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/observed-source/videos/ai/ai6/common.py",
+      "decoded_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+      "decoded_bytes": 9415,
+      "encoded_sha256": "2f0afe61a44325121ef07e1471b31fa35858167ff54f656ca5695fa73acdb789"
+    },
+    {
+      "path": "receipts/observed-source/videos/ai/ai6/s08_bayes.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/observed-source/videos/ai/ai6/s08_bayes.py",
+      "decoded_sha256": "2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf",
+      "decoded_bytes": 13380,
+      "encoded_sha256": "36dfe15d58ae2b0de59af38b65191042ff48e013d782e5abf7430f55146d0b1d"
+    },
+    {
+      "path": "receipts/observed-source/videos/ai/ai6/zh_lines.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/observed-source/videos/ai/ai6/zh_lines.py",
+      "decoded_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+      "decoded_bytes": 77583,
+      "encoded_sha256": "89381de1b997727bb1f58723c8a912e69da21c0ce5aefda51447d7443e1b6fd6"
+    },
+    {
+      "path": "receipts/observed-source/videos/ai/ai_text_zh.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/observed-source/videos/ai/ai_text_zh.json",
+      "decoded_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+      "decoded_bytes": 2440019,
+      "encoded_sha256": "7276faa9505120625908facd80a3c23880e383cc31427f0c708cebc4ecf0f513"
+    },
+    {
+      "path": "receipts/preparation.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/preparation.log",
+      "decoded_sha256": "8a433544366ab7cde6e2a65b7175deda78d510a7d8255cb99b4ae2d21fc3b6e4",
+      "decoded_bytes": 98,
+      "encoded_sha256": "fbc24fca5a19426b4cbbc35e03a6f4ab92d3644c6ad9007927f7be449b764377"
+    },
+    {
+      "path": "receipts/prepare.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/prepare.py",
+      "decoded_sha256": "a26f37e735890cc3ef10973565cdfd262e45ed3f6773fc4b68dd1d9b94bb2326",
+      "decoded_bytes": 3689,
+      "encoded_sha256": "320720125f64acf5320b847a53cb08c62def1cf456bc7883325bcaf8712f858d"
+    },
+    {
+      "path": "receipts/raw-scientific-visual-values.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/raw-scientific-visual-values.json",
+      "decoded_sha256": "565339a9c1a7a2b6dd4ffbf5ca1bebc078acd44fdcd236f1f4bc2d2995ad5e54",
+      "decoded_bytes": 9341,
+      "encoded_sha256": "6032df0f1ea463d82ac2c1e7341b9a1573976efcba96a4d46e270a780b3b9d5f"
+    },
+    {
+      "path": "receipts/report.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/report.json",
+      "decoded_sha256": "dfbe89752c3b893774b58c523a543b33852dc21783edb71ac4df831d8477ea04",
+      "decoded_bytes": 124959,
+      "encoded_sha256": "976e6228929a5c7f0ea1134098a8d7bb9b89a05b5117c2565ddc9a68b20996f0"
+    },
+    {
+      "path": "receipts/report.md.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/report.md",
+      "decoded_sha256": "b373967262d04041e661029ecacb988b64c01512ef378904f04a8022f22128b3",
+      "decoded_bytes": 1416,
+      "encoded_sha256": "fc53155dc041cf72150cfe56da9078da2b1f7e8f50c586d694bd03a86d1105b7"
+    },
+    {
+      "path": "receipts/review_helper.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/review_helper.py",
+      "decoded_sha256": "8eb15fee0fe42cae72651df30277dcfa0fe7021dce6a35d253cd5694c2ddd3ef",
+      "decoded_bytes": 3348,
+      "encoded_sha256": "de39cff74fdcd84192394266d3cab23b3b62469a67da6c07d3ba82cae9a24421"
+    },
+    {
+      "path": "receipts/root-common-scope-clearance.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/root-common-scope-clearance.json",
+      "decoded_sha256": "63e16546f71bb2ae208f28123959a4699357e0c6bfc307de84e1aab6632f6b77",
+      "decoded_bytes": 1248,
+      "encoded_sha256": "dc3fff50be55edea749109727dc92b8896c865771301f567f00ac135ea35089e"
+    },
+    {
+      "path": "receipts/source-scope-reconciliation.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/source-scope-reconciliation.json",
+      "decoded_sha256": "b6995298817113c8d75215b355b264101a30dc96fd0d61a10ae7dd157863f235",
+      "decoded_bytes": 964,
+      "encoded_sha256": "dd2cac98cce2bade0cd9670297955660e24d9c44de7c7e6bbd7b52bf242d012b"
+    },
+    {
+      "path": "receipts/zh/audit/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/result.json",
+      "decoded_sha256": "b3e5507972d8e4c37df01adc0810ec8a422e28ec8430c2fa8195ab7d5f930a62",
+      "decoded_bytes": 166392,
+      "encoded_sha256": "bf9ecbdf800b79aaf0fdd19507e98411c1db438c0916798a87d27bf4a51e51f5"
+    },
+    {
+      "path": "receipts/zh/audit.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit.log",
+      "decoded_sha256": "0202519bbff561777d22b1549802833f552614ff3a72c7d174937fda237567d8",
+      "decoded_bytes": 96,
+      "encoded_sha256": "e48df551cccbbcb779aeea30f4d82a8cac9ffb6b6831f8ba0bf9015c774aa337"
+    },
+    {
+      "path": "receipts/zh/endpoints/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints/command.json",
+      "decoded_sha256": "e6688977ec0c5888df7829bd73b53a1d4e10bb0290d7e840c6321e92a70cee65",
+      "decoded_bytes": 737,
+      "encoded_sha256": "0268b5922240bb2086e847fecf97d3f1eceb63eeec29a2623c5077dfc70f78f7"
+    },
+    {
+      "path": "receipts/zh/endpoints/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/zh/endpoints/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/zh/endpoints/raw-copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints/raw-copy-manifest.json",
+      "decoded_sha256": "029a3d3c62f78d64a587015ed8d55c27ac8a37a139584896fde3e53b13ce3a34",
+      "decoded_bytes": 5298,
+      "encoded_sha256": "03bf6c67768f203ef71f1e0b41e00eb27acca99b2fdb7b7094167cda9380f8bc"
+    },
+    {
+      "path": "receipts/zh/endpoints/raw-result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints/raw-result.json",
+      "decoded_sha256": "963fe2bae452d4ae2312f04cb3348383dc35af2e880e55f8546d48817cecec97",
+      "decoded_bytes": 82472,
+      "encoded_sha256": "8a3d1477d554c615c8479e304e3f3a38e3866f9769a6757c253f8ea43c5f162c"
+    },
+    {
+      "path": "receipts/zh/endpoints/raw-text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints/raw-text.jsonl",
+      "decoded_sha256": "e0106140dca685c615963a29971d4d3ba63fb6f098766a6f6eb3ee96969444e2",
+      "decoded_bytes": 8011,
+      "encoded_sha256": "837593c6e8cacbe90335d7d19c100caa3a42faefbef7fdb1fca27d39d2169423"
+    },
+    {
+      "path": "receipts/zh/endpoints/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints/receipt.json",
+      "decoded_sha256": "189fb6f75758dcbf21da896a960dda38513ed36633265f2b061f1469c67f320b",
+      "decoded_bytes": 6124,
+      "encoded_sha256": "67bd174e07d834041d2ff0203f97e4ec999cc25bdd753112cb44b696e8f9b899"
+    },
+    {
+      "path": "receipts/zh/endpoints/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints/source-after.json",
+      "decoded_sha256": "929d21863a70623dc4c32ccbbdb4b4ef3ba75eb743b85ad57bf7699f48f08a18",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "c786e239eb8346299528b6bb21788fc935c68052e0aaa8537fd4c7195f8f2985"
+    },
+    {
+      "path": "receipts/zh/endpoints/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints/source-before.json",
+      "decoded_sha256": "8b470eab35f2ebb78031f5f70756320a12d781c98a16c8f39326577b7cbaba6c",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "d463a56f5a1fdf66a4a723c192075c3fa003848191e39728526bfed5f8c38c19"
+    },
+    {
+      "path": "receipts/zh/endpoints-views/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints-views/plan.json",
+      "decoded_sha256": "ed5bb3d1a6b4323ffbfa7fa6c4fc29d92fa7e20aa20d7f90dcbee6a7c21e1826",
+      "decoded_bytes": 52330,
+      "encoded_sha256": "b39d2ddba3000f4c460f6196a4c82cbf2ffd53ac0462d0fbd1a69e0b1ac3b5ad"
+    },
+    {
+      "path": "receipts/zh/endpoints-views/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints-views/views.json",
+      "decoded_sha256": "abb19ff0f7bdf132bd72020ed033dac79d1843cd09ebdc900352710037b85dd0",
+      "decoded_bytes": 3864,
+      "encoded_sha256": "ab738d594030f193c23d6ec56d3d7a2cdfeb9bd7ce0e12a71bfd1190f37146f4"
+    },
+    {
+      "path": "receipts/zh/motion/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion/command.json",
+      "decoded_sha256": "7718e60557a1cf3689890f0dc9e2497604a2f8118090529809c525e3ea4b05ad",
+      "decoded_bytes": 753,
+      "encoded_sha256": "4b0f2afd32eeb58fd7ce32ca1d40ce95b943ea2f31f3d0fb2b2cb0149d01623b"
+    },
+    {
+      "path": "receipts/zh/motion/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/zh/motion/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/zh/motion/raw-copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion/raw-copy-manifest.json",
+      "decoded_sha256": "62199167a5fa66760357a35fecc284f69f2c36cc4adff11d041d97cd02fa10bd",
+      "decoded_bytes": 7541,
+      "encoded_sha256": "c1725166b5f965aaea2e6cbdb3d83bd696413920fb91aed91606977fbc0b5cea"
+    },
+    {
+      "path": "receipts/zh/motion/raw-result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion/raw-result.json",
+      "decoded_sha256": "5026e8dcfb2c3e2adf7f2743fd9771e75a41e0122097caabc517ad3e603488e4",
+      "decoded_bytes": 82804,
+      "encoded_sha256": "831c989305e5cae43e48c58a404edc0aa9b3b06b2506db59a96849ccc4b61a82"
+    },
+    {
+      "path": "receipts/zh/motion/raw-text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion/raw-text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/zh/motion/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion/receipt.json",
+      "decoded_sha256": "1d1e689f4c44f280e81de1de6c9586c106218e34f4c8c7aa4bba26b463ee2f52",
+      "decoded_bytes": 8518,
+      "encoded_sha256": "0806b64ecd59444d5730eaeb1895fa8dd8cc08a69706df982e54e84c5cc84db3"
+    },
+    {
+      "path": "receipts/zh/motion/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion/source-after.json",
+      "decoded_sha256": "26f512d9df6293b1e21a2774141c6c33899e59c2056beae7d599b2e7f592ad9b",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "24a2dcb6bb38988705858f681c6770e55d9ea51d6145c64b36828706c0c81882"
+    },
+    {
+      "path": "receipts/zh/motion/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion/source-before.json",
+      "decoded_sha256": "2df00185319283a087a704a9d88513379831b12f65c5b7b5e7193ee7386e3a22",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "3e9db7789379bd9742131df62be341d0f410326a617a28e19a0185496fe5544f"
+    },
+    {
+      "path": "receipts/zh/motion-views/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion-views/plan.json",
+      "decoded_sha256": "667b580383dda6dbd9747f5d5024b75d5435df6b02ea7a95acf61fa0808feb8d",
+      "decoded_bytes": 269270,
+      "encoded_sha256": "64649c825488b1c44c905dc563008347006754170db649e817c430061ccede5b"
+    },
+    {
+      "path": "receipts/zh/motion-views/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion-views/views.json",
+      "decoded_sha256": "3df483c6a2fc41eccd29db4df875e17da8db83ee2c56994ffd0110f7146e8167",
+      "decoded_bytes": 21141,
+      "encoded_sha256": "96424421b5a64f04a785fc8e316dbfdd53c0e92871a8db223a81b863f9904195"
+    },
+    {
+      "path": "critical-originals/en/endpoints/0007.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/08-NaiveBayes/en/endpoints/completed/007_00070.2s.png",
+      "original_sha256": "03389ac817672d52e1d81eb34fae27b80f07579402bc74e6a96d5f85923f0278",
+      "bytes": 54083
+    },
+    {
+      "path": "critical-originals/en/endpoints/0009.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/08-NaiveBayes/en/endpoints/completed/009_00091.2s.png",
+      "original_sha256": "1565b3d49c49b9dc9a12abec75c4cb238cbb0b5cafa5e99ea794110a44320b18",
+      "bytes": 67047
+    },
+    {
+      "path": "critical-originals/en/endpoints/0012.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/08-NaiveBayes/en/endpoints/completed/012_00142.1s.png",
+      "original_sha256": "99f2a19ed2b3b35c1dcfeb0bb20baea65f356a9c864ac5ea689a7ecbfc95e362",
+      "bytes": 60295
+    },
+    {
+      "path": "representative-pages/en/endpoints/001.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints-views/page-001.png",
+      "original_sha256": "be7eec7bf0254b78b8c85eb72044f9b732eeafd9353bcad5b0bf445fe059ce84",
+      "bytes": 121164
+    },
+    {
+      "path": "representative-pages/en/endpoints/002.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints-views/page-002.png",
+      "original_sha256": "83e0f09037fd0f993305b628691300984c65a68c2aed5ae1455a1fb8a46aed69",
+      "bytes": 165631
+    },
+    {
+      "path": "representative-pages/en/endpoints/003.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints-views/page-003.png",
+      "original_sha256": "320ba3db37b817b56a2cb9a649099acb7f6d651de6712de65891486a382f71f3",
+      "bytes": 109432
+    },
+    {
+      "path": "representative-pages/en/endpoints/004.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/endpoints-views/page-004.png",
+      "original_sha256": "405b8c38a72197fded655d0af6eb3f3c55b94857434f3219ce262bea04963af3",
+      "bytes": 56281
+    },
+    {
+      "path": "critical-originals/en/motion/0051.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0000253_000016.866s.png",
+      "original_sha256": "84e5671eb9dc63f83648c0827878cb45cd8dec7094c5e9519afb91b3e10c7dc1",
+      "bytes": 62941
+    },
+    {
+      "path": "critical-originals/en/motion/0055.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0000264_000017.600s.png",
+      "original_sha256": "672b0c65e46a58baff42a5a11dfe5b607e8f6006ccec3129e5afd2b4c1e12776",
+      "bytes": 60492
+    },
+    {
+      "path": "critical-originals/en/motion/0065.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0000292_000019.466s.png",
+      "original_sha256": "02fda85ed4ffada5d63141a92f55ed36bf27e0e014e8a11999b1419fed43c17e",
+      "bytes": 78484
+    },
+    {
+      "path": "critical-originals/en/motion/0091.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0000471_000031.400s.png",
+      "original_sha256": "47d4426ff6a302f89908c4f3ed4fcb9c5e2fa893c2afedb015e5a7aa5a7e9e43",
+      "bytes": 90499
+    },
+    {
+      "path": "critical-originals/en/motion/0109.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0000556_000037.066s.png",
+      "original_sha256": "cc7c9fc1b6193923e29ffc763dec4da1eaceb52efa9737426605eae7acbfe184",
+      "bytes": 71246
+    },
+    {
+      "path": "critical-originals/en/motion/0345.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0001919_000127.933s.png",
+      "original_sha256": "10ab2609d0574341bf50fca77cc3995c604ebc7670885748ff9aa3c6c8bfece2",
+      "bytes": 46985
+    },
+    {
+      "path": "representative-pages/en/motion/007.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion-views/page-007.png",
+      "original_sha256": "fdba6c4671f0a30ddd54f0b9d3a84c82c934ef58c1e093209e580a706b594149",
+      "bytes": 250201
+    },
+    {
+      "path": "representative-pages/en/motion/008.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion-views/page-008.png",
+      "original_sha256": "093a9262674d9d56c8372968748d3b6dc02025b935c7b0a070b94fb5d5b231d5",
+      "bytes": 315831
+    },
+    {
+      "path": "representative-pages/en/motion/012.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion-views/page-012.png",
+      "original_sha256": "e49f30aa099a201750dc831b5f21bd49e52354cacb2fc55340df9031b33e313b",
+      "bytes": 458938
+    },
+    {
+      "path": "representative-pages/en/motion/022.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion-views/page-022.png",
+      "original_sha256": "85c68c9739076f4a9e39d2c09477aa455cbb33697b23c17d142c5264b389cb0d",
+      "bytes": 223243
+    },
+    {
+      "path": "representative-pages/en/motion/036.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion-views/page-036.png",
+      "original_sha256": "e58134f3751fb29991a6ab2141a9a045622a03d754c5eddef7773ab89347108d",
+      "bytes": 205279
+    },
+    {
+      "path": "representative-pages/en/motion/039.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/motion-views/page-039.png",
+      "original_sha256": "b925930c9a4783e7d749914ca4db54a022e1c3621b2be81fd0eb5a35940971c3",
+      "bytes": 276423
+    },
+    {
+      "path": "critical-originals/zh/endpoints/0005.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/08-NaiveBayes/zh/endpoints/completed/005_00052.0s.png",
+      "original_sha256": "c90b015fec0e2dcac6522d07c36664c232f4c747e03e7df3af0e2a1583561012",
+      "bytes": 23521
+    },
+    {
+      "path": "critical-originals/zh/endpoints/0006.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/08-NaiveBayes/zh/endpoints/completed/006_00066.2s.png",
+      "original_sha256": "b78d7986ad91e226398d7dc80f1fc012432e2061f1bd2611fed6767a6ff67bba",
+      "bytes": 34742
+    },
+    {
+      "path": "critical-originals/zh/endpoints/0009.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/08-NaiveBayes/zh/endpoints/completed/009_00099.1s.png",
+      "original_sha256": "1e815d91277caaa40f5219fe7fa576ebe42f9ffc30ebb9ceb3c010efff99f540",
+      "bytes": 70927
+    },
+    {
+      "path": "critical-originals/zh/endpoints/0012.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/08-NaiveBayes/zh/endpoints/completed/012_00153.6s.png",
+      "original_sha256": "9422813f5db9fa1701bf7ed82b6ca928c34d8e8fff9c2353b5a6e119952110e1",
+      "bytes": 63940
+    },
+    {
+      "path": "representative-pages/zh/endpoints/001.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints-views/page-001.png",
+      "original_sha256": "4bf705790cce4262141effe51a5a5d0fef29a7ad0270e6fb15aa6e347e6dc9a6",
+      "bytes": 119701
+    },
+    {
+      "path": "representative-pages/zh/endpoints/002.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints-views/page-002.png",
+      "original_sha256": "038b451abbf5ccd5b6ed57685ffe18dd6245aa6bb8bb814bb7e283b4ecd256d5",
+      "bytes": 168354
+    },
+    {
+      "path": "representative-pages/zh/endpoints/003.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints-views/page-003.png",
+      "original_sha256": "0051266fed400b22e05482fe3d13b4ee6b456d1463beaed264929eb44966396c",
+      "bytes": 111329
+    },
+    {
+      "path": "representative-pages/zh/endpoints/004.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/endpoints-views/page-004.png",
+      "original_sha256": "3da76fb3082fb7853026ef7947148995c80e0622c40179d1a3d0a5506f4f3f26",
+      "bytes": 57060
+    },
+    {
+      "path": "critical-originals/zh/motion/0057.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0000316_000021.066s.png",
+      "original_sha256": "4084a678ee64f371d6a48a4e99fa7cdc6f0e5fdb1fa8106232721ff1f37c846e",
+      "bytes": 60761
+    },
+    {
+      "path": "critical-originals/zh/motion/0072.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0000355_000023.666s.png",
+      "original_sha256": "1678d442d43a556987e20ca54134fa7383b586e29461fe14d457e2fb295c00a8",
+      "bytes": 77702
+    },
+    {
+      "path": "critical-originals/zh/motion/0099.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0000507_000033.800s.png",
+      "original_sha256": "cd69b33dedfc8d82e30c2c578702dd676ce60ceba3ee902c434185986ddfa9d5",
+      "bytes": 89115
+    },
+    {
+      "path": "critical-originals/zh/motion/0120.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0000626_000041.733s.png",
+      "original_sha256": "3bc4f2f3f77f08c1b9da36d9e370631865d9c48547a3e21853427851edf3d4bd",
+      "bytes": 73138
+    },
+    {
+      "path": "critical-originals/zh/motion/0368.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0002075_000138.333s.png",
+      "original_sha256": "77e30ddfc26a65d316a9400804473504cbe5386478b52dd36acf88f71f167241",
+      "bytes": 46784
+    },
+    {
+      "path": "representative-pages/zh/motion/006.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion-views/page-006.png",
+      "original_sha256": "441190e0c04f630772f0eca430eded26fbee2a3e6be8974f37b46c728044229a",
+      "bytes": 226884
+    },
+    {
+      "path": "representative-pages/zh/motion/008.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion-views/page-008.png",
+      "original_sha256": "882f672accd2d7965de9b9ff494f1fc8f52330bc9b689e2343c83b39647878e7",
+      "bytes": 401397
+    },
+    {
+      "path": "representative-pages/zh/motion/013.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion-views/page-013.png",
+      "original_sha256": "3d7541572cf9eecde34ad114ab0bd96e18abc7d1bdd892625511e71a72cd680a",
+      "bytes": 421038
+    },
+    {
+      "path": "representative-pages/zh/motion/024.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion-views/page-024.png",
+      "original_sha256": "4e8682a0aa69816040613a0260d0b29967d76fc15bfb62e18eb4de3862df2fc3",
+      "bytes": 233783
+    },
+    {
+      "path": "representative-pages/zh/motion/036.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion-views/page-036.png",
+      "original_sha256": "e0215baf1a485f1c81b8e5fb9626f2b3b09d83d8f20e28aea1c244c06353710e",
+      "bytes": 168221
+    },
+    {
+      "path": "representative-pages/zh/motion/038.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/motion-views/page-038.png",
+      "original_sha256": "065231b45aaef7bc3161e61a4c812884ab993287026653d40e787540802758a9",
+      "bytes": 313646
+    }
+  ],
+  "preservation": "Lossless gzip/identity; original raw content and hashes preserved."
+}

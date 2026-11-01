@@ -1,0 +1,76 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2461,
+      "sha256": "1179a85b4d0cf76f45389ff3d2fd291c3dfea5dc9ce8b857031755376a8fabd4"
+    },
+    {
+      "path": "focused-test.py.gz",
+      "bytes": 2896,
+      "sha256": "66f6646364ad6f6a70d5a39c92a3e3350735b449a5b3241e8ebcf0b1ce3b1964"
+    },
+    {
+      "path": "focused-unittest.log.gz",
+      "bytes": 308,
+      "sha256": "07f10e09549ec33765beec624ae1d43b33012e2ca43debefd82c184f635c218b"
+    },
+    {
+      "path": "frame-budget-probes.json.gz",
+      "bytes": 1357,
+      "sha256": "5f6afbb1a5acdb9b855dc9baa590d0fca9a93e17bfa4b8823c8cfe3ee5bae35b"
+    },
+    {
+      "path": "historical-blocker-blocked-preparation-manifest.json.gz",
+      "bytes": 387,
+      "sha256": "21d6029785442f3a82e1e45ab7a90a6b4f0e8376efd8a695d317b321797b8aaa"
+    },
+    {
+      "path": "historical-blocker-download-helper-error.log.gz",
+      "bytes": 98,
+      "sha256": "e7519c89382c87113114760d872293d76456fa3d2b581ea4cfbf5ee9a00a578b"
+    },
+    {
+      "path": "historical-blocker-pre-evidence-source-analysis.json.gz",
+      "bytes": 2058,
+      "sha256": "7997adeae7a77c2ef7a784d78dbf08c89909f3a833a3d2a69d2bad230021c3a3"
+    },
+    {
+      "path": "historical-blocker-source-only-proposal.md.gz",
+      "bytes": 1499,
+      "sha256": "ebe9f023f9708cfc3e125e2c48c9836e75856ddac2e6a7bd1b029aa5ac42a86a"
+    },
+    {
+      "path": "historical-blocker-transport-failure.json.gz",
+      "bytes": 1072,
+      "sha256": "e2e8f76b02cf887ee8c67294e728d2d39fc09148cb962109424bdc46b6b422b4"
+    },
+    {
+      "path": "readable-diagnostic.json.gz",
+      "bytes": 11922,
+      "sha256": "708794df808ac84aebac88e47a0781fad9306ac604c24001a15403aeed866fbd"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 15098,
+      "sha256": "4c6d5b5cd4b7015372df4f6c83f4d3157b0db1bd0340c25d7cabd2805181a974"
+    },
+    {
+      "path": "source-after.py.gz",
+      "bytes": 7505,
+      "sha256": "5ebe239acde8f944d83266e979d0dd644912c926d17fcd12097c26ac2342b6cb"
+    },
+    {
+      "path": "source-before.py.gz",
+      "bytes": 7093,
+      "sha256": "72c360196174d8d0a6154bb2fb92a0e321cedabf26e59afe4692407c3e581e7d"
+    },
+    {
+      "path": "source.patch.gz",
+      "bytes": 1268,
+      "sha256": "1571b25c19d7ab623fc0ac383258ad3882ef01fa2a45b79d5874af1752f0c51f"
+    }
+  ],
+  "payload_files": 14,
+  "payload_bytes": 55022
+}
