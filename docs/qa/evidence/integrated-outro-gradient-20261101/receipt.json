@@ -1,0 +1,20 @@
+{
+  "started_utc": "2026-11-01T00:58:06.324520+00:00",
+  "ended_utc": "2026-11-01T00:59:19.594508+00:00",
+  "returncode": 0,
+  "sources_unchanged": true,
+  "source_files": 1482,
+  "git_head": "3bb3a5810d44b5089bc36cb5a7a3b4a37dc5d776",
+  "scope": "Full unittest suite at exact local frozen source inventory; render/visual/audio approval separate.",
+  "tests": 421,
+  "unittest_runtime_seconds": 68.405,
+  "source_inventory_before_sha256": "b77a39fac2a55c8f7a43532864eee75064b08736325196fea0b2844d0f5bc089",
+  "source_inventory_after_sha256": "b77a39fac2a55c8f7a43532864eee75064b08736325196fea0b2844d0f5bc089",
+  "raw_log_sha256": "43e78b86705da9be6133895800fce7a44d1d7421a7c3d73b0c2f2173dc869581",
+  "local_uncommitted_source_scope": [
+    "videos/ai/ai3/s19_outro.py",
+    "videos/ai/ai4/s03_gradient.py",
+    "videos/ai/ai4/zh_lines.py",
+    "tests/test_ai3_outro_trail.py"
+  ]
+}

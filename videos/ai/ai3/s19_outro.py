@@ -9,6 +9,23 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai3.common import MPC, PART, RANDOM, TRAINED, gray_image, load
 
 
+def smooth_trail_reveal(path, dot):
+    """Keep the marker at Create's smooth-cubic prefix end, using curve-index progress.
+
+    Retain the original trail reveal and easing, rather than changing to arc-length
+    speed. Both objects belong to one animated family for Cairo's moving cache.
+    """
+    full = path.copy()
+    family = VGroup(path, dot)
+
+    def reveal(group, alpha):
+        visible, marker = group
+        visible.pointwise_become_partial(full, 0, alpha)
+        marker.move_to(visible.get_end())
+
+    return UpdateFromAlphaFunc(family, reveal)
+
+
 class Outro(VoiceoverScene):
     def construct(self):
         self.recap()
@@ -228,7 +245,7 @@ class Outro(VoiceoverScene):
             self.play(FadeIn(head), Create(field), FadeIn(tag), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(ball))
-            self.play(MoveAlongPath(ball, trail), Create(trail), run_time=3.0)
+            self.play(smooth_trail_reveal(trail, ball), run_time=3.0)
         self.wait(0.3)
         self.clear_scene()
 
