@@ -298,6 +298,25 @@ class EntropyPrefixTiming(unittest.TestCase):
     def test_entire_source_preserves_all_non_timing_AST_and_voiceovers(self):
         for name in CASES:
             old, new = source_tree(name, True), source_tree(name)
+            # The separately covered word-anchored decoder replaces exactly one
+            # With block. Keep this original v8 timing guard strict everywhere else.
+            if name == 'prefix':
+                def decoder(tree):
+                    return next(n for n in ast.walk(tree) if isinstance(n, ast.With)
+                                and isinstance(n.items[0].context_expr, ast.Call)
+                                and isinstance(n.items[0].context_expr.func, ast.Attribute)
+                                and n.items[0].context_expr.func.attr == 'voiceover'
+                                and isinstance(n.items[0].context_expr.args[0], ast.Constant)
+                                and n.items[0].context_expr.args[0].value.startswith('Watch it decode.'))
+                old_decoder, new_decoder = decoder(old), decoder(new)
+                self.assertEqual(MARK.sub('', new_decoder.items[0].context_expr.args[0].value),
+                                 old_decoder.items[0].context_expr.args[0].value)
+                class RestoreOnlyDecoder(ast.NodeTransformer):
+                    def visit_FunctionDef(self, node):
+                        return None if node.name == '_decoder_wait_until' else self.generic_visit(node)
+                    def visit_With(self, node):
+                        return copy.deepcopy(old_decoder) if node is new_decoder else self.generic_visit(node)
+                new = RestoreOnlyDecoder().visit(new)
             class RemoveOnlyOwnedTiming(ast.NodeTransformer):
                 def visit_FunctionDef(self, node):
                     if node.name in {'_bookmark_run_times', '_bookmark_ladder_step'}:

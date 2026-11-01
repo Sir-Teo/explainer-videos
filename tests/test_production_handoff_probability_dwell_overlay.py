@@ -155,7 +155,7 @@ class NumericDwellReviewedManifestTests(unittest.TestCase):
             nodes={n.name:n for n in ast.parse(path.read_text()).body
                    if isinstance(n,ast.FunctionDef) and n.name not in {'load_overlay','main'}}
             if path==D/'verify_handoff.py':
-                # V8 adds diagnostic labels only. Require exactly these pairs
+                # V8/V9 add diagnostic labels only. Require exactly these pairs
                 # at the existing label lookup, then compare every guard AST.
                 fn=nodes['overlay_tree_checks']
                 labels=[n for n in ast.walk(fn) if isinstance(n,ast.Assign)
@@ -169,13 +169,16 @@ class NumericDwellReviewedManifestTests(unittest.TestCase):
                                  ast.dump(ast.parse("after['path']",mode='eval').body,include_attributes=False))
                 mapping=value.value
                 additions=[(k,v) for k,v in zip(mapping.keys,mapping.values)
-                           if isinstance(k,ast.Name) and k.id in {'ENTROPY','PREFIX'}]
+                           if isinstance(k,ast.Name) and k.id in {'ENTROPY','PREFIX','CROSS_ENTROPY','ARITHMETIC','AI1_ZH'}]
                 self.assertEqual([(k.id,ast.dump(v,include_attributes=False)) for k,v in additions],
                                  [('ENTROPY',ast.dump(ast.Constant(value='Part1 Entropy'),include_attributes=False)),
-                                  ('PREFIX',ast.dump(ast.Constant(value='Part1 Prefix'),include_attributes=False))])
-                self.assertEqual(len(mapping.keys),7)
+                                  ('PREFIX',ast.dump(ast.Constant(value='Part1 Prefix'),include_attributes=False)),
+                                  ('CROSS_ENTROPY',ast.dump(ast.Constant(value='Part1 CrossEntropy'),include_attributes=False)),
+                                  ('ARITHMETIC',ast.dump(ast.Constant(value='Part1 Arithmetic'),include_attributes=False)),
+                                  ('AI1_ZH',ast.dump(ast.Constant(value='Part1 Chinese narration'),include_attributes=False))])
+                self.assertEqual(len(mapping.keys),10)
                 keep=[(k,v) for k,v in zip(mapping.keys,mapping.values)
-                      if not(isinstance(k,ast.Name) and k.id in {'ENTROPY','PREFIX'})]
+                      if not(isinstance(k,ast.Name) and k.id in {'ENTROPY','PREFIX','CROSS_ENTROPY','ARITHMETIC','AI1_ZH'})]
                 mapping.keys=[k for k,v in keep];mapping.values=[v for k,v in keep]
             return {name:ast.dump(n,include_attributes=False) for name,n in nodes.items()}
         self.assertEqual(bodies(old),bodies(D/'verify_handoff.py'))
