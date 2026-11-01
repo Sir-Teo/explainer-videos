@@ -1,6 +1,6 @@
 {
   "part": "ai6",
-  "observed_utc": "2026-11-01T13:29:58.860852+00:00",
+  "observed_utc": "2026-11-01T13:53:25.477537+00:00",
   "chapters": 19,
   "bilingual_cases": 38,
   "numerical_items": 22,
@@ -608,8 +608,11 @@
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "native1080_evidence": "evidence/ai6-gradientboosting-native1080-endpoint-review/README.md",
       "full_selected_cohort_review_complete": true,
-      "GB_T1": "Atb narration says ten/thirty while loop startsround3; actual silentcaption/frame lead. Source scheduling assessment pending; no spoken failure claim.",
-      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md"
+      "GB_T1": "Source cue repair applied; unchanged cleaned speech/cache keys/data. Fresh EN/ZH plane after-regression including initial model1 reading/pacing remains pending. Historical full selected review stays attached to original source/movie identities.",
+      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md",
+      "current_source_sha256": "ec0a65fc2c9b6f7ed3a4340c14c14cc60f3de9ecf4d778ee690ad3ac761f37d6",
+      "current_local_zh_sha256": "a0f59d6710c75f2d3524aa5b0c782ad2cf271f2f97ed3167ce240ed8d87dcd0c",
+      "GB_T1_source_evidence": "evidence/ai6-gboost-count-cue-source-repair/README.md"
     },
     {
       "position": 16,
@@ -629,8 +632,11 @@
       "parent_review_evidence": "evidence/ai6-parent-cloud-twelve-case-review/README.md",
       "native1080_evidence": "evidence/ai6-gradientboosting-native1080-endpoint-review/README.md",
       "full_selected_cohort_review_complete": true,
-      "GB_T1": "Atb narration says ten/thirty while loop startsround3; actual silentcaption/frame lead. Source scheduling assessment pending; no spoken failure claim.",
-      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md"
+      "GB_T1": "Source cue repair applied; unchanged cleaned speech/cache keys/data. Fresh EN/ZH plane after-regression including initial model1 reading/pacing remains pending. Historical full selected review stays attached to original source/movie identities.",
+      "fresh_full_selected_evidence": "evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md",
+      "current_source_sha256": "ec0a65fc2c9b6f7ed3a4340c14c14cc60f3de9ecf4d778ee690ad3ac761f37d6",
+      "current_local_zh_sha256": "a0f59d6710c75f2d3524aa5b0c782ad2cf271f2f97ed3167ce240ed8d87dcd0c",
+      "GB_T1_source_evidence": "evidence/ai6-gboost-count-cue-source-repair/README.md"
     },
     {
       "position": 17,
@@ -807,5 +813,12 @@
   "latest_verified_source_publication": "8db4f0399a1490f905c8367151eeeb3bae9e051b",
   "historical_selected_image_cases_accepted_at_declared_scope": 17,
   "current_source_selected_image_cases_accepted_at_declared_scope": 18,
-  "fresh_review_routing_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md"
+  "fresh_review_routing_evidence": "evidence/ai6-fresh-host-review-checkpoint/README.md",
+  "latest_source_test_scope": {
+    "tests": 768,
+    "seconds": 75.542,
+    "source_files": 1550,
+    "sources_unchanged": true,
+    "evidence": "evidence/ai6-gboost-count-cue-source-repair/README.md"
+  }
 }

@@ -324,7 +324,7 @@ ZH.update({
     'the second-order picture slightly overestimates it.': '二阶的图景略有高估。',
 
     'f"Watch it learn on the two plotted rates.':
-        "看它在图上这两个词频上学习。<bookmark mark='a'/>一棵树：几个方格。<bookmark mark='b'/>10棵，30棵：在两位作者交界的地方，边界越来越清晰。<bookmark mark='c'/>训练损失一直在下降，但留出的书页在第{best}轮之后最好，判对{100 * acc[best - 1]:.1f}%。<bookmark mark='d'/>{end}",
+        "看它在图上这两个词频上学习。<bookmark mark='a'/>一棵树：几个方格。<bookmark mark='b'/>10棵，<bookmark mark='thirty'/>30棵：在两位作者交界的地方，边界越来越清晰。<bookmark mark='c'/>训练损失一直在下降，但留出的书页在第{best}轮之后最好，判对{100 * acc[best - 1]:.1f}%。<bookmark mark='d'/>{end}",
 
     'f"By round {n} they\'ve slipped':
         "到第{n}轮，已经滑落到{100 * acc[-1]:.1f}%：每页只有两个数，多出来的细节拟合的是训练页，而不是作者。及早停下，本身就是这个方法的一部分。",

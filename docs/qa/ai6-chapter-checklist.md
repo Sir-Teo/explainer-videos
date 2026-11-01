@@ -1,8 +1,8 @@
 # Part6 chapter checklist
 
-Observed 2026-11-01T13:32:05.125448+00:00. **19 chapters / 38 bilingual cases / 22 numerical items.** All 22 numerical items and 263 checks are complete. Current source selected-image acceptance is **18**: the original 17 historical cases, plus Trees EN/ZH, with Chinese Naive Bayes held for its new targeted regression. **16 native endpoint cases** retain their declared scope. All fresh host captures are complete; review and production acceptance remain separate.
+Observed 2026-11-01T13:54:11.258845+00:00. **19 chapters / 38 bilingual cases / 22 numerical items.** All 22 numerical items and 263 checks are complete. Current source selected-image acceptance is **18**: the original 17 historical cases, plus Trees EN/ZH, with Chinese Naive Bayes held for its new targeted regression. **16 native endpoint cases** retain their declared scope. All fresh host captures are complete; review and production acceptance remain separate.
 
-Trees has full selected-cohort acceptance. Forests, AdaBoost, Contest and the Outro recap have bounded repair-target closure. Naive Bayes and Outro problem 8 have source repairs awaiting their targeted after-checks. Gradient Boosting has completed historical selected-cohort review with GB-T1 timing polish pending. Nine inactive fresh-review claims have been relinquished to the parent pool. Resource guards remain unchanged.
+Trees has full selected-cohort acceptance. Forests, AdaBoost, Contest and the Outro recap have bounded repair-target closure. Naive Bayes and Outro problem 8 have source repairs awaiting their targeted after-checks. Gradient Boosting has completed historical selected-cohort review with GB-T1 source repair awaiting controlled after-review. Nine inactive fresh-review claims have been relinquished to the parent pool. Resource guards remain unchanged.
 
 | Position | Chapter | Actualcoverage/pendingwork |
 |---|---|---|
@@ -21,7 +21,7 @@ Trees has full selected-cohort acceptance. Forests, AdaBoost, Contest and the Ou
 | 13 | Trees: 12. Trees: twenty questions  | Independent TreesENZH full selected cohort accepted: all110sheets/866selected frames, both margins closed. Native/audio/production limits remain. |
 | 14 | Forests: 13. Bagging and random forests  | Independent EN/ZH native/reveal-window review closes history-card/title repair target. Full selected cohort and production gates remain pending. |
 | 15 | AdaBoost: 14. AdaBoost and the exponential loss  | Independent EN/ZH native/reveal-window review closes measured-precision/floor disclosure targets. Full selected cohort and audio/production gates remain pending. |
-| 16 | GradientBoosting: 15. Gradient boosting, second order  | Full historical ENZH selected cohorts reviewed (370/386frames); no stable layout defect, but GB-T1 caption/round timing lead pending source assessment. No current-global/native-motion/audio approval. |
+| 16 | GradientBoosting: 15. Gradient boosting, second order  | Full historical ENZH selected cohorts reviewed (370/386frames); no stable layout defect, but GB-T1 source cue repair now awaits fresh targeted pacing/alignment review. No current-global/native-motion/audio approval. |
 | 17 | Metrics: 16. Keeping score honestly  | EN prior full selected review retained. ZH movie decoded; full selected review relinquished to parent pool. New native endpoints retain separate, partial executor scope. |
 | 18 | Contest: 17. The contest, and two cultures  | Independent EN/ZH board/caption/native samples close tie/cap-disclosure target. Full selected cohort and production gates pending. |
 | 19 | Outro: Recap, problems, and what comes next  | Independent EN/ZH windows close Newton/concept cue repair target. New ZH problem8 source spacing repair8beb applied, targeted after-regression pending; full selected/listening/production gates open. |
@@ -41,3 +41,5 @@ Historical five-chapter source publication: `8db4f0399a1490f905c8367151eeeb3bae9
 [Fresh-host ownership reconciliation and independent bounded closures](evidence/ai6-fresh-host-review-checkpoint/README.md). [NaiveBayes source repair](evidence/ai6-naivebayes-fraction-depth-source-repair/README.md). The earlier765-test run predates this new source repair; its24 selected teaching/template tests pass with31 stable identities.
 
 [Trees full selected and GradientBoosting GB-T1 receipts](evidence/ai6-trees-full-selected-and-gboost-timing-review/README.md). Current selected acceptance18 retains original17historically, adds Trees2 and holds NBZH1 for target regression. [Outro spacing source proof](evidence/ai6-outro-problem8-leading-source-repair/README.md);24 scoped tests/31stable identities cover NBb776+Outro8beb, no final whole-suite count.
+
+[Final late-polish source batch](evidence/ai6-gboost-count-cue-source-repair/README.md):768 tests pass in75.542seconds with1550 unchanged source/configuration identities. Controlled regression manifest pins all five permitted Part6 source replacements on base5886; it does not grant full-branch or production acceptance. GB reading/pacing and all affected after-pixel gates remain open.
