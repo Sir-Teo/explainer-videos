@@ -1,0 +1,27 @@
+[
+  {
+    "path": "Contest-Outro-Review.txt",
+    "bytes": 5961,
+    "sha256": "60cc6aac3038b936926c3d8680791125278c264f798726cb039560938e1b3d01"
+  },
+  {
+    "path": "Forests-AdaBoost-Review.txt",
+    "bytes": 5937,
+    "sha256": "64957606905233466dd809cbb19552232d47606dba49bdf1d3d2b522ecb8c31a"
+  },
+  {
+    "path": "README.md",
+    "bytes": 1439,
+    "sha256": "eb09d3625b8b23dd297b45c0a9409e2248b7b4fdce1de44d7f9789ccc92038b7"
+  },
+  {
+    "path": "reconciliation.json",
+    "bytes": 2155,
+    "sha256": "293e67a63b550b68caba4be32c977269b933a67675a07c557b47a1523867cf8a"
+  },
+  {
+    "path": "routing-before-reconciliation.json",
+    "bytes": 8433,
+    "sha256": "f414bd6ecc761aa5a93d45f9609b2bc8223e328a722bdc81bf4129e7827a6751"
+  }
+]

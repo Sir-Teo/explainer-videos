@@ -1,0 +1,42 @@
+AI Built Part 6 — Contest then Outro, EN then ZH
+Read-only bounded visual regression review, 2026-11-01
+
+RESULT
+The named Contest tie/capped-error-bar repairs and Outro recap timing repair are supported in the inspected source, captions, native endpoints and selected encoded-motion samples. This is scoped closure, not whole-chapter or production acceptance.
+One additional low-priority readability/polish finding: Outro ZH problem 8's wrapped final formula has cramped line leading (native 100.9s; encoded movie 103.0s). It enters the vertical band of the preceding Chinese line; distinct glyph contact is not established. Recommend more line spacing or deliberate earlier wrap, followed by fresh native and motion regression. EN 94.3s has visibly more comfortable line leading. Source owner retains edits.
+
+IDENTITY
+Delivery index: libfile_9f4b9294e5cc81918c8c7a44854b95a4 v0, 7893 bytes, SHA256 1555bd8a7736eb7662b9cf741d4d48ca38821be0d7a571ca4cfcef3c7eae0b5a.
+Contest: libfile_7314f8c978648191b785b84d3f29e411 v0; 54583349 bytes; archive SHA256 72471319a9ea997c5087daaea2b200c63fad4afc4a7805d0035e35b4987f8ae4.
+Outro: libfile_24cf5ff4c9d08191b8e86a82cf862738 v0; 54108614 bytes; archive SHA256 1c8bfe8a39916760216848756a97acf6c112de05a92dd8defaecfdbe9180a310.
+Archive/index byte identities, CRC, payload manifests independently verified. Extraction rejected absolute/traversal/symlink members. No numerical rerun or scene rerender.
+Commit 5886ad1b45446fc06f5e9a63a7bc0ce8caf7f8e1 in Sir-Teo/explainer-videos.
+Actual source fetched read-only at this commit, byte hashes match capture receipts:
+videos/ai/ai6/s18_contest.py: 104c27ae8743b7383b0768235e4a40b0e5b2524fb8edfd2312c88d99b27399b7
+videos/ai/ai6/s19_outro.py: 0f613477aa043c40f1622d482caef005511f01ed0613ada91cc3a01ab626ea8e
+ZH source dependencies fetched and hash matched: zh_lines.py 29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f; narration_zh.json 10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d; text_zh_add.json bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73.
+Both languages' motion source-before/source-after and data-before/data-after receipts agree. Current motion structured warnings are empty. This establishes fresh packet provenance only; it does not retroactively erase the original Outro EN source-changed-during-render warning.
+
+CONTEST EN
+Movie SHA256 6779cfab092d0f82cc263d5fafa0d46eb5b482f0b3e9dc49e1367fa9625e1199.
+SRT 21.201–26.878 explicitly says 2 procedures tie for highest mean accuracy at 99.5%; no unique-logistic-winner assertion. Native endpoint 23.3s shows logistic regression and Gaussian-kernel SVM each 99.5. Footer reads “error bars capped at the displayed axis limits”; ± one SD / 70–100% scale explanation is intact and legible. Encoded samples 22.933–26.600s confirm board and disclosure persist without a sampled overlap.
+Actual source board_leaders returns all exact-equal finite maxima, narrative distinguishes ties, and highlights all leaders. Source caps intervals at 0.70 and 1.0 and discloses that action. Exact underlying CV/SD values are not recalculated by this review.
+Late native layout 159.3s: transformer cells/arrows/output separated, table-benchmark qualifications fit above lower boundary, no sampled text collision.
+
+CONTEST ZH
+Movie SHA256 04f26f8effacfc7bafc361e22663b7b4404a7311c233d8b3c9824d424571539c.
+SRT 22.211–28.732 says “2种流程并列取得最高平均准确率，为99.5%”. Native 24.3s shows both 99.5 entries and Chinese cap disclosure, with no clipping. Encoded 23.333–24.600s shows orderly reveal and preserved footer. zh_lines.py translates the tie template explicitly. Late native 176.7s keeps the schematic and lower red qualification separated and within frame.
+
+OUTRO EN
+Movie SHA256 dec1b6892d4685c986da2deff2092908143c6c26ff49ecb8a3ce5b43e942de1f.
+Actual source anchors groups to named concepts, including logistic_newton for tile 4, rather than uniformly distributing twelve tiles. SRT logistic/Newton interval 10.866–17.368s. Encoded 11.199s shows the tile arriving, 11.532s shows it settled, and 15.532/16.466s retain it. Bayes arrives 17.532–18.066s after its caption starts at 17.368s. This resolves the originally late Newton/logistic recap cue in these silent timing placeholders.
+Native complete grid 46.9s: all twelve cards separated; formulas/captions and diagrams remain inside card boundaries. Native problems 94.3s readable with distinct row and wrapped-line spacing.
+
+OUTRO ZH
+Movie SHA256 6cdbe80fecde9536bb3d3cb7f0fc0fe1efc9448bd45ea1c34d2655f43e34f04e.
+ZH source explicitly preserves logistic_newton and other concept bookmarks. SRT interval 13.265–18.451s. Encoded 13.599s shows Newton tile arriving, 13.932s settled; 15.999–18.266s retained. Bayes arrives 18.599–18.866s during its own caption beginning 18.451s. This resolves the originally late cue in the inspected window.
+Native complete grid 51.0s: no card collisions; long Chinese labels and variance formula fit. Problem 8 finding above is separate from the resolved recap timing issue.
+
+SCOPE / LIMITS
+Viewed bilingual endpoint overview sheets, selected original 1920x1080 frames, selected timestamped encoded-frame sequences around Contest board and Outro Newton/Bayes transitions, and independently decoded Outro ZH 103s movie frame. No full continuous perceptual viewing, listening, real-narration alignment, native motion/4K acceptance, exhaustive selected-image acceptance, or numerical validation claimed. Overview sheets aid navigation; individual source frames underpin named findings. Existing historical warnings retain historical scope. No source edits/pushes/compute/rerender/browser/desktop actions.
+Evidence in this bundle includes original native board frames, actual encoded-motion contact sheets for cue windows, and native/encoded crops of the new polish finding. Crops preserve pixels except the encoded crop is enlarged 2x for visibility.

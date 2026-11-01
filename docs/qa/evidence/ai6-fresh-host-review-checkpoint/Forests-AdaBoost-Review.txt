@@ -1,0 +1,39 @@
+READ-ONLY BOUNDED VISUAL REPAIR REVIEW — 2026-11-01
+Result: prior Forests history-card/title collision and AdaBoost precision/floor-disclosure findings closed in inspected scope, both EN then ZH. No new established overlap in these views.
+
+Forests: Native 1920x1080 final EN 103.9s / ZH 112.6s show card upper-right, clear of title, plot, legend and out-of-bag explanation. All critical-window sheets inspected: EN 89.533333–91.266667, ZH 99.0–100.733333. Card fades in at its separate upper-right position, no crossing title. Native final text is readable. Whole endpoint contact sheets inspected (10 EN, 11 ZH), not equivalent to native inspection of every endpoint.
+
+AdaBoost: Native EN 76.7 / 84.0 / 98.8s and ZH 82.8 / 90.4 / 104.2s inspected. Precision is explicitly 3.2×10^-6; EN captions 75.607–82.839 say within a few millionths, ZH 81.689–89.215 says 百万分之几. This is consistent with reported historical difference 3.1611917665763656e-06, not a new numerical recomputation. Floor note explicitly says zero training error and positive loss below 10^-4 share baseline; native labels and final readouts separated/readable. All critical-window sheets inspected: EN 82.533008–84.266341 and 96.333008–99.399674; ZH 88.933008–90.666341 and 101.733008–104.799674. Disclosure fades in with axes before curves; measured scores progressively reveal without overlap. Small 480p footnotes are less comfortable than native; 480p is timing proxy, not final typography delivery. Whole native endpoint sheets (17 each) inspected as overview only.
+
+Independent ffmpeg decoding: final encoded frame of each chapter/language critical window re-decoded and viewed; PNG hashes exactly match packet records. No rendering, numerical producers, edits, pushes, browser or desktop used.
+
+Source: GitHub exact commit 5886ad1b45446fc06f5e9a63a7bc0ce8caf7f8e1, Sir-Teo/explainer-videos. Fetched actual contents and verified SHA256 against packet source-before: s14_forests.py line156-157 upper-right placement; s15_adaboost.py precision label from alpha_check, narration few millionths, log clamp remains but floor_note explicit and included initial FadeIn; zh_lines.py actual updated Chinese narration inspected. Raw narration_zh/text_zh_add fetched and hash verified; not assumed sole translation mechanism.
+
+Integrity: archive byte sizes and SHA256 matched delivery index libfile_9f4b9294e5cc81918c8c7a44854b95a4. CRC verified, extraction rejected absolute/traversal/symlink paths. All 259 Forests and 337 AdaBoost payload manifest entries verified. Materialization warnings empty, version0 both; Library metadata applied successfully. Original packet warnings preserved in originals: renderer FFmpeg can log unused metadata/shortest option warnings; silent timing placeholders. Capture counts/receipts not treated as visual approval. Historical findings are retained, not deleted or relabeled as never occurring.
+
+Limits: selected bounded repair review only, not comprehensive all dense-sheet/whole-chapter acceptance. No listening or continuous playback, no real narration alignment, no native-motion/4K/whole-reel approval. These remain separate production gates.
+
+EXACT IDENTITIES / EVIDENCE (SHA256):
+
+Forests libfile_cc3ed40d1bf881919fb2c4707189e66e v0 bytes=27536415 sha256=01ffd37345e734b0b418d4fccc2737b7883c7f5850d18e9baee70807904307bd
+en video 0586d1e13d301e6e908ad60bc92b771d62ff3f1b8dfaba8f4bd1bf77c70dde18
+en final independently decoded frame {'file': 'frame-0027.png', 'frame': 1369, 'seconds': 91.266667, 'sha256': '3efeb4826a14de4146fd951e5e367287e65c59f38671230df1f01bbc48e52ca8'}
+AI-Built-Part6-Forests-Fresh-Regression-20261101/captures/en/native1080/completed/009_00103.9s.png 14a8abf47bb0d9d0eb81355f3097f34199ac72ff4f8f48a98e62fd3a1b4f6167
+zh video a694f7bc2fe624cad4d0c3cd9a551fa531cbdebbad585f30b6c5d88d9c0ef9fa
+zh final independently decoded frame {'file': 'frame-0027.png', 'frame': 1511, 'seconds': 100.733333, 'sha256': 'faa6d79a4a12ec70bdd2ce816bd29c44f2cd7ca5c5942ebe47633431adca9182'}
+AI-Built-Part6-Forests-Fresh-Regression-20261101/captures/zh/native1080/completed/010_00112.6s.png 35f5979121c4c6c266f124ee948ab9ddf84a2659520752322613f6e9b7994556
+
+AdaBoost libfile_168f0c8b19148191b5810094c4eac7fb v0 bytes=39141415 sha256=eb56246b422d58322cc33023b3ef9021ac51034e5b114e2e495a30b88f0f0164
+en video e49ef69044115da03e7c1b58190fa25ddbfe5fbb0a5a540591b8887cc97f51a9
+en final independently decoded frame {'file': 'frame-0074.png', 'frame': 1491, 'seconds': 99.399674, 'sha256': '8e3dd79bf967b52add08e64934a9e84f383893010133bc4f794a504af79ca206'}
+AI-Built-Part6-AdaBoost-Fresh-Regression-20261101/captures/en/native1080/completed/012_00098.8s.png 5b0fbf01adbd6b71e724a847a3cd2bb66155180117268940b267e1573b435792
+AI-Built-Part6-AdaBoost-Fresh-Regression-20261101/captures/en/native1080/completed/009_00076.7s.png 91e0d4334615e6bfb8272fe9dd3797e3249be382a3ef676d1bf78ce52643ba21
+zh video ee1bcc80f803a2fd7401817783cca8cc0942a3851344096f0fc908d18b7678c8
+zh final independently decoded frame {'file': 'frame-0074.png', 'frame': 1572, 'seconds': 104.799674, 'sha256': 'f25d86b2c836253c15a0c5062afc78f57c37a37d09d844c260d7bb885273da8c'}
+AI-Built-Part6-AdaBoost-Fresh-Regression-20261101/captures/zh/native1080/completed/012_00104.2s.png bd176387ad577db1addc9540b09201d2d92ffdb448051b21ca680e43299c5435
+AI-Built-Part6-AdaBoost-Fresh-Regression-20261101/captures/zh/native1080/completed/009_00082.8s.png 4479df33fa3eb1103e152141a815dce2fd9cc738020c7ef6a6188ae416034e1b
+source/narration_zh.json 10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d
+source/s15_adaboost.py 9dace46b8fa80a1fcf5d8fa51af867875275dda791916647d8e16c1f243cbbd7
+source/text_zh_add.json bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73
+source/s14_forests.py 5695aabdd4ff39c68135a5a3de172077e4f5d26cf9b8f546741c8f45ffbf6018
+source/zh_lines.py 29600967e224f5ed62595f74468be181e1b6f76267f5e6b089a44241adf8d11f

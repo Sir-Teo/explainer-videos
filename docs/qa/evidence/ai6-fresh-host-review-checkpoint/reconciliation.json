@@ -1,0 +1,41 @@
+{
+  "observed_utc": "2026-11-01T13:19:45.790014+00:00",
+  "scope": "Root integrated exact saved independent bounded repair closures and explicitly relinquished inactive fresh-case ownership to parent. No full selected-cohort, continuous/audio or production acceptance follows.",
+  "bundles": [
+    {
+      "library_id": "libfile_f962144e120481918a4cefa8f133ed5a",
+      "bytes": 1182411,
+      "sha256": "367a583299828cbbb97773431013d7fad9ee14f966368bed756415156a121324",
+      "scope": "Forests/AdaBoost repaired targets closed EN/ZH only"
+    },
+    {
+      "library_id": "libfile_c58207e8e8048191bf3948a436c12176",
+      "bytes": 1874091,
+      "sha256": "ed19d216d364e56ade072fb149c2e3561c48147b1f130b55ec262d3e115fa85e",
+      "scope": "Contest tie/cap and Outro concept-cue targets closed EN/ZH; new ZH problem8 leading polish pending"
+    },
+    {
+      "library_id": "libfile_e949ad959434819193baf8c04cd1ee15",
+      "bytes": 59685599,
+      "scope": "Library metadata resolved; not materialized here because it would cross retained disk write guard. Parent reports Jensen native/57frame repair target resolved, English pixels exact; full cohort pending."
+    }
+  ],
+  "relinquished_fresh_cases": [
+    "LDA:en",
+    "LDA:zh",
+    "KNN:en",
+    "KNN:zh",
+    "Kernels:en",
+    "Kernels:zh",
+    "SVM:en",
+    "SVM:zh",
+    "Metrics:zh"
+  ],
+  "relinquishment_state": "No active owner in source container; parent instructed to assign these nine fresh review cases. This record does not fabricate confirmed receiving reviewer IDs.",
+  "source_owner_retains": [
+    "NaiveBayes source-only repair, fresh controlled after-regression pending host",
+    "Outro problem8 source-local spacing proposal only"
+  ],
+  "native_gate": "Actual NaiveBayes ZH native contact independently confirmed; new source repair gates target acceptance. Earlier17 selected-image approvals retain their historical limited scope; current reviewed-source acceptance count16 excludes ZH NaiveBayes pending regression.",
+  "part7_gate": "No generation/cache/render progression until Part6 gate; source-preparation publication remains b3d75c61425d194eed35a7aa9ba61267eed81213."
+}

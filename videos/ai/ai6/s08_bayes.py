@@ -4,7 +4,9 @@ import math
 
 import numpy as np
 
+from explainer import lang
 from explainer.ai import *  # noqa: F403
+from explainer.zh_text import translate as translate_caption
 from videos.ai.ai6.common import AUSTEN, DICKENS, HL, MONO, chapter, load, plot
 
 NB, LR, PLATT = "#4FD1C5", C.MODEL_Q, "#B48EF0"
@@ -22,14 +24,20 @@ class NaiveBayes(VoiceoverScene):
     # ------------------------------------------------------------------
     def derive(self):
         colors = {r"\theta_{D,w}": DICKENS, r"\theta_{A,w}": AUSTEN, r"\beta_w": HL}
+        ratio = r"\log\frac{P(D \mid \text{page})}{P(A \mid \text{page})}"
+        smoothed_count = r"\frac{\text{count}_{D,w} + 1}{N_D + 70}"
+        if lang.LANG == "zh":
+            numerator_depth = r"\rule[-0.6em]{0pt}{1.2em}"
+            ratio = translate_caption(ratio).replace(r"\frac{", r"\frac{" + numerator_depth, 1)
+            smoothed_count = translate_caption(smoothed_count).replace(r"\frac{", r"\frac{" + numerator_depth, 1)
         rows = [
             cmath(r"P(D \mid \text{page})", r"\;\propto\;", r"P(D)\prod_w \theta_{D,w}^{\,c_w}", font_size=34,
                   colors=colors),
-            cmath(r"\log\frac{P(D \mid \text{page})}{P(A \mid \text{page})}", "=",
+            cmath(ratio, "=",
                   r"\log\frac{P(D)}{P(A)} + \sum_w c_w \log\frac{\theta_{D,w}}{\theta_{A,w}}", font_size=34, colors=colors),
-            cmath(r"\log\frac{P(D \mid \text{page})}{P(A \mid \text{page})}", "=", r"b + \sum_w \beta_w\, c_w",
+            cmath(ratio, "=", r"b + \sum_w \beta_w\, c_w",
                   font_size=34, colors=colors),
-            cmath(r"\theta_{D,w}", "=", r"\frac{\text{count}_{D,w} + 1}{N_D + 70}", font_size=34, colors=colors),
+            cmath(r"\theta_{D,w}", "=", smoothed_count, font_size=34, colors=colors),
         ]
         whys = [why(r"Bayes' rule; \\ each word drawn independently"), why(r"take logs, \ divide"),
                 why(r"a straight line \\ in the counts!"), why(r"Laplace's $+1$ \ (Part 1)")]

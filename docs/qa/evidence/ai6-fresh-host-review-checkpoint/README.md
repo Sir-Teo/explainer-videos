@@ -1,0 +1,7 @@
+# Part 6 fresh host review checkpoint
+
+The two full-text independent bounded reviews are preserved exactly, with original bundle identities in `reconciliation.json`. Their repaired-target closures do not approve the full selected cohorts, listening or production output. Root verified the materialized small-bundle byte identities; no large fresh chapter bundle was duplicated here.
+
+The routing inventory is a historical before-reconciliation receipt, not current owner assignment. None of its nine retained cases had an active reviewer in this source container. Root explicitly relinquished LDA/KNN/Kernels/SVM EN/ZH and Metrics ZH to the parent review pool. Fresh receiving assignments are pending parent confirmation. Trees and GradientBoosting remain with separately assigned parent reviewers. No duplicate renderer/reviewer was launched for these cases.
+
+The earlier17 selected-image cases keep their historical bounded receipts. NaiveBayes ZH now has a separately confirmed native fraction-contact defect and changed-source regression pending; current reviewed-source count is16, with no blanket redo requested for unchanged portions. KNN's targeted repair closure remains distinct from its pending full selected cohort. Forests/AdaBoost/Contest/Outro targeted closures likewise do not inflate full-case counts. Outro problem8 spacing is a separate low-priority polish lead; no glyph contact or numerical defect was asserted there.

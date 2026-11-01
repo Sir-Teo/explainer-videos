@@ -1,0 +1,230 @@
+{
+  "observed_utc": "2026-11-01T13:13:17.891211+00:00",
+  "published_head_checked": "b3d75c61425d194eed35a7aa9ba61267eed81213",
+  "published_checklist_observed_utc": "2026-11-01T10:28:38.694203+00:00",
+  "limitation": "Latest published checklist retains its older17accepted scope. Later unpublished reviewer closures are unknown here; source owner must reconcile before reassignment. This is a routing inventory, not a reset of acceptance.",
+  "accepted_selected_cases_do_not_repeat": [
+    "Hook:en",
+    "Hook:zh",
+    "LeastSquares:en",
+    "LeastSquares:zh",
+    "GaussMarkov:en",
+    "GaussMarkov:zh",
+    "Ridge:en",
+    "Ridge:zh",
+    "Lasso:en",
+    "Lasso:zh",
+    "Logistic:en",
+    "Logistic:zh",
+    "Newton:en",
+    "Newton:zh",
+    "NaiveBayes:en",
+    "NaiveBayes:zh",
+    "Metrics:en"
+  ],
+  "new_parent_assigned_review_pairs": [
+    {
+      "chapters": [
+        "Forests",
+        "AdaBoost"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "owner": "New independent parent cloud reviewer1 per parent instruction"
+    },
+    {
+      "chapters": [
+        "Contest",
+        "Outro"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "owner": "New independent parent cloud reviewer2 per parent instruction"
+    }
+  ],
+  "remaining_selected_cases_recorded_pending": 13,
+  "retained_source_owner_cases": [
+    {
+      "scene": "LDA",
+      "cases": [
+        "en",
+        "zh"
+      ],
+      "selected_per_language": {
+        "en": 480,
+        "zh": 498
+      },
+      "sheet_pages_per_language": {
+        "en": 60,
+        "zh": 63
+      },
+      "packet": "libfile_283dbb6fbbc881919bb8c401ad147770",
+      "scope": "Fresh5886 bilingual after movies/endpoints/native captures and9bounded-window extractions perlanguage; bounded executor review only. Retained LDA owner must complete after cohort/window acceptance."
+    },
+    {
+      "scene": "KNN",
+      "cases": [
+        "en",
+        "zh"
+      ],
+      "selected_per_language": {
+        "en": 443,
+        "zh": 471
+      },
+      "sheet_pages_per_language": {
+        "en": 56,
+        "zh": 59
+      },
+      "packet": "libfile_e949ad959434819193baf8c04cd1ee15",
+      "scope": "Use corrected5886plus only source fromcc58 packet; original libfile_6ff02d5001848191a2c6357a27776de7 retained as before evidence. English complete decoded movie and endpoint pixels exact; Chinese Jensen issue closed only in native and57frame append-window scope. Full cohort still belongs to retained KNN owner."
+    },
+    {
+      "scene": "Kernels",
+      "cases": [
+        "en",
+        "zh"
+      ],
+      "selected_per_language": {
+        "en": 605,
+        "zh": 625
+      },
+      "sheet_pages_per_language": {
+        "en": 76,
+        "zh": 79
+      },
+      "packet": "libfile_0c33d8b1fce8819181ca8b8c2efd313f",
+      "scope": "Fresh5886 bilingual after movies/endpoints/native and6append-window extractions perlanguage. Full cohort/windows retained Kernels owner."
+    },
+    {
+      "scene": "SVM",
+      "cases": [
+        "en",
+        "zh"
+      ],
+      "selected_per_language": {
+        "en": 472,
+        "zh": 506
+      },
+      "sheet_pages_per_language": {
+        "en": 59,
+        "zh": 64
+      },
+      "packet": "libfile_09b1155cced481919493eb18bba0d9f0",
+      "scope": "Decode-only historical movie identities, not fresh5886 renders. Full cohort retained SVM owner. Historical native47states were already reviewed; do not repeat native baseline."
+    },
+    {
+      "scene": "Metrics",
+      "cases": [
+        "zh"
+      ],
+      "selected_per_language": {
+        "zh": 332
+      },
+      "sheet_pages_per_language": {
+        "zh": 42
+      },
+      "packet": "libfile_b5b4a0e3a5488191ba7760e7799a6ad9",
+      "scope": "Historical/current input ZH movie decoded only; do not retag it as a new native-render movie. Retained Metrics owner handles full ZH cohort; EN selected review already accepted."
+    }
+  ],
+  "retained_ownership_authority": "docs/qa/evidence/ai6-five-chapter-source-integration/execution-capacity-request.json review_ownership; individual local reviewer thread IDs not recorded in that handoff. Coordinate through source-owner cloud task01a191c2-9a9e-74ad-ab44-2d96f53a10ee, do not invent or replace those owners.",
+  "other_parent_routed_cases": [
+    {
+      "scene": "Trees",
+      "cases": [
+        "en",
+        "zh"
+      ],
+      "packet": "libfile_4fa21ff00bc48191bead74accc1ad02e",
+      "selected_per_language": {
+        "en": 433,
+        "zh": 433
+      },
+      "sheet_pages_per_language": {
+        "en": 55,
+        "zh": 55
+      },
+      "routing": "Parent owns repaired-after review; not among the two newly assigned reviewer pairs. No comprehensive after-cohort closure reported to this executor. Ready for parent assignment after ownership reconciliation."
+    },
+    {
+      "scene": "GradientBoosting",
+      "cases": [
+        "en",
+        "zh"
+      ],
+      "routing": "Parent bounded historical review complete; no comprehensive full selected-cohort acceptance recorded. Native29states already reviewed, and all60 requested EN window frames already viewed. Do not duplicate either bounded/native work. Full cohort still requires decode/selection of existing movies; no new render needed.",
+      "window_only_packet": "libfile_3963313adfa0819194b471292857074a",
+      "full_movies_input_library": "libfile_3158cc8861448191a951cd71b6549e14",
+      "full_movies_input_library_version": 0,
+      "full_movies_archive_bytes": 41613077,
+      "full_movies_archive_sha256": "a3f9a113f93166796fd226f2fa733b60c032def432b5fe7f533cba6185a4d3e2",
+      "movie_archive_relative_paths": {
+        "en": "factory/runs/20261101T064932/16-GradientBoosting/en/motion/completed/media/videos/480p15/GradientBoosting.mp4",
+        "zh": "factory/runs/20261101T064932/16-GradientBoosting/zh/motion/completed/media/videos/480p15/GradientBoosting.mp4"
+      },
+      "movie_bytes": {
+        "en": 1492631,
+        "zh": 1507431
+      },
+      "movie_sha256": {
+        "en": "25fde2c6ac3028fe06baff1822449f76bbed7dd055180888c754544502a59650",
+        "zh": "bafecfcc81ea2750f00a74a9084b558ff6c146a3a88b96a4ea4d994b457ffc1b"
+      },
+      "full_movies_archive_filename": "AI-Built-Part6-Disjoint-12-Silent-Cloud-Review.zip"
+    }
+  ],
+  "separate_new_native_endpoint_scope": [
+    {
+      "scene": "Newton",
+      "cases": [
+        "en",
+        "zh"
+      ],
+      "native_states": {
+        "en": 14,
+        "zh": 16
+      },
+      "packet": "libfile_6adebd83d4248191b38585cc2d087e4d",
+      "note": "Both selected-motion cases already accepted. Executor inspected low overview and3native originals perlanguage; no claim of comprehensive review of all30native originals."
+    },
+    {
+      "scene": "NaiveBayes",
+      "cases": [
+        "en",
+        "zh"
+      ],
+      "native_states": {
+        "en": 13,
+        "zh": 13
+      },
+      "packet": "libfile_d2be10be2d7c8191b4c562b8524e1acf",
+      "note": "Both earlier selected-motion cases already accepted at old scope; do not blanket redo them. New ZH native fraction contact remains with source owner; target repaired-source regression only once assigned. Finding libfile_1d99caccd0988191a10fa6b6385f72ad. Executor inspected3native originals perlanguage, not all26originals."
+    },
+    {
+      "scene": "Metrics",
+      "cases": [
+        "en",
+        "zh"
+      ],
+      "native_states": {
+        "en": 16,
+        "zh": 16
+      },
+      "packet": "libfile_e70c585005308191aa9432053d34c77d",
+      "note": "EN old selected cohort accepted; ZH full selected cohort retained Metrics owner. New native scope separate, executor inspected4native originals perlanguage, not all32originals. Coordinate remaining native scope through same owner."
+    }
+  ],
+  "workspace": {
+    "main_head": "5886ad1b45446fc06f5e9a63a7bc0ce8caf7f8e1",
+    "main_git_status": "",
+    "free_bytes": 11746463744,
+    "capture_jobs": "none; all66complete, no new render/producer started for this routing request",
+    "preserved": "Original Library inputs, all captured outputs and guarded runtime remain available for targetedNaiveBayes follow-up."
+  },
+  "delivery_index": "libfile_9f4b9294e5cc81918c8c7a44854b95a4 version0 holds all15 packet bytes/hashes",
+  "future_gates": "Continuous perceptual playback, genuine narration/listening/alignment, full native motion/4K, whole-reel joins remain distinct; no Part7 started."
+}
