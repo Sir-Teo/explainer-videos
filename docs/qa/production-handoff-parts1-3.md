@@ -233,3 +233,12 @@ Use the explicit v7 ID with the existing `--strict-external --optional-audio` pr
 A new cloud fixture passed the actual268-file strict gate. It reused156 existing frozen inputs through ignored data symlinks without copying their80.9MB contents; source replacements remained independent regular files. Existing policy already permits hash-checked data links and rejects source symlinks. Nineteen actual outcomes covered exact worktree/source-only commit acceptance and default/old-mode, unrelated-source/HEAD/producer, missing/tampered-data and runtime-version rejection. All156 original payload hashes/sizes/mtimes/inodes/link counts, original fixture Git files and public-model witnesses stayed exact. The512MiB resource hard stop remained active. These checks load no model, synthesize no speech and grant no rendered-output approval.
 
 See `manifest-probability-dwell-part3-v7.json` and `overlay-probability-dwell-v7-checks/` for release pins, raw outcomes and limits. Earlier manifests/tests remain byte-exact.
+
+
+### Explicit v8 controlled-rerender gate
+
+`--overlay part1-entropy-prefix-timing-and-part3-v8` permits exactly base927 plus seven pinned regular source files: Hook7230, Probability5e, Surprise6456, Entropy338c, Prefix4592, SVD2c01, Outroe874. No Huffman, Part7 HEAD, extra repository paths or data/runtime/model/audio exemptions are authorized. Existing default/no-overlay behavior and v1–v7 manifests retain their scopes; v7 remains the unchanged five-source option.
+
+Entropy/Prefix source clearance follows actual supplied word clocks and frame-phase tests plus constructor checks; it authorizes controlled rerender only. Short Entropy motions request approximately0.179/0.306/0.221seconds, with retained settled proof state at least2.1507seconds in the clock probe. No repaired encoded output, actual readability/listening/sync or production acceptance is claimed.
+
+The verifier adds only two diagnostic labels for the new source paths beyond explicit v8 manifest dispatch. Its fullverify and all acceptance guards are unchanged. The existing v7 AST-comparison test is deliberately revised to require those exact two dictionary pairs at the exact existing label assignment, remove only those pairs, and compare every remaining guard AST. Its original bytes and prior helper/docs/manifests/tests are preserved under `historical/entropy-prefix-v8-before/`; current v7 test bytes are therefore explicitly not called unchanged. Other old tests/manifests/inventories remain byte-exact.

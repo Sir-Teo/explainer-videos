@@ -16,6 +16,40 @@ def dyadic(code: str) -> tuple[float, float]:
     return lo, lo + 2.0 ** -len(code)
 
 
+def _bookmark_run_times(vo, mark, *nominal):
+    """Fit sequential plays before this utterance's cue, allowing frame rounding.
+
+    Impossible deadlines retain positive one-frame plays, not a synchronization
+    guarantee. The actual cue and current elapsed time determine every budget.
+    """
+    frame = 1 / config.frame_rate
+    floor = len(nominal) * frame
+    budget = vo.mark_time(mark) - vo.elapsed() - (len(nominal) + 1) * frame
+    scale = min(1.0, max(0.0, (budget - floor) / (sum(nominal) - floor)))
+    return tuple(frame + (duration - frame) * scale for duration in nominal)
+
+
+def _bookmark_ladder_step(scene, step, index, vo, mark):
+    """Budget only this ladder step's scroll, transform and emphasis plays."""
+    run_times = iter(_bookmark_run_times(vo, mark, 0.6, 1.2, 0.8))
+    original_play = scene.play
+    had_override = "play" in scene.__dict__
+    original_override = scene.__dict__.get("play")
+
+    def timed_play(*animations, **kwargs):
+        kwargs["run_time"] = next(run_times)
+        return original_play(*animations, **kwargs)
+
+    scene.play = timed_play
+    try:
+        return step(index)
+    finally:
+        if had_override:
+            scene.play = original_override
+        else:
+            del scene.play
+
+
 class Prefix(VoiceoverScene):
     def construct(self):
         self.card()
@@ -358,7 +392,7 @@ class Prefix(VoiceoverScene):
             self.play(FadeOut(ud_demo), FadeOut(amb))
             step(0)
             vo.wait_until("d")
-            step(1)
+            _bookmark_ladder_step(self, step, 1, vo, "e")
             vo.wait_until("e")
             step(2)
         with self.voiceover(
