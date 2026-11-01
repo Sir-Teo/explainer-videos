@@ -24,3 +24,5 @@ All 18 chapters have scoped source/analytical and bilingual preparation. **Zero 
 | 15. Bayesian optimization | Recorded at scoped source level | Pending; Part6 gate | Pending |
 | 16. Variational inference | Recorded at scoped source level | Pending; Part6 gate | Pending |
 | Recap, problems, and where this comes back | Recorded at scoped source level | Pending; Part6 gate | Pending |
+
+[Bounded residual source risks](evidence/ai7-residual-source-risks/README.md) preserve current-code counterexamples and default-data uncertainty. They are an implementation/review queue, not completed fixes or rendered findings. No Part7 cache generation or rendering has started. New Part6 source triage takes priority.

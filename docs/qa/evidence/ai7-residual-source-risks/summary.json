@@ -1,0 +1,11 @@
+{
+  "observed_utc": "2026-11-01T14:13:07.407719+00:00",
+  "source_head": "9b8ab0457af23ec799dddf0c7289606f07371971",
+  "source_changed": false,
+  "part7_cache_exists": false,
+  "default_part7_items_run": 0,
+  "rendered_part7_cases": 0,
+  "owner_payloads_verified": 33,
+  "scope": "Read-only residual source audit with tiny synthetic witnesses only. No acceptance or default-outcome claim.",
+  "priority": "New Part6 LDA/Kernels triage now takes precedence; root narration qualifications intentionally not yet applied."
+}
