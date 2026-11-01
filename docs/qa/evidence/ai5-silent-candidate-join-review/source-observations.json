@@ -1,0 +1,230 @@
+[
+  {
+    "path": "tools/build.py",
+    "bytes": 11900,
+    "sha256": "12337229386de13d5c4090f7d07a389ef1d06745a78896493398a38699f1affc",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/tools/build.py"
+  },
+  {
+    "path": "explainer/voiceover.py",
+    "bytes": 10700,
+    "sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/explainer/voiceover.py"
+  },
+  {
+    "path": "explainer/lang.py",
+    "bytes": 6956,
+    "sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/explainer/lang.py"
+  },
+  {
+    "path": "explainer/tts.py",
+    "bytes": 40277,
+    "sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/explainer/tts.py"
+  },
+  {
+    "path": "tools/qa_series.py",
+    "bytes": 25379,
+    "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/tools/qa_series.py"
+  },
+  {
+    "path": "tools/qa_motion.py",
+    "bytes": 19437,
+    "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/tools/qa_motion.py"
+  },
+  {
+    "path": "explainer/ai/viz.py",
+    "bytes": 31773,
+    "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/explainer/ai/viz.py"
+  },
+  {
+    "path": "videos/ai/ai_text_zh.json",
+    "bytes": 2436781,
+    "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai_text_zh.json"
+  },
+  {
+    "path": "videos/ai/ai5/__init__.py",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/__init__.py"
+  },
+  {
+    "path": "videos/ai/ai5/cache_contract.py",
+    "bytes": 27481,
+    "sha256": "8299c66149bdedeb11bd500f80b3aed6b5cdef3fb83fd66dae883e269d3ec538",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/cache_contract.py"
+  },
+  {
+    "path": "videos/ai/ai5/common.py",
+    "bytes": 8633,
+    "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/common.py"
+  },
+  {
+    "path": "videos/ai/ai5/compute.py",
+    "bytes": 60814,
+    "sha256": "6e61b12c65cbb90f4829195ba09cc366ababaa10c1226dfd809c24b4557996d8",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/compute.py"
+  },
+  {
+    "path": "videos/ai/ai5/contracts.py",
+    "bytes": 5886,
+    "sha256": "c9749dab8b50f72bf7810914d7cffd4377ddc939ce00b66a8d5987f091977443",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/contracts.py"
+  },
+  {
+    "path": "videos/ai/ai5/decoding.py",
+    "bytes": 10979,
+    "sha256": "235fb5155a16523394e659acb7763260e3f3dadb5db7d7c54367ef77c50295d5",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/decoding.py"
+  },
+  {
+    "path": "videos/ai/ai5/decoding_contract.py",
+    "bytes": 7793,
+    "sha256": "bac666e3d8dd9dc4a5b2312a72eba6dc6776157e806f02d3eaab65d35d694d8a",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/decoding_contract.py"
+  },
+  {
+    "path": "videos/ai/ai5/manifest.py",
+    "bytes": 1285,
+    "sha256": "20340d942ab7b80dfb610d23cc24acec2104434b4021d460ac44d18d9df9659c",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/manifest.py"
+  },
+  {
+    "path": "videos/ai/ai5/plotting.py",
+    "bytes": 3599,
+    "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/plotting.py"
+  },
+  {
+    "path": "videos/ai/ai5/s01_hook.py",
+    "bytes": 8384,
+    "sha256": "5a5f0dc5ff04c831baaf752a2fe8a71a5caf716b1f32e4710e441fb03b901e96",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s01_hook.py"
+  },
+  {
+    "path": "videos/ai/ai5/s02_bell.py",
+    "bytes": 22764,
+    "sha256": "c4025027c65a62e4bb5f904802cacb357a2927b7f43434cda7adafe05dd42898",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s02_bell.py"
+  },
+  {
+    "path": "videos/ai/ai5/s03_gauss.py",
+    "bytes": 16067,
+    "sha256": "a913a45fd52683d2423e417262fa47588b165560335ae5e30957323630e44127",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s03_gauss.py"
+  },
+  {
+    "path": "videos/ai/ai5/s04_likelihood.py",
+    "bytes": 17514,
+    "sha256": "8de7027104168e6188476a1d809389e6873fbbead8c1a57ee855faf81bdb2e99",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s04_likelihood.py"
+  },
+  {
+    "path": "videos/ai/ai5/s05_fisher.py",
+    "bytes": 19172,
+    "sha256": "65ec3c37d067edf3f6361ddad24a5605bebf32490f2fc8418df3f4278f0386dd",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s05_fisher.py"
+  },
+  {
+    "path": "videos/ai/ai5/s06_bayes.py",
+    "bytes": 18730,
+    "sha256": "64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s06_bayes.py"
+  },
+  {
+    "path": "videos/ai/ai5/s07_maxent.py",
+    "bytes": 15669,
+    "sha256": "f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s07_maxent.py"
+  },
+  {
+    "path": "videos/ai/ai5/s08_mcmc.py",
+    "bytes": 207,
+    "sha256": "d9f6b6a8cda96bda03f017c7c6a00bef423e4280b7acfa9f6c72268fcc896946",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s08_mcmc.py"
+  },
+  {
+    "path": "videos/ai/ai5/s09_tails.py",
+    "bytes": 14844,
+    "sha256": "028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s09_tails.py"
+  },
+  {
+    "path": "videos/ai/ai5/s10_sampling.py",
+    "bytes": 19995,
+    "sha256": "c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s10_sampling.py"
+  },
+  {
+    "path": "videos/ai/ai5/s11_decoding.py",
+    "bytes": 22630,
+    "sha256": "be8c9b419ea61ecc004d275ccbef276db838bec0a29f57801c8f4db52c63e693",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s11_decoding.py"
+  },
+  {
+    "path": "videos/ai/ai5/s12_markov.py",
+    "bytes": 21774,
+    "sha256": "6c7ee6d58ffa4096340c3c5be933d9006d48879f3561acdc277fc45fedc7e30e",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s12_markov.py"
+  },
+  {
+    "path": "videos/ai/ai5/s13_montecarlo.py",
+    "bytes": 23262,
+    "sha256": "34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s13_montecarlo.py"
+  },
+  {
+    "path": "videos/ai/ai5/s14_scorefn.py",
+    "bytes": 15280,
+    "sha256": "15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s14_scorefn.py"
+  },
+  {
+    "path": "videos/ai/ai5/s15_mcmc.py",
+    "bytes": 22444,
+    "sha256": "95c38c1d058a07556f26dd86fd042dbdba8e137ff4083ea9350cbd0f919655af",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s15_mcmc.py"
+  },
+  {
+    "path": "videos/ai/ai5/s16_brownian.py",
+    "bytes": 15958,
+    "sha256": "780521544fd9ad5e9ab698bfeba6c8da2aa82b24b17433a93623dca69c444e9f",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s16_brownian.py"
+  },
+  {
+    "path": "videos/ai/ai5/s17_ito.py",
+    "bytes": 13410,
+    "sha256": "3cbd2023cb1a0a969d542fe634cd814e3f7a69f46e1a62d0a11702a2b73fa08e",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s17_ito.py"
+  },
+  {
+    "path": "videos/ai/ai5/s18_sde.py",
+    "bytes": 11573,
+    "sha256": "b014235b1885e3373b2052dd8b937a085413475073f7fa9296d5866b628c8e65",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s18_sde.py"
+  },
+  {
+    "path": "videos/ai/ai5/s19_fokker.py",
+    "bytes": 17978,
+    "sha256": "7e33904756d634c988cc6b3db97f29a851788d7d64d7a111a33df0f75983bca7",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s19_fokker.py"
+  },
+  {
+    "path": "videos/ai/ai5/s20_outro.py",
+    "bytes": 15158,
+    "sha256": "7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/s20_outro.py"
+  },
+  {
+    "path": "videos/ai/ai5/zh_lines.py",
+    "bytes": 82756,
+    "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+    "snapshot": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/source/videos/ai/ai5/zh_lines.py"
+  }
+]

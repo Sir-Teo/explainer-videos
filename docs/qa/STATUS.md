@@ -1,9 +1,9 @@
 # Current cloud QA checkpoint
 
-Observed 01 November 2026, 04:27 UTC. Progress, **not full-series production approval**.
+Observed 01 November 2026, 04:38 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified push before this checkpoint:
-`91266d222f3c2799159dd66df2b42a94c028f458` (MC/Score/data-caption repairs and bounded evidence). No merge, deployment, CI/CD or runners.
+`5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed` (final Part5scene source, selected-review and data/test evidence). No merge, deployment, CI/CD or runners.
 
 Part 1: all 17 chapters in both languages have endpoint captures, complete silent renders and selected-time
 review. The frozen baseline covers 15,194 selected times from 109,941 automatically decoded frames; scoped
@@ -96,7 +96,7 @@ Repairs include live MonteCarlo pictured-cohort/count/estimate synchronization a
 
 All **604 native1080 endpoint images across38cases** were inspected on164pages at declared scales, plus93original-size followups. A Brownian clipping suspicion was withdrawn after native-crop confirmation of full entries/margins. The original ENBrownian sparse/dead-air warning was inspected over every encoded transition frame and found to reflect the intended fade/tiny initial point; its rawwarning remains. Native endpoints do not approve full1080/4Kmotion.
 
-Both complete silent candidates have full decode/monotonic timestamp/chapter/subtitle checks: EN55:52.563(50,288frames,992cues), ZH58:23.617(52,554frames,1013cues). All36chapter joins have684selected times,650distinct images on82actually viewed chronological pages and44original context images, with no observed join defect. FullAAC/PCM silence checks are being completed separately. These are labeled QA candidates; continuous perception, narration/listening/sync and fullproduction motion remain open.
+Both complete silent candidates have full decode/monotonic timestamp/chapter/subtitle checks: EN55:52.563(50,288frames,992cues), ZH58:23.617(52,554frames,1013cues). All36chapter joins have684selected times,650distinct images on82actually viewed chronological pages and44original context images, with no observed join defect. FullAAC/PCMchecks decoded321,398AACframes with strictly increasing audioPTS and zero nonzero PCMbytes. These prove digital silence only. These are labeled QA candidates; continuous perception, narration/listening/sync and fullproduction motion remain open.
 
 The [final frozen test run](evidence/ai5-integrated-tests-20261101-final-candidate/README.md) passed518tests in46.717seconds, all1501source/config identities unchanged during the run; exact inventories include final MCMC/Brownian/Fokker local sources. Earlier518/507runs remain historical and counts are not added. Later Part6implementation is outside that frozen test claim. Part6source implementation starts next; Parts7–31remainqueued. All31parts/553chapters remain in scope. The [production/listening queue](remaining-production-qa.md) retains all remaining gates; no CI/CD/localrender/merge/publicpublication was started.
 
@@ -139,3 +139,5 @@ Cloud production coordination: the private Drive test succeeded via the parent, 
 Cloud SVD production-polish overlay `svd-production-polish-v2` is separately gated at10b0de74: exact scene hash2c01a4a7…, native right margin27→132pixels in both languages, protected Chinese name wrapping, unchanged voiceover/bookmarks/timing and data. Its strict268-file preflight and negative default/v1/unrelated-source cases pass. This visual-only overlay does not include the later Part3Outro source, nor approve the new Mandarin audio candidate. The cloud production owner alone owns that speech comparison.
 
 Storage guard recovery04:10UTC: normal public forced-aligner cache eviction restored about2.4GiB free, after checking no visible open/mapped model blobs and245protected numerical/trained/corpus signatures unchanged. Generated speech and unique QA evidence remain. Future alignment here requires normal exact-revision redownload. [Receipt](evidence/cloud-capacity-20261101-aligner/README.md).
+
+Part5source/datahandoff is saved in Library `libfile_31f193f835c08191910421e5e333cd51`,version1,7,399,093bytes, frozen to5fc8eeab34c2c2fe49a6b38ff38629e1512fa7ed. [Production handoff](production-handoff-part5.md). Separate cloudproduction owner can begin gated narrated4Kpilots; allopenproduction/listeningconditions remain. Part6core/cache and scene/ENZHrepairs are in progress, with no actualPart6 numerical job/render started.

@@ -1,0 +1,366 @@
+{
+  "scope": "Part5 remaining21 native1080 endpoint cases: EN Bayes/MaxEnt/Tails plus EN/ZH Sampling through Outro, complementing immutable first17case package.",
+  "completed": "2026-11-01T04:11:44.016839+00:00",
+  "cases": [
+    {
+      "case": "en/Bayes",
+      "frames": 18,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "f0ceaa36e6407b10458ff1c84d91afcbe7e74db8414d2e1ecee531f5374de410",
+      "direct_source": {
+        "path": "videos/ai/ai5/s06_bayes.py",
+        "sha256": "64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64",
+        "bytes": 18730
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/MaxEnt",
+      "frames": 16,
+      "pages": 4,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "89667c1e6cf925e2e6310af0423e140a4a77e14d5ae45f59d6b9a6a308af1853",
+      "direct_source": {
+        "path": "videos/ai/ai5/s07_maxent.py",
+        "sha256": "f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd",
+        "bytes": 15669
+      },
+      "known_capture_limitations": [
+        {
+          "kind": "known-skipped-animation-updater-limitation",
+          "frame_index": 9,
+          "detail": "Step60 endpoint may retain uniform old bars while lambda/mean text is final; subsequent hold catches up. Excluded from real-motion correctness conclusions; separate selected full-motion case was reviewed."
+        }
+      ],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Tails",
+      "frames": 17,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "e561f1b2359f97244aa5a39b8cd20a878cbcb66b5aa4d398fb087129e22cbd89",
+      "direct_source": {
+        "path": "videos/ai/ai5/s09_tails.py",
+        "sha256": "028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773",
+        "bytes": 14844
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Sampling",
+      "frames": 17,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "2e9415fb069ce389100d0d6a9fb9e517c9f41e75be634e94ed2247da12738b88",
+      "direct_source": {
+        "path": "videos/ai/ai5/s10_sampling.py",
+        "sha256": "c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974",
+        "bytes": 19995
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Sampling",
+      "frames": 17,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "043667fdf11eef28396791425f920a66bbadd5473c2c33f47806e4d8bfb171fa",
+      "direct_source": {
+        "path": "videos/ai/ai5/s10_sampling.py",
+        "sha256": "c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974",
+        "bytes": 19995
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/MonteCarlo",
+      "frames": 19,
+      "pages": 5,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "1e605df4fdbeaa651619a713fc8b0255bde46b055022f22e46d1caccd21a64f4",
+      "direct_source": {
+        "path": "videos/ai/ai5/s13_montecarlo.py",
+        "sha256": "34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5",
+        "bytes": 23262
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/MonteCarlo",
+      "frames": 19,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "f485c0c815f1667776ebb0c7dc84e0687c9cc4ba624e1e686a957e463f5b8c90",
+      "direct_source": {
+        "path": "videos/ai/ai5/s13_montecarlo.py",
+        "sha256": "34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5",
+        "bytes": 23262
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/ScoreFn",
+      "frames": 16,
+      "pages": 4,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "b87c10e64ffa6bc2dbfd730911ae7ed57a1cc14161c4b4b525662695e3aea76c",
+      "direct_source": {
+        "path": "videos/ai/ai5/s14_scorefn.py",
+        "sha256": "15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c",
+        "bytes": 15280
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/ScoreFn",
+      "frames": 16,
+      "pages": 4,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "63174e7aa1c564826a98ecda930f3a383a778775975895ba3c45fad65830345a",
+      "direct_source": {
+        "path": "videos/ai/ai5/s14_scorefn.py",
+        "sha256": "15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c",
+        "bytes": 15280
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/MCMC",
+      "frames": 18,
+      "pages": 5,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "532d92bbba6dae5aa6827d71a3fa89a33788feac5d0d384a905b17a253d5571f",
+      "direct_source": {
+        "path": "videos/ai/ai5/s15_mcmc.py",
+        "sha256": "95c38c1d058a07556f26dd86fd042dbdba8e137ff4083ea9350cbd0f919655af",
+        "bytes": 22444
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/MCMC",
+      "frames": 19,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "4960fc2cbdaff93ee4d5d85c76a8694de86906edd282bf4b2428a6411f7bbbc8",
+      "direct_source": {
+        "path": "videos/ai/ai5/s15_mcmc.py",
+        "sha256": "95c38c1d058a07556f26dd86fd042dbdba8e137ff4083ea9350cbd0f919655af",
+        "bytes": 22444
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Brownian",
+      "frames": 11,
+      "pages": 3,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "279691bf19b30cda20002751e55395059400e6b449576ad95a98b8271c691884",
+      "direct_source": {
+        "path": "videos/ai/ai5/s16_brownian.py",
+        "sha256": "780521544fd9ad5e9ab698bfeba6c8da2aa82b24b17433a93623dca69c444e9f",
+        "bytes": 15958
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Brownian",
+      "frames": 12,
+      "pages": 3,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "3854324af817986f2d19188ffe5795fda60514bf929f18930a1587da6b2f5c2e",
+      "direct_source": {
+        "path": "videos/ai/ai5/s16_brownian.py",
+        "sha256": "780521544fd9ad5e9ab698bfeba6c8da2aa82b24b17433a93623dca69c444e9f",
+        "bytes": 15958
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Ito",
+      "frames": 14,
+      "pages": 4,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "f38d0f9f6541892f90e1af5c2ac6ae8e0bf3a0adc06bacbd4f52d92cb1d88636",
+      "direct_source": {
+        "path": "videos/ai/ai5/s17_ito.py",
+        "sha256": "3cbd2023cb1a0a969d542fe634cd814e3f7a69f46e1a62d0a11702a2b73fa08e",
+        "bytes": 13410
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Ito",
+      "frames": 15,
+      "pages": 4,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "87f71926d7a622768d7ab4ee5e01ce77ac4baf36f6d610e1ceeb1719bb36f252",
+      "direct_source": {
+        "path": "videos/ai/ai5/s17_ito.py",
+        "sha256": "3cbd2023cb1a0a969d542fe634cd814e3f7a69f46e1a62d0a11702a2b73fa08e",
+        "bytes": 13410
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/SDE",
+      "frames": 11,
+      "pages": 3,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "55c29add8d95f795b1c982a4d99d219b55800cb9e2993b330320a2dddd7136d1",
+      "direct_source": {
+        "path": "videos/ai/ai5/s18_sde.py",
+        "sha256": "b014235b1885e3373b2052dd8b937a085413475073f7fa9296d5866b628c8e65",
+        "bytes": 11573
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/SDE",
+      "frames": 11,
+      "pages": 3,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "1fe21f2a31e987945773df449c2111bc8f90b8c823ea66db8c1495c7afcff583",
+      "direct_source": {
+        "path": "videos/ai/ai5/s18_sde.py",
+        "sha256": "b014235b1885e3373b2052dd8b937a085413475073f7fa9296d5866b628c8e65",
+        "bytes": 11573
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/FokkerPlanck",
+      "frames": 15,
+      "pages": 4,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "195717aea67cf28c15073f73a2efc12d18ee8db7b4997dde921cfe16743faeaf",
+      "direct_source": {
+        "path": "videos/ai/ai5/s19_fokker.py",
+        "sha256": "7e33904756d634c988cc6b3db97f29a851788d7d64d7a111a33df0f75983bca7",
+        "bytes": 17978
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/FokkerPlanck",
+      "frames": 14,
+      "pages": 4,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "9877c93c5140b6c85fd978ff384813f603cd5130c8cd75b37ce0d4b79c7bce46",
+      "direct_source": {
+        "path": "videos/ai/ai5/s19_fokker.py",
+        "sha256": "7e33904756d634c988cc6b3db97f29a851788d7d64d7a111a33df0f75983bca7",
+        "bytes": 17978
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Outro",
+      "frames": 5,
+      "pages": 2,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "573a317f0e9d3d19a0e5d7cf1cdea93bc69eebcf347a4f4ee5490bc604238aee",
+      "direct_source": {
+        "path": "videos/ai/ai5/s20_outro.py",
+        "sha256": "7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e",
+        "bytes": 15158
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Outro",
+      "frames": 5,
+      "pages": 2,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "3759d3e23a4c16a5b9145409a5c986c110ce671348bebd415dc38894877ea805",
+      "direct_source": {
+        "path": "videos/ai/ai5/s20_outro.py",
+        "sha256": "7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e",
+        "bytes": 15158
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    }
+  ],
+  "totals": {
+    "frames": 305,
+    "pages": 84,
+    "original_size_followups": 51
+  },
+  "source_snapshots_unchanged_during_all_cases": true,
+  "shared_caption_table_sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+  "wrapper_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+  "capture_session": {
+    "id": 78207,
+    "exit_code": 0,
+    "serial": true,
+    "nice": 15,
+    "numeric_threads": 1,
+    "disk_guard_bytes": 536870912
+  },
+  "no_source_core_producer_cache_edits": true,
+  "no_full_motion_audio_approval": true
+}

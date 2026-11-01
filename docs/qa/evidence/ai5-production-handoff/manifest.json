@@ -1,0 +1,57 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1926,
+    "sha256": "ec2233c386cadeb5f6a8fbcbb1192f2b0714f9b6be309b074a813b3cb9b1099f"
+  },
+  {
+    "path": "archive-manifest.json.gz",
+    "bytes": 3184,
+    "sha256": "30db774fb12374e80c095122a447688eae6d792bcfc1ad758e1d8f3dd7490af0"
+  },
+  {
+    "path": "archive-receipt.json.gz",
+    "bytes": 263,
+    "sha256": "18621ae5f2bb6443e7a6e40452ca24b6339ab183aadf2750f9807340324c4607"
+  },
+  {
+    "path": "build_handoff-attempt1-root-metadata-path.py.gz",
+    "bytes": 3432,
+    "sha256": "b1ce96fbe630dac7899db9d89f0b3596f4ba3716b34fe3bbef7d3e2994bc6c25"
+  },
+  {
+    "path": "build_handoff.py.gz",
+    "bytes": 3430,
+    "sha256": "5a9758d3d88f5361dfcc9d5437f17f115e6acd1a0828d8e40ef756f4f6cd61a9"
+  },
+  {
+    "path": "handoff.json.gz",
+    "bytes": 10204,
+    "sha256": "2beb665710988fd82f5861688572e236a28e0bce9731b26be01b0a419d3850ff"
+  },
+  {
+    "path": "library-receipt.json",
+    "bytes": 833,
+    "sha256": "ed9e6a8aaa9b16040959ca17956eb88b83d0b89b96a2f9315648ea804bd9d35b"
+  },
+  {
+    "path": "original-v0/README.md.gz",
+    "bytes": 1760,
+    "sha256": "141cdd88c9bfeba2c5b9c11050881ebef768c90e1ab39abb39c35e05bff24df5"
+  },
+  {
+    "path": "original-v0/archive-manifest.json.gz",
+    "bytes": 3184,
+    "sha256": "936bc2de1fb4a486fdbaa846fca4157914687f1fccebb0814eeb85ebd539ac77"
+  },
+  {
+    "path": "original-v0/archive-receipt.json.gz",
+    "bytes": 263,
+    "sha256": "236ad61973cc7ee29a3808c4c7bdecb68faa9edad022b7f901ac67265dca9298"
+  },
+  {
+    "path": "original-v0/handoff.json.gz",
+    "bytes": 10205,
+    "sha256": "9555a2d97739c24217f4563470c3c62d278e3383b5a96ec8b4d8b59e9d6ca117"
+  }
+]

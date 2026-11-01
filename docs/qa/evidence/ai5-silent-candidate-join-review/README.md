@@ -1,0 +1,19 @@
+# Part5 silent candidate assembly: selected chapter joins
+
+All18chapter joins in each English/Chinese silent candidate were reviewed chronologically: **684selected timestamps**, **650actually viewed distinct images**, and **34byte-identical PNG duplicate-time mappings**. All82pages were viewed at640px image width; an additional22critical before/after pairs (44images) were inspected at original854×480. No join-specific defect was found: outgoing compositions fade out, the expected next chapter title/recap fades in, and no wrong-order flash or persistent prior overlay appeared.
+
+Each join includes every encoded frame from boundary index−6 through+6 (approximately±0.4seconds at15fps), plus−15/−12/−9/+9/+12/+15 (approximately±1.0/0.8/0.6seconds). Complete frame identities, exact PTS, hashes, coverage/duplicate mapping, page hashes, actual native context checks and unselected scope are in the compressed ledgers. The other7optional original-size pairs per language were not viewed separately; their selected images were covered on the declared pages.
+
+Original-size contexts cover Hook→Bell, Gauss→Likelihood, Bayes→MaxEnt, Tails→Sampling, Sampling→Decoding, Decoding→Markov, ScoreFn→MCMC, MCMC→Brownian, Ito→SDE, SDE→FokkerPlanck and FokkerPlanck→Outro. All82actual reviewed page identities remain in the complete ledgers and all original pages remain in runtime. This bounded package ships10representative actual pages (5per language:3,10,14,25,32) and all44native examples; together these images represent all18joins per language. The artifact map distinguishes viewed versus shipped pages. Redundant package-only page copies were removed only after SHA256 verification against untouched runtime originals. No full movies or data caches are bundled.
+
+Machine validation was completed before consumption and movie/frame hashes were independently checked. English:3352.562542seconds/50288decodedframes/992subtitle cues. Chinese:3503.617125seconds/52554decodedframes/1013cues. Existing complete decode, monotonic packet timestamps, ~1/15second video gaps and exact soft-subtitle text/millisecond timing receipts are preserved; they are not substituted for perceptual or listening review. Original chapter raw source-change warnings remain in frozen chapter records and the summary.
+
+Assembly movie SHA256:
+- EN `d256356d20368c82c9b190c93c2a01453283626b4dffdf7642f0ced5477347ab`
+- ZH `9dae141ad8fa31bee6f50ebed1a3f13ea5c3b060b5560fbb76822cb64e3f97d5`
+
+**Scope and limits:** this is a silent854×48015fps **candidate join-window review**. It does not upgrade the candidate status, close another owner's chapter-level FP gate, approve whole-chapter/full-part continuous perceptual playback, narration/listening/synchronization, subtitle-player rendering, or production1080/4K output. Source snapshots in the assembly freeze are observations, not retrospective import proof. No scene, producer, numerical data/cache, translation/global table, or CI configuration changed. Runtime methods adapt the previously used Part4join-page/checkpoint workflow and render no new scene/movie.
+
+Compaction preserves the full compressed review/maps/view logs/raw validation/assembly/chapter-warning receipts. All44original native PNG byte streams remain bundled; only redundant page copies were removed. All82runtime pages and every runtime join PNG are untouched.
+
+Root added full silent-audio validation after the join review:157,159English and164,239Chinese AACframes decoded; strictly increasing audioPTS; full stereo16bitPCMdecode yielded zero nonzero bytes in both files. Exact outputmovieSHA, commands, samplecounts, rawlogs and fullAACtime ledgers retained underroot-audio-supplement/. This establishesdigital silence only, not narrated listening/acousticquality/sync. Original pre-supplement manifest retained compressed under method/.

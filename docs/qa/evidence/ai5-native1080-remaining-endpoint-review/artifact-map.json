@@ -1,0 +1,1343 @@
+{
+  "created_utc": "2026-11-01T04:26:50.861807+00:00",
+  "prior_manifest_sha256": "7a2378c92352c35ad1a57ee0abf95617110ae80ee2b5a10d9e48efcc92428eb5",
+  "all_runtime_originals_preserved": true,
+  "critical_original_resolution_images": 51,
+  "withdrawal_crops": 2,
+  "actual_representative_pages": 21,
+  "scope": "Original-resolution content preserved via verified lossless re-encoding; original PNG bytes remain runtime, not this package. Full original timestamps/SHA/viewing ledgers unchanged.",
+  "artifacts": [
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Bayes/pages/page-005.png",
+      "original_png_sha256": "a5e6ef1a5375d822db0c7c23abb98bdd0b0371ca169ab97e1897da8607e1c77d",
+      "original_png_bytes": 132584,
+      "original_png_package_path_before_compaction": "en/Bayes/example/page-005.png",
+      "package_encoded_path": "en/Bayes/example/page-005.webp",
+      "package_encoded_sha256": "21e11689116120838147d9979007f9c343cb47b8ada3d0006e05ff11bece67c6",
+      "package_encoded_bytes": 66636,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "2e72a62bcf88c6cf8f24a8db11e167dbcc208fdbabc23c3d61103daaa8e56662",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Bayes/frames/007_00067.8s.png",
+      "original_png_sha256": "b95a15583cf7ff83f4cd3bf9ddd2c2829a2af5c2912a287244abcf3dc04a9259",
+      "original_png_bytes": 170007,
+      "original_png_package_path_before_compaction": "en/Bayes/native/007_00067.8s.png",
+      "package_encoded_path": "en/Bayes/native/007_00067.8s.webp",
+      "package_encoded_sha256": "97b93fc7944b229f099235ae1596b5993203d86fa46f601f2180e5b71254b00e",
+      "package_encoded_bytes": 62688,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "3bfffa246b4e81563c5f1893de3461f9435826dddaf4fe58864c0302e9915c8b",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Bayes/frames/017_00162.8s.png",
+      "original_png_sha256": "0fb202b8f7e72313988e28474ab280a608b151a5290b2e8fd91fcba64428d0ba",
+      "original_png_bytes": 213974,
+      "original_png_package_path_before_compaction": "en/Bayes/native/017_00162.8s.png",
+      "package_encoded_path": "en/Bayes/native/017_00162.8s.webp",
+      "package_encoded_sha256": "1a1339f0cb1b4df2177e497556e43641156c60a9456ed3271d9e67023fcf3ecb",
+      "package_encoded_bytes": 77702,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "dccd4fb3c6ccdb5dbfb05c0a3c680a40b8d3f5c3fd99a0d28c88028e32cd4cbf",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Brownian/pages/page-003.png",
+      "original_png_sha256": "e84df8972c599610f7e6e4ee1e8c0ef7a11d81286dd9a44d2620924b49b5322e",
+      "original_png_bytes": 311370,
+      "original_png_package_path_before_compaction": "en/Brownian/example/page-003.png",
+      "package_encoded_path": "en/Brownian/example/page-003.webp",
+      "package_encoded_sha256": "96da40267c2370d6d640fa10d688d01906c2c8eb98b2010b1f06efd6ee1408d7",
+      "package_encoded_bytes": 174404,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "e8f185f53166022953b7413a02dcae2d331a3ba58c8730c5f0bf27452b2f5e26",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Brownian/frames/004_00072.0s.png",
+      "original_png_sha256": "279c2a4a5792296fb665398be6ca5f4348d47f2058140bc8b5b565274173224a",
+      "original_png_bytes": 922557,
+      "original_png_package_path_before_compaction": "en/Brownian/native/004_00072.0s.png",
+      "package_encoded_path": "en/Brownian/native/004_00072.0s.webp",
+      "package_encoded_sha256": "92fa8a3e6ec7ba342182cc57b3e2c84240879f6e80fa70625a8e0e6afbb187da",
+      "package_encoded_bytes": 578878,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "67a29287f9420b8990f9099260f0692cc72345f31ad99b6359f4ee00d1584eca",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Brownian/frames/008_00118.7s.png",
+      "original_png_sha256": "aa794b0c42706095fbd7f629d47e455e7bdd5bcf7d800ec72d6f64b539cdd823",
+      "original_png_bytes": 187382,
+      "original_png_package_path_before_compaction": "en/Brownian/native/008_00118.7s.png",
+      "package_encoded_path": "en/Brownian/native/008_00118.7s.webp",
+      "package_encoded_sha256": "001843b6aef73c15f332c9bf1507d907e785593b7d1f158a7ed5e762f01c80ef",
+      "package_encoded_bytes": 62916,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "9085c670f4c5fead2e65062b65801b9ca442d261e9ae018266bba2b62b6f9cd0",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Brownian/qv-right-native-crop.png",
+      "original_png_sha256": "5640419979202a56799cc191b9ee3a36dca80f349875fe0e016e2d9a0aeaa130",
+      "original_png_bytes": 66005,
+      "original_png_package_path_before_compaction": "en/Brownian/qv-right-native-crop.png",
+      "package_encoded_path": "en/Brownian/qv-right-native-crop.webp",
+      "package_encoded_sha256": "d911e4b48a7b43d30e76b3e0ca0e8883e203c68e73023255d4acdb6393052301",
+      "package_encoded_bytes": 21742,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        920,
+        320
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "e8e94be38ad54e5d4d965d9615eb86f37d2b00640046aae842e2c5b381e27793",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-FokkerPlanck/pages/page-004.png",
+      "original_png_sha256": "59f37f9d51a8d509dec33ef64e51c8659ff7529e6db0f7b17955a800cc14ebe8",
+      "original_png_bytes": 388281,
+      "original_png_package_path_before_compaction": "en/FokkerPlanck/example/page-004.png",
+      "package_encoded_path": "en/FokkerPlanck/example/page-004.webp",
+      "package_encoded_sha256": "642185677d0f0572547d25f25049920eb0f34c5e475c3c00ed019e5bb72d3110",
+      "package_encoded_bytes": 242940,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "c122a06e864c3201f619c4485c568421435bb427c6457cf9f65bbf42e0cbb6b9",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-FokkerPlanck/frames/003_00035.1s.png",
+      "original_png_sha256": "420e3d7efa6024bc54d9413effdf622cc30d00f311e128752d9be6cd379e89fc",
+      "original_png_bytes": 199731,
+      "original_png_package_path_before_compaction": "en/FokkerPlanck/native/003_00035.1s.png",
+      "package_encoded_path": "en/FokkerPlanck/native/003_00035.1s.webp",
+      "package_encoded_sha256": "0198b78ae50cce155ae21dba84ecb5dcef60659b320989b63d74d3a74d51d23d",
+      "package_encoded_bytes": 65016,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "2a85f65699709736a857a80514f72cfd64626c2ebc025ad5c7c066e97cd67600",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-FokkerPlanck/frames/006_00077.8s.png",
+      "original_png_sha256": "b4789492c9f5f94e251ce5849f3a0e58684b861c7c48e9c151a402ff9e59ada6",
+      "original_png_bytes": 116044,
+      "original_png_package_path_before_compaction": "en/FokkerPlanck/native/006_00077.8s.png",
+      "package_encoded_path": "en/FokkerPlanck/native/006_00077.8s.webp",
+      "package_encoded_sha256": "a2100fc0c2c6517f95634e9bc0d74c5f2affe309e3f5962fa8991abe83c39576",
+      "package_encoded_bytes": 42090,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "5c5ba194c7ede089c40cf51621bc5ec6f8d13ed5224beaf62a180129748faf5b",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-FokkerPlanck/frames/011_00150.6s.png",
+      "original_png_sha256": "c83844793173580fbbdfe3ee2f5fb3581b04b60d292ef193b997fd33e7ad41eb",
+      "original_png_bytes": 108105,
+      "original_png_package_path_before_compaction": "en/FokkerPlanck/native/011_00150.6s.png",
+      "package_encoded_path": "en/FokkerPlanck/native/011_00150.6s.webp",
+      "package_encoded_sha256": "7159f61e044529a343332786790edb6cfd7bdbf0612253bba0b2324ea967299f",
+      "package_encoded_bytes": 39078,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "40053ad5e72ba7258055a82344f14f0d5cb475f1153ba69db183ce8719a54ecb",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Ito/pages/page-004.png",
+      "original_png_sha256": "e6106cedeb8bc7f9932d174db45aa929f53f34bf730d079e493c37b0f5539d56",
+      "original_png_bytes": 117722,
+      "original_png_package_path_before_compaction": "en/Ito/example/page-004.png",
+      "package_encoded_path": "en/Ito/example/page-004.webp",
+      "package_encoded_sha256": "3cf5dada52efa0d07c69a955f6bfeb254c913e6a115f74d6c64560baa8ccaf8a",
+      "package_encoded_bytes": 55490,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "d173286ffb9356154d2c402d3a968776b9268620486adc3fe5f94c94be4f8c81",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Ito/frames/004_00041.7s.png",
+      "original_png_sha256": "afeab855cf34d9a34c9865c4c60fddf4a4ef7043782f6c93b4247739ca14b7b8",
+      "original_png_bytes": 183308,
+      "original_png_package_path_before_compaction": "en/Ito/native/004_00041.7s.png",
+      "package_encoded_path": "en/Ito/native/004_00041.7s.webp",
+      "package_encoded_sha256": "90c6b8748dd3f5afa652a943f186180025853e63cb3fe9172791a112d17ee23e",
+      "package_encoded_bytes": 65054,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "317433a35ad75336c97ab6ad0fd9bb2d337d1f9e38cc9adc36641769cdcedf5f",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Ito/frames/008_00085.8s.png",
+      "original_png_sha256": "0d72206533c48c5a161daf65b528af832fcf6de214e80b633d79139b14e39beb",
+      "original_png_bytes": 177241,
+      "original_png_package_path_before_compaction": "en/Ito/native/008_00085.8s.png",
+      "package_encoded_path": "en/Ito/native/008_00085.8s.webp",
+      "package_encoded_sha256": "5cd7edfdfa9541d81fd93138aa020634c3e84c395848f6253ed636ac2f9a3427",
+      "package_encoded_bytes": 59708,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "cef5abdf843d3775ac193e01ff7da101702de8c5406e371128e98b457264315f",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Ito/frames/013_00143.9s.png",
+      "original_png_sha256": "cb8337cfe72576a9bf37cdbfa875c2569fe3a7163700ddc7de8504049ab28489",
+      "original_png_bytes": 187133,
+      "original_png_package_path_before_compaction": "en/Ito/native/013_00143.9s.png",
+      "package_encoded_path": "en/Ito/native/013_00143.9s.webp",
+      "package_encoded_sha256": "e132cdb5198805cf02517a7d2187edc01e340f79e271afbeb59a00395176b2de",
+      "package_encoded_bytes": 62202,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "3a364cc6d40f7ee5562c123083a547ad24a24522a04976f53e569df0e75e7705",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MCMC/pages/page-005.png",
+      "original_png_sha256": "52a2cacdc0d6e520990c1a603bb4f4c51fd3c2ff8a413611c3e5fb26fef3dcc5",
+      "original_png_bytes": 175749,
+      "original_png_package_path_before_compaction": "en/MCMC/example/page-005.png",
+      "package_encoded_path": "en/MCMC/example/page-005.webp",
+      "package_encoded_sha256": "7dbbb6ae3c7e77ac62c50f09acbe5d4a6971ec87448600a57315824962d1ab9e",
+      "package_encoded_bytes": 106636,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "d766e7eec2535fa8ce8796125820c0c5ff034d87546afc43bbf8a54465f8939f",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MCMC/frames/009_00105.8s.png",
+      "original_png_sha256": "12155647f22f6ba2ea09b301bfb12f75889ed786c94af3a21103bf065e258c62",
+      "original_png_bytes": 190963,
+      "original_png_package_path_before_compaction": "en/MCMC/native/009_00105.8s.png",
+      "package_encoded_path": "en/MCMC/native/009_00105.8s.webp",
+      "package_encoded_sha256": "8c28e07465ac83cee84e0cc48c626e03a6951ae7c7ab815e7c20a355df652207",
+      "package_encoded_bytes": 92994,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "8c041875cf570178b9945e31b8386ac13183945aa665c5d0f3a257eaa6f858a6",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MCMC/frames/012_00145.6s.png",
+      "original_png_sha256": "9b9d97db706e5f6291b90671ccb35efeecd3250ff2551e9940b05a7b2d01aa97",
+      "original_png_bytes": 477229,
+      "original_png_package_path_before_compaction": "en/MCMC/native/012_00145.6s.png",
+      "package_encoded_path": "en/MCMC/native/012_00145.6s.webp",
+      "package_encoded_sha256": "38302622a875ed94033facfdcc74b835910ea198e2090197e11ed4080ac50f3c",
+      "package_encoded_bytes": 273898,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "ac4d5a9c30c6eba3c273412afa611320c01dcf238cabcc9faaacbd746df80798",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MCMC/frames/017_00199.8s.png",
+      "original_png_sha256": "13a88ad1c1675adf0518a6353daf5dfb1ec6c1cceb8924a30bf696e0762645a8",
+      "original_png_bytes": 301618,
+      "original_png_package_path_before_compaction": "en/MCMC/native/017_00199.8s.png",
+      "package_encoded_path": "en/MCMC/native/017_00199.8s.webp",
+      "package_encoded_sha256": "9ae345418f3c5c74c855f5c8564ab0f6b80538f594337313208a67caa700501d",
+      "package_encoded_bytes": 132582,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "4851df716ff27711855fa77a591d10ea787fd6c43501c0c840917dc59231fe20",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MaxEnt/pages/page-004.png",
+      "original_png_sha256": "abeda357503d7c27f751e6eb81818cc023d21baa0b33059a222ff1cff8efb9f5",
+      "original_png_bytes": 163456,
+      "original_png_package_path_before_compaction": "en/MaxEnt/example/page-004.png",
+      "package_encoded_path": "en/MaxEnt/example/page-004.webp",
+      "package_encoded_sha256": "6578d75906f4890a6cddbb6f888f9cdc1b18eee48daa065ecb5277afb667b341",
+      "package_encoded_bytes": 82894,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "565a358aaef2862432adb066434291a010be2452152160ea72df68780661b29a",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MaxEnt/frames/007_00067.8s.png",
+      "original_png_sha256": "490677b1206193c62d91c3bcc179bb1858e7ddcbf861a2effd20dcddaa9a0c11",
+      "original_png_bytes": 140645,
+      "original_png_package_path_before_compaction": "en/MaxEnt/native/007_00067.8s.png",
+      "package_encoded_path": "en/MaxEnt/native/007_00067.8s.webp",
+      "package_encoded_sha256": "12848d40dfb65d40e4efd151093a23b342822e01a300efd2a2222199987a26e2",
+      "package_encoded_bytes": 43946,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "7ad631e1a9c1569442593d672586e2244fad05c50bbfd1884412e244ab03267b",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MaxEnt/frames/009_00091.8s.png",
+      "original_png_sha256": "2b2edd8cd6921951e2ee7c3d9a56bee8496968e9cece88a4ede4462450b6fe3c",
+      "original_png_bytes": 65299,
+      "original_png_package_path_before_compaction": "en/MaxEnt/native/009_00091.8s.png",
+      "package_encoded_path": "en/MaxEnt/native/009_00091.8s.webp",
+      "package_encoded_sha256": "3a9cc6da0dfb2ca018cec7a15517921f8c12fbb8e9ed6d829ebf933920d98751",
+      "package_encoded_bytes": 21724,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "5c849b4788f71960bad50604c4bba10c12643cbcda552bbced1b044cb462137e",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MaxEnt/frames/015_00152.7s.png",
+      "original_png_sha256": "463fb607f7b65d22fc8af4c70bbbefe1c9a60611502c4e5207a10a7706fc274c",
+      "original_png_bytes": 179854,
+      "original_png_package_path_before_compaction": "en/MaxEnt/native/015_00152.7s.png",
+      "package_encoded_path": "en/MaxEnt/native/015_00152.7s.webp",
+      "package_encoded_sha256": "3e1c227495099d3b4a48ea90fb152027df572b7b3e7b99651a819f8d1f9a27bd",
+      "package_encoded_bytes": 62340,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "09d0865133dec0a5fbe51d2e0df9cad1d34e7ff5de242a7dc55bfb0a4575e1e8",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MonteCarlo/pages/page-005.png",
+      "original_png_sha256": "29d2354022a6eb08d862f2296476ecd04c133afcf81e17dd3814698f936ce246",
+      "original_png_bytes": 128712,
+      "original_png_package_path_before_compaction": "en/MonteCarlo/example/page-005.png",
+      "package_encoded_path": "en/MonteCarlo/example/page-005.webp",
+      "package_encoded_sha256": "a92e32997874b6de1786658e7f79983a67f97c2686452e5cf0ccb4f9d01d4c54",
+      "package_encoded_bytes": 56638,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "f042ff7e4f071c16db5c8333f08267e710242bbe1e1f21885602577900faeca5",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MonteCarlo/frames/007_00060.5s.png",
+      "original_png_sha256": "03e68aee9a5939b579ae02b3f21665bba1574cdc9865ef29e9b62bf8c2000b27",
+      "original_png_bytes": 391368,
+      "original_png_package_path_before_compaction": "en/MonteCarlo/native/007_00060.5s.png",
+      "package_encoded_path": "en/MonteCarlo/native/007_00060.5s.webp",
+      "package_encoded_sha256": "29fdd8409d33ff5b479735e4395518891075c2ef6ec3f64181131b07436a2f3d",
+      "package_encoded_bytes": 143352,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "c47838fb5c3c924d82cef2c28025d737fea3570787e56755f52cb78d69d8b722",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MonteCarlo/frames/015_00149.6s.png",
+      "original_png_sha256": "96634f44770f27a0d4491c1401a95d4f3716a5adff49c52823c4b03a5a11d6f7",
+      "original_png_bytes": 180840,
+      "original_png_package_path_before_compaction": "en/MonteCarlo/native/015_00149.6s.png",
+      "package_encoded_path": "en/MonteCarlo/native/015_00149.6s.webp",
+      "package_encoded_sha256": "0d30cbbaa8d9a50d5cee128c20ff9d8ff9991bcacdeca5c2ed22c94c7f5b2aa9",
+      "package_encoded_bytes": 66448,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "e300ce625aca52e9082a8e4f2764f3e8d257e8aea2fb8dbe7216fe6e9986d65f",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-MonteCarlo/frames/018_00175.2s.png",
+      "original_png_sha256": "75f5bc866c05ab39e5a21ac58c6e3ecacee402d456b16fdec4289459009e5991",
+      "original_png_bytes": 129778,
+      "original_png_package_path_before_compaction": "en/MonteCarlo/native/018_00175.2s.png",
+      "package_encoded_path": "en/MonteCarlo/native/018_00175.2s.webp",
+      "package_encoded_sha256": "44d07370e4bc5390a1924e21ac7171f66cef4585c9c47183b48ff60925ed8c82",
+      "package_encoded_bytes": 42930,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "1dd3d3bcff7fbb4c486984f51ca33c74a43ef7c61faae404fc9abb8fee0d7500",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Outro/pages/page-002.png",
+      "original_png_sha256": "78072604aaf6164f087ad77bea2982c3be3bf5a6f1b960c243670fe7ea413b77",
+      "original_png_bytes": 232212,
+      "original_png_package_path_before_compaction": "en/Outro/example/page-002.png",
+      "package_encoded_path": "en/Outro/example/page-002.webp",
+      "package_encoded_sha256": "5ae365ce0992cfcf3ecdeefa66f219bf24852436ec1415db8ddf52b3f5284502",
+      "package_encoded_bytes": 103842,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "9f578008805c93bbf75b011cca7b94925a2b9fa9105f494a2e826d02965c5457",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Outro/frames/001_00099.3s.png",
+      "original_png_sha256": "67df471d0fc30c57f7c165642d733e90399a3bfaaa980e9d03f5621088257476",
+      "original_png_bytes": 224186,
+      "original_png_package_path_before_compaction": "en/Outro/native/001_00099.3s.png",
+      "package_encoded_path": "en/Outro/native/001_00099.3s.webp",
+      "package_encoded_sha256": "ef149c9233cc2399c6d65cadc528be18b4541c6d4da947d26bec98fb02b5ce78",
+      "package_encoded_bytes": 75838,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "3d66579d2ee28c1ded5d37761701e8d8dfcea7d151ae0ac7e67fdbf5d9d8778b",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Outro/frames/002_00104.2s.png",
+      "original_png_sha256": "0218ed6f85e09cd8c79f720057577a17a98a9a4e28977252213a490e44387811",
+      "original_png_bytes": 204031,
+      "original_png_package_path_before_compaction": "en/Outro/native/002_00104.2s.png",
+      "package_encoded_path": "en/Outro/native/002_00104.2s.webp",
+      "package_encoded_sha256": "0a1a8e0d622ed38ad6be626085173379563492cc051822e505d0c5ee5a9d694c",
+      "package_encoded_bytes": 65364,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "e9b97261bcadffbaf707c57268908004db75689717d294101b49b04d91dd1057",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Outro/frames/004_00146.6s.png",
+      "original_png_sha256": "55dd150d4c9f84f9816f6474a29dfd50968c9a47fb99ddb22973d3e092fa02bc",
+      "original_png_bytes": 416308,
+      "original_png_package_path_before_compaction": "en/Outro/native/004_00146.6s.png",
+      "package_encoded_path": "en/Outro/native/004_00146.6s.webp",
+      "package_encoded_sha256": "cc1cfbab2bccbbc1e29a59e096ae9b7b86b4fe317ad25f1c5270b9964db27039",
+      "package_encoded_bytes": 138686,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "4b1da7ff764dc9d60cfddee758a9d49a458ddfe0956194363617729912127312",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-SDE/pages/page-003.png",
+      "original_png_sha256": "18bcb4afc4bb454c0044d38f094f2e8fae440db401bb07f753bc8e2e6cdfeb49",
+      "original_png_bytes": 201357,
+      "original_png_package_path_before_compaction": "en/SDE/example/page-003.png",
+      "package_encoded_path": "en/SDE/example/page-003.webp",
+      "package_encoded_sha256": "7780d3cfdc1f1788ab5280fdf20bd3be0d16575eabc75de88ad7a65521db68bb",
+      "package_encoded_bytes": 120518,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "c050620b572d533d945ef120fc439849702f03416107381cfd4c60d4064286ce",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-SDE/frames/003_00028.9s.png",
+      "original_png_sha256": "95c67e760060239e022ddee4d4390d6ffbedb662e5a92338cc854709882283d1",
+      "original_png_bytes": 130220,
+      "original_png_package_path_before_compaction": "en/SDE/native/003_00028.9s.png",
+      "package_encoded_path": "en/SDE/native/003_00028.9s.webp",
+      "package_encoded_sha256": "a96e8bfd2e17415e68bcac482b27216a5b5a4dcf57845be6a80fb7eebc643e11",
+      "package_encoded_bytes": 46136,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "5ffaaec9c39761d55fd419a33289a95b7123bda3976331a96fc072c524b3cce0",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-SDE/frames/010_00102.3s.png",
+      "original_png_sha256": "f6e1b8f0f856f30c51cd658eb3080053bfba726a58f03ce0e2be7f216490a897",
+      "original_png_bytes": 187447,
+      "original_png_package_path_before_compaction": "en/SDE/native/010_00102.3s.png",
+      "package_encoded_path": "en/SDE/native/010_00102.3s.webp",
+      "package_encoded_sha256": "ee8a7a4a2dd125daec068a7ac5d290dd39b5981416a5d6251b8d74ed0693bdb9",
+      "package_encoded_bytes": 77228,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "ce23f590ff8e469fcd2c6eee2890057b9c72c9f4d63c2d93562482f6c2d65276",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Sampling/pages/page-005.png",
+      "original_png_sha256": "0589e61bb977181e467975ec11ea8fe143bc5e21dd57a322de701ead99347c17",
+      "original_png_bytes": 75821,
+      "original_png_package_path_before_compaction": "en/Sampling/example/page-005.png",
+      "package_encoded_path": "en/Sampling/example/page-005.webp",
+      "package_encoded_sha256": "02b2691bbf38bd15c04fa14d2129a4a3e3ad6848f62d4bfb72b7417d338ffbe6",
+      "package_encoded_bytes": 33576,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "e20846b4034fbf43a770c01268705574c97a2e889020bc5c343336afbfa777bb",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Sampling/frames/011_00103.8s.png",
+      "original_png_sha256": "9e9bca453f9bdbd73f731f87031632ced1b8b68178c84e666f13a612650c98c3",
+      "original_png_bytes": 291789,
+      "original_png_package_path_before_compaction": "en/Sampling/native/011_00103.8s.png",
+      "package_encoded_path": "en/Sampling/native/011_00103.8s.webp",
+      "package_encoded_sha256": "e418863c0e6d5d9936a21e751f4eba2743d281e61cee5c3f20d6df90a5e9d2b1",
+      "package_encoded_bytes": 97128,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "975c42636e6331d6f5e63a011ce1fea9b7b873685ca9248dcfc555948e0134bb",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Sampling/frames/016_00170.1s.png",
+      "original_png_sha256": "f2a41688d3e749bc80de7fa15966b43f0e1262c233b3a6b12a6d7d11ce563c1c",
+      "original_png_bytes": 114741,
+      "original_png_package_path_before_compaction": "en/Sampling/native/016_00170.1s.png",
+      "package_encoded_path": "en/Sampling/native/016_00170.1s.webp",
+      "package_encoded_sha256": "71daec2a8ae34b3b8e67a54f3af4b1a8afad1827cee0c2795244e740cb1faf30",
+      "package_encoded_bytes": 35396,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "4abb910ada12406c3482c244346c3abaf892b485ca32bec9c6330badf8261b17",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-ScoreFn/pages/page-004.png",
+      "original_png_sha256": "4897d5e8dda14e218623fcb81845e1cc9d209884e6407368798b1ebfe4a257fe",
+      "original_png_bytes": 354103,
+      "original_png_package_path_before_compaction": "en/ScoreFn/example/page-004.png",
+      "package_encoded_path": "en/ScoreFn/example/page-004.webp",
+      "package_encoded_sha256": "3d8b10c4d4b6416db16745a06a79f24693d346133d7e4118bb08e2d0e39cf28b",
+      "package_encoded_bytes": 190768,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "0ddf9400c6976ef4fa291d6f166423babcc5eaf43dd24d06407ec5f4663b1fbf",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-ScoreFn/frames/007_00062.2s.png",
+      "original_png_sha256": "05dc27b2cfb6bed3fcd93864308d33d6113ffc01fffe53de53874d842bda41fe",
+      "original_png_bytes": 182977,
+      "original_png_package_path_before_compaction": "en/ScoreFn/native/007_00062.2s.png",
+      "package_encoded_path": "en/ScoreFn/native/007_00062.2s.webp",
+      "package_encoded_sha256": "d0f19fa91b3de111384a25aa80e5ca879f9f147416d29e2592e73e2cc7b863e7",
+      "package_encoded_bytes": 61128,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "029f31bf57eaae7bc388edf76a72d2362489e5833c9bc6437d23839f1a38d545",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-ScoreFn/frames/011_00110.0s.png",
+      "original_png_sha256": "adaa0b274e38487f6f879eba22bd4c2638805a3dab517d617cdab2ee3a21229b",
+      "original_png_bytes": 123736,
+      "original_png_package_path_before_compaction": "en/ScoreFn/native/011_00110.0s.png",
+      "package_encoded_path": "en/ScoreFn/native/011_00110.0s.webp",
+      "package_encoded_sha256": "4eec06b3347fea11960ac2766b77c04d924582a84047c0c07e903c920b28b9a1",
+      "package_encoded_bytes": 43466,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "16fb51bae2ea3615294618293d45ffeefb0612fbf81d4e76e2dede6ab4d52429",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-ScoreFn/frames/015_00175.7s.png",
+      "original_png_sha256": "b8aaefa95b4f0f8f0c82e7b2c014deae806f5f308a211717033f15227f8004aa",
+      "original_png_bytes": 361903,
+      "original_png_package_path_before_compaction": "en/ScoreFn/native/015_00175.7s.png",
+      "package_encoded_path": "en/ScoreFn/native/015_00175.7s.webp",
+      "package_encoded_sha256": "c09ecd6179fc89938d2c99a92ae363115dd26e9d5534b7ff6915f88e17b0d921",
+      "package_encoded_bytes": 145568,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "4d4c88d5de2c9baf8faf7ddf1dfa76569c5a30c6fc77bbbbbcdd376d7d9ac628",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Tails/pages/page-005.png",
+      "original_png_sha256": "5a2074d09198a4745d822f4a4575fa0fa71e8d07d2a0c4661c0c29f7932d23db",
+      "original_png_bytes": 82183,
+      "original_png_package_path_before_compaction": "en/Tails/example/page-005.png",
+      "package_encoded_path": "en/Tails/example/page-005.webp",
+      "package_encoded_sha256": "2013d08839d8857c8c8a98ce7a1ccc8bd6540a8690620116f67a7291bcf3eeb1",
+      "package_encoded_bytes": 37458,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "5fe761d1984b1b096ca4df57390600ba5681a47d46a8e0f8ecb4e60d895f1652",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Tails/frames/009_00076.0s.png",
+      "original_png_sha256": "31c92ad9145e0c94c4f2bdbdc518405400e63d83c4be642a1819a5159c937c04",
+      "original_png_bytes": 154714,
+      "original_png_package_path_before_compaction": "en/Tails/native/009_00076.0s.png",
+      "package_encoded_path": "en/Tails/native/009_00076.0s.webp",
+      "package_encoded_sha256": "0f49f551841d7a0e8cdcb8d75dcd5349f1d206c238c966877935a0a66a82509b",
+      "package_encoded_bytes": 51080,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "6b1ff17ccd2ca369dc1d2884af6d538022d7b17e506bc572542c51fa78aeab51",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/en-Tails/frames/016_00151.2s.png",
+      "original_png_sha256": "f8397659df04157bf574962f622a661612a2102656fdfe0289341057196b1627",
+      "original_png_bytes": 130181,
+      "original_png_package_path_before_compaction": "en/Tails/native/016_00151.2s.png",
+      "package_encoded_path": "en/Tails/native/016_00151.2s.webp",
+      "package_encoded_sha256": "f909e5a38684ff886305e1d42b8b6906dcf3521fc6151b5240f540d40a5378ee",
+      "package_encoded_bytes": 44306,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "545d81274533d8e8ab1b74ac2d28161b54c48b82a8a3f590c4c8ef3a09771ecd",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Brownian/pages/page-003.png",
+      "original_png_sha256": "c9868af09d44a2558c2b5de53cfd7f30a467b22ff026e480f5f4d50d68b97594",
+      "original_png_bytes": 233233,
+      "original_png_package_path_before_compaction": "zh/Brownian/example/page-003.png",
+      "package_encoded_path": "zh/Brownian/example/page-003.webp",
+      "package_encoded_sha256": "019c7df41d8720d849f5bb672c00c5f15206ef500177175e38e5b38071e5dac9",
+      "package_encoded_bytes": 123468,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "6f185161c1cfb557ab04309af080a75eae42d8fd4b0c61396b696e5f0e46de1c",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Brownian/frames/005_00069.7s.png",
+      "original_png_sha256": "e2708d27709a8c727b21e17bd89e2b3d75ff96e108363a66d8157a3071efb796",
+      "original_png_bytes": 924397,
+      "original_png_package_path_before_compaction": "zh/Brownian/native/005_00069.7s.png",
+      "package_encoded_path": "zh/Brownian/native/005_00069.7s.webp",
+      "package_encoded_sha256": "1de446a9cd6c7135ccd2899dfeef3f5e72ceab19bc8e02353f4da71b1e708676",
+      "package_encoded_bytes": 578846,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "1502c555397d28fe6e02a2a4ed657a3ab6fa5c8f6c4a8b0eb8a99e7fb170f6a8",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Brownian/frames/009_00114.2s.png",
+      "original_png_sha256": "52546010b60ca86611a5eba16ffd0e421e40e87ded6237ed3ac264958540fb47",
+      "original_png_bytes": 192856,
+      "original_png_package_path_before_compaction": "zh/Brownian/native/009_00114.2s.png",
+      "package_encoded_path": "zh/Brownian/native/009_00114.2s.webp",
+      "package_encoded_sha256": "4afd1f4c8480abfa42735730c156f756a9823db183a7065defe909ced79a5ddf",
+      "package_encoded_bytes": 64254,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "4f4aac5d2511f0fc000a3b2fe2b3740327ec10487dbe0e92ea30a3e813d29640",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Brownian/qv-right-native-crop.png",
+      "original_png_sha256": "d3aad7a93c4944db8698638e2a4ed1fba66c0401e41b9218146b164e99099134",
+      "original_png_bytes": 67631,
+      "original_png_package_path_before_compaction": "zh/Brownian/qv-right-native-crop.png",
+      "package_encoded_path": "zh/Brownian/qv-right-native-crop.webp",
+      "package_encoded_sha256": "86ea75d4f16c24191b24793e4c619d95778bd06df4c0119db238e70a63857955",
+      "package_encoded_bytes": 22076,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        920,
+        320
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "103a97e6bde1a74cc349f85d74fed9f3fc764345d22b13856af5bf662b0658fe",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-FokkerPlanck/pages/page-004.png",
+      "original_png_sha256": "420b359c8c547bab9e511675d88d8a804d268914b8ba781266003580e3074ba1",
+      "original_png_bytes": 260513,
+      "original_png_package_path_before_compaction": "zh/FokkerPlanck/example/page-004.png",
+      "package_encoded_path": "zh/FokkerPlanck/example/page-004.webp",
+      "package_encoded_sha256": "39bfcfb4f0207f400fc7b5f1d2ecf19bd70258100f5eaf74c2af3cd8054957da",
+      "package_encoded_bytes": 160130,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "c33d4743165ea5bee78d05437da4b94d63c873ad4afa28ca090cd7fcdec7d8d1",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-FokkerPlanck/frames/002_00035.3s.png",
+      "original_png_sha256": "5e3c6acfca9001c02730abeec3b0c3b784f09d07669c301755fadf78cada44e7",
+      "original_png_bytes": 197884,
+      "original_png_package_path_before_compaction": "zh/FokkerPlanck/native/002_00035.3s.png",
+      "package_encoded_path": "zh/FokkerPlanck/native/002_00035.3s.webp",
+      "package_encoded_sha256": "aa46197fc09f6a9b2c1135fdbe9fe20c263e718b1338373aad6d0bb9722c1696",
+      "package_encoded_bytes": 64068,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "96ecbb7f6425f326b80272c7a5b10902efcc0de5cd645ccc07effa591bc73f55",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-FokkerPlanck/frames/006_00082.7s.png",
+      "original_png_sha256": "372291613f5bd788f8d84ab8379d1cffe0cac2da4e73ec3a48416c34f09f4832",
+      "original_png_bytes": 119213,
+      "original_png_package_path_before_compaction": "zh/FokkerPlanck/native/006_00082.7s.png",
+      "package_encoded_path": "zh/FokkerPlanck/native/006_00082.7s.webp",
+      "package_encoded_sha256": "fed246f6196b1b935bc1db8fe30a351f93842c7f3a5e92584ed2db1cf75c6334",
+      "package_encoded_bytes": 42232,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "aaab196db263a6d0209894e3f433751f2c797473dfbbc34959586eb1a7b551a3",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-FokkerPlanck/frames/010_00148.8s.png",
+      "original_png_sha256": "1961ce473796d561e42a209cc5e28fe0cc22e3bbdaa9d6857c59879eff1b0da8",
+      "original_png_bytes": 84783,
+      "original_png_package_path_before_compaction": "zh/FokkerPlanck/native/010_00148.8s.png",
+      "package_encoded_path": "zh/FokkerPlanck/native/010_00148.8s.webp",
+      "package_encoded_sha256": "e9b7297ccf0c22d063ce84b014fa5db6aef59163da3530aa8dd1e3dc7301361c",
+      "package_encoded_bytes": 30128,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "68c51e4b1cc7b4b0c6f6d22a001424f75c9cd142008fa7010398b333af2a0b60",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Ito/pages/page-004.png",
+      "original_png_sha256": "90bb64a27ccf9dd2bb2b5961141ab0122056b8e2819d49d66ca6de91e0958829",
+      "original_png_bytes": 207142,
+      "original_png_package_path_before_compaction": "zh/Ito/example/page-004.png",
+      "package_encoded_path": "zh/Ito/example/page-004.webp",
+      "package_encoded_sha256": "d6270d0f03006f817e740f5060750a243961aaa191687da6326fb02d60887b4f",
+      "package_encoded_bytes": 98688,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "3fe6f636730dfa14ae30e7344c8af7e2f47380305a33beff9b8532532ea343ac",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Ito/frames/009_00088.4s.png",
+      "original_png_sha256": "f940a4f52f9103700a1adc32774bbe4408889a0fe69e81ca8dd1ad7c92b1f4a7",
+      "original_png_bytes": 182453,
+      "original_png_package_path_before_compaction": "zh/Ito/native/009_00088.4s.png",
+      "package_encoded_path": "zh/Ito/native/009_00088.4s.webp",
+      "package_encoded_sha256": "718cf1f722315a7766690e0e4fc62b40dccb271fa224a15e5c46dbdf5f808f51",
+      "package_encoded_bytes": 60926,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "0fe8958e5223e265df1a52bf22e7d47f6bcd33cedebd923f47474551d28e540f",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Ito/frames/014_00145.0s.png",
+      "original_png_sha256": "0ac41032897bb39bb45cd5d2f5acf6cd697b0413d44f1c2e570d3a7c65ac21bd",
+      "original_png_bytes": 195098,
+      "original_png_package_path_before_compaction": "zh/Ito/native/014_00145.0s.png",
+      "package_encoded_path": "zh/Ito/native/014_00145.0s.webp",
+      "package_encoded_sha256": "961fd1a7481716c534f3983c708adbedd3759269343bb8193ff668a2ae8f470f",
+      "package_encoded_bytes": 62662,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "4a13dcc503e6699d5c1abad98737f0cb7ec84c27fec07f89b8684a38f1bb7585",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-MCMC/pages/page-005.png",
+      "original_png_sha256": "feefd3b876be51c684197f54ed0e69ea6949688adda2ce6c06e8ebddc0fa67c7",
+      "original_png_bytes": 339879,
+      "original_png_package_path_before_compaction": "zh/MCMC/example/page-005.png",
+      "package_encoded_path": "zh/MCMC/example/page-005.webp",
+      "package_encoded_sha256": "49048163a063e64102be655b8341137343a5bdb8768113dbb184c1a3f489d3e7",
+      "package_encoded_bytes": 210826,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "ab5f03131c2b53bc9dda23596cdf2aeceac573ebb40915dc1189bd05f1c67c74",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-MCMC/frames/012_00130.9s.png",
+      "original_png_sha256": "046bc3657e31afe7a32ba8bd75e02e751569d2cdb385a3ebe529afe4bd669d0c",
+      "original_png_bytes": 548793,
+      "original_png_package_path_before_compaction": "zh/MCMC/native/012_00130.9s.png",
+      "package_encoded_path": "zh/MCMC/native/012_00130.9s.webp",
+      "package_encoded_sha256": "0a3f585cb957c410307cc8cadd7d1dd4dc0e2fa745b267555b7ccb7b8176faee",
+      "package_encoded_bytes": 323990,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "3fbbda126104bc6ddb19d19344ca5a1d625281bbe673503231de14e2694c91b1",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-MCMC/frames/018_00216.4s.png",
+      "original_png_sha256": "03712c0502d32ee77cfe0852dec6d6450336798465155f31e32f2609cb628d8f",
+      "original_png_bytes": 307637,
+      "original_png_package_path_before_compaction": "zh/MCMC/native/018_00216.4s.png",
+      "package_encoded_path": "zh/MCMC/native/018_00216.4s.webp",
+      "package_encoded_sha256": "60a8f418cba219d933f9d617e426d7c987d53561f81b86185dbf60558e4a273e",
+      "package_encoded_bytes": 133748,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "9c0fe9f5a5f6e7ac0e448a4a0b5017755c819f81af2fba0754bf8c820b4323bf",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-MonteCarlo/pages/page-005.png",
+      "original_png_sha256": "0633be56f01b445bec78f12c937535a9d3b7dc8ef2fc79fd3b500800b188c7bc",
+      "original_png_bytes": 128196,
+      "original_png_package_path_before_compaction": "zh/MonteCarlo/example/page-005.png",
+      "package_encoded_path": "zh/MonteCarlo/example/page-005.webp",
+      "package_encoded_sha256": "ac5568a553e9c6d63987ef986c921dc077cab6714421825b09c42601fe7d08ef",
+      "package_encoded_bytes": 56270,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "329400bbb765bbfbed0818d280532e350f932b2aa4c894b4524fbb501212971a",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-MonteCarlo/frames/015_00153.7s.png",
+      "original_png_sha256": "5d36eccadccba97431b64fb105df6ca1916b6da81a99dbf420e1073fbeeba48f",
+      "original_png_bytes": 211124,
+      "original_png_package_path_before_compaction": "zh/MonteCarlo/native/015_00153.7s.png",
+      "package_encoded_path": "zh/MonteCarlo/native/015_00153.7s.webp",
+      "package_encoded_sha256": "27ec63b429886db5a9119f341d42b98065b359e0cef0f495eaa91f8bc9dec616",
+      "package_encoded_bytes": 75878,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "c2a44c8935647da8928482e4d69eee34139c61594ed6279590082c299ff2ea68",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-MonteCarlo/frames/018_00181.9s.png",
+      "original_png_sha256": "fbc82fd5d048f6704b125c8eff9afeeab03a0c2c141c31d1739b8d2608a00a7e",
+      "original_png_bytes": 129260,
+      "original_png_package_path_before_compaction": "zh/MonteCarlo/native/018_00181.9s.png",
+      "package_encoded_path": "zh/MonteCarlo/native/018_00181.9s.webp",
+      "package_encoded_sha256": "e35197faf118e32d72f16ff940796c1d21c744892f632c90227875e9da018a3d",
+      "package_encoded_bytes": 41916,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "426d2ad9f42af9a320ab9edfb1555076fff92d892efc8b7646bc5ea350fb53f2",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Outro/pages/page-002.png",
+      "original_png_sha256": "8c67382ad73d30756b8adf5219fb4c70c55a43484c55f4664175e4a06edc47b8",
+      "original_png_bytes": 231457,
+      "original_png_package_path_before_compaction": "zh/Outro/example/page-002.png",
+      "package_encoded_path": "zh/Outro/example/page-002.webp",
+      "package_encoded_sha256": "709e94e6f64e6fd2fe2618308fb3a02570b9ddac3b13a687da60246776fe39c4",
+      "package_encoded_bytes": 102404,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "a43eafb71dcfe5dcefe1af363fc6c2ebf25c7ceb2b9085d39fbb7000c83672e0",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Outro/frames/001_00117.4s.png",
+      "original_png_sha256": "f2d111d8a8870cff162260448a1ffddc228980f716fc25c89a831047667451bf",
+      "original_png_bytes": 202733,
+      "original_png_package_path_before_compaction": "zh/Outro/native/001_00117.4s.png",
+      "package_encoded_path": "zh/Outro/native/001_00117.4s.webp",
+      "package_encoded_sha256": "4c9c92529d745b9fce58595a74a96d6e59dee1f9205ca1c3b1647835a79e91b6",
+      "package_encoded_bytes": 63976,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "4412d359cae36c74d71e34969f5ba264181630fb5c9ee52dcede0e7cb8150731",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Outro/frames/002_00122.4s.png",
+      "original_png_sha256": "76ab10d3dae922c404f10d18cd7348e15fe1bbd8bbede820f95b12068509748d",
+      "original_png_bytes": 202046,
+      "original_png_package_path_before_compaction": "zh/Outro/native/002_00122.4s.png",
+      "package_encoded_path": "zh/Outro/native/002_00122.4s.webp",
+      "package_encoded_sha256": "1fae4eb0f49af1f0e279431b4da950d760e6ebb813aca1951e15b272aa9f8de1",
+      "package_encoded_bytes": 61100,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "1f19ec1095cebbe64f116ff7aee60cdb670040d45678cf205b63dfb5afd1406b",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Outro/frames/004_00171.6s.png",
+      "original_png_sha256": "7014475ba5f465dc78e90c673b5b54665c2e8cdc41c8060174cf7e70fc886039",
+      "original_png_bytes": 413422,
+      "original_png_package_path_before_compaction": "zh/Outro/native/004_00171.6s.png",
+      "package_encoded_path": "zh/Outro/native/004_00171.6s.webp",
+      "package_encoded_sha256": "345c93aa115ee400be948d9d2b4af487b13ebe63b4269495a35b6f7ddbd236f4",
+      "package_encoded_bytes": 130732,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "98d100f4382180ad694892f0d57762d9325804feaad5511d41ba03e592df173f",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-SDE/pages/page-003.png",
+      "original_png_sha256": "e96520317081a59d0395051d7438c732eb127dd86f833b587332bbfa386be077",
+      "original_png_bytes": 199808,
+      "original_png_package_path_before_compaction": "zh/SDE/example/page-003.png",
+      "package_encoded_path": "zh/SDE/example/page-003.webp",
+      "package_encoded_sha256": "681b7c761c0f487615c5ea42f190965b167a0930c1f1cef61c9efd323a78d58d",
+      "package_encoded_bytes": 118882,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "11946f82406aec8a81434645c6167bbc7d087d706fc2d74b4422fa929e14f950",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-SDE/frames/003_00030.3s.png",
+      "original_png_sha256": "08ecb61d2f4bdea5392b4bf0d6d1c4b3a3bb05f496c4a679c745dfe09b032046",
+      "original_png_bytes": 143106,
+      "original_png_package_path_before_compaction": "zh/SDE/native/003_00030.3s.png",
+      "package_encoded_path": "zh/SDE/native/003_00030.3s.webp",
+      "package_encoded_sha256": "073fc9e64503873ca239695bdf3ce5297bee921673e120107f57bdca3d5c0eba",
+      "package_encoded_bytes": 47508,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "e1cd3cbe86fbbb44d00671b3a7ffa8667b88a41c38354fffb08d99c8444d798c",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-SDE/frames/010_00100.8s.png",
+      "original_png_sha256": "fa108b77521c9504dac28bb8810928c6e04df8ee297c9862fd9f4c318bc4649a",
+      "original_png_bytes": 187175,
+      "original_png_package_path_before_compaction": "zh/SDE/native/010_00100.8s.png",
+      "package_encoded_path": "zh/SDE/native/010_00100.8s.webp",
+      "package_encoded_sha256": "2429c9e8657689e67ae51f825212c2cee4594944aa8918ae288b6365ae1c6167",
+      "package_encoded_bytes": 76658,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "2b770fc25ba48aefdf162098f3f40f92772e1aa4623dfa42551ebe6c0668c213",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Sampling/pages/page-005.png",
+      "original_png_sha256": "363a8d7dafe0b2795c2c26c792acbd1f20e864cd34e27f1b51cf006429c235e9",
+      "original_png_bytes": 72440,
+      "original_png_package_path_before_compaction": "zh/Sampling/example/page-005.png",
+      "package_encoded_path": "zh/Sampling/example/page-005.webp",
+      "package_encoded_sha256": "227b4f3b2ed57f38eb1271d5161bf95708a53a8e500f81e0730b713f87655fea",
+      "package_encoded_bytes": 32392,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "b86b03d817d21d47470c799866c2053b808ef69d119f54b8d9faf52bcb18bf2e",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Sampling/frames/011_00104.5s.png",
+      "original_png_sha256": "376114ef39301ed9ab51c39895938e83c81b24baedc9be6fb9ad59bebda1c00e",
+      "original_png_bytes": 308249,
+      "original_png_package_path_before_compaction": "zh/Sampling/native/011_00104.5s.png",
+      "package_encoded_path": "zh/Sampling/native/011_00104.5s.webp",
+      "package_encoded_sha256": "4e2db8f72bb86ca4b9a373ab6e597bb909b612d350ff61c98fef46af0bdf8dc3",
+      "package_encoded_bytes": 102548,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "d1ddce5f8e31337444d49edb0c4a6e04772ece57ea7fc298c77881d1aee5c286",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-Sampling/frames/016_00173.5s.png",
+      "original_png_sha256": "48071ceed064c1cbad13eebd61b187c8c9d6b81ff17ee6312e1e28acb3b796f0",
+      "original_png_bytes": 109286,
+      "original_png_package_path_before_compaction": "zh/Sampling/native/016_00173.5s.png",
+      "package_encoded_path": "zh/Sampling/native/016_00173.5s.webp",
+      "package_encoded_sha256": "4624da46bb86c79d7e3f8c56583ace874941ea32bb76973ea84f9d1409190da4",
+      "package_encoded_bytes": 32600,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "4ddd04135708f0341462408e6d6a5ba4c53b1644b30cf40caabe1c329641c8dc",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-ScoreFn/pages/page-004.png",
+      "original_png_sha256": "ba21c00ba7c481e79e6c125ccffed57566ddaaf2ccb4ba36b7225bd9ec47e6d8",
+      "original_png_bytes": 363574,
+      "original_png_package_path_before_compaction": "zh/ScoreFn/example/page-004.png",
+      "package_encoded_path": "zh/ScoreFn/example/page-004.webp",
+      "package_encoded_sha256": "d7609195923a20623a700efaec8d97505cadd65b9ad5fc263924b3fd94c6ba81",
+      "package_encoded_bytes": 193062,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1144
+      ],
+      "decoded_mode": "RGB",
+      "decoded_pixel_sha256": "516f37b17ac5a788b2c26b1b1c38a1b69b265634b3ae2ef54431253e0f9989bf",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-ScoreFn/frames/007_00060.9s.png",
+      "original_png_sha256": "8225df33cf0bf65888e445c5de9faaba55a22d679ddf008361a424a5d991150b",
+      "original_png_bytes": 185012,
+      "original_png_package_path_before_compaction": "zh/ScoreFn/native/007_00060.9s.png",
+      "package_encoded_path": "zh/ScoreFn/native/007_00060.9s.webp",
+      "package_encoded_sha256": "639ea3e2fc8ffb0755af9fc21fa899655eae033371cddfd228e738df875180de",
+      "package_encoded_bytes": 61574,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "962821cd82eed944e7e47c135faed0cc45b1349e1d63c0a50647e09aca1a1df9",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    },
+    {
+      "runtime_original": "/workspace/runtime/ai5-production1080-remaining-review/zh-ScoreFn/frames/015_00181.8s.png",
+      "original_png_sha256": "a285c0d42ddebd2f66137b420f3f74c041fa073330d70a0b82563e2f1a715e46",
+      "original_png_bytes": 377407,
+      "original_png_package_path_before_compaction": "zh/ScoreFn/native/015_00181.8s.png",
+      "package_encoded_path": "zh/ScoreFn/native/015_00181.8s.webp",
+      "package_encoded_sha256": "46774f7b7940f8b4c44e6dc0ad860eb2becda343aa2071c185c8fd0592664b55",
+      "package_encoded_bytes": 149254,
+      "encoding": "lossless-WebP",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "decoded_mode": "RGBA",
+      "decoded_pixel_sha256": "7d5bf5431d1c9cf20fed13e4e76b75ea16e201561c3f11a575580bc1fa5cdca6",
+      "decoded_pixel_equality_verified": true,
+      "original_png_bytes_bundled": false
+    }
+  ]
+}

@@ -1,0 +1,1809 @@
+{
+  "created_utc": "2026-11-01T04:26:50.861807+00:00",
+  "prior_manifest_sha256": "f0ada46a61ed76b2205338c4df78a604238d58eb518c090a80aa9ae03a978810",
+  "all_runtime_originals_preserved": true,
+  "viewed_pages": 82,
+  "shipped_pages": 10,
+  "critical_native_images_shipped": 44,
+  "all18joins_each_language_represented_by_shipped_page_or_native_context": true,
+  "artifacts": [
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 1,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-001.png",
+      "original_png_sha256": "1b43516daf504da30560190977ef0d7810ac636531d7f9800da5e15ab96854a1",
+      "joins_represented": [
+        1
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 2,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-002.png",
+      "original_png_sha256": "a64000d54a8ef2fc862310e0bee1b5cb6fe140c632c9602b1da50d7e56f013ac",
+      "joins_represented": [
+        1
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 3,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-003.png",
+      "original_png_sha256": "863fee5544f59cf6446093d2bcff470a12d406570fb74186e235d69d3c0b12b7",
+      "joins_represented": [
+        1,
+        2
+      ],
+      "shipped": true,
+      "package_path": "en/pages/sheet-003.png",
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 4,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-004.png",
+      "original_png_sha256": "75802854dece0b132e9f44c83eae49ec9568411e014d9fa11bb44b55563ad3b0",
+      "joins_represented": [
+        2
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 5,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-005.png",
+      "original_png_sha256": "03ac66ae51590318480317c7ac521a873452aee377d463decee7ba1105362daa",
+      "joins_represented": [
+        2,
+        3
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 6,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-006.png",
+      "original_png_sha256": "d4f79935673e3c0138a9bfb3f911f3b57e64236026d617e4085a6e534bcade5b",
+      "joins_represented": [
+        3
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 7,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-007.png",
+      "original_png_sha256": "6ab1d23648a4199c263b7a3f564532be829323ac415acc0fad8ed51b83536a04",
+      "joins_represented": [
+        3,
+        4
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 8,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-008.png",
+      "original_png_sha256": "dec1ef3583232576ed4e7d28f707952609b31f863eba021e75c3ff6801af1248",
+      "joins_represented": [
+        4
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 9,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-009.png",
+      "original_png_sha256": "54f83f1cdd796ab797464721841c9446d7c449fdaf1491a9e95dc4cdafa1fe35",
+      "joins_represented": [
+        4
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 10,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-010.png",
+      "original_png_sha256": "88064978e3b5e82460dd9fcb9ee209c4654c3ce3b3c23a146c344e54087869bc",
+      "joins_represented": [
+        4,
+        5
+      ],
+      "shipped": true,
+      "package_path": "en/pages/sheet-010.png",
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 11,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-011.png",
+      "original_png_sha256": "4690e42763ff55e968e77f353a86dde51397e43219fcc66b1dca0b5821180772",
+      "joins_represented": [
+        5
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 12,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-012.png",
+      "original_png_sha256": "51db673357475449d876cf85bc0c0cc42a7e63f3359b791207e66f091f9c7250",
+      "joins_represented": [
+        5,
+        6
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 13,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-013.png",
+      "original_png_sha256": "c9336291df7abcb2746b8e17bd3f19d9e41705d07e3af2dead80f95dd923d1cc",
+      "joins_represented": [
+        6
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 14,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-014.png",
+      "original_png_sha256": "a55f905aba4bf605ecb51354e14cf701ca586e67930208f1bd6ce4fbbf0c78da",
+      "joins_represented": [
+        6,
+        7
+      ],
+      "shipped": true,
+      "package_path": "en/pages/sheet-014.png",
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 15,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-015.png",
+      "original_png_sha256": "f27bb8891132726e062b2432a32fb9bbbafbfa2400c1d6c20eeb18d37d9fbd79",
+      "joins_represented": [
+        7
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 16,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-016.png",
+      "original_png_sha256": "304111cd229e91cd40ec95ed5400f15e9640d497af5381b0b72923e44a59732c",
+      "joins_represented": [
+        7,
+        8
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 17,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-017.png",
+      "original_png_sha256": "378095872a1fc37458f698090cb1d29430a84c564d9e601e0631f9ddd6624d39",
+      "joins_represented": [
+        8
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 18,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-018.png",
+      "original_png_sha256": "160296a40c5c3047b1c90b2452dff57697601ac6abe8ed94b71fc3f275d7968c",
+      "joins_represented": [
+        8
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 19,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-019.png",
+      "original_png_sha256": "2ee8ed83d02ec1959e3bbdd5801d84e0a8d088d15eab246657bdcbcb6e055a56",
+      "joins_represented": [
+        8,
+        9
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 20,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-020.png",
+      "original_png_sha256": "b5724cfba4ec6898b27abb7f14fef37310fb77b2f1fd00f73d88d3c419ed6f51",
+      "joins_represented": [
+        9
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 21,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-021.png",
+      "original_png_sha256": "816d627ccb1e3ab0dbb21402ef2e85fecd6b32a942a37c937fb1f8a2bf9a4af7",
+      "joins_represented": [
+        9,
+        10
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 22,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-022.png",
+      "original_png_sha256": "5a357cfeb536f45ac8d8534689ef6bc86827919f59459ef3d8ce0ff7ea05b945",
+      "joins_represented": [
+        10
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 23,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-023.png",
+      "original_png_sha256": "55e392cd9883021ade4a99527d70591c783328e38e2c8c985d75b60c65a18166",
+      "joins_represented": [
+        10,
+        11
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 24,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-024.png",
+      "original_png_sha256": "adfbfcb0be528b2ad82cb6978ea23fd8318b0ba0f7a5e1436e6b6858a014e629",
+      "joins_represented": [
+        11
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 25,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-025.png",
+      "original_png_sha256": "932ff2525a5a936d0076bd39c3bf5827d58674f7df7d3e6c57d3f3ae2860f110",
+      "joins_represented": [
+        11,
+        12
+      ],
+      "shipped": true,
+      "package_path": "en/pages/sheet-025.png",
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 26,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-026.png",
+      "original_png_sha256": "0f779c1f518825588c19461a5521c7b6d0c02f6beddc34259d4a430ede03e2fc",
+      "joins_represented": [
+        12
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 27,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-027.png",
+      "original_png_sha256": "20f11d2fad0280ae16583620348edf20442d70eadfe6dc434b5de1e4e72fd516",
+      "joins_represented": [
+        12
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 28,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-028.png",
+      "original_png_sha256": "083c693907173682db6f45677f94fffabe7b6173bf9aaabb8cb7ff7539a2e256",
+      "joins_represented": [
+        12,
+        13
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 29,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-029.png",
+      "original_png_sha256": "c3b9a5e8e68fd0024bcc1d4786634637e918bd0199dc09bd94aea197d36d9481",
+      "joins_represented": [
+        13
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 30,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-030.png",
+      "original_png_sha256": "cfc0865de77d178d6a89fc05e53a74abca0860421a5775484ad2a2ebf9230e71",
+      "joins_represented": [
+        13,
+        14
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 31,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-031.png",
+      "original_png_sha256": "d58ccc606ed5597255b784cb938026a0eb73bf3dd0c4f7370fac1bbc4f8b3822",
+      "joins_represented": [
+        14
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 32,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-032.png",
+      "original_png_sha256": "b64a395f3f4872451049390b6908aca66417f4b53ae338f49e9a4b9200b3f047",
+      "joins_represented": [
+        14,
+        15
+      ],
+      "shipped": true,
+      "package_path": "en/pages/sheet-032.png",
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 33,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-033.png",
+      "original_png_sha256": "f2ee69e0d3422d44bef8f5c8ea3bd8860c9933d693a07bcd9ee7da6315b27efa",
+      "joins_represented": [
+        15
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 34,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-034.png",
+      "original_png_sha256": "13122257ab90c15b79bab048f329bd069f1bb236df6de1c5585650beeb63b17c",
+      "joins_represented": [
+        15,
+        16
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 35,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-035.png",
+      "original_png_sha256": "ddf67b94104cf26b786d1874cd1a92dccabc3fb50c6bd0ba9805eb35e02f96e9",
+      "joins_represented": [
+        16
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 36,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-036.png",
+      "original_png_sha256": "ad20ad482a4e89791187f668d52714f6e911995e776d42b561108c487bac3be2",
+      "joins_represented": [
+        16
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 37,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-037.png",
+      "original_png_sha256": "bff5ab898e0dcfe1dc318a016b796c6b265c81ea8cdd025e87d6f793e7ed5218",
+      "joins_represented": [
+        16,
+        17
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 38,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-038.png",
+      "original_png_sha256": "a011d3563c068fba3fa45ce5cb8b3d8325bc7b8f3e6c3e232473755b0e9076d4",
+      "joins_represented": [
+        17
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 39,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-039.png",
+      "original_png_sha256": "964a0370593e5e4819757615a534737582c9ec44b570f2711bab53ea57417121",
+      "joins_represented": [
+        17,
+        18
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 40,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-040.png",
+      "original_png_sha256": "b5b360dab406ba4ea293788681b98aeeced747138a8e7a4bf1fa382e520c0e01",
+      "joins_represented": [
+        18
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "reviewed-page",
+      "page": 41,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/en/review-pages/sheet-041.png",
+      "original_png_sha256": "da289e1eb6be6bdb1fd7ae430232dda66cf7dad794867033b37efb312eb3d4fd",
+      "joins_represented": [
+        18
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 1,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0001894.png",
+      "original_png_sha256": "b8e55088222a8b70b3f6725f70ba8e18699214ae0f15803873af213c5a833e70",
+      "shipped": true,
+      "package_path": "en/native/join-01-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 1,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0001924.png",
+      "original_png_sha256": "61a80376276cf30949d3eeafeff1e49ca3efeb1285d61aef305abca52ee319b8",
+      "shipped": true,
+      "package_path": "en/native/join-01-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 3,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0007643.png",
+      "original_png_sha256": "3dce0851d956b9355c6bd525eaf35c25da95409603dcbe0e58585ff65f807ca5",
+      "shipped": true,
+      "package_path": "en/native/join-03-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 3,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0007673.png",
+      "original_png_sha256": "1d20ea471fd1fa1d72fac68b1b8e66543109304c334f92441fae3c69f9c499cb",
+      "shipped": true,
+      "package_path": "en/native/join-03-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 6,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0015976.png",
+      "original_png_sha256": "906c553f5535afd5ff2aac7506111a85240622ff88cba3c935ed65fcbf926b5b",
+      "shipped": true,
+      "package_path": "en/native/join-06-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 6,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0016006.png",
+      "original_png_sha256": "326eb142656eab6c4f3fa4cef91ca2de22c9439f73f482099e1ea407475333e5",
+      "shipped": true,
+      "package_path": "en/native/join-06-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 8,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0020863.png",
+      "original_png_sha256": "a696eba0b8bf825a04ae941acab5a5ac776ddf1c314e044f6d4e8851ed81d7b6",
+      "shipped": true,
+      "package_path": "en/native/join-08-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 8,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0020893.png",
+      "original_png_sha256": "b0d9c8a8c6edfd5797fe53d1050f5ebeadcaddbc5083a6f7ea914791943becdd",
+      "shipped": true,
+      "package_path": "en/native/join-08-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 9,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0023578.png",
+      "original_png_sha256": "036ecba4ebfda312e49e9bacbac415f59b63a9a1994b3bd0bac69679c57c01d0",
+      "shipped": true,
+      "package_path": "en/native/join-09-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 9,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0023608.png",
+      "original_png_sha256": "36f5e9e1dcc2b6154d7666d880862e95e58972f34fcc448745e707862a7950f6",
+      "shipped": true,
+      "package_path": "en/native/join-09-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 10,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0026705.png",
+      "original_png_sha256": "823870a4021fc072fce85e69bbde245e374ec02367c382480477c44d4a529fdb",
+      "shipped": true,
+      "package_path": "en/native/join-10-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 10,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0026735.png",
+      "original_png_sha256": "2c0a9d36cf2fa2669d24b0119f1c85947293d5395a4f58f22be6139a725b7ee6",
+      "shipped": true,
+      "package_path": "en/native/join-10-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 13,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0035435.png",
+      "original_png_sha256": "fe531ab20be7b3acf65567e4f4e920417863d2206e27d1c41cea2d52865eb7ee",
+      "shipped": true,
+      "package_path": "en/native/join-13-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 13,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0035465.png",
+      "original_png_sha256": "71e0b7017ac68c89c5b93d81dfd6965e54bc2a18c9e79818c0eb0f53fc174111",
+      "shipped": true,
+      "package_path": "en/native/join-13-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 14,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0038748.png",
+      "original_png_sha256": "1e932800dcafc75adc0fc93705fe1690baf46f6456ab85e4dacd10b1f577ea1c",
+      "shipped": true,
+      "package_path": "en/native/join-14-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 14,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0038778.png",
+      "original_png_sha256": "79650ecd59fbb31a8e56b482116f690f59cb437ebc6a8efbb858ce5a87ec0d3a",
+      "shipped": true,
+      "package_path": "en/native/join-14-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 16,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0043452.png",
+      "original_png_sha256": "c9d123b494dc0bdbfb833c94d7d1001948f037a6f9320480b63dfbe6b258d7dc",
+      "shipped": true,
+      "package_path": "en/native/join-16-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 16,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0043482.png",
+      "original_png_sha256": "222869871eeaf6ce47134a990f35f1213dc759d5702ac969a91b4348a4a233e2",
+      "shipped": true,
+      "package_path": "en/native/join-16-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 17,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0045172.png",
+      "original_png_sha256": "3085e760a204ed929035a4498ddf20e6975b35fe1487bcd6374ee93cd365d822",
+      "shipped": true,
+      "package_path": "en/native/join-17-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 17,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0045202.png",
+      "original_png_sha256": "dc9409ab370f7b6896a523ec7e8f6427c0b06b6ad2fe2f9f9f420bcb36aeaf37",
+      "shipped": true,
+      "package_path": "en/native/join-17-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 18,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0047847.png",
+      "original_png_sha256": "67718821b6a23e690e953c6f40d6cd707aacc447c5419ae848b1ffcd6a6d0ade",
+      "shipped": true,
+      "package_path": "en/native/join-18-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "en",
+      "kind": "critical-native-context",
+      "join": 18,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/validation/join-frames/frame-0047877.png",
+      "original_png_sha256": "be65b06ae83a12fdb6a26bb1898fd5982aecb3ee73c3f74e9649a3cff6b9dc66",
+      "shipped": true,
+      "package_path": "en/native/join-18-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 1,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-001.png",
+      "original_png_sha256": "3c165ae21ce1afe381215dded95564f14b66d06b2096f9e4faf37be175472c1b",
+      "joins_represented": [
+        1
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 2,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-002.png",
+      "original_png_sha256": "5b2a6be873f50642e0cdef3aab831dbb1bef5262529afe5dafbd4948272ed586",
+      "joins_represented": [
+        1
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 3,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-003.png",
+      "original_png_sha256": "27d6588c335c6482814f53d30932228c695bdb376b98429c081215e22f1e4535",
+      "joins_represented": [
+        1,
+        2
+      ],
+      "shipped": true,
+      "package_path": "zh/pages/sheet-003.png",
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 4,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-004.png",
+      "original_png_sha256": "40b5fd330d7ddd2861b8cf205f07d914bcfacc3b01b06b1925d24851b8ab682c",
+      "joins_represented": [
+        2
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 5,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-005.png",
+      "original_png_sha256": "506794d179b468472b38baf2a2ccc440940864deb71f0b2b789a735b1b45bb9e",
+      "joins_represented": [
+        2,
+        3
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 6,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-006.png",
+      "original_png_sha256": "a9e86812eb6cd6dd4a65a9450ece0b895b4d105ee3b25c0627d2a5fb4d127ec2",
+      "joins_represented": [
+        3
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 7,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-007.png",
+      "original_png_sha256": "dcff48740515563dc9be8ac81e8bb96a91fb65f89a70712b0751fc96b7319ef6",
+      "joins_represented": [
+        3,
+        4
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 8,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-008.png",
+      "original_png_sha256": "85fe6e4e592a98bfc44ccc30b311652dd2e6c39f01ff8fc9b97fbdb10e5eec7a",
+      "joins_represented": [
+        4
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 9,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-009.png",
+      "original_png_sha256": "c5fc492b620896fb5f406a030318f46f9429dec9db7f4eb277c96f8913ec81cc",
+      "joins_represented": [
+        4
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 10,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-010.png",
+      "original_png_sha256": "dc1ee3cb3bafe9cc011e48d337888524b27cb90b86cd9174351ebfedd51e1133",
+      "joins_represented": [
+        4,
+        5
+      ],
+      "shipped": true,
+      "package_path": "zh/pages/sheet-010.png",
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 11,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-011.png",
+      "original_png_sha256": "fecf11efdb5f458ba95bfb669b20746587675a639ca436a321e6441def9ffd29",
+      "joins_represented": [
+        5
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 12,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-012.png",
+      "original_png_sha256": "d8e1af12088249a131c70e65368827443d5fe07c85628165efff578b67122166",
+      "joins_represented": [
+        5,
+        6
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 13,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-013.png",
+      "original_png_sha256": "f7d99f8982e2b4e20fb5f0c45905931a3eac210bf501a6e7ddd08b4ffe4e7ce6",
+      "joins_represented": [
+        6
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 14,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-014.png",
+      "original_png_sha256": "71333cbc1488c24a3bf878efe7e6929d2ec95866bb9accf173947a9f5f3630d9",
+      "joins_represented": [
+        6,
+        7
+      ],
+      "shipped": true,
+      "package_path": "zh/pages/sheet-014.png",
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 15,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-015.png",
+      "original_png_sha256": "8f6224b0c337cf3609c3d5bb52c31ac3bad7f64fb565e002b8a8139f7c611aa4",
+      "joins_represented": [
+        7
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 16,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-016.png",
+      "original_png_sha256": "5982353d0729feeeba2bc04562de8b93c199249b9f95e35bdad869feced925b7",
+      "joins_represented": [
+        7,
+        8
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 17,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-017.png",
+      "original_png_sha256": "44bf30002b0b3f182d5a5587435bf9934d50414329e142e4606a7077b360381e",
+      "joins_represented": [
+        8
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 18,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-018.png",
+      "original_png_sha256": "f35f2e4503dcc3591fe77c66642131ab832ef7c4541b2b8d274f9336742b7bc2",
+      "joins_represented": [
+        8
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 19,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-019.png",
+      "original_png_sha256": "1a47de44d666aa4ea83f6a14428f1495787a2cc4ae8fd810d1507fde2e7f97f4",
+      "joins_represented": [
+        8,
+        9
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 20,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-020.png",
+      "original_png_sha256": "cad780406d172eeb1202f042d146de615048871e08971dac37503d6df481ab30",
+      "joins_represented": [
+        9
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 21,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-021.png",
+      "original_png_sha256": "b07d60ba11dc33b243df5602364bbd2ea820ac37bfc338d8200e754458cc93b6",
+      "joins_represented": [
+        9,
+        10
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 22,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-022.png",
+      "original_png_sha256": "22ed9fc08ad088f386402c2da0c199a49371f2ff1e27130cd7404c8b192c756d",
+      "joins_represented": [
+        10
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 23,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-023.png",
+      "original_png_sha256": "b1178ca66d3ab3b6430a385dd401d622a24013cdb197eec331c0b2e226b32110",
+      "joins_represented": [
+        10,
+        11
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 24,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-024.png",
+      "original_png_sha256": "2fd054bba15bcc41dd725a8bf2a05735b0300c9d5f7c630ba5c4d89dda19f723",
+      "joins_represented": [
+        11
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 25,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-025.png",
+      "original_png_sha256": "501ba87f89090dbf34233d67c599334dc933a91ce5cd9cc081eb0df93d647350",
+      "joins_represented": [
+        11,
+        12
+      ],
+      "shipped": true,
+      "package_path": "zh/pages/sheet-025.png",
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 26,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-026.png",
+      "original_png_sha256": "90601ac2b77b00aacf5501088ce99c0c29887f1b522910d5f82a265c25417663",
+      "joins_represented": [
+        12
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 27,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-027.png",
+      "original_png_sha256": "3d10366322040015f838d444380d39f32ee1ad6b35fc6662d0e29540fa2de855",
+      "joins_represented": [
+        12
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 28,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-028.png",
+      "original_png_sha256": "c00b8886ef765274387d73c9a398f64ea9c7e41f438d9232c26e6a77e391f7e3",
+      "joins_represented": [
+        12,
+        13
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 29,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-029.png",
+      "original_png_sha256": "96c2daae0f98b65102f30c081454d83cc0714b16911707ad3e27a437580e3dc1",
+      "joins_represented": [
+        13
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 30,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-030.png",
+      "original_png_sha256": "62fd0941a8fc86dea79e9540a775dca84d9e636c8722fa31d51c85a3536b60c4",
+      "joins_represented": [
+        13,
+        14
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 31,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-031.png",
+      "original_png_sha256": "84f3366d953917b0441e5cdfa5d18cf1b3c05949020973aac64db0da58b76664",
+      "joins_represented": [
+        14
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 32,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-032.png",
+      "original_png_sha256": "599f07eb8bc4b24b6539f107c74d65d000e04bb2e6f6187838d7a5937e50870f",
+      "joins_represented": [
+        14,
+        15
+      ],
+      "shipped": true,
+      "package_path": "zh/pages/sheet-032.png",
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 33,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-033.png",
+      "original_png_sha256": "11b7f3dd763ae0bd580d5db715635b4193fb81315da024ecda5f92bf0a12eac8",
+      "joins_represented": [
+        15
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 34,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-034.png",
+      "original_png_sha256": "3327de09f8804760f93bbad40a514e9a0126231f436086ee7ca4a210db915b1a",
+      "joins_represented": [
+        15,
+        16
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 35,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-035.png",
+      "original_png_sha256": "82a1e3301981814c6ccd9da4e0bac90db8584a3774e7173902f8c9e648a5824d",
+      "joins_represented": [
+        16
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 36,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-036.png",
+      "original_png_sha256": "e06bdb4a66973404fe289972bff25f000e16a10bf92538d99c7052127d5b8bc7",
+      "joins_represented": [
+        16
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 37,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-037.png",
+      "original_png_sha256": "27afafc827fdf89da07e16be111c8b8dfbec1bfa1f131a8587713b5142e78b2f",
+      "joins_represented": [
+        16,
+        17
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 38,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-038.png",
+      "original_png_sha256": "c27cba6dd1326a2d5b7cf7d0f9f834d45e4c3c40d308a0772065a9f962f1918e",
+      "joins_represented": [
+        17
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 39,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-039.png",
+      "original_png_sha256": "b5b08fd11ef6d7214ba386f4647cf0da784efca098b48151d2a92a8fd11f7648",
+      "joins_represented": [
+        17,
+        18
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 40,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-040.png",
+      "original_png_sha256": "a4573e43ae2c31973553fa1b6abd2bdbce1ca335599eb0bb14e14c5d56729dc9",
+      "joins_represented": [
+        18
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "reviewed-page",
+      "page": 41,
+      "runtime_original": "/workspace/runtime/ai5-assembly-join-review/zh/review-pages/sheet-041.png",
+      "original_png_sha256": "e55b0f83a7f0aff49cbeeb5c8399029e51559d885605889025da2657852f87af",
+      "joins_represented": [
+        18
+      ],
+      "shipped": false,
+      "package_path": null,
+      "tile_width": 640,
+      "viewing_scope": "All82pages actually reviewed;10representative actual pages shipped."
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 1,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0002188.png",
+      "original_png_sha256": "270886b8fc653ebbfd82a497221df3e86e53e38c314a27f0f95be8b472a2fa64",
+      "shipped": true,
+      "package_path": "zh/native/join-01-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 1,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0002218.png",
+      "original_png_sha256": "d7800b8799322926ed06cdafd0463bcafcc72c4e0e17aad3a2b3a63faebcc39a",
+      "shipped": true,
+      "package_path": "zh/native/join-01-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 3,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0008062.png",
+      "original_png_sha256": "55ea78ea0be8f98af0ef2c0e24ae519fe679926bfcb8663edfeff451d7b1d521",
+      "shipped": true,
+      "package_path": "zh/native/join-03-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 3,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0008092.png",
+      "original_png_sha256": "37d39f92771124dfa0f314eb4a30df6bdfd27835113bf89d13ae0b72cca893bc",
+      "shipped": true,
+      "package_path": "zh/native/join-03-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 6,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0016632.png",
+      "original_png_sha256": "b04721a158eaac8d73ccf0a48ceb335809587488b146c995df62dc07f05ec2c1",
+      "shipped": true,
+      "package_path": "zh/native/join-06-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 6,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0016662.png",
+      "original_png_sha256": "6d12d679751214f14ce3693b45ec436f373864e28c6f9d3cd4ac081f3fb6ec9d",
+      "shipped": true,
+      "package_path": "zh/native/join-06-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 8,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0021624.png",
+      "original_png_sha256": "7d558d0ab42a2d6f006fe0345876a6e989307bc00e8810b0987285baaf05746a",
+      "shipped": true,
+      "package_path": "zh/native/join-08-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 8,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0021654.png",
+      "original_png_sha256": "12666f1a598214448dba6285165fce21e7daf69594be211c6bef8f85cf0714b9",
+      "shipped": true,
+      "package_path": "zh/native/join-08-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 9,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0024392.png",
+      "original_png_sha256": "e2ef449fb1c3ab94a14bb2d95390011ec8325d6d99fa4e1e0d6b99bcea9da8ec",
+      "shipped": true,
+      "package_path": "zh/native/join-09-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 9,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0024422.png",
+      "original_png_sha256": "68fd3de0d7c85c9bc3e4cbb5d17b6467ea58a8864d1b53a95295e522e967e186",
+      "shipped": true,
+      "package_path": "zh/native/join-09-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 10,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0027734.png",
+      "original_png_sha256": "581473a3ead08db7c332f850e6f591f54efa90eeca258517f7fe70e03cb06a5f",
+      "shipped": true,
+      "package_path": "zh/native/join-10-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 10,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0027764.png",
+      "original_png_sha256": "a8c4d9d8d60e207445ce3b29ec9e2c40e0be1a25377a4cc25defd472fd50b870",
+      "shipped": true,
+      "package_path": "zh/native/join-10-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 13,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0036834.png",
+      "original_png_sha256": "d1a57f5246053a23e7592de378038463ec93596b67e9f41c34fcd7b83606ce51",
+      "shipped": true,
+      "package_path": "zh/native/join-13-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 13,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0036864.png",
+      "original_png_sha256": "b26070c061a6e4573a5539b549d7b5205aa1b01d3fdc5802aa3eec4565ba085c",
+      "shipped": true,
+      "package_path": "zh/native/join-13-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 14,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0040414.png",
+      "original_png_sha256": "2751900c3f6350af4fb6800e5248e5acb5c54b210d62566c05a1e5274ba89f6d",
+      "shipped": true,
+      "package_path": "zh/native/join-14-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 14,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0040444.png",
+      "original_png_sha256": "464ca1038aedf366dbd1aa03ab051986614e636e0a206a752fb3056ad5165920",
+      "shipped": true,
+      "package_path": "zh/native/join-14-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 16,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0045153.png",
+      "original_png_sha256": "1605a79cf054132f8b0fb711cfc47875d9073a41e22e40e13b43e78554581cf7",
+      "shipped": true,
+      "package_path": "zh/native/join-16-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 16,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0045183.png",
+      "original_png_sha256": "6233135ab43298d75140641b1a7463dc678352d33608fabdba6a6e56590d766a",
+      "shipped": true,
+      "package_path": "zh/native/join-16-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 17,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0046908.png",
+      "original_png_sha256": "6f29aed12c0b2ceae5d57bdf8f6ebb950f6431087dcd7785057720250ba23bb8",
+      "shipped": true,
+      "package_path": "zh/native/join-17-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 17,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0046938.png",
+      "original_png_sha256": "9877588da5bfbf9594564f2216d590d97fb8abfeaca6c9e4f3f4c45fa4134495",
+      "shipped": true,
+      "package_path": "zh/native/join-17-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 18,
+      "role": "before",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0049740.png",
+      "original_png_sha256": "03f9473f7bdfb57bf7b957183b9bde234ac3095f64aa4bd0c4be03505e64afbf",
+      "shipped": true,
+      "package_path": "zh/native/join-18-before.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    },
+    {
+      "language": "zh",
+      "kind": "critical-native-context",
+      "join": 18,
+      "role": "after",
+      "runtime_original": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/validation/join-frames/frame-0049770.png",
+      "original_png_sha256": "1a10fc3b4fb73dddbc5625575bf8daee7724eef37f7db4b493a5fc25df6bb1e5",
+      "shipped": true,
+      "package_path": "zh/native/join-18-after.png",
+      "dimensions": [
+        854,
+        480
+      ]
+    }
+  ]
+}

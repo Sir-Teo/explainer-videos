@@ -1,0 +1,26 @@
+{
+  "utc": "2026-11-01T03:59:52.637524+00:00",
+  "scope": "Observed after first ENBayes wrapper launched, before its result; parent attests source frozen. Subsequent case starts can compare these snapshots.",
+  "sources": [
+    {
+      "path": "explainer/ai/viz.py",
+      "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "bytes": 31773
+    },
+    {
+      "path": "explainer/ai/lecture.py",
+      "sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+      "bytes": 6055
+    },
+    {
+      "path": "explainer/ai/fonts.py",
+      "sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+      "bytes": 1964
+    },
+    {
+      "path": "explainer/ai/__init__.py",
+      "sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+      "bytes": 18937
+    }
+  ]
+}

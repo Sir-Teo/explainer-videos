@@ -1,0 +1,30 @@
+{
+  "at": "2026-11-01T04:11:44.016839+00:00",
+  "entries": [
+    {
+      "path": "explainer/ai/__init__.py",
+      "observed_start_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+      "package_time_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+      "unchanged": true
+    },
+    {
+      "path": "explainer/ai/fonts.py",
+      "observed_start_sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+      "package_time_sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+      "unchanged": true
+    },
+    {
+      "path": "explainer/ai/lecture.py",
+      "observed_start_sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+      "package_time_sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+      "unchanged": true
+    },
+    {
+      "path": "explainer/ai/viz.py",
+      "observed_start_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "package_time_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "unchanged": true
+    }
+  ],
+  "qualification": "Observed just after firstENBayes launch; not pre-import attestation."
+}

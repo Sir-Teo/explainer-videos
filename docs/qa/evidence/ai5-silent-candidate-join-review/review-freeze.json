@@ -1,0 +1,29 @@
+{
+  "at": "2026-11-01T04:13:30.059892+00:00",
+  "cases": [
+    {
+      "language": "en",
+      "movie": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/en/ai5-silent-preview-en-480p15.mp4",
+      "movie_sha256": "d256356d20368c82c9b190c93c2a01453283626b4dffdf7642f0ced5477347ab",
+      "validation_sha256": "0282f90d660f3fe9ad55fcec3e25ade3779c9e0fec8fcae6250769b91aa0987f",
+      "selection_sha256": "aefe92d8fa1b45db903b5b1ea9f5833035205965d974795ec36ff47663bdf97a",
+      "selected_times": 342,
+      "unique_images": 325,
+      "pages": 41,
+      "full_decode": true,
+      "completed_utc": "2026-11-01T04:11:40.029358+00:00"
+    },
+    {
+      "language": "zh",
+      "movie": "/workspace/runtime/ai5-silent-preview-assembly/current-candidate/zh/ai5-silent-preview-zh-480p15.mp4",
+      "movie_sha256": "9dae141ad8fa31bee6f50ebed1a3f13ea5c3b060b5560fbb76822cb64e3f97d5",
+      "validation_sha256": "c3d519b305727509bdef4a1976ce10c48994f09751f7df464e816ae5e1229ee2",
+      "selection_sha256": "94dcdf3be0d99d2090ebc9c4b21409372a0d99c707a9c0410d8b7e0bbd47c842",
+      "selected_times": 342,
+      "unique_images": 325,
+      "pages": 41,
+      "full_decode": true,
+      "completed_utc": "2026-11-01T04:11:41.451776+00:00"
+    }
+  ]
+}

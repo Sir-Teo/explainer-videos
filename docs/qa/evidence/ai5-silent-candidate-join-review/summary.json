@@ -1,0 +1,238 @@
+{
+  "scope": "Part5 current-candidate EN/ZH silent assembly selected joins only",
+  "completed_utc": "2026-11-01T04:22:38.780961+00:00",
+  "languages": [
+    {
+      "lang": "en",
+      "movie_sha256": "d256356d20368c82c9b190c93c2a01453283626b4dffdf7642f0ced5477347ab",
+      "duration": 3352.562542,
+      "video_frames": 50288,
+      "chapters": 19,
+      "joins": 18,
+      "selected_times": 342,
+      "actual_unique_images": 325,
+      "exact_PNG_duplicate_times": 17,
+      "pages_viewed": 41,
+      "tile_width": 640,
+      "original_size": [
+        854,
+        480
+      ],
+      "critical_native_pairs": 11,
+      "original_followups": 22,
+      "new_join_defects": 0,
+      "full_machine_decode": true,
+      "first_pts": 0.021029,
+      "last_pts": 3352.479557,
+      "min_frame_gap": 0.06634099999973841,
+      "max_frame_gap": 0.06699300000002495,
+      "packet_dts_monotonic": {
+        "0": {
+          "packets": 50288,
+          "first": -0.112305,
+          "last": 3352.346224
+        },
+        "1": {
+          "packets": 157159,
+          "first": 0.0,
+          "last": 3352.541208
+        },
+        "2": {
+          "packets": 1082,
+          "first": 0.0,
+          "last": 3345.675
+        }
+      },
+      "subtitle_cues": 992,
+      "soft_subtitles_exact_text_and_millisecond_timing": true,
+      "input_raw_warning_cases": [
+        {
+          "scene": "Hook",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "Bayes",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "MaxEnt",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "MCMC",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "Brownian",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "dead-air-review",
+              "report": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 154 s\n   2:06.25   1.5 s   [  +126.2 s]\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 154 s\n   2:06.25   1.5 s   [  +126.2 s]\n"
+            }
+          ]
+        },
+        {
+          "scene": "Ito",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "Outro",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lang": "zh",
+      "movie_sha256": "9dae141ad8fa31bee6f50ebed1a3f13ea5c3b060b5560fbb76822cb64e3f97d5",
+      "duration": 3503.617125,
+      "video_frames": 52554,
+      "chapters": 19,
+      "joins": 18,
+      "selected_times": 342,
+      "actual_unique_images": 325,
+      "exact_PNG_duplicate_times": 17,
+      "pages_viewed": 41,
+      "tile_width": 640,
+      "original_size": [
+        854,
+        480
+      ],
+      "critical_native_pairs": 11,
+      "original_followups": 22,
+      "new_join_defects": 0,
+      "full_machine_decode": true,
+      "first_pts": 0.021029,
+      "last_pts": 3503.547461,
+      "min_frame_gap": 0.06634099999973841,
+      "max_frame_gap": 0.06699299999991126,
+      "packet_dts_monotonic": {
+        "0": {
+          "packets": 52554,
+          "first": -0.112305,
+          "last": 3503.414128
+        },
+        "1": {
+          "packets": 164239,
+          "first": 0.0,
+          "last": 3503.595792
+        },
+        "2": {
+          "packets": 1103,
+          "first": 0.0,
+          "last": 3498.078
+        }
+      },
+      "subtitle_cues": 1013,
+      "soft_subtitles_exact_text_and_millisecond_timing": true,
+      "input_raw_warning_cases": [
+        {
+          "scene": "Hook",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "Gauss",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "Likelihood",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "Bayes",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "MaxEnt",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "MCMC",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        },
+        {
+          "scene": "Outro",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "total_selected_times": 684,
+  "actual_unique_images": 650,
+  "exact_duplicate_times": 34,
+  "pages_viewed": 82,
+  "critical_native_pairs": 22,
+  "original_followups": 44,
+  "candidate_status": "Not upgraded by this join review. Separate chapter-level FP gate and parent acceptance govern candidate closure.",
+  "no_continuous_perceptual_or_audio_approval": true,
+  "scene_producer_cache_edits": false,
+  "parent_update_after_review": {
+    "received_during_compaction": true,
+    "scope": "Parent reports all38 current chapter selectedvisual gates closed, including FP. This child join review does not itself expand those scopes or give production/audio/continuous approval."
+  }
+}

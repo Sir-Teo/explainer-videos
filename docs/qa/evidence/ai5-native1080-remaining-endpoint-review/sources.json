@@ -1,0 +1,146 @@
+[
+  {
+    "file": "sources/64c18dce04f23031-s06_bayes.py.gz",
+    "source_sha256": "64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64",
+    "bytes": 18730,
+    "original_paths": [
+      "videos/ai/ai5/s06_bayes.py"
+    ]
+  },
+  {
+    "file": "sources/0acc48bb7c655bde-common.py.gz",
+    "source_sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+    "bytes": 8633,
+    "original_paths": [
+      "videos/ai/ai5/common.py"
+    ]
+  },
+  {
+    "file": "sources/1d76a9c4145eedf0-plotting.py.gz",
+    "source_sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+    "bytes": 3599,
+    "original_paths": [
+      "videos/ai/ai5/plotting.py"
+    ]
+  },
+  {
+    "file": "sources/475ebcc3c100e87b-zh_lines.py.gz",
+    "source_sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+    "bytes": 82756,
+    "original_paths": [
+      "videos/ai/ai5/zh_lines.py"
+    ]
+  },
+  {
+    "file": "sources/c2914a2973672064-ai_text_zh.json.gz",
+    "source_sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+    "bytes": 2436781,
+    "original_paths": [
+      "videos/ai/ai_text_zh.json"
+    ]
+  },
+  {
+    "file": "sources/87a00a2438f12095-qa_production_endpoint.py.gz",
+    "source_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+    "bytes": 1943,
+    "original_paths": [
+      "/workspace/runtime/qa_production_endpoint.py"
+    ]
+  },
+  {
+    "file": "sources/d2edb5b43a4d6599-qa_series.py.gz",
+    "source_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+    "bytes": 25379,
+    "original_paths": [
+      "tools/qa_series.py"
+    ]
+  },
+  {
+    "file": "sources/f77af534a6e426e9-s07_maxent.py.gz",
+    "source_sha256": "f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd",
+    "bytes": 15669,
+    "original_paths": [
+      "videos/ai/ai5/s07_maxent.py"
+    ]
+  },
+  {
+    "file": "sources/028b56fd37dfbb8e-s09_tails.py.gz",
+    "source_sha256": "028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773",
+    "bytes": 14844,
+    "original_paths": [
+      "videos/ai/ai5/s09_tails.py"
+    ]
+  },
+  {
+    "file": "sources/c78cee1cf3a8a8c9-s10_sampling.py.gz",
+    "source_sha256": "c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974",
+    "bytes": 19995,
+    "original_paths": [
+      "videos/ai/ai5/s10_sampling.py"
+    ]
+  },
+  {
+    "file": "sources/34879d06284884ff-s13_montecarlo.py.gz",
+    "source_sha256": "34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5",
+    "bytes": 23262,
+    "original_paths": [
+      "videos/ai/ai5/s13_montecarlo.py"
+    ]
+  },
+  {
+    "file": "sources/15a66c5cb423e2bd-s14_scorefn.py.gz",
+    "source_sha256": "15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c",
+    "bytes": 15280,
+    "original_paths": [
+      "videos/ai/ai5/s14_scorefn.py"
+    ]
+  },
+  {
+    "file": "sources/95c38c1d058a0755-s15_mcmc.py.gz",
+    "source_sha256": "95c38c1d058a07556f26dd86fd042dbdba8e137ff4083ea9350cbd0f919655af",
+    "bytes": 22444,
+    "original_paths": [
+      "videos/ai/ai5/s15_mcmc.py"
+    ]
+  },
+  {
+    "file": "sources/780521544fd9ad5e-s16_brownian.py.gz",
+    "source_sha256": "780521544fd9ad5e9ab698bfeba6c8da2aa82b24b17433a93623dca69c444e9f",
+    "bytes": 15958,
+    "original_paths": [
+      "videos/ai/ai5/s16_brownian.py"
+    ]
+  },
+  {
+    "file": "sources/3cbd2023cb1a0a96-s17_ito.py.gz",
+    "source_sha256": "3cbd2023cb1a0a969d542fe634cd814e3f7a69f46e1a62d0a11702a2b73fa08e",
+    "bytes": 13410,
+    "original_paths": [
+      "videos/ai/ai5/s17_ito.py"
+    ]
+  },
+  {
+    "file": "sources/b014235b1885e337-s18_sde.py.gz",
+    "source_sha256": "b014235b1885e3373b2052dd8b937a085413475073f7fa9296d5866b628c8e65",
+    "bytes": 11573,
+    "original_paths": [
+      "videos/ai/ai5/s18_sde.py"
+    ]
+  },
+  {
+    "file": "sources/7e33904756d634c9-s19_fokker.py.gz",
+    "source_sha256": "7e33904756d634c988cc6b3db97f29a851788d7d64d7a111a33df0f75983bca7",
+    "bytes": 17978,
+    "original_paths": [
+      "videos/ai/ai5/s19_fokker.py"
+    ]
+  },
+  {
+    "file": "sources/7b21098460f4ae4c-s20_outro.py.gz",
+    "source_sha256": "7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e",
+    "bytes": 15158,
+    "original_paths": [
+      "videos/ai/ai5/s20_outro.py"
+    ]
+  }
+]
