@@ -10,6 +10,20 @@ from videos.ai.ai6.common import (BAD, GOOD, HIST, HL, chapter, load, page_dots,
 SECOND, FIRST = C.REWARD, C.MODEL_Q
 
 
+def _run_time_before(vo, mark, frame_rate, preferred=1.2):
+    """Leave two frames before a cue; zero requests a crisp snapshot instead.
+
+    An already-passed cue cannot be recovered by this scheduling fallback.
+    """
+    if not (math.isfinite(frame_rate) and frame_rate > 0 and math.isfinite(preferred) and preferred > 0):
+        raise ValueError("Positive finite frame rate and duration required")
+    available = vo.mark_time(mark) - vo.elapsed()
+    if not math.isfinite(available):
+        raise ValueError("Finite relative bookmark budget required")
+    budget = min(preferred, available - 2 / frame_rate)
+    return budget if budget >= 1 / frame_rate else 0.0
+
+
 class GradientBoosting(VoiceoverScene):
     def construct(self):
         chapter(self, 15, r"Gradient boosting, second order", r"How does XGBoost choose a split?",
@@ -165,7 +179,7 @@ class GradientBoosting(VoiceoverScene):
         tag = note(rf"depth-${x['depth']}$ trees, \ $\eta = {x['eta']:g}$, \ $\lambda = {x['lam']:g}$").to_corner(DR, buff=0.2)
         with self.voiceover(
             "Watch it learn on the two plotted rates. <bookmark mark='a'/> One tree: a few boxes. "
-            "<bookmark mark='b'/> Ten, thirty: the boundary sharpens where the authors meet. <bookmark mark='c'/> "
+            "<bookmark mark='b'/> Ten, <bookmark mark='thirty'/>thirty: the boundary sharpens where the authors meet. <bookmark mark='c'/> "
             f"The training loss keeps falling, but the held-out pages are best after {best} rounds, at "
             f"{100 * acc[best - 1]:.1f} percent. <bookmark mark='d'/> {end}"
         ) as vo:
@@ -175,14 +189,30 @@ class GradientBoosting(VoiceoverScene):
             self.add(mc)
             self.bring_to_front(dots)
             shown = imgs[1]
-            for k, mark in ((3, "b"), (10, None), (30, None), (100, "c"), (200, None)):
-                if k not in imgs:
-                    continue
-                if mark:
-                    vo.wait_until(mark)
-                self.play(r.animate.set_value(k), FadeOut(shown), FadeIn(imgs[k]), run_time=1.2, rate_func=linear)
+
+            def show_round(k, run_time=0.0):
+                nonlocal shown
+                if run_time:
+                    self.play(r.animate.set_value(k), FadeOut(shown), FadeIn(imgs[k]), run_time=run_time, rate_func=linear)
+                else:
+                    # A named snapshot arrives as one coherent state, without
+                    # squeezing a boundary tween between two adjacent words.
+                    r.set_value(k)
+                    self.remove(shown)
+                    self.add(imgs[k])
+                    for m in (cnt, tv, av, mc):
+                        m.update(0)
                 self.bring_to_front(dots)
                 shown = imgs[k]
+
+            show_round(10, _run_time_before(vo, "b", float(config.frame_rate)))
+            vo.wait_until("b")
+            vo.wait_until("thirty")
+            show_round(30)
+            vo.wait_until("c")
+            show_round(100, 1.2)
+            vo.wait_until("d")
+            show_round(n)
         for m in (cnt, tv, av, mc):
             m.clear_updaters()
         self.wait(0.3)
