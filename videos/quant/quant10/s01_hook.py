@@ -93,7 +93,7 @@ class Hook(VoiceoverScene):
         pay_line = pay.ax.plot_line_graph([60, 100, 160], [0, 0, 60], line_color=OPT, add_vertex_dots=False,
                                           stroke_width=4)
         pay_lab = MathTex(r"\text{you owe } \max(S_T - K,\, 0)", font_size=30, color=OPT)
-        pay_lab.next_to(pay.ax.c2p(110, 45), LEFT, buff=0.1)
+        pay_lab.move_to(pay.ax.c2p(88, 47))
         call_slot = call.copy().scale_to_fit_width(4.4).to_edge(RIGHT, buff=0.35).set_y(-1.7)
         with self.voiceover(
             f"The first of October 2021. Bitcoin trades at about {b['pick_S0']:,.0f} dollars. You sell someone "

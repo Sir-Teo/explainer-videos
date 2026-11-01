@@ -323,7 +323,34 @@ def compute_crash87() -> dict:
             "window_dates": d[i - 30:i + 10], "window_ret": r[i - 30:i + 10], "n_days": int(i)}
 
 
-ITEMS = {"tree": compute_tree, "ledger": compute_ledger, "wrong_vol": compute_wrong_vol,
+def compute_riskneutral() -> dict:
+    """The same paths under P (drift mu) and Q (drift r), and Monte Carlo prices under each."""
+    S0, K, T, sig, r, mu = 100.0, 100.0, 1.0, 0.25, 0.05, 0.15
+    n_draw, n_mc = 80, 400_000
+    tP, SP = paths.gbm(S0, mu, sig, T, 120, n_draw, seed=51)
+    rng = np.random.default_rng(52)
+    Z = rng.standard_normal(n_mc)
+    STP = S0 * np.exp((mu - 0.5 * sig ** 2) * T + sig * np.sqrt(T) * Z)
+    STQ = S0 * np.exp((r - 0.5 * sig ** 2) * T + sig * np.sqrt(T) * Z)
+    disc = np.exp(-r * T)
+    payQ = disc * np.maximum(STQ - K, 0)
+    payP = disc * np.maximum(STP - K, 0)
+    # Girsanov: P's samples reweighted by dQ/dP give Q's expectation
+    theta = (mu - r) / sig
+    w = np.exp(-theta * np.sqrt(T) * Z - 0.5 * theta ** 2 * T)
+    payW = payP * w
+    d1, d2 = bs.d1_d2(S0, K, T, sig, r)
+    return {"S0": S0, "K": K, "T": T, "sigma": sig, "r": r, "mu": mu, "t": tP, "paths_P": SP,
+            "ST_P": STP[:60000], "ST_Q": STQ[:60000], "theta": theta,
+            "mc_Q": float(payQ.mean()), "se_Q": float(payQ.std() / np.sqrt(n_mc)),
+            "mc_P": float(payP.mean()), "se_P": float(payP.std() / np.sqrt(n_mc)),
+            "mc_W": float(payW.mean()), "se_W": float(payW.std() / np.sqrt(n_mc)),
+            "exact": float(bs.price(S0, K, T, sig, r)), "N_d1": float(stats.norm.cdf(d1)),
+            "N_d2": float(stats.norm.cdf(d2)), "q_itm": float((STQ > K).mean()), "p_itm": float((STP > K).mean()),
+            "n_mc": n_mc}
+
+
+ITEMS = {"tree": compute_tree, "riskneutral": compute_riskneutral, "ledger": compute_ledger, "wrong_vol": compute_wrong_vol,
          "discrete": compute_discrete, "implied": compute_implied, "btc": compute_btc, "crash87": compute_crash87}
 
 if __name__ == "__main__":
