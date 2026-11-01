@@ -1,0 +1,46 @@
+{
+  "scope": "source-only GP provenance/coordinates and observational causal identification assumptions",
+  "source": [
+    {
+      "path": "videos/ai/ai7/s13_causes.py",
+      "before_sha256": "be4e258b51fa537857f6ea7e293db5841a8f80cefe14ab654e55d6d2cc2fd324",
+      "after_sha256": "66d1ffa191f85630dd5af76d451564dc6738f87bb41630cd1261b2b8ea4015f7",
+      "bytes_after": 13689,
+      "voiceover_blocks": 4,
+      "bookmarks_same_order": true,
+      "explicit_timing_ast_exact": true,
+      "cmath_formula_AST_exact": true
+    },
+    {
+      "path": "videos/ai/ai7/s14_gp.py",
+      "before_sha256": "1fa9941841c3e20b46fc52f7cf4fd4361115f6ac7aea5e8afbe6b249f4df6bc9",
+      "after_sha256": "bcb158296af65f83ba37d8a5ec8d48c5aa0cd443a40d7ded9b1d170f9f1541b7",
+      "bytes_after": 14534,
+      "voiceover_blocks": 4,
+      "bookmarks_same_order": true,
+      "explicit_timing_ast_exact": true,
+      "cmath_formula_AST_exact": true
+    }
+  ],
+  "changed_VOs": 5,
+  "changed_spliced_fragments": 1,
+  "changed_captions": 7,
+  "tests": 5,
+  "test_seconds": 0.064,
+  "test_log": "focused-tests.log",
+  "test_sha256": "c95c4748b69010519dda084f2d140d7affd417b2e4849aca789bad45f37efcbf",
+  "translation_proposal_sha256": "6735f357e44fa4a1063716ec986ec84b23e01be59534cd7208588ba9eab502d4",
+  "root_owns_ZH_global_README": true,
+  "global_table_touched_by_child": false,
+  "cache_ai7_absent": true,
+  "explicit_animation_timing_and_cmath_ASTs_same": true,
+  "bookmarks_same_order": true,
+  "audio_text_cache_duration_identity_preserved": false,
+  "actual_generation_render_native_typesetting_audio_pending": true,
+  "compute_provider_scene_tex_decoder_calls": false,
+  "nonempty_finite_viewport_padding": "5% of observed ordinate span; constant traces use scale max(abs(value),1), no observations moved",
+  "GP_curves": "piecewise linear through exact sampled vertices; band polygons exact",
+  "source_growth_bytes": 2068,
+  "new_test_bytes": 4677,
+  "free_after": 538521600
+}

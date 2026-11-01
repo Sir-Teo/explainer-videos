@@ -112,7 +112,9 @@ class CountingSceneClaims(unittest.TestCase):
         line = evaluate(voiceovers(method('s10_kn.py', 'board'))[0],
                         k={'best': 3, 'best_bits': 2.123})
         self.assertIn('With 3 characters', line)
-        self.assertIn('selected on the validation books', line)
+        self.assertIn('selected by comparing orders on one common validation suffix', line)
+        self.assertIn('after its first 3 characters', line)
+        self.assertIn('matching the following infinity-gram comparison', line)
         self.assertIn('why stop at 3 characters', line)
 
     def test_viterbi_is_joint_map_and_forward_event_includes_the_space(self):

@@ -1,0 +1,10 @@
+test_actual_model_viewport_covers_prior_post_subset_bands_and_data (test_ai7_gp_viewport.GPViewport.test_actual_model_viewport_covers_prior_post_subset_bands_and_data) ... ok
+test_constant_trace_has_a_range_and_invalid_input_is_explicit (test_ai7_gp_viewport.GPViewport.test_constant_trace_has_a_range_and_invalid_input_is_explicit) ... ok
+test_every_sequential_state_uses_one_inclusive_viewport (test_ai7_gp_viewport.GPViewport.test_every_sequential_state_uses_one_inclusive_viewport) ... ok
+test_negative_and_high_sampled_vertices_are_not_relocated_or_smoothed (test_ai7_gp_viewport.GPViewport.test_negative_and_high_sampled_vertices_are_not_relocated_or_smoothed) ... ok
+test_sequential_polygon_and_mean_retain_actual_coordinates (test_ai7_gp_viewport.GPViewport.test_sequential_polygon_and_mean_retain_actual_coordinates) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.064s
+
+OK

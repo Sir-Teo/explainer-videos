@@ -1,0 +1,30 @@
+[
+  {
+    "payload": "compute.py.patch.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 8260,
+    "raw_sha256": "ae5b63534b090613e7381865c884257862cd0c59ed992448f67ec2c04f61358f",
+    "encoded_sha256": "17675f5915209c31aa6400256d0da44360023bd605591a5d9cc55dab34c240e6"
+  },
+  {
+    "payload": "contracts.py.patch.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 5474,
+    "raw_sha256": "e88afb4a59d99b305086e659b4be7c6a497e1a6dc27a60478bc6220be2e73abd",
+    "encoded_sha256": "dec668b5764b771d98e4f143472b28f42912c42edd4a895fa1287731b931ab0c"
+  },
+  {
+    "payload": "compute.py.before.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 66147,
+    "raw_sha256": "0000dd2299409678db0cb754288c70307600416caa68c5c9ab4943f4073ca011",
+    "encoded_sha256": "88e000e9e01a54ea0b142031b2f4f4766989d4f18c6c1db0c26effff426ff8f6"
+  },
+  {
+    "payload": "contracts.py.before.gz",
+    "codec": "gzip lossless",
+    "raw_bytes": 20364,
+    "raw_sha256": "97e8219609be33368ecf63fe30ebf7c21c9e2f75cf7fca49dfdd57b885808df8",
+    "encoded_sha256": "2d7837bd13d41b00fb6191df6710bfc72a64379ae7c4563c85932e89ec605cf0"
+  }
+]

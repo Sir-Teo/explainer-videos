@@ -1,0 +1,28 @@
+{
+  "created_utc": "2026-11-01T17:04:39.367975+00:00",
+  "source_parent_commit": "4dfd596f89456666d4da0201a28b58ac7b427064",
+  "actual_real_ai7_cache_absent": true,
+  "default_items_completed": 0,
+  "rendered_cases": 0,
+  "all24recipe_fingerprints_changed_without_production": true,
+  "series_caption_table_byte_unchanged": true,
+  "app_source_changed": [
+    "tests/test_ai7_bilingual_claims.py",
+    "tests/test_ai7_counting_scene_claims.py",
+    "videos/ai/ai7/README.md",
+    "videos/ai/ai7/compute.py",
+    "videos/ai/ai7/contracts.py",
+    "videos/ai/ai7/s10_kn.py",
+    "videos/ai/ai7/s13_causes.py",
+    "videos/ai/ai7/s14_gp.py",
+    "videos/ai/ai7/s18_outro.py",
+    "videos/ai/ai7/zh_lines.py"
+  ],
+  "test_scope": "81selected/59stableidentities/242unchangedscientificpayloads; not a whole-repository finalsuite",
+  "remaining_source_queues": [
+    "PCA/PPCA/ICA coordinate clipping",
+    "Kmeans capped-state correspondence",
+    "KN discount chart signed/out-of-range bars"
+  ],
+  "remaining_render_audio_gates": "All Part7 cases pending after Part6 closure"
+}

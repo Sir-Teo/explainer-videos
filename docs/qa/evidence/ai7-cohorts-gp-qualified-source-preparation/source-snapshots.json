@@ -1,0 +1,72 @@
+[
+  {
+    "path": "tests/test_ai7_bilingual_claims.py",
+    "before_sha256": "9b2e7c332b8ce51ab334ff3bd3df1f22a0b3f18b12cd7b8e851a73d2162a4ff9",
+    "after_sha256": "f82edc6c80f323a8195e910f796f61121d1bf05b86dfc8af1d1127c67394cd6f",
+    "before_payload": "source-snapshots/00.before.gz",
+    "after_payload": "source-snapshots/00.after.gz"
+  },
+  {
+    "path": "tests/test_ai7_counting_scene_claims.py",
+    "before_sha256": "5d15ed8a470026d1dfa625967144a20a4d4b74d6170d943b65ba1d2f38bf3ff9",
+    "after_sha256": "81b0dd0010c5414bdf9de45e332bf9832c0a5c0a98702fe1a8df9c4ecd3cd278",
+    "before_payload": "source-snapshots/01.before.gz",
+    "after_payload": "source-snapshots/01.after.gz"
+  },
+  {
+    "path": "videos/ai/ai7/README.md",
+    "before_sha256": "c07652ba6b77d472585eb8af27adaf059c84a09de947e31adfe520c8d646a05d",
+    "after_sha256": "51f5330ddbe95b18b9f610db26533a3db18bf8630788f1705a16ffea2ec074d5",
+    "before_payload": "source-snapshots/02.before.gz",
+    "after_payload": "source-snapshots/02.after.gz"
+  },
+  {
+    "path": "videos/ai/ai7/compute.py",
+    "before_sha256": "0000dd2299409678db0cb754288c70307600416caa68c5c9ab4943f4073ca011",
+    "after_sha256": "48f0f93371d3f0af0482fac70a79adaafb9800a4662f62cada9c79be7df390bd",
+    "before_payload": "source-snapshots/03.before.gz",
+    "after_payload": "source-snapshots/03.after.gz"
+  },
+  {
+    "path": "videos/ai/ai7/contracts.py",
+    "before_sha256": "97e8219609be33368ecf63fe30ebf7c21c9e2f75cf7fca49dfdd57b885808df8",
+    "after_sha256": "2ffa4f7fbaee1c10bb185778c0507f275cb5e35a0858ae206979d2ed46dbbcfa",
+    "before_payload": "source-snapshots/04.before.gz",
+    "after_payload": "source-snapshots/04.after.gz"
+  },
+  {
+    "path": "videos/ai/ai7/s10_kn.py",
+    "before_sha256": "4f70e0fb9f443160594e9ec7d73f767e50df632449c85ffd1551380109b45b6a",
+    "after_sha256": "a153e62f99dc0f56fcc5841b486381143e45c65a8e5711496514e842a3561b7f",
+    "before_payload": "source-snapshots/05.before.gz",
+    "after_payload": "source-snapshots/05.after.gz"
+  },
+  {
+    "path": "videos/ai/ai7/s13_causes.py",
+    "before_sha256": "be4e258b51fa537857f6ea7e293db5841a8f80cefe14ab654e55d6d2cc2fd324",
+    "after_sha256": "bc9a2dcb4a28c14e3ea3b07612220cff667fc256bd116e761b7618efb38d61bb",
+    "before_payload": "source-snapshots/06.before.gz",
+    "after_payload": "source-snapshots/06.after.gz"
+  },
+  {
+    "path": "videos/ai/ai7/s14_gp.py",
+    "before_sha256": "1fa9941841c3e20b46fc52f7cf4fd4361115f6ac7aea5e8afbe6b249f4df6bc9",
+    "after_sha256": "3b569dda0a545fe500a6fc86feca5a8f875540f80a0aafa6b2f1df2d19bcfb57",
+    "before_payload": "source-snapshots/07.before.gz",
+    "after_payload": "source-snapshots/07.after.gz"
+  },
+  {
+    "path": "videos/ai/ai7/s18_outro.py",
+    "before_sha256": "00794aa17a890a8b15d04a062d9b14895f1a8da85bdef49e0305d90d8f1c31fb",
+    "after_sha256": "40cd7b7e69b8fd02d5c1113b3e5a334a93922be248051762c6dca862d5c4a801",
+    "before_payload": "source-snapshots/08.before.gz",
+    "after_payload": "source-snapshots/08.after.gz"
+  },
+  {
+    "path": "videos/ai/ai7/zh_lines.py",
+    "before_sha256": "b4c6c479eee2ae28a80eeb11960174d840555f369b332b9dd1099feb94960011",
+    "after_sha256": "e67f16e334085e426be1f5b568a783c79b8ea1864ef4d860a95c34587f75cbae",
+    "before_payload": "source-snapshots/09.before.gz",
+    "after_payload": "source-snapshots/09.after.gz"
+  }
+]

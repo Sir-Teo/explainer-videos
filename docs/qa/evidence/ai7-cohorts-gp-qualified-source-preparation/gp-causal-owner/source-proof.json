@@ -1,0 +1,125 @@
+{
+  "source": [
+    {
+      "path": "videos/ai/ai7/s13_causes.py",
+      "before_sha256": "be4e258b51fa537857f6ea7e293db5841a8f80cefe14ab654e55d6d2cc2fd324",
+      "after_sha256": "66d1ffa191f85630dd5af76d451564dc6738f87bb41630cd1261b2b8ea4015f7",
+      "bytes_after": 13689,
+      "voiceover_blocks": 4,
+      "bookmarks_same_order": true,
+      "explicit_timing_ast_exact": true,
+      "cmath_formula_AST_exact": true
+    },
+    {
+      "path": "videos/ai/ai7/s14_gp.py",
+      "before_sha256": "1fa9941841c3e20b46fc52f7cf4fd4361115f6ac7aea5e8afbe6b249f4df6bc9",
+      "after_sha256": "bcb158296af65f83ba37d8a5ec8d48c5aa0cd443a40d7ded9b1d170f9f1541b7",
+      "bytes_after": 14534,
+      "voiceover_blocks": 4,
+      "bookmarks_same_order": true,
+      "explicit_timing_ast_exact": true,
+      "cmath_formula_AST_exact": true
+    }
+  ],
+  "changed_voiceovers": [
+    {
+      "file": "s13_causes.py",
+      "voiceover_index": 2,
+      "old_expression": "f\"Draw where the data came from. Stone size affected which treatment doctors chose, and it affected success. <bookmark mark='a'/> So there are two paths from treatment to success: the direct one, the effect we want, and a back door through stone size, which carries the confounding. <bookmark mark='b'/> Judea Pearl's question is not 'what's the success rate among patients who got open surgery', but 'what would it be if we gave everyone open surgery': y given do x. Doing means cutting the arrows into the treatment: it's set by hand, not by the stone. <bookmark mark='c'/> And if a variable, here stone size, blocks every back door, the effect of doing can be computed from data that was only seen. Average over the size, <bookmark mark='d'/> using the success rate within each size, weighted by how common each size is in everyone. <bookmark mark='e'/> For the kidney stones, that favours {better}: {100 * adj['A']:.0f} against {100 * adj['B']:.0f} percent. This is the back-door adjustment; Pearl's do-calculus says exactly when such a formula exists.\"",
+      "new_expression": "f\"Draw where the data came from. Stone size affected which treatment doctors chose, and it affected success. <bookmark mark='a'/> So there are two paths from treatment to success: the direct one, the effect we want, and a back door through stone size, which carries the confounding. <bookmark mark='b'/> Judea Pearl's question is not 'what's the success rate among patients who got open surgery', but 'what would it be if we gave everyone open surgery': y given do x. Doing means cutting the arrows into the treatment: it's set by hand, not by the stone. <bookmark mark='c'/> And if a variable, here stone size, blocks every back door in an adequate causal graph, with no omitted confounding, the observational adjustment can identify the effect. We also need consistency, so treatment denotes the same well-defined intervention, and overlap: both treatments must be possible in each relevant size stratum. Average over size, <bookmark mark='d'/> using the success rate within each size, weighted by how common each size is in everyone. <bookmark mark='e'/> The size-standardized kidney-stone rates favour {better}: {100 * adj['A']:.0f} against {100 * adj['B']:.0f} percent. Reading these as causal requires those assumptions; the observational table alone cannot establish them. This is the back-door adjustment, with its identification assumptions.\"",
+      "bookmarks": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e"
+      ]
+    },
+    {
+      "file": "s14_gp.py",
+      "voiceover_index": 0,
+      "old_expression": "\"Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says 'her', from the start of the novel to the end. It rises and falls as the story moves between characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over functions; our kernel makes them smooth. Gaussian means bell-shaped: at every page, the value is uncertain, most likely near the middle of a bell. <bookmark mark='k'/> The kernel, k, says how strongly two pages' values move together: strongly when the pages are close, hardly at all when they're far apart. Before seeing any data, here are five functions drawn from it: wiggly, with a typical width of wiggle, the length scale. <bookmark mark='b'/> Now condition on the pages. Only functions that pass near the data survive.\"",
+      "new_expression": "\"Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says 'her', from the start of the novel to the end. It rises and falls as the story moves between characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over functions; our kernel makes them smooth. Gaussian means bell-shaped: at every page, the value is uncertain, most likely near the middle of a bell. <bookmark mark='k'/> The kernel, k, says how strongly two pages' values move together: strongly when the pages are close, hardly at all when they're far apart. We already fitted the mean, kernel and noise settings using all these pages. Here are five draws from that fitted empirical-Bayes prior, before conditioning on the individual values again. Their typical width of wiggle is the length scale. <bookmark mark='b'/> Now condition on the pages with those settings fixed. The draws move toward functions compatible with the noisy observations.\"",
+      "bookmarks": [
+        "a",
+        "k",
+        "b"
+      ]
+    },
+    {
+      "file": "s14_gp.py",
+      "voiceover_index": 1,
+      "old_expression": "f\"Their average is the best guess, and the band around it shows the uncertainty. <bookmark mark='a'/> The length scale, about {g['ell']:g} pages, wasn't set by hand: it's the one under which the data was most probable. <bookmark mark='b'/> Show the model only the first twenty pages, and with the kernel settings held fixed, the band opens wide beyond them. This is uncertainty under our model, useful when deciding where to look next.\"",
+      "new_expression": "f\"The white curve is the conditional mean. The band is plus or minus two conditional standard deviations of the latent function, given the fitted settings. It excludes observation noise and uncertainty in those settings. <bookmark mark='a'/> The length scale, about {g['ell']:g} pages, was chosen by the all-page marginal likelihood among the settings tried. <bookmark mark='b'/> Now condition only on the first {m20} pages, still holding the all-page fitted mean, kernel and noise fixed. This is a subset-conditioning demonstration, not a held-out forecast: those later pages already helped choose the settings.\"",
+      "bookmarks": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "file": "s14_gp.py",
+      "voiceover_index": 2,
+      "old_expression": "\"Why is conditioning so easy? First subtract the mean. Under a Gaussian process, the pages we've seen and the value at any new page are jointly Gaussian, with covariances given by the kernel. <bookmark mark='a'/> And a Gaussian, conditioned on some of its coordinates, is still Gaussian. Completing the square gives its mean and variance. <bookmark mark='b'/> The mean is a weighted sum of the observed values: nearby pages weigh the most in this example. <bookmark mark='c'/> With kernel settings fixed, the variance is the prior's, minus what the data explains. It never looks at the values themselves, only at where the pages are. Rasmussen and Williams' book of 2006 builds the whole subject on these two lines.\"",
+      "new_expression": "\"Why is conditioning so easy? First subtract the mean. Under a Gaussian process, the pages we've seen and the value at any new page are jointly Gaussian, with covariances given by the kernel. <bookmark mark='a'/> And a Gaussian, conditioned on some of its coordinates, is still Gaussian. Completing the square gives its mean and variance. <bookmark mark='b'/> The mean is a weighted sum of the observed values: nearby pages weigh the most in this example. <bookmark mark='c'/> With mean and kernel settings fixed, the conditional latent variance is the prior's, minus what conditioning explains. It depends on the page locations, not directly on their observed values. But our fitted settings depend on all the values; this plug-in variance omits their uncertainty. Rasmussen and Williams' book of 2006 builds the whole subject on these two lines.\"",
+      "bookmarks": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "file": "s14_gp.py",
+      "voiceover_index": 3,
+      "old_expression": "\"Now watch the band shrink as pages land, in a random order. With no data, it's the prior: the same wide band everywhere. <bookmark mark='a'/> Each page pins the function down near it, and the band pinches there. <bookmark mark='b'/> With all \" + f\"{ns[-1]} pages, the average uncertainty has fallen from {msd[0]:.1f} to {msd[-1]:.1f}. Between the pages, where the kernel says the rate could still wander, it stays open. <bookmark mark='c'/> Mining engineers did this first: Danie Krige estimated gold grades between boreholes in the 1950s, and Georges Matheron made it a theory, kriging. Machine learning took it up in the 1990s.\"",
+      "new_expression": "\"Now reveal conditioning pages in a random order. At zero revealed pages, this is the fitted empirical-Bayes prior; its mean, kernel and noise already used all the pages. We hold those settings fixed throughout. The band is plus or minus two latent conditional standard deviations, not an observation prediction band or full Bayesian uncertainty. <bookmark mark='a'/> Each conditioning page reduces the uncertainty near it, and the band pinches there. <bookmark mark='b'/> With all \" + f\"{ns[-1]} pages, the average uncertainty has fallen from {msd[0]:.1f} to {msd[-1]:.1f}. Between the pages, where the kernel says the rate could still wander, it stays open. <bookmark mark='c'/> Mining engineers did this first: Danie Krige estimated gold grades between boreholes in the 1950s, and Georges Matheron made it a theory, kriging. Machine learning took it up in the 1990s.\"",
+      "bookmarks": [
+        "a",
+        "b",
+        "c"
+      ]
+    }
+  ],
+  "changed_spliced_fragments": [
+    {
+      "file": "s13_causes.py",
+      "assigned_name": "verdict",
+      "old_expression": "f\"Compare the treated with the untreated, and the treatment looks harmful: {c['naive']:+.2f}. Adjust for severity through the back door: {c['adjusted_sim']:+.3f}. Now run the experiment, flipping a coin for every patient: {c['experiment']:+.3f}. The adjustment recovered what only an experiment could show.\"",
+      "new_expression": "f\"Compare the treated with the untreated, and the treatment looks harmful: {c['naive']:+.2f}. Adjust for severity through the back door: {c['adjusted_sim']:+.3f}. Now run the experiment, flipping a coin for every patient: {c['experiment']:+.3f}. In this specified simulation, the known causal structure makes the adjustment comparable to the randomized experiment.\""
+    }
+  ],
+  "changed_captions": [
+    {
+      "file": "s13_causes.py",
+      "expression": "'size-standardized observational rates:'"
+    },
+    {
+      "file": "s13_causes.py",
+      "expression": "'causal only with an adequate DAG, no omitted confounding, \\\\\\\\ consistency and overlap'"
+    },
+    {
+      "file": "s14_gp.py",
+      "expression": "\"``her'' per $1{,}000$ words \\\\\\\\ band: latent $f \\\\pm 2$ conditional SD\""
+    },
+    {
+      "file": "s14_gp.py",
+      "expression": "f\"all-page fit: \\\\ $\\\\ell = {g['ell']:g}$ pages \\\\\\\\ mean, kernel and noise held fixed\""
+    },
+    {
+      "file": "s14_gp.py",
+      "expression": "'conditioning pages:'"
+    },
+    {
+      "file": "s14_gp.py",
+      "expression": "'mean latent conditional SD:'"
+    },
+    {
+      "file": "s14_gp.py",
+      "expression": "'random-order conditioning; latent $f \\\\pm 2$ conditional SD \\\\\\\\ all-page fitted mean, kernel and noise held fixed'"
+    }
+  ],
+  "part7_cache_absent_after": true,
+  "read_only_compute_sha256": "91baad21c6719897ad4b5551e252e122d2774a759190d6b459a2c47917d24ddc",
+  "no_production_render_or_TeX": true,
+  "narration_audio_duration_identity": false,
+  "actual_layout_gates_pending": true
+}

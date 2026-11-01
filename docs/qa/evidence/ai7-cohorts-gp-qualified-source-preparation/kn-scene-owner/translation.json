@@ -1,0 +1,27 @@
+{
+  "main": [
+    {
+      "method": "orders",
+      "old_effective_key": "f\"Back to part one's scoreboard. The best counting model on that scored passage used {best1} characters of context and reached {p1[best1]:.2f} bits per character on the passage. <bookmark mark='a'/> Longer contexts should help, but they're rare: most long contexts in the passage appeared only a handful of times in thirty novels, if at all. Part one's best passage score is at {best1} characters. <bookmark mark='b'/> {trend}\"",
+      "new_key": "f\"Back to part one's scoreboard. The best counting model on that scored passage used {best1} characters of context and reached {p1[best1]:.2f} bits per character on the passage. <bookmark mark='a'/> Longer contexts should help, but they're rare: most long contexts in the passage appeared only a handful of times in thirty novels, if at all. Part one's curve retains its original order-dependent scoring starts. <bookmark mark='b'/> Here every Kneser–Ney order scores the same {k['test_count']} passage characters, after the first {k['comparison_start']} characters. {trend}\"",
+      "Chinese": "回到第1部分的记分牌。在那个评分段落上，最好的计数模型用了{best1}个字符的上下文，得到每字符{p1[best1]:.2f}比特。<bookmark mark='a'/>更长的上下文本该有帮助，但它们很罕见：测试段落里大多数长上下文，在30部小说里只出现过寥寥几次，甚至没出现过。第1部分的曲线保留了各阶原来的评分起点。<bookmark mark='b'/>这里每一阶Kneser–Ney都对同样的{k['test_count']}个段落字符打分，跳过最前面的{k['comparison_start']}个字符。{trend}"
+    },
+    {
+      "method": "idea",
+      "old_effective_key": "f\"Reinhard Kneser and Hermann Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, absolute discounting: shave the fixed discount off every count you've seen, <bookmark mark='c'/> and use the savings to back off to a shorter context, one character fewer: blend the two. <bookmark mark='b'/> Second, judge the shorter contexts by their variety. In the novels, '{d['word']}' appears {d['word_count']:,} times, but its number of distinct predecessors is {d['word_prev']}; its most common predecessor is '{d['word_top_prev']}'. '{d['other']}' is about as common, and follows {d['other_prev']:,} different words. <bookmark mark='d'/> After an unfamiliar word, '{d['other']}' is the far better guess. So the shorter contexts count how many different contexts something follows, not how often it appears.\"",
+      "new_key": "f\"Reinhard Kneser and Hermann Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, absolute discounting: shave the fixed discount off every count you've seen, <bookmark mark='c'/> and use the savings to back off to a shorter context, one character fewer: blend the two. <bookmark mark='b'/> Second, judge the shorter contexts by their variety. In the novels, '{d['word']}' appears {d['word_count']:,} times, but its number of distinct predecessors is {d['word_prev']}; its most common predecessor is '{d['word_top_prev']}'. '{d['other']}' is about as common, and follows {d['other_prev']:,} different words. <bookmark mark='d'/> {continuation}So the shorter contexts count how many different contexts something follows, not how often it appears.\"",
+      "Chinese": "赖因哈德·克内泽和赫尔曼·奈1995年的平滑法有两个想法。<bookmark mark='a'/>第一，绝对折扣：每个见过的计数都削去一个固定的折扣，<bookmark mark='c'/>把省下来的概率交给少一个字符的短上下文，把两者混合。<bookmark mark='b'/>第二，用多样性判断短上下文。在小说里，‘{d['word']}’出现了{d['word_count']:,}次，却只有{d['word_prev']}种不同的前驱；最常见的前驱是‘{d['word_top_prev']}’。‘{d['other']}’差不多常见，却跟在{d['other_prev']:,}种不同的词后面。<bookmark mark='d'/>{continuation}所以短上下文数的是一个东西跟在多少种不同上下文后面，不是它总共出现多少次。"
+    },
+    {
+      "method": "board",
+      "old_effective_key": "f\"With {k['best']} characters of context, selected on the validation books, Kneser–Ney reaches {k['best_bits']:.2f} bits per character on the passage. <bookmark mark='a'/> For two decades, from speech recognition to machine translation, a Kneser–Ney model was the language model in the noisy channel. Stanley Chen and Joshua Goodman's careful comparison in 1998 found a modified Kneser–Ney variant best among the methods they tested. But why stop at {k['best']} characters?\"",
+      "new_key": "f\"With {k['best']} characters of context, selected by comparing orders on one common validation suffix, Kneser–Ney reaches {k['best_bits']:.2f} bits per character on the passage after its first {k['best']} characters. This benchmark keeps that selected order's own scoring start, matching the following infinity-gram comparison. <bookmark mark='a'/> For two decades, from speech recognition to machine translation, a Kneser–Ney model was the language model in the noisy channel. Stanley Chen and Joshua Goodman's careful comparison in 1998 found a modified Kneser–Ney variant best among the methods they tested. But why stop at {k['best']} characters?\"",
+      "Chinese": "通过在同一段验证后缀上比较阶数，选出{k['best']}个字符的上下文后，Kneser–Ney跳过评分段落最前面的{k['best']}个字符，达到每字符{k['best_bits']:.2f}比特。这个基准保留所选阶数自己的评分起点，与接下来的无穷元比较一致。<bookmark mark='a'/>有二十年，从语音识别到机器翻译，有噪信道里的语言模型都是Kneser–Ney这一类。斯坦利·陈和乔舒亚·古德曼1998年的细致比较发现，在他们测试的方法里，一种改进版Kneser–Ney表现最好。但为什么要停在{k['best']}个字符呢？"
+    }
+  ],
+  "fragments": {
+    "f\"In the continuation distribution, '{d['other']}' gets more probability than '{d['word']}'. \"": "在延续分布里，‘{d['other']}’得到的概率比‘{d['word']}’更高。",
+    "f\"In the continuation distribution, '{d['word']}' gets more probability than '{d['other']}'. \"": "在延续分布里，‘{d['word']}’得到的概率比‘{d['other']}’更高。",
+    "f\"In the continuation distribution, '{d['word']}' and '{d['other']}' receive equal probability. \"": "在延续分布里，‘{d['word']}’和‘{d['other']}’得到相同的概率。"
+  }
+}

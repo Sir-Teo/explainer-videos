@@ -1,0 +1,41 @@
+{
+  "files": [
+    {
+      "path": "codec-map.json",
+      "bytes": 1111,
+      "sha256": "4fe3d2e38b9c0af5924350dbafc5898534b6f198406a48f2c0cc6a3fe5198034"
+    },
+    {
+      "path": "compute.py.before.gz",
+      "bytes": 22542,
+      "sha256": "88e000e9e01a54ea0b142031b2f4f4766989d4f18c6c1db0c26effff426ff8f6"
+    },
+    {
+      "path": "compute.py.patch.gz",
+      "bytes": 2970,
+      "sha256": "17675f5915209c31aa6400256d0da44360023bd605591a5d9cc55dab34c240e6"
+    },
+    {
+      "path": "contracts.py.before.gz",
+      "bytes": 6709,
+      "sha256": "2d7837bd13d41b00fb6191df6710bfc72a64379ae7c4563c85932e89ec605cf0"
+    },
+    {
+      "path": "contracts.py.patch.gz",
+      "bytes": 1794,
+      "sha256": "dec668b5764b771d98e4f143472b28f42912c42edd4a895fa1287731b931ab0c"
+    },
+    {
+      "path": "focused-tests.log",
+      "bytes": 1230,
+      "sha256": "ea3c9ff8a76df5d0e5410caff40ab0a569808a52494ab78b647034db8dbb0dbe"
+    },
+    {
+      "path": "report.json",
+      "bytes": 6174,
+      "sha256": "7b09e58904560eb2eaa735556fc3f9b8c6fcee74b4c340deeb2b45d334ac4dae"
+    }
+  ],
+  "runtime_payload_bytes": 42530,
+  "test_sha256": "68de534de70eb8492ed6864421cfea4720e79e136fded6613b1afbc2f9b7eaaa"
+}

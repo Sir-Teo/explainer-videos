@@ -358,15 +358,19 @@ def kn_model(tables, K, M):
     return model
 
 
-def kn_bits(model, a, K, M):
-    """Bits per symbol of the sequence a under the model with context length M (the first M symbols are skipped)."""
-    return float(-np.log2(kn_probs(model, a, K, M)).mean())
+def kn_bits(model, a, K, M, *, start=None):
+    """Bits per scored symbol; default start M preserves the natural-order cohort."""
+    return float(-np.log2(kn_probs(model, a, K, M, start=start)).mean())
 
 
-def kn_probs(model, a, K, M):
-    """The model's probability of each symbol of a, from position M on."""
+def kn_probs(model, a, K, M, *, start=None):
+    """Probability at each target from start (default M); no empty/padded cohort."""
     n = len(a)
-    idx = np.arange(M, n)
+    start = M if start is None else start
+    if (not isinstance(start, (int, np.integer)) or isinstance(start, (bool, np.bool_))
+            or not M <= start < n):
+        raise ValueError("KN evaluation requires an integer start >= order and a nonempty suffix")
+    idx = np.arange(start, n)
     p = np.full(len(idx), 1.0 / K)
     for m in range(M + 1):
         t = model[m]
@@ -394,15 +398,25 @@ def compute_kn():
     enc = lambda t: np.array([idx[ch] for ch in t], np.int64)  # noqa: E731
     a, v, ps = enc(train), enc(valid), enc(passage)
     MAXM = max(m for m in range(1, 10) if K ** (m + 1) < 2 ** 62)  # n-gram keys must fit in 64 bits
+    if min(len(a), len(v), len(ps)) <= MAXM:
+        raise ValueError("KN comparison requires training n-grams and nonempty validation/passage suffixes at the maximum order")
     rows = []
     tables = ngram_tables(a, K, MAXM)
     for M in range(0, MAXM + 1):
         model = kn_model(tables, K, M)
-        rows.append(dict(order=M, valid=kn_bits(model, v, K, M), test=kn_bits(model, ps, K, M)))
+        rows.append(dict(order=M, start=MAXM, valid_count=len(v) - MAXM, test_count=len(ps) - MAXM,
+                         valid=kn_bits(model, v, K, M, start=MAXM),
+                         test=kn_bits(model, ps, K, M, start=MAXM)))
         print(f"    KN order {M}: valid {rows[-1]['valid']:.3f}  passage {rows[-1]['test']:.3f}")
     best = int(np.argmin([r["valid"] for r in rows]))
+    selected = kn_model(tables, K, best)
+    same_order = dict(order=best, start=best, valid_count=len(v) - best, test_count=len(ps) - best,
+                      valid=kn_bits(selected, v, K, best), test=kn_bits(selected, ps, K, best))
     raw = CACHE.read_part1("raw")
-    return dict(K=K, rows=rows, best=best, best_bits=rows[best]["test"], part1_best=raw["best_bits"],
+    return dict(K=K, rows=rows, best=best, best_bits=same_order["test"],
+                comparison_best_bits=rows[best]["test"], comparison_start=MAXM,
+                valid_count=len(v) - MAXM, test_count=len(ps) - MAXM, selected_same_order=same_order,
+                part1_best=raw["best_bits"],
                 part1_rows=[r["test"] for r in raw["rows"]])
 
 
@@ -876,21 +890,29 @@ def word_ids(text: str):
     return toks
 
 
-def compute_goodturing():
-    """Counts of counts for the word pairs of the novels: Good-Turing's estimate of what a count of r is really worth,
-    against the truth measured on the other half of the reading (Church & Gale, 1991)."""
-    lines = CACHE.read_text("train").split("\n")
-    ta, tb = word_ids("\n".join(lines[0::2])), word_ids("\n".join(lines[1::2]))
-    vocab, inv = np.unique(np.concatenate([ta, tb]), return_inverse=True)
-    V = len(vocab)
-    ia, ib = inv[:len(ta)].astype(np.int64), inv[len(ta):].astype(np.int64)
+def goodturing_cohort(ia, ib, V):
+    """Raw count-of-counts demonstration, not a normalized probability model.
+
+    Missing raw frequency classes make the requested ratio/held mean undefined;
+    reject that cohort explicitly rather than fabricate values or emit NaNs.
+    """
+    ia, ib = np.asarray(ia), np.asarray(ib)
+    if (not isinstance(V, (int, np.integer)) or isinstance(V, (bool, np.bool_)) or not 2 <= V <= 3_037_000_499
+            or any(x.ndim != 1 or x.dtype.kind not in "iu" or len(x) < 2
+                   or np.any(x < 0) or np.any(x >= V) for x in (ia, ib))):
+        raise ValueError("Good-Turing requires two nonempty bigram-trial cohorts and a valid vocabulary")
+    ia, ib = ia.astype(np.int64, copy=False), ib.astype(np.int64, copy=False)
+    trials_a, trials_b = len(ia) - 1, len(ib) - 1
     ka, ca = np.unique(ia[:-1] * V + ia[1:], return_counts=True)
     kb, cb = np.unique(ib[:-1] * V + ib[1:], return_counts=True)
+    N0 = float(V) * V - len(ka)
+    missing = [r for r in range(1, 9) if not np.any(ca == r)]
+    if N0 <= 0 or missing:
+        raise ValueError(f"Unsupported raw Good-Turing cohort: unseen types={N0:g}, missing count classes={missing}")
     j = np.minimum(np.searchsorted(kb, ka), len(kb) - 1)
     in_b = np.where(kb[j] == ka, cb[j], 0)
-    scale = (len(ia) - 1) / (len(ib) - 1)
+    scale = trials_a / trials_b
     rows = []
-    N0 = float(V) * V - len(ka)
     unseen_b = float(cb.sum() - in_b.sum())
     Nr = lambda r: float((ca == r).sum())  # noqa: E731
     rows.append(dict(r=0, Nr=N0, gt=Nr(1) / N0, held=unseen_b * scale / N0))
@@ -898,6 +920,13 @@ def compute_goodturing():
         sel = ca == r
         rows.append(dict(r=r, Nr=Nr(r), gt=(r + 1) * Nr(r + 1) / Nr(r), held=float(in_b[sel].mean() * scale)))
     disc = [r_["r"] - r_["held"] for r_ in rows[2:]]
+    return (dict(rows=rows, discount=disc, types_a=int(len(ka)), bigram_trials_a=trials_a,
+                 bigram_trials_b=trials_b, singleton_types=int(Nr(1)), p_unseen=Nr(1) / trials_a), ka, kb)
+
+
+def continuation_examples(vocab, ia, ib, ka, kb):
+    """Actual available frequent-word contrast; a better contrast is not assumed."""
+    V = len(vocab)
     # Kneser-Ney's continuation counts on words: frequent, but after very few different words
     allk = np.unique(np.concatenate([ka, kb]))
     prev_n = np.bincount(allk % V, minlength=V)  # N1+(. w): distinct words seen before w
@@ -905,18 +934,35 @@ def compute_goodturing():
     cand = np.nonzero(cnt >= 1000)[0]
     ratio = cnt[cand] / np.maximum(prev_n[cand], 1)
     picks = cand[np.argsort(-ratio)[:6]]
+    if not len(picks):
+        raise ValueError("Unsupported continuation example cohort: no word occurs at least 1000 times")
     w0 = int(picks[0])
     pre = np.concatenate([ia[:-1][ia[1:] == w0], ib[:-1][ib[1:] == w0]])
     pv, pc = np.unique(pre, return_counts=True)
+    if not len(pc):
+        raise ValueError("Unsupported continuation example cohort: selected word has no predecessor")
     top_prev = vocab[pv[np.argmax(pc)]]
     # a word about as common, with many different words before it
-    near = np.nonzero((cnt > 0.7 * cnt[w0]) & (cnt < 1.4 * cnt[w0]))[0]
+    near = np.nonzero((cnt > 0.7 * cnt[w0]) & (cnt < 1.4 * cnt[w0]) & (np.arange(V) != w0))[0]
+    if not len(near):
+        raise ValueError("Unsupported continuation example cohort: no distinct similarly frequent word")
     w1 = int(near[np.argmax(prev_n[near])])
-    return dict(rows=rows, discount=disc, V=V, tokens=int(len(ia) + len(ib)), types_a=int(len(ka)),
-                p_unseen=Nr(1) / len(ia), example=[[str(vocab[i]), int(cnt[i]), int(prev_n[i])] for i in picks],
+    return dict(example=[[str(vocab[i]), int(cnt[i]), int(prev_n[i])] for i in picks],
                 word=str(vocab[w0]), word_count=int(cnt[w0]), word_prev=int(prev_n[w0]), word_top_prev=str(top_prev),
                 word_top_share=float(pc.max() / pc.sum()), other=str(vocab[w1]), other_count=int(cnt[w1]),
                 other_prev=int(prev_n[w1]))
+
+
+def compute_goodturing():
+    """Raw word-pair count estimates checked on the other half (Church & Gale, 1991)."""
+    lines = CACHE.read_text("train").split("\n")
+    ta, tb = word_ids("\n".join(lines[0::2])), word_ids("\n".join(lines[1::2]))
+    vocab, inv = np.unique(np.concatenate([ta, tb]), return_inverse=True)
+    V = len(vocab)
+    ia, ib = inv[:len(ta)].astype(np.int64), inv[len(ta):].astype(np.int64)
+    cohort, ka, kb = goodturing_cohort(ia, ib, V)
+    return dict(cohort, V=V, tokens=int(len(ia) + len(ib)),
+                **continuation_examples(vocab, ia, ib, ka, kb))
 
 
 # ---------------------------------------------------------------------------

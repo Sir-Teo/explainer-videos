@@ -1,0 +1,17 @@
+{
+  "action": "Standard Git split-index metadata to reduce temporary index-lock size; no config file edit",
+  "before_index_bytes": 1309567,
+  "after_index_bytes": 73329,
+  "original_shared_indexes": {},
+  "current_shared_indexes": {
+    "sharedindex.24f38da987cc8262b413904cc6be84988cc95006": 1236338
+  },
+  "indexed_path_mode_blob_entries_identical": true,
+  "indexed_entries_sha256": "099eb10f4d68001c07e81d3a8a53a649cc2d13c7bdd55994c5ff36ff6a3f2c7f",
+  "before_index_sha256": "e1a8a020a40b961a099cf598af6fda6a717869542eadbce5f143bcf2ab7d6c17",
+  "after_index_sha256": "e716b672f318ef75e13c6c8e211a8bcde324d947d88b1006c93b6a93953c4a04",
+  "before_free": 538447872,
+  "after_free": 538451968,
+  "hard_storage_floor": 536870912,
+  "scope": "Git internal index representation only; staged tree unchanged, no source/data/model/master/evidence removal; current worktree Part7 edits remain unstaged."
+}

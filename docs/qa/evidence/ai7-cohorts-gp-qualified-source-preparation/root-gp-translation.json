@@ -1,0 +1,50 @@
+[
+  {
+    "file": "s13_causes.py",
+    "old_effective_key": "f\"Draw where the data came from.",
+    "new_key": "f\"Draw where the data came from. Stone size affected which treatment doctors chose, and it affected success. <bookmark mark='a'/> So there are two paths from treatment to success: the direct one, the effect we want, and a back door through stone size, which carries the confounding. <bookmark mark='b'/> Judea Pearl's question is not 'what's the success rate among patients who got open surgery', but 'what would it be if we gave everyone open surgery': y given do x. Doing means cutting the arrows into the treatment: it's set by hand, not by the stone. <bookmark mark='c'/> And if a variable, here stone size, blocks every back door in an adequate causal graph, with no omitted confounding, the observational adjustment can identify the effect. We also need consistency, so treatment denotes the same well-defined intervention, and overlap: both treatments must be possible in each relevant size stratum. Average over size, <bookmark mark='d'/> using the success rate within each size, weighted by how common each size is in everyone. <bookmark mark='e'/> The size-standardized kidney-stone rates favour {better}: {100 * adj['A']:.0f} against {100 * adj['B']:.0f} percent. Reading these as causal requires those assumptions; the observational table alone cannot establish them. This is the back-door adjustment, with its identification assumptions.\"",
+    "Chinese": "画出数据的来源。结石大小影响医生选择哪种治疗，也影响成功率。<bookmark mark='a'/>所以从治疗到成功有两条路径：我们想知道的直接作用，以及一条经过结石大小、携带混杂的后门。<bookmark mark='b'/>朱迪亚·珀尔问的不是‘接受开放手术的病人成功率是多少’，而是‘如果人人都接受开放手术，成功率会是多少’：给定do x的y。干预，就是切断指向治疗的箭头：治疗由人设定，不再由结石决定。<bookmark mark='c'/>如果在一个充分的因果图中，某个变量，这里是结石大小，阻断了所有后门，而且没有遗漏混杂，观察数据的调整才可能识别因果效应。还需要一致性，也就是治疗指同一个定义明确的干预；以及重叠性：在每个相关的结石大小层中，两种治疗都必须有可能出现。对大小求平均，<bookmark mark='d'/>用每层的成功率，按这一层在总体中有多常见来加权。<bookmark mark='e'/>按大小标准化后的肾结石观察成功率偏向{better}：{100 * adj['A']:.0f}%对{100 * adj['B']:.0f}%。把它们解读为因果，需要这些假设；观察表本身不能证明假设成立。这就是带有识别假设的后门调整。"
+  },
+  {
+    "file": "s14_gp.py",
+    "old_effective_key": "Sometimes the hidden thing is a whole function.",
+    "new_key": "Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says 'her', from the start of the novel to the end. It rises and falls as the story moves between characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over functions; our kernel makes them smooth. Gaussian means bell-shaped: at every page, the value is uncertain, most likely near the middle of a bell. <bookmark mark='k'/> The kernel, k, says how strongly two pages' values move together: strongly when the pages are close, hardly at all when they're far apart. We already fitted the mean, kernel and noise settings using all these pages. Here are five draws from that fitted empirical-Bayes prior, before conditioning on the individual values again. Their typical width of wiggle is the length scale. <bookmark mark='b'/> Now condition on the pages with those settings fixed. The draws move toward functions compatible with the noisy observations.",
+    "Chinese": "有时，隐藏的东西是整条函数。这是《远大前程》每一页说到‘her’的频率，从小说开头到结尾。随着故事在人物之间转移，它上下起伏。<bookmark mark='a'/>高斯过程，是函数上的概率分布；这里的核让函数平滑。高斯就是钟形：在每一页，函数值都不确定，最可能落在一条钟形曲线的中间。<bookmark mark='k'/>核k描述两页的值一起变动得有多强：相近时强，远离时几乎没有。我们已经用全部这些书页，拟合了均值、核与噪声设置。这里是从这个拟合好的经验贝叶斯先验中抽出的5条函数，还没有再次按各页的具体观测值条件化。起伏的典型宽度，就是长度尺度。<bookmark mark='b'/>现在固定这些设置，再以书页为条件。抽样函数会转向与带噪观测相容的形状。"
+  },
+  {
+    "file": "s14_gp.py",
+    "old_effective_key": "f\"Their average is the best guess",
+    "new_key": "f\"The white curve is the conditional mean. The band is plus or minus two conditional standard deviations of the latent function, given the fitted settings. It excludes observation noise and uncertainty in those settings. <bookmark mark='a'/> The length scale, about {g['ell']:g} pages, was chosen by the all-page marginal likelihood among the settings tried. <bookmark mark='b'/> Now condition only on the first {m20} pages, still holding the all-page fitted mean, kernel and noise fixed. This is a subset-conditioning demonstration, not a held-out forecast: those later pages already helped choose the settings.\"",
+    "Chinese": "白线是条件均值。阴影带是给定拟合设置后，潜在函数上下各2个条件标准差。它不包括观测噪声，也不包括这些设置本身的不确定性。<bookmark mark='a'/>长度尺度大约是{g['ell']:g}页，是在尝试过的设置中，按全部书页的边缘似然选出来的。<bookmark mark='b'/>现在只用前{m20}页作条件，但仍固定用全部书页拟合的均值、核与噪声。这是在演示子集条件化，不是对留出数据的预测：后面的书页已经参与了设置的选择。"
+  },
+  {
+    "file": "s14_gp.py",
+    "old_effective_key": "Why is conditioning so easy?",
+    "new_key": "Why is conditioning so easy? First subtract the mean. Under a Gaussian process, the pages we've seen and the value at any new page are jointly Gaussian, with covariances given by the kernel. <bookmark mark='a'/> And a Gaussian, conditioned on some of its coordinates, is still Gaussian. Completing the square gives its mean and variance. <bookmark mark='b'/> The mean is a weighted sum of the observed values: nearby pages weigh the most in this example. <bookmark mark='c'/> With mean and kernel settings fixed, the conditional latent variance is the prior's, minus what conditioning explains. It depends on the page locations, not directly on their observed values. But our fitted settings depend on all the values; this plug-in variance omits their uncertainty. Rasmussen and Williams' book of 2006 builds the whole subject on these two lines.",
+    "Chinese": "为什么条件化这么容易？先减去均值。在高斯过程下，已观测书页和任意新位置的函数值联合服从高斯分布，协方差由核给出。<bookmark mark='a'/>高斯分布以其中一部分坐标为条件后，仍是高斯分布。配方就能得到均值和方差。<bookmark mark='b'/>均值是观测值的加权和：在这个例子里，附近的书页权重最大。<bookmark mark='c'/>固定均值和核的设置时，潜在函数的条件方差，是先验方差减去条件化所解释的部分。它依赖书页位置，不直接依赖观测值。但是，我们拟合的设置依赖全部观测值；这个代入估计的方差忽略了设置本身的不确定性。拉斯穆森和威廉斯2006年的书，就从这两行公式展开整个主题。"
+  },
+  {
+    "file": "s14_gp.py",
+    "old_effective_key": "\"Now watch the band shrink as pages land",
+    "new_key": "\"Now reveal conditioning pages in a random order. At zero revealed pages, this is the fitted empirical-Bayes prior; its mean, kernel and noise already used all the pages. We hold those settings fixed throughout. The band is plus or minus two latent conditional standard deviations, not an observation prediction band or full Bayesian uncertainty. <bookmark mark='a'/> Each conditioning page reduces the uncertainty near it, and the band pinches there. <bookmark mark='b'/> With all \" + f\"{ns[-1]} pages, the average uncertainty has fallen from {msd[0]:.1f} to {msd[-1]:.1f}. Between the pages, where the kernel says the rate could still wander, it stays open. <bookmark mark='c'/> Mining engineers did this first: Danie Krige estimated gold grades between boreholes in the 1950s, and Georges Matheron made it a theory, kriging. Machine learning took it up in the 1990s.\"",
+    "Chinese": "现在按随机顺序，逐步揭开用于条件化的书页。在揭开0页时，这已经是拟合好的经验贝叶斯先验；它的均值、核与噪声已经使用了全部书页。我们始终固定这些设置。阴影带是潜在函数上下各2个条件标准差，不是观测预测带，也不是完整的贝叶斯不确定性。<bookmark mark='a'/>每一页用于条件化的观测，都会降低附近的不确定性，阴影带在那儿收紧。<bookmark mark='b'/>用上全部{ns[-1]}页后，平均不确定性从{msd[0]:.1f}降到{msd[-1]:.1f}。书页之间，核认为频率仍可能游走的地方，带仍然张开。<bookmark mark='c'/>采矿工程师最先这样做：二十世纪五十年代，丹尼·克里格估计钻孔之间的金矿品位，乔治·马瑟龙把它发展为克里金理论。机器学习在九十年代接过了它。"
+  },
+  {
+    "file": "s13_causes.py",
+    "old_effective_key": "f'Compare the treated with the untreated",
+    "new_key": "f\"Compare the treated with the untreated, and the treatment looks harmful: {c['naive']:+.2f}. Adjust for severity through the back door: {c['adjusted_sim']:+.3f}. Now run the experiment, flipping a coin for every patient: {c['experiment']:+.3f}. In this specified simulation, the known causal structure makes the adjustment comparable to the randomized experiment.\"",
+    "Chinese": "比较接受治疗与未接受治疗的人，治疗看起来有害：{c['naive']:+.2f}。通过后门调整严重程度：{c['adjusted_sim']:+.3f}。再做实验，给每位病人抛硬币：{c['experiment']:+.3f}。在这个明确设定的模拟世界里，已知的因果结构，使调整结果可以与随机实验比较。"
+  },
+  {
+    "file": "s13_causes.py",
+    "caption_after_sha256": "bc9a2dcb4a28c14e3ea3b07612220cff667fc256bd116e761b7618efb38d61bb",
+    "local_conditional_count": 2,
+    "global_caption_table_unchanged": true
+  },
+  {
+    "file": "s14_gp.py",
+    "caption_after_sha256": "3b569dda0a545fe500a6fc86feca5a8f875540f80a0aafa6b2f1df2d19bcfb57",
+    "local_conditional_count": 5,
+    "global_caption_table_unchanged": true
+  }
+]

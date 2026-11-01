@@ -1,0 +1,21 @@
+{
+  "started_utc": "2026-11-01T17:00:09.111782+00:00",
+  "enclosing_seconds": 6.1843202114105225,
+  "exit_code": 0,
+  "patterns": [
+    "test_ai7_estimator_cohorts.py",
+    "test_ai7_gp_viewport.py",
+    "test_ai7_bilingual_claims.py",
+    "test_ai7_counting_scene_claims.py",
+    "test_ai7_cache_contracts.py",
+    "test_ai7_outro_cues.py"
+  ],
+  "stable_source_and_protected_release_identities": 59,
+  "unchanged_scientific_input_payloads": 242,
+  "source_unchanged": true,
+  "scientific_input_hashes_unchanged": true,
+  "real_ai7_cache_absent_before_and_after": true,
+  "minimum_free_bytes_observed": 538128384,
+  "hard_floor_bytes": 536870912,
+  "scope": "Selected source/pure-array/caption/temporary-fixture cache checks only. Temporary tests use mock producers and tiny artifacts in private temporary roots, not real Part7 production. No default model/corpus/numerical production, renderer/dryrun/TeX/decode/audio generation. Bayesian full-grid default VI optimizer test intentionally excluded. No rendered/narrated/production acceptance."
+}

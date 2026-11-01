@@ -1,18 +1,21 @@
 {
   "part": "ai7",
-  "observed_utc": "2026-11-01T14:13:07.407719+00:00",
+  "observed_utc": "2026-11-01T17:08:44.603130+00:00",
   "chapters": 18,
   "bilingual_cases": 36,
   "numerical_items": 24,
   "default_items_completed": 0,
   "actual_rendered_cases": 0,
-  "source_scope": "Preparatory source work only while Part6 rendered acceptance remains open. Synthetic and small in-memory audit probes are not production computation. Bounded residual audits add conditional coordinate/state/cohort risks, GP prior provenance and causal-assumption follow-ups. No new source repair or production operation from this follow-up.",
+  "source_scope": "Bounded source-only estimator fairness/GT denominator/GP viewport and fitted-prior scope/causal assumptions/recap qualifications integrated ENZH. Zero Part7 default items or renders. Some source risks remain; generation/rendering held behind Part6.",
   "source_evidence": "evidence/ai7-source-preparation/README.md",
   "integration_evidence": "evidence/ai7-source-integration/README.md",
   "source_tests": {
-    "tests": 765,
-    "seconds": 67.468,
-    "unchanged_source_config_identities": 1549
+    "tests": 81,
+    "seconds": 4.852,
+    "scope": "Selected six source/pure-array/translation/temporary-cache suites; not whole repository.",
+    "unchanged_source_and_protected_release_identities": 59,
+    "unchanged_scientific_payload_hashes": 242,
+    "real_ai7_cache_absent_before_and_after": true
   },
   "cases": [
     {
@@ -327,7 +330,7 @@
       "scene": "KneserNey",
       "title": "9. Kneser-Ney, from Good-Turing",
       "lang": "en",
-      "source_sha256": "4f70e0fb9f443160594e9ec7d73f767e50df632449c85ffd1551380109b45b6a",
+      "source_sha256": "a153e62f99dc0f56fcc5841b486381143e45c65a8e5711496514e842a3561b7f",
       "source_preparation": "Scoped source/analytical and bilingual preparation recorded; revised default data and rendered validation not yet executed. Residual owner-audit questions remain for actual data/render review.",
       "numerical_production": "Pending; generation gated behind Part6.",
       "endpoints": "Pending.",
@@ -336,7 +339,9 @@
       "narration_alignment_listening": "Pending.",
       "whole_part_joins": "Pending.",
       "production_approval": "Pending.",
-      "selected_image_case_accepted_at_declared_scope": false
+      "selected_image_case_accepted_at_declared_scope": false,
+      "historical_source_sha256_before_supplement": "4f70e0fb9f443160594e9ec7d73f767e50df632449c85ffd1551380109b45b6a",
+      "supplemental_source_preparation": "Current source repairs and actual bilingual branch checks recorded in supplemental evidence; no default/numerical/render/native/audio approval."
     },
     {
       "position": 10,
@@ -344,7 +349,7 @@
       "scene": "KneserNey",
       "title": "9. Kneser-Ney, from Good-Turing",
       "lang": "zh",
-      "source_sha256": "4f70e0fb9f443160594e9ec7d73f767e50df632449c85ffd1551380109b45b6a",
+      "source_sha256": "a153e62f99dc0f56fcc5841b486381143e45c65a8e5711496514e842a3561b7f",
       "source_preparation": "Scoped source/analytical and bilingual preparation recorded; revised default data and rendered validation not yet executed. Residual owner-audit questions remain for actual data/render review.",
       "numerical_production": "Pending; generation gated behind Part6.",
       "endpoints": "Pending.",
@@ -353,7 +358,9 @@
       "narration_alignment_listening": "Pending.",
       "whole_part_joins": "Pending.",
       "production_approval": "Pending.",
-      "selected_image_case_accepted_at_declared_scope": false
+      "selected_image_case_accepted_at_declared_scope": false,
+      "historical_source_sha256_before_supplement": "4f70e0fb9f443160594e9ec7d73f767e50df632449c85ffd1551380109b45b6a",
+      "supplemental_source_preparation": "Current source repairs and actual bilingual branch checks recorded in supplemental evidence; no default/numerical/render/native/audio approval."
     },
     {
       "position": 11,
@@ -429,7 +436,7 @@
       "scene": "Causes",
       "title": "12. From graphs to causes",
       "lang": "en",
-      "source_sha256": "be4e258b51fa537857f6ea7e293db5841a8f80cefe14ab654e55d6d2cc2fd324",
+      "source_sha256": "bc9a2dcb4a28c14e3ea3b07612220cff667fc256bd116e761b7618efb38d61bb",
       "source_preparation": "Scoped source/analytical and bilingual preparation recorded; revised default data and rendered validation not yet executed. Residual owner-audit questions remain for actual data/render review.",
       "numerical_production": "Pending; generation gated behind Part6.",
       "endpoints": "Pending.",
@@ -438,7 +445,9 @@
       "narration_alignment_listening": "Pending.",
       "whole_part_joins": "Pending.",
       "production_approval": "Pending.",
-      "selected_image_case_accepted_at_declared_scope": false
+      "selected_image_case_accepted_at_declared_scope": false,
+      "historical_source_sha256_before_supplement": "be4e258b51fa537857f6ea7e293db5841a8f80cefe14ab654e55d6d2cc2fd324",
+      "supplemental_source_preparation": "Current source repairs and actual bilingual branch checks recorded in supplemental evidence; no default/numerical/render/native/audio approval."
     },
     {
       "position": 13,
@@ -446,7 +455,7 @@
       "scene": "Causes",
       "title": "12. From graphs to causes",
       "lang": "zh",
-      "source_sha256": "be4e258b51fa537857f6ea7e293db5841a8f80cefe14ab654e55d6d2cc2fd324",
+      "source_sha256": "bc9a2dcb4a28c14e3ea3b07612220cff667fc256bd116e761b7618efb38d61bb",
       "source_preparation": "Scoped source/analytical and bilingual preparation recorded; revised default data and rendered validation not yet executed. Residual owner-audit questions remain for actual data/render review.",
       "numerical_production": "Pending; generation gated behind Part6.",
       "endpoints": "Pending.",
@@ -455,7 +464,9 @@
       "narration_alignment_listening": "Pending.",
       "whole_part_joins": "Pending.",
       "production_approval": "Pending.",
-      "selected_image_case_accepted_at_declared_scope": false
+      "selected_image_case_accepted_at_declared_scope": false,
+      "historical_source_sha256_before_supplement": "be4e258b51fa537857f6ea7e293db5841a8f80cefe14ab654e55d6d2cc2fd324",
+      "supplemental_source_preparation": "Current source repairs and actual bilingual branch checks recorded in supplemental evidence; no default/numerical/render/native/audio approval."
     },
     {
       "position": 14,
@@ -463,7 +474,7 @@
       "scene": "GP",
       "title": "13. Gaussian processes",
       "lang": "en",
-      "source_sha256": "1fa9941841c3e20b46fc52f7cf4fd4361115f6ac7aea5e8afbe6b249f4df6bc9",
+      "source_sha256": "3b569dda0a545fe500a6fc86feca5a8f875540f80a0aafa6b2f1df2d19bcfb57",
       "source_preparation": "Scoped source/analytical and bilingual preparation recorded; revised default data and rendered validation not yet executed. Residual owner-audit questions remain for actual data/render review.",
       "numerical_production": "Pending; generation gated behind Part6.",
       "endpoints": "Pending.",
@@ -472,7 +483,9 @@
       "narration_alignment_listening": "Pending.",
       "whole_part_joins": "Pending.",
       "production_approval": "Pending.",
-      "selected_image_case_accepted_at_declared_scope": false
+      "selected_image_case_accepted_at_declared_scope": false,
+      "historical_source_sha256_before_supplement": "1fa9941841c3e20b46fc52f7cf4fd4361115f6ac7aea5e8afbe6b249f4df6bc9",
+      "supplemental_source_preparation": "Current source repairs and actual bilingual branch checks recorded in supplemental evidence; no default/numerical/render/native/audio approval."
     },
     {
       "position": 14,
@@ -480,7 +493,7 @@
       "scene": "GP",
       "title": "13. Gaussian processes",
       "lang": "zh",
-      "source_sha256": "1fa9941841c3e20b46fc52f7cf4fd4361115f6ac7aea5e8afbe6b249f4df6bc9",
+      "source_sha256": "3b569dda0a545fe500a6fc86feca5a8f875540f80a0aafa6b2f1df2d19bcfb57",
       "source_preparation": "Scoped source/analytical and bilingual preparation recorded; revised default data and rendered validation not yet executed. Residual owner-audit questions remain for actual data/render review.",
       "numerical_production": "Pending; generation gated behind Part6.",
       "endpoints": "Pending.",
@@ -489,7 +502,9 @@
       "narration_alignment_listening": "Pending.",
       "whole_part_joins": "Pending.",
       "production_approval": "Pending.",
-      "selected_image_case_accepted_at_declared_scope": false
+      "selected_image_case_accepted_at_declared_scope": false,
+      "historical_source_sha256_before_supplement": "1fa9941841c3e20b46fc52f7cf4fd4361115f6ac7aea5e8afbe6b249f4df6bc9",
+      "supplemental_source_preparation": "Current source repairs and actual bilingual branch checks recorded in supplemental evidence; no default/numerical/render/native/audio approval."
     },
     {
       "position": 15,
@@ -599,7 +614,7 @@
       "scene": "Outro",
       "title": "Recap, problems, and where this comes back",
       "lang": "en",
-      "source_sha256": "00794aa17a890a8b15d04a062d9b14895f1a8da85bdef49e0305d90d8f1c31fb",
+      "source_sha256": "40cd7b7e69b8fd02d5c1113b3e5a334a93922be248051762c6dca862d5c4a801",
       "source_preparation": "Scoped source/analytical and bilingual preparation recorded; revised default data and rendered validation not yet executed. Residual owner-audit questions remain for actual data/render review.",
       "numerical_production": "Pending; generation gated behind Part6.",
       "endpoints": "Pending.",
@@ -608,7 +623,9 @@
       "narration_alignment_listening": "Pending.",
       "whole_part_joins": "Pending.",
       "production_approval": "Pending.",
-      "selected_image_case_accepted_at_declared_scope": false
+      "selected_image_case_accepted_at_declared_scope": false,
+      "historical_source_sha256_before_supplement": "00794aa17a890a8b15d04a062d9b14895f1a8da85bdef49e0305d90d8f1c31fb",
+      "supplemental_source_preparation": "Current source repairs and actual bilingual branch checks recorded in supplemental evidence; no default/numerical/render/native/audio approval."
     },
     {
       "position": 18,
@@ -616,7 +633,7 @@
       "scene": "Outro",
       "title": "Recap, problems, and where this comes back",
       "lang": "zh",
-      "source_sha256": "00794aa17a890a8b15d04a062d9b14895f1a8da85bdef49e0305d90d8f1c31fb",
+      "source_sha256": "40cd7b7e69b8fd02d5c1113b3e5a334a93922be248051762c6dca862d5c4a801",
       "source_preparation": "Scoped source/analytical and bilingual preparation recorded; revised default data and rendered validation not yet executed. Residual owner-audit questions remain for actual data/render review.",
       "numerical_production": "Pending; generation gated behind Part6.",
       "endpoints": "Pending.",
@@ -625,8 +642,21 @@
       "narration_alignment_listening": "Pending.",
       "whole_part_joins": "Pending.",
       "production_approval": "Pending.",
-      "selected_image_case_accepted_at_declared_scope": false
+      "selected_image_case_accepted_at_declared_scope": false,
+      "historical_source_sha256_before_supplement": "00794aa17a890a8b15d04a062d9b14895f1a8da85bdef49e0305d90d8f1c31fb",
+      "supplemental_source_preparation": "Current source repairs and actual bilingual branch checks recorded in supplemental evidence; no default/numerical/render/native/audio approval."
     }
   ],
-  "residual_source_review": "evidence/ai7-residual-source-risks/README.md"
+  "residual_source_review": "evidence/ai7-residual-source-risks/README.md",
+  "historical_source_tests": {
+    "tests": 765,
+    "seconds": 67.468,
+    "unchanged_source_config_identities": 1549
+  },
+  "supplemental_source_evidence": "evidence/ai7-cohorts-gp-qualified-source-preparation/README.md",
+  "remaining_source_risks": [
+    "PCA/PPCA/ICA coordinate saturation",
+    "Kmeans capped-state displayed/statistic consistency",
+    "KN discount-chart negative/out-of-range bars (conditional default occurrence unknown)"
+  ]
 }

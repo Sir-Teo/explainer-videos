@@ -1,0 +1,144 @@
+{
+  "scope": "Independent READ-ONLY source/diff/test-source review. No tests or helperfixtures executed, no data/Cache.load/defaultproducer/corpus/model/Scene/TeX/render/decode/TTS/audio operations. No source/stage/commit/push changes by reviewer.",
+  "head_context": "73fd0a1d8e0c8442ef079582a89464dff27b687b",
+  "pins": [
+    {
+      "path": "videos/ai/ai7/compute.py",
+      "bytes": 68883,
+      "sha256": "48f0f93371d3f0af0482fac70a79adaafb9800a4662f62cada9c79be7df390bd"
+    },
+    {
+      "path": "videos/ai/ai7/contracts.py",
+      "bytes": 22240,
+      "sha256": "2ffa4f7fbaee1c10bb185778c0507f275cb5e35a0858ae206979d2ed46dbbcfa"
+    },
+    {
+      "path": "videos/ai/ai7/cache_contract.py",
+      "bytes": 28380,
+      "sha256": "c6266270e7244cbbd830b954059bd1206aed5efaa52ec23c6d3aed4495e82fe5"
+    },
+    {
+      "path": "videos/ai/ai7/s10_kn.py",
+      "bytes": 19039,
+      "sha256": "a153e62f99dc0f56fcc5841b486381143e45c65a8e5711496514e842a3561b7f"
+    },
+    {
+      "path": "videos/ai/ai7/s13_causes.py",
+      "bytes": 13844,
+      "sha256": "bc9a2dcb4a28c14e3ea3b07612220cff667fc256bd116e761b7618efb38d61bb"
+    },
+    {
+      "path": "videos/ai/ai7/s14_gp.py",
+      "bytes": 14994,
+      "sha256": "3b569dda0a545fe500a6fc86feca5a8f875540f80a0aafa6b2f1df2d19bcfb57"
+    },
+    {
+      "path": "videos/ai/ai7/s18_outro.py",
+      "bytes": 18667,
+      "sha256": "40cd7b7e69b8fd02d5c1113b3e5a334a93922be248051762c6dca862d5c4a801"
+    },
+    {
+      "path": "videos/ai/ai7/zh_lines.py",
+      "bytes": 92556,
+      "sha256": "e67f16e334085e426be1f5b568a783c79b8ea1864ef4d860a95c34587f75cbae"
+    },
+    {
+      "path": "videos/ai/ai7/README.md",
+      "bytes": 26537,
+      "sha256": "51f5330ddbe95b18b9f610db26533a3db18bf8630788f1705a16ffea2ec074d5"
+    },
+    {
+      "path": "tests/test_ai7_bilingual_claims.py",
+      "bytes": 16394,
+      "sha256": "f82edc6c80f323a8195e910f796f61121d1bf05b86dfc8af1d1127c67394cd6f"
+    },
+    {
+      "path": "tests/test_ai7_counting_scene_claims.py",
+      "bytes": 7585,
+      "sha256": "81b0dd0010c5414bdf9de45e332bf9832c0a5c0a98702fe1a8df9c4ecd3cd278"
+    },
+    {
+      "path": "tests/test_ai7_cache_contracts.py",
+      "bytes": 27351,
+      "sha256": "6fd284bb8b375ce274355ab749d153cdbcf35537f254dd3d029e15a6e98d553c"
+    },
+    {
+      "path": "tests/test_ai7_gp_viewport.py",
+      "bytes": 4677,
+      "sha256": "c95c4748b69010519dda084f2d140d7affd417b2e4849aca789bad45f37efcbf"
+    },
+    {
+      "path": "tests/test_ai7_estimator_cohorts.py",
+      "bytes": 7069,
+      "sha256": "68de534de70eb8492ed6864421cfea4720e79e136fded6613b1afbc2f9b7eaaa"
+    },
+    {
+      "path": "tests/test_ai7_cohort_edges.py",
+      "bytes": 1082,
+      "sha256": "485e9f25e7a6a9076b96f689b25ebea57c30869ba2313d739aa28f08371c6690"
+    }
+  ],
+  "new_concrete_semantic_regressions": [],
+  "reviewed_conclusions": [
+    {
+      "topic": "KN common cohort versus downstream natural start",
+      "refs": [
+        "compute.py:361-428",
+        "contracts.py:217-239",
+        "s10_kn.py:134-174,249-269",
+        "compute.py:1000-1064",
+        "ai9/compute.py:406-435",
+        "ai10/s14_charlstm.py:31-37,357",
+        "ai13/s07_transformer.py:21,126-142",
+        "ai31/common.py:139"
+      ],
+      "assessment": "Rows use one MAXM suffix for every tested order. Selection uses common validation rows. best_bits deliberately evaluates the selected model with its natural start=best, separately from comparison_best_bits. Defaultkn_bits/kn_probs API remains natural-M; Infini reconstructs the same selectedMmodel and natural suffix before its equality assertion. Downstream consumers retain that contract. New metadata makes denominators/starts explicit; validator distinguishes the two scores. No unintended replacement of best_bits by common-row score found."
+    },
+    {
+      "topic": "Good-Turing cohorts and continuation examples",
+      "refs": [
+        "compute.py:893-966",
+        "contracts.py:284-299",
+        "s10_kn.py:49-74,214-235",
+        "README.md:185-201,231-246"
+      ],
+      "assessment": "Unseen mass denominator now counts bigram trials(len(words)-1), and held counts scale by trial counts. Requested denominator classes1..8 and unseen-type support are checked; a zero numerator for class9 remains a legal raw estimate, not a fabricated normalized distribution. Zero held-unseen count no longer divides by zero and yields a nonmatching verdict. Distinct comparison words are required; >/< /= continuation outcomes are narrated conditionally. Raw missing-class nonnormalization is explicitly disclosed in EN/ZH exercises."
+    },
+    {
+      "topic": "GP coordinates, bands and fitted settings",
+      "refs": [
+        "s14_gp.py:14-23,34-56,82-119,143-153,168-219",
+        "zh_lines.py:233-247",
+        "tests/test_ai7_gp_viewport.py"
+      ],
+      "assessment": "Viewport includes rawdata, prior/postdraws, means and all +/-2latentconditionalSD band endpoints across displayed states. Piecewise vertices preserve actualvalues without coordinate clamping or splineovershoot. Means/kernel/noise fit on allpages are explicitly retained; initial and subset demonstrations are not represented as heldout forecasts. Variance-independence claim is now conditioned on fixedsettings, and VO distinguishes latentconditional uncertainty from observationnoise/hyperparameteruncertainty. No new algebra/provenance regression found. Actual label/layout/pacing remains unviewed."
+    },
+    {
+      "topic": "Causes and recap scope",
+      "refs": [
+        "s13_causes.py:105-133,183-196",
+        "s18_outro.py:147-161,183-195",
+        "zh_lines.py:219-247,recap/payoffentries"
+      ],
+      "assessment": "Real-study standardized rates now explicitly require adequateDAG/noomittedconfounding/consistency/overlap for causalinterpretation; tablealone does notestablish assumptions. Constructed-world comparison remains explicitly scoped. Recap specifies equalweight sphericalGaussian kmeans limit, inferredunlabelledstates and declaredcontextcap; NN-GP correspondence refers to an appropriately initialized/scaled fullyconnected infinitewidthprior. LocalZH carries matching scope and bookmarksequences; changed wording intentionally needs freshfutureaudio."
+    },
+    {
+      "topic": "Cache invalidation",
+      "refs": [
+        "cache_contract.py:179-203,279-284,311-344",
+        "contracts.py:REQUIRED"
+      ],
+      "assessment": "Wholecompute/contracts/helper source hashes participate in every recipe, so thisbatch conservatively changes all24itemrecipes. Recursiveupstream and integrity checks remain unchanged. No existingPart7cache was opened orgenerated; thisreview does not attest runtime cachecurrentness."
+    }
+  ],
+  "known_open_queues_not_new_findings": [
+    "Conditional KNdiscountchart negativebar/out-of-range geometry remains queued.",
+    "PCA/PPCA/ICA clamping andkmeanscap remain queued."
+  ],
+  "limits": [
+    "No real revised-default numerical results, fullproducerintegration/runtimeperformance, actualGP/KNlayout, audioalignment/listening orproductionacceptance validated.",
+    "Rootreportedfocusedtest counts were not rerun oradded to thisreview coverage.",
+    "This report is source reasoning, not a claim of full QA or an observed production failure."
+  ],
+  "free_at_write": 538292224
+}

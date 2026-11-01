@@ -1,0 +1,97 @@
+{
+  "created_utc": "2026-11-01T16:32:41.729937+00:00",
+  "scope": "Authorized source preparation only; Part7 generation/render remain gated until Part6 closes. Default results unknown. No actual producers/load/CACHE/model/corpus/text generation/network/Scene/TeX/render/decode/audio calls.",
+  "sources": {
+    "compute.py": {
+      "before_sha256": "0000dd2299409678db0cb754288c70307600416caa68c5c9ab4943f4073ca011",
+      "after_sha256": "48f0f93371d3f0af0482fac70a79adaafb9800a4662f62cada9c79be7df390bd",
+      "before_bytes": 66147,
+      "after_bytes": 68883
+    },
+    "contracts.py": {
+      "before_sha256": "97e8219609be33368ecf63fe30ebf7c21c9e2f75cf7fca49dfdd57b885808df8",
+      "after_sha256": "2ffa4f7fbaee1c10bb185778c0507f275cb5e35a0858ae206979d2ed46dbbcfa",
+      "before_bytes": 20364,
+      "after_bytes": 22240
+    }
+  },
+  "test_path": "tests/test_ai7_estimator_cohorts.py",
+  "test_bytes": 7069,
+  "test_sha256": "68de534de70eb8492ed6864421cfea4720e79e136fded6613b1afbc2f9b7eaaa",
+  "kn_schema_delta": {
+    "rows": "All candidate orders valid/test use exactly targets MAXM..end (same suffix and unchanged available M-character histories). Each row records start,valid_count,test_count; selected best minimizes common validation.",
+    "top_level_additions": [
+      "comparison_best_bits",
+      "comparison_start",
+      "valid_count",
+      "test_count",
+      "selected_same_order"
+    ],
+    "comparison_best_bits": "Equals rows[best].test on sharedMAXM suffix.",
+    "best_bits": "Preserved natural selectedM score from targetsM..end; equals selected_same_order.test, NOT generally comparison_best_bits.",
+    "selected_same_order": "order=start=best, natural valid/test/counts explicitly stored.",
+    "scorer_API": "kn_bits/kn_probs gain keyword-only start=None; default naturally skipsM as before. Invalid/empty/start<M cohorts raise ValueError.",
+    "compatibility": "compute_infini andcompute_scoreboard unchanged; they keep selectedM matched natural metric. Downstreamai9/10/31 best_bits consumers retain API/metric.",
+    "historical_part1_rows": "Unchanged historical natural-order values. They are not silently rescored onto commonMAXM; cross-method matched-cohort claims remain unsupported unless separately established."
+  },
+  "goodturing_schema_delta": {
+    "fields": [
+      "bigram_trials_a",
+      "bigram_trials_b",
+      "singleton_types"
+    ],
+    "identity": "p_unseen=singleton_types/bigram_trials_a; tokens=bigram_trials_a+bigram_trials_b+2.",
+    "raw_helper": "goodturing_cohort returns payload,ka,kb for already encoded tiny arrays. Missing unseen types, missingr1..8 classes, invalid/empty trial arrays explicitly raise ValueError before undefined ratios/means. Raw estimates are not asserted to normalize.",
+    "examples": "Distinct actual similarly frequent other excludesw0. No >=1000frequency candidate/no distinct alternative/no predecessor produces a precise unsupported-cohort ValueError. Equal/lower continuation-diversity contrast remains valid; no hoped-for improvement check.",
+    "legitimate_zero": "Held-out unseen count0 is valid finite data, not an exception. Root scene must guard its relative-error division/verdict.",
+    "actual_default_status": "Unmeasured; no assertion that default novels trigger unsupported cohorts or old score errors."
+  },
+  "actual_executed_test_scope": {
+    "tests": 6,
+    "elapsed_seconds": 0.025,
+    "outcome": "passed",
+    "log_sha256": "ea3c9ff8a76df5d0e5410caff40ab0a569808a52494ab78b647034db8dbb0dbe",
+    "method": "AST-extract only pure numeric helpers and pure array-based comparison statements; synthetic arrays only. Import contracts alone, never compute.py module/SchemaCache.",
+    "fixtures": [
+      "Preserved16train/8target binary example reverses natural order0winner to common order1winner.",
+      "Selection fixture makes best0 and proves natural best_bits .9671322 differs from common comparison_best_bits1.0280699.",
+      "Explicit target starts match natural probability vector suffix exactly; nonempty/history guards.",
+      "GT72pair trials/73words uses2/72 not2/73; zero andpositive held-unseen bothfinite.",
+      "Empty/one-token/V1/no-unseen/missingfrequency rawcohorts rejected.",
+      "No frequent/distinct example cohorts rejected; equal diversity distinct comparison accepted.",
+      "Contracts reject wrong counts/same-order start/swappednatural/common score/oldGTdenominator/same-wordcontrast."
+    ],
+    "limitations": "Not default producers, data quality, numeric outcomes, full-part tests, rendered layout, pacing or listening."
+  },
+  "protected_AST": {
+    "all_other_compute_functions_andmodule_statements_exact": true,
+    "allowed_changed_functions": [
+      "compute_goodturing",
+      "compute_kn",
+      "kn_bits",
+      "kn_probs"
+    ],
+    "added_pure_helpers": [
+      "continuation_examples",
+      "goodturing_cohort"
+    ],
+    "all_other_contract_branches_and_required_fields_exact": true,
+    "closed_b3_repairs_preserved": true
+  },
+  "recipe_impact": {
+    "cache_contract_observed_sha256": "c6266270e7244cbbd830b954059bd1206aed5efaa52ec23c6d3aed4495e82fe5",
+    "schema_version_unchanged": 1,
+    "existing_behavior": "SchemaCache.recipe hashes wholecompute.py andcontracts.py for every Part7 item. Their byte changes invalidate ALL24itemrecipefingerprints by existing design, not justKN/GT.",
+    "safety": "No schema/cache metadata rewritten, no oldbytes promoted, no cache_contract edit. New requiredfields also reject legacyKN/GT structures.",
+    "cache_ai7_exists_before": false,
+    "cache_ai7_exists_after": false,
+    "default_generated_items": 0
+  },
+  "consumer_handoff": [
+    "Root owns allscene/ZH/README edits: common-suffix KN chart labels and comparison_best_bits; naturalMboard/Infini labels remain explicit.",
+    "GuardGTzero-held relative error before computing a close-verdict.",
+    "Branch actual continuation contrast ifother is notmore diverse; do not assert a preferred result."
+  ],
+  "source_approval_scope": "Prepared source/test repair only. No Part7 production/review acceptance; awaitroot integration and lateractualdata/render gates.",
+  "no_stage_commit_push": true
+}

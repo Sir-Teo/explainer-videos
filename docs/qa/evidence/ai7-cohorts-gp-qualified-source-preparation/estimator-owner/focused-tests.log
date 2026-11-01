@@ -1,0 +1,11 @@
+test_actual_comparison_schema_keeps_matched_natural_score_separate (test_ai7_estimator_cohorts.EstimatorCohorts.test_actual_comparison_schema_keeps_matched_natural_score_separate) ... ok
+test_common_suffix_changes_real_ranking_without_changing_natural_api (test_ai7_estimator_cohorts.EstimatorCohorts.test_common_suffix_changes_real_ranking_without_changing_natural_api) ... ok
+test_goodturing_contract_binds_denominator_and_distinct_actual_examples (test_ai7_estimator_cohorts.EstimatorCohorts.test_goodturing_contract_binds_denominator_and_distinct_actual_examples) ... ok
+test_goodturing_uses_bigram_trials_and_allows_zero_held_unseen (test_ai7_estimator_cohorts.EstimatorCohorts.test_goodturing_uses_bigram_trials_and_allows_zero_held_unseen) ... ok
+test_nonempty_targets_and_history_requirements_fail_explicitly (test_ai7_estimator_cohorts.EstimatorCohorts.test_nonempty_targets_and_history_requirements_fail_explicitly) ... ok
+test_unsupported_raw_and_example_cohorts_never_make_nan_or_fake_contrast (test_ai7_estimator_cohorts.EstimatorCohorts.test_unsupported_raw_and_example_cohorts_never_make_nan_or_fake_contrast) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.025s
+
+OK
