@@ -53,13 +53,14 @@ class NaiveBayes(VoiceoverScene):
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
-            step(1)
+            step(1, transform=False)
             vo.wait_until("c")
-            step(2)
+            step(2, transform=False)
             vo.wait_until("d")
-            step(3)
+            step(3, transform=False)
             vo.wait_until("e")
-            self.play(Indicate(gen, color=NB), Indicate(dis, color=LR))
+            self.play(Indicate(gen.head, color=NB, scale_factor=1),
+                      Indicate(dis.head, color=LR, scale_factor=1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -118,9 +119,15 @@ class NaiveBayes(VoiceoverScene):
         d = load("nbvslr")
         sizes = [int(m) for m in d["sizes"]]
         lx = np.log10(sizes)
-        top = 0.32
-        g = plot([lx[0] - 0.05, lx[-1] + 0.05, 1], [0, top, 0.1], x_length=7.4, y_length=4.4,
-                 xticks=[math.log10(v) for v in (4, 16, 64, 256)], yticks=[0, 0.1, 0.2, 0.3],
+        # Enclose the actual means and both percentile endpoints; never flatten
+        # measured uncertainty against a preset display ceiling.
+        peak = max(d[key][str(m)][field] for key in ("nb", "lr")
+                   for m in sizes for field in ("mean", "lo", "hi"))
+        top = math.ceil(1.08 * peak / 0.05) * 0.05
+        tick_step = 0.1 if top <= 0.5 else 0.2
+        yticks = np.arange(0, top + 1e-9, tick_step).tolist()
+        g = plot([lx[0] - 0.05, lx[-1] + 0.05, 1], [0, top, tick_step], x_length=7.4, y_length=4.4,
+                 xticks=[math.log10(v) for v in (4, 16, 64, 256)], yticks=yticks,
                  xfmt=lambda v: f"{10 ** v:.0f}", yfmt=lambda v: rf"{100 * v:.0f}\%", center=[-2.3, -0.4, 0],
                  xlabel=r"training pages \ (log scale)", ylabel=r"error on the held-out pages \ (all $70$ word counts)")
         ax = g.ax
@@ -128,7 +135,7 @@ class NaiveBayes(VoiceoverScene):
         for key, col in (("nb", NB), ("lr", LR)):
             m_ = [d[key][str(m)]["mean"] for m in sizes]
             lo = [d[key][str(m)]["lo"] for m in sizes]
-            hi = [min(d[key][str(m)]["hi"], top) for m in sizes]
+            hi = [d[key][str(m)]["hi"] for m in sizes]
             art[key] = (band(ax, lx, lo, hi, col, opacity=0.18), curve(ax, lx, m_, col, stroke_width=4),
                         VGroup(*[Dot(ax.c2p(a, b), radius=0.045, color=col) for a, b in zip(lx, m_)]))
         key_ = VGroup(label(r"naive Bayes", font_size=26, color=NB), label(r"logistic regression", font_size=26, color=LR),
@@ -212,7 +219,7 @@ class NaiveBayes(VoiceoverScene):
             self.play(FadeIn(panels[0][:2]), FadeIn(panels[0][3]))
             self.play(FadeIn(panels[0][2]), FadeIn(panels[0][4]))
             vo.wait_until("a")
-            self.play(Indicate(panels[0][2], color=WHITE))
+            self.play(Indicate(panels[0][2], color=WHITE, scale_factor=1))
             vo.wait_until("b")
             self.play(FadeIn(panels[1]))
             vo.wait_until("c")

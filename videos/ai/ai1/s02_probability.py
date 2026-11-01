@@ -6,6 +6,20 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai1.common import (ALPHA27, PART, ZoomLadder, letter, letter_bars, letter_row, load, tt)
 
 
+def _bookmark_run_times(vo, mark, *nominal):
+    """Fit these sequential reveals before a speech cue, retaining their order.
+
+    Reserve one rounding frame per play plus a frame before the cue. A cue
+    already too close still gets positive one-frame plays; it cannot be made
+    synchronized by a duration calculation alone.
+    """
+    frame = 1 / config.frame_rate
+    floor = len(nominal) * frame
+    budget = vo.mark_time(mark) - vo.elapsed() - (len(nominal) + 1) * frame
+    scale = min(1.0, max(0.0, (budget - floor) / (sum(nominal) - floor)))
+    return tuple(frame + (duration - frame) * scale for duration in nominal)
+
+
 class Probability(VoiceoverScene):
     def construct(self):
         self.card()
@@ -54,8 +68,9 @@ class Probability(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), LaggedStart(*[FadeIn(b) for b in books], lag_ratio=0.1), FadeIn(more))
             vo.wait_until("a")
+            reveal_time, = _bookmark_run_times(vo, "b", 2.5)
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in g.bars], lag_ratio=0.05), FadeIn(g.labels),
-                      FadeOut(books), FadeOut(more), run_time=2.5)
+                      FadeOut(books), FadeOut(more), run_time=reveal_time)
             vo.wait_until("b")
             self.play(FadeIn(sp_val), Indicate(g.bars[first], color=WHITE))
             self.play(FadeIn(e_val))
@@ -314,10 +329,11 @@ class Probability(VoiceoverScene):
             self.play(Write(eqs[0]), FadeIn(names))
             self.play(FadeIn(b_w), GrowFromCenter(b_h), FadeIn(b_h_l), Indicate(lit_cell, color=WHITE, scale_factor=2.5))
             vo.wait_until("b")
-            self.play(FadeOut(names), FadeOut(b_h), FadeOut(b_h_l))
-            morph(self, eqs[0], eqs[1], run_time=1.2)
-            self.play(TransformFromCopy(out[hi], cell3), Create(rays3), run_time=1.3)
-            self.play(FadeIn(c3l), GrowFromCenter(b3), FadeIn(b3_l))
+            clear_time, pair_time, column_time, labels_time = _bookmark_run_times(vo, "c", 1.0, 1.2, 1.3, 1.0)
+            self.play(FadeOut(names), FadeOut(b_h), FadeOut(b_h_l), run_time=clear_time)
+            morph(self, eqs[0], eqs[1], run_time=pair_time)
+            self.play(TransformFromCopy(out[hi], cell3), Create(rays3), run_time=column_time)
+            self.play(FadeIn(c3l), GrowFromCenter(b3), FadeIn(b3_l), run_time=labels_time)
             vo.wait_until("c")
             morph(self, eqs[1], eqs[2], run_time=1.2)
             self.play(Write(num))
@@ -332,9 +348,11 @@ class Probability(VoiceoverScene):
             "assumption made. <bookmark mark='b'/> It's why a machine that only guesses the next symbol can score, "
             "or write, a whole text."
         ) as vo:
-            self.play(FadeOut(VGroup(cells, pt[1:], lit_cell, b_w, cell3, c3l, rays3, b3, b3_l, num, head)), run_time=0.8)
-            morph(self, eqs[2], eqs[3], run_time=1.4)
-            self.play(Create(box))
+            clear_time, formula_time, box_time = _bookmark_run_times(vo, "a", 0.8, 1.4, 1.0)
+            self.play(FadeOut(VGroup(cells, pt[1:], lit_cell, b_w, cell3, c3l, rays3, b3, b3_l, num, head)),
+                      run_time=clear_time)
+            morph(self, eqs[2], eqs[3], run_time=formula_time)
+            self.play(Create(box), run_time=box_time)
             vo.wait_until("a")
             self.play(FadeIn(cap))
             vo.wait_until("b")
