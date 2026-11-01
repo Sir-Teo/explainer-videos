@@ -1,0 +1,98 @@
+[
+  {
+    "file": "en-Hook/native-0430.png",
+    "sha256": "4cbc25982c99e68e7bbbc893c5530a00866e35e6db57e1f22ed800232bfd9eb3",
+    "source_movie_sha256": "c02059858335065b12c2286bb17b4747a0cb6597b42727399c9b438d1b643056",
+    "source_frame": 430,
+    "time": 28.666667,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "en-Hook/native-1198.png",
+    "sha256": "0b8298e3bcd112ab7a24d28ab0f4c6a05f773e53376227cb86b4e37657aafb8c",
+    "source_movie_sha256": "c02059858335065b12c2286bb17b4747a0cb6597b42727399c9b438d1b643056",
+    "source_frame": 1198,
+    "time": 79.866667,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "en-Hook/native-1745.png",
+    "sha256": "118b6d24d6c4bb1f27823bae3c11caa4afb45e3cbcb4e5598e8f3640a55a9754",
+    "source_movie_sha256": "c02059858335065b12c2286bb17b4747a0cb6597b42727399c9b438d1b643056",
+    "source_frame": 1745,
+    "time": 116.333333,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "zh-Hook/native-0456.png",
+    "sha256": "1925d94f5fd2ffd802c9fa5c01ba92964dd0cf14a60777c0bbbdcf2274c12ffa",
+    "source_movie_sha256": "7acdf8098c7c3863fa69e0a4e2ce7f4157da82b1355c32ca9e31f9af7666450c",
+    "source_frame": 456,
+    "time": 30.4,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "zh-Hook/native-1410.png",
+    "sha256": "04b9508f370d1694f85bcc537c3a62f84ef1f5d701dc3a77294413812ae1b46b",
+    "source_movie_sha256": "7acdf8098c7c3863fa69e0a4e2ce7f4157da82b1355c32ca9e31f9af7666450c",
+    "source_frame": 1410,
+    "time": 94.0,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "zh-Hook/native-2008.png",
+    "sha256": "8684359fa442dd1d46b8cb2c57f8fb6af2d410fa698acfaa38841acc5b5656d8",
+    "source_movie_sha256": "7acdf8098c7c3863fa69e0a4e2ce7f4157da82b1355c32ca9e31f9af7666450c",
+    "source_frame": 2008,
+    "time": 133.866667,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "en-Derivative/native-1117.png",
+    "sha256": "5c5624a07e9cbbe1f4f2401a4525f8131f3c498cd82b9332943a63df78f9ea97",
+    "source_movie_sha256": "e8ff09c52f811af7bc9d45f2cdf80f891283505b8f30f0c80f9958d6a28a39f6",
+    "source_frame": 1117,
+    "time": 74.466667,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "en-Derivative/native-1789.png",
+    "sha256": "3c2c3d99b8c7dc1ec5ac26592e82829dca599b7a34839cefafaebf8bff0cbe22",
+    "source_movie_sha256": "e8ff09c52f811af7bc9d45f2cdf80f891283505b8f30f0c80f9958d6a28a39f6",
+    "source_frame": 1789,
+    "time": 119.266341,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "en-Derivative/native-2149.png",
+    "sha256": "d551df0f6ed518a836f060d1ba24aa10e9ba8fc01ce3a8a70879b057bc14f26b",
+    "source_movie_sha256": "e8ff09c52f811af7bc9d45f2cdf80f891283505b8f30f0c80f9958d6a28a39f6",
+    "source_frame": 2149,
+    "time": 143.266341,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "zh-Derivative/native-1135.png",
+    "sha256": "74606a3c3a214d893a54789536304e06ece1505c77f8b78e0ae77605db6f2a8c",
+    "source_movie_sha256": "8c9ed4c296cac6e32cae4eea6a5a557b25378b4acd7f6baab72aa340b58abf71",
+    "source_frame": 1135,
+    "time": 75.666667,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "zh-Derivative/native-1842.png",
+    "sha256": "32211dcdc34832a8e2ba8adcc7ab456d1b0832bbeabc4618fbb1752e1e26e99f",
+    "source_movie_sha256": "8c9ed4c296cac6e32cae4eea6a5a557b25378b4acd7f6baab72aa340b58abf71",
+    "source_frame": 1842,
+    "time": 122.799674,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  },
+  {
+    "file": "zh-Derivative/native-2230.png",
+    "sha256": "88b762087510d64a22e2b0ab7c9256e9369bee5a71145506e1e64f277c5debe2",
+    "source_movie_sha256": "8c9ed4c296cac6e32cae4eea6a5a557b25378b4acd7f6baab72aa340b58abf71",
+    "source_frame": 2230,
+    "time": 148.666341,
+    "scope": "Standalone native actual followup; Derivative examples use historical prior movie with current inheritance only where exact hash proves."
+  }
+]

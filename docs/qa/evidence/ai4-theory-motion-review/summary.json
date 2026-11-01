@@ -1,0 +1,540 @@
+{
+  "scope": "Part4 GradCheck, Memory, Newton, HVP bilingual complete-file automatic decoding and complete selected-time native-image review; no continuous playback or audio review",
+  "completed_utc": "2026-11-01T00:20:36.525432+00:00",
+  "cases": [
+    {
+      "case": "en-GradCheck",
+      "scene": "GradCheck",
+      "lang": "en",
+      "movie_sha256": "fada253aaf65e1464e7fdc87a485676f86f92bca57b160e131ce622e9d908d93",
+      "record_sha256": "3c6e012cf735d2bac092d7aa97663a6160e92087b436ddd8df8ad6d5c3577520",
+      "audit_sha256": "34c5c1b214e4a7b76f0844285067f331b5547a0f6e551503bdf3f9b2634491c2",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "duration_seconds": 170.666016,
+      "decoded_frames_automatically": 2560,
+      "selected_times": 327,
+      "direct_unique_images": 229,
+      "exact_duplicate_times": 98,
+      "actual_pages": 29,
+      "individual_native_followups": 3,
+      "largest_selected_time_gap": 1.0,
+      "aggregate_source_current_at_freeze": true,
+      "recorded_inputs_current_at_freeze": true,
+      "source_provenance_at_extraction": {
+        "record": "/workspace/explainer-videos/renders/qa/series/ai4/en/GradCheck_motion/result.json",
+        "sha256": "3c6e012cf735d2bac092d7aa97663a6160e92087b436ddd8df8ad6d5c3577520",
+        "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+        "status": "needs-review",
+        "current_source_and_inputs": true
+      },
+      "findings": [
+        {
+          "severity": "review-warning-explained",
+          "raw_status": "needs-review",
+          "kind": "dead-air-review",
+          "interval": [
+            56.75,
+            58.25
+          ],
+          "disposition": "intentional old-chart fade, incoming header, first formula Write; no unintended held blank; threshold/raw warning retained"
+        }
+      ],
+      "native_examples": [
+        {
+          "source_frame": 859,
+          "time": 57.266341,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-GradCheck-full-motion/frames/0000859_000057.266s.png",
+          "sha256": "e18d356095405470a6be497c88ed194218cedf45e0e0c1388b7199c865f67091",
+          "coverage": "pending-actual-view",
+          "observations": "Direct individual native view: sparse fade/header context",
+          "package_file": "en-GradCheck/native-01-frame-0000859.png"
+        },
+        {
+          "source_frame": 873,
+          "time": 58.199674,
+          "reasons": [
+            "motion-013:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-GradCheck-full-motion/frames/0000873_000058.200s.png",
+          "sha256": "4bf443800a4ee9344abd5aac56f9e0f8ed2ca824bb196bf266439d6906992683",
+          "coverage": "pending-actual-view",
+          "observations": "Direct individual native view: sparse fade/header context",
+          "package_file": "en-GradCheck/native-02-frame-0000873.png"
+        },
+        {
+          "source_frame": 2246,
+          "time": 149.732682,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-GradCheck-full-motion/frames/0002246_000149.733s.png",
+          "sha256": "437f8c60238d64e6950626621590f5cab7588fab0d957f3fc2ac1838615ee583",
+          "coverage": "pending-actual-view",
+          "observations": "Direct individual native view: formulas/numeric minima, legend and footer legible without collision",
+          "package_file": "en-GradCheck/native-03-frame-0002246.png"
+        }
+      ],
+      "runtime_review": "/workspace/runtime/ai4-theory-motion-review/en-GradCheck/fada253aaf65e1464e7fdc87a485676f86f92bca57b160e131ce622e9d908d93/review.json",
+      "package_review": "en-GradCheck/review.json.gz"
+    },
+    {
+      "case": "zh-GradCheck",
+      "scene": "GradCheck",
+      "lang": "zh",
+      "movie_sha256": "4fffa3194a96471b46de114a6e771b657b548bff9a1457b783a26acc5e8d19fe",
+      "record_sha256": "006b815b83ee3a313cffb7b12991887739b13cbf0128cd8e9a1a5ab6f08d1925",
+      "audit_sha256": "ed10ed24613dd515962495758a08b534d0553fa1c8d875ad94e81d594a72ebf5",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "duration_seconds": 182.533008,
+      "decoded_frames_automatically": 2738,
+      "selected_times": 331,
+      "direct_unique_images": 221,
+      "exact_duplicate_times": 110,
+      "actual_pages": 28,
+      "individual_native_followups": 2,
+      "largest_selected_time_gap": 1.0,
+      "aggregate_source_current_at_freeze": true,
+      "recorded_inputs_current_at_freeze": true,
+      "source_provenance_at_extraction": {
+        "record": "/workspace/explainer-videos/renders/qa/series/ai4/zh/GradCheck_motion/result.json",
+        "sha256": "006b815b83ee3a313cffb7b12991887739b13cbf0128cd8e9a1a5ab6f08d1925",
+        "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+        "status": "passed",
+        "current_source_and_inputs": true
+      },
+      "findings": [],
+      "native_examples": [
+        {
+          "source_frame": 1547,
+          "time": 103.133008,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-zh-GradCheck-full-motion/frames/0001547_000103.133s.png",
+          "sha256": "18c85476147a2b6b734b29b20dfcb0dad4a616f5f27c150f47d16c5a6c767cb3",
+          "coverage": "pending-actual-view",
+          "observations": "Direct individual native view: formulas/numeric minima, legend and footer legible without collision",
+          "package_file": "zh-GradCheck/native-01-frame-0001547.png"
+        },
+        {
+          "source_frame": 2465,
+          "time": 164.333008,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-zh-GradCheck-full-motion/frames/0002465_000164.333s.png",
+          "sha256": "31c8d2967446ed68feb03a80c998e7308412729334768a68e54e9e6aa8c0c0e7",
+          "coverage": "pending-actual-view",
+          "observations": "Direct individual native view: formulas/numeric minima, legend and footer legible without collision",
+          "package_file": "zh-GradCheck/native-02-frame-0002465.png"
+        }
+      ],
+      "runtime_review": "/workspace/runtime/ai4-theory-motion-review/zh-GradCheck/4fffa3194a96471b46de114a6e771b657b548bff9a1457b783a26acc5e8d19fe/review.json",
+      "package_review": "zh-GradCheck/review.json.gz"
+    },
+    {
+      "case": "en-Memory",
+      "scene": "Memory",
+      "lang": "en",
+      "movie_sha256": "a21f35a561b7659da435750ed72dbb267f9f839ba3f8c45bba8c5286bac94457",
+      "record_sha256": "12d20fd4a5f159a5ea0ea4eef909a54624f1e44d895c2953abe0bda7b6dfb9ec",
+      "audit_sha256": "976e613fbbfc90127ed1879e7f4f0b2f93939b0dd02c4f6a77aa457ce3796da3",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "duration_seconds": 166.732682,
+      "decoded_frames_automatically": 2501,
+      "selected_times": 336,
+      "direct_unique_images": 229,
+      "exact_duplicate_times": 107,
+      "actual_pages": 29,
+      "individual_native_followups": 2,
+      "largest_selected_time_gap": 1.0000000000000036,
+      "aggregate_source_current_at_freeze": false,
+      "recorded_inputs_current_at_freeze": true,
+      "source_provenance_at_extraction": {
+        "record": "/workspace/explainer-videos/renders/qa/series/ai4/en/Memory_motion/result.json",
+        "sha256": "12d20fd4a5f159a5ea0ea4eef909a54624f1e44d895c2953abe0bda7b6dfb9ec",
+        "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+        "status": "passed",
+        "current_source_and_inputs": false
+      },
+      "findings": [],
+      "native_examples": [
+        {
+          "source_frame": 676,
+          "time": 45.066341,
+          "reasons": [
+            "motion-015:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-Memory-full-motion/frames/0000676_000045.066s.png",
+          "sha256": "da2e8b5731011c914bbb91c0e97931c086c0cf0e496bb722fcfbc89d5ea572e2",
+          "coverage": "pending-actual-view",
+          "observations": "Direct individual native image view: checkpoint recompute/captions or final measured counts and logical-storage exclusion legible.",
+          "package_file": "en-Memory/native-01-frame-0000676.png"
+        },
+        {
+          "source_frame": 2415,
+          "time": 160.999349,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-Memory-full-motion/frames/0002415_000160.999s.png",
+          "sha256": "b9a7f2451fd67e39fc147969d5ecabe9401e362f3f8c46d15621444bdd563793",
+          "coverage": "pending-actual-view",
+          "observations": "Direct individual native image view: checkpoint recompute/captions or final measured counts and logical-storage exclusion legible.",
+          "package_file": "en-Memory/native-02-frame-0002415.png"
+        }
+      ],
+      "runtime_review": "/workspace/runtime/ai4-theory-motion-review/en-Memory/a21f35a561b7659da435750ed72dbb267f9f839ba3f8c45bba8c5286bac94457/review.json",
+      "package_review": "en-Memory/review.json.gz"
+    },
+    {
+      "case": "zh-Memory",
+      "scene": "Memory",
+      "lang": "zh",
+      "movie_sha256": "f15ce4ce2075b290251456b006452d4b2edd9d8c79b514cb536fdc309e4ebc4e",
+      "record_sha256": "0e09fb17e47485b73463bb3cbbacf597baa8b391773f1d26fdda23572e8ac14b",
+      "audit_sha256": "5b891cf57dbbef142324dd5315a96a661b175a6ed6c8874ebf07468cd09a30e0",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "duration_seconds": 182.866016,
+      "decoded_frames_automatically": 2743,
+      "selected_times": 348,
+      "direct_unique_images": 218,
+      "exact_duplicate_times": 130,
+      "actual_pages": 28,
+      "individual_native_followups": 2,
+      "largest_selected_time_gap": 1.0,
+      "aggregate_source_current_at_freeze": false,
+      "recorded_inputs_current_at_freeze": true,
+      "source_provenance_at_extraction": {
+        "record": "/workspace/explainer-videos/renders/qa/series/ai4/zh/Memory_motion/result.json",
+        "sha256": "0e09fb17e47485b73463bb3cbbacf597baa8b391773f1d26fdda23572e8ac14b",
+        "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+        "status": "passed",
+        "current_source_and_inputs": false
+      },
+      "findings": [],
+      "native_examples": [
+        {
+          "source_frame": 1447,
+          "time": 96.466016,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-zh-Memory-full-motion/frames/0001447_000096.466s.png",
+          "sha256": "1100a44c0ffa75a4784a6ae4d7a2cc6ef5c42ddbbd03aae3400356ef3dea8854",
+          "coverage": "pending-actual-view",
+          "observations": "Direct individual native image view: checkpoint recompute/captions or final measured counts and logical-storage exclusion legible.",
+          "package_file": "zh-Memory/native-01-frame-0001447.png"
+        },
+        {
+          "source_frame": 2571,
+          "time": 171.399349,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-zh-Memory-full-motion/frames/0002571_000171.399s.png",
+          "sha256": "2dfaa006821cdc3b6091869fcce4872be24c04153669e715a7abe4122d5dc3d7",
+          "coverage": "pending-actual-view",
+          "observations": "Direct individual native image view: checkpoint recompute/captions or final measured counts and logical-storage exclusion legible.",
+          "package_file": "zh-Memory/native-02-frame-0002571.png"
+        }
+      ],
+      "runtime_review": "/workspace/runtime/ai4-theory-motion-review/zh-Memory/f15ce4ce2075b290251456b006452d4b2edd9d8c79b514cb536fdc309e4ebc4e/review.json",
+      "package_review": "zh-Memory/review.json.gz"
+    },
+    {
+      "case": "en-Newton",
+      "scene": "Newton",
+      "lang": "en",
+      "movie_sha256": "d4c2c7032160081a9247507af91e75c71699ac670405df9dc18c18418b089c2b",
+      "record_sha256": "edc32b9e10081bfe2476b653f269ce186c293c4bc656c8f0fc9f0b13ecb955b1",
+      "audit_sha256": "2ce64c589a6bf8f219c1c7de828d13dc96d74ba2372da5ba7d1219d498514175",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "duration_seconds": 140.466341,
+      "decoded_frames_automatically": 2107,
+      "selected_times": 256,
+      "direct_unique_images": 195,
+      "exact_duplicate_times": 61,
+      "actual_pages": 25,
+      "individual_native_followups": 3,
+      "largest_selected_time_gap": 1.000000000000007,
+      "aggregate_source_current_at_freeze": false,
+      "recorded_inputs_current_at_freeze": true,
+      "source_provenance_at_extraction": {
+        "record": "/workspace/explainer-videos/renders/qa/series/ai4/en/Newton_motion/result.json",
+        "sha256": "edc32b9e10081bfe2476b653f269ce186c293c4bc656c8f0fc9f0b13ecb955b1",
+        "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+        "status": "passed",
+        "current_source_and_inputs": false
+      },
+      "findings": [],
+      "native_examples": [
+        {
+          "source_frame": 474,
+          "time": 31.6,
+          "reasons": [
+            "motion-003:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-Newton-full-motion/frames/0000474_000031.600s.png",
+          "sha256": "3984797c9c27e7a8df3914107df02d0733f6eb3c7b05a0fcd25f8308373910ea",
+          "coverage": "pending-actual-view",
+          "observations": "Direct native view during bowl-to-saddle caption crossfade; transient old/new sign overlap resolves in subsequent held state.",
+          "package_file": "en-Newton/native-01-frame-0000474.png"
+        },
+        {
+          "source_frame": 950,
+          "time": 63.333008,
+          "reasons": [
+            "motion-010:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-Newton-full-motion/frames/0000950_000063.333s.png",
+          "sha256": "1836659c5d42531aee7e54c1686cc06d68058aebe7d12c7d29c1321645f5d800",
+          "coverage": "pending-actual-view",
+          "observations": "Direct native view of Newton formula/SPD qualifier and historical card: no collision.",
+          "package_file": "en-Newton/native-02-frame-0000950.png"
+        },
+        {
+          "source_frame": 1626,
+          "time": 108.399674,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-Newton-full-motion/frames/0001626_000108.400s.png",
+          "sha256": "c8b549eec266e70a952fc8dd731d71d3417a0ce8a9f862dce22365aa5aa7e0e2",
+          "coverage": "pending-actual-view",
+          "observations": "Direct native view of paths, criteria, chart floor and footer: labels read correctly and data geometry clear.",
+          "package_file": "en-Newton/native-03-frame-0001626.png"
+        }
+      ],
+      "runtime_review": "/workspace/runtime/ai4-theory-motion-review/en-Newton/d4c2c7032160081a9247507af91e75c71699ac670405df9dc18c18418b089c2b/review.json",
+      "package_review": "en-Newton/review.json.gz"
+    },
+    {
+      "case": "zh-Newton",
+      "scene": "Newton",
+      "lang": "zh",
+      "movie_sha256": "0383bb615a3fa92df3dc359f7b15f2acf54af7587629c253b44fbb8791eba4e7",
+      "record_sha256": "fa89caf066d903373cf822cad275dd019ae5b0f1604c33c92af8f7a8e62dee7e",
+      "audit_sha256": "b367e407a37153dcafe78b989f66a9f126e42427ac9f4e266e3681493624cefe",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "duration_seconds": 161.533008,
+      "decoded_frames_automatically": 2423,
+      "selected_times": 280,
+      "direct_unique_images": 202,
+      "exact_duplicate_times": 78,
+      "actual_pages": 26,
+      "individual_native_followups": 3,
+      "largest_selected_time_gap": 1.0000000000000018,
+      "aggregate_source_current_at_freeze": false,
+      "recorded_inputs_current_at_freeze": true,
+      "source_provenance_at_extraction": {
+        "record": "/workspace/explainer-videos/renders/qa/series/ai4/zh/Newton_motion/result.json",
+        "sha256": "fa89caf066d903373cf822cad275dd019ae5b0f1604c33c92af8f7a8e62dee7e",
+        "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+        "status": "passed",
+        "current_source_and_inputs": false
+      },
+      "findings": [],
+      "native_examples": [
+        {
+          "source_frame": 759,
+          "time": 50.6,
+          "reasons": [
+            "motion-003:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-zh-Newton-full-motion/frames/0000759_000050.600s.png",
+          "sha256": "e1ef37f11fb4ad0b4b8fd2420d79c90877aba9c77acbb130caa670fe8a25a9f6",
+          "coverage": "pending-actual-view",
+          "observations": "Direct native view of negative-eigenvalue saddle and footer clearance.",
+          "package_file": "zh-Newton/native-01-frame-0000759.png"
+        },
+        {
+          "source_frame": 1138,
+          "time": 75.866341,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-zh-Newton-full-motion/frames/0001138_000075.866s.png",
+          "sha256": "fd1e6364dba5e97511e12fbc1bdee7788f1082a4a22390aa8121fe9c195e44ec",
+          "coverage": "pending-actual-view",
+          "observations": "Direct native view of Chinese Newton formula/SPD qualifier and historical card: no collision.",
+          "package_file": "zh-Newton/native-02-frame-0001138.png"
+        },
+        {
+          "source_frame": 1873,
+          "time": 124.866341,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-zh-Newton-full-motion/frames/0001873_000124.866s.png",
+          "sha256": "3cd91b9e2ceea498cc9ca8dcbcea0a2e35a2d253b52c230e8bda5771f61ec6a5",
+          "coverage": "pending-actual-view",
+          "observations": "Direct native view of actual paths, separately qualified criteria, chart floor and footer: readable.",
+          "package_file": "zh-Newton/native-03-frame-0001873.png"
+        }
+      ],
+      "runtime_review": "/workspace/runtime/ai4-theory-motion-review/zh-Newton/0383bb615a3fa92df3dc359f7b15f2acf54af7587629c253b44fbb8791eba4e7/review.json",
+      "package_review": "zh-Newton/review.json.gz"
+    },
+    {
+      "case": "en-HVP",
+      "scene": "HVP",
+      "lang": "en",
+      "movie_sha256": "8086d22d2b8d8293b2fdd19b1fe6dbccce30cf7bcadc7ac12c16bb39ddbaba46",
+      "record_sha256": "1ff963b343937f956079b746e114a201e7744144c760213646e4ff3559152409",
+      "audit_sha256": "eb21f4806eca3892f172d50315f2326e20558022abe5be87c559f88920df78e7",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "duration_seconds": 156.933008,
+      "decoded_frames_automatically": 2354,
+      "selected_times": 294,
+      "direct_unique_images": 190,
+      "exact_duplicate_times": 104,
+      "actual_pages": 24,
+      "individual_native_followups": 3,
+      "largest_selected_time_gap": 1.000000000000007,
+      "aggregate_source_current_at_freeze": false,
+      "recorded_inputs_current_at_freeze": true,
+      "source_provenance_at_extraction": {
+        "record": "/workspace/explainer-videos/renders/qa/series/ai4/en/HVP_motion/result.json",
+        "sha256": "1ff963b343937f956079b746e114a201e7744144c760213646e4ff3559152409",
+        "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+        "status": "passed",
+        "current_source_and_inputs": false
+      },
+      "findings": [],
+      "native_examples": [
+        {
+          "source_frame": 391,
+          "time": 26.066341,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-HVP-full-motion/frames/0000391_000026.066s.png",
+          "sha256": "e5992edeaf6b133e8481abcc6f218da848852480b7b9aa77c7ad51f3a3a5c186",
+          "coverage": "pending-actual-view",
+          "observation": "Individual native view: fixed-v identity and cost qualifiers readable; no clipping.",
+          "actually_viewed": true,
+          "package_file": "en-HVP/native-01-frame-0000391.png"
+        },
+        {
+          "source_frame": 965,
+          "time": 64.333008,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-HVP-full-motion/frames/0000965_000064.333s.png",
+          "sha256": "91fa4c123ad7ad67e2de87baea235b355388e1d27990855b47a51facbb84a7d0",
+          "coverage": "pending-actual-view",
+          "observation": "Individual native view: both error charts, signed target, best recorded finite-difference error and floor/omission footer readable and separated.",
+          "actually_viewed": true,
+          "package_file": "en-HVP/native-02-frame-0000965.png"
+        },
+        {
+          "source_frame": 1721,
+          "time": 114.733008,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-en-HVP-full-motion/frames/0001721_000114.733s.png",
+          "sha256": "6f56d9e45ef8db4e109143ee180e11989fe25c38dc053669bb57ed63042d7f2d",
+          "coverage": "pending-actual-view",
+          "observation": "Individual native view: final checkpoint map, loss marker, signed-normalized spectrum, absolute rho and relative cutoff counts separated; training-cohort disclaimer readable.",
+          "actually_viewed": true,
+          "package_file": "en-HVP/native-03-frame-0001721.png"
+        }
+      ],
+      "runtime_review": "/workspace/runtime/ai4-theory-motion-review/en-HVP/8086d22d2b8d8293b2fdd19b1fe6dbccce30cf7bcadc7ac12c16bb39ddbaba46/review.json",
+      "package_review": "en-HVP/review.json.gz"
+    },
+    {
+      "case": "zh-HVP",
+      "scene": "HVP",
+      "lang": "zh",
+      "movie_sha256": "572c53fdf46f9b8e76c6019dd72fea2457c3620b193855c78ce6a8a86fb4eda1",
+      "record_sha256": "c04eb74f68759d16c3455b3b85cda6f3ed35c09539ae0fa39b667b83257fb4e1",
+      "audit_sha256": "f6e60e5a5097a5481eddb44841a33a72c02cb98d7518bd2aeff405f9fbd587e3",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "duration_seconds": 180.733008,
+      "decoded_frames_automatically": 2711,
+      "selected_times": 314,
+      "direct_unique_images": 190,
+      "exact_duplicate_times": 124,
+      "actual_pages": 24,
+      "individual_native_followups": 3,
+      "largest_selected_time_gap": 1.000000000000007,
+      "aggregate_source_current_at_freeze": false,
+      "recorded_inputs_current_at_freeze": true,
+      "source_provenance_at_extraction": {
+        "record": "/workspace/explainer-videos/renders/qa/series/ai4/zh/HVP_motion/result.json",
+        "sha256": "c04eb74f68759d16c3455b3b85cda6f3ed35c09539ae0fa39b667b83257fb4e1",
+        "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+        "status": "passed",
+        "current_source_and_inputs": false
+      },
+      "findings": [],
+      "native_examples": [
+        {
+          "source_frame": 429,
+          "time": 28.599674,
+          "reasons": [
+            "motion-009:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-zh-HVP-full-motion/frames/0000429_000028.600s.png",
+          "sha256": "052b7877050d3fca98bab2a64041d1dc5b92049851b72f8200f3d612647580cf",
+          "coverage": "pending-actual-view",
+          "observation": "Individual native view: Chinese fixed-v identity, cost qualifier and historical citation clear and separated.",
+          "actually_viewed": true,
+          "package_file": "zh-HVP/native-01-frame-0000429.png"
+        },
+        {
+          "source_frame": 1056,
+          "time": 70.399674,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-zh-HVP-full-motion/frames/0001056_000070.400s.png",
+          "sha256": "13c6ed66b94020f9a0ef7789959d08cd5099aeeeaa41889a0ad6c72225804da7",
+          "coverage": "pending-actual-view",
+          "observation": "Individual native view: Chinese numerical labels, signed-target comparison, recorded finite-difference minimum and floor/omission disclosure readable without overlap.",
+          "actually_viewed": true,
+          "package_file": "zh-HVP/native-02-frame-0001056.png"
+        },
+        {
+          "source_frame": 1964,
+          "time": 130.933008,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai4-zh-HVP-full-motion/frames/0001964_000130.933s.png",
+          "sha256": "536730be87e5b3ed08e9585c4cdde3c4fe42a419c56d677f2af6b9ddf521d1d7",
+          "coverage": "pending-actual-view",
+          "observation": "Individual native view: final probability map, loss marker, signed-normalized spectrum, actual absolute radius and relative-cutoff counts legible; training cohort and display-limit footer clear.",
+          "actually_viewed": true,
+          "package_file": "zh-HVP/native-03-frame-0001964.png"
+        }
+      ],
+      "runtime_review": "/workspace/runtime/ai4-theory-motion-review/zh-HVP/572c53fdf46f9b8e76c6019dd72fea2457c3620b193855c78ce6a8a86fb4eda1/review.json",
+      "package_review": "zh-HVP/review.json.gz"
+    }
+  ],
+  "totals": {
+    "decoded_frames_automatically": 20137,
+    "selected_times": 2486,
+    "direct_unique_images": 1674,
+    "exact_duplicate_times": 812,
+    "actual_pages": 213,
+    "individual_native_followups": 21
+  },
+  "limitations": [
+    "No continuous perceptual playback, narration listening, pronunciation or audio/video synchronization review.",
+    "Native images are 854x480 silent preview frames, not final-resolution full motion. Separate 1080 endpoint review belongs to another receipt.",
+    "All decoded frames were machine-analyzed; only listed selected unique images and individual followups were visually reviewed. Undecoded distinctions and exact unextracted frame gaps are in each audit/review.",
+    "Maximum selected timestamp gap is 1 second plus frame/timestamp quantization; small or subthreshold transient changes between samples can remain unseen.",
+    "Seven raw render records passed with zero warnings. English GradCheck retains needs-review/dead-air-review; its sparse transition was visually examined and explained, not erased.",
+    "Aggregate current-source mismatch remains explicit for six later-frozen cases. Verified consumed-input hashes do not independently prove every imported source byte matched the render."
+  ],
+  "known_subsequent_changes_receipt": "known-subsequent-changes.json"
+}

@@ -1,0 +1,16 @@
+{
+  "before_sha256": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+  "after_sha256": "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c",
+  "change": "layers step1\u20133 transform=False only",
+  "invariants": "All other AST identical, including VO/bookmarks, run_times, input/data/geometry.",
+  "en": {
+    "frozen_case": "/workspace/runtime/ai4-mid-head-motion-review/en/Backprop/4c09a480979d8c1b745923ce331dd74b80af81c1fbd8f1cf9d2443cc4be9ca37",
+    "movie_sha256": "4c09a480979d8c1b745923ce331dd74b80af81c1fbd8f1cf9d2443cc4be9ca37",
+    "original_record_sha256": "58de912347e578500b73b2469f40d0d180fca79737ae7d9aeaacd667a182b39b"
+  },
+  "zh": {
+    "frozen_case": "/workspace/runtime/ai4-mid-head-motion-review/zh/Backprop/237bb13e9e9071ed6b83fffe9d45dc7384a001e64a0894456dfe780b4df6fe03",
+    "movie_sha256": "237bb13e9e9071ed6b83fffe9d45dc7384a001e64a0894456dfe780b4df6fe03",
+    "original_record_sha256": "3691d8caf024bd02aae689adf894149561762dd7f2cba35becbbff219fa06c92"
+  }
+}

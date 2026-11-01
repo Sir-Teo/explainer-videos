@@ -1,0 +1,2405 @@
+{
+  "completed_utc": "2026-10-31T23:34:05.352790+00:00",
+  "scope": "All19 Part4 chapters EN/ZH native1920x1080 silent cached-only skipped-animation endpoint captures. Every captured endpoint viewed on declared960x540cells; three original1920x1080followups per case.",
+  "limits": [
+    "No production-resolution full-motion rendering or continuous perceptual viewing",
+    "No audio/listening/pronunciation or narration synchronization approval",
+    "No responsive/player assessment",
+    "No approval of animation transition geometry between endpoints",
+    "Rare data-dependent branches were covered by prior source/fixture work, not by these default-data pictures"
+  ],
+  "counts": {
+    "frames": 537,
+    "pages": 152,
+    "natives": 114,
+    "input_records": 132,
+    "source_snapshots": 456
+  },
+  "cases": [
+    {
+      "case": "en-Hook",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 19,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "43781285d69c25325632299b4d377d1c97a65a4abb64356fd50ea6bdf4480db1",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All19native1080endpoint images inspected on960pxcells; parameter-count headers/schematic qualification, timeline milestones/year labels/not-to-scale footer, roadmap highlight and six-item chapter outline fit. Native follow-ups confirm grid masks/readability, roadmap inactive/active hierarchy and long wrap lines without clipping. No concrete new endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Hook/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s01_hook.py",
+          "capture_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+          "packaging_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Derivative",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 17,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "081dd2e6b80acdd998b67aad46e69261e561682834e8e10f840bd109273329b7",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All17native1080endpoints inspected; actual fixed tangent and separate finite-step curve/prediction points/error connector match their labels. Definition, measured log-error slopes2.00/1.01, derivative algebra, chain-rule local factors and 6x line-scale disclosure are readable and in frame. Three critical originals inspected; no new concrete endpoint defect. Shrinking-step motion is outside this endpoint scope."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Derivative/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s02_derivative.py",
+          "capture_sha256": "b072470cd31ea9009eb3f663c8db03e73705cacea4c86dfad83b367df880ecec",
+          "packaging_sha256": "b072470cd31ea9009eb3f663c8db03e73705cacea4c86dfad83b367df880ecec",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Gradient",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 19,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "485756d5e8bda8e89bb2ea1bc39d68cdb593b982e7e032b27181ce51310105b3",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "scope": "typography/math labels",
+          "details": "All19native1080endpoints viewed. Fixed3Dgradient caption/error qualifier, Euclidean-unit-direction/nonzero-gradient theorem, measured direction slope readouts and path/history qualifiers readable; no text collision/clipping."
+        },
+        {
+          "severity": "minor-visual",
+          "scope": "contour geometry",
+          "details": "Recurring visible open seams in several contour loops at upper/lower/right quadrants, confirmed in native frame014. Root notified; no edit or claim of wrong measured data. Full continuous path/motion remains unreviewed."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Gradient/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s03_gradient.py",
+          "capture_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+          "packaging_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Jacobian",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 10,
+        "pages_viewed": 3,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "07e81f0f05121367c3ad604ae390ff3fc32cd4620434184030dfb89f181f03c9",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All10native1080endpoints viewed; fixed local Jacobian over warped grid remains readable, inset nonlinear/linear-map colors distinguished. Definition/input-output matrix braces, absolute determinant area factor, chain-product dimensions and operator-norm bound qualifier readable. Depth plot gain labels/seed min–max bands and mean-log-norm caption fit. Three native follow-ups found no text clipping/ink collision."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Jacobian/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s04_jacobian.py",
+          "capture_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+          "packaging_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Layers",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 14,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "2b89587030e74e0999b751475f116b0882b14e1834ba144126c5d7f29277d231",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All14native1080endpoints inspected; indexed linear-layer derivatives, matrix-product work/count readouts, softmax Jacobian matrix and heatmap, roundoff-qualified eigenvalues and layer-normalization rank corrections/readouts are readable and in frame. Critical original checks confirm numeric row and matrix legends remain separate; no new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Layers/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s05_layers.py",
+          "capture_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+          "packaging_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Modes",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 17,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "f18848a650950747171158e1a30db3979dfb565773a0bfe64cd7ed572cfb04aa",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All17native1080endpoints inspected; JVP/VJP definitions and nested products, chain labels, two work-count heatmaps with row/column definitions, observed-call-time versus derivative-work qualifiers, parameter-only reverse scope and history cards fit. Critical originals confirm dense classifier/timing disclosure legible without clipping. No new concrete endpoint defect; arrow-wave direction/motion remains separate QA."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Modes/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s06_modes.py",
+          "capture_sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+          "packaging_sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Backprop",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 17,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "6c201375b3808e984a29a96d9bf6675a781614a349d3b8f46e0fa8b8f8337bd9",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All17native1080endpoints inspected. Scalar graph blue forward values/orange gradient numbers and local derivatives fit; summing fork gradients, four neural-network derivative rows, single-example outer product and batch-rank bound/evidence readouts are legible. Three native original checks found no clipping or ink collision. Endpoint graph does not establish propagation animation direction."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Backprop/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s07_backprop.py",
+          "capture_sha256": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+          "packaging_sha256": "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c",
+          "matches": false
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Library",
+      "capture_status": "needs-review",
+      "wrapper_returncode": 1,
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "coverage": {
+        "endpoint_frames_viewed": 16,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "f6ceb241cf0283e06636410b5d3a56cbc7c725e9c3ca585f6b62fff9bc5867d1",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All16native1080endpoints inspected. Three-column code overview leads to readable focused multiplication/backward snippets; backward comments fit in pane. Topological graph and tape labels, five displayed gradient pairs versus256checked values, max-error readouts and six historical cards/framework usage snippets fit. Native code/table/cards inspected; no new concrete endpoint defect."
+        },
+        {
+          "severity": "provenance-warning",
+          "details": "Original aggregate source-change warning retained. Direct tracked source-before/after hashes match; this does not erase conservative whole-part warning."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Library/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s08_library.py",
+          "capture_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+          "packaging_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Train",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 13,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "64b908a1b97b6383f636b77a3350bbe3409f9ad2149d2c134276185eaa70b520",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All13native1080endpoints viewed. Cross-entropy derivative/index notation, first-gradient color semantics, complete generated sample line, heatmap row/column/colorbar labels, minibatch-versus-fulltrain/test/count reference, finite Pearson cohort, step/log axes and full-batch curvature thresholds/clipping disclosure are readable. Critical originals confirm bottom Pearson line and dense curvature plot remain within image. No new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Train/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s09_train.py",
+          "capture_sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+          "packaging_sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Floats",
+      "capture_status": "needs-review",
+      "wrapper_returncode": 1,
+      "warnings": [
+        {
+          "kind": "untranslated-on-screen",
+          "text": "FP8 E4M3FN"
+        }
+      ],
+      "coverage": {
+        "endpoint_frames_viewed": 16,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "32d0173860f5b78f8ca0ab564aca3f060f2fc091bbe3055a618c9e8e0f04319b",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All16native1080endpoints inspected. Normal/finite number prerequisite, fiveformat bit layouts/ranges, E4M3FN finite/NaN exception, ULP legend and repaired six-line definition including halfspacing, subnormal/device qualifiers, sum curves/readouts and stable log-sum-exp/code fit. Three critical originals confirm card/math/readout typography readable with no clipping."
+        },
+        {
+          "severity": "accepted-technical-name",
+          "details": "Raw untranslated-on-screen warning for exact FP8 E4M3FN retained. Parent explicitly reviewed/accepted standard format identifier; no CJK text added solely to erase warning."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Floats/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s10_floats.py",
+          "capture_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+          "packaging_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-GradCheck",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 14,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "1a5e2004da5ca069c25770da8ee0725a43b77b8b40c42b9332e44fd7956a75d4",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All14native1080endpoints viewed. Cancellation comparison legends/true-value example, five-row central-difference error derivation with absolute third derivative/nonzero/local-model prerequisite, actual median minima dots, predicted-step lines/table and paired8direction/range/display-floor disclosures fit. Three native originals confirm small explanatory text readable and no clipping/collision. No new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-GradCheck/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s11_vcurve.py",
+          "capture_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+          "packaging_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Memory",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 14,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "b279d8f81eb4935b38a1944889fe0b392de1980a4831abba5db2bc0d9b4cded5",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All14native1080endpoints inspected. Activation-liveness counter/definition, checkpoint pattern, storage/work derivation, logarithmic storage/overhead versus total-work historical cards and actual logical-count/evaluation tables fit. Three native originals confirm dense cards, minimum-span markers, longer-chain table and logical-memory exclusions readable. No new concrete endpoint defect; recomputation/release animation remains separate."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Memory/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s12_memory.py",
+          "capture_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+          "packaging_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Newton",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 10,
+        "pages_viewed": 3,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "13f7d53c14d9eba6a2f323d903afb12677eb657850fb6ad4203440e92b0bb457",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "Fixed Hessian label, bowl/saddle eigenvalues, positive-definite prerequisite, numerical reference/path, conservative 1/L step, distinct GD2362 objective-gap versus Newton4 gradient-norm stopping, log floor counts and iteration+1 axes all readable. No new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Newton/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s13_newton.py",
+          "capture_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+          "packaging_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-HVP",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 10,
+        "pages_viewed": 3,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "640b341235e424e97d437a90be67c2cbc605e4181200dac9c231cca2591a42c6",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "Definition/constant-vector prerequisite and history card fit. Measured finite-difference error, signed dominant-magnitude eigenvalue target and relative error, display clipping counters, training cohort, normalized signed-log spectrum and relative negative/near-zero/high-positive thresholds all readable. New Chinese nested captions fit. No new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-HVP/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s14_hvp.py",
+          "capture_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+          "packaging_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Quadratic",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 16,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "d5b531df9c4ceb067f5b0787d0093b01ac465c781eb52d3fee6b38db7637b5c0",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "minor-visual",
+          "details": "Positive-definite assumption, norm-error factor definition, contraction formulas, actual gradient/momentum/Newton path endpoints, condition-number measurements and censored-run legend, saddle escape thresholds/counts and zero-start qualifier readable. Minor open contour seams preserved in native frame005; no data mutation."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Quadratic/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s15_quadratic.py",
+          "capture_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+          "packaging_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Lagrange",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 17,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "b7619f86399f0c4580f7ade05dd27d07f2b58ae2ecb2496936d56011aac48e43",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "minor-visual",
+          "details": "Constraint circle, gradient arrows, tangent derivative readout, regularity and necessary-not-sufficient qualifications, numerical candidate/residual/solver status, maximum entropy derivation/probability bars, KL objective and penalty-versus-inverse-temperature qualifier all readable. Minor contour seams remain visible; no clipping found."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Lagrange/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s16_lagrange.py",
+          "capture_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+          "packaging_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-KKT",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 13,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "96a1c92c54e47f722aa9f7af68fa37b684e18605a27a62bb49c4c2674a244928",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "Constraint qualification theorem, schematic inactive/active wall, duality assumptions, finite-grid non-certified bound disclosure, SVM primal/dual/free-intercept equality, actual solver residuals and support-multiplier rings/counts all readable. Chinese line wrap can isolate punctuation, but no lost text or ink overlap. No blocking endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-KKT/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s17_kkt.py",
+          "capture_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+          "packaging_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Implicit",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 11,
+        "pages_viewed": 3,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "1c4b8af1c4e6da9c84963ed1002536e052bbbdf4d458cae1d02d5aa61d6d5b30",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "Fixed-point diagram and invertibility prerequisite, adjoint solve, iteration residual/cap and fitted-factor labels, activation-history versus retained-workspace qualifier, state dimension12 versus181parameters, full training/fit-grid convergence counts and loss-floor exclusions readable. No clipping or collision found."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Implicit/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s18_implicit.py",
+          "capture_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+          "packaging_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "en-Outro",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 5,
+        "pages_viewed": 2,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "3323ea43956a633ab779374a2a2374a10bf9ba6e111f31f8a5dc6d41bc96466e",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All eight recap tiles/threshold labels and display-range footer, six later-part cross references, six complete problem statements, illustrative random walks, references and credits readable. Small bibliography text remains intentionally dense; critical original viewed. No lost text or clipping found."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/en-Outro/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s19_outro.py",
+          "capture_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+          "packaging_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Hook",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 19,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "94e9207c2fa0ea4c6c74d8778dbbb2a76a0507bcfdd255ce36fb9223698f84ff",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All19native1080endpoints inspected on960pxcells; Chinese parameter-count labels, schematic qualifier, timeline milestones, not-to-scale footer and complete outline are legible and in frame. Native roadmap confirms intentionally dim future chapters still readable and selected fourth part distinct; no ink collisions or clipping. No new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Hook/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s01_hook.py",
+          "capture_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+          "packaging_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Derivative",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 17,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "d0c439191128eeacc91f73d18a227ee97d42c0d2f705ccabe4f7d04aac2cde68",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All17native1080endpoints inspected; actual fixed tangent and separate finite-step curve/prediction points/error connector match their labels. Definition, measured log-error slopes2.00/1.01, derivative algebra, chain-rule local factors and 6x line-scale disclosure are readable and in frame. Three critical originals inspected; no new concrete endpoint defect. Shrinking-step motion is outside this endpoint scope."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Derivative/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s02_derivative.py",
+          "capture_sha256": "b072470cd31ea9009eb3f663c8db03e73705cacea4c86dfad83b367df880ecec",
+          "packaging_sha256": "b072470cd31ea9009eb3f663c8db03e73705cacea4c86dfad83b367df880ecec",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Gradient",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 19,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "5aa952b86e11277b3c1ba8c50acc94d0eb2f3e34e0586a5fa3491e05d667e373",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "scope": "typography/math labels",
+          "details": "All19native1080endpoints viewed. Fixed3Dgradient caption/error qualifier, Euclidean-unit-direction/nonzero-gradient theorem, measured direction slope readouts and path/history qualifiers readable; no text collision/clipping."
+        },
+        {
+          "severity": "minor-visual",
+          "scope": "contour geometry",
+          "details": "Recurring visible open seams in several contour loops at upper/lower/right quadrants, confirmed in native frame014. Root notified; no edit or claim of wrong measured data. Full continuous path/motion remains unreviewed."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Gradient/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s03_gradient.py",
+          "capture_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+          "packaging_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Jacobian",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 10,
+        "pages_viewed": 3,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "4ee913bfc3425fc385a63711dc19733f974e9b2369d83439e50497dc7c22c22b",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All10native1080endpoints viewed; fixed local Jacobian over warped grid remains readable, inset nonlinear/linear-map colors distinguished. Definition/input-output matrix braces, absolute determinant area factor, chain-product dimensions and operator-norm bound qualifier readable. Depth plot gain labels/seed min–max bands and mean-log-norm caption fit. Three native follow-ups found no text clipping/ink collision."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Jacobian/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s04_jacobian.py",
+          "capture_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+          "packaging_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Layers",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 14,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "f98e69941c7845536fdf0bcec88572d5703fbeace50a3ee21bd480d980fc4a97",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All14native1080endpoints inspected; indexed linear-layer derivatives, matrix-product work/count readouts, softmax Jacobian matrix and heatmap, roundoff-qualified eigenvalues and layer-normalization rank corrections/readouts are readable and in frame. Critical original checks confirm numeric row and matrix legends remain separate; no new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Layers/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s05_layers.py",
+          "capture_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+          "packaging_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Modes",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 17,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "5d820f2c9fe32feb2d656d4578ed2414ab35b10bc9869c84ca1ebc8105edffcd",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All17native1080endpoints inspected; JVP/VJP definitions and nested products, chain labels, two work-count heatmaps with row/column definitions, observed-call-time versus derivative-work qualifiers, parameter-only reverse scope and history cards fit. Critical originals confirm dense classifier/timing disclosure legible without clipping. No new concrete endpoint defect; arrow-wave direction/motion remains separate QA."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Modes/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s06_modes.py",
+          "capture_sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+          "packaging_sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Backprop",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 17,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "cc96ce5c2171f5f836e226ff593b69cb5d4283dfc341d343d3f00dd61f924064",
+      "fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All17native1080endpoints inspected. Scalar graph blue forward values/orange gradient numbers and local derivatives fit; summing fork gradients, four neural-network derivative rows, single-example outer product and batch-rank bound/evidence readouts are legible. Three native original checks found no clipping or ink collision. Endpoint graph does not establish propagation animation direction."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Backprop/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s07_backprop.py",
+          "capture_sha256": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+          "packaging_sha256": "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c",
+          "matches": false
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Library",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 16,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "f9895127a6070efd687c62499b966dcceab974889181adae10e680223be7772f",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All16native1080endpoints inspected. Three-column code overview leads to readable focused multiplication/backward snippets; backward comments fit in pane. Topological graph and tape labels, five displayed gradient pairs versus256checked values, max-error readouts and six historical cards/framework usage snippets fit. Native code/table/cards inspected; no new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Library/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s08_library.py",
+          "capture_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+          "packaging_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Train",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 13,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "a2c259fea942f0291969db3c17b3fae4d8e0b7d6615c5dd60579a297a3d09ec2",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All13native1080endpoints viewed. Cross-entropy derivative/index notation, first-gradient color semantics, complete generated sample line, heatmap row/column/colorbar labels, minibatch-versus-fulltrain/test/count reference, finite Pearson cohort, step/log axes and full-batch curvature thresholds/clipping disclosure are readable. Critical originals confirm bottom Pearson line and dense curvature plot remain within image. No new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Train/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s09_train.py",
+          "capture_sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+          "packaging_sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Floats",
+      "capture_status": "needs-review",
+      "wrapper_returncode": 1,
+      "warnings": [
+        {
+          "kind": "untranslated-on-screen",
+          "text": "FP8 E4M3FN"
+        }
+      ],
+      "coverage": {
+        "endpoint_frames_viewed": 16,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "c23ec0f1b9b8c522514419663e3f296abaa39ba5737c9817894e1909b2460f23",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All16native1080endpoints inspected. Normal/finite number prerequisite, fiveformat bit layouts/ranges, E4M3FN finite/NaN exception, ULP legend and repaired six-line definition including halfspacing, subnormal/device qualifiers, sum curves/readouts and stable log-sum-exp/code fit. Three critical originals confirm card/math/readout typography readable with no clipping."
+        },
+        {
+          "severity": "accepted-technical-name",
+          "details": "Raw untranslated-on-screen warning for exact FP8 E4M3FN retained. Parent explicitly reviewed/accepted standard format identifier; no CJK text added solely to erase warning."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Floats/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s10_floats.py",
+          "capture_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+          "packaging_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-GradCheck",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 14,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "80aef1d73cba8400947ad536e74e744e374f0ec9274e6c0324804f072cf9afcc",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All14native1080endpoints viewed. Cancellation comparison legends/true-value example, five-row central-difference error derivation with absolute third derivative/nonzero/local-model prerequisite, actual median minima dots, predicted-step lines/table and paired8direction/range/display-floor disclosures fit. Three native originals confirm small explanatory text readable and no clipping/collision. No new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-GradCheck/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s11_vcurve.py",
+          "capture_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+          "packaging_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Memory",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 14,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "f9913a67e199b2c67668f90948f4191d4cddb29c1f2e47cd591445e0003c0509",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All14native1080endpoints inspected. Activation-liveness counter/definition, checkpoint pattern, storage/work derivation, logarithmic storage/overhead versus total-work historical cards and actual logical-count/evaluation tables fit. Three native originals confirm dense cards, minimum-span markers, longer-chain table and logical-memory exclusions readable. No new concrete endpoint defect; recomputation/release animation remains separate."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Memory/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s12_memory.py",
+          "capture_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+          "packaging_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Newton",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 11,
+        "pages_viewed": 3,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "6de04ab206678ea0acee115766e155692f6ef0aff5194e17803a506c950ed67b",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "Fixed Hessian label, bowl/saddle eigenvalues, positive-definite prerequisite, numerical reference/path, conservative 1/L step, distinct GD2362 objective-gap versus Newton4 gradient-norm stopping, log floor counts and iteration+1 axes all readable. No new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Newton/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s13_newton.py",
+          "capture_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+          "packaging_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-HVP",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 10,
+        "pages_viewed": 3,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "983f159b0f111624e3b6b535cfba72920f1a56ca532bd896dbce021d23995ee8",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "Definition/constant-vector prerequisite and history card fit. Measured finite-difference error, signed dominant-magnitude eigenvalue target and relative error, display clipping counters, training cohort, normalized signed-log spectrum and relative negative/near-zero/high-positive thresholds all readable. New Chinese nested captions fit. No new concrete endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-HVP/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s14_hvp.py",
+          "capture_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+          "packaging_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Quadratic",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 16,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "132e3d49808b9a75a11b9ebb1e4fefec6279db04928bfad73d8e5d1a5f439b7c",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "minor-visual",
+          "details": "Positive-definite assumption, norm-error factor definition, contraction formulas, actual gradient/momentum/Newton path endpoints, condition-number measurements and censored-run legend, saddle escape thresholds/counts and zero-start qualifier readable. Minor open contour seams preserved in native frame005; no data mutation."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Quadratic/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s15_quadratic.py",
+          "capture_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+          "packaging_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Lagrange",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 17,
+        "pages_viewed": 5,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "eb5ef576a222865744cdd1ee231952c4a4800a45d2905cc6aad699816b8cf505",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "minor-visual",
+          "details": "Constraint circle, gradient arrows, tangent derivative readout, regularity and necessary-not-sufficient qualifications, numerical candidate/residual/solver status, maximum entropy derivation/probability bars, KL objective and penalty-versus-inverse-temperature qualifier all readable. Minor contour seams remain visible; no clipping found."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Lagrange/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s16_lagrange.py",
+          "capture_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+          "packaging_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-KKT",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 13,
+        "pages_viewed": 4,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "d998d8f124afa5e180ae1b071012e765f2e6299340d5832c37620e391557a58d",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "Constraint qualification theorem, schematic inactive/active wall, duality assumptions, finite-grid non-certified bound disclosure, SVM primal/dual/free-intercept equality, actual solver residuals and support-multiplier rings/counts all readable. Chinese line wrap can isolate punctuation, but no lost text or ink overlap. No blocking endpoint defect."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-KKT/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s17_kkt.py",
+          "capture_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+          "packaging_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Implicit",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 11,
+        "pages_viewed": 3,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "8decdd9d2fd5c74d54b4201e3d3c891ea8378e38a5022fe67d90c03a1e3f99bc",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "Fixed-point diagram and invertibility prerequisite, adjoint solve, iteration residual/cap and fitted-factor labels, activation-history versus retained-workspace qualifier, state dimension12 versus181parameters, full training/fit-grid convergence counts and loss-floor exclusions readable. No clipping or collision found."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Implicit/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s18_implicit.py",
+          "capture_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+          "packaging_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "case": "zh-Outro",
+      "capture_status": "passed",
+      "wrapper_returncode": 0,
+      "warnings": [],
+      "coverage": {
+        "endpoint_frames_viewed": 5,
+        "pages_viewed": 2,
+        "native_followups_viewed": 3
+      },
+      "result_sha256": "90e872c9083afaed8e718e9ea6e4339c419fa97952c5c1c25ad0199627a732eb",
+      "fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
+      "findings": [
+        {
+          "severity": "none",
+          "details": "All eight recap tiles/threshold labels and display-range footer, six later-part cross references, six complete problem statements, illustrative random walks, references and credits readable. Small bibliography text remains intentionally dense; critical original viewed. No lost text or clipping found."
+        }
+      ],
+      "direct_sources_stable_during_capture": true,
+      "ledger": "cases/zh-Outro/review.json.gz",
+      "source_current_at_packaging": [
+        {
+          "path": "videos/ai/ai4/s19_outro.py",
+          "capture_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+          "packaging_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/common.py",
+          "capture_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "packaging_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai4/zh_lines.py",
+          "capture_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "packaging_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+          "matches": true
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "capture_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "packaging_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+          "matches": true
+        },
+        {
+          "path": "/workspace/runtime/qa_production_endpoint.py",
+          "capture_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "packaging_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+          "matches": true
+        },
+        {
+          "path": "tools/qa_series.py",
+          "capture_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "packaging_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "matches": true
+        }
+      ]
+    }
+  ],
+  "accepted_warning": "FP8 E4M3FN is an explicitly reviewed standard format identifier; unchanged untranslated warning retained in both Floats cases.",
+  "provenance_warning": "ENLibrary original source-changed-during-render aggregate warning retained, despite direct tracked source-before/after equality. No rerender solely to erase warning.",
+  "resource_guard": "Each capture serial nice10, numeric threads1. Disk>=512MiB and availableRAM>=512MiB checked before cases after Hook. Hook EN/ZH had RAM guard; disk guard was added after parent clarification and was not retroactively claimed.",
+  "remaining_visual_finding": "Minor open-contour seams in Gradient, Quadratic and Lagrange; root notified; no source edits by this reviewer.",
+  "source_blobs": [
+    {
+      "original_path": "videos/ai/ai4/s01_hook.py",
+      "sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955"
+    },
+    {
+      "original_path": "videos/ai/ai4/common.py",
+      "sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041"
+    },
+    {
+      "original_path": "videos/ai/ai4/zh_lines.py",
+      "sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d"
+    },
+    {
+      "original_path": "videos/ai/ai_text_zh.json",
+      "sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182"
+    },
+    {
+      "original_path": "/workspace/runtime/qa_production_endpoint.py",
+      "sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d"
+    },
+    {
+      "original_path": "tools/qa_series.py",
+      "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+    },
+    {
+      "original_path": "videos/ai/ai4/s02_derivative.py",
+      "sha256": "b072470cd31ea9009eb3f663c8db03e73705cacea4c86dfad83b367df880ecec"
+    },
+    {
+      "original_path": "videos/ai/ai4/s03_gradient.py",
+      "sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830"
+    },
+    {
+      "original_path": "videos/ai/ai4/s04_jacobian.py",
+      "sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783"
+    },
+    {
+      "original_path": "videos/ai/ai4/s05_layers.py",
+      "sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc"
+    },
+    {
+      "original_path": "videos/ai/ai4/s06_modes.py",
+      "sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0"
+    },
+    {
+      "original_path": "videos/ai/ai4/s08_library.py",
+      "sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9"
+    },
+    {
+      "original_path": "videos/ai/ai4/s09_train.py",
+      "sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021"
+    },
+    {
+      "original_path": "videos/ai/ai4/s10_floats.py",
+      "sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4"
+    },
+    {
+      "original_path": "videos/ai/ai4/s11_vcurve.py",
+      "sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8"
+    },
+    {
+      "original_path": "videos/ai/ai4/s12_memory.py",
+      "sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4"
+    },
+    {
+      "original_path": "videos/ai/ai4/s13_newton.py",
+      "sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19"
+    },
+    {
+      "original_path": "videos/ai/ai4/s14_hvp.py",
+      "sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb"
+    },
+    {
+      "original_path": "videos/ai/ai4/s15_quadratic.py",
+      "sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b"
+    },
+    {
+      "original_path": "videos/ai/ai4/s16_lagrange.py",
+      "sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee"
+    },
+    {
+      "original_path": "videos/ai/ai4/s17_kkt.py",
+      "sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26"
+    },
+    {
+      "original_path": "videos/ai/ai4/s18_implicit.py",
+      "sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181"
+    },
+    {
+      "original_path": "videos/ai/ai4/s19_outro.py",
+      "sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765"
+    },
+    {
+      "original_path": "videos/ai/ai4/s07_backprop.py",
+      "sha256": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+      "authenticated_copy": "/workspace/runtime/ai4-backprop-ladder-motion-repair/s07_backprop.before.py",
+      "note": "Exact pre-repair source supplied by owning scene reviewer; matches both capture receipts."
+    }
+  ],
+  "current_source_limit": "EN/ZH Backprop were captured/reviewed under source59568748 before later source019a5a1e. Current revised Backprop native1080 appearance remains unverified by this package. Captured source stable before/after; preserve this distinction."
+}

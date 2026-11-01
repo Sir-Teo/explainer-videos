@@ -946,9 +946,27 @@
         "scope": "Disk observation, not proof of historic worker import memory."
       },
       "resolved_contour_lead": {
-        "resolution": "Expected clipping at finite x±4/y±3 display window; actual segment graph has zero interior open endpoints. No source fix needed.",
+        "resolution": "Expected clipping at finite x\u00b14/y\u00b13 display window; actual segment graph has zero interior open endpoints. No source fix needed.",
         "proof": "/workspace/runtime/ai4-gradient-motion-review/contour-seam-diagnosis.json",
         "optional_polish": "Wider local viewport considered, not adopted in this source batch. Shared exact-zero synthetic issue is separate and deferred."
+      },
+      "additional_actual_selected_motion_review": {
+        "proof": "/workspace/runtime/ai4-gradient-motion-review/review.json",
+        "proof_sha256": "3c92e42e39962f70e5f9f322ac41251374bb9a86a6e46571b19bc30624df1d3a",
+        "scope": "All selected-time images; not continuous playback/listening/native1080 motion",
+        "selected_times": 475,
+        "exact_unique_pngs_actually_viewed": 412,
+        "actual_native_followups": 6,
+        "movie_sha256": "cb00f62a7661cac38148d6682ce7d76e1bffcaf00afd292ec185e3922c8c8f63",
+        "raw_status": "needs-review",
+        "raw_warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "repository_packaged": true,
+        "repository_evidence": "docs/qa/evidence/ai4-gradient-motion-review/README.md",
+        "repository_manifest_sha256": "9cd1622fc4d4dca3977925a17ad34978e1f306a141ae456370385840ffa54bed"
       }
     },
     {
@@ -1138,9 +1156,27 @@
         "scope": "Disk observation, not proof of historic worker import memory."
       },
       "resolved_contour_lead": {
-        "resolution": "Expected clipping at finite x±4/y±3 display window; actual segment graph has zero interior open endpoints. No source fix needed.",
+        "resolution": "Expected clipping at finite x\u00b14/y\u00b13 display window; actual segment graph has zero interior open endpoints. No source fix needed.",
         "proof": "/workspace/runtime/ai4-gradient-motion-review/contour-seam-diagnosis.json",
         "optional_polish": "Wider local viewport considered, not adopted in this source batch. Shared exact-zero synthetic issue is separate and deferred."
+      },
+      "additional_actual_selected_motion_review": {
+        "proof": "/workspace/runtime/ai4-gradient-motion-review/review.json",
+        "proof_sha256": "3c92e42e39962f70e5f9f322ac41251374bb9a86a6e46571b19bc30624df1d3a",
+        "scope": "All selected-time images; not continuous playback/listening/native1080 motion",
+        "selected_times": 490,
+        "exact_unique_pngs_actually_viewed": 432,
+        "actual_native_followups": 6,
+        "movie_sha256": "59834d6e2b9f1d49f2b89053e14fa2366872482787a2a370a582f3a0f5d51645",
+        "raw_status": "needs-review",
+        "raw_warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "repository_packaged": true,
+        "repository_evidence": "docs/qa/evidence/ai4-gradient-motion-review/README.md",
+        "repository_manifest_sha256": "9cd1622fc4d4dca3977925a17ad34978e1f306a141ae456370385840ffa54bed"
       }
     },
     {

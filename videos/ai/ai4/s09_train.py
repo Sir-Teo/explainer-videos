@@ -120,9 +120,9 @@ class Train(VoiceoverScene):
         ) as vo:
             step(0)
             vo.wait_until("a")
-            step(1)
+            step(1, transform=False)
             vo.wait_until("b")
-            step(2)
+            step(2, transform=False)
             vo.wait_until("c")
             self.play(FadeIn(heat), FadeIn(hcap), FadeIn(pairs), FadeIn(chk))
         self.wait(0.3)

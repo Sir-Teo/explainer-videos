@@ -1,0 +1,2269 @@
+{
+  "created_utc": "2026-11-01T00:34:26.880439+00:00",
+  "scope": "Bounded fresh bilingual Quadratic regression evidence, separate from originalall10baselinereports; no video/rawcache bundles.",
+  "original_copy_map": [
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/summary.json",
+      "original_sha256": "9a6e7a630531be1cdc02a2b99cec5c24c4c9d7b3f6e598323185c1ab72b6f234",
+      "package_path": "reports/summary.json.gz",
+      "packaged_sha256": "c2c5595e2a3942ebc47db9b6ee61bc49a7a652ee4f9c8b78075a84735aece002",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/endpoint-comparison.json",
+      "original_sha256": "efde34f1bddb12f57fe010d62254cfef3a551e356a09c86da771f2ce12465567",
+      "package_path": "reports/endpoint-comparison.json.gz",
+      "packaged_sha256": "b9b6c15b4bdee29d331ac0d7dc821ae5594fa794cf7e8ba4b97ab1c9109b2466",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/endpoint-pixel-localization.json",
+      "original_sha256": "2a532bcbfbd5eb623823ab577a71cc5c55b220fb9b964b001ca1d6bc5ab77280",
+      "package_path": "reports/endpoint-pixel-localization.json.gz",
+      "packaged_sha256": "a576238f81ec1cb5808b91b612b3444e08831766502f626833b9128d221e56f8",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/endpoint-native-views.json",
+      "original_sha256": "30c83d09d1e37902a4ef1db89fd982026b9245b113e0193df9cd3e0fbd9116de",
+      "package_path": "reports/endpoint-native-views.json.gz",
+      "packaged_sha256": "d2090d51f18b7d5593180584ec3adae951a8c3684cff6df047071567489f0bce",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/pacing-choice.json",
+      "original_sha256": "b3dc8675c21ce62bb8329cc50d86b2fb1ce213a5e970b371499f8fdfe1dcdf67",
+      "package_path": "reports/pacing-choice.json.gz",
+      "packaged_sha256": "70a9aabc0f782830651650b739c7497c68e614d46fecf37d2b0b6fce9d6e2fe5",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en-review.json",
+      "original_sha256": "a885c6ff37fb2d1fd6d050e4e75494f65ea37dc39b91abb1fd5084139edadedb",
+      "package_path": "reports/en-review.json.gz",
+      "packaged_sha256": "4b4fa36d5278fedcecba741175cec09c5dca4c21d276a60b227b0a95c87e0368",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh-review.json",
+      "original_sha256": "a45968b4bb69a6ea7b3b69e03a8b4576112f75cbd0a3f354b43dc93820ae73f9",
+      "package_path": "reports/zh-review.json.gz",
+      "packaged_sha256": "210dc3559415eb79c42564f04b21dd533f4acad764b263427b6276c89be1b3b6",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en-native-plan.json",
+      "original_sha256": "30d5f4483d2191494d4a8b430d764a4de4a9cd8135856be1b02390c70775b232",
+      "package_path": "reports/en-native-plan.json.gz",
+      "packaged_sha256": "ae7474084937bbfed0cba1d23f7222e5d4cdb779fd30fa597c63d0f5d08be291",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh-review.md",
+      "original_sha256": "66d044d38f054ea080a57374f65c48f90bd6b8629c2e4f1eabcff331fe598522",
+      "package_path": "reports/zh-review.md",
+      "packaged_sha256": "66d044d38f054ea080a57374f65c48f90bd6b8629c2e4f1eabcff331fe598522",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/prepare_case.py",
+      "original_sha256": "b8528c33edebea95a5afa0d0c5ce5e97a03102cf323a1f59b492893579032d58",
+      "package_path": "scripts/prepare_case.py",
+      "packaged_sha256": "b8528c33edebea95a5afa0d0c5ce5e97a03102cf323a1f59b492893579032d58",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/compare_cohorts.py",
+      "original_sha256": "6779c8cdc076b29eca5c8551e88e194a7a5f39f2ddd7e78d33180b37a95c6025",
+      "package_path": "scripts/compare_cohorts.py",
+      "packaged_sha256": "6779c8cdc076b29eca5c8551e88e194a7a5f39f2ddd7e78d33180b37a95c6025",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/endpoint_compare.py",
+      "original_sha256": "19101ac3d3403a81f0e16e400dc5f5176b558d7914bd4069cd8b81d1383fc61c",
+      "package_path": "scripts/endpoint_compare.py",
+      "packaged_sha256": "19101ac3d3403a81f0e16e400dc5f5176b558d7914bd4069cd8b81d1383fc61c",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/check_endpoint_pixels.py",
+      "original_sha256": "65bb0f41c0c62d8294c872aa3fedf90c017dff02c8ef94c887ec83bc14e560ee",
+      "package_path": "scripts/check_endpoint_pixels.py",
+      "packaged_sha256": "65bb0f41c0c62d8294c872aa3fedf90c017dff02c8ef94c887ec83bc14e560ee",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/finalize.py",
+      "original_sha256": "c8e60d001cf71e1f80454c94c5334ef0dc3c244e0bf85a955c0c88149b1ae5ba",
+      "package_path": "scripts/finalize.py",
+      "packaged_sha256": "c8e60d001cf71e1f80454c94c5334ef0dc3c244e0bf85a955c0c88149b1ae5ba",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/freeze.json",
+      "original_sha256": "e2505ce1c1b9ecc0715f84a20631ea2425cbe5b870c37098eec3135c0566d15d",
+      "package_path": "en/records/freeze.json.gz",
+      "packaged_sha256": "3150931164ab02143c3712c7977fe5923d8fb8bce68984d500d4a17b7ea8cd03",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/original-result.json",
+      "original_sha256": "f11cc0912803603ba2a5d341af0c49bd656e76ee1dfb9370ef2424f571caa7af",
+      "package_path": "en/records/original-result.json.gz",
+      "packaged_sha256": "39e5b4b2e7acc6ed306ccf8762069c1e169b2e6fd5bea5d48e809443aa851594",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/audit/result.json",
+      "original_sha256": "24c62a0fe5716d6f63e62801e77ff459dc36ff9966539c6aa293f3c281cca3ca",
+      "package_path": "en/records/audit/result.json.gz",
+      "packaged_sha256": "d32f1673b88dfde96b305475d63cc4e30ac5f21712f2c8d9d2c22b7992da9632",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/review-plan.json",
+      "original_sha256": "b6e50cb13355c3448cfcb5c7a3a3a472d3e89de1f701d32ce8a5157f10e63327",
+      "package_path": "en/records/changed/review-plan.json.gz",
+      "packaged_sha256": "c4619fb25a413dde1ec0d07a06131a90cf2fd13e0d180ec57363789f351b5e8f",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/actual-views.json",
+      "original_sha256": "860c4f5d4332d0997472819aeac6a774a172cb666ee6f5a1575a3c23fa73950c",
+      "package_path": "en/records/actual-views.json.gz",
+      "packaged_sha256": "bb67cbc54d6e1c472868300344ba7f2f324ce89dd64589f3930eeb356c87a417",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/result.json",
+      "original_sha256": "b7d047c284d72da97d6abf6bd725dba9da7349a8f30370cb7a3e770539aa9e7f",
+      "package_path": "en/records/all-repair-spans/result.json.gz",
+      "packaged_sha256": "5d04a62f5bfe072c5e2e70b72d9cdcc3801e52615f861b78b94e2ab2b7451806",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/endpoints/result.json",
+      "original_sha256": "c5223c3998af4e893cedce9371300e485c6546af944de36d67f4cf6fc64f724c",
+      "package_path": "en/records/endpoints/result.json.gz",
+      "packaged_sha256": "a3fa181506051c1e9c01abf3dca75896c75621b029b0d6857c482770928c425d",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/original-render.log",
+      "original_sha256": "b27c403560c6e96d9577d6b450a94c5a2e7b640d16459ef438673ab3f16e1057",
+      "package_path": "en/records/original-render.log.gz",
+      "packaged_sha256": "6e342bfcc04c404545ec932740822a36c01ead38db56d0ee0f13b9d6baf25f16",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/audit.log",
+      "original_sha256": "aef32cfe4f2f7e23c880ab94dbff5a50ff1917d73c8b522ba01748922486d4a6",
+      "package_path": "en/records/audit.log.gz",
+      "packaged_sha256": "ac871aba25273c5577d8409ddac2000bf6c3a939665069b35e35073b290789f9",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/freeze.json",
+      "original_sha256": "464d71e431e432440ae22a9112b3b42623aa0348304ade9eb341ddf9d4fc84ab",
+      "package_path": "en/baseline-records/freeze.json.gz",
+      "packaged_sha256": "767f3592a04d3180a92d1d691524780e775b87eb72d5ba97eec11812d9d92860",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/original-result.json",
+      "original_sha256": "bf93e90ac5ba10d63158ada142efd0e564b04e91f44c1f67a2698a735d596566",
+      "package_path": "en/baseline-records/original-result.json.gz",
+      "packaged_sha256": "8c09c7979ee8d226277797b5fdf5de6b17897dbb2e1db09a39746af7e3d52007",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/actual-views.json",
+      "original_sha256": "52b2a518289751adfd15fc9de7f9e86db15e68a37c2b16072adca7883ef38f79",
+      "package_path": "en/baseline-records/actual-views.json.gz",
+      "packaged_sha256": "6ce0ab0ef5fb937d22ae77d59e34a166a1248509a5649246af75480d19b5dde3",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/unique/review-plan.json",
+      "original_sha256": "d451b74335ef5865e78e0e61cb50b161e7c52bdddcd816620d765fe228af0ebc",
+      "package_path": "en/baseline-records/unique/review-plan.json.gz",
+      "packaged_sha256": "51315f220321f66304f7a6d88c6e3fe6ebe90c19d2f639fc8a68bf8b55f9bd98",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-001.png",
+      "original_sha256": "8c5a33b9a229dfd8fdded116baa0579baab50bc1aa882a034e5dbac190022fb3",
+      "package_path": "en/sheets/changed/sheet-001.png",
+      "packaged_sha256": "8c5a33b9a229dfd8fdded116baa0579baab50bc1aa882a034e5dbac190022fb3",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-002.png",
+      "original_sha256": "7ed3463bbe9040debc894e6c3c8e0b826a7d8446d5cca17650e8c5f7bbe7c3f7",
+      "package_path": "en/sheets/changed/sheet-002.png",
+      "packaged_sha256": "7ed3463bbe9040debc894e6c3c8e0b826a7d8446d5cca17650e8c5f7bbe7c3f7",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-003.png",
+      "original_sha256": "4fa9efe5141fe696b8c7be6f9b0d50b97791b8f01b00b2514b7ffd593036d147",
+      "package_path": "en/sheets/changed/sheet-003.png",
+      "packaged_sha256": "4fa9efe5141fe696b8c7be6f9b0d50b97791b8f01b00b2514b7ffd593036d147",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-004.png",
+      "original_sha256": "21ea174823d45b5a8009cc2814a42d2df8043a9ab83ae72f6b335a6ca158a474",
+      "package_path": "en/sheets/changed/sheet-004.png",
+      "packaged_sha256": "21ea174823d45b5a8009cc2814a42d2df8043a9ab83ae72f6b335a6ca158a474",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-005.png",
+      "original_sha256": "f5e1875ce06dab041a21e8afbe17dacbf3e227c1a554a865008b524a6283d7c4",
+      "package_path": "en/sheets/changed/sheet-005.png",
+      "packaged_sha256": "f5e1875ce06dab041a21e8afbe17dacbf3e227c1a554a865008b524a6283d7c4",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-006.png",
+      "original_sha256": "644f367263b5967457723fc37a753769b41ca7a8fadbe8b8fe736d5daaa67cc3",
+      "package_path": "en/sheets/changed/sheet-006.png",
+      "packaged_sha256": "644f367263b5967457723fc37a753769b41ca7a8fadbe8b8fe736d5daaa67cc3",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-007.png",
+      "original_sha256": "755bf0ee53c6b2771d1ac974ae8049ab3c6ba2b11ad807cd308788482f1b9286",
+      "package_path": "en/sheets/changed/sheet-007.png",
+      "packaged_sha256": "755bf0ee53c6b2771d1ac974ae8049ab3c6ba2b11ad807cd308788482f1b9286",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-008.png",
+      "original_sha256": "c3217abba532b1f001292382b3fd240c4fabd7b8e31557f3d11efe5712fd3304",
+      "package_path": "en/sheets/changed/sheet-008.png",
+      "packaged_sha256": "c3217abba532b1f001292382b3fd240c4fabd7b8e31557f3d11efe5712fd3304",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-009.png",
+      "original_sha256": "cc2929f64b8bd42ce54eb9e3611c70dfafee141bebdaedeec9fdc09ebf0a75cf",
+      "package_path": "en/sheets/changed/sheet-009.png",
+      "packaged_sha256": "cc2929f64b8bd42ce54eb9e3611c70dfafee141bebdaedeec9fdc09ebf0a75cf",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-010.png",
+      "original_sha256": "b75e81d74e457d9785d0230cfd3bfd41aa59f175483e296a72a1bd07af302eeb",
+      "package_path": "en/sheets/changed/sheet-010.png",
+      "packaged_sha256": "b75e81d74e457d9785d0230cfd3bfd41aa59f175483e296a72a1bd07af302eeb",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-011.png",
+      "original_sha256": "cc60473cfb657216d27a5b3765a97ba87a246ec717c4da5a951e0a73ce7d81ae",
+      "package_path": "en/sheets/changed/sheet-011.png",
+      "packaged_sha256": "cc60473cfb657216d27a5b3765a97ba87a246ec717c4da5a951e0a73ce7d81ae",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-012.png",
+      "original_sha256": "94cc73033700db8c0b1b30563dd281f6e61ea8803ef0cb9cebb48c818ee81483",
+      "package_path": "en/sheets/changed/sheet-012.png",
+      "packaged_sha256": "94cc73033700db8c0b1b30563dd281f6e61ea8803ef0cb9cebb48c818ee81483",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-013.png",
+      "original_sha256": "1917366374b753d57b0c2d0b01a71597024466b8e871513280180a61cdc69f5a",
+      "package_path": "en/sheets/changed/sheet-013.png",
+      "packaged_sha256": "1917366374b753d57b0c2d0b01a71597024466b8e871513280180a61cdc69f5a",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-014.png",
+      "original_sha256": "62c09526e86b1ddaefc63786716a9a3784f8eb8516cb220b0eea782358a23568",
+      "package_path": "en/sheets/changed/sheet-014.png",
+      "packaged_sha256": "62c09526e86b1ddaefc63786716a9a3784f8eb8516cb220b0eea782358a23568",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-015.png",
+      "original_sha256": "b47ff8f720d0d445193775b19a060d3df30bc156b6c84ba492b33d689c1de055",
+      "package_path": "en/sheets/changed/sheet-015.png",
+      "packaged_sha256": "b47ff8f720d0d445193775b19a060d3df30bc156b6c84ba492b33d689c1de055",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-016.png",
+      "original_sha256": "1f34331c066de1dc19057adac25386c479509346373dabe59031eb3d7f262098",
+      "package_path": "en/sheets/changed/sheet-016.png",
+      "packaged_sha256": "1f34331c066de1dc19057adac25386c479509346373dabe59031eb3d7f262098",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/changed/sheet-017.png",
+      "original_sha256": "28fb9fd805df7532473b4d2d933dfeec37897ad934db99b61a17f18e934ae1ac",
+      "package_path": "en/sheets/changed/sheet-017.png",
+      "packaged_sha256": "28fb9fd805df7532473b4d2d933dfeec37897ad934db99b61a17f18e934ae1ac",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-001.png",
+      "original_sha256": "ef9399fcf5404ede170f21168f1f9769ef29dbce28898c866bbe40a5539127eb",
+      "package_path": "en/sheets/all-repair-spans/sheet-001.png",
+      "packaged_sha256": "ef9399fcf5404ede170f21168f1f9769ef29dbce28898c866bbe40a5539127eb",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-002.png",
+      "original_sha256": "3a5c74860db0ece4c1cfb81ba15e0df5f29746dea08c7a3aab6e26115bd6ef8f",
+      "package_path": "en/sheets/all-repair-spans/sheet-002.png",
+      "packaged_sha256": "3a5c74860db0ece4c1cfb81ba15e0df5f29746dea08c7a3aab6e26115bd6ef8f",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-003.png",
+      "original_sha256": "e6895f612b3718904b55a7d8df8e22b99fc6dbb6840b5bbbe47be0dbf3f189a8",
+      "package_path": "en/sheets/all-repair-spans/sheet-003.png",
+      "packaged_sha256": "e6895f612b3718904b55a7d8df8e22b99fc6dbb6840b5bbbe47be0dbf3f189a8",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-004.png",
+      "original_sha256": "74d2e43a2147d2c5fdc251fa5b0869dc07ae7b828385408dea987f5af5f3e4ef",
+      "package_path": "en/sheets/all-repair-spans/sheet-004.png",
+      "packaged_sha256": "74d2e43a2147d2c5fdc251fa5b0869dc07ae7b828385408dea987f5af5f3e4ef",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-005.png",
+      "original_sha256": "55e2cd345d398739c75022b36bd80943b518c39722537448866a8434ef776fba",
+      "package_path": "en/sheets/all-repair-spans/sheet-005.png",
+      "packaged_sha256": "55e2cd345d398739c75022b36bd80943b518c39722537448866a8434ef776fba",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-006.png",
+      "original_sha256": "8865a29e0deec99f54661540411777d2e51a0b47d0b5786ef3df5f77956ea6b0",
+      "package_path": "en/sheets/all-repair-spans/sheet-006.png",
+      "packaged_sha256": "8865a29e0deec99f54661540411777d2e51a0b47d0b5786ef3df5f77956ea6b0",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-007.png",
+      "original_sha256": "5b6a958261a76a1c362189e264c00a7e281903fb18780142bb9553644ae6b674",
+      "package_path": "en/sheets/all-repair-spans/sheet-007.png",
+      "packaged_sha256": "5b6a958261a76a1c362189e264c00a7e281903fb18780142bb9553644ae6b674",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-008.png",
+      "original_sha256": "467c2f0495f3251b39fdf871c05ba326a4fc0c595b08a3671e6b751c05865621",
+      "package_path": "en/sheets/all-repair-spans/sheet-008.png",
+      "packaged_sha256": "467c2f0495f3251b39fdf871c05ba326a4fc0c595b08a3671e6b751c05865621",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-009.png",
+      "original_sha256": "c72124d08176010b338a93542f8f6cc8abbd2ef38617897d512b9984a68fe84a",
+      "package_path": "en/sheets/all-repair-spans/sheet-009.png",
+      "packaged_sha256": "c72124d08176010b338a93542f8f6cc8abbd2ef38617897d512b9984a68fe84a",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-010.png",
+      "original_sha256": "db502eb75b8190d068092dc2060817f1572656b9329ce11622326691c75162f8",
+      "package_path": "en/sheets/all-repair-spans/sheet-010.png",
+      "packaged_sha256": "db502eb75b8190d068092dc2060817f1572656b9329ce11622326691c75162f8",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-011.png",
+      "original_sha256": "c56e358c203df762546fbdaa052a9386e521208f93d85addc05fbbc60e22e760",
+      "package_path": "en/sheets/all-repair-spans/sheet-011.png",
+      "packaged_sha256": "c56e358c203df762546fbdaa052a9386e521208f93d85addc05fbbc60e22e760",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-012.png",
+      "original_sha256": "d1bd3ab9d379fa5ba3fd4ee727635586ae0c73aa76af2a831137b2d660c1136a",
+      "package_path": "en/sheets/all-repair-spans/sheet-012.png",
+      "packaged_sha256": "d1bd3ab9d379fa5ba3fd4ee727635586ae0c73aa76af2a831137b2d660c1136a",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-013.png",
+      "original_sha256": "214372d98024b53ccfa3014313f58e8d9fafbfbbd9d1d4c4e297d3a9447dc1b7",
+      "package_path": "en/sheets/all-repair-spans/sheet-013.png",
+      "packaged_sha256": "214372d98024b53ccfa3014313f58e8d9fafbfbbd9d1d4c4e297d3a9447dc1b7",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-014.png",
+      "original_sha256": "da927132112cd32ea5795cf3039780a0c2e8f105f9efe19d9ab494dd59471bfd",
+      "package_path": "en/sheets/all-repair-spans/sheet-014.png",
+      "packaged_sha256": "da927132112cd32ea5795cf3039780a0c2e8f105f9efe19d9ab494dd59471bfd",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-015.png",
+      "original_sha256": "87b3cee802cdf49c055ff176c3aeff2a17cc8a1e5f04f07e85188cb7a171b70e",
+      "package_path": "en/sheets/all-repair-spans/sheet-015.png",
+      "packaged_sha256": "87b3cee802cdf49c055ff176c3aeff2a17cc8a1e5f04f07e85188cb7a171b70e",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-016.png",
+      "original_sha256": "4145c0ec6464e5b4c10e494f65da012a9f5a3aa6fe516ff0ef49aacfdc9e4a93",
+      "package_path": "en/sheets/all-repair-spans/sheet-016.png",
+      "packaged_sha256": "4145c0ec6464e5b4c10e494f65da012a9f5a3aa6fe516ff0ef49aacfdc9e4a93",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-017.png",
+      "original_sha256": "9c9a11924f99221c0287c52a45e3dc17493131715b944613dd91eebca3a7574b",
+      "package_path": "en/sheets/all-repair-spans/sheet-017.png",
+      "packaged_sha256": "9c9a11924f99221c0287c52a45e3dc17493131715b944613dd91eebca3a7574b",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-018.png",
+      "original_sha256": "e74555279d4b9dcea6eb0be245f45394b9642a4b98fbd983dd1594042bc7745f",
+      "package_path": "en/sheets/all-repair-spans/sheet-018.png",
+      "packaged_sha256": "e74555279d4b9dcea6eb0be245f45394b9642a4b98fbd983dd1594042bc7745f",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-019.png",
+      "original_sha256": "2d08b2e0675ee7e713f542c3e6271a5c443690621895cfa4c112f3c047963a40",
+      "package_path": "en/sheets/all-repair-spans/sheet-019.png",
+      "packaged_sha256": "2d08b2e0675ee7e713f542c3e6271a5c443690621895cfa4c112f3c047963a40",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-020.png",
+      "original_sha256": "eaf9f8091aeed784f69958b4ba74afe88fc3e47a8d07b2db33d7cbe9d128f129",
+      "package_path": "en/sheets/all-repair-spans/sheet-020.png",
+      "packaged_sha256": "eaf9f8091aeed784f69958b4ba74afe88fc3e47a8d07b2db33d7cbe9d128f129",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-021.png",
+      "original_sha256": "946aff58804411403eea5c644595f5c7f8b51a85f20b65e2ceb6831617c78a4b",
+      "package_path": "en/sheets/all-repair-spans/sheet-021.png",
+      "packaged_sha256": "946aff58804411403eea5c644595f5c7f8b51a85f20b65e2ceb6831617c78a4b",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-022.png",
+      "original_sha256": "5ad4ac7adfe771b0ddd57cee829442833435ec1bcad51faad31c856751ae79d1",
+      "package_path": "en/sheets/all-repair-spans/sheet-022.png",
+      "packaged_sha256": "5ad4ac7adfe771b0ddd57cee829442833435ec1bcad51faad31c856751ae79d1",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-023.png",
+      "original_sha256": "95e08a851d7894d9223b92a1d6426fd5c73828c007e3d71130a50492f559262a",
+      "package_path": "en/sheets/all-repair-spans/sheet-023.png",
+      "packaged_sha256": "95e08a851d7894d9223b92a1d6426fd5c73828c007e3d71130a50492f559262a",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-024.png",
+      "original_sha256": "a8e748a5322310e14d36c087bf5a7d9f680bf85da1372fc8fda39829c0e48623",
+      "package_path": "en/sheets/all-repair-spans/sheet-024.png",
+      "packaged_sha256": "a8e748a5322310e14d36c087bf5a7d9f680bf85da1372fc8fda39829c0e48623",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-025.png",
+      "original_sha256": "b41a6659c974d2359ae68565d88ef116b1642dbd222ccc68294475857ea7218c",
+      "package_path": "en/sheets/all-repair-spans/sheet-025.png",
+      "packaged_sha256": "b41a6659c974d2359ae68565d88ef116b1642dbd222ccc68294475857ea7218c",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-026.png",
+      "original_sha256": "8c4998cb3e42c689f64322a1eaaf637173a14ed95ffc41933fc2a3017a7fb564",
+      "package_path": "en/sheets/all-repair-spans/sheet-026.png",
+      "packaged_sha256": "8c4998cb3e42c689f64322a1eaaf637173a14ed95ffc41933fc2a3017a7fb564",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-027.png",
+      "original_sha256": "24248937b1acd00ec1fc12f14e6d96e2b55f5fe6e607061a6f160990527b6f1e",
+      "package_path": "en/sheets/all-repair-spans/sheet-027.png",
+      "packaged_sha256": "24248937b1acd00ec1fc12f14e6d96e2b55f5fe6e607061a6f160990527b6f1e",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-028.png",
+      "original_sha256": "62940b6d097f7ae8887df21aab48552650d852eec5207927371add8a15c9178c",
+      "package_path": "en/sheets/all-repair-spans/sheet-028.png",
+      "packaged_sha256": "62940b6d097f7ae8887df21aab48552650d852eec5207927371add8a15c9178c",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/sheet-029.png",
+      "original_sha256": "7e1b83af85e8c0c3f31e7743857b311b7570dd070cd2356a48f00bb61ff57e80",
+      "package_path": "en/sheets/all-repair-spans/sheet-029.png",
+      "packaged_sha256": "7e1b83af85e8c0c3f31e7743857b311b7570dd070cd2356a48f00bb61ff57e80",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-endpoint-review/en/Quadratic/005_00056.4s.png",
+      "original_sha256": "b9e8120961b3051206bbf78d30d41a593b702e24eac9d1793197f3923ad98533",
+      "package_path": "en/native/000-005_00056.4s.png",
+      "packaged_sha256": "b9e8120961b3051206bbf78d30d41a593b702e24eac9d1793197f3923ad98533",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/endpoints/005_00056.4s.png",
+      "original_sha256": "7665e1c5586f5deacfc63661ebe7546032b780799f4b9d5c4699fa1391025f82",
+      "package_path": "en/native/001-005_00056.4s.png",
+      "packaged_sha256": "7665e1c5586f5deacfc63661ebe7546032b780799f4b9d5c4699fa1391025f82",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/frames/0000226_000015.066s.png",
+      "original_sha256": "43bf831c9591190f66899e5b2a42b63203a0a897ae30e829b72e47de73b40f8f",
+      "package_path": "en/native/002-0000226_000015.066s.png",
+      "packaged_sha256": "43bf831c9591190f66899e5b2a42b63203a0a897ae30e829b72e47de73b40f8f",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/frames/0000358_000023.866s.png",
+      "original_sha256": "fc491e38980f980afa6dbcd2caaa9e628443eaee6364e8393837b7312fe660b1",
+      "package_path": "en/native/003-0000358_000023.866s.png",
+      "packaged_sha256": "fc491e38980f980afa6dbcd2caaa9e628443eaee6364e8393837b7312fe660b1",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/frames/0000497_000033.133s.png",
+      "original_sha256": "b012f6c24ff6ef6da79fc61472281c3b07d7bcd77385f44664c0bb370c9f6b6f",
+      "package_path": "en/native/004-0000497_000033.133s.png",
+      "packaged_sha256": "b012f6c24ff6ef6da79fc61472281c3b07d7bcd77385f44664c0bb370c9f6b6f",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/frames/0000947_000063.133s.png",
+      "original_sha256": "e9b4ef685afce79e7b7e60e3d46af402de5a9e2748f28277d0326a61abae86ec",
+      "package_path": "en/native/005-0000947_000063.133s.png",
+      "packaged_sha256": "e9b4ef685afce79e7b7e60e3d46af402de5a9e2748f28277d0326a61abae86ec",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/frames/0000962_000064.133s.png",
+      "original_sha256": "c23ca0801282efb1af5ed1a72bae08442762e2f0910381e0e56ded72e4815259",
+      "package_path": "en/native/006-0000962_000064.133s.png",
+      "packaged_sha256": "c23ca0801282efb1af5ed1a72bae08442762e2f0910381e0e56ded72e4815259",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/frames/0001204_000080.266s.png",
+      "original_sha256": "51a7c305888a05387563d93f657f13e3b0efdbf37ae558f25a2100a444c46ff2",
+      "package_path": "en/native/007-0001204_000080.266s.png",
+      "packaged_sha256": "51a7c305888a05387563d93f657f13e3b0efdbf37ae558f25a2100a444c46ff2",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/frames/0001214_000080.933s.png",
+      "original_sha256": "b4792c4f8fe37a1716522095180af2a0ee4a51c6cbeddccf4712ddfc1b0a05ce",
+      "package_path": "en/native/008-0001214_000080.933s.png",
+      "packaged_sha256": "b4792c4f8fe37a1716522095180af2a0ee4a51c6cbeddccf4712ddfc1b0a05ce",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/frames/0001342_000089.466s.png",
+      "original_sha256": "09f7f764918d1d7849ebee82a761caaeb20e355404696ea4bbed0e042c4c7134",
+      "package_path": "en/native/009-0001342_000089.466s.png",
+      "packaged_sha256": "09f7f764918d1d7849ebee82a761caaeb20e355404696ea4bbed0e042c4c7134",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/all-repair-spans/frames/0001350_000089.999s.png",
+      "original_sha256": "926142625884535e76ace46d06a492ebf62560463153c45c285f97194597476d",
+      "package_path": "en/native/010-0001350_000089.999s.png",
+      "packaged_sha256": "926142625884535e76ace46d06a492ebf62560463153c45c285f97194597476d",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/endpoints/005_00056.4s.png",
+      "original_sha256": "7665e1c5586f5deacfc63661ebe7546032b780799f4b9d5c4699fa1391025f82",
+      "package_path": "en/native-endpoints/005-005_00056.4s.png",
+      "packaged_sha256": "7665e1c5586f5deacfc63661ebe7546032b780799f4b9d5c4699fa1391025f82",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/endpoints/006_00066.5s.png",
+      "original_sha256": "f037d15d0ce91fe31e6f6ae75ae65791f10d0fcfc9b484a3ab8e7a0c34b31c27",
+      "package_path": "en/native-endpoints/006-006_00066.5s.png",
+      "packaged_sha256": "f037d15d0ce91fe31e6f6ae75ae65791f10d0fcfc9b484a3ab8e7a0c34b31c27",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/endpoints/007_00082.6s.png",
+      "original_sha256": "0ec16b6352f973c8dac5796111154edb157580e1018f352c864d906c42eff139",
+      "package_path": "en/native-endpoints/007-007_00082.6s.png",
+      "packaged_sha256": "0ec16b6352f973c8dac5796111154edb157580e1018f352c864d906c42eff139",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/endpoints/008_00090.2s.png",
+      "original_sha256": "6dbbef7e5a9ca9d120aaa8b723b152c0cb98be5bf28b8d311a40df7629bb2908",
+      "package_path": "en/native-endpoints/008-008_00090.2s.png",
+      "packaged_sha256": "6dbbef7e5a9ca9d120aaa8b723b152c0cb98be5bf28b8d311a40df7629bb2908",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/row-reveals/frames/0000226_000015.066s.png",
+      "original_sha256": "d2686bed1a8771d0c0fdb4c21cb9ca4ffd128a0f3f928d18ef4d2d88159f6158",
+      "package_path": "en/before-samples/0000226_000015.066s.png",
+      "packaged_sha256": "d2686bed1a8771d0c0fdb4c21cb9ca4ffd128a0f3f928d18ef4d2d88159f6158",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/row-reveals/frames/0000358_000023.866s.png",
+      "original_sha256": "4e8ad05450beb9bd0632f0ff90bc556fb21b9fa141a5431860b81ebdc0b62405",
+      "package_path": "en/before-samples/0000358_000023.866s.png",
+      "packaged_sha256": "4e8ad05450beb9bd0632f0ff90bc556fb21b9fa141a5431860b81ebdc0b62405",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/audit/frames/0000947_000063.133s.png",
+      "original_sha256": "906188399ccab2cdf652394c467d21ac416141762b49f28c17e7fd1b79d8b9ab",
+      "package_path": "en/before-samples/0000947_000063.133s.png",
+      "packaged_sha256": "906188399ccab2cdf652394c467d21ac416141762b49f28c17e7fd1b79d8b9ab",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/audit/frames/0000962_000064.133s.png",
+      "original_sha256": "a45c209429dc0dedb084085c9ca0ed2b1cf02f44966412b30f4d7db83b51a5cd",
+      "package_path": "en/before-samples/0000962_000064.133s.png",
+      "packaged_sha256": "a45c209429dc0dedb084085c9ca0ed2b1cf02f44966412b30f4d7db83b51a5cd",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/freeze.json",
+      "original_sha256": "212d5692839035b38ae2dbb288a5d3c9df8811c74274115b7fc1d163da8a9eb3",
+      "package_path": "zh/records/freeze.json.gz",
+      "packaged_sha256": "8ab89e86702ddc76960af2b2cd88fc8c0d0b8eadc0a90f5ed5411a2e951778ae",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/original-result.json",
+      "original_sha256": "ce3079498c966b9073109310306d8f1399bc1f507fa12308ab33238d31523f85",
+      "package_path": "zh/records/original-result.json.gz",
+      "packaged_sha256": "c1a404d9a02327555b7f6c462241d8000ac68c0188171d87caddbf31ff615f55",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/audit/result.json",
+      "original_sha256": "c681b2cf835db924aa6927d0752a46fdc4c6265657bad28f47fac1a1b9922e87",
+      "package_path": "zh/records/audit/result.json.gz",
+      "packaged_sha256": "2d81c8195f10787bb50d0981c0a9a5b955e53857d446d1bba804525b6004ed12",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/review-plan.json",
+      "original_sha256": "ca24e3dd422095eae827c23b2b9bafe17d1cffedc4e7379e8f53c2ac027da6c8",
+      "package_path": "zh/records/changed/review-plan.json.gz",
+      "packaged_sha256": "5fc90845a45b4457d036f4412ffa268dde943253f5dc8c2dedd6603474e52f0c",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/actual-views.json",
+      "original_sha256": "5bb45adb2f5835ab47afa7a72cfb2479910face25e8002c5d69d164d1b1ac0b8",
+      "package_path": "zh/records/actual-views.json.gz",
+      "packaged_sha256": "67ba921d5a9aa4457c2e6465686552ae0fac34cf408f1b802b26ec03e3bdbab6",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/result.json",
+      "original_sha256": "90eab8ad88e67a4bfcba6a10fb3122fad9511a6e9f19ff5737d2c9fd49635968",
+      "package_path": "zh/records/encoded-regression/result.json.gz",
+      "packaged_sha256": "c4aa3430ad20d0afb9e940174fd3b5d01f918849fcdef7afb0788687fc45781f",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/endpoints/result.json",
+      "original_sha256": "15999e22ce9c6d3c8b74e05a4a60cec3b27168f9e52c8a4bbc5a9c027a7ac51b",
+      "package_path": "zh/records/endpoints/result.json.gz",
+      "packaged_sha256": "185456f58d165eeda43f80e19ea192561bc16a44740363a68e9bd66aae159812",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/original-render.log",
+      "original_sha256": "c3730cedb49adcd1bf7665c5edf8663b58b08c88a3c9331c600b2af01fd2fe45",
+      "package_path": "zh/records/original-render.log.gz",
+      "packaged_sha256": "c0fb8436f71d5633fc4b97ecf0f4190f42afd3ad3f1d03b517bef07f7aff13b9",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/audit.log",
+      "original_sha256": "9e82d0cf9c757229c58c6e998500a8832b77d330ee1779b6cd9be38b90b36b06",
+      "package_path": "zh/records/audit.log.gz",
+      "packaged_sha256": "cc6840f38d101c1ea5b22948a9e57694a155599c7e8ef0cd1886efe8ba76965d",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/freeze.json",
+      "original_sha256": "91dc72408650a32dacf3057c31abcc35ac10bd6a0201c15dc095cb11cdab4de3",
+      "package_path": "zh/baseline-records/freeze.json.gz",
+      "packaged_sha256": "769e4fecb23279341addde44696615ed71a0bff09437c71b5f762d05be90cb46",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/original-result.json",
+      "original_sha256": "a73674d688c832464be0cff20f0b75c63e8237d4453da972321d9d22452c5348",
+      "package_path": "zh/baseline-records/original-result.json.gz",
+      "packaged_sha256": "ee2a2ef7cf953e5477bef62f7ffc9a248fb649acdbec928a98e1a95758841c51",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/actual-views.json",
+      "original_sha256": "ef75f600fef5f0150f35427c1a50603a2e914a4b7fb8b82f70241616e05f40e7",
+      "package_path": "zh/baseline-records/actual-views.json.gz",
+      "packaged_sha256": "e532390c5c6ffab9bc5d0ff7b70e73a8d7dc3b2e05b23fd29e28bd1bdbfa5c3c",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/unique/review-plan.json",
+      "original_sha256": "37816e00c9dfb424833eafd13d0449fd45829d6a97b02fa2f23a0dd606993fa9",
+      "package_path": "zh/baseline-records/unique/review-plan.json.gz",
+      "packaged_sha256": "43391f5c09d9ab47a0fe517eea55c6674a57814d4cdbf40ab6a2f6c44d722295",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-001.png",
+      "original_sha256": "88cb2aedcd1c4d16ab07a384932926322b539be06f4f7811bf336ec62525ac8e",
+      "package_path": "zh/sheets/changed/sheet-001.png",
+      "packaged_sha256": "88cb2aedcd1c4d16ab07a384932926322b539be06f4f7811bf336ec62525ac8e",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-002.png",
+      "original_sha256": "5c97143ff42569b7d95b9964bd8cced02316eef33af82016bdd8185a00333552",
+      "package_path": "zh/sheets/changed/sheet-002.png",
+      "packaged_sha256": "5c97143ff42569b7d95b9964bd8cced02316eef33af82016bdd8185a00333552",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-003.png",
+      "original_sha256": "79e5bcfb01ed5845d91d6e120f82a0a641729b8dcf7dc6c1a109dd8476c1f0e6",
+      "package_path": "zh/sheets/changed/sheet-003.png",
+      "packaged_sha256": "79e5bcfb01ed5845d91d6e120f82a0a641729b8dcf7dc6c1a109dd8476c1f0e6",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-004.png",
+      "original_sha256": "4ea15c085aeaad7b42ef397fa3f3155d0c4aa9c35fc32bb354a03a7a11994f4f",
+      "package_path": "zh/sheets/changed/sheet-004.png",
+      "packaged_sha256": "4ea15c085aeaad7b42ef397fa3f3155d0c4aa9c35fc32bb354a03a7a11994f4f",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-005.png",
+      "original_sha256": "a15a081a1772ab2a272f9cde416bfd8fa0c09a71e37f06fd20985c5fbcd752f7",
+      "package_path": "zh/sheets/changed/sheet-005.png",
+      "packaged_sha256": "a15a081a1772ab2a272f9cde416bfd8fa0c09a71e37f06fd20985c5fbcd752f7",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-006.png",
+      "original_sha256": "2b85a1c7f389b6c31e45d42d110f3c07a766f306791f876a400de15ebdc6fb7d",
+      "package_path": "zh/sheets/changed/sheet-006.png",
+      "packaged_sha256": "2b85a1c7f389b6c31e45d42d110f3c07a766f306791f876a400de15ebdc6fb7d",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-007.png",
+      "original_sha256": "5b9c8eb1f2ff921192e6cb4af364abec44e1a62910c635190a0ada69fae60db0",
+      "package_path": "zh/sheets/changed/sheet-007.png",
+      "packaged_sha256": "5b9c8eb1f2ff921192e6cb4af364abec44e1a62910c635190a0ada69fae60db0",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-008.png",
+      "original_sha256": "baa6b7db049264558ca17f21e0d60e23180e2341a15baf8c9be96889e36cd68d",
+      "package_path": "zh/sheets/changed/sheet-008.png",
+      "packaged_sha256": "baa6b7db049264558ca17f21e0d60e23180e2341a15baf8c9be96889e36cd68d",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-009.png",
+      "original_sha256": "49c3913708a9cef0f5bf0d9f0eb205b08c9ae90f270a219a39079510a0206147",
+      "package_path": "zh/sheets/changed/sheet-009.png",
+      "packaged_sha256": "49c3913708a9cef0f5bf0d9f0eb205b08c9ae90f270a219a39079510a0206147",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-010.png",
+      "original_sha256": "2da52a15e00beeb63a2f8e291dacf80676d02e923c195bdd7eccba56542c54a7",
+      "package_path": "zh/sheets/changed/sheet-010.png",
+      "packaged_sha256": "2da52a15e00beeb63a2f8e291dacf80676d02e923c195bdd7eccba56542c54a7",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-011.png",
+      "original_sha256": "9b13c80a21ac2ba63dea55420bfec7be1562f28c440167f39b1a0bf493d8af41",
+      "package_path": "zh/sheets/changed/sheet-011.png",
+      "packaged_sha256": "9b13c80a21ac2ba63dea55420bfec7be1562f28c440167f39b1a0bf493d8af41",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-012.png",
+      "original_sha256": "9f9db01d74939cefcbccf62298a93041bb05e56e027889757e6e45dae790ae98",
+      "package_path": "zh/sheets/changed/sheet-012.png",
+      "packaged_sha256": "9f9db01d74939cefcbccf62298a93041bb05e56e027889757e6e45dae790ae98",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-013.png",
+      "original_sha256": "3716014725dab28967dfc72b742498bb085d24555e10e003e3750c1c0fde86e8",
+      "package_path": "zh/sheets/changed/sheet-013.png",
+      "packaged_sha256": "3716014725dab28967dfc72b742498bb085d24555e10e003e3750c1c0fde86e8",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-014.png",
+      "original_sha256": "d83ac21bebc7eb3f0b8af98d5e9d848079cea70427b13b265da72130e39585a3",
+      "package_path": "zh/sheets/changed/sheet-014.png",
+      "packaged_sha256": "d83ac21bebc7eb3f0b8af98d5e9d848079cea70427b13b265da72130e39585a3",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-015.png",
+      "original_sha256": "d34a0cce330f2160f36336aeed58543b8e61aef8a6986c73a9b47ba7c4e80212",
+      "package_path": "zh/sheets/changed/sheet-015.png",
+      "packaged_sha256": "d34a0cce330f2160f36336aeed58543b8e61aef8a6986c73a9b47ba7c4e80212",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-016.png",
+      "original_sha256": "ebbf49be2c7253d4040b1becc396cb47b30cb345b6d1e4dbc4f17efe6f4e2163",
+      "package_path": "zh/sheets/changed/sheet-016.png",
+      "packaged_sha256": "ebbf49be2c7253d4040b1becc396cb47b30cb345b6d1e4dbc4f17efe6f4e2163",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/changed/sheet-017.png",
+      "original_sha256": "4e930dadcd9179d0082d4c5b982eb03c2472a436f5ed23bdd6dff76f0333dadc",
+      "package_path": "zh/sheets/changed/sheet-017.png",
+      "packaged_sha256": "4e930dadcd9179d0082d4c5b982eb03c2472a436f5ed23bdd6dff76f0333dadc",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-001.png",
+      "original_sha256": "58b9658e589b63cacc69d42af38939ada7f7eeb32394e8fbf077510455313307",
+      "package_path": "zh/sheets/encoded-regression/sheet-001.png",
+      "packaged_sha256": "58b9658e589b63cacc69d42af38939ada7f7eeb32394e8fbf077510455313307",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-002.png",
+      "original_sha256": "230af6c607dc6fb153b8cab86e8cd88a18723347dd5da5fe915196ba54d83891",
+      "package_path": "zh/sheets/encoded-regression/sheet-002.png",
+      "packaged_sha256": "230af6c607dc6fb153b8cab86e8cd88a18723347dd5da5fe915196ba54d83891",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-003.png",
+      "original_sha256": "f78a7be5a1692373bd1741e4cd96e9ecce58bab8b4b548f94833b631eeedd682",
+      "package_path": "zh/sheets/encoded-regression/sheet-003.png",
+      "packaged_sha256": "f78a7be5a1692373bd1741e4cd96e9ecce58bab8b4b548f94833b631eeedd682",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-004.png",
+      "original_sha256": "e184af700943c2505c14de8bf88d4d4d35d16a4342909f67ff2188bef26f7ea1",
+      "package_path": "zh/sheets/encoded-regression/sheet-004.png",
+      "packaged_sha256": "e184af700943c2505c14de8bf88d4d4d35d16a4342909f67ff2188bef26f7ea1",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-005.png",
+      "original_sha256": "b52954f4248fc14d5cd366a94f18bb2b39d62bb2d168118b67737f929008acca",
+      "package_path": "zh/sheets/encoded-regression/sheet-005.png",
+      "packaged_sha256": "b52954f4248fc14d5cd366a94f18bb2b39d62bb2d168118b67737f929008acca",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-006.png",
+      "original_sha256": "658fc011512619bcbe31a09453376e11d436937728d195e78062e988e7f16df0",
+      "package_path": "zh/sheets/encoded-regression/sheet-006.png",
+      "packaged_sha256": "658fc011512619bcbe31a09453376e11d436937728d195e78062e988e7f16df0",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-007.png",
+      "original_sha256": "962461291abe1430e384dbcf5dec371bd45c064401a14bdd44d00210abf9fdb9",
+      "package_path": "zh/sheets/encoded-regression/sheet-007.png",
+      "packaged_sha256": "962461291abe1430e384dbcf5dec371bd45c064401a14bdd44d00210abf9fdb9",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-008.png",
+      "original_sha256": "7d6649a730294a6712256eb8a1cdb5e3867a3be33d14880ff891f6ff1f37adfd",
+      "package_path": "zh/sheets/encoded-regression/sheet-008.png",
+      "packaged_sha256": "7d6649a730294a6712256eb8a1cdb5e3867a3be33d14880ff891f6ff1f37adfd",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-009.png",
+      "original_sha256": "6700f8114eaa6fb4b96cf903dbd74c47ee4fc35f89c3e629f242d3ef899cb528",
+      "package_path": "zh/sheets/encoded-regression/sheet-009.png",
+      "packaged_sha256": "6700f8114eaa6fb4b96cf903dbd74c47ee4fc35f89c3e629f242d3ef899cb528",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-010.png",
+      "original_sha256": "1a22a77675855b0373ca26de97c1402acc41cb3d69bd1433870057805b93bc88",
+      "package_path": "zh/sheets/encoded-regression/sheet-010.png",
+      "packaged_sha256": "1a22a77675855b0373ca26de97c1402acc41cb3d69bd1433870057805b93bc88",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-011.png",
+      "original_sha256": "ef5698d7d9bd1d117b742f2ee871dc2b3062263a046931ebba3811348e1a44cb",
+      "package_path": "zh/sheets/encoded-regression/sheet-011.png",
+      "packaged_sha256": "ef5698d7d9bd1d117b742f2ee871dc2b3062263a046931ebba3811348e1a44cb",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-012.png",
+      "original_sha256": "d5fa622a77430170338bc205802403b851a009a823f831d375595749effe3227",
+      "package_path": "zh/sheets/encoded-regression/sheet-012.png",
+      "packaged_sha256": "d5fa622a77430170338bc205802403b851a009a823f831d375595749effe3227",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-013.png",
+      "original_sha256": "c0015bd4da9931ac9d189d2880bd2f89f0364e66175b544e663dbe9e88d0cc8e",
+      "package_path": "zh/sheets/encoded-regression/sheet-013.png",
+      "packaged_sha256": "c0015bd4da9931ac9d189d2880bd2f89f0364e66175b544e663dbe9e88d0cc8e",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-014.png",
+      "original_sha256": "5e0380f166bd3c653cc8c2214371995d57be486e6b0cb668d01b2b84f442f3b2",
+      "package_path": "zh/sheets/encoded-regression/sheet-014.png",
+      "packaged_sha256": "5e0380f166bd3c653cc8c2214371995d57be486e6b0cb668d01b2b84f442f3b2",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-015.png",
+      "original_sha256": "936810f616af1950ddb461b1c2a62fc3e9db72557aa31eed643f6b2eb44de9fb",
+      "package_path": "zh/sheets/encoded-regression/sheet-015.png",
+      "packaged_sha256": "936810f616af1950ddb461b1c2a62fc3e9db72557aa31eed643f6b2eb44de9fb",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-016.png",
+      "original_sha256": "16b16017bc4447f023d48b23ffd15ef363e71c8b95cdf9a036ff3928b74ce9aa",
+      "package_path": "zh/sheets/encoded-regression/sheet-016.png",
+      "packaged_sha256": "16b16017bc4447f023d48b23ffd15ef363e71c8b95cdf9a036ff3928b74ce9aa",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-017.png",
+      "original_sha256": "813c936d21ccd22e7370e27c9386472b1b569ffa3fab3a7613b02d220c683fd4",
+      "package_path": "zh/sheets/encoded-regression/sheet-017.png",
+      "packaged_sha256": "813c936d21ccd22e7370e27c9386472b1b569ffa3fab3a7613b02d220c683fd4",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-018.png",
+      "original_sha256": "f1d96fc99414dd148e50d97bcf94ea25c8268e7749dc0a9d47add7f10ce1f45b",
+      "package_path": "zh/sheets/encoded-regression/sheet-018.png",
+      "packaged_sha256": "f1d96fc99414dd148e50d97bcf94ea25c8268e7749dc0a9d47add7f10ce1f45b",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-019.png",
+      "original_sha256": "877ddfc8452fff7d550d8f9273e6144d4badca3a47d2f0a272a091caf433e0d8",
+      "package_path": "zh/sheets/encoded-regression/sheet-019.png",
+      "packaged_sha256": "877ddfc8452fff7d550d8f9273e6144d4badca3a47d2f0a272a091caf433e0d8",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-020.png",
+      "original_sha256": "043a766167b8a7c797a188086f20c7ec37b24fd52190af3c09ab6c085e2dc184",
+      "package_path": "zh/sheets/encoded-regression/sheet-020.png",
+      "packaged_sha256": "043a766167b8a7c797a188086f20c7ec37b24fd52190af3c09ab6c085e2dc184",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-021.png",
+      "original_sha256": "f11a67f0174c03f30283566dc91d9496e66dc57806970dc8b046f276877f00ab",
+      "package_path": "zh/sheets/encoded-regression/sheet-021.png",
+      "packaged_sha256": "f11a67f0174c03f30283566dc91d9496e66dc57806970dc8b046f276877f00ab",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-022.png",
+      "original_sha256": "3daa670c36e7a641fff0594d3ee2e02f019709db453107fe04a236dafead6abe",
+      "package_path": "zh/sheets/encoded-regression/sheet-022.png",
+      "packaged_sha256": "3daa670c36e7a641fff0594d3ee2e02f019709db453107fe04a236dafead6abe",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-023.png",
+      "original_sha256": "6eb3fe716be983c8cc4fcb63f141539da1b92dae99b9528dca6cd94f2be724dd",
+      "package_path": "zh/sheets/encoded-regression/sheet-023.png",
+      "packaged_sha256": "6eb3fe716be983c8cc4fcb63f141539da1b92dae99b9528dca6cd94f2be724dd",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-024.png",
+      "original_sha256": "36569ca36c245b67cffde2da55abfcd65551bff15d9d604998b21af0cf19481b",
+      "package_path": "zh/sheets/encoded-regression/sheet-024.png",
+      "packaged_sha256": "36569ca36c245b67cffde2da55abfcd65551bff15d9d604998b21af0cf19481b",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/sheet-025.png",
+      "original_sha256": "e5972ef48bc509e980ad0528b871b54d1bab40fee92c6b4f81bd14fbd036f25f",
+      "package_path": "zh/sheets/encoded-regression/sheet-025.png",
+      "packaged_sha256": "e5972ef48bc509e980ad0528b871b54d1bab40fee92c6b4f81bd14fbd036f25f",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/audit/frames/0000854_000056.933s.png",
+      "original_sha256": "1766bffe04294a0c02399c4463e83c1ed862c92cbd59e0652c1ce5c7d8ea5658",
+      "package_path": "zh/native/000-0000854_000056.933s.png",
+      "packaged_sha256": "1766bffe04294a0c02399c4463e83c1ed862c92cbd59e0652c1ce5c7d8ea5658",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/frames/0000899_000059.933s.png",
+      "original_sha256": "16dfd6053c00ae98b1a557096c3fb236c07e32fdeb9fa0e2db2c868e98252707",
+      "package_path": "zh/native/001-0000899_000059.933s.png",
+      "packaged_sha256": "16dfd6053c00ae98b1a557096c3fb236c07e32fdeb9fa0e2db2c868e98252707",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/frames/0000904_000060.266s.png",
+      "original_sha256": "1243e9380d37ce93167dd4ad0134c2bd5b4f32d706434c896145e621205d698e",
+      "package_path": "zh/native/002-0000904_000060.266s.png",
+      "packaged_sha256": "1243e9380d37ce93167dd4ad0134c2bd5b4f32d706434c896145e621205d698e",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/baseline-cohort-extra/frames/0000905_000060.333s.png",
+      "original_sha256": "62a7b93e16ca816f754808c1cdc1cc39df49d939968d7e1497c798ca3cdb1d1f",
+      "package_path": "zh/native/003-0000905_000060.333s.png",
+      "packaged_sha256": "62a7b93e16ca816f754808c1cdc1cc39df49d939968d7e1497c798ca3cdb1d1f",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/baseline-cohort-extra/frames/0000920_000061.333s.png",
+      "original_sha256": "304ef81bebb77083f6c327efdab51da368f015369f13cceaa25eaf401b192eae",
+      "package_path": "zh/native/004-0000920_000061.333s.png",
+      "packaged_sha256": "304ef81bebb77083f6c327efdab51da368f015369f13cceaa25eaf401b192eae",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/audit/frames/0000945_000062.999s.png",
+      "original_sha256": "8ad1c6a48b7b72cc9ad35f63337ad6d8979908d49577675b438a60a866bc28cb",
+      "package_path": "zh/native/005-0000945_000062.999s.png",
+      "packaged_sha256": "8ad1c6a48b7b72cc9ad35f63337ad6d8979908d49577675b438a60a866bc28cb",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/frames/0001118_000074.533s.png",
+      "original_sha256": "f92fe854ca3479f77f7fe44e8d845c63c752d6af645637f5875cbe2a01caa87b",
+      "package_path": "zh/native/006-0001118_000074.533s.png",
+      "packaged_sha256": "f92fe854ca3479f77f7fe44e8d845c63c752d6af645637f5875cbe2a01caa87b",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/frames/0001119_000074.599s.png",
+      "original_sha256": "fdf3ff32918055c611a62292acf720147627b1a819b0bb5c5a32f26255c6284b",
+      "package_path": "zh/native/007-0001119_000074.599s.png",
+      "packaged_sha256": "fdf3ff32918055c611a62292acf720147627b1a819b0bb5c5a32f26255c6284b",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/audit/frames/0001122_000074.799s.png",
+      "original_sha256": "ea6c29f419535872eb4410331df9daac6987f58a52858194829e47290b32a53b",
+      "package_path": "zh/native/008-0001122_000074.799s.png",
+      "packaged_sha256": "ea6c29f419535872eb4410331df9daac6987f58a52858194829e47290b32a53b",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/encoded-regression/frames/0001128_000075.199s.png",
+      "original_sha256": "000a2a3b2d267568f4be25a80fa078ab0ce9c5451478e93cb8d96ac23cb496ca",
+      "package_path": "zh/native/009-0001128_000075.199s.png",
+      "packaged_sha256": "000a2a3b2d267568f4be25a80fa078ab0ce9c5451478e93cb8d96ac23cb496ca",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/audit/frames/0001130_000075.333s.png",
+      "original_sha256": "c531ebf93f1fa13884abe3c57d8ba53149d622fa15a51c446d56bd16defa8f18",
+      "package_path": "zh/native/010-0001130_000075.333s.png",
+      "packaged_sha256": "c531ebf93f1fa13884abe3c57d8ba53149d622fa15a51c446d56bd16defa8f18",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/audit/frames/0001153_000076.866s.png",
+      "original_sha256": "927664cccac7ab207f916edf9057e2640af7377a2c8a9f185de62f6287a1946c",
+      "package_path": "zh/native/011-0001153_000076.866s.png",
+      "packaged_sha256": "927664cccac7ab207f916edf9057e2640af7377a2c8a9f185de62f6287a1946c",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/audit/frames/0001277_000085.133s.png",
+      "original_sha256": "bc0258f1fdce2c7249a6c2e8cd77a4dc50957137b6990abe509f7e717b5712f3",
+      "package_path": "zh/native/012-0001277_000085.133s.png",
+      "packaged_sha256": "bc0258f1fdce2c7249a6c2e8cd77a4dc50957137b6990abe509f7e717b5712f3",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/audit/frames/0001284_000085.599s.png",
+      "original_sha256": "4a2aa26b18d5ee2cc357f71c39499a08b8a3349a078f6a628cddebc29cddf187",
+      "package_path": "zh/native/013-0001284_000085.599s.png",
+      "packaged_sha256": "4a2aa26b18d5ee2cc357f71c39499a08b8a3349a078f6a628cddebc29cddf187",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/audit/frames/0001292_000086.133s.png",
+      "original_sha256": "1e555fca30600f48f193889832b81c4dfacf389fba601b978f7945ea4a02bb76",
+      "package_path": "zh/native/014-0001292_000086.133s.png",
+      "packaged_sha256": "1e555fca30600f48f193889832b81c4dfacf389fba601b978f7945ea4a02bb76",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/audit/frames/0000854_000056.933s.png",
+      "original_sha256": "ae374e5ee5a35d4517efac621db288fbabd2575a27e77df769defdf1de47f330",
+      "package_path": "zh/native/015-0000854_000056.933s.png",
+      "packaged_sha256": "ae374e5ee5a35d4517efac621db288fbabd2575a27e77df769defdf1de47f330",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/endpoints/005_00055.0s.png",
+      "original_sha256": "9d6e0d673c97e7fce016f52830f68e4d69ce646a0033500a46b0b6114ec9f53a",
+      "package_path": "zh/native-endpoints/005-005_00055.0s.png",
+      "packaged_sha256": "9d6e0d673c97e7fce016f52830f68e4d69ce646a0033500a46b0b6114ec9f53a",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/endpoints/006_00063.2s.png",
+      "original_sha256": "68dabfe7fe96170c0dfb684efa99ac03f8832f1a7db33a4c1f6c9293cfea0f07",
+      "package_path": "zh/native-endpoints/006-006_00063.2s.png",
+      "packaged_sha256": "68dabfe7fe96170c0dfb684efa99ac03f8832f1a7db33a4c1f6c9293cfea0f07",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/endpoints/007_00077.1s.png",
+      "original_sha256": "ef69306587736cbe82ad0bbde1e78302e1bc01183bbb1547112368f7deb7f05b",
+      "package_path": "zh/native-endpoints/007-007_00077.1s.png",
+      "packaged_sha256": "ef69306587736cbe82ad0bbde1e78302e1bc01183bbb1547112368f7deb7f05b",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/zh/Quadratic/endpoints/008_00086.4s.png",
+      "original_sha256": "e0d3aaa653a3b2838f967f8f14cb7b09ebb4430ed8c694bc10c26b00a3c75803",
+      "package_path": "zh/native-endpoints/008-008_00086.4s.png",
+      "packaged_sha256": "e0d3aaa653a3b2838f967f8f14cb7b09ebb4430ed8c694bc10c26b00a3c75803",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/source/tools/qa_motion.py",
+      "original_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "package_path": "source/current/tools/qa_motion.py.gz",
+      "packaged_sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/source/tools/qa_series.py",
+      "original_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "package_path": "source/current/tools/qa_series.py.gz",
+      "packaged_sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/source/videos/ai/ai_text_zh.json",
+      "original_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+      "package_path": "source/current/videos/ai/ai_text_zh.json.gz",
+      "packaged_sha256": "c96653d5e0263880d828cf48e287393ccd81edf56ba032bfbe37239b6390f445",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/source/videos/ai/ai4/manifest.py",
+      "original_sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+      "package_path": "source/current/videos/ai/ai4/manifest.py.gz",
+      "packaged_sha256": "e90cf2533c05781b93a0cac14f3bfbbfc9eca8205eacfb9468611dfea28e0c19",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/source/videos/ai/ai4/common.py",
+      "original_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+      "package_path": "source/current/videos/ai/ai4/common.py.gz",
+      "packaged_sha256": "87ef4a5b96e96f8b791a9b75d455d8f2f0743ee5ae430eca5f4cb94efc4934d9",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/source/videos/ai/ai4/s15_quadratic.py",
+      "original_sha256": "8b387c3a6f707b35b275bfb56a2daba1219707bd6e8c573bbf8ca2456390d68e",
+      "package_path": "source/current/videos/ai/ai4/s15_quadratic.py.gz",
+      "packaged_sha256": "1e389d386a7777395e66770934d5b186608d0dc24e46e5b68629283bd7810466",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/source/videos/ai/ai4/zh_lines.py",
+      "original_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+      "package_path": "source/current/videos/ai/ai4/zh_lines.py.gz",
+      "packaged_sha256": "e006af58d907e2fa89f6a5331321ef4c965d7ae4f88f79bc85d7beaf76af3b4b",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/source/explainer/ai/viz.py",
+      "original_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "package_path": "source/current/explainer/ai/viz.py.gz",
+      "packaged_sha256": "dde628602d8128cda334fa1a7eb6b8bb7204e835ecc14ae09d6a646b5111d5af",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-rendered-regression/en/Quadratic/source/explainer/analysis/__init__.py",
+      "original_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+      "package_path": "source/current/explainer/analysis/__init__.py.gz",
+      "packaged_sha256": "1092edb463e57cbc4bfae9d6151a690c440335551061f4310e48d633dc3ccf73",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-motion-repair/source-before.py",
+      "original_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+      "package_path": "source/before/s15_quadratic.py.gz",
+      "packaged_sha256": "629555abf88dabbf7ae47dfaac2780eeea13179c932514a6bf717401b9c881b2",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/shared-contour-exact-level-repair/viz-before.py",
+      "original_sha256": "68c7ea8f062a7c8d0e54ee94e819c09f1b8c882931babddd3a0b4c8cee61f5aa",
+      "package_path": "source/before/explainer-ai-viz.py.gz",
+      "packaged_sha256": "0e6fcd6a24324f3b8110b6d82ecf5564c4deaae75f30513391ca509310cf7949",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-motion-repair/source.patch",
+      "original_sha256": "007a722e938cf8087512d4bf117f8a626c3ffedccd33c8c014f268765b5f851e",
+      "package_path": "source/quadratic.patch.gz",
+      "packaged_sha256": "a7af84603326829a36d29943f2efea7f466a5b423ed2b52c48102aa5092a98bb",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/shared-contour-exact-level-repair/production.patch",
+      "original_sha256": "09837da501cc6981a61c7d2faad2b13d616916a891629ce1a15685384d26a634",
+      "package_path": "source/contour.patch.gz",
+      "packaged_sha256": "3003e25f8df4e1bbf8bbecbb85bcff0116654eb53adf42daa5cc33718bcc5ffe",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-motion-repair/freeze.json",
+      "original_sha256": "95ba3edc6ce53a8b3ac845253e1e6e694a9080f845532d9e9f749aa5a78dcbe9",
+      "package_path": "checks/quadratic-freeze.json.gz",
+      "packaged_sha256": "de15bc753bc987743188ec3fcf0c5b7848d8831dc440841650bfaa0302447c61",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-motion-repair/unit-tests.log",
+      "original_sha256": "4e81d60fc450b0bef30f205e52accffa5ac30fd71adfc268a18768984d503756",
+      "package_path": "checks/quadratic-unit-tests.log.gz",
+      "packaged_sha256": "73b52cdd93d635a3b7d3c9c9e159345045aa2c01204dc56414bf11c70bfa256a",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-motion-repair/actual-trajectory-check.json",
+      "original_sha256": "2c2336e1872f2c4eb7c72e2088f11134022ae8d187e02e51f2da5ea7a900fdce",
+      "package_path": "checks/quadratic-actual-trajectory-check.json.gz",
+      "packaged_sha256": "5a9c055342a316b5224a77b8cc13b65dce62e4f4873af60ee80388c44313d0c6",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-quadratic-motion-repair/check_actual_trajectories.py",
+      "original_sha256": "51751d471a9b17bb389c86a3e0a4da57022b7101fb0d1a25d6b3327081f2478f",
+      "package_path": "checks/quadratic-check_actual_trajectories.py.gz",
+      "packaged_sha256": "7960bb3c8ed23a1a8f7f9976733bb48f30ef822a3a1bf0dfd46decd21bd1c35c",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/shared-contour-exact-level-repair/source-freeze.json",
+      "original_sha256": "682291db6a73aeacabab80276ded0b6716640440affb3d04fd3f573cafc19f0d",
+      "package_path": "checks/contour-source-freeze.json.gz",
+      "packaged_sha256": "57758e7b888821466bd00cd9f8e8639fa0d76584867c8dedb073cfa4e9d12f33",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/shared-contour-exact-level-repair/actual-caller-comparison.json",
+      "original_sha256": "c71e878faee9a4907d2c99e219c3c178eb1f91dc33a8b5618129d8d9ad78e4aa",
+      "package_path": "checks/contour-actual-caller-comparison.json.gz",
+      "packaged_sha256": "2f80658bd58c9ebaa96500790486a5dca21a4df55b2fdb4a2940025ac7a2b37b",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/shared-contour-exact-level-repair/tests.log",
+      "original_sha256": "419feae9ce8e3f5d19060145c4bef7ae967892d8fa045a79fc73b32bc669b1bd",
+      "package_path": "checks/contour-tests.log.gz",
+      "packaged_sha256": "e0b6dc137eaf93daa3e3ab9bff0049e06537f2b87a7ef4f0a634072904cc4049",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/explainer-videos/tests/test_ai4_quadratic_motion.py",
+      "original_sha256": "82666a277d6c9d094f83c1d9016c68f38767a77040c00b761fc6855975b926c8",
+      "package_path": "checks/test_ai4_quadratic_motion.py",
+      "packaged_sha256": "82666a277d6c9d094f83c1d9016c68f38767a77040c00b761fc6855975b926c8",
+      "compression": null
+    }
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 4491,
+      "sha256": "c73618de31b8a0b5892f987f7dd56e730576f0340de335046f5d29198f509867"
+    },
+    {
+      "path": "checks/contour-actual-caller-comparison.json.gz",
+      "bytes": 3354,
+      "sha256": "2f80658bd58c9ebaa96500790486a5dca21a4df55b2fdb4a2940025ac7a2b37b"
+    },
+    {
+      "path": "checks/contour-source-freeze.json.gz",
+      "bytes": 586,
+      "sha256": "57758e7b888821466bd00cd9f8e8639fa0d76584867c8dedb073cfa4e9d12f33"
+    },
+    {
+      "path": "checks/contour-tests.log.gz",
+      "bytes": 874,
+      "sha256": "e0b6dc137eaf93daa3e3ab9bff0049e06537f2b87a7ef4f0a634072904cc4049"
+    },
+    {
+      "path": "checks/quadratic-actual-trajectory-check.json.gz",
+      "bytes": 1193,
+      "sha256": "5a9c055342a316b5224a77b8cc13b65dce62e4f4873af60ee80388c44313d0c6"
+    },
+    {
+      "path": "checks/quadratic-check_actual_trajectories.py.gz",
+      "bytes": 2656,
+      "sha256": "7960bb3c8ed23a1a8f7f9976733bb48f30ef822a3a1bf0dfd46decd21bd1c35c"
+    },
+    {
+      "path": "checks/quadratic-freeze.json.gz",
+      "bytes": 745,
+      "sha256": "de15bc753bc987743188ec3fcf0c5b7848d8831dc440841650bfaa0302447c61"
+    },
+    {
+      "path": "checks/quadratic-unit-tests.log.gz",
+      "bytes": 310,
+      "sha256": "73b52cdd93d635a3b7d3c9c9e159345045aa2c01204dc56414bf11c70bfa256a"
+    },
+    {
+      "path": "checks/test_ai4_quadratic_motion.py",
+      "bytes": 5172,
+      "sha256": "82666a277d6c9d094f83c1d9016c68f38767a77040c00b761fc6855975b926c8"
+    },
+    {
+      "path": "en/baseline-records/actual-views.json.gz",
+      "bytes": 4770,
+      "sha256": "6ce0ab0ef5fb937d22ae77d59e34a166a1248509a5649246af75480d19b5dde3"
+    },
+    {
+      "path": "en/baseline-records/freeze.json.gz",
+      "bytes": 1461,
+      "sha256": "767f3592a04d3180a92d1d691524780e775b87eb72d5ba97eec11812d9d92860"
+    },
+    {
+      "path": "en/baseline-records/original-result.json.gz",
+      "bytes": 13591,
+      "sha256": "8c09c7979ee8d226277797b5fdf5de6b17897dbb2e1db09a39746af7e3d52007"
+    },
+    {
+      "path": "en/baseline-records/unique/review-plan.json.gz",
+      "bytes": 39835,
+      "sha256": "51315f220321f66304f7a6d88c6e3fe6ebe90c19d2f639fc8a68bf8b55f9bd98"
+    },
+    {
+      "path": "en/before-samples/0000226_000015.066s.png",
+      "bytes": 25781,
+      "sha256": "d2686bed1a8771d0c0fdb4c21cb9ca4ffd128a0f3f928d18ef4d2d88159f6158"
+    },
+    {
+      "path": "en/before-samples/0000358_000023.866s.png",
+      "bytes": 33214,
+      "sha256": "4e8ad05450beb9bd0632f0ff90bc556fb21b9fa141a5431860b81ebdc0b62405"
+    },
+    {
+      "path": "en/before-samples/0000947_000063.133s.png",
+      "bytes": 98793,
+      "sha256": "906188399ccab2cdf652394c467d21ac416141762b49f28c17e7fd1b79d8b9ab"
+    },
+    {
+      "path": "en/before-samples/0000962_000064.133s.png",
+      "bytes": 106739,
+      "sha256": "a45c209429dc0dedb084085c9ca0ed2b1cf02f44966412b30f4d7db83b51a5cd"
+    },
+    {
+      "path": "en/native/000-005_00056.4s.png",
+      "bytes": 49941,
+      "sha256": "b9e8120961b3051206bbf78d30d41a593b702e24eac9d1793197f3923ad98533"
+    },
+    {
+      "path": "en/native/001-005_00056.4s.png",
+      "bytes": 50318,
+      "sha256": "7665e1c5586f5deacfc63661ebe7546032b780799f4b9d5c4699fa1391025f82"
+    },
+    {
+      "path": "en/native/002-0000226_000015.066s.png",
+      "bytes": 21007,
+      "sha256": "43bf831c9591190f66899e5b2a42b63203a0a897ae30e829b72e47de73b40f8f"
+    },
+    {
+      "path": "en/native/003-0000358_000023.866s.png",
+      "bytes": 30501,
+      "sha256": "fc491e38980f980afa6dbcd2caaa9e628443eaee6364e8393837b7312fe660b1"
+    },
+    {
+      "path": "en/native/004-0000497_000033.133s.png",
+      "bytes": 39340,
+      "sha256": "b012f6c24ff6ef6da79fc61472281c3b07d7bcd77385f44664c0bb370c9f6b6f"
+    },
+    {
+      "path": "en/native/005-0000947_000063.133s.png",
+      "bytes": 88743,
+      "sha256": "e9b4ef685afce79e7b7e60e3d46af402de5a9e2748f28277d0326a61abae86ec"
+    },
+    {
+      "path": "en/native/006-0000962_000064.133s.png",
+      "bytes": 95300,
+      "sha256": "c23ca0801282efb1af5ed1a72bae08442762e2f0910381e0e56ded72e4815259"
+    },
+    {
+      "path": "en/native/007-0001204_000080.266s.png",
+      "bytes": 115545,
+      "sha256": "51a7c305888a05387563d93f657f13e3b0efdbf37ae558f25a2100a444c46ff2"
+    },
+    {
+      "path": "en/native/008-0001214_000080.933s.png",
+      "bytes": 118712,
+      "sha256": "b4792c4f8fe37a1716522095180af2a0ee4a51c6cbeddccf4712ddfc1b0a05ce"
+    },
+    {
+      "path": "en/native/009-0001342_000089.466s.png",
+      "bytes": 136677,
+      "sha256": "09f7f764918d1d7849ebee82a761caaeb20e355404696ea4bbed0e042c4c7134"
+    },
+    {
+      "path": "en/native/010-0001350_000089.999s.png",
+      "bytes": 133445,
+      "sha256": "926142625884535e76ace46d06a492ebf62560463153c45c285f97194597476d"
+    },
+    {
+      "path": "en/native-endpoints/005-005_00056.4s.png",
+      "bytes": 50318,
+      "sha256": "7665e1c5586f5deacfc63661ebe7546032b780799f4b9d5c4699fa1391025f82"
+    },
+    {
+      "path": "en/native-endpoints/006-006_00066.5s.png",
+      "bytes": 75487,
+      "sha256": "f037d15d0ce91fe31e6f6ae75ae65791f10d0fcfc9b484a3ab8e7a0c34b31c27"
+    },
+    {
+      "path": "en/native-endpoints/007-007_00082.6s.png",
+      "bytes": 85071,
+      "sha256": "0ec16b6352f973c8dac5796111154edb157580e1018f352c864d906c42eff139"
+    },
+    {
+      "path": "en/native-endpoints/008-008_00090.2s.png",
+      "bytes": 88246,
+      "sha256": "6dbbef7e5a9ca9d120aaa8b723b152c0cb98be5bf28b8d311a40df7629bb2908"
+    },
+    {
+      "path": "en/records/actual-views.json.gz",
+      "bytes": 4280,
+      "sha256": "bb67cbc54d6e1c472868300344ba7f2f324ce89dd64589f3930eeb356c87a417"
+    },
+    {
+      "path": "en/records/all-repair-spans/result.json.gz",
+      "bytes": 13991,
+      "sha256": "5d04a62f5bfe072c5e2e70b72d9cdcc3801e52615f861b78b94e2ab2b7451806"
+    },
+    {
+      "path": "en/records/audit/result.json.gz",
+      "bytes": 29103,
+      "sha256": "d32f1673b88dfde96b305475d63cc4e30ac5f21712f2c8d9d2c22b7992da9632"
+    },
+    {
+      "path": "en/records/audit.log.gz",
+      "bytes": 101,
+      "sha256": "ac871aba25273c5577d8409ddac2000bf6c3a939665069b35e35073b290789f9"
+    },
+    {
+      "path": "en/records/changed/review-plan.json.gz",
+      "bytes": 38743,
+      "sha256": "c4619fb25a413dde1ec0d07a06131a90cf2fd13e0d180ec57363789f351b5e8f"
+    },
+    {
+      "path": "en/records/endpoints/result.json.gz",
+      "bytes": 13747,
+      "sha256": "a3fa181506051c1e9c01abf3dca75896c75621b029b0d6857c482770928c425d"
+    },
+    {
+      "path": "en/records/freeze.json.gz",
+      "bytes": 1496,
+      "sha256": "3150931164ab02143c3712c7977fe5923d8fb8bce68984d500d4a17b7ea8cd03"
+    },
+    {
+      "path": "en/records/original-render.log.gz",
+      "bytes": 183,
+      "sha256": "6e342bfcc04c404545ec932740822a36c01ead38db56d0ee0f13b9d6baf25f16"
+    },
+    {
+      "path": "en/records/original-result.json.gz",
+      "bytes": 13566,
+      "sha256": "39e5b4b2e7acc6ed306ccf8762069c1e169b2e6fd5bea5d48e809443aa851594"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-001.png",
+      "bytes": 103756,
+      "sha256": "ef9399fcf5404ede170f21168f1f9769ef29dbce28898c866bbe40a5539127eb"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-002.png",
+      "bytes": 102559,
+      "sha256": "3a5c74860db0ece4c1cfb81ba15e0df5f29746dea08c7a3aab6e26115bd6ef8f"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-003.png",
+      "bytes": 124493,
+      "sha256": "e6895f612b3718904b55a7d8df8e22b99fc6dbb6840b5bbbe47be0dbf3f189a8"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-004.png",
+      "bytes": 142490,
+      "sha256": "74d2e43a2147d2c5fdc251fa5b0869dc07ae7b828385408dea987f5af5f3e4ef"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-005.png",
+      "bytes": 149223,
+      "sha256": "55e2cd345d398739c75022b36bd80943b518c39722537448866a8434ef776fba"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-006.png",
+      "bytes": 147797,
+      "sha256": "8865a29e0deec99f54661540411777d2e51a0b47d0b5786ef3df5f77956ea6b0"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-007.png",
+      "bytes": 181864,
+      "sha256": "5b6a958261a76a1c362189e264c00a7e281903fb18780142bb9553644ae6b674"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-008.png",
+      "bytes": 167175,
+      "sha256": "467c2f0495f3251b39fdf871c05ba326a4fc0c595b08a3671e6b751c05865621"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-009.png",
+      "bytes": 191019,
+      "sha256": "c72124d08176010b338a93542f8f6cc8abbd2ef38617897d512b9984a68fe84a"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-010.png",
+      "bytes": 177884,
+      "sha256": "db502eb75b8190d068092dc2060817f1572656b9329ce11622326691c75162f8"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-011.png",
+      "bytes": 216094,
+      "sha256": "c56e358c203df762546fbdaa052a9386e521208f93d85addc05fbbc60e22e760"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-012.png",
+      "bytes": 206066,
+      "sha256": "d1bd3ab9d379fa5ba3fd4ee727635586ae0c73aa76af2a831137b2d660c1136a"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-013.png",
+      "bytes": 314927,
+      "sha256": "214372d98024b53ccfa3014313f58e8d9fafbfbbd9d1d4c4e297d3a9447dc1b7"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-014.png",
+      "bytes": 327267,
+      "sha256": "da927132112cd32ea5795cf3039780a0c2e8f105f9efe19d9ab494dd59471bfd"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-015.png",
+      "bytes": 337774,
+      "sha256": "87b3cee802cdf49c055ff176c3aeff2a17cc8a1e5f04f07e85188cb7a171b70e"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-016.png",
+      "bytes": 348356,
+      "sha256": "4145c0ec6464e5b4c10e494f65da012a9f5a3aa6fe516ff0ef49aacfdc9e4a93"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-017.png",
+      "bytes": 353312,
+      "sha256": "9c9a11924f99221c0287c52a45e3dc17493131715b944613dd91eebca3a7574b"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-018.png",
+      "bytes": 360700,
+      "sha256": "e74555279d4b9dcea6eb0be245f45394b9642a4b98fbd983dd1594042bc7745f"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-019.png",
+      "bytes": 366139,
+      "sha256": "2d08b2e0675ee7e713f542c3e6271a5c443690621895cfa4c112f3c047963a40"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-020.png",
+      "bytes": 506240,
+      "sha256": "eaf9f8091aeed784f69958b4ba74afe88fc3e47a8d07b2db33d7cbe9d128f129"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-021.png",
+      "bytes": 474106,
+      "sha256": "946aff58804411403eea5c644595f5c7f8b51a85f20b65e2ceb6831617c78a4b"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-022.png",
+      "bytes": 399074,
+      "sha256": "5ad4ac7adfe771b0ddd57cee829442833435ec1bcad51faad31c856751ae79d1"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-023.png",
+      "bytes": 401045,
+      "sha256": "95e08a851d7894d9223b92a1d6426fd5c73828c007e3d71130a50492f559262a"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-024.png",
+      "bytes": 404817,
+      "sha256": "a8e748a5322310e14d36c087bf5a7d9f680bf85da1372fc8fda39829c0e48623"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-025.png",
+      "bytes": 405504,
+      "sha256": "b41a6659c974d2359ae68565d88ef116b1642dbd222ccc68294475857ea7218c"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-026.png",
+      "bytes": 410188,
+      "sha256": "8c4998cb3e42c689f64322a1eaaf637173a14ed95ffc41933fc2a3017a7fb564"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-027.png",
+      "bytes": 472310,
+      "sha256": "24248937b1acd00ec1fc12f14e6d96e2b55f5fe6e607061a6f160990527b6f1e"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-028.png",
+      "bytes": 443617,
+      "sha256": "62940b6d097f7ae8887df21aab48552650d852eec5207927371add8a15c9178c"
+    },
+    {
+      "path": "en/sheets/all-repair-spans/sheet-029.png",
+      "bytes": 333633,
+      "sha256": "7e1b83af85e8c0c3f31e7743857b311b7570dd070cd2356a48f00bb61ff57e80"
+    },
+    {
+      "path": "en/sheets/changed/sheet-001.png",
+      "bytes": 103480,
+      "sha256": "8c5a33b9a229dfd8fdded116baa0579baab50bc1aa882a034e5dbac190022fb3"
+    },
+    {
+      "path": "en/sheets/changed/sheet-002.png",
+      "bytes": 148888,
+      "sha256": "7ed3463bbe9040debc894e6c3c8e0b826a7d8446d5cca17650e8c5f7bbe7c3f7"
+    },
+    {
+      "path": "en/sheets/changed/sheet-003.png",
+      "bytes": 168809,
+      "sha256": "4fa9efe5141fe696b8c7be6f9b0d50b97791b8f01b00b2514b7ffd593036d147"
+    },
+    {
+      "path": "en/sheets/changed/sheet-004.png",
+      "bytes": 149344,
+      "sha256": "21ea174823d45b5a8009cc2814a42d2df8043a9ab83ae72f6b335a6ca158a474"
+    },
+    {
+      "path": "en/sheets/changed/sheet-005.png",
+      "bytes": 316707,
+      "sha256": "f5e1875ce06dab041a21e8afbe17dacbf3e227c1a554a865008b524a6283d7c4"
+    },
+    {
+      "path": "en/sheets/changed/sheet-006.png",
+      "bytes": 304715,
+      "sha256": "644f367263b5967457723fc37a753769b41ca7a8fadbe8b8fe736d5daaa67cc3"
+    },
+    {
+      "path": "en/sheets/changed/sheet-007.png",
+      "bytes": 339599,
+      "sha256": "755bf0ee53c6b2771d1ac974ae8049ab3c6ba2b11ad807cd308788482f1b9286"
+    },
+    {
+      "path": "en/sheets/changed/sheet-008.png",
+      "bytes": 360979,
+      "sha256": "c3217abba532b1f001292382b3fd240c4fabd7b8e31557f3d11efe5712fd3304"
+    },
+    {
+      "path": "en/sheets/changed/sheet-009.png",
+      "bytes": 418896,
+      "sha256": "cc2929f64b8bd42ce54eb9e3611c70dfafee141bebdaedeec9fdc09ebf0a75cf"
+    },
+    {
+      "path": "en/sheets/changed/sheet-010.png",
+      "bytes": 391310,
+      "sha256": "b75e81d74e457d9785d0230cfd3bfd41aa59f175483e296a72a1bd07af302eeb"
+    },
+    {
+      "path": "en/sheets/changed/sheet-011.png",
+      "bytes": 414912,
+      "sha256": "cc60473cfb657216d27a5b3765a97ba87a246ec717c4da5a951e0a73ce7d81ae"
+    },
+    {
+      "path": "en/sheets/changed/sheet-012.png",
+      "bytes": 409610,
+      "sha256": "94cc73033700db8c0b1b30563dd281f6e61ea8803ef0cb9cebb48c818ee81483"
+    },
+    {
+      "path": "en/sheets/changed/sheet-013.png",
+      "bytes": 434765,
+      "sha256": "1917366374b753d57b0c2d0b01a71597024466b8e871513280180a61cdc69f5a"
+    },
+    {
+      "path": "en/sheets/changed/sheet-014.png",
+      "bytes": 446585,
+      "sha256": "62c09526e86b1ddaefc63786716a9a3784f8eb8516cb220b0eea782358a23568"
+    },
+    {
+      "path": "en/sheets/changed/sheet-015.png",
+      "bytes": 535436,
+      "sha256": "b47ff8f720d0d445193775b19a060d3df30bc156b6c84ba492b33d689c1de055"
+    },
+    {
+      "path": "en/sheets/changed/sheet-016.png",
+      "bytes": 519118,
+      "sha256": "1f34331c066de1dc19057adac25386c479509346373dabe59031eb3d7f262098"
+    },
+    {
+      "path": "en/sheets/changed/sheet-017.png",
+      "bytes": 744609,
+      "sha256": "28fb9fd805df7532473b4d2d933dfeec37897ad934db99b61a17f18e934ae1ac"
+    },
+    {
+      "path": "reports/en-native-plan.json.gz",
+      "bytes": 983,
+      "sha256": "ae7474084937bbfed0cba1d23f7222e5d4cdb779fd30fa597c63d0f5d08be291"
+    },
+    {
+      "path": "reports/en-review.json.gz",
+      "bytes": 62646,
+      "sha256": "4b4fa36d5278fedcecba741175cec09c5dca4c21d276a60b227b0a95c87e0368"
+    },
+    {
+      "path": "reports/endpoint-comparison.json.gz",
+      "bytes": 3277,
+      "sha256": "b9b6c15b4bdee29d331ac0d7dc821ae5594fa794cf7e8ba4b97ab1c9109b2466"
+    },
+    {
+      "path": "reports/endpoint-native-views.json.gz",
+      "bytes": 824,
+      "sha256": "d2090d51f18b7d5593180584ec3adae951a8c3684cff6df047071567489f0bce"
+    },
+    {
+      "path": "reports/endpoint-pixel-localization.json.gz",
+      "bytes": 1003,
+      "sha256": "a576238f81ec1cb5808b91b612b3444e08831766502f626833b9128d221e56f8"
+    },
+    {
+      "path": "reports/pacing-choice.json.gz",
+      "bytes": 2153,
+      "sha256": "70a9aabc0f782830651650b739c7497c68e614d46fecf37d2b0b6fce9d6e2fe5"
+    },
+    {
+      "path": "reports/summary.json.gz",
+      "bytes": 1441,
+      "sha256": "c2c5595e2a3942ebc47db9b6ee61bc49a7a652ee4f9c8b78075a84735aece002"
+    },
+    {
+      "path": "reports/zh-review.json.gz",
+      "bytes": 33689,
+      "sha256": "210dc3559415eb79c42564f04b21dd533f4acad764b263427b6276c89be1b3b6"
+    },
+    {
+      "path": "reports/zh-review.md",
+      "bytes": 4490,
+      "sha256": "66d044d38f054ea080a57374f65c48f90bd6b8629c2e4f1eabcff331fe598522"
+    },
+    {
+      "path": "scripts/check_endpoint_pixels.py",
+      "bytes": 4106,
+      "sha256": "65bb0f41c0c62d8294c872aa3fedf90c017dff02c8ef94c887ec83bc14e560ee"
+    },
+    {
+      "path": "scripts/compare_cohorts.py",
+      "bytes": 3944,
+      "sha256": "6779c8cdc076b29eca5c8551e88e194a7a5f39f2ddd7e78d33180b37a95c6025"
+    },
+    {
+      "path": "scripts/endpoint_compare.py",
+      "bytes": 1884,
+      "sha256": "19101ac3d3403a81f0e16e400dc5f5176b558d7914bd4069cd8b81d1383fc61c"
+    },
+    {
+      "path": "scripts/finalize.py",
+      "bytes": 9149,
+      "sha256": "c8e60d001cf71e1f80454c94c5334ef0dc3c244e0bf85a955c0c88149b1ae5ba"
+    },
+    {
+      "path": "scripts/prepare_case.py",
+      "bytes": 4250,
+      "sha256": "b8528c33edebea95a5afa0d0c5ce5e97a03102cf323a1f59b492893579032d58"
+    },
+    {
+      "path": "source/before/explainer-ai-viz.py.gz",
+      "bytes": 8815,
+      "sha256": "0e6fcd6a24324f3b8110b6d82ecf5564c4deaae75f30513391ca509310cf7949"
+    },
+    {
+      "path": "source/before/s15_quadratic.py.gz",
+      "bytes": 5948,
+      "sha256": "629555abf88dabbf7ae47dfaac2780eeea13179c932514a6bf717401b9c881b2"
+    },
+    {
+      "path": "source/contour.patch.gz",
+      "bytes": 2598,
+      "sha256": "3003e25f8df4e1bbf8bbecbb85bcff0116654eb53adf42daa5cc33718bcc5ffe"
+    },
+    {
+      "path": "source/current/explainer/ai/viz.py.gz",
+      "bytes": 10483,
+      "sha256": "dde628602d8128cda334fa1a7eb6b8bb7204e835ecc14ae09d6a646b5111d5af"
+    },
+    {
+      "path": "source/current/explainer/analysis/__init__.py.gz",
+      "bytes": 11076,
+      "sha256": "1092edb463e57cbc4bfae9d6151a690c440335551061f4310e48d633dc3ccf73"
+    },
+    {
+      "path": "source/current/tools/qa_motion.py.gz",
+      "bytes": 6507,
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2"
+    },
+    {
+      "path": "source/current/tools/qa_series.py.gz",
+      "bytes": 7934,
+      "sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf"
+    },
+    {
+      "path": "source/current/videos/ai/ai4/common.py.gz",
+      "bytes": 2210,
+      "sha256": "87ef4a5b96e96f8b791a9b75d455d8f2f0743ee5ae430eca5f4cb94efc4934d9"
+    },
+    {
+      "path": "source/current/videos/ai/ai4/manifest.py.gz",
+      "bytes": 703,
+      "sha256": "e90cf2533c05781b93a0cac14f3bfbbfc9eca8205eacfb9468611dfea28e0c19"
+    },
+    {
+      "path": "source/current/videos/ai/ai4/s15_quadratic.py.gz",
+      "bytes": 6764,
+      "sha256": "1e389d386a7777395e66770934d5b186608d0dc24e46e5b68629283bd7810466"
+    },
+    {
+      "path": "source/current/videos/ai/ai4/zh_lines.py.gz",
+      "bytes": 41090,
+      "sha256": "e006af58d907e2fa89f6a5331321ef4c965d7ae4f88f79bc85d7beaf76af3b4b"
+    },
+    {
+      "path": "source/current/videos/ai/ai_text_zh.json.gz",
+      "bytes": 881407,
+      "sha256": "c96653d5e0263880d828cf48e287393ccd81edf56ba032bfbe37239b6390f445"
+    },
+    {
+      "path": "source/quadratic.patch.gz",
+      "bytes": 1484,
+      "sha256": "a7af84603326829a36d29943f2efea7f466a5b423ed2b52c48102aa5092a98bb"
+    },
+    {
+      "path": "zh/baseline-records/actual-views.json.gz",
+      "bytes": 4254,
+      "sha256": "e532390c5c6ffab9bc5d0ff7b70e73a8d7dc3b2e05b23fd29e28bd1bdbfa5c3c"
+    },
+    {
+      "path": "zh/baseline-records/freeze.json.gz",
+      "bytes": 1437,
+      "sha256": "769e4fecb23279341addde44696615ed71a0bff09437c71b5f762d05be90cb46"
+    },
+    {
+      "path": "zh/baseline-records/original-result.json.gz",
+      "bytes": 20614,
+      "sha256": "ee2a2ef7cf953e5477bef62f7ffc9a248fb649acdbec928a98e1a95758841c51"
+    },
+    {
+      "path": "zh/baseline-records/unique/review-plan.json.gz",
+      "bytes": 39216,
+      "sha256": "43391f5c09d9ab47a0fe517eea55c6674a57814d4cdbf40ab6a2f6c44d722295"
+    },
+    {
+      "path": "zh/native/000-0000854_000056.933s.png",
+      "bytes": 78995,
+      "sha256": "1766bffe04294a0c02399c4463e83c1ed862c92cbd59e0652c1ce5c7d8ea5658"
+    },
+    {
+      "path": "zh/native/001-0000899_000059.933s.png",
+      "bytes": 88741,
+      "sha256": "16dfd6053c00ae98b1a557096c3fb236c07e32fdeb9fa0e2db2c868e98252707"
+    },
+    {
+      "path": "zh/native/002-0000904_000060.266s.png",
+      "bytes": 91156,
+      "sha256": "1243e9380d37ce93167dd4ad0134c2bd5b4f32d706434c896145e621205d698e"
+    },
+    {
+      "path": "zh/native/003-0000905_000060.333s.png",
+      "bytes": 91565,
+      "sha256": "62a7b93e16ca816f754808c1cdc1cc39df49d939968d7e1497c798ca3cdb1d1f"
+    },
+    {
+      "path": "zh/native/004-0000920_000061.333s.png",
+      "bytes": 97914,
+      "sha256": "304ef81bebb77083f6c327efdab51da368f015369f13cceaa25eaf401b192eae"
+    },
+    {
+      "path": "zh/native/005-0000945_000062.999s.png",
+      "bytes": 106167,
+      "sha256": "8ad1c6a48b7b72cc9ad35f63337ad6d8979908d49577675b438a60a866bc28cb"
+    },
+    {
+      "path": "zh/native/006-0001118_000074.533s.png",
+      "bytes": 114533,
+      "sha256": "f92fe854ca3479f77f7fe44e8d845c63c752d6af645637f5875cbe2a01caa87b"
+    },
+    {
+      "path": "zh/native/007-0001119_000074.599s.png",
+      "bytes": 114860,
+      "sha256": "fdf3ff32918055c611a62292acf720147627b1a819b0bb5c5a32f26255c6284b"
+    },
+    {
+      "path": "zh/native/008-0001122_000074.799s.png",
+      "bytes": 115791,
+      "sha256": "ea6c29f419535872eb4410331df9daac6987f58a52858194829e47290b32a53b"
+    },
+    {
+      "path": "zh/native/009-0001128_000075.199s.png",
+      "bytes": 117594,
+      "sha256": "000a2a3b2d267568f4be25a80fa078ab0ce9c5451478e93cb8d96ac23cb496ca"
+    },
+    {
+      "path": "zh/native/010-0001130_000075.333s.png",
+      "bytes": 118410,
+      "sha256": "c531ebf93f1fa13884abe3c57d8ba53149d622fa15a51c446d56bd16defa8f18"
+    },
+    {
+      "path": "zh/native/011-0001153_000076.866s.png",
+      "bytes": 122326,
+      "sha256": "927664cccac7ab207f916edf9057e2640af7377a2c8a9f185de62f6287a1946c"
+    },
+    {
+      "path": "zh/native/012-0001277_000085.133s.png",
+      "bytes": 131792,
+      "sha256": "bc0258f1fdce2c7249a6c2e8cd77a4dc50957137b6990abe509f7e717b5712f3"
+    },
+    {
+      "path": "zh/native/013-0001284_000085.599s.png",
+      "bytes": 134424,
+      "sha256": "4a2aa26b18d5ee2cc357f71c39499a08b8a3349a078f6a628cddebc29cddf187"
+    },
+    {
+      "path": "zh/native/014-0001292_000086.133s.png",
+      "bytes": 133229,
+      "sha256": "1e555fca30600f48f193889832b81c4dfacf389fba601b978f7945ea4a02bb76"
+    },
+    {
+      "path": "zh/native/015-0000854_000056.933s.png",
+      "bytes": 78734,
+      "sha256": "ae374e5ee5a35d4517efac621db288fbabd2575a27e77df769defdf1de47f330"
+    },
+    {
+      "path": "zh/native-endpoints/005-005_00055.0s.png",
+      "bytes": 50384,
+      "sha256": "9d6e0d673c97e7fce016f52830f68e4d69ce646a0033500a46b0b6114ec9f53a"
+    },
+    {
+      "path": "zh/native-endpoints/006-006_00063.2s.png",
+      "bytes": 74568,
+      "sha256": "68dabfe7fe96170c0dfb684efa99ac03f8832f1a7db33a4c1f6c9293cfea0f07"
+    },
+    {
+      "path": "zh/native-endpoints/007-007_00077.1s.png",
+      "bytes": 84715,
+      "sha256": "ef69306587736cbe82ad0bbde1e78302e1bc01183bbb1547112368f7deb7f05b"
+    },
+    {
+      "path": "zh/native-endpoints/008-008_00086.4s.png",
+      "bytes": 87682,
+      "sha256": "e0d3aaa653a3b2838f967f8f14cb7b09ebb4430ed8c694bc10c26b00a3c75803"
+    },
+    {
+      "path": "zh/records/actual-views.json.gz",
+      "bytes": 4475,
+      "sha256": "67ba921d5a9aa4457c2e6465686552ae0fac34cf408f1b802b26ec03e3bdbab6"
+    },
+    {
+      "path": "zh/records/audit/result.json.gz",
+      "bytes": 28863,
+      "sha256": "2d81c8195f10787bb50d0981c0a9a5b955e53857d446d1bba804525b6004ed12"
+    },
+    {
+      "path": "zh/records/audit.log.gz",
+      "bytes": 101,
+      "sha256": "cc6840f38d101c1ea5b22948a9e57694a155599c7e8ef0cd1886efe8ba76965d"
+    },
+    {
+      "path": "zh/records/changed/review-plan.json.gz",
+      "bytes": 37663,
+      "sha256": "5fc90845a45b4457d036f4412ffa268dde943253f5dc8c2dedd6603474e52f0c"
+    },
+    {
+      "path": "zh/records/encoded-regression/result.json.gz",
+      "bytes": 12274,
+      "sha256": "c4aa3430ad20d0afb9e940174fd3b5d01f918849fcdef7afb0788687fc45781f"
+    },
+    {
+      "path": "zh/records/endpoints/result.json.gz",
+      "bytes": 20936,
+      "sha256": "185456f58d165eeda43f80e19ea192561bc16a44740363a68e9bd66aae159812"
+    },
+    {
+      "path": "zh/records/freeze.json.gz",
+      "bytes": 1499,
+      "sha256": "8ab89e86702ddc76960af2b2cd88fc8c0d0b8eadc0a90f5ed5411a2e951778ae"
+    },
+    {
+      "path": "zh/records/original-render.log.gz",
+      "bytes": 183,
+      "sha256": "c0fb8436f71d5633fc4b97ecf0f4190f42afd3ad3f1d03b517bef07f7aff13b9"
+    },
+    {
+      "path": "zh/records/original-result.json.gz",
+      "bytes": 20621,
+      "sha256": "c1a404d9a02327555b7f6c462241d8000ac68c0188171d87caddbf31ff615f55"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-001.png",
+      "bytes": 104793,
+      "sha256": "88cb2aedcd1c4d16ab07a384932926322b539be06f4f7811bf336ec62525ac8e"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-002.png",
+      "bytes": 140937,
+      "sha256": "5c97143ff42569b7d95b9964bd8cced02316eef33af82016bdd8185a00333552"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-003.png",
+      "bytes": 187842,
+      "sha256": "79e5bcfb01ed5845d91d6e120f82a0a641729b8dcf7dc6c1a109dd8476c1f0e6"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-004.png",
+      "bytes": 211360,
+      "sha256": "4ea15c085aeaad7b42ef397fa3f3155d0c4aa9c35fc32bb354a03a7a11994f4f"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-005.png",
+      "bytes": 344476,
+      "sha256": "a15a081a1772ab2a272f9cde416bfd8fa0c09a71e37f06fd20985c5fbcd752f7"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-006.png",
+      "bytes": 380674,
+      "sha256": "2b85a1c7f389b6c31e45d42d110f3c07a766f306791f876a400de15ebdc6fb7d"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-007.png",
+      "bytes": 348277,
+      "sha256": "5b9c8eb1f2ff921192e6cb4af364abec44e1a62910c635190a0ada69fae60db0"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-008.png",
+      "bytes": 369766,
+      "sha256": "baa6b7db049264558ca17f21e0d60e23180e2341a15baf8c9be96889e36cd68d"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-009.png",
+      "bytes": 451117,
+      "sha256": "49c3913708a9cef0f5bf0d9f0eb205b08c9ae90f270a219a39079510a0206147"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-010.png",
+      "bytes": 405709,
+      "sha256": "2da52a15e00beeb63a2f8e291dacf80676d02e923c195bdd7eccba56542c54a7"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-011.png",
+      "bytes": 403493,
+      "sha256": "9b13c80a21ac2ba63dea55420bfec7be1562f28c440167f39b1a0bf493d8af41"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-012.png",
+      "bytes": 501427,
+      "sha256": "9f9db01d74939cefcbccf62298a93041bb05e56e027889757e6e45dae790ae98"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-013.png",
+      "bytes": 470801,
+      "sha256": "3716014725dab28967dfc72b742498bb085d24555e10e003e3750c1c0fde86e8"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-014.png",
+      "bytes": 616869,
+      "sha256": "d83ac21bebc7eb3f0b8af98d5e9d848079cea70427b13b265da72130e39585a3"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-015.png",
+      "bytes": 675832,
+      "sha256": "d34a0cce330f2160f36336aeed58543b8e61aef8a6986c73a9b47ba7c4e80212"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-016.png",
+      "bytes": 554409,
+      "sha256": "ebbf49be2c7253d4040b1becc396cb47b30cb345b6d1e4dbc4f17efe6f4e2163"
+    },
+    {
+      "path": "zh/sheets/changed/sheet-017.png",
+      "bytes": 147252,
+      "sha256": "4e930dadcd9179d0082d4c5b982eb03c2472a436f5ed23bdd6dff76f0333dadc"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-001.png",
+      "bytes": 92416,
+      "sha256": "58b9658e589b63cacc69d42af38939ada7f7eeb32394e8fbf077510455313307"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-002.png",
+      "bytes": 105473,
+      "sha256": "230af6c607dc6fb153b8cab86e8cd88a18723347dd5da5fe915196ba54d83891"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-003.png",
+      "bytes": 130031,
+      "sha256": "f78a7be5a1692373bd1741e4cd96e9ecce58bab8b4b548f94833b631eeedd682"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-004.png",
+      "bytes": 162956,
+      "sha256": "e184af700943c2505c14de8bf88d4d4d35d16a4342909f67ff2188bef26f7ea1"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-005.png",
+      "bytes": 156646,
+      "sha256": "b52954f4248fc14d5cd366a94f18bb2b39d62bb2d168118b67737f929008acca"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-006.png",
+      "bytes": 184545,
+      "sha256": "658fc011512619bcbe31a09453376e11d436937728d195e78062e988e7f16df0"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-007.png",
+      "bytes": 172425,
+      "sha256": "962461291abe1430e384dbcf5dec371bd45c064401a14bdd44d00210abf9fdb9"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-008.png",
+      "bytes": 184947,
+      "sha256": "7d6649a730294a6712256eb8a1cdb5e3867a3be33d14880ff891f6ff1f37adfd"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-009.png",
+      "bytes": 286152,
+      "sha256": "6700f8114eaa6fb4b96cf903dbd74c47ee4fc35f89c3e629f242d3ef899cb528"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-010.png",
+      "bytes": 316889,
+      "sha256": "1a22a77675855b0373ca26de97c1402acc41cb3d69bd1433870057805b93bc88"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-011.png",
+      "bytes": 331019,
+      "sha256": "ef5698d7d9bd1d117b742f2ee871dc2b3062263a046931ebba3811348e1a44cb"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-012.png",
+      "bytes": 343147,
+      "sha256": "d5fa622a77430170338bc205802403b851a009a823f831d375595749effe3227"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-013.png",
+      "bytes": 346567,
+      "sha256": "c0015bd4da9931ac9d189d2880bd2f89f0364e66175b544e663dbe9e88d0cc8e"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-014.png",
+      "bytes": 353759,
+      "sha256": "5e0380f166bd3c653cc8c2214371995d57be486e6b0cb668d01b2b84f442f3b2"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-015.png",
+      "bytes": 361031,
+      "sha256": "936810f616af1950ddb461b1c2a62fc3e9db72557aa31eed643f6b2eb44de9fb"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-016.png",
+      "bytes": 419770,
+      "sha256": "16b16017bc4447f023d48b23ffd15ef363e71c8b95cdf9a036ff3928b74ce9aa"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-017.png",
+      "bytes": 397661,
+      "sha256": "813c936d21ccd22e7370e27c9386472b1b569ffa3fab3a7613b02d220c683fd4"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-018.png",
+      "bytes": 396811,
+      "sha256": "f1d96fc99414dd148e50d97bcf94ea25c8268e7749dc0a9d47add7f10ce1f45b"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-019.png",
+      "bytes": 395112,
+      "sha256": "877ddfc8452fff7d550d8f9273e6144d4badca3a47d2f0a272a091caf433e0d8"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-020.png",
+      "bytes": 399845,
+      "sha256": "043a766167b8a7c797a188086f20c7ec37b24fd52190af3c09ab6c085e2dc184"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-021.png",
+      "bytes": 401390,
+      "sha256": "f11a67f0174c03f30283566dc91d9496e66dc57806970dc8b046f276877f00ab"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-022.png",
+      "bytes": 458475,
+      "sha256": "3daa670c36e7a641fff0594d3ee2e02f019709db453107fe04a236dafead6abe"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-023.png",
+      "bytes": 429351,
+      "sha256": "6eb3fe716be983c8cc4fcb63f141539da1b92dae99b9528dca6cd94f2be724dd"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-024.png",
+      "bytes": 441785,
+      "sha256": "36569ca36c245b67cffde2da55abfcd65551bff15d9d604998b21af0cf19481b"
+    },
+    {
+      "path": "zh/sheets/encoded-regression/sheet-025.png",
+      "bytes": 305250,
+      "sha256": "e5972ef48bc509e980ad0528b871b54d1bab40fee92c6b4f81bd14fbd036f25f"
+    }
+  ]
+}

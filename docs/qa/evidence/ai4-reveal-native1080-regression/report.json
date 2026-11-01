@@ -1,0 +1,515 @@
+{
+  "completed_utc": "2026-10-31T23:39:35.274260+00:00",
+  "scope": "Fresh native1920x1080 cached-only silent skipped-animation regression of Backprop and Train EN/ZH after their local Write-reveal repairs.",
+  "counts": {
+    "cases": 4,
+    "fresh_endpoint_PNGs": 60,
+    "exact_byte_and_pixel_inherited": 60,
+    "new_changed_states": 0,
+    "new_directly_viewed_states": 0,
+    "baseline_native_examples_packaged": 12
+  },
+  "cases": [
+    {
+      "case": "en-Backprop",
+      "frames": 17,
+      "exact_byte_and_pixel_inherited": 17,
+      "new_states": 0,
+      "native_examples": [
+        {
+          "file": "005_00048.9s.png",
+          "sha256": "48ff01493d1256c4397c6f49cb289c064b153a2f8046641c8ba0094eca6f6469",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        },
+        {
+          "file": "012_00139.3s.png",
+          "sha256": "1fca9acceebcdc067c408fe40d4424501aa1cb5a21a13d63afc562af311c02a8",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        },
+        {
+          "file": "016_00189.3s.png",
+          "sha256": "4630fa98f9139df98c5a23d72306dcbfa65be8051f390d4e928247be68b17e4c",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        }
+      ],
+      "source": {
+        "path": "/workspace/explainer-videos/videos/ai/ai4/s07_backprop.py",
+        "sha256": "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c"
+      },
+      "record_sha256": "1736c6108a22f580ce92279d56684db05e49fd7f243432fc1825856856bd6ae3",
+      "warnings": [],
+      "inputs": [
+        {
+          "path": ".cache/ai4/tiny.json",
+          "render_signature": [
+            1259,
+            1793485507092588435
+          ],
+          "review_signature": [
+            1259,
+            1793485507092588435
+          ],
+          "signature_matches": true,
+          "sha256": "728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218",
+          "exists": true,
+          "fresh_signature": [
+            1259,
+            1793485507092588435
+          ],
+          "fresh_sha256": "728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218"
+        },
+        {
+          "path": ".cache/ai4/tiny.npz",
+          "render_signature": null,
+          "review_signature": null,
+          "signature_matches": true,
+          "sha256": null,
+          "exists": false,
+          "fresh_signature": null,
+          "fresh_sha256": null
+        },
+        {
+          "path": ".cache/ai4/mlp2.json",
+          "render_signature": [
+            1106,
+            1793485509109867484
+          ],
+          "review_signature": [
+            1106,
+            1793485509109867484
+          ],
+          "signature_matches": true,
+          "sha256": "a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034",
+          "exists": true,
+          "fresh_signature": [
+            1106,
+            1793485509109867484
+          ],
+          "fresh_sha256": "a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034"
+        },
+        {
+          "path": ".cache/ai4/mlp2.npz",
+          "render_signature": [
+            2532,
+            1793485509104534415
+          ],
+          "review_signature": [
+            2532,
+            1793485509104534415
+          ],
+          "signature_matches": true,
+          "sha256": "b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d",
+          "exists": true,
+          "fresh_signature": [
+            2532,
+            1793485509104534415
+          ],
+          "fresh_sha256": "b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d"
+        }
+      ],
+      "receipt": "en-Backprop/receipt.json.gz",
+      "comparison": "en-Backprop/comparison.json.gz"
+    },
+    {
+      "case": "zh-Backprop",
+      "frames": 17,
+      "exact_byte_and_pixel_inherited": 17,
+      "new_states": 0,
+      "native_examples": [
+        {
+          "file": "005_00050.2s.png",
+          "sha256": "38d50bc7dca01611408591fcde515440b576a1198dce92f508901011cce9a8c4",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        },
+        {
+          "file": "012_00144.6s.png",
+          "sha256": "c5aac12c1922812e09bea1a03cb4a904bee93dc09f2c0c529a868b1b2d2d39c6",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        },
+        {
+          "file": "016_00196.3s.png",
+          "sha256": "1591e79a173759a84723a516f0f1d6eb6de9d9520ceb3bdd818a971f4bdff635",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        }
+      ],
+      "source": {
+        "path": "/workspace/explainer-videos/videos/ai/ai4/s07_backprop.py",
+        "sha256": "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c"
+      },
+      "record_sha256": "fb46f8214795d38f1e00139a4ceed7bac61dc99d9e829ba61fec5c4ef518f414",
+      "warnings": [],
+      "inputs": [
+        {
+          "path": ".cache/ai4/tiny.json",
+          "render_signature": [
+            1259,
+            1793485507092588435
+          ],
+          "review_signature": [
+            1259,
+            1793485507092588435
+          ],
+          "signature_matches": true,
+          "sha256": "728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218",
+          "exists": true,
+          "fresh_signature": [
+            1259,
+            1793485507092588435
+          ],
+          "fresh_sha256": "728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218"
+        },
+        {
+          "path": ".cache/ai4/tiny.npz",
+          "render_signature": null,
+          "review_signature": null,
+          "signature_matches": true,
+          "sha256": null,
+          "exists": false,
+          "fresh_signature": null,
+          "fresh_sha256": null
+        },
+        {
+          "path": ".cache/ai4/mlp2.json",
+          "render_signature": [
+            1106,
+            1793485509109867484
+          ],
+          "review_signature": [
+            1106,
+            1793485509109867484
+          ],
+          "signature_matches": true,
+          "sha256": "a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034",
+          "exists": true,
+          "fresh_signature": [
+            1106,
+            1793485509109867484
+          ],
+          "fresh_sha256": "a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034"
+        },
+        {
+          "path": ".cache/ai4/mlp2.npz",
+          "render_signature": [
+            2532,
+            1793485509104534415
+          ],
+          "review_signature": [
+            2532,
+            1793485509104534415
+          ],
+          "signature_matches": true,
+          "sha256": "b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d",
+          "exists": true,
+          "fresh_signature": [
+            2532,
+            1793485509104534415
+          ],
+          "fresh_sha256": "b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d"
+        }
+      ],
+      "receipt": "zh-Backprop/receipt.json.gz",
+      "comparison": "zh-Backprop/comparison.json.gz"
+    },
+    {
+      "case": "en-Train",
+      "frames": 13,
+      "exact_byte_and_pixel_inherited": 13,
+      "new_states": 0,
+      "native_examples": [
+        {
+          "file": "003_00033.8s.png",
+          "sha256": "dc38b0f969b2da8c19407a61e1be5d1d8d744196304260eca40269716c03bd3f",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        },
+        {
+          "file": "008_00105.3s.png",
+          "sha256": "a444c036d72ca34691c0545301253634dd72f4afccb7b90bafbd45c7fc68af9e",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        },
+        {
+          "file": "012_00165.3s.png",
+          "sha256": "57a869b698e8139c6282d6ec51560e1bed0e257c1738465f3ceb7c4c2ec17052",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        }
+      ],
+      "source": {
+        "path": "/workspace/explainer-videos/videos/ai/ai4/s09_train.py",
+        "sha256": "49f9e2da42f74283fc989608a10e5ad82cb6dea33a4bd4fac9329d85a7970f78"
+      },
+      "record_sha256": "6c0022fa0aaccb672d09ddc5c9195d2dcd9167b08afcb1b03f4775e386151c3b",
+      "warnings": [],
+      "inputs": [
+        {
+          "path": ".cache/ai4/grad0.json",
+          "render_signature": [
+            1258,
+            1793485524085653580
+          ],
+          "review_signature": [
+            1258,
+            1793485524085653580
+          ],
+          "signature_matches": true,
+          "sha256": "12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d",
+          "exists": true,
+          "fresh_signature": [
+            1258,
+            1793485524085653580
+          ],
+          "fresh_sha256": "12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d"
+        },
+        {
+          "path": ".cache/ai4/grad0.npz",
+          "render_signature": [
+            4161,
+            1793485524081312196
+          ],
+          "review_signature": [
+            4161,
+            1793485524081312196
+          ],
+          "signature_matches": true,
+          "sha256": "be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf",
+          "exists": true,
+          "fresh_signature": [
+            4161,
+            1793485524081312196
+          ],
+          "fresh_sha256": "be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf"
+        },
+        {
+          "path": ".cache/ai4/train.json",
+          "render_signature": [
+            1919,
+            1793485520890721666
+          ],
+          "review_signature": [
+            1919,
+            1793485520890721666
+          ],
+          "signature_matches": true,
+          "sha256": "1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd",
+          "exists": true,
+          "fresh_signature": [
+            1919,
+            1793485520890721666
+          ],
+          "fresh_sha256": "1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd"
+        },
+        {
+          "path": ".cache/ai4/train.npz",
+          "render_signature": [
+            49378,
+            1793485520884249435
+          ],
+          "review_signature": [
+            49378,
+            1793485520884249435
+          ],
+          "signature_matches": true,
+          "sha256": "757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6",
+          "exists": true,
+          "fresh_signature": [
+            49378,
+            1793485520884249435
+          ],
+          "fresh_sha256": "757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6"
+        },
+        {
+          "path": ".cache/ai4/gdlr.json",
+          "render_signature": [
+            1925,
+            1793485528530780235
+          ],
+          "review_signature": [
+            1925,
+            1793485528530780235
+          ],
+          "signature_matches": true,
+          "sha256": "6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d",
+          "exists": true,
+          "fresh_signature": [
+            1925,
+            1793485528530780235
+          ],
+          "fresh_sha256": "6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d"
+        },
+        {
+          "path": ".cache/ai4/gdlr.npz",
+          "render_signature": [
+            16144,
+            1793485528525572771
+          ],
+          "review_signature": [
+            16144,
+            1793485528525572771
+          ],
+          "signature_matches": true,
+          "sha256": "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770",
+          "exists": true,
+          "fresh_signature": [
+            16144,
+            1793485528525572771
+          ],
+          "fresh_sha256": "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770"
+        }
+      ],
+      "receipt": "en-Train/receipt.json.gz",
+      "comparison": "en-Train/comparison.json.gz"
+    },
+    {
+      "case": "zh-Train",
+      "frames": 13,
+      "exact_byte_and_pixel_inherited": 13,
+      "new_states": 0,
+      "native_examples": [
+        {
+          "file": "003_00036.1s.png",
+          "sha256": "be2dcd6bcd8e600594da5bcc71b7a0f40b29abcf7267a12413d336d61a49821f",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        },
+        {
+          "file": "008_00115.9s.png",
+          "sha256": "7b4bf588344fc237812c1a896bd09947abc598deff928b0e347bf1013838a6f4",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        },
+        {
+          "file": "012_00177.1s.png",
+          "sha256": "f401210ee66d665d4d688379afb57402837c06f0944b8c8565e3733cd632dbf9",
+          "viewing": "Inherited exact baseline native inspection; this fresh copy is byte/pixel identical. No new direct viewing claimed."
+        }
+      ],
+      "source": {
+        "path": "/workspace/explainer-videos/videos/ai/ai4/s09_train.py",
+        "sha256": "49f9e2da42f74283fc989608a10e5ad82cb6dea33a4bd4fac9329d85a7970f78"
+      },
+      "record_sha256": "7adfdc864835effebc39f7bc31ad1669cfdd23991e4796acb9bc9900aa4ebfd0",
+      "warnings": [],
+      "inputs": [
+        {
+          "path": ".cache/ai4/grad0.json",
+          "render_signature": [
+            1258,
+            1793485524085653580
+          ],
+          "review_signature": [
+            1258,
+            1793485524085653580
+          ],
+          "signature_matches": true,
+          "sha256": "12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d",
+          "exists": true,
+          "fresh_signature": [
+            1258,
+            1793485524085653580
+          ],
+          "fresh_sha256": "12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d"
+        },
+        {
+          "path": ".cache/ai4/grad0.npz",
+          "render_signature": [
+            4161,
+            1793485524081312196
+          ],
+          "review_signature": [
+            4161,
+            1793485524081312196
+          ],
+          "signature_matches": true,
+          "sha256": "be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf",
+          "exists": true,
+          "fresh_signature": [
+            4161,
+            1793485524081312196
+          ],
+          "fresh_sha256": "be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf"
+        },
+        {
+          "path": ".cache/ai4/train.json",
+          "render_signature": [
+            1919,
+            1793485520890721666
+          ],
+          "review_signature": [
+            1919,
+            1793485520890721666
+          ],
+          "signature_matches": true,
+          "sha256": "1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd",
+          "exists": true,
+          "fresh_signature": [
+            1919,
+            1793485520890721666
+          ],
+          "fresh_sha256": "1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd"
+        },
+        {
+          "path": ".cache/ai4/train.npz",
+          "render_signature": [
+            49378,
+            1793485520884249435
+          ],
+          "review_signature": [
+            49378,
+            1793485520884249435
+          ],
+          "signature_matches": true,
+          "sha256": "757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6",
+          "exists": true,
+          "fresh_signature": [
+            49378,
+            1793485520884249435
+          ],
+          "fresh_sha256": "757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6"
+        },
+        {
+          "path": ".cache/ai4/gdlr.json",
+          "render_signature": [
+            1925,
+            1793485528530780235
+          ],
+          "review_signature": [
+            1925,
+            1793485528530780235
+          ],
+          "signature_matches": true,
+          "sha256": "6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d",
+          "exists": true,
+          "fresh_signature": [
+            1925,
+            1793485528530780235
+          ],
+          "fresh_sha256": "6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d"
+        },
+        {
+          "path": ".cache/ai4/gdlr.npz",
+          "render_signature": [
+            16144,
+            1793485528525572771
+          ],
+          "review_signature": [
+            16144,
+            1793485528525572771
+          ],
+          "signature_matches": true,
+          "sha256": "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770",
+          "exists": true,
+          "fresh_signature": [
+            16144,
+            1793485528525572771
+          ],
+          "fresh_sha256": "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770"
+        }
+      ],
+      "receipt": "zh-Train/receipt.json.gz",
+      "comparison": "zh-Train/comparison.json.gz"
+    }
+  ],
+  "limits": [
+    "Settled native endpoints only; no full-resolution motion, continuous playback, audio/listening or sync approval",
+    "All viewing inherited only on exact timestamp and byte/pixel SHA match to complete actually viewed baseline; no perceptual-similarity inheritance"
+  ],
+  "baseline_package": "../ai4-native1080-endpoint-review/",
+  "baseline_immutable_manifest_sha256": "b41826d8592f79de1bc4cd57a76938a89ae74de91cfd676baeda88204263d7ce",
+  "clarification": "Parent independently established Gradient contour openings are expected viewport clipping with zero interior gaps; earlier Gradient minor-seam suspicion is resolved. Quadratic/Lagrange observations remain visual leads, without a proven shared-helper defect. Original package remains unchanged."
+}

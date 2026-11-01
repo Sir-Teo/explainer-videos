@@ -1,0 +1,90 @@
+{
+ "gpt2": 124439808,
+ "qwen3_4b": 4022468096,
+ "provenance": {
+  "gpt2": {
+   "source": "pinned-safetensors-headers",
+   "repo": "openai-community/gpt2",
+   "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+   "files": [
+    {
+     "path": "model.safetensors",
+     "header_sha256": "a41dc5e8c2f45cd5f533b4f081e7777de1f8faa3b2527134d4230ae531127b21",
+     "header_bytes": 14283
+    }
+   ],
+   "config_sha256": "0daed7749b4f02b8f76240d5444551d7b08712dab4d0adb8239c56ba823bb7b4",
+   "index_sha256": null,
+   "tied_weight_policy": "declared tied lm_head counted once; GPT2 causal-mask buffers excluded",
+   "excluded": [
+    "h.7.attn.bias",
+    "h.2.attn.bias",
+    "h.4.attn.bias",
+    "h.0.attn.bias",
+    "h.8.attn.bias",
+    "h.11.attn.bias",
+    "h.3.attn.bias",
+    "h.9.attn.bias",
+    "h.5.attn.bias",
+    "h.6.attn.bias",
+    "h.1.attn.bias",
+    "h.10.attn.bias"
+   ],
+   "error": null,
+   "historical_date": null,
+   "observed_utc": "2026-10-31T22:24:55.680251+00:00"
+  },
+  "qwen3_4b": {
+   "source": "pinned-safetensors-headers",
+   "repo": "Qwen/Qwen3-4B-Base",
+   "revision": "906bfd4b4dc7f14ee4320094d8b41684abff8539",
+   "files": [
+    {
+     "path": "model-00001-of-00003.safetensors",
+     "header_sha256": "a8f45f72beda0f33ad73b7c94747c4c5bace94e3770a90810e9a23ec0a6a6abd",
+     "header_bytes": 20000
+    },
+    {
+     "path": "model-00002-of-00003.safetensors",
+     "header_sha256": "55d8e8decb2976c9758e922be1274c003bf57dd8ac5f7c4a74dd91ee39fc0351",
+     "header_bytes": 25232
+    },
+    {
+     "path": "model-00003-of-00003.safetensors",
+     "header_sha256": "19f753c0ae5015a4f6110a351070e77ff01c59ec37dd2c12fbae4f3c7eb1a0d1",
+     "header_bytes": 552
+    }
+   ],
+   "config_sha256": "304b2545a258d35620f1d4bf46940c0471d9baa00715ff8e77f84c2fca5057c1",
+   "index_sha256": "d6c42883a895dfef5b0080ed2116a1bcd764f558406b98923d675978a1abf29c",
+   "tied_weight_policy": "declared tied lm_head counted once; GPT2 causal-mask buffers excluded",
+   "excluded": [],
+   "error": null,
+   "historical_date": null,
+   "observed_utc": "2026-10-31T22:25:00.239027+00:00"
+  }
+ },
+ "_cache": {
+  "schema_version": 1,
+  "recipe": {
+   "item": "params",
+   "schema_version": 1,
+   "source_hashes": {
+    "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+    "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+    "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+    "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+   },
+   "libraries": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "torch": "2.15.0+cpu"
+   },
+   "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+  },
+  "dependencies": {},
+  "payload_sha256": "e6e2b847bfc2c64d88033c4b21281d6cee2a3fe11d7865a448243215fc6a659c",
+  "arrays_sha256": null,
+  "origin": "producer-save"
+ }
+}

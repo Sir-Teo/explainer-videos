@@ -1,0 +1,242 @@
+{
+  "completed_utc": "2026-10-31T23:44:04.015174+00:00",
+  "scope": "Fresh EN/ZH Floats native1920x1080 silent cached-only skipped-animation settled regression after local Write-reveal repair.",
+  "counts": {
+    "cases": 2,
+    "fresh_endpoint_PNGs": 32,
+    "exact_byte_and_pixel_inherited": 32,
+    "new_changed_states": 0,
+    "new_directly_viewed_states": 0,
+    "baseline_native_examples_packaged": 6
+  },
+  "cases": [
+    {
+      "case": "en-Floats",
+      "fresh_endpoints": 16,
+      "exact_inherited": 16,
+      "new_states": 0,
+      "new_directly_viewed_states": 0,
+      "wrapper_returncode": 1,
+      "status": "needs-review",
+      "warnings": [
+        {
+          "kind": "untranslated-on-screen",
+          "text": "FP8 E4M3FN"
+        }
+      ],
+      "source": {
+        "path": "/workspace/explainer-videos/videos/ai/ai4/s10_floats.py",
+        "sha256": "98288d25f6a2fb37d0742a9385e078425265b86696e2336928b049683148682b"
+      },
+      "result_sha256": "7b08358a5354fa691697d032c718958e319e3d45d6a916fe043f86b6ec87f012",
+      "native_examples": [
+        {
+          "file": "003_00038.7s.png",
+          "sha256": "43eabf1f9d36fc7a89895154fa15326e00b640d2921ee3d8d19437b7e1f28d83",
+          "size": [
+            1920,
+            1080
+          ],
+          "scale": [
+            1,
+            1
+          ],
+          "viewed_utc": "2026-10-31T23:22:37.231961+00:00",
+          "method": "direct native1920x1080PNG via view_image original",
+          "viewing": "Exact inherited baseline native inspection; fresh copy is byte/pixel identical."
+        },
+        {
+          "file": "005_00095.7s.png",
+          "sha256": "151b50c13cf109fc5c0a33355fe69457d14a804b8dcd9bacf7a4a3a262d1aefa",
+          "size": [
+            1920,
+            1080
+          ],
+          "scale": [
+            1,
+            1
+          ],
+          "viewed_utc": "2026-10-31T23:22:37.231961+00:00",
+          "method": "direct native1920x1080PNG via view_image original",
+          "viewing": "Exact inherited baseline native inspection; fresh copy is byte/pixel identical."
+        },
+        {
+          "file": "015_00219.6s.png",
+          "sha256": "6ed76d94b5c6c515b28083af51ceddd894ec6de2bf2d03f7580ce2ddefbe3b46",
+          "size": [
+            1920,
+            1080
+          ],
+          "scale": [
+            1,
+            1
+          ],
+          "viewed_utc": "2026-10-31T23:22:37.231961+00:00",
+          "method": "direct native1920x1080PNG via view_image original",
+          "viewing": "Exact inherited baseline native inspection; fresh copy is byte/pixel identical."
+        }
+      ],
+      "inputs": [
+        {
+          "path": ".cache/ai4/floats.json",
+          "render_signature": [
+            2908,
+            1793485530573099124
+          ],
+          "review_signature": [
+            2908,
+            1793485530573099124
+          ],
+          "signature_matches": true,
+          "sha256": "db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291",
+          "exists": true,
+          "fresh_signature": [
+            2908,
+            1793485530573099124
+          ],
+          "fresh_sha256": "db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291"
+        },
+        {
+          "path": ".cache/ai4/floats.npz",
+          "render_signature": [
+            8682,
+            1793485530568456683
+          ],
+          "review_signature": [
+            8682,
+            1793485530568456683
+          ],
+          "signature_matches": true,
+          "sha256": "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af",
+          "exists": true,
+          "fresh_signature": [
+            8682,
+            1793485530568456683
+          ],
+          "fresh_sha256": "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af"
+        }
+      ],
+      "comparison": "en-Floats/comparison.json.gz",
+      "receipt": "en-Floats/receipt.json.gz"
+    },
+    {
+      "case": "zh-Floats",
+      "fresh_endpoints": 16,
+      "exact_inherited": 16,
+      "new_states": 0,
+      "new_directly_viewed_states": 0,
+      "wrapper_returncode": 1,
+      "status": "needs-review",
+      "warnings": [
+        {
+          "kind": "untranslated-on-screen",
+          "text": "FP8 E4M3FN"
+        }
+      ],
+      "source": {
+        "path": "/workspace/explainer-videos/videos/ai/ai4/s10_floats.py",
+        "sha256": "98288d25f6a2fb37d0742a9385e078425265b86696e2336928b049683148682b"
+      },
+      "result_sha256": "8d96294748dc41332cbb16adc5bf7e7f0921d921a8160eae4b93571ccb073027",
+      "native_examples": [
+        {
+          "file": "003_00042.4s.png",
+          "sha256": "9b73c0c365e5c2e9959dc1224673deb5244ef7a9340af5fc622045374b6a57a1",
+          "size": [
+            1920,
+            1080
+          ],
+          "scale": [
+            1,
+            1
+          ],
+          "viewed_utc": "2026-10-31T23:22:58.110065+00:00",
+          "method": "direct native1920x1080PNG via view_image original",
+          "viewing": "Exact inherited baseline native inspection; fresh copy is byte/pixel identical."
+        },
+        {
+          "file": "005_00096.1s.png",
+          "sha256": "226fd91fb2a252b19ffba86ed6c213391ca17d273ac0b6ad227d84a81e780601",
+          "size": [
+            1920,
+            1080
+          ],
+          "scale": [
+            1,
+            1
+          ],
+          "viewed_utc": "2026-10-31T23:22:58.110065+00:00",
+          "method": "direct native1920x1080PNG via view_image original",
+          "viewing": "Exact inherited baseline native inspection; fresh copy is byte/pixel identical."
+        },
+        {
+          "file": "015_00204.6s.png",
+          "sha256": "69440693a6d59e214d4c737ddd0eec54ddc764f548968ca0d1b4dda7c58a4992",
+          "size": [
+            1920,
+            1080
+          ],
+          "scale": [
+            1,
+            1
+          ],
+          "viewed_utc": "2026-10-31T23:22:58.110065+00:00",
+          "method": "direct native1920x1080PNG via view_image original",
+          "viewing": "Exact inherited baseline native inspection; fresh copy is byte/pixel identical."
+        }
+      ],
+      "inputs": [
+        {
+          "path": ".cache/ai4/floats.json",
+          "render_signature": [
+            2908,
+            1793485530573099124
+          ],
+          "review_signature": [
+            2908,
+            1793485530573099124
+          ],
+          "signature_matches": true,
+          "sha256": "db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291",
+          "exists": true,
+          "fresh_signature": [
+            2908,
+            1793485530573099124
+          ],
+          "fresh_sha256": "db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291"
+        },
+        {
+          "path": ".cache/ai4/floats.npz",
+          "render_signature": [
+            8682,
+            1793485530568456683
+          ],
+          "review_signature": [
+            8682,
+            1793485530568456683
+          ],
+          "signature_matches": true,
+          "sha256": "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af",
+          "exists": true,
+          "fresh_signature": [
+            8682,
+            1793485530568456683
+          ],
+          "fresh_sha256": "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af"
+        }
+      ],
+      "comparison": "zh-Floats/comparison.json.gz",
+      "receipt": "zh-Floats/receipt.json.gz"
+    }
+  ],
+  "immutable_prior_manifests": {
+    "ai4-native1080-endpoint-review": "b41826d8592f79de1bc4cd57a76938a89ae74de91cfd676baeda88204263d7ce",
+    "ai4-reveal-native1080-regression": "97264849e5f03f11998522c4373b95095b36a4976da4d2bc6afebf01b57f1cdf"
+  },
+  "warning_assessment": "Both wrappers exit1/needs-review solely for preserved FP8 E4M3FN standard-format-name warning, explicitly accepted by parent; no suppression or added CJK.",
+  "limits": [
+    "Settled endpoints only; does not validate animation transitions or full-resolution motion",
+    "No continuous playback, narration/audio/listening or synchronization approval",
+    "Viewing inherited only on exact timestamp plus exact byte and RGB-pixel hash agreement"
+  ]
+}

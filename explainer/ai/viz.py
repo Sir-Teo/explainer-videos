@@ -22,6 +22,8 @@ A scene that zooms is ``class X(VoiceoverScene, MovingCameraScene)``; one with a
 
 from __future__ import annotations
 
+import math
+
 import numpy as np
 from manim import *  # noqa: F403
 
@@ -397,23 +399,132 @@ class Cloud3D(VGroup):
 # ---------------------------------------------------------------------------
 # Contour lines
 # ---------------------------------------------------------------------------
+def _contour_fraction(z1, z2, level):
+    """Keep ordinary interpolation unchanged; scale only overflowing differences."""
+    with np.errstate(over='ignore', invalid='ignore', divide='ignore'):
+        numerator, denominator = (level - z1, z2 - z1)
+        t = numerator / denominator
+    if all(math.isfinite(float(v)) for v in [numerator, denominator, t]) and 0 <= t <= 1:
+        return t
+    scale = max(abs(float(z1)), abs(float(z2)), abs(float(level)))
+    a, b, lv = (z1 / scale, z2 / scale, level / scale)
+    return (lv - a) / (b - a)
+
+
 def contour_segments(xs, ys, Z, level):
-    """Marching squares: the segments where the grid values Z[i, j] (at ys[i], xs[j]) cross ``level``."""
-    segs = []
+    """Marching-squares segments, including exact-level vertices and edges.
+
+    Whole-level edges are emitted once beside non-flat cells; an entirely flat
+    grid emits nothing. Isolated zero points and flat-region interiors are not
+    represented. Nonzero four-crossing saddles retain perimeter-order pairing,
+    rather than an asymptotic decider. Integer axes must be exactly representable
+    in float64 before interpolation; intermediate coordinates have float64 precision.
+    """
+    xs, ys, Z = (np.asarray(xs), np.asarray(ys), np.asarray(Z))
+    if (xs.ndim != 1 or ys.ndim != 1 or len(xs) < 2 or len(ys) < 2
+            or Z.shape != (len(ys), len(xs))
+            or any(np.iscomplexobj(x) for x in [xs, ys, Z, level])):
+        raise ValueError('Expected real one-dimensional axes and matching rectangular Z.')
+    try:
+        finite = all(np.isfinite(x).all() for x in [xs, ys, Z, level])
+        increasing = np.all(xs[1:] > xs[:-1]) and np.all(ys[1:] > ys[:-1])
+    except TypeError as exc:
+        raise ValueError('Expected finite numeric input.') from exc
+    if np.ndim(level) != 0 or not finite or not increasing:
+        raise ValueError('Expected finite scalar level, finite values and strictly increasing axes.')
+    # Convert integer axes before subtraction to avoid int64 wraparound. Refuse
+    # lossy endpoints rather than silently shifting or collapsing coordinates.
+    safe_axes = []
+    for axis in (xs, ys):
+        if np.issubdtype(axis.dtype, np.integer):
+            floats = axis.astype(np.float64)
+            if any(int(a) != int(b) for a, b in zip(axis, floats)):
+                raise ValueError('Integer coordinates must be exactly representable as float64 geometry.')
+            axis = floats
+        safe_axes.append(axis)
+    xs, ys = safe_axes
+    segs, seen, cuts = ([], set(), {})
+    flat = (Z[:-1, :-1] == level) & (Z[:-1, 1:] == level) & (Z[1:, 1:] == level) & (Z[1:, :-1] == level)
+
+    def emit(a, b):
+        a, b = (tuple(a), tuple(b))
+        key = tuple(sorted((a, b)))
+        if a != b and key not in seen:
+            if not np.isfinite([a, b]).all():
+                raise ValueError('Nonfinite interpolated geometry.')
+            seen.add(key)
+            segs.append([a, b])
+
     for i in range(len(ys) - 1):
         for j in range(len(xs) - 1):
-            c = [(xs[j], ys[i], Z[i, j]), (xs[j + 1], ys[i], Z[i, j + 1]), (xs[j + 1], ys[i + 1], Z[i + 1, j + 1]),
-                 (xs[j], ys[i + 1], Z[i + 1, j])]
+            c = [(xs[j], ys[i], Z[i, j]), (xs[j + 1], ys[i], Z[i, j + 1]),
+                 (xs[j + 1], ys[i + 1], Z[i + 1, j + 1]), (xs[j], ys[i + 1], Z[i + 1, j])]
+            ids = [(i, j), (i, j + 1), (i + 1, j + 1), (i + 1, j)]
+            zeros = [k for k in range(4) if c[k][2] == level]
+            zero_edges = [k for k in range(4) if c[k][2] == level == c[(k + 1) % 4][2]]
+            if zero_edges:
+                # A bilinear cell with one zero edge and opposite signs across
+                # its far edge has a transverse branch. Split the shared zero
+                # edge at that branch so its T-junction remains connected.
+                if len(zeros) == 2:
+                    k = zero_edges[0]
+                    a, b = (c[k], c[(k + 1) % 4])
+                    d, e = (c[(k + 3) % 4], c[(k + 2) % 4])
+                    if d[2] < level < e[2] or e[2] < level < d[2]:
+                        t = _contour_fraction(d[2], e[2], level)
+                        p = (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
+                        q = (d[0] + t * (e[0] - d[0]), d[1] + t * (e[1] - d[1]))
+                        emit(p, q)
+                        key = tuple(sorted((ids[k], ids[(k + 1) % 4])))
+                        cuts.setdefault(key, []).append(p)
+                continue
             pts = []
             for k in range(4):
-                (x1, y1, z1), (x2, y2, z2) = c[k], c[(k + 1) % 4]
-                if (z1 - level) * (z2 - level) < 0:
-                    t = (level - z1) / (z2 - z1)
-                    pts.append((x1 + t * (x2 - x1), y1 + t * (y2 - y1)))
-            if len(pts) == 2:
-                segs.append(pts)
-            elif len(pts) == 4:
-                segs += [pts[:2], pts[2:]]
+                a, b = (c[k], c[(k + 1) % 4])
+                if a[2] < level < b[2] or b[2] < level < a[2]:
+                    t = _contour_fraction(a[2], b[2], level)
+                    pts.append((a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])))
+            if not zeros:
+                if len(pts) == 2:
+                    emit(*pts)
+                elif len(pts) == 4:
+                    emit(*pts[:2])
+                    emit(*pts[2:])
+            elif len(zeros) == 1:
+                k = zeros[0]
+                a, b = (c[(k - 1) % 4][2], c[(k + 1) % 4][2])
+                if a < level < b or b < level < a:
+                    pts.append(c[k][:2])
+                if len(pts) == 2:
+                    emit(*pts)
+            elif len(zeros) == 2:
+                other = [k for k in range(4) if k not in zeros]
+                a, b = (c[k][2] for k in other)
+                if a < level < b or b < level < a:
+                    emit(c[zeros[0]][:2], c[zeros[1]][:2])
+
+    def edge(a, b, neighbors):
+        if Z[a] != level or Z[b] != level:
+            return
+        # A plateau interface is meaningful only beside a non-flat cell. In
+        # particular, an entirely flat grid must not acquire a viewport outline.
+        if all(flat[k] for k in neighbors):
+            return
+        key = tuple(sorted((a, b)))
+        p = (xs[a[1]], ys[a[0]])
+        q = (xs[b[1]], ys[b[0]])
+        points = [p, q] + cuts.get(key, [])
+        axis = 0 if a[0] == b[0] else 1
+        points = sorted(set(points), key=lambda x: x[axis])
+        for u, v in zip(points, points[1:]):
+            emit(u, v)
+
+    for i in range(len(ys)):
+        for j in range(len(xs) - 1):
+            edge((i, j), (i, j + 1), [(r, j) for r in [i - 1, i] if 0 <= r < len(ys) - 1])
+    for i in range(len(ys) - 1):
+        for j in range(len(xs)):
+            edge((i, j), (i + 1, j), [(i, col) for col in [j - 1, j] if 0 <= col < len(xs) - 1])
     return segs
 
 

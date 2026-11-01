@@ -1,0 +1,154 @@
+{
+  "checked_utc": "2026-11-01T00:21:10.685206+00:00",
+  "scope": "Known subsequent independent changes supplied by parent and exact receipts inspected. These do not exhaustively explain every aggregate mismatch and do not establish historical imported source bytes. Existing false aggregate-current fields remain unchanged.",
+  "receipts": [
+    {
+      "path": "/workspace/runtime/ai4-train-ladder-motion-repair/freeze.json",
+      "sha256": "0d09d0ad58512da85225945d14c387b229c521c3783d9de5577387ddaa084431",
+      "receipt": {
+        "utc": "2026-10-31T23:35:59.597703+00:00",
+        "before_sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "after_sha256": "49f9e2da42f74283fc989608a10e5ad82cb6dea33a4bd4fac9329d85a7970f78",
+        "only_changes": "Train.first step(1/2, transform=False); full AST identical after removing exactly two inserted keywords. All VO/bookmarks/data/geometry/run_time identical. Shared ladder helper untouched.",
+        "originals": {
+          "en": {
+            "original_movie_sha256": "17ecf5294408623588c6ae766a8b53842918190b3816b382bbb9a8d403106dc4",
+            "original_record_sha256": "89d7d981199992c5c6ddc62fc5b56d65503bab5f11b236d83dae061f9e85c70b",
+            "review_path": "/workspace/runtime/ai4-mid-head-motion-review/en/Train/17ecf5294408623588c6ae766a8b53842918190b3816b382bbb9a8d403106dc4/review-map.json",
+            "review_sha256": "925d83a78f640d8a8e58c6a52909de5a416228b44bdd95d1976c4993cf7dc824",
+            "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect"
+          },
+          "zh": {
+            "original_movie_sha256": "d2fe4eb1e98c765f4f518c54f74d5b5f1f435cf5cf06f0aee22e239601359393",
+            "original_record_sha256": "141fabc9ac822186e71f90571e965b7414dc9ed8c24d433269983a3714c34520",
+            "review_path": "/workspace/runtime/ai4-mid-head-motion-review/zh/Train/d2fe4eb1e98c765f4f518c54f74d5b5f1f435cf5cf06f0aee22e239601359393/review-map.json",
+            "review_sha256": "12736bf5db9a0c6e9f5688d72140fe40fb4423aed27c33da1390ecacc1d32998",
+            "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect"
+          }
+        },
+        "appearance": "fresh bilingual endpoints and motion pending root renders"
+      }
+    },
+    {
+      "path": "/workspace/runtime/ai4-floats-ladder-motion-repair/freeze.json",
+      "sha256": "f1a30eaac796ca7553cadb0d7689cf50bb1a81d0b00b2c2c2c5bb1e96bc44ed4",
+      "receipt": {
+        "utc": "2026-10-31T23:41:48.985172+00:00",
+        "before_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+        "after_sha256": "98288d25f6a2fb37d0742a9385e078425265b86696e2336928b049683148682b",
+        "only_changes": "Floats.lse step(1/2, transform=False); method called stable in task wording is actually lse. Full AST identical after removing exactly two inserted keywords. Six-line ULP card, all VO/bookmarks/data/geometry/run_time identical. Shared ladder helper untouched.",
+        "originals": {
+          "en": {
+            "original_movie_sha256": "d67732ceb6d267cf6b62a770bad734ce723bc252e36ac50cc58a27f3477eeb67",
+            "original_record_sha256": "846cd7dbfb0abe36dc7720a8a5b7c88aad84f9c41b08b52e1b0681938cc83d0d",
+            "review_path": "/workspace/runtime/ai4-mid-head-motion-review/en/Floats/d67732ceb6d267cf6b62a770bad734ce723bc252e36ac50cc58a27f3477eeb67/review-map.json",
+            "review_sha256": "7f166d53ff38df6a29d9d7d6d47a0704568f9503268e8b38e0b1cf38231158b6",
+            "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect"
+          },
+          "zh": {
+            "original_movie_sha256": "dcda6972de7edda8b1c12acd6eb1e5919d3e7c57f9dc43934f6597d9aba12551",
+            "original_record_sha256": "48a91f716fff780ed7fa4fc12693d7416c392d31c7f759d15ec6db228acf6b54",
+            "review_path": "/workspace/runtime/ai4-mid-head-motion-review/zh/Floats/dcda6972de7edda8b1c12acd6eb1e5919d3e7c57f9dc43934f6597d9aba12551/review-map.json",
+            "review_sha256": "fa93dc1db815dea86931ae5915abee008ff43c3ed22856218febfc7738d2f671",
+            "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect"
+          }
+        },
+        "appearance": "fresh bilingual endpoints and motion pending root renders"
+      }
+    },
+    {
+      "path": "/workspace/runtime/ai3-svd-ladder-reveal-repair/freeze.json",
+      "sha256": "c5511309e10ba818f31eda441d589b883cff71329b75af59b2c56dd27351a6f1",
+      "receipt": {
+        "frozen_utc": "2026-10-31T23:57:29.201067+00:00",
+        "source_before_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+        "source_after_sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+        "shared_ladder_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+        "single_text_replacement": true,
+        "AST_equal_after_removing_single_transform_false_keyword": true,
+        "changed_call_line": 125,
+        "data_geometry_narration_bookmarks_timing_other_AST_unchanged": true,
+        "authorization": "Parent clarified isolated local f00 pilot unaffected; cloud single-keyword edit authorized now. No local action.",
+        "render_validation": "pending fresh EN/ZH480 endpoint+motion by parent",
+        "original_movie_and_audit_snapshots": "before/ and before-audit/"
+      }
+    },
+    {
+      "path": "/workspace/explainer-videos/docs/qa/evidence/shared-contour-exact-level-repair/source-freeze.json.gz",
+      "sha256": "1b9a8c6b6b3caad374c417f48bf44cbee2215df1795a4b6b4ec82ff755328193",
+      "receipt": {
+        "approved_candidate_sha256": "2736d10023347cf142bd9d9ff44f269290adb99b4261ab120ccef1221eea7f88",
+        "baseline_viz_sha256": "68c7ea8f062a7c8d0e54ee94e819c09f1b8c882931babddd3a0b4c8cee61f5aa",
+        "production_viz_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+        "quadratic_source_sha256": "8b387c3a6f707b35b275bfb56a2daba1219707bd6e8c573bbf8ca2456390d68e",
+        "test_sha256": "3a915465b50d4d704139914f6d99bf8d2c8e49f98f156072aaaac9ee319a596c",
+        "legacy_fixture_sha256": "d0bf61242fa65bf70444f4a1c9a2f1bb7b3c9925b095eec77dd7441387a6af43",
+        "outside_contour_functions_and_explicit_math_import_text_exactly_preserved": true,
+        "approved_candidate_body_AST_equivalence": true,
+        "shared_source_frozen": true,
+        "rendered_regression": "pending root-owned fresh bilingual Quadratic motion/native checks",
+        "full_repository_suite": "pending root-owned run",
+        "production_computation_or_cache_rewrite": false,
+        "commit_or_render_by_this_agent": false
+      }
+    }
+  ],
+  "owned_modules_current_vs_frozen": [
+    {
+      "case": "en-GradCheck",
+      "path": "videos/ai/ai4/s11_vcurve.py",
+      "frozen_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "current_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "matches": true
+    },
+    {
+      "case": "en-HVP",
+      "path": "videos/ai/ai4/s14_hvp.py",
+      "frozen_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "current_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "matches": true
+    },
+    {
+      "case": "en-Memory",
+      "path": "videos/ai/ai4/s12_memory.py",
+      "frozen_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "current_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "matches": true
+    },
+    {
+      "case": "en-Newton",
+      "path": "videos/ai/ai4/s13_newton.py",
+      "frozen_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "current_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "matches": true
+    },
+    {
+      "case": "zh-GradCheck",
+      "path": "videos/ai/ai4/s11_vcurve.py",
+      "frozen_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "current_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "matches": true
+    },
+    {
+      "case": "zh-HVP",
+      "path": "videos/ai/ai4/s14_hvp.py",
+      "frozen_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "current_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "matches": true
+    },
+    {
+      "case": "zh-Memory",
+      "path": "videos/ai/ai4/s12_memory.py",
+      "frozen_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "current_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "matches": true
+    },
+    {
+      "case": "zh-Newton",
+      "path": "videos/ai/ai4/s13_newton.py",
+      "frozen_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "current_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "matches": true
+    }
+  ]
+}

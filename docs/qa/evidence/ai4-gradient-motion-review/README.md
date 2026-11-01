@@ -1,0 +1,11 @@
+# Part4 Gradient: bilingual selected-image motion evidence
+
+All **965 selected-time appearances** were reviewed through **844 exact PNG representative groups**, across **106 chronological sheets**, plus **12 native 854×480 individual followups**. Automated RGB analysis decoded 5,156 source frames. EN 475 / 412 unique / 52 pages; ZH 490 / 432 / 54. Selected gaps are at most 1 second (floating-point tolerance). No new concrete layout/math defect was found.
+
+Every actually viewed sheet is in `{en,zh}/viewed-pages/`; all critical native followups are in `{en,zh}/native/`. Complete compressed maps bind every selected source frame/time/PNG SHA to its representative and actually viewed page. Original automated audit/render records, statuses, warnings and fingerprints are compressed without modification. `review.json.gz` supplies conclusions, bounds and exact original/frozen movie identities. No MP4 is copied here.
+
+Both raw movies remain **needs-review**, with **source-changed-during-render** warnings. `source-at-review/` is a later disk snapshot, not independent proof of historical in-memory imports; parent attests direct Gradient source unchanged. Recorded numeric input size/mtime signatures still matched, and read-only hashes are retained. Compression preserves exact decompressed bytes; `manifest.json` hashes the actual packaged compressed bytes.
+
+The native1080 contour opening lead was resolved by the exact-grid topology probe as expected finite-window clipping, with zero missing interior segments. No Gradient/source/helper fix was made. Wider-viewport polish and the unrelated shared exact-zero helper issue were deferred. Existing ZH history-card line-leading comma is cosmetic; fixed formula backing covers only a small outer surface rim during camera rotation, without hiding required content.
+
+This proves **listed selected-image review**, not continuous perceptual playback, narration/listening/synchronization or native1080 full-motion approval. Every intervening unviewed-frame gap is retained in raw audits. Fine changes between selected frames remain unverified. The one native1080 endpoint viewed for contour diagnosis is separate from the 480p movie views and is not included in the 12 native movie followups.

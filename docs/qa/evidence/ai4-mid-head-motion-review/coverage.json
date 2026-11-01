@@ -1,0 +1,419 @@
+{
+  "cases": [
+    {
+      "language": "en",
+      "scene": "Modes",
+      "movie_sha256": "b907abe2b298bc58ccb411d1e7b7f5598e3255af5d4083b8e46e12cdf9791c4c",
+      "movie_bytes": 1566186,
+      "original_record_sha256": "a90c81f869fd0098388e8152d4f2bb1a334a9a016a5e2af09fac80462cad3e72",
+      "decoded": 3090,
+      "selected": 419,
+      "unique_viewed": 296,
+      "exact_pixel_duplicate_selections": 123,
+      "pages_viewed": 37,
+      "native_viewed": 4,
+      "largest_selected_time_gap": 1.0000000000000009,
+      "status": "all-selected-representatives-reviewed-no-concrete-defect",
+      "findings": [],
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_case": "/workspace/runtime/ai4-mid-head-motion-review/en/Modes/b907abe2b298bc58ccb411d1e7b7f5598e3255af5d4083b8e46e12cdf9791c4c"
+    },
+    {
+      "language": "en",
+      "scene": "Backprop",
+      "movie_sha256": "4c09a480979d8c1b745923ce331dd74b80af81c1fbd8f1cf9d2443cc4be9ca37",
+      "movie_bytes": 2026817,
+      "original_record_sha256": "58de912347e578500b73b2469f40d0d180fca79737ae7d9aeaacd667a182b39b",
+      "decoded": 2975,
+      "selected": 433,
+      "unique_viewed": 343,
+      "exact_pixel_duplicate_selections": 90,
+      "pages_viewed": 43,
+      "native_viewed": 3,
+      "largest_selected_time_gap": 1.0000000000000142,
+      "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect",
+      "findings": [
+        {
+          "id": "BP-M01",
+          "status": "confirmed-rendered",
+          "description": "Moving duplicate of prior equation overlaps still-visible original during ladder copy/morph reveal; fractions doubled at native112.532357 and124.932357 seconds. Also third transition near136.933."
+        }
+      ],
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_case": "/workspace/runtime/ai4-mid-head-motion-review/en/Backprop/4c09a480979d8c1b745923ce331dd74b80af81c1fbd8f1cf9d2443cc4be9ca37"
+    },
+    {
+      "language": "en",
+      "scene": "Library",
+      "movie_sha256": "3ef80980320d87d31d0c8b54d859b37f1172f6b42eeab06c699b22767e8dafe0",
+      "movie_bytes": 1900396,
+      "original_record_sha256": "4da00059ac612dea35f15371f35a6a5b1ee55d270a1b59740aed4ddfb3babc0d",
+      "decoded": 2316,
+      "selected": 381,
+      "unique_viewed": 312,
+      "exact_pixel_duplicate_selections": 69,
+      "pages_viewed": 39,
+      "native_viewed": 4,
+      "largest_selected_time_gap": 1.0,
+      "status": "all-selected-representatives-reviewed-no-concrete-defect",
+      "findings": [],
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_case": "/workspace/runtime/ai4-mid-head-motion-review/en/Library/3ef80980320d87d31d0c8b54d859b37f1172f6b42eeab06c699b22767e8dafe0"
+    },
+    {
+      "language": "en",
+      "scene": "Train",
+      "movie_sha256": "17ecf5294408623588c6ae766a8b53842918190b3816b382bbb9a8d403106dc4",
+      "movie_bytes": 1676657,
+      "original_record_sha256": "89d7d981199992c5c6ddc62fc5b56d65503bab5f11b236d83dae061f9e85c70b",
+      "decoded": 2744,
+      "selected": 354,
+      "unique_viewed": 251,
+      "exact_pixel_duplicate_selections": 103,
+      "pages_viewed": 32,
+      "native_viewed": 6,
+      "largest_selected_time_gap": 1.000000000000007,
+      "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect",
+      "findings": [
+        {
+          "id": "TRAIN-M01",
+          "status": "confirmed-actual-motion",
+          "times": [
+            20.933008,
+            30.599674
+          ],
+          "description": "During second and third ladder reveals a copied prior equation overlaps the already visible prior row, causing a doubled formula before the copy reaches the new row. Settled equations remain clear.",
+          "candidate": "Local step(1/2,transform=False), shared helper unchanged."
+        }
+      ],
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_case": "/workspace/runtime/ai4-mid-head-motion-review/en/Train/17ecf5294408623588c6ae766a8b53842918190b3816b382bbb9a8d403106dc4"
+    },
+    {
+      "language": "en",
+      "scene": "Floats",
+      "movie_sha256": "d67732ceb6d267cf6b62a770bad734ce723bc252e36ac50cc58a27f3477eeb67",
+      "movie_bytes": 1577930,
+      "original_record_sha256": "846cd7dbfb0abe36dc7720a8a5b7c88aad84f9c41b08b52e1b0681938cc83d0d",
+      "decoded": 3397,
+      "selected": 429,
+      "unique_viewed": 277,
+      "exact_pixel_duplicate_selections": 152,
+      "pages_viewed": 35,
+      "native_viewed": 6,
+      "largest_selected_time_gap": 1.0,
+      "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect",
+      "findings": [
+        {
+          "id": "FLOATS-M01",
+          "status": "confirmed-actual-motion",
+          "times": [
+            201.199674,
+            206.866341
+          ],
+          "description": "Copied previous LSE formula doubles/overlaps visible previous row during next-row reveals; settled rows clear.",
+          "candidate": "Local ladder step(1/2,transform=False), shared helper unchanged."
+        }
+      ],
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_case": "/workspace/runtime/ai4-mid-head-motion-review/en/Floats/d67732ceb6d267cf6b62a770bad734ce723bc252e36ac50cc58a27f3477eeb67"
+    },
+    {
+      "language": "zh",
+      "scene": "Modes",
+      "movie_sha256": "4881876d48f35cb7dde595012d6cb2cca0a95b08be88fc0dd3ae806400650ce1",
+      "movie_bytes": 1659482,
+      "original_record_sha256": "740d8e2c1bf9ee864027ccc232f689f9966149e08f163f3e51f6f98c4de15761",
+      "decoded": 3538,
+      "selected": 445,
+      "unique_viewed": 297,
+      "exact_pixel_duplicate_selections": 148,
+      "pages_viewed": 38,
+      "native_viewed": 4,
+      "largest_selected_time_gap": 1.0,
+      "status": "all-selected-representatives-reviewed-no-concrete-defect",
+      "findings": [],
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_case": "/workspace/runtime/ai4-mid-head-motion-review/zh/Modes/4881876d48f35cb7dde595012d6cb2cca0a95b08be88fc0dd3ae806400650ce1"
+    },
+    {
+      "language": "zh",
+      "scene": "Backprop",
+      "movie_sha256": "237bb13e9e9071ed6b83fffe9d45dc7384a001e64a0894456dfe780b4df6fe03",
+      "movie_bytes": 2088273,
+      "original_record_sha256": "3691d8caf024bd02aae689adf894149561762dd7f2cba35becbbff219fa06c92",
+      "decoded": 3095,
+      "selected": 454,
+      "unique_viewed": 360,
+      "exact_pixel_duplicate_selections": 94,
+      "pages_viewed": 45,
+      "native_viewed": 4,
+      "largest_selected_time_gap": 1.000000000000007,
+      "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect",
+      "findings": [
+        {
+          "id": "BP-M01",
+          "status": "confirmed-rendered-native",
+          "times": [
+            118.733,
+            132.199,
+            142.066
+          ],
+          "description": "Same prior-row copy overlaps original during next-row reveal."
+        }
+      ],
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "runtime_case": "/workspace/runtime/ai4-mid-head-motion-review/zh/Backprop/237bb13e9e9071ed6b83fffe9d45dc7384a001e64a0894456dfe780b4df6fe03"
+    },
+    {
+      "language": "zh",
+      "scene": "Library",
+      "movie_sha256": "0427cde16ad09943ba51990eec360a984ee67b1efc1da1a6b287f831167ee951",
+      "movie_bytes": 1928570,
+      "original_record_sha256": "f5328c84fa075a8f02254ee4e1674308f433dd1cb5f67c759028bba35cdb65f1",
+      "decoded": 2548,
+      "selected": 390,
+      "unique_viewed": 305,
+      "exact_pixel_duplicate_selections": 85,
+      "pages_viewed": 39,
+      "native_viewed": 4,
+      "largest_selected_time_gap": 1.0,
+      "status": "all-selected-representatives-reviewed-no-concrete-defect",
+      "findings": [],
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_case": "/workspace/runtime/ai4-mid-head-motion-review/zh/Library/0427cde16ad09943ba51990eec360a984ee67b1efc1da1a6b287f831167ee951"
+    },
+    {
+      "language": "zh",
+      "scene": "Train",
+      "movie_sha256": "d2fe4eb1e98c765f4f518c54f74d5b5f1f435cf5cf06f0aee22e239601359393",
+      "movie_bytes": 1780612,
+      "original_record_sha256": "141fabc9ac822186e71f90571e965b7414dc9ed8c24d433269983a3714c34520",
+      "decoded": 2968,
+      "selected": 375,
+      "unique_viewed": 252,
+      "exact_pixel_duplicate_selections": 123,
+      "pages_viewed": 32,
+      "native_viewed": 6,
+      "largest_selected_time_gap": 1.0,
+      "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect",
+      "findings": [
+        {
+          "id": "TRAIN-M01",
+          "status": "confirmed-actual-motion",
+          "times": [
+            21.266341,
+            32.666341
+          ],
+          "description": "Copied previous equation doubles/overlaps existing prior equation during next row reveals. Settled rows clear.",
+          "candidate": "Local step(1/2,transform=False), no shared helper change."
+        }
+      ],
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_case": "/workspace/runtime/ai4-mid-head-motion-review/zh/Train/d2fe4eb1e98c765f4f518c54f74d5b5f1f435cf5cf06f0aee22e239601359393"
+    },
+    {
+      "language": "zh",
+      "scene": "Floats",
+      "movie_sha256": "dcda6972de7edda8b1c12acd6eb1e5919d3e7c57f9dc43934f6597d9aba12551",
+      "movie_bytes": 1490766,
+      "original_record_sha256": "48a91f716fff780ed7fa4fc12693d7416c392d31c7f759d15ec6db228acf6b54",
+      "decoded": 3165,
+      "selected": 408,
+      "unique_viewed": 267,
+      "exact_pixel_duplicate_selections": 141,
+      "pages_viewed": 34,
+      "native_viewed": 6,
+      "largest_selected_time_gap": 1.0000000000000036,
+      "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect",
+      "findings": [
+        {
+          "id": "FLOATS-M01",
+          "status": "confirmed-actual-motion",
+          "times": [
+            187.133008,
+            192.466341
+          ],
+          "description": "Copied previous LSE formula overlaps existing prior row during second/third ladder reveals. Settled rows remain clear.",
+          "candidate": "Local step(1/2,transform=False), shared helper unchanged."
+        }
+      ],
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "runtime_case": "/workspace/runtime/ai4-mid-head-motion-review/zh/Floats/dcda6972de7edda8b1c12acd6eb1e5919d3e7c57f9dc43934f6597d9aba12551"
+    }
+  ],
+  "totals": {
+    "decoded": 29836,
+    "selected": 4088,
+    "unique_viewed": 2960,
+    "exact_pixel_duplicate_selections": 1128,
+    "pages_viewed": 374,
+    "native_viewed": 47
+  },
+  "sources": {
+    "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0": {
+      "original_path": "videos/ai/ai4/s06_modes.py",
+      "compressed_path": "sources/ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0/s06_modes.py.gz"
+    },
+    "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d": {
+      "original_path": "videos/ai/ai4/s07_backprop.py",
+      "compressed_path": "sources/5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d/s07_backprop.py.gz"
+    },
+    "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9": {
+      "original_path": "videos/ai/ai4/s08_library.py",
+      "compressed_path": "sources/59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9/s08_library.py.gz"
+    },
+    "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021": {
+      "original_path": "videos/ai/ai4/s09_train.py",
+      "compressed_path": "sources/811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021/s09_train.py.gz"
+    },
+    "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4": {
+      "original_path": "videos/ai/ai4/s10_floats.py",
+      "compressed_path": "sources/929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4/s10_floats.py.gz"
+    },
+    "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d": {
+      "original_path": "videos/ai/ai4/zh_lines.py",
+      "compressed_path": "sources/e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d/zh_lines.py.gz"
+    },
+    "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041": {
+      "original_path": "videos/ai/ai4/common.py",
+      "compressed_path": "sources/cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041/common.py.gz"
+    },
+    "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182": {
+      "original_path": "videos/ai/ai_text_zh.json",
+      "compressed_path": "sources/20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182/ai_text_zh.json.gz"
+    },
+    "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e": {
+      "original_path": "tools/qa_motion.py",
+      "compressed_path": "sources/1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e/qa_motion.py.gz"
+    },
+    "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073": {
+      "original_path": "tools/qa_scene.py",
+      "compressed_path": "sources/b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073/qa_scene.py.gz"
+    },
+    "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3": {
+      "original_path": "tools/qa_series.py",
+      "compressed_path": "sources/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3/qa_series.py.gz"
+    },
+    "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0": {
+      "original_path": "explainer/ai/autodiff.py",
+      "compressed_path": "sources/2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0/autodiff.py.gz"
+    },
+    "019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c": {
+      "original_path": "videos/ai/ai4/s07_backprop.py",
+      "compressed_path": "sources/019a5a1e27b77f7f4d18cf030ca7b106995e430a2d04d069f8566cbc8398b94c/s07_backprop.py.gz"
+    }
+  },
+  "inputs": {
+    ".cache/ai4/modes.json": {
+      "sha256": "50461982b3a240ab55985bca9d9faf8a340a059cc46401da0c7f1f6df7ff1216",
+      "bytes": 11969,
+      "mtime_ns": 1793485505716573205,
+      "path": "inputs/50461982b3a240ab55985bca9d9faf8a340a059cc46401da0c7f1f6df7ff1216/modes.json"
+    },
+    ".cache/ai4/modes.npz": {
+      "sha256": "8195705ae313dbdb6285752bb58628e6a8db6d43bed323cbc520b5e551907bfe",
+      "bytes": 1491,
+      "mtime_ns": 1793485505712094881,
+      "path": "inputs/8195705ae313dbdb6285752bb58628e6a8db6d43bed323cbc520b5e551907bfe/modes.npz"
+    },
+    ".cache/ai4/params.json": {
+      "sha256": "dd82dbfb1106c320a094ad9c926d619708e4f362e1d11753bd434a54f8e7d46b",
+      "bytes": 2976,
+      "mtime_ns": 1793485500246547643,
+      "path": "inputs/dd82dbfb1106c320a094ad9c926d619708e4f362e1d11753bd434a54f8e7d46b/params.json"
+    },
+    ".cache/ai4/tiny.json": {
+      "sha256": "728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218",
+      "bytes": 1259,
+      "mtime_ns": 1793485507092588435,
+      "path": "inputs/728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218/tiny.json"
+    },
+    ".cache/ai4/mlp2.json": {
+      "sha256": "a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034",
+      "bytes": 1106,
+      "mtime_ns": 1793485509109867484,
+      "path": "inputs/a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034/mlp2.json"
+    },
+    ".cache/ai4/mlp2.npz": {
+      "sha256": "b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d",
+      "bytes": 2532,
+      "mtime_ns": 1793485509104534415,
+      "path": "inputs/b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d/mlp2.npz"
+    },
+    ".cache/ai4/tape.json": {
+      "sha256": "f9a4acf8cac97f337e7df105dd208e02a5bdea42579abd08453bb50d15f26099",
+      "bytes": 2975,
+      "mtime_ns": 1793485510363191905,
+      "path": "inputs/f9a4acf8cac97f337e7df105dd208e02a5bdea42579abd08453bb50d15f26099/tape.json"
+    },
+    ".cache/ai4/check.json": {
+      "sha256": "591e5d04e43d7346dc9beab8aa062cc22baf1ab131f47a9b97e4144019454828",
+      "bytes": 1344,
+      "mtime_ns": 1793485512327055822,
+      "path": "inputs/591e5d04e43d7346dc9beab8aa062cc22baf1ab131f47a9b97e4144019454828/check.json"
+    },
+    ".cache/ai4/grad0.json": {
+      "sha256": "12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d",
+      "bytes": 1258,
+      "mtime_ns": 1793485524085653580,
+      "path": "inputs/12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d/grad0.json"
+    },
+    ".cache/ai4/grad0.npz": {
+      "sha256": "be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf",
+      "bytes": 4161,
+      "mtime_ns": 1793485524081312196,
+      "path": "inputs/be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf/grad0.npz"
+    },
+    ".cache/ai4/train.json": {
+      "sha256": "1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd",
+      "bytes": 1919,
+      "mtime_ns": 1793485520890721666,
+      "path": "inputs/1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd/train.json"
+    },
+    ".cache/ai4/train.npz": {
+      "sha256": "757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6",
+      "bytes": 49378,
+      "mtime_ns": 1793485520884249435,
+      "path": "inputs/757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6/train.npz"
+    },
+    ".cache/ai4/gdlr.json": {
+      "sha256": "6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d",
+      "bytes": 1925,
+      "mtime_ns": 1793485528530780235,
+      "path": "inputs/6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d/gdlr.json"
+    },
+    ".cache/ai4/gdlr.npz": {
+      "sha256": "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770",
+      "bytes": 16144,
+      "mtime_ns": 1793485528525572771,
+      "path": "inputs/7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770/gdlr.npz"
+    },
+    ".cache/ai4/floats.json": {
+      "sha256": "db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291",
+      "bytes": 2908,
+      "mtime_ns": 1793485530573099124,
+      "path": "inputs/db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291/floats.json"
+    },
+    ".cache/ai4/floats.npz": {
+      "sha256": "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af",
+      "bytes": 8682,
+      "mtime_ns": 1793485530568456683,
+      "path": "inputs/11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af/floats.npz"
+    }
+  }
+}

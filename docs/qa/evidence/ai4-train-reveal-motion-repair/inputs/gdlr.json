@@ -1,0 +1,69 @@
+{
+ "lam0": 0.007075613948733852,
+ "eta0": 282.66098383701257,
+ "lam_star": 0.02600547813712622,
+ "eta_star": 76.90687283094937,
+ "H_cond": 3.330892152418567,
+ "steps": 3000,
+ "metrics": {
+  "loss_unit": "bits per transition",
+  "cohort": "full training corpus",
+  "pairs": 22788050,
+  "curve_parameter_step": "t",
+  "final_tail_states": 500
+ },
+ "etas": [
+  2.8266098383701257,
+  28.26609838370126,
+  56.53219676740252,
+  84.79829515110377,
+  141.33049191850628
+ ],
+ "last_mean": [
+  3.349622106238647,
+  3.332320778437881,
+  3.331538317637062,
+  3.3554129879280654,
+  3.581980271206984
+ ],
+ "last_spread": [
+  0.003687652982713896,
+  0.0002958899646925417,
+  0.00013604086801111137,
+  0.009679153410065311,
+  0.5019320864095906
+ ],
+ "monotone": [
+  true,
+  true,
+  true,
+  false,
+  false
+ ],
+ "_cache": {
+  "schema_version": 1,
+  "recipe": {
+   "item": "gdlr",
+   "schema_version": 1,
+   "source_hashes": {
+    "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+    "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+    "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+    "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+    "videos/ai/ai1/compute.py": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa"
+   },
+   "libraries": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "torch": "2.15.0+cpu"
+   },
+   "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+  },
+  "dependencies": {
+   "ai1/train.txt": "51f51a196c17cf5222811570c9d21acacae92fb754267d29a2ffa8dca7f3d2b8"
+  },
+  "payload_sha256": "9ebf25dd21f1a925cc060e1cb3ca4b655fe071d74dd64d8582ebba7979746526",
+  "arrays_sha256": "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770",
+  "origin": "producer-save"
+ }
+}

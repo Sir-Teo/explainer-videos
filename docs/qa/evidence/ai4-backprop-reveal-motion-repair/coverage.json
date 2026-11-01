@@ -1,0 +1,38 @@
+[
+  {
+    "language": "en",
+    "old_movie_sha256": "4c09a480979d8c1b745923ce331dd74b80af81c1fbd8f1cf9d2443cc4be9ca37",
+    "new_movie_sha256": "a40ac757eb70a6d10b9a6fc98654deb6d57fc615e5af4777d19d98ea01db8af0",
+    "decoded_frames": 2975,
+    "selected_frames": 433,
+    "exact_pixel_inherited_selected": 422,
+    "new_unique_viewed": 11,
+    "new_unique_pages_viewed": 2,
+    "dense_reveal_frames_actually_viewed": 69,
+    "dense_reveal_pages_viewed": 9,
+    "native_followups_actually_viewed": 3,
+    "endpoint_exact_png_inherited": 17,
+    "raw_motion_status": "passed",
+    "raw_motion_warnings": [],
+    "raw_endpoint_status": "passed",
+    "raw_endpoint_warnings": []
+  },
+  {
+    "language": "zh",
+    "old_movie_sha256": "237bb13e9e9071ed6b83fffe9d45dc7384a001e64a0894456dfe780b4df6fe03",
+    "new_movie_sha256": "1f2ec3da7db1cf8a1523c575cb4a79aeaa73545e7607d22522fbf50eeb769c77",
+    "decoded_frames": 3095,
+    "selected_frames": 454,
+    "exact_pixel_inherited_selected": 441,
+    "new_unique_viewed": 13,
+    "new_unique_pages_viewed": 2,
+    "dense_reveal_frames_actually_viewed": 67,
+    "dense_reveal_pages_viewed": 9,
+    "native_followups_actually_viewed": 3,
+    "endpoint_exact_png_inherited": 17,
+    "raw_motion_status": "passed",
+    "raw_motion_warnings": [],
+    "raw_endpoint_status": "passed",
+    "raw_endpoint_warnings": []
+  }
+]

@@ -1,0 +1,85 @@
+{
+  "scope": "All evidence payloads except this manifest; actual compressed-byte identities.",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 3969,
+      "sha256": "805270b400c77cb944ef0ef7f82ac3fe98466196de940179c9fb809af856f86d"
+    },
+    {
+      "file": "actual-caller-comparison.json.gz",
+      "bytes": 3354,
+      "sha256": "ee7b88a94767f4d54d621b1bd3bb94d9e29dd3039a2307c8664d8e5772bcfe7a"
+    },
+    {
+      "file": "cache-load-verification.json.gz",
+      "bytes": 9350,
+      "sha256": "624167f938cd7eb12e8c8a7125676e571acac54adb87902b04e1ef90bd67e779"
+    },
+    {
+      "file": "cache-loads.log.gz",
+      "bytes": 136,
+      "sha256": "cab449314e54b5194ffe4d69527e76bf58218536360bb64fad83be5c2840295f"
+    },
+    {
+      "file": "callers.log.gz",
+      "bytes": 197,
+      "sha256": "3a5344421121337175841e92e7d4124c9cfd2e1bf3052fc17c2c0ae4aa917b52"
+    },
+    {
+      "file": "payloads-before.json.gz",
+      "bytes": 4491,
+      "sha256": "1381d03abf21f16b5b44d255e873e7b461d46824231f318e8081f429d45f4c77"
+    },
+    {
+      "file": "probes/compare_actual_callers.py.gz",
+      "bytes": 2722,
+      "sha256": "c51107aaee027e1365c144b2f129f69290102ce22ec141bd005a83456482f02c"
+    },
+    {
+      "file": "probes/verify_cache_loads.py.gz",
+      "bytes": 1361,
+      "sha256": "3f8e5cbc51de5f1951bb35978b0376dd6e0a3e9a4a3855bde7ae015313432642"
+    },
+    {
+      "file": "production.patch.gz",
+      "bytes": 2598,
+      "sha256": "1454d1f01e44d83a4c03dcfce637fb1337e4b14cc33c7df8d687b60496586122"
+    },
+    {
+      "file": "source/quadratic-frozen.py.gz",
+      "bytes": 6764,
+      "sha256": "38f06be83c9528aa8d84e77e4902767d3aab66e6bfc7cc531a7df05a9fd09054"
+    },
+    {
+      "file": "source/viz-after.py.gz",
+      "bytes": 10483,
+      "sha256": "ea38260518e3e5ba072775355dae69b43209d43e315c6e9f0ceaee7719230411"
+    },
+    {
+      "file": "source/viz-before.py.gz",
+      "bytes": 8815,
+      "sha256": "72e7bd62dec953dad1670d9148ea79516d3f3b1ffea3f9719ca9694c66fd6e0b"
+    },
+    {
+      "file": "source-freeze.json.gz",
+      "bytes": 586,
+      "sha256": "1b9a8c6b6b3caad374c417f48bf44cbee2215df1795a4b6b4ec82ff755328193"
+    },
+    {
+      "file": "tests/fixtures/contour_segments_legacy.py",
+      "bytes": 1062,
+      "sha256": "d0bf61242fa65bf70444f4a1c9a2f1bb7b3c9925b095eec77dd7441387a6af43"
+    },
+    {
+      "file": "tests/test_contour_segments.py",
+      "bytes": 9279,
+      "sha256": "3a915465b50d4d704139914f6d99bf8d2c8e49f98f156072aaaac9ee319a596c"
+    },
+    {
+      "file": "tests.log.gz",
+      "bytes": 874,
+      "sha256": "85f579711096453cc78c3ad20f6a54b3be84328ee7fcd890332cfd2abe3adef9"
+    }
+  ]
+}

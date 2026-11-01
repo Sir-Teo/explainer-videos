@@ -1,0 +1,127 @@
+{
+ "info": {
+  "fp64": {
+   "exp": 11,
+   "man": 52,
+   "bits": 64,
+   "eps": 2.220446049250313e-16,
+   "max": 1.7976931348623157e+308,
+   "min_normal": 2.2250738585072014e-308,
+   "digits": 15.954589770191003
+  },
+  "fp32": {
+   "exp": 8,
+   "man": 23,
+   "bits": 32,
+   "eps": 1.1920928955078125e-07,
+   "max": 3.4028234663852886e+38,
+   "min_normal": 1.1754943508222875e-38,
+   "digits": 7.224719895935549
+  },
+  "bf16": {
+   "exp": 8,
+   "man": 7,
+   "bits": 16,
+   "eps": 0.0078125,
+   "max": 3.3895313892515355e+38,
+   "min_normal": 1.1754943508222875e-38,
+   "digits": 2.4082399653118496,
+   "min_sub": 9.183549615799121e-41,
+   "count": 32639
+  },
+  "fp16": {
+   "exp": 5,
+   "man": 10,
+   "bits": 16,
+   "eps": 0.0009765625,
+   "max": 65504.0,
+   "min_normal": 6.103515625e-05,
+   "digits": 3.3113299523037933,
+   "min_sub": 5.960464477539063e-08,
+   "count": 31743
+  },
+  "e5m2": {
+   "exp": 5,
+   "man": 2,
+   "bits": 8,
+   "eps": 0.25,
+   "max": 57344.0,
+   "min_normal": 6.103515625e-05,
+   "digits": 0.9030899869919435,
+   "min_sub": 1.52587890625e-05,
+   "count": 123
+  },
+  "e4m3": {
+   "exp": 4,
+   "man": 3,
+   "bits": 8,
+   "eps": 0.125,
+   "max": 448.0,
+   "min_normal": 0.015625,
+   "digits": 1.2041199826559248,
+   "min_sub": 0.001953125,
+   "count": 126
+  }
+ },
+ "rounding": {
+  "bf16_1p": 1.0,
+  "fp16_1p": 1.00390625,
+  "bf16_257": 256.0,
+  "fp16_2049": 2048.0,
+  "fp32_2p24p1": 16777216.0,
+  "e4m3_pi": 3.25,
+  "bf16_pi": 3.140625,
+  "fp16_pi": 3.140625,
+  "fp32_pi": 3.1415927410125732,
+  "fp32_tenth": 0.10000000149011612
+ },
+ "acc_steps": 10000,
+ "acc_inc": 0.01,
+ "lse_naive_e": [
+  "inf",
+  "inf",
+  "inf"
+ ],
+ "lse_naive_p": [
+  "nan",
+  "nan",
+  "nan"
+ ],
+ "lse": 1000.4075927734375,
+ "fp16_e": [
+  "inf",
+  "59872.0",
+  "22032.0"
+ ],
+ "overflow_at": {
+  "fp64": 709.782712893384,
+  "fp32": 88.72283905206835,
+  "bf16": 88.71892521235186,
+  "fp16": 11.089866488461016,
+  "e5m2": 10.956823496334602,
+  "e4m3": 6.104793232414985
+ },
+ "_cache": {
+  "schema_version": 1,
+  "recipe": {
+   "item": "floats",
+   "schema_version": 1,
+   "source_hashes": {
+    "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+    "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+    "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+    "explainer/ai/autodiff.py": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0"
+   },
+   "libraries": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "torch": "2.15.0+cpu"
+   },
+   "invalidation_scope": "conservative whole Part4 producer/helper source identity"
+  },
+  "dependencies": {},
+  "payload_sha256": "1a29fdba2d8e76366e2b79d6c1534a4a761765b724c8120f55c12c871f23158b",
+  "arrays_sha256": "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af",
+  "origin": "producer-save"
+ }
+}

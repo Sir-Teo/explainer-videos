@@ -1,0 +1,23 @@
+{
+  "utc": "2026-10-31T23:41:48.985172+00:00",
+  "before_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+  "after_sha256": "98288d25f6a2fb37d0742a9385e078425265b86696e2336928b049683148682b",
+  "only_changes": "Floats.lse step(1/2, transform=False); method called stable in task wording is actually lse. Full AST identical after removing exactly two inserted keywords. Six-line ULP card, all VO/bookmarks/data/geometry/run_time identical. Shared ladder helper untouched.",
+  "originals": {
+    "en": {
+      "original_movie_sha256": "d67732ceb6d267cf6b62a770bad734ce723bc252e36ac50cc58a27f3477eeb67",
+      "original_record_sha256": "846cd7dbfb0abe36dc7720a8a5b7c88aad84f9c41b08b52e1b0681938cc83d0d",
+      "review_path": "/workspace/runtime/ai4-mid-head-motion-review/en/Floats/d67732ceb6d267cf6b62a770bad734ce723bc252e36ac50cc58a27f3477eeb67/review-map.json",
+      "review_sha256": "7f166d53ff38df6a29d9d7d6d47a0704568f9503268e8b38e0b1cf38231158b6",
+      "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect"
+    },
+    "zh": {
+      "original_movie_sha256": "dcda6972de7edda8b1c12acd6eb1e5919d3e7c57f9dc43934f6597d9aba12551",
+      "original_record_sha256": "48a91f716fff780ed7fa4fc12693d7416c392d31c7f759d15ec6db228acf6b54",
+      "review_path": "/workspace/runtime/ai4-mid-head-motion-review/zh/Floats/dcda6972de7edda8b1c12acd6eb1e5919d3e7c57f9dc43934f6597d9aba12551/review-map.json",
+      "review_sha256": "fa93dc1db815dea86931ae5915abee008ff43c3ed22856218febfc7738d2f671",
+      "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect"
+    }
+  },
+  "appearance": "fresh bilingual endpoints and motion pending root renders"
+}

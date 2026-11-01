@@ -1,0 +1,403 @@
+{
+  "completed_utc": "2026-11-01T00:27:08.657171+00:00",
+  "scope": "Final EN/ZH Quadratic native1920x1080 cached-only silent skipped-animation endpoint regression. Preserves original537-image package; replaces only these two final native endpoint cases.",
+  "counts": {
+    "cases": 2,
+    "fresh_native_endpoints": 32,
+    "exact_byte_and_RGB_inherited": 24,
+    "changed_endpoints_directly_viewed": 8,
+    "changed_pages_directly_viewed": 2,
+    "changed_original1920x1080_followups": 8
+  },
+  "cases": [
+    {
+      "case": "en-Quadratic",
+      "source": {
+        "path": "/workspace/explainer-videos/videos/ai/ai4/s15_quadratic.py",
+        "sha256": "8b387c3a6f707b35b275bfb56a2daba1219707bd6e8c573bbf8ca2456390d68e"
+      },
+      "shared_viz": {
+        "path": "/workspace/explainer-videos/explainer/ai/viz.py",
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16"
+      },
+      "result_sha256": "83b63af556cce603cc8321afbb2cb8e3a14389bd134d5fe0d2636bfcd1b8f630",
+      "status": "passed",
+      "returncode": 0,
+      "warnings": [],
+      "source_stable_during_capture": true,
+      "fresh_endpoints": 16,
+      "exact_inherited": 12,
+      "changed_directly_viewed": 4,
+      "native_followups": [
+        {
+          "file": "005_00056.4s.png",
+          "time": 56.43699999999999,
+          "sha256": "05ce5f38a8cf1298133d3fc5148564bfa496af4e5fd15925dba17d37d8412c39",
+          "scale": [
+            1,
+            1
+          ],
+          "size": [
+            1920,
+            1080
+          ],
+          "directly_viewed": true,
+          "finding": "Internal blue contour loops continuous at native resolution. Outer green arcs terminate at true viewport boundaries. Paths/final markers, captions and legends remain readable, without collision."
+        },
+        {
+          "file": "006_00066.5s.png",
+          "time": 66.48066471734892,
+          "sha256": "e7353b707ca55c2ea27947e7aef6559b98ec3aaeb12eb3d62449234a39e6bf72",
+          "scale": [
+            1,
+            1
+          ],
+          "size": [
+            1920,
+            1080
+          ],
+          "directly_viewed": true,
+          "finding": "Internal blue contour loops continuous at native resolution. Outer green arcs terminate at true viewport boundaries. Paths/final markers, captions and legends remain readable, without collision."
+        },
+        {
+          "file": "007_00082.6s.png",
+          "time": 82.64148343079924,
+          "sha256": "98b13e7f6e503569830a5b14d999a8465b42704872e15d431a1d95176b6e1ba4",
+          "scale": [
+            1,
+            1
+          ],
+          "size": [
+            1920,
+            1080
+          ],
+          "directly_viewed": true,
+          "finding": "Internal blue contour loops continuous at native resolution. Outer green arcs terminate at true viewport boundaries. Paths/final markers, captions and legends remain readable, without collision."
+        },
+        {
+          "file": "008_00090.2s.png",
+          "time": 90.16195126705654,
+          "sha256": "344b094031b91f104d0853a239220a5a7272f7b697b2e170dfda149e4d2338ba",
+          "scale": [
+            1,
+            1
+          ],
+          "size": [
+            1920,
+            1080
+          ],
+          "directly_viewed": true,
+          "finding": "Internal blue contour loops continuous at native resolution. Outer green arcs terminate at true viewport boundaries. Paths/final markers, captions and legends remain readable, without collision."
+        }
+      ],
+      "inputs": [
+        {
+          "path": ".cache/ai4/valley.json",
+          "render_signature": [
+            1195,
+            1793485545476174082
+          ],
+          "review_signature": [
+            1195,
+            1793485545476174082
+          ],
+          "signature_matches": true,
+          "sha256": "f7f4bed471579263dcd844d5480617a5a31600fd453d648fdf8941f1f03337ed",
+          "exists": true,
+          "fresh_signature": [
+            1195,
+            1793485545476174082
+          ],
+          "fresh_sha256": "f7f4bed471579263dcd844d5480617a5a31600fd453d648fdf8941f1f03337ed"
+        },
+        {
+          "path": ".cache/ai4/valley.npz",
+          "render_signature": [
+            3615,
+            1793485545472088327
+          ],
+          "review_signature": [
+            3615,
+            1793485545472088327
+          ],
+          "signature_matches": true,
+          "sha256": "3aeaf22153629a49f964737b278baf892b45263832af16cd80085fc866977fdb",
+          "exists": true,
+          "fresh_signature": [
+            3615,
+            1793485545472088327
+          ],
+          "fresh_sha256": "3aeaf22153629a49f964737b278baf892b45263832af16cd80085fc866977fdb"
+        },
+        {
+          "path": ".cache/ai4/quad.json",
+          "render_signature": [
+            8319,
+            1793485546392702964
+          ],
+          "review_signature": [
+            8319,
+            1793485546392702964
+          ],
+          "signature_matches": true,
+          "sha256": "c3e92425573a15609d909de84fd1f77f20f2b9915cefd80b883acc8f25d47a54",
+          "exists": true,
+          "fresh_signature": [
+            8319,
+            1793485546392702964
+          ],
+          "fresh_sha256": "c3e92425573a15609d909de84fd1f77f20f2b9915cefd80b883acc8f25d47a54"
+        },
+        {
+          "path": ".cache/ai4/quad.npz",
+          "render_signature": [
+            13335,
+            1793485546387706720
+          ],
+          "review_signature": [
+            13335,
+            1793485546387706720
+          ],
+          "signature_matches": true,
+          "sha256": "607e72f60e66b381cf3e589e1390fe9e08433da3d4f05a3f4f96c937a2fa6ddf",
+          "exists": true,
+          "fresh_signature": [
+            13335,
+            1793485546387706720
+          ],
+          "fresh_sha256": "607e72f60e66b381cf3e589e1390fe9e08433da3d4f05a3f4f96c937a2fa6ddf"
+        }
+      ],
+      "narration_records_exact_equal": true,
+      "all32_timestamp_comparison": "Every new timestamp has a baseline match; none removed",
+      "comparison": "en-Quadratic/comparison.json.gz",
+      "receipt": "en-Quadratic/receipt.json.gz"
+    },
+    {
+      "case": "zh-Quadratic",
+      "source": {
+        "path": "/workspace/explainer-videos/videos/ai/ai4/s15_quadratic.py",
+        "sha256": "8b387c3a6f707b35b275bfb56a2daba1219707bd6e8c573bbf8ca2456390d68e"
+      },
+      "shared_viz": {
+        "path": "/workspace/explainer-videos/explainer/ai/viz.py",
+        "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16"
+      },
+      "result_sha256": "db03fba771ba292a485968c88f9719cb703ed0a6db1ac614c700379359b9cb02",
+      "status": "passed",
+      "returncode": 0,
+      "warnings": [],
+      "source_stable_during_capture": true,
+      "fresh_endpoints": 16,
+      "exact_inherited": 12,
+      "changed_directly_viewed": 4,
+      "native_followups": [
+        {
+          "file": "005_00055.0s.png",
+          "time": 54.99879166666666,
+          "sha256": "17ce6747fd6098921d7e67d22e4f6ff402313cbe0d2d94ea750ea363a06459b5",
+          "scale": [
+            1,
+            1
+          ],
+          "size": [
+            1920,
+            1080
+          ],
+          "directly_viewed": true,
+          "finding": "Internal blue contour loops continuous at native resolution. Outer green arcs terminate at true viewport boundaries. Paths/final markers, captions and legends remain readable, without collision."
+        },
+        {
+          "file": "006_00063.2s.png",
+          "time": 63.17821721335184,
+          "sha256": "0ad7bfde37af7026fc5f785b5b56a437c358e132537a05b14ca7585f41ed4880",
+          "scale": [
+            1,
+            1
+          ],
+          "size": [
+            1920,
+            1080
+          ],
+          "directly_viewed": true,
+          "finding": "Internal blue contour loops continuous at native resolution. Outer green arcs terminate at true viewport boundaries. Paths/final markers, captions and legends remain readable, without collision."
+        },
+        {
+          "file": "007_00077.1s.png",
+          "time": 77.0596819825292,
+          "sha256": "72dbf3fbf6f35606eac6208bd76875946859d99d677201cb5e15b6a8f067f74d",
+          "scale": [
+            1,
+            1
+          ],
+          "size": [
+            1920,
+            1080
+          ],
+          "directly_viewed": true,
+          "finding": "Internal blue contour loops continuous at native resolution. Outer green arcs terminate at true viewport boundaries. Paths/final markers, captions and legends remain readable, without collision."
+        },
+        {
+          "file": "008_00086.4s.png",
+          "time": 86.35940430116854,
+          "sha256": "b6af8aab6058401780b84f1f94238ffa0de1ed9c214cdbcd9e9a82cd0bc67940",
+          "scale": [
+            1,
+            1
+          ],
+          "size": [
+            1920,
+            1080
+          ],
+          "directly_viewed": true,
+          "finding": "Internal blue contour loops continuous at native resolution. Outer green arcs terminate at true viewport boundaries. Paths/final markers, captions and legends remain readable, without collision."
+        }
+      ],
+      "inputs": [
+        {
+          "path": ".cache/ai4/valley.json",
+          "render_signature": [
+            1195,
+            1793485545476174082
+          ],
+          "review_signature": [
+            1195,
+            1793485545476174082
+          ],
+          "signature_matches": true,
+          "sha256": "f7f4bed471579263dcd844d5480617a5a31600fd453d648fdf8941f1f03337ed",
+          "exists": true,
+          "fresh_signature": [
+            1195,
+            1793485545476174082
+          ],
+          "fresh_sha256": "f7f4bed471579263dcd844d5480617a5a31600fd453d648fdf8941f1f03337ed"
+        },
+        {
+          "path": ".cache/ai4/valley.npz",
+          "render_signature": [
+            3615,
+            1793485545472088327
+          ],
+          "review_signature": [
+            3615,
+            1793485545472088327
+          ],
+          "signature_matches": true,
+          "sha256": "3aeaf22153629a49f964737b278baf892b45263832af16cd80085fc866977fdb",
+          "exists": true,
+          "fresh_signature": [
+            3615,
+            1793485545472088327
+          ],
+          "fresh_sha256": "3aeaf22153629a49f964737b278baf892b45263832af16cd80085fc866977fdb"
+        },
+        {
+          "path": ".cache/ai4/quad.json",
+          "render_signature": [
+            8319,
+            1793485546392702964
+          ],
+          "review_signature": [
+            8319,
+            1793485546392702964
+          ],
+          "signature_matches": true,
+          "sha256": "c3e92425573a15609d909de84fd1f77f20f2b9915cefd80b883acc8f25d47a54",
+          "exists": true,
+          "fresh_signature": [
+            8319,
+            1793485546392702964
+          ],
+          "fresh_sha256": "c3e92425573a15609d909de84fd1f77f20f2b9915cefd80b883acc8f25d47a54"
+        },
+        {
+          "path": ".cache/ai4/quad.npz",
+          "render_signature": [
+            13335,
+            1793485546387706720
+          ],
+          "review_signature": [
+            13335,
+            1793485546387706720
+          ],
+          "signature_matches": true,
+          "sha256": "607e72f60e66b381cf3e589e1390fe9e08433da3d4f05a3f4f96c937a2fa6ddf",
+          "exists": true,
+          "fresh_signature": [
+            13335,
+            1793485546387706720
+          ],
+          "fresh_sha256": "607e72f60e66b381cf3e589e1390fe9e08433da3d4f05a3f4f96c937a2fa6ddf"
+        }
+      ],
+      "narration_records_exact_equal": true,
+      "all32_timestamp_comparison": "Every new timestamp has a baseline match; none removed",
+      "comparison": "zh-Quadratic/comparison.json.gz",
+      "receipt": "zh-Quadratic/receipt.json.gz"
+    }
+  ],
+  "unchanged_wrapper_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+  "baseline_immutable_manifest_sha256": "b41826d8592f79de1bc4cd57a76938a89ae74de91cfd676baeda88204263d7ce",
+  "before_after_figure": {
+    "file": "valley-before-after.png",
+    "sha256": "b85ae90c4b822e09534e3207056e4413b8fc08f165bbfb5274b978043b498a7c",
+    "mapping": [
+      {
+        "case": "en-Quadratic",
+        "phase": "before",
+        "file": "005_00056.4s.png",
+        "time": 56.43699999999999,
+        "source_sha256": "c7aaf626d264b18efe5aadf22cb9aba5fbcac64c02e5c1d83ad5a36cc8d03d3e",
+        "scale": [
+          0.5,
+          0.5
+        ]
+      },
+      {
+        "case": "en-Quadratic",
+        "phase": "after",
+        "file": "005_00056.4s.png",
+        "time": 56.43699999999999,
+        "source_sha256": "05ce5f38a8cf1298133d3fc5148564bfa496af4e5fd15925dba17d37d8412c39",
+        "scale": [
+          0.5,
+          0.5
+        ]
+      },
+      {
+        "case": "zh-Quadratic",
+        "phase": "before",
+        "file": "005_00055.0s.png",
+        "time": 54.99879166666666,
+        "source_sha256": "9cb9ce25f9a3e4b4dfe5fc66c63994c83f810736499d5b37940fd5e1293f2521",
+        "scale": [
+          0.5,
+          0.5
+        ]
+      },
+      {
+        "case": "zh-Quadratic",
+        "phase": "after",
+        "file": "005_00055.0s.png",
+        "time": 54.99879166666666,
+        "source_sha256": "17ce6747fd6098921d7e67d22e4f6ff402313cbe0d2d94ea750ea363a06459b5",
+        "scale": [
+          0.5,
+          0.5
+        ]
+      }
+    ],
+    "viewed": true,
+    "viewed_utc": "2026-11-01T00:27:40.926830+00:00",
+    "method": "All4native-image overview cells inspected at declared0.5scale; changed originals already separately viewed at1.0scale"
+  },
+  "limits": [
+    "Native settled endpoints only; does not approve time-coupled path/dot animation or Write reveal transitions",
+    "No production1080p full-motion/continuous viewing or audio/listening/synchronization approval",
+    "Local4Kpilot separate and untouched",
+    "Shared-viz regression for other chapters is owned by parent; this supplement covers Quadratic only"
+  ],
+  "resource_control": "Serial nice10 numeric threads1; freeDISK and availableRAM>=512MiB checked before each case",
+  "source_changes_by_reviewer": false
+}

@@ -1,0 +1,23 @@
+{
+  "utc": "2026-10-31T23:35:59.597703+00:00",
+  "before_sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+  "after_sha256": "49f9e2da42f74283fc989608a10e5ad82cb6dea33a4bd4fac9329d85a7970f78",
+  "only_changes": "Train.first step(1/2, transform=False); full AST identical after removing exactly two inserted keywords. All VO/bookmarks/data/geometry/run_time identical. Shared ladder helper untouched.",
+  "originals": {
+    "en": {
+      "original_movie_sha256": "17ecf5294408623588c6ae766a8b53842918190b3816b382bbb9a8d403106dc4",
+      "original_record_sha256": "89d7d981199992c5c6ddc62fc5b56d65503bab5f11b236d83dae061f9e85c70b",
+      "review_path": "/workspace/runtime/ai4-mid-head-motion-review/en/Train/17ecf5294408623588c6ae766a8b53842918190b3816b382bbb9a8d403106dc4/review-map.json",
+      "review_sha256": "925d83a78f640d8a8e58c6a52909de5a416228b44bdd95d1976c4993cf7dc824",
+      "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect"
+    },
+    "zh": {
+      "original_movie_sha256": "d2fe4eb1e98c765f4f518c54f74d5b5f1f435cf5cf06f0aee22e239601359393",
+      "original_record_sha256": "141fabc9ac822186e71f90571e965b7414dc9ed8c24d433269983a3714c34520",
+      "review_path": "/workspace/runtime/ai4-mid-head-motion-review/zh/Train/d2fe4eb1e98c765f4f518c54f74d5b5f1f435cf5cf06f0aee22e239601359393/review-map.json",
+      "review_sha256": "12736bf5db9a0c6e9f5688d72140fe40fb4423aed27c33da1390ecacc1d32998",
+      "status": "all-selected-representatives-reviewed-one-confirmed-transition-defect"
+    }
+  },
+  "appearance": "fresh bilingual endpoints and motion pending root renders"
+}

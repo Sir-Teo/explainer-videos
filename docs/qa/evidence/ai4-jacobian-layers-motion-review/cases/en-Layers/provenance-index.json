@@ -1,0 +1,64 @@
+{
+  "files": [
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/en-Layers/085d554e54175592e23aba1642d7d278d5d7623a550b95512a127630d65102c0/frozen/.cache/ai4/jacobians.json",
+      "relative_to_frozen": ".cache/ai4/jacobians.json",
+      "raw_sha256": "fe9010b7e51e5f03af564f47aaa5622947bb5fea5b62aa70dc040effe8680936",
+      "retained_gzip_blob": "provenance-blobs/fe9010b7e51e5f03af564f47aaa5622947bb5fea5b62aa70dc040effe8680936.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/en-Layers/085d554e54175592e23aba1642d7d278d5d7623a550b95512a127630d65102c0/frozen/.cache/ai4/jacobians.npz",
+      "relative_to_frozen": ".cache/ai4/jacobians.npz",
+      "raw_sha256": "42131a5f8fdb3b9b8c98315ed288315e11605377fa99fa5d676673d32b889405",
+      "retained_gzip_blob": "provenance-blobs/42131a5f8fdb3b9b8c98315ed288315e11605377fa99fa5d676673d32b889405.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/en-Layers/085d554e54175592e23aba1642d7d278d5d7623a550b95512a127630d65102c0/frozen/renders/qa/series/ai4/en/Layers_motion/media/videos/480p15/Layers.narration.json",
+      "relative_to_frozen": "renders/qa/series/ai4/en/Layers_motion/media/videos/480p15/Layers.narration.json",
+      "raw_sha256": "b249b738594da549ae9c914a854197a665048cda3ed5788a636a8d9f7c6f4ab9",
+      "retained_gzip_blob": "provenance-blobs/b249b738594da549ae9c914a854197a665048cda3ed5788a636a8d9f7c6f4ab9.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/en-Layers/085d554e54175592e23aba1642d7d278d5d7623a550b95512a127630d65102c0/frozen/renders/qa/series/ai4/en/Layers_motion/result.json",
+      "relative_to_frozen": "renders/qa/series/ai4/en/Layers_motion/result.json",
+      "raw_sha256": "2fa3b5379409702d0c56556c277e925eb78a173f2d650a9baf7beb35d18bff25",
+      "retained_gzip_blob": "provenance-blobs/2fa3b5379409702d0c56556c277e925eb78a173f2d650a9baf7beb35d18bff25.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/en-Layers/085d554e54175592e23aba1642d7d278d5d7623a550b95512a127630d65102c0/frozen/tools/qa_motion.py",
+      "relative_to_frozen": "tools/qa_motion.py",
+      "raw_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "retained_gzip_blob": "provenance-blobs/1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/en-Layers/085d554e54175592e23aba1642d7d278d5d7623a550b95512a127630d65102c0/frozen/videos/ai/ai4/common.py",
+      "relative_to_frozen": "videos/ai/ai4/common.py",
+      "raw_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+      "retained_gzip_blob": "provenance-blobs/cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/en-Layers/085d554e54175592e23aba1642d7d278d5d7623a550b95512a127630d65102c0/frozen/videos/ai/ai4/manifest.py",
+      "relative_to_frozen": "videos/ai/ai4/manifest.py",
+      "raw_sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+      "retained_gzip_blob": "provenance-blobs/1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/en-Layers/085d554e54175592e23aba1642d7d278d5d7623a550b95512a127630d65102c0/frozen/videos/ai/ai4/s05_layers.py",
+      "relative_to_frozen": "videos/ai/ai4/s05_layers.py",
+      "raw_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+      "retained_gzip_blob": "provenance-blobs/33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/en-Layers/085d554e54175592e23aba1642d7d278d5d7623a550b95512a127630d65102c0/frozen/videos/ai/ai4/zh_lines.py",
+      "relative_to_frozen": "videos/ai/ai4/zh_lines.py",
+      "raw_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+      "retained_gzip_blob": "provenance-blobs/e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/en-Layers/085d554e54175592e23aba1642d7d278d5d7623a550b95512a127630d65102c0/frozen/videos/ai/ai_text_zh.json",
+      "relative_to_frozen": "videos/ai/ai_text_zh.json",
+      "raw_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+      "retained_gzip_blob": "provenance-blobs/20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182.gz"
+    }
+  ]
+}

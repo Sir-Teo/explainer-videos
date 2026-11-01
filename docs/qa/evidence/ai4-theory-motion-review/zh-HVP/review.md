@@ -1,0 +1,53 @@
+# HVP zh: selected-time visual QA
+
+314 selected times: 190 native unique images directly viewed on 24 chronological sheets, 124 exact duplicate reuse. Every file frame was automatically decoded (2711 frames); this is not continuous perceptual playback/listening. Largest selected gap 1.000000s.
+
+Movie SHA `572c53fdf46f9b8e76c6019dd72fea2457c3620b193855c78ce6a8a86fb4eda1`; tool SHA `1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e`. Source/input/record/frame/page provenance and gaps remain in JSON.
+
+Page 1: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 2: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 3: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 4: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 5: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 6: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 7: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 8: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 9: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 10: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 11: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 12: Actually viewed all native-scale representative cells chronologically. Chinese title and derivation captions fit; fixed-v identity/cost explanation and 1994 card clear through emphasis. Incoming charts and measured discrepancy/timing fit; transient Write and matching-formula copies resolve correctly. No concrete visual defect in this span.
+
+Page 13: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 14: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 15: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 16: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 17: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 18: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 19: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 20: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 21: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 22: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 23: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.
+
+Page 24: Actually viewed every remaining native-scale representative cell chronologically. Chinese finite-difference V-curve/power chart and floor qualifiers readable; all six checkpoint region maps, normalized signed-log spectra and absolute-rho/cutoff readouts fit with moving loss marker. Color-only emphasis keeps spectrum positions fixed. Incoming/outgoing readout values overlap briefly during crossfade, with clear held states. Final fade correct. No concrete blocking visual defect.

@@ -1,0 +1,64 @@
+{
+  "files": [
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/zh-Jacobian/25e7b9137048e7184ef26e5ea50ff72229ff2a526e88ddd87f4c5754ca24d59d/frozen/.cache/ai4/depth.json",
+      "relative_to_frozen": ".cache/ai4/depth.json",
+      "raw_sha256": "1ffd989907645c43fc7da0d2b3529b727a3fb3baee307d33f0d93f310a069965",
+      "retained_gzip_blob": "provenance-blobs/1ffd989907645c43fc7da0d2b3529b727a3fb3baee307d33f0d93f310a069965.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/zh-Jacobian/25e7b9137048e7184ef26e5ea50ff72229ff2a526e88ddd87f4c5754ca24d59d/frozen/.cache/ai4/depth.npz",
+      "relative_to_frozen": ".cache/ai4/depth.npz",
+      "raw_sha256": "99c400d91780e257c42230bf17f629fde21e43b8f2991ed0862e3c9e7d6ed4a4",
+      "retained_gzip_blob": "provenance-blobs/99c400d91780e257c42230bf17f629fde21e43b8f2991ed0862e3c9e7d6ed4a4.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/zh-Jacobian/25e7b9137048e7184ef26e5ea50ff72229ff2a526e88ddd87f4c5754ca24d59d/frozen/renders/qa/series/ai4/zh/Jacobian_motion/media/videos/480p15/Jacobian.narration.json",
+      "relative_to_frozen": "renders/qa/series/ai4/zh/Jacobian_motion/media/videos/480p15/Jacobian.narration.json",
+      "raw_sha256": "801659ef22bbfc01486c4a5515d5cd3c097ad464ce1eeacf5c4f6f6e15d19279",
+      "retained_gzip_blob": "provenance-blobs/801659ef22bbfc01486c4a5515d5cd3c097ad464ce1eeacf5c4f6f6e15d19279.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/zh-Jacobian/25e7b9137048e7184ef26e5ea50ff72229ff2a526e88ddd87f4c5754ca24d59d/frozen/renders/qa/series/ai4/zh/Jacobian_motion/result.json",
+      "relative_to_frozen": "renders/qa/series/ai4/zh/Jacobian_motion/result.json",
+      "raw_sha256": "52162072f64e479ba012ab23d1e7194fee2b47f36bedd1d6e17a40230e748786",
+      "retained_gzip_blob": "provenance-blobs/52162072f64e479ba012ab23d1e7194fee2b47f36bedd1d6e17a40230e748786.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/zh-Jacobian/25e7b9137048e7184ef26e5ea50ff72229ff2a526e88ddd87f4c5754ca24d59d/frozen/tools/qa_motion.py",
+      "relative_to_frozen": "tools/qa_motion.py",
+      "raw_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "retained_gzip_blob": "provenance-blobs/1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/zh-Jacobian/25e7b9137048e7184ef26e5ea50ff72229ff2a526e88ddd87f4c5754ca24d59d/frozen/videos/ai/ai4/common.py",
+      "relative_to_frozen": "videos/ai/ai4/common.py",
+      "raw_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+      "retained_gzip_blob": "provenance-blobs/cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/zh-Jacobian/25e7b9137048e7184ef26e5ea50ff72229ff2a526e88ddd87f4c5754ca24d59d/frozen/videos/ai/ai4/manifest.py",
+      "relative_to_frozen": "videos/ai/ai4/manifest.py",
+      "raw_sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+      "retained_gzip_blob": "provenance-blobs/1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/zh-Jacobian/25e7b9137048e7184ef26e5ea50ff72229ff2a526e88ddd87f4c5754ca24d59d/frozen/videos/ai/ai4/s04_jacobian.py",
+      "relative_to_frozen": "videos/ai/ai4/s04_jacobian.py",
+      "raw_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+      "retained_gzip_blob": "provenance-blobs/4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/zh-Jacobian/25e7b9137048e7184ef26e5ea50ff72229ff2a526e88ddd87f4c5754ca24d59d/frozen/videos/ai/ai4/zh_lines.py",
+      "relative_to_frozen": "videos/ai/ai4/zh_lines.py",
+      "raw_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+      "retained_gzip_blob": "provenance-blobs/e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d.gz"
+    },
+    {
+      "frozen_original": "/workspace/runtime/ai4-jacobian-layers-motion-review/zh-Jacobian/25e7b9137048e7184ef26e5ea50ff72229ff2a526e88ddd87f4c5754ca24d59d/frozen/videos/ai/ai_text_zh.json",
+      "relative_to_frozen": "videos/ai/ai_text_zh.json",
+      "raw_sha256": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182",
+      "retained_gzip_blob": "provenance-blobs/20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182.gz"
+    }
+  ]
+}

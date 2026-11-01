@@ -1,0 +1,180 @@
+{
+  "scope": "Completed bilingual Hook/repairedDerivative full-file selected-image review; continuous/audio unverified.",
+  "payloads": [
+    {
+      "path": "README.md",
+      "bytes": 3612,
+      "sha256": "7fe864f5716913c3fe948c270e8bdabcb3dcee7609e10149a9770e106b056bf0"
+    },
+    {
+      "path": "coverage-summary.json.gz",
+      "bytes": 739,
+      "sha256": "3517fc2a015f604ad37fb04f4566ec073cbc6b3079aedef9c5bae1c334df8816"
+    },
+    {
+      "path": "en-Derivative/automatic-audit.json.gz",
+      "bytes": 26080,
+      "sha256": "65086b80aca3cc3a48de8000155e017d9fc2343ee5e39e23e6b6197c7442517f"
+    },
+    {
+      "path": "en-Derivative/dense-repair-supplement.json.gz",
+      "bytes": 3172,
+      "sha256": "4d2d50557357fc84267b055813cf799a3aabb8340d2f08c081324497ce7721d7"
+    },
+    {
+      "path": "en-Derivative/native-1117.png",
+      "bytes": 88124,
+      "sha256": "5c5624a07e9cbbe1f4f2401a4525f8131f3c498cd82b9332943a63df78f9ea97"
+    },
+    {
+      "path": "en-Derivative/native-1789.png",
+      "bytes": 63414,
+      "sha256": "3c2c3d99b8c7dc1ec5ac26592e82829dca599b7a34839cefafaebf8bff0cbe22"
+    },
+    {
+      "path": "en-Derivative/native-2149.png",
+      "bytes": 57160,
+      "sha256": "d551df0f6ed518a836f060d1ba24aa10e9ba8fc01ce3a8a70879b057bc14f26b"
+    },
+    {
+      "path": "en-Derivative/prior-actual-review.json.gz",
+      "bytes": 37672,
+      "sha256": "05a9cb377c327c79a2a291945c2a62b4165e2a389e4d467d1935722aab86db57"
+    },
+    {
+      "path": "en-Derivative/render-record.json.gz",
+      "bytes": 11007,
+      "sha256": "b94a886c483be22184264d83eb9471169210ba86014b88a42aa2cfb238800a06"
+    },
+    {
+      "path": "en-Derivative/review.json.gz",
+      "bytes": 38971,
+      "sha256": "bbd5042bd737eaf73b7ed1a49a4ba4042ba05718506a00e898ffde9a23104d42"
+    },
+    {
+      "path": "en-Derivative/scene-source.py.gz",
+      "bytes": 5329,
+      "sha256": "753ba94b1094a5beb26d67077b5495a09b6a034b7f0468462608079edfbcc170"
+    },
+    {
+      "path": "en-Hook/automatic-audit.json.gz",
+      "bytes": 18863,
+      "sha256": "25d1f48179f90673e7887ef9087b7f69d6b2c647b6f48fad7d77e0b5045fbab6"
+    },
+    {
+      "path": "en-Hook/native-0430.png",
+      "bytes": 422161,
+      "sha256": "4cbc25982c99e68e7bbbc893c5530a00866e35e6db57e1f22ed800232bfd9eb3"
+    },
+    {
+      "path": "en-Hook/native-1198.png",
+      "bytes": 70739,
+      "sha256": "0b8298e3bcd112ab7a24d28ab0f4c6a05f773e53376227cb86b4e37657aafb8c"
+    },
+    {
+      "path": "en-Hook/native-1745.png",
+      "bytes": 80071,
+      "sha256": "118b6d24d6c4bb1f27823bae3c11caa4afb45e3cbcb4e5598e8f3640a55a9754"
+    },
+    {
+      "path": "en-Hook/render-record.json.gz",
+      "bytes": 10840,
+      "sha256": "6c6588349c3cd8ad89238b647357f07f941269262868d43c69b67272c92e97b1"
+    },
+    {
+      "path": "en-Hook/review.json.gz",
+      "bytes": 27089,
+      "sha256": "3d899a085afd9b8fb72170f494663bd4a6e1034304d916c85552699502e4124b"
+    },
+    {
+      "path": "en-Hook/scene-source.py.gz",
+      "bytes": 3708,
+      "sha256": "00c5fb92a7b7beba9e2290bbd1a65fa8be8843b9b463ff225a8652cae8c23f12"
+    },
+    {
+      "path": "native-examples.json",
+      "bytes": 5144,
+      "sha256": "0e03d814514a27fee4eebe4cbbf8e8b90468dafc8fd210573aa13d77749667f3"
+    },
+    {
+      "path": "zh-Derivative/automatic-audit.json.gz",
+      "bytes": 25147,
+      "sha256": "ff9bc7dfb67bb7105f485f298d71916159a3c2ce471f05bfa6a090d7a8f11e48"
+    },
+    {
+      "path": "zh-Derivative/dense-repair-supplement.json.gz",
+      "bytes": 3336,
+      "sha256": "d908ebf392537bb4fc56210a250a70005918e5dd64ef0c37d425c8c9da8af18f"
+    },
+    {
+      "path": "zh-Derivative/native-1135.png",
+      "bytes": 91108,
+      "sha256": "74606a3c3a214d893a54789536304e06ece1505c77f8b78e0ae77605db6f2a8c"
+    },
+    {
+      "path": "zh-Derivative/native-1842.png",
+      "bytes": 62443,
+      "sha256": "32211dcdc34832a8e2ba8adcc7ab456d1b0832bbeabc4618fbb1752e1e26e99f"
+    },
+    {
+      "path": "zh-Derivative/native-2230.png",
+      "bytes": 60168,
+      "sha256": "88b762087510d64a22e2b0ab7c9256e9369bee5a71145506e1e64f277c5debe2"
+    },
+    {
+      "path": "zh-Derivative/prior-actual-review.json.gz",
+      "bytes": 36507,
+      "sha256": "b5697c938fa276502eaf05eb69f7eb88ef3229334c053bf54a4fe8cc16346a59"
+    },
+    {
+      "path": "zh-Derivative/render-record.json.gz",
+      "bytes": 15794,
+      "sha256": "b732028ead8b5f8c3b7f356d3ed2bd24f068ebdd70d9f8c61de55bf5627a7fd9"
+    },
+    {
+      "path": "zh-Derivative/review.json.gz",
+      "bytes": 37683,
+      "sha256": "a2dac60e6f2bf2d3bee0b7e5cdbbabcf2924ff1bd491c7addaae321b53e04726"
+    },
+    {
+      "path": "zh-Derivative/scene-source.py.gz",
+      "bytes": 5329,
+      "sha256": "753ba94b1094a5beb26d67077b5495a09b6a034b7f0468462608079edfbcc170"
+    },
+    {
+      "path": "zh-Hook/automatic-audit.json.gz",
+      "bytes": 18536,
+      "sha256": "305f72c377854d25e1d90afbbd46fd5f46a405f66f556a239418f3adedbcb0e9"
+    },
+    {
+      "path": "zh-Hook/native-0456.png",
+      "bytes": 427046,
+      "sha256": "1925d94f5fd2ffd802c9fa5c01ba92964dd0cf14a60777c0bbbdcf2274c12ffa"
+    },
+    {
+      "path": "zh-Hook/native-1410.png",
+      "bytes": 78077,
+      "sha256": "04b9508f370d1694f85bcc537c3a62f84ef1f5d701dc3a77294413812ae1b46b"
+    },
+    {
+      "path": "zh-Hook/native-2008.png",
+      "bytes": 82271,
+      "sha256": "8684359fa442dd1d46b8cb2c57f8fb6af2d410fa698acfaa38841acc5b5656d8"
+    },
+    {
+      "path": "zh-Hook/render-record.json.gz",
+      "bytes": 16884,
+      "sha256": "c6218d503eefdc7fcd52f0e89da72e4c260216945e6b75736e31a9ca1d7e3e50"
+    },
+    {
+      "path": "zh-Hook/review.json.gz",
+      "bytes": 27434,
+      "sha256": "810246396354fad31895f28d3eeb89daf379d5cbbad0f4dbaaa154fee92af06a"
+    },
+    {
+      "path": "zh-Hook/scene-source.py.gz",
+      "bytes": 3708,
+      "sha256": "00c5fb92a7b7beba9e2290bbd1a65fa8be8843b9b463ff225a8652cae8c23f12"
+    }
+  ]
+}

@@ -1,0 +1,1048 @@
+{
+  "created_utc": "2026-11-01T00:51:54.496990+00:00",
+  "historical_baseline": true,
+  "original_summary_sha256": "4fbaa3d9524d6fd97400fbb94d55adf0670a4c138e12f36773e8b2db414c3bc2",
+  "copies": [
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/review-summary.json",
+      "original_sha256": "4fbaa3d9524d6fd97400fbb94d55adf0670a4c138e12f36773e8b2db414c3bc2",
+      "package_path": "reports/review-summary.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/implicit-review.json",
+      "original_sha256": "41dca42a7a35e15c6f98cc33a51eb325687cb0424556657f66a8f8a91c6ce74e",
+      "package_path": "reports/implicit-review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/lagrange-kkt-review.json",
+      "original_sha256": "219850665e2a322fe3764232c88a7eefb7461eda17b42d13372c7b9e1d7ec6d4",
+      "package_path": "reports/lagrange-kkt-review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zhquad-outro-review.json",
+      "original_sha256": "b8436ecfa39eacf621f835d65eca215aa78c9f07b80da3c603b789e23352b1af",
+      "package_path": "reports/zhquad-outro-review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/review.json",
+      "original_sha256": "5b86b2bb0afe8b53aec0cef83e88dc836e1907d67a3dde35f108ee8a66493ce4",
+      "package_path": "reports/en/Quadratic/review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/implicit-review.md",
+      "original_sha256": "493a5e9d97ef2eda4a5ebab1420266579ef63cf85d3a6725633fb5927135216c",
+      "package_path": "reports/implicit-review.md",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/lagrange-kkt-review.md",
+      "original_sha256": "3fb26f3deee860f8a552299c0fd194ad4155891ae480d4eadefe17f1266a4920",
+      "package_path": "reports/lagrange-kkt-review.md",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zhquad-outro-review.md",
+      "original_sha256": "25bcff3c1f6d17c7d0db22aaa565594c5ecfb4fda3d84dfd23145417a6a4d21a",
+      "package_path": "reports/zhquad-outro-review.md",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/freeze.json",
+      "original_sha256": "464d71e431e432440ae22a9112b3b42623aa0348304ade9eb341ddf9d4fc84ab",
+      "package_path": "cases/en/Quadratic/freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/original-result.json",
+      "original_sha256": "bf93e90ac5ba10d63158ada142efd0e564b04e91f44c1f67a2698a735d596566",
+      "package_path": "cases/en/Quadratic/original-result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/unique/review-plan.json",
+      "original_sha256": "d451b74335ef5865e78e0e61cb50b161e7c52bdddcd816620d765fe228af0ebc",
+      "package_path": "cases/en/Quadratic/unique/review-plan.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/audit/result.json",
+      "original_sha256": "476b1bc18de72bb4b2adf4c4387c352fbd73d260d44ac23cbf5ed73d56d5bb9c",
+      "package_path": "cases/en/Quadratic/audit/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/actual-views.json",
+      "original_sha256": "52b2a518289751adfd15fc9de7f9e86db15e68a37c2b16072adca7883ef38f79",
+      "package_path": "cases/en/Quadratic/actual-views.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/row-reveals/result.json",
+      "original_sha256": "4cdd3c2b0ac02492a0fd956fd7bd08f17c24e70c2c81631b19e354e51d87f59b",
+      "package_path": "cases/en/Quadratic/row-reveals/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/original-render.log",
+      "original_sha256": "6a8b9ef257161b391bc2569aed43588b887a6d07cb782d87f7867b49387b1e51",
+      "package_path": "cases/en/Quadratic/original-render.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/audit.log",
+      "original_sha256": "dc50676a13477ef0d936f8dc4617d103f7c8d28f7431686bc434b21b77ffd1f8",
+      "package_path": "cases/en/Quadratic/audit.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Quadratic/review.json",
+      "original_sha256": "5b86b2bb0afe8b53aec0cef83e88dc836e1907d67a3dde35f108ee8a66493ce4",
+      "package_path": "cases/en/Quadratic/review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Lagrange/freeze.json",
+      "original_sha256": "14640e2bab6dbc954d2fac77c9bbca32ba31db8cbff847d83ea227f3b8d62365",
+      "package_path": "cases/en/Lagrange/freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Lagrange/original-result.json",
+      "original_sha256": "c6304e5c74449970a31c1fb7255e3ada62ecd59ecf959aaff0af97b856d49977",
+      "package_path": "cases/en/Lagrange/original-result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Lagrange/unique/review-plan.json",
+      "original_sha256": "26ee9a690b65c9f1b575840ea07639dce5749029c977f55bec7cb50baed8bf0e",
+      "package_path": "cases/en/Lagrange/unique/review-plan.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Lagrange/audit/result.json",
+      "original_sha256": "e83bfb3237aa7e638399767a5c8f5e510d9283f68d2515d420057fb546e2ff10",
+      "package_path": "cases/en/Lagrange/audit/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Lagrange/actual-views.json",
+      "original_sha256": "c9a2d8ed78a55e9a9464aefb6f71eb5c911454fad2d720172ea7a7a728255ad9",
+      "package_path": "cases/en/Lagrange/actual-views.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Lagrange/row-reveals/result.json",
+      "original_sha256": "48c2591106cd4613def823c9286966b31f97148c583821c5e2775864de64e2e7",
+      "package_path": "cases/en/Lagrange/row-reveals/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Lagrange/original-render.log",
+      "original_sha256": "4aa11bb08aedd8d7c74b13932de47393b9a3306599d7da17ba36a1fe845612b9",
+      "package_path": "cases/en/Lagrange/original-render.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Lagrange/audit.log",
+      "original_sha256": "6505d8d819707e29e80fa26b4cd23b0b2e39ab71d14b519afe01d3b1653cd5c0",
+      "package_path": "cases/en/Lagrange/audit.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/KKT/freeze.json",
+      "original_sha256": "033f274667bb1d0a9088a90d58b076ffee5a0a542490812b8d18f6958f248f26",
+      "package_path": "cases/en/KKT/freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/KKT/original-result.json",
+      "original_sha256": "c5e48abe27f17d76cd5e152ba585db8b320fb8d796afbd58c946e0e5e5e8035b",
+      "package_path": "cases/en/KKT/original-result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/KKT/unique/review-plan.json",
+      "original_sha256": "57edf0e78d472bbfedb1944b25f4309e7e59532b492f6ab22040660a7fbcf236",
+      "package_path": "cases/en/KKT/unique/review-plan.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/KKT/audit/result.json",
+      "original_sha256": "22443ba26435b957f461e3739f058cd9bfbac26c8f7dbc9470b720358d79f020",
+      "package_path": "cases/en/KKT/audit/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/KKT/actual-views.json",
+      "original_sha256": "93f8d7a256ea37e5932ca02b665dee59b899f09646a2908ec9d7dda943683a2c",
+      "package_path": "cases/en/KKT/actual-views.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/KKT/row-reveals/result.json",
+      "original_sha256": "5cb1dcac8f105e85dae19ad443b4515ee91e17d1dcde30c16383e931ac0c2631",
+      "package_path": "cases/en/KKT/row-reveals/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/KKT/original-render.log",
+      "original_sha256": "eef14523cc8d24db98c49745057c5e19cdcfc7c750535d7469885a013b9f7e00",
+      "package_path": "cases/en/KKT/original-render.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/KKT/audit.log",
+      "original_sha256": "6a9e1365fe28556e60ae30738cfa635a561d91c52f280deee7f38621fc18bb14",
+      "package_path": "cases/en/KKT/audit.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Implicit/freeze.json",
+      "original_sha256": "f375ed2c85ea853f2fb932c482c3ed50dc50e542eb0fa23473008bd75a202862",
+      "package_path": "cases/en/Implicit/freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Implicit/original-result.json",
+      "original_sha256": "8cede1d5841bff284585239c0197915d0b7696afff0c6548c364e31ec2926563",
+      "package_path": "cases/en/Implicit/original-result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Implicit/unique/review-plan.json",
+      "original_sha256": "39c25d07b858cdecb0e66795b51fd158035dd3b29d53ebd504dfaf5e8664696f",
+      "package_path": "cases/en/Implicit/unique/review-plan.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Implicit/audit/result.json",
+      "original_sha256": "5f44d69426ae2bb282f1dce62b5319bd9cfedf7f5163989d816ce610ff49ee43",
+      "package_path": "cases/en/Implicit/audit/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Implicit/actual-views.json",
+      "original_sha256": "6e88b6e79cda641d6d0b8e8baffec919ab42ac2576e0cc4f497ba1ac83cd9ebf",
+      "package_path": "cases/en/Implicit/actual-views.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Implicit/row-reveals/result.json",
+      "original_sha256": "98d54e86803e98825f198a611f35ad83fc5bd7188969537b172d40c14c9c1eac",
+      "package_path": "cases/en/Implicit/row-reveals/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Implicit/original-render.log",
+      "original_sha256": "340c655cb43eb54a2bab13bb1a84b521c865dd6cbd7cfc5107db3698802474a1",
+      "package_path": "cases/en/Implicit/original-render.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Implicit/audit.log",
+      "original_sha256": "b6bfee962ace4690b1428d73f9736f6921b7a5d54b7187f9d56e1ec40429d3fe",
+      "package_path": "cases/en/Implicit/audit.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Implicit/review.json",
+      "original_sha256": "b30eb01ff0ad63ab329693b39d180c75f2c597fe0b9810c440cd95b7147ebe3f",
+      "package_path": "cases/en/Implicit/review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Outro/freeze.json",
+      "original_sha256": "9e9f6cb91bc02dced3bdd86a6bb660a72e1c582f561180dccfae6bea26358b7e",
+      "package_path": "cases/en/Outro/freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Outro/original-result.json",
+      "original_sha256": "16a572bfa20aadb52fbb12e82fb241b059a6a7e398096240204f3a2b440919b5",
+      "package_path": "cases/en/Outro/original-result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Outro/unique/review-plan.json",
+      "original_sha256": "3f33d26ea844b804b17c68715ad5c67e953f9484263134bfcf631d3b48ad611d",
+      "package_path": "cases/en/Outro/unique/review-plan.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Outro/audit/result.json",
+      "original_sha256": "2c52f29a9808aaeb780afdb77abc66b8a8df0e349334fd1ca4f66f9760c3a8ee",
+      "package_path": "cases/en/Outro/audit/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Outro/actual-views.json",
+      "original_sha256": "7c6672117fabd37a7fb4fc819952ae7f287d5f7afcd2b6af2555faee253d8318",
+      "package_path": "cases/en/Outro/actual-views.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Outro/original-render.log",
+      "original_sha256": "9af9d73e3c45e1a8f6f8b6a5469a3887c5a61db1fcbc49a5e2d0f1dbcbca7812",
+      "package_path": "cases/en/Outro/original-render.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/en/Outro/audit.log",
+      "original_sha256": "7dbce3a1a77f7fb7f9234c7445bbccec494eab6f5bd189fedf6a27fff6ca07c6",
+      "package_path": "cases/en/Outro/audit.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/freeze.json",
+      "original_sha256": "91dc72408650a32dacf3057c31abcc35ac10bd6a0201c15dc095cb11cdab4de3",
+      "package_path": "cases/zh/Quadratic/freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/original-result.json",
+      "original_sha256": "a73674d688c832464be0cff20f0b75c63e8237d4453da972321d9d22452c5348",
+      "package_path": "cases/zh/Quadratic/original-result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/unique/review-plan.json",
+      "original_sha256": "37816e00c9dfb424833eafd13d0449fd45829d6a97b02fa2f23a0dd606993fa9",
+      "package_path": "cases/zh/Quadratic/unique/review-plan.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/audit/result.json",
+      "original_sha256": "8dd1e52e31ae173be0e692ae731d88afabfd3c4d3e54d41540526f9377b5b098",
+      "package_path": "cases/zh/Quadratic/audit/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/actual-views.json",
+      "original_sha256": "ef75f600fef5f0150f35427c1a50603a2e914a4b7fb8b82f70241616e05f40e7",
+      "package_path": "cases/zh/Quadratic/actual-views.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/row-reveals/result.json",
+      "original_sha256": "0a5d319f5e321d6583850b368ff494d229f427d0c4bf116c19c904ed80e21673",
+      "package_path": "cases/zh/Quadratic/row-reveals/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/original-render.log",
+      "original_sha256": "d65618f66b4c83f272e1de5433225d3d7f5c423b649351d3e87f8482818bf67b",
+      "package_path": "cases/zh/Quadratic/original-render.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Quadratic/audit.log",
+      "original_sha256": "31e25dc80310f4fa9466545dc2f0fd8a0cb0378f38b5f6ac4efff4fc454c435d",
+      "package_path": "cases/zh/Quadratic/audit.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Lagrange/freeze.json",
+      "original_sha256": "571ccefb0b0ba76e0ae3778fb1505337900759ac1b053ba7ed7cab0ecac709aa",
+      "package_path": "cases/zh/Lagrange/freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Lagrange/original-result.json",
+      "original_sha256": "588841238dcdb51a47dac9ae137914d50ee168fd4f15aaa46080f76263b76031",
+      "package_path": "cases/zh/Lagrange/original-result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Lagrange/unique/review-plan.json",
+      "original_sha256": "b0c3a75982f6a0df98e9bcaeacde103b1ff6bdfce7eb9fd36969519af646b837",
+      "package_path": "cases/zh/Lagrange/unique/review-plan.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Lagrange/audit/result.json",
+      "original_sha256": "506ee917077293bdc512caf5041099b89f5dfca2b617e136def950df8bf24968",
+      "package_path": "cases/zh/Lagrange/audit/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Lagrange/actual-views.json",
+      "original_sha256": "86d50b9f9bc3cabdcd681469cf8c2b2a4346282a91006b36536509f51c3f73dd",
+      "package_path": "cases/zh/Lagrange/actual-views.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Lagrange/row-reveals/result.json",
+      "original_sha256": "1b9605fd8b9b4f048c2763452c57e3c0a325007e5089995af1fce2e9b2f5c493",
+      "package_path": "cases/zh/Lagrange/row-reveals/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Lagrange/original-render.log",
+      "original_sha256": "eb8afb37e3a9e6e926c392c2306cc5f053628872ead4aaee4f0477d5483c5380",
+      "package_path": "cases/zh/Lagrange/original-render.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Lagrange/audit.log",
+      "original_sha256": "a73366a315789d612373b42589db62bb0691d55c86a11057150b853de870a51a",
+      "package_path": "cases/zh/Lagrange/audit.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/KKT/freeze.json",
+      "original_sha256": "6a29a71fdcb6e5fa46c431449fb0da7a8ee0744550fb27da4199ad7d2ecf409d",
+      "package_path": "cases/zh/KKT/freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/KKT/original-result.json",
+      "original_sha256": "ad232a862dae7c54086e5e22ab8e880ef2ea70e3bc75a9483c4bef988b4b5200",
+      "package_path": "cases/zh/KKT/original-result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/KKT/unique/review-plan.json",
+      "original_sha256": "f34237307a69aa258c9d2dc5cbc6a3822735f18019120afabbdd506e503efcf9",
+      "package_path": "cases/zh/KKT/unique/review-plan.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/KKT/audit/result.json",
+      "original_sha256": "60e9d02bcf79b684d0297c36a15c1418e40ac86b4e6fcddddb5c2fe720737177",
+      "package_path": "cases/zh/KKT/audit/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/KKT/actual-views.json",
+      "original_sha256": "5694a07d191367d62faeb8327a9a9e548e161655c834ff9742e0a4fef4405032",
+      "package_path": "cases/zh/KKT/actual-views.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/KKT/row-reveals/result.json",
+      "original_sha256": "7eccbaeefaed28a7431757baafc61dc1df245eda28308d5e7add499c71396869",
+      "package_path": "cases/zh/KKT/row-reveals/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/KKT/original-render.log",
+      "original_sha256": "4707111109834fbca9508f6347bc003255cb8d44fe8af936410a613085dfa847",
+      "package_path": "cases/zh/KKT/original-render.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/KKT/audit.log",
+      "original_sha256": "f2819e8562328536ddc798b72963e1041617a46f6db8ff5a7af010383243bfc8",
+      "package_path": "cases/zh/KKT/audit.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Implicit/freeze.json",
+      "original_sha256": "c8c038a061c8fdd869914b532fc64f6f962a42ba916b2dc4b48db01a81e3270e",
+      "package_path": "cases/zh/Implicit/freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Implicit/original-result.json",
+      "original_sha256": "74c47d99743fd7c7ca570ad2726438f14296852093b1da8d4a78ee4f97f46f46",
+      "package_path": "cases/zh/Implicit/original-result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Implicit/unique/review-plan.json",
+      "original_sha256": "24dc2caeca385e5c92fb919157d1f89cd546a7648a9c72baf391fe3a71108e3f",
+      "package_path": "cases/zh/Implicit/unique/review-plan.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Implicit/audit/result.json",
+      "original_sha256": "a8b007e207946850a8eadb51cfeecc1f2a8c8b61968cf333ff36b22c3f2d497e",
+      "package_path": "cases/zh/Implicit/audit/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Implicit/actual-views.json",
+      "original_sha256": "5b4a5f2863d99e58e320f9d62ffa6953d27cbc7b27dab8186df59c47c909b8e4",
+      "package_path": "cases/zh/Implicit/actual-views.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Implicit/row-reveals/result.json",
+      "original_sha256": "5170c1f00a2a21df45086389106a29398cef16cfc84355abe8633eb34581f4ae",
+      "package_path": "cases/zh/Implicit/row-reveals/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Implicit/original-render.log",
+      "original_sha256": "368e790e77a5ba4b234fd9ad1df3947f85fee7f39b272422bf3f992eea4a6c02",
+      "package_path": "cases/zh/Implicit/original-render.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Implicit/audit.log",
+      "original_sha256": "b2cd1720c3178b1785368636b9bdf3e225ab2e5f489f0738e815785bdb63da53",
+      "package_path": "cases/zh/Implicit/audit.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Implicit/review.json",
+      "original_sha256": "394c804968ca844211fe3fc9a6733ece9a2cabe94dd044ef6e3be9b2f5f13285",
+      "package_path": "cases/zh/Implicit/review.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Outro/freeze.json",
+      "original_sha256": "fb1e516fa90ad7d794b231c28ca88b16d653906e8171e79267282f36123b7215",
+      "package_path": "cases/zh/Outro/freeze.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Outro/original-result.json",
+      "original_sha256": "1a3240fa86d5673e7a5a8172e812ba911a6fcdfc1eac747c47ec36e928c2af6d",
+      "package_path": "cases/zh/Outro/original-result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Outro/unique/review-plan.json",
+      "original_sha256": "66654acc870c108e91d294b7f1357c5adc5c3d8fa79c322d180442e7d6398577",
+      "package_path": "cases/zh/Outro/unique/review-plan.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Outro/audit/result.json",
+      "original_sha256": "21f1f93304595a0a4b3187ad4ba3742a50883f96cbb1700a0d16fbd5eac0f7d9",
+      "package_path": "cases/zh/Outro/audit/result.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Outro/actual-views.json",
+      "original_sha256": "85e9198694bf238feaaa4dc80a4fa337517dc84910694371ac95c1d44b34640e",
+      "package_path": "cases/zh/Outro/actual-views.json.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Outro/original-render.log",
+      "original_sha256": "b1be926e2026615d2d58841eded47a81757b17a18adb8ad88ddc36a282c43dd3",
+      "package_path": "cases/zh/Outro/original-render.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/zh/Outro/audit.log",
+      "original_sha256": "63fc1febae9b17414b8c21c0ad95c1f614e00718843703e882a301cca991cb1d",
+      "package_path": "cases/zh/Outro/audit.log.gz",
+      "compression": "gzip"
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/prepare_case.py",
+      "original_sha256": "813635f0b21aa05cbfa48537bdf00efc5e02a0bfea2995bf9ac8061716dd359c",
+      "package_path": "tools/prepare_case.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/log_views.py",
+      "original_sha256": "df005fbf58a4d42519c9d3d6f2c758a6ff9fad376bcb5aae9fdcabb058887df4",
+      "package_path": "tools/log_views.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/extract_spans.py",
+      "original_sha256": "17804bfaf1337ba251ff989846dc75ed7a9ea42a46a5eb62c175c95bf391579a",
+      "package_path": "tools/extract_spans.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/aggregate.py",
+      "original_sha256": "45355865abbb6fcfcf46f6ba8414ed3188546ac94ee472f8a5dfeffa386d2d98",
+      "package_path": "tools/aggregate.py",
+      "compression": null
+    },
+    {
+      "original_path": "/workspace/runtime/ai4-tail-motion-review/finalize_implicit.py",
+      "original_sha256": "6b5bda5443d18c59701931dead2cf06a3f9dcd588ea9ff70ca7d31009651dd4f",
+      "package_path": "tools/finalize_implicit.py",
+      "compression": null
+    }
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3161,
+      "sha256": "280b3178c00283d5ca5b91cf8dd10e831f2f18d5fb0561f6c6c6834baf1832ca"
+    },
+    {
+      "path": "cases/en/Implicit/actual-views.json.gz",
+      "bytes": 4516,
+      "sha256": "1ee36fcfd9084f7c6bc5ef61ae7b8af80931d906eabaa8cdb3debda54fd67c65"
+    },
+    {
+      "path": "cases/en/Implicit/audit/result.json.gz",
+      "bytes": 22520,
+      "sha256": "5e6bb79eae9cb1cdedd745a0c9434653c84af4efbd31aa709824bfa57592e506"
+    },
+    {
+      "path": "cases/en/Implicit/audit.log.gz",
+      "bytes": 101,
+      "sha256": "b7b11ca9551da89844302904b3aca3cc899e27719c1d8b559ea50af154a62f96"
+    },
+    {
+      "path": "cases/en/Implicit/freeze.json.gz",
+      "bytes": 1294,
+      "sha256": "e2d90ce8320f87e4660e76f0199f564f2012e1dbaa98f7b6176ec9b7432d9919"
+    },
+    {
+      "path": "cases/en/Implicit/original-render.log.gz",
+      "bytes": 184,
+      "sha256": "b5da2ddabfcdfd861a475abff8943f31eae10f5625702a2abc5150628b3835a0"
+    },
+    {
+      "path": "cases/en/Implicit/original-result.json.gz",
+      "bytes": 11745,
+      "sha256": "e673ccd25a4b6c8c42cdcce565ac75febf0a5bf35b4d2a014a38e24f1e504f2f"
+    },
+    {
+      "path": "cases/en/Implicit/review.json.gz",
+      "bytes": 1704,
+      "sha256": "9b709fcf4714c85bd1ee382b6fbb8740f586082d322d6b335efb25ba214f63a1"
+    },
+    {
+      "path": "cases/en/Implicit/row-reveals/result.json.gz",
+      "bytes": 6708,
+      "sha256": "9ce6c48548cf46c9c8f99f1945893bac5f297d0ad8f40ba9e21943a3ceeb3312"
+    },
+    {
+      "path": "cases/en/Implicit/unique/review-plan.json.gz",
+      "bytes": 30058,
+      "sha256": "c2d680764bc554af1e770ced6343704a680938c4cac7a6689a1021e9ec2a3097"
+    },
+    {
+      "path": "cases/en/KKT/actual-views.json.gz",
+      "bytes": 3754,
+      "sha256": "eab54d266a9d58edc7f386d0738ff8491e08f1a3d08e7ffd997079753857f7df"
+    },
+    {
+      "path": "cases/en/KKT/audit/result.json.gz",
+      "bytes": 23099,
+      "sha256": "38d40216f66f47613ca7d51a0144cd9f490a89d49a4531e46e70887364f2a2df"
+    },
+    {
+      "path": "cases/en/KKT/audit.log.gz",
+      "bytes": 101,
+      "sha256": "04e024c6e00e87d21a887ea95e22ed6b08df17cc79edc0b37c52ad7592d70692"
+    },
+    {
+      "path": "cases/en/KKT/freeze.json.gz",
+      "bytes": 1296,
+      "sha256": "6fe863e9b62990d6c63e3086e099327cc61ae22ac9d2d8f330628e4400bf9b91"
+    },
+    {
+      "path": "cases/en/KKT/original-render.log.gz",
+      "bytes": 183,
+      "sha256": "71d974e23f43a7412fd2193d34b6ed255536ad7bac3f8f3e849a8195edf4d823"
+    },
+    {
+      "path": "cases/en/KKT/original-result.json.gz",
+      "bytes": 13724,
+      "sha256": "7268901da41d38629e0babeb68989c3c7037468240ac837574a9775ac57a031f"
+    },
+    {
+      "path": "cases/en/KKT/row-reveals/result.json.gz",
+      "bytes": 6755,
+      "sha256": "6046842841304c47db83020d92df6c18428445a1d3f68b07546fc97acb8c7894"
+    },
+    {
+      "path": "cases/en/KKT/unique/review-plan.json.gz",
+      "bytes": 29251,
+      "sha256": "449e61bee45db6e1d87f3ce580349b5526c130f5fa593626e98afdd57882c82a"
+    },
+    {
+      "path": "cases/en/Lagrange/actual-views.json.gz",
+      "bytes": 4034,
+      "sha256": "6fb5493f997a16c54d48e368c373ced499805087bf62c2cd3676c958e4606ad5"
+    },
+    {
+      "path": "cases/en/Lagrange/audit/result.json.gz",
+      "bytes": 25414,
+      "sha256": "1d9b44d272fc47a5284d01b5a18e8afdcdd325c204ff64447f66f6eabd918240"
+    },
+    {
+      "path": "cases/en/Lagrange/audit.log.gz",
+      "bytes": 102,
+      "sha256": "dc6ef3c3ec283b2d6d59b45e1f87f8c1ba23db06544adc9dded4032f0abf51bb"
+    },
+    {
+      "path": "cases/en/Lagrange/freeze.json.gz",
+      "bytes": 1298,
+      "sha256": "36a27ec45b35ea7b6865a40d83731bbe1bc001f0e97456d698aa03c71817ed48"
+    },
+    {
+      "path": "cases/en/Lagrange/original-render.log.gz",
+      "bytes": 183,
+      "sha256": "cb777e10654b0847367884028ffe7c1fc150df608ac2706684c1655bca3b8597"
+    },
+    {
+      "path": "cases/en/Lagrange/original-result.json.gz",
+      "bytes": 13468,
+      "sha256": "071269a6a374a5e47b47ef439111ec22ff8e76ffbbe1f49076cac956cbbfce81"
+    },
+    {
+      "path": "cases/en/Lagrange/row-reveals/result.json.gz",
+      "bytes": 6444,
+      "sha256": "3947ed1483aad8782ee4dd830db2d76a04b854ebb4f54c4ab368b264e6e85be6"
+    },
+    {
+      "path": "cases/en/Lagrange/unique/review-plan.json.gz",
+      "bytes": 34404,
+      "sha256": "3f27b9514880b99dc95e2ef6acc0f01743baabbd869ac9384ec34ee54082c7f8"
+    },
+    {
+      "path": "cases/en/Outro/actual-views.json.gz",
+      "bytes": 3006,
+      "sha256": "e655ed46301f33d56f2a56b351e797df430010e0a31472ace6258e0df6fc207c"
+    },
+    {
+      "path": "cases/en/Outro/audit/result.json.gz",
+      "bytes": 21761,
+      "sha256": "33d3e6da39203f6a1ecd1b9f267a45b4822915dd9867dcd6df6c33bab3cf81ae"
+    },
+    {
+      "path": "cases/en/Outro/audit.log.gz",
+      "bytes": 101,
+      "sha256": "c087c1d782b2e1cc2a87309e5be5d4a1a499a741e4aef87d724b65bd05c27b4e"
+    },
+    {
+      "path": "cases/en/Outro/freeze.json.gz",
+      "bytes": 2222,
+      "sha256": "7e21a478206cd790895d8ccfa556788b4f1d86d50000e62ec2cf0fc0cfad4039"
+    },
+    {
+      "path": "cases/en/Outro/original-render.log.gz",
+      "bytes": 184,
+      "sha256": "84f27a534cb23677ed449733125d9c8af1648b8a30cccd63dbaff966190adff2"
+    },
+    {
+      "path": "cases/en/Outro/original-result.json.gz",
+      "bytes": 11796,
+      "sha256": "7333ca653457f5fc31e5dd20bdbde823fc5c1273837f6a5943d0568e6f9e31ca"
+    },
+    {
+      "path": "cases/en/Outro/unique/review-plan.json.gz",
+      "bytes": 31654,
+      "sha256": "f3463622d3a920a0ba65e21570438cf53327c1557af64a1da20939574aefc143"
+    },
+    {
+      "path": "cases/en/Quadratic/actual-views.json.gz",
+      "bytes": 4770,
+      "sha256": "6ce0ab0ef5fb937d22ae77d59e34a166a1248509a5649246af75480d19b5dde3"
+    },
+    {
+      "path": "cases/en/Quadratic/audit/result.json.gz",
+      "bytes": 28962,
+      "sha256": "95f16784c90140e6f21617543f32bebcc6a389002f0ad8190c1707752592c787"
+    },
+    {
+      "path": "cases/en/Quadratic/audit.log.gz",
+      "bytes": 101,
+      "sha256": "95e3add76ab6e34238960e532f6ea8805d39510f5259b50392e800f7ff3ed8e4"
+    },
+    {
+      "path": "cases/en/Quadratic/freeze.json.gz",
+      "bytes": 1461,
+      "sha256": "767f3592a04d3180a92d1d691524780e775b87eb72d5ba97eec11812d9d92860"
+    },
+    {
+      "path": "cases/en/Quadratic/original-render.log.gz",
+      "bytes": 183,
+      "sha256": "18f6d75e226e7dbfa6c983217cbcd25a7dedd56d1a8e2e74c501940f8a3d97e6"
+    },
+    {
+      "path": "cases/en/Quadratic/original-result.json.gz",
+      "bytes": 13591,
+      "sha256": "8c09c7979ee8d226277797b5fdf5de6b17897dbb2e1db09a39746af7e3d52007"
+    },
+    {
+      "path": "cases/en/Quadratic/review.json.gz",
+      "bytes": 1692,
+      "sha256": "b0976166c554cc97f5d53a4e2a01310505b9e0a2e1f5321bdee75dc693421940"
+    },
+    {
+      "path": "cases/en/Quadratic/row-reveals/result.json.gz",
+      "bytes": 5636,
+      "sha256": "222d7e3c13952d4a0d04ceec5e581d3d82661dfc40a77b7089e839ab6cc91e6f"
+    },
+    {
+      "path": "cases/en/Quadratic/unique/review-plan.json.gz",
+      "bytes": 39835,
+      "sha256": "51315f220321f66304f7a6d88c6e3fe6ebe90c19d2f639fc8a68bf8b55f9bd98"
+    },
+    {
+      "path": "cases/zh/Implicit/actual-views.json.gz",
+      "bytes": 3665,
+      "sha256": "c694255fe296ff49a30506aebf18dc8bdb7b622264eb099b628baea0f02e277f"
+    },
+    {
+      "path": "cases/zh/Implicit/audit/result.json.gz",
+      "bytes": 22801,
+      "sha256": "af23bd3cdc4231010cfafad509f2479e40134f84de92580e248a7474846d8c3e"
+    },
+    {
+      "path": "cases/zh/Implicit/audit.log.gz",
+      "bytes": 100,
+      "sha256": "293dd1ff4b188520594eba9703161ae7e65e0dbdf384d0a29bdd7b2460dcfb8c"
+    },
+    {
+      "path": "cases/zh/Implicit/freeze.json.gz",
+      "bytes": 1296,
+      "sha256": "e50eecbe91d531119c3ad5d4735588e5f69c1ab1cc15c6ea0a653632fa0ec9ea"
+    },
+    {
+      "path": "cases/zh/Implicit/original-render.log.gz",
+      "bytes": 183,
+      "sha256": "38b3d48898d644de1189f4cd66b3943e8113c5406f831aed0f596898108aa4ea"
+    },
+    {
+      "path": "cases/zh/Implicit/original-result.json.gz",
+      "bytes": 18108,
+      "sha256": "f6a1847002c298bc586971f770bfc108a2ccbfd2ef0471e344a2d81e02535dac"
+    },
+    {
+      "path": "cases/zh/Implicit/review.json.gz",
+      "bytes": 1708,
+      "sha256": "1490f67025ed837df4bd4f5fceab64bd6af7bd4cf56fbf496b41b1661baddad2"
+    },
+    {
+      "path": "cases/zh/Implicit/row-reveals/result.json.gz",
+      "bytes": 5124,
+      "sha256": "ecfd6c7b9f0df381a68be651038766ab29e180ce813fa2b18ddcff1f78641f13"
+    },
+    {
+      "path": "cases/zh/Implicit/unique/review-plan.json.gz",
+      "bytes": 30170,
+      "sha256": "27349c1b082deaaa2323d8f074886945c2d03abad6bda9ca84547a6c0b7d9f0a"
+    },
+    {
+      "path": "cases/zh/KKT/actual-views.json.gz",
+      "bytes": 3582,
+      "sha256": "431a92e9442fa2cc7edbb1d81375f53905a8b5f8669f47027436b1199a5ed0d8"
+    },
+    {
+      "path": "cases/zh/KKT/audit/result.json.gz",
+      "bytes": 24934,
+      "sha256": "83ad9b2f7c671a734024ac54503609c65f3c13d358af3c47fa01818ba7fb61f1"
+    },
+    {
+      "path": "cases/zh/KKT/audit.log.gz",
+      "bytes": 102,
+      "sha256": "443d760321ddde64acfbc2bb1d60e1c97ca329ace94098f14b339c907c1553dc"
+    },
+    {
+      "path": "cases/zh/KKT/freeze.json.gz",
+      "bytes": 1297,
+      "sha256": "a23e6d3a3c4c5479202f806a6ef4c3ee4567546ef0e6bd20140bc06f50d1523c"
+    },
+    {
+      "path": "cases/zh/KKT/original-render.log.gz",
+      "bytes": 183,
+      "sha256": "18dfc741c73219032112109f51709b3714763567dee0808890a8233f2b8ff661"
+    },
+    {
+      "path": "cases/zh/KKT/original-result.json.gz",
+      "bytes": 20493,
+      "sha256": "0cdd5f36f4b379432d6d18833823de62c17595b91dfd378e7014eb3fe4e25635"
+    },
+    {
+      "path": "cases/zh/KKT/row-reveals/result.json.gz",
+      "bytes": 4532,
+      "sha256": "e9dc444ce961429060250cc7be049d21891c723a7c969185ab6538536965b90a"
+    },
+    {
+      "path": "cases/zh/KKT/unique/review-plan.json.gz",
+      "bytes": 31919,
+      "sha256": "9b5d21864426a31d9e9f1e523368743f3ce7260b090d62a0149d26e7c457b3e5"
+    },
+    {
+      "path": "cases/zh/Lagrange/actual-views.json.gz",
+      "bytes": 3939,
+      "sha256": "0cdde4716ed4ba4e41537d51219114f5449a43f09dc467ec6db5dc2d831934df"
+    },
+    {
+      "path": "cases/zh/Lagrange/audit/result.json.gz",
+      "bytes": 26025,
+      "sha256": "8eca673c275bb7bf1c26f6cd6d8ba3cd4db0f5f275ebae51d702484250953a85"
+    },
+    {
+      "path": "cases/zh/Lagrange/audit.log.gz",
+      "bytes": 102,
+      "sha256": "f659228bfb4a361c2e6ec2d5924a601b914183b43867efa212b7f3d214da0c38"
+    },
+    {
+      "path": "cases/zh/Lagrange/freeze.json.gz",
+      "bytes": 1299,
+      "sha256": "a75c714db7c7568c78f881cf9e7e1d544a4d702cc430b9964f5f339886b6d5bf"
+    },
+    {
+      "path": "cases/zh/Lagrange/original-render.log.gz",
+      "bytes": 183,
+      "sha256": "958df52f5a021bc398f7db3c6444677558c022e4494237637f2a0f030a6a7a1c"
+    },
+    {
+      "path": "cases/zh/Lagrange/original-result.json.gz",
+      "bytes": 19977,
+      "sha256": "214a30c03ff40ffdb91f3a146ca48def439df05807f431263885d26adba2a4fa"
+    },
+    {
+      "path": "cases/zh/Lagrange/row-reveals/result.json.gz",
+      "bytes": 5643,
+      "sha256": "d5c5b9acefa4c393b7431a480fa2f39aeaffb0647418e8a21e1dfef955f99b21"
+    },
+    {
+      "path": "cases/zh/Lagrange/unique/review-plan.json.gz",
+      "bytes": 35057,
+      "sha256": "37fe08c815ee3bb3411df0f9f688126285dde9e688963f5543ab67f3a16a0721"
+    },
+    {
+      "path": "cases/zh/Outro/actual-views.json.gz",
+      "bytes": 3183,
+      "sha256": "fea51779976dd9c8ab11a5fc5e5af5aa36cb56bea8b251dfa6db67c2287443e1"
+    },
+    {
+      "path": "cases/zh/Outro/audit/result.json.gz",
+      "bytes": 22627,
+      "sha256": "1fc82743d94c8e86c8d9fd99473a901edb62c7782d1b8460eaeb7220344b789b"
+    },
+    {
+      "path": "cases/zh/Outro/audit.log.gz",
+      "bytes": 101,
+      "sha256": "3e0c6de993a3db26fcb3df09d4725d9f2a6648d75fa7a197269a25b9c5a94468"
+    },
+    {
+      "path": "cases/zh/Outro/freeze.json.gz",
+      "bytes": 2219,
+      "sha256": "f3aafb220bf0440fe7a99be510d964e58c91ed8aa1e9a57f55320580f4accf70"
+    },
+    {
+      "path": "cases/zh/Outro/original-render.log.gz",
+      "bytes": 183,
+      "sha256": "9d64dcff84338d28b9514e4b28615504d813596d54c19744b015f201ffbf5c09"
+    },
+    {
+      "path": "cases/zh/Outro/original-result.json.gz",
+      "bytes": 18788,
+      "sha256": "0630e7397bcaca01d26311e9deec46529589de576029a91d5864cfa3965ae305"
+    },
+    {
+      "path": "cases/zh/Outro/unique/review-plan.json.gz",
+      "bytes": 33552,
+      "sha256": "c56f195cd0a5c3a1ddfa51cd2c599daac3b8faa51cfab3a33a84bc0029824335"
+    },
+    {
+      "path": "cases/zh/Quadratic/actual-views.json.gz",
+      "bytes": 4254,
+      "sha256": "e532390c5c6ffab9bc5d0ff7b70e73a8d7dc3b2e05b23fd29e28bd1bdbfa5c3c"
+    },
+    {
+      "path": "cases/zh/Quadratic/audit/result.json.gz",
+      "bytes": 28366,
+      "sha256": "bcfc51152bf0fdd40d45a287c4ab8180e555aa8d824d160b84cd0007d2b8bc35"
+    },
+    {
+      "path": "cases/zh/Quadratic/audit.log.gz",
+      "bytes": 102,
+      "sha256": "44478ec0183b25caa495afd42f79b0c444b5a32dcea783af5f735da3851dc384"
+    },
+    {
+      "path": "cases/zh/Quadratic/freeze.json.gz",
+      "bytes": 1437,
+      "sha256": "769e4fecb23279341addde44696615ed71a0bff09437c71b5f762d05be90cb46"
+    },
+    {
+      "path": "cases/zh/Quadratic/original-render.log.gz",
+      "bytes": 183,
+      "sha256": "71987949ae003a6aa5541e03873b711244c4604f8e8a48dd498c1b78ff20912d"
+    },
+    {
+      "path": "cases/zh/Quadratic/original-result.json.gz",
+      "bytes": 20614,
+      "sha256": "ee2a2ef7cf953e5477bef62f7ffc9a248fb649acdbec928a98e1a95758841c51"
+    },
+    {
+      "path": "cases/zh/Quadratic/row-reveals/result.json.gz",
+      "bytes": 4396,
+      "sha256": "183fef77e27fef4fbb9b64d01663b7ce276e5794672e445bb6949633881acce6"
+    },
+    {
+      "path": "cases/zh/Quadratic/unique/review-plan.json.gz",
+      "bytes": 39216,
+      "sha256": "43391f5c09d9ab47a0fe517eea55c6674a57814d4cdbf40ab6a2f6c44d722295"
+    },
+    {
+      "path": "reports/en/Quadratic/review.json.gz",
+      "bytes": 1692,
+      "sha256": "b0976166c554cc97f5d53a4e2a01310505b9e0a2e1f5321bdee75dc693421940"
+    },
+    {
+      "path": "reports/implicit-review.json.gz",
+      "bytes": 2049,
+      "sha256": "16aeecfe73f6aeb7436823ef4a3e2923e76ae2683a2ee18e9e716c89ba289cf7"
+    },
+    {
+      "path": "reports/implicit-review.md",
+      "bytes": 1516,
+      "sha256": "493a5e9d97ef2eda4a5ebab1420266579ef63cf85d3a6725633fb5927135216c"
+    },
+    {
+      "path": "reports/lagrange-kkt-review.json.gz",
+      "bytes": 8607,
+      "sha256": "2bc0d97425316adbf0786c801e5caae8cd8c14350f58561472c5de8debc5cb2a"
+    },
+    {
+      "path": "reports/lagrange-kkt-review.md",
+      "bytes": 5985,
+      "sha256": "3fb26f3deee860f8a552299c0fd194ad4155891ae480d4eadefe17f1266a4920"
+    },
+    {
+      "path": "reports/review-summary.json.gz",
+      "bytes": 7281,
+      "sha256": "3ad89022d2728aa6b09c9a522f18de3102bef6e1bed6afce968e60754f027373"
+    },
+    {
+      "path": "reports/zhquad-outro-review.json.gz",
+      "bytes": 15211,
+      "sha256": "2ce796bfb4616dec622d686b53b0f5734e330a5efd3071147d6c7463161cbe70"
+    },
+    {
+      "path": "reports/zhquad-outro-review.md",
+      "bytes": 5648,
+      "sha256": "25bcff3c1f6d17c7d0db22aaa565594c5ecfb4fda3d84dfd23145417a6a4d21a"
+    },
+    {
+      "path": "tools/aggregate.py",
+      "bytes": 5817,
+      "sha256": "45355865abbb6fcfcf46f6ba8414ed3188546ac94ee472f8a5dfeffa386d2d98"
+    },
+    {
+      "path": "tools/extract_spans.py",
+      "bytes": 1049,
+      "sha256": "17804bfaf1337ba251ff989846dc75ed7a9ea42a46a5eb62c175c95bf391579a"
+    },
+    {
+      "path": "tools/finalize_implicit.py",
+      "bytes": 5564,
+      "sha256": "6b5bda5443d18c59701931dead2cf06a3f9dcd588ea9ff70ca7d31009651dd4f"
+    },
+    {
+      "path": "tools/log_views.py",
+      "bytes": 1115,
+      "sha256": "df005fbf58a4d42519c9d3d6f2c758a6ff9fad376bcb5aae9fdcabb058887df4"
+    },
+    {
+      "path": "tools/prepare_case.py",
+      "bytes": 4217,
+      "sha256": "813635f0b21aa05cbfa48537bdf00efc5e02a0bfea2995bf9ac8061716dd359c"
+    }
+  ]
+}
