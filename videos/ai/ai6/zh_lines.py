@@ -296,7 +296,7 @@ ZH.update({
         "提升法问的是另一个问题：许多弱规则，能不能组成一个强规则？1997年，弗罗因德和沙皮尔的AdaBoost回答：能。<bookmark mark='a'/>开始时，每个训练页的权重都一样，找出最好的单个问题，也就是一个树桩。它在{100 * e1:.0f}%的权重上判错了。<bookmark mark='b'/>现在把它判错的书页加重，再为重新加权后的书页找最好的树桩。<bookmark mark='c'/>重复下去。权重越来越集中在难判的书页上，也就是两位作者的交界处，而委员会的投票，每个树桩按它的α加权，把平面切分开来。",
 
     'Why those weights, and that alpha?':
-        "为什么是这样的权重，这样的α？2000年，弗里德曼、黑斯蒂和蒂布希拉尼找到了答案。<bookmark mark='a'/>AdaBoost是在贪心地最小化指数损失：e的负间隔次方。再加一个树桩，乘以α。<bookmark mark='b'/>把指数拆开，旧委员会的那一部分，恰好就是每一页的权重。<bookmark mark='c'/>树桩判对的书页贡献e的负α次方，判错的贡献e的α次方。<bookmark mark='d'/>令导数为零，α就是“判对的几率”取对数的一半。<bookmark mark='e'/>用数值方法搜索α，得到的是同一个答案，精确到小数点后第六位。",
+        "为什么是这样的权重，这样的α？2000年，弗里德曼、黑斯蒂和蒂布希拉尼找到了答案。<bookmark mark='a'/>AdaBoost是在贪心地最小化指数损失：e的负间隔次方。再加一个树桩，乘以α。<bookmark mark='b'/>把指数拆开，旧委员会的那一部分，恰好就是每一页的权重。<bookmark mark='c'/>树桩判对的书页贡献e的负α次方，判错的贡献e的α次方。<bookmark mark='d'/>令导数为零，α就是“判对的几率”取对数的一半。<bookmark mark='e'/>在这里，数值搜索α与公式结果的差异只有百万分之几。",
 
     'f"On all seventy rates, run four hundred rounds.':
         "在全部70个词频上，跑400轮。<bookmark mark='a'/>指数损失稳步下降。<bookmark mark='b'/>它总是在训练错误率的上方，因为只要判错，e的负间隔次方就至少是1。<bookmark mark='c'/>{say}",
@@ -466,7 +466,7 @@ ZH.update({
     "Here the seventy-rate model scores lower than the two-rate model; more features need not help.": "这里，70个词频的模型反而得分更低；更多特征未必有帮助。",
     "f\"The training error never reaches zero in these": "在这{n}轮中，训练错误率从未到零，最后是{100 * tr[-1]:.1f}%。留出错误率最后是{100 * te[-1]:.1f}%，观察到的最低值是第{best}轮的{100 * te.min():.1f}%。",
     "f\"Here are the measured log losses: naive Bayes": "这里测得的对数损失是：朴素贝叶斯{nb['logloss']:.2f}，两个词频的逻辑回归{l2['logloss']:.2f}。",
-    "f\"Here's the contest: twelve named procedures": "这是比赛：12种具名流程，在同样5部小说书页的相同10折上比较，使用固定的全语料词表，参数预先设定。<bookmark mark='a'/>只用两个词频时，这些受测流程在这些折上的准确率落在{100 * lo2:.0f}%到{100 * hi2:.0f}%之间。<bookmark mark='b'/>换成全部70个词频，最高的是{best70['name']}，{100 * best70['70']['cv']:.1f}%。单棵树是{100 * tree70:.0f}%。{line_s}<bookmark mark='c'/>经典机器学习的一课是：数据的描述，比方法的巧妙更重要。这70个小词，做了大部分工作。",
+    "f\"Here's the contest: twelve named procedures": "这是比赛：12种具名流程，在同样5部小说书页的相同10折上比较，使用固定的全语料词表，参数预先设定。<bookmark mark='a'/>只用两个词频时，这些受测流程在这些折上的准确率落在{100 * lo2:.0f}%到{100 * hi2:.0f}%之间。<bookmark mark='b'/>换成全部70个词频，{winner_s}单棵树是{100 * tree70:.0f}%。{line_s}<bookmark mark='c'/>经典机器学习的一课是：数据的描述，比方法的巧妙更重要。这70个小词，做了大部分工作。",
     "A finite paired logistic-versus-boosting comparison is unavailable here.": "这里没有可用的、有限的逻辑回归与提升树配对比较。",
     "Logistic regression scores higher than boosted trees in these folds.": "在这些折上，逻辑回归得分高于提升树。对这个固定语料任务，小词效应的和是一种有用的描述。",
     "Logistic regression and boosted trees tie on mean accuracy in these folds.": "在这些折上，逻辑回归和提升树的平均准确率打平。",
@@ -488,5 +488,15 @@ ZH.update({
 
 # Benchmark/task conditioning from the primary papers; release numerals retained.
 ZH.update({
-    "Deep learning took over images, sound and language.": "深度学习接管了图像、声音和语言。为什么没有接管表格？2022年，格林斯塔因、瓦永和瓦罗科在45个、每个约一万行的表格数据集上做了测试，树的集成仍然胜过深度网络。<bookmark mark='a'/>他们给出的理由是：表格里有无用的列，而树根本不会去问它们；每一列都有自己的含义，网络却把它们搅在一起；而答案常常是一级一级地跳变，树画起来很容易。<bookmark mark='b'/>挑战者是一个只在大量合成表格上训练出来的Transformer，它把你的训练行当作提示读进去，一次前向传播就给出预测。TabPFN的第二版，2025年1月发表在《自然》上，在论文报告的分类基准配置中，用不到三秒，胜过了一个调了四小时的集成；该基准适用于至多一万行的表格。<bookmark mark='c'/>它的后继者能处理五万行，然后，在2026年5月，200个特征时处理100万行；按其开发者的报告，在TabArena排行榜上名列第一。<bookmark mark='d'/>2026年6月一项更广泛的基准测试，其共同作者中包括模型作者，评估的是TabPFN二点六，而不是TabPFN三。基础模型在小型和中型、独立同分布的表格上表现很强；在非独立同分布、大型或非常宽的数据上，传统树模型和深度模型揭示了它们的适用边界。这些比较针对特定版本和任务，树模型与深度模型都是必要的基线。"
+    "Deep learning took over images, sound and language.": "深度学习接管了图像、声音和语言。为什么没有接管表格？2022年，格林斯塔因、瓦永和瓦罗科在45个、每个约一万行的表格数据集上做了测试，树的集成仍然胜过深度网络。<bookmark mark='a'/>他们给出的理由是：表格里有无用的列，而树根本不会去问它们；每一列都有自己的含义，网络却把它们搅在一起；而答案常常是一级一级地跳变，树画起来很容易。<bookmark mark='b'/>挑战者是一个只在大量合成表格上训练出来的Transformer，它把你的训练行当作提示读进去，一次前向传播就给出预测。TabPFN的第二版，2025年1月发表在《自然》上，在论文报告的分类基准配置中，用不到三秒，胜过了一个调了四小时的集成；该基准适用于至多一万行的表格。<bookmark mark='c'/>它的后继者能处理五万行，然后，在2026年5月，200个特征时处理100万行；按其开发者的报告，在TabArena排行榜上名列第一。<bookmark mark='d'/>2026年6月一项更广泛的基准测试，其共同作者中包括模型作者，评估的是TabPFN二点六，而不是TabPFN三。基础模型在小型和中型、独立同分布的表格上表现很强；在非独立同分布、大型或非常宽的数据上，传统树模型和深度模型揭示了它们的适用边界。这些比较针对特定版本和任务，树模型与深度模型都是必要的基线。",
+
+    # Reviewed measured-score and recap-cue variants.
+    "No finite seventy-rate mean accuracy is available here.":
+        "这里没有可用的、有限的70词频平均准确率。",
+    "f\"{best70['name']} has the highest mean accuracy, at {100 * best70['70']['cv']:.1f} percent.\"":
+        "{best70['name']}的平均准确率最高，为{100 * best70['70']['cv']:.1f}%。",
+    "f'{len(leaders70)} procedures tie for the highest mean accuracy, at {100 * best_mean:.1f} percent.'":
+        "{len(leaders70)}种流程并列取得最高平均准确率，为{100 * best_mean:.1f}%。",
+    "Let's take stock. <bookmark mark='linear'/> Least squares is a projection":
+        "我们来盘点一下。<bookmark mark='linear'/>最小二乘法是一次投影，在线性无偏估计里是最好的。<bookmark mark='penalties'/>岭回归收缩弱的方向；套索回归的软阈值挑选词语。<bookmark mark='logistic_newton'/>逻辑回归是一只凸的碗，牛顿法几步就找到碗底。<bookmark mark='bayes'/>朴素贝叶斯学得快，却一直有偏差，而且过于自信。<bookmark mark='neighbours'/>在大样本极限下，单个邻居的错误率至多是最好规则的两倍，但在很多维里，邻居们就被淹没了。<bookmark mark='kernels'/>核函数不抬升地抬升，支持向量机的对偶问题只需要它们。<bookmark mark='averaging'/>把树平均起来，能把方差降到由相关性决定的下限；<bookmark mark='boosting'/>提升法沿着指数损失往下走，XGBoost迈的是牛顿步。<bookmark mark='evaluation'/>而一个诚实的分数，需要对的曲线，和没碰过的测试页。",
 })

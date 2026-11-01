@@ -111,8 +111,8 @@ class AdaBoost(VoiceoverScene):
             "stump, scaled by alpha. <bookmark mark='b'/> Split the exponential, and the old committee's part is "
             "exactly each page's weight. <bookmark mark='c'/> Pages the stump gets right contribute e to the minus "
             "alpha, pages it gets wrong e to the alpha. <bookmark mark='d'/> Set the derivative to zero, and alpha is "
-            "half the log of the odds of being right. <bookmark mark='e'/> Searching for alpha numerically gives the "
-            "same answer, to the sixth decimal."
+            "half the log of the odds of being right. <bookmark mark='e'/> Searching for alpha numerically agrees with the "
+            "formula to within a few millionths here."
         ) as vo:
             self.play(FadeIn(fht))
             step(0)
@@ -162,6 +162,8 @@ class AdaBoost(VoiceoverScene):
                      label(rf"best: \ ${100 * te.min():.1f}\%$, \ round ${best}$", font_size=22, color=HL),
                      label(rf"final: \ ${100 * te[-1]:.1f}\%$, \ round ${n}$", font_size=22, color=HL)
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(bound, DOWN, buff=0.35).align_to(key, LEFT)
+        floor_note = label(r"plot floor: $10^{-4}$ \\ training error $0$ or positive loss \\ below $10^{-4}$ shares this baseline", font_size=20, color=GREY_A)
+        floor_note.next_to(res, DOWN, buff=0.28).align_to(key, LEFT)
         if z0 is None:
             say = (f"The training error never reaches zero in these {n} rounds; its final value is "
                    f"{100 * tr[-1]:.1f} percent. The held-out error ends at {100 * te[-1]:.1f} percent, "
@@ -180,7 +182,7 @@ class AdaBoost(VoiceoverScene):
             "<bookmark mark='b'/> It's always above the training error, since e to the minus the margin is at least "
             f"one for any mistake. <bookmark mark='c'/> {say}"
         ) as vo:
-            self.play(FadeIn(g), FadeIn(key))
+            self.play(FadeIn(g), FadeIn(key), FadeIn(floor_note))
             vo.wait_until("a")
             self.play(Create(cL), run_time=2.0)
             vo.wait_until("b")

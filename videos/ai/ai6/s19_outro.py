@@ -126,19 +126,36 @@ class Outro(VoiceoverScene):
         tiles = self.tiles()
         head = label(rf"Part {PART}, in twelve pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Let's take stock. Least squares is a projection, and among linear unbiased estimates the best. Ridge "
-            "shrinks the weak directions; the lasso's soft thresholds choose words. Logistic regression is a convex "
-            "bowl, and Newton's method finds its bottom in a few steps. Naive Bayes learns fast but stays wrong, and "
-            "overconfident on these pages. In the large-sample limit, a single neighbour errs at most twice as often as "
+            "Let's take stock. <bookmark mark='linear'/> Least squares is a projection, and among linear unbiased estimates the best. <bookmark mark='penalties'/> Ridge "
+            "shrinks the weak directions; the lasso's soft thresholds choose words. <bookmark mark='logistic_newton'/> Logistic regression is a convex "
+            "bowl, and Newton's method finds its bottom in a few steps. <bookmark mark='bayes'/> Naive Bayes learns fast but stays wrong, and "
+            "overconfident on these pages. <bookmark mark='neighbours'/> In the large-sample limit, a single neighbour errs at most twice as often as "
             "the best rule, but neighbours drown in "
-            "many dimensions. Kernels lift without lifting, and the support vector machine's dual needs only them. "
-            "Averaging trees cuts variance down to a floor set by their correlation; boosting walks down the "
-            "exponential loss, and XGBoost takes Newton steps. And an honest score needs the right curve and "
+            "many dimensions. <bookmark mark='kernels'/> Kernels lift without lifting, and the support vector machine's dual needs only them. "
+            "<bookmark mark='averaging'/> Averaging trees cuts variance down to a floor set by their correlation; <bookmark mark='boosting'/> boosting walks down the "
+            "exponential loss, and XGBoost takes Newton steps. <bookmark mark='evaluation'/> And an honest score needs the right curve and "
             "untouched test pages."
         ) as vo:
             self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
-                      run_time=max(4.0, vo.duration - 2.0))
+            # One cue per narrated idea; related pictures arrive together and remain visible.
+            groups = (
+                ("linear", (0, 1)),
+                ("penalties", (2, 3)),
+                ("logistic_newton", (4,)),
+                ("bayes", (5,)),
+                ("neighbours", (6,)),
+                ("kernels", (7, 8)),
+                ("averaging", (9,)),
+                ("boosting", (10,)),
+                ("evaluation", (11,)),
+            )
+            frame = 1.0 / config.frame_rate
+            for k, (cue, indices) in enumerate(groups):
+                vo.wait_until(cue)
+                budget = (vo.until(groups[k + 1][0], minimum=0.0)
+                          if k + 1 < len(groups) else vo.remaining(minimum=0.0))
+                self.play(*[FadeIn(tiles[i], shift=UP * 0.15, scale=0.95) for i in indices],
+                          run_time=max(frame, min(0.7, 0.4 * budget)))
         self.wait(0.3)
         self.clear_scene()
 
