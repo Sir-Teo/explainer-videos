@@ -1,0 +1,11 @@
+test_actual_original_nested_function_reproduces_point17_overrun (test_ai1_arithmetic_timing.Timing.test_actual_original_nested_function_reproduces_point17_overrun) ... ok
+test_both_real_loops_frame_reserved_and_same_animation_arguments (test_ai1_arithmetic_timing.Timing.test_both_real_loops_frame_reserved_and_same_animation_arguments) ... ok
+test_entire_module_AST_is_exact_except_local_timing (test_ai1_arithmetic_timing.Timing.test_entire_module_AST_is_exact_except_local_timing) ... ok
+test_every_revealed_row_has_settled_source_clock_reading_hold (test_ai1_arithmetic_timing.Timing.test_every_revealed_row_has_settled_source_clock_reading_hold) ... ok
+test_exact_diagnostic_and_all_actual_tracker_targets (test_ai1_arithmetic_timing.Timing.test_exact_diagnostic_and_all_actual_tracker_targets) ... ok
+test_other_add_row_calls_and_impossible_budgets_keep_honest_contract (test_ai1_arithmetic_timing.Timing.test_other_add_row_calls_and_impossible_budgets_keep_honest_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.567s
+
+OK

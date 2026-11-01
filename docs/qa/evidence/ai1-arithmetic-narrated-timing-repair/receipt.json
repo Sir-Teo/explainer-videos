@@ -1,0 +1,150 @@
+{
+  "created_utc": "2026-11-01T15:41:43.335176+00:00",
+  "source_path": "videos/ai/ai1/s09_arithmetic.py",
+  "source_before_sha256": "565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83",
+  "source_after_sha256": "bb35007c0827e7a53660c89efc6e917f2f45a744434256628550f3799ee947c9",
+  "source_bytes_after": 29984,
+  "scope": "Scene-local timing repair only. No narration/bookmark/math/reveal-order/data/producer/sharedhelper/ZH/master changes. No rendering/Scene/audio/provider/model/decoder or production jobs. No v9 registration/stage/commit/push.",
+  "diagnostic_path": "/workspace/runtime/ai1-arithmetic-exact-diagnostic.json",
+  "diagnostic_bytes": 152277,
+  "diagnostic_sha256": "ffbf5a0de4593a85c2ea734d62b69cf1de835a33acce1d4b5291dce62762fec5",
+  "library_id": "libfile_239355bde2308191ba579f23e22abc0c",
+  "exact_diagnostic_gzip_sha256": "41ff7ef545e10aa2624346b1d83a1871eca1f8bde975e46bb4947f93fb8129bd",
+  "host_schedule_report_path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/evidence/Arithmetic/fast-narrated-timing-v8/schedule-report.json",
+  "host_schedule_report_sha256": "34c8912d135573fdb1c37f3db6af4929e2ba90618d6f994ace6721a540be0360",
+  "host_data_identity_sha256": "2a9a41d609ceb81365771d3233d69ca8d5cbd9117f8081f67453e4807a677ea9",
+  "host_voice_identity_sha256": "57c00c9290971b454265f7fb37efd2d1b0e6fa097d08cafe4ad975524f877bed",
+  "master_metadata": [
+    {
+      "key": "fe088d41c90573b7",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/fe088d41c90573b7.float.wav",
+      "bytes": 322640,
+      "sha256": "8bb200a521632906ee05baad3965575d2b94136d3ddd9476fffbb9206a4c9559"
+    },
+    {
+      "key": "b5cb3683a650324c",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/b5cb3683a650324c.float.wav",
+      "bytes": 2668880,
+      "sha256": "bc00c0431a82fd5708ae24ecc81ea3c15b468e4c70b9cf8c828fe535b624791a"
+    },
+    {
+      "key": "d768706e0962cd6d",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/d768706e0962cd6d.float.wav",
+      "bytes": 2310800,
+      "sha256": "c52bb5036ece3f1d992867be04536909179cec7b2c0b04c6bb29cf08309498e3"
+    },
+    {
+      "key": "f70ee29386da35ae",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/f70ee29386da35ae.float.wav",
+      "bytes": 2426960,
+      "sha256": "3eaf7b119a7e692c50d30119466239973d46ea81286010a2023f37d0338111cb"
+    },
+    {
+      "key": "2a66fcf6fafedceb",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/2a66fcf6fafedceb.float.wav",
+      "bytes": 2284880,
+      "sha256": "c1f6901c2bfc853304e4a82f80c54c2dfff16ad9b4cfb2beadf3948628aee524"
+    },
+    {
+      "key": "4556ba82abe239f9",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/4556ba82abe239f9.float.wav",
+      "bytes": 2729360,
+      "sha256": "b7b3e648d4b660ce17c698500ec6aff59c2adc019b51ced4fe2f90f9db546d29"
+    },
+    {
+      "key": "c279d8fc649409f1",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/c279d8fc649409f1.float.wav",
+      "bytes": 1525520,
+      "sha256": "5ae1978a135a70c188e5ecbe9f46d3860908a6868e37b9d638a985278bc825ad"
+    },
+    {
+      "key": "69310184fa061112",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/69310184fa061112.float.wav",
+      "bytes": 2544080,
+      "sha256": "574b568b855dbe0512b112da62f972a087b808436a8f5f052af8fe12c07e2f9c"
+    },
+    {
+      "key": "50590f94a00e7237",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/50590f94a00e7237.float.wav",
+      "bytes": 1006160,
+      "sha256": "652b03eb5e57a2bc5fb675f12892fd08f2233c272bbd89578ef540ca841d1788"
+    },
+    {
+      "key": "43d7999ab7957da8",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/43d7999ab7957da8.float.wav",
+      "bytes": 3336080,
+      "sha256": "44c5e00a036b75c358c7c8faef0f98a6b4a0404ee5f86a0f5e3d59d63d2c9f2a"
+    }
+  ],
+  "audio_scope": "Preserved supplied10master identities/clean texts, no audio downloaded/opened/regenerated or independently verified here.",
+  "source_nominal_first_group_seconds": 7.0,
+  "source_nominal_first_deadline_relative_seconds": 7.03,
+  "source_nominal_second_group_seconds": 6.8,
+  "source_nominal_second_budget_seconds": 6.63,
+  "actual_reported_and_reproduced_late_seconds": 0.17,
+  "all10utterances_and24requests_reconstructed_from_actual_tracker": true,
+  "helper_contract": "Actual mark_time minus current elapsed; scroll count derives from row count and current shown count, retaining4rows. Reserve one frame per sequential stage plus a cue frame, then uniformly scale only2reveal stages/row and0.5scroll. Optional add_row scroll_time defaults0.5; all othercallers preserve original defaults and requested timing.",
+  "frame_rates": [
+    15,
+    30,
+    60
+  ],
+  "adverse_arrival_phases_frames": [
+    0,
+    0.49,
+    1
+  ],
+  "current_loop_checks": 18,
+  "before_after_loop_checks": 36,
+  "summaries": [
+    {
+      "loop": "first",
+      "cases": 9,
+      "minimum_cue_lead_seconds": 0.030000000000002025,
+      "minimum_row_reveal_requested_seconds": 0.522293906810036,
+      "minimum_row_reveal_quantized_seconds": 0.5333333333333332,
+      "minimum_scroll_requested_seconds": 0.4368637992831542,
+      "minimum_scroll_quantized_seconds": 0.4666666666666668
+    },
+    {
+      "loop": "second",
+      "cases": 9,
+      "minimum_cue_lead_seconds": 0.15183333333333948,
+      "minimum_row_reveal_requested_seconds": 0.5045925925925928,
+      "minimum_row_reveal_quantized_seconds": 0.5333333333333332,
+      "minimum_scroll_requested_seconds": 0.4224814814814816,
+      "minimum_scroll_quantized_seconds": 0.4666666666666668
+    }
+  ],
+  "all_current_groups_finish_atleast_one_frame_before_cue": true,
+  "minimum_settled_row_retention_seconds": 3.6666666666666665,
+  "minimum_final_row_retention_seconds": 11.771833333333339,
+  "reading_scope": "Each row completion is end of actual source add_row second play; conservative retention ends at beginning of next FadeOut for that row, or actual utterance end for final retained rows. These are source-clock/completion estimates; not decoded-frame brightness, reading ability or actual listening approval.",
+  "focused_tests": {
+    "count": 6,
+    "elapsed_seconds": 1.597,
+    "outcome": "passed",
+    "log_sha256": "7f113445219faf2b16c34389b26e2f43f8329579dd9603348c39d9fcea02fb93",
+    "fixture_correction": "Initial test compiled nested add_row atmodule scope and correctly failed nonlocal lines syntax. Raw failed log+fixture source retained. Final fixture wraps unmodified nested AST in an outer real closure, preserving nonlocal rather than deleting it."
+  },
+  "invariants": {
+    "entire_module_AST_except_owned_timing_exact": true,
+    "all10voiceover_expression_ASTs_preserved": true,
+    "allbookmarks_preserved": true,
+    "allanimationarguments_except_run_time_preserved": true,
+    "reveal_order_and_math_unchanged": true,
+    "other_add_row_call_timing_exact": true,
+    "no_absolute_scene_timestamps_in_source": true
+  },
+  "impossible_budget_limits": "Retains positive one-frame row/scroll stages even when deadline physically missed; no timing/reading success is claimed for impossible budgets or untested frame rates/other actual voices.",
+  "source_clearance": "Controlled actual cached-master preflight only; production frame/cue/reading/listening gates remain open. Root775fullsuite predates this source; only6runtimefocused tests are attributed here.",
+  "source_and_test_compile": "In memory only; bytecode disabled.",
+  "test_path": "/workspace/runtime/ai1-arithmetic-timing-repair/test_timing.py",
+  "test_sha256": "fc18effd711dd0a4fca3a6f9a361fc83fe89d84d6be4897a1df8815120956ec4",
+  "patch_sha256": "c6e8dd8ed9d6d918585142668189e126b9a31e5be86edce79e0506e8aab6244f",
+  "remaining": [
+    "Parent production overlay must explicitly adopt this exact source.",
+    "Fresh actual cached-master requested cue alignment and visible completion/readability atproductionfps.",
+    "Actual reading/pacing/listening and any ZH voice budget validation."
+  ]
+}

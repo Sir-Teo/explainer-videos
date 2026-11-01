@@ -7,6 +7,23 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai1.common import ALPHA27, MONO, PART, ZoomLadder, letter, letter_row, load, tt
 
 
+def _row_run_times(vo, mark, count, shown_count):
+    """Fit this group of row reveals and scrolls before its actual speech cue.
+
+    Each stage keeps at least one frame; impossible deadlines remain late.
+    Other add_row callers retain their existing nominal timing.
+    """
+    frame = 1 / config.frame_rate
+    scrolls = max(0, min(count, shown_count + count - 4))
+    stages = 2 * count + scrolls
+    floor = stages * frame
+    nominal = 1.2 * count + 0.5 * scrolls
+    budget = vo.mark_time(mark) - vo.elapsed() - (stages + 1) * frame
+    scale = min(1.0, max(0.0, (budget - floor) / (nominal - floor)))
+    return ((frame + (0.6 - frame) * scale) / 0.6,
+            frame + (0.5 - frame) * scale)
+
+
 def binary(x: float, n: int) -> str:
     """The first n binary digits of x in [0, 1)."""
     out = []
@@ -143,7 +160,7 @@ class Arithmetic(VoiceoverScene):
         shown = []  # (row, funnel, ctx, read) on screen, oldest first
         lines = None
 
-        def add_row(k, run_time=0.9):
+        def add_row(k, run_time=0.9, scroll_time=0.5):
             nonlocal lines
             anims = []
             if len(shown) == 4:  # scroll: drop the oldest row (and the new top row's funnel), move the rest up
@@ -155,7 +172,7 @@ class Arithmetic(VoiceoverScene):
                 for grp in shown:
                     anims += [m.animate.shift(UP * dy) for m in grp if m is not None]
                 if anims:
-                    self.play(*anims, run_time=0.5)
+                    self.play(*anims, run_time=scroll_time)
             y = y_top - dy * len(shown)
             row = lad.row(k, y)
             fun = lad.funnel(k - 1, y + dy, y) if shown else None
@@ -198,11 +215,13 @@ class Arithmetic(VoiceoverScene):
             f"unlikely one, like the {hs_sym} in {hs_word}, "
             f"which the model gave {100 * hs['p']:.1f} percent, costs {hs['bits']:.1f} bits."
         ) as vo:
+            row_times = _row_run_times(vo, "a", 5, len(shown))
             for k in range(1, 6):
-                add_row(k, run_time=1.0)
+                add_row(k, run_time=row_times[0], scroll_time=row_times[1])
             vo.wait_until("a")
+            row_times = _row_run_times(vo, "b", 4, len(shown))
             for k in range(6, 10):
-                add_row(k, run_time=1.0)
+                add_row(k, run_time=row_times[0], scroll_time=row_times[1])
             vo.wait_until("b")
             row_c = next((g for g in shown if g[3] is not None and f"{hs['p']:.3f}" in g[3].tex_string), None)
             if row_c is not None:

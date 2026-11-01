@@ -1,0 +1,66 @@
+{
+  "README.md": {
+    "bytes": 2191,
+    "sha256": "88426be5a038942a3f5e7ca7e98fb496dd332781661142575a087d9bacb41b2d"
+  },
+  "codec-map.json": {
+    "bytes": 3398,
+    "sha256": "62a53c5ecc5617ffd89b06ae6f9c1654b3b9da62601886666112433ab982ad27"
+  },
+  "collect_proof.py.gz": {
+    "bytes": 3903,
+    "sha256": "97b798b6a6ff6e914121333d4ff2eac0277126e981b661471fd570ec61db9d5f"
+  },
+  "exact-diagnostic.json.gz": {
+    "bytes": 22511,
+    "sha256": "41ff7ef545e10aa2624346b1d83a1871eca1f8bde975e46bb4947f93fb8129bd"
+  },
+  "focused-test.py.gz": {
+    "bytes": 3060,
+    "sha256": "a8dc0d6b772fa1e6f08b51b26063e797d0684281bc1f8bd26dfc0507614ad430"
+  },
+  "focused-tests.log.gz": {
+    "bytes": 327,
+    "sha256": "0ab2b8c7af7051f66541d6aa419d9c89e545ae1fc0e883d523eada17c419ef6b"
+  },
+  "initial-closure-fixture-error.log.gz": {
+    "bytes": 1027,
+    "sha256": "0c8e9f61b14f1fb005167ddc5234ab744dbad1524579d7e2a518656d773d53bc"
+  },
+  "initial-closure-fixture.py.gz": {
+    "bytes": 2931,
+    "sha256": "0124ce5ef09acc464159ec55d0f46ac0bc3413caf02cf12e77ffa560fc1e2912"
+  },
+  "phase-proof.json.gz": {
+    "bytes": 6546,
+    "sha256": "2358894c1c076d21eecfaafb8ccd1da1db347038c72eab217d98db309fc3ff26"
+  },
+  "portable-focused-tests.log": {
+    "bytes": 1086,
+    "sha256": "6baa2aa0ea6def84fd37a9d97c74c1ad170b5a8b227be25d6f24991de5dff05f"
+  },
+  "receipt.json": {
+    "bytes": 8715,
+    "sha256": "79047123d802022b7cffec36fddfe0800db2adaf208171352b75889185e6fed2"
+  },
+  "receipt.json.gz": {
+    "bytes": 3282,
+    "sha256": "89053702c055367039187a5243e0a660cebf39058e77448c5fea4848fcb05ae0"
+  },
+  "root-integration.json": {
+    "bytes": 834,
+    "sha256": "471c614b31cf62f7be35a3b57473829136e863baa3dde327b27dcfad8a6ad632"
+  },
+  "source-after.py.gz": {
+    "bytes": 9057,
+    "sha256": "a01fcd9dfe967539c0c2a02cfae045c5183aa5894b8bd4219a9791921105315b"
+  },
+  "source-before.py.gz": {
+    "bytes": 8698,
+    "sha256": "1333c8df81bbfd9cb4e97acacd92c104640dfa09524bc62752eda01928d080e0"
+  },
+  "source.patch.gz": {
+    "bytes": 1146,
+    "sha256": "f9fdeb2cc412d539ec4ed370c7f8d4a3c779209ac8bc9a1f5790451300867311"
+  }
+}

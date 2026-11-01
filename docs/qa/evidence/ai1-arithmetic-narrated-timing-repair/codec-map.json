@@ -1,0 +1,74 @@
+[
+  {
+    "original_path": "/workspace/runtime/ai1-arithmetic-exact-diagnostic.json",
+    "payload": "exact-diagnostic.json.gz",
+    "codec": "gzip lossless, mtime0",
+    "raw_bytes": 152277,
+    "raw_sha256": "ffbf5a0de4593a85c2ea734d62b69cf1de835a33acce1d4b5291dce62762fec5",
+    "payload_sha256": "41ff7ef545e10aa2624346b1d83a1871eca1f8bde975e46bb4947f93fb8129bd"
+  },
+  {
+    "original_path": "/workspace/runtime/ai1-arithmetic-timing-repair/before.py",
+    "payload": "source-before.py.gz",
+    "codec": "gzip lossless, mtime0",
+    "raw_bytes": 29057,
+    "raw_sha256": "565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83",
+    "payload_sha256": "1333c8df81bbfd9cb4e97acacd92c104640dfa09524bc62752eda01928d080e0"
+  },
+  {
+    "original_path": "/workspace/runtime/ai1-arithmetic-timing-repair/after.py",
+    "payload": "source-after.py.gz",
+    "codec": "gzip lossless, mtime0",
+    "raw_bytes": 29984,
+    "raw_sha256": "bb35007c0827e7a53660c89efc6e917f2f45a744434256628550f3799ee947c9",
+    "payload_sha256": "a01fcd9dfe967539c0c2a02cfae045c5183aa5894b8bd4219a9791921105315b"
+  },
+  {
+    "original_path": "/workspace/runtime/ai1-arithmetic-timing-repair/source.patch",
+    "payload": "source.patch.gz",
+    "codec": "gzip lossless, mtime0",
+    "raw_bytes": 2676,
+    "raw_sha256": "c6e8dd8ed9d6d918585142668189e126b9a31e5be86edce79e0506e8aab6244f",
+    "payload_sha256": "f9fdeb2cc412d539ec4ed370c7f8d4a3c779209ac8bc9a1f5790451300867311"
+  },
+  {
+    "original_path": "/workspace/runtime/ai1-arithmetic-timing-repair/test_timing.py",
+    "payload": "focused-test.py.gz",
+    "codec": "gzip lossless, mtime0",
+    "raw_bytes": 7947,
+    "raw_sha256": "fc18effd711dd0a4fca3a6f9a361fc83fe89d84d6be4897a1df8815120956ec4",
+    "payload_sha256": "a8dc0d6b772fa1e6f08b51b26063e797d0684281bc1f8bd26dfc0507614ad430"
+  },
+  {
+    "original_path": "/workspace/runtime/ai1-arithmetic-timing-repair/focused-tests.log",
+    "payload": "focused-tests.log.gz",
+    "codec": "gzip lossless, mtime0",
+    "raw_bytes": 978,
+    "raw_sha256": "7f113445219faf2b16c34389b26e2f43f8329579dd9603348c39d9fcea02fb93",
+    "payload_sha256": "0ab2b8c7af7051f66541d6aa419d9c89e545ae1fc0e883d523eada17c419ef6b"
+  },
+  {
+    "original_path": "/workspace/runtime/ai1-arithmetic-timing-repair/focused-tests-initial-closure-fixture-error.log",
+    "payload": "initial-closure-fixture-error.log.gz",
+    "codec": "gzip lossless, mtime0",
+    "raw_bytes": 16703,
+    "raw_sha256": "0bafb5fac5b0eb9ab4dcb9dd746a229a504d90094f120da1e5ce100b36bf12c3",
+    "payload_sha256": "0c8e9f61b14f1fb005167ddc5234ab744dbad1524579d7e2a518656d773d53bc"
+  },
+  {
+    "original_path": "/workspace/runtime/ai1-arithmetic-timing-repair/test_timing-initial-closure-fixture.py",
+    "payload": "initial-closure-fixture.py.gz",
+    "codec": "gzip lossless, mtime0",
+    "raw_bytes": 7620,
+    "raw_sha256": "7a21fd7d1f9bbad2c753d98780ffb406275dff9f9b32b576d0ce9f2bcd0d1844",
+    "payload_sha256": "0124ce5ef09acc464159ec55d0f46ac0bc3413caf02cf12e77ffa560fc1e2912"
+  },
+  {
+    "original_path": "/workspace/runtime/ai1-arithmetic-timing-repair/receipt.json",
+    "payload": "receipt.json.gz",
+    "codec": "gzip lossless, mtime0",
+    "raw_bytes": 8715,
+    "raw_sha256": "79047123d802022b7cffec36fddfe0800db2adaf208171352b75889185e6fed2",
+    "payload_sha256": "89053702c055367039187a5243e0a660cebf39058e77448c5fea4848fcb05ae0"
+  }
+]

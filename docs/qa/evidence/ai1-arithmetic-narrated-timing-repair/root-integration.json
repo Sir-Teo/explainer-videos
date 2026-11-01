@@ -1,0 +1,18 @@
+{
+  "source_sha256": "bb35007c0827e7a53660c89efc6e917f2f45a744434256628550f3799ee947c9",
+  "portable_test": "tests/test_ai1_arithmetic_timing.py",
+  "adaptation": "Only imports and fixture/source path loading changed; same six focused assertions. Original runtime test bytes preserved in focused-test.py.gz.",
+  "independent_root_runtime_rerun": {
+    "tests": 6,
+    "seconds": 1.37,
+    "outcome": "passed"
+  },
+  "scope": "No audio bytes verified or regenerated; no production render/listening approval. Registered v9 still pending Prefix/source integration.",
+  "diagnostic_library_id": "libfile_239355bde2308191ba579f23e22abc0c",
+  "portable_focused_test_run": {
+    "count": 6,
+    "elapsed_seconds": 1.567,
+    "outcome": "passed",
+    "raw_log_sha256": "6baa2aa0ea6def84fd37a9d97c74c1ad170b5a8b227be25d6f24991de5dff05f"
+  }
+}
