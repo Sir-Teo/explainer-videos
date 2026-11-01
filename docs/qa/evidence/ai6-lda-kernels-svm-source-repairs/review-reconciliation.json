@@ -1,0 +1,54 @@
+{
+  "scope": "Trusted parent independent-review closures, not repeated root materialization where storage guard prevents it. Recorded artifact versions and original movie/source contexts remain authoritative.",
+  "artifacts": [
+    {
+      "id": "libfile_7ba844f403148191962710cd19836415",
+      "version": 0,
+      "bytes": 1749485,
+      "sha256": "4989ef18ff0022bb49114ff8efd81d6c70b2f67681d2d401c6fa54344839cdd8",
+      "review": "RootverifiedZIP+readfulltext; KNN443EN/471ZHcomplete, LDA480EN/498ZHcompletewithlayeringopen."
+    },
+    {
+      "id": "libfile_3f6fba7132b881918255c87c2bc071d7",
+      "version": 0,
+      "bytes": 728222,
+      "sha256": "531a965b1a22c502fdd4b5aac018c00e5575d4a0a231c617c1a2d30d0d99ccd9",
+      "review": "RootverifiedZIP/readfulltext+freshZHnative; Kernels605EN/625ZHplus331/335target frames. ENaccepted atscope,ZHtypographyopen."
+    },
+    {
+      "id": "libfile_0d420715312481919a40621f45d68031",
+      "version": 0,
+      "bytes": 1761499,
+      "sha256": "e956fb86d0cc0709871d7a17fe6980f160a3ca24e11095b6da0df89e8de2cd59",
+      "review": "RootverifiedZIP/readfulltext+original854encodedwitness; SVM fullcohorts472EN/506ZHcompletewithassociationopen; oldf7a/c80contextsretained."
+    },
+    {
+      "id": "libfile_47ebed1e5b8c8191b35b3f6126abba14",
+      "version": 0,
+      "bytes": 907235,
+      "sha256": "0364367ebfc79cfc66b6de1327548797b0cf7c53104634567b62a2a339212ed9",
+      "review": "Parentconfirms MetricsZH332selected/42sheets no newscopeddefect; notmaterializedhere."
+    },
+    {
+      "id": "libfile_fe8a735015448191a8f9f188196e7f47",
+      "version": 0,
+      "bytes": 207791,
+      "sha256": "e96427aabbedfbc27db2b74bbad153996a64400e3ec8649cd4c8c6925617643b",
+      "review": "Parentconfirms fullForestsEN313/ZH337,AdaEN435/ZH436,all193sheets,no newdefect; notmaterializedhere."
+    },
+    {
+      "id": "libfile_90c56ab9c1188191925d7635ba2c0dee",
+      "version": 0,
+      "bytes": 1305102,
+      "sha256": "c1283bbcd71ccfc226df983979882addc357b3285f796426ea273d39aee6bc1f",
+      "review": "Parentconfirms Contest/OutroENZH all205sheetscomplete, Englishno newdefect. Chinesepercentage/bibliographypolishopen. OldOutrosource0f613doesnotjudgeproblem8new8bebtarget."
+    }
+  ],
+  "target_closures_from_parent": {
+    "NaiveBayes": "libfile_be5fb06bfbac8191af0459132e761291; ZHclearancepassed,ENnativeunchanged; oldfullselectedbaseline+newtargetedclosureonly, notnewwholecohortafter.",
+    "Outro": "libfile_777b397106fc8191a42620fe46e7c94e; ZHproblem8spacingpassed,ENnativeunchanged; bibliography separate.",
+    "GB": "libfile_cdda8176c4148191b46ca2cd03e0ac2b; ec0cuespass,pointlayerdefectlibfile_f690115bbf988191a478c1533c0a3f25nowpatched34fpendingfreshafter.",
+    "index": "libfile_1325727e08c081919946400f08ccf0f6"
+  },
+  "global_limits": "Selectedchronological still/cohort andtargetedencodedwindow scopes only; no continuous perception/listening/actual narratedsync/fullnative-motion/final4K approval."
+}

@@ -1,0 +1,86 @@
+{
+  "scope": "Pinned source AST/fake draw-membership only; not a render/opacity/always_redraw simulation",
+  "before_underlay_events": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "after_underlay_events": [],
+  "restored_after_exit": true,
+  "after": [
+    {
+      "event": "cue:w",
+      "visible": [
+        "dl",
+        "pile_l",
+        "pl",
+        "sp1"
+      ]
+    },
+    {
+      "event": "remove",
+      "visible": [
+        "dl",
+        "sp1"
+      ]
+    },
+    {
+      "event": "play",
+      "visible": [
+        "dl",
+        "sp1",
+        "swc"
+      ]
+    },
+    {
+      "event": "play",
+      "visible": [
+        "dl",
+        "sp1",
+        "swc"
+      ]
+    },
+    {
+      "event": "cue:pull",
+      "visible": [
+        "dl",
+        "sp1",
+        "swc"
+      ]
+    },
+    {
+      "event": "play",
+      "visible": [
+        "back",
+        "dl",
+        "sp1"
+      ]
+    },
+    {
+      "event": "cue:a",
+      "visible": [
+        "back",
+        "dl",
+        "sp1"
+      ]
+    },
+    {
+      "event": "play",
+      "visible": [
+        "dl",
+        "sp1"
+      ]
+    },
+    {
+      "event": "add",
+      "visible": [
+        "dl",
+        "pile_l",
+        "pl",
+        "sp1"
+      ]
+    }
+  ]
+}

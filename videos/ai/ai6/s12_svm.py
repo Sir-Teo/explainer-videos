@@ -243,11 +243,31 @@ class SVM(VoiceoverScene):
             vo.wait_until("c")
             rd.clear_updaters()
             self.play(FadeOut(rd), FadeOut(kkt))
-            cvl = VGroup(label(rf"cross-validated: \ $C = {cvC:g}$, \ $\gamma = {cvg:g}$", font_size=24, color=GOLD),
-                         label(rf"held-out pages: \ ${100 * s['acc_cv2']:.0f}\%$ \ ($2$ rates)", font_size=24, color=WHITE),
-                         label(rf"all $70$ rates: \ ${100 * s['acc70_rbf']:.1f}\%$", font_size=24, color=HL)
-                         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.2, 1.2, 0])
-            self.play(FadeIn(cvl))
+            sweep = VGroup(
+                label("图示：扫描终点（2个频率）" if zh() else r"Shown: sweep endpoint ($2$ rates)",
+                      font_size=23, color=GREY_A),
+                MathTex(rf"C = {Cs[-1]:g},\quad \gamma = 1", font_size=28, color=WHITE),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([-3.1, 2.9, 0])
+            selected = VGroup(
+                label("交叉验证选择（2个频率，未绘制）" if zh() else r"CV choice ($2$ rates; not plotted)",
+                      font_size=22, color=GOLD),
+                MathTex(rf"C = {cvC:g},\quad \gamma = {cvg:g}", font_size=28, color=GOLD),
+                label(("留出准确率：" if zh() else r"held-out pages: \ ") +
+                      rf"${100 * s['acc_cv2']:.0f}\%$", font_size=22, color=WHITE),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+            full = VGroup(
+                label("另一组拟合（70个频率）" if zh() else r"Separate fit ($70$ rates)",
+                      font_size=22, color=HL),
+                MathTex(r"C = 1,\quad \gamma = \frac{1}{70}", font_size=26, color=HL),
+                label(("留出准确率：" if zh() else r"held-out pages: \ ") +
+                      rf"${100 * s['acc70_rbf']:.1f}\%$", font_size=22, color=WHITE),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+            cvl = VGroup(selected, full).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.1, 1.2, 0])
+            if sweep.width > 6.2:
+                sweep.scale_to_fit_width(6.2)
+            if cvl.width > 4.9:
+                cvl.scale_to_fit_width(4.9)
+            self.play(FadeIn(sweep), FadeIn(cvl))
             vo.wait_until("d")
             self.play(FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)
