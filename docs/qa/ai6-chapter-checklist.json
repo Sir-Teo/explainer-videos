@@ -1,15 +1,15 @@
 {
   "part": "ai6",
-  "observed_utc": "2026-11-01T06:51:02.776131+00:00",
+  "observed_utc": "2026-11-01T08:01:42.665094+00:00",
   "chapters": 19,
   "bilingual_cases": 38,
   "numerical_items": 22,
   "default_items_completed": 22,
-  "actual_rendered_cases": 22,
+  "actual_rendered_cases": 38,
   "source_integration_evidence": "evidence/ai6-source-integration/README.md",
   "source_teaching_evidence": "evidence/ai6-scene-teaching-source-repairs/README.md",
   "source_core_evidence": "evidence/ai6-producer-cache-source-repairs/README.md",
-  "scope": "22defaultnumerical items complete and263independent checks passed. Hook two current selected-image cases accepted at scopedpreviewcoverage; LeastSquares/Ridge baseline movies exposed retained-row/reveal-direction defects and repairs require actualnewrenderregression. Native1080/narration/listening/4K separate.",
+  "scope": "All 22 numerical items and 263 independent checks complete. First six chapters have selected-image and native1080 endpoint review in both languages (12 cases each). Newton/NaiveBayes fresh repair regression active; LDA selected review active. Remaining whole-chapter visual/audio/production gates remain open.",
   "cases": [
     {
       "position": 1,
@@ -85,10 +85,11 @@
       "source_state": "Sevenretained-rowreveals andcolor-onlyquantitativeemphasis repaired; commonhbarsoriginfixed. Actualbilingualselected/windowregressionaccepted.",
       "endpoints": "All36statescovered:30exactbaselineinheritance+6freshactualviews.",
       "selected_motion_review": "EN606/ZH602uniontimes includeall447targetencodedframes;1052distinct=607exactinherited+445freshactualimages. Narration/SRT/WAV/timing/bookmarks/dataexact; bothrawpassed0warnings.",
-      "native1080_endpoints": "Pending.",
+      "native1080_endpoints": "Both languages: 36 native1920x1080 endpoint states reviewed on ten scaled sheets with eight original-resolution followups; all raw records passed with zero warnings. This is endpoint coverage, not full1080p motion.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-gauss-hbars-motion-regression/README.md"
+      "evidence": "evidence/ai6-gauss-hbars-motion-regression/README.md",
+      "native1080_evidence": "evidence/ai6-native1080-gauss-review/README.md"
     },
     {
       "position": 3,
@@ -100,10 +101,11 @@
       "source_state": "Sevenretained-rowreveals andcolor-onlyquantitativeemphasis repaired; commonhbarsoriginfixed. Actualbilingualselected/windowregressionaccepted.",
       "endpoints": "All36statescovered:30exactbaselineinheritance+6freshactualviews.",
       "selected_motion_review": "EN606/ZH602uniontimes includeall447targetencodedframes;1052distinct=607exactinherited+445freshactualimages. Narration/SRT/WAV/timing/bookmarks/dataexact; bothrawpassed0warnings.",
-      "native1080_endpoints": "Pending.",
+      "native1080_endpoints": "Both languages: 36 native1920x1080 endpoint states reviewed on ten scaled sheets with eight original-resolution followups; all raw records passed with zero warnings. This is endpoint coverage, not full1080p motion.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-gauss-hbars-motion-regression/README.md"
+      "evidence": "evidence/ai6-gauss-hbars-motion-regression/README.md",
+      "native1080_evidence": "evidence/ai6-native1080-gauss-review/README.md"
     },
     {
       "position": 4,
@@ -115,10 +117,11 @@
       "source_state": "Source-local3ghostreveal/pathtraversalfix acceptedatbilingualselectedpreviewscope.",
       "endpoints": "All30freshENZHendpointstatescovered; EN15exactbaselineinheritance,ZH15actualviews.",
       "selected_motion_review": "EN581selected/2505decoded andZH587/2727: EN424exactpriorPNGtimes+152freshunique/19pages+5duplicates, ZH490unique/62unscaledpages+97duplicates; all384targetwindowframes included. No currentdefectobserved. Source/commonhbarsnotusedhere; rawoldwarningretained.",
-      "native1080_endpoints": "Pending.",
+      "native1080_endpoints": "Six bilingual Ridge/Lasso/Logistic cases: 105 native1920x1080 endpoint states reviewed on 28 scaled sheets with 30 original-resolution followups. All six raw records passed with zero warnings. Endpoint coverage only.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-ridge-motion-repair/README.md"
+      "evidence": "evidence/ai6-ridge-motion-repair/README.md",
+      "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md"
     },
     {
       "position": 4,
@@ -130,10 +133,11 @@
       "source_state": "Source-local3ghostreveal/pathtraversalfix acceptedatbilingualselectedpreviewscope.",
       "endpoints": "All30freshENZHendpointstatescovered; EN15exactbaselineinheritance,ZH15actualviews.",
       "selected_motion_review": "EN581selected/2505decoded andZH587/2727: EN424exactpriorPNGtimes+152freshunique/19pages+5duplicates, ZH490unique/62unscaledpages+97duplicates; all384targetwindowframes included. No currentdefectobserved. Source/commonhbarsnotusedhere; rawoldwarningretained.",
-      "native1080_endpoints": "Pending.",
+      "native1080_endpoints": "Six bilingual Ridge/Lasso/Logistic cases: 105 native1920x1080 endpoint states reviewed on 28 scaled sheets with 30 original-resolution followups. All six raw records passed with zero warnings. Endpoint coverage only.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-ridge-motion-repair/README.md"
+      "evidence": "evidence/ai6-ridge-motion-repair/README.md",
+      "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md"
     },
     {
       "position": 5,
@@ -142,13 +146,14 @@
       "title": "4. The lasso: soft thresholds and a path",
       "lang": "en",
       "source_sha256_observed": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9",
-      "source_state": "Fullbaselinepairclosed;5authorizedgeometry/annotation/revealrepairsfrozen andfixturespassed; freshbilingualaftercapture/reviewactive.",
-      "endpoints": "All37baselineENZHnative480endpointstatesactuallyviewed6pages; afterpending.",
-      "selected_motion_review": "BaselineEN475/ZH512selectedtimes,842uniqueimages/106pages+10nativefollowupsactuallyviewed. Currentafterreviewpending.",
-      "native1080_endpoints": "Pending.",
+      "source_state": "Five local geometry, annotation, emphasis and copy-reveal repairs frozen; fresh bilingual after regression accepted at declared selected-image scope.",
+      "endpoints": "37 endpoint states reviewed with 33 exact prior-image inheritances and four new actual views; eight native after followups.",
+      "selected_motion_review": "EN531 selected appearances; ZH568. Both languages include all187 encoded frames in the target windows, exact inherited prior-image mappings and new actual sheet/native inspection. Complete silent files decoded separately. No continuous perception or listening claim.",
+      "native1080_endpoints": "Six bilingual Ridge/Lasso/Logistic cases: 105 native1920x1080 endpoint states reviewed on 28 scaled sheets with 30 original-resolution followups. All six raw records passed with zero warnings. Endpoint coverage only.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-lasso-motion-repair/README.md"
+      "evidence": "evidence/ai6-lasso-motion-repair/README.md",
+      "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md"
     },
     {
       "position": 5,
@@ -157,13 +162,14 @@
       "title": "4. The lasso: soft thresholds and a path",
       "lang": "zh",
       "source_sha256_observed": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9",
-      "source_state": "Fullbaselinepairclosed;5authorizedgeometry/annotation/revealrepairsfrozen andfixturespassed; freshbilingualaftercapture/reviewactive.",
-      "endpoints": "All37baselineENZHnative480endpointstatesactuallyviewed6pages; afterpending.",
-      "selected_motion_review": "BaselineEN475/ZH512selectedtimes,842uniqueimages/106pages+10nativefollowupsactuallyviewed. Currentafterreviewpending.",
-      "native1080_endpoints": "Pending.",
+      "source_state": "Five local geometry, annotation, emphasis and copy-reveal repairs frozen; fresh bilingual after regression accepted at declared selected-image scope.",
+      "endpoints": "37 endpoint states reviewed with 33 exact prior-image inheritances and four new actual views; eight native after followups.",
+      "selected_motion_review": "EN531 selected appearances; ZH568. Both languages include all187 encoded frames in the target windows, exact inherited prior-image mappings and new actual sheet/native inspection. Complete silent files decoded separately. No continuous perception or listening claim.",
+      "native1080_endpoints": "Six bilingual Ridge/Lasso/Logistic cases: 105 native1920x1080 endpoint states reviewed on 28 scaled sheets with 30 original-resolution followups. All six raw records passed with zero warnings. Endpoint coverage only.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-lasso-motion-repair/README.md"
+      "evidence": "evidence/ai6-lasso-motion-repair/README.md",
+      "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md"
     },
     {
       "position": 6,
@@ -172,13 +178,14 @@
       "title": "5. Logistic regression",
       "lang": "en",
       "source_sha256_observed": "c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032",
-      "source_state": "Fullbaselinepairclosed;4verifiedretained-rowrevealkeywordsrepaired, allotherASTunchanged; freshENZHaftercapture/reviewactive.",
-      "endpoints": "All38baselineENZHendpointstates/10pagesactuallyviewed.",
-      "selected_motion_review": "Baseline1026selectedtimes/909uniqueimages on115pages plus23nativefollowupsactuallyviewed; repairedafterreviewpending.",
-      "native1080_endpoints": "Pending.",
+      "source_state": "Four convex-proof copy reveals repaired; fresh bilingual selected-image regression accepted.",
+      "endpoints": "All38 endpoint PNGs match the reviewed baseline exactly.",
+      "selected_motion_review": "1225 selected union times /1092 unique images:847 exact prior-PNG inheritances plus245 new actual views on32 sheets, ten after/eight before originals. All321 encoded target-window frames covered;3930 movie frames were not individually inspected.",
+      "native1080_endpoints": "Six bilingual Ridge/Lasso/Logistic cases: 105 native1920x1080 endpoint states reviewed on 28 scaled sheets with 30 original-resolution followups. All six raw records passed with zero warnings. Endpoint coverage only.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-logistic-baseline-motion-review/README.md"
+      "evidence": "evidence/ai6-logistic-motion-regression/README.md",
+      "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md"
     },
     {
       "position": 6,
@@ -187,27 +194,29 @@
       "title": "5. Logistic regression",
       "lang": "zh",
       "source_sha256_observed": "c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032",
-      "source_state": "Fullbaselinepairclosed;4verifiedretained-rowrevealkeywordsrepaired, allotherASTunchanged; freshENZHaftercapture/reviewactive.",
-      "endpoints": "All38baselineENZHendpointstates/10pagesactuallyviewed.",
-      "selected_motion_review": "Baseline1026selectedtimes/909uniqueimages on115pages plus23nativefollowupsactuallyviewed; repairedafterreviewpending.",
+      "source_state": "Four convex-proof copy reveals repaired; fresh bilingual selected-image regression accepted.",
+      "endpoints": "All38 endpoint PNGs match the reviewed baseline exactly.",
+      "selected_motion_review": "1225 selected union times /1092 unique images:847 exact prior-PNG inheritances plus245 new actual views on32 sheets, ten after/eight before originals. All321 encoded target-window frames covered;3930 movie frames were not individually inspected.",
+      "native1080_endpoints": "Six bilingual Ridge/Lasso/Logistic cases: 105 native1920x1080 endpoint states reviewed on 28 scaled sheets with 30 original-resolution followups. All six raw records passed with zero warnings. Endpoint coverage only.",
+      "narration_listening_sync_4K": "Pending.",
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-logistic-motion-regression/README.md",
+      "native1080_evidence": "evidence/ai6-ridge-lasso-logistic-native1080-review/README.md"
+    },
+    {
+      "position": 7,
+      "module": "s07_newton",
+      "scene": "Newton",
+      "title": "6. Newton's method, and lines that run away",
+      "lang": "en",
+      "source_sha256_observed": "89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b",
+      "source_state": "Four copy-reveal repairs; explicit penalized mean-CE objective gap and actual71x71 system including intercept. Fresh bilingual endpoint/motion capture completed; actual selected review still in progress.",
+      "endpoints": "Fresh after endpoint images are being compared/reviewed; no final case acceptance yet.",
+      "selected_motion_review": "Baseline896 selected times reviewed; after regression currently in progress. Changed narration requires fresh timing review.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-logistic-baseline-motion-review/README.md"
-    },
-    {
-      "position": 7,
-      "module": "s07_newton",
-      "scene": "Newton",
-      "title": "6. Newton's method, and lines that run away",
-      "lang": "en",
-      "source_sha256_observed": "24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
-      "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
+      "evidence": "evidence/ai6-newton-motion-repair/README.md"
     },
     {
       "position": 7,
@@ -215,13 +224,14 @@
       "scene": "Newton",
       "title": "6. Newton's method, and lines that run away",
       "lang": "zh",
-      "source_sha256_observed": "24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "source_sha256_observed": "89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b",
+      "source_state": "Four copy-reveal repairs; explicit penalized mean-CE objective gap and actual71x71 system including intercept. Fresh bilingual endpoint/motion capture completed; actual selected review still in progress.",
+      "endpoints": "Fresh after endpoint images are being compared/reviewed; no final case acceptance yet.",
+      "selected_motion_review": "Baseline896 selected times reviewed; after regression currently in progress. Changed narration requires fresh timing review.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-newton-motion-repair/README.md"
     },
     {
       "position": 8,
@@ -229,13 +239,14 @@
       "scene": "NaiveBayes",
       "title": "7. Naive Bayes: generative or discriminative?",
       "lang": "en",
-      "source_sha256_observed": "2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
+      "source_sha256_observed": "096df1ad04b1b9c22c0ee27f5a925171f263153fc8bf179579a1e66b78ac9639",
+      "source_state": "Band viewport now preserves actual90th percentile; copy reveals, card highlight and calibration-point geometry repaired. Fresh after captures/review in progress.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "selected_motion_review": "Baseline818 selected times reviewed. Current after regression is pending; no repaired-case acceptance yet.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-naivebayes-baseline-motion-review/README.md"
     },
     {
       "position": 8,
@@ -243,13 +254,14 @@
       "scene": "NaiveBayes",
       "title": "7. Naive Bayes: generative or discriminative?",
       "lang": "zh",
-      "source_sha256_observed": "2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf",
-      "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
+      "source_sha256_observed": "096df1ad04b1b9c22c0ee27f5a925171f263153fc8bf179579a1e66b78ac9639",
+      "source_state": "Band viewport now preserves actual90th percentile; copy reveals, card highlight and calibration-point geometry repaired. Fresh after captures/review in progress.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "selected_motion_review": "Baseline818 selected times reviewed. Current after regression is pending; no repaired-case acceptance yet.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-naivebayes-baseline-motion-review/README.md"
     },
     {
       "position": 9,
@@ -260,7 +272,7 @@
       "source_sha256_observed": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "selected_motion_review": "Actual bilingual review of frozen completed factory movies has started; no acceptance yet.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
@@ -274,7 +286,7 @@
       "source_sha256_observed": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "selected_motion_review": "Actual bilingual review of frozen completed factory movies has started; no acceptance yet.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
@@ -341,7 +353,7 @@
       "scene": "SVM",
       "title": "11. The widest street",
       "lang": "en",
-      "source_sha256_observed": "c9a778da1f5cd7c4d582a752f3124f4e8c18b3ebc0904db3cd69c33db157ecca",
+      "source_sha256_observed": "bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
@@ -355,7 +367,7 @@
       "scene": "SVM",
       "title": "11. The widest street",
       "lang": "zh",
-      "source_sha256_observed": "c9a778da1f5cd7c4d582a752f3124f4e8c18b3ebc0904db3cd69c33db157ecca",
+      "source_sha256_observed": "bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
@@ -425,7 +437,7 @@
       "scene": "AdaBoost",
       "title": "14. AdaBoost and the exponential loss",
       "lang": "en",
-      "source_sha256_observed": "bc2a0b9581df1bdda8bc4056ce121166c7b3f497fe8367f4266f361e401e9e90",
+      "source_sha256_observed": "be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
@@ -439,7 +451,7 @@
       "scene": "AdaBoost",
       "title": "14. AdaBoost and the exponential loss",
       "lang": "zh",
-      "source_sha256_observed": "bc2a0b9581df1bdda8bc4056ce121166c7b3f497fe8367f4266f361e401e9e90",
+      "source_sha256_observed": "be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
@@ -481,13 +493,14 @@
       "scene": "Metrics",
       "title": "16. Keeping score honestly",
       "lang": "en",
-      "source_sha256_observed": "77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6",
-      "source_state": "Sharedhbarsfix/current70%baselinecue staticallyreviewed/geometrytested; freshENZHrender/nativegatepending, especiallypositive7.8pxChineseleftgutter.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "source_sha256_observed": "2f2885828585ad6464f5308e6ee97c10f188bbf668362444ebcaf7804a60ec86",
+      "source_state": "Shared baseline alignment and visible70% cue reviewed in score windows. Additional local accuracy-group inset widens Chinese left margin; fresh target regression in progress.",
+      "endpoints": "Current gutter repair endpoints:32 actual newly reviewed images; only score states change, source/audio/data identities separately reconciled. Native1080 refresh pending.",
+      "selected_motion_review": "Earlier score-window review covers885 encoded frames with176 exact-RGB representatives. Current gutter repair target review active; whole-chapter motion review still pending.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-metrics-shared-bars-early-regression/README.md"
     },
     {
       "position": 17,
@@ -495,13 +508,14 @@
       "scene": "Metrics",
       "title": "16. Keeping score honestly",
       "lang": "zh",
-      "source_sha256_observed": "77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6",
-      "source_state": "Sharedhbarsfix/current70%baselinecue staticallyreviewed/geometrytested; freshENZHrender/nativegatepending, especiallypositive7.8pxChineseleftgutter.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Pending actual rendered review.",
+      "source_sha256_observed": "2f2885828585ad6464f5308e6ee97c10f188bbf668362444ebcaf7804a60ec86",
+      "source_state": "Shared baseline alignment and visible70% cue reviewed in score windows. Additional local accuracy-group inset widens Chinese left margin; fresh target regression in progress.",
+      "endpoints": "Current gutter repair endpoints:32 actual newly reviewed images; only score states change, source/audio/data identities separately reconciled. Native1080 refresh pending.",
+      "selected_motion_review": "Earlier score-window review covers885 encoded frames with176 exact-RGB representatives. Current gutter repair target review active; whole-chapter motion review still pending.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
-      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
+      "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
+      "evidence": "evidence/ai6-metrics-shared-bars-early-regression/README.md"
     },
     {
       "position": 18,
@@ -509,7 +523,7 @@
       "scene": "Contest",
       "title": "17. The contest, and two cultures",
       "lang": "en",
-      "source_sha256_observed": "52d42f40ed267dd75a6781263590c2ef3f8d6c49af43c9ab86c13aa8996f80d1",
+      "source_sha256_observed": "7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
@@ -523,7 +537,7 @@
       "scene": "Contest",
       "title": "17. The contest, and two cultures",
       "lang": "zh",
-      "source_sha256_observed": "52d42f40ed267dd75a6781263590c2ef3f8d6c49af43c9ab86c13aa8996f80d1",
+      "source_sha256_observed": "7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
       "selected_motion_review": "Pending actual rendered review.",
@@ -564,14 +578,19 @@
   "numerical_completed_utc": "2026-11-01T05:09:55.484692+00:00",
   "numerical_scientific_audit": "22 actual guarded loads, zero forbidden writes/producers, 263 independent arithmetic/inference checks passed; no refit or replicated training claim.",
   "numerical_evidence": "evidence/ai6-numerical-generation-scientific-audit/README.md",
-  "current_selected_image_cases_accepted": 8,
-  "source_current_table_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
-  "full_repository_tests": "604tests55.842s;1524source/configidentitiesunchanged, evidence/ai6-integrated-tests-20261101-lasso-logistic-candidate/README.md",
-  "actual_endpoint_capture_cases_completed": 22,
-  "actual_silent_movie_cases_completed": 21,
-  "native1080_endpoint_cases_accepted": 4,
+  "current_selected_image_cases_accepted": 12,
+  "source_current_table_sha256": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+  "full_repository_tests": {
+    "tests": 638,
+    "elapsed_s": 76.136,
+    "unchanged_source_identities": 1532,
+    "evidence": "evidence/surprise-v6-newton-metrics-integrated-tests-20261101/README.md"
+  },
+  "actual_endpoint_capture_cases_completed": 38,
+  "actual_silent_movie_cases_completed": 38,
+  "native1080_endpoint_cases_accepted": 12,
   "runtime_index_observed_utc": "2026-11-01T06:39:48.335366+00:00",
-  "runtime_index_captured_passes": 31,
+  "runtime_index_captured_passes": 64,
   "runtime_index_planned_passes": 64,
-  "runtime_counts_scope": "Includes completedwarning-bearinghistoricalcaptures with exact independentmovies. Doesnotimplysourcecurrency/selected/native/audioapproval. Currentselectedaccepted8isHook/LeastSquares/Gauss/RidgeENZH; native4onlyHook/LeastSquares."
+  "runtime_counts_scope": "The remaining sixteen-chapter factory completed 64 captures (32 endpoints, 32 full silent movies) at frozen observed versions; the first three chapters have separate earlier captures. Historical source warnings and replacements remain distinct from actual image review."
 }

@@ -169,7 +169,7 @@ class Metrics(VoiceoverScene):
                     fmt=lambda v: f"{v:.3f}", name_width=3.2)
         ta = label(r"accuracy \\ bars start at $70\%$ (higher is better)", font_size=26).next_to(accs, UP, buff=0.3)
         tl = label(r"log loss, \ nats per page \ (lower is better)", font_size=26)
-        gA = VGroup(ta, accs).move_to([-3.4, 0.2, 0])
+        gA = VGroup(ta, accs).move_to([-3.2, 0.2, 0])
         for r_ in lls:
             r_[0].set_opacity(0)  # the names are already on the left
         tl.next_to(lls, UP, buff=0.3)
