@@ -29,7 +29,7 @@
   "BTC/USDT hourly, Binance; implied volatility: Deribit DVOL; from 1 Oct 2021": "BTC/USDT小时数据，币安；隐含波动率：Deribit DVOL；自2021年10月1日",
   "Sold: a 30-day call, strike = today's price": "卖出：一份30天看涨期权，行权价 = 今天的价格",
   "priced at": "定价",
-  "a year:": "每年：",
+  "a year:": "（年化）：",
   "per 100 of bitcoin": "每100美元比特币",
   "Bitcoin at expiry, per 100": "到期时的比特币（以100计）",
   "the volatility the market charged": "市场收取的波动率",

@@ -27,16 +27,19 @@ Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitigno
 - **Part 10 Chinese narration**: `videos/quant/quant10/zh_lines.py` covers 70 of 70 source lines (templates for
   the computed ones); glossary and style in `videos/quant/QUANT_ZH_GUIDE.md`; `quant` is in `make.py`'s `BILINGUAL`,
   and `qa_audio.py` / `qa_series.py` resolve the series from the video name.
+- **Part 10 silent build**: `renders/quant10_480p.mp4`, 52.6 min, 15 chapters; `tools/dead_air.py` finds only
+  three 1.5–2.2 s transitions. (Implied's 3D surface is the slow chapter: about 29 min at 480p.)
+- **Part 10 Chinese**: `narration_zh.json` filled (70 lines, `--verify` clean); on-screen text in
+  `videos/quant/quant_text_zh.json` (577 strings; only "Vega" stays Latin); a Chinese Hook preview reviewed.
 
 ## In progress
 
-- Part 10 full silent build (`python tools/build.py quant10 -q l` with `EXPLAINER_TTS=silent`; log
-  `renders/make/quant10_silent_l.log`), then `tools/dead_air.py`, then `python tools/zh_lines.py quant10 --verify`.
-- Part 10 on-screen text: `python tools/collect_text.py quant10`, `--check quant10`, translations merged into
-  `videos/quant/quant_text_zh.json` with `tools/text_zh_add.py quant FILE`, then `--lang zh quant10` dry run.
+- Chinese dry run of every chapter (`python tools/collect_text.py --lang zh quant10`, log
+  `renders/make/quant10_zh_dry.log`): TeX and layout asserts.
 
 ## Next
 
-1. Chinese preview of a few chapters (`EXPLAINER_LANG=zh`), QA; then narrated builds (Qwen3-TTS) in both languages.
+1. Chinese silent previews of the dense chapters (`python tools/qa_scene.py quant10 <Scene> --lang zh`); then narrated
+   builds (`python tools/make.py quant10`) in both languages.
 2. Review with the user; lock the standard; then Part 1.
 3. Phase 0 remainder: `qa_report.py` and `package_uploads.py` still list only the AI series.
