@@ -1,14 +1,14 @@
 # Part 4 final silent-preview map
 
-Observed 2026-11-01T00:41:38.340648+00:00. All **38 canonical English/Chinese movies** match completed actual selected-image review by exact SHA256. All **537 current native 1080p endpoint PNGs** match actual reviewed images or explicit exact inheritance/direct-view supplements. The original chapter-checklist snapshot and raw result records remain unchanged.
+Observed 2026-11-01T01:04:05.960003+00:00. All **38 canonical English/Chinese movies** match completed actual selected-image review by exact SHA256. All **537 current native 1080p endpoint PNGs** match actual reviewed images or explicit exact inheritance/direct-view supplements. The original chapter-checklist snapshot and raw result records remain unchanged.
 
-Current cohorts contain **13,669 selected-time appearances** across **101,207 automatically decoded frames**. Decoding and selected images are not continuous perceptual playback. Supplementary encoded windows, direct views, exact duplicates/inheritance and remaining frame gaps are kept per case; no inflated combined viewing total is inferred.
+Current cohorts contain **13,670 selected-time appearances** across **101,192 automatically decoded frames**. Decoding and selected images are not continuous perceptual playback. Supplementary encoded windows, direct views, exact duplicates/inheritance and remaining frame gaps are kept per case; no inflated combined viewing total is inferred.
 
 |Chapter|EN movie SHA prefix / raw status|ZH movie SHA prefix / raw status|Current scoped evidence|
 |---|---|---|---|
 |1. Hook|c02059858335 / passed (0 warnings)|7acdf8098c7c / passed (0 warnings)|EN 256 / ZH 263 selected; native settled images bound|
 |2. Derivative|86a4fbb4dbe2 / passed (0 warnings)|af7cb568335e / passed (0 warnings)|EN 363 / ZH 359 selected; native settled images bound|
-|3. Gradient|cb00f62a7661 / needs-review (1 warnings)|59834d6e2b9f / needs-review (1 warnings)|EN 475 / ZH 490 selected; native settled images bound|
+|3. Gradient|9146a232c842 / passed (0 warnings)|b4d34a09298a / passed (0 warnings)|EN 472 / ZH 494 selected; exact endpoint inheritance; native geometry historical|
 |4. Jacobian|e0b64ac1910e / passed (0 warnings)|25e7b9137048 / passed (0 warnings)|EN 265 / ZH 276 selected; native settled images bound|
 |5. Layers|085d554e5417 / needs-review (1 warnings)|771ae08dc0ef / passed (0 warnings)|EN 346 / ZH 351 selected; native settled images bound|
 |6. Modes|b907abe2b298 / passed (0 warnings)|4881876d48f3 / passed (0 warnings)|EN 419 / ZH 445 selected; native settled images bound|
@@ -35,3 +35,5 @@ The guarded-load proof covers17Part3+23Part 4 actual cache loads, 0 producer cal
 Remaining: complete bilingual narrated generation/listening/synchronization, continuous perceptual playback, full production-resolution motion exports and their encoded/frame-cadence/player review. Silent assembly/distribution is a separate operation. No narrated, continuous or production-motion approval is implied.
 
 The [machine-readable map](ai4-final-preview-map.json) retains every canonical movie/record identity, consumed inputs (including intentionally absent optional NPZ), raw statuses/warnings/fingerprints, historical evidence references and current source observations.
+
+The original [pre-history map](historical/ai4-final-preview-map-pre-gradient-history-20261101T004138Z.json) is preserved unchanged. The [Gradient history regression](evidence/ai4-gradient-history-regression/README.md) replaces only those two chapter movies after all 966 fresh selected times were covered (922 exact RGB inheritances, 36 novel groups viewed on five pages, eight new duplicates, seven native checks). All 38 fresh 480p endpoints match the reviewed baseline exactly; existing native 1080p geometry evidence remains historical, with no fresh 1080p timing claim. Current raw movie statuses are 36 passed / 2 needs-review, two warnings preserved. Source fingerprints are recomputed observations, not historical imported-source attestations. Assembly replacement/join acceptance is a separate operation.

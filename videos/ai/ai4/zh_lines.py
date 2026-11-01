@@ -64,8 +64,8 @@ ZH = {
 
 
 
-    "Walking downhill this way is the oldest method":
-        "这样一路走下坡，是本系列里最古老的方法。<bookmark mark='a'/>1847年，奥古斯丁–路易·柯西想解出一条轨道的方程组，就把它们写成一个平方和，并提出逆着它的梯度一步步走。<bookmark mark='b'/>用今天的写法：下一个点，等于当前的点，减去步长η乘以那里的梯度。<bookmark mark='c'/>步子该多大，多快能走到，取决于曲率，这要到第14章，再到第11部分去讲。",
+    "Walking downhill this way is a standard optimization method.":
+        "这样一路走下坡，是一种标准的优化方法。<bookmark mark='a'/>1847年，奥古斯丁–路易·柯西想解出一条轨道的方程组，就把它们写成一个平方和，并提出逆着它的梯度一步步走。<bookmark mark='b'/>用今天的写法：下一个点，等于当前的点，减去步长η乘以那里的梯度。<bookmark mark='c'/>步子该多大，多快能走到，取决于曲率，这要到第14章，再到第11部分去讲。",
 
     # ------------------------------------------------------------------ Jacobian
     "Chapter three. Maps that bend.":

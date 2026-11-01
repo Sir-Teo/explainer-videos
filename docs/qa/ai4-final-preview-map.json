@@ -1,6 +1,6 @@
 {
-  "observed_utc": "2026-11-01T00:41:38.340648+00:00",
-  "kind": "Final Part4 canonical-preview identity map and evidence-linked checklist; additive observation, raw/historical receipts unchanged.",
+  "observed_utc": "2026-11-01T01:04:05.960003+00:00",
+  "kind": "Final Part4 history-qualified canonical-preview identity map; two Gradient artifacts replaced after actual regression, prior map preserved.",
   "series": "ai",
   "part": "ai4",
   "manifest": {
@@ -15,19 +15,19 @@
     "explainer/ai/viz.py": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
     "videos/ai/ai_text_zh.json": "20229b679782e6b183a87b809cd2124dbb48950de7179b5be22fb3f04013a182"
   },
-  "aggregate_fingerprint_at_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+  "aggregate_fingerprint_at_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
   "counts": {
     "manifest_scenes": 19,
     "canonical_bilingual_movies": 38,
     "canonical_movie_hashes_matched_to_completed_review": 38,
     "current_native1080_endpoint_pngs_matched_to_actual_review": 537,
-    "selected_time_appearances_current_cohorts": 13669,
-    "decoded_frames_automatically_current_movies": 101207,
+    "selected_time_appearances_current_cohorts": 13670,
+    "decoded_frames_automatically_current_movies": 101192,
     "motion_statuses_raw": {
-      "passed": 34,
-      "needs-review": 4
+      "passed": 36,
+      "needs-review": 2
     },
-    "motion_warning_count_raw": 4,
+    "motion_warning_count_raw": 2,
     "motion_aggregate_fingerprint_current_at_observation": 2
   },
   "native_scope": {
@@ -82,7 +82,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "8420e00289e0dc9d43ed43f5f9ae84b590b6df7b769002167169d3b43c8a0935",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -415,7 +415,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "8420e00289e0dc9d43ed43f5f9ae84b590b6df7b769002167169d3b43c8a0935",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -748,7 +748,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -1070,7 +1070,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -1385,26 +1385,22 @@
       "title": "2. Many inputs: the gradient",
       "language": "en",
       "movie_path": "renders/qa/series/ai4/en/Gradient_motion/media/videos/480p15/Gradient.mp4",
-      "movie_sha256": "cb00f62a7661cac38148d6682ce7d76e1bffcaf00afd292ec185e3922c8c8f63",
-      "movie_bytes": 2384589,
+      "movie_sha256": "9146a232c8420f824ed5236c54e1768c056ad0619e4815e08cdc4f7d32af87df",
+      "movie_bytes": 2382347,
       "record_path": "renders/qa/series/ai4/en/Gradient_motion/result.json",
-      "record_sha256": "c06c3ec89dd401eee1e48cd76f3823809ce34c1f16ba90cd47135bda28be6f13",
-      "raw_motion_status": "needs-review",
-      "raw_motion_warnings": [
-        {
-          "kind": "source-changed-during-render"
-        }
-      ],
-      "raw_capture_fingerprint": "c6dac197b1de575f3179a35d04b75d1f10b9a05e700b21b905c54292f6b970d3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
-      "aggregate_source_current_at_this_observation": false,
+      "record_sha256": "ba54a608cc7285df0f2cf9128b5b5666c1e6c10f94fe2ad5610d980aa551d669",
+      "raw_motion_status": "passed",
+      "raw_motion_warnings": [],
+      "raw_capture_fingerprint": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
+      "aggregate_source_current_at_this_observation": true,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
         "visual_review": "pending",
         "full_playback_review": "pending",
         "narrated_playback_review": "pending"
       },
-      "record_duration_seconds": 170.46666666666573,
+      "record_duration_seconds": 169.66666666666572,
       "requested_movie_mode": "silent timing placeholders,480p nominal15fps; actual encoded-rate/stream claims remain with render/assembly receipts",
       "consumed_input_signatures_at_this_observation": [
         {
@@ -1440,50 +1436,51 @@
       ],
       "scene_source_at_observation": {
         "path": "videos/ai/ai4/s03_gradient.py",
-        "sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+        "sha256": "10bac01890e68e3f86915521de9cf3b6729fe9e7934750d629360464263ceb33",
         "scope": "Current disk observation; not proof of historical worker import."
       },
       "actual_selected_image_review": {
-        "movie_sha256": "cb00f62a7661cac38148d6682ce7d76e1bffcaf00afd292ec185e3922c8c8f63",
-        "selected_times": 475,
-        "decoded_frames_automatically": 2557,
+        "movie_sha256": "9146a232c8420f824ed5236c54e1768c056ad0619e4815e08cdc4f7d32af87df",
+        "selected_times": 472,
+        "decoded_frames_automatically": 2545,
         "proof": {
-          "path": "docs/qa/evidence/ai4-gradient-motion-review/review.json.gz",
-          "sha256": "95bd3cb42690768d96485658f9d90b6f97a670f1bb90bf65c9d0c9723803a516"
+          "path": "docs/qa/evidence/ai4-gradient-history-regression/report.json.gz",
+          "sha256": "b8c4ab5cbf1c92a2146de4dc698ef771c2a79be5f886a5ee4dad65e38712289a"
         },
         "historical_evidence_case": {
-          "movie_sha256": "cb00f62a7661cac38148d6682ce7d76e1bffcaf00afd292ec185e3922c8c8f63",
-          "movie_file": "/workspace/runtime/ai4-gradient-motion-review/en/movie-frozen.mp4",
-          "render_record_sha256": "c06c3ec89dd401eee1e48cd76f3823809ce34c1f16ba90cd47135bda28be6f13",
-          "raw_status": "needs-review",
-          "raw_warnings": [
-            {
-              "kind": "source-changed-during-render"
-            }
-          ],
-          "raw_fingerprint": "c6dac197b1de575f3179a35d04b75d1f10b9a05e700b21b905c54292f6b970d3",
-          "audit_sha256": "d0d272deb3750b5d8eff65052157e42b62322f7f2ed115381cc52bb53d41c440",
-          "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
-          "full_rgb_decoded_frames": 2557,
-          "selected_times": 475,
-          "exact_png_representatives_actually_viewed": 412,
-          "exact_duplicate_selected_appearances": 63,
-          "viewed_review_pages": 52,
-          "native_individual_views": 6,
-          "native_views_are_additional_to_sheet_views": true,
-          "selected_mapping_file": "/workspace/runtime/ai4-gradient-motion-review/en/unique-review/map.json",
-          "selected_mapping_sha256": "7bc56005bbe54c2ee1e45de507cbc28916c2433b4f4554cc997e11dde8c6b9db",
-          "native_review_file": "/workspace/runtime/ai4-gradient-motion-review/en/native-review.json",
-          "native_review_sha256": "a343636e2a54d0d67771e87112678f4b81cb28f88d177cdb171dda58c0fac4cd",
-          "duration_seconds": 170.466016,
-          "first_selected_time": 0.0,
-          "last_selected_time": 170.399349,
+          "movie_sha256": "9146a232c8420f824ed5236c54e1768c056ad0619e4815e08cdc4f7d32af87df",
+          "record_sha256": "ba54a608cc7285df0f2cf9128b5b5666c1e6c10f94fe2ad5610d980aa551d669",
+          "raw_status": "passed",
+          "raw_warnings": [],
+          "fingerprint": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
+          "decoded_frames_automatically": 2545,
+          "selected_times": 472,
+          "inherited_exact_RGB_times": 448,
+          "new_unique_groups_actually_viewed": 20,
+          "new_duplicate_selected_times": 4,
+          "new_pages_actually_viewed": 3,
+          "native_followups_actually_viewed": 4,
           "maximum_selected_gap_seconds": 1.0000000000000142,
-          "all_selected_appearances_covered_by_exact_identity": true,
-          "unselected_source_frames_not_individually_viewed": 2082,
-          "unextracted_frame_gaps_file": "/workspace/runtime/ai4-gradient-motion-review/en/audit/result.json",
-          "current_source_and_inputs_at_audit": false,
-          "manual_review_conclusion": "No new concrete defect in inspected images; scoped selected-image review only."
+          "unselected_source_frames_not_individually_viewed": 2073,
+          "actual_encoded_duration_seconds": 169.666016,
+          "recorded_placeholder_duration_seconds": 169.66666666666572,
+          "mapping_sha256": "7fa118bc0d912db0fe015cdb603f0d1e8fec09e6c5b39c96af053659ea7408aa",
+          "audit_sha256": "c4638648f4b76d399834a62501284afd86a6b62077ef0444bd93e926c0c51a40",
+          "native_review_sha256": "53ab00a0b82dde5a6cfeee03036cd3cbd2191f6edb9293434e328298e1eb6fcd",
+          "first_four_narration_blocks_exactly_unchanged": true,
+          "last_narration_raw_changes_only_history_phrase": true,
+          "first_final_paragraph_start_unchanged": true,
+          "endpoint_images_byte_and_RGB_inherited": 19,
+          "all_selected_times_covered_by_explicit_exact_inheritance_or_actual_novel_view": true,
+          "finding": "No new concrete defect observed; known cosmetic line-leading Chinese comma unchanged."
+        },
+        "baseline_scope_reference": {
+          "path": "docs/qa/historical/ai4-final-preview-map-pre-gradient-history-20261101T004138Z.json",
+          "sha256": "83fa053f20854ba7c4986aa57f250a063445ad0beb6838f18ed9eb80adad395c"
+        },
+        "complete_mapping": {
+          "path": "docs/qa/evidence/ai4-gradient-history-regression/en/complete-motion-map.json.gz",
+          "sha256": "f84ac818492001bf9655c018c5e2d45426c610e0f50997c33f70d0a01b11313b"
         }
       },
       "native1080_endpoint_review": {
@@ -1738,19 +1735,26 @@
             "exact_baseline_inherited": false
           }
         ],
-        "all_current_pngs_bound_to_actual_review": true
+        "all_current_pngs_bound_to_actual_review": true,
+        "history_phrase_update_scope": "This remains the original reviewed native1080 geometry/timing capture. Source geometry unchanged and all19fresh480p endpoint PNGs match exactly; no fresh1080 capture/timing approval claimed."
       },
       "endpoint480_runtime_observation": {
         "record": {
           "path": "renders/qa/series/ai4/en/Gradient/result.json",
-          "sha256": "f020499a72dc5c00b307c10dc0cb45a0d7d727e616d225d4dc1d4fd870449133"
+          "sha256": "54d00f8f4be5c2572653844f29a5d7135aa65e55664432396b89747030ca4228"
         },
         "raw_status": "passed",
         "raw_warnings": [],
         "frames": 19,
-        "scope": "Runtime observation only; historical endpoint review remains separately preserved."
+        "scope": "All fresh480p endpoints exactly match actually reviewed baseline PNG bytes/RGB; times may shift.",
+        "actual_exact_review_inherited": 19,
+        "comparison_proof": {
+          "path": "docs/qa/evidence/ai4-gradient-history-regression/endpoint-comparison.json.gz",
+          "sha256": "bd3216b4172bd7c2321637bf759480e2f7d51207c5b7dc4e171c0293b5222f82"
+        }
       },
-      "scope_verdict": "Current canonical movie identity matches completed scoped selected-image review. This is not continuous playback, narration/listening/sync or full1080motion approval."
+      "scope_verdict": "Current canonical movie identity matches completed scoped selected-image review. This is not continuous playback, narration/listening/sync or full1080motion approval.",
+      "history_qualified_preview": true
     },
     {
       "manifest_position": 3,
@@ -1759,26 +1763,22 @@
       "title": "2. Many inputs: the gradient",
       "language": "zh",
       "movie_path": "renders/qa/series/ai4/zh/Gradient_motion/media/videos/480p15/Gradient.mp4",
-      "movie_sha256": "59834d6e2b9f1d49f2b89053e14fa2366872482787a2a370a582f3a0f5d51645",
-      "movie_bytes": 2372489,
+      "movie_sha256": "b4d34a09298ae83b6c21b0b254c373b32cf267c690742b7c994a5811d6a333b6",
+      "movie_bytes": 2372039,
       "record_path": "renders/qa/series/ai4/zh/Gradient_motion/result.json",
-      "record_sha256": "007a3d93266da442fa9ba7f7d297f524c6381e5373cf69ffe83735078947bc26",
-      "raw_motion_status": "needs-review",
-      "raw_motion_warnings": [
-        {
-          "kind": "source-changed-during-render"
-        }
-      ],
-      "raw_capture_fingerprint": "086351f6d7e2ce6cedcff2bb473ff51f2ea2448e622b06e5650548a9237f1ad1",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
-      "aggregate_source_current_at_this_observation": false,
+      "record_sha256": "af7b5b529d6e5a11c1a25249cd8aa860bd143968a31c4d227340e0ec8822c871",
+      "raw_motion_status": "passed",
+      "raw_motion_warnings": [],
+      "raw_capture_fingerprint": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
+      "aggregate_source_current_at_this_observation": true,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
         "visual_review": "pending",
         "full_playback_review": "pending",
         "narrated_playback_review": "pending"
       },
-      "record_duration_seconds": 173.26666666666551,
+      "record_duration_seconds": 173.06666666666553,
       "requested_movie_mode": "silent timing placeholders,480p nominal15fps; actual encoded-rate/stream claims remain with render/assembly receipts",
       "consumed_input_signatures_at_this_observation": [
         {
@@ -1814,50 +1814,51 @@
       ],
       "scene_source_at_observation": {
         "path": "videos/ai/ai4/s03_gradient.py",
-        "sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+        "sha256": "10bac01890e68e3f86915521de9cf3b6729fe9e7934750d629360464263ceb33",
         "scope": "Current disk observation; not proof of historical worker import."
       },
       "actual_selected_image_review": {
-        "movie_sha256": "59834d6e2b9f1d49f2b89053e14fa2366872482787a2a370a582f3a0f5d51645",
-        "selected_times": 490,
-        "decoded_frames_automatically": 2599,
+        "movie_sha256": "b4d34a09298ae83b6c21b0b254c373b32cf267c690742b7c994a5811d6a333b6",
+        "selected_times": 494,
+        "decoded_frames_automatically": 2596,
         "proof": {
-          "path": "docs/qa/evidence/ai4-gradient-motion-review/review.json.gz",
-          "sha256": "95bd3cb42690768d96485658f9d90b6f97a670f1bb90bf65c9d0c9723803a516"
+          "path": "docs/qa/evidence/ai4-gradient-history-regression/report.json.gz",
+          "sha256": "b8c4ab5cbf1c92a2146de4dc698ef771c2a79be5f886a5ee4dad65e38712289a"
         },
         "historical_evidence_case": {
-          "movie_sha256": "59834d6e2b9f1d49f2b89053e14fa2366872482787a2a370a582f3a0f5d51645",
-          "movie_file": "/workspace/runtime/ai4-gradient-motion-review/zh/movie-frozen.mp4",
-          "render_record_sha256": "007a3d93266da442fa9ba7f7d297f524c6381e5373cf69ffe83735078947bc26",
-          "raw_status": "needs-review",
-          "raw_warnings": [
-            {
-              "kind": "source-changed-during-render"
-            }
-          ],
-          "raw_fingerprint": "086351f6d7e2ce6cedcff2bb473ff51f2ea2448e622b06e5650548a9237f1ad1",
-          "audit_sha256": "a0c5b7b483ab2a380e3db4ae57619bf67119d9e9d4f76c621185f2dbcb5813ef",
-          "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
-          "full_rgb_decoded_frames": 2599,
-          "selected_times": 490,
-          "exact_png_representatives_actually_viewed": 432,
-          "exact_duplicate_selected_appearances": 58,
-          "viewed_review_pages": 54,
-          "native_individual_views": 6,
-          "native_views_are_additional_to_sheet_views": true,
-          "selected_mapping_file": "/workspace/runtime/ai4-gradient-motion-review/zh/unique-review/map.json",
-          "selected_mapping_sha256": "c288abee935c8f81559636f49e63b65475b5d2716edeb43f8a2ad0a020cf08cd",
-          "native_review_file": "/workspace/runtime/ai4-gradient-motion-review/zh/native-review.json",
-          "native_review_sha256": "a5b7ea0e53b4dddfb1a88e8bea5955a6ffbfca153afb75a50664cca03dd35875",
-          "duration_seconds": 173.266016,
-          "first_selected_time": 0.0,
-          "last_selected_time": 173.199349,
+          "movie_sha256": "b4d34a09298ae83b6c21b0b254c373b32cf267c690742b7c994a5811d6a333b6",
+          "record_sha256": "af7b5b529d6e5a11c1a25249cd8aa860bd143968a31c4d227340e0ec8822c871",
+          "raw_status": "passed",
+          "raw_warnings": [],
+          "fingerprint": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
+          "decoded_frames_automatically": 2596,
+          "selected_times": 494,
+          "inherited_exact_RGB_times": 474,
+          "new_unique_groups_actually_viewed": 16,
+          "new_duplicate_selected_times": 4,
+          "new_pages_actually_viewed": 2,
+          "native_followups_actually_viewed": 3,
           "maximum_selected_gap_seconds": 1.0000000000000018,
-          "all_selected_appearances_covered_by_exact_identity": true,
-          "unselected_source_frames_not_individually_viewed": 2109,
-          "unextracted_frame_gaps_file": "/workspace/runtime/ai4-gradient-motion-review/zh/audit/result.json",
-          "current_source_and_inputs_at_audit": false,
-          "manual_review_conclusion": "No new concrete defect in inspected images; scoped selected-image review only."
+          "unselected_source_frames_not_individually_viewed": 2102,
+          "actual_encoded_duration_seconds": 173.066016,
+          "recorded_placeholder_duration_seconds": 173.06666666666553,
+          "mapping_sha256": "5060cb705fd178f2612935ecc7a4ee8ff8d59529cfed807647e4e049aa360520",
+          "audit_sha256": "a8cdbe4c0457a012feefacf7fa50566f1c625fe72c4864b5c9ed64fe0fe03076",
+          "native_review_sha256": "56a7389a4cdd080c4b8a5396053314e0a555bb18186caaf3f70d4d2dc1534539",
+          "first_four_narration_blocks_exactly_unchanged": true,
+          "last_narration_raw_changes_only_history_phrase": true,
+          "first_final_paragraph_start_unchanged": true,
+          "endpoint_images_byte_and_RGB_inherited": 19,
+          "all_selected_times_covered_by_explicit_exact_inheritance_or_actual_novel_view": true,
+          "finding": "No new concrete defect observed; known cosmetic line-leading Chinese comma unchanged."
+        },
+        "baseline_scope_reference": {
+          "path": "docs/qa/historical/ai4-final-preview-map-pre-gradient-history-20261101T004138Z.json",
+          "sha256": "83fa053f20854ba7c4986aa57f250a063445ad0beb6838f18ed9eb80adad395c"
+        },
+        "complete_mapping": {
+          "path": "docs/qa/evidence/ai4-gradient-history-regression/zh/complete-motion-map.json.gz",
+          "sha256": "2eca4e24fef3c352dd20bbf07cdf245fb4de597f10f2aa6f4619976a9500724b"
         }
       },
       "native1080_endpoint_review": {
@@ -2112,19 +2113,26 @@
             "exact_baseline_inherited": false
           }
         ],
-        "all_current_pngs_bound_to_actual_review": true
+        "all_current_pngs_bound_to_actual_review": true,
+        "history_phrase_update_scope": "This remains the original reviewed native1080 geometry/timing capture. Source geometry unchanged and all19fresh480p endpoint PNGs match exactly; no fresh1080 capture/timing approval claimed."
       },
       "endpoint480_runtime_observation": {
         "record": {
           "path": "renders/qa/series/ai4/zh/Gradient/result.json",
-          "sha256": "8a302c2729ae495a443897801f1d8cfb26c3e33b897d82ed0a78174f260e4da3"
+          "sha256": "ecaaa0845ad6f845b181f1d8e03e6e1525c40a74bb682a8491ddb3a515cae257"
         },
         "raw_status": "passed",
         "raw_warnings": [],
         "frames": 19,
-        "scope": "Runtime observation only; historical endpoint review remains separately preserved."
+        "scope": "All fresh480p endpoints exactly match actually reviewed baseline PNG bytes/RGB; times may shift.",
+        "actual_exact_review_inherited": 19,
+        "comparison_proof": {
+          "path": "docs/qa/evidence/ai4-gradient-history-regression/endpoint-comparison.json.gz",
+          "sha256": "bd3216b4172bd7c2321637bf759480e2f7d51207c5b7dc4e171c0293b5222f82"
+        }
       },
-      "scope_verdict": "Current canonical movie identity matches completed scoped selected-image review. This is not continuous playback, narration/listening/sync or full1080motion approval."
+      "scope_verdict": "Current canonical movie identity matches completed scoped selected-image review. This is not continuous playback, narration/listening/sync or full1080motion approval.",
+      "history_qualified_preview": true
     },
     {
       "manifest_position": 4,
@@ -2140,7 +2148,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "72a8ea64682b27c60286ce6c8277cbf60e01ac873a4793c9285b7172a541adb2",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -2489,7 +2497,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "72a8ea64682b27c60286ce6c8277cbf60e01ac873a4793c9285b7172a541adb2",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -2842,7 +2850,7 @@
         }
       ],
       "raw_capture_fingerprint": "72a8ea64682b27c60286ce6c8277cbf60e01ac873a4793c9285b7172a541adb2",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -3231,7 +3239,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "bbba3257f87191e9f8355b0328dd57bb56db819776ad94d51aeb99a7ad781a07",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -3620,7 +3628,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "c8501c06ea355ab1ccb1539b4f534db320ff8d977ae51c7e6b8142496e259a41",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -3975,7 +3983,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "c8501c06ea355ab1ccb1539b4f534db320ff8d977ae51c7e6b8142496e259a41",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -4334,7 +4342,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -4729,7 +4737,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -5124,7 +5132,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -5476,7 +5484,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "a22459540685614e5f63df2d2d823939b6f45895a5a92d669deb63c82a611b68",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -5820,7 +5828,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "d7f08faf72b606e58f61c2461a0734212635087e3fafdf29b2ad6af8ae2160f6",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -6262,7 +6270,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "d7f08faf72b606e58f61c2461a0734212635087e3fafdf29b2ad6af8ae2160f6",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -6704,7 +6712,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "12e053536905bd3fac33441c6d0781b7b32eb676ab743c59340aea886a30f5a3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -7090,7 +7098,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "12e053536905bd3fac33441c6d0781b7b32eb676ab743c59340aea886a30f5a3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -7481,7 +7489,7 @@
         }
       ],
       "raw_capture_fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -7874,7 +7882,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -8244,7 +8252,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -8584,7 +8592,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -8928,7 +8936,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -9244,7 +9252,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -9573,7 +9581,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -9892,7 +9900,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "e1c27cc502029f4f4513116fbb50a52ca71a648f27283b46f91df156a5278ba7",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -10211,8 +10219,8 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
-      "aggregate_source_current_at_this_observation": true,
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
+      "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
         "visual_review": "pending",
@@ -10322,7 +10330,7 @@
         "raw_status": "passed",
         "raw_warnings": [],
         "raw_fingerprint": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
-        "aggregate_source_current_at_this_observation": true,
+        "aggregate_source_current_at_this_observation": false,
         "proof": {
           "path": "docs/qa/evidence/ai4-quadratic-native1080-regression/en-Quadratic/comparison.json.gz",
           "sha256": "f9d228676468cafb958d956c3a946f4978f5de5192bd9ef26c443ed3970cc853"
@@ -10665,8 +10673,8 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
-      "aggregate_source_current_at_this_observation": true,
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
+      "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
         "visual_review": "pending",
@@ -10776,7 +10784,7 @@
         "raw_status": "passed",
         "raw_warnings": [],
         "raw_fingerprint": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
-        "aggregate_source_current_at_this_observation": true,
+        "aggregate_source_current_at_this_observation": false,
         "proof": {
           "path": "docs/qa/evidence/ai4-quadratic-native1080-regression/zh-Quadratic/comparison.json.gz",
           "sha256": "880c124eacd226f6485f2007da594369c88a8e38460e8b5546781b5c29d9db31"
@@ -11119,7 +11127,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "12e053536905bd3fac33441c6d0781b7b32eb676ab743c59340aea886a30f5a3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -11524,7 +11532,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "12e053536905bd3fac33441c6d0781b7b32eb676ab743c59340aea886a30f5a3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -11929,7 +11937,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "12e053536905bd3fac33441c6d0781b7b32eb676ab743c59340aea886a30f5a3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -12298,7 +12306,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "12e053536905bd3fac33441c6d0781b7b32eb676ab743c59340aea886a30f5a3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -12671,7 +12679,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "12e053536905bd3fac33441c6d0781b7b32eb676ab743c59340aea886a30f5a3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -13022,7 +13030,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "12e053536905bd3fac33441c6d0781b7b32eb676ab743c59340aea886a30f5a3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -13373,7 +13381,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "12e053536905bd3fac33441c6d0781b7b32eb676ab743c59340aea886a30f5a3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -14066,7 +14074,7 @@
       "raw_motion_status": "passed",
       "raw_motion_warnings": [],
       "raw_capture_fingerprint": "12e053536905bd3fac33441c6d0781b7b32eb676ab743c59340aea886a30f5a3",
-      "aggregate_fingerprint_at_this_observation": "451c5a3de439f399f6b03c96adffdd773c383ab1fad95e72aaf672d3d77c29a6",
+      "aggregate_fingerprint_at_this_observation": "dab8a68b83d6c854784fa466b286d2de4d40a6289b38a060a87f9b70acd31924",
       "aggregate_source_current_at_this_observation": false,
       "recorded_inputs_current_at_this_observation": true,
       "raw_review_fields_unchanged": {
@@ -14769,5 +14777,32 @@
     "Per-case complete selection maps, exact inheritance rules, direct views, targeted encoded windows and intervening gaps remain in their cited ledgers; counts are not continuous perceptual coverage.",
     "Expected absent optional NPZ input signatures stay None and are not treated as missing-data failure.",
     "No source/data/render/raw-result edits or computation occurred while creating this map."
-  ]
+  ],
+  "local_zh_lines_source_at_observation": {
+    "path": "videos/ai/ai4/zh_lines.py",
+    "sha256": "ec04b2f4c18551b990707465209d3f4472d3b098ccf16e61a1d2d558bb089e08"
+  },
+  "previous_map": {
+    "path": "docs/qa/historical/ai4-final-preview-map-pre-gradient-history-20261101T004138Z.json",
+    "sha256": "83fa053f20854ba7c4986aa57f250a063445ad0beb6838f18ed9eb80adad395c",
+    "scope": "Published pre-history-qualified38case baseline; unchanged."
+  },
+  "gradient_history_regression": {
+    "report": {
+      "path": "docs/qa/evidence/ai4-gradient-history-regression/report.json.gz",
+      "sha256": "b8c4ab5cbf1c92a2146de4dc698ef771c2a79be5f886a5ee4dad65e38712289a"
+    },
+    "source": "10bac01890e68e3f86915521de9cf3b6729fe9e7934750d629360464263ceb33",
+    "local_zh": "ec04b2f4c18551b990707465209d3f4472d3b098ccf16e61a1d2d558bb089e08",
+    "totals": {
+      "selected_times": 966,
+      "decoded_frames_automatically": 5141,
+      "inherited_exact_RGB_times": 922,
+      "new_unique_groups_actually_viewed": 36,
+      "new_duplicate_times": 8,
+      "new_pages_actually_viewed": 5,
+      "individual_native_followups": 7,
+      "endpoint_images_exact_inherited": 38
+    }
+  }
 }

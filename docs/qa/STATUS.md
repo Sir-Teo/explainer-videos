@@ -64,7 +64,7 @@ A subsequent every-encoded-frame probe has confirmed a remaining Part 3 Outro de
 
 Part 4's reviewed **pre-history-correction baseline** now covers all 19 chapters and 38 bilingual silent 480p15
 movie cases: **13,669 selected-time appearances from 101,207 automatically decoded frames**, plus **537 actually
-reviewed native 1920×1080 endpoint images**. The [final baseline map](ai4-final-preview-map.md) binds every exact
+reviewed native 1920×1080 endpoint images**. The [preserved baseline map](historical/ai4-final-preview-map-pre-gradient-history-20261101T004138Z.md) binds every exact
 canonical movie to completed selected-image evidence. Its raw statuses remain 34 passed / 4 needs-review with four
 warnings; only 2/38 matched its conservative aggregate fingerprint at that map's observation. Historical records,
 current=false fields and unviewed-frame gaps remain intact. Selected images and skipped-animation native
@@ -141,3 +141,5 @@ the explicit reviewed `svd-reveal-v1` scene overlay. Three handoff cache archive
 about 33.3 MB total. Local producer guards, exact package/version and external model/corpus identities, ownership
 and actual narrated/4K review gates remain open. No validator weakening, automatic regeneration, full-part local
 expansion or new local runtime result is implied by cloud evidence or archive persistence.
+
+Update 01 November 2026, 01:05 UTC: the [Gradient history regression](evidence/ai4-gradient-history-regression/README.md) has now closed both fresh chapter image gates: 966 selected appearances, 922 exact RGB inheritances, 36 new unique images actually viewed on five sheets, eight new duplicates and seven native checks. All 38 fresh 480p endpoint PNGs match reviewed baseline bytes/RGB. The [history-qualified map](ai4-final-preview-map.md) now replaces only those two movie identities: 13,670 selected appearances / 101,192 decoded frames; raw 36 passed / 2 needs-review and two warnings remain. The old map is preserved unchanged. Existing Gradient native 1080p geometry evidence remains historical; no fresh 1080p timing or full-resolution motion claim follows. Assembly replacement/join validation is separately owned and is not claimed complete by this chapter review.
