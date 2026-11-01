@@ -1,9 +1,9 @@
 # Current cloud QA checkpoint
 
-Observed 01 November 2026, 01:16 UTC. Progress, **not full-series production approval**.
+Observed 01 November 2026, 03:28 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified push before this checkpoint:
-`c16a525da73107d6aa8332b942cb5c206dc8107e` (current Part4 source and chapter evidence; later assembly receipts are included in this checkpoint). No merge, deployment, CI/CD or runners.
+`86da3b0df913b80966cfba4547cbcb952e9a64a4` (native SVD polish evidence; Part5 Decoding review pushed earlier atbbaf3fe5). No merge, deployment, CI/CD or runners.
 
 Part 1: all 17 chapters in both languages have endpoint captures, complete silent renders and selected-time
 review. The frozen baseline covers 15,194 selected times from 109,941 automatically decoded frames; scoped
@@ -90,14 +90,18 @@ configuration files identical before/after. It includes the Gradient history and
 Git HEAD predates explicitly listed local files; full SHA inventories bind the tested bytes. The older417/20and352
 runs remain historical; no counts are added together. [Frozen test receipt](evidence/integrated-outro-gradient-20261101/README.md).
 
-Part5 source/data preparation is now active in order. No Part5 production computation or rendering has started;
-source corrections and their cache contracts must freeze first. Parts6–31 remain queued; all31 parts and553chapters
-remain in scope. The explicit
+Part 5 is advancing through actual rendered review. All 28 corrected numerical items completed; all 56 payloads total 3,090,034 bytes and passed strict currentness/guarded loads with zero producers. Original silent movies rendered for all 38 bilingual cases. Complete selected-image baseline review now covers 28 cases / 12 chapters in both languages. Current repaired-source selected-image acceptance covers 11 cases: EN/ZH Hook, Bell, Gauss, Decoding and Markov, plus Chinese Bayes. Remaining original/repaired cases are not accepted merely because they rendered.
+
+Latest concrete completions: Bell/Gauss regression evidence packaged03:19UTC; MonteCarlo cohort-sync source frozen03:21; ENOutro baseline review completed03:25; bilingual SDE baseline closed and its caption transition repair frozen03:28. Likelihood/Fisher/Itô regressions and MCMC inspection are active; Brownian and Fokker–Planck still need actual selected review. The live [chapter ledger](ai5-chapter-checklist.md) lists all19chapters individually, including outstanding repair/regression gates.
+
+The root spent about25minutes on the parent's requested SVD4K margin/name-wrap polish and strict overlay preflight while six reviewers continued Part5. Its native endpoint evidence is published, with English utterances/timing unchanged. Mandarin speech comparison belongs solely to the cloud production owner. No Part5 numerical process is active and no access block is preventing QA. Storage is bounded and guarded; original data/unique evidence remains preserved.
+
+The507testreceipt predates the later Decoding geometry and Markov motion repairs; four Decoding geometry tests and21existing tests are separately scoped. Test counts are not added together or substituted for render/image evidence. Parts6–31remainqueued; all31parts and553chapters remain in scope. The explicit
 [narration/production queue](remaining-production-qa.md) retains listening, sync, subjective pacing, continuous
 perception and full-part export gaps. No tracked web-player application exists; an external host's responsive
 behavior is outside this checkout.
 
-Storage is about3.1GiB free at this observation; original unique evidence and completed numerical data are preserved. Normal Hugging Face cache-manager eviction of one inactive public pretrained TTS
+Storage remains bounded. Exactbyte PNGhardlink consolidation retained40,994historicalpaths and allhashes while reclaiming about3.13GBallocated; free space rose to4.3GiBbefore newPart5reviews, about3.4GiBat this observation; original unique evidence and completed numerical data are preserved. Normal Hugging Face cache-manager eviction of one inactive public pretrained TTS
 revision recovered about4.54GB, after verifying its public metadata and absence of known active TTS services.
 All68 Part3/Part 4 numerical artifact signatures remained unchanged. Generated voices/speech, trained checkpoints,
 original sources and unique QA evidence remain. Future TTS requires a normal public redownload of that revision.
@@ -130,3 +134,5 @@ and actual narrated/4K review gates remain open. No validator weakening, automat
 expansion or new local runtime result is implied by cloud evidence or archive persistence.
 
 Local-render cancellation,01:25UTC: the local task and its jobs were stopped and archived; existing artifacts are preserved. Unfinished local-overlayv2 work was moved out of the active repository and the frozenv1 helper restored exactly. Cloud series QA continues. A separate parent-owned cloud production task is gated by its own Drive/access and production checks; this QA task does not start production exports or duplicate Drive uploads.
+
+Cloud production coordination: the private Drive test succeeded via the parent, and the separate cloud production owner reports both corrected4K60 narrated SVDpilots complete (its acceptance remains its own evidence). The new [Part4cloudhandoff](production-handoff-part4.md) pins1927e6b7source, map33071…,23currentitems/42unchangedpayloads, and open strict-runtime/per-renderer-producer-guard/narration/listening/4Kgates. The [Parts1–3cloudreactivationaddendum](production-handoff-parts1-3.md) points to the already-saved144file cachetransfer; no duplicateupload or canceledlocalexecution was started. Qualityover speed, cloudQA continues separately from production, noCI/CDor publicplatformpublishing.

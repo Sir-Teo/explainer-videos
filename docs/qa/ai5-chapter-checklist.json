@@ -1,6 +1,6 @@
 {
   "part": "ai5",
-  "scope": "Source inventory and scoped corrections ready; no default data or rendered acceptance yet.",
+  "scope": "All28 numerical items completed/current under guarded loads; 38 bilingual endpoint cases captured/reviewed at scoped versions. Complete silent motion rendering and selected-image review in progress; defects and replacement gates below remain open. No narrated/listening/4K signoff.",
   "numerical_items": 28,
   "cases": [
     {
@@ -9,11 +9,40 @@
       "scene": "Hook",
       "title": "Out of noise",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH current selected-image review accepted.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Hook/result.json",
+          "sha256": "c7cf2955fa1e4b5474207848e95575857492896bc143725dec98350b3d8bfc0d",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+          "frame_captures": 13,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Hook_motion/result.json",
+          "sha256": "f74812a0a1d714f3654de5a39704030b4856a535a9a5e775a17236ddfa3e5144",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "364e505aef17f8a6ec293f451f7323e0e4d8f057baedc83298ec930ac9749fd1",
+          "frame_captures": 13,
+          "movie": "renders/qa/series/ai5/en/Hook_motion/media/videos/480p15/Hook.mp4"
+        }
+      },
+      "open_findings": [],
+      "review_evidence": "evidence/ai5-en-hook-selected-motion-review/README.md",
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 1,
@@ -21,11 +50,40 @@
       "scene": "Hook",
       "title": "Out of noise",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH current selected-image review accepted.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Hook/result.json",
+          "sha256": "094aab701b22c7c2a3551b2caf5ed4f97a8a2dd85ec1914df667396a30310dbe",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+          "frame_captures": 17,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Hook_motion/result.json",
+          "sha256": "39bc31c4e21b2cd72cff7f3b5daab7d8e833b998d6ea40b36f95a34699c43fd5",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "d59d0445b5f38b6e143ca57ed3fb344c29553451309326539463596043969eb4",
+          "frame_captures": 17,
+          "movie": "renders/qa/series/ai5/zh/Hook_motion/media/videos/480p15/Hook.mp4"
+        }
+      },
+      "open_findings": [],
+      "review_evidence": "evidence/ai5-zh-hook-selected-motion-review/README.md",
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 2,
@@ -33,11 +91,35 @@
       "scene": "Bell",
       "title": "1. The bell curve",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Bell/result.json",
+          "sha256": "4cf35966e70aff20e46b8c7d524e42739c52a28c75e55e596e7efec13243b2dd",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 19,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Bell_motion/result.json",
+          "sha256": "e122eca6a225a21684eefbecd89e22f01e63d90a274a4e50f845b945517f8bc3",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 19,
+          "movie": "renders/qa/series/ai5/en/Bell_motion/media/videos/480p15/Bell.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 2,
@@ -45,11 +127,35 @@
       "scene": "Bell",
       "title": "1. The bell curve",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Bell/result.json",
+          "sha256": "3287f28a0de3ba3d0db97e0024e2823079fddfe4073f3ad746e3cf7ec29eab3a",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 22,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Bell_motion/result.json",
+          "sha256": "f0af692b02ff337fb8957a3d6eb2235433bcf895a9119c4f58cd372993dfe5e4",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 22,
+          "movie": "renders/qa/series/ai5/zh/Bell_motion/media/videos/480p15/Bell.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 3,
@@ -57,11 +163,35 @@
       "scene": "Gauss",
       "title": "2. Bells in many dimensions",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Gauss/result.json",
+          "sha256": "2c2e53cdefa14a1c18a33c0850903c3fa3cc5c0a360b7da3243822f7ff05e7bb",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "69cb6b072c34c2bf899170a6f2b47ffb7f23260e8e5b024473277c1d966fe78a",
+          "frame_captures": 18,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Gauss_motion/result.json",
+          "sha256": "1b8a0b4a95211fd1b3d96f2ebf7adcced5ec073bd60c0a8e3358dc2349a55bb6",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "69cb6b072c34c2bf899170a6f2b47ffb7f23260e8e5b024473277c1d966fe78a",
+          "frame_captures": 18,
+          "movie": "renders/qa/series/ai5/en/Gauss_motion/media/videos/480p15/Gauss.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 3,
@@ -69,11 +199,39 @@
       "scene": "Gauss",
       "title": "2. Bells in many dimensions",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Gauss/result.json",
+          "sha256": "ed69f4829285a0e12de67beca6303ec321a3267933231386f9c7426bf9fd5ec4",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "69cb6b072c34c2bf899170a6f2b47ffb7f23260e8e5b024473277c1d966fe78a",
+          "frame_captures": 18,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Gauss_motion/result.json",
+          "sha256": "6c6d2a9cd59c855e7078db8eee526fc33b9b9420ca76991aeca0eda77c6b6bfb",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "69cb6b072c34c2bf899170a6f2b47ffb7f23260e8e5b024473277c1d966fe78a",
+          "frame_captures": 18,
+          "movie": "renders/qa/series/ai5/zh/Gauss_motion/media/videos/480p15/Gauss.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 4,
@@ -81,11 +239,35 @@
       "scene": "Likelihood",
       "title": "3. Fitting a bell: maximum likelihood",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; repaired selected-image regression active.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Likelihood/result.json",
+          "sha256": "9fcc9294d2eb58bcca209513e4c65e8f832fe4190db01953d40b902a4f364224",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 16,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Likelihood_motion/result.json",
+          "sha256": "2afa95675040a8c9d391958b437c41d2a8266beb03b63711f90758c2f064ddf2",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 16,
+          "movie": "renders/qa/series/ai5/en/Likelihood_motion/media/videos/480p15/Likelihood.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 4,
@@ -93,11 +275,39 @@
       "scene": "Likelihood",
       "title": "3. Fitting a bell: maximum likelihood",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; repaired selected-image regression active.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Likelihood/result.json",
+          "sha256": "8b05fad2d9dd7e25c6efe2f2dd8a26adb9718efc5687ea4cd0c442bcf30c36f8",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 16,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Likelihood_motion/result.json",
+          "sha256": "0c486bf2b8ce1b06e62de7fe23323a4c530f5bf1935dbb9371b638d5dfa56d92",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 16,
+          "movie": "renders/qa/series/ai5/zh/Likelihood_motion/media/videos/480p15/Likelihood.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 5,
@@ -105,11 +315,35 @@
       "scene": "Fisher",
       "title": "4. How precise can an estimate be?",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; repaired selected-image regression active.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Fisher/result.json",
+          "sha256": "44e46be249bfe1a861fed4c80e5340ef2cf1543c6b742b09c4b8926f25a38bfe",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 19,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Fisher_motion/result.json",
+          "sha256": "875324ee3f5e5afcc7eddaa84e9887aa786df33daccbc06f9fa129a2e63f524e",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 19,
+          "movie": "renders/qa/series/ai5/en/Fisher_motion/media/videos/480p15/Fisher.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 5,
@@ -117,11 +351,35 @@
       "scene": "Fisher",
       "title": "4. How precise can an estimate be?",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; repaired selected-image regression active.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Fisher/result.json",
+          "sha256": "1bf8f365a382caca2be4235c601681485c0d2e100e6bdc7185028fe18ad1a31b",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 19,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Fisher_motion/result.json",
+          "sha256": "6bb2d62a3ae26c384cae133760d1e5cc8624f16223aad7d301ff3dc89e5ce3c8",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 19,
+          "movie": "renders/qa/series/ai5/zh/Fisher_motion/media/videos/480p15/Fisher.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 6,
@@ -129,11 +387,39 @@
       "scene": "Bayes",
       "title": "5. Belief as a distribution",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "Current ZH selected review accepted; repaired EN regression pending.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Bayes/result.json",
+          "sha256": "0faf8b6f7f79f11d792aea55cdf5b147e83c15c73c3dd932e636406fcc1fb850",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 18,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Bayes_motion/result.json",
+          "sha256": "55f7f69863e5377c182591735b46523ca28df7605344b60f0cbc1ce37b008708",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 18,
+          "movie": "renders/qa/series/ai5/en/Bayes_motion/media/videos/480p15/Bayes.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 6,
@@ -141,11 +427,39 @@
       "scene": "Bayes",
       "title": "5. Belief as a distribution",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "Current ZH selected review accepted; repaired EN regression pending.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Bayes/result.json",
+          "sha256": "09c35a0925aa73dc060a7bc18096b6e6ccec228bd38dc7a9ed31b3876cf862dd",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 16,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Bayes_motion/result.json",
+          "sha256": "93c47e89d7a84527939cb85fe9000d427e31aef6b015c73c5324f052c4072746",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "1102ed080da2c05334fec84004858b3464c968ac96f20e632197dfacae6a7363",
+          "frame_captures": 16,
+          "movie": "renders/qa/series/ai5/zh/Bayes_motion/media/videos/480p15/Bayes.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 7,
@@ -153,11 +467,39 @@
       "scene": "MaxEnt",
       "title": "6. Maximum entropy",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "EN complete baseline; current ZH selected review active; repaired EN regression pending.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/MaxEnt/result.json",
+          "sha256": "864dc761f9b766eda4fec8597d1ac962891fafd4a3483d5294ad29856d77d578",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "69cb6b072c34c2bf899170a6f2b47ffb7f23260e8e5b024473277c1d966fe78a",
+          "frame_captures": 16,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/MaxEnt_motion/result.json",
+          "sha256": "309bec6445ebaba5ebc860e80169f9339035c068bda39be2933e656db159a994",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "69cb6b072c34c2bf899170a6f2b47ffb7f23260e8e5b024473277c1d966fe78a",
+          "frame_captures": 16,
+          "movie": "renders/qa/series/ai5/en/MaxEnt_motion/media/videos/480p15/MaxEnt.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 7,
@@ -165,11 +507,39 @@
       "scene": "MaxEnt",
       "title": "6. Maximum entropy",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "EN complete baseline; current ZH selected review active; repaired EN regression pending.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/MaxEnt/result.json",
+          "sha256": "ac24234f690e33879760f68b20e1a48b73034cd59f27cf3d0ea16ea43fdcf72f",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "69cb6b072c34c2bf899170a6f2b47ffb7f23260e8e5b024473277c1d966fe78a",
+          "frame_captures": 16,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/MaxEnt_motion/result.json",
+          "sha256": "cb48a6466071c3c2ce51762dee0dd8d5030616fe28d8f64805fa53afb0e69376",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "6f47881689217dcd2fa926415b57f9fa79450783992be7c879e46f847979b670",
+          "frame_captures": 16,
+          "movie": "renders/qa/series/ai5/zh/MaxEnt_motion/media/videos/480p15/MaxEnt.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": false,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 8,
@@ -177,11 +547,35 @@
       "scene": "Tails",
       "title": "7. How far from the average?",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN complete baseline; current ZH selected review queued; repaired EN regression pending.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Tails/result.json",
+          "sha256": "901833c3b7d67c7a624de042feecdaaf76e84162c4e16c44df162e20feda59f3",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 17,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Tails_motion/result.json",
+          "sha256": "7e54208006f0e00891d4539e55aee99dd78b609c6074c3d3c1241835f8ff727d",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 17,
+          "movie": "renders/qa/series/ai5/en/Tails_motion/media/videos/480p15/Tails.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 8,
@@ -189,11 +583,35 @@
       "scene": "Tails",
       "title": "7. How far from the average?",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN complete baseline; current ZH selected review queued; repaired EN regression pending.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Tails/result.json",
+          "sha256": "9e3815c0c0a27a10a41ba9eaa2b267c0ba00d9b76e1d21292dff63aafd1aba5a",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 18,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Tails_motion/result.json",
+          "sha256": "403185fb77d17a4bcfcebf4cedf19f0160e2574affe67453c5504f513f3e39fb",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 18,
+          "movie": "renders/qa/series/ai5/zh/Tails_motion/media/videos/480p15/Tails.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": false,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 9,
@@ -201,11 +619,35 @@
       "scene": "Sampling",
       "title": "8. Rolling loaded dice",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN complete baseline; repaired EN/ZH renders/regression underway.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Sampling/result.json",
+          "sha256": "72b457ec7d6c762fef68df3b24c76152ec123eb71f8ac2a46ba21e792b80773a",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 17,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Sampling_motion/result.json",
+          "sha256": "dbb50e7a7f2d229c36aacea88d36ae7901968b9821a214ccf7040bfa708193cf",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 17,
+          "movie": "renders/qa/series/ai5/en/Sampling_motion/media/videos/480p15/Sampling.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 9,
@@ -213,11 +655,35 @@
       "scene": "Sampling",
       "title": "8. Rolling loaded dice",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN complete baseline; repaired EN/ZH renders/regression underway.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Sampling/result.json",
+          "sha256": "85e5b3390d7d375efb15ccff8003172c74c1022749aa8ae40566d87d26912096",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 17,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Sampling_motion/result.json",
+          "sha256": "dce2ae7561731b69b9753e792d8fec4cc335dd5154371ce079be3187e341097e",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 17,
+          "movie": "renders/qa/series/ai5/zh/Sampling_motion/media/videos/480p15/Sampling.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": false,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 10,
@@ -225,11 +691,35 @@
       "scene": "Decoding",
       "title": "9. How a language model chooses",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "Repaired EN/ZH selected review accepted; evidence pushed03:08UTC.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Decoding/result.json",
+          "sha256": "8c4b8e0b32f17ecff4fd706b97b8a1f84c13bd4fb22ca47151c36b0fa1a61e97",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+          "frame_captures": 19,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Decoding_motion/result.json",
+          "sha256": "19501345f626036e79d7a5827d40418305e0b5b7aeec95bcc337ff8c5341d714",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+          "frame_captures": 20,
+          "movie": "renders/qa/series/ai5/en/Decoding_motion/media/videos/480p15/Decoding.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 10,
@@ -237,11 +727,35 @@
       "scene": "Decoding",
       "title": "9. How a language model chooses",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "Repaired EN/ZH selected review accepted; evidence pushed03:08UTC.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Decoding/result.json",
+          "sha256": "f553c07792be5cb9266978d3c6ddb34c00011069ff915d36dd9b27e533dfb51b",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+          "frame_captures": 21,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Decoding_motion/result.json",
+          "sha256": "ce30e2cfa003dfc2e02f3d16e1cb77240f3743cc405a4db61c49a379d8f67763",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+          "frame_captures": 21,
+          "movie": "renders/qa/series/ai5/zh/Decoding_motion/media/videos/480p15/Decoding.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 11,
@@ -249,11 +763,35 @@
       "scene": "Markov",
       "title": "10. Chains with short memories",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "Repaired EN/ZH selected review accepted; final Markov package ready.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Markov/result.json",
+          "sha256": "5ccdfb85a9cc385f2f220511511241e53c6a0c5a2026a3ec9f09c39ae8ba7f78",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 16,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Markov_motion/result.json",
+          "sha256": "521d14b57047f07e50184b82a68a9ee067ac7ccf6519222cbcdb7c2d428f9196",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "6be8111e4a7326983783ae9af451d1810d0665b857277e9c5e44ca0dc2c503bb",
+          "frame_captures": 16,
+          "movie": "renders/qa/series/ai5/en/Markov_motion/media/videos/480p15/Markov.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 11,
@@ -261,11 +799,35 @@
       "scene": "Markov",
       "title": "10. Chains with short memories",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "Repaired EN/ZH selected review accepted; final Markov package ready.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Markov/result.json",
+          "sha256": "ee65a614b7ec53d0197cfb8f4f11f08aa3e7a0f126fb7c614866e8e741b47395",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 16,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Markov_motion/result.json",
+          "sha256": "35938732268948c8f6d6e5628c130870f06d1de86f557bce6cd0018e5967b176",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "6be8111e4a7326983783ae9af451d1810d0665b857277e9c5e44ca0dc2c503bb",
+          "frame_captures": 16,
+          "movie": "renders/qa/series/ai5/zh/Markov_motion/media/videos/480p15/Markov.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 12,
@@ -273,11 +835,37 @@
       "scene": "MonteCarlo",
       "title": "11. Answers from random samples",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; cohort-sync repair frozen03:21UTC; fresh renders/regression underway.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/MonteCarlo/result.json",
+          "sha256": "af4f166f80cac9e9bb84fa20b8efc150fc803b4b4ed1b30bbde74b28d536a347",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 19,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/MonteCarlo_motion/result.json",
+          "sha256": "5b769614479f5b61e23c216bf4a1243f49795be7e821fef1b10bba00efbb0781",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 19,
+          "movie": "renders/qa/series/ai5/en/MonteCarlo_motion/media/videos/480p15/MonteCarlo.mp4"
+        }
+      },
+      "open_findings": [
+        "Actual first-dart estimator/readout advancesNwhile leftalreadyshows24darts; later1500shownvs4000computed needscohort disclosure/synchronization. Scopedrepair pending."
+      ],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 12,
@@ -285,11 +873,37 @@
       "scene": "MonteCarlo",
       "title": "11. Answers from random samples",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; cohort-sync repair frozen03:21UTC; fresh renders/regression underway.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/MonteCarlo/result.json",
+          "sha256": "a8f04b6ea7c6d5bd6698c3828e5b6f1e44cb055e02370b554e86fe8a507d4c66",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 19,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/MonteCarlo_motion/result.json",
+          "sha256": "7baffd10865fc739b845e967320594d507c1c75fee4df9202e2378aa9614f181",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 19,
+          "movie": "renders/qa/series/ai5/zh/MonteCarlo_motion/media/videos/480p15/MonteCarlo.mp4"
+        }
+      },
+      "open_findings": [
+        "Actual first-dart estimator/readout advancesNwhile leftalreadyshows24darts; later1500shownvs4000computed needscohort disclosure/synchronization. Scopedrepair pending."
+      ],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 13,
@@ -297,11 +911,35 @@
       "scene": "ScoreFn",
       "title": "12. The gradient of an average",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; clean-reveal repair rendering/regression underway.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/ScoreFn/result.json",
+          "sha256": "76bac1adb18803b07f180d7dcd506f5e1c6196479d4b29a2b9d1e659ef2c352f",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 16,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/ScoreFn_motion/result.json",
+          "sha256": "79df1fccc16868ef4d2a1fec35091ef85a8454d98b88fd4a523e8b8abd42a0d9",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 16,
+          "movie": "renders/qa/series/ai5/en/ScoreFn_motion/media/videos/480p15/ScoreFn.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 13,
@@ -309,11 +947,35 @@
       "scene": "ScoreFn",
       "title": "12. The gradient of an average",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; clean-reveal repair rendering/regression underway.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/ScoreFn/result.json",
+          "sha256": "383a3593baa9cdc4bd686be15441769c25eca60a9c8504d2b297f3a886029b41",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 16,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/ScoreFn_motion/result.json",
+          "sha256": "0055c75cd1d44fdde330a140a30612cac2c5ce079aba2393d75a355a8e4c634d",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "0b1f0ad51e829131ab400ffb3d8566e7708efe740adedf7bee11be179c09567f",
+          "frame_captures": 16,
+          "movie": "renders/qa/series/ai5/zh/ScoreFn_motion/media/videos/480p15/ScoreFn.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 14,
@@ -321,11 +983,39 @@
       "scene": "MCMC",
       "title": "13. Sampling the unsampleable",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "Complete silent renders; selected-image review active.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/MCMC/result.json",
+          "sha256": "4309e6b708f2cbb2d75e42c71bba55a9f9234c1d633f37af874f7003cb467e8d",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+          "frame_captures": 18,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/MCMC_motion/result.json",
+          "sha256": "051db49fe18e13f6cc8ce101eab8b645570448cf3621d5588ab11d1a5553bf22",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+          "frame_captures": 18,
+          "movie": "renders/qa/series/ai5/en/MCMC_motion/media/videos/480p15/MCMC.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": false,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 14,
@@ -333,11 +1023,39 @@
       "scene": "MCMC",
       "title": "13. Sampling the unsampleable",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "Complete silent renders; selected-image review active.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/MCMC/result.json",
+          "sha256": "6e3f05dd5194bbcd8eec762afc0c9e44c13b3316b7b67a06209cd9a942d073c1",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+          "frame_captures": 19,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/MCMC_motion/result.json",
+          "sha256": "8653a96953272cff1f67144c555482ba1d68e9f1f2a19cdc877d63c35ad7d2bc",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+          "frame_captures": 19,
+          "movie": "renders/qa/series/ai5/zh/MCMC_motion/media/videos/480p15/MCMC.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": false,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 15,
@@ -345,11 +1063,40 @@
       "scene": "Brownian",
       "title": "14. Brownian motion",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "Complete silent renders; selected-image review pending.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Brownian/result.json",
+          "sha256": "24671303c5a73c5050e576d624e15efd7664d4f796e2399d0b211b8d2606021a",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "bfc2662ae7fbee18cbe54f9c44c87cf870bbcd8138106cb7fb7466dba256da0b",
+          "frame_captures": 11,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Brownian_motion/result.json",
+          "sha256": "d2cc03b2ebbe173514c093347b465e726727b77314bf864f19464d118f350d18",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "dead-air-review",
+              "report": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 154 s\n   2:06.25   1.5 s   [  +126.2 s]\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 154 s\n   2:06.25   1.5 s   [  +126.2 s]\n"
+            }
+          ],
+          "fingerprint": "6be8111e4a7326983783ae9af451d1810d0665b857277e9c5e44ca0dc2c503bb",
+          "frame_captures": 11,
+          "movie": "renders/qa/series/ai5/en/Brownian_motion/media/videos/480p15/Brownian.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": false,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 15,
@@ -357,35 +1104,111 @@
       "scene": "Brownian",
       "title": "14. Brownian motion",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "Complete silent renders; selected-image review pending.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Brownian/result.json",
+          "sha256": "523156f624de131296acab1e18ec3e9c06b9afa483a8cf98ddbe591a0a77c003",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "bfc2662ae7fbee18cbe54f9c44c87cf870bbcd8138106cb7fb7466dba256da0b",
+          "frame_captures": 12,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Brownian_motion/result.json",
+          "sha256": "e110bf89bdf0317d28f31db4a65160cf585a5b1943a0245d0279d6b7cb45b0ba",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 12,
+          "movie": "renders/qa/series/ai5/zh/Brownian_motion/media/videos/480p15/Brownian.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": false,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 16,
       "module": "s17_ito",
       "scene": "Ito",
-      "title": "15. Itô's lemma",
+      "title": "15. It\u00f4's lemma",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; repaired reveal regression active.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Ito/result.json",
+          "sha256": "732efd776b3adc10554b4e27718c14303459f1e17f88ac5a30c6c763397b09bb",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "69cb6b072c34c2bf899170a6f2b47ffb7f23260e8e5b024473277c1d966fe78a",
+          "frame_captures": 14,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Ito_motion/result.json",
+          "sha256": "40c1c81022110309044b562684be257c91dada422a1382d2b079d3e3f06bf1a4",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "6f47881689217dcd2fa926415b57f9fa79450783992be7c879e46f847979b670",
+          "frame_captures": 14,
+          "movie": "renders/qa/series/ai5/en/Ito_motion/media/videos/480p15/Ito.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 16,
       "module": "s17_ito",
       "scene": "Ito",
-      "title": "15. Itô's lemma",
+      "title": "15. It\u00f4's lemma",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; repaired reveal regression active.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Ito/result.json",
+          "sha256": "146451a778a221c6085adc3d92a3cc6e0ca3955011303a1572ccf35512c17da3",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "69cb6b072c34c2bf899170a6f2b47ffb7f23260e8e5b024473277c1d966fe78a",
+          "frame_captures": 15,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Ito_motion/result.json",
+          "sha256": "da998b2f79eb8b7ebdffa325595f50f191d54e25deaf8b31cc1cceb395345b5d",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5252959df95b1976e3edddc876af8a4240a1109e145218ff85fefa54c902ee6b",
+          "frame_captures": 15,
+          "movie": "renders/qa/series/ai5/zh/Ito_motion/media/videos/480p15/Ito.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 17,
@@ -393,11 +1216,35 @@
       "scene": "SDE",
       "title": "16. Randomness with a push",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; sequential-caption transition repair frozen; fresh regression queued.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/SDE/result.json",
+          "sha256": "4f5a1de9966b3e6b0a356ad4691d8e3fcc9d0a7d8b6ed2efd0ec0654078d8777",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+          "frame_captures": 11,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/SDE_motion/result.json",
+          "sha256": "874167aae4414872e14472f727775aa603a9ed1ee4cdf0f27a3306b978fc334f",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "5005add0c0b55405a39515df394e422f93d3d111e527aec9e2a1c0012c348a96",
+          "frame_captures": 11,
+          "movie": "renders/qa/series/ai5/en/SDE_motion/media/videos/480p15/SDE.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 17,
@@ -405,11 +1252,39 @@
       "scene": "SDE",
       "title": "16. Randomness with a push",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime needs-review; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN/ZH complete baseline; sequential-caption transition repair frozen; fresh regression queued.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/SDE/result.json",
+          "sha256": "f5fc18cbeeca6a02d83cfe5fd2f2d32fc33dbdbc5f2d9ea2c7d2df1e302b6fac",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "89cc010a7329aa14f09b68489e58807c6d56c4af447f7e3d1fba4823e0575c91",
+          "frame_captures": 11,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/SDE_motion/result.json",
+          "sha256": "d096b5b2e91edfe2d37593ab2f9a9efffdcf0afcdf74ae95d0b45b914607be37",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 11,
+          "movie": "renders/qa/series/ai5/zh/SDE_motion/media/videos/480p15/SDE.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 18,
@@ -417,11 +1292,39 @@
       "scene": "FokkerPlanck",
       "title": "17. The density's own law",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "Complete silent renders; selected-image review queued.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/FokkerPlanck/result.json",
+          "sha256": "77bd898603a89d99fa2fa2382b4d5541b0b0127c338a58791c1f29681fff087c",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+          "frame_captures": 15,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/FokkerPlanck_motion/result.json",
+          "sha256": "c0f18d2aea953dc4d8017f1c9db1563377078052efbfbbb3101a04a940027439",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "5005add0c0b55405a39515df394e422f93d3d111e527aec9e2a1c0012c348a96",
+          "frame_captures": 15,
+          "movie": "renders/qa/series/ai5/en/FokkerPlanck_motion/media/videos/480p15/FokkerPlanck.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": false,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 18,
@@ -429,11 +1332,35 @@
       "scene": "FokkerPlanck",
       "title": "17. The density's own law",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "Complete silent renders; selected-image review queued.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/FokkerPlanck/result.json",
+          "sha256": "fd4eee83871b695d0c3b08f0a5b6e81f5cd192474d91cb12b077c73ce56fbeca",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "364e505aef17f8a6ec293f451f7323e0e4d8f057baedc83298ec930ac9749fd1",
+          "frame_captures": 14,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/FokkerPlanck_motion/result.json",
+          "sha256": "7be12e950ef943cb659cbc7f6a264a0a2a7a5ae004c2930ebc2dc2f134a3a9e7",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 14,
+          "movie": "renders/qa/series/ai5/zh/FokkerPlanck_motion/media/videos/480p15/FokkerPlanck.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": false,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 19,
@@ -441,11 +1368,39 @@
       "scene": "Outro",
       "title": "Recap, problems, and what comes next",
       "lang": "en",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "EN complete baseline03:25UTC; ZH review active; tiny measured-point recap correction pending.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/en/Outro/result.json",
+          "sha256": "7c21f05e64a3732d7c23f552bf39764d159620e0290aaeb8dd9e2599ad0402ee",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "bfc2662ae7fbee18cbe54f9c44c87cf870bbcd8138106cb7fb7466dba256da0b",
+          "frame_captures": 5,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/en/Outro_motion/result.json",
+          "sha256": "464494707e570375adff11373540002bb42ed1fc582ceb5f2586e448ac755da5",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "8f0d0a24807649f2f9aef290647c4089da3147a8966ecd85243af84122426d61",
+          "frame_captures": 5,
+          "movie": "renders/qa/series/ai5/en/Outro_motion/media/videos/480p15/Outro.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     },
     {
       "position": 19,
@@ -453,11 +1408,59 @@
       "scene": "Outro",
       "title": "Recap, problems, and what comes next",
       "lang": "zh",
-      "endpoints": "pending",
-      "silent_motion": "pending",
-      "actual_visual_review": "pending",
-      "narration_listening": "pending",
-      "production_resolution": "pending"
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
+      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
+      "actual_visual_review": "EN complete baseline03:25UTC; ZH review active; tiny measured-point recap correction pending.",
+      "narration_listening": "Pending actual narrated render/listening/synchronization",
+      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "runtime_records": {
+        "endpoints": {
+          "path": "renders/qa/series/ai5/zh/Outro/result.json",
+          "sha256": "a09ecd3388c36abc4d332dbcf7a38c7bd2a155d43011a7fb20a48264a86e8344",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "bfc2662ae7fbee18cbe54f9c44c87cf870bbcd8138106cb7fb7466dba256da0b",
+          "frame_captures": 5,
+          "movie": null
+        },
+        "silent_motion": {
+          "path": "renders/qa/series/ai5/zh/Outro_motion/result.json",
+          "sha256": "b3f0a552e933c87ffa8e24e2ef7dc4e45b78ee5ddda38c17de7b471a31f25815",
+          "status": "needs-review",
+          "warnings": [
+            {
+              "kind": "source-changed-during-render"
+            }
+          ],
+          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "frame_captures": 5,
+          "movie": "renders/qa/series/ai5/zh/Outro_motion/media/videos/480p15/Outro.mp4"
+        }
+      },
+      "open_findings": [],
+      "complete_baseline_selected_review": false,
+      "current_selected_review_accepted": false,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
     }
-  ]
+  ],
+  "observed_utc": "2026-11-01T03:30:22.295761+00:00",
+  "numerical_evidence": "evidence/ai5-completed-28-decoding-audit/README.md",
+  "runtime_inventory_summary": {
+    "endpoint_records": 38,
+    "completed_motion_records": 38,
+    "raw_motion_statuses": {
+      "needs-review": 15,
+      "passed": 23
+    }
+  },
+  "coverage_checkpoint": {
+    "observed_utc": "2026-11-01T03:30:22.388325+00:00",
+    "baseline_closed_cases": 28,
+    "current_selected_review_closed_cases": 11,
+    "bilingual_chapters_with_complete_baseline": 12,
+    "bilingual_chapters_with_current_selected_acceptance": 5,
+    "original_silent_motion_renders_completed": 38,
+    "current_replacement_records_in_progress_are_not_acceptance": true,
+    "numerical_items_complete": 28
+  }
 }
