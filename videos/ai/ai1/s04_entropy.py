@@ -8,6 +8,40 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai1.common import ALPHA27, PART, area_slivers, letter, load, plain_axes, polyline
 
 
+def _bookmark_run_times(vo, mark, *nominal):
+    """Fit sequential plays before this utterance's cue, allowing frame rounding.
+
+    Impossible deadlines retain positive one-frame plays, not a synchronization
+    guarantee. The actual cue and current elapsed time determine every budget.
+    """
+    frame = 1 / config.frame_rate
+    floor = len(nominal) * frame
+    budget = vo.mark_time(mark) - vo.elapsed() - (len(nominal) + 1) * frame
+    scale = min(1.0, max(0.0, (budget - floor) / (sum(nominal) - floor)))
+    return tuple(frame + (duration - frame) * scale for duration in nominal)
+
+
+def _bookmark_ladder_step(scene, step, index, vo, mark):
+    """Budget only this ladder step's scroll, transform and emphasis plays."""
+    run_times = iter(_bookmark_run_times(vo, mark, 0.6, 1.2, 0.8))
+    original_play = scene.play
+    had_override = "play" in scene.__dict__
+    original_override = scene.__dict__.get("play")
+
+    def timed_play(*animations, **kwargs):
+        kwargs["run_time"] = next(run_times)
+        return original_play(*animations, **kwargs)
+
+    scene.play = timed_play
+    try:
+        return step(index)
+    finally:
+        if had_override:
+            scene.play = original_override
+        else:
+            del scene.play
+
+
 class Entropy(VoiceoverScene, ThreeDScene):
     def construct(self):
         self.card()
@@ -146,8 +180,9 @@ class Entropy(VoiceoverScene, ThreeDScene):
             f"{hbin(0.9):.2f} bits. <bookmark mark='c'/> Always heads: no entropy at all. Entropy is largest when the "
             "outcomes are equally likely."
         ) as vo:
-            self.play(Write(f), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl))
-            self.play(Create(curve))
+            coin_times = _bookmark_run_times(vo, "a", 2.0, 1.0)
+            self.play(Write(f), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl), run_time=coin_times[0])
+            self.play(Create(curve), run_time=coin_times[1])
             vo.wait_until("a")
             self.add(ins, dot)
             self.wait(0.5)
@@ -306,7 +341,7 @@ class Entropy(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(nlab), LaggedStart(*[FadeIn(c, scale=0.6) for c in cells], lag_ratio=0.1),
                       LaggedStart(*[FadeIn(b_) for b_ in blocks], lag_ratio=0.3), run_time=1.5)
             vo.wait_until("d")
-            step(4)
+            _bookmark_ladder_step(self, step, 4, vo, "e")
             vo.wait_until("e")
             step(5)
         with self.voiceover(

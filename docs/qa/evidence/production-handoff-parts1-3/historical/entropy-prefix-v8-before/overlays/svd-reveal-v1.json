@@ -1,0 +1,752 @@
+{
+  "schema_version": 1,
+  "overlay_id": "svd-reveal-v1",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "reviewed_patch_commit": "7c47c11e3802390141c9551ac376ebe4ddf31e0e",
+  "scope": "Only the reviewed SVD derivation reveal option; all other base-tree/source/cache/dependency gates remain strict. Optional exact reviewed evidence additions do not authorize any other change.",
+  "source_replacement": {
+    "before": {
+      "path": "videos/ai/ai3/s08_svd.py",
+      "bytes": 11730,
+      "sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+      "git_mode": "100644",
+      "git_blob": "43fd7a7d8a4b21754550c8a09dea3ed387ac3a4c"
+    },
+    "after": {
+      "path": "videos/ai/ai3/s08_svd.py",
+      "bytes": 11747,
+      "sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+      "git_mode": "100644",
+      "git_blob": "8fc5b9231d368849fd20ed6428e47f39139523f2"
+    }
+  },
+  "patch_identity": {
+    "path": "videos/ai/ai3/s08_svd.py",
+    "git_diff_sha256": "1ce005daf5b4e57e688497cd058aeb041e6888fa7a9b70df4f2c36373a47831f",
+    "git_diff_bytes": 512,
+    "reviewed_patch_parent": "9f00977556eaa975d8c87a45fc25899c147d1ede"
+  },
+  "optional_evidence_files": [
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/README.md",
+      "bytes": 1965,
+      "sha256": "e8426835267e15871777aa4e507d635194522ee9bfd75f4d4c0432950a2b3511",
+      "git_mode": "100644",
+      "git_blob": "ddad57ae9843a6ae3e246ed6512f785f7bdc6283"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/before-audit-comparison.png",
+      "bytes": 79013,
+      "sha256": "5f8abb1bf66b37def89e658efcc5d1f4573217648ac9a3a5b5b0e3d7b00d7156",
+      "git_mode": "100644",
+      "git_blob": "70cb1b7c56dd1efbff007dd4edbb76d941a16279"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/before-audit-report.md",
+      "bytes": 1748,
+      "sha256": "28315a59ff7f53353afe89932d798eefcd70f9ccf7c9b6fd15ce8fe3cc3a4c1c",
+      "git_mode": "100644",
+      "git_blob": "f1bfe01887590ec3eff0e2fe19409b212eb8272d"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-changed-001.png",
+      "bytes": 126637,
+      "sha256": "fcaca410d55922e1dacca6ea119e02e0493fd0d4f1bf2537909f5b5114155c33",
+      "git_mode": "100644",
+      "git_blob": "8aaa123470c2d7c9d9c1cf476fd3e4163cb21c29"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-changed-002.png",
+      "bytes": 134189,
+      "sha256": "0723320021f71d8003b066bf5c021b33500b08d5c5fe2e53b079c78f7c4f61e2",
+      "git_mode": "100644",
+      "git_blob": "cbb6e44aef59e01f2aa89afdaadaaa09a8ffa72b"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-changed-003.png",
+      "bytes": 151844,
+      "sha256": "398124aaba8fed72c09f371e0494a5c158ece2f42679ee37f8af82478c6528b0",
+      "git_mode": "100644",
+      "git_blob": "df116c96a39a375d585685c09fc283f1c95f998b"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-changed-004.png",
+      "bytes": 163462,
+      "sha256": "66cb98d0e11899da3271ff88836e2ef837bb2ca10cdc8079cc6eb17824f8abb5",
+      "git_mode": "100644",
+      "git_blob": "311f77edbd93dadd468f3298979685c0d7823962"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-changed-005.png",
+      "bytes": 171670,
+      "sha256": "9496c8f6c09792c812dd14660bdb1f0536f1a594263de5725753943f70167ef3",
+      "git_mode": "100644",
+      "git_blob": "b568405068df8d9217ef3bfa683c70b9ccbbd8da"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-changed-006.png",
+      "bytes": 199455,
+      "sha256": "333a565cd42066ced81f4c969a054711e40601ac2c969dddf5eac053ccc63517",
+      "git_mode": "100644",
+      "git_blob": "c1bea586b6fc5ee080c3a64b6e16953a00d2d9ca"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-changed-007.png",
+      "bytes": 216959,
+      "sha256": "c8b5d04ecd6a599746599ba87662d904943d7e5cdcf64115abf7f36c58b26e5f",
+      "git_mode": "100644",
+      "git_blob": "9d02c8faf0ac5bcdad244d22d1192824383f66a7"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-changed-008.png",
+      "bytes": 231711,
+      "sha256": "0606bd9750146d41ac41eee908793688fbfff55b60e2c2a11246ab20693db56a",
+      "git_mode": "100644",
+      "git_blob": "4497bfbfc293453e45a07664d5468cf4bbb3ad7d"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-changed-009.png",
+      "bytes": 246057,
+      "sha256": "d94b1254dc3c1ecee8039fc39f0a0554e3fa5dcdc721d8dccd4a140fcaf199b6",
+      "git_mode": "100644",
+      "git_blob": "1a90c6aa416235e703bded860a01b13bd9007b72"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-motion-record.json.gz",
+      "bytes": 6708,
+      "sha256": "feae4dfd96cc935f67946f856bbdc5d8f8ddd0ec56563bb88ed32578c305f43e",
+      "git_mode": "100644",
+      "git_blob": "3a1c49dd68f0cc86ec8edf9565bdb595aa0bf281"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-native-frame-00631.png",
+      "bytes": 37127,
+      "sha256": "5a0174dc49ee7df7c245c6ab063cdaa704b9a10ed553a6b2300ba6858db165f6",
+      "git_mode": "100644",
+      "git_blob": "1013b77ef139f9616d5563a6da631b21041190e1"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-native-frame-00711.png",
+      "bytes": 47385,
+      "sha256": "d21b81d6af6b211981dbb4b20f15ab7ad5236121543847c4701a80d7fca17522",
+      "git_mode": "100644",
+      "git_blob": "37c449cc97fa6e4c98e493a03c2105ae546293ed"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-native-frame-00838.png",
+      "bytes": 54767,
+      "sha256": "4fe63224175419d27410effa1a103b6138132469382f0a09fc6d135cefe7009f",
+      "git_mode": "100644",
+      "git_blob": "45a084c40498faf679af42984c326d3d781e039f"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-native-frame-00893.png",
+      "bytes": 68422,
+      "sha256": "73699a69ae0a2ae8e61e49f9e87bdd8676ef7b8b9ff6981b10727ef20ee3abbf",
+      "git_mode": "100644",
+      "git_blob": "8cced5a9976298c2f8de44fee521903238e5a110"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/after-review.json.gz",
+      "bytes": 52061,
+      "sha256": "75b93098a19f91599620232be86026e692df81b0baacd502a6b35d1de93f59f5",
+      "git_mode": "100644",
+      "git_blob": "ab6ef36361ae24ad85bf244b3f3b88a61e76721c"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-encoded-audit.json.gz",
+      "bytes": 17659,
+      "sha256": "7c1e3db56a4a1c588a2b336ec2802d9108e716ab6b433fca8b595f78384981e5",
+      "git_mode": "100644",
+      "git_blob": "b50626e210f434457e9f2186d3f98c27c01c74a4"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-motion-record.json.gz",
+      "bytes": 6711,
+      "sha256": "9d68c548d8d10cd2b0ed767b5ed8aa243fe5d819e72745c7f477f7af8b885857",
+      "git_mode": "100644",
+      "git_blob": "929aabc5ad1e1cc7e13ba7f87dbc7261b5da9f04"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-native-frame-00631.png",
+      "bytes": 37516,
+      "sha256": "96bddf527a92405fee9e47d87a54dffc9575ad2bcbabff0f541b345f54d6a1cf",
+      "git_mode": "100644",
+      "git_blob": "2a8862a2ec2de7281f1f6c168ac85574f46987fe"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-native-frame-00711.png",
+      "bytes": 44710,
+      "sha256": "cdd9576e9077a521cb985bfe46d686fc85d19ce634302416b05daac08cd9806e",
+      "git_mode": "100644",
+      "git_blob": "cba617c1d93bcaf55996bb9bdb21aa6c226b80ce"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-native-frame-00838.png",
+      "bytes": 51245,
+      "sha256": "7ec28d548d48fd9c00d81ac3b8f47dba27fbbaa8ca99d79e8b3854f0e131d41b",
+      "git_mode": "100644",
+      "git_blob": "452656a5663a2bc467af316bbcac4f47f9edf37d"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-native-frame-00893.png",
+      "bytes": 67742,
+      "sha256": "5ddedc9c6b669a80aae7acf6d2e47d1604fc446de10bc019be40e28193dba70e",
+      "git_mode": "100644",
+      "git_blob": "9d4e5ca4ea6ca53e14479dd27633ee0c9ab7e35d"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-001.png",
+      "bytes": 139127,
+      "sha256": "6cf5f368a269f6979fceb3233cc5ebf4ec36c71709b21ab8767a80fcc64484a0",
+      "git_mode": "100644",
+      "git_blob": "0797fb5841616af4d540149b4aa6001be01f5c09"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-002.png",
+      "bytes": 129747,
+      "sha256": "3d8c3cff680b6b0dc3d4d2e15339c75b96baff2cadf80aa0889a47b5a877db67",
+      "git_mode": "100644",
+      "git_blob": "f0cefc1afb1c26010cc32086a1ca497d0ac53544"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-003.png",
+      "bytes": 161863,
+      "sha256": "8019b5ddb8a0457849cecfc2b58f2e8188ea8f20465e42230e1723b4ff6b4435",
+      "git_mode": "100644",
+      "git_blob": "80a38fa71ccc08716b1c40a2eb208757294b1b05"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-004.png",
+      "bytes": 142516,
+      "sha256": "89403037233434f825036107bbf2a26830a94d80ecf0f41d0989facceddda889",
+      "git_mode": "100644",
+      "git_blob": "43aba0d953168cabc95f8289a0e0c1a1faf859cd"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-005.png",
+      "bytes": 158435,
+      "sha256": "ca60c53769205d2672f90554b455eecad1335b7570e79b2999c78638bc9b1179",
+      "git_mode": "100644",
+      "git_blob": "a539825f4568dbe71a84602f6a4a9ce91e84265c"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-006.png",
+      "bytes": 177997,
+      "sha256": "13eac7e2534131e05359bd4a036a82c4c14a41e248e3a8e86a32a27963321d92",
+      "git_mode": "100644",
+      "git_blob": "67ec2b2e0c71860b5575e9d4a1b6e860912f7ae6"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-007.png",
+      "bytes": 167802,
+      "sha256": "d09be31246910b65a9ed4cdcc0d3e66da5d56d78ef82104dde446daa9d587427",
+      "git_mode": "100644",
+      "git_blob": "9e58f448c4c5f741b19c7d201ff3fe8d3ced7245"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-008.png",
+      "bytes": 182671,
+      "sha256": "bcf8a2656ab9e1715211fe0ef4918ad62caed4010e9d01425102e72b3b90fccd",
+      "git_mode": "100644",
+      "git_blob": "c265793d3023c99a04c3ec6ad3014cc563156bc1"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-009.png",
+      "bytes": 169038,
+      "sha256": "98b8ee203e118f22b77b5db46f701a2917098aee4dad3ae3469201b6b5d18569",
+      "git_mode": "100644",
+      "git_blob": "0f8a2bb598240a15546bcf216fe7ed77362a8661"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-010.png",
+      "bytes": 204170,
+      "sha256": "a5ae97b945fc443f0919b871de107f1764185fd7da2a946c9d8aac6da62aa357",
+      "git_mode": "100644",
+      "git_blob": "ed340573551a251c652fb6fb6856096f1052eeee"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-011.png",
+      "bytes": 169287,
+      "sha256": "1bb3c7b9ae445a7175b1701e33e9c9639d4212666d596f1b80eed3025283b7c9",
+      "git_mode": "100644",
+      "git_blob": "1fda6a822f29a2a8ff94cdad239a86de0fd3d333"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-012.png",
+      "bytes": 208748,
+      "sha256": "e8d6834e97e63577bb3d262bf6412f2ddc84580021c75872d08951d6424bdd57",
+      "git_mode": "100644",
+      "git_blob": "2786928f95b4a1c3e4f39bee48ac67f8a116b1c9"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-013.png",
+      "bytes": 231185,
+      "sha256": "15ad578dfa3b01b0cb5e68645568719b04a3b2f3b786592497bf64da6256d178",
+      "git_mode": "100644",
+      "git_blob": "134e2d04a52a2accf5b86199a577d3a71576f2b6"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-014.png",
+      "bytes": 217383,
+      "sha256": "2ba9a172fe0956f62a8924ed2b8bd9de3f3d3b23b1f8d500e31a69f1c7041e5e",
+      "git_mode": "100644",
+      "git_blob": "67f4b1c46131b85e2e504e542c0df8db420a370b"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-015.png",
+      "bytes": 261537,
+      "sha256": "2b1238c666a28ab97e72f82eefa47b039bde5f3c9ab8e4cb8fb44b72a2e573ab",
+      "git_mode": "100644",
+      "git_blob": "1aab529fcf87bda8ba7454e3316b1e1365e6958f"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-016.png",
+      "bytes": 229852,
+      "sha256": "fbeb1ccb551c3fe6131958bbe047519b15086f25da9fd30ca54f039d3bffc4f7",
+      "git_mode": "100644",
+      "git_blob": "01e04fbc9311aca9693c2e9464dff7f72e771e34"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-017.png",
+      "bytes": 305160,
+      "sha256": "c9f34210ccc97c401fcc6d21f3fcf732ca96597e0a22cafd4057a996070748fb",
+      "git_mode": "100644",
+      "git_blob": "c3c60c3fd6a88343a9fe813ec1b5ead320b4a372"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-018.png",
+      "bytes": 279046,
+      "sha256": "9edd02c0e1b456f84ae721255abf1dfe9b78a070e6fb0388af6d6476cc90d683",
+      "git_mode": "100644",
+      "git_blob": "640792ef0b0a0509afa290e1581f6877e8e9c1cb"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/before-page-019.png",
+      "bytes": 259917,
+      "sha256": "be45b5abbcb04fb00ac8f24daa8ccd1fa357f87950f45fe797ec2cd9ed82c0d3",
+      "git_mode": "100644",
+      "git_blob": "5f2d43b190c17f4c5371c9501af1c7a5a5e1b126"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/endpoints-page-001.png",
+      "bytes": 206883,
+      "sha256": "aef11ea94eba8b6153a87861f75dc473566c125d78f34fa90985bff1ec529434",
+      "git_mode": "100644",
+      "git_blob": "236d2182853ea3c30c775e10cba91773ce5d4798"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/endpoints-page-002.png",
+      "bytes": 150366,
+      "sha256": "eba185f7a1a0ef246faa4ac6023b34bb88604ef1b0ea981460012786094885ae",
+      "git_mode": "100644",
+      "git_blob": "7321ceac283ab241b7299a02ba0fb81d91486113"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/endpoints-result.json.gz",
+      "bytes": 6949,
+      "sha256": "c3963da6e2c704b7a65744cbf9ab6e5a48c39238ecd2c3e2397e89ddcd70573f",
+      "git_mode": "100644",
+      "git_blob": "84d3c76439a53fa91e0ae8ac8cf3d205654cd240"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/endpoints-review.json.gz",
+      "bytes": 3536,
+      "sha256": "8fc6b8a65f5f39c89353e022fc82f6e8a17fbf7596432737634305d542b98545",
+      "git_mode": "100644",
+      "git_blob": "72b753e55eede6c92e2d5158ac6103dc39e3138a"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/en/prior-complete-selected-review.json.gz",
+      "bytes": 18753,
+      "sha256": "7c4f74cc2d15f542821ab871cd8e2561a376c7298c760e50ad06bb41e84279fb",
+      "git_mode": "100644",
+      "git_blob": "145a64926e84c33072649d4508b3358bf309ffb6"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/freeze.json",
+      "bytes": 817,
+      "sha256": "c5511309e10ba818f31eda441d589b883cff71329b75af59b2c56dd27351a6f1",
+      "git_mode": "100644",
+      "git_blob": "8e42d5c751e92a323d9b5278feb60e5a2c625680"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/manifest.json",
+      "bytes": 15404,
+      "sha256": "265f2b1f5cef9aed93f07f55275c88475c3c5ffdbf4a987b1f7d4a8ff162ca88",
+      "git_mode": "100644",
+      "git_blob": "267db373205ce786994335ec02d6b262a5513e81"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/prepare_after.py",
+      "bytes": 5016,
+      "sha256": "4bd7a6e10f5db518fe29a1e45726c39e52b16cc0125111c832d7957e64d408c6",
+      "git_mode": "100644",
+      "git_blob": "b1b428a37549b116493cc776033603a6f6991308"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/prepared.json",
+      "bytes": 2977,
+      "sha256": "693ff0184012934264d778c1bf06b07229fb1623bd2a8fe8417bd23f8e7cf01d",
+      "git_mode": "100644",
+      "git_blob": "fcca2f556465f03cf1c1e190651a56a2b9408a0f"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/report.json",
+      "bytes": 45143,
+      "sha256": "7610a69d2d905e61a5edff94d689b55ab9eaa0d901868a4a155ef009f6a2a6f8",
+      "git_mode": "100644",
+      "git_blob": "0dddc6e6b76c92f9b3e194ebde13b92427b08b53"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/s08_svd.after.py",
+      "bytes": 11747,
+      "sha256": "291bba0e7c180750274e2117114cc22382f3b9b81880db0a499791b4b2e3e322",
+      "git_mode": "100644",
+      "git_blob": "8fc5b9231d368849fd20ed6428e47f39139523f2"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/s08_svd.before.py",
+      "bytes": 11730,
+      "sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+      "git_mode": "100644",
+      "git_blob": "43fd7a7d8a4b21754550c8a09dea3ed387ac3a4c"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/shared-ladder.before.py",
+      "bytes": 30850,
+      "sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+      "git_mode": "100644",
+      "git_blob": "a7cae57be5d25578a5fb0766373bc2cfad539b9f"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/svd-local-reveal.patch",
+      "bytes": 512,
+      "sha256": "1ce005daf5b4e57e688497cd058aeb041e6888fa7a9b70df4f2c36373a47831f",
+      "git_mode": "100644",
+      "git_blob": "c29fa9ecb332383b7cca2050a96191ddc9fbd124"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/timed-before-after.png",
+      "bytes": 154940,
+      "sha256": "694d5027aa4dad0568531ccc872c2b4aa30272ca18b28e606ac4560ff35f8f86",
+      "git_mode": "100644",
+      "git_blob": "e157b43bffb4c19191128b653baf81a76d59c997"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-changed-001.png",
+      "bytes": 125165,
+      "sha256": "acaef046de96f257332eeefe687c016d03b9dea4c09367aafc83a2b1d53e075d",
+      "git_mode": "100644",
+      "git_blob": "428425b26fc647a0c2de6589c58019b0cb751218"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-changed-002.png",
+      "bytes": 132590,
+      "sha256": "f722d94f4169248004c29dd291cc4ffd399c7391701dcce2f93a8a69fc0eb53a",
+      "git_mode": "100644",
+      "git_blob": "9ce16434dba66fc33e67e512fd8669fc97718d05"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-changed-003.png",
+      "bytes": 147964,
+      "sha256": "b58954e35a90d1d41338d37c958b6b4c7ffb2ba832a23edd431fb927a27e7d5c",
+      "git_mode": "100644",
+      "git_blob": "f8c4e9fdac9d06a87727cbbcc4589bb982244799"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-changed-004.png",
+      "bytes": 159751,
+      "sha256": "7553d73e8b8eb6ea5ae8f6927e0d6e1e5de2069a54d31fe2a2c4aa39a86c925c",
+      "git_mode": "100644",
+      "git_blob": "f8702cf47978ccc67e25ae807e65c1292dd80ece"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-changed-005.png",
+      "bytes": 166917,
+      "sha256": "d8656b6104c57499b62a28243248e22db451786df20e8e3e01b4673e1b9b8c3b",
+      "git_mode": "100644",
+      "git_blob": "7cf33220f33763792d5fb593ef8d2e8f5bfeeace"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-changed-006.png",
+      "bytes": 193458,
+      "sha256": "f053a23a28a487021c177730cb37442d263bb7c5673c3445c3cdf8fbffe048fb",
+      "git_mode": "100644",
+      "git_blob": "c56eb3c6ed9a82cab47ac6e91b5f6387422dda90"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-changed-007.png",
+      "bytes": 210150,
+      "sha256": "f08763dcb8a630a0195f2b50df421e089397e90e5b1aa364c05d6ca2e8aa2766",
+      "git_mode": "100644",
+      "git_blob": "381946d513a2ef00c1659c0ae147648307e788a6"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-changed-008.png",
+      "bytes": 221719,
+      "sha256": "7b1d9614866cfce3c81f66397b0571f54b091ef19ae4958c661e5ea39ea40347",
+      "git_mode": "100644",
+      "git_blob": "826c6254b1fbf7769c612585ce886182f3d59e9c"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-changed-009.png",
+      "bytes": 235858,
+      "sha256": "559406951cd55bdd4f9151c7b67940114dffc197bbb20f7077ccb767d90e03a1",
+      "git_mode": "100644",
+      "git_blob": "eaf13fd815c583a901c9a9b8d2ef4b0d15bffd6f"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-motion-record.json.gz",
+      "bytes": 10919,
+      "sha256": "b70f22dc8cfe15fc2f5d1a4a3cf5f04006c57e0daced45c0fa5534d278293b3e",
+      "git_mode": "100644",
+      "git_blob": "43e8078d2991fdbbe88f38b74ad433691fc396d7"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-native-frame-00688.png",
+      "bytes": 36672,
+      "sha256": "a00c46c777b3667cff97c1834239c825d8ddabaa39e47aace5e4fcfc5b10dc82",
+      "git_mode": "100644",
+      "git_blob": "32441addb54a0aa4ae5323c41631e61011558f07"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-native-frame-00797.png",
+      "bytes": 45826,
+      "sha256": "146bb95ac2ed3a7cffa1822705dce9a5f45976a3ec477b11fb01a0fe6168516b",
+      "git_mode": "100644",
+      "git_blob": "c677ca73970700c83b044ecc36b1d4e12c6e062b"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-native-frame-00931.png",
+      "bytes": 53954,
+      "sha256": "f9bbb8e6976b9b8640ab85ec3bb200e3372dc36ead32ee58d45238c6d14bc9c3",
+      "git_mode": "100644",
+      "git_blob": "4a741cb371ee47b0b8362562c4de7398b209fac3"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-native-frame-00977.png",
+      "bytes": 65137,
+      "sha256": "89f955728bf2007f5a6b515d48ff2a52829ef4e79e2942b0c646714a32f9e81e",
+      "git_mode": "100644",
+      "git_blob": "fd51cf924660c83652b323433edd6ef2abe918de"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/after-review.json.gz",
+      "bytes": 54589,
+      "sha256": "21c01060ecf827d59357470bd3660475fb0fff6dc6534e33785da192e436341e",
+      "git_mode": "100644",
+      "git_blob": "9e9d589ec458ac30863fc0dc7686723c5689ccc6"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-encoded-audit.json.gz",
+      "bytes": 17746,
+      "sha256": "1d83be8a3b5f053736f119935a5e99562b681ff2b555627162d24e695fdf43d3",
+      "git_mode": "100644",
+      "git_blob": "e9eee277cd27fdb94dbe0d17d57eb21e351ca83c"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-motion-record.json.gz",
+      "bytes": 10919,
+      "sha256": "281f3910b1115bb3c514bafda4f8f837c21bad72e519d7c901b65dac31c9c092",
+      "git_mode": "100644",
+      "git_blob": "274b7f91a6920a54ff98876085ffe6f2b768fdda"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-native-frame-00688.png",
+      "bytes": 37297,
+      "sha256": "1d4f21e141932ea928458888d84abc8e5d7ee5f5d5fac1bb096aa681a13f355d",
+      "git_mode": "100644",
+      "git_blob": "83bb92a6273680b435eec9a0a2f83497325ce167"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-native-frame-00797.png",
+      "bytes": 43771,
+      "sha256": "673652777a4f912a7d2fa73fd7c96370f4e09ea56da14d5840ac5372c5035924",
+      "git_mode": "100644",
+      "git_blob": "d0d14a11d98d189a600965ca14d32aea7c34ca6d"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-native-frame-00931.png",
+      "bytes": 52019,
+      "sha256": "3d72d006f8c94e3f5628703030a830a5e336758fa52dd9817f7915f9f61940c6",
+      "git_mode": "100644",
+      "git_blob": "3debfccee36e28374fa4f387518a82483757d684"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-native-frame-00977.png",
+      "bytes": 65710,
+      "sha256": "7aa8827ded162f8a261fdebb96add7cd0bbf8de0edcdd614aa7714290b80e8ad",
+      "git_mode": "100644",
+      "git_blob": "2631d570c21d993b5205314f7d2ab0ba06266930"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-001.png",
+      "bytes": 137001,
+      "sha256": "82eabb4bff2632bf5e5136bd8fce24a39c21d2ee3649cc57a892920abc5f0407",
+      "git_mode": "100644",
+      "git_blob": "e5fe994e451a216df262ab4b661e069e397650f5"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-002.png",
+      "bytes": 128337,
+      "sha256": "49bda1737f69a1e2924d5db4ae36a5899ef8c8eac1ee4093f831ef4b9416a9c9",
+      "git_mode": "100644",
+      "git_blob": "19f9b7d05891a55b94c32ff80a2d5d27026dfee8"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-003.png",
+      "bytes": 160358,
+      "sha256": "00c9545f6cbcb2812c76ed38fe10d06cdaa13a19ae4e42da3c3a33874ffb6a43",
+      "git_mode": "100644",
+      "git_blob": "41791003ea93d47a06ba7be0539382270de26081"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-004.png",
+      "bytes": 139738,
+      "sha256": "9b249dd79039295729bfae4a98546b9f6933e5c1662853cc456acc59c17d2d34",
+      "git_mode": "100644",
+      "git_blob": "05905f10c9abd1a0387784238bc14b5d13b1d341"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-005.png",
+      "bytes": 152046,
+      "sha256": "f81396f1cf2bcfd3fe9e908041d45723cb7998fe02cf1930bf19036e54c3dea6",
+      "git_mode": "100644",
+      "git_blob": "c48e6015c8a058db9124b8fc3313741b03928c3f"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-006.png",
+      "bytes": 172304,
+      "sha256": "e2b6d6dd5158c0518af69f22b75ccc33beb19374bdbd830dfe72a0aabd953191",
+      "git_mode": "100644",
+      "git_blob": "65845ef923275134f49e8d624547975e17f9bb00"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-007.png",
+      "bytes": 162647,
+      "sha256": "e4a67091a223be6695a2122e27ef2263adac9b457648c7a994a7355c171e9a2c",
+      "git_mode": "100644",
+      "git_blob": "58cceec6166abece62d0b0660ace8d7dccb414df"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-008.png",
+      "bytes": 179411,
+      "sha256": "a50c9b251b37a6aa6cc2bb40f44afcc1d31b27776170c23a2a6cc18150313a70",
+      "git_mode": "100644",
+      "git_blob": "ecc7ad2c00b41f0bfd3cce1dd74c516454e36229"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-009.png",
+      "bytes": 162697,
+      "sha256": "d3883b134a3827e1c13672c73de3e2c64cd45505d06cb79ac8ab5800eddd19bb",
+      "git_mode": "100644",
+      "git_blob": "752a4b3f16c23223ef3032141f3176bd8745dcec"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-010.png",
+      "bytes": 198024,
+      "sha256": "08d5e054f503ab3c9fec704f38b1d432ff4591ed515e3917dfccb3fb14ffe854",
+      "git_mode": "100644",
+      "git_blob": "ea6123a09cc18884d7f2b7a9e6ee0bc604806f80"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-011.png",
+      "bytes": 163581,
+      "sha256": "989f938770fc1873309e682a925cf35805fea86e64fdc7c475856a5ad88c88b7",
+      "git_mode": "100644",
+      "git_blob": "5c2a95471ba61602e0cf2648ce464013096c5f75"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-012.png",
+      "bytes": 202867,
+      "sha256": "4ef648e2abb645f85e9a5f581c7d28251179d39acc39eae1d9ccec004ddf6c0f",
+      "git_mode": "100644",
+      "git_blob": "9d042eb09e2b3b2b409c121beac5bd2f29282277"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-013.png",
+      "bytes": 225057,
+      "sha256": "3d8ce8e3b8425ab1b0e0144b72a8161bf00209a7a7c128f69aea5504b8219034",
+      "git_mode": "100644",
+      "git_blob": "3592170a1d85019b7cd21f57fd9312803d4e23a9"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-014.png",
+      "bytes": 209537,
+      "sha256": "fd6ae8dc82314f47da587648f865524136001d07663156092c128d7fd15e4dfd",
+      "git_mode": "100644",
+      "git_blob": "18bc22214713da8e0d86bad6f59b236c7b661922"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-015.png",
+      "bytes": 243142,
+      "sha256": "a6adb274822951d193729712f325cd5d37398f60f63cb898208f82348a0b8f9e",
+      "git_mode": "100644",
+      "git_blob": "4b2ae2338bc1a39e818de4760546900ec030851b"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-016.png",
+      "bytes": 220467,
+      "sha256": "4db66cb2e6411c7ae40c541cd3a7789fe683133a743401952978caee79dadff8",
+      "git_mode": "100644",
+      "git_blob": "75c3603392bc69c51764ebe6ea86ff26bfe44abc"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-017.png",
+      "bytes": 293898,
+      "sha256": "137b755aacf7188379389e57adbbb74252bf4ff4c42fd5318af4da4816183056",
+      "git_mode": "100644",
+      "git_blob": "c91d849d4e119044bbdf82381d7e53a6cb18ab0a"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-018.png",
+      "bytes": 265929,
+      "sha256": "e810658f25d3e541d7cf1bedf45db081531dd5ff84b82d9462d24aaca1695b60",
+      "git_mode": "100644",
+      "git_blob": "355511f71891f9ef0b639a369554a2a52980b58f"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/before-page-019.png",
+      "bytes": 248192,
+      "sha256": "3a756223600c12d512769f9c8b8814dc4f00140a73f904aa6d6664bae64f3161",
+      "git_mode": "100644",
+      "git_blob": "cb1f0184830dab5eeb5eb22420f4a4fd58f659bc"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/endpoints-page-001.png",
+      "bytes": 209591,
+      "sha256": "cbcd5701cb8e26948999d5bf5190248ca2c85d5305f60315b7ee89738389242e",
+      "git_mode": "100644",
+      "git_blob": "b739bef6d607863e173d38c50d3e5d6b410261e6"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/endpoints-page-002.png",
+      "bytes": 147683,
+      "sha256": "f104bdd410b6390a00016c3b2c4ae5a64de7a0c2f91003b28e4e7ef5c10337ca",
+      "git_mode": "100644",
+      "git_blob": "9582779b6f2b72b12f42c2bcca1d431e2bfdf7b5"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/endpoints-result.json.gz",
+      "bytes": 10915,
+      "sha256": "81e53342d0da4fc63bc34fff0ac265ca8592fba7a4f9dc4e9432fba04dd7d60b",
+      "git_mode": "100644",
+      "git_blob": "a9383f2178aafd8ce652b780cf7ee874f815eb3e"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/endpoints-review.json.gz",
+      "bytes": 3731,
+      "sha256": "4e37eb408818e154fa2c5f80f061ff84d0edd991592ef03782bf5aacc9b98724",
+      "git_mode": "100644",
+      "git_blob": "91564d2c3bb73b58e407e4ddd356994aa8912242"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-reveal-motion-regression/zh/prior-complete-selected-review.json.gz",
+      "bytes": 34965,
+      "sha256": "a4321fb5504f541126f87b882ae905665e6c5b849a3409ac06127ae520cc5190",
+      "git_mode": "100644",
+      "git_blob": "b50061c4b2537e97bd05e982f2a609d8b7432402"
+    }
+  ]
+}

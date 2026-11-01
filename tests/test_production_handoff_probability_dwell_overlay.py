@@ -152,8 +152,32 @@ class NumericDwellReviewedManifestTests(unittest.TestCase):
     def test_full_verify_and_other_guard_bodies_unchanged(self):
         old=D/'historical/probability-numeric-dwell-v7-before/verify_handoff.py'
         def bodies(path):
-            return {n.name:ast.dump(n,include_attributes=False) for n in ast.parse(path.read_text()).body
-                    if isinstance(n,ast.FunctionDef) and n.name not in {'load_overlay','main'}}
+            nodes={n.name:n for n in ast.parse(path.read_text()).body
+                   if isinstance(n,ast.FunctionDef) and n.name not in {'load_overlay','main'}}
+            if path==D/'verify_handoff.py':
+                # V8 adds diagnostic labels only. Require exactly these pairs
+                # at the existing label lookup, then compare every guard AST.
+                fn=nodes['overlay_tree_checks']
+                labels=[n for n in ast.walk(fn) if isinstance(n,ast.Assign)
+                        and len(n.targets)==1 and isinstance(n.targets[0],ast.Name)
+                        and n.targets[0].id=='label']
+                self.assertEqual(len(labels),1)
+                value=labels[0].value
+                self.assertIsInstance(value,ast.Subscript)
+                self.assertIsInstance(value.value,ast.Dict)
+                self.assertEqual(ast.dump(value.slice,include_attributes=False),
+                                 ast.dump(ast.parse("after['path']",mode='eval').body,include_attributes=False))
+                mapping=value.value
+                additions=[(k,v) for k,v in zip(mapping.keys,mapping.values)
+                           if isinstance(k,ast.Name) and k.id in {'ENTROPY','PREFIX'}]
+                self.assertEqual([(k.id,ast.dump(v,include_attributes=False)) for k,v in additions],
+                                 [('ENTROPY',ast.dump(ast.Constant(value='Part1 Entropy'),include_attributes=False)),
+                                  ('PREFIX',ast.dump(ast.Constant(value='Part1 Prefix'),include_attributes=False))])
+                self.assertEqual(len(mapping.keys),7)
+                keep=[(k,v) for k,v in zip(mapping.keys,mapping.values)
+                      if not(isinstance(k,ast.Name) and k.id in {'ENTROPY','PREFIX'})]
+                mapping.keys=[k for k,v in keep];mapping.values=[v for k,v in keep]
+            return {name:ast.dump(n,include_attributes=False) for name,n in nodes.items()}
         self.assertEqual(bodies(old),bodies(D/'verify_handoff.py'))
 
 if __name__=='__main__':unittest.main()

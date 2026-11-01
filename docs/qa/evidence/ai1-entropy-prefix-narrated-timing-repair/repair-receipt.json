@@ -1,0 +1,199 @@
+{
+  "completed_utc": "2026-11-01T11:34:25.561481+00:00",
+  "state": "ROOT-REVIEWED SOURCE CLEARANCE; ACTUAL REPAIRED OUTPUT UNOBSERVED",
+  "source_changes": [
+    {
+      "scene": "Entropy",
+      "path": "videos/ai/ai1/s04_entropy.py",
+      "before_sha256": "8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c",
+      "before_bytes": 29406,
+      "after_sha256": "338c43429a0087d9cbba25e945bba2dfbad09fd40afeb2eef9f7ce68c62dcc49",
+      "after_bytes": 30806,
+      "diagnostic_sha256": "f25fa6d23e03bac6ac9d8dfe99bcffd23d0eee7d1e640bf0f53216b262394b9c",
+      "patch_raw_sha256": "1543ba35ae0787070cdb656f8b9dd0ee6592d2920d9518b1d4d141473bde3cf7"
+    },
+    {
+      "scene": "Prefix",
+      "path": "videos/ai/ai1/s05_prefix.py",
+      "before_sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+      "before_bytes": 23419,
+      "after_sha256": "4592ba3674a83dca35bf52455367b32dc1ee8a53df93e27e5676f50387a7e7e8",
+      "after_bytes": 24707,
+      "diagnostic_sha256": "cd2d5105756b7a202c936c459f35e1b15460817fa1edfd0339c778969eaa234c",
+      "patch_raw_sha256": "9c8846fc32c66f21bf8f9db7dba37bae112eb6d77160b3198ffac230ee1e504c"
+    }
+  ],
+  "new_test": {
+    "path": "tests/test_ai1_entropy_prefix_timing.py",
+    "bytes": 18630,
+    "sha256": "22ee58e639f43e2b1e084383161a3f3fc1332255985974f9361b7619f48062d3"
+  },
+  "focused_tests": {
+    "count": 7,
+    "elapsed_seconds": 3.158,
+    "outcome": "passed",
+    "raw_log_sha256": "39eb74c2b7d5d9f58307d6ab0a52c418a83ec5eca3b571478cb00d62fa5f803c"
+  },
+  "observed_original_late_seconds": [
+    0.96,
+    1.56,
+    0.11
+  ],
+  "phase_proof": {
+    "fps": [
+      15,
+      30,
+      60
+    ],
+    "adverse_arrival_phase_frames": [
+      0,
+      0.49,
+      1
+    ],
+    "original_and_current_rows": 54,
+    "current_affected_span_checks": 27,
+    "all_current_spans_finish_atleast_one_frame_before_cue": true,
+    "summary": [
+      {
+        "spec": [
+          "entropy",
+          "coin",
+          3,
+          null,
+          "a",
+          null
+        ],
+        "min_stage_requested_seconds": 0.6006201550387598,
+        "min_stage_quantized_seconds": 0.6666666666666665,
+        "minimum_cue_lead_seconds": 0.0318333333333336,
+        "minimum_settled_reading_residual_seconds": 2.580666666666666
+      },
+      {
+        "spec": [
+          "entropy",
+          "uniqueness",
+          6,
+          "d",
+          "e",
+          4
+        ],
+        "min_stage_requested_seconds": 0.17925925925925995,
+        "min_stage_quantized_seconds": 0.1999999999999993,
+        "minimum_cue_lead_seconds": 0.03999999999999915,
+        "minimum_settled_reading_residual_seconds": 2.150666666666673
+      },
+      {
+        "spec": [
+          "prefix",
+          "mcmillan",
+          6,
+          "d",
+          "e",
+          1
+        ],
+        "min_stage_requested_seconds": 0.5014814814814827,
+        "min_stage_quantized_seconds": 0.533333333333335,
+        "minimum_cue_lead_seconds": 0.04000000000000625,
+        "minimum_settled_reading_residual_seconds": 6.79666666666666
+      }
+    ],
+    "minimum_settled_reading_residual_seconds": 2.150666666666673,
+    "scope": "Actualwordalignment+realTracker+installedframeprogression/validation. ActualsharedladderstepAST executed withcontrolledclock/objectinterface; separate realMobjectprobe verifiesnominal3stagebranch. Notencodedframes/fullSceneexecution."
+  },
+  "short_motion_stages": {
+    "entropy_proof_requested_minima_seconds": [
+      0.17925925925925995,
+      0.3059259259259274,
+      0.22148148148148245
+    ],
+    "entropy_proof_quantized_clock_minima_seconds": [
+      0.1999999999999993,
+      0.33333333333333215,
+      0.2666666666666657
+    ],
+    "scope": "Scroll/transform/highlight respectcue whileformula persists. These are shortstages requiringactualproductionpacingreview, notanacceptedperceptualthreshold. Readingcriterion1.5s retainedseparately; minimumsource-clockresidual2.1507s."
+  },
+  "adapter_contract": {
+    "target_calls": [
+      "Entropy.uniqueness step4 d-to-e",
+      "Prefix.mcmillan step1 d-to-e"
+    ],
+    "original_stage_nominals_seconds": [
+      0.6,
+      1.2,
+      0.8
+    ],
+    "scene_play_restoration": "Classdescriptorownership preserved bydeletingtemporaryinstanceattribute; existinginstanceoverride restoredexactobject. Success+exception paths verified.",
+    "only_run_time_kwargs_change": true,
+    "physically_impossible_deadlines": "Positiveoneframefallback, explicitlytestedlate; notclaimedcue/readabilitysuccess.",
+    "validated_frame_rates_only": [
+      15,
+      30,
+      60
+    ],
+    "no_universal_all_fps_claim": true
+  },
+  "invariants": {
+    "all19voiceover_expression_ASTs_exact": true,
+    "entropy_voiceovers": 11,
+    "prefix_voiceovers": 8,
+    "entropy_bookmarks": 28,
+    "prefix_bookmarks": 19,
+    "all_non_timing_AST_exact": true,
+    "math_geometry_data_animationarguments_revealorder_exact": true,
+    "no_absolute_scene_time_budget_constants": true,
+    "provided_master_metadata_retained": true,
+    "shared_ladder_voiceover_Huffman_and_v7_protected_pins": [
+      {
+        "path": "videos/ai/ai1/s06_huffman.py",
+        "sha256": "a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a",
+        "bytes": 20144
+      },
+      {
+        "path": "explainer/analysis/__init__.py",
+        "sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+        "bytes": 30850
+      },
+      {
+        "path": "explainer/voiceover.py",
+        "sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+        "bytes": 10700
+      },
+      {
+        "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+        "sha256": "6362af754a9b42dd06a3c1b7f2665929f94ae35fc64f6ea19ca175affd0bcb25",
+        "bytes": 14654
+      }
+    ]
+  },
+  "constructor_probe": {
+    "coin_Write_default_seconds": 2,
+    "coin_Create_default_seconds": 1.0,
+    "both_real_MathTex_ladder_steps_stage_nominals": [
+      0.6,
+      1.2,
+      0.8
+    ],
+    "scope": "Actualvisualobjects/animationconstructors only; noScene/camera/render/interpolation/output."
+  },
+  "runtime_versions": {
+    "python": "3.12.14",
+    "manim": "0.22.0",
+    "numpy": "2.5.4"
+  },
+  "method_source_pins": {
+    "installed_scene_source_path": "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/manim/scene/scene.py",
+    "installed_scene_source_sha256": "0396056a0f59184e7e0f48488a9ab4a30fbad328c96813f3b3655025d4622305",
+    "shared_ladder_source_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+    "voiceover_tracker_source_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b"
+  },
+  "scope": "Timing-only ownedsource/newtest/evidence. No sharedhelper/strictv7/Huffman/data/model/master/voice/table changes, no synth/productionrender/decode/listening/jobs.",
+  "remaining_gates": [
+    "Exactstrictv8controlledsourceoverlaymustbindbothnewsourcehashes; existingv7excludesEntropy/Prefix.",
+    "Actualfreshnarratedfullscene/preflight mustcheckall28/19bookmarkrequests, includingunmodifiedspans notgloballyrescheduledhere.",
+    "Actualproductionmotion/frame timing/shortstagepacing andreadability; source-clockresidual isnotobservedpixelbrightness.",
+    "Actualspeechlisten/sync andproductionoutputacceptance. No wholemovie-duration equivalence claim."
+  ],
+  "free_bytes": 555151360,
+  "guard_minimum_bytes": 536870912
+}

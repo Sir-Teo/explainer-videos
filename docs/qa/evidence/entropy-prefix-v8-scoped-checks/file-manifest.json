@@ -1,0 +1,42 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 1880,
+    "sha256": "194116050e5a7563d9f7e1fb76bb26c39b7b329246c0ba0613949b8ed2393c0c"
+  },
+  {
+    "path": "prospective-index-check.json",
+    "bytes": 202,
+    "sha256": "fc1edcf909c9aeb5af54fcfb48afc8bd0effb42aecead8b08126bc2a806871c7"
+  },
+  {
+    "path": "receipt.json.gz",
+    "bytes": 452,
+    "sha256": "0d671ce52e967ae0ae6fff00095dd93c8891eaa42ef8a88f829330dfc48818c0"
+  },
+  {
+    "path": "runner.py.gz",
+    "bytes": 1470,
+    "sha256": "17208d0c5f0077a205572a199bd963898b4354a2c7422ef4cf09d11f1911a9f7"
+  },
+  {
+    "path": "source-after.json.gz",
+    "bytes": 4516,
+    "sha256": "e3d4f02f41650d13fb916014a4c8adb088d12aff85d438034dc478f37f597be3"
+  },
+  {
+    "path": "source-before.json.gz",
+    "bytes": 4516,
+    "sha256": "e3d4f02f41650d13fb916014a4c8adb088d12aff85d438034dc478f37f597be3"
+  },
+  {
+    "path": "storage-observations.json.gz",
+    "bytes": 288,
+    "sha256": "49513cf33d5d24f70ddf09e0cddb2c75cfa069d88999c5061b0198514d3d472e"
+  },
+  {
+    "path": "unittest.log.gz",
+    "bytes": 3408,
+    "sha256": "5cca240e0746517ec84099730a7e02f4a2baef99dcffa276f0e0bfe82ba8f6ca"
+  }
+]

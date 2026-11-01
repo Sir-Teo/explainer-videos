@@ -1,0 +1,8 @@
+{
+  "scope": "Fixture-only corrections, all failed logs retained. Ownedproduction source didnotchange duringthese corrections.",
+  "corrections": [
+    "First clock usedSimpleNamespace forManimconfig butinstalledframeprogression also needsdict indexing; correctedfixture adapter.",
+    "Second event comparison neededNumPyshiftarrays normalizedtolists; correctedserialization, notactualanimationarguments.",
+    "Privatephase-reportwriter hadinvaliddictkeyword syntax; fixedbeforeanyreportwritten. InitialSyntaxError log retained inruntime, no productionexecution."
+  ]
+}

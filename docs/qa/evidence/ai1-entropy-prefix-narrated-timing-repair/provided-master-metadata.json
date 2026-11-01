@@ -1,0 +1,193 @@
+[
+  {
+    "scene": "Entropy",
+    "diagnostic_bytes": 85346,
+    "diagnostic_sha256": "f25fa6d23e03bac6ac9d8dfe99bcffd23d0eee7d1e640bf0f53216b262394b9c",
+    "source_before_sha256": "8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c",
+    "provided_speech_master_metadata": {
+      "library_file_id": "libfile_916e87e36f148191bd963bf51d8fab80",
+      "version": 0,
+      "bytes": 17503353,
+      "sha256": "c69969bbfa9cb0de00277c6d5f15ce9b4dbf188283d25be1203c126e0f62eaf2",
+      "native_speech_seconds": 213.56,
+      "utterances": 11,
+      "actual_source_at_synthesis": "v4; unchangedsource and40selectedmasterbyteequalproof to currentv5"
+    },
+    "utterances": [
+      {
+        "key": "f4c0107bb62d6a84",
+        "raw": "Chapter three. Entropy.",
+        "spoken": "Chapter three. Entropy.",
+        "duration": 2.34
+      },
+      {
+        "key": "499b5214da2e8718",
+        "raw": "Surprise is about one event. Before it happens, we can ask: on average, how surprised should we expect to be? <bookmark mark='a'/> Weight each surprise by how often it happens, and add up. That average is the entropy, H of p.",
+        "spoken": "Surprise is about one event. Before it happens, we can ask: on average, how surprised should we expect to be? Weight each surprise by how often it happens, and add up. That average is the entropy, H of p.",
+        "duration": 12.82
+      },
+      {
+        "key": "bc47cdfc77772ce2",
+        "raw": "There's a nice picture of it. Take the unit bar from chapter one, <bookmark mark='a'/> a sliver per symbol, as wide as its probability, common to rare. <bookmark mark='b'/> Raise each sliver to the height of its surprise: common symbols wide and low, rare ones thin and tall. <bookmark mark='c'/> The entropy is the total area: for English letters, 4.08 bits.",
+        "spoken": "There's a nice picture of it. Take the unit bar from chapter one, a sliver per symbol, as wide as its probability, common to rare. Raise each sliver to the height of its surprise: common symbols wide and low, rare ones thin and tall. The entropy is the total area: for English letters, 4.08 bits.",
+        "duration": 20.03
+      },
+      {
+        "key": "556c4b8856a88c19",
+        "raw": "The simplest case is a coin. <bookmark mark='a'/> Fair, it has one bit of entropy. <bookmark mark='b'/> Bias it, and it gets easier to guess: heads ninety percent of the time, 0.47 bits. <bookmark mark='c'/> Always heads: no entropy at all. Entropy is largest when the outcomes are equally likely.",
+        "spoken": "The simplest case is a coin. Fair, it has one bit of entropy. Bias it, and it gets easier to guess: heads ninety percent of the time, 0.47 bits. Always heads: no entropy at all. Entropy is largest when the outcomes are equally likely.",
+        "duration": 16.82
+      },
+      {
+        "key": "6f74c9d513806596",
+        "raw": "We built entropy out of surprise; Shannon went the other way. In 1948 he asked what any measure of uncertainty should satisfy. <bookmark mark='a'/> It should change continuously with the probabilities. <bookmark mark='b'/> With n equally likely outcomes, more outcomes, more uncertainty. <bookmark mark='c'/> And a choice broken into two successive choices should cost the first choice, plus the second, weighted by how often you face it. <bookmark mark='d'/> His example: a half, a third, a sixth is a fair coin, then, half the time, two thirds against one third.",
+        "spoken": "We built entropy out of surprise; Shannon went the other way. In 1948 he asked what any measure of uncertainty should satisfy. It should change continuously with the probabilities. With n equally likely outcomes, more outcomes, more uncertainty. And a choice broken into two successive choices should cost the first choice, plus the second, weighted by how often you face it. His example: a half, a third, a sixth is a fair coin, then, half the time, two thirds against one third.",
+        "duration": 29.31
+      },
+      {
+        "key": "d12bd817a7f259a2",
+        "raw": "Our letters work the same way. <bookmark mark='a'/> First choose space, vowel or consonant: 1.48 bits. Then choose which one: 2.20 bits among the vowels, 3.85 among the consonants. <bookmark mark='b'/> Weighted and added, that's 4.08 bits: the entropy of the letters, exactly.",
+        "spoken": "Our letters work the same way. First choose space, vowel or consonant: 1.48 bits. Then choose which one: 2.20 bits among the vowels, 3.85 among the consonants. Weighted and added, that's 4.08 bits: the entropy of the letters, exactly.",
+        "duration": 18.47
+      },
+      {
+        "key": "0db9e28fe954335d",
+        "raw": "And he proved nothing else meets them. Call A of n the uncertainty of n equal choices. <bookmark mark='a'/> Choosing among s to the m equal outcomes is m choices among s in a row, so by the third requirement, A of s to the m is m times A of s. <bookmark mark='b'/> Squeeze any number between powers of another, and the second forces A of n to be a constant times log n. <bookmark mark='c'/> Now take probabilities that are fractions, n i over N: choose one of N equal outcomes in two steps, the block, then the outcome inside it. <bookmark mark='d'/> Solve for H, <bookmark mark='e'/> and out comes minus K, sum of p log p; continuity covers the rest.",
+        "spoken": "And he proved nothing else meets them. Call A of n the uncertainty of n equal choices. Choosing among s to the m equal outcomes is m choices among s in a row, so by the third requirement, A of s to the m is m times A of s. Squeeze any number between powers of another, and the second forces A of n to be a constant times log n. Now take probabilities that are fractions, n i over N: choose one of N equal outcomes in two steps, the block, then the outcome inside it. Solve for H, and out comes minus K, sum of p log p; continuity covers the rest.",
+        "duration": 36.89
+      },
+      {
+        "key": "d82b01ec9881cfc3",
+        "raw": "Up to a unit, entropy is the only consistent measure of uncertainty. That's why every part of this series measures information this way.",
+        "spoken": "Up to a unit, entropy is the only consistent measure of uncertainty. That's why every part of this series measures information this way.",
+        "duration": 8.09
+      },
+      {
+        "key": "cf089c0ea4cee33d",
+        "raw": "In general, with K outcomes, the entropy is at most log two of K. <bookmark mark='a'/> The proof is one inequality. The log bends downward, so the average of logs is at most the log of the average: Jensen's inequality. <bookmark mark='b'/> Entropy is an average of logs. <bookmark mark='c'/> Swap in the log of the average, <bookmark mark='d'/> and the average of one over p is just the number of outcomes. <bookmark mark='e'/> So H is at most log K, with equality only when every outcome is equally likely. The gap measures structure a guesser can exploit. Shannon's redundancy is that gap divided by log two of K.",
+        "spoken": "In general, with K outcomes, the entropy is at most log two of K. The proof is one inequality. The log bends downward, so the average of logs is at most the log of the average: Jensen's inequality. Entropy is an average of logs. Swap in the log of the average, and the average of one over p is just the number of outcomes. So H is at most log K, with equality only when every outcome is equally likely. The gap measures structure a guesser can exploit. Shannon's redundancy is that gap divided by log two of K.",
+        "duration": 32.7
+      },
+      {
+        "key": "5294d055708c0c2d",
+        "raw": "Entropy also works when we know something. Each previous letter gives the next one its own distribution, and entropy. <bookmark mark='a'/> Draw a column for each previous letter, as wide as that letter is common, as tall as the entropy of what follows. <bookmark mark='b'/> After q, almost nothing: 0.02 bits. <bookmark mark='c'/> After a space, a new word begins: 4.11 bits.",
+        "spoken": "Entropy also works when we know something. Each previous letter gives the next one its own distribution, and entropy. Draw a column for each previous letter, as wide as that letter is common, as tall as the entropy of what follows. After q, almost nothing: 0.02 bits. After a space, a new word begins: 4.11 bits.",
+        "duration": 22.46
+      },
+      {
+        "key": "8866aa01189d650d",
+        "raw": "The total area is the conditional entropy: 3.33 bits given the previous letter, <bookmark mark='a'/> down from 4.08 with no context. <bookmark mark='b'/> On average, knowing more never makes you more uncertain; chapter seven proves it.",
+        "spoken": "The total area is the conditional entropy: 3.33 bits given the previous letter, down from 4.08 with no context. On average, knowing more never makes you more uncertain; chapter seven proves it.",
+        "duration": 13.63
+      }
+    ],
+    "scope": "Provided exactdiagnostic master metadata/keys/text/durations preserved. Prefixcontains8individualfloatWAVhashrecords; Entropycontains11utterances andone17.5MBbundle identity. No independentlocalread/listening of remoteWAVs/bundle is claimed."
+  },
+  {
+    "scene": "Prefix",
+    "diagnostic_bytes": 117579,
+    "diagnostic_sha256": "cd2d5105756b7a202c936c459f35e1b15460817fa1edfd0339c778969eaa234c",
+    "source_before_sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+    "provided_speech_master_metadata": [
+      {
+        "key": "25bc1e6a9f51809b",
+        "path": "/workspace/cloud-production/jobs/c97a9b9401b12fc99b5242252c0d3d9bef41311b5d7d93573998b175569fb51b/audio-masters/en/25bc1e6a9f51809b.float.wav",
+        "bytes": 488720,
+        "sha256": "fc80723bd7c2d863890d000835f7dae51a4c0bba897857e18b6875afb37557d7"
+      },
+      {
+        "key": "beb272d237dee986",
+        "path": "/workspace/cloud-production/jobs/c97a9b9401b12fc99b5242252c0d3d9bef41311b5d7d93573998b175569fb51b/audio-masters/en/beb272d237dee986.float.wav",
+        "bytes": 1887440,
+        "sha256": "8a21b44440d25795b954fd140d321948dee351de88ef56e55605a2a835abfb13"
+      },
+      {
+        "key": "f2b04dae9d221851",
+        "path": "/workspace/cloud-production/jobs/c97a9b9401b12fc99b5242252c0d3d9bef41311b5d7d93573998b175569fb51b/audio-masters/en/f2b04dae9d221851.float.wav",
+        "bytes": 2424080,
+        "sha256": "63231a39c054e968fd0dc62fd17e9f87353e3d5eb563973f3208bbc2baeebdf3"
+      },
+      {
+        "key": "86a8352c7e3815ea",
+        "path": "/workspace/cloud-production/jobs/c97a9b9401b12fc99b5242252c0d3d9bef41311b5d7d93573998b175569fb51b/audio-masters/en/86a8352c7e3815ea.float.wav",
+        "bytes": 1189520,
+        "sha256": "099dffe6f458b46652cecea65727f19d16191a1e99107085fb158b546834488f"
+      },
+      {
+        "key": "e85625342a04bd04",
+        "path": "/workspace/cloud-production/jobs/c97a9b9401b12fc99b5242252c0d3d9bef41311b5d7d93573998b175569fb51b/audio-masters/en/e85625342a04bd04.float.wav",
+        "bytes": 3387920,
+        "sha256": "970201a7282e4c9a6741cca03f51f6273dbf6f0328d8f26eb6fc57d3585a7ce9"
+      },
+      {
+        "key": "a422c7d89ba90164",
+        "path": "/workspace/cloud-production/jobs/c97a9b9401b12fc99b5242252c0d3d9bef41311b5d7d93573998b175569fb51b/audio-masters/en/a422c7d89ba90164.float.wav",
+        "bytes": 2306960,
+        "sha256": "90980f9e0728135ae0a0aff7d2a5501ea8767c206ef41d9d27fefb0fc6ebd9e3"
+      },
+      {
+        "key": "13bf1fe73fd7a76f",
+        "path": "/workspace/cloud-production/jobs/c97a9b9401b12fc99b5242252c0d3d9bef41311b5d7d93573998b175569fb51b/audio-masters/en/13bf1fe73fd7a76f.float.wav",
+        "bytes": 4110800,
+        "sha256": "74970131ef17a8c74e3b4d1717883d26f050aefaf74eb38406590b7f03df568c"
+      },
+      {
+        "key": "c7e40f65d753cc2d",
+        "path": "/workspace/cloud-production/jobs/c97a9b9401b12fc99b5242252c0d3d9bef41311b5d7d93573998b175569fb51b/audio-masters/en/c7e40f65d753cc2d.float.wav",
+        "bytes": 1997840,
+        "sha256": "da658b88b5bb67d3417753f0322a116e1fcddf2821597ce217255ce51176ad14"
+      }
+    ],
+    "utterances": [
+      {
+        "key": "25bc1e6a9f51809b",
+        "raw": "Chapter four. Surprise is measured in bits. So let's spend some bits.",
+        "spoken": "Chapter four. Surprise is measured in bits. So let's spend some bits.",
+        "duration": 5.09
+      },
+      {
+        "key": "beb272d237dee986",
+        "raw": "The simplest way to send letters as bits is a fixed-length code. Two to the five is thirty-two, enough for twenty-seven symbols, <bookmark mark='a'/> so each gets a five-bit number. <bookmark mark='b'/> The falcon, 10 symbols, costs 50 bits. <bookmark mark='c'/> But that's wasteful: e is 192 times more common than z, and both cost five bits.",
+        "spoken": "The simplest way to send letters as bits is a fixed-length code. Two to the five is thirty-two, enough for twenty-seven symbols, so each gets a five-bit number. The falcon, 10 symbols, costs 50 bits. But that's wasteful: e is 192 times more common than z, and both cost five bits.",
+        "duration": 19.66
+      },
+      {
+        "key": "f2b04dae9d221851",
+        "raw": "So give common symbols short codewords, as Morse code gives e a single dot. But careful. <bookmark mark='a'/> If e is zero, t is one, and a is zero one, then zero one could be e, t, or a. <bookmark mark='b'/> The fix is a prefix-free code: no codeword starts another. <bookmark mark='c'/> Then the codewords are the leaves of a binary tree: zero goes left, one goes right, and to decode, you walk down from the top to a leaf.",
+        "spoken": "So give common symbols short codewords, as Morse code gives e a single dot. But careful. If e is zero, t is one, and a is zero one, then zero one could be e, t, or a. The fix is a prefix-free code: no codeword starts another. Then the codewords are the leaves of a binary tree: zero goes left, one goes right, and to decode, you walk down from the top to a leaf.",
+        "duration": 25.25
+      },
+      {
+        "key": "86a8352c7e3815ea",
+        "raw": "Watch it decode. Right, right, left: c. Back to the top. Left: a. Right, left: b. Right five times: f. No separators needed.",
+        "spoken": "Watch it decode. Right, right, left: c. Back to the top. Left: a. Right, left: b. Right five times: f. No separators needed.",
+        "duration": 12.39
+      },
+      {
+        "key": "e85625342a04bd04",
+        "raw": "Prefix-free codes obey a budget, and the tree shows why. <bookmark mark='a'/> Grow the tree down to the longest codeword: 5 levels, 32 leaves at the bottom. <bookmark mark='b'/> A codeword of length l sits l levels down, and everything below it is off limits, so it uses up two to the l max minus l of the bottom leaves. <bookmark mark='c'/> No codeword starts another, so these shares never overlap: together, at most 32. <bookmark mark='d'/> Divide by two to the l max: two to the minus length, summed over the codewords, is at most one. That's Kraft's inequality, from Leon Kraft's 1949 master's thesis.",
+        "spoken": "Prefix-free codes obey a budget, and the tree shows why. Grow the tree down to the longest codeword: 5 levels, 32 leaves at the bottom. A codeword of length l sits l levels down, and everything below it is off limits, so it uses up two to the l max minus l of the bottom leaves. No codeword starts another, so these shares never overlap: together, at most 32. Divide by two to the l max: two to the minus length, summed over the codewords, is at most one. That's Kraft's inequality, from Leon Kraft's 1949 master's thesis.",
+        "duration": 35.29
+      },
+      {
+        "key": "a422c7d89ba90164",
+        "raw": "The budget is also enough. <bookmark mark='a'/> Hand me any lengths whose powers of a half add up to at most one, and a prefix code with those lengths exists: give out codewords shortest first, each at the leftmost free node of its depth. <bookmark mark='b'/> For example, round each letter's surprise up to whole bits. The powers of a half add up to 0.70, so here is a prefix code with those lengths. We'll meet it again next chapter.",
+        "spoken": "The budget is also enough. Hand me any lengths whose powers of a half add up to at most one, and a prefix code with those lengths exists: give out codewords shortest first, each at the leftmost free node of its depth. For example, round each letter's surprise up to whole bits. The powers of a half add up to 0.70, so here is a prefix code with those lengths. We'll meet it again next chapter.",
+        "duration": 24.03
+      },
+      {
+        "key": "13bf1fe73fd7a76f",
+        "raw": "Could a code that isn't prefix-free do better? <bookmark mark='a'/> This one isn't: zero starts zero one. Yet it decodes, because every codeword begins with a zero, and a zero always means a new codeword. Its sum is 15 over 16. <bookmark mark='b'/> This one, with sum 5 over 4, can't be decoded: zero one is a b, or c. <bookmark mark='c'/> In 1956 Brockway McMillan showed the budget binds every decodable code. Raise the sum to a power k and multiply out: each term is a message of k codewords. <bookmark mark='d'/> Group the messages by their length in bits. <bookmark mark='e'/> If the code decodes, different messages never give the same bits, so at most two to the m are m bits long, and the sum is at most k times the longest length.",
+        "spoken": "Could a code that isn't prefix-free do better? This one isn't: zero starts zero one. Yet it decodes, because every codeword begins with a zero, and a zero always means a new codeword. Its sum is 15 over 16. This one, with sum 5 over 4, can't be decoded: zero one is a b, or c. In 1956 Brockway McMillan showed the budget binds every decodable code. Raise the sum to a power k and multiply out: each term is a message of k codewords. Group the messages by their length in bits. If the code decodes, different messages never give the same bits, so at most two to the m are m bits long, and the sum is at most k times the longest length.",
+        "duration": 42.82
+      },
+      {
+        "key": "c7e40f65d753cc2d",
+        "raw": "A sum above one, raised to the k, grows exponentially; k times a constant grows in a straight line. <bookmark mark='a'/> For the bad code, five fourths to the k overtakes two k at k equals 16: the bound breaks, so it can't be decodable. <bookmark mark='b'/> So prefix codes lose nothing: any lengths a decodable code can have, a prefix code can have too.",
+        "spoken": "A sum above one, raised to the k, grows exponentially; k times a constant grows in a straight line. For the bad code, five fourths to the k overtakes two k at k equals 16: the bound breaks, so it can't be decodable. So prefix codes lose nothing: any lengths a decodable code can have, a prefix code can have too.",
+        "duration": 20.81
+      }
+    ],
+    "scope": "Provided exactdiagnostic master metadata/keys/text/durations preserved. Prefixcontains8individualfloatWAVhashrecords; Entropycontains11utterances andone17.5MBbundle identity. No independentlocalread/listening of remoteWAVs/bundle is claimed."
+  }
+]

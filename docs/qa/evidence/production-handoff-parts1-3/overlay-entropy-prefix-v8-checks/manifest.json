@@ -1,0 +1,90 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2400,
+      "sha256": "b803e1042bd236861aacc719f2f4a1e89fb25c26305baa834c70c86d9f5ce584"
+    },
+    {
+      "path": "actual-checks-progress.json.gz",
+      "bytes": 3130,
+      "sha256": "771beff0253bce9d8933902508e9ed58e1473c1a3aa3182ef5a9cc93f528170a"
+    },
+    {
+      "path": "actual-checks-receipt.json.gz",
+      "bytes": 35433,
+      "sha256": "72f4dbfbfe24a942f600f678e333267bb9140662d7442228bd63828b626208bd"
+    },
+    {
+      "path": "actual-preparation.json.gz",
+      "bytes": 15358,
+      "sha256": "93abeceb0b61cf9865e512c7fe342b9d11d2531ed85e5117a3b375c98a7adf1e"
+    },
+    {
+      "path": "actual-run.log.gz",
+      "bytes": 407,
+      "sha256": "00cc4fa909e417af2fd135ed71570ce3275301f7ae886b94c23fc3c31eb01f31"
+    },
+    {
+      "path": "focused-tests.log.gz",
+      "bytes": 2466,
+      "sha256": "3382926c8fcd44e5ed6eab5061a86c74147899b1f321da3876a15cb297be3355"
+    },
+    {
+      "path": "helper-dispatch.patch.gz",
+      "bytes": 1676,
+      "sha256": "831dd0b4c1c7990fb9ae343c18e7d43e209e4129f4eea0fad4e27c6e38343a96"
+    },
+    {
+      "path": "old-v7-git-before.json.gz",
+      "bytes": 2692,
+      "sha256": "0ddbd1349d5ea410f82ac5081a71b1a99bc7a5d27defe6287018c7547899cced"
+    },
+    {
+      "path": "old-v7-links-final.json.gz",
+      "bytes": 3239,
+      "sha256": "1c6eb5210085209113d775c7651193098f66a7c7f7ab85998c0da8c50af8ce5f"
+    },
+    {
+      "path": "precise-v7-diagnostic-normalizer.patch.gz",
+      "bytes": 876,
+      "sha256": "9704b5df4e4066e56da5dd5751d6ee7403b1e7c6ee3008f4fda41b2d2a5260ab"
+    },
+    {
+      "path": "private-policy-check.json.gz",
+      "bytes": 325,
+      "sha256": "9eb47dd4d5c6d6155da77f9d8a2f4e87c133593d9a703608e9224199256af935"
+    },
+    {
+      "path": "registration.json.gz",
+      "bytes": 438,
+      "sha256": "9a886c0c966f79408c8c8347834a73761f0ea187915cd1617d7492a195dc75d3"
+    },
+    {
+      "path": "scripts/prepare_actual.py.gz",
+      "bytes": 1448,
+      "sha256": "7f402c4a270ee3746991039d8b1829f07a69784e36f723dcd041cdc41cfd2c51"
+    },
+    {
+      "path": "scripts/prepare_policy.py.gz",
+      "bytes": 1451,
+      "sha256": "15de5b7fc4ed619646b3721fbb920fb34c63c1730dde6e2495ef21e85cc2064b"
+    },
+    {
+      "path": "scripts/register.py.gz",
+      "bytes": 3780,
+      "sha256": "8d6b92938b125edba268b73e070b2d10c4f95db47d55548a06940f91bc6142cb"
+    },
+    {
+      "path": "scripts/run_actual.py.gz",
+      "bytes": 3425,
+      "sha256": "ebf6ccc1e7a84d9a0883ac0049aaee16c9e0aadf0272def60ee50b3688dea6b6"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 5776,
+      "sha256": "d4a26dd93c470c0c772d90dc94162ca562cfa038057c7e61777d0c7004e13ae9"
+    }
+  ],
+  "bytes": 84320
+}

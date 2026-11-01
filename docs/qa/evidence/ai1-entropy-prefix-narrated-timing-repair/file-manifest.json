@@ -1,0 +1,102 @@
+{
+  "payload_files": 24,
+  "payload_bytes": 119360,
+  "files": {
+    "README.md": {
+      "bytes": 2678,
+      "sha256": "4c86bfcfcb3d597ee29f505c01977110f62a9e96254e4f8496279535f1297cd6"
+    },
+    "actual-constructor-and-ladder-proof.json.gz": {
+      "bytes": 929,
+      "sha256": "ba085fd4690e1f9c32b4a6e1bd96f16dd5e720d66768eb398953d9b0ae1dd1ea"
+    },
+    "actual-constructor-probe.log.gz": {
+      "bytes": 2106,
+      "sha256": "07193ff316bbd840e087102b8be37857c07a22aec308634c1f555d1a01195b7e"
+    },
+    "codec-map.json": {
+      "bytes": 6749,
+      "sha256": "8223962805ef590731f1dd688b4a2401c34e3fb6ced86aa5af3a8177c107ac35"
+    },
+    "entropy-exact-diagnostic.json.gz": {
+      "bytes": 10801,
+      "sha256": "613012e5fda799cb351d5cc8887763b9b5a9312a4b87b009bcd24bb48fac63f0"
+    },
+    "entropy-source-after.py.gz": {
+      "bytes": 9080,
+      "sha256": "b233736ff0fc760e5c8095c9d98f82d99ea8a51df5a534462e9faf74ec3c1b93"
+    },
+    "entropy-source-before.py.gz": {
+      "bytes": 8517,
+      "sha256": "c0558f0d10f0ffc35ff53541eeea2afbc9a8a120c547608196841354a01451b8"
+    },
+    "entropy-source.patch.gz": {
+      "bytes": 1135,
+      "sha256": "860512a14ff86b971c22e574d943438a59bf5e77ed7dc4c893f23c4d8ea48385"
+    },
+    "fixture-corrections.json": {
+      "bytes": 572,
+      "sha256": "0dec5fc5a7fbf0a8726565d20b18b7915b77e14e5381110f7a75d3874e695245"
+    },
+    "focused-tests-final.log.gz": {
+      "bytes": 407,
+      "sha256": "ab8790f49437474d0b571e086675d85dfb48e0695051c5b19fd437b39cef3737"
+    },
+    "focused-tests-first.log.gz": {
+      "bytes": 1846,
+      "sha256": "4aead55766d914b75ca2c4db00245625f49240ceae8e73678eb14e98fb0d88a5"
+    },
+    "focused-tests-second.log.gz": {
+      "bytes": 1018,
+      "sha256": "2ae6d1d3092e0848662c81edafb6805b979e631c6ae603a467db7d742cccdb77"
+    },
+    "phase-proof-final.log.gz": {
+      "bytes": 330,
+      "sha256": "69052998567548a2de05ee1dd5e983938a65c0f236cb17b329fa830a805eeec6"
+    },
+    "phase-proof.json.gz": {
+      "bytes": 5151,
+      "sha256": "97f4910925f0a8533404749c0ba72d5460c69f6e959666983ed78e8afec2c3a6"
+    },
+    "prefix-exact-diagnostic.json.gz": {
+      "bytes": 16461,
+      "sha256": "e4ac31ea2ac6ab1497b4a652dc652cb63fe7f115a3c4ac99678b55aff3671d54"
+    },
+    "prefix-source-after.py.gz": {
+      "bytes": 7516,
+      "sha256": "59e089288d447f48667c54b4c759d72a4887e3521edccaf1517810e5c34a505f"
+    },
+    "prefix-source-before.py.gz": {
+      "bytes": 6985,
+      "sha256": "f2ca9409d0d00b5d84acb0ea2eeae1fe74b861aa6a9a2e2cd96642719138f53e"
+    },
+    "prefix-source.patch.gz": {
+      "bytes": 868,
+      "sha256": "3e7873dd6b1d3a9c1665c3199a156541cb985d848e1b56111f4a26fac294c48a"
+    },
+    "provided-master-metadata.json": {
+      "bytes": 19099,
+      "sha256": "f023182ee0ace4f9928d939b25ff1b2385a5b5351cb02900571c9c44c737e676"
+    },
+    "real_mobject_probe.py.gz": {
+      "bytes": 1525,
+      "sha256": "99f6b99beb704d1e99cbe9196cb1a8295a8d2d63d759e6d9a79bdfcc7ee4b778"
+    },
+    "repair-receipt.json": {
+      "bytes": 7446,
+      "sha256": "c6624efd735a722bb7e58ce072b12ae12ad7f6cdd36ff720869e7295463df2fa"
+    },
+    "source-preparation.json.gz": {
+      "bytes": 993,
+      "sha256": "dd7ca196bff067eaefb131c9f36091d60bddc5da405b5ba4e4e07fbcdaee4b66"
+    },
+    "test_ai1_entropy_prefix_timing.py.gz": {
+      "bytes": 5580,
+      "sha256": "d7bf18c008083db46e1e45ef6ee59d2a458270d35d4b21d9c74b7f02c3c9c2e3"
+    },
+    "write_phase_proof.py.gz": {
+      "bytes": 1568,
+      "sha256": "7aab348e8d174d4249bf877c344013c5ea279e4a60b0eee1d92155fcdc549360"
+    }
+  }
+}

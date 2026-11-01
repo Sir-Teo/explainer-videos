@@ -1,0 +1,504 @@
+{
+  "schema_version": 2,
+  "overlay_id": "part1-entropy-prefix-timing-and-part3-v8",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "scope": "Exactly base927 plus SEVEN exact regular source replacements: Hook7230,Probability5e,Surprise6456,Entropy338c,Prefix4592,SVD2c01,Outroe874. Controlled narrated-rerender source clearance only. No Huffman,wholeP7HEAD,extra files,data/audio/runtime exemptions or output approval.",
+  "reviewed_patch_commits": {
+    "part1_hook": "03e3ab6eeeac77396e0ffff081f64af945f6c636",
+    "svd": "d7a9b0acfb15ad9c371f14acae5d8acab2644d6f",
+    "outro": "6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0"
+  },
+  "prior_probability_patch_identity": {
+    "kind": "exact source patch evidence, independent of the later joint publication commit",
+    "path": "docs/qa/evidence/ai1-probability-narrated-timing-repair/source.patch.gz",
+    "compressed_bytes": 1268,
+    "compressed_sha256": "1571b25c19d7ab623fc0ac383258ad3882ef01fa2a45b79d5874af1752f0c51f",
+    "raw_patch_sha256": "fcf91f53d4ae151adf509d88664457ba3985908c0e855b45903f1a6725c1cb48"
+  },
+  "surprise_patch_identity": {
+    "kind": "Exact reviewed source patch evidence; independent of later jointpublication commit",
+    "path": "docs/qa/evidence/ai1-surprise-narrated-timing-repair/source.patch.gz",
+    "compressed_bytes": 1357,
+    "compressed_sha256": "15f7e288fc0450ee920090fccb76225db7454ebaaa38fae38859a2864d9dd908",
+    "raw_patch_sha256": "bd50dbc14b0458955509f6f04ecd1ba0b400a608acf908827bf2370f08484af3"
+  },
+  "source_replacements": [
+    {
+      "before": {
+        "path": "videos/ai/ai1/s01_hook.py",
+        "bytes": 23077,
+        "sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+        "git_mode": "100644",
+        "git_blob": "51995a7544c9750271c268f5bfa0ed3666f2e30d"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s01_hook.py",
+        "bytes": 23484,
+        "sha256": "7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8",
+        "git_mode": "100644",
+        "git_blob": "adae9662d6193f4fef075daedf4859352e6c467e"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/s02_probability.py",
+        "bytes": 24663,
+        "sha256": "f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620",
+        "git_mode": "100644",
+        "git_blob": "133cd5ca27678520687280efc4661a3dd2668845"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s02_probability.py",
+        "bytes": 25970,
+        "sha256": "5e856dd92a662a8a7f1bfc370e57e0c937722c5e2f9c35e99960e1cfd80724ea",
+        "git_mode": "100644",
+        "git_blob": "b94c5bec91d1b5fcf761ddb0a1b514dd163b2456"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/s03_surprise.py",
+        "bytes": 23704,
+        "sha256": "5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8",
+        "git_mode": "100644",
+        "git_blob": "91c552c31f9a88bcfa29df2f59a7cfbe06edc811"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s03_surprise.py",
+        "bytes": 24700,
+        "sha256": "64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55",
+        "git_mode": "100644",
+        "git_blob": "e6d8c7b74a568fb404d632f5daa2ddfbfb91ebb4"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/s04_entropy.py",
+        "bytes": 29406,
+        "sha256": "8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c",
+        "git_mode": "100644",
+        "git_blob": "733e7f87c3ebf9327b034e00765734853c0b3531"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s04_entropy.py",
+        "bytes": 30806,
+        "sha256": "338c43429a0087d9cbba25e945bba2dfbad09fd40afeb2eef9f7ce68c62dcc49",
+        "git_mode": "100644",
+        "git_blob": "8f1fcb4385a75fd99900a108375a40a91597bb93"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai1/s05_prefix.py",
+        "bytes": 23419,
+        "sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+        "git_mode": "100644",
+        "git_blob": "87bdb7e83764a8c52dfebc878c5f7d34ef14ea49"
+      },
+      "after": {
+        "path": "videos/ai/ai1/s05_prefix.py",
+        "bytes": 24707,
+        "sha256": "4592ba3674a83dca35bf52455367b32dc1ee8a53df93e27e5676f50387a7e7e8",
+        "git_mode": "100644",
+        "git_blob": "4f10b1afc08a9ea532e0a092b31654d5dcc41416"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai3/s08_svd.py",
+        "bytes": 11730,
+        "sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+        "git_mode": "100644",
+        "git_blob": "43fd7a7d8a4b21754550c8a09dea3ed387ac3a4c"
+      },
+      "after": {
+        "path": "videos/ai/ai3/s08_svd.py",
+        "bytes": 12273,
+        "sha256": "2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b",
+        "git_mode": "100644",
+        "git_blob": "85d98e597659e3c3b5596efc8b57d1c72c0dca79"
+      }
+    },
+    {
+      "before": {
+        "path": "videos/ai/ai3/s19_outro.py",
+        "bytes": 16807,
+        "sha256": "4e1d29200637256128acf72ecffd0f02caaf6733a4222808dd0b32bf82981ed7",
+        "git_mode": "100644",
+        "git_blob": "585b962a101c85561b89d9ac2e7c4686b344bd2e"
+      },
+      "after": {
+        "path": "videos/ai/ai3/s19_outro.py",
+        "bytes": 17361,
+        "sha256": "e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24",
+        "git_mode": "100644",
+        "git_blob": "23373891f4d38c3ce5917027d3e289a7a7d0ee5b"
+      }
+    }
+  ],
+  "optional_evidence_files": [],
+  "production_acceptance": {
+    "surprise_source_status": "Source-owner reviewed exact actual facts/source-span repair, controlled narrated-rerender clearance only",
+    "surprise_repaired_output_observed": false,
+    "surprise_repaired_output_accepted": false,
+    "remaining_surprise_gates": [
+      "Actual rendered readability/pacing of short graph stages, including0.318s adverse15fps case",
+      "Actual narrated bookmark synchronization and listening",
+      "Production-resolution motion/output acceptance"
+    ],
+    "other_sources": "Exact earlier v5 identities/scopes retained; no new narration/voice candidate or output approval.",
+    "probability_numeric_dwell_source_status": "Exact root/source-owner freeze; controlled narrated-rerender source clearance only",
+    "probability_numeric_dwell_output_observed": false,
+    "probability_numeric_dwell_output_accepted": false,
+    "remaining_probability_dwell_gates": [
+      "Actual completed numeric-display readability/pacing at productionresolution",
+      "Actual narrated bookmark synchronization and listening",
+      "Actual rendered output/frame timing and overall duration"
+    ],
+    "entropy_repaired_output_observed": false,
+    "entropy_repaired_output_accepted": false,
+    "prefix_repaired_output_observed": false,
+    "prefix_repaired_output_accepted": false,
+    "entropy_prefix_source_status": "Exact source-owner/root-reviewed timing repair; controlled narrated rerender only",
+    "remaining_entropy_prefix_gates": [
+      "Exactstrictv8controlledsourceoverlaymustbindbothnewsourcehashes; existingv7excludesEntropy/Prefix.",
+      "Actualfreshnarratedfullscene/preflight mustcheckall28/19bookmarkrequests, includingunmodifiedspans notgloballyrescheduledhere.",
+      "Actualproductionmotion/frame timing/shortstagepacing andreadability; source-clockresidual isnotobservedpixelbrightness.",
+      "Actualspeechlisten/sync andproductionoutputacceptance. No wholemovie-duration equivalence claim."
+    ]
+  },
+  "actual_surprise_facts": [
+    {
+      "evidence_path": "docs/qa/evidence/ai1-surprise-narrated-timing-repair/exact-diagnostic.json.gz",
+      "uncompressed_bytes": 104451,
+      "reconstructed_sha256": "b1d79845b80fb776c0d8a3a881770b3e92c1b3f9f17ae2cebc3b1f4356bb8544",
+      "hash_scope": "Exact source-owner direct-read reconstruction, internally rehashed here; exact size matches Library metadata. No independently supplied remote whole-file expected hash comparison is asserted."
+    },
+    {
+      "evidence_path": "docs/qa/evidence/ai1-surprise-narrated-timing-repair/compact-requests.json.gz",
+      "uncompressed_bytes": 13158,
+      "reconstructed_sha256": "2cd32f4024aed88336aa7867c8ee1e8229d3082cadfb8865d5083cb657041eb4",
+      "hash_scope": "Exact source-owner direct-read reconstruction, internally rehashed here; exact size matches Library metadata. No independently supplied remote whole-file expected hash comparison is asserted."
+    }
+  ],
+  "audio_scope": "Eight speech-keyed blocks sum145.45seconds; VO8/bookmarks22/speech identities preserved. Raw master/WAV bytes/hashes were not supplied or downloaded for independent hashing/listening; no invented master hash claim.",
+  "unchanged_inputs": "Nine durationkwargs in three sequential VO-relative budgets plus a scene-local helper/assignments only. Whole-source AST comparison preserves VO/math/geometry/order/animationarguments/playcount except timing; all other scenes, sharedhelpers, captions, scientificdata and masters untouched.",
+  "evidence_references": [
+    "docs/qa/evidence/ai1-surprise-narrated-timing-repair/README.md",
+    "docs/qa/evidence/ai1-probability-narrated-timing-repair/README.md",
+    "docs/qa/evidence/ai1-opening-roadmap-narrated-timing-repair/README.md",
+    "docs/qa/evidence/ai3-svd-production-margin-polish/README.md",
+    "docs/qa/evidence/ai3-outro-path-front-repair/README.md",
+    "docs/qa/evidence/ai3-outro-trail-motion-regression/README.md",
+    "docs/qa/evidence/ai1-probability-numeric-dwell-source-repair/README.md",
+    "docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair/README.md"
+  ],
+  "evidence_receipts": [
+    {
+      "path": "docs/qa/evidence/ai1-surprise-narrated-timing-repair/README.md",
+      "bytes": 2964,
+      "sha256": "4b0b179441e6a04d6c6c023bcfe0f7280957bebcc906476381a8bf9ebc857401"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-surprise-narrated-timing-repair/manifest.json",
+      "bytes": 1609,
+      "sha256": "dce1a29958abdc6bb63ed767bd318572cf193ebcae6e162978757fd12737332b"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-surprise-narrated-timing-repair/receipt.json",
+      "bytes": 13979,
+      "sha256": "d681233202f8657873256fd4964f79de005770bcda947d9812bc2a857ff90e2d"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-surprise-narrated-timing-repair/exact-diagnostic.json.gz",
+      "bytes": 14460,
+      "sha256": "70483e43f68b8a59487e65c6086248e3b0f06c04bb0d156d1b4fc6fa4ab35837"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-surprise-narrated-timing-repair/compact-requests.json.gz",
+      "bytes": 3789,
+      "sha256": "f592145ba01737e005eea0b4aaca6b756fbf616192c30d253ec076ad26faf3ca"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-probability-narrated-timing-repair/README.md",
+      "bytes": 2461,
+      "sha256": "1179a85b4d0cf76f45389ff3d2fd291c3dfea5dc9ce8b857031755376a8fabd4"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-probability-narrated-timing-repair/manifest.json",
+      "bytes": 2371,
+      "sha256": "c4642ff1c0d9d7c719069443dcd6f9a4214cd0b8412d0287e113ef2e8fc3c1be"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-probability-narrated-timing-repair/receipt.json",
+      "bytes": 15098,
+      "sha256": "4c6d5b5cd4b7015372df4f6c83f4d3157b0db1bd0340c25d7cabd2805181a974"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-probability-narrated-timing-repair/readable-diagnostic.json.gz",
+      "bytes": 11922,
+      "sha256": "708794df808ac84aebac88e47a0781fad9306ac604c24001a15403aeed866fbd"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-opening-roadmap-narrated-timing-repair/README.md",
+      "bytes": 2424,
+      "sha256": "d9abd61fd353e28a4bcc548565f8ad38e436b03b865288881b634d675f47562e"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-opening-roadmap-narrated-timing-repair/manifest.json",
+      "bytes": 4682,
+      "sha256": "163f585479a9080afaec992182ffa1d92e313fdf006fda547157f38a572590b3"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-opening-roadmap-narrated-timing-repair/repair-receipt.json",
+      "bytes": 8815,
+      "sha256": "ed757bd57b5a6567df5939c44a04da911d8434f3002a683c9f14409103e137e5"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-production-margin-polish/README.md",
+      "bytes": 3009,
+      "sha256": "7abe9ed720f8df833ea052da8ed13262f3d5ec519aed49ccdde8874da2397831"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-svd-production-margin-polish/manifest.json",
+      "bytes": 5135,
+      "sha256": "72574ec67c7cf8679c48bd8c5095b904e8660c2fbc9a3c31f96fa77abe5eb157"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-outro-path-front-repair/README.md",
+      "bytes": 3699,
+      "sha256": "ad0fd986fda505f5b3d1948836a7cf329ceb94c768b7e4117749ac45b464e25e"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-outro-path-front-repair/manifest.json",
+      "bytes": 1889,
+      "sha256": "bfd3358e12433a40e2ca5c058e33711ec1ec7bcf19021ffdf156fdecf163a25c"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-outro-trail-motion-regression/README.md",
+      "bytes": 4227,
+      "sha256": "4ee87fd3a1e036bf3b1098e9e604050c95c093d38d60b52552b4dc44f311e032"
+    },
+    {
+      "path": "docs/qa/evidence/ai3-outro-trail-motion-regression/manifest.json",
+      "bytes": 3748,
+      "sha256": "945f7a4183f8cee6193a7df924f37feb1a640e439d324de67c1c67349d1cf5c2"
+    }
+  ],
+  "external_supplement_note": {
+    "novels_base_library_file_id": "libfile_f134e147968881918fc96c1c227cdc88",
+    "version": 0,
+    "scope": "Separately authorized private supplement; not included/duplicated in this source metadata overlay."
+  },
+  "numeric_dwell_source_patch_identity": {
+    "kind": "Exact incremental50ff-to5e856d source patch; independent of the laterjointpublication commit",
+    "path": "docs/qa/evidence/ai1-probability-numeric-dwell-source-repair/source.patch.gz",
+    "compressed_bytes": 452,
+    "compressed_sha256": "109ff13454fa1b851a9fdc0e497b915fe6fc667e1fd9a0fa5614eebc51b00d16",
+    "raw_patch_sha256": "35eb669e7aa001d5fad63f44f8422cb99e984209fcfc3d7a614325c5426100bd",
+    "incremental_before_source_sha256": "50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed",
+    "incremental_after_source_sha256": "5e856dd92a662a8a7f1bfc370e57e0c937722c5e2f9c35e99960e1cfd80724ea"
+  },
+  "numeric_dwell_source_review": {
+    "minimum_finished_numeric_hold_seconds": 1.5,
+    "speech_master_metadata_blocks": 11,
+    "bookmark_count": 18,
+    "scope": "Actual source-owner source/metadata/phase checks preserve VO/masterIDs/bookmark names; hold may addnon-speech time. No equality of old/new wholemovie durations or actual repaired output/listening is claimed."
+  },
+  "numeric_dwell_evidence_receipts": [
+    {
+      "path": "docs/qa/evidence/ai1-probability-numeric-dwell-source-repair/README.md",
+      "bytes": 3278,
+      "sha256": "5f3bff18b01ba46d3cd79321943bf4b42562474e0688e7804eda14ca3ce9857c"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-probability-numeric-dwell-source-repair/source.patch.gz",
+      "bytes": 452,
+      "sha256": "109ff13454fa1b851a9fdc0e497b915fe6fc667e1fd9a0fa5614eebc51b00d16"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-probability-numeric-dwell-source-repair/file-manifest.json",
+      "bytes": 7355,
+      "sha256": "36c7ce77476d3e0280789744b1fecb5e3d9267b958456b68dfd738e64b4682bb"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-probability-numeric-dwell-source-repair/applied-receipt.json",
+      "bytes": 2604,
+      "sha256": "6d522e91a420c48a852139a1dfca7288252c590fbc9b0636d788e88992503775"
+    }
+  ],
+  "entropy_prefix_source_review": {
+    "focused_tests": {
+      "count": 7,
+      "elapsed_seconds": 3.158,
+      "outcome": "passed",
+      "raw_log_sha256": "39eb74c2b7d5d9f58307d6ab0a52c418a83ec5eca3b571478cb00d62fa5f803c"
+    },
+    "observed_original_late_seconds": [
+      0.96,
+      1.56,
+      0.11
+    ],
+    "phase_proof": {
+      "fps": [
+        15,
+        30,
+        60
+      ],
+      "adverse_arrival_phase_frames": [
+        0,
+        0.49,
+        1
+      ],
+      "original_and_current_rows": 54,
+      "current_affected_span_checks": 27,
+      "all_current_spans_finish_atleast_one_frame_before_cue": true,
+      "summary": [
+        {
+          "spec": [
+            "entropy",
+            "coin",
+            3,
+            null,
+            "a",
+            null
+          ],
+          "min_stage_requested_seconds": 0.6006201550387598,
+          "min_stage_quantized_seconds": 0.6666666666666665,
+          "minimum_cue_lead_seconds": 0.0318333333333336,
+          "minimum_settled_reading_residual_seconds": 2.580666666666666
+        },
+        {
+          "spec": [
+            "entropy",
+            "uniqueness",
+            6,
+            "d",
+            "e",
+            4
+          ],
+          "min_stage_requested_seconds": 0.17925925925925995,
+          "min_stage_quantized_seconds": 0.1999999999999993,
+          "minimum_cue_lead_seconds": 0.03999999999999915,
+          "minimum_settled_reading_residual_seconds": 2.150666666666673
+        },
+        {
+          "spec": [
+            "prefix",
+            "mcmillan",
+            6,
+            "d",
+            "e",
+            1
+          ],
+          "min_stage_requested_seconds": 0.5014814814814827,
+          "min_stage_quantized_seconds": 0.533333333333335,
+          "minimum_cue_lead_seconds": 0.04000000000000625,
+          "minimum_settled_reading_residual_seconds": 6.79666666666666
+        }
+      ],
+      "minimum_settled_reading_residual_seconds": 2.150666666666673,
+      "scope": "Actualwordalignment+realTracker+installedframeprogression/validation. ActualsharedladderstepAST executed withcontrolledclock/objectinterface; separate realMobjectprobe verifiesnominal3stagebranch. Notencodedframes/fullSceneexecution."
+    },
+    "short_motion_stages": {
+      "entropy_proof_requested_minima_seconds": [
+        0.17925925925925995,
+        0.3059259259259274,
+        0.22148148148148245
+      ],
+      "entropy_proof_quantized_clock_minima_seconds": [
+        0.1999999999999993,
+        0.33333333333333215,
+        0.2666666666666657
+      ],
+      "scope": "Scroll/transform/highlight respectcue whileformula persists. These are shortstages requiringactualproductionpacingreview, notanacceptedperceptualthreshold. Readingcriterion1.5s retainedseparately; minimumsource-clockresidual2.1507s."
+    },
+    "adapter_contract": {
+      "target_calls": [
+        "Entropy.uniqueness step4 d-to-e",
+        "Prefix.mcmillan step1 d-to-e"
+      ],
+      "original_stage_nominals_seconds": [
+        0.6,
+        1.2,
+        0.8
+      ],
+      "scene_play_restoration": "Classdescriptorownership preserved bydeletingtemporaryinstanceattribute; existinginstanceoverride restoredexactobject. Success+exception paths verified.",
+      "only_run_time_kwargs_change": true,
+      "physically_impossible_deadlines": "Positiveoneframefallback, explicitlytestedlate; notclaimedcue/readabilitysuccess.",
+      "validated_frame_rates_only": [
+        15,
+        30,
+        60
+      ],
+      "no_universal_all_fps_claim": true
+    },
+    "invariants": {
+      "all19voiceover_expression_ASTs_exact": true,
+      "entropy_voiceovers": 11,
+      "prefix_voiceovers": 8,
+      "entropy_bookmarks": 28,
+      "prefix_bookmarks": 19,
+      "all_non_timing_AST_exact": true,
+      "math_geometry_data_animationarguments_revealorder_exact": true,
+      "no_absolute_scene_time_budget_constants": true,
+      "provided_master_metadata_retained": true,
+      "shared_ladder_voiceover_Huffman_and_v7_protected_pins": [
+        {
+          "path": "videos/ai/ai1/s06_huffman.py",
+          "sha256": "a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a",
+          "bytes": 20144
+        },
+        {
+          "path": "explainer/analysis/__init__.py",
+          "sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+          "bytes": 30850
+        },
+        {
+          "path": "explainer/voiceover.py",
+          "sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+          "bytes": 10700
+        },
+        {
+          "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+          "sha256": "6362af754a9b42dd06a3c1b7f2665929f94ae35fc64f6ea19ca175affd0bcb25",
+          "bytes": 14654
+        }
+      ]
+    },
+    "scope": "Timing-only ownedsource/newtest/evidence. No sharedhelper/strictv7/Huffman/data/model/master/voice/table changes, no synth/productionrender/decode/listening/jobs."
+  },
+  "entropy_prefix_evidence_receipts": [
+    {
+      "path": "docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair/README.md",
+      "bytes": 2678,
+      "sha256": "4c86bfcfcb3d597ee29f505c01977110f62a9e96254e4f8496279535f1297cd6"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair/repair-receipt.json",
+      "bytes": 7446,
+      "sha256": "c6624efd735a722bb7e58ce072b12ae12ad7f6cdd36ff720869e7295463df2fa"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair/file-manifest.json",
+      "bytes": 3583,
+      "sha256": "cc9e9b258a7360c275bf8d2d41c2b9081f2e21207eea2740f9676172c1edca29"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair/entropy-source.patch.gz",
+      "bytes": 1135,
+      "sha256": "860512a14ff86b971c22e574d943438a59bf5e77ed7dc4c893f23c4d8ea48385"
+    },
+    {
+      "path": "docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair/prefix-source.patch.gz",
+      "bytes": 868,
+      "sha256": "3e7873dd6b1d3a9c1665c3199a156541cb985d848e1b56111f4a26fac294c48a"
+    },
+    {
+      "path": "tests/test_ai1_entropy_prefix_timing.py",
+      "bytes": 18630,
+      "sha256": "22ee58e639f43e2b1e084383161a3f3fc1332255985974f9361b7619f48062d3"
+    }
+  ],
+  "registration_history": "Original v1-v7 overlay manifests/inventories and prior test files remain unchanged except the explicitly versioned v7 AST-comparison test normalization. Original v7 test/helper/docs bytes preserved before-v8. Exactly two diagnostic labeldict entries added; fullverify and acceptance guards unchanged."
+}

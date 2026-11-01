@@ -1,0 +1,95 @@
+{
+  "source_gate_commit": "5886ad1b45446fc06f5e9a63a7bc0ce8caf7f8e1",
+  "files": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "bytes": 14654,
+      "sha256": "6362af754a9b42dd06a3c1b7f2665929f94ae35fc64f6ea19ca175affd0bcb25",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/verify_handoff.py"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/README.md",
+      "bytes": 9142,
+      "sha256": "57e717959a8f53d4f68c6aaf2b4da759725a6d03ed1764aca47ede552d108070",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/README.md"
+    },
+    {
+      "path": "docs/qa/production-handoff-parts1-3.md",
+      "bytes": 37465,
+      "sha256": "9187dc5c174e93477c36f4d0edef84b2e0c1c7e510d22abfb17935ed4da4830c",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/production-handoff-parts1-3.md"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest-probability-dwell-part3-v7.json",
+      "bytes": 8344,
+      "sha256": "28fb4522b10562cdc003a0648681c9a1392ef5c840935ade975afbc49b364548",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/manifest-probability-dwell-part3-v7.json"
+    },
+    {
+      "path": "tests/test_production_handoff_overlay.py",
+      "bytes": 34069,
+      "sha256": "3babfe70739a7146df1c4f84176ae80452722b770a4c22c0c83b8efdeecb2a69",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/test_production_handoff_overlay.py"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_overlay.py",
+      "bytes": 11273,
+      "sha256": "dbb041ef929150098126b49f3df048fafec4a5edbc36f52c0543f388543f8a44",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/test_production_handoff_probability_overlay.py"
+    },
+    {
+      "path": "tests/test_production_handoff_surprise_overlay.py",
+      "bytes": 11302,
+      "sha256": "1c9faef1e99a12056c2a73a057aa3b680878b065571c39dd598f3b6c5e57196e",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/test_production_handoff_surprise_overlay.py"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_dwell_overlay.py",
+      "bytes": 11260,
+      "sha256": "a2104fe0a8f1c52d8d08f0d4555533b4106c38f9189c7f7c3d43618b89ad1516",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/test_production_handoff_probability_dwell_overlay.py"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7.json",
+      "bytes": 13558,
+      "sha256": "f501b221cb5e92608a32e7570dcfbe145dd4ab02e6fc8c62643ae9d1b9651bd9",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-roadmap-and-part3-v5.json",
+      "bytes": 8593,
+      "sha256": "6bc668f43c97b0d9867b2ab323c2d337599a5c4417c9fb5eb01644d7e9a7dbce",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/part1-probability-roadmap-and-part3-v5.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-roadmap-and-part3-v4.json",
+      "bytes": 5609,
+      "sha256": "f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/part1-roadmap-and-part3-v4.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-surprise-probability-roadmap-and-part3-v6.json",
+      "bytes": 11065,
+      "sha256": "916421ce802ab387df104242a54e7d4e2d9b5869825ea52df069b95b8c5d345c",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/part1-surprise-probability-roadmap-and-part3-v6.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part3-svd-outro-production-v3.json",
+      "bytes": 3597,
+      "sha256": "69a16ca2846362919dfd8e9a024120fb3cba19264a643ad70b994c65f427f178",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/part3-svd-outro-production-v3.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-production-polish-v2.json",
+      "bytes": 1456,
+      "sha256": "631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/svd-production-polish-v2.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-reveal-v1.json",
+      "bytes": 32227,
+      "sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/svd-reveal-v1.json"
+    }
+  ]
+}

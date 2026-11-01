@@ -1,0 +1,13 @@
+# Entropy and Prefix narrated-cue timing repair
+
+Source-only controlled-rerender clearance. Entropy changes from8206578d… to338c4342…; Prefix changes fromf04891be… to4592ba36…. Existing v7 does not authorize either new source; an explicit exact v8 gate is still required. No repaired movie, listening or production appearance is approved here.
+
+The exact supplied diagnostics reproduce Entropy's0.96s coin-intro delay and1.56s uniqueness-proof delay, and Prefix's0.11s McMillan-proof delay. Coin's two reveals now share a budget against its actual speech cue. The two affected ladder calls each contain scroll/transform/highlight plays (0.6+1.2+0.8s), so a local adapter budgets all three. It changes only run_time and restores the original play attribute/ownership in finally, including exceptions. Shared helpers remain unchanged.
+
+Seven focused tests pass (3.158s). Actual word alignment/tracker and installed Manim frame progression/validation cover27 current span cases:15/30/60fps at arrival phases0/0.49/1 frame. All finish at least one frame before their cue. The entire non-timing AST, all19 voiceover expressions and47 bookmarks, math, geometry, animation arguments and reveal order are preserved. A tiny actual-MathTex/constructor/shared-ladder probe confirms Write2s/Create1s and both three-play ladder branches; no camera or rendered output was produced.
+
+The tight Entropy proof has short requested scroll/transform/highlight stages of about0.179/0.306/0.221s; their clock-quantized minima are0.20/0.333/0.267s. These are **not perceptual readability approval**. Retained settled formulas separately have at least2.151s residual reading time; fair-coin state2.581s and Prefix final proof6.797s. The1.5s reading criterion is retained, not lowered. These values derive from source retention and the speech/frame clock, not observed pixel brightness. Actual production pacing must still be viewed. Other frame rates and impossible deadlines receive no synchronization guarantee.
+
+Both original diagnostics and all provided master metadata remain losslessly preserved. Entropy supplies an11-utterance speech-bundle identity; Prefix supplies8 individual float-WAV hash records. No remote audio bytes were reopened or independently listened to by this repair owner. No speech generation, numerical producer, model, default loader, renderer, decoder, shared helper, Huffman or v7 change occurred. Failed fixture-only setup attempts are retained and explained separately.
+
+`repair-receipt.json` and `file-manifest.json` bind exact sources, patches, tests, inputs and limits. Source patches and raw evidence are gzip wrapped without normalizing context whitespace.

@@ -1,0 +1,154 @@
+[
+  {
+    "source_path": "Originalverifiedinputorownedsourcefreeze",
+    "path": "entropy-exact-diagnostic.json.gz",
+    "raw_bytes": 85346,
+    "raw_sha256": "f25fa6d23e03bac6ac9d8dfe99bcffd23d0eee7d1e640bf0f53216b262394b9c",
+    "gzip_bytes": 10801,
+    "gzip_sha256": "613012e5fda799cb351d5cc8887763b9b5a9312a4b87b009bcd24bb48fac63f0"
+  },
+  {
+    "source_path": "Originalverifiedinputorownedsourcefreeze",
+    "path": "entropy-source-after.py.gz",
+    "raw_bytes": 30806,
+    "raw_sha256": "338c43429a0087d9cbba25e945bba2dfbad09fd40afeb2eef9f7ce68c62dcc49",
+    "gzip_bytes": 9080,
+    "gzip_sha256": "b233736ff0fc760e5c8095c9d98f82d99ea8a51df5a534462e9faf74ec3c1b93"
+  },
+  {
+    "source_path": "Originalverifiedinputorownedsourcefreeze",
+    "path": "entropy-source-before.py.gz",
+    "raw_bytes": 29406,
+    "raw_sha256": "8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c",
+    "gzip_bytes": 8517,
+    "gzip_sha256": "c0558f0d10f0ffc35ff53541eeea2afbc9a8a120c547608196841354a01451b8"
+  },
+  {
+    "source_path": "Originalverifiedinputorownedsourcefreeze",
+    "path": "entropy-source.patch.gz",
+    "raw_bytes": 2623,
+    "raw_sha256": "1543ba35ae0787070cdb656f8b9dd0ee6592d2920d9518b1d4d141473bde3cf7",
+    "gzip_bytes": 1135,
+    "gzip_sha256": "860512a14ff86b971c22e574d943438a59bf5e77ed7dc4c893f23c4d8ea48385"
+  },
+  {
+    "source_path": "Originalverifiedinputorownedsourcefreeze",
+    "path": "prefix-exact-diagnostic.json.gz",
+    "raw_bytes": 117579,
+    "raw_sha256": "cd2d5105756b7a202c936c459f35e1b15460817fa1edfd0339c778969eaa234c",
+    "gzip_bytes": 16461,
+    "gzip_sha256": "e4ac31ea2ac6ab1497b4a652dc652cb63fe7f115a3c4ac99678b55aff3671d54"
+  },
+  {
+    "source_path": "Originalverifiedinputorownedsourcefreeze",
+    "path": "prefix-source-after.py.gz",
+    "raw_bytes": 24707,
+    "raw_sha256": "4592ba3674a83dca35bf52455367b32dc1ee8a53df93e27e5676f50387a7e7e8",
+    "gzip_bytes": 7516,
+    "gzip_sha256": "59e089288d447f48667c54b4c759d72a4887e3521edccaf1517810e5c34a505f"
+  },
+  {
+    "source_path": "Originalverifiedinputorownedsourcefreeze",
+    "path": "prefix-source-before.py.gz",
+    "raw_bytes": 23419,
+    "raw_sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+    "gzip_bytes": 6985,
+    "gzip_sha256": "f2ca9409d0d00b5d84acb0ea2eeae1fe74b861aa6a9a2e2cd96642719138f53e"
+  },
+  {
+    "source_path": "Originalverifiedinputorownedsourcefreeze",
+    "path": "prefix-source.patch.gz",
+    "raw_bytes": 1885,
+    "raw_sha256": "9c8846fc32c66f21bf8f9db7dba37bae112eb6d77160b3198ffac230ee1e504c",
+    "gzip_bytes": 868,
+    "gzip_sha256": "3e7873dd6b1d3a9c1665c3199a156541cb985d848e1b56111f4a26fac294c48a"
+  },
+  {
+    "source_path": "/workspace/runtime/ai1-entropy-prefix-timing-repair/phase-proof.json",
+    "path": "phase-proof.json.gz",
+    "raw_bytes": 108213,
+    "raw_sha256": "71d39fe92ac5898354800b8abc5b5c45250a60a70eabc45cfd35c3c44f354aef",
+    "gzip_bytes": 5151,
+    "gzip_sha256": "97f4910925f0a8533404749c0ba72d5460c69f6e959666983ed78e8afec2c3a6"
+  },
+  {
+    "source_path": "/workspace/runtime/ai1-entropy-prefix-timing-repair/phase-proof-final.log",
+    "path": "phase-proof-final.log.gz",
+    "raw_bytes": 1219,
+    "raw_sha256": "e6d6d615fafef035931556a70e15428c210248afa495695dfd5517f24048bf2b",
+    "gzip_bytes": 330,
+    "gzip_sha256": "69052998567548a2de05ee1dd5e983938a65c0f236cb17b329fa830a805eeec6"
+  },
+  {
+    "source_path": "/workspace/runtime/ai1-entropy-prefix-timing-repair/actual-constructor-and-ladder-proof.json",
+    "path": "actual-constructor-and-ladder-proof.json.gz",
+    "raw_bytes": 2604,
+    "raw_sha256": "2c737374dca4fd53dfe842f51ebdb710be1753bba95f97a5463a3cbe5130151c",
+    "gzip_bytes": 929,
+    "gzip_sha256": "ba085fd4690e1f9c32b4a6e1bd96f16dd5e720d66768eb398953d9b0ae1dd1ea"
+  },
+  {
+    "source_path": "/workspace/runtime/ai1-entropy-prefix-timing-repair/actual-constructor-probe.log",
+    "path": "actual-constructor-probe.log.gz",
+    "raw_bytes": 22935,
+    "raw_sha256": "d4de5826c1710afe7a58df15a2d9b4102f06dc589bf6ed1e0315e4962c75add4",
+    "gzip_bytes": 2106,
+    "gzip_sha256": "07193ff316bbd840e087102b8be37857c07a22aec308634c1f555d1a01195b7e"
+  },
+  {
+    "source_path": "/workspace/runtime/ai1-entropy-prefix-timing-repair/focused-tests-first.log",
+    "path": "focused-tests-first.log.gz",
+    "raw_bytes": 62972,
+    "raw_sha256": "bc660bec1ceea2e257ca22f34ce72d1777448c1852160c50d117724c9a342f28",
+    "gzip_bytes": 1846,
+    "gzip_sha256": "4aead55766d914b75ca2c4db00245625f49240ceae8e73678eb14e98fb0d88a5"
+  },
+  {
+    "source_path": "/workspace/runtime/ai1-entropy-prefix-timing-repair/focused-tests-second.log",
+    "path": "focused-tests-second.log.gz",
+    "raw_bytes": 16455,
+    "raw_sha256": "9ddd6bdf74b595c907386c9a3a65c899009efce89368edec53990e160df219a1",
+    "gzip_bytes": 1018,
+    "gzip_sha256": "2ae6d1d3092e0848662c81edafb6805b979e631c6ae603a467db7d742cccdb77"
+  },
+  {
+    "source_path": "/workspace/runtime/ai1-entropy-prefix-timing-repair/focused-tests-final.log",
+    "path": "focused-tests-final.log.gz",
+    "raw_bytes": 1466,
+    "raw_sha256": "39eb74c2b7d5d9f58307d6ab0a52c418a83ec5eca3b571478cb00d62fa5f803c",
+    "gzip_bytes": 407,
+    "gzip_sha256": "ab8790f49437474d0b571e086675d85dfb48e0695051c5b19fd437b39cef3737"
+  },
+  {
+    "source_path": "/workspace/runtime/ai1-entropy-prefix-timing-repair/source-preparation.json",
+    "path": "source-preparation.json.gz",
+    "raw_bytes": 2023,
+    "raw_sha256": "b412014fff890565ad484f8d05265bf6f628bdcd72eab647ca94b51f86c6e712",
+    "gzip_bytes": 993,
+    "gzip_sha256": "dd7ca196bff067eaefb131c9f36091d60bddc5da405b5ba4e4e07fbcdaee4b66"
+  },
+  {
+    "source_path": "/workspace/runtime/ai1-entropy-prefix-timing-repair/real_mobject_probe.py",
+    "path": "real_mobject_probe.py.gz",
+    "raw_bytes": 3108,
+    "raw_sha256": "6786524cf45d3e0ac9016139ba1a14d29663531df6b967207fed6c6148bbafb7",
+    "gzip_bytes": 1525,
+    "gzip_sha256": "99f6b99beb704d1e99cbe9196cb1a8295a8d2d63d759e6d9a79bdfcc7ee4b778"
+  },
+  {
+    "source_path": "/workspace/runtime/ai1-entropy-prefix-timing-repair/write_phase_proof.py",
+    "path": "write_phase_proof.py.gz",
+    "raw_bytes": 3617,
+    "raw_sha256": "0e1655d24a73565246e44cc2774c02853ebc0752404795722cc7c25327b93583",
+    "gzip_bytes": 1568,
+    "gzip_sha256": "7aab348e8d174d4249bf877c344013c5ea279e4a60b0eee1d92155fcdc549360"
+  },
+  {
+    "source_path": "/workspace/explainer-videos/tests/test_ai1_entropy_prefix_timing.py",
+    "path": "test_ai1_entropy_prefix_timing.py.gz",
+    "raw_bytes": 18630,
+    "raw_sha256": "22ee58e639f43e2b1e084383161a3f3fc1332255985974f9361b7619f48062d3",
+    "gzip_bytes": 5580,
+    "gzip_sha256": "d7bf18c008083db46e1e45ef6ee59d2a458270d35d4b21d9c74b7f02c3c9c2e3"
+  }
+]

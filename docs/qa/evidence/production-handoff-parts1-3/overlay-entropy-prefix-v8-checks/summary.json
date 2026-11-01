@@ -1,0 +1,118 @@
+{
+  "completed_utc": "2026-11-01T11:44:01.725294+00:00",
+  "overlay_id": "part1-entropy-prefix-timing-and-part3-v8",
+  "focused_tests": {
+    "total": 107,
+    "elapsed_seconds": 7.232,
+    "previous_count": 92,
+    "previous_byte_exact": 91,
+    "previous_precisely_revised_diagnostic_AST_test": 1,
+    "new": 15,
+    "log_sha256": "4c38e511ba5ac09fae32ea319137e2e6fd4eecf692f458d1795f4cb022521918"
+  },
+  "actual_checks": 28,
+  "all_expected": true,
+  "final_strict_file_count": 268,
+  "new_source_context": "/workspace/runtime/part1-entropy-prefix-v8-base927",
+  "source_only_fixture_commit": "2793042ff9c266f767cfc285c8dde760fbdbf6be",
+  "reused_input_count": 156,
+  "reused_input_logical_bytes": 80858842,
+  "new_data_copy_bytes": 0,
+  "old_payload_stat_hashes_exact": true,
+  "old_156_symlink_targets_and_inodes_exact": true,
+  "old_fixture_git_exact": true,
+  "public_model_files_exact": true,
+  "guard_minimum_bytes": 536870912,
+  "free_after_bytes": 544604160,
+  "inherited_full_verify_AST_unchanged": true,
+  "acceptance_guards_unchanged": true,
+  "only_guard_AST_delta": "Exactly diagnostic labeldict Entropy/Prefix two entries; strict existing-test normalizer requires them then compares every remaining AST node.",
+  "raw_receipts": {
+    "actual-checks-receipt.json": {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/actual-checks-receipt.json.gz",
+      "raw_bytes": 165667,
+      "raw_sha256": "c1ed0659874c0ccc08ba4f62c0fc7aea291a8904dd3aa855f2272372200e977e",
+      "gzip_bytes": 35433,
+      "gzip_sha256": "72f4dbfbfe24a942f600f678e333267bb9140662d7442228bd63828b626208bd"
+    },
+    "actual-preparation.json": {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/actual-preparation.json.gz",
+      "raw_bytes": 103644,
+      "raw_sha256": "dd7c460ccf97023aaaaaa5c2081752e34e78576155d6a3e30cdfa5bfdc58d9f2",
+      "gzip_bytes": 15358,
+      "gzip_sha256": "93abeceb0b61cf9865e512c7fe342b9d11d2531ed85e5117a3b375c98a7adf1e"
+    },
+    "old-v7-git-before.json": {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/old-v7-git-before.json.gz",
+      "raw_bytes": 12098,
+      "raw_sha256": "477286df9fdd791fd4e65daddb24db19540efb18c11201a8b97daf93782dac09",
+      "gzip_bytes": 2692,
+      "gzip_sha256": "0ddbd1349d5ea410f82ac5081a71b1a99bc7a5d27defe6287018c7547899cced"
+    },
+    "old-v7-links-final.json": {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/old-v7-links-final.json.gz",
+      "raw_bytes": 66942,
+      "raw_sha256": "4fc3fa6c5c39717b07f9b8be54965f2f7de55dbc21a6881dc8b92f76c3c741d3",
+      "gzip_bytes": 3239,
+      "gzip_sha256": "1c6eb5210085209113d775c7651193098f66a7c7f7ab85998c0da8c50af8ce5f"
+    },
+    "actual-checks-progress.json": {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/actual-checks-progress.json.gz",
+      "raw_bytes": 35707,
+      "raw_sha256": "708b22c5aebd58c2b449cd6b62fa98fe6deac169962b0109aaa25cab14103135",
+      "gzip_bytes": 3130,
+      "gzip_sha256": "771beff0253bce9d8933902508e9ed58e1473c1a3aa3182ef5a9cc93f528170a"
+    },
+    "focused-tests.log": {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/focused-tests.log.gz",
+      "raw_bytes": 19173,
+      "raw_sha256": "4c38e511ba5ac09fae32ea319137e2e6fd4eecf692f458d1795f4cb022521918",
+      "gzip_bytes": 2466,
+      "gzip_sha256": "3382926c8fcd44e5ed6eab5061a86c74147899b1f321da3876a15cb297be3355"
+    },
+    "actual-run.log": {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/actual-run.log.gz",
+      "raw_bytes": 1354,
+      "raw_sha256": "da8a20a6823c1d1142031e98bd16eaa46808cee4a19e278ca32fadad3fb20332",
+      "gzip_bytes": 407,
+      "gzip_sha256": "00cc4fa909e417af2fd135ed71570ce3275301f7ae886b94c23fc3c31eb01f31"
+    },
+    "private-policy-check.json": {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/private-policy-check.json.gz",
+      "raw_bytes": 456,
+      "raw_sha256": "afac0c2421d0293f637dee9a9399432d6548f162628f38f684e3f5978fbcb6dd",
+      "gzip_bytes": 325,
+      "gzip_sha256": "9eb47dd4d5c6d6155da77f9d8a2f4e87c133593d9a703608e9224199256af935"
+    },
+    "registration.json": {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/registration.json.gz",
+      "raw_bytes": 690,
+      "raw_sha256": "948f5afc334f7cb0eaf2efa249099e2f6808642e026aa09d787e3088dbe8aebd",
+      "gzip_bytes": 438,
+      "gzip_sha256": "9a886c0c966f79408c8c8347834a73761f0ea187915cd1617d7492a195dc75d3"
+    }
+  },
+  "frozen_guard_inventory_pins": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/cache-inventory.json",
+      "bytes": 46061,
+      "sha256": "8cf34dd7acc11ba29eb37fa6881c70f706f7209301540145d679fd4dad3d2af4"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/reviewed-source-inventory.json",
+      "bytes": 30831,
+      "sha256": "1c9eb76a370a5b74b79b7a0aa5b7e8f9300bfe4cd00ed494f3801d3ac50a79f2"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/external-validation-dependencies.json",
+      "bytes": 7325,
+      "sha256": "9e60b6b1545b517c79107d27ae3a1e835adf6b0859cd3051dbfb1eabcd688480"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/real-information-audio.json",
+      "bytes": 10569,
+      "sha256": "a1da73b811d29cc6675dbff5c1d095bb31228ae3cea97ea21c10366cc83a06c5"
+    }
+  ],
+  "production_acceptance": "Controlled narrated rerender source clearance only; actual repaired motion/readability/listening/sync/output acceptance remains pending."
+}
