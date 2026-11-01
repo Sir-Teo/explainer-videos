@@ -19,3 +19,10 @@ published/
 SCRIPT.md
 .DS_Store
 videos/*/*_text_zh.lock
+
+# Video files anywhere (never committed: everything renders from source)
+*.mp4
+*.mov
+*.webm
+*.wav
+*.mp3

@@ -303,6 +303,30 @@ C = SimpleNamespace(
     HIGHLIGHT=YELLOW,
 )
 
+# Quant, Built (videos/quant/quant1-43): its own namespace, so its meanings never collide with other series'
+# (C.OPTION, C.DELTA, C.THETA, C.LOSS already mean something else).  P and Q are the two measures: every
+# risk-neutral object is violet, every real-world one amber.
+QC = SimpleNamespace(
+    Q="#A78BFA",  # Q: the risk-neutral measure, prices, implied quantities
+    P="#FBBF24",  # P: the real-world measure, forecasts, realized quantities
+    SPOT="#58A6FF",  # S: the underlying, its paths
+    OPTION="#E879F9",  # V, C, P: an option's value, its payoff
+    STRIKE="#CBD5E1",  # K: strikes, barriers, levels
+    CASH="#94A3B8",  # the bond, cash, the bank account, rates r
+    DELTA="#F7D154",  # Delta: the hedge ratio, hedge positions
+    GAMMA="#FF7EB6",  # Gamma: curvature, convexity
+    THETA="#7DD3FC",  # Theta: time decay
+    VEGA="#A3E635",  # vega: sensitivity to volatility
+    IMPLIED="#FB923C",  # implied volatility (a Q quantity, quoted)
+    REALIZED="#2DD4BF",  # realized volatility (a P quantity, measured)
+    GAIN="#4ADE80",  # P&L above zero
+    LOSS="#F87171",  # P&L below zero, costs
+    CRISIS="#EF4444",  # crisis files, crashes on the timeline
+    FIRM="#60A5FA",  # firm files, firms on the timeline
+    IDEA="#F7D154",  # ideas on the timeline
+    HOUSE="#E2C08D",  # the House, the series' own firm
+)
+
 # Colormap anchor colors (used by explainer.fluids.colormaps)
 PRESSURE_LOW = "#1B2A6B"
 PRESSURE_HIGH = "#E8533F"
