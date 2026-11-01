@@ -146,6 +146,7 @@ class GradientBoosting(VoiceoverScene):
         ax = plane[0]
         tr = np.nonzero(~test)[0]
         dots = page_dots(ax, X2, y, idx=tr, jitter=0.35, radius=0.04, opacity=0.9)
+        dots.set_z_index(2)
         imgs = {k: regions(ax, x[f"region{k}"], x["xs"], x["ys"], lo=0.2, hi=0.8, opacity=0.5) for k in snaps}
         r = ValueTracker(1)
         cur = lambda: min(n, max(1, int(round(r.get_value()))))  # noqa: E731
