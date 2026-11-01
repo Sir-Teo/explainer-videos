@@ -1,0 +1,34 @@
+{
+  "latex": {
+    "resolved_executable": "/usr/bin/pdftex",
+    "executable_sha256": "d0668e4e5c4f2eb213bb189e735e54d84542275bca29433ceaa687c1bf4e9ab2"
+  },
+  "xelatex": {
+    "resolved_executable": "/usr/bin/xetex",
+    "executable_sha256": "f55d68533cce6f5d55d0e9c0158f8a2acc804d58025f0066fc774b7edb535b01"
+  },
+  "dvisvgm": {
+    "resolved_executable": "/workspace/runtime/sysroot/usr/bin/dvisvgm",
+    "executable_sha256": "610e8f25fb43dc5c4bdfa559fe82ffaeb0084a972fba6e23a477010efe83bdca"
+  },
+  "FandolSong-Regular.otf": {
+    "resolved_path": "/workspace/runtime/sysroot/usr/share/texlive/texmf-dist/fonts/opentype/public/fandol/FandolSong-Regular.otf",
+    "sha256": "a3820003227d4abe31fe28b493200d94a849ccfd078b50a019264f70353020b0",
+    "returncode": 0
+  },
+  "FandolSong-Bold.otf": {
+    "resolved_path": "/workspace/runtime/sysroot/usr/share/texlive/texmf-dist/fonts/opentype/public/fandol/FandolSong-Bold.otf",
+    "sha256": "ffa76a70e128947a4dd22151d5ee829b23e24ce3cb6fe8ad49891cd1c2d9e9b9",
+    "returncode": 0
+  },
+  "standalone.cls": {
+    "resolved_path": "/usr/share/texlive/texmf-dist/tex/latex/standalone/standalone.cls",
+    "sha256": "fe43e6a36997c58615429505ded27fded60e5de98972ccc89c1501c8f4f3655f",
+    "returncode": 0
+  },
+  "amsmath.sty": {
+    "resolved_path": "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty",
+    "sha256": "bcb034eb1b9ba90d62b9c33bb3d20ce3c906d00ae74a9f9baef81ddf14168458",
+    "returncode": 0
+  }
+}

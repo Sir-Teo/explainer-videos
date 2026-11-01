@@ -1,0 +1,113 @@
+{
+  "at": "2026-11-01T06:41:30.486265+00:00",
+  "scope": "Representative English and mixed Chinese/formula cacheSVGs recompiled in private directories from byteidentical retained.tex using actual Manim compile_tex+convert_to_svg; originals unchanged. Sample result is not all-file regeneration proof.",
+  "manim_version": "0.22.0",
+  "compiler_versions": {
+    "latex": [
+      "pdfTeX 3.141592653-2.6-1.40.26 (TeX Live 2025/dev/Debian)",
+      "kpathsea version 6.4.0/dev"
+    ],
+    "xelatex": [
+      "XeTeX 3.141592653-2.6-0.999996 (TeX Live 2025/dev/Debian)",
+      "kpathsea version 6.4.0/dev"
+    ],
+    "dvisvgm": [
+      "dvisvgm 3.4.4"
+    ]
+  },
+  "manim_tool_path": "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/manim/utils/tex_file_writing.py",
+  "manim_tool_sha256": "1242c9f714ca6c972e6bc17ed90607a88d05419acc6c6fe90b4f3ab96121598d",
+  "samples": [
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai3/en/SVD/Tex/373a1b58f15cc277.tex",
+      "part": 3,
+      "lang": "en",
+      "cjk": false,
+      "scene": "SVD",
+      "body": "\n\\begin{center}\n\\special{dvisvgm:raw <g id='unique000'>}the spectral norm: \\ $\\|A\\| = \\sigma_1$, \\ the most $A$ can stretch\\special{dvisvgm:raw </g>}\n\\end{center}\n\\end{document}",
+      "compiler": "latex",
+      "format": ".dvi",
+      "source_tex_sha256": "373a1b58f15cc2778791c72322050dae5dbd2ba33ba349eebb711041a0f3f7fe",
+      "copied_tex_sha256": "373a1b58f15cc2778791c72322050dae5dbd2ba33ba349eebb711041a0f3f7fe",
+      "original_svg_sha256": "e9135c004f88df662e942fb57c9853796cf9d800c453e221959ca0eac6075e43",
+      "regenerated_svg_sha256": "e9135c004f88df662e942fb57c9853796cf9d800c453e221959ca0eac6075e43",
+      "regenerated_path": "/workspace/runtime/old-tex-capacity-audit/regenerated/01-en-SVD/373a1b58f15cc277.svg",
+      "original_svg_bytes": 16130,
+      "regenerated_svg_bytes": 16130,
+      "byte_exact": true
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai4/en/HVP/Tex/c9503c871d5c03e7.tex",
+      "part": 4,
+      "lang": "en",
+      "cjk": false,
+      "scene": "HVP",
+      "body": "\n\\begin{align*}\n\\special{dvisvgm:raw <g id='unique000'>}H v \\special{dvisvgm:raw </g>}\\special{dvisvgm:raw <g id='unique001'>}= \\special{dvisvgm:raw </g>}\\special{dvisvgm:raw <g id='unique002'>}\\lim_{t \\to 0} \\frac{\\nabla f(\\theta + t v) - \\nabla f(\\theta)}{t}\\special{dvisvgm:raw </g>}\n\\end{align*}\n\\end{document}",
+      "compiler": "latex",
+      "format": ".dvi",
+      "source_tex_sha256": "c9503c871d5c03e70d2de86cc18eff1a6276f6fbf6b6dbbbd0417d04f89773c7",
+      "copied_tex_sha256": "c9503c871d5c03e70d2de86cc18eff1a6276f6fbf6b6dbbbd0417d04f89773c7",
+      "original_svg_sha256": "a6a4d2c326cea7656105624a92b13bbcf2fed83aa54a53e5cdedab239c8176dd",
+      "regenerated_svg_sha256": "a6a4d2c326cea7656105624a92b13bbcf2fed83aa54a53e5cdedab239c8176dd",
+      "regenerated_path": "/workspace/runtime/old-tex-capacity-audit/regenerated/02-en-HVP/c9503c871d5c03e7.svg",
+      "original_svg_bytes": 15103,
+      "regenerated_svg_bytes": 15103,
+      "byte_exact": true
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Gauss/Tex/e9c042740bd6d3cb.tex",
+      "part": 5,
+      "lang": "en",
+      "cjk": false,
+      "scene": "Gauss",
+      "body": "\n\\begin{align*}\n\\special{dvisvgm:raw <g id='unique000'>}p(x) \\special{dvisvgm:raw </g>}\\special{dvisvgm:raw <g id='unique001'>}= \\special{dvisvgm:raw </g>}\\special{dvisvgm:raw <g id='unique002'>}\\frac{1}{\\sqrt{(2\\pi)^d \\det \\Sigma}} \\special{dvisvgm:raw </g>}\\special{dvisvgm:raw <g id='unique003'>}\\, e^{-\\frac12 (x-\\mu)^\\top \\Sigma^{-1} (x-\\mu)}\\special{dvisvgm:raw </g>}\n\\end{align*}\n\\end{document}",
+      "compiler": "latex",
+      "format": ".dvi",
+      "source_tex_sha256": "e9c042740bd6d3cb35f040f5215e188067018ccc607b566a03874c8a84b8e7f7",
+      "copied_tex_sha256": "e9c042740bd6d3cb35f040f5215e188067018ccc607b566a03874c8a84b8e7f7",
+      "original_svg_sha256": "1062926e56093b3b40f4895fad91685051b505b1d05fde81579ed9be5482c9d7",
+      "regenerated_svg_sha256": "1062926e56093b3b40f4895fad91685051b505b1d05fde81579ed9be5482c9d7",
+      "regenerated_path": "/workspace/runtime/old-tex-capacity-audit/regenerated/03-en-Gauss/e9c042740bd6d3cb.svg",
+      "original_svg_bytes": 21208,
+      "regenerated_svg_bytes": 21208,
+      "byte_exact": true
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai4/zh/KKT/Tex/9ee94f6fd8451d3e.tex",
+      "part": 4,
+      "lang": "zh",
+      "cjk": true,
+      "scene": "KKT",
+      "body": "\n\\begin{center}\n\\special{dvisvgm:raw <g id='unique000'>}可行性残差$3 \\times 10^{-15}$, 容差$10^{-6}$; 驻点\\special{dvisvgm:raw </g>}\n\\end{center}\n\\end{document}",
+      "compiler": "xelatex",
+      "format": ".xdv",
+      "source_tex_sha256": "9ee94f6fd8451d3e4fd7cbb6279d796b5f4007f3ca772556640b18ea96acfea3",
+      "copied_tex_sha256": "9ee94f6fd8451d3e4fd7cbb6279d796b5f4007f3ca772556640b18ea96acfea3",
+      "original_svg_sha256": "494d6f1895db9a78b4e01b5e8b9ed0767c1941f4d485b8d4fde900a104f44bec",
+      "regenerated_svg_sha256": "494d6f1895db9a78b4e01b5e8b9ed0767c1941f4d485b8d4fde900a104f44bec",
+      "regenerated_path": "/workspace/runtime/old-tex-capacity-audit/regenerated/04-zh-KKT/9ee94f6fd8451d3e.svg",
+      "original_svg_bytes": 33052,
+      "regenerated_svg_bytes": 33052,
+      "byte_exact": true
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/zh/Likelihood/Tex/8761661d56b97254.tex",
+      "part": 5,
+      "lang": "zh",
+      "cjk": true,
+      "scene": "Likelihood",
+      "body": "\n\\begin{center}\n\\special{dvisvgm:raw <g id='unique000'>}$n$ 个数的平均，方差为 $\\sigma^2/n$\\special{dvisvgm:raw </g>}\n\\end{center}\n\\end{document}",
+      "compiler": "xelatex",
+      "format": ".xdv",
+      "source_tex_sha256": "8761661d56b97254f6f825bbb783e249924edb0efb73d2634c35511f509cfb25",
+      "copied_tex_sha256": "8761661d56b97254f6f825bbb783e249924edb0efb73d2634c35511f509cfb25",
+      "original_svg_sha256": "4dc8cd2be7dea26bb918226482e2e7feb82d9d13841f01409947dfd4cb429c4c",
+      "regenerated_svg_sha256": "4dc8cd2be7dea26bb918226482e2e7feb82d9d13841f01409947dfd4cb429c4c",
+      "regenerated_path": "/workspace/runtime/old-tex-capacity-audit/regenerated/05-zh-Likelihood/8761661d56b97254.svg",
+      "original_svg_bytes": 28587,
+      "regenerated_svg_bytes": 28587,
+      "byte_exact": true
+    }
+  ],
+  "all_byte_exact": true
+}

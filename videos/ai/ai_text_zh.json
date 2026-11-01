@@ -20873,7 +20873,9 @@
     "outside/bound violations: \\ $0$": "街道外／上界点未通过检查：\\ $0$",
     "free-margin residual: \\ $5.6\\times 10^{-5}$": "自由点最大间隔残差：\\ $5.6\\times 10^{-5}$",
     "final: \\ $1.6\\%$, \\ round $400$": "最终：\\ $1.6\\%$，\\ 第 $400$ 轮",
-    "accuracy \\\\ bars start at $70\\%$ (higher is better)": "准确率 \\\\ 条形从 $70\\%$ 起（越高越好）"
+    "accuracy \\\\ bars start at $70\\%$ (higher is better)": "准确率 \\\\ 条形从 $70\\%$ 起（越高越好）",
+    "all $70$ rates: \\ penalized gap $F-F_\\star$ \\ (nats per page)": "全部 $70$ 个词频：带惩罚目标差距 $F-F_\\star$（每页纳特）",
+    "$F=\\text{mean cross-entropy}+\\frac{\\lambda}{2}\\|\\mathbf{w}\\|^2,\\quad\\lambda=0.01$": "$F=\\text{平均交叉熵}+\\frac{\\lambda}{2}\\|\\mathbf{w}\\|^2,\\quad\\lambda=0.01$"
   },
   "phrases": {
     "width": "宽度",

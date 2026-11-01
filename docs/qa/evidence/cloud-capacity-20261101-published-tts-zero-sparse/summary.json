@@ -1,0 +1,64 @@
+{
+  "started": "2026-11-01T07:07:30.263869+00:00",
+  "finished": "2026-11-01T07:07:50.380209+00:00",
+  "scope": "Only fixed initial published16hex.wav/json +sameexisting.json.lock pairs older600s; sameexclusiveNONBLOCKINGflock, no create/retag/delete/reencode/synthesis/network. Metadata content never recorded.",
+  "plan_sha256": "5e0e3e0887b9de5cc22318b09a8a4defaeb563869b2927126b7d3b1d45f0a6c8",
+  "initial_inventory": 1291,
+  "initial_ineligible": 30,
+  "initial_eligible": 1261,
+  "considered": 1261,
+  "remaining_unprocessed": 0,
+  "status_counts": {
+    "byte-exact-sparse": 1253,
+    "skipped-nonzero-interior": 8
+  },
+  "stopped_reason": null,
+  "allocated_bytes_recovered": 1880113152,
+  "target_before_allocated_bytes": 1890369536,
+  "target_after_allocated_bytes": 10256384,
+  "free_before": 812007424,
+  "free_after": 2688512000,
+  "observed_free_space_delta": 1876504576,
+  "space_caveat": "OtherPart6 QA writes continue; observedwholefilesystemdelta separate from exacttargetallocatedrecovery.",
+  "all_success_WAV_bytes_path_size_inode_device_mode_mtime_atime_preserved": true,
+  "all_success_headers_tails_preserved": true,
+  "all_success_metadata_exact_signatures_preserved": true,
+  "all_success_existing_lock_exact_signatures_preserved": true,
+  "ctime_changes_explicit": true,
+  "protected306_count": 306,
+  "protected306_exact_signatures_unchanged": true,
+  "critical_source_files": 1524,
+  "critical_source_bytes_unchanged": true,
+  "partial_activity_visibility_caveat": "Partial host FD/maps visibility; same existing per-item exclusive flock is the writer guard. Readers would see identical bytes. No global absence claim.",
+  "no_provider_model_or_network_calls": true,
+  "successful_ctime_changes": 1253,
+  "raw_receipt": {
+    "private_path": "/workspace/runtime/capacity-published-tts-silent-wav-sparse-20261101/receipt.json",
+    "sha256": "379213f699511e5f8fea09db5006b9429770c7257469c3b4512c11c4f2f7b842"
+  },
+  "journal": {
+    "private_path": "/workspace/runtime/capacity-published-tts-silent-wav-sparse-20261101/journal.jsonl",
+    "sha256": "285c2705cac1c85afea5279ff893a6d1f3e2e4fc75edc20013ad5e1d94435719"
+  },
+  "byte_preserving_read_method": "Owner-authorized O_NOATIME|O_NOFOLLOW, no create, under same existing lock; WAV original atime andmtime explicitly restored; metadata/lock exact signatures unchanged.",
+  "protected_snapshot_proofs": {
+    "protected306": {
+      "before_private": "/workspace/runtime/capacity-published-tts-silent-wav-sparse-20261101/protected306-before.json.gz",
+      "after_private": "/workspace/runtime/capacity-published-tts-silent-wav-sparse-20261101/protected306-after.json.gz",
+      "before_gzip_sha256": "69f5edcd16107e6b34b2c28ccc1a8b09d7560f5b7170643f6cc2b6e0c2778173",
+      "after_gzip_sha256": "048b675cbbe34fa1beca4371dfe7a760f43819b385e8daa62e2cb4e8f3fff5cc",
+      "both_decompressed_sha256": "036e7fc562b9059d30caf584d17a1a2a73b74368f34ef536d8736e1f8242404f",
+      "decompressed_exact": true,
+      "records": 306
+    },
+    "source": {
+      "before_private": "/workspace/runtime/capacity-published-tts-silent-wav-sparse-20261101/source-before.json.gz",
+      "after_private": "/workspace/runtime/capacity-published-tts-silent-wav-sparse-20261101/source-after.json.gz",
+      "before_gzip_sha256": "b3f2385515b55d871ed82aa6a79938e62a538c1e5e0128d5a164c3ddc870745f",
+      "after_gzip_sha256": "c6ef86ff87a0b6c42928ef33872b01ea37aaa94d422d2867af19c28a51dfdc39",
+      "both_decompressed_sha256": "0861387ba021574b73bed4d67359a026c2bde18d438fe35307967730c3278957",
+      "decompressed_exact": true,
+      "records": 1524
+    }
+  }
+}

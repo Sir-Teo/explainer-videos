@@ -1,0 +1,71 @@
+{
+  "files": [
+    {
+      "path": "execute.py.gz",
+      "sha256": "35b224fb68083a71277f27ba7828f0fc2dff461bd929ef435204d2d4a6ba8c9c",
+      "bytes": 3730
+    },
+    {
+      "path": "protected306-identical-before-after.json.gz",
+      "sha256": "69f5edcd16107e6b34b2c28ccc1a8b09d7560f5b7170643f6cc2b6e0c2778173",
+      "bytes": 20538
+    },
+    {
+      "path": "execution.log.gz",
+      "sha256": "7162f181d0796fec40a0a864596abe8e265ded0658e60bb74fbf806ab41b8532",
+      "bytes": 1001
+    },
+    {
+      "path": "receipt.json.gz",
+      "sha256": "f3bbdbd27d82f4f160a0ac77d64ce0ea5675b9066f4de13b50028744477f9863",
+      "bytes": 8366
+    },
+    {
+      "path": "activity-before.json",
+      "sha256": "caca744d69d6f159070f02d67adb1329c3d1413e3c1687837c0bedb32f64ce0e",
+      "bytes": 516
+    },
+    {
+      "path": "plan.py.gz",
+      "sha256": "44a9d5d2cd8b8d7502602bdb0df05df7424baa12172cd096b1eab8ad1f0c1199",
+      "bytes": 1562
+    },
+    {
+      "path": "artifact-map.json",
+      "sha256": "e4d7910a43deb9e94e7dcbb746c82aca815f1f2266dca83b2f20edb0be0c756a",
+      "bytes": 3643
+    },
+    {
+      "path": "README.md",
+      "sha256": "f112e9ea12f67b36730fa227876acee31d001a5e54a7fb7bec947a17f481ebc7",
+      "bytes": 2265
+    },
+    {
+      "path": "plan.json.gz",
+      "sha256": "0cb94844e9c9394b42473bbaa1d2b44682e363639041a77ce7120995b933144f",
+      "bytes": 6064
+    },
+    {
+      "path": "inventory-unverified.json.gz",
+      "sha256": "9765f11a0050be5224480a39a966ba6c9c4411dd89079a11175219b069f0b8e0",
+      "bytes": 1446
+    },
+    {
+      "path": "activity-after.json",
+      "sha256": "3324d73f1d6d2214efd2aa5b2fb7e9bb50267b0919b74529ca06ed54ced72a36",
+      "bytes": 516
+    },
+    {
+      "path": "summary.json",
+      "sha256": "91797bfe2fc5c29e0db9af2912f35ebd2b125258df8972d4e9dc02c0c68fcdcf",
+      "bytes": 15876
+    },
+    {
+      "path": "source-identical-before-after.json.gz",
+      "sha256": "b3f2385515b55d871ed82aa6a79938e62a538c1e5e0128d5a164c3ddc870745f",
+      "bytes": 76985
+    }
+  ],
+  "count": 13,
+  "bytes": 142508
+}

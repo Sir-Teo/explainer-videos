@@ -1,0 +1,86 @@
+{
+  "case": "en-Ridge",
+  "frames": 15,
+  "pages_viewed": 4,
+  "native_originals_viewed": 4,
+  "covered_frame_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "coverage_complete_for_captured_endpoints": true,
+  "raw_status": "passed",
+  "raw_warnings": [],
+  "raw_result_sha256": "2fcdcf5e1e6e6c9115fc2b9dc0352678f2a83620fdc6e7b21a01c9eb86c06500",
+  "capture_receipt_sha256": "0a11b23773fc9afd5ecf69e21ed9e2246c0eee64efea096ab969ce5d9ff23d29",
+  "source_before_after_bytes_equal": true,
+  "inputs": [
+    {
+      "path": ".cache/ai6/ridge.json",
+      "sha256": "d91c02dd133467ef012f023fc1e570e01d5c6f6611cc832b4bca284923faf77b",
+      "captured_signature": [
+        14117,
+        1793509494113322260
+      ],
+      "current_signature": [
+        14117,
+        1793509494113322260
+      ]
+    },
+    {
+      "path": ".cache/ai6/ridge.npz",
+      "sha256": "9e8e74312aadbe1154a8009218d35847b42c1e37629723b573f1ba75da26e0b0",
+      "captured_signature": [
+        31266,
+        1793509494110918282
+      ],
+      "current_signature": [
+        31266,
+        1793509494110918282
+      ]
+    },
+    {
+      "path": ".cache/ai6/pages.json",
+      "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+      "captured_signature": [
+        4425,
+        1793509481979465950
+      ],
+      "current_signature": [
+        4425,
+        1793509481979465950
+      ]
+    },
+    {
+      "path": ".cache/ai6/pages.npz",
+      "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+      "captured_signature": [
+        46636,
+        1793509481978270662
+      ],
+      "current_signature": [
+        46636,
+        1793509481978270662
+      ]
+    }
+  ],
+  "raw_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+  "new_defects": [],
+  "limits": [
+    "All endpoint states viewed at960x540 tiles (50% native); critical originals separately recorded.",
+    "Skip-animation endpoint capture does not verify continuous motion or all live updater behavior.",
+    "No continuous perceptual playback, audio listening/sync, production4K or native1080 motion approval."
+  ]
+}

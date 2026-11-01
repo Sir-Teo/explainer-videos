@@ -1,0 +1,46 @@
+{
+  "utc": "2026-11-01T07:45:31.326952+00:00",
+  "status": "approved scoped local source repair implemented and focused checks passed; fresh bilingual visual/timing regression pending",
+  "source_sha256": "89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b",
+  "local_zh_sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+  "global_caption_status": "two exact entries handed off to parent; isolated geometry uses in-memory proposed overlay only until actual merge/capture verified",
+  "actual_baseline": {
+    "selected_times": 896,
+    "native_unique_images_actually_viewed": 756,
+    "exact_PNG_duplicate_times": 140,
+    "unscaled_pages_actually_viewed": 96,
+    "encoded_decoded": 4506,
+    "encoded_unselected": 3610,
+    "endpoint_states_actually_viewed": 30,
+    "native_proof_followups": 8
+  },
+  "repairs": [
+    "derive step1/2/3 transform=False",
+    "digits step1 transform=False",
+    "race cached penalty/penalized meanCE objective label/VO",
+    "race system_size=pages.X.shape[1]+1 including unpenalized intercept",
+    "one matching local Chinese narration template"
+  ],
+  "validation": {
+    "AST_scope": "four append flags + objective caption/VO/cachel2 and cacheddimension read; all other source AST identical",
+    "objective_expression": "actual producer objective function AST only: three synthetic parameter cases prove cached .01 weight penalty and unpenalized intercept; optimizer not executed",
+    "dimension": "actual cached X639x70 =>71 inclintercept",
+    "translation": "actual Translator(new source AST/current localZH) matches both placeholders/bookmarks; no unfilled fields",
+    "geometry": "actual-Manim AST-only caption/plot fixtures EN/ZH pass, native fixture PNGs actualviewed",
+    "syntax": "both source files AST compiled; no scene/producer imports/data loads",
+    "diff_check": "passed"
+  },
+  "not_claimed": [
+    "speech duration equivalence",
+    "fresh render acceptance",
+    "continuous perceptual playback",
+    "audio/listening/synchronization",
+    "full production-resolution movie QA"
+  ],
+  "fresh_required": [
+    "EN/ZH endpoints",
+    "EN/ZH full silent motion",
+    "fresh narration sidecars/bookmark timings",
+    "changed content + complete selected-time review with exact-PNG inheritance only"
+  ]
+}

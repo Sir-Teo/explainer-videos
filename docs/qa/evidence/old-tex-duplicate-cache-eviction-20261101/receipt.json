@@ -1,0 +1,159 @@
+{
+  "started": "2026-11-01T06:50:10.201048+00:00",
+  "finished": "2026-11-01T06:50:34.694051+00:00",
+  "approved_plan_sha256": "10d3c4393bd268426d1355366c9dbba0067df5ddb99cc27d8eb085ef217f9883",
+  "planned": 9253,
+  "removed": 9253,
+  "skipped": [],
+  "stopped_reason": null,
+  "remaining_preserved": 0,
+  "removed_allocated_bytes": 182243328,
+  "removed_logical_bytes": 163185571,
+  "disk_free_before": 1145712640,
+  "disk_free_after": 1301852160,
+  "observed_free_space_delta": 156139520,
+  "free_space_caveat": "Concurrent Part6 writes mean wholefilesystem delta may differ from exact removed fileallocation sum. No globally quiescent space claim.",
+  "protected306_exact_signatures_unchanged": true,
+  "protected306_count": 306,
+  "all_current_source_bytes_unchanged": true,
+  "source_files": 1524,
+  "all_tex_exact_signatures_unchanged": true,
+  "retained_tex_count": 15660,
+  "all_anchor_exact_signatures_unchanged": true,
+  "retained_unique_svg_anchor_count": 6403,
+  "all_removed_paths_absent": true,
+  "all_removed_restore_anchors_present_exact": true,
+  "partial_activity_visibility_caveat": "Partial host FD/map visibility. Root reconciled all task-owned runners as Part6 and oldPart3\u20135 idle; no global absence claim.",
+  "no_png_movie_audio_data_model_or_source_mutations_by_executor": true,
+  "removed_by_part": {
+    "ai4": 4471,
+    "ai5": 4082,
+    "ai3": 700
+  },
+  "private_full_receipt": {
+    "path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/receipt.json",
+    "sha256": "818eddca136eb62f129b0df18d0ac8ca8b8339e6ebbcef55c4de18f0a46cf423"
+  },
+  "private_approved_plan": {
+    "path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-plan.json.gz",
+    "sha256": "10d3c4393bd268426d1355366c9dbba0067df5ddb99cc27d8eb085ef217f9883"
+  },
+  "private_full_restore_map": {
+    "path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/full-restore-map.json.gz",
+    "sha256": "1da21c8f1527aad1b75e49e52405fc7dc3d44582f6ac8ea96f5cab49919bd169"
+  },
+  "private_deletion_journal": {
+    "path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/deletion-journal.jsonl",
+    "sha256": "f1abe151ee4ce11e720b2875fca63e9c2f88308c59b0e1ed8e3a8a9cf7006d18"
+  },
+  "protected_snapshot_proofs": {
+    "protected306": {
+      "before_private_path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/protected306-before.json.gz",
+      "after_private_path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/protected306-after.json.gz",
+      "before_gzip_sha256": "a8f1d6b0e5984ecc68256a7748a3ce4b8a977d69e192b93929df26853bd1a14a",
+      "after_gzip_sha256": "be6df38a8f92263818f9237aa5a32bc7014a616d88c9a675723471c50a89876d",
+      "both_decompressed_sha256": "381525d3c3d3bd7efec5b5b10f66343b8a374f14f7d14b7e8fa48891e310f8a9",
+      "decompressed_exact": true,
+      "identical_record_count": 306
+    },
+    "source": {
+      "before_private_path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/source-before.json.gz",
+      "after_private_path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/source-after.json.gz",
+      "before_gzip_sha256": "b3f2385515b55d871ed82aa6a79938e62a538c1e5e0128d5a164c3ddc870745f",
+      "after_gzip_sha256": "c6ef86ff87a0b6c42928ef33872b01ea37aaa94d422d2867af19c28a51dfdc39",
+      "both_decompressed_sha256": "0861387ba021574b73bed4d67359a026c2bde18d438fe35307967730c3278957",
+      "decompressed_exact": true,
+      "identical_record_count": 1524
+    },
+    "all-retained-tex": {
+      "before_private_path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/all-retained-tex-before.json.gz",
+      "after_private_path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/all-retained-tex-after.json.gz",
+      "before_gzip_sha256": "e658a98f08a540ba939db15867da6a62c19811096ebc0423f93d6f282017c235",
+      "after_gzip_sha256": "b8cb11e744cdd49bf820fcffc239369bee7ec9173749ba882b6919bdca567a29",
+      "both_decompressed_sha256": "6f47459aa51522a3d1c6673e5eefe5cf69016b91123e585b46bbfa2e20a07422",
+      "decompressed_exact": true,
+      "identical_record_count": 15660
+    },
+    "all-anchor-svg": {
+      "before_private_path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/all-anchor-svg-before.json.gz",
+      "after_private_path": "/workspace/runtime/old-tex-capacity-audit/duplicate-only-execution/all-anchor-svg-after.json.gz",
+      "before_gzip_sha256": "5f3f4a78faffa06d189a04cf975ee7e25ac9ef7698990c1bd820bcb18b8177d8",
+      "after_gzip_sha256": "7f8b559ad81ca7d02027a04ec2d354fa4a58e58c3548c6e6b239ce41e41892b6",
+      "both_decompressed_sha256": "e37ca7153a5a33c6ead296bb8cb303ba42512e3d19c4048e3bbc3c4ccd850525",
+      "decompressed_exact": true,
+      "identical_record_count": 6403
+    }
+  },
+  "excluded_orphan_svgs_retained_exact": [
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai4/en/Floats_motion/Tex/2eb1b65f98fc6289.svg",
+      "sha256": "38f09041d28d310c0255d4cd882271ac9a7ed0aa9677bb12aa25c3a3b0df0e98",
+      "bytes": 42597
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai4/en/Floats_motion/Tex/ce025336008acfe7.svg",
+      "sha256": "5f003ced7d1a7e7ac2f9311d7fb75993d20cd72ad72b6e0a8ad9b54227b807e8",
+      "bytes": 42907
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai4/zh/Layers_motion/Tex/66d534215e6bb4a4.svg",
+      "sha256": "8fced3588128b3a3fb45e65d469770edc278efd65ac44558c2bbbed70b609a7c",
+      "bytes": 23847
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai4/zh/Train_motion/Tex/1b71551d50231906.svg",
+      "sha256": "27caa3958c9615ac0bd0d8088cd5bb64a6edcb9a4732449374b4d8151bfd2520",
+      "bytes": 42834
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai4/zh/Train_motion/Tex/cd8800053766b564.svg",
+      "sha256": "6e644fa522bb3130e504eb41d19ee055f4c44b250f8db18f0437c61369760be7",
+      "bytes": 17453
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai4/zh/Train_motion/Tex/e28954acf7d7413a.svg",
+      "sha256": "087b9f8a60f36f58979a3264aeb0ebb590fde3350cfaa409495ac2f9db8ba683",
+      "bytes": 71140
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Bell_motion/Tex/12004c18c462cbcf.svg",
+      "sha256": "92b40a4cceeba63dd23b2a7d83ddbd9785a883b761e74c1e0c58a734a955b0b3",
+      "bytes": 13132
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Brownian_motion/Tex/0cd91cd9b5dc18b4.svg",
+      "sha256": "b292eb28e498d29f542ee29e97a1b9c0ec37246ed8778381e93bc2e2d7cc2b6a",
+      "bytes": 12158
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Sampling_motion/Tex/d8e01761d0bdde1f.svg",
+      "sha256": "957fa2479a1eb2fa757518f1f6502f9cb4e728cf61603999004e04e12ef2eed1",
+      "bytes": 22270
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/en/Tails_motion/Tex/95fb9d86d3e0e4bd.svg",
+      "sha256": "76f9024099e29bca4e352feefc384dcb4ac2b7894c7a80e24a3f642d553961fc",
+      "bytes": 15768
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/zh/Bell_motion/Tex/8621c74134d1d70d.svg",
+      "sha256": "d11ac80b7031c5469e45e25fc1688262ff979ce4a1fec53cb015a0367b24fc4c",
+      "bytes": 28002
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/zh/Brownian_motion/Tex/341d29ee191c7d00.svg",
+      "sha256": "42f42466e1f0792a49408f8afe000f1999ef4531a182d36b10bd7fa1eac0f14c",
+      "bytes": 14616
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/zh/Sampling_motion/Tex/ff4d3a3aedd467c2.svg",
+      "sha256": "57f8153c1695a253b234b76c960961ad6deff35cfec5b437720c9191d8218dd0",
+      "bytes": 46744
+    },
+    {
+      "path": "/workspace/explainer-videos/renders/qa/series/ai5/zh/Tails_motion/Tex/180427015160409e.svg",
+      "sha256": "2286919a49d0350cc4801b659ef28c732ea05c908bd0a077e2468d01091fccab",
+      "bytes": 22494
+    }
+  ]
+}

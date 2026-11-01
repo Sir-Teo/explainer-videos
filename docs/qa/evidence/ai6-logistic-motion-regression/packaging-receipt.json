@@ -1,0 +1,7 @@
+{
+  "created_utc": "2026-11-01T07:06:15.167883+00:00",
+  "runtime_report_sha256": "e0b6a0620652fdc611e3ec708112ce3f5f855ef65d1e50c870a95a17937843a2",
+  "baseline_manifest_sha256": "f6b48545ff32a9dea97aff3c3b4a6e5c7568ee6cffc3aaf15410a9a6053ba425",
+  "source_sha256": "c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032",
+  "scope": "All four actual freshcaptures plus paired selected-image/encoded-reveal-window regression; no continuous/listening/production approval."
+}

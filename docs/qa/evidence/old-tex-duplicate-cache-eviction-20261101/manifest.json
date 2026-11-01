@@ -1,0 +1,81 @@
+{
+  "files": [
+    {
+      "path": "activity-before.json",
+      "bytes": 547,
+      "sha256": "b17c2102e2b2c423279672053766c811df97887ca0c9599d2af13001f8c37b81"
+    },
+    {
+      "path": "execution.log",
+      "bytes": 1499,
+      "sha256": "ed68e7408001fc3be94398b2b1f23a2b97389a91430f268caac926edb24729a3"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 8085,
+      "sha256": "82a77f6cb7b2697a932e4a6bc04d7801a2796c7ea114dd0df40f76b539f3c35b"
+    },
+    {
+      "path": "artifact-map.json",
+      "bytes": 4478,
+      "sha256": "bac98ced6eef047bfc12058976b3660b32a3f0d320ad455da03349627343585e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2179,
+      "sha256": "732530c9cd41eb8eaaaed4b23951da6e6e5a3824d8317ef5adbac350d55f711a"
+    },
+    {
+      "path": "preflight.json",
+      "bytes": 497,
+      "sha256": "ab3470c5139b7b741cacdbcd3287857727192e7b1e74c1b73fd373eac3090a11"
+    },
+    {
+      "path": "execute.py",
+      "bytes": 10655,
+      "sha256": "9f3ef29501df12a9baad352a96d0aaa4a1bb9f2d4be1e8a02e78fc40aa39feb4"
+    },
+    {
+      "path": "dependency-identities.json",
+      "bytes": 1461,
+      "sha256": "6a5e1884120bc7e12a2fe9d32c7c6eb4c5b087fba0aa26305893c07b6d8abbb3"
+    },
+    {
+      "path": "activity-after.json",
+      "bytes": 547,
+      "sha256": "1418e437cd11bd48a655ba266410f3cd4a3e3fb2cdae65c9a8b48e7541d5ecdf"
+    },
+    {
+      "path": "restore-map.json.gz",
+      "bytes": 1037403,
+      "sha256": "1da21c8f1527aad1b75e49e52405fc7dc3d44582f6ac8ea96f5cab49919bd169"
+    },
+    {
+      "path": "regeneration-proof.json",
+      "bytes": 6531,
+      "sha256": "a377c7d5c1011667bc578f28ee48ad19465ad1ac4a3de4decef4c2f2791c7088"
+    },
+    {
+      "path": "protected/protected306-identical-before-after.json.gz",
+      "bytes": 20459,
+      "sha256": "a8f1d6b0e5984ecc68256a7748a3ce4b8a977d69e192b93929df26853bd1a14a"
+    },
+    {
+      "path": "protected/all-anchor-svg-identical-before-after.json.gz",
+      "bytes": 511424,
+      "sha256": "5f3f4a78faffa06d189a04cf975ee7e25ac9ef7698990c1bd820bcb18b8177d8"
+    },
+    {
+      "path": "protected/all-retained-tex-identical-before-after.json.gz",
+      "bytes": 885257,
+      "sha256": "e658a98f08a540ba939db15867da6a62c19811096ebc0423f93d6f282017c235"
+    },
+    {
+      "path": "protected/source-identical-before-after.json.gz",
+      "bytes": 76985,
+      "sha256": "b3f2385515b55d871ed82aa6a79938e62a538c1e5e0128d5a164c3ddc870745f"
+    }
+  ],
+  "count": 15,
+  "bytes": 2568007
+}

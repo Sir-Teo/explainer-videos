@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "actual_system_size_including_intercept": 71,
+  "local_Chinese_changed_keys": [
+    "f\"Race them, from the same start."
+  ],
+  "approved_append_switches": [
+    [
+      "derive",
+      1
+    ],
+    [
+      "derive",
+      2
+    ],
+    [
+      "derive",
+      3
+    ],
+    [
+      "digits",
+      1
+    ]
+  ],
+  "all_other_AST_exact_after_removing_explicit_objective_caption_VO_and_cached_l2_read": true,
+  "unpenalized_derivation_two_rate_replay_all_arrays_plot_vertices_digits_runaway_unchanged": true,
+  "all_bookmarks_and_requested_play_wait_duration_expressions_unchanged": true,
+  "race_VO_changed": true,
+  "duration_equivalence": "NOT CLAIMED: new speech is longer; fresh EN/ZH captures/sidecars/timings required",
+  "synthetic_objective_checks": 3,
+  "producer_optimizer_or_default_data_load_executed": false,
+  "cached_l2": 0.01,
+  "cached_fstar": 0.046671306490608744,
+  "cache_json_sha256": "c3da935ac12d1600eea2f5f450d77d95ee61cf0d993abcce64b66df4c7dc267f",
+  "narration_lookup": {
+    "en": "Race them, from the same start. <bookmark mark='a'/> After one step, Newton's line is already near the answer; after 3, it's there. Gradient descent, after the same number of steps, is still swinging into place. <bookmark mark='b'/> With all seventy rates, minimize mean cross-entropy in nats plus half lambda times the squared weight norm, with lambda 0.01. The gap subtracts the minimum of this penalized objective. Newton needs 8 steps to reach it to the last digit; gradient descent needs 1,000 steps to get within a millionth. Near the bottom, Newton doubles the number of correct digits at every step. The price: a 71 by 71 system, including the intercept, to solve each time, which is why giant models stay with gradients.",
+    "zh": "让它们从同一个起点赛跑。<bookmark mark='a'/>走了一步之后，牛顿法的直线已经接近答案；走了3步，就到了。梯度下降走了同样多的步数，还在摆动着找位置。<bookmark mark='b'/>用全部70个词频时，最小化的是以纳特计的平均交叉熵，加上二分之一乘λ再乘权重范数的平方，其中λ等于0.01。图里的差距，是这个带惩罚目标减去它的最小值。牛顿法走8步，就精确到最后一位；梯度下降要走1000步，才能差到百万分之一以内。接近谷底时，牛顿法每走一步，正确的位数就翻一倍。代价是：算上截距，每一步都要解一个71乘71的方程组，这就是为什么巨大的模型还是用梯度。",
+    "new_source_template": "f\"Race them, from the same start. <bookmark mark='a'/> After one step, Newton's line is already near the answer; after {settle}, it's there. Gradient descent, after the same number of steps, is still swinging into place. <bookmark mark='b'/> With all seventy rates, minimize mean cross-entropy in nats plus half lambda times the squared weight norm, with lambda {penalty:g}. The gap subtracts the minimum of this penalized objective. Newton needs {nn} steps to reach it to the last digit; gradient descent needs {it6:,} steps to get within a millionth. Near the bottom, Newton doubles the number of correct digits at every step. The price: a {system_size} by {system_size} system, including the intercept, to solve each time, which is why giant models stay with gradients.\"",
+    "placeholders": [
+      "settle",
+      "penalty:g",
+      "nn",
+      "it6:,",
+      "system_size",
+      "system_size"
+    ],
+    "bookmarks": [
+      "a",
+      "b"
+    ]
+  },
+  "before_sha256": "24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705",
+  "proposed_sha256": "89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b"
+}

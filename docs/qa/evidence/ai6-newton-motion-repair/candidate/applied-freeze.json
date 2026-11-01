@@ -1,0 +1,20 @@
+{
+  "utc": "2026-11-01T07:43:47.362116+00:00",
+  "source_sha256": "89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b",
+  "local_zh_sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+  "source_before_sha256": "24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705",
+  "local_zh_before_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+  "scope": [
+    "derive step1/2/3 transform=False",
+    "digits step1 transform=False",
+    "race cached penalty/penalized meanCE objective label/VO",
+    "race system_size=pages.X.shape[1]+1 including unpenalized intercept",
+    "one matching local Chinese narration template"
+  ],
+  "global_captions_pending_parent_merge": {
+    "all $70$ rates: \\ penalized gap $F-F_\\star$ \\ (nats per page)": "全部 $70$ 个词频：带惩罚目标差距 $F-F_\\star$（每页纳特）",
+    "$F=\\text{mean cross-entropy}+\\frac{\\lambda}{2}\\|\\mathbf{w}\\|^2,\\quad\\lambda=0.01$": "$F=\\text{平均交叉熵}+\\frac{\\lambda}{2}\\|\\mathbf{w}\\|^2,\\quad\\lambda=0.01$"
+  },
+  "speech_duration_equivalence": false,
+  "fresh_bilingual_capture_required": true
+}

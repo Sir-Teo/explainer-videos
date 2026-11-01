@@ -1,0 +1,89 @@
+{
+  "case": "zh-Lasso",
+  "frames": 18,
+  "pages_viewed": 5,
+  "native_originals_viewed": 6,
+  "covered_frame_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "coverage_complete_for_captured_endpoints": true,
+  "raw_status": "passed",
+  "raw_warnings": [],
+  "raw_result_sha256": "481fee0cd976d6b506975e14c5a759f100b0b5c37a560544000b95086a776fce",
+  "capture_receipt_sha256": "802961b15b44c6507d5e28d5f4909dafc3cb7f5f9aac8b37b6d4c6b7de0e90e7",
+  "source_before_after_bytes_equal": true,
+  "inputs": [
+    {
+      "path": ".cache/ai6/lasso.json",
+      "sha256": "17965418da0d05800bdd2d6be4d185316431f340626e24e5bff3fe9611bdfb22",
+      "captured_signature": [
+        10627,
+        1793509518563657867
+      ],
+      "current_signature": [
+        10627,
+        1793509518563657867
+      ]
+    },
+    {
+      "path": ".cache/ai6/lasso.npz",
+      "sha256": "68dfc52f9c0a8295ab11014f228357b71c11b2c004af3168da55bfb9facf0d8b",
+      "captured_signature": [
+        48312,
+        1793509518562119715
+      ],
+      "current_signature": [
+        48312,
+        1793509518562119715
+      ]
+    },
+    {
+      "path": ".cache/ai6/pages.json",
+      "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+      "captured_signature": [
+        4425,
+        1793509481979465950
+      ],
+      "current_signature": [
+        4425,
+        1793509481979465950
+      ]
+    },
+    {
+      "path": ".cache/ai6/pages.npz",
+      "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+      "captured_signature": [
+        46636,
+        1793509481978270662
+      ],
+      "current_signature": [
+        46636,
+        1793509481978270662
+      ]
+    }
+  ],
+  "raw_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+  "new_defects": [],
+  "limits": [
+    "All endpoint states viewed at960x540 tiles (50% native); critical originals separately recorded.",
+    "Skip-animation endpoint capture does not verify continuous motion or all live updater behavior.",
+    "No continuous perceptual playback, audio listening/sync, production4K or native1080 motion approval."
+  ]
+}

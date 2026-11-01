@@ -1,0 +1,1933 @@
+{
+  "artifacts": [
+    {
+      "path": "receipts/capture-controller.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/capture-controller.log",
+      "decoded_sha256": "948a2ac16c57d768d356310a8c8732f49fe1bd187114205e28568be984ced98e",
+      "decoded_bytes": 4274,
+      "encoded_sha256": "dd18865c0a014e22f34315d8a5270b835e6c4a3edbe034f0212816a91e982369"
+    },
+    {
+      "path": "receipts/capture_driver.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/capture_driver.py",
+      "decoded_sha256": "a3ba29a272b86c9e66ebae4acc3caa7dfdba5beb22fe35de7265aa6530adf478",
+      "decoded_bytes": 13360,
+      "encoded_sha256": "66339917ef0583e3a02e2c27e3b05c93bfefd86d403bf86c2ac6e4ce3fdc1aec"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/command.json",
+      "decoded_sha256": "a08735a7ac6b9f689f21200209eea6708938813b1f9846999ea95812938b1e4d",
+      "decoded_bytes": 735,
+      "encoded_sha256": "7e5c90af4c06f57b9efceca899a23a0c44cf410a3410ba18079034be22ca3738"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/completed/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/completed/copy-manifest.json",
+      "decoded_sha256": "1b977fb3daace9561deb059b9198120b250a44442347a1898368576080d7542f",
+      "decoded_bytes": 6856,
+      "encoded_sha256": "4f8e66157e77b417ec7213dd21b0eb7b3fb787bf3a882e009b9ea4f37196763a"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/completed/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/completed/result.json",
+      "decoded_sha256": "2f98bc14ef6fe150755b7583cdd7ff0bdd84e15df504b187f316f94cec7396d1",
+      "decoded_bytes": 58894,
+      "encoded_sha256": "dfd7cb3eafbfaa7a8e6ab52f6f90935ae3d5d70537092cb74675aa8d95d6ccfc"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/completed/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/completed/text.jsonl",
+      "decoded_sha256": "188b143bdb9fc2a49a0fc0f702aa6a5adbe5bce0ee67b7414433b4876b4b14dd",
+      "decoded_bytes": 7943,
+      "encoded_sha256": "458e4056c66d30be0e6b2758870029f7b45a17c0123df99d1eeb66823dfd160e"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/prior/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/prior/copy-manifest.json",
+      "decoded_sha256": "e0ec2ff0fb55f95d96e7f531ce79cbe041444d60b54202897ed5b8dcff2d1e81",
+      "decoded_bytes": 6768,
+      "encoded_sha256": "8d306269271f33f5fe0b3cf606e8cc5aed1c5ebb342069840772ae849c6e883d"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/prior/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/prior/result.json",
+      "decoded_sha256": "128ca7fcae6ba5af318c875f115b24406ea6d1df177d806703d29d090fb309a1",
+      "decoded_bytes": 58894,
+      "encoded_sha256": "fe9e0727c7b830db950243c8e54f4e37d2796792f4aa00fe6ca600654015bf41"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/prior/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/prior/text.jsonl",
+      "decoded_sha256": "188b143bdb9fc2a49a0fc0f702aa6a5adbe5bce0ee67b7414433b4876b4b14dd",
+      "decoded_bytes": 7943,
+      "encoded_sha256": "458e4056c66d30be0e6b2758870029f7b45a17c0123df99d1eeb66823dfd160e"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/prior-output.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/prior-output.json",
+      "decoded_sha256": "e0ec2ff0fb55f95d96e7f531ce79cbe041444d60b54202897ed5b8dcff2d1e81",
+      "decoded_bytes": 6768,
+      "encoded_sha256": "8d306269271f33f5fe0b3cf606e8cc5aed1c5ebb342069840772ae849c6e883d"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/process.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/process.log",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/receipt.json",
+      "decoded_sha256": "14236fb9b6da5832acae61d6889e842ba2428782b2b48bb2060a46938708f2b5",
+      "decoded_bytes": 7765,
+      "encoded_sha256": "ffcc2a0b449e2446afa8f0cb1a63f848fac5f2d4b14d796c1d0480ea094fc017"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/source-after.json",
+      "decoded_sha256": "6404efe33e0ee61819af8e73b484bff34775cdf07b202412cecd449c16a089a4",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "74262c2ded32062b23f63a46912bf3b2e4678c565c0aa0fcf67a4e2be1ce9f0a"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/endpoints/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/endpoints/source-before.json",
+      "decoded_sha256": "2e211421d8638ef67ce4f1825011c365dfc05ed3d07fc74469b7da1712a78f6a",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "c8404673aa0c0cd6e91e21deffc3d3593755457c23739adaa7a09aa676e49fb7"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/command.json",
+      "decoded_sha256": "f3084aae25d69c405d7d7131b8ec07ec74b14d1d56fe996eaaa947d0179ecfb0",
+      "decoded_bytes": 751,
+      "encoded_sha256": "32dad51711497f43f28790bc6ac5eba2f6cd7898cd8f7cf48077323a2dab344c"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/completed/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/completed/copy-manifest.json",
+      "decoded_sha256": "bf704a20ff9752caccd99bbfa7da78d48c18db6710ff8e8af30de676bf4f6bc8",
+      "decoded_bytes": 8939,
+      "encoded_sha256": "1a9111374592d66996e387dd40bba5e287bff895ce69ed86838cb4477a88a7a6"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/completed/dead_air.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/completed/dead_air.log",
+      "decoded_sha256": "d958e3cebe35d854eae8f76fc301c0482b7aef32094da1ac201b14e0bea0c79e",
+      "decoded_bytes": 133,
+      "encoded_sha256": "a0abe066585a70bee8b80144fd579044132facc1a1b671bb73fd987bd54842b5"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/completed/media/videos/480p15/Logistic.narration.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/completed/media/videos/480p15/Logistic.narration.json",
+      "decoded_sha256": "055943193de0267674513dd5019f6d39c506c105c711210bcc83d1815e6ca90d",
+      "decoded_bytes": 33010,
+      "encoded_sha256": "60e64abfe8b0f198a0bb1b8e4506c84219e64dc0c00938ce7be8260fa7745495"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/completed/media/videos/480p15/Logistic.srt.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/completed/media/videos/480p15/Logistic.srt",
+      "decoded_sha256": "589bc1612f56dde57b61bdc060dd36878142c3693d83f1d139bff910b1a6f58f",
+      "decoded_bytes": 3782,
+      "encoded_sha256": "8409ab01cf397bca4709c86fe55a6d14256c3559603d9ef1648a4035cf6b72fc"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/completed/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/completed/result.json",
+      "decoded_sha256": "d1f8433a5dc066f392fcb23fd5e97e2bb8a93264d7a8ffdf0b98cac4a94d9673",
+      "decoded_bytes": 59179,
+      "encoded_sha256": "22c2ef3fefae4ef19a02be6ee9823c6e3aba0f4ed0168b1a5081c58915e44e9d"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/completed/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/completed/text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/prior/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/prior/copy-manifest.json",
+      "decoded_sha256": "5bd4d3f4f32fa942e053f3145a6e998f1f74b6f9e4685e15b236f6532858b019",
+      "decoded_bytes": 8827,
+      "encoded_sha256": "25d6057997f85f368cd4df80fdaf1195e9d4695377814c381e14110a5b9b6f37"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/prior/dead_air.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/prior/dead_air.log",
+      "decoded_sha256": "d958e3cebe35d854eae8f76fc301c0482b7aef32094da1ac201b14e0bea0c79e",
+      "decoded_bytes": 133,
+      "encoded_sha256": "a0abe066585a70bee8b80144fd579044132facc1a1b671bb73fd987bd54842b5"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/prior/media/videos/480p15/Logistic.narration.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/prior/media/videos/480p15/Logistic.narration.json",
+      "decoded_sha256": "055943193de0267674513dd5019f6d39c506c105c711210bcc83d1815e6ca90d",
+      "decoded_bytes": 33010,
+      "encoded_sha256": "60e64abfe8b0f198a0bb1b8e4506c84219e64dc0c00938ce7be8260fa7745495"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/prior/media/videos/480p15/Logistic.srt.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/prior/media/videos/480p15/Logistic.srt",
+      "decoded_sha256": "589bc1612f56dde57b61bdc060dd36878142c3693d83f1d139bff910b1a6f58f",
+      "decoded_bytes": 3782,
+      "encoded_sha256": "8409ab01cf397bca4709c86fe55a6d14256c3559603d9ef1648a4035cf6b72fc"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/prior/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/prior/result.json",
+      "decoded_sha256": "487ab5a08d386f6db7dcfa4c667ba3351fb6751da82ccfb269f59c10ba18eae6",
+      "decoded_bytes": 59179,
+      "encoded_sha256": "e45374f65720b59ee54db7df89ed2223fd71c256dac16d9c1f8380df044eb07b"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/prior/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/prior/text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/prior-output.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/prior-output.json",
+      "decoded_sha256": "5bd4d3f4f32fa942e053f3145a6e998f1f74b6f9e4685e15b236f6532858b019",
+      "decoded_bytes": 8827,
+      "encoded_sha256": "25d6057997f85f368cd4df80fdaf1195e9d4695377814c381e14110a5b9b6f37"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/process.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/process.log",
+      "decoded_sha256": "fb0dd7cb18eb387f3b74f5435e7a5587f151d5906258fd0ae645a6c4fc347769",
+      "decoded_bytes": 405,
+      "encoded_sha256": "622e073504429970f7f238609d370884164a60b6d6e48bc7f91e4fa2efaa05aa"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/receipt.json",
+      "decoded_sha256": "230e86c9ea2582459eab0cad7f5474146a5c3cb5b9dedfea20e74a93a66c1bb3",
+      "decoded_bytes": 9930,
+      "encoded_sha256": "5b3b5f0395c2c3bd303a744864ea27e8a998dde7dc3c6f3d8e44af0124447776"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/source-after.json",
+      "decoded_sha256": "baaa7d594ceda569a1b5d5be48c08abf2c9ca00b956e631059837287663c47de",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "8778467e665d356246eb622ed4adf21b9c13755364a9a582879d210452558b6a"
+    },
+    {
+      "path": "receipts/current/06-Logistic/en/motion/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/source-before.json",
+      "decoded_sha256": "de2f6f7f5f58fc4eddce664e946af26eeb19c141b9f61c4139aa52b3be9a7994",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "9d398f2267d668a74336d71569e0c6e6cf363fabad132a329c89aa6e510b5f85"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/command.json",
+      "decoded_sha256": "290a641d4094f3155b10e289d68b3bc602be1e016b7ec929f3e1e6e784fe69dc",
+      "decoded_bytes": 735,
+      "encoded_sha256": "2b7441e14b1ac9bef019e44fa407523bd3a2ebf60b4523b0b79b921837754e80"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/completed/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/completed/copy-manifest.json",
+      "decoded_sha256": "daad86a61c30e2d138002243367c76d2d9dc792704fc6712a170dd68a84927bb",
+      "decoded_bytes": 6856,
+      "encoded_sha256": "9b90ebf8e72dcf078aad487564410f23d295acbbb1f72fcc78f4955950a317f8"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/completed/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/completed/result.json",
+      "decoded_sha256": "e474088a1492cf4ca1f5da5a1174df65b5e5475cf0e7e0a5e834105c47914973",
+      "decoded_bytes": 78657,
+      "encoded_sha256": "4c8c79b9eb652fe4b1196c6aba1b459bdbf1a19ec8604467f6fe2a13ae2b56b5"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/completed/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/completed/text.jsonl",
+      "decoded_sha256": "34387706ccf40db0124c51fefaa9e2ab534f827e79c36d6c119110a511509927",
+      "decoded_bytes": 7946,
+      "encoded_sha256": "9939b94354ddebecf205012d337b63e6fd0f65d1bd9100d1b1e1224063d3827f"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/prior/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/prior/copy-manifest.json",
+      "decoded_sha256": "388733767192aa5421744de207320e6946e0b8b304405eaa3a3ee6c829b368ff",
+      "decoded_bytes": 6768,
+      "encoded_sha256": "293e14dd528497c4aa412401a25317011397a9757d20c6c39bdc07967aa2246c"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/prior/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/prior/result.json",
+      "decoded_sha256": "09dfd507a57c2aefdbd466ab50f5c118b198e7b8d38b705c4c2388b839dcfce2",
+      "decoded_bytes": 78656,
+      "encoded_sha256": "d5910d50c0d698c914a5b7b05e265d18aabf689d5ab1cca135ae93714a5029f7"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/prior/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/prior/text.jsonl",
+      "decoded_sha256": "34387706ccf40db0124c51fefaa9e2ab534f827e79c36d6c119110a511509927",
+      "decoded_bytes": 7946,
+      "encoded_sha256": "9939b94354ddebecf205012d337b63e6fd0f65d1bd9100d1b1e1224063d3827f"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/prior-output.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/prior-output.json",
+      "decoded_sha256": "388733767192aa5421744de207320e6946e0b8b304405eaa3a3ee6c829b368ff",
+      "decoded_bytes": 6768,
+      "encoded_sha256": "293e14dd528497c4aa412401a25317011397a9757d20c6c39bdc07967aa2246c"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/process.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/process.log",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/receipt.json",
+      "decoded_sha256": "d5928fde650c9927de256fe2cf39c06e6d58113f312171115df503fb45fc64c2",
+      "decoded_bytes": 7765,
+      "encoded_sha256": "ea3565745051c4c393184a313084312ca20944a137c58374912d55db39a416e7"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/source-after.json",
+      "decoded_sha256": "2bfd501c873840c7e1f2709c68cdad1cd3261d270c954528b2b256f1ab2da7ab",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "28e96b10c3e75db6c1b5f35d08268a4aa2194dd04035216fce22e7a1b726f62d"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/endpoints/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/endpoints/source-before.json",
+      "decoded_sha256": "2d409dc0d34dd122e277d85ca09d1af2c0ce3f9e812962c93522e82256c7e2fa",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "e3feafc50b4d75811d545a5116b9dc80606404325a20d237252cbd8c4bf35134"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/command.json",
+      "decoded_sha256": "56da3dbad680f698093ca689e2682126d08b76ac929c03aff07d638edf98363c",
+      "decoded_bytes": 751,
+      "encoded_sha256": "575b495a071e653b5a79a867f00cbd6e94a9bdd404c794a900c734ba37577ce8"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/completed/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/completed/copy-manifest.json",
+      "decoded_sha256": "725eea44ae19d1de6545fa78857285bf43c74c9a886feae552fbcb1bdd153357",
+      "decoded_bytes": 8940,
+      "encoded_sha256": "36ddececd6b00d92abc0dbb61f6ee34bd739688a8df902c97bf746ae9e2dc6e9"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/completed/dead_air.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/completed/dead_air.log",
+      "decoded_sha256": "0ca82ca5c845e09435013dc760f862f877f06f9927fe8def6d01bc0b8b169d95",
+      "decoded_bytes": 133,
+      "encoded_sha256": "4d8607bc04e5ba95e90c80fa749bce4e81473aba8b606b36de8bb05b2ea2efa4"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/completed/media/videos/480p15/Logistic.narration.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/completed/media/videos/480p15/Logistic.narration.json",
+      "decoded_sha256": "d726ed187f558c9facf4e1db80fca4c1786ccf1196606d32aaa6bd2893c1ab19",
+      "decoded_bytes": 52546,
+      "encoded_sha256": "99a27da43c461b83e03dd6f75a7e390e7245af05a9267f306ed19a7082276707"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/completed/media/videos/480p15/Logistic.srt.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/completed/media/videos/480p15/Logistic.srt",
+      "decoded_sha256": "7ae8e14c321af02334d42f451fb6caf284837533aa0f884715f5ce498fa69e4c",
+      "decoded_bytes": 3903,
+      "encoded_sha256": "f0367a1415816f419b0202ddf0c433711d5fca38ceb610483d643da408a062d3"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/completed/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/completed/result.json",
+      "decoded_sha256": "d395c3280c9d0f5340630c64803ab79a1436c54acee4008cf7162b0628a2e09d",
+      "decoded_bytes": 78956,
+      "encoded_sha256": "b2f2abd102aee9321d35f7e0fbe97910f7ef94993128ecf29c329b7dfc4910f1"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/completed/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/completed/text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/prior/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/prior/copy-manifest.json",
+      "decoded_sha256": "3a06ce12e96ae7942a2f37259538cddfc29702f5966a702abc37c5acadcd87a5",
+      "decoded_bytes": 8828,
+      "encoded_sha256": "a753cf001ebb5f0147ad80a394407ae49118fa361bf650a0ad3f7ff0c4ff5936"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/prior/dead_air.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/prior/dead_air.log",
+      "decoded_sha256": "0ca82ca5c845e09435013dc760f862f877f06f9927fe8def6d01bc0b8b169d95",
+      "decoded_bytes": 133,
+      "encoded_sha256": "4d8607bc04e5ba95e90c80fa749bce4e81473aba8b606b36de8bb05b2ea2efa4"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/prior/media/videos/480p15/Logistic.narration.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/prior/media/videos/480p15/Logistic.narration.json",
+      "decoded_sha256": "d726ed187f558c9facf4e1db80fca4c1786ccf1196606d32aaa6bd2893c1ab19",
+      "decoded_bytes": 52546,
+      "encoded_sha256": "99a27da43c461b83e03dd6f75a7e390e7245af05a9267f306ed19a7082276707"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/prior/media/videos/480p15/Logistic.srt.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/prior/media/videos/480p15/Logistic.srt",
+      "decoded_sha256": "7ae8e14c321af02334d42f451fb6caf284837533aa0f884715f5ce498fa69e4c",
+      "decoded_bytes": 3903,
+      "encoded_sha256": "f0367a1415816f419b0202ddf0c433711d5fca38ceb610483d643da408a062d3"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/prior/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/prior/result.json",
+      "decoded_sha256": "f70a3edaedba66973d05836b90e204a46410602f31ffe6c4d143b7786f80169c",
+      "decoded_bytes": 78956,
+      "encoded_sha256": "23cc927d0e730d968b9e6649fcdf49d26cea9b3aea9df635cca3ccdb2c254faa"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/prior/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/prior/text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/prior-output.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/prior-output.json",
+      "decoded_sha256": "3a06ce12e96ae7942a2f37259538cddfc29702f5966a702abc37c5acadcd87a5",
+      "decoded_bytes": 8828,
+      "encoded_sha256": "a753cf001ebb5f0147ad80a394407ae49118fa361bf650a0ad3f7ff0c4ff5936"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/process.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/process.log",
+      "decoded_sha256": "dba9cb6b9feb98a756828ab10c101bfc8e11a00976c80bce9604b0b5eeee3308",
+      "decoded_bytes": 405,
+      "encoded_sha256": "c827fd98dfed0c4fae86de70ace94abcad7cb9271835f4ad421ae8109698f5f4"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/receipt.json",
+      "decoded_sha256": "81d3f6a5671e1ecdab30bbf7194110e8447eab277d8e6495addb6355db4709b5",
+      "decoded_bytes": 9931,
+      "encoded_sha256": "9969c36f590c77dd54c747b7ed12c6aaccc39c40d4723936d52c6e1ee4e5f607"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/source-after.json",
+      "decoded_sha256": "97094e8a42abbc10155fe90026f5977c67f15820a6d91ec4826d59e527163b30",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "15c7979df5bed9abc365c984303a59fe44b367422670926c6aff26561791406c"
+    },
+    {
+      "path": "receipts/current/06-Logistic/zh/motion/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/zh/motion/source-before.json",
+      "decoded_sha256": "57c3ce5e92047a79126b06845b56e4ac9ffff53bfa0515eb1a8a09b8ac5d38e0",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "2be13e86e31f6ec1b303f564fb1fc13f16c2871d9a631ee0955bce1d52092dba"
+    },
+    {
+      "path": "receipts/current/complete.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/complete.json",
+      "decoded_sha256": "bb288f56193f59a704ef738a82d29eb74abaa50504a670969f57d7a6df468d17",
+      "decoded_bytes": 297,
+      "encoded_sha256": "cd0627f160ce4e7af972b7842e9185d52c2ed50cd827980df9d803b7b6a4d097"
+    },
+    {
+      "path": "receipts/current/progress.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/progress.json",
+      "decoded_sha256": "51ce90bd71c0136de95ab8f3b21eb9bf622fc9cb4d29afaaebfb80ad1f357350",
+      "decoded_bytes": 37030,
+      "encoded_sha256": "06e21bfdac4c98f9ac25a6ed0d447f523a11031206aafbc9d508050548f8e80c"
+    },
+    {
+      "path": "receipts/current/start-gate.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/current/start-gate.json",
+      "decoded_sha256": "40362b953ab0f8c9ef8bc534f33512ff8591f72d39f9bad145b2d619c782c588",
+      "decoded_bytes": 623,
+      "encoded_sha256": "3d8723f978737c8319754b9553e0b8f26866827031054d965d53d59dc9d7f779"
+    },
+    {
+      "path": "receipts/data-final-check.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/data-final-check.json",
+      "decoded_sha256": "202ea4af8cf6a5cb957f9f5391838c1670a9636931819d9cc616b3d8a669a2a5",
+      "decoded_bytes": 14928,
+      "encoded_sha256": "f424a92cf8de7659ec9893d380b8446697e93fad3f5b861ca15d2e5a7a01c961"
+    },
+    {
+      "path": "receipts/events.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/events.jsonl",
+      "decoded_sha256": "948a2ac16c57d768d356310a8c8732f49fe1bd187114205e28568be984ced98e",
+      "decoded_bytes": 4274,
+      "encoded_sha256": "dd18865c0a014e22f34315d8a5270b835e6c4a3edbe034f0212816a91e982369"
+    },
+    {
+      "path": "receipts/finalize_review.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/finalize_review.py",
+      "decoded_sha256": "abb2bd6de922b58faf979eac6258be6ae5beff70c0f2b079b451870e9938b044",
+      "decoded_bytes": 9244,
+      "encoded_sha256": "ce6dea521c2c3a91b8e6a728129efcd4334e4644e7f54f6eb0316487e12ff865"
+    },
+    {
+      "path": "receipts/mark_views.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/mark_views.py",
+      "decoded_sha256": "3d8de3f94e164de25e1f3010923c3ebeb54082a0c87a8365b10fd072e4b59304",
+      "decoded_bytes": 771,
+      "encoded_sha256": "897178bb2c38aa5dba69351699443afadfdc836f2c6faed9fac4f26e12376575"
+    },
+    {
+      "path": "receipts/prepare-en.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/prepare-en.log",
+      "decoded_sha256": "2136b9a00e6a40cd7412e9139d8def5a29a08da468bcfb825d22ddeda7bfe9aa",
+      "decoded_bytes": 207,
+      "encoded_sha256": "46341856a34a91ca3c7e5e52e08e8456d511ffe4fe4980585bb9fe8e1c488466"
+    },
+    {
+      "path": "receipts/prepare-zh.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/prepare-zh.log",
+      "decoded_sha256": "a692166f205eae5fbe460a8381500ead3a04f5fe99830819532e3f19dda1ed90",
+      "decoded_bytes": 207,
+      "encoded_sha256": "13de3183fa8cc5da42e24d1bfe83b483d21541b347b4fdf4324fbc299b0f0a03"
+    },
+    {
+      "path": "receipts/prepare_review.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/prepare_review.py",
+      "decoded_sha256": "f7ce36e7d213e9b2d219b04f2db779957382c52e378bfacad6cd883b77886a4f",
+      "decoded_bytes": 8360,
+      "encoded_sha256": "0ba1feb8c8376aa69f359925b574ae49bcfa99b1a2d70120f6672733e2c3f727"
+    },
+    {
+      "path": "receipts/report.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/report.json",
+      "decoded_sha256": "e0b6a0620652fdc611e3ec708112ce3f5f855ef65d1e50c870a95a17937843a2",
+      "decoded_bytes": 15747,
+      "encoded_sha256": "97192a05e54aada34cdb11be3d6c0b5ddb617d4f6ca30028461f031c047fde99"
+    },
+    {
+      "path": "receipts/report.md.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/report.md",
+      "decoded_sha256": "06b2cad24989a89280a78c3b44b4d49c40aa0ca75782da17c75a274898e111a9",
+      "decoded_bytes": 1361,
+      "encoded_sha256": "64a42dae67b3f516c5ebc5f91403fc1bf016a1e4fa21920e40f924c3cecf8f1b"
+    },
+    {
+      "path": "receipts/review/en/audit/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/audit/result.json",
+      "decoded_sha256": "e88433857790d40a2781c0cff0e5f7d45adb4d25e2d69cc1ecd0406759c22049",
+      "decoded_bytes": 197071,
+      "encoded_sha256": "f398ae6fac292a635cf247103b557332ddd6057e6a4c6b606a92ac322d306d5e"
+    },
+    {
+      "path": "receipts/review/en/audit.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/audit.log",
+      "decoded_sha256": "12c529217a75e5ff28f9ed9db68ce3f6bb92277c799d042fb45872cf12f73fe6",
+      "decoded_bytes": 96,
+      "encoded_sha256": "c6345092b6e703255717eebd24c9ccf7f4cb02ac7d1ac5809944369e40ed8f92"
+    },
+    {
+      "path": "receipts/review/en/closed-checkpoint.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/closed-checkpoint.json",
+      "decoded_sha256": "cb64985fb88a1995ea8ef4d553c83e7f6c2560dcdccaaac95615b31a080ffd6e",
+      "decoded_bytes": 500,
+      "encoded_sha256": "7b8fd8ac928ae18c967d74869ae72b3cb870ea92ff20b660b85fe6758d11c9ad"
+    },
+    {
+      "path": "receipts/review/en/final-unselected-gaps.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/final-unselected-gaps.json",
+      "decoded_sha256": "fc161311aa9329cb6d5b65c50ddd014386c213d1fe1af8fd5d254d1acf414f47",
+      "decoded_bytes": 44472,
+      "encoded_sha256": "37f75fe1938955616c1f1b79bafd5e91acc44e4084bacc8194cff34eaa0a2474"
+    },
+    {
+      "path": "receipts/review/en/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/plan.json",
+      "decoded_sha256": "792556993c2ec5e331bf48c3728a7270f609192c24e576ce849da7abe43a51c5",
+      "decoded_bytes": 1324155,
+      "encoded_sha256": "e6548f38dc69dd91ce9ba778536c105eb57f5e9102c0b2e21846bf609f1f0a3b"
+    },
+    {
+      "path": "receipts/review/en/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/views.json",
+      "decoded_sha256": "d2c721df40dcdfc3c5505e6bd41d43466558c57b201eec538fa888a72776a933",
+      "decoded_bytes": 11708,
+      "encoded_sha256": "f3cfabe2e91689e49f349801a566fd7e0a02e882a2a60cbe780610e4c0b90d60"
+    },
+    {
+      "path": "receipts/review/zh/audit/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/audit/result.json",
+      "decoded_sha256": "13e686e4e64a86e1740150a5982a7ecc4c24a525c9dee44aa09fc224d7d4c763",
+      "decoded_bytes": 209432,
+      "encoded_sha256": "d506ea972a1fb33d3f2e75146bb57835865607110402a4da174c0383409a67e0"
+    },
+    {
+      "path": "receipts/review/zh/audit.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/audit.log",
+      "decoded_sha256": "1f7cd5930798cc14c7beffc03e6f76b26ea6719ee92464c14562eccb0b50577c",
+      "decoded_bytes": 96,
+      "encoded_sha256": "ae9457041a77eb5b491363787a87c5a768eac9397d16b056daca5f2af92b4254"
+    },
+    {
+      "path": "receipts/review/zh/final-unselected-gaps.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/final-unselected-gaps.json",
+      "decoded_sha256": "0e466b54b40d788dfcd9fde53b046c7665e75c1856f1845486d09809217005f8",
+      "decoded_bytes": 47801,
+      "encoded_sha256": "bf1e1feecf62b3a82bcf5fc1581d594e388771bd2be7d5ae6c4ef40ced942b40"
+    },
+    {
+      "path": "receipts/review/zh/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/plan.json",
+      "decoded_sha256": "1ec09a00efaff56c7730852ee07901276f6bd780d59af1b853e0d04d3525c1dc",
+      "decoded_bytes": 1423798,
+      "encoded_sha256": "4ae6d5c8699e7c1fba8311ddcbe4d5062493e4152617797fba5bcc486197b937"
+    },
+    {
+      "path": "receipts/review/zh/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/views.json",
+      "decoded_sha256": "6bae98a17080eddaa468e97af39b6c66104013e43ab8df649d2a3a2dd4374e17",
+      "decoded_bytes": 12069,
+      "encoded_sha256": "2572198b4364c9bfd1c2daa26361057e56b4c3654f67cf2844c768104b3b7d36"
+    },
+    {
+      "path": "receipts/run_captures.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/run_captures.py",
+      "decoded_sha256": "52a7d998d02bc6f038ea53c9d0b4271de510afa3c2f1aef08e276cd96d8257b5",
+      "decoded_bytes": 1741,
+      "encoded_sha256": "8e0e266ad6e0d992f895c76f34d936f036b94cef894b2c711eb0f2dc0619f1f9"
+    },
+    {
+      "path": "source-blobs/0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934.gz",
+      "decoded_sha256": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+      "decoded_bytes": 16199,
+      "encoded_sha256": "a04662090c3c129cc1ccae3170e526aed0473849e7f305c83330cd9443aa6faf"
+    },
+    {
+      "path": "source-blobs/0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b.gz",
+      "decoded_sha256": "0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b",
+      "decoded_bytes": 77583,
+      "encoded_sha256": "89381de1b997727bb1f58723c8a912e69da21c0ce5aefda51447d7443e1b6fd6"
+    },
+    {
+      "path": "source-blobs/0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa.gz",
+      "decoded_sha256": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa",
+      "decoded_bytes": 78448,
+      "encoded_sha256": "9b271d67e47dda1ab50854e347f2b2b936f44a0d9e5f0a6bd16fd14c5fe1482b"
+    },
+    {
+      "path": "source-blobs/0d817ec6801fc2903a8e74a8952449cd59664a9ef45548f10303003b503bb37e.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/0d817ec6801fc2903a8e74a8952449cd59664a9ef45548f10303003b503bb37e.gz",
+      "decoded_sha256": "0d817ec6801fc2903a8e74a8952449cd59664a9ef45548f10303003b503bb37e",
+      "decoded_bytes": 5877,
+      "encoded_sha256": "f3df17414468d84176921101cda9ecafa92d2e0aa2dd3008afbee4068d356503"
+    },
+    {
+      "path": "source-blobs/10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d.gz",
+      "decoded_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+      "decoded_bytes": 100230,
+      "encoded_sha256": "e959b9ee70e6acb3b7cfab793fc3284b0c493565044134ad5512b1aa78717215"
+    },
+    {
+      "path": "source-blobs/117cfbdcd6f4f5569cf7f99cdf91ab68a6144425ecaedbc68bea3571148a6bcc.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/117cfbdcd6f4f5569cf7f99cdf91ab68a6144425ecaedbc68bea3571148a6bcc.gz",
+      "decoded_sha256": "117cfbdcd6f4f5569cf7f99cdf91ab68a6144425ecaedbc68bea3571148a6bcc",
+      "decoded_bytes": 1997,
+      "encoded_sha256": "fdcc43586f4288bd1204372c7847d2e5263bd2061e2cc4a83c873ad12f3bc17d"
+    },
+    {
+      "path": "source-blobs/149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f.gz",
+      "decoded_sha256": "149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f",
+      "decoded_bytes": 23968,
+      "encoded_sha256": "35d61bc25f15d98d004c043740e17fd806d63416dcc545525e498a6e95190688"
+    },
+    {
+      "path": "source-blobs/163fab83580f701f663c7226b26cde0c455fc6aca174af26bc99d26bcdd966ff.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/163fab83580f701f663c7226b26cde0c455fc6aca174af26bc99d26bcdd966ff.gz",
+      "decoded_sha256": "163fab83580f701f663c7226b26cde0c455fc6aca174af26bc99d26bcdd966ff",
+      "decoded_bytes": 19996,
+      "encoded_sha256": "9cb8ff724818649729615ace14cb84d72e0cd42dedd169d98a9375480c8c2d81"
+    },
+    {
+      "path": "source-blobs/19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b.gz",
+      "decoded_sha256": "19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b",
+      "decoded_bytes": 11200,
+      "encoded_sha256": "445f2075ce4fbafd1864ade89a580d8473eeff8b763f53608bfa5c434c177a46"
+    },
+    {
+      "path": "source-blobs/196386f5e47b82efd7884369f7901ece1a3a144edea745d7d54042a764e1a2de.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/196386f5e47b82efd7884369f7901ece1a3a144edea745d7d54042a764e1a2de.gz",
+      "decoded_sha256": "196386f5e47b82efd7884369f7901ece1a3a144edea745d7d54042a764e1a2de",
+      "decoded_bytes": 4609,
+      "encoded_sha256": "126e4757c05639fbc8d873745620ca918a77bc142865ecfb06c396b31af1da85"
+    },
+    {
+      "path": "source-blobs/1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4.gz",
+      "decoded_sha256": "1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4",
+      "decoded_bytes": 23829,
+      "encoded_sha256": "4496022b3b860d11e4353d24603616772b4b7c6204682d6f4407953bbad26868"
+    },
+    {
+      "path": "source-blobs/1c33e2455da69d3f8112c421b4588099896d36932bd1060bcd026bf4c89bad62.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/1c33e2455da69d3f8112c421b4588099896d36932bd1060bcd026bf4c89bad62.gz",
+      "decoded_sha256": "1c33e2455da69d3f8112c421b4588099896d36932bd1060bcd026bf4c89bad62",
+      "decoded_bytes": 153,
+      "encoded_sha256": "d35fa1a615e2576605d8f4c4b9a38bca171b3cb52b2446d49ebb91b4b321bdad"
+    },
+    {
+      "path": "source-blobs/1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485.gz",
+      "decoded_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+      "decoded_bytes": 9415,
+      "encoded_sha256": "2f0afe61a44325121ef07e1471b31fa35858167ff54f656ca5695fa73acdb789"
+    },
+    {
+      "path": "source-blobs/1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082.gz",
+      "decoded_sha256": "1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082",
+      "decoded_bytes": 18924,
+      "encoded_sha256": "a03a1d9831d96e3d09041190834e5c590bf90f8057f08e1fec0d65b010bd0c3f"
+    },
+    {
+      "path": "source-blobs/1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13.gz",
+      "decoded_sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+      "decoded_bytes": 1964,
+      "encoded_sha256": "9be9fdcd42284554e5fa5697214d4bb985a1ecc65ff570e7a3d788c3b00035e2"
+    },
+    {
+      "path": "source-blobs/20146dcf999aa8ca58f97ea828eaa34da97986a3ebea1afd74f3f530b2469607.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/20146dcf999aa8ca58f97ea828eaa34da97986a3ebea1afd74f3f530b2469607.gz",
+      "decoded_sha256": "20146dcf999aa8ca58f97ea828eaa34da97986a3ebea1afd74f3f530b2469607",
+      "decoded_bytes": 10691,
+      "encoded_sha256": "df54a76c1fea535bdecd43a6f44083cf9c01f061a909d1b74049808fdbc4c1b9"
+    },
+    {
+      "path": "source-blobs/20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3.gz",
+      "decoded_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+      "decoded_bytes": 2440019,
+      "encoded_sha256": "7276faa9505120625908facd80a3c23880e383cc31427f0c708cebc4ecf0f513"
+    },
+    {
+      "path": "source-blobs/210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449.gz",
+      "decoded_sha256": "210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449",
+      "decoded_bytes": 17742,
+      "encoded_sha256": "3ce9c9e0ec1bf9c6b077e3ff1697a47cdbdc0181afcd76152f97e55f9becdfe8"
+    },
+    {
+      "path": "source-blobs/22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb.gz",
+      "decoded_sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+      "decoded_bytes": 6055,
+      "encoded_sha256": "bb8af91d3d478ae033b6d385563601f23c0a724f98530a8fb474df6832af7d5f"
+    },
+    {
+      "path": "source-blobs/24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705.gz",
+      "decoded_sha256": "24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705",
+      "decoded_bytes": 13659,
+      "encoded_sha256": "2d4a963cac72e7ead6357e6577511004974870d6d9c470e6c65d03047fa45a36"
+    },
+    {
+      "path": "source-blobs/25681bdcdb4ce5d90961e9195f3fd3df76d7ca55dcb7cc4e3ead027f131e55aa.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/25681bdcdb4ce5d90961e9195f3fd3df76d7ca55dcb7cc4e3ead027f131e55aa.gz",
+      "decoded_sha256": "25681bdcdb4ce5d90961e9195f3fd3df76d7ca55dcb7cc4e3ead027f131e55aa",
+      "decoded_bytes": 5603,
+      "encoded_sha256": "01b92f33eaaeb4f69b9c071dc78106d2fd083fd8fe1d849ebc574ff8058a77c8"
+    },
+    {
+      "path": "source-blobs/2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf.gz",
+      "decoded_sha256": "2b8865c9f6cafcebdea4e093cba70daf9dcec0535460a5b1748bfdeba09f5fbf",
+      "decoded_bytes": 13380,
+      "encoded_sha256": "36dfe15d58ae2b0de59af38b65191042ff48e013d782e5abf7430f55146d0b1d"
+    },
+    {
+      "path": "source-blobs/2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0.gz",
+      "decoded_sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+      "decoded_bytes": 7798,
+      "encoded_sha256": "dd045ceae97f867429e27f8db42c65e886b13a6f66fe3dde4e7cb101d18d0ab7"
+    },
+    {
+      "path": "source-blobs/332ba7f10a4ab786608c70a3f9f0f334497ae3e07fd6b29a5fab71e8940b6fce.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/332ba7f10a4ab786608c70a3f9f0f334497ae3e07fd6b29a5fab71e8940b6fce.gz",
+      "decoded_sha256": "332ba7f10a4ab786608c70a3f9f0f334497ae3e07fd6b29a5fab71e8940b6fce",
+      "decoded_bytes": 11296,
+      "encoded_sha256": "ab6f70983b94892097851e6db8e4ab8ffe8cafffde34ed97ad02bb7b8f43a611"
+    },
+    {
+      "path": "source-blobs/335fe7ea82257be43fbda9e06dd67231cd6ee04f5a7bbf93fa71eded36d9512d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/335fe7ea82257be43fbda9e06dd67231cd6ee04f5a7bbf93fa71eded36d9512d.gz",
+      "decoded_sha256": "335fe7ea82257be43fbda9e06dd67231cd6ee04f5a7bbf93fa71eded36d9512d",
+      "decoded_bytes": 1486,
+      "encoded_sha256": "e9ed9bfa9f58b5af72a50a734a4b75cfb0f2f96073e72006a706765fb6c35a2f"
+    },
+    {
+      "path": "source-blobs/379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d.gz",
+      "decoded_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+      "decoded_bytes": 30850,
+      "encoded_sha256": "1092edb463e57cbc4bfae9d6151a690c440335551061f4310e48d633dc3ccf73"
+    },
+    {
+      "path": "source-blobs/37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb.gz",
+      "decoded_sha256": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb",
+      "decoded_bytes": 15895,
+      "encoded_sha256": "f4bb36e5bcd18320beec24449034c519efb2e7da5a8c84d99bed7118feadd1f5"
+    },
+    {
+      "path": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.gz",
+      "decoded_sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+      "decoded_bytes": 325,
+      "encoded_sha256": "79f2d5bcc6a02a4cc297586601b992ea0a3d43faae071a55dea62db179797a31"
+    },
+    {
+      "path": "source-blobs/3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b.gz",
+      "decoded_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+      "decoded_bytes": 10700,
+      "encoded_sha256": "b22f2829fecc4c155e063fa6859ce018e36ceb9b276cf2fe820126df8217c6ef"
+    },
+    {
+      "path": "source-blobs/400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032.gz",
+      "decoded_sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+      "decoded_bytes": 40277,
+      "encoded_sha256": "0d38d28e1ad14760305e71a9c68adcf50ca5bbe4090b45cf7f34f0306c77a76c"
+    },
+    {
+      "path": "source-blobs/41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf.gz",
+      "decoded_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+      "decoded_bytes": 18937,
+      "encoded_sha256": "91c50b9f36036861ceb3b5b85434995f3b6cf8698ae9d8c54cbcd18419bf69ca"
+    },
+    {
+      "path": "source-blobs/4894412fa7cb01eb3eb9cb293f91f7d4a8430b80e2d8580cfaf2c21f026c5df1.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/4894412fa7cb01eb3eb9cb293f91f7d4a8430b80e2d8580cfaf2c21f026c5df1.gz",
+      "decoded_sha256": "4894412fa7cb01eb3eb9cb293f91f7d4a8430b80e2d8580cfaf2c21f026c5df1",
+      "decoded_bytes": 120,
+      "encoded_sha256": "9822c451140ee766c926bc270727fbfcd33efe2af781c267ea1efe4f3d821424"
+    },
+    {
+      "path": "source-blobs/4ee7f26834a904b5c402e08ac82825a2968c191d356b43bb6b07cb9f63e71620.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/4ee7f26834a904b5c402e08ac82825a2968c191d356b43bb6b07cb9f63e71620.gz",
+      "decoded_sha256": "4ee7f26834a904b5c402e08ac82825a2968c191d356b43bb6b07cb9f63e71620",
+      "decoded_bytes": 39331,
+      "encoded_sha256": "a683ac9e2e5e76dacc5ead46a0bf1e47cb5eb3f9c1228ff6f1ea8e0a667c1ae0"
+    },
+    {
+      "path": "source-blobs/531701c46ef97fc3d33b960cb42d267053c9098bcbfe186e55b72dc7bdde6ed7.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/531701c46ef97fc3d33b960cb42d267053c9098bcbfe186e55b72dc7bdde6ed7.gz",
+      "decoded_sha256": "531701c46ef97fc3d33b960cb42d267053c9098bcbfe186e55b72dc7bdde6ed7",
+      "decoded_bytes": 400,
+      "encoded_sha256": "ff7f777245eaa15bf375a191b335e70af67e8f0fa5e45f864941eb100bd32c03"
+    },
+    {
+      "path": "source-blobs/565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83.gz",
+      "decoded_sha256": "565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83",
+      "decoded_bytes": 29057,
+      "encoded_sha256": "1333c8df81bbfd9cb4e97acacd92c104640dfa09524bc62752eda01928d080e0"
+    },
+    {
+      "path": "source-blobs/5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8.gz",
+      "decoded_sha256": "5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8",
+      "decoded_bytes": 23704,
+      "encoded_sha256": "bb12e2a761ac948d0c9509a4d2ffd8951fa1cc5632167c3c03e0777ec8e04e52"
+    },
+    {
+      "path": "source-blobs/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf.gz",
+      "decoded_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+      "decoded_bytes": 8305,
+      "encoded_sha256": "a0bd959eba1ae04d088aef631e8edbd075392f0b2705162f323a6785a4d135d2"
+    },
+    {
+      "path": "source-blobs/651675cee1829c94d92e4acf63ce73ac6e5a878daae07bb08777a979b0f2d48c.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/651675cee1829c94d92e4acf63ce73ac6e5a878daae07bb08777a979b0f2d48c.gz",
+      "decoded_sha256": "651675cee1829c94d92e4acf63ce73ac6e5a878daae07bb08777a979b0f2d48c",
+      "decoded_bytes": 10414,
+      "encoded_sha256": "67b8d401ebbad06376892733fa9fe24877c0b361ba0cf77997ca3ddc420158be"
+    },
+    {
+      "path": "source-blobs/6953684ba6d3131e15a349b76b8ba94b70f1c56699c20e049a46d5407c8b74c6.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/6953684ba6d3131e15a349b76b8ba94b70f1c56699c20e049a46d5407c8b74c6.gz",
+      "decoded_sha256": "6953684ba6d3131e15a349b76b8ba94b70f1c56699c20e049a46d5407c8b74c6",
+      "decoded_bytes": 18021,
+      "encoded_sha256": "2acaf1adad98922ee1b4a01e1f93d6fb547816790505aa4650d8d99be3bc75e3"
+    },
+    {
+      "path": "source-blobs/6a50dc8a1c97ed2d50af4836060b2eff88e3b9f84fb48136b0cf064e7e1abac5.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/6a50dc8a1c97ed2d50af4836060b2eff88e3b9f84fb48136b0cf064e7e1abac5.gz",
+      "decoded_sha256": "6a50dc8a1c97ed2d50af4836060b2eff88e3b9f84fb48136b0cf064e7e1abac5",
+      "decoded_bytes": 3602,
+      "encoded_sha256": "312cb4b89328f5e7d5e7662687c7f6715b4f456c3b234b738528baf707986331"
+    },
+    {
+      "path": "source-blobs/6c52377ee995ea0db7a7fbcfe8cb672dc41985d9aebc10496a3efeaf2b6db0fe.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/6c52377ee995ea0db7a7fbcfe8cb672dc41985d9aebc10496a3efeaf2b6db0fe.gz",
+      "decoded_sha256": "6c52377ee995ea0db7a7fbcfe8cb672dc41985d9aebc10496a3efeaf2b6db0fe",
+      "decoded_bytes": 2528,
+      "encoded_sha256": "83dd7634e6d332bb2c43736e4abf75d24d08a8138e8c7254533b5d64184aefce"
+    },
+    {
+      "path": "source-blobs/6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42.gz",
+      "decoded_sha256": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
+      "decoded_bytes": 20784,
+      "encoded_sha256": "67ac7fdeccec92ee5cf50f388d45a53f5c4cdc022a85787d54c80694255d3b06"
+    },
+    {
+      "path": "source-blobs/706ad5eed1fe0854604026137d09731dd679e54b9b570cb6753084d67d16bd6b.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/706ad5eed1fe0854604026137d09731dd679e54b9b570cb6753084d67d16bd6b.gz",
+      "decoded_sha256": "706ad5eed1fe0854604026137d09731dd679e54b9b570cb6753084d67d16bd6b",
+      "decoded_bytes": 9366,
+      "encoded_sha256": "96cba30c48649fdd7c2bf38a04b2b99e69781b7a94c6ad08124c3c4824774573"
+    },
+    {
+      "path": "source-blobs/71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507.gz",
+      "decoded_sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+      "decoded_bytes": 6276,
+      "encoded_sha256": "5801a2e646019cf07ca1419b42369150cb8b81ce3b94ec33248858d7f20c976a"
+    },
+    {
+      "path": "source-blobs/7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8.gz",
+      "decoded_sha256": "7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8",
+      "decoded_bytes": 23484,
+      "encoded_sha256": "6df45703e3a4bfa71266eaf05e05b0e4d22496c9044119018632a83082ac12ff"
+    },
+    {
+      "path": "source-blobs/77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6.gz",
+      "decoded_sha256": "77a857e013d0e95372e04cee9ecb6cff976c8a5dea8d91feb8d1a2750c6476e6",
+      "decoded_bytes": 14337,
+      "encoded_sha256": "cd1ce3332d510430e1515d07054686c6f5f1160129e6b9b68ee4fa1098db4a0c"
+    },
+    {
+      "path": "source-blobs/7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2.gz",
+      "decoded_sha256": "7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2",
+      "decoded_bytes": 17420,
+      "encoded_sha256": "c332ec28807194a4fcd21ac8a078577943f09bb11560345dd4010343c635031f"
+    },
+    {
+      "path": "source-blobs/7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f.gz",
+      "decoded_sha256": "7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f",
+      "decoded_bytes": 13554,
+      "encoded_sha256": "e61a2626ec6cfc5e71db3f6624910b3e4803b87d6bce2fd4f74822c2a6ab027b"
+    },
+    {
+      "path": "source-blobs/802ba281240adec1b0ff72831fe66fb569163e326495170c94b4badafbb7a69a.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/802ba281240adec1b0ff72831fe66fb569163e326495170c94b4badafbb7a69a.gz",
+      "decoded_sha256": "802ba281240adec1b0ff72831fe66fb569163e326495170c94b4badafbb7a69a",
+      "decoded_bytes": 5734,
+      "encoded_sha256": "8f0b7b244db8e63bf4042c3b099526e6249af19ca5c0c63ed7a5e95bc5d7ec22"
+    },
+    {
+      "path": "source-blobs/8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901.gz",
+      "decoded_sha256": "8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901",
+      "decoded_bytes": 11557,
+      "encoded_sha256": "3c5b4d798f5dab6340904344e5d5604f8c894678fad8664eb52c58a8510611b1"
+    },
+    {
+      "path": "source-blobs/8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c.gz",
+      "decoded_sha256": "8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c",
+      "decoded_bytes": 29406,
+      "encoded_sha256": "c0558f0d10f0ffc35ff53541eeea2afbc9a8a120c547608196841354a01451b8"
+    },
+    {
+      "path": "source-blobs/8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01.gz",
+      "decoded_sha256": "8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01",
+      "decoded_bytes": 17213,
+      "encoded_sha256": "9ec86205d39182ba21bb17bf6950e418bd5e9ae543e7c5ff0e78fee696c4d10e"
+    },
+    {
+      "path": "source-blobs/8f788f0a5ee0b6c8d3f39e2b814d6c8490933a068fc706715ef08911c8bfa18a.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/8f788f0a5ee0b6c8d3f39e2b814d6c8490933a068fc706715ef08911c8bfa18a.gz",
+      "decoded_sha256": "8f788f0a5ee0b6c8d3f39e2b814d6c8490933a068fc706715ef08911c8bfa18a",
+      "decoded_bytes": 18624,
+      "encoded_sha256": "1245f05ca5bf8088d740d44468b3f69a61c4c8feb2ee443bde09f32f151c5b0f"
+    },
+    {
+      "path": "source-blobs/91bf1049a40ffaaebd6e1e57b83840e56a756d72cd49613f4bbe7d160f48a58c.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/91bf1049a40ffaaebd6e1e57b83840e56a756d72cd49613f4bbe7d160f48a58c.gz",
+      "decoded_sha256": "91bf1049a40ffaaebd6e1e57b83840e56a756d72cd49613f4bbe7d160f48a58c",
+      "decoded_bytes": 3436,
+      "encoded_sha256": "7766df5756cac5f9ea66290195fb943cad9567d13c576ea7299813db34cb4393"
+    },
+    {
+      "path": "source-blobs/92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46.gz",
+      "decoded_sha256": "92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46",
+      "decoded_bytes": 12257,
+      "encoded_sha256": "1cffa47ce75d271359c69fc7c59f0fa21ccf1fd979355b0e1f74dcbf9a2e5853"
+    },
+    {
+      "path": "source-blobs/98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e.gz",
+      "decoded_sha256": "98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e",
+      "decoded_bytes": 16664,
+      "encoded_sha256": "474248296a6387eaafac6b68a08f48b689a3d3e9467276f3181e2fbde63b7c82"
+    },
+    {
+      "path": "source-blobs/9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394.gz",
+      "decoded_sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+      "decoded_bytes": 23866,
+      "encoded_sha256": "4d48f508d25dfe87d713934bb5baa8ff8b95238ee29de1fa8b392849b165de89"
+    },
+    {
+      "path": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.gz",
+      "decoded_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "decoded_bytes": 31773,
+      "encoded_sha256": "dde628602d8128cda334fa1a7eb6b8bb7204e835ecc14ae09d6a646b5111d5af"
+    },
+    {
+      "path": "source-blobs/a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d.gz",
+      "decoded_sha256": "a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d",
+      "decoded_bytes": 12718,
+      "encoded_sha256": "4e132882fb01bd57b91fe8c9220f5c2c013d4ec7e497f6a3ec98c9807be98bf4"
+    },
+    {
+      "path": "source-blobs/a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a.gz",
+      "decoded_sha256": "a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a",
+      "decoded_bytes": 20144,
+      "encoded_sha256": "1d706a6b27a1efd09328520cf31c1293e8f919e8ffef34dec74eed1c157aa99e"
+    },
+    {
+      "path": "source-blobs/ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256.gz",
+      "decoded_sha256": "ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256",
+      "decoded_bytes": 14560,
+      "encoded_sha256": "3b862470f547edd997016eb12f768b3e22691b77f82d28f75c0a1c874a7752d7"
+    },
+    {
+      "path": "source-blobs/b15b01a3311aee840ba65e2a6c4592bfed137e3b278bcc85babaae0c87f3b5bf.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/b15b01a3311aee840ba65e2a6c4592bfed137e3b278bcc85babaae0c87f3b5bf.gz",
+      "decoded_sha256": "b15b01a3311aee840ba65e2a6c4592bfed137e3b278bcc85babaae0c87f3b5bf",
+      "decoded_bytes": 1568,
+      "encoded_sha256": "aba2d182347ca2788e67b34a86fac6fe0cf859ac40d800df109aaa918c6dda10"
+    },
+    {
+      "path": "source-blobs/b422d736f14b5b873bf242713d1e1d5f0901f5322fe81e9e91edc60dcd82f661.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/b422d736f14b5b873bf242713d1e1d5f0901f5322fe81e9e91edc60dcd82f661.gz",
+      "decoded_sha256": "b422d736f14b5b873bf242713d1e1d5f0901f5322fe81e9e91edc60dcd82f661",
+      "decoded_bytes": 691,
+      "encoded_sha256": "970184af5da0604f5b453093373f8a2506867378ba821bc90fd575a4c5655eea"
+    },
+    {
+      "path": "source-blobs/b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432.gz",
+      "decoded_sha256": "b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432",
+      "decoded_bytes": 9496,
+      "encoded_sha256": "aafb2fbbf93f63d5b73026508b14d156fcf0a81be9f7ded3fbe79d923cf7b75e"
+    },
+    {
+      "path": "source-blobs/bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112.gz",
+      "decoded_sha256": "bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112",
+      "decoded_bytes": 18606,
+      "encoded_sha256": "4676cdc133fbd13c92482b26d3a4621c21677b3b77f28ac0d15a121a9baf2898"
+    },
+    {
+      "path": "source-blobs/bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73.gz",
+      "decoded_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73",
+      "decoded_bytes": 64040,
+      "encoded_sha256": "a5a0a2cb605a00cd9cccb61dce9feb5c243240adc21f3d7545c2010de446e5ac"
+    },
+    {
+      "path": "source-blobs/be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12.gz",
+      "decoded_sha256": "be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12",
+      "decoded_bytes": 15331,
+      "encoded_sha256": "bb6d8234ba87354f0f9bbb55e418eec618ec7ccd6ba1b5eb92907a305a4ca60b"
+    },
+    {
+      "path": "source-blobs/bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9.gz",
+      "decoded_sha256": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9",
+      "decoded_bytes": 19035,
+      "encoded_sha256": "9f50a27d672b4b289f0ea14f447973d8701aec6054932e0bfaae3c33026115c2"
+    },
+    {
+      "path": "source-blobs/c13b04dcd43fbb4c85c621ef9b245a9fce10d174ef018c6a3dfe0f8457398151.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/c13b04dcd43fbb4c85c621ef9b245a9fce10d174ef018c6a3dfe0f8457398151.gz",
+      "decoded_sha256": "c13b04dcd43fbb4c85c621ef9b245a9fce10d174ef018c6a3dfe0f8457398151",
+      "decoded_bytes": 109726,
+      "encoded_sha256": "dd45ff3a27f18e6f7cc8d89ad69be5b3098b4e669adce1ba996960d2876cb57c"
+    },
+    {
+      "path": "source-blobs/c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032.gz",
+      "decoded_sha256": "c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032",
+      "decoded_bytes": 17039,
+      "encoded_sha256": "a76c3d887bbf378d8e64b932d835a99090915ce62325a9e0c1717c2ce9e7d62b"
+    },
+    {
+      "path": "source-blobs/c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413.gz",
+      "decoded_sha256": "c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413",
+      "decoded_bytes": 798,
+      "encoded_sha256": "1d922265e79d879fdbda3b044cfc1d435c8ae31bc5b9b90a7790340db04e6212"
+    },
+    {
+      "path": "source-blobs/c9b32bd52ac9d3f4e51f9d573c48ae9506c959c2d83e599eaf747ee834f80920.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/c9b32bd52ac9d3f4e51f9d573c48ae9506c959c2d83e599eaf747ee834f80920.gz",
+      "decoded_sha256": "c9b32bd52ac9d3f4e51f9d573c48ae9506c959c2d83e599eaf747ee834f80920",
+      "decoded_bytes": 7935,
+      "encoded_sha256": "2d12dbdcbdd4200b9beee68bb6c624c20d92805f2bf7343e27202c83bc82eca0"
+    },
+    {
+      "path": "source-blobs/d0a2c12502dfd644eee3940734140dd3d228c15dfa66c3155168c9dc9badfccf.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/d0a2c12502dfd644eee3940734140dd3d228c15dfa66c3155168c9dc9badfccf.gz",
+      "decoded_sha256": "d0a2c12502dfd644eee3940734140dd3d228c15dfa66c3155168c9dc9badfccf",
+      "decoded_bytes": 1389,
+      "encoded_sha256": "a73984bcff30a529abc4084d5db9f0dbf213a336491550a4dbd1423714fafacf"
+    },
+    {
+      "path": "source-blobs/d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7.gz",
+      "decoded_sha256": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
+      "decoded_bytes": 16659,
+      "encoded_sha256": "3126173ec5fd450eea267131a8bb128b7b55b5fae59d4991ead53fc4906c9e5f"
+    },
+    {
+      "path": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.gz",
+      "decoded_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "decoded_bytes": 25379,
+      "encoded_sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf"
+    },
+    {
+      "path": "source-blobs/d3f5b5218d27c5af539ee0dcc7f214302cbbfa09f42e572647cf4e9047d8e2ab.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/d3f5b5218d27c5af539ee0dcc7f214302cbbfa09f42e572647cf4e9047d8e2ab.gz",
+      "decoded_sha256": "d3f5b5218d27c5af539ee0dcc7f214302cbbfa09f42e572647cf4e9047d8e2ab",
+      "decoded_bytes": 25504,
+      "encoded_sha256": "094df76a9420c36c51a4f9b2388f6bece07b0b02ae092de6ad07df7adaf79d86"
+    },
+    {
+      "path": "source-blobs/d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f.gz",
+      "decoded_sha256": "d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f",
+      "decoded_bytes": 19190,
+      "encoded_sha256": "7334a910a6508f7ec059e495de3962fe53529c01c91c4896d7fe799bc63a58a9"
+    },
+    {
+      "path": "source-blobs/d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc.gz",
+      "decoded_sha256": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+      "decoded_bytes": 81289,
+      "encoded_sha256": "bb1a4e4297ce1b944901ac5a034670a3de7936485e934fd6318470159cbdc94b"
+    },
+    {
+      "path": "source-blobs/d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032.gz",
+      "decoded_sha256": "d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032",
+      "decoded_bytes": 7081,
+      "encoded_sha256": "ee7fd1bed5d9571ec6ef575245aa32a9eab001963ab5b55e8cb3cbbd9501c432"
+    },
+    {
+      "path": "source-blobs/dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2.gz",
+      "decoded_sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+      "decoded_bytes": 23046,
+      "encoded_sha256": "e6d950621619407f3fa4e29bf3d649e46466f4e4407a779b7d1ad86ff1f83294"
+    },
+    {
+      "path": "source-blobs/de512b032db0cca06bf05c58b06917a1e7024dd8213d6b9730f1abf76fe8e111.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/de512b032db0cca06bf05c58b06917a1e7024dd8213d6b9730f1abf76fe8e111.gz",
+      "decoded_sha256": "de512b032db0cca06bf05c58b06917a1e7024dd8213d6b9730f1abf76fe8e111",
+      "decoded_bytes": 317,
+      "encoded_sha256": "b5eac2e8dcf6e3b020a1f029a44e61bbd720371feed33148d8e7218fc367e4ef"
+    },
+    {
+      "path": "source-blobs/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gz",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "source-blobs/f00a2efefc723e5182fb23f1c284e6692d58176d473ea73aafc5bcfa2501f8d7.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/f00a2efefc723e5182fb23f1c284e6692d58176d473ea73aafc5bcfa2501f8d7.gz",
+      "decoded_sha256": "f00a2efefc723e5182fb23f1c284e6692d58176d473ea73aafc5bcfa2501f8d7",
+      "decoded_bytes": 81,
+      "encoded_sha256": "dc727713de90416d85fb72957709361d7e88b265fa5b521bd0de1c8ec2ae72da"
+    },
+    {
+      "path": "source-blobs/f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d.gz",
+      "decoded_sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+      "decoded_bytes": 23419,
+      "encoded_sha256": "f2ca9409d0d00b5d84acb0ea2eeae1fe74b861aa6a9a2e2cd96642719138f53e"
+    },
+    {
+      "path": "source-blobs/f1262659e073baff2ff2c786ea8e4c12a9adf53aff70209cc21629e81c7ca48f.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/f1262659e073baff2ff2c786ea8e4c12a9adf53aff70209cc21629e81c7ca48f.gz",
+      "decoded_sha256": "f1262659e073baff2ff2c786ea8e4c12a9adf53aff70209cc21629e81c7ca48f",
+      "decoded_bytes": 16482,
+      "encoded_sha256": "da69013a502d2b70a2ed647186dd6189c1cbd00cdfbcdd5b11afe61da4d8b5fe"
+    },
+    {
+      "path": "source-blobs/f5581226c179c7d62fd326744db03329700ed73dc21a36db44581c63c03ac55f.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/f5581226c179c7d62fd326744db03329700ed73dc21a36db44581c63c03ac55f.gz",
+      "decoded_sha256": "f5581226c179c7d62fd326744db03329700ed73dc21a36db44581c63c03ac55f",
+      "decoded_bytes": 5253,
+      "encoded_sha256": "7d7952ddeb880c9439bd7c7d3af4b2c5a998f861aa082b3fdb13a7659798c010"
+    },
+    {
+      "path": "source-blobs/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b.gz",
+      "decoded_sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+      "decoded_bytes": 6956,
+      "encoded_sha256": "88dc26733378196fd4350d20873b9966a89f2c78b8eb191d74e1f391f3a4a503"
+    },
+    {
+      "path": "source-blobs/f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620.gz",
+      "decoded_sha256": "f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620",
+      "decoded_bytes": 24663,
+      "encoded_sha256": "72c360196174d8d0a6154bb2fb92a0e321cedabf26e59afe4692407c3e581e7d"
+    },
+    {
+      "path": "source-blobs/f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228.gz",
+      "decoded_sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+      "decoded_bytes": 1521,
+      "encoded_sha256": "2c838ec16aeb71dae182d10dc8d18e35f05b47c2b6ea0659b2102b01e4cc9cc9"
+    },
+    {
+      "path": "source-blobs/f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98.gz",
+      "decoded_sha256": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
+      "decoded_bytes": 13945,
+      "encoded_sha256": "5a7431a56d092593ae85007f38c751125fd02aac96e38cdf04a82c59dd84c3d3"
+    },
+    {
+      "path": "source-blobs/fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d.gz",
+      "decoded_sha256": "fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d",
+      "decoded_bytes": 16854,
+      "encoded_sha256": "62613db6c52183d01826548e9e8e3e799693254903eb24a8be251b701b54b2b8"
+    },
+    {
+      "path": "source-blobs/ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411.gz",
+      "decoded_sha256": "ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411",
+      "decoded_bytes": 68358,
+      "encoded_sha256": "d4087ab792fadcf43fba23f6b0f11642f83a75f3f843f7287db077772341d4dc"
+    },
+    {
+      "path": "source-blobs/fffb03c58f574d989901764a535495da6808bab700e5b07879db1da013bcdfa8.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/source-blobs/fffb03c58f574d989901764a535495da6808bab700e5b07879db1da013bcdfa8.gz",
+      "decoded_sha256": "fffb03c58f574d989901764a535495da6808bab700e5b07879db1da013bcdfa8",
+      "decoded_bytes": 7355,
+      "encoded_sha256": "b5b480fa4b159cf4b71d42de80c5283fcf297005d48e83cb9aeb3a52a9a3a853"
+    },
+    {
+      "path": "receipts/verify_zh_metadata.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/verify_zh_metadata.py",
+      "decoded_sha256": "b43e14d75a9e295582e555a3d3723c9e75787e0e8216d77dfb38f25b6de8b0cc",
+      "decoded_bytes": 3141,
+      "encoded_sha256": "f8010b4f1f13ef6d73677286bec4e731ffddd184e1332727e07a16820e1ec72b"
+    },
+    {
+      "path": "receipts/zh-extraction-resource-hold-current-sample-mislabel.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/zh-extraction-resource-hold-current-sample-mislabel.json",
+      "decoded_sha256": "86d3b28e7a16da5e4e3ac02eac01d38fd91d32175d01c958a0275687dd5c6c8b",
+      "decoded_bytes": 653,
+      "encoded_sha256": "c838c3cfdbc64a2f950d07559bb1a0fcdf994dfca3f5b2eaa8e68448a78db654"
+    },
+    {
+      "path": "receipts/zh-extraction-resource-resolution.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/zh-extraction-resource-resolution.json",
+      "decoded_sha256": "14f10b41947fb1c24a149b993a6e33b8c0f785b9c6b1e098fae12c95eaee198a",
+      "decoded_bytes": 657,
+      "encoded_sha256": "d5b92e0d95fce8916a3cdb3fd92bbee7e663ae1c372642d2a6745929f4f2f4cf"
+    },
+    {
+      "path": "receipts/zh-metadata-checkpoint.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/zh-metadata-checkpoint.json",
+      "decoded_sha256": "9cb38b3fcb585bc8f395a94c42c1b8fcd8299fb37445396371470a1933675774",
+      "decoded_bytes": 27743,
+      "encoded_sha256": "968703a5720c9b2f87060df0f3a8078647af2f74c5c5367e186792b0afc4b4ec"
+    },
+    {
+      "path": "changed-pages/en/001.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-001.png",
+      "decoded_sha256": "b3a8614b012799f29dd11fc166ad5a043d5baa5da1b6ef288e8ef0c9e990ff40",
+      "decoded_bytes": 312330,
+      "encoded_sha256": "b3a8614b012799f29dd11fc166ad5a043d5baa5da1b6ef288e8ef0c9e990ff40"
+    },
+    {
+      "path": "changed-pages/en/002.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-002.png",
+      "decoded_sha256": "ca6e2f5cb8696c157c933f7128f3ce274ef4d98f42786e8b90d0d160d0d141c1",
+      "decoded_bytes": 83415,
+      "encoded_sha256": "ca6e2f5cb8696c157c933f7128f3ce274ef4d98f42786e8b90d0d160d0d141c1"
+    },
+    {
+      "path": "changed-pages/en/003.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-003.png",
+      "decoded_sha256": "5fb53b5afeeaf6daed32e4e32581677efd679172f7dcaf570efc9f964519aef4",
+      "decoded_bytes": 94248,
+      "encoded_sha256": "5fb53b5afeeaf6daed32e4e32581677efd679172f7dcaf570efc9f964519aef4"
+    },
+    {
+      "path": "changed-pages/en/004.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-004.png",
+      "decoded_sha256": "cdf8839e2de39bc5a408a8562d7c1b1904174caa48792672b4237838537bfcdc",
+      "decoded_bytes": 117808,
+      "encoded_sha256": "cdf8839e2de39bc5a408a8562d7c1b1904174caa48792672b4237838537bfcdc"
+    },
+    {
+      "path": "changed-pages/en/005.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-005.png",
+      "decoded_sha256": "6124d71d9228ba5bb53a013b41857112560cd6e203afc3cdb23f3959f8f30972",
+      "decoded_bytes": 121763,
+      "encoded_sha256": "6124d71d9228ba5bb53a013b41857112560cd6e203afc3cdb23f3959f8f30972"
+    },
+    {
+      "path": "changed-pages/en/006.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-006.png",
+      "decoded_sha256": "3f9f78a424cfcbc85b34692aa0be41ec4f635b44412b084bfd9614fdf0d99cf0",
+      "decoded_bytes": 117166,
+      "encoded_sha256": "3f9f78a424cfcbc85b34692aa0be41ec4f635b44412b084bfd9614fdf0d99cf0"
+    },
+    {
+      "path": "changed-pages/en/007.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-007.png",
+      "decoded_sha256": "fcbaddd95d1dd8afabbb929d32486b1632cb602a3e11c6ce23c4237a5a48cb4d",
+      "decoded_bytes": 152366,
+      "encoded_sha256": "fcbaddd95d1dd8afabbb929d32486b1632cb602a3e11c6ce23c4237a5a48cb4d"
+    },
+    {
+      "path": "changed-pages/en/008.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-008.png",
+      "decoded_sha256": "03016a5a6213f2625d14dcc226493aed7b58a9b198711a808f9f1acb404fb319",
+      "decoded_bytes": 136894,
+      "encoded_sha256": "03016a5a6213f2625d14dcc226493aed7b58a9b198711a808f9f1acb404fb319"
+    },
+    {
+      "path": "changed-pages/en/009.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-009.png",
+      "decoded_sha256": "37f6a98d42c8d81cb480a77bd4c7a33c202d77dbfa52c304b0bbcefc09cf3d63",
+      "decoded_bytes": 158891,
+      "encoded_sha256": "37f6a98d42c8d81cb480a77bd4c7a33c202d77dbfa52c304b0bbcefc09cf3d63"
+    },
+    {
+      "path": "changed-pages/en/010.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-010.png",
+      "decoded_sha256": "647e8850efe4790b2b22c6996341df0054655030f24241d5e2dd0751bbf6ea1b",
+      "decoded_bytes": 170891,
+      "encoded_sha256": "647e8850efe4790b2b22c6996341df0054655030f24241d5e2dd0751bbf6ea1b"
+    },
+    {
+      "path": "changed-pages/en/011.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-011.png",
+      "decoded_sha256": "ffca5951d107af587fa617c04fc29d518f9f5171d6eecee0d2876bf4babbd00d",
+      "decoded_bytes": 175285,
+      "encoded_sha256": "ffca5951d107af587fa617c04fc29d518f9f5171d6eecee0d2876bf4babbd00d"
+    },
+    {
+      "path": "changed-pages/en/012.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-012.png",
+      "decoded_sha256": "d98a40611a346c86d629b1885b8f59439fba9330522fd505f0e00d5616a5e3a9",
+      "decoded_bytes": 187120,
+      "encoded_sha256": "d98a40611a346c86d629b1885b8f59439fba9330522fd505f0e00d5616a5e3a9"
+    },
+    {
+      "path": "changed-pages/en/013.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-013.png",
+      "decoded_sha256": "9a435e1de4b59d97457107b9c4bc930cb4a2fe4207d4155d16b623dacf4ba3d5",
+      "decoded_bytes": 203496,
+      "encoded_sha256": "9a435e1de4b59d97457107b9c4bc930cb4a2fe4207d4155d16b623dacf4ba3d5"
+    },
+    {
+      "path": "changed-pages/en/014.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-014.png",
+      "decoded_sha256": "066285cf21008974e9c5351e68ecfc1bd1846b465f3bda7281e8c667322893d6",
+      "decoded_bytes": 217175,
+      "encoded_sha256": "066285cf21008974e9c5351e68ecfc1bd1846b465f3bda7281e8c667322893d6"
+    },
+    {
+      "path": "changed-pages/en/015.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/changed-015.png",
+      "decoded_sha256": "a4b8837dbfae2aca8afcdac578c8bfb9092638660dfe078525ee6b7fedf335fe",
+      "decoded_bytes": 107194,
+      "encoded_sha256": "a4b8837dbfae2aca8afcdac578c8bfb9092638660dfe078525ee6b7fedf335fe"
+    },
+    {
+      "path": "critical-after/en/0238.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/audit/frames/0000982_000065.466s.png",
+      "decoded_sha256": "9936a73ea3d39a3ad6a7fa3c047243f5bb99dc007eb29fd6d1a676076d2db6a6",
+      "decoded_bytes": 18245,
+      "encoded_sha256": "9936a73ea3d39a3ad6a7fa3c047243f5bb99dc007eb29fd6d1a676076d2db6a6"
+    },
+    {
+      "path": "critical-after/en/0280.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/repair-frames/0001054_000070.266s.png",
+      "decoded_sha256": "2f227d9ccf9159397be85f23a97c8ddd9fb8292a19eaa19e12c737637a5ab3d3",
+      "decoded_bytes": 25600,
+      "encoded_sha256": "2f227d9ccf9159397be85f23a97c8ddd9fb8292a19eaa19e12c737637a5ab3d3"
+    },
+    {
+      "path": "critical-after/en/0319.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/repair-frames/0001150_000076.666s.png",
+      "decoded_sha256": "68cd77b790143279c2938e92152a92815c9cbf1a454b9896a663966d6c072a8e",
+      "decoded_bytes": 34550,
+      "encoded_sha256": "68cd77b790143279c2938e92152a92815c9cbf1a454b9896a663966d6c072a8e"
+    },
+    {
+      "path": "critical-after/en/0362.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/repair-frames/0001251_000083.400s.png",
+      "decoded_sha256": "a556481ef33025cd1806c12d85f2a97dc42684aee0aac54053c368b3d2827788",
+      "decoded_bytes": 44685,
+      "encoded_sha256": "a556481ef33025cd1806c12d85f2a97dc42684aee0aac54053c368b3d2827788"
+    },
+    {
+      "path": "critical-after/en/0376.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/en/repair-frames/0001265_000084.333s.png",
+      "decoded_sha256": "d0eb7b382b41d03078eb98d9e6cc4a5c0545936323fbdf69536b77eeb1e99bc5",
+      "decoded_bytes": 50550,
+      "encoded_sha256": "d0eb7b382b41d03078eb98d9e6cc4a5c0545936323fbdf69536b77eeb1e99bc5"
+    },
+    {
+      "path": "critical-before/en/0231.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0000982_000065.466s.png",
+      "decoded_sha256": "7ac249ac999f6a6b5a0788b3629c39a3d5cf129db081ec81c8138885ad05d163",
+      "decoded_bytes": 25062,
+      "encoded_sha256": "7ac249ac999f6a6b5a0788b3629c39a3d5cf129db081ec81c8138885ad05d163"
+    },
+    {
+      "path": "critical-before/en/0249.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0001054_000070.266s.png",
+      "decoded_sha256": "e8feb878468186c1f00103a9842fa06ac6dc6e5c5cb5c290443b6dcdc829d1eb",
+      "decoded_bytes": 30015,
+      "encoded_sha256": "e8feb878468186c1f00103a9842fa06ac6dc6e5c5cb5c290443b6dcdc829d1eb"
+    },
+    {
+      "path": "critical-before/en/0271.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0001150_000076.666s.png",
+      "decoded_sha256": "7553a973423bf51aa9968cba3cd64b4db5cd460bdab6e92b5128a8ac72c5876f",
+      "decoded_bytes": 37764,
+      "encoded_sha256": "7553a973423bf51aa9968cba3cd64b4db5cd460bdab6e92b5128a8ac72c5876f"
+    },
+    {
+      "path": "critical-before/en/0291.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/en/audit/frames/0001251_000083.400s.png",
+      "decoded_sha256": "373886ded8320141982b8fd020dd301a447cc703db8bdcfa4491783f3453d9cc",
+      "decoded_bytes": 48910,
+      "encoded_sha256": "373886ded8320141982b8fd020dd301a447cc703db8bdcfa4491783f3453d9cc"
+    },
+    {
+      "path": "changed-pages/zh/001.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-001.png",
+      "decoded_sha256": "07c7b8d0fcc0a2205a1541951a32d96db725b726bde3c522f3a10a8d443a2495",
+      "decoded_bytes": 84528,
+      "encoded_sha256": "07c7b8d0fcc0a2205a1541951a32d96db725b726bde3c522f3a10a8d443a2495"
+    },
+    {
+      "path": "changed-pages/zh/002.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-002.png",
+      "decoded_sha256": "314b1e50b01d3d86b729188e65d45c80f5dc4cd323e01cdf623e151c72bf1d73",
+      "decoded_bytes": 85053,
+      "encoded_sha256": "314b1e50b01d3d86b729188e65d45c80f5dc4cd323e01cdf623e151c72bf1d73"
+    },
+    {
+      "path": "changed-pages/zh/003.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-003.png",
+      "decoded_sha256": "379ec4220b1e118cc870816edf93af250af626212330867ea640c792b2c0cb2b",
+      "decoded_bytes": 106823,
+      "encoded_sha256": "379ec4220b1e118cc870816edf93af250af626212330867ea640c792b2c0cb2b"
+    },
+    {
+      "path": "changed-pages/zh/004.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-004.png",
+      "decoded_sha256": "17075f2bfda4bf5a681dc3527b944acfe139cd4e19fa778845faad59f54cb404",
+      "decoded_bytes": 102731,
+      "encoded_sha256": "17075f2bfda4bf5a681dc3527b944acfe139cd4e19fa778845faad59f54cb404"
+    },
+    {
+      "path": "changed-pages/zh/005.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-005.png",
+      "decoded_sha256": "e9e8ba1439c80fd10aaec1564ee83bda8d5b96562f601ccf6243fbc35c881017",
+      "decoded_bytes": 113254,
+      "encoded_sha256": "e9e8ba1439c80fd10aaec1564ee83bda8d5b96562f601ccf6243fbc35c881017"
+    },
+    {
+      "path": "changed-pages/zh/006.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-006.png",
+      "decoded_sha256": "38f7460e58028f73016f70917a0efc31307b2a6c492b1bc43b4b28d2646ce3e8",
+      "decoded_bytes": 106379,
+      "encoded_sha256": "38f7460e58028f73016f70917a0efc31307b2a6c492b1bc43b4b28d2646ce3e8"
+    },
+    {
+      "path": "changed-pages/zh/007.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-007.png",
+      "decoded_sha256": "bcaeecf8153534892fddcf36d518de2b15d0c2fbf8a81b7134e98539f0cbb709",
+      "decoded_bytes": 116732,
+      "encoded_sha256": "bcaeecf8153534892fddcf36d518de2b15d0c2fbf8a81b7134e98539f0cbb709"
+    },
+    {
+      "path": "changed-pages/zh/008.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-008.png",
+      "decoded_sha256": "5656e82757e1e10e69df428d056919aa5cbbed319873e7c343bf6a15f9e18679",
+      "decoded_bytes": 150583,
+      "encoded_sha256": "5656e82757e1e10e69df428d056919aa5cbbed319873e7c343bf6a15f9e18679"
+    },
+    {
+      "path": "changed-pages/zh/009.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-009.png",
+      "decoded_sha256": "397d6f20d75019332a2881a8d0600162970ca03c7fb554f320f89418c6f31d40",
+      "decoded_bytes": 173477,
+      "encoded_sha256": "397d6f20d75019332a2881a8d0600162970ca03c7fb554f320f89418c6f31d40"
+    },
+    {
+      "path": "changed-pages/zh/010.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-010.png",
+      "decoded_sha256": "a664aaa06a521189d11ae9258beeb0ba855f9b1e92e6dbac5155af1dd806a29f",
+      "decoded_bytes": 147581,
+      "encoded_sha256": "a664aaa06a521189d11ae9258beeb0ba855f9b1e92e6dbac5155af1dd806a29f"
+    },
+    {
+      "path": "changed-pages/zh/011.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-011.png",
+      "decoded_sha256": "9b7945d2de44f294caee9f76ae07e26828e80deb99edf53f66359ad1da4a3ad7",
+      "decoded_bytes": 162675,
+      "encoded_sha256": "9b7945d2de44f294caee9f76ae07e26828e80deb99edf53f66359ad1da4a3ad7"
+    },
+    {
+      "path": "changed-pages/zh/012.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-012.png",
+      "decoded_sha256": "7d7dc405c5e6887d20bf8972e088c9d4536dc1de5341c23d69831cf928b9cc77",
+      "decoded_bytes": 225807,
+      "encoded_sha256": "7d7dc405c5e6887d20bf8972e088c9d4536dc1de5341c23d69831cf928b9cc77"
+    },
+    {
+      "path": "changed-pages/zh/013.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-013.png",
+      "decoded_sha256": "c69b3d2926fd0985d222a285c59644da005cb0376ac9bc0af5914e72981365af",
+      "decoded_bytes": 198982,
+      "encoded_sha256": "c69b3d2926fd0985d222a285c59644da005cb0376ac9bc0af5914e72981365af"
+    },
+    {
+      "path": "changed-pages/zh/014.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-014.png",
+      "decoded_sha256": "2e151a2bb991bc1cd8e42ff3506d7d0b37876fb1b4bd0e765c263a6dec42befe",
+      "decoded_bytes": 191238,
+      "encoded_sha256": "2e151a2bb991bc1cd8e42ff3506d7d0b37876fb1b4bd0e765c263a6dec42befe"
+    },
+    {
+      "path": "changed-pages/zh/015.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-015.png",
+      "decoded_sha256": "8935d5e25a3a8af2f73cbd773d79faaaf84ab74fd8b5e711e678c200c848350f",
+      "decoded_bytes": 202363,
+      "encoded_sha256": "8935d5e25a3a8af2f73cbd773d79faaaf84ab74fd8b5e711e678c200c848350f"
+    },
+    {
+      "path": "changed-pages/zh/016.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-016.png",
+      "decoded_sha256": "b2883ac6048521c98746c3d575483b133bf86dae8f9acf68ba90fc3aebf85c24",
+      "decoded_bytes": 211806,
+      "encoded_sha256": "b2883ac6048521c98746c3d575483b133bf86dae8f9acf68ba90fc3aebf85c24"
+    },
+    {
+      "path": "changed-pages/zh/017.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/changed-017.png",
+      "decoded_sha256": "4f81216da10b40ec7275114d7ef435967525f67dcfd87b5583a3835631ba4155",
+      "decoded_bytes": 48051,
+      "encoded_sha256": "4f81216da10b40ec7275114d7ef435967525f67dcfd87b5583a3835631ba4155"
+    },
+    {
+      "path": "critical-after/zh/0267.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/audit/frames/0001110_000074.000s.png",
+      "decoded_sha256": "afaef0de26e219b2177466b3de1ec654df83ae4b30b257e0171d50fbc63d8c1d",
+      "decoded_bytes": 17414,
+      "encoded_sha256": "afaef0de26e219b2177466b3de1ec654df83ae4b30b257e0171d50fbc63d8c1d"
+    },
+    {
+      "path": "critical-after/zh/0318.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/repair-frames/0001192_000079.466s.png",
+      "decoded_sha256": "d5ba61350f8b51dbf6a67716bd84fd04efd35a0dc784de81f5642db65e39c599",
+      "decoded_bytes": 25251,
+      "encoded_sha256": "d5ba61350f8b51dbf6a67716bd84fd04efd35a0dc784de81f5642db65e39c599"
+    },
+    {
+      "path": "critical-after/zh/0360.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/repair-frames/0001287_000085.800s.png",
+      "decoded_sha256": "57d0ef2fb76fc0ddf140e4f9b721af310ec517a7bd285666855551f3e8d25b3b",
+      "decoded_bytes": 33170,
+      "encoded_sha256": "57d0ef2fb76fc0ddf140e4f9b721af310ec517a7bd285666855551f3e8d25b3b"
+    },
+    {
+      "path": "critical-after/zh/0403.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/repair-frames/0001385_000092.333s.png",
+      "decoded_sha256": "aa95e2e881612ee326c1ae504b071c86d109443eca259011bc61cfddabf071b6",
+      "decoded_bytes": 43912,
+      "encoded_sha256": "aa95e2e881612ee326c1ae504b071c86d109443eca259011bc61cfddabf071b6"
+    },
+    {
+      "path": "critical-after/zh/0417.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-final-regression/review/zh/repair-frames/0001399_000093.266s.png",
+      "decoded_sha256": "70992628010bd795b6fb7383a789ed2324c14ec42afa58bd3f6597545f610556",
+      "decoded_bytes": 50257,
+      "encoded_sha256": "70992628010bd795b6fb7383a789ed2324c14ec42afa58bd3f6597545f610556"
+    },
+    {
+      "path": "critical-before/zh/0259.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit/frames/0001110_000074.000s.png",
+      "decoded_sha256": "934dc94d1641bf2965c391de509481dd5e14883d8a7b5f79f0b13c0978c23722",
+      "decoded_bytes": 23567,
+      "encoded_sha256": "934dc94d1641bf2965c391de509481dd5e14883d8a7b5f79f0b13c0978c23722"
+    },
+    {
+      "path": "critical-before/zh/0277.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit/frames/0001192_000079.466s.png",
+      "decoded_sha256": "672b6c3ad1e97082f5e90c424a9482eca6733455d2aaf6b6c3e72ad1c97a85d2",
+      "decoded_bytes": 29666,
+      "encoded_sha256": "672b6c3ad1e97082f5e90c424a9482eca6733455d2aaf6b6c3e72ad1c97a85d2"
+    },
+    {
+      "path": "critical-before/zh/0295.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit/frames/0001287_000085.800s.png",
+      "decoded_sha256": "4c2f120041a029e597b437fb492b55a9b333647573168bc8e5eb192a665e3bee",
+      "decoded_bytes": 36978,
+      "encoded_sha256": "4c2f120041a029e597b437fb492b55a9b333647573168bc8e5eb192a665e3bee"
+    },
+    {
+      "path": "critical-before/zh/0315.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-logistic-selected-review/zh/audit/frames/0001385_000092.333s.png",
+      "decoded_sha256": "903bcf5688111c4637d486e09cb3d3b738ea4249156ab37df188f386b51da6e3",
+      "decoded_bytes": 48068,
+      "encoded_sha256": "903bcf5688111c4637d486e09cb3d3b738ea4249156ab37df188f386b51da6e3"
+    }
+  ],
+  "scope": "All payload archives are lossless gzip or byte-identical original PNG. No lossy matching or audio/image deletion."
+}

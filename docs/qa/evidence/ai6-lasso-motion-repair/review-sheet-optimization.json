@@ -1,0 +1,17 @@
+{
+  "scope": "New-only native reviewer-sheet optimization, separate from frozen qa_motion algorithm",
+  "frozen_tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+  "original_prepare_sha256": "a978d0e4b2b1512d853a88163a2c143b0183ec9ab3ea4f6ea1bb42e419694e6c",
+  "fresh_prepare_sha256": "4137ba09db55ca30c4f80371e6cd7bd14204829bc10ca1944dc5b71101cbe076",
+  "changes": [
+    "task-specific independent owner output root",
+    "skip generation of redundant initial native reviewer sheets; selected PNG extraction and frozen tool internal sheets unchanged"
+  ],
+  "actual_new_images_reviewed": 272,
+  "actual_new_pages": 35,
+  "inherited_by_exact_full_native_PNG_sha256_only": 799,
+  "RGBA_equivalence_fallback_used": false,
+  "detector_or_JPEG_or_perceptual_equivalence_used": false,
+  "thresholds_maxgap_dense_unchanged": true,
+  "complete_selected_and_unselected_mapping_preserved": true
+}

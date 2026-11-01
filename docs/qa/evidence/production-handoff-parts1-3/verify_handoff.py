@@ -16,11 +16,15 @@ SVD = 'videos/ai/ai3/s08_svd.py'
 OUTRO = 'videos/ai/ai3/s19_outro.py'
 HOOK = 'videos/ai/ai1/s01_hook.py'
 PROBABILITY = 'videos/ai/ai1/s02_probability.py'
+SURPRISE = 'videos/ai/ai1/s03_surprise.py'
+SURPRISE_OVERLAY = 'part1-surprise-probability-roadmap-and-part3-v6'
 PROBABILITY_OVERLAY = 'part1-probability-roadmap-and-part3-v5'
 # V5 is registered only by the exact reviewed manifest byte pin below.
 ROADMAP = 'part1-roadmap-and-part3-v4'
 COMBINED = 'part3-svd-outro-production-v3'
 KNOWN_OVERLAYS = {
+    SURPRISE_OVERLAY: ('overlays/part1-surprise-probability-roadmap-and-part3-v6.json',
+                       '916421ce802ab387df104242a54e7d4e2d9b5869825ea52df069b95b8c5d345c'),
     PROBABILITY_OVERLAY: ('overlays/part1-probability-roadmap-and-part3-v5.json',
                           '6bc668f43c97b0d9867b2ab323c2d337599a5c4417c9fb5eb01644d7e9a7dbce'),
     ROADMAP: ('overlays/part1-roadmap-and-part3-v4.json',
@@ -58,7 +62,7 @@ def load_overlay(name, errors):
     except (OSError, ValueError) as exc:
         errors.append('Overlay manifest unavailable/invalid: ' + type(exc).__name__)
         return None
-    version = 2 if name in (COMBINED, ROADMAP, PROBABILITY_OVERLAY) else 1
+    version = 2 if name in (COMBINED, ROADMAP, PROBABILITY_OVERLAY, SURPRISE_OVERLAY) else 1
     if (not isinstance(overlay, dict) or type(overlay.get('schema_version')) is not int
             or overlay['schema_version'] != version):
         errors.append(f'Overlay manifest schema_version must be exactly {version}.')
@@ -74,7 +78,8 @@ def load_overlay(name, errors):
         replacements = source_replacements(overlay)
         before = [row['before']['path'] for row in replacements]
         after = [row['after']['path'] for row in replacements]
-        expected_paths = ([HOOK, PROBABILITY, SVD, OUTRO] if name == PROBABILITY_OVERLAY
+        expected_paths = ([HOOK, PROBABILITY, SURPRISE, SVD, OUTRO] if name == SURPRISE_OVERLAY
+                          else [HOOK, PROBABILITY, SVD, OUTRO] if name == PROBABILITY_OVERLAY
                           else [HOOK, SVD, OUTRO] if name == ROADMAP
                           else [SVD, OUTRO] if name == COMBINED else [SVD])
         evidence = overlay['optional_evidence_files']
@@ -85,7 +90,7 @@ def load_overlay(name, errors):
         # Multi-source releases deliberately authorize no extra repository
         # files. Its pinned review receipts are external metadata, not a broad
         # whitelist for copying an evidence/producer tree into the target.
-        if name in (COMBINED, ROADMAP, PROBABILITY_OVERLAY):
+        if name in (COMBINED, ROADMAP, PROBABILITY_OVERLAY, SURPRISE_OVERLAY):
             valid_paths = valid_paths and evidence == []
     except (KeyError, TypeError, AttributeError):
         valid_paths = False
@@ -171,7 +176,7 @@ def overlay_tree_checks(repo, head, overlay, errors):
                 or bool(target.stat().st_mode & 0o111) != (after['git_mode'] == '100755')
                 or target.stat().st_size != after['bytes'] or digest(target) != after['sha256']):
             label = {SVD: 'SVD', OUTRO: 'Outro', HOOK: 'Part1 Hook',
-                     PROBABILITY: 'Part1 Probability'}[after['path']]
+                     PROBABILITY: 'Part1 Probability', SURPRISE: 'Part1 Surprise'}[after['path']]
             errors.append(f'Overlay requires the exact reviewed {label} after bytes: ' + after['path'])
 
 
@@ -256,7 +261,7 @@ def main():
     parser.add_argument('--repo', type=Path, required=True)
     parser.add_argument('--strict-external', action='store_true')
     parser.add_argument('--optional-audio', action='store_true')
-    parser.add_argument('--overlay', help='Explicit reviewed overlay ID; svd-reveal-v1, svd-production-polish-v2, part3-svd-outro-production-v3, part1-roadmap-and-part3-v4, or part1-probability-roadmap-and-part3-v5.')
+    parser.add_argument('--overlay', help='Explicit reviewed overlay ID; svd-reveal-v1, svd-production-polish-v2, part3-svd-outro-production-v3, part1-roadmap-and-part3-v4, part1-probability-roadmap-and-part3-v5, or part1-surprise-probability-roadmap-and-part3-v6.')
     args = parser.parse_args()
     result = verify(args.repo, strict_external=args.strict_external,
                     optional_audio=args.optional_audio, overlay_id=args.overlay)

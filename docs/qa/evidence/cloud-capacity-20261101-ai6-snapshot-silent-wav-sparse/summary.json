@@ -1,0 +1,322 @@
+{
+  "started": "2026-11-01T06:58:25.747411+00:00",
+  "finished": "2026-11-01T06:58:30.323717+00:00",
+  "scope": "Only initial30 alreadycompleted independent runtime/ai6-*/frozen|completed silentQA WAV snapshots; no canonicalactive renders/voice/model/cache paths. Physicalzero-interiorholepunch, no deletion/reencoding/speech changes.",
+  "plan_sha256": "3f2b23abd416e1f7bf25e0b47334912ff465e919d49ff6bb7bc0b46782f8e6b4",
+  "candidate_count": 30,
+  "candidate_before_allocated_bytes": 252006400,
+  "processed_count": 30,
+  "skips_and_failures": [],
+  "stopped_reason": null,
+  "remaining_unprocessed": 0,
+  "allocated_bytes_recovered": 251760640,
+  "free_before": 822980608,
+  "free_after": 1074348032,
+  "observed_free_space_delta": 251367424,
+  "free_space_caveat": "Other Part6 captures/reviews write concurrently; wholefilesystemfree delta is separate from exact targetallocation recovery.",
+  "protected306_count": 306,
+  "protected306_exact_signatures_unchanged": true,
+  "source_files": 1524,
+  "critical_source_bytes_unchanged": true,
+  "activity_caveat": "Partial host FD/maps visibility. Only already completed independent runtime snapshots, with task-owned copy activity reconciled by receipts; no global process-absence claim.",
+  "all_successful_file_bytes_size_inode_device_mode_mtime_preserved": true,
+  "ctime_changes_explicitly_recorded": true,
+  "all30_ctime_changes_count": 30,
+  "after_target_allocated_bytes": 245760,
+  "payloads": [
+    {
+      "path": "/workspace/runtime/ai6-gauss-regression/en-GaussMarkov_motion/frozen/media/videos/480p15/GaussMarkov.wav",
+      "sha256_unchanged": "50ae372992dbe21652d3fa47027242db9a8be2d68e5d8fe2c36344eb87443b24",
+      "before_allocated_bytes": 7335936,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793514321558860750,
+      "inode_unchanged": 316158
+    },
+    {
+      "path": "/workspace/runtime/ai6-gauss-regression/zh-GaussMarkov_motion/frozen/media/videos/480p15/GaussMarkov.wav",
+      "sha256_unchanged": "ae3656022514a71c6adfb8bc3b3f3b33631d17f97fd2852e7bbb6063f0305581",
+      "before_allocated_bytes": 8065024,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793514411380033220,
+      "inode_unchanged": 447320
+    },
+    {
+      "path": "/workspace/runtime/ai6-lasso-after-capture/runs/20261101T064932/05-Lasso/en/motion/completed/media/videos/480p15/Lasso.wav",
+      "sha256_unchanged": "23b9df8dd31df7a0e0c64064f68008f7e55c25c59bb8464741265b7d7ec19da6",
+      "before_allocated_bytes": 7868416,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793515837642310528,
+      "inode_unchanged": 656909
+    },
+    {
+      "path": "/workspace/runtime/ai6-lasso-after-capture/runs/20261101T064932/05-Lasso/zh/motion/completed/media/videos/480p15/Lasso.wav",
+      "sha256_unchanged": "86c0912a5115c58e267c0edc1b77ef74401651389f80a24b9ef3479b26a4496d",
+      "before_allocated_bytes": 8597504,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793515918302057522,
+      "inode_unchanged": 673749
+    },
+    {
+      "path": "/workspace/runtime/ai6-logistic-final-regression/current/06-Logistic/en/motion/completed/media/videos/480p15/Logistic.wav",
+      "sha256_unchanged": "590f63946f8c125037224992dc86e64d3ab8e02a5c514b4135a3f099bd9398d8",
+      "before_allocated_bytes": 7819264,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793516006170019130,
+      "inode_unchanged": 687434
+    },
+    {
+      "path": "/workspace/runtime/ai6-lsq-gauss-review/en-GaussMarkov_motion/frozen/media/videos/480p15/GaussMarkov.wav",
+      "sha256_unchanged": "50ae372992dbe21652d3fa47027242db9a8be2d68e5d8fe2c36344eb87443b24",
+      "before_allocated_bytes": 7335936,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793512804161897978,
+      "inode_unchanged": 970583
+    },
+    {
+      "path": "/workspace/runtime/ai6-lsq-gauss-review/en-LeastSquares_motion/frozen/media/videos/480p15/LeastSquares.wav",
+      "sha256_unchanged": "55ca26a46140427765dfe5627877afcb12b650c6d09b71310bf1cccd79c24b1e",
+      "before_allocated_bytes": 7311360,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793511454751764972,
+      "inode_unchanged": 962601
+    },
+    {
+      "path": "/workspace/runtime/ai6-lsq-gauss-review/zh-GaussMarkov_motion/frozen/media/videos/480p15/GaussMarkov.wav",
+      "sha256_unchanged": "ae3656022514a71c6adfb8bc3b3f3b33631d17f97fd2852e7bbb6063f0305581",
+      "before_allocated_bytes": 8065024,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793512947980417260,
+      "inode_unchanged": 1050773
+    },
+    {
+      "path": "/workspace/runtime/ai6-lsq-gauss-review/zh-LeastSquares_motion/frozen/media/videos/480p15/LeastSquares.wav",
+      "sha256_unchanged": "4b297acbf0c9087f6352a375efb5a6bd9c317e3c203539f58dd662a17b27b1ec",
+      "before_allocated_bytes": 8286208,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793511635813216153,
+      "inode_unchanged": 964632
+    },
+    {
+      "path": "/workspace/runtime/ai6-lsq-regression/en-LeastSquares_motion/frozen/media/videos/480p15/LeastSquares.wav",
+      "sha256_unchanged": "55ca26a46140427765dfe5627877afcb12b650c6d09b71310bf1cccd79c24b1e",
+      "before_allocated_bytes": 7311360,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793512347486929484,
+      "inode_unchanged": 839724
+    },
+    {
+      "path": "/workspace/runtime/ai6-lsq-regression/zh-LeastSquares_motion/frozen/media/videos/480p15/LeastSquares.wav",
+      "sha256_unchanged": "4b297acbf0c9087f6352a375efb5a6bd9c317e3c203539f58dd662a17b27b1ec",
+      "before_allocated_bytes": 8286208,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793512474427111728,
+      "inode_unchanged": 966866
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T053852/04-Ridge/en/motion/completed/media/videos/480p15/Ridge.wav",
+      "sha256_unchanged": "ce5b8064cdeb13f60a6c805d4c44acbacd049cea7ca6d1f51443812e9644abfa",
+      "before_allocated_bytes": 7954432,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793511658432783965,
+      "inode_unchanged": 964715
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/en/motion/completed/media/videos/480p15/Ridge.wav",
+      "sha256_unchanged": "ce5b8064cdeb13f60a6c805d4c44acbacd049cea7ca6d1f51443812e9644abfa",
+      "before_allocated_bytes": 7954432,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793512602801357155,
+      "inode_unchanged": 967599
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/04-Ridge/zh/motion/completed/media/videos/480p15/Ridge.wav",
+      "sha256_unchanged": "bba77ffae7d80841cce17a4fa723e2f3eb1ad2fc96bdcb4bd242fb5e20225e11",
+      "before_allocated_bytes": 8663040,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793512766475441450,
+      "inode_unchanged": 969530
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/05-Lasso/en/motion/completed/media/videos/480p15/Lasso.wav",
+      "sha256_unchanged": "23b9df8dd31df7a0e0c64064f68008f7e55c25c59bb8464741265b7d7ec19da6",
+      "before_allocated_bytes": 7868416,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793512847146240842,
+      "inode_unchanged": 970953
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/05-Lasso/zh/motion/completed/media/videos/480p15/Lasso.wav",
+      "sha256_unchanged": "86c0912a5115c58e267c0edc1b77ef74401651389f80a24b9ef3479b26a4496d",
+      "before_allocated_bytes": 8597504,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793512943011320244,
+      "inode_unchanged": 1050152
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/en/motion/completed/media/videos/480p15/Logistic.wav",
+      "sha256_unchanged": "590f63946f8c125037224992dc86e64d3ab8e02a5c514b4135a3f099bd9398d8",
+      "before_allocated_bytes": 7819264,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793513165383364930,
+      "inode_unchanged": 1055417
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/06-Logistic/zh/motion/completed/media/videos/480p15/Logistic.wav",
+      "sha256_unchanged": "8f5511e7156312fa8eb435d1eecf3af58a2cfe1e3d8d40dd2418905dce34b50d",
+      "before_allocated_bytes": 8548352,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793513449995093227,
+      "inode_unchanged": 1055543
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/07-Newton/en/motion/completed/media/videos/480p15/Newton.wav",
+      "sha256_unchanged": "8a278a2f192eaa45d46686ad10fe6fa1be35e83abed5c80627298388119291e2",
+      "before_allocated_bytes": 6881280,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793513530378874753,
+      "inode_unchanged": 1056143
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/07-Newton/zh/motion/completed/media/videos/480p15/Newton.wav",
+      "sha256_unchanged": "8ccfa45879fefccebf4e12bfa897e721c00b22bea39e16a5aa30218bcf7e5e34",
+      "before_allocated_bytes": 7409664,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793513632094607060,
+      "inode_unchanged": 1057377
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/08-NaiveBayes/en/motion/completed/media/videos/480p15/NaiveBayes.wav",
+      "sha256_unchanged": "fde3fb4e74ac156e55875ed9b4aad536e85be1a16f40a6e933845cbfcd6550f4",
+      "before_allocated_bytes": 7225344,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793513715616078898,
+      "inode_unchanged": 1058634
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/08-NaiveBayes/zh/motion/completed/media/videos/480p15/NaiveBayes.wav",
+      "sha256_unchanged": "1b648db7a321724b366a5ce9b4440ccd5f5b3134c8723d6acc43f8f608433869",
+      "before_allocated_bytes": 7864320,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793513828150313707,
+      "inode_unchanged": 1058852
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/09-LDA/en/motion/completed/media/videos/480p15/LDA.wav",
+      "sha256_unchanged": "000ec4a82dfcce7a40864e052bb9c084c02cf821fd7a760789573cc03c437e4d",
+      "before_allocated_bytes": 8740864,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793514460949016130,
+      "inode_unchanged": 1059972
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/09-LDA/zh/motion/completed/media/videos/480p15/LDA.wav",
+      "sha256_unchanged": "4f7264c2f53afdbcdf4e6c45fbfbdc6c01ab84120687c93fda8d9b9d21402a5f",
+      "before_allocated_bytes": 9383936,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793514563913890314,
+      "inode_unchanged": 1060384
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/10-KNN/en/motion/completed/media/videos/480p15/KNN.wav",
+      "sha256_unchanged": "f52c12f917f5001a33577cc047df729f190d48e38d0265cf1e83f49cda93b495",
+      "before_allocated_bytes": 8540160,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793514658535759006,
+      "inode_unchanged": 1061050
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/10-KNN/zh/motion/completed/media/videos/480p15/KNN.wav",
+      "sha256_unchanged": "63d8236d0755272687ee899119dc3b18186ef199db74080a73b647c878bbf2f6",
+      "before_allocated_bytes": 8638464,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793514798206804001,
+      "inode_unchanged": 1061774
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/en/motion/completed/media/videos/480p15/Kernels.wav",
+      "sha256_unchanged": "8cf5a466abc8b23fbd96271179775aa85d38d2cab004e96638825802fb485428",
+      "before_allocated_bytes": 10469376,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793514962320645324,
+      "inode_unchanged": 1062537
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T062616/11-Kernels/zh/motion/completed/media/videos/480p15/Kernels.wav",
+      "sha256_unchanged": "f236eea076f582a7c93f7cea5d11b0e16d001d2d6f21daca4745b372da017824",
+      "before_allocated_bytes": 11157504,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793515210258433884,
+      "inode_unchanged": 1063478
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/12-SVM/en/motion/completed/media/videos/480p15/SVM.wav",
+      "sha256_unchanged": "c1e1e17719980dccd49c30255dddb3a801cdb40a65be037eade1e9ea944f818c",
+      "before_allocated_bytes": 10862592,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793515841556130741,
+      "inode_unchanged": 1064320
+    },
+    {
+      "path": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T064932/12-SVM/zh/motion/completed/media/videos/480p15/SVM.wav",
+      "sha256_unchanged": "6d6ef3b494ef913641a96b0548ec97af548330cf250ac0262f151c84aaab295f",
+      "before_allocated_bytes": 11145216,
+      "after_allocated_bytes": 8192,
+      "mode_unchanged": 384,
+      "mtime_ns_unchanged": 1793516055122338507,
+      "inode_unchanged": 1066372
+    }
+  ],
+  "protected_snapshot_proofs": {
+    "protected306": {
+      "before_private": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/protected306-before.json.gz",
+      "after_private": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/protected306-after.json.gz",
+      "before_gzip_sha256": "69f5edcd16107e6b34b2c28ccc1a8b09d7560f5b7170643f6cc2b6e0c2778173",
+      "after_gzip_sha256": "048b675cbbe34fa1beca4371dfe7a760f43819b385e8daa62e2cb4e8f3fff5cc",
+      "both_decompressed_sha256": "036e7fc562b9059d30caf584d17a1a2a73b74368f34ef536d8736e1f8242404f",
+      "decompressed_exact": true,
+      "count": 306
+    },
+    "source": {
+      "before_private": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/source-before.json.gz",
+      "after_private": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/source-after.json.gz",
+      "before_gzip_sha256": "b3f2385515b55d871ed82aa6a79938e62a538c1e5e0128d5a164c3ddc870745f",
+      "after_gzip_sha256": "c6ef86ff87a0b6c42928ef33872b01ea37aaa94d422d2867af19c28a51dfdc39",
+      "both_decompressed_sha256": "0861387ba021574b73bed4d67359a026c2bde18d438fe35307967730c3278957",
+      "decompressed_exact": true,
+      "count": 1524
+    }
+  },
+  "raw_private_receipt": {
+    "path": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/receipt.json",
+    "sha256": "4da944268e07ac2cd82c1e51bbceb7335869e38416551ac7b983b38760a7359c"
+  }
+}

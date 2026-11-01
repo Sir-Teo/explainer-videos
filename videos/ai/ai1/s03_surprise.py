@@ -9,6 +9,20 @@ from videos.ai.ai1.common import (ALPHA27, PART, letter_row, load, plain_axes, s
                                   surprise_legend, wrap_words)
 
 
+def _bookmark_run_times(vo, mark, *nominal):
+    """Budget sequential reveals against this utterance's actual speech cue.
+
+    Allow one rounding frame per play and a final frame before the cue. A
+    physically impossible deadline still gets positive one-frame animations;
+    this calculation does not claim to synchronize such a deadline.
+    """
+    frame = 1 / config.frame_rate
+    floor = len(nominal) * frame
+    budget = vo.mark_time(mark) - vo.elapsed() - (len(nominal) + 1) * frame
+    scale = min(1.0, max(0.0, (budget - floor) / (sum(nominal) - floor)))
+    return tuple(frame + (duration - frame) * scale for duration in nominal)
+
+
 class Surprise(VoiceoverScene):
     def construct(self):
         self.card()
@@ -230,19 +244,21 @@ class Surprise(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(m, shift=UP * 0.1) for m in xl], lag_ratio=0.1), FadeIn(xname),
                       FadeIn(gname), Write(eqs[0]))
             vo.wait_until("b")
-            morph(self, eqs[0], eqs[1])
-            self.play(Create(seg_x), GrowFromEdge(bx, DOWN), FadeIn(bx_l), run_time=0.8)
-            self.play(Create(seg_y), GrowFromEdge(by, DOWN), FadeIn(by_l), run_time=0.8)
-            self.play(TransformFromCopy(bx, stack_a), TransformFromCopy(by, stack_b), FadeIn(st_l), run_time=1.2)
+            sum_time, x_time, y_time, stack_time = _bookmark_run_times(vo, "c", 1.4, 0.8, 0.8, 1.2)
+            morph(self, eqs[0], eqs[1], run_time=sum_time)
+            self.play(Create(seg_x), GrowFromEdge(bx, DOWN), FadeIn(bx_l), run_time=x_time)
+            self.play(Create(seg_y), GrowFromEdge(by, DOWN), FadeIn(by_l), run_time=y_time)
+            self.play(TransformFromCopy(bx, stack_a), TransformFromCopy(by, stack_b), FadeIn(st_l), run_time=stack_time)
             vo.wait_until("c")
             morph(self, eqs[1], eqs[2], run_time=1.0)
             self.play(FadeOut(additive), LaggedStart(*[LaggedStart(*[GrowFromEdge(b, DOWN) for b in u], lag_ratio=0.3)
                                                        for u in units], lag_ratio=0.25), run_time=2.0)
             self.play(FadeIn(int_dots), run_time=0.5)
             vo.wait_until("d")
-            morph(self, eqs[2], eqs[3], run_time=1.0)
+            fraction_time, dots_time = _bookmark_run_times(vo, "e", 1.0, 2.0)
+            morph(self, eqs[2], eqs[3], run_time=fraction_time)
             self.play(units.animate.set_opacity(0.25), LaggedStart(*[FadeIn(d, scale=0.3) for d in frac_dots],
-                                                                     lag_ratio=0.02), run_time=2.0)
+                                                                     lag_ratio=0.02), run_time=dots_time)
             vo.wait_until("e")
             morph(self, eqs[3], eqs[4], run_time=1.0)
             self.play(Create(gline), run_time=1.6)
@@ -307,11 +323,12 @@ class Surprise(VoiceoverScene):
             f"right after q: {su:.3f} bits, almost nothing. <bookmark mark='d'/> As p heads to zero, the surprise "
             "grows without limit."
         ) as vo:
+            clear_time, bend_time, tail_time = _bookmark_run_times(vo, "a", 1.0, 2.0, 1.0)
             self.play(FadeOut(d["rest"]), FadeOut(VGroup(*d["axes"][1:])),
-                      d["unit"].animate.scale(0.6).to_corner(UR, buff=0.3))
+                      d["unit"].animate.scale(0.6).to_corner(UR, buff=0.3), run_time=clear_time)
             self.play(ReplacementTransform(d["ax"], ax), ReplacementTransform(d["line"], bent), FadeIn(xl), FadeIn(yl),
-                      FadeIn(axl), run_time=2.0)
-            self.play(Create(tail), run_time=1.0)
+                      FadeIn(axl), run_time=bend_time)
+            self.play(Create(tail), run_time=tail_time)
             vo.wait_until("a")
             self.play(FadeIn(dots[0]), FadeIn(dots[1]))
             vo.wait_until("b")

@@ -1,0 +1,56 @@
+{
+  "payload_files": 10,
+  "payload_bytes": 55242,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2964,
+      "sha256": "4b0b179441e6a04d6c6c023bcfe0f7280957bebcc906476381a8bf9ebc857401"
+    },
+    {
+      "path": "compact-requests.json.gz",
+      "bytes": 3789,
+      "sha256": "f592145ba01737e005eea0b4aaca6b756fbf616192c30d253ec076ad26faf3ca"
+    },
+    {
+      "path": "exact-diagnostic.json.gz",
+      "bytes": 14460,
+      "sha256": "70483e43f68b8a59487e65c6086248e3b0f06c04bb0d156d1b4fc6fa4ab35837"
+    },
+    {
+      "path": "focused-test.py.gz",
+      "bytes": 3279,
+      "sha256": "cca6c2436d1c6b5555a9c32a9febabba3671708fa1e7822fa77bb4c906550860"
+    },
+    {
+      "path": "focused-unittest.log.gz",
+      "bytes": 331,
+      "sha256": "f6042739665e53b19cb339ee0c39b722c214c39ffed0eea56e5c9ddacddb3e2f"
+    },
+    {
+      "path": "frame-budget-probes.json.gz",
+      "bytes": 1349,
+      "sha256": "17fca8c8fbe242a874be61053a24286efb98435de325aba4f66ff41eec90541f"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 13979,
+      "sha256": "d681233202f8657873256fd4964f79de005770bcda947d9812bc2a857ff90e2d"
+    },
+    {
+      "path": "source-after.py.gz",
+      "bytes": 7071,
+      "sha256": "38ee56de36176b39d91f9fa4fde4c913ecfaa96cd30b84475cd040173132d5c7"
+    },
+    {
+      "path": "source-before.py.gz",
+      "bytes": 6663,
+      "sha256": "bb12e2a761ac948d0c9509a4d2ffd8951fa1cc5632167c3c03e0777ec8e04e52"
+    },
+    {
+      "path": "source.patch.gz",
+      "bytes": 1357,
+      "sha256": "15f7e288fc0450ee920090fccb76225db7454ebaaa38fae38859a2864d9dd908"
+    }
+  ]
+}

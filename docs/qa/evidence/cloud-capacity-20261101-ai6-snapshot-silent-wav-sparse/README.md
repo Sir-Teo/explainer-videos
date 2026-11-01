@@ -1,0 +1,11 @@
+# Part 6 completed silent-QA WAV snapshot sparsification
+
+On 2026-11-01, the authorized byte-preserving capacity action sparsified **30 completed independent WAV snapshots** under `/workspace/runtime/ai6-*/.../frozen/` or `completed/`. No canonical render WAV, voice/model/cache directory, or incomplete copy was eligible. Each snapshot matched an already-written completion/copy2 receipt and had a different inode from its canonical source.
+
+For every file, the entire aligned interior was proved zero before punching: offset 4,096 and length `floor(size/4096)*4096−4096`. `fallocate --punch-hole --keep-size` changed physical allocation only. Full-file SHA256, logical size, inode, device, mode and original mtime are unchanged; the original mtime was explicitly restored. Header and unaligned tail bytes were compared unchanged. The resulting ctime changes are recorded honestly. There was no deletion, reencoding, speech-byte change, or audio approval.
+
+All **30 operations succeeded**, with zero skips or failures. Target allocation decreased from 252,006,400 to 245,760 bytes, recovering **251,760,640 bytes (240.10 MiB)**. Observed filesystem free space rose from 822,980,608 to 1,074,348,032 bytes at 06:58:30 UTC; other Part 6 QA writes continued, so the free-space delta is recorded separately from target allocation recovery. The 768 MiB render/extraction guard was not lowered.
+
+All **306 protected numerical/model/corpus/current-Part-6 files** retain exact before/after signatures, and all **1,524 critical source/configuration files** retain identical bytes. Full payload identities, zero-proof lengths, before/after metadata, completion witnesses and execution code are bundled. Protected snapshots are included once each because decompressed before/after content is identical; both original hashes are retained in `summary.json`. Original raw records and all metadata remain at hash-pinned private paths.
+
+No visible matching open/mapped snapshot was found during checks, but host FD/maps visibility is partial. Eligibility relies on completed independent snapshot receipts and no known active consumer; this is not a claim of global process absence. No source, numerical producer, unique image/movie, model or corpus was changed by the executor.

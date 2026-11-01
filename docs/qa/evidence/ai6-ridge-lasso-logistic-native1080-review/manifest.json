@@ -1,0 +1,600 @@
+{
+  "files": [
+    {
+      "file": "README.md",
+      "sha256": "f73eb325af8294aa99e5d5da005925b7d1f10e385f99d15e767d0848893ca758",
+      "bytes": 2765
+    },
+    {
+      "file": "artifact-map.json",
+      "sha256": "edcb4bfbc7258ed1c00d73216a13e1286c43faf5b3580dbf18cd379de3d86d04",
+      "bytes": 40749
+    },
+    {
+      "file": "images/en-Lasso/002_00015.0s.png",
+      "sha256": "ddea4a85f89352f69c77298440e404cf110db8209100abed8bc85d124277df1a",
+      "bytes": 211241
+    },
+    {
+      "file": "images/en-Lasso/003_00031.3s.png",
+      "sha256": "6971e44f9acedc05380f819a4c851061cf4b25196d3c05b3f445c6f34f3292bc",
+      "bytes": 209645
+    },
+    {
+      "file": "images/en-Lasso/008_00065.3s.png",
+      "sha256": "f8f825e37656c68b6e890f1661e2efb1a3b91d34fb2c8e5e94019cb709168096",
+      "bytes": 169667
+    },
+    {
+      "file": "images/en-Lasso/012_00099.5s.png",
+      "sha256": "5768e7cce7c151fe81a64484fb15ba3cb8d2dd34f24b33737641301cd69beafa",
+      "bytes": 273262
+    },
+    {
+      "file": "images/en-Lasso/015_00122.6s.png",
+      "sha256": "5ba6f3f599fa845df0e2651f0fb786c3772faf29e336988f37294b02c8e8f607",
+      "bytes": 96885
+    },
+    {
+      "file": "images/en-Lasso/018_00154.0s.png",
+      "sha256": "e70f86b4480bdb37980e025680cec665456513f18450d245b4db6c65c0c34b0e",
+      "bytes": 108049
+    },
+    {
+      "file": "images/en-Lasso/representative-page-003.png",
+      "sha256": "8452c10cbec5b17ccd00e6f32de183a7d2d6b7781fe82b326ecaba4cf940c685",
+      "bytes": 415869
+    },
+    {
+      "file": "images/en-Logistic/006_00051.3s.png",
+      "sha256": "f6d0430de0b63d0e04ded97e3ecbed7a950eed7da43a076374bb6f055fd13c1d",
+      "bytes": 276662
+    },
+    {
+      "file": "images/en-Logistic/012_00091.6s.png",
+      "sha256": "e6e5e9cb397082474138544d05b326763618fc25a923ab5335cb4cf6d1040ba4",
+      "bytes": 163406
+    },
+    {
+      "file": "images/en-Logistic/015_00121.7s.png",
+      "sha256": "b205f1bb30a4d06e3a426f55c54624f569813da749dc9f26acf3c0cfe3ae00a5",
+      "bytes": 182600
+    },
+    {
+      "file": "images/en-Logistic/016_00124.8s.png",
+      "sha256": "73154b21f0a522d92c8777042ca66db3efdf206fbe498fcf0faafe2f5a2cb374",
+      "bytes": 218561
+    },
+    {
+      "file": "images/en-Logistic/018_00149.2s.png",
+      "sha256": "4ff228faa3a292b40c2e2ab93663a756819dd59d57d607710dda87152bf82f12",
+      "bytes": 149747
+    },
+    {
+      "file": "images/en-Logistic/representative-page-003.png",
+      "sha256": "02b093724d0b31f383a8774a67dfdd614fe73ad724ac9cf1ab2a78bc9ab83868",
+      "bytes": 156053
+    },
+    {
+      "file": "images/en-Ridge/003_00033.4s.png",
+      "sha256": "bee0cf40dde644e49b3979d612fbf33818def006363080301e3585099d833225",
+      "bytes": 131667
+    },
+    {
+      "file": "images/en-Ridge/008_00074.7s.png",
+      "sha256": "687a5a4d5ab48abfe0d71472a4767f776a8798cb1f9c917bf9f2487d93c741cb",
+      "bytes": 110186
+    },
+    {
+      "file": "images/en-Ridge/010_00091.4s.png",
+      "sha256": "22b432fba5f00e333400a344da3e22d28813925ab27d71e9c773e6246d1dd914",
+      "bytes": 172683
+    },
+    {
+      "file": "images/en-Ridge/014_00151.8s.png",
+      "sha256": "b816e1252aa9a71f00cdf0196a438f096838ae66d17ced373a78aaff69c8ade8",
+      "bytes": 124737
+    },
+    {
+      "file": "images/en-Ridge/representative-page-003.png",
+      "sha256": "35363e0b30a9181c2e23e8c5f4f9080d285f2ce6d53856be45a4ccaefc44f74e",
+      "bytes": 293544
+    },
+    {
+      "file": "images/zh-Lasso/003_00015.1s.png",
+      "sha256": "d9520dc9c461fb23434b2f1f4ef2758544bd3ca964b4f37f65ee38b225a7a890",
+      "bytes": 217012
+    },
+    {
+      "file": "images/zh-Lasso/004_00036.2s.png",
+      "sha256": "d8d3f76b3fb16f078863dece3b8ae277c031645aa8098f103be30874189f2e19",
+      "bytes": 214873
+    },
+    {
+      "file": "images/zh-Lasso/008_00071.2s.png",
+      "sha256": "d06a7f629e241a06204d8e8237ac916b7391c7d05106011e654510b7b9202532",
+      "bytes": 173850
+    },
+    {
+      "file": "images/zh-Lasso/012_00106.8s.png",
+      "sha256": "190e8b480accbdfe36c82844b8112cab3d1c7ca497cdedee02a76eae4a11223b",
+      "bytes": 275672
+    },
+    {
+      "file": "images/zh-Lasso/014_00132.1s.png",
+      "sha256": "d516b5201b65f25c0d8a695790c3f2fdb7ee5691957e6cc7c98a92c3437e942d",
+      "bytes": 103542
+    },
+    {
+      "file": "images/zh-Lasso/017_00167.8s.png",
+      "sha256": "e130287d9817d009f3a74edda361d638f6e942a6f70e0ca53bd9500f6338452f",
+      "bytes": 114465
+    },
+    {
+      "file": "images/zh-Lasso/representative-page-003.png",
+      "sha256": "6b87c3be7a80fd93b3a4231ef18380c7d7c5ee876d738734291c69b8b1ae7af9",
+      "bytes": 418069
+    },
+    {
+      "file": "images/zh-Logistic/006_00057.2s.png",
+      "sha256": "a32c24689136313d87a1dbee33b180f5d497227be22453a84942924ff669dcfb",
+      "bytes": 282406
+    },
+    {
+      "file": "images/zh-Logistic/012_00101.8s.png",
+      "sha256": "0a397977bba49add790d2dc205a673e182866ea8158afa92caa7dee9a0b998f3",
+      "bytes": 158592
+    },
+    {
+      "file": "images/zh-Logistic/015_00134.1s.png",
+      "sha256": "af4b7da5215c1adfaaf6ceaa8b5e42ff73b9bea5a467cf311577e6732e35b574",
+      "bytes": 187826
+    },
+    {
+      "file": "images/zh-Logistic/016_00137.1s.png",
+      "sha256": "f0b06433dcb9ff3a17443855a9515058452018ad82dddf5ced0e91cb8c37c027",
+      "bytes": 232078
+    },
+    {
+      "file": "images/zh-Logistic/018_00162.8s.png",
+      "sha256": "ec7f1c7dfe8e0faf3a624f7aa7ef0bcdf8e259ba07625ea3d2e7f7e62018084a",
+      "bytes": 150220
+    },
+    {
+      "file": "images/zh-Logistic/representative-page-003.png",
+      "sha256": "bd2e0008ec2fb55cf30f372a762d0052f5eebe0937326a4cb7cce406aec9e928",
+      "bytes": 149732
+    },
+    {
+      "file": "images/zh-Ridge/003_00033.6s.png",
+      "sha256": "a7a9fd149bb9c2cf510f63b9d86a7114dd8de8fa3e3692a03cba755ed2d5eb35",
+      "bytes": 128188
+    },
+    {
+      "file": "images/zh-Ridge/008_00077.9s.png",
+      "sha256": "75fc36648724cc9be1b551b36ed49ba9f74b5b373bdd4516c1d73a3be11165d8",
+      "bytes": 102298
+    },
+    {
+      "file": "images/zh-Ridge/010_00095.9s.png",
+      "sha256": "45ea450b13fa81ffd3f9ca724cee205d2ab73e0de1a477942100cf8b0428b15d",
+      "bytes": 180463
+    },
+    {
+      "file": "images/zh-Ridge/014_00164.6s.png",
+      "sha256": "1390abed53d4364376dea0430e38515823ac886b0a1c476fe23a93d1f3cbbd9d",
+      "bytes": 128633
+    },
+    {
+      "file": "images/zh-Ridge/representative-page-003.png",
+      "sha256": "8278713f5aa48f4a504bb4c19a4afe751c0975d0b2ae2c3d1a24ad9b43bc6217",
+      "bytes": 292834
+    },
+    {
+      "file": "ledgers/en-Lasso/closure.json",
+      "sha256": "f56cb15f8018302cb7d75411716bbca16aec227b0c7325108e967ea99e293b20",
+      "bytes": 2248
+    },
+    {
+      "file": "ledgers/en-Lasso/guarded-reads.json.gz",
+      "sha256": "eb2638c158408043d0dc960f2e977f0dec76d94ad805bdc23d88bf8315230e07",
+      "bytes": 1304
+    },
+    {
+      "file": "ledgers/en-Lasso/plan.json.gz",
+      "sha256": "5560c86047667622e0bf784dd7fab838b247f309b30c5d52099ae525d34c32e0",
+      "bytes": 6155
+    },
+    {
+      "file": "ledgers/en-Lasso/provenance.json.gz",
+      "sha256": "716c94286c34faa8d206123d313919c3d24296f87a170e877ec6b01c7043c9fe",
+      "bytes": 1923
+    },
+    {
+      "file": "ledgers/en-Lasso/raw-result.json.gz",
+      "sha256": "31872b3d739d5cf667c26f52de4fba2cf171aaa93c09dd274da02b24b0cc4b1b",
+      "bytes": 12420
+    },
+    {
+      "file": "ledgers/en-Lasso/receipt.json.gz",
+      "sha256": "e7a7be7b26e95356c9e0059c7675c6952a7f9f478883011a5962fee6a5385f65",
+      "bytes": 4933
+    },
+    {
+      "file": "ledgers/en-Lasso/start.json.gz",
+      "sha256": "9ee66eb53431201005e361ada7690587b2cc6c77f15b432b2d8e575de6843a93",
+      "bytes": 3097
+    },
+    {
+      "file": "ledgers/en-Lasso/used-caption-narration-scope.json.gz",
+      "sha256": "3a1a672c391fa8cb72383fac50c58fee38a34ac39d3d664b3c4b4d59ead2f283",
+      "bytes": 19567
+    },
+    {
+      "file": "ledgers/en-Lasso/views.json.gz",
+      "sha256": "2174b592f0aa71f00c96ea896169ac7e96812694ef0dce9915b05ad0477ff9e1",
+      "bytes": 4864
+    },
+    {
+      "file": "ledgers/en-Logistic/closure.json",
+      "sha256": "cd366cca4f845e4605feb69cb8e3a26f716d71ee27023009cb1fe042ae76d817",
+      "bytes": 2257
+    },
+    {
+      "file": "ledgers/en-Logistic/guarded-reads.json.gz",
+      "sha256": "30c805758b2649dd6e36f8437657f30078e3ae8fe5a34a80e913b606af3767a2",
+      "bytes": 1302
+    },
+    {
+      "file": "ledgers/en-Logistic/plan.json.gz",
+      "sha256": "2edb8693fcfa33345aa4b55628b8f39d9fabffccc50cabd5d238fdc5d37ce2c6",
+      "bytes": 5066
+    },
+    {
+      "file": "ledgers/en-Logistic/provenance.json.gz",
+      "sha256": "a2e64227f79384ac0914fb2d7f84bd0edb67d16c1b765d8eb85915f7bd6be576",
+      "bytes": 1924
+    },
+    {
+      "file": "ledgers/en-Logistic/raw-result.json.gz",
+      "sha256": "712155bd55ddf496b0262b8e2aeb67ea608b9a9726d40416c2134aa483122d18",
+      "bytes": 11571
+    },
+    {
+      "file": "ledgers/en-Logistic/receipt.json.gz",
+      "sha256": "2179a2714eb9bbe640339629c46836e642fe4b5c5502a519f9159c662e86e19f",
+      "bytes": 4947
+    },
+    {
+      "file": "ledgers/en-Logistic/start.json.gz",
+      "sha256": "bf52f2e8d6feb9334d51ec3c78d39b34d108a4c2bf145662681310537e455d7c",
+      "bytes": 3109
+    },
+    {
+      "file": "ledgers/en-Logistic/used-caption-narration-scope.json.gz",
+      "sha256": "e3ed31f53593cda7d682d1f082c5c33257e6a1c296de68e4ee82e9119e1b2509",
+      "bytes": 18995
+    },
+    {
+      "file": "ledgers/en-Logistic/views.json.gz",
+      "sha256": "5b82df139b6f76fd86138975f72d06dab3611e6469a8372351979d663e73bf79",
+      "bytes": 3551
+    },
+    {
+      "file": "ledgers/en-Ridge/closure.json",
+      "sha256": "f89643093771708dd489e9374e5278c79e3a9420520b50fca6ca968f448afebd",
+      "bytes": 2216
+    },
+    {
+      "file": "ledgers/en-Ridge/guarded-reads.json.gz",
+      "sha256": "7ca3a4d320e92c1075c07352d6b6ce8a8947e3c1b8469f12648fcb8e290cdc18",
+      "bytes": 1172
+    },
+    {
+      "file": "ledgers/en-Ridge/plan.json.gz",
+      "sha256": "f6605b1a584867a16c14f3f0036443ae7b4783c1eb786ec5a79bdf256a64c9e8",
+      "bytes": 5788
+    },
+    {
+      "file": "ledgers/en-Ridge/provenance.json.gz",
+      "sha256": "01745e2c4a6d14e4b9fb64a7e60233afd16871833106c2d747814050f5c2b4ef",
+      "bytes": 1924
+    },
+    {
+      "file": "ledgers/en-Ridge/raw-result.json.gz",
+      "sha256": "bf5033a740f7416b76ee0b5210fbd7280c8ac6bac51da2aabd7aff4658b37036",
+      "bytes": 12594
+    },
+    {
+      "file": "ledgers/en-Ridge/receipt.json.gz",
+      "sha256": "d88b5f6c81768c3316fc3f8d7391638d860c90b1f5e2ddd038c6d1f5c09de562",
+      "bytes": 4566
+    },
+    {
+      "file": "ledgers/en-Ridge/start.json.gz",
+      "sha256": "d4f38fd1bfaf767a411631954ce543ac631fb134453b807b65a83e555868f6c0",
+      "bytes": 2862
+    },
+    {
+      "file": "ledgers/en-Ridge/used-caption-narration-scope.json.gz",
+      "sha256": "c21f0c2b8ca85bdd58578f85cd071946272e8c5f466580f0b536ac89449b6b19",
+      "bytes": 20068
+    },
+    {
+      "file": "ledgers/en-Ridge/views.json.gz",
+      "sha256": "057bddd282a66ff11250cf2527864eab06d81a76cb569fd9454742a6be258e2b",
+      "bytes": 4369
+    },
+    {
+      "file": "ledgers/zh-Lasso/closure.json",
+      "sha256": "fbc126b13f41c3aabebd0036b3244ac2c7182f5b9426254189c551854e42f0a3",
+      "bytes": 2240
+    },
+    {
+      "file": "ledgers/zh-Lasso/guarded-reads.json.gz",
+      "sha256": "b3100b9eebc5d8139592116d716004c1be4e915505deaffe04780d1b91abfbf1",
+      "bytes": 1300
+    },
+    {
+      "file": "ledgers/zh-Lasso/plan.json.gz",
+      "sha256": "ffd5771fe1d6bff9b254ceea84122307d056d28d3da5676be0a9dc0ae20f74d1",
+      "bytes": 6385
+    },
+    {
+      "file": "ledgers/zh-Lasso/provenance.json.gz",
+      "sha256": "e70dcf2969ca8c16068ab6b42bbb987e86e4ba37d6b4e506bcbdf48a54985242",
+      "bytes": 1923
+    },
+    {
+      "file": "ledgers/zh-Lasso/raw-result.json.gz",
+      "sha256": "f782f4c0063722f429cb233909714bf65822fa77583a9f722537b364144a1299",
+      "bytes": 19205
+    },
+    {
+      "file": "ledgers/zh-Lasso/receipt.json.gz",
+      "sha256": "4ad5c169963629fade2defc83090892b74c857cfdefce201efd949d3c61b9ee9",
+      "bytes": 4889
+    },
+    {
+      "file": "ledgers/zh-Lasso/start.json.gz",
+      "sha256": "bb5761ff17b1ba6c96b45662039cb770d4e7231ca9d25eb59ba61a9159873530",
+      "bytes": 3034
+    },
+    {
+      "file": "ledgers/zh-Lasso/used-caption-narration-scope.json.gz",
+      "sha256": "4c24cefeccc91412adb52f3b2eb3bfdc026f3fa268b0de22fc64f850e89cd3a9",
+      "bytes": 32589
+    },
+    {
+      "file": "ledgers/zh-Lasso/views.json.gz",
+      "sha256": "60d8aa63322b962f570bf158ce7fd4797f89c83645d0bb26988a298628d4579e",
+      "bytes": 5168
+    },
+    {
+      "file": "ledgers/zh-Logistic/closure.json",
+      "sha256": "24315ab0d34029d59e2b8de5ca26d91c7c7cd8db9c2d402f1a8e3084d4871959",
+      "bytes": 2257
+    },
+    {
+      "file": "ledgers/zh-Logistic/guarded-reads.json.gz",
+      "sha256": "da7807f0c8b16434bc61e5f0115996031377421c0ba88a91ac139c58789ea376",
+      "bytes": 1305
+    },
+    {
+      "file": "ledgers/zh-Logistic/plan.json.gz",
+      "sha256": "46b4f587a7992742a1dacb4cbfb01760c9f723fc2f3b670704779ad59b0e473d",
+      "bytes": 5357
+    },
+    {
+      "file": "ledgers/zh-Logistic/provenance.json.gz",
+      "sha256": "2ac16af916fd00735c1379bd965863df91c8622df90a7b7ae7ccdc78ba55d633",
+      "bytes": 1907
+    },
+    {
+      "file": "ledgers/zh-Logistic/raw-result.json.gz",
+      "sha256": "604119ab8a24c7e5cc68b4f399b499a428a8d62709870fef9aca498e435b0406",
+      "bytes": 17913
+    },
+    {
+      "file": "ledgers/zh-Logistic/receipt.json.gz",
+      "sha256": "b24abbe6540e38cffe6d3c3b180051c134c14dca3fd6db5f4cdf1bc33f35bd9a",
+      "bytes": 4955
+    },
+    {
+      "file": "ledgers/zh-Logistic/start.json.gz",
+      "sha256": "810715ed3694939bb0715fe4bcf1944a0c9797f3e4f348611b1d15763a3ddaef",
+      "bytes": 3104
+    },
+    {
+      "file": "ledgers/zh-Logistic/used-caption-narration-scope.json.gz",
+      "sha256": "fc97565d1c606321d855ae992cf109eda656bd5e6b1b564a61a2994d73874f34",
+      "bytes": 31340
+    },
+    {
+      "file": "ledgers/zh-Logistic/views.json.gz",
+      "sha256": "7ecd0aa6073e3d1bb96c43f12c66c89ede43e47ed8eabc23d3ee386929366f67",
+      "bytes": 3933
+    },
+    {
+      "file": "ledgers/zh-Ridge/closure.json",
+      "sha256": "08026466ef219494f54fa630ac9428848b65bbe768f0611be61a5b399aa60dbc",
+      "bytes": 2216
+    },
+    {
+      "file": "ledgers/zh-Ridge/guarded-reads.json.gz",
+      "sha256": "e17f3877b37980f2b4021ce3f6ff19bb3bd0c96a737874685f59b131e758a9e8",
+      "bytes": 1171
+    },
+    {
+      "file": "ledgers/zh-Ridge/plan.json.gz",
+      "sha256": "c8726109c2fba5480c6d37d97d9c19eda57d1965a1580d97600599b1ba1967b0",
+      "bytes": 6007
+    },
+    {
+      "file": "ledgers/zh-Ridge/provenance.json.gz",
+      "sha256": "4efa78feb8577ce828aa3f519f7dc5fb3aafa9574641b3cee121ccc663caeaca",
+      "bytes": 1924
+    },
+    {
+      "file": "ledgers/zh-Ridge/raw-result.json.gz",
+      "sha256": "1bedb8dcbd9e585ba4a8daad572c43df7a4a2e790d4dc11ff5abd2e3938e7e04",
+      "bytes": 18848
+    },
+    {
+      "file": "ledgers/zh-Ridge/receipt.json.gz",
+      "sha256": "57d586f055877a6a29f790429dfbadc0e7f5c2a5f06150b6bd0f4559f40a29af",
+      "bytes": 4567
+    },
+    {
+      "file": "ledgers/zh-Ridge/start.json.gz",
+      "sha256": "7b0c4191dbb78dc73b8b0b0c69d5c6442bb314e51a8ac789ce477eca4ac0ddb6",
+      "bytes": 2861
+    },
+    {
+      "file": "ledgers/zh-Ridge/used-caption-narration-scope.json.gz",
+      "sha256": "0bf37426854f08b8737e4ae6dff90e61a858fcba71626fa4a8a70705f2d4a21c",
+      "bytes": 32109
+    },
+    {
+      "file": "ledgers/zh-Ridge/views.json.gz",
+      "sha256": "3b350bd2f48d5f7eb0661c16f79701ca6e17badafcd49b9840b1d5a2a6b14ea4",
+      "bytes": 4489
+    },
+    {
+      "file": "review.json",
+      "sha256": "67dc3c817fe976e215866f023d4d67cd9f87e415e9c3454a1aed3959c9e08a22",
+      "bytes": 16226
+    },
+    {
+      "file": "sources/0850eb78ce241be9239cbc68eaacbd17925cec90cd33b24005eb46932c7c035b-zh_lines.py.gz",
+      "sha256": "89381de1b997727bb1f58723c8a912e69da21c0ce5aefda51447d7443e1b6fd6",
+      "bytes": 28491
+    },
+    {
+      "file": "sources/10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d-narration_zh.json.gz",
+      "sha256": "e959b9ee70e6acb3b7cfab793fc3284b0c493565044134ad5512b1aa78717215",
+      "bytes": 39937
+    },
+    {
+      "file": "sources/1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485-common.py.gz",
+      "sha256": "2f0afe61a44325121ef07e1471b31fa35858167ff54f656ca5695fa73acdb789",
+      "bytes": 3942
+    },
+    {
+      "file": "sources/1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13-fonts.py.gz",
+      "sha256": "9be9fdcd42284554e5fa5697214d4bb985a1ecc65ff570e7a3d788c3b00035e2",
+      "bytes": 912
+    },
+    {
+      "file": "sources/20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3-ai_text_zh.json.gz",
+      "sha256": "7276faa9505120625908facd80a3c23880e383cc31427f0c708cebc4ecf0f513",
+      "bytes": 886227
+    },
+    {
+      "file": "sources/22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb-lecture.py.gz",
+      "sha256": "bb8af91d3d478ae033b6d385563601f23c0a724f98530a8fb474df6832af7d5f",
+      "bytes": 2086
+    },
+    {
+      "file": "sources/379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d-__init__.py.gz",
+      "sha256": "1092edb463e57cbc4bfae9d6151a690c440335551061f4310e48d633dc3ccf73",
+      "bytes": 11076
+    },
+    {
+      "file": "sources/3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b-voiceover.py.gz",
+      "sha256": "b22f2829fecc4c155e063fa6859ce018e36ceb9b276cf2fe820126df8217c6ef",
+      "bytes": 4096
+    },
+    {
+      "file": "sources/400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032-tts.py.gz",
+      "sha256": "0d38d28e1ad14760305e71a9c68adcf50ca5bbe4090b45cf7f34f0306c77a76c",
+      "bytes": 13788
+    },
+    {
+      "file": "sources/41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf-__init__.py.gz",
+      "sha256": "91c50b9f36036861ceb3b5b85434995f3b6cf8698ae9d8c54cbcd18419bf69ca",
+      "bytes": 6926
+    },
+    {
+      "file": "sources/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf-zh_text.py.gz",
+      "sha256": "a0bd959eba1ae04d088aef631e8edbd075392f0b2705162f323a6785a4d135d2",
+      "bytes": 3515
+    },
+    {
+      "file": "sources/71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507-cache.py.gz",
+      "sha256": "5801a2e646019cf07ca1419b42369150cb8b81ce3b94ec33248858d7f20c976a",
+      "bytes": 2232
+    },
+    {
+      "file": "sources/9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394-cache_contract.py.gz",
+      "sha256": "4d48f508d25dfe87d713934bb5baa8ff8b95238ee29de1fa8b392849b165de89",
+      "bytes": 7017
+    },
+    {
+      "file": "sources/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16-viz.py.gz",
+      "sha256": "dde628602d8128cda334fa1a7eb6b8bb7204e835ecc14ae09d6a646b5111d5af",
+      "bytes": 10483
+    },
+    {
+      "file": "sources/ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256-s04_ridge.py.gz",
+      "sha256": "3b862470f547edd997016eb12f768b3e22691b77f82d28f75c0a1c874a7752d7",
+      "bytes": 4809
+    },
+    {
+      "file": "sources/b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432-zh_templates.py.gz",
+      "sha256": "aafb2fbbf93f63d5b73026508b14d156fcf0a81be9f7ded3fbe79d923cf7b75e",
+      "bytes": 3478
+    },
+    {
+      "file": "sources/bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73-text_zh_add.json.gz",
+      "sha256": "a5a0a2cb605a00cd9cccb61dce9feb5c243240adc21f3d7545c2010de446e5ac",
+      "bytes": 23800
+    },
+    {
+      "file": "sources/bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9-s05_lasso.py.gz",
+      "sha256": "9f50a27d672b4b289f0ea14f447973d8701aec6054932e0bfaae3c33026115c2",
+      "bytes": 6158
+    },
+    {
+      "file": "sources/c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032-s06_logistic.py.gz",
+      "sha256": "a76c3d887bbf378d8e64b932d835a99090915ce62325a9e0c1717c2ce9e7d62b",
+      "bytes": 5531
+    },
+    {
+      "file": "sources/c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413-paths.py.gz",
+      "sha256": "1d922265e79d879fdbda3b044cfc1d435c8ae31bc5b9b90a7790340db04e6212",
+      "bytes": 464
+    },
+    {
+      "file": "sources/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3-qa_series.py.gz",
+      "sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf",
+      "bytes": 7934
+    },
+    {
+      "file": "sources/d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc-compute.py.gz",
+      "sha256": "bb1a4e4297ce1b944901ac5a034670a3de7936485e934fd6318470159cbdc94b",
+      "bytes": 25702
+    },
+    {
+      "file": "sources/dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2-contracts.py.gz",
+      "sha256": "e6d950621619407f3fa4e29bf3d649e46466f4e4407a779b7d1ad86ff1f83294",
+      "bytes": 6809
+    },
+    {
+      "file": "sources/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b-lang.py.gz",
+      "sha256": "88dc26733378196fd4350d20873b9966a89f2c78b8eb191d74e1f391f3a4a503",
+      "bytes": 2823
+    },
+    {
+      "file": "sources/f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228-cache_lock.py.gz",
+      "sha256": "2c838ec16aeb71dae182d10dc8d18e35f05b47c2b6ea0659b2102b01e4cc9cc9",
+      "bytes": 668
+    }
+  ],
+  "file_count_excluding_manifest": 118,
+  "bytes_excluding_manifest": 8531649,
+  "reviewed_frames": 105,
+  "viewed_pages": 28,
+  "native_original_followups": 30,
+  "images_packaged": 36
+}

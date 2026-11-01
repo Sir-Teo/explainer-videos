@@ -1,0 +1,16 @@
+{
+  "at": "2026-11-01T06:50:34.693903+00:00",
+  "counts": {
+    "pids_seen": 1290,
+    "argv_readable": 1290,
+    "fd_dirs_readable": 27,
+    "fd_links_unreadable_or_raced": 127,
+    "maps_unreadable_or_raced": 26,
+    "fd_dirs_unreadable_or_raced": 1263,
+    "maps_readable": 1264,
+    "fd_links_readable": 9
+  },
+  "visible_open_or_mapped_targets": [],
+  "visible_explicit_old_part_renderers": [],
+  "caveat": "Partial host FD/map visibility. Root reconciled all task-owned runners as Part6 and oldPart3\u20135 idle; no global absence claim."
+}

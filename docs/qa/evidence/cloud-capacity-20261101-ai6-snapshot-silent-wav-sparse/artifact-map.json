@@ -1,0 +1,72 @@
+[
+  {
+    "bundle": "protected306-identical-before-after.json.gz",
+    "private_original": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/protected306-before.json.gz",
+    "original_sha256": "69f5edcd16107e6b34b2c28ccc1a8b09d7560f5b7170643f6cc2b6e0c2778173",
+    "bundle_sha256": "69f5edcd16107e6b34b2c28ccc1a8b09d7560f5b7170643f6cc2b6e0c2778173",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "source-identical-before-after.json.gz",
+    "private_original": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/source-before.json.gz",
+    "original_sha256": "b3f2385515b55d871ed82aa6a79938e62a538c1e5e0128d5a164c3ddc870745f",
+    "bundle_sha256": "b3f2385515b55d871ed82aa6a79938e62a538c1e5e0128d5a164c3ddc870745f",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "receipt.json.gz",
+    "private_original": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/receipt.json",
+    "original_sha256": "4da944268e07ac2cd82c1e51bbceb7335869e38416551ac7b983b38760a7359c",
+    "bundle_sha256": "f3bbdbd27d82f4f160a0ac77d64ce0ea5675b9066f4de13b50028744477f9863",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "plan.json.gz",
+    "private_original": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/plan.json",
+    "original_sha256": "3f2b23abd416e1f7bf25e0b47334912ff465e919d49ff6bb7bc0b46782f8e6b4",
+    "bundle_sha256": "0cb94844e9c9394b42473bbaa1d2b44682e363639041a77ce7120995b933144f",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "inventory-unverified.json.gz",
+    "private_original": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/inventory-unverified.json",
+    "original_sha256": "ee5328bbd4ad10833551e5b4c10e96335bb2b8642339dd34364572978fe4ab0c",
+    "bundle_sha256": "9765f11a0050be5224480a39a966ba6c9c4411dd89079a11175219b069f0b8e0",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "execute.py.gz",
+    "private_original": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/execute.py",
+    "original_sha256": "677c03b788359acf95dd7f7995d9e9099d0ad826100a6a11bd5d2a2f40022409",
+    "bundle_sha256": "35b224fb68083a71277f27ba7828f0fc2dff461bd929ef435204d2d4a6ba8c9c",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "plan.py.gz",
+    "private_original": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/plan.py",
+    "original_sha256": "9ca97ad6c351a1aabd48aa5994f1b8515a6926109f247a65c2f5c5c8baefc69c",
+    "bundle_sha256": "44a9d5d2cd8b8d7502602bdb0df05df7424baa12172cd096b1eab8ad1f0c1199",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "execution.log.gz",
+    "private_original": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/execution.log",
+    "original_sha256": "c00c4bc852fc867167c621d1607a51c774ca2443248847f92511302bd6bb11ea",
+    "bundle_sha256": "7162f181d0796fec40a0a864596abe8e265ded0658e60bb74fbf806ab41b8532",
+    "gzip_exact": true
+  },
+  {
+    "bundle": "activity-before.json",
+    "private_original": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/activity-before.json",
+    "original_sha256": "caca744d69d6f159070f02d67adb1329c3d1413e3c1687837c0bedb32f64ce0e",
+    "bundle_sha256": "caca744d69d6f159070f02d67adb1329c3d1413e3c1687837c0bedb32f64ce0e",
+    "gzip_exact": false
+  },
+  {
+    "bundle": "activity-after.json",
+    "private_original": "/workspace/runtime/capacity-ai6-snapshot-silent-wav-sparse-20261101/activity-after.json",
+    "original_sha256": "3324d73f1d6d2214efd2aa5b2fb7e9bb50267b0919b74529ca06ed54ced72a36",
+    "bundle_sha256": "3324d73f1d6d2214efd2aa5b2fb7e9bb50267b0919b74529ca06ed54ced72a36",
+    "gzip_exact": false
+  }
+]

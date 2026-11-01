@@ -1,0 +1,37 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 817,
+    "sha256": "4d05549110aaacf3e6c58b1c887c614584e566b04d33cd1fdf3b69055a3872f1"
+  },
+  {
+    "path": "after-ai_text_zh.json.gz",
+    "bytes": 886365,
+    "sha256": "4252fe4cc0a5111a276b5dcd60e65945f3a45ce066e6d51b30861e00b5ee950a"
+  },
+  {
+    "path": "before-ai_text_zh.json.gz",
+    "bytes": 886227,
+    "sha256": "7276faa9505120625908facd80a3c23880e383cc31427f0c708cebc4ecf0f513"
+  },
+  {
+    "path": "caption-add.json.gz",
+    "bytes": 282,
+    "sha256": "bac8f0ccb12b704a0aec70e5dfffff6310688f82c98c81e59053f473e4f67c35"
+  },
+  {
+    "path": "merge_ai6_newton_captions.py.gz",
+    "bytes": 1490,
+    "sha256": "c8d54034cbaac2d6c8b8480cfcc58ea4c71934ffb50c5fad22ffc457c52d9adf"
+  },
+  {
+    "path": "report.json.gz",
+    "bytes": 16881,
+    "sha256": "245ca9e07924b21d1e15b11f5b88bbd094e2a53c4a81684f5d677e6d3e711410"
+  },
+  {
+    "path": "used-caption-results.json.gz",
+    "bytes": 423889,
+    "sha256": "62b0aa098a48d0b33e347192b5f5cccfdaf003bba1edc84b516f01b89f827b54"
+  }
+]

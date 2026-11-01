@@ -1,0 +1,549 @@
+{
+  "completed_at": "2026-11-01T07:25:48.876113+00:00",
+  "scope": "Part6Ridge/Lasso/Logistic EN+ZH independent native1920x1080 endpoint review",
+  "case_count": 6,
+  "frames": 105,
+  "pages_viewed": 28,
+  "native_originals_viewed": 30,
+  "new_defects": [],
+  "cases": [
+    {
+      "case": "en-Lasso",
+      "frames": 19,
+      "pages_viewed": 5,
+      "native_originals_viewed": 6,
+      "covered_frame_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "coverage_complete_for_captured_endpoints": true,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "raw_result_sha256": "b14bc7b8817ee8cf1736aebc1070a7f69d57ad37aa00b4c329dacf665da9bc7a",
+      "capture_receipt_sha256": "1585830ac0e1bfd912cad0beda42fee71031841c04eaf7b9226f32339f17c911",
+      "source_before_after_bytes_equal": true,
+      "inputs": [
+        {
+          "path": ".cache/ai6/lasso.json",
+          "sha256": "17965418da0d05800bdd2d6be4d185316431f340626e24e5bff3fe9611bdfb22",
+          "captured_signature": [
+            10627,
+            1793509518563657867
+          ],
+          "current_signature": [
+            10627,
+            1793509518563657867
+          ]
+        },
+        {
+          "path": ".cache/ai6/lasso.npz",
+          "sha256": "68dfc52f9c0a8295ab11014f228357b71c11b2c004af3168da55bfb9facf0d8b",
+          "captured_signature": [
+            48312,
+            1793509518562119715
+          ],
+          "current_signature": [
+            48312,
+            1793509518562119715
+          ]
+        },
+        {
+          "path": ".cache/ai6/pages.json",
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+          "captured_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "current_signature": [
+            4425,
+            1793509481979465950
+          ]
+        },
+        {
+          "path": ".cache/ai6/pages.npz",
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+          "captured_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "current_signature": [
+            46636,
+            1793509481978270662
+          ]
+        }
+      ],
+      "raw_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+      "new_defects": [],
+      "limits": [
+        "All endpoint states viewed at960x540 tiles (50% native); critical originals separately recorded.",
+        "Skip-animation endpoint capture does not verify continuous motion or all live updater behavior.",
+        "No continuous perceptual playback, audio listening/sync, production4K or native1080 motion approval."
+      ]
+    },
+    {
+      "case": "en-Logistic",
+      "frames": 19,
+      "pages_viewed": 5,
+      "native_originals_viewed": 5,
+      "covered_frame_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "coverage_complete_for_captured_endpoints": true,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "raw_result_sha256": "149d98a3081f0af15c6d8397cb7e0e4a47ec78c7bf54dae69762cc82995f9491",
+      "capture_receipt_sha256": "36b5fb23da29f4fdc8d4dbf880a2259bee1eecb50601a12125e276eb790521bc",
+      "source_before_after_bytes_equal": true,
+      "inputs": [
+        {
+          "path": ".cache/ai6/pages.json",
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+          "captured_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "current_signature": [
+            4425,
+            1793509481979465950
+          ]
+        },
+        {
+          "path": ".cache/ai6/pages.npz",
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+          "captured_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "current_signature": [
+            46636,
+            1793509481978270662
+          ]
+        },
+        {
+          "path": ".cache/ai6/logistic.json",
+          "sha256": "743ba31b2d56e50625ebced3b4499b43fae584c143aee56e99992a7a45fc7750",
+          "captured_signature": [
+            9005,
+            1793509522205355294
+          ],
+          "current_signature": [
+            9005,
+            1793509522205355294
+          ]
+        },
+        {
+          "path": ".cache/ai6/logistic.npz",
+          "sha256": "0aa11e641db2c9f6271d031bb226a33a698494bcd336504bcff3c5ec6274cce2",
+          "captured_signature": [
+            111451,
+            1793509522202114645
+          ],
+          "current_signature": [
+            111451,
+            1793509522202114645
+          ]
+        }
+      ],
+      "raw_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+      "new_defects": [],
+      "limits": [
+        "All endpoint states viewed at960x540 tiles (50% native); critical originals separately recorded.",
+        "Skip-animation endpoint capture does not verify continuous motion or all live updater behavior.",
+        "No continuous perceptual playback, audio listening/sync, production4K or native1080 motion approval."
+      ]
+    },
+    {
+      "case": "en-Ridge",
+      "frames": 15,
+      "pages_viewed": 4,
+      "native_originals_viewed": 4,
+      "covered_frame_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "coverage_complete_for_captured_endpoints": true,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "raw_result_sha256": "2fcdcf5e1e6e6c9115fc2b9dc0352678f2a83620fdc6e7b21a01c9eb86c06500",
+      "capture_receipt_sha256": "0a11b23773fc9afd5ecf69e21ed9e2246c0eee64efea096ab969ce5d9ff23d29",
+      "source_before_after_bytes_equal": true,
+      "inputs": [
+        {
+          "path": ".cache/ai6/ridge.json",
+          "sha256": "d91c02dd133467ef012f023fc1e570e01d5c6f6611cc832b4bca284923faf77b",
+          "captured_signature": [
+            14117,
+            1793509494113322260
+          ],
+          "current_signature": [
+            14117,
+            1793509494113322260
+          ]
+        },
+        {
+          "path": ".cache/ai6/ridge.npz",
+          "sha256": "9e8e74312aadbe1154a8009218d35847b42c1e37629723b573f1ba75da26e0b0",
+          "captured_signature": [
+            31266,
+            1793509494110918282
+          ],
+          "current_signature": [
+            31266,
+            1793509494110918282
+          ]
+        },
+        {
+          "path": ".cache/ai6/pages.json",
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+          "captured_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "current_signature": [
+            4425,
+            1793509481979465950
+          ]
+        },
+        {
+          "path": ".cache/ai6/pages.npz",
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+          "captured_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "current_signature": [
+            46636,
+            1793509481978270662
+          ]
+        }
+      ],
+      "raw_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+      "new_defects": [],
+      "limits": [
+        "All endpoint states viewed at960x540 tiles (50% native); critical originals separately recorded.",
+        "Skip-animation endpoint capture does not verify continuous motion or all live updater behavior.",
+        "No continuous perceptual playback, audio listening/sync, production4K or native1080 motion approval."
+      ]
+    },
+    {
+      "case": "zh-Lasso",
+      "frames": 18,
+      "pages_viewed": 5,
+      "native_originals_viewed": 6,
+      "covered_frame_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "coverage_complete_for_captured_endpoints": true,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "raw_result_sha256": "481fee0cd976d6b506975e14c5a759f100b0b5c37a560544000b95086a776fce",
+      "capture_receipt_sha256": "802961b15b44c6507d5e28d5f4909dafc3cb7f5f9aac8b37b6d4c6b7de0e90e7",
+      "source_before_after_bytes_equal": true,
+      "inputs": [
+        {
+          "path": ".cache/ai6/lasso.json",
+          "sha256": "17965418da0d05800bdd2d6be4d185316431f340626e24e5bff3fe9611bdfb22",
+          "captured_signature": [
+            10627,
+            1793509518563657867
+          ],
+          "current_signature": [
+            10627,
+            1793509518563657867
+          ]
+        },
+        {
+          "path": ".cache/ai6/lasso.npz",
+          "sha256": "68dfc52f9c0a8295ab11014f228357b71c11b2c004af3168da55bfb9facf0d8b",
+          "captured_signature": [
+            48312,
+            1793509518562119715
+          ],
+          "current_signature": [
+            48312,
+            1793509518562119715
+          ]
+        },
+        {
+          "path": ".cache/ai6/pages.json",
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+          "captured_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "current_signature": [
+            4425,
+            1793509481979465950
+          ]
+        },
+        {
+          "path": ".cache/ai6/pages.npz",
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+          "captured_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "current_signature": [
+            46636,
+            1793509481978270662
+          ]
+        }
+      ],
+      "raw_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+      "new_defects": [],
+      "limits": [
+        "All endpoint states viewed at960x540 tiles (50% native); critical originals separately recorded.",
+        "Skip-animation endpoint capture does not verify continuous motion or all live updater behavior.",
+        "No continuous perceptual playback, audio listening/sync, production4K or native1080 motion approval."
+      ]
+    },
+    {
+      "case": "zh-Logistic",
+      "frames": 19,
+      "pages_viewed": 5,
+      "native_originals_viewed": 5,
+      "covered_frame_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "coverage_complete_for_captured_endpoints": true,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "raw_result_sha256": "09dfe862e016b71181d65ba0e721ed8ebc830effb2b5e137a686362e1e7a7382",
+      "capture_receipt_sha256": "f763009969e80d7bc17185909ebf64413ac150ee01974ad5ffdfbd218a6573f8",
+      "source_before_after_bytes_equal": true,
+      "inputs": [
+        {
+          "path": ".cache/ai6/pages.json",
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+          "captured_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "current_signature": [
+            4425,
+            1793509481979465950
+          ]
+        },
+        {
+          "path": ".cache/ai6/pages.npz",
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+          "captured_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "current_signature": [
+            46636,
+            1793509481978270662
+          ]
+        },
+        {
+          "path": ".cache/ai6/logistic.json",
+          "sha256": "743ba31b2d56e50625ebced3b4499b43fae584c143aee56e99992a7a45fc7750",
+          "captured_signature": [
+            9005,
+            1793509522205355294
+          ],
+          "current_signature": [
+            9005,
+            1793509522205355294
+          ]
+        },
+        {
+          "path": ".cache/ai6/logistic.npz",
+          "sha256": "0aa11e641db2c9f6271d031bb226a33a698494bcd336504bcff3c5ec6274cce2",
+          "captured_signature": [
+            111451,
+            1793509522202114645
+          ],
+          "current_signature": [
+            111451,
+            1793509522202114645
+          ]
+        }
+      ],
+      "raw_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+      "new_defects": [],
+      "limits": [
+        "All endpoint states viewed at960x540 tiles (50% native); critical originals separately recorded.",
+        "Skip-animation endpoint capture does not verify continuous motion or all live updater behavior.",
+        "No continuous perceptual playback, audio listening/sync, production4K or native1080 motion approval."
+      ]
+    },
+    {
+      "case": "zh-Ridge",
+      "frames": 15,
+      "pages_viewed": 4,
+      "native_originals_viewed": 4,
+      "covered_frame_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "coverage_complete_for_captured_endpoints": true,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "raw_result_sha256": "2414cb7d1770dcb396f01bcc0931706c98b0e0404fb311c7dd7ae73cc3548a6d",
+      "capture_receipt_sha256": "7d72fd420f567c530a087302d07ba02f5f088671096c6f11703d028049856573",
+      "source_before_after_bytes_equal": true,
+      "inputs": [
+        {
+          "path": ".cache/ai6/ridge.json",
+          "sha256": "d91c02dd133467ef012f023fc1e570e01d5c6f6611cc832b4bca284923faf77b",
+          "captured_signature": [
+            14117,
+            1793509494113322260
+          ],
+          "current_signature": [
+            14117,
+            1793509494113322260
+          ]
+        },
+        {
+          "path": ".cache/ai6/ridge.npz",
+          "sha256": "9e8e74312aadbe1154a8009218d35847b42c1e37629723b573f1ba75da26e0b0",
+          "captured_signature": [
+            31266,
+            1793509494110918282
+          ],
+          "current_signature": [
+            31266,
+            1793509494110918282
+          ]
+        },
+        {
+          "path": ".cache/ai6/pages.json",
+          "sha256": "4d5e59c4b9c6bc92ce979163788234f188d9bfd6430675671785c14f65e0d48d",
+          "captured_signature": [
+            4425,
+            1793509481979465950
+          ],
+          "current_signature": [
+            4425,
+            1793509481979465950
+          ]
+        },
+        {
+          "path": ".cache/ai6/pages.npz",
+          "sha256": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+          "captured_signature": [
+            46636,
+            1793509481978270662
+          ],
+          "current_signature": [
+            46636,
+            1793509481978270662
+          ]
+        }
+      ],
+      "raw_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+      "new_defects": [],
+      "limits": [
+        "All endpoint states viewed at960x540 tiles (50% native); critical originals separately recorded.",
+        "Skip-animation endpoint capture does not verify continuous motion or all live updater behavior.",
+        "No continuous perceptual playback, audio listening/sync, production4K or native1080 motion approval."
+      ]
+    }
+  ],
+  "shipped_images": {
+    "representative_actual_pages": 6,
+    "critical_original1920_images": 30,
+    "original_png_bytes_preserved": true
+  },
+  "runtime_all_pages_and_endpoint_originals_retained": true,
+  "raw_visual_review_pending_field_preserved": "Capture-owner receipt/raw records precede this independent review; separate viewledgers and closures record actual manual scope."
+}

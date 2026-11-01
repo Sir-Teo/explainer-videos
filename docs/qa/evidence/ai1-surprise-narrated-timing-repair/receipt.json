@@ -1,0 +1,251 @@
+{
+  "completed_utc": "2026-11-01T07:48:43.552538+00:00",
+  "scope": "Source-owner sequential scheduling repair against actual selected-speech predictive preflight; controlled rerender permitted, not production acceptance.",
+  "source_base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "source_path": "videos/ai/ai1/s03_surprise.py",
+  "source_before": {
+    "bytes": 23704,
+    "sha256": "5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8"
+  },
+  "source_after": {
+    "bytes": 24700,
+    "sha256": "64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55"
+  },
+  "library_facts": [
+    {
+      "library_file_id": "libfile_ebd1ca335cc0819198b12f8177adadfc",
+      "filename": "AI_Built_Part1_Surprise_Exact_Timing_and_Source_For_QA_v1.json",
+      "direct_read_lines": 4581,
+      "direct_read_pages": 5,
+      "bytes": 104451,
+      "computed_reconstructed_sha256": "b1d79845b80fb776c0d8a3a881770b3e92c1b3f9f17ae2cebc3b1f4356bb8544",
+      "parent_supplied_whole_file_sha256": null,
+      "reconstructed_size_matches_tool_metadata": true
+    },
+    {
+      "library_file_id": "libfile_38d2451dc4d48191b20a3e3be0c07e3e",
+      "filename": "AI_Built_Part1_Probability_Surprise_Compact_QA_Timing_Requests_v1.json",
+      "direct_read_lines": 423,
+      "direct_read_pages": 1,
+      "bytes": 13158,
+      "computed_reconstructed_sha256": "2cd32f4024aed88336aa7867c8ee1e8229d3082cadfb8865d5083cb657041eb4",
+      "parent_supplied_whole_file_sha256": null,
+      "reconstructed_size_matches_tool_metadata": true
+    }
+  ],
+  "actual_audio": {
+    "utterances": 8,
+    "total_duration_seconds": 145.45,
+    "masters_library_file_id": "libfile_513bd7b48b808191b49f7f2972f40a2b",
+    "preserved_selected_master_keys_and_speech": [
+      {
+        "key": "75dbfcf1ec0c9058",
+        "raw": "Chapter two. How surprised should you be?",
+        "spoken": "Chapter two. How surprised should you be?",
+        "actual_audio_duration_seconds": 3.03,
+        "original_runtime_capture_sha256": "c45e545f2743047215b66a3c48533ad11505832af49988686fddfcb3bc83cde4"
+      },
+      {
+        "key": "92c7d807d6134b43",
+        "raw": "If you were sure something would happen, seeing it happen tells you nothing. <bookmark mark='a'/> u after q: no news. <bookmark mark='b'/> A coin landing heads tells you a little. <bookmark mark='c'/> A letter e, a bit more. <bookmark mark='d'/> And a z, which turns up about once in 1,900 symbols, tells you a lot. The less likely it was, the more you learn.",
+        "spoken": "If you were sure something would happen, seeing it happen tells you nothing. u after q: no news. A coin landing heads tells you a little. A letter e, a bit more. And a z, which turns up about once in 1,900 symbols, tells you a lot. The less likely it was, the more you learn.",
+        "actual_audio_duration_seconds": 19.15,
+        "original_runtime_capture_sha256": "c45e545f2743047215b66a3c48533ad11505832af49988686fddfcb3bc83cde4"
+      },
+      {
+        "key": "2b5fef94a2a4c35c",
+        "raw": "Let's turn that into mathematics. Call the surprise of an event with probability p, s of p. <bookmark mark='a'/> Ask a few modest things. It depends only on p. <bookmark mark='b'/> It goes down as p goes up, and a certain event is no surprise at all. <bookmark mark='c'/> For independent events, where one tells you nothing about the other, probabilities multiply and surprises should add: <bookmark mark='d'/> heads on a coin and a five on a die, together, as surprising as the two added up. <bookmark mark='e'/> And small changes in p make small changes in s.",
+        "spoken": "Let's turn that into mathematics. Call the surprise of an event with probability p, s of p. Ask a few modest things. It depends only on p. It goes down as p goes up, and a certain event is no surprise at all. For independent events, where one tells you nothing about the other, probabilities multiply and surprises should add: heads on a coin and a five on a die, together, as surprising as the two added up. And small changes in p make small changes in s.",
+        "actual_audio_duration_seconds": 28.16,
+        "original_runtime_capture_sha256": "c45e545f2743047215b66a3c48533ad11505832af49988686fddfcb3bc83cde4"
+      },
+      {
+        "key": "2b65ee5d8cc5391d",
+        "raw": "Remarkably, those rules leave only one choice. Measure probabilities in halvings: <bookmark mark='a'/> write p as two to the minus x, and let g of x be its surprise. <bookmark mark='b'/> Rule three says g turns sums into sums. <bookmark mark='c'/> So g of n is n times g of one, for every whole number, <bookmark mark='d'/> and for every fraction. <bookmark mark='e'/> Continuity fills in the rest: g of x is x times g of one.",
+        "spoken": "Remarkably, those rules leave only one choice. Measure probabilities in halvings: write p as two to the minus x, and let g of x be its surprise. Rule three says g turns sums into sums. So g of n is n times g of one, for every whole number, and for every fraction. Continuity fills in the rest: g of x is x times g of one.",
+        "actual_audio_duration_seconds": 23.01,
+        "original_runtime_capture_sha256": "c45e545f2743047215b66a3c48533ad11505832af49988686fddfcb3bc83cde4"
+      },
+      {
+        "key": "a2ae4072f093fc88",
+        "raw": "Put the probability back in, and the surprise must be a constant times the log of one over p. <bookmark mark='a'/> The constant just picks a unit. Let a fair coin flip carry exactly one, and call it a bit: an event of probability p carries log, base two, of one over p, bits.",
+        "spoken": "Put the probability back in, and the surprise must be a constant times the log of one over p. The constant just picks a unit. Let a fair coin flip carry exactly one, and call it a bit: an event of probability p carries log, base two, of one over p, bits.",
+        "actual_audio_duration_seconds": 17.14,
+        "original_runtime_capture_sha256": "c45e545f2743047215b66a3c48533ad11505832af49988686fddfcb3bc83cde4"
+      },
+      {
+        "key": "53512db73e88ce3c",
+        "raw": "Here's that function. <bookmark mark='a'/> A coin: one bit. A face of a die: 2.58 bits. <bookmark mark='b'/> The letter e: 3.32 bits. The letter z: 10.9. <bookmark mark='c'/> And u, right after q: 0.002 bits, almost nothing. <bookmark mark='d'/> As p heads to zero, the surprise grows without limit.",
+        "spoken": "Here's that function. A coin: one bit. A face of a die: 2.58 bits. The letter e: 3.32 bits. The letter z: 10.9. And u, right after q: 0.002 bits, almost nothing. As p heads to zero, the surprise grows without limit.",
+        "actual_audio_duration_seconds": 19.54,
+        "original_runtime_capture_sha256": "c45e545f2743047215b66a3c48533ad11505832af49988686fddfcb3bc83cde4"
+      },
+      {
+        "key": "2e10f60e7dcd2a1f",
+        "raw": "And because logs turn products into sums, the chain rule turns into something lovely. <bookmark mark='a'/> A whole text's surprise is the sum of its symbols' surprises, each given everything before it. <bookmark mark='b'/> Here is Shannon's sentence again, each letter's surprise a bar, judged by a model that knows only the previous 5 letters.",
+        "spoken": "And because logs turn products into sums, the chain rule turns into something lovely. A whole text's surprise is the sum of its symbols' surprises, each given everything before it. Here is Shannon's sentence again, each letter's surprise a bar, judged by a model that knows only the previous 5 letters.",
+        "actual_audio_duration_seconds": 17.15,
+        "original_runtime_capture_sha256": "c45e545f2743047215b66a3c48533ad11505832af49988686fddfcb3bc83cde4"
+      },
+      {
+        "key": "35cf05279180e886",
+        "raw": "The tall bars are where the text surprised the model: the starts of words, and words it didn't expect. <bookmark mark='a'/> Altogether, 182 bits for 101 symbols: 1.8 bits per symbol, under half of the 4.08 bits the letter frequencies alone would give. Remember that number; it's how we'll keep score.",
+        "spoken": "The tall bars are where the text surprised the model: the starts of words, and words it didn't expect. Altogether, 182 bits for 101 symbols: 1.8 bits per symbol, under half of the 4.08 bits the letter frequencies alone would give. Remember that number; it's how we'll keep score.",
+        "actual_audio_duration_seconds": 18.27,
+        "original_runtime_capture_sha256": "c45e545f2743047215b66a3c48533ad11505832af49988686fddfcb3bc83cde4"
+      }
+    ],
+    "master_or_wav_bytes_downloaded_read_or_modified": false,
+    "master_byte_sha256s_supplied_in_this_diagnostic": false,
+    "scope": "Selected speech identity, word timings and producer capture hashes supplied in exact diagnostic; no local master-byte hash or listening claim."
+  },
+  "actual_predictive_overruns": [
+    {
+      "scene": "Surprise",
+      "mark": "c",
+      "block_start": 54.38999999999999,
+      "target_seconds": 67.08,
+      "actual_seconds": 68.24,
+      "late_seconds": 1.1599999999999966
+    },
+    {
+      "scene": "Surprise",
+      "mark": "d",
+      "block_start": 54.38999999999999,
+      "target_seconds": 71.24,
+      "actual_seconds": 71.74,
+      "late_seconds": 0.5
+    },
+    {
+      "scene": "Surprise",
+      "mark": "e",
+      "block_start": 54.38999999999999,
+      "target_seconds": 72.75999999999999,
+      "actual_seconds": 74.74,
+      "late_seconds": 1.980000000000004
+    },
+    {
+      "scene": "Surprise",
+      "mark": "a",
+      "block_start": 95.14,
+      "target_seconds": 96.63,
+      "actual_seconds": 99.14,
+      "late_seconds": 2.510000000000005
+    }
+  ],
+  "preflight_scope": "Actual verified cached speech, endpoint-only animation skipping. Predictive schedule check; no frame-rounded fullmotion, visual readability, actual hearing or futurevideo approval.",
+  "changed_spans": [
+    {
+      "method": "derive",
+      "range": "b\u2192c",
+      "nominal_seconds": [
+        1.4,
+        0.8,
+        0.8,
+        1.2
+      ],
+      "actual_cue_gap_seconds": 3.04
+    },
+    {
+      "method": "derive",
+      "range": "d\u2192e",
+      "nominal_seconds": [
+        1.0,
+        2.0
+      ],
+      "actual_cue_gap_seconds": 1.52
+    },
+    {
+      "method": "curve",
+      "range": "block-start\u2192a",
+      "nominal_seconds": [
+        1.0,
+        2.0,
+        1.0
+      ],
+      "actual_cue_gap_seconds": 1.49
+    }
+  ],
+  "inherited_backlog": {
+    "mark": "d",
+    "old_lateness_seconds": 0.5,
+    "cause": "Earlier c overrun; c\u2192d sequence3.5seconds already fits4.16second cuegap once backlog removed. Its1/2/.5second timings remain exact."
+  },
+  "invariants": {
+    "all_voiceover_context_expressions_ast_exact": 8,
+    "all_bookmarks": 22,
+    "all_animation_arguments_geometry_math_order_and_call_count_ast_exact_except_timing": true,
+    "changed_duration_calls": 9,
+    "shared_helpers_or_audio_changed": false
+  },
+  "focused_validation": {
+    "methods": 5,
+    "exit": 0,
+    "source_sequence_probes": 18,
+    "cue_arrival_checks": 36,
+    "fps": [
+      15,
+      30,
+      60
+    ],
+    "initial_frame_phases": [
+      0,
+      0.49,
+      1
+    ],
+    "conservative_upward_frame_rounding": true,
+    "all_changed_and_backlog_cues_fit_with_one_frame_lead": true,
+    "minimum_requested_actual_probe_animation_seconds": 0.30163742690058354,
+    "scope": "Actual source AST span execution using controlled animation/clock objects, not a Manim render or speech hearing."
+  },
+  "dependencies_observed": [
+    {
+      "path": "explainer/voiceover.py",
+      "bytes": 10700,
+      "sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+      "scope": "filesystem observation at source-repair review; not imported-source attestation for remote production"
+    },
+    {
+      "path": "explainer/lang.py",
+      "bytes": 6956,
+      "sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+      "scope": "filesystem observation at source-repair review; not imported-source attestation for remote production"
+    },
+    {
+      "path": "explainer/tts.py",
+      "bytes": 40277,
+      "sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+      "scope": "filesystem observation at source-repair review; not imported-source attestation for remote production"
+    },
+    {
+      "path": "explainer/ai/viz.py",
+      "bytes": 31773,
+      "sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "scope": "filesystem observation at source-repair review; not imported-source attestation for remote production"
+    },
+    {
+      "path": "videos/ai/ai1/common.py",
+      "bytes": 16482,
+      "sha256": "f1262659e073baff2ff2c786ea8e4c12a9adf53aff70209cc21629e81c7ca48f",
+      "scope": "filesystem observation at source-repair review; not imported-source attestation for remote production"
+    },
+    {
+      "path": "videos/ai/ai1/zh_lines.py",
+      "bytes": 68358,
+      "sha256": "ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411",
+      "scope": "filesystem observation at source-repair review; not imported-source attestation for remote production"
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "bytes": 2440019,
+      "sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+      "scope": "filesystem observation at source-repair review; not imported-source attestation for remote production"
+    }
+  ],
+  "source_owner_clearance": "Controlled production rerender on exactly this after-source permitted. Verify actual frame-rounded cue arrivals and short sequential graph introduction readability/pacing; no full4K, listening or synchronization approval here.",
+  "remaining_gates": [
+    "Parent-controlled strictv6 five-source overlay gate and publication",
+    "Actual narrated full-motion render and one-frame checkpoint validation",
+    "Perceptual graph-transition readability, full playback/listening and final4K approval"
+  ]
+}

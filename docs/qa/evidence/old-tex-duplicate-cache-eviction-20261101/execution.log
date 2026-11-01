@@ -1,0 +1,37 @@
+removed 1000 of 9253
+removed 2000 of 9253
+removed 3000 of 9253
+removed 4000 of 9253
+removed 5000 of 9253
+removed 6000 of 9253
+removed 7000 of 9253
+removed 8000 of 9253
+removed 9000 of 9253
+{
+  "started": "2026-11-01T06:50:10.201048+00:00",
+  "finished": "2026-11-01T06:50:34.694051+00:00",
+  "approved_plan_sha256": "10d3c4393bd268426d1355366c9dbba0067df5ddb99cc27d8eb085ef217f9883",
+  "planned": 9253,
+  "removed": 9253,
+  "skipped": [],
+  "stopped_reason": null,
+  "remaining_preserved": 0,
+  "removed_allocated_bytes": 182243328,
+  "removed_logical_bytes": 163185571,
+  "disk_free_before": 1145712640,
+  "disk_free_after": 1301852160,
+  "observed_free_space_delta": 156139520,
+  "free_space_caveat": "Concurrent Part6 writes mean wholefilesystem delta may differ from exact removed fileallocation sum. No globally quiescent space claim.",
+  "protected306_exact_signatures_unchanged": true,
+  "protected306_count": 306,
+  "all_current_source_bytes_unchanged": true,
+  "source_files": 1524,
+  "all_tex_exact_signatures_unchanged": true,
+  "retained_tex_count": 15660,
+  "all_anchor_exact_signatures_unchanged": true,
+  "retained_unique_svg_anchor_count": 6403,
+  "all_removed_paths_absent": true,
+  "all_removed_restore_anchors_present_exact": true,
+  "partial_activity_visibility_caveat": "Partial host FD/map visibility. Root reconciled all task-owned runners as Part6 and oldPart3\u20135 idle; no global absence claim.",
+  "no_png_movie_audio_data_model_or_source_mutations_by_executor": true
+}

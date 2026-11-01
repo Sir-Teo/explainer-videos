@@ -1,0 +1,11 @@
+{
+  "at": "2026-11-01T06:50:10.201048+00:00",
+  "approved_plan_sha256": "10d3c4393bd268426d1355366c9dbba0067df5ddb99cc27d8eb085ef217f9883",
+  "candidates_verified": 9253,
+  "anchors_verified": 6403,
+  "tex_verified": 15660,
+  "protected306_reference_bytes_identical": true,
+  "source_files": 1524,
+  "free_before": 1145712640,
+  "parent_authorization": "Only duplicate-only SVG plan; all unique anchors/tex/media/data/models preserved; task-owned oldPart3\u20135 inactivity reconciled by root."
+}

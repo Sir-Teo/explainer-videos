@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "language": "zh",
+  "scope": "AST-extracted actual g70 plot and proposed bilingual caption constructors; in-memory proposed translation overlay only. No scene/common producer import or data loading, JSON l2 read directly. Not actual rendered chapter approval.",
+  "penalty": 0.01,
+  "caption_bounds": [
+    -6.3981091770833345,
+    -1.0458385812500026,
+    2.1787131562499997,
+    2.7611480312499994
+  ],
+  "plot_bounds": [
+    -6.3981091770833345,
+    1.5981091770833342,
+    -3.0987131562499997,
+    2.0987131562499997
+  ],
+  "line_bounds": [
+    [
+      -6.3981091770833345,
+      -1.0458385812500026,
+      2.5328375312499993,
+      2.7611480312499994
+    ],
+    [
+      -6.3981091770833345,
+      -3.0269408020833337,
+      2.1787131562499997,
+      2.4328375312499992
+    ]
+  ],
+  "source_proposed_sha256": "89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b",
+  "image_sha256": "df1f816feaeb211c4275519df86aeb0e46b21362b000a4c8e81043fe5af3f343",
+  "actual_fixture_png_viewed": true,
+  "actual_view_scope": "isolated actual-Manim caption/plot fixture only, native854; not current chapter render"
+}

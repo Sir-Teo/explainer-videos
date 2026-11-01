@@ -1,0 +1,11 @@
+{"utc": "2026-11-01T06:49:32.197708+00:00", "kind": "start", "scene": "Lasso", "lang": "en", "mode": "endpoints", "free_bytes": 1169211392, "fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699"}
+{"utc": "2026-11-01T06:49:52.823854+00:00", "kind": "completed", "scene": "Lasso", "lang": "en", "mode": "endpoints", "outcome": "runtime-complete", "raw_status": "passed", "warnings": 0, "elapsed_seconds": 20.626, "free_bytes": 1164517376}
+{"utc": "2026-11-01T06:49:52.974094+00:00", "kind": "start", "scene": "Lasso", "lang": "en", "mode": "motion", "free_bytes": 1152417792, "fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699"}
+{"utc": "2026-11-01T06:50:22.976651+00:00", "kind": "heartbeat", "scene": "Lasso", "lang": "en", "mode": "motion", "pid": 1165075, "elapsed_seconds": 30.0, "free_bytes": 1242935296}
+{"utc": "2026-11-01T06:50:47.511101+00:00", "kind": "completed", "scene": "Lasso", "lang": "en", "mode": "motion", "outcome": "runtime-complete", "raw_status": "passed", "warnings": 0, "elapsed_seconds": 54.537, "free_bytes": 1271496704}
+{"utc": "2026-11-01T06:50:47.606347+00:00", "kind": "start", "scene": "Lasso", "lang": "zh", "mode": "endpoints", "free_bytes": 1269948416, "fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699"}
+{"utc": "2026-11-01T06:51:10.861720+00:00", "kind": "completed", "scene": "Lasso", "lang": "zh", "mode": "endpoints", "outcome": "runtime-complete", "raw_status": "passed", "warnings": 0, "elapsed_seconds": 23.255, "free_bytes": 1225347072}
+{"utc": "2026-11-01T06:51:11.029284+00:00", "kind": "start", "scene": "Lasso", "lang": "zh", "mode": "motion", "free_bytes": 1212424192, "fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699"}
+{"utc": "2026-11-01T06:51:41.030051+00:00", "kind": "heartbeat", "scene": "Lasso", "lang": "zh", "mode": "motion", "pid": 1169602, "elapsed_seconds": 30.0, "free_bytes": 1157554176}
+{"utc": "2026-11-01T06:52:07.476947+00:00", "kind": "completed", "scene": "Lasso", "lang": "zh", "mode": "motion", "outcome": "runtime-complete", "raw_status": "passed", "warnings": 0, "elapsed_seconds": 56.447, "free_bytes": 1140924416}
+FOUR_RUNTIME_CAPTURES_COMPLETED /workspace/runtime/ai6-lasso-after-capture/runs/20261101T064932

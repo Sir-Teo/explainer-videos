@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-01T07:07:30.263691+00:00",
+  "counts": {
+    "pids_seen": 1279,
+    "fd_dirs_readable": 15,
+    "fd_links_unreadable_or_raced": 78,
+    "maps_unreadable_or_raced": 15,
+    "fd_dirs_unreadable_or_raced": 1264,
+    "maps_readable": 1264,
+    "fd_links_readable": 6
+  },
+  "visible_open_or_mapped": [],
+  "caveat": "Partial host FD/maps visibility; same existing per-item exclusive flock is the writer guard. Readers would see identical bytes. No global absence claim."
+}

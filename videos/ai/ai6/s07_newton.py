@@ -50,11 +50,11 @@ class Newton(VoiceoverScene):
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
-            step(1)
+            step(1, transform=False)
             vo.wait_until("c")
-            step(2)
+            step(2, transform=False)
             vo.wait_until("d")
-            step(3)
+            step(3, transform=False)
             vo.wait_until("e")
             self.play(FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)
@@ -65,6 +65,7 @@ class Newton(VoiceoverScene):
         ir = load("irls")
         p = load("pages")
         X2, y, test = np.asarray(p["X2"]), np.asarray(p["y"]), np.asarray(p["test"], bool)
+        system_size = int(np.asarray(p["X"]).shape[1]) + 1  # weights plus the unpenalized intercept
         LN, LG = np.asarray(ir["lines_newton"]), np.asarray(ir["lines_gd"])
         panels = []
         tr = np.nonzero(~test)[0]
@@ -94,7 +95,8 @@ class Newton(VoiceoverScene):
             return g
 
         ln, rd = always_redraw(lines), always_redraw(reads)
-        # the 70-rate race: the distance to the best loss, log scale
+        # The 70-rate race measures the cached penalized mean-CE objective, in nats.
+        penalty = float(ir["l2"])
         gap_n = np.maximum(np.asarray(ir["newton_gap"]), 1e-16)
         gd = np.asarray(ir["gd"])
         gx = np.log10(np.maximum(gd[:, 0], 1))
@@ -106,7 +108,11 @@ class Newton(VoiceoverScene):
             [a70.c2p(math.log10(max(i, 1)), math.log10(v)) for i, v in enumerate(gap_n) if i >= 1])
         cg = VMobject(color=GD, stroke_width=4).set_points_as_corners(
             [a70.c2p(x_, math.log10(max(v, 1e-16))) for x_, v in zip(gx, gd[:, 1]) if v > 1e-16 and x_ > 0])
-        g70n = label(r"all $70$ rates: \ loss above the best, \ against steps", font_size=22, color=GREY_A)
+        g70n = VGroup(
+            label(r"all $70$ rates: \ penalized gap $F-F_\star$ \ (nats per page)", font_size=22, color=GREY_A),
+            label(rf"$F=\text{{mean cross-entropy}}+\frac{{\lambda}}{{2}}\|\mathbf{{w}}\|^2,\quad\lambda={penalty:g}$",
+                  font_size=20, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.10)
         g70n.next_to(g70, UP, buff=0.08).align_to(g70, LEFT)
         nn, it6 = int(ir["n_newton"]), int(ir["gd_iters_to"])
         res = VGroup(label(rf"Newton: \ ${nn}$ steps \ to the last digit", font_size=24, color=NEWTON),
@@ -116,10 +122,12 @@ class Newton(VoiceoverScene):
         with self.voiceover(
             "Race them, from the same start. <bookmark mark='a'/> After one step, Newton's line is already near the "
             f"answer; after {settle}, it's there. Gradient descent, after the same number of steps, is still swinging into "
-            f"place. <bookmark mark='b'/> With all seventy rates, Newton needs {nn} steps to reach the bottom to the "
-            f"last digit; gradient descent needs {it6:,} steps to get within a millionth. Near the bottom, Newton "
-            "doubles the number of correct digits at every step. The price: a seventy by seventy system to solve "
-            "each time, which is why giant models stay with gradients."
+            f"place. <bookmark mark='b'/> With all seventy rates, minimize mean cross-entropy in nats plus half "
+            f"lambda times the squared weight norm, with lambda {penalty:g}. The gap subtracts the minimum of this "
+            f"penalized objective. Newton needs {nn} steps to reach it to the last digit; gradient descent needs "
+            f"{it6:,} steps to get within a millionth. Near the bottom, Newton "
+            f"doubles the number of correct digits at every step. The price: a {system_size} by {system_size} system, "
+            "including the intercept, to solve each time, which is why giant models stay with gradients."
         ) as vo:
             for plane, dots, t, Ls, col in panels:
                 self.play(FadeIn(plane), FadeIn(dots), FadeIn(t), run_time=0.8)
@@ -171,7 +179,7 @@ class Newton(VoiceoverScene):
             self.play(FadeIn(g))
             step(0)
             vo.wait_until("a")
-            step(1)
+            step(1, transform=False)
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[:4]], lag_ratio=0.25), FadeIn(vals[:4]), run_time=1.5)
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[4:]], lag_ratio=0.25), FadeIn(vals[4:]), run_time=2.0)

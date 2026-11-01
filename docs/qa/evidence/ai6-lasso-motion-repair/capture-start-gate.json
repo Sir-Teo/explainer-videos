@@ -1,0 +1,14 @@
+{
+  "root_approved_source_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+  "root_approved_global_table": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+  "root_approved_direct_source": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9",
+  "wrapper": "/workspace/runtime/ai6-lasso-motion-repair/capture_after.py",
+  "wrapper_sha256": "8d34b260a1f3778fd24fa36b173767fae1b6fd2e66bf01901aee8135f90085da",
+  "adapter": "/workspace/runtime/ai6-remaining-qa-serial/driver.py",
+  "adapter_sha256": "a3ba29a272b86c9e66ebae4acc3caa7dfdba5beb22fe35de7265aa6530adf478",
+  "scope": "Only four Lasso after captures; independent output storage; cache-only silent numeric1 nice10 768MiB; no producer",
+  "preserved_baseline": {
+    "en": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/05-Lasso/en",
+    "zh": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/05-Lasso/zh"
+  }
+}

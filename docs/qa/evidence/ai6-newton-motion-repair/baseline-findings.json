@@ -1,0 +1,69 @@
+{
+  "utc": "2026-11-01T07:39:31.673457+00:00",
+  "scope": "Read-only actual cache plus exact source expressions; no producer/optimizer/load/scene import",
+  "findings": [
+    {
+      "id": "NEWTON-C01",
+      "status": "confirmed; authorized localrepairpending",
+      "actual_cached_l2": 0.01,
+      "objective": "mean cross-entropy (nats) + 0.5*lambda*||w||^2; intercept not penalized",
+      "source_references": [
+        "videos/ai/ai6/s07_newton.py:117",
+        "videos/ai/ai6/s07_newton.py:128",
+        "videos/ai/ai6/compute.py:449",
+        "videos/ai/ai6/compute.py:521"
+      ],
+      "visual": "Before ENframe880 andZH925 label above the convergence chart; actual native-size selected views.",
+      "plan": "Two-line objective definition/units and clearVO; no numerical change."
+    },
+    {
+      "id": "NEWTON-M01",
+      "status": "confirmed; authorized localrepairpending",
+      "actual_EN_frames": [
+        223,
+        347,
+        403
+      ],
+      "actual_ZH_frames": [
+        237,
+        356,
+        430
+      ],
+      "source_reference": "derive step1/2/3",
+      "plan": "transform=False only at actual retained-row appends"
+    },
+    {
+      "id": "NEWTON-M02",
+      "status": "confirmed; authorized localrepairpending",
+      "actual_EN_frames": [
+        1392
+      ],
+      "actual_ZH_frames": [
+        1455
+      ],
+      "source_reference": "digits step1",
+      "plan": "transform=False only at actual retained-row append"
+    },
+    {
+      "id": "NEWTON-C02",
+      "status": "confirmed dimensional contradiction; authorization pending",
+      "spoken_before": "seventy by seventy system / 70乘70",
+      "actual_cached_X_shape": [
+        639,
+        70
+      ],
+      "actual_A_and_H_shape": "A training_rows×71, Hessian71×71; ones/intercept added by producer",
+      "source_references": [
+        "videos/ai/ai6/s07_newton.py:133",
+        "videos/ai/ai6/compute.py:453",
+        "videos/ai/ai6/compute.py:465"
+      ],
+      "proposed": "71 by71 including intercept; speech only, cachednumbers/data untouched"
+    }
+  ],
+  "payloads": {
+    ".cache/ai6/pages.npz": "e43d6bcb15ffa09810f1f174ed5b9b6ce6f54190509f47f5e7a2f8f78bf37dc4",
+    ".cache/ai6/irls.json": "c3da935ac12d1600eea2f5f450d77d95ee61cf0d993abcce64b66df4c7dc267f",
+    ".cache/ai6/irls.npz": "317e1160920893e47683ed0529696a64cf7b157ef97eacc9af23f8e1f4eaa82d"
+  }
+}

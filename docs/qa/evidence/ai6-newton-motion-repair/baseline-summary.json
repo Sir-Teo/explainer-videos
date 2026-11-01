@@ -1,0 +1,118 @@
+{
+  "status": "bilingual-original-baseline-reviewed-with-three-confirmed-findings; repairs pending",
+  "utc": "2026-11-01T07:37:04.710801+00:00",
+  "scene": "Part6 Newton",
+  "scope": "All selected times mapped to actual native854x480 chronological image views or exact full-PNG duplicate reuse. Full files automatically decoded, not continuous perceptual playback/listening/native1080 approval.",
+  "baseline_direct_source_sha256": "24dba4d98d0adb334417172b16db985623ce63acc41a253f06642f6da107b705",
+  "raw_fingerprint_policy": "Original owner records remain raw967c8366/table0e4bad42. Later shared hbar/other scene/global updates do not retrospectively prove imported bytes or justify rewriting raw current/status.",
+  "cases": {
+    "en": {
+      "movie": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/07-Newton/en/motion/completed/media/videos/480p15/Newton.mp4",
+      "movie_sha256": "69bc24931e6d41f2f9d5603bc61e8ced99560364ff5cb94131a8388cd14b26c8",
+      "movie_bytes": 1336952,
+      "independent_movie_nlink": 1,
+      "selected": 440,
+      "direct_unique_actual_images": 377,
+      "exact_PNG_duplicate_times": 63,
+      "actual_unscaled_pages": 48,
+      "decoded_frames": 2171,
+      "unselected_encoded_frames": 1731,
+      "max_selected_gap_seconds": 1.0,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "native_examples": [
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/en-Newton/69bc24931e6d41f2f9d5603bc61e8ced99560364ff5cb94131a8388cd14b26c8/audit/frames/0000223_000014.866s.png",
+          "artifact": "before-en/0000223_000014.866s.png",
+          "sha256": "153a574ee081fcafa8fdd8853d8f20fc7c767472627c5ef7f68eb6313c9dff87",
+          "actual_view": "Native individual proof followup"
+        },
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/en-Newton/69bc24931e6d41f2f9d5603bc61e8ced99560364ff5cb94131a8388cd14b26c8/audit/frames/0000347_000023.133s.png",
+          "artifact": "before-en/0000347_000023.133s.png",
+          "sha256": "86a98489bdc9cf5109abf3106c977f7a57d28710d09dc2791981bda0175e30c0",
+          "actual_view": "Native individual proof followup"
+        },
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/en-Newton/69bc24931e6d41f2f9d5603bc61e8ced99560364ff5cb94131a8388cd14b26c8/audit/frames/0000403_000026.866s.png",
+          "artifact": "before-en/0000403_000026.866s.png",
+          "sha256": "dca43a88acfc066c353a68a50f6d188cd481cb9e879143c238f384ef14c1f0c2",
+          "actual_view": "Native individual proof followup"
+        },
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/en-Newton/69bc24931e6d41f2f9d5603bc61e8ced99560364ff5cb94131a8388cd14b26c8/audit/frames/0001392_000092.799s.png",
+          "artifact": "before-en/0001392_000092.799s.png",
+          "sha256": "4fc22a9c7adab7c6c3129fba239ffb37e85acef4882502b01bb3198a75eeea08",
+          "actual_view": "Native individual proof followup"
+        },
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/en-Newton/69bc24931e6d41f2f9d5603bc61e8ced99560364ff5cb94131a8388cd14b26c8/audit/frames/0000880_000058.666s.png",
+          "artifact": "before-en/0000880_000058.666s.png",
+          "sha256": "dcd09525234de5b74d5e37660c0b715488695f6118ffbc28e076ffee40f64a18",
+          "actual_view": "Native854 image actually viewed on chronological original sheet"
+        },
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/en-Newton/69bc24931e6d41f2f9d5603bc61e8ced99560364ff5cb94131a8388cd14b26c8/audit/frames/0001873_000124.866s.png",
+          "artifact": "before-en/0001873_000124.866s.png",
+          "sha256": "10d1f60930f3c223e68f1738a2e970f28dd8938ccaa9806e8a8ad2a91062ccc6",
+          "actual_view": "Native854 image actually viewed on chronological original sheet"
+        }
+      ],
+      "endpoints_actual": 14
+    },
+    "zh": {
+      "movie": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/07-Newton/zh/motion/completed/media/videos/480p15/Newton.mp4",
+      "movie_sha256": "e359d181eef3f45ed8567d9aa69226340dba9893a541aed9b99697bfab5e4b0e",
+      "movie_bytes": 1327722,
+      "independent_movie_nlink": 1,
+      "selected": 456,
+      "direct_unique_actual_images": 379,
+      "exact_PNG_duplicate_times": 77,
+      "actual_unscaled_pages": 48,
+      "decoded_frames": 2335,
+      "unselected_encoded_frames": 1879,
+      "max_selected_gap_seconds": 1.0000000000000142,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "native_examples": [
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/zh-Newton/e359d181eef3f45ed8567d9aa69226340dba9893a541aed9b99697bfab5e4b0e/audit/frames/0000237_000015.800s.png",
+          "artifact": "before-zh/0000237_000015.800s.png",
+          "sha256": "05d9168dc7fc222339551334a131c2deb3a237608be0639aef825cbbe87cf4a5",
+          "actual_view": "Native individual proof followup"
+        },
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/zh-Newton/e359d181eef3f45ed8567d9aa69226340dba9893a541aed9b99697bfab5e4b0e/audit/frames/0000356_000023.733s.png",
+          "artifact": "before-zh/0000356_000023.733s.png",
+          "sha256": "aa177347750c0ad2b871cadf4dda860068768cf7d97b568dc10ac18bc5567e18",
+          "actual_view": "Native individual proof followup"
+        },
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/zh-Newton/e359d181eef3f45ed8567d9aa69226340dba9893a541aed9b99697bfab5e4b0e/audit/frames/0000430_000028.667s.png",
+          "artifact": "before-zh/0000430_000028.667s.png",
+          "sha256": "89013afb4d4c4314af6bc160fd8487e3d4604fa6f4bc870d034b065a5e451aef",
+          "actual_view": "Native individual proof followup"
+        },
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/zh-Newton/e359d181eef3f45ed8567d9aa69226340dba9893a541aed9b99697bfab5e4b0e/audit/frames/0001455_000097.000s.png",
+          "artifact": "before-zh/0001455_000097.000s.png",
+          "sha256": "0d799f4f0c3a37612acc90f04aab1e2e3a82b5e0c174c20fa372cdded0a1576e",
+          "actual_view": "Native individual proof followup"
+        },
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/zh-Newton/e359d181eef3f45ed8567d9aa69226340dba9893a541aed9b99697bfab5e4b0e/audit/frames/0000925_000061.667s.png",
+          "artifact": "before-zh/0000925_000061.667s.png",
+          "sha256": "6b5cd9ab7441b5192b5f15051473d99d7e4ff744c1f340b7dd9a5cd6a87fefb4",
+          "actual_view": "Native854 image actually viewed on chronological original sheet"
+        },
+        {
+          "source": "/workspace/runtime/ai6-newton-motion-review/zh-Newton/e359d181eef3f45ed8567d9aa69226340dba9893a541aed9b99697bfab5e4b0e/audit/frames/0002017_000134.466s.png",
+          "artifact": "before-zh/0002017_000134.466s.png",
+          "sha256": "942ecab0aa5127b8badabbdd57f9d95e2626ebe778142c7adc81661e82dfb3aa",
+          "actual_view": "Native854 image actually viewed on chronological original sheet"
+        }
+      ],
+      "endpoints_actual": 16
+    }
+  }
+}

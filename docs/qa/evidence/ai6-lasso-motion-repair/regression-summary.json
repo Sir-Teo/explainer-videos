@@ -1,0 +1,131 @@
+{
+  "scope": "Current EN/ZH Lasso selected silent-motion and endpoint regression complete; continuous perceptual playback, listening and finalproductionresolution remain unverified",
+  "candidate_sha256": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9",
+  "source_fingerprint": "dc8391c0e5be2e50bc0c7a318aedf0e5f16f8c6cd329f18baa78d403ad2d5699",
+  "global_table_sha256": "20635e737d97cfae5cb70af15ee2b4378637b33e5e17f25c2be5906460fe38e3",
+  "cases": {
+    "en": {
+      "movie": "/workspace/runtime/ai6-lasso-after-capture/runs/20261101T064932/05-Lasso/en/motion/completed/media/videos/480p15/Lasso.mp4",
+      "movie_sha256": "287089862b15874766a53de157a275beb00488c8ced4996ea03ac5f2acdbf98f",
+      "original_movie_sha256": "d9f33e685138c910dce3910a7dafe6678f43e8ebb2f5268bcf09d30de955d0e1",
+      "movie_independent_nlink": 1,
+      "original_independent_movie_sha_reverified": true,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 2479,
+      "selected_time_count": 531,
+      "unselected_frames": 1948,
+      "prior_exact_native_PNG_times": 395,
+      "new_unique_images_actually_viewed": 123,
+      "new_exact_duplicate_times": 13,
+      "actual_native_pages": 16,
+      "individual_after_native_views": 4,
+      "largest_selected_time_gap": 1.0,
+      "every_encoded_windows": [
+        {
+          "start": 30.1,
+          "end": 31.5,
+          "every_encoded_frame_count": 21,
+          "actual_first_time": 30.133333,
+          "actual_last_time": 31.466667,
+          "missing_selected_frames": []
+        },
+        {
+          "start": 47.6,
+          "end": 49.4,
+          "every_encoded_frame_count": 27,
+          "actual_first_time": 47.666341,
+          "actual_last_time": 49.399674,
+          "missing_selected_frames": []
+        },
+        {
+          "start": 55.5,
+          "end": 57.3,
+          "every_encoded_frame_count": 27,
+          "actual_first_time": 55.533008,
+          "actual_last_time": 57.266341,
+          "missing_selected_frames": []
+        },
+        {
+          "start": 63.1,
+          "end": 64.2,
+          "every_encoded_frame_count": 17,
+          "actual_first_time": 63.133008,
+          "actual_last_time": 64.199674,
+          "missing_selected_frames": []
+        }
+      ],
+      "every_encoded_window_total": 92,
+      "same_duration_narration_bookmarks_and_record_input_signatures_as_baseline": true,
+      "endpoint_total": 19,
+      "endpoint_prior_exact": 17,
+      "endpoint_new_actual": 2,
+      "regression_review_sha256": "d56f1ef12c62cb1804f68a0f794decf30bc81abe994e88241e5f7f40fa448b7b",
+      "endpoint_review_sha256": "9077c6aa82f8ff77aa7cdf9de9568da40fa2742b7dcc838c189928ba000b1ac4",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+    },
+    "zh": {
+      "movie": "/workspace/runtime/ai6-lasso-after-capture/runs/20261101T064932/05-Lasso/zh/motion/completed/media/videos/480p15/Lasso.mp4",
+      "movie_sha256": "61ea97d31d897682f3e2ff3e786f495df37461d808c4c5d7b85f859afd1ceee8",
+      "original_movie_sha256": "b6f8ce966099ba4e54ae015efff98eb3f997ad9c09c509f22d9442ea29d9ac82",
+      "movie_independent_nlink": 1,
+      "original_independent_movie_sha_reverified": true,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 2706,
+      "selected_time_count": 568,
+      "unselected_frames": 2138,
+      "prior_exact_native_PNG_times": 404,
+      "new_unique_images_actually_viewed": 149,
+      "new_exact_duplicate_times": 15,
+      "actual_native_pages": 19,
+      "individual_after_native_views": 4,
+      "largest_selected_time_gap": 1.0,
+      "every_encoded_windows": [
+        {
+          "start": 35,
+          "end": 36.5,
+          "every_encoded_frame_count": 23,
+          "actual_first_time": 35.0,
+          "actual_last_time": 36.466667,
+          "missing_selected_frames": []
+        },
+        {
+          "start": 55,
+          "end": 56.8,
+          "every_encoded_frame_count": 27,
+          "actual_first_time": 55.066341,
+          "actual_last_time": 56.799674,
+          "missing_selected_frames": []
+        },
+        {
+          "start": 62.6,
+          "end": 64.5,
+          "every_encoded_frame_count": 28,
+          "actual_first_time": 62.666341,
+          "actual_last_time": 64.466341,
+          "missing_selected_frames": []
+        },
+        {
+          "start": 69,
+          "end": 70.15,
+          "every_encoded_frame_count": 17,
+          "actual_first_time": 69.066341,
+          "actual_last_time": 70.133008,
+          "missing_selected_frames": []
+        }
+      ],
+      "every_encoded_window_total": 95,
+      "same_duration_narration_bookmarks_and_record_input_signatures_as_baseline": true,
+      "endpoint_total": 18,
+      "endpoint_prior_exact": 16,
+      "endpoint_new_actual": 2,
+      "regression_review_sha256": "cc645f4a13106cc1aea1f7be22f2f2ddb0a63cf1bfe414bc95d3695c68b80e0f",
+      "endpoint_review_sha256": "8fa2232fffb7f07d162a35e88078d60590a2a212345282944ef6145d0f583535",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e"
+    }
+  },
+  "all_four_findings": "resolved within actual selected and every-encoded repairwindow review",
+  "data_compute_or_model_import": false,
+  "completed_utc": "2026-11-01T07:04:14.139878+00:00"
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-01T07:54:28.994484+00:00",
+  "overlay_id": "part1-surprise-probability-roadmap-and-part3-v6",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "helper_sha256": "d6ca66b0f32cca9bcbe0352e8240ac1daa87dfea76b8e10a9d4490a5123ad1c6",
+  "overlay_sha256": "916421ce802ab387df104242a54e7d4e2d9b5869825ea52df069b95b8c5d345c",
+  "new_test_source_sha256": "1c9faef1e99a12056c2a73a057aa3b680878b065571c39dd598f3b6c5e57196e",
+  "original66_test_sources": [
+    {
+      "path": "tests/test_production_handoff_overlay.py",
+      "bytes": 34069,
+      "sha256": "3babfe70739a7146df1c4f84176ae80452722b770a4c22c0c83b8efdeecb2a69",
+      "unchanged": true
+    },
+    {
+      "path": "tests/test_production_handoff_probability_overlay.py",
+      "bytes": 11273,
+      "sha256": "dbb041ef929150098126b49f3df048fafec4a5edbc36f52c0543f388543f8a44",
+      "unchanged": true
+    }
+  ],
+  "Surprise_after_sha256": "64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55",
+  "Surprise_source_status": "Reviewed controlled narrated-rerender candidate only",
+  "Surprise_repaired_output_accepted": false,
+  "gate_tests": {
+    "passed": 78,
+    "elapsed_seconds": 4.237,
+    "previous66sources_byte_exact": true,
+    "new_separate_tests": 12
+  },
+  "source_owner_timing_tests": {
+    "passed": 5,
+    "elapsed_seconds": 0.126,
+    "sequence_probes": 18,
+    "cue_checks": 36,
+    "scope": "Separate source-span/frame-phase checks, not new full-repository suite or output approval."
+  },
+  "actual_fixture": {
+    "checks": 18,
+    "all_expected": true,
+    "strict_file_checks_per_case": 268,
+    "independent_copied_inputs": 156,
+    "copied_input_bytes": 80858842,
+    "original_refs_and_copies_exact_after_negatives": true,
+    "public_weights_copied": false,
+    "source_only_fixture_commit": "6a721acac8c7fd8fd3f9a090ffd14d758eafb9d0"
+  },
+  "unchanged_v1_to_v5_manifests": [
+    {
+      "path": "overlays/svd-reveal-v1.json",
+      "sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8",
+      "bytes": 32227,
+      "unchanged": true
+    },
+    {
+      "path": "overlays/svd-production-polish-v2.json",
+      "sha256": "631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca",
+      "bytes": 1456,
+      "unchanged": true
+    },
+    {
+      "path": "overlays/part3-svd-outro-production-v3.json",
+      "sha256": "69a16ca2846362919dfd8e9a024120fb3cba19264a643ad70b994c65f427f178",
+      "bytes": 3597,
+      "unchanged": true
+    },
+    {
+      "path": "overlays/part1-roadmap-and-part3-v4.json",
+      "sha256": "f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3",
+      "bytes": 5609,
+      "unchanged": true
+    },
+    {
+      "path": "overlays/part1-probability-roadmap-and-part3-v5.json",
+      "sha256": "6bc668f43c97b0d9867b2ab323c2d337599a5c4417c9fb5eb01644d7e9a7dbce",
+      "bytes": 8593,
+      "unchanged": true
+    }
+  ],
+  "external_and_optional_audio_AST_unchanged": true,
+  "direct_fact_reconstructions": [
+    {
+      "evidence_path": "docs/qa/evidence/ai1-surprise-narrated-timing-repair/exact-diagnostic.json.gz",
+      "uncompressed_bytes": 104451,
+      "reconstructed_sha256": "b1d79845b80fb776c0d8a3a881770b3e92c1b3f9f17ae2cebc3b1f4356bb8544",
+      "hash_scope": "Exact source-owner direct-read reconstruction, internally rehashed here; exact size matches Library metadata. No independently supplied remote whole-file expected hash comparison is asserted."
+    },
+    {
+      "evidence_path": "docs/qa/evidence/ai1-surprise-narrated-timing-repair/compact-requests.json.gz",
+      "uncompressed_bytes": 13158,
+      "reconstructed_sha256": "2cd32f4024aed88336aa7867c8ee1e8229d3082cadfb8865d5083cb657041eb4",
+      "hash_scope": "Exact source-owner direct-read reconstruction, internally rehashed here; exact size matches Library metadata. No independently supplied remote whole-file expected hash comparison is asserted."
+    }
+  ],
+  "limitations": [
+    "Exact controlled source/file/runtime gate, no actual source-repair production render/TTS/model/producer/voice/data action.",
+    "Fact sizes match Librarymetadata and saved reconstruction SHAvalues are internally checked; no independent remotely expected whole-file hash comparison is claimed.",
+    "No raw master/WAV hashes or listening proof were supplied, and none are invented.",
+    "Actual short-transition readability/pacing, narrated sync/listening and4K output remain open.",
+    "Successful strict cases use actual runtime/model files; explicit version-negative mocks metadata only.",
+    "Earlier suite receipts retain their earlier source epochs; root reports its new integrated suite separately.",
+    "Only five source replacements are allowed; samebranchP6/future changes and fullmovingHEAD are not approved."
+  ]
+}

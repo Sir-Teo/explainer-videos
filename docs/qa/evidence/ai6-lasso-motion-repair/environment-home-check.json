@@ -1,0 +1,10 @@
+{
+  "action": "Optional read-only verification of live child environment HOME/home/CODEX_HOME",
+  "target": "/proc/1169602/environ",
+  "outcome": "denied",
+  "reason": "OS PermissionError errno13",
+  "retry_or_escalation": false,
+  "direct_runtime_environment_observation": "unverified",
+  "independent_code_evidence": "capture_after.py changes only private adapter Python output-directory constant; run_one copies existing os.environ then only numericthreads/EXPLAINER_CACHED_ONLY/EXPLAINER_TTS overrides; command.json whitelist retained",
+  "capture_and_visual_review_blocked": false
+}

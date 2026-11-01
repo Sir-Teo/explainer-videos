@@ -1,5 +1,29 @@
 # Parts 1–3: reviewed cloud production handoff
 
+## Surprise + Probability + roadmap + Part 3 — controlled source gate v6
+
+Use explicit **`--overlay part1-surprise-probability-roadmap-and-part3-v6`** only for original base **`927fba668656a682b3e29a288de64130ddc680dd`** with these **five exact source replacements**:
+
+| Repository path | Required SHA256 | Bytes |
+|---|---|---:|
+| `videos/ai/ai1/s01_hook.py` | `7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8` | 23,484 |
+| `videos/ai/ai1/s02_probability.py` | `50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed` | 25,682 |
+| `videos/ai/ai1/s03_surprise.py` | `64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55` | 24,700 |
+| `videos/ai/ai3/s08_svd.py` | `2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b` | 12,273 |
+| `videos/ai/ai3/s19_outro.py` | `e874a8da48693ea2c9ec75584e044d090a6bd9a39c8f0c193c1d245101a8ca24` | 17,361 |
+
+The [v6 manifest](evidence/production-handoff-parts1-3/overlays/part1-surprise-probability-roadmap-and-part3-v6.json) binds every before/after path/size/hash/blob/mode and18 review receipts. Surprise-before is exactly base927 SHA`5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8`,23,704 bytes. No optional repository files, later fullbranch HEAD, or other Part6/future source change is permitted. Keep this helper/metadata outside the pinned target checkout. Existing default/v1–v5 gates and manifests retain their narrower exact behavior; v5 rejects the new Surprise file and still accepts its original four replacements with original Surprise.
+
+**Surprise6456 is source-cleared only for controlled narrated rerender. Its actual motion readability/pacing, listening, synchronization and4K output remain unaccepted.** The [source-owner evidence](evidence/ai1-surprise-narrated-timing-repair/README.md) records predictive verified-speech/animation-skipped lateness1.16/.50/1.98s and2.51s at the graph introduction. These are schedule leads reproduced by executing the old source spans, not full-motion/listening findings. The repair changes nine duration kwargs in three sequential VO-relative budgets plus a local helper/assignments; all8 VO expressions,22 bookmarks, math, layout, animationarguments/order/playcount and speech identities remain exact. Five source-span tests and18 full-sequence probes/36 cue checks cover15/30/60fps with three initial phases. Short graph-stage readability, including about0.318s in the adverse15fps case, still needs actual output review.
+
+Two direct-read fact reconstructions are104,451 bytes/SHA`b1d79845b80fb776c0d8a3a881770b3e92c1b3f9f17ae2cebc3b1f4356bb8544` and13,158 bytes/SHA`2cd32f4024aed88336aa7867c8ee1e8229d3082cadfb8865d5083cb657041eb4`. Saved compressed bytes were internally rehashed for the gate, and exact sizes match Library metadata. These are reconstruction hashes; **no independently supplied remote whole-file expected hash comparison is claimed**. Eight speech-keyed blocks sum145.45s; raw master/WAV bytes/hashes were not supplied/downloaded/heard, so no master-byte/listening claim is made.
+
+```bash
+python "$HANDOFF_DIR/verify_handoff.py" --repo "$CLOUD_REPO" --strict-external --overlay part1-surprise-probability-roadmap-and-part3-v6
+```
+
+[Gate evidence](evidence/production-handoff-parts1-3/overlay-surprise-v6-checks/README.md) records78 portable tests and18 actual strict cloud-fixture outcomes. Exactbase/five-source worktree/source-only commit pass268file checks; old flags, extra sources/HEAD and missing/tampereddata/runtime negatives reject. The156 copied repository-relative inputs are80,858,842 bytes; existing publicGPT2 weights are validated in place, not duplicated. Every original cache/runtime/model/optional-audio/other-source check remains; this is not an inherited producer guard or a new narration candidate/output approval. Earlier full-suite receipts keep their stated source epochs; root reports its later integrated suite separately. No local task, model/voice/data transfer, recomputation or production render is introduced here.
+
 ## Probability + roadmap + reviewed Part 3 — controlled source gate v5
 
 The explicit **`--overlay part1-probability-roadmap-and-part3-v5`** permits **only** original base **`927fba668656a682b3e29a288de64130ddc680dd`** plus these four exact source replacements:
