@@ -9,7 +9,8 @@ The book holds ``position`` options (+1 long, -1 short), bought or sold at time 
 volatility ``sigma_price`` (default: the hedge volatility), and holds -position x delta shares, delta computed at
 ``sigma_hedge``, rebalanced every ``hedge_every`` steps.  Cash earns ``r``; the shares pay the carry ``q``; each
 share traded costs ``cost`` x its price (a proportional cost: half the bid-ask spread plus fees), including the
-first hedge and the unwind at expiry.
+first hedge and the unwind at expiry (``cost_ends=False`` charges only the rebalancing trades, as Leland's
+formula does).
 
 The accounting identity behind the decomposition: marked at the hedge volatility, the book's P&L over one step is
 
@@ -30,7 +31,7 @@ from explainer.quant.house import bs
 
 
 def delta_hedge(t, S, K, T, sigma_hedge, *, cp=1, position=1, r=0.0, q=0.0, sigma_price=None, cost=0.0,
-                hedge_every=1, record=None) -> dict:
+                hedge_every=1, record=None, cost_ends=True) -> dict:
     t = np.asarray(t, float)
     S = np.atleast_2d(np.asarray(S, float))
     n_paths, n1 = S.shape
@@ -46,11 +47,12 @@ def delta_hedge(t, S, K, T, sigma_hedge, *, cp=1, position=1, r=0.0, q=0.0, sigm
     edge = w * (g0["price"] - premium)
     delta = g0["delta"]
     shares = -w * delta
-    cash = -w * premium - shares * S[:, 0] - cost * np.abs(shares) * S[:, 0]
+    k_end = cost if cost_ends else 0.0
+    cash = -w * premium - shares * S[:, 0] - k_end * np.abs(shares) * S[:, 0]
     v_prev, s_prev, gam_prev = g0["price"], S[:, 0], g0["gamma"]
 
     mtm = np.zeros(n_paths)
-    gam_acc, the_acc, cost_acc = np.zeros(n_paths), np.zeros(n_paths), cost * np.abs(shares) * S[:, 0]
+    gam_acc, the_acc, cost_acc = np.zeros(n_paths), np.zeros(n_paths), k_end * np.abs(shares) * S[:, 0]
     series = {k: np.zeros((len(rec), n1)) for k in ("value", "delta", "book", "gamma", "theta", "cost", "shares")}
 
     def snap(i, value, d):
@@ -87,7 +89,7 @@ def delta_hedge(t, S, K, T, sigma_hedge, *, cp=1, position=1, r=0.0, q=0.0, sigm
         snap(i, gi["price"], delta)
     # expiry: settle the option and unwind the shares
     payoff = np.maximum(cp * (S[:, -1] - K), 0.0) if tau[-1] <= 0 else bs.price(S[:, -1], K, tau[-1], sig_h, r, q, cp)
-    unwind_cost = cost * np.abs(shares) * S[:, -1]
+    unwind_cost = k_end * np.abs(shares) * S[:, -1]
     cash += shares * S[:, -1] - unwind_cost
     cost_acc += unwind_cost
     pnl = cash + w * payoff

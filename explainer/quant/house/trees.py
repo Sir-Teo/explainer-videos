@@ -32,6 +32,7 @@ def crr(S, K, T, sigma, r=0.0, q=0.0, N=200, cp=1, american=False, boundary=Fals
     values = np.maximum(cp * (spots - K), 0.0)
     bnd = np.full(N, np.nan)
     layers = {}
+    v1 = v2 = None
     for n in range(N - 1, -1, -1):
         spots_n = S * u ** (2 * np.arange(n + 1) - n)
         cont = disc * (p * values[1:] + (1 - p) * values[:-1])
@@ -50,8 +51,9 @@ def crr(S, K, T, sigma, r=0.0, q=0.0, N=200, cp=1, american=False, boundary=Fals
         if n == 1:
             v1, s1 = values.copy(), spots_n.copy()
     out = {"price": float(values[0]), "p": float(p), "u": float(u), "dt": float(dt)}
-    if N >= 2:
+    if v1 is not None:
         out["delta"] = float((v1[1] - v1[0]) / (s1[1] - s1[0]))
+    if v2 is not None:
         d_up = (v2[2] - v2[1]) / (s2[2] - s2[1])
         d_dn = (v2[1] - v2[0]) / (s2[1] - s2[0])
         out["gamma"] = float((d_up - d_dn) / (0.5 * (s2[2] - s2[0])))
