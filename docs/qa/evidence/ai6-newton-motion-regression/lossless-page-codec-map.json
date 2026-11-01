@@ -1,0 +1,626 @@
+[
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-001.png",
+    "original_png_sha256": "ce5314ab812e85dbb854c1ed54a004a31c46d7735e72cc824f42893bcf4521f6",
+    "stored_webp": "en/pages/changed-001.webp",
+    "stored_webp_sha256": "3bd818fab6fae1e327556a389edebba5117498b1f112336100a9083ba200081f",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "6cc18382386e7b2c1717b61b6095ed446d85f7575c48048aa87faf06041e681a",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-002.png",
+    "original_png_sha256": "24f2d1578ac3c9aac5fae7476c7c81ec6ec707a51d91cb94de75c0832f51615d",
+    "stored_webp": "en/pages/changed-002.webp",
+    "stored_webp_sha256": "be6af5faa64768c30b6f97415dc9ad79530e209bd17785e96020d62f7be9b5e5",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "1f42ea86b76e9a445d497f632c52ff55bef430b24b6b59e660dece3e8ce7ca55",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-003.png",
+    "original_png_sha256": "e3236aab44a10f4e3afd4438db9e7e94f53794d959d672f45d1642797e36d66a",
+    "stored_webp": "en/pages/changed-003.webp",
+    "stored_webp_sha256": "1de359d131dc345b2c5dbe54659a935302d89e804bcc4666106a611ce212746d",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "1d08f63edf06ed53b9e0767beb79f5fcf1455b2eda6062c0ee88bfc3b4362b8b",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-004.png",
+    "original_png_sha256": "01772881c5b989e10ffe0f404dbc0d11bfac26492656e3f3b894e6edd0a821e5",
+    "stored_webp": "en/pages/changed-004.webp",
+    "stored_webp_sha256": "1970a248545e0e7c264e1b6c9faf4166ba8dc73eb5d849f463e0a811206a7eab",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "cde7e2638730e4b4d8a1fea025346169393dbcfe844b9d24811e31bcb15928bd",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-005.png",
+    "original_png_sha256": "940dae14c8ce2e886ac0f04738c8552f820f2a68acdac38c9367b171fd9abeaf",
+    "stored_webp": "en/pages/changed-005.webp",
+    "stored_webp_sha256": "d26b9c35b9bc4e4845e27965bbf07e4555ede0b7986b8becb5c6ef1516c35bc9",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "ba8d3ed30664a5cb95b765ac0e5b0b2319ad867a4a81fed6fe4a449db48f726b",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-006.png",
+    "original_png_sha256": "9cd886b3ac14ca8e4a8ffd6f419469cfd57d87b1a7f06973b71f4c00f57c6d00",
+    "stored_webp": "en/pages/changed-006.webp",
+    "stored_webp_sha256": "3d88ce2d081f9ca85778313e458866eb1b9c00bc2fd14d0a1132468c08ead9f2",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "42be8e2727bf6fcdd58f224b517d7a05e9e0f691556f6f449f8c55b1c87f007e",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-007.png",
+    "original_png_sha256": "629fe1fa17c5635aeefde536bdc887bcf6034eb47f495f1f18c28c4782df28b3",
+    "stored_webp": "en/pages/changed-007.webp",
+    "stored_webp_sha256": "e1b30290212436b40d34678cdeadbd7df58f84a76f713fe91946b28395800df8",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "6e4779769090c8079ab27c931bed6a0eb4c377f3ac00a01239121170f559e1ed",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-008.png",
+    "original_png_sha256": "48e4c0d15c132990861bdf0e76b4ead54fb1ebfd6185764f6f5b629117a1b40f",
+    "stored_webp": "en/pages/changed-008.webp",
+    "stored_webp_sha256": "7840fa1c0dcc792ae03b9243cc698d9f6f566accd3c9c55f5e28f7a381ac4ffd",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "bede1a27d9ed421a4422f45b290c7f76f3a3190096b683f3b64821dfb5334691",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-009.png",
+    "original_png_sha256": "ef8394e5320caba09c79e171f020f12cda046f638d29d18b705aec0b5ac317fc",
+    "stored_webp": "en/pages/changed-009.webp",
+    "stored_webp_sha256": "ab34d2c072033118d5c45fc62a01298349df8c39dae218d17f62d4bce88e3274",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "b64abedfefa3fb46c372c04533a5ebeb8d1a773b3047e1069f551da298c59c18",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-010.png",
+    "original_png_sha256": "ef3f8bfdcec026360a3a358d7ddaa4132cb79967299924b52bd9445614b08186",
+    "stored_webp": "en/pages/changed-010.webp",
+    "stored_webp_sha256": "fbdd23a29c1616dad1026c4a1513c25d3895f3d34b798dd58f3f17d0b335cac3",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "6958606350135997c0e7161d17803e6b5c3cf5b1b2bd9736cea4375fc142c651",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-011.png",
+    "original_png_sha256": "c25a7c9f7c58bfea0291a99faa6410e3ab680b6cd0e7ea503d5c3deacc17fe38",
+    "stored_webp": "en/pages/changed-011.webp",
+    "stored_webp_sha256": "fa7e0d6e0143ca9d2fc5dbc79f1e33e7e4d31ab4291401dab4d6d385c1b701ad",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "366e3b5ba1cbe1f0602e353f64f883e9fd51dbeee9e9c59f0e9ea66f909f45da",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-012.png",
+    "original_png_sha256": "3a6a5ac6d9b996b4fbb2a2938ea72d5d47b97b099a1574a9d2a0f34b989bfae3",
+    "stored_webp": "en/pages/changed-012.webp",
+    "stored_webp_sha256": "980a9c7f78ab50f59b44536259ad213d242515dce0da63c51e7d01c8a5fe6388",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "fd2ab685762818f2ec454a50ccb7abe0bb89b8448ce3780495b4e6cdb42aa3a1",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-013.png",
+    "original_png_sha256": "e20b7d3b6b11b635f2332997dfc3474bc73a5fe6d334a178500203464f76c2ab",
+    "stored_webp": "en/pages/changed-013.webp",
+    "stored_webp_sha256": "166c7e4f6849b7118db025a73013cee66f04314c1a31d50dbc07639e0ca4e667",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "a1c9f9df343b9e91e4edcbadb66c2078f5fbe8496220f0afbd3c152d91660a1a",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-014.png",
+    "original_png_sha256": "b8ad6b64f226f2d8756d0e03dbf3918af0ccea6304ccd73057f38cca0aba208f",
+    "stored_webp": "en/pages/changed-014.webp",
+    "stored_webp_sha256": "f83b060e8e384dd4c7c71efeadc8cbc90bc0fdaffd1793d096c9c9cb5de66cec",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "875033b3423a9efa40e0ad4705fdb66d5ba4cd15f50ca183f66132cf410d1bbf",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-015.png",
+    "original_png_sha256": "eea1a395f6a9a9c8bb0fc6240df832f6db40e6a262f5a4efd6fa983a783b65a3",
+    "stored_webp": "en/pages/changed-015.webp",
+    "stored_webp_sha256": "2a34b7233a7250b7fb7ad64047c186d8443752033c47768baa4fa4b606096bff",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "d905a50350819b47ae8f2a385cdb709695a91334b3ea2ca1c91216ba7f5c0f1c",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-016.png",
+    "original_png_sha256": "21c20ca6394ae5cb648161e5664540fba1b94fa7ed0a6f4058ffcedb788ce8f6",
+    "stored_webp": "en/pages/changed-016.webp",
+    "stored_webp_sha256": "275caf6fd3a1d100a92f58f367ad8b128f21b623709ad85b73b74f3132ebec20",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "0c00995d8a554086572bdc4b5684c0847d70698865c884fe283af9791abf6c2e",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-017.png",
+    "original_png_sha256": "d8daffeec516aceb39cba9823f91bec1d8d2c372ff0cbba257741a6ada22d901",
+    "stored_webp": "en/pages/changed-017.webp",
+    "stored_webp_sha256": "78a24446da3938eeeb4c67a7d0f4366f2c9270540241fc583fd886bd2a4505e5",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "b1b7599c753aa086fe5337444ebfebb201791b90e60edd08ab6312c7c857488a",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-018.png",
+    "original_png_sha256": "b0a78e80e216f88e874df548644a70b4c2b0b76267c16c879bbf70c35046845d",
+    "stored_webp": "en/pages/changed-018.webp",
+    "stored_webp_sha256": "436c17d232901d5c0f7c69c48a7b7f8f33b60e967b4bee6b2580fb93fbb51201",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "dd1819c6db772794e6c2b12162ec7eddce37cbaacadad82af5898942b2c17ab8",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-019.png",
+    "original_png_sha256": "4872d32a471dc56e8cf81e78dd5d0473626470a4515b178f75022195fca9a501",
+    "stored_webp": "en/pages/changed-019.webp",
+    "stored_webp_sha256": "c3f9e42359d437591b2ca2e9436efe9606224b8eed73980d9b73722ea3c6b583",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "f108a7f133de0f9e443568f049296a021769560c45aa2f604e091a443ea933bc",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-020.png",
+    "original_png_sha256": "7cdb80d1c38b3da2695997890e33e47acaf5f79e8b079a23ba765d2073a8c637",
+    "stored_webp": "en/pages/changed-020.webp",
+    "stored_webp_sha256": "e3b4bce86f2a547f631fa20d196b6027d9f25e2b29c4388d61e7aa2751dba590",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "c170345b0dbd1cf632570c4d25f81cd7bc01556053e1c493f2972cec929ff8de",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-021.png",
+    "original_png_sha256": "25dcb9decc8162c9fcbddbdeefd01977d91a9c8f8fb82ddc899115f4698d7d33",
+    "stored_webp": "en/pages/changed-021.webp",
+    "stored_webp_sha256": "d4143944dd9ce15e1f04763f13783c9838bc19ec39c9dec12c0bea56b4b6eddc",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "a288811f0100a4dd8b17fe59e324505346ec80dc04a0f982999a3df4c5dec2ab",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-022.png",
+    "original_png_sha256": "14d8d0582a68c062ece253b03daf503d78cad4b0d0016894f0f09ecc1b3d63ed",
+    "stored_webp": "en/pages/changed-022.webp",
+    "stored_webp_sha256": "dbff743f9bf468bb02d66b3e0c5c80b2e7d7f060e3521d0e7fe5116e449a7610",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "a6768db782f08116c3623c80db23b6c95934b947a88dedd4e4165ca520db977b",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-023.png",
+    "original_png_sha256": "77b480499250ae2ca2a5569c1970f50a156fde099c20fe932424d11fb6fb14b8",
+    "stored_webp": "en/pages/changed-023.webp",
+    "stored_webp_sha256": "14120d8fd1e7a45ebce4f94965eb91d93e067b7d122ea4ec93bd77a3505f40e3",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "3942acec7efdc137ed4fbf86d6682a30ea84783860590489177188fef693eaca",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/changed-024.png",
+    "original_png_sha256": "07759a102dd8f2b1684c584c8115257d08098197a133346e8c3035b219d37bd4",
+    "stored_webp": "en/pages/changed-024.webp",
+    "stored_webp_sha256": "43ba07feb42ddcaa819cb8ff764377fac93b8f86dc1d76ffe56ecd7734393286",
+    "dimensions": [
+      1708,
+      1040
+    ],
+    "rgb_pixel_sha256": "c33bd1411978624a889f9d9e932c7692904f77358a5b0459506bfb4c9dc93fec",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-001.png",
+    "original_png_sha256": "8a1e558403d1e1c9719e47e9b0162296c729fb38f86f36c649c9f21989618192",
+    "stored_webp": "zh/pages/changed-001.webp",
+    "stored_webp_sha256": "1c22a8bd058b7bf19ff90b92885757c37c664b5364acd4de88b12713efa3754e",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "96bad60ca7ddaa216d5e018dd0b9a2e3a79c3c43694fc0fde990a425c2e1f3ac",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-002.png",
+    "original_png_sha256": "0dd750952210bb33519136c920e622c5bc154a8f750ea09c756da97c162892a6",
+    "stored_webp": "zh/pages/changed-002.webp",
+    "stored_webp_sha256": "20feec2d32330614e115eb35cead45e2d48a700564fb3fe1453a7c20cc58370a",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "123be7d9daea75339e274fff953f7aea655dd43d2a8a30c6ecca87de90f4fd8a",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-003.png",
+    "original_png_sha256": "a543b03bf4e172ae4af5acdfe594f91c1edfaac7b7a184fe953e75077d9b1e45",
+    "stored_webp": "zh/pages/changed-003.webp",
+    "stored_webp_sha256": "38cee3144ba53c8947d4ad18f0bf070df216b1c69be4458e1491ab93c3cbbd33",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "8461e0eb93c89a78d2d9789709be06121cccd6a00c94d65ef4cbc58afe4e9a49",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-004.png",
+    "original_png_sha256": "832c7a9689d5ad3f41171424b84bfc6679fb93dcd9d89840818c65553d150c8d",
+    "stored_webp": "zh/pages/changed-004.webp",
+    "stored_webp_sha256": "044b9467a63c66cd663a1208b9fa78560aea11b2868e7bb5b7889ee672fd990c",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "75c47c610442dd7ebc6fb927859da187ce73d1d9d8e4f899444fc214067f0037",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-005.png",
+    "original_png_sha256": "1413772408dec6c39c5e2cb851bca0eb66d38f6a17080f3ca94f779d75e181c8",
+    "stored_webp": "zh/pages/changed-005.webp",
+    "stored_webp_sha256": "e741d00127ba78b4d32fe2f968bd57d500e5c19f2f12ace950cc37b389c0ba81",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "65ed82c020889a4618aaec33c17d545582f47d691338458fc64503fd8da78d21",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-006.png",
+    "original_png_sha256": "0e74fd1e268163759055da74caa57a303e01bcee10622fa859884328cccb676a",
+    "stored_webp": "zh/pages/changed-006.webp",
+    "stored_webp_sha256": "2fce961428dbb9e170e2a6bc45b690786fe26a075df695d073ef81c2e119818c",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "2da1a455adc22fc7214f83afa1b1d189ae7787434e698ebd748adf7e3e21a886",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-007.png",
+    "original_png_sha256": "1ca24c33f9439f3377394a12cb64a65fa68b293bfb1361ff7e18ac1eaf844a00",
+    "stored_webp": "zh/pages/changed-007.webp",
+    "stored_webp_sha256": "d47f6de7b76940865c0d54900810b3fc4711573ae9c26c44875c5ddb1ad88f3e",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "78d23c3aacb75ed103642bb92865bdf161e0557281f78056d343b4f74fcc416f",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-008.png",
+    "original_png_sha256": "33f51699309d96a3a46b680269be695bc2395dbec46aca19354947feb77858c8",
+    "stored_webp": "zh/pages/changed-008.webp",
+    "stored_webp_sha256": "6f30d0cf248a0452dab0f8c28913c85bc10871e543ad89f2b37ca151b90c9676",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "b9a7c724fcada897d24abe2e542bfb13ee52d338f9a61cbea26ddcf78aa1b92c",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-009.png",
+    "original_png_sha256": "ca0bfe0b4e3f480d2057418fdccf1d1f8881f6e4e34d682a6613746090fac4f6",
+    "stored_webp": "zh/pages/changed-009.webp",
+    "stored_webp_sha256": "2b36717d7b4346253d4fd22150e8071b6a392b57cdb9cee03cdb829434465e9c",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "57ec6462ffb052b93345e3f712eed1eb09e42bb3b1438d31b95249d074b1f7c5",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-010.png",
+    "original_png_sha256": "1e8852df74e2c56db125495ffd7f4f9840492cb924fad122a8d1f8ad458de654",
+    "stored_webp": "zh/pages/changed-010.webp",
+    "stored_webp_sha256": "eacb19a53079743837491b4562b528cfc4167ffa20195647da2ee3c6a276857b",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "1c5e052b698c83bfa97522f69eaea48c8a9db0b7b9b37bab205a481c375c5aeb",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-011.png",
+    "original_png_sha256": "683925f9e477f2c5f26513ef96c1c08c2036d99238266ddd1ae6ccb7aca4a28a",
+    "stored_webp": "zh/pages/changed-011.webp",
+    "stored_webp_sha256": "9da8ba6074688d489639d2ca855dbb2ba8497579f2dfa427d272b782e1d1217f",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "60a98b4121653ee5a7891716f4731c54933385835b675c83648d3754897cfab5",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-012.png",
+    "original_png_sha256": "0cec36ad7651ba0d89e6299c061b18046013c25dac48d3741019821707d9007c",
+    "stored_webp": "zh/pages/changed-012.webp",
+    "stored_webp_sha256": "2eefbb8384744887d1294d2068e3773f742f19de7fd9bd49add59f701e8b3565",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "71991cf7ee51c4f4b79c66d34ff86dfd021a89986123d429204e7f4720962193",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-013.png",
+    "original_png_sha256": "bc9f8316264b259672b6744fdfe62fb9e4d1a9a01471e28163583ec3d4bdd56d",
+    "stored_webp": "zh/pages/changed-013.webp",
+    "stored_webp_sha256": "e3de40b75c2bea5cd72e42f22b8244606a81a2a14199883856a596f9e55a08a8",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "9d084b897b5d7712b662466668bb2f3b3f575568029eb46d12e146f041812484",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-014.png",
+    "original_png_sha256": "0a9dc8416cf9c2602027e0c651fca7afbedfd2733d75a6d1aa52c9c7e1956582",
+    "stored_webp": "zh/pages/changed-014.webp",
+    "stored_webp_sha256": "063a66d1cce5dacc6c56c6bb47ea4b254cc0f79c6c2d79d4d2464eeca214ae34",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "61de8cc29f1e4f8ca7aabb35fb543a17c7b6d3ae4ca9ddbf84460fcbf2b8f0e6",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-015.png",
+    "original_png_sha256": "168efa61443e6c9f72c0bf06e7ead4bc89de00484cbd04c0ea9e919e8e9b5833",
+    "stored_webp": "zh/pages/changed-015.webp",
+    "stored_webp_sha256": "c994b6a4d253cd75cba7700e1566a1707e80536c45e9d791f096102567f1b367",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "0a988f6c9593391a1dd34cf198142b9d7aaac7cf833f56116d09b13e23681937",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-016.png",
+    "original_png_sha256": "1e6feb4fb57bbe096ce675eb02f637b8581d0a2f042bf18d1d89b89c15e8257d",
+    "stored_webp": "zh/pages/changed-016.webp",
+    "stored_webp_sha256": "efee82523a7798d861a67aaf7398e9d2f7f779088c216c2537e026074fe78b28",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "29727d3adedc10884ce6d17504a4ea4982e443a67abbfb196c19da8cbfa84d42",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-017.png",
+    "original_png_sha256": "4061ede8723dc43c8ccb760cf5702a340b4d2ebde2506b8c60f3f68ce2be17e5",
+    "stored_webp": "zh/pages/changed-017.webp",
+    "stored_webp_sha256": "b6769bdad9e573827b16e2137770df2e011ea96aed8ae2d6e4b1508c6505398b",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "790afd3a4e9f2cb5dba02240a3ca777432852e6b3855d138b4101d88ce1af341",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-018.png",
+    "original_png_sha256": "029e6feb091dd143de314bacfaaf5d9f68c1c27744934cbc58f89d8106fd7f49",
+    "stored_webp": "zh/pages/changed-018.webp",
+    "stored_webp_sha256": "ea301db8a785fa459542a7dff2125ff5a2f0b26219167efedc50e057323339c8",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "5e417c18d2c642348b7867c08d4d8f3d31cde193112f3d16c022a3837f4681ef",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-019.png",
+    "original_png_sha256": "3d039b8251bbc9a675bc66a791bcdc92b4783d732d7c706353f3ae4e658c1801",
+    "stored_webp": "zh/pages/changed-019.webp",
+    "stored_webp_sha256": "d4a7776a24cf61fce34829f54bc6c4b97d1caca2aa25f202e8fb0f74c4d78cb4",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "edfb9ef4152411698878b5021e4b0b5b6f80ef878a7740cb6df89663466fe919",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-020.png",
+    "original_png_sha256": "93bc88919f0214f67b56b755123579ec64a63a13b63ffbea7c32b7d5d69ef1a5",
+    "stored_webp": "zh/pages/changed-020.webp",
+    "stored_webp_sha256": "c96e5469f3a3609b656869dfba854430d62b22da48b8b3182bb6874c43696731",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "ea51e64869ddfaad32b9231b0ebc83ae830a0c8e0d8962e480284e00f21892d5",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-021.png",
+    "original_png_sha256": "aca5e69d31f7cab17a398c531b06cbf0e2f794542596ab281b15c5d65ce56a18",
+    "stored_webp": "zh/pages/changed-021.webp",
+    "stored_webp_sha256": "60f439d220b225db5978ec5186363fd275dbfd949be51ea9982febcb12361f90",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "63dbd1e0eda328b137adcad1306fdcc13b383d9ef82fa29239c27b84e7de50bb",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-022.png",
+    "original_png_sha256": "32eb98e4c89ffea70e936532534716ca65b959cfe74f8a69e5bc48eb88f77cb2",
+    "stored_webp": "zh/pages/changed-022.webp",
+    "stored_webp_sha256": "a54df11e125e9534684e5a01659d7d3b526d81a1fd7f411b8ade158bd1ffba2a",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "723ff45d144fe7b55a25631c3a901af3ec6b8cea2cd00975aa13f4d4ae91513a",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-023.png",
+    "original_png_sha256": "facfda84a9a4feb1c3560fca8cbbea7de92f2c341bfd7c57abb080628f5fd4a2",
+    "stored_webp": "zh/pages/changed-023.webp",
+    "stored_webp_sha256": "5510e98de7b4f5d461ef4e12a3732d6cd1e159229406a27d22140233978a0a0a",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "2b2c260b08c3aa1acc1ca750267eb8ad0f7869481423e26f86df82ae09da41e5",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  },
+  {
+    "original_png": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/changed-024.png",
+    "original_png_sha256": "73d1c1ea3c564b73e48849f497c727c59124ee1142b766f65ccef8dad311505e",
+    "stored_webp": "zh/pages/changed-024.webp",
+    "stored_webp_sha256": "5f7f831fda18609fd886dc8a42b95d76457aa609f443ec2f38966cf1e99fe381",
+    "dimensions": [
+      1708,
+      2080
+    ],
+    "rgb_pixel_sha256": "b4648aac5eb588c0d13ecfcd2b8e2b0250621656cbee42f4466560433dbded0e",
+    "exact_rgb_equality_verified": true,
+    "original_runtime_retained": true
+  }
+]

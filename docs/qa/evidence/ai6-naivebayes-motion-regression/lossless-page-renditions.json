@@ -1,0 +1,530 @@
+{
+  "created_utc": "2026-11-01T08:04:33.574583+00:00",
+  "initial_packaging_bound_failure": {
+    "payload_bytes": 17621398,
+    "limit_bytes": 12582912,
+    "no_manifest_created": true
+  },
+  "converted_duplicate_pages": 47,
+  "all_original_runtime_pngs_preserved": true,
+  "only_own_uncompleted_packet_duplicate_pngs_removed_after_exactproof": true,
+  "proofs": [
+    {
+      "original_png_sha256": "50b077ecc7eb3c2fdfc5c331f54c2167eeb4a8aba0766fa4e621a318f6fb503a",
+      "rendition_sha256": "c4457a24e16c9b525114aa5d2d5fb78620f7680a392a08c3285734a2a75ebee9",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "4226853b23519b698cbd7931bd17a02934f3ca89bc42ac0f21988e35dc353901",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-001.png"
+    },
+    {
+      "original_png_sha256": "b09a16942bd7c88335176c579825bbaadb3770075868452756aad051bc260e2b",
+      "rendition_sha256": "eeec049e6487e7ec0abec75d8f6f5da143fbb513795edf05e1542e6d1f9be672",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "9c625f7afe0b173ff1938cd18f4928db8d8ded70dfe47c02dec7de44a123c052",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-002.png"
+    },
+    {
+      "original_png_sha256": "e8c70a640d5210fffb0b9cae303523f42269ab3859026b9d0278f143283e3b8f",
+      "rendition_sha256": "5827e01966e7312713b7b0f8c22aa3d7d0968d4d26fac7355b6486e5eb64d9b1",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "b8840a3740a39023e107af7ceb986fe51541d7d12ddd9518a020a0fab15d6972",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-003.png"
+    },
+    {
+      "original_png_sha256": "bbbb72fa27e696af1f509882faabe9f64fdc51c62c9152a530127c4b4aaa7586",
+      "rendition_sha256": "94f8c200194fd64684e8cdfe54c31042a52418425ffe3adf3c5ff047c5525c04",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "71f585292bac678674c39de7eeda293dd43dac7d120bcc913f09646d15ab3f86",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-004.png"
+    },
+    {
+      "original_png_sha256": "3179309de795cd353897a7bed20a3ee7bd259248d902cc321a5f0944654d240f",
+      "rendition_sha256": "cd0a317e0f4c6b4a886bc531f129b6f3d88c5cea21266ef8231f5a62a6115e15",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "912467b79a0ae7c4e05b4748d35a97f2bba401ec01cfdecafa16d607b15ecc0b",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-005.png"
+    },
+    {
+      "original_png_sha256": "3638a26dcda82c96dc29c71391bf8f2d816a3e41c3f9d5dc7d5f7df43b8d7aea",
+      "rendition_sha256": "b2253eb2a34d209cef4c0d38c027a7b3dfe845d819f5daff8a3e408702f3f7e7",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "2b561b9a5722576a3de2af2a4453f86780d8807ffb6d9c30cc16049c16e9f8ac",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-006.png"
+    },
+    {
+      "original_png_sha256": "06ca095b6c957a05ac845aae1163fd20161811924971a5283bd716e01219a81f",
+      "rendition_sha256": "4d5c896bfb2b99dcc577f5e223f86c599f40aa5de9898e102ae836c9b068f3dc",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "469a60b7e904d0fe7d4db23c39ba3c430f2d4b1676cde50166eb2b48756cb8d7",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-007.png"
+    },
+    {
+      "original_png_sha256": "9e6a99ecd4676de72ed0c66e653c99751b8040194d5a964d205b29acc4bfa2c8",
+      "rendition_sha256": "511a5984d69c29a0fc4d61e7988e613303a36e76c1cae4b6967087fdcc8d9082",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "63c07a3e17b302e59cc69eb09571778c482e2ffbefbd8a28e5123ecb417389bf",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-008.png"
+    },
+    {
+      "original_png_sha256": "331300650d669bb6531f1540260ee00643b47b3a2784a39145d117fd7aeafe68",
+      "rendition_sha256": "0abdbfdfbfc084188c5ec2fa0e113f03c184a4eecc35a30b7b8afa28b734458e",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "8f1ff00565b2c8dd3e9cabcb6bcbabe223af575a3da326737909d8659abb92fc",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-009.png"
+    },
+    {
+      "original_png_sha256": "5ea0b45a5885fcadaf2429100864d694391c996ed0b15c5ac5fa91f8261392b0",
+      "rendition_sha256": "d0e389f0b7e6299356454615a05784456ea75dda299692a71eef2c912d6423e1",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "bbd26c7d59bc61c74b04b6daa9a8293ae82f382a61719b658a919a464e3ae4a7",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-010.png"
+    },
+    {
+      "original_png_sha256": "391ddded3d2264c336f464df966b64cb25f347b037f3ef5a1478e6b862a3fc7b",
+      "rendition_sha256": "5bc8667bb04dfab71f7d00d95594f45d51a3040eb844b766be61fc13f688babc",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "c57ea60c5808a805117f5440e840c3cd0b5448c4609f89cbab95b7ab2edbf7dd",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-011.png"
+    },
+    {
+      "original_png_sha256": "e208010f551168d157757f2fb45687232e7e20ba260959d49fb1521d939b8433",
+      "rendition_sha256": "bec61398867afb7a2dfc1d04f64d06bf770a0fc2eda6a4337b070eb51b89c037",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "867e773a493d5f83be8951d5f3cc0a2494f91382cb9d6e250a87f4b3401e095f",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-012.png"
+    },
+    {
+      "original_png_sha256": "fea7d54c420b41414b855dd7b816bea1f2c9010658ce510c9f1209aa43a914fb",
+      "rendition_sha256": "37040a8a9fcc88dcca04e94dd0a498d8a8f24dc1265906b4aa75d0f88144ddca",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "7542945862678bd2a29c8755317a0d0ea3c7fc01bb6ef71b8ccec05dfe6cfbad",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-013.png"
+    },
+    {
+      "original_png_sha256": "3ff75ef8b821bc964997eadf40bf56039ded9e73353fa8e5d4424e043eb20278",
+      "rendition_sha256": "d0a807f9aa20396c726fe6796acf55b9c8afb634ffb63b8c58f59b532ba05ba2",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "44906929437c5734fee83586870110ad757f67ff59cf7899d3ce9b7a8b33cbf8",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-014.png"
+    },
+    {
+      "original_png_sha256": "0ed4f1e90869e3df9a3795d11e88666cab2f61f72b7b631c19f63a0454ae953b",
+      "rendition_sha256": "dd4a5c20f63ef25b619f38b0b8b02243b53d0bdc90168f0f6ab569dcb6ce2ad0",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "3cd485e8d67d0441990de577e7319276b2e92b931f7a25b8b3d785fc94b467f6",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-015.png"
+    },
+    {
+      "original_png_sha256": "da0ef0e072a2c3109b746fd6115409fad7573d1c4ac7b448ff0ac39286e60b7e",
+      "rendition_sha256": "58674baeed4042e510e975793ffd9ce47a0a61f08687138afa6194f590599552",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "410e33be6a55208cacd2e83afbb71115109a524a90f6a6fef1e23468cafef00c",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-016.png"
+    },
+    {
+      "original_png_sha256": "1ee7df7300501efd61799ab84fa098747752b895491e8112b2aab18bac6985c8",
+      "rendition_sha256": "659c483d040ab2b8611d6b0eb4f3c828e470c452888cf7c8954fc432c6612664",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "bc96a0af8b3bb7c71feb2a7500e49b4e340df6e0d8e7aa1a19de4ea20891f7a7",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-017.png"
+    },
+    {
+      "original_png_sha256": "b519a2237f85c56dcf70f1ca3309ad3d51d034e5f04e57541ce7b3b1455f8fc8",
+      "rendition_sha256": "9a4ca688ff60e43f6f2f294c020176fc5dd8d0ff42556350fb90aada5827120c",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "7dc429e1cd98465b5be5adde66c3af7129e887ab7a4697a34fda3ade9ccadde8",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-018.png"
+    },
+    {
+      "original_png_sha256": "47489890ca9de2b445b91c6f05e723e13862a4dd549f3d24994a6aa5134da37b",
+      "rendition_sha256": "0938d482ba370d5a61b38ad11097f9a19c0f902e5b27397c3c12d09785b7fb94",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "9101565bd7a7842e5b7d62f7bf857487dd60703f69620247dbb6ad947a42b39c",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-019.png"
+    },
+    {
+      "original_png_sha256": "6a2e1632880d471e58a7f63b63961bc5fabd6192b9ad0892f0318fbb625a75c0",
+      "rendition_sha256": "b7f742b5d42779abc60519e90c2162dcd04aef82adb8399f77cf2dd29635e95b",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "8667fe849a54cd0e263321b46231413261d4f4f1c7345161d074523962e7c1ff",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-020.png"
+    },
+    {
+      "original_png_sha256": "c046230323b9e45ee42724dbe9e785ada85ab89bdb80a8ed3703ac2992c5d886",
+      "rendition_sha256": "360bd2296f714d7aae4f67f515507f8465990de863efece7f7085fcbfafb2b98",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "3d4279eb4dcd894a60391ccdcbe0b734824a01a09c8ce7f7764d3b3e8c4ae510",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-021.png"
+    },
+    {
+      "original_png_sha256": "2fe69c012dc3e43130c5dcd5ca84ed8dacbbf052dcc2f9ca77aa8ca9d21c35d6",
+      "rendition_sha256": "22043488fccdcd3e41a13f52782f78ca7311d5bd6a93ee5728105abd91a75dba",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "429892c26da3f44492e047d14c3218029dcfc6494e0e77a199275c0414d1bbba",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-022.png"
+    },
+    {
+      "original_png_sha256": "a83b890951166908070a464a3976e18edfe6d6a818e2d892137c22341134811b",
+      "rendition_sha256": "3b39d332ad6b108bee285fbb33a86ab5cf4113d85b0fd5e9196f1d5459af93cd",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "aa53fb37bd501402cd879e6247381710ffaf23616c314a0c07e1061065d92946",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-023.png"
+    },
+    {
+      "original_png_sha256": "8ac4b24540a1fcc721a3a8b27fd94fda7551979d9f34fcab33b2aa6f1b97c10b",
+      "rendition_sha256": "bcf970b5f12ea29c38f4ebe17e5f0ba599e55769b060751ef56e2d435a860162",
+      "dimensions": [
+        1280,
+        1164
+      ],
+      "decoded_RGB_sha256": "d1bd4afe6a1dd94aeb25dc6b08e5e4afeab4fcbf330e9f0cf6b96f054856c5e2",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-024.png"
+    },
+    {
+      "original_png_sha256": "93d8de32c9a94968ec49710bbefc63919e66ffacd8ba17bca3e64574af689b28",
+      "rendition_sha256": "59ca5abc7364dcb666a398eb057c6a71a5f3010d234a865366ba94167b9b8319",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "eef564ff2a22fa45a6c3fb93b8c8009b8b229f673c758dd40e5d29b88c52fe4f",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-001.png"
+    },
+    {
+      "original_png_sha256": "e80d8cb6e1f5286ff0b4863ab5425a439ea95f77c574bb4056208e61ab57b008",
+      "rendition_sha256": "ffe2374f9d3a0059bd84aa90d1cf7f3f88fc2ae4c552dc0b89d9d611acbeca30",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "a17de769ac42f4067f1f1048520f95da45922857482b95ff0ed6b57a9bd2faef",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-002.png"
+    },
+    {
+      "original_png_sha256": "ec0f455ce06edfa69bd4869b3b2c6587637b75a04f1e4a0cde3b628e15aa6db5",
+      "rendition_sha256": "5f9904781f439902ce4918176f1be2cd8363bbbd99108cbb795eadbac8d5e2b9",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "eae1b4755e488845f065a235bd6753367f09af37b62f747678151aa68e25c643",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-003.png"
+    },
+    {
+      "original_png_sha256": "bdca4f802bc9e7a8402e92d547ab9a2b7dbe0b874ad2af807292e84b7d9871a4",
+      "rendition_sha256": "be07fe55d6221da4834d587bc6bb397c8ce872b62686add834c50bdfcf7dbe4e",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "93ecca475cef3d8828d5f02b6e088e08f198a8bb9a7c8eb02c0e034801a55bca",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-004.png"
+    },
+    {
+      "original_png_sha256": "94598ab4a2f3639656f93f4c3b2f33fd22e73092c95deae1e434b8db9882d5d5",
+      "rendition_sha256": "c8896b54fd639c79c4819abc0d95bf29f94313a3c79e329710589c96719cf339",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "ad6404ebe74febcc1f852990137e4df801f31588f7cab6ac09483363f3491797",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-005.png"
+    },
+    {
+      "original_png_sha256": "e454bcf250a1e65d51bac50d1a4eee4050f38a0e911d377b921016ccfc28edbd",
+      "rendition_sha256": "73b1f4c7736c0ace7e7720ea5775c7f8cd99f1ea1401fbe1e3230ba58c39e3cc",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "24133ceecd85d5e72567568a28a0275bb06768d5992ccdf1ed2eca834bdb477d",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-006.png"
+    },
+    {
+      "original_png_sha256": "3a72905ae50070a47e88a8a1efdb9ba0f646278f8935bdcc7f39f65ceee6129b",
+      "rendition_sha256": "c60ad278f50a96e1b18d16b0ed2d034b1a9ac2a3583f64f2509f3421acfc9100",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "e38b0148d1847c150f5678caaa42d48934e5ed6df295febfc3189d31ebdec088",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-007.png"
+    },
+    {
+      "original_png_sha256": "29459c7daa745550239e745bc7ab7a65a2bbf271f33f08fdd6cf2e2130fd7f0b",
+      "rendition_sha256": "02349169bb0fc64331b20ba6d177ebb9e23f466aaf99efbc2ccc11cf9435d74a",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "7c2bc4b0ea1e4844c54d10fee9f6ec5fdb9f70d12c8177d24ccc10dc08754d01",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-008.png"
+    },
+    {
+      "original_png_sha256": "1b904c5a87c9cf15ccd0496f8775edd6a338532e51b7925ec7610742682a4ad4",
+      "rendition_sha256": "299db8231f3f843670cc37b1f3a0cbd1c6d1a118ff1edcabf48764f222579a5c",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "aff9031c2af161de996fcb3ad70d9da65a022fc40de14da2e364ddaf45418394",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-009.png"
+    },
+    {
+      "original_png_sha256": "8c57acd920955cbd7361969ddaa92ea31f1ff2072878a1b2ca5a8543648b430a",
+      "rendition_sha256": "808046ddd0a1a0dce9df5f60676be7280fc5a4ba6932c9131b06e74b5a87c9d3",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "a037f1bb2a2d5cf284a2ff50af188e75ad9cf38dda960290d455ad1f4f7377c0",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-010.png"
+    },
+    {
+      "original_png_sha256": "84a22f979e771f91827d3e8544ebe01453fe3fb96b9b1f1bfb68664457430a71",
+      "rendition_sha256": "4667ef06ebc2d768d04da9a6175856bd8f5d76c9be9af437886d655b966944e4",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "806ee6f23df1ba5402fcee7b8530569828ac46eac3b3785536bce185aba7222b",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-011.png"
+    },
+    {
+      "original_png_sha256": "b25382877181bde6435bd8a570cfc9fc55ff95009cdb8df68dfd816596e6833b",
+      "rendition_sha256": "1d29b6e8f8af0537131623d470d77c77e0c724c4505b7418f2d4ea89f8110928",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "6cd2fdca3480ed32b9451a45a260d0c277f5d88e8d52a92b47211a181fdb31a9",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-012.png"
+    },
+    {
+      "original_png_sha256": "9aa6ee6921f76a09bb8e463c97fead43e08aa1bb5a5a0579b24de699cf9a18d1",
+      "rendition_sha256": "b2ca0149c435a92a6d71c24f30056ddc45efa05d9654c1174f10294d612bc5f6",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "d229b4fb04ff7258932e8b0ac6722afc1359300d72022152996d2f805f0b4a0e",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-013.png"
+    },
+    {
+      "original_png_sha256": "a3eef75d5dadd72462ff994a7e0e15acbf2e1a46c2e98f215128b726685fde2f",
+      "rendition_sha256": "171dc82a77c826f37669f8737477dcf3e48ee110612a9866c36b5affbe156017",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "5662514edb3765d498c6743174a4645e21156503dddbfbe5e576ef6ff3e3d3c0",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-014.png"
+    },
+    {
+      "original_png_sha256": "248c80d292dd72cadc3c8beedaa7843b9657b840a30de80677044630f19ac598",
+      "rendition_sha256": "0f6d9ee68261aa966656aef38d35330b7a45d1a19ecea1d91c852b31e943548a",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "c33e8b175497008014b11d98a7ee9513e27711f001bb79030e4faa6d33e52908",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-015.png"
+    },
+    {
+      "original_png_sha256": "6d4208de72ab55a3a758a410908306f09011e7883aa182c9ddf33553e15da653",
+      "rendition_sha256": "0c1b2e579d81d25635836a019be7e4064f73edc3ec5331fe4465a14f4c919c38",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "3f9d5082e4b10b32c0b5b37f0caa4a893a04591d0936a95060ad771949b9ee26",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-016.png"
+    },
+    {
+      "original_png_sha256": "6e45feeb0d77c069cf3a6a083f66670da4f20320887f8eb811a489c55e17caa7",
+      "rendition_sha256": "da26abdf964ac00d1a67d2de4374ac6b4f22c022ef3ed96c81a9f92208536c39",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "b299db6ffc2d5ee7d5c82953e023ac7f63ee41577fd33b5dbec2b9a71649f31d",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-017.png"
+    },
+    {
+      "original_png_sha256": "ff676754b50bde9f85818429a06134ffd9a24603c1a86e3fdf73f24bc21cc0e6",
+      "rendition_sha256": "f70f91ea387cb8e019266224d159bba24639a85a1288ab0f24a529e6d3de1f6e",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "9102c2ee4217eb2390b70691bef49e9dde7870452118cd16e4566735645317d4",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-018.png"
+    },
+    {
+      "original_png_sha256": "c56e9ef2992d83ce0f160d3855d7b859078063c27b590cca8e6e9573e3814b74",
+      "rendition_sha256": "25abe8b27cf07ed0606f65798964d1f850e31310ffa86bdcb6d8a89a2a2bb003",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "41ae97c3357c2fe6cbde5958ea3524a92496c70fcc752de98fabf841bf374c48",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-019.png"
+    },
+    {
+      "original_png_sha256": "a992dceb350ee19090f8b84343a61e7f05bea9e3d4a10ecac6ac2b1f22ff6203",
+      "rendition_sha256": "31c88059be6bdff3062c355c94626db530f3ae70b24fba44ee6fe5ae46254b86",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "a365629e1371314274d194f708e30b4f963c976da6a2a35992a8f80323da8ea6",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-020.png"
+    },
+    {
+      "original_png_sha256": "37220677cb275cc879c38edaaa14eec69a120e0db6f5c60f3c103d8799679fa4",
+      "rendition_sha256": "74fed09cd963ff0bb03652738fbb57df345b28ce383f97b4cc2068ec8bb16a08",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "962d6a13d20909909a50c92dee909ee700a9f65427819596cd3e34f88d8142f5",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-021.png"
+    },
+    {
+      "original_png_sha256": "0d271b6ce74347b0f8750dc995950e7c42ba044f11c98c95edcabc8904f49628",
+      "rendition_sha256": "2913d3f9bef9e63051a6a0cf0c46fc6032fb2d18c2ebbaa9d8359b319e6bc7b8",
+      "dimensions": [
+        1280,
+        1552
+      ],
+      "decoded_RGB_sha256": "aeff78d67d66fcf4d08d2b0e81fda1eabab3187d27df4e47d00b99aec3d23258",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-022.png"
+    },
+    {
+      "original_png_sha256": "532a5d7e518ce51ab209d063f70b03caeb82e8ec6d2981ce3168a0187ac3123a",
+      "rendition_sha256": "0831c753fb8a6c8ffa7f6e83b5751b7ee1ec90e48185891e15bd72e85dbcfa95",
+      "dimensions": [
+        1280,
+        388
+      ],
+      "decoded_RGB_sha256": "e019f5c2a32183d4c6fecb553b0aa8d6bb059c85bdcdbaa70e792ed5f4eeabbf",
+      "pixel_bytes_equal": true,
+      "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-023.png"
+    }
+  ]
+}

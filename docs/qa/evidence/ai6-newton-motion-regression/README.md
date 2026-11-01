@@ -1,0 +1,11 @@
+# Newton bilingual selected-motion regression
+
+All four fresh captures passed with zero raw warnings. This closes the four documented Newton repairs within the selected-image and silent-sidecar scope: independent IRLS/digit proof appends, explicit penalized 70-rate objective (mean cross-entropy plus λ‖w‖²/2 with λ=0.01), and the 71×71 system including an unpenalized intercept. The historical before/source packet remains unchanged at [../ai6-newton-motion-repair](../ai6-newton-motion-repair/).
+
+EN: 572 selected / 2343 decoded, 1771 unselected; 188 new unique images actually viewed on all 24 native-scale chronological pages, 350 exact previously reviewed PNG times and 34 exact new duplicates. ZH: 578 selected / 2567 decoded, 1989 unselected; 192 new unique images on all 24 pages, 352 exact prior times and 34 exact new duplicates. Maximum selected gap is 1 second; adaptive motion density remains 0.25 seconds. Four repaired proof windows per language additionally retain every encoded frame (176 EN / 174 ZH), including duplicates mapped to actual views. Ten individual original854×480 follow-ups were viewed. All 30 endpoints are covered by 28 exact prior PNGs and two actual changed-image views.
+
+All 48 actual reviewed pages are stored losslessly as WebP. The codec map records original PNG and stored WebP hashes, dimensions and exact RGB pixel equality. Original PNGs remain in runtime; inheritance used full original PNG SHA, never compressed-page or low-resolution similarity. Complete time maps, frame hashes, gaps, source/input snapshots, raw records and review observations are compressed without content edits.
+
+The changed race narration intentionally increases silent preview duration: EN144.733333→156.2 seconds, ZH155.666667→171.133333 seconds. Actual translated sidecar text, placeholder resolution, bookmark ordering and finite word bounds were checked. No old-duration equivalence is claimed. Sidecar checks do not establish real speech, listening or audiovisual synchronization.
+
+Continuous perceptual playback, narration listening, real audio synchronization and final-resolution/full-quality motion remain unverified. This packet contains no movies, model payloads or numerical recomputation. Exact source/table/movie/tool hashes and unchanged raw statuses are in summary and per-language records.

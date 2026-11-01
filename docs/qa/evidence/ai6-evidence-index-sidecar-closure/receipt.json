@@ -1,0 +1,86 @@
+{
+  "observed_utc": "2026-11-01T08:23:15.194775+00:00",
+  "reason": "Repository media ignore excluded nested compressed narration and subtitle sidecars. Only these exact small evidence files were force-added; no movie/audio payload or private transfer data.",
+  "files": [
+    {
+      "path": "docs/qa/evidence/ai6-logistic-motion-regression/receipts/current/06-Logistic/en/motion/completed/media/videos/480p15/Logistic.narration.json.gz",
+      "bytes": 7313,
+      "sha256": "60e64abfe8b0f198a0bb1b8e4506c84219e64dc0c00938ce7be8260fa7745495"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-logistic-motion-regression/receipts/current/06-Logistic/en/motion/completed/media/videos/480p15/Logistic.srt.gz",
+      "bytes": 1673,
+      "sha256": "8409ab01cf397bca4709c86fe55a6d14256c3559603d9ef1648a4035cf6b72fc"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-logistic-motion-regression/receipts/current/06-Logistic/en/motion/prior/media/videos/480p15/Logistic.narration.json.gz",
+      "bytes": 7313,
+      "sha256": "60e64abfe8b0f198a0bb1b8e4506c84219e64dc0c00938ce7be8260fa7745495"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-logistic-motion-regression/receipts/current/06-Logistic/en/motion/prior/media/videos/480p15/Logistic.srt.gz",
+      "bytes": 1673,
+      "sha256": "8409ab01cf397bca4709c86fe55a6d14256c3559603d9ef1648a4035cf6b72fc"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-logistic-motion-regression/receipts/current/06-Logistic/zh/motion/completed/media/videos/480p15/Logistic.narration.json.gz",
+      "bytes": 13620,
+      "sha256": "99a27da43c461b83e03dd6f75a7e390e7245af05a9267f306ed19a7082276707"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-logistic-motion-regression/receipts/current/06-Logistic/zh/motion/completed/media/videos/480p15/Logistic.srt.gz",
+      "bytes": 1846,
+      "sha256": "f0367a1415816f419b0202ddf0c433711d5fca38ceb610483d643da408a062d3"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-logistic-motion-regression/receipts/current/06-Logistic/zh/motion/prior/media/videos/480p15/Logistic.narration.json.gz",
+      "bytes": 13620,
+      "sha256": "99a27da43c461b83e03dd6f75a7e390e7245af05a9267f306ed19a7082276707"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-logistic-motion-regression/receipts/current/06-Logistic/zh/motion/prior/media/videos/480p15/Logistic.srt.gz",
+      "bytes": 1846,
+      "sha256": "f0367a1415816f419b0202ddf0c433711d5fca38ceb610483d643da408a062d3"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-naivebayes-motion-regression/receipts/current/08-NaiveBayes/en/motion/completed/media/videos/480p15/NaiveBayes.narration.json.gz",
+      "bytes": 6898,
+      "sha256": "1ac01eaeb9dc4330248f658c5a99628ab0604ff09113ee63065e3737d9be6e70"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-naivebayes-motion-regression/receipts/current/08-NaiveBayes/en/motion/completed/media/videos/480p15/NaiveBayes.srt.gz",
+      "bytes": 1620,
+      "sha256": "532433fc525a93aea04677bf7ad732b8e5cd971a024cae254e4d1794023ae1ab"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-naivebayes-motion-regression/receipts/current/08-NaiveBayes/en/motion/prior/media/videos/480p15/NaiveBayes.narration.json.gz",
+      "bytes": 6898,
+      "sha256": "1ac01eaeb9dc4330248f658c5a99628ab0604ff09113ee63065e3737d9be6e70"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-naivebayes-motion-regression/receipts/current/08-NaiveBayes/en/motion/prior/media/videos/480p15/NaiveBayes.srt.gz",
+      "bytes": 1620,
+      "sha256": "532433fc525a93aea04677bf7ad732b8e5cd971a024cae254e4d1794023ae1ab"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-naivebayes-motion-regression/receipts/current/08-NaiveBayes/zh/motion/completed/media/videos/480p15/NaiveBayes.narration.json.gz",
+      "bytes": 12565,
+      "sha256": "419d22c60acd11062ed477cd6b75b376d32e053112fe6958208d91658698646c"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-naivebayes-motion-regression/receipts/current/08-NaiveBayes/zh/motion/completed/media/videos/480p15/NaiveBayes.srt.gz",
+      "bytes": 1793,
+      "sha256": "d15ac47ae63ecf93d86b9c56212f8983ef219395ba4f258f6adf0609a29cf121"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-naivebayes-motion-regression/receipts/current/08-NaiveBayes/zh/motion/prior/media/videos/480p15/NaiveBayes.narration.json.gz",
+      "bytes": 12565,
+      "sha256": "419d22c60acd11062ed477cd6b75b376d32e053112fe6958208d91658698646c"
+    },
+    {
+      "path": "docs/qa/evidence/ai6-naivebayes-motion-regression/receipts/current/08-NaiveBayes/zh/motion/prior/media/videos/480p15/NaiveBayes.srt.gz",
+      "bytes": 1793,
+      "sha256": "d15ac47ae63ecf93d86b9c56212f8983ef219395ba4f258f6adf0609a29cf121"
+    }
+  ]
+}

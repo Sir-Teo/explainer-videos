@@ -1,0 +1,650 @@
+[
+  {
+    "stored": "en/regression-review.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/regression-review.json",
+    "source_sha256": "8f2b93b180f60560816f122ed7565887c2e80fec74e8d93bd7747dcdc081a4d7",
+    "stored_sha256": "bae6be8947c40669e4dac68731fac28ee71fe61c9ca0a9318b59d231c9603d81",
+    "encoding": "gzip",
+    "source_bytes": 519250,
+    "stored_bytes": 47351
+  },
+  {
+    "stored": "en/regression-plan.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/regression-plan.json",
+    "source_sha256": "1e673a2c1876f988447b67d6d16305c0c0b07cd04afcde8b613e116e853423e4",
+    "stored_sha256": "4e574327e698e3fd58e9e80c65da8e4f2a7625d8b024ed7cf9dc35928ab004d1",
+    "encoding": "gzip",
+    "source_bytes": 436931,
+    "stored_bytes": 41540
+  },
+  {
+    "stored": "en/plan.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/plan.json",
+    "source_sha256": "3f40235daae380cb199a1d2616730c8a705bbcd4f87a8d42189e5d2d6e2bd8fa",
+    "stored_sha256": "c04a28842900dcafe3633e23a20c67e440d1c0496ceb36b7d5e187be9a075a44",
+    "encoding": "gzip",
+    "source_bytes": 245979,
+    "stored_bytes": 29197
+  },
+  {
+    "stored": "en/review-progress.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/review-progress.json",
+    "source_sha256": "fbc6e103092f5a4590c454ef5efea62f17b9a419d078e1238440fd14f582c52f",
+    "stored_sha256": "370688377b6f1ce7377aa8107d124fab09ad439f3e41280d3c9f5b44972b5ff0",
+    "encoding": "gzip",
+    "source_bytes": 27835,
+    "stored_bytes": 4257
+  },
+  {
+    "stored": "en/freeze.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/freeze.json",
+    "source_sha256": "b5661122f92d622173f16d0e041136e3c0c89f6e47314c89fd1587c3107c5e11",
+    "stored_sha256": "a11477dfed6ab54798ed930a804566df6d656aa3ab963557da83a7f0dd74e8c3",
+    "encoding": "gzip",
+    "source_bytes": 3759,
+    "stored_bytes": 1410
+  },
+  {
+    "stored": "en/owner-copy-manifest.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/owner-copy-manifest.json",
+    "source_sha256": "8105ad2a236b764c92202e3ed57789411517d3bba3ecd7628e1f62750db30454",
+    "stored_sha256": "5c0a9fec8c480cb9b1169aeffdd4119c5f36c2021a6483d86133da0ecfce9234",
+    "encoding": "gzip",
+    "source_bytes": 7585,
+    "stored_bytes": 1616
+  },
+  {
+    "stored": "en/render-record.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/render-record.json",
+    "source_sha256": "6adddb3847a17ea03f28b5bf00dcfe1dd44f74d306a898f7d98f2fd97f6c6ea6",
+    "stored_sha256": "8f47d46669cf1643e1ee07586bebbf071e2f29a304ce3a1308938b9f11a9ccfb",
+    "encoding": "gzip",
+    "source_bytes": 63125,
+    "stored_bytes": 11923
+  },
+  {
+    "stored": "en/audit-command.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/audit-command.json",
+    "source_sha256": "f3b389cfa7a9720ad9cbd40921dc28bc6ad316e85570e7f197bb95be065d4c79",
+    "stored_sha256": "a6002567a40941e568c0aac126efa00a565587260f9f9c6616648542b6f794d7",
+    "encoding": "gzip",
+    "source_bytes": 678,
+    "stored_bytes": 390
+  },
+  {
+    "stored": "en/source-before.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/source-before.json.gz",
+    "source_sha256": "278659fb5e4bd83834169fced43a5d207e7007e1357290723c25cc34e611a0d0",
+    "stored_sha256": "278659fb5e4bd83834169fced43a5d207e7007e1357290723c25cc34e611a0d0",
+    "encoding": "identity",
+    "source_bytes": 5741,
+    "stored_bytes": 5741
+  },
+  {
+    "stored": "en/source-after.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/source-after.json.gz",
+    "source_sha256": "09d85ca2515392f637f79817a3db1d390cc17f91cbc07f828984ad6b4e5287b7",
+    "stored_sha256": "09d85ca2515392f637f79817a3db1d390cc17f91cbc07f828984ad6b4e5287b7",
+    "encoding": "identity",
+    "source_bytes": 5740,
+    "stored_bytes": 5740
+  },
+  {
+    "stored": "en/data-before.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/data-before.json.gz",
+    "source_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+    "encoding": "identity",
+    "source_bytes": 4469,
+    "stored_bytes": 4469
+  },
+  {
+    "stored": "en/data-after.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/data-after.json.gz",
+    "source_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+    "encoding": "identity",
+    "source_bytes": 4469,
+    "stored_bytes": 4469
+  },
+  {
+    "stored": "en/command.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/command.json.gz",
+    "source_sha256": "e90acb01e7540b7f4946e55df28b868172d98a8dd6e049b1a8703e4995f554b4",
+    "stored_sha256": "e90acb01e7540b7f4946e55df28b868172d98a8dd6e049b1a8703e4995f554b4",
+    "encoding": "identity",
+    "source_bytes": 432,
+    "stored_bytes": 432
+  },
+  {
+    "stored": "en/receipt.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/receipt.json.gz",
+    "source_sha256": "650154768888745002ffe6ace2d6a88340c1960c29f328482e4319163bd01690",
+    "stored_sha256": "650154768888745002ffe6ace2d6a88340c1960c29f328482e4319163bd01690",
+    "encoding": "identity",
+    "source_bytes": 1889,
+    "stored_bytes": 1889
+  },
+  {
+    "stored": "en/audit.log",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/audit.log",
+    "source_sha256": "525572dd9583d13b4bb776938796056121c85516bd0b25d5678027443a44466b",
+    "stored_sha256": "525572dd9583d13b4bb776938796056121c85516bd0b25d5678027443a44466b",
+    "encoding": "identity",
+    "source_bytes": 96,
+    "stored_bytes": 96
+  },
+  {
+    "stored": "en/temporal-audit.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/audit/result.json",
+    "source_sha256": "859bf2ba6adeddf194b0114f379a091d370d7b42e46cb47a04ffb6b7b8fa541d",
+    "stored_sha256": "3149808dc9252f8601d05e9c4d07009506a4c756f096b65788cc2882618bfb34",
+    "encoding": "gzip",
+    "source_bytes": 178414,
+    "stored_bytes": 32781
+  },
+  {
+    "stored": "en/review.md",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/regression-review.md",
+    "source_sha256": "5d330f6b60bc18fb919142ceec98e2bff49dece22d8641bf52d0fc60d366bd6f",
+    "stored_sha256": "5d330f6b60bc18fb919142ceec98e2bff49dece22d8641bf52d0fc60d366bd6f",
+    "encoding": "identity",
+    "source_bytes": 7937,
+    "stored_bytes": 7937
+  },
+  {
+    "stored": "en/native/0000223_000014.866s.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/repair-extra/frames/0000223_000014.866s.png",
+    "source_sha256": "345026a77cdb44f36c1adc7f5a8eb2c44d0eb8e01b8d2962730316798e657321",
+    "stored_sha256": "345026a77cdb44f36c1adc7f5a8eb2c44d0eb8e01b8d2962730316798e657321",
+    "encoding": "identity",
+    "source_bytes": 24084,
+    "stored_bytes": 24084
+  },
+  {
+    "stored": "en/native/0000347_000023.133s.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/repair-extra/frames/0000347_000023.133s.png",
+    "source_sha256": "a330a986b04612986ce6c9baf2dcb3ba7fa4284a0388fe731fbe9bcd0d3be4b0",
+    "stored_sha256": "a330a986b04612986ce6c9baf2dcb3ba7fa4284a0388fe731fbe9bcd0d3be4b0",
+    "encoding": "identity",
+    "source_bytes": 35190,
+    "stored_bytes": 35190
+  },
+  {
+    "stored": "en/native/0000403_000026.866s.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/repair-extra/frames/0000403_000026.866s.png",
+    "source_sha256": "8d266bf8dc1ce6f4ba114f7404f26aed539156a3303d9e02de48065ab45d1364",
+    "stored_sha256": "8d266bf8dc1ce6f4ba114f7404f26aed539156a3303d9e02de48065ab45d1364",
+    "encoding": "identity",
+    "source_bytes": 43921,
+    "stored_bytes": 43921
+  },
+  {
+    "stored": "en/native/0000880_000058.666s.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/audit/frames/0000880_000058.666s.png",
+    "source_sha256": "9e22974ea9c71aefe365581a9663216236617953666236e2aa65ef92aeff0822",
+    "stored_sha256": "9e22974ea9c71aefe365581a9663216236617953666236e2aa65ef92aeff0822",
+    "encoding": "identity",
+    "source_bytes": 54311,
+    "stored_bytes": 54311
+  },
+  {
+    "stored": "en/native/0001564_000104.266s.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/repair-extra/frames/0001564_000104.266s.png",
+    "source_sha256": "99cd4d13f479275af2da82ca1ba648bf7022834fc20d64c152f7e05e5bcfe2d2",
+    "stored_sha256": "99cd4d13f479275af2da82ca1ba648bf7022834fc20d64c152f7e05e5bcfe2d2",
+    "encoding": "identity",
+    "source_bytes": 24291,
+    "stored_bytes": 24291
+  },
+  {
+    "stored": "en/endpoints/plan.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/after-en-endpoints/plan.json",
+    "source_sha256": "1a1821649fff9119435577a780170c7f0639a20d5a254d339847d3505f0a24a9",
+    "stored_sha256": "95a75f445bfcc831b6d968000b3b26e68531d8a184645537275ad99321a1a3a2",
+    "encoding": "gzip",
+    "source_bytes": 48262,
+    "stored_bytes": 5489
+  },
+  {
+    "stored": "en/endpoints/review.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/after-en-endpoints/review.json",
+    "source_sha256": "eb3a046bdb8aded26743b12192cf038f2fdd658541a4e31e9ce56007e182d1fb",
+    "stored_sha256": "2f83b9d642c32d9231f35c4605315d3b208c37a0d9cc4cf7c96805dab5671c97",
+    "encoding": "gzip",
+    "source_bytes": 48629,
+    "stored_bytes": 5692
+  },
+  {
+    "stored": "en/endpoints/changed-001.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/after-en-endpoints/changed-001.png",
+    "source_sha256": "5b0821033ed0c2ae10b98909d1373b19fd3af25e9617f8e72e81ff937c1cb789",
+    "stored_sha256": "5b0821033ed0c2ae10b98909d1373b19fd3af25e9617f8e72e81ff937c1cb789",
+    "encoding": "identity",
+    "source_bytes": 38146,
+    "stored_bytes": 38146
+  },
+  {
+    "stored": "en/endpoints/render-record.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-capture/runs/20261101T075505/07-Newton/en/endpoints/completed/result.json",
+    "source_sha256": "f51da6d96cb4919d6b1ad209a9bbae62a62ac7f0c3a24fd9e8a2061cd3e03dcd",
+    "stored_sha256": "a561181a38664c428581f7e00bb692c28c7fcaa55923956cf28c4b7b4b86e25b",
+    "encoding": "gzip",
+    "source_bytes": 62850,
+    "stored_bytes": 12108
+  },
+  {
+    "stored": "en/endpoints/owner-receipt.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-capture/runs/20261101T075505/07-Newton/en/endpoints/receipt.json",
+    "source_sha256": "dc43749aeec285a973dbcdf09b6782a8e4ed0009e34fdce29410d1095fcb8173",
+    "stored_sha256": "a947a394b91d709118373a4b19ffbd6a16f0138a2c022e99f48c16d0d7ed4e72",
+    "encoding": "gzip",
+    "source_bytes": 6321,
+    "stored_bytes": 1521
+  },
+  {
+    "stored": "en/old_sidecar.json.gz",
+    "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/07-Newton/en/motion/completed/media/videos/480p15/Newton.narration.json",
+    "source_sha256": "6a4e4bb96727fe34d2b59a8888e5cbef3917e308d2e4fc340ee0754bba91db44",
+    "stored_sha256": "049c7f3f7d58960e47e636d4cee3eea28f67d40fb8637cc251fd119d4231cb54",
+    "encoding": "gzip",
+    "source_bytes": 28741,
+    "stored_bytes": 6425
+  },
+  {
+    "stored": "en/new_sidecar.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-capture/runs/20261101T075505/07-Newton/en/motion/completed/media/videos/480p15/Newton.narration.json",
+    "source_sha256": "d9643900ecce88f47976cbd373a8ba8d8c97494e9df86971f70639097b8c731f",
+    "stored_sha256": "70fd7dbddfa7205dd613e032ad0be6eabb66e4bf605a5f96fa1f003080255c74",
+    "encoding": "gzip",
+    "source_bytes": 31157,
+    "stored_bytes": 7108
+  },
+  {
+    "stored": "helpers/qa_motion.py",
+    "source": "/workspace/runtime/ai6-newton-after-review/en-Newton/84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826/qa_motion.py",
+    "source_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+    "stored_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+    "encoding": "identity",
+    "source_bytes": 19437,
+    "stored_bytes": 19437
+  },
+  {
+    "stored": "zh/regression-review.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/regression-review.json",
+    "source_sha256": "ef53e60604ec89ab12e91fd3545517d6eb28f98bdcd9fdd3845e31f5201f349a",
+    "stored_sha256": "dcb5d4563184f2eac80b436502d7fb086a68a22deb021e3aac50db47a8e0d323",
+    "encoding": "gzip",
+    "source_bytes": 523524,
+    "stored_bytes": 47655
+  },
+  {
+    "stored": "zh/regression-plan.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/regression-plan.json",
+    "source_sha256": "35585d5e36e4e5cd0fc727c647cd0493063ca61dffc2a6bce316c35c46f8c12d",
+    "stored_sha256": "24b8da1d961076248770288587e0d0ba89e031df9be82c4dad3a4974fc44e8f6",
+    "encoding": "gzip",
+    "source_bytes": 441707,
+    "stored_bytes": 41741
+  },
+  {
+    "stored": "zh/plan.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/plan.json",
+    "source_sha256": "b758f303a0257b1030f6a68e71f7c68519422a3bae354e399ee210d45970b137",
+    "stored_sha256": "394a1e223fcdc7e2fbb293cd3e5812142fa6e822de258336cdfd8a04293435cd",
+    "encoding": "gzip",
+    "source_bytes": 249079,
+    "stored_bytes": 29098
+  },
+  {
+    "stored": "zh/review-progress.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/review-progress.json",
+    "source_sha256": "23a5674bbe06538ddc6666b06255815a8bb272daa4d431e74b49a0462e5417fd",
+    "stored_sha256": "104f101d68462d36179c5913a9dca4e030060aa50140bfe7facac7ff55897381",
+    "encoding": "gzip",
+    "source_bytes": 26177,
+    "stored_bytes": 4218
+  },
+  {
+    "stored": "zh/freeze.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/freeze.json",
+    "source_sha256": "7b4df6da57ed38627fcc9f9bfb92914f1d9efb7534e2ef34ce83362ac1d3a615",
+    "stored_sha256": "612ebed7a256c275ebd9a3af7934a34bea92f03686fcb6212c293030b7920236",
+    "encoding": "gzip",
+    "source_bytes": 3759,
+    "stored_bytes": 1411
+  },
+  {
+    "stored": "zh/owner-copy-manifest.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/owner-copy-manifest.json",
+    "source_sha256": "f613e87f4d1c549310714053f960d5a1b113452006276ff77d84ed5952651c69",
+    "stored_sha256": "925ab6574c05a3d40677a21df358d37c1d94a1a9401d6baef6fcb50d38149783",
+    "encoding": "gzip",
+    "source_bytes": 8221,
+    "stored_bytes": 1734
+  },
+  {
+    "stored": "zh/render-record.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/render-record.json",
+    "source_sha256": "7f5462669b838ea0a00cc22479f1db4642d140a835e2a404c27bbdfbc7d98617",
+    "stored_sha256": "7823c237c521f15687d37a447a94ede0a8b3e56bfeb302ef25305094b48f9876",
+    "encoding": "gzip",
+    "source_bytes": 85638,
+    "stored_bytes": 18118
+  },
+  {
+    "stored": "zh/audit-command.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/audit-command.json",
+    "source_sha256": "4471dadd83ce3025b0b222a94533e137b290db5fc2a8dbebcfe7dd66cf08ea51",
+    "stored_sha256": "19180d15f330c9a29be676d5ef1764d7b7b1538557a2ae89524f308a648d060b",
+    "encoding": "gzip",
+    "source_bytes": 678,
+    "stored_bytes": 391
+  },
+  {
+    "stored": "zh/source-before.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/source-before.json.gz",
+    "source_sha256": "e8d70c9883111248d2b791235f0eb8b91a09c1547aac8cbd2eb51e62ec38ec2e",
+    "stored_sha256": "e8d70c9883111248d2b791235f0eb8b91a09c1547aac8cbd2eb51e62ec38ec2e",
+    "encoding": "identity",
+    "source_bytes": 5740,
+    "stored_bytes": 5740
+  },
+  {
+    "stored": "zh/source-after.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/source-after.json.gz",
+    "source_sha256": "aa33219c1aa7b308c32ee827bd4c139b2054ded65cf3ceaaadc17a34a2173796",
+    "stored_sha256": "aa33219c1aa7b308c32ee827bd4c139b2054ded65cf3ceaaadc17a34a2173796",
+    "encoding": "identity",
+    "source_bytes": 5740,
+    "stored_bytes": 5740
+  },
+  {
+    "stored": "zh/data-before.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/data-before.json.gz",
+    "source_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+    "encoding": "identity",
+    "source_bytes": 4469,
+    "stored_bytes": 4469
+  },
+  {
+    "stored": "zh/data-after.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/data-after.json.gz",
+    "source_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+    "stored_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0",
+    "encoding": "identity",
+    "source_bytes": 4469,
+    "stored_bytes": 4469
+  },
+  {
+    "stored": "zh/command.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/command.json.gz",
+    "source_sha256": "00c5b1feafe62feceb015bbbb2ee9a5e58cc9c05f822acec43862f7e0befad9d",
+    "stored_sha256": "00c5b1feafe62feceb015bbbb2ee9a5e58cc9c05f822acec43862f7e0befad9d",
+    "encoding": "identity",
+    "source_bytes": 434,
+    "stored_bytes": 434
+  },
+  {
+    "stored": "zh/receipt.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/receipt.json.gz",
+    "source_sha256": "9fd173639bc4edb880aacda1caf740298d4fc03d5b0e7c065a63b2e2a232c052",
+    "stored_sha256": "9fd173639bc4edb880aacda1caf740298d4fc03d5b0e7c065a63b2e2a232c052",
+    "encoding": "identity",
+    "source_bytes": 2005,
+    "stored_bytes": 2005
+  },
+  {
+    "stored": "zh/audit.log",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/audit.log",
+    "source_sha256": "a4b45e2feaca35cf0853bceceb2be2efe8fc44d69b0e83055657db30d0a823a7",
+    "stored_sha256": "a4b45e2feaca35cf0853bceceb2be2efe8fc44d69b0e83055657db30d0a823a7",
+    "encoding": "identity",
+    "source_bytes": 96,
+    "stored_bytes": 96
+  },
+  {
+    "stored": "zh/temporal-audit.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/audit/result.json",
+    "source_sha256": "58209f06f13ae2ddf829d18391177543a37a07582ee663aa0bd91b9f84740429",
+    "stored_sha256": "8e7d855315ab3d9f20076aa8a3fb28b889bf0316eb1a676ae00d2d4cc81d55e5",
+    "encoding": "gzip",
+    "source_bytes": 180167,
+    "stored_bytes": 32552
+  },
+  {
+    "stored": "zh/review.md",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/regression-review.md",
+    "source_sha256": "14045ca5281688bb1c5825b1af5981ae16172fc9392c8dc03b80c0c93af27fa7",
+    "stored_sha256": "14045ca5281688bb1c5825b1af5981ae16172fc9392c8dc03b80c0c93af27fa7",
+    "encoding": "identity",
+    "source_bytes": 6465,
+    "stored_bytes": 6465
+  },
+  {
+    "stored": "zh/native/0000237_000015.800s.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/repair-extra/frames/0000237_000015.800s.png",
+    "source_sha256": "b2d46d3d960b35b15c31ced88c3e1a945234b31bfc3d31746048b9eb72df0c1f",
+    "stored_sha256": "b2d46d3d960b35b15c31ced88c3e1a945234b31bfc3d31746048b9eb72df0c1f",
+    "encoding": "identity",
+    "source_bytes": 22816,
+    "stored_bytes": 22816
+  },
+  {
+    "stored": "zh/native/0000356_000023.733s.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/repair-extra/frames/0000356_000023.733s.png",
+    "source_sha256": "fe86c47d1884836b4314951dbb61f9800ac6c94dbe642bccaa12f268234a850c",
+    "stored_sha256": "fe86c47d1884836b4314951dbb61f9800ac6c94dbe642bccaa12f268234a850c",
+    "encoding": "identity",
+    "source_bytes": 33031,
+    "stored_bytes": 33031
+  },
+  {
+    "stored": "zh/native/0000430_000028.667s.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/repair-extra/frames/0000430_000028.667s.png",
+    "source_sha256": "432ea45d02ee67e8ef88901cb26c6adc5d12db267411c2b7cc1809c3f3f95762",
+    "stored_sha256": "432ea45d02ee67e8ef88901cb26c6adc5d12db267411c2b7cc1809c3f3f95762",
+    "encoding": "identity",
+    "source_bytes": 41385,
+    "stored_bytes": 41385
+  },
+  {
+    "stored": "zh/native/0001687_000112.466s.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/repair-extra/frames/0001687_000112.466s.png",
+    "source_sha256": "f1076e4af9dcfb64f9b5c0db4e10e405a899b8a5debcdc3e6b4b120cb9e2170e",
+    "stored_sha256": "f1076e4af9dcfb64f9b5c0db4e10e405a899b8a5debcdc3e6b4b120cb9e2170e",
+    "encoding": "identity",
+    "source_bytes": 23155,
+    "stored_bytes": 23155
+  },
+  {
+    "stored": "zh/native/0000925_000061.667s.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/zh-Newton/fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e/audit/frames/0000925_000061.667s.png",
+    "source_sha256": "f06c560e2bf5a939c6125182ccca16044da11572befad63b19375ae7306b8094",
+    "stored_sha256": "f06c560e2bf5a939c6125182ccca16044da11572befad63b19375ae7306b8094",
+    "encoding": "identity",
+    "source_bytes": 55004,
+    "stored_bytes": 55004
+  },
+  {
+    "stored": "zh/endpoints/plan.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/after-zh-endpoints/plan.json",
+    "source_sha256": "47d0da87f33712b2ba05e38e3653600302ca27e1235a1f0637c2ac6ed2026826",
+    "stored_sha256": "c544893d9df66a9361c2041a9d7beeb7649dbb0f6423fc694e998dc4ff93d77d",
+    "encoding": "gzip",
+    "source_bytes": 55296,
+    "stored_bytes": 5791
+  },
+  {
+    "stored": "zh/endpoints/review.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-review/after-zh-endpoints/review.json",
+    "source_sha256": "0dba175f2c7038e3675485a320d4c570cfc8e1cc3c6fbfc5e4ed1bf2281f0914",
+    "stored_sha256": "b996248daaecf92fdbde766d70b7f21a69b548120adad8b9128c23114a5c27cc",
+    "encoding": "gzip",
+    "source_bytes": 53999,
+    "stored_bytes": 6093
+  },
+  {
+    "stored": "zh/endpoints/changed-001.png",
+    "source": "/workspace/runtime/ai6-newton-after-review/after-zh-endpoints/changed-001.png",
+    "source_sha256": "a56145d38861cea381f1fee450b5bf83517d689c350a7e28655b8365b19f0f47",
+    "stored_sha256": "a56145d38861cea381f1fee450b5bf83517d689c350a7e28655b8365b19f0f47",
+    "encoding": "identity",
+    "source_bytes": 41555,
+    "stored_bytes": 41555
+  },
+  {
+    "stored": "zh/endpoints/render-record.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-capture/runs/20261101T075505/07-Newton/zh/endpoints/completed/result.json",
+    "source_sha256": "30269a4e5cc8c1d442221dee6ecd8d9f0aab518889d6dfb6b131850cb3e3f673",
+    "stored_sha256": "07a43d504b4e535cf1ec79c94521b08b67dd8c68e1c3eb8207dfc7765d411522",
+    "encoding": "gzip",
+    "source_bytes": 85398,
+    "stored_bytes": 18345
+  },
+  {
+    "stored": "zh/endpoints/owner-receipt.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-capture/runs/20261101T075505/07-Newton/zh/endpoints/receipt.json",
+    "source_sha256": "4b0225a978a2594278427a94f7d6daf4c10f9ad0c291ec260eedfad8159aff29",
+    "stored_sha256": "5bb2b3c062432c950aaafbbb16a02aef9545022f54a3854382877670d070fd79",
+    "encoding": "gzip",
+    "source_bytes": 6977,
+    "stored_bytes": 1633
+  },
+  {
+    "stored": "zh/old_sidecar.json.gz",
+    "source": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/07-Newton/zh/motion/completed/media/videos/480p15/Newton.narration.json",
+    "source_sha256": "0388321355b77e87bf7cc40eddf98788df7532b0b1c276f50ae021976eebcf96",
+    "stored_sha256": "01666f757433492c3a4a647e6c40fcbad2a76b56bd55ab1ba1b87d0b37e9e294",
+    "encoding": "gzip",
+    "source_bytes": 45883,
+    "stored_bytes": 11869
+  },
+  {
+    "stored": "zh/new_sidecar.json.gz",
+    "source": "/workspace/runtime/ai6-newton-after-capture/runs/20261101T075505/07-Newton/zh/motion/completed/media/videos/480p15/Newton.narration.json",
+    "source_sha256": "35bbcab8edd69df7f75d3a1bc56022e7f98282da4bf4e93b2f1c7ca187bf568e",
+    "stored_sha256": "05082e4d66e9e31e8d91ddc1a8a614b9330150b68880aa28b603e8d7ba6f0e25",
+    "encoding": "gzip",
+    "source_bytes": 50649,
+    "stored_bytes": 13075
+  },
+  {
+    "stored": "helpers/check_sidecars.py",
+    "source": "/workspace/runtime/ai6-newton-after-review/check_sidecars.py",
+    "source_sha256": "b490a7cae0adb07b138a07320d92aae9f2d38515dc3f366c3a064635b76df22d",
+    "stored_sha256": "b490a7cae0adb07b138a07320d92aae9f2d38515dc3f366c3a064635b76df22d",
+    "encoding": "identity",
+    "source_bytes": 3069,
+    "stored_bytes": 3069
+  },
+  {
+    "stored": "helpers/checkpoint.py",
+    "source": "/workspace/runtime/ai6-newton-after-review/checkpoint.py",
+    "source_sha256": "a055d0e48dc6364cf6bf64ce8dd548a6551171c297668b379470aa37df0f670e",
+    "stored_sha256": "a055d0e48dc6364cf6bf64ce8dd548a6551171c297668b379470aa37df0f670e",
+    "encoding": "identity",
+    "source_bytes": 899,
+    "stored_bytes": 899
+  },
+  {
+    "stored": "helpers/close_regression.py",
+    "source": "/workspace/runtime/ai6-newton-after-review/close_regression.py",
+    "source_sha256": "7866e686d18a797f185dccb5f1a97061e7d5aa9688d38768075636e599fbd8a2",
+    "stored_sha256": "7866e686d18a797f185dccb5f1a97061e7d5aa9688d38768075636e599fbd8a2",
+    "encoding": "identity",
+    "source_bytes": 2347,
+    "stored_bytes": 2347
+  },
+  {
+    "stored": "helpers/compare_endpoints.py",
+    "source": "/workspace/runtime/ai6-newton-after-review/compare_endpoints.py",
+    "source_sha256": "b2a4288db6f1aa58593516dc020753c36603c7379df26d5790b006a30e85cc31",
+    "stored_sha256": "b2a4288db6f1aa58593516dc020753c36603c7379df26d5790b006a30e85cc31",
+    "encoding": "identity",
+    "source_bytes": 2456,
+    "stored_bytes": 2456
+  },
+  {
+    "stored": "helpers/plan_regression.py",
+    "source": "/workspace/runtime/ai6-newton-after-review/plan_regression.py",
+    "source_sha256": "b10c6d5ce7243dadc63fa7ebc6b557ef6d85dfd21dd3027f327a8aec3b862a9d",
+    "stored_sha256": "b10c6d5ce7243dadc63fa7ebc6b557ef6d85dfd21dd3027f327a8aec3b862a9d",
+    "encoding": "identity",
+    "source_bytes": 4401,
+    "stored_bytes": 4401
+  },
+  {
+    "stored": "helpers/prepare_after.py",
+    "source": "/workspace/runtime/ai6-newton-after-review/prepare_after.py",
+    "source_sha256": "3a16e9a6743abfdc9a7dce1c9dcf53ab19b65c827b8c91ec5edcbadb901dcabd",
+    "stored_sha256": "3a16e9a6743abfdc9a7dce1c9dcf53ab19b65c827b8c91ec5edcbadb901dcabd",
+    "encoding": "identity",
+    "source_bytes": 7741,
+    "stored_bytes": 7741
+  },
+  {
+    "stored": "validation/windows-en.json",
+    "source": "/workspace/runtime/ai6-newton-after-review/windows-en.json",
+    "source_sha256": "e3f7f57c0a4052f753dc28230648d257a6ee9ebeaed111b01390669a799813d8",
+    "stored_sha256": "e3f7f57c0a4052f753dc28230648d257a6ee9ebeaed111b01390669a799813d8",
+    "encoding": "identity",
+    "source_bytes": 98,
+    "stored_bytes": 98
+  },
+  {
+    "stored": "validation/windows-zh.json",
+    "source": "/workspace/runtime/ai6-newton-after-review/windows-zh.json",
+    "source_sha256": "874a29bab9d432f595d64d50acce4890ed07efabb14f09185cd3adca26ae6417",
+    "stored_sha256": "874a29bab9d432f595d64d50acce4890ed07efabb14f09185cd3adca26ae6417",
+    "encoding": "identity",
+    "source_bytes": 98,
+    "stored_bytes": 98
+  },
+  {
+    "stored": "validation/sidecar-review.json",
+    "source": "/workspace/runtime/ai6-newton-after-review/sidecar-review.json",
+    "source_sha256": "d9e7b7567ed906d2edd94e981bf5e0a4f3d1311946b86eb271c290587e7e7f13",
+    "stored_sha256": "d9e7b7567ed906d2edd94e981bf5e0a4f3d1311946b86eb271c290587e7e7f13",
+    "encoding": "identity",
+    "source_bytes": 8235,
+    "stored_bytes": 8235
+  },
+  {
+    "stored": "validation/prepare-en.log",
+    "source": "/workspace/runtime/ai6-newton-after-review/prepare-en.log",
+    "source_sha256": "862fcaa76d407d08f934bee47bfb40abcde7cf91d7383219b12330f6a6fd5eea",
+    "stored_sha256": "862fcaa76d407d08f934bee47bfb40abcde7cf91d7383219b12330f6a6fd5eea",
+    "encoding": "identity",
+    "source_bytes": 307,
+    "stored_bytes": 307
+  },
+  {
+    "stored": "validation/prepare-zh.log",
+    "source": "/workspace/runtime/ai6-newton-after-review/prepare-zh.log",
+    "source_sha256": "b55092c747136433d4b750ea013fc39eb41a3f425fed5bd9050a6942574c3b32",
+    "stored_sha256": "b55092c747136433d4b750ea013fc39eb41a3f425fed5bd9050a6942574c3b32",
+    "encoding": "identity",
+    "source_bytes": 307,
+    "stored_bytes": 307
+  },
+  {
+    "stored": "validation/plan-en.log",
+    "source": "/workspace/runtime/ai6-newton-after-review/plan-en.log",
+    "source_sha256": "c8d493de8dff447bbd19806dac742768ec196dbaecf55fd528f8db01ad962493",
+    "stored_sha256": "c8d493de8dff447bbd19806dac742768ec196dbaecf55fd528f8db01ad962493",
+    "encoding": "identity",
+    "source_bytes": 343,
+    "stored_bytes": 343
+  },
+  {
+    "stored": "validation/plan-zh.log",
+    "source": "/workspace/runtime/ai6-newton-after-review/plan-zh.log",
+    "source_sha256": "3dab12845afe9c83a510ad5ab678e70d553baf27a59a8fa7786505a02c9ace10",
+    "stored_sha256": "3dab12845afe9c83a510ad5ab678e70d553baf27a59a8fa7786505a02c9ace10",
+    "encoding": "identity",
+    "source_bytes": 343,
+    "stored_bytes": 343
+  }
+]

@@ -1,0 +1,95 @@
+{
+  "scope": "Selected native480 image regression and silent-sidecar validation, not continuous playback, listening, real narration synchronization or native1080 approval.",
+  "cases": {
+    "en": {
+      "movie": "/workspace/runtime/ai6-newton-after-capture/runs/20261101T075505/07-Newton/en/motion/completed/media/videos/480p15/Newton.mp4",
+      "movie_sha256": "84a53ffdf3130820fef2565e98f16987770d7dba5949b528df58029b64c81826",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 2343,
+      "selected_time_count": 572,
+      "unique_new_images": 188,
+      "prior_exact_times": 350,
+      "new_duplicate_times": 34,
+      "unselected_frames": 1771,
+      "largest_selected_time_gap": 1.0,
+      "all_encoded_windows_seconds": [
+        [
+          13.992999,
+          16.892999
+        ],
+        [
+          22.254065,
+          25.154065
+        ],
+        [
+          25.971545,
+          28.871545
+        ],
+        [
+          103.386521,
+          106.286521
+        ]
+      ],
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "settings": {
+        "pixel_delta": 8,
+        "changed_fraction": 0.0005,
+        "mean_delta": 0.0001,
+        "mean_delta_definition": "spatial mean of max-channel absolute RGB delta / 255",
+        "static_gap_seconds": 0.2,
+        "dense_motion_seconds": 0.25,
+        "maximum_selected_gap_seconds": 1.0
+      },
+      "repair_window_encoded_count": 176
+    },
+    "zh": {
+      "movie": "/workspace/runtime/ai6-newton-after-capture/runs/20261101T075505/07-Newton/zh/motion/completed/media/videos/480p15/Newton.mp4",
+      "movie_sha256": "fb36f568f9a8bd55ae808093dab99fd25ccc7b2e508425fc09024f393e2c831e",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 2567,
+      "selected_time_count": 578,
+      "unique_new_images": 192,
+      "prior_exact_times": 352,
+      "new_duplicate_times": 34,
+      "unselected_frames": 1989,
+      "largest_selected_time_gap": 1.0,
+      "all_encoded_windows_seconds": [
+        [
+          14.917065,
+          17.817065
+        ],
+        [
+          22.890452,
+          25.790452
+        ],
+        [
+          27.777367,
+          30.677367
+        ],
+        [
+          111.602347,
+          114.502347
+        ]
+      ],
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "settings": {
+        "pixel_delta": 8,
+        "changed_fraction": 0.0005,
+        "mean_delta": 0.0001,
+        "mean_delta_definition": "spatial mean of max-channel absolute RGB delta / 255",
+        "static_gap_seconds": 0.2,
+        "dense_motion_seconds": 0.25,
+        "maximum_selected_gap_seconds": 1.0
+      },
+      "repair_window_encoded_count": 174
+    }
+  },
+  "baseline_evidence": "../ai6-newton-motion-repair/",
+  "raw_status": "all four fresh endpoint/motion captures passed with no warnings",
+  "source_sha256": "89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b",
+  "local_zh_sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+  "global_caption_sha256": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+  "full_qa_fingerprint": "a59fad15d77164cac1ccec643a99c29d64d421ddd1e5791276f340c4a725c4a9"
+}

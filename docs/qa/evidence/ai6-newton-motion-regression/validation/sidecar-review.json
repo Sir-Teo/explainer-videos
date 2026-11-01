@@ -1,0 +1,214 @@
+{
+  "en": {
+    "status": "passed silent-sidecar structural/content checks; no listening or real narration sync approval",
+    "old_sidecar": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/07-Newton/en/motion/completed/media/videos/480p15/Newton.narration.json",
+    "old_sha256": "6a4e4bb96727fe34d2b59a8888e5cbef3917e308d2e4fc340ee0754bba91db44",
+    "new_sidecar": "/workspace/runtime/ai6-newton-after-capture/runs/20261101T075505/07-Newton/en/motion/completed/media/videos/480p15/Newton.narration.json",
+    "new_sha256": "d9643900ecce88f47976cbd373a8ba8d8c97494e9df86971f70639097b8c731f",
+    "old_movie_duration": 144.73333333333295,
+    "new_movie_duration": 156.1999999999996,
+    "duration_delta": 11.46666666666664,
+    "old_race_VO_duration": 38.60366666666667,
+    "new_race_VO_duration": 50.10366666666667,
+    "lines": [
+      {
+        "line": 0,
+        "raw_unchanged": true,
+        "old_start": 0.0,
+        "new_start": 0.0,
+        "old_duration": 2.3814583333333332,
+        "new_duration": 2.3814583333333332,
+        "bookmarks": [],
+        "fresh_absolute_bookmark_times_from_actual_tokens_words": {},
+        "fresh_raw": null,
+        "fresh_words": 4
+      },
+      {
+        "line": 1,
+        "raw_unchanged": true,
+        "old_start": 3.4666666666666694,
+        "new_start": 3.4666666666666694,
+        "old_duration": 34.27033333333333,
+        "new_duration": 34.27033333333333,
+        "bookmarks": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e"
+        ],
+        "fresh_absolute_bookmark_times_from_actual_tokens_words": {
+          "a": 8.310252935862696,
+          "b": 14.092999096657639,
+          "c": 22.35406504065041,
+          "d": 26.07154471544716,
+          "e": 31.854290876242104
+        },
+        "fresh_raw": null,
+        "fresh_words": 82
+      },
+      {
+        "line": 2,
+        "raw_unchanged": false,
+        "old_start": 39.13333333333338,
+        "new_start": 39.13333333333338,
+        "old_duration": 38.60366666666667,
+        "new_duration": 50.10366666666667,
+        "bookmarks": [
+          "a",
+          "b"
+        ],
+        "fresh_absolute_bookmark_times_from_actual_tokens_words": {
+          "a": 41.960640301318314,
+          "b": 53.33352165725053
+        },
+        "fresh_raw": "Race them, from the same start. <bookmark mark='a'/> After one step, Newton's line is already near the answer; after 3, it's there. Gradient descent, after the same number of steps, is still swinging into place. <bookmark mark='b'/> With all seventy rates, minimize mean cross-entropy in nats plus half lambda times the squared weight norm, with lambda 0.01. The gap subtracts the minimum of this penalized objective. Newton needs 8 steps to reach it to the last digit; gradient descent needs 1,000 steps to get within a millionth. Near the bottom, Newton doubles the number of correct digits at every step. The price: a 71 by 71 system, including the intercept, to solve each time, which is why giant models stay with gradients.",
+        "fresh_words": 118
+      },
+      {
+        "line": 3,
+        "raw_unchanged": true,
+        "old_start": 79.13333333333397,
+        "new_start": 90.60000000000062,
+        "old_duration": 25.992583333333332,
+        "new_duration": 25.992583333333332,
+        "bookmarks": [
+          "a",
+          "b"
+        ],
+        "fresh_absolute_bookmark_times_from_actual_tokens_words": {
+          "a": 103.4865209471773,
+          "b": 106.84292653309107
+        },
+        "fresh_raw": null,
+        "fresh_words": 61
+      },
+      {
+        "line": 4,
+        "raw_unchanged": true,
+        "old_start": 106.46666666666675,
+        "new_start": 117.9333333333334,
+        "old_duration": 36.881458333333335,
+        "new_duration": 36.881458333333335,
+        "bookmarks": [
+          "a",
+          "b",
+          "c"
+        ],
+        "fresh_absolute_bookmark_times_from_actual_tokens_words": {
+          "a": 124.24204793028328,
+          "b": 133.68431372549026,
+          "c": 143.12657952069722
+        },
+        "fresh_raw": null,
+        "fresh_words": 85
+      }
+    ]
+  },
+  "zh": {
+    "status": "passed silent-sidecar structural/content checks; no listening or real narration sync approval",
+    "old_sidecar": "/workspace/runtime/ai6-remaining-qa-serial/runs/20261101T055536/07-Newton/zh/motion/completed/media/videos/480p15/Newton.narration.json",
+    "old_sha256": "0388321355b77e87bf7cc40eddf98788df7532b0b1c276f50ae021976eebcf96",
+    "new_sidecar": "/workspace/runtime/ai6-newton-after-capture/runs/20261101T075505/07-Newton/zh/motion/completed/media/videos/480p15/Newton.narration.json",
+    "new_sha256": "35bbcab8edd69df7f75d3a1bc56022e7f98282da4bf4e93b2f1c7ca187bf568e",
+    "old_movie_duration": 155.66666666666632,
+    "new_movie_duration": 171.133333333333,
+    "duration_delta": 15.466666666666697,
+    "old_race_VO_duration": 40.71391666666667,
+    "new_race_VO_duration": 56.16741666666667,
+    "lines": [
+      {
+        "line": 0,
+        "raw_unchanged": true,
+        "old_start": 0.0,
+        "new_start": 0.0,
+        "old_duration": 2.2953333333333332,
+        "new_duration": 2.2953333333333332,
+        "bookmarks": [],
+        "fresh_absolute_bookmark_times_from_actual_tokens_words": {},
+        "fresh_raw": null,
+        "fresh_words": 6
+      },
+      {
+        "line": 1,
+        "raw_unchanged": true,
+        "old_start": 3.400000000000003,
+        "new_start": 3.400000000000003,
+        "old_duration": 36.92325,
+        "new_duration": 36.92325,
+        "bookmarks": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e"
+        ],
+        "fresh_absolute_bookmark_times_from_actual_tokens_words": {
+          "a": 8.329708483458894,
+          "b": 15.017065181788414,
+          "c": 22.990452014412085,
+          "d": 27.87736652472982,
+          "e": 33.53589911562404
+        },
+        "fresh_raw": null,
+        "fresh_words": 142
+      },
+      {
+        "line": 2,
+        "raw_unchanged": false,
+        "old_start": 41.666666666666735,
+        "new_start": 41.666666666666735,
+        "old_duration": 40.71391666666667,
+        "new_duration": 56.16741666666667,
+        "bookmarks": [
+          "a",
+          "b"
+        ],
+        "fresh_absolute_bookmark_times_from_actual_tokens_words": {
+          "a": 44.83321741650373,
+          "b": 56.560015938564135
+        },
+        "fresh_raw": "Race them, from the same start. <bookmark mark='a'/> After one step, Newton's line is already near the answer; after 3, it's there. Gradient descent, after the same number of steps, is still swinging into place. <bookmark mark='b'/> With all seventy rates, minimize mean cross-entropy in nats plus half lambda times the squared weight norm, with lambda 0.01. The gap subtracts the minimum of this penalized objective. Newton needs 8 steps to reach it to the last digit; gradient descent needs 1,000 steps to get within a millionth. Near the bottom, Newton doubles the number of correct digits at every step. The price: a 71 by 71 system, including the intercept, to solve each time, which is why giant models stay with gradients.",
+        "fresh_words": 214
+      },
+      {
+        "line": 3,
+        "raw_unchanged": true,
+        "old_start": 83.73333333333397,
+        "new_start": 99.20000000000064,
+        "old_duration": 28.783708333333333,
+        "new_duration": 28.783708333333333,
+        "bookmarks": [
+          "a",
+          "b"
+        ],
+        "fresh_absolute_bookmark_times_from_actual_tokens_words": {
+          "a": 111.70234731580155,
+          "b": 116.74244729406712
+        },
+        "fresh_raw": null,
+        "fresh_words": 107
+      },
+      {
+        "line": 4,
+        "raw_unchanged": true,
+        "old_start": 113.86666666666676,
+        "new_start": 129.33333333333343,
+        "old_duration": 40.4465,
+        "new_duration": 40.4465,
+        "bookmarks": [
+          "a",
+          "b",
+          "c"
+        ],
+        "fresh_absolute_bookmark_times_from_actual_tokens_words": {
+          "a": 137.64263565891483,
+          "b": 147.20212553138296,
+          "c": 156.50325081270336
+        },
+        "fresh_raw": null,
+        "fresh_words": 155
+      }
+    ]
+  }
+}

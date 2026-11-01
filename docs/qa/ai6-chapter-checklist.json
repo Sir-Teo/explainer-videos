@@ -1,6 +1,6 @@
 {
   "part": "ai6",
-  "observed_utc": "2026-11-01T08:01:42.665094+00:00",
+  "observed_utc": "2026-11-01T08:23:14.494442+00:00",
   "chapters": 19,
   "bilingual_cases": 38,
   "numerical_items": 22,
@@ -9,7 +9,7 @@
   "source_integration_evidence": "evidence/ai6-source-integration/README.md",
   "source_teaching_evidence": "evidence/ai6-scene-teaching-source-repairs/README.md",
   "source_core_evidence": "evidence/ai6-producer-cache-source-repairs/README.md",
-  "scope": "All 22 numerical items and 263 independent checks complete. First six chapters have selected-image and native1080 endpoint review in both languages (12 cases each). Newton/NaiveBayes fresh repair regression active; LDA selected review active. Remaining whole-chapter visual/audio/production gates remain open.",
+  "scope": "All 22 numerical items and 263 independent checks complete. Eight chapters (Hook through Naive Bayes) have accepted bilingual selected-image review: 16 cases. First six chapters have 12 native 1080p endpoint cases reviewed. LDA/KNN/Kernels/SVM and whole-Metrics review are active; full listening/narration/continuous-perception/production gates remain open.",
   "cases": [
     {
       "position": 1,
@@ -210,13 +210,13 @@
       "title": "6. Newton's method, and lines that run away",
       "lang": "en",
       "source_sha256_observed": "89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b",
-      "source_state": "Four copy-reveal repairs; explicit penalized mean-CE objective gap and actual71x71 system including intercept. Fresh bilingual endpoint/motion capture completed; actual selected review still in progress.",
-      "endpoints": "Fresh after endpoint images are being compared/reviewed; no final case acceptance yet.",
-      "selected_motion_review": "Baseline896 selected times reviewed; after regression currently in progress. Changed narration requires fresh timing review.",
+      "source_state": "Four repairs accepted after actual bilingual selected-image regression: retained-copy reveals, explicit penalized mean-cross-entropy objective gap, lambda0.01 and the measured71x71 system including intercept.",
+      "endpoints": "All30 states reviewed:28 exact prior PNGs and two new actual objective views. Four fresh endpoint/motion runtime captures passed with zero warnings.",
+      "selected_motion_review": "1150 selected times /4910 decoded frames /3760 unselected. 702 exact previously reviewed PNG inheritances +380 new unique images actually inspected on48 native854 sheets +68 exact new duplicates. Includes all350 encoded frame-times in eight proof windows, plus ten original-resolution followups.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending.",
+      "narration_listening_sync_4K": "Silent narration metadata changed intentionally: EN156.2s (+11.4667), ZH171.1333s (+15.4667). Actual speech, listening, synchronization and production-resolution motion remain pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-newton-motion-repair/README.md"
+      "evidence": "evidence/ai6-newton-motion-regression/README.md"
     },
     {
       "position": 7,
@@ -225,13 +225,13 @@
       "title": "6. Newton's method, and lines that run away",
       "lang": "zh",
       "source_sha256_observed": "89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b",
-      "source_state": "Four copy-reveal repairs; explicit penalized mean-CE objective gap and actual71x71 system including intercept. Fresh bilingual endpoint/motion capture completed; actual selected review still in progress.",
-      "endpoints": "Fresh after endpoint images are being compared/reviewed; no final case acceptance yet.",
-      "selected_motion_review": "Baseline896 selected times reviewed; after regression currently in progress. Changed narration requires fresh timing review.",
+      "source_state": "Four repairs accepted after actual bilingual selected-image regression: retained-copy reveals, explicit penalized mean-cross-entropy objective gap, lambda0.01 and the measured71x71 system including intercept.",
+      "endpoints": "All30 states reviewed:28 exact prior PNGs and two new actual objective views. Four fresh endpoint/motion runtime captures passed with zero warnings.",
+      "selected_motion_review": "1150 selected times /4910 decoded frames /3760 unselected. 702 exact previously reviewed PNG inheritances +380 new unique images actually inspected on48 native854 sheets +68 exact new duplicates. Includes all350 encoded frame-times in eight proof windows, plus ten original-resolution followups.",
       "native1080_endpoints": "Pending.",
-      "narration_listening_sync_4K": "Pending.",
+      "narration_listening_sync_4K": "Silent narration metadata changed intentionally: EN156.2s (+11.4667), ZH171.1333s (+15.4667). Actual speech, listening, synchronization and production-resolution motion remain pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-newton-motion-repair/README.md"
+      "evidence": "evidence/ai6-newton-motion-regression/README.md"
     },
     {
       "position": 8,
@@ -240,13 +240,13 @@
       "title": "7. Naive Bayes: generative or discriminative?",
       "lang": "en",
       "source_sha256_observed": "096df1ad04b1b9c22c0ee27f5a925171f263153fc8bf179579a1e66b78ac9639",
-      "source_state": "Band viewport now preserves actual90th percentile; copy reveals, card highlight and calibration-point geometry repaired. Fresh after captures/review in progress.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Baseline818 selected times reviewed. Current after regression is pending; no repaired-case acceptance yet.",
+      "source_state": "Four repairs accepted after actual bilingual selected-image regression: uncapped percentile band, retained-copy reveals, card emphasis and calibration-point highlight.",
+      "endpoints": "26 endpoint states: 20 exact previously reviewed PNGs and six new images on two pages. Fourteen current native-resolution 854x480 followups. No current 1080p claim.",
+      "selected_motion_review": "964 selected union times from 4756 decoded frames; 750 unique images = 383 exact previously reviewed PNG inheritances + 367 new actual views on 47 pages. All 244 encoded frames in ten repair windows covered. 3792 frames were not individually inspected.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-naivebayes-baseline-motion-review/README.md"
+      "evidence": "evidence/ai6-naivebayes-motion-regression/README.md"
     },
     {
       "position": 8,
@@ -255,13 +255,13 @@
       "title": "7. Naive Bayes: generative or discriminative?",
       "lang": "zh",
       "source_sha256_observed": "096df1ad04b1b9c22c0ee27f5a925171f263153fc8bf179579a1e66b78ac9639",
-      "source_state": "Band viewport now preserves actual90th percentile; copy reveals, card highlight and calibration-point geometry repaired. Fresh after captures/review in progress.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Baseline818 selected times reviewed. Current after regression is pending; no repaired-case acceptance yet.",
+      "source_state": "Four repairs accepted after actual bilingual selected-image regression: uncapped percentile band, retained-copy reveals, card emphasis and calibration-point highlight.",
+      "endpoints": "26 endpoint states: 20 exact previously reviewed PNGs and six new images on two pages. Fourteen current native-resolution 854x480 followups. No current 1080p claim.",
+      "selected_motion_review": "964 selected union times from 4756 decoded frames; 750 unique images = 383 exact previously reviewed PNG inheritances + 367 new actual views on 47 pages. All 244 encoded frames in ten repair windows covered. 3792 frames were not individually inspected.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate.",
-      "evidence": "evidence/ai6-naivebayes-baseline-motion-review/README.md"
+      "evidence": "evidence/ai6-naivebayes-motion-regression/README.md"
     },
     {
       "position": 9,
@@ -272,7 +272,7 @@
       "source_sha256_observed": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Actual bilingual review of frozen completed factory movies has started; no acceptance yet.",
+      "selected_motion_review": "Actual bilingual selected review active. Direction-line label strike, emphasis overflow and six retained-copy proof reveals confirmed in English; Chinese review underway. No repaired-case acceptance yet.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
@@ -286,7 +286,7 @@
       "source_sha256_observed": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
       "endpoints": "Pending actual cached-only capture after required data completes.",
-      "selected_motion_review": "Actual bilingual review of frozen completed factory movies has started; no acceptance yet.",
+      "selected_motion_review": "Actual bilingual selected review active. Direction-line label strike, emphasis overflow and six retained-copy proof reveals confirmed in English; Chinese review underway. No repaired-case acceptance yet.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
       "data": "All22 default items complete; 22 strict cached-only loads and263 independent checks passed, no refit; scene consumer and visual acceptance separate."
@@ -299,7 +299,7 @@
       "lang": "en",
       "source_sha256_observed": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
+      "endpoints": "All 35 existing states actually reviewed on ten pages plus six original-resolution followups. Native endpoint evidence confirms 90th-percentile bands flattened at 40% although measured upper values reach 47.725%. Local repair pending.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
@@ -313,7 +313,7 @@
       "lang": "zh",
       "source_sha256_observed": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
       "source_state": "Reviewed source corrections integrated; actual data/render validation pending.",
-      "endpoints": "Pending actual cached-only capture after required data completes.",
+      "endpoints": "All 35 existing states actually reviewed on ten pages plus six original-resolution followups. Native endpoint evidence confirms 90th-percentile bands flattened at 40% although measured upper values reach 47.725%. Local repair pending.",
       "selected_motion_review": "Pending actual rendered review.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
@@ -495,7 +495,7 @@
       "lang": "en",
       "source_sha256_observed": "2f2885828585ad6464f5308e6ee97c10f188bbf668362444ebcaf7804a60ec86",
       "source_state": "Shared baseline alignment and visible70% cue reviewed in score windows. Additional local accuracy-group inset widens Chinese left margin; fresh target regression in progress.",
-      "endpoints": "Current gutter repair endpoints:32 actual newly reviewed images; only score states change, source/audio/data identities separately reconciled. Native1080 refresh pending.",
+      "endpoints": "Current gutter repair endpoints: all32 newly reviewed states, with28 exact prior PNGs. Actual score windows cover885 encoded frames,179 RGB representatives. Whole-chapter and native1080 refresh pending.",
       "selected_motion_review": "Earlier score-window review covers885 encoded frames with176 exact-RGB representatives. Current gutter repair target review active; whole-chapter motion review still pending.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
@@ -510,7 +510,7 @@
       "lang": "zh",
       "source_sha256_observed": "2f2885828585ad6464f5308e6ee97c10f188bbf668362444ebcaf7804a60ec86",
       "source_state": "Shared baseline alignment and visible70% cue reviewed in score windows. Additional local accuracy-group inset widens Chinese left margin; fresh target regression in progress.",
-      "endpoints": "Current gutter repair endpoints:32 actual newly reviewed images; only score states change, source/audio/data identities separately reconciled. Native1080 refresh pending.",
+      "endpoints": "Current gutter repair endpoints: all32 newly reviewed states, with28 exact prior PNGs. Actual score windows cover885 encoded frames,179 RGB representatives. Whole-chapter and native1080 refresh pending.",
       "selected_motion_review": "Earlier score-window review covers885 encoded frames with176 exact-RGB representatives. Current gutter repair target review active; whole-chapter motion review still pending.",
       "native1080_endpoints": "Pending.",
       "narration_listening_sync_4K": "Pending.",
@@ -578,7 +578,7 @@
   "numerical_completed_utc": "2026-11-01T05:09:55.484692+00:00",
   "numerical_scientific_audit": "22 actual guarded loads, zero forbidden writes/producers, 263 independent arithmetic/inference checks passed; no refit or replicated training claim.",
   "numerical_evidence": "evidence/ai6-numerical-generation-scientific-audit/README.md",
-  "current_selected_image_cases_accepted": 12,
+  "current_selected_image_cases_accepted": 16,
   "source_current_table_sha256": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
   "full_repository_tests": {
     "tests": 638,

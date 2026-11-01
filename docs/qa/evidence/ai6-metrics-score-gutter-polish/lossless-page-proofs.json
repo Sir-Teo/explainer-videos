@@ -1,0 +1,434 @@
+[
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-001.png",
+    "original_png_sha256": "089426acecc197a13698d4d3f85fb6fa5f144de091629b51a9fedcf6bdd0c8fe",
+    "packaged_path": "en/motion-pages/page-001.webp",
+    "packaged_sha256": "6fc2588d0f6ee6a0073759ec43c3fd66d5b9b1ac5f0458174ed2a8a87d7f6520",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "95ae58491c9ff0dc1472d0f19518eb2fc29c8085df9a2ccea85d27b8646f787e",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-002.png",
+    "original_png_sha256": "89d8e1e4ec8c518c8821e54f0c5155e29b86b9a3b17a1e4a6c330ef319444b83",
+    "packaged_path": "en/motion-pages/page-002.webp",
+    "packaged_sha256": "9242edfe101f1c600d549e48372f5756bf8543c73a25244540c30bb0614a7fd1",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "e1dd016984054fe371f8119de7507099764e4847cd96a258e234eacf3e130dde",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-003.png",
+    "original_png_sha256": "ac43156fae334661fb14d57011f59a7826707a74d1e9a5e9e5d51f17e8d8b6f6",
+    "packaged_path": "en/motion-pages/page-003.webp",
+    "packaged_sha256": "82ac6ef689803dc854768b31ad3f2a5f37a84cc7215c77773a9b9dbc3b687e5a",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "4e57ecd36a6d19b22ebbd3d1fc4a6b40ed2cfdf68642c1fb782608c162bfd4b6",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-004.png",
+    "original_png_sha256": "7f50c431b4e0cde47861d440aa009b8a852c73e32f6e1747243c319d02eb5f50",
+    "packaged_path": "en/motion-pages/page-004.webp",
+    "packaged_sha256": "74ed3fdabcb5ed9d6ae469085cc55bb8322949a97ce56ebc1f39d3788b7415cc",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "40a92bceffe95b11ef15f3831533d8d570f5c038a439ff60fdfd695b51b72e77",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-005.png",
+    "original_png_sha256": "418e10cef90ac60761f1c37c21882664195a30ca21d0de623e7dbce5fd075132",
+    "packaged_path": "en/motion-pages/page-005.webp",
+    "packaged_sha256": "e50bdd738ef506fb75219feb561b717ace25013cc4a70a3aaa3a695e0cde8410",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "33c87a49efb43dc26174f793343e30b3e747ac7d999e339520144f1a172c4cbc",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-006.png",
+    "original_png_sha256": "a6ef262ceb80f9e867fa0393378ce5d1598a95fcb890b0efb16fad32b37b5b59",
+    "packaged_path": "en/motion-pages/page-006.webp",
+    "packaged_sha256": "a118e4dd966036d86e18b9cde6a6f7ff915f4318b62bdefadf781fd77a7ff58b",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "64964837d70356cce38b8654864550b43de488214977c2deb08b3f595bfe9c29",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-007.png",
+    "original_png_sha256": "b7f2faaad9a8a0e652f36e6f8ecb447707da44f2aa7f32a6c326753b90ae50be",
+    "packaged_path": "en/motion-pages/page-007.webp",
+    "packaged_sha256": "3acf363d3622dec170fcc288ba27392916a1503907e2423f1fd9a4b4ca31cc54",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "d63854cf9de5d609b0950e9a535e9e9a940627b858a30314734c9d62512e218b",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-008.png",
+    "original_png_sha256": "4b4f68e25a5ee8f944420f3c940ffd54dc571974e34f293b491eebb4c24645cf",
+    "packaged_path": "en/motion-pages/page-008.webp",
+    "packaged_sha256": "05c0e98b88c95c289f36c08d3b34ce4786468eb8c01f17cb6d6ea49209f274ff",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "9db57e0da533ec2d9f4b7b64c6fb0cfaa3b137ad395745ceea80fad24609dbc5",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-009.png",
+    "original_png_sha256": "e300024e4993be725746b37505bf41a285529d36e3280adea00bf0e2c6fd517b",
+    "packaged_path": "en/motion-pages/page-009.webp",
+    "packaged_sha256": "470ea780c01508aec72f7ee1cb48a848fd0421426897c1f10929dd465d1c4b88",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "43450b2ca790208190e2f9a9464a059d23037a146ce859624f424a019f7094f3",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-010.png",
+    "original_png_sha256": "b79587ef8a79c7dbbc41e3d4d601e5fb0226587754ad59e8e46d9c4bf3dfe8f8",
+    "packaged_path": "en/motion-pages/page-010.webp",
+    "packaged_sha256": "6ae95deb1a07c49d2ca354210da6d0a711e83072562fb6e96d070e2e92ce62ae",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "2156e69a317fe0addeb3e808494d925b49bddd28a48e2adc3b9bd4f542a11199",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-011.png",
+    "original_png_sha256": "7bfbd869bfba4edf51e3b0434b70c017efeb72df4c673f7739fcd0d2df8a7e3e",
+    "packaged_path": "en/motion-pages/page-011.webp",
+    "packaged_sha256": "8a3124bb23c597ff96e3ccb8355425b8736943a38215986a5d18af9123119137",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "2ec205bc4b956b524ebd74133cb761c7473f559aa56ebcc539578aee97e6d455",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-012.png",
+    "original_png_sha256": "b8856899de45070b6f34b6caf657ac8a3d80bfe1133265c2ffad3bfe1b8978f7",
+    "packaged_path": "en/motion-pages/page-012.webp",
+    "packaged_sha256": "4e7b081f9eb287c8aa114d6717fd0369978d73d4aa311d43ac8771c1660b2cc7",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "770e8dcb334dc0d856b46f90cd9af37b1f5d9e12f000bcf468518d6981e06716",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/en/changed/page-013.png",
+    "original_png_sha256": "1994fd003e325808188fc90430d11bfba8a095583a7a6c5b6146b49f88375ce6",
+    "packaged_path": "en/motion-pages/page-013.webp",
+    "packaged_sha256": "7c0e0dfdd4677b5a88c88cf67e3443dd0e34d5a4197908c40d8c5d71adc75390",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "55db636e7adde63c1c5dff045736749e3d8aea1f18b4d10ee9a72127b0a6d55c",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-endpoint-review/en/page-001.png",
+    "original_png_sha256": "ca2fe457dd58620eefb2754ce06f0b64256e882ade12ea0bdc28e17042483a56",
+    "packaged_path": "en/endpoint-pages/page-001.webp",
+    "packaged_sha256": "82fba8a682abcc47ed3cb7b31f91b968ebdbc9d26adf9285d63d3c80f6d570d3",
+    "size": [
+      1708,
+      1004
+    ],
+    "rgb_sha256": "8392bec804a5267e7eced1739d15b03c849fad09af7de4268d883c3707194fc1",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-endpoint-review/en/page-002.png",
+    "original_png_sha256": "a13fdd854f2e1f50d89210c1e557b5de43c8312be876d065d4cb9c754e88fb8a",
+    "packaged_path": "en/endpoint-pages/page-002.webp",
+    "packaged_sha256": "1f2f0a6f65ca7c5e58f38028ff9dd3a920fc69d03c4082631487ae47a849c029",
+    "size": [
+      1708,
+      1004
+    ],
+    "rgb_sha256": "437708fc8e9b9f04027d6723bd61a4b4016750c0abb9584eeb74495e02de792a",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-endpoint-review/en/page-003.png",
+    "original_png_sha256": "f2ccf1f0910e9ef4c19795ea350ae8826fedb1e450c8a0307a364153fab1b047",
+    "packaged_path": "en/endpoint-pages/page-003.webp",
+    "packaged_sha256": "c614796c9a6a2ebb542cf13981833fcd30f6b7a871e9aa443088c682e2db1d83",
+    "size": [
+      1708,
+      1004
+    ],
+    "rgb_sha256": "250488907d8cf0ca841f63e993b950e423574c2112b2324edaeb5a213b510a42",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-endpoint-review/en/page-004.png",
+    "original_png_sha256": "ef4966debf8d6b0e9038041bf6bb30222bed77387f1b86890ba1d717b4de812a",
+    "packaged_path": "en/endpoint-pages/page-004.webp",
+    "packaged_sha256": "06e50d14f467c43ff333da5dcb128e95037ecab638281259a47444eb4fb1a779",
+    "size": [
+      1708,
+      1004
+    ],
+    "rgb_sha256": "f8372373deaf61a5138e8627cdaf8745c61a193ec663bc1be70db6289f24843f",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-001.png",
+    "original_png_sha256": "6873257ad3740e080b1736bddc3de8fe521c49f442400ff624f8312ea74fbba0",
+    "packaged_path": "zh/motion-pages/page-001.webp",
+    "packaged_sha256": "e5f56f167d6f9fa24e15b96da1bfb493712f50f4f5053dd0f970f737d6f4e139",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "1bfaa75db4d456449dc52ca8a23af5401f8a3eed6fc4a535745c2f71a72b0a44",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-002.png",
+    "original_png_sha256": "7a7f556db03d3d1184e607464e4e5d386ee603135e3fccd084321ceb5935c6b9",
+    "packaged_path": "zh/motion-pages/page-002.webp",
+    "packaged_sha256": "b148ccae201e3b3618af7be9f5bccf6df73f9de7944122d65a2b0c2056e67b6d",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "6d00b953da2ba43d5c496f64342dc604c90f40166819bde95654fbbb3268f904",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-003.png",
+    "original_png_sha256": "d670f9852846caef76dcd8a0627c10630d881ec68303ef86d69fcdb8c6e9116b",
+    "packaged_path": "zh/motion-pages/page-003.webp",
+    "packaged_sha256": "29353249e63ff5eedc5a95559b845bbda3c5e0347ac4c616d4be38dd698752e7",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "2d50aab06ca0ea82497bcae0d55e7209af2efd0b705be7bfff53fe9ef765c125",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-004.png",
+    "original_png_sha256": "1232060727f39f20186c36db619ee189f58c5d65783cd4fc8cc0737743707b21",
+    "packaged_path": "zh/motion-pages/page-004.webp",
+    "packaged_sha256": "5c0d833dd4662e4aacf306e162818804f76efb9f8308c6cf1d07254a043a2b50",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "0d99065d364b8f45ab1b8597473b15104c3651beb96f4be2d7736f6f98d78863",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-005.png",
+    "original_png_sha256": "257b15ad6c43c42cfdb5a7f38a5a56065f5aa1b354ae37b9aeb629381a669229",
+    "packaged_path": "zh/motion-pages/page-005.webp",
+    "packaged_sha256": "6b03bc9a74281904a3a2b04e2f91e6a4f8858d1e6755fdb419ae02252c78dd95",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "0afd5b0bd498d129af2582cdea33119f900ed51a4859b94ffe225c223fbd5e03",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-006.png",
+    "original_png_sha256": "84a2e78fcd1420e14c7ed5f49f33e3e955043332a6b62738a34fc3930ccebd72",
+    "packaged_path": "zh/motion-pages/page-006.webp",
+    "packaged_sha256": "4e6af0a38d26153434b42ff56326346608f9cf6cd90cf4e89ee8129111f8ce84",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "89b7c1b48d37ad23d840be2076acda54498bfb0153ea4f540599e22253d3b506",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-007.png",
+    "original_png_sha256": "9abc25c7b4c5c7822816941615c50e6e588e24ca305a2d7e2a0260bd6bf71d2b",
+    "packaged_path": "zh/motion-pages/page-007.webp",
+    "packaged_sha256": "d5bf42f7dee213fe424c2985b9477db7d4308723546c863c25113de4bf1927c7",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "32c0a2ff9393645ca0bcb04fea2a1077daabee6d1240336f5ddf14556bc54da5",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-008.png",
+    "original_png_sha256": "3ba05d02507dfce4692554c293d28309df6dedc56c4ba613bc2da274928440db",
+    "packaged_path": "zh/motion-pages/page-008.webp",
+    "packaged_sha256": "7467a3efb85672c285fb822ca3be4d24f04fcf3837fdeb8dd47bf8caa3abcde3",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "d6f6ffcb29e7900cf097a78a38d2e05f4d7a0b0f0514543db4575051d2998b27",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-009.png",
+    "original_png_sha256": "f84454fe19678899661a33658cbb2bdae277384b49bb46f7d7a9536f4a672b88",
+    "packaged_path": "zh/motion-pages/page-009.webp",
+    "packaged_sha256": "3dd0a92038252ed2da10f7854fc2fdf988e83ce74d3f9f3ba36d674b38de1eca",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "4c3c139ae0cd119687bbdd1e8e831c84cde98c3215de48ae6f7f0a353b569713",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-010.png",
+    "original_png_sha256": "c49c6594dbd11e2c257d36e49ca721b26a149280b7cb8c0717f50dc52e52a652",
+    "packaged_path": "zh/motion-pages/page-010.webp",
+    "packaged_sha256": "3ac2af69cdf0db6cbbd7d76af6a389c4541adf54aff1fa931cf14bd19e869b56",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "4eedfee8d0a3ccc40aeaabc78564f8c34ec34cded993af0c1b005ac0f1600d71",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-011.png",
+    "original_png_sha256": "10c60e768824e16413b3376f492d8e28e2b894ebcc3a33128a66d96311061ecb",
+    "packaged_path": "zh/motion-pages/page-011.webp",
+    "packaged_sha256": "e2cb05f0b8eb3926a6dc15df31a233dfa28474ccdbae151893cd9508246289a3",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "d6fdb337233f15bc3dad2739ca5e1b99cc934d85fd9b63f5d405ecddef9754b7",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-012.png",
+    "original_png_sha256": "fb0c233fb265796931e56c832cbc9f502ff41b16f0131e9bea250ad069f7dd8c",
+    "packaged_path": "zh/motion-pages/page-012.webp",
+    "packaged_sha256": "cc65ca334e6a90b27f25b9e880ae7a06d031b182e79bb32ff3f88dba3e81241f",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "c8f91cf1ee71e3ab373543e88900744851c532312d08c906d9a90f038b9d2ebf",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-013.png",
+    "original_png_sha256": "894a50e6aab582d65eaac286a93add3885ac4674bbaeb4da8423553ed220f15f",
+    "packaged_path": "zh/motion-pages/page-013.webp",
+    "packaged_sha256": "e41473090afb074db2998701a1bcd2704416d3476de61e5a15791a2a2f53c93f",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "4613720cd509e5096c556ff63b3db7a8b377ae1457b9852f011bc545acaf72f6",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-014.png",
+    "original_png_sha256": "2dfba697faf7f11e3d65e7837262545ac76bb8edf5a550c431deacc2e693224a",
+    "packaged_path": "zh/motion-pages/page-014.webp",
+    "packaged_sha256": "941d35ca5e5eb0e6aacd00b361950dd62e136635454aed82c5846273afa79851",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "a7b2a2330b0d1aee716a06c5130ec16e3def70c2af2858bfcf7cdd857535e51d",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-review/zh/changed/page-015.png",
+    "original_png_sha256": "b2f607cf5a23e87904756111d8544bd9933e1977c26c1a23de629e9dca58d320",
+    "packaged_path": "zh/motion-pages/page-015.webp",
+    "packaged_sha256": "ecb19ff96841690c4e99946564698ca00a260ea7e44168fbd4f5e57c31b1c6e3",
+    "size": [
+      1708,
+      1506
+    ],
+    "rgb_sha256": "1ebdeafe43bb4ee3879621f1bd74324cbe8547dec82b8829a6a18cdd9ba16909",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-endpoint-review/zh/page-001.png",
+    "original_png_sha256": "342d098f7b8d1b93b2f4af32124dcc41485123d582562214ceb3f3c8e3857dcf",
+    "packaged_path": "zh/endpoint-pages/page-001.webp",
+    "packaged_sha256": "bcd3c0aa08e903f97d678ff50f3c84e281dea2e55ae87f06e918a38de9d185c5",
+    "size": [
+      1708,
+      1004
+    ],
+    "rgb_sha256": "22ea14596576a3ce012d20e3e8b66745772ab0aacebd3976be84797e1c7a3832",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-endpoint-review/zh/page-002.png",
+    "original_png_sha256": "cb61f30f0f13125d5d0c66692a5d39727fe8d12cedefe6efd219987d4f55140d",
+    "packaged_path": "zh/endpoint-pages/page-002.webp",
+    "packaged_sha256": "71c150d0455100aada96c39500b7114d8f9a43402e2b021ecfd27d0381e01cae",
+    "size": [
+      1708,
+      1004
+    ],
+    "rgb_sha256": "ea71d80c73bee10b66af34b93893ab4cf2fd170d79fcd67230024012e20daa39",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-endpoint-review/zh/page-003.png",
+    "original_png_sha256": "dd5895f3dbbab572baec6bc4914ce2a47f825fbe470af8d3efb8444ab0196ce9",
+    "packaged_path": "zh/endpoint-pages/page-003.webp",
+    "packaged_sha256": "f961d03922c676eef4d7ce8e46c899f8d2433a2d6d91dc2ae01bfdf1a8a7291e",
+    "size": [
+      1708,
+      1004
+    ],
+    "rgb_sha256": "9346473cb841aa797a392ad0a96db11fbc0e30281a5e39432e90c0cbcf62a42e",
+    "decoded_pixels_exact": true
+  },
+  {
+    "original_path": "/workspace/runtime/ai6-metrics-score-gutter-polish/after-endpoint-review/zh/page-004.png",
+    "original_png_sha256": "aad31d867153f46b1f55758b71785a9f35811f5822d4203d2e969de3b0fb2ed1",
+    "packaged_path": "zh/endpoint-pages/page-004.webp",
+    "packaged_sha256": "005435345eb56d3354ad16889b2a49df18667a6d53aec0832ae73691e006464a",
+    "size": [
+      1708,
+      1004
+    ],
+    "rgb_sha256": "807c9fda6d7b409379d14acec7f49b9508edeeee91080a277393f70555e1c10a",
+    "decoded_pixels_exact": true
+  }
+]

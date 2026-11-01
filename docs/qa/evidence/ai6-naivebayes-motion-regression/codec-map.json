@@ -1,0 +1,2610 @@
+{
+  "artifacts": [
+    {
+      "path": "receipts/capture-controller.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/capture-controller.log",
+      "decoded_sha256": "a3eeee815c0bae0594daa3a0b14b13a7fc1ead3eeedbf565d6b5c3275f2e033b",
+      "decoded_bytes": 2448,
+      "encoded_sha256": "f8e01c137dda42b167ae664a63bfe4b180ccd0c2c200e873c577ed899bceae3e"
+    },
+    {
+      "path": "receipts/capture_driver.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/capture_driver.py",
+      "decoded_sha256": "a3ba29a272b86c9e66ebae4acc3caa7dfdba5beb22fe35de7265aa6530adf478",
+      "decoded_bytes": 13360,
+      "encoded_sha256": "66339917ef0583e3a02e2c27e3b05c93bfefd86d403bf86c2ac6e4ce3fdc1aec"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/command.json",
+      "decoded_sha256": "0b13569d32d0b0a49d232418d5afc4454d72e6611059e91af3fc399e81acdff7",
+      "decoded_bytes": 737,
+      "encoded_sha256": "67649471fb500517aa32ecc83af2b5170996745b749c2c98f5445621e22d875b"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/completed/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/completed/copy-manifest.json",
+      "decoded_sha256": "1ecf8e56422d4d6ec2ef9f0b7056199c8e8701a27dfbe70ed6df523ab894f5e0",
+      "decoded_bytes": 5090,
+      "encoded_sha256": "af4b95dc40f2971eb871571946dee901e8d801a4b075fde783df48290c2f8471"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/completed/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/completed/result.json",
+      "decoded_sha256": "698d50e9cea66befa347fe00dcfb00e740510be015d7c71ee729ff90ac3c67fd",
+      "decoded_bytes": 64163,
+      "encoded_sha256": "bafde0c7257b4891d88c519997856041552bce79db78649ebc5526d0975935fa"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/completed/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/completed/text.jsonl",
+      "decoded_sha256": "0e5d525925ffc336473962818284d5d872241cca2de0146aaa161d34cbd8e621",
+      "decoded_bytes": 8218,
+      "encoded_sha256": "ac96378b73304ef48427b869da3e4a5d04ecf7e730ed814584657927ce5584b4"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/prior/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/prior/copy-manifest.json",
+      "decoded_sha256": "fb891be45c171b72f1c2a2ba416e98a522c57bda87fdd9cbee2a9911cfac8678",
+      "decoded_bytes": 5026,
+      "encoded_sha256": "67978d3ab3cceb4d7bff66f4312e1a1e24c94436a3bd6a53f1e72057039e50d2"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/prior/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/prior/result.json",
+      "decoded_sha256": "982763a875a89deb5f18b57a8ff7edf813453131c80c2e5a1ced20f6fa196936",
+      "decoded_bytes": 63731,
+      "encoded_sha256": "2c6d868d52695a7a34a8f7aa37458c866b02ade807388f6efd7c0fe10db1919d"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/prior/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/prior/text.jsonl",
+      "decoded_sha256": "4b026e3a2891650f4ea49ee52d1b4915a5050de0f8a91af68a98ec4263d26caf",
+      "decoded_bytes": 8145,
+      "encoded_sha256": "b30eef054fcb14949d0fd4043cb9dd35f69996755dc5d5a43c6ae9a4a6a368f7"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/prior-output.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/prior-output.json",
+      "decoded_sha256": "fb891be45c171b72f1c2a2ba416e98a522c57bda87fdd9cbee2a9911cfac8678",
+      "decoded_bytes": 5026,
+      "encoded_sha256": "67978d3ab3cceb4d7bff66f4312e1a1e24c94436a3bd6a53f1e72057039e50d2"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/process.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/process.log",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/receipt.json",
+      "decoded_sha256": "df2f6b583ac3211b1a082672f661134bf7d663c5c09067d5c584ffb6455cc666",
+      "decoded_bytes": 5917,
+      "encoded_sha256": "9b2d679fef8bf24b9f761ecd2d43160482096aebbed3872d173173fcbdc91936"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/source-after.json",
+      "decoded_sha256": "c7be4f505588e29bdb75092a21b737482c48a38f98f808d78b432cc578d8280f",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "60e6f6ff44b1ca45506ccf0a6676abd8b10b8251ec200ac5e96ee1867bfc4725"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/endpoints/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/endpoints/source-before.json",
+      "decoded_sha256": "d0c2b254cb0d4a1435dd473a3bbbc27db9164f081d9a3a1d66b01cba301b8079",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "79688cd67f972f426732a2fcc16ce4a800af679e06ec5cf5100f03268161fdd6"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/command.json",
+      "decoded_sha256": "1e6f884485d425ec5e7de283369e6dc8a167696dc0bfd1150c6f0f91b9e56463",
+      "decoded_bytes": 753,
+      "encoded_sha256": "f62e02351fc316fb600a03aaefb175245afce5406fdd795efe3d024dc7d6f87d"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/completed/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/completed/copy-manifest.json",
+      "decoded_sha256": "5e4e44fbb44ac69e14446013ecf2a39d935e7b9a97a45b5dc5ff803d84cf242a",
+      "decoded_bytes": 7189,
+      "encoded_sha256": "3566a9183dcafdc5a0a00fed40f0244d5747a2ccfdf482de2845351c7704ad12"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/completed/dead_air.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/completed/dead_air.log",
+      "decoded_sha256": "338001c554a53059b89598fa32b8eede39ac6fe458cb7ce15dbd3202f8cdb62c",
+      "decoded_bytes": 133,
+      "encoded_sha256": "ddc11569ab918acce4c323ab54c44baacd1bd7498c226855d85ec4ee852831fd"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/completed/media/videos/480p15/NaiveBayes.narration.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/completed/media/videos/480p15/NaiveBayes.narration.json",
+      "decoded_sha256": "d101766309b7c0ceea231bc1296814dd13ba07632d2f33efd11b68eece7bf6c7",
+      "decoded_bytes": 30218,
+      "encoded_sha256": "1ac01eaeb9dc4330248f658c5a99628ab0604ff09113ee63065e3737d9be6e70"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/completed/media/videos/480p15/NaiveBayes.srt.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/completed/media/videos/480p15/NaiveBayes.srt",
+      "decoded_sha256": "d3a49183330144591d292b5787ef2a7143085a6cbc4abd82086171c0f96d4c25",
+      "decoded_bytes": 3694,
+      "encoded_sha256": "532433fc525a93aea04677bf7ad732b8e5cd971a024cae254e4d1794023ae1ab"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/completed/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/completed/result.json",
+      "decoded_sha256": "c4c025c6cbd9a228ce773b322e8dedfc9fbc11d74cd62102e1490a826a440820",
+      "decoded_bytes": 64432,
+      "encoded_sha256": "a306beaa21d1fbb3dc5864612175630ec32f64ef7ea8e9edad247adca832cd31"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/completed/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/completed/text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/prior/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/prior/copy-manifest.json",
+      "decoded_sha256": "1254239ec52400ff771ae21739a3cc9923f9b054dc665eef919e90274e12de7c",
+      "decoded_bytes": 7101,
+      "encoded_sha256": "292570e4f8f5ebcfd535783b3926eda46396940cbcfeebc7cb0e19e17ace54c0"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/prior/dead_air.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/prior/dead_air.log",
+      "decoded_sha256": "338001c554a53059b89598fa32b8eede39ac6fe458cb7ce15dbd3202f8cdb62c",
+      "decoded_bytes": 133,
+      "encoded_sha256": "ddc11569ab918acce4c323ab54c44baacd1bd7498c226855d85ec4ee852831fd"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/prior/media/videos/480p15/NaiveBayes.narration.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/prior/media/videos/480p15/NaiveBayes.narration.json",
+      "decoded_sha256": "d101766309b7c0ceea231bc1296814dd13ba07632d2f33efd11b68eece7bf6c7",
+      "decoded_bytes": 30218,
+      "encoded_sha256": "1ac01eaeb9dc4330248f658c5a99628ab0604ff09113ee63065e3737d9be6e70"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/prior/media/videos/480p15/NaiveBayes.srt.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/prior/media/videos/480p15/NaiveBayes.srt",
+      "decoded_sha256": "d3a49183330144591d292b5787ef2a7143085a6cbc4abd82086171c0f96d4c25",
+      "decoded_bytes": 3694,
+      "encoded_sha256": "532433fc525a93aea04677bf7ad732b8e5cd971a024cae254e4d1794023ae1ab"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/prior/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/prior/result.json",
+      "decoded_sha256": "a78a240e9cf93568f21fa64e78174d78412bc1e307a121a038ea1d0236f28982",
+      "decoded_bytes": 64000,
+      "encoded_sha256": "f62c53894699a139be6aa457220f80c95949b6aeb55bd8c9e3d1d76411018e64"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/prior/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/prior/text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/prior-output.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/prior-output.json",
+      "decoded_sha256": "1254239ec52400ff771ae21739a3cc9923f9b054dc665eef919e90274e12de7c",
+      "decoded_bytes": 7101,
+      "encoded_sha256": "292570e4f8f5ebcfd535783b3926eda46396940cbcfeebc7cb0e19e17ace54c0"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/process.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/process.log",
+      "decoded_sha256": "bab6cdb07c14572c72c71f720caea6d8b185122bb4c60ce9a7c2cccb9b1a940f",
+      "decoded_bytes": 405,
+      "encoded_sha256": "a81a5189122d1a160b7515319bc2bbfabd92195ae29c95961ea3d37d4ae1b849"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/receipt.json",
+      "decoded_sha256": "b501b2d373c5bf9d95c8c9e193de816e4bb3ad719b40d8d7b40cf6467b53233b",
+      "decoded_bytes": 8097,
+      "encoded_sha256": "fe8f84ad8af261686e3243de6a0642f1359b65b85d294751eedda50b83a62846"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/source-after.json",
+      "decoded_sha256": "9c3fa84e54b26e002fedbc4044aae5f4d3a401a851b577dab301a9e80c9fcb14",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "c15bd6ac06319b30393c622b49ab1aaafeac0074ce9fbc4046ecc985c1c382dc"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/en/motion/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/en/motion/source-before.json",
+      "decoded_sha256": "4ee75a091db58f0f8e6f957742088fa60449fac288ff2adfc57a121246ac9edc",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "3726e9c262a05b1c7018bc75e8865deeb81d95baaea5801d8ae3381f0304021e"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/command.json",
+      "decoded_sha256": "feddf065487a53e0d1c0f6776ef223c3c551aba12c15229cb4ac283d11e8c43b",
+      "decoded_bytes": 737,
+      "encoded_sha256": "d53a29f1be300265d7ba690f2dde1b4fa55f3d82112e7dacec92c8a7fff48f4b"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/completed/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/completed/copy-manifest.json",
+      "decoded_sha256": "e1963960bfc4e13535b3882161424656fe08c9eebe2e347a07f29086d62d3c8d",
+      "decoded_bytes": 5090,
+      "encoded_sha256": "c3a8c89760d8e8d4d8d7e215c2e19eed8e574eac86b661cc10c1de153876c7fc"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/completed/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/completed/result.json",
+      "decoded_sha256": "636cd377bd47e4917fe29b3df24de84754568314cb05f60003101976096530df",
+      "decoded_bytes": 82891,
+      "encoded_sha256": "4a071639a39ba366a1da9b290b967fd2cf0d907f95aeccc67a48f50b5dea4869"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/completed/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/completed/text.jsonl",
+      "decoded_sha256": "3fd6b48e5d26e6fc8d8afbfde014bc8b7b65bac0abd2c6e146c0bea7b8ddfad4",
+      "decoded_bytes": 8084,
+      "encoded_sha256": "9729951942c46c197061b150c09c3368ee04f30e26721b22d21d892f2edbb067"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/prior/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/prior/copy-manifest.json",
+      "decoded_sha256": "126bb19e23b4f38519d3918a224681e3017e9d2c0c536c7dafe407ed6ba715ce",
+      "decoded_bytes": 5026,
+      "encoded_sha256": "c5472055eac4a58371fd1cfe050b9d5ab7d4a9e662a5292f779021795260372d"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/prior/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/prior/result.json",
+      "decoded_sha256": "963fe2bae452d4ae2312f04cb3348383dc35af2e880e55f8546d48817cecec97",
+      "decoded_bytes": 82472,
+      "encoded_sha256": "8a3d1477d554c615c8479e304e3f3a38e3866f9769a6757c253f8ea43c5f162c"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/prior/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/prior/text.jsonl",
+      "decoded_sha256": "e0106140dca685c615963a29971d4d3ba63fb6f098766a6f6eb3ee96969444e2",
+      "decoded_bytes": 8011,
+      "encoded_sha256": "837593c6e8cacbe90335d7d19c100caa3a42faefbef7fdb1fca27d39d2169423"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/prior-output.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/prior-output.json",
+      "decoded_sha256": "126bb19e23b4f38519d3918a224681e3017e9d2c0c536c7dafe407ed6ba715ce",
+      "decoded_bytes": 5026,
+      "encoded_sha256": "c5472055eac4a58371fd1cfe050b9d5ab7d4a9e662a5292f779021795260372d"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/process.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/process.log",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/receipt.json",
+      "decoded_sha256": "177e32230833c456c8073b87fe29b17354a4b79d980d7bee07ba9cb8d5b6c895",
+      "decoded_bytes": 5917,
+      "encoded_sha256": "340a91920458f3dfcd95771f989d89e959611b48c80b7c72a7bbebc528c3e398"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/source-after.json",
+      "decoded_sha256": "c5a333d533cfb5bae055cb90d52b95a382596d60e067e41091328b53e0716e3e",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "bca5c9ac3b7c1603ffed9bd7e45cb42f485ac4969913d1501d3ee0d3acc76592"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/endpoints/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/endpoints/source-before.json",
+      "decoded_sha256": "3b03a5ad8260fe663e148d285e70ef1cdb93e42a54d31afaf85a9498bcbc41f1",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "aa7598742ee5bee4038fb55f2738ab8e5ddb5c15348de77ec9673637c339b0a3"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/command.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/command.json",
+      "decoded_sha256": "f21952669fcdc230dc6c682aa18b29001ab16618b0d5917234cc631b95140594",
+      "decoded_bytes": 753,
+      "encoded_sha256": "276e3705b6514d60f326a4587b6a3ffecb974a46f968c2c8232219d25a144d55"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/completed/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/completed/copy-manifest.json",
+      "decoded_sha256": "40060cf09fac32e200aa4008a142e4b81d92ae531a5ee6118cc28de72089a2be",
+      "decoded_bytes": 7189,
+      "encoded_sha256": "3cf88ad4c7b98434801801aef1d0013f5c7f90c6aefc24ab93a696b10d49ccbd"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/completed/dead_air.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/completed/dead_air.log",
+      "decoded_sha256": "e2d82d854861955072af23e6d17a8b6d791256ed20b3566e40ff7c9823559505",
+      "decoded_bytes": 133,
+      "encoded_sha256": "36a3f40f23d3fdc6d8a5392d4aeb8d80cab6e2b8559d59f4e7db2be99b34d01b"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/completed/media/videos/480p15/NaiveBayes.narration.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/completed/media/videos/480p15/NaiveBayes.narration.json",
+      "decoded_sha256": "e4bdb8868acd175d7a731774f1f414679a48b68829218316e9d51fd330c7833d",
+      "decoded_bytes": 48753,
+      "encoded_sha256": "419d22c60acd11062ed477cd6b75b376d32e053112fe6958208d91658698646c"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/completed/media/videos/480p15/NaiveBayes.srt.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/completed/media/videos/480p15/NaiveBayes.srt",
+      "decoded_sha256": "2f8f3b1c4087b821108ad5f394ae82d52e25e631c4599d7b26b2be6021e0f6bd",
+      "decoded_bytes": 3829,
+      "encoded_sha256": "d15ac47ae63ecf93d86b9c56212f8983ef219395ba4f258f6adf0609a29cf121"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/completed/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/completed/result.json",
+      "decoded_sha256": "2b645f257cd761b404746793f999692c39f4aabc8e3ad71aa2cc502f99d5cb90",
+      "decoded_bytes": 83165,
+      "encoded_sha256": "e815630fdc73ef0bddc0209f405e2113187d1dba28cc33783a9152d765071e3c"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/completed/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/completed/text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/data-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/data-after.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/data-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/data-before.json",
+      "decoded_sha256": "cca42dd8bd5f1a239ecd74a559db3a3ce6085a45db0fee3b9c104174b20375e8",
+      "decoded_bytes": 13968,
+      "encoded_sha256": "40f3216941773d282f844cf45773ee9dc54b279d0d21209e6e201880c19cf5d0"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/prior/copy-manifest.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/prior/copy-manifest.json",
+      "decoded_sha256": "46707650ebcb691afbf46529a06ca0475d7b0038054bf5784a70dd7007194ff0",
+      "decoded_bytes": 7167,
+      "encoded_sha256": "d00562c8c800c957b6b053343118ed0975a2201236472ce073ac3583716af5e2"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/prior/dead_air.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/prior/dead_air.log",
+      "decoded_sha256": "e2d82d854861955072af23e6d17a8b6d791256ed20b3566e40ff7c9823559505",
+      "decoded_bytes": 133,
+      "encoded_sha256": "36a3f40f23d3fdc6d8a5392d4aeb8d80cab6e2b8559d59f4e7db2be99b34d01b"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/prior/media/videos/480p15/NaiveBayes.narration.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/prior/media/videos/480p15/NaiveBayes.narration.json",
+      "decoded_sha256": "e4bdb8868acd175d7a731774f1f414679a48b68829218316e9d51fd330c7833d",
+      "decoded_bytes": 48753,
+      "encoded_sha256": "419d22c60acd11062ed477cd6b75b376d32e053112fe6958208d91658698646c"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/prior/media/videos/480p15/NaiveBayes.srt.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/prior/media/videos/480p15/NaiveBayes.srt",
+      "decoded_sha256": "2f8f3b1c4087b821108ad5f394ae82d52e25e631c4599d7b26b2be6021e0f6bd",
+      "decoded_bytes": 3829,
+      "encoded_sha256": "d15ac47ae63ecf93d86b9c56212f8983ef219395ba4f258f6adf0609a29cf121"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/prior/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/prior/result.json",
+      "decoded_sha256": "5026e8dcfb2c3e2adf7f2743fd9771e75a41e0122097caabc517ad3e603488e4",
+      "decoded_bytes": 82804,
+      "encoded_sha256": "831c989305e5cae43e48c58a404edc0aa9b3b06b2506db59a96849ccc4b61a82"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/prior/text.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/prior/text.jsonl",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/prior-output.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/prior-output.json",
+      "decoded_sha256": "46707650ebcb691afbf46529a06ca0475d7b0038054bf5784a70dd7007194ff0",
+      "decoded_bytes": 7167,
+      "encoded_sha256": "d00562c8c800c957b6b053343118ed0975a2201236472ce073ac3583716af5e2"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/process.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/process.log",
+      "decoded_sha256": "1392dfd19a4e2e81673da3c772d28b3ac43d109d95e0ad1eabb5a0c2713c5a4f",
+      "decoded_bytes": 405,
+      "encoded_sha256": "9c5d7f8158ab0d4d773558a2c97e0f81b0a432f72ccab4fc617a60eabdba1e77"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/receipt.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/receipt.json",
+      "decoded_sha256": "d6e769784b0c62b3ad4631876dc22ca9359906b562f1bd805b49b8600b6031ad",
+      "decoded_bytes": 8097,
+      "encoded_sha256": "15ea59d39dd49e958917dc1ee0ec476109e6d0a6a2e174991039efef4e34b2ae"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/source-after.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/source-after.json",
+      "decoded_sha256": "fad632c21862b247214409a43fb3a0cff6e25fb0e768167f2b7addc366fa1c88",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "c11dd9c3826f9120d82f6d3bec8821f44a5121ef05d5abc0172c270819e35546"
+    },
+    {
+      "path": "receipts/current/08-NaiveBayes/zh/motion/source-before.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/08-NaiveBayes/zh/motion/source-before.json",
+      "decoded_sha256": "bd5ef586d638641b62d2a473e02d437e23b2cd12ed4ddb31161e766602e6a0e3",
+      "decoded_bytes": 24727,
+      "encoded_sha256": "0c75199019dc8d85d7447223bde7576169d0a507e96e10a69feae5a5f3f9d793"
+    },
+    {
+      "path": "receipts/current/complete.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/complete.json",
+      "decoded_sha256": "2fd43bc0f060af0264b26b9313fa095add6b30ecc222e2e80dff1e20b12bfd9a",
+      "decoded_bytes": 297,
+      "encoded_sha256": "6394d90dd354aa7eb7bc10404ce0aa3109ecffbdd6548095465a92626b27f1ce"
+    },
+    {
+      "path": "receipts/current/progress.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/progress.json",
+      "decoded_sha256": "c245444ed75937501547dcabb81e04c432687aa7a91ccfed97786d81fb13a98e",
+      "decoded_bytes": 29331,
+      "encoded_sha256": "52f1f8bdd3148178394dbfd7223a06f51d97892620836b6554bad20c9870c2dc"
+    },
+    {
+      "path": "receipts/current/start-gate.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/current/start-gate.json",
+      "decoded_sha256": "53c19e83873535d9ab8dabdb578b33f2d179870c332e2cedd7c3c4bd090dab40",
+      "decoded_bytes": 625,
+      "encoded_sha256": "57fc213cedecf32f82b7510c4d28bd3f17ced96f8f7210088ca7550546dea7ba"
+    },
+    {
+      "path": "receipts/data-final-check.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/data-final-check.json",
+      "decoded_sha256": "202ea4af8cf6a5cb957f9f5391838c1670a9636931819d9cc616b3d8a669a2a5",
+      "decoded_bytes": 14928,
+      "encoded_sha256": "f424a92cf8de7659ec9893d380b8446697e93fad3f5b861ca15d2e5a7a01c961"
+    },
+    {
+      "path": "receipts/events.jsonl.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/events.jsonl",
+      "decoded_sha256": "a3eeee815c0bae0594daa3a0b14b13a7fc1ead3eeedbf565d6b5c3275f2e033b",
+      "decoded_bytes": 2448,
+      "encoded_sha256": "f8e01c137dda42b167ae664a63bfe4b180ccd0c2c200e873c577ed899bceae3e"
+    },
+    {
+      "path": "receipts/finalize_review.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/finalize_review.py",
+      "decoded_sha256": "bd33939fc300170a5df7bb0aa5814b2c73d34b71a95bef7774c5e528241fad0f",
+      "decoded_bytes": 9696,
+      "encoded_sha256": "8c0d79e6c9f7b0ae9514bb4f650c5de9852df1731ae36bfe3c9fada398b73739"
+    },
+    {
+      "path": "receipts/mark_views.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/mark_views.py",
+      "decoded_sha256": "25a41a27e1bca341c5238650ff535df39dea90eced1c965ee9ba70a2a9a875fc",
+      "decoded_bytes": 946,
+      "encoded_sha256": "29318079f78e9bde87a6a9ff4b071f3a0047e23a6ed3b865dd3878cf7099a565"
+    },
+    {
+      "path": "receipts/prepare-en.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/prepare-en.log",
+      "decoded_sha256": "90426f74efa773a4072121571004e6d81da42f7fb86f7b1a501fc3eb55fa7dc7",
+      "decoded_bytes": 207,
+      "encoded_sha256": "8405fd1a425f3b029a3bf32354134c331e39ce829abd274d7f7bd7569960d2cd"
+    },
+    {
+      "path": "receipts/prepare-zh.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/prepare-zh.log",
+      "decoded_sha256": "8ced6460f05213f9453c9f25d9015e00003e02895df23e8c369de34721321094",
+      "decoded_bytes": 207,
+      "encoded_sha256": "c446b6dce6c3cf851e5bdab932706e904c4ce2e2fb12bd16c3989c2f1d918a9e"
+    },
+    {
+      "path": "receipts/prepare_review.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/prepare_review.py",
+      "decoded_sha256": "4bdfa7425c30c31ddf4e31ef9e8364b950fb43be44c6d715decc56561d18978c",
+      "decoded_bytes": 9064,
+      "encoded_sha256": "04561ebc7dff856998a77084c72c9b0beba20e43d77de0bb30278680b7ccc6a4"
+    },
+    {
+      "path": "receipts/report.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/report.json",
+      "decoded_sha256": "2f24470ccca1596c2d24874e7abdc256e969ee4268e692117d8b1a9ccc9c2518",
+      "decoded_bytes": 16115,
+      "encoded_sha256": "59977b1b6b4a724c1527db25bf8073e4b0f8c4a3fce03c9100361cfb72a86ad0"
+    },
+    {
+      "path": "receipts/report.md.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/report.md",
+      "decoded_sha256": "c8fcb922fa0eba2f56e847f1f88c76d14050277a76ff5efdfc719d64df0a9ba6",
+      "decoded_bytes": 1180,
+      "encoded_sha256": "86da4c549eb1e44ff98a2153d8ce42ed0783fd7ff8258738d48ddc7667f1f250"
+    },
+    {
+      "path": "receipts/review/en/audit/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/audit/result.json",
+      "decoded_sha256": "73ab78a33ad488d32703a802f6735e0efeb3a94bfc84b44e3f387e4c8b71bd67",
+      "decoded_bytes": 158219,
+      "encoded_sha256": "b6e6bfebf24dd5d2fc4e779c09ac49402098b43641ba3260e547259c8cf0b683"
+    },
+    {
+      "path": "receipts/review/en/audit.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/audit.log",
+      "decoded_sha256": "efc714a0238cd75c822fc4395eef287f0d154fca6b65b0d7d00094efd6004bad",
+      "decoded_bytes": 96,
+      "encoded_sha256": "d2c78304e2987f7540fe605433e0926e6a566071f7e9700258c61fb8e4531f40"
+    },
+    {
+      "path": "receipts/review/en/final-unselected-gaps.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/final-unselected-gaps.json",
+      "decoded_sha256": "2aa89ef7c9c9f66f1e5a149e8df9a624e6d7127ae5f36880c06cd90c914639e7",
+      "decoded_bytes": 32025,
+      "encoded_sha256": "1979a580cfff3117d8736b834eb5046154858f9a1bcbd909babc94c6184fe6e4"
+    },
+    {
+      "path": "receipts/review/en/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/plan.json",
+      "decoded_sha256": "8383a348f2ad866903e1e50c62bab0711ce887d2710a831e30b75cf9055a28fe",
+      "decoded_bytes": 866519,
+      "encoded_sha256": "178e496dceab0d19b35f341fad8feafaae1b26f221d93287127579abc433b7d4"
+    },
+    {
+      "path": "receipts/review/en/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/views.json",
+      "decoded_sha256": "efad32dfa14b43214ab94b23b3832229890ab2702b1682a89de61bfa6a447491",
+      "decoded_bytes": 16831,
+      "encoded_sha256": "f0282e3f1ab51ea1060e8550e64b2bb09caaa9f49f3b5b56af35a9ce90bb5fd6"
+    },
+    {
+      "path": "receipts/review/zh/audit/result.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/audit/result.json",
+      "decoded_sha256": "bec23f1d94cc508bd07bcc8a96c502043698ebad18d398f5f104acefca12c5ed",
+      "decoded_bytes": 165761,
+      "encoded_sha256": "642c74f5b7667c32e3be957187c947b8fa947e233d046166b339c9ee66cf50a7"
+    },
+    {
+      "path": "receipts/review/zh/audit.log.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/audit.log",
+      "decoded_sha256": "1908bf710824d417808c898bf391c44f4c100801c4986b4becc3d68f9072e0c5",
+      "decoded_bytes": 96,
+      "encoded_sha256": "5dd9704a7cc0c0081e7e13e51b608b8b2cdb57fd0bb150a436d5826b8553a889"
+    },
+    {
+      "path": "receipts/review/zh/final-unselected-gaps.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/final-unselected-gaps.json",
+      "decoded_sha256": "ee484c581d827359c23002dd9f92d7613825692ba8e0fcb9ca50da5f97553a8c",
+      "decoded_bytes": 34125,
+      "encoded_sha256": "81b78e855bb03724d653d4a45a273ee5807f96bc4a093d428683b713e2196546"
+    },
+    {
+      "path": "receipts/review/zh/plan.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/plan.json",
+      "decoded_sha256": "de6e92b33c3a599b9a945c44e3850b98cbf8fece51b3705192a2f3e762780e72",
+      "decoded_bytes": 868609,
+      "encoded_sha256": "be8e23484a25217051233dd395ee7df4f2f2cfd20606d3529cb33fea6da6177e"
+    },
+    {
+      "path": "receipts/review/zh/views.json.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/views.json",
+      "decoded_sha256": "de09bd9fb411700665a3cffe7fa92b338863a93f84d5cbcbd5a43e733fc245af",
+      "decoded_bytes": 16010,
+      "encoded_sha256": "eb79626611ddc7db7831d3e7512e595320ca6bb9d0a5fddeec9917406cc45b59"
+    },
+    {
+      "path": "receipts/run_captures.py.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/run_captures.py",
+      "decoded_sha256": "5ba546d28d820edf3feecd3485a74af394dd3586b2f2751d6b928b971fa6451b",
+      "decoded_bytes": 1745,
+      "encoded_sha256": "293c799ad059fc8f557e06295f0af49778e0e9e29ed9cb98421dbd196ad0e398"
+    },
+    {
+      "path": "source-blobs/0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934.gz",
+      "decoded_sha256": "0496ff8d52bba893245d426cf72b666bc917d7b73c427946d508972fd0f66934",
+      "decoded_bytes": 16199,
+      "encoded_sha256": "a04662090c3c129cc1ccae3170e526aed0473849e7f305c83330cd9443aa6faf"
+    },
+    {
+      "path": "source-blobs/0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad.gz",
+      "decoded_sha256": "0884ed469261b1b911c233f875d03430ed6099b6ce79c499972cce6ff0e9d0ad",
+      "decoded_bytes": 2440358,
+      "encoded_sha256": "4252fe4cc0a5111a276b5dcd60e65945f3a45ce066e6d51b30861e00b5ee950a"
+    },
+    {
+      "path": "source-blobs/096df1ad04b1b9c22c0ee27f5a925171f263153fc8bf179579a1e66b78ac9639.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/096df1ad04b1b9c22c0ee27f5a925171f263153fc8bf179579a1e66b78ac9639.gz",
+      "decoded_sha256": "096df1ad04b1b9c22c0ee27f5a925171f263153fc8bf179579a1e66b78ac9639",
+      "decoded_bytes": 13915,
+      "encoded_sha256": "ca76026143b67eac4b85cb4686c6e26bf1d6633378c388b82521d0a27e6a9c53"
+    },
+    {
+      "path": "source-blobs/0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa.gz",
+      "decoded_sha256": "0a8793c74e7ba2a0ff79f83ba37180c21329405a2cd189c6ad939d49302a84fa",
+      "decoded_bytes": 78448,
+      "encoded_sha256": "9b271d67e47dda1ab50854e347f2b2b936f44a0d9e5f0a6bd16fd14c5fe1482b"
+    },
+    {
+      "path": "source-blobs/0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2.gz",
+      "decoded_sha256": "0c4d021bafe1042615e3247ea5905534c2fa3cb3bf38dd9fafa23b9318ec73c2",
+      "decoded_bytes": 77809,
+      "encoded_sha256": "e7e522b44f300a063b9c03232b1d0046e84d414f06636af5a5d79f3f5e434c79"
+    },
+    {
+      "path": "source-blobs/0d817ec6801fc2903a8e74a8952449cd59664a9ef45548f10303003b503bb37e.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/0d817ec6801fc2903a8e74a8952449cd59664a9ef45548f10303003b503bb37e.gz",
+      "decoded_sha256": "0d817ec6801fc2903a8e74a8952449cd59664a9ef45548f10303003b503bb37e",
+      "decoded_bytes": 5877,
+      "encoded_sha256": "f3df17414468d84176921101cda9ecafa92d2e0aa2dd3008afbee4068d356503"
+    },
+    {
+      "path": "source-blobs/10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d.gz",
+      "decoded_sha256": "10978b49dafd2dfc78a8fe5c9bfb55dc23021aab8620e422d18a0fceceb4233d",
+      "decoded_bytes": 100230,
+      "encoded_sha256": "e959b9ee70e6acb3b7cfab793fc3284b0c493565044134ad5512b1aa78717215"
+    },
+    {
+      "path": "source-blobs/117cfbdcd6f4f5569cf7f99cdf91ab68a6144425ecaedbc68bea3571148a6bcc.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/117cfbdcd6f4f5569cf7f99cdf91ab68a6144425ecaedbc68bea3571148a6bcc.gz",
+      "decoded_sha256": "117cfbdcd6f4f5569cf7f99cdf91ab68a6144425ecaedbc68bea3571148a6bcc",
+      "decoded_bytes": 1997,
+      "encoded_sha256": "fdcc43586f4288bd1204372c7847d2e5263bd2061e2cc4a83c873ad12f3bc17d"
+    },
+    {
+      "path": "source-blobs/149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f.gz",
+      "decoded_sha256": "149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f",
+      "decoded_bytes": 23968,
+      "encoded_sha256": "35d61bc25f15d98d004c043740e17fd806d63416dcc545525e498a6e95190688"
+    },
+    {
+      "path": "source-blobs/163fab83580f701f663c7226b26cde0c455fc6aca174af26bc99d26bcdd966ff.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/163fab83580f701f663c7226b26cde0c455fc6aca174af26bc99d26bcdd966ff.gz",
+      "decoded_sha256": "163fab83580f701f663c7226b26cde0c455fc6aca174af26bc99d26bcdd966ff",
+      "decoded_bytes": 19996,
+      "encoded_sha256": "9cb8ff724818649729615ace14cb84d72e0cd42dedd169d98a9375480c8c2d81"
+    },
+    {
+      "path": "source-blobs/19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b.gz",
+      "decoded_sha256": "19036018feffafaf5c43855814f0b877ae7e63140a9e585ebb30e17bdc346c5b",
+      "decoded_bytes": 11200,
+      "encoded_sha256": "445f2075ce4fbafd1864ade89a580d8473eeff8b763f53608bfa5c434c177a46"
+    },
+    {
+      "path": "source-blobs/196386f5e47b82efd7884369f7901ece1a3a144edea745d7d54042a764e1a2de.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/196386f5e47b82efd7884369f7901ece1a3a144edea745d7d54042a764e1a2de.gz",
+      "decoded_sha256": "196386f5e47b82efd7884369f7901ece1a3a144edea745d7d54042a764e1a2de",
+      "decoded_bytes": 4609,
+      "encoded_sha256": "126e4757c05639fbc8d873745620ca918a77bc142865ecfb06c396b31af1da85"
+    },
+    {
+      "path": "source-blobs/1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4.gz",
+      "decoded_sha256": "1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4",
+      "decoded_bytes": 23829,
+      "encoded_sha256": "4496022b3b860d11e4353d24603616772b4b7c6204682d6f4407953bbad26868"
+    },
+    {
+      "path": "source-blobs/1c33e2455da69d3f8112c421b4588099896d36932bd1060bcd026bf4c89bad62.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/1c33e2455da69d3f8112c421b4588099896d36932bd1060bcd026bf4c89bad62.gz",
+      "decoded_sha256": "1c33e2455da69d3f8112c421b4588099896d36932bd1060bcd026bf4c89bad62",
+      "decoded_bytes": 153,
+      "encoded_sha256": "d35fa1a615e2576605d8f4c4b9a38bca171b3cb52b2446d49ebb91b4b321bdad"
+    },
+    {
+      "path": "source-blobs/1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485.gz",
+      "decoded_sha256": "1e2f807b32cdda3143ba74beb990d8388a6d574eb9b5da5584ab89cc6d195485",
+      "decoded_bytes": 9415,
+      "encoded_sha256": "2f0afe61a44325121ef07e1471b31fa35858167ff54f656ca5695fa73acdb789"
+    },
+    {
+      "path": "source-blobs/1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082.gz",
+      "decoded_sha256": "1f3f3b02bae3b42ce22d51255ef01a22f9daed0d0cfd794297ef36d6c697c082",
+      "decoded_bytes": 18924,
+      "encoded_sha256": "a03a1d9831d96e3d09041190834e5c590bf90f8057f08e1fec0d65b010bd0c3f"
+    },
+    {
+      "path": "source-blobs/1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13.gz",
+      "decoded_sha256": "1f4a407ba2869b75f5c5ef69854c2718d10708f9d9949452c7959d41fb983f13",
+      "decoded_bytes": 1964,
+      "encoded_sha256": "9be9fdcd42284554e5fa5697214d4bb985a1ecc65ff570e7a3d788c3b00035e2"
+    },
+    {
+      "path": "source-blobs/20146dcf999aa8ca58f97ea828eaa34da97986a3ebea1afd74f3f530b2469607.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/20146dcf999aa8ca58f97ea828eaa34da97986a3ebea1afd74f3f530b2469607.gz",
+      "decoded_sha256": "20146dcf999aa8ca58f97ea828eaa34da97986a3ebea1afd74f3f530b2469607",
+      "decoded_bytes": 10691,
+      "encoded_sha256": "df54a76c1fea535bdecd43a6f44083cf9c01f061a909d1b74049808fdbc4c1b9"
+    },
+    {
+      "path": "source-blobs/210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449.gz",
+      "decoded_sha256": "210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449",
+      "decoded_bytes": 17742,
+      "encoded_sha256": "3ce9c9e0ec1bf9c6b077e3ff1697a47cdbdc0181afcd76152f97e55f9becdfe8"
+    },
+    {
+      "path": "source-blobs/22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb.gz",
+      "decoded_sha256": "22a32b06d6232c8667db7fd0e318094c8e88ce10590ce9322916830d0e6b9cbb",
+      "decoded_bytes": 6055,
+      "encoded_sha256": "bb8af91d3d478ae033b6d385563601f23c0a724f98530a8fb474df6832af7d5f"
+    },
+    {
+      "path": "source-blobs/25681bdcdb4ce5d90961e9195f3fd3df76d7ca55dcb7cc4e3ead027f131e55aa.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/25681bdcdb4ce5d90961e9195f3fd3df76d7ca55dcb7cc4e3ead027f131e55aa.gz",
+      "decoded_sha256": "25681bdcdb4ce5d90961e9195f3fd3df76d7ca55dcb7cc4e3ead027f131e55aa",
+      "decoded_bytes": 5603,
+      "encoded_sha256": "01b92f33eaaeb4f69b9c071dc78106d2fd083fd8fe1d849ebc574ff8058a77c8"
+    },
+    {
+      "path": "source-blobs/2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0.gz",
+      "decoded_sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+      "decoded_bytes": 7798,
+      "encoded_sha256": "dd045ceae97f867429e27f8db42c65e886b13a6f66fe3dde4e7cb101d18d0ab7"
+    },
+    {
+      "path": "source-blobs/2f2885828585ad6464f5308e6ee97c10f188bbf668362444ebcaf7804a60ec86.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/2f2885828585ad6464f5308e6ee97c10f188bbf668362444ebcaf7804a60ec86.gz",
+      "decoded_sha256": "2f2885828585ad6464f5308e6ee97c10f188bbf668362444ebcaf7804a60ec86",
+      "decoded_bytes": 14337,
+      "encoded_sha256": "87382bf749f047d840a8fb1e5736d5269e36ca259c207d43b393d65a104db088"
+    },
+    {
+      "path": "source-blobs/332ba7f10a4ab786608c70a3f9f0f334497ae3e07fd6b29a5fab71e8940b6fce.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/332ba7f10a4ab786608c70a3f9f0f334497ae3e07fd6b29a5fab71e8940b6fce.gz",
+      "decoded_sha256": "332ba7f10a4ab786608c70a3f9f0f334497ae3e07fd6b29a5fab71e8940b6fce",
+      "decoded_bytes": 11296,
+      "encoded_sha256": "ab6f70983b94892097851e6db8e4ab8ffe8cafffde34ed97ad02bb7b8f43a611"
+    },
+    {
+      "path": "source-blobs/335fe7ea82257be43fbda9e06dd67231cd6ee04f5a7bbf93fa71eded36d9512d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/335fe7ea82257be43fbda9e06dd67231cd6ee04f5a7bbf93fa71eded36d9512d.gz",
+      "decoded_sha256": "335fe7ea82257be43fbda9e06dd67231cd6ee04f5a7bbf93fa71eded36d9512d",
+      "decoded_bytes": 1486,
+      "encoded_sha256": "e9ed9bfa9f58b5af72a50a734a4b75cfb0f2f96073e72006a706765fb6c35a2f"
+    },
+    {
+      "path": "source-blobs/379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d.gz",
+      "decoded_sha256": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+      "decoded_bytes": 30850,
+      "encoded_sha256": "1092edb463e57cbc4bfae9d6151a690c440335551061f4310e48d633dc3ccf73"
+    },
+    {
+      "path": "source-blobs/37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb.gz",
+      "decoded_sha256": "37f22bb9c08a1f9e9b73b3419bf2597cc3b387e4d2267aa571d0c9e7130fbeeb",
+      "decoded_bytes": 15895,
+      "encoded_sha256": "f4bb36e5bcd18320beec24449034c519efb2e7da5a8c84d99bed7118feadd1f5"
+    },
+    {
+      "path": "source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e.gz",
+      "decoded_sha256": "3d29dd5f586d9b716b6d762393a747cf328839a7a22f45158ebde3d62cea176e",
+      "decoded_bytes": 325,
+      "encoded_sha256": "79f2d5bcc6a02a4cc297586601b992ea0a3d43faae071a55dea62db179797a31"
+    },
+    {
+      "path": "source-blobs/3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b.gz",
+      "decoded_sha256": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+      "decoded_bytes": 10700,
+      "encoded_sha256": "b22f2829fecc4c155e063fa6859ce018e36ceb9b276cf2fe820126df8217c6ef"
+    },
+    {
+      "path": "source-blobs/400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032.gz",
+      "decoded_sha256": "400e169419dbb499e81939b30456100abdbb9116d60c319f051669da3656c032",
+      "decoded_bytes": 40277,
+      "encoded_sha256": "0d38d28e1ad14760305e71a9c68adcf50ca5bbe4090b45cf7f34f0306c77a76c"
+    },
+    {
+      "path": "source-blobs/41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf.gz",
+      "decoded_sha256": "41a1abc02e0493f1797de3d37cf6e44e81adb647c7f44c8240b27d075507cdcf",
+      "decoded_bytes": 18937,
+      "encoded_sha256": "91c50b9f36036861ceb3b5b85434995f3b6cf8698ae9d8c54cbcd18419bf69ca"
+    },
+    {
+      "path": "source-blobs/4894412fa7cb01eb3eb9cb293f91f7d4a8430b80e2d8580cfaf2c21f026c5df1.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/4894412fa7cb01eb3eb9cb293f91f7d4a8430b80e2d8580cfaf2c21f026c5df1.gz",
+      "decoded_sha256": "4894412fa7cb01eb3eb9cb293f91f7d4a8430b80e2d8580cfaf2c21f026c5df1",
+      "decoded_bytes": 120,
+      "encoded_sha256": "9822c451140ee766c926bc270727fbfcd33efe2af781c267ea1efe4f3d821424"
+    },
+    {
+      "path": "source-blobs/4ee7f26834a904b5c402e08ac82825a2968c191d356b43bb6b07cb9f63e71620.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/4ee7f26834a904b5c402e08ac82825a2968c191d356b43bb6b07cb9f63e71620.gz",
+      "decoded_sha256": "4ee7f26834a904b5c402e08ac82825a2968c191d356b43bb6b07cb9f63e71620",
+      "decoded_bytes": 39331,
+      "encoded_sha256": "a683ac9e2e5e76dacc5ead46a0bf1e47cb5eb3f9c1228ff6f1ea8e0a667c1ae0"
+    },
+    {
+      "path": "source-blobs/50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed.gz",
+      "decoded_sha256": "50ff2a79121a6429eaf30950094d2157e6118d3b390e4544185f27cc44ecf0ed",
+      "decoded_bytes": 25682,
+      "encoded_sha256": "5ebe239acde8f944d83266e979d0dd644912c926d17fcd12097c26ac2342b6cb"
+    },
+    {
+      "path": "source-blobs/531701c46ef97fc3d33b960cb42d267053c9098bcbfe186e55b72dc7bdde6ed7.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/531701c46ef97fc3d33b960cb42d267053c9098bcbfe186e55b72dc7bdde6ed7.gz",
+      "decoded_sha256": "531701c46ef97fc3d33b960cb42d267053c9098bcbfe186e55b72dc7bdde6ed7",
+      "decoded_bytes": 400,
+      "encoded_sha256": "ff7f777245eaa15bf375a191b335e70af67e8f0fa5e45f864941eb100bd32c03"
+    },
+    {
+      "path": "source-blobs/565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83.gz",
+      "decoded_sha256": "565c12043339695c00f7fcd427121a2a499d06f88b6c3e91132defb465690a83",
+      "decoded_bytes": 29057,
+      "encoded_sha256": "1333c8df81bbfd9cb4e97acacd92c104640dfa09524bc62752eda01928d080e0"
+    },
+    {
+      "path": "source-blobs/64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55.gz",
+      "decoded_sha256": "64567666d4e3d0d7ebed23a78f034d4aa1883b78acb2fb5cd89e6298d0855d55",
+      "decoded_bytes": 24700,
+      "encoded_sha256": "38ee56de36176b39d91f9fa4fde4c913ecfaa96cd30b84475cd040173132d5c7"
+    },
+    {
+      "path": "source-blobs/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf.gz",
+      "decoded_sha256": "64afdd9ee3a6ccbce986eadb2e872ee9f5a246321a852170ea4957869b867caf",
+      "decoded_bytes": 8305,
+      "encoded_sha256": "a0bd959eba1ae04d088aef631e8edbd075392f0b2705162f323a6785a4d135d2"
+    },
+    {
+      "path": "source-blobs/651675cee1829c94d92e4acf63ce73ac6e5a878daae07bb08777a979b0f2d48c.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/651675cee1829c94d92e4acf63ce73ac6e5a878daae07bb08777a979b0f2d48c.gz",
+      "decoded_sha256": "651675cee1829c94d92e4acf63ce73ac6e5a878daae07bb08777a979b0f2d48c",
+      "decoded_bytes": 10414,
+      "encoded_sha256": "67b8d401ebbad06376892733fa9fe24877c0b361ba0cf77997ca3ddc420158be"
+    },
+    {
+      "path": "source-blobs/6953684ba6d3131e15a349b76b8ba94b70f1c56699c20e049a46d5407c8b74c6.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/6953684ba6d3131e15a349b76b8ba94b70f1c56699c20e049a46d5407c8b74c6.gz",
+      "decoded_sha256": "6953684ba6d3131e15a349b76b8ba94b70f1c56699c20e049a46d5407c8b74c6",
+      "decoded_bytes": 18021,
+      "encoded_sha256": "2acaf1adad98922ee1b4a01e1f93d6fb547816790505aa4650d8d99be3bc75e3"
+    },
+    {
+      "path": "source-blobs/6a50dc8a1c97ed2d50af4836060b2eff88e3b9f84fb48136b0cf064e7e1abac5.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/6a50dc8a1c97ed2d50af4836060b2eff88e3b9f84fb48136b0cf064e7e1abac5.gz",
+      "decoded_sha256": "6a50dc8a1c97ed2d50af4836060b2eff88e3b9f84fb48136b0cf064e7e1abac5",
+      "decoded_bytes": 3602,
+      "encoded_sha256": "312cb4b89328f5e7d5e7662687c7f6715b4f456c3b234b738528baf707986331"
+    },
+    {
+      "path": "source-blobs/6c52377ee995ea0db7a7fbcfe8cb672dc41985d9aebc10496a3efeaf2b6db0fe.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/6c52377ee995ea0db7a7fbcfe8cb672dc41985d9aebc10496a3efeaf2b6db0fe.gz",
+      "decoded_sha256": "6c52377ee995ea0db7a7fbcfe8cb672dc41985d9aebc10496a3efeaf2b6db0fe",
+      "decoded_bytes": 2528,
+      "encoded_sha256": "83dd7634e6d332bb2c43736e4abf75d24d08a8138e8c7254533b5d64184aefce"
+    },
+    {
+      "path": "source-blobs/6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42.gz",
+      "decoded_sha256": "6ca92202367264e3db72e1d3bc209fda837d7c494d307c0d45c10fea3610aa42",
+      "decoded_bytes": 20784,
+      "encoded_sha256": "67ac7fdeccec92ee5cf50f388d45a53f5c4cdc022a85787d54c80694255d3b06"
+    },
+    {
+      "path": "source-blobs/706ad5eed1fe0854604026137d09731dd679e54b9b570cb6753084d67d16bd6b.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/706ad5eed1fe0854604026137d09731dd679e54b9b570cb6753084d67d16bd6b.gz",
+      "decoded_sha256": "706ad5eed1fe0854604026137d09731dd679e54b9b570cb6753084d67d16bd6b",
+      "decoded_bytes": 9366,
+      "encoded_sha256": "96cba30c48649fdd7c2bf38a04b2b99e69781b7a94c6ad08124c3c4824774573"
+    },
+    {
+      "path": "source-blobs/71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507.gz",
+      "decoded_sha256": "71d7e6857f0b37033c57a0e273fdd80a6cf897bfc7c7ce3f1fdd1f022be1d507",
+      "decoded_bytes": 6276,
+      "encoded_sha256": "5801a2e646019cf07ca1419b42369150cb8b81ce3b94ec33248858d7f20c976a"
+    },
+    {
+      "path": "source-blobs/7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8.gz",
+      "decoded_sha256": "7230ac4c55882c65ba880133512bbb328a4239f919a1f993544a52e7d272dcf8",
+      "decoded_bytes": 23484,
+      "encoded_sha256": "6df45703e3a4bfa71266eaf05e05b0e4d22496c9044119018632a83082ac12ff"
+    },
+    {
+      "path": "source-blobs/7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2.gz",
+      "decoded_sha256": "7c1e56626b1ceceefc5b5c5ce173a57d8cd28f84883939a1e9268bd679eaf5a2",
+      "decoded_bytes": 17420,
+      "encoded_sha256": "c332ec28807194a4fcd21ac8a078577943f09bb11560345dd4010343c635031f"
+    },
+    {
+      "path": "source-blobs/7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f.gz",
+      "decoded_sha256": "7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f",
+      "decoded_bytes": 13554,
+      "encoded_sha256": "e61a2626ec6cfc5e71db3f6624910b3e4803b87d6bce2fd4f74822c2a6ab027b"
+    },
+    {
+      "path": "source-blobs/802ba281240adec1b0ff72831fe66fb569163e326495170c94b4badafbb7a69a.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/802ba281240adec1b0ff72831fe66fb569163e326495170c94b4badafbb7a69a.gz",
+      "decoded_sha256": "802ba281240adec1b0ff72831fe66fb569163e326495170c94b4badafbb7a69a",
+      "decoded_bytes": 5734,
+      "encoded_sha256": "8f0b7b244db8e63bf4042c3b099526e6249af19ca5c0c63ed7a5e95bc5d7ec22"
+    },
+    {
+      "path": "source-blobs/8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901.gz",
+      "decoded_sha256": "8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901",
+      "decoded_bytes": 11557,
+      "encoded_sha256": "3c5b4d798f5dab6340904344e5d5604f8c894678fad8664eb52c58a8510611b1"
+    },
+    {
+      "path": "source-blobs/8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c.gz",
+      "decoded_sha256": "8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c",
+      "decoded_bytes": 29406,
+      "encoded_sha256": "c0558f0d10f0ffc35ff53541eeea2afbc9a8a120c547608196841354a01451b8"
+    },
+    {
+      "path": "source-blobs/89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b.gz",
+      "decoded_sha256": "89e9e5256bf83a6b8b3f2b53fa379f7a4e03e7c730901d7cc22bad0e1241132b",
+      "decoded_bytes": 14358,
+      "encoded_sha256": "b41d591f03b09d2b54c648d341836c2bef54242c04dbedb429ad6800ab354425"
+    },
+    {
+      "path": "source-blobs/8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01.gz",
+      "decoded_sha256": "8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01",
+      "decoded_bytes": 17213,
+      "encoded_sha256": "9ec86205d39182ba21bb17bf6950e418bd5e9ae543e7c5ff0e78fee696c4d10e"
+    },
+    {
+      "path": "source-blobs/8f788f0a5ee0b6c8d3f39e2b814d6c8490933a068fc706715ef08911c8bfa18a.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/8f788f0a5ee0b6c8d3f39e2b814d6c8490933a068fc706715ef08911c8bfa18a.gz",
+      "decoded_sha256": "8f788f0a5ee0b6c8d3f39e2b814d6c8490933a068fc706715ef08911c8bfa18a",
+      "decoded_bytes": 18624,
+      "encoded_sha256": "1245f05ca5bf8088d740d44468b3f69a61c4c8feb2ee443bde09f32f151c5b0f"
+    },
+    {
+      "path": "source-blobs/91bf1049a40ffaaebd6e1e57b83840e56a756d72cd49613f4bbe7d160f48a58c.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/91bf1049a40ffaaebd6e1e57b83840e56a756d72cd49613f4bbe7d160f48a58c.gz",
+      "decoded_sha256": "91bf1049a40ffaaebd6e1e57b83840e56a756d72cd49613f4bbe7d160f48a58c",
+      "decoded_bytes": 3436,
+      "encoded_sha256": "7766df5756cac5f9ea66290195fb943cad9567d13c576ea7299813db34cb4393"
+    },
+    {
+      "path": "source-blobs/92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46.gz",
+      "decoded_sha256": "92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46",
+      "decoded_bytes": 12257,
+      "encoded_sha256": "1cffa47ce75d271359c69fc7c59f0fa21ccf1fd979355b0e1f74dcbf9a2e5853"
+    },
+    {
+      "path": "source-blobs/98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e.gz",
+      "decoded_sha256": "98cc20f6a5a0b03e2b99bde15aa8d5a6a762e7e3d61ed3acb99e1cf44778f62e",
+      "decoded_bytes": 16664,
+      "encoded_sha256": "474248296a6387eaafac6b68a08f48b689a3d3e9467276f3181e2fbde63b7c82"
+    },
+    {
+      "path": "source-blobs/9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394.gz",
+      "decoded_sha256": "9a7737a81faab306b3e6846a4c348f59281c39217344abdcab73953e956eb394",
+      "decoded_bytes": 23866,
+      "encoded_sha256": "4d48f508d25dfe87d713934bb5baa8ff8b95238ee29de1fa8b392849b165de89"
+    },
+    {
+      "path": "source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16.gz",
+      "decoded_sha256": "9f31d9eea0073ddd34935f40165bafa02ffa668c45d733a2d1b8a03c2afe6c16",
+      "decoded_bytes": 31773,
+      "encoded_sha256": "dde628602d8128cda334fa1a7eb6b8bb7204e835ecc14ae09d6a646b5111d5af"
+    },
+    {
+      "path": "source-blobs/a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d.gz",
+      "decoded_sha256": "a056c9a3ddbe16b77214173c85d1faada320fc7b7d701644fd935aedbfa2498d",
+      "decoded_bytes": 12718,
+      "encoded_sha256": "4e132882fb01bd57b91fe8c9220f5c2c013d4ec7e497f6a3ec98c9807be98bf4"
+    },
+    {
+      "path": "source-blobs/a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a.gz",
+      "decoded_sha256": "a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a",
+      "decoded_bytes": 20144,
+      "encoded_sha256": "1d706a6b27a1efd09328520cf31c1293e8f919e8ffef34dec74eed1c157aa99e"
+    },
+    {
+      "path": "source-blobs/ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256.gz",
+      "decoded_sha256": "ad9f008e86790304c0ae994343e96f18e28155fd91158908bf1e62bb81b71256",
+      "decoded_bytes": 14560,
+      "encoded_sha256": "3b862470f547edd997016eb12f768b3e22691b77f82d28f75c0a1c874a7752d7"
+    },
+    {
+      "path": "source-blobs/b15b01a3311aee840ba65e2a6c4592bfed137e3b278bcc85babaae0c87f3b5bf.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/b15b01a3311aee840ba65e2a6c4592bfed137e3b278bcc85babaae0c87f3b5bf.gz",
+      "decoded_sha256": "b15b01a3311aee840ba65e2a6c4592bfed137e3b278bcc85babaae0c87f3b5bf",
+      "decoded_bytes": 1568,
+      "encoded_sha256": "aba2d182347ca2788e67b34a86fac6fe0cf859ac40d800df109aaa918c6dda10"
+    },
+    {
+      "path": "source-blobs/b422d736f14b5b873bf242713d1e1d5f0901f5322fe81e9e91edc60dcd82f661.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/b422d736f14b5b873bf242713d1e1d5f0901f5322fe81e9e91edc60dcd82f661.gz",
+      "decoded_sha256": "b422d736f14b5b873bf242713d1e1d5f0901f5322fe81e9e91edc60dcd82f661",
+      "decoded_bytes": 691,
+      "encoded_sha256": "970184af5da0604f5b453093373f8a2506867378ba821bc90fd575a4c5655eea"
+    },
+    {
+      "path": "source-blobs/b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432.gz",
+      "decoded_sha256": "b4a9697158554f862e1d4cf28e37aea96369d04e245e5feea41fc9af9aba1432",
+      "decoded_bytes": 9496,
+      "encoded_sha256": "aafb2fbbf93f63d5b73026508b14d156fcf0a81be9f7ded3fbe79d923cf7b75e"
+    },
+    {
+      "path": "source-blobs/bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112.gz",
+      "decoded_sha256": "bc176ced2a4cdcb8e687760812b77f9e14fb9a28120fbd148695b9a2606e8112",
+      "decoded_bytes": 18606,
+      "encoded_sha256": "4676cdc133fbd13c92482b26d3a4621c21677b3b77f28ac0d15a121a9baf2898"
+    },
+    {
+      "path": "source-blobs/bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73.gz",
+      "decoded_sha256": "bdc45e631f290b35587c92f462add1b7ac97aa4b28cb212ec33e14aea79d4b73",
+      "decoded_bytes": 64040,
+      "encoded_sha256": "a5a0a2cb605a00cd9cccb61dce9feb5c243240adc21f3d7545c2010de446e5ac"
+    },
+    {
+      "path": "source-blobs/be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12.gz",
+      "decoded_sha256": "be2d6221ca9c57a69285e7d980a3191e9ec5be33b7d8b6c310393edacb17de12",
+      "decoded_bytes": 15331,
+      "encoded_sha256": "bb6d8234ba87354f0f9bbb55e418eec618ec7ccd6ba1b5eb92907a305a4ca60b"
+    },
+    {
+      "path": "source-blobs/bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9.gz",
+      "decoded_sha256": "bff5e9b4c58b1baa11492c217cb281faa1c15f8a421838c43d4d4f4d7b9071c9",
+      "decoded_bytes": 19035,
+      "encoded_sha256": "9f50a27d672b4b289f0ea14f447973d8701aec6054932e0bfaae3c33026115c2"
+    },
+    {
+      "path": "source-blobs/c13b04dcd43fbb4c85c621ef9b245a9fce10d174ef018c6a3dfe0f8457398151.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/c13b04dcd43fbb4c85c621ef9b245a9fce10d174ef018c6a3dfe0f8457398151.gz",
+      "decoded_sha256": "c13b04dcd43fbb4c85c621ef9b245a9fce10d174ef018c6a3dfe0f8457398151",
+      "decoded_bytes": 109726,
+      "encoded_sha256": "dd45ff3a27f18e6f7cc8d89ad69be5b3098b4e669adce1ba996960d2876cb57c"
+    },
+    {
+      "path": "source-blobs/c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032.gz",
+      "decoded_sha256": "c3bcced54df05e2e5519d01fdf0d1619c3e98e7e1de2ce5add33eb0a9110c032",
+      "decoded_bytes": 17039,
+      "encoded_sha256": "a76c3d887bbf378d8e64b932d835a99090915ce62325a9e0c1717c2ce9e7d62b"
+    },
+    {
+      "path": "source-blobs/c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413.gz",
+      "decoded_sha256": "c7e2e5722e7ebfcdeca9c3e024b2c048d5c63f09523e4221caaef310875e3413",
+      "decoded_bytes": 798,
+      "encoded_sha256": "1d922265e79d879fdbda3b044cfc1d435c8ae31bc5b9b90a7790340db04e6212"
+    },
+    {
+      "path": "source-blobs/c9b32bd52ac9d3f4e51f9d573c48ae9506c959c2d83e599eaf747ee834f80920.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/c9b32bd52ac9d3f4e51f9d573c48ae9506c959c2d83e599eaf747ee834f80920.gz",
+      "decoded_sha256": "c9b32bd52ac9d3f4e51f9d573c48ae9506c959c2d83e599eaf747ee834f80920",
+      "decoded_bytes": 7935,
+      "encoded_sha256": "2d12dbdcbdd4200b9beee68bb6c624c20d92805f2bf7343e27202c83bc82eca0"
+    },
+    {
+      "path": "source-blobs/d0a2c12502dfd644eee3940734140dd3d228c15dfa66c3155168c9dc9badfccf.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/d0a2c12502dfd644eee3940734140dd3d228c15dfa66c3155168c9dc9badfccf.gz",
+      "decoded_sha256": "d0a2c12502dfd644eee3940734140dd3d228c15dfa66c3155168c9dc9badfccf",
+      "decoded_bytes": 1389,
+      "encoded_sha256": "a73984bcff30a529abc4084d5db9f0dbf213a336491550a4dbd1423714fafacf"
+    },
+    {
+      "path": "source-blobs/d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7.gz",
+      "decoded_sha256": "d1532cd9b96693ad4af6c1dfb7a043a31a36c0bd6e7e57221fa8adce90b9a1d7",
+      "decoded_bytes": 16659,
+      "encoded_sha256": "3126173ec5fd450eea267131a8bb128b7b55b5fae59d4991ead53fc4906c9e5f"
+    },
+    {
+      "path": "source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.gz",
+      "decoded_sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "decoded_bytes": 25379,
+      "encoded_sha256": "b38a8faba2a29dd0e699ce8662864827d05331a55ddb27809c34f3f4ee150cdf"
+    },
+    {
+      "path": "source-blobs/d3f5b5218d27c5af539ee0dcc7f214302cbbfa09f42e572647cf4e9047d8e2ab.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/d3f5b5218d27c5af539ee0dcc7f214302cbbfa09f42e572647cf4e9047d8e2ab.gz",
+      "decoded_sha256": "d3f5b5218d27c5af539ee0dcc7f214302cbbfa09f42e572647cf4e9047d8e2ab",
+      "decoded_bytes": 25504,
+      "encoded_sha256": "094df76a9420c36c51a4f9b2388f6bece07b0b02ae092de6ad07df7adaf79d86"
+    },
+    {
+      "path": "source-blobs/d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f.gz",
+      "decoded_sha256": "d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f",
+      "decoded_bytes": 19190,
+      "encoded_sha256": "7334a910a6508f7ec059e495de3962fe53529c01c91c4896d7fe799bc63a58a9"
+    },
+    {
+      "path": "source-blobs/d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc.gz",
+      "decoded_sha256": "d5ca0df3e298b51a7b1099f6333790b69f3f79d256713408b95e9968b85630cc",
+      "decoded_bytes": 81289,
+      "encoded_sha256": "bb1a4e4297ce1b944901ac5a034670a3de7936485e934fd6318470159cbdc94b"
+    },
+    {
+      "path": "source-blobs/d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032.gz",
+      "decoded_sha256": "d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032",
+      "decoded_bytes": 7081,
+      "encoded_sha256": "ee7fd1bed5d9571ec6ef575245aa32a9eab001963ab5b55e8cb3cbbd9501c432"
+    },
+    {
+      "path": "source-blobs/dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2.gz",
+      "decoded_sha256": "dc63e2c86c275a9c28c659fb83344e98dca17a846aefc49a01d73db9f43998a2",
+      "decoded_bytes": 23046,
+      "encoded_sha256": "e6d950621619407f3fa4e29bf3d649e46466f4e4407a779b7d1ad86ff1f83294"
+    },
+    {
+      "path": "source-blobs/de512b032db0cca06bf05c58b06917a1e7024dd8213d6b9730f1abf76fe8e111.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/de512b032db0cca06bf05c58b06917a1e7024dd8213d6b9730f1abf76fe8e111.gz",
+      "decoded_sha256": "de512b032db0cca06bf05c58b06917a1e7024dd8213d6b9730f1abf76fe8e111",
+      "decoded_bytes": 317,
+      "encoded_sha256": "b5eac2e8dcf6e3b020a1f029a44e61bbd720371feed33148d8e7218fc367e4ef"
+    },
+    {
+      "path": "source-blobs/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.gz",
+      "decoded_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decoded_bytes": 0,
+      "encoded_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec"
+    },
+    {
+      "path": "source-blobs/f00a2efefc723e5182fb23f1c284e6692d58176d473ea73aafc5bcfa2501f8d7.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/f00a2efefc723e5182fb23f1c284e6692d58176d473ea73aafc5bcfa2501f8d7.gz",
+      "decoded_sha256": "f00a2efefc723e5182fb23f1c284e6692d58176d473ea73aafc5bcfa2501f8d7",
+      "decoded_bytes": 81,
+      "encoded_sha256": "dc727713de90416d85fb72957709361d7e88b265fa5b521bd0de1c8ec2ae72da"
+    },
+    {
+      "path": "source-blobs/f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d.gz",
+      "decoded_sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+      "decoded_bytes": 23419,
+      "encoded_sha256": "f2ca9409d0d00b5d84acb0ea2eeae1fe74b861aa6a9a2e2cd96642719138f53e"
+    },
+    {
+      "path": "source-blobs/f1262659e073baff2ff2c786ea8e4c12a9adf53aff70209cc21629e81c7ca48f.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/f1262659e073baff2ff2c786ea8e4c12a9adf53aff70209cc21629e81c7ca48f.gz",
+      "decoded_sha256": "f1262659e073baff2ff2c786ea8e4c12a9adf53aff70209cc21629e81c7ca48f",
+      "decoded_bytes": 16482,
+      "encoded_sha256": "da69013a502d2b70a2ed647186dd6189c1cbd00cdfbcdd5b11afe61da4d8b5fe"
+    },
+    {
+      "path": "source-blobs/f5581226c179c7d62fd326744db03329700ed73dc21a36db44581c63c03ac55f.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/f5581226c179c7d62fd326744db03329700ed73dc21a36db44581c63c03ac55f.gz",
+      "decoded_sha256": "f5581226c179c7d62fd326744db03329700ed73dc21a36db44581c63c03ac55f",
+      "decoded_bytes": 5253,
+      "encoded_sha256": "7d7952ddeb880c9439bd7c7d3af4b2c5a998f861aa082b3fdb13a7659798c010"
+    },
+    {
+      "path": "source-blobs/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b.gz",
+      "decoded_sha256": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+      "decoded_bytes": 6956,
+      "encoded_sha256": "88dc26733378196fd4350d20873b9966a89f2c78b8eb191d74e1f391f3a4a503"
+    },
+    {
+      "path": "source-blobs/f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228.gz",
+      "decoded_sha256": "f86cc364f4f9bf162378464e4bf68fe482e5056c1ca75c0baba44b16b62a9228",
+      "decoded_bytes": 1521,
+      "encoded_sha256": "2c838ec16aeb71dae182d10dc8d18e35f05b47c2b6ea0659b2102b01e4cc9cc9"
+    },
+    {
+      "path": "source-blobs/f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98.gz",
+      "decoded_sha256": "f994e9a6ee1fc4be8fc0e0adda0e6c4e6d55a0e183813b3797e91c3634973b98",
+      "decoded_bytes": 13945,
+      "encoded_sha256": "5a7431a56d092593ae85007f38c751125fd02aac96e38cdf04a82c59dd84c3d3"
+    },
+    {
+      "path": "source-blobs/fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d.gz",
+      "decoded_sha256": "fd12221973554ffa30ef64d0539bf85909459e81d86d02d751f09cf6d3fa604d",
+      "decoded_bytes": 16854,
+      "encoded_sha256": "62613db6c52183d01826548e9e8e3e799693254903eb24a8be251b701b54b2b8"
+    },
+    {
+      "path": "source-blobs/ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411.gz",
+      "decoded_sha256": "ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411",
+      "decoded_bytes": 68358,
+      "encoded_sha256": "d4087ab792fadcf43fba23f6b0f11642f83a75f3f843f7287db077772341d4dc"
+    },
+    {
+      "path": "source-blobs/fffb03c58f574d989901764a535495da6808bab700e5b07879db1da013bcdfa8.gz",
+      "codec": "gzip",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/source-blobs/fffb03c58f574d989901764a535495da6808bab700e5b07879db1da013bcdfa8.gz",
+      "decoded_sha256": "fffb03c58f574d989901764a535495da6808bab700e5b07879db1da013bcdfa8",
+      "decoded_bytes": 7355,
+      "encoded_sha256": "b5b480fa4b159cf4b71d42de80c5283fcf297005d48e83cb9aeb3a52a9a3a853"
+    },
+    {
+      "path": "changed-pages/en/001.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-001.png",
+      "decoded_sha256": "50b077ecc7eb3c2fdfc5c331f54c2167eeb4a8aba0766fa4e621a318f6fb503a",
+      "decoded_bytes": 222916,
+      "encoded_sha256": "c4457a24e16c9b525114aa5d2d5fb78620f7680a392a08c3285734a2a75ebee9",
+      "png_rendition_proof": {
+        "original_png_sha256": "50b077ecc7eb3c2fdfc5c331f54c2167eeb4a8aba0766fa4e621a318f6fb503a",
+        "rendition_sha256": "c4457a24e16c9b525114aa5d2d5fb78620f7680a392a08c3285734a2a75ebee9",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "4226853b23519b698cbd7931bd17a02934f3ca89bc42ac0f21988e35dc353901",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-001.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/002.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-002.png",
+      "decoded_sha256": "b09a16942bd7c88335176c579825bbaadb3770075868452756aad051bc260e2b",
+      "decoded_bytes": 238456,
+      "encoded_sha256": "eeec049e6487e7ec0abec75d8f6f5da143fbb513795edf05e1542e6d1f9be672",
+      "png_rendition_proof": {
+        "original_png_sha256": "b09a16942bd7c88335176c579825bbaadb3770075868452756aad051bc260e2b",
+        "rendition_sha256": "eeec049e6487e7ec0abec75d8f6f5da143fbb513795edf05e1542e6d1f9be672",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "9c625f7afe0b173ff1938cd18f4928db8d8ded70dfe47c02dec7de44a123c052",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-002.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/003.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-003.png",
+      "decoded_sha256": "e8c70a640d5210fffb0b9cae303523f42269ab3859026b9d0278f143283e3b8f",
+      "decoded_bytes": 290085,
+      "encoded_sha256": "5827e01966e7312713b7b0f8c22aa3d7d0968d4d26fac7355b6486e5eb64d9b1",
+      "png_rendition_proof": {
+        "original_png_sha256": "e8c70a640d5210fffb0b9cae303523f42269ab3859026b9d0278f143283e3b8f",
+        "rendition_sha256": "5827e01966e7312713b7b0f8c22aa3d7d0968d4d26fac7355b6486e5eb64d9b1",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "b8840a3740a39023e107af7ceb986fe51541d7d12ddd9518a020a0fab15d6972",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-003.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/004.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-004.png",
+      "decoded_sha256": "bbbb72fa27e696af1f509882faabe9f64fdc51c62c9152a530127c4b4aaa7586",
+      "decoded_bytes": 297006,
+      "encoded_sha256": "94f8c200194fd64684e8cdfe54c31042a52418425ffe3adf3c5ff047c5525c04",
+      "png_rendition_proof": {
+        "original_png_sha256": "bbbb72fa27e696af1f509882faabe9f64fdc51c62c9152a530127c4b4aaa7586",
+        "rendition_sha256": "94f8c200194fd64684e8cdfe54c31042a52418425ffe3adf3c5ff047c5525c04",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "71f585292bac678674c39de7eeda293dd43dac7d120bcc913f09646d15ab3f86",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-004.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/005.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-005.png",
+      "decoded_sha256": "3179309de795cd353897a7bed20a3ee7bd259248d902cc321a5f0944654d240f",
+      "decoded_bytes": 275085,
+      "encoded_sha256": "cd0a317e0f4c6b4a886bc531f129b6f3d88c5cea21266ef8231f5a62a6115e15",
+      "png_rendition_proof": {
+        "original_png_sha256": "3179309de795cd353897a7bed20a3ee7bd259248d902cc321a5f0944654d240f",
+        "rendition_sha256": "cd0a317e0f4c6b4a886bc531f129b6f3d88c5cea21266ef8231f5a62a6115e15",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "912467b79a0ae7c4e05b4748d35a97f2bba401ec01cfdecafa16d607b15ecc0b",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-005.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/006.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-006.png",
+      "decoded_sha256": "3638a26dcda82c96dc29c71391bf8f2d816a3e41c3f9d5dc7d5f7df43b8d7aea",
+      "decoded_bytes": 341934,
+      "encoded_sha256": "b2253eb2a34d209cef4c0d38c027a7b3dfe845d819f5daff8a3e408702f3f7e7",
+      "png_rendition_proof": {
+        "original_png_sha256": "3638a26dcda82c96dc29c71391bf8f2d816a3e41c3f9d5dc7d5f7df43b8d7aea",
+        "rendition_sha256": "b2253eb2a34d209cef4c0d38c027a7b3dfe845d819f5daff8a3e408702f3f7e7",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "2b561b9a5722576a3de2af2a4453f86780d8807ffb6d9c30cc16049c16e9f8ac",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-006.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/007.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-007.png",
+      "decoded_sha256": "06ca095b6c957a05ac845aae1163fd20161811924971a5283bd716e01219a81f",
+      "decoded_bytes": 306936,
+      "encoded_sha256": "4d5c896bfb2b99dcc577f5e223f86c599f40aa5de9898e102ae836c9b068f3dc",
+      "png_rendition_proof": {
+        "original_png_sha256": "06ca095b6c957a05ac845aae1163fd20161811924971a5283bd716e01219a81f",
+        "rendition_sha256": "4d5c896bfb2b99dcc577f5e223f86c599f40aa5de9898e102ae836c9b068f3dc",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "469a60b7e904d0fe7d4db23c39ba3c430f2d4b1676cde50166eb2b48756cb8d7",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-007.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/008.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-008.png",
+      "decoded_sha256": "9e6a99ecd4676de72ed0c66e653c99751b8040194d5a964d205b29acc4bfa2c8",
+      "decoded_bytes": 317102,
+      "encoded_sha256": "511a5984d69c29a0fc4d61e7988e613303a36e76c1cae4b6967087fdcc8d9082",
+      "png_rendition_proof": {
+        "original_png_sha256": "9e6a99ecd4676de72ed0c66e653c99751b8040194d5a964d205b29acc4bfa2c8",
+        "rendition_sha256": "511a5984d69c29a0fc4d61e7988e613303a36e76c1cae4b6967087fdcc8d9082",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "63c07a3e17b302e59cc69eb09571778c482e2ffbefbd8a28e5123ecb417389bf",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-008.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/009.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-009.png",
+      "decoded_sha256": "331300650d669bb6531f1540260ee00643b47b3a2784a39145d117fd7aeafe68",
+      "decoded_bytes": 391807,
+      "encoded_sha256": "0abdbfdfbfc084188c5ec2fa0e113f03c184a4eecc35a30b7b8afa28b734458e",
+      "png_rendition_proof": {
+        "original_png_sha256": "331300650d669bb6531f1540260ee00643b47b3a2784a39145d117fd7aeafe68",
+        "rendition_sha256": "0abdbfdfbfc084188c5ec2fa0e113f03c184a4eecc35a30b7b8afa28b734458e",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "8f1ff00565b2c8dd3e9cabcb6bcbabe223af575a3da326737909d8659abb92fc",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-009.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/010.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-010.png",
+      "decoded_sha256": "5ea0b45a5885fcadaf2429100864d694391c996ed0b15c5ac5fa91f8261392b0",
+      "decoded_bytes": 337160,
+      "encoded_sha256": "d0e389f0b7e6299356454615a05784456ea75dda299692a71eef2c912d6423e1",
+      "png_rendition_proof": {
+        "original_png_sha256": "5ea0b45a5885fcadaf2429100864d694391c996ed0b15c5ac5fa91f8261392b0",
+        "rendition_sha256": "d0e389f0b7e6299356454615a05784456ea75dda299692a71eef2c912d6423e1",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "bbd26c7d59bc61c74b04b6daa9a8293ae82f382a61719b658a919a464e3ae4a7",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-010.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/011.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-011.png",
+      "decoded_sha256": "391ddded3d2264c336f464df966b64cb25f347b037f3ef5a1478e6b862a3fc7b",
+      "decoded_bytes": 337667,
+      "encoded_sha256": "5bc8667bb04dfab71f7d00d95594f45d51a3040eb844b766be61fc13f688babc",
+      "png_rendition_proof": {
+        "original_png_sha256": "391ddded3d2264c336f464df966b64cb25f347b037f3ef5a1478e6b862a3fc7b",
+        "rendition_sha256": "5bc8667bb04dfab71f7d00d95594f45d51a3040eb844b766be61fc13f688babc",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "c57ea60c5808a805117f5440e840c3cd0b5448c4609f89cbab95b7ab2edbf7dd",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-011.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/012.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-012.png",
+      "decoded_sha256": "e208010f551168d157757f2fb45687232e7e20ba260959d49fb1521d939b8433",
+      "decoded_bytes": 194094,
+      "encoded_sha256": "bec61398867afb7a2dfc1d04f64d06bf770a0fc2eda6a4337b070eb51b89c037",
+      "png_rendition_proof": {
+        "original_png_sha256": "e208010f551168d157757f2fb45687232e7e20ba260959d49fb1521d939b8433",
+        "rendition_sha256": "bec61398867afb7a2dfc1d04f64d06bf770a0fc2eda6a4337b070eb51b89c037",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "867e773a493d5f83be8951d5f3cc0a2494f91382cb9d6e250a87f4b3401e095f",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-012.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/013.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-013.png",
+      "decoded_sha256": "fea7d54c420b41414b855dd7b816bea1f2c9010658ce510c9f1209aa43a914fb",
+      "decoded_bytes": 189370,
+      "encoded_sha256": "37040a8a9fcc88dcca04e94dd0a498d8a8f24dc1265906b4aa75d0f88144ddca",
+      "png_rendition_proof": {
+        "original_png_sha256": "fea7d54c420b41414b855dd7b816bea1f2c9010658ce510c9f1209aa43a914fb",
+        "rendition_sha256": "37040a8a9fcc88dcca04e94dd0a498d8a8f24dc1265906b4aa75d0f88144ddca",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "7542945862678bd2a29c8755317a0d0ea3c7fc01bb6ef71b8ccec05dfe6cfbad",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-013.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/014.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-014.png",
+      "decoded_sha256": "3ff75ef8b821bc964997eadf40bf56039ded9e73353fa8e5d4424e043eb20278",
+      "decoded_bytes": 223747,
+      "encoded_sha256": "d0a807f9aa20396c726fe6796acf55b9c8afb634ffb63b8c58f59b532ba05ba2",
+      "png_rendition_proof": {
+        "original_png_sha256": "3ff75ef8b821bc964997eadf40bf56039ded9e73353fa8e5d4424e043eb20278",
+        "rendition_sha256": "d0a807f9aa20396c726fe6796acf55b9c8afb634ffb63b8c58f59b532ba05ba2",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "44906929437c5734fee83586870110ad757f67ff59cf7899d3ce9b7a8b33cbf8",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-014.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/015.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-015.png",
+      "decoded_sha256": "0ed4f1e90869e3df9a3795d11e88666cab2f61f72b7b631c19f63a0454ae953b",
+      "decoded_bytes": 304135,
+      "encoded_sha256": "dd4a5c20f63ef25b619f38b0b8b02243b53d0bdc90168f0f6ab569dcb6ce2ad0",
+      "png_rendition_proof": {
+        "original_png_sha256": "0ed4f1e90869e3df9a3795d11e88666cab2f61f72b7b631c19f63a0454ae953b",
+        "rendition_sha256": "dd4a5c20f63ef25b619f38b0b8b02243b53d0bdc90168f0f6ab569dcb6ce2ad0",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "3cd485e8d67d0441990de577e7319276b2e92b931f7a25b8b3d785fc94b467f6",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-015.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/016.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-016.png",
+      "decoded_sha256": "da0ef0e072a2c3109b746fd6115409fad7573d1c4ac7b448ff0ac39286e60b7e",
+      "decoded_bytes": 300662,
+      "encoded_sha256": "58674baeed4042e510e975793ffd9ce47a0a61f08687138afa6194f590599552",
+      "png_rendition_proof": {
+        "original_png_sha256": "da0ef0e072a2c3109b746fd6115409fad7573d1c4ac7b448ff0ac39286e60b7e",
+        "rendition_sha256": "58674baeed4042e510e975793ffd9ce47a0a61f08687138afa6194f590599552",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "410e33be6a55208cacd2e83afbb71115109a524a90f6a6fef1e23468cafef00c",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-016.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/017.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-017.png",
+      "decoded_sha256": "1ee7df7300501efd61799ab84fa098747752b895491e8112b2aab18bac6985c8",
+      "decoded_bytes": 324569,
+      "encoded_sha256": "659c483d040ab2b8611d6b0eb4f3c828e470c452888cf7c8954fc432c6612664",
+      "png_rendition_proof": {
+        "original_png_sha256": "1ee7df7300501efd61799ab84fa098747752b895491e8112b2aab18bac6985c8",
+        "rendition_sha256": "659c483d040ab2b8611d6b0eb4f3c828e470c452888cf7c8954fc432c6612664",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "bc96a0af8b3bb7c71feb2a7500e49b4e340df6e0d8e7aa1a19de4ea20891f7a7",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-017.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/018.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-018.png",
+      "decoded_sha256": "b519a2237f85c56dcf70f1ca3309ad3d51d034e5f04e57541ce7b3b1455f8fc8",
+      "decoded_bytes": 354705,
+      "encoded_sha256": "9a4ca688ff60e43f6f2f294c020176fc5dd8d0ff42556350fb90aada5827120c",
+      "png_rendition_proof": {
+        "original_png_sha256": "b519a2237f85c56dcf70f1ca3309ad3d51d034e5f04e57541ce7b3b1455f8fc8",
+        "rendition_sha256": "9a4ca688ff60e43f6f2f294c020176fc5dd8d0ff42556350fb90aada5827120c",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "7dc429e1cd98465b5be5adde66c3af7129e887ab7a4697a34fda3ade9ccadde8",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-018.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/019.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-019.png",
+      "decoded_sha256": "47489890ca9de2b445b91c6f05e723e13862a4dd549f3d24994a6aa5134da37b",
+      "decoded_bytes": 405021,
+      "encoded_sha256": "0938d482ba370d5a61b38ad11097f9a19c0f902e5b27397c3c12d09785b7fb94",
+      "png_rendition_proof": {
+        "original_png_sha256": "47489890ca9de2b445b91c6f05e723e13862a4dd549f3d24994a6aa5134da37b",
+        "rendition_sha256": "0938d482ba370d5a61b38ad11097f9a19c0f902e5b27397c3c12d09785b7fb94",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "9101565bd7a7842e5b7d62f7bf857487dd60703f69620247dbb6ad947a42b39c",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-019.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/020.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-020.png",
+      "decoded_sha256": "6a2e1632880d471e58a7f63b63961bc5fabd6192b9ad0892f0318fbb625a75c0",
+      "decoded_bytes": 494111,
+      "encoded_sha256": "b7f742b5d42779abc60519e90c2162dcd04aef82adb8399f77cf2dd29635e95b",
+      "png_rendition_proof": {
+        "original_png_sha256": "6a2e1632880d471e58a7f63b63961bc5fabd6192b9ad0892f0318fbb625a75c0",
+        "rendition_sha256": "b7f742b5d42779abc60519e90c2162dcd04aef82adb8399f77cf2dd29635e95b",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "8667fe849a54cd0e263321b46231413261d4f4f1c7345161d074523962e7c1ff",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-020.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/021.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-021.png",
+      "decoded_sha256": "c046230323b9e45ee42724dbe9e785ada85ab89bdb80a8ed3703ac2992c5d886",
+      "decoded_bytes": 438320,
+      "encoded_sha256": "360bd2296f714d7aae4f67f515507f8465990de863efece7f7085fcbfafb2b98",
+      "png_rendition_proof": {
+        "original_png_sha256": "c046230323b9e45ee42724dbe9e785ada85ab89bdb80a8ed3703ac2992c5d886",
+        "rendition_sha256": "360bd2296f714d7aae4f67f515507f8465990de863efece7f7085fcbfafb2b98",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "3d4279eb4dcd894a60391ccdcbe0b734824a01a09c8ce7f7764d3b3e8c4ae510",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-021.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/022.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-022.png",
+      "decoded_sha256": "2fe69c012dc3e43130c5dcd5ca84ed8dacbbf052dcc2f9ca77aa8ca9d21c35d6",
+      "decoded_bytes": 245866,
+      "encoded_sha256": "22043488fccdcd3e41a13f52782f78ca7311d5bd6a93ee5728105abd91a75dba",
+      "png_rendition_proof": {
+        "original_png_sha256": "2fe69c012dc3e43130c5dcd5ca84ed8dacbbf052dcc2f9ca77aa8ca9d21c35d6",
+        "rendition_sha256": "22043488fccdcd3e41a13f52782f78ca7311d5bd6a93ee5728105abd91a75dba",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "429892c26da3f44492e047d14c3218029dcfc6494e0e77a199275c0414d1bbba",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-022.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/023.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-023.png",
+      "decoded_sha256": "a83b890951166908070a464a3976e18edfe6d6a818e2d892137c22341134811b",
+      "decoded_bytes": 177595,
+      "encoded_sha256": "3b39d332ad6b108bee285fbb33a86ab5cf4113d85b0fd5e9196f1d5459af93cd",
+      "png_rendition_proof": {
+        "original_png_sha256": "a83b890951166908070a464a3976e18edfe6d6a818e2d892137c22341134811b",
+        "rendition_sha256": "3b39d332ad6b108bee285fbb33a86ab5cf4113d85b0fd5e9196f1d5459af93cd",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "aa53fb37bd501402cd879e6247381710ffaf23616c314a0c07e1061065d92946",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-023.png"
+      }
+    },
+    {
+      "path": "changed-pages/en/024.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-024.png",
+      "decoded_sha256": "8ac4b24540a1fcc721a3a8b27fd94fda7551979d9f34fcab33b2aa6f1b97c10b",
+      "decoded_bytes": 126806,
+      "encoded_sha256": "bcf970b5f12ea29c38f4ebe17e5f0ba599e55769b060751ef56e2d435a860162",
+      "png_rendition_proof": {
+        "original_png_sha256": "8ac4b24540a1fcc721a3a8b27fd94fda7551979d9f34fcab33b2aa6f1b97c10b",
+        "rendition_sha256": "bcf970b5f12ea29c38f4ebe17e5f0ba599e55769b060751ef56e2d435a860162",
+        "dimensions": [
+          1280,
+          1164
+        ],
+        "decoded_RGB_sha256": "d1bd4afe6a1dd94aeb25dc6b08e5e4afeab4fcbf330e9f0cf6b96f054856c5e2",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/changed-024.png"
+      }
+    },
+    {
+      "path": "changed-endpoints/en/001.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/endpoint-changed-001.png",
+      "decoded_sha256": "362b147dfbfc5f6942a596c1083167b342028721d5fd5ca7e74dfd07c11488a9",
+      "decoded_bytes": 112350,
+      "encoded_sha256": "362b147dfbfc5f6942a596c1083167b342028721d5fd5ca7e74dfd07c11488a9"
+    },
+    {
+      "path": "critical-after/en/0059.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/repair-frames/0000253_000016.866s.png",
+      "decoded_sha256": "33ae0d9368f49eddce60ce1909c2ff051a3b31688f089d1506c3c37a91f77c05",
+      "decoded_bytes": 52511,
+      "encoded_sha256": "33ae0d9368f49eddce60ce1909c2ff051a3b31688f089d1506c3c37a91f77c05"
+    },
+    {
+      "path": "critical-after/en/0091.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/audit/frames/0000292_000019.466s.png",
+      "decoded_sha256": "df7e73f8dbe13b08d91381c4b495914321ddeb40d54d66703678aa90baf2f979",
+      "decoded_bytes": 67903,
+      "encoded_sha256": "df7e73f8dbe13b08d91381c4b495914321ddeb40d54d66703678aa90baf2f979"
+    },
+    {
+      "path": "critical-after/en/0134.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/audit/frames/0000471_000031.400s.png",
+      "decoded_sha256": "a0d1fe93e4704af757e7ca94ea0c7faf003ab213d50a589dc8ac9b554f71f46e",
+      "decoded_bytes": 79066,
+      "encoded_sha256": "a0d1fe93e4704af757e7ca94ea0c7faf003ab213d50a589dc8ac9b554f71f46e"
+    },
+    {
+      "path": "critical-after/en/0166.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/repair-frames/0000556_000037.066s.png",
+      "decoded_sha256": "4cbd0d694c924eaa0ca1a1b7067d3d6a305a67fb125d6d1724ddfcaeeac8efde",
+      "decoded_bytes": 87224,
+      "encoded_sha256": "4cbd0d694c924eaa0ca1a1b7067d3d6a305a67fb125d6d1724ddfcaeeac8efde"
+    },
+    {
+      "path": "critical-after/en/0286.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/audit/frames/0001050_000070.000s.png",
+      "decoded_sha256": "e657339d9634ea7174d6f23652c067e93af71afe7b50025df30752670bfd1172",
+      "decoded_bytes": 71907,
+      "encoded_sha256": "e657339d9634ea7174d6f23652c067e93af71afe7b50025df30752670bfd1172"
+    },
+    {
+      "path": "critical-after/en/0328.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/audit/frames/0001366_000091.066s.png",
+      "decoded_sha256": "2cdd925ef863f1980d078bd1da9b06ea8519790cc81d6c8339284bad749502ed",
+      "decoded_bytes": 90682,
+      "encoded_sha256": "2cdd925ef863f1980d078bd1da9b06ea8519790cc81d6c8339284bad749502ed"
+    },
+    {
+      "path": "critical-after/en/0415.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/en/audit/frames/0001919_000127.933s.png",
+      "decoded_sha256": "31305262455b2cf55f5f9a6733d1ced51383e31bca8dc162183b962be35177a3",
+      "decoded_bytes": 44231,
+      "encoded_sha256": "31305262455b2cf55f5f9a6733d1ced51383e31bca8dc162183b962be35177a3"
+    },
+    {
+      "path": "critical-before/en/0051.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0000253_000016.866s.png",
+      "decoded_sha256": "84e5671eb9dc63f83648c0827878cb45cd8dec7094c5e9519afb91b3e10c7dc1",
+      "decoded_bytes": 62941,
+      "encoded_sha256": "84e5671eb9dc63f83648c0827878cb45cd8dec7094c5e9519afb91b3e10c7dc1"
+    },
+    {
+      "path": "critical-before/en/0065.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0000292_000019.466s.png",
+      "decoded_sha256": "02fda85ed4ffada5d63141a92f55ed36bf27e0e014e8a11999b1419fed43c17e",
+      "decoded_bytes": 78484,
+      "encoded_sha256": "02fda85ed4ffada5d63141a92f55ed36bf27e0e014e8a11999b1419fed43c17e"
+    },
+    {
+      "path": "critical-before/en/0091.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0000471_000031.400s.png",
+      "decoded_sha256": "47d4426ff6a302f89908c4f3ed4fcb9c5e2fa893c2afedb015e5a7aa5a7e9e43",
+      "decoded_bytes": 90499,
+      "encoded_sha256": "47d4426ff6a302f89908c4f3ed4fcb9c5e2fa893c2afedb015e5a7aa5a7e9e43"
+    },
+    {
+      "path": "critical-before/en/0109.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0000556_000037.066s.png",
+      "decoded_sha256": "cc7c9fc1b6193923e29ffc763dec4da1eaceb52efa9737426605eae7acbfe184",
+      "decoded_bytes": 71246,
+      "encoded_sha256": "cc7c9fc1b6193923e29ffc763dec4da1eaceb52efa9737426605eae7acbfe184"
+    },
+    {
+      "path": "critical-before/en/0221.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0001050_000070.000s.png",
+      "decoded_sha256": "0edacee2f506f7f5f2e818033eeeafeb64a5a9599b5359737b7565edc7c1c8c7",
+      "decoded_bytes": 74083,
+      "encoded_sha256": "0edacee2f506f7f5f2e818033eeeafeb64a5a9599b5359737b7565edc7c1c8c7"
+    },
+    {
+      "path": "critical-before/en/0345.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/en/audit/frames/0001919_000127.933s.png",
+      "decoded_sha256": "10ab2609d0574341bf50fca77cc3995c604ebc7670885748ff9aa3c6c8bfece2",
+      "decoded_bytes": 46985,
+      "encoded_sha256": "10ab2609d0574341bf50fca77cc3995c604ebc7670885748ff9aa3c6c8bfece2"
+    },
+    {
+      "path": "changed-pages/zh/001.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-001.png",
+      "decoded_sha256": "93d8de32c9a94968ec49710bbefc63919e66ffacd8ba17bca3e64574af689b28",
+      "decoded_bytes": 191471,
+      "encoded_sha256": "59ca5abc7364dcb666a398eb057c6a71a5f3010d234a865366ba94167b9b8319",
+      "png_rendition_proof": {
+        "original_png_sha256": "93d8de32c9a94968ec49710bbefc63919e66ffacd8ba17bca3e64574af689b28",
+        "rendition_sha256": "59ca5abc7364dcb666a398eb057c6a71a5f3010d234a865366ba94167b9b8319",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "eef564ff2a22fa45a6c3fb93b8c8009b8b229f673c758dd40e5d29b88c52fe4f",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-001.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/002.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-002.png",
+      "decoded_sha256": "e80d8cb6e1f5286ff0b4863ab5425a439ea95f77c574bb4056208e61ab57b008",
+      "decoded_bytes": 229412,
+      "encoded_sha256": "ffe2374f9d3a0059bd84aa90d1cf7f3f88fc2ae4c552dc0b89d9d611acbeca30",
+      "png_rendition_proof": {
+        "original_png_sha256": "e80d8cb6e1f5286ff0b4863ab5425a439ea95f77c574bb4056208e61ab57b008",
+        "rendition_sha256": "ffe2374f9d3a0059bd84aa90d1cf7f3f88fc2ae4c552dc0b89d9d611acbeca30",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "a17de769ac42f4067f1f1048520f95da45922857482b95ff0ed6b57a9bd2faef",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-002.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/003.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-003.png",
+      "decoded_sha256": "ec0f455ce06edfa69bd4869b3b2c6587637b75a04f1e4a0cde3b628e15aa6db5",
+      "decoded_bytes": 278893,
+      "encoded_sha256": "5f9904781f439902ce4918176f1be2cd8363bbbd99108cbb795eadbac8d5e2b9",
+      "png_rendition_proof": {
+        "original_png_sha256": "ec0f455ce06edfa69bd4869b3b2c6587637b75a04f1e4a0cde3b628e15aa6db5",
+        "rendition_sha256": "5f9904781f439902ce4918176f1be2cd8363bbbd99108cbb795eadbac8d5e2b9",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "eae1b4755e488845f065a235bd6753367f09af37b62f747678151aa68e25c643",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-003.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/004.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-004.png",
+      "decoded_sha256": "bdca4f802bc9e7a8402e92d547ab9a2b7dbe0b874ad2af807292e84b7d9871a4",
+      "decoded_bytes": 258061,
+      "encoded_sha256": "be07fe55d6221da4834d587bc6bb397c8ce872b62686add834c50bdfcf7dbe4e",
+      "png_rendition_proof": {
+        "original_png_sha256": "bdca4f802bc9e7a8402e92d547ab9a2b7dbe0b874ad2af807292e84b7d9871a4",
+        "rendition_sha256": "be07fe55d6221da4834d587bc6bb397c8ce872b62686add834c50bdfcf7dbe4e",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "93ecca475cef3d8828d5f02b6e088e08f198a8bb9a7c8eb02c0e034801a55bca",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-004.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/005.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-005.png",
+      "decoded_sha256": "94598ab4a2f3639656f93f4c3b2f33fd22e73092c95deae1e434b8db9882d5d5",
+      "decoded_bytes": 301188,
+      "encoded_sha256": "c8896b54fd639c79c4819abc0d95bf29f94313a3c79e329710589c96719cf339",
+      "png_rendition_proof": {
+        "original_png_sha256": "94598ab4a2f3639656f93f4c3b2f33fd22e73092c95deae1e434b8db9882d5d5",
+        "rendition_sha256": "c8896b54fd639c79c4819abc0d95bf29f94313a3c79e329710589c96719cf339",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "ad6404ebe74febcc1f852990137e4df801f31588f7cab6ac09483363f3491797",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-005.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/006.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-006.png",
+      "decoded_sha256": "e454bcf250a1e65d51bac50d1a4eee4050f38a0e911d377b921016ccfc28edbd",
+      "decoded_bytes": 295728,
+      "encoded_sha256": "73b1f4c7736c0ace7e7720ea5775c7f8cd99f1ea1401fbe1e3230ba58c39e3cc",
+      "png_rendition_proof": {
+        "original_png_sha256": "e454bcf250a1e65d51bac50d1a4eee4050f38a0e911d377b921016ccfc28edbd",
+        "rendition_sha256": "73b1f4c7736c0ace7e7720ea5775c7f8cd99f1ea1401fbe1e3230ba58c39e3cc",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "24133ceecd85d5e72567568a28a0275bb06768d5992ccdf1ed2eca834bdb477d",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-006.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/007.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-007.png",
+      "decoded_sha256": "3a72905ae50070a47e88a8a1efdb9ba0f646278f8935bdcc7f39f65ceee6129b",
+      "decoded_bytes": 307030,
+      "encoded_sha256": "c60ad278f50a96e1b18d16b0ed2d034b1a9ac2a3583f64f2509f3421acfc9100",
+      "png_rendition_proof": {
+        "original_png_sha256": "3a72905ae50070a47e88a8a1efdb9ba0f646278f8935bdcc7f39f65ceee6129b",
+        "rendition_sha256": "c60ad278f50a96e1b18d16b0ed2d034b1a9ac2a3583f64f2509f3421acfc9100",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "e38b0148d1847c150f5678caaa42d48934e5ed6df295febfc3189d31ebdec088",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-007.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/008.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-008.png",
+      "decoded_sha256": "29459c7daa745550239e745bc7ab7a65a2bbf271f33f08fdd6cf2e2130fd7f0b",
+      "decoded_bytes": 375309,
+      "encoded_sha256": "02349169bb0fc64331b20ba6d177ebb9e23f466aaf99efbc2ccc11cf9435d74a",
+      "png_rendition_proof": {
+        "original_png_sha256": "29459c7daa745550239e745bc7ab7a65a2bbf271f33f08fdd6cf2e2130fd7f0b",
+        "rendition_sha256": "02349169bb0fc64331b20ba6d177ebb9e23f466aaf99efbc2ccc11cf9435d74a",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "7c2bc4b0ea1e4844c54d10fee9f6ec5fdb9f70d12c8177d24ccc10dc08754d01",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-008.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/009.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-009.png",
+      "decoded_sha256": "1b904c5a87c9cf15ccd0496f8775edd6a338532e51b7925ec7610742682a4ad4",
+      "decoded_bytes": 384625,
+      "encoded_sha256": "299db8231f3f843670cc37b1f3a0cbd1c6d1a118ff1edcabf48764f222579a5c",
+      "png_rendition_proof": {
+        "original_png_sha256": "1b904c5a87c9cf15ccd0496f8775edd6a338532e51b7925ec7610742682a4ad4",
+        "rendition_sha256": "299db8231f3f843670cc37b1f3a0cbd1c6d1a118ff1edcabf48764f222579a5c",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "aff9031c2af161de996fcb3ad70d9da65a022fc40de14da2e364ddaf45418394",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-009.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/010.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-010.png",
+      "decoded_sha256": "8c57acd920955cbd7361969ddaa92ea31f1ff2072878a1b2ca5a8543648b430a",
+      "decoded_bytes": 222824,
+      "encoded_sha256": "808046ddd0a1a0dce9df5f60676be7280fc5a4ba6932c9131b06e74b5a87c9d3",
+      "png_rendition_proof": {
+        "original_png_sha256": "8c57acd920955cbd7361969ddaa92ea31f1ff2072878a1b2ca5a8543648b430a",
+        "rendition_sha256": "808046ddd0a1a0dce9df5f60676be7280fc5a4ba6932c9131b06e74b5a87c9d3",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "a037f1bb2a2d5cf284a2ff50af188e75ad9cf38dda960290d455ad1f4f7377c0",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-010.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/011.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-011.png",
+      "decoded_sha256": "84a22f979e771f91827d3e8544ebe01453fe3fb96b9b1f1bfb68664457430a71",
+      "decoded_bytes": 177551,
+      "encoded_sha256": "4667ef06ebc2d768d04da9a6175856bd8f5d76c9be9af437886d655b966944e4",
+      "png_rendition_proof": {
+        "original_png_sha256": "84a22f979e771f91827d3e8544ebe01453fe3fb96b9b1f1bfb68664457430a71",
+        "rendition_sha256": "4667ef06ebc2d768d04da9a6175856bd8f5d76c9be9af437886d655b966944e4",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "806ee6f23df1ba5402fcee7b8530569828ac46eac3b3785536bce185aba7222b",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-011.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/012.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-012.png",
+      "decoded_sha256": "b25382877181bde6435bd8a570cfc9fc55ff95009cdb8df68dfd816596e6833b",
+      "decoded_bytes": 224010,
+      "encoded_sha256": "1d29b6e8f8af0537131623d470d77c77e0c724c4505b7418f2d4ea89f8110928",
+      "png_rendition_proof": {
+        "original_png_sha256": "b25382877181bde6435bd8a570cfc9fc55ff95009cdb8df68dfd816596e6833b",
+        "rendition_sha256": "1d29b6e8f8af0537131623d470d77c77e0c724c4505b7418f2d4ea89f8110928",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "6cd2fdca3480ed32b9451a45a260d0c277f5d88e8d52a92b47211a181fdb31a9",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-012.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/013.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-013.png",
+      "decoded_sha256": "9aa6ee6921f76a09bb8e463c97fead43e08aa1bb5a5a0579b24de699cf9a18d1",
+      "decoded_bytes": 287039,
+      "encoded_sha256": "b2ca0149c435a92a6d71c24f30056ddc45efa05d9654c1174f10294d612bc5f6",
+      "png_rendition_proof": {
+        "original_png_sha256": "9aa6ee6921f76a09bb8e463c97fead43e08aa1bb5a5a0579b24de699cf9a18d1",
+        "rendition_sha256": "b2ca0149c435a92a6d71c24f30056ddc45efa05d9654c1174f10294d612bc5f6",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "d229b4fb04ff7258932e8b0ac6722afc1359300d72022152996d2f805f0b4a0e",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-013.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/014.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-014.png",
+      "decoded_sha256": "a3eef75d5dadd72462ff994a7e0e15acbf2e1a46c2e98f215128b726685fde2f",
+      "decoded_bytes": 311889,
+      "encoded_sha256": "171dc82a77c826f37669f8737477dcf3e48ee110612a9866c36b5affbe156017",
+      "png_rendition_proof": {
+        "original_png_sha256": "a3eef75d5dadd72462ff994a7e0e15acbf2e1a46c2e98f215128b726685fde2f",
+        "rendition_sha256": "171dc82a77c826f37669f8737477dcf3e48ee110612a9866c36b5affbe156017",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "5662514edb3765d498c6743174a4645e21156503dddbfbe5e576ef6ff3e3d3c0",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-014.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/015.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-015.png",
+      "decoded_sha256": "248c80d292dd72cadc3c8beedaa7843b9657b840a30de80677044630f19ac598",
+      "decoded_bytes": 272638,
+      "encoded_sha256": "0f6d9ee68261aa966656aef38d35330b7a45d1a19ecea1d91c852b31e943548a",
+      "png_rendition_proof": {
+        "original_png_sha256": "248c80d292dd72cadc3c8beedaa7843b9657b840a30de80677044630f19ac598",
+        "rendition_sha256": "0f6d9ee68261aa966656aef38d35330b7a45d1a19ecea1d91c852b31e943548a",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "c33e8b175497008014b11d98a7ee9513e27711f001bb79030e4faa6d33e52908",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-015.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/016.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-016.png",
+      "decoded_sha256": "6d4208de72ab55a3a758a410908306f09011e7883aa182c9ddf33553e15da653",
+      "decoded_bytes": 334154,
+      "encoded_sha256": "0c1b2e579d81d25635836a019be7e4064f73edc3ec5331fe4465a14f4c919c38",
+      "png_rendition_proof": {
+        "original_png_sha256": "6d4208de72ab55a3a758a410908306f09011e7883aa182c9ddf33553e15da653",
+        "rendition_sha256": "0c1b2e579d81d25635836a019be7e4064f73edc3ec5331fe4465a14f4c919c38",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "3f9d5082e4b10b32c0b5b37f0caa4a893a04591d0936a95060ad771949b9ee26",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-016.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/017.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-017.png",
+      "decoded_sha256": "6e45feeb0d77c069cf3a6a083f66670da4f20320887f8eb811a489c55e17caa7",
+      "decoded_bytes": 312005,
+      "encoded_sha256": "da26abdf964ac00d1a67d2de4374ac6b4f22c022ef3ed96c81a9f92208536c39",
+      "png_rendition_proof": {
+        "original_png_sha256": "6e45feeb0d77c069cf3a6a083f66670da4f20320887f8eb811a489c55e17caa7",
+        "rendition_sha256": "da26abdf964ac00d1a67d2de4374ac6b4f22c022ef3ed96c81a9f92208536c39",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "b299db6ffc2d5ee7d5c82953e023ac7f63ee41577fd33b5dbec2b9a71649f31d",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-017.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/018.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-018.png",
+      "decoded_sha256": "ff676754b50bde9f85818429a06134ffd9a24603c1a86e3fdf73f24bc21cc0e6",
+      "decoded_bytes": 367241,
+      "encoded_sha256": "f70f91ea387cb8e019266224d159bba24639a85a1288ab0f24a529e6d3de1f6e",
+      "png_rendition_proof": {
+        "original_png_sha256": "ff676754b50bde9f85818429a06134ffd9a24603c1a86e3fdf73f24bc21cc0e6",
+        "rendition_sha256": "f70f91ea387cb8e019266224d159bba24639a85a1288ab0f24a529e6d3de1f6e",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "9102c2ee4217eb2390b70691bef49e9dde7870452118cd16e4566735645317d4",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-018.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/019.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-019.png",
+      "decoded_sha256": "c56e9ef2992d83ce0f160d3855d7b859078063c27b590cca8e6e9573e3814b74",
+      "decoded_bytes": 330927,
+      "encoded_sha256": "25abe8b27cf07ed0606f65798964d1f850e31310ffa86bdcb6d8a89a2a2bb003",
+      "png_rendition_proof": {
+        "original_png_sha256": "c56e9ef2992d83ce0f160d3855d7b859078063c27b590cca8e6e9573e3814b74",
+        "rendition_sha256": "25abe8b27cf07ed0606f65798964d1f850e31310ffa86bdcb6d8a89a2a2bb003",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "41ae97c3357c2fe6cbde5958ea3524a92496c70fcc752de98fabf841bf374c48",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-019.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/020.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-020.png",
+      "decoded_sha256": "a992dceb350ee19090f8b84343a61e7f05bea9e3d4a10ecac6ac2b1f22ff6203",
+      "decoded_bytes": 361006,
+      "encoded_sha256": "31c88059be6bdff3062c355c94626db530f3ae70b24fba44ee6fe5ae46254b86",
+      "png_rendition_proof": {
+        "original_png_sha256": "a992dceb350ee19090f8b84343a61e7f05bea9e3d4a10ecac6ac2b1f22ff6203",
+        "rendition_sha256": "31c88059be6bdff3062c355c94626db530f3ae70b24fba44ee6fe5ae46254b86",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "a365629e1371314274d194f708e30b4f963c976da6a2a35992a8f80323da8ea6",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-020.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/021.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-021.png",
+      "decoded_sha256": "37220677cb275cc879c38edaaa14eec69a120e0db6f5c60f3c103d8799679fa4",
+      "decoded_bytes": 173576,
+      "encoded_sha256": "74fed09cd963ff0bb03652738fbb57df345b28ce383f97b4cc2068ec8bb16a08",
+      "png_rendition_proof": {
+        "original_png_sha256": "37220677cb275cc879c38edaaa14eec69a120e0db6f5c60f3c103d8799679fa4",
+        "rendition_sha256": "74fed09cd963ff0bb03652738fbb57df345b28ce383f97b4cc2068ec8bb16a08",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "962d6a13d20909909a50c92dee909ee700a9f65427819596cd3e34f88d8142f5",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-021.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/022.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-022.png",
+      "decoded_sha256": "0d271b6ce74347b0f8750dc995950e7c42ba044f11c98c95edcabc8904f49628",
+      "decoded_bytes": 196867,
+      "encoded_sha256": "2913d3f9bef9e63051a6a0cf0c46fc6032fb2d18c2ebbaa9d8359b319e6bc7b8",
+      "png_rendition_proof": {
+        "original_png_sha256": "0d271b6ce74347b0f8750dc995950e7c42ba044f11c98c95edcabc8904f49628",
+        "rendition_sha256": "2913d3f9bef9e63051a6a0cf0c46fc6032fb2d18c2ebbaa9d8359b319e6bc7b8",
+        "dimensions": [
+          1280,
+          1552
+        ],
+        "decoded_RGB_sha256": "aeff78d67d66fcf4d08d2b0e81fda1eabab3187d27df4e47d00b99aec3d23258",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-022.png"
+      }
+    },
+    {
+      "path": "changed-pages/zh/023.webp",
+      "codec": "lossless-webp-rendition",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-023.png",
+      "decoded_sha256": "532a5d7e518ce51ab209d063f70b03caeb82e8ec6d2981ce3168a0187ac3123a",
+      "decoded_bytes": 36005,
+      "encoded_sha256": "0831c753fb8a6c8ffa7f6e83b5751b7ee1ec90e48185891e15bd72e85dbcfa95",
+      "png_rendition_proof": {
+        "original_png_sha256": "532a5d7e518ce51ab209d063f70b03caeb82e8ec6d2981ce3168a0187ac3123a",
+        "rendition_sha256": "0831c753fb8a6c8ffa7f6e83b5751b7ee1ec90e48185891e15bd72e85dbcfa95",
+        "dimensions": [
+          1280,
+          388
+        ],
+        "decoded_RGB_sha256": "e019f5c2a32183d4c6fecb553b0aa8d6bb059c85bdcdbaa70e792ed5f4eeabbf",
+        "pixel_bytes_equal": true,
+        "original_png_retained_runtime": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/changed-023.png"
+      }
+    },
+    {
+      "path": "changed-endpoints/zh/001.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/endpoint-changed-001.png",
+      "decoded_sha256": "48eac7908a54eb93300ad63bafa23c6031f2bc2b2af933a5bedf79d2f4359fab",
+      "decoded_bytes": 115699,
+      "encoded_sha256": "48eac7908a54eb93300ad63bafa23c6031f2bc2b2af933a5bedf79d2f4359fab"
+    },
+    {
+      "path": "critical-after/zh/0064.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/audit/frames/0000316_000021.066s.png",
+      "decoded_sha256": "5e37f2f1efe1634770036dc00f45e1d3c633e82615a79c63dfbeb9ae819209bf",
+      "decoded_bytes": 51956,
+      "encoded_sha256": "5e37f2f1efe1634770036dc00f45e1d3c633e82615a79c63dfbeb9ae819209bf"
+    },
+    {
+      "path": "critical-after/zh/0090.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/audit/frames/0000355_000023.666s.png",
+      "decoded_sha256": "8bc848821f20663d1b4aac96ffc5de7ba685a461f92971bc20ebd1f9b618344d",
+      "decoded_bytes": 66584,
+      "encoded_sha256": "8bc848821f20663d1b4aac96ffc5de7ba685a461f92971bc20ebd1f9b618344d"
+    },
+    {
+      "path": "critical-after/zh/0131.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/audit/frames/0000507_000033.800s.png",
+      "decoded_sha256": "8aa22fdd8fa780385495ff909c52f28532fb2c5d8a877b374d04804505c15655",
+      "decoded_bytes": 79012,
+      "encoded_sha256": "8aa22fdd8fa780385495ff909c52f28532fb2c5d8a877b374d04804505c15655"
+    },
+    {
+      "path": "critical-after/zh/0165.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/repair-frames/0000626_000041.733s.png",
+      "decoded_sha256": "2db795cc03874710993c70e6931b34137bd9f844cff01afb6ce651ba9833d17b",
+      "decoded_bytes": 85698,
+      "encoded_sha256": "2db795cc03874710993c70e6931b34137bd9f844cff01afb6ce651ba9833d17b"
+    },
+    {
+      "path": "critical-after/zh/0297.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/audit/frames/0001185_000079.000s.png",
+      "decoded_sha256": "23d61a6a6c624dd6adeec95e96bf6b6e3531e16d841e9c66a31b515260183765",
+      "decoded_bytes": 73426,
+      "encoded_sha256": "23d61a6a6c624dd6adeec95e96bf6b6e3531e16d841e9c66a31b515260183765"
+    },
+    {
+      "path": "critical-after/zh/0338.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/audit/frames/0001485_000099.000s.png",
+      "decoded_sha256": "3ed26e62f0bf9201042a6dda42fcd6143fc9d729da3402a6004acbf8ad0966bd",
+      "decoded_bytes": 93392,
+      "encoded_sha256": "3ed26e62f0bf9201042a6dda42fcd6143fc9d729da3402a6004acbf8ad0966bd"
+    },
+    {
+      "path": "critical-after/zh/0429.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-final-regression/review/zh/repair-frames/0002075_000138.333s.png",
+      "decoded_sha256": "5ff0e2f863c13d97faf6ccef04b7a763cc6481d6d7541b016dee0e6172d1190c",
+      "decoded_bytes": 44185,
+      "encoded_sha256": "5ff0e2f863c13d97faf6ccef04b7a763cc6481d6d7541b016dee0e6172d1190c"
+    },
+    {
+      "path": "critical-before/zh/0057.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0000316_000021.066s.png",
+      "decoded_sha256": "4084a678ee64f371d6a48a4e99fa7cdc6f0e5fdb1fa8106232721ff1f37c846e",
+      "decoded_bytes": 60761,
+      "encoded_sha256": "4084a678ee64f371d6a48a4e99fa7cdc6f0e5fdb1fa8106232721ff1f37c846e"
+    },
+    {
+      "path": "critical-before/zh/0072.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0000355_000023.666s.png",
+      "decoded_sha256": "1678d442d43a556987e20ca54134fa7383b586e29461fe14d457e2fb295c00a8",
+      "decoded_bytes": 77702,
+      "encoded_sha256": "1678d442d43a556987e20ca54134fa7383b586e29461fe14d457e2fb295c00a8"
+    },
+    {
+      "path": "critical-before/zh/0099.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0000507_000033.800s.png",
+      "decoded_sha256": "cd69b33dedfc8d82e30c2c578702dd676ce60ceba3ee902c434185986ddfa9d5",
+      "decoded_bytes": 89115,
+      "encoded_sha256": "cd69b33dedfc8d82e30c2c578702dd676ce60ceba3ee902c434185986ddfa9d5"
+    },
+    {
+      "path": "critical-before/zh/0120.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0000626_000041.733s.png",
+      "decoded_sha256": "3bc4f2f3f77f08c1b9da36d9e370631865d9c48547a3e21853427851edf3d4bd",
+      "decoded_bytes": 73138,
+      "encoded_sha256": "3bc4f2f3f77f08c1b9da36d9e370631865d9c48547a3e21853427851edf3d4bd"
+    },
+    {
+      "path": "critical-before/zh/0247.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0001186_000079.066s.png",
+      "decoded_sha256": "d60a14809f1eb635c0dcdb62f014ac04d86a8de8dd53cbbd25d6749bf7ad2af5",
+      "decoded_bytes": 75469,
+      "encoded_sha256": "d60a14809f1eb635c0dcdb62f014ac04d86a8de8dd53cbbd25d6749bf7ad2af5"
+    },
+    {
+      "path": "critical-before/zh/0368.png",
+      "codec": "identity",
+      "original_path": "/workspace/runtime/ai6-naivebayes-selected-review/zh/audit/frames/0002075_000138.333s.png",
+      "decoded_sha256": "77e30ddfc26a65d316a9400804473504cbe5386478b52dd36acf88f71f167241",
+      "decoded_bytes": 46784,
+      "encoded_sha256": "77e30ddfc26a65d316a9400804473504cbe5386478b52dd36acf88f71f167241"
+    }
+  ],
+  "scope": "Raw metadata/source gzip and critical original PNG remain byte-exact.47review-page PNGs have losslessWebP pixel-identical renditions; runtime PNG bytes retained and original SHA mapped. No lossy matching/deletion of original assets."
+}
