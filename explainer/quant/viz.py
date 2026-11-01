@@ -103,7 +103,10 @@ class HedgeLedger(VGroup):
                  font_size=24, names=(r"gamma: $\tfrac12\Gamma\,\Delta S^2$", r"theta: $\Theta\,\Delta t$",
                                       r"the book"), digits=2):
         super().__init__()
-        self.tracker, self.scale, self.hw = tracker, scale, half_width
+        self.tracker, self.pnl_scale, self.hw = tracker, scale, half_width
+        # the redrawn bars and readouts are placed relative to this point, so the ledger can be moved as a whole
+        self.anchor = VectorizedPoint(ORIGIN)
+        self.add(self.anchor)
         series = [np.asarray(gamma, float), np.asarray(theta, float), np.asarray(book, float)]
         colors = [QC.GAMMA, QC.THETA, WHITE]
         self.zero = Line(UP * (1.5 * bar_h + 0.35), DOWN * (1.5 * bar_h + 0.75), color=GREY_C, stroke_width=1.5)
@@ -129,17 +132,17 @@ class HedgeLedger(VGroup):
     def _bar(self, arr, col, y, bar_h, filled=True):
         def make():
             v = at_index(arr, self.tracker)
-            w = float(np.clip(v / self.scale, -1.05, 1.05)) * self.hw
+            w = float(np.clip(v / self.pnl_scale, -1.05, 1.05)) * self.hw
             r = Rectangle(width=max(abs(w), 0.004), height=bar_h, stroke_width=0 if filled else 2.5, stroke_color=col,
                           fill_color=(QC.GAIN if v >= 0 else QC.LOSS) if not filled else col,
                           fill_opacity=0.85 if filled else 0.55)
-            return r.move_to([w / 2, y, 0])
+            return r.move_to(self.anchor.get_center() + np.array([w / 2, y, 0]))
         return make
 
     def _readout(self, arr, y):
         def upd(d):
             d.set_value(at_index(arr, self.tracker))
-            d.move_to([self.hw * 1.05 + 0.3, y, 0], aligned_edge=LEFT)
+            d.move_to(self.anchor.get_center() + np.array([self.hw * 1.05 + 0.3, y, 0]), aligned_edge=LEFT)
         return upd
 
 
