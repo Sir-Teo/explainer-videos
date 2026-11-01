@@ -1,0 +1,65 @@
+{
+  "en": {
+    "status": "scoped-selected-motion-regression-complete-no-observed-defect",
+    "movie_sha256": "9a9eab0797a3ca3eeb614ca31606f2afca60a8782d96cade5a8237541e486786",
+    "decoded_frames": 1720,
+    "duration": 114.666667,
+    "inherited_selected_times": 267,
+    "new_unique_count": 5,
+    "selected_plus_dense_unique_source_times": 288,
+    "unviewed_encoded_frames": 1432,
+    "record_comparison": {
+      "duration_equal": true,
+      "narration_and_bookmark_words_equal": true,
+      "inputs_equal": true,
+      "captured_frame_times_equal": true,
+      "captured_endpoint_state_metadata_equal": true,
+      "old_endpoint_PNG_direct_byte_comparison": "not claimed; no frozen pre-repair endpoint-PNG set available to this owner. Exact inheritance is from fully reviewed encoded baseline PNGs."
+    },
+    "selected_count": 272,
+    "dense_window_frame_count": 28,
+    "dense_window_range": [
+      532,
+      559
+    ],
+    "max_gap": 1.0,
+    "endpoints_actually_viewed": 11,
+    "native_followups": 2
+  },
+  "zh": {
+    "status": "scoped-selected-motion-regression-complete-no-observed-defect",
+    "movie_sha256": "5c3bbf1ef4ba6bbcde9d4de5469e38322833ca17781e01fb9a084200f357f854",
+    "decoded_frames": 1755,
+    "duration": 117.0,
+    "inherited_selected_times": 276,
+    "new_unique_count": 5,
+    "selected_plus_dense_unique_source_times": 297,
+    "unviewed_encoded_frames": 1458,
+    "record_comparison": {
+      "duration_equal": true,
+      "narration_and_bookmark_words_equal": true,
+      "inputs_equal": true,
+      "captured_frame_times_equal": true,
+      "captured_endpoint_state_metadata_equal": true,
+      "old_endpoint_PNG_direct_byte_comparison": "not claimed; no frozen pre-repair endpoint-PNG set available to this owner. Exact inheritance is from fully reviewed encoded baseline PNGs."
+    },
+    "selected_count": 281,
+    "dense_window_frame_count": 28,
+    "dense_window_range": [
+      516,
+      543
+    ],
+    "max_gap": 1.0,
+    "endpoints_actually_viewed": 11,
+    "native_followups": 2
+  },
+  "source_sha256": "b014235b1885e3373b2052dd8b937a085413475073f7fa9296d5866b628c8e65",
+  "table_sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+  "raw_cases_status": {
+    "en-endpoints": "passed",
+    "en-motion": "passed",
+    "zh-endpoints": "passed",
+    "zh-motion": "passed"
+  },
+  "limits": "Silent preview854x480 native selected images plus every encoded transition-window frame; no continuous playback/audio/production resolution signoff."
+}

@@ -1,0 +1,465 @@
+{
+  "created_utc": "2026-11-01T03:39:41.707111+00:00",
+  "scope": "Compact representative visual evidence plus COMPLETE compressed metadata/raw records/source captures/source and input pins/actual-view hashes/time coverage. Full original images/movies remain at runtime; omitted package images are not presented as bundled.",
+  "retained_exact_visual_and_readable_artifacts": [
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/report.md",
+      "package_path": "baseline-motion/report.md",
+      "sha256": "9d3eeb665146542e1641fe327c1acf69119ec832429b3b4847aa3b7417a26792",
+      "bytes": 2085
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Likelihood/unique/sheet-039.png",
+      "package_path": "baseline-motion/en/Likelihood/unique/sheet-039.png",
+      "sha256": "1d6e7a8b377aedd8302988569800c03f826b4a752e3cac56d2cf042c1aec79e9",
+      "bytes": 197046
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Likelihood/audit/frames/0001012_000067.467s.png",
+      "package_path": "baseline-motion/en/Likelihood/native/0001012_000067.467s.png",
+      "sha256": "9f4113f4e7ac62a1a856d703b3413b2263dbe6ff321d50ba3eba706bfe7cdff1",
+      "bytes": 157030
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Likelihood/audit/frames/0002042_000136.133s.png",
+      "package_path": "baseline-motion/en/Likelihood/native/0002042_000136.133s.png",
+      "sha256": "63403887b36e29f60b948d3f1f5123129cfd54905a0a1c8b6caae05a4acd93a5",
+      "bytes": 41951
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Likelihood/audit/frames/0002104_000140.266s.png",
+      "package_path": "baseline-motion/en/Likelihood/native/0002104_000140.266s.png",
+      "sha256": "eb24cb5e6094261e2b28a8394959ee959ad3668e73cc2e769c51b3688fb96a01",
+      "bytes": 56335
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Fisher/unique/sheet-025.png",
+      "package_path": "baseline-motion/en/Fisher/unique/sheet-025.png",
+      "sha256": "00af7763b150c3569d45ca2f52c5c6f2b24b76dff3cabe6e15fef621da7e535c",
+      "bytes": 318065
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Fisher/audit/frames/0000998_000066.533s.png",
+      "package_path": "baseline-motion/en/Fisher/native/0000998_000066.533s.png",
+      "sha256": "d5f1d3480243bcfb479e921b8acb20d53e5f82faf11e5c292f48cff85ac23afd",
+      "bytes": 43045
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Fisher/audit/frames/0001133_000075.533s.png",
+      "package_path": "baseline-motion/en/Fisher/native/0001133_000075.533s.png",
+      "sha256": "80a332c78abf7fab2dd30d29772b351b39c3ed39c9abfb8cbd9ef61844b79211",
+      "bytes": 58218
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Fisher/audit/frames/0001301_000086.733s.png",
+      "package_path": "baseline-motion/en/Fisher/native/0001301_000086.733s.png",
+      "sha256": "43cd62156d7b08a6efc77a91d91d9c4482495c1953a300d04dac095fb07bd41d",
+      "bytes": 69970
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Fisher/audit/frames/0001424_000094.933s.png",
+      "package_path": "baseline-motion/en/Fisher/native/0001424_000094.933s.png",
+      "sha256": "69cdbdd4aad820b7b4b3588c61287257551aa01511d833a513d525ccc57478b4",
+      "bytes": 70491
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Fisher/audit/frames/0001530_000102.000s.png",
+      "package_path": "baseline-motion/en/Fisher/native/0001530_000102.000s.png",
+      "sha256": "77e83d6aa9f6420797db5bfc8cdbaf65db170e4cbcc5f867f17f206d7991ef66",
+      "bytes": 65918
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Fisher/audit/frames/0001570_000104.666s.png",
+      "package_path": "baseline-motion/en/Fisher/native/0001570_000104.666s.png",
+      "sha256": "bd8778540152e2ea247c40ed33a100c4e4972989c3d040ad57a3a6124b906b87",
+      "bytes": 87096
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Fisher/audit/frames/0002118_000141.200s.png",
+      "package_path": "baseline-motion/en/Fisher/native/0002118_000141.200s.png",
+      "sha256": "811b1f4960f7331325887f35f452fcc14a7a38e6eed6b91582d1383b3d17bb4e",
+      "bytes": 84537
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/en/Fisher/audit/frames/0002951_000196.733s.png",
+      "package_path": "baseline-motion/en/Fisher/native/0002951_000196.733s.png",
+      "sha256": "5059653811403205eeaf4ed161fbc1d7c1db3a6dc314fe32e0bd5714dba20f3d",
+      "bytes": 77363
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Likelihood/audit/frames/0000449_000029.933s.png",
+      "package_path": "baseline-motion/zh/Likelihood/native/0000449_000029.933s.png",
+      "sha256": "7014d82b4da27b4a3868a796d32886fdcd5e57339d031eff5705ce80ffb92a03",
+      "bytes": 73003
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Likelihood/audit/frames/0001067_000071.133s.png",
+      "package_path": "baseline-motion/zh/Likelihood/native/0001067_000071.133s.png",
+      "sha256": "051377146de3f271804d5f820ab3d6e248d2bf2bb0526f96af4a0d8ac17b875d",
+      "bytes": 161644
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Likelihood/audit/frames/0002104_000140.267s.png",
+      "package_path": "baseline-motion/zh/Likelihood/native/0002104_000140.267s.png",
+      "sha256": "b6d64ccb43931d001de7e8ff9acc520ca48cc1c8d3d7fea5f1e01c10a96e4571",
+      "bytes": 44982
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Likelihood/audit/frames/0002164_000144.267s.png",
+      "package_path": "baseline-motion/zh/Likelihood/native/0002164_000144.267s.png",
+      "sha256": "e1f542dfc65dcef74c5e78862dddba7e1a4d2149690bc2869ec5863d2b332f82",
+      "bytes": 59261
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Fisher/audit/frames/0000979_000065.266s.png",
+      "package_path": "baseline-motion/zh/Fisher/native/0000979_000065.266s.png",
+      "sha256": "f5aa96f84b31ac2d9810525b8a07cfa8b74dc0234c1069c96c87774b88d7e690",
+      "bytes": 42662
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Fisher/audit/frames/0001108_000073.866s.png",
+      "package_path": "baseline-motion/zh/Fisher/native/0001108_000073.866s.png",
+      "sha256": "f95b350932afe3ec1de4c10b21b5dcd6c48d88639a7894f653d1e64b0f697d7a",
+      "bytes": 56537
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Fisher/audit/frames/0001275_000085.000s.png",
+      "package_path": "baseline-motion/zh/Fisher/native/0001275_000085.000s.png",
+      "sha256": "0fcf78049da217e4da184336bb9a986c1b1917fe822c10710b2a8cf37cdb430d",
+      "bytes": 70692
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Fisher/audit/frames/0001408_000093.866s.png",
+      "package_path": "baseline-motion/zh/Fisher/native/0001408_000093.866s.png",
+      "sha256": "47a26d806672c5018ddf963743e80a1b7e772ed9dc4e2918bca0d230e640358e",
+      "bytes": 67314
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Fisher/audit/frames/0001518_000101.200s.png",
+      "package_path": "baseline-motion/zh/Fisher/native/0001518_000101.200s.png",
+      "sha256": "35b323d2437f65476bbb0615fceb01ab6dd12d260f811ffcbbbd95bb01ef7cdf",
+      "bytes": 63849
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Fisher/audit/frames/0001573_000104.866s.png",
+      "package_path": "baseline-motion/zh/Fisher/native/0001573_000104.866s.png",
+      "sha256": "dbf95b3745d30500ed1eb77ec6393105b567ae6a599e99d44698e56bbe23550d",
+      "bytes": 85680
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Fisher/audit/frames/0002148_000143.200s.png",
+      "package_path": "baseline-motion/zh/Fisher/native/0002148_000143.200s.png",
+      "sha256": "8b5624f9c4b9897205d4fbe48771d1e919bef4be166772f54cf121ffee84b328",
+      "bytes": 82893
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-motion-review/zh/Fisher/audit/frames/0003135_000209.000s.png",
+      "package_path": "baseline-motion/zh/Fisher/native/0003135_000209.000s.png",
+      "sha256": "8e866a4af2f9bb245bb4f237e314063aa04599eee1d842d54daf995cfec00213",
+      "bytes": 72099
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/report.md",
+      "package_path": "fresh-regression/report.md",
+      "sha256": "a5f1b3f94e7e905b0352784ecf8dcbfa3c0b4dced6d6680ed95e29e62b1f4ef4",
+      "bytes": 2675
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Likelihood/changed/sheet-002.png",
+      "package_path": "fresh-regression/en/Likelihood/changed/sheet-002.png",
+      "sha256": "f1c3b1e2e2aff3fdcf0224bbb9d5caa42acc217a6beeb43ff79e83bb23b5908e",
+      "bytes": 140240
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Likelihood/audit/frames/0000899_000059.933s.png",
+      "package_path": "fresh-regression/en/Likelihood/native/0000899_000059.933s.png",
+      "sha256": "7da758e4ec5e7535091d1f7cb4b5ada8a737d3146a2fa3454bc1e3884d97f1ce",
+      "bytes": 143724
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Likelihood/audit/frames/0000906_000060.400s.png",
+      "package_path": "fresh-regression/en/Likelihood/native/0000906_000060.400s.png",
+      "sha256": "c559e6624ed5013d73a025b6b02a6ddf0374900890a847d5a576acef899423ed",
+      "bytes": 154768
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Likelihood/union/frames/0002034_000135.600s.png",
+      "package_path": "fresh-regression/en/Likelihood/native/0002034_000135.600s.png",
+      "sha256": "4543ba4e2b84c34eb80ffc761b771a36c08c1b2aae84d701c1d553f4780a7f12",
+      "bytes": 31607
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Likelihood/union/frames/0002042_000136.133s.png",
+      "package_path": "fresh-regression/en/Likelihood/native/0002042_000136.133s.png",
+      "sha256": "931982d7fa3ec30de9edb1e44a12f05f02fdc23c78887a79890b6a4fc80db1d7",
+      "bytes": 34592
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Likelihood/union/frames/0002053_000136.866s.png",
+      "package_path": "fresh-regression/en/Likelihood/native/0002053_000136.866s.png",
+      "sha256": "eef822be3aec1786d6d1a0fbd288f44a24e7e3e0bdf0c019caaac9827a36c862",
+      "bytes": 37552
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Likelihood/union/frames/0002092_000139.466s.png",
+      "package_path": "fresh-regression/en/Likelihood/native/0002092_000139.466s.png",
+      "sha256": "ab61050cc761f75127df06168cf52449941fff82bc29329de8b024d64d44e28f",
+      "bytes": 49566
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Likelihood/union/frames/0002104_000140.266s.png",
+      "package_path": "fresh-regression/en/Likelihood/native/0002104_000140.266s.png",
+      "sha256": "bf50cf30e372acb5ce164173d40fd159d0c6e4a327044737ad13752090161292",
+      "bytes": 51551
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Likelihood/audit/frames/0002112_000140.800s.png",
+      "package_path": "fresh-regression/en/Likelihood/native/0002112_000140.800s.png",
+      "sha256": "15c174a602f13b9866f38115d663796c715d0578b26c373e4dc27e455a54d1b1",
+      "bytes": 53495
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/changed/sheet-002.png",
+      "package_path": "fresh-regression/en/Fisher/changed/sheet-002.png",
+      "sha256": "5667b1333a58820abb7cb94ffa3d0926d4a4cac6449f66a51e9dab53ecb0306f",
+      "bytes": 154850
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/audit/frames/0000990_000066.000s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0000990_000066.000s.png",
+      "sha256": "1b8dd20fbfb182a7e9e2e976301792bf7e3e5c5131d4e88d8622e85c45c635cb",
+      "bytes": 31820
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/union/frames/0000998_000066.533s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0000998_000066.533s.png",
+      "sha256": "2195aca606eab44e7a5b76c5f76e2e0543bafd82b7d54d9ad4d4f96c4fd9509f",
+      "bytes": 36264
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/audit/frames/0001009_000067.266s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001009_000067.266s.png",
+      "sha256": "92ac9038af7e008419df2b72ab8d6c952c8bb71015f99e69e21dadb6c865f2d0",
+      "bytes": 40195
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/union/frames/0001123_000074.866s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001123_000074.866s.png",
+      "sha256": "aea5b455151e19f39e6f41682ae5a354c8ac39b99d20525a9889aa9e292392c1",
+      "bytes": 43094
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/audit/frames/0001133_000075.533s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001133_000075.533s.png",
+      "sha256": "e480b92b4297a4efab4e3b3c510f79b301afb4cc2e533ee54a4d8a85d57a31c2",
+      "bytes": 48834
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/union/frames/0001144_000076.266s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001144_000076.266s.png",
+      "sha256": "6aca9b421cf2dad731609a71c8e934e8881eedc23d9058da03523c7b0b8f3daa",
+      "bytes": 52487
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/union/frames/0001293_000086.200s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001293_000086.200s.png",
+      "sha256": "bf0afec7702d5cf953d65a717bea3ee37b1a1baddfb1167a4ddef2b31285c4aa",
+      "bytes": 55941
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/union/frames/0001301_000086.733s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001301_000086.733s.png",
+      "sha256": "94b1d0396618abb060b5761dd5a583e35d26b19469be7cc2d946d0d4893092c2",
+      "bytes": 59269
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/union/frames/0001311_000087.400s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001311_000087.400s.png",
+      "sha256": "d5d8b2f42821f1d26c9e9bda0f105c75e18f4addb7a32c9f1c5023a828a89982",
+      "bytes": 63047
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/audit/frames/0001406_000093.733s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001406_000093.733s.png",
+      "sha256": "a68465ca88cbc2c960a437f93644f4e135a8577bd75f840b305e270e0ef2a9b6",
+      "bytes": 71438
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/audit/frames/0001424_000094.933s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001424_000094.933s.png",
+      "sha256": "4719afa859d979774be43dc432f98f7ae5e8cab92ddbb5110df0eeb73f4cabfd",
+      "bytes": 64695
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/audit/frames/0001432_000095.466s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001432_000095.466s.png",
+      "sha256": "e4e8d1265a1e15772fbd8d9de28f898a36beba3e54c00d81e716000c10584238",
+      "bytes": 66757
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/audit/frames/0001515_000101.000s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001515_000101.000s.png",
+      "sha256": "7f0d1a4360b0d28f2620d60ebab06697de9981bc62d65f3238fcfcbdab61a23a",
+      "bytes": 72955
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/audit/frames/0001530_000102.000s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001530_000102.000s.png",
+      "sha256": "f320435b91cb6aa369aaad079c0668caf08ab15897395e4b58fb7254fca8fe1e",
+      "bytes": 60914
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/en/Fisher/union/frames/0001541_000102.733s.png",
+      "package_path": "fresh-regression/en/Fisher/native/0001541_000102.733s.png",
+      "sha256": "3b84d33394decc1665675786d4b3043f18fbec07c81b126eb5fe1325c4989143",
+      "bytes": 63340
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Likelihood/union/frames/0002096_000139.733s.png",
+      "package_path": "fresh-regression/zh/Likelihood/native/0002096_000139.733s.png",
+      "sha256": "279b3fc86934773860b2cafed363e7e4b6ae2f17cf3c419e751b8698bd77f0e9",
+      "bytes": 34378
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Likelihood/union/frames/0002104_000140.267s.png",
+      "package_path": "fresh-regression/zh/Likelihood/native/0002104_000140.267s.png",
+      "sha256": "70dfdcca4d61a1a1a3b6ebbd9cb955f806226f9aea884b210c1712ed5c77260d",
+      "bytes": 37699
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Likelihood/union/frames/0002115_000141.000s.png",
+      "package_path": "fresh-regression/zh/Likelihood/native/0002115_000141.000s.png",
+      "sha256": "0ffe73821f013f47ca98688eb1f27ae464ae5c7e72e2e407037ba9820c1709e1",
+      "bytes": 40287
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Likelihood/union/frames/0002152_000143.467s.png",
+      "package_path": "fresh-regression/zh/Likelihood/native/0002152_000143.467s.png",
+      "sha256": "fee9870ec0cdb385ec5e35113d7ce73da567586154914bd6e506ee4752a1aa5a",
+      "bytes": 52090
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Likelihood/union/frames/0002164_000144.267s.png",
+      "package_path": "fresh-regression/zh/Likelihood/native/0002164_000144.267s.png",
+      "sha256": "31112f283bb25246a207992f65c5a4b3758fbbae283832adfc3089a1166cba11",
+      "bytes": 54339
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Likelihood/audit/frames/0002172_000144.800s.png",
+      "package_path": "fresh-regression/zh/Likelihood/native/0002172_000144.800s.png",
+      "sha256": "24e20afc91192277acc6c1e96b9f28723ff315105a39cf7f261d4fdd3dc40d55",
+      "bytes": 55910
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/union/frames/0000972_000064.800s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0000972_000064.800s.png",
+      "sha256": "72817ec2f9a7359d760dced23be775ee49cf4eaff4d647af2010289a3af36c18",
+      "bytes": 32754
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/union/frames/0000979_000065.266s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0000979_000065.266s.png",
+      "sha256": "9b8d7bfcc2ef760eb6ab3befd9652d713dd41de4f1b7db7658e25fce3222204e",
+      "bytes": 37093
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/union/frames/0000990_000066.000s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0000990_000066.000s.png",
+      "sha256": "1dc88a40288c515aeedff2b3a1bf51fde93455b5b3a434a410aa4e6954ff0531",
+      "bytes": 41879
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/union/frames/0001100_000073.333s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001100_000073.333s.png",
+      "sha256": "84cb9d5a3739d3b4cbdf010e46078668f620152157495bbfa526124114c59749",
+      "bytes": 43522
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/union/frames/0001108_000073.866s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001108_000073.866s.png",
+      "sha256": "cb7a25ad87605e964cf5dc09ac4956273a87fb29655dda089c18b02b7af2e2c2",
+      "bytes": 47754
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/audit/frames/0001121_000074.733s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001121_000074.733s.png",
+      "sha256": "2f4d81f5b13b8d3347e84b288412bca2cc95b2febcc925acda3a26c69d6276d3",
+      "bytes": 52767
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/union/frames/0001267_000084.466s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001267_000084.466s.png",
+      "sha256": "80a88fb7de8a4ba6ca2df25a2c9247b5d1e859d0db862c97d2a9978230b78f21",
+      "bytes": 56612
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/union/frames/0001275_000085.000s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001275_000085.000s.png",
+      "sha256": "a208475de42918e2b1401f4984b8512a0c4865da18d75155ff79b4c17c6a14c4",
+      "bytes": 60086
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/union/frames/0001285_000085.666s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001285_000085.666s.png",
+      "sha256": "8d2556c5579fd7c792f053668e0dda273eb1f05ef5c295b9d6cb78137ab3d862",
+      "bytes": 63782
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/audit/frames/0001394_000092.933s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001394_000092.933s.png",
+      "sha256": "f7b57dbad2cfee8d87c17cb32dbb45fca5730000df718ba2c6153f7a5f16c0a5",
+      "bytes": 69503
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/audit/frames/0001408_000093.866s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001408_000093.866s.png",
+      "sha256": "49e1915199d9a5d7dac7c5bce80586d0734f295a1c3f844abc4dc89153adbb1c",
+      "bytes": 60911
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/audit/frames/0001420_000094.666s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001420_000094.666s.png",
+      "sha256": "53debc7aa49a243cd64a876a62d13196967168a68ba18bbd9dabe7272a028a58",
+      "bytes": 65454
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/audit/frames/0001503_000100.200s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001503_000100.200s.png",
+      "sha256": "1edeb5be82ad5a8d049a2b2b65975795aa5a8efa44965d13905f40e300c44baa",
+      "bytes": 70344
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/audit/frames/0001518_000101.200s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001518_000101.200s.png",
+      "sha256": "989c6a1b53d830470c765df4ef934290ec77a0f3ab7090719d846499eff09781",
+      "bytes": 58515
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/zh/Fisher/union/frames/0001529_000101.933s.png",
+      "package_path": "fresh-regression/zh/Fisher/native/0001529_000101.933s.png",
+      "sha256": "4fe764b197ddeb9bab5d4cd6015e6c246ad1b69d0eb380e2b50839811d5ef976",
+      "bytes": 61386
+    },
+    {
+      "runtime_path": "/workspace/runtime/ai5-endpoint-likelihood-fisher-review/report.md",
+      "package_path": "baseline-endpoints/report.md",
+      "sha256": "a8149484443f7dfa89d284d03c03e19ed7f2d1af3ddbb454d1d2fb4bb262ad97",
+      "bytes": 3476
+    }
+  ],
+  "compressed_complete_nonimage_artifacts": {
+    "file": "complete-ledgers-source-pins.tar.gz",
+    "sha256": "deaf3d333ae2d5d94adaf89a25bd24b86d250f93c3c4c2477ed124a66130ce62",
+    "bytes": 4134975,
+    "index_member": "index.json",
+    "mapped_artifacts": 425
+  },
+  "removed_copy_ledger": {
+    "file": "removed-package-copies.json.gz",
+    "sha256": "a3fe4c9db6b31260865a3e6dfe3d728f6a2f8dec4c3307c4b2e98070ec75ffd2"
+  },
+  "original_artifact_map_runtime": "/workspace/runtime/ai5-likelihood-fisher-rendered-regression/package-before-compaction/artifact-map.json",
+  "original_exact_artifact_count": 935,
+  "removed_package_copy_count": 861,
+  "retained_runtime_originals_verified": 935
+}

@@ -1,0 +1,277 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 2023,
+    "sha256": "4b8160593d71fafce1b1fe046c659141ba9a639d8dbd345e648dc345bfa6b4bc"
+  },
+  {
+    "path": "method/mark.py",
+    "bytes": 996,
+    "sha256": "b2a562edcc790bff1d254691ee50560e70ba0b5fe9345ec08454446248389407"
+  },
+  {
+    "path": "method/package.py",
+    "bytes": 10243,
+    "sha256": "884737af47988e24a0e74e644f87a04ee900b24ca5775a17feafec3f49a0573d"
+  },
+  {
+    "path": "method/prepare.py",
+    "bytes": 3413,
+    "sha256": "dd4ce2055749e5f65e00c4e4d51aab537110cc999f73633834602b0c75713cda"
+  },
+  {
+    "path": "summary.json",
+    "bytes": 1720,
+    "sha256": "fa2b30559d910df6ff7a54a6fec21e6c944b4a4f92116c943ffae71e0ddabe4a"
+  },
+  {
+    "path": "zh/Bayes/audit.json.gz",
+    "bytes": 35749,
+    "sha256": "401b400ee9f9b90244f954e0166ef8b5cbbbadb5ebe5bfe1c4f3e6b2a9ce3a7a"
+  },
+  {
+    "path": "zh/Bayes/examples/sheet-032.png",
+    "bytes": 373830,
+    "sha256": "b5f787cc5324cd6a9aeb9d26bc753f53e46bcf83e4581bf0377eaabb217a7229"
+  },
+  {
+    "path": "zh/Bayes/examples/sheet-048.png",
+    "bytes": 296113,
+    "sha256": "38e1e8f4097b0c2821ace2cf29e6eedf509c8bee717a5fdd43e58653fdfeac57"
+  },
+  {
+    "path": "zh/Bayes/freeze.json.gz",
+    "bytes": 1103,
+    "sha256": "2ce4f1a84f4fecebc484a230fb7ca3dba13726339d12884939fce65db06d91ff"
+  },
+  {
+    "path": "zh/Bayes/native/0000891_000059.400s.png",
+    "bytes": 92273,
+    "sha256": "d02b710ff49644a7e73c9f70b8042a010947472dec75ff652d9eb01680630dc8"
+  },
+  {
+    "path": "zh/Bayes/native/0001493_000099.533s.png",
+    "bytes": 90037,
+    "sha256": "98ae35b9ce5f551496cbe2cc97d2f2e53355ce763eca986e65a2732c2d32f68d"
+  },
+  {
+    "path": "zh/Bayes/native/0002187_000145.800s.png",
+    "bytes": 61536,
+    "sha256": "7d52156de219521db4fed9f31e916ab778822a72e8b9c7e2c61625cdf73eae6e"
+  },
+  {
+    "path": "zh/Bayes/native/0002440_000162.666s.png",
+    "bytes": 95616,
+    "sha256": "51c6262b3ca1b9e77f62149b2bfdb1aa847094600d1d04c318d37e0a33faa926"
+  },
+  {
+    "path": "zh/Bayes/plan.json.gz",
+    "bytes": 55931,
+    "sha256": "41341eb9122169775762e385c6808d3000bf652b49846a925e5c4f2b75d58a86"
+  },
+  {
+    "path": "zh/Bayes/raw-render.log.gz",
+    "bytes": 198,
+    "sha256": "671375a2d6e282075f1214696183026f3c2ef3aed4f40d7b90de1d7cab042368"
+  },
+  {
+    "path": "zh/Bayes/raw-result.json.gz",
+    "bytes": 19807,
+    "sha256": "ca1360f44daf771b12d06bad163e43a1fe5cd057f903fa7b3f9c7e331e7fae56"
+  },
+  {
+    "path": "zh/Bayes/raw-text.jsonl.gz",
+    "bytes": 35,
+    "sha256": "d13c99199e2a40b167f3f5dbdb2383e4eeeceb6af3dac1ce660fbf0b066604ae"
+  },
+  {
+    "path": "zh/Bayes/review.json.gz",
+    "bytes": 40114,
+    "sha256": "42d773296fcf7dd0244041907714def620bd3be888f0cea0ef5b787f5a8f66a4"
+  },
+  {
+    "path": "zh/Bayes/source/plotting.py",
+    "bytes": 3599,
+    "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845"
+  },
+  {
+    "path": "zh/Bayes/source/s06_bayes.py",
+    "bytes": 18730,
+    "sha256": "64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64"
+  },
+  {
+    "path": "zh/Bayes/views.json.gz",
+    "bytes": 6188,
+    "sha256": "d4103717ffbdad8511dc0934b25876720511a905f4457115f6ed7f7ba2dcf54e"
+  },
+  {
+    "path": "zh/MaxEnt/audit.json.gz",
+    "bytes": 29821,
+    "sha256": "bab32e84954c8c5616e00cc751f1c80451cbe5cb1b26d025bfd15744db31f14f"
+  },
+  {
+    "path": "zh/MaxEnt/examples/sheet-018.png",
+    "bytes": 303309,
+    "sha256": "0af5a0b340974a54900f0077f56a4d24dc5fa726286ffa8cbf075e0f6d64f5c8"
+  },
+  {
+    "path": "zh/MaxEnt/examples/sheet-040.png",
+    "bytes": 298492,
+    "sha256": "7ea556a79cb03d146d1fca83216b91c058a883a01bf78b750251c4e68e33dfeb"
+  },
+  {
+    "path": "zh/MaxEnt/freeze.json.gz",
+    "bytes": 988,
+    "sha256": "0dca78c98d99ba66838e095f7b217fd9fbf0c3b8eb362184540eafbe1c540398"
+  },
+  {
+    "path": "zh/MaxEnt/native/0000573_000038.200s.png",
+    "bytes": 69201,
+    "sha256": "425a915be08a5a6f03d1202ac47218df3a13b4f589f93a02de9466afefcfece8"
+  },
+  {
+    "path": "zh/MaxEnt/native/0000993_000066.199s.png",
+    "bytes": 58094,
+    "sha256": "99dec0763070cb4ed2901cea54e0056212bc05c66adb83b2d3ebaa8e4ce1feaf"
+  },
+  {
+    "path": "zh/MaxEnt/native/0001427_000095.133s.png",
+    "bytes": 54596,
+    "sha256": "356408bc54f1db04ec8d5da22849e2913a23c5ccea66d9827bd4b464394b0589"
+  },
+  {
+    "path": "zh/MaxEnt/native/0002231_000148.733s.png",
+    "bytes": 81600,
+    "sha256": "6f49022a5ae7f8151c03409f05c07274bbf74f67a88dc0ce2ce18e14665e8bfa"
+  },
+  {
+    "path": "zh/MaxEnt/plan.json.gz",
+    "bytes": 45097,
+    "sha256": "2075fe8970997370d8bcf668693cb91735ff81d7258a43b1573a9effb98eaad8"
+  },
+  {
+    "path": "zh/MaxEnt/raw-render.log.gz",
+    "bytes": 197,
+    "sha256": "1cfc77c6ec5df61742216aba897f076d31840b856a5eed9de661188f446bb4cd"
+  },
+  {
+    "path": "zh/MaxEnt/raw-result.json.gz",
+    "bytes": 17701,
+    "sha256": "e967be7fb2625cd1df7bb1d1326d5d9f77136d52af1879aa6842bd92894eb753"
+  },
+  {
+    "path": "zh/MaxEnt/raw-text.jsonl.gz",
+    "bytes": 35,
+    "sha256": "d13c99199e2a40b167f3f5dbdb2383e4eeeceb6af3dac1ce660fbf0b066604ae"
+  },
+  {
+    "path": "zh/MaxEnt/review.json.gz",
+    "bytes": 33456,
+    "sha256": "20f85776e5514ad682fcdd1a179dd2b3e19d6a720726cc89590f087f7040cc8e"
+  },
+  {
+    "path": "zh/MaxEnt/source/plotting.py",
+    "bytes": 3599,
+    "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845"
+  },
+  {
+    "path": "zh/MaxEnt/source/s07_maxent.py",
+    "bytes": 15669,
+    "sha256": "f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd"
+  },
+  {
+    "path": "zh/MaxEnt/views.json.gz",
+    "bytes": 5140,
+    "sha256": "57ed22632c2a2b49e64b80b70b6e456fc4c0fd0be9048b60e729308234cba157"
+  },
+  {
+    "path": "zh/Tails/audit.json.gz",
+    "bytes": 31808,
+    "sha256": "498759ea74689f608ae75f00cbc21212d89e8e1c4e08c4bbf8fbc25c5ff5b57c"
+  },
+  {
+    "path": "zh/Tails/examples/sheet-021.png",
+    "bytes": 309312,
+    "sha256": "35ca39314cd333f5fe8dcd75e9492befe0b7159a7cdeb48f7e757946032e8be2"
+  },
+  {
+    "path": "zh/Tails/examples/sheet-041.png",
+    "bytes": 222487,
+    "sha256": "8117701d036e885feed94ed9079a6a4149fe1585953eb0e2de68e168747879ba"
+  },
+  {
+    "path": "zh/Tails/freeze.json.gz",
+    "bytes": 958,
+    "sha256": "ca96348d50a59144be0f162cb6db5ec6167bf473e01847009beeae73132e15a8"
+  },
+  {
+    "path": "zh/Tails/native/0000321_000021.400s.png",
+    "bytes": 53658,
+    "sha256": "d2e99c608a903249acaf7a5d3a0c4008bda32940e830326032a5629a3ffdcdc8"
+  },
+  {
+    "path": "zh/Tails/native/0000930_000062.000s.png",
+    "bytes": 51329,
+    "sha256": "4d3385dd5c919dbc67f9218bfeefdeb9eb594dbc7c0c02e0d8076b602236a3bc"
+  },
+  {
+    "path": "zh/Tails/native/0001170_000078.000s.png",
+    "bytes": 60305,
+    "sha256": "2b7995a9b1d5941ee0f4564149ae673e1f267ab489f983d8bd4f0a3a64713ba2"
+  },
+  {
+    "path": "zh/Tails/native/0001563_000104.199s.png",
+    "bytes": 80339,
+    "sha256": "8c49d2182d21108806c448d99bf50b7bebf0c8094f76bdb64d37a259184b3997"
+  },
+  {
+    "path": "zh/Tails/native/0002085_000138.999s.png",
+    "bytes": 44374,
+    "sha256": "ef55522348d3de33784a8fa605f250f8a46862d9573ea0edc1ef919bc8467ad6"
+  },
+  {
+    "path": "zh/Tails/native/0002397_000159.799s.png",
+    "bytes": 43744,
+    "sha256": "068dbe4a6a15fe8b41cf3498673adc9153f82831541f1121721d865d67c7df41"
+  },
+  {
+    "path": "zh/Tails/plan.json.gz",
+    "bytes": 48061,
+    "sha256": "e163b3f50da97cd2e73b1a076dfecf7bdda320bf6ed9c35aa425d35ab8b799fb"
+  },
+  {
+    "path": "zh/Tails/raw-render.log.gz",
+    "bytes": 199,
+    "sha256": "061de37cfbcf3a98672a8110c71fd49d0fa45af333f0d90628c748345731243e"
+  },
+  {
+    "path": "zh/Tails/raw-result.json.gz",
+    "bytes": 17197,
+    "sha256": "e9645d76fde772fc4eaad1b6c7edcf2047aca48fb22c0bdb0567db5542e0bc4d"
+  },
+  {
+    "path": "zh/Tails/raw-text.jsonl.gz",
+    "bytes": 35,
+    "sha256": "d13c99199e2a40b167f3f5dbdb2383e4eeeceb6af3dac1ce660fbf0b066604ae"
+  },
+  {
+    "path": "zh/Tails/review.json.gz",
+    "bytes": 35766,
+    "sha256": "a10c5a93df6e6862621ce8a1209f359cd9ed8e6aa76614cc2c5a6d2cf68d7a56"
+  },
+  {
+    "path": "zh/Tails/source/plotting.py",
+    "bytes": 3599,
+    "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845"
+  },
+  {
+    "path": "zh/Tails/source/s09_tails.py",
+    "bytes": 14844,
+    "sha256": "028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773"
+  },
+  {
+    "path": "zh/Tails/views.json.gz",
+    "bytes": 6034,
+    "sha256": "461bc355abda8db36e892ac4b39a74afd86d5d025cc3125525c26d0554627891"
+  }
+]

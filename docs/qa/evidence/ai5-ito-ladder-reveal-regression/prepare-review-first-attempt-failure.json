@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-01T03:30:39.923438+00:00",
+  "status": "failed harness after completed EN fixed-cohort PNG extraction",
+  "error": "FileNotFoundError resolving extracted path: wrapper added cohort-frames/ to qa_motion.extract logical frames/ prefix, although PNGs are directly in cohort-frames.",
+  "outcome": "Known failure after image extraction, no data/source/movie changes. Existing EN PNGs reconciled by source-index filenames/hashes; no duplicate extraction needed. ZH extraction not yet started."
+}

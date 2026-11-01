@@ -1,0 +1,1004 @@
+{
+  "utc": "2026-11-01T03:55:02.732575+00:00",
+  "scope": "Seven final Part5 silent480p15 cases; dense selected-image visual review, not continuous perceptual playback. ZH Bayes/MaxEnt/Tails separately owned and excluded.",
+  "cases": [
+    {
+      "case": "en-Bayes",
+      "review": "final/en-Bayes/review.json.gz",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-final-motion-review/en/Bayes",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/en/Bayes_motion/media/videos/480p15/Bayes.mp4",
+      "movie_sha256": "9d0be56a4338d79d962456e07f180efc5dbe120dcd6e149652439720325bcab2",
+      "raw_record_sha256": "55f7f69863e5377c182591735b46523ca28df7605344b60f0cbc1ce37b008708",
+      "review_sha256": "efc0ca633d14096221fe47d19b46733707bb543c1cc89e535c6f99bddfd93279",
+      "decoded": 2722,
+      "selected": 496,
+      "unique_png": 407,
+      "inherited_exact_png": 358,
+      "novel_png_actually_viewed": 49,
+      "novel_pages_actually_viewed": 7,
+      "native_followups_actually_viewed": 2,
+      "unselected_encoded_frames": 2226,
+      "largest_selected_gap": 1.0000000000000018,
+      "duration": 181.466016,
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "adjacent_audit_provenance": null,
+      "source_files_at_review": [
+        {
+          "path": "videos/ai/ai5/s06_bayes.py",
+          "sha256": "64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64",
+          "bytes": 18730
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/bayes.json",
+          "sha256": "f28590579a967e04a3c6ead9312ad0611dfcf6c025e89842405c7bfab74a28f1",
+          "size_mtime_ns": [
+            1688,
+            1793497407536928775
+          ]
+        },
+        {
+          "path": ".cache/ai5/bayes.npz",
+          "sha256": "946585f20ceb29c185315c5f793abbedfa5c3a7de5b23d5f9a27fe5a23eed488",
+          "size_mtime_ns": [
+            14803,
+            1793497407536005076
+          ]
+        },
+        {
+          "path": ".cache/ai5/map.json",
+          "sha256": "c29e0ddb4a0627591ff2e6818712b5e41492e306b2736714607258e49d51e086",
+          "size_mtime_ns": [
+            1066,
+            1793497410796058729
+          ]
+        },
+        {
+          "path": ".cache/ai5/map.npz",
+          "sha256": "eed9c148f8cbc7c953244976b60f347b389a68259eca31f8f973df97459819cd",
+          "size_mtime_ns": [
+            8998,
+            1793497410795217926
+          ]
+        }
+      ],
+      "new_findings": []
+    },
+    {
+      "case": "en-MaxEnt",
+      "review": "final/en-MaxEnt/review.json.gz",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-final-motion-review/en/MaxEnt",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/en/MaxEnt_motion/media/videos/480p15/MaxEnt.mp4",
+      "movie_sha256": "94277c0aa41a3e45bc2fe87a4ac422448e3f72b83d8eb8e92b1497efe623682e",
+      "raw_record_sha256": "309bec6445ebaba5ebc860e80169f9339035c068bda39be2933e656db159a994",
+      "review_sha256": "b04f3aeedef6727d80ba88a05b2aa5e84587d15b24112d1b2ac0b57436ffa658",
+      "decoded": 2472,
+      "selected": 418,
+      "unique_png": 326,
+      "inherited_exact_png": 300,
+      "novel_png_actually_viewed": 26,
+      "novel_pages_actually_viewed": 4,
+      "native_followups_actually_viewed": 2,
+      "unselected_encoded_frames": 2054,
+      "largest_selected_gap": 1.0000000000000018,
+      "duration": 164.799349,
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "adjacent_audit_provenance": null,
+      "source_files_at_review": [
+        {
+          "path": "videos/ai/ai5/s07_maxent.py",
+          "sha256": "f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd",
+          "bytes": 15669
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/maxent.json",
+          "sha256": "1cf2877ec2f8687436c4d8538c043bc6b31e97013c55bcd3a1e712f31d5504e1",
+          "size_mtime_ns": [
+            1129,
+            1793497414444366806
+          ]
+        },
+        {
+          "path": ".cache/ai5/maxent.npz",
+          "sha256": "1f28792b0f62f7ab3d8f29deaa377a101651115cb4f3cb6a0b06b3587c705126",
+          "size_mtime_ns": [
+            10623,
+            1793497414443534242
+          ]
+        }
+      ],
+      "new_findings": []
+    },
+    {
+      "case": "en-Tails",
+      "review": "final/en-Tails/review.json.gz",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-final-motion-review/en/Tails",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/en/Tails_motion/media/videos/480p15/Tails.mp4",
+      "movie_sha256": "0de315e76a585e7a4a23db7fd02cd272653c0b34016047c422ec68bf76adf17e",
+      "raw_record_sha256": "7e54208006f0e00891d4539e55aee99dd78b609c6074c3d3c1241835f8ff727d",
+      "review_sha256": "de8c0977139daeb0461b0ede4dfd7f96948fc3c151389ef78211524a2219ab4e",
+      "decoded": 2415,
+      "selected": 431,
+      "unique_png": 333,
+      "inherited_exact_png": 300,
+      "novel_png_actually_viewed": 33,
+      "novel_pages_actually_viewed": 5,
+      "native_followups_actually_viewed": 2,
+      "unselected_encoded_frames": 1984,
+      "largest_selected_gap": 1.0,
+      "duration": 160.999349,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "adjacent_audit_provenance": null,
+      "source_files_at_review": [
+        {
+          "path": "videos/ai/ai5/s09_tails.py",
+          "sha256": "028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773",
+          "bytes": 14844
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/tails.json",
+          "sha256": "e8d069ebecbb2c5c6f268294e723cf99c8b01b098b7864309bdf4071cb00a891",
+          "size_mtime_ns": [
+            1164,
+            1793497418172851051
+          ]
+        },
+        {
+          "path": ".cache/ai5/tails.npz",
+          "sha256": "27ac5c908a2c876b8b9d9456d5faa32f4c0dd20b993c1b42524c39a5798c1806",
+          "size_mtime_ns": [
+            7715,
+            1793497418172105826
+          ]
+        }
+      ],
+      "new_findings": []
+    },
+    {
+      "case": "en-Sampling",
+      "review": "final/en-Sampling/review.json.gz",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-final-motion-review/en/Sampling",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/en/Sampling_motion/media/videos/480p15/Sampling.mp4",
+      "movie_sha256": "432dadbc45ea2d1f7b70bcd63ef09d7addfb7615994c36f58df80499cb3cb6d6",
+      "raw_record_sha256": "dbb50e7a7f2d229c36aacea88d36ae7901968b9821a214ccf7040bfa708193cf",
+      "review_sha256": "688d36881a1b7e8953368034741e98fdce2304fb8d56e7a7802c940c2fedc0fa",
+      "decoded": 2715,
+      "selected": 510,
+      "unique_png": 431,
+      "inherited_exact_png": 412,
+      "novel_png_actually_viewed": 19,
+      "novel_pages_actually_viewed": 3,
+      "native_followups_actually_viewed": 3,
+      "unselected_encoded_frames": 2205,
+      "largest_selected_gap": 1.0,
+      "duration": 180.998698,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "adjacent_audit_provenance": null,
+      "source_files_at_review": [
+        {
+          "path": "videos/ai/ai5/s10_sampling.py",
+          "sha256": "c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974",
+          "bytes": 19995
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/markov.json",
+          "sha256": "9ee957ab57ca8595a173b6d422f69cd8dcfd9382fbd4f22eca0613828b23e611",
+          "size_mtime_ns": [
+            3523,
+            1793497425618745948
+          ]
+        },
+        {
+          "path": ".cache/ai5/markov.npz",
+          "sha256": "ff914575313ee9b6e4025dac0e3ff7aea146982e9ad72f840a33600653f315b7",
+          "size_mtime_ns": [
+            9145,
+            1793497425617481352
+          ]
+        },
+        {
+          "path": ".cache/ai5/draws.json",
+          "sha256": "9dba970c6d523f3395bc61dd21c0e296d00184a3d18a6d4bd99c733c48455978",
+          "size_mtime_ns": [
+            1122,
+            1793497422077784488
+          ]
+        },
+        {
+          "path": ".cache/ai5/draws.npz",
+          "sha256": "e21458f021f3455e6fa4f1ddf67a312346ec1dd974970e185fe778bcb3c24dd7",
+          "size_mtime_ns": [
+            48130,
+            1793497422075867870
+          ]
+        }
+      ],
+      "new_findings": []
+    },
+    {
+      "case": "en-Outro",
+      "review": "final/en-Outro/review.json.gz",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-final-motion-review/en/Outro",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/en/Outro_motion/media/videos/480p15/Outro.mp4",
+      "movie_sha256": "56e78b8a439183dcc4e5addcf1278cd6312828d137c8d6d90b3d42de0ef08eb9",
+      "raw_record_sha256": "0317b8840a18556d8a0ead68e823716b19a4f27a72bf7d22446c27ccbd4847b2",
+      "review_sha256": "b84f4701399d05d666f7946af8c607ac04023634ac69d77e2ade61a7f806d8dc",
+      "decoded": 2426,
+      "selected": 372,
+      "unique_png": 334,
+      "inherited_exact_png": 267,
+      "novel_png_actually_viewed": 67,
+      "novel_pages_actually_viewed": 9,
+      "native_followups_actually_viewed": 3,
+      "unselected_encoded_frames": 2054,
+      "largest_selected_gap": 1.0,
+      "duration": 161.733333,
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "adjacent_audit_provenance": null,
+      "source_files_at_review": [
+        {
+          "path": "videos/ai/ai5/s20_outro.py",
+          "sha256": "7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e",
+          "bytes": 15158
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/conv.json",
+          "sha256": "c368b553bb6976e754189cfaf0721c16f40f3b31c69880aad7fe41118c09640a",
+          "size_mtime_ns": [
+            1134,
+            1793497345069185557
+          ]
+        },
+        {
+          "path": ".cache/ai5/conv.npz",
+          "sha256": "e5a64f6c92ec93b3c22130185c70f9d730635fec9f516925b61fde6f3fd4fc17",
+          "size_mtime_ns": [
+            11717,
+            1793497345068345287
+          ]
+        },
+        {
+          "path": ".cache/ai5/gauss.json",
+          "sha256": "76f46d04a04ecf4ae3600a792589ceb9d42208419947b737c5f50cf2ab1cd66f",
+          "size_mtime_ns": [
+            1098,
+            1793497355829225340
+          ]
+        },
+        {
+          "path": ".cache/ai5/gauss.npz",
+          "sha256": "e7827e1dc4b73e9c04a57dfda9710c3b313f7eb53e55c55681afe5ed844062c5",
+          "size_mtime_ns": [
+            67278,
+            1793497355826850416
+          ]
+        },
+        {
+          "path": ".cache/ai5/fisher.json",
+          "sha256": "918cab59645982326b811c38acf5a0cf103abcc2246f11c1b821fd75064e8ce6",
+          "size_mtime_ns": [
+            2649,
+            1793497404253042190
+          ]
+        },
+        {
+          "path": ".cache/ai5/fisher.npz",
+          "sha256": "92796e7f59de5fa05ee5082c9c2076509ea5603f00018f662d75c3e05cfa0637",
+          "size_mtime_ns": [
+            2682,
+            1793497404252252501
+          ]
+        },
+        {
+          "path": ".cache/ai5/maxent.json",
+          "sha256": "1cf2877ec2f8687436c4d8538c043bc6b31e97013c55bcd3a1e712f31d5504e1",
+          "size_mtime_ns": [
+            1129,
+            1793497414444366806
+          ]
+        },
+        {
+          "path": ".cache/ai5/maxent.npz",
+          "sha256": "1f28792b0f62f7ab3d8f29deaa377a101651115cb4f3cb6a0b06b3587c705126",
+          "size_mtime_ns": [
+            10623,
+            1793497414443534242
+          ]
+        },
+        {
+          "path": ".cache/ai5/tails.json",
+          "sha256": "e8d069ebecbb2c5c6f268294e723cf99c8b01b098b7864309bdf4071cb00a891",
+          "size_mtime_ns": [
+            1164,
+            1793497418172851051
+          ]
+        },
+        {
+          "path": ".cache/ai5/tails.npz",
+          "sha256": "27ac5c908a2c876b8b9d9456d5faa32f4c0dd20b993c1b42524c39a5798c1806",
+          "size_mtime_ns": [
+            7715,
+            1793497418172105826
+          ]
+        },
+        {
+          "path": ".cache/ai5/decoding.json",
+          "sha256": "4b26aff88fe29f0e8e8b737933773150971a6e9ec8d0b9777941c79d3277da93",
+          "size_mtime_ns": [
+            28201,
+            1793498147623798962
+          ]
+        },
+        {
+          "path": ".cache/ai5/decoding.npz",
+          "sha256": "63f82ba2326ffff36480f1ca4a6f3f961d572596e982239b05d4ae3961b10d9c",
+          "size_mtime_ns": [
+            707,
+            1793498147622602445
+          ]
+        },
+        {
+          "path": ".cache/ai5/langevin.json",
+          "sha256": "e54e74c146d2a8038f6df17154b354a0dbd5f50a5a2cd9c2c021e02029d95fb0",
+          "size_mtime_ns": [
+            1125,
+            1793497470293017944
+          ]
+        },
+        {
+          "path": ".cache/ai5/langevin.npz",
+          "sha256": "1d5ca59b70f5291f01a67cacb8bd251edb853ead6a1437dade1a32623db827cc",
+          "size_mtime_ns": [
+            891896,
+            1793497470289213744
+          ]
+        },
+        {
+          "path": ".cache/ai5/shape.json",
+          "sha256": "c6bbd28f47c9e55c75b86a0173a00a503d66eac2277808d06ab78fe4ef9113f2",
+          "size_mtime_ns": [
+            904,
+            1793497336713807083
+          ]
+        },
+        {
+          "path": ".cache/ai5/shape.npz",
+          "sha256": "795466e5cf23c537ab2f629b0dbd9f008f2542d86d93789ac5585703f2c3a0e3",
+          "size_mtime_ns": [
+            973620,
+            1793497336709697083
+          ]
+        }
+      ],
+      "new_findings": []
+    },
+    {
+      "case": "zh-Sampling",
+      "review": "final/zh-Sampling/review.json.gz",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-final-motion-review/zh/Sampling",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/zh/Sampling_motion/media/videos/480p15/Sampling.mp4",
+      "movie_sha256": "82ec9d465e16a3fd52af1e1a29dbeb323ceacaa70a42dc11be6debd565895dc1",
+      "raw_record_sha256": "dce2ae7561731b69b9753e792d8fec4cc335dd5154371ce079be3187e341097e",
+      "review_sha256": "ba3973e0fad09ae0414e7eec60ae5304471b30e0e756972347c0fee5e9c092ed",
+      "decoded": 2768,
+      "selected": 502,
+      "unique_png": 416,
+      "inherited_exact_png": 0,
+      "novel_png_actually_viewed": 416,
+      "novel_pages_actually_viewed": 52,
+      "native_followups_actually_viewed": 5,
+      "unselected_encoded_frames": 2266,
+      "largest_selected_gap": 1.0,
+      "duration": 184.532682,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "adjacent_audit_provenance": null,
+      "source_files_at_review": [
+        {
+          "path": "videos/ai/ai5/s10_sampling.py",
+          "sha256": "c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974",
+          "bytes": 19995
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/markov.json",
+          "sha256": "9ee957ab57ca8595a173b6d422f69cd8dcfd9382fbd4f22eca0613828b23e611",
+          "size_mtime_ns": [
+            3523,
+            1793497425618745948
+          ]
+        },
+        {
+          "path": ".cache/ai5/markov.npz",
+          "sha256": "ff914575313ee9b6e4025dac0e3ff7aea146982e9ad72f840a33600653f315b7",
+          "size_mtime_ns": [
+            9145,
+            1793497425617481352
+          ]
+        },
+        {
+          "path": ".cache/ai5/draws.json",
+          "sha256": "9dba970c6d523f3395bc61dd21c0e296d00184a3d18a6d4bd99c733c48455978",
+          "size_mtime_ns": [
+            1122,
+            1793497422077784488
+          ]
+        },
+        {
+          "path": ".cache/ai5/draws.npz",
+          "sha256": "e21458f021f3455e6fa4f1ddf67a312346ec1dd974970e185fe778bcb3c24dd7",
+          "size_mtime_ns": [
+            48130,
+            1793497422075867870
+          ]
+        }
+      ],
+      "new_findings": []
+    },
+    {
+      "case": "zh-Outro",
+      "review": "final/zh-Outro/review.json.gz",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-final-motion-review/zh/Outro",
+      "original_movie": "/workspace/explainer-videos/renders/qa/series/ai5/zh/Outro_motion/media/videos/480p15/Outro.mp4",
+      "movie_sha256": "361ca4c9dbda68212834f68fce989097bd25d025435ead6fa42f5c38af7e810a",
+      "raw_record_sha256": "4ae37ffd1c349702c954c1cf6ecfad42bd74d707f2fb93c0a3833956ee3200ef",
+      "review_sha256": "6c603c2e3c7fbd9001eb74b0120aaf8c24f6990f338f1e6919c5403d3cc5bb02",
+      "decoded": 2799,
+      "selected": 370,
+      "unique_png": 321,
+      "inherited_exact_png": 275,
+      "novel_png_actually_viewed": 46,
+      "novel_pages_actually_viewed": 6,
+      "native_followups_actually_viewed": 3,
+      "unselected_encoded_frames": 2429,
+      "largest_selected_gap": 1.0,
+      "duration": 186.6,
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "adjacent_audit_provenance": null,
+      "source_files_at_review": [
+        {
+          "path": "videos/ai/ai5/s20_outro.py",
+          "sha256": "7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e",
+          "bytes": 15158
+        },
+        {
+          "path": "videos/ai/ai5/common.py",
+          "sha256": "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7",
+          "bytes": 8633
+        },
+        {
+          "path": "videos/ai/ai5/zh_lines.py",
+          "sha256": "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba",
+          "bytes": 82756
+        },
+        {
+          "path": "videos/ai/ai_text_zh.json",
+          "sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+          "bytes": 2436781
+        },
+        {
+          "path": "videos/ai/ai5/plotting.py",
+          "sha256": "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845",
+          "bytes": 3599
+        },
+        {
+          "path": "tools/qa_motion.py",
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "bytes": 19437
+        },
+        {
+          "path": "tools/qa_series.py",
+          "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+          "bytes": 25379
+        }
+      ],
+      "inputs_at_review": [
+        {
+          "path": ".cache/ai5/conv.json",
+          "sha256": "c368b553bb6976e754189cfaf0721c16f40f3b31c69880aad7fe41118c09640a",
+          "size_mtime_ns": [
+            1134,
+            1793497345069185557
+          ]
+        },
+        {
+          "path": ".cache/ai5/conv.npz",
+          "sha256": "e5a64f6c92ec93b3c22130185c70f9d730635fec9f516925b61fde6f3fd4fc17",
+          "size_mtime_ns": [
+            11717,
+            1793497345068345287
+          ]
+        },
+        {
+          "path": ".cache/ai5/gauss.json",
+          "sha256": "76f46d04a04ecf4ae3600a792589ceb9d42208419947b737c5f50cf2ab1cd66f",
+          "size_mtime_ns": [
+            1098,
+            1793497355829225340
+          ]
+        },
+        {
+          "path": ".cache/ai5/gauss.npz",
+          "sha256": "e7827e1dc4b73e9c04a57dfda9710c3b313f7eb53e55c55681afe5ed844062c5",
+          "size_mtime_ns": [
+            67278,
+            1793497355826850416
+          ]
+        },
+        {
+          "path": ".cache/ai5/fisher.json",
+          "sha256": "918cab59645982326b811c38acf5a0cf103abcc2246f11c1b821fd75064e8ce6",
+          "size_mtime_ns": [
+            2649,
+            1793497404253042190
+          ]
+        },
+        {
+          "path": ".cache/ai5/fisher.npz",
+          "sha256": "92796e7f59de5fa05ee5082c9c2076509ea5603f00018f662d75c3e05cfa0637",
+          "size_mtime_ns": [
+            2682,
+            1793497404252252501
+          ]
+        },
+        {
+          "path": ".cache/ai5/maxent.json",
+          "sha256": "1cf2877ec2f8687436c4d8538c043bc6b31e97013c55bcd3a1e712f31d5504e1",
+          "size_mtime_ns": [
+            1129,
+            1793497414444366806
+          ]
+        },
+        {
+          "path": ".cache/ai5/maxent.npz",
+          "sha256": "1f28792b0f62f7ab3d8f29deaa377a101651115cb4f3cb6a0b06b3587c705126",
+          "size_mtime_ns": [
+            10623,
+            1793497414443534242
+          ]
+        },
+        {
+          "path": ".cache/ai5/tails.json",
+          "sha256": "e8d069ebecbb2c5c6f268294e723cf99c8b01b098b7864309bdf4071cb00a891",
+          "size_mtime_ns": [
+            1164,
+            1793497418172851051
+          ]
+        },
+        {
+          "path": ".cache/ai5/tails.npz",
+          "sha256": "27ac5c908a2c876b8b9d9456d5faa32f4c0dd20b993c1b42524c39a5798c1806",
+          "size_mtime_ns": [
+            7715,
+            1793497418172105826
+          ]
+        },
+        {
+          "path": ".cache/ai5/decoding.json",
+          "sha256": "4b26aff88fe29f0e8e8b737933773150971a6e9ec8d0b9777941c79d3277da93",
+          "size_mtime_ns": [
+            28201,
+            1793498147623798962
+          ]
+        },
+        {
+          "path": ".cache/ai5/decoding.npz",
+          "sha256": "63f82ba2326ffff36480f1ca4a6f3f961d572596e982239b05d4ae3961b10d9c",
+          "size_mtime_ns": [
+            707,
+            1793498147622602445
+          ]
+        },
+        {
+          "path": ".cache/ai5/langevin.json",
+          "sha256": "e54e74c146d2a8038f6df17154b354a0dbd5f50a5a2cd9c2c021e02029d95fb0",
+          "size_mtime_ns": [
+            1125,
+            1793497470293017944
+          ]
+        },
+        {
+          "path": ".cache/ai5/langevin.npz",
+          "sha256": "1d5ca59b70f5291f01a67cacb8bd251edb853ead6a1437dade1a32623db827cc",
+          "size_mtime_ns": [
+            891896,
+            1793497470289213744
+          ]
+        },
+        {
+          "path": ".cache/ai5/shape.json",
+          "sha256": "c6bbd28f47c9e55c75b86a0173a00a503d66eac2277808d06ab78fe4ef9113f2",
+          "size_mtime_ns": [
+            904,
+            1793497336713807083
+          ]
+        },
+        {
+          "path": ".cache/ai5/shape.npz",
+          "sha256": "795466e5cf23c537ab2f629b0dbd9f008f2542d86d93789ac5585703f2c3a0e3",
+          "size_mtime_ns": [
+            973620,
+            1793497336709697083
+          ]
+        }
+      ],
+      "new_findings": []
+    }
+  ],
+  "baselines": [
+    {
+      "case": "en-Bayes",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-selected-motion-review/en/Bayes",
+      "review_sha256": "cddf401af72197df628a7a7ce035a5b52dfaee81a3c609e1d523ec18ed434788",
+      "movie_sha256": "0c28b5ec2313b9a5c109cd2c16174b077e0191837c342cf06779cf9438059076",
+      "actual_pages_viewed": 52,
+      "unique_png": 410,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "historical_review_unchanged": true
+    },
+    {
+      "case": "en-MaxEnt",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-selected-motion-review/en/MaxEnt",
+      "review_sha256": "43b3c2fdb1ce7567c9b6e8296b3be91b55bc63fc1c44a4cf3ae6237bc700653d",
+      "movie_sha256": "0caa76c46d0548cf2bc83c2c8bd7cba49ca46c4f79b7adae6a3b33292f2f7c7f",
+      "actual_pages_viewed": 42,
+      "unique_png": 333,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "historical_review_unchanged": true
+    },
+    {
+      "case": "en-Tails",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-selected-motion-review/en/Tails",
+      "review_sha256": "375444933f02848ff10cddd8183665325bc21a8687311a8778cc60c954690563",
+      "movie_sha256": "57967c673e329e837249498c71f8dc02bd766815c035dbdd617abce9022fbb48",
+      "actual_pages_viewed": 42,
+      "unique_png": 336,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "historical_review_unchanged": true
+    },
+    {
+      "case": "en-Sampling",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-selected-motion-review/en/Sampling",
+      "review_sha256": "95778de396695468695065c7c057f5bea4e78a948ff6c9f1cca8e6faa5d07f8b",
+      "movie_sha256": "2c9cdf57bce5645d5036ebc154338e7e8a7ff192dc6410091732e4b03026cd1e",
+      "actual_pages_viewed": 55,
+      "unique_png": 434,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "historical_review_unchanged": true
+    },
+    {
+      "case": "en-Outro",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-selected-motion-review/en/Outro",
+      "review_sha256": "56213afd929bb6cfa226aa1254ac65b3997b0b6e1b3042e13c7e37534137d1d2",
+      "movie_sha256": "92573b5d523fcf185a0d51a13b278447514b2574ab595c25c59d547304ba9741",
+      "actual_pages_viewed": 42,
+      "unique_png": 329,
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "historical_review_unchanged": true
+    },
+    {
+      "case": "zh-Outro",
+      "runtime_directory": "/workspace/runtime/ai5-integrity-selected-motion-review/zh/Outro",
+      "review_sha256": "84ef9e15a8b488e518f2ea235e4feba0ace7d9a91a025f7cc244fc0d47864255",
+      "movie_sha256": "c699668b3963bcb656eed2a496b4a5a6117597ef6b655d62ac13e631597c86b7",
+      "actual_pages_viewed": 41,
+      "unique_png": 325,
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "historical_review_unchanged": true
+    }
+  ],
+  "repairs": [
+    {
+      "scene": "Bayes",
+      "before_sha256": "0645e4f1b3aac621a89376265e4cd092b13dae0326023c3e1f5b03a21f233f16",
+      "after_sha256": "64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64",
+      "local_append_call_options_added": 6,
+      "voiceover_expressions_identical": true,
+      "explicit_self_play_calls_identical": true,
+      "wait_calls_identical": true,
+      "bookmark_calls_identical": true,
+      "historical_source_freeze": "repairs/Bayes/historical-source-freeze.json.gz"
+    },
+    {
+      "scene": "MaxEnt",
+      "before_sha256": "71381b6538b02c3fc8aafc144d407c801d075970c088d2701688fe4ac96f0d54",
+      "after_sha256": "f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd",
+      "local_append_call_options_added": 4,
+      "voiceover_expressions_identical": true,
+      "explicit_self_play_calls_identical": true,
+      "wait_calls_identical": true,
+      "bookmark_calls_identical": true,
+      "historical_source_freeze": "repairs/MaxEnt/historical-source-freeze.json.gz"
+    },
+    {
+      "scene": "Tails",
+      "before_sha256": "905e4f10672b19a101ffdcbb465b2b92304455858d2751dc797b3631225c3a6f",
+      "after_sha256": "028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773",
+      "local_append_call_options_added": 4,
+      "voiceover_expressions_identical": true,
+      "explicit_self_play_calls_identical": true,
+      "wait_calls_identical": true,
+      "bookmark_calls_identical": true,
+      "historical_source_freeze": "repairs/Tails/historical-source-freeze.json.gz"
+    },
+    {
+      "scene": "Sampling",
+      "before_sha256": "0602dce119320294dd573ab004bc230742e5ba466d908af12e348476eaae6787",
+      "after_sha256": "c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974",
+      "local_append_call_options_added": 3,
+      "voiceover_expressions_identical": true,
+      "explicit_self_play_calls_identical": true,
+      "wait_calls_identical": true,
+      "bookmark_calls_identical": true,
+      "historical_source_freeze": "repairs/Sampling/historical-source-freeze.json.gz"
+    },
+    {
+      "scene": "Outro",
+      "before_sha256": "c9e0e67ffe3b8976b1a5cea82de634312c3083300e79652ae927580cc2464fd9",
+      "after_sha256": "7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e",
+      "local_append_call_options_added": 0,
+      "voiceover_expressions_identical": true,
+      "explicit_self_play_calls_identical": true,
+      "wait_calls_identical": true,
+      "bookmark_calls_identical": true,
+      "historical_source_freeze": "repairs/Outro/historical-source-freeze.json.gz"
+    }
+  ],
+  "limits": [
+    "Every encoded video frame was decoded algorithmically; only selected image representatives were visually viewed. Complete unsampled gaps are preserved.",
+    "Exact PNG byte SHA256 inheritance only; never visual/perceptual similarity.",
+    "No continuous perceptual playback, audio/listening/narration synchronization, final production resolution/frame rate or native1080-motion approval.",
+    "Raw needs-review/source-changed-during-render statuses/warnings remain unchanged. Source snapshots taken at review do not themselves attest exact imported sources during an earlier render.",
+    "Current ZH Sampling inherits no old visual approval: preserved historical ZH movie was unviewed.",
+    "Scientific cache methodology audit is separately documented; these selected-image reviews do not prove all scientific claims."
+  ],
+  "totals": {
+    "decoded": 18317,
+    "selected": 3099,
+    "unique_png": 2568,
+    "inherited_exact_png": 1912,
+    "novel_png_actually_viewed": 656,
+    "novel_pages_actually_viewed": 86,
+    "native_followups_actually_viewed": 20,
+    "unselected_encoded_frames": 15218
+  },
+  "source_snapshot_store": {
+    "64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64": "source-snapshots/64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64-s06_bayes.py.gz",
+    "0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7": "source-snapshots/0acc48bb7c655bde239c1adfe2c318b96d939bb6ff448d8581605f88aec78ba7-common.py.gz",
+    "475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba": "source-snapshots/475ebcc3c100e87bac0f8349dec9672b33fb9cf3686e41bcd9eb232271c5d0ba-zh_lines.py.gz",
+    "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef": "source-snapshots/c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef-ai_text_zh.json.gz",
+    "1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845": "source-snapshots/1d76a9c4145eedf0f3a65549223ba4b8edae1397f6d8696c146b45037542d845-plotting.py.gz",
+    "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e": "source-snapshots/1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e-qa_motion.py.gz",
+    "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3": "source-snapshots/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3-qa_series.py.gz",
+    "f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd": "source-snapshots/f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd-s07_maxent.py.gz",
+    "028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773": "source-snapshots/028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773-s09_tails.py.gz",
+    "c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974": "source-snapshots/c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974-s10_sampling.py.gz",
+    "7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e": "source-snapshots/7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e-s20_outro.py.gz"
+  }
+}

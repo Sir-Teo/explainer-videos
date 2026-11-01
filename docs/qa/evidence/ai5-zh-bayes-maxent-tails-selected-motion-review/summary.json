@@ -1,0 +1,59 @@
+{
+  "scope": "Part5 current ZH Bayes/MaxEnt/Tails only",
+  "cases": [
+    {
+      "case": "zh/Bayes",
+      "decoded_frames": 2725,
+      "selected_times": 500,
+      "direct_unique_representatives": 421,
+      "direct_pages": 53,
+      "native_followups": 4,
+      "duration": 181.666341,
+      "largest_selected_time_gap": 1.0,
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "outcome": "No new corrective visual defect observed within selected-image scope."
+    },
+    {
+      "case": "zh/MaxEnt",
+      "decoded_frames": 2407,
+      "selected_times": 424,
+      "direct_unique_representatives": 335,
+      "direct_pages": 42,
+      "native_followups": 4,
+      "duration": 160.466016,
+      "largest_selected_time_gap": 1.0,
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "outcome": "No new corrective visual defect observed within selected-image scope."
+    },
+    {
+      "case": "zh/Tails",
+      "decoded_frames": 2585,
+      "selected_times": 459,
+      "direct_unique_representatives": 357,
+      "direct_pages": 45,
+      "native_followups": 6,
+      "duration": 172.332682,
+      "largest_selected_time_gap": 1.0,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "outcome": "No new corrective visual defect observed within selected-image scope."
+    }
+  ],
+  "total_selected_times": 1383,
+  "total_unique_representatives": 1113,
+  "total_pages": 140,
+  "total_native_followups": 14,
+  "no_source_edits": true,
+  "no_old_unviewed_zh_inheritance": true,
+  "created": "2026-11-01T03:35:14.660719+00:00"
+}

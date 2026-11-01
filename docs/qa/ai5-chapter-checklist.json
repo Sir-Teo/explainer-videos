@@ -11,9 +11,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH current selected-image review accepted.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Hook/result.json",
@@ -42,7 +42,8 @@
       "review_evidence": "evidence/ai5-en-hook-selected-motion-review/README.md",
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "5a5f0dc5ff04c831baaf752a2fe8a71a5caf716b1f32e4710e441fb03b901e96"
     },
     {
       "position": 1,
@@ -52,9 +53,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH current selected-image review accepted.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Hook/result.json",
@@ -83,7 +84,8 @@
       "review_evidence": "evidence/ai5-zh-hook-selected-motion-review/README.md",
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "5a5f0dc5ff04c831baaf752a2fe8a71a5caf716b1f32e4710e441fb03b901e96"
     },
     {
       "position": 2,
@@ -93,9 +95,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Bell/result.json",
@@ -119,7 +121,8 @@
       "open_findings": [],
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "c4025027c65a62e4bb5f904802cacb357a2927b7f43434cda7adafe05dd42898"
     },
     {
       "position": 2,
@@ -129,9 +132,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Bell/result.json",
@@ -155,7 +158,8 @@
       "open_findings": [],
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "c4025027c65a62e4bb5f904802cacb357a2927b7f43434cda7adafe05dd42898"
     },
     {
       "position": 3,
@@ -165,9 +169,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Gauss/result.json",
@@ -191,7 +195,8 @@
       "open_findings": [],
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "a913a45fd52683d2423e417262fa47588b165560335ae5e30957323630e44127"
     },
     {
       "position": 3,
@@ -201,9 +206,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "Repaired EN/ZH selected review accepted; bounded evidence packaged03:19UTC.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Gauss/result.json",
@@ -231,7 +236,8 @@
       "open_findings": [],
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "a913a45fd52683d2423e417262fa47588b165560335ae5e30957323630e44127"
     },
     {
       "position": 4,
@@ -241,9 +247,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; repaired selected-image regression active.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Likelihood/result.json",
@@ -266,8 +272,11 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "8de7027104168e6188476a1d809389e6873fbbead8c1a57ee855faf81bdb2e99",
+      "review_evidence": "evidence/ai5-likelihood-fisher-selected-motion-review/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 4,
@@ -277,9 +286,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; repaired selected-image regression active.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Likelihood/result.json",
@@ -306,8 +315,11 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "8de7027104168e6188476a1d809389e6873fbbead8c1a57ee855faf81bdb2e99",
+      "review_evidence": "evidence/ai5-likelihood-fisher-selected-motion-review/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 5,
@@ -317,9 +329,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; repaired selected-image regression active.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Fisher/result.json",
@@ -342,8 +354,11 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "65ec3c37d067edf3f6361ddad24a5605bebf32490f2fc8418df3f4278f0386dd",
+      "review_evidence": "evidence/ai5-likelihood-fisher-selected-motion-review/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 5,
@@ -353,9 +368,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; repaired selected-image regression active.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Fisher/result.json",
@@ -378,8 +393,11 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "65ec3c37d067edf3f6361ddad24a5605bebf32490f2fc8418df3f4278f0386dd",
+      "review_evidence": "evidence/ai5-likelihood-fisher-selected-motion-review/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 6,
@@ -389,9 +407,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "Current ZH selected review accepted; repaired EN regression pending.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Bayes/result.json",
@@ -418,8 +436,10 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64",
+      "review_evidence": "evidence/ai5-bayes-maxent-tails-sampling-outro-motion-review/README.md"
     },
     {
       "position": 6,
@@ -429,9 +449,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "Current ZH selected review accepted; repaired EN regression pending.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Bayes/result.json",
@@ -459,7 +479,9 @@
       "open_findings": [],
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64",
+      "review_evidence": "evidence/ai5-zh-bayes-maxent-tails-selected-motion-review/README.md"
     },
     {
       "position": 7,
@@ -469,9 +491,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "EN complete baseline; current ZH selected review active; repaired EN regression pending.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/MaxEnt/result.json",
@@ -498,8 +520,10 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd",
+      "review_evidence": "evidence/ai5-bayes-maxent-tails-sampling-outro-motion-review/README.md"
     },
     {
       "position": 7,
@@ -509,9 +533,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "EN complete baseline; current ZH selected review active; repaired EN regression pending.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/MaxEnt/result.json",
@@ -537,9 +561,11 @@
         }
       },
       "open_findings": [],
-      "complete_baseline_selected_review": false,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd",
+      "review_evidence": "evidence/ai5-zh-bayes-maxent-tails-selected-motion-review/README.md"
     },
     {
       "position": 8,
@@ -549,9 +575,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN complete baseline; current ZH selected review queued; repaired EN regression pending.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Tails/result.json",
@@ -574,8 +600,10 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773",
+      "review_evidence": "evidence/ai5-bayes-maxent-tails-sampling-outro-motion-review/README.md"
     },
     {
       "position": 8,
@@ -585,9 +613,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN complete baseline; current ZH selected review queued; repaired EN regression pending.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Tails/result.json",
@@ -609,9 +637,11 @@
         }
       },
       "open_findings": [],
-      "complete_baseline_selected_review": false,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773",
+      "review_evidence": "evidence/ai5-zh-bayes-maxent-tails-selected-motion-review/README.md"
     },
     {
       "position": 9,
@@ -621,9 +651,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN complete baseline; repaired EN/ZH renders/regression underway.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Sampling/result.json",
@@ -646,8 +676,11 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974",
+      "review_evidence": "evidence/ai5-bayes-maxent-tails-sampling-outro-motion-review/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 9,
@@ -657,9 +690,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN complete baseline; repaired EN/ZH renders/regression underway.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Sampling/result.json",
@@ -681,9 +714,12 @@
         }
       },
       "open_findings": [],
-      "complete_baseline_selected_review": false,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "c78cee1cf3a8a8c99f64785bfca563f5c7aed619c46423c3b06b6e800f265974",
+      "review_evidence": "evidence/ai5-bayes-maxent-tails-sampling-outro-motion-review/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 10,
@@ -693,9 +729,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "Repaired EN/ZH selected review accepted; evidence pushed03:08UTC.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Decoding/result.json",
@@ -719,7 +755,8 @@
       "open_findings": [],
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "be8c9b419ea61ecc004d275ccbef276db838bec0a29f57801c8f4db52c63e693"
     },
     {
       "position": 10,
@@ -729,9 +766,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "Repaired EN/ZH selected review accepted; evidence pushed03:08UTC.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Decoding/result.json",
@@ -755,7 +792,8 @@
       "open_findings": [],
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "be8c9b419ea61ecc004d275ccbef276db838bec0a29f57801c8f4db52c63e693"
     },
     {
       "position": 11,
@@ -765,9 +803,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "Repaired EN/ZH selected review accepted; final Markov package ready.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Markov/result.json",
@@ -791,7 +829,8 @@
       "open_findings": [],
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "6c7ee6d58ffa4096340c3c5be933d9006d48879f3561acdc277fc45fedc7e30e"
     },
     {
       "position": 11,
@@ -801,9 +840,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "Repaired EN/ZH selected review accepted; final Markov package ready.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint images reviewed at scoped source version; full1080motion/4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Markov/result.json",
@@ -827,7 +866,8 @@
       "open_findings": [],
       "complete_baseline_selected_review": true,
       "current_selected_review_accepted": true,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "6c7ee6d58ffa4096340c3c5be933d9006d48879f3561acdc277fc45fedc7e30e"
     },
     {
       "position": 12,
@@ -837,9 +877,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; cohort-sync repair frozen03:21UTC; fresh renders/regression underway.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/MonteCarlo/result.json",
@@ -860,12 +900,14 @@
           "movie": "renders/qa/series/ai5/en/MonteCarlo_motion/media/videos/480p15/MonteCarlo.mp4"
         }
       },
-      "open_findings": [
-        "Actual first-dart estimator/readout advancesNwhile leftalreadyshows24darts; later1500shownvs4000computed needscohort disclosure/synchronization. Scopedrepair pending."
-      ],
+      "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5",
+      "review_evidence": "evidence/ai5-mc-score-cohort-motion-regression/README.md",
+      "evidence_package_ready": false,
+      "historical_movie_preservation_limit": "Old reviewed frames/records/guard receipts intact, but original whole-movie witness overwritten through hardlink; no independent old whole MP4 remains. See baseline preservation report."
     },
     {
       "position": 12,
@@ -875,9 +917,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; cohort-sync repair frozen03:21UTC; fresh renders/regression underway.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/MonteCarlo/result.json",
@@ -898,12 +940,14 @@
           "movie": "renders/qa/series/ai5/zh/MonteCarlo_motion/media/videos/480p15/MonteCarlo.mp4"
         }
       },
-      "open_findings": [
-        "Actual first-dart estimator/readout advancesNwhile leftalreadyshows24darts; later1500shownvs4000computed needscohort disclosure/synchronization. Scopedrepair pending."
-      ],
+      "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5",
+      "review_evidence": "evidence/ai5-mc-score-cohort-motion-regression/README.md",
+      "evidence_package_ready": false,
+      "historical_movie_preservation_limit": "Old reviewed frames/records/guard receipts intact, but original whole-movie witness overwritten through hardlink; no independent old whole MP4 remains. See baseline preservation report."
     },
     {
       "position": 13,
@@ -913,9 +957,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; clean-reveal repair rendering/regression underway.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/ScoreFn/result.json",
@@ -938,8 +982,12 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c",
+      "review_evidence": "evidence/ai5-mc-score-cohort-motion-regression/README.md",
+      "evidence_package_ready": false,
+      "historical_movie_preservation_limit": "Old reviewed frames/records/guard receipts intact, but original whole-movie witness overwritten through hardlink; no independent old whole MP4 remains. See baseline preservation report."
     },
     {
       "position": 13,
@@ -949,9 +997,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; clean-reveal repair rendering/regression underway.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/ScoreFn/result.json",
@@ -974,8 +1022,12 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c",
+      "review_evidence": "evidence/ai5-mc-score-cohort-motion-regression/README.md",
+      "evidence_package_ready": false,
+      "historical_movie_preservation_limit": "Old reviewed frames/records/guard receipts intact, but original whole-movie witness overwritten through hardlink; no independent old whole MP4 remains. See baseline preservation report."
     },
     {
       "position": 14,
@@ -985,37 +1037,41 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "Complete silent renders; selected-image review active.",
+      "actual_visual_review": "Both original selected-image baselines complete; final repaired movies rendered; fresh changed-window/native review active.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/MCMC/result.json",
-          "sha256": "4309e6b708f2cbb2d75e42c71bba55a9f9234c1d633f37af874f7003cb467e8d",
+          "sha256": "9524e123d813825c078b0ac4097c6e5faa993ba3f0db4b1de1746c3398dc89e7",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+          "fingerprint": "1adbb0b743a83032e75d15b1862e494898b5829bc48ff311309212f3e53e6310",
           "frame_captures": 18,
           "movie": null
         },
         "silent_motion": {
           "path": "renders/qa/series/ai5/en/MCMC_motion/result.json",
-          "sha256": "051db49fe18e13f6cc8ce101eab8b645570448cf3621d5588ab11d1a5553bf22",
+          "sha256": "61e7f52d4a2e122badefa915fd7df75e0e02575f5d64af8f125e734d14d983cf",
           "status": "needs-review",
           "warnings": [
             {
               "kind": "source-changed-during-render"
             }
           ],
-          "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+          "fingerprint": "1adbb0b743a83032e75d15b1862e494898b5829bc48ff311309212f3e53e6310",
           "frame_captures": 18,
           "movie": "renders/qa/series/ai5/en/MCMC_motion/media/videos/480p15/MCMC.mp4"
         }
       },
-      "open_findings": [],
-      "complete_baseline_selected_review": false,
+      "open_findings": [
+        "Final repaired-source selected review not yet accepted."
+      ],
+      "complete_baseline_selected_review": true,
       "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "95c38c1d058a07556f26dd86fd042dbdba8e137ff4083ea9350cbd0f919655af",
+      "historical_movie_preservation_limit": "Old reviewed frames/records/guard receipts intact, but original whole-movie witness overwritten through hardlink; no independent old whole MP4 remains. See baseline preservation report."
     },
     {
       "position": 14,
@@ -1025,37 +1081,41 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "Complete silent renders; selected-image review active.",
+      "actual_visual_review": "Both original selected-image baselines complete; final repaired movies rendered; fresh changed-window/native review active.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/MCMC/result.json",
-          "sha256": "6e3f05dd5194bbcd8eec762afc0c9e44c13b3316b7b67a06209cd9a942d073c1",
+          "sha256": "92c06fea6c8b2d1b1f3421d9ff2b6ed1381d6e81e9bc7074f1451ffee6981ed5",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+          "fingerprint": "1adbb0b743a83032e75d15b1862e494898b5829bc48ff311309212f3e53e6310",
           "frame_captures": 19,
           "movie": null
         },
         "silent_motion": {
           "path": "renders/qa/series/ai5/zh/MCMC_motion/result.json",
-          "sha256": "8653a96953272cff1f67144c555482ba1d68e9f1f2a19cdc877d63c35ad7d2bc",
+          "sha256": "33054831a960614c2726af3273912172b3ef206ca0f0c908d197f0f96cfc0b0d",
           "status": "needs-review",
           "warnings": [
             {
               "kind": "source-changed-during-render"
             }
           ],
-          "fingerprint": "35aceee1318cd5bd4775caf49c23f24a205636922c24a2076a52069ce154e5df",
+          "fingerprint": "1adbb0b743a83032e75d15b1862e494898b5829bc48ff311309212f3e53e6310",
           "frame_captures": 19,
           "movie": "renders/qa/series/ai5/zh/MCMC_motion/media/videos/480p15/MCMC.mp4"
         }
       },
-      "open_findings": [],
-      "complete_baseline_selected_review": false,
+      "open_findings": [
+        "Final repaired-source selected review not yet accepted."
+      ],
+      "complete_baseline_selected_review": true,
       "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "95c38c1d058a07556f26dd86fd042dbdba8e137ff4083ea9350cbd0f919655af",
+      "historical_movie_preservation_limit": "Old reviewed frames/records/guard receipts intact, but original whole-movie witness overwritten through hardlink; no independent old whole MP4 remains. See baseline preservation report."
     },
     {
       "position": 15,
@@ -1065,22 +1125,22 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "Complete silent renders; selected-image review pending.",
+      "actual_visual_review": "Both original selected-image baselines complete; final repaired movies rendered; fresh changed-window/native review active.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Brownian/result.json",
-          "sha256": "24671303c5a73c5050e576d624e15efd7664d4f796e2399d0b211b8d2606021a",
+          "sha256": "a8a1705e9e2bce86721d29fabebeabb8074c0c61c5d7c1b37275692f18b9538e",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "bfc2662ae7fbee18cbe54f9c44c87cf870bbcd8138106cb7fb7466dba256da0b",
+          "fingerprint": "aa2f35bb8fbfd132189e28727a207a812606c3acfa6e94a0cfd7472b90354e6b",
           "frame_captures": 11,
           "movie": null
         },
         "silent_motion": {
           "path": "renders/qa/series/ai5/en/Brownian_motion/result.json",
-          "sha256": "d2cc03b2ebbe173514c093347b465e726727b77314bf864f19464d118f350d18",
+          "sha256": "45ec0faec9518f30749388154c8a55987fa866ee0be90fb7b9504b5431e2e979",
           "status": "needs-review",
           "warnings": [
             {
@@ -1088,15 +1148,18 @@
               "report": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 154 s\n   2:06.25   1.5 s   [  +126.2 s]\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 154 s\n   2:06.25   1.5 s   [  +126.2 s]\n"
             }
           ],
-          "fingerprint": "6be8111e4a7326983783ae9af451d1810d0665b857277e9c5e44ca0dc2c503bb",
+          "fingerprint": "aa2f35bb8fbfd132189e28727a207a812606c3acfa6e94a0cfd7472b90354e6b",
           "frame_captures": 11,
           "movie": "renders/qa/series/ai5/en/Brownian_motion/media/videos/480p15/Brownian.mp4"
         }
       },
-      "open_findings": [],
-      "complete_baseline_selected_review": false,
+      "open_findings": [
+        "Final repaired-source selected review not yet accepted."
+      ],
+      "complete_baseline_selected_review": true,
       "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "780521544fd9ad5e9ab698bfeba6c8da2aa82b24b17433a93623dca69c444e9f"
     },
     {
       "position": 15,
@@ -1106,33 +1169,36 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "Complete silent renders; selected-image review pending.",
+      "actual_visual_review": "Both original selected-image baselines complete; final repaired movies rendered; fresh changed-window/native review active.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Brownian/result.json",
-          "sha256": "523156f624de131296acab1e18ec3e9c06b9afa483a8cf98ddbe591a0a77c003",
+          "sha256": "5e6fee7c283c36f6c72237608a40b75d2e3441c1545e2a498a45868656fa3081",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "bfc2662ae7fbee18cbe54f9c44c87cf870bbcd8138106cb7fb7466dba256da0b",
+          "fingerprint": "aa2f35bb8fbfd132189e28727a207a812606c3acfa6e94a0cfd7472b90354e6b",
           "frame_captures": 12,
           "movie": null
         },
         "silent_motion": {
           "path": "renders/qa/series/ai5/zh/Brownian_motion/result.json",
-          "sha256": "e110bf89bdf0317d28f31db4a65160cf585a5b1943a0245d0279d6b7cb45b0ba",
+          "sha256": "0b79944338d0cc38a570691cc110efbaeb79dd06495ff703997fa8be7e79c9d4",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "fingerprint": "aa2f35bb8fbfd132189e28727a207a812606c3acfa6e94a0cfd7472b90354e6b",
           "frame_captures": 12,
           "movie": "renders/qa/series/ai5/zh/Brownian_motion/media/videos/480p15/Brownian.mp4"
         }
       },
-      "open_findings": [],
-      "complete_baseline_selected_review": false,
+      "open_findings": [
+        "Final repaired-source selected review not yet accepted."
+      ],
+      "complete_baseline_selected_review": true,
       "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "780521544fd9ad5e9ab698bfeba6c8da2aa82b24b17433a93623dca69c444e9f"
     },
     {
       "position": 16,
@@ -1142,9 +1208,9 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; repaired reveal regression active.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Ito/result.json",
@@ -1171,8 +1237,11 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "3cbd2023cb1a0a969d542fe634cd814e3f7a69f46e1a62d0a11702a2b73fa08e",
+      "review_evidence": "evidence/ai5-ito-ladder-reveal-regression/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 16,
@@ -1182,9 +1251,9 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; repaired reveal regression active.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Ito/result.json",
@@ -1207,8 +1276,11 @@
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "3cbd2023cb1a0a969d542fe634cd814e3f7a69f46e1a62d0a11702a2b73fa08e",
+      "review_evidence": "evidence/ai5-ito-ladder-reveal-regression/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 17,
@@ -1218,33 +1290,36 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; sequential-caption transition repair frozen; fresh regression queued.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/SDE/result.json",
-          "sha256": "4f5a1de9966b3e6b0a356ad4691d8e3fcc9d0a7d8b6ed2efd0ec0654078d8777",
+          "sha256": "91b3aa99084d0a58cc9e91c355a801717151b69f7fcebda69c101a89619d9f9f",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+          "fingerprint": "35d5a12cd2c9c454c66a5e687623575b847b10d18d8cb125c1297ee4b7bd2674",
           "frame_captures": 11,
           "movie": null
         },
         "silent_motion": {
           "path": "renders/qa/series/ai5/en/SDE_motion/result.json",
-          "sha256": "874167aae4414872e14472f727775aa603a9ed1ee4cdf0f27a3306b978fc334f",
+          "sha256": "6fb8ef97351ca5d6f6829b4378af84cf2445494dad5426865a6eeff050049611",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "5005add0c0b55405a39515df394e422f93d3d111e527aec9e2a1c0012c348a96",
+          "fingerprint": "35d5a12cd2c9c454c66a5e687623575b847b10d18d8cb125c1297ee4b7bd2674",
           "frame_captures": 11,
           "movie": "renders/qa/series/ai5/en/SDE_motion/media/videos/480p15/SDE.mp4"
         }
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "b014235b1885e3373b2052dd8b937a085413475073f7fa9296d5866b628c8e65",
+      "review_evidence": "evidence/ai5-sde-transition-motion-repair/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 17,
@@ -1252,39 +1327,38 @@
       "scene": "SDE",
       "title": "16. Randomness with a push",
       "lang": "zh",
-      "endpoints": "Runtime needs-review; actual visual coverage is separate.",
+      "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "EN/ZH complete baseline; sequential-caption transition repair frozen; fresh regression queued.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/SDE/result.json",
-          "sha256": "f5fc18cbeeca6a02d83cfe5fd2f2d32fc33dbdbc5f2d9ea2c7d2df1e302b6fac",
-          "status": "needs-review",
-          "warnings": [
-            {
-              "kind": "source-changed-during-render"
-            }
-          ],
-          "fingerprint": "89cc010a7329aa14f09b68489e58807c6d56c4af447f7e3d1fba4823e0575c91",
+          "sha256": "3312284ddc51c693dd2223913a13488b2814d7ccc2022aaffa5e9ae47124fab5",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "35d5a12cd2c9c454c66a5e687623575b847b10d18d8cb125c1297ee4b7bd2674",
           "frame_captures": 11,
           "movie": null
         },
         "silent_motion": {
           "path": "renders/qa/series/ai5/zh/SDE_motion/result.json",
-          "sha256": "d096b5b2e91edfe2d37593ab2f9a9efffdcf0afcdf74ae95d0b45b914607be37",
+          "sha256": "097ba39e853f803e65f495f9ae03c421728700b7faabd44a03c1a320c73adca8",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "fingerprint": "35d5a12cd2c9c454c66a5e687623575b847b10d18d8cb125c1297ee4b7bd2674",
           "frame_captures": 11,
           "movie": "renders/qa/series/ai5/zh/SDE_motion/media/videos/480p15/SDE.mp4"
         }
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "b014235b1885e3373b2052dd8b937a085413475073f7fa9296d5866b628c8e65",
+      "review_evidence": "evidence/ai5-sde-transition-motion-repair/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 18,
@@ -1293,38 +1367,37 @@
       "title": "17. The density's own law",
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
-      "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "Complete silent renders; selected-image review queued.",
+      "silent_motion": "Runtime passed; actual visual coverage is separate.",
+      "actual_visual_review": "EN complete baseline; ZH baseline34/55pages through104.33s atthischeckpoint; final repaired render/regression pending.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/FokkerPlanck/result.json",
-          "sha256": "77bd898603a89d99fa2fa2382b4d5541b0b0127c338a58791c1f29681fff087c",
+          "sha256": "b9f2994036b9b4dbc05c526a37a0d2117a9430b23d4d4155b44b17388f303c24",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "daa1de1167d1f21a0162c791443adbf64165c0faa9d1eac484c09bc4fde9e971",
+          "fingerprint": "aa2f35bb8fbfd132189e28727a207a812606c3acfa6e94a0cfd7472b90354e6b",
           "frame_captures": 15,
           "movie": null
         },
         "silent_motion": {
           "path": "renders/qa/series/ai5/en/FokkerPlanck_motion/result.json",
-          "sha256": "c0f18d2aea953dc4d8017f1c9db1563377078052efbfbbb3101a04a940027439",
-          "status": "needs-review",
-          "warnings": [
-            {
-              "kind": "source-changed-during-render"
-            }
-          ],
-          "fingerprint": "5005add0c0b55405a39515df394e422f93d3d111e527aec9e2a1c0012c348a96",
+          "sha256": "823840cf23cd86cec693a21a9850665377019699c6425568762306a051bcfdee",
+          "status": "passed",
+          "warnings": [],
+          "fingerprint": "aa2f35bb8fbfd132189e28727a207a812606c3acfa6e94a0cfd7472b90354e6b",
           "frame_captures": 15,
           "movie": "renders/qa/series/ai5/en/FokkerPlanck_motion/media/videos/480p15/FokkerPlanck.mp4"
         }
       },
-      "open_findings": [],
-      "complete_baseline_selected_review": false,
+      "open_findings": [
+        "Final repaired-source selected review not yet accepted."
+      ],
+      "complete_baseline_selected_review": true,
       "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "7e33904756d634c988cc6b3db97f29a851788d7d64d7a111a33df0f75983bca7"
     },
     {
       "position": 18,
@@ -1334,33 +1407,36 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime passed; actual visual coverage is separate.",
-      "actual_visual_review": "Complete silent renders; selected-image review queued.",
+      "actual_visual_review": "EN complete baseline; ZH baseline34/55pages through104.33s atthischeckpoint; final repaired render/regression pending.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/FokkerPlanck/result.json",
-          "sha256": "fd4eee83871b695d0c3b08f0a5b6e81f5cd192474d91cb12b077c73ce56fbeca",
+          "sha256": "be623f5632a7047a9d40ee6462f5b06fe7b56a222c503cc2d10d6287a261de73",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "364e505aef17f8a6ec293f451f7323e0e4d8f057baedc83298ec930ac9749fd1",
+          "fingerprint": "aa2f35bb8fbfd132189e28727a207a812606c3acfa6e94a0cfd7472b90354e6b",
           "frame_captures": 14,
           "movie": null
         },
         "silent_motion": {
           "path": "renders/qa/series/ai5/zh/FokkerPlanck_motion/result.json",
-          "sha256": "7be12e950ef943cb659cbc7f6a264a0a2a7a5ae004c2930ebc2dc2f134a3a9e7",
+          "sha256": "96511d9dba8a78c4de820e28cbf13b7049cfa479631d2af3253f41cbc26ff470",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "fingerprint": "aa2f35bb8fbfd132189e28727a207a812606c3acfa6e94a0cfd7472b90354e6b",
           "frame_captures": 14,
           "movie": "renders/qa/series/ai5/zh/FokkerPlanck_motion/media/videos/480p15/FokkerPlanck.mp4"
         }
       },
-      "open_findings": [],
+      "open_findings": [
+        "Final repaired-source selected review not yet accepted."
+      ],
       "complete_baseline_selected_review": false,
       "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "7e33904756d634c988cc6b3db97f29a851788d7d64d7a111a33df0f75983bca7"
     },
     {
       "position": 19,
@@ -1370,37 +1446,40 @@
       "lang": "en",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "EN complete baseline03:25UTC; ZH review active; tiny measured-point recap correction pending.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/en/Outro/result.json",
-          "sha256": "7c21f05e64a3732d7c23f552bf39764d159620e0290aaeb8dd9e2599ad0402ee",
+          "sha256": "cebbaea45e16fb40314385230bedfe301b63b5e4ba3a05fb5f040e3fc8712c61",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "bfc2662ae7fbee18cbe54f9c44c87cf870bbcd8138106cb7fb7466dba256da0b",
+          "fingerprint": "1adbb0b743a83032e75d15b1862e494898b5829bc48ff311309212f3e53e6310",
           "frame_captures": 5,
           "movie": null
         },
         "silent_motion": {
           "path": "renders/qa/series/ai5/en/Outro_motion/result.json",
-          "sha256": "464494707e570375adff11373540002bb42ed1fc582ceb5f2586e448ac755da5",
+          "sha256": "0317b8840a18556d8a0ead68e823716b19a4f27a72bf7d22446c27ccbd4847b2",
           "status": "needs-review",
           "warnings": [
             {
               "kind": "source-changed-during-render"
             }
           ],
-          "fingerprint": "8f0d0a24807649f2f9aef290647c4089da3147a8966ecd85243af84122426d61",
+          "fingerprint": "1adbb0b743a83032e75d15b1862e494898b5829bc48ff311309212f3e53e6310",
           "frame_captures": 5,
           "movie": "renders/qa/series/ai5/en/Outro_motion/media/videos/480p15/Outro.mp4"
         }
       },
       "open_findings": [],
       "complete_baseline_selected_review": true,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e",
+      "review_evidence": "evidence/ai5-bayes-maxent-tails-sampling-outro-motion-review/README.md",
+      "evidence_package_ready": true
     },
     {
       "position": 19,
@@ -1410,57 +1489,62 @@
       "lang": "zh",
       "endpoints": "Runtime passed; actual visual coverage is separate.",
       "silent_motion": "Runtime needs-review; actual visual coverage is separate.",
-      "actual_visual_review": "EN complete baseline03:25UTC; ZH review active; tiny measured-point recap correction pending.",
+      "actual_visual_review": "Current selected-image review accepted in both languages; exact inherited/new-image coverage retained.",
       "narration_listening": "Pending actual narrated render/listening/synchronization",
-      "production_resolution": "Pending native1080 endpoint and full4K production review",
+      "production_resolution": "Native1080 endpoint review pending/queued; full4K production remains open.",
       "runtime_records": {
         "endpoints": {
           "path": "renders/qa/series/ai5/zh/Outro/result.json",
-          "sha256": "a09ecd3388c36abc4d332dbcf7a38c7bd2a155d43011a7fb20a48264a86e8344",
+          "sha256": "2e8e1f9b562e21057498c9c72d8fc5bc3ba068d9beb7d1705081770572fc47c5",
           "status": "passed",
           "warnings": [],
-          "fingerprint": "bfc2662ae7fbee18cbe54f9c44c87cf870bbcd8138106cb7fb7466dba256da0b",
+          "fingerprint": "1adbb0b743a83032e75d15b1862e494898b5829bc48ff311309212f3e53e6310",
           "frame_captures": 5,
           "movie": null
         },
         "silent_motion": {
           "path": "renders/qa/series/ai5/zh/Outro_motion/result.json",
-          "sha256": "b3f0a552e933c87ffa8e24e2ef7dc4e45b78ee5ddda38c17de7b471a31f25815",
+          "sha256": "4ae37ffd1c349702c954c1cf6ecfad42bd74d707f2fb93c0a3833956ee3200ef",
           "status": "needs-review",
           "warnings": [
             {
               "kind": "source-changed-during-render"
             }
           ],
-          "fingerprint": "33c66cce9b66aa807cb9f281624fcab8f4dd6162bb0649ee9dcf66c398ce4555",
+          "fingerprint": "1adbb0b743a83032e75d15b1862e494898b5829bc48ff311309212f3e53e6310",
           "frame_captures": 5,
           "movie": "renders/qa/series/ai5/zh/Outro_motion/media/videos/480p15/Outro.mp4"
         }
       },
       "open_findings": [],
-      "complete_baseline_selected_review": false,
-      "current_selected_review_accepted": false,
-      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open."
+      "complete_baseline_selected_review": true,
+      "current_selected_review_accepted": true,
+      "acceptance_scope": "Only actually inspected selected images/exact-byte inheritance; continuous perception, narration/listening and production resolution remain open.",
+      "observed_source_sha256": "7b21098460f4ae4c6a7209bfb1f7ebb26e98e689d08729949fc1e3f1c355b91e",
+      "review_evidence": "evidence/ai5-bayes-maxent-tails-sampling-outro-motion-review/README.md",
+      "evidence_package_ready": true
     }
   ],
-  "observed_utc": "2026-11-01T03:30:22.295761+00:00",
+  "observed_utc": "2026-11-01T03:59:30.333657+00:00",
   "numerical_evidence": "evidence/ai5-completed-28-decoding-audit/README.md",
   "runtime_inventory_summary": {
     "endpoint_records": 38,
     "completed_motion_records": 38,
     "raw_motion_statuses": {
-      "needs-review": 15,
-      "passed": 23
+      "needs-review": 14,
+      "passed": 24
     }
   },
   "coverage_checkpoint": {
-    "observed_utc": "2026-11-01T03:30:22.388325+00:00",
-    "baseline_closed_cases": 28,
-    "current_selected_review_closed_cases": 11,
-    "bilingual_chapters_with_complete_baseline": 12,
-    "bilingual_chapters_with_current_selected_acceptance": 5,
+    "observed_utc": "2026-11-01T03:59:30.333657+00:00",
+    "baseline_closed_cases": 37,
+    "current_selected_review_closed_cases": 32,
+    "bilingual_chapters_with_complete_baseline": 18,
+    "bilingual_chapters_with_current_selected_acceptance": 16,
     "original_silent_motion_renders_completed": 38,
-    "current_replacement_records_in_progress_are_not_acceptance": true,
-    "numerical_items_complete": 28
+    "native1080_endpoint_review_cases": 17,
+    "native1080_endpoint_images": 299,
+    "numerical_items_complete": 28,
+    "current_replacement_records_in_progress_are_not_acceptance": true
   }
 }

@@ -1,0 +1,133 @@
+{
+  "before_sha256": "2e6b745f1c330d4faa576eb450f5edcc394508ac3b9d59373fb2e6f430c81090",
+  "after_sha256": "3cbd2023cb1a0a969d542fe634cd814e3f7a69f46e1a62d0a11702a2b73fa08e",
+  "changes": [
+    [
+      "integral",
+      1,
+      100
+    ],
+    [
+      "integral",
+      2,
+      102
+    ],
+    [
+      "lemma",
+      1,
+      158
+    ],
+    [
+      "lemma",
+      2,
+      160
+    ]
+  ],
+  "whole_AST_identical_after_removing_four_transform_False_keywords": true,
+  "all_voiceover_expressions_identical": true,
+  "voiceover_expressions": 4,
+  "all_self_play_calls_and_arguments_identical": true,
+  "self_play_calls": 14,
+  "actual_shared_ladder_animation_constructor_fixture": [
+    {
+      "transform": true,
+      "calls": [
+        {
+          "types": [
+            "Write"
+          ],
+          "run_time": 1.2
+        },
+        {
+          "types": [
+            "FadeIn"
+          ],
+          "run_time": 0.5
+        },
+        {
+          "types": [
+            "_AnimationBuilder",
+            "_AnimationBuilder"
+          ],
+          "run_time": 0.6
+        },
+        {
+          "types": [
+            "TransformMatchingTex"
+          ],
+          "run_time": 1.2
+        },
+        {
+          "types": [
+            "FadeIn"
+          ],
+          "run_time": 0.5
+        }
+      ],
+      "sum_scheduled_seconds": 4.0,
+      "row_centers": [
+        [
+          -0.018134399999998885,
+          2.7244084749999997,
+          0.0
+        ],
+        [
+          -0.01439845000000095,
+          1.8698628249999996,
+          0.0
+        ]
+      ]
+    },
+    {
+      "transform": false,
+      "calls": [
+        {
+          "types": [
+            "Write"
+          ],
+          "run_time": 1.2
+        },
+        {
+          "types": [
+            "FadeIn"
+          ],
+          "run_time": 0.5
+        },
+        {
+          "types": [
+            "_AnimationBuilder",
+            "_AnimationBuilder"
+          ],
+          "run_time": 0.6
+        },
+        {
+          "types": [
+            "Write"
+          ],
+          "run_time": 1.2
+        },
+        {
+          "types": [
+            "FadeIn"
+          ],
+          "run_time": 0.5
+        }
+      ],
+      "sum_scheduled_seconds": 4.0,
+      "row_centers": [
+        [
+          -0.018134399999998885,
+          2.7244084749999997,
+          0.0
+        ],
+        [
+          -0.01439845000000095,
+          1.8698628249999996,
+          0.0
+        ]
+      ]
+    }
+  ],
+  "same_scheduled_animation_time_and_final_row_centers_in_fixture": true,
+  "limits": "AST/real-animation-constructor checks only; no production scene import/render/data load/producer. Fresh bilingual image/motion regression remains pending parent."
+}

@@ -92,7 +92,13 @@ class SDE(VoiceoverScene):
             "and they settle into a bell around zero, its width set by the balance between the two. Leonard Ornstein "
             "and George Uhlenbeck described it in 1930, and it is the forward process of diffusion models."
         ) as vo:
-            self.play(FadeOut(em), FadeOut(em_n), FadeOut(dd), Create(ax), FadeIn(xl), FadeIn(ou), FadeIn(ou_n))
+            # Clear the Euler supplement before the OU caption occupies the same row.
+            # Preserve the original one-second transition and keep the top SDE held.
+            self.play(Succession(
+                AnimationGroup(FadeOut(em), FadeOut(em_n), FadeOut(dd)),
+                AnimationGroup(Create(ax), FadeIn(xl), FadeIn(ou), FadeIn(ou_n)),
+                run_time=1.0,
+            ))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.02), run_time=3.0, rate_func=linear)
             vo.wait_until("a")
             self.play(FadeIn(band), Create(mline))

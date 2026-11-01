@@ -1,9 +1,9 @@
 # Current cloud QA checkpoint
 
-Observed 01 November 2026, 03:28 UTC. Progress, **not full-series production approval**.
+Observed 01 November 2026, 03:59 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified push before this checkpoint:
-`86da3b0df913b80966cfba4547cbcb952e9a64a4` (native SVD polish evidence; Part5 Decoding review pushed earlier atbbaf3fe5). No merge, deployment, CI/CD or runners.
+`cb430e0fd34e57fe1136cea3c40e6a7dd9ddf46d` (Bell/Gauss/Markov rendered repairs; strict SVDv2 overlay at10b0de74). No merge, deployment, CI/CD or runners.
 
 Part 1: all 17 chapters in both languages have endpoint captures, complete silent renders and selected-time
 review. The frozen baseline covers 15,194 selected times from 109,941 automatically decoded frames; scoped
@@ -90,16 +90,13 @@ configuration files identical before/after. It includes the Gradient history and
 Git HEAD predates explicitly listed local files; full SHA inventories bind the tested bytes. The older417/20and352
 runs remain historical; no counts are added together. [Frozen test receipt](evidence/integrated-outro-gradient-20261101/README.md).
 
-Part 5 is advancing through actual rendered review. All 28 corrected numerical items completed; all 56 payloads total 3,090,034 bytes and passed strict currentness/guarded loads with zero producers. Original silent movies rendered for all 38 bilingual cases. Complete selected-image baseline review now covers 28 cases / 12 chapters in both languages. Current repaired-source selected-image acceptance covers 11 cases: EN/ZH Hook, Bell, Gauss, Decoding and Markov, plus Chinese Bayes. Remaining original/repaired cases are not accepted merely because they rendered.
+Part 5 is advancing through actual rendered review. All28 numerical items completed/current under guarded loads,56payloads3,090,034bytes,zero producers. Original silent movies rendered for all38cases. Complete original selected-image review covers37/38cases (ZH Fokker–Planck still in progress). Current repaired-source selected-image acceptance covers **32/38cases /16bilingual chapters**. This includes the Monte Carlo live-cohort/counter repair, clean proof reveals, corrected Outro measured-point range and sequential SDE caption transition. MCMC/Brownian/Fokker–Planck final selected reviews remain active, not accepted solely because rendering succeeded. The [chapter ledger](ai5-chapter-checklist.md) lists each chapter and exact runtime/source identities.
 
-Latest concrete completions: Bell/Gauss regression evidence packaged03:19UTC; MonteCarlo cohort-sync source frozen03:21; ENOutro baseline review completed03:25; bilingual SDE baseline closed and its caption transition repair frozen03:28. Likelihood/Fisher/Itô regressions and MCMC inspection are active; Brownian and Fokker–Planck still need actual selected review. The live [chapter ledger](ai5-chapter-checklist.md) lists all19chapters individually, including outstanding repair/regression gates.
+Native1080 endpoint review covers17cases/299images on80pages plus42original-size checks. Another21cases are queued; full1080motion/4K, narration, listening, synchronization and continuous perception remain open. No numerical process or repository access block is preventing QA. Storage is guarded, currently about1.4GiB free; long renders and actual chronological review remain the active work.
 
-The root spent about25minutes on the parent's requested SVD4K margin/name-wrap polish and strict overlay preflight while six reviewers continued Part5. Its native endpoint evidence is published, with English utterances/timing unchanged. Mandarin speech comparison belongs solely to the cloud production owner. No Part5 numerical process is active and no access block is preventing QA. Storage is bounded and guarded; original data/unique evidence remains preserved.
+Important preservation limitation: six historical EN/ZH MonteCarlo/ScoreFn/MCMC whole-movie witnesses were hardlinks to mutable render destinations and were overwritten during rerendering. No independent oldwholemovie was recovered. Their old reviewed PNGs, raw records, source snapshots and stable movie-hash guards remain intact and support only the declared image comparison. Both Brownian oldmovies and other checked Fokker/SDE oldmovies are independently preserved. New snapshots use independent copies. [Preservation and baseline receipt](evidence/ai5-mc-score-mcmc-brownian-baseline-motion-review/README.md).
 
-The507testreceipt predates the later Decoding geometry and Markov motion repairs; four Decoding geometry tests and21existing tests are separately scoped. Test counts are not added together or substituted for render/image evidence. Parts6–31remainqueued; all31parts and553chapters remain in scope. The explicit
-[narration/production queue](remaining-production-qa.md) retains listening, sync, subjective pacing, continuous
-perception and full-part export gaps. No tracked web-player application exists; an external host's responsive
-behavior is outside this checkout.
+The latest frozen full suite passed518tests in89.381seconds, with1501source/config files byte-identical before/after. It covers the MC/Score/MCMC/SDE/Outro source bytes but predates later Brownian/Fokker local visual edits. Earlier507/488runs remain historical; counts are not added together or substituted for visual quality. Parts6–31remainqueued; all31parts/553chapters remain in scope. The explicit [production queue](remaining-production-qa.md) retains continuous review, listening, sync, pacing and fullpart export gates. No tracked web player is present.
 
 Storage remains bounded. Exactbyte PNGhardlink consolidation retained40,994historicalpaths and allhashes while reclaiming about3.13GBallocated; free space rose to4.3GiBbefore newPart5reviews, about3.4GiBat this observation; original unique evidence and completed numerical data are preserved. Normal Hugging Face cache-manager eviction of one inactive public pretrained TTS
 revision recovered about4.54GB, after verifying its public metadata and absence of known active TTS services.

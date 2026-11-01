@@ -1,0 +1,240 @@
+{
+  "created_utc": "2026-11-01T03:51:25.919042+00:00",
+  "scope": "Eight original silent480p15 clips, before the MonteCarlocohort/ScoreFn/MCMC/Brownian transition repairs. All selected representative pages actually viewed chronologically; no perception claim for unselected frames.",
+  "cases": [
+    {
+      "case": "en/MonteCarlo",
+      "movie_sha256": "7f06ca484da0e97cb5026b43bc92ff2723918dd5066bb1631502d905c27e13bc",
+      "original_movie_bytes_retained": false,
+      "runtime_witness_current_sha256": "8397bb911db581572c19cd00b917057279c2836f06d569ca7152f826327960e9",
+      "raw_record_sha256": "329204dd06d6283a783f9fcf50fe0370e73f7c750b0c7f540c209b058c022c1f",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 3100,
+      "selected_times": 530,
+      "unselected_frames": 2570,
+      "exact_png_representatives_actually_viewed": 403,
+      "exact_png_reused_selected_times": 127,
+      "pages_actually_viewed": 51,
+      "native_followups": 7,
+      "largest_selected_time_gap_seconds": 1.0000000000000142,
+      "review_scale": "640x360 image tiles in original1280px-wide2x4sheets; native followups854x480",
+      "scope": "Every selected time covered by direct representative view or exact PNG SHA256 reuse within this movie. Full decode is technical evidence, not perception of unselected frames."
+    },
+    {
+      "case": "en/ScoreFn",
+      "movie_sha256": "7b2cac34b7ff285b944c878a2c1b8c155ebd33af188ae0ba4fa68edd8b3ba707",
+      "original_movie_bytes_retained": false,
+      "runtime_witness_current_sha256": "a96c93e1b979c8f739beec30264f8bc6c5ba805d80dd57cd203efd6365bd8605",
+      "raw_record_sha256": "dddd5a996c7c375bc23aa2bf01801929f3afae502c3cfc3bc77588e4c4572d61",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 2808,
+      "selected_times": 471,
+      "unselected_frames": 2337,
+      "exact_png_representatives_actually_viewed": 361,
+      "exact_png_reused_selected_times": 110,
+      "pages_actually_viewed": 46,
+      "native_followups": 3,
+      "largest_selected_time_gap_seconds": 1.0,
+      "review_scale": "640x360 image tiles in original1280px-wide2x4sheets; native followups854x480",
+      "scope": "Every selected time covered by direct representative view or exact PNG SHA256 reuse within this movie. Full decode is technical evidence, not perception of unselected frames."
+    },
+    {
+      "case": "en/MCMC",
+      "movie_sha256": "8c3b4a117008d11d61f68d40b4597d9d8eb5ba18f56d79c28bceb143a951b477",
+      "original_movie_bytes_retained": false,
+      "runtime_witness_current_sha256": "cceb1eb7da30107604e7d8bea63489ee9ef4d9494a252e4f1a36eac11792d202",
+      "raw_record_sha256": "051db49fe18e13f6cc8ce101eab8b645570448cf3621d5588ab11d1a5553bf22",
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "decoded_frames": 3313,
+      "selected_times": 679,
+      "unselected_frames": 2634,
+      "exact_png_representatives_actually_viewed": 610,
+      "exact_png_reused_selected_times": 69,
+      "pages_actually_viewed": 77,
+      "native_followups": 6,
+      "largest_selected_time_gap_seconds": 1.0,
+      "review_scale": "640x360 image tiles in original1280px-wide2x4sheets; native followups854x480",
+      "scope": "Every selected time covered by direct representative view or exact PNG SHA256 reuse within this movie. Full decode is technical evidence, not perception of unselected frames."
+    },
+    {
+      "case": "en/Brownian",
+      "movie_sha256": "cb68daf08faf89dda437725a0010c9aff9d79e0c0d90ed3c59853ea0621476d5",
+      "original_movie_bytes_retained": true,
+      "runtime_witness_current_sha256": "cb68daf08faf89dda437725a0010c9aff9d79e0c0d90ed3c59853ea0621476d5",
+      "raw_record_sha256": "d2cc03b2ebbe173514c093347b465e726727b77314bf864f19464d118f350d18",
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "dead-air-review",
+          "report": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 154 s\n   2:06.25   1.5 s   [  +126.2 s]\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 1, 1.5 s of 154 s\n   2:06.25   1.5 s   [  +126.2 s]\n"
+        }
+      ],
+      "decoded_frames": 2305,
+      "selected_times": 479,
+      "unselected_frames": 1826,
+      "exact_png_representatives_actually_viewed": 417,
+      "exact_png_reused_selected_times": 62,
+      "pages_actually_viewed": 53,
+      "native_followups": 9,
+      "largest_selected_time_gap_seconds": 1.000000000000007,
+      "review_scale": "640x360 image tiles in original1280px-wide2x4sheets; native followups854x480",
+      "scope": "Every selected time covered by direct representative view or exact PNG SHA256 reuse within this movie. Full decode is technical evidence, not perception of unselected frames."
+    },
+    {
+      "case": "zh/MonteCarlo",
+      "movie_sha256": "29c86126bd9511f6600b517ec0360c936e0cabce2d924b556262637c4608d7f9",
+      "original_movie_bytes_retained": false,
+      "runtime_witness_current_sha256": "e796581d295e034bf2fbc625df05fe34601d4e041f8a107d820727069db40eef",
+      "raw_record_sha256": "ae9c32bba5fbbf82752cb151f55711a9bda6931708140f18450592c26d0eb6cf",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 3214,
+      "selected_times": 520,
+      "unselected_frames": 2694,
+      "exact_png_representatives_actually_viewed": 410,
+      "exact_png_reused_selected_times": 110,
+      "pages_actually_viewed": 52,
+      "native_followups": 6,
+      "largest_selected_time_gap_seconds": 1.0,
+      "review_scale": "640x360 image tiles in original1280px-wide2x4sheets; native followups854x480",
+      "scope": "Every selected time covered by direct representative view or exact PNG SHA256 reuse within this movie. Full decode is technical evidence, not perception of unselected frames."
+    },
+    {
+      "case": "zh/ScoreFn",
+      "movie_sha256": "91587c0b7a689ceef8657293aa03ec2d2ad7e63d157adc8cdb0435519b644d3d",
+      "original_movie_bytes_retained": false,
+      "runtime_witness_current_sha256": "8991d477fbd9ec465f72210ea939f3b8a39c5b383dcd29f2de446706e035756b",
+      "raw_record_sha256": "6df59d5f13bec25515316a0272c386938f954b45cb9672d1fbcdd189e4b11344",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 2991,
+      "selected_times": 481,
+      "unselected_frames": 2510,
+      "exact_png_representatives_actually_viewed": 364,
+      "exact_png_reused_selected_times": 117,
+      "pages_actually_viewed": 46,
+      "native_followups": 3,
+      "largest_selected_time_gap_seconds": 1.0000000000000009,
+      "review_scale": "640x360 image tiles in original1280px-wide2x4sheets; native followups854x480",
+      "scope": "Every selected time covered by direct representative view or exact PNG SHA256 reuse within this movie. Full decode is technical evidence, not perception of unselected frames."
+    },
+    {
+      "case": "zh/MCMC",
+      "movie_sha256": "07ebd3ec2adc414a89c1b785a680a3fe4aed3c46dfd4bbf100dd004b0c2585ff",
+      "original_movie_bytes_retained": false,
+      "runtime_witness_current_sha256": "0a8c1a39b926c5eac9f625d195e53a6aa5dbf762d9f77fbbe41f4abe5b9c032d",
+      "raw_record_sha256": "8653a96953272cff1f67144c555482ba1d68e9f1f2a19cdc877d63c35ad7d2bc",
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "decoded_frames": 3580,
+      "selected_times": 705,
+      "unselected_frames": 2875,
+      "exact_png_representatives_actually_viewed": 620,
+      "exact_png_reused_selected_times": 85,
+      "pages_actually_viewed": 78,
+      "native_followups": 7,
+      "largest_selected_time_gap_seconds": 1.0,
+      "review_scale": "640x360 image tiles in original1280px-wide2x4sheets; native followups854x480",
+      "scope": "Every selected time covered by direct representative view or exact PNG SHA256 reuse within this movie. Full decode is technical evidence, not perception of unselected frames."
+    },
+    {
+      "case": "zh/Brownian",
+      "movie_sha256": "af59b8661b3496da6c9b85cec807c1a53b9e1650bf594ff117ab9c08aeb9c796",
+      "original_movie_bytes_retained": true,
+      "runtime_witness_current_sha256": "af59b8661b3496da6c9b85cec807c1a53b9e1650bf594ff117ab9c08aeb9c796",
+      "raw_record_sha256": "e110bf89bdf0317d28f31db4a65160cf585a5b1943a0245d0279d6b7cb45b0ba",
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "decoded_frames": 2254,
+      "selected_times": 459,
+      "unselected_frames": 1795,
+      "exact_png_representatives_actually_viewed": 400,
+      "exact_png_reused_selected_times": 59,
+      "pages_actually_viewed": 50,
+      "native_followups": 23,
+      "largest_selected_time_gap_seconds": 1.000000000000007,
+      "review_scale": "640x360 image tiles in original1280px-wide2x4sheets; native followups854x480",
+      "scope": "Every selected time covered by direct representative view or exact PNG SHA256 reuse within this movie. Full decode is technical evidence, not perception of unselected frames."
+    }
+  ],
+  "totals": {
+    "decoded_frames": 23565,
+    "selected_times": 4324,
+    "unselected_frames": 19241,
+    "exact_png_representatives_actually_viewed": 3585,
+    "exact_png_reused_selected_times": 739,
+    "pages_actually_viewed": 453,
+    "native_followups": 64
+  },
+  "findings": [
+    {
+      "scene": "MonteCarlo",
+      "severity": "visual/data-cohort synchronization",
+      "actual_before": "The24pictured darts were fullypresent while readout replay restarted atN1(4.000), e.gEN49.800s/ZH56.733s. Visible24darts contained15hits, giving2.5, not4.000. ForN>1500thepicturealso lacked subset disclosure.",
+      "repair": "One shared N tracker now controls visible dart prefix, liveN counter, estimate and curve; exactfirstmin(N,1500)picture/allNestimate caption. Data/VO/bookmarks/durations unchanged; initial full-size dot appearance and synchronizedrewind are intentional visual changes.",
+      "source_sha256": "34879d06284884ffc9f5ec5d11425c8ae94bbe05a30325a852fcaeabbeabaaa5",
+      "fresh_render_review": "parent-owned, separate"
+    },
+    {
+      "scene": "ScoreFn",
+      "severity": "transient readability polish",
+      "actual_before": "Retained copied equations cross prior text during reveals, e.gEN48.933s/ZH46.066s; settled rows clear. Straight score and smoothedES contours/star/readouts are readable.",
+      "repair": "Onlyderive returnedstep1/2/3 transform=False.",
+      "source_sha256": "15a66c5cb423e2bd507ebe3af352e8907ae588c509fc4f4df39b9bfcd236e52c",
+      "fresh_render_review": "parent-owned, separate"
+    },
+    {
+      "scene": "MCMC",
+      "severity": "transient readability polish",
+      "actual_before": "Three retained-copy reveals cross previous equation/why text, e.gEN95.198/98.531/104.998s andZH102.331/106.198/114.398s. Settled equations clear; no held factualbug claimed. Accepted/rejected moves,66.4%visits/66.5%target,Langevincohort/mesh notes and mixingcomparison were checked.",
+      "repair": "Onlyderive returnedstep1/2/3 transform=False.",
+      "source_sha256": "95c38c1d058a07556f26dd86fd042dbdba8e137ff4083ea9350cbd0f919655af",
+      "fresh_render_review": "pending separate regression"
+    },
+    {
+      "scene": "Brownian",
+      "severity": "transient readability polish",
+      "actual_before": "Two retained-copy reveals overlap oldrows atEN98.400/101.400s, clearheld98.867/101.867s. RawQVpath,mean\u00b1acrosspathSD table and theoreticalfan envelope interpretation were checked; outliers beyond2SD are expected.",
+      "repair": "Onlyquadraticvar returnedstep1/2 transform=False.",
+      "source_sha256": "780521544fd9ad5e9ab698bfeba6c8da2aa82b24b17433a93623dca69c444e9f",
+      "fresh_render_review": "pending separate regression"
+    }
+  ],
+  "repairs": [
+    {
+      "runtime": "/workspace/runtime/ai5-mc-cohort-sync-repair",
+      "freeze_sha256": "c1e87cb81497641db1a30c1b22451f46bcc6d0a9696e52bc41cbd795622eba1d",
+      "scope": "Source repair evidence only. Fresh rendered regression lives separately and is not inherited from this baseline."
+    },
+    {
+      "runtime": "/workspace/runtime/ai5-mcmc-copy-transition-repair",
+      "freeze_sha256": "b92ec6b49233a31849a9a96ce3640d8092e1f5e800be019023b80aad4e22abcf",
+      "scope": "Source repair evidence only. Fresh rendered regression lives separately and is not inherited from this baseline."
+    },
+    {
+      "runtime": "/workspace/runtime/ai5-brownian-copy-transition-repair",
+      "freeze_sha256": "5b3e7f1d384bd3b0f98e49262c77de4ffa54b5785623d51bed266f4b6c900699",
+      "scope": "Source repair evidence only. Fresh rendered regression lives separately and is not inherited from this baseline."
+    }
+  ],
+  "limitations": [
+    "Silent preview placeholders; no audio quality/listening/narration synchronization approval.",
+    "No continuous perceptual playback claim. Selected-time gaps and unselected frame counts remain explicit in fullauditreceipts.",
+    "No native1080 or4K motion approval.",
+    "Source/input snapshots are observed bytes and do not prove historical in-memory imports.",
+    "Six original MC/ScoreFn/MCMC movie files are no longer retained: initial hardlink witnesses were overwritten by canonical rerenders. Original audit/native PNG/rawrecord/view ledgers are retained and hashes verified. Exact fullSHA search found no independent old movie copy. Brownian movies were converted to independently copied verified baseline bytes before overwrite. Fresh regressions use independent copies.",
+    "Original source-change warnings forMCMC and ENBrownian1.5s dead-air warning retained. ENBrownian flagged transition was inspected in selected frames asfade/smallinitialcloudsetup; narrated pacing remains open.",
+    "Beforefix findings remain historical; repairs require their own actual fresh-frame reviews."
+  ]
+}

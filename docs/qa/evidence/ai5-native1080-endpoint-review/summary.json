@@ -1,0 +1,318 @@
+{
+  "scope": "Part5 authorized native1080 endpoints: seven EN/ZH chapter pairs plus ZH Bayes/MaxEnt/Tails;17cases only.",
+  "completed": "2026-11-01T03:50:35.913602+00:00",
+  "cases": [
+    {
+      "case": "en/Hook",
+      "frames": 13,
+      "pages": 4,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "58010518a18f16c7c5965fc6de6d66b3b39c3a7eb4a22c1e4377205f36065a6e",
+      "direct_source": {
+        "path": "videos/ai/ai5/s01_hook.py",
+        "sha256": "5a5f0dc5ff04c831baaf752a2fe8a71a5caf716b1f32e4710e441fb03b901e96",
+        "bytes": 8384
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Hook",
+      "frames": 17,
+      "pages": 5,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "421b6802a9aeeb02cef857376306c7470d6f9320a553bb53d70c3c6ba34f8c99",
+      "direct_source": {
+        "path": "videos/ai/ai5/s01_hook.py",
+        "sha256": "5a5f0dc5ff04c831baaf752a2fe8a71a5caf716b1f32e4710e441fb03b901e96",
+        "bytes": 8384
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Bell",
+      "frames": 19,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "needs-review",
+      "raw_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "record_sha256": "aacfc4a5d81fee730465f8c9cf4a368182c54a7c1f85f08891bc6c1de4ce8a8d",
+      "direct_source": {
+        "path": "videos/ai/ai5/s02_bell.py",
+        "sha256": "c4025027c65a62e4bb5f904802cacb357a2927b7f43434cda7adafe05dd42898",
+        "bytes": 22764
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Bell",
+      "frames": 22,
+      "pages": 6,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "4e035b3a474f752f129a3b57baca502bd351480b7c7c61f35fd79692a4dad839",
+      "direct_source": {
+        "path": "videos/ai/ai5/s02_bell.py",
+        "sha256": "c4025027c65a62e4bb5f904802cacb357a2927b7f43434cda7adafe05dd42898",
+        "bytes": 22764
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Gauss",
+      "frames": 18,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "46ef1bac19da85243a9ece052a8ee37639a4462d1b618a4edaad6490004ef358",
+      "direct_source": {
+        "path": "videos/ai/ai5/s03_gauss.py",
+        "sha256": "a913a45fd52683d2423e417262fa47588b165560335ae5e30957323630e44127",
+        "bytes": 16067
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Gauss",
+      "frames": 18,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "358e561ec02e77348e8afc14db5b8778ba8d63843fe749420d22c7221660ae72",
+      "direct_source": {
+        "path": "videos/ai/ai5/s03_gauss.py",
+        "sha256": "a913a45fd52683d2423e417262fa47588b165560335ae5e30957323630e44127",
+        "bytes": 16067
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Likelihood",
+      "frames": 16,
+      "pages": 4,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "6f8ac716c5ca86fb029e3ef7d53fc3a5b47956fa388851cdec5f6311bfcbc25b",
+      "direct_source": {
+        "path": "videos/ai/ai5/s04_likelihood.py",
+        "sha256": "8de7027104168e6188476a1d809389e6873fbbead8c1a57ee855faf81bdb2e99",
+        "bytes": 17514
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Likelihood",
+      "frames": 16,
+      "pages": 4,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "f9c19a4f6d40e7c2c4ce51f96982cefeb2794e3a52f65882b131c7d28cb6f886",
+      "direct_source": {
+        "path": "videos/ai/ai5/s04_likelihood.py",
+        "sha256": "8de7027104168e6188476a1d809389e6873fbbead8c1a57ee855faf81bdb2e99",
+        "bytes": 17514
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Fisher",
+      "frames": 19,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "9563cf9c0c733f57bae540972ad995e95eb092eb1e2f1bf8ff6793b017e64412",
+      "direct_source": {
+        "path": "videos/ai/ai5/s05_fisher.py",
+        "sha256": "65ec3c37d067edf3f6361ddad24a5605bebf32490f2fc8418df3f4278f0386dd",
+        "bytes": 19172
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Fisher",
+      "frames": 19,
+      "pages": 5,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "a0878b0a0b8757544b2a6322b172eea15de9c6b34d22c2a55d5982d5ac84aea8",
+      "direct_source": {
+        "path": "videos/ai/ai5/s05_fisher.py",
+        "sha256": "65ec3c37d067edf3f6361ddad24a5605bebf32490f2fc8418df3f4278f0386dd",
+        "bytes": 19172
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Decoding",
+      "frames": 19,
+      "pages": 5,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "679b8d09ed1ddad38266de9ce65906635e9c2de0fbec2b9986de2fff68a7bdbe",
+      "direct_source": {
+        "path": "videos/ai/ai5/s11_decoding.py",
+        "sha256": "be8c9b419ea61ecc004d275ccbef276db838bec0a29f57801c8f4db52c63e693",
+        "bytes": 22630
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Decoding",
+      "frames": 21,
+      "pages": 6,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "556b50aa8721c27fb25a533216be8b18751713ffae27bd0fd825eb3603b7f9a9",
+      "direct_source": {
+        "path": "videos/ai/ai5/s11_decoding.py",
+        "sha256": "be8c9b419ea61ecc004d275ccbef276db838bec0a29f57801c8f4db52c63e693",
+        "bytes": 22630
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "en/Markov",
+      "frames": 16,
+      "pages": 4,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "ac07c05f221a41876af3e987e1e8ac3663a9f121617b5aac5e713e04d0af04f6",
+      "direct_source": {
+        "path": "videos/ai/ai5/s12_markov.py",
+        "sha256": "6c7ee6d58ffa4096340c3c5be933d9006d48879f3561acdc277fc45fedc7e30e",
+        "bytes": 21774
+      },
+      "known_capture_limitations": [
+        {
+          "kind": "known-skipped-animation-updater-limitation",
+          "frame_index": 8,
+          "detail": "Step1 endpoint can retain old q=100% tag/bar with updated state. It is excluded from real-motion correctness conclusions; separate selected full-motion review handles actual animation."
+        }
+      ],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Markov",
+      "frames": 16,
+      "pages": 4,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "824f950c80b02a8c41de3587fd406b9037b19487de4c413b8400c446b690ea18",
+      "direct_source": {
+        "path": "videos/ai/ai5/s12_markov.py",
+        "sha256": "6c7ee6d58ffa4096340c3c5be933d9006d48879f3561acdc277fc45fedc7e30e",
+        "bytes": 21774
+      },
+      "known_capture_limitations": [
+        {
+          "kind": "known-skipped-animation-updater-limitation",
+          "frame_index": 8,
+          "detail": "Step1 endpoint can retain old q=100% tag/bar with updated state. It is excluded from real-motion correctness conclusions; separate selected full-motion review handles actual animation."
+        }
+      ],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Bayes",
+      "frames": 16,
+      "pages": 4,
+      "original_size_followups": 2,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "4f2ce3e9365f69f0140e7e31f82311d8a95987c4d7441705449755f69fe2bca2",
+      "direct_source": {
+        "path": "videos/ai/ai5/s06_bayes.py",
+        "sha256": "64c18dce04f2303164dfec75cb02542fc046376620d7236be63182d8129bea64",
+        "bytes": 18730
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/MaxEnt",
+      "frames": 16,
+      "pages": 4,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "786a4ef5c69a444b456bb3298c50e7e351eaf22d207e1aa9550a85d0b3c4a0f9",
+      "direct_source": {
+        "path": "videos/ai/ai5/s07_maxent.py",
+        "sha256": "f77af534a6e426e955ed3c6889b92524eaece97bc0c42428c459513e8d378bbd",
+        "bytes": 15669
+      },
+      "known_capture_limitations": [
+        {
+          "kind": "known-skipped-animation-updater-limitation",
+          "frame_index": 9,
+          "detail": "Step60 endpoint may retain uniform old bars while lambda/mean text is final; subsequent hold catches up. Excluded from real-motion correctness conclusions; separate selected full-motion case was reviewed."
+        }
+      ],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    },
+    {
+      "case": "zh/Tails",
+      "frames": 18,
+      "pages": 5,
+      "original_size_followups": 3,
+      "raw_status": "passed",
+      "raw_warnings": [],
+      "record_sha256": "8bcc13cb0042dfbad819f349a52e9585792d0d00dbaf13a03d680bb7c584bf9a",
+      "direct_source": {
+        "path": "videos/ai/ai5/s09_tails.py",
+        "sha256": "028b56fd37dfbb8e04ce5db98d6067a51c839c625a66ffe87f242ccfc9073773",
+        "bytes": 14844
+      },
+      "known_capture_limitations": [],
+      "visual_outcome": "No new corrective typography/geometry defect observed in native endpoint scope."
+    }
+  ],
+  "totals": {
+    "frames": 299,
+    "pages": 80,
+    "original_size_followups": 42
+  },
+  "source_snapshots_unchanged_during_all_cases": true,
+  "shared_caption_table_sha256": "c2914a2973672064f4cc508af8659a00ad0a07bce7398490e157b49439c494ef",
+  "wrapper_sha256": "87a00a2438f120958c658343893d6b0d36934a65d8438beb7790f77384f88a9d",
+  "capture_session": {
+    "id": 53772,
+    "exit_code": 0,
+    "serial": true,
+    "nice": 15,
+    "numeric_threads": 1,
+    "disk_guard_bytes": 536870912
+  },
+  "no_source_core_producer_cache_edits": true,
+  "no_full_motion_audio_approval": true
+}

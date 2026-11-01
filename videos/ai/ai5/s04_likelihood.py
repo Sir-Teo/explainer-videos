@@ -264,10 +264,10 @@ class Likelihood(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(Create(mline))
             vo.wait_until("b")
-            step(1)
+            step(1, transform=False)
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), Create(one))
             vo.wait_until("c")
-            step(2)
+            step(2, transform=False)
             self.play(Create(thc), FadeIn(leg[0]))
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(x) for x in md], lag_ratio=0.1), LaggedStart(*[FadeIn(x) for x in bd],
