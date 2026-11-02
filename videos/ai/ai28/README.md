@@ -12,7 +12,7 @@ first.
 
 * **From "let's think step by step" to o1 and R1.** Chain-of-thought prompting (Wei et al. 2022: PaLM 540B on GSM8K,
   17.9% → 56.9%, with the paper's Figure 1 example); zero-shot "Let's think step by step" (Kojima et al. 2022:
-  MultiArith 17.7% → 78.7%); o1 (September 2024; AIME 2024: GPT-4o 12%, o1 74% with one try, 83% by a vote of 64, 93%
+  MultiArith 17.7% → 78.7%); o1 (September 2024; AIME 2024: GPT-4o 9.3% pass@1, o1 74.4% pass@1, 83.3% cons@64 (Appendix A), 93% (prose)
   reranking 1,000 with a learned scorer); R1-Zero (15.6% → 71.0%, 86.7% by a vote of 64; DeepSeek-AI 2025); gold-medal
   IMO 2025 solutions in natural language; ARC-AGI-3 (March 2026), where every frontier model started below 1%; the
   questions of the part and what it covers.
@@ -27,11 +27,11 @@ first.
   running total first (1,500 supervised steps; one sample at temperature 1: 90% → 38% at once, 96% → 64% thinking;
   left to choose, it thinks 65% of the time). Self-consistency (Wang et al. 2022, +17.9 points on GSM8K). One 7-digit
   list and 64 chains. When voting works, derived (Hoeffding and a union bound: P(vote wrong) ≤ (m − 1)e^{−kΔ²/2}); on
-  300 lists of 2–9 digits: one chain 81%, a vote of 64 98% (the limit: the most frequent answer right, 98%), any of 64
+  300 lists of 2–9 digits: one chain 81%, a vote of 64 98% (observed 64-sample mode right, 98%; not an independent asymptotic-limit estimate), any of 64
   right 100%, a vote over answers given at once 74%.
-* **3. Checking the steps.** A right answer from a broken argument (ours, made to think: 27% of right answers have a
-  wrong step); outcome and process reward models; Cobbe et al. (2021: a verifier worth a 30× larger model), Uesato et
-  al. (2022), Lightman et al. (2023: PRM800K; best of 1,860 on MATH: vote 69.6%, ORM 72.4%, PRM 78.2%). Ours, both
+* **3. Checking the steps.** A right answer from a broken argument (ours, made to think: 27% of right answers lack a
+  complete, locally correct chain, including early stopping); outcome and process reward models; Cobbe et al. (2021: a verifier worth a 30× larger model), Uesato et
+  al. (2022), Lightman et al. (2023: PRM800K; best of 1,860 on a representative MATH test subset: vote 69.6%, ORM 72.4%, PRM 78.2%). Ours, both
   graders trained on the same 8,000 solutions, 300 new questions: one sample 80%; the graders' picks get worse as N
   grows (best of 64: process grader 50%, outcome grader 44%; vote 96%); AUC 0.76 and 0.66; 71% of the process grader's
   picks from 64 had stopped thinking early, against 35% of all solutions (a product of step scores favours short
@@ -50,7 +50,7 @@ first.
 * **6. The successors.** Dr. GRPO's length and difficulty biases (Liu et al. 2025); DAPO (clip-higher 0.2/0.28,
   dynamic sampling, token-level averaging, overlong shaping; Yu et al. 2025); GSPO's sequence ratio (Zheng et al.
   2025); CISPO's clipped, stop-gradient weight (MiniMax 2025). Seven objectives on our model, three runs each, 300
-  steps: GRPO as published, the only one with a KL penalty (k3, β = 0.04), collapsed in two of three runs (to 2% and
+  steps: our toy GRPO recipe, the only one with a KL penalty (k3, β = 0.04), collapsed in two of three runs (to 2% and
   5%; the third reached 88%); among the runs that learned (start 35%): plain 79%, Dr. GRPO 84%, DAPO 91%, GSPO 86%,
   CISPO 79%, a 12-point span against 19 points between runs of one method; the share of groups with no signal (the
   plain gradient's rises to 31% by the end); DAPO drew 2.9× the questions; offline DPO on pairs from the starting
@@ -58,8 +58,8 @@ first.
   bits; likelihood displacement).
 * **7. Entropy collapse.** ∂H/∂z_b = −π_b(log π_b − E log π) and ΔH ≈ −Cov(log π, Δz), derived (Cui et al. 2025);
   entropy over training for four objectives (0.92 bits a digit at the start; at the end Dr. GRPO 0.14, DAPO 0.08,
-  CISPO 0.16, the plain gradient 0.28: clip-higher did not hold the entropy up on three-digit answers); the fit R = −a
-  e^H + b on every checkpoint (R² = 0.80 over the 16 runs that did not collapse; the ceiling at H = 0, 86%); remedies:
+  CISPO 0.16, the plain gradient 0.28: DAPO also ends with low entropy; this is not an isolated clip-higher ablation); the fit R = −a
+  e^H + b on every checkpoint (R² = 0.80 over the 16 runs that did not collapse; the extrapolated value at H = 0, 86%, not a proven accuracy ceiling); remedies:
   clip-higher, entropy bonuses, Clip-Cov and KL-Cov, ProRL's long runs (more than 2,000 steps).
 * **8. How long to think.** R1-Zero's growing chains and its "aha moment" (DeepSeek-AI 2025, Table 3); RL with a
   reward for the right sum only, replayed as a map of how many steps it chooses for each length of list (thinking 66%
@@ -84,26 +84,56 @@ first.
   matches one try after RL.
 * **11. Searching over thoughts.** AlphaZero (Part 26) mapped onto reasoning; Tree of Thoughts (Yao et al. 2023: Game
   of 24, 4% → 74%), rStar-Math (Guan et al. 2025: MATH 58.8% → 90.0% at 7B), AlphaProof, R1's unsuccessful MCTS; beam
-  search over running totals guided by the process grader, one tree drawn; beam search against best-of-N at equal
-  tokens on 9-digit lists: beam search ahead at every budget (78% against 64% at 2 samples per step), but both fall as
+  search over running totals guided by the process grader, one tree drawn; beam search against best-of-N at matching width
+  settings on 9-digit lists (token and compute costs were not matched): beam search ahead at every tested width (78% against 64% at 2 samples per step), but both fall as
   they widen (beam 78% → 52%, best-of-N 64% → 31%).
 * **12. Thinking without words.** The token bottleneck (about 17 bits per token, against tens of thousands in a hidden
   state); Coconut (Hao et al. 2024); HRM (Wang et al. 2025: 27M parameters, about 1,000 examples; Sudoku-Extreme 55%,
   Maze-Hard 74.5%, ARC-AGI-1 40.3%, ARC-AGI-2 5%) and ARC Prize's analysis (August 2025); TRM (Jolicoeur-Martineau
   2025: 7M parameters, 87.4%, 85.3%, 44.6%, 7.8%); chain-of-thought monitorability (Korbak et al. 2025).
 * **13. Proofs a machine can check.** Lean and Mathlib; AlphaProof (Hubert et al., *Nature* 2025: about a million
-  problems formalized into about 80 million statements; test-time RL) and IMO 2024 (28 of 42, one short of gold); IMO
-  2025: Gemini Deep Think 35 (certified by the IMO's coordinators) and OpenAI's experimental model 35, in natural
-  language; Harmonic's Aristotle and ByteDance's Seed-Prover formally (five of six); the spectrum of checkers.
+  problems formalized into about 80 million statements; test-time RL) and the joint AlphaProof + AlphaGeometry 2 result at IMO 2024 (28 of 42, one short of gold); IMO
+  2025: Gemini Deep Think 35 (submitted solutions graded by the IMO's coordinators) and OpenAI's experimental model 35, in natural
+  language; Harmonic's Aristotle released five Lean proofs; Seed-Prover officially scored 30 points with four complete
+  solutions, including natural-language geometry, and completed an additional Lean proof after the competition;
+  the spectrum of checkers.
 * **14. Puzzles nobody has seen.** Chollet (2019); ARC-AGI-1 from about 20% (2020) to 53.5% (test-time training, 2024)
   and o3's 75.7% and 87.5% (December 2024); ARC-AGI-2 (March 2025; people 60% on average): NVARC 24%, Claude Opus 4.5
-  37.6%, Poetiq on Gemini 3 Pro 54% (2025), Gemini 4 Argon 91% (verified October 2026); ARC-AGI-3 (March 2026):
+  37.6%, Poetiq on Gemini 3 Pro 54% (2025), Gemini 4 Argon 91.25% (published Semi-Private aggregate, high reasoning, October 2026); ARC-AGI-3 (March 2026):
   frontier models below 1% at launch, GPT-6 Astra 62.7% on ARC Prize's standard harness (September 2026).
 * **Recap** in eight pictures from the part's own results, where it comes back (Parts 19, 29, 30, 31), six problems,
-  Part 29's teaser (our model's steps are right 98.2% of the time, so a chain of n steps is all right with
-  probability 0.982^n: a coin flip by about 39 steps).
+  Part 29's teaser (pooled step accuracy 98.2%; assuming independent steps with the same success rate, a chain
+  of n steps is all right with probability 0.982^n: a coin flip by about 39 steps. The pooled rate alone does not
+  establish that assumption).
 
-Run from the repo root:
+## Reviewed source handoff and integration gates
+
+This branch carries source, documentation, synthetic regression tests and a part-local caption delta. It does not
+publish scientific inputs, generated numerical results, model weights or rendered/audio acceptance evidence.
+The numerical examples retained below describe the previously documented recipes; they are not receipts for
+experiments run from this source-only branch. Sampled silent QA informed the edits, but this publication does not
+establish continuous playback, actual listening, speech synchronization or production readiness.
+
+`text_zh_reviewed.json` declares 43 exact caption entries. The sole integration owner must compose its `strings`
+into `videos/ai/ai_text_zh.json` entry by entry: accept an already matching value, otherwise require the current
+value to equal `expected_before` (null means absent), and stop on a conflict. Preserve every unrelated entry.
+The two existing translations being corrected express 27 million and 7 million parameters. This local declaration
+is not automatically loaded by the renderer; Chinese rendering still requires explicit caption composition.
+This branch does not modify the shared table.
+
+Run the bounded regression checks from the repository root:
+
+```sh
+python -m unittest discover -s tests -p 'test_ai28_reviewed_source.py'
+```
+
+They execute actual AUC/voting summary code with synthetic arrays and check bilingual source contracts. They do
+not load models, invoke scientific producers or certify empirical outcomes. Existing cache files are not migrated
+by source edits. The legacy renderer's `compute.load` can compute missing products: supply independently reviewed
+compatible caches before rendering, and preserve original outcomes when recalculating metric summaries. The
+explicit compute/make commands below can train models; they are not part of source-handoff validation.
+
+Run the original workflows from the repo root only after their inputs and scope have been reviewed:
 
 ```
 python tools/make.py ai28                 # everything: the numbers, then the English and Chinese builds (resumes)
@@ -286,3 +316,61 @@ P(Σ X_i ≤ 0) ≤ exp(−2(kΔ)²/(4k)) = exp(−kΔ²/2)。对m − 1个错�
 
 Names stay in Latin script: GRPO, Dr. GRPO, DAPO, GSPO, CISPO, DPO, o1, o3, R1, R1-Zero, s1, L1, Kimi k1.5, ProRL,
 rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristotle, Seed-Prover, ARC-AGI, NVARC, Poetiq.
+
+## Scope of the toy comparisons
+
+The parity models share an architecture but are trained separately. The chain recipe receives a label for every
+intermediate parity step; the experiment combines additional sequential computation with intermediate supervision.
+
+The objective variants implement selected mechanisms on fixed three-digit outputs, rather than reproducing the
+full published training systems. The previously documented numerical outcomes above are preserved; they are not a report of the new cloud QA rerun. A matched ablation would be needed
+to establish why a particular run collapsed. Fresh evaluation draws are sampled from the same finite task
+distribution as training; they are not guaranteed to be disjoint, previously unseen arithmetic problems.
+
+The test-time plot uses output-token budget caps: a chain may stop before its cap. The search plot matches width
+settings, not measured token or compute costs. Beam search forces full chains and greedily decodes final answers,
+whereas the whole-chain sampler can stop early. These results compare the configured recipes; they do not
+establish equal-cost search efficiency. The entropy fit is descriptive, and its zero-entropy extrapolation is
+not a universal accuracy ceiling.
+
+A kernel-checked proof guarantees only its formal statement relative to its assumptions. Reward validation must
+reject placeholders and unapproved axioms. Passing finite code tests does not prove correctness on every input.
+A token's vocabulary limits its discrete choice, not a transformer's total memory: attention can still access
+earlier hidden states.
+
+The self-consistency limit concerns arbitrarily many independent samples. A finite vote can still select the right
+answer by chance when a wrong answer has greater probability; the limit does not make that finite probability zero.
+
+Verifier AUC uses average ranks for tied scores; a vote with no valid decoded answers is a failure. Existing cache
+files are not migrated automatically by a source change. Recalculate these summaries only from their verified
+original score/answer arrays, preserving the original outputs and recording the measured change. The cloud QA
+rerun keeps its original cache and raw verifier scores alongside the separately reviewed metric correction.
+
+The 2024 IMO score combines AlphaProof in Lean with AlphaGeometry 2's specialized geometry system. For the
+2025 Gemini result, the IMO review covers submitted solutions; timing and process information is laboratory-reported.
+
+The best-of-N equality with `log N - (N - 1) / N` uses a continuous reward-distribution idealization. For discrete
+answers it is generally an upper bound, even when distinct answers have distinct reward values. The binary-checker
+calculation here keeps the first correct draw, or the first draw if none is correct; choosing among tied samples by
+their answer values can change the selected distribution and its KL. This makes the existing analytical policy
+explicit and does not change the original numerical outputs.
+
+## Published-score provenance and illustrative proof status
+
+ARC Prize's [official result](https://arcprize.org/results/google-gemini-4-argon) embeds the high-reasoning ARC-AGI-2
+aggregate as `0.9125`, or **91.25%**. Its prose shows 91.2% and its table 91.3%. These match two common halfway
+rounding rules, but the site's formatter has not been established. The public 120-task table is a separate evaluation;
+it was not used to reconstruct the Semi-Private score. No model/API benchmark was rerun here.
+
+OpenAI's [September 2024 post](https://openai.com/index/learning-to-reason-with-llms/) reports GPT-4o at **12%**
+(1.8/15) in prose, but **9.3% pass@1** in Appendix A. This is not a rounding difference, and the post supplies no
+reconciling evaluation detail. The chart explicitly uses Appendix A's metric-labeled 9.3/74.4/83.3 values and separately
+attributes the 93% learned-reranking result to prose; narration and captions disclose the conflicting GPT-4o claims.
+These are cited publication values, not reproduced experimental results.
+
+The displayed Lean code illustrates the checking process. It was not compiled in this QA environment, and its
+arrow/status is explicitly schematic rather than an observed acceptance result. No Lean/Mathlib version or compiled
+proof receipt is claimed.
+
+The September 2024 release was the early **o1-preview** model. The 74.4% pass@1 and 83.3% cons@64 values above
+refer to the post's **research o1** column; Appendix A separately lists o1-preview at 44.6% pass@1.

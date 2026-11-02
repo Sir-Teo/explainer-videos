@@ -56,7 +56,7 @@ class Chain(VoiceoverScene):
         r2 = label(rf"writing its work first: \ right ${100 * np.mean(c16):.0f}\%$", font_size=28, color=CHAIN)
         r2.move_to([2.6, -1.9, 0])
         ans = SurroundingRectangle(par[-1], color=CHAIN, buff=0.06, stroke_width=4)
-        tag = note(rf"one string shown; \ accuracy on $1{{,}}000$ new strings, \ mean of ${len(d16)}$ training runs")
+        tag = note(rf"schematic: \ one string; \ accuracy on $1{{,}}000$ test draws, \ mean of ${len(d16)}$ training runs")
         tag.to_corner(DR, buff=0.25)
         coin = "a coin flip" if np.mean(d16) < 0.6 else "far from reliable"
         with self.voiceover(
@@ -65,7 +65,8 @@ class Chain(VoiceoverScene):
             f"{100 * np.mean(d16):.0f} percent of the time: {coin}. <bookmark mark='b'/> Now train the very same "
             "model to write its work first: going along the bits, is the count odd so far? Each step is easy, just "
             f"the last answer and one more bit. <bookmark mark='c'/> Its final answer is right "
-            f"{100 * np.mean(c16):.0f} percent of the time. Same model, same size. It just got to think out loud."
+            f"{100 * np.mean(c16):.0f} percent of the time. Same architecture and size, trained separately with labels "
+            "for every intermediate step. This experiment combines extra computation with intermediate supervision."
         ) as vo:
             self.play(FadeIn(q), LaggedStart(*[FadeIn(b, shift=DOWN * 0.15) for b in row], lag_ratio=0.05), FadeIn(tag))
             vo.wait_until("a")
@@ -199,7 +200,8 @@ class Chain(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(t2, shift=UP * 0.15), Create(sets[0]), FadeIn(labs[0]), FadeIn(ex[2]))
             vo.wait_until("d")
-            self.play(FadeIn(ex[0]), Indicate(ex[0], color=DIRECT), FadeIn(honest))
+            self.play(FadeIn(ex[0]), FadeIn(honest))
+            self.play(Indicate(ex[0], color=DIRECT))
         self.wait(0.3)
         self.clear_scene()
 
@@ -263,7 +265,7 @@ class Chain(VoiceoverScene):
         p = load("parity")
         ns = [int(n) for n in p["ns"]]
         modes = ("direct", "filler", "chain")
-        g = axes([0, 3], [0, 1], x_length=7.4, y_length=3.8, ylabel=r"right on $1{,}000$ new strings",
+        g = axes([0, 3], [0, 1], x_length=7.4, y_length=3.8, ylabel=r"right on $1{,}000$ test draws",
                  yticks=[0, 0.5, 1], yfmt=lambda v: rf"{int(100 * v)}\%", center=[-1.4, -0.2, 0])
         ax = g.ax
         chance = DashedLine(ax.c2p(0, 0.5), ax.c2p(3, 0.5), color=GREY_D, stroke_width=1.5)
@@ -315,7 +317,7 @@ class Chain(VoiceoverScene):
         steps = Cc[0, :, 0]
         smax = float(steps[-1])
         g = axes([0, smax], [0.3, 1.0], x_length=5.6, y_length=3.4, xlabel=r"training steps",
-                 ylabel=r"right on new strings, \ $16$ bits", xticks=[0, smax / 2, smax],
+                 ylabel=r"right on test draws, \ $16$ bits", xticks=[0, smax / 2, smax],
                  xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), yticks=[0.5, 1.0],
                  yfmt=lambda v: rf"{int(100 * v)}\%", center=[-3.6, -0.6, 0])
         ax = g.ax

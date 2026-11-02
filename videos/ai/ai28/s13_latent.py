@@ -50,7 +50,7 @@ class Latent(VoiceoverScene):
         a2 = Arrow(tok.get_right(), h2.get_left(), buff=0.15, color=GREY_B)
         sq = label(r"squeeze", font_size=22, color=GREY_B).next_to(a1, UP, buff=0.05)
         head = label(r"a chain of thought has a narrow throat", font_size=34).to_edge(UP, buff=0.5)
-        sch = note(r"schematic").to_corner(DR, buff=0.3)
+        sch = note(r"schematic: \ earlier hidden states remain available through attention").to_corner(DR, buff=0.3)
         rec = label(rf"chapter one, \ $16$ bits: \ dots ${100 * fd:.0f}\%$, \ at once ${100 * dd:.0f}\%$", font_size=26,
                     color=FILLER).move_to(DOWN * 2.0)
         q = label(r"what if the model passed its state on directly, \ without writing it down?", font_size=28,
@@ -59,7 +59,8 @@ class Latent(VoiceoverScene):
             "A chain of thought is computation, but it has a narrow throat. <bookmark mark='a'/> Each step, the "
             "model's last hidden state, thousands of numbers, is squeezed into a single token: with a vocabulary of a "
             "hundred thousand, about seventeen bits. <bookmark mark='b'/> Then the token is turned back into numbers "
-            "for the next step. Everything the model carries forward must fit through that throat. "
+            "for the next step. That limits the new input embedding; attention still has access to earlier hidden "
+            "states, often stored in a key-value cache. Seventeen bits is not the model's total memory. "
             f"<bookmark mark='c'/> {dots} <bookmark mark='d'/> So why not pass the state on directly?"
         ) as vo:
             self.play(FadeIn(head), FadeIn(sch), FadeIn(h), FadeIn(hl))
@@ -122,7 +123,7 @@ class Latent(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(l_) for l_ in rows["latent"][1]], lag_ratio=0.3), FadeIn(l2))
             vo.wait_until("c")
-            self.play(Indicate(hc, color=LATENT, scale_factor=1.03))
+            self.play(Circumscribe(hc, color=LATENT, buff=0.08))
         self.wait(0.3)
         self.clear_scene()
 
@@ -175,7 +176,8 @@ class Latent(VoiceoverScene):
         ny = label(r"then improve $y$", font_size=20, color=RIGHT_C).next_to(a_y, DOWN, buff=0.1)
         outer = CurvedArrow(y.get_bottom() + DOWN * 0.05, net.get_bottom() + DOWN * 0.05, angle=-1.2, color=GREY_A,
                             stroke_width=2.5, tip_length=0.15)
-        no = label(r"repeat; \ checked after each round, \ up to $16$ rounds \ (deep supervision)", font_size=20,
+        no = label(r"training: \ supervision after each round, \ up to $16$; \\ inference: \ no answer oracle",
+                   font_size=20,
                    color=GREY_A).move_to([0.6, -1.6, 0])
         res = VGroup(label(r"$7$ million parameters", font_size=24, color=POLICY),
                      label(r"Sudoku-Extreme $87.4\%$, \ Maze-Hard $85.3\%$", font_size=22, color=GREY_A),
@@ -187,8 +189,10 @@ class Latent(VoiceoverScene):
             "In October 2025, Alexia Jolicoeur-Martineau at Samsung's lab in Montreal stripped the idea to its core. "
             "<bookmark mark='a'/> One tiny network, two layers. It reads the puzzle, x, and keeps two things: a latent "
             "scratchpad z, and its current answer y. <bookmark mark='b'/> It updates the scratchpad six times, then "
-            "uses it to improve the answer. <bookmark mark='c'/> Then it does it all again, and its answer is checked "
-            "after every round, up to sixteen of them. <bookmark mark='d'/> With seven million parameters, it beat the "
+            "uses it to improve the answer. <bookmark mark='c'/> Then it does it all again. During training, the "
+            "answer is supervised after each round, up to sixteen rounds. At inference, it iterates without "
+            "access to the correct answer. <bookmark mark='d'/> With "
+            "seven million parameters, it beat the "
             "Hierarchical Reasoning Model on every task: 87 percent on extreme Sudoku against 55, and 45 percent on "
             "ARC-AGI-1, ahead of many large language models. It won the first prize for papers in the 2025 ARC Prize. "
             "Depth through recurrence, instead of through tokens."

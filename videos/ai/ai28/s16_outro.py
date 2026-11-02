@@ -156,15 +156,16 @@ class Outro(VoiceoverScene):
         ns = np.arange(1, 201)
         head = label(r"Next: \ Part 29, \ Agents and Worlds", font_size=40).to_edge(UP, buff=0.4)
         g = axes([0, 200], [0, 1], x_length=7.2, y_length=3.6, xlabel=r"steps in a row",
-                 ylabel=r"chance every step is right", xticks=[0, 100, 200], yticks=[0, 0.5, 1],
+                 ylabel=r"all steps right, \ independent-error illustration", xticks=[0, 100, 200], yticks=[0, 0.5, 1],
                  yfmt=lambda v: rf"{int(100 * v)}\%", center=[-1.2, -0.6, 0])
         c_ = curve(g.ax, ns, ps ** ns, WRONG_C, 4)
         n50 = math.log(0.5) / math.log(ps) if ps < 1 else float("inf")
         mk = DashedLine(g.ax.c2p(n50, 0), g.ax.c2p(n50, 0.5), color=GREY_B, dash_length=0.06) if n50 < 200 else VMobject()
-        eq = cmath(r"P(\text{all } n \text{ right})", r"=", rf"{ps:.3f}^{{\,n}}", font_size=34).move_to([4.4, 1.6, 0])
+        eq = cmath(r"P(\text{all } n \text{ right})", r"\approx", rf"{ps:.3f}^{{\,n}}", font_size=34).move_to([4.4, 1.6, 0])
         nl = label(rf"our model's steps: \ right ${100 * ps:.1f}\%$ of the time", font_size=20, color=GREY_A)
         nl.next_to(eq, DOWN, buff=0.25)
-        tag = note(r"computed: \ the think-or-answer model before RL, \ every step checked").to_corner(DR, buff=0.2)
+        tag = note(r"illustration: \ independent steps at a constant rate; \ per-step rate measured before RL")
+        tag.to_corner(DR, buff=0.2)
         if n50 < 200:
             half = (f"Even at {100 * ps:.1f} percent a step, a chain of {n50:.0f} steps is a coin flip, and of two "
                     "hundred, almost hopeless.")
@@ -173,8 +174,10 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Next time: agents, models that act over many steps, in the world or on a computer. Here is the problem "
             "they face, measured on our own chains. Each step of thought our adding model writes is right "
-            f"{100 * ps:.1f} percent of the time. <bookmark mark='a'/> But a long task needs every step right, and "
-            f"those chances multiply. {half} <bookmark mark='b'/> How agents plan, check themselves and recover over "
+            f"{100 * ps:.1f} percent of the time. <bookmark mark='a'/> If errors were independent, with this same "
+            f"rate at every step, those chances would multiply. In that illustration, {half} Our measured average "
+            "does not establish independence or predict success on longer tasks. <bookmark mark='b'/> How agents "
+            "plan, check themselves and recover over "
             "long horizons, and how they learn models of the worlds they act in: Part 29."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(tag), Write(eq), FadeIn(nl))

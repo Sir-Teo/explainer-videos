@@ -100,6 +100,9 @@ class Variants(VoiceoverScene):
                            MathTex(eq, font_size=28).move_to([-2.4, y, 0], aligned_edge=LEFT),
                            label(note_, font_size=19, color=GREY_A).move_to([3.3, y, 0], aligned_edge=LEFT)))
         for r_ in tab:
+            name_width = r_[1].get_left()[0] - 0.2 - r_[0].get_left()[0]
+            if r_[0].width > name_width:
+                r_[0].scale(name_width / r_[0].width, about_edge=LEFT)
             if r_[1].get_right()[0] > r_[2].get_left()[0] - 0.2:
                 r_[1].scale((r_[2].get_left()[0] - 0.2 - r_[1].get_left()[0]) / r_[1].width, about_edge=LEFT)
         gm = MathTex(r"\sqrt[3]{2 \times \tfrac{1}{2} \times 1} = 1", font_size=32, color=C.ATTN)
@@ -155,9 +158,9 @@ class Variants(VoiceoverScene):
         start = DashedLine([-5.0, base_y + Hh * acc0, 0], [-4.4 + (len(V) - 1) * 1.35 + 0.6, base_y + Hh * acc0, 0],
                            dash_length=0.06, stroke_width=1.5, color=GREY_B)
         sl = label(rf"start: \ ${100 * acc0:.0f}\%$", font_size=18, color=GREY_B).next_to(start, RIGHT, buff=0.1)
-        head = label(rf"right after ${steps}$ steps, \ same start, \ ${int(o['seeds'])}$ runs each \ "
-                     r"(line: lowest to highest)", font_size=22, color=GREY_A).to_edge(UP, buff=0.4)
-        cost = label(rf"DAPO drew ${drawn['dapo']:.2f}\times$ the questions \\ to fill its batches", font_size=20,
+        head = label(rf"right after ${steps}$ sampling rounds; \ same start; \ ${int(o['seeds'])}$ runs each \\ "
+                     r"updates/round: plain $1$, others up to $4$; \ line: lowest to highest", font_size=22, color=GREY_A).to_edge(UP, buff=0.4)
+        cost = label(rf"DAPO drew ${drawn['dapo']:.2f}\times$ the questions \\ for its target batches", font_size=20,
                      color=C.BITS).move_to([5.0, 1.6, 0])
         ok = {v: healthy(o, v) for v in V}  # runs that did not collapse
         n_bad = {v: int(len(accs[v]) - ok[v].sum()) for v in V}
@@ -180,10 +183,10 @@ class Variants(VoiceoverScene):
         bad = [v for v in V if n_bad[v]]
         if bad == ["grpo"]:
             low = 100 * float(accs["grpo"].min())
-            collapse = (f"GRPO as published, the only objective here with a KL penalty, collapsed in {n_bad['grpo']} "
+            collapse = (f"Our toy GRPO recipe, the only objective here with a KL penalty, collapsed in {n_bad['grpo']} "
                         f"of its {seeds} runs: accuracy fell to {low:.0f} percent, and the model ran far from where it "
-                        "started. The likely culprit is that penalty: the gradient of the k3 estimator grows with r, "
-                        "whose heavy tail we met in chapter five. DAPO drops the term altogether.")
+                        "started. One possible explanation is the penalty's heavy-tailed gradient, but we did not "
+                        "isolate that cause with a matched ablation. DAPO drops the term altogether.")
         elif bad:
             collapse = (f"{sum(n_bad.values())} of the runs collapsed, ending below where they started; the averages "
                         "that follow leave them out.")
@@ -192,8 +195,8 @@ class Variants(VoiceoverScene):
         with self.voiceover(
             "We ran all of them on our addition model, from the same start, on the same kind of questions, three runs "
             f"each. <bookmark mark='a'/> {collapse} <bookmark mark='a2'/> {verdict} <bookmark mark='b'/> One cost the "
-            f"bars hide: DAPO's dynamic sampling drew {drawn['dapo']:.2f} times as many questions to fill its batches. "
-            "A fair comparison counts samples, not steps."
+            f"bars hide: DAPO's dynamic sampling drew {drawn['dapo']:.2f} times as many questions for its target batches. "
+            "Each sampling round uses one optimizer update for the plain gradient and up to four for the other displayed recipes. These bars do not compare equal compute costs."
         ) as vo:
             self.play(FadeIn(head), Create(start), FadeIn(sl))
             vo.wait_until("a")
@@ -215,7 +218,7 @@ class Variants(VoiceoverScene):
         w = 20
         zs = np.array([z[max(0, i - w + 1):i + 1].mean() for i in range(len(z))])
         g = axes([0, steps], [0, 1], x_length=6.0, y_length=3.6, xlabel=r"RL steps \ (the plain group gradient; \ "
-                 r"average of $20$ steps, \ $3$ runs)", ylabel=r"groups whose $8$ answers all agree: \ no signal",
+                 r"average of $20$ steps, \ $3$ runs)", ylabel=r"identical correctness rewards: \ no signal",
                  xticks=[0, steps], yticks=[0, 0.5, 1], yfmt=lambda v: rf"{int(100 * v)}\%", center=[-2.6, -0.4, 0])
         ln = curve(g.ax, np.arange(1, len(zs) + 1), zs, WRONG_C, 3.5)
         eq = MathTex(r"\hat A_i = 0 \ \text{ for every } i \ \Rightarrow\ \nabla J = 0", font_size=32).move_to([3.9, 1.8, 0])
@@ -223,16 +226,16 @@ class Variants(VoiceoverScene):
         dds = np.array([dr[max(0, i - w + 1):i + 1].mean() for i in range(len(dr))])
         dtop = max(2, math.ceil(float(dds.max()) - 1e-9))
         h = axes([0, steps], [0, dtop + 0.3], x_length=4.0, y_length=1.5, ylabel=r"DAPO: \ questions drawn per step, "
-                 r"\\ as a multiple of the $32$ it trains on", yticks=[1, dtop], yfmt=lambda v: rf"{int(v)}\times",
+                 r"\\ as a multiple of the target batch of $32$", yticks=[1, dtop], yfmt=lambda v: rf"{int(v)}\times",
                  center=[4.0, -1.5, 0], font_size=16)
         cone = DashedLine(h.ax.c2p(0, 1), h.ax.c2p(steps, 1), dash_length=0.05, stroke_width=1, color=GREY_D)
         cln = curve(h.ax, np.arange(1, len(dds) + 1), dds, C.BITS, 3)
         with self.voiceover(
-            "One of DAPO's fixes is worth seeing. When all eight answers to a question are right, every advantage "
-            "is zero, and so is the gradient: the question was wasted. <bookmark mark='a'/> As the model improves, "
-            f"that happens more and more: by the end, {100 * zs[-1]:.0f} percent of the groups taught it nothing. "
-            "<bookmark mark='b'/> DAPO keeps sampling questions until each batch is full of groups that disagree; "
-            f"by the end it needed {dds[-1]:.1f} times as many."
+            "One of DAPO's fixes is worth seeing. When all eight answers to a question are right, or all are wrong, "
+            "every advantage is zero: no policy-gradient reward signal. <bookmark mark='a'/> By the end, "
+            f"{100 * zs[-1]:.0f} percent of the groups carried no such signal. "
+            "<bookmark mark='b'/> DAPO resamples to collect groups with mixed rewards. Our toy recipe caps this "
+            f"at four rounds, so a batch can remain short. By the end it drew {dds[-1]:.1f} times the target batch."
         ) as vo:
             self.play(FadeIn(g), Write(eq))
             vo.wait_until("a")

@@ -46,21 +46,15 @@ class Verify(VoiceoverScene):
             label(r"an answer checker says: \ right", font_size=28, color=RIGHT_C),
             label(r"a step checker says: \ two steps are wrong", font_size=28, color=WRONG_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 0.5)
-        stat = label(rf"our model, \ made to think: \ ${100 * rb:.1f}\%$ of its right answers \\ have a wrong step on "
-                     r"the way", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.6)
-        if rb < 0.05:
-            small = ("Small here, because two slips must cancel exactly. In long mathematical arguments, a right "
-                     "number at the end of a broken argument is far more common, and rewarding it teaches the wrong "
-                     "lesson.")
-        else:
-            small = ("And in long mathematical arguments, a right number at the end of a broken argument is more "
-                     "common still; rewarding it teaches the wrong lesson.")
+        stat = label(rf"our model, \ made to think: \ ${100 * rb:.1f}\%$ of its right answers \\ lack a complete, "
+                     r"locally correct chain", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.6)
+        small = "This includes chains cut short as well as chains with an incorrect step."
         with self.voiceover(
             "A checker of answers sees only the end. <bookmark mark='a'/> Here is a chain that adds five and three "
             "and writes nine, then adds eight and writes sixteen. Two mistakes, and they cancel: the final sum is "
             "right. <bookmark mark='b'/> A checker of answers rewards this. A checker of steps would flag two of "
             "them. <bookmark mark='c'/> How often does it happen? Among our model's right answers, "
-            f"{100 * rb:.1f} percent had a wrong step on the way. {small}"
+            f"{100 * rb:.1f} percent lacked a complete, locally correct chain. {small}"
         ) as vo:
             self.play(FadeIn(q), FadeIn(sch))
             vo.wait_until("a")
@@ -95,8 +89,9 @@ class Verify(VoiceoverScene):
             "So there are two kinds of learned grader. <bookmark mark='a'/> An outcome reward model reads a whole "
             "solution and predicts whether its final answer is right. It is trained with one label per solution, "
             "which a checker of answers can supply. <bookmark mark='b'/> A process reward model judges every step: "
-            "is this step right, given the ones before it? A solution's score is the product over its steps, the "
-            "chance that all of them are right. It needs a label for every step. <bookmark mark='c'/> Either can "
+            "is this step right, given the ones before it? Here we multiply its scores over the steps. Interpreting "
+            "that product as a probability requires calibrated conditional scores. It needs a label for every step. "
+            "<bookmark mark='c'/> Either can "
             "rerank: sample N solutions and keep the one it scores highest. Or its score can be the reward for "
             "reinforcement learning."
         ) as vo:
@@ -131,7 +126,7 @@ class Verify(VoiceoverScene):
             bars.add(VGroup(b, label(rf"${v}\%$", font_size=22, color=c).next_to(b, UP, buff=0.08),
                             label(t, font_size=18, color=c).next_to(b, DOWN, buff=0.12)))
         base = Line([1.7, -2.0, 0], [5.8, -2.0, 0], color=GREY_C, stroke_width=1.5)
-        bh = label(r"MATH, \ best of $1{,}860$ samples: \\ problems solved", font_size=22, color=GREY_A)
+        bh = label(r"MATH test subset: \\ best of $1{,}860$ samples", font_size=22, color=GREY_A)
         bh.next_to(VGroup(bars, base), UP, buff=0.4)
         cut = note(r"bars start at $60\%$").next_to(base, DOWN, buff=0.55).align_to(base, RIGHT)
         with self.voiceover(
@@ -141,8 +136,9 @@ class Verify(VoiceoverScene):
             "In 2022, Jonathan Uesato and colleagues at DeepMind compared the two kinds of feedback. Outcome feedback "
             "gave final answers about as good, with fewer labels; but to keep the reasoning inside right answers "
             "sound, they needed process feedback, or a grader trained to imitate it. <bookmark mark='c'/> In 2023, OpenAI's Let's Verify Step by Step paid people to "
-            "label eight hundred thousand steps. <bookmark mark='d'/> Reranking 1,860 solutions to competition "
-            "problems, a majority vote solved 69.6 percent, the outcome grader 72.4, and the process grader 78.2."
+            "label eight hundred thousand steps. <bookmark mark='d'/> On a representative subset of the MATH "
+            "test set, reranking 1,860 solutions per problem, a majority vote solved 69.6 percent, the outcome "
+            "grader 72.4, and the process grader 78.2."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.15))
             for k, mk in enumerate("bc"):

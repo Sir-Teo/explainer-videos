@@ -38,10 +38,10 @@ class Length(VoiceoverScene):
         with self.voiceover(
             "When DeepSeek trained R1-Zero with reinforcement learning, something happened that nobody had asked for. "
             "Its thinking grew longer, steadily, throughout training, from hundreds of tokens to thousands, though "
-            "the reward only checked the final answer. <bookmark mark='a'/> And in the middle of one solution, an "
+            "the rules rewarded correctness and format, not length. <bookmark mark='a'/> And in the middle of one solution, an "
             "intermediate version wrote: wait, wait, wait. That's an aha moment I can flag here. Then it went back "
-            "and redid the step. <bookmark mark='b'/> Re-checking, backtracking, trying another way: none of it was "
-            "demonstrated. It appeared because longer, more careful chains earned more reward."
+            "and redid the step. <bookmark mark='b'/> Re-checking, backtracking, trying another way appeared without "
+            "an added supervised fine-tuning stage before RL. The base model still carried its pretraining."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(cite_))
             vo.wait_until("a")

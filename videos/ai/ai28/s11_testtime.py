@@ -106,7 +106,7 @@ class TestTime(VoiceoverScene):
             res[name] = (np.asarray(b[f"{name}_seq_tokens"]), np.asarray(b[f"{name}_seq"]),
                          np.asarray(b[f"{name}_vote_tokens"]), np.asarray(b[f"{name}_vote"]))
         tmax = int(max(max(r_[0].max(), r_[2].max()) for r_ in res.values()))
-        g = axes([0, tmax], [0, 1], x_length=7.2, y_length=4.2, xlabel=r"tokens written per question",
+        g = axes([0, tmax], [0, 1], x_length=7.2, y_length=4.2, xlabel=r"output-token budget cap per question",
                  ylabel=rf"right, \ ${n}$-digit lists", xticks=[0, tmax // 2, tmax], yticks=[0, 0.5, 1],
                  yfmt=lambda v: rf"{int(100 * v)}\%", center=[-1.4, -0.3, 0])
         cols = {("sft", "seq"): CHAIN, ("sft", "vote"): VOTE, ("rl", "seq"): POLICY, ("rl", "vote"): C.SURPRISE}
@@ -160,7 +160,8 @@ class TestTime(VoiceoverScene):
         with self.voiceover(
             "Our adding model can be given a budget too. Make it think, and force it to answer after at most m steps, "
             f"the way s1 cuts a model off. <bookmark mark='a'/> {first} <bookmark mark='b'/> The parallel "
-            f"alternative: answer at once N times, and vote. <bookmark mark='c'/> {verdict} <bookmark mark='d'/> "
+            f"alternative: answer at once N times, and vote. The horizontal axis shows token budget caps; chains "
+            f"may stop early, and equal token caps need not cost equal computation. <bookmark mark='c'/> {verdict} <bookmark mark='d'/> "
             f"{after}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
@@ -188,7 +189,7 @@ class TestTime(VoiceoverScene):
         ]
         rows[2][2].set_color(KLC)
         whys = [why(r"draw $N$, \ keep a right one if there is one"),
-                why(r"which right answer: \ in proportion to $\pi$"),
+                why(r"ties: \ first right draw; \\ if none, first draw"),
                 why(r"the KL between two coins: \ right with $1 - q$, \ or with $p$"),
                 why(r"bounded, \ however large $N$; \ Part 27's formula is an upper bound")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.4, buff=0.5, edge=6.9)
@@ -196,19 +197,21 @@ class TestTime(VoiceoverScene):
                      corner=DL)
         p27 = VGroup(label(r"Part 27: \ best-of-$N$ with a reward model", font_size=26, color=GREY_A),
                      cmath(r"\mathrm{KL}(\pi_N \,\|\, \pi)", r"=", r"\log N - \frac{N - 1}{N}", font_size=38),
-                     label(r"if no two answers ever tie", font_size=24, color=GREY_B))
+                     label(r"continuous reward distribution \\ (no sampled ties)", font_size=24, color=GREY_B))
         p27.arrange(DOWN, buff=0.3).move_to(UP * 0.9)
         p27[1][0].set_color(KLC)
         ties = label(r"a checker: \ every right answer scores $1$, \ every wrong one $0$: \ all ties", font_size=28,
                      color=WRONG_C).move_to(DOWN * 1.5)
         with self.voiceover(
-            "The simplest parallel strategy with a checker is best-of-N: draw N answers and keep a right one. Part 27 "
-            "showed that best-of-N moves a model log N minus N minus one over N nats away from where it started, when "
-            "the reward has no ties. <bookmark mark='t'/> A checker's reward is all ties: right or wrong. So let's redo "
+            "The simplest parallel strategy with a checker is best-of-N: draw N answers and keep a right one. "
+            "In the continuous-reward idealization, Part 27's best-of-N formula gives log N minus N minus one over N nats. "
+            "For discrete answers, even unique reward values generally give only an upper bound. "
+            "<bookmark mark='t'/> A checker's reward is all ties: right or wrong. So let's redo "
             "it. "
             "<bookmark mark='a'/> If one try is right with probability p, best-of-N is right with probability one "
-            "minus one minus p to the N. <bookmark mark='b'/> Given that, which right answer it returns is in "
-            "proportion to the model's own probabilities; the same for wrong ones. <bookmark mark='c'/> So the KL "
+            "minus one minus p to the N. <bookmark mark='b'/> Here we keep the first right draw, or the first draw if none "
+            "is right. With that tie rule, which right answer it returns is in proportion to the model's own probabilities; "
+            "the same for wrong ones. <bookmark mark='c'/> So the KL "
             "is just the divergence between two coins: one right with probability one minus q, the other with p. "
             "<bookmark mark='d'/> As N grows it levels off at log one over p, however many answers you draw, far "
             "below Part 27's formula, which in general is only an upper bound, as Ahmad Beirami and colleagues "
@@ -263,7 +266,7 @@ class TestTime(VoiceoverScene):
                      "learning.")
         with self.voiceover(
             "On our addition model, exactly. <bookmark mark='a'/> The KL of best-of-N with a checker levels off at "
-            f"{kl[-1]:.2f} nats, while the formula for untied rewards would reach {bound[-1]:.2f} at {Ns[-1]} tries. "
+            f"{kl[-1]:.2f} nats, while the general upper bound is {bound[-1]:.2f} at {Ns[-1]} tries. "
             f"<bookmark mark='b'/> And accuracy: {match}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(h), FadeIn(tag))

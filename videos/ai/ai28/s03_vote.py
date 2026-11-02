@@ -165,6 +165,7 @@ class Vote(VoiceoverScene):
         top = int(vals[np.argmax(cnt)])
         win = SurroundingRectangle(bars[int(np.argmax(cnt))], color=VOTE, buff=0.06, stroke_width=3)
         wl = label(rf"the vote: \ ${top}$", font_size=24, color=VOTE).next_to(win, UP, buff=0.1)
+        hl.next_to(wl, UP, buff=0.18)
         p_right = float(np.mean(A == truth))
         n_ok = int(np.sum(A[:8] == truth))
         n_wrong_vals = int(len(np.unique(A[(A >= 0) & (A != truth)])))
@@ -211,11 +212,11 @@ class Vote(VoiceoverScene):
     def why_vote(self):
         colors = {r"y^*": RIGHT_C, r"p^*": RIGHT_C, r"y": WRONG_C, r"p_y": WRONG_C, r"k": VOTE}
         rows = [
-            cmath(r"\text{the vote is right}", r"\iff", r"N_{y^*} > N_{y}\ \text{ for every wrong } y", font_size=32),
+            cmath(r"\text{unique winner is right}", r"\iff", r"N_{y^*} > N_{y}\ \text{ for every wrong } y", font_size=32),
             cmath(r"N_{y^*} - N_{y}", r"=", r"\sum_{i=1}^{k} \big(\mathbf 1[Y_i = y^*] - \mathbf 1[Y_i = y]\big),\ \ "
                   r"\text{mean } k\,(p^* - p_y)", font_size=32),
-            cmath(r"P\big(N_{y^*} \le N_y\big)", r"\le", r"e^{-k\,(p^* - p_y)^2 / 2}", font_size=34),
-            cmath(r"\text{vote}_k \text{ right}", r"\xrightarrow{\ k \to \infty\ }",
+            cmath(r"P\big(N_{y^*} \le N_y\big)", r"\le", r"e^{-k\,(p^* - p_y)^2 / 2},\quad p^* > p_y", font_size=34),
+            cmath(r"P(\text{vote}_k \text{ right})", r"\xrightarrow{\ k \to \infty\ }",
                   r"\begin{cases} 1 & p^* > \max_y p_y \\ 0 & \text{some } p_y > p^* \end{cases}", font_size=32),
         ]
         whys = [why(r"$N$: \ how often each answer appears in $k$ samples"),
@@ -223,21 +224,23 @@ class Vote(VoiceoverScene):
                 why(r"Hoeffding \ (Part 26): \ a range of $2$"),
                 why(r"a union bound over the wrong answers")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.5, edge=6.9)
-        res = label(r"voting can only amplify \ what the model already prefers", font_size=28, color=VOTE)
+        res = label(r"voting selects the model's mode \\ in the large-sample limit", font_size=28, color=VOTE)
         res.to_edge(DOWN, buff=0.45)
         defs = label(r"$y^*$: \ the right answer, \ with probability $p^*$; \ $y$: \ a wrong answer, \ with "
                      r"probability $p_y$; \ $k$: \ the number of samples", font_size=24, color=GREY_A)
         defs.to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "When does voting work? Call the right answer y star, and its probability p star. <bookmark mark='a'/> "
-            "The vote is right when the right answer appears more often than every wrong one. <bookmark mark='a2'/> "
+            "The right answer wins outright when it appears more often than every wrong one. Ties depend on the "
+            "tie-breaking rule; our code picks the smallest tied answer. <bookmark mark='a2'/> "
             "Compare it with one wrong answer y: the difference in counts is a sum of k independent draws, each plus one, zero, or minus "
-            "one, with mean k times p star minus p y. <bookmark mark='b'/> By Hoeffding's inequality, the chance "
+            "one, with mean k times p star minus p y. <bookmark mark='b'/> When p star is larger than p y, "
+            "Hoeffding's inequality says the chance "
             "that the wrong answer catches up falls exponentially in k. <bookmark mark='c'/> So as the votes grow, "
-            "the vote is right with probability one if the right answer is the model's single most likely answer, "
-            "and with probability zero if some wrong answer is more likely. <bookmark mark='d'/> Voting can only "
-            "amplify what the model already prefers. It cannot rescue a question where the model's favourite answer "
-            "is wrong."
+            "its success probability approaches one if the right answer is the model's single most likely answer, "
+            "and approaches zero if some wrong answer is more likely. <bookmark mark='d'/> In the large-sample "
+            "limit, voting selects the model's mode. A finite vote can still be right by chance when a wrong "
+            "answer is more likely."
         ) as vo:
             self.play(FadeIn(defs))
             vo.wait_until("a")
@@ -260,7 +263,7 @@ class Vote(VoiceoverScene):
         ks = [int(k) for k in v["ks"]]
         lk = np.log2(ks)
         tv, tp, dv = np.asarray(v["think_vote"]), np.asarray(v["think_pass"]), np.asarray(v["direct_vote"])
-        lim = float(v["think_mode_right"])
+        lim = float(tv[-1])
         lo = float(np.floor(min(tv.min(), dv.min()) * 10) / 10)
         g = axes([0, lk[-1]], [lo, 1.0], x_length=7.2, y_length=4.4, xlabel=r"samples per question, \ $k$",
                  ylabel=r"questions answered right", xticks=list(lk), xfmt=lambda x: f"{int(2 ** x)}",
@@ -270,7 +273,7 @@ class Vote(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(x, y), radius=0.05, color=c) for ys, c in ((tp, PASS), (tv, VOTE), (dv, DIRECT))
                         for x, y in zip(lk, ys)])
         limit = DashedLine(ax.c2p(0, lim), ax.c2p(lk[-1], lim), color=VOTE, dash_length=0.08, stroke_width=2)
-        ll = label(rf"the limit: \\ most frequent answer right \\ (${100 * lim:.0f}\%$)", font_size=18, color=VOTE)
+        ll = label(rf"observed ${ks[-1]}$-sample vote: \\ ${100 * lim:.1f}\%$", font_size=18, color=VOTE)
         ll.next_to(limit, RIGHT, buff=0.15)
         lg = legend([(PASS, r"any of $k$ right \ (needs a checker)"), (VOTE, r"vote over $k$ chains"),
                      (DIRECT, r"vote over $k$ answers given at once")], font_size=19)
@@ -278,26 +281,26 @@ class Vote(VoiceoverScene):
         if lg.get_right()[0] > 6.9:
             lg.shift(LEFT * (lg.get_right()[0] - 6.9))
         tag = note(r"computed: \ $300$ questions, \ $64$ samples each; \ subsets averaged").to_corner(DR, buff=0.2)
-        dlim = float(v["direct_mode_right"])
         if dv[-1] < tv[-1] - 0.03:
-            direct_said = (f"Voting over answers given at once reaches only {100 * dv[-1]:.0f}: for more of the "
-                           "questions, the model's favourite answer at once is wrong, and voting cannot fix that. The "
-                           "chains make the right answer the most likely one, and then the vote amplifies it.")
+            direct_said = (f"Voting over answers given at once reaches only {100 * dv[-1]:.1f}. On these samples, "
+                           "chains and voting worked better together. Finite samples do not establish the model's "
+                           "true most likely answer on every question.")
         else:
-            direct_said = (f"Voting over answers given at once does about as well here, {100 * dv[-1]:.0f} percent: "
-                           "on this task the model's favourite answer is often right either way.")
+            direct_said = (f"Voting over answers given at once does about as well here, {100 * dv[-1]:.1f} percent: "
+                           "On these finite samples, the two voting strategies give similar accuracy.")
         gi = int(np.argmax(tp - tv))
         if tp[-1] - tv[-1] < 0.05 and tp[gi] - tv[gi] > 0.08:
             gap_said = ("The gap between the two curves is what a checker is worth: wide at a few samples, "
-                        f"{100 * (tp[gi] - tv[gi]):.0f} points at {ks[gi]}, and nearly closed by {ks[-1]}.")
+                        f"{100 * (tp[gi] - tv[gi]):.1f} points at {ks[gi]}, and nearly closed by {ks[-1]}.")
         else:
             gap_said = "The gap between the two curves is what a checker is worth."
         with self.voiceover(
             "Here it is on three hundred questions. <bookmark mark='a'/> One chain is right "
-            f"{100 * tv[0]:.0f} percent of the time. Voting over {ks[-1]} chains: {100 * tv[-1]:.0f} percent. "
-            f"<bookmark mark='b'/> And the derivation predicted where it would level off: the share of questions "
-            f"whose most frequent answer is right, {100 * lim:.0f} percent. <bookmark mark='c'/> If something could "
-            f"check the answers, any of {ks[-1]} chains being right would count: {100 * tp[-1]:.0f} percent. "
+            f"{100 * tv[0]:.1f} percent of the time. Voting over {ks[-1]} chains: {100 * tv[-1]:.1f} percent. "
+            f"<bookmark mark='b'/> The dashed line marks the observed {ks[-1]}-sample vote, "
+            f"{100 * lim:.1f} percent. It is not an independent estimate of the infinite-sample limit. "
+            f"<bookmark mark='c'/> If something could "
+            f"check the answers, any of {ks[-1]} chains being right would count: {100 * tp[-1]:.1f} percent. "
             f"{gap_said} <bookmark mark='d'/> {direct_said}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
