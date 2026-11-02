@@ -31,6 +31,33 @@
    },
    "trials": 1
   },
+  "btc_vol_forecast_edge": {
+   "code_sha256": "76085f797e10c8b93a8232d20cb07ed4fe28a127a2fcf422e52e634087b82637",
+   "params": {
+    "signal": "DVOL > HAR forecast of 30-day realized vol",
+    "trade": "Part 10's sold, hourly-hedged 30-day ATM call"
+   },
+   "trials": 1
+  },
+  "btc_vol_race_2020": {
+   "code_sha256": "65f92e9e3373bf11e34c829a3795f53d35ff8f0054523632f3ae48e053698a56",
+   "params": {
+    "models": [
+     "EWMA",
+     "GARCH",
+     "GJR",
+     "HAR",
+     "HARQ",
+     "log-HAR",
+     "LSTM",
+     "Transformer"
+    ],
+    "note": "log-HAR added after the first results; counted",
+    "seeds": 5,
+    "test": "2020"
+   },
+   "trials": 8
+  },
   "cape_forecast_2021_2030": {
    "code_sha256": "a5b36ee43c347f92565b55014118cbdaee0c27f95ef91ca15f3d9898a73461da",
    "params": {
@@ -51,6 +78,15 @@
    "code_sha256": "c3d5e418ce5790f114b1ea5c0b107f787b6a491fc9f27501ddd177a8dd0ab97e",
    "params": {
     "signal": "12-2 month industry return"
+   },
+   "trials": 1
+  },
+  "kelly_us_split": {
+   "code_sha256": "d93dd0374429b90255b88da13a77a6a4de7c900dc37336d2157cd1c55b573f35",
+   "params": {
+    "apply": "1973-2020",
+    "choose": "1926-1972",
+    "grid": "0..5 step 0.02"
    },
    "trials": 1
   },

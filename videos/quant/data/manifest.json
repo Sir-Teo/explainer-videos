@@ -1599,6 +1599,286 @@
   "bytes": 7608,
   "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=3600"
  },
+ "deribit/dvol/BTC/86400/2021-04": {
+  "sha256": "4ab7905e665c7ff2292cce4ae3bc649e3b2241462f104301f92d330270da678e",
+  "bytes": 463,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2021-05": {
+  "sha256": "e2aee00cf467f499166cbab8e37355c7adaf38ddf2daae5297ffec02b67925ea",
+  "bytes": 510,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2021-06": {
+  "sha256": "3cb745663caffd982012d65024670ef3b10bae5d5e42e7bc0673f5f86aa84b11",
+  "bytes": 477,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2021-07": {
+  "sha256": "52ad8da2be0ced8bfb59b9e1240214014833e2e9d8d98902fab96b5384001e91",
+  "bytes": 474,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2021-08": {
+  "sha256": "78bf2bdf9ac87e1a252bc996c0cd02565537a0b5048b2b374f2d9e2dfd78144b",
+  "bytes": 473,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2021-09": {
+  "sha256": "35beb1cccec488a2140ac4ac307f7fb4f30e09f62ac2fb975cc2c8e981b54306",
+  "bytes": 453,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2021-10": {
+  "sha256": "069fc2d7ef30857579b2dd90088b625f70499ad4f2b426b20739ab26e8bb2813",
+  "bytes": 467,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2021-11": {
+  "sha256": "26c52c86b5030f0150739d7dd6e1513d094544e97ebf91bd9e809e20549efb52",
+  "bytes": 446,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2021-12": {
+  "sha256": "850843e3a4b9612aa3e2dfc4faefbed2b6cf39cdd81eced8e1bf16d8318b73e5",
+  "bytes": 474,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-01": {
+  "sha256": "f36941f39c686242cb0dc0663316e2ccfc1ed49fe3ebc84a7d3483816faf4994",
+  "bytes": 483,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-02": {
+  "sha256": "e57e0f52bbf8e91fa311eb6b1c3a27904a2eb68743ca436f57d978697e8108d8",
+  "bytes": 429,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-03": {
+  "sha256": "233d74cccf15c16900325b596f65c428592a88b057f6bf20d2339754715bb440",
+  "bytes": 461,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-04": {
+  "sha256": "727ed7cfef32071b02f08166cd7f939e3560ce6617eb3bad82330679bbaa1615",
+  "bytes": 436,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-05": {
+  "sha256": "e783d56ecd1fc08a978042c64f2099e436313972b011c060cf62362849c50b5d",
+  "bytes": 489,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-06": {
+  "sha256": "bbf34ad71227fa1d2e24d4a15e4666cb205f7915a227e16f54aeb3848359dfad",
+  "bytes": 469,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-07": {
+  "sha256": "6189d8799d53c1af87daf2d62be34bd0049ea4a46c2c49fbc257b0f7e4328e76",
+  "bytes": 472,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-08": {
+  "sha256": "5fcebe890795ec1ef06aa77304ca25509ea21cb3d585cf67ace1716112919fb8",
+  "bytes": 446,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-09": {
+  "sha256": "17d7fdb74d2e050ff7ea792b66f5645812b5803f76bc56ea3defe399f511c69a",
+  "bytes": 446,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-10": {
+  "sha256": "ac9104dc6e581120c3fe31768a4c30ec152dac8e4acf48c8bc49108821346cfa",
+  "bytes": 472,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-11": {
+  "sha256": "f6b7e8dd53847d9a69ce4573d183f77799b20e63bc3331616699e4e4dbd1e7a7",
+  "bytes": 471,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2022-12": {
+  "sha256": "c8b55beeea9e43b32bfc2897e62cb6d001e0b7235f8a7c97c97f9223f9f7fa9b",
+  "bytes": 473,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-01": {
+  "sha256": "27589b25b69a703a638a7e407524fdfcb1f582a9d1a3ddf02f073d1cb0684bc4",
+  "bytes": 465,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-02": {
+  "sha256": "e6123198fca8431b2cbc438b0799e0024bb862a2e5a4647240a7e91930d8a3ab",
+  "bytes": 428,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-03": {
+  "sha256": "b0a143b102b2c081325ade91909d48b14c422c39d488b96a8ccc89aacc3ed746",
+  "bytes": 477,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-04": {
+  "sha256": "03079bfc0b775d3a96a2dad6a6b1b8077b97bc630368a7515c2e0f4a323733e5",
+  "bytes": 447,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-05": {
+  "sha256": "e8c7ca095273cb6a851e1a0d41244834c94f526d8137bbd7bf387660939bf689",
+  "bytes": 448,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-06": {
+  "sha256": "c24722ff87c6dadd6254859ce3927f5c3b85fa8e57684fa1cd4df11a53303454",
+  "bytes": 441,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-07": {
+  "sha256": "0acf538246253be9e735508a31ae719fe4c10d26037072df4ec244899cee5c55",
+  "bytes": 454,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-08": {
+  "sha256": "3ae2f2a445050f144221bde274534caf845ac6da32dfb5080cfa992aa050679d",
+  "bytes": 452,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-09": {
+  "sha256": "e56be0de6400ef83cf26141a6ae43a4a054eb5a7e5e62924e79ab5ff4521894f",
+  "bytes": 451,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-10": {
+  "sha256": "26c40c49b201ecf005208b04129c1091d00edd375f1381d878c1985994c83e74",
+  "bytes": 464,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-11": {
+  "sha256": "bfc50b0a30f1f42d08355c350b42afd0525bb1fb9903c01cd5da1d617611b721",
+  "bytes": 451,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2023-12": {
+  "sha256": "283ffd189f76f0d4e9ee7e46bb6b002ce11b11422f03de8babbf5cdd70241141",
+  "bytes": 452,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-01": {
+  "sha256": "da27fb70231cedfbfee22a2dd0bae14866e4cde2b1df718b5f08b55a45c666ab",
+  "bytes": 470,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-02": {
+  "sha256": "ba95f9e7661f9a49aff12d695888d42937fcb5bffa5ec4fa5f37a74bdb70a13c",
+  "bytes": 443,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-03": {
+  "sha256": "76bb4d6f59f3c1cfaac6c60d2fd7250987eb6599bb6dd967fc41eb6dea6785d7",
+  "bytes": 470,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-04": {
+  "sha256": "308d1872f3c1101647c822f74288c3497808961d17bf639c37ba2f027a16fb00",
+  "bytes": 458,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-05": {
+  "sha256": "f3ebb9b0781ebc34f45584d20aa6f0e95691ebde5a232bd4c3ef0936f0d0c06d",
+  "bytes": 470,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-06": {
+  "sha256": "c8de5ff00a86d3ca213b8028f300cc3e9e7c38f91577666a7978b9c473f50bdf",
+  "bytes": 438,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-07": {
+  "sha256": "366e2d2a1806ca848b2fcd531feda892cbfb849150fcbbfd59d3941ba361d37e",
+  "bytes": 464,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-08": {
+  "sha256": "326bb93ce08b6c6d671aa02f89a6d7161c0e0cc11130e9f2be9c2ca70720ab22",
+  "bytes": 462,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-09": {
+  "sha256": "b5c7869a43dd19f60b51cb9731d10af0c60669833834fbaf140a003f1c0954ca",
+  "bytes": 442,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-10": {
+  "sha256": "a57207adfd61317c3a2bc10a36aef773dfb0fc641e2c3d176ca5ee301030b023",
+  "bytes": 448,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-11": {
+  "sha256": "9df9c1e4bdaf37dde64718ba26b0de1f808ca2a96235fcf70092133643fc7659",
+  "bytes": 454,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2024-12": {
+  "sha256": "d4ea73ea4132d2d1da8ab8281bbbc463e5048ca07a2c1dc3c86e4f73d9c9bb62",
+  "bytes": 453,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-01": {
+  "sha256": "e6a169d22b69c93efba183153aa097b2bbc8e66ba8860c01d44daec1e6d6f5f6",
+  "bytes": 465,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-02": {
+  "sha256": "b6bf6d9a65ac29de2033be7df0afa89cac06683c4d5e68c6aa28d2f12d34f456",
+  "bytes": 405,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-03": {
+  "sha256": "9432e343413c507f25887805ca29df30afdd764e7f815b451671297dc8ba66e2",
+  "bytes": 469,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-04": {
+  "sha256": "b56e92d3064dd2df4dbfa92d3319e80724b8059a85fb148ef249a6f25a765895",
+  "bytes": 441,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-05": {
+  "sha256": "0b37dc6257deebc6737efa9f479e0ec0123e7e4fdfbcd5fb72ed8b1e64c750b8",
+  "bytes": 436,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-06": {
+  "sha256": "c591052ae44aadc9c62cb122ae979349d817c438c4d44300d78a6856c19f0a32",
+  "bytes": 430,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-07": {
+  "sha256": "a817a959e39f00e2af89d412389e9016ed94063b7bcff8293c29f78b54f24734",
+  "bytes": 448,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-08": {
+  "sha256": "48ba2bd226467cd7bd610cb066b0e3ab63b235a8c270c8358d69d80e322cb80f",
+  "bytes": 451,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-09": {
+  "sha256": "56de1574a847722b69fe72f6605ebda0579dbfc3a1ac1ebb62810b5ce1a4c185",
+  "bytes": 426,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-10": {
+  "sha256": "934dd2352a8383d1cabf10a38029c9c06c89a955b2cf47a93ee19f49f15b6b1b",
+  "bytes": 461,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
+ "deribit/dvol/BTC/86400/2025-11": {
+  "sha256": "cbe799707bd04003a021f570ef1da98445fffef2ca95214877e806c8d79abcfc",
+  "bytes": 449,
+  "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
+ },
  "deribit/trades/BTC/option/2024-01-03/00": {
   "sha256": "2fcfd73bfb77663bcee67842bfe5aea1b8c574365d0bd8e902d23fd9cdf9e1b1",
   "bytes": 7854,
