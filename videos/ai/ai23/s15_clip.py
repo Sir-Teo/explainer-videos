@@ -95,14 +95,14 @@ class Clip(VoiceoverScene):
         c = load("clip")
         rows = [MathTex(r"\mathcal L = -\,\mathbb E \log \frac{e^{f(x, y_1)}}{\sum_{j=1}^{N} e^{f(x, y_j)}}", font_size=32),
                 MathTex(r"f^*(x, y) = \log \frac{p(y \mid x)}{p(y)} + c(x)", font_size=32),
-                MathTex(r"\mathcal L^* = \mathbb E \log\Big(1 + \frac{p(y_1)}{p(y_1 \mid x)} \sum_{j \ge 2} \frac{p(y_j \mid x)}{p(y_j)}\Big)",
-                        font_size=30),
-                MathTex(r"\approx \mathbb E \log\Big(1 + (N-1)\, \frac{p(y_1)}{p(y_1 \mid x)}\Big) \ \ge \ \log N - I(x; y)",
+                MathTex(r"I(X;Y)=\log N-\mathcal L^*+D_{\rm KL}(P_{X,Y_{1:N}}\Vert p_X Q_N)",
+                        font_size=27),
+                MathTex(r"\log N-\mathcal L\ \le\ \log N-\mathcal L^*\ \le\ I(X;Y)",
                         font_size=30, color=CLIP_C)]
-        whys = [why(r"picture $x$ picks its caption $y_1$ among $N$", font_size=19),
+        whys = [why(r"$Q_N$: \ a candidate set; \ choose the positive slot uniformly", font_size=19),
                 why(r"the best critic: \ a density ratio (Part 24)", font_size=19),
-                why(r"put it in; \ divide by the true pair's term", font_size=19),
-                why(r"each ratio averages $1$ over random captions; \\ then $1 + (N{-}1)r \ge Nr$ for $r \le 1$", font_size=19)]
+                why(r"randomize the positive slot; \\ apply the chain rule for KL", font_size=19),
+                why(r"cross-entropy is minimized at the truth; \\ KL divergence is nonnegative", font_size=19)]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=-1.6, align_index=None, buff=0.25, edge=6.9)
         Bs = [int(b) for b in c["batches"]]
         k = {B: i for i, B in enumerate(Bs)}
@@ -125,26 +125,30 @@ class Clip(VoiceoverScene):
                                 [x + w / 2, base_y + e.mean() * sy, 0], RIGHT, buff=0.1)))
         hl = DashedLine([x0 - 0.6, base_y + H * sy, 0], [x0 + 2 * gap + 0.6, base_y + H * sy, 0], color=TEXT_C)
         hll = label(rf"$H(\text{{caption}}) = \log {int(round(math.exp(H)))} = {H:.2f}$", font_size=18, color=TEXT_C).next_to(hl, LEFT, buff=0.1)
-        bl = label(rf"our CLIP (trained with batches of ${Bs[-1]}$): \ $\log N - \mathcal L$, \ nats \ (outline: $\log N$)",
+        bl = label(rf"empirical $\log N - \mathcal L$, \ nats \ (outline: $\log N$)",
                    font_size=18, color=GREY_A)
         bl.next_to(VGroup(bars, hl), UP, buff=0.12).align_to(bars, LEFT)
         bars_g = VGroup(bars, hl, hll, bl)
         keep_in_frame(bars_g, margin=0.2)
         e16, e256 = est[0].mean(), est[-1].mean()
         bh = VGroup(label(r"what the loss measures", font_size=44),
-                    label(r"Part 24: \ $\log N - \mathcal L$ is a lower bound on the mutual information \\ "
-                          r"here: \ the same bound, \ from the best possible critic", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.4)
+                    label(r"InfoNCE: \ an information bound for the population loss \\ empirical estimates have sampling error",
+                          font_size=26, color=GREY_A)).arrange(DOWN, buff=0.4)
         with self.voiceover(
-            "Part 24 showed that this kind of loss measures information. Here is the same fact seen from the critic's "
-            "side. <bookmark mark='a'/> The loss asks each picture to pick its caption out of N. <bookmark mark='b'/> "
+            "Part 24 develops the information bound behind this loss. Here is a proof from the critic's "
+            "side. <bookmark mark='a'/> Draw a candidate set, choose a slot uniformly, then draw a picture "
+            "conditioned on that slot's caption. The loss asks the picture to find its partner. <bookmark mark='b'/> "
             "The best possible score is the log of how much more likely the caption is given the picture than on its "
-            "own. <bookmark mark='c'/> Put that in, and divide through by the true pair's term. <bookmark mark='d'/> "
-            "With many random captions each ratio averages one, and what is left is at least log N minus the mutual "
-            "information between pictures and words. So log N minus the loss estimates that information from below, "
-            "and can never exceed log N. <bookmark mark='e'/> Measured on our model with "
+            "own. <bookmark mark='c'/> Randomize the partner's slot. The chain rule for KL divergence splits the "
+            "mutual information into log N minus the optimal loss, plus a nonnegative divergence. "
+            "<bookmark mark='d'/> Any other critic has at least the optimal loss, which proves the bound for the "
+            "population expectation. The candidate law Q N can be independent marginal draws, or uniform "
+            "distinct captions as in our experiment: every slot still has the same caption marginal. "
+            "<bookmark mark='e'/> Our measured values have sampling error, so they are estimates of that "
+            "population bound. With "
             f"{Bs[0]}, {Bs[1]} and "
-            f"{Bs[-1]} candidates, three seeds: the estimate grows from {e16:.2f} nats to {e256:.2f}, pinned under log "
-            f"N, while the captions themselves hold {H:.2f}. The ceiling belongs to the measurement: with {Bs[-1]} "
+            f"{Bs[-1]} candidates, three seeds, that score grows from {e16:.2f} nats to {e256:.2f}. "
+            f"The uniform seen-caption entropy is {H:.2f} nats. At the same {Bs[-1]} "
             f"candidates, models trained on batches of {Bs[0]} and of {Bs[-1]} score {at_big[0]:.2f} and "
             f"{at_big[-1]:.2f}."
         ) as vo:

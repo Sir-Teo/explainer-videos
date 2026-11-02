@@ -123,8 +123,8 @@ class Omni(VoiceoverScene):
         seq.arrange(RIGHT, buff=0.15).move_to([-2.0, -1.0, 0])
         sl = label(r"text, \ picture, \ text, \ sound: \ one sequence, \ positions aligned by time", font_size=20,
                    color=GREY_A).next_to(seq, DOWN, buff=0.2)
-        thinker = RoundedRectangle(width=4.2, height=1.1, corner_radius=0.15, stroke_color=WHITE, stroke_width=2.5).move_to([-2.0, 1.0, 0])
-        talker = RoundedRectangle(width=3.0, height=1.1, corner_radius=0.15, stroke_color=SND_C, stroke_width=2.5).move_to([3.6, 1.0, 0])
+        thinker = RoundedRectangle(width=4.2, height=1.1, corner_radius=0.15, stroke_color=WHITE, stroke_width=2.5).move_to([-2.0, 0.7, 0])
+        talker = RoundedRectangle(width=3.0, height=1.1, corner_radius=0.15, stroke_color=SND_C, stroke_width=2.5).move_to([3.6, 0.7, 0])
         tl = label(r"the Thinker: \ a language model \\ reading every kind of token", font_size=20, color=WHITE).move_to(thinker)
         kl = label(r"the Talker: \\ writes speech codes", font_size=20, color=SND_C).move_to(talker)
         a1 = Arrow(seq.get_top(), thinker.get_bottom(), buff=0.15, color=GREY_B)
@@ -142,10 +142,6 @@ class Omni(VoiceoverScene):
         if facts.width > 13.2:
             facts.width = 13.2
         tag = note(r"schematic", font_size=18).to_corner(DL, buff=0.3)
-        thinker.shift(DOWN * 0.3)
-        tl.shift(DOWN * 0.3)
-        talker.shift(DOWN * 0.3)
-        kl.shift(DOWN * 0.3)
         with self.voiceover(
             "Alibaba's open omni models split the work in two. <bookmark mark='a'/> A Thinker, a language model, "
             "reads one sequence of text, picture and sound tokens, with rotary positions aligned by time, and writes "

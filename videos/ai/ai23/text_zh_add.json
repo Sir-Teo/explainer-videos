@@ -419,7 +419,7 @@
   "n = 1, 2, 4, 8: \\ 400, 800, 1600, 3200 \\text{ bits/s}": "n = 1, 2, 4, 8: \\ 400, 800, 1600, 3200 \\text{ 比特/秒}",
   "one strided convolution": "一层带步长的卷积",
   "$n$ stages of $256$ codes": "$n$级，每级$256$个码",
-  "one model, \\ quantizer dropout": "一个模型，\\ 量化器丢弃",
+  "one model, \\ quantizer dropout": "一个模型，\\ 量化器随机丢弃",
   "log-mel picture": "对数梅尔图",
   "vocoder: \\ not built here": "声码器：\\ 这里没有搭",
   "$400$ bits/s": "$400$ 比特/秒",
@@ -523,7 +523,24 @@
   "Qwen2.5-Omni (March 2025): \\ Thinker and Talker; \\ time-aligned rotary positions": "Qwen2.5-Omni（2025年3月）：\\ 思考者与说话者；\\ 按时间对齐的旋转位置",
   "Qwen3-Omni (September 2025): \\ both mixtures of experts; \\ open weights; \\\\ first sound in $234$ ms (theory); \\ text in $119$ languages, \\ speech in $19$, \\ out in $10$": "Qwen3-Omni（2025年9月）：\\ 两者都是混合专家；\\ 开放权重；\\\\ 首个声音$234$ ms（理论值）；\\ 文本$119$种语言，\\ 语音输入$19$种，\\ 输出$10$种",
   "Qwen3.5-Omni (April 2026): \\ hybrid-attention experts; \\ over $10$ hours of audio in one context": "Qwen3.5-Omni（2026年4月）：\\ 混合注意力的专家模型；\\ 一个上下文可容纳$10$小时以上的音频",
-  "PersonaPlex (NVIDIA, January 2026): \\ full duplex, \\ steered by a role and a voice": "PersonaPlex（NVIDIA，2026年1月）：\\ 全双工，\\ 由角色和声音来引导"
+  "PersonaPlex (NVIDIA, January 2026): \\ full duplex, \\ steered by a role and a voice": "PersonaPlex（NVIDIA，2026年1月）：\\ 全双工，\\ 由角色和声音来引导",
+  "every grid point is a code \\\\ (our letters: $4$ numbers, $4$ levels)": "每个网格点都是一个码 \\\\ （我们的字母：$4$个数，$4$级）",
+  "vision encoder \\\\ (NFNet-F6)": "视觉编码器 \\\\ （NFNet-F6）",
+  "vision encoder \\\\ (CLIP / EVA-CLIP)": "视觉编码器 \\\\ （CLIP / EVA-CLIP）",
+  "vision encoder \\\\ (CLIP ViT-L/14)": "视觉编码器 \\\\ （CLIP ViT-L/14）",
+  "original: \\ linear map, \\ $256$ tokens \\\\ ($224$ pixels); \\ LLaVA-1.5: \\\\ two-layer MLP, \\ $576$ tokens \\ ($336$ pixels)": "原版：\\ 线性映射，\\ $256$个词元 \\\\ （$224$像素）；\\ LLaVA-1.5：\\\\ 两层MLP，\\ $576$个词元 \\ （$336$像素）",
+  "Show that $f^*(x, y) = \\log\\frac{p(y \\mid x)}{p(y)}$ minimizes InfoNCE, \\ and that $\\log N - \\mathcal L \\le \\log N$ for any critic. \\ How much information can a batch of $256$ certify?": "证明$f^*(x, y) = \\log\\frac{p(y \\mid x)}{p(y)}$使InfoNCE最小，\\ 且对任何评判函数都有$\\log N - \\mathcal L \\le \\log N$。\\ 一个$256$的批次最多能证明多少信息？",
+  "RMSE per pixel, \\ evaluation patches": "每像素均方根误差，\\ 评估小块",
+  "$n_k$ non-overlapping replacements: \\\\ two symbols become one, \\ each time": "$n_k$次互不重叠的替换：\\\\ 每次两个符号变成一个",
+  "BPE ranks pair counts, \\ including overlaps; \\\\ actual savings can be smaller": "BPE按包含重叠的对数排序；\\\\ 实际节省可能较少",
+  "the codebook is the grid \\ ($4 \\times 4$, \\ schematic)": "码本就是网格 \\ （$4 \\times 4$，\\ 示意）",
+  "four levels: \\ squash, \\ shift, \\ then round; \\\\ the gradient goes straight through": "四级：\\ 压缩，\\ 偏移，\\ 再舍入；\\\\ 梯度直接穿过",
+  "the offset gives exactly four levels \\\\ (the experiment's rule)": "偏移恰好给出四级 \\\\ （实验的规则）",
+  "$Q_N$: \\ a candidate set; \\ choose the positive slot uniformly": "$Q_N$：\\ 候选集合；\\ 均匀地选取正例位置",
+  "randomize the positive slot; \\\\ apply the chain rule for KL": "随机化正例位置；\\\\ 应用KL散度的链式法则",
+  "cross-entropy is minimized at the truth; \\\\ KL divergence is nonnegative": "真实后验使交叉熵最小；\\\\ KL散度非负",
+  "empirical $\\log N - \\mathcal L$, \\ nats \\ (outline: $\\log N$)": "实测 $\\log N - \\mathcal L$，\\ 奈特 \\ （外框：$\\log N$）",
+  "InfoNCE: \\ an information bound for the population loss \\\\ empirical estimates have sampling error": "InfoNCE：\\ 总体损失的信息下界 \\\\ 实测估计含有抽样误差"
  },
  "patterns": [
   [
@@ -685,6 +702,10 @@
   [
    "^unseen captions found, \\\\ \\$\\\\%\\$ \\\\ \\(same \\$(\\d+)\\$ thousand pairs for every run; three seeds\\)$",
    "找到的未见说明，\\\\ $\\\\%$ \\\\ （每次都是同样的$\\1$千对；三个种子）"
+  ],
+  [
+   "^\\$-\\\\log p\\(\\\\text\\{transcript\\}\\) = ([\\d.]+)\\$, \\\\ PyTorch CTC loss \\(no reduction\\)$",
+   "$-\\\\log p(\\\\text{转写}) = \\1$，\\\\ PyTorch CTC损失（不归约）"
   ]
  ]
 }

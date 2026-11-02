@@ -30,37 +30,44 @@ class FSQ(VoiceoverScene):
         def P(x):
             return O + u * np.array([x[0], x[1], 0])
 
-        lv = np.arange(-2, 3)
+        lv = np.arange(-2, 2)
         fgrid = VGroup(*[Dot(P([a, b]), radius=0.07, color=VQ_COLORS["fsq"]) for a in lv for b in lv])
-        fbox = Square(4 * u, stroke_color=VQ_COLORS["fsq"], stroke_width=1.5).move_to(P([0, 0]))
+        fbox = Square(3 * u, stroke_color=VQ_COLORS["fsq"], stroke_width=1.5).move_to(P([-0.5, -0.5]))
         fz = g.normal(0, 1.6, (14, 2))
         fpts = VGroup(*[Dot(P(np.clip(x, -2.6, 2.6)), radius=0.07, color=WHITE) for x in fz])
-        fl_ = label(r"the codebook is the grid \ ($5 \times 5$, \ schematic)", font_size=22, color=VQ_COLORS["fsq"])
+        fl_ = label(r"the codebook is the grid \ ($4 \times 4$, \ schematic)", font_size=22, color=VQ_COLORS["fsq"])
         fl_.next_to(fbox, UP, buff=0.2)
-        rows = [MathTex(r"\hat z_i = \operatorname{round}\big(\lfloor L_i / 2 \rfloor \tanh z_i\big)", font_size=34),
+        rows = [MathTex(r"\hat z_i = \operatorname{round}\!\left(a\tanh(z_i+s)-\tfrac12\right)", font_size=30),
+                MathTex(r"a=1.5(1-10^{-3}),\ s=\operatorname{atanh}\!\left(\tfrac{1}{2a}\right),\ "
+                        r"\hat z_i\in\{-2,-1,0,1\}", font_size=25),
                 MathTex(r"\#\text{codes} = \prod_i L_i = 4 \cdot 4 \cdot 4 \cdot 4 = 256", font_size=34),
                 MathTex(r"\text{bits} = \sum_i \log_2 L_i = 8", font_size=34)]
-        whys = [why(r"squash into a box, \ round each number; \\ the gradient goes straight through", font_size=20),
-                why(r"every corner of the grid is a code \\ (our letters: $4$ numbers, $4$ levels)", font_size=20),
+        whys = [why(r"four levels: \ squash, \ shift, \ then round; \\ the gradient goes straight through", font_size=20),
+                why(r"the offset gives exactly four levels \\ (the experiment's rule)", font_size=20),
+                why(r"every grid point is a code \\ (our letters: $4$ numbers, $4$ levels)", font_size=20),
                 why(r"the same $256$ codes as chapter six", font_size=20)]
-        step = ladder(self, rows, whys, keep=3, top=2.4, x=2.6, align_index=None, buff=0.75, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=2.6, align_index=None, buff=0.4, edge=6.9)
         cite_ = cite(r"F.~Mentzer, D.~Minnen, E.~Agustsson \& M.~Tschannen, \textit{FSQ} (2023)", corner=DR)
         with self.voiceover(
             "In 2023 Fabian Mentzer and colleagues at Google asked whether the codebook needs learning at all. "
             "<bookmark mark='a'/> Finite scalar quantization: map the encoder's output to a few numbers, squash each "
-            "into a fixed range, and round it to one of a few levels. <bookmark mark='b'/> The codebook is just the "
+            "into a fixed range, and round it to one of a few levels. For four levels an offset keeps the rounded "
+            "values at minus two, minus one, zero and one. <bookmark mark='b'/> The codebook is just the "
             "grid of all the combinations: with four numbers of four levels each, 256 codes, eight bits, the same as "
             "our VQ. <bookmark mark='c'/> Rounding has no gradient either, so the straight-through trick again. But "
-            "there is nothing to collapse: no code can be stranded, because no code is learned."
+            "the grid itself cannot drift away: no code is learned. Some grid points can still go unused."
         ) as vo:
             self.play(FadeIn(fbox), FadeIn(fgrid), FadeIn(fpts), FadeIn(fl_), FadeIn(cite_))
             vo.wait_until("a")
             step(0)
-            self.play(*[d_.animate.move_to(P(2 * np.tanh(x))) for d_, x in zip(fpts, fz)], run_time=1.0)
-            self.play(*[d_.animate.move_to(P(np.round(2 * np.tanh(x)))) for d_, x in zip(fpts, fz)], run_time=0.8)
+            a = 1.5 * (1 - 1e-3)
+            s = np.arctanh(0.5 / a)
+            self.play(*[d_.animate.move_to(P(a * np.tanh(x + s) - 0.5)) for d_, x in zip(fpts, fz)], run_time=1.0)
+            self.play(*[d_.animate.move_to(P(np.round(a * np.tanh(x + s) - 0.5))) for d_, x in zip(fpts, fz)], run_time=0.8)
             vo.wait_until("b")
             step(1, transform=False)
             step(2, transform=False)
+            step(3, transform=False)
             vo.wait_until("c")
             self.play(Indicate(fgrid, color=WHITE, scale_factor=1.05))
         self.wait(0.3)
@@ -162,7 +169,7 @@ class FSQ(VoiceoverScene):
         bits2 = [4 * (i + 1) for i in range(len(rv))]
         ymax = max(e1 + rv) * 1.1
         ax = axes([0, 17, 4], [0, ymax, 0.05], x_length=5.6, y_length=3.6, xlabel=r"bits per $4 \times 4$ patch",
-                  ylabel=r"error per pixel, \ held-out patches", xticks=[4, 8, 12, 16],
+                  ylabel=r"RMSE per pixel, \ evaluation patches", xticks=[4, 8, 12, 16],
                   yticks=[round(y, 2) for y in np.arange(0, ymax, 0.05)][:5], center=[-3.4, -0.6, 0])
         c1 = curve(ax.ax, bits1, e1, IMG_C, 3.5)
         d1 = VGroup(*[Dot(ax.ax.c2p(b_, e_), radius=0.07, color=IMG_C) for b_, e_ in zip(bits1, e1)])
@@ -184,7 +191,8 @@ class FSQ(VoiceoverScene):
         with self.voiceover(
             "One more trick, the one sound codecs rely on: quantize in stages. <bookmark mark='a'/> The first stage "
             "codes the patch roughly; the second codes what the first missed; then a third, and a fourth. The patch is "
-            "rebuilt as the sum. <bookmark mark='b'/> Is it better than one big codebook? Not at equal bits. "
+            "rebuilt as the sum. <bookmark mark='b'/> At equal bits, here is our comparison on evaluation patches "
+            "sampled from the same pool as the fitting patches. "
             f"{at8} <bookmark mark='c'/> But residual stages keep going where one codebook can't: sixteen bits would "
             f"need a table of 65,536 entries, and four stages of 16 reach {rv[-1]:.3f} with 64. That is residual "
             "vector quantization, inside nearly every neural audio codec."

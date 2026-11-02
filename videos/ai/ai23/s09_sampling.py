@@ -56,7 +56,7 @@ class Sampling(VoiceoverScene):
             "gives the same samples as f. <bookmark mark='d'/> So the samples can only tell apart frequencies "
             "between zero and half the sampling rate. A seven kilohertz tone sampled eight thousand times a second "
             "lands exactly on a one kilohertz tone. The converse is the sampling theorem of Nyquist and Shannon: a "
-            "signal with nothing above half the rate is fixed exactly by its samples."
+            "signal band-limited strictly below half the rate is fixed exactly by its samples."
         ) as vo:
             self.play(FadeIn(ax), Create(lo), FadeIn(ll), FadeIn(tl), FadeIn(cite_))
             vo.wait_until("a")
@@ -184,7 +184,8 @@ class Sampling(VoiceoverScene):
         colors = {r"m": SND_C}
         f1 = MathTex(r"\log_{10} \textstyle\sum_k W_{mk}\, |X_k|^2, \quad \text{clipped to 8 decades}", font_size=28,
                      color=SND_C).to_edge(DOWN, buff=0.25)
-        exp = int(np.floor(np.log10(max(diff, 1e-12))))
+        # Narration says "within 10^exp": round the bound up, not down.
+        exp = int(np.ceil(np.log10(max(diff, 1e-12))))
         # one window's spectrum, following the window across the picture
         sax = Axes(x_range=[0, 8000, 1000], y_range=[0, 1.05, 1], x_length=5.4, y_length=1.6, tips=False,
                    axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([3.5, 1.5, 0])

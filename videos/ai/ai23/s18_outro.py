@@ -83,8 +83,9 @@ class Outro(VoiceoverScene):
             "Let's take stock. Byte-pair encoding cuts text by merging the commonest pairs, a greedy compressor; the "
             "unigram model puts a probability on every cut; and bits per character is the fair way to compare them. "
             "Bytes and entropy patches spend a model's effort where the surprise is. Pictures and sound become "
-            "tokens through codebooks, which collapse unless they are restarted, or replaced by a fixed grid, and "
-            "residual stages make codecs that carry speech in a few hundred bits a second. Sampling folds what is "
+            "tokens through codebooks, which can collapse; restarts or fixed grids address different failure modes. "
+            "Our residual codec codes speech spectrograms at 400 to 3,200 bits a second; making a wave would still "
+            "need a vocoder. Sampling folds what is "
             "too fast back into the band; spectra and the mel scale are what recognizers hear. CTC learns to "
             "transcribe without alignments by summing over a lattice, Whisper learns from the web, and speech "
             "synthesis became language modelling over codec tokens. Contrastive training puts pictures and words in "
@@ -132,7 +133,7 @@ class Outro(VoiceoverScene):
             r"$16$ kHz, \ where does a $9$ kHz tone appear?",
             r"List every path of $T = 3$ frames over $\{a, b, \varnothing\}$ that collapses to ``ab'', \ and check the "
             r"count with the forward recursion. \ Why must every path for ``aa'' contain a blank?",
-            r"Show that $f^*(x, y) = \log p(y \mid x) / p(y)$ minimizes InfoNCE, \ and that "
+            r"Show that $f^*(x, y) = \log\frac{p(y \mid x)}{p(y)}$ minimizes InfoNCE, \ and that "
             r"$\log N - \mathcal L \le \log N$ for any critic. \ How much information can a batch of $256$ certify?",
         ], font_size=22)
         with self.voiceover(

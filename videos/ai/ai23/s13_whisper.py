@@ -102,7 +102,7 @@ class Whisper(VoiceoverScene):
             "writes the transcript one token at a time, with GPT-2's byte-level BPE, attending back to the sound. "
             "<bookmark mark='c'/> Special tokens at the start say what to do: here, start of transcript, no "
             "timestamps. A recognizer has become a language model that listens. <bookmark mark='d'/> We ran the "
-            f"smallest English model, base.en, {int(w['params']) / 1e6:.0f} million parameters, from the Hugging Face cache."
+            f"base English model, base.en, {int(w['params']) / 1e6:.0f} million parameters, from the Hugging Face cache."
         ) as vo:
             self.play(FadeIn(mel), FadeIn(ml), FadeIn(par))
             vo.wait_until("b")

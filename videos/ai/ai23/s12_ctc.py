@@ -244,7 +244,7 @@ class CTC(VoiceoverScene):
         txt = str(d["lat_text"])
         key = label(rf"down: \ the ${S}$ states of \\ ``{txt}'' \ ($2L + 1$, \ $L = {len(txt)}$) \\ across: \ ${T}$ frames",
                     font_size=20, color=GREY_A).move_to([4.5, 2.5, 0])
-        totl = label(rf"$\log p(\text{{transcript}}) = {tot:.2f}$, \ the same as PyTorch's CTC loss", font_size=20,
+        totl = label(rf"$-\log p(\text{{transcript}}) = {-tot:.2f}$, \ PyTorch CTC loss (no reduction)", font_size=20,
                      color=SND_C).next_to(img, DOWN, buff=0.15)
         wer = np.asarray(d["wer"], float)
         seen = np.asarray(d["wer_seen"], float)
@@ -268,7 +268,7 @@ class CTC(VoiceoverScene):
             "the side, the frames across. <bookmark mark='a'/> The brightness is how likely each state is at each "
             "frame, from the forward and backward passes together; the white line is the single best path. "
             f"<bookmark mark='b'/> The forward algorithm's total, {tot:.2f} in natural log, agrees with PyTorch's own "
-            f"CTC loss. <bookmark mark='c'/> Averaged over three seeds: {verdict}; {gap}. <bookmark mark='d'/> In 2014 Baidu's "
+            f"CTC log probability, the negative of its unreduced loss. <bookmark mark='c'/> Averaged over three seeds: {verdict}; {gap}. <bookmark mark='d'/> In 2014 Baidu's "
             "Deep Speech trained CTC on thousands of hours and did without the old pipeline. CTC treats each frame's "
             "letter as independent of the others, so later systems, RNN transducers and attention-based "
             "recognizers, let each letter depend on the ones before."
