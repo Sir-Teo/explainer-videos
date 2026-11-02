@@ -47,7 +47,6 @@ class Flash(VoiceoverScene):
                         color=GREY_B, stroke_width=2, max_tip_length_to_length_ratio=0.06)
             arrows.add(ar1)
             texts.add(label(t, font_size=18, color=GREY_A).next_to(sram, DOWN, buff=0.3 + 0.4 * k))
-        f = load("flash")
         T = 131072
         tbl = 2.0 * T * T
         cost = label(rf"the table, \ one head, \ $T = 128$k, \ $16$ bits: \ ${tbl / 2**30:.0f}$ GiB", font_size=22,
@@ -209,16 +208,16 @@ class Flash(VoiceoverScene):
         rows = [
             cmath(r"B_c", r"=", r"\Big\lceil \frac{M}{4d} \Big\rceil", colors=COLORS, font_size=32),
             cmath(r"\text{reads of } K, V", r"=", r"2Td", colors=COLORS, font_size=32),
-            cmath(r"\text{reads of } Q, O", r"=", r"\frac{T}{B_c} \cdot T \cdot 3d", r"\;\approx\;",
+            cmath(r"\text{Q/O transfers}", r"\approx", r"\frac{T}{B_c} \cdot T \cdot 3d", r"\;\approx\;",
                   r"\frac{12\,T^2 d^2}{M}", colors=COLORS, font_size=32),
             cmath(r"\Theta\Big(\frac{T^2 d^2}{M}\Big)", r"\;\text{vs}\;", r"\Theta(T^2 + Td)", colors=COLORS,
                   font_size=32),
         ]
         whys = [why(r"a tile of keys and values fills SRAM"), why(r"each loaded once"),
-                why(r"once per outer block"), why(r"tiled \ vs \ standard: \ smaller when $d^2 < M$")]
+                why(r"once per outer block"), why(r"asymptotic: $d\le M\le Td$; \ gain grows with $M/d^2$", font_size=20)]
         step = ladder(self, rows, whys, keep=4, top=3.25, x=-3.2, buff=0.3, edge=6.9)
-        g = loglog((math.log10(400), math.log10(2e5)), (5, 11.5), x_length=5.4, y_length=3.0,
-                   xlabel=r"sequence length $T$", ylabel=r"numbers moved, \ one head", center=[-2.9, -2.25, 0],
+        g = loglog((math.log10(400), math.log10(2e5)), (5, 11.5), x_length=5.4, y_length=4.2,
+                   xlabel=r"sequence length $T$", ylabel=r"numbers moved, \ one head", center=[-2.9, -0.15, 0],
                    font_size=17, xfmt=lambda v: {3: r"10^3", 4: r"10^4", 5: r"10^5"}.get(int(v), ""), ystep=2)
         ax = g.ax
         cols = [("io_std_128", ATTNC, r"standard"), ("io_flash_128", C.BITS, r"FlashAttention, \ $d = 128$"),
@@ -260,8 +259,10 @@ class Flash(VoiceoverScene):
             "d, a tile of keys and values holds M over 4 d of them. <bookmark mark='b'/> Keys and values are each "
             "read once. <bookmark mark='c'/> The queries and the running outputs are read and written once per "
             "tile of keys: T over B c times, about twelve T squared d squared over M numbers in all. "
-            "<bookmark mark='d'/> Against the standard method's T squared plus T d, that's smaller whenever d "
-            "squared is smaller than M, and Dao and colleagues proved no exact method can do better for every M. "
+            "<bookmark mark='d'/> The quadratic traffic term scales as T squared d squared over M, against "
+            "T squared plus T d for the standard method. This is an order comparison: constants and tile "
+            "boundaries determine the actual savings. The paper also rules out an asymptotic improvement "
+            "uniformly across its SRAM range, d at most M at most T d. "
             "<bookmark mark='e'/> With an H100's shared memory, we counted the numbers moved, running the "
             f"algorithm's loops: {r128:.1f} times fewer with heads of 128, {r64:.1f} times fewer with heads of 64. "
             "<bookmark mark='f'/> FlashAttention-2 in 2023 swapped the loops and trimmed the work between "
@@ -279,7 +280,7 @@ class Flash(VoiceoverScene):
             vo.wait_until("d")
             step(3)
             vo.wait_until("e")
-            self.play(FadeOut(sram_g))
+            self.play(FadeOut(sram_g), FadeOut(VGroup(*rows, *whys)))
             self.play(FadeIn(g), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(leg), FadeIn(rl),
                       run_time=2.5)
             vo.wait_until("f")

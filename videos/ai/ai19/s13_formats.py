@@ -162,7 +162,7 @@ class Formats(VoiceoverScene):
             "NVIDIA's NVFP4, on its Blackwell chips, changes two things. <bookmark mark='a'/> Blocks of sixteen, "
             "so one large weight spoils fewer neighbours. <bookmark mark='b'/> And the block's scale is itself a "
             "small float, eight-bit E4M3, with three bits of mantissa: it can put the block's largest weight at "
-            "six almost exactly, so nothing is clamped. <bookmark mark='c'/> E4M3 only spans a limited range, so "
+            "six much more closely, though rounding the scale can still cause clipping. <bookmark mark='c'/> E4M3 only spans a limited range, so "
             "one 32-bit scale for the whole matrix moves every block scale into it. <bookmark mark='d'/> The cost: "
             "four and a half bits a weight, against MXFP4's four and a quarter."
         ) as vo:
@@ -187,33 +187,27 @@ class Formats(VoiceoverScene):
         L, bpw = f["loss"], f["bpw"]
         rows = [("int4_row", r"$4$-bit integers, \ a scale per row", RTNC),
                 ("mxfp4", r"MXFP4", MXC), ("nvfp4", r"NVFP4", NVC),
-                ("int4_g16e4m3", r"$4$-bit integers, \ NVFP4's scales", INTC),
+                ("int4_g16e4m3", r"$4$-bit integers, \ group $16$, E4M3 scales", INTC),
                 ("int4_g32", r"$4$-bit integers, \ a 16-bit scale per $32$", C.EMBED)]
         vals = [L[k] - base for k, _, _ in rows]
         b = hbars(vals, [rf"{nm} \ (${bpw[k]:.2f}$)" for k, nm, _ in rows], [c_ for _, _, c_ in rows], width=4.2,
                   row_h=0.55, font_size=20, lo=0, hi=max(vals) * 1.1, fmt_v=lambda v: rf"{v:+.4f}")
         b.move_to([1.4, 0.0, 0])
-        head = label(r"extra loss on held-out novels \ (nats per token), \ bits per weight in brackets", font_size=22,
+        head = label(r"held-out extra loss (nats/token); \ nominal bits/weight in brackets", font_size=22,
                      color=GREY_A).to_edge(UP, buff=0.4)
+        scope = VGroup(note(r"nominal storage: \ 256-column rows, complete groups; \ matrix-scale overhead excluded"),
+                       note(r"block-linear weights only; \ embedding and output head remain FP32")).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
         mx, nv, i16 = L["mxfp4"] - base, L["nvfp4"] - base, L["int4_g16e4m3"] - base
-        rel = f["rel"]
-        if nv < mx:
-            a = f"NVFP4's finer, float-valued scales beat MXFP4: {nv:.4f} nats against {mx:.4f}."
-        else:
-            a = f"MXFP4 matches NVFP4 here: {mx:.4f} nats against {nv:.4f}."
-        if i16 < nv * 0.95:
-            b_say = ("But give plain four-bit integers NVFP4's very scales, and they do better still, "
-                     f"{i16:.4f}: our weights are spread evenly within a block, and sixteen even levels fit them "
-                     "better than E2M1's uneven ones. Floats earn their place on wider-ranging numbers, "
-                     "activations above all, and because the chips multiply them directly.")
-        else:
-            b_say = f"Four-bit integers with the same scales come out at {i16:.4f}: no better than the floats."
+        a = f"Here NVFP4 adds {nv:.4f} nats per token, while MXFP4 adds {mx:.4f}."
+        b_say = ("Both use sixteen-weight groups and E4M3 block scales, with tensor scales chosen for their "
+                 f"element ranges. The integers add {i16:.6f} nats per token; NVFP4 adds {nv:.6f}.")
         with self.voiceover(
-            "Which is better on our model? <bookmark mark='a'/> Every block weight stored each way, scales "
-            "included, and the loss measured on held-out novels. <bookmark mark='b'/> " + a +
+            "Which is better on our model? <bookmark mark='a'/> We emulate each format on the block weights, "
+            "then measure loss on held-out novels. The storage rates are nominal: scales included, but padding "
+            "and matrix-scale overhead excluded. <bookmark mark='b'/> " + a +
             " <bookmark mark='c'/> " + b_say
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(scope))
             vo.wait_until("a")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(r_.bar, LEFT), FadeIn(r_.val))
                                     for r_ in b[:3]], lag_ratio=0.3), run_time=2.0)
@@ -247,8 +241,8 @@ class Formats(VoiceoverScene):
         head = label(rf"gpt-oss-120b \ (OpenAI, \ August 2025): \ ${o['total'] / 1e9:.1f}$B parameters, \ "
                      rf"${o['active'] / 1e9:.2f}$B per token", font_size=24, color=MXC).to_edge(UP, buff=0.4)
         k3 = F.KIMIK3
-        more = label(rf"2026: \ Kimi K3 (${k3['total'] / 1e12:.1f}$T parameters) \ learns MXFP4 weights in training "
-                     r"(Part 18)", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.45)
+        more = label(rf"2026: \ Kimi K3 (${k3['total'] / 1e12:.1f}$T): \ MXFP4 quantization-aware training from SFT onward",
+                     font_size=20, color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "This is how a frontier-size open model fits on one chip. <bookmark mark='a'/> In August 2025 OpenAI "
             "released gpt-oss-120b: 117 billion parameters, five of them used per token, because most live in "
@@ -256,7 +250,8 @@ class Formats(VoiceoverScene):
             f"Adding it up gives {gib:.1f} gibibytes, which matches the model card's {o['ckpt_gib']}. "
             f"<bookmark mark='c'/> In sixteen bits it would be {full / 1e9:.0f} gigabytes; in four, it fits on a "
             "single eighty-gigabyte GPU. <bookmark mark='d'/> And four bits are moving into training itself: in "
-            "2026 Kimi K3 learned its weights in MXFP4 from the start, as Part 18 described."
+            "2026 Kimi K3 used MXFP4 weights and MXFP8 activations in quantization-aware training from the "
+            "supervised fine-tuning stage onward."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

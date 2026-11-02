@@ -93,7 +93,7 @@ class KVQuant(VoiceoverScene):
         base = float(k["fp32"])
         L = k["loss"]
         bits = [4, 3, 2]
-        series = [("token", r"a scale per token", RTNC), ("kivi", r"KIVI: \ keys per channel", KIVIC),
+        series = [("token", r"a scale per token", RTNC), ("kivi", r"KIVI-style: \ keys per channel", KIVIC),
                   ("rot", r"rotated first \ (Hadamard)", ROTC)]
         hi = max(L[f"{m}_{b}"] - base for m, _, _ in series for b in bits)
         g = VGroup()
@@ -104,8 +104,10 @@ class KVQuant(VoiceoverScene):
                                font_size=18, lo=0, hi=hi * 1.1, fmt_v=lambda v: rf"{v:+.3f}"))
                   .arrange(DOWN, aligned_edge=LEFT, buff=0.1))
         g.arrange(DOWN, aligned_edge=LEFT, buff=0.3).scale(1.2).move_to([-1.6, -0.4, 0])
-        head = label(r"extra loss on held-out novels \ (nats per token), \ the cache rounded as it is written",
+        head = label(r"offline grouped quantization: \ extra held-out loss \ (nats per token)",
                      font_size=22, color=GREY_A).to_edge(UP, buff=0.35)
+        scope = note(r"teacher-forced: \ key scales see whole $32$-token groups; \ causal serving is a separate experiment",
+                     font_size=15).to_edge(DOWN, buff=0.18)
         e8, f8 = L["token_8"] - base, L["fp8_8"] - base
         side = VGroup(label(rf"$8$ bits, \ integers: \ ${e8:+.4f}$", font_size=20, color=RTNC),
                       label(rf"$8$ bits, \ FP8 (E4M3): \ ${f8:+.4f}$", font_size=20, color=FP8C),
@@ -114,10 +116,8 @@ class KVQuant(VoiceoverScene):
         t2, k2, r2 = (L[f"{m}_2"] - base for m in ("token", "kivi", "rot"))
         t3, k3 = L["token_3"] - base, L["kivi_3"] - base
         best2 = min((("kivi", k2), ("rot", r2), ("token", t2)), key=lambda x: x[1])[0]
-        if max(abs(e8), abs(f8)) < 0.001:
-            say8 = "At eight bits, integer or FP8, nothing measurable is lost."
-        else:
-            say8 = f"At eight bits, integer or FP8, the loss grows by at most {max(e8, f8):.4f} nats."
+        say8 = (f"On these windows, eight-bit integers change loss by {e8:+.6f} nats per token, "
+                f"and FP8 by {f8:+.6f}.")
         if best2 == "kivi":
             best_say = ("The best here is KIVI's split. Keys need their outlier channels respected, by a scale of "
                         "their own or by a rotation that spreads them.")
@@ -128,14 +128,16 @@ class KVQuant(VoiceoverScene):
             best_say = ("Here one scale per token does best: our keys' outlier channels are too mild to need "
                         "anything more.")
         with self.voiceover(
-            "On our model, the cache rounded as it is written, and the loss measured on held-out novels. "
+            "On our model, this is an offline, teacher-forced comparison, measured on held-out novels. "
+            "The per-channel key scales see whole groups of thirty-two tokens, including later positions. "
+            "Causal serving needs a separate experiment. "
             "<bookmark mark='a'/> " + say8 + " " +
             f"At four bits, one scale per token costs {L['token_4'] - base:.3f}. "
             f"<bookmark mark='b'/> At three bits, one scale per token costs {t3:.3f} nats a token; KIVI's split "
             f"{k3:.3f}. <bookmark mark='c'/> At two bits the differences grow: per token {t2:.2f}, rotated "
             f"{r2:.2f}, KIVI {k2:.2f}. " + best_say
         ) as vo:
-            self.play(FadeIn(head), FadeIn(side[:2]), FadeIn(side[2]))
+            self.play(FadeIn(head), FadeIn(scope), FadeIn(side[:2]), FadeIn(side[2]))
             vo.wait_until("a")
             self.play(FadeIn(g[0]))
             vo.wait_until("b")

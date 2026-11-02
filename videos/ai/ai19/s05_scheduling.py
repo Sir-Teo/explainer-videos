@@ -65,7 +65,7 @@ class Scheduling(VoiceoverScene):
 
         am_top, am_bot = marks(2.2), marks(-0.95)
         key = VGroup(*[VGroup(Square(0.18, stroke_width=0, fill_color=c_, fill_opacity=0.9),
-                              label(t_, font_size=18, color=c_)).arrange(RIGHT, buff=0.1)
+                              label(t_, font_size=18, color=GREY_B if c_ is GREY_D else c_)).arrange(RIGHT, buff=0.1)
                        for c_, t_ in ((PREFILLC, r"prefill"), (DECODEC, r"decode"), (GREY_D, r"idle, \ finished"),
                                       (GREY_A, r"$\blacktriangledown$ \ a request arrives"))]).arrange(RIGHT, buff=0.5)
         key.to_edge(DOWN, buff=0.3)

@@ -84,6 +84,8 @@ class GPTQ(VoiceoverScene):
                 r"is parallel to the constraint"), why(r"$\lambda$ from the constraint"),
                 why(r"the price of rounding weight $q$")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.4, buff=0.4, edge=6.8)
+        assumption = note(r"$H\succ0$: \ positive definite; \ damp the calibration matrix if needed",
+                          font_size=16).to_edge(UP, buff=0.18)
         hist = VGroup(
             history_card(1990, r"Yann LeCun, John Denker \& Sara Solla", r"Optimal Brain Damage: \ prune the weights "
                          r"whose removal costs least, \ by the Hessian's diagonal", width=4.4, font_size=16,
@@ -94,7 +96,9 @@ class GPTQ(VoiceoverScene):
                          r"for rounding instead of removing", width=4.4, font_size=16, color=GPTQC),
         ).arrange(RIGHT, buff=0.2).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The question is old. <bookmark mark='a'/> Fix weight q at its rounded value, and move all the "
+            "The question is old. For this inverse-based derivation, take H positive definite. In GPTQ, "
+            "a small diagonal damping term can regularize the calibration matrix before inversion. "
+            "<bookmark mark='a'/> Fix weight q at its rounded value, and move all the "
             "others by delta to keep the output error, one half delta H delta, as small as possible. "
             "<bookmark mark='b'/> With a Lagrange multiplier, the optimum has H delta parallel to the direction of "
             "weight q. <bookmark mark='c'/> Solving: delta is the rounding error over the q-th diagonal entry of H "
@@ -103,6 +107,7 @@ class GPTQ(VoiceoverScene):
             "Brain Surgeon of Babak Hassibi and David Stork, from 1993, which followed Yann LeCun's Optimal Brain "
             "Damage: they used it to prune networks. In 2022 Elias Frantar and Dan Alistarh used it to round."
         ) as vo:
+            self.play(FadeIn(assumption))
             step(0)
             vo.wait_until("a")
             vo.wait_until("b")
@@ -151,12 +156,18 @@ class GPTQ(VoiceoverScene):
                            font_size=21, color=GPTQC))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.4, -2.55, 0])
         if eg < 0.85 * er:
-            trace_say = (f"but together they make a better output: an error of {eg:.3f} on the calibration inputs, "
+            trace_say = (f"The updates make a better output: an error of {eg:.3f} on the calibration inputs, "
                          f"against {er:.3f} for rounding each weight alone.")
-        else:
-            trace_say = (f"but together they make a slightly better output: an error of {eg:.3f} on the calibration "
+        elif eg < er - 1e-10:
+            trace_say = (f"The updates make a slightly better output: an error of {eg:.3f} on the calibration "
                          f"inputs, against {er:.3f} for rounding each weight alone. Sixteen weights leave little room "
                          "to make up for an error.")
+        elif np.array_equal(qf, rt):
+            trace_say = (f"Here the final weights match ordinary rounding exactly: both give an output error "
+                         f"of {eg:.3f}. The updates move the remaining weights, but do not change their final levels.")
+        else:
+            trace_say = (f"Here GPTQ's output error is {eg:.3f}, compared with {er:.3f} for ordinary rounding. "
+                         "This greedy procedure does not guarantee a better result on every small row.")
         hc = history_card(2022, r"Elias Frantar, Saleh Ashkboos, Torsten Hoefler \& Dan Alistarh", rf"GPTQ: \ one "
                           rf"column order for every row, \ ${F.GPTQ['params'] / 1e9:.0f}$B parameters in about "
                           rf"${F.GPTQ['hours']}$ GPU-hours", width=5.2, font_size=16, color=GPTQC).move_to([-3.4, 2.45, 0])
@@ -167,7 +178,7 @@ class GPTQ(VoiceoverScene):
             "Cholesky factorization of H inverse; and apply them in blocks. A 175-billion-parameter model took "
             "about four GPU-hours. <bookmark mark='b'/> Here it is on one row of a real layer of our model, at "
             "three bits. Each column is rounded, and its error is pushed onto the columns still to come. "
-            "<bookmark mark='c'/> The final weights aren't the nearest levels to the originals, the grey outlines, "
+            "<bookmark mark='c'/> The grey outlines show the original weights. "
             + trace_say + " <bookmark mark='d'/> Over "
             f"the whole layer, with every input to spread it across, GPTQ's error is {lg_:.3f}, against {lr_:.3f}."
         ) as vo:
@@ -222,8 +233,8 @@ class GPTQ(VoiceoverScene):
             "rounding, and divide the input by s, which folds away for free. The rounding error, relative to that "
             "channel, shrinks by s. <bookmark mark='b'/> AWQ makes s the average size of the channel's input, to "
             "a power alpha chosen on calibration text: activation-aware weight quantization. "
-            f"<bookmark mark='c'/> On our model the best alpha came out small, {min(alphas):.2f} to "
-            f"{max(alphas):.2f}: our inputs are fairly even, so there is little to protect."
+            f"<bookmark mark='c'/> Across these runs, the mean chosen alpha over layers ranges from "
+            f"{min(alphas):.2f} to {max(alphas):.2f}. Our small AWQ variant brings little improvement here."
         ) as vo:
             step(0)
             vo.wait_until("a")

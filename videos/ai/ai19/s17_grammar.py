@@ -57,7 +57,7 @@ class Grammar(VoiceoverScene):
                   f"of {gr['n']} tries, {gr['valid_un']} were valid records.")
         with self.voiceover(
             "Programs that call a model often need its answer in a fixed format: a record, a function call, a "
-            "number. <bookmark mark='a'/> Our novels model has never seen such a thing. Shown three records of "
+            "number. <bookmark mark='a'/> Our model was trained on novels, without training for this record format. Shown three records of "
             "guests at an inn, and asked for the next, <bookmark mark='b'/> it goes back to writing novels: "
             + un_say + " Big models do far better, but 'usually' isn't good enough for a program."
         ) as vo:
@@ -95,7 +95,7 @@ class Grammar(VoiceoverScene):
             l_.next_to(e_, UP, buff=0.08)
         loop = CurvedArrow(nodes[3].get_top() + LEFT * 0.12, nodes[3].get_top() + RIGHT * 0.12, angle=-4.0,
                            color=GREY_B, stroke_width=2, tip_length=0.12)
-        skip = CurvedArrow(nodes[5].get_bottom(), nodes[7].get_bottom() + LEFT * 0.1, angle=0.9, color=GREY_B,
+        skip = CurvedArrow(nodes[5].get_bottom(), nodes[6].get_bottom() + LEFT * 0.1, angle=0.9, color=GREY_B,
                            stroke_width=2, tip_length=0.12)
         tag = schematic_tag(corner=UR)
         al = label(rf"as a deterministic automaton over characters: \ ${gr['states']}$ states", font_size=20,
@@ -113,7 +113,8 @@ class Grammar(VoiceoverScene):
         hc = history_card(2023, r"Brandon Willard \& R\'emi Louf, \ Outlines", r"an index from automaton states to "
                           r"allowed tokens, \ built once", width=4.2, font_size=16, color=AUTOC).move_to([-4.2, -1.15, 0])
         with self.voiceover(
-            "The fix is to make invalid output impossible. <bookmark mark='a'/> Write the format as a pattern, a "
+            "The fix is to rule out format-violating tokens at each step. Finishing a record still needs enough "
+            "generation budget. <bookmark mark='a'/> Write the format as a pattern, a "
             "regular expression, and compile it to an automaton: states, and the characters that move between them. "
             f"Ours has {gr['states']} states. <bookmark mark='b'/> But a model writes tokens, not characters, and a "
             "token can be several characters long. In 2023 Brandon Willard and Rémi Louf, in Outlines, built an "
@@ -144,7 +145,7 @@ class Grammar(VoiceoverScene):
         ol.next_to(outs, UP, buff=0.4).align_to(outs, LEFT)
         tu = gr["t_un"] / max(gr["tokens_un"], 1) * 1e3
         tc = gr["t_co"] / max(gr["tokens_co"], 1) * 1e3
-        cost = VGroup(label(r"time per token, \ this computer:", font_size=20, color=GREY_A),
+        cost = VGroup(label(r"observed ms/output token, \ including prefill:", font_size=20, color=GREY_A),
                       label(rf"free sampling: \ ${tu:.2f}$ ms", font_size=20, color=GREY_A),
                       label(rf"with the mask: \ ${tc:.2f}$ ms", font_size=20, color=OKC))
         cost.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, 1.0, 0])
@@ -152,8 +153,9 @@ class Grammar(VoiceoverScene):
                           rf"possible: \ up to ${F.XGRAMMAR['gain']}\times$ faster", width=4.2, font_size=16,
                           color=AUTOC).move_to([4.4, -1.6, 0])
         over = tc / tu - 1
-        cost_say = (f"it costs nothing we can measure: {tc:.2f} milliseconds a token against {tu:.2f}."
-                    if abs(over) < 0.1 else f"it costs {100 * over:.0f} percent more time per token.")
+        cost_say = (f"the observed time was {tc:.2f} milliseconds per output token with the mask, "
+                    f"against {tu:.2f} without it. These ordered runs include repeated prompt prefill and "
+                    "different output lengths; they do not isolate the mask's overhead.")
         mask_say = (f"every one of the {gr['n']} outputs is a valid record." if gr["valid_co"] == gr["n"] else
                     f"{gr['valid_co']} of the {gr['n']} outputs are valid records; the rest ran out of room before "
                     "they closed.")

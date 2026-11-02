@@ -229,7 +229,7 @@ class Exact(VoiceoverScene):
                 t_.width = 1.1
         ctx = data_text("…" + str(jt["context"]).replace("\n", " ")[-40:], font="DejaVu Sans Mono", font_size=22,
                         color=GREY_A).to_edge(UP, buff=0.35)
-        head = label(r"the next two tokens of our novels model: \ the likeliest pairs", font_size=22,
+        head = label(r"the next two tokens of our novels model: \ selected observed pairs", font_size=22,
                      color=GREY_A).next_to(ctx, DOWN, buff=0.15)
         key = VGroup(label(r"exactly, \ $p(y_1)\,p(y_2 \mid y_1)$", font_size=20, color=TARGET),
                      label(r"speculative, \ $2$ tokens drafted", font_size=20, color=ACCEPTC),
@@ -242,17 +242,14 @@ class Exact(VoiceoverScene):
                      label(rf"direct \ ${jt['tv_direct']:.3f}$", font_size=20, color=GREY_B),
                      label(rf"unchecked \ ${jt['tv_naive']:.3f}$", font_size=20, color=REJECTC)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).next_to(key, DOWN, buff=0.35).align_to(key, LEFT)
-        ok = jt["tv_spec"] < 1.3 * jt["tv_direct"] + 0.005
-        verdict = ("Speculative sampling is as close to exact as sampling the big model itself: what's left is the "
-                   "noise of a finite sample" if ok else "Speculative sampling lands farther from exact than direct "
-                   "sampling, more than the noise of a finite sample")
         with self.voiceover(
             "One more check, on the novels model, with the small drafter we'll train in the next chapter. "
             "<bookmark mark='a'/> At one place in a held-out novel, we drafted two tokens at a time and let the "
             f"rule run, {int(jt['N']):,} times, keeping the first two tokens it wrote. The exact answer is known: "
             "the big model's probability of the first token, times its probability of the second given the "
-            "first. <bookmark mark='b'/> " + verdict + f": a total variation of {jt['tv_spec']:.3f}, "
-            f"against {jt['tv_direct']:.3f}. <bookmark mark='c'/> Keep the drafts without checking, and you get the "
+            "first. <bookmark mark='b'/> In this finite-sample comparison, speculative sampling has total "
+            f"variation {jt['tv_spec']:.3f}, against {jt['tv_direct']:.3f} for direct sampling. "
+            "<bookmark mark='c'/> Keep the drafts without checking, and you get the "
             f"draft's distribution instead: {jt['tv_naive']:.3f}."
         ) as vo:
             self.play(FadeIn(ctx), FadeIn(head), Create(base), FadeIn(xl))

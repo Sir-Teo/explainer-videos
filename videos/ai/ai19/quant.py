@@ -3,7 +3,7 @@
 channels, rotations of the residual stream (QuaRot's Hadamard, random, learned as in SpinQuant), and the 4-bit float
 formats (``formats.py``).
 
-A quantized model is a copy of the novels model whose linear layers (the 36 matrices of its six blocks; the
+A quantized model is a copy of the novels model whose linear layers (the 30 matrices of its six blocks; the
 embedding and the output head stay in 32 bits, as is usual) are replaced by :class:`QLinear`: the weight rounded
 once, offline, and optionally the input rounded on every call (activation quantization), after an optional smoothing
 scale or rotation.
@@ -44,6 +44,8 @@ def rtn(W, bits: int, group: int | str = "row"):
     q = qmax(bits)
     if group == "tensor":
         s = np.abs(W).max() / q
+        if s == 0:
+            return np.zeros_like(W)
         return np.clip(np.round(W / s), -q - 1, q) * s
     if group == "row":
         s = np.abs(W).max(1, keepdims=True) / q

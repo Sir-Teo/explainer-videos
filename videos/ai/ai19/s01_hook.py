@@ -10,7 +10,7 @@ from videos.ai.ai19.common import PART, F, COSTC
 # One token from a big model, at batch size one: every weight is read once.  Published figures, not measured here.
 BW = 3.35e12  # bytes a second: an H100 (SXM)'s HBM3 memory, NVIDIA's datasheet
 PEAK = 989e12  # dense 16-bit operations a second, the same chip
-PARAMS = 70.6e9  # Llama 3.1 70B
+PARAMS = F.LLAMA31_8B["params"]  # Llama 3.1 8B fits the illustrated 80 GB H100
 BYTES = 2 * PARAMS  # 16 bits each
 TOKENS_S = BW / BYTES
 USE = 2 * PARAMS * TOKENS_S / PEAK  # the share of the chip's arithmetic a lone conversation uses
@@ -34,9 +34,9 @@ class Hook(VoiceoverScene):
         wall.move_to([-2.6, 0.5, 0])
         for i, sq in enumerate(wall):
             sq.base = shade[i // cols, i % cols]
-        wl = label(r"memory: \ the weights, \\ $70$ billion numbers, \ $141$ GB", font_size=24, color=C.NEURAL).to_edge(UP, buff=0.35)
+        wl = label(r"memory: \ the weights, \\ $8$ billion numbers, \ $16$ GB", font_size=24, color=C.NEURAL).to_edge(UP, buff=0.35)
         wl.set_x(wall.get_x())
-        lay = VGroup(label(r"layer $1$", font_size=18, color=GREY_C), label(r"layer $80$", font_size=18, color=GREY_C))
+        lay = VGroup(label(r"layer $1$", font_size=18, color=GREY_C), label(r"layer $32$", font_size=18, color=GREY_C))
         lay[0].next_to(wall, DOWN, buff=0.12).align_to(wall, LEFT)
         lay[1].next_to(wall, DOWN, buff=0.12).align_to(wall, RIGHT)
         lay_a = Arrow(lay[0].get_right(), lay[1].get_left(), buff=0.15, stroke_width=1.5, color=GREY_D, max_tip_length_to_length_ratio=0.03)
@@ -74,14 +74,14 @@ class Hook(VoiceoverScene):
         n_tok = ValueTracker(0)
         cl = label(r"GB read from memory", font_size=24, color=C.BITS).move_to([-1.6, -2.75, 0])
         count = Integer(0, font_size=34, color=C.BITS).next_to(cl, LEFT, buff=0.18)
-        count.add_updater(lambda m: m.set_value(int(round(141 * n_tok.get_value()))).next_to(cl, LEFT, buff=0.18))
-        tag = note(r"schematic: \ one square stands for $400$ million weights").to_corner(DR, buff=0.25)
+        count.add_updater(lambda m: m.set_value(int(round(BYTES / 1e9 * n_tok.get_value()))).next_to(cl, LEFT, buff=0.18))
+        tag = note(r"schematic: \ one square stands for about $45$ million weights").to_corner(DR, buff=0.25)
         bytes_l = label(r"each weight: \ $16$ bits $=$ $2$ bytes", font_size=20, color=C.NEURAL).next_to(wl, DOWN, buff=0.1)
         pl2 = label(r"memory bandwidth: \\ $3.35$ TB a second", font_size=20, color=GREY_A).next_to(pipe, DOWN, buff=0.15)
         with self.voiceover(
             "When a big model writes, it writes one token at a time. And to write each one, it has to read every "
-            "single one of its weights. <bookmark mark='a'/> For a seventy-billion-parameter model, stored as "
-            "sixteen-bit numbers, two bytes each, that's a hundred and forty-one gigabytes, streamed from memory "
+            "single one of its weights. <bookmark mark='a'/> For an eight-billion-parameter model, stored as "
+            "sixteen-bit numbers, two bytes each, that's about sixteen gigabytes, streamed from memory "
             "through to the chip, <bookmark mark='b'/> for one token. Then all of it again for the next one, and the "
             "next. <bookmark mark='c'/> How many bytes a second can flow from memory to the chip is the memory "
             "bandwidth: here, three point three five terabytes a second."
@@ -116,10 +116,10 @@ class Hook(VoiceoverScene):
         colors = {r"\text{bandwidth}": C.BITS, r"\text{bytes}": C.NEURAL}
         f1 = cmath(r"\frac{\text{tokens}}{\text{second}}", r"\;\le\;", r"\frac{", r"\text{bandwidth}", r"}{", r"\text{bytes}", r"}",
                    colors=colors, font_size=44).move_to(UP * 2.5 + LEFT * 2.6)
-        f2 = cmath(r"=\;\frac{3.35\ \text{TB/s}}{141\ \text{GB}}\;\approx\;", rf"{TOKENS_S:.0f}", font_size=44,
+        f2 = cmath(r"=\;\frac{3.35\ \text{TB/s}}{16.06\ \text{GB}}\;\approx\;", rf"{TOKENS_S:.0f}", font_size=44,
                    colors={rf"{TOKENS_S:.0f}": C.BITS}).next_to(f1, RIGHT, buff=0.3)
         VGroup(f1, f2).move_to(UP * 2.5)
-        src = label(r"an H100 chip; \ Llama 3.1 70B in 16-bit numbers", font_size=22, color=GREY_A).next_to(VGroup(f1, f2), DOWN, buff=0.3)
+        src = label(r"weight-only bound: \ H100; \ Llama 3.1 8B in 16-bit numbers", font_size=22, color=GREY_A).next_to(VGroup(f1, f2), DOWN, buff=0.3)
         # the chip's arithmetic, as a bar; the sliver one conversation uses; and its first percent, magnified
         W = 11.0
         full = Rectangle(width=W, height=0.5, stroke_color=GREY_C, stroke_width=1.5, fill_opacity=0).move_to(UP * 0.1)
@@ -161,7 +161,8 @@ class Hook(VoiceoverScene):
                    f"One conversation uses {100 * USE:.2f} percent of it.")
         with self.voiceover(
             "So memory sets a speed limit. Tokens per second can't beat the memory bandwidth divided by the bytes of "
-            f"weights: on an NVIDIA H100, about {TOKENS_S:.0f} tokens a second. <bookmark mark='a'/> And "
+            f"weights: for Llama 3.1 8B on an NVIDIA H100, about {TOKENS_S:.0f} tokens a second, before cache "
+            "traffic and other overheads. <bookmark mark='a'/> And "
             "meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> " + use_say + " "
             "<bookmark mark='c'/> Running a trained model to get answers, with no learning, just using it, is called "
             "inference; it's not part seven's variational inference. And inference is a problem "

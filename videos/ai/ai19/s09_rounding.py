@@ -10,6 +10,13 @@ from videos.ai.ai19.common import (ERRC, LEVELC, PART, WEIGHTC, load, x_)
 COLORS = {r"\Delta": LEVELC, r"e": ERRC, r"w": WEIGHTC, r"b": GREY_A}
 
 
+def agreement_suffix(ratios, tolerance=0.05):
+    """First all-good suffix; with none, report the last point's actual error."""
+    errors = np.abs(np.asarray(ratios) - 1)
+    valid = np.flatnonzero(np.maximum.accumulate(errors[::-1])[::-1] < tolerance)
+    return int(valid[0]) if len(valid) else len(errors) - 1
+
+
 class Rounding(VoiceoverScene):
     def construct(self):
         self.card()
@@ -54,11 +61,11 @@ class Rounding(VoiceoverScene):
                   font_size=36),
             cmath(r"\mathbb E[e^2]", r"=", r"\frac{\Delta^2}{12}", colors=COLORS, font_size=36),
             cmath(r"\Delta", r"=", r"\frac{\max|w|}{2^{b-1} - 1}", colors=COLORS, font_size=36),
-            cmath(r"\Delta^2 / 12", r"\;\propto\;", r"4^{-b}", colors=COLORS, font_size=36),
+            cmath(r"\Delta^2 / 12", r"\;\propto\;", r"4^{-b}\quad(b\gg1)", colors=COLORS, font_size=36),
         ]
         whys = [why(r"uniform on one step"), why(r"$\int e^2 = e^3/3$"), why(r"the classic result"),
                 why(r"$b$ bits, \ symmetric, \ the largest weight sets the step"),
-                why(r"each bit halves $\Delta$: \ $6$ dB per bit")]
+                why(r"many levels: \ approximately $6$ dB per bit")]
         step = ladder(self, rows, whys, keep=5, top=3.1, x=2.6, buff=0.32, edge=6.9)
         with self.voiceover(
             "Quantization is the other half of this part: store each number in fewer bits, and move fewer bytes. "
@@ -69,8 +76,9 @@ class Rounding(VoiceoverScene):
             "gives delta squared over twelve, which W. R. Bennett of Bell Labs worked out in 1948, for speech and "
             "television sent as numbers. "
             "<bookmark mark='d'/> With b bits, symmetric about zero, the largest weight sets the step: delta is "
-            "the maximum over two to the b minus one, minus one. <bookmark mark='e'/> So each bit halves the step "
-            "and quarters the error: six decibels a bit, as audio engineers say."
+            "the maximum over two to the b minus one, minus one. <bookmark mark='e'/> With many levels, each extra "
+            "bit approximately halves the step and quarters the error: about six decibels a bit. At low bit counts, "
+            "use the exact step size above."
         ) as vo:
             self.play(Create(nl), Create(lv))
             self.play(FadeIn(dl), FadeIn(dlt), FadeIn(wd), FadeIn(wl))
@@ -111,7 +119,7 @@ class Rounding(VoiceoverScene):
                      label(r"grey: \ one scale for a whole matrix", font_size=20, color=GREY_A))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.2, 1.6, 0])
         ratio = meas / pred
-        ok = int(np.argmax(np.abs(ratio - 1) < 0.05))
+        ok = agreement_suffix(ratio)
         notes = VGroup(label(rf"measured $\div$ predicted, \ ${bits[ok]}$ bits and up: \ "
                              rf"${ratio[ok:].min():.3f}$--${ratio[ok:].max():.3f}$", font_size=20, color=ERRC),
                        label(rf"at $2$ bits: \ ${ratio[0]:.2f}$", font_size=20, color=ERRC))
@@ -122,8 +130,8 @@ class Rounding(VoiceoverScene):
             "Does it hold for a real model? <bookmark mark='a'/> We rounded all the block weights of the novels "
             "model, with a scale for each row of each matrix, at two to eight bits, and measured the mean squared "
             f"error. <bookmark mark='b'/> From {bits[ok]} bits up, the measurement and delta squared over twelve "
-            f"agree to within {100 * max(abs(ratio[ok:] - 1)):.1f} percent: the lines are straight, a factor of four "
-            "a bit. <bookmark mark='c'/> At two bits the formula overestimates: most weights now fall inside the "
+            f"agree to within {100 * max(abs(ratio[ok:] - 1)):.1f} percent. The error reduction approaches a factor "
+            "of four per bit as the bit width grows. <bookmark mark='c'/> At two bits the formula overestimates: most weights now fall inside the "
             "zero step, and their error is just their own small size, not spread over a whole step. "
             "<bookmark mark='d'/> The grey dots used one scale for a whole matrix: every error is larger, because "
             "one large weight anywhere sets the step for all the others."
@@ -206,36 +214,39 @@ class Rounding(VoiceoverScene):
                                                                                     aligned_edge=RIGHT)
         lines, dots = VGroup(), VGroup()
         for key, nm, col in series:
-            y = np.minimum(np.asarray(r["loss"][key]), cap)
+            actual = np.asarray(r["loss"][key])
+            y = np.minimum(actual, cap)
             lines.add(curve(ax, bits, y, col, 3))
-            dots.add(VGroup(*[Dot(ax.c2p(b, v), radius=0.06, color=col) for b, v in zip(bits, y)]))
+            dots.add(VGroup(*[(Triangle(color=col, fill_color=col, fill_opacity=1, stroke_width=0).scale(0.075)
+                              if value > cap else Dot(radius=0.06, color=col)).move_to(ax.c2p(b, shown))
+                             for b, value, shown in zip(bits, actual, y)]))
+        ceiling = note(r"upward triangles: \ values above the plot range, shown at the ceiling", font_size=16).to_edge(DOWN, buff=0.18)
         leg = legend([(c_, t) for _, t, c_ in series], font_size=20).move_to([4.4, 1.4, 0])
         L = {k: np.asarray(r["loss"][k]) - base for k, _, _ in series}
         i4, i3, i8 = list(bits).index(4), list(bits).index(3), list(bits).index(8)
         bpw = r["bpw"]
         d8 = L["row"][i8]
-        notes = VGroup(label(rf"$8$ bits, \ per row: \ ${'0.0000' if abs(d8) < 5e-5 else f'{d8:+.4f}'}$", font_size=20,
+        notes = VGroup(label(rf"$8$ bits, \ per row: \ ${d8:+.6f}$", font_size=20,
                              color=C.PROB),
                        label(rf"$4$ bits: \ ${L['tensor'][i4]:+.3f}$ \ $\to$ \ ${L['32'][i4]:+.3f}$ per $32$", font_size=20,
                              color=LEVELC),
                        label(rf"$3$ bits, \ per row: \ ${L['row'][i3]:+.3f}$", font_size=20, color=C.PROB),
-                       label(rf"$2$ bits, \ per row: \ ${r['loss']['row'][0]:.1f}$ nats: \ broken", font_size=20,
+                       label(rf"$2$ bits, \ per row: \ ${r['loss']['row'][0]:.3f}$ nats/token", font_size=20,
                              color=ERRC))
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.4, -1.2, 0])
-        free8 = abs(L["row"][i8]) < 0.002
-        say8 = ("At eight bits, nothing measurable is lost." if free8 else
-                f"At eight bits, the loss grows by {L['row'][i8]:.4f} nats.")
+        say8 = f"On these windows, eight-bit row-wise rounding changes loss by {d8:+.6f} nats per token."
         with self.voiceover(
             "What the model loses: its loss on held-out novels, at each width and each kind of scale. "
             "<bookmark mark='a'/> " + say8 + " "
             f"<bookmark mark='b'/> At four bits it depends on the scales: one per matrix costs {L['tensor'][i4]:.3f} "
             f"nats per token, one per row {L['row'][i4]:.3f}, one per 32 weights {L['32'][i4]:.3f}, for "
-            f"{bpw['32'][i4]:.1f} bits a weight in all. <bookmark mark='c'/> At three bits plain rounding starts "
-            f"to hurt, {L['row'][i3]:.2f} nats with a scale per row, and at two the model is broken. "
+            f"a nominal {bpw['32'][i4]:.1f} bits a weight, excluding padding. <bookmark mark='c'/> At three bits plain rounding starts "
+            f"to hurt, {L['row'][i3]:.2f} nats with a scale per row; at two, row-wise loss rises to "
+            f"{r['loss']['row'][0]:.3f} from {base:.3f} nats per token. Smaller groups need not lower loss at every width. "
             "<bookmark mark='d'/> Everything that follows is about doing better than plain rounding at three and "
             "four bits."
         ) as vo:
-            self.play(FadeIn(g), Create(bl), FadeIn(bll))
+            self.play(FadeIn(g), Create(bl), FadeIn(bll), FadeIn(ceiling))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2), FadeIn(dots), FadeIn(leg),
                       FadeIn(notes[0]), run_time=2.5)

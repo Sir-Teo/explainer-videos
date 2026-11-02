@@ -111,12 +111,14 @@ class Outliers(VoiceoverScene):
             g = VGroup(*[Rectangle(width=7.2 / n * 0.85, height=max(0.9 * x / top, 0.004), stroke_width=0, fill_color=col,
                                    fill_opacity=0.85).move_to([-6.4 + 7.2 * (i + 0.5) / n, y + 0.45 * x / top, 0])
                          for i, x in enumerate(v)])
-            t = label(lab + rf" \ (peak $\div$ median ${v.max() / np.median(v):.1f}$)", font_size=18,
+            t = label(lab + rf" \ (shown peak $\div$ median ${v.max() / np.median(v):.1f}$)", font_size=18,
                       color=col).next_to([-6.4, y + 1.0, 0], RIGHT, buff=0.0)
             return VGroup(g, t)
 
         sa0, sw0 = strip(a0, C.TOKEN, -2.0, r"activations: \ max per channel"), strip(w0, WEIGHTC, -3.3, r"weights")
         sa1, sw1 = strip(a1, SMOOTHC, -2.0, r"activations $\div\, s$"), strip(w1, SMOOTHC, -3.3, r"weights $\times\, s$")
+        profile_scope = note(rf"first ${n}$ of ${len(a0)}$ channels; \ each strip normalized separately",
+                             font_size=15).to_edge(DOWN, buff=0.18)
         hc = history_card(2022, r"Guangxuan Xiao et al., \ SmoothQuant", rf"eight-bit weights and activations, \ "
                           rf"${F.SMOOTHQUANT['speed']}\times$ faster, \ models up to "
                           rf"${F.SMOOTHQUANT['params'] / 1e9:.0f}$B", width=4.0, font_size=16,
@@ -131,11 +133,11 @@ class Outliers(VoiceoverScene):
             "<bookmark mark='c'/> Choose s j as the activation's range to the power alpha, over the weight's to "
             "the power one minus alpha. <bookmark mark='d'/> With alpha a half, both sides end up with the same "
             "range, the geometric mean of the two. The activations' outliers are smoothed into weights, which are "
-            f"rounded offline and can take it: on our layer, the largest activation goes from {sa:.1f} times the "
+            f"rounded offline and can take it: across all {len(a0)} channels of our layer, the largest activation goes from {sa:.1f} times the "
             f"median to {sb:.1f}."
         ) as vo:
             step(0)
-            self.play(FadeIn(sa0), FadeIn(sw0))
+            self.play(FadeIn(sa0), FadeIn(sw0), FadeIn(profile_scope))
             vo.wait_until("a")
             vo.wait_until("b")
             step(1)
@@ -177,8 +179,9 @@ class Outliers(VoiceoverScene):
             "What does it buy on our model? <bookmark mark='a'/> At eight bits, nothing is needed: every method "
             f"stays within {d8:.4f} nats of the full model. <bookmark mark='b'/> At six bits the costs appear. "
             f"<bookmark mark='c'/> At four, plain rounding of every block input costs {p4:.3f} nats a token; "
-            + s_say + f"; and keeping the largest one percent of channels in full precision, as LLM.int8() does with "
-            f"its outliers, {k4:.3f}. <bookmark mark='d'/> Our outliers are mild, {o['ratio'][o['worst']]:.0f} times "
+            + s_say + f"; and keeping the largest one percent of activation channels in full precision costs "
+            f"{k4:.3f}. This is an LLM.int8-inspired illustration; all block-linear weights remain eight-bit. "
+            f"<bookmark mark='d'/> Our outliers are mild, {o['ratio'][o['worst']]:.0f} times "
             "the median rather than twenty, so there is less to smooth. Four-bit activations need something "
             "stronger: the next chapter but one."
         ) as vo:

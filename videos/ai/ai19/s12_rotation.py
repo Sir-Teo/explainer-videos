@@ -27,8 +27,8 @@ class Rotation(VoiceoverScene):
     def invariance(self):
         r = load("rotation")
         rows = [
-            cmath(r"\mathrm{RMSNorm}(x)", r"=", r"\frac{x}{\|x\| / \sqrt d}\,\gamma", colors=COLORS, font_size=32),
-            cmath(r"\mathrm{RMSNorm}(x Q)", r"=", r"\mathrm{RMSNorm}(x)\, Q", colors=COLORS, font_size=32),
+            cmath(r"\mathrm{RMSNorm}_{\gamma=1}(x)", r"=", r"\frac{x}{\sqrt{\|x\|^2/d + \epsilon}}", colors=COLORS, font_size=32),
+            cmath(r"\mathrm{RMSNorm}_{\gamma=1}(x Q)", r"=", r"\mathrm{RMSNorm}_{\gamma=1}(x)\, Q", colors=COLORS, font_size=32),
             cmath(r"W_{\text{in}} \to W_{\text{in}} Q,", r"\quad", r"W_{\text{out}} \to Q^\top W_{\text{out}}",
                   colors=COLORS, font_size=32),
             cmath(r"E \to E\,Q,", r"\quad", r"W_{\text{head}} \to W_{\text{head}}\, Q", colors=COLORS, font_size=32),
@@ -110,7 +110,7 @@ class Rotation(VoiceoverScene):
         s0, s1 = strip(a0, C.TOKEN, 1.0), strip(a1, ROTC, -1.6)
         l0 = label(rf"one token's input to a layer, \ ${n}$ channels: \ peak $\div$ typical $= {r['crest']:.1f}$ "
                    r"(average over tokens)", font_size=20, color=C.TOKEN).move_to([0, 2.5, 0])
-        l1 = label(rf"the same vector, \ rotated by a Hadamard matrix: \ ${r['crest_rot']:.1f}$", font_size=20,
+        l1 = label(rf"after folding norm gains and Hadamard rotation: \ ${r['crest_rot']:.1f}$", font_size=20,
                    color=ROTC).move_to([0, -0.15, 0])
         hm = MathTex(r"H_2 = \tfrac{1}{\sqrt2}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix},\quad "
                      r"H_{2n} = \tfrac{1}{\sqrt2}\begin{pmatrix} H_n & H_n \\ H_n & -H_n \end{pmatrix}", font_size=28,
@@ -118,17 +118,18 @@ class Rotation(VoiceoverScene):
         with self.voiceover(
             "Which rotation? <bookmark mark='a'/> Here is one token's input to a layer of our model, channel by "
             f"channel. Its largest entry is {r['crest']:.1f} times its typical size, on average over tokens. "
-            "<bookmark mark='b'/> Rotate it with a Hadamard matrix: entries of plus and minus one over root n, "
+            "<bookmark mark='b'/> First fold the norm gains into the next weights, then apply a Hadamard matrix: entries of plus and minus one over root n, "
             "built by doubling, and applied in n log n steps, like a fast Fourier transform. Each output mixes all "
             "inputs equally, so a spike in one channel is spread across all of them. "
-            f"<bookmark mark='c'/> Now the peak is {r['crest_rot']:.1f} times the typical size: one scale per token "
-            "fits all its channels, and four-bit levels are no longer wasted."
+            f"<bookmark mark='c'/> After both transformations, the average peak ratio is {r['crest_rot']:.1f}. "
+            "This before-and-after includes gain folding as well as rotation."
         ) as vo:
             self.play(FadeIn(l0), LaggedStart(*[GrowFromCenter(b_) for b_ in s0], lag_ratio=0.004), run_time=1.5)
             vo.wait_until("a")
             vo.wait_until("b")
             self.play(Write(hm))
-            self.play(TransformFromCopy(s0, s1), FadeIn(l1), run_time=1.5)
+            self.play(TransformFromCopy(s0, s1), run_time=1.5)
+            self.play(FadeIn(l1))
             vo.wait_until("c")
             self.play(Indicate(l1, color=ROTC))
         self.wait(0.3)
@@ -178,7 +179,7 @@ class Rotation(VoiceoverScene):
         if lv < h_ - 0.003:
             learn_say = f"We did, small: {lv:+.3f}, better than the Hadamard rotation it started from."
         elif lv <= h_ + 0.003:
-            learn_say = f"We did, small: {lv:+.3f}, no better than the Hadamard rotation it started from."
+            learn_say = f"We did, small: {lv:+.3f}, close to the Hadamard rotation it started from."
         else:
             learn_say = f"We did, small: {lv:+.3f}, a little worse than the Hadamard rotation it started from."
         with self.voiceover(
@@ -220,7 +221,7 @@ class Rotation(VoiceoverScene):
         evd = VGroup(*[Dot(ax.c2p(a, b_), radius=0.08, color=LEARNC) for a, b_ in ev])
         evl = curve(ax, ev[:, 0], ev[:, 1], LEARNC, 3)
         key = VGroup(label(r"training batches \ (smoothed)", font_size=20, color=GREY_B),
-                     label(r"held-out text, \ every $20$ steps", font_size=20, color=LEARNC)).arrange(DOWN,
+                     label(r"first $16$ held-out windows, \ every $20$ steps", font_size=20, color=LEARNC)).arrange(DOWN,
                                                                                                    aligned_edge=LEFT,
                                                                                                    buff=0.12)
         key.move_to([4.4, 1.6, 0])
@@ -237,17 +238,17 @@ class Rotation(VoiceoverScene):
                          "rotation learned where our model's outliers are.")
         elif gain > -0.002:
             learn_say = (f"Over {st} steps the held-out loss went from {ev[0, 1]:.3f} to {ev[-1, 1]:.3f}: the "
-                         "Hadamard start was already close to the best this training could find.")
+                         "run gives little held-out change from its Hadamard start.")
         else:
             learn_say = (f"Over {st} steps the held-out loss rose from {ev[0, 1]:.3f} to {ev[-1, 1]:.3f}: the "
-                         "rotation fitted its little calibration text, not the novels.")
+                         "small training run did not improve held-out performance.")
         with self.voiceover(
             "Learning a rotation needs care, because a gradient step on a rotation matrix makes it something else. "
             "<bookmark mark='a'/> SpinQuant keeps it a rotation by construction. Write Q as the Hadamard matrix "
             "times the Cayley map of a skew-symmetric matrix A: every A gives a rotation, so A can be trained "
             "freely. <bookmark mark='b'/> We trained A on our model's loss with four-bit weights and activations, "
             "the rounding passed straight through for the gradient, starting from the Hadamard rotation. "
-            "<bookmark mark='c'/> " + learn_say
+            "<bookmark mark='c'/> This curve uses the first sixteen held-out windows; the comparison bars use all forty-eight. " + learn_say
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
