@@ -44,8 +44,8 @@ class Hawkes(VoiceoverScene):
         src = illustration(r"Hawkes processes with exponential kernels (Part 5's simulator)")
         with self.voiceover(
             "Why would volatility be rough? Look at where it comes from: orders. Part five modelled order arrivals as "
-            "a Hawkes process, in which every trade raises the chance of another. Here are three, filling as the "
-            "events arrive, each with the same average rate of trading. When each trade triggers half a trade on "
+            "a Hawkes process, in which every trade raises the chance of another. Here are three with the same "
+            "average rate. When each trade triggers half a trade on "
             "average, activity is steady. <bookmark mark='a'/> At nine-tenths, it starts to cluster. "
             "<bookmark mark='b'/> At ninety-nine hundredths, the edge of instability, almost all activity is "
             "triggered by other activity: clusters inside clusters. Fitted to order flow, the branching ratio comes "

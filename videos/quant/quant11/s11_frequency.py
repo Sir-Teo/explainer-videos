@@ -78,8 +78,7 @@ class Frequency(VoiceoverScene):
             "day, in blue; and one only when the price has moved two percent since its last trade, in green. "
             "<bookmark mark='a'/> Watch their hedges: the hourly one is a smooth curve, the daily one a staircase, "
             "and the move-triggered one steps only when something happens. <bookmark mark='b'/> Their ledgers race "
-            "beside them, and they end close together: on one month, the order of the moves matters more than the "
-            "rule."
+            f"beside them. {race_say}"
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(src), FadeIn(rows), FadeIn(head), Create(zl))
             self.add(ls, hs, bars, nums)

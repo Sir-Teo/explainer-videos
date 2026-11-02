@@ -118,9 +118,8 @@ class DML3D(VoiceoverScene, ThreeDScene):
             "enters the model exactly the way a price observation does. <bookmark mark='b'/> Condition on both, and "
             "the posterior mean is one linear solve over the stacked payoffs and slopes: the same information "
             "differential machine learning uses, combined exactly, and with error bars. <bookmark mark='c'/> The catch "
-            "is the cost: the solve is cubic in the number of observations, times one plus the dimension. Fine for "
-            "sixty-four samples on two assets; hopeless for a desk's hundred thousand on a hundred. The network is the "
-            "scalable version."
+            "is the cost: cubic in the number of observations. Fine for sixty-four samples on two assets; hopeless for "
+            "a desk's hundred thousand on a hundred. The network is the scalable version."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -190,9 +189,9 @@ class DML3D(VoiceoverScene, ThreeDScene):
         else:
             slopes = "Here the slopes do not help every method, a reminder that sixty-four samples is very few."
         with self.voiceover(
-            "Three seeds, three methods, the same sixty-four samples each time. <bookmark mark='a'/> On average the "
+            "Three seeds, three methods. <bookmark mark='a'/> On average the "
             f"plain network's error is {means['plain']:.2f}, the differential network's {means['diff']:.2f}, and the "
-            f"Gaussian process's {means['gp']:.2f}: {names[best]} does best here. {slopes} At this size the exact method is affordable; at a desk's size only the network is."
+            f"Gaussian process's {means['gp']:.2f}: {names[best]} does best here. {slopes}"
         ) as vo:
             self.play(FadeIn(ttl), FadeIn(tab[0]), FadeIn(tab[1]))
             vo.wait_until("a")
@@ -200,10 +199,9 @@ class DML3D(VoiceoverScene, ThreeDScene):
         q = ask(r"a digital pays 1 above the strike. Its pathwise derivative is zero on almost every path. What do "
                 r"the slope labels teach the network?")
         with self.voiceover(
-            "And the question from the last chapter. A digital option's payoff is flat on both sides of the strike, so "
-            "its pathwise derivative is zero on almost every path: the slope labels teach the network nothing, or "
-            "worse, that the price is flat. The fixes are to smooth the payoff, or to use likelihood-ratio derivatives, "
-            "which Part sixteen built."
+            "And the digital: its payoff is flat on both sides of the strike, so its pathwise derivative is zero on "
+            "almost every path, and the slopes teach the network that the price is flat. Smooth the payoff, or use "
+            "Part sixteen's likelihood-ratio derivatives."
         ):
             self.play(FadeIn(q))
         self.wait(0.5)

@@ -49,18 +49,16 @@ class HLP(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.62, edge=6.9)
         n = h["n_train"]
         with self.voiceover(
-            "In 1994 James Hutchinson, Andrew Lo and Tomaso Poggio asked a question that sounds modern: could a "
-            "learning network discover an option pricing formula from prices alone, with no model at all? First, a "
-            "reduction. If the stock follows geometric Brownian motion, doubling the price and the strike doubles the "
-            "call, so the price per unit of strike depends only on moneyness and time: two inputs, not three. "
+            "In 1994 James Hutchinson, Andrew Lo and Tomaso Poggio asked: could a network discover an option pricing "
+            "formula from prices alone? First, a reduction. Doubling the price and the strike doubles the call, so the "
+            "price per unit of strike depends only on moneyness and time: two inputs, not three. "
             "<bookmark mark='a'/> Second, a guarantee. The universal approximation theorem says a network with one wide "
             "enough hidden layer can approximate any continuous function on a bounded region, as closely as you like. "
             "It promises that the network exists; it does not promise that training finds it. "
             "<bookmark mark='b'/> Third, the hedge comes free: differentiate the network with respect to the price. "
             "<bookmark mark='c'/> And the test is that hedge. Rebalance it daily to expiry and measure what is left: "
-            "even the true delta leaves something, because it trades once a day, not continuously. They trained on "
-            "simulated histories with options listed as an exchange lists them, then on S&P 500 futures options from "
-            f"1987 to 1991. We redo the simulated experiment with {n:,} prices and a small modern network."
+            "even the true delta leaves something, because it trades once a day. We redo their simulated experiment "
+            f"with {n:,} prices and a small modern network."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -158,11 +156,9 @@ class HLP(VoiceoverScene, ThreeDScene):
             q = r["seeds"][s]
             outs.append(f"seed {s}: final mse {q['curve'][-1][1]:.2e}   at the money, error {q['slice_err_atm']:.3f}% of K")
         with self.voiceover(
-            "This is the House's training loop, the whole of it. Shuffle the prices; take a batch of a thousand; "
-            "measure the squared error; take one gradient step; and every epoch, lower the learning rate along a "
-            "cosine. <bookmark mark='a'/> Run it three times, from three random starts, and here is what comes out: the "
-            "final error of each seed, and how far each lands from the true price at the money. Three different sets of "
-            "weights, the same function to a few hundredths of a percent."
+            "The House's training loop, all of it: shuffle, take a batch, measure the squared error, step, and lower "
+            "the learning rate each epoch. <bookmark mark='a'/> Three random starts: three different sets of weights, "
+            "the same function."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -213,9 +209,8 @@ class HLP(VoiceoverScene, ThreeDScene):
             "them, day by day: the option's value, and the two hedge portfolios chasing it. <bookmark mark='a'/> They "
             "track each other so closely they are hard to tell apart. <bookmark mark='b'/> Over all two hundred, the "
             f"true delta leaves a root-mean-square error of {bs_r:.3f}; the three networks leave {min(net_r):.3f} to "
-            f"{max(net_r):.3f}: {verdict}. The network learned the hedge from prices alone. Hutchinson, Lo and Poggio "
-            "found the same, and on real S&P 500 futures options, where Black–Scholes is itself wrong, their networks "
-            "often did better."
+            f"{max(net_r):.3f}: {verdict}. Hutchinson, Lo and Poggio found the same, and on real S&P 500 futures "
+            "options from 1987 to 1991 their networks often beat Black–Scholes."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             self.add(*lines)

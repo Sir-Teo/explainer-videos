@@ -895,12 +895,13 @@ def lsm_max_call(p, n_fit=200000, n_eval=400000, seed=1, chunk=50000):
 # ---------------------------------------------------------------- AAD against bumping, by the number of inputs
 
 
-def aad_basket(d, n_paths=4000, n_steps=12, seed=0, reps=5, T=1.0, r=0.05, K=100.0):
+def aad_basket(d, n_paths=4000, n_steps=12, seed=0, reps=5, T=1.0, r=0.05, K=100.0, bump_reps=None):
     """An arithmetic Asian basket call on d assets (spots 100, volatilities 20%, independent), priced by Monte Carlo;
     all 2d first derivatives (every spot and every volatility) by one reverse sweep of the series' autodiff, and by
     central bumps (4d extra pricings). Wall-clock times are the best of ``reps``; the machine-independent counts are
     the tape's nodes and element operations: forward ops (one per output element of every node) and backward ops (one
-    multiply-add per input element of every edge). Returns both, and the largest delta disagreement."""
+    multiply-add per input element of every edge). Returns both, and the largest delta disagreement. ``bump_reps``
+    (default ``reps``) times the bumping fewer times when it is slow."""
     from explainer.ai.autodiff import Tensor, topological_order
 
     g = np.random.default_rng(seed)
@@ -926,12 +927,13 @@ def aad_basket(d, n_paths=4000, n_steps=12, seed=0, reps=5, T=1.0, r=0.05, K=100
         pr = (avg - K).relu().mean() * np.exp(-r * T)
         return pr, s, v
 
-    def best(fn):
-        b = np.inf
-        for _ in range(reps):
+    def best(fn, k=None):
+        b, out = np.inf, None
+        for _ in range(k or reps):
             t0 = time.perf_counter()
-            fn()
+            out = fn()
             b = min(b, time.perf_counter() - t0)
+        best.last = out
         return b
 
     t_price = best(lambda: price_np(S0, sig))
@@ -953,8 +955,8 @@ def aad_basket(d, n_paths=4000, n_steps=12, seed=0, reps=5, T=1.0, r=0.05, K=100
             out.append((price_np(S0, sig + 1e-3 * e) - price_np(S0, sig - 1e-3 * e)) / 2e-3)
         return out
 
-    t_bump = best(bump)
-    gb = bump()
+    t_bump = best(bump, bump_reps)
+    gb = best.last
     pr, _, _ = price_ad()
     order = topological_order(pr)
     fwd = sum(t.data.size for t in order)

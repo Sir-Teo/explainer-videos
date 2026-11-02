@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import valuation
-from videos.quant.quant3.common import CASH, DEBT, PART, VALUE, load, real_data
+from videos.quant.quant3.common import CASH, DEBT, PART, VALUE, live, load, real_data
 
 C_ = {r"P": VALUE, r"D_1": CASH, r"r": QC.IMPLIED, r"g": CASH, r"D": DEBT}
 
@@ -80,8 +80,8 @@ class Duration(VoiceoverScene):
             D = valuation.gordon_duration(r, gt.get_value())["macaulay"]
             x = ax.c2p(min(D, H + 2), 0)
             tri = Triangle(color=QC.HOUSE, fill_opacity=1, stroke_width=0).scale(0.16).move_to(x + DOWN * 0.18)
-            lab = MathTex(rf"D = {D:.0f}\ \text{{years}}", font_size=28, color=QC.HOUSE).next_to(tri, DOWN, buff=0.12)
-            gl = MathTex(rf"g = {100 * gt.get_value():.1f}\%", font_size=30, color=CASH).to_corner(UR, buff=0.5)
+            lab = live(r"D =", D, 0, r"\text{years}", font_size=28, color=QC.HOUSE).next_to(tri, DOWN, buff=0.12)
+            gl = live(r"g =", 100 * gt.get_value(), 1, r"\%", font_size=30, color=CASH).to_corner(UR, buff=0.5)
             return VGroup(tri, lab, gl)
 
         bondbars = VGroup()

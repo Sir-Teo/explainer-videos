@@ -53,17 +53,20 @@ class House(VoiceoverScene):
         nums = VGroup(*[MathTex(f"{v:.3g}" + r"\,\text{s}", font_size=22).next_to(ax.c2p(np.clip(np.log10(v), lo, hi),
                                                                                        len(items) - 1 - i), RIGHT, buff=0.1)
                         for i, v in enumerate(vals)])
-        ratio = vals[0] / vals[3]
+        ratio = sp["rBergomi MC (Part 17)"] / sp["neural (Part 17)"]
         q = pause(r"A desk recalibrates every 5 seconds. Which of these can it run?", width=5.4, font_size=21).to_corner(UL, buff=0.35)
         src = real_data(r"timed on this machine, shared with other jobs: the ratios matter, not the seconds; Part 17's "
                         r"network and Monte Carlo timed in Part 17", corner=DL)
         with self.voiceover(
             "What do desks actually run? Speed decides first: a calibration evaluates the model on the whole surface "
             "hundreds of times. Pause and predict: a desk that recalibrates every five seconds. Which "
-            "can it run? <bookmark mark='a'/> Rough Bergomi by Monte Carlo: seconds per evaluation, minutes per "
-            "calibration. Rough Heston through its Riccati equation: much faster. The lifted Heston, faster still. "
-            f"And Part seventeen's neural network: about {ratio:,.0f} times faster than the Monte Carlo it imitates. "
-            "<bookmark mark='b'/> Every five seconds, only a lift or a surrogate keeps up."
+            "can it run? <bookmark mark='a'/> Rough Bergomi by Monte Carlo: about "
+            f"{sp['rBergomi MC']:.0f} seconds per evaluation on this busy machine, so minutes to hours per "
+            "calibration. Rough Heston through its Riccati equation and the lifted Heston through its system of "
+            "ordinary equations: a few seconds each, here. Part seventeen's neural network, timed in Part seventeen: "
+            f"about {ratio:,.0f} times faster than the Monte Carlo it imitates. <bookmark mark='b'/> Every five "
+            "seconds, only the surrogate keeps up. Lifts earn their place elsewhere: a Markov state for simulation "
+            "and hedging."
         ) as vo:
             self.play(FadeIn(g), FadeIn(names), FadeIn(bb), FadeIn(src), FadeIn(q))
             vo.wait_until("a")

@@ -102,14 +102,14 @@ class Frontier(VoiceoverScene):
         first = o["first_test_day"]
         b1 = ("The network beats the decoder: reading the quotes directly helps. " if beats_dec else
               "The network does not beat the decoder: the two numbers, not the network, set the limit. ")
-        b2 = ("It even beats SSVI fitted to each week, " if beats_ssvi else "SSVI fitted to each week does better, ")
+        b2 = ("the network even beats it, " if beats_ssvi else "fitted to each week it does better, ")
         with self.voiceover(
             "A small replication of the idea, on our own data. One network for every week: it takes log-moneyness, "
             "the square root of maturity, and the week's two numbers from the autoencoder, and returns an implied "
             "volatility. It trains on every quote of the first eighty percent of weeks, and is scored on weeks "
             f"from {first} on, which it never saw. <bookmark mark='a'/> Three seeds, the band. On the held-out weeks it "
             f"misses by {mt:.2f} volatility points. The autoencoder's own decoded grid, from the same two numbers, "
-            f"misses by {d:.2f}. " + b1 + b2 + f"at {s_:.2f}, "
+            f"misses by {d:.2f}. {b1}As for SSVI: {b2}at {s_:.2f}, "
             "but that comparison flatters SSVI, which was fitted to the very quotes it is scored on, with a dozen "
             "parameters to the network's two."
         ) as vo:

@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import valuation
-from videos.quant.quant3.common import CASH, DEBT, EQUITY, PART, VALUE
+from videos.quant.quant3.common import CASH, DEBT, EQUITY, PART, VALUE, live
 
 RA, RD = 0.08, 0.04
 
@@ -177,8 +177,9 @@ class MM(VoiceoverScene):
                     g.add(AnnularSector(inner_radius=0, outer_radius=R0, angle=ang, start_angle=a0, fill_color=col,
                                         fill_opacity=0.85, stroke_width=1, stroke_color=BLACK).move_arc_center_to(center))
                 a0 += ang
-            rd = MathTex(rf"\text{{debt}}\ {100 * x:.0f}\%\ \text{{of}}\ V_U:\quad \text{{investors}}\ {value(x):.3f}",
-                         font_size=30).next_to(center, DOWN, buff=R0 + 0.35)
+            rd = VGroup(live(r"\text{debt}", 100 * x, 0, r"\%\ \text{of}\ V_U", font_size=30),
+                        live(r"\text{investors}", value(x), 3, font_size=30)).arrange(RIGHT, buff=0.5)
+            rd.next_to(center, DOWN, buff=R0 + 0.35)
             return VGroup(g, rd)
 
         pie = always_redraw(draw)

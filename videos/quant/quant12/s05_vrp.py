@@ -19,7 +19,7 @@ def _t(s):
 
 def _nice(day):
     d = date.fromisoformat(day)
-    return f"{d.day} {d.strftime('%B')} {d.year}"
+    return str(d.day) + " " + d.strftime("%B") + " " + str(d.year)
 
 
 class VRP(VoiceoverScene):
@@ -198,7 +198,7 @@ class VRP(VoiceoverScene):
             "positive in most weeks of each. <bookmark mark='a'/> Now Bollerslev, Tauchen and Zhou's question. "
             "Regress the next thirty days' Bitcoin return on the premium measured in advance. This is a description of "
             "the data, not a strategy test, so the trial counter does not move. The t-statistic is "
-            f"{t1:+.2f} over the whole sample, and {t2:+.2f} in the last two years. " + branch +
+            f"{t1:+.2f} over the whole sample, and {t2:+.2f} in the last two years. {branch}"
             "For the S&P 500 the predictability they found was at quarterly horizons, and the next question is whether "
             "the same premium exists there."
         ) as vo:

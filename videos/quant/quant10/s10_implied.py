@@ -16,69 +16,16 @@ class Implied(VoiceoverScene, ThreeDScene):
     def construct(self):
         d = load("implied")
         self.card()
-        self.invert(d)
         self.smiles(d)
         self.surface3d(d)
         self.scoreboard(d)
 
     def card(self):
-        c = chapter_card(9, r"Implied volatility and the first smile", r"What volatility is the market charging?",
+        c = chapter_card(12, r"The first smile, and the Surface's first row", r"Is the market's world the formula's?",
                          lit=(1987,), part=PART)
-        with self.voiceover("Chapter nine. Implied volatility and the first smile."):
+        with self.voiceover("Chapter twelve. The first smile, and the Surface's first row."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
-
-    # ------------------------------------------------------------------
-    def invert(self, d):
-        F, K, T, target = d["solver_F"], d["solver_K"], d["solver_T"], d["solver_price"]
-        sig = np.linspace(0.05, 1.2, 200)
-        prices = bs.price(F, K, T, sig) / 1000
-        g = axes([0, 1.2], [0, 16], x_length=6.6, y_length=4.2, xlabel=r"volatility $\sigma$",
-                 ylabel=r"Black--Scholes price, thousands of dollars", xticks=[0.25, 0.5, 0.75, 1.0],
-                 yticks=[0, 5, 10, 15], xfmt=lambda v: f"{100 * v:.0f}\\%", font_size=20)
-        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
-        ax = g.ax
-        line = curve(ax, sig, prices, OPT, stroke_width=4)
-        tgt = DashedLine(ax.c2p(0, target / 1000), ax.c2p(1.2, target / 1000), color=GREY_B, stroke_width=1.5)
-        tgt_lab = MathTex(rf"\text{{market price}}\ \${target:,.0f}".replace(",", "{,}"), font_size=26, color=GREY_A)
-        tgt_lab.next_to(ax.c2p(1.2, target / 1000), UP, buff=0.1).shift(LEFT * 1.2)
-        its = np.asarray(d["solver_iters"], float)
-        dot = glow_dot(ax.c2p(its[-1], target / 1000), color=IMP, radius=0.07)
-        drop = DashedLine(ax.c2p(its[-1], target / 1000), ax.c2p(its[-1], 0), color=IMP, stroke_width=2)
-        quote = VGroup(
-            label(r"one real quote, 10 December 2025, 08:00 UTC", font_size=24, color=GREY_A),
-            label(rf"a BTC call, strike \${K:,.0f}, {T * 365:.0f} days".replace(",", "{,}"), font_size=26),
-            label(rf"forward \${F:,.0f} (from put--call parity)".replace(",", "{,}"), font_size=24, color=SPOT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.5)
-        rows = VGroup(*[MathTex(rf"\sigma_{{{i}}} = {100 * v:.10f}\%", font_size=28,
-                                color=IMP if i == len(its) - 1 else GREY_A) for i, v in enumerate(its)])
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(quote, DOWN, buff=0.5).align_to(quote, LEFT)
-        rows_lab = VGroup(label(r"initial guess: Corrado--Miller", font_size=20, color=GREY_B),
-                          label(r"then Newton steps, kept inside a bisection bracket", font_size=20, color=GREY_B))
-        rows_lab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(rows, DOWN, buff=0.3).align_to(rows, LEFT)
-        with self.voiceover(
-            "The formula has five inputs. Four can be looked up: the price of the underlying, the strike, the time "
-            "and the interest rate. The fifth, volatility, cannot. So traders turn the formula around: given the "
-            "market's price, find the volatility that reproduces it. That number is the implied volatility. "
-            "<bookmark mark='a'/> Here is one real quote from the House's data: a Bitcoin call on Deribit, the "
-            "largest crypto options exchange, on the morning of the tenth of December 2025. The Black-Scholes price "
-            "rises steadily with volatility, so exactly one volatility matches the market price. "
-            "<bookmark mark='b'/> The House's solver starts from Corrado and Miller's approximation, which lands "
-            "within a twentieth of a volatility point, and two Newton steps finish the job to twelve digits: "
-            f"{100 * its[-1]:.2f} percent. Peter Jaeckel's method, which desks use, does it in two steps from "
-            "anywhere. Traders stopped quoting prices and started quoting this number, because it puts options of "
-            "every strike and maturity on one scale."
-        ) as vo:
-            self.play(FadeIn(g), Create(line))
-            vo.wait_until("a")
-            self.play(FadeIn(quote), Create(tgt), FadeIn(tgt_lab))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[0]), FadeIn(rows_lab[0]))
-            for r in rows[1:]:
-                self.play(FadeIn(r), run_time=0.6)
-            self.play(FadeIn(rows_lab[1]), FadeIn(dot, scale=1.5), Create(drop))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def smiles(self, d):
@@ -113,15 +60,15 @@ class Implied(VoiceoverScene, ThreeDScene):
                    rf"{len(k)} out-of-the-money quotes from {d['q0']['n_trades']:,} trades".replace(",", "{,}", 1),
                    font_size=18).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Now do this for every option traded that morning. Plot the implied volatility of each against its "
-            "strike, measured as the log of strike over forward, one curve per expiry. "
-            "<bookmark mark='a'/> If the Black-Scholes world were the real one, each curve would be a flat line: "
-            "the underlying has one volatility, whatever strike you ask about. Instead they smile, and lean. "
-            "Out-of-the-money puts, to the left, are dearer than calls the same distance away, and both wings rise "
-            "above the middle. The market is charging for something the formula does not have: big moves, mostly "
-            "down, more often than a lognormal allows. Part one measured exactly those fat tails in the prices "
-            "themselves; here they are, priced. <bookmark mark='b'/> The dashed lines are the best one can do with "
-            "Black-Scholes as stated, one volatility per expiry."
+            "Now invert every option traded that morning, and plot each implied volatility against its strike, "
+            "measured as the log of strike over forward, one curve per expiry. Pause and predict: if the "
+            "Black-Scholes world were the real one, what shape would these curves have? <bookmark mark='a'/> "
+            "Flat: the underlying has one volatility, whatever strike you ask about. Instead they smile, and "
+            "lean. Out-of-the-money puts, to the left, are dearer than calls the same distance away, and both "
+            "wings rise above the middle. The market is charging for big moves, mostly down, more often than a "
+            "lognormal allows: Part one's fat tails, priced. And it is not bookkeeping: chapter thirteen shows "
+            "the much smaller skew a forgotten forward would draw. <bookmark mark='b'/> The dashed lines are the "
+            "best Black-Scholes can do: one volatility per expiry."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             for grp, lb in zip(groups, labels_):
@@ -166,12 +113,10 @@ class Implied(VoiceoverScene, ThreeDScene):
         self.remove(hint, title)
         with self.voiceover(
             "Put every expiry together and you have the series' Surface: two hundred and fifty-odd implied "
-            "volatilities over strike and maturity, frozen on one morning, from the trades of that day. Every "
-            "pricing model in this series will be calibrated to it and scored on it. The short-dated smiles, in "
-            "front, are steep and high: it was the morning of a Federal Reserve decision, and the market was "
-            "paying for the next few days' moves. Further back, the surface flattens out. <bookmark mark='a'/> "
-            "And the grey lines are Black-Scholes' best effort, one flat volatility per expiry. It gets the level "
-            "of each expiry right and nothing else."
+            "volatilities over strike and maturity, frozen on one morning. Every pricing model in this series will "
+            "be calibrated to it and scored on it. The short-dated smiles, in front, are steep and high: it was "
+            "the morning of a Federal Reserve decision. <bookmark mark='a'/> The grey lines are Black-Scholes' "
+            "best effort, one flat volatility per expiry: the level of each expiry right, and nothing else."
         ) as vo:
             self.play(FadeIn(title), FadeIn(hint), Create(ax), run_time=1.5)
             self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.004, run_time=3))

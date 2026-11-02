@@ -58,10 +58,9 @@ class Correlation(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
-            "Structurers have a trick for raising the coupon: link the note to the worst of two or three indices. "
-            "Here is the payoff of the put the buyer sells, over the final levels of two indices: a folded surface, "
-            "creased along the diagonal, where the two are equal. It pays whenever the worse of the two ends below "
-            "the strike. <bookmark mark='a'/> On the floor, three hundred joint outcomes. With correlation near zero "
+            "Structurers raise the coupon by linking a note to the worst of two or three indices. Here is the put "
+            "the buyer sells, over the final levels of two indices: a folded surface, creased along the diagonal. "
+            "<bookmark mark='a'/> On the floor, three hundred joint outcomes. With correlation near zero "
             "the cloud is round, and many points have one index or the other below the strike. "
             "<bookmark mark='b'/> Now raise the correlation toward one. The cloud collapses onto the diagonal, the "
             "two indices move as one, and the put shrinks to a put on a single index. The price readout follows: "
@@ -100,8 +99,8 @@ class Correlation(VoiceoverScene, ThreeDScene):
                     r"negative cross-gamma, so its holder is short correlation")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.9, buff=0.8, edge=6.9)
         with self.voiceover(
-            "How are two-asset payoffs priced? William Margrabe's trick, from 1978. The option to exchange one asset "
-            "for another: measure everything in units of the second asset, the change of numeraire of Part nine. "
+            "How are two-asset payoffs priced? William Margrabe's 1978 trick: price the option to exchange one asset "
+            "for another in units of the second asset, the change of numeraire of Part nine. "
             "<bookmark mark='a'/> In those units the ratio of the two is a martingale, and Itô's formula gives its "
             "volatility: sigma one squared plus sigma two squared minus twice rho sigma one sigma two. So the "
             "exchange option is a plain Black–Scholes call on the ratio, struck at one. <bookmark mark='b'/> And the "
@@ -153,9 +152,8 @@ class Correlation(VoiceoverScene, ThreeDScene):
             "lower the correlation, the dearer the put. Between these two indices the measured correlation was "
             f"{w['rho_measured']:.2f}, where the put is worth {pm:.3f}, against {s2:.3f} for the riskier index alone. "
             "<bookmark mark='a'/> Pause and predict: in a crash, correlations jump toward one. Does the dealer, who "
-            "owns the worst-of put, gain or lose on that move in correlation? <bookmark mark='b'/> It loses: the put "
-            "is worth less when the indices move together. The dealer is short correlation, and in a crash it is "
-            "usually compensated by the fall itself, but it must re-mark a number no market quotes."
+            "owns the worst-of put, gain or lose on that? <bookmark mark='b'/> It loses: the put is worth less when "
+            "the indices move together. The dealer is short correlation, a number no market quotes."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), Create(line), Create(h1), FadeIn(h1l), Create(mk),
                       FadeIn(mkl), run_time=2.5)
@@ -193,15 +191,13 @@ class Correlation(VoiceoverScene, ThreeDScene):
                    if beyond else
                    "So the measured gap is within what conditioning alone can produce.")
         with self.voiceover(
-            "Does correlation really jump when it matters? Measure it on the real indices. The CSI 500 against the "
-            f"CSI 1000, its smaller-cap neighbour: {A[0]['rho']:.2f} over 2021 to 2023, {A[1]['rho']:.2f} in "
-            f"January and February 2024, {A[2]['rho']:.2f} in the Covid crash of 2020. Against Hong Kong's HSCEI: "
-            f"{B[0]['rho']:.2f}, {B[1]['rho']:.2f} and {B[2]['rho']:.2f}. Up in every fall. <bookmark mark='a'/> But "
-            "be careful. Correlation measured over turbulent windows is biased upward even when the true "
-            "correlation never changes, as Brian Boyer, Michael Gibson and Mico Loretan, and Kristin Forbes and "
-            "Roberto Rigobon, showed. So compare like with like. On days when the CSI 500 falls by more than one "
-            f"standard deviation, its correlation with the HSCEI is {dn:.2f}; on the matching up days, {up:.2f}; a "
-            f"Gaussian with constant correlation would show {gd:.2f} on both. {verdict}"
+            "Does correlation jump when it matters? The CSI 500 against the CSI 1000: "
+            f"{A[0]['rho']:.2f} over 2021 to 2023, {A[1]['rho']:.2f} in January and February 2024, {A[2]['rho']:.2f} in "
+            f"the Covid crash. Against the HSCEI: {B[0]['rho']:.2f}, {B[1]['rho']:.2f} and {B[2]['rho']:.2f}. "
+            "<bookmark mark='a'/> But correlation measured on turbulent windows is biased even when the true correlation "
+            "never changes, as Boyer, Gibson and Loretan, and Forbes and Rigobon, showed. So compare like with like. On "
+            f"days when the CSI 500 falls by more than one standard deviation, its correlation with the HSCEI is {dn:.2f}; "
+            f"on the matching up days, {up:.2f}; a constant-correlation Gaussian gives {gd:.2f} on both. {verdict}"
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(src), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.4,
                                                                 run_time=3))
@@ -264,13 +260,10 @@ class Correlation(VoiceoverScene, ThreeDScene):
                              r"long-correlation mirror: dispersion trading and implied correlation are Part 11; quantos, "
                              r"which add a currency correlation, are Part 22", 11.6, 19, GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Two more names to know. The correlation skew: implied correlation, backed out of index options against "
-            "the options on their members, is higher for downside strikes, just as implied volatility is. Desks model "
-            "it with local correlation, the multi-asset cousin of local volatility, calibrated by the particle "
-            "method of Julien Guyon and Pierre Henry-Labordère. <bookmark mark='a'/> And the mountain range, from "
-            "the trade's handbooks: the Himalaya, which retires the best performer at each date; the Everest, on the "
-            "worst of many; the Altiplano, which pays only if no asset ever breaches a barrier. All of them are "
-            "bets on correlation, written for clients who mostly think they are buying a coupon."
+            "Two more names. The correlation skew: implied correlation is higher for downside strikes, as implied "
+            "volatility is, and desks model it with local correlation, calibrated by Guyon and Henry-Labordère's "
+            "particle method. <bookmark mark='a'/> And the mountain range: the Himalaya, the Everest, the Altiplano, "
+            "all bets on correlation, sold as coupons."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

@@ -11,7 +11,6 @@ class Lift(VoiceoverScene):
         L = load("lift")
         lp = load("lift_paths")
         self.card()
-        self.kernel(L)
         self.grow(L)
         self.derive()
         self.paths(lp)
@@ -22,51 +21,6 @@ class Lift(VoiceoverScene):
         with self.voiceover("Chapter ten. Markovian lifts."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
-
-    def kernel(self, L):
-        from scipy.special import gamma as G
-        H = L["H"]
-        a = H + 0.5
-        t = np.exp(np.linspace(np.log(1e-3), np.log(1.0), 200))
-        K = t ** (a - 1) / G(a)
-        g = axes([-3, 0], [-0.5, 2.5], x_length=6.2, y_length=4.0, xlabel=r"lag $t$ (years, log scale)",
-                 ylabel=r"kernel $K(t)$ (log scale)", xticks=[-3, -2, -1, 0], xfmt=lambda u: f"10^{{{int(u)}}}",
-                 yticks=[0, 1, 2], yfmt=lambda u: f"10^{{{int(u)}}}", log_x=True, font_size=15)
-        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-        exact = curve(ax, np.log10(t), np.log10(K), ROUGH, stroke_width=4)
-        apps = VGroup()
-        cols = [GREY_B, VAR, IV]
-        for N, c in zip((2, 5, 20), cols):
-            rN = 1 + 10 * N ** (-0.9)
-            cc = (rN ** (1 - a) - 1) * rN ** ((a - 1) * (1 + N / 2)) / (G(a) * G(2 - a)) * rN ** ((1 - a) * np.arange(1, N + 1))
-            x = (1 - a) / (2 - a) * (rN ** (2 - a) - 1) / (rN ** (1 - a) - 1) * rN ** (np.arange(1, N + 1) - 1 - N / 2)
-            Ka = (cc[None, :] * np.exp(-x[None, :] * t[:, None])).sum(axis=1)
-            apps.add(curve(ax, np.log10(t), np.clip(np.log10(np.maximum(Ka, 1e-3)), -0.5, 2.5), c, stroke_width=2.2))
-        leg = legend([(ROUGH, rf"the rough kernel $t^{{H - 1/2}}/\Gamma(H + \tfrac12)$, $H = {H:.2f}$"),
-                      (GREY_B, r"2 exponentials"), (VAR, r"5 exponentials"), (IV, r"20 exponentials")], font_size=16)
-        leg.next_to(g, RIGHT, buff=0.35).align_to(g, UP)
-        eq = MathTex(r"\frac{t^{\alpha - 1}}{\Gamma(\alpha)} \approx \sum_{i=1}^N c_i\,e^{-x_i t}", font_size=34).next_to(
-            leg, DOWN, buff=0.45).align_to(leg, LEFT)
-        note_ = wrapped_label(r"Abi Jaber and El Euch (2019): each exponential is one Heston-like factor; $N$ of them make a "
-                              r"Markovian model with a closed-form Riccati system", 4.4, 19, GREY_A).next_to(eq, DOWN, buff=0.3).align_to(eq, LEFT)
-        with self.voiceover(
-            "A rough model has no Markovian state: today's volatility depends on the whole past. That makes simulation "
-            "slow and dynamic hedging awkward. Eduardo Abi Jaber and Omar El Euch found a way back. The rough kernel, "
-            "a power law, can be written as a mixture of exponentials. <bookmark mark='a'/> Cut the mixture to a "
-            "finite number of terms, and each exponential becomes one mean-reverting factor, like Heston's. Two "
-            "factors miss the short end badly; five do better; twenty follow the power law over three decades of "
-            "time. <bookmark mark='b'/> The result, the lifted Heston model, is Markovian, with a closed-form "
-            "characteristic function."
-        ) as vo:
-            self.play(FadeIn(g), Create(exact), FadeIn(leg[0]), FadeIn(eq))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(Create(a_), FadeIn(l_)) for a_, l_ in zip(apps, leg[1:])],
-                                  lag_ratio=0.5, run_time=4))
-            vo.wait_until("b")
-            self.play(FadeIn(note_))
-        self.wait(0.4)
-        self.clear_scene()
 
     def grow(self, L):
         from scipy.special import gamma as G
@@ -102,7 +56,10 @@ class Lift(VoiceoverScene):
         q = pause(r"One exponential per decade of time: how many to cover lags from one minute to one year?", width=5.0,
                   font_size=20).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Watch the sum build. One exponential, one time scale: it matches the kernel at one lag only. Add them "
+            "A rough model has no Markovian state: today's volatility depends on the whole past, which makes "
+            "simulation slow and hedging awkward. Eduardo Abi Jaber and Omar El Euch found a way back: the rough "
+            "kernel is a mixture of exponentials. Watch the sum build. One exponential matches the kernel at one "
+            "lag only. Add them "
             "one at a time, on geometrically spaced rates. Each new exponential is a thin curve, and the yellow sum "
             "crawls up the power law decade by decade. <bookmark mark='a'/> Pause and predict: if each decade of "
             "time needs about one exponential, how many cover lags from a minute to a year? "

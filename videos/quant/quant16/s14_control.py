@@ -56,9 +56,9 @@ class Control(VoiceoverScene):
         h = axes([-6, 18], [0, 1], x_length=5.0, y_length=3.4, xlabel=r"$Y - b\,(C - \mathbb{E}C)$", xticks=[0, 10],
                  font_size=15).to_edge(RIGHT, buff=0.6).shift(DOWN * 0.6)
         hist = always_redraw(lambda: hist_bars(h.ax, Y - b.get_value() * (Cg - EC), -6, 18, 60, OPT, top=900))
-        rd = always_redraw(lambda: MathTex(rf"b = {b.get_value():.3f}:\ \ \text{{sd}} = "
-                                           rf"{np.std(Y - b.get_value() * (Cg - EC)):.3f}", font_size=28, color=OPT)
-                           .next_to(h, UP, buff=0.25))
+        rd = VGroup(readout(r"b =", lambda: b.get_value(), digits=3, font_size=28, color=OPT),
+                    readout(r"\text{sd} =", lambda: float(np.std(Y - b.get_value() * (Cg - EC))), digits=3, font_size=28,
+                            color=OPT)).arrange(RIGHT, buff=1.0).next_to(h, UP, buff=0.25)
         res = VGroup(
             MathTex(rf"\rho = {sg['rho']:.4f}:\ \text{{variance}} \div {sg['ratio']:,.0f}".replace(",", "{,}"),
                     font_size=30, color=GOOD),

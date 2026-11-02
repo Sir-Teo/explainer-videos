@@ -4,7 +4,7 @@ import numpy as np
 from scipy import stats
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant10.common import CASH, DEL, OPT, PART, PP, QQ, SPOT, load
+from videos.quant.quant10.common import CASH, DEL, OPT, PART, PP, QQ, SPOT, computed, load
 
 C_ = {r"\mu": PP, r"r": CASH, r"\mathbb Q": QQ, r"\mathbb P": PP, r"S_T": SPOT, r"S_0": SPOT, r"S": SPOT,
       r"W^{\mathbb Q}_t": QQ, r"W_t": PP, r"V_0": OPT, r"N(d_1)": DEL, r"N(d_2)": QQ}
@@ -21,12 +21,13 @@ class RiskNeutral(VoiceoverScene):
         self.feynman_kac()
         self.two_worlds(d)
         self.integral(d)
+        self.replay(load("mc_seeds"))
         self.meaning(d)
 
     def card(self):
-        c = chapter_card(3, r"The price as an expectation", r"Whose probabilities price an option?",
+        c = chapter_card(4, r"The price as an expectation", r"Whose probabilities price an option?",
                          lit=(1979, 1981), part=PART)
-        with self.voiceover("Chapter three. The price as an expectation."):
+        with self.voiceover("Chapter four. The price as an expectation."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -43,15 +44,13 @@ class RiskNeutral(VoiceoverScene):
         sde_note = why(r"under $\mathbb Q$ the stock drifts at $r$, not $\mu$")
         sde_note.next_to(sde, RIGHT, buff=0.4)
         with self.voiceover(
-            "Part five ended with the Feynman-Kac theorem: the solution of an equation like this one can be "
-            "written as an average over random paths. <bookmark mark='a'/> Read the Black-Scholes equation that "
-            "way, and the option's value today is the discounted average of its payoff, the average taken over "
-            "paths of a stock that grows at the riskless rate r. <bookmark mark='b'/> Not at mu. The average is "
-            "not over the world's probabilities, which we call P, but over another set of probabilities, Q, under "
-            "which every asset is expected to earn exactly the riskless rate. Q is called the risk-neutral "
-            "measure, and it is the most important object in derivatives pricing. Harrison and Kreps in 1979, "
-            "and Harrison and Pliska in 1981, proved that its existence is the same thing as the absence of "
-            "arbitrage. That is Part nine's theorem. Here we watch it work."
+            "The heat kernel was a Gaussian average of the payoff. Part five's Feynman-Kac theorem says what it "
+            "is an average over: random paths. <bookmark mark='a'/> Read the Black-Scholes equation that way, and "
+            "the option's value today is the discounted average of its payoff over paths of a stock that grows at "
+            "the riskless rate r. <bookmark mark='b'/> Not at mu. The average is not over the world's "
+            "probabilities, P, but over another set, Q, under which every asset is expected to earn exactly the "
+            "riskless rate: the risk-neutral measure. Harrison, Kreps and Pliska proved that its existence is "
+            "the absence of arbitrage; that is Part nine's theorem. Here we watch it work."
         ) as vo:
             self.play(FadeIn(pde))
             vo.wait_until("a")
@@ -104,7 +103,7 @@ class RiskNeutral(VoiceoverScene):
         params = note(rf"$S_0 = K = 100$, $T = 1$, $\sigma = {100 * sig:.0f}\%$; "
                       rf"{d['n_mc']:,} simulated outcomes".replace(",", "{,}"), font_size=18).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Here are two worlds built from the same random numbers. In amber, the real world: the stock grows "
+            "Two worlds, built from the same random numbers. In amber, the real world: the stock grows "
             f"at an expected {100 * mu:.0f} percent a year. <bookmark mark='a'/> Average the discounted payoff of "
             f"a one-year at-the-money call over these paths and you get {d['mc_P']:.2f}. That is not the "
             "option's price. <bookmark mark='b'/> In violet, the same paths with the drift replaced by the "
@@ -114,8 +113,7 @@ class RiskNeutral(VoiceoverScene):
             "worlds are the same paths with different weights. Weight each real-world path by this exponential, "
             "which tilts probability away from the paths that went up fastest, and the real-world average turns "
             f"into the risk-neutral one: {d['mc_W']:.2f}. The theta in it, mu minus r over sigma, is the market "
-            "price of risk: the extra return per unit of volatility that investors demand, and that the option's "
-            "price does not need to know."
+            "price of risk, which the option's price does not need to know."
         ) as vo:
             self.play(FadeIn(g), Create(kline))
             self.play(LaggedStart(*[Create(m) for m in fanP], lag_ratio=0.02, run_time=3))
@@ -134,35 +132,25 @@ class RiskNeutral(VoiceoverScene):
     # ------------------------------------------------------------------
     def integral(self, d):
         rows = [
-            row(r"\mathbb E^{\mathbb Q}[(", r"S_T", r"- K)^+]", r"=",
-                r"\mathbb E^{\mathbb Q}\big[", r"S_T", r"\,\mathbf 1\{", r"S_T", r"> K\}\big]", r"-",
-                r"K\,", r"\mathbb Q(", r"S_T", r"> K)"),
-            row(r"\mathbb Q(", r"S_T", r"> K)", r"=", r"\mathbb Q\big(Z > -d_2\big)", r"=", r"N(d_2)"),
-            row(r"\mathbb E^{\mathbb Q}\big[", r"S_T", r"\,\mathbf 1\{", r"S_T", r"> K\}\big]", r"=",
-                r"S_0", r"e^{", r"r", r"T}\,", r"\mathbb Q^S(", r"S_T", r"> K)"),
-            row(r"\mathbb Q^S(", r"S_T", r"> K)", r"=", r"N(d_1)"),
-            row(r"V_0", r"=", r"S_0", r"N(d_1)", r"-", r"K e^{-", r"r", r"T}", r"N(d_2)", fs=46),
+            row(r"V_0", r"=", r"e^{-", r"r", r"T}\,", r"\mathbb E^{\mathbb Q}[(", r"S_T", r"- K)^+]"),
+            row(r"\ln", r"S_T", r"\sim", r"N\big(\ln", r"S_0", r"+ (", r"r", r"- \tfrac12\sigma^2)T,\ \sigma^2 T\big)"),
+            row(r"\mathbb Q(", r"S_T", r"> K)", r"=", r"N(d_2)"),
+            row(r"e^{-", r"r", r"T}\,", r"\mathbb E^{\mathbb Q}\big[", r"S_T", r"\,\mathbf 1\{", r"S_T", r"> K\}\big]",
+                r"=", r"S_0", r"N(d_1)"),
         ]
-        whys = [why(r"split the payoff where it switches on"),
-                why(r"$\ln S_T = \ln S_0 + (r - \tfrac12\sigma^2)T + \sigma\sqrt T Z$"),
-                why(r"weight by $S_T/(S_0 e^{rT})$: the stock as numeraire"),
-                why(r"under that measure the drift is $r + \tfrac12\sigma^2$"),
-                why(r"discount by $e^{-rT}$")]
-        defs = note(r"$d_{1,2} = \dfrac{\ln(S_0/K) + (r \pm \tfrac12\sigma^2)T}{\sigma\sqrt T}$",
-                    font_size=30, color=GREY_A).to_edge(DOWN, buff=0.45)
-        step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.3, buff=0.6, edge=6.9)
+        whys = [why(r"Feynman--Kac (Part 5)"), why(r"under $\mathbb Q$ the stock is GBM with drift $r$"),
+                why(r"standardize: the chance of finishing above the strike"),
+                why(r"complete the square: $e^{\sigma\sqrt T Z}$ tilts the Gaussian by $\sigma\sqrt T$ (Part 9: "
+                    r"the stock as numeraire)")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-1.8, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Now the expectation can be done by hand. Split the payoff at the strike: the average of the final "
-            "price over the outcomes that finish in the money, minus the strike times the probability of finishing "
-            "in the money. <bookmark mark='a'/> The second piece is a normal probability. Under Q the log of the "
-            "final price is normal with mean r minus half sigma squared, times T, so the chance of ending above "
-            "the strike is N of d two. <bookmark mark='b'/> The first piece has a trick. Weight each outcome by the "
-            "final price relative to its forward: that is another change of measure, the one that uses the stock "
-            "itself as the unit of account. <bookmark mark='c'/> Under it the drift is r plus half sigma squared, "
-            "and the probability becomes N of d one. <bookmark mark='d'/> Put the pieces together and discount: "
-            "the Black-Scholes formula. The same one the equation gives, by a completely different road."
+            "The average can be done by hand. <bookmark mark='a'/> Under Q the log of the final price is normal, "
+            "with mean r minus half sigma squared times T. <bookmark mark='b'/> So the chance of finishing above "
+            "the strike is N of d two. <bookmark mark='c'/> And the average of the final price over those "
+            "outcomes, discounted, is S naught times N of d one: completing the square shifts the Gaussian by "
+            "sigma root T. Subtract K times the discounted probability and it is the formula again, by a "
+            "second road. Part nine reads N of d one as a probability too, under the measure that counts in shares."
         ) as vo:
-            self.play(FadeIn(defs))
             step(0)
             vo.wait_until("a")
             step(1)
@@ -170,9 +158,59 @@ class RiskNeutral(VoiceoverScene):
             step(2)
             vo.wait_until("c")
             step(3)
-            vo.wait_until("d")
-            step(4)
-            self.play(Create(SurroundingRectangle(rows[4], color=OPT, buff=0.18, corner_radius=0.1)))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def replay(self, m):
+        n = np.asarray(m["n"], float)
+        q, w = np.asarray(m["q"], float), np.asarray(m["w"], float)
+        ex = m["exact"]
+        lx = np.log10(n)
+        g = axes([2, lx[-1]], [10.0, 14.5], x_length=8.6, y_length=4.4, xlabel=r"simulated outcomes $n$",
+                 ylabel=r"Monte Carlo price", xticks=[2, 3, 4, 5], yticks=[10.5, 12.5, 14.5],
+                 xfmt=lambda v: f"10^{{{int(v)}}}", font_size=20).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
+        ax = g.ax
+        line = DashedLine(ax.c2p(2, ex), ax.c2p(lx[-1], ex), color=OPT, stroke_width=2)
+        k = ValueTracker(2.0)
+
+        def upto(runs, col):
+            j = max(int(np.searchsorted(lx, k.get_value(), side="right")), 2)
+            return seed_band(ax, lx[:j], np.clip(runs[:, :j], 10.0, 14.5), col, stroke_width=3, opacity=0.25)
+
+        bq = always_redraw(lambda: upto(q, QQ))
+        bw = always_redraw(lambda: upto(w, PP))
+        leg = legend([(QQ, r"$\mathbb Q$-paths, 8 seeds"), (PP, r"$\mathbb P$-paths reweighted by Girsanov, 8 seeds"),
+                      (OPT, rf"the formula, {ex:.3f}")], font_size=22).next_to(g, RIGHT, buff=0.3).align_to(g, UP)
+        nums = VGroup(
+            label(rf"spread of the 8 seeds at $n = {int(n[-1]):,}$:".replace(",", "{,}"), font_size=24, color=GREY_A),
+            MathTex(rf"\mathbb Q:\ {m['spread_q_end']:.3f}", font_size=30, color=QQ),
+            MathTex(rf"\text{{reweighted}}\ \mathbb P:\ {m['spread_w_end']:.3f}", font_size=30, color=PP),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
+        narrower = m["ratio"] < 1
+        verdict = (f"Here the reweighted estimator is the narrower one: its standard deviation is "
+                   f"{m['ratio']:.2f} times the plain one's, because the real world's higher drift sends more paths "
+                   "into the money, where the payoff lives, and the weights correct for it. That is importance "
+                   "sampling, and Part sixteen uses it on purpose.") if narrower else (
+                   f"Here the reweighted estimator is the wider one, {m['ratio']:.2f} times the plain one's standard "
+                   "deviation: the weights themselves are noise.")
+        with self.voiceover(
+            "And by simulation, watched as it runs. Eight independent seeds, each averaging more and more "
+            "discounted payoffs under Q. With a hundred outcomes the eight estimates disagree by dollars; the "
+            "band narrows like one over the square root of n, and closes on the formula. "
+            "<bookmark mark='a'/> In amber, the same budget spent on real-world paths, reweighted by Girsanov's "
+            "factor. Both bands close on the same price. " + verdict
+        ) as vo:
+            self.play(FadeIn(g), Create(line), FadeIn(leg[2]))
+            self.add(bq)
+            self.play(FadeIn(leg[0]), k.animate.set_value(lx[-1]), run_time=max(vo.until("a") - 1.0, 3.0),
+                      rate_func=linear)
+            bq.clear_updaters()
+            k.set_value(2.0)
+            self.add(bw)
+            self.play(FadeIn(leg[1]), k.animate.set_value(lx[-1]), run_time=4, rate_func=linear)
+            bw.clear_updaters()
+            self.play(FadeIn(nums, shift=LEFT * 0.2), FadeIn(computed()))
         self.wait(0.4)
         self.clear_scene()
 
@@ -202,13 +240,13 @@ class RiskNeutral(VoiceoverScene):
         check = note(rf"simulated: {100 * d['q_itm']:.1f}\% of $\mathbb Q$-outcomes finish above $K$; "
                      rf"{100 * d['p_itm']:.1f}\% of $\mathbb P$-outcomes do", font_size=20).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The two Ns have meanings worth keeping. N of d two is the risk-neutral probability that the call "
-            f"finishes in the money: here {d['N_d2']:.3f}, the shaded area, and {100 * d['q_itm']:.1f} percent of "
-            f"our simulated risk-neutral outcomes did. In the real world, with its higher drift, "
-            f"{100 * d['p_itm']:.1f} percent did: Q's probabilities are not forecasts. <bookmark mark='a'/> N of d "
-            f"one is the delta, {d['N_d1']:.3f} shares per option. So the formula reads like a recipe: hold N of "
-            "d one shares, borrow K e to the minus r T times N of d two, and the portfolio is the option. "
-            "Replication and expectation are one statement seen from two sides."
+            "The two Ns are worth keeping. N of d two is the risk-neutral probability that the call finishes "
+            f"in the money: here {d['N_d2']:.3f}, the shaded area, and {100 * d['q_itm']:.1f} percent of our "
+            f"risk-neutral outcomes did. In the real world {100 * d['p_itm']:.1f} percent did. Pause: is the call "
+            "worth that real chance of anything? No. Q's probabilities are not forecasts; they are prices. "
+            f"<bookmark mark='a'/> N of d one is the delta, {d['N_d1']:.3f} shares per option. So the formula is a "
+            "recipe: hold N of d one shares, borrow K e to the minus r T times N of d two, and the portfolio is "
+            "the option. Replication and expectation are one statement seen from two sides."
         ) as vo:
             self.play(FadeIn(g), Create(line), Create(kline), FadeIn(klab))
             self.play(FadeIn(area), FadeIn(top[0]))

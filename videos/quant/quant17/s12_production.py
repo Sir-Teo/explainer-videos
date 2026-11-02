@@ -1,52 +1,60 @@
 from __future__ import annotations
 
+import numpy as np
+
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant17.common import BAD, GOOD, NET, PART, load
+from videos.quant.quant17.common import BAD, GOOD, NET, OPT, PART, REF, ask, load
 
 
 class Production(VoiceoverScene):
     def construct(self):
         self.card()
         self.record()
-        self.validation(load("calib"), load("hedge"))
+        self.more()
+        self.validation(load("calib"), load("hedge"), load("calib_noise"))
+        self.known(load("bsde_seeds"), load("stopping"), load("hedge"), load("drift"))
 
     def card(self):
-        c = chapter_card(11, r"Production and model risk", r"What has to be true before a network trades?", part=PART)
-        with self.voiceover("Chapter eleven. Production and model risk."):
+        c = chapter_card(17, r"Production and model risk", r"What has to be true before a network trades?", part=PART)
+        with self.voiceover("Chapter seventeen. Production and model risk."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
     def record(self):
         cards = VGroup(
-            firm_card(r"J.P. Morgan", r"Hans Buehler's team put data-driven hedging into production, starting in 2018 with "
-                      r"vanilla index option books. By 2022, Risk.net reported, about 70\% of the bank's Euro Stoxx flow "
-                      r"options were quoted and hedged by machine, with traders reviewing the orders, and deep hedging of "
-                      r"Euro Stoxx 50 cliquets had gone live. Buehler was Risk's quant of the year for 2022.",
-                      source=r"as reported by Risk.net, 2022", width=6.1, font_size=20),
+            firm_card(r"J.P. Morgan", r"Hans Buehler's team has hedged vanilla index option books on the S\&P 500 and "
+                      r"the Euro Stoxx with a data-driven engine since 2018, and later priced a large share of its "
+                      r"Euro Stoxx vanilla book with deep hedging and extended it to cliquets. Buehler was Risk's quant of "
+                      r"the year for 2022, and later moved to XTX Markets.",
+                      source=r"as reported by Risk.net", width=6.1, font_size=20),
             firm_card(r"Danske Bank", r"Brian Huge and Antoine Savine developed differential machine learning (chapter 4) "
                       r"at the bank, where adjoint differentiation already ran in production: the pathwise derivatives it "
                       r"computed became training labels. Risk.net reported the bank using the method to speed up its XVA "
                       r"calculations.", source=r"Huge and Savine (2020); as reported by Risk.net", width=6.1, font_size=20),
         ).arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(UP * 0.6)
         sr = history_card(2026, r"SR 26-2, Federal Reserve, OCC and FDIC",
-                          r"US supervisory guidance on model risk, replacing SR 11-7 (2011) in April 2026. Every model is "
+                          r"US supervisory guidance on model risk, 17 April 2026, superseding SR 11-7 (2011) and SR 21-8. Every model is "
                           r"challenged by people independent of its builders (``effective challenge''), validated for "
                           r"conceptual soundness, monitored, tested on outcomes and kept in an inventory, with effort scaled "
-                          r"to the model's materiality. A pricing or hedging network is a model like any other.",
+                          r"to the model's materiality. Generative and agentic AI are outside its scope; a pricing or hedging network "
+                          r"is a model like any other.",
                           color=QC.HOUSE, width=12.4, font_size=20)
         sr.next_to(cards, DOWN, buff=0.35)
         with self.voiceover(
-            "What has reached real desks? The clearest public case is J.P. Morgan. Hans Buehler's team began hedging "
-            "vanilla index option books with a data-driven engine in 2018. By 2022, as Risk.net reported, about seventy "
-            "percent of the bank's Euro Stoxx flow options were quoted and hedged by machine, with traders reviewing "
-            "the orders, and deep hedging of Euro Stoxx cliquets had gone live. <bookmark mark='a'/> At Danske Bank, "
-            "Brian Huge and Antoine Savine built differential machine learning where adjoint differentiation already "
-            "ran in production: the derivatives it computed became training labels, and Risk.net reported the method "
-            "speeding up the bank's valuation adjustments. <bookmark mark='b'/> And over all of "
-            "it sits the regulator. American banking supervisors' guidance on model risk, SR 11-7 from 2011, revised in April "
-            "2026 as SR 26-2, says that every model must be challenged by people who did not build it, checked for "
-            "conceptual soundness, monitored, and tested on outcomes, with more scrutiny the more it matters. A neural "
-            "network that prices or hedges is a model like any other."
+            "What has reached real desks? The clearest public case is J.P. Morgan. As Risk.net reported, Hans "
+            "Buehler's team has hedged vanilla index option books on the S&P 500 and the Euro Stoxx with a data-driven "
+            "engine since 2018; the bank later priced a large share of its Euro Stoxx vanilla book with a version of "
+            "deep hedging, and extended the programme to cliquets. Buehler was Risk's quant of the year for 2022, and "
+            "later moved to the market maker XTX. <bookmark mark='a'/> At Danske Bank, "
+            "Brian Huge and Antoine Savine turned the derivatives that adjoint differentiation already computed in "
+            "production into training labels; Risk.net reported the method speeding up the bank's valuation "
+            "adjustments. <bookmark mark='b'/> And over all of "
+            "it sits the regulator. American banking supervisors' guidance on model risk, SR 11-7 from 2011, was "
+            "replaced on the seventeenth of April 2026 by SR 26-2, from the Federal Reserve, the OCC and the FDIC, "
+            "which also supersedes SR 21-8. It says that every model must be challenged by people who did not build "
+            "it, checked for conceptual soundness, monitored, tested on outcomes and kept in an inventory, with more "
+            "scrutiny the more it matters. Generative and agentic AI are outside its scope; a neural network that "
+            "prices or hedges is squarely inside it, a model like any other."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -56,46 +64,81 @@ class Production(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def validation(self, c, h):
-        held = c["held_rmse"]
-        noise = c["label_noise_rmse"]
+    def more(self):
+        cs = VGroup(
+            firm_card(r"Quantum deep hedging", r"Cherrat, Raj, Kerenidis, \dots, Wood, \dots, Pistoia (2023), with J.P. "
+                      r"Morgan researchers: deep hedging with quantum networks on a trapped-ion processor, circuits of up "
+                      r"to 16 qubits; comparable performance with fewer trainable parameters", source=r"\textit{Quantum} 7, "
+                      r"1191", width=4.1, font_size=16),
+            firm_card(r"Deeply learning derivatives", r"Ferguson and Green (2018): a network trained on randomly generated "
+                      r"basket-call valuations, ``a million times faster'' than the traditional model, as the authors "
+                      r"claim", source=r"arXiv 1809.02233", width=4.1, font_size=16),
+            firm_card(r"PRA SS1/23", r"UK model risk principles for banks with internal-model approval: published 17 May "
+                      r"2023, in force 17 May 2024, revised 23 April 2026; covers the use of artificial intelligence and "
+                      r"machine learning in models", source=r"Bank of England", width=4.1, font_size=16),
+        ).arrange(RIGHT, buff=0.2).shift(UP * 0.3)
+        for c_ in cs:
+            c_[0].set_stroke(GREY_C)
+        with self.voiceover(
+            "Three more entries on the public record. In 2023, researchers including a J.P. Morgan team published deep "
+            "hedging with quantum neural networks, run on a trapped-ion processor with circuits of up to sixteen "
+            "qubits: comparable performance with fewer trainable parameters, a research result, not a deployment. "
+            "<bookmark mark='a'/> In 2018 Ryan Ferguson and Andrew Green trained a network on randomly generated "
+            "valuations of a basket call and reported it a million times faster than the traditional model; that is "
+            "the authors' claim. <bookmark mark='b'/> And in Britain, the Prudential Regulation Authority's "
+            "supervisory statement SS1/23, in force since May 2024 and revised in April 2026, sets model risk "
+            "principles for banks with internal-model approval, and names artificial intelligence and machine "
+            "learning explicitly."
+        ) as vo:
+            self.play(FadeIn(cs[0], shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(cs[1], shift=UP * 0.2))
+            vo.wait_until("b")
+            self.play(FadeIn(cs[2], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def validation(self, c, h, nz):
         ev = h["nocost"]["eval"]
         bsd = h["nocost"]["bs_eval"]
         rows = [
-            (r"inside the box it learned", rf"the calibrator's error on held-out parameter sets: {held:.2f} vol points, "
-             rf"against Monte Carlo noise of {noise:.2f} in its own labels", GOOD),
-            (r"outside the box, silence", r"a network extrapolates without warning: inputs are checked against the training "
-             r"ranges, and anything outside falls back to the slow engine", BAD),
-            (r"against a known answer", rf"with no costs the deep hedger must reproduce Black--Scholes: its price "
-             rf"{ev['price']:.2f} against {bsd['price']:.2f} for delta hedging on the same paths", NET),
-            (r"the simulator is the model", r"a hedger trained on one market generator is tested on others and on "
-             r"replayed history; the generator gets validated too (chapter 10)", BAD),
-            (r"every night", r"each network re-checked against the pricing engine of Part 16 on fresh samples; drift beyond "
-             r"tolerance takes it out of service", GOOD),
+            (r"conceptual soundness", r"every method derived before it is trained: indifference prices, BSDEs, the "
+             r"bang-bang rule, the band (chapters 8, 10, 11, 13)", GOOD),
+            (r"inside the box it learned", rf"the calibrator against fresh simulation: {nz['net_fresh']['rmse']:.2f} vol "
+             rf"points on parameter sets it never saw (chapter 3)", GOOD),
+            (r"outside the box, silence", r"a network extrapolates without warning; inputs are checked against the "
+             r"training ranges and anything outside goes to the slow engine (chapters 4 and 5)", BAD),
+            (r"outcomes against known answers", rf"no costs: the deep hedger's price {ev['price']:.2f} against delta "
+             rf"hedging's {bsd['price']:.2f}; the BSDE's linear check (chapters 9 and 11)", NET),
+            (r"the simulator is the model", r"hedgers tested on other generators and on replayed history (chapter 19); "
+             r"the generator is validated too (chapter 16)", BAD),
+            (r"monitoring and inventory", r"every network re-checked nightly against Part 16's engine; each one listed, "
+             r"with its owner, its box and its materiality", GOOD),
         ]
         tab = VGroup()
         for a, b, col in rows:
-            tab.add(VGroup(label(a, font_size=23, color=col), wrapped_label(b, 7.6, 20, GREY_A)).arrange(RIGHT, buff=0.5,
+            tab.add(VGroup(label(a, font_size=22, color=col), wrapped_label(b, 7.6, 19, GREY_A)).arrange(RIGHT, buff=0.5,
                                                                                                        aligned_edge=UP))
-        for r_ in tab:
-            r_[1].align_to(tab, LEFT).shift(RIGHT * 4.6)
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.32)
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.26)
         for r_ in tab:
             r_[1].set_x(r_[0].get_left()[0] + 4.6 + r_[1].width / 2)
-        head = label(r"Validating a network, the SR 26-2 way", font_size=32).to_edge(UP, buff=0.5)
-        tab.next_to(head, DOWN, buff=0.45)
+        head = label(r"SR 26-2's checklist, applied to this part's networks", font_size=32).to_edge(UP, buff=0.4)
+        tab.next_to(head, DOWN, buff=0.35)
         if tab.width > 13.0:
             tab.scale_to_fit_width(13.0)
+        if tab.height > 6.3:
+            tab.scale_to_fit_height(6.3)
         tab.set_x(0)
         with self.voiceover(
-            "What does that mean for the networks of this part? First, they are checked where they were trained: the "
-            f"calibrator's error on parameters it never saw is {held:.2f} vol points, below the noise of its own "
-            "Monte Carlo labels. <bookmark mark='a'/> Second, outside that region they are not trusted at all: a "
-            "network extrapolates without any warning, so inputs are checked against the training ranges, and "
-            "anything outside goes back to the slow engine. <bookmark mark='b'/> Third, they must reproduce known "
-            "answers: with no costs, the deep hedger has to rediscover Black–Scholes, and it does. "
-            "<bookmark mark='c'/> Fourth, for a hedger the simulator is the model, so it is tested on other generators "
-            "and on replayed history. And every night, each network is checked against the engine of Part sixteen."
+            "Take the guidance's checklist, line by line. Conceptual soundness: every method here was derived before "
+            "it was trained. <bookmark mark='a'/> Performance where it "
+            f"was trained: the calibrator sits {nz['net_fresh']['rmse']:.2f} vol points from fresh simulations of "
+            "parameters it never saw. <bookmark mark='b'/> Outside that region it is not trusted: inputs are checked "
+            "against the training ranges, and anything outside goes to the slow engine. <bookmark mark='c'/> Outcomes against known answers: with no costs, the "
+            "deep hedger must rediscover Black–Scholes, and it does; the BSDE solver must reproduce Monte Carlo when "
+            "default is switched off, and it does. <bookmark mark='d'/> For a hedger, the simulator is part of the "
+            "model, so the hedger is tested on other generators and on history, which is chapter nineteen. And every "
+            "network is monitored, checked each night against the engine of Part sixteen, and kept in the inventory."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab[0]))
             vo.wait_until("a")
@@ -103,6 +146,51 @@ class Production(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(tab[2]))
             vo.wait_until("c")
-            self.play(FadeIn(tab[3]), FadeIn(tab[4]))
+            self.play(FadeIn(tab[3]))
+            vo.wait_until("d")
+            self.play(FadeIn(tab[4]), FadeIn(tab[5]))
+        self.wait(0.5)
+        self.clear_scene()
+
+    def known(self, bs, st, h, d):
+        t0 = bs["tail0"]
+        tl = bs["tail_lin"]
+        n = h["nocost"]
+        devs = [r["dev"] for r in d["rows"]]
+        rows = [
+            (r"deep BSDE, with default", rf"{t0['mean']:.2f} \pm {t0['sd']:.2f}", rf"{bs['reference']:.3f}",
+             r"multilevel Picard"),
+            (r"deep BSDE, no default", rf"{tl['mean']:.2f} \pm {tl['sd']:.2f}", rf"{bs['no_default_mc']:.2f}", r"Monte Carlo"),
+            (r"deep stopping, two assets", rf"{st['2']['lower']:.3f}", rf"{st['2']['reference']['binomial']:.3f}",
+             r"binomial tree"),
+            (r"deep hedger, no costs", rf"{n['eval']['price']:.3f}", rf"{n['bs_eval']['price']:.3f}", r"delta hedging"),
+            (r"drift hedger, extra shares", rf"{np.mean(devs):.3f}", rf"{d['merton_atm']:.3f}", r"Merton (1969)"),
+        ]
+        head = VGroup(label(r"network", font_size=21, color=GREY_A), label(r"it says", font_size=21, color=GREY_A),
+                      label(r"known answer", font_size=21, color=GREY_A), label(r"from", font_size=21, color=GREY_A))
+        tab = VGroup(head)
+        for a, b, c_, e in rows:
+            tab.add(VGroup(label(a, font_size=22), MathTex(b, font_size=30, color=NET), MathTex(c_, font_size=30, color=REF),
+                           label(e, font_size=20, color=GREY_B)))
+        xs = [-4.4, -0.6, 2.4, 5.0]
+        for i, row in enumerate(tab):
+            for j, cell in enumerate(row):
+                cell.move_to([xs[j], 2.2 - 0.8 * i, 0])
+        ttl = label(r"The part's known-answer scoreboard", font_size=30).to_edge(UP, buff=0.5)
+        with self.voiceover(
+            "Here is the part's scoreboard of known answers, all from this part's own runs. The deep BSDE against "
+            "multilevel Picard, and against Monte Carlo without default. Deep stopping against a binomial tree. The "
+            "deep hedger against delta hedging. And the drift-trained hedger's extra shares against Merton's formula. "
+            "<bookmark mark='a'/> Every network here earns its trust the same way: by agreeing with a slower, "
+            "independent engine wherever such an engine exists."
+        ) as vo:
+            self.play(FadeIn(ttl), FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.5, run_time=6))
+            vo.wait_until("a")
+        q = ask(r"under SR 26-2, is the market generator a model?")
+        with self.voiceover(
+            "A question: under the new guidance, is the market generator a model? Think about what the hedger is "
+            "validated on."
+        ):
+            self.play(FadeIn(q))
         self.wait(0.5)
         self.clear_scene()

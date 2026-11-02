@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import valuation
-from videos.quant.quant3.common import CASH, DEBT, EQUITY, PART, PRICE, VALUE, load, real_data
+from videos.quant.quant3.common import CASH, DEBT, EQUITY, PART, PRICE, VALUE, live, load, real_data
 
 IMPLIED_CODE = [
     "def implied_rate(price, cf0, growth, growth_long, years=5):",
@@ -106,9 +106,9 @@ class CostOfCapital(VoiceoverScene):
                                     fill_color=CASH if k_ < 5 else VALUE, fill_opacity=0.85)
                           .move_to([rp[0], y + h / 2, 0]))
                 y += h
-            sl = MathTex(rf"\text{{PV of cash}}\ {right:,.0f}".replace(",", "{,}"), font_size=24, color=CASH)
+            sl = live(r"\text{PV of cash}", right, 0, font_size=24, color=CASH, group_sep=True)
             sl.next_to(stack, UP, buff=0.1)
-            dial = MathTex(rf"r = {100 * rr:.2f}\%", font_size=40, color=QC.IMPLIED).move_to(UP * 3.0)
+            dial = live(r"r =", 100 * rr, 2, r"\%", font_size=40, color=QC.IMPLIED).move_to(UP * 3.0)
             return VGroup(beam, block, bl, stack, sl, dial)
 
         tri = Triangle(color=GREY_B, fill_opacity=1, stroke_width=0).scale(0.25).move_to(pivot + DOWN * 0.22)

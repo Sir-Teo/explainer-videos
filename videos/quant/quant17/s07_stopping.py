@@ -53,14 +53,11 @@ class Stopping(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
         with self.voiceover(
             "Part sixteen priced an American option by regressing the value of waiting. Sebastian Becker, Patrick "
-            "Cheridito and Arnulf Jentzen asked a network to learn the decision itself. Start from the Snell "
-            "envelope: at each exercise date, the option is worth the better of stopping now and waiting. "
-            "<bookmark mark='a'/> Any stopping time can be built backwards from yes-or-no decisions, one per date, "
-            "each depending only on today's state: stop now, or follow the later rule. So learn one decision network "
-            "per date, starting from expiry and working back. <bookmark mark='b'/> Given today's state, the reward "
-            "is linear in the decision: the value of waiting, plus the decision times the gain from stopping. So the "
-            "best decision is all or nothing: stop exactly when the payoff beats the value of waiting. Training uses "
-            "a soft version, a probability, so gradients flow; the final rule is hard. "
+            "Cheridito and Arnulf Jentzen learned the decision itself. The Snell envelope: at each date, the better of "
+            "stopping and waiting. <bookmark mark='a'/> Any stopping time is built backwards from yes-or-no decisions, "
+            "one per date, so learn one network per date, from expiry back. <bookmark mark='b'/> Given today's state the "
+            "reward is linear in the decision, so the best decision is all or nothing: stop exactly when the payoff "
+            "beats waiting. Training softens it into a probability; the final rule is hard. "
             "<bookmark mark='c'/> And any rule is a real strategy, so its average payoff on fresh paths can only be "
             "a lower bound on the price."
         ) as vo:
@@ -107,9 +104,8 @@ class Stopping(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
-            "What does the network learn? A call on the better of two assets, nine exercise dates over three years. "
-            "Here is every date's decision at once: the floor is the two asset prices, and each layer up is a later "
-            "date, coloured where the network says exercise now. <bookmark mark='a'/> Each layer has two lobes: "
+            "What does it learn? A call on the better of two assets. Every date's decision at once: the floor is the "
+            "two prices, each layer a later date, coloured where it exercises. <bookmark mark='a'/> Each layer has two lobes: "
             "exercise when one asset is far above the strike and well ahead of the other. Between them runs a valley "
             "along the diagonal, where either asset could still end up the winner and the right to pick the better "
             "one later is worth more than the dividends given up. <bookmark mark='b'/> Fly up the tunnel toward "
@@ -234,10 +230,9 @@ class Stopping(VoiceoverScene, ThreeDScene):
         outs = [f"d=2: lower bound {d2['lower']:.3f} +/- {2 * d2['se']:.3f}   binomial {d2['reference']['binomial']:.3f}",
                 f"d=5: lower bound {d5['lower']:.3f} +/- {2 * d5['se']:.3f}"]
         with self.voiceover(
-            "The House's training for one exercise date. Draw a batch of paths. Ask the later, already trained "
-            "networks what each path collects if we wait. Turn this date's network into a stopping probability, and "
-            "maximize the expected payoff: stop and take the payoff, or wait and take the rest. <bookmark mark='a'/> "
-            "Run backwards over the dates, then evaluate the hard rule on a million fresh paths."
+            "The House's training for one date: what the later rules collect if we wait, a stopping probability "
+            "from this date's network, and the expected payoff to maximize. <bookmark mark='a'/> Then the hard rule on "
+            "a million fresh paths."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

@@ -89,8 +89,7 @@ class Paths(VoiceoverScene):
                             for a, b in zip(y1, y2)])
 
         cloud = always_redraw(pts)
-        rd = always_redraw(lambda: MathTex(rf"\rho = {t.get_value():+.2f}", font_size=34, color=OPT)
-                           .next_to(plane, UP, buff=0.05))
+        rd = readout(r"\rho =", lambda: t.get_value(), digits=2, font_size=34, color=OPT).next_to(plane, UP, buff=0.05)
         eq = VGroup(
             MathTex(r"R = \sqrt{-2\log U_1},\ \ \phi = 2\pi U_2", font_size=30),
             MathTex(r"(Z_1, Z_2) = (R\cos\phi,\ R\sin\phi)", font_size=30),

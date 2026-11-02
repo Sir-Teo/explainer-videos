@@ -788,18 +788,36 @@ Frontier (2023–2026):
 - Jäckel, P. (2015). "Let's be rational." *Wilmott*.
 
 ### Part 11 · Trading Options
+- Glosten, L., Milgrom, P. (1985). "Bid, ask and transaction prices in a specialist market with heterogeneously informed traders." *JFE*.
+- Leland, H. (1985). "Option pricing and replication with transactions costs." *Journal of Finance* (shared with Part 10).
+- Huang, R., Stoll, H. (1997). "The components of the bid-ask spread: a general approach." *RFS*.
+- Whalley, A. E., Wilmott, P. (1997). "An asymptotic analysis of an optimal hedging model for option pricing with transaction costs." *Mathematical Finance*.
 - Carr, P., Madan, D. (1998). "Towards a theory of volatility trading." In *Volatility* (Risk Books).
-- Coval, J., Shumway, T. (2001). "Expected option returns." *Journal of Finance*.
+- Coval, J., Shumway, T. (2001). "Expected option returns." *Journal of Finance* 56(3).
 - Bakshi, G., Kapadia, N. (2003). "Delta-hedged gains and the negative market volatility risk premium." *RFS*.
 - Avellaneda, M., Lipkin, M. (2003). "A market-induced mechanism for stock pinning." *Quantitative Finance*.
 - Ni, S. X., Pearson, N., Poteshman, A. (2005). "Stock price clustering on option expiration dates." *JFE*.
+- Zakamouline, V. (2006). "European option pricing and hedging with both fixed and proportional transaction costs." *JEDC*.
+- Castagna, A., Mercurio, F. (2007). "The vanna-volga method for implied volatilities." *Risk*.
+- Avellaneda, M., Stoikov, S. (2008). "High-frequency trading in a limit order book." *Quantitative Finance*.
+- Pool, V. K., Stoll, H., Whaley, R. (2008). "Failure to exercise call options: an anomaly and a trading game." *Journal of Financial Markets* 11(1).
 - Gârleanu, N., Pedersen, L. H., Poteshman, A. (2009). "Demand-based option pricing." *RFS*.
 - Driessen, J., Maenhout, P., Vilkov, G. (2009). "The price of correlation risk: evidence from equity options." *Journal of Finance*.
 - Goyal, A., Saretto, A. (2009). "Cross-section of option returns and volatility." *JFE*.
 - Stoikov, S., Sağlam, M. (2009). "Option market making under inventory risk." *Review of Derivatives Research*.
+- Hao, J., Kalay, A., Mayhew, S. (2010). "Ex-dividend arbitrage in option markets." *RFS* 23(1).
+- Golez, B., Jackwerth, J. (2012). "Pinning in the S&P 500 futures." *JFE* 106(3).
+- Guéant, O., Lehalle, C.-A., Fernandez-Tapia, J. (2013). "Dealing with the inventory risk: a solution to the market making problem." *Mathematics and Financial Economics*.
+- Guéant, O. (2017). "Optimal market making." *Applied Mathematical Finance*.
+- Muravyev, D., Pearson, N. (2020). "Options trading costs are lower than you think." *RFS* 33(11).
 - Baldacci, B., Bergault, P., Guéant, O. (2021). "Algorithmic market making for options." *Quantitative Finance*.
-- SEBI (3 July 2025). Interim order in the matter of index manipulation by the Jane Street group *(the firm contests the allegations)*.
-- Millennium Management v. Jane Street (S.D.N.Y., 2024; settled) *(verify: court record)*.
+- Bali, T., Beckmeyer, H., Mörke, M., Weigert, F. (2023). "Option return predictability with machine learning and big data." *RFS* 36(9).
+- Bryzgalova, S., Pavlova, A., Sikorskaya, T. (2023). "Retail trading in options and the rise of the big three wholesalers." *Journal of Finance* 78(6).
+- Cao, J., Chen, J., Farghadani, S., Hull, J., Poulos, Z., Wang, Z., Yuan, J. (2023). "Gamma and vega hedging using deep distributional reinforcement learning." *Frontiers in Artificial Intelligence* 6.
+- Fang, Z., Xu, H. (2023). "Option market making via reinforcement learning." arXiv 2307.01814.
+- Buehler, H., Gonon, L., Teichmann, J., Wood, B. (2019). "Deep hedging." *Quantitative Finance* (Part 17's; replayed here).
+- Industry and regulators: SEBI, studies of individual traders in equity F&O (September 2024; 7 July 2025); circular of 1 October 2024 (index derivatives); interim order in the matter of index manipulation by the Jane Street group (3 July 2025) *(allegations; the firm contests them)*; circular of 1 September 2025 (intraday position limits); SEC press releases 2021-89 (LJM) and 2022-84 (Allianz Global Investors U.S.); U.S. v. Allianz Global Investors U.S. (S.D.N.Y., guilty plea May 2022); CFTC v. Optiver (press releases 5521-08, 6239-12); OCC annual volume reports; Cboe implied correlation methodology; Deribit settlement rules.
+- *Jane Street Group v. Millennium Management* (S.D.N.Y., 24-cv-2783, filed April 2024; dismissed after a settlement, December 2024, terms undisclosed, as reported by Bloomberg Law).
 
 ### Part 12 · The Volatility Surface
 - Derman, E., Kani, I. (1994). "Riding on a smile." *Risk*.
@@ -820,10 +838,30 @@ Frontier (2023–2026):
 - Ackerer, D., Tagasovska, N., Vatter, T. (2020). "Deep smoothing of the implied volatility surface." *NeurIPS*.
 - Baltussen, G., Da, Z., Lammers, S., Martens, M. (2021). "Hedging demand and market intraday momentum." *JFE*.
 - Bergeron, M., Fung, N., Hull, J., Poulos, Z. (2022). "Variational autoencoders: a hands-off approach to volatility." *J. Financial Data Science*.
-- Bandi, F., Fusari, N., Renò, R. (2023). "0DTE option pricing." Working paper *(verify)*.
-- Beckmeyer, H., Branger, N., Gayda, L. (2023). "Retail traders love 0DTE options... but should they?" Working paper.
-- Dim, C., Eraker, B., Vilkov, G. (2024). "0DTEs: trading, gamma risk and volatility propagation." Working paper *(verify)*.
+- Bandi, F., Fusari, N., Renò, R. (2023). "0DTE option pricing." Working paper, SSRN 4503344.
+- Beckmeyer, H., Branger, N., Gayda, L. (2023). "Retail traders love 0DTE options... but should they?" Working paper, SSRN 4404704.
+- Dim, C., Eraker, B., Vilkov, G. (2024). "0DTEs: trading, gamma risk and volatility propagation." Working paper, SSRN 4692190.
 - Cboe. *VIX White Paper*; Deribit. *DVOL methodology*.
+- Neuberger, A. (1994). "The log contract." *Journal of Portfolio Management*.
+- Carr, P., Madan, D. (1998). "Towards a theory of volatility trading." In *Volatility* (Risk Books).
+- Berestycki, H., Busca, J., Florent, I. (2002). "Asymptotics and calibration of local volatility models." *Quantitative Finance*.
+- Hagan, P., Kumar, D., Lesniewski, A., Woodward, D. (2002). "Managing smile risk." *Wilmott*.
+- Bakshi, G., Kapadia, N., Madan, D. (2003). "Stock return characteristics, skew laws, and the differential pricing of individual equity options." *RFS*.
+- Backus, D., Foresi, S., Wu, L. (2004). "Accounting for biases in Black–Scholes." Working paper.
+- Zeliade Systems (2009). "Quasi-explicit calibration of Gatheral's SVI model." White paper.
+- Cheng, M., Madhavan, A. (2009). "The dynamics of leveraged and inverse exchange-traded funds." *Journal of Investment Management*.
+- Gatheral, J., Jacquier, A. (2011). "Convergence of Heston to SVI." *Quantitative Finance*.
+- Andreasen, J., Huge, B. (2011). "Volatility interpolation." *Risk* (Danske Bank; SSRN 1694972).
+- Andersen, T., Fusari, N., Todorov, V. (2017). "Short-term market risks implied by weekly options." *Journal of Finance*.
+- Dew-Becker, I., Giglio, S., Le, A., Rodriguez, M. (2017). "The price of variance risk." *JFE*.
+- Griffin, J., Shams, A. (2018). "Manipulation in the VIX?" *RFS* 31(4) (Cboe disputed the conclusions).
+- Martin, I., Wagner, C. (2019). "What is the expected return on a stock?" *Journal of Finance*.
+- Hendriks, S., Martini, C. (2019). "The extended SSVI volatility surface." *Journal of Computational Finance*.
+- Martini, C., Mingone, A. (2022). "No arbitrage SVI." *SIAM Journal on Financial Mathematics* (arXiv 2005.03340); and "No arbitrage global parametrization for the eSSVI volatility surface." *Quantitative Finance* (arXiv 2204.00312).
+- Kelly, B., Kuznetsov, B., Malamud, S., Xu, T. (2023). "Deep learning from implied volatility surfaces." Swiss Finance Institute RP 23-60, SSRN 4531181.
+- Vuletić, M., Cont, R. (2024). "VolGAN: a generative model for arbitrage-free implied volatility surfaces." *Applied Mathematical Finance* 31(4).
+- Wiedemann, R., Jacquier, A., Gonon, L. (2025). "Operator deep smoothing for implied volatility." ICLR (arXiv 2406.11520).
+- Industry and public record: Credit Suisse, Form 6-K of 6 February 2018 (XIV event acceleration); *Set Capital LLC v. Credit Suisse Group AG*, 996 F.3d 64 (2d Cir. 2021) (allegations, contested); ProShares (SVXY to −0.5×, effective 27 February 2018); Cboe, "SPX 0DTE options jump to record 62% share in August" (2025).
 
 ### Part 13 · Stochastic Volatility and Jumps
 - Merton, R. C. (1976). "Option pricing when underlying stock returns are discontinuous." *JFE*.
@@ -867,11 +905,23 @@ Frontier (2023–2026):
 - Guyon, J. (2020). "The joint S&P 500/VIX smile calibration puzzle solved." *Risk*.
 - Fukasawa, M., Takabatake, T., Westphal, R. (2022). "Consistent estimation for fractional stochastic volatility model under high-frequency asymptotics." *Mathematical Finance*.
 - Rømer, S. E. (2022). "Empirical analysis of rough and classical stochastic volatility models to the SPX and VIX markets." *Quantitative Finance*.
-- Guyon, J., El Amrani, M. (2023). "Does the term-structure of the at-the-money skew really follow a power law?" *Quantitative Finance*.
+- Guyon, J., El Amrani, M. (2023). "Does the term-structure of the at-the-money skew really follow a power law?" *Risk* (Cutting Edge).
 - Guyon, J., Lekeufack, J. (2023). "Volatility is (mostly) path-dependent." *Quantitative Finance*.
-- Cuchiero, C., Gazzetta, G., Svaluto-Ferro, S. (2023). "Signature-based models: theory and calibration." *SIAM J. Financial Mathematics*.
-- Guyon, J. (2024). "Dispersion-constrained martingale Schrödinger problems and the exact joint S&P 500/VIX smile calibration puzzle." *Finance and Stochastics* *(verify: venue and year)*.
+- Cuchiero, C., Gazzani, G., Svaluto-Ferro, S. (2023). "Signature-based models: theory and calibration." *SIAM J. Financial Mathematics* (arXiv 2207.13136).
+- Guyon, J. (2024). "Dispersion-constrained martingale Schrödinger problems and the exact joint S&P 500/VIX smile calibration puzzle." *Finance and Stochastics* 28(1):27–79.
 - Cont, R., Das, P. (2024). "Rough volatility: fact or artefact?" *Sankhya B*.
+- Fukasawa, M. (2021). "Volatility has to be rough." *Quantitative Finance* 21(1):1–8.
+- Horvath, B., Muguruza, A., Tomas, M. (2021). "Deep learning volatility." *Quantitative Finance* 21(1):11–27.
+- Bolko, A. E., Christensen, K., Pakkanen, M. S., Veliyev, B. (2023). "A GMM approach to estimate the roughness of stochastic volatility." *J. Econometrics* 235(2):745–778.
+- Chong, C., Hoffmann, M., Liu, Y., Rosenbaum, M., Szymanski, G. (2024). "Statistical inference for rough volatility: minimax theory." *Annals of Statistics* 52(4):1277–1306; and "… central limit theorems", *Annals of Applied Probability* 34(3).
+- Bayer, C., Breneis, S. (2023). "Markovian approximations of stochastic Volterra equations with the fractional kernel." *Quantitative Finance* 23(1):53–70.
+- Rosenbaum, M., Zhang, J. (2022). "Deep calibration of the quadratic rough Heston model." *Risk* (arXiv 2107.01611).
+- Abi Jaber, E., Li, S. (2025). "Volatility models in practice: rough, path-dependent or Markovian?" *Mathematical Finance* 35(4):796–817 (arXiv 2401.03345).
+- Nutz, M., Riveros Valdevenito, A. (2024). "On the Guyon–Lekeufack volatility model." *Finance and Stochastics* 28(4):1203–1223; Andrès, H., Jourdain, B. (2024), arXiv 2408.02477 (general kernels).
+- Cuchiero, C., Gazzani, G., Möller, J., Svaluto-Ferro, S. (2025). "Joint calibration to SPX and VIX options with signature-based models." *Mathematical Finance* 35(1):161–213.
+- Nuzman, C. J., Poor, H. V. (2000). "Linear estimation of self-similar processes via Lamperti's transformation." *J. Applied Probability* (the conditional mean behind the rough forecast).
+- Diethelm, K., Ford, N. J., Freed, A. D. (2002). "A predictor-corrector approach for the numerical solution of fractional differential equations." *Nonlinear Dynamics* (the Adams scheme).
+- Industry and crisis: Aquilina, Lombardi, Schrimpf, Sushko (27 Aug 2024), "The market turbulence and carry trade unwind of August 2024", BIS Bulletin 90; Todorov, Vilkov (29 Oct 2024), "Anatomy of the VIX spike in August 2024", BIS Bulletin 95; Li, Askanazi (April 2025), "Demystify the Surge in VIX", SEC DERA Working Paper; Cboe, VIX1D launch (24 Apr 2023). Mandelbrot–Van Ness (1968): see Part 5.
 
 ### Part 15 · Exotics and Structured Products
 - Goldman, M. B., Sosin, H., Gatto, M. A. (1979). "Path dependent options: 'buy at the low, sell at the high'." *Journal of Finance*.
@@ -886,7 +936,22 @@ Frontier (2023–2026):
 - Henderson, B., Pearson, N. (2011). "The dark side of financial innovation: a case study of the pricing of a retail financial product." *JFE*.
 - Glasserman, P., Xu, X. (2014). "Robust risk measurement and model risk." *Quantitative Finance*.
 - Célérier, C., Vallée, B. (2017). "Catering to investors through security design: headline rate and complexity." *QJE*.
-- Public sources on the 2024 A-share snowball knock-ins and on Korean HSCEI-linked ELS losses (exchange, regulator and central-bank reports) *(verify)*.
+- Merton, R. C. (1973). "Theory of rational option pricing." *Bell Journal of Economics and Management Science* (the down-and-out call).
+- Margrabe, W. (1978). "The value of an option to exchange one asset for another." *Journal of Finance*.
+- Stulz, R. (1982). "Options on the minimum or the maximum of two risky assets." *Journal of Financial Economics*.
+- Johnson, H. (1987). "Options on the maximum or the minimum of several assets." *JFQA*.
+- Conze, A., Viswanathan (1991). "Path dependent options: the case of lookback options." *Journal of Finance*.
+- Rubinstein, M. (1991). "Somewhere over the rainbow." *Risk*.
+- Avellaneda, M., Parás, A. (1996). "Managing the volatility risk of portfolios of derivative securities: the Lagrangian uncertain volatility model." *Applied Mathematical Finance*.
+- Boyer, B., Gibson, M., Loretan, M. (1999). "Pitfalls in tests for changes in correlations." Federal Reserve Board, International Finance Discussion Paper 597.
+- Vecer, J. (2001). "A new PDE approach for pricing arithmetic average Asian options." *Journal of Computational Finance*.
+- Forbes, K., Rigobon, R. (2002). "No contagion, only interdependence: measuring stock market comovements." *Journal of Finance*.
+- Carr, P., Lee, R. (2009). "Put-call symmetry: extensions and applications." *Mathematical Finance*.
+- Egan, M. (2019). "Brokers versus retail investors: conflicting interests and dominated products." *Journal of Finance*.
+- Vokata, P. "Engineering lemons." Working paper, Fisher College of Business / Dice Center WP 2020-21 (not confirmed as published).
+- Calvet, L., Célérier, C., Sodini, P., Vallée, B. (2023). "Can security design foster household risk-taking?" *Journal of Finance* 78(4).
+- Frontier: Zeron, Wu, Ruiz (2023), FRTB-IMA for equity autocallables with Chebyshev proxies (arXiv 2305.06215); Sharma, Chen, Noh, DeJesus, Schlener (2024), distributional RL hedging of autocallable portfolios (arXiv 2407.10903) and "Hedging and pricing structured products featuring multiple underlying assets" (arXiv 2411.01121, ICAIF 2024); Cibrario et al. (2025), quantum autocallable pricing (arXiv 2507.19039); Goudenège, Molent, Zanette (2025), uncertain volatility for equity-indexed annuities (arXiv 2502.10300); Glasserman, Karmarkar (2025), "Differential ML with a difference" (arXiv 2512.05301); Higgins (2026), stochastic spot/vol correlation and FX barriers (arXiv 2602.01376); Che, Lim, Sun (2026), "Dual attainment in multi-period multi-asset martingale optimal transport and its computation" (arXiv 2602.02996); Lakshtanov (2026), "Unbiased Monte Carlo Greeks for discontinuous payoffs" (arXiv 2609.06137); Fukasawa (2026), "Short-term barrier option price expansion" (arXiv 2610.00340); Lopez-Piqueres, Acharya, Sun, Kumar (2026), functional tensor trains for multi-asset structured products (arXiv 2610.42119).
+- Public record (checked November 2026): Caixin (27 Oct 2023, ≈$27 bn onshore snowballs, SAC data via Bloomberg); Bloomberg (11 Jan 2024, ≈$13 bn near knock-in; 24 Apr 2024, brokers told to stop growing OTC A-share derivative exposure, coupons above 40%); Asia Financial (23 Jan 2024, UBS analysts' ≈$50 bn estimate); Risk.net (22 Jan 2024 knock-ins and futures selling; issuers blaming a narrowing CSI 500 basis; peak vega; Korean autocall hedging losses 2015–16); Korea FSC press release (21 Jan 2016, 37.0 tn won outstanding); Korea Times / KED (19.3 tn won outstanding in November 2023, 15.9 tn via banks); JoongAng Daily (11 Mar 2024, FSS scheme, 1.2 tn won lost in Jan–Feb, 20–60% compensation range; 28 Nov 2025, preliminary penalty notices of ≈2 tn won to five banks); Natixis / Groupe BPCE release (18 Dec 2018: €100 m revenue reduction and €160 m provision, "a hedging strategy that proved to be deficient"); EU Delegated Regulation 2016/101 (prudent valuation, Art. 11 model risk); IFRS 9 B5.1.2A; Basel MAR23 (residual risk add-on); PRIIPs Regulation 1286/2014; FINRA Regulatory Notice 12-03; Federal Reserve SR 11-7 / SR 26-2.
 
 ### Part 16 · Computing Prices
 - Crank, J., Nicolson, P. (1947). "A practical method for numerical evaluation of solutions of partial differential equations of the heat-conduction type." *Proc. Cambridge Phil. Soc.*
@@ -915,6 +980,32 @@ Frontier (2023–2026):
 - Rebentrost, P., Gupt, B., Bromley, T. (2018). "Quantum computational finance: Monte Carlo pricing of financial derivatives." *Physical Review A*.
 - Stamatopoulos, N., et al. (2020). "Option pricing using quantum computers." *Quantum*.
 - Chakrabarti, S., et al. (2021). "A threshold for quantum advantage in derivative pricing." *Quantum*.
+- Metropolis, N., Ulam, S. (1949). "The Monte Carlo method." *JASA*.
+- Box, G. E. P., Muller, M. E. (1958). "A note on the generation of random normal deviates." *Annals of Mathematical Statistics*.
+- Sobol', I. M. (1967). "On the distribution of points in a cube and the approximate evaluation of integrals." *USSR Comp. Math. and Math. Physics*.
+- Cryer, C. W. (1971). "The solution of a quadratic programming problem using systematic overrelaxation." *SIAM J. Control*.
+- Kemna, A., Vorst, A. (1990). "A pricing method for options based on average asset values." *J. Banking & Finance*.
+- Rubinstein, R. (1997). "Optimization of computer simulation models with rare events." *European J. Operational Research* (the cross-entropy method).
+- Broadie, M., Glasserman, P. (1997). "Pricing American-style securities using simulation." *J. Economic Dynamics and Control* (random trees).
+- Glasserman, P., Heidelberger, P., Shahabuddin, P. (1999). "Asymptotically optimal importance sampling and stratification for pricing path-dependent options." *Mathematical Finance*.
+- Clément, E., Lamberton, D., Protter, P. (2002). "An analysis of a least squares regression method for American option pricing." *Finance and Stochastics*.
+- Forsyth, P., Vetzal, K. (2002). "Quadratic convergence for valuing American options using a penalty method." *SIAM J. Scientific Computing*.
+- Brassard, G., Høyer, P., Mosca, M., Tapp, A. (2002). "Quantum amplitude amplification and estimation." *Contemporary Mathematics*.
+- Broadie, M., Glasserman, P. (2004). "A stochastic mesh method for pricing high-dimensional American options." *J. Computational Finance*.
+- Griewank, A., Walther, A. (2008). *Evaluating Derivatives*, 2nd ed. SIAM.
+- Fang, F., Oosterlee, C. (2009). "Pricing early-exercise and discrete barrier options by Fourier-cosine series expansions." *Numerische Mathematik*.
+- Salmon, J., Moraes, M., Dror, R., Shaw, D. E. (2011). "Parallel random numbers: as easy as 1, 2, 3." *SC'11* (Philox).
+- Weston, S., Spooner, J., Racanière, S., Mencer, O. (2012). "Rapid computation of value and risk for derivatives portfolios." *Concurrency and Computation: Practice and Experience* (JPMorgan and Maxeler's FPGA risk run).
+- Montanaro, A. (2015). "Quantum speedup of Monte Carlo methods." *Proc. Royal Society A*.
+- Rhee, C.-H., Glynn, P. (2015). "Unbiased estimation with square root convergence for SDE models." *Operations Research*.
+- Giles, M. (2015). "Multilevel Monte Carlo methods." *Acta Numerica*.
+- Gaß, M., Glau, K., Mahlstedt, M., Mair, M. (2018). "Chebyshev interpolation for parametric option pricing." *Finance and Stochastics*.
+- Becker, S., Cheridito, P., Jentzen, A. (2019). "Deep optimal stopping." *JMLR* (the max-call bounds [26.156, 26.162]; Part 17).
+- Glau, K., Kressner, D., Statti, F. (2020). "Low-rank tensor approximation for Chebyshev interpolation in parametric option pricing." *SIAM J. Financial Mathematics*.
+- Suzuki, Y., et al. (2020). "Amplitude estimation without phase estimation." *Quantum Information Processing*.
+- Owen, A. (2022). "On dropping the first Sobol' point." *Monte Carlo and Quasi-Monte Carlo Methods 2020*, Springer.
+- Junike, G., Pankrashkin, K. (2022). "Precise option pricing by the COS method—how to choose the truncation range." *Applied Mathematics and Computation*.
+- *Frontier (2023–2026):* Pan, Z., Owen, A. (2023). "Super-polynomial accuracy of one dimensional randomized nets using the median-of-means." *Mathematics of Computation*; Bayer, C., Pelizzari, L., Schoenmakers, J. (2023). "Primal and dual optimal stopping with signatures." arXiv 2312.03444; Dalzell, A., et al. (2023). "Quantum algorithms: a survey of applications and end-to-end complexities." arXiv 2310.03011; Junike, G. (2024). "On the number of terms in the COS method for European option pricing." *Numerische Mathematik*; Stamatopoulos, N., Zeng, W. (2024). "Derivative pricing using quantum signal processing." *Quantum*.
 
 ### Part 17 · Deep Pricing and Hedging
 - Hodges, S., Neuberger, A. (1989). "Optimal replication of contingent claims under transaction costs." *Review of Futures Markets*.

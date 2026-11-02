@@ -235,6 +235,8 @@ class Learning(VoiceoverScene, ThreeDScene):
                   rf"{100 * rc.mean():.1f}\%", font_size=24, color=BAD),
             label(rf"SSVI on the same splits: {st[0]:.2f}, {st[1]:.2f}, {st[2]:.2f} \quad 0 by construction", font_size=24,
                   color=LV),
+            label(rf"vega-weighted, network against SSVI: {np.mean(n['pen_test_vw']):.2f} against "
+                  rf"{np.mean(n['ssvi_test_vw']):.2f}", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(UP, buff=0.9)
         note_ = label(r"violations: share of a $201 \times 60$ grid ($|k| \le 1$, 3 days to 0.8 years) with $g < 0$ or "
                       r"$\partial_T w < 0$; unweighted RMSE", font_size=17, color=GREY_B).next_to(tab, DOWN, buff=0.3)
@@ -248,12 +250,16 @@ class Learning(VoiceoverScene, ThreeDScene):
         rgm = 100 * float(np.mean(rg))
         branch = ("So the penalized network beats SSVI on quotes it never saw. " if wins else
                   "So SSVI holds its own on quotes it never saw. ")
+        pv, sv = float(np.mean(n["pen_test_vw"])), float(np.mean(n["ssvi_test_vw"]))
+        branch2 = ("Weighted by vega, as a desk would weigh them, the network still wins. " if pv < sv else
+                   "But weight the errors by vega, as a desk would, and the order flips: SSVI wins, because the "
+                   "network's gains are in the far wings, where options are cheap. ")
         with self.voiceover(
             f"The scores. On held-out quotes the penalized network misses by {a:.2f} volatility points on average over "
             f"three splits, and has no arbitrage anywhere on a fine grid. The same network without the penalty fits "
             f"the held-out quotes better, {b:.2f}, but {rgm:.0f} percent of the grid has a negative density: it buys "
             "accuracy with arbitrage. SSVI, refitted on the same training quotes, misses by "
-            f"{c:.2f}. " + branch + "<bookmark mark='a'/> Pause and predict: if the network fits better, why might a "
+            f"{c:.2f}. {branch}<bookmark mark='a'/> {branch2}Pause and predict: if the network fits better, why might a "
             "desk still quote SSVI? Because SSVI extrapolates with a guarantee, fits in milliseconds, moves smoothly "
             "from one day to the next, and its parameters mean something to a trader."
         ) as vo:

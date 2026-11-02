@@ -63,8 +63,7 @@ class Barriers(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(UP * 0.5)
         src = illustration(r"60 Brownian paths drawn; the histograms from 20{,}000; $m_T$ the minimum, $b$ the barrier")
         with self.voiceover(
-            "Watch it on many paths at once. Sixty Brownian paths run to the horizon. Those that touch the barrier "
-            "turn red. <bookmark mark='a'/> After its first touch, each red path gets a mirror twin, reflected "
+            "Sixty Brownian paths run to the horizon; those that touch the barrier turn red. <bookmark mark='a'/> After its first touch, each red path gets a mirror twin, reflected "
             "across the barrier. The twin is just as likely, because Brownian motion forgets its past and is "
             "symmetric. <bookmark mark='b'/> So on the right, the paths that touched and ended above any level x "
             "pile up like all the paths that ended below the mirror point, two b minus x. Counted on twenty "
@@ -106,18 +105,14 @@ class Barriers(VoiceoverScene, ThreeDScene):
                 why(r"in--out parity: on every path exactly one of the two is alive at expiry")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.2, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Now the derivation, step by step. Reflection gives the joint law of the minimum and the endpoint: the "
-            "chance of touching b and ending above x equals the chance of ending below two b minus x. "
-            "<bookmark mark='a'/> Prices have drift, so re-weight every driftless path by its Girsanov density, as "
-            "in Part five. <bookmark mark='b'/> Integrate the call's payoff against this killed density, and out "
-            "comes the closed form: the vanilla, minus the vanilla seen from the mirrored spot, scaled by H over S to "
-            "the power two lambda minus two. <bookmark mark='c'/> The same price comes from the partial differential "
-            "equation: Black–Scholes on the region above the barrier, with the value pinned to zero on it. "
-            "<bookmark mark='d'/> And the two views meet in the method of images. If V solves Black–Scholes, so does "
-            "this reflected version of it. Subtract it from the vanilla, and the boundary condition holds "
-            "automatically: the image term is the reflected vanilla. <bookmark mark='e'/> One last identity. A "
-            "down-and-in and a down-and-out with the same terms add up to the vanilla, because on every path exactly "
-            "one of them is alive."
+            "Now the derivation. Reflection gives the joint law of the minimum and the endpoint: touching b and ending "
+            "above x is as likely as ending below two b minus x. <bookmark mark='a'/> Prices have drift, so re-weight "
+            "each path by its Girsanov density, as in Part five. <bookmark mark='b'/> Integrate the call's payoff against "
+            "this killed density: the vanilla, minus the vanilla seen from the mirrored spot, scaled by H over S to the "
+            "power two lambda minus two. <bookmark mark='c'/> The same price solves Black–Scholes above the barrier, "
+            "pinned to zero on it. <bookmark mark='d'/> The two views meet in the method of images: if V solves "
+            "Black–Scholes, so does this reflection of it, and subtracting it makes the boundary condition hold. "
+            "<bookmark mark='e'/> And a down-and-in plus a down-and-out is the vanilla: on every path exactly one is alive."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -154,13 +149,11 @@ class Barriers(VoiceoverScene, ThreeDScene):
         pp = pause_card(r"A down-and-in call plus a down-and-out call with the same terms is worth\ldots?", width=4.8)
         pp.to_corner(UR, buff=0.35)
         with self.voiceover(
-            "Here is that formula in the House's library: lambda, the reflected argument y, the down-and-in part "
-            "priced from the mirror, and the vanilla minus it. <bookmark mark='a'/> Run it on a six-month call, spot "
-            f"and strike {p['S']:.0f}, barrier {p['H']:.0f}, twenty-five percent volatility: {b['continuous']:.2f}. A "
-            f"hundred thousand simulated paths with twenty steps a day give {fine['mc']:.2f}, within their noise. "
-            f"The vanilla is {b['vanilla']:.2f}: the barrier takes very little, because the paths it kills were "
-            "mostly worth little. <bookmark mark='b'/> And a quick one to answer in your head: a down-and-in plus a "
-            "down-and-out is worth the vanilla."
+            "Here is that formula in the House's library: lambda, the reflected argument y, the down-and-in part, and the "
+            "vanilla minus it. <bookmark mark='a'/> Run it on a six-month call, spot and strike "
+            f"{p['S']:.0f}, barrier {p['H']:.0f}, twenty-five percent volatility: {b['continuous']:.2f}. A hundred thousand "
+            f"paths give {fine['mc']:.2f}, within their noise; the vanilla is {b['vanilla']:.2f}. <bookmark mark='b'/> "
+            "And a quick one for you: a down-and-in plus a down-and-out is worth the vanilla."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

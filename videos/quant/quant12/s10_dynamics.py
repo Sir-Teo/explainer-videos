@@ -173,17 +173,15 @@ class Dynamics(VoiceoverScene, ThreeDScene):
                   "an average skew that is small, the ratio lands near two, the local-volatility value; trust the sign "
                   "of the slope more than the size of the ratio. " if ident else
                   "Do not believe it. The slope is indistinguishable from zero, and Bitcoin's average skew is close to "
-                  "zero too, so the ratio of two small, noisy numbers is not identified. ")
+                  "zero too, so the ratio of two small, noisy numbers is not identified. In equity indices, where the "
+                  "skew is steep and stable, the same regression is informative; here we cannot tell.")
         with self.voiceover(
             f"Test the rules on {n} pairs of consecutive weeks: predict next week's thirty-day smile from this "
             f"week's, holding moneyness or holding strikes. Sticky moneyness misses by {mm:.2f} volatility points on "
             f"average, sticky strike by {ms:.2f}, and sticky strike wins in only {sb:.0f} percent of weeks. "
             "<bookmark mark='a'/> Now estimate the ratio itself, by regressing the weekly change in at-the-money "
             f"volatility on the change in log spot and dividing by the average skew. The point estimate is "
-            f"{rhat:.1f}, with a t-statistic of {tstat:.1f}. "
-            + branch
-            + "In equity indices, where the skew is steep and stable, the same regression is informative; on this market, "
-            "the honest answer is that we cannot tell."
+            f"{rhat:.1f}, with a t-statistic of {tstat:.1f}. {branch}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lm), Create(ls), FadeIn(leg), run_time=2.5)
             self.play(FadeIn(foot))

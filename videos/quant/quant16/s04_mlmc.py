@@ -155,8 +155,8 @@ class MLMC(VoiceoverScene):
             "bars. <bookmark mark='a'/> Then it tests the bias using the "
             "last correction's mean. Too big: add a level, re-estimate, re-allocate. Pass by pass the dots step down "
             "a straight line. <bookmark mark='b'/> It stops when "
-            f"the bias test passes, here at {runs[0]['levels']} levels. Across four seeds the final cost varies by a "
-            "few percent: the algorithm is stable."
+            f"the bias test passes, here at {runs[0]['levels']} levels. Across four seeds the final cost varies by "
+            f"{100 * (max(costs) - min(costs)) / min(costs):.1f} percent: the algorithm is stable."
         ) as vo:
             self.play(FadeIn(g), FadeIn(h), FadeIn(src), FadeIn(cur))
             vo.wait_until("a")

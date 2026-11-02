@@ -209,8 +209,7 @@ class SkewMath(VoiceoverScene, ThreeDScene):
                   font_size=22).to_corner(UR, buff=0.3)
         src = real_data(r"models priced by COS (Part 13) or Monte Carlo; the Surface, 10 December 2025", corner=DL)
         with self.voiceover(
-            "Now the models themselves, priced exactly, with their skews against maturity on the same log scales "
-            "as the market's. Pause and predict: a Heston model whose mean reversion is two a year. Over which "
+            "Now the models themselves, priced exactly. Pause and predict: a Heston model whose mean reversion is two a year. Over which "
             "expiries is its skew flat? <bookmark mark='a'/> Over everything well under six months. Part thirteen's "
             f"Heston fit has a local exponent of {hs['short']:.2f} between two days and two weeks: flat. "
             "<bookmark mark='b'/> Jumps alone go the other way: their skew falls like one over maturity, an "

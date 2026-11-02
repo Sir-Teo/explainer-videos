@@ -134,8 +134,8 @@ class FD(VoiceoverScene, ThreeDScene):
                                             BAD, stroke_width=3))
         cn_c = always_redraw(lambda: curve(ax, k, (1 - 2 * lam.get_value() * np.sin(k / 2) ** 2) /
                                            (1 + 2 * lam.get_value() * np.sin(k / 2) ** 2), GOOD, stroke_width=3))
-        rd = always_redraw(lambda: MathTex(rf"\lambda = {lam.get_value():.2f}", font_size=34, color=OPT)
-                           .next_to(g, UP, buff=0.1).align_to(g, RIGHT))
+        rd = readout(r"\lambda =", lambda: lam.get_value(), digits=2, font_size=34, color=OPT)
+        rd.next_to(g, UP, buff=0.1).align_to(g, RIGHT)
         leg = legend([(BAD, r"explicit: $1 - 4\lambda\sin^2(k\Delta x/2)$"),
                       (GOOD, r"Crank--Nicolson"), (GREY_B, r"stable: $|g| \le 1$ (shaded)")], font_size=17)
         leg.to_edge(RIGHT, buff=0.4).shift(UP * 1.5)

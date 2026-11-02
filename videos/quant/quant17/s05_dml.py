@@ -41,12 +41,10 @@ class DML(VoiceoverScene):
                     r"'twin network': its backward pass is part of the model); $\omega_j$ puts each input on one scale")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.5, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Chapter one's network learned from exact prices. A real desk does not have them: it has simulations. "
-            "Each training example is a starting state of the market and one simulated payoff from it, noisy, but "
-            "right on average. <bookmark mark='a'/> Brian Huge and Antoine Savine at Danske Bank noticed what else the "
-            "desk has. The payoff's derivative with respect to every input, along the simulated path, by the chain "
-            "rule. Adjoint differentiation, from Part sixteen, computes all of them for little more than the cost of "
-            "the payoff itself. <bookmark mark='b'/> And these derivatives are honest labels. The payoff is Lipschitz "
+            "Chapter one's network learned from exact prices. A real desk has simulations: a starting state and one "
+            "simulated payoff, noisy but right on average. <bookmark mark='a'/> Brian Huge and Antoine Savine at Danske "
+            "Bank noticed what else the desk has: the payoff's derivative with respect to every input, along the path, "
+            "which adjoint differentiation from Part sixteen computes almost for free. <bookmark mark='b'/> And these derivatives are honest labels. The payoff is Lipschitz "
             "in the starting state, so the derivative and the expectation can be swapped: the average pathwise "
             "derivative is exactly the delta. <bookmark mark='c'/> So fit the network to the payoffs and to their "
             "derivatives together, by differentiating the network itself. The test: a basket option on "
@@ -196,11 +194,9 @@ class DML(VoiceoverScene):
             de = [r["delta_rmse"] for r in rows if r["differential"] == use]
             outs.append(f"n=1024 {nm}: price rmse {np.mean(pr):.3f}   delta rmse {np.mean(de):.4f}   (3 seeds)")
         with self.voiceover(
-            "The House's version is nine lines. Run the batch through the network with gradients switched on for the "
-            "inputs. The value error, as usual. Then, if slopes are given, ask autograd for the network's own input "
-            "gradient, keeping the graph, so that training can differentiate through the derivative; add its error "
-            "against the pathwise slopes, and take one step. <bookmark mark='a'/> At a thousand and twenty-four "
-            "samples, averaged over three seeds, here is what it prints."
+            "The House's twin loss: the value error, then the network's own input gradient, kept in the graph so "
+            "training can differentiate through it, scored against the pathwise slopes. <bookmark mark='a'/> At a "
+            "thousand and twenty-four samples, over three seeds:"
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

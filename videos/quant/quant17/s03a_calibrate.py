@@ -48,14 +48,12 @@ class Calibrate(VoiceoverScene, ThreeDScene):
                     r"would need")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Calibration is now an optimization over five numbers, and every step of it is a pass through the network. "
-            "First, keep the parameters where the network was trained: optimize a free variable and squash it into "
-            "the training box with a hyperbolic tangent. <bookmark mark='a'/> That choice has a consequence. By the "
-            "chain rule, the gradient picks up the tangent's slope, which vanishes at the walls of the box. A "
-            "parameter that the market pushes against a wall stops moving there, without complaint. Remember that "
-            "for the next chapter. <bookmark mark='b'/> Second, the gradient of the fit is exact: automatic "
-            "differentiation through the network. By Monte Carlo every gradient would cost more simulations, and "
-            "come out noisy. <bookmark mark='c'/> Third, the cost. Twelve starts, a few hundred steps each: through "
+            "Calibration is now an optimization over five numbers. First, keep the parameters where the network was "
+            "trained: squash a free variable into the training box with a hyperbolic tangent. <bookmark mark='a'/> By "
+            "the chain rule the gradient picks up the tangent's slope, which vanishes at the walls: a parameter pushed "
+            "against a wall stops there, without complaint. <bookmark mark='b'/> Second, the gradient is exact, by "
+            "automatic differentiation; by Monte Carlo it would cost more simulations, and be noisy. "
+            "<bookmark mark='c'/> Third, the cost. Twelve starts, a few hundred steps each: through "
             f"the network a pass costs {1e3 * c['t_net_surface']:.1f} milliseconds, by simulation "
             f"{c['t_mc_surface']:.1f} seconds. Seconds against hours, before counting the extra simulations every "
             "Monte Carlo gradient would need."
@@ -212,9 +210,9 @@ class Calibrate(VoiceoverScene, ThreeDScene):
                   font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(leg, DOWN, buff=0.3).to_edge(LEFT, buff=0.8)
         with self.voiceover(
-            "Now the check that matters. Three expiries of the Surface: the market in orange, the network's smile at "
-            "the calibrated parameters in purple. <bookmark mark='a'/> The crosses check it: fresh Monte Carlo at the calibrated parameters, never "
-            f"touched by the network. The fit is {s['net_rmse']:.2f} vol points through the network and {s['mc_rmse']:.2f} "
+            "Now the check that matters. Three expiries of the Surface: the market in orange, the network's smile in "
+            "purple. <bookmark mark='a'/> The crosses are fresh Monte Carlo at the same parameters. "
+            f"The fit is {s['net_rmse']:.2f} vol points through the network and {s['mc_rmse']:.2f} "
             f"by simulation, with Hurst exponent {p['H']:.2f}. <bookmark mark='b'/> A pass of the network over the whole "
             f"surface takes {1e3 * c['t_net_surface']:.1f} milliseconds, against {c['t_mc_surface']:.0f} seconds of Monte "
             f"Carlo. Part fourteen's direct fit found H of {p14['params']['H']:.2f}. Calibration that took minutes now "

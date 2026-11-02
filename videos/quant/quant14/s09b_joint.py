@@ -126,7 +126,7 @@ class Joint(VoiceoverScene):
             "past volatility predicts a big move. <bookmark mark='a'/> Measure it, with twenty-day windows. In the "
             f"quadratic rough Heston paths the forward correlation is {z['qRH'][0]:.2f}, the backward "
             f"{z['qRH'][1]:.2f}. In the US market since 1990, {z['market'][0]:.2f} against {z['market'][1]:.2f}: "
-            + verdict + ". <bookmark mark='b'/> Rough Bergomi, with no feedback from price to volatility, is close "
+            f"{verdict}. <bookmark mark='b'/> Rough Bergomi, with no feedback from price to volatility, is close "
             f"to symmetric: {z['rBergomi'][0]:.2f} against {z['rBergomi'][1]:.2f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(side), FadeIn(src))
@@ -226,7 +226,7 @@ class Joint(VoiceoverScene):
             "answers it. <bookmark mark='a'/> Run it, both ways. On the right, the constraint errors "
             "fall to ten to the minus nine; below, the interval of possible prices closes onto its final width. "
             f"<bookmark mark='b'/> Any model that fits both smiles must price the claim between {lo['value']:.3f} and "
-            f"{up['value']:.3f}. Rough Bergomi says {jb['rbergomi']:.3f}: " + verdict + ". Guyon's construction adds "
+            f"{up['value']:.3f}. Rough Bergomi says {jb['rbergomi']:.3f}: {verdict}. Guyon's construction adds "
             "the VIX smile as a third constraint, and so finds a model that fits all three exactly."
         ) as vo:
             self.play(FadeIn(card), FadeIn(warn))

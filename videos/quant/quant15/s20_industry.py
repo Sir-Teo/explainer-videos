@@ -129,9 +129,8 @@ class Industry(VoiceoverScene):
             "risks, path-dependent payoffs among them. A bank on internal models must show its risk model explains "
             "its autocallables' daily profit and loss, and running those simulations is expensive: Zeron, Wu and "
             "Ruiz reported cutting that cost by about ninety percent with Chebyshev proxies. <bookmark mark='a'/> "
-            "Fourth, conduct. In Europe every packaged retail product carries a key information document with a risk "
-            "class and performance scenarios. America's FINRA told brokers in 2012 to supervise complex products "
-            "more closely, and Korea's regulator, as we saw, ordered compensation and proposed penalties. "
+            "Fourth, conduct: Europe's key information documents for packaged retail products, FINRA's 2012 notice "
+            "on complex products, and Korea's compensation and penalties. "
             "<bookmark mark='b'/> And fifth, model validation, the Federal Reserve's guidance, revised this year. "
             "Natixis is the case study of why: a hedging model can price correctly and still fail to hedge."
         ) as vo:

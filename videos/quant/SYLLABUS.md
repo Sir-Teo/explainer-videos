@@ -526,7 +526,7 @@ shift, adjoint Greeks and Monte Carlo hardware belong to Part 16.
 "Price a digital by Girsanov."
 *House:* the simulation library (used by every pricing part), validated by Rule 6.
 
-### Part 6 · Financial Econometrics (~58; 20 chapters)
+### Part 6 · Financial Econometrics (~55; 20 chapters)
 1. Regression in finance: OLS as projection, Frisch–Waugh–Lovell, the sandwich; overlapping observations and HAC
    errors (Newey–West 1987, Hansen–Hodrick 1980, Hodrick 1992); fixed-b and EWC (Kiefer–Vogelsang 2005; Lazarus,
    Lewis, Stock and Watson 2018); clustered errors.
@@ -728,51 +728,101 @@ the model.
 digital as T → 0?"
 *House:* the vol desk opens: the BSM pricer and hedger.
 
-### Part 11 · Trading Options (~50; the practitioner's part)
-1. How an options trader thinks: positions as Greeks, P&L as gamma vs theta.
-2. Gamma scalping on a real path, and the variance it captures.
-3. Vega, vanna, volga: the second-order Greeks and the risk reversal and butterfly.
-4. Strategies: straddles, strangles, spreads, calendars, risk reversals; what each bets on.
-5. Volatility trading: realized vs implied, the volatility risk premium, the edge in forecasting it (Sinclair).
-6. Pin risk and expiry; early exercise and dividend plays.
-7. The options market maker's book: quoting the surface, hedging the residual, inventory in Greeks.
-8. Dispersion: index vs single-stock vol, implied correlation.
-9. The India expiry-day boom: weekly index options, retail flow, and SEBI's 2024 tightening.
-10. Case file: the SEBI interim order against Jane Street (July 2025), *alleged* index manipulation on expiry days,
-    contested by the firm. The mechanics alleged, explained with an index-and-options toy model.
+### Part 11 · Trading Options (~58; the practitioner's part)
+1. How an options trader thinks: the book as one Taylor series, each Greek derived; P&L as gamma against theta; a
+   real next-day P&L explain on the Surface.
+2. Gamma scalping on a real path, its order effect (the same returns reshuffled 2,000 times), and how often to hedge
+   (hourly, daily, on 2% moves) across 244 BTC windows of 2021–2025.
+3. Vega, vanna, volga derived; the risk reversal and butterfly as their prices; the vanna–volga smile rebuilt from
+   three quotes; 100 weeks of BTC RR and BF.
+4. Strategies: straddles, strangles, spreads, calendars, risk reversals, butterflies; what each bets on (3D P&L
+   surfaces morphing), and what each paid on two years of real smiles.
+5. Volatility trading: the premium in option returns (Coval–Shumway; Bakshi–Kapadia), a forecaster's edge tested out
+   of sample (Sinclair; Goyal–Saretto), and how much to bet when the tail is fat (Kelly with a ruin wall).
+6. Expiry: gamma at the strike, pin risk, the pinning mechanism (Avellaneda–Lipkin) simulated and tested on Bitcoin
+   (Ni–Pearson–Poteshman); early exercise, synthetics and the dividend play (Pool–Stoll–Whaley; Hao–Kalay–Mayhew).
+7. The options market maker: the spread from adverse selection (Glosten–Milgrom) measured on 524,000 Deribit trades
+   (edge and markouts); inventory and the optimal quote (Avellaneda–Stoikov, GLFT, Stoikov–Sağlam); hedging the book's
+   gamma and vega with other options, vega by bucket, and under costs.
+8. Dispersion: index against component volatility, implied correlation (Cboe COR3M 2006–2025), the correlation risk
+   premium, and the trade's P&L simulated.
+9. The India expiry-day boom: weekly index options, retail losses, SEBI's 2024 measures; what short-dated options
+   return to their buyers (Deribit).
+10. Case file: SEBI's interim order against Jane Street (July 2025), *alleged* expiry-day index manipulation,
+    contested by the firm; the record since (escrow, the SAT appeal; Jane Street v. Millennium, settled 2024); the
+    mechanics alleged, as a toy model and its 3D generalization.
 
 *Textbooks:* Natenberg *Option Volatility and Pricing*; Sinclair *Volatility Trading* and *Positional Option
-Trading*; Taleb *Dynamic Hedging*; Bennett *Trading Volatility*.
-*Trained:* an RL options market maker that learns to scalp gamma under costs, compared with delta-hedging rules.
-*Computed:* gamma-scalping P&L on BTC paths; implied correlation from index and component vols (where data allows).
-*Visuals:* a P&L surface over (spot move, vol move) for each strategy; the scalper's trades on the path.
-*Firms:* SIG (game theory and poker in training, from public interviews), Optiver, IMC, Jane Street.
+Trading*; Taleb *Dynamic Hedging*; Bennett *Trading Volatility*; Hull OFOD (strategies, Greeks).
+*Trained:* a tabular Q-learning options market maker (5 seeds) against the exact dynamic program and the GLFT
+formula; the deep hedger (3 cost weights × 3 seeds, replayed; Part 17 goes further); a walk-forward ridge/boosted-tree
+predictor of hedged straddle P&L (registered).
+*Computed:* P&L explain on the Surface; scalping and its reshuffles; hedge frequency on 244 BTC windows; vanna–volga
+on the Surface; 96 weeks of structures on real smiles; delta-hedged gains; Kelly on Part 10's 1,706 months; Deribit
+maker edge and markouts; Greek hedges under Heston; pinning simulated and on BTC; early exercise on a tree; COR3M;
+dispersion simulated; short-dated option returns on Deribit; short-vol books through 2018 and 2020.
+*Visuals:* the value surface sinking by theta; the dollar-gamma landscape with the crash on it; P&L surfaces morphing
+across structures; the vega surface with vanna and volga; Glosten–Milgrom beliefs; the policy map learning; Greek
+space; the gamma spike and pinning paths; the index-vol surface over correlation; the alleged mechanics as a surface.
+*Labs:* `book_greeks`, `delta_hedge`, `markouts`, `quote`, `ww_band`, `implied_correlation`.
+*Crisis:* short volatility blown up: LJM (February 2018) and Allianz Structured Alpha (March 2020), from the SEC's and
+DOJ's records.
+*Firms:* SIG, Optiver (and its CFTC case), IMC, Jane Street, Citadel Securities and the PFOF wholesalers.
+*Industry:* OCC volumes; retail flow and PFOF (Bryzgalova–Pavlova–Sikorskaya 2023; Muravyev–Pearson 2020); the desk's
+loop; Deribit's settlement design; SEBI's intraday position limits.
+*Frontier:* machine-learned option returns (Bali et al. 2023); RL for gamma–vega hedging (Cao et al. 2023) and for
+option market making (Baldacci–Bergault–Guéant 2021; Fang–Xu 2023).
 *Desk:* the market-making game ("make a market on a die roll; now I tell you it's even"); "Long a straddle, the
-stock doesn't move. How do you lose money?"
+stock doesn't move. How do you lose money?"; "Deep ITM American call, dividend tomorrow: exercise?"
 *House:* the options quoting engine.
 
-### Part 12 · The Volatility Surface (~55)
-1. Smile, skew, term structure; delta quoting; sticky strike vs sticky delta.
-2. Static no-arbitrage: butterfly and calendar; Roper's conditions; Lee's moment formula.
-3. SVI (Gatheral 2004) and SSVI (Gatheral–Jacquier 2014), fitted to the Surface.
-4. Dupire (1994) local volatility derived; Derman–Kani; Gyöngy's projection.
-5. Local volatility's forward smile.
-6. Variance swaps and the log contract (Carr–Madan; Demeterfi–Derman–Kamal–Zou 1999).
-7. The VIX derived and computed: our BTC index vs Deribit's DVOL.
-8. The variance risk premium (Carr–Wu 2009; Bollerslev–Tauchen–Zhou 2009), measured; the SVIX lower bound on the
-   expected market return (Martin 2017), computed.
-9. Dealer gamma, intraday momentum (Baltussen et al. 2021); 0DTE (Bandi–Fusari–Renò 2023; Dim–Eraker–Vilkov 2024).
-10. VIX futures, the roll, short-vol ETPs.
-11. Learning surfaces: an arbitrage-free neural SVI and a VAE over daily surfaces (Bergeron–Fung–Hull–Poulos 2022).
+### Part 12 · The Volatility Surface (~58)
+1. Smile, skew, term structure, read as the risk-neutral law's skewness and kurtosis (Backus–Foresi–Wu); delta quoting;
+   how the surface moves: sticky strike, sticky delta, Derman's regimes (1999), the skew-stickiness ratio, and the
+   principal components of weekly moves (Cont–da Fonseca 2002).
+2. Static no-arbitrage in total variance: Gatheral's g derived, calendar monotonicity, Roper's conditions, Lee's moment
+   formula (2004); an arbitrage shown happening (Vogt's SVI).
+3. SVI (Gatheral 2004; its Heston origin; the JW parameters; fitted and replayed) and SSVI (Gatheral–Jacquier 2014;
+   both theorems, and where the butterfly condition stops holding when γ > ½; fitted to the Surface in 3D); eSSVI and
+   the exact no-arbitrage SVI region (Martini–Mingone 2022).
+4. Dupire (1994) derived from Fokker–Planck; Derman–Kani and Rubinstein's implied trees; BBF's factor of two;
+   Gyöngy's projection checked by Monte Carlo on Heston; local vol repricing the Surface.
+5. Local volatility's dynamics: the smile moves against the spot (Hagan et al. 2002), the forward smile fades.
+6. Variance swaps and the log contract (Neuberger; Carr–Madan; DDKZ 1999; Britten-Jones–Neuberger 2000): strike
+   truncation, jumps, monitoring; replicated on 243 real Bitcoin months; volatility swaps and convexity.
+7. The VIX derived and run line by line; our BTC index against Deribit's DVOL since 2021; the VIX since 1990.
+8. The variance risk premium (Carr–Wu 2009; Bollerslev–Tauchen–Zhou 2009) on BTC and the S&P 500, its P&L skew, and a
+   descriptive predictability regression; Martin's (2017) SVIX bound derived; risk-neutral moments (Bakshi–Kapadia–Madan
+   2003).
+9. Dealer gamma and its feedback, simulated; intraday momentum (Baltussen et al. 2021); 0DTE (Andersen–Fusari–Todorov
+   2017; Bandi–Fusari–Renò 2023; Dim–Eraker–Vilkov 2024); VIX1D.
+10. VIX futures, the roll, short-volatility notes: the short-term futures index and a −1× note rebuilt from Cboe
+    settlements; leveraged-product rebalancing (Cheng–Madhavan 2009).
+11. Learning surfaces: a VAE over weekly surfaces (Bergeron et al. 2022) and an arbitrage-penalised network
+    (Ackerer et al. 2020), both trained and replayed against SSVI.
 
-*Textbooks:* Gatheral *The Volatility Surface*; Bergomi ch. 1–2; Rebonato *Volatility and Correlation*; Hull
-OFOD ch. 20, 27.
-*Trained:* neural SVI; the surface VAE on Deribit history, with its latent space explored.
-*Visuals:* `VolSurface` tour; butterfly violations glowing; the variance-swap strip of options weighted 1/K².
-*Crisis:* Volmageddon, 5 February 2018: the VIX more than doubled and XIV lost over 90%.
-*Firms:* volatility funds and dealers' vol desks; the ETP issuers.
-*Desk:* "Why is the VIX above realized volatility on average?"; "Replicate a variance swap with options."
-*House:* the surface builder.
+*Textbooks:* Gatheral ch. 1, 3, 7, 8, 11 (2, 4–6 → Part 13; 9–10 → Parts 15, 13); Bergomi (local volatility,
+forward-start options, variance swaps; the rest → 13, 14); Rebonato *Vol & Corr* (implied vs local, smile dynamics);
+Hull OFOD "Volatility smiles and surfaces" and the implied-volatility-function model; Sinclair; Bennett.
+*Computed/Trained:* term structure and skew sign over 243 weeks (2021–2025); stickiness tests and surface PCA; Vogt's
+arbitrage and Lee's moments on the Surface; SVI and SSVI fit replays; Dupire, BBF ratio, an implied tree; Gyöngy on
+Heston; LV repricing and forward skews; strike truncation; variance-swap replication on BTC; vol-swap convexity; our
+VIX vs DVOL; VRP on BTC and the S&P 500 with P&L skew and a BTZ regression; SVIX and risk-neutral moments; the VX
+index and inverse note; gamma feedback; the surface VAE (5 seeds); the penalised neural surface (3 seeds); one net
+for all weeks.
+*Visuals:* the flat plane bending into the skew; stickiness under a spot slider; eigen-surfaces breathing; g glowing
+red; the SSVI surface fitting itself in 3D; implied vs local surfaces; the Heston cloud and its conditional variance;
+payoffs summing to the log contract; the VX futures ribbon folding on 5 February 2018; long- vs short-gamma paths.
+*Labs:* `fit_svi`, `fit_ssvi`, `g_function`/`dupire_local_var`, `strip_replication`, `vix`, `vx_index`/`inverse_note`.
+*Crisis:* Volmageddon, 5 February 2018: the front VIX future +113%, the rebuilt −1× note −96%.
+*Firms:* Cboe and Deribit (index makers); Credit Suisse (XIV, TVIX); ProShares (SVXY); Griffin–Shams (VIX settlement);
+dealers' quants (Goldman's DDKZ and Derman–Kani, Dupire at Paribas, SVI at Merrill Lynch, Andreasen–Huge at Danske).
+LJM and Allianz Structured Alpha are Part 11's crisis file.
+*Frontier:* operator deep smoothing (ICLR 2025); VolGAN (2024); deep learning from IV surfaces (Kelly et al.);
+no-arbitrage SVI/eSSVI (Martini–Mingone 2022); 0DTE pricing.
+*Desk:* "Why is the VIX above realized volatility on average?"; "Replicate a variance swap with options."; "Spot falls
+5%: where does ATM vol go under sticky strike, sticky delta and local vol?"
+*House:* the surface builder (Rule 12: quote only from a fitted, checked surface; state the dynamics).
 
 ### Part 13 · Stochastic Volatility and Jumps (~55)
 1. Why volatility must move.
@@ -795,75 +845,150 @@ models fitted to the same vanillas.
 *Desk:* "In Heston, what sets the skew? The smile's curvature?"
 *House:* the calibrator.
 
-### Part 14 · Rough and Path-Dependent Volatility (~60; frontier)
-1. The fact: the ATM skew explodes like T^{H−1/2}.
-2. Volatility is rough (Gatheral–Jaisson–Rosenbaum 2018), re-measured.
-3. Rough Bergomi (Bayer–Friz–Gatheral 2016); the hybrid scheme (Bennedsen–Lunde–Pakkanen 2017).
-4. Rough Heston (El Euch–Rosenbaum 2019): fractional Riccati and Adams.
-5. Where roughness comes from: nearly unstable Hawkes (Jaisson–Rosenbaum 2016; El Euch–Fukasawa–Rosenbaum 2018).
-6. Markovian lifts (Abi Jaber–El Euch 2019).
-7. The debate: estimator bias, Cont–Das (2024), Guyon–El Amrani (2023); both sides' evidence shown.
-8. Path-dependent volatility (Guyon–Lekeufack 2023), the 4-factor PDV.
-9. The quadratic rough Heston (Gatheral–Jusselin–Rosenbaum 2020) and joint SPX/VIX.
-10. Guyon's (2020, 2022) dispersion-constrained martingale Schrödinger problem.
-11. Signature volatility models (Cuchiero–Gazzetta–Svaluto-Ferro 2023).
-12. What desks use and why: speed, and Part 17's neural calibrators.
+### Part 14 · Rough and Path-Dependent Volatility (~58; frontier)
+1. The fact: the at-the-money skew grows like T^{H−1/2}, measured on 102 weekly Deribit surfaces (2024–2025); why a
+   kernel makes it (the skew as integrated spot–variance covariance, Bergomi–Guyon 2012), why one-factor Markov models
+   cannot, and why a power law forces roughness (Fukasawa 2021).
+2. Volatility is rough (Gatheral–Jaisson–Rosenbaum 2018), re-measured on bitcoin in two eras; the rough forecast
+   formula against HAR (expanding-window, out of sample); long memory (Comte–Renault 1998) is not roughness.
+3. Rough Bergomi (Bayer–Friz–Gatheral 2016): the martingale property and the variance curve; calibrated and replayed
+   (3 seeds); the hybrid scheme (Bennedsen–Lunde–Pakkanen 2017) against naive discretisation.
+4. Rough Heston (El Euch–Rosenbaum 2019): the affine Volterra derivation, the fractional Riccati equation, Adams with
+   its convergence measured; how much the Surface cares about H (a nine-point profile).
+5. Where roughness comes from: nearly unstable Hawkes order flow (Jaisson–Rosenbaum 2016; El Euch–Fukasawa–Rosenbaum
+   2018), simulated by branching; what a finite sample can and cannot show.
+6. Markovian lifts (Abi Jaber–El Euch 2019; Abi Jaber 2019; Bayer–Breneis 2023): convergence in law and path by path.
+7. The debate: the estimator's bias map (rough against fast mean reversion), estimation theory (Fukasawa–Takabatake–
+   Westphal 2022; Bolko et al. 2023; Chong et al. 2024; Cont–Das 2024); the options side (Livieri et al. 2018; Rømer
+   2022; Guyon–El Amrani 2023; Abi Jaber–Li 2025) and a two-factor Bergomi calibrated to the Surface.
+8. Path-dependent volatility (Guyon–Lekeufack 2023) on DVOL and on the VIX, fits replayed; the 4-factor Markovian PDV
+   (well posed: Nutz–Riveros Valdevenito 2024).
+9. Quadratic rough Heston (Gatheral–Jusselin–Rosenbaum 2020, with their calibrated parameters): the Zumbach effect
+   measured on the model, on rough Bergomi and on the US market; joint SPX/VIX.
+10. Guyon's puzzle (2020: models fitted to the SPX skew give VIX implied vols too high; Part 13 measures it) and his
+    dispersion-constrained martingale Schrödinger problem (*Finance Stoch.* 2024); martingale-transport bounds on the
+    Surface as an illustration.
+11. Signature volatility models (Cuchiero–Gazzani–Svaluto-Ferro 2023), calibrated to the Surface (in and out of
+    sample); joint SPX/VIX with signatures (Cuchiero–Gazzani–Möller–Svaluto-Ferro 2025).
+12. What desks use and why: speed (timed), neural surrogates (Bayer–Stemper 2018; Horvath–Muguruza–Tomas 2021;
+    Rosenbaum–Zhang 2022) and lifts; hedging with the forward variance curve; Rule 14 applied to the part's scoreboard.
 
-*Textbooks:* Bayer–Friz–Fukasawa–Gatheral–Jacquier–Rosenbaum (eds.) *Rough Volatility* (SIAM 2023);
-Guyon–Henry-Labordère *Nonlinear Option Pricing*.
-*Computed/Trained:* rBergomi and rough Heston on the Surface; skew power-law fits vs two-factor Bergomi; the PDV
-kernel regression of DVOL on past BTC returns; the Hurst estimator's bias on simulated paths.
-*Visuals:* fBM sharpening as H → 0; the skew term structure on log–log axes.
-*Crisis:* 5 August 2024: the VIX printed 65 on thin pre-market quotes.
-*Desk:* "Why can't a one-factor Markov SV model fit a 1-week skew?"
-*House:* rough and PDV pricers.
+*Textbooks:* Bayer–Friz–Fukasawa–Gatheral–Jacquier–Rosenbaum (eds.) *Rough Volatility* (SIAM 2023), ch. 1–10;
+Guyon–Henry-Labordère *Nonlinear Option Pricing* ch. 10–11 (McKean SDEs and the particle method; UVM → 15, BSDEs → 17);
+Bergomi *Stochastic Volatility Modeling*, the forward variance and smile-expansion chapters; Gatheral *The Volatility
+Surface* (stochastic-volatility and jump skews); Friz–Hairer (2nd ed. 2020) §14.5.
+*Computed/Trained:* weekly skew power laws (102 weeks); model skews (Heston, Bates, jumps, rough); GJR on BTC 2018–20 and
+2024–25; RFSV against HAR; rBergomi calibration replayed (3 seeds); hybrid against Riemann; Adams convergence and the H
+profile; branching Hawkes sweep; lifts in law and pathwise; the estimator bias map (64 cells × 4 seeds); a two-factor
+Bergomi; PDV on DVOL and VIX, 4FMPDV; qRH and the Zumbach effect; entropic martingale-transport bounds; a signature
+volatility model on the Surface; calibration speed.
+*Visuals:* the skew loom (3D); the kernel over the triangle (3D); |φ(u, T)| (3D); the bias map (3D); the hybrid scheme
+filling the singular cell; Adams with memory arrows; Hawkes family trees and zoom-out; exponentials summing into a
+power law; PDV memories filling; qRH riding its parabola; signature bars growing.
+*Labs:* `log_rv_scaling`, `rbergomi_paths`, `frac_riccati`, `pdv4_step`, `entropic_mot`, `sigvol_logS`.
+*Crisis:* 5 August 2024: the VIX above 65 before the open on wide put quotes (SEC DERA working paper; BIS Bulletin 95);
+path-dependence explains bitcoin's DVOL that day and not the VIX. *Firms:* Cboe (VIX, VIX1D), Deribit (DVOL); Risk's
+2021 Quants of the Year and 2023 Rising Star.
+*Desk:* "Why can't a one-factor Markov SV model fit a 1-week skew?"; "Rough or fast mean reversion: how would you
+test it?"; "Calibrate a rough model in milliseconds."
+*House:* rough and PDV pricers, lifts, qRH, signature volatility, branching Hawkes; Rule 14.
 
-### Part 15 · Exotics and Structured Products (~55)
-1. The structuring business: why banks sell structured notes and who buys them.
-2. Barriers: reflection principle, closed forms, the discrete-monitoring correction (Broadie–Glasserman–Kou 1997).
-3. Asians, lookbacks, digitals and their hedging problems (the digital's exploding gamma; call-spread hedging).
-4. Autocallables and snowballs (雪球): the payoff, why the seller is long volatility then short, and the knock-in
-   cliff.
-5. Worst-of and correlation: the correlation skew; dispersion.
-6. Cliquets and forward-starting options: forward-smile risk (Part 13).
-7. Uncertain volatility (Avellaneda–Levy–Parás 1995; Lyons 1995): pricing under model uncertainty, the nonlinear
-   PDE.
-8. Model risk and reserves: how desks mark exotics and price model uncertainty.
-9. Dealer hedging flows and their market footprint (the autocallable vega supply that depresses long-dated
-   implied volatility).
-10. A neural surrogate pricer for the snowball book.
+### Part 15 · Exotics and Structured Products (~58)
+1. The structuring business: a note taken apart into a bond, a coupon strip and a short put, priced piece by piece;
+   the issuer's funding and margin; who buys, and what the record says they earned (Henderson–Pearson 2011;
+   Célérier–Vallée 2017; Egan 2019); stylized notes followed on the real CSI 500 path.
+2. Barriers: the reflection principle, the closed form and the PDE with its image; the value surface and the
+   hedge at the wall; discrete monitoring (Broadie–Glasserman–Kou 1997); static replication (Derman–Ergener–Kani
+   1995; Carr–Ellis–Gupta 1998) and how the skew breaks it.
+3. Digitals and one-touches (the exploding gamma, the call-spread hedge simulated, the skew in a digital's price);
+   Asians (Kemna–Vorst control variate; the change-of-numéraire PDE) and lookbacks (Goldman–Sosin–Gatto 1979).
+4. Autocallables and snowballs (雪球): the price as a linear function of the coupon, the outcome distribution, carry
+   and the futures basis; the issuer's delta, gamma and vega in 3D (long vol above the barrier, then short); the
+   knock-in cliff.
+5. Worst-of and correlation: Margrabe and Stulz; cross-gamma; correlation in calm and in crashes; the worst-of
+   snowball; correlation skew and local correlation; mountain-range products.
+6. Cliquets and forward-starting options: homogeneity, forward-volatility risk, the zero-vega ridge and volga;
+   reverse cliquets and Napoleons (Part 13 for the forward smile).
+7. Uncertain volatility (Avellaneda–Levy–Parás 1995; Lyons 1995): the Black–Scholes–Barenblatt equation solved
+   live; non-additivity; the Lagrangian hedge with vanillas (Avellaneda–Parás 1996).
+8. Model risk and reserves: exotics under models fitted to the same vanillas; Cont's (2006) measure; Glasserman–Xu
+   (2014) worst case by exponential tilting; prudent valuation, day-one P&L and validation.
+9. Dealer hedging flows: a book's aggregate vega and gamma on the real path, peak vega, the vega supply that
+   depresses long-dated implied volatility; what is arithmetic and what is disputed.
+10. A neural surrogate pricer for the snowball book, trained on screen with seeds and an equal-data baseline;
+    discontinuous payoffs and their Greeks (frontier).
 
-*Textbooks:* Hull OFOD ch. 26; Bouzoubaa–Osseiran *Exotic Options and Hybrids*; Guyon–Henry-Labordère; Wilmott
-PWOQF (exotics chapters).
-*Computed/Trained:* snowball pricing and Greeks by MC across spot; a CSI 500 snowball book's knock-in exposure
-simulated through January–February 2024 using public index data; the neural surrogate's speed and error.
-*Visuals:* the snowball's value surface over (spot, time) with the knock-in cliff; the dealer's vega flipping sign.
-*Crisis:* the January–February 2024 A-share snowball knock-ins; Korea's HSCEI-linked ELS (2016 and 2024).
-*Firms:* Chinese brokers' OTC derivatives desks; European and Korean structured-product issuers.
-*Desk:* "Price a digital with a call spread. What width, and what happens to the hedge near expiry?"
-*House:* the exotics pricer.
+*Textbooks:* Hull OFOD, "Exotic options" (ch. 27 of the 11th ed.; ch. 26 of the Global Edition); Shreve II ch. 7; Bouzoubaa–Osseiran ch. 2, 7–15; Guyon–Henry-Labordère (UVM; local
+correlation); Wilmott PWOQF (exotics chapters); Gatheral (barriers; exotic cliquets); Taleb (binaries and barriers).
+Volatility derivatives → Part 12; numerics → Part 16; deep pricing → Part 17; hybrids → Parts 19, 21, 22.
+*Computed/Trained:* note decomposition; buyer outcomes on the CSI 500 path; barrier closed form against MC by
+monitoring frequency; static-hedge error under BS and Heston (ρ = 0, −0.7); digital against call-spread hedging error;
+the snowball's outcome distribution, coupon by carry and barrier; Greeks surfaces; the 2024 book and its gamma; Korean
+vintages 2015 and 2021; correlation regimes and the worst-of snowball; cliquet price over (σ, cap); UVM bounds,
+non-additivity and the Lagrangian hedge; exotics under LV/Heston/Bates/VG fitted to the BTC Surface; the KL worst
+case; book vega 2021–2024; the neural surrogate (3 seeds) against a polynomial; unbiased digital Greeks.
+*Visuals:* the snowball's value and Greeks surfaces with the knock-in cliff (3D); the barrier wall; the static hedge
+on the barrier line; the BSB PDE marching back with its σ map; the worst-of cloud collapsing; the cliquet ridge; path
+fans diverging on exotics while agreeing on vanillas.
+*Labs:* `down_out_call`, `static_dic_hedge`, `geometric_asian_call`, `snowball_payoff`, `uvm_price`, the surrogate's
+training loop. *Replays:* the surrogate (3 seeds) against a polynomial; the Lagrangian UVM optimiser; the bump-size
+curve (3 seeds); the entropic tilt; three digital-delta estimators (5 seeds).
+*Industry:* prudent valuation and model reserves, day-one P&L, FRTB for autocallables, PRIIPs; Natixis 2018.
+*Frontier:* differential ML for discontinuous payoffs (Glasserman–Karmarkar 2025); unbiased MC Greeks (Lakshtanov
+2026); tensor trains for worst-of autocallables (2026); RL hedging of autocallable books (2024); quantum autocallable
+pricing (2025).
+*Crisis:* the January–February 2024 A-share snowball knock-ins; Korea's HSCEI-linked ELS (the 2015 vintages near
+their barriers and the FSC's 37 tn won count of January 2016; the 2021 vintages' losses and the FSS scheme of 2024).
+*Firms:* Chinese brokers' OTC derivatives desks; Korean banks and securities firms (FSS 2024–25); Natixis (2018).
+*Desk:* "Price a digital with a call spread. What width, and what happens to the hedge near expiry?"; "The snowball
+issuer's vega: sign, and where it peaks?"; "Price a one-touch with zero drift, given the digital."
+*House:* the exotics pricer; Rule 15 (two models, a reserve, the worst path on record).
 
-### Part 16 · Computing Prices (~60)
-1. Monte Carlo at 1/√n.
-2. Variance reduction: antithetics, control variates, importance sampling.
-3. Quasi-Monte Carlo: Sobol, the Brownian bridge, effective dimension.
-4. Multilevel Monte Carlo (Giles 2008): ε⁻²(log ε)² vs ε⁻³ for Euler paths.
-5. Longstaff–Schwartz; duality bounds (Andersen–Broadie).
-6. Greeks: bumps, pathwise, likelihood ratio (Broadie–Glasserman 1996).
-7. AAD (Giles–Glasserman 2006): all Greeks for a small constant multiple of one price, with the series' autodiff
-   (AI Part 4).
-8. Finite differences: explicit, implicit, Crank–Nicolson, Rannacher; American options as an LCP.
-9. ADI for Heston (Craig–Sneyd; in 't Hout–Foulon).
-10. Fourier: Carr–Madan, Lewis, COS (Fang–Oosterlee 2008).
-11. Hardware: GPUs in bank risk; quantum amplitude estimation's real speedup.
+### Part 16 · Computing Prices (~59)
+1. Monte Carlo: the estimator, the CLT error bar, efficiency (variance × work); random numbers (inverse transform,
+   Box–Muller, Cholesky) and reproducible parallel streams (counter-based generators).
+2. Variance reduction: antithetics, control variates (the optimal coefficient; Kemna–Vorst's geometric control),
+   stratification and Latin hypercubes; importance sampling (the zero-variance measure, the optimal shift learned by
+   cross-entropy, weight degeneracy).
+3. Quasi-Monte Carlo: discrepancy and Koksma–Hlawka, Sobol nets (Joe–Kuo), scrambling for error bars; the Brownian
+   bridge and PCA; effective dimension (Caflisch–Morokoff–Owen 1997; Paskov–Traub 1995).
+4. Multilevel Monte Carlo (Giles 2008): the complexity theorem proved; Euler (β = 1) against Milstein (β = 2);
+   randomised MLMC (Rhee–Glynn 2015).
+5. American options by simulation: Longstaff–Schwartz run backward on real paths; the duality bound derived
+   (Rogers; Haugh–Kogan) and computed (Andersen–Broadie); the five-asset max-call, against Part 17's network.
+6. Greeks: bumps (bias–variance, common random numbers), pathwise, likelihood ratio, Malliavin weights
+   (Broadie–Glasserman 1996; Fournié et al. 1999).
+7. AAD (Giles–Glasserman 2006): reverse mode, the cheap-gradient principle, cost against the number of inputs,
+   check-pointing.
+8. Finite differences: θ-schemes, von Neumann stability and Lax's theorem; Crank–Nicolson's ringing and Rannacher; the
+   American put as a complementarity problem (PSOR; the penalty method).
+9. ADI for Heston (Douglas; Craig–Sneyd; in 't Hout–Foulon), on non-uniform grids.
+10. Fourier: Carr–Madan and Lewis derived; COS (Fang–Oosterlee 2008) and its truncation; the race between every method.
+11. Hardware: the overnight run, GPUs and FPGAs, sensitivities for SIMM and FRTB; quantum amplitude estimation built,
+    simulated and costed.
 
-*Textbooks:* Glasserman *Monte Carlo Methods in Financial Engineering*; Savine *Modern Computational Finance*;
-Andersen–Piterbarg vol. I; Duffy *Finite Difference Methods*; Seydel.
-*Computed:* convergence races; MLMC cost; LSM vs binomial; AAD cost ratio; COS vs FFT.
-*Visuals:* error vs cost for every method on one log–log plot; Sobol vs random; the AAD tape running backwards.
-*Firms:* bank quant libraries and overnight risk runs.
-*Desk:* "How many paths for a price to 1 bp?"; "Why is AAD's cost independent of the number of Greeks?"
-*House:* the pricing engine.
+*Textbooks:* Glasserman ch. 1–5, 7–8 (6 → Part 5, 9 → Part 40); Savine Parts I–III; Andersen–Piterbarg vol. I (FD and
+MC chapters); Duffy; Seydel (finite elements: README note); Oosterlee–Grzelak (COS chapter).
+*Computed:* the CI funnel and its coverage; Kemna–Vorst control (variance ÷ ~1,300); the IS variance curve and
+cross-entropy; star discrepancy; dropping Sobol's first point; effective dimension (step/bridge/PCA); MLMC Euler vs
+Milstein; LSM boundary, basis sweep, duality gap, Bermudan reference, five-asset max-call (a tie with Part 17's
+network); bump RMSE surface; AAD cost against inputs (wall clock and operation counts); explicit blow-up; PSOR vs
+penalty; uniform vs non-uniform ADI; Lewis vs COS; the race with a control variate; QAE vs MC at equal oracle calls; a
+Chebyshev pricer; RQMC median-of-means.
+*Visuals:* the race drawn as the clock runs; the net's boxes lighting; the bridge's coordinates (3D); the MLMC
+telescope and replay; LSM run backward; the bump-error valley (3D); the AAD tape running both ways; the explicit march
+exploding (3D); the American surface with its free boundary (3D); ADI sweeps on the Heston surface (3D); a density
+rebuilt by cosines; the Grover rotation; the Chebyshev error surface collapsing (3D).
+*Labs:* `brownian_bridge`, `mc_call`, `_mlmc_level`, `andersen_broadie_put`, `aad_greeks`, `fd_american_put`,
+`cos_price`.
+*Industry:* the overnight run; SIMM and FRTB sensitivities; Danske Bank's AAD; JPMorgan's FPGAs (2011); STAC-A2;
+the OCC's Monte Carlo margin; QuantLib and ORE. *Frontier:* QSP derivative pricing (2024); median-of-means RQMC (2023);
+COS term bounds (2024); signature stopping (2023); Chebyshev and tensor pricers.
+*Firms:* Danske Bank; JPMorgan and Maxeler; bank quant libraries and overnight risk runs. (The London Whale's VaR
+spreadsheet stays in Part 20: the Task Force report could not be fetched to quote here.)
+*Desk:* "How many paths for a price to 1 bp?"; "Why is AAD's cost independent of the number of Greeks?";
+"Crank–Nicolson's gamma oscillates: why, and the fix?"; "LSM 6.06, dual 6.41: what next?"
+*House:* the pricing engine; Rule 16 (every price with its error, every method checked against another).
 
 ### Part 17 · Deep Pricing and Hedging (~60; frontier)
 1. Hutchinson–Lo–Poggio (1994).

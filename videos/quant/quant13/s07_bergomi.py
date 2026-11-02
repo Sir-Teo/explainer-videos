@@ -3,19 +3,24 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant13.common import BAD, IV, MODEL_COL, OPT, PART, RV, SPOT, VAR, load, real_data
+from videos.quant.quant13.common import BAD, IV, MODEL_COL, OPT, PART, RV, SPOT, VAR, load, pause, real_data
 
 
-class Bergomi(VoiceoverScene):
+class Bergomi(VoiceoverScene, ThreeDScene):
     def construct(self):
         b = load("bergomi")
+        bs = load("bergomi_sim")
         self.card()
         self.curve_(b)
-        self.model()
+        self.model(bs)
+        self.ribbon(bs)
+        self.volvol(bs, load("facts"))
+        self.ssr(load("ssr"))
 
     def card(self):
-        c = chapter_card(6, r"Forward variance as the state", r"What if the model's state were a whole curve?", part=PART)
-        with self.voiceover("Chapter six. Forward variance as the state."):
+        c = chapter_card(13, r"Bergomi: forward variance as the state", r"What if the model's state were a whole curve?",
+                         part=PART)
+        with self.voiceover("Chapter thirteen. Bergomi's models: forward variance as the state."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -72,32 +77,185 @@ class Bergomi(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def model(self):
+    def model(self, bs):
+        p = bs["params"]
         rows = [cmath(r"\xi_t(T)", r"=", r"\mathbb{E}^Q_t\big[v_T\big]", font_size=38, colors={r"\xi_t(T)": IV}),
-                cmath(r"\frac{d\xi_t(T)}{\xi_t(T)}", r"=", r"\omega\Big(\theta_1 e^{-k_1(T - t)}\,dW^1_t + "
-                      r"\theta_2 e^{-k_2(T - t)}\,dW^2_t\Big)", font_size=36, colors={r"\frac{d\xi_t(T)}{\xi_t(T)}": VAR}),
-                cmath(r"\frac{dS}{S}", r"=", r"\sqrt{\xi_t(t)}\,dW^S_t", font_size=38, colors={r"\frac{dS}{S}": SPOT})]
-        whys = [why(r"each forward variance is a martingale under $Q$: it is a tradable variance swap's rate"),
-                why(r"Bergomi (2005, 2016): let the whole curve move, driven by two factors, a fast one and a slow one, "
-                    r"each decaying with distance to $T$; today's curve is an input, matched exactly"),
-                why(r"the price moves with the instantaneous variance at the front of the curve; the vol of vol term "
-                    r"structure, not today's smile, is what the model is designed to control")]
-        step = ladder(self, rows, whys, keep=3, top=2.8, x=-1.2, buff=0.85, edge=6.9)
+                cmath(r"\frac{d\xi_t(T)}{\xi_t(T)}", r"=", r"\omega\,\alpha_\theta\Big((1 - \theta)\,e^{-k_1(T - t)}\,dW^1_t + "
+                      r"\theta\,e^{-k_2(T - t)}\,dW^2_t\Big)", font_size=34, colors={r"\frac{d\xi_t(T)}{\xi_t(T)}": VAR}),
+                cmath(r"\xi_t(T)", r"=", r"\xi_0(T)\,\exp\Big(\omega\,x^T_t - \tfrac{\omega^2}{2}\operatorname{Var}x^T_t\Big),"
+                      r"\quad x^T_t = \alpha_\theta\big[(1 - \theta)e^{-k_1(T-t)}X^1_t + \theta e^{-k_2(T-t)}X^2_t\big]",
+                      font_size=28, colors={r"\xi_t(T)": IV}),
+                cmath(r"\text{vol}\big(\xi_t(t+\tau)\big)", r"=", r"\omega\,\alpha_\theta\sqrt{(1 - \theta)^2e^{-2k_1\tau} + "
+                      r"\theta^2e^{-2k_2\tau} + 2\rho_{12}\theta(1 - \theta)e^{-(k_1 + k_2)\tau}}", font_size=30,
+                      colors={r"\text{vol}\big(\xi_t(t+\tau)\big)": VAR}),
+                cmath(r"\text{Heston:}\ \ d\xi_t(T)", r"=", r"e^{-\kappa(T - t)}\,\xi\sqrt{v_t}\,dW^2_t", font_size=34,
+                      colors={r"\text{Heston:}\ \ d\xi_t(T)": MODEL_COL["Heston"]})]
+        whys = [why(r"the forward variance for date $T$: by the tower property a $Q$-martingale in $t$, the rate of a "
+                    r"forward-starting variance swap", 20),
+                why(r"Bergomi (2005): every point of the curve moves lognormally, driven by a fast and a slow "
+                    r"Ornstein--Uhlenbeck factor ($dX^i = -k_iX^i\,dt + dW^i$) whose effect fades with the distance to $T$; "
+                    r"$\alpha_\theta$ normalises so that $\omega$ is the vol of the shortest variance", 20),
+                why(r"integrate: a lognormal martingale started from today's curve, which is an input, matched exactly", 20),
+                why(r"It\^o: the term structure of vol of vol, set by $k_1, k_2, \theta$, independently of today's curve", 20),
+                why(r"differentiate $\theta + (v - \theta)e^{-\kappa(T - t)}$: one exponential, and the same $\kappa$ also shapes "
+                    r"today's curve", 20)]
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
             "Lorenzo Bergomi turned this around. Make the whole forward variance curve the model's state, and take "
-            "today's curve from the market as given, whatever its shape. <bookmark mark='a'/> Each point on the curve "
-            "is the rate of a tradable variance swap, so under the pricing measure it is a martingale. Let the curve "
-            "move, driven by two factors, one fast and one slow, each fading with the distance to its date. "
-            "<bookmark mark='b'/> The price itself moves with the variance at the front of the curve. What the model "
-            "controls is not today's smile but how volatile the future variances are, and how that volatility "
-            "depends on horizon: exactly what forward-start options and cliquets are bets on. It is the variance "
-            "curve version of Heston, and, with a fractional kernel instead of two exponentials, it becomes Part "
-            "fourteen's rough Bergomi."
+            "today's curve from the market as given, whatever its shape, weekend dip and all. Each point is the "
+            "expected variance at its date, so by the tower property it is a martingale: it is the rate of a "
+            "tradable forward variance swap. <bookmark mark='a'/> In his two-factor model each point moves "
+            "lognormally, driven by two Ornstein–Uhlenbeck factors, one fast and one slow, whose effect fades with "
+            "the distance to the date. <bookmark mark='b'/> Integrate it, and the curve is today's curve times a "
+            "lognormal martingale. <bookmark mark='c'/> By Itô, the volatility of each point depends only on its "
+            "distance tau from today: a term structure of vol of vol, set by the two speeds and the weight theta, "
+            "entirely separate from today's curve. <bookmark mark='d'/> Compare Heston: differentiate its forward "
+            "variance, and every point moves by the same shock times e to the minus kappa tau. One exponential, "
+            "and the same kappa that sets the shape of today's curve. One number doing two jobs."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def ribbon(self, bs):
+        Tg = np.asarray(bs["Tg"]) * 365
+        t = np.asarray(bs["t"]) * 365
+        R = np.sqrt(np.clip(np.asarray(bs["ribbon"]), 0, None))
+        H = np.sqrt(np.clip(np.asarray(bs["heston_ribbon"]), 0, None))
+        ax = ThreeDAxes(x_range=[0, 300, 100], y_range=[0, 120, 30], z_range=[0.0, 1.0, 0.25], x_length=6.6, y_length=5.4,
+                        z_length=3.0, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+        ax.shift(DOWN * 0.3)
+
+        def lines(M, col):
+            return VGroup(*[VMobject(stroke_color=col, stroke_width=2).set_points_as_corners(
+                [ax.c2p(x, tt, float(np.clip(z, 0, 1.0))) for x, z in zip(Tg, row)]) for tt, row in zip(t, M)])
+
+        LB, LH = lines(R, IV), lines(H, MODEL_COL["Heston"])
+        hint = VGroup(label(r"one simulated path of the whole curve: forward vol $\sqrt{\xi_t(t + \tau)}$ over $\tau$ = 0 to "
+                            r"300 days ahead (across) and the calendar date $t$ = 0 to 120 days (into the screen)",
+                            font_size=19, color=GREY_A)).to_corner(UL, buff=0.3)
+        hint[0].set(width=min(hint[0].width, 12.0))
+        tag_b = label(r"Bergomi, two factors", font_size=24, color=IV).to_corner(UR, buff=0.4)
+        tag_h = label(r"Heston", font_size=24, color=MODEL_COL["Heston"]).to_corner(UR, buff=0.4)
+        mart = bs["mean_at"]["120"]
+        dev = float(np.max(np.abs(np.asarray(mart["mean"]) / np.asarray(mart["xi0"]) - 1)))
+        txt = wrapped_label(rf"average over 2{{,}}000 paths, 120 days on: within {100 * dev:.1f}\% of today's curve at every "
+                            r"date (a martingale)", 4.6, 18, GREY_A).to_corner(DR, buff=0.35)
+        self.set_camera_orientation(phi=66 * DEGREES, theta=-125 * DEGREES, zoom=0.85)
+        self.add_fixed_in_frame_mobjects(hint, tag_b, tag_h, txt)
+        self.remove(hint, tag_b, tag_h, txt)
+        with self.voiceover(
+            "Now let the curve move. Start from the Surface's forward variance curve, and simulate Bergomi's model "
+            "day by day for four months; each day adds one slice, the curve as it stands that day, out to three "
+            "hundred days ahead. <bookmark mark='a'/> The front end whips around; the far end barely moves; the "
+            "weekend dip drifts toward today and passes. The vol of vol omega was set so that the model's own "
+            "thirty-day index moves as much as DVOL does. <bookmark mark='b'/> And each point is a martingale: "
+            f"averaged over two thousand paths, the curve four months on is within {100 * dev:.1f} percent of where "
+            "it started. <bookmark mark='c'/> Now the same with Heston, from its own fitted state. The whole curve "
+            "moves as one exponential: a shock to today's variance, decaying with the same kappa everywhere. With "
+            "our fitted kappa of nearly fifteen, everything beyond a few weeks is pinned to theta and never moves "
+            "at all."
+        ) as vo:
+            self.play(Create(ax), FadeIn(hint), FadeIn(tag_b), run_time=1.2)
+            self.play(LaggedStart(*[Create(l_) for l_ in LB], lag_ratio=0.15), run_time=max(vo.until("b") - 1.5, 3))
+            vo.wait_until("b")
+            self.play(FadeIn(txt))
+            vo.wait_until("c")
+            self.move_camera(theta=-80 * DEGREES, run_time=1.2)
+            self.play(FadeOut(LB), FadeOut(tag_b), FadeIn(tag_h), LaggedStart(*[Create(l_) for l_ in LH], lag_ratio=0.1),
+                      run_time=3)
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, LH)), FadeOut(hint), FadeOut(tag_h),
+                                                                  FadeOut(txt)], run_time=1.5)
+        self.clear_scene()
+
+    def volvol(self, bs, f):
+        tau = np.asarray(bs["tau"]) * 365
+        g = axes([0, 365], [0, 3.0], x_length=6.4, y_length=4.0, xlabel=r"distance to the variance's date, $\tau$ (days)",
+                 ylabel=r"vol of the forward variance $\xi_t(t + \tau)$", xticks=[0, 90, 180, 270, 365],
+                 yticks=[0, 1, 2, 3], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15).to_edge(LEFT, buff=0.7)
+        lb = curve(g.ax, tau, np.clip(np.asarray(bs["volvol_bergomi"]), 0, 3), IV, stroke_width=3.5)
+        lh = curve(g.ax, tau, np.clip(np.asarray(bs["volvol_heston"]), 0, 3), MODEL_COL["Heston"], stroke_width=3.5)
+        leg = legend([(IV, r"Bergomi: a fast and a slow factor"), (MODEL_COL["Heston"], r"Heston: one exponential, $e^{-\kappa\tau}$")],
+                     font_size=17).next_to(g, UP, buff=0.12).align_to(g, LEFT)
+        p = bs["params"]
+        i90 = int(np.argmin(np.abs(tau - 90)))
+        side = VGroup(
+            MathTex(rf"k_1 = {p['k1']:g},\ k_2 = {p['k2']:g},\ \theta = {p['theta']:g},\ \omega = {bs['omega']:.2f}",
+                    font_size=26, color=IV),
+            wrapped_label(rf"illustrative speeds; $\omega$ set so that the model's 30-day vol index has DVOL's vol of vol, "
+                          rf"{100 * f['volvol']:.0f}\%", 4.4, 18, GREY_A),
+            MathTex(rf"\tau = 90\text{{d}}:\ \ {100 * bs['volvol_bergomi'][i90]:.0f}\%\ \text{{vs}}\ "
+                    rf"{100 * bs['volvol_heston'][i90]:.0f}\%", font_size=28, color=WHITE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
+        pp = pause(r"A one-year variance swap and a one-week one: whose rate is more volatile?", width=4.6).to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "Here is the difference as one plot: how volatile each point of the forward variance curve is, against "
+            "its distance from today. <bookmark mark='a'/> Bergomi's falls fast over the first weeks, the fast "
+            "factor dying, then levels off on the slow one: variance three months out still moves "
+            f"{100 * bs['volvol_bergomi'][i90]:.0f} percent a year. <bookmark mark='b'/> Heston's starts much higher, "
+            "because its fit needed a violent short-term vol of vol, and dies within weeks: three months out, "
+            f"{100 * bs['volvol_heston'][i90]:.0f} percent. Forward-start options and cliquets are bets on exactly "
+            "this curve, and Heston has no freedom to draw it. <bookmark mark='c'/> Pause and predict: a one-year "
+            "variance swap and a one-week one, whose rate is more volatile? The one-week, in both models: vol of "
+            "vol decays with distance."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[:2]))
+            vo.wait_until("a")
+            self.play(Create(lb), FadeIn(leg[0]))
+            vo.wait_until("b")
+            self.play(Create(lh), FadeIn(leg[1]), FadeIn(side[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(pp))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def ssr(self, ss):
+        rows_ = ss["rows"]
+        rows = [cmath(r"R", r"=", r"\frac{d\sigma_{\text{ATM}}/d\ln S}{\partial_k\sigma\big|_0}", font_size=38, colors={r"R": VAR}),
+                cmath(r"\mathbb{E}\big[dv \mid d\ln S\big]", r"=", r"\rho\,\xi\ d\ln S", font_size=36,
+                      colors={r"\mathbb{E}\big[dv \mid d\ln S\big]": VAR}),
+                cmath(r"d\sigma_{\text{ATM}}", r"\approx", r"\frac{dv}{2\sqrt v} = \frac{\rho\xi}{2\sqrt v}\,d\ln S", font_size=36,
+                      colors={r"d\sigma_{\text{ATM}}": VAR}),
+                cmath(r"R", r"\to", r"\frac{\rho\xi/(2\sqrt v)}{\rho\xi/(4\sqrt v)} = 2", font_size=38, colors={r"R": VAR})]
+        whys = [why(r"the skew-stickiness ratio: how far the at-the-money vol moves per unit of log price, in units of the "
+                    r"skew (Bergomi, ch.\ 9). Sticky strike is $R = 1$, sticky delta $R = 0$", 20),
+                why(r"regress the variance's move on the price's: the two Brownian increments are correlated by $\rho$", 20),
+                why(r"at short maturity the at-the-money vol is $\sqrt v$", 20),
+                why(r"with chapter 4's short-maturity skew: $R = 2$, the same as local volatility (Part 12)", 20)]
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.4, buff=0.55, edge=6.9)
+        tab = VGroup(*[MathTex(rf"{r['days']}\ \text{{d}}:\ R = {r['R']:.2f}", font_size=26,
+                               color=VAR) for r in rows_]).arrange_in_grid(rows=2, buff=(0.6, 0.2)).to_edge(DOWN, buff=0.45)
+        r2, r365 = rows_[0], rows_[-1]
+        with self.voiceover(
+            "One more dynamic property links today's smile to tomorrow's: the skew-stickiness ratio. When the price "
+            "moves, how far does the at-the-money volatility move, measured in units of today's skew? A ratio of "
+            "one is sticky strike, zero is sticky delta. <bookmark mark='a'/> In Heston, regress the variance's move "
+            "on the price's: the slope is rho xi. <bookmark mark='b'/> At short maturity the at-the-money volatility "
+            "is the square root of v, so it moves by rho xi over two root v per unit of log price. "
+            "<bookmark mark='c'/> Divide by chapter four's skew, rho xi over four root v, and the ratio is two: at "
+            "short maturities Heston has the same skew stickiness as local volatility. <bookmark mark='d'/> Computed "
+            f"exactly on our fit, it is {r2['R']:.2f} at two days, and falls with maturity to {r365['R']:.2f} at "
+            "a year, as mean reversion weakens the link. So for short-dated hedging, SV and local vol agree on how the "
+            "smile moves; they disagree further out, and on the future smile itself. Part twelve measured "
+            "Bitcoin's actual ratio."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            self.play(LaggedStart(*[FadeIn(t_) for t_ in tab], lag_ratio=0.15, run_time=2))
         self.wait(0.4)
         self.clear_scene()

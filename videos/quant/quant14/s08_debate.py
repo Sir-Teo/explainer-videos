@@ -42,7 +42,7 @@ class Debate(VoiceoverScene, ThreeDScene):
         src = real_data(r"geometric mean of daily realized variance by weekday (UTC), 2024--2025")
         with self.voiceover(
             "Not everyone accepts that volatility is rough. Start with a trap in our own data: Bitcoin's weekends "
-            "are calm, a Saturday's realized volatility well under half a weekday's. "
+            "are calm, a Saturday's realized volatility about half a weekday's. "
             "<bookmark mark='a'/> That weekly rhythm jumps up and down from day to day, and the estimator reads it "
             f"as roughness. Remove it, and H rises from {a['btc']:.2f} to {a['btc_deseasonalized']:.2f}. Still rough, "
             "but the number moved because of a calendar, not a law of nature."
@@ -228,7 +228,7 @@ class Debate(VoiceoverScene, ThreeDScene):
                              r"(next chapter)", 12.0, 20, GOLD).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "The statistics literature took this seriously. Masaaki Fukasawa, Tetsuya Takabatake and Rebecca "
-            "Westphal modelled the measurement error and still found volatility rough. <bookmark mark='a'/> Mikkel "
+            "Westphal modelled the measurement error and still found volatility rough. <bookmark mark='a'/> Anine "
             "Bolko and co-authors corrected it by the generalized method of moments: H still about 0.05. "
             "<bookmark mark='b'/> Rama Cont and Purba Das showed the artefact we just simulated. "
             "<bookmark mark='c'/> And the minimax theory says how little one number can settle. What can choose? "

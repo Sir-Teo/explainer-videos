@@ -89,10 +89,9 @@ class Greeks(VoiceoverScene):
             "weighted sum of the curvature of its activation. <bookmark mark='b'/> A ReLU is a straight line on each "
             "side of its kink, so its second derivative is zero except at the kinks, where it does not exist. Stack as "
             "many layers as you like: the network stays piecewise linear, and its gamma is zero almost everywhere. "
-            "<bookmark mark='c'/> And there is a second kind of shape a price must have. From Breeden and "
-            "Litzenberger, the second derivative of a call in its strike is the risk-neutral density, so the price must "
-            "be convex in the strike. A butterfly spread, long two wings and short two bodies, then always has a "
-            "non-negative price. A network knows none of this unless you build it in, or penalize its violation."
+            "<bookmark mark='c'/> And a price has a shape it must keep. From Breeden and Litzenberger, the second "
+            "strike derivative of a call is the risk-neutral density, so a butterfly can never have a negative price. "
+            "A network knows none of this unless you build it in, or penalize it."
         ) as vo:
             step(0)
             vo.wait_until("a")

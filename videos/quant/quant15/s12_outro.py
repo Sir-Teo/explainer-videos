@@ -12,7 +12,7 @@ DESK = [
      r"swings, but within a band the desk can trade"),
     (r"The snowball issuer's vega: what sign, and where does it peak?",
      r"above the barrier the issuer owns the down-and-in put the buyer sold: more volatility makes a knock-in likelier, "
-     r"so it is long vega, most of all with spot a little above the barrier at mid-life; once knocked in, it collapses"),
+     r"so it is long vega, most of all with spot between the barrier and the start; once knocked in, it collapses"),
     (r"Price a one-touch with zero drift, given the digital.",
      r"twice the digital: every path that ends beyond the barrier touched it, and so did its mirror image"),
 ]
@@ -59,7 +59,7 @@ class Outro(VoiceoverScene):
             (rf"averaging divides variance by three; a control variate cuts the noise", QC.HOUSE),
             (rf"the snowball's fair coupon, {100 * o['coupon']:.1f}\%, is a linear solve; {100 * o['p_ko']:.0f}\% knock out",
              IV),
-            (r"the issuer's hedge falls off a cliff at the knock-in; its vega peaks just above it", DELTA),
+            (r"the issuer's hedge falls off a cliff at the knock-in; its vega peaks on the way down", DELTA),
             (rf"January 2024: hedges grew to {dl.max():.0f} notes' worth and were cut to {dl[np.argmin(px)]:.0f}; Korea "
              rf"lost {100 * min(-r['return'] for r in lost):.0f}--{100 * max(-r['return'] for r in lost):.0f}\%", BAD),
             (r"worst-of notes sell correlation; cliquets hide volatility risk from vega", GOOD),
@@ -77,16 +77,14 @@ class Outro(VoiceoverScene):
         if rows.height > 6.6:
             rows.scale_to_fit_height(6.6)
         with self.voiceover(
-            "Part fifteen in twelve lines. A structured note is a bond, a coupon strip and a short put, and the issuer "
-            "keeps the gap to fair value. The record says buyers paid for the complexity, and that the vintage "
-            "decided the rest. Barriers come from reflection, and from the same equation with an image. They depend "
-            "on how often they are watched, and their static hedges need a symmetric smile. A digital is a smooth "
-            "price on an impossible hedge. Averaging divides the variance by three. The snowball's coupon is a "
-            "linear solve, and four in five of them end early. The issuer's hedge falls off a cliff at the "
-            "knock-in, and its vega peaks just above it. In January 2024 the dealers who had bought all the way down "
-            "were forced to sell at the bottom, and Korea's savers learned the same lesson from Hong Kong. Worst-of "
-            "notes sell correlation, and cliquets hide volatility risk from vega. Model risk has a price. And a "
-            "small network can reprice a book in microseconds, though at three inputs a polynomial does as well."
+            "Part fifteen in twelve lines. A note is a bond, a coupon strip and a short put, and the issuer keeps the "
+            "gap. Buyers paid for complexity; vintage decided the rest. Barriers come from reflection, depend on how "
+            "often they are watched, and hedge statically only under symmetry. A digital is a smooth price on an "
+            "impossible hedge. Averaging divides the variance by three. The snowball's coupon is a linear solve. "
+            "The issuer's hedge falls off a cliff at the knock-in. In January 2024 the dealers who had bought all "
+            "the way down sold at the bottom, and Korea's savers lost again. Worst-of notes sell correlation; "
+            "cliquets hide volatility risk from vega. Model risk has a price. And a network reprices a book in "
+            "microseconds, though at three inputs a polynomial does as well."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=24))
@@ -100,7 +98,7 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Three desk questions. A digital is hedged as a call spread, whose width trades price against a hedge "
             "the desk can run. <bookmark mark='a'/> A snowball's issuer is long volatility above the barrier, because "
-            "it owns the put the buyer sold, most of all a little above the barrier at mid-life, and that exposure "
+            "it owns the put the buyer sold, most of all with the spot between the barrier and the start, and that exposure "
             "collapses once the barrier breaks. <bookmark mark='b'/> And a one-touch with no drift is worth twice the "
             "digital, by reflection. A fourth, on worst-of notes and correlation, and full solutions, are in the "
             "notes."
@@ -144,7 +142,7 @@ class Outro(VoiceoverScene):
 
     def references(self):
         card = reference_card(
-            [r"Hull, \textit{Options, Futures, and Other Derivatives}, ch.\ 26; Shreve, \textit{Stochastic Calculus for "
+            [r"Hull, \textit{Options, Futures, and Other Derivatives}, ``Exotic options''; Shreve, \textit{Stochastic Calculus for "
              r"Finance II}, ch.\ 7; Bouzoubaa and Osseiran, \textit{Exotic Options and Hybrids}",
              r"Guyon and Henry-Labord\`ere, \textit{Nonlinear Option Pricing}; Wilmott, \textit{Paul Wilmott on "
              r"Quantitative Finance}; Gatheral, \textit{The Volatility Surface}; Taleb, \textit{Dynamic Hedging}"],

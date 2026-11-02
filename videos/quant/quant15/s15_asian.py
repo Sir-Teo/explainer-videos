@@ -51,12 +51,10 @@ class Asian(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         src = illustration(r"one simulated year, 25\% volatility, daily fixings")
         with self.voiceover(
-            "Two path-dependent payoffs, on one path. As the price runs, a gold line trails it: the running "
-            "average. A blue line trails it too: the running minimum. <bookmark mark='a'/> The average moves slowly "
-            "and shrugs off the last day's spike, which is why commodity contracts settle on averages: no one can "
-            "push the payoff around with a trade at one fixing. The minimum only ever falls. <bookmark mark='b'/> "
-            "Read the payoffs off the end. An Asian call pays the average minus the strike; a floating lookback pays "
-            "the final price minus the lowest one. One payoff is tamer than the price, the other wilder."
+            "Two path-dependent payoffs on one path: a gold line trails the price, its running average, and a blue one, "
+            "its running minimum. <bookmark mark='a'/> The average moves slowly and shrugs off the last day's spike, which "
+            "is why commodity contracts settle on averages. The minimum only ever falls. <bookmark mark='b'/> An Asian call "
+            "pays the average minus the strike; a floating lookback pays the final price minus the lowest one."
         ) as vo:
             self.play(FadeIn(g), Create(k), FadeIn(leg), FadeIn(src))
             self.add(lp, la, lm)
@@ -90,17 +88,14 @@ class Asian(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.75, edge=6.9)
         pp = pause_card(r"Why is an Asian call worth about half a vanilla?", width=5.4).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Why are Asians cheap, and how are they priced? Start with the geometric average. Its log is an "
-            "average of Gaussian log prices, so it is Gaussian, with a variance built from the minimum of every "
-            "pair of fixing times. <bookmark mark='a'/> In continuous time that double integral is T cubed over "
-            "three: averaging divides the variance by three, as if volatility were sigma over root three. "
-            "<bookmark mark='p'/> Pause on that: why is an Asian call worth about half a vanilla? Because its "
-            "effective volatility is only about fifty-eight percent of the price's. <bookmark mark='b'/> The "
-            "arithmetic average has no closed form, but it moves almost exactly with the geometric one. So simulate "
-            "both, and correct the arithmetic estimate by the geometric one's known error. The noise left is the "
-            "part the two do not share, one minus rho squared. <bookmark mark='c'/> And there is a deterministic "
-            "route. Steven Shreve, after Jan Vecer, changes the numeraire to the stock itself, and the problem in "
-            "two variables, spot and average, collapses to one partial differential equation in one variable."
+            "Why are Asians cheap? The log of the geometric average is an average of Gaussian log prices, so it is "
+            "Gaussian, with a variance built from the minimum of every pair of fixing times. <bookmark mark='a'/> In "
+            "continuous time that double integral is T cubed over three: averaging divides the variance by three. "
+            "<bookmark mark='p'/> So why is an Asian call worth about half a vanilla? Its effective volatility is about "
+            "fifty-eight percent of the price's. <bookmark mark='b'/> The arithmetic average has no closed form, but moves "
+            "almost exactly with the geometric one: simulate both, and correct by the geometric one's known error. "
+            "<bookmark mark='c'/> Or change the numeraire to the stock, as Shreve does after Vecer, and the problem in "
+            "spot and average collapses to one equation in one variable."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -136,17 +131,25 @@ class Asian(VoiceoverScene):
                     rf"\ \text{{vanilla }} {a['vanilla']:.2f}", font_size=26, color=OPT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
         src = illustration(r"one-year at-the-money Asian calls, 25\% volatility, 252 daily fixings")
+        lk = wrapped_label(rf"a lookback pays $S_T - \min S$: {a['lookback_cf']:.1f} watched continuously (Goldman, Sosin "
+                           rf"and Gatto 1979; Conze and Viswanathan 1991), {a['lookback_mc_daily']:.1f} at daily closes. "
+                           r"A shout option, a cousin, lets the holder lock in the gain once", 4.8, 18, IV)
+        lk.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         with self.voiceover(
-            "See the control variate. Each dot is one simulated path: across, its geometric Asian payoff; up, its "
-            "arithmetic one. <bookmark mark='a'/> They fall on a line, with correlation "
-            f"{sc['rho']:.4f}. The regression line is the correction; what is left to estimate is the thin scatter "
-            f"around it. The noise falls {sc['ratio']:.0f}-fold, as if we had run {sc['ratio'] ** 2:.0f} times as "
-            f"many paths. And the prices: geometric {a['geo_cf']:.2f} in closed form, arithmetic {a['price']:.2f}, "
-            f"vanilla {a['vanilla']:.2f}. About half, as the variance argument said."
+            "See the control variate. Each dot is one path: across, its geometric Asian payoff; up, its arithmetic one. "
+            f"<bookmark mark='a'/> They fall on a line, with correlation {sc['rho']:.4f}, and what is left to estimate is "
+            f"the thin scatter around it: the noise falls {sc['ratio']:.0f}-fold, as if we had run {sc['ratio'] ** 2:.0f} "
+            f"times the paths. Geometric {a['geo_cf']:.2f} in closed form, arithmetic {a['price']:.2f}, vanilla "
+            f"{a['vanilla']:.2f}: about half. <bookmark mark='b'/> The lookback needs no simulation: reflection gives "
+            "Goldman, Sosin and Gatto's closed form, "
+            f"{a['lookback_cf']:.1f} watched continuously, against {a['lookback_mc_daily']:.1f} at daily closes, chapter "
+            "four's lesson again."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.002, run_time=3))
             vo.wait_until("a")
             self.play(Create(line), LaggedStart(*[FadeIn(x_) for x_ in side], lag_ratio=0.4))
+            vo.wait_until("b")
+            self.play(FadeIn(lk))
         self.wait(0.4)
         self.clear_scene()
 

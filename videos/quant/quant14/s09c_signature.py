@@ -186,7 +186,7 @@ class Signature(VoiceoverScene):
             "Watch the sixteen numbers calibrate: the error on the right, the smiles at three expiries on the left. "
             "Because each evaluation is only linear algebra, the search is cheap. <bookmark mark='a'/> Re-priced on "
             "fresh paths, the scores on our Surface: rough Bergomi, the two-factor Bergomi model, and the signature "
-            "model. Lowest: " + best_name + ". <bookmark mark='b'/> With Christian Möller, the same group showed in "
+            f"model. Lowest: {best_name}. <bookmark mark='b'/> With Janka Möller, the same group showed in "
             "2025 that signature models fit S&P and VIX options jointly, with neither jumps nor roughness: "
             "path dependence, again, doing the work."
         ) as vo:

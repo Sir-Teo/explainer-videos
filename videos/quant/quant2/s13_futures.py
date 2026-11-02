@@ -48,7 +48,7 @@ class Futures(VoiceoverScene, ThreeDScene):
                 why(r"no arbitrage both ways: reverse carry shorts the coin, lends, buys forward"),
                 why(r"an asset yielding $q$: hold $e^{-qT}$ units, reinvest the yield"),
                 why(r"read backwards: the carry the market is charging, a year's rate")]
-        step = ladder(self, rows, whys, keep=5, top=2.6, x=0.6, buff=0.42, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=2.6, x=0.6, buff=0.42, edge=6.9)
         ann = MathTex(rf"\ln({r['F']:,.0f}/{r['S']:,.0f})\ /\ ({r['days']:.0f}/365) \approx {100 * r['ann']:.0f}\%\ "
                       r"\text{a year}".replace(",", "{,}"), font_size=34, color=QC.IDEA).to_edge(DOWN, buff=0.5)
         with self.voiceover(
@@ -79,7 +79,10 @@ class Futures(VoiceoverScene, ThreeDScene):
     def converge(self, b):
         t = np.asarray(b["t"], float)
         d = (t - t[0]) / 86400
-        S, F, ann = np.asarray(b["S"]), np.asarray(b["F"]), np.asarray(b["ann"])
+        S, F, ann = np.asarray(b["S"]), np.asarray(b["F"]), np.asarray(b["ann"], float).copy()
+        late = np.asarray(b["days"], float) < 3  # the last days' annualized carry is noise over a tiny horizon
+        if late.any() and (~late).any():
+            ann[late] = ann[~late][-1]
         D = float(d[-1])
         top = axes([0, D], [15000, 62000], x_length=7.6, y_length=2.9, ylabel=r"BTC, \$ (hourly)",
                    yticks=[20000, 40000, 60000], yfmt=lambda v: rf"{v / 1000:.0f}\text{{k}}", font_size=17)
@@ -100,9 +103,10 @@ class Futures(VoiceoverScene, ThreeDScene):
                       (QC.IDEA, r"$\ln(F/S)/(T-t)$")], font_size=19).to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
         res = VGroup(
             MathTex(rf"\text{{mean}}\ {100 * b['mean_ann']:.0f}\%,\ \text{{max}}\ {100 * b['max_ann']:.0f}\%\ "
-                    r"\text{a year}", font_size=28, color=QC.IDEA),
+                    r"\text{a year}", font_size=24, color=QC.IDEA),
             label(r"(more than 10 days to expiry)", font_size=18, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
+        keep_in_frame(res, 0.3)
         src = real_data(r"Binance coin-margined BTCUSD\_210326 and spot BTCUSDT, hourly closes")
         off = abs(b["last_basis"]) > 0.003
         last_hour = (f"The last hour is off by {abs(100 * b['last_basis']):.1f} percent: the future settles on a dollar "

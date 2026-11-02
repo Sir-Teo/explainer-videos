@@ -20,7 +20,6 @@ class RBergomi(VoiceoverScene):
         self.proof()
         self.scheme(rb)
         self.replay(rb, rp, rs)
-        self.skew(rb, rs)
 
     def card(self):
         c = chapter_card(5, r"Rough Bergomi", r"What is the simplest rough model that prices options?", lit=(2016,),
@@ -211,24 +210,5 @@ class RBergomi(VoiceoverScene):
             self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(tab[2]), FadeIn(src))
             vo.wait_until("a")
             self.play(FadeIn(tab[3]), FadeIn(tab[4]))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def skew(self, rb, rs):
-        s = load("skew")
-        g = loglog_skew_axes(t_lo=2 / 365).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        dots = VGroup(*[Dot(g.ax.c2p(np.log10(a), np.log10(b)), radius=0.07, color=WHITE)
-                        for a, b in zip(s["T"], s["skew"]) if b > 0.02 and a >= 2 / 365])
-        c = loglog_curve(g.ax, rs["skew_T"], rs["skew"], MODEL_COL["rBergomi"])
-        leg = legend([(WHITE, r"the Surface"), (MODEL_COL["rBergomi"], rf"rough Bergomi, $H = {rb['params']['H']:.2f}$")],
-                     font_size=17).next_to(g, RIGHT, buff=0.3).align_to(g, UP)
-        side = wrapped_label(r"carrying the market's variance curve, it follows the quotes from 4 days to 200 but misses the "
-                             r"3-day point", 4.0, 19, GREY_A).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
-        with self.voiceover(
-            "And the test that motivated all of this, the skew against maturity. Rough Bergomi, carrying the "
-            "market's own variance curve, follows the quotes from four days out to two hundred, though it misses "
-            "the three-day point."
-        ):
-            self.play(FadeIn(g), FadeIn(dots), FadeIn(leg), Create(c), FadeIn(side), run_time=3)
         self.wait(0.4)
         self.clear_scene()

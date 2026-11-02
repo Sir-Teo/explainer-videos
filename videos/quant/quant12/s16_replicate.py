@@ -20,7 +20,7 @@ class Replicate(VoiceoverScene):
 
     def card(self):
         c = chapter_card(10, r"Replicating on real Bitcoin; volatility swaps", r"Does the strip really pay variance?",
-                         lit=(1999,), part=PART)
+                         part=PART)
         with self.voiceover("Chapter ten. Replicating a variance swap on real Bitcoin, and the volatility swap."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

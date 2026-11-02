@@ -7,6 +7,11 @@ from explainer.quant.house import bs
 from videos.quant.quant10.common import DEL, IMP, LOSS, OPT, PART, SPOT, load
 
 
+def datetime_str(d: str) -> str:
+    import datetime as _dt
+    return _dt.date(int(d[:4]), int(d[4:6]), int(d[6:])).strftime("%d %B %Y").lstrip("0")
+
+
 def sci_tex(x: float) -> str:
     e = int(np.floor(np.log10(x)))
     m = x / 10 ** e
@@ -17,27 +22,29 @@ class Crash(VoiceoverScene):
     def construct(self):
         c = load("crash87")
         self.card()
-        self.insurance()
+        ins = load("insurance87")
+        self.insurance(ins)
+        self.replay(ins)
         self.day(c)
-        self.tails(c)
         self.after()
 
     def card(self):
-        c = chapter_card(12, r"October 1987", r"What happens when everyone hedges the same way?", lit=(1987,),
+        c = chapter_card(16, r"October 1987", r"What happens when everyone hedges the same way?", lit=(1987,),
                          part=PART)
-        with self.voiceover("Chapter twelve. October 1987."):
+        with self.voiceover("Chapter sixteen. October 1987."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
     # ------------------------------------------------------------------
-    def insurance(self):
+    def insurance(self, ins):
         xs = np.linspace(70, 130, 241)
         g = axes([70, 130], [0, 1.05], x_length=6.6, y_length=3.6, xlabel=r"index level",
                  ylabel=r"fraction of the portfolio held in stocks", xticks=[80, 100, 120], yticks=[0, 0.5, 1],
                  font_size=20).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
         ax = g.ax
         # a protective put struck at 95, a year out: stocks held = 1 + put delta, as a fraction of value
-        frac = xs * (1 + bs.greeks(xs, 95.0, 1.0, 0.2, 0, 0, -1)["delta"]) / (xs + bs.price(xs, 95.0, 1.0, 0.2, 0, 0, -1))
+        sg, rr = ins["sigma"], ins["rate"]
+        frac = xs * (1 + bs.greeks(xs, 95.0, 1.0, sg, rr, 0, -1)["delta"]) / (xs + bs.price(xs, 95.0, 1.0, sg, rr, 0, -1))
         line = curve(ax, xs, np.clip(frac, 0, 1), DEL, stroke_width=4)
         arr = Arrow(ax.c2p(118, 0.95), ax.c2p(86, 0.55), buff=0, color=LOSS, stroke_width=4,
                     max_tip_length_to_length_ratio=0.12)
@@ -46,27 +53,106 @@ class Crash(VoiceoverScene):
         card = history_card(1981, r"Leland, O'Brien and Rubinstein", r"portfolio insurance: a floor under a "
                             r"portfolio, built not from bought puts but by replicating them, Black--Scholes delta "
                             r"hedging with index futures", width=5.4, font_size=24).to_edge(RIGHT, buff=0.5).shift(UP * 0.9)
-        size = label(r"by October 1987: some \$60--90 billion insured (Brady report)", font_size=24, color=GREY_A)
-        size.next_to(card, DOWN, buff=0.4).align_to(card, LEFT)
-        loop = label(r"a hedger who replicates a put sells as prices fall, and buys as they rise", font_size=24,
-                     color=GREY_A).to_edge(DOWN, buff=0.4)
+        card2 = lab_card(r"portfolio insurance", [
+            "for i in range(n):",
+            "    tau = max(T - i / 252, 1e-6)",
+            "    g = bs.greeks(S[i], floor, tau, sigma, rf[i] * 252, 0, -1)",
+            "    w[i] = S[i] * (1 + g['delta']) / (S[i] + g['price'])",
+            "    V[i + 1] = V[i] * (w[i] * (1 + ret[i])",
+            "                       + (1 - w[i]) * (1 + rf[i]))",
+            "    S[i + 1] = S[i] * (1 + ret[i])",
+        ], source="explainer/quant/house/hedge.py (replicate_put, abridged)", width=6.6)
+        card2.to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
         with self.voiceover(
-            "By the mid-1980s the Black-Scholes hedge had become a product. Hayne Leland, John O'Brien and Mark "
-            "Rubinstein sold portfolio insurance: a floor under a pension fund's portfolio, built not by buying puts, "
-            "which were scarce, but by replicating them, with the delta hedge of this part, trading index futures. "
+            "By the mid-1980s the Black-Scholes hedge had become a product. Hayne Leland and Mark Rubinstein, with "
+            "John O'Brien, sold portfolio insurance: a floor under a pension fund's portfolio, built not by buying "
+            "puts but by replicating them, the hedge of this part, trading index futures. Rubinstein and Leland had "
+            "published the recipe in 1981: replicating options with positions in stock and cash. "
             "<bookmark mark='a'/> Replicating a put means holding less stock as prices fall. Here is the fraction "
-            "of the portfolio held in stocks under a put struck five percent below the market: as the index drops, "
-            "the hedge sells. <bookmark mark='b'/> By October 1987 the Brady Commission, which investigated the "
-            "crash, put the assets under such strategies at sixty to ninety billion dollars. All of them followed "
-            "the same rule. Sell when prices fall."
+            "held in stocks under a one-year floor five percent below the market: as the index drops, the hedge "
+            f"sells. On a ten percent fall this model sells {100 * ins['sold_on_10pct']:.0f} percent of its stock. "
+            "<bookmark mark='b'/> In the House it is four lines: each day, the weight in the index is the stock's "
+            "share of stock plus put, and the rest sits in Treasury bills."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(g), Create(line))
+            self.play(FadeOut(card), FadeIn(g), Create(line))
             self.play(GrowArrow(arr), FadeIn(arr_lab))
             vo.wait_until("b")
-            self.play(FadeIn(size), FadeIn(loop))
+            self.play(FadeIn(card2))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def replay(self, ins):
+        dates = [str(int(x)) for x in ins["dates"]]
+        S, V, w = np.asarray(ins["S"], float), np.asarray(ins["V"], float), np.asarray(ins["w"], float)
+        j1 = int(np.searchsorted(np.asarray(ins["dates"]), 19871031))
+        n = j1 + 1
+        xs = np.arange(len(S))
+        g = axes([0, n], [70, 115], x_length=8.2, y_length=4.4, ylabel=r"value, 1 July 1987 $= 100$",
+                 yticks=[80, 95, 110], font_size=18).to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
+        ax = g.ax
+        fl = DashedLine(ax.c2p(0, ins["floor_value"]), ax.c2p(n, ins["floor_value"]), color=LOSS, stroke_width=2)
+        fl_lab = label(rf"the floor at the horizon, {ins['floor_value']:.1f}", font_size=20, color=LOSS)
+        fl_lab.next_to(ax.c2p(0, ins["floor_value"]), DOWN + RIGHT, buff=0.08)
+        k = ValueTracker(1)
+        mkt = always_redraw(lambda: curve(ax, xs[:max(int(k.get_value()), 2)], S[:max(int(k.get_value()), 2)],
+                                          SPOT, stroke_width=2.5))
+        port = always_redraw(lambda: curve(ax, xs[:max(int(k.get_value()), 2)], V[:max(int(k.get_value()), 2)],
+                                           WHITE, stroke_width=3.5))
+        frame = Rectangle(width=0.6, height=3.0, stroke_color=GREY_C, stroke_width=1.5).move_to([5.6, -0.6, 0])
+        fill = always_redraw(lambda: Rectangle(width=0.6, height=max(3.0 * w[min(int(k.get_value()), len(w) - 1)], 0.01),
+                                               stroke_width=0, fill_color=DEL, fill_opacity=0.85)
+                             .align_to(frame, DOWN).align_to(frame, LEFT))
+        wl = always_redraw(lambda: MathTex(rf"{100 * w[min(int(k.get_value()), len(w) - 1)]:.0f}\%", font_size=30,
+                                           color=DEL).next_to(frame, UP, buff=0.12))
+        wcap = label(r"in stocks", font_size=22, color=DEL).next_to(frame, DOWN, buff=0.12)
+        day = always_redraw(lambda: label(datetime_str(dates[min(int(k.get_value()), len(dates) - 1)]), font_size=26,
+                                          color=GREY_A).to_corner(UR, buff=0.4))
+        leg = legend([(SPOT, r"the US market (French)"), (WHITE, r"the insured portfolio")], font_size=20)
+        leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
+        params = note(rf"illustrative: one-year floor at {ins['floor']:.0f}, $\sigma = {100 * ins['sigma']:.0f}\%$, "
+                      r"bills at the daily T-bill rate, rebalanced at each close", font_size=18).to_edge(DOWN, buff=0.25)
+        i16 = dates.index(str(ins["oct16"]["date"]))
+        i19 = dates.index(str(ins["oct19"]["date"]))
+        o5, o16, o19, o20, eo = ins["oct5"], ins["oct16"], ins["oct19"], ins["oct20"], ins["end_oct"]
+        brady = VGroup(
+            label(r"The Brady Commission (1988):", font_size=24, color=IMP),
+            label(r"``\$60 to \$90 billion of equity assets were under portfolio insurance administration''",
+                  font_size=20, color=GREY_A),
+            label(r"``stock sales in excess of 20 percent of a portfolio in response to a 10 percent decline''",
+                  font_size=20, color=GREY_A),
+            label(r"``\$12 billion ... should already have been sold. Less than \$4 billion had in fact been sold.''",
+                  font_size=20, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        brady.scale_to_fit_width(min(brady.width, 12.6)).to_edge(UP, buff=0.35)
+        with self.voiceover(
+            "Now run it on the real 1987, from the first of July, on Kenneth French's daily market returns. The "
+            "white line is the insured portfolio, the blue the market, the yellow bar the share in stocks. "
+            f"Through the summer the market rises and the bar fills: {100 * o5['w']:.0f} percent in stocks on "
+            f"the fifth of October. <bookmark mark='a'/> Then the market falls for days running, and the rule "
+            f"sells: {100 * o16['w']:.0f} percent by Friday the sixteenth, {100 * o19['w']:.0f} going into Monday. "
+            "<bookmark mark='b'/> On Monday the market gaps down, and the portfolio, still "
+            f"{100 * o19['w']:.0f} percent in stocks, falls straight through its floor; the next morning the model "
+            f"demands selling most of what is left, down to {100 * o20['w']:.0f} percent. The insured portfolio "
+            f"ends October at {eo['V']:.1f}, " + ("below the floor of " if ins["breach"] else "above the floor of ")
+            + f"{ins['floor_value']:.1f} it was built to keep. <bookmark mark='c'/> The Brady Commission's numbers "
+            "say this was not a curiosity: sixty to ninety billion dollars insured, models calling for sales of "
+            "more than a fifth of a portfolio on a ten percent fall, and by that Monday twelve billion that should "
+            "already have been sold, of which less than four had been. Pause and predict: the rule says sell after "
+            "a fall. What happens when everyone follows it?"
+        ) as vo:
+            self.play(FadeIn(g), Create(fl), FadeIn(fl_lab), FadeIn(leg), FadeIn(frame), FadeIn(wcap), FadeIn(params))
+            self.add(mkt, port, fill, wl, day)
+            self.play(k.animate.set_value(i16 - 8), run_time=max(vo.until("a") - 0.5, 4.0), rate_func=linear)
+            self.play(k.animate.set_value(i19), run_time=max(vo.until("b") - 0.5, 2.0), rate_func=linear)
+            self.play(k.animate.set_value(n), run_time=4, rate_func=linear)
+            for m_ in (mkt, port, fill, wl, day):
+                m_.clear_updaters()
+            vo.wait_until("c")
+            self.play(FadeOut(VGroup(leg, params)), FadeIn(brady, shift=DOWN * 0.2))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -94,13 +180,12 @@ class Crash(VoiceoverScene):
         src = note(r"Kenneth French's data library: the value-weighted US market (Mkt$-$RF $+$ RF), "
                    r"dividends included", font_size=18).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "In the week before the nineteenth of October the market fell several days running, and the insurers' "
-            "rule told them to sell futures. Their selling pushed futures below the stocks; arbitrageurs bought "
-            "futures and sold stocks; stocks fell; the rule said sell again. <bookmark mark='a'/> On Monday the "
-            "nineteenth, the broad US market, in Kenneth French's data, fell "
-            f"{-100 * c['ret']:.1f} percent in a day; the S and P five hundred, 20.5. It is still the largest "
-            "one-day fall in the history of the American market. The hedge assumed that it could always trade, "
-            "at a price near the last one, in any size. That day, it could not."
+            "Everyone did. Insurers' selling pushed futures below the stocks; arbitrageurs bought futures and "
+            "sold stocks; stocks fell; the rule said sell again. <bookmark mark='a'/> On Monday the nineteenth "
+            f"the broad US market, in Kenneth French's data, fell {-100 * c['ret']:.1f} percent; the S and P five "
+            f"hundred, 20.5. Part one measured it: {-c['z']:.0f} standard deviations, impossible under a normal "
+            "law; Jackwerth and Rubinstein put the futures' fall at ten to the minus one hundred and sixty under "
+            "the lognormal. The hedge assumed it could always trade near the last price. That day it could not."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             self.play(LaggedStart(*[GrowFromEdge(b_, UP if r[i] < 0 else DOWN) for i, b_ in enumerate(bars) if i < i0],
@@ -110,36 +195,6 @@ class Crash(VoiceoverScene):
             self.play(FadeIn(lab), FadeIn(day))
             self.play(LaggedStart(*[GrowFromEdge(b_, UP if r[i] < 0 else DOWN) for i, b_ in enumerate(bars) if i > i0],
                                   lag_ratio=0.05, run_time=2))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def tails(self, c):
-        card = crisis_card(
-            r"19 October 1987", r"Black Monday, measured",
-            rf"against the market's own volatility over the year before ({100 * c['trailing_sd']:.2f}\% a day)",
-            stats=[(rf"{c['z']:.1f}\,\sigma", r"the fall in standard deviations"),
-                   (sci_tex(c['years_gauss']), r"years between such days, if returns were Gaussian"),
-                   (rf"{c['years_tail']:.0f}", r"years between such days, under the fitted power-law tail")],
-            width=10.4, font_size=28).to_edge(UP, buff=0.6)
-        fit = label(rf"power-law tail fitted to the worst 2\% of days, 1926--1986: exponent "
-                    rf"$\alpha = {c['alpha']:.2f}$ (Hill estimator)", font_size=24, color=GREY_A)
-        fit.next_to(card, DOWN, buff=0.5)
-        worst = label(rf"the worst day before it: {100 * c['worst_before']:.1f}\% (log), 29 October 1929",
-                      font_size=24, color=GREY_A).next_to(fit, DOWN, buff=0.25)
-        with self.voiceover(
-            "How unlikely was it? Against the market's own volatility over the previous year, the fall was "
-            f"{-c['z']:.1f} standard deviations. If daily returns were normal, as the lognormal model says, a day "
-            f"like that would come once in about ten to the {int(np.floor(np.log10(c['years_gauss'])))} years: "
-            "never, in any universe. <bookmark mark='a'/> But Part one measured the tails of real returns: they "
-            "fall off like a power, not like a Gaussian. Fit a power law to the worst two percent of days from "
-            f"1926 to 1986, and the exponent comes out {c['alpha']:.2f}, close to the inverse cubic law; under that "
-            f"tail, a day like Black Monday comes about once every {c['years_tail']:.0f} years. Rare, but not "
-            "impossible: the kind of event a long-lived institution should expect to meet."
-        ) as vo:
-            self.play(FadeIn(card, shift=UP * 0.2))
-            vo.wait_until("a")
-            self.play(FadeIn(fit), FadeIn(worst))
         self.wait(0.3)
         self.clear_scene()
 
@@ -172,7 +227,7 @@ class Crash(VoiceoverScene):
             "barely depended on the strike: the market priced roughly the Black-Scholes world. After it, "
             "out-of-the-money puts, crash insurance, became permanently dearer than the formula's single volatility "
             "allows. Mark Rubinstein, one of the portfolio insurers, documented it in 1994. That is the skew of "
-            "chapter nine, born here. <bookmark mark='a'/> The sociologist Donald MacKenzie read the episode as a "
+            "chapter twelve, born here. <bookmark mark='a'/> The sociologist Donald MacKenzie read the episode as a "
             "case of performativity: for fourteen years the formula helped make the market look like the formula, "
             "and then, in one day, the market stopped looking like it. Part twelve is about that skew."
         ) as vo:

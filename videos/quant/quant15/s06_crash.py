@@ -41,8 +41,8 @@ class Crash(VoiceoverScene):
                    r"Yahoo Finance (510500.SS)", font_size=17, color=GREY_B).to_corner(DR, buff=0.2)
         with self.voiceover(
             "In January 2024 China's small-cap indices fell through the knock-in levels of the snowballs sold over "
-            "the previous three years. How big was the market? Caixin, citing industry data reported by Bloomberg, "
-            "put onshore snowballs at about twenty-seven billion dollars in the summer of 2023. On the eleventh of "
+            "three years. Caixin, citing industry data, put onshore snowballs at about twenty-seven billion dollars "
+            "in mid-2023. On the eleventh of "
             "January, Bloomberg reported about thirteen billion dollars of them close to their loss triggers, and "
             "UBS analysts estimated the whole market at around fifty billion. <bookmark mark='a'/> On the "
             "twenty-second, as Risk.net reported it, the CSI 500 fell 4.7 percent in a day to a four-year low, with "
@@ -91,9 +91,8 @@ class Crash(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         src = illustration(r"stylized book, one note of notional 1 a month; the index path is real (510500.SS)", corner=DL)
         with self.voiceover(
-            "Rebuild it on the real path. Suppose one snowball was issued at the start of every month from 2021 to "
-            "2023 on the CSI 500, with the standard terms, and follow all of them, day by day, through the winter. "
-            "<bookmark mark='a'/> Run the clock. From the twenty-second of January the notes struck in 2022 and 2023 "
+            "Rebuild it on the real path: one snowball issued at the start of every month from 2021 to 2023, "
+            "followed day by day through the winter. <bookmark mark='a'/> From the twenty-second of January the notes struck in 2022 and 2023 "
             f"start to knock in, {b['n_ki_2024']} of them by the fifth of February. Underneath, the issuers' hedge, "
             "priced every day by the neural surrogate of chapter sixteen. <bookmark mark='b'/> As the index fell "
             f"toward the barriers, the hedge grew, from {dl[0]:.0f} notes' worth of futures to {dl[i_pk]:.0f}: the "
@@ -179,13 +178,11 @@ class Crash(VoiceoverScene):
                              rf"largest, a 1\% fall in the index added {gmax:.2f} notes' worth to the hedge", 11.6, 20,
                              GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Here are the day-by-day trades of our stylized book's hedgers, the change in the futures they hold. "
-            "Green bars are purchases, as the hedge grows on falling days. <bookmark mark='a'/> Red bars are the "
-            "days with knock-ins, when the hedge jumps down. Over the three months, the hedgers bought "
-            f"{buys:.1f} notes' worth of futures and sold {sells:.1f}, and the knock-in jumps alone account for "
-            f"{jsum:.1f} of the selling. At its largest, a one percent fall added {gmax:.2f} notes' worth to the "
-            "hedge. Scale one note to the tens of billions outstanding, and these bars become real orders in the "
-            "futures market."
+            "Here are our stylized hedgers' daily trades. Green bars are purchases, as the hedge grows on falling days. "
+            "<bookmark mark='a'/> Red bars are days with knock-ins, when the hedge jumps down. Over the three months they "
+            f"bought {buys:.1f} notes' worth of futures and sold {sells:.1f}, {jsum:.1f} of it in the knock-in jumps. At its "
+            f"largest, a one percent fall added {gmax:.2f} notes' worth to the hedge. Scale one note to tens of billions, "
+            "and these bars are real orders."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.02, run_time=4),
                       FadeIn(leg[:2]))

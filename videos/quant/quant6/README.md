@@ -16,7 +16,7 @@ the real-world measure P.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 58 minutes, 20 entries)
+## Chapters (about 55 minutes, 20 entries)
 
 * **One regression, five verdicts** (`s01_hook`). Does an industry's past year (months t−12 to t−2) predict its next
   month? French's 49 industries, 1928–2020, 51,858 industry-months: pooled OLS t = 1.86; clustered by industry 1.21;
@@ -269,7 +269,7 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
 
 *讲的是方法，不构成投资建议。*
 
-## 各章（约58分钟，20段）
+## 各章（约55分钟，20段）
 
 * **一个回归，五个结论。** 行业动量：混合OLS t = 1.86；按行业聚类1.21；按月0.27；双向0.27；法玛–麦克白5.08，斜率大八倍。灰色的第六根柱子：
   带月份效应的OLS，t = 3.56。

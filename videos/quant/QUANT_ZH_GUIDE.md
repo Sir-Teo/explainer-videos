@@ -121,3 +121,22 @@ translations with `python tools/text_zh_add.py quant FILE`; `--lang zh quantN` d
 | the Track Record | 业绩记录 |
 | the trial counter | 试验计数器 |
 | not investment advice | 不构成投资建议 |
+| total implied variance (w = σ²T) | 总隐含方差 |
+| sticky strike / sticky delta (moneyness) | 粘性执行价 / 粘性delta（粘性价值度） |
+| skew-stickiness ratio | 偏斜粘性比 |
+| risk reversal, butterfly (quotes) | 风险逆转，蝶式 |
+| butterfly arbitrage | 蝶式套利 |
+| Lee's moment formula | 李的矩公式 |
+| jump-wings (SVI) | 跳跃翼形式 |
+| local volatility | 局部波动率 |
+| implied (binomial) tree | 隐含（二叉）树 |
+| forward smile, forward-start option, cliquet | 远期微笑，远期起始期权，棘轮期权 |
+| log contract | 对数合约 |
+| volatility swap, convexity adjustment | 波动率互换，凸性调整 |
+| contango, backwardation | 期货升水（正向结构），现货升水（反向结构） |
+| roll yield | 展期收益 |
+| inverse / leveraged note (ETN) | 反向 / 杠杆票据（ETN） |
+| dealer gamma exposure (GEX) | 交易商Gamma敞口（GEX） |
+| same-day options (0DTE) | 当日到期期权（0DTE） |
+| risk-neutral moments | 风险中性矩 |
+| collocation points | 配置点 |

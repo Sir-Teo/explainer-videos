@@ -202,7 +202,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
             "power law the band always holds. <bookmark mark='b'/> For butterflies they gave a sufficient condition: "
             "two inequalities in theta and phi. <bookmark mark='c'/> Plug in the power law. The second inequality "
             "stays bounded as theta goes to zero only if gamma is at most one half. On the Surface, gamma is "
-            f"{gm:.3f}. " + branch
+            f"{gm:.3f}. {branch}"
         ) as vo:
             step(0)
             vo.wait_until("a")

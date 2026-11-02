@@ -17,8 +17,7 @@ class VarSwap(VoiceoverScene):
         self.jumps(t)
 
     def card(self):
-        c = chapter_card(9, r"Variance swaps: buying volatility itself", r"How do you buy volatility itself?", lit=(1994,),
-                         part=PART)
+        c = chapter_card(9, r"Variance swaps: buying volatility itself", r"How do you buy volatility itself?", part=PART)
         with self.voiceover("Chapter nine. Variance swaps: buying volatility itself."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

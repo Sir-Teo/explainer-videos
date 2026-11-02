@@ -19,13 +19,14 @@ class Ledger(VoiceoverScene):
         self.card()
         self.derive()
         self.breakeven(L)
+        self.lab(L)
         self.three_paths(L)
         self.distributions(L)
 
     def card(self):
-        c = chapter_card(6, r"Where the hedger's money comes from", r"What does a hedged option book bet on?",
+        c = chapter_card(7, r"Where the hedger's money comes from", r"What does a hedged option book bet on?",
                          lit=(1973,), part=PART)
-        with self.voiceover("Chapter six. Where the hedger's money comes from."):
+        with self.voiceover("Chapter seven. Where the hedger's money comes from."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -43,7 +44,7 @@ class Ledger(VoiceoverScene):
         whys = [why(r"short one option, long $\Delta$ shares (marked at $\sigma_i$; $r = 0$)"),
                 why(r"Taylor to second order; the $\Delta$ term cancels the slope"),
                 why(r"It\^o: the stock really moves with $\sigma_r$, so $(dS)^2 = S^2\sigma_r^2\,dt$"),
-                why(r"chapter five: $\Theta = -\tfrac12\sigma_i^2 S^2\Gamma$")]
+                why(r"chapter six: $\Theta = -\tfrac12\sigma_i^2 S^2\Gamma$")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.4, buff=0.6, edge=6.9)
         legend_ = VGroup(
             VGroup(MathTex(r"\sigma_i", font_size=34, color=IMP), label(r"implied: the volatility the option was "
@@ -134,6 +135,41 @@ class Ledger(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def lab(self, L):
+        card = lab_card(r"the hedger's ledger", [
+            "for i in range(1, n1):",
+            "    gi = bs.greeks(S[:, i], K, tau[i], sig_h, r, q, cp)",
+            "    dS = S[:, i] - s_prev",
+            "    step = w * (gi['price'] - v_prev - delta * dS)",
+            "    mtm += step                           # the book's change",
+            "    gam_acc += w * 0.5 * gam_prev * dS**2      # gamma",
+            "    the_acc += -w * 0.5 * gam_prev * s_prev**2 * sig_h**2 * dt",
+            "    delta = gi['delta']                   # rebalance",
+            "residual = mtm - gam_acc - the_acc",
+        ], source="explainer/quant/house/hedge.py (delta_hedge, at r = q = 0; abridged)", width=8.2)
+        card.to_edge(UP, buff=0.45)
+        outs = []
+        for j in (0, 2, 1):
+            g, th = float(L[f"gamma_{j}"][-1]), float(L[f"theta_{j}"][-1])
+            pnl = float(L["rows"][j]["pnl"])
+            outs.append(f"realized {100 * L['rows'][j]['realized']:.0f}%:  gamma {g:+.2f}  theta {th:+.2f}  "
+                        f"residual {pnl - g - th:+.2f}  P&L {pnl:+.2f}")
+        res = [abs(float(L["rows"][j]["pnl"]) - float(L[f"gamma_{j}"][-1]) - float(L[f"theta_{j}"][-1])) for j in range(3)]
+        with self.voiceover(
+            "This is the House's hedger, the loop that will keep score on every path in this part. Each step it "
+            "marks the option, books the change against the shares held, and splits it: half gamma times the "
+            "squared move, the theta term, and whatever is left. <bookmark mark='a'/> Run it on three quarters "
+            "that realize twelve, twenty-eight and twenty percent. The gamma and theta columns carry the story; "
+            f"the residual, what the second-order expansion misses, is never more than {max(res):.2f}. That is "
+            "the honest line: the formula explains the book, but only to the order it was derived."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            lab_run(self, card, outs)
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def three_paths(self, L):
         t = np.asarray(L["t"], float)
         days = t * 252
@@ -164,16 +200,14 @@ class Ledger(VoiceoverScene):
             return path, led, head
 
         with self.voiceover(
-            "Now three whole paths, each hedged four times a day for three months, each short a three-month "
-            "at-the-money call sold at twenty percent. The ledger keeps score: the pink bar is the gamma term, "
-            "what the squared moves cost; the blue bar is the theta term, what time paid; the white bar is the "
-            "book. <bookmark mark='a'/> On the first path the stock realizes twelve percent. Theta's income "
+            "Now watch those three quarters, each hedged four times a day, short a three-month at-the-money call "
+            "sold at twenty percent. Pink: the gamma term, what the squared moves cost. Blue: the theta term, "
+            "what time paid. White: the book. <bookmark mark='a'/> At twelve percent realized, theta's income "
             "outruns gamma's bill all quarter, and the book ends up "
-            f"{L['rows'][0]['pnl']:.2f}, on a premium of {L['premium']:.2f}. <bookmark mark='b'/> On the second it "
-            "realizes twenty-eight percent: gamma's bill grows faster than theta's income, and the book loses "
-            f"{-L['rows'][2]['pnl']:.2f}. <bookmark mark='c'/> On the third it realizes exactly twenty, the "
-            "volatility the option was sold at, and the two terms cancel: the book ends at "
-            f"{L['rows'][1]['pnl']:.2f}. The direction of the stock, up or down, never entered."
+            f"{L['rows'][0]['pnl']:.2f}, on a premium of {L['premium']:.2f}. <bookmark mark='b'/> At twenty-eight, "
+            f"gamma's bill wins and the book loses {-L['rows'][2]['pnl']:.2f}. <bookmark mark='c'/> At twenty, the "
+            f"volatility it was sold at, the two cancel: {L['rows'][1]['pnl']:.2f}. The direction of the stock "
+            "never entered."
         ) as vo:
             self.play(FadeIn(top), Create(kline))
             first = build(0)
@@ -223,12 +257,13 @@ class Ledger(VoiceoverScene):
         cap = label(r"20,000 paths at each realized volatility, all hedged at $\sigma_i = 20\%$", font_size=24,
                     color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "One path is an anecdote. Here are twenty thousand at each realized volatility. When the world "
+            "One path is an anecdote. Pause and predict: when realized equals implied, does every path end at "
+            "zero? Here are twenty thousand at each realized volatility. When the world "
             f"realizes twelve percent, the seller makes {rows[0]['mean']:.2f} on average and never loses: "
             f"{100 * rows[0]['p_loss']:.0f} percent of paths lose money. When it realizes twenty-eight, the seller "
             f"loses {-rows[2]['mean']:.2f} on average, and on every path. And when realized equals implied, the "
             f"average is {rows[1]['mean']:+.2f}: the price was fair, and what is left is a spread of "
-            f"{rows[1]['sd']:.2f} from hedging only four times a day, which chapter eight measures. An options "
+            f"{rows[1]['sd']:.2f} from hedging only four times a day, which chapter nine measures. An options "
             "trader is a volatility trader: the profit is the gap between two volatilities, one quoted, one lived."
         ):
             self.play(LaggedStart(*[FadeIn(p, shift=UP * 0.2) for p in panels], lag_ratio=0.4, run_time=3),

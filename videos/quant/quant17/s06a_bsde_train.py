@@ -151,11 +151,9 @@ class BSDETrain(VoiceoverScene):
         outs = [f"u0 at step 0: {cv[0]:.2f}   step 1000: {cv[1000]:.2f}   step 4000: {cv[4000]:.2f}",
                 f"reference (multilevel Picard): {b['reference']:.3f}"]
         with self.voiceover(
-            "The House's forward sweep, eleven lines. Draw the Brownian increments for a hundred assets and forty "
-            "steps; build the asset paths. Start every path at the guess. At each date, ask that date's network for "
-            "the hedge, and step the price forward: the default term times the time step, plus the hedge times the "
-            "noise. Return where the price ended and what the payoff was. <bookmark mark='a'/> Training only adds "
-            "the squared miss and an optimizer."
+            "The House's forward sweep: draw the noise for a hundred assets and forty steps, start every path at the "
+            "guess, and at each date step the price with the default term and that date's network's hedge. "
+            "<bookmark mark='a'/> Training only adds the squared miss and an optimizer."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -186,16 +184,13 @@ class BSDETrain(VoiceoverScene):
         for c_ in cards:
             c_[0].set_stroke(GREY_C)
         with self.voiceover(
-            "Why does it scale, when grids cannot? The work per training step is the forty-step sweep through "
-            "networks whose width grows with the dimension: linear in the steps, quadratic in the dimension at most. "
-            "So doubling the assets roughly doubles or quadruples the work, while a grid with ten points per axis "
-            "multiplies its size by ten to the hundred. There is theory behind this: Hutzenthaler, Jentzen, Kruse and "
-            "Nguyen proved that for semilinear heat equations, networks of polynomial size suffice. "
-            "<bookmark mark='a'/> It has relatives. The deep Galerkin method fits the equation's residual at random "
-            "points instead, which needs second derivatives of the network. Multilevel Picard iteration solves the "
-            "same equations without learning, and supplied our reference. <bookmark mark='b'/> And one more question: "
-            "the training loss stalls near thirty, not zero. Is the network failing? No: the time grid and the batch "
-            "noise put a floor under it. Judge the solver by its price, which has converged, not by its loss."
+            "Why does it scale? The work per step grows at most with the square of the dimension, while a grid "
+            "multiplies by ten with every asset; and Hutzenthaler, Jentzen, Kruse and Nguyen proved that networks of "
+            "polynomial size suffice for such equations. <bookmark mark='a'/> Its relatives: the deep Galerkin method "
+            "fits the equation's residual instead, needing second derivatives; multilevel Picard iteration solves it "
+            "without learning, and supplied our reference. <bookmark mark='b'/> And a question: the loss stalls near "
+            "thirty, not zero. Is the network failing? No: the time grid and batch noise put a floor under it. Judge "
+            "the solver by its price."
         ) as vo:
             step(0)
             step(1)

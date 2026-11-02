@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant10.common import GAIN, GAM, IMP, LOSS, OPT, PART, SPOT, load
+from videos.quant.quant10.common import GAIN, GAM, IMP, LOSS, OPT, PART, SPOT, computed, load
 
 C_ = {r"\Gamma": GAM, r"\sigma^2": IMP, r"\sigma^4": IMP, r"Z^2 - 1": SPOT, r"\Delta t": SPOT}
 
@@ -13,13 +13,13 @@ class Discrete(VoiceoverScene):
         d = load("discrete")
         self.card()
         self.derive()
-        self.measure(d)
-        self.costs(d)
+        self.measure(d, load("discrete_seeds"))
+        self.shape(load("discrete_seeds"))
+        self.jumps(load("jump_floor"))
 
     def card(self):
-        c = chapter_card(8, r"Hedging in steps, and paying for it", r"How often should you hedge?",
-                         lit=(1985,), part=PART)
-        with self.voiceover("Chapter eight. Hedging in steps, and paying for it."):
+        c = chapter_card(9, r"Hedging in steps", r"How often should you hedge?", lit=(1980,), part=PART)
+        with self.voiceover("Chapter nine. Hedging in steps."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -38,8 +38,9 @@ class Discrete(VoiceoverScene):
                 why(r"$\operatorname{Var}(Z^2) = 2$"),
                 why(r"steps are independent: add the variances")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.2, buff=0.75, edge=6.9)
-        hist = note(r"Boyle and Emanuel (1980); Kamal and Derman (1999): $\operatorname{sd} \approx "
-                    r"\sqrt{\pi/4}\;\text{vega}\;\sigma/\sqrt N$ at the money", font_size=24).to_edge(DOWN, buff=0.5)
+        hist = note(r"Boyle and Emanuel (1980); Derman and Kamal (Goldman Sachs, 1998): $\operatorname{sd} \approx "
+                    r"\sqrt{\pi/4}\;\text{vega}\;\sigma/\sqrt N$ at the money, $\sqrt{\pi/4} = 0.886$",
+                    font_size=24).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Black-Scholes assumes the hedge is adjusted continuously. Real hedgers trade in steps: every hour, "
             "every day. Over one step the hedge leaves an error: half gamma S squared times the squared move, "
@@ -49,8 +50,9 @@ class Discrete(VoiceoverScene):
             "fourth delta t squared. <bookmark mark='b'/> The steps are independent, so the variances add: there "
             "are T over delta t of them, which leaves one power of delta t. The standard deviation of the hedging "
             "error shrinks like the square root of the step: halve the error, hedge four times as often. Phelim "
-            "Boyle and David Emanuel worked this out in 1980; Emanuel Derman's team at Goldman Sachs later gave "
-            "the at-the-money rule of thumb at the bottom."
+            "Boyle and David Emanuel worked this out in 1980; Emanuel Derman and Michael Kamal at Goldman Sachs "
+            "gave the at-the-money rule of thumb at the bottom, with its prefactor, the square root of pi over "
+            "four."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -62,113 +64,129 @@ class Discrete(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def measure(self, d):
+    def measure(self, d, ds):
         N = np.asarray(d["N"], float)
-        sd, th, km = (np.asarray(d[k], float) for k in ("sd", "theory", "kamal"))
+        th, km = (np.asarray(d[k], float) for k in ("theory", "kamal"))
+        sd5 = np.asarray(ds["sd"], float)
         g = axes([0.5, 3.1], [-1.1, 0.4], x_length=7.6, y_length=4.4, xlabel=r"hedges over three months",
                  ylabel=r"standard deviation of the hedged P\&L", xticks=[1, 2, 3], yticks=[-1, 0],
                  xfmt=lambda v: f"10^{{{int(v)}}}", yfmt=lambda v: f"10^{{{int(v)}}}", font_size=20)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
         lx = np.log10(N)
-        dots = VGroup(*[glow_dot(ax.c2p(a, b), color=OPT, radius=0.06) for a, b in zip(lx, np.log10(sd))])
         th_line = curve(ax, lx, np.log10(th), GAM, stroke_width=3)
         km_line = DashedVMobject(curve(ax, lx, np.log10(km), GREY_B, stroke_width=2), num_dashes=40)
-        leg = legend([(OPT, r"simulated, 20,000 paths each"), (GAM, r"derived: $\propto \sqrt{\Delta t}$"),
-                      (GREY_B, r"rule of thumb")], font_size=22).move_to(ax.c2p(2.35, 0.2))
+        k = ValueTracker(lx[0])
+
+        def grown():
+            j = max(int(np.searchsorted(lx, k.get_value() + 1e-9, side="right")), 2)
+            return seed_band(ax, lx[:j], np.log10(sd5[:, :j]), OPT, stroke_width=3, opacity=0.35)
+
+        band_ = always_redraw(grown)
+        leg = legend([(OPT, r"simulated: 5 seeds of 20,000 paths"), (GAM, r"derived: $\propto \sqrt{\Delta t}$"),
+                      (GREY_B, r"rule of thumb")], font_size=22).move_to(ax.c2p(2.3, 0.2))
         marks = VGroup()
         for n, name in ((13, r"weekly"), (63, r"daily"), (252, r"four a day")):
             x = np.log10(n)
             marks.add(VGroup(DashedLine(ax.c2p(x, -1.1), ax.c2p(x, -0.95), color=GREY_C, stroke_width=1),
                              label(name, font_size=18, color=GREY_B).next_to(ax.c2p(x, -0.95), UP, buff=0.05)))
+        sl = np.asarray(ds["slopes"], float)
         right = VGroup(
-            label(r"fitted slope", font_size=26, color=GREY_A),
-            MathTex(rf"{d['slope']:.2f}", font_size=44, color=OPT),
+            label(r"fitted slope, 5 seeds", font_size=26, color=GREY_A),
+            MathTex(rf"{sl.min():.3f}\ \text{{to}}\ {sl.max():.3f}", font_size=40, color=OPT),
             label(r"the theory says $-0.5$", font_size=24, color=GREY_B),
             label(rf"premium: {d['premium_bs']:.2f}", font_size=24, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.8)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.6)
         with self.voiceover(
             "Here it is measured. A three-month at-the-money call, sold at the true volatility of twenty percent, "
-            "hedged four times, eight, sixteen, up to a thousand and twenty-four times over the quarter, twenty "
-            "thousand paths at each frequency. The pink line is the formula we just derived, with its integral "
-            "computed exactly; the dashed grey line is the rule of thumb. <bookmark mark='a'/> The simulation sits "
-            f"on the formula, and its slope on these log scales is {d['slope']:.2f}: the square-root law. Hedging "
-            f"weekly leaves an error of about {d['sd'][2]:.2f} on a premium of {d['premium_bs']:.2f}; hedging four "
-            f"times a day, about {d['sd'][6]:.2f}. Even a hedger with a perfect model is running a risk, unless "
-            "she trades without limit."
+            "hedged four times, eight, sixteen, up to a thousand and twenty-four times over the quarter. Five "
+            "independent seeds of twenty thousand paths each, drawn as a band as the frequency rises. The pink line "
+            "is the formula we just derived, the dashed grey line the rule of thumb. <bookmark mark='a'/> The band "
+            f"is so thin it looks like a line: the five seeds never differ by more than "
+            f"{100 * ds['spread_max']:.1f} percent, and their slopes on these log scales lie between "
+            f"{sl.min():.3f} and {sl.max():.3f}: the square-root law. Hedging weekly leaves an error of about "
+            f"{d['sd'][2]:.2f} on a premium of {d['premium_bs']:.2f}; four times a day, about {d['sd'][6]:.2f}."
         ) as vo:
             self.play(FadeIn(g), Create(th_line), Create(km_line), FadeIn(leg), FadeIn(marks))
-            self.play(LaggedStart(*[FadeIn(x, scale=1.4) for x in dots], lag_ratio=0.15, run_time=2.5))
-            vo.wait_until("a")
-            self.play(FadeIn(right, shift=LEFT * 0.2))
+            self.add(band_)
+            self.play(k.animate.set_value(lx[-1]), run_time=max(vo.until("a") - 1.0, 3.0), rate_func=linear)
+            band_.clear_updaters()
+            self.play(FadeIn(right, shift=LEFT * 0.2), FadeIn(computed()))
         self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def costs(self, d):
-        k = d["cost"]
-        eq = cmath(r"\sigma_L^2", r"=", r"\sigma^2", r"\Big(1 + \sqrt{\tfrac{2}{\pi}}\,\frac{2k}{\sigma\sqrt{\Delta t}}\Big)",
-                   font_size=42, colors={r"\sigma_L^2": IMP, r"\sigma^2": IMP}).to_edge(UP, buff=0.5)
-        who = note(r"Leland (1985): sell, and hedge, at the volatility $\sigma_L$", font_size=24).next_to(eq, DOWN,
-                                                                                                         buff=0.2)
-        lo, hi = -4.5, 3.0
+    def shape(self, ds):
+        lo, hi = -3.0, 1.6
         panels = VGroup()
-        for name, arr, mean, col in ((r"priced at $\sigma = 20\%$", d["pnl_naive"], d["naive_mean"], LOSS),
-                                     (rf"priced at $\sigma_L = {100 * d['sigma_leland']:.1f}\%$", d["pnl_leland"],
-                                      d["leland_mean"], GAIN)):
-            g = axes([lo, hi], [0, 1.05], x_length=4.6, y_length=2.4, xlabel=r"P\&L at expiry, after costs",
-                     xticks=[-4, -2, 0, 2], font_size=18)
-            pnl = np.asarray(arr, float)
-            h, e = np.histogram(np.clip(pnl, lo, hi), bins=60, range=(lo, hi))
-            h = h / h.max()
+        for N, col in ((13, LOSS), (252, OPT)):
+            pnl = np.asarray(ds[f"pnl_{N}"], float)
+            g = axes([lo, hi], [0, 1.05], x_length=5.0, y_length=2.6, xlabel=r"hedged P\&L, short the call",
+                     xticks=[-2, -1, 0, 1], font_size=18)
+            hh, e = np.histogram(np.clip(pnl, lo, hi), bins=60, range=(lo, hi))
+            hh = hh / hh.max()
             bars = VGroup(*[Rectangle(width=g.ax.x_length / 60 * 0.95, height=max(g.ax.y_length * v, 0.002),
                                       stroke_width=0, fill_color=col, fill_opacity=0.85)
-                            .move_to(g.ax.c2p((e[i] + e[i + 1]) / 2, 0), aligned_edge=DOWN) for i, v in enumerate(h)])
-            zero = DashedLine(g.ax.c2p(0, 0), g.ax.c2p(0, 1.05), color=GREY_C, stroke_width=1.2)
-            head = label(name, font_size=26, color=IMP).next_to(g, UP, buff=0.15)
-            stat = MathTex(rf"\text{{mean}}\ {mean:+.2f}", font_size=30, color=col).next_to(g, DOWN, buff=0.15)
-            panels.add(VGroup(g, bars, zero, head, stat))
-        panels.arrange(RIGHT, buff=1.0).next_to(who, DOWN, buff=0.45)
-        # the trade-off, schematically: hedging error falls like 1/sqrt(N), costs rise like sqrt(N)
-        tg = axes([1, 60], [0, 4.2], x_length=6.4, y_length=3.0, xlabel=r"hedges per period $N$",
-                  ylabel=r"risk and cost", font_size=20).next_to(who, DOWN, buff=0.6)
-        xs = np.linspace(1, 60, 200)
-        e_, c_ = 3.6 / np.sqrt(xs), 0.42 * np.sqrt(xs)
-        err_l = curve(tg.ax, xs, e_, SPOT, stroke_width=3.5)
-        cost_l = curve(tg.ax, xs, c_, LOSS, stroke_width=3.5)
-        tot_l = curve(tg.ax, xs, e_ + c_, WHITE, stroke_width=4)
-        best = xs[np.argmin(e_ + c_)]
-        best_d = glow_dot(tg.ax.c2p(best, float(np.min(e_ + c_))), color=WHITE, radius=0.07)
-        tlegend = legend([(SPOT, r"hedging error $\propto 1/\sqrt N$"), (LOSS, r"costs $\propto \sqrt N$"),
-                          (WHITE, r"both")], font_size=22).next_to(tg, RIGHT, buff=0.4)
-        sch = note(r"schematic", font_size=18).next_to(tg, DOWN, buff=0.1).align_to(tg, RIGHT)
-        trade = VGroup(tg, err_l, cost_l, tot_l, best_d, tlegend, sch)
-        foot = wrapped_label(
-            rf"cost {100 * k:.2f}\% of each share traded, hedged weekly. Of the costs, {d['end_costs']:.2f} is "
-            rf"the first hedge and the unwind, which Leland's formula leaves out; without them his book averages "
-            rf"{d['leland_mid_mean']:+.2f}.", 12.5, 22, GREY_A).to_edge(DOWN, buff=0.35)
+                            .move_to(g.ax.c2p((e[i] + e[i + 1]) / 2, 0), aligned_edge=DOWN) for i, v in enumerate(hh)])
+            head = label(rf"{N} hedges", font_size=26, color=col).next_to(g, UP, buff=0.12)
+            stat = MathTex(rf"\text{{sd}}\ {ds[f'sd_{N}']:.2f},\ \text{{skewness}}\ {ds[f'skew_{N}']:+.2f}", font_size=26,
+                           color=col).next_to(g, DOWN, buff=0.12)
+            panels.add(VGroup(g, bars, head, stat))
+        panels.arrange(RIGHT, buff=0.8).shift(UP * 0.2)
+        neg = ds["skew_13"] < 0
         with self.voiceover(
-            "And trading is not free. Every rebalance pays a cost, here a quarter of a percent of the value of the "
-            "shares traded, and the costs grow with the number of trades, like the square root of the frequency, "
-            "while the hedging error shrinks like its inverse. So there is a best frequency, and a price for the "
-            "option that covers it. Hayne Leland's answer in 1985: hedge, and sell, at a higher volatility, "
-            "inflated by the costs. <bookmark mark='a'/> Weekly hedging of our call: priced at twenty percent, "
-            f"the seller loses {-d['naive_mean']:.2f} on average, all of it costs. Priced and hedged at Leland's "
-            f"{100 * d['sigma_leland']:.1f} percent, the loss shrinks to {-d['leland_mean']:.2f}. <bookmark mark='b'/> "
-            f"And what is left is exactly what the formula leaves out: {d['end_costs']:.2f} for buying the first "
-            "hedge and unwinding the last. Charge for those too, and the book breaks even. Leland's rule is a "
-            "first answer; the deep hedger of Part seventeen will learn the better one, a band in which it does "
-            "not trade at all."
+            "The spread is not the whole story; look at its shape. Each step's error is Z squared minus one, "
+            "which is lopsided: small gains most of the time, an occasional large loss when the stock jumps "
+            "across a step. <bookmark mark='a'/> " + (
+                f"Hedged weekly, the seller's distribution leans left, skewness {ds['skew_13']:.2f}; hedged four "
+                f"times a day, {ds['skew_252']:.2f}: more steps, each smaller, and the sum looks more normal."
+                if neg else
+                f"Here the skewness is {ds['skew_13']:+.2f} weekly and {ds['skew_252']:+.2f} four times a day.")
         ) as vo:
-            self.play(FadeIn(tg), FadeIn(sch))
-            self.play(Create(err_l), FadeIn(tlegend[0]))
-            self.play(Create(cost_l), FadeIn(tlegend[1]))
-            self.play(Create(tot_l), FadeIn(tlegend[2]), FadeIn(best_d, scale=1.5))
-            self.play(Write(eq), FadeIn(who))
+            self.play(FadeIn(panels[0], shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeOut(trade), run_time=0.7)
-            self.play(LaggedStart(*[FadeIn(p, shift=UP * 0.2) for p in panels], lag_ratio=0.5, run_time=2.5))
-            vo.wait_until("b")
-            self.play(FadeIn(foot))
+            self.play(FadeIn(panels[1], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def jumps(self, jf):
+        N = np.asarray(jf["N"], float)
+        J, G = np.asarray(jf["jump"], float), np.asarray(jf["gbm"], float)
+        lx = np.log10(N)
+        g = axes([1.1, 3.1], [-1.2, 0.5], x_length=7.4, y_length=4.2, xlabel=r"hedges over three months",
+                 ylabel=r"sd of the hedged P\&L", xticks=[2, 3], yticks=[-1, 0],
+                 xfmt=lambda v: f"10^{{{int(v)}}}", yfmt=lambda v: f"10^{{{int(v)}}}", font_size=20)
+        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
+        ax = g.ax
+        bj = seed_band(ax, lx, np.log10(J), LOSS, stroke_width=3.5, opacity=0.3)
+        bg = seed_band(ax, lx, np.log10(G), SPOT, stroke_width=3.5, opacity=0.3)
+        floor = DashedLine(ax.c2p(1.1, np.log10(jf["floor"])), ax.c2p(3.1, np.log10(jf["floor"])), color=LOSS,
+                           stroke_width=1.5)
+        leg = legend([(SPOT, r"no jumps: GBM, same total volatility"), (LOSS, r"Merton jumps: 2 a year, mean $-5\%$"),
+                      (LOSS, rf"dashed: the jump term alone, {jf['floor']:.2f}")], font_size=22)
+        leg.next_to(g, RIGHT, buff=0.3).align_to(g, UP)
+        C = {r"\Gamma": GAM, r"J": LOSS}
+        eq = cmath(r"V(Se^J) - V(S) - \Delta S(e^J - 1)", r"\approx", r"\tfrac12", r"\Gamma", r"S^2", r"J", r"^2",
+                   font_size=32, colors=C).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
+        eqn = label(r"a jump is not made smaller by hedging more often", font_size=22, color=GREY_A)
+        eqn.next_to(eq, DOWN, buff=0.15).align_to(eq, LEFT)
+        holds = jf["ratio_jump"] < 2
+        with self.voiceover(
+            "And here is where the law stops. Emanuel Derman and Nassim Taleb's point, in 2005: dynamic "
+            "replication assumes the price moves continuously. Give the stock jumps, twice a year on average, "
+            "about five percent down, and hedge at the right total volatility. In blue, the same stock without "
+            "jumps: its error keeps halving every time the hedging quadruples. <bookmark mark='a'/> In red, with "
+            f"jumps: from sixteen hedges to a thousand and twenty-four, the error falls only from "
+            f"{J.mean(0)[0]:.2f} to {J.mean(0)[-1]:.2f}. "
+            + ("It hits a floor, " if holds else "It falls, but slowly, towards a floor, ")
+            + f"and the floor is the jump term: a jump of size J costs half gamma S squared J squared however "
+            f"often you rebalance, which by itself leaves {jf['floor']:.2f}. Hedging frequency buys you nothing "
+            "against a gap. Part eleven measures it on Bitcoin's real jumps; Part thirteen prices them."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(bg), FadeIn(leg[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(bj), FadeIn(leg[1]))
+            self.play(Create(floor), FadeIn(leg[2]), Write(eq), FadeIn(eqn))
         self.wait(0.4)
         self.clear_scene()

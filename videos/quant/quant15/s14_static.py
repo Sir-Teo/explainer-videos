@@ -100,14 +100,12 @@ class Static(VoiceoverScene):
         src = illustration(rf"down-and-out call: $S = K = {p['S']:.0f}$, $H = {p['H']:.0f}$, six months, $\sigma = "
                            rf"{100 * p['sigma']:.0f}\%$; 100{{,}}000 paths, 20 steps a day", corner=UR)
         with self.voiceover(
-            "How much more? Simulate with a hundred thousand paths. Watched monthly, the knock-out is worth "
-            f"{rows[0]['mc']:.2f}, against {b['continuous']:.2f} for the textbook formula; daily, "
-            f"{rows[2]['mc']:.2f}. <bookmark mark='a'/> Mark Broadie, Paul Glasserman and Steven Kou explained the "
-            "gap in 1997. When a walk that is only looked at every delta t first lands past the barrier, it lands "
-            "past it by a random overshoot, and the overshoot's mean is beta sigma root delta t, with beta about "
-            "0.58, a constant from the Riemann zeta function. <bookmark mark='b'/> So shift the barrier away from "
-            "the spot by that much, and use the continuous formula. The right-hand column does exactly that, and "
-            "matches every frequency to within the simulation's noise."
+            "How much more? Watched monthly, the knock-out is worth "
+            f"{rows[0]['mc']:.2f}, against {b['continuous']:.2f} for the textbook formula; daily, {rows[2]['mc']:.2f}. "
+            "<bookmark mark='a'/> Broadie, Glasserman and Kou explained it in 1997: a walk looked at every delta t lands "
+            "past the barrier by an overshoot whose mean is beta sigma root delta t, with beta about 0.58, from the Riemann "
+            "zeta function. <bookmark mark='b'/> So shift the barrier away by that much and use the continuous formula: the "
+            "right-hand column matches every frequency within the noise."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(src), LaggedStart(*[FadeIn(r_[:2]) for r_ in tab[1:-1]], lag_ratio=0.2),
                       FadeIn(tab[-1]))
@@ -154,16 +152,13 @@ class Static(VoiceoverScene):
                             r"worthless above $H$", 12.0, 19, GREY_A).to_edge(UP, buff=0.35)
         last = rows[-1]
         with self.voiceover(
-            "Now a different question: can a barrier be hedged without trading every day? Emanuel Derman, Deniz "
-            "Ergener and Iraj Kani answered yes, in 1995, with a static portfolio of vanillas. Start with the call "
-            "itself. On the barrier, at the last date before expiry, it is worth something, so add puts struck at "
-            "the barrier that cancel it there. <bookmark mark='a'/> Then step back one date, and cancel the "
-            "portfolio's value on the barrier again with shorter puts, and so on back to today. The curve is the "
-            "portfolio's value along the barrier: exactly zero at each date, and close to zero in between. "
-            "<bookmark mark='b'/> With more dates it flattens onto zero, and the portfolio's cost converges to the "
+            "Can a barrier be hedged without trading every day? Emanuel Derman, Deniz Ergener and Iraj Kani said "
+            "yes, in 1995, with a static portfolio of vanillas. Hold the call, and add puts struck at the barrier "
+            "that cancel its value there at the last date. <bookmark mark='a'/> Step back one date and cancel again "
+            "with shorter puts, and so on back to today. The curve is the portfolio's value along the barrier: zero "
+            "at each date, close to zero in between. <bookmark mark='b'/> With more dates its cost converges to the "
             f"barrier's price: {last['cost']:.3f} with {last['n']} dates, against {d['closed']:.3f} in closed form. "
-            "If the barrier is touched, the desk sells the whole portfolio for about nothing, which is what the "
-            "dead option is worth."
+            "On a touch, the desk sells it all for about nothing, the dead option's worth."
         ) as vo:
             self.play(FadeIn(cap), FadeIn(g), Create(zero), FadeIn(tab[0]))
             self.play(Create(curves[0]), FadeIn(marks[0]), FadeIn(tab[1]))
@@ -199,10 +194,9 @@ class Static(VoiceoverScene):
         outs = [f"static_dic_hedge(100, 90, 100)  ->  ({w:.3f}, {k:.1f})",
                 f"cost {bsm['hedge']:.3f};  exact down-and-in call {s['exact_dic_bs']:.3f}"]
         with self.voiceover(
-            "There is an even simpler static hedge, by Peter Carr, Katrina Ellis and Vishal Gupta in 1998. Under "
-            "put–call symmetry, with no carry and a smile that is symmetric in log strike, a call struck at K is "
-            "worth K over F puts struck at F squared over K. <bookmark mark='a'/> Under Black–Scholes it is one "
-            "change of measure: weighting by S over F turns the law of F squared over S into the law of S. "
+            "A simpler static hedge came from Peter Carr, Katrina Ellis and Vishal Gupta in 1998. Under put–call "
+            "symmetry, a call struck at K is worth K over F puts struck at F squared over K. "
+            "<bookmark mark='a'/> Under Black–Scholes it is one change of measure, with density S over F. "
             "<bookmark mark='b'/> Now apply it at the moment of the touch, when the forward is the barrier. K over "
             "H puts struck at H squared over K are worth exactly the call. So a down-and-in call is replicated by "
             "holding those puts: if the barrier is touched, swap them for the call at no cost; if not, they expire "
@@ -256,14 +250,15 @@ class Static(VoiceoverScene):
         src = illustration(r"$S = K = 100$, $H = 90$, six months, $r = q = 0$; 50{,}000 paths of 500 steps; Heston "
                            r"$v_0 = \theta = 0.0625$, $\kappa = 2$, $\xi = 0.8$", corner=UL)
         with self.voiceover(
-            "Where does it break? Pause and predict: with an equity-style negative skew, is the put-symmetry hedge "
-            "too dear or too cheap? <bookmark mark='a'/> Simulate it. Under Black–Scholes the hedge costs "
+            "Pause and predict: with a negative skew, is the put-symmetry hedge too dear or too cheap? "
+            "<bookmark mark='a'/> Under Black–Scholes the hedge costs "
             f"{M['BS']['hedge']:.3f} and the barrier is worth {M['BS']['dic']:.3f} on a grid of five hundred steps; "
             f"the gap, {g_bs:+.3f}, is only the monitoring error of the last section. Heston with no correlation "
             f"keeps the smile symmetric, and the gap stays small, {g0:+.3f}. <bookmark mark='b'/> Now give it a "
             f"skew, correlation minus 0.7. {verdict} The puts at 81 carry a higher implied volatility than the call "
-            "at 100, so the hedge is too dear, and at each touch the swap leaves money on the table: the desk sells "
-            "its puts for less than the call costs. Static hedges are model-free only under symmetry."
+            "at 100, so the hedge is too dear. It still covers the barrier, and at every touch the puts sell for more "
+            "than the call costs, as the ledger shows; but nobody can charge a client its price. Static hedges are "
+            "exact only under symmetry."
         ) as vo:
             self.play(FadeIn(pp))
             vo.wait_until("a")

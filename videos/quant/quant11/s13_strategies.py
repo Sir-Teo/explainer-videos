@@ -164,17 +164,17 @@ class Strategies(VoiceoverScene, ThreeDScene):
         med_say = ("below zero for every structure: the theta story." if n_neg == len(NAMES) else
                    f"below zero for {n_neg} of the six: the theta story.")
         rr_say = ("The risk reversal made money on average because Bitcoin rose over these two years, not because of "
-                  "anything about volatility," if rows["risk reversal"]["mean"] > 0 else
-                  "The risk reversal lost on average, as the smile's tilt cost more than the drift paid,")
-        tsay = (f"and no structure's mean has a t-statistic above {best_t:.1f}." if best_t < 2 else
-                f"and the largest t-statistic is {best_t:.1f}.")
+                  "anything about volatility." if rows["risk reversal"]["mean"] > 0 else
+                  "The risk reversal lost on average, as the smile's tilt cost more than the drift paid.")
+        tsay = (f"No structure's mean has a t-statistic above {best_t:.1f}." if best_t < 2 else
+                f"The largest t-statistic is {best_t:.1f}.")
         with self.voiceover(
             "Here is the record. Every Wednesday of 2024 and 2025, buy each structure on that day's real Deribit "
             "smile, and settle it twenty-eight days later at Bitcoin's price. "
             f"<bookmark mark='a'/> {nW} trades of each, filling week by week. <bookmark mark='b'/> The answer to the "
             f"question: the {st['worst']}, which lost in {100 * (1 - worst['win']):.0f} percent of weeks. Look at the "
             f"white medians: {med_say} The yellow means sit higher, pulled up by the rare large wins, the tails. "
-            f"<bookmark mark='c'/> {rr_say} {tsay} Two years of one asset in a rising market can show what the shapes do; it cannot show that any of "
+            f"<bookmark mark='c'/> {rr_say} <bookmark mark='d'/> {tsay} Two years of one asset in a rising market can show what the shapes do; it cannot show that any of "
             "them has an edge."
         ) as vo:
             self.play(FadeIn(g), Create(z), FadeIn(names), FadeIn(src))

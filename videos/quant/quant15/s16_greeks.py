@@ -56,14 +56,13 @@ class Greeks(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, cliff, cliff2)
         self.remove(hint, cliff, cliff2)
         with self.voiceover(
-            "Here is the note's value, not yet knocked in, over the index level and the months since issue. On the "
-            "right, near the start, it is worth a little more than it cost: the coupon is accruing and repayment is "
-            "near. <bookmark mark='a'/> On the left, the surface falls away toward the knock-in line. Cross it, and "
+            "Here is the note's value, not yet knocked in, over the index level and the months since issue. Near "
+            "the start it is worth a little more than it cost. <bookmark mark='a'/> On the left, the surface falls away toward the knock-in line. Cross it, and "
             "the note stops being a bond with a coupon and becomes a position in the index, a loss of a quarter or "
             "more on the day it happens. <bookmark mark='b'/> Underneath, in red, the same note once it has knocked "
             "in: it has stepped off the upper surface onto a lower one, for good, even if the index recovers. The "
-            "gap between the two sheets along the barrier is the cliff the whole product is built on, and it is the "
-            "signature of this chapter: every Greek we draw next is the shape of that cliff, differentiated."
+            "gap between the two sheets is the cliff the product is built on; every Greek we draw next is that cliff, "
+            "differentiated."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), Create(surf), run_time=3)
             vo.wait_until("a")
@@ -79,8 +78,12 @@ class Greeks(VoiceoverScene, ThreeDScene):
     def greek3d(self, g, which):
         sp = np.asarray(g["spots"])
         mo = np.asarray(g["months"], float)
-        A = np.asarray(g[f"alive_{which}"], float)
-        K = np.asarray(g[f"ki_{which}"], float)
+        if which == "gamma":  # the slope of the delta grid: steadier than second differences of noisy prices
+            A = np.gradient(np.asarray(g["alive_delta"], float), sp, axis=1)
+            K = np.gradient(np.asarray(g["ki_delta"], float), sp, axis=1)
+        else:
+            A = np.asarray(g[f"alive_{which}"], float)
+            K = np.asarray(g[f"ki_{which}"], float)
         if which == "delta":  # show the hedge the issuer holds: minus its delta, in index units per 1 of notes
             A, K = -A, -K
         lo = float(np.nanpercentile(np.concatenate([A.ravel(), K.ravel()]), 2))
@@ -162,7 +165,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
     def gamma3d(self, g):
         o = self.greek3d(g, "gamma")
         sp, mo = np.asarray(g["spots"]), np.asarray(g["months"], float)
-        A = np.asarray(g["alive_gamma"], float)
+        A = np.gradient(np.asarray(g["alive_delta"], float), sp, axis=1)
         j6 = int(np.argmin(np.abs(mo - 6)))
         m_above = float(np.max(np.abs(A[j6][sp > 0.755])))
         with self.voiceover(
@@ -170,9 +173,8 @@ class Greeks(VoiceoverScene, ThreeDScene):
             "small. <bookmark mark='a'/> Along the knock-in line it spikes, because the hedge is steep there "
             f"and about to jump; six months in, its largest size above the barrier is {m_above:.1f} per unit "
             "of spot. And there are ripples at each monthly knock-out date, where a note can vanish. "
-            "<bookmark mark='b'/> A big gamma is not by itself a loss. It is a promise to trade: to buy as the "
-            "index falls toward the barrier, and to sell as it rises, in amounts that grow as the barrier "
-            "nears."
+            "<bookmark mark='b'/> Gamma is a promise to trade: to buy as the index falls toward the barrier, in "
+            "amounts that grow as it nears."
         ) as vo:
             self._g3play(vo, o)
         self._g3end(o)
@@ -190,12 +192,12 @@ class Greeks(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "And the vega. Above the barrier the issuer is long volatility, a hill: it owns the down-and-in "
             "put the buyer sold, and more volatility makes a knock-in likelier. Six months in, the hill peaks "
-            f"at {v_pk:.4f} per vol point, at a spot of {s_pk:.2f}, just above the barrier. "
+            f"at {v_pk:.4f} per vol point, at a spot of {s_pk:.2f}, between the barrier and the start. "
             f"<bookmark mark='a'/> Over the whole grid, the peak is at month {m_pk} and spot {s_pk2:.2f}. That is "
-            "what practitioners call peak vega: spot a little above the barrier, mid-life. "
+            "what practitioners call peak vega: not at the barrier, where a knock-in is nearly certain, but on the way "
+            "down to it. "
             "<bookmark mark='b'/> On the red sheet, once knocked in, the put is a deep vanilla put with little vega "
-            "left, and the hill is gone. A book of snowballs is a supplier of volatility until the barriers break, "
-            "and then it is not."
+            "left, and the hill is gone."
         ) as vo:
             self._g3play(vo, o)
         self._g3end(o)
@@ -218,18 +220,16 @@ class Greeks(VoiceoverScene, ThreeDScene):
                 why(r"the decomposition of chapter 1: the issuer owns the put and owes the coupons. The put's vega is "
                     r"largest near the barrier; once knocked in, it is a deep vanilla put with little vega")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.2, buff=0.8, edge=6.9)
-        pp = pause_card(r"Where is the issuer's vega largest: at the start, just above the knock-in, or after it?",
+        pp = pause_card(r"Where is the issuer's vega largest: at the start, on the way down to the knock-in, or after it?",
                         width=6.0).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "How are these numbers made? By bumping. Reprice the note with the spot nudged up and down by h, and "
-            "take the difference. <bookmark mark='a'/> With independent simulations for each price, the error is "
-            "the Taylor remainder, of order h squared, plus the noise of a difference of two estimates divided by "
-            "h, which explodes as h shrinks. <bookmark mark='b'/> Common random numbers, the same paths for both "
-            "prices, cancel most of the noise for a smooth payoff. But near a barrier, a path flips between knocked "
-            "in and not knocked in as the bump crosses it, and the variance comes back, of order one over h N. "
-            "<bookmark mark='c'/> And the sign of the issuer's vega comes straight from chapter one's "
-            "decomposition: it owns the down-and-in put, and owes the coupons. <bookmark mark='p'/> Pause on it: "
-            "where is that vega largest? Just above the knock-in, mid-life, as the surface showed."
+            "How are these numbers made? By bumping the spot up and down by h and repricing. "
+            "<bookmark mark='a'/> With independent simulations, the error is the Taylor remainder, h squared, plus "
+            "noise divided by h, which explodes as h shrinks. <bookmark mark='b'/> Common random numbers cancel most "
+            "of the noise, for smooth payoffs. Near a barrier, paths flip state as the bump crosses them, and the "
+            "variance returns, of order one over h N. "
+            "<bookmark mark='c'/> And the issuer's vega sign comes from chapter one: it owns the down-and-in put and "
+            "owes the coupons. <bookmark mark='p'/> Where is it largest? On the way down to the knock-in, not at it."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -276,10 +276,8 @@ class Greeks(VoiceoverScene, ThreeDScene):
             "computed with five bump sizes and three seeds each. <bookmark mark='a'/> In red, independent paths for "
             f"the up and the down price: the seeds disagree by {spread_ind:.2f} on average, and worst at the "
             f"smallest bump. <bookmark mark='b'/> In green, common random numbers: the spread falls to "
-            f"{spread_crn:.2f}. But even with the same paths, the smallest bump still wobbles, by {sp_small:.2f}, "
-            "because paths flip across the barrier, and the largest is smooth but biased, because it straddles the "
-            "barrier itself. There is no free bump size near a cliff. Chapter eighteen shows how the frontier "
-            "removes this choice."
+            f"{spread_crn:.2f}, but the smallest bump still wobbles, by {sp_small:.2f}, as paths flip across the "
+            "barrier, and the largest straddles it and is biased. There is no free bump size near a cliff."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

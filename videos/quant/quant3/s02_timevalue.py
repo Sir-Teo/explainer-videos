@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant3.common import CASH, PART, VALUE, load
+from videos.quant.quant3.common import CASH, PART, VALUE, live, load
 
 C_ = {r"V": VALUE, r"D_1": CASH, r"r": QC.IMPLIED, r"g": CASH}
 
@@ -151,8 +151,10 @@ class TimeValue(VoiceoverScene, ThreeDScene):
             seg = Line(nl.n2p(lo), nl.n2p(hi), color=QC.HOUSE, stroke_width=10)
             ends = VGroup(Line(nl.n2p(lo) + DOWN * 0.18, nl.n2p(lo) + UP * 0.18, color=QC.HOUSE, stroke_width=3),
                           Line(nl.n2p(hi) + DOWN * 0.18, nl.n2p(hi) + UP * 0.18, color=QC.HOUSE, stroke_width=3))
-            txt = MathTex(rf"\text{{step}}\ {i}:\ [{100 * lo:.4f}\%,\ {100 * hi:.4f}\%]", font_size=26,
-                          color=QC.HOUSE).next_to(nl, UP, buff=0.35)
+            txt = VGroup(live(r"\text{step}", i, 0, r":", font_size=26, color=QC.HOUSE),
+                         live(r"[", 100 * lo, 4, r"\%,", font_size=26, color=QC.HOUSE),
+                         live("", 100 * hi, 4, r"\%]", font_size=26, color=QC.HOUSE)).arrange(RIGHT, buff=0.15)
+            txt.next_to(nl, UP, buff=0.35)
             return VGroup(seg, ends, txt)
 
         brk = always_redraw(bracket)

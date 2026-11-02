@@ -62,16 +62,14 @@ class Business(VoiceoverScene):
         src = illustration(rf"the CSI 500 snowball: 24 months, knock-out 103\%, knock-in 75\%; $\sigma = "
                            rf"{100 * d['sigma']:.1f}\%$, $r = 2\%$")
         with self.voiceover(
-            "A structured note is sold as one security, but it is built from parts, and each part has a price. Take "
-            "the snowball we will meet in chapter seven, at its fair coupon, and price every piece on the same "
-            f"simulated paths. <bookmark mark='a'/> First a zero-coupon bond: {b['bond']:.3f} for every unit, the "
-            "promise to repay in two years, discounted. <bookmark mark='b'/> Most notes are repaid early, and money "
-            f"back sooner is worth a little more: {b['early']:.3f}. <bookmark mark='c'/> Then the coupons: "
-            f"{b['strip']:.3f} paid at a knock-out, and {b['maturity_coupon']:.3f} paid at maturity on paths that "
-            "never knocked in. <bookmark mark='d'/> And then the piece the buyer does not see. She has sold a put "
-            f"that comes alive only if the index falls through the barrier, worth {abs(b['dip']):.3f}. It hangs "
-            "below the stack, and takes it back down to exactly one. The coupon is the put's premium, paid in "
-            "instalments."
+            "A structured note is sold as one security but built from parts, each with a price. Take chapter seven's "
+            "snowball at its fair coupon, and price every piece on the same paths. "
+            f"<bookmark mark='a'/> A zero-coupon bond: {b['bond']:.3f}, the promise to repay in two years, discounted. "
+            f"<bookmark mark='b'/> Most notes are repaid early, and money back sooner is worth a little more: {b['early']:.3f}. "
+            f"<bookmark mark='c'/> The coupons: {b['strip']:.3f} paid at a knock-out, {b['maturity_coupon']:.3f} at maturity. "
+            "<bookmark mark='d'/> And the piece the buyer does not see: a put that comes alive only if the index falls "
+            f"through the barrier, worth {abs(b['dip']):.3f}. It takes the stack back down to exactly one. The coupon is "
+            "the put's premium, paid in instalments."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")
@@ -113,10 +111,9 @@ class Business(VoiceoverScene):
                            rf"{d['B']:.3f}$, so selling it at {100 * d['coupon'] - 3:.1f}\% instead of "
                            rf"{100 * d['coupon']:.1f}\% keeps {3 * d['B']:.2f} points", 12.0, 21, GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Now the algebra. The simplest note is the reverse convertible: it pays one plus a coupon, unless the "
-            "stock has fallen, in which case the buyer bears the fall. That is a bond, minus a put. <bookmark mark='a'/> "
-            "Its value: the issuer discounts its own promise at its funding rate, r plus s, and the put is priced as "
-            "any put. <bookmark mark='b'/> Set the value to one and solve: the fair coupon grows with the put's "
+            "Now the algebra. The simplest note, the reverse convertible, pays one plus a coupon, unless the stock "
+            "has fallen, when the buyer bears the fall: a bond minus a put. <bookmark mark='a'/> The issuer discounts "
+            "its own promise at its funding rate, r plus s. <bookmark mark='b'/> Set the value to one and solve: the fair coupon grows with the put's "
             f"premium and with the issuer's credit spread. At twenty percent volatility over a year it is "
             f"{100 * rc['coupon']:.1f} percent. <bookmark mark='c'/> The snowball is the same idea with memory: its "
             "payoff splits on three disjoint events, knocked out in month m, alive and never knocked in, alive and "
@@ -162,9 +159,9 @@ class Business(VoiceoverScene):
         pp = pause_card(r"The issuer's credit spread widens by 100 bp. Does the coupon it can offer rise or fall?",
                         width=6.0).to_corner(UR, buff=0.3)
         with self.voiceover(
-            "Pause on that funding spread. <bookmark mark='p'/> If the issuer's own credit spread widens by a "
-            "hundred basis points, does the coupon it can offer rise or fall? <bookmark mark='a'/> It rises. A "
-            "weaker issuer discounts its promise more heavily, the bond block shrinks, and the room it frees goes "
+            "<bookmark mark='p'/> Pause and predict: if the issuer's credit spread widens by a hundred basis "
+            "points, does its coupon rise or fall? <bookmark mark='a'/> It rises: the bond block shrinks, and the room "
+            "goes "
             f"into the coupon: from {100 * c[0]:.1f} percent at no spread to {100 * c[2]:.1f} at a hundred basis "
             f"points and {100 * c[-1]:.1f} at two hundred. Part of every coupon pays the buyer for lending to the "
             "bank. Lehman Brothers' note buyers learned in 2008 that this part is not free."

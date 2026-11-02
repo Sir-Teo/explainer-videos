@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant3.common import CASH, PART, PRICE, VALUE, load, real_data
+from videos.quant.quant3.common import CASH, PART, PRICE, VALUE, live, load, real_data
 
 C_ = {r"P": PRICE, r"E_1": VALUE, r"b": CASH, r"r": QC.IMPLIED, r"g": CASH}
 
@@ -206,9 +206,9 @@ class CAPE(VoiceoverScene):
             left = Line([-W / 2, y, 0], [-W / 2 + a * W, y, 0], color=QC.LOSS, stroke_width=16)
             right = Line([-W / 2 + a * W, y, 0], [W / 2, y, 0], color=QC.GAIN, stroke_width=16)
             knot = Dot([-W / 2 + a * W, y, 0], radius=0.18, color=WHITE)
-            lt = MathTex(rf"\text{{returns}}\ b_r^{{lr}} = {rr:.2f}", font_size=32, color=QC.LOSS)
+            lt = live(r"\text{returns}\ b_r^{lr} =", rr, 2, font_size=32, color=QC.LOSS)
             lt.next_to([-W / 2, y, 0], UP, buff=0.3).align_to(left, LEFT)
-            rt = MathTex(rf"\text{{dividend growth}}\ b_d^{{lr}} = {dd:.2f}", font_size=32, color=QC.GAIN)
+            rt = live(r"\text{dividend growth}\ b_d^{lr} =", dd, 2, font_size=32, color=QC.GAIN)
             rt.next_to([W / 2, y, 0], UP, buff=0.3).align_to(right, RIGHT)
             per = label(S[int(round(x))][0], font_size=34, color=QC.IDEA).move_to(UP * 2.6)
             return VGroup(left, right, knot, lt, rt, per)

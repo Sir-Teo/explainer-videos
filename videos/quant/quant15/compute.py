@@ -410,17 +410,23 @@ TOTAL = TERMS["months"] * DPM
 DT = 1 / (12 * DPM)
 
 
-def _unit_note(sig, elapsed, n_paths, seed, q=0.0, r=None):
+def _unit_note(sig, elapsed, n_paths, seed, q=0.0, r=None, chunk=10000):
     """Unit paths for a note `elapsed` days old: GBM from 1, so a note at spot S reads S times them (common random
     numbers across spots for free). Returns what the payoff needs: the observation rows, the running minimum, the
-    final value and the discount factors."""
+    final value and the discount factors. Simulated in chunks of 10,000 paths to keep memory small."""
     r = TERMS["r"] if r is None else r
     rem = TOTAL - elapsed
-    p = X.gbm_paths(1.0, sig, rem * DT, rem, n_paths, r, q, seed)
     obs = [(m, m * DPM - elapsed) for m in range(TERMS["lockup"], TERMS["months"] + 1) if m * DPM >= elapsed]
-    return {"rows": np.array([p[i] for _, i in obs]), "months": np.array([m for m, _ in obs]),
-            "disc": np.exp(-r * DT * np.array([i for _, i in obs])), "min": p.min(axis=0), "last": p[-1],
-            "dT": np.exp(-r * rem * DT)}
+    rows, mins, lasts = [], [], []
+    for k in range(0, n_paths, chunk):
+        p = X.gbm_paths(1.0, sig, rem * DT, rem, min(chunk, n_paths - k), r, q, seed * 1000 + k // chunk)
+        rows.append(np.array([p[i] for _, i in obs]))
+        mins.append(p.min(axis=0))
+        lasts.append(p[-1])
+        del p
+    return {"rows": np.concatenate(rows, axis=1), "months": np.array([m for m, _ in obs]),
+            "disc": np.exp(-r * DT * np.array([i for _, i in obs])), "min": np.concatenate(mins),
+            "last": np.concatenate(lasts), "dT": np.exp(-r * rem * DT)}
 
 
 def _note_value(U, S, knocked_in, coupon):
@@ -557,12 +563,12 @@ def compute_static() -> dict:
 
     for name, rho in (("BS", None), ("Heston, rho = 0", 0.0), ("Heston, rho = -0.7", -0.7)):
         dic, paths_show = [], []
-        for b in range(2):
+        for b in range(5):  # 5 batches of 10,000 paths, to keep memory small
             if rho is None:
-                S = X.gbm_paths(S0, 0.25, T, n, 25000, seed=11 + b)
+                S = X.gbm_paths(S0, 0.25, T, n, 10000, seed=11 + b)
                 v = None
             else:
-                S, v = sv.heston_qe(S0, hp["v0"], hp["kappa"], hp["theta"], hp["xi"], rho, T, n, 25000, seed=11 + b,
+                S, v = sv.heston_qe(S0, hp["v0"], hp["kappa"], hp["theta"], hp["xi"], rho, T, n, 10000, seed=11 + b,
                                     return_v=True)
             hit = S.min(axis=0) <= H
             dic.append(np.where(hit, np.maximum(S[-1] - K, 0), 0))

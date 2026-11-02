@@ -3,20 +3,22 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant10.common import CASH, DEL, OPT, PART, QQ, SPOT, load
+from explainer.quant.house import bs
+from videos.quant.quant10.common import CASH, DEL, GAM, OPT, PART, QQ, SPOT, THE, computed, load
 
 
-class Tree(VoiceoverScene):
+class Tree(VoiceoverScene, ThreeDScene):
     def construct(self):
         d = load("tree")
         self.card()
         self.one_step()
-        self.many_steps(d)
-        self.limit(d)
+        self.lattice(load("tree3d"))
+        self.derive()
+        self.limit(d, load("tree3d"))
 
     def card(self):
-        c = chapter_card(4, r"The tree and its limit", r"Can a coin flip price an option?", lit=(1979,), part=PART)
-        with self.voiceover("Chapter four. The tree and its limit."):
+        c = chapter_card(5, r"The tree and its limit", r"Can a coin flip price an option?", lit=(1979,), part=PART)
+        with self.voiceover("Chapter five. The tree and its limit."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -54,19 +56,13 @@ class Tree(VoiceoverScene):
         pnote.next_to(prob, DOWN, buff=0.25).align_to(prob, LEFT)
         ill = note(r"illustrative: zero interest, one period", font_size=18).to_corner(DL, buff=0.3)
         with self.voiceover(
-            "There is a third road, the one that is easiest to see. Cox, Ross and Rubinstein in 1979: let time "
-            "move in one step, and let the stock do one of two things. From one hundred it goes to one hundred and "
-            "twenty, or to ninety. A call with strike one hundred is then worth twenty, or nothing. "
-            "<bookmark mark='a'/> Two outcomes, two instruments: we can copy the call exactly. Hold delta shares, "
-            "with delta the change in the call over the change in the stock, twenty over thirty: two thirds of a "
-            "share. <bookmark mark='b'/> Borrow sixty, so that in the up state the shares are worth eighty, minus "
-            "sixty, twenty; in the down state, sixty minus sixty, zero. The copy matches the call in both "
-            f"states, so it must cost the same: two thirds of a hundred minus sixty, {c0:.2f}. "
-            "<bookmark mark='c'/> Write that price as a weighted average of the two payoffs, and the weight on the "
-            "up state comes out to one third. That is a probability, but not anyone's belief: it is the one "
-            "probability under which the stock is a fair game, expected to stay at a hundred. Whether the real "
-            "chance of going up is ten percent or ninety, the price is the same. The risk-neutral measure, in "
-            "its simplest form."
+            "The third road is the one that is easiest to see. Cox, Ross and Rubinstein, 1979: one step, two "
+            "outcomes. From one hundred the stock goes to one hundred and twenty or to ninety, and a call struck at "
+            "one hundred is worth twenty or nothing. <bookmark mark='a'/> Hold two thirds of a share, "
+            "<bookmark mark='b'/> borrow sixty, and the copy matches the call in both states, so it costs the same: "
+            f"{c0:.2f}. <bookmark mark='c'/> Written as an average of the payoffs, the weight on the up state is "
+            "one third, whatever the real chance of going up. Part nine built this; here we take it to its "
+            "limit."
         ) as vo:
             self.play(FadeIn(n0), FadeIn(ill))
             self.play(Create(e1), Create(e2), FadeIn(nu), FadeIn(nd))
@@ -83,53 +79,107 @@ class Tree(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def many_steps(self, d):
-        small = d["small"]
-        layers = {int(k): v for k, v in small["layers"].items()}
-        g = binomial_tree(layers, dx=2.45, dy=0.78, node_r=0.38, font_size=22, show=("values",))
-        gs = binomial_tree(layers, dx=2.45, dy=0.78, node_r=0.38, font_size=22, show=("spots",))
-        gd = binomial_tree({k: v for k, v in layers.items() if v.get("delta") is not None}, dx=2.45, dy=0.78,
-                           node_r=0.38, font_size=22, show=("delta",))
-        for m in (g, gs, gd):
-            m.move_to(LEFT * 1.2 + DOWN * 0.3)
-        gd.align_to(g, LEFT).align_to(g, UP).shift(DOWN * (g.height - gd.height) / 2)
-        info = VGroup(
-            MathTex(rf"u = e^{{\sigma\sqrt{{\Delta t}}}} = {small['u']:.4f}", font_size=28, color=SPOT),
-            MathTex(rf"q = \frac{{e^{{r\Delta t}} - d}}{{u - d}} = {small['p']:.4f}", font_size=28, color=QQ),
-            MathTex(rf"C_0 = {small['price']:.3f}", font_size=34, color=OPT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4).shift(UP * 0.8)
-        params = note(rf"$S_0 = K = 100$, $T = 1$, $\sigma = 20\%$, $r = 5\%$, four steps", font_size=20)
-        params.to_corner(DR, buff=0.3)
-        heads = VGroup(label(r"stock prices", font_size=28, color=SPOT), label(r"call values", font_size=28, color=OPT),
-                       label(r"the hedge, $\Delta$", font_size=28, color=DEL))
-        for h in heads:
-            h.to_edge(UP, buff=0.35).set_x(g.get_x())
+    def lattice(self, t3):
+        K, T, sig, r = t3["K"], t3["T"], t3["sigma"], t3["r"]
+        ax = ThreeDAxes(x_range=[0, 1, 0.25], y_range=[50, 200, 50], z_range=[0, 100, 25], x_length=7.0,
+                        y_length=6.0, z_length=3.6, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+        ax.shift(DOWN * 0.4)
+        surf = price_surface(ax, lambda t, S: float(bs.price(S, K, max(T - t, 1e-4), sig, r)), (0.0, 0.999),
+                             (50, 200), resolution=(24, 24), z_lo=0, z_hi=100, opacity=0.35)
+
+        def nodes(N, cap=1500):
+            t, S, V = (np.asarray(t3[f"{c}_{N}"], float) for c in ("t", "s", "v"))
+            m = (S >= 50) & (S <= 200)
+            idx = np.flatnonzero(m)
+            if len(idx) > cap:
+                idx = idx[np.linspace(0, len(idx) - 1, cap).astype(int)]
+            rad = {4: 0.09, 16: 0.06, 64: 0.04, 256: 0.03}[N]
+            return VGroup(*[Dot3D(ax.c2p(t[i], S[i], min(V[i], 100)), radius=rad, color=YELLOW, resolution=(4, 4))
+                            for i in idx])
+
+        groups = {N: nodes(N) for N in t3["N"]}
+        hint = VGroup(label(r"time $t$", font_size=24, color=THE), label(r"stock price $S$", font_size=24, color=SPOT),
+                      label(r"call value $V$", font_size=24, color=OPT)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                 buff=0.1).to_corner(UL, buff=0.35)
+        readout_ = VGroup()
+
+        def tag_(N):
+            j = list(t3["N"]).index(N)
+            return VGroup(MathTex(rf"N = {N}", font_size=36, color=YELLOW),
+                          MathTex(rf"\text{{price}}\ {t3[f'price_{N}']:.4f}", font_size=30, color=OPT),
+                          MathTex(rf"\text{{worst node gap}}\ {t3['max_gap'][j]:.3f}", font_size=26, color=GREY_A)
+                          ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.4)
+
+        self.set_camera_orientation(phi=68 * DEGREES, theta=-60 * DEGREES, zoom=0.88)
+        self.add_fixed_in_frame_mobjects(hint)
+        self.remove(hint)
         with self.voiceover(
-            "Now chop a year into four steps and let the stock move up or down by e to the plus or minus sigma "
-            "root delta t at each. The prices recombine into a tree. <bookmark mark='a'/> At the last layer the "
-            "call is worth its payoff. Work backwards: each node is the discounted risk-neutral average of the two "
-            "nodes after it. That is the replication argument applied once per node, and it lands on a price "
-            f"today of {small['price']:.3f}. <bookmark mark='b'/> And at every node the tree also tells you the "
-            "hedge: how many shares make the copy work over the next step. Near the top, almost a full share; "
-            "near the bottom, almost none. A hedger walking down this tree rebalances at every step."
+            "Chop the year into steps and the tree's nodes become points in space: time across, stock price "
+            "along, and the call's value as height. Here is a four-step tree, every node at the value backward "
+            "induction gives it, and behind it, translucent, the Black-Scholes surface. "
+            "<bookmark mark='a'/> Sixteen steps. <bookmark mark='b'/> Sixty-four. <bookmark mark='c'/> Two hundred "
+            "and fifty-six. The nodes multiply and settle onto the surface: the worst gap between a node and the "
+            f"surface falls from {t3['max_gap'][0]:.2f} to {t3['max_gap'][-1]:.2f}, roughly halving every time the "
+            "steps are multiplied by four, and the largest gaps sit where the payoff has its kink. The tree is not "
+            "an approximation to the price at one point. It is a whole discretized copy of the surface."
         ) as vo:
-            self.play(FadeIn(heads[0]), FadeIn(gs.edges))
-            self.play(LaggedStart(*[FadeIn(gs.nodes[n]) for n in sorted(gs.nodes)], lag_ratio=0.3, run_time=2.5))
-            self.play(FadeIn(params), FadeIn(info[0]), FadeIn(info[1]))
-            vo.wait_until("a")
-            self.play(ReplacementTransform(heads[0], heads[1]), FadeOut(VGroup(*[gs.nodes[n] for n in gs.nodes])))
-            for n in sorted(g.nodes, reverse=True):
-                self.play(FadeIn(g.nodes[n], shift=LEFT * 0.2), run_time=0.7)
-            self.play(FadeIn(info[2]), Indicate(g.nodes[0], color=OPT))
-            vo.wait_until("b")
-            self.play(ReplacementTransform(heads[1], heads[2]),
-                      FadeOut(VGroup(*[g.nodes[n] for n in g.nodes])),
-                      LaggedStart(*[FadeIn(gd.nodes[n]) for n in sorted(gd.nodes)], lag_ratio=0.2))
-        self.wait(0.3)
+            self.play(FadeIn(hint), Create(ax), run_time=1.5)
+            self.play(FadeIn(surf), run_time=1.0)
+            cur = groups[4]
+            tg = tag_(4)
+            self.add_fixed_in_frame_mobjects(tg)
+            self.play(LaggedStart(*[FadeIn(x, scale=0.5) for x in cur], lag_ratio=0.05, run_time=1.5), FadeIn(tg))
+            for N, mark in ((16, "a"), (64, "b"), (256, "c")):
+                vo.wait_until(mark)
+                nt = tag_(N)
+                self.add_fixed_in_frame_mobjects(nt)
+                self.remove(nt)
+                self.play(FadeOut(cur), FadeIn(groups[N]), FadeOut(tg), FadeIn(nt), run_time=1.2)
+                cur, tg = groups[N], nt
+            self.move_camera(theta=-20 * DEGREES, phi=62 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.5))
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, cur)), FadeOut(hint),
+                                                                  FadeOut(tg)], run_time=1.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def limit(self, d):
+    def derive(self):
+        C = {r"q": QQ, r"u": SPOT, r"\Delta t": THE, r"V": OPT, r"r": CASH, r"\sigma": GAM}
+        rows = [
+            cmath(r"V(t, S)", r"=", r"e^{-r\Delta t}\big[", r"q", r"\,V(t + \Delta t, uS) + (1 - ", r"q",
+                  r")\,V(t + \Delta t, S/u)\big]", font_size=32, colors=C),
+            cmath(r"u = e^{\sigma\sqrt{\Delta t}},\quad", r"q", r"= \tfrac12 + \frac{r - \sigma^2/2}{2\sigma}\sqrt{\Delta t}"
+                  r" + O(\Delta t)", font_size=32, colors=C),
+            cmath(r"V(t + \Delta t, u^{\pm 1}S) = V \pm \sigma\sqrt{\Delta t}\,S V_S + \Delta t\,(V_t + "
+                  r"\tfrac12\sigma^2 S V_S + \tfrac12\sigma^2 S^2 V_{SS}) + \dots", font_size=30, colors=C),
+            cmath(r"0", r"=", r"V_t + r S V_S + \tfrac12\sigma^2 S^2 V_{SS} - r V", r"\;+\;O(\Delta t)", font_size=36,
+                  colors=C),
+        ]
+        whys = [why(r"backward induction: the discounted risk-neutral average"),
+                why(r"expand $q = (e^{r\Delta t} - 1/u)/(u - 1/u)$ in $\sqrt{\Delta t}$"),
+                why(r"Taylor in $\ln S$ to order $\Delta t$"),
+                why(r"collect powers of $\sqrt{\Delta t}$, divide by $\Delta t$: the Black--Scholes PDE")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-1.0, buff=0.75, edge=6.9)
+        with self.voiceover(
+            "Why it must converge is a short calculation. Each node is the discounted risk-neutral average of its "
+            "two successors. <bookmark mark='a'/> With an up move of e to the sigma root delta t, the risk-neutral "
+            "probability is one half plus a correction of order root delta t. <bookmark mark='b'/> Expand the two "
+            "successors' values in a Taylor series: the root delta t terms carry the slope, the delta t terms "
+            "the curvature. <bookmark mark='c'/> Substitute, collect powers, divide by delta t, and the recursion "
+            "is the Black-Scholes equation plus an error of order delta t. The tree is the equation, discretized."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def limit(self, d, t3d):
         N = np.asarray(d["N"], float)
         px = np.asarray(d["price"], float)
         exact = d["exact"]
@@ -158,22 +208,49 @@ class Tree(VoiceoverScene):
             label(r"central limit theorem: the coin flips", font_size=24, color=GREY_A),
             label(r"become a lognormal", font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.55)
+        even_err = float(np.mean((px - exact)[(N % 2 == 0) & (N >= 20)]))
+        side = "below" if even_err < 0 else "above"
         with self.voiceover(
-            "Add steps and the tree's price converges to the Black-Scholes price. Here is the tree's price for "
-            "every number of steps from one to four hundred, on a log scale. It zigzags: trees with an even "
-            "number of steps put a node exactly at the strike, odd ones straddle it, and the two families err on "
-            "opposite sides, closing in on the formula like one over N. "
-            f"<bookmark mark='a'/> With four hundred steps the tree gives {d['big_N_price']:.4f}; the formula, "
-            f"{exact:.4f}. The reason is the central limit theorem: the log of the price is a sum of many small "
-            "up and down steps, so it becomes normal, the price lognormal, and the tree's backward induction "
-            "becomes the equation's. Three derivations, one formula: a riskless portfolio, an expectation under "
-            "the risk-neutral measure, and the limit of a coin-flipping tree. Desks use all three, and trees "
-            "especially for options that can be exercised early, which is chapter ten."
+            "Add steps and the tree's price converges to the formula. Here it is for every number of steps from "
+            "one to four hundred, drawn as it computes. It zigzags. Pause and predict: an even number of steps "
+            "puts a node exactly at the strike. Are those trees above the formula, or below? "
+            f"<bookmark mark='a'/> Here, {side}: the two families err on opposite sides and close in like one over "
+            "N, with a wobble set by where the strike falls between nodes, which Francine and Marc Diener worked "
+            "out exactly in 2004, and which Part sixteen's smoother trees remove. "
+            f"<bookmark mark='b'/> With four hundred steps the tree gives {d['big_N_price']:.4f}; the formula, "
+            f"{exact:.4f}."
         ) as vo:
-            self.play(FadeIn(g), Create(line), FadeIn(line_lab))
-            self.play(LaggedStart(*[FadeIn(x) for x in odd], lag_ratio=0.01, run_time=2.5),
-                      LaggedStart(*[FadeIn(x) for x in even], lag_ratio=0.01, run_time=2.5), FadeIn(leg))
-            vo.wait_until("a")
+            self.play(FadeIn(g), Create(line), FadeIn(line_lab), FadeIn(leg))
+            self.play(LaggedStart(*[FadeIn(x) for x in sorted([*odd, *even], key=lambda m: m.get_x())],
+                                  lag_ratio=0.01, run_time=max(vo.until("a") - 2.5, 3.0)))
+            vo.wait_until("b")
             self.play(FadeIn(right, shift=LEFT * 0.2))
+        self.wait(0.3)
+        self.clear_scene()
+        t3 = t3d
+        card = lab_card(r"backward induction", [
+            "for n in range(N - 1, -1, -1):",
+            "    spots_n = S * u ** (2 * np.arange(n + 1) - n)",
+            "    cont = disc * (p * values[1:] + (1 - p) * values[:-1])",
+            "    if american:",
+            "        ex = np.maximum(cp * (spots_n - K), 0.0)",
+            "        values = np.where(ex > cont, ex, cont)",
+            "    else:",
+            "        values = cont",
+            "return values[0]",
+        ], source="explainer/quant/house/trees.py (crr, abridged)", width=7.6).to_edge(UP, buff=0.5)
+        lab = t3["lab"]
+        with self.voiceover(
+            "And here is the House's tree: one loop, backwards from expiry, each layer the discounted average of "
+            "the next, with one extra line for the American option of chapter fourteen. <bookmark mark='a'/> "
+            f"Four steps: {lab['4']:.4f}. Sixty-four: {lab['64']:.4f}. Four hundred: {lab['400']:.4f}, against "
+            f"the formula's {t3['exact']:.4f}. Three derivations, one formula: a heat equation solved, an "
+            "expectation under Q, and the limit of a coin-flipping tree."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            lab_run(self, card, [f"crr(100, 100, 1, 0.2, 0.05, N={n})  ->  {lab[str(n)]:.6f}" for n in (4, 64, 400)]
+                    + [f"price(100, 100, 1, 0.2, 0.05)      ->  {t3['exact']:.6f}"])
+            self.play(FadeIn(computed()))
         self.wait(0.4)
         self.clear_scene()

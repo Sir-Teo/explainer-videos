@@ -32,8 +32,8 @@ class Fourier(VoiceoverScene):
         ax = g.ax
         al = ValueTracker(0.0)
         cur = always_redraw(lambda: curve(ax, k, np.clip(np.exp(al.get_value() * k) * C, 0, 100), OPT, stroke_width=3))
-        rd = always_redraw(lambda: MathTex(rf"\alpha = {al.get_value():.2f}", font_size=32, color=OPT)
-                           .next_to(g, UP, buff=0.05).align_to(g, RIGHT))
+        rd = readout(r"\alpha =", lambda: al.get_value(), digits=2, font_size=32, color=OPT)
+        rd.next_to(g, UP, buff=0.05).align_to(g, RIGHT)
         u = np.asarray(lw["u"])
         h = axes([0, 25], [-0.5, 1.0], x_length=4.6, y_length=3.0, xlabel=r"frequency $u$",
                  ylabel=r"its transform $\psi(u)$ ($\alpha = 1.5$)", xticks=[0, 10, 20], yticks=[0, 1], font_size=14)
@@ -116,9 +116,10 @@ class Fourier(VoiceoverScene):
         lu = label(r"frequency grid, step $\eta$", font_size=20, color=GOOD).next_to(line_u, UP, buff=0.3)
         lk = label(r"log-strike grid, step $\lambda = 2\pi/(N\eta)$ (around the money)", font_size=20, color=OPT)
         lk.next_to(line_k, UP, buff=0.3)
-        rd = always_redraw(lambda: MathTex(rf"N = {int(N.get_value()):,},\ \ \eta = {eta.get_value():.3f},\ \ \lambda = "
-                                           rf"{2 * np.pi / (N.get_value() * eta.get_value()):.4f}".replace(",", "{,}"),
-                                           font_size=30, color=WHITE).to_edge(UP, buff=0.4))
+        rd = VGroup(readout(r"N =", lambda: N.get_value(), digits=0, font_size=30),
+                    readout(r"\eta =", lambda: eta.get_value(), digits=3, font_size=30),
+                    readout(r"\lambda =", lambda: 2 * np.pi / (N.get_value() * eta.get_value()), digits=4, font_size=30)
+                    ).arrange(RIGHT, buff=1.2).to_edge(UP, buff=0.4)
         cm = [x for x in f["rows"] if x["method"] == "Carr-Madan"]
         tab = VGroup(*[MathTex(rf"N = {x['N']:,}".replace(",", "{,}") + rf":\ \ \text{{error}}\ {sci(x['err'], 1)}", font_size=26,
                                color=METHOD_COL["Carr-Madan FFT"]) for x in cm]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)

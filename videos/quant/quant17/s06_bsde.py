@@ -97,12 +97,11 @@ class BSDE(VoiceoverScene):
                     r"discounted Monte Carlo. Chapter 9 runs it")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Two facts make this usable. First, Étienne Pardoux and Shige Peng proved in 1990 that for such a drift "
-            "the backward equation has exactly one solution, and that its starting value is the solution of the "
-            "pricing equation: the non-linear Feynman–Kac formula. <bookmark mark='a'/> Second, Weinan E, Jiequn Han "
-            "and Arnulf Jentzen turned it into a learning problem. Guess today's price. Step the equation forward with "
-            "the simulated noise. At each date, the unknown hedge is supplied by a small network that looks at the "
-            "hundred prices. <bookmark mark='b'/> Then train the guess and all the networks together so that every "
+            "Two facts make this usable. Étienne Pardoux and Shige Peng proved in 1990 that the backward equation has "
+            "exactly one solution, whose start is the pricing equation's solution: the non-linear Feynman–Kac formula. "
+            "<bookmark mark='a'/> And Weinan E, Jiequn Han and Arnulf Jentzen made it a learning problem. Guess today's "
+            "price; step forward with the simulated noise; at each date a small network supplies the hedge. "
+            "<bookmark mark='b'/> Then train the guess and all the networks together so that every "
             "path lands on its own payoff at expiry. If the loss were zero, the guess would be the price and the "
             "networks would be the hedge. <bookmark mark='c'/> And there is a built-in check: switch default off, and "
             "the equation becomes linear, with an answer plain Monte Carlo can give."
@@ -159,8 +158,7 @@ class BSDE(VoiceoverScene):
             "land on the white tick, that path's payoff. The red segments are the misses. "
             "<bookmark mark='a'/> Before training, the guess is arbitrary and the hedges are noise: the fan sprays "
             "everywhere. <bookmark mark='b'/> As training proceeds, the guess moves and the networks learn to steer: "
-            "the fan narrows, and each path comes down close to its own target. The misses never vanish, because time "
-            "is cut into forty steps; what matters is that the guess has stopped moving."
+            "the fan narrows, and each path comes down close to its own target."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), FadeIn(cur))
             vo.wait_until("a")

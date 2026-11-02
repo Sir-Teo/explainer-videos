@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant17.common import BAD, GEN_COL, GOOD, NET, PART, REF, illustration, load
+from explainer.quant.house import deep as D
+from videos.quant.quant17.common import BAD, GEN_COL, GOOD, NET, PART, REF, ask, house_lab, illustration, load
 
 ORDER = ["i.i.d. normal", "i.i.d. bootstrap", "GJR-GARCH", "signature LSTM", "diffusion"]
 
@@ -11,14 +12,18 @@ ORDER = ["i.i.d. normal", "i.i.d. bootstrap", "GJR-GARCH", "signature LSTM", "di
 class Generator(VoiceoverScene):
     def construct(self):
         g = load("generator")
+        r = load("ddpm_reverse")
         self.card()
         self.why_generate()
+        self.derive()
+        self.reverse(r)
+        self.contenders(g, r)
         self.lineup(g)
         self.scores(g)
 
     def card(self):
-        c = chapter_card(10, r"Market generators", r"Can a network invent markets that look real?", part=PART)
-        with self.voiceover("Chapter ten. Market generators."):
+        c = chapter_card(16, r"Market generators", r"Can a network invent markets that look real?", lit=(2020,), part=PART)
+        with self.voiceover("Chapter sixteen. Market generators."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -46,6 +51,129 @@ class Generator(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             step(1)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def derive(self):
+        rows = [cmath(r"x_t", r"=", r"\sqrt{\bar\alpha_t}\,x_0 + \sqrt{1 - \bar\alpha_t}\,\varepsilon,\quad "
+                      r"\bar\alpha_t = \textstyle\prod_{s \le t}(1 - \beta_s)", font_size=36, colors={r"x_t": GREY_B}),
+                cmath(r"\min_\theta", r"\ ", r"\mathbb{E}\,\lVert \varepsilon - \varepsilon_\theta(x_t, t)\rVert^2", font_size=38,
+                      colors={r"\min_\theta": GOOD}),
+                cmath(r"x_{t-1}", r"=", r"\frac{1}{\sqrt{\alpha_t}}\Big(x_t - \frac{\beta_t}{\sqrt{1 - \bar\alpha_t}}\,"
+                      r"\varepsilon_\theta(x_t, t)\Big) + \sqrt{\beta_t}\,z", font_size=36, colors={r"x_{t-1}": GEN_COL["diffusion"]}),
+                cmath(r"d(X, Y)", r"=", r"\big\lVert\, \mathbb{E}\,S(X) - \mathbb{E}\,S(Y) \,\big\rVert", font_size=38,
+                      colors={r"d(X, Y)": NET})]
+        whys = [why(r"the forward process: add a little Gaussian noise 200 times; composing Gaussian steps gives any $x_t$ "
+                    r"in one draw, a blend of the real window and pure noise"),
+                why(r"Ho, Jain and Abbeel (2020): train a network to recognise the noise that was added (the AI series, "
+                    r"Part 21, builds it)"),
+                why(r"then run backwards from pure noise, removing the predicted noise one step at a time: a new window"),
+                why(r"to judge any generator: the expected signature (Part 5) of the windows, as a path of time, level and "
+                    r"running variance, determines their law under a normalization (Chevyrev and Oberhauser 2022), so "
+                    r"the distance between expected signatures compares two generators. The lead-lag transform's "
+                    r"second level is the quadratic variation: volatility clustering shows")]
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+        with self.voiceover(
+            "How does a diffusion model invent a month of bitcoin? Forward: add a little Gaussian noise to a real "
+            "window, two hundred times, until nothing is left; any stage is one blend of window and noise. "
+            "<bookmark mark='a'/> Train a network to "
+            "look at a noisy window and the stage, and recognise the noise that was added. <bookmark mark='b'/> Then "
+            "run it backwards: start from pure noise and remove the predicted noise one step at a time. What remains "
+            "is a window no one has seen. <bookmark mark='c'/> And to judge it, the signature from Part five. Read "
+            "each window as a path of time, cumulative return and running variance; the average signature of a set "
+            "of windows determines their law, so the distance between two averages compares two generators."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def reverse(self, r):
+        s0 = r["seeds"]["0"]
+        sn = s0["snaps"]
+        fw = s0["forward"]
+        ts = [int(t) for t in r["ts"]]
+        lim = 14.0
+        gl = axes([0, 32], [-lim, lim], x_length=5.6, y_length=4.2, xlabel=r"day", ylabel=r"cumulative return (sd units)",
+                  xticks=[0, 16, 32], yticks=[-10, 0, 10], font_size=13)
+        gr = axes([0, 32], [-lim, lim], x_length=5.6, y_length=4.2, xlabel=r"day", ylabel="", xticks=[0, 16, 32],
+                  yticks=[], font_size=13)
+        VGroup(gl, gr).arrange(RIGHT, buff=0.8).shift(DOWN * 0.3)
+        x = np.arange(33)
+
+        def fan(t):
+            W = np.asarray(sn[str(t)])
+            return VGroup(*[curve(gl.ax, x, np.clip(np.r_[0, np.cumsum(w)], -lim, lim), GEN_COL["diffusion"],
+                                  stroke_width=1.4).set_stroke(opacity=0.7) for w in W])
+
+        def one(t):
+            w = np.asarray(fw[str(t)])
+            return curve(gr.ax, x, np.clip(np.r_[0, np.cumsum(w)], -lim, lim), REF, stroke_width=3)
+        tl = label(r"reverse: 24 windows from noise", font_size=20, color=GEN_COL["diffusion"]).next_to(gl, UP, buff=0.15)
+        tr_ = label(r"forward: one real window, drowned", font_size=20, color=REF).next_to(gr, UP, buff=0.15)
+        cur, cur2 = fan(ts[0]), one(ts[-1])
+        stage = label(rf"step {ts[0]}", font_size=24, color=GREY_A).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "Here it is, live. On the left, twenty-four windows of pure noise, wandering like random walks with "
+            "wild steps. On the right, one real window of bitcoin, held out from training. <bookmark mark='a'/> Run the "
+            "two processes against each other: the real window drowns in noise as the forward process runs, while on "
+            "the left the reverse process strips noise away, two hundred steps down to zero. The fans settle into "
+            "paths with the scale and the jumps of real returns: invented months of bitcoin."
+        ) as vo:
+            self.play(FadeIn(gl), FadeIn(gr), FadeIn(tl), FadeIn(tr_), FadeIn(cur), Create(cur2), FadeIn(stage))
+            vo.wait_until("a")
+            per = max(vo.remaining(0.5), 6) / (len(ts) - 1)
+            for i, t in enumerate(ts[1:], 1):
+                st = label(rf"step {t}", font_size=24, color=GREY_A).move_to(stage)
+                self.play(Transform(cur, fan(t)), Transform(cur2, one(ts[len(ts) - 1 - i])), Transform(stage, st),
+                          run_time=per)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def contenders(self, g, r):
+        cs = VGroup(
+            firm_card(r"GJR-GARCH", r"the econometric baseline of Part 7: volatility that reacts to the last shock, "
+                      r"more to falls than to rises", width=3.1, font_size=15),
+            firm_card(r"Quant GANs", r"Wiese, Knobloch, Korn and Kretschmer (2020): temporal convolutions trained "
+                      r"adversarially; volatility clustering and leverage", source=r"\textit{Quantitative Finance}",
+                      width=3.1, font_size=15),
+            firm_card(r"Signature generators", r"Buehler, Horvath, Lyons, Perez Arribas and Wood (2020), for small data; "
+                      r"Ni, Szpruch et al.\ (2020, 2021): Sig-Wasserstein GANs; Kidger et al.\ (2021): neural SDEs as GANs",
+                      width=3.1, font_size=15),
+            firm_card(r"Diffusion", r"Ho, Jain and Abbeel (2020): the image generators' method, here on return windows",
+                      width=3.1, font_size=15),
+        ).arrange(RIGHT, buff=0.15).to_edge(UP, buff=0.35)
+        for c_ in cs:
+            c_[0].set_stroke(GREY_C)
+        sig = np.asarray(g["curves"]["sig"])
+        dd = np.array([r["seeds"][s]["curve"] for s in ("0", "1", "2")])
+        g1 = axes([0, len(sig) - 1], [float(np.log10(sig.min())) - 0.1, float(np.log10(sig.max())) + 0.1], x_length=5.4,
+                  y_length=2.8, xlabel=r"training step (signature network)", ylabel=r"$\log_{10}$ signature loss",
+                  xticks=[0, len(sig) - 1], xfmt=lambda v: f"{10 * v:,.0f}".replace(",", "{,}"), yticks=[], font_size=12)
+        g2 = axes([0, dd.shape[1] - 1], [float(dd.min()) * 0.95, float(np.percentile(dd, 99))], x_length=5.4,
+                  y_length=2.8, xlabel=r"training step (diffusion)", ylabel=r"noise-prediction loss",
+                  xticks=[0, dd.shape[1] - 1], xfmt=lambda v: f"{20 * v:,.0f}".replace(",", "{,}"), yticks=[], font_size=12)
+        VGroup(g1, g2).arrange(RIGHT, buff=0.9).to_edge(DOWN, buff=0.45)
+        l1 = curve(g1.ax, np.arange(len(sig)), np.log10(sig), GEN_COL["signature LSTM"], stroke_width=2.5)
+        l2 = seed_band(g2.ax, np.arange(dd.shape[1]), np.clip(dd, None, float(np.percentile(dd, 99))), GEN_COL["diffusion"])
+        ks = [r["seeds"][s]["kurtosis"] for s in ("0", "1", "2")]
+        with self.voiceover(
+            "Four contenders. GJR-GARCH, the econometric baseline from Part seven. Quant GANs, temporal convolution "
+            "networks trained adversarially to reproduce clustering and leverage. Signature-based generators, trained "
+            "by matching expected signatures, which Buehler's team built for exactly this use, with little data; and the "
+            "diffusion model. <bookmark mark='a'/> Two of them trained here, replayed: the signature network's loss "
+            "over its fifteen hundred steps, and the diffusion model's over four thousand, three seeds. The three "
+            f"diffusion seeds produce windows with excess kurtosis between {min(ks):.1f} and {max(ks):.1f}, against "
+            f"{r['real_kurtosis_train']:.1f} in the training years: the tails are the hard part."
+        ) as vo:
+            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in cs], lag_ratio=0.4, run_time=3))
+            vo.wait_until("a")
+            self.play(FadeIn(g1), FadeIn(g2), Create(l1), Create(l2), run_time=3)
         self.wait(0.4)
         self.clear_scene()
 
@@ -121,8 +249,8 @@ class Generator(VoiceoverScene):
                              12.6, 18, GREY_A).to_edge(DOWN, buff=0.3)
         src = illustration(r"4{,}000 generated windows each; daily log returns, standardized", corner=UR)
         with self.voiceover(
-            "Here are Part one's stylized facts, measured in each set of windows: fat tails, volatility clustering, "
-            "the leverage effect, and the absence of autocorrelation, with the signature distance to each real period. "
+            "Part one's stylized facts, measured in each set of windows, with the signature distance to each real "
+            "period. "
             f"<bookmark mark='a'/> First, the two real periods. The training years have excess kurtosis of "
             f"{tr['kurtosis']:.0f}; the held-out years, calmer, {te['kurtosis']:.1f}. They are far apart: the future "
             "did not look like the past. <bookmark mark='b'/> Now the generators. Independent draws have no clustering "
@@ -130,8 +258,7 @@ class Generator(VoiceoverScene):
             "of the signature-trained network. At this depth the distance is a weak judge, and the facts catch what it "
             "misses: only the signature-trained network has fat tails, clustering and leverage near those of the "
             f"training years. The {b_te} is closest to the held-out years for a dull reason: its tails are thin, and "
-            "those years were calm. No single score is enough. A desk checks the facts one by one, keeps several "
-            "generators, and stresses its hedger on all of them."
+            "those years were calm. No single score is enough."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(src))
             vo.wait_until("a")

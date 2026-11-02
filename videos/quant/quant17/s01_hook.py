@@ -132,10 +132,9 @@ class Hook(VoiceoverScene):
                                     rf"{r5['deep']['price']:.2f} against {r5['delta']['price']:.2f}", 4.6, 19, GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.45)
         with self.voiceover(
-            "Watch it work on one simulated month. The top panel is the stock; below, the corridor the network "
-            "draws around the hedge each day, and what it holds. <bookmark mark='a'/> While the holding sits inside the "
-            "corridor, the network does nothing. When the price moves enough to carry an edge past the holding, it "
-            "trades, but only to the nearest edge. The delta hedger beside it trades every single day. "
+            "Watch it work on one simulated month: the stock on top; below, the corridor the network draws each day, "
+            "and what it holds. <bookmark mark='a'/> Inside the corridor it does nothing; when an edge reaches the "
+            "holding, it trades, but only to that edge. The delta hedger trades every single day. "
             f"<bookmark mark='b'/> On this path the band trades on {L['trades_band']} days of thirty, delta on "
             f"{L['trades_delta']}, and the fees pile up accordingly."
         ) as vo:
@@ -173,17 +172,15 @@ class Hook(VoiceoverScene):
         marks = ["a", "b", "c", "d", "e"]
         groups = [(0, 1), (1, 4), (4, 8), (8, 11), (11, 12)]
         with self.voiceover(
-            "How we got here. In 1985 Hayne Leland showed how to hedge an option when every trade costs money. In 1989 "
-            "Stewart Hodges and Anthony Neuberger priced an option by indifference, and George Cybenko proved that a "
-            "network with one hidden layer can approximate any continuous function. <bookmark mark='a'/> In 1994 "
-            "Hutchinson, Lo and Poggio let a network learn option prices; in 1997 Whalley and Wilmott derived the "
-            "corridor you just saw, for small costs. In 2011 American supervisors wrote the rules for model risk. "
+            "How we got here. In 1985 Hayne Leland priced hedging with costs. In 1989 Hodges and Neuberger priced by "
+            "indifference, and George Cybenko proved that one hidden layer can approximate any continuous function. "
+            "<bookmark mark='a'/> In 1994 Hutchinson, Lo and Poggio let a network learn option prices; in 1997 Whalley "
+            "and Wilmott derived the corridor you just saw. In 2011 American supervisors wrote the rules for model risk. "
             "<bookmark mark='b'/> Then the deep wave: calibration by a network in 2016, the deep BSDE solver in 2017, "
             "deep hedging and deep optimal stopping in 2019. <bookmark mark='c'/> Differential machine learning and "
             "generative market models in 2020; neural calibration of rough volatility and band networks in 2021; neural "
             "models for robust bounds in 2022. <bookmark mark='d'/> And in 2026 the supervisors rewrote their rules, "
-            "while researchers began to build generators of whole option markets. This part rebuilds that story, one "
-            "network at a time."
+            "while researchers began to build generators of whole option markets."
         ) as vo:
             self.play(FadeIn(head), Create(strip[0]), FadeIn(strip[1]))
             for (a, b), m in zip(groups, [None] + marks[:4]):
@@ -207,15 +204,10 @@ class Hook(VoiceoverScene):
             r"Production (SR 26-2), what has reached desks, and the frontier of 2023--2026",
         ], color=QC.IDEA)
         with self.voiceover(
-            "The plan. A network that learns a pricing formula from prices, and what its derivatives get right and "
-            "wrong. A network that calibrates rough volatility in milliseconds, used on two years of surfaces. Training "
-            "on derivatives as well as prices, and the classical method that does the same thing exactly. Pricing in a "
-            "hundred dimensions, and learning when to exercise. The deep hedger: its objective, its prices, and a trap "
-            "it falls into when the stock has a drift. Where it learns not to trade, set against the formulas of "
-            "Leland and of Whalley and Wilmott. Neural models that measure model risk. Machines that invent markets, "
-            "and hedgers tested across them. And what it takes to let any of them trade, with the research of the last "
-            "three years. Every network in this part is trained on screen, more than once, and checked against an "
-            "answer we already know."
+            "The plan, in nine steps: pricing networks and their Greeks; neural calibration; derivatives as labels; "
+            "a hundred dimensions and early exercise; the deep hedger and its traps; where not to trade; model risk; "
+            "market generators; and what it takes to let any of them trade. Every network is trained on screen, more "
+            "than once, and checked against an answer we already know."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=16))

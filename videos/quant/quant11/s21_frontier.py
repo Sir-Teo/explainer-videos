@@ -120,9 +120,9 @@ class Frontier(VoiceoverScene):
         flat = max(abs(f["corr ridge"]), abs(f["corr boost"])) < 0.15
         if flat and same:
             say = ("Neither model can tell a good week from a bad one: their correlations with the outcome are about "
-                   "zero. What they learned is the one thing the data does show, that selling has lost money for the "
-                   "buyer on average, so they say sell almost every week, and earn what always selling earns. The "
-                   "premium survives; the timing does not.")
+                   "zero. What they learned is the one thing the data does show, that buyers of volatility lose on "
+                   "average, so they say sell almost every week, and earn what always selling earns. The premium "
+                   "survives; the timing does not.")
         elif flat:
             say = ("Neither model can tell a good week from a bad one: their correlations with the outcome are about "
                    "zero, and what they earn is the premium, not timing.")

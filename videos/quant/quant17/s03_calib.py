@@ -82,13 +82,11 @@ class Calibrator(VoiceoverScene):
         with self.voiceover(
             "The work splits in two. Offline, once: draw twelve thousand random parameter sets, simulate each by "
             f"Monte Carlo, and keep {n_pts:,} implied volatilities as labels; then fit the network to them. That took "
-            "hours on this machine, and it is never repeated. <bookmark mark='a'/> Online, every day: take the "
-            "market's quotes and run gradient descent on the five parameters, through the network, in seconds. "
-            "<bookmark mark='b'/> The idea has a short history. In 2016 Andres Hernandez trained a network to map "
-            "quotes straight to parameters. Christian Bayer and Benjamin Stemper made it pointwise, one implied "
-            "volatility per parameter set, expiry and strike, which is the form used here; Shuaiqiang Liu, Cornelis "
-            "Oosterlee and Sander Bohte learned prices and implied volatilities; and Horvath, Muguruza and Tomas "
-            "learned the forward map on a whole grid for rough volatility, and made it practical."
+            "hours, once. <bookmark mark='a'/> Online, every day: gradient descent on the five parameters, through the "
+            "network, in seconds. <bookmark mark='b'/> In 2016 Andres Hernandez first mapped quotes straight to "
+            "parameters. Christian Bayer and Benjamin Stemper made it pointwise, the form used here; Liu, Oosterlee "
+            "and Bohte learned prices and implied volatilities; and Horvath, Muguruza and Tomas made it practical for "
+            "rough volatility."
         ) as vo:
             self.play(Create(off), FadeIn(t_off), FadeIn(bar_bg), FadeIn(bar), FadeIn(cap))
             self.play(LaggedStart(*[FadeIn(d) for d in cloud], lag_ratio=0.01),
@@ -160,12 +158,11 @@ class Calibrator(VoiceoverScene):
                     r"the network is the fresher, less noisy simulation")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.7, edge=6.9)
         with self.voiceover(
-            "How good is that? The honest answer needs care, because the labels themselves are noisy. Each one is "
-            "the true implied volatility plus Monte Carlo noise, independent of the network, so a held-out error can "
-            "never fall below the noise of the labels it is scored against. <bookmark mark='a'/> To measure that noise, "
-            f"we simulated {nz['n_sets']} held-out parameter sets again, with twenty thousand fresh paths. Two "
-            "independent simulations differ by both their noises: one and a half times the variance of the ten-"
-            f"thousand-path label. <bookmark mark='b'/> So the labels' own noise is about {s10:.2f} vol points."
+            "How good is that? The labels themselves are noisy: each is the true implied volatility plus Monte Carlo "
+            "noise, so a held-out error can never fall below the noise of the labels it is scored against. "
+            f"<bookmark mark='a'/> So we simulated {nz['n_sets']} held-out parameter sets again, with twenty thousand "
+            "fresh paths. Two independent simulations differ by both their noises, one and a half times the label's "
+            f"variance. <bookmark mark='b'/> So the labels' own noise is about {s10:.2f} vol points."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -202,8 +199,7 @@ class Calibrator(VoiceoverScene):
             "Now the three comparisons side by side. The network against its own noisy label: "
             f"{a['rmse']:.2f} vol points. <bookmark mark='a'/> The same labels against the fresh simulation: "
             f"{d['rmse']:.2f}. <bookmark mark='b'/> And the network against the fresh simulation: {b['rmse']:.2f}. So "
-            f"{verdict}. Fitting hundreds of thousands of noisy labels with a smooth function averages much of their "
-            "noise away; the white lines, the medians, tell the same story with less weight on the tails."
+            f"{verdict}. A smooth fit to hundreds of thousands of noisy labels averages much of their noise away."
         ) as vo:
             self.play(FadeIn(g), FadeIn(bars[0]))
             vo.wait_until("a")

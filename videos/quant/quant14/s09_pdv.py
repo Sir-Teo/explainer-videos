@@ -204,7 +204,7 @@ class PDV(VoiceoverScene):
             "updated by one line: the House's code is exactly that. <bookmark mark='b'/> Fitted the same way on "
             "Bitcoin: the activity memory splits into a fast factor of "
             f"{hl[2]:.0f} days and a slow one of {hl[3]:.0f}. Out of sample it explains {100 * q['r2_test']:.0f} "
-            f"percent of DVOL, against {100 * q['tspl_test']:.0f} for the power law: " + verdict + ". "
+            f"percent of DVOL, against {100 * q['tspl_test']:.0f} for the power law: {verdict}. "
             "<bookmark mark='c'/> Is it a well-defined stochastic differential equation? Marcel Nutz and Andrés "
             "Riveros Valdevenito proved it is, and Hervé Andrès and Benjamin Jourdain extended that to general kernels."
         ) as vo:

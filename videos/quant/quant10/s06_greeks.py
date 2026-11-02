@@ -22,12 +22,13 @@ class Greeks(VoiceoverScene, ThreeDScene):
         self.card()
         self.surface()
         self.delta_gamma()
+        self.derive()
         self.theta_identity()
         self.vega_one_bump()
 
     def card(self):
-        c = chapter_card(5, r"The Greeks as geometry", r"What are the slopes of a price?", lit=(1973,), part=PART)
-        with self.voiceover("Chapter five. The Greeks as geometry."):
+        c = chapter_card(6, r"The Greeks as geometry", r"What are the slopes of a price?", lit=(1973,), part=PART)
+        with self.voiceover("Chapter six. The Greeks as geometry."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -53,14 +54,12 @@ class Greeks(VoiceoverScene, ThreeDScene):
         slice_ = VMobject(stroke_color=YELLOW, stroke_width=5).set_points_as_corners(
             [ax.c2p(x, 0.25, float(V(x, 0.25))) + OUT * 0.03 for x in np.linspace(60, 140, 81)])
         with self.voiceover(
-            "Every risk an options trader manages is a slope or a curve of one surface: the option's value, "
-            "over the stock price and the time left. Here it is for a call. Along the front edge, at expiry, it "
-            "is the payoff, the white hockey stick. <bookmark mark='a'/> Further back, with more time left, the "
-            "surface rises and smooths, the heat-equation picture of chapter two, now in three dimensions. "
-            "<bookmark mark='b'/> The Greek letters are the names of its slopes. Delta is the slope along the "
-            "stock axis. Gamma is the curvature along it. Theta is the slope along the time axis. And vega, which "
-            "is not a Greek letter at all, is how the whole surface lifts when volatility rises. Take the slice three "
-            "months from expiry, in yellow, and lay it flat."
+            "Every risk an options trader manages is a slope or a curve of one surface: the option's value over "
+            "the stock price and the time left. At expiry, the front edge, it is the payoff. "
+            "<bookmark mark='a'/> Further back the surface rises and smooths: chapter three's melting kink. "
+            "<bookmark mark='b'/> The Greek letters name its slopes. Delta is the slope along the stock axis, "
+            "gamma the curvature along it, theta the slope along time, and vega, not a Greek letter at all, how "
+            "the whole surface lifts when volatility rises. Take the slice three months out, in yellow."
         ) as vo:
             self.play(FadeIn(hint), FadeIn(params), Create(ax), Create(payoff), run_time=2)
             vo.wait_until("a")
@@ -123,6 +122,42 @@ class Greeks(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(tau.animate.set_value(0.02), run_time=max(vo.remaining(1.0) - 1.5, 5.0), rate_func=smooth)
         self.wait(0.5)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def derive(self):
+        C = {r"\Delta": DEL, r"\Gamma": GAM, r"\Theta": THE, r"\mathcal V": VEG, r"S": SPOT, r"V": OPT}
+        rows = [
+            cmath(r"S\,\varphi(d_1)", r"=", r"K e^{-rT}\,\varphi(d_2)", font_size=40, colors=C),
+            cmath(r"\Delta", r"=", r"N(d_1)", font_size=40, colors=C),
+            cmath(r"\Gamma", r"=", r"\frac{\varphi(d_1)}{S\sigma\sqrt T},\qquad", r"\mathcal V", r"=",
+                  r"S\varphi(d_1)\sqrt T", r"=", r"\sigma T S^2", r"\Gamma", font_size=38, colors=C),
+            cmath(r"\Theta", r"+", r"r S", r"\Delta", r"+", r"\tfrac12\sigma^2 S^2", r"\Gamma", r"=", r"r", r"V",
+                  font_size=40, colors=C),
+        ]
+        whys = [why(r"$d_1^2 - d_2^2 = 2\ln(S/K) + 2rT$: the identity that makes the Greeks short"),
+                why(r"differentiate the formula; the two $\varphi$ terms cancel by the identity"),
+                why(r"differentiate again; vega in units of gamma"),
+                why(r"the PDE, read as a ledger")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-1.6, buff=0.75, edge=6.9)
+        with self.voiceover(
+            "Each of these slopes takes two lines to derive, thanks to one identity: S times the normal density "
+            "at d one equals the discounted strike times the density at d two, because the squares of d one and "
+            "d two differ by exactly the log terms. <bookmark mark='a'/> Differentiate the formula in S: the "
+            "terms where d one and d two move cancel by the identity, and delta is just N of d one. "
+            "<bookmark mark='b'/> Once more for gamma; vega, the derivative in sigma, comes out as sigma T S "
+            "squared gamma. <bookmark mark='c'/> And the equation itself ties three of them together. Pause and "
+            "predict: at the money, with no rates, as the maturity grows without limit, what happens to the "
+            "call's delta? It goes to one, because d one is half sigma root T."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------

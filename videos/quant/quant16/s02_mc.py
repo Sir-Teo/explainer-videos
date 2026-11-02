@@ -57,9 +57,10 @@ class MC(VoiceoverScene):
 
         band_m = always_redraw(band_)
         lines = [line(j) for j in range(3)]
-        rd = always_redraw(lambda: MathTex(
-            rf"n = {int(10 ** tr.get_value()):,}".replace(",", "{,}") + rf":\ \ {m0[max(upto(), 1) - 1]:.3f} \pm "
-            rf"{1.96 * se0[max(upto(), 1) - 1]:.3f}", font_size=28, color=OPT).next_to(g, UP, buff=0.05).align_to(g, RIGHT))
+        rd = VGroup(readout(r"n =", lambda: 10 ** tr.get_value(), digits=0, font_size=28, color=OPT),
+                    readout(r"\hat V_n =", lambda: m0[max(upto(), 1) - 1], digits=3, font_size=28, color=OPT),
+                    readout(r"\pm", lambda: 1.96 * se0[max(upto(), 1) - 1], digits=3, font_size=28, color=OPT)
+                    ).arrange(RIGHT, buff=0.9).next_to(g, UP, buff=0.05).align_to(g, RIGHT)
         leg = legend([(OPT, r"seed 1 and its 95\% band"), (QC.THETA, r"seed 2"), (QC.DELTA, r"seed 3"),
                       (WHITE, rf"Black--Scholes: {ex:.4f}")], font_size=17).next_to(g, RIGHT, buff=0.25).align_to(g, UP)
         w = {k: 1.96 * se0[int(np.searchsorted(ck, k))] for k in (2, 4, 6)}

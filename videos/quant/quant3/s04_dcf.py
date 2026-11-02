@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import valuation
-from videos.quant.quant3.common import CASH, DEBT, EQUITY, PART, VALUE, load
+from videos.quant.quant3.common import CASH, DEBT, EQUITY, PART, VALUE, live, load
 
 FCF = 100 * 1.05 ** np.arange(1, 6)
 
@@ -263,8 +263,8 @@ class DCF(VoiceoverScene, ThreeDScene):
                             for a, b, v in zip(bins[:-1], bins[1:], h)])
 
         def counter():
-            return MathTex(rf"\text{{draws: }}{int(k.get_value()):,}".replace(",", "{,}"), font_size=28,
-                           color=GREY_A).to_corner(UL, buff=0.5)
+            return live(r"\text{draws:}", int(k.get_value()), 0, font_size=28, color=GREY_A,
+                        group_sep=True).to_corner(UL, buff=0.5)
 
         hb, cnt = always_redraw(hist), always_redraw(counter)
         bl = DashedLine(ax.c2p(base, 0), ax.c2p(base, 1.0), color=WHITE, stroke_width=2)

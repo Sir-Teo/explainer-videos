@@ -129,9 +129,12 @@ class Rough(VoiceoverScene):
         lags = np.asarray(r["lags"], float)
         qs = np.asarray(r["qs"], float)
         zeta = np.asarray(r["zeta"])
-        g = axes([0, np.log10(60)], [-1.6, 1.2], x_length=5.4, y_length=4.0, xlabel=r"lag $\Delta$ (days, log scale)",
+        allm = np.concatenate([np.log10(np.asarray(r["m"][f"{q}"])) for q in qs])
+        ylo, yhi = float(np.floor(allm.min() * 10) / 10 - 0.05), float(np.ceil(allm.max() * 10) / 10 + 0.05)
+        g = axes([0, np.log10(60)], [ylo, yhi], x_length=5.6, y_length=4.4, xlabel=r"lag $\Delta$ (days, log scale)",
                  ylabel=r"$\log_{10} m(q, \Delta)$", xticks=[np.log10(v) for v in (1, 3, 10, 30)],
-                 xfmt=lambda u: f"{10 ** u:.0f}", log_x=True, yticks=[-1, 0, 1], font_size=15)
+                 xfmt=lambda u: f"{10 ** u:.0f}", log_x=True, yticks=[round(ylo + 0.05, 1), round((ylo + yhi) / 2, 1),
+                                                                     round(yhi - 0.05, 1)], font_size=15)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         cols = [VAR, RV, IV, OPT, ROUGH]
         dots, fits = VGroup(), VGroup()

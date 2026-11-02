@@ -67,10 +67,10 @@ class Dual(VoiceoverScene):
             return g
 
         fan = always_redraw(fans)
-        rd = always_redraw(lambda: VGroup(
-            MathTex(rf"h_t - \pi_t = {gap[int(np.clip(k.get_value(), 0, n))]:+.2f}", font_size=28, color=GREY_A),
-            MathTex(rf"\max_{{s \le t}} = {run[int(np.clip(k.get_value(), 0, n))]:.2f}", font_size=30, color=GOOD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.8))
+        rd = VGroup(readout(r"h_t - \pi_t =", lambda: gap[int(np.clip(k.get_value(), 0, n))], digits=2, font_size=28,
+                            color=GREY_A),
+                    readout(r"\max_{s \le t} =", lambda: run[int(np.clip(k.get_value(), 0, n))], digits=2, font_size=30,
+                            color=GOOD)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.8).shift(DOWN * 0.8)
         leg = legend([(SPOT, r"the outer path"), (GREY_B, r"inner paths: what is continuing worth?"),
                       (BAD, r"payoff $h_t$"), (QC.Q, r"the policy's martingale $\pi_t$")], font_size=16)
         leg.to_edge(RIGHT, buff=0.35).to_edge(UP, buff=0.6)

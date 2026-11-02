@@ -38,11 +38,10 @@ class Quantum(VoiceoverScene):
                                                 o + R * np.array([0, np.sin(ang.get_value()), 0]), stroke_color=GREY_B,
                                                 stroke_width=1.5))
         m = ValueTracker(0)
-        rd = always_redraw(lambda: VGroup(
-            MathTex(rf"m = {int(round(m.get_value()))}:\ \ \text{{angle}}\ (2m + 1)\theta", font_size=28, color=OPT),
-            MathTex(rf"P(\text{{good}}) = \sin^2\big((2m + 1)\theta\big) = "
-                    rf"{np.sin((2 * round(m.get_value()) + 1) * th) ** 2:.3f}", font_size=28, color=GOOD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.5).shift(UP * 1.2))
+        rd = VGroup(readout(r"m =", lambda: round(m.get_value()), digits=0, font_size=28, color=OPT),
+                    readout(r"P(\text{good}) = \sin^2\big((2m + 1)\theta\big) =",
+                            lambda: np.sin((2 * round(m.get_value()) + 1) * th) ** 2, digits=3, font_size=28, color=GOOD),
+                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.8).shift(UP * 1.2)
         top = MathTex(rf"a = \sin^2\theta = {q['a']}\ \ (\text{{the price, scaled to }}[0, 1])", font_size=30,
                       color=OPT).to_edge(UP, buff=0.4)
         refl = wrapped_label(r"Grover's operator $Q$: reflect about $|\text{bad}\rangle$, then about the prepared "

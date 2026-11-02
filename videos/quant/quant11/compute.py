@@ -740,7 +740,7 @@ def compute_mm_learn() -> dict:
                   "glft_bid": gl["bid"], "glft_ask": gl["ask"], "live": live, "params": {k: v for k, v in p.items()}})
 
 
-def _deep_train(kappa, seed, t, S, sigma, cost, T, iters=500, record_every=25, ck=(0, 100, 250, 500)):
+def _deep_train(kappa, seed, t, S, sigma, cost, T, iters=500, record_every=25, ck=(0, 100, 250, 500), ckpt=None):
     import torch
     torch.set_num_threads(1)
     torch.manual_seed(seed)
@@ -786,8 +786,19 @@ def _deep_train(kappa, seed, t, S, sigma, cost, T, iters=500, record_every=25, c
             return torch.sigmoid(net(x).squeeze(-1)).numpy().tolist()
 
     g = torch.Generator().manual_seed(seed)
-    loss_hist, snaps = [], {}
-    for it in range(iters + 1):
+    loss_hist, snaps, start = [], {}, 0
+    if ckpt is not None and ckpt.exists():   # resume a run that was killed (the machine is shared)
+        st = torch.load(ckpt, weights_only=False)
+        net.load_state_dict(st["net"])
+        opt.load_state_dict(st["opt"])
+        g.set_state(st["gen"])
+        loss_hist, snaps, start = st["loss"], st["snaps"], st["it"]
+    for it in range(start, iters + 1):
+        if ckpt is not None and it % 50 == 0 and it > start:
+            ckpt.parent.mkdir(parents=True, exist_ok=True)
+            torch.save({"net": net.state_dict(), "opt": opt.state_dict(), "gen": g.get_state(), "loss": loss_hist,
+                        "snaps": snaps, "it": it}, ckpt.with_suffix(".tmp"))
+            ckpt.with_suffix(".tmp").replace(ckpt)
         if it in ck:
             snaps[str(it)] = frac_curve()
         if it == iters:
@@ -796,7 +807,7 @@ def _deep_train(kappa, seed, t, S, sigma, cost, T, iters=500, record_every=25, c
         pnl, c = run(St[idx])
         loss = pnl.var() + kappa * c.mean()
         if it % record_every == 0:
-            loss_hist.append(float(loss))
+            loss_hist.append(float(loss.detach()))
         opt.zero_grad()
         loss.backward()
         opt.step()
@@ -814,7 +825,8 @@ def compute_hedging_replay() -> dict:
         for seed in range(3):
             key = f"{kappa:g}-{seed}"
             if key not in part:
-                part[key] = _deep_train(kappa, seed, t, S, sigma, cost, T)
+                part[key] = _deep_train(kappa, seed, t, S, sigma, cost, T,
+                                        ckpt=CACHE.dir / "hedging_replay_ckpt" / f"{key}.pt")
                 print(f"    deep hedge kappa {kappa:g} seed {seed}: sd {part[key]['sd']:.3f}", flush=True)
     runs = {k: part[k] for k in part.done}
     return _json({"runs": runs, "steps": list(range(0, 500, 25)) + [500], "gaps": np.linspace(-0.3, 0.3, 61),

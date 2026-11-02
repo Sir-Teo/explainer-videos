@@ -190,7 +190,7 @@ class AAD(VoiceoverScene):
         lb = polyline(ax, x, np.clip(np.log10(bump), 0, 3), BAD)
         pa = DashedVMobject(polyline(ax, x, np.log10(prox_a), DELTA, dots=False)[0], num_dashes=20)
         pb = DashedVMobject(polyline(ax, x, np.clip(np.log10(prox_b), 0, 3), BAD, dots=False)[0], num_dashes=20)
-        leg = legend([(DELTA, r"AAD, wall clock (best of 5)"), (BAD, r"central bumps, wall clock"),
+        leg = legend([(DELTA, r"AAD, wall clock (best of several runs)"), (BAD, r"central bumps, wall clock"),
                       (GREY_B, r"dashed: operation counts (machine-free)")], font_size=16).next_to(g, UP, buff=0.1)
         leg.align_to(g, LEFT)
         big = rows[-1]
@@ -209,7 +209,8 @@ class AAD(VoiceoverScene):
         with self.voiceover(
             "Now grow the problem: an Asian basket on more and more assets, differentiating with respect to every "
             "spot and every volatility. Cost in units of one price, on a log scale. <bookmark mark='a'/> Bumping is a "
-            "line: two extra prices per input. Adjoints stay nearly flat. With "
+            "line: two extra prices per input. Adjoints stay nearly flat, apart from timing noise at the smallest "
+            "sizes, where one price takes a millisecond. With "
             f"{big['inputs']} inputs, AAD cost {aad[-1]:.1f} prices on this machine and bumping {bump[-1]:.0f}. "
             "<bookmark mark='b'/> Wall-clock time on a shared machine is noisy, so the dashed lines count operations "
             "instead: the backward sweep does about as much arithmetic as the forward pass, whatever the number of "

@@ -137,8 +137,7 @@ class Digitals(VoiceoverScene):
         src = illustration(r"one month, struck at 100, 25\% volatility; delta-hedged in the underlying, no costs",
                            corner=UR)
         with self.voiceover(
-            "Why does the width matter so much? Hedge both books on one path. A month to expiry, spot near the "
-            "strike, rebalanced daily. <bookmark mark='a'/> In red, the hedge for a short digital; in green, the "
+            "Hedge both books on one path, a month to expiry, rebalanced daily. <bookmark mark='a'/> In red, the hedge for a short digital; in green, the "
             "hedge for a short call spread two points wide. As the path hovers near the strike in the last days, the "
             "digital's hedge swings wildly, while the spread's stays within one over the width. "
             "<bookmark mark='b'/> Now forty thousand paths, and three rebalancing frequencies. Rebalancing sixteen "
@@ -174,11 +173,10 @@ class Digitals(VoiceoverScene):
                             rf"formula: {o['bgk']:.3f}); twice the digital put {o['two_digital']:.3f}", 12.0, 20,
                             GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "A one-touch pays if the barrier is touched at any time before expiry. Its price is the probability of "
-            "touching, and reflection gives it at once: the first-passage law of Brownian motion with drift, from "
-            "Part five. <bookmark mark='a'/> With no drift in the log price there is a beautiful rule: every path "
-            "that ends below the barrier touched it, and so did its mirror twin, so the one-touch is worth exactly "
-            "twice the digital. Traders use this as a rule of thumb. <bookmark mark='b'/> With zero rates, though, "
+            "A one-touch pays if the barrier is touched before expiry. Its price is the probability of touching, the "
+            "first-passage law of Part five. <bookmark mark='a'/> With no drift in the log price, every path that "
+            "ends below the barrier touched it, and so did its mirror twin: the one-touch is worth exactly twice the "
+            "digital, a traders' rule of thumb. <bookmark mark='b'/> With zero rates, though, "
             "the price is a martingale and its log drifts down, and the exact price is a digital plus a little less "
             f"than a second one. Here: closed form {o['closed']:.3f}, simulation {o['mc']:.3f} on a grid of a "
             f"thousand steps, which misses a few touches between steps, and twice the digital, {o['two_digital']:.3f}, "

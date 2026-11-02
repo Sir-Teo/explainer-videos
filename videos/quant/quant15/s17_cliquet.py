@@ -65,10 +65,9 @@ class Cliquet(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         src = illustration(r"one simulated year at 22\% volatility")
         with self.voiceover(
-            "A cliquet is a ratchet. Every month, the strike resets to wherever the index is, and only that month's "
-            "return counts, clipped between a local floor and a local cap. <bookmark mark='a'/> Watch a year. Each "
-            "month starts a new little band around the current level. Whatever the index does within the month, at "
-            "most plus three percent and at least minus three percent drops into the running sum below. "
+            "A cliquet is a ratchet. Every month the strike resets to wherever the index is, and only that month's "
+            "return counts, clipped between a local floor and cap. <bookmark mark='a'/> Watch a year: each month a "
+            "new band, and the clipped return drops into the running sum below. "
             "<bookmark mark='b'/> At the end, the sum is paid, with a global floor of zero, so the buyer gets the "
             f"sum of clipped monthly returns, or nothing: here, {100 * pay:.1f} percent. Cliquets were sold as "
             "capital-protected equity exposure, and they are where model risk hides best."
@@ -107,16 +106,12 @@ class Cliquet(VoiceoverScene, ThreeDScene):
                     r"risk; a model with random volatility says otherwise (Bergomi's smile dynamics, Part 13)")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.8, edge=6.9)
         with self.voiceover(
-            "The building block is the forward-start option, struck at a fraction of a level not yet known. "
-            "Because Black–Scholes prices are homogeneous of degree one, it is today's spot times a call struck at "
-            "alpha with the remaining time: its price depends only on the forward volatility between the two dates. "
-            "<bookmark mark='a'/> A cliquet is a strip of capped and floored forward returns, with a global floor "
-            "that makes it more than the sum of its forward-starts. <bookmark mark='b'/> Now the trap. As volatility "
-            "rises, a capped and floored month gains on the floor and loses on the cap, and the two effects can "
-            "cancel. At that point the Black–Scholes vega is zero. But the price is concave there. "
-            "<bookmark mark='c'/> And by Jensen's inequality, if volatility is itself random, the average of a "
-            "concave price is below the price at the average volatility. A model with no vega says there is no "
-            "risk; a model with random volatility marks it lower."
+            "The building block is the forward-start option. Black–Scholes prices are homogeneous of degree one, so it is "
+            "today's spot times a call struck at alpha: it depends only on the forward volatility. <bookmark mark='a'/> A "
+            "cliquet is a strip of capped and floored forward returns, with a global floor on top. <bookmark mark='b'/> Now "
+            "the trap. As volatility rises, each month gains on the floor and loses on the cap, and the two can cancel: "
+            "vega zero, but the price is concave. <bookmark mark='c'/> By Jensen's inequality, if volatility is random, a "
+            "concave price averages lower. No vega, and still volatility risk."
         ) as vo:
             step(0)
             vo.wait_until("a")

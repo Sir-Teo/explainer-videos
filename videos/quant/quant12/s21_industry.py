@@ -116,9 +116,10 @@ class Industry(VoiceoverScene):
         ]
         tab = VGroup(*[VGroup(label(a, font_size=19, color=QC.HOUSE), label(b, font_size=18, color=GREY_A))
                        for a, b in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        w0 = max(r_[0].width for r_ in tab)
         for r_ in tab:
-            r_[1].next_to(r_[0], RIGHT, buff=0.3)
-            r_[1].align_to(tab, LEFT).shift(RIGHT * 6.6)
+            r_[1].align_to(r_[0], LEFT).shift(RIGHT * (w0 + 0.4))
+            r_[1].set_y(r_[0].get_y())
         tab.next_to(chart, DOWN, buff=0.3)
         if tab.width > 13.0:
             tab.scale_to_fit_width(13.0)

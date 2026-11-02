@@ -55,11 +55,10 @@ class Importance(VoiceoverScene):
         def at(arr):
             return float(np.interp(t.get_value(), th, arr))
 
-        rd = always_redraw(lambda: VGroup(
-            MathTex(rf"\theta = {t.get_value():.2f}", font_size=30, color=OPT),
-            MathTex(rf"\text{{variance}} \div {at(ratio):.1f}", font_size=28, color=GOOD if at(ratio) > 1 else BAD),
-            MathTex(rf"\text{{ESS}}/n = {at(ess):.4f}", font_size=28, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.4).shift(UP * 0.8))
+        rd = VGroup(readout(r"\theta =", lambda: t.get_value(), digits=2, font_size=30, color=OPT),
+                    readout(r"\text{variance} \div", lambda: at(ratio), digits=1, font_size=28, color=GOOD),
+                    readout(r"\text{ESS}/n =", lambda: at(ess), digits=4, font_size=28, color=GREY_A),
+                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.6).shift(UP * 0.8)
         tag = label(rf"the payoff lives here: $z > {zs:.2f}$ ({100 * s['share_in_money']:.1f}\% of draws)", font_size=18,
                     color=BAD).next_to(ta.c2p(zs + 0.2, 0.3), RIGHT, buff=0.1)
         src = illustration(r"a call struck at 160 (one year, 20\% volatility); 400{,}000 normals at every shift")

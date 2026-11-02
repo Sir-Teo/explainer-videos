@@ -51,7 +51,7 @@ class Hook(VoiceoverScene):
             bar_h = 0.9 * D[i] / D.max()
             bar = Rectangle(width=0.06, height=max(bar_h, 0.02), stroke_width=0, fill_color=QC.GAIN,
                             fill_opacity=0.9).move_to(ax.c2p(t[i], lo), aligned_edge=DOWN)
-            yr = label(rf"{int(t[i])}", font_size=20, color=VALUE).next_to(p, UP, buff=0.12)
+            yr = Integer(int(t[i]), font_size=22, color=VALUE, group_with_commas=False).next_to(p, UP, buff=0.12)
             return VGroup(glow_dot(p, color=VALUE, radius=0.06), bar, yr)
 
         line_ps = always_redraw(built)

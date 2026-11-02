@@ -120,11 +120,10 @@ class Fact(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "Now one day up close: the Surface of Part thirteen, the tenth of December 2025. <bookmark mark='a'/> "
             f"A straight line fits it, a power law with exponent {p['a']:.2f}. <bookmark mark='b'/> But a skew that "
-            f"stops growing below about {365 * q['eps']:.0f} days fits these points a little better. Julien Guyon and "
-            "Mehdi El Amrani made this objection in 2023, on the S&P 500, the Euro Stoxx and the DAX: once the "
-            "shortest expiries are included, a two-parameter power law fails. <bookmark mark='c'/> Across all our "
+            f"stops growing below about {365 * q['eps']:.0f} days fits these points a little better: Julien Guyon "
+            "and Mehdi El Amrani's objection, made on the S&P 500. <bookmark mark='c'/> Across all our "
             f"weeks, the bounded form wins by a clear margin in {100 * w['bounded_share']:.0f} percent of them, so "
-            + verdict + ". The fact is real; its exact form at the very short end is disputed, and chapter twelve "
+            f"{verdict}. The fact is real; its exact form at the very short end is disputed, and chapter twelve "
             "returns to it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg[0]), LaggedStart(*[FadeIn(d, scale=0.5) for d in dots],
@@ -157,7 +156,7 @@ class Fact(VoiceoverScene, ThreeDScene):
             "The definitions. The skew psi of T is the slope of implied volatility in log-moneyness, at the money. "
             "<bookmark mark='a'/> The power law says psi is a constant times T to the minus a. Read as roughness, "
             f"a equals one half minus H, and our median exponent of {w['a_median']:.2f} gives H of "
-            f"{w['H_median']:.2f}. " + verdict + " "
+            f"{w['H_median']:.2f}. {verdict} "
             "<bookmark mark='b'/> The bounded rival shifts maturity by epsilon, so the skew "
             "stays finite as expiry nears. <bookmark mark='c'/> Pause and predict. If H is a tenth, how much steeper "
             "is a one-day option's skew than a one-month option's? <bookmark mark='d'/> Thirty days to one is a "

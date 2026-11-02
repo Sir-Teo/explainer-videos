@@ -155,10 +155,8 @@ class Flows(VoiceoverScene):
             "autocalls growing as the underlying falls, to a peak that a UBS strategist put at typically twenty to "
             "twenty-five percent below the issue level; past it, they must buy volatility back, and that is where "
             "hedging costs mount. <bookmark mark='a'/> It also reported desks losing money on autocall hedges after "
-            "the HSCEI's fall in 2015 and 2016, and bracing for more as the index sank again. Natixis, in chapter "
-            "ten, was one dealer's hedging model failing in exactly these conditions. What is arithmetic here is "
-            "the book's vega and the direction of the trades it forces. What is disputed is how much those trades "
-            "moved prices."
+            "the HSCEI's fall in 2015 and 2016. The book's vega and the direction of its trades are arithmetic; how "
+            "much they moved prices is disputed."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

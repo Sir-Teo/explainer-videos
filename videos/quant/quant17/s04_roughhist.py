@@ -55,14 +55,12 @@ class RoughHistory(VoiceoverScene):
                              r"changes sign with the market, as Heston's did in Part 13", 3.6, 18, GREY_A).to_edge(RIGHT, buff=0.4)
         src = illustration(r"Deribit BTC options, Wednesdays 2024--2025 (Part 13's weekly surfaces), expiries to 200 days")
         with self.voiceover(
-            "Part fourteen measured roughness on one day. Is it a property of the market or an accident of that day? "
-            "With the network, calibrating rough Bergomi to every weekly surface of 2024 and 2025 takes minutes. "
+            "Part fourteen measured roughness on one day. Is it the market, or that day? With the network, calibrating "
+            "every weekly surface of 2024 and 2025 takes minutes. "
             f"<bookmark mark='a'/> Here is the Hurst exponent, week by week. In {100 * at_floor:.0f} percent of weeks "
             "it sits at 0.02, the lowest value the network was trained on: the market's short-dated skew asks for "
-            "something rougher still. Fresh simulation at those parameters confirms the fits, so this is the market, "
-            "not the network; and Part fourteen showed that bitcoin's quiet weekends read as extra roughness. A "
-            "production version would widen the training box. This is exactly the check of chapter seventeen: know "
-            "where your network has been. <bookmark mark='b'/> Below it, the correlation between price and volatility, which "
+            "something rougher still; Part fourteen showed that bitcoin's quiet weekends read as extra roughness. "
+            "<bookmark mark='b'/> Below it, the correlation between price and volatility, which "
             "changes sign with the market, as it did for Heston in Part thirteen."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(src), Create(half), FadeIn(floor_lab))
@@ -139,10 +137,9 @@ class RoughHistory(VoiceoverScene):
                     r"confirm a fit, they cannot reveal what lies outside. A wider box needs a new hour of simulation")]
         step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.4, buff=1.0, edge=6.9)
         with self.voiceover(
-            "Why the wall? In rough Bergomi the at-the-money skew grows like the expiry to the power H minus one half "
-            "as expiries shorten. Bitcoin's short-dated skew is steep, and the only way the model can steepen it is to "
-            "lower H. <bookmark mark='a'/> So at the wall, the answer is the best fit inside the box, not the market's "
-            "H. The Monte Carlo checks confirm that the fit is a fit; they cannot see what lies outside the box."
+            "Why the wall? Rough Bergomi's at-the-money skew grows like the expiry to the power H minus one half, and "
+            "bitcoin's short-dated skew is steep, so the fit lowers H. <bookmark mark='a'/> At the wall, the answer is "
+            "the best fit inside the box, not the market's H; the checks cannot see outside the box."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -42,17 +42,13 @@ class UVM(VoiceoverScene):
                     r"everywhere. The price is non-linear: a book is not the sum of its parts")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.8, edge=6.9)
         with self.voiceover(
-            "Parts thirteen and fourteen showed that models fitted to the same vanillas disagree on exotics. How "
-            "much should a desk charge for that? In 1995 Marco Avellaneda, Arnon Levy and Antonio Parás, and "
-            "independently Terry Lyons, answered with a worst case. Suppose volatility can be anything within a band, "
-            "chosen against you at every moment. The seller's price is the largest expected payoff over all those "
-            "volatility paths. <bookmark mark='a'/> That is a control problem, with volatility as the adversary's "
-            "control, and dynamic programming turns it into a Hamilton–Jacobi–Bellman equation: Black–Scholes, with "
-            "a supremum inside. <bookmark mark='b'/> The thing being maximised is linear in sigma squared, so the "
-            "worst case always sits at an end of the band: the top wherever the position is long gamma, the bottom "
-            "wherever it is short. That is the Black–Scholes–Barenblatt equation. <bookmark mark='c'/> And it is "
-            "non-linear. The worst case for a book is at most the sum of the worst cases of its parts, and usually "
-            "less, because positions can cancel each other's risk."
+            "Models fitted to the same vanillas disagree on exotics. What should a desk charge for that? In 1995 Marco "
+            "Avellaneda, Arnon Levy and Antonio Parás, and independently Terry Lyons, answered with a worst case: "
+            "volatility anywhere in a band, chosen against you. <bookmark mark='a'/> Dynamic programming turns that into a "
+            "Hamilton–Jacobi–Bellman equation, Black–Scholes with a supremum inside. <bookmark mark='b'/> It is linear in "
+            "sigma squared, so the worst case sits at an end of the band: the top where the position is long gamma, the "
+            "bottom where it is short. That is the Black–Scholes–Barenblatt equation. <bookmark mark='c'/> And it is "
+            "non-linear: a book's worst case is at most the sum of its parts'."
         ) as vo:
             step(0)
             vo.wait_until("a")

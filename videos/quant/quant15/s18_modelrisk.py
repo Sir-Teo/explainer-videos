@@ -143,9 +143,9 @@ class ModelRisk(VoiceoverScene):
                 why(r"what the desk holds back (chapter 17); both are computed, neither needs a new model")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.8, edge=6.9)
         with self.voiceover(
-            "Two ways to put a number on it. Rama Cont, in 2006: take every model consistent with the instruments "
-            "you calibrate to, and measure the range of prices they give. It is zero for the vanillas themselves, "
-            "and it behaves like a proper risk measure. Our four models give a crude lower bound on that range. "
+            "Two ways to put a number on it. Rama Cont, in 2006: the range of prices over every model consistent "
+            "with the calibration instruments, zero for the vanillas themselves. Our four models give a lower bound "
+            "on it. "
             "<bookmark mark='a'/> Paul Glasserman and Xingbo Xu, in 2014, ask a different question: what is the "
             "worst price over every model within a given relative entropy of yours? The answer is beautiful: the "
             "worst model is an exponential tilt of your own, re-weighting each path by e to the theta times its "

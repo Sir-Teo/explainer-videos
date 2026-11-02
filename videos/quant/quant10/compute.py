@@ -589,16 +589,17 @@ def compute_kabanov() -> dict:
     the volatility and the premium grow without bound; what the book's error does."""
     K, T, sig, k = 100.0, 0.25, 0.2, 0.0025
     Ns = [13, 52, 252, 1008, 4032]
-    part = CACHE.partial("kabanov", {"Ns": Ns, "k": k, "paths": 10000})
+    n_paths = {13: 10000, 52: 10000, 252: 10000, 1008: 4000, 4032: 2000}  # memory: paths x steps stays small
+    part = CACHE.partial("kabanov", {"Ns": Ns, "k": k, "paths": n_paths})
     for N in Ns:
         if str(N) in part:
             continue
         sL = float(bs.leland_vol(sig, 2 * k, T / N))
-        t, S = paths.gbm(100.0, 0.0, sig, T, N, 10000, seed=1200 + N)
+        t, S = paths.gbm(100.0, 0.0, sig, T, N, n_paths[N], seed=1200 + N)
         o = hedge.delta_hedge(t, S, K, T, sL, position=-1, sigma_price=sL, cost=k, cost_ends=False)
         part[str(N)] = {"sigma_L": sL, "premium": float(bs.price(100.0, K, T, sL)), "mean": float(o["pnl"].mean()),
                         "sd": float(o["pnl"].std()), "cost": float(o["cost_total"].mean())}
-    rows = [dict(N=N, **part[str(N)]) for N in Ns]
+    rows = [dict(N=N, paths=n_paths[N], **part[str(N)]) for N in Ns]
     return {"rows": rows, "k": k, "premium_bs": float(bs.price(100.0, K, T, sig)), "share": 100.0}
 
 
@@ -723,8 +724,9 @@ def compute_american_more() -> dict:
     steps = sorted({n for n, _, _ in dv["region"]})
     return {"spots": spots, "taus": taus, "premium": prem, "b_times": pb["times"], "b_smooth": pb["boundary"],
             "b_raw": pb["raw"], "tree": pb["price"], "european": eu, "kim": kim, "kim_raw": kim_raw,
-            "baw": float(o["price"]), "baw_critical": o["critical"], "tree_critical": float(np.nanmax(pb["raw"][:1])),
-            "smooth_critical": float(pb["boundary"][0]), "baw_curve": baw_curve,
+            "baw": float(o["price"]), "baw_critical": o["critical"],
+            "tree_critical": float(pb["raw"][np.isfinite(pb["raw"])][0]),
+            "smooth_critical": float(pb["boundary"][np.isfinite(pb["boundary"])][0]), "baw_curve": baw_curve,
             "div": {"S": 100.0, "K": 90.0, "T": 0.5, "D": 4.0, "tD": 0.4, "american": dv["price"],
                     "european": dv["european"], "steps": steps, "first_t": float(min(steps) * dv["dt"]),
                     "last_t": float(max(steps) * dv["dt"]), "n_nodes": len(dv["region"])}}

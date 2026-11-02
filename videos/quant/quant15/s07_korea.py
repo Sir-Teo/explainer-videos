@@ -57,13 +57,11 @@ class Korea(VoiceoverScene):
                           r"what pays for it", 4.6, 19, WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Korea's version of the snowball is the step-down equity-linked security, and for a decade its favourite "
-            "underlying was Hong Kong's index of Chinese companies, the HSCEI. The terms: every six months the note "
-            "is repaid with its coupon if the index is above a level that steps down over time, ninety percent of "
-            "the start, then eighty-five, then eighty. <bookmark mark='a'/> And a knock-in at half the starting "
-            "level, watched every day. In option terms it is a strip of six digitals on a falling staircase, plus a "
-            "down-and-in put struck at the start with its barrier at fifty percent. The steps make an early exit "
-            "likelier as time passes, which keeps the coupon cheap to pay. The put is what pays for it."
+            "Korea's snowball is the step-down equity-linked security, and its favourite underlying was Hong Kong's "
+            "index of Chinese companies, the HSCEI. Every six months the note is repaid with its coupon if the index "
+            "is above a level that steps down, ninety percent of the start, then eighty-five, then eighty. "
+            "<bookmark mark='a'/> And a knock-in at half the start, watched daily. In option terms: six digitals on "
+            "a falling staircase, plus a down-and-in put with its barrier at fifty percent, which pays for them."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]))
             self.play(LaggedStart(*[Create(s_) for s_ in stair], lag_ratio=0.3))
@@ -130,9 +128,8 @@ class Korea(VoiceoverScene):
         with self.voiceover(
             "The regulator's own document from that winter shows how large the exposure had become. On the "
             "twenty-first of January 2016, Korea's Financial Services Commission counted thirty-seven trillion won "
-            "of HSCEI-linked notes outstanding, as the index fell to about eight thousand. It reminded investors that "
-            "a knock-in does not necessarily mean a loss, which is true: a knocked-in note pays the index's level at "
-            "maturity, and the index can recover. In 2016 and 2017, it largely did."
+            "of HSCEI-linked notes outstanding, as the index fell to about eight thousand, and reminded investors "
+            "that a knock-in does not necessarily mean a loss. In 2016 and 2017 the index largely recovered."
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
         self.wait(0.4)
@@ -232,10 +229,8 @@ class Korea(VoiceoverScene):
             "The dealer's side of the same product. In December 2018 Natixis, one of the largest issuers of "
             "Korean autocallables, cut its fourth-quarter revenues by a hundred million euros and set aside a "
             "hundred and sixty million more, on what it called some specific products traded with clients in Asia. "
-            "Its own words: the model used to manage them had led to a hedging strategy that proved to be deficient "
-            "in the market conditions of the time. Bloomberg reported that the bank stopped creating the notes. "
-            "The products were the same short puts and digitals; the issuer's side failed through its hedging "
-            "model, as chapter fifteen will explain."
+            "In its words, the model used to manage them had led to a hedging strategy that proved deficient in the "
+            "market conditions. Bloomberg reported that it stopped creating the notes."
         ):
             self.play(FadeIn(card, shift=UP * 0.2))
         self.wait(0.5)

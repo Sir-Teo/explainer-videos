@@ -102,12 +102,13 @@ class Hook(VoiceoverScene):
             f"worth {prem:.1f} dollars for every hundred dollars of bitcoin. You collect it. <bookmark mark='a'/> "
             f"Then Bitcoin goes up. Not a little: {S[-1] - 100:.0f} percent in a month. "
             f"<bookmark mark='b'/> At expiry you owe the buyer the whole rise, {S[-1] - 100:.0f} dollars per "
-            f"hundred. Unhedged, the red line, you lose {S[-1] - 100 - prem:.0f}. <bookmark mark='c'/> But a "
+            f"hundred. Unhedged, the red line, you lose {S[-1] - 100 - prem:.0f}. Pause and predict: did a seller "
+            "who hedged lose too? <bookmark mark='c'/> A "
             f"seller who, every hour, held a certain number of coins, the yellow bar, about "
             f"{b['pick_delta'][0]:.2f} of a coin at the start and rising towards one "
             "as the call went deeper into the money, ended the month on the white line. Up "
             f"{b['pick_pnl']:.2f}. The rally that cost the unhedged seller a fortune cost the hedger nothing. And "
-            f"this was not a lucky month: of the {b['n']:,} months we will hedge in chapter eleven, this one's profit is "
+            f"this was not a lucky month: of the {b['n']:,} months we will hedge in chapter fifteen, this one's profit is "
             "the median."
         ) as vo:
             self.play(FadeIn(call, scale=0.95))
@@ -168,19 +169,20 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def objectives(self):
         card = objectives_card([
-            r"Derive the Black--Scholes--Merton price three ways: replication, risk-neutral expectation, the tree",
+            r"Derive the price by replication, solve the PDE as a heat equation, read it as an expectation and a tree",
             r"Read the Greeks as the geometry of one surface, and find the identity that ties gamma to theta",
             r"Derive the hedger's P\&L, $\tfrac12\Gamma S^2(\sigma_r^2 - \sigma_i^2)\,dt$, and watch it on real paths",
-            r"Measure what hedging in steps, transaction costs and the wrong volatility do",
-            r"Invert the formula: implied volatility, and the first row of the series' Surface",
-            r"Sell volatility on real Bitcoin for four and a half years, and live through 1987",
+            r"Measure hedging in steps, with jumps, with costs (Leland) and with the wrong volatility",
+            r"Invert the formula on 254 real quotes; add the carry; price early exercise",
+            r"Sell volatility on real Bitcoin, replay 1987 and 1998, and see how desks and researchers use it now",
         ], title=r"In this part", font_size=29)
         with self.voiceover(
-            "Here is the plan. Three derivations of one formula, each showing a different side of it. The Greeks, "
-            "read as the slope and curve of a single surface. The hedger's profit and loss, term by term, and the "
-            "ways hedging fails: in steps, with costs, with the wrong volatility. Then the formula turned inside "
-            "out, implied volatility, measured on a real options market. And two stories with real data: four "
-            "and a half years of selling Bitcoin volatility, and the day in 1987 the formula's world broke."
+            "Here is the plan. The formula derived and solved, three ways, each showing a different side of it. "
+            "The Greeks, read as the slope and curve of a single surface. The hedger's profit and loss, term by "
+            "term, and the ways hedging fails: in steps, across jumps, with costs, with the wrong volatility. "
+            "Then the formula turned inside out on a real options market, extended to dividends and early "
+            "exercise. And real data: four and a half years of selling Bitcoin volatility, the crash of 1987 "
+            "replayed, 1998, and how the formula is used on desks, and researched, today."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.35, run_time=6))

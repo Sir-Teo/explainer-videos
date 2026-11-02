@@ -55,7 +55,7 @@ class Options(VoiceoverScene):
         with self.voiceover(
             "The options have their own say. Here are chapter one's weekly fits again, all on one chart: blue where "
             "a power law is as good as anything, gold where a skew that stops growing at short expiries wins by a "
-            f"clear margin. <bookmark mark='a'/> {int(sum(better))} of {len(weeks)} weeks are gold, " + verdict + ". "
+            f"clear margin. <bookmark mark='a'/> {int(sum(better))} of {len(weeks)} weeks are gold, {verdict}. "
             "<bookmark mark='b'/> Where the bounded form wins, how far does the flattening reach? The shifts spread "
             f"widely, with a median of {w['eps_median_days']:.0f} days. Some weeks the short-end flattening is real; "
             "others, it is noise in a few thin expiries."
@@ -185,7 +185,7 @@ class Options(VoiceoverScene):
             "<bookmark mark='a'/> The fitted half-lives are "
             f"{hl[0]:.1f} days and {hl[1]:.0f} days: one fast factor and one slow one, as the algebra suggested. "
             f"<bookmark mark='b'/> Re-priced on fresh paths its error is {b2['rmse']:.2f} volatility points, against "
-            f"rough Bergomi's {rbm:.2f}. So " + verdict + ". One day of one market settles nothing; the honest "
+            f"rough Bergomi's {rbm:.2f}. So {verdict}. One day of one market settles nothing; the honest "
             "reading is that rough and multi-factor models are close competitors on prices, and the choice turns on "
             "dynamics, speed and hedging."
         ) as vo:

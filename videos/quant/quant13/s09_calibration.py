@@ -6,7 +6,20 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant13.common import BAD, IV, MODEL_COL, OPT, PART, RV, SPOT, VAR, load, real_data
+from videos.quant.quant13.common import BAD, IV, MODEL_COL, OPT, PART, RV, SPOT, VAR, load, pause, real_data
+
+LAB_REG = [
+    "def calibrate_reg(name, quotes, x_prev, lam, W=None, x0=None):",
+    "    spec, pre = MODELS[name], _pre(quotes)",
+    "    W = 1 / np.maximum(np.abs(x_prev), 0.05) if W is None else W",
+    "    s = np.sqrt(lam * len(quotes['K']))",
+    "    def fun(p):  # the fit's residuals, then the pull toward last week",
+    "        return np.concatenate([residuals(name, p, quotes, pre),",
+    "                               s * W * (p - x_prev)])",
+    "    r = least_squares(fun, x_prev, bounds=(spec['lo'], spec['hi']),",
+    "                      x_scale='jac')",
+    "    return r.x",
+]
 
 
 def _t(s):
@@ -18,17 +31,23 @@ class Calibration(VoiceoverScene, ThreeDScene):
     def construct(self):
         L = load("landscape")
         h = load("history")
+        hs = load("hessian")
+        hr = load("history_reg")
         self.card()
-        self.landscape(L)
+        self.landscape(L, hs)
+        self.derive(hs)
         self.history(h)
+        self.wander(h)
+        self.regularised(hr)
 
     def card(self):
-        c = chapter_card(8, r"Calibration", r"Which parameters did the market mean?", part=PART)
-        with self.voiceover("Chapter eight. Calibration."):
+        c = chapter_card(16, r"Calibration: valleys, identifiability, instability", r"Which parameters did the market mean?",
+                         part=PART)
+        with self.voiceover("Chapter sixteen. Calibration, as an inverse problem."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def landscape(self, Ld):
+    def landscape(self, Ld, hs):
         ka, xi = np.log10(np.asarray(Ld["kappa"])), np.log10(np.asarray(Ld["xi"]))
         loss = np.clip(np.asarray(Ld["loss"]), 1.0, 4.0)
         f = RegularGridInterpolator((ka, xi), loss)
@@ -44,6 +63,16 @@ class Calibration(VoiceoverScene, ThreeDScene):
             [ax.c2p(ka[i], xi[j], loss[i, j] + 0.03) for i, j in enumerate(floor)])
         best = Ld["best"]
         star = Dot3D(ax.c2p(np.log10(best[1]), np.log10(best[3]), loss.min() + 0.05), radius=0.09, color=YELLOW)
+        V = np.asarray(hs["profile_vecs"])  # columns: eigenvectors over (log kappa, log xi), natural logs
+        ev = np.asarray(hs["profile_eig"])
+        c0 = np.array([np.log10(best[1]), np.log10(best[3])])
+        arrows = VGroup()
+        for j, col in ((0, WHITE), (1, BAD)):
+            d = V[:, j] / np.linalg.norm(V[:, j]) * (0.55 if j == 0 else 0.55 * np.sqrt(ev[0] / ev[1]) * 3)
+            for sgn in (1, -1):
+                a3 = Arrow3D(ax.c2p(*c0, loss.min() + 0.05), ax.c2p(*(c0 + sgn * d), loss.min() + 0.05), color=col,
+                             thickness=0.015)
+                arrows.add(a3)
         hint = VGroup(label(r"mean reversion $\kappa$, 0.5 to 30 (log)", font_size=22, color=GREY_A),
                       label(r"vol of vol $\xi$, 0.3 to 8 (log)", font_size=22, color=GREY_A),
                       label(r"height: the best fit error with $v_0, \theta, \rho$ re-optimized", font_size=22,
@@ -64,7 +93,8 @@ class Calibration(VoiceoverScene, ThreeDScene):
             "Calibration is an optimization, and its landscape is worth looking at. Fix Heston's mean reversion and "
             "vol of vol, re-fit the other three parameters, and record the error. Do it on a grid, and here is the "
             "landscape. <bookmark mark='a'/> The minimum is the yellow star. But look at the valley running from it: "
-            "a long, curved floor where faster mean reversion and higher vol of vol trade off against each other. "
+            "a long, curved floor where faster mean reversion and higher vol of vol trade off against each other, "
+            "the valley the fit replay of chapter four slid along. "
             f"At a mean reversion of {Ld['kappa'][i0]:.0f} instead of {best[1]:.0f}, the error rises only from "
             f"{Lm.min():.2f} to {along:.2f} points. <bookmark mark='b'/> On this day the optimizer is not fooled: "
             "twelve random starts all end at the same point. But the valley says the data pin down a combination of "
@@ -76,7 +106,19 @@ class Calibration(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-70 * DEGREES, phi=58 * DEGREES, run_time=max(vo.remaining(1.0) - 6, 2))
             vo.wait_until("b")
             self.play(FadeIn(txt))
-        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, valley, star)), FadeOut(hint),
+        with self.voiceover(
+            "Make the valley precise. At the minimum, the curvature of the loss in every direction is a matrix, the "
+            "Hessian. Over these two parameters, with the other three re-optimized, it has two eigenvectors. "
+            "<bookmark mark='a'/> The white arrows point along the valley: the curvature there is small. The red "
+            f"arrows point across it, {np.sqrt(hs['profile_cond']):.0f} times steeper in slope: the ratio of the "
+            f"curvatures is {hs['profile_cond']:.0f}. The data pin down the red direction, a combination of mean "
+            "reversion and vol of vol, and barely the white one."
+        ) as vo:
+            self.play(*[FadeIn(a_) for a_ in arrows[:2]], run_time=1.2)
+            vo.wait_until("a")
+            self.play(*[FadeIn(a_) for a_ in arrows[2:]], run_time=1.2)
+            self.move_camera(theta=-95 * DEGREES, phi=30 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.5))
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, valley, star, arrows)), FadeOut(hint),
                                                                   FadeOut(txt), FadeOut(src)], run_time=1.5)
         self.clear_scene()
 
@@ -133,5 +175,151 @@ class Calibration(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(G[2]), Create(z3), Create(l3), FadeIn(side[4]), run_time=2)
             vo.wait_until("c")
             self.play(FadeIn(side[5]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def derive(self, hs):
+        rows = [cmath(r"\hat x", r"=", r"\arg\min_x\ \tfrac12\,\|r(x)\|^2,\qquad H \approx J^\top J", font_size=36,
+                      colors={r"\hat x": VAR}),
+                cmath(r"\delta L", r"\approx", r"\tfrac12\,\delta x^\top H\,\delta x = \tfrac12\sum_j \lambda_j\,(e_j^\top\delta x)^2",
+                      font_size=36, colors={r"\delta L": VAR}),
+                cmath(r"\operatorname{Cov}(\hat x)", r"\approx", r"\hat\sigma^2\,H^{-1}", font_size=36,
+                      colors={r"\operatorname{Cov}(\hat x)": VAR}),
+                cmath(r"\min_x", r"\ ", r"\tfrac12\|r(x)\|^2 + \tfrac{\lambda}{2}\,\big\|W(x - x_{\text{prev}})\big\|^2"
+                      r"\ \Rightarrow\ H \to H + \lambda W^\top W", font_size=34, colors={r"\min_x": OPT})]
+        whys = [why(r"least squares on the vega-weighted residuals; Gauss--Newton approximates the Hessian by the "
+                    r"Jacobian's Gram matrix", 20),
+                why(r"near the optimum the loss is a bowl; a small eigenvalue $\lambda_j$ is a flat direction $e_j$: the "
+                    r"data pin the combination $e_j^\top\delta x$ only weakly", 20),
+                why(r"linearise the fit: the parameters' standard errors are the bowl's widths", 20),
+                why(r"Tikhonov regularisation toward last week (Cont and Tankov 2004 use relative entropy for jump models): "
+                    r"every eigenvalue grows by $\lambda$, and the flat direction stops wandering", 20)]
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.6, edge=6.9)
+        se = np.asarray(hs["se"])
+        ev = np.asarray(hs["eig"])
+        tab = VGroup(
+            MathTex(rf"\text{{eigenvalues of }}H:\ " + r",\ ".join(f"{v:.0f}" for v in ev) +
+                    rf"\quad \text{{condition}}\ {hs['cond']:.0f}", font_size=26, color=GREY_A),
+            MathTex(rf"\text{{s.e.:}}\ \kappa\ \pm{100 * se[1]:.0f}\%,\ \ \xi\ \pm{100 * se[3]:.0f}\%,\ \ v_0\ \pm{100 * se[0]:.0f}\%,"
+                    rf"\ \ \theta\ \pm{100 * se[2]:.0f}\%,\ \ \rho\ \pm{se[4]:.2f}", font_size=26, color=GREY_A),
+        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
+        with self.voiceover(
+            "In symbols. The calibrator minimises half the sum of squared, vega-weighted errors, and the curvature "
+            "of that loss at the optimum is approximately J transpose J, the Gauss–Newton Hessian. "
+            "<bookmark mark='a'/> Near the optimum the loss is a bowl, the sum over eigen-directions of eigenvalue "
+            "times displacement squared. A small eigenvalue is a flat direction: a combination of parameters the "
+            "data barely determine. <bookmark mark='b'/> Linearise, and the parameters' covariance is the noise "
+            "level times the inverse Hessian. On our fit the eigenvalues span a factor of "
+            f"{hs['cond']:.0f}, and the standard errors are about {100 * se[1]:.0f} percent for kappa and "
+            f"{100 * se[3]:.0f} for xi, from a single day's quotes. <bookmark mark='c'/> The cure is to add "
+            "information. Penalise moving away from last week's parameters: every eigenvalue grows by lambda, the "
+            "flat directions stiffen, and the fit pays a small price. Rama Cont and Peter Tankov proposed the "
+            "relative-entropy version for jump models in 2004."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            self.play(FadeIn(tab))
+            vo.wait_until("c")
+            step(3)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def wander(self, h):
+        rows = h["rows"]
+        X = np.array([r["x"] for r in rows])
+        lk, lxi = np.log10(np.clip(X[:, 1], 0.05, 25)), np.log10(np.clip(X[:, 3], 0.05, 8))
+        rm = np.array([r["rmse"] for r in rows])
+        g = axes([np.log10(0.05), np.log10(25)], [np.log10(0.05), np.log10(8)], x_length=6.0, y_length=4.6,
+                 xlabel=r"mean reversion $\kappa$ (log)", ylabel=r"vol of vol $\xi$ (log)",
+                 xticks=[np.log10(v) for v in (0.1, 1, 10)], yticks=[np.log10(v) for v in (0.1, 1, 5)],
+                 xfmt=lambda u: f"{10 ** u:g}", yfmt=lambda u: f"{10 ** u:g}", font_size=15).to_edge(LEFT, buff=0.7)
+        gr = axes([0, len(rows) - 1], [0, 4], x_length=4.6, y_length=2.4, xlabel=r"week", ylabel=r"fit error (vol pts)",
+                  xticks=[0, len(rows) - 1], yticks=[0, 2, 4], font_size=13).to_edge(RIGHT, buff=0.5).shift(UP * 1.0)
+        w = ValueTracker(0)
+
+        def trail():
+            k = int(w.get_value())
+            pts = [g.ax.c2p(a, b) for a, b in zip(lk[:k + 1], lxi[:k + 1])]
+            m = VMobject(stroke_color=VAR, stroke_width=1.5, stroke_opacity=0.6)
+            if len(pts) > 1:
+                m.set_points_as_corners(pts)
+            return m
+
+        tr = always_redraw(trail)
+        dot = always_redraw(lambda: Dot(g.ax.c2p(lk[int(w.get_value())], lxi[int(w.get_value())]), radius=0.08, color=YELLOW))
+        err = always_redraw(lambda: VMobject(stroke_color=MODEL_COL["Heston"], stroke_width=2.5).set_points_as_corners(
+            [gr.ax.c2p(i, min(v, 4)) for i, v in enumerate(rm[:max(int(w.get_value()) + 1, 2)])]))
+        day = always_redraw(lambda: label(rows[int(w.get_value())]["day"], font_size=22, color=GREY_A).next_to(g, UP, buff=0.1)
+                            .align_to(g, RIGHT))
+        corr = float(np.corrcoef(lk, lxi)[0, 1])
+        side = wrapped_label(rf"each yellow dot is one Wednesday's fit; across {len(rows)} weeks $\log\kappa$ and $\log\xi$ "
+                             rf"move together, correlation {corr:+.2f}: the fits slide along the valley, while the error "
+                             rf"stays near {h['rmse_median']:.1f}", 4.6, 18, GREY_A).next_to(gr, DOWN, buff=0.5).align_to(gr, LEFT)
+        src = real_data(r"100 weekly surfaces from Deribit trades, 2024--2025")
+        with self.voiceover(
+            "Now replay the hundred weekly fits as a walk across that floor. Each Wednesday the calibrator refits "
+            "Heston to that morning's surface, and the yellow dot jumps to the new mean reversion and vol of vol. "
+            "<bookmark mark='a'/> It wanders over two orders of magnitude, from mean reversion near zero to the "
+            "bound of twenty, and mostly along a diagonal: when kappa rises, xi rises with it, a correlation of "
+            f"{corr:+.2f} in the logs. The fit error, on the right, hardly reacts. The model is walking along its "
+            "valley, week after week, because nothing in a single surface tells it where to stand."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(gr), FadeIn(src))
+            self.add(tr, dot, err, day)
+            self.play(w.animate.set_value(len(rows) - 1), run_time=max(vo.remaining(2.0) - 2.0, 6), rate_func=linear)
+            self.play(FadeIn(side))
+        for m in (tr, dot, err, day):
+            m.clear_updaters()
+        self.wait(0.4)
+        self.clear_scene()
+
+    def regularised(self, hr):
+        fr = hr["frontier"]
+        days = hr["days"]
+        g = axes([0, 0.35], [1.0, 2.2], x_length=5.4, y_length=3.6, xlabel=r"median weekly change in the parameters",
+                 ylabel=r"median fit error (vol points)", xticks=[0, 0.1, 0.2, 0.3], xfmt=lambda u: f"{100 * u:.0f}\\%",
+                 yticks=[1.0, 1.5, 2.0], font_size=14).to_edge(LEFT, buff=0.6).shift(DOWN * 0.6)
+        ax = g.ax
+        cols = [BAD, OPT, RV]
+        pts = VGroup()
+        for f_, c_ in zip(fr, cols):
+            x_, y_ = min(f_["median_change_all"], 0.35), float(np.clip(f_["rmse_median"], 1.0, 2.2))
+            pts.add(VGroup(Dot(ax.c2p(x_, y_), radius=0.09, color=c_),
+                           MathTex(rf"\lambda = {f_['lam']:g}", font_size=24, color=c_).next_to(ax.c2p(x_, y_), UR, buff=0.08)))
+        link = VMobject(stroke_color=GREY_B, stroke_width=2).set_points_as_corners(
+            [ax.c2p(min(f_["median_change_all"], 0.35), float(np.clip(f_["rmse_median"], 1.0, 2.2))) for f_ in fr])
+        card = lab_card(r"regularised calibration", LAB_REG, source="explainer/quant/house/stochvol.py: calibrate_reg",
+                        width=7.2, font_size=16).to_edge(UP, buff=0.3).to_edge(RIGHT, buff=0.3)
+        outs = [f"lam={f_['lam']:<5g} weekly change {100 * f_['median_change_all']:5.1f}%   "
+                f"kappa {100 * f_['median_change']['kappa']:5.1f}%   error {f_['rmse_median']:.2f}" for f_ in fr]
+        a, b = fr[0], fr[-1]
+        cut = a["median_change_all"] / max(b["median_change_all"], 1e-9)
+        cost = b["rmse_median"] - a["rmse_median"]
+        verdict = (f"The strongest pull cuts the typical weekly change by a factor of {cut:.0f} and costs "
+                   f"{cost:.2f} vol points of median fit error." if cut > 2 else
+                   f"Even the strongest pull cuts the weekly change only by a factor of {cut:.1f}, for {cost:.2f} vol "
+                   "points of fit: the instability is not only noise.")
+        pp = pause(r"Overnight $\kappa$ jumped from 3 to 20 and the fit barely moved. Which prices changed?", width=5.2)
+        pp.to_corner(DL, buff=0.3)
+        with self.voiceover(
+            "So regularise. Here is the House's version: the fit's residuals, stacked with a pull toward last week's "
+            "parameters, each measured as a relative change and weighted by lambda. Ten lines. "
+            "<bookmark mark='a'/> Rerun all hundred weeks with two strengths of pull, and plot each run as a point: "
+            "how much the parameters move in a typical week, against how well the model fits. <bookmark mark='b'/> "
+            f"{verdict} <bookmark mark='c'/> That is the trade a desk makes: a little fit, for parameters that mean "
+            "the same thing next week, and hedges that do not lurch. Pause and predict: overnight kappa jumped from "
+            "three to twenty and the fit barely moved. Which prices changed? Vanillas hardly at all. Forward starts, "
+            "cliquets and every hedge ratio, a lot."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2), FadeIn(g))
+            vo.wait_until("a")
+            lab_run(self, card, outs, run_time=2.5, font_size=16)
+            vo.wait_until("b")
+            self.play(Create(link), LaggedStart(*[FadeIn(p_, scale=1.4) for p_ in pts], lag_ratio=0.4))
+            vo.wait_until("c")
+            self.play(FadeIn(pp))
         self.wait(0.4)
         self.clear_scene()

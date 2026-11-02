@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant13.common import BAD, IV, MODEL_COL, OPT, PART, RV, SPOT, VAR, illustration, load
+from videos.quant.quant13.common import BAD, IV, MODEL_COL, OPT, PART, RV, SPOT, VAR, illustration, load, pause
 
 ORDER = ("LV", "Heston", "Bates", "VG", "SLV")
 NAMES = {"LV": r"local vol", "Heston": r"Heston", "Bates": r"Bates", "VG": r"variance gamma", "SLV": r"SLV"}
@@ -12,16 +12,161 @@ NAMES = {"LV": r"local vol", "Heston": r"Heston", "Bates": r"Bates", "VG": r"var
 class Forward(VoiceoverScene):
     def construct(self):
         e = load("exotics")
+        fs = load("fwd_semi")
         self.card()
+        self.accumulate(fs)
         self.smiles(e)
+        self.derive(fs)
+        self.coupons(fs)
         self.exotics(e)
-        self.puzzle()
 
     def card(self):
-        c = chapter_card(7, r"The forward smile, and model risk", r"Same vanillas, same exotic price?", part=PART)
-        with self.voiceover("Chapter seven. The forward smile, and model risk."):
+        c = chapter_card(14, r"Forward smiles and cliquets", r"Same vanillas, same exotic price?", part=PART)
+        with self.voiceover("Chapter fourteen. Forward smiles, and cliquets."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
+
+    def accumulate(self, fs):
+        k = np.asarray(fs["k"])
+        g = axes([-0.27, 0.27], [0.36, 0.7], x_length=6.8, y_length=4.2, xlabel=r"log-moneyness of a 30-day option, "
+                 r"struck in 60 days", ylabel=r"Heston's forward smile", xticks=[-0.2, -0.1, 0, 0.1, 0.2],
+                 yticks=[0.4, 0.5, 0.6, 0.7], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=15).to_edge(LEFT, buff=0.7)
+        ax = g.ax
+        semi = curve(ax, k, np.asarray(fs["semi_iv"]), WHITE, stroke_width=3)
+        ns = sorted(int(n) for n in fs["acc"])
+
+        def pts(n):
+            iv = np.clip(np.asarray(fs["acc"][str(n)], float), 0.36, 0.7)
+            return VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=MODEL_COL["Heston"]) for a, b in zip(k, iv) if np.isfinite(b)])
+
+        cur = pts(ns[0])
+        cnt = MathTex(rf"{ns[0]:,}".replace(",", "{,}") + r"\ \text{paths}", font_size=30, color=MODEL_COL["Heston"])
+        cnt.next_to(g, UP, buff=0.1).align_to(g, RIGHT)
+        mc = np.array([np.asarray(v, float) for v in fs["mc"].values()])
+        bandm = seed_band(ax, k, mc, MODEL_COL["Heston"], stroke_width=0)
+        dev = float(np.max(np.abs(mc.mean(0) - np.asarray(fs["semi_iv"]))) * 100)
+        spread = float(np.max(mc.max(0) - mc.min(0)) * 100)
+        side = VGroup(
+            wrapped_label(r"white: the forward smile by a one-dimensional integral over the law of $v$ at 60 days, Heston's "
+                          r"price inside (exact up to quadrature)", 4.4, 18, GREY_A),
+            wrapped_label(r"dots: Monte Carlo, as paths accumulate; band: three seeds of 40{,}000 paths", 4.4, 18,
+                          MODEL_COL["Heston"]),
+            MathTex(rf"\max |\text{{MC mean}} - \text{{integral}}| = {dev:.2f}\ \text{{pts}}", font_size=26, color=WHITE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
+        verdict = (f"The three seeds average to within {dev:.1f} of a vol point of the integral at every strike, inside "
+                   f"their own spread of {spread:.1f}: the simulation and the formula agree." if dev <= max(spread, 0.3) else
+                   f"The seeds' average misses the integral by up to {dev:.1f} points, more than their spread of "
+                   f"{spread:.1f}: a discretisation bias in the simulation.")
+        with self.voiceover(
+            "A forward smile is the smile a model predicts for a future date: here, the thirty-day smile sixty days "
+            "from now. It is not quoted anywhere. It is a model's opinion, and it is what forward-start options and "
+            "cliquets pay on. For Heston it can be computed two ways. The white curve is a one-dimensional integral, "
+            "derived in a minute. <bookmark mark='a'/> The dots are Monte Carlo: simulate the model for ninety "
+            "days, and price the thirty-day option on the last month's return. With five hundred paths they "
+            "scatter; as paths accumulate they settle onto the curve. <bookmark mark='b'/> "
+            f"{verdict}"
+        ) as vo:
+            self.play(FadeIn(g), Create(semi), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(cur), FadeIn(cnt), FadeIn(side[1]))
+            per = max((vo.until("b") - 0.5) / (len(ns) - 1), 0.5)
+            for n in ns[1:]:
+                new_c = MathTex(rf"{n:,}".replace(",", "{,}") + r"\ \text{paths}", font_size=30,
+                                color=MODEL_COL["Heston"]).move_to(cnt, aligned_edge=RIGHT)
+                self.play(Transform(cur, pts(n)), Transform(cnt, new_c), run_time=per)
+            vo.wait_until("b")
+            self.play(FadeIn(bandm), FadeIn(side[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def derive(self, fs):
+        rows = [cmath(r"\Big(\frac{S_{T_2}}{S_{T_1}} - e^k\Big)^+", r"\Rightarrow", r"V_{T_1} = C\big(1,\ e^k,\ \tau;\ "
+                      r"\text{state}_{T_1}\big)", font_size=34, colors={r"\Big(\frac{S_{T_2}}{S_{T_1}} - e^k\Big)^+": OPT}),
+                cmath(r"\text{L\'evy:}\ \ V_0", r"=", r"C\big(1,\ e^k,\ \tau\big)\ \ \text{(today's smile)}", font_size=34,
+                      colors={r"\text{L\'evy:}\ \ V_0": MODEL_COL["VG"]}),
+                cmath(r"\text{Heston:}\ \ V_0", r"=", r"\int_0^\infty C_H\big(1,\ e^k,\ \tau;\ v\big)\ p_{T_1}(v)\,dv,"
+                      r"\quad v_{T_1} \sim c\,\chi'^2_d(\lambda)", font_size=32,
+                      colors={r"\text{Heston:}\ \ V_0": MODEL_COL["Heston"]}),
+                cmath(r"\sum_i \min\big(\max(r_i, f), c\big)", r"=", r"\sum_i \Big[f + (r_i - f)^+ - (r_i - c)^+\Big]",
+                      font_size=34, colors={r"\sum_i \min\big(\max(r_i, f), c\big)": OPT})]
+        whys = [why(r"the payoff is homogeneous of degree 0 in the price at $T_1$: at $T_1$ it is an ordinary option with "
+                    r"spot 1, worth the model's price given its state then", 20),
+                why(r"independent stationary increments: the state is irrelevant, so the forward smile is today's "
+                    r"$\tau$-smile (README problem 3)", 20),
+                why(r"tower property: average Heston's price over the law of $v_{T_1}$, chapter 5's scaled non-central "
+                    r"$\chi^2$; with COS inside, this is the white curve", 20),
+                why(r"a cliquet coupon is floored at $f$ and capped at $c$: each period is a forward-start call spread, so "
+                    r"a cliquet is priced off forward smiles, which no vanilla pins down", 20)]
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.6, edge=6.9)
+        pp = pause(r"In which models is a forward-start option worth exactly today's option?", width=4.6).to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "Here is why. A forward-start call pays the return from one date to a later one, above a strike. Its "
+            "payoff does not care about the price level at the first date, so at that date it is an ordinary option "
+            "on a spot of one, worth whatever the model says given its state then. <bookmark mark='a'/> In a Lévy "
+            "model the state is irrelevant: increments are independent and stationary, so the forward smile is "
+            "exactly today's smile for that maturity. <bookmark mark='b'/> In Heston the state is the variance. "
+            "Average Heston's price over the distribution of the variance at the first date, chapter five's "
+            "non-central chi-squared, and you have the white curve: one integral, with the Fourier price inside. "
+            "<bookmark mark='c'/> And a cliquet, a sum of capped and floored period returns, is a strip of these: "
+            "each coupon is a floor plus a forward-start call spread. <bookmark mark='d'/> Pause and predict: in "
+            "which models is a forward-start option worth exactly today's option? In every exponential Lévy model."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            self.play(FadeIn(pp))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def coupons(self, fs):
+        R = np.asarray(fs["monthly"])  # (4 months, 3 paths)
+        cap, flo = 0.10, 0.0
+        g = axes([0.3, 12.7], [-0.25, 0.3], x_length=10.0, y_length=4.0, ylabel=r"monthly return, three simulated paths",
+                 xticks=[], yticks=[-0.2, -0.1, 0, 0.1, 0.2], yfmt=lambda u: f"{100 * u:+.0f}\\%" if u else "0",
+                 font_size=15).to_edge(UP, buff=0.8)
+        ax = g.ax
+        capl = DashedLine(ax.c2p(0.3, cap), ax.c2p(12.7, cap), stroke_color=BAD, stroke_width=2)
+        flol = DashedLine(ax.c2p(0.3, flo), ax.c2p(12.7, flo), stroke_color=GREY_B, stroke_width=2)
+        lab = VGroup(label(r"cap 10\%", font_size=16, color=BAD).next_to(ax.c2p(12.7, cap), RIGHT, buff=0.08),
+                     label(r"floor 0", font_size=16, color=GREY_B).next_to(ax.c2p(12.7, flo), RIGHT, buff=0.08))
+        raw, clip, sums = VGroup(), VGroup(), VGroup()
+        for p in range(3):
+            for m in range(4):
+                x = 1 + p * 4.2 + m * 0.8
+                r = float(R[m, p])
+                c_ = min(max(r, flo), cap)
+                raw.add(Rectangle(width=0.5, height=max(abs(ax.c2p(0, np.clip(r, -0.25, 0.3))[1] - ax.c2p(0, 0)[1]), 1e-3),
+                                  stroke_color=GREY_B, stroke_width=1.5, fill_opacity=0).move_to(ax.c2p(x, np.clip(r, -0.25, 0.3) / 2)))
+                clip.add(Rectangle(width=0.5, height=max(abs(ax.c2p(0, c_)[1] - ax.c2p(0, 0)[1]), 1e-3), stroke_width=0,
+                                   fill_color=OPT, fill_opacity=0.85).move_to(ax.c2p(x, c_ / 2)))
+            tot = float(np.clip(R[:, p], flo, cap).sum())
+            sums.add(MathTex(rf"\text{{payoff}}\ {100 * tot:.1f}\%", font_size=26, color=OPT).next_to(ax.c2p(1 + p * 4.2 + 1.2, -0.25),
+                                                                                                    DOWN, buff=0.15))
+        foot = wrapped_label(r"each path: four monthly returns (grey outlines), each floored at 0 and capped at 10\% "
+                             r"(orange); the payoff is their sum: big months are cut, bad months are forgiven", 12.0, 19, GREY_A)
+        foot.to_edge(DOWN, buff=0.4)
+        src = illustration(r"three paths of the fitted Heston")
+        with self.voiceover(
+            "See the cliquet's mechanism on three simulated paths. Each grey outline is one month's return. "
+            "<bookmark mark='a'/> The contract floors each month at zero and caps it at ten percent: the orange "
+            "bars. Big months are cut off, bad months are forgiven, and the payoff is the sum. <bookmark mark='b'/> "
+            "So the cliquet's value depends on how volatile each future month will be, and on the skew of each "
+            "future month's distribution: the forward smiles. Today's vanillas fix only the distribution of the "
+            "total return to each date, not how it is shared out among the months."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(src), FadeIn(raw), Create(flol))
+            vo.wait_until("a")
+            self.play(Create(capl), FadeIn(lab), LaggedStart(*[TransformFromCopy(a, b) for a, b in zip(raw, clip)],
+                                                              lag_ratio=0.08), run_time=3)
+            vo.wait_until("b")
+            self.play(FadeIn(sums), FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
 
     def smiles(self, e):
         k = np.asarray(e["k"])
@@ -101,31 +246,5 @@ class Forward(VoiceoverScene):
             self.play(FadeIn(p2[:2]), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in p2[2]], lag_ratio=0.15), FadeIn(p2[3]))
             vo.wait_until("b")
             self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def puzzle(self):
-        h1 = history_card(2008, r"Gatheral, Bachelier Congress, London",
-                          r"The VIX is a 30-day variance swap on the S\&P 500, and options on the VIX trade too. A "
-                          r"model fitted to S\&P options must also price VIX options. Gatheral showed that a diffusion "
-                          r"with two variance factors could fit both markets only approximately.", color=QC.IDEA, width=5.8)
-        h2 = history_card(2020, r"Guyon, \textit{Risk}", r"``The joint S\&P 500/VIX smile calibration puzzle solved'': "
-                          r"an exact joint fit by a non-parametric discrete-time model built with optimal transport, the "
-                          r"same mathematics as Part 9's martingale bounds. Continuous-time models that fit both are "
-                          r"still a research front (Part 14).", color=QC.IDEA, width=5.8)
-        VGroup(h1, h2).arrange(RIGHT, buff=0.5, aligned_edge=UP).move_to(UP * 0.3)
-        foot = label(r"the puzzle is stated here for the S\&P 500 and the VIX; Part 14 returns to it",
-                     font_size=20, color=GREY_B).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "There is a harder test still. The VIX is a thirty-day variance swap on the S&P 500, and options on the "
-            "VIX trade as well. A model fitted to S&P options makes a prediction about VIX options, and for years no "
-            "standard model got both right. Jim Gatheral showed in 2008 that a diffusion with two variance factors "
-            "could fit both, but only approximately. <bookmark mark='a'/> In 2020 Julien Guyon fitted both exactly, "
-            "with a discrete-time model built by optimal transport, the mathematics of Part nine's bounds. Continuous "
-            "models that do it are a research front, and Part fourteen picks it up."
-        ) as vo:
-            self.play(FadeIn(h1, shift=UP * 0.2))
-            vo.wait_until("a")
-            self.play(FadeIn(h2, shift=UP * 0.2), FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()

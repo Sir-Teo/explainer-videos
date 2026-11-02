@@ -693,14 +693,16 @@ def compute_bump_h() -> dict:
 
 
 def compute_aad_scale() -> dict:
-    """Ch 11: adjoint against bumping as the inputs grow, on a basket Asian (2d inputs): wall-clock (best of five,
+    """Ch 11: adjoint against bumping as the inputs grow, on a basket Asian (2d inputs): wall-clock (best of nine,
     this machine) and the machine-independent counts (tape nodes and element operations)."""
-    part = CACHE.partial("aad_scale", {"ds": [1, 2, 4, 8, 16, 32, 64], "n": 4000, "steps": 12, "reps": 5})
+    part = CACHE.partial("aad_scale", {"ds": [1, 2, 4, 8, 16, 32, 64], "n": 4000, "steps": 12, "reps": 9,
+                                       "bump_reps": "9, or 2 at d >= 32"})
     for d in (1, 2, 4, 8, 16, 32, 64):
         if str(d) not in part:
-            part[str(d)] = E.aad_basket(d, 4000, 12, seed=0, reps=5)
+            part[str(d)] = E.aad_basket(d, 4000, 12, seed=0, reps=9, bump_reps=9 if d < 32 else 2)
     rows = [part[str(d)] for d in (1, 2, 4, 8, 16, 32, 64)]
-    return {"rows": rows, "machine": "one core of the build machine (shared, under load); best of five"}
+    return {"rows": rows, "machine": "one core of the build machine (shared, under load); best of nine (bumps at "
+                                     "32 and 64 assets: best of two)"}
 
 
 def compute_fd_live() -> dict:

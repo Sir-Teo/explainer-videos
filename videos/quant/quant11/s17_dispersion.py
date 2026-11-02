@@ -175,7 +175,7 @@ class Dispersion(VoiceoverScene, ThreeDScene):
 
         def ymd(x):
             s = str(int(x))
-            return f"{int(s[6:])} {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][int(s[4:6]) - 1]} {s[:4]}"
+            return s[:4] + "-" + s[4:6] + "-" + s[6:]
         side = VGroup(
             label(rf"mean {c3['mean']:.1f}", font_size=21, color=GREY_A),
             label(rf"peak {c3['max']:.1f} ({ymd(c3['argmax'])})", font_size=21, color=QC.LOSS),

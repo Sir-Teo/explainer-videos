@@ -5,7 +5,7 @@ from datetime import date
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant3.common import PART, VALUE, load, real_data
+from videos.quant.quant3.common import PART, VALUE, live, load, real_data
 
 ASOF_CODE = [
     "def history(self, entity, concept, t):",
@@ -98,7 +98,7 @@ class House(VoiceoverScene):
             tt = t.get_value()
             out = VGroup()
             line = Line(ax.c2p(2008.5, tt), ax.c2p(2021.2, tt), color=QC.HOUSE, stroke_width=3)
-            out.add(line, label(rf"as of {tt:.1f}", font_size=20, color=QC.HOUSE).next_to(line, RIGHT, buff=0.1))
+            out.add(line, live(r"\text{as of}", tt, 1, font_size=22, color=QC.HOUSE).next_to(line, RIGHT, buff=0.1))
             xs, ys = [], []
             for e in np.unique(X):
                 m = (X == e) & (Y <= tt)

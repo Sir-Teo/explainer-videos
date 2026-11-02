@@ -79,11 +79,10 @@ class Snowball(VoiceoverScene):
                 f"full coupon {100 * o['p_full']:.1f}%",
                 f"mean value {o['pv_mean']:.4f}   expected life {o['life']:.1f} months"]
         with self.voiceover(
-            "Here is the whole product in the House's code, eleven lines. A loop over the observation months: on "
-            "every path still alive, if the index is at or above the knock-out level, pay one plus the coupon for "
-            "the months held, and retire the path. <bookmark mark='a'/> Then the knock-in: did the path ever close "
-            "below the barrier? Paths alive and knocked in pay the index's loss; paths alive and never knocked in "
-            "pay the full coupon. <bookmark mark='b'/> Run it on forty thousand paths at the CSI 500's volatility "
+            "Here is the whole product in the House's code. A loop over the observation months: every path still "
+            "alive and at or above the knock-out level is paid its coupon and retired. <bookmark mark='a'/> Then "
+            "the knock-in: survivors that ever closed below the barrier pay the index's loss; the rest, the full "
+            "coupon. <bookmark mark='b'/> Run it on forty thousand paths at the CSI 500's volatility "
             f"and the fair coupon. {100 * o['p_ko']:.0f} percent knock out, {100 * o['p_lost']:.0f} percent end "
             f"knocked in, and only {100 * o['p_full']:.0f} percent run the full two years and collect every coupon."
         ) as vo:
@@ -144,8 +143,7 @@ class Snowball(VoiceoverScene):
         src = illustration(r"150 of 40{,}000 simulated paths at the fair coupon; gold stops at its knock-out", corner=DL)
         with self.voiceover(
             "Pause and predict: what fraction of these notes end before maturity? <bookmark mark='a'/> Watch a "
-            "hundred and fifty of the paths. Each runs until it knocks out, and stops there, in gold. Paths that "
-            "fall through the knock-in turn red and run to the end. White paths survive both. "
+            "hundred and fifty paths. Gold ones stop at their knock-out; red ones fell through the knock-in. "
             f"<bookmark mark='b'/> The answer: {100 * o['p_ko']:.0f} percent knock out, most of them early. "
             f"{100 * o['p_first']:.0f} percent at the very first look, in month three, and the average knock-out "
             f"comes in month {o['mean_ko_month']:.0f}. The expected life of a two-year note is {o['life']:.0f} "
@@ -187,13 +185,12 @@ class Snowball(VoiceoverScene):
                                     r"coupon is a linear solve (a solve, not a fit)", 5.2, 19, WHITE),
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "How was that fair coupon found? Not by trial and error. On every path, the note pays either a fixed "
-            "amount or a fixed amount plus the coupon times something that does not depend on the coupon. "
-            "<bookmark mark='a'/> So the note's value is a straight line in the coupon: A plus c times B. A is what "
-            "the note is worth with no coupon at all; B is the present value of one unit of coupon a year, which is "
-            "roughly the expected time the note stays alive and paying. <bookmark mark='b'/> One simulation gives "
-            f"both: A is {A:.3f}, B is {B:.3f}. The line crosses one at c star equals one minus A over B, "
-            f"{100 * c:.2f} percent. It is a solve, not a search, and it is exact on the simulated paths."
+            "How was the fair coupon found? Not by search. On every path, the payoff is a fixed amount plus the coupon "
+            "times something that does not depend on it. <bookmark mark='a'/> So the value is a straight line in the "
+            "coupon, A plus c B: A is the note with no coupon, B the present value of one unit of coupon a year, roughly "
+            "the note's expected life. <bookmark mark='b'/> "
+            f"One simulation gives both: A is {A:.3f}, B is {B:.3f}, and the line crosses one at one minus A over B, "
+            f"{100 * c:.2f} percent."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
@@ -235,17 +232,16 @@ class Snowball(VoiceoverScene):
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.3)
         q0, q4 = bq[0]["coupon"], bq[2]["coupon"]
         with self.voiceover(
-            "Two more levers set the coupon. The first is carry. Issuers hedge with index futures, and for years the "
-            "CSI 500 futures traded at a large discount to the index. A hedger who is long futures earns that "
-            "discount as the futures converge. <bookmark mark='a'/> In the pricing it acts like a dividend yield: "
+            "Two more levers set the coupon. The first is carry. Issuers hedge with index futures, and the CSI 500 "
+            "futures long traded at a discount to the index, which a long hedger earns as they converge. "
+            "<bookmark mark='a'/> In the pricing it acts like a dividend yield: "
             "the forward is lower, a knock-in likelier, the put dearer, and the fair coupon higher. With no carry, "
             f"{100 * q0:.1f} percent; with four percent, {100 * q4:.1f}; with eight, {100 * bq[-1]['coupon']:.1f}. "
             "<bookmark mark='b'/> The second is the knock-in level. Move it from 75 down to 70 percent of the start, "
             f"and the fair coupon falls from {100 * bk[2]['coupon']:.1f} to {100 * bk[1]['coupon']:.1f} percent; up to "
-            f"80, and it rises to {100 * bk[3]['coupon']:.1f}. <bookmark mark='c'/> The market noticed both. Risk.net "
-            "reported issuers blaming a narrowing futures discount for shrinking coupons, and Bloomberg reported "
-            "brokers offering coupons above forty percent after the 2024 selloff, with prices that had fallen "
-            "and volatility that had risen, before regulators told them to stop growing their exposure."
+            f"80, and it rises to {100 * bk[3]['coupon']:.1f}. <bookmark mark='c'/> Risk.net reported "
+            "issuers blaming a narrowing futures discount for shrinking coupons, and Bloomberg reported brokers "
+            "offering coupons above forty percent after the 2024 selloff."
         ) as vo:
             self.play(FadeIn(g1), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in b1], lag_ratio=0.2), FadeIn(rows[0]))
             vo.wait_until("a")

@@ -139,7 +139,7 @@ class Adams(VoiceoverScene, ThreeDScene):
             "frequencies at once. <bookmark mark='a'/> Pause and predict: double the number of steps. By how much "
             "does the error shrink? <bookmark mark='b'/> Run it against a solution with sixteen hundred steps. The "
             f"error falls by about three each time the steps double: an observed order of {a['order']:.1f}. And "
-            "with H set to one half, the scheme matches Heston's closed-form characteristic function " + match + "."
+            f"with H set to one half, the scheme matches Heston's closed-form characteristic function {match}."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

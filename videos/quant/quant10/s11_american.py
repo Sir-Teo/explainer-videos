@@ -3,20 +3,24 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant10.common import CASH, GAIN, OPT, PART, SPOT, THE, load
+from videos.quant.quant10.common import CASH, GAIN, OPT, PART, SPOT, THE, computed, load
 
 
-class American(VoiceoverScene):
+class American(VoiceoverScene, ThreeDScene):
     def construct(self):
         d = load("tree")
         self.card()
         self.calls()
         self.puts(d)
-        self.boundary(d)
+        a = load("american_more")
+        self.premium3d(a)
+        self.free_boundary(a)
+        self.approximations(a)
 
     def card(self):
-        c = chapter_card(10, r"Early exercise", r"When should you stop waiting?", lit=(1979,), part=PART)
-        with self.voiceover("Chapter ten. Early exercise."):
+        c = chapter_card(14, r"Early exercise and the free boundary", r"When should you stop waiting?", lit=(1979,),
+                         part=PART)
+        with self.voiceover("Chapter fourteen. Early exercise and the free boundary."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -44,7 +48,7 @@ class American(VoiceoverScene):
             "1973. <bookmark mark='a'/> A put is different. Exercising a deep in-the-money put hands you the strike "
             "now, and cash earns interest; waiting keeps the chance of an even lower price, but that chance is "
             "worth little when the put is already deep. At some price, stopping beats waiting. Which price is a "
-            "problem of optimal stopping, the subject of Part eight, and it has no closed form."
+            "problem of optimal stopping, Part eight's subject, and for a finite maturity it has no closed form."
         ) as vo:
             self.play(Write(rows[0]), run_time=2)
             self.play(FadeIn(rows[1]))
@@ -78,15 +82,13 @@ class American(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(leg, DOWN, buff=0.6).align_to(leg, LEFT)
         params = note(r"$K = 100$, $T = 1$, $\sigma = 20\%$, $r = 5\%$", font_size=20).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "The tree of chapter four solves it. At every node, the put is worth the larger of exercising now and "
-            "the discounted risk-neutral average of the two nodes after it: wait only if waiting is worth more. "
-            "Here is the result for a one-year put with a five percent interest rate. The European put, in blue, "
+            "The tree of chapter five solves it, with its one extra line: each node is worth the larger of "
+            "exercising now and waiting. A one-year put, five percent interest rate. The European put, in blue, "
             "dips below its payoff for deep prices: alive, it is worth less than exercised, because of the "
             "interest. <bookmark mark='a'/> The American put, in magenta, never does: it meets the payoff and runs "
             f"along it. At the money it is worth {d['american_put']:.4f} against the European "
             f"{d['european_put']:.4f}: an early-exercise premium of "
-            f"{d['american_put'] - d['european_put']:.2f}, the shaded gap. The tree's value matches the "
-            "textbook benchmark for this option to four digits."
+            f"{d['american_put'] - d['european_put']:.2f}, the shaded gap."
         ) as vo:
             self.play(FadeIn(g), Create(payoff), FadeIn(params), FadeIn(leg[2]))
             self.play(Create(eu_l), FadeIn(leg[1]))
@@ -97,53 +99,147 @@ class American(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def boundary(self, d):
-        t = np.asarray(d["boundary_t"], float)
-        b = np.asarray(d["boundary"], float)
-        ok = np.isfinite(b)
-        t, b = t[ok], b[ok]
-        # the tree's boundary moves in lattice steps; draw it through the points where it steps
-        ch = np.flatnonzero(np.diff(b)) + 1
-        t = np.concatenate([[t[0]], t[ch], [1.0]])
-        b = np.concatenate([[b[0]], b[ch], [100.0]])
-        g = axes([0, 1], [60, 102], x_length=7.0, y_length=4.6, xlabel=r"time (years)",
-                 ylabel=r"stock price", xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[60, 80, 100], font_size=20)
-        g.to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
-        ax = g.ax
-        line = curve(ax, t, b, OPT, stroke_width=4, smooth=True)
-        region = Polygon(*[ax.c2p(x, y) for x, y in zip(t, b)], ax.c2p(t[-1], 60), ax.c2p(t[0], 60), stroke_width=0,
-                         fill_color=OPT, fill_opacity=0.22)
-        k_line = DashedLine(ax.c2p(0, 100), ax.c2p(1, 100), color=QC.STRIKE, stroke_width=1.2)
-        lab_ex = label(r"exercise", font_size=30, color=OPT).move_to(ax.c2p(0.45, 68))
-        lab_wait = label(r"wait", font_size=30, color=GREY_A).move_to(ax.c2p(0.45, 94))
-        side = VGroup(
-            label(r"the free boundary $S^*(t)$", font_size=28, color=OPT),
-            label(rf"a year out: \${b[0]:.1f}; at expiry: \$100", font_size=24, color=GREY_A),
-            label(r"no formula; trees, PDEs (Part 16),", font_size=24, color=GREY_B),
-            label(r"regression Monte Carlo (Longstaff--Schwartz)", font_size=24, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).shift(UP * 1.0)
-        if side.width > 4.6:
-            side.scale_to_fit_width(4.6).to_edge(RIGHT, buff=0.4)
-        div = wrapped_label(r"Dividends change the call's answer: just before an ex-dividend date, exercising a deep "
-                            r"call to collect the dividend can beat waiting.", 4.4, 22, GREY_A)
-        div.next_to(side, DOWN, buff=0.5).align_to(side, LEFT)
+    def premium3d(self, a):
+        sp, ta, P = np.asarray(a["spots"], float), np.asarray(a["taus"], float), np.asarray(a["premium"], float)
+        bt, bs_ = np.asarray(a["b_times"], float), np.asarray(a["b_smooth"], float)
+        zmax = 6.0
+        ax = ThreeDAxes(x_range=[60, 140, 20], y_range=[0, 1, 0.25], z_range=[0, zmax, 2], x_length=7.6, y_length=5.4,
+                        z_length=3.2, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+        ax.shift(DOWN * 0.5)
+
+        def f(s_, t_):
+            col = np.array([np.interp(t_, ta, P[:, j]) for j in range(len(sp))])
+            return float(min(max(np.interp(s_, sp, col), 0.0), zmax))
+
+        surf = Surface(lambda u, v: ax.c2p(u, v, f(u, v)), u_range=[60, 140], v_range=[ta[0], 1.0],
+                       resolution=(32, 20))
+        surf.set_fill_by_value(axes=ax, colorscale=[(QC.Q, 0), (OPT, 1.5), (WHITE, zmax)], axis=2)
+        surf.set_style(fill_opacity=0.65, stroke_width=0.3, stroke_color=GREY_D)
+        ok = np.isfinite(bs_) & (bt > 0.002)
+        tau_b = 1.0 - bt[ok]
+        Sb = bs_[ok]
+        sel = np.linspace(0, len(Sb) - 1, 80).astype(int)
+        gold = VMobject(stroke_color=YELLOW, stroke_width=6).set_points_smoothly(
+            [ax.c2p(Sb[i], tau_b[i], f(Sb[i], tau_b[i]) + 0.05) for i in sel if tau_b[i] >= ta[0]])
+        hint = VGroup(label(r"stock price $S$", font_size=24, color=SPOT), label(r"time left $\tau$", font_size=24,
+                                                                               color=THE),
+                      label(r"early-exercise premium $P_A - P_E$", font_size=24, color=OPT)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
+        foot = note(r"600-step trees at every point; gold: the free boundary $S^*(\tau)$", font_size=20)
+        foot.to_corner(DR, buff=0.3)
+        self.set_camera_orientation(phi=66 * DEGREES, theta=-60 * DEGREES, zoom=0.85)
+        for m in (hint, foot):
+            self.add_fixed_in_frame_mobjects(m)
+            self.remove(m)
         with self.voiceover(
-            "The tree also draws where exercise begins. For each time, the highest stock price at which "
-            "exercising is optimal: the early-exercise boundary. Below it, exercise; above it, wait. A year out, the "
-            f"put should be exercised only if the stock has fallen to about {b[0]:.0f}; as expiry approaches, the "
-            "boundary rises towards the strike, because there is less time for waiting to pay. "
-            "<bookmark mark='a'/> The boundary is part of the solution, not an input to it: the equation holds in "
-            "the wait region, the payoff holds in the exercise region, and the price and its slope must join "
-            "smoothly across the line. Problems like this are called free-boundary problems; they have no closed "
-            "form, and desks solve them with trees, with the finite-difference methods of Part sixteen, or with "
-            "regression Monte Carlo. And dividends bring calls back into the game: just before a stock goes ex "
-            "dividend, exercising a deep call to collect the dividend can beat waiting."
+            "Here is the whole early-exercise premium, the American put minus the European, over the stock price "
+            "and the time left, from a tree at every point. Far above the strike it is zero: no one exercises a "
+            "put that is out of the money. <bookmark mark='a'/> It grows as the stock falls, and below a certain "
+            "price it becomes exactly the gap between exercising now and the European value. The gold curve, where "
+            "the shape changes, is the free boundary: the stock price at which exercise becomes optimal, for each "
+            "time left. It rises to the strike as expiry approaches, and falls away from it the longer there is to "
+            "wait."
         ) as vo:
-            self.play(FadeIn(g), Create(k_line))
-            self.play(Create(line), run_time=2)
-            self.play(FadeIn(region), FadeIn(lab_ex), FadeIn(lab_wait), FadeIn(side[:2]))
+            self.play(FadeIn(hint), Create(ax), FadeIn(foot), run_time=1.5)
+            self.play(FadeIn(surf), run_time=2)
             vo.wait_until("a")
-            self.play(FadeIn(side[2:]))
+            self.play(Create(gold), run_time=2)
+            self.move_camera(theta=-25 * DEGREES, phi=60 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.5))
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*self.mobjects))], run_time=1.2)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def free_boundary(self, a):
+        C = {r"P": OPT, r"S^*": GAIN, r"K": QC.STRIKE, r"r": CASH}
+        rows = [
+            cmath(r"P(t, S)", r"=", r"\sup_{\tau}\,\mathbb E^{\mathbb Q}\big[e^{-r(\tau - t)}(K - S_\tau)^+\big]",
+                  font_size=32, colors=C),
+            cmath(r"P_t + rSP_S + \tfrac12\sigma^2S^2P_{SS} - rP = 0\ \ (S > S^*),", r"\quad",
+                  r"P = K - S\ \ (S \le S^*)", font_size=30, colors=C),
+            cmath(r"P(t, S^*) = K - S^*,", r"\quad", r"P_S(t, S^*) = -1", font_size=32, colors=C),
+            cmath(r"(\partial_t + \mathcal L - r)(K - S)", r"=", r"-rK", font_size=32, colors=C),
+            cmath(r"P_A", r"=", r"P_E + \int_0^T rK e^{-rs}\,N\big(-d_2(S_0, S^*(s), s)\big)\,ds", font_size=32,
+                  colors=C),
+        ]
+        whys = [why(r"optimal stopping (Part 8)"),
+                why(r"wait: the equation holds; stop: the payoff holds"),
+                why(r"value matching and smooth pasting (Part 8's smooth fit)"),
+                why(r"in the stopping region the put loses the interest on the strike"),
+                why(r"It\^o on $e^{-rt}P$: Kim (1990); Jacka (1991); Carr, Jarrow, Myneni (1992)")]
+        step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.6, buff=0.6, edge=6.9)
+        gap = a["kim"] - a["tree"]
+        with self.voiceover(
+            "In symbols: the American put is an optimal stopping problem. <bookmark mark='a'/> Above the boundary "
+            "the Black-Scholes equation holds; below it the value is the payoff. <bookmark mark='b'/> Across the "
+            "line the value and its slope must join, value matching and smooth pasting, Part eight's smooth fit. "
+            "<bookmark mark='c'/> Now a beautiful step. In the stopping region, plug the payoff into the equation: "
+            "what comes out is minus r K, the interest on the strike you could be earning. <bookmark mark='d'/> "
+            "Apply Ito to the discounted put and take expectations, and the early-exercise premium is that "
+            "interest, collected over every moment the put would sit exercised, weighted by the risk-neutral "
+            "chance of being below the boundary then. In-Joon Kim found it in 1990; Peter Carr, Robert Jarrow and "
+            "Ravi Myneni gave it its meaning in 1992. Plug in the boundary the tree drew, located between its nodes, "
+            f"and the integral gives {a['kim']:.4f} against the tree's {a['tree']:.4f}: "
+            + ("agreement to the third decimal." if abs(gap) < 0.01 else f"a gap of {abs(gap):.3f}, the boundary's "
+               "remaining error.")
+            + " Pause and predict: rates go to zero; where does the boundary go? To zero: no interest, no premium."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
+            self.play(FadeIn(computed()))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def approximations(self, a):
+        sp, bc = np.asarray(a["spots"], float), np.asarray(a["baw_curve"], float)
+        cards = VGroup(
+            history_card(1977, r"Brennan and Schwartz", r"the first finite-difference solution of the American put "
+                         r"(Part 16 solves it as a complementarity problem)", width=4.2, font_size=22),
+            history_card(1987, r"Barone-Adesi and Whaley", r"drop the early-exercise term's time derivative: a "
+                         r"quadratic, solved at the critical price", width=4.2, font_size=22),
+        ).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(LEFT, buff=0.4).shift(UP * 0.5)
+        nums = VGroup(
+            label(r"one-year at-the-money put, $r = 5\%$, $\sigma = 20\%$:", font_size=24, color=GREY_A),
+            MathTex(rf"\text{{tree}}\ {a['tree']:.4f}", font_size=30, color=OPT),
+            MathTex(rf"\text{{Kim's integral}}\ {a['kim']:.4f}", font_size=30, color=OPT),
+            MathTex(rf"\text{{Barone-Adesi--Whaley}}\ {a['baw']:.4f}", font_size=30, color=GAIN),
+            MathTex(rf"\text{{critical price: BAW}}\ {a['baw_critical']:.1f},\ \text{{tree}}\ {a['smooth_critical']:.1f}",
+                    font_size=28, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.4).shift(UP * 1.0)
+        dv = a["div"]
+        div = wrapped_label(
+            rf"An American call, strike {dv['K']:.0f}, with one dividend of {dv['D']:.0f} at {12 * dv['tD']:.1f} months: "
+            rf"worth {dv['american']:.3f} against {dv['european']:.3f} European, and every exercise node in the tree "
+            rf"sits in the last step before the dividend.", 6.0, 22, GREY_A)
+        div.next_to(nums, DOWN, buff=0.4).align_to(nums, LEFT)
+        before = (dv["last_t"] < dv["tD"]) and (dv["tD"] - dv["first_t"] < 0.01)
+        with self.voiceover(
+            "Before fast computers, desks needed something quicker than a tree. Michael Brennan and Eduardo "
+            "Schwartz solved the American put by finite differences in 1977, the method of Part sixteen. "
+            "<bookmark mark='a'/> Giovanni Barone-Adesi and Robert Whaley, in 1987, guessed that the "
+            "early-exercise premium changes slowly in time, dropped its time derivative, and got an equation they "
+            "could solve in closed form, fitted at the critical price. On our put it gives "
+            f"{a['baw']:.4f}, against the tree's {a['tree']:.4f}, with a critical price of "
+            f"{a['baw_critical']:.1f} against the tree's {a['smooth_critical']:.1f}. <bookmark mark='b'/> And "
+            "dividends bring calls back. " + (
+                "On a call with one cash dividend, the tree exercises only in the instant before the stock goes "
+                "ex-dividend, to collect it; never at any other time."
+                if before else "On a call with one cash dividend, the tree's exercise nodes cluster before the "
+                "dividend date.")
+            + " The trade around that instant is Part eleven's."
+        ) as vo:
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(cards[1], shift=UP * 0.2), FadeIn(nums, shift=LEFT * 0.2))
+            vo.wait_until("b")
             self.play(FadeIn(div))
         self.wait(0.4)
         self.clear_scene()
