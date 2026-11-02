@@ -75,7 +75,7 @@ def compute_shiller() -> dict:
     return {"t": ty, "price": Py, "pstar": pstar, "div": Dy, "r": r, "sd_price": sd_p, "sd_pstar": sd_ps,
             "ratio": sd_p / sd_ps, "n_years": int(len(ty)), "sd_dprice": float(np.std(dP)), "sd_dpstar": float(np.std(dS)),
             "ratio_changes": float(np.std(dP) / np.std(dS)), "big_moves": int(np.sum(np.abs(dP) > 0.2)),
-            "big_moves_pstar": int(np.sum(np.abs(dS) > 0.2))}
+            "big_moves_pstar": int(np.sum(np.abs(dS) > 0.2)), "dy": Dy / Py, "earn_yield": None}
 
 
 # ---------------------------------------------------------------------------
