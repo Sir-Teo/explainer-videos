@@ -146,11 +146,11 @@ class Prime(VoiceoverScene):
                        label(r"wait", font_size=18).next_to(cells[2], LEFT, buff=0.1))
         nash = SurroundingRectangle(cells[0], color=LOSS, buff=0.02, stroke_width=4)
         best = SurroundingRectangle(cells[3], color=GAIN, buff=0.02, stroke_width=3)
-        cap = VGroup(label(r"losses of A, B in units of $\lambda q^2$; the standstill is an orderly sale with a "
-                           r"quarter less impact (assumed)", font_size=17, color=GREY_A),
-                     label(r"red: what each bank's best response gives; green: what they could have had",
-                           font_size=17, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        cap.next_to(cells, DOWN, buff=0.3).align_to(cells, LEFT).shift(LEFT * 1.0)
+        cap = VGroup(wrapped_label(r"losses of A, B in units of $\lambda q^2$; the standstill is an orderly sale with a "
+                                   r"quarter less impact (assumed)", 5.4, 17, GREY_A),
+                     wrapped_label(r"red: what each bank's best response gives; green: what they could have had", 5.4,
+                                   17, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        cap.next_to(cells, DOWN, buff=0.3).to_edge(RIGHT, buff=0.4)
         src = note(r"simulated: 2 to 8 banks, random block sizes and random order, square-root impact, 8 seeds",
                    font_size=16).to_edge(DOWN, buff=0.12)
         with self.voiceover(
