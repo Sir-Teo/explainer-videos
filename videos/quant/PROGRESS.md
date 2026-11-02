@@ -62,6 +62,12 @@ the loss curve), `seed_band`.
 
 Builds are paused: narrated builds resume only after a part is expanded (the narration cache keeps finished lines).
 
+Expansion status (2 Nov 2026, night): research plans for Parts 3–9 are in `videos/quant/plans/quantN.md`
+(copied from the scratchpad so a restart cannot lose them); the shared implementation brief is
+`videos/quant/plans/IMPLEMENT.md`. Parts 3, 4, 5, 6 and 7 are being implemented in parallel; Parts 8 and 9 next,
+then Part 2 (plan in progress), then plans for Parts 1 and 10–17. Section 1 of SYLLABUS.md now sets chapters at
+about 3 minutes (16–20 per part), as in the AI series. Part 17 cites SR 26-2 (17 April 2026), which replaced SR 11-7.
+
 ## Builds queued (CPU voice, 720p)
 
 Built: Parts 10, 1, 2 (English and Chinese; Part 2's Chinese is rebuilt after a missing string was added). One serial
