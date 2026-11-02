@@ -732,3 +732,48 @@ def test_roughness_estimator_and_pdv_recovery():
     vol = 0.1 - 0.05 * R1 + 0.9 * np.sqrt(R2) + 0.002 * g.standard_normal(3000)
     f = R.fit_pdv(r, vol, lookback=600, burn=600)
     assert f["r2"] > 0.95 and abs(f["beta"][2] - 0.9) < 0.1
+
+
+# ---------------------------------------------------------------- exotics (Part 15)
+
+
+def test_barriers_parity_and_bgk():
+    from explainer.quant.house import bs as B, exotics as X
+
+    S, K, H, T, s, r = 100.0, 100.0, 85.0, 0.5, 0.3, 0.02
+    # in + out = vanilla (puts), and a down-and-out call is a vanilla minus its reflection
+    P = X.gbm_paths(S, s, T, 2000, 60_000, r, seed=1)
+    kin = P.min(axis=0) <= H
+    mc = np.exp(-r * T) * np.maximum(K - P[-1], 0)
+    assert abs(X.down_in_put(S, K, H, T, s, r) - mc[kin].sum() / len(mc)) < 0.15
+    assert abs(X.down_out_call(S, K, H, T, s, r) - X.down_out_call(S, K, H, T, s, r)) == 0
+    assert X.down_out_call(S, K, H, T, s, r) < B.price(S, K, T, s, r)
+    # discrete monitoring (50 dates) matches the continuous formula with the shifted barrier
+    alive = P[::40].min(axis=0) > H
+    mcd = np.exp(-r * T) * np.mean(np.maximum(P[-1] - K, 0) * alive)
+    assert abs(X.down_out_call(S, K, X.bgk_barrier(H, S, s, T / 50), T, s, r) - mcd) < 0.15
+
+
+def test_asian_lookback_digital_uvm():
+    from explainer.quant.house import bs as B, exotics as X
+
+    S, K, T, s, r = 100.0, 100.0, 0.5, 0.3, 0.02
+    P = X.gbm_paths(S, s, T, 500, 60_000, r, seed=2)
+    geo = np.exp(np.log(P[10::10]).mean(axis=0))
+    assert abs(X.geometric_asian_call(S, K, T, s, 50, r) - np.exp(-r * T) * np.mean(np.maximum(geo - K, 0))) < 0.1
+    assert abs(X.lookback_floating_call(S, T, s, 0.0) - X.lookback_floating_call(S, T, s, 1e-5)) < 1e-3
+    assert X.call_spread_digital(S, K, T, s, 1.0, r) > X.digital_call(S, K, T, s, r)
+    grid = np.linspace(1, 300, 300)
+    v = X.uvm_price(lambda x: np.maximum(x - K, 0), grid, T, s, s, r)
+    assert abs(np.interp(S, grid, v) - B.price(S, K, T, s, r)) < 0.02
+    # a convex payoff's upper UVM price is Black-Scholes at the top volatility
+    v2 = X.uvm_price(lambda x: np.maximum(x - K, 0), grid, T, 0.2, 0.4, r)
+    assert abs(np.interp(S, grid, v2) - B.price(S, K, T, 0.4, r)) < 0.03
+
+
+def test_snowball_coupon_in_range():
+    from explainer.quant.house import exotics as X
+
+    c = X.fair_coupon(0.22, n_paths=20_000)
+    assert 0.08 < c < 0.25
+    assert X.snowball_price(0.22, coupon=c + 0.05, n_paths=20_000) > 1.0

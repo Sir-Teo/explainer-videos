@@ -8283,5 +8283,20 @@
   "sha256": "d0580a40f10087aabdcc591481b0e1a31d2240bb2df987459e47ad2e08185b74",
   "bytes": 98719,
   "source": "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
+ },
+ "yahoo/510500.SS/2015-01-01_2025-11-30": {
+  "sha256": "130e6f603e5a0d1d4cf9f24575aaf7dd0a31b35dc7367c203732b1a7ef49d6ef",
+  "bytes": 51902,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/510500.SS"
+ },
+ "yahoo/512100.SS/2015-01-01_2025-11-30": {
+  "sha256": "1059e463070a9e2278f89b555b9b57a452f6666e763993d58ef10fcdb83a3dcc",
+  "bytes": 43116,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/512100.SS"
+ },
+ "yahoo/^HSCE/2015-01-01_2025-11-30": {
+  "sha256": "5d901e87f853ed29ff3abd340bb222ad8d4ff6e55f4f385b0050b3b71dd903c3",
+  "bytes": 62184,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/^HSCE"
  }
 }

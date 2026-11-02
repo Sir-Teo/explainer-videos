@@ -19,7 +19,9 @@ Sources (all free; see videos/quant/SYLLABUS.md, "Data"):
 * :func:`binance_funding`: the funding rate of a Binance USD-margined perpetual future, every eight hours;
 * :func:`fred`: a daily or weekly series from FRED (St. Louis Fed), frozen through a date;
 * :func:`shiller`: Robert Shiller's monthly US stock market data since 1871 (price, dividends, earnings, CPI, CAPE);
-* :func:`ken_french_sorts`: his monthly portfolios sorted on a characteristic (accruals, profitability, ...).
+* :func:`ken_french_sorts`: his monthly portfolios sorted on a characteristic (accruals, profitability, ...);
+* :func:`yahoo_daily`: daily closes of an index from Yahoo Finance's chart API (CSI 500, HSCEI, ...), frozen through a
+  date and checksummed like the rest.
 
     python -m explainer.quant.data            # fetch everything the series uses so far (resumes)
 """
@@ -346,6 +348,46 @@ def fred(series: str, start: str = "2015-01-01", through: str = "2025-12-31") ->
     frozen = json.dumps(a.round(6).tolist(), separators=(",", ":")).encode()
     _check(f"fred/{series}/{start}_{through}", frozen, f"{FRED}?id={series}")
     return {"date": a[:, 0].astype(int), "value": a[:, 1]}
+
+
+YAHOO = "https://query1.finance.yahoo.com/v8/finance/chart/"
+
+
+def yahoo_daily(symbol: str, start: str = "2015-01-01", through: str = "2025-11-30") -> dict:
+    """Daily closes of ``symbol`` (an index such as 000905.SS for the CSI 500 or ^HSCE for the HSCEI) from Yahoo
+    Finance's chart API: ``date`` (YYYYMMDD ints, exchange-local) and ``close``. The window is frozen through
+    ``through`` and the extracted closes are checksummed, so a revision upstream stops the render."""
+    p0 = int(datetime.fromisoformat(start).replace(tzinfo=timezone.utc).timestamp())
+    p1 = int((datetime.fromisoformat(through) + timedelta(days=1)).replace(tzinfo=timezone.utc).timestamp())
+    safe = symbol.replace("^", "_").replace(".", "_")
+    path = DATA / "yahoo" / f"{safe}_{start}_{through}.json"
+
+    def fetch():
+        q = urllib.parse.urlencode({"period1": p0, "period2": p1, "interval": "1d"})
+        req = urllib.request.Request(f"{YAHOO}{urllib.parse.quote(symbol)}?{q}",
+                                     headers={"User-Agent": "Mozilla/5.0 (education)"})
+        err = None
+        for k in range(5):
+            try:
+                with urllib.request.urlopen(req, timeout=60) as r:
+                    return r.read()
+            except Exception as e:
+                err = e
+                time.sleep(min(2 ** k, 30))
+        raise RuntimeError(f"failed to fetch {symbol} from Yahoo: {err}")
+
+    if not path.exists():
+        _atomic_write(path, fetch())
+    d = json.loads(path.read_text())["chart"]["result"][0]
+    off = d["meta"].get("gmtoffset", 0)
+    ts = np.asarray(d["timestamp"], float) + off
+    close = np.asarray([np.nan if c is None else c for c in d["indicators"]["quote"][0]["close"]], float)
+    ymd = np.array([int(datetime.fromtimestamp(t, timezone.utc).strftime("%Y%m%d")) for t in ts])
+    ok = np.isfinite(close)
+    ymd, close = ymd[ok], close[ok]
+    frozen = json.dumps(np.column_stack([ymd, close.round(4)]).tolist(), separators=(",", ":")).encode()
+    _check(f"yahoo/{symbol}/{start}_{through}", frozen, f"{YAHOO}{symbol}")
+    return {"date": ymd, "close": close}
 
 
 SHILLER = "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
