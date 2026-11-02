@@ -161,7 +161,8 @@ class PPO(VoiceoverScene):
         Pm = np.asarray(d["snap_p"])
         T, L = np.asarray(d["snap_traj"]), np.asarray(d["snap_len"])
         run0 = np.asarray(d["run0"])
-        g = axes([0, 100_000], [0, 520], x_length=5.0, y_length=2.4, xlabel=r"steps of experience",
+        xmax = max(100_000, int(steps[-1]), int(run0[-1, 0]))  # complete batches can exceed the nominal budget
+        g = axes([0, xmax], [0, 520], x_length=5.0, y_length=2.4, xlabel=r"steps of experience",
                  ylabel=r"length of each episode \ (this run)", xticks=[0, 50_000, 100_000], yticks=[0, 500],
                  xfmt=lambda v: f"{int(v / 1000)}" + (r"\text{k}" if v else ""), center=[-3.3, -2.15, 0])
         pts = VGroup(*[Dot(g.ax.c2p(t, r), radius=0.025, color=PPO_C) for t, r in run0])
@@ -188,14 +189,17 @@ class PPO(VoiceoverScene):
             rf"after ${int(steps[int(snap.get_value())]):,}$ steps: \ balanced "
             rf"${min(int(state.get_value()), int(L[int(snap.get_value())]) - 1)}$ of $500$".replace(",", "{,}"),
             font_size=24, color=GREY_A).move_to([-3.3, 3.25, 0]))
-        tag = note(r"computed: \ PPO, \ $\epsilon = 0.2$, \ $4$ epochs per batch").to_corner(DR, buff=0.2)
+        tag = note(r"computed: \ PPO seed $0$; \ $\epsilon = 0.2$; \ $4$ epochs per batch")
+        if tag.width > 7.0:
+            tag.scale_to_fit_width(7.0)
+        tag.to_corner(DR, buff=0.2)
         img = imgs[0]
         with self.voiceover(
-            "Here is PPO learning the cart-pole, replayed. On the right, the policy itself: the probability of "
-            "pushing left or right in each state. It starts as a coin flip everywhere, a uniform grey. "
-            "<bookmark mark='a'/> Batch by batch, the two colours pull apart along the same tilted line DQN found, "
-            "and the episodes get longer. Unlike DQN's, this policy stays soft near the boundary, where it isn't "
-            "sure, until training sharpens it."
+            "Here is PPO learning the cart-pole, replayed from seed zero. The map starts with the random network's "
+            "action probabilities, near one half with small differences. <bookmark mark='a'/> At each saved checkpoint, "
+            "freeze the policy and sample one episode. Its length can rise or fall; more training does not guarantee "
+            "a longer trial. The boundary between preferred pushes changes, and actions can stay mixed near it. "
+            "These are action probabilities, not uncertainty bounds."
         ) as vo:
             self.add(cp)
             self.play(FadeIn(info), FadeIn(img), FadeIn(frame), FadeIn(mkey), FadeIn(ml), FadeIn(g), FadeIn(tag))
@@ -204,13 +208,15 @@ class PPO(VoiceoverScene):
             self.add(marker)
             for i in range(1, len(steps)):
                 state.set_value(0)
-                self.play(FadeIn(imgs[i]), FadeOut(img), snap.animate.set_value(i),
+                snap.set_value(i)
+                self.play(FadeIn(imgs[i]), FadeOut(img),
                           marker.animate.put_start_and_end_on(g.ax.c2p(steps[i], 0), g.ax.c2p(steps[i], 520)),
                           FadeIn(VGroup(*[p for p, (t, _) in zip(pts, run0) if steps[i - 1] < t <= steps[i]])),
                           run_time=0.8)
                 img = imgs[i]
                 n = int(L[i])
                 self.play(state.animate.set_value(n - 1), run_time=min(0.4 + n / 160, 3.6), rate_func=linear)
+                self.wait(0.4)  # keep the completed trial count and failure colour visible before resetting
         cp.clear_updaters()
         info.clear_updaters()
         self.wait(0.3)
@@ -231,17 +237,11 @@ class PPO(VoiceoverScene):
         lg = legend([(c, t) for _, c, t in items], font_size=20).next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
         auc = {k: float(np.nanmean(np.asarray(d[k]))) for k, _, _ in items}
         rest = max(auc[k] for k in ("reinforce", "baseline", "ac"))
-        if auc["ppo"] > 1.03 * rest:
-            said = (f"Against the policy-gradient methods of the last chapter, PPO, in bold blue, gets the most out of "
-                    f"the same experience: its episodes average {auc['ppo']:.0f} steps over training, against "
-                    f"{rest:.0f} for the best of the others, because it takes several careful steps on each batch "
-                    "instead of one.")
-        else:
-            said = (f"Against the policy-gradient methods of the last chapter, PPO, in bold blue, averages "
-                    f"{auc['ppo']:.0f} steps over training, against {rest:.0f} for the best of the others: on a task "
-                    "this small there is little to separate them. PPO's advantage is reliability at scale. It can "
-                    "reuse each batch with clipping to discourage large policy changes, while still requiring careful step sizes, which "
-                    "is why it became the default.")
+        said = (f"Against the policy-gradient methods of the last chapter, PPO, in bold blue, has a mean windowed "
+                f"episode length of {auc['ppo']:.0f} steps, compared with {rest:.0f} for the best of the others. "
+                "These numbers equally average the fixed training-step grid. This compares four complete training "
+                "setups across eight runs each: PPO also uses a different learning rate and more updates, so the "
+                "difference does not isolate clipping's effect.")
         with self.voiceover(said) as vo:
             self.play(FadeIn(g), LaggedStart(*[Create(l_) for l_ in lines[:3]], lag_ratio=0.2), FadeIn(lg[:3]))
             self.play(Create(lines[3]), FadeIn(lg[3]), run_time=1.5)
