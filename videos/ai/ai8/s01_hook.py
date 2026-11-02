@@ -20,7 +20,9 @@ class Hook(VoiceoverScene):
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.4, -0.4, 0])
         yl = VGroup(*[MathTex(rf"{int(100 * v)}\%", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
                       for v in (0.0, 0.1, 0.2, 0.3, 0.4)])
-        xl = label(r"$k$: \ how many neighbours vote \ (Part 6)", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.25)
+        xt = VGroup(*[MathTex(str(v), font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.12)
+                      for v in (1, 25, 50, 100, 150)])
+        xl = label(r"$k$: \ how many neighbours vote \ (Part 6)", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.6)
         yn = label(r"wrong answers", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         c_tr, c_te = curve(ax, ks, tr, TRAIN), curve(ax, ks, te, TEST)
         key = VGroup(label(r"on the pages it learned from", font_size=26, color=TRAIN),
@@ -38,7 +40,7 @@ class Hook(VoiceoverScene):
             "<bookmark mark='b'/> That gap is the central question of machine learning. A model is fitted to "
             "examples. Why should it work on anything else?"
         ) as vo:
-            self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn))
+            self.play(Create(ax), FadeIn(yl), FadeIn(xt), FadeIn(xl), FadeIn(yn))
             self.play(Create(c_tr), Create(c_te), FadeIn(key), run_time=2.0)
             self.play(GrowFromCenter(gap), FadeIn(gl))
             vo.wait_until("a")
@@ -110,7 +112,7 @@ class Hook(VoiceoverScene):
     def plan(self):
         title = label(rf"Part {PART}: \ Fitting and Generalizing", font_size=50).to_edge(UP, buff=0.45)
         sub = label(r"why models work on data they have never seen", font_size=30, color=TEST).next_to(title, DOWN, buff=0.2)
-        smap = series_map(current=PART, done=PART - 1).scale(0.78).move_to(DOWN * 0.7)
+        smap = series_map(current=PART, done=PART - 1).scale(0.88).move_to(DOWN * 0.7)
         obj = objectives_card([
             r"risk: \ empirical, \ true, \ and the best possible; \ bias and variance, \ derived",
             r"one rule and many: \ Hoeffding, \ the union bound, \ PAC learning",

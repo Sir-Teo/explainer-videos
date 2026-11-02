@@ -82,10 +82,14 @@ class Stability(VoiceoverScene):
         hist = history_card(2002, r"O.~Bousquet \& A.~Elisseeff", r"\textit{Stability and Generalization}: \ "
                             r"regularized learners are stable, \ $\beta \propto 1/(\lambda n)$", width=6.2,
                             font_size=18, color=HIST).next_to(dfn, DOWN, buff=0.25).align_to(dfn, LEFT)
+        empirical = wrapped_label(
+            r"Empirical illustration: for each of $60$ sampled swaps, take the largest prediction change over "
+            r"the observed pages, then average. This does not measure uniform loss stability.",
+            max_width=6.0, font_size=19, color=GREY_A).to_corner(DL, buff=0.3)
         lo = math.floor(math.log10(min(st.min(), stn.min())) * 2) / 2
         hi = math.ceil(math.log10(max(st.max(), stn.max())) * 2) / 2
         G = log_axes((-3, 2), (lo, hi), x_length=5.2, y_length=3.0, xticks=[-3, -2, -1, 0, 1, 2], yticks=[lo, hi],
-                     xlabel=r"ridge strength $\lambda$", ylabel=r"largest change in a prediction", center=(3.5, 1.3, 0),
+                     xlabel=r"ridge strength $\lambda$", ylabel=r"mean prediction sensitivity", center=(3.5, 1.3, 0),
                      font_size=18)
         ax = G.ax
         cs = VGroup(curve(ax, np.log10(lams), np.log10(st), MEAS, 3.5),
@@ -119,7 +123,7 @@ class Stability(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(hist, shift=UP * 0.2))
             vo.wait_until("c")
-            self.play(Create(cs), run_time=1.6)
+            self.play(Create(cs), FadeIn(empirical), run_time=1.6)
             vo.wait_until("d")
             self.play(FadeIn(H), Create(ref), FadeIn(rl), Create(cn), run_time=1.6)
         self.wait(0.3)

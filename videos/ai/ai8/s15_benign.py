@@ -120,27 +120,28 @@ class Benign(VoiceoverScene):
             cmath(r"\text{bias}", r"\approx", r"\text{ridge with } \lambda_{\text{eff}} = \tfrac1n \textstyle\sum_{i > k} "
                   r"\lambda_i", font_size=34),
         ]
-        whys = [why(r"$k$ strong directions, \ the rest a tail"),
+        whys = [why(r"spectral intuition: \ $k$ strong directions, \ normalized spiked example"),
                 why(r"the tail's effective rank: \ how many directions share its variance"),
                 why(r"the tail soaks up the noise, \ and acts as a ridge on the rest")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-2.4, buff=0.55, edge=6.9)
         cond = VGroup(
-            label(r"benign when: \ $k \ll n$, \ $R_k \gg n$, \ and the tail's total variance $\ll n$", font_size=26,
+            wrapped_label(r"spiked intuition: \ $k \ll n$, \ $R_k \gg n$, \ tail variance $\ll n$, \ small signal bias", max_width=7.0, font_size=22,
                   color=SPIKE),
             label(rf"here: \ $k/n = {b['s'] / b['n']:.2f}$, \ $n/R_k = {b['n'] / b['Ds'][-1]:.4f}$, \ "
-                  rf"$\lambda_{{\mathrm{{eff}}}} = {b['tail'] / b['n']:.2f}$", font_size=24, color=GREY_A),
-        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=1.75)
+                  rf"$\lambda_{{\mathrm{{eff}}}} = {b['tail'] / b['n']:.2f}$", font_size=22, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(DL, buff=0.35)
         hist = history_card(2020, r"P.~Bartlett, P.~Long, G.~Lugosi \& A.~Tsigler", r"\textit{Benign Overfitting in "
-                            r"Linear Regression}", width=6.6, font_size=17, color=HIST).to_edge(DOWN, buff=0.2)
+                            r"Linear Regression}", width=4.6, font_size=16, color=HIST).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Their theorem splits the excess error into a bias, and a variance that's the noise times two terms. "
+            "For our normalized spiked example, here is the spectral intuition: excess error has a signal-bias part, "
+            "and a noise-variance part with two scales. "
             "<bookmark mark='a'/> The first counts the strong directions against the examples. "
             "<bookmark mark='b'/> The second compares n with the effective rank of the tail: how many directions "
             "share the weak variance. Many small directions can each absorb a little of the noise without moving "
             "predictions much: those are the spikes. <bookmark mark='c'/> And the tail as a whole acts like a ridge "
-            "penalty on the strong directions, costing a little bias. <bookmark mark='d'/> So interpolation is "
-            "benign when the signal is low-dimensional and the rest is a long tail of tiny directions, the kind of "
-            "spectrum real data and wide networks tend to have. For real networks the picture is more often in "
+            "penalty on the strong directions; the resulting signal bias must also be small. <bookmark mark='d'/> "
+            "With few strong directions, a broad weak tail, and small signal bias, interpolation can be benign. "
+            "General guarantees require precise spectral and distributional conditions. For real networks the picture is more often in "
             "between: Mallinar and colleagues in 2022 called it tempered."
         ) as vo:
             step(0)

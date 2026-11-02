@@ -7,6 +7,7 @@ import numpy as np
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai8.common import BOUND, MEAS, PART, TEST, TRAIN, curve, load
+from videos.ai.ai8.s04_hoeffding import _segments_above_floor
 
 
 class Outro(VoiceoverScene):
@@ -33,18 +34,23 @@ class Outro(VoiceoverScene):
                            curve(a, lx, np.clip(np.asarray(r["emp_mean"]), 0.12, 0.32), TRAIN, 2.5)),
                     r"risk: \ training error flatters", TEST))
         b = load("biasvar")
-        a = plane([0, 15, 3], [-1, 1.5, 1])
-        out.append((VGroup(a, curve(a, b["degs"], np.clip(np.log10(np.asarray(b["total"])), -1, 1.5), TEST, 3),
-                           curve(a, b["degs"], np.clip(np.log10(np.asarray(b["bias2"])), -1, 1.5), C.TRUE_P, 2),
-                           curve(a, b["degs"], np.clip(np.log10(np.asarray(b["var"])), -1, 1.5), C.MODEL_Q, 2)),
+        a = plane([0, 15, 3], [-4, 2.5, 1])
+        out.append((VGroup(a, curve(a, b["degs"], np.log10(np.asarray(b["total"])), TEST, 3),
+                           curve(a, b["degs"], np.log10(np.asarray(b["bias2"])), C.TRUE_P, 2),
+                           curve(a, b["degs"], np.log10(np.asarray(b["var"])), C.MODEL_Q, 2)),
                     r"bias$^2$ + variance + noise", TEST))
         h = load("hoeffding")
         a = plane([0, 0.3, 0.1], [-5, 0, 1])
         e = np.asarray(h["eps"])
         tl = np.asarray(h["tail160"])
         ok = tl > 0
-        out.append((VGroup(a, curve(a, e[ok], np.log10(tl[ok]), MEAS, 3),
-                           curve(a, e, np.log10(np.maximum(np.asarray(h["hoef160"]), 1e-5)), BOUND, 2.5)),
+        segments, crossings = _segments_above_floor(e, np.log10(np.asarray(h["hoef160"])), -5)
+        visible = VGroup(*[curve(a, [p[0] for p in segment], [p[1] for p in segment], BOUND, 2.5)
+                           for segment in segments if len(segment) > 1])
+        markers = VGroup(*[Arrow(a.c2p(x, -5) + UP * 0.08, a.c2p(x, -5) + DOWN * 0.08,
+                                buff=0, color=BOUND, stroke_width=1.5, tip_length=0.06,
+                                max_tip_length_to_length_ratio=0.45) for x in crossings])
+        out.append((VGroup(a, curve(a, e[ok], np.log10(tl[ok]), MEAS, 3), visible, markers),
                     r"Hoeffding, \ simulated", BOUND))
         g = load("growth")
         a = plane([0, 16, 4], [0, 16, 4])
@@ -59,7 +65,7 @@ class Outro(VoiceoverScene):
             lo_, hi_ = a.c2p(i - 0.3, 0), a.c2p(i + 0.3, v)
             bars_.add(Rectangle(width=hi_[0] - lo_[0], height=hi_[1] - lo_[1], stroke_width=0, fill_color=col,
                                 fill_opacity=0.85).move_to([(lo_[0] + hi_[0]) / 2, (lo_[1] + hi_[1]) / 2, 0]))
-        out.append((VGroup(a, bars_), rf"PAC-Bayes: \ ${100 * p['bound']:.0f}\%$, \ non-vacuous", BOUND))
+        out.append((VGroup(a, bars_), rf"PAC-Bayes: \ ${100 * p['bound']:.0f}\%$, \\ illustrative calculation", BOUND))
         rl = load("random")
         S = np.asarray(rl["shuffled"])
         a = plane([0, 3.2, 1], [0.4, 1, 0.2])
@@ -96,8 +102,8 @@ class Outro(VoiceoverScene):
             "and the gap splits into approximation and estimation. Error splits into bias, variance and noise. One "
             "rule's test score is trustworthy by Hoeffding; choosing among many costs the log of how many, and an "
             "infinite family costs its growth function, a polynomial by Sauer and Shelah. Rademacher complexity and "
-            "margins measure capacity by the size of the weights; PAC-Bayes, compression and stability gave bounds "
-            "that can say something even for a network, as ours did. Then the puzzles: networks memorize noise, "
+            "margins measure capacity by the size of the weights; under their assumptions, PAC-Bayes, compression and "
+            "stability give useful bounds even for networks. Our own calculation was illustrative. Then the puzzles: networks memorize noise, "
             "gradient descent chooses the smallest fit and the widest margin, error descends twice, overfitting can "
             "be benign, and flatness is not the whole story. And when the data moves, or repeats, generalization "
             "gives way to weighting, and to memory."

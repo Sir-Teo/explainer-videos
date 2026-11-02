@@ -8,6 +8,39 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai8.common import BOUND, HIST, MEAS, TEST, TRAIN, bars, card_body, chapter, curve, load
 
 
+def _segments_above_floor(xs, ys, floor):
+    """Clip display line segments at an lower viewport edge without flattening data."""
+    if len(xs) != len(ys):
+        raise ValueError("display coordinates must have equal lengths")
+    points = [(float(x), float(y)) for x, y in zip(xs, ys)]
+    if not math.isfinite(floor) or any(not math.isfinite(x) or not math.isfinite(y) for x, y in points):
+        raise ValueError("display coordinates must be finite")
+    if not points:
+        return [], []
+    segments, crossings = [], []
+    current = [points[0]] if points[0][1] >= floor else []
+    for (x0, y0), (x1, y1) in zip(points, points[1:]):
+        if y0 >= floor and y1 >= floor:
+            if not current:
+                current = [(x0, y0)]
+            if current[-1] != (x1, y1):
+                current.append((x1, y1))
+        elif (y0 >= floor) != (y1 >= floor):
+            cross = (x0 + (x1 - x0) * (floor - y0) / (y1 - y0), float(floor))
+            if cross[0] not in crossings:
+                crossings.append(cross[0])
+            if y0 >= floor:
+                if current[-1] != cross:
+                    current.append(cross)
+                segments.append(current)
+                current = []
+            else:
+                current = [cross] if cross == (x1, y1) else [cross, (x1, y1)]
+    if current:
+        segments.append(current)
+    return segments, crossings
+
+
 class Hoeffding(VoiceoverScene):
     def construct(self):
         chapter(self, 3, r"One rule, then many", r"When can a score on test data be trusted?",
@@ -28,24 +61,25 @@ class Hoeffding(VoiceoverScene):
         thm.to_corner(UL, buff=0.3)
         app = label(r"$Z_i = 1$ \ if the rule errs on test case $i$: \\ $\bar Z = \hat R$, \ $\mu = R$", font_size=24,
                     color=GREY_A).next_to(thm, DOWN, buff=0.3).align_to(thm, LEFT)
-        G = axes([0, 0.7], [0, 14], x_length=6.4, y_length=4.4, xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+        hist_top = 26
+        G = axes([0, 0.7], [0, hist_top], x_length=6.4, y_length=4.4, xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
                  xfmt=lambda v: rf"{100 * v:.0f}\%", xlabel=r"error rate measured on $n$ test cases",
                  center=(3.2, -0.3, 0))
         ax = G.ax
-        pline = DashedLine(ax.c2p(p, 0), ax.c2p(p, 14), color=WHITE, stroke_width=2)
-        pl = label(rf"true error ${100 * p:.0f}\%$", font_size=22).next_to(ax.c2p(p, 13), RIGHT, buff=0.12)
+        pline = DashedLine(ax.c2p(p, 0), ax.c2p(p, hist_top), color=WHITE, stroke_width=2)
+        pl = label(rf"true error ${100 * p:.0f}\%$", font_size=22).next_to(ax.c2p(p, hist_top - 1), RIGHT, buff=0.12)
         eps = 0.05
-        zone = Rectangle(width=ax.c2p(p + eps, 0)[0] - ax.c2p(p - eps, 0)[0], height=ax.c2p(0, 14)[1] - ax.c2p(0, 0)[1],
-                         stroke_width=0, fill_color=MEAS, fill_opacity=0.10).move_to(ax.c2p(p, 7))
+        zone = Rectangle(width=ax.c2p(p + eps, 0)[0] - ax.c2p(p - eps, 0)[0], height=ax.c2p(0, hist_top)[1] - ax.c2p(0, 0)[1],
+                         stroke_width=0, fill_color=MEAS, fill_opacity=0.10).move_to(ax.c2p(p, hist_top / 2))
 
         def hist(n):
             pmf = np.asarray(h[f"pmf{n}"])
             ks = np.arange(len(pmf))
-            return bars(ax, ks / n, np.minimum(pmf * n, 14), 0.9 / n if n <= 40 else 1.0 / n, TEST, 0.8)
+            return bars(ax, ks / n, pmf * n, 0.9 / n if n <= 40 else 1.0 / n, TEST, 0.8)
 
         hs = {n: hist(n) for n in ns}
         within = {n: 1 - float(np.interp(eps, np.asarray(h["eps"]), np.asarray(h[f"tail{n}"]))) for n in ns}
-        tags = {n: label(rf"$n = {n}$: \ ${100 * within[n]:.0f}\%$ of draws within $\pm 5$ points", font_size=24,
+        tags = {n: label(rf"$n = {n}$: \ ${100 * within[n]:.0f}\%$, \ $|\hat R - R| < 0.05$", font_size=24,
                          color=TEST).next_to(G, UP, buff=0.1) for n in ns}
         with self.voiceover(
             "Start with one rule, fixed in advance, and a test set. Each test case is a coin flip: the rule errs "
@@ -53,7 +87,8 @@ class Hoeffding(VoiceoverScene):
             "inequality: an average of n independent numbers between zero and one strays from its mean by epsilon "
             "with probability at most two e to the minus two n epsilon squared. <bookmark mark='a'/> Watch it "
             f"happen. A rule whose true error is {100 * p:.0f} percent, measured on ten test cases, a hundred thousand "
-            f"times: only {100 * within[ns[0]]:.0f} percent of the measurements land within five points. "
+            f"times: only {100 * within[ns[0]]:.0f} percent of the measurements have deviation less than "
+            "five percentage points. "
             f"<bookmark mark='b'/> On forty, {100 * within[ns[1]]:.0f} percent. <bookmark mark='c'/> On "
             f"{ns[2]}, {100 * within[ns[2]]:.0f}. <bookmark mark='d'/> On {ns[3]}, {100 * within[ns[3]]:.0f} "
             "percent: the histogram narrows like one over the square root of n."
@@ -82,24 +117,35 @@ class Hoeffding(VoiceoverScene):
                  center=(-2.8, -0.3, 0))
         ax = G.ax
         cm = curve(ax, e[ok], np.log10(tail[ok]), MEAS, 4)
-        ch = curve(ax, e, np.log10(np.maximum(hoef, 1e-5)), BOUND, 3.5)
+        floor = -5
+        segments, crossings = _segments_above_floor(e, np.log10(hoef), floor)
+        visible = VGroup(*[curve(ax, [p[0] for p in segment], [p[1] for p in segment], BOUND, 3.5)
+                           for segment in segments if len(segment) > 1])
+        markers = VGroup(*[Arrow(ax.c2p(x, floor) + UP * 0.13, ax.c2p(x, floor) + DOWN * 0.13,
+                                buff=0, color=BOUND, stroke_width=2, tip_length=0.10,
+                                max_tip_length_to_length_ratio=0.45) for x in crossings])
+        ch = VGroup(visible, markers)
+        floor_note = label(r"values below $10^{-5}$ are outside this view", font_size=16,
+                           color=GREY_A).next_to(G, DOWN, buff=0.12).align_to(G, LEFT)
+        G.add(floor_note)
         okc = cheb < 1.0
         cc = curve(ax, e[okc], np.log10(cheb[okc]), GREY_B, 3)
         key = legend([(MEAS, r"measured, $100{,}000$ draws"), (BOUND, r"Hoeffding: \ $2e^{-2n\varepsilon^2}$"),
                       (GREY_B, r"Chebyshev: \ $\frac{p(1-p)}{n\varepsilon^2}$")], font_size=20)
         key.next_to(G, UP, buff=0.05).align_to(G, RIGHT)
         nh, ne, nc = int(h["n_hoef"]), int(h["n_exact"]), int(h["n_cheb"])
-        q = label(r"How many test cases \\ to be within $5$ points, \\ $95\%$ of the time?", font_size=26)
+        q = label(r"How many test cases \\ for deviation $< 5$ points, \\ $95\%$ of the time?", font_size=26)
         tab = VGroup(*[VGroup(label(a, font_size=24, color=c), MathTex(fmt_int(v), font_size=30, color=c)).arrange(RIGHT, buff=0.3)
-                       for a, v, c in ((r"exact, \ knowing $p$:", ne, MEAS), (r"Hoeffding:", nh, BOUND),
+                       for a, v, c in ((r"first exact $n$:", ne, MEAS), (r"Hoeffding:", nh, BOUND),
                                        (r"Chebyshev:", nc, GREY_B))]).arrange(DOWN, aligned_edge=RIGHT, buff=0.22)
         side = VGroup(q, tab).arrange(DOWN, buff=0.4).move_to([4.3, -0.2, 0])
         ratio = nh / ne
         with self.voiceover(
             "On a log scale, the measured tail at a hundred and sixty test cases falls off like a parabola, and so "
             "does Hoeffding's bound, always above it. <bookmark mark='a'/> Chebyshev's bound, which uses only the "
-            "variance, falls far more slowly. <bookmark mark='b'/> So how many test cases do you need to be within "
-            f"five points of the truth, ninety-five percent of the time? Knowing the true error, exactly {ne}. "
+            "variance, falls far more slowly. <bookmark mark='b'/> So how many test cases give a deviation of less than "
+            "five percentage points, ninety-five percent of the time? Knowing the true error, "
+            f"the first qualifying n is {ne}. "
             f"Hoeffding asks for {nh:,}, about {ratio:.1f} times as many, but it needs to know nothing about the "
             f"rule. Chebyshev asks for {nc:,}. That's why a held-out test set of a few thousand examples is a "
             "trustworthy score."
@@ -185,7 +231,7 @@ class Hoeffding(VoiceoverScene):
         cb = curve(ax, Ks, b100, TRAIN, 3.5)
         cg = curve(ax, Ks, g100, MEAS, 4)
         cu = curve(ax, Ks, bd100, BOUND, 3.5)
-        key = legend([(TRAIN, r"the best rule's training error"), (MEAS, r"largest gap, $95\%$ of the time"),
+        key = legend([(TRAIN, r"median of the best rule's training error"), (MEAS, r"largest gap, $95\%$ of the time"),
                       (BOUND, r"union bound")], font_size=20).next_to(G, UP, buff=0.1).align_to(G, LEFT)
         dfn = definition_card(r"PAC learning",
                               r"a family is \textit{probably approximately correct} learnable if, \ for every "

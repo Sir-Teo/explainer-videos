@@ -34,7 +34,7 @@ class Shift(VoiceoverScene):
         truth = ax.plot(f, x_range=[-1.15, 1.55], color=WHITE, stroke_width=2.5)
         dtr = ax.plot(lambda x: -1.2 + 0.55 * norm.pdf(x, s["mu_tr"], s["sd_tr"]), x_range=[-1.2, 2.0], color=PTR,
                       stroke_width=3)
-        dte = ax.plot(lambda x: -1.2 + 0.55 * norm.pdf(x, s["mu_te"], s["sd_te"]) * 0.6, x_range=[-1.2, 2.0], color=PTE,
+        dte = ax.plot(lambda x: -1.2 + 0.55 * norm.pdf(x, s["mu_te"], s["sd_te"]), x_range=[-1.2, 2.0], color=PTE,
                       stroke_width=3)
         x0, y0 = np.asarray(s["x0"]), np.asarray(s["y0"])
         dots = VGroup(*[Dot(ax.c2p(a, np.clip(b, -1.15, 2.15)), radius=0.045, color=PTR) for a, b in zip(x0, y0)

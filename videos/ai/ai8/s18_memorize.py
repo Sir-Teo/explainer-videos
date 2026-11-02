@@ -89,7 +89,7 @@ class Memorization(VoiceoverScene):
         mtok, mmax, vrun = m["train_tokens"] / 1e6, m["max_count"], m["valid_run32"]
         r0, rN, topbin = runs[0], runs[-1], labs[-1].replace(chr(92) + "text{--}", " to ")
         info = VGroup(
-            label(r"our novels model: \ $6$ million weights, \ thirty novels", font_size=22),
+            label(r"our novels model: \ $6.8$ million weights, \ thirty novels", font_size=22),
             label(rf"${m['train_tokens'] / 1e6:.1f}$ million training tokens; \ the most any passage repeats: "
                   rf"${m['max_count']}$", font_size=20, color=GREY_A),
             label(rf"passages extracted exactly: \ ${n_ex}$ of ${sum(int(r['k']) for r in rows)}$ tested", font_size=22,
@@ -108,9 +108,9 @@ class Memorization(VoiceoverScene):
         rising = runs[-1] > 2 * runs[0]
         further = ("But it gets further before its first mistake on passages it has seen more often: "
                    f"{r0:.1f} tokens on average for passages seen once, {rN:.1f} for those seen {topbin} times, "
-                   f"against {vrun:.1f} on text it never saw. " if rising else
-                   f"On average it gets {r0:.1f} tokens right before its first mistake, about as many as on text it "
-                   f"never saw, {vrun:.1f}. ")
+                   f"against {vrun:.1f} on held-out text. " if rising else
+                   f"On average it gets {r0:.1f} tokens right before its first mistake, about as many as on "
+                   f"held-out text, {vrun:.1f}. ")
         with self.voiceover(
             f"Run that test on our own novels model. Its training text has {mtok:.1f} million tokens, and long "
             f"passages rarely repeat: no 64-token passage occurs more than {mmax} times. <bookmark mark='a'/> "
@@ -146,7 +146,7 @@ class Memorization(VoiceoverScene):
         ax = G.ax
         lines = VGroup(*[curve(ax, steps, ex[:, j], cols[j], 3.5 if g >= 16 else 2.5) for j, g in enumerate(groups)])
         lk = VGroup(*[VGroup(Line(ORIGIN, RIGHT * 0.3, color=cols[j], stroke_width=4),
-                             label(rf"${g}\times$" if g else r"never", font_size=18, color=cols[j])).arrange(RIGHT, buff=0.1)
+                             label(rf"${g}\times$" if g else r"not planted", font_size=18, color=cols[j])).arrange(RIGHT, buff=0.1)
                       for j, g in reversed(list(enumerate(groups)))]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         lk.move_to([0.3, -0.2, 0])
         gs = [g for g in groups if g > 0]
@@ -158,7 +158,7 @@ class Memorization(VoiceoverScene):
         cf = VGroup(curve(hx, np.log2(gs), fin, C.SURPRISE, 4),
                     *[Dot(hx.c2p(math.log2(g), v), radius=0.07, color=C.SURPRISE) for g, v in zip(gs, fin)])
         ctrl = ex[-1, -1]
-        head = label(rf"Trained on: \ its own text, \ plus ${int(c['per'])}$ unseen passages planted $1, 2, 4, \dots, "
+        head = label(rf"Own text plus ${int(c['per'])}$ held-out passages per repetition group, \ planted $1, 2, 4, \dots, "
                      rf"{gs[-1]}$ times", font_size=24).to_edge(UP, buff=0.3)
         sh = c["shown"]
         k64 = f"g{len(groups) - 2}"
@@ -186,10 +186,10 @@ class Memorization(VoiceoverScene):
                  "colleagues and Kandpal and colleagues, and why deduplicating training data became standard.")
         with self.voiceover(
             "To see repetition at work, plant it. Continue training our model on its own text, into which "
-            f"{per} passages it has never seen are planted once each, {per} more twice each, and so on up to {gN} "
-            f"times, with {per} more never planted, as a control. <bookmark mark='a'/> Through {S} steps of "
+            f"{per} passages sampled from held-out text are planted once each, {per} more twice each, and so on up to {gN} "
+            f"times, with {per} more not planted, as a control. <bookmark mark='a'/> Through {S} steps of "
             "training, the passages planted most often become extractable first. "
-            f"<bookmark mark='b'/> By the end: {e1:.0f} percent of passages seen once, {e8:.0f} percent of those "
+            f"<bookmark mark='b'/> By the end: {e1:.0f} percent of passages planted once, {e8:.0f} percent of those "
             f"planted eight times, and {eN:.0f} percent of those planted {gN} times come back word for word; the "
             f"control, {eC:.0f} percent. " + halfway + "<bookmark mark='c'/> " + trend
         ) as vo:

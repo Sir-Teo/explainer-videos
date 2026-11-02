@@ -257,3 +257,49 @@ Carlini et al. (2019, 2021, 2023); Kandpal, Wallace & Raffel (2022); Lee et al. 
 | distribution shift, covariate shift, label shift, concept drift | 分布偏移，协变量偏移，标签偏移，概念漂移 |
 | importance weighting, effective sample size | 重要性加权，有效样本量 |
 | memorization, extractable, canary, deduplication | 记忆，可提取，金丝雀（植入的测试文本），去重 |
+
+## Reviewed scene-source candidate
+
+This source update is based on public QA commit
+`4ec09923e8394cc908c003f10c96808b6a34fda7`. It repairs the initially empty
+MaxMargin proof context, qualifies empirical sensitivity and bound calculations,
+shows chart clipping explicitly, and improves bilingual labels and chart layouts.
+The label-corruption narration now describes the measured endpoints without
+claiming monotonic training time. Memorization captions distinguish held-out
+provenance from deliberate planting and state the number of passages per group.
+
+Shared translation changes add only 22 exact caption entries, also recorded in
+this part's translation supplement. Existing translations, phrase rules and
+patterns remain unchanged. The shared CJK punctuation-wrapping helper is excluded
+from this candidate and requires separate integration review.
+
+The scientific producer and manifest are unchanged. Two independently reviewed
+numerical corrections are excluded here: the binomial minimum CDF requires the
+strict survival event `P(errors > k)`; logistic-loss logs must use the same
+post-update weights as the rest of each recorded row. The worker validated these
+with separately identified corrected outcomes, without overwriting original
+results. Those data and producer corrections are not distributed in this source
+branch. In particular, the worker's corrected union-bound medians and MaxMargin
+loss displays cannot be reproduced from the unchanged original cache alone.
+The integration owner must reconcile these dependencies before production.
+
+The worker reports static endpoint coverage for all 19 scenes in English and
+Chinese, selected native-resolution still review, and selected encoded MaxMargin
+review with complete video-stream decoding. Detailed rendered evidence remains
+private. Those captures used the worker's separately corrected data overlay and
+CJK wrapping helper; they do not establish rendered acceptance of this exact
+public source tree. No continuous playback, actual speech listening,
+speech synchronization, series-wide shared-helper acceptance or final 4K
+production acceptance is claimed.
+
+Portable source checks can be run without importing scenes or producers:
+
+```sh
+python videos/ai/ai8/test_source_repairs.py
+python videos/ai/ai8/test_display_geometry.py
+```
+
+`qa_cached.py` requires explicit scenes and language, propagates both the CLI
+and environment cached-only guards, and selects a silent QA backend. The source
+checks include a synthetic upstream-cache rejection test; synthetic tests do not
+validate scientific outcomes or spoken synchronization.

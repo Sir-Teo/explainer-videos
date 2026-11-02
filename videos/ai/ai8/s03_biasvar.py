@@ -49,8 +49,8 @@ class BiasVariance(VoiceoverScene):
             "noisy points drawn from it. <bookmark mark='a'/> Fit a straight line. Draw sixteen new points and fit "
             "again, and again: it misses the curve's shape in the same way every time. That systematic miss is "
             "bias. <bookmark mark='b'/> Fit a polynomial of degree twelve: a sum of powers of x, up to x to the "
-            "twelfth. The degree, the highest power, is roughly how many bends the curve can make. It threads the "
-            "points, but each new draw gives a wildly different curve. That's variance. <bookmark mark='c'/> In "
+            "twelfth. The degree, the highest power, is roughly how many bends the curve can make. "
+            "It bends closely around the points, but each new draw gives a wildly different curve. That's variance. <bookmark mark='c'/> In "
             f"between, at degree {best}, the fits hug the truth."
         ) as vo:
             self.play(FadeIn(head), *[FadeIn(VGroup(p[0], p[1], p[2])) for p in panels])
@@ -99,7 +99,7 @@ class BiasVariance(VoiceoverScene):
             "comes off on its own. <bookmark mark='b'/> In what's left, add and subtract the average fit, f bar. "
             "<bookmark mark='c'/> The fit's deviation from its own average also averages to zero, so again no cross "
             "term. <bookmark mark='d'/> Three pieces remain: the average fit's distance from the truth, squared, the "
-            "bias; how much the fit varies from sample to sample, the variance; and the noise. Geman, Bienenstock "
+            "squared bias; how much the fit varies from sample to sample, the variance; and the noise. Geman, Bienenstock "
             "and Doursat named the dilemma in 1992, for neural networks."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hist, shift=UP * 0.2))
@@ -123,12 +123,14 @@ class BiasVariance(VoiceoverScene):
         bias2, var, total = np.asarray(b["bias2"]), np.asarray(b["var"]), np.asarray(b["total"])
         meas = np.asarray(b["measured"])
         noise = float(b["noise"])
-        lo, hi = -3, 1.5
+        lo, hi = -4, 2.5
         ax = Axes(x_range=[0, 15, 3], y_range=[0, hi - lo, 1], x_length=8.2, y_length=4.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.6, -0.5, 0])
+        ax.x_axis.add_numbers([0, 3, 6, 9, 12, 15], excluding=[], font_size=22,
+                              num_decimal_places=0, color=GREY_B, buff=0.12)
         xl = label(r"degree of the polynomial: \ flexibility $\longrightarrow$", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.25)
         yl = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v - lo), LEFT, buff=0.1)
-                      for v in range(lo, 2)])
+                      for v in range(lo, 3)])
 
         def ly(v):
             return float(np.clip(math.log10(max(v, 10.0 ** lo)), lo, hi) - lo)
@@ -145,8 +147,8 @@ class BiasVariance(VoiceoverScene):
                   colors=colors, font_size=34).to_edge(UP, buff=0.4)
         best = int(b["best"])
         dot = Dot(ax.c2p(best, ly(total[best])), radius=0.09, color=TEST)
-        bl = label(rf"best: \ degree ${best}$", font_size=26, color=TEST).next_to(dot, DOWN, buff=0.25)
-        names = VGroup(label(r"bias$^2$", font_size=26, color=BIAS).next_to(ax.c2p(7.5, 0.05), UP, buff=0.12),
+        bl = label(rf"best: \ degree ${best}$", font_size=26, color=TEST).next_to(dot, UP, buff=0.3)
+        names = VGroup(label(r"bias$^2$", font_size=26, color=BIAS).next_to(ax.c2p(8, 0.9), UP, buff=0.12),
                        label(r"variance", font_size=26, color=VAR).next_to(cv.get_end(), LEFT, buff=0.15),
                        label(r"noise", font_size=24, color=GREY_B).next_to(ax.c2p(0.2, math.log10(noise) - lo), DR,
                                                                            buff=0.08))
