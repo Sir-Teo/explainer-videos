@@ -1,0 +1,97 @@
+{
+  "status": "UNAPPLIED isolated two-scene sharedcaption additions; reconcile serially, preserve all other entries",
+  "target": "videos/ai/ai_text_zh.json",
+  "operations": [
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "a translation network looks back at the source sentence (Part 10); \\ in 2017 attention replaces recurrent mixing; feed-forward sublayers remain",
+      "value": "翻译网络回看源句（第10部分）；\\ 2017年注意力替代循环混合，前馈子层仍然保留",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "relative \\\\ bar heights",
+      "value": "相对\\\\ 条形高度",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "Softmax attention",
+      "value": "Softmax注意力",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "softmax of $q \\cdot k_i$ \\\\ unscaled illustration",
+      "value": "$q \\cdot k_i$ 的softmax \\\\ 未缩放的示意",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "larger dot products \\ receive more weight",
+      "value": "较大的点积\\ 获得较大的权重",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "pattern recall: \\\\ modern sign readout",
+      "value": "模式召回：\\\\ 现代更新取符号读出",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "start-marker coefficients \\\\ differential: signed",
+      "value": "起始标记系数\\\\ 差分：有正有负",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "repeat-loss probes",
+      "value": "重复段损失探针",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "For our bias-free QKVO, biased $4d$ MLP and two affine LayerNorms, show $12d^2+9d$ parameters. Counting dominant causal-half matrix FLOPs only, show attention's $2LTd$ FLOPs per token equal the leading linear-map $24 L d^2$ at $T = 12d$; omit vocabulary projection and elementwise work.",
+      "value": "对我们的无偏置QKVO、带偏置 $4d$ MLP和两个仿射LayerNorm，证明参数数目为 $12d^2+9d$。只计主要的因果半矩阵FLOP时，证明注意力每词元的 $2LTd$ FLOP等于主要线性映射的 $24 L d^2$，条件为 $T = 12d$；不计词表投影和逐元素工作。",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "Show that the modern Hopfield update $\\xi \\leftarrow X^\\top \\operatorname{softmax}(\\beta X \\xi)$ tends to the stored pattern of uniquely largest overlap as $\\beta \\to \\infty$; ties give the average of maximizing patterns. As $\\beta \\to 0$, it gives the average of all patterns (continuous update, before any sign readout).",
+      "value": "证明现代Hopfield连续更新 $\\xi \\leftarrow X^\\top \\operatorname{softmax}(\\beta X \\xi)$ 在 $\\beta \\to \\infty$ 时趋于唯一最大重叠模式；并列时得到最大重叠模式的平均。在 $\\beta \\to 0$ 时得到所有模式的平均（连续更新，尚未进行符号读出）。",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "Text: Project Gutenberg (Part 1's $30$ novels). \\ Own experiments and adopted earlier-part results; external reports cited; \\ illustrations labeled.",
+      "value": "文本：古腾堡计划（第1部分的 $30$ 部小说）。\\ 本部分实验与沿用的前期结果；外部报告注明引用；\\ 示意图明确标注。",
+      "expected_absent": true
+    },
+    {
+      "table": "strings",
+      "operation": "add",
+      "key": "$1{,}000$-word block (zero-based) of \\textit{Great Expectations}",
+      "value": "《远大前程》的 $1{,}000$ 词文本块（从零计数）",
+      "expected_absent": true
+    },
+    {
+      "table": "patterns",
+      "operation": "append",
+      "key": "^bump\\ width:\\ \\\\\\ \\$([-+]?\\d+(?:\\.\\d+)?)\\$\\ blocks$",
+      "value": "核宽度：\\\\ $\\g<1>$ 个文本块",
+      "expected_absent": true
+    }
+  ]
+}

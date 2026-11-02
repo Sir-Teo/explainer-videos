@@ -10,8 +10,8 @@ items made of many small runs piece by piece, ``CACHE.partial``). Torch threads:
 busy machine 1 is often faster).
 
 Items:
-    smoother   Nadaraya and Watson's kernel smoother on Part 7's data (how often "her" appears on each page of *Great
-               Expectations*): the estimate at three bandwidths, and the weights one query puts on every page
+    smoother   Nadaraya and Watson's kernel smoother on the raw 1000-word blocks also used in Part 7 (how often
+               "her" appears in *Great Expectations*): three bandwidths, and one query's weights on every block
     dotscale   why attention divides by the square root of d: for random queries and 64 random keys, the spread of the
                scores, the entropy of the softmax weights and the size of the softmax's gradient, as d grows, with and
                without the division
@@ -88,8 +88,11 @@ def threads(default: int = 2) -> None:
 def compute_smoother():
     from videos.ai.ai7 import compute as c7
 
-    gp = c7.load("gp")
-    x, y = np.asarray(gp["x"], float), np.asarray(gp["y"], float)
+    # The smoother needs the raw observations, not Part 7's fitted GP.
+    # pages() retains Part 7's validated Part 6 input reader.
+    X, _, book, vocab = c7.pages()
+    y = np.asarray(X[book == 1400, vocab.index("her")], float)
+    x = np.arange(len(y), dtype=float)
     xs = np.linspace(0, x[-1], 400)
 
     def nw(h, at):
