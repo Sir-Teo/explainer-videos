@@ -44,17 +44,14 @@ class Production(VoiceoverScene):
             "What has reached real desks? The clearest public case is J.P. Morgan. As Risk.net reported, Hans "
             "Buehler's team has hedged vanilla index option books on the S&P 500 and the Euro Stoxx with a data-driven "
             "engine since 2018; the bank later priced a large share of its Euro Stoxx vanilla book with a version of "
-            "deep hedging, and extended the programme to cliquets. Buehler was Risk's quant of the year for 2022, and "
-            "later moved to the market maker XTX. <bookmark mark='a'/> At Danske Bank, "
+            "deep hedging, and extended the programme to cliquets. <bookmark mark='a'/> At Danske Bank, "
             "Brian Huge and Antoine Savine turned the derivatives that adjoint differentiation already computed in "
             "production into training labels; Risk.net reported the method speeding up the bank's valuation "
             "adjustments. <bookmark mark='b'/> And over all of "
-            "it sits the regulator. American banking supervisors' guidance on model risk, SR 11-7 from 2011, was "
-            "replaced on the seventeenth of April 2026 by SR 26-2, from the Federal Reserve, the OCC and the FDIC, "
-            "which also supersedes SR 21-8. It says that every model must be challenged by people who did not build "
-            "it, checked for conceptual soundness, monitored, tested on outcomes and kept in an inventory, with more "
-            "scrutiny the more it matters. Generative and agentic AI are outside its scope; a neural network that "
-            "prices or hedges is squarely inside it, a model like any other."
+            "it sits the regulator. On the seventeenth of April 2026 the Federal Reserve, the OCC and the FDIC "
+            "replaced SR 11-7, the model risk guidance of 2011, with SR 26-2: every model challenged by people who did "
+            "not build it, checked for soundness, monitored, tested on outcomes and kept in an inventory. Generative "
+            "and agentic AI are outside its scope; a network that prices or hedges is squarely inside it."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -80,12 +77,10 @@ class Production(VoiceoverScene):
         for c_ in cs:
             c_[0].set_stroke(GREY_C)
         with self.voiceover(
-            "Three more entries on the public record. In 2023, researchers including a J.P. Morgan team published deep "
-            "hedging with quantum neural networks, run on a trapped-ion processor with circuits of up to sixteen "
-            "qubits: comparable performance with fewer trainable parameters, a research result, not a deployment. "
-            "<bookmark mark='a'/> In 2018 Ryan Ferguson and Andrew Green trained a network on randomly generated "
-            "valuations of a basket call and reported it a million times faster than the traditional model; that is "
-            "the authors' claim. <bookmark mark='b'/> And in Britain, the Prudential Regulation Authority's "
+            "Three more entries. In 2023 a team including J.P. Morgan researchers ran deep hedging with quantum "
+            "networks on a trapped-ion processor: comparable performance with fewer parameters, research, not "
+            "deployment. <bookmark mark='a'/> In 2018 Ryan Ferguson and Andrew Green reported a network valuing basket "
+            "calls a million times faster than the traditional model, as the authors claim. <bookmark mark='b'/> And in Britain, the Prudential Regulation Authority's "
             "supervisory statement SS1/23, in force since May 2024 and revised in April 2026, sets model risk "
             "principles for banks with internal-model approval, and names artificial intelligence and machine "
             "learning explicitly."

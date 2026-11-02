@@ -23,6 +23,9 @@ PROBLEMS = [
     r"hedging. Which is cheaper to sell?",
     r"Why is an American call on a non-dividend stock never exercised early, while an American put can be? "
     r"Give the put's early-exercise condition at $r = 0$.",
+    r"Derive Leland's $\sigma_L$ from the expected size of the hedge's trade, $\mathbb E|\delta\Delta|$, per step.",
+    r"With carry $b$, show that inverting with $S$ instead of $F$ raises call implied vols and lowers put implied "
+    r"vols; estimate the error at the money for $b = 4\%$, $T = 0.5$, $\sigma = 45\%$.",
 ]
 
 
@@ -37,38 +40,46 @@ class Outro(VoiceoverScene):
 
     def recap(self):
         items = [
-            (r"replicate the option with $\Delta$ shares and cash: the drift $\mu$ drops out", OPT),
-            (r"three derivations, one formula: PDE, $\mathbb Q$-expectation, the tree's limit", OPT),
-            (r"the Greeks are one surface; $\Theta = -\tfrac12\sigma^2S^2\Gamma$", GAM),
-            (r"the hedger earns $\tfrac12\Gamma S^2(\sigma_i^2 - \sigma_r^2)$: a bet on volatility, weighted by "
-             r"gamma", GAM),
-            (r"hedging in steps leaves an error $\propto\sqrt{\Delta t}$; costs push the price up (Leland)", REA),
-            (r"implied volatility smiles: the formula's world is not the market's", IMP),
+            (r"replicate with $\Delta$ shares and cash, self-financing: the drift $\mu$ drops out", OPT),
+            (r"the PDE is the heat equation: the price is a Gaussian average of the payoff", OPT),
+            (r"the same price as a $\mathbb Q$-expectation, and as the limit of a tree", OPT),
+            (r"the Greeks are one surface; $\Theta + rS\Delta + \tfrac12\sigma^2S^2\Gamma = rV$", GAM),
+            (r"the hedger earns $\tfrac12\Gamma S^2(\sigma_i^2 - \sigma_r^2)$, weighted by gamma (EKJS)", GAM),
+            (r"hedging in steps: error $\propto\sqrt{\Delta t}$, and a floor under jumps", REA),
+            (r"costs: Leland's volatility, the valley, and why perfect hedging is unbounded", REA),
+            (r"implied volatility: one root, found fast; the smile; the Surface's first row", IMP),
+            (r"carry moves the forward; early exercise has a free boundary and a premium integral", IMP),
             (r"selling volatility on Bitcoin earned a premium, with a left tail", IMP),
-            (r"1987 and 1998: hedges assume you can always trade and always fund", QC.CRISIS),
+            (r"1987 and 1998: every hedge assumes you can trade, fund, and are not alone", QC.CRISIS),
+            (r"desks speak in volatility; the 2026 frontier still races to invert it", QC.IDEA),
         ]
         rows = VGroup()
         for i, (t, c) in enumerate(items, 1):
             n = MathTex(str(i), font_size=28, color=c)
             rows.add(VGroup(n, label(t, font_size=26)).arrange(RIGHT, buff=0.3))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.26)
-        title = label(r"Part 10 in eight lines", font_size=38).to_edge(UP, buff=0.4)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        title = label(r"Part 10 in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         rows.next_to(title, DOWN, buff=0.5)
         if rows.width > 13.0:
             rows.scale_to_fit_width(13.0)
+        if rows.height > 6.4:
+            rows.scale_to_fit_height(6.4)
+        rows.next_to(title, DOWN, buff=0.35)
         with self.voiceover(
-            "Part ten in eight lines. An option can be manufactured from the stock and cash, and the stock's "
-            "expected return drops out of its price. The price can be found three ways: as the solution of an "
-            "equation, as an expectation under the risk-neutral measure, and as the limit of a tree. The Greeks "
-            "are slopes and curves of one surface, and theta is minus gamma in disguise. A hedged option is a bet "
-            "that realized volatility, weighted by gamma, will differ from implied. Hedging in steps leaves an error "
-            "that shrinks only like the square root of the step, and costs push the price up. The market's "
-            "implied volatilities smile: its world is not the formula's. Selling volatility on real Bitcoin earned "
-            "a premium, with a left tail. And 1987 and 1998 showed what every hedge assumes: that you can always "
-            "trade, and always fund."
+            "Part ten in twelve lines. An option can be manufactured from the stock and cash, and the stock's "
+            "expected return drops out of its price. The equation is the heat equation in disguise, so the price "
+            "is a Gaussian average of the payoff; the same price is an expectation under the risk-neutral measure, "
+            "and the limit of a tree. The Greeks are slopes of one surface, tied together by the equation. A "
+            "hedged option is a bet on realized volatility, weighted by gamma. Hedging in steps leaves an error "
+            "that shrinks like the square root of the step, and not at all across jumps; costs push the price up, "
+            "without limit if you insist on perfection. Implied volatility always exists, can be found to machine "
+            "precision, and smiles. Carry moves the forward; early exercise is a free boundary with a premium you "
+            "can write as an integral. Selling volatility on Bitcoin paid, with a left tail. 1987 and 1998 showed "
+            "what every hedge assumes. And desks speak the formula's language, while the frontier still races to "
+            "invert it."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.5,
-                                                 run_time=14))
+                                                 run_time=20))
         self.wait(0.5)
         self.clear_scene()
 
@@ -93,11 +104,12 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=24)
+        ps = problem_set(PROBLEMS, font_size=21)
         with self.voiceover(
-            "And five problems to work through: parity and delta from the formula, the tree's martingale "
-            "probability, the volatility trader's back-of-the-envelope, Leland's volatility, and early exercise. "
-            "Solutions, in English and Chinese, are in the notes for this part."
+            "And seven problems to work through: parity and delta from the formula, the tree's martingale "
+            "probability, the volatility trader's back-of-the-envelope, Leland's volatility and its derivation, "
+            "early exercise, and the skew a forgotten forward draws. Solutions, in English and Chinese, are in the "
+            "notes for this part."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3, run_time=4))
             self.wait(4)
@@ -109,6 +121,7 @@ class Outro(VoiceoverScene):
             (r"implied volatility and the Surface", [12, 13, 14, 17]),
             (r"the hedge as a control problem", [17, 37, 38]),
             (r"trees, PDEs and Monte Carlo", [15, 16]),
+            (r"carry, forwards and currencies", [22]),
             (r"leverage, liquidity and 1998", [41]),
         ])
         with self.voiceover(
@@ -117,7 +130,8 @@ class Outro(VoiceoverScene):
             "The Surface gets new rows in twelve, thirteen, fourteen and seventeen. The hedge becomes a control "
             "problem, solved by a neural network in seventeen and by the execution and market-making desks of "
             "thirty-seven and thirty-eight. Trees, equations and simulation come back for exotics and numerics in "
-            "fifteen and sixteen, and LTCM's full story in forty-one."
+            "fifteen and sixteen, the carry of currencies and commodities in twenty-two, and LTCM's full story in "
+            "forty-one."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r) for r in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
@@ -125,15 +139,15 @@ class Outro(VoiceoverScene):
 
     def references(self):
         card = reference_card(
-            [r"Hull, \textit{Options, Futures, and Other Derivatives}, ch. 13--15, 19, 20",
-             r"Shreve, \textit{Stochastic Calculus for Finance} I (ch. 1) and II (ch. 4--5)",
-             r"Bj\"ork, \textit{Arbitrage Theory in Continuous Time}, ch. 7--9; Wilmott, \textit{PWOQF}, ch. 5--8",
-             r"Taleb, \textit{Dynamic Hedging}; Natenberg, \textit{Option Volatility and Pricing}"],
-            [r"Black and Scholes (1973), JPE; Merton (1973), Bell J.\ Econ.; Cox, Ross and Rubinstein (1979), JFE",
-             r"Boyle and Emanuel (1980), JFE; Leland (1985), JF; El Karoui, Jeanblanc and Shreve (1998), Math.\ Finance",
-             r"Harrison and Kreps (1979), JET; Harrison and Pliska (1981), SPA; Rubinstein (1994), JF",
-             r"Carr and Wu (2009), RFS; Bollerslev, Tauchen and Zhou (2009), RFS (the variance risk premium)",
-             r"MacKenzie and Millo (2003), AJS; Brady Commission (1988); President's Working Group (1999)"])
+            [r"Hull, \textit{Options, Futures, and Other Derivatives}, ch. 13, 15, 17--20",
+             r"Shreve, \textit{Stochastic Calculus for Finance} II, \S4.5, ch. 5, \S8.4--8.5",
+             r"Bj\"ork, \textit{Arbitrage Theory in Continuous Time}, ch. 7--10; Wilmott, \textit{PWOQF}, ch. 5--9",
+             r"Joshi, \textit{Concepts and Practice}; Baxter--Rennie; Taleb, \textit{Dynamic Hedging}"],
+            [r"Black--Scholes (1973); Merton (1973); Black (1976); Brennan--Schwartz (1977); Boyle--Emanuel (1980)",
+             r"Rubinstein--Leland (1981); Leland (1985); Barone-Adesi--Whaley (1987); Brady Commission (1988)",
+             r"Kim (1990); Carr--Jarrow--Myneni (1992); Kabanov--Safarian (1997); El Karoui--Jeanblanc--Shreve (1998)",
+             r"MacKenzie--Millo (2003); Derman--Taleb (2005); Ahmad--Wilmott (2005); Haug--Taleb (2011); J\"ackel (2015)",
+             r"Alexander--Chen--Imeraj (2023); Matic--Packham--H\"ardle (2023); the 2026 solvers (arXiv)"])
         with self.voiceover(
             "The textbook chapters this part covers, and the papers it draws on. Every number in it was computed "
             "from public data by the series' own code: Deribit's option trades and DVOL, Binance's prices, and "
@@ -148,7 +162,8 @@ class Outro(VoiceoverScene):
         smap = series_map(current=PART + 1, done=PART)
         nxt = label(r"Next: Part 11, Trading Options", font_size=32, color=QC.IDEA).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The House now has a volatility desk: a pricer, a hedger, an implied volatility solver and the Surface "
+            "The House now has a volatility desk: a pricer and a heat-kernel solver, a hedger that also prices "
+            "costs, an implied volatility solver, American approximations, portfolio insurance, and the Surface "
             "to score against. <bookmark mark='a'/> Next, Part eleven puts a trader at that desk: positions as "
             "Greeks, gamma scalping, the strategies, and the market maker's book."
         ) as vo:

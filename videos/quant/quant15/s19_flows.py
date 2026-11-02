@@ -53,7 +53,7 @@ class Flows(VoiceoverScene):
             "standard terms, and each day read every live note's vega off chapter eight's table, and sum. "
             "<bookmark mark='a'/> Run the clock. While the index rallies, notes knock out after a few months, and "
             "their vega vanishes with them. As the index sinks through 2022 and 2023, notes stop knocking out, they "
-            "pile up, and they drift toward their barriers, where each one's vega is largest. The book's vega "
+            "pile up, and they drift down through the zone where each one's vega is largest. The book's vega "
             "climbs. <bookmark mark='b'/> It peaked at "
             f"{pk['vega']:.3f} per vol point, with {pk['live']} notes alive. Then the barriers broke, in January "
             "2024, and the vega collapsed: knocked-in notes have almost none."

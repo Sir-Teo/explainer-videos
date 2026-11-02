@@ -153,7 +153,8 @@ class Consumption(VoiceoverScene):
                  yticks=[1, 2, 3, 4], font_size=16).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
         k = ValueTracker(0)
-        order = np.random.default_rng(5).permutation(len(xi))[:1200]
+        inside = np.where((lx >= np.log10(xs[0])) & (lx <= np.log10(xs[-1])) & (XT <= 4.0))[0]
+        order = np.random.default_rng(5).permutation(inside)[:1200]
         pts = [ax.c2p(a, min(b, 4.0)) for a, b in zip(lx[order], XT[order])]
         dots = VGroup(*[Dot(p, radius=0.022, color=UNDER).set_opacity(0.7) for p in pts])
         for d_ in dots:

@@ -17,7 +17,6 @@ class SABR(VoiceoverScene, ThreeDScene):
         self.derive(r)
         self.replay(r)
         self.ribbon(c)
-        self.slices(c)
         self.backbone(s)
 
     def card(self):
@@ -203,52 +202,6 @@ class SABR(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-60 * DEGREES, phi=68 * DEGREES, run_time=max(vo.remaining(1.0) - 0.3, 1.5))
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, lines)), FadeOut(hint)],
                          run_time=1.5)
-        self.clear_scene()
-
-    def slices(self, c):
-        sab = c["sabr"]
-        days = np.array(sorted(int(d) for d in sab))
-        nu = np.array([sab[str(d)]["nu"] for d in days])
-        g = axes([np.log10(2), np.log10(400)], [np.log10(0.4), np.log10(10)], x_length=6.2, y_length=4.0,
-                 xlabel=r"days to expiry", ylabel=r"SABR's vol of vol $\nu$", xticks=[np.log10(x) for x in (3, 10, 30, 100, 300)],
-                 xfmt=lambda u: f"{10 ** u:.0f}", log_x=True, font_size=16).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-        # the y axis is log too: place points by hand
-        yl = lambda v: np.log10(v)  # noqa: E731
-        for v in (0.5, 1, 2, 5, 10):
-            g.add(label(f"{v:g}", font_size=16, color=GREY_B).next_to(ax.c2p(np.log10(2), yl(v)), LEFT, buff=0.12))
-        dots = VGroup(*[Dot(ax.c2p(np.log10(d), yl(n)), radius=0.07, color=MODEL_COL["SABR"]) for d, n in zip(days, nu)])
-        a = c["sabr_nu_power"]
-        b0 = np.polyfit(np.log10(days / 365), np.log10(nu), 1)[1]
-        xs = np.linspace(np.log10(2.5), np.log10(350), 40)
-        fitl = curve(ax, xs, (b0 + a * (xs - np.log10(365))), GREY_A, stroke_width=2)
-        side = VGroup(
-            MathTex(rf"\text{{error}}\ {c['sabr_rmse']:.2f}\ \text{{vol points}}", font_size=30, color=MODEL_COL["SABR"]),
-            wrapped_label(rf"SABR fitted to each of the Surface's {len(days)} expiries on its own ($\beta = 1$): three "
-                          rf"numbers per expiry, {3 * len(days)} in all, against Heston's five for everything", 4.6, 19,
-                          GREY_A),
-            MathTex(rf"\nu \propto T^{{{a:.2f}}}", font_size=40, color=WHITE),
-            wrapped_label(r"the vol of vol each expiry needs falls like one over the square root of its maturity. No "
-                          r"model in this part produces that; Part 14's rough volatility does", 4.6, 19, VAR),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
-        src = real_data(r"the Surface, 10 December 2025; log scales")
-        with self.voiceover(
-            "Fit SABR to the Surface expiry by expiry, and it nails every one: "
-            f"{c['sabr_rmse']:.1f} of a volatility point overall. But it uses three numbers per expiry, "
-            f"{3 * len(days)} in all. <bookmark mark='a'/> Now plot the vol of vol each expiry asked for, against "
-            "the expiry, on log scales. It falls on a line. The slope is "
-            f"{a:.2f}: the vol of vol needed falls like one over the square root of maturity. <bookmark mark='b'/> "
-            "Pause and predict: one SABR model for all expiries would have to pick one nu. What happens at three "
-            "days? It underfits the short skew, the same diagnosis as Heston's. No model in this part produces this "
-            "square-root law; in Part fourteen it becomes the clue that volatility is rough."
-        ) as vo:
-            self.play(FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
-            vo.wait_until("a")
-            self.play(FadeIn(g), LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.15, run_time=2))
-            self.play(Create(fitl), FadeIn(side[2]))
-            vo.wait_until("b")
-            self.play(FadeIn(side[3]))
-        self.wait(0.4)
         self.clear_scene()
 
     def backbone(self, s):

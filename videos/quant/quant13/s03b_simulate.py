@@ -28,7 +28,6 @@ class Simulate(VoiceoverScene):
         self.feller(qd)
         self.derive()
         self.lab(q, qd)
-        self.qe(q)
         self.cards()
 
     def card(self):
@@ -214,47 +213,6 @@ class Simulate(VoiceoverScene):
             vo.wait_until("a")
             lab_run(self, card, outs, run_time=3)
         self.wait(0.8)
-        self.clear_scene()
-
-    def qe(self, q):
-        rows = q["rows"]
-        ns = sorted({r["n"] for r in rows})
-        ex = q["exact"]["1.0"]
-        g = axes([np.log10(1.5), np.log10(180)], [-0.05, 0.25], x_length=6.8, y_length=4.0, xlabel=r"time steps (3 months)",
-                 ylabel=r"error of the Monte Carlo price, \% of price", xticks=[np.log10(n) for n in ns],
-                 xfmt=lambda u: f"{10 ** u:.0f}", yticks=[0, 0.1, 0.2], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16,
-                 log_x=True).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-
-        def line(scheme, col):
-            pts = [(np.log10(r["n"]), r["bias"] / ex) for r in rows if r["scheme"] == scheme and r["K"] == 1.0]
-            dots = VGroup(*[Dot(ax.c2p(*p_), radius=0.06, color=col) for p_ in pts])
-            ln = VMobject(stroke_color=col, stroke_width=3).set_points_as_corners([ax.c2p(*p_) for p_ in pts])
-            return VGroup(ln, dots)
-
-        eu, qe = line("Euler", BAD), line("QE", RV)
-        zero = DashedLine(ax.c2p(np.log10(1.5), 0), ax.c2p(np.log10(180), 0), stroke_color=GREY_C, stroke_width=1.5)
-        leg = legend([(BAD, r"Euler, variance floored at zero"), (RV, r"Andersen's QE scheme (2008)")],
-                     font_size=17).next_to(g, UP, buff=0.15).align_to(g, LEFT)
-        e2 = next(r for r in rows if r["scheme"] == "Euler" and r["n"] == 2 and r["K"] == 1.0)
-        q2 = next(r for r in rows if r["scheme"] == "QE" and r["n"] == 2 and r["K"] == 1.0)
-        side = VGroup(
-            wrapped_label(r"pricing a 3-month at-the-money call under the fitted Heston, 200{,}000 paths, against the exact "
-                          r"Fourier price", 4.4, 19, GREY_A),
-            wrapped_label(rf"with 2 steps, Euler is {100 * e2['rel']:.0f}\% too high and QE {100 * abs(q2['rel']):.0f}\% too "
-                          r"low; from 16 steps, QE is inside the Monte Carlo noise", 4.4, 20, WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        with self.voiceover(
-            "Here is the whole curve. Euler, with two steps, is "
-            f"{100 * e2['rel']:.0f} percent too high, and needs dozens of steps to get inside the noise. "
-            "<bookmark mark='a'/> QE, with two steps, is off by about "
-            f"{100 * abs(q2['rel']):.0f} percent, and from sixteen steps its error disappears into the Monte Carlo "
-            "noise. It is the House's Heston simulator, and every Heston path in this part comes from it."
-        ) as vo:
-            self.play(FadeIn(g), Create(zero), FadeIn(side[0]), FadeIn(leg[0]), Create(eu[0]), FadeIn(eu[1]), run_time=2)
-            vo.wait_until("a")
-            self.play(FadeIn(leg[1]), Create(qe[0]), FadeIn(qe[1]), FadeIn(side[1]), run_time=2)
-        self.wait(0.4)
         self.clear_scene()
 
     def cards(self):

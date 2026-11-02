@@ -158,8 +158,8 @@ class Lift(VoiceoverScene):
             row[1].set_x(tab[0][1].get_x())
         tab[1:].next_to(tab[0], DOWN, buff=0.35)
         tab.move_to(LEFT * 2.2)
-        side = wrapped_label(r"against rough Heston with $H = 0.1$, fitted to the Surface in chapter 4, solved exactly by the fractional "
-                             r"Adams scheme; the lift is a Heston model with $N$ variance factors and no fractional calculus",
+        side = wrapped_label(r"against rough Heston with $H = 0.1$, fitted to the Surface in chapter 7, solved exactly by the fractional "
+                             r"Adams scheme; the lift (Abi Jaber and El Euch 2019) is a Heston model with $N$ variance factors and no fractional calculus",
                              4.6, 20, GREY_A).to_edge(RIGHT, buff=0.6)
         src = illustration(r"13 strikes, $\pm 30\%$; the House's \texttt{lifted\_heston\_cf}")
         with self.voiceover(

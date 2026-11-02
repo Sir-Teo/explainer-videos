@@ -14,7 +14,6 @@ class Jumps(VoiceoverScene):
         lf = load("levy_fits")
         br = load("bates_replay")
         self.card()
-        self.models()
         self.cake()
         self.derive()
         self.scores(c, lf)
@@ -27,36 +26,6 @@ class Jumps(VoiceoverScene):
         with self.voiceover("Chapter eight. Jumps: Merton, Kou, and Bates."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
-
-    def models(self):
-        rows = [cmath(r"\frac{dS}{S_-}", r"=", r"\sigma\,dW_t + (e^{J} - 1)\,dN_t - \lambda\bar k\,dt", font_size=36,
-                      colors={r"\frac{dS}{S_-}": SPOT}),
-                cmath(r"J", r"\sim", r"\mathcal{N}(\mu_J, \sigma_J^2)\ \ \text{(Merton)}\quad\text{or}\quad "
-                      r"\text{two exponentials (Kou)}", font_size=34, colors={r"J": BAD}),
-                cmath(r"\text{Bates}", r"=", r"\text{Heston} + \text{Merton's jumps}", font_size=36,
-                      colors={r"\text{Bates}": MODEL_COL["Bates"]})]
-        whys = [why(r"Merton (1976): Poisson-timed jumps $N_t$ at rate $\lambda$ on top of the diffusion; the last term "
-                    r"keeps the forward a martingale"),
-                why(r"Merton's jumps are log-normal; Kou's (2002) are exponential up and down, with fatter tails and "
-                    r"closed-form barrier prices"),
-                why(r"Bates (1996): stochastic volatility for the long end, jumps for the short end, after the crash of "
-                    r"1987 made short-dated puts dear")]
-        step = ladder(self, rows, whys, keep=3, top=2.8, x=-1.6, buff=0.85, edge=6.9)
-        with self.voiceover(
-            "A diffusion cannot gap. Robert Merton added jumps in 1976: on top of the Brownian motion, a Poisson clock "
-            "rings at rate lambda, and each ring multiplies the price by a random factor. The last term pays for the "
-            "jumps, so the forward stays fair. <bookmark mark='a'/> Merton's jumps are log-normal. Steven Kou's, in "
-            "2002, are exponential, with fatter tails and closed-form prices for barriers. <bookmark mark='b'/> David "
-            "Bates, studying the market after 1987, put the two ideas together: Heston's variance for the long end, "
-            "Merton's jumps for the short end, where a sudden crash is all a three-day put is really about."
-        ) as vo:
-            step(0)
-            vo.wait_until("a")
-            step(1)
-            vo.wait_until("b")
-            step(2)
-        self.wait(0.4)
-        self.clear_scene()
 
     def cake(self):
         sig, mj, sj, T = 0.3, -0.12, 0.08, 0.25

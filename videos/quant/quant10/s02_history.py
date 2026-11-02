@@ -17,7 +17,7 @@ class History(VoiceoverScene):
 
     def card(self):
         c = chapter_card(1, r"Before the formula", r"Why did it take seventy-three years?",
-                         lit=(1900, 1965, 1967, 1969, 1973), part=PART)
+                         lit=(1900, 1965, 1967, 1973, 1997), part=PART)
         with self.voiceover("Chapter one. Before the formula."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
@@ -50,13 +50,12 @@ class History(VoiceoverScene):
         env_lab = MathTex(r"\pm\,\sigma\sqrt t", font_size=30, color=SPOT).next_to(env[0], RIGHT, buff=0.1)
         ill = note(r"illustrative", font_size=18).next_to(ax, DOWN, buff=0.08).align_to(ax, RIGHT)
         with self.voiceover(
-            "People priced options long before 1973. Louis Bachelier's thesis of 1900, the one this series began "
-            "with, priced options on French government bonds with a random walk and compared his prices with "
-            "the quotes on the Paris exchange. <bookmark mark='a'/> Then the idea slept for half a century. In "
-            "the 1950s and 60s economists rediscovered Bachelier, replaced his random walk with a lognormal price "
-            "that cannot go negative, and wrote down what an option should be worth: its expected payoff, "
-            "discounted. Case Sprenkle in 1961, James Boness in 1964, <bookmark mark='b'/> Paul Samuelson in 1965. "
-            "Their formulas look almost exactly like the one we will derive. Almost."
+            "People priced options long before 1973. Louis Bachelier's thesis of 1900, where this series began, "
+            "priced options on French government bonds with a random walk and checked them against the Paris "
+            "quotes. <bookmark mark='a'/> Then the idea slept for half a century. In the 1950s and 60s economists "
+            "rediscovered him, swapped his random walk for a lognormal price, and wrote down what an option should "
+            "be worth: its expected payoff, discounted. Case Sprenkle in 1961, James Boness in 1964, "
+            "<bookmark mark='b'/> Paul Samuelson in 1965. Their formulas look almost exactly like ours. Almost."
         ) as vo:
             self.play(FadeIn(strip), FadeIn(cards[0], shift=UP * 0.2))
             self.play(LaggedStart(*[Create(w) for w in walks], lag_ratio=0.08, run_time=3), FadeIn(ill))
@@ -90,12 +89,11 @@ class History(VoiceoverScene):
             "expected rate mu to maturity, times a probability-like weight; the strike K times another; the whole "
             "thing discounted at a rate rho. <bookmark mark='a'/> And there was the problem. Mu is how fast the "
             "stock is expected to grow; rho is the return an investor would demand for holding something as risky "
-            "as an option. Nobody knows either. Every investor would plug in different numbers and get a "
-            "different price. A formula with two unobservable inputs is not much of a formula. "
-            "<bookmark mark='b'/> The Black-Scholes formula is this one with both of them replaced by a single "
-            "number anyone can look up: the riskless interest rate r. The expected return of the stock does not "
-            "appear. Not because it is small, but because it does not matter. Why it does not matter is the "
-            "whole content of this part."
+            "as an option. Nobody knows either. Pause and predict: two investors expect plus thirty and minus "
+            "ten percent a year from the stock. Do they agree on the call's price? <bookmark mark='b'/> In the "
+            "answer of 1973, yes. The Black-Scholes formula is this one with both unknowns replaced by a single "
+            "number anyone can look up: the riskless interest rate r. The stock's expected return does not "
+            "appear, not because it is small, but because it does not matter. Why is the content of this part."
         ) as vo:
             self.play(Write(f1), run_time=2)
             self.play(FadeIn(d1))
@@ -145,15 +143,17 @@ class History(VoiceoverScene):
             "issued by companies. Their method: sell the overpriced warrants and hold the stock against them, "
             "adjusting as the price moves. A hedge: the short warrant loses when the stock rises, the shares gain, "
             "and at today's price the two cancel: the white curve is flat there. It bends down only for big moves, "
-            "and that bend will turn out to be where all of this part's money is made and lost. Thorp has said he was trading with a formula equivalent to "
-            "Black-Scholes by 1969, and kept it to himself. <bookmark mark='a'/> At the same time Fischer Black, "
+            "and that bend is where all of this part's money is made and lost. By 1967, Donald MacKenzie "
+            "reports, Thorp was using a formula that matched Black-Scholes but for one discount factor, and kept "
+            "it to himself. <bookmark mark='a'/> At the same time Fischer Black, "
             "a consultant with a physics degree, and Myron Scholes, a young professor at MIT, asked what a hedged "
             "position is worth. If the hedge removes the market risk, the capital asset pricing model says the "
             "position must earn the riskless rate. <bookmark mark='b'/> Their colleague Robert Merton saw the "
             "deeper reason: trade continuously, and the hedge is not just low risk, it is riskless. Then no model "
-            "of investors is needed at all, only the absence of arbitrage. <bookmark mark='c'/> Black and Scholes's "
-            "paper was turned down by the first journals they sent it to. It appeared in the Journal of "
-            "Political Economy in the spring of 1973, alongside Merton's in the Bell Journal."
+            "of investors is needed at all, only the absence of arbitrage. <bookmark mark='c'/> The Journal of "
+            "Political Economy first rejected Black and Scholes's paper as too specialized, and so did the "
+            "Review of Economics and Statistics. It appeared in the Journal of Political Economy in 1973, "
+            "alongside Merton's in the Bell Journal."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             self.play(FadeIn(hx), Create(short), FadeIn(hl[0]))
@@ -171,10 +171,10 @@ class History(VoiceoverScene):
     # ------------------------------------------------------------------
     def exchange(self):
         card = history_card(1973, r"26 April: the Chicago Board Options Exchange opens",
-                            r"standardized calls on 16 stocks, traded in a converted smoking lounge of the Board of "
-                            r"Trade", width=7.2, font_size=27).to_corner(UL, buff=0.5)
+                            r"standardized calls only, on 16 stocks: 911 contracts on the first day; puts from 1977",
+                            width=7.2, font_size=27).to_corner(UL, buff=0.5)
         pts = VGroup(*[wrapped_label(t, 6.4, 28, GREY_A) for t in (
-            r"within a few years: the formula on traders' calculators and printed sheets",
+            r"Black sells sheets of theoretical prices to market makers (MacKenzie 2003)",
             r"traders quote \emph{volatility}, not price",
             r"1997: the Nobel prize for Scholes and Merton (Black died in 1995)",
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.38).next_to(card, DOWN, buff=0.6).align_to(card, LEFT)
@@ -203,14 +203,13 @@ class History(VoiceoverScene):
         sheet.to_edge(RIGHT, buff=0.45).shift(DOWN * 0.4)
         sheet.add(note(r"illustrative", font_size=16).next_to(frame, DOWN, buff=0.06).align_to(frame, RIGHT))
         with self.voiceover(
-            "A month before the paper appeared, on the twenty-sixth of April 1973, the Chicago Board Options "
-            "Exchange opened, with standardized calls on sixteen stocks. Within a few years traders on the floor "
-            "carried the formula on calculators and on printed sheets of theoretical prices, and the sociologist "
-            "Donald MacKenzie has argued that the market came to price options the way the formula said "
-            "because traders used it. <bookmark mark='a'/> They stopped quoting options in dollars and started "
-            "quoting them in volatility, the one input of the formula that cannot be looked up. "
-            "<bookmark mark='b'/> In 1997 Scholes and Merton received the Nobel prize; Black had died two years "
-            "before. Now let us derive what they found."
+            "On the twenty-sixth of April 1973 the Chicago Board Options Exchange opened: calls only, on sixteen "
+            "stocks, nine hundred and eleven contracts on the first day; puts came in 1977. Fischer Black sold "
+            "sheets of theoretical prices to its traders, and the sociologist Donald MacKenzie has argued that the "
+            "market came to price options the way the formula said because traders used it, chapter eighteen's "
+            "story. <bookmark mark='a'/> They started quoting options in volatility, the one input that cannot "
+            "be looked up. <bookmark mark='b'/> In 1997 Scholes and Merton received the Nobel prize; Black had "
+            "died two years before. Now let us derive what they found."
         ) as vo:
             self.play(FadeIn(strip), FadeIn(card, shift=UP * 0.2))
             self.play(FadeIn(pts[0]), FadeIn(sheet, shift=LEFT * 0.2))

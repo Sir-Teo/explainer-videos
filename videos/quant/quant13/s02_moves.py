@@ -18,7 +18,6 @@ class Moves(VoiceoverScene):
         self.series(f)
         self.scatter(f, vf)
         self.clustering(vf)
-        self.leverage(f)
         self.crash(vf)
 
     def card(self):
@@ -64,42 +63,6 @@ class Moves(VoiceoverScene):
             self.play(FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("b")
             self.play(FadeIn(leg[1]), Create(ld), FadeIn(side[2]), FadeIn(side[3]), run_time=2.5)
-        self.wait(0.4)
-        self.clear_scene()
-
-    def leverage(self, f):
-        yrs = sorted(f["by_year"])
-        vals = [f["by_year"][y] for y in yrs]
-        g = axes([-0.5, len(yrs) - 0.5], [-0.7, 0.4], x_length=5.6, y_length=3.8, ylabel=r"corr(return, change in DVOL)",
-                 xticks=list(range(len(yrs))), xfmt=lambda u: str(yrs[int(round(u))]), yticks=[-0.6, -0.3, 0, 0.3],
-                 font_size=17).to_edge(LEFT, buff=0.8).shift(DOWN * 0.3)
-        ax = g.ax
-        bars = VGroup(*[Rectangle(width=0.55, height=abs(ax.c2p(0, v)[1] - ax.c2p(0, 0)[1]), stroke_width=0,
-                                  fill_opacity=0.85, fill_color=BAD if v < 0 else RV)
-                        .move_to(ax.c2p(i, v / 2)) for i, v in enumerate(vals)])
-        side = VGroup(
-            label(r"on days bitcoin fell more than 5\%:", font_size=22, color=GREY_A),
-            MathTex(rf"\text{{DVOL}}\ +{f['dvol_change_down5']:.1f}\%", font_size=34, color=BAD),
-            label(r"on days it rose more than 5\%:", font_size=22, color=GREY_A),
-            MathTex(rf"\text{{DVOL}}\ {f['dvol_change_up5']:+.1f}\%", font_size=34, color=RV),
-            wrapped_label(r"Black (1976) called it the leverage effect: as equity falls, firms grow more levered and "
-                          r"riskier. Bitcoin has no debt, yet volatility still rises in its falls; in the 2023 rally the "
-                          r"sign flipped, as calls were bid on the way up", 5.2, 20, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.5)
-        src = real_data(rf"{f['n']} daily pairs, 2021--2025; average change in log DVOL, in percent")
-        with self.voiceover(
-            "And the two rivers are tied together. On the days Bitcoin fell more than five percent, DVOL rose by "
-            f"{f['dvol_change_down5']:.0f} percent on average. On days it rose that much, DVOL barely moved. "
-            "<bookmark mark='a'/> Year by year, the correlation between the day's return and the change in implied "
-            "volatility was negative in most years, strongly so in 2022. Fischer Black named this in 1976, the "
-            "leverage effect: a falling stock makes its firm more levered and riskier. Bitcoin has no debt, and the "
-            "effect is still there. In 2023's rally it even flipped sign, as traders bid up calls on the way up. "
-            "That correlation is what tilts the smile into a skew."
-        ) as vo:
-            self.play(FadeIn(side[0]), FadeIn(side[1]), FadeIn(side[2]), FadeIn(side[3]), FadeIn(src))
-            vo.wait_until("a")
-            self.play(FadeIn(g), LaggedStart(*[GrowFromEdge(b, UP if v < 0 else DOWN) for b, v in zip(bars, vals)],
-                                             lag_ratio=0.2, run_time=2.5), FadeIn(side[4]))
         self.wait(0.4)
         self.clear_scene()
 

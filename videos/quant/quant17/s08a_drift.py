@@ -103,7 +103,7 @@ class Drift(VoiceoverScene):
             "fifty percent, three seeds each. Here are the profit-and-loss distributions of the two hedgers on fresh "
             "paths. <bookmark mark='a'/> The dashed line is the CVaR hedger's learned threshold, sliding to where it "
             f"settled, which is the median loss, as the derivation says: {c0['w']:.3f}, against an empirical "
-            f"{c0['var50']:.3f}. <bookmark mark='b'/> {first} {second} The choice of risk measure is a choice of which "
+            f"{c0['var50']:.3f}. <bookmark mark='b'/> {first} <bookmark mark='c'/> {second} The choice of risk measure is a choice of which "
             "losses you fear most, and the network will shape its hedge accordingly."
         ) as vo:
             self.play(FadeIn(g), Create(H1), FadeIn(rows[0]), FadeIn(rows[1]))
@@ -114,6 +114,7 @@ class Drift(VoiceoverScene):
             self.play(FadeIn(rows[3]))
             vo.wait_until("b")
             self.play(FadeIn(rows[4]))
+            vo.wait_until("c")
         wline.clear_updaters()
         wlab.clear_updaters()
         self.wait(0.4)
@@ -136,9 +137,9 @@ class Drift(VoiceoverScene):
                     r"shares, a bet on the drift layered on top of the hedge")]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.4, buff=0.8, edge=6.9)
         with self.voiceover(
-            "Now the trap. Every path so far had no drift. Real stocks do drift, and a deep hedger trained on "
-            "historical-looking paths sees one. Minimizing entropic risk is maximizing exponential utility. What is "
-            "the optimal holding when the stock drifts at mu? <bookmark mark='a'/> In a complete market the answer "
+            "Now the trap. Every path so far had no drift; paths that look like history do. Minimizing entropic risk "
+            "is maximizing exponential utility: what is the best holding when the stock drifts at mu? "
+            "<bookmark mark='a'/> In a complete market the answer "
             "splits in two. The claim can be replicated, so the delta hedge removes it. What is left is the problem "
             "with no claim at all, and Robert Merton solved that in 1969: under exponential utility, hold a fixed "
             "dollar amount, the drift over risk aversion times variance. <bookmark mark='c'/> At the money, with a "

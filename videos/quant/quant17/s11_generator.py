@@ -163,11 +163,10 @@ class Generator(VoiceoverScene):
         l2 = seed_band(g2.ax, np.arange(dd.shape[1]), np.clip(dd, None, float(np.percentile(dd, 99))), GEN_COL["diffusion"])
         ks = [r["seeds"][s]["kurtosis"] for s in ("0", "1", "2")]
         with self.voiceover(
-            "Four contenders. GJR-GARCH, the econometric baseline from Part seven. Quant GANs, temporal convolution "
-            "networks trained adversarially to reproduce clustering and leverage. Signature-based generators, trained "
-            "by matching expected signatures, which Buehler's team built for exactly this use, with little data; and the "
-            "diffusion model. <bookmark mark='a'/> Two of them trained here, replayed: the signature network's loss "
-            "over its fifteen hundred steps, and the diffusion model's over four thousand, three seeds. The three "
+            "Four contenders: GJR-GARCH from Part seven; Quant GANs, temporal convolutions trained adversarially; "
+            "signature-based generators, which Buehler's team built for small data; and diffusion. "
+            "<bookmark mark='a'/> Two trained here, replayed: the signature network's loss, and the diffusion model's, "
+            "three seeds. The three "
             f"diffusion seeds produce windows with excess kurtosis between {min(ks):.1f} and {max(ks):.1f}, against "
             f"{r['real_kurtosis_train']:.1f} in the training years: the tails are the hard part."
         ) as vo:

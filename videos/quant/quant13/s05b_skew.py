@@ -15,7 +15,6 @@ class Skew(VoiceoverScene):
         sm = load("skew_more")
         self.card()
         self.multiples(sm)
-        self.slices(c)
         self.termstructure(sm)
         self.derive(c)
         self.cards(c)
@@ -199,40 +198,3 @@ class Skew(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def slices(self, c):
-        panels = VGroup()
-        anims = []
-        for sl in c["shown"]:
-            k, iv = np.asarray(sl["k"]), np.asarray(sl["iv"])
-            kk = np.asarray(sl["kk"])
-            lo, hi = 0.35, 0.8
-            g = axes([kk.min(), kk.max()], [lo, hi], x_length=3.9, y_length=3.2, xlabel=r"log-moneyness",
-                     yticks=[0.4, 0.6, 0.8], yfmt=lambda u: f"{100 * u:.0f}\\%",
-                     xticks=[round(kk.min() + 0.05, 1), 0, round(kk.max() - 0.05, 1)], font_size=14)
-            ttl = label(rf"{sl['days']} days", font_size=20).next_to(g, UP, buff=0.1)
-            dots = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.05, color=WHITE) for a, b in zip(k, iv) if lo <= b <= hi])
-            lines = VGroup(*[curve(g.ax, kk, np.clip(np.asarray(sl["curves"][n]), lo, hi), MODEL_COL[n], stroke_width=2.2)
-                             for n in ("VG", "NIG", "Heston", "Bates")])
-            panels.add(VGroup(g, ttl, dots, lines))
-        panels.arrange(RIGHT, buff=0.55).to_edge(UP, buff=0.9)
-        leg = legend([(WHITE, r"the Surface's quotes")] + [(MODEL_COL[n], NAMES[n]) for n in ("Heston", "Bates", "VG", "NIG")],
-                     font_size=17)
-        leg.arrange(RIGHT, buff=0.4).next_to(panels, DOWN, buff=0.45)
-        foot = wrapped_label(r"at 9 days every model bends; at 198 days the L\'evy models' smiles have gone nearly flat, while "
-                             r"the market's has not: their skew dies too fast with maturity", 11.0, 20, GREY_A).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Here are three expiries, with each model's smile over the quotes. At nine days, everything can bend. "
-            "<bookmark mark='a'/> At fifty-one days, the Lévy models start to miss the wings. <bookmark mark='b'/> At "
-            "a hundred and ninety-eight days, their smiles have gone nearly flat, and the market's has not. With "
-            "independent increments, a Lévy model's skew must die away as maturity grows. Stochastic volatility "
-            "keeps it alive."
-        ) as vo:
-            self.play(FadeIn(panels[0][:3]), FadeIn(leg), LaggedStart(*[Create(l_) for l_ in panels[0][3]], lag_ratio=0.2),
-                      run_time=2)
-            vo.wait_until("a")
-            self.play(FadeIn(panels[1][:3]), LaggedStart(*[Create(l_) for l_ in panels[1][3]], lag_ratio=0.2), run_time=2)
-            vo.wait_until("b")
-            self.play(FadeIn(panels[2][:3]), LaggedStart(*[Create(l_) for l_ in panels[2][3]], lag_ratio=0.2),
-                      FadeIn(foot), run_time=2)
-        self.wait(0.4)
-        self.clear_scene()

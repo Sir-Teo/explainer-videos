@@ -132,11 +132,14 @@ class Outro(VoiceoverScene):
             (r"COS, PDEs and Monte Carlo, made fast and checked", [16]),
             (r"neural calibrators that fit in microseconds; deep hedging under SV", [17]),
             (r"stochastic rates: the same ideas for the yield curve", [19]),
+            (r"jump to default: credit inside the equity smile", [20]),
+            (r"FX desks: SLV, barriers and the mixing fraction in practice", [22]),
         ])
         with self.voiceover(
             "Where this comes back. The square-root law is Part fourteen's starting point. Part fifteen prices "
             "structured products across these models. Part sixteen makes the pricing fast, and Part seventeen trains "
-            "networks to calibrate in microseconds. And the same ideas return for interest rates."
+            "networks to calibrate in microseconds. The same ideas return for interest rates, a jump to zero becomes "
+            "credit, and FX desks run stochastic local volatility every day."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r_) for r_ in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
