@@ -89,10 +89,10 @@ ZH = {
         "缓存不能无限增长，所以第一个问题是：模型可以不要哪些词元。<bookmark mark='a'/>完整的注意力，让每个词元去看前面的每一个词元。"
         "2019年，里翁·蔡尔德的稀疏Transformer，只看最近的一个窗口，再加上一个跨步的模式，<bookmark mark='b'/>2020年，Longformer保留一个窗口，"
         "再加几个全局词元，它们看得见一切，也被一切看见。<bookmark mark='c'/>BigBird又加了几个随机的键，并且证明了，这种稀疏的模式，"
-        "仍然能算出完整注意力能算的任何东西。<bookmark mark='d'/>这样一来，每个词元读的键的数目是固定的，缓存就不再增长了。"
+        "仍然能算出完整注意力能算的任何东西。<bookmark mark='d'/>稀疏读取减少的是计算量；滑动窗口允许丢弃旧键，但若随机读取任意旧键，就仍须保留它们。"
         "<bookmark mark='e'/>2019年的Transformer-XL走的是另一条路：它把上一段的状态缓存下来，让每一段都去读它，于是一叠层能看到往前好几段。",
 
-    'f"A sliding window has a hidden flaw':
+    'f"A sliding window has a hidden flaw, found in 2023 by Guangxuan Xiao and colleagues. Part 13 showed that many heads park their attention on the very first token, an attention sink, when they have nothing to do. <bookmark mark=\'a\'/> Here is the series\' own model, the one trained on the thirty novels: each square is a head, and the number is the share of its attention that lands on the first token of the window. <bookmark mark=\'b\'/> Spread evenly, the first token would get {100 * uni:.1f} percent. Instead, " + verdict':
         "滑动窗口有一个隐藏的缺陷，2023年由肖光烜和同事们发现。第13部分讲过，许多注意力头在没事可做的时候，会把注意力停在最开头那个词元上，"
         "这就是注意力汇点。<bookmark mark='a'/>这是本系列自己的模型，就是用三十部小说训练的那个：每个方块是一个头，上面的数，是它的注意力"
         "落在窗口第一个词元上的比例。<bookmark mark='b'/>如果平均分配，第一个词元会分到{100 * uni:.1f}%。可实际上，{verdict}",
@@ -106,8 +106,8 @@ ZH = {
         "比大模型更少依赖第一个词元。",
 
     "f'not one of its {L_ * H_} heads":
-        "它的{L_ * H_}个头里，没有一个给第一个词元哪怕这个数的十倍；平均下来，每个头只给它{100 * mean:.1f}%。这个模型从没长出汇点："
-        "它是在从小说里随机截取的窗口上训练的，找到了别的地方来停放注意力。",
+        "它的{L_ * H_}个头里，没有一个给第一个词元哪怕这个数的十倍；平均下来，每个头只给它{100 * mean:.1f}%。在这些窗口中，按这个阈值，"
+        "第一个词元不是强注意力汇点。",
 
     'f"That matters for the cache.':
         "这对缓存很要紧。我们让本系列的模型，像服务器那样一次一个地读计分板那段文字的前{n:,}个词元，每个头只留出{W}个词元的键和值的位置，"
@@ -123,7 +123,7 @@ ZH = {
         "再把最前面的四个词元也留着，它就恢复了：{bits['sinks']:.2f}，接近每个窗口都从头重算的{br:.2f}。",
 
     'f"Keeping the first four tokens as well gives':
-        "把最前面的四个词元也留着，得到{bits['sinks']:.2f}，而每个窗口都从头重算是{br:.2f}：没有汇点可丢，这个模型也就用不着它们。",
+        "把最前面的四个词元也留着，得到{bits['sinks']:.2f}，而每个窗口都从头重算是{br:.2f}：在这段文字上，预留最前面四个词元的影响很小。",
 
     "f'And keeping everything fails differently":
         "而什么都留着，会以另一种方式失败：过了第256个位置，模型就遇到了训练时从没见过的位置，最后得到{bits['full']:.2f}。这就是为什么长窗口"
@@ -510,11 +510,7 @@ ZH = {
         "<bookmark mark='c'/>可是大海捞针是一道容易的题：问题重复了针里的词，所以一个会匹配词语的注意力头就能找到它。",
 
     'So the tests got harder.':
-        "于是测试变难了。<bookmark mark='a'/>2024年，英伟达的谢承平和同事们做了RULER：一次藏好几根针，把值沿着一串变量传下去，数出最常见的词，"
-        "还有关于文本的问题。在17个号称至少支持3.2万个词元的模型里，到了3.2万个词元，只有一半还表现良好。<bookmark mark='b'/>2025年，NoLiMa"
-        "去掉了字面上的匹配：针和问题之间没有一个共同的词。到了3.2万个词元，13个模型里有11个跌到了它们短文本成绩的一半以下。"
-        "<bookmark mark='c'/>而Chroma关于上下文腐烂的报告发现，它试过的全部18个模型，输入越长就越不可靠，哪怕是简单的任务。"
-        "<bookmark mark='d'/>模型能接受的长度，并不是它能用上的长度。",
+        "于是测试变难了。<bookmark mark='a'/>2024年，英伟达的谢承平和同事们做了RULER：一次藏好几根针，把值沿着一串变量传下去，数出最常见的词，还有关于文本的问题。在17个号称至少支持3.2万个词元的模型里，论文摘要说，只有一半在这个长度仍表现良好。<bookmark mark='b'/>2025年，NoLiMa减少了字面匹配：针和问题的字面重合很少。到了3.2万个词元，13个模型里有11个跌到了它们短文本成绩的一半以下。<bookmark mark='c'/>而Chroma关于上下文腐烂的报告测试了18个模型，发现其各项任务中，输入变长伴随可靠性下降，简单任务也如此。<bookmark mark='d'/>模型能接受的长度，并不是它能用上的长度。",
 
     'f"We can run a small RULER of our own.':
         "我们可以自己做一个小RULER。用上一章的四种两层模型，在{T0}个词元上训练三个任务：在一串填充词里找一根针；在四根针里找出被问到的那一根；"
@@ -548,38 +544,29 @@ ZH = {
     'f"The hybrid\'s climbs too':
         "混合模型的损失也往上爬，从{near_h:.2f}到{far_h:.2f}。",
 
-    'But neither can find a needle':
-        "可是两个模型都找不到针：给它们24个随机词元，接着一段小说，再来同样的24个词元，即使只隔16个词元，两个都预测不出重复的部分。"
-        "这么小、训练这么短的模型，从没形成第13部分讲的归纳头；所以前面的测试，用的是专门为这项任务训练的小模型。",
+    'But in this copy test':
+        "可是在这个抄写测试里，给它们24个随机词元，接着一段小说，再来同样的24个词元，即使两份副本之间只有16个小说词元，两个都不能可靠预测重复的部分。这些小模型训练时间很短，在这个测试里没有表现出第13部分讲的归纳式抄写；前面的测试，用的是专门为这项任务训练的模型。",
 
     "f'And in the copy test, twenty-four random tokens":
-        "在抄写测试里，24个随机词元在一段小说之后重复出现，两份副本相隔{r['gaps'][0]}个词元时，Transformer预测对重复部分的"
+        "在抄写测试里，24个随机词元在一段小说之后重复出现，两份副本之间有{r['gaps'][0]}个小说词元时，Transformer预测对重复部分的"
         "{100 * ct.mean(0)[0]:.0f}%，混合模型{100 * chy.mean(0)[0]:.0f}%。",
 
     'Where does that leave the frontier?':
-        "那前沿又怎样呢？<bookmark mark='a'/>2024年，谷歌的Gemini 1.5提供了一百万个词元，并报告在多达一千万个词元里找到了针。"
-        "<bookmark mark='b'/>Kimi Linear的报告，为混合架构在长文本上的表现给出了证据：在12.8万个词元的RULER上，84.3分，同样方式训练的"
-        "完整注意力是81.3分；而它的注意力层改用旋转位置时，只有78.8分。<bookmark mark='c'/>在OpenAI更难的MRCR测试里，八个相似的请求藏在"
-        "一百万个词元中，Anthropic在2026年2月报告，Claude Opus 4.6找对了76%，而它的前一代Sonnet 4.5只有18.5%。<bookmark mark='d'/>"
-        "DeepSeek-V4则通过压缩键和值来读一百万个词元，压缩比分别是4比1和128比1，再在其中挑选：这是第16部分的主题。这些都是各家自己的测量。",
+        "那前沿又怎样呢？<bookmark mark='a'/>2024年，谷歌的Gemini 1.5提供了一百万个词元，并报告在多达一千万个词元里找到了针。<bookmark mark='b'/>Kimi Linear的报告，为混合架构在长文本上的表现给出了证据：在12.8万个词元的RULER上，84.3分，同样方式训练的完整注意力是81.3分；而它的注意力层改用旋转位置时，只有78.8分。<bookmark mark='c'/>在OpenAI的MRCR v2测试里，八个相似请求位于标作一百万词元的长提示区间。Anthropic在2026年2月报告，Claude Opus 4.6的平均匹配率为76%，作为对比，Sonnet 4.5为18.5%，两者的思考设置不同。<bookmark mark='d'/>DeepSeek-V4则通过压缩键和值来读一百万个词元，压缩比分别是4比1和128比1，再在其中挑选：这是第16部分的主题。这些都是各家自己的测量。",
 
     # ------------------------------------------------------------------ Retrieval
     'Chapter fourteen. Retrieval as memory.':
         '第14章。把检索当作记忆。',
 
     'Every memory so far lives inside the model.':
-        "到目前为止的每一种记忆，都住在模型里面。另一条路，是把记忆放在模型之外，像一座图书馆。<bookmark mark='a'/>把一个大文集里的每一段"
-        "都变成一个向量，也就是嵌入，问题也变成一个；离问题最近的那些段落，就是要读的。<bookmark mark='b'/>2020年，弗拉基米尔·卡尔普欣和同事们"
-        "训练了两个编码器，让问题落在它们的答案附近，这叫稠密段落检索；REALM把检索器和语言模型一起训练；帕特里克·刘易斯和同事们给这套做法"
-        "起了名字：检索增强生成，找到段落，放进上下文，再生成。<bookmark mark='c'/>如今大多数聊天助手就是这样搜索文档的，而这份记忆从来不需要"
-        "塞进上下文窗口。",
+        "到目前为止的每一种记忆，都住在模型里面。另一条路，是把记忆放在模型之外，像一座图书馆。<bookmark mark='a'/>把一个大文集里的每一段都变成一个向量，也就是嵌入，问题也变成一个；离问题最近的那些段落，就是要读的。<bookmark mark='b'/>2020年，弗拉基米尔·卡尔普欣和同事们训练了两个编码器，让问题落在它们的答案附近，这叫稠密段落检索；REALM把检索器和语言模型一起训练；帕特里克·刘易斯和同事们给这套做法起了名字：检索增强生成，找到段落，放进上下文，再生成。<bookmark mark='c'/>助手可以搜索比上下文窗口更大的图书馆，再在窗口内阅读选出的段落。",
 
     'f"A language model can retrieve too':
         "语言模型也可以检索，一次一个词元。2020年，乌尔瓦希·坎德尔瓦尔和同事们，把训练文本的每个词元都存成一对：模型在它前面一刻的隐状态，"
         "和这个词元本身。<bookmark mark='a'/>测试时，找出离当前隐状态最近的那些存储状态，让它们的下一个词元来投票，越近权重越大。再把投票结果和"
         "模型自己的预测混合，记忆占λ这么大的份额。不做任何额外训练，它就让当时最好的模型在维基百科文本上的困惑度降了2.9。<bookmark mark='b'/>"
         "我们为本系列的模型也做了一个：三十部小说的全部{n_all / 1000000.0:.1f}百万个词元，都存成隐状态。<bookmark mark='c'/>这是计分板那段文字里，"
-        "它帮得最多的那个词元。模型自己给正确的下一个词元{100 * float(ex['p_lm']):.1f}%；<bookmark mark='d'/>最近的那些存储状态，来自小说里"
+        "它帮得最多的那个词元。模型自己给正确的下一个词元{100 * float(ex['p_lm']):.2g}%；<bookmark mark='d'/>最近的那些存储状态，来自小说里"
         "看起来一样的地方，给它投了{100 * float(ex['p_knn']):.0f}%的票。",
 
     '"How much does it help?':
@@ -604,19 +591,17 @@ ZH = {
     '"Where does the memory of the novels help?':
         "关于小说的记忆，在哪里帮了忙？<bookmark mark='a'/>这些是这段文字里，它省下最多比特的词元。{v}<bookmark mark='b'/>{v2}",
 
-    "f'Many are names and capitals":
-        "很多是名字和大写的词，比如{names[0]}：这份记忆见过小说是怎样用它们的。",
+    "f'Some are capitalized tokens":
+        "有些是以大写字母开头的词元，比如{names[0]}；这里展示的是它们测得的收益。",
 
-    'Mostly they finish a word that has already begun':
-        '它们大多是把一个已经开了头的词补完，就像例子里那样：这些补全，小说里见过很多次。',
+    'The numbers beside them report':
+        "旁边的数字，表示每个词元在这段文字上省下的比特。",
 
-    'f"Edouard Grave and colleagues had done the same in 2017 with the text read so far, a continuous cache. For our passage, which runs far past the model\'s 256-token window, a memory of its own earlier hidden states takes the score from {base:.3f} to {float(sc[\'bits\']):.3f}: names that appeared a page earlier come back."':
-        "2017年，爱德华·格拉夫和同事们，用已经读过的文本做过同样的事，叫作连续缓存。我们这段文字远远超过模型256个词元的窗口，用它自己更早的"
-        "隐状态做一份记忆，把分数从{base:.3f}降到了{float(sc['bits']):.3f}：一页之前出现过的名字，又被找了回来。",
+    'f"Edouard Grave and colleagues proposed a similar idea in 2017, a continuous cache over the text read so far. Our adaptation votes with up to thirty-two nearest earlier states using squared Euclidean distance. On this passage, the aggregate score moves from {base:.3f} to {float(sc[\'bits\']):.3f}: an improvement from its own past."':
+        "2017年，爱德华·格拉夫和同事们提出了相似的思路：在已经读过的文本上建立连续缓存。我们的改编用平方欧氏距离，让最多32个最近的先前状态投票。在这段文字上，总分从{base:.3f}变为{float(sc['bits']):.3f}：利用自身过去的内容带来了改善。",
 
-    'f"Edouard Grave and colleagues had done the same in 2017 with the text read so far, a continuous cache; for our passage it gives {float(sc[\'bits\']):.3f} against {base:.3f}, little."':
-        "2017年，爱德华·格拉夫和同事们，用已经读过的文本做过同样的事，叫作连续缓存；对我们这段文字，它得到{float(sc['bits']):.3f}，"
-        "而不用它是{base:.3f}，帮助不大。",
+    'f"Edouard Grave and colleagues proposed a similar idea in 2017, a continuous cache over the text read so far. Our adaptation votes with up to thirty-two nearest earlier states using squared Euclidean distance. On our passage it scores {float(sc[\'bits\']):.3f} against {base:.3f}, little aggregate gain."':
+        "2017年，爱德华·格拉夫和同事们提出了相似的思路：在已经读过的文本上建立连续缓存。我们的改编用平方欧氏距离，让最多32个最近的先前状态投票。在我们这段文字上，它得到{float(sc['bits']):.3f}，原来是{base:.3f}，总收益很小。",
 
     '"Retrieval scales too:':
         "检索也能扩大规模：2021年，DeepMind的RETRO从一个两万亿词元的图书馆里查找文本块，只用二十五分之一的参数，就在Pile上接近了GPT-3。"

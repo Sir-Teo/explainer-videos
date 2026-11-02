@@ -38,8 +38,12 @@ class Retrieval(VoiceoverScene):
         qd = Star(n=5, outer_radius=0.18, color=Q, fill_opacity=1).move_to(ax.c2p(*q))
         links = VGroup(*[Line(ax.c2p(*q), ax.c2p(*pts[i]), color=RET, stroke_width=2) for i in near])
         dl = label(r"passages, \ each an embedding", font_size=24, color=GREY_B).next_to(ax, DOWN, buff=0.05)
-        ql = label(r"the question", font_size=24, color=Q).next_to(qd, UR, buff=0.08)
-        tag = note(r"schematic: \ in two of the hundreds of dimensions", font_size=16).to_corner(DL, buff=0.25)
+        ql = label(r"the question", font_size=24, color=Q).next_to(ax, UP, buff=0.2)
+        question_leader = Arrow(ql.get_bottom(), qd.get_top(), buff=0.12, color=Q, stroke_width=2,
+                                max_tip_length_to_length_ratio=0.08)
+        tag = note(r"二维欧氏距离示意；DPR用点积打分" if zh() else
+                   r"2D Euclidean proximity sketch; \ DPR uses dot-product scores",
+                   font_size=16).to_corner(DL, buff=0.25)
         d_card = definition_card(r"retrieval-augmented generation", r"embed the question; \ find the nearest passages in "
                                  r"a large store \ (a dot product, \ over millions); \ put them in the context, \ and "
                                  r"generate", color=RET, width=6.0, font_size=21).move_to([3.6, 1.2, 0])
@@ -59,12 +63,12 @@ class Retrieval(VoiceoverScene):
             "<bookmark mark='b'/> In 2020 Vladimir Karpukhin and colleagues trained two encoders so that questions "
             "land near their answers, dense passage retrieval; REALM trained the retriever together with the "
             "language model; and Patrick Lewis and colleagues named the recipe: retrieval-augmented generation, "
-            "find the passages, put them in the context, and generate. <bookmark mark='c'/> It's how most chat "
-            "assistants search documents today, and the memory never has to fit in a context window."
+            "find the passages, put them in the context, and generate. <bookmark mark='c'/> An assistant can search "
+            "a library larger than its context window, then read the selected passages within that window."
         ) as vo:
             self.play(FadeIn(docs), FadeIn(dl), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(qd), FadeIn(ql))
+            self.play(FadeIn(qd), FadeIn(ql), GrowArrow(question_leader))
             self.play(LaggedStart(*[Create(l_) for l_ in links], lag_ratio=0.3),
                       *[docs[i].animate.set_color(RET).scale(1.6) for i in near])
             vo.wait_until("b")
@@ -103,7 +107,8 @@ class Retrieval(VoiceoverScene):
         store.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         dots_ = MathTex(r"\vdots", font_size=26, color=GREY_B).next_to(store, DOWN, buff=0.08).align_to(store[0][0], LEFT).shift(RIGHT * 0.8)
         sl = label(r"the memory: \ one (hidden state, \ next token) \\ pair for every token of the novels", font_size=19, color=GREY_A)
-        nl = label(r"the next tokens of its \\ 8 nearest stored states", font_size=19, color=KNN_C)
+        nl = label(r"只展示64个邻居中的8个；投票使用全部64个" if zh() else
+                   r"8 of the 64 neighbours shown; \\ the vote uses all 64", font_size=19, color=KNN_C)
         ng = VGroup(sl, store, dots_).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([0.9, -1.25, 0])
         nl.move_to(sl, aligned_edge=LEFT)
         tg = VGroup(label(r"the true next token:", font_size=18, color=GREY_A),
@@ -123,7 +128,7 @@ class Retrieval(VoiceoverScene):
             "best model of the day on Wikipedia text. <bookmark mark='b'/> We built one for the series' model: "
             f"all {n_all / 1e6:.1f} million tokens of the thirty novels, as hidden states. <bookmark mark='c'/> Here "
             "is the token where it helps most in the scoreboard's passage. The model alone gives the right next "
-            f"token {100 * float(ex['p_lm']):.1f} percent; <bookmark mark='d'/> the nearest stored states, from "
+            f"token {100 * float(ex['p_lm']):.2g} percent; <bookmark mark='d'/> the nearest stored states, from "
             f"places in the novels that looked the same, vote {100 * float(ex['p_knn']):.0f} percent for it."
         ) as vo:
             self.play(Write(f1), FadeIn(cite_), FadeIn(cg), FadeIn(tg[0]), FadeIn(tg[1]))
@@ -170,6 +175,10 @@ class Retrieval(VoiceoverScene):
         d2 = VGroup(*[Dot(ax2.c2p(x, y), radius=0.06, color=KNN_C) for x, y in zip(lk, bits)])
         bl = DashedLine(ax2.c2p(lk[0] - 0.2, base), ax2.c2p(lk[-1] + 0.2, base), dash_length=0.06, color=LM_C, stroke_width=2)
         bll = label(r"the model alone", font_size=16, color=LM_C).next_to(bl, DOWN, buff=0.05).align_to(bl, RIGHT)
+        snapshot_note = note(
+            "各比例快照在整批处理后记录；中间计数近似，最终计数精确" if zh() else
+            r"fractional snapshots at complete batches; \ intermediate counts approximate, \ final count exact",
+            font_size=16).to_edge(DOWN, buff=0.2)
         gain = base - float(full["bits"])
         rel = gain / base
         v1 = (f"On the passage, the model alone scores {base:.3f} bits per character. With the memory of the "
@@ -189,7 +198,7 @@ class Retrieval(VoiceoverScene):
             "chapter two of The Maltese Falcon, is not among the thirty novels, so the memory can't simply recall "
             "it: it helps with what novels share."
         ) as vo:
-            self.play(FadeIn(g1), FadeIn(g2))
+            self.play(FadeIn(g1), FadeIn(g2), FadeIn(snapshot_note))
             vo.wait_until("a")
             self.play(Create(c1), run_time=1.5)
             self.play(Create(mark), FadeIn(ml))
@@ -214,24 +223,29 @@ class Retrieval(VoiceoverScene):
         left.move_to([-3.5, -0.3, 0])
         base = float(sc["base_bits"])
         gain = base - float(sc["bits"])
-        hc = history_card(2017, r"a continuous cache \ (Grave, Joulin \& Usunier)", r"the same vote, \ over the text read "
-                          r"so far", color=HIST, width=5.6, font_size=22)
+        hc = history_card(2017, r"a continuous cache \ (Grave, Joulin \& Usunier)",
+                          r"相似的思路：按状态相似度，对已经读过的文本投票" if zh() else
+                          r"a similar idea: \ a state-weighted vote over the text read so far",
+                          color=HIST, width=5.6, font_size=22)
         res = label(rf"the passage's own past, \ beyond the $256$-token window: \\ ${base:.3f}$ $\rightarrow$ "
                     rf"${float(sc['bits']):.3f}$ bits per character \ ($\lambda = {float(sc['lam']):g}$)", font_size=23, color=RET)
-        right = VGroup(hc, res).arrange(DOWN, aligned_edge=LEFT, buff=0.45)
+        adaptation = note(r"原论文：点积权重；本例：最多32个最近的先前状态，平方欧氏距离" if zh() else
+                          r"paper: \ dot-product weights; \\ ours: \ up to 32 nearest earlier states, \ squared Euclidean distance",
+                          font_size=16)
+        right = VGroup(hc, res, adaptation).arrange(DOWN, aligned_edge=LEFT, buff=0.45)
         if right.width > 6.2:
             right.width = 6.2
         right.move_to([3.5, -0.3, 0])
         names = [w.strip() for w, _ in best if w.strip()[:1].isupper()]
-        v = (f"Many are names and capitals, like {names[0]}: the memory has seen how novels use them. " if names else
-             "Mostly they finish a word that has already begun, like the example's: completions the novels have seen "
-             "many times. ")
-        v2 = (f"Edouard Grave and colleagues had done the same in 2017 with the text read so far, a continuous cache. "
-              f"For our passage, which runs far past the model's 256-token window, a memory of its own earlier hidden "
-              f"states takes the score from {base:.3f} to {float(sc['bits']):.3f}: names that appeared a page "
-              "earlier come back." if gain > 0.005 else
-              f"Edouard Grave and colleagues had done the same in 2017 with the text read so far, a continuous cache; "
-              f"for our passage it gives {float(sc['bits']):.3f} against {base:.3f}, little.")
+        v = (f"Some are capitalized tokens, like {names[0]}; here we show their measured gains. " if names else
+             "The numbers beside them report the bits saved for each token on this passage. ")
+        v2 = (f"Edouard Grave and colleagues proposed a similar idea in 2017, a continuous cache over the text read so far. "
+              f"Our adaptation votes with up to thirty-two nearest earlier states using squared Euclidean distance. "
+              f"On this passage, the aggregate score moves from {base:.3f} to {float(sc['bits']):.3f}: "
+              "an improvement from its own past." if gain > 0.005 else
+              f"Edouard Grave and colleagues proposed a similar idea in 2017, a continuous cache over the text read so far. "
+              f"Our adaptation votes with up to thirty-two nearest earlier states using squared Euclidean distance. "
+              f"On our passage it scores {float(sc['bits']):.3f} against {base:.3f}, little aggregate gain.")
         with self.voiceover(
             "Where does the memory of the novels help? <bookmark mark='a'/> Here are the tokens of the passage "
             "where it saves the most bits. " + v + "<bookmark mark='b'/> " + v2
@@ -259,9 +273,16 @@ class Retrieval(VoiceoverScene):
             board.scale_to_fit_width(9.8)
         board.move_to([-1.7, -0.45, 0])
         head = label(r"The scoreboard: \ \textit{The Maltese Falcon}, \ chapter 2", font_size=30).to_edge(UP, buff=0.3)
-        hc = history_card(2021, r"RETRO \ (Borgeaud et al., DeepMind)", r"retrieval from $2$ trillion tokens; \ about "
-                          r"GPT-3's quality \ with $25\times$ fewer parameters", color=HIST, width=3.1, font_size=19)
+        hc = history_card(2021, r"RETRO \ (Borgeaud et al., DeepMind)",
+                          r"从$2$万亿词元检索；在Pile上接近GPT-3，参数少$25$倍" if zh() else
+                          r"retrieval from $2$ trillion tokens; \ about GPT-3's quality on the Pile \ with $25\times$ "
+                          r"fewer parameters", color=HIST, width=3.1, font_size=19)
         hc.move_to([5.35, 0.6, 0])
+        protocol_note = wrapped_label(
+            "沿用各部分原始评分流程；评分目标集合有所不同。第13部分末尾29个字符未评分。比较细小分差前，应先统一评分目标集合。" if zh() else
+            r"Original scoring protocols retained; \ scored target cohorts differ across parts. \ Part 13 leaves 29 "
+            r"suffix characters unscored. \ Small gaps require aligned target cohorts.",
+            3.1, font_size=14, color=GREY_B).next_to(hc, DOWN, buff=0.25).align_to(hc, LEFT)
         by = {r.get("key"): r for r in rows}
         tf, hy, kn, sc = by["tf15"], by["hybrid15"], by["knn"], by["selfcache"]
         base = next(r for r in rows if r["label"] == "the series' model")
@@ -276,7 +297,7 @@ class Retrieval(VoiceoverScene):
             "came close to GPT-3 on the Pile with a twenty-fifth of the parameters. <bookmark mark='a'/> And here is the scoreboard. "
             + v
         ) as vo:
-            self.play(FadeIn(head), FadeIn(hc), FadeIn(board))
+            self.play(FadeIn(head), FadeIn(hc), FadeIn(board), FadeIn(protocol_note))
             vo.wait_until("a")
             for i in mine:
                 self.play(Indicate(board.rows[i], color=C.BITS, scale_factor=1.02), run_time=0.6)

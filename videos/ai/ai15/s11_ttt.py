@@ -137,15 +137,16 @@ class TTT(VoiceoverScene):
 
         sp, st = smooth(sp), smooth(st)
         top_s = float(max(sp.max(), st.max())) * 1.1
+        top_e = max(1.2, float(np.ceil(max(ep.max(), et.max()) * 1.05 * 5) / 5))
         g1 = axes([0, n], [0, top_s], x_length=6.2, y_length=2.3, ylabel=r"surprise: \ $\|\nabla \ell\|$",
                   center=[-3.4, 1.55, 0])
-        g2 = axes([0, n], [0, 1.2], x_length=6.2, y_length=2.3, xlabel=r"pairs read",
-                  ylabel=r"error on the current rule", yticks=[0, 1], center=[-3.4, -1.75, 0])
-        for gg, yt in ((g1, top_s), (g2, 1.2)):
+        g2 = axes([0, n], [0, top_e], x_length=6.2, y_length=2.3, xlabel=r"pairs read",
+                  ylabel=r"error on the current rule", yticks=[0, 1, top_e], center=[-3.4, -1.75, 0])
+        for gg, yt in ((g1, top_s), (g2, top_e)):
             gg.add(DashedLine(gg.ax.c2p(sw, 0), gg.ax.c2p(sw, yt), dash_length=0.06, color=GREY_B, stroke_width=1.5))
         xs = np.arange(n)
         c_s = VGroup(curve(g1.ax, xs, sp, GREY_B, 2.5), curve(g1.ax, xs, st, SSM_C, 3))
-        c_e = VGroup(curve(g2.ax, xs, np.minimum(ep, 1.2), GREY_B, 2.5), curve(g2.ax, xs, np.minimum(et, 1.2), SSM_C, 3))
+        c_e = VGroup(curve(g2.ax, xs, ep, GREY_B, 2.5), curve(g2.ax, xs, et, SSM_C, 3))
         sl = label(r"the rule changes", font_size=16, color=GREY_B).next_to(g1.ax.c2p(sw, top_s), UP, buff=0.05)
         colors = {r"S_t": SSM_C, r"S_{t-1}": SSM_C, r"M_t": STATE, r"M_{t-1}": STATE, r"\eta": DELTA, r"\theta": DELTA,
                   r"\alpha": DECAY}
@@ -160,6 +161,12 @@ class TTT(VoiceoverScene):
                      font_size=17).move_to([3.4, -0.25, 0])
         after = slice(sw + 8, min(sw + 40, n))
         ap, at_ = float(np.mean(ep[after])), float(np.mean(et[after]))
+        interval = label(
+            (rf"逐对中位数的均值（${Sp.shape[0]}$条序列） \\ "
+             rf"改变后的第${after.start - sw + 1}$--${after.stop - sw}$对；未计入最初${after.start - sw}$对") if zh() else
+            (rf"mean of per-pair medians (${Sp.shape[0]}$ sequences) \\ "
+             rf"pairs ${after.start - sw + 1}$--${after.stop - sw}$ after change; first ${after.start - sw}$ excluded"),
+            font_size=16, color=GREY_B).next_to(leg, DOWN, buff=0.15)
         hc = history_card(2025, r"Titans", r"Behrouz, Zhong \& Mirrokni: \ a deep neural memory beside attention; \ reported "
                           r"beyond $2$ million tokens", color=SSM_C, width=4.6, font_size=19).move_to([3.6, -2.25, 0])
         verdict = (f"In the thirty-two pairs after the change, momentum and forgetting adapt faster: an error of "
@@ -183,7 +190,7 @@ class TTT(VoiceoverScene):
             self.play(Write(f2), FadeIn(l2))
             vo.wait_until("c")
             self.play(Create(c_s[0]), Create(c_s[1]), FadeIn(sl), run_time=2.0)
-            self.play(FadeIn(leg), Create(c_e[0]), Create(c_e[1]), run_time=2.0)
+            self.play(FadeIn(leg), FadeIn(interval), Create(c_e[0]), Create(c_e[1]), run_time=2.0)
             vo.wait_until("d")
             self.play(Indicate(c_e[1], color=WHITE, scale_factor=1.0))
             vo.wait_until("e")

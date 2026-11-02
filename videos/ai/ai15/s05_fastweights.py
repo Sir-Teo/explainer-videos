@@ -32,17 +32,22 @@ class FastWeights(VoiceoverScene):
         pats = np.asarray(h["ex_patterns"])
         en = np.asarray(h["ex_energy"])
         N = int(h["N"])
+        updates = np.minimum(5 * np.arange(len(en)), N)  # the producer appends its final state after sampling every fifth update
         d = definition_card(r"Hopfield network", r"$N$ neurons of $\pm 1$; \ store patterns $\xi$ by Hebb's rule, "
                             r"$W = \tfrac1N \sum_\mu \xi^\mu \xi^{\mu\top}$; \ recall: \ set each neuron to the sign of "
                             r"$W s$, \ one at a time, \ until nothing changes", color=HIST, width=7.0, font_size=23)
         d.to_corner(UL, buff=0.3)
+        no_self_connections = MathTex(r"W_{ii}=0", font_size=24, color=HIST).next_to(d, DOWN, buff=0.12).align_to(d, LEFT)
         stored = VGroup(*[bits_grid(p, size=1.0) for p in pats]).arrange(RIGHT, buff=0.18)
         sl = label(rf"${len(pats)}$ stored patterns of ${N}$ neurons", font_size=20, color=GREY_A)
         st = VGroup(stored, sl.next_to(stored, DOWN, buff=0.12)).to_corner(UR, buff=0.4)
         cue = bits_grid(frames[0], size=2.9).move_to([-3.6, -1.45, 0])
-        cl = label(r"the cue: \ pattern 1, \ $30$ of $100$ bits flipped", font_size=20, color=GREY_A).next_to(cue, DOWN, buff=0.15)
-        g = axes([0, len(en) - 1], [float(en.min()) * 1.05, float(en.max()) * 0.9 if en.max() < 0 else float(en.max())],
-                 x_length=5.0, y_length=2.8, xlabel=r"updates, \ in fives", ylabel=r"energy \ $E = -\tfrac12 s^{\top} W s$",
+        cl = wrapped_label(r"当前状态；初始为模式1，翻转了$100$位中的$30$位" if zh() else
+                           r"state, initialized from pattern 1 with $30$ of $100$ bits flipped",
+                           max_width=6.2, font_size=20, color=GREY_A).next_to(cue, DOWN, buff=0.15)
+        g = axes([0, N], [float(en.min()) * 1.05, float(en.max()) * 0.9 if en.max() < 0 else float(en.max())],
+                 x_length=5.0, y_length=2.8, xlabel=r"神经元更新次数" if zh() else r"neuron updates", ylabel=r"energy \ $E = -\tfrac12 s^{\top} W s$",
+                 xticks=[0, N // 2, N],
                  center=[2.7, -1.45, 0])
         ax = g.ax
         dot = Dot(ax.c2p(0, en[0]), radius=0.06, color=HIST)
@@ -57,7 +62,7 @@ class FastWeights(VoiceoverScene):
             "<bookmark mark='c'/> Every update can only lower an energy, so the state rolls downhill into the nearest "
             "valley: the stored pattern, recovered from a damaged copy."
         ) as vo:
-            self.play(FadeIn(d, shift=UP * 0.1), FadeIn(cite_), FadeIn(st), FadeIn(g))
+            self.play(FadeIn(d, shift=UP * 0.1), FadeIn(no_self_connections), FadeIn(cite_), FadeIn(st), FadeIn(g))
             vo.wait_until("a")
             self.play(Indicate(stored, color=HIST, scale_factor=1.05))
             vo.wait_until("b")
@@ -65,7 +70,7 @@ class FastWeights(VoiceoverScene):
             vo.wait_until("c")
             pts = [ax.c2p(0, en[0])]
             for k in range(1, len(frames)):
-                pts.append(ax.c2p(k, en[min(k, len(en) - 1)]))
+                pts.append(ax.c2p(updates[min(k, len(updates) - 1)], en[min(k, len(en) - 1)]))
                 self.play(Transform(cue, bits_grid(frames[k], size=2.9).move_to(cue)),
                           Transform(path, VMobject(color=HIST, stroke_width=3).set_points_as_corners(pts)),
                           dot.animate.move_to(pts[-1]), run_time=0.25, rate_func=linear)

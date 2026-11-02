@@ -156,6 +156,15 @@ class Mamba(VoiceoverScene):
         res = label(r"reported: \ the same perplexity as Mamba-2 with half the state; \\ at $1.5$B parameters, $+0.6$ points "
                     r"over Gated DeltaNet, \ $+1.2$ more with MIMO", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.5)
         tag = note(r"schematic").to_corner(DR, buff=0.3)
+        # Experimental scope, not universal performance: https://arxiv.org/html/2603.15569v1
+        reported_scope = label(
+            (r"论文实验：困惑度接近；准确率增益单位为百分点 \\ "
+             r"具备状态追踪能力，不保证训练后的模型一定学会") if zh() else
+            (r"reported experiments: comparable perplexity; gains in percentage points \\ "
+             r"state-tracking capacity; learning is not guaranteed"),
+            font_size=16, color=GREY_B).move_to([0, -2.15, 0])
+        if reported_scope.width > 13.2:
+            reported_scope.scale_to_fit_width(13.2)
         with self.voiceover(
             "The line continues. In March 2026 Aakash Lahoti, Gu, Dao and colleagues published Mamba-3, with three "
             "ideas from state-space thinking. <bookmark mark='a'/> First, a better step: instead of holding the "
@@ -169,7 +178,7 @@ class Mamba(VoiceoverScene):
         ) as vo:
             veils = VGroup(*[Rectangle(width=c_[0].width + 0.05, height=c_[0].height + 0.05, stroke_width=0,
                                        fill_color=BACKGROUND, fill_opacity=0.82).move_to(c_[0]) for c_ in cols])
-            self.play(FadeIn(head), FadeIn(tag), FadeIn(cols), FadeIn(veils))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(reported_scope), FadeIn(cols), FadeIn(veils))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
                 self.play(FadeOut(veils[k]))

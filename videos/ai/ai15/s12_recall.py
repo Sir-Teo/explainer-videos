@@ -8,6 +8,15 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai15.common import fmt_int, K, MIX_C, MIX_NAME, MIX_SHORT, MIX_TAG, MONO, PART, V, axes, curve, load
 
 
+def replay_prefix(steps, values, position):
+    """Only the evaluated history, with a duplicate initial point so the zero-step curve is drawable."""
+    end = min(len(steps), max(0, int(round(position))) + 1)
+    xs, ys = np.asarray(steps[:end]), np.asarray(values[:end])
+    if end == 1:
+        xs, ys = np.repeat(xs, 2), np.repeat(ys, 2)
+    return xs, ys
+
+
 class Recall(VoiceoverScene):
     def construct(self):
         self.card()
@@ -86,7 +95,9 @@ class Recall(VoiceoverScene):
         grids, names = VGroup(), VGroup()
         for r, k in enumerate(mix):
             y = 1.9 - r * 0.62
-            g = VGroup(*[Square(cell, stroke_width=0.8, stroke_color=GREY_D, fill_color=GREY_D, fill_opacity=0.3)
+            g = VGroup(*[Square(cell, stroke_width=0.8, stroke_color=GREY_D,
+                               fill_color=MIX_C[k] if bool(picks[k][0, q]) else GREY_D,
+                               fill_opacity=0.9 if bool(picks[k][0, q]) else 0.3)
                          .move_to([-4.9 + q * (cell + 0.04), y, 0]) for q in range(N)])
             grids.add(g)
             names.add(label(MIX_TAG[k], font_size=20, color=MIX_C[k]).next_to(g, LEFT, buff=0.25))
@@ -99,8 +110,7 @@ class Recall(VoiceoverScene):
         tk = ValueTracker(0)
 
         def make_lines():
-            n = max(2, int(round(tk.get_value())) + 1)
-            return VGroup(*[curve(ax, steps[:n], curves[k][:n], MIX_C[k], 3) for k in mix])
+            return VGroup(*[curve(ax, *replay_prefix(steps, curves[k], tk.get_value()), MIX_C[k], 3) for k in mix])
 
         lines = always_redraw(make_lines)
         counter = VGroup(label(r"step", font_size=22, color=GREY_A), Integer(0, font_size=26)).arrange(RIGHT, buff=0.15)
@@ -152,7 +162,8 @@ class Recall(VoiceoverScene):
         acc = {k: np.asarray(m[f"acc_{k}"]) for k in mix}  # (dks, seeds)
         lx = np.log2(dks)
         g = axes([lx[0] - 0.3, lx[-1] + 0.3], [0, 1.02], x_length=7.4, y_length=4.4,
-                 xlabel=r"key size: \ the fixed memories hold key size $\times\ 64$ numbers a layer",
+                 xlabel=(r"键大小：每层矩阵状态为键大小$\times64$个数" if zh() else
+                         r"key size: \ matrix state holds key size $\times\ 64$ numbers a layer"),
                  ylabel=r"answers right, \ $1{,}024$ fresh lists", xticks=list(lx), yticks=[0, 0.25, 0.5, 0.75, 1],
                  xfmt=lambda v: f"{int(round(2 ** v))}", yfmt=lambda v: rf"{int(100 * v)}\%", center=[-1.7, -0.45, 0])
         ax = g.ax
@@ -212,7 +223,8 @@ class Recall(VoiceoverScene):
             rows.add(VGroup(MathTex(rf"{dk}", font_size=36, color=GREY_A),
                             MathTex(rf"{state[i]:,}".replace(",", "{,}"), font_size=36, color=MIX_C["gdn"]),
                             MathTex(rf"{cache[i]:,}".replace(",", "{,}"), font_size=36, color=MIX_C["softmax"])))
-        hdr = VGroup(label(r"key size", font_size=26, color=GREY_B), label(r"a fixed memory", font_size=26, color=MIX_C["gdn"]),
+        hdr = VGroup(label(r"key size", font_size=26, color=GREY_B),
+                     label(r"固定矩阵状态" if zh() else r"fixed matrix state", font_size=26, color=MIX_C["gdn"]),
                      label(rf"attention's cache, \ ${T}$ tokens", font_size=26, color=MIX_C["softmax"]))
         xs = [-3.6, 0.0, 3.6]
         for h_, x in zip(hdr, xs):
@@ -223,6 +235,10 @@ class Recall(VoiceoverScene):
         tw = label(r"attention pays for exact recall with a cache that grows with the text; \\ a fixed memory must be "
                    r"big enough, \ or know what to overwrite",
                    font_size=24, color=WHITE).to_edge(DOWN, buff=0.6)
+        state_scope = note(
+            r"只统计矩阵状态与KV缓存 \\ 不含归一化向量与短卷积缓冲区" if zh() else
+            r"counts: \ matrix state and KV cache only \\ normalizer vectors and short-convolution buffers excluded",
+            font_size=16).move_to([0, -2.1, 0])
         hy, gd, sm = acc["hybrid"][0], acc["gdn"][0], acc["softmax"][0]
         v = (f"With the smallest keys, adding one attention layer above a gated delta layer lifts recall from "
              f"{100 * gd:.0f} to {100 * hy:.0f} percent. That is the case for hybrids." if hy > gd + 0.1 else
@@ -237,7 +253,7 @@ class Recall(VoiceoverScene):
             "thousand times longer. <bookmark mark='b'/> Exact recall is what attention buys with that growing "
             "cache; a fixed memory has to be big enough, or know what to overwrite. " + v
         ) as vo:
-            self.play(FadeIn(head), FadeIn(hdr))
+            self.play(FadeIn(head), FadeIn(hdr), FadeIn(state_scope))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in rows], lag_ratio=0.3))
             vo.wait_until("b")

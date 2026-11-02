@@ -13,14 +13,14 @@ TF_C, HY_C = C.ATTN, HYB
 STACKS = [  # (model, year, layers in one repeating unit: L = a linear-time layer, A = full attention, its fast layer)
     (r"Jamba", 2024, "LLLALLLL", r"Mamba"),
     (r"MiniMax-01", 2025, "LLLLLLLA", r"lightning \\ attention"),
-    (r"Nemotron-H", 2025, "LLLLLLLA", r"Mamba-2"),
-    (r"Granite 4.0", 2025, "LLLLLLLLLA", r"Mamba-2"),
+    (r"Nemotron-H", 2025, "LLLALLL", r"Mamba-2"),
+    (r"Granite 4.0-H", 2025, "LLLLLLLLLA", r"Mamba-2"),
     (r"Qwen3-Next", 2025, "LLLA", r"Gated \\ DeltaNet"),
     (r"Kimi Linear", 2025, "LLLA", r"Kimi Delta \\ Attention"),
     (r"Qwen3.5", 2026, "LLLA", r"Gated \\ DeltaNet"),
     (r"Kimi K3", 2026, "LLLA", r"Kimi Delta \\ Attention"),
 ]
-RATIO = {r"Nemotron-H": r"$4$ in $28$", r"Granite 4.0": r"$1$ in $10$", r"Kimi K3": r"$24$ in $93$"}
+RATIO = {r"Nemotron-H": r"$4$ in $28$", r"Granite 4.0-H": r"$1$ in $10$", r"Kimi K3": r"$24$ in $93$"}
 
 
 class Hybrid(VoiceoverScene):
@@ -41,7 +41,7 @@ class Hybrid(VoiceoverScene):
     def stacks(self):
         cols, atts = Group(), VGroup()
         for name, year, unit, lin_name in STACKS:
-            reps = max(1, 20 // len(unit))
+            reps = max(1, math.ceil(20 / len(unit)))
             seq = (unit * reps)[:20]
             blocks = VGroup(*[Rectangle(width=0.95, height=0.15, stroke_width=1, stroke_color=GREY_D,
                                         fill_color=ATT if ch == "A" else LIN, fill_opacity=0.85) for ch in seq])
@@ -60,6 +60,10 @@ class Hybrid(VoiceoverScene):
         key.arrange(RIGHT, buff=0.8).to_edge(UP, buff=0.3)
         tag = note(r"the share of attention layers, \ from each model's report or card; \ 20 layers drawn, \ schematic order",
                    font_size=17).to_edge(DOWN, buff=0.2)
+        qualification = note(
+            r"标签给出精确占比；20层示意图只近似表示占比" if zh() else
+            r"labels give exact shares; \ the 20-layer sketch approximates them",
+            font_size=16).next_to(tag, UP, buff=0.08)
         with self.voiceover(
             "Fixed-size memories are cheap, but they forget; attention remembers everything exactly, at a price. "
             "So the newest models mix them. <bookmark mark='a'/> Jamba, from AI21 in 2024, put one attention layer "
@@ -74,7 +78,7 @@ class Hybrid(VoiceoverScene):
         ) as vo:
             veils = Group(*[Rectangle(width=c_.width + 0.1, height=c_.height + 0.1, stroke_width=0, fill_color=BACKGROUND,
                                       fill_opacity=0.8).move_to(c_) for c_ in cols])
-            self.play(FadeIn(key), FadeIn(tag), FadeIn(cols), FadeIn(veils))
+            self.play(FadeIn(key), FadeIn(tag), FadeIn(qualification), FadeIn(cols), FadeIn(veils))
             groups = [[0, 1], [2, 3], [4, 5], [6, 7]]
             for g_, m in zip(groups, "abcd"):
                 vo.wait_until(m)
@@ -96,15 +100,15 @@ class Hybrid(VoiceoverScene):
         st = steps[2:-2]
         ct_, ch_ = sm(ct), sm(ch)
         lo = math.floor(min(ct_.min(), ch_.min()) * 2) / 2
-        hi = min(math.ceil(max(ct_[:, 3:].max(), ch_[:, 3:].max()) * 2) / 2, lo + 4)
+        hi = math.ceil(max(ct_.max(), ch_.max()) * 2) / 2
         S_ = int(r["steps"])
         g = axes([0, S_], [lo, hi], x_length=6.6, y_length=4.0, xlabel=r"training steps",
                  ylabel=r"training loss \ (nats a token, \ smoothed)", xticks=[0, S_ // 2, S_],
                  yticks=[lo, (lo + hi) / 2, hi], center=[-2.6, -0.4, 0], xfmt=lambda v: f"{int(v)}")
         ax = g.ax
-        bands = VGroup(band(ax, st, np.clip(ct_.min(0), lo, hi), np.clip(ct_.max(0), lo, hi), TF_C, 0.25),
-                       band(ax, st, np.clip(ch_.min(0), lo, hi), np.clip(ch_.max(0), lo, hi), HY_C, 0.25))
-        lines = VGroup(curve(ax, st, np.clip(ct_.mean(0), lo, hi), TF_C, 3), curve(ax, st, np.clip(ch_.mean(0), lo, hi), HY_C, 3))
+        bands = VGroup(band(ax, st, ct_.min(0), ct_.max(0), TF_C, 0.25),
+                       band(ax, st, ch_.min(0), ch_.max(0), HY_C, 0.25))
+        lines = VGroup(curve(ax, st, ct_.mean(0), TF_C, 3), curve(ax, st, ch_.mean(0), HY_C, 3))
         pt, ph = int(r["transformer_params"]), int(r["hybrid_params"])
         d, Lr = int(r["d"]), int(r["layers"])
         arch = VGroup(label(rf"transformer: \ {Lr} attention layers, \ rotary positions \ (${fmt_int(pt)}$ weights)",

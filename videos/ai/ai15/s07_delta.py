@@ -86,6 +86,7 @@ class GatedDelta(VoiceoverScene):
         colors = {r"S_{t-1}": STATE, r"S_t": STATE, r"k_t": K, r"k_t^{\top}": K, r"v_t": V, r"\beta_t": DELTA}
         f = cmath(r"S_t", "=", r"S_{t-1}", r"\big(I - ", r"\beta_t", r"\,", r"k_t", r"k_t^{\top}", r"\big)", "+", r"\beta_t",
                   r"\,", r"v_t", r"k_t^{\top}", colors=colors, font_size=36).move_to([3.4, 2.6, 0])
+        unit_key = MathTex(r"\|k_t\|_2 = 1", font_size=22, color=GREY_A).next_to(f, UP, buff=0.16).align_to(f, RIGHT)
         e1 = label(r"$I - \beta\, k k^{\top}$: \ stretches the direction $k$ by $1 - \beta$, \\ leaves every direction "
                    r"at right angles to $k$ alone", font_size=20, color=GREY_A).next_to(f, DOWN, buff=0.25)
         steps = VGroup(label(r"$\beta = \tfrac12$: \ halfway to $v$", font_size=24, color=DELTA),
@@ -128,7 +129,7 @@ class GatedDelta(VoiceoverScene):
             self.play(GrowArrow(ak), FadeIn(kl), GrowArrow(ans), FadeIn(al))
             self.play(Create(tgt), FadeIn(tip), FadeIn(vl), GrowArrow(ap), FadeIn(pl))
             vo.wait_until("b")
-            self.play(FadeOut(mp), Write(f), FadeIn(e1))
+            self.play(FadeOut(mp), Write(f), FadeIn(e1), FadeIn(unit_key))
             vo.wait_until("c")
             cur = S0
             for i, b in enumerate((0.5, 1.0, 2.0)):
@@ -179,6 +180,15 @@ class GatedDelta(VoiceoverScene):
                    r"$M_t$ is a diagonal plus a low-rank matrix", font_size=20, color=GREY_A).next_to(common, DOWN, buff=0.12)
         cite_ = cite(r"Yang et al.\ (2025); \ Kimi Team (2025); \ Dao \& Gu (2024); \ Beck et al., \textit{xLSTM} (2024); \ "
                      r"Peng et al., \textit{RWKV-7} (2025)", corner=DR, font_size=16)
+        # RWKV-7, Appendix D, Theorem 3: https://arxiv.org/html/2503.14456v1
+        theorem_scope = label(
+            (r"存在性定理：每种正则语言都有一个可识别它的4层RWKV-7模型 \\ "
+             r"Transformer对比采用论文的固定深度设定，并假设$\mathsf{TC}^0\ne\mathsf{NC}^1$") if zh() else
+            (r"existence: for each regular language, some 4-layer RWKV-7 recognizes it \\ "
+             r"Transformer comparison: the paper's fixed-depth setting and $\mathsf{TC}^0\ne\mathsf{NC}^1$"),
+            font_size=16, color=GREY_B).move_to([0, -1.8, 0])
+        if theorem_scope.width > 13.2:
+            theorem_scope.scale_to_fit_width(13.2)
         with self.voiceover(
             "Now the whole family side by side. <bookmark mark='a'/> Linear attention only adds. Decay, as in "
             "Mamba-2 and gated linear attention, shrinks the whole memory by alpha before each write: everything "
@@ -213,7 +223,7 @@ class GatedDelta(VoiceoverScene):
             vo.wait_until("f")
             self.play(rows[5].animate.set_opacity(1))
             vo.wait_until("g")
-            self.play(rows[6].animate.set_opacity(1))
+            self.play(rows[6].animate.set_opacity(1), FadeIn(theorem_scope))
             vo.wait_until("e")
             self.play(Write(common), FadeIn(cl))
         self.wait(0.3)

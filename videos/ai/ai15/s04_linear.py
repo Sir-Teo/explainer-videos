@@ -99,6 +99,10 @@ class Linear(VoiceoverScene, ThreeDScene):
         cite_ = cite(r"A.~Katharopoulos et al., \textit{Transformers are RNNs} (2020)", corner=DR)
         phi = label(r"$\phi$: \ a fixed function that makes every number positive", font_size=22, color=GREY_A)
         phi.next_to(top, DOWN, buff=0.15)
+        numerator_scope = note(
+            r"先重组分子；再除以每行的权重和" if zh() else
+            r"regroup the numerator; \ divide each row by its weight sum",
+            font_size=16).next_to(phi, DOWN, buff=0.12)
         with self.voiceover(
             "Here's attention for a whole text of T tokens: queries times keys, then times values. <bookmark mark='a'/> "
             "The product of queries and keys is a T by T table of scores: it grows with the square of the length. "
@@ -118,7 +122,7 @@ class Linear(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(same))
             vo.wait_until("c")
             self.play(Write(top), FadeIn(cite_))
-            self.play(FadeIn(phi))
+            self.play(FadeIn(phi), FadeIn(numerator_scope))
         self.wait(0.3)
         self.clear_scene()
 
@@ -151,14 +155,21 @@ class Linear(VoiceoverScene, ThreeDScene):
 
         base = Square(n * cell, stroke_color=GREY_C, stroke_width=1.5).move_to(LEFT * 2.6 + DOWN * 0.4)
         cur = tower(np.zeros((n, n)))
-        colors = {r"S_t": STATE, r"S_{t-1}": STATE, r"v_t": V, r"k_t": K, r"q_t": Q}
-        f1 = cmath(r"S_t", "=", r"S_{t-1}", "+", r"v_t", r"\,", r"k_t", r"^{\top}", colors=colors, font_size=40)
-        f2 = cmath(r"\mathrm{out}_t", "=", r"S_t", r"\,", r"q_t", colors=colors, font_size=40)
-        fs = VGroup(f1, f2).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.4, 1.6, 0])
+        colors = {r"S_t": STATE, r"S_{t-1}": STATE, r"v_t": V, r"\tilde k_t": K, r"\tilde q_t": Q,
+                  r"z_t": K, r"z_{t-1}": K}
+        features = MathTex(r"\tilde q_t=\phi(q_t),\quad\tilde k_t=\phi(k_t)", font_size=26, color=GREY_A)
+        f1 = cmath(r"S_t", "=", r"S_{t-1}", "+", r"v_t", r"\,", r"\tilde k_t", r"^{\top}", colors=colors, font_size=32)
+        fz = cmath(r"z_t", "=", r"z_{t-1}", "+", r"\tilde k_t", colors=colors, font_size=32)
+        f2 = MathTex(r"\mathrm{out}_t=\frac{S_t\tilde q_t}{z_t^{\top}\tilde q_t}", font_size=32)
+        fs = VGroup(features, f1, fz, f2).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.05, 1.8, 0])
         sl = label(r"the state $S$: \ $d \times d$ numbers, \ fixed size \\ (blue $+$, \ red $-$)", font_size=24,
                    color=STATE).to_corner(DL, buff=0.4)
+        bar_scope = note(
+            r"条形仅示意原始有符号外积；右侧为归一化公式" if zh() else
+            r"bars: raw signed outer products; \ normalized formula at right",
+            font_size=16).next_to(sl, UP, buff=0.12).align_to(sl, LEFT)
         rnn = label(r"a transformer without the softmax \\ is a recurrent network", font_size=26, color=GREY_A)
-        rnn.next_to(fs, DOWN, buff=0.5)
+        rnn.next_to(fs, DOWN, buff=0.35)
         chk = label(rf"computed both ways on ${lin['T']}$ tokens: \\ they agree to "
                     rf"$10^{{{math.ceil(math.log10(max(float(lin['dev']), 1e-16)))}}}$", font_size=22, color=GREY_B)
         chk.next_to(rnn, DOWN, buff=0.35)
@@ -170,7 +181,7 @@ class Linear(VoiceoverScene, ThreeDScene):
         rc = gloss(r"recurrent network", r"reads one token at a time, and carries a fixed-size \\ memory forward, "
                    r"updating it at each step", recurrent_picture(), width=5.6, color=STATE)
         rc.to_corner(DR, buff=0.3)
-        for m in (f1, f2, sl, rnn, chk, toks, op, rc):
+        for m in (features, f1, fz, f2, sl, bar_scope, rnn, chk, toks, op, rc):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
         self.set_camera_orientation(phi=62 * DEGREES, theta=-50 * DEGREES, zoom=0.95)
@@ -183,9 +194,9 @@ class Linear(VoiceoverScene, ThreeDScene):
             "recurrent network, <bookmark mark='r'/> one that reads a token at a time and carries a fixed-size "
             "memory forward, updating it at each step. Katharopoulos and colleagues showed this in 2020."
         ) as vo:
-            self.play(Create(base), FadeIn(cur), FadeIn(sl), FadeIn(toks))
+            self.play(Create(base), FadeIn(cur), FadeIn(sl), FadeIn(bar_scope), FadeIn(toks))
             vo.wait_until("a")
-            self.play(Write(f1))
+            self.play(Write(f1), Write(fz), FadeIn(features))
             vo.wait_until("o")
             self.play(FadeIn(op, shift=UP * 0.2))
             for i, (kk, vv, S_) in enumerate(steps):
@@ -194,7 +205,7 @@ class Linear(VoiceoverScene, ThreeDScene):
             self.play(FadeOut(op), Write(f2))
             self.play(FadeIn(rnn), FadeIn(chk))
             vo.wait_until("r")
-            self.play(FadeIn(rc, shift=UP * 0.2))
+            self.play(FadeOut(rnn), FadeOut(chk), FadeIn(rc, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
         self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1.0)
