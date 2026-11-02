@@ -15,7 +15,9 @@ Sources (all free; see videos/quant/SYLLABUS.md, "Data"):
   price, mark price, implied volatility and the index price at that moment;
 * :func:`deribit_dvol`: Deribit's DVOL index (a 30-day implied volatility, computed like the VIX), hourly;
 * :func:`ken_french_daily`: Kenneth French's daily US market factor since 1926;
-* :func:`ken_french_size_daily`: his daily value-weighted size-decile portfolios since 1926.
+* :func:`ken_french_size_daily`: his daily value-weighted size-decile portfolios since 1926;
+* :func:`binance_funding`: the funding rate of a Binance USD-margined perpetual future, every eight hours;
+* :func:`fred`: a daily or weekly series from FRED (St. Louis Fed), frozen through a date.
 
     python -m explainer.quant.data            # fetch everything the series uses so far (resumes)
 """
@@ -285,6 +287,59 @@ def ken_french_size_daily(through: str = "2025-12-31") -> dict:
     frozen = json.dumps(a.round(8).tolist(), separators=(",", ":")).encode()
     _check(f"kenfrench/size_deciles_daily/through_{through}", frozen, f"{KF}/{name}")
     return {"date": a[:, 0].astype(int), "deciles": a[:, 1:]}
+
+
+def binance_funding(symbol="BTCUSDT", start="2020-01", end="2020-12") -> dict:
+    """Funding of a Binance USD-margined perpetual: ``time`` (UTC seconds of each settlement, every 8 hours) and
+    ``rate`` (paid by longs to shorts when positive, as a fraction of the position's value).  Monthly files from the
+    public archive, checked against Binance's published SHA-256 and the manifest."""
+    base = f"https://data.binance.vision/data/futures/um/monthly/fundingRate/{symbol}"
+    t, r = [], []
+    for ym in _months(start, end):
+        name = f"{symbol}-fundingRate-{ym}.zip"
+        path = DATA / "binance" / "futures" / "um" / "fundingRate" / symbol / name
+        url = f"{base}/{name}"
+
+        def fetch(url=url, name=name):
+            raw = _get(url)
+            want = _get(url + ".CHECKSUM").decode().split()[0]
+            if _sha(raw) != want:
+                raise RuntimeError(f"{name}: sha256 does not match Binance's published checksum")
+            return raw
+
+        raw = _cached(f"binance/futures/um/fundingRate/{symbol}/{ym}", path, fetch, url)
+        with zipfile.ZipFile(io.BytesIO(raw)) as z:
+            text = z.read(z.namelist()[0]).decode()
+        for row in text.strip().splitlines():
+            parts = row.split(",")
+            if parts[0].isdigit():
+                t.append(float(parts[0]) / 1e3)
+                r.append(float(parts[2]))
+    o = np.argsort(t, kind="stable")
+    return {"time": np.array(t)[o], "rate": np.array(r)[o]}
+
+
+FRED = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+
+
+def fred(series: str, start: str = "2015-01-01", through: str = "2025-12-31") -> dict:
+    """A FRED series as ``date`` (YYYYMMDD ints) and ``value`` (as published: percent for rates, millions of dollars
+    for balances), missing days dropped.  FRED revises some series, so the manifest checks the frozen window."""
+    path = DATA / "fred" / f"{series}.csv"
+    if not path.exists():
+        _atomic_write(path, _get(f"{FRED}?id={series}&cosd={start}&coed={through}"))
+    rows = []
+    for line in path.read_text().strip().splitlines()[1:]:
+        d, v = line.split(",")[:2]
+        if v.strip() in ("", "."):
+            continue
+        rows.append((int(d.replace("-", "")), float(v)))
+    a = np.array(rows)
+    m = (a[:, 0] >= int(start.replace("-", ""))) & (a[:, 0] <= int(through.replace("-", "")))
+    a = a[m]
+    frozen = json.dumps(a.round(6).tolist(), separators=(",", ":")).encode()
+    _check(f"fred/{series}/{start}_{through}", frozen, f"{FRED}?id={series}")
+    return {"date": a[:, 0].astype(int), "value": a[:, 1]}
 
 
 # ---------------------------------------------------------------------------

@@ -43,6 +43,28 @@ Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitigno
   (`collect_text.py quant1`, then `--check`), the Chinese dry run, a full silent build and `dead_air.py`, then the
   narrated build (`python tools/make.py quant1 --cpu-voice -q m`).
 
+## Part 2 plan (The Machinery of Markets), facts checked 2 Nov 2026
+
+Data in hand (`explainer/quant/data.py`): Binance USD-M perpetual BTCUSDT klines (`market="futures/um"`) and funding
+(`binance_funding`, from 2020-01; 2020 average about 17% a year); FRED via `data.fred` (SOFR, DFF, IOER to 2021-07,
+IORB after, WRESBAL, RRPONTSYD, DTB3). Stooq (single stocks) is blocked here.
+
+Chapters: 0 Hook: the life of a trade (order, broker, exchange, CCP, DTCC, T+1) and Robinhood on 28 January 2021 (the
+NSCC asked for about $3bn, cut to $1.4bn, as its CEO described it; accounts differ). 1 Instruments and how each is
+quoted. 2 Orders, the book, price-time priority, the closing auction (a toy call auction computed). 3 Clearing:
+novation and multilateral netting (simulated: gross vs bilateral vs CCP net), T+1 since 28 May 2024. 4 Margin: a
+10x long BTC perpetual from 1 March 2020, hourly variation margin, liquidation on 12 March (real Binance prices), and
+funding. 5 Short selling: locate, borrow fee, recall; Volkswagen (26 Oct 2008 Porsche disclosed 74.1% via shares and
+cash-settled options; above EUR 1,000 intraday on the 28th, close EUR 945, briefly the world's most valuable company;
+hedge funds' fraud claims are allegations). 6 Repo and securities lending: haircut = 1/leverage. 7 Prime brokerage
+and total return swaps (Archegos preview, Part 41). 8 Business models and fees (2-and-20 with a high-water mark,
+computed; pass-through fees). 9 The quant industry map and roles. 10 Markets around the world (A-shares: T+1, +/-10%,
+STAR and ChiNext +/-20%; India: SEBI, Sept 2024: 93% of individual F&O traders lost money FY22-FY24, Rs 1.8 lakh crore).
+11 Crisis file: 17 September 2019, SOFR 5.25% from about 2.2% (tax date plus Treasury settlement, reserves at a
+multiyear low; FRED). 12 The House: treasury and funding (`house/funding.py`: margin account, financing at SOFR
+plus spread, borrow fees, perp funding; tested). Outro: desk "make me a market on the number of trading days in a
+year".
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real

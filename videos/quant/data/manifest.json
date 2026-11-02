@@ -1,4 +1,84 @@
 {
+ "binance/futures/um/BTCUSDT/1h/2020-01": {
+  "sha256": "512a1d725c8df97a1bbbee4f118e730e9628500a8f271c9e59d2a7fc5fbfcfcc",
+  "bytes": 37271,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-01.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2020-02": {
+  "sha256": "13d067e5c7b258764b8524e1d3c61b129c44838c2ce9850f4d86cae13c61f198",
+  "bytes": 35268,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-02.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2020-03": {
+  "sha256": "9fc0c560cce35fd083febee10c0c8c3ffcd56a9185f9b489f265a51bbf60ec6e",
+  "bytes": 38166,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-03.zip"
+ },
+ "binance/futures/um/BTCUSDT/1h/2020-04": {
+  "sha256": "bfa6d2adc1aefd8a96b3cbd38932486741caa1ae40f1e646df3606205402176f",
+  "bytes": 36833,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-04.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-01": {
+  "sha256": "7f81b2f3694d13779e7e896b69d60cd61e9444d7b9f9e90df761935e1c1b76e2",
+  "bytes": 825,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-01.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-02": {
+  "sha256": "6599466d108d120c64a078824326c063ed2d4335b3292e52c5e572f79166533a",
+  "bytes": 885,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-02.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-03": {
+  "sha256": "eee845fde6336e29d25889563cba3d2cff2d4d640e51fb1f82ae9b28cedaee77",
+  "bytes": 928,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-03.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-04": {
+  "sha256": "d009ce034d08c3dcf3e7f874b0f8b0ec76ba507bc6bb4e007e541df537bafbce",
+  "bytes": 867,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-04.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-05": {
+  "sha256": "3f2b56dd6b9a42457009bb367d0adadd3cf7e2216cd325172d0089e3883125a8",
+  "bytes": 839,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-05.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-06": {
+  "sha256": "30b3470ff98576578973d75e3c157a5cbf1778b11e4c26b4b4ff70a3cbb348ec",
+  "bytes": 791,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-06.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-07": {
+  "sha256": "18dae7b11075fc0fba79ad47df46683415cba5d027caa69c66bc2a5c9d9b459a",
+  "bytes": 712,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-07.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-08": {
+  "sha256": "e6f6d1749f674c85d4766e0eb36af6ea40d91a0674234d30df80eb9876b094e3",
+  "bytes": 854,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-08.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-09": {
+  "sha256": "7ae9a3b6afb2dc06e46080582908ec8c27063b707a14c7f1e679dc991ff48032",
+  "bytes": 838,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-09.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-10": {
+  "sha256": "4c55b191c101f39c7fb193a6529665dd9e83302ca21876521e4c93b3902e9fb1",
+  "bytes": 828,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-10.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-11": {
+  "sha256": "676356a2d075caa51b4f8ada026e9430dc320ffd23d2343b13b7aa25324ed6d1",
+  "bytes": 854,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-11.zip"
+ },
+ "binance/futures/um/fundingRate/BTCUSDT/2020-12": {
+  "sha256": "d7390f90edf54cc4ad9bbe78e2f6b291ae06ad9539f591a2d0fce445873bbd63",
+  "bytes": 852,
+  "source": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2020-12.zip"
+ },
  "binance/spot/BTCUSDT/1d/2017-08": {
   "sha256": "c92970f74893163b848f117a37fa5e7110ee1d800c0d9ada949940fccccfdd2f",
   "bytes": 1150,
@@ -1193,6 +1273,41 @@
   "sha256": "f6a3a7afe5c9f6a8303bdf21c972f63e5036b9954788c968f798caf3e8fae84e",
   "bytes": 11748,
   "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "fred/DFF/2018-01-01_2025-12-31": {
+  "sha256": "3100da0c4a6dcd62ba97790245d0081c3131945741e981cbc8c41f7c2a019caa",
+  "bytes": 52267,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFF"
+ },
+ "fred/DTB3/2018-01-01_2025-12-31": {
+  "sha256": "1ddabd9041ab5aacbcac4443eaa36f30c7bf56694e57e1db8123847eaf0f56ad",
+  "bytes": 35788,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3"
+ },
+ "fred/IOER/2018-01-01_2025-12-31": {
+  "sha256": "c64813d1da5b864413de5a18d2c92251e286791fd7939a92283abd65aebb9d7d",
+  "bytes": 22599,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IOER"
+ },
+ "fred/IORB/2018-01-01_2025-12-31": {
+  "sha256": "eecaff2df978ff95df7db12ae19f65af18a3666c832f9c1d418d6d8277e1287c",
+  "bytes": 28042,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB"
+ },
+ "fred/RRPONTSYD/2018-01-01_2025-12-31": {
+  "sha256": "3efc9c2424f800c524ef41b1ab3139b6a9f99aac8c74191f7f1478adfe300fb2",
+  "bytes": 40304,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=RRPONTSYD"
+ },
+ "fred/SOFR/2018-01-01_2025-12-31": {
+  "sha256": "48eb5ccfa657a7166263b04d01e2080700c11c35e9ab6bbdbfe920b2e338a040",
+  "bytes": 34572,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR"
+ },
+ "fred/WRESBAL/2018-01-01_2025-12-31": {
+  "sha256": "211a2ef5a0b3b347bd517c5f28ebbb85cd3f4d18291d76d4ee56e313906a6272",
+  "bytes": 9615,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WRESBAL"
  },
  "kenfrench/daily_factors/through_2025-12-31": {
   "sha256": "40782c306bc1378b854a6bf42be100809cff4b6a538c15dc5c21f9c9a94ceaec",
