@@ -21711,7 +21711,14 @@
     "fixed autoencoder: $16$ numbers, seed $2022$; \\ three flow seeds each \\\\ line: arithmetic mean FD; \\ band: min--max; \\ reference: training images": "固定自编码器：$16$个数，种子$2022$；\\ 每种三个流随机种子\\\\ 曲线：FD算术均值；\\ 范围带：最小值至最大值；\\ 参考：训练图片",
     "uniform: \\ equal time density": "均匀分布：\\ 各时间的概率密度相同",
     "logit-normal: \\ more draws near the middle": "logit-normal：\\ 在中间附近抽取更多训练时刻",
-    "velocity target: \\ $z_1-z_0$": "速度目标：\\ $z_1-z_0$"
+    "velocity target: \\ $z_1-z_0$": "速度目标：\\ $z_1-z_0$",
+    "computed: \\ cart-pole; common $100{,}000$-step reporting grid": "计算所得：倒立摆；共同的$100{,}000$步报告网格",
+    "computed: \\ PPO seed $0$; \\ $\\epsilon = 0.2$; \\ $4$ epochs per batch": "计算所得：PPO种子$0$；$\\epsilon=0.2$；每批$4$轮",
+    "$\\pi(\\text{left}) = 1$": "$\\pi(\\text{左推}) = 1$",
+    "$\\pi(\\text{right}) = 1$": "$\\pi(\\text{右推}) = 1$",
+    "computed: \\ $400$ selected tactical positions; \\ UCT with win-aware rollouts \\\\ right $=$ keeps the win or draw; \\ one seeded choice per position and budget": "计算所得：$400$个筛选的战术局面；UCT模拟时会走立即获胜步 \\\\ 正确$=$保住胜或和；每个局面与预算只选一次（固定随机种子）",
+    "outcome-preserving choices": "保住结果的走法",
+    "$3{,}000$ simulations per move": "每步$3{,}000$次模拟"
   },
   "phrases": {
     "width": "宽度",

@@ -306,28 +306,23 @@ class PolicyGradient(VoiceoverScene):
         lines, bands = VGroup(), VGroup()
         for key, col, _ in items:
             Y = np.asarray(d[key])
-            sem = np.nanstd(Y, 0) / np.sqrt(len(Y))  # the uncertainty of the mean, not the spread of runs
+            sem = np.nanstd(Y, 0, ddof=1) / np.sqrt(len(Y))  # sample estimate of the mean's standard error
             bands.add(band(g.ax, grid, np.nanmean(Y, 0) - sem, np.nanmean(Y, 0) + sem, col, 0.2))
             lines.add(curve(g.ax, grid, np.nanmean(Y, 0), col, 3))
         lg = legend([(c, t) for _, c, t in items], font_size=20).next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
-        tag = note(r"computed: \ cart-pole, \ the same networks and step budget").to_corner(DR, buff=0.2)
+        tag = note(r"computed: \ cart-pole; common $100{,}000$-step reporting grid").to_corner(DR, buff=0.2)
         auc = {k: float(np.nanmean(np.asarray(d[k]))) for k, _, _ in items}
-        lo, hi = min(auc.values()), max(auc.values())
-        if hi - lo < 0.1 * hi:
-            verdict = ("On a task this small, all three get there, and the differences are modest. Cart-pole pays a "
-                       "reward every step and its episodes are short, so even plain REINFORCE's noise is affordable. "
-                       "On long tasks, where a reward arrives long after the actions that earned it, that noise is "
-                       "what stalls learning, and baselines and critics earn their keep.")
-        else:
-            best = max(auc, key=auc.get)
-            verdict = {"reinforce": "Here, plain REINFORCE comes out ahead: the variance it saves is not free, since "
-                                    "the critic has to be learned too.",
-                       "baseline": "The baseline is the clearest win here.",
-                       "ac": "Actor-critic, with the least variance, learns fastest."}[best]
+        verdict = {
+            "reinforce": "In this eight-run sample, plain REINFORCE has the highest mean on that grid.",
+            "baseline": "In this eight-run sample, REINFORCE with a baseline has the highest mean on that grid.",
+            "ac": "In this eight-run sample, actor-critic has the highest mean on that grid.",
+        }[max(auc, key=auc.get)]
+        verdict += (" The bands show one estimated standard error of the mean. "
+                    "This comparison does not establish a general ranking or the cause of the differences.")
         with self.voiceover(
-            f"On the cart-pole, with the same networks and the same budget of experience, {len(d['ppo'])} runs each: "
+            f"On the cart-pole, with the same policy architecture and nominal experience budget, {len(d['ppo'])} runs each: "
             "plain REINFORCE, <bookmark mark='a'/> REINFORCE with a baseline, <bookmark mark='b'/> and actor-critic "
-            "with generalized advantages. Averaged over the whole of training, their episodes last "
+            "with generalized advantages. Equally averaging windowed episode lengths across the fixed training-step grid gives "
             f"{auc['reinforce']:.0f}, {auc['baseline']:.0f} and {auc['ac']:.0f} steps. " + verdict
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(bands[0]), Create(lines[0]), FadeIn(lg[0]))
