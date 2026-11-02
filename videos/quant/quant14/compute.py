@@ -220,6 +220,37 @@ def compute_rbergomi() -> dict:
                   "iv": iv, "skew_T": Tg, "skew": sk, "n": len(Q["K"]), "n_paths": n_paths})
 
 
+def compute_rbskew() -> dict:
+    """Rough Bergomi's at-the-money skew by maturity, from the fitted parameters: the slope of implied vol over
+    log-moneyness -0.08..0.08 (least squares on 9 strikes), 100,000 paths, so Monte Carlo noise stays small."""
+    rb = load("rbergomi")
+    xi = _xi_curve()
+    nd = 183
+    S = R.rbergomi_paths(*rb["x"], xi, nd / 365, nd * 2, 100000, seed=31)
+    ks = np.linspace(-0.08, 0.08, 9)
+    Tg = np.exp(np.linspace(np.log(3 / 365), np.log(0.5), 14))
+    out = []
+    for T in Tg:
+        i = max(1, int(round(T * 365 * 2)))
+        x = S[i]
+        iv = []
+        for k in ks:
+            c = 1 if k >= 0 else -1
+            pr = float(np.mean(np.maximum(c * (x - np.exp(k)), 0)))
+            iv.append(bs.implied_vol(pr, 1.0, np.exp(k), i / 730, 0, 0, c))
+        iv = np.asarray(iv, float)
+        ok = np.isfinite(iv)
+        out.append(float(np.polyfit(ks[ok], iv[ok], 2)[1]))  # the slope at the money of a quadratic fit
+    # Part 13's Heston on the same quotes (expiries up to 200 days), for a like-for-like comparison
+    Q = _quotes()
+    hx = Q13.load("calibrate")["fits"]["Heston"]["x"]
+    hiv = np.empty(len(Q["K"]))
+    for T in np.unique(Q["T"]):
+        m = Q["T"] == T
+        hiv[m] = sv.surface_iv("Heston", hx, float(Q["F"][m][0]), Q["K"][m], T)
+    return _json({"skew_T": Tg, "skew": out, "heston_rmse_same": _rmse(hiv, Q)})
+
+
 def compute_rheston() -> dict:
     Q = _quotes()
     w = np.sqrt(Q["vega"] / Q["vega"].mean())
@@ -404,7 +435,7 @@ def compute_envelope() -> dict:
 
 
 ITEMS = {"skew": compute_skew, "roughness": compute_roughness, "artefact": compute_artefact,
-         "rbergomi": compute_rbergomi, "rheston": compute_rheston, "rprofile": compute_rprofile, "lift": compute_lift, "hawkes": compute_hawkes,
+         "rbergomi": compute_rbergomi, "rbskew": compute_rbskew, "rheston": compute_rheston, "rprofile": compute_rprofile, "lift": compute_lift, "hawkes": compute_hawkes,
          "pdv": compute_pdv, "envelope": compute_envelope}
 
 if __name__ == "__main__":

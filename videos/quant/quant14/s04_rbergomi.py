@@ -10,10 +10,11 @@ from videos.quant.quant14.common import BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV
 class RBergomi(VoiceoverScene):
     def construct(self):
         rb = load("rbergomi")
+        rs = load("rbskew")
         self.card()
         self.model()
         self.scheme(rb)
-        self.fit(rb)
+        self.fit(rb, rs)
 
     def card(self):
         c = chapter_card(3, r"Rough Bergomi", r"What is the simplest rough model that prices options?", lit=(2016,),
@@ -78,7 +79,7 @@ class RBergomi(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def fit(self, rb):
+    def fit(self, rb, rs):
         p = rb["params"]
         tab = VGroup(
             MathTex(rf"H = {p['H']:.2f},\quad \eta = {p['eta']:.2f},\quad \rho = {p['rho']:.2f}", font_size=36,
@@ -88,16 +89,16 @@ class RBergomi(VoiceoverScene):
             wrapped_label(rf"fitted by least squares on {rb['n_paths']:,} simulated paths with common random numbers, then "
                           r"re-priced on fresh paths; the forward variance curve is Part 13's, from variance swaps",
                           10.0, 20, GREY_A),
-            wrapped_label(r"for comparison, Part 13's Heston missed the Surface by 1.33 with five free numbers, and needed a "
-                          r"vol of vol of 460\%", 10.0, 20, GREY_A),
+            wrapped_label(rf"on the same quotes, Part 13's Heston misses by {rs['heston_rmse_same']:.2f}, with five free numbers "
+                          r"and a vol of vol of 460\%", 10.0, 20, GREY_A),
         ).arrange(DOWN, buff=0.35).move_to(ORIGIN)
         src = real_data(r"the Surface, 10 December 2025")
         with self.voiceover(
             "Fit it to the Surface, by least squares on twenty thousand simulated paths, and price again on fresh "
             "paths to make sure the fit is not an artefact of the random numbers. <bookmark mark='a'/> Roughness "
             f"comes out at {p['H']:.2f}, with a vol of vol of {p['eta']:.1f} and a correlation of {p['rho']:.2f}. The "
-            f"error is {rb['rmse']:.2f} volatility points. Part thirteen's Heston missed by 1.33, with five free "
-            "numbers and an absurd vol of vol."
+            f"error is {rb['rmse']:.2f} volatility points. On the same quotes, Part thirteen's Heston misses by "
+            f"{rs['heston_rmse_same']:.2f}, with five free numbers and an absurd vol of vol."
         ) as vo:
             self.play(FadeIn(tab[2]), FadeIn(src))
             vo.wait_until("a")
