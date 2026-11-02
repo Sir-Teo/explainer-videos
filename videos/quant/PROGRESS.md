@@ -288,6 +288,33 @@ Facts checked:
   - No strategy tested; trials stay at 73.
   - Remaining: previews QA, on-screen text, dry run, build.
 
+## Part 13 (Stochastic Volatility and Jumps), 2 Nov 2026
+
+- **House** `stochvol.py` (tested): Heston (little trap), Bates, Kou, VG and NIG characteristic functions; COS pricing
+  (Fang-Oosterlee Heston benchmark to 1e-8); Hagan's SABR and its density; Andersen's QE; Bates/VG simulators;
+  forward-start and cliquet payoffs; the calibrator. `volsurface.theta_at` (SSVI ATM variance linear from zero; the
+  old clamp made local vol ~0 before the first expiry) and `local_vol_paths` (4 sub-steps a day), shared with Part 12,
+  whose local-vol forward skew is now 3.4 points (was 2.6 with the daily, clamped simulator).
+- **Facts checked.** S&P 500 -20.5% / Dow -22.6% on 19 Oct 1987; post-crash skew (Rubinstein 1994; Bates 2000).
+  Gatheral (2008, Bachelier Congress, London): a diffusion fits SPX and VIX smiles only approximately. Guyon (2020,
+  Risk): an exact joint fit by a discrete-time optimal-transport model.
+- **Results.**
+  - facts: 30-day RV 17-122%; vol of vol (DVOL) 89%; DVOL +6.4% on days BTC fell >5% and +0.5% on days it rose >5%;
+    corr(return, d log DVOL) -0.23, by year -0.42, -0.58, +0.30, +0.04, -0.25 (2021-2025).
+  - calibrate (193 quotes): BS 3.89, Heston 1.33 (kappa 14.8, xi 4.6, rho -0.31, Feller ratio 0.37; the 3-day expiry
+    is missed by 5.3), Bates 1.31 (jumps go to the bound: 20 a year of -4%), VG 2.89, NIG 2.70, SABR per slice 0.38.
+  - SABR's nu falls like T^-0.49; the market's ATM skew grows like T^-0.49 (Heston flat, Levy ~1/T).
+  - QE vs Euler, 3-month ATM call: with 2 steps Euler +20%, QE -1.2%; QE inside the noise from 16 steps.
+  - SABR's 10-year density (rates-like: F 3%, beta 1/2, nu 0.4, rho -0.3) is negative below 0.7%, mass 0.63.
+  - landscape: a curved (kappa, xi) valley (1.30 at kappa 15, 1.43 at kappa 5); 12 random starts reach one minimum.
+  - history (100 weeks): kappa moves 25% a week (median), sits at its bound 20% of weeks; Feller fails 91%; rho > 0 in
+    54% (call-side smiles: Part 12's 30-day skew was call-side in 67% of 2024 weeks).
+  - SLV (particle method, half Heston's vol of vol): reprices to 0.68 (30 d) - 0.44 (120 d) vol points.
+  - forward smile (30 d starting in 60): skew today 6.5; LV 3.4, Heston 6.1, Bates 6.3, VG 5.0, SLV 5.1; cliquet
+    13.1-14.2% (8% apart); forward-start ATM 11% apart.
+  - forward variance: Sat 13 - Sun 14 Dec priced at 32% vol; Saturdays realized 29% vs 52% weekdays (2024-25 hourly).
+- **Built** (compute, 11 scenes, README EN/ZH, zh_lines 46/46). Remaining: on-screen text, dry runs, previews, build.
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
