@@ -55,7 +55,7 @@ Surface and 100 weekly surfaces), Binance's BTCUSDT (daily and hourly) and Derib
 * **6. Forward variance as the state.**
   * The Surface's forward variance curve, from variance-swap strikes. Saturday 13 to Sunday 14 December is priced at
     32% volatility, against about 50% on either side.
-  * Bitcoin's Saturdays realized 29% in 2024–2025, against 52% on weekdays.
+  * Bitcoin's Saturdays realized 29% in 2024–2025, against 54% on weekdays.
   * Heston's single exponential. Bergomi's two-factor variance curve model.
 * **7. The forward smile, and model risk.**
   * 30-day smiles 60 days ahead: local vol flattens the skew to 3.4 points, against 6.5 today. Heston keeps 6.1,

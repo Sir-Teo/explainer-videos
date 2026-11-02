@@ -312,7 +312,7 @@ Facts checked:
   - SLV (particle method, half Heston's vol of vol): reprices to 0.68 (30 d) - 0.44 (120 d) vol points.
   - forward smile (30 d starting in 60): skew today 6.5; LV 3.4, Heston 6.1, Bates 6.3, VG 5.0, SLV 5.1; cliquet
     13.1-14.2% (8% apart); forward-start ATM 11% apart.
-  - forward variance: Sat 13 - Sun 14 Dec priced at 32% vol; Saturdays realized 29% vs 52% weekdays (2024-25 hourly).
+  - forward variance: Sat 13 - Sun 14 Dec priced at 32% vol; Saturdays realized 29% vs 54% weekdays (2024-25 hourly).
 - **Built** (compute, 11 scenes, README EN/ZH, zh_lines 46/46). Remaining: on-screen text, dry runs, previews, build.
 
 ## Next

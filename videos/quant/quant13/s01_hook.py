@@ -78,7 +78,7 @@ class Hook(VoiceoverScene):
         head = label(r"five models, fitted to the same options, price one cliquet", font_size=28).to_edge(UP, buff=0.8)
         rows.next_to(head, DOWN, buff=0.5)
         v = np.array(list(cl.values()))
-        q = label(rf"a {100 * (v.max() - v.min()) / v.mean():.0f}\% disagreement that no option price can settle",
+        q = label(rf"they disagree by {100 * (v.max() - v.min()) / v.mean():.0f}\%, and no option price can settle it",
                   font_size=26, color=BAD).next_to(rows, DOWN, buff=0.5)
         with self.voiceover(
             "This part builds the models that let volatility move: a second random river, jumps, and Lévy "

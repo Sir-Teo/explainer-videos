@@ -99,7 +99,7 @@ class Jumps(VoiceoverScene):
             bars.add(Rectangle(width=abs(ax.c2p(v, 0)[0] - ax.c2p(0, 0)[0]), height=0.45, stroke_width=0,
                                fill_color=MODEL_COL[n], fill_opacity=0.85).move_to(ax.c2p(v / 2, y)))
             labs.add(VGroup(label(NAMES[n], font_size=20, color=MODEL_COL[n]),
-                            label(rf"{k} parameters", font_size=16, color=GREY_B)).arrange(DOWN, aligned_edge=RIGHT,
+                            label(rf"{k} parameter" + ("s" if k > 1 else ""), font_size=16, color=GREY_B)).arrange(DOWN, aligned_edge=RIGHT,
                                                                                           buff=0.05)
                      .next_to(ax.c2p(0, y), LEFT, buff=0.2))
             labs[-1].add(MathTex(f"{v:.2f}", font_size=22).next_to(bars[-1], RIGHT, buff=0.12))
