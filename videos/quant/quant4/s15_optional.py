@@ -179,6 +179,7 @@ class Optional(VoiceoverScene):
 
     def patterns(self, pt):
         W = pt["waits"]
+        abra = pt["abra"] / 1e15  # thousands of trillions
         card = lab_card(r"pattern waiting times (Li 1980)", [
             "def pattern_wait(pat, m=2):",
             "    \"\"\"Expected i.i.d. draws until pat first appears.\"\"\"",
@@ -205,7 +206,7 @@ class Optional(VoiceoverScene):
             "In general, add m to the k for every k where the pattern's first k letters equal its last k. "
             "<bookmark mark='a'/> Heads heads, six; heads tails, four; heads tails heads, ten; three heads, fourteen; "
             "two hundred thousand simulated sequences agree within sampling error. A monkey typing ABRACADABRA needs "
-            f"about {pt['abra'] / 1e15:.2f} thousand trillion keystrokes. <bookmark mark='b'/> Overlaps also decide "
+            f"about {abra:.2f} thousand trillion keystrokes. <bookmark mark='b'/> Overlaps also decide "
             f"Penney's game: tails heads heads beats heads heads tails {100 * pt['penney_exact']:.0f} percent of the "
             "time. <bookmark mark='c'/> So heads heads takes longer than heads tails, though each has the same chance "
             "in two tosses: it overlaps itself."

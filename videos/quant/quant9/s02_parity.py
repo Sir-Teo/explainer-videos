@@ -15,7 +15,6 @@ class Parity(VoiceoverScene):
         self.definition()
         self.sticks()
         self.ledger()
-        self.bounds()
         self.lab(p)
         self.futures(p, fb)
         self.predict()
@@ -36,12 +35,10 @@ class Parity(VoiceoverScene):
                              color=Q_C, width=6.0, kind=r"Corollary")
         VGroup(d, lo).arrange(RIGHT, buff=0.4, aligned_edge=UP).move_to(UP * 0.3)
         with self.voiceover(
-            "Start with a definition. An arbitrage is a portfolio that costs nothing or less today, can never lose, "
-            "and wins with positive probability. Three conditions: cost at most zero, payoff never negative, payoff "
-            "sometimes positive. <bookmark mark='a'/> The law of one price follows at once. If two portfolios pay the "
-            "same in every state of the world but cost different amounts, buy the cheap one and sell the dear one: "
-            "you collect the difference today and owe nothing later. Everything in this part is that sentence, "
-            "pushed as far as it will go."
+            "A definition first. An arbitrage costs nothing or less today, can never lose, and "
+            "sometimes wins. <bookmark mark='a'/> The law of one price follows: if two portfolios pay "
+            "the same in every state but cost different amounts, buy the cheap one, sell the dear "
+            "one, and keep the difference."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.2))
             vo.wait_until("a")
@@ -73,15 +70,13 @@ class Parity(VoiceoverScene):
                          r"price of the unit (chapter 11)", 5.6)]
         step = ladder(self, rows, whys, keep=3, top=3.3, x=3.6, buff=0.5, edge=6.9)
         with self.voiceover(
-            "Now build parity instead of quoting it. On the left, payoffs at expiry against the stock price. A long "
-            "call is a hockey stick bending up at the strike. <bookmark mark='a'/> A short put is a hockey stick "
-            "bending down. <bookmark mark='b'/> Add them. Above the strike the call pays and the put is worthless; "
-            "below it, the reverse. The kinks cancel, and what is left is a straight line: the stock minus the "
-            "strike, the payoff of a forward contract, in every state of the world. <bookmark mark='c'/> The "
-            "straight line can be bought today another way: one share, financed by borrowing the present value of "
-            "the strike. Same payoff, so the same price: call minus put equals the stock minus the discounted "
-            "strike. Hans Stoll wrote this down in 1969. <bookmark mark='d'/> On Deribit, where options are priced "
-            "in bitcoin, divide every dollar price by the forward, and parity reads one minus K over F."
+            "Now build parity. Payoffs at expiry against the stock price: a long call is a hockey "
+            "stick bending up at the strike. <bookmark mark='a'/> A short put bends down. <bookmark "
+            "mark='b'/> Add them: the kinks cancel, and what is left is a straight line, the stock "
+            "minus the strike, a forward, in every state. <bookmark mark='c'/> That line can also be "
+            "bought with one share and a loan of the discounted strike. Same payoff, same price: call "
+            "minus put equals stock minus discounted strike. <bookmark mark='d'/> On Deribit, where "
+            "prices are in bitcoin, divide by the forward: one minus K over F."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(leg[0]), Create(call))
             vo.wait_until("a")
@@ -129,15 +124,12 @@ class Parity(VoiceoverScene):
         res = wrapped_label(r"200 possible prices at expiry: every one lands on $+1$. No state of the world is left "
                             r"in the payoff", 5.0, 21, Q_C).next_to(side, DOWN, buff=0.35).align_to(side, LEFT)
         with self.voiceover(
-            "Now misprice the put at six and watch the arbitrage lock in. The call minus the put is now four, more "
-            "than the forward's three. Sell what is dear and buy what is cheap. <bookmark mark='a'/> Sell the call: "
-            "ten dollars in, and a payoff that falls away above the strike. <bookmark mark='b'/> Buy the put for six: "
-            "now the package pays minus the stock plus the strike, a downward line. <bookmark mark='c'/> Buy the "
-            "stock for a hundred and three, and the slope cancels: the line goes flat. <bookmark mark='d'/> Borrow "
-            "the ninety-nine dollars you are short, and the package costs nothing today. At expiry it pays one "
-            "dollar. <bookmark mark='e'/> Draw two hundred possible stock prices at expiry. Every one of them lands "
-            "on the same flat line at plus one. That flattening is the idea of the whole part: a hedged position "
-            "has no state of the world left in it."
+            "Now misprice the put at six and watch the arbitrage lock in. Call minus put is four, "
+            "more than the forward's three. <bookmark mark='a'/> Sell the call for ten. <bookmark "
+            "mark='b'/> Buy the put for six. <bookmark mark='c'/> Buy the stock: the line goes flat. "
+            "<bookmark mark='d'/> Borrow the ninety-nine you are short: the package costs nothing and "
+            "pays one dollar. <bookmark mark='e'/> Two hundred possible prices at expiry all land on "
+            "the same line. A hedged position has no state of the world left in it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(head))
             vo.wait_until("a")
@@ -150,41 +142,6 @@ class Parity(VoiceoverScene):
             vo.wait_until("e")
             self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.01, run_time=1.2))
             self.play(Transform(dots, landed), FadeIn(res), run_time=1.8)
-        self.wait(0.3)
-        self.clear_scene()
-
-    def bounds(self):
-        K = 100.0
-        g = axes([40, 160], [0, 165], x_length=6.4, y_length=4.4, xlabel=r"stock price today, $S$",
-                 ylabel=r"call price", xticks=[50, 100, 150], yticks=[0, 50, 100, 150], font_size=17)
-        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-        xs = np.linspace(40, 160, 241)
-        lo = np.maximum(xs - K * np.exp(-0.04), 0)
-        region = band(ax, xs, lo, xs, Q_C, 0.18)
-        lo_c = curve(ax, xs, lo, Q_C, stroke_width=3)
-        hi_c = curve(ax, xs, xs, Q_C, stroke_width=3)
-        from explainer.quant.house import bs
-        cc = curve(ax, xs, bs.price(xs, K, 1.0, 0.3, 0.04), CALL, stroke_width=4)
-        side = VGroup(
-            MathTex(r"\max(S - K e^{-rT},\, 0) \le C \le S", font_size=34, color=Q_C),
-            wrapped_label(r"below: a call is worth at least the forward it can be turned into, and never less than "
-                          r"nothing; above: it can never be worth more than the share it may buy", 5.2, 20, GREY_A),
-            wrapped_label(r"green: one model's call (Black--Scholes, 30\% volatility, 4\% rates); any model must keep "
-                          r"its curve inside the band", 5.2, 20, CALL),
-            wrapped_label(r"Bj\"ork, ch.\ 10; Hull, ch.\ 11", 5.2, 18, GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
-        with self.voiceover(
-            "Parity is one of a family of model-free facts. A call is worth at least what you could lock in by "
-            "converting it into a forward, and never less than nothing. And it can never be worth more than the "
-            "share it gives you the right to buy. <bookmark mark='a'/> That gives a band, drawn in purple, with no "
-            "model at all. Any model's call price, like this Black-Scholes curve, must live inside it, or there is an "
-            "arbitrage against that model. Björk's chapter ten collects these parity relations."
-        ) as vo:
-            self.play(FadeIn(g), FadeIn(side[0]), FadeIn(side[1]))
-            self.play(FadeIn(region), Create(lo_c), Create(hi_c))
-            vo.wait_until("a")
-            self.play(Create(cc), FadeIn(side[2]), FadeIn(side[3]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -207,12 +164,12 @@ class Parity(VoiceoverScene):
                 f"len(pairs) = {p['n_pairs']}    expiries = {len(ex)}",
                 f"median |residual| = {p['trade_p50']:.1f} bp (trades), {p['mark_p50']:.1f} bp (marks)"]
         with self.voiceover(
-            "Here is the House's code that reads the forward out of real trades. Group the day's option trades by "
-            "expiry, strike and type. For every call, find the put at the same strike traded closest in time, "
-            "and keep the pair if they are within ten minutes and near the money. <bookmark mark='a'/> Each pair "
-            "gives the forward by parity: the strike, divided by one minus the call-minus-put price. Run it on the "
-            f"Surface's morning of trades. <bookmark mark='b'/> {p['n_pairs']} pairs, across {len(ex)} expiries, "
-            f"and half of them sit within {p['trade_p50']:.1f} basis points of their expiry's median forward."
+            "Here is the House's code that reads the forward from real trades: group the morning's "
+            "option trades by expiry and strike, pair each call with the nearest put in time, within "
+            "ten minutes and near the money. <bookmark mark='a'/> Each pair gives the forward: the "
+            f"strike over one minus the call-minus-put price. <bookmark mark='b'/> {p['n_pairs']} "
+            f"pairs across {len(ex)} expiries, half within {p['trade_p50']:.1f} basis points of their "
+            "expiry's median."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -248,16 +205,14 @@ class Parity(VoiceoverScene):
                           r"rate, paid by leveraged buyers (Part 2's funding rate)", 4.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.45)
         src = real_data(r"Deribit BTC options and futures trades, 10 December 2025, 00:00--12:00 UTC")
-        tail = ("The two markets agree to within the width of a quote. If they did not, buying the cheap forward and "
-                "selling the dear one would be the cash-and-carry arbitrage, and traders do exactly that."
+        tail = ("They agree to within a quote's width; if they did not, cash-and-carry traders would close the gap."
                 if gmax < 10 else "That is wider than a quote: the basis between the two markets is itself a trade.")
         with self.voiceover(
-            "Is that forward real? Deribit also lists futures on the same expiries, and a future is, up to daily "
-            "settlement, a forward you can trade directly. The House fetched every futures trade from the same "
-            f"hours, {fb['n_trades']:,} of them, most in the perpetual contract. <bookmark mark='a'/> The dots are "
-            "the forwards that option parity implies, as annual rates over the index; the squares are where the "
-            f"dated futures actually traded. On the {fb['n_matched']} expiries that have both, the median gap is "
-            f"{gp50:.1f} basis points of price, and the largest {gmax:.1f}. <bookmark mark='b'/> " + tail
+            "Is that forward real? Deribit lists futures on the same expiries, and the House fetched "
+            f"all {fb['n_trades']:,} futures trades from the same hours. <bookmark mark='a'/> Dots: "
+            "the forwards option parity implies; squares: where the dated futures traded. On the "
+            f"{fb['n_matched']} expiries with both, the median gap is {gp50:.1f} basis points, the "
+            f"largest {gmax:.1f}. <bookmark mark='b'/> " + tail
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), FadeIn(side[0]))
             vo.wait_until("a")
@@ -271,10 +226,8 @@ class Parity(VoiceoverScene):
     def predict(self):
         card = pause_at(r"If the put had been 8 instead of 6, which of the four legs flip?")
         with self.voiceover(
-            "Pause and predict. If the put had been eight instead of six, which of the four legs flip? "
-            "<bookmark mark='a'/> All four. Now the call minus the put is two, less than the forward's three, so "
-            "buy the call, sell the put, short the stock and lend a hundred: one dollar in hand today, and nothing "
-            "owed at expiry."
+            "Pause and predict. If the put were eight, which legs flip? <bookmark mark='a'/> All "
+            "four: buy the call, sell the put, short the stock and lend: a dollar in hand today."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

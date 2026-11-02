@@ -591,10 +591,10 @@ def compute_maxcall() -> dict:
     paths, against Part 17's deep optimal stopping (read from its cache, not recomputed)."""
     from explainer.quant.house import deep
     p = dict(deep.MAX_CALL)
-    part = CACHE.partial("maxcall", {"fits": [2000, 20000, 200000], "eval": 400000})
+    part = CACHE.partial("maxcall", {"fits": [2000, 20000, 200000], "eval": 2000000})
     for nf in (2000, 20000, 200000):
         if str(nf) not in part:
-            part[str(nf)] = E.lsm_max_call(p, nf, 400000, seed=1)
+            part[str(nf)] = E.lsm_max_call(p, nf, 2000000, seed=1)
     import json as _j
     from explainer.tts import REPO_ROOT
     st = _j.loads((REPO_ROOT / ".cache" / "quant17" / "stopping.json").read_text())["5"]
@@ -1020,6 +1020,38 @@ def compute_rqmc_median() -> dict:
     return {"ns": [2 ** m for m in ms], "mean": me, "median": md}
 
 
+
+def compute_mlmc_call() -> dict:
+    """Ch 7: the theorem's textbook case, a European call (Lipschitz payoff): multilevel cost against eps for Euler
+    (beta = gamma = 1: eps^-2 (log eps)^2) and Milstein (beta = 2 > gamma: eps^-2)."""
+    part = CACHE.partial("mlmc_call", {"eps": [0.04, 0.02, 0.01, 0.005], "seed": 3})
+    for sch in ("euler", "milstein"):
+        for e in (0.04, 0.02, 0.01, 0.005):
+            key = f"{sch}{e}"
+            if key not in part:
+                part[key] = _json(E.mlmc_run(e, S0, K, T, SIG, R, seed=3, scheme=sch, payoff="call"))
+    return {"eps": [0.04, 0.02, 0.01, 0.005], "exact": float(bs.price(S0, K, T, SIG, R)),
+            "euler": [part[f"euler{e}"] for e in (0.04, 0.02, 0.01, 0.005)],
+            "milstein": [part[f"milstein{e}"] for e in (0.04, 0.02, 0.01, 0.005)]}
+
+
+def compute_drop_first() -> dict:
+    """Ch 5: dropping Sobol's first point (the origin) to dodge the inverse normal's -infinity, against keeping it:
+    the error of scrambled Sobol on a smooth integral, int e^{u1 + u2} over the square, 100 scramblings each."""
+    I = (np.e - 1) ** 2
+    out = {}
+    for m in (6, 8, 10, 12):
+        keep, drop = [], []
+        for s in range(100):
+            sob = qmc.Sobol(2, scramble=True, seed=s)
+            x = sob.random(2 ** m + 1)
+            keep.append(np.exp(x[:-1].sum(1)).mean() - I)
+            drop.append(np.exp(x[1:].sum(1)).mean() - I)
+        out[str(2 ** m)] = {"keep": float(np.sqrt(np.mean(np.square(keep)))),
+                            "drop": float(np.sqrt(np.mean(np.square(drop))))}
+    return {"rows": out}
+
+
 ITEMS = {"mc": compute_mc, "qmc": compute_qmc, "mlmc": compute_mlmc, "american": compute_american,
          "greeks": compute_greeks, "fd": compute_fd, "adi": compute_adi, "fourier": compute_fourier,
          "race": compute_race, "envelope": compute_envelope,
@@ -1029,7 +1061,8 @@ ITEMS = {"mc": compute_mc, "qmc": compute_qmc, "mlmc": compute_mlmc, "american":
          "maxcall": compute_maxcall, "dual_path": compute_dual_path, "bump_h": compute_bump_h,
          "aad_scale": compute_aad_scale, "fd_live": compute_fd_live, "lcp": compute_lcp, "adi_grid": compute_adi_grid,
          "lewis": compute_lewis, "cos_density": compute_cos_density, "race_cv": compute_race_cv,
-         "parallel": compute_parallel, "qae": compute_qae, "cheb": compute_cheb, "rqmc_median": compute_rqmc_median}
+         "parallel": compute_parallel, "qae": compute_qae, "cheb": compute_cheb, "rqmc_median": compute_rqmc_median,
+         "mlmc_call": compute_mlmc_call, "drop_first": compute_drop_first}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

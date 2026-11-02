@@ -111,7 +111,7 @@ ZH = {
         "<bookmark mark='b'/>于是乘以T的估计系数，收敛到由这条布朗路径构成的两个随机量之比，<bookmark mark='c'/>t统计量也是如此。"
         "<bookmark mark='d'/>分子是W(1)的平方减一的一半，而W(1)的平方大约有三分之二的时间小于一。统计量偏向左边，正如模拟所画出的。",
 
-    '"Lab. The House\'s test':
+    'f"Lab. The House\'s test':
         "实验。我们公司的检验：把变化量对常数、昨天的水平和五个滞后变化量回归，再把t统计量与负二点八六比较。在四个序列上运行。"
         "<bookmark mark='a'/>先暂停预测一下：十年期国债收益率不可能涨到无穷。它有单位根吗？<bookmark mark='b'/>"
         "比特币的对数价格和股市的对数指数：有单位根，不出所料。{y10_line}至于VIX：{vix_line}",
@@ -153,7 +153,7 @@ ZH = {
         "因为beta本来就是为了让残差看起来平稳而选的。<bookmark mark='c'/>序列多于两个时，索伦·约翰森把系统写成水平和差分的形式："
         "水平只通过一个降秩矩阵pi进入。<bookmark mark='d'/>它的秩，即独立牵绳的个数，由差分与滞后水平之间的典型相关通过迹检验读出。",
 
-    '"Johansen\'s test, made visible.':
+    'f"Johansen\'s test, made visible.':
         "约翰森检验，变成看得见的样子。从1990到2020年的每一天，三个月、五年和十年期国债收益率作为三维空间中的一个点，颜色随时间由蓝变红。"
         "<bookmark mark='a'/>每个收益率都在游走：点云沿一个长方向伸展，即利率的水平，三十年来一路下降。<bookmark mark='b'/>"
         "转动镜头，直到侧面看点云。它几乎是平的：一张薄片，在一个方向上很薄。这个薄的方向是一个不游走的收益率组合，也就是曲线的曲率，一根牵绳。"
@@ -252,7 +252,7 @@ ZH = {
     # ------------------------------------------------------------------ Zoo
     "Chapter seven. Stationarity, fat tails and asymmetry": "第7章。平稳性、厚尾与不对称：GARCH家族。",
 
-    '"Every GARCH is a point on this plane.':
+    'f"Every GARCH is a point on this plane.':
         "每个GARCH都是这个平面上的一个点。在alpha加beta等于一的线以下，方差是有限的。<bookmark mark='a'/>美国市场就在这条线下方，"
         "比特币更靠里一些。<bookmark mark='b'/>线的上方会怎样？丹尼尔·纳尔逊在1990年证明，方差不一定会爆炸。只要alpha乘z平方加beta的对数的平均"
         "为负，过程就会稳定下来，而这条红色的边界位于那条线之外。<bookmark mark='c'/>暂停预测一下。alpha零点三加beta零点七五等于一点零五；"
@@ -297,7 +297,7 @@ ZH = {
         "运行一个类似GARCH的递推，<bookmark mark='c'/>每天再重新缩放成一个真正的相关矩阵。<bookmark mark='d'/>似然一分为二，"
         "所以分两个简单的步骤估计。对股票和债券，b是{d['b']:.3f}：相关性冲击非常持久。",
 
-    '"Here is the fitted correlation day by day':
+    'f"Here is the fitted correlation day by day':
         "这是逐日拟合的相关性，灰色是一个普通的指数平均作对比：DCC的路径更平滑，因为它的记忆更长。四十年里相关性为正：通胀同时伤害两者。"
         "然后它翻转了。<bookmark mark='a'/>暂停预测一下。2010年，你给六四组合的风险模型仍假设相关性为正零点三。组合的风险比模型说的更大还是更小？"
         "<bookmark mark='b'/>{verdict}2022年，在我们的时间窗之外，符号又翻转了。",
@@ -358,7 +358,7 @@ ZH = {
         "用滚动的一年重新拟合，看着窗口从2018年滑到2020年底。昨天的权重保持在一半左右，但一周和一月交换了位置：一年的数据分不清它们，"
         "因为两个平均一起变动。",
 
-    '"Pause and predict: if yesterday\'s realized variance':
+    'f"Pause and predict: if yesterday\'s realized variance':
         "暂停预测一下：如果昨天的已实现方差测量得很嘈杂，模型应该更相信它还是更不信它？<bookmark mark='a'/>更不信。已实现方差是真实方差加上一个测量误差，"
         "误差的大小由已实现四次变差告诉我们。<bookmark mark='b'/>一个嘈杂回归量的系数会被拉向零，越嘈杂的日子拉得越多。<bookmark mark='c'/>"
         "于是蒂姆·博勒斯列夫、安德鲁·巴顿和罗赫尔·夸德弗利格让每日系数在四次变差高时收缩：HARQ。系数如预期为负，{verdict}"
@@ -422,7 +422,7 @@ ZH = {
         "预测是校准的吗？明瑟和扎诺维茨把结果对预测回归：理想情况下截距为零、斜率为一。在2020年的测试年里，HAR的斜率接近一；基于对数的预测斜率"
         "接近{mz['log-HAR']['b']:.1f}：它们在大日子里太保守，因为对数压缩了尖峰。",
 
-    '"Last, many models at once.':
+    'f"Last, many models at once.':
         "最后，同时比较很多模型。彼得·汉森、阿斯格·伦德和詹姆斯·纳森构建了模型置信集：只要等预测精度被拒绝，就剔除最差的模型。剩下的集合以百分之九十的"
         "置信度包含最好的模型。<bookmark mark='a'/>在我们即将进行的竞赛上，{verdict}<bookmark mark='b'/>把水平放宽到百分之七十五，"
         "{out_txt}出局。看到排行榜时，请记住这份谦逊。",
@@ -481,7 +481,7 @@ ZH = {
         "<bookmark mark='e'/>白点：单个种子。<bookmark mark='f'/>而用平方误差给同样的预测评分，顺序就变了：{mse_order[0]}排第一。"
         "一场竞赛的诚实程度，取决于它的损失函数。",
 
-    '"And the late entrant, HARNet':
+    'f"And the late entrant, HARNet':
         "还有后来加入的HARNet，它生来就是对数HAR。<bookmark mark='a'/>它能胜过自己的起点吗？{verdict}那置信集呢？{mcs_line}",
 
     "f'By the smallest of margins":
@@ -574,7 +574,7 @@ ZH = {
     # ------------------------------------------------------------------ Industry
     "Chapter seventeen. How the industry forecasts volatility.": "第17章。业界如何预测波动率。",
 
-    '"In October 1994 J.P. Morgan published RiskMetrics':
+    'f"In October 1994 J.P. Morgan published RiskMetrics':
         "1994年10月，摩根大通发布了RiskMetrics，并免费公开数据。它的波动率模型是指数平均：明天的方差等于零点九四乘以今天的预测，加上零点零六乘以"
         "今天的平方收益。所有序列用同一个衰减因子，日度预测零点九四，月度零点九七，依据数百个序列上的预测误差选出。2010年，MSCI以约十五亿美元"
         "收购了这项业务。<bookmark mark='a'/>暂停预测一下：为什么所有序列用同一个lambda？因为用同一个衰减因子构造的协方差矩阵保持一致且正定；"
@@ -600,7 +600,7 @@ ZH = {
 
     "Here it does not improve QLIKE.": "这里它没有改善QLIKE。",
 
-    '"Trend followers lean heavily on volatility forecasts.':
+    'f"Trend followers lean heavily on volatility forecasts.':
         "趋势跟踪者高度依赖波动率预测。2018年，坎贝尔·哈维和曼集团AHL的同事把每个资产缩放到百分之十的波动率目标：风险资产的夏普比率提高了，"
         "所有资产的左尾都变小了。托拜厄斯·莫斯科维茨、欧耀华和拉塞·佩德森在他们的时间序列动量研究中，把每个期货头寸设定为百分之四十的波动率，"
         "用质心为六十天的指数平均估计。<bookmark mark='a'/>我们在九十四年美国市场上的复现。头寸随之呼吸：大萧条和2008年时很小，平静的年代加杠杆。"
