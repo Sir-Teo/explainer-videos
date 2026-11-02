@@ -15,6 +15,9 @@ def pct(x: float) -> str:
 
 
 class OurLineage(VoiceoverScene):
+    # Explicitly override only for a separately provisioned, verified probe v2.
+    probe_fit_protocol = "fp32-lbfgs-probe-v1"
+
     def construct(self):
         self.card()
         self.fair_setup()
@@ -33,7 +36,7 @@ class OurLineage(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def fair_setup(self):
-        g, L = load("gpt_m"), load("lineage")
+        g = load("gpt_m")
         sh, p = g["shape"], g["params"]
         gpt = VGroup(arch_diagram("decoder", 1.0), label(r"GPT-style: \ predict every next token", font_size=22,
                                                          color=DECODER)).arrange(DOWN, buff=0.25)
@@ -276,7 +279,7 @@ class OurLineage(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def probe(self):
-        L = load("lineage")
+        L = load("lineage", probe_fit_protocol=self.probe_fit_protocol)
         nc = L["probe_classes"]
         pg, pb = L["probe_gpt"], L["probe_bert"]
         steps_ = VGroup(*[node_box(t, c, font_size=20) for t, c in ((r"a held-out sentence", GREY_B),

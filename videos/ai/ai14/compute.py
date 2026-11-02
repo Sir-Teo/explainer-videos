@@ -384,28 +384,34 @@ def _cloze_scores(model, kind, items):
 
 
 def _features(model, sents, B=32):
-    """Mean of the final (normalized) hidden states over a sentence's tokens."""
+    """Mean final states, batching equal-length sentences without padding.
+
+    Masking only the pooling is insufficient for bidirectional attention:
+    real tokens would already have attended to the padding. Restore input
+    order after length bucketing so classifier labels remain aligned.
+    """
     import torch
 
     from explainer.ai import novels as N
 
-    feats = []
+    encoded = [N.encode(s)[:64] for s in sents]
+    by_length = {}
+    for i, ids in enumerate(encoded):
+        by_length.setdefault(len(ids), []).append(i)
+    feats = [None] * len(encoded)
     model.eval()
     with torch.no_grad():
-        for i in range(0, len(sents), B):
-            chunk = [N.encode(s)[:64] for s in sents[i:i + B]]
-            T = max(len(c) for c in chunk)
-            x = torch.zeros(len(chunk), T, dtype=torch.long)
-            m = torch.zeros(len(chunk), T)
-            for j, c in enumerate(chunk):
-                x[j, :len(c)] = torch.tensor(c)
-                m[j, :len(c)] = 1
-            h = model.emb(x)
-            for b in model.blocks:
-                h = b(h)
-            h = model.norm(h)
-            feats.append(((h * m[..., None]).sum(1) / m.sum(1, keepdim=True)).numpy())
-    return np.concatenate(feats)
+        for indices in by_length.values():
+            for start in range(0, len(indices), B):
+                batch_ids = indices[start:start + B]
+                x = torch.tensor([encoded[i] for i in batch_ids], dtype=torch.long)
+                h = model.emb(x)
+                for b in model.blocks:
+                    h = b(h)
+                pooled = model.norm(h).mean(dim=1).numpy()
+                for i, row in zip(batch_ids, pooled):
+                    feats[i] = row
+    return np.stack(feats)
 
 
 def _probe(Xtr, ytr, Xte, yte, classes, wd=1e-3, iters=300):
@@ -428,6 +434,45 @@ def _probe(Xtr, ytr, Xte, yte, classes, wd=1e-3, iters=300):
         return loss
 
     opt.step(closure)
+    with torch.no_grad():
+        pred = (Bt @ W + b).argmax(-1).numpy()
+        tr = float(((A @ W + b).argmax(-1).numpy() == ytr).mean())
+    return float((pred == yte).mean()), tr
+
+
+def _probe_v2(Xtr, ytr, Xte, yte, classes, wd=1e-3, iters=1000):
+    """FP32 normalization followed by an FP64 regularized multinomial fit.
+
+    The post-fit residual bound is separate from the optimizer stopping flags.
+    """
+    import torch
+
+    if torch.get_num_threads() != 1:
+        raise ValueError("probe v2 requires one compute thread")
+    if Xtr.dtype != np.float32 or Xte.dtype != np.float32:
+        raise TypeError("probe v2 requires float32 frozen features before normalization")
+    mu, sd = Xtr.mean(0), Xtr.std(0) + 1e-6
+    A = torch.tensor((Xtr - mu) / sd, dtype=torch.float64)
+    Bt = torch.tensor((Xte - mu) / sd, dtype=torch.float64)
+    y = torch.tensor(ytr)
+    torch.manual_seed(0)
+    W = torch.zeros(A.shape[1], classes, dtype=torch.float64, requires_grad=True)
+    b = torch.zeros(classes, dtype=torch.float64, requires_grad=True)
+    opt = torch.optim.LBFGS([W, b], lr=1.0, max_iter=iters, max_eval=iters * 5 // 4,
+                            tolerance_grad=1e-9, tolerance_change=1e-12, history_size=100,
+                            line_search_fn="strong_wolfe")
+
+    def closure():
+        opt.zero_grad()
+        loss = torch.nn.functional.cross_entropy(A @ W + b, y) + wd * (W ** 2).sum()
+        loss.backward()
+        return loss
+
+    opt.step(closure)
+    final_loss = closure()
+    grad_inf = max(float(W.grad.abs().max()), float(b.grad.abs().max()))
+    if not bool(torch.isfinite(final_loss)) or not math.isfinite(grad_inf) or grad_inf > 1e-6:
+        raise RuntimeError(f"probe v2 failed its post-fit residual bound: {grad_inf:g}")
     with torch.no_grad():
         pred = (Bt @ W + b).argmax(-1).numpy()
         tr = float(((A @ W + b).argmax(-1).numpy() == ytr).mean())
@@ -466,6 +511,8 @@ def compute_lineage():
                                 left=N.decode(ex["ids"][:ex["pos"]]), right=N.decode(ex["ids"][ex["pos"] + 1:]),
                                 opts=[N.decode([o]).strip() for o in ex["opts"]], answer=ex["answer"])
     tr, te, titles = _probe_data()
+    out["probe_protocol"] = "exact-length-batches-v1"
+    out["probe_fit_protocol"] = "fp32-lbfgs-probe-v1"
     ytr, yte = np.array([k for _, k in tr]), np.array([k for _, k in te])
     for nm, m in (("gpt", gpt), ("bert", bert)):
         Xtr, Xte = _features(m, [s for s, _ in tr]), _features(m, [s for s, _ in te])
@@ -538,7 +585,9 @@ def _fewshot_scores(model, items, shots=SHOTS):
     Calibrated (Zhao et al., 2021, "Calibrate before use"): subtract each title's log-probability after the same
     examples and a content-free query ("N/A"), so that a fixed preference for one title cancels.  All the prompts of
     an item (every k, both titles, real and content-free query) go through the model as one right-padded batch;
-    padding after a sequence can't change a causal model's outputs before it."""
+    padding after a sequence can't change a causal model's outputs before it. Each sequence is left-truncated
+    to T+1 tokens, so k is the requested number of demonstrations. Long sequences can retain different context
+    for the real/content-free queries or the two title candidates."""
     import torch
 
     from explainer.ai import novels as N
@@ -552,7 +601,7 @@ def _fewshot_scores(model, items, shots=SHOTS):
             a, b = it["pair"]
             seqs, ns = [], []
             for k in shots:
-                demos = it["demos"][:k] if k else []  # balanced: the first k of a list that alternates labels
+                demos = it["demos"][:k] if k else []  # first k from the shuffled eight-example pool
                 for query in (it["query"], CONTENT_FREE):
                     p = N.encode(_fewshot_prompt(demos, query))
                     for lab in (a, b):

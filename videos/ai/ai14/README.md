@@ -90,12 +90,53 @@ missing items. A render therefore cannot start training or silently regenerate t
 `matched-all-words-v1` for ICL rows and GPT replay snapshots. The probe protocol excludes invented padding from
 bidirectional attention; the repetition protocol scores all words in both copies of the repeated list.
 
-This source-only change does not include the corresponding producer/evaluation repairs, scientific caches,
-model weights or datasets. The unchanged producer recipes are not a way to generate the required corrected
-results. Their review and compatible inputs/results must be supplied separately. Protocol markers alone do not
-verify model identity or provenance: check the model, tokenizer, input data, evaluation cohorts and runtime before
-using an external cache. Base-model comparison rows are optional when their separate cache is absent; a
-family-only capture does not validate the base-model branches.
+The producers implement pad-free probe features (`exact-length-batches-v1`) and matched repetition targets
+(`matched-all-words-v1`). These measurement corrections are separate from the choice of probe optimizer.
+The default `compute_lineage` keeps the original FP32 head, 300-iteration LBFGS recipe and two-thread
+execution, and records `probe_fit_protocol=fp32-lbfgs-probe-v1` in newly generated results. This does not
+rewrite existing artifacts or promise the stronger v2 residual bound.
+
+`common.load("lineage")` reads only `.cache/ai14/lineage.json` with the corrected-v1 feature protocol and
+original FP32 fit. The approved corrected-v1 artifact predates the fit marker: its absent marker remains
+compatible under its separately verified provenance. Explicit null, unknown and v2 fit markers at that path
+are rejected, as are v2-only `probe_fit` or `candidate_provenance` fields in a v1 artifact. NPZ companions
+cannot add or replace protocol/provenance metadata after validation. An absent marker alone is not evidence that an arbitrary supplied file is valid; verify the
+external source, input, model and runtime pins before provisioning it.
+
+The optional stronger fit is selected explicitly:
+
+```python
+load("lineage", probe_fit_protocol="fp64-lbfgs-probe-v2")
+```
+
+This reads only `.cache/ai14/lineage_probe_v2.json`, requires its exact v2 feature/fit metadata and recorded
+cohort counts/hash, and verifies its recorded parent hash against the supplied canonical v1 artifact.
+Provision both verified artifacts before opting in. Missing or incompatible v2 inputs fail without falling
+back, generating data, relabeling a result or replacing the v1 file. `OurLineage.probe_fit_protocol` defaults
+to v1; explicitly set that scene attribute to the v2 string for a separately identified v2 probe QA run.
+Only its `probe` method uses the selector. Setup, cloze, writing and Outro continue reading canonical v1;
+changing the probe selection does not change their samples or measurements. Keep the selected recipe in
+external QA receipts. No shared QA/build command automatically chooses v2 from files on disk.
+
+The separately named `_probe_v2` helper retains FP32 training normalization, casts those exact standardized
+values to an FP64 head, and requires its caller to use one compute thread. Its recipe is LBFGS (learning rate
+1, history 100, at most 1,000 iterations / 1,250 evaluations, strong-Wolfe search). Requested tolerances are
+1e-9 for gradients and 1e-12 for change. A fresh post-fit infinity-norm gradient must also be finite and at
+most 1e-6; passing this separate acceptance bound does not claim that 1e-9 stationarity was reached.
+This optional helper is not the default lineage producer and has no automatic cache-generation entry point.
+The objective remains mean training cross-entropy plus 0.001 times squared weights, with zero initialization,
+original examples and class order. The numerical acceptance criterion was chosen after exploratory training
+diagnostics, before verification of the separately versioned candidate; no held-out accuracy criterion selects
+the fit. The older two-thread result discrepancy remains unisolated. Preserve its original results and recipe;
+stronger numerics do not establish that the original FP32 fit was scientifically invalid.
+
+Scientific caches, weights and datasets are supplied separately. Use verified original inputs in an isolated
+workspace, preserve older products, and explicitly evaluate a new version rather than upgrading JSON labels.
+Protocol markers alone do not verify model identity or provenance: retain model/tokenizer/data/runtime pins.
+The probe uses up to the available held-out sentences per book, so some labels can be absent from the test set;
+its accuracy is micro-accuracy over the actual cohort, not a balanced per-class average. Do not resample it to
+make a displayed percentage match. Base-model rows remain optional when their separate cache is absent;
+family-only evidence does not validate those branches.
 
 Earlier selected-frame and silent-motion review used separately supplied compatible caches. It does not establish
 visual acceptance of this public tree. Fresh bilingual scene QA remains required after cache reconciliation;
