@@ -76,7 +76,7 @@ class Hook(VoiceoverScene):
 
     def robinhood(self):
         c = crisis_card(r"28 January 2021", r"The day a trading app stopped buying",
-                        r"GameStop had risen about twentyfold in a month. Before the open, the National Securities "
+                        r"GameStop had risen nearly twentyfold in January. Before the open, the National Securities "
                         r"Clearing Corporation asked Robinhood for a deposit of about \$3 billion against two days of "
                         r"unsettled trades; Robinhood restricted buying in GameStop and other stocks, and the "
                         r"requirement was reduced, to about \$1.4 billion as its chief executive described it.",
@@ -90,7 +90,7 @@ class Hook(VoiceoverScene):
         src = note(r"public record: Robinhood's statements and its chief executive's interviews (February 2021); "
                    r"SEC staff report on the January 2021 events (October 2021)", font_size=17).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "That collateral once decided who could trade. In January 2021 GameStop rose about twentyfold in a month, "
+            "That collateral once decided who could trade. In January 2021 GameStop rose nearly twentyfold in a month, "
             "bought by millions of people through apps. Early on the 28th, the clearing house for American stocks "
             "asked Robinhood for a deposit of about three billion dollars against the trades it had not yet "
             "settled. Robinhood stopped its customers from buying GameStop and a handful of other stocks, and the "
