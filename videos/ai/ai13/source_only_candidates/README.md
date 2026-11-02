@@ -1,12 +1,24 @@
-# Gated source-only candidates
+# Earlier partial source-only proposals
 
-The active Smoother and Outro modules remain unchanged. These patches and four owned Chinese narration
-operations are for later review/integration only, after compatible original Part 7 GP and derived smoother inputs
-are verified. No GP values or substitute datasets are included here.
+The two patches and four narration operations in this directory are earlier, partial proposals. They are retained
+for reference; they are not the full reviewed Smoother/Outro update and are not automatically applied. Do not stack
+them on top of the complete scene changes or use the full Chinese capture context as a replacement table.
 
-The Smoother candidate clarifies negligible Gaussian weights, equal weights only in the infinite-bandwidth limit,
-and the score denominator 2h². The Outro candidate qualifies the scored passage cohort and formal depth limits.
-They preserve numerical recipes and bookmark sequences. Source review does not establish layout, continuous
-playback, listening, synchronization or final-resolution acceptance. Before enabling either patch, reconcile its
-expected baseline, inspect the original output, apply only its owned narration operations, and complete fresh
-English/Chinese output QA using the exact integrated source/input/runtime combination.
+The full update clarifies the Gaussian score −distance²/(2h²), the infinite-bandwidth uniform-weight limit,
+zero-based 1,000-word block coordinates, peak-rescaled bars and the RBF key-norm condition. It also qualifies
+the Outro's continuous/sign readouts, signed coefficients, raw plot ranges, cost convention and algorithm claims.
+It contributes six narrowly owned Chinese narration additions and a separate 12-string/one-pattern caption delta.
+Those operations must be reconciled independently from the earlier 74 already integrated shared-caption operations.
+
+The reviewed dependency change reads the raw validated Part 6 observations through Part 7's `c7.pages()` reader;
+it does not require fitting Part 7's GP and does not recover a GP posterior. The downstream Nadaraya–Watson and
+leave-one-out mathematics are unchanged. New saved smoother output has its own version and provenance; original
+scientific outcomes and cache metadata stay immutable. Similar fields or matching arrays do not authorize automatic
+cache-lineage adoption. Ordinary loaders can generate missing data, so reconcile qualified inputs before rendering.
+
+Source and synthetic checks are distinct from output acceptance. Record exact source/input/runtime identities
+and the reviewed language, scene, mode and samples. Earlier selected-frame checks do not transfer acceptance to a
+new tree. These notes alone do not certify rendered acceptance of an integrated revision; acceptance is recorded
+for the exact scene, language, mode, source, inputs and runtime. Silent QA does not establish actual audio,
+continuous playback, speech synchronization, final-resolution or production acceptance. Review the exact
+integrated English and Chinese output before any production decision.

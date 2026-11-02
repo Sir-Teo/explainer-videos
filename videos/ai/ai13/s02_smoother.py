@@ -32,14 +32,14 @@ class Smoother(VoiceoverScene):
         yhi = float(np.ceil(y.max() / 10) * 10)
         ax = Axes(x_range=[0, len(x), 25], y_range=[0, yhi, 10], x_length=10.6, y_length=3.6, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([0, 0.75, 0])
-        xl = label(r"page of \textit{Great Expectations}", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.12)
+        xl = label(r"$1{,}000$-word block (zero-based) of \textit{Great Expectations}", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.12)
         yl = label(r"``her'' per $1{,}000$ words \ (Part 7)", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.1)
         yl.align_to(ax, LEFT)
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.045, color=V) for a, b in zip(x, y)])
         # the weights, on a strip of their own under the plot
         wax = Axes(x_range=[0, len(x), 25], y_range=[0, 1, 1], x_length=10.6, y_length=1.3, tips=False,
                    axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([0, -2.55, 0])
-        wl = label(r"weights", font_size=22, color=A).next_to(wax, LEFT, buff=0.15)
+        wl = label(r"relative \\ bar heights", font_size=22, color=A).next_to(wax, LEFT, buff=0.15)
         qv, hv = ValueTracker(float(s["q"])), ValueTracker(h0)
 
         def weights():
@@ -54,8 +54,13 @@ class Smoother(VoiceoverScene):
                             for a, b in zip(x, w) if b > 1e-3 * top])
 
         def qline():
-            return DashedLine(wax.c2p(qv.get_value(), 0), ax.c2p(qv.get_value(), yhi), color=Q, stroke_width=2,
-                              dash_length=0.08)
+            # Keep the two query guides inside their own axes, clear of the caption gutter.
+            return VGroup(
+                DashedLine(wax.c2p(qv.get_value(), 0), wax.c2p(qv.get_value(), 1), color=Q, stroke_width=2,
+                           dash_length=0.08),
+                DashedLine(ax.c2p(qv.get_value(), 0), ax.c2p(qv.get_value(), yhi), color=Q, stroke_width=2,
+                           dash_length=0.08),
+            )
 
         def est():
             return glow_dot(ax.c2p(qv.get_value(), float(weights() @ y)), color=Q, radius=0.09)
@@ -72,12 +77,7 @@ class Smoother(VoiceoverScene):
         ql_lab.add_updater(lambda m: m.next_to(ax.c2p(qv.get_value(), yhi), UP, buff=0.05))
         cite_ = cite(r"E.~A.~Nadaraya (1964); \ G.~S.~Watson (1964)", corner=DR)
         with self.voiceover(
-            "Here is Part 7's data again: how often each page of Great Expectations says 'her'. Suppose you want a "
-            "smooth guess for page one hundred and twenty. <bookmark mark='a'/> Take a weighted average of every "
-            "page, weighting each by how close it is: a bump of weights, centered on the page you're asking about. "
-            "<bookmark mark='b'/> Pages near the query count a lot, far ones not at all. The weights are positive "
-            "and add up to one. <bookmark mark='c'/> Slide the query along, and the average traces a smooth curve. "
-            "This is Nadaraya and Watson's kernel smoother, from 1964."
+            ("Here are the same observations used in Part 7: occurrences of 'her' per thousand-word block of Great Expectations. This is a new normalized Gaussian kernel smoother, not the Gaussian-process posterior. Suppose we query zero-based block index one hundred and twenty. <bookmark mark='a'/> Average the observed block values with distance-based weights centered on that query. <bookmark mark='b'/> Nearby blocks receive more weight; distant Gaussian weights can be negligible, though mathematically positive. The normalized weights sum to one. Bar heights are rescaled relative to their peak, and tiny bars are omitted: they are not literal probabilities on this strip. <bookmark mark='c'/> Moving the query traces the Nadaraya-Watson estimate.")
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.005),
                       run_time=2.0)
@@ -100,18 +100,17 @@ class Smoother(VoiceoverScene):
             self.remove(trace)
             self.add(fit)
         # the one knob: the width of the bump
-        hl = label(rf"bump width: \ ${h0:g}$ pages", font_size=26, color=A).to_corner(UR, buff=0.35)
+        hl = label(rf"bump width: \ ${h0:g}$ blocks", font_size=26, color=A).to_corner(UR, buff=0.35)
         fits = {h: curve(ax, xs, np.asarray(s[f"fit{h:g}"]), Q, 3.5, smooth=True) for h in hs}
         with self.voiceover(
-            "The only knob is the width of the bump. <bookmark mark='a'/> Too narrow, and the curve chases every "
-            "page's noise. <bookmark mark='b'/> Too wide, and it flattens the whole story into one number."
+            (f"These three illustrations use bandwidths {hs[0]:g}, {hs[1]:g}, and {hs[2]:g} blocks; they are not a claimed optimum. <bookmark mark='a'/> A narrow bandwidth can follow local variation. <bookmark mark='b'/> A wider finite bandwidth smooths more broadly; in the infinite-width limit, every observed block receives equal weight and the estimate approaches the global average. Separately, the original computation compares 40 bandwidths from 0.4 to 30 by leave-one-out mean squared error, excluding the held-out observation itself. That is different from Part 7's Gaussian-process marginal-likelihood selection.")
         ) as vo:
             self.play(qv.animate.set_value(float(s["q"])), FadeIn(hl), run_time=1.5)
             vo.wait_until("a")
-            hl2 = label(rf"bump width: \ ${hs[0]:g}$ pages", font_size=26, color=A).move_to(hl)
+            hl2 = label(rf"bump width: \ ${hs[0]:g}$ blocks", font_size=26, color=A).move_to(hl)
             self.play(hv.animate.set_value(hs[0]), Transform(fit, fits[hs[0]]), Transform(hl, hl2), run_time=1.5)
             vo.wait_until("b")
-            hl3 = label(rf"bump width: \ ${hs[2]:g}$ pages", font_size=26, color=A).move_to(hl)
+            hl3 = label(rf"bump width: \ ${hs[2]:g}$ blocks", font_size=26, color=A).move_to(hl)
             self.play(hv.animate.set_value(hs[2]), Transform(fit, fits[hs[2]]), Transform(hl, hl3), run_time=1.5)
         self.wait(0.3)
         for m in (bars, ql, ed, lit):
@@ -145,14 +144,14 @@ class Smoother(VoiceoverScene):
                     softmax_picture(), width=5.0, color=A).move_to([0, -2.0, 0])
         smp = smc[1][-1]
         with self.voiceover(
-            "Write it down. The guess at the query is a sum over the pages: each page's value, times a weight. The "
+            ("Write it down. The guess at the query is a sum over the blocks: each block's value, times a weight. The "
             "weight is a softmax of a score: the exponential of the score, divided by the total, so the weights are "
-            "positive and add up to one. Here the score is minus the squared distance. <bookmark mark='a'/> Now "
-            "change one thing. Instead of a distance between page numbers, score each item by a dot product between "
+            "positive and add up to one. Here the score is minus the squared distance divided by twice the bandwidth squared. <bookmark mark='a'/> Now "
+            "deliberately change the scoring rule. Expanding a vector RBF score gives a dot product plus key-norm and query-norm terms. The query-norm term cancels within a softmax row; dot-only equivalence at matching scale needs equal key norms, otherwise a key-norm bias remains. Instead, learn the affinity between "
             "two vectors: a query and a key. <bookmark mark='b'/> That's attention, the heart of the transformer. "
             "The query asks what am I looking for; each key says what it offers; each value is what it passes on. "
             "<bookmark mark='c'/> And all three are computed from the characters by matrices the network learns. "
-            "Attention is a kernel smoother whose kernel is learned."
+            "This softmax head has the normalized weighted-average form of a kernel smoother. Learned query-key affinities need not be a symmetric positive-semidefinite Gaussian-process covariance kernel.")
         ) as vo:
             self.play(Write(f1), run_time=2.0)
             self.play(FadeIn(sm), FadeIn(sml), FadeIn(smc, shift=UP * 0.2))
@@ -179,7 +178,7 @@ class Smoother(VoiceoverScene):
                   colors=colors, font_size=40)
         words = label(r"score the keys against the query, \\ \ softmax the scores, \ average the values",
                       font_size=26, color=GREY_A)
-        card = definition_card(r"Attention", VGroup(f, words).arrange(DOWN, buff=0.35, aligned_edge=LEFT),
+        card = definition_card(r"Softmax attention", VGroup(f, words).arrange(DOWN, buff=0.35, aligned_edge=LEFT),
                                color=A, width=8.6, font_size=28).move_to([0, 0.4, 0])
         # the same weights, drawn: a query, five keys, their weights, the average
         wv = np.array([0.08, 0.46, 0.21, 0.05, 0.20])
@@ -193,20 +192,20 @@ class Smoother(VoiceoverScene):
         demo_g = VGroup(demo, demo_l).move_to([0, -2.6, 0])
         hist = history_card(2014, r"D.~Bahdanau, K.~Cho \& Y.~Bengio",
                             r"a translation network looks back at the source sentence (Part 10); \ "
-                            r"in 2017 attention becomes the whole network", color=HIST, width=5.0)
+                            r"in 2017 attention replaces recurrent mixing; feed-forward sublayers remain", color=HIST, width=5.0)
         hist.move_to([4.3, 0.9, 0])
         quiz = pause_card(r"If every key is the same, \ what does attention return?", width=6.4)
         quiz.move_to([-3.0, -2.45, 0])
         ans = label(r"every weight is $1/n$: \ the plain average of the values", font_size=26, color=V)
         ans.move_to([3.6, -2.45, 0])
         with self.voiceover(
-            "Here is the definition for the rest of this part. <bookmark mark='a'/> Attention scores each key against "
+            ("Here is the softmax-attention definition used here. <bookmark mark='a'/> Attention scores each key against "
             "the query with a dot product divided by the square root of d, turns the scores into weights with a "
             "softmax, and returns the weighted average of the values. <bookmark mark='b'/> In 2014, Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio let a neural translation network "
-            "look back at its source sentence, as in Part 10; in 2017 it became the whole network. "
+            "look back at its source sentence, as in Part 10; in 2017 attention replaced recurrent sequence mixing, alongside feed-forward sublayers. "
             "<bookmark mark='c'/> A question: if every key is the same, what does attention return? "
-            "<bookmark mark='d'/> Every weight is one over n: the plain average of the values. Attention can only "
-            "weigh and blend what it is given."
+            "<bookmark mark='d'/> Every weight is one over n: the plain average of the values. This softmax readout can only "
+            "weigh and blend what it is given.")
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -264,18 +263,18 @@ class Smoother(VoiceoverScene):
         wb = always_redraw(bars)
         wlabs = VGroup(*[MathTex(n, font_size=28, color=K).move_to([bx + i * bw, by - 0.25, 0]) for i, n in enumerate(names)])
         base = Line([bx - bw / 2, by, 0], [bx + 5.5 * bw, by, 0], color=GREY_C, stroke_width=2)
-        wt = label(r"softmax of $q \cdot k_i$", font_size=26, color=A).next_to(base, UP, buff=bh + 0.25)
+        wt = label(r"softmax of $q \cdot k_i$ \\ unscaled illustration", font_size=26, color=A).next_to(base, UP, buff=bh + 0.25)
         wt.set_x(bx + 2.5 * bw)
         dotf = cmath(r"q \cdot k", "=", r"|q|\,|k|\cos\theta", font_size=34).to_corner(UR, buff=0.35)
-        dl = label(r"long keys pointing the query's way win", font_size=24, color=GREY_A).next_to(dotf, DOWN, buff=0.15)
+        dl = label(r"larger dot products \ receive more weight", font_size=24, color=GREY_A).next_to(dotf, DOWN, buff=0.15)
         dl.align_to(dotf, RIGHT)
         tag = note(r"illustrative vectors, \ in 2 of a head's 32 dimensions").to_corner(DL, buff=0.3)
         with self.voiceover(
-            "Here's the geometry. Every key is an arrow; so is the query. <bookmark mark='a'/> The score of a key is "
+            ("Here is an unscaled dot-product illustration; the earlier definition includes the square-root scale. Every key is an arrow; so is the query. <bookmark mark='a'/> The score of a key is "
             "its dot product with the query: how long both are, times how much they point the same way. The softmax "
             "turns the scores into weights. <bookmark mark='b'/> Turn the query, and the weights flow from key to "
             "key. A query is a direction to look in. Next, the same formula read another way: as a memory that "
-            "recalls what it stored."
+            "reads stored values.")
         ) as vo:
             self.play(Create(plane), FadeIn(tag))
             self.play(LaggedStart(*[GrowArrow(a) for a in karrows], lag_ratio=0.15), FadeIn(klabs), run_time=1.5)

@@ -36,12 +36,12 @@ class Outro(VoiceoverScene):
         Ms = np.log10(np.asarray(h["Ms"], float))
         a2 = plane([Ms[0], Ms[-1], 1], [0, 1.05, 0.5])
         out.append((VGroup(a2, curve(a2, Ms, np.asarray(h["classical"]), C.SURPRISE, 2.5),
-                           curve(a2, Ms, np.asarray(h["modern"]), A, 3)), r"a memory that recalls", A))
+                           curve(a2, Ms, np.asarray(h["modern"]), A, 3)), r"pattern recall: \\ modern sign readout", A))
         # 3. our transformer's heads
         t = load("tf")
         maps = np.asarray(t["maps"])
         out.append((Group(*[heat_image(maps[1, hh], 0.9, 0.9, mask_upper=True) for hh in range(3)]).arrange(RIGHT, buff=0.08),
-                    rf"our transformer: \ ${float(t['passage_bits']):.2f}$ bits", OURS))
+                    rf"our transformer: \ ${float(t['passage_bits']):.2f}$ bits \\ $21{{,}}376$ scored targets", OURS))
         # 4. heads as low-rank maps
         hd = load("heads")
         sv = np.asarray(hd["sv_qk"])
@@ -58,23 +58,24 @@ class Outro(VoiceoverScene):
         nb = np.asarray(p["bucket_rope"]).shape[1]
         bx = np.arange(nb) * (R / nb) + R / nb / 2
         allv = np.concatenate([np.asarray(p[f"bucket_{m}"]).ravel() for m in POS_COLORS])
-        a5 = plane([0, R, 128], [allv.min() - 0.1, min(allv.max(), allv.min() + 4) + 0.1, 1])
-        g5 = VGroup(a5, *[curve(a5, bx, np.clip(np.asarray(p[f"bucket_{m}"]).mean(0), allv.min(), allv.min() + 4),
+        a5 = plane([0, R, 128], [allv.min() - 0.1, allv.max() + 0.1, 1])
+        g5 = VGroup(a5, *[curve(a5, bx, np.asarray(p[f"bucket_{m}"]).mean(0),
                                 POS_COLORS[m], 2.5) for m in POS_COLORS])
         out.append((g5, r"positions, past the length", POS))
         # 6. sinks
         sk = load("sinks")  # each design's weight on <s> with nothing to copy, during training (mean of the seeds)
         hs = {v: np.asarray(sk[f"{v}_hist"], float) for v in SINK_COLORS}
         hx6 = hs["softmax"][0, :, 0]
-        a6 = plane([0, float(hx6[-1]), 500], [0, max(0.6, max(float(h_[:, :, 3].mean(0).max()) for h_ in hs.values())), 0.2])
+        a6 = plane([0, float(hx6[-1]), 500], [min(0.0, min(float(h_[:, :, 3].mean(0).min()) for h_ in hs.values())),
+                                              max(0.6, max(float(h_[:, :, 3].mean(0).max()) for h_ in hs.values())), 0.2])
         g6 = VGroup(a6, *[curve(a6, hx6, hs[v][:, :, 3].mean(0), c_, 2.5) for v, c_ in SINK_COLORS.items()])
-        out.append((g6, r"sinks, and ways out", C.SINK))
+        out.append((g6, r"start-marker coefficients \\ differential: signed", C.SINK))
         # 7. induction heads forming
         d = load("induction")
         c2 = np.asarray(d["curve2"])
-        a7 = plane([0, c2[-1, 0], 1000], [0, float(c2[:, 1].max()) + 0.3, 1])
+        a7 = plane([0, c2[-1, 0], 1000], [0, max(float(np.asarray(d["curve1"])[:, 1].max()), float(c2[:, 1].max())) + 0.3, 1])
         out.append((VGroup(a7, curve(a7, np.asarray(d["curve1"])[:, 0], np.asarray(d["curve1"])[:, 1], GREY_B, 2),
-                           curve(a7, c2[:, 0], c2[:, 1], A, 3)), r"induction heads", A))
+                           curve(a7, c2[:, 0], c2[:, 1], A, 3)), r"repeat-loss probes", A))
         # 8. a program in weights
         r = load("rasp")
         out.append((Group(heat_image(np.asarray(r["sort_A1"]), 1.25, 1.25, color=A, gamma=1.0),
@@ -97,14 +98,14 @@ class Outro(VoiceoverScene):
         head = label(rf"Part {PART}, \ in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         t = load("tf")
         with self.voiceover(
-            "Let's take stock. Attention is a weighted average, Nadaraya and Watson's smoother with a learned "
-            "kernel, and a memory read, one step of a modern Hopfield network. Dividing by the square root of d "
-            "keeps its softmax from collapsing. Heads compare and move along a few directions, the mask decides who "
-            "sees whom, and a block costs twelve d squared weights plus a term that grows with the context. Our "
-            f"transformer reached {float(t['passage_bits']):.2f} bits a character. Positions can be added, rotated, "
-            "penalized or left out, and stretched with care. Sink logits and gates give the softmax somewhere to "
-            "park, and trained heads find algorithms: copying, a step of gradient descent, programs, within limits "
-            "that only more steps of thought remove."
+            ("Let's take stock. Softmax attention has a normalized weighted-average form related to Nadaraya-Watson smoothing, with learned "
+            "affinities, and connects to modern Hopfield memory reads; the recall thumbnail uses a sign readout. Dividing by the square root of d "
+            "controls initial score variance under independent-component assumptions; learned scores can still saturate. Heads compare and move along a few directions, the mask decides who "
+            "sees whom, and our block has twelve d squared plus nine d parameters: bias-free QKVO, a biased four-d-width MLP and two affine LayerNorms. Its matrix-multiply work grows with context; that count omits vocabulary projection and elementwise arithmetic. Our "
+            f"transformer reached {float(t['passage_bits']):.2f} bits a character over its 21,376 scored passage targets. Positions can be added, rotated, "
+            "penalized or left out, and stretched with care. A sink logit changes the softmax denominator with a null option; an output gate attenuates the weighted write. These act at different stages. "
+            "Probes investigate copying and gradient-step-like maps, and we hand-compile programs, within limits. "
+            "More layers, recurrence, or generated steps can relax some depth limits.")
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
@@ -142,12 +143,12 @@ class Outro(VoiceoverScene):
             r"show that $\operatorname{Var}(q \cdot k) = d\,\sigma_q^2 \sigma_k^2$. \ What should the score be divided by?",
             r"Let $R_m$ rotate each pair of a vector by $m\theta_j$. \ Show $(R_m q)\cdot(R_n k)$ depends only on $n - m$, "
             r"and that ALiBi's bias $-m_h (i - j)$ has the same property.",
-            r"Show that a pre-norm block with an MLP of width $4d$ has $12 d^2 + 9d$ parameters, and that attention's "
-            r"$2LTd$ operations per token equal the weights' $24 L d^2$ at $T = 12d$.",
+            r"For our bias-free QKVO, biased $4d$ MLP and two affine LayerNorms, show $12d^2+9d$ parameters. Counting dominant causal-half matrix FLOPs only, show attention's "
+            r"$2LTd$ FLOPs per token equal the leading linear-map $24 L d^2$ at $T = 12d$; omit vocabulary projection and elementwise work.",
             r"A head has a sink logit $b$ and $n$ keys with equal scores $s$. \ What share of its attention goes "
             r"nowhere? \ For which $b$ is it one half?",
             r"Show that the modern Hopfield update $\xi \leftarrow X^\top \operatorname{softmax}(\beta X \xi)$ tends to "
-            r"the stored pattern of largest overlap as $\beta \to \infty$, and to the average pattern as $\beta \to 0$.",
+            r"the stored pattern of uniquely largest overlap as $\beta \to \infty$; ties give the average of maximizing patterns. As $\beta \to 0$, it gives the average of all patterns (continuous update, before any sign readout).",
             r"Show that one step of gradient descent from $w = 0$ on $\tfrac{1}{2N}\sum_i (w\cdot x_i - y_i)^2$ "
             r"predicts $\hat y = \tfrac{\eta}{N}\sum_i y_i\, (x_i \cdot x_q)$: \ linear attention.",
         ], font_size=21)
@@ -210,8 +211,8 @@ class Outro(VoiceoverScene):
             r"Merrill \& Sabharwal (2023, 2024); \ Merrill, Petty \& Sabharwal (2024); \ Zhou et al.\ (2023)",
         ]
         card = reference_card(books, papers, font_size=19)
-        data = note(r"Text: Project Gutenberg (Part 1's $30$ novels). \ Every model here is trained by this part's "
-                    r"code; \ every number on screen is computed or cited.", font_size=18).to_edge(DOWN, buff=0.2)
+        data = note(r"Text: Project Gutenberg (Part 1's $30$ novels). \ Own experiments and adopted earlier-part results; "
+                    r"external reports cited; \ illustrations labeled.", font_size=18).to_edge(DOWN, buff=0.2)
         credit = note(rf"Animated with Manim Community; \ narrated by {narration_credit()}.", font_size=18)
         credit.next_to(data, UP, buff=0.08)
         if card.get_bottom()[1] < credit.get_top()[1] + 0.12:
