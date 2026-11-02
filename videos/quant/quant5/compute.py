@@ -185,9 +185,17 @@ def compute_stoploss() -> dict:
         V = max(S0 - K, 0) + np.sum(hold * np.diff(S, axis=1), axis=1)
         err = (np.maximum(S[:, -1] - K, 0) - V)
         out.append({"n": n, "mean_err": float(err.mean()), "sd_err": float(err.std())})
+        if n == 4000:
+            # half the local time at K, by the occupation formula: (1/4 eps) * int 1{|S - K| < eps} d<S>
+            eps = 0.5
+            dqv = (sigma * S[:, :-1]) ** 2 * (T / n)
+            half_L = np.sum((np.abs(S[:, :-1] - K) < eps) * dqv, axis=1) / (4 * eps)
+            scatter = {"err": err[:600], "half_L": half_L[:600],
+                       "corr": float(np.corrcoef(err, half_L)[0, 1]), "mean_half_L": float(half_L.mean())}
+            one = {"S": S[0], "half_L": np.concatenate([[0.0], np.cumsum((np.abs(S[0, :-1] - K) < eps) * dqv[0])]) / (4 * eps)}
     # the theory: E[(S_T - K)^+] - (S_0 - K)^+ = E[1/2 L_T^K] = the call's time value at the money
     call = float(bs.price(S0, K, T, sigma, 0.0, 0.0, 1))
-    return _json({"rows": out, "call": call, "intrinsic": max(S0 - K, 0)})
+    return _json({"rows": out, "call": call, "intrinsic": max(S0 - K, 0), "scatter": scatter, "one": one})
 
 
 # ---------------------------------------------------------------------------
