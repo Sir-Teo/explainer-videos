@@ -87,6 +87,7 @@ class Stopping(VoiceoverScene):
 
     def table(self, s):
         d2, d5 = s["2"], s["5"]
+        gap = 100 * (d5["reference"]["lower"] - d5["lower"]) / d5["reference"]["lower"]
         head = VGroup(label(r"assets", font_size=22, color=GREY_A), label(r"our lower bound", font_size=22, color=GREY_A),
                       label(r"published", font_size=22, color=GREY_A), label(r"time", font_size=22, color=GREY_A))
         rows = VGroup(head)
@@ -100,14 +101,16 @@ class Stopping(VoiceoverScene):
             for j, cell in enumerate(row):
                 cell.move_to([xs[j], 1.4 - 0.9 * i, 0])
         title = label(r"Bermudan max-call, at the money", font_size=30).to_edge(UP, buff=0.7)
-        foot = wrapped_label(r"our bounds are $\pm 2$ standard errors on a million fresh paths; the published values are "
-                             r"Becker, Cheridito and Jentzen's (2019) interval and a binomial lattice. The method scales: "
+        foot = wrapped_label(r"our bounds are $\pm 2$ standard errors on a million fresh paths, after 500 training steps per "
+                             r"date on a CPU; the published values are Becker, Cheridito and Jentzen's (2019) interval (their "
+                             r"lower bound alone: 26.156) and a binomial lattice. The method scales: "
                              r"they report 500 assets, where no tree and no regression basis can follow", 11.6, 20,
                              GREY_A).to_edge(DOWN, buff=0.7)
         with self.voiceover(
             f"And the prices. With two assets, the network's rule earns {d2['lower']:.2f}, against {d2['reference']['binomial']:.2f} "
-            f"from a binomial tree. <bookmark mark='a'/> With five, {d5['lower']:.2f}, inside or at the edge of the "
-            "published interval. The method's real point is scale: the paper prices the same option on five hundred "
+            f"from a binomial tree. <bookmark mark='a'/> With five, {d5['lower']:.2f}, {gap:.1f} percent below the "
+            f"published lower bound of {d5['reference']['lower']:.2f}: a lower bound from a much smaller training budget "
+            "sits a little lower, as it should. The method's real point is scale: the paper prices the same option on five hundred "
             "assets, where no tree and no regression basis can follow."
         ) as vo:
             self.play(FadeIn(title), FadeIn(rows[0]), FadeIn(rows[1]))
