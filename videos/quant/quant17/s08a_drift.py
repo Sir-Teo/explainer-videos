@@ -257,7 +257,8 @@ class Drift(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in cs], lag_ratio=0.5, run_time=4))
         q = ask(r"your deep hedger makes money on average with no costs. Is it hedging?")
         with self.voiceover("Which gives us a desk question: your deep hedger makes money on average with no costs. "
-                            "Is it hedging?"):
+                            "Is it hedging?"
+                            " Not entirely. Its delta part hedges; the extra holding is Merton's bet on the drift. Test it on paths without drift before you call it a hedge. Next: what trading costs do to the hedge."):
             self.play(FadeIn(q))
         self.wait(0.5)
         self.clear_scene()

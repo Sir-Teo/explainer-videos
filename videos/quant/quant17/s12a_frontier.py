@@ -111,6 +111,7 @@ class Frontier(VoiceoverScene):
             f"networks converge faster. <bookmark mark='a'/> In chapter fourteen's run, {verdict}. "
             "<bookmark mark='b'/> And a question to end on: which is harder to build, a hedger, or the simulator it "
             "trains on?"
+            " The simulator. A hedger only has to be good on the paths it is given; the simulator has to be right about the world, including days it has never seen. Next: the House's rule for that, tested."
         ) as vo:
             self.play(FadeIn(box[0]), FadeIn(box[1]))
             vo.wait_until("a")

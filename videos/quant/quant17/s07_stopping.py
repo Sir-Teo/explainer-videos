@@ -241,6 +241,7 @@ class Stopping(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "A question: both assets at a hundred and thirty, one date before expiry. Stop or wait? Look at the "
             "tunnel's top layer before you answer."
+            " Wait. A hundred and thirty each sits on the diagonal, in the valley, which narrows near expiry but never closes: with the two assets tied, the right to take the better one later is still worth something. Next: the deep hedger."
         ):
             self.play(FadeIn(q))
         self.wait(0.5)

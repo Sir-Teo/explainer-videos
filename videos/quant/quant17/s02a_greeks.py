@@ -178,6 +178,7 @@ class Greeks(VoiceoverScene):
         q = ask(r"which of the three networks hedges a short straddle's gamma risk worst?")
         with self.voiceover(
             "A question before moving on: which of the three would you least like to hedge a short straddle with?"
+            " The ReLU network: its gamma is zero almost everywhere, so it would never warn you how fast a straddle's delta turns, exactly where the risk lives. Next: a network that learns a model's whole smile."
         ):
             self.play(FadeIn(q))
         self.wait(0.6)

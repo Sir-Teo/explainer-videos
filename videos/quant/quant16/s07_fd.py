@@ -188,6 +188,7 @@ class FD(VoiceoverScene, ThreeDScene):
             f"the finest grids, doubling the grid cuts its error {rc:.1f} times. <bookmark mark='b'/> Pause and "
             "predict: double the price points of a stable explicit grid. The bound has the price step squared in "
             "it, so you need four times the time steps, and eight times the work."
+            " Next: what goes wrong at the kink, and how a grid prices an American put."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lines[0]), FadeIn(leg[0]))
             vo.wait_until("a")

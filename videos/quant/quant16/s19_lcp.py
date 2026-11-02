@@ -242,6 +242,7 @@ class LCP(VoiceoverScene, ThreeDScene):
             "The House's PSOR is eleven lines: the Crank–Nicolson update for one point, relaxed, and the single "
             "word max that makes it American. <bookmark mark='a'/> On a three-hundred-point grid it prices the put "
             f"at {a['fd']:.3f}, against {a['tree2000']:.3f} from the tree."
+            " Next: grids in two dimensions, for Heston."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

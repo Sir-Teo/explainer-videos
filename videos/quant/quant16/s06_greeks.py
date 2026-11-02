@@ -178,6 +178,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
             "multiplied by a weight that is linear in its normal. Gamma of a call has the same problem, one level "
             "up, and the same cure. <bookmark mark='b'/> Pause and predict: a bump of one ten-thousandth with fresh "
             "random numbers. You get noise: the error grows like one over h, the left wall of the valley."
+            " Next: every Greek at once, for the cost of a few prices. Adjoint differentiation."
         ) as vo:
             self.play(FadeIn(ga), Create(step), FadeIn(slope), FadeIn(cap1))
             vo.wait_until("a")

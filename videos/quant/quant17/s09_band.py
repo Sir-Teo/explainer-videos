@@ -191,6 +191,7 @@ class Band(VoiceoverScene):
             f"<bookmark mark='b'/> A puzzle: Leland's price is {r5['bs_at_leland']:.2f}, yet hedging his way needs "
             f"{r5['leland']['price']:.2f}. Why? Leland covers the expected cost; the entropic price also charges for "
             "the risk that remains."
+            " Next: the band, seen as a surface."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.03, run_time=3))

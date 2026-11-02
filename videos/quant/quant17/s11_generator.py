@@ -258,6 +258,7 @@ class Generator(VoiceoverScene):
             "misses: only the signature-trained network has fat tails, clustering and leverage near those of the "
             f"training years. The {b_te} is closest to the held-out years for a dull reason: its tails are thin, and "
             "those years were calm. No single score is enough."
+            " Next: putting these networks into production, and the rules they answer to."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(src))
             vo.wait_until("a")

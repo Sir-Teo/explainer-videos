@@ -180,6 +180,7 @@ class Quantum(VoiceoverScene):
             "<bookmark mark='b'/> Pause and predict: a quadratic speedup in samples, but each sample ten thousand times "
             "slower. It wins only once the classical run needs more than about ten thousand squared samples, so only "
             "for the most demanding accuracies."
+            " Last, the frontier."
         ) as vo:
             self.play(FadeIn(a, shift=UP * 0.2))
             vo.wait_until("a")

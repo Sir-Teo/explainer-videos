@@ -186,6 +186,7 @@ class RoughHistory(VoiceoverScene):
             f"and rough Bergomi is ahead in {100 * better:.0f} percent of weeks. On the single day of Part fourteen the "
             "rough model won clearly; over two years, with the same number of parameters, it is close to a tie. One "
             "good day is not a model, and only a fast calibrator could show it."
+            " Next: a better kind of training label, the derivatives."
         ) as vo:
             self.play(FadeIn(g), Create(l_he), FadeIn(leg[0]), FadeIn(leg[2]))
             vo.wait_until("a")

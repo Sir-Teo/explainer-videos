@@ -261,6 +261,7 @@ class Dual(VoiceoverScene):
             f"{say}. <bookmark mark='c'/> Becker, Cheridito and Jentzen's published bounds for their network "
             f"are {paper['lower']} to {paper['upper']}. Pause and predict: lower bound 6.06, "
             "upper 6.41. Rerun with more inner paths first; if the gap shrinks, it was noise, as it was here."
+            " A price is half the job; the hedge needs Greeks. Next: three ways to compute them."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             vo.wait_until("a")

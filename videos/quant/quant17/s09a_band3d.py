@@ -216,6 +216,7 @@ class Band3D(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "A question: near expiry, far out of the money, where are the two edges? Think about what the delta is "
             "there, and whether the band can bind."
+            " Both edges close in on zero. The delta is zero there and so is gamma, so the band is narrow, but the holding is already zero and nothing trades: the band cannot bind. Next: what the vanillas leave undecided."
         ):
             self.play(FadeIn(q))
         self.wait(0.5)

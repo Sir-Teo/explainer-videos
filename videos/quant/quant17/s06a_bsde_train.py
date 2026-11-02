@@ -191,6 +191,7 @@ class BSDETrain(VoiceoverScene):
             "without learning, and supplied our reference. <bookmark mark='b'/> And a question: the loss stalls near "
             "thirty, not zero. Is the network failing? No: the time grid and batch noise put a floor under it. Judge "
             "the solver by its price."
+            " Next: deciding when to stop, by network."
         ) as vo:
             step(0)
             step(1)

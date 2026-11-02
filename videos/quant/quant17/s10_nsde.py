@@ -274,6 +274,7 @@ class NSDE(VoiceoverScene, ThreeDScene):
             "The same idea runs through recent work, from generative calibration of local stochastic volatility to "
             "joint calibration of the S&P 500 and VIX smiles. <bookmark mark='a'/> And a question: add a one-touch "
             "struck at the barrier to the calibration set. What happens to the range?"
+            " It shrinks. A one-touch at the barrier prices the chance of hitting it, exactly what the barrier option depends on, so fewer models fit everything. Next: where a hedger's training paths come from."
         ) as vo:
             self.play(FadeIn(rel))
             vo.wait_until("a")

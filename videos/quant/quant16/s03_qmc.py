@@ -244,6 +244,7 @@ class QMC(VoiceoverScene):
             f"dropped is {list(rows.values())[0]['drop'] / list(rows.values())[0]['keep']:.0f} times larger at "
             f"sixty-four points and {last['drop'] / last['keep']:.0f} times at four thousand, growing like root n, "
             "as Owen showed in 2022. Scramble instead; a scrambled point is never exactly zero."
+            " Next: why quasi-Monte Carlo stalls on long paths, and the fix."
         ) as vo:
             self.play(FadeIn(g), FadeIn(truth), LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.2), FadeIn(bar),
                       FadeIn(txt))

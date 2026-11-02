@@ -202,6 +202,7 @@ class DML3D(VoiceoverScene, ThreeDScene):
             "And the digital: its payoff is flat on both sides of the strike, so its pathwise derivative is zero on "
             "almost every path, and the slopes teach the network that the price is flat. Smooth the payoff, or use "
             "Part sixteen's likelihood-ratio derivatives."
+            " Next: a hundred dimensions."
         ):
             self.play(FadeIn(q))
         self.wait(0.5)

@@ -186,6 +186,7 @@ class American(VoiceoverScene):
             f"{tvr:.3f} in sample: {'above' if tvr > ref else 'below'} the true price, as the theory warned. "
             "<bookmark mark='c'/> Pause and predict: why regress only on paths that are in the money? "
             "Out-of-the-money paths never exercise there, and fitting them would spend the basis on the wrong region."
+            " Longstaff–Schwartz gives a lower bound. Next: the matching upper bound."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(refl), FadeIn(leg[5]))
             vo.wait_until("a")

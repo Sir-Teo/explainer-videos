@@ -192,6 +192,7 @@ class Bridge(VoiceoverScene, ThreeDScene):
             "1995, and the explanation two years later. <bookmark mark='c'/> And the stall? Step by step, the "
             f"variance is spread over all sixty-four coordinates: the first four carry only "
             f"{100 * e['shares']['step'][3]:.0f} percent, so the later, less even coordinates decide the answer."
+            " Another way to spend less: take coarse steps on most paths. Next: multilevel Monte Carlo."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lines[0]), Create(lines[1]), FadeIn(leg[:2]), run_time=2)
             vo.wait_until("a")

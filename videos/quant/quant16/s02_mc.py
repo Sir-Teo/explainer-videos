@@ -156,6 +156,7 @@ class MC(VoiceoverScene):
             "Estimator A is twice as noisy as B but four times cheaper per path. Which should you run? "
             "<bookmark mark='c'/> Neither wins: variance times cost is the same. Every method in this part is judged "
             "by that product."
+            " Monte Carlo needs random numbers and paths. Next: how they are made."
         ) as vo:
             self.play(FadeIn(stats[0]), FadeIn(stats[1]))
             vo.wait_until("a")

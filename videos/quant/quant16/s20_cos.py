@@ -196,6 +196,7 @@ class COS(VoiceoverScene):
             "for low-dimensional products with early exercise or barriers; simulation for everything else. Pause and "
             "predict: why can the cosine method not price a barrier? It needs only the terminal density, and a "
             "barrier needs the path."
+            " Next: how banks run these engines overnight."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), *[FadeIn(x) for x in lines])
             vo.wait_until("a")

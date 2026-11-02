@@ -243,6 +243,7 @@ class MLMC(VoiceoverScene):
             f"half cent cost {mil_a[-1] / mi['euler_0.005']['cost']:.2f} times Euler's. One more card: Chang-han Rhee "
             "and Peter Glynn showed in 2015 that picking the level at random, and weighting by its probability, "
             "removes the bias entirely when beta beats gamma."
+            " Simulation runs forward; early exercise looks back. Next: American options by simulation."
         ) as vo:
             self.play(FadeIn(g), Create(ls), Create(lm), FadeIn(leg))
             vo.wait_until("a")

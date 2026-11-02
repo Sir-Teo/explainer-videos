@@ -202,6 +202,7 @@ class Hardware(VoiceoverScene):
             "constructions against the covariance to round-off, the American bounds against a tree, the adjoints "
             "against bumps, the grids against Fourier and each other. <bookmark mark='a'/> A failing line stops the "
             "night's prices. Model risk is mostly computation risk, and this report is how the House sleeps."
+            " Next: whether a quantum computer will ever do it faster."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3, run_time=5))
             vo.wait_until("a")

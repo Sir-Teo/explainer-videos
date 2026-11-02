@@ -216,6 +216,7 @@ class AAD(VoiceoverScene):
             "instead: the backward sweep does about as much arithmetic as the forward pass, whatever the number of "
             "inputs. <bookmark mark='c'/> The price is memory: the tape remembers every intermediate, so long "
             "simulations store checkpoints and recompute between them."
+            " In low dimensions there is a faster road than simulation. Next: finite differences."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

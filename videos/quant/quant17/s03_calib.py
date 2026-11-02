@@ -210,6 +210,7 @@ class Calibrator(VoiceoverScene):
         with self.voiceover(
             "A question: train on labels with twice the noise. Does the error against the fresh simulation double? "
             "Think about what averaging does before you answer; it is one of the problems in the notes."
+            " Far less than double. Each label is noisier, but the network averages over thousands of them, so its own error grows much more slowly than the noise: you need more data, not a new method. Next: calibrating the Surface through the network."
         ):
             self.play(FadeIn(q))
         self.wait(0.5)

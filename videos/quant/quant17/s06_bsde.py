@@ -171,6 +171,7 @@ class BSDE(VoiceoverScene):
         with self.voiceover(
             "Before the next chapter: double the number of assets to two hundred. Does the work per training step "
             "double, or square, or explode like the grid?"
+            " It roughly doubles. Each step simulates paths and evaluates small networks whose size grows in proportion to the dimension: no grid, and nothing explodes. That is the whole point. Next: watching it converge."
         ):
             self.play(FadeIn(q))
         self.wait(0.5)

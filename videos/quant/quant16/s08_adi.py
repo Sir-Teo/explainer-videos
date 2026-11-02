@@ -170,6 +170,7 @@ class ADI(VoiceoverScene, ThreeDScene):
             f"grid prices the call to {best['err']:.4f} in {best['time']:.1f} seconds on one core. "
             "<bookmark mark='b'/> Pause and predict: why crowd the variance near zero? Because the variance spends "
             "time there when Feller's condition fails, and the solution bends most sharply there."
+            " When the characteristic function is known, there is a faster road still. Next: Fourier."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.2, run_time=2.5))
             vo.wait_until("a")

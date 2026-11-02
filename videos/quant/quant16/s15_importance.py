@@ -169,6 +169,7 @@ class Importance(VoiceoverScene):
             f"{d['plain_se']:.4f} into {d['is_se']:.5f}, worth a hundred times the paths. For whole paths, Glasserman, "
             "Heidelberger and Shahabuddin shift along the most likely route to the payoff. And the pause-and-predict "
             "answer you have already seen: shift too far, and the error grows."
+            " Next: replace random points with points spread evenly. Quasi-Monte Carlo."
         ) as vo:
             self.play(FadeIn(g), Create(cur), FadeIn(strike), FadeIn(src), FadeIn(dots[0]), FadeIn(q))
             vo.wait_until("a")

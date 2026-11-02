@@ -199,6 +199,7 @@ class Control(VoiceoverScene):
             "with 262,144 paths and measure the root mean square error against Black–Scholes: plain "
             f"{r['plain']:.4f}, mirrors {r['antithetic']:.4f}, the stock as control {r['control']:.4f}. Modest gains "
             "on a vanilla. The thousandfold gains belong to products with a twin that has a formula."
+            " Next: the most powerful of these tricks, and the most dangerous: importance sampling."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

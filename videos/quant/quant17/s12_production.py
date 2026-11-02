@@ -185,6 +185,7 @@ class Production(VoiceoverScene):
         with self.voiceover(
             "A question: under the new guidance, is the market generator a model? Think about what the hedger is "
             "validated on."
+            " Yes. It produces the paths the hedger is validated on, so it is part of the model and must be validated too: its stylized facts, held-out history, and more than one generator. Next: the frontier."
         ):
             self.play(FadeIn(q))
         self.wait(0.5)

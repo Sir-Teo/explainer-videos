@@ -177,6 +177,7 @@ class Fourier(VoiceoverScene):
             "derivations, one number. <bookmark mark='b'/> And Carr–Madan's damping, measured: too little, and the "
             "error is large; from about one onward it no longer matters, because the floor of "
             f"{floor:.4f} is set by the grid of strikes, not by alpha."
+            " Next: the fastest of them, and a race between all the engines."
         ) as vo:
             self.play(FadeIn(g), Create(cur), FadeIn(row))
             vo.wait_until("a")

@@ -213,6 +213,7 @@ class Paths(VoiceoverScene):
             "<bookmark mark='b'/> Both normal recipes pass a Kolmogorov–Smirnov test on a million draws; and a Python "
             f"loop over payoffs is about {rng['speedup']:,.0f} times slower than one vectorised line. <bookmark mark='c'/> Pause and predict: the Cholesky factor for correlation 0.9. "
             "Its second row is 0.9 and the square root of 0.19."
+            " With paths in hand, the work is to need fewer of them. Next: variance reduction."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(tiles[k]) for k in order], lag_ratio=0.03, run_time=3), FadeIn(head))
             vo.wait_until("a")
