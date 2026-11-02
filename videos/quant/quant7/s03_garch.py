@@ -27,7 +27,7 @@ class Garch(VoiceoverScene, ThreeDScene):
         h, r = np.asarray(gl["bucket_h"]), np.asarray(gl["bucket_r"])
         w, a, b = gl["us"]
         w, n = w * 1e4, len(h)
-        hist = history_card(1982, r"Robert Engle, at the LSE", r"ARCH, to model the uncertainty of UK inflation: the "
+        hist = history_card(1982, r"Robert Engle", r"ARCH, to model the uncertainty of UK inflation: the "
                             r"variance of today's surprise depends on yesterday's", color=QC.IDEA, width=5.0, font_size=19)
         hist.to_corner(UL, buff=0.3)
         H = 3.4
@@ -54,8 +54,9 @@ class Garch(VoiceoverScene, ThreeDScene):
         bars = always_redraw(lambda: VGroup(*[Line(g.ax.c2p(i, 0), g.ax.c2p(i, np.clip(r[i], -4.5, 4.5)), stroke_width=1.6,
                                                    color=RET) for i in range(int(tr.get_value()) + 1)]))
         with self.voiceover(
-            "In 1982 Robert Engle, visiting the London School of Economics, wanted to model how uncertain British "
-            "inflation was, and proposed that the variance of today's surprise depends on yesterday's. That is ARCH. "
+            "Robert Engle, on a sabbatical at the London School of Economics, wanted to model how uncertain British "
+            "inflation was. His answer, published in 1982: the variance of today's surprise depends on yesterday's "
+            "surprise. That is ARCH. "
             "<bookmark mark='a'/> Picture the variance as water in a bucket. A tap pours in a steady trickle, omega. "
             "Each night the bucket keeps a fraction beta of its water and leaks the rest. <bookmark mark='b'/> Each "
             "day a return is drawn, its size in proportion to the square root of the water level, and it splashes "
@@ -192,7 +193,6 @@ class Garch(VoiceoverScene, ThreeDScene):
                                            color=YELLOW).to_corner(UL, buff=0.35))
         tag = label(r"log-likelihood over $(\alpha, \beta)$, $\omega$ by variance targeting; the optimiser's path",
                     font_size=19, color=GREY_A).to_edge(DOWN, buff=0.3)
-        lab_a = label(r"$\alpha$", font_size=28).to_corner(DR, buff=1.6)
         ewma = wrapped_label(r"RiskMetrics' EWMA (1994) is GARCH with $\omega = 0$, $\alpha + \beta = 1$: a bucket "
                              r"with no tap and no leak, so no long-run level (Technical Document, 4th ed., 1996, sec.\ 5.2)",
                              5.2, 19, ALT).to_corner(UR, buff=0.3)

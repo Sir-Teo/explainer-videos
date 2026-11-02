@@ -1,159 +1,187 @@
 from __future__ import annotations
 
 import numpy as np
-from scipy.stats import norm
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, STRAT, load, real_data
+from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, STRAT, load, pause
 
 
 class Jumps(VoiceoverScene):
     def construct(self):
         j = load("jumps")
-        h = load("hawkes")
+        lv = load("levy_layers")
         self.card()
-        self.levy(j)
-        self.bitcoin(j)
-        self.hawkes(h)
+        self.clock(lv)
+        self.layers(lv)
+        self.formula(j, lv)
 
     def card(self):
-        c = chapter_card(6, r"Jumps, and jumps that cause jumps", r"What if prices don't move continuously?", part=PART)
-        with self.voiceover("Chapter six. Jumps, and jumps that cause jumps."):
+        c = chapter_card(12, r"Jumps: from Poisson to L\'evy--It\^o", r"What if prices don't move continuously?",
+                         part=PART)
+        with self.voiceover("Chapter twelve. Jumps: from the Poisson clock to the Lévy-Itô decomposition, and Itô's "
+                            "lemma for jumps."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def levy(self, j):
+    def clock(self, lv):
+        ev = np.asarray(lv["clock"])
+        g1 = axes([0, 1], [0, len(ev) + 1], x_length=7.4, y_length=2.6, ylabel=r"$N_t$: a Poisson clock, rate 6 a year",
+                  xticks=[], yticks=[0, len(ev)], font_size=15)
+        g2 = axes([0, 1], [-3.5, 3.5], x_length=7.4, y_length=2.4, xlabel=r"time (years)",
+                  ylabel=r"$\widetilde N_t = N_t - 6t$: compensated", xticks=[0, 0.5, 1], yticks=[-3, 0, 3], font_size=15)
+        VGroup(g1, g2).arrange(DOWN, buff=0.4).to_edge(LEFT, buff=0.5)
+        a1, a2 = g1.ax, g2.ax
+        tt = np.concatenate([[0], ev, [1]])
+        stair = [a1.c2p(0, 0)]
+        for k, e in enumerate(ev):
+            stair += [a1.c2p(e, k), a1.c2p(e, k + 1)]
+        stair.append(a1.c2p(1, len(ev)))
+        st = VMobject(stroke_color=JUMP, stroke_width=3).set_points_as_corners(stair)
+        ticks = VGroup(*[Line(a1.c2p(e, -0.3), a1.c2p(e, 0.3), color=YELLOW, stroke_width=3) for e in ev])
+        comp = [a2.c2p(0, 0)]
+        for k, e in enumerate(ev):
+            comp += [a2.c2p(e, k - 6 * e), a2.c2p(e, k + 1 - 6 * e)]
+        comp.append(a2.c2p(1, len(ev) - 6))
+        ct = VMobject(stroke_color=ITO, stroke_width=3).set_points_as_corners(comp)
+        rows = [cmath(r"P(\text{gap} > s)", r"=", r"e^{-\lambda s}", font_size=30),
+                cmath(r"\mathbb{E}\big[N_t - \lambda t \mid \mathcal{F}_s\big]", r"=", r"N_s - \lambda s", font_size=30,
+                      colors={r"N_s - \lambda s": ITO}),
+                cmath(r"[\widetilde N]_t", r"=", r"N_t, \quad \mathbb{E}\,\widetilde N_t^2 = \lambda t", font_size=30),
+                cmath(r"\mathbb{E}\,e^{iu\sum_{i \le N_t} Y_i}", r"=", r"\exp\big(\lambda t\,(\phi_Y(u) - 1)\big)", font_size=30)]
+        whys = [why(r"memoryless gaps: the clock forgets", 18),
+                why(r"independent increments: the compensator $\lambda t$ makes it a martingale", 18),
+                why(r"each jump has size 1, so $(\Delta N)^2 = \Delta N$", 18),
+                why(r"compound Poisson: condition on $N_t$", 18)]
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=3.6, buff=0.75, edge=6.9)
+        pc, ans = pause(r"Jumps arrive at rate 6 a year. The chance of none in a month?", r"$e^{-6/12} = e^{-0.5} = 0.61$.",
+                        width=4.4, font_size=20)
+        VGroup(pc, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.3)
+        res = label(rf"compensated compound Poisson, 50{{,}}000 paths: mean {lv['cp_mean']:+.4f}, variance "
+                    rf"{lv['cp_var']:.4f} against $\lambda t\,\mathbb{{E}}Y^2 = {lv['cp_var_theory']:.4f}$", font_size=18,
+                    color=GREY_A).to_edge(DOWN, buff=0.12)
+        with self.voiceover(
+            "Brownian paths are continuous; prices are not always. News arrives in lumps. The simplest model of a "
+            "lump is a Poisson clock: it rings at random times, with independent, exponentially distributed gaps. "
+            "<bookmark mark='a'/> Each ring adds one to the counter, a staircase. On average it climbs at rate lambda, "
+            "so the staircase itself is not a martingale. <bookmark mark='b'/> Subtract the average climb, lambda t, "
+            "and it is: the compensated Poisson process, a sawtooth that jumps up and drifts down. Its quadratic "
+            "variation is the counter itself, because a jump of one squared is still one. <bookmark mark='c'/> Attach "
+            "a random size to each ring and you have a compound Poisson process, whose characteristic function "
+            f"follows by conditioning on the count. Fifty thousand paths give a mean of {lv['cp_mean']:+.4f} and the "
+            "predicted variance. <bookmark mark='d'/> A pause: at six jumps a year, what is the chance of a month with "
+            "none? E to the minus a half: sixty-one percent."
+        ) as vo:
+            self.play(FadeIn(g1), FadeIn(g2))
+            self.play(LaggedStart(*[FadeIn(tk, shift=DOWN * 0.2) for tk in ticks], lag_ratio=0.3), step0 := Wait(0.1))
+            step(0)
+            vo.wait_until("a")
+            self.play(Create(st), run_time=2)
+            vo.wait_until("b")
+            self.play(Create(ct), run_time=2)
+            step(1)
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            self.play(FadeIn(res))
+            vo.wait_until("d")
+            self.play(FadeIn(pc), FadeIn(ans))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def layers(self, lv):
+        grid = np.asarray(lv["grid"])
+        eps_keys = ["0.3", "0.1", "0.03", "0.01", "0.005"]
+        comps = [("drift", np.asarray(lv["drift"]), DRIFT, r"drift $b\,t$"),
+                 ("brown", np.asarray(lv["brown"]), BM, r"Brownian part $\sigma W_t$"),
+                 ("big", np.asarray(lv["big"]), JUMP, r"big jumps, $|x| \ge 1$")]
+        small = {k: np.asarray(v) for k, v in lv["small"].items()}
+        allv = np.concatenate([c[1] for c in comps] + list(small.values()))
+        span = max(np.ptp(c[1]) for c in comps)
+        strips = VGroup()
+        axs = []
+        hs = 1.15
+        for name, y, col, txt in comps + [("small", small[eps_keys[0]], STRAT, r"compensated small jumps")]:
+            lo, hi = y.min() - 0.05, y.max() + 0.05
+            if name == "small":
+                lo = min(v.min() for v in small.values()) - 0.05
+                hi = max(v.max() for v in small.values()) + 0.05
+            a = axes([0, 1], [lo, hi], x_length=6.8, y_length=hs, xticks=[], yticks=[], font_size=14)
+            axs.append(a)
+            strips.add(VGroup(a, label(txt, font_size=19, color=col).next_to(a, LEFT, buff=0.2)))
+        strips.arrange(DOWN, buff=0.25, aligned_edge=RIGHT).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.2)
+        lines = [curve(axs[i].ax, grid, comps[i][1], comps[i][2], stroke_width=2.5) for i in range(3)]
+        sm = [curve(axs[3].ax, grid, small[k], STRAT, stroke_width=1.8) for k in eps_keys]
+        el = VGroup(*[MathTex(rf"\varepsilon = {k}:\ {lv['n_small'][k]}\ \text{{jumps, compensator }} "
+                              rf"{lv['comp'][k]:+.2f}\,t", font_size=22, color=STRAT) for k in eps_keys])
+        for m in el:
+            m.next_to(strips, UP, buff=0.2).align_to(strips, RIGHT)
+        eq = MathTex(r"X_t = b\,t + \sigma W_t + \sum_{s \le t} \Delta X_s \mathbf{1}_{|\Delta X_s| \ge 1} + "
+                     r"\lim_{\varepsilon \to 0} \Big(\sum_{s \le t} \Delta X_s \mathbf{1}_{\varepsilon \le |\Delta X_s| < 1} - "
+                     r"t\int_{\varepsilon \le |x| < 1} x\,\nu(dx)\Big)", font_size=24).to_edge(UP, buff=0.3)
+        lk = MathTex(r"\mathbb{E}\,e^{iuX_t} = e^{t\psi(u)},\ \ \psi(u) = iub - \tfrac12\sigma^2u^2 + \int \big(e^{iux} - 1 - "
+                     r"iux\mathbf{1}_{|x|<1}\big)\,\nu(dx)", font_size=24, color=ITO).to_edge(DOWN, buff=0.55)
+        lkr = label(rf"checked on 20{{,}}000 simulated $X_1$: largest gap between the empirical and the formula's "
+                    rf"characteristic function {lv['cf_err']:.3f}", font_size=18, color=GREY_B).to_edge(DOWN, buff=0.15)
+        with self.voiceover(
+            "Every process with independent, stationary increments, a Lévy process, is built from four layers. Here "
+            f"is one path of a tempered stable process, with infinitely many small jumps and {lv['n_big']} big ones, "
+            "taken apart. <bookmark mark='a'/> A straight drift. A Brownian part. The big jumps, a compound Poisson "
+            "process. <bookmark mark='b'/> And the small jumps, which are so many that their sum only converges after "
+            "subtracting their average, the compensator. Slide the cutoff epsilon toward zero: hundreds of jumps "
+            "become a thousand, the compensator grows, and the strip turns from sparse spikes into something that "
+            "looks almost Brownian. Asmussen and Rosiński made that precise. <bookmark mark='c'/> This is the "
+            "Lévy-Itô decomposition. Because the layers are independent, their characteristic functions multiply, "
+            "and the exponent is the Lévy-Khintchine formula: drift, variance, and an integral against the Lévy "
+            "measure nu. Our simulated path family matches the formula to "
+            f"{lv['cf_err']:.2f}, the sampling noise of twenty thousand draws."
+        ) as vo:
+            self.play(FadeIn(eq), FadeIn(strips))
+            vo.wait_until("a")
+            for ln in lines:
+                self.play(Create(ln), run_time=1.0)
+            vo.wait_until("b")
+            self.play(Create(sm[0]), FadeIn(el[0]))
+            for k in range(1, len(sm)):
+                self.play(ReplacementTransform(sm[k - 1], sm[k]), ReplacementTransform(el[k - 1], el[k]), run_time=1.2)
+            vo.wait_until("c")
+            self.play(FadeIn(lk), FadeIn(lkr))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def formula(self, j, lv):
         P = np.asarray(j["merton_paths"])
         n = P.shape[1]
-        g = axes([0, 1], [0.3, 1.9], x_length=5.6, y_length=4.2, xlabel=r"time (years)", ylabel=r"price",
-                 xticks=[0, 0.5, 1], yticks=[0.5, 1.0, 1.5], font_size=18).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        g = axes([0, 1], [0.3, 1.9], x_length=5.4, y_length=3.6, xlabel=r"time (years)", ylabel=r"Merton paths",
+                 xticks=[0, 0.5, 1], yticks=[0.5, 1.0, 1.5], font_size=16).to_corner(DL, buff=0.45)
         ax = g.ax
         t = np.linspace(0, 1, n)
         cols = color_gradient([BM, STRAT], len(P))
-        paths = VGroup(*[curve(ax, t, np.clip(p, 0.3, 1.9), c, stroke_width=2.2) for p, c in zip(P, cols)])
-        rows = VGroup(
-            MathTex(r"X_t = b\,t + \sigma W_t + \sum_{s \le t} \Delta X_s", font_size=32),
-            label(r"L\'evy--It\^o: drift, plus Brownian motion, plus jumps (compensated when small)", font_size=20,
-                  color=GREY_A),
-            MathTex(r"df(X_t) = f'\,dX^c_t + \tfrac12 f''\,d\langle X^c\rangle_t + \big[f(X_t) - f(X_{t-})\big]",
-                    font_size=28, color=ITO),
-            label(r"It\^o for jumps: the continuous part as before, plus each jump's full change", font_size=20,
-                  color=GREY_A),
-            label(r"Merton (1976): GBM plus Poisson jumps, here 6 a year, mean $-5\%$", font_size=20, color=STRAT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        if rows.width > 6.6:
-            rows.scale_to_fit_width(6.6)
-        rows.to_edge(RIGHT, buff=0.3)
+        paths = VGroup(*[curve(ax, t, np.clip(p, 0.3, 1.9), c, stroke_width=2) for p, c in zip(P, cols)])
+        rows = [cmath(r"f(X_t)", r"=", r"f(X_0) + \int_0^t f'(X_{s-})\,dX_s + \tfrac12\int_0^t f''\,d\langle X^c\rangle_s + "
+                      r"\sum_{s \le t}\big[f(X_s) - f(X_{s-}) - f'(X_{s-})\,\Delta X_s\big]", font_size=26,
+                      colors={r"\sum_{s \le t}\big[f(X_s) - f(X_{s-}) - f'(X_{s-})\,\Delta X_s\big]": JUMP}),
+                cmath(r"S_t", r"=", r"S_0\exp\Big(\big(\mu - \tfrac12\sigma^2 - \lambda\bar k\big)t + \sigma W_t + "
+                      r"\sum_{i \le N_t} Y_i\Big),\ \ \bar k = e^{m + s^2/2} - 1", font_size=28,
+                      colors={r"\lambda\bar k": JUMP})]
+        whys = [why(r"between jumps, the continuous lemma; at each jump, replace the linear guess by the true change", 20),
+                why(r"Merton (1976): compensate the drift so that $\mathbb{E}S_t = S_0 e^{\mu t}$", 20)]
+        step = ladder(self, rows, whys, keep=2, top=3.2, x=-0.6, buff=0.6, edge=6.9)
+        side = wrapped_label(r"here: 6 jumps a year, log sizes $N(-5\%, 8\%^2)$, $\sigma = 50\%$; the House's "
+                             r"\texttt{merton\_jumps}, its mean checked against $S_0 e^{\mu t}$", 5.6, 20, GREY_A)
+        side.to_corner(DR, buff=0.6)
         with self.voiceover(
-            "Brownian paths are continuous. Prices are not always: news arrives in lumps, and a price can gap. The "
-            "simplest model adds a Poisson clock that rings at random times, and a random jump each time it rings. "
-            "<bookmark mark='a'/> Robert Merton proposed exactly this in 1976. <bookmark mark='b'/> More generally, "
-            "the Lévy-Itô decomposition says that any process with independent, stationary increments is a drift, "
-            "plus a Brownian motion, plus jumps. And Itô's lemma extends: the continuous part behaves as before, and "
-            "each jump contributes its full change. <bookmark mark='c'/> What disappears is completeness. A jump of "
-            "random size can't be hedged with the stock alone, which is why Part eleven needs options to hedge "
-            "options."
+            "Itô's lemma extends to jumps with one honest change. Between jumps the path is continuous, so the old "
+            "lemma applies. At a jump, the first-order term guesses the change linearly; replace that guess by the "
+            "true change of f. <bookmark mark='a'/> Apply it to the exponential of Merton's 1976 model: Brownian "
+            "motion plus a compound Poisson process of log-normal jumps. To keep the expected return at mu, the drift "
+            "must pay back the average jump: lambda times k bar. <bookmark mark='b'/> These are its paths: diffusion "
+            "most of the time, gaps now and then. The next chapter looks for such gaps in real prices, and shows what "
+            "they do to a hedge."
         ) as vo:
-            self.play(FadeIn(g))
+            step(0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(p) for p in paths], lag_ratio=0.3, run_time=4), FadeIn(rows[4]))
+            step(1)
             vo.wait_until("b")
-            self.play(FadeIn(rows[0]), FadeIn(rows[1]))
-            self.play(FadeIn(rows[2]), FadeIn(rows[3]))
-            vo.wait_until("c")
-        self.wait(0.4)
-        self.clear_scene()
-
-    def bitcoin(self, j):
-        edges = np.asarray(j["z_edges"])
-        h = np.asarray(j["z_hist"], float)
-        mid = (edges[:-1] + edges[1:]) / 2
-        w = edges[1] - edges[0]
-        N = j["n_hours"]
-        gauss = N * (norm.cdf(edges[1:]) - norm.cdf(edges[:-1]))
-        g = axes([-12, 12], [-1, 4.2], x_length=7.2, y_length=4.4, xlabel=r"hourly return / local volatility (bipower)",
-                 ylabel=r"hours (log scale)", xticks=[-10, -5, 0, 5, 10], yticks=[0, 1, 2, 3, 4],
-                 yfmt=lambda u: rf"10^{{{int(u)}}}" if u else "1", font_size=18).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
-        ax = g.ax
-        bars = VGroup()
-        for m_, c in zip(mid, h):
-            if c <= 0:
-                continue
-            top, bot = ax.c2p(m_, np.log10(c)), ax.c2p(m_, -1)
-            col = JUMP if abs(m_) > 5 else BM
-            bars.add(Rectangle(width=ax.c2p(w * 0.9, 0)[0] - ax.c2p(0, 0)[0], height=top[1] - bot[1], stroke_width=0,
-                               fill_color=col, fill_opacity=0.85).move_to((top + bot) / 2))
-        gl = curve(ax, mid, np.log10(np.maximum(gauss, 0.1)), DRIFT, stroke_width=3)
-        cut = VGroup(DashedLine(ax.c2p(5, -1), ax.c2p(5, 4.2), color=JUMP, stroke_width=1.5),
-                     DashedLine(ax.c2p(-5, -1), ax.c2p(-5, 4.2), color=JUMP, stroke_width=1.5))
-        py = j["per_year"]
-        side = VGroup(
-            label(r"Bitcoin, hourly, 2018--2020", font_size=22, color=GREY_A),
-            MathTex(rf"\text{{beyond 5 local sd: }} {j['n_jumps']} \text{{ hours}}", font_size=30, color=JUMP),
-            MathTex(rf"\text{{a Gaussian would give }} {j['gauss_expected']:.3f}", font_size=30, color=DRIFT),
-            label(rf"by year: {py['2018']}, {py['2019']}, {py['2020']}", font_size=21, color=GREY_A),
-            MathTex(rf"\text{{share of all variance: }} {100 * j['share_of_variance']:.0f}\%", font_size=30, color=JUMP),
-            wrapped_label(r"scale: bipower variation over the past week, $\tfrac{\pi}{2} \sum |r_t|\,|r_{t-1}|$, which a "
-                          r"single jump barely moves (Barndorff-Nielsen and Shephard 2004)", 4.6, 19, GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4)
-        src = real_data(r"Binance BTCUSDT one-hour candles, January 2018 -- December 2020")
-        with self.voiceover(
-            "Are there jumps in real prices? Take Bitcoin's hourly returns for three years and divide each by a local "
-            "volatility measured in a way a single jump barely moves: bipower variation, the sum of products of "
-            "neighbouring absolute returns. <bookmark mark='a'/> If the hours were Gaussian, the histogram would follow "
-            "the green curve, and you would expect one hour in about two hundred years beyond five standard deviations. "
-            f"<bookmark mark='b'/> There were {j['n_jumps']}, about seventy a year, and those hours alone carry a "
-            f"{100 * j['share_of_variance']:.0f} percent share of all the variance. The jumps are not rare accidents; "
-            "they are a structural part of how this market moves."
-        ) as vo:
-            self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]))
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.01, run_time=2))
-            vo.wait_until("a")
-            self.play(Create(gl), Create(cut), FadeIn(side[2]))
-            vo.wait_until("b")
-            self.play(FadeIn(side[1]), FadeIn(side[3]), FadeIn(side[4]), FadeIn(side[5]))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def hawkes(self, h):
-        f = h["fit"]
-        grid, lam = np.asarray(h["grid"]), np.asarray(h["lam"])
-        ev = np.asarray(h["events"])
-        T = h["T"]
-        g = axes([0, T], [0, 3.4], x_length=8.0, y_length=3.6, xlabel=r"days since 1 January 2018",
-                 ylabel=r"fitted intensity, large moves a day", xticks=[0, 365, 730, 1095], yticks=[0, 1, 2, 3],
-                 font_size=18).to_edge(LEFT, buff=0.6).shift(DOWN * 0.6)
-        ax = g.ax
-        line = curve(ax, grid, np.clip(lam, 0, 3.4), JUMP, stroke_width=2)
-        ticks = VGroup(*[Line(ax.c2p(e, 0), ax.c2p(e, 0.25), stroke_width=1.2, color=BM) for e in ev])
-        base = DashedLine(ax.c2p(0, f["mu"]), ax.c2p(T, f["mu"]), color=DRIFT, stroke_width=2)
-        eq = MathTex(r"\lambda_t = \mu + \sum_{t_i < t} \alpha\,e^{-\beta (t - t_i)}", font_size=34, color=JUMP)
-        eq.to_corner(UL, buff=0.5)
-        side = VGroup(
-            MathTex(rf"\text{{branching ratio }} \alpha/\beta = {f['branching']:.2f}", font_size=30, color=JUMP),
-            label(rf"each large move triggers {f['branching']:.2f} more, on average", font_size=21, color=GREY_A),
-            label(rf"the excitement halves in {h['half_life_hours']:.1f} hours", font_size=21, color=GREY_A),
-            label(rf"log-likelihood {f['loglik']:.0f}, against {f['loglik_poisson']:.0f} for a Poisson clock",
-                  font_size=21, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.5)
-        how = label(r"events: hours with $|r| > 4\times$ the past month's volatility; fitted by maximum likelihood",
-                    font_size=18, color=GREY_B).to_corner(DR, buff=0.25)
-        with self.voiceover(
-            "Big moves also come in clusters: one large move makes another more likely soon after. Alan Hawkes wrote "
-            "down a point process with that property in 1971. Its intensity, the rate of events, jumps up by alpha "
-            "after every event and decays at rate beta back toward a base rate. <bookmark mark='a'/> Fit it to the "
-            f"{f['n']} hours since 2018 when Bitcoin moved more than four times its recent volatility. The fitted "
-            "intensity spikes after each event and relaxes. <bookmark mark='b'/> The branching ratio, alpha over "
-            f"beta, is {f['branching']:.2f}: each large move triggers about a third of another, and the excitement "
-            f"halves in about {h['half_life_hours']:.0f} hours. The self-exciting model beats a plain Poisson clock "
-            "by a wide margin. Hawkes processes come back in Part fourteen, in rough volatility, and in Part "
-            "thirty-six, in the order book, where orders trigger orders."
-        ) as vo:
-            self.play(FadeIn(g), FadeIn(eq), FadeIn(how))
-            vo.wait_until("a")
-            self.play(FadeIn(ticks), Create(base))
-            self.play(Create(line), run_time=3)
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(s_) for s_ in side], lag_ratio=0.3))
+            self.play(FadeIn(g), LaggedStart(*[Create(p) for p in paths], lag_ratio=0.3, run_time=3), FadeIn(side))
         self.wait(0.4)
         self.clear_scene()
