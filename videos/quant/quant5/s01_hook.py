@@ -118,7 +118,7 @@ class Hook(VoiceoverScene):
         card = objectives_card([
             r"Brownian motion built two ways; reflection; quadratic variation, proved and measured on Bitcoin",
             r"The It\^o integral constructed; the isometry; Stratonovich and Wong--Zakai",
-            r"It\^o's lemma proved, in 3D; SDEs: Picard, Euler and Milstein, multilevel Monte Carlo",
+            r"It\^o's lemma proved, in 3D; SDEs: existence by Picard iteration, Euler and Milstein with their orders",
             r"Ornstein--Uhlenbeck and CIR fitted by exact likelihood; Fokker--Planck and Feynman--Kac proved",
             r"Girsanov: paths re-weighted, not moved; importance sampling; why volatility is observable",
             r"Martingale representation and Clark--Ocone: why a hedge exists, and when it does not",

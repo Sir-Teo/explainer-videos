@@ -112,9 +112,11 @@ def compute_netting() -> dict:
     keep = a != b
     a, b, size = a[keep], b[keep], size[keep]
     res = funding.netting(a, b, size, n)
+    M = np.zeros((n, n))
+    np.add.at(M, (a, b), size)
     return {"n": n, "trades": int(keep.sum()), "gross": res["gross"], "bilateral": res["bilateral"],
             "multilateral": res["multilateral"], "net_position": res["net_position"],
-            "saved": 1 - res["multilateral"] / res["gross"]}
+            "saved": 1 - res["multilateral"] / res["gross"], "matrix": M}
 
 
 # ---------------------------------------------------------------------------
