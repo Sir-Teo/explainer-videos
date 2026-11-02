@@ -125,9 +125,9 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(pac))
             vo.wait_until("a")
-            self.play(FadeIn(strip[:-2]), FadeIn(strip.leaders[:3]), FadeIn(strip.labels[:3]), run_time=1.5)
+            self.play(FadeIn(strip[:-2]), FadeIn(strip.leaders[:2]), FadeIn(strip.labels[:2]), run_time=1.5)
             vo.wait_until("b")
-            self.play(FadeIn(strip.leaders[3:5]), FadeIn(strip.labels[3:5]))
+            self.play(FadeIn(strip.leaders[2:]), FadeIn(strip.labels[2:]))
             vo.wait_until("c")
             self.play(FadeIn(late))
         self.wait(0.4)
