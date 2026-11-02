@@ -39,3 +39,8 @@ def pause_at(question, width=9.6):
 
 def answer_under(card, text, width=9.0):
     return wrapped_label(text, width, 24, GREY_A).next_to(card, DOWN, buff=0.45)
+
+
+def side_why(text: str, width: float = 6.2, font_size=19):
+    """A derivation note for a ladder that shares the frame with a picture: wrapped to the right column's width."""
+    return wrapped_label(text, width, font_size, GREY_B)

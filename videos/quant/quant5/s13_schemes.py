@@ -93,11 +93,13 @@ class Schemes(VoiceoverScene):
                 why(r"chapter 3's left-point integral of $W$ against itself", 19)]
         with self.voiceover(
             "To compute a solution, step it forward. Here is the House's code. Euler-Maruyama: the drift times the "
-            "step, plus the volatility times the Brownian increment. Milstein adds one line, in purple. "
-            "<bookmark mark='a'/> Inside a step the volatility itself moves: expanded by the lemma, it changes by b "
-            "prime b times the Brownian move so far, and integrating that against d W gives chapter three's "
-            "left-point integral: half the squared increment minus the step. <bookmark mark='b'/> Run both on "
-            "geometric Brownian motion, where the exact solution is known path by path."
+            "step, plus the volatility times the Brownian increment, exactly the left-point sum of chapter three. "
+            "Milstein adds one line, in purple. <bookmark mark='a'/> Where does it come from? Inside a step the "
+            "volatility itself moves. Expanded by the lemma, it changes by b prime times b times the Brownian move so "
+            "far, and integrating that against d W gives chapter three's left-point integral: half the squared "
+            "increment minus the step. <bookmark mark='b'/> Run both on geometric Brownian motion, where the exact "
+            "solution is known path by path, with twenty thousand paths shared between the two schemes, so that their "
+            "errors can be compared path by path."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

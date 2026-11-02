@@ -71,21 +71,16 @@ class Outro(VoiceoverScene):
         if rows.width > 13.0:
             rows.scale_to_fit_width(13.0)
         with self.voiceover(
-            "Part eight in ten lines. With a sixty percent coin at even odds, bet twenty percent; bet everything and "
-            "you will almost surely go bust. Utility turns a gamble into a certainty equivalent, and the premium is "
-            "half of gamma times the variance. Bellman's recursion solves decisions backwards, the HJB equation is "
-            "its continuous form, and the verification theorem proves the guess. Where the value has kinks, "
-            "viscosity solutions give the equation meaning, and only monotone grids find them. Merton's fraction, on "
-            f"ninety-four years of American stocks, is {100 * m['fraction'][2]:.0f} percent for gamma three, with "
-            "wide error bars, and the investor spends a constant share of wealth. Trading costs open a no-trade band "
-            "that grows like the cube root of the cost. Kelly eventually beats everything, slowly, and an edge "
-            "overestimated twofold earns nothing. Growth is not utility. Stopping is a rope over pegs, and smooth fit "
-            "finds the boundary. A crowd sells in a rush, and a learner finds Merton but struggles with costs. And "
-            "in practice, funds bet fractions, work inside risk budgets, and cut risk as they approach a drawdown "
-            "limit."
+            "Part eight in ten lines. Bet twenty percent on the sixty percent coin. The premium for risk is half gamma times "
+            "the variance. Bellman solves backwards, the HJB is its continuous form, and verification proves the guess. "
+            "Kinks need viscosity solutions and monotone grids. Merton holds "
+            f"{100 * m['fraction'][2]:.0f} percent in stocks at gamma three, with wide error bars, and spends a constant "
+            "share. Costs open a band growing like the cube root of the cost. Kelly wins eventually, slowly, and earns "
+            "nothing on an edge overestimated twofold. Growth is not utility; stopping is a rope over pegs. A crowd sells "
+            "in a rush, and a learner finds Merton. And funds bet fractions inside risk budgets."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
-                                                 run_time=20))
+                                                 run_time=14))
         self.wait(0.5)
         self.clear_scene()
 

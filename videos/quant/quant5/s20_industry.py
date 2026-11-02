@@ -181,10 +181,11 @@ class Industry(VoiceoverScene):
             "realized variance is twice the gain from holding one over S shares, minus twice the log return. "
             "<bookmark mark='b'/> And by Taylor's formula the log payoff is a forward plus puts and calls weighted by "
             "one over strike squared: the variance swap of Demeterfi, Derman, Kamal and Zou, and the weights of "
-            "Cboe's VIX. <bookmark mark='c'/> On ten thousand Heston paths, the replication misses by a fraction of a "
-            "basis point of variance. Add jumps, and a bias appears, exactly chapter twelve's jump term: "
-            f"{vs['2520_jump']['mean'] * 1e4:+.1f} against a predicted {vs['jump_bias_theory'] * 1e4:+.1f}, in "
-            "ten-thousandths."
+            "Cboe's VIX. <bookmark mark='c'/> On ten thousand Heston paths, the replication misses by "
+            f"{vs['252_heston']['sd'] * 1e4:.1f} ten-thousandths of variance with daily steps, and "
+            f"{vs['2520_heston']['sd'] * 1e4:.2f} with ten times as many. Add jumps, and a bias appears, exactly "
+            f"chapter twelve's jump term: {vs['2520_jump']['mean'] * 1e4:+.1f} against a predicted "
+            f"{vs['jump_bias_theory'] * 1e4:+.1f}."
         ) as vo:
             step(0)
             vo.wait_until("a")

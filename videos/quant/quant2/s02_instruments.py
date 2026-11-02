@@ -51,15 +51,14 @@ class Instruments(VoiceoverScene):
         grid.move_to(DOWN * 0.1)
         foot = note(r"example quotes are illustrative", font_size=18).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Six instruments carry almost everything in this series. A share: a slice of a company, quoted as a price "
-            "per share. <bookmark mark='a'/> A bond: a loan that pays coupons and then its face value, quoted as a "
-            "price per hundred of face value, or as the yield that price implies. <bookmark mark='b'/> A future: an "
-            "agreement to trade later at a price fixed now, settled every single day, which is why it needs margin. "
-            "<bookmark mark='c'/> A swap: two parties exchange cash flows, typically a fixed interest rate against a "
-            "floating one, and the quote is that fixed rate. <bookmark mark='d'/> An option: a right without an "
-            "obligation, quoted in dollars or in implied volatility. <bookmark mark='e'/> And an exchange-traded "
-            "fund: a basket that trades like a share, kept close to the value of what it holds by market makers who "
-            "create and redeem its units, as Part thirty-eight shows."
+            "Six instruments carry almost everything in this series. A share: a slice of a company, quoted per share. "
+            "<bookmark mark='a'/> A bond: a loan that pays coupons and then its face value, quoted per hundred of face or as "
+            "the yield that price implies; Part eighteen builds the arithmetic. <bookmark mark='b'/> A future: an agreement "
+            "to trade later at a price fixed now, settled every single day, which is why it needs margin. "
+            "<bookmark mark='c'/> A swap: two parties exchange cash flows, typically fixed against floating, and the quote is "
+            "the fixed rate. <bookmark mark='d'/> An option: a right without an obligation, quoted in dollars or in implied "
+            "volatility. <bookmark mark='e'/> And an exchange-traded fund: a basket that trades like a share, kept near the "
+            "value of what it holds by market makers who create and redeem its units, as Part thirty-eight shows."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(foot))
             for i, mark in enumerate("abcde", start=2):
@@ -99,14 +98,12 @@ class Instruments(VoiceoverScene):
                           font_size=22).to_corner(DR, buff=0.3)
         src = note(r"illustrative bond: 5\% coupon, paid twice a year", font_size=17).to_corner(DL, buff=0.2)
         with self.voiceover(
-            "Bond quotes hide one trap. Between coupons, interest accrues to whoever holds the bond. A bond is "
-            "quoted clean, without that interest, and the buyer pays the dirty price: clean plus accrued. Watch a "
-            "year of a five percent bond whose clean quote stays at ninety-eight seventy-five. "
-            "<bookmark mark='a'/> The price you pay climbs every day by the coupon's share, then drops by two and a "
-            "half on each coupon date, when the interest is paid out: a saw-tooth over a flat line. "
-            "<bookmark mark='b'/> Ninety-one days in, the buyer pays a hundred, of which one twenty-five is the "
-            "seller's interest. Quoting clean keeps the quote from jumping on coupon days. Pause and predict: if "
-            "the clean price hasn't moved for a month, did the holder earn anything?"
+            "Bond quotes hide one trap. Between coupons, interest accrues to whoever holds the bond. Bonds are quoted clean, "
+            "without it, and the buyer pays the dirty price: clean plus accrued. Watch a year of a five percent bond whose "
+            "clean quote stays at ninety-eight seventy-five. <bookmark mark='a'/> What you pay climbs every day, then drops "
+            "by two and a half on each coupon date: a saw-tooth over a flat line. <bookmark mark='b'/> Ninety-one days in, "
+            "the buyer pays a hundred, one twenty-five of it the seller's interest. Pause and predict: the clean price hasn't "
+            "moved for a month. Did the holder earn anything?"
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             self.add(clean, dl, wedge)
@@ -135,12 +132,10 @@ class Instruments(VoiceoverScene):
         foot = note(r"CME contract specifications; OCC; the index level is illustrative", font_size=17)
         foot.to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "A listed derivative is a standard contract, and its specification is part of the quote. The E-mini "
-            "S and P five hundred future at the CME is fifty dollars times the index; it moves in quarter points, "
-            "twelve dollars fifty a tick; it expires every quarter and settles in cash. At sixty-one twenty-five, "
-            "one contract is three hundred thousand dollars of exposure. <bookmark mark='a'/> An American equity "
-            "option is a contract on a hundred shares, with a strike and an expiry, and every one of them is cleared "
-            "by the Options Clearing Corporation, which stands between every buyer and every writer."
+            "A listed derivative is a standard contract. The E-mini S and P five hundred future is fifty dollars times the "
+            "index, moves in quarter points, twelve fifty a tick, expires quarterly and settles in cash: at sixty-one "
+            "twenty-five, three hundred thousand dollars of exposure. <bookmark mark='a'/> An American equity option is on a "
+            "hundred shares, and every one is cleared by the Options Clearing Corporation."
         ) as vo:
             self.play(FadeIn(fut, shift=UP * 0.2), FadeIn(foot))
             self.play(Write(ex))
@@ -161,12 +156,11 @@ class Instruments(VoiceoverScene):
                     r"\$100\text{m},\ 5\text{ years: } \approx\$45{,}000 \text{ per basis point}", font_size=30),
         ).arrange(DOWN, buff=0.4).next_to(d, DOWN, buff=0.5)
         with self.voiceover(
-            "One word to keep straight: notional. A derivative refers to a size, the notional, which is not its value. "
-            "A swap on a hundred million dollars exchanges interest on a hundred million, but may be worth a few "
-            "hundred thousand. Its value moves by its sensitivity times the move in rates: a five-year swap on a "
-            "hundred million gains or loses about forty-five thousand dollars per basis point. "
-            "<bookmark mark='a'/> The ratio of exposure to the money put up is leverage, and leverage is what turns "
-            "the plumbing of this part into a matter of survival."
+            "Keep one word straight: notional, the size a derivative refers to, not its value. A five-year swap on a hundred "
+            "million dollars may be worth only a few hundred thousand, and gains or loses about forty-five thousand per basis "
+            "point. A future on a million dollars of an index can be held with fifty thousand of margin. "
+            "<bookmark mark='a'/> Exposure over the money put up is leverage, and leverage is what turns the plumbing of this "
+            "part into a matter of survival."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.2))
             self.play(FadeIn(rows[1]))

@@ -38,16 +38,12 @@ class SmoothFit(VoiceoverScene):
                     r"the payoff with the payoff's slope, $-1$: smooth fit", font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.6, buff=0.75, edge=6.9)
         with self.voiceover(
-            "In continuous time the stopping rule becomes a boundary in space, and nobody tells you where it is. "
-            "Take the simplest case: an American put that never expires, the right to sell a stock at K whenever you "
-            "like. While you hold it, above some exercise level b, its value obeys the Black-Scholes equation with "
-            "no time derivative. <bookmark mark='a'/> Try a power of S. The exponent solves a quadratic with roots "
-            "one and minus beta, and only the negative root keeps the put worthless when the stock is huge. "
-            "<bookmark mark='b'/> Value matching: at the level b you exercise and receive K minus b, which fixes the "
-            "constant. Henry McKean solved this in 1965. <bookmark mark='c'/> Which level? The one that makes the "
-            "value largest. Differentiate in b, and the condition you get is the same as asking the value to leave "
-            "the payoff with the payoff's own slope, minus one, with no kink: smooth fit. With five percent rates "
-            f"and thirty percent volatility, beta is {p['beta']:.2f} and the boundary is {p['b_star']:.1f}."
+            "In continuous time the stopping rule is a boundary nobody gives you. Take a perpetual American put: while "
+            "held, above an exercise level b, it obeys Black-Scholes without a time derivative. <bookmark mark='a'/> A power "
+            "of S solves it; only the negative root keeps the put worthless as S grows. <bookmark mark='b'/> Value matching "
+            "at b fixes the constant: McKean, 1965. <bookmark mark='c'/> Choose b to make the value largest, and the "
+            "condition is that the curve leaves the payoff with slope minus one: smooth fit. At five percent rates and "
+            f"thirty percent volatility, the boundary is {p['b_star']:.1f}."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -80,7 +76,8 @@ class SmoothFit(VoiceoverScene):
         vcurve = curve(g2.ax, bg, np.clip(vb, 10, 25), UNDER, stroke_width=3)
         vdot = always_redraw(lambda: Dot(g2.ax.c2p(b.get_value(), float(np.clip(
             C.perpetual_put_value(100.0, K, r, s, b.get_value()), 10, 25))), color=UNDER, radius=0.08))
-        gap = DecimalNumber(0, num_decimal_places=2, include_sign=True, font_size=30, color=KELLY)
+        gap = DecimalNumber(-beta * (K - 32.0) / 32.0 + 1, num_decimal_places=2, include_sign=True, font_size=30,
+                            color=KELLY)
         gap.add_updater(lambda m: m.set_value(-beta * (K - b.get_value()) / b.get_value() + 1))
         gl = VGroup(MathTex(r"V_b'(b^+) - (-1) =", font_size=30, color=KELLY), gap).arrange(RIGHT, buff=0.12)
         gl.next_to(g2, DOWN, buff=0.5).align_to(g2, LEFT)
@@ -92,17 +89,12 @@ class SmoothFit(VoiceoverScene):
         q = pause_card(r"Rates rise. Does the exercise boundary move up or down?", width=4.8, font_size=20).next_to(
             res, DOWN, buff=0.35).align_to(gl, LEFT)
         with self.voiceover(
-            "Watch the choice. The grey line is the payoff, K minus S. The blue curve is the value of the rule "
-            "'exercise when the stock first falls to b', for a level b we can slide. <bookmark mark='a'/> With a low "
-            "level, the curve meets the payoff at a kink, coming in too flat; the readout is the gap between the two "
-            "slopes. Raise the level and the value at a stock price of a hundred, on the right, rises. Raise it too "
-            "far and the curve meets the payoff too steeply, and the value falls again. <bookmark mark='b'/> The best "
-            f"level is {bs:.1f}, exactly where the gap closes and the curve kisses the payoff. The put is worth "
-            f"{p['v100']:.2f}. A forty-year binomial tree, which knows nothing of smooth fit, puts its boundary at "
-            f"{p['tree_boundary0']:.1f} and its price at {p['tree_price']:.2f}. <bookmark mark='c'/> Pause and "
-            "predict: if rates rise, does the boundary move up or down? <bookmark mark='d'/> Up: beta grows and the "
-            f"boundary moves toward the strike, to {p['b_star_r7']:.1f} at seven percent. Waiting to receive K costs "
-            "more interest, so you exercise sooner."
+            "Slide the exercise level. <bookmark mark='a'/> Too low, and the value curve meets the payoff with a kink, too "
+            "flat; too high, too steep, and the value at a hundred falls again. <bookmark mark='b'/> The best level, "
+            f"{bs:.1f}, is where the kink closes. The put is worth {p['v100']:.2f}; a forty-year tree that knows nothing of "
+            f"smooth fit gives {p['tree_boundary0']:.1f} and {p['tree_price']:.2f}. <bookmark mark='c'/> Pause and predict: "
+            f"rates rise; does the boundary move up or down? <bookmark mark='d'/> Up, to {p['b_star_r7']:.1f} at seven "
+            "percent: waiting to receive K costs more interest."
         ) as vo:
             self.play(FadeIn(g), Create(pay), FadeIn(g2), Create(vcurve))
             self.add(fam, bdot, hund, vdot)
@@ -150,14 +142,10 @@ class SmoothFit(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = illustration(r"a 500-step CRR tree (the House's \texttt{trees})")
         with self.voiceover(
-            "With an expiry date, the boundary moves. For a one-year put the tree's boundary rises toward the strike "
-            "as expiry nears: with little time left there is little to wait for. Far from expiry it approaches the "
-            "perpetual level from above. <bookmark mark='a'/> The right to choose when is worth "
-            f"{a['american'] - a['european']:.2f} here: the American put costs {a['american']:.2f}, the European "
-            f"{a['european']:.2f}. <bookmark mark='b'/> In general the value solves a variational inequality: either "
-            "it obeys the pricing equation and lies above the payoff, or it equals the payoff. It is a viscosity "
-            "solution, it has a smooth-fit boundary, and it is the solution of a reflected backward equation, the "
-            "subject of chapter fourteen."
+            "With an expiry, the boundary rises toward the strike as time runs out. <bookmark mark='a'/> The right to "
+            f"choose when is worth {a['american'] - a['european']:.2f} on a one-year put. <bookmark mark='b'/> In general "
+            "the value solves a variational inequality, is a viscosity solution, and is the value of a reflected backward "
+            "equation: next chapter's subject."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), Create(perp), FadeIn(pl))
             self.play(Create(bl), FadeIn(region), FadeIn(ex), FadeIn(wt), run_time=2)

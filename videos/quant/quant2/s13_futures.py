@@ -52,17 +52,14 @@ class Futures(VoiceoverScene, ThreeDScene):
         ann = MathTex(rf"\ln({r['F']:,.0f}/{r['S']:,.0f})\ /\ ({r['days']:.0f}/365) \approx {100 * r['ann']:.0f}\%\ "
                       r"\text{a year}".replace(",", "{,}"), font_size=34, color=QC.IDEA).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            f"A market fact. On the tenth of February 2021, the March Bitcoin future on Binance traded "
-            f"{100 * r['basis']:.1f} percent above the coin, with {r['days']:.0f} days to go. Is that a "
-            "forecast? No: it's a price for carrying the coin. <bookmark mark='a'/> Borrow the cash, buy the coin, "
-            "and sell it forward at F nought: no money down. <bookmark mark='b'/> At expiry, deliver the coin for F "
-            "nought and repay the loan with interest. That profit is riskless, so it cannot be positive. "
-            "<bookmark mark='c'/> Run the trade in reverse, short the coin, lend the cash, buy forward, and the "
-            "inequality flips. So the forward price is the spot price grown at the interest rate. "
-            "<bookmark mark='d'/> If the asset pays a yield q, a dividend or a lending fee, the forward grows at r "
-            "minus q. <bookmark mark='e'/> Read it backwards and a future tells you the carry the market is "
-            f"charging: that February, about {100 * r['ann']:.0f} percent a year. Crypto traders were paying that "
-            "to hold Bitcoin with leverage, and whoever bought the coin and sold the future collected it."
+            f"On the tenth of February 2021 the March Bitcoin future on Binance traded {100 * r['basis']:.1f} percent above "
+            f"the coin, with {r['days']:.0f} days to go. A forecast? No: a price for carrying the coin. "
+            "<bookmark mark='a'/> Borrow cash, buy the coin, sell it forward at F nought: no money down. "
+            "<bookmark mark='b'/> At expiry deliver it and repay the loan. That profit is riskless, so it can't be positive. "
+            "<bookmark mark='c'/> Run it in reverse and the inequality flips: the forward is spot grown at the interest rate. "
+            "<bookmark mark='d'/> An asset paying a yield q grows at r minus q. <bookmark mark='e'/> Read backwards, a "
+            f"future tells you the carry the market charges: that February, about {100 * r['ann']:.0f} percent a year, paid "
+            "by leveraged longs to whoever bought the coin and sold the future."
         ) as vo:
             self.play(FadeIn(fact))
             vo.wait_until("a")
@@ -108,18 +105,16 @@ class Futures(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
         src = real_data(r"Binance coin-margined BTCUSD\_210326 and spot BTCUSDT, hourly closes")
         off = abs(b["last_basis"]) > 0.003
+        last_hour = (f"The last hour is off by {abs(100 * b['last_basis']):.1f} percent: the future settles on a dollar "
+                     "index, this spot price is in USDT on one exchange." if off else
+                     "In the last hour the two agree.")
         with self.voiceover(
-            "Now watch a real future converge. The orange line is Bitcoin; the blue line, the March 2021 future, "
-            "hour by hour from the first of December, with its implied carry below. <bookmark mark='a'/> Bitcoin "
-            "triples. The future stays above it the whole way, and the gap, measured as a yearly rate, swings "
-            f"between about fifteen and fifty percent: {100 * b['mean_ann']:.0f} percent on average, at most "
-            f"{100 * b['max_ann']:.0f}, whenever more than ten days were left. <bookmark mark='b'/> But as expiry "
-            "nears the two ribbons zip shut, because at expiry a future is the asset. "
-            + (f"The very last hour is off by {abs(100 * b['last_basis']):.1f} percent, and that's not arbitrage: "
-               "the future settles against an index in dollars, and this spot price is in USDT on one exchange. "
-               if off else "In the last hour the two agree. ")
-            + "The difference between spot and future is the basis; its convergence is what a hedger, or a carry "
-            "trader, is betting on."
+            "Now watch a real future converge: Bitcoin in orange, the March 2021 future in blue, hour by hour from December, "
+            "its implied carry below. <bookmark mark='a'/> Bitcoin triples, and the future stays above it; the carry swings "
+            f"between fifteen and fifty percent a year, {100 * b['mean_ann']:.0f} on average. <bookmark mark='b'/> As expiry "
+            "nears the ribbons zip shut, because at expiry a future is the asset. "
+            + last_hour
+            + " That gap between spot and future is the basis."
         ) as vo:
             self.play(FadeIn(top), FadeIn(bot), FadeIn(leg), FadeIn(src))
             self.add(ls, lf, la, cnt, gap)
@@ -150,16 +145,12 @@ class Futures(VoiceoverScene, ThreeDScene):
                      color=QC.HOUSE).to_edge(UP, buff=0.35)
         step = ladder(self, rows, whys, keep=5, top=2.4, x=-0.3, buff=0.42, edge=6.9)
         with self.voiceover(
-            "Hedgers use futures the other way round. An airline hedges jet fuel with heating-oil futures; a fund "
-            "hedges a stock portfolio with index futures. The future isn't quite the asset, so the hedge leaves "
-            "basis risk. How many futures? <bookmark mark='a'/> Hold the asset and sell h futures. The variance of "
-            "the hedged position is the variance of a difference. <bookmark mark='b'/> Set its slope in h to zero. "
-            "<bookmark mark='c'/> The minimum-variance hedge ratio is the correlation times the ratio of "
-            "volatilities, and it is a minimum, because the curvature is positive. <bookmark mark='d'/> Put it "
-            "back: what's left is one minus rho squared of the original variance. So the hedge's effectiveness is "
-            "rho squared, and nothing else. <bookmark mark='e'/> In contracts, scale by the sizes; for a stock "
-            "portfolio hedged with index futures, the ratio is the portfolio's beta. When the hedge outlives the "
-            "contract, the hedger rolls it forward, stacking one expiry on the next."
+            "Hedgers use futures the other way round, often on something close to the asset but not the same: basis risk. "
+            "How many futures? <bookmark mark='a'/> Sell h of them; the hedged variance is the variance of a difference. "
+            "<bookmark mark='b'/> Set its slope in h to zero. <bookmark mark='c'/> The best ratio is the correlation times "
+            "the ratio of volatilities, a minimum since the curvature is positive. <bookmark mark='d'/> What's left is one "
+            "minus rho squared of the variance: the hedge's effectiveness is rho squared. <bookmark mark='e'/> In contracts, "
+            "scale by the sizes; for a stock portfolio, use its beta; and roll the hedge from one expiry to the next."
         ) as vo:
             self.play(FadeIn(head))
             for i, mk in enumerate("abcde"):
@@ -198,13 +189,10 @@ class Futures(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, cap, params)
         self.remove(hint, cap, params)
         with self.voiceover(
-            "Here is the whole hedging problem as a landscape. Across, the hedge ratio; into the screen, the "
-            "correlation between asset and future; up, the variance left over. <bookmark mark='a'/> For any "
-            "correlation the remaining variance is a parabola in h. Take rho equal to point eight, the yellow "
-            "slice, and let a ball roll down it: it settles at h star, one point two times rho. "
-            "<bookmark mark='b'/> The valley floor, in green, runs diagonally, and its depth is one minus rho "
-            "squared. Near rho of one the valley reaches the floor, a perfect hedge; at rho of a half, the best "
-            "hedge still leaves three quarters of the variance. The depth of the valley is the effectiveness."
+            "Here is the whole problem as a landscape: hedge ratio across, correlation into the screen, leftover variance up. "
+            "<bookmark mark='a'/> At rho of point eight the slice is a parabola, and a ball rolls to h star, one point two "
+            "times rho. <bookmark mark='b'/> The valley floor runs diagonally, and its depth is one minus rho squared: the "
+            "effectiveness."
         ) as vo:
             self.play(FadeIn(hint), FadeIn(params), Create(ax), run_time=1.5)
             self.play(Create(surf), run_time=2.5)
@@ -233,6 +221,8 @@ class Futures(VoiceoverScene, ThreeDScene):
             "hedge_effectiveness(eth_2023, btc_2023, h)",
         ], source="explainer/quant/house/funding.py", width=6.6).to_corner(UL, buff=0.35)
         held = h["eff_out"] > h["eff_in"] - 0.1
+        verdict = (f"It held up, though 2023's own best ratio was {h['h_2023']:.2f}: desks refit. " if held else
+                   f"Much less: 2023's best ratio was {h['h_2023']:.2f}, and desks refit. ")
         q = desk_question(r"A future at 102, spot at 100, six months, rates 3\%, no yield. Trade?",
                           r"fair value $100e^{0.015} = 101.51$: sell the future, buy spot with borrowed money, "
                           r"lock in 0.49", width=6.0, font_size=22).to_corner(DR, buff=0.35)
@@ -242,18 +232,13 @@ class Futures(VoiceoverScene, ThreeDScene):
                             color=QC.IDEA, fill_opacity=0.6) for x, y in zip(h["btc"], h["eth"])])
         fit = Line(sc.ax.c2p(-0.12, -0.12 * h["h"]), sc.ax.c2p(0.12, 0.12 * h["h"]), color=QC.HOUSE, stroke_width=3)
         with self.voiceover(
-            "Now the House does it on data. Hedge Ether with Bitcoin, fitted on the daily returns of 2021 and 2022. "
-            "<bookmark mark='a'/> The hedge ratio comes out at "
-            f"{h['h']:.2f}: Ether moved more than Bitcoin, so a dollar of Ether needs more than a dollar of Bitcoin "
-            f"against it. A bootstrap puts it between {h['h_ci'][0]:.2f} and {h['h_ci'][1]:.2f}. In sample the hedge "
-            f"removes {100 * h['eff_in']:.0f} percent of the variance, rho squared. <bookmark mark='b'/> Then the "
-            f"test that matters: keep that ratio and hedge 2023. It removes {100 * h['eff_out']:.0f} percent. "
-            + ("The relation held up out of sample, though in 2023 alone the best ratio would have been "
-               f"{h['h_2023']:.2f}: hedge ratios drift, and desks refit them. " if held else
-               f"Much less: the relation moved, and the best ratio in 2023 was {h['h_2023']:.2f}. Hedge ratios "
-               "drift, and desks refit them. ")
-            + "<bookmark mark='c'/> Pause and predict: a future at a hundred and two, spot at a hundred, six "
-            "months, rates at three percent. Is there a trade?"
+            "The House does it on data: hedge Ether with Bitcoin, fitted on 2021 and 2022. <bookmark mark='a'/> The ratio is "
+            f"{h['h']:.2f}, between {h['h_ci'][0]:.2f} and {h['h_ci'][1]:.2f} by bootstrap, and in sample it removes "
+            f"{100 * h['eff_in']:.0f} percent of the variance. <bookmark mark='b'/> Keep that ratio through 2023: it removes "
+            f"{100 * h['eff_out']:.0f} percent. "
+            + verdict
+            + "<bookmark mark='c'/> Pause and predict: future a hundred and two, spot a hundred, six months, three percent. "
+            "Trade?"
         ) as vo:
             self.play(FadeIn(card), FadeIn(sc))
             self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.002, run_time=1.5))

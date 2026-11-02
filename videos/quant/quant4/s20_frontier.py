@@ -158,12 +158,12 @@ class Frontier(VoiceoverScene):
                    else "here both happen to stay near their target." if e_ok else
                    "here even e-BH overshoots, a warning about small samples of seeds.")
         with self.voiceover(
-            "The frontier on a desk problem. Two hundred strategies watched daily for ten years, twenty with a real "
-            "edge; each monitored by a learning e-process, with e-BH applied every day at ten percent. "
-            "<bookmark mark='a'/> The rule is five lines: reject the largest k e-values that clear the number of "
-            "strategies over alpha times k. <bookmark mark='b'/> Benjamini and Hochberg on daily t-tests finds more, "
-            "faster. <bookmark mark='c'/> But suppose the desk acts on the first day it has ten discoveries. Then "
-            + verdict + " <bookmark mark='d'/> An e-process stopped at any time is still an e-value. Part twenty-six "
+            "The frontier on a desk problem. Two hundred strategies watched daily for ten years, twenty with "
+            "a real edge; each monitored by a learning e-process, with e-BH applied every day at ten percent. "
+            "<bookmark mark='a'/> The rule is five lines: reject the largest k e-values that clear the number "
+            "of strategies over alpha times k. <bookmark mark='b'/> Benjamini and Hochberg on daily t-tests finds "
+            "more, faster. <bookmark mark='c'/> But suppose the desk acts on the first day it has ten discoveries. "
+            f"Then {verdict} <bookmark mark='d'/> An e-process stopped at any time is still an e-value. Part twenty-six "
             "builds on this."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(tenp), FadeIn(leg))

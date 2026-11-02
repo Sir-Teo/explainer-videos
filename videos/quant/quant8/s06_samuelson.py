@@ -45,17 +45,14 @@ class Samuelson(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = illustration(r"$\mu - r = 6\%$, $\sigma = 18\%$, $r = 2\%$; closed forms, checked by simulation")
         with self.voiceover(
-            "Kelly's admirers in the 1960s and 70s argued that everyone with a long horizon should maximize growth, "
-            "whatever their risk aversion: in the long run, Kelly beats any other strategy with near certainty. Paul "
-            "Samuelson thought this was a fallacy, and in 1979 wrote a reply in words of one syllable, all but the "
-            "last, so that no one could misread it. <bookmark mark='a'/> Compare Kelly with the Merton fraction of an "
-            f"investor with gamma three: {100 * s['f_kelly']:.0f} percent in stocks against "
-            f"{100 * s['f_merton']:.0f}. The chance that Kelly ends richer does rise toward one with the horizon: "
-            f"{100 * p[list(T).index(10)]:.0f} percent after ten years, {100 * p[list(T).index(100)]:.0f} after a "
-            "hundred. <bookmark mark='b'/> But measured in that investor's own utility, Kelly is worse at every "
-            f"horizon: its certainty equivalent shrinks at {100 * abs(s['ce_rate_kelly']):.1f} percent a year, while "
-            f"Merton's grows at {100 * s['ce_rate_merton']:.1f}. Both statements are true. Maximizing the probability "
-            "of being ahead is not maximizing expected utility."
+            "Kelly's admirers argued that everyone with a long horizon should maximize growth, since Kelly eventually wins. "
+            "Paul Samuelson called it a fallacy, and in 1979 replied in words of one syllable, all but the last. "
+            "<bookmark mark='a'/> Compare Kelly with the gamma-three Merton fraction: "
+            f"{100 * s['f_kelly']:.0f} percent against {100 * s['f_merton']:.0f}. Kelly ends richer more and more often: "
+            f"{100 * p[list(T).index(10)]:.0f} percent of the time after ten years, {100 * p[list(T).index(100)]:.0f} after a "
+            "hundred. <bookmark mark='b'/> But in that investor's own utility Kelly is worse at every horizon: its "
+            f"certainty equivalent shrinks {100 * abs(s['ce_rate_kelly']):.1f} percent a year while Merton's grows "
+            f"{100 * s['ce_rate_merton']:.1f}. Usually ahead is not better."
         ) as vo:
             self.play(FadeIn(g), FadeIn(title), FadeIn(src))
             vo.wait_until("a")
@@ -82,13 +79,10 @@ class Samuelson(VoiceoverScene):
                     font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.6, buff=0.75, edge=6.9)
         with self.voiceover(
-            "The algebra behind the objection takes four lines. With a constant fraction, log wealth is normal, "
-            "with a mean and a variance that both grow linearly in time. <bookmark mark='a'/> The certainty "
-            "equivalent for power utility is the expected wealth to the power one minus gamma, undone; the normal "
-            "moment generating function computes it exactly. <bookmark mark='b'/> Its growth rate does not depend "
-            "on the horizon at all: the cash rate, plus f times the excess return, minus gamma over two times f "
-            "squared sigma squared. <bookmark mark='c'/> That parabola peaks at Merton's fraction for gamma, at "
-            "every horizon. A long horizon does not turn anyone into a Kelly investor, unless gamma is one."
+            "Four lines show why. With a constant fraction, log wealth is normal. <bookmark mark='a'/> The normal moment "
+            "generating function gives the certainty equivalent exactly. <bookmark mark='b'/> Its growth rate does not "
+            "depend on the horizon. <bookmark mark='c'/> It peaks at Merton's fraction for gamma, at every horizon: a long "
+            "horizon makes no one a Kelly investor unless gamma is one."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -151,21 +145,15 @@ class Samuelson(VoiceoverScene):
                        font_size=20).to_edge(RIGHT, buff=0.35).to_edge(DOWN, buff=0.3)
         src = illustration(r"simulation: 100{,}000 players, 60 flips")
         with self.voiceover(
-            "The argument has a modern form. Toss a coin: heads, your wealth rises fifty percent; tails, it falls "
-            "forty. The average outcome is a gain of five percent per toss. Give the coin to a hundred thousand "
-            "players and watch the distribution of their wealth, on a log scale. <bookmark mark='a'/> The average, "
-            "in gold, runs off to the right, carried by a lucky few. The median player, in red, drifts left: a head "
-            "and a tail together multiply wealth by point nine. After sixty flips, "
-            f"{100 * e['share_below_1']:.0f} percent of players have lost money, and the richest one percent hold "
-            f"{100 * e['share_of_wealth_top1pct']:.0f} percent of all the wealth. <bookmark mark='b'/> The physicist "
-            "Ole Peters argues this is what expected value misses: the average over parallel worlds is not the "
-            "average over one life, and the time average is the log growth rate, Kelly's criterion. An experiment by "
-            "Meder and colleagues in 2021 found people's risk taking moved toward the time-optimal one when the "
-            "gambles were multiplicative. Economists reply that this is log utility under another name, and "
-            "Alexis Akira Toda's 2023 critique is sharper still. The debate is open. <bookmark mark='c'/> Pause "
-            "and predict: what fraction should you stake on this coin? <bookmark mark='d'/> Kelly says "
-            f"{100 * L['kelly_stake']:.0f} percent, which grows wealth about {100 * L['kelly_growth']:.1f} percent a "
-            "flip: staking part of your wealth turns a losing game into a winning one."
+            "A modern form: heads, wealth rises fifty percent; tails, it falls forty. The average gain is five percent a "
+            "toss. Give the coin to a hundred thousand players. <bookmark mark='a'/> The average runs right, carried by a "
+            "lucky few; the median drifts left, since a head and a tail multiply wealth by point nine. After sixty flips "
+            f"{100 * e['share_below_1']:.0f} percent have lost money. <bookmark mark='b'/> Ole Peters argues expected value "
+            "misses this: the time average is log growth, Kelly. Meder and colleagues found in 2021 that people's risk "
+            "taking shifted that way under multiplicative gambles; economists reply it is log utility by another name, and "
+            "Alexis Akira Toda's 2023 critique is sharper still. <bookmark mark='c'/> Pause and predict: what fraction "
+            f"should you stake? <bookmark mark='d'/> Kelly says {100 * L['kelly_stake']:.0f} percent, growing about "
+            f"{100 * L['kelly_growth']:.1f} percent a flip: a losing game, staked partially, wins."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), FadeIn(src), FadeIn(leg), FadeIn(tl))
             self.add(hg, mean_l, med_l)

@@ -70,14 +70,13 @@ class Frontier(VoiceoverScene):
             MathTex(r"\text{zero-shot: } \hat y_{t+1} = f_\theta(x_{t-C+1:t}),\ \theta\text{ frozen}", font_size=28),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.5)
         with self.voiceover(
-            "Since 2024 a new kind of model has promised to forecast any time series without being trained on it. "
-            "Chronos, from Abdul Fatir Ansari and colleagues at Amazon, shows the idea most clearly: turn numbers "
-            "into a language. <bookmark mark='a'/> Take a window of the series, here Bitcoin's daily volatility before "
+            "Since 2024, foundation models promise to forecast any time series without training on it. Chronos, from "
+            "Abdul Fatir Ansari and colleagues at Amazon, shows the idea: turn numbers into a language. <bookmark mark='a'/> Take a window of the series, here Bitcoin's daily volatility before "
             "the crash, and divide by its average size, so every series lives on the same scale. <bookmark mark='b'/> "
             "Cut the scaled range into bins, and each day becomes a token, one of a fixed vocabulary. The series is now "
             "a sentence. <bookmark mark='c'/> A transformer is trained, on a huge corpus of other series, to predict "
             "the next token, exactly as a language model predicts the next word. Its output is a probability for every "
-            "bin: a whole forecast distribution. Then, frozen, it is pointed at a series it has never seen."
+            "bin: a whole forecast distribution."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.02, run_time=1.5))
             vo.wait_until("a")
@@ -120,10 +119,9 @@ class Frontier(VoiceoverScene):
                     rf"context {f['context']} days".replace(",", "{,}"), font_size=18, color=GREY_B).to_edge(DOWN, buff=0.5)
         red = label(r"red: what happened on 13 March", font_size=18, color=BAD).next_to(cap, UP, buff=0.15)
         with self.voiceover(
-            "None of the published models is installed here, so the House built a toy one the same way, small enough "
-            "to train on an ordinary processor. Its corpus is synthetic: volatility-like series from four families, "
-            "autoregressions, HAR processes, regime switches and GARCH paths, with random parameters. It never sees a "
-            "market. <bookmark mark='a'/> Watch it learn, three seeds. On the left, its forecast distribution for the "
+            "The published models are not installed here, so the House built a toy one the same way, small enough "
+            "for an ordinary processor. Its corpus is synthetic volatility series from four families, with random "
+            "parameters. It never sees a market. <bookmark mark='a'/> Watch it learn, three seeds. On the left, its forecast distribution for the "
             "thirteenth of March 2020, the day after the crash, read from the sixty-four days before it, at each "
             "checkpoint. At first, a smear across all bins. Then it learns that volatility clusters: the mass moves "
             "toward the recent level, and a right tail grows."
@@ -208,15 +206,13 @@ class Frontier(VoiceoverScene):
             label(r"data from the paper; not run here", font_size=16, color=GREY_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.3)
         with self.voiceover(
-            "What do the real models do? The largest comparison so far, by Alessio Brini in July 2026, ran nine "
-            "foundation models zero-shot against eight econometric ones on fifty assets. Here is one row of his "
+            "What do the real models do? Alessio Brini's comparison of July 2026 ran nine foundation models zero-shot against eight econometric ones on fifty assets. Here is one row of his "
             "results, the day-ahead loss of each model relative to log-HAR, averaged over assets, as published. "
             "<bookmark mark='a'/> Only IBM's Tiny Time Mixers, a model of about a million parameters, beats log-HAR, "
             "and narrowly. Chronos-Bolt and TimesFM are about nine to twelve percent worse. <bookmark mark='b'/> Much of the edge that "
             "remains disappears after a Mincer-Zarnowitz recalibration, and the best forecast is an average of TTM and "
             "log-HAR. His conclusion: the choice of architecture matters more than the choice between foundation and "
-            "econometric models. One more caveat: a pretrained model's corpus may contain the very years it is tested "
-            "on."
+            "econometric models. And a pretrained corpus may contain the test years."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(side[0]), FadeIn(side[1]), FadeIn(side[3]))
             self.play(LaggedStart(*[GrowFromEdge(b, LEFT) for b in bars], lag_ratio=0.08), Create(one))
@@ -235,14 +231,10 @@ class Frontier(VoiceoverScene):
             rows.scale_to_fit_width(13.4)
         head = label(r"The 2022--2026 frontier, checked against the papers", font_size=30).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The frontier in one screen. The foundation models: Chronos, TimesFM and Moirai in 2024, IBM's tiny "
-            "mixers, and Chronos-2 with many series at once. The volatility papers: Kim Christensen, Mathias Siggaard "
-            "and Bezirgen Veliyev found machine learning helps HAR one day ahead on the Dow's stocks; networks pooled "
-            "across stocks generalise to new ones; HARNet. <bookmark mark='a'/> And the 2025 tests of foundation "
-            "models in finance: TimesFM is a reasonable baseline but needs fine-tuning; off-the-shelf models lag on "
-            "returns, and pretraining on financial data helps; Kronos, pretrained on candlesticks from forty-five "
-            "exchanges, reports gains on its own benchmark. The honest summary: on volatility, the log of a HAR model "
-            "is still the bar to clear, and it is a high one."
+            "The frontier in one screen: the foundation models of 2024 and 2025, and the volatility papers. Machine "
+            "learning helps HAR one day ahead on the Dow's stocks; networks pooled across stocks generalise. <bookmark "
+            "mark='a'/> In finance, TimesFM needs fine-tuning, pretraining on financial data helps, and Kronos reports "
+            "gains on its own benchmark. The honest summary: on volatility, log-HAR is still the bar to clear."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r_) for r_ in rows[:6]], lag_ratio=0.3, run_time=4))
             vo.wait_until("a")

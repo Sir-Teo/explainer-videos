@@ -166,6 +166,12 @@ class Accruals(VoiceoverScene, ThreeDScene):
                     rf"{a['osap_t']:.1f}", font_size=26, color=QC.IDEA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4).shift(UP * 0.4)
         src = real_data(r"SEC EDGAR company facts (10-K, as last reported); Chen--Zimmermann Accruals portfolio")
+        if sure and gap > 0:
+            gap_line = "The gap has Sloan's sign and is larger than the noise. "
+        elif gap > 0:
+            gap_line = "The gap has Sloan's sign, but the error bands are wide: seven firms cannot separate it from noise. "
+        else:
+            gap_line = "There is no gap here at all, and seven firms are far too few to say anything. "
         pp = desk_question(r"Pause and predict: two firms each earn 10\% of assets. One collected it in cash, one "
                            r"booked it as receivables. Whose earnings will be higher next year?", width=11.6,
                            font_size=21).to_edge(DOWN, buff=0.25)
@@ -173,10 +179,7 @@ class Accruals(VoiceoverScene, ThreeDScene):
             "Now real filings. The House's fundamentals store holds the full XBRL histories of a handful of large "
             f"companies; seven of them are not banks, which gives {a['real_n']} firm-years with a following year. "
             f"<bookmark mark='a'/> The same regression: cash persists with {b[1]:.2f}, accruals with {b[2]:.2f}. "
-            + ("The gap has Sloan's sign and is larger than the noise. " if sure and gap > 0 else
-               ("The gap has Sloan's sign, but the error bands are wide: seven firms cannot separate it from noise. "
-                if gap > 0 else "There is no gap here at all, and seven firms are far too few to say anything. "))
-            + "Sloan used tens of thousands of firm-years; the House's full panel needs the SEC's bulk data, and the "
+            + gap_line + "Sloan used tens of thousands of firm-years; the House's full panel needs the SEC's bulk data, and the "
             "notes say how to load it. <bookmark mark='b'/> The market evidence is larger: the open-source replication "
             f"of Sloan's portfolio, long low accruals and short high, earned {a['osap_mean']:.2f} percent a month from "
             f"1963 to 2020, with a t-statistic of {a['osap_t']:.1f}. Chapter fourteen asks how much of that survived "

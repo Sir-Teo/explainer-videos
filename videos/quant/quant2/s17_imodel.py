@@ -76,12 +76,10 @@ class MarginModel(VoiceoverScene):
         src = note(r"CME Group, SPAN risk arrays; the straddle is illustrative (S = 100, 30 days, 20\% vol, scan 6)",
                    font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "How big should margin be? The classic answer for futures and options is SPAN, from the CME. It "
-            "revalues the position under sixteen scenarios: the price unchanged, or moved by a third, two thirds, "
-            "or all of a scan range, up and down, each with volatility up and down; plus two extreme moves of three "
-            "scan ranges, of which only thirty percent of the loss counts. <bookmark mark='a'/> Here is a short "
-            "straddle under all sixteen. It earns a little when nothing happens and loses on every big move. "
-            "<bookmark mark='b'/> The margin is the worst scenario. Simple, transparent, and blind to anything "
+            "How big should margin be? The CME's classic answer, SPAN, revalues a position under sixteen scenarios: the "
+            "price unchanged or moved a third, two thirds or a whole scan range each way, with volatility up and down, plus "
+            "two extreme moves counted at thirty percent. <bookmark mark='a'/> A short straddle earns a little when nothing "
+            "happens and loses on every big move. <bookmark mark='b'/> The margin is the worst scenario: simple, and blind "
             "outside its grid."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(txt[:3]), FadeIn(src))
@@ -106,13 +104,10 @@ class MarginModel(VoiceoverScene):
                 why(r"Kupiec's test: $x$ breaches in $T$ days against the promised 1\%, $\hat p = x/T$")]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-1.2, buff=0.5, edge=6.9)
         with self.voiceover(
-            "Most clearing houses now use value-at-risk models instead. The simplest worth using is the "
-            "exponentially weighted variance of RiskMetrics: today's variance estimate is yesterday's, nudged by "
-            "yesterday's squared return, with a memory lambda. <bookmark mark='a'/> Initial margin is then a "
-            "ninety-nine percent Gaussian value-at-risk over the days it would take to close out a defaulter. "
-            "<bookmark mark='b'/> How fast should it forget? Choose lambda by maximum likelihood. "
-            "<bookmark mark='c'/> And check it the way a regulator would: count the days losses broke through the "
-            "margin, and test the count against the promised one percent with Kupiec's likelihood ratio."
+            "Most clearing houses now use value-at-risk models. The simplest is exponentially weighted variance: yesterday's "
+            "estimate, nudged by yesterday's squared return, with memory lambda. <bookmark mark='a'/> Margin is a "
+            "ninety-nine percent value-at-risk over the close-out days. <bookmark mark='b'/> Lambda is chosen by likelihood, "
+            "<bookmark mark='c'/> and the model is checked by counting breaches against one percent, with Kupiec's test."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -160,14 +155,11 @@ class MarginModel(VoiceoverScene):
         ], source="explainer/quant/house/funding.py", width=5.6, font_size=16).to_corner(DR, buff=0.3)
         src = real_data(r"Kenneth French, daily US market; band: the 1-day 99\% level, $\lambda = 0.97$", corner=DL)
         with self.voiceover(
-            "Watch the model run through 1987, with lambda at point nine seven. The blue band is the one-day "
-            "ninety-nine percent level; each bar is a day's return, red when it breaks through. The band breathes "
-            "with volatility: narrow in a calm summer, wider in the jittery days of mid-October. "
-            f"<bookmark mark='a'/> Then the nineteenth of October: {100 * np.expm1(r[i19]):.1f} percent in a day, "
-            "far through the band. Only afterwards does the band balloon: two-day margin goes from "
-            f"{100 * key['19871016']:.1f} percent of notional on the Friday before to {100 * key['19871020']:.1f} "
-            "percent the day after the crash. Margin arrives after the loss. <bookmark mark='b'/> The House's "
-            "implementation is the recursion itself, five lines."
+            "Run it through 1987, lambda point nine seven. The band is the one-day ninety-nine percent level; bars are daily "
+            f"returns, red when they break through. <bookmark mark='a'/> The nineteenth of October: {100 * np.expm1(r[i19]):.1f} "
+            f"percent, far through the band. Only afterwards does margin balloon, from {100 * key['19871016']:.1f} percent of "
+            f"notional to {100 * key['19871020']:.1f}. Margin arrives after the loss. <bookmark mark='b'/> The House's "
+            "implementation is the recursion, five lines."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             self.add(bnd, bars)
@@ -219,16 +211,12 @@ class MarginModel(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(rd2, DOWN, buff=0.4).to_edge(RIGHT, buff=0.35)
         leg = label(r"band: the same curve in five 19-year eras", font_size=18, color=QC.IDEA).next_to(g, UP, buff=0.1)
         with self.voiceover(
-            "Now fit lambda, and watch the fit run. The curve is the log-likelihood over lambda on ninety-four years "
-            "of daily returns; the band is the same curve computed separately in five eras of nineteen years. A "
-            "golden-section search closes in on the peak, iteration by iteration. <bookmark mark='a'/> It lands at "
-            f"{m['lam_hat']:.3f} for the American market, a memory of about two weeks, and {m['btc_lam']:.3f} for "
-            "Bitcoin. <bookmark mark='b'/> Then the backtest. With lambda at point nine seven, losses broke the "
-            f"ninety-nine percent margin on {100 * m['breach_rate']:.1f} percent of days, "
-            f"{m['breaches']} times in {m['T']:,} days. Kupiec rejects the model resoundingly. The constant-volatility "
-            f"baseline fails too, at {100 * m['breach_rate_const']:.1f} percent, and its misses all come together, in "
-            "crises. The cause in both is the Gaussian assumption: daily returns have fatter tails than any normal. "
-            "Clearing houses add stress add-ons for exactly this."
+            "Now fit lambda: the log-likelihood over ninety-four years, a band from five separate eras, and a golden-section "
+            f"search closing in. <bookmark mark='a'/> It lands at {m['lam_hat']:.3f} for the American market and "
+            f"{m['btc_lam']:.3f} for Bitcoin. <bookmark mark='b'/> The backtest: at point nine seven, losses broke the "
+            f"ninety-nine percent margin on {100 * m['breach_rate']:.1f} percent of days, and Kupiec rejects it. A constant "
+            f"volatility does no better, {100 * m['breach_rate_const']:.1f} percent, its misses bunched in crises. The "
+            "culprit is the Gaussian tail; clearing houses add stress add-ons."
         ) as vo:
             self.play(FadeIn(g), FadeIn(eb), Create(lc), FadeIn(leg))
             self.add(dot)
@@ -273,17 +261,12 @@ class MarginModel(VoiceoverScene):
                           r"their biggest calls on the worst day", width=6.0, font_size=20)
         q.to_corner(DL, buff=0.3)
         with self.voiceover(
-            "And the bite. Within each crisis year, the margin this model asks for multiplies: "
-            f"{rt['1987']['ratio']:.1f}-fold in 1987, {rt['2008']['ratio']:.1f}-fold in 2008, and "
-            f"{rt['2020']['ratio']:.1f}-fold in 2020, from {100 * rt['2020']['lo']:.1f} percent in January to "
-            f"{100 * rt['2020']['hi']:.1f} percent in late March. Margin is procyclical: it asks for the most cash "
-            "exactly when cash is scarcest. <bookmark mark='a'/> European rules force clearing houses to choose a "
-            "damper: a buffer they can release in stress, extra weight on stressed history, or a ten-year floor. "
-            "<bookmark mark='b'/> When margin calls outrun the market, things break. On the eighth of March 2022 "
-            "nickel more than doubled within hours; the London Metal Exchange suspended trading and cancelled the "
-            "morning's trades, and was later fined by the FCA. In September 2022 British pension funds' leveraged "
-            "gilt hedges met collateral calls by selling gilts, until the Bank of England bought. Pause and predict: "
-            "is a faster margin model safer?"
+            f"And the bite: within the year, this model's margin rose {rt['1987']['ratio']:.1f}-fold in 1987, "
+            f"{rt['2008']['ratio']:.1f}-fold in 2008, {rt['2020']['ratio']:.1f}-fold in 2020. It asks for cash exactly when "
+            "cash is scarce. <bookmark mark='a'/> European rules make clearing houses add a damper: a releasable buffer, "
+            "weight on stressed history, or a ten-year floor. <bookmark mark='b'/> When calls outrun markets, things break: "
+            "LME nickel in March 2022, trading suspended and trades cancelled, later fined; British pension funds' gilt "
+            "hedges that September, until the Bank of England bought. Pause and predict: is a faster margin model safer?"
         ) as vo:
             self.play(FadeIn(g), Create(ln, run_time=2))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.4))

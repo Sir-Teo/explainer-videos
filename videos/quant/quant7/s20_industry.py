@@ -48,17 +48,16 @@ class Industry(VoiceoverScene):
         edge = ind["lam_rmse"] <= lams[0] + 1e-9
         rmse_line = ("the squared error wants an even faster decay, at the edge of our grid, because it is dominated "
                      "by a few crash days" if edge else f"the squared error picks {ind['lam_rmse']:.2f}")
-        qlike_line = f"; QLIKE picks {ind['lam_qlike']:.2f}, J.P. Morgan's number."
+        qlike_line = f"It picks {ind['lam_qlike']:.2f}, J.P. Morgan's number."
         with self.voiceover(
             "In October 1994 J.P. Morgan published RiskMetrics and gave its data away. Its volatility model is the "
             "exponential average: tomorrow's variance is zero point nine four times today's forecast plus zero point "
             "zero six times today's squared return. One decay factor for every series, zero point nine four for daily "
             "forecasts, zero point nine seven for monthly, chosen by the forecast error across hundreds of series. "
-            "It became the industry's default, and in 2010 MSCI bought the business for about one and a half billion "
-            "dollars. <bookmark mark='a'/> Pause and predict: why one lambda for everything? Because a covariance "
+            "In 2010 MSCI bought the business for about one and a half billion dollars. <bookmark mark='a'/> Pause and predict: why one lambda for everything? Because a covariance "
             "matrix built from one decay factor stays consistent and positive definite; four hundred and eighty "
             "different ones would not. <bookmark mark='b'/> Our replica on the American market from 1990: "
-            + rmse_line + qlike_line
+            + rmse_line + "; and QLIKE? " + qlike_line
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -93,12 +92,9 @@ class Industry(VoiceoverScene):
         vra_line = ("It lowers the out-of-sample QLIKE: one number corrects the whole model's lag."
                     if ind["q_adj"] < ind["q_raw"] else "Here it does not improve QLIKE.")
         with self.voiceover(
-            "Factor risk models face the same problem at scale. MSCI's Barra US equity model of 2011, by the firm's "
-            "own description, estimates correlations with a longer half-life than volatilities, to keep the matrix "
+            "Factor risk models face this at scale. MSCI's Barra US equity model of 2011, by MSCI's account, estimates correlations with a longer half-life than volatilities, to keep the matrix "
             "well-conditioned, and adds a volatility regime adjustment that scales every factor's volatility by a "
-            "time series of cross-sectional bias statistics. <bookmark mark='a'/> The exact formula is in documents "
-            "we could not retrieve, so here is a replica in that spirit. Each day, compare every portfolio's return "
-            "with its forecast volatility, average the squared ratios across portfolios, and smooth. When forecasts "
+            "time series of cross-sectional bias statistics. <bookmark mark='a'/> We could not retrieve the exact formula, so here is a replica in that spirit: average each day's squared ratios of return to forecast volatility across portfolios, and smooth. When forecasts "
             "run too low, the multiplier rises above one. <bookmark mark='b'/> On the ten size portfolios it spikes in "
             f"the Depression, to {pk['1929']:.1f}, in 1987, to {pk['1987']:.1f}, and in 2020, to {pk['2020']:.1f}. "
             + vra_line
@@ -138,10 +134,9 @@ class Industry(VoiceoverScene):
                    "money; it only needs to know when to be small." if a["sharpe"] > b["sharpe"] else
                    "Here the Sharpe ratio does not improve.")
         with self.voiceover(
-            "The biggest consumers of volatility forecasts are the trend followers. In 2018 Campbell Harvey and five "
-            "researchers at Man AHL showed what scaling each asset to a ten percent volatility target does, using the "
-            "forecast from two days earlier: risk assets get better Sharpe ratios, and left tails shrink for "
-            "everything. Tobias Moskowitz, Yao Hua Ooi and Lasse Pedersen sized every futures position in their time-"
+            "Trend followers lean heavily on volatility forecasts. In 2018 Campbell Harvey and colleagues "
+            "at Man AHL scaled each asset to a ten percent volatility target: risk assets got better Sharpe ratios, "
+            "and left tails shrank for everything. Tobias Moskowitz, Yao Hua Ooi and Lasse Pedersen sized every futures position in their time-"
             "series momentum study to forty percent volatility, from an exponential average with a sixty-day centre "
             "of mass. <bookmark mark='a'/> Our replica, on ninety-four years of the American market. The position "
             "breathes: small in the Depression and in 2008, levered in calm decades. "

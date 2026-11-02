@@ -52,16 +52,13 @@ class Bellman(VoiceoverScene, ThreeDScene):
             r_.scale(0.95)
         step = ladder(self, rows, whys, keep=4, top=3.3, x=1.2, buff=0.45, edge=6.9)
         with self.voiceover(
-            "Most financial decisions are made again tomorrow, with whatever today's decision led to. Richard "
-            "Bellman's principle of optimality, from 1957, says an optimal plan remains optimal from wherever it has "
-            "led. So start at the end, where the value of wealth is just its utility, and work backwards one period "
-            "at a time. <bookmark mark='a'/> At each node, try every fraction pi in the stock, average the next "
-            "period's value over what the stock might do, and keep the best. That is the Bellman recursion. "
-            "<bookmark mark='b'/> With power utility we can do it by hand. Guess that tomorrow's value is a power of "
-            "wealth too. <bookmark mark='c'/> Substitute, and wealth factors out of the maximum: the best fraction "
-            "is whatever maximizes the expected power of one period's growth. <bookmark mark='d'/> It is the same at "
-            "every wealth and every date. The investor is myopic: she can ignore the horizon and decide one period "
-            "at a time. Jan Mossin and Paul Samuelson proved this in 1968 and 1969."
+            "Most decisions are made again tomorrow, with whatever today's choice led to. Bellman's principle of "
+            "optimality, from 1957: an optimal plan stays optimal from wherever it has led. So start at the end, where the "
+            "value is just utility, and work backwards. <bookmark mark='a'/> At each node, try every fraction, average the "
+            "next value over what the stock might do, and keep the best. <bookmark mark='b'/> With power utility, guess that "
+            "tomorrow's value is a power of wealth too. <bookmark mark='c'/> Wealth factors out of the maximum. "
+            "<bookmark mark='d'/> So the best fraction is the same at every wealth and date: the investor is myopic, as "
+            "Mossin and Samuelson proved in 1968 and 1969."
         ) as vo:
             self.play(Create(edges), *[FadeIn(nd) for nd in nodes], FadeIn(tags), run_time=1.5)
             step(0)
@@ -97,14 +94,11 @@ class Bellman(VoiceoverScene, ThreeDScene):
         f = b["floor"]
         gap = float(np.nanmax(np.abs(np.asarray(f["pi"]) - np.asarray(f["pi_closed"]))))
         with self.voiceover(
-            "Lab one: the House's solver. It takes Merton's market, a stock with eight percent expected return and "
-            "eighteen percent volatility and a bond at two, and an investor with gamma three over ten years. "
-            "Expectations come from fifteen Gauss-Hermite nodes. It steps backwards a month at a time; at every "
-            "wealth on its grid it tries a hundred and fifty-one fractions, interpolates next month's value, and "
-            "keeps the best. <bookmark mark='a'/> Run it. Without a floor, the fraction it chooses today is "
-            f"{100 * p0.min():.0f} percent at the lowest wealth on the grid and {100 * p0.max():.0f} percent at the "
-            f"highest: Merton's {100 * sw['pi_merton']:.1f} percent, to the grid's step, everywhere. With a floor it "
-            f"matches a closed form to within {gap:.3f}, as we will see."
+            "Lab one: the House's solver, for a stock with eight percent expected return and eighteen percent volatility, a "
+            "bond at two, and gamma three over ten years. It steps backwards a month at a time, tries a hundred and "
+            "fifty-one fractions at every wealth on its grid, and keeps the best. <bookmark mark='a'/> Run it. Without a "
+            f"floor it chooses {100 * p0.min():.0f} to {100 * p0.max():.0f} percent across the grid: Merton's "
+            f"{100 * sw['pi_merton']:.1f}, to the grid's step."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -158,16 +152,13 @@ class Bellman(VoiceoverScene, ThreeDScene):
         self.remove(ig, cur, hint, params)
         last = len(t) - 1
         with self.voiceover(
-            "Now watch the solver work, with a floor: the investor must end ten years with at least sixty cents of "
-            "every starting dollar, as a pension fund might. The surface is its decision, the fraction in stocks at "
-            "every wealth and date, and it is built the way the solver builds it: backwards from year ten, one slab "
-            "at a time. <bookmark mark='a'/> The inset shows the slab's choice at a wealth of one: the expected value "
-            "of next period against the fraction, a hump, and its peak is the decision. As the slabs pile up toward "
-            f"today the peak walks from {100 * f['best_at_1'][last]:.0f} percent near the deadline to "
-            f"{100 * f['best_at_1'][0]:.0f} percent today: the further the deadline, the cheaper the floor, and the "
-            "more the investor can risk. <bookmark mark='b'/> The faint plane is the same problem without a floor: "
-            "Merton's constant answer. With the floor, the decision falls toward zero as wealth approaches the "
-            "floor, and the fall steepens as the deadline nears."
+            "Now add a floor: the investor must end ten years with at least sixty cents of every starting dollar. The "
+            "surface is the solver's decision at every wealth and date, built the way it is computed: backwards from year "
+            "ten, slab by slab. <bookmark mark='a'/> The inset is the slab's choice at a wealth of one: next period's "
+            "expected value against the fraction, a hump whose peak is the decision. It walks from "
+            f"{100 * f['best_at_1'][last]:.0f} percent near the deadline to {100 * f['best_at_1'][0]:.0f} today. "
+            "<bookmark mark='b'/> The faint plane is Merton without a floor; with it, the decision falls toward zero near "
+            "the floor, more steeply as the deadline nears."
         ) as vo:
             self.play(Create(ax), FadeIn(ig), FadeIn(cur), FadeIn(hint), FadeIn(params), run_time=1.5)
             vo.wait_until("a")
@@ -212,14 +203,11 @@ class Bellman(VoiceoverScene, ThreeDScene):
         q = pause_card(r"As the deadline nears with wealth just above the floor, does the stock fraction rise or fall?",
                        width=5.0, font_size=21).to_corner(DR, buff=0.35)
         with self.voiceover(
-            "Slice the surface at three dates. Without a floor the answer would be the same everywhere: Merton's "
-            f"{100 * b['pi_merton']:.0f} percent, the dashed line. <bookmark mark='a'/> With the floor, the solver "
-            "invests Merton's fraction of the cushion, the wealth above what the floor costs today. Pause and "
-            "predict: as the deadline nears with wealth just above the floor, does the fraction rise or fall? "
-            "<bookmark mark='b'/> It falls: the floor's present value climbs toward the floor itself, the cushion "
-            "shrinks, and so does the bet. <bookmark mark='c'/> The lines are the closed-form answer, known as "
-            "portfolio insurance; the dots are the grid solver, which knew nothing of it. They differ by at most "
-            f"{np.nanmax(np.abs(P - Q)):.3f}."
+            "Slice it at three dates. <bookmark mark='a'/> The solver invests Merton's fraction of the cushion, the wealth "
+            "above what the floor costs today. Pause and predict: near the deadline, just above the floor, does the "
+            "fraction rise or fall? <bookmark mark='b'/> It falls: the cushion shrinks, and so does the bet. "
+            "<bookmark mark='c'/> The lines are the closed form, portfolio insurance; the dots, the solver, which never saw "
+            f"it. They differ by at most {np.nanmax(np.abs(P - Q)):.3f}."
         ) as vo:
             self.play(FadeIn(g), Create(merton), FadeIn(ml))
             vo.wait_until("a")

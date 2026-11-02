@@ -4,7 +4,8 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.zh_text import verbatim
-from videos.quant.quant9.common import (ARB, CALL, FWD, PART, PUT, Q_C, answer_under, load, pause_at, real_data)
+from videos.quant.quant9.common import (ARB, CALL, FWD, PART, PUT, Q_C, answer_under, load, pause_at, real_data,
+                                        side_why)
 
 
 class Parity(VoiceoverScene):
@@ -65,11 +66,11 @@ class Parity(VoiceoverScene):
         rows = [cmath(r"(S_T - K)^+ - (K - S_T)^+", r"=", r"S_T - K", font_size=34),
                 cmath(r"C - P", r"=", r"S - K e^{-rT}", font_size=38, colors={r"C - P": CALL}),
                 cmath(r"\tilde C - \tilde P", r"=", r"1 - \frac{K}{F}", font_size=38, colors={r"\tilde C - \tilde P": Q_C})]
-        whys = [why(r"split at $K$: above it the call pays and the put is worthless; below, the reverse", 20),
-                why(r"the right side is bought today with one share and a loan of $K e^{-rT}$; by the law of one "
-                    r"price the two sides cost the same (Stoll 1969)", 20),
-                why(r"Deribit's options are paid in bitcoin: divide every dollar price by the forward $F$, the "
-                    r"price of the unit (chapter 11)", 20)]
+        whys = [side_why(r"split at $K$: above it the call pays and the put is worthless; below, the reverse", 5.6),
+                side_why(r"the right side is bought today with one share and a loan of $K e^{-rT}$; by the law of one "
+                         r"price the two sides cost the same (Stoll 1969)", 5.6),
+                side_why(r"Deribit's options are paid in bitcoin: divide every dollar price by the forward $F$, the "
+                         r"price of the unit (chapter 11)", 5.6)]
         step = ladder(self, rows, whys, keep=3, top=3.3, x=3.6, buff=0.5, edge=6.9)
         with self.voiceover(
             "Now build parity instead of quoting it. On the left, payoffs at expiry against the stock price. A long "
@@ -99,7 +100,7 @@ class Parity(VoiceoverScene):
     def ledger(self):
         K, S0 = 100.0, 103.0
         g = axes([60, 140], [-45, 45], x_length=6.6, y_length=4.4, xlabel=r"stock price at expiry, $S_T$",
-                 ylabel=r"payoff of the package", xticks=[60, 100, 140], yticks=[-40, 0, 1, 40], font_size=17)
+                 ylabel=r"payoff of the package", xticks=[60, 100, 140], yticks=[-40, 0, 40], font_size=17)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.25)
         ax = g.ax
         xs = np.linspace(60, 140, 161)
@@ -154,15 +155,15 @@ class Parity(VoiceoverScene):
 
     def bounds(self):
         K = 100.0
-        g = axes([40, 160], [0, 110], x_length=6.4, y_length=4.4, xlabel=r"stock price today, $S$",
-                 ylabel=r"call price", xticks=[50, 100, 150], yticks=[0, 50, 100], font_size=17)
+        g = axes([40, 160], [0, 165], x_length=6.4, y_length=4.4, xlabel=r"stock price today, $S$",
+                 ylabel=r"call price", xticks=[50, 100, 150], yticks=[0, 50, 100, 150], font_size=17)
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ax = g.ax
         xs = np.linspace(40, 160, 241)
         lo = np.maximum(xs - K * np.exp(-0.04), 0)
-        region = band(ax, xs, lo, np.minimum(xs, 110), Q_C, 0.18)
+        region = band(ax, xs, lo, xs, Q_C, 0.18)
         lo_c = curve(ax, xs, lo, Q_C, stroke_width=3)
-        hi_c = curve(ax, xs, np.minimum(xs, 110), Q_C, stroke_width=3)
+        hi_c = curve(ax, xs, xs, Q_C, stroke_width=3)
         from explainer.quant.house import bs
         cc = curve(ax, xs, bs.price(xs, K, 1.0, 0.3, 0.04), CALL, stroke_width=4)
         side = VGroup(
@@ -219,7 +220,7 @@ class Parity(VoiceoverScene):
             vo.wait_until("b")
             with verbatim():
                 lab_run(self, card, outs, run_time=2.4)
-        self.wait(0.5)
+        self.wait(2.5)
         self.clear_scene()
 
     def futures(self, p, fb):

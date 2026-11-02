@@ -68,16 +68,14 @@ class Crisis(VoiceoverScene):
         src = real_data(r"FRED: SOFR and its percentiles (SOFR1, SOFR25, SOFR75, SOFR99), IOER; daily")
         i17 = list(S["SOFR"]["date"]).index(20190917)
         with self.voiceover(
-            "The crisis file for this part is a day few people outside finance noticed. In the summer of 2019 the "
-            "overnight rates of the American money market sat in a tight band just above the interest the Federal "
-            "Reserve paid banks on their reserves. The New York Fed publishes not just SOFR, the median overnight "
-            "Treasury repo rate, but its spread across the day's trades: the fan. <bookmark mark='a'/> On Monday the "
-            "16th of September corporate taxes fell due and buyers paid for a large batch of new Treasuries, both "
-            "draining cash at once. The median barely moved; the top of the fan jumped to "
-            f"{key['20190916']['SOFR99']:.1f}. <bookmark mark='b'/> On Tuesday the whole fan lifted: the median printed "
-            f"{key['20190917']['SOFR']:.2f} percent, and the ninety-ninth percentile {key['20190917']['SOFR99']:.0f}. "
-            "That morning the New York Fed offered up to seventy-five billion dollars in repo, its first in a "
-            "decade, and dealers took fifty-three. By Thursday the fan had folded back."
+            "The crisis file is a day few outside finance noticed. In the summer of 2019 overnight rates sat just above what "
+            "the Fed paid on reserves. The New York Fed publishes not only SOFR, the median overnight Treasury repo rate, but "
+            "its spread across the day's trades: the fan. <bookmark mark='a'/> On Monday the 16th of September, corporate "
+            "taxes fell due and new Treasuries settled, draining cash at once. The median barely moved; the top of the fan "
+            f"jumped to {key['20190916']['SOFR99']:.1f}. <bookmark mark='b'/> On Tuesday the whole fan lifted: median "
+            f"{key['20190917']['SOFR']:.2f} percent, ninety-ninth percentile {key['20190917']['SOFR99']:.0f}. The New York Fed "
+            "offered up to seventy-five billion dollars in repo, its first in a decade; dealers took fifty-three. By Thursday "
+            "the fan had folded back."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg), Create(il))
             self.add(fm)
@@ -117,12 +115,10 @@ class Crisis(VoiceoverScene):
             w.scale_to_fit_width(min(w.width, 4.4))
         right.to_edge(RIGHT, buff=0.35).shift(UP * 0.8)
         with self.voiceover(
-            "Why did one tax date break the market? Since 2017 the Federal Reserve had been shrinking its balance "
-            "sheet, and the reserves banks keep with it fell from about "
-            f"{r['reserves_2018']:.1f} trillion dollars to {r['reserves_low']:.2f} trillion the week of the spike. "
-            "<bookmark mark='a'/> A bank with spare reserves lends them in repo only if repo pays more than the Fed "
-            "pays on reserves. When reserves are plentiful, that spread costs nothing; when they are scarce, banks "
-            "hold on to them, and the price of cash rises steeply. That's a demand curve for reserves, and it can be "
+            "Why did a tax date break the market? Since 2017 the Fed had been shrinking its balance sheet, and bank reserves "
+            f"fell from about {r['reserves_2018']:.1f} trillion dollars to {r['reserves_low']:.2f} trillion that week. "
+            "<bookmark mark='a'/> A bank lends reserves in repo only if repo pays more than the Fed does. When reserves are "
+            "plentiful that costs nothing; when scarce, the price of cash rises steeply: a demand curve, and it can be "
             "measured."
         ) as vo:
             self.play(FadeIn(g), Create(line), run_time=3)
@@ -169,15 +165,12 @@ class Crisis(VoiceoverScene):
         src = note(r"FRED: SOFR, IOER/IORB, WRESBAL; weekly, April 2018 -- December 2021; band: 8 bootstrap resamples; "
                    r"dashed: the linear baseline", font_size=15).to_edge(DOWN, buff=0.1)
         with self.voiceover(
-            "Each dot is a week from 2018 to 2021: reserves across, the repo rate's spread over interest on reserves "
-            "up. Dots crawl left as reserves drain, and leap in September 2019. Fit the curve: a flat part plus an "
-            "exponential wall, by Gauss-Newton, starting from a guess. <bookmark mark='a'/> Watch it learn: within a "
-            "couple of iterations the curve bends into the wall, and the error drops; eight bootstrap resamples give "
-            f"the band. It beats a straight line, mean squared error {rc['mse_fit']:.0f} against "
-            f"{rc['mse_lin']:.0f}. <bookmark mark='b'/> Below one and a half trillion, the spread averaged "
-            f"{tab[0]['mean']:+.0f} basis points and reached {tab[0]['max']:+.0f}; above three and a half, it was "
-            f"{tab[4]['mean']:+.0f}. In September 2019 the system was sitting on the steep part, and didn't know it. "
-            "The Fed's answer since has been to keep reserves ample."
+            "Each dot is a week of 2018 to 2021: reserves across, repo's spread over interest on reserves up. Fit a flat "
+            "part plus an exponential wall by Gauss-Newton. <bookmark mark='a'/> Within a few iterations the curve bends into "
+            f"the wall; eight bootstrap fits make the band, and it beats a straight line, error {rc['mse_fit']:.0f} against "
+            f"{rc['mse_lin']:.0f}. <bookmark mark='b'/> Below one and a half trillion the spread averaged "
+            f"{tab[0]['mean']:+.0f} basis points and reached {tab[0]['max']:+.0f}; above three and a half, "
+            f"{tab[4]['mean']:+.0f}. In September 2019 the system sat on the steep part without knowing it."
         ) as vo:
             self.play(FadeIn(rp), FadeIn(src))
             vo.wait_until("a")
@@ -204,13 +197,11 @@ class Crisis(VoiceoverScene):
                                r"charges SOFR plus a spread, and its stress tests include a day like this one; March "
                                r"2020's dash for cash is Part 41", 11.0, 22, QC.IDEA).next_to(c, DOWN, buff=0.45)
         with self.voiceover(
-            "The file. On the 17th of September 2019 the market's cheapest, safest loan, an overnight loan against "
-            f"Treasury bonds, cost {k['20190917']['sofr']:.2f} percent at the median, and some trades paid "
-            f"{fk['20190917']['SOFR99']:.0f}. The New York Fed's own researchers traced it to reserves concentrated in "
-            "a handful of large banks that were slow to lend them. <bookmark mark='a'/> Every leveraged position in "
-            "this series is funded this way, overnight, again and again. The House's funding desk charges every "
-            "backtest SOFR plus a spread, and its stress tests include a day like this one. Six months later, in "
-            "March 2020, the same plumbing failed again, far worse: that is Part forty-one."
+            f"The file: on the 17th of September 2019 the safest overnight loan cost {k['20190917']['sofr']:.2f} percent at "
+            f"the median, and some trades paid {fk['20190917']['SOFR99']:.0f}. Afonso and colleagues at the New York Fed "
+            "traced it to reserves concentrated in a few large banks slow to lend them. <bookmark mark='a'/> Every leveraged "
+            "position in this series is funded overnight. The House charges SOFR plus a spread, and stress-tests a day like "
+            "this; March 2020's worse failure is Part forty-one."
         ) as vo:
             self.play(FadeIn(c, shift=UP * 0.2))
             vo.wait_until("a")

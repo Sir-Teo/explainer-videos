@@ -48,13 +48,10 @@ class Margin(VoiceoverScene, ThreeDScene):
                              r"its net risk, not leg by leg; how the number is set is the next chapter", 11.0, 22, GREY_A)
         foot.to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "A future or a perpetual swap costs nothing to enter, but the exchange wants collateral. The initial "
-            "margin: the position's size divided by the leverage allowed. <bookmark mark='a'/> Then the position is "
-            "marked to market: every day, and on crypto exchanges continuously, gains are paid in and losses paid "
-            "out. <bookmark mark='b'/> If the account falls below the maintenance margin, the trader gets a margin "
-            "call, or, on most crypto exchanges, is liquidated on the spot. <bookmark mark='c'/> A hedged book gets "
-            "a discount: under portfolio margin, a long future and a short in a close cousin are margined on their "
-            "net risk. How big the margin should be is the next chapter."
+            "A future costs nothing to enter, but the exchange wants collateral: initial margin, the size over the leverage "
+            "allowed. <bookmark mark='a'/> Then gains and losses are paid every day, on crypto exchanges continuously. "
+            "<bookmark mark='b'/> Below the maintenance margin comes a margin call, or, on most crypto exchanges, "
+            "liquidation on the spot. <bookmark mark='c'/> Hedged books get portfolio margin, on their net risk."
         ) as vo:
             self.play(FadeIn(d1, shift=UP * 0.2))
             vo.wait_until("a")
@@ -77,12 +74,10 @@ class Margin(VoiceoverScene, ThreeDScene):
                 why(r"10x: a 9.5\% fall; 3x: 33\%; 2x: 50\% (with $m = 0.5\%$)")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.6, buff=0.75, edge=6.9)
         with self.voiceover(
-            "How far can the price fall before the exchange steps in? Hold one coin, opened at P nought with a "
-            "margin of P nought over L. The account's equity is that margin plus the gain or loss. "
-            "<bookmark mark='a'/> Liquidation comes when equity falls to the maintenance level, a small fraction m "
-            "of the position's value. <bookmark mark='b'/> Solve for the price. With a maintenance margin of half "
-            "a percent: at ten times leverage, a fall of nine and a half percent ends the position. At three times, "
-            "a third. At two times, a half."
+            "How far can the price fall? Hold one coin opened at P nought with margin P nought over L; equity is the margin "
+            "plus the gain. <bookmark mark='a'/> Liquidation comes when equity falls to a fraction m of the position. "
+            "<bookmark mark='b'/> Solve: with m at half a percent, ten times leverage survives a nine and a half percent "
+            "fall, three times a third, two times a half."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -150,16 +145,13 @@ class Margin(VoiceoverScene, ThreeDScene):
         i3 = m["runs"]["3"]["liq_index"]
         i2 = m["runs"]["2"]["liq_index"]
         with self.voiceover(
-            "Now a real test, run hour by hour. On the first of March 2020 Bitcoin traded at about "
-            f"{m['entry']:,.0f} dollars. Three traders open long positions of one coin each on a perpetual swap, at "
-            "ten, three and two times leverage. The dashed lines are their liquidation prices; on the right, each "
-            "account's equity. <bookmark mark='a'/> The price drifts, and the accounts breathe with it. On the "
-            "ninth of March it slips under the first line, and the ten-times account is gone. "
-            "<bookmark mark='b'/> Then the twelfth of March, Part one's crisis. The three-times account is "
-            f"liquidated that evening, and in the early hours of the thirteenth, with Bitcoin at {m['min_price']:,.0f}, "
-            "even the two-times account is closed out, below zero: a hole the exchange's insurance fund has to fill. "
-            "<bookmark mark='c'/> Within weeks Bitcoin was back above seven thousand dollars. None of the three was "
-            "there to see it."
+            f"A real test, hour by hour. On the first of March 2020 Bitcoin was at {m['entry']:,.0f} dollars. Three traders "
+            "go long one coin each on a perpetual, at ten, three and two times leverage: dashed lines for their liquidation "
+            "prices, and on the right, each account's equity. <bookmark mark='a'/> On the ninth of March the price slips "
+            "under the first line: the ten-times account is gone. <bookmark mark='b'/> On the twelfth, Part one's crisis, the "
+            "three-times account goes that evening, and early on the thirteenth, at "
+            f"{m['min_price']:,.0f} dollars, even two times is closed out, below zero: a hole for the exchange's insurance "
+            "fund. <bookmark mark='c'/> Within weeks Bitcoin was back above seven thousand. None of them saw it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(zero), FadeIn(head), LaggedStart(*[Create(x) for x in hl]))
             self.add(line, ledger)
@@ -195,12 +187,10 @@ class Margin(VoiceoverScene, ThreeDScene):
             MathTex(rf"\text{{average}}\ {100 * f['annualized']:.1f}\%\ \text{{a year}}", font_size=28, color=BTC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(d, DOWN, buff=0.4).align_to(d, LEFT)
         with self.voiceover(
-            "The House's margin account is that loop: each hour, pay the funding, add the gain or loss, and check "
-            "the maintenance line. <bookmark mark='a'/> Run on March 2020 it closes the three accounts at the hours "
-            "you just saw. The funding line matters too: a perpetual never expires, so every eight hours longs pay "
-            f"shorts when it trades above spot. Through 2020 longs paid in {100 * f['share_positive']:.0f} percent of "
-            f"settlements, about {100 * f['annualized']:.0f} percent a year, the same carry the futures basis "
-            "charged in chapter two."
+            "The House's margin account is that loop: pay the funding, add the gain or loss, check the line. "
+            "<bookmark mark='a'/> On March 2020 it closes the three accounts at those hours. And funding is real money: "
+            f"through 2020 perpetual longs paid shorts about {100 * f['annualized']:.0f} percent a year, chapter two's carry "
+            "again."
         ) as vo:
             self.play(FadeIn(card), FadeIn(d))
             vo.wait_until("a")
@@ -226,12 +216,10 @@ class Margin(VoiceoverScene, ThreeDScene):
         pq = desk_question(r"Go from 5x to 10x. Does the distance to liquidation halve, or worse? And the chance?",
                            width=8.0, font_size=22).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "How likely is liquidation, before it happens? Measure the distance to the liquidation price in log "
-            "terms. <bookmark mark='a'/> If the log price wanders like Brownian motion, the reflection principle of "
-            "Part five gives the chance of touching that level within H days: twice the chance of ending below it. "
-            "<bookmark mark='b'/> So the probability is two times Phi of minus the distance over sigma root H. "
-            f"Five times leverage puts the line {q['d5']:.2f} away in log price; ten times, {q['d10']:.2f}: less "
-            "than half, because the maintenance margin eats into it. Pause and predict what that does to the chance."
+            "How likely is liquidation before it happens? Measure the distance to the liquidation price in log terms. "
+            "<bookmark mark='a'/> For a Brownian log price, the reflection principle says the chance of touching it within H "
+            "days is twice the chance of ending below it. <bookmark mark='b'/> So it is two Phi of minus d over sigma root H. "
+            f"At five times, d is {q['d5']:.2f}; at ten, {q['d10']:.2f}, less than half. Predict what that does to the odds."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -290,23 +278,21 @@ class Margin(VoiceoverScene, ThreeDScene):
         src = note(rf"Binance BTCUSDT hourly lows, 2020--2025: {q['n_entries']:,} daily entries; "
                    rf"$\sigma$ = {100 * q['sigma_daily']:.1f}\% a day".replace(",", "{,}"), font_size=16).to_corner(DL, buff=0.2)
         tails = p3 > f3
+        month = (f"At modest leverage over a month, data beats the formula, {100 * p3:.1f} percent against "
+                 f"{100 * f3:.1f}: fat tails." if tails else "At modest leverage over a month, data and formula agree.")
+        quarter = (f"the formula is too gloomy, {100 * f3l:.0f} against {100 * p3l:.0f}: Bitcoin's rise rescued "
+                   "patient longs." if f3l > p3l else "the data is worse still.")
         self.set_camera_orientation(phi=64 * DEGREES, theta=-130 * DEGREES, zoom=0.85)
         self.add_fixed_in_frame_mobjects(hint, cap, src)
         self.remove(hint, cap, src)
         with self.voiceover(
-            "Now check it on six years of Bitcoin. Open a long at midnight on every day from 2020 to 2025, at every "
-            "leverage from one and a half to fifty, and ask whether the hourly lows touched its liquidation price "
-            "within H days. The coloured surface is the answer from data; the white mesh is the formula. "
-            "<bookmark mark='a'/> Leverage turns a gentle slope into a cliff: past ten times, most positions are "
-            "dead within weeks. The yellow slice is ten times leverage, and the pin is nineteen days, the March "
-            f"2020 trade: liquidated on {100 * q['p_L10_H19']:.0f} percent of starting days. <bookmark mark='b'/> "
-            "Where do data and formula disagree? "
-            + (f"At modest leverage and a month's horizon the data is worse than the formula, "
-               f"{100 * p3:.1f} percent against {100 * f3:.1f}: fat tails, the crashes Brownian motion doesn't make. "
-               if tails else f"At modest leverage and a month's horizon the data is no worse than the formula. ")
-            + (f"Over ninety days the formula is too gloomy, {100 * f3l:.0f} percent against {100 * p3l:.0f}, "
-               "because Bitcoin rose a lot over these years, and drift rescued patient longs." if f3l > p3l else
-               "Over ninety days the data is worse still.")
+            "Check it on six years of Bitcoin: a long opened every day from 2020 to 2025, at leverage from one and a half to "
+            "fifty, liquidated if the hourly lows touched its line within H days. Colour is the data; the white mesh, the "
+            "formula. <bookmark mark='a'/> Leverage turns a slope into a cliff. The pin is ten times for nineteen days, the "
+            f"March 2020 trade: liquidated from {100 * q['p_L10_H19']:.0f} percent of starting days. <bookmark mark='b'/> "
+            + month
+            + " Over ninety days, "
+            + quarter
         ) as vo:
             self.play(FadeIn(hint), FadeIn(src), Create(ax), run_time=1.2)
             self.play(Create(surf), run_time=3)

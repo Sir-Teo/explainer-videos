@@ -66,15 +66,14 @@ class Hook(VoiceoverScene):
             "predict its return next month? Kenneth French's forty-nine industries, ninety-three years, fifty-two "
             "thousand observations. Run one regression. <bookmark mark='a'/> Ordinary least squares says the slope "
             f"is positive, with a t-statistic of {res['pooled OLS']['t']:.2f}, almost significant. "
-            "<bookmark mark='b'/> But industries in the same month share a market shock. Allow for that, cluster by "
-            f"month, and the t-statistic is {res['clustered by month']['t']:.2f}: nothing. <bookmark mark='c'/> Fama "
-            "and MacBeth's method, which estimates a slope each month and averages, gives a different slope "
-            f"altogether, {res['Fama-MacBeth']['beta'] / res['pooled OLS']['beta']:.0f} times larger, with a "
-            f"t-statistic of {res['Fama-MacBeth']['t']:.1f}. <bookmark mark='d'/> Same data, same question, five verdicts. And a sixth, "
-            "in grey, that we will meet in chapter four: least squares with a separate intercept for every month. "
-            "<bookmark mark='e'/> Pause and predict: which of the five will it sit closest to? By chapter four you "
-            "will see that the pooled slope mixes two different questions, and that once they are separated, none "
-            "of these numbers is wrong. Each answers its own question."
+            "<bookmark mark='b'/> But industries in the same month share a market shock. Cluster by month, and the "
+            f"t-statistic is {res['clustered by month']['t']:.2f}: nothing. <bookmark mark='c'/> Fama and MacBeth's "
+            "method, a slope each month, averaged, gives a different slope altogether, "
+            f"{res['Fama-MacBeth']['beta'] / res['pooled OLS']['beta']:.0f} times larger, with a t-statistic of "
+            f"{res['Fama-MacBeth']['t']:.1f}. <bookmark mark='d'/> Same data, same question, five verdicts. And a sixth, in "
+            "grey: least squares with a separate intercept for every month. <bookmark mark='e'/> Pause and predict: "
+            "which will it sit closest to? Chapter four shows that none of these numbers is wrong; each answers its own "
+            "question."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(side[1]), Create(two), FadeIn(tl), FadeIn(labs))
             vo.wait_until("a")
@@ -122,18 +121,13 @@ class Hook(VoiceoverScene):
             cards.add(VGroup(lead, c))
         head = label(r"How we got here", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "How we got here. In 1933 Alfred Cowles asked whether stock market forecasters could forecast, and "
-            "found that mostly they could not: financial econometrics began as a test of claims. "
-            "<bookmark mark='a'/> In 1969 Eugene Fama, Lawrence Fisher, Michael Jensen and Richard Roll lined up "
-            "stock splits in event time and invented the event study. <bookmark mark='b'/> In 1973 Fama and James "
-            "MacBeth ran a cross-section every month and averaged the slopes. <bookmark mark='c'/> In 1982 Lars "
-            "Peter Hansen gave the generalized method of moments, and in 1987 Whitney Newey and Kenneth West the "
-            "standard error that survives correlated data. <bookmark mark='d'/> Then the reckoning. In 2009 "
-            "Mitchell Petersen counted: forty-two percent of the finance papers he surveyed with panel data did not "
-            "adjust their standard errors at all. In 2016 Campbell Harvey, Yan Liu and Heqing Zhu counted at least "
-            "three hundred and sixteen published factors and asked for a t-statistic above three. And in 2024 one "
-            "hundred and sixty-four research teams were given the same data and the same questions, and came back "
-            "with answers that differed far more than their standard errors said they should."
+            "How we got here. In 1933 Alfred Cowles asked whether forecasters could forecast: mostly not. "
+            "<bookmark mark='a'/> In 1969 Fama, Fisher, Jensen and Roll invented the event study. <bookmark mark='b'/> In "
+            "1973 Fama and MacBeth averaged monthly cross-sections. <bookmark mark='c'/> In 1982 Hansen gave GMM; in 1987 "
+            "Newey and West, the standard error for correlated data. <bookmark mark='d'/> Then the reckoning: in 2009 "
+            "Petersen found forty-two percent of panel papers had not adjusted their standard errors; in 2016 Harvey, "
+            "Liu and Zhu counted three hundred and sixteen factors; in 2024 a hundred and sixty-four teams given the same "
+            "data disagreed far more than their standard errors said."
         ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(ticks))
             self.play(FadeIn(dots[0]), FadeIn(cards[0]))
@@ -160,15 +154,11 @@ class Hook(VoiceoverScene):
             r"Multiple testing; causal designs and double ML; how many years a Sharpe ratio needs",
         ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan, in eighteen chapters. Least squares as geometry, and the three shapes of dependence that "
-            "break its standard errors: overlap, persistence and shared shocks. Fama-MacBeth and the two-pass test "
-            "of the CAPM, where the five verdicts are resolved. Predictive regressions, in sample and out of sample. "
-            "Maximum likelihood and the generalized method of moments, and the consumption Euler equation, which "
-            "fails. Event studies, on the days the Federal Reserve announces its decisions. Bootstraps for "
-            "dependent data, Bayesian shrinkage sampled by Gibbs, multiple testing, causal designs and double "
-            "machine learning. And the hardest number in finance: how many years of data a Sharpe ratio needs. "
-            "Every result in this part lives under the real-world measure, P: these are statements about the data "
-            "we observe, not prices."
+            "The plan. Least squares as geometry, and the three shapes of dependence that break its standard errors. "
+            "Fama-MacBeth, where the verdicts are resolved. Predictive regressions, in and out of sample. Likelihood, "
+            "GMM, and the Euler equation, which fails. Event studies on Federal Reserve decision days. Bootstraps, "
+            "Bayes, multiple testing, causal designs and double machine learning. And how many years a Sharpe ratio "
+            "needs. Everything here lives under the real-world measure, P."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=12))

@@ -100,7 +100,7 @@ class Brownian(VoiceoverScene):
                 why(r"so the sum converges to $T$ in mean square; the paths are continuous, so "
                     r"$\max|\Delta W| \to 0$ and the length is infinite: no Stieltjes integral"),
                 why(r"observed prices carry noise $\varepsilon$ at each tick: $n$ extra squares, which grow with $n$")]
-        step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.5, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=-1.5, buff=0.5, edge=6.9)
         ns = q["ns"]
         tab = VGroup(*[MathTex(rf"n = {n:,}:\ \ {sd:.4f} \text{{ against }} \sqrt{{2/n}} = {th:.4f}".replace(",", "{,}"),
                                font_size=24, color=GREY_A) for n, sd, th in
@@ -134,7 +134,7 @@ class Brownian(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(ans), FadeIn(tl), FadeIn(tab))
             vo.wait_until("e")
-            self.play(FadeOut(pc), FadeOut(ans))
+            self.play(FadeOut(pc), FadeOut(ans), FadeOut(tab), FadeOut(tl))
             step(3)
         self.wait(0.4)
         self.clear_scene()

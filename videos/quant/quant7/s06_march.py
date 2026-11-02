@@ -38,8 +38,7 @@ class March(VoiceoverScene):
         with self.voiceover(
             "In March 2020, as Covid-19 closed one economy after another, everything was sold for cash at once. On the "
             "twelfth of March the American stock market fell nine point six percent. Bitcoin fell thirty-nine and a "
-            "half percent in a day. On Ethereum, the network clogged, and according to a later report, about eight "
-            "million dollars of collateral in the MakerDAO lending protocol was auctioned off for bids of zero. On "
+            "half percent in a day. On Ethereum, according to a later report, about eight million dollars of MakerDAO collateral was auctioned for bids of zero. On "
             "the sixteenth the stock market fell twelve percent, its worst day since 1987, and the VIX, the market's "
             "own forecast of volatility, closed at eighty-two point six nine, a record."
         ):
@@ -82,9 +81,7 @@ class March(VoiceoverScene):
             f"{100 * real:.0f} percent. <bookmark mark='b'/> No model, classical or neural, saw the day coming, and "
             "none could have: the shock was news, not a pattern in the past. What a forecaster can do is react the "
             "next day, and the realized models, which see the whole intraday path, react fastest. <bookmark mark='c'/> "
-            "A day like this also dominates any average of squared errors. That is why forecasts are scored with "
-            "QLIKE, the loss Andrew Patton showed in 2011 still ranks models correctly when the realized variance "
-            "they are judged against is itself measured with noise."
+            "A day like this also dominates any average of squared errors. That is why the race was scored with QLIKE."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.15),
                       LaggedStart(*[FadeIn(v) for v in vals], lag_ratio=0.15), FadeIn(side[0]))

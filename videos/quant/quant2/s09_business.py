@@ -42,12 +42,9 @@ class Business(VoiceoverScene):
                               width=5.9, color=QC.IDEA, font_size=20)
         pair = VGroup(sell, buy).arrange(RIGHT, buff=0.4, aligned_edge=UP).shift(UP * 0.6)
         with self.voiceover(
-            "The industry divides in two. The sell side, banks and dealers, makes markets, earns spreads and fees, "
-            "designs products and lends to everyone else. Acting as agent it works for the client; as principal it "
-            "trades against the client, from its own book. <bookmark mark='a'/> The buy side invests: asset "
-            "managers, pension funds, insurers, hedge funds. It charges a fee on assets, and hedge funds take a share "
-            "of profits too. The big multi-manager platforms often charge their costs, salaries included, straight "
-            "through to investors instead of a fixed management fee."
+            "The sell side, banks and dealers, makes markets and lends; as agent it works for a client, as principal it "
+            "trades against one. <bookmark mark='a'/> The buy side invests and charges a fee on assets, hedge funds a share of "
+            "profits too; big multi-manager platforms often pass their costs straight through to investors."
         ) as vo:
             self.play(FadeIn(sell, shift=UP * 0.2))
             vo.wait_until("a")
@@ -78,13 +75,10 @@ class Business(VoiceoverScene):
         src = real_data(r"calendar-year returns of the US market, 1927--2020 (Ken French), as a fund's gross returns; "
                         r"fees charged yearly")
         with self.voiceover(
-            "Fees compound, just like returns. Take the American market's calendar years from 1927 to 2020 as a "
-            f"fund's returns before fees. A dollar becomes {fe['final_gross']:,.0f} dollars. Now charge the classic "
-            "hedge-fund fee: two percent of assets a year, and twenty percent of any gain above the fund's previous "
-            f"peak, the high-water mark. <bookmark mark='a'/> The same dollar becomes {fe['final_net']:,.0f}. Growth "
-            f"falls from {100 * fe['geo_gross']:.1f} percent a year to {100 * fe['geo_net']:.1f}, and the investor "
-            f"keeps {100 * fe['share_kept']:.1f} percent of the profit. Even a plain one percent fee leaves "
-            f"{fe['final_1pct']:,.0f}."
+            "Fees compound like returns. Take the American market's years from 1927 to 2020 as a fund's gross returns: a "
+            f"dollar becomes {fe['final_gross']:,.0f}. Charge two percent a year and twenty percent of gains above the "
+            f"high-water mark. <bookmark mark='a'/> It becomes {fe['final_net']:,.0f}: the investor keeps "
+            f"{100 * fe['share_kept']:.1f} percent of the profit. Even one percent leaves {fe['final_1pct']:,.0f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg))
             self.add(lg, ln)
@@ -112,12 +106,10 @@ class Business(VoiceoverScene):
             label(r"dynamic styles, with option-like, nonlinear payoffs", font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(eq, DOWN, buff=0.4).align_to(eq, LEFT)
         with self.voiceover(
-            "Look at the performance fee as a payoff. Below the high-water mark it pays the manager nothing; above "
-            "it, a fifth of the gain. That is a call option on the fund, struck at its peak. <bookmark mark='a'/> "
-            "After a bad year the option is far out of the money, which is why funds sometimes close and relaunch "
-            "with a fresh mark; and like any option holder, the manager gains from volatility. Fung and Hsieh found "
-            "hedge-fund returns themselves look option-like: nonlinear in the market, in ways a linear factor model "
-            "misses."
+            "The performance fee pays nothing below the high-water mark and a fifth above it: a call on the fund, struck at "
+            "its peak. <bookmark mark='a'/> After a bad year it is far out of the money, so funds sometimes close and "
+            "relaunch, and like any option holder the manager gains from volatility. Fung and Hsieh found hedge-fund returns "
+            "themselves option-like, nonlinear in the market."
         ) as vo:
             self.play(FadeIn(g), Create(pay), Write(eq))
             vo.wait_until("a")
@@ -151,14 +143,11 @@ class Business(VoiceoverScene):
         src = note(r"simulated: iid normal monthly returns; Ken French size deciles, daily, value-weighted", font_size=15)
         src.to_edge(DOWN, buff=0.12)
         with self.voiceover(
-            "Hedge funds report monthly returns on assets that may not trade every day, and illiquid assets get "
-            "marked with stale or averaged prices. Watch what that does. The grey line is a fund's true monthly "
-            "return; the blue line is what it reports, half this month, a third of last month's, a fifth of the "
-            "month before. <bookmark mark='a'/> The reported line is a shadow: same average, less wiggle. Its "
-            f"volatility shrinks, and its Sharpe ratio rises by a factor of {gl['inflate']:.2f}, with no extra skill "
-            "at all. <bookmark mark='b'/> It happens in plain stock indices too. The smallest decile of American "
-            f"stocks had a daily autocorrelation of {gl['ac1']['early']['small']:.2f} before 1990, when many of them "
-            f"traded rarely; since then, {gl['ac1']['late']['small']:.2f}. Stale prices are smoothing in the wild."
+            "Funds holding illiquid assets mark them with stale or averaged prices. Grey is a fund's true monthly return; blue "
+            "what it reports: half this month, a third of last, a fifth of the one before. <bookmark mark='a'/> The report is "
+            f"a shadow, same mean, less wiggle, and its Sharpe ratio rises {gl['inflate']:.2f} times with no skill at all. "
+            "<bookmark mark='b'/> It happens in plain indices: the smallest decile of American stocks had daily "
+            f"autocorrelation {gl['ac1']['early']['small']:.2f} before 1990, {gl['ac1']['late']['small']:.2f} since."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(sr), FadeIn(src))
             self.add(tr, rp)
@@ -184,12 +173,9 @@ class Business(VoiceoverScene):
                 why(r"same mean, less volatility: $\theta = (0.5, 0.3, 0.2)$ gives $\times 1.62$", font_size=20)]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-1.4, buff=0.5, edge=6.9)
         with self.voiceover(
-            "The model is Getmansky, Lo and Makarov's. Reported returns are a weighted average of the true ones, "
-            "weights summing to one. <bookmark mark='a'/> With independent true returns, the reported variance is "
-            "sigma squared times the sum of the squared weights, which is less than one. <bookmark mark='b'/> And "
-            "smoothing leaves a fingerprint: positive autocorrelation, computed from the weights. "
-            "<bookmark mark='c'/> The mean is untouched, so the Sharpe ratio is inflated by one over the square root "
-            "of the sum of squared weights: one point six two for these weights."
+            "Getmansky, Lo and Makarov: reported returns average the true ones. <bookmark mark='a'/> Variance shrinks by the "
+            "sum of squared weights. <bookmark mark='b'/> Autocorrelation appears. <bookmark mark='c'/> The mean is untouched, "
+            "so the Sharpe ratio is inflated by one over the root of that sum: one point six two here."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -242,14 +228,11 @@ class Business(VoiceoverScene):
         q = desk_question(r"A fund's monthly returns have autocorrelation 0.4. Is its true volatility higher or lower "
                           r"than reported, and by how much?", width=6.0, font_size=19).to_corner(DL, buff=0.25)
         with self.voiceover(
-            "Can we undo it? Fit the weights by maximum likelihood, as a moving-average model, on five simulated "
-            "funds of six hundred months each. Each dot is a seed's estimate on the triangle of possible weights; "
-            "the star is the truth. <bookmark mark='a'/> The optimizer walks every seed to the star within a few "
-            "iterations, and the simpler moment estimator, in grey, lands close too. <bookmark mark='b'/> On the "
-            "smallest decile's monthly returns before 1990 the fit puts "
-            f"{100 * sm[0]:.0f} percent of the weight on the current month and inflates the Sharpe ratio "
-            f"{gl['small_inflate']:.2f} times. Pause and predict: a fund with autocorrelation point four. Higher or "
-            "lower true volatility, and by how much?"
+            "Undo it: fit the weights by maximum likelihood on five simulated funds of six hundred months. Each dot is a "
+            "seed's estimate on the triangle of weights; the star is the truth. <bookmark mark='a'/> Every seed walks to the "
+            "star in a few iterations; the moment estimator, grey, lands close too. <bookmark mark='b'/> On the smallest "
+            f"decile before 1990, the fit puts {100 * sm[0]:.0f} percent of the weight on the current month: Sharpe inflated "
+            f"{gl['small_inflate']:.2f} times. Predict: autocorrelation point four. True volatility higher or lower?"
         ) as vo:
             self.play(FadeIn(rp), FadeIn(leg))
             vo.wait_until("a")

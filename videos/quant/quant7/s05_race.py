@@ -72,12 +72,7 @@ class Race(VoiceoverScene):
         with self.voiceover(
             "Hansen and Lunde's question, asked of Bitcoin: does anything beat a GARCH(1,1)? On the Deutschmark-dollar "
             "rate, nothing did; on IBM's stock, models with the leverage effect won. <bookmark mark='a'/> Here is our "
-            "race. Every model is fitted on "
-            "Bitcoin from August 2017 to June 2019. The second half of 2019 is held back, so the neural networks "
-            "can choose when to stop training. All of 2020 is the test, untouched until the end. "
-            "<bookmark mark='b'/> The first seven contestants. RiskMetrics' exponential average, from 1994, with no "
-            "fitted parameters. GARCH and GJR, which see only daily returns. HAR and HARQ, which see the realized "
-            "variance. And the LSTM and the transformer of the last chapter. Each network's five seeds are averaged. "
+            "race. Fit to June 2019, validate on the second half, test on all of 2020, untouched until the end. <bookmark mark='b'/> The first seven contestants. RiskMetrics' exponential average; GARCH and GJR, which see daily returns; HAR and HARQ, which see realized variance; and the two networks, five seeds averaged. "
             "Everyone forecasts the same thing, tomorrow's realized variance, and is scored by QLIKE."
         ) as vo:
             self.play(FadeIn(side[0]))
@@ -138,13 +133,13 @@ class Race(VoiceoverScene):
             f"The results, over the {r['test_days']} days of 2020. Lower is better. <bookmark mark='a'/> The models "
             "that see only daily closes, the exponential average, GARCH and GJR, come last. <bookmark mark='b'/> The "
             "models that read the realized variance do better, and the two neural networks do better still. The "
-            "LSTM beats HAR with a Diebold-Mariano t-statistic of minus three. Has the network found something? "
+            "LSTM beats HAR with a Diebold-Mariano t of minus three. Has it found something? "
             "<bookmark mark='c'/> Look at what it forecasts: the logarithm of realized variance, not the variance. "
             "Logs tame the spikes that dominate a least-squares fit. So, after seeing these results, we added one "
             "more contestant, and the trial counter counts it: HAR again, four coefficients, fitted to the logarithm. "
             f"<bookmark mark='d'/> It comes first. Against log-HAR, the LSTM's t-statistic is {dml['LSTM']['t']:.1f}, "
-            "in log-HAR's favour: no evidence that the network adds anything beyond the log. <bookmark mark='e'/> The white dots are the networks' individual seeds: "
-            "they scatter, and averaging five of them helps. <bookmark mark='f'/> And score the same forecasts by "
+            "in log-HAR's favour: no evidence that the network adds anything beyond the log. <bookmark mark='e'/> White dots: single seeds."
+            " <bookmark mark='f'/> And score the same forecasts by "
             f"squared error, and the order changes: {mse_order[0]} comes first. A race is only as honest as its "
             "loss function."
         ) as vo:
@@ -237,12 +232,11 @@ class Race(VoiceoverScene):
             verdict = "It beats log-HAR by more than luck: the network found something beyond the log."
         else:
             verdict = "It does not beat log-HAR."
-        mcs_line = ("The model confidence set, as the last chapter warned, keeps every model: one year cannot crown a "
-                    "winner." if len(mcs["survivors"]) == len(r2["names"]) else
-                    "The model confidence set narrows the field, but keeps several models.")
+        mcs_line = ("As the last chapter warned, it keeps every model: one year cannot crown a winner." if len(mcs["survivors"]) == len(r2["names"]) else
+                    "It narrows the field, but keeps several models.")
         with self.voiceover(
             "And the late entrant, HARNet, which started life as log-HAR. <bookmark mark='a'/> Does it beat its own "
-            "starting point? " + verdict + " " + mcs_line
+            "starting point? " + verdict + " And the confidence set? " + mcs_line
         ) as vo:
             self.play(FadeIn(rows[1]), FadeIn(rows[2]))
             vo.wait_until("a")

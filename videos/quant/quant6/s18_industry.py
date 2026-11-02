@@ -49,18 +49,16 @@ class Industry(VoiceoverScene):
         tag = label(r"illustrative: a toy rotation on French's daily size deciles, not F-Squared's rule", font_size=16,
                     color=GREY_C).next_to(g, DOWN, buff=0.12)
         with self.voiceover(
-            "The crisis file of this part is not a crash; it is a backtest. On the twenty-second of December 2014 "
-            "the SEC announced that F-Squared Investments had advertised the track record of its AlphaSector "
-            "strategy as not backtested, for years before the algorithm existed. And the backtest had a flaw: in "
-            "the SEC's words, an analyst applied the buy and sell signals to the week preceding the price changes "
-            "they were based on, which inflated the results by approximately three hundred and fifty percent. "
-            "F-Squared admitted wrongdoing and agreed to pay thirty-five million dollars. Its co-founder was "
-            "charged separately; those charges were allegations. <bookmark mark='a'/> How much can one week of "
-            "look-ahead do? A toy, on French's daily size portfolios from 2001 to 2008: each week, hold the "
-            "portfolios that rose over the past four weeks. Honestly, it earns "
-            f"{100 * la['ann_honest']:.0f} percent a year. Shift the signal one week early, so that it includes the "
-            f"very week it trades, and it earns {100 * la['ann_early']:.0f} percent. <bookmark mark='b'/> A one-week "
-            "look-ahead does not add a little; it harvests the very move the signal was built from."
+            "This part's crisis file is a backtest. On the twenty-second of December 2014 the SEC announced that "
+            "F-Squared Investments had advertised its AlphaSector track record as not backtested, for years before the "
+            "algorithm existed; and, in the SEC's words, an analyst applied the signals to the week preceding the price "
+            "changes they were based on, which inflated the results by approximately three hundred and fifty percent. "
+            "F-Squared admitted wrongdoing and agreed to pay thirty-five million dollars; its co-founder was charged "
+            "separately, allegations at the time. <bookmark mark='a'/> What can one week of look-ahead do? A toy on "
+            "French's daily size portfolios, 2001 to 2008: each week, hold those that rose over the past four weeks. "
+            f"Honestly, {100 * la['ann_honest']:.0f} percent a year. With the signal one week early, including the very "
+            f"week it trades, {100 * la['ann_early']:.0f} percent. <bookmark mark='b'/> It harvests the move the signal was "
+            "built from."
         ) as vo:
             self.play(FadeIn(cc))
             vo.wait_until("a")
@@ -80,12 +78,10 @@ class Industry(VoiceoverScene):
             numbers=[(r"9", r"advisers"), (r"\$850{,}000", r"combined penalties")],
             source=r"SEC press release 2023-173", width=11.6, font_size=22).move_to(ORIGIN)
         with self.voiceover(
-            "The regulator's answer came in the Marketing Rule, adopted by the SEC in December 2020: an adviser "
-            "that shows hypothetical performance must have policies and procedures that make it relevant to the "
-            "people who see it. <bookmark mark='a'/> In September 2023 the SEC charged nine advisers for "
-            "advertising hypothetical performance to mass audiences on their websites without those procedures. "
-            "Without admitting or denying the findings, they settled, with eight hundred and fifty thousand dollars "
-            "in combined penalties."
+            "The regulator's answer: the SEC's Marketing Rule, adopted in December 2020, requires policies and "
+            "procedures before an adviser shows hypothetical performance. <bookmark mark='a'/> In September 2023 nine "
+            "advisers were charged with advertising it to mass audiences on their websites without them; without "
+            "admitting or denying the findings, they settled, for eight hundred and fifty thousand dollars combined."
         ) as vo:
             self.play(FadeIn(rule))
             vo.wait_until("a")
@@ -120,22 +116,18 @@ class Industry(VoiceoverScene):
             grid.scale_to_fit_height(7.6)
         grid.move_to(ORIGIN)
         with self.voiceover(
-            "What do the firms that do this for a living say, on the public record? Man Group publishes Campbell "
-            "Harvey and Yan Liu's paper on backtesting: the common habit of halving a backtested Sharpe ratio is a "
-            "mistake, because the right haircut comes from the number of strategies tried, and it is nonlinear, "
-            "mild for the best and severe for the marginal. <bookmark mark='a'/> At AQR, Bryan Kelly and Lasse "
-            "Pedersen, with Theis Jensen, asked in 2023 whether finance has a replication crisis. On a hundred and "
-            "fifty-three factors in ninety-three countries, eighty-two percent had significant alphas against the "
-            "CAPM, seventy-six after a multiple-testing correction, against the thirty-five percent replication "
-            "rate an earlier study had reported; their Bayesian model is chapter twelve's shrinkage at industrial "
-            "scale. Antti Ilmanen and colleagues tested factors on a century of data, much of it before the factors "
-            "were discovered: the premia held, and timing them mostly did not survive costs. That is chapter six. "
-            "<bookmark mark='b'/> Research Affiliates' Robert Arnott, with Harvey and Harry Markowitz, wrote down a "
-            "backtesting protocol: the hypothesis first, every trial reported. <bookmark mark='c'/> And the "
-            "profession audited itself. In 2024 Albert Menkveld and his many coauthors reported giving a hundred and "
-            "sixty-four teams the same data and questions, and their answers spread far more than their standard "
-            "errors implied. Christophe Pérignon and coauthors re-ran a hundred and sixty-eight teams' own code on "
-            "their own data: the exact results came back only fifty-two percent of the time."
+            "What do the firms say, on the record? Man Group publishes Campbell Harvey and Yan Liu's backtesting paper: "
+            "halving a backtested Sharpe ratio is a mistake; the haircut should come from the number of trials, mild for "
+            "the best, severe for the marginal. <bookmark mark='a'/> At AQR, Bryan Kelly and Lasse Pedersen, with Theis "
+            "Jensen, found that eighty-two percent of a hundred and fifty-three factors have significant CAPM alphas, "
+            "seventy-six after a multiple-testing correction, against an earlier thirty-five percent replication rate; "
+            "their Bayesian model is chapter twelve at industrial scale. Antti Ilmanen and colleagues found factor "
+            "premia held over a century of data, while timing them mostly did not survive costs. <bookmark mark='b'/> "
+            "Research Affiliates' Robert Arnott, with Harvey and Harry Markowitz, wrote a backtesting protocol: "
+            "hypothesis first, every trial reported. <bookmark mark='c'/> And the profession audited itself: in 2024 a "
+            "hundred and sixty-four teams given the same data disagreed far more than their standard errors implied, "
+            "and re-running a hundred and sixty-eight teams' own code reproduced their exact results fifty-two percent "
+            "of the time."
         ) as vo:
             self.play(FadeIn(man))
             vo.wait_until("a")
@@ -167,12 +159,10 @@ class Industry(VoiceoverScene):
         q = predict(r"A one-week look-ahead on a weekly rotation: does it add a little or a lot?", width=9.0).to_edge(
             DOWN, buff=0.15)
         with self.voiceover(
-            "Every practice on this list maps onto something the House already does. A hypothesis written down "
-            "first: the registry, with the code's hash. Every trial counted: the trial counter. A hold-out nobody "
-            "looks at: the sealed envelope. Standard errors that respect how the data were sampled: this part's "
-            "module, by default. Results that rerun from one command: checksummed data and seeded computations. "
-            "<bookmark mark='a'/> And you have already answered this chapter's question: a week of look-ahead adds "
-            "a lot."
+            "Each practice maps onto the House: a hypothesis written first, the registry; every trial counted, the trial "
+            "counter; an untouched hold-out, the sealed envelope; honest standard errors, this part's module; reruns from "
+            "one command, checksummed data. <bookmark mark='a'/> And this chapter's question: a week of look-ahead adds a "
+            "lot."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in tab], lag_ratio=0.5, run_time=5))

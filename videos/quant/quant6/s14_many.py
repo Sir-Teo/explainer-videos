@@ -61,15 +61,12 @@ class Many(VoiceoverScene):
             MathTex(rf"\text{{Benjamini--Hochberg (5\%): }} {m['n_bh']}", font_size=30, color=ALT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Test all forty-nine industries for an alpha against the market, and sort the p-values. "
-            f"<bookmark mark='a'/> {m['n_raw']} are below five percent. But test forty-nine things and you expect "
-            "two or three to pass by luck alone. <bookmark mark='b'/> Bonferroni's correction divides the threshold "
-            "by the number of tests: the red line, at one in a thousand. It controls the family-wise error, the "
-            "chance of even one false discovery. <bookmark mark='c'/> Yoav Benjamini and Yosef Hochberg, in 1995, "
-            "controlled something else: the share of discoveries that are false. Their line rises from the origin, "
-            "i times q over m. Rotate it up to q of five percent; every p-value up to the last one under the line "
-            f"is a discovery. <bookmark mark='d'/> Here: {m['n_bh']}. None of the forty-nine industries has an alpha "
-            "that survives either correction."
+            "Test forty-nine industries for an alpha and sort the p-values. <bookmark mark='a'/> "
+            f"{m['n_raw']} are below five percent; by luck alone you expect two or three. <bookmark mark='b'/> Bonferroni "
+            "divides the threshold by the number of tests, the red line, controlling the chance of even one false "
+            "discovery. <bookmark mark='c'/> Benjamini and Hochberg, in 1995, control the share of discoveries that are "
+            "false: their line rises from the origin, i times q over m, and everything up to the last p-value under it "
+            f"is a discovery. <bookmark mark='d'/> Here, {m['n_bh']}. No industry alpha survives either correction."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.03))
             vo.wait_until("a")
@@ -103,16 +100,12 @@ class Many(VoiceoverScene):
                 why(r"what a mixture of nulls and real effects looks like: a flat floor of height $\pi_0$ plus a spike")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.8, edge=6.8)
         with self.voiceover(
-            "The proofs are short. Bonferroni is the union bound: the chance that any true null is rejected is at "
-            "most the sum of their chances, m times alpha over m. <bookmark mark='a'/> Sture Holm's 1979 refinement "
-            "steps down the sorted p-values with thresholds alpha over m, then over m minus one, and so on. At the "
-            "first true null it rejects, at least m-nought true nulls are still in play, so its threshold is at "
-            "most alpha over m-nought, and the union bound applies again: same guarantee, more power. "
-            "<bookmark mark='b'/> Benjamini and Hochberg control the false discovery rate, the expected share of "
-            "false discoveries, and with independent p-values it equals the share of true nulls times q: never "
-            "more than q. <bookmark mark='c'/> And a picture to keep: the p-values of true nulls are uniform, so a "
-            "histogram of many p-values is a flat floor, whose height is the share of nulls, plus a spike near zero "
-            "from the real effects."
+            "The proofs are short. Bonferroni is the union bound. <bookmark mark='a'/> Holm's 1979 step-down uses "
+            "thresholds alpha over m, then over m minus one, and so on; at its first false rejection at least m-nought "
+            "nulls remain, so the union bound still applies, with more power. <bookmark mark='b'/> Benjamini-Hochberg's "
+            "false discovery rate, with independent p-values, is the share of true nulls times q: at most q. "
+            "<bookmark mark='c'/> And null p-values are uniform, so a histogram of many is a flat floor, the share of "
+            "nulls, plus a spike near zero."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -158,16 +151,13 @@ class Many(VoiceoverScene):
             MathTex(rf"\text{{FWER: Holm }} {100 * S['Holm']['fwer']:.1f}\%", font_size=26, color=BAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(h, DOWN, buff=0.4).align_to(h, LEFT)
         with self.voiceover(
-            f"Now a world where we know the truth. A thousand strategies, {f['m1']} of them real, with a Sharpe ratio "
-            f"of {f['sr']} over {f['years']} years; the rest pure noise. Two hundred such worlds. "
-            "<bookmark mark='a'/> At five percent, each world finds about "
-            f"{S['raw']['true']:.0f} of the real ones, and {S['raw']['false']:.0f} false ones: "
-            f"{100 * S['raw']['fdr']:.0f} percent of its discoveries are false. <bookmark mark='b'/> Bonferroni and "
-            f"Holm almost never make a false discovery, but find only about {S['Holm']['true']:.0f} real ones. "
-            f"Benjamini-Hochberg finds about {S['BH']['true']:.1f}, with a false discovery rate of "
-            f"{100 * S['BH']['fdr']:.1f} percent, as promised. <bookmark mark='c'/> The p-value histogram of one "
-            f"world shows why it is hard: a flat floor of nulls at height {pi0:.2f}, and a modest "
-            "spike. A Sharpe ratio of a half over twenty years is not a strong signal."
+            f"A world with a known truth: a thousand strategies, {f['m1']} real with a Sharpe ratio of {f['sr']} over "
+            f"{f['years']} years, the rest noise, two hundred times. <bookmark mark='a'/> At five percent each world finds "
+            f"about {S['raw']['true']:.0f} real ones and {S['raw']['false']:.0f} false: {100 * S['raw']['fdr']:.0f} percent "
+            f"false. <bookmark mark='b'/> Bonferroni and Holm make almost no false discoveries but find "
+            f"{S['Holm']['true']:.0f} real ones; Benjamini-Hochberg finds {S['BH']['true']:.1f} at a false discovery rate "
+            f"of {100 * S['BH']['fdr']:.1f} percent, as promised. <bookmark mark='c'/> The p-value histogram shows why it "
+            f"is hard: a floor at {pi0:.2f} and a modest spike."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(leg))
             vo.wait_until("a")
@@ -195,15 +185,12 @@ class Many(VoiceoverScene):
         prev.to_corner(DR, buff=0.4)
         q = predict(r"Twenty strategies; the best has $p = 0.03$. Significant?", width=6.0).to_corner(UR, buff=0.35)
         with self.voiceover(
-            "The House's version is ten lines: sort, compare with the rising line, and reject everything up to the "
-            "last crossing. <bookmark mark='a'/> On the forty-nine industries: "
-            f"{m['n_bh']}. In the planted worlds: about {S['true']:.0f} true discoveries and a false discovery rate of "
-            f"{100 * S['fdr']:.0f} percent. On a thousand strategies of pure noise: {m['noise_raw']} pass at five "
-            f"percent, {m['noise_bh']} after the correction. <bookmark mark='b'/> Pause and predict: you tried twenty "
-            "strategies and the best has a p-value of three percent. Significant? No: the chance that at least one "
-            "of twenty useless strategies does that well is one minus nought point nine seven to the twentieth, "
-            "forty-six percent. Part twenty-six builds the full machinery, and the House's trial counter keeps the "
-            "count."
+            "The House's ten lines: sort, compare with the rising line, reject up to the last crossing. "
+            f"<bookmark mark='a'/> Industries: {m['n_bh']}. Planted worlds: about {S['true']:.0f} true discoveries, false "
+            f"discovery rate {100 * S['fdr']:.0f} percent. Pure noise: {m['noise_raw']} pass at five percent, "
+            f"{m['noise_bh']} after correction. <bookmark mark='b'/> Pause and predict: twenty strategies, the best at p "
+            "of three percent. Significant? No: the chance one of twenty useless strategies does that well is forty-six "
+            "percent. Part twenty-six builds the machinery."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

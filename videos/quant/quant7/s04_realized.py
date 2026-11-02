@@ -54,14 +54,13 @@ class Realized(VoiceoverScene):
         names = [r"every 30 minutes", r"every 10 minutes", r"every 5 minutes", r"every minute"]
         nm = label(names[0], font_size=24, color=VOL).next_to(ro, UP, buff=0.15)
         with self.voiceover(
-            "Can you measure volatility after the fact, rather than estimate it with a model? Here is one day of "
-            "Bitcoin, minute by minute: the twenty-sixth of June 2019, a wild day. <bookmark mark='a'/> Cut the day "
+            "Can volatility be measured after the fact? Here is one wild day of Bitcoin, minute by minute: the "
+            "twenty-sixth of June 2019. <bookmark mark='a'/> Cut the day "
             "into half-hours. Each half-hour's return gets a square, with side the size of the move and area its "
             "square. Add up the areas: that is realized variance. <bookmark mark='b'/> Cut finer, ten minutes, five "
             "minutes: the squares multiply six-fold and shrink, while their total moves far less. <bookmark mark='c'/> In the limit "
             "it is the quadratic variation of Part five, the integral of the instantaneous variance over the day. "
-            "Torben Andersen, Tim Bollerslev, Francis Diebold and Paul Labys turned this into a programme around 2000: "
-            "with intraday data, volatility becomes something you observe. <bookmark mark='d'/> At every minute, though, "
+            "Andersen, Bollerslev, Diebold and Labys built on this around 2000: volatility becomes observable. <bookmark mark='d'/> At every minute, though, "
             "the total creeps up again. Why?"
         ) as vo:
             self.play(FadeIn(g), Create(path), run_time=2)
@@ -118,8 +117,8 @@ class Realized(VoiceoverScene):
             f"The line rises as the interval shrinks: in 2019, one-minute sampling reads {100 * rise:.1f} percent more "
             "than five-minute sampling. <bookmark mark='b'/> Over the whole sample, with the thinner markets of 2017 and "
             f"2018, the gap is {100 * rise_all:.0f} percent. The culprit is microstructure noise: trades bounce between "
-            "the bid and the ask, and every bounce adds a little square that has nothing to do with volatility. The "
-            "deeper the market, the smaller the bounce. <bookmark mark='c'/> Pause and predict: is sampling every "
+            "the bid and the ask, and every bounce adds a little square that has nothing to do with volatility."
+            " <bookmark mark='c'/> Pause and predict: is sampling every "
             "second better? No: the more often you sample, the more bounces you add up."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]))
@@ -157,9 +156,9 @@ class Realized(VoiceoverScene):
         res = MathTex(rf"\text{{Bitcoin, per day: }} n^* \Rightarrow \Delta^* \approx {s['nstar_min_median']:.0f}\text{{ minutes "
                       rf"(median; quartiles }}{q[0]:.0f}\text{{--}}{q[1]:.0f})", font_size=28, color=GOOD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The theory. As the grid gets finer, the sum of squares converges to the integrated variance, <bookmark "
-            "mark='a'/> with an error that Ole Barndorff-Nielsen and Neil Shephard derived in 2002: it shrinks like one "
-            "over the square root of n, and its size can be estimated from fourth powers of the returns. <bookmark "
+            "The theory. The sum of squares converges to the integrated variance, <bookmark "
+            "mark='a'/> with an error, derived by Barndorff-Nielsen and Shephard in 2002, that shrinks like one over "
+            "root n and is estimated from fourth powers. <bookmark "
             "mark='b'/> Now add noise to every observed price. Each observed return gains the difference of two noise "
             "terms, and summing n squares adds two n times the noise variance: a bias that grows with n. <bookmark "
             "mark='c'/> Bias against error: minimising the sum gives an optimal number of samples, Federico Bandi and "
@@ -167,7 +166,7 @@ class Realized(VoiceoverScene):
             "<bookmark mark='d'/> Or keep all the data and remove the bias: the two-scale estimator averages several "
             "sparse grids and subtracts the noise measured on the dense one, <bookmark mark='e'/> and the realized "
             "kernel adds back the autocovariances the noise creates. Pre-averaging, spot volatility and irregular "
-            "sampling extend the same ideas; Ait-Sahalia and Jacod's textbook has them all."
+            "sampling extend these ideas."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -209,8 +208,7 @@ class Realized(VoiceoverScene):
         with self.voiceover(
             "On three and a half years of Bitcoin: one-minute sums give an average volatility of "
             f"{100 * z['vol_rv1']:.0f} percent, five-minute sums {100 * z['vol_rv5']:.0f}. <bookmark mark='a'/> The two "
-            f"noise-corrected estimators, using every minute, land near {100 * z['vol_tsrv']:.0f}. Bipower variation, "
-            "which ignores jumps and comes next chapter, is lower still. <bookmark mark='b'/> And each day's measure "
+            f"noise-corrected estimators, using every minute, land near {100 * z['vol_tsrv']:.0f}. Bipower variation, next chapter, is lower still. <bookmark mark='b'/> And each day's measure "
             "comes with an error band from the central limit theorem: with five-minute returns, the half-width is "
             f"typically {100 * rel:.0f} percent of the variance. Realized variance is a measurement, not the truth, and "
             "that will matter when forecasts are scored against it."

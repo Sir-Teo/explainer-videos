@@ -46,10 +46,8 @@ class Series(VoiceoverScene):
         c1 = label(r"variance $\sigma^2/(1-\phi^2)$: a band", font_size=20, color=GOOD).next_to(g1, DOWN, buff=0.2)
         c2 = label(r"variance $t\sigma^2$: a funnel $\pm 2\sqrt{t}$", font_size=20, color=BAD).next_to(g2, DOWN, buff=0.2)
         with self.voiceover(
-            "Let phi reach one, and the spring snaps. On the left, sixty paths of a stationary series: they wander, "
-            "but inside a band. <bookmark mark='a'/> On the right, sixty random walks from the same shocks. Nothing "
-            "pulls them back. Every shock is permanent, the variance grows in proportion to time, and the paths fan "
-            "out in a funnel that widens like the square root of t. This is a unit root, and log prices have one."
+            "Let phi reach one, and the spring snaps. On the left, sixty stationary paths, inside a band. <bookmark mark='a'/> On the right, sixty random walks from the same shocks. Every "
+            "shock is permanent, and the paths fan out in a funnel that widens like the square root of t. This is a unit root, and log prices have one."
         ) as vo:
             self.play(FadeIn(g1), Create(f1, lag_ratio=0.02), run_time=2.5)
             self.play(Create(e1), FadeIn(c1))
@@ -88,9 +86,8 @@ class Series(VoiceoverScene):
             label(r"Dickey and Fuller (1979); MacKinnon's tables: $-2.86$", font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.3)
         with self.voiceover(
-            "How do you test for a unit root? Regress the change on yesterday's level: if the coefficient is zero, "
-            "nothing pulls the series back. The natural test is the coefficient's t-statistic. But under the unit "
-            "root it is not normally distributed. Watch. Twenty thousand simulated random walks, each regressed, their "
+            "To test for a unit root, regress the change on yesterday's level and look at the coefficient's "
+            "t-statistic. Under the unit root it is not normal. Watch. Twenty thousand simulated random walks, each regressed, their "
             "t-statistics piling up. <bookmark mark='a'/> The pile sits to the left of the normal curve and is skewed. "
             f"Its mean is about {u['mean']:.1f}, not zero, and {100 * u['share_below_1645']:.0f} percent of the walks "
             "would be rejected at the textbook five percent level. <bookmark mark='b'/> The true five percent point "
@@ -123,14 +120,12 @@ class Series(VoiceoverScene):
                 why(r"so the numerator is usually negative: the distribution is skewed left")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-2.4, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Why it is not normal. Square the random walk and add up: the sum of yesterday's level times today's shock "
-            "telescopes into a half of the final value squared, minus the sum of squared shocks. <bookmark mark='a'/> "
+            "Why it is not normal. Square the walk and add up: the cross term telescopes. <bookmark mark='a'/> "
             "Scale the walk by the square root of T, and Donsker's theorem turns it into a Brownian motion. "
             "<bookmark mark='b'/> So the estimated coefficient, scaled by T, converges to a ratio of two random "
             "quantities built from that Brownian path, <bookmark mark='c'/> and so does the t-statistic. "
             "<bookmark mark='d'/> The numerator is a half of W of one squared minus one, and W of one squared is "
-            "below one about two thirds of the time. The statistic leans left, which is exactly what the simulation "
-            "drew."
+            "below one about two thirds of the time. The statistic leans left, as the simulation drew."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -166,14 +161,14 @@ class Series(VoiceoverScene):
         y10_line = ("The ten-year yield: over sixty years the test cannot tell it from a random walk. Bounded in "
                     "principle, a unit root in practice: tests have little power when phi is close to one."
                     if not A["y10"]["reject_5pct"] else "The ten-year yield: the test rejects, the yield is pulled back.")
-        vix_line = ("The log VIX rejects decisively: fear mean-reverts." if A["vix"]["reject_5pct"] else
-                    "Even the log VIX does not reject a unit root.")
+        vix_line = ("it rejects decisively: fear mean-reverts." if A["vix"]["reject_5pct"] else
+                    "even it does not reject a unit root.")
         with self.voiceover(
             "Lab. The House's test: regress the change on a constant, yesterday's level and five lagged changes, and "
             "compare the t-statistic with minus two point eight six. Run it on four series. <bookmark mark='a'/> Pause "
             "and predict first: the ten-year Treasury yield can't go to infinity. Does it have a unit root? <bookmark "
             "mark='b'/> Bitcoin's log price and the stock market's log index: unit roots, as expected. "
-            + y10_line + " " + vix_line
+            + y10_line + " As for the VIX: " + vix_line
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -217,7 +212,7 @@ class Series(VoiceoverScene):
             "of them. In changes, five percent, as it should be. <bookmark mark='a'/> Peter Phillips proved why in "
             "1986: in levels, the slope does not converge to zero but to a random number, so as the sample grows the "
             f"t-statistic grows like the square root of T. From fifty days to two thousand it grows {grow:.1f}-fold. "
-            "<bookmark mark='b'/> More data makes the lie more confident. <bookmark mark='c'/> Bitcoin against the "
+            "<bookmark mark='b'/> More data, a more confident lie. <bookmark mark='c'/> Bitcoin against the "
             "American stock market, in log levels: a t-statistic of twenty-four. In daily changes the link is real but "
             "weak: five percent of the variance, most of it from 2020."
         ) as vo:

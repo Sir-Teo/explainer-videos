@@ -46,17 +46,14 @@ class Industry(VoiceoverScene):
         if VGroup(a, b, c).width > 13.6:
             VGroup(a, b, c).scale_to_fit_width(13.6)
         with self.voiceover(
-            "First, the bettors, from their own published accounts. Edward Thorp, besides the partnership, ran a "
-            "field test of a sports-betting system in 1994: fifty thousand dollars, Kelly-sized, with edge estimates "
-            "he says were deliberately conservative, made a hundred and twenty-three thousand in a hundred and one "
-            "days. Over his career he estimates about eighty billion dollars of trades in a million and a quarter "
-            "bets. <bookmark mark='a'/> William Benter's syndicate bet on about four hundred and seventy Hong Kong "
-            "races a year against a track take of about nineteen percent, and was profitable in four of its first "
-            "five seasons. His report says it bet a conservative fraction of Kelly throughout, because at full Kelly, "
-            "losing more than half the bankroll is a common occurrence. <bookmark mark='b'/> Elwyn Berlekamp worked "
-            "under John Kelly at Bell Labs as a student, and in 1989 took control of Axcom, the firm that ran the "
-            "trading of Jim Simons's Medallion Fund, rebuilding its system with Simons, Sandor Straus and Henry "
-            "Laufer. How Medallion sizes its bets has not been made public, and we do not guess."
+            "First the bettors, from their own accounts. Thorp's 1994 sports-betting test: fifty thousand dollars, sized "
+            "by Kelly with deliberately conservative edges, made a hundred and twenty-three thousand in a hundred and one "
+            "days. <bookmark mark='a'/> William Benter's syndicate bet about four hundred and seventy Hong Kong races a "
+            "year against a nineteen percent track take, profitably in four of five seasons, at a conservative fraction of "
+            "Kelly, because at full Kelly losing half the bankroll is, in his words, a common occurrence. "
+            "<bookmark mark='b'/> Elwyn Berlekamp worked under Kelly at Bell Labs as a student and in 1989 took control of "
+            "Axcom, which traded for Jim Simons's Medallion Fund. How Medallion sizes its bets is not public, and we do not "
+            "guess."
         ) as vo:
             self.play(FadeIn(a, shift=UP * 0.2))
             vo.wait_until("a")
@@ -96,17 +93,13 @@ class Industry(VoiceoverScene):
                           r"2's floor, moving", 12.0, 20, GREY_A),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Most institutions do not maximize a utility; they work inside risk budgets, which are control "
-            "constraints. Norway's oil fund, the largest in the world, has a mandate that caps how far its expected "
-            "volatility relative to its benchmark may go: one and a quarter percentage points. Bridgewater's All "
-            "Weather portfolio, from 1996, puts equal risk on four economic environments and calls leverage an "
-            "implementation tool. <bookmark mark='a'/> Multi-manager hedge funds use drawdown limits. As reported by "
-            "the Wall Street Journal in 2024, a Millennium portfolio manager who loses five percent has capital cut "
-            "in half, and at seven and a half percent is likely to be let go; the firm did not comment. "
-            "<bookmark mark='b'/> Control theory has the optimal policy for a drawdown limit. Sanford Grossman and "
-            "Zhongquan Zhou showed in 1993 that an investor who must never fall below a fraction alpha of her "
-            "running peak should hold Merton's fraction of the cushion above that moving floor: chapter two's "
-            "portfolio insurance, with a floor that ratchets up."
+            "Most institutions work inside risk budgets, which are control constraints. Norway's oil fund caps its expected "
+            "volatility relative to its benchmark at one and a quarter points; Bridgewater's All Weather, from 1996, puts "
+            "equal risk on four economic environments. <bookmark mark='a'/> As reported by the Wall Street Journal in 2024, "
+            "a Millennium manager who loses five percent has capital halved, and at seven and a half is likely let go; the "
+            "firm did not comment. <bookmark mark='b'/> Grossman and Zhou solved the drawdown problem in 1993: never fall "
+            "below a fraction alpha of the peak by holding Merton's fraction of the cushion above it: chapter two's floor, "
+            "ratcheting up."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("a")
@@ -146,16 +139,12 @@ class Industry(VoiceoverScene):
                        r"stock fraction?", width=5.0, font_size=19).next_to(res, DOWN, buff=0.4).align_to(res, LEFT)
         src = illustration(r"simulation: $\mu - r = 6\%$, $\sigma = 18\%$; Kelly fraction 185\%")
         with self.voiceover(
-            "The House ran it. One path each: unconstrained Kelly in red, and the Grossman-Zhou investor with a floor "
-            "at eighty percent of her peak, in blue, with the floor itself faint beneath her. Every time she makes a "
-            "new high the floor ratchets up; as she falls toward it she sells, and she never touches it. "
-            f"<bookmark mark='a'/> Over two thousand paths, Kelly's worst drawdown is {100 * d['worst_dd_kelly']:.0f} "
-            f"percent; hers is {100 * d['worst_dd_gz']:.0f}, under the twenty she promised. The price is growth: "
-            f"{100 * d['median_growth_gz']:.1f} percent a year at the median, against {100 * d['median_growth_kelly']:.1f}. "
-            "<bookmark mark='b'/> Pause and predict: a manager is down four point nine percent against a five "
-            "percent limit. What does this policy say? Hold almost nothing: the cushion is a tenth of a percent, and "
-            "the position is proportional to it. That is why a hard stop changes how a manager trades long before "
-            "the stop."
+            "One path each: Kelly in red, Grossman and Zhou with a floor at eighty percent of the peak in blue. As she "
+            "falls toward the floor she sells, and she never touches it. <bookmark mark='a'/> Over two thousand paths, "
+            f"Kelly's worst drawdown is {100 * d['worst_dd_kelly']:.0f} percent, hers {100 * d['worst_dd_gz']:.0f}. The "
+            f"price: {100 * d['median_growth_gz']:.1f} percent median growth against {100 * d['median_growth_kelly']:.1f}. "
+            "<bookmark mark='b'/> Pause and predict: down four point nine against a five percent limit? Hold almost "
+            "nothing: the cushion is a tenth of a percent."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             self.add(*lines)
@@ -189,21 +178,18 @@ class Industry(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
         src = real_data(r"Kenneth French daily, 1926--2020; registered with the trial counter")
         with self.voiceover(
-            "Volatility targeting, used across the industry, is Merton's rule with a moving volatility: hold a "
-            "fraction proportional to one over the forecast variance. Alan Moreira and Tyler Muir tested it in "
-            "2017. The House redid their test on ninety-four years of daily data: each month, scale exposure by "
-            "last month's realized variance, normalized to average one, and registered the test before running it."
+            "Volatility targeting is Merton's rule with a moving volatility: exposure proportional to one over forecast "
+            "variance. Moreira and Muir tested it in 2017; the House redid the test on ninety-four years of daily data, "
+            "registered first."
         ):
             self.play(FadeIn(g), Create(one), FadeIn(src), FadeIn(side[0]))
             self.play(Create(line), run_time=3)
         with self.voiceover(
-            f"It helped: a Sharpe ratio of {v['sr_scaled']:.2f} against the market's {v['sr_mkt']:.2f}, and an alpha "
-            f"of {100 * v['alpha']:.1f} percent a year with a t-statistic of {v['alpha_t']:.1f}. Volatility clusters, "
-            "as Part seven showed, and returns do not keep pace with it, so cutting exposure when volatility is high "
-            "pays. The exposure swings are wild, though, and real funds cap them."
+            f"It helped: a Sharpe ratio of {v['sr_scaled']:.2f} against {v['sr_mkt']:.2f}, and an alpha of "
+            f"{100 * v['alpha']:.1f} percent a year, t of {v['alpha_t']:.1f}. Volatility clusters and returns do not keep "
+            "pace; but the exposure swings are wild, and real funds cap them."
             if better else
-            f"It did not help here: a Sharpe ratio of {v['sr_scaled']:.2f} against the market's {v['sr_mkt']:.2f}. "
-            "The idea is sound in theory, but in this history the timing cost as much as it earned."
+            f"It did not help here: a Sharpe ratio of {v['sr_scaled']:.2f} against {v['sr_mkt']:.2f}."
         ):
             self.play(LaggedStart(*[FadeIn(x) for x in side[1:]], lag_ratio=0.4))
         self.wait(0.4)
@@ -223,13 +209,10 @@ class Industry(VoiceoverScene):
                       source=r"Haghani and White (2023)", width=6.4, font_size=20),
         ).arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(ORIGIN)
         with self.voiceover(
-            "Two more. Execution desks solve a control problem every day: Robert Almgren and Neil Chriss's 2001 "
-            "model trades off the cost of selling fast against the risk of selling slowly, and Almgren, Thum, "
-            "Hauptmann and Li fitted its impact to Citigroup's US equity trades in 2005, finding it grows like the "
-            "three-fifths power of size. <bookmark mark='a'/> And Victor Haghani, who ran the coin experiment of "
-            "the hook and was a partner at Long-Term Capital Management, now runs a firm that sizes positions by "
-            "Merton's rule. His 2023 book with James White, The Missing Billionaires, argues that the great fortunes "
-            "of the past did not survive because of bad sizing and spending: the two halves of Merton's problem."
+            "Execution desks solve a control problem daily: Almgren and Chriss, 2001; and Almgren, Thum, Hauptmann and Li "
+            "fitted its impact on Citigroup's trades, a three-fifths power of size. <bookmark mark='a'/> And Victor "
+            "Haghani, of the coin experiment, now sizes clients' portfolios with Merton's rule; his 2023 book with James "
+            "White, The Missing Billionaires, blames lost fortunes on bad sizing and spending."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

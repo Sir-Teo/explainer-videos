@@ -57,14 +57,11 @@ class RL(VoiceoverScene):
                     r"(\textit{AI, Built} Part 26)", font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.4, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Now let a learner find the answer with no equation at all. Write Merton's problem as a Markov decision "
-            "process: the state is the time and the log of wealth, the action is the fraction in stocks, and the "
-            "reward is each quarter's log growth, so the learner is a log-utility investor. <bookmark mark='a'/> The "
-            "policy gradient says: raise the probability of actions that did better than expected. "
-            "<bookmark mark='b'/> Better than expected is measured by the advantage. We use one step of a learned "
-            "critic, which keeps only this quarter's market noise, instead of the whole remaining episode's. "
-            "<bookmark mark='c'/> And proximal policy optimization, from Part twenty-six of the AI series, clips "
-            "each update so the policy cannot jump too far on one noisy batch."
+            "Now a learner with no equation. Merton as a Markov decision process: the state is time and log wealth, the "
+            "action a fraction, the reward each quarter's log growth. <bookmark mark='a'/> The policy gradient raises the "
+            "probability of actions that did better than expected. <bookmark mark='b'/> Better than expected is a one-step "
+            "advantage from a learned critic, carrying one quarter's noise instead of a decade's. <bookmark mark='c'/> PPO, "
+            "from Part twenty-six of the AI series, clips each update."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -96,14 +93,11 @@ class RL(VoiceoverScene):
         outs.append(f"optimum (quarterly): {100 * ps['discrete']:.0f}%   closed form (continuous): "
                     f"{100 * ps['merton']:.0f}%")
         with self.voiceover(
-            "Lab five: the core of the House's learner, eleven lines. Roll out a thousand and twenty-four ten-year "
-            "episodes, quarterly, sampling fractions around the policy's mean; compute one-step advantages; take a "
-            "few clipped gradient steps; repeat three hundred times. <bookmark mark='a'/> Run it with five seeds. "
-            f"Their final average fractions run from {100 * min(fin):.0f} to {100 * max(fin):.0f} percent, against "
-            f"the quarterly optimum of {100 * ps['discrete']:.0f}. In growth, the worst seed gives up "
-            f"{100 * max(ps['shortfall']):.2f} percent a year: the objective is so flat near the top that being "
-            f"{100 * max(abs(f - ps['discrete']) for f in fin):.0f} points off costs almost nothing, which is exactly "
-            "why it is hard to learn."
+            "Lab five: roll out a thousand and twenty-four ten-year episodes, compute advantages, take clipped steps, three "
+            "hundred times. <bookmark mark='a'/> Five seeds end between "
+            f"{100 * min(fin):.0f} and {100 * max(fin):.0f} percent, against the optimum of {100 * ps['discrete']:.0f}; the "
+            f"worst gives up only {100 * max(ps['shortfall']):.2f} percent a year. The objective is that flat near the top, "
+            "which is why it is hard to learn."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -137,13 +131,10 @@ class RL(VoiceoverScene):
             tgt, DOWN, buff=0.08).align_to(tgt, RIGHT)
         src = illustration(r"300 iterations $\times$ 1{,}024 ten-year quarterly episodes, 5 seeds, one CPU thread each")
         with self.voiceover(
-            "Here is the training, scrubbed checkpoint by checkpoint. On the right, the average fraction the policy "
-            "chooses, for five seeds, the band showing their spread, against the optimum. On the left, the policy "
-            "itself, over time and wealth, at the same checkpoint. <bookmark mark='a'/> It starts at fifty percent "
-            "everywhere. It climbs, overshoots on some seeds, and wanders around the optimum, because the gradient's "
-            "signal is a fraction of a percent a year inside an eighteen percent market. The map flattens: by the end "
-            "the fraction barely depends on time or wealth, which is what Merton's theorem says, though the learner "
-            "never heard of it."
+            "The training, checkpoint by checkpoint: right, the average fraction for five seeds against the optimum; left, "
+            "the policy over time and wealth. <bookmark mark='a'/> It starts at fifty percent, climbs, wanders around the "
+            "optimum in a noisy market, and flattens: the fraction stops depending on time or wealth, as Merton's theorem "
+            "says, though the learner never heard of it."
         ) as vo:
             self.play(FadeIn(rp), Create(tgt), FadeIn(tl), FadeIn(src))
             vo.wait_until("a")
@@ -190,29 +181,24 @@ class RL(VoiceoverScene):
         beats = bool(np.median(pg) > pc["merton"]["growth"])
         src = illustration(r"log utility, 1\% cost, quarterly, 10 years; all rules scored on the same 200{,}000 markets")
         with self.voiceover(
-            "Now a problem with no formula: the same market with a one percent cost on every trade. The learner sees "
-            "the fraction it holds before trading and chooses a trade. The dynamic program from chapter seven says "
-            f"the answer is a band, from {100 * lo:.0f} to {100 * hi:.0f} percent: inside it, do nothing, the dashed "
-            "diagonal; outside, trade to the nearest edge. Pause and predict: will the learner find the band? "
-            "<bookmark mark='a'/> Here are the five learned policies, at mid-horizon, against the band."
+            "Now a problem with no formula: a one percent cost on every trade. The dynamic program says: a band from "
+            f"{100 * lo:.0f} to {100 * hi:.0f} percent, do nothing inside, trade to the edge outside. Pause and predict: "
+            "will the learner find it? <bookmark mark='a'/> Five learned policies, against the band."
         ) as vo:
             self.play(FadeIn(g), Create(diag), FadeIn(band), Create(dp), FadeIn(leg), FadeIn(src), FadeIn(q))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in learned], lag_ratio=0.2, run_time=2.5))
         with self.voiceover(
-            "They do. Each seed learns to leave the position alone over a range close to the band and to trade "
-            f"toward it outside, and their net growth, {100 * np.median(pg):.2f} percent a year at the median, beats "
-            f"rebalancing to Merton every quarter, {100 * pc['merton']['growth']:.2f}, with far less turnover. The "
-            f"band itself earns {100 * pc['band']['growth']:.2f}. A learner can find a structure no formula handed it."
+            "They do: each seed leaves the position alone over a range close to the band, and its net growth, "
+            f"{100 * np.median(pg):.2f} percent a year at the median, beats rebalancing to Merton, "
+            f"{100 * pc['merton']['growth']:.2f}."
             if close and beats else
-            "Not quite. The learned policies trade only part of the way toward Merton instead of leaving a band "
-            "alone: a smooth compromise, not the kink the dynamic program finds. Their net growth, "
-            f"{100 * np.median(pg):.2f} percent a year at the median, against {100 * pc['band']['growth']:.2f} for "
-            f"the band and {100 * pc['merton']['growth']:.2f} for rebalancing to Merton every quarter. The prize "
-            f"for finding the band is a fraction of a percent a year, measured here with a standard error of "
-            f"{100 * se:.2f}, but each training episode is ten years of an eighteen percent market: at this budget "
-            "the signal sits under the noise. The method has to be built to hear a small signal, and that is the "
-            "lesson for learning in finance."
+            "Not quite: the learners trade part of the way toward the middle, leaving only a narrow strip alone, not the "
+            f"band. Their net growth is {100 * np.median(pg):.2f} percent a year at the median, against "
+            f"{100 * pc['merton']['growth']:.2f} for rebalancing to Merton every quarter and "
+            f"{100 * pc['band']['growth']:.2f} for the band. The band's edge over the learners is "
+            f"{100 * (pc['band']['growth'] - np.median(pg)):.2f} percent a year, and each episode is a decade of an "
+            "eighteen percent market: at this budget that signal sits under the noise."
         ) as vo:
             self.play(FadeOut(q), LaggedStart(*[FadeIn(VGroup(*r_)) for r_ in cells], lag_ratio=0.3, run_time=3))
         self.wait(0.4)

@@ -196,14 +196,13 @@ class Projection(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French's daily US market, July 1926 -- December 2020")
         with self.voiceover(
-            "Now the market. Let the information be one bit: was yesterday up or down? The conditional expectation of "
-            "today's return is then two numbers, the average after up days and the average after down days. "
+            "Now the market. Let the information be one bit: was yesterday up or down? The conditional expectation "
+            "of today's return is then two numbers, the average after up days and the average after down days. "
             f"<bookmark mark='a'/> From 1926 to 1974: {e0['up']:.1f} basis points after an up day, {e0['down']:.1f} "
-            f"after a down day. Yesterday's sign was today's sign, on average. From 1975 to 1999, the same pattern, "
-            f"{e1['up']:.1f} against {e1['down']:.1f}. <bookmark mark='b'/> Since 2000 it has turned around: "
-            f"{e2['up']:.1f} after an up day and {e2['down']:.1f} after a down day. The white bars are how far each "
-            "number moves when we resample the years in blocks: " + verdict + " This is the hook's gambler, as a "
-            "projection."
+            "after a down day. Yesterday's sign was today's sign, on average. From 1975 to 1999, the same pattern, "
+            f"{e1['up']:.1f} against {e1['down']:.1f}. <bookmark mark='b'/> Since 2000 it has turned around: {e2['up']:.1f} "
+            f"after an up day and {e2['down']:.1f} after a down day. The white bars are how far each number moves "
+            f"when we resample the years in blocks: {verdict} This is the hook's gambler, as a projection."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(zero), FadeIn(side[1]), FadeIn(xl))
             vo.wait_until("a")

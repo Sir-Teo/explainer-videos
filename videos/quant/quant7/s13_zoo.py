@@ -56,8 +56,7 @@ class Zoo(VoiceoverScene):
                    "one with infinite variance. The second is positive: it explodes. The same sum, opposite fates."
                    if s1 and not s2 else "Both come out on the same side of zero here.")
         with self.voiceover(
-            "Every GARCH is a point on this plane. Below the line alpha plus beta equal to one, the variance is finite "
-            "and the forecasts revert. <bookmark mark='a'/> The American market sits just under the line, Bitcoin a "
+            "Every GARCH is a point on this plane. Below alpha plus beta equal to one, the variance is finite. <bookmark mark='a'/> The American market sits just under the line, Bitcoin a "
             "little further in. <bookmark mark='b'/> What happens above it? Daniel Nelson showed in 1990 that the "
             "variance need not explode. The process settles down whenever the average of the log of alpha z squared "
             "plus beta is negative, and that boundary, in red, lies beyond the line. <bookmark mark='c'/> Pause and "
@@ -95,13 +94,11 @@ class Zoo(VoiceoverScene):
                 why(r"EGARCH (Nelson 1991): the log variance, so no positivity constraints; $\gamma < 0$ for asymmetry")]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-1.8, buff=0.5, edge=6.9)
         with self.voiceover(
-            "Why. Unroll the recursion: the variance is omega times a sum of products of random factors. <bookmark "
+            "Why. Unrolled, the variance is a sum of products of random factors. <bookmark "
             "mark='a'/> By the law of large numbers, a long product behaves like the exponential of k times the "
             "average log factor, so the sum converges exactly when that average is negative. <bookmark mark='b'/> By "
             "Jensen's inequality the average log is below the log of the average, so even integrated GARCH, alpha "
-            "plus beta equal to one, is strictly stationary. <bookmark mark='c'/> A second result makes GARCH usable "
-            "on real data: the Gaussian likelihood's score has mean zero whenever the shocks have unit variance, "
-            "whatever their shape. So the estimates stay consistent under fat tails, with sandwich standard errors: "
+            "plus beta equal to one, is strictly stationary. <bookmark mark='c'/> And the Gaussian likelihood's score has mean zero whenever the shocks have unit variance, whatever their shape. So the estimates stay consistent under fat tails, with sandwich standard errors: "
             "Tim Bollerslev and Jeffrey Wooldridge, 1992. <bookmark mark='d'/> And two members of the zoo give bad "
             "news its own weight: GJR adds a term only after falls, <bookmark mark='e'/> and Nelson's EGARCH models "
             "the log of the variance, with a signed term."
@@ -182,7 +179,7 @@ class Zoo(VoiceoverScene):
         tg = gl["t_garch"]
         side = VGroup(
             legend([(BAD, r"against the normal"), (GOOD, rf"against Student-$t$, $\nu = {tg['nu']:.1f}$")], font_size=20),
-            MathTex(rf"\text{{kurtosis of } } r_t/\hat\sigma_t = {gl['kurt_z']:.1f}\ \ (\text{{normal: }} 3)", font_size=26, color=GREY_A),
+            MathTex(rf"\text{{kurtosis of }} r_t/\hat\sigma_t = {gl['kurt_z']:.1f}\ \ (\text{{normal: }} 3)", font_size=26, color=GREY_A),
             MathTex(rf"\log L:\ {gl['g_loglik']:,.0f} \to {tg['loglik']:,.0f}".replace(",", "{,}"), font_size=28, color=GOOD),
             label(r"GARCH-$t$ (Bollerslev 1987)", font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.6)

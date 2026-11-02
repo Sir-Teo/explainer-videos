@@ -191,12 +191,12 @@ class System(VoiceoverScene):
                              r"Neither: both lose $1/37$ of what they stake. Labouch\`ere stakes more, so it loses more "
                              r"in total, but wins more sessions.", width=9.6, font_size=22).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The ledger. The systems differ in how much they stake and in the shape of their results. Doubling and "
-            "Fibonacci win most sessions, and pay for it with rare large losses: their skew is strongly negative. "
-            "<bookmark mark='a'/> But divide the loss by the amount staked, and " + verdict + ", " + fair + " "
-            "<bookmark mark='b'/> So, which loses more per unit staked, Labouchère or flat betting? Neither. "
-            "Labouchère stakes far more and so loses more in total, while winning more of its sessions: a pleasant "
-            "evening, most nights, paid for on the others."
+            "The ledger. The systems differ in how much they stake and in the shape of their results. Doubling "
+            "and Fibonacci win most sessions, and pay for it with rare large losses: their skew is strongly negative. "
+            f"<bookmark mark='a'/> But divide the loss by the amount staked, and {verdict}, {fair} <bookmark mark='b'/> "
+            "So, which loses more per unit staked, Labouchère or flat betting? Neither. Labouchère stakes far "
+            "more and so loses more in total, while winning more of its sessions: a pleasant evening, most nights, "
+            "paid for on the others."
         ) as vo:
             self.play(FadeIn(VGroup(*head)), LaggedStart(*[FadeIn(VGroup(r[0], r[1], r[2], r[4], r[5])) for r in rows],
                                                           lag_ratio=0.2), FadeIn(note_))

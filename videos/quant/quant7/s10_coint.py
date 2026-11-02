@@ -57,8 +57,7 @@ class Coint(VoiceoverScene, ThreeDScene):
                     color=GREY_C).to_corner(DR, buff=0.2)
         with self.voiceover(
             "In 1994 Michael Murray explained cointegration with a drunk and her dog. The drunk wanders home: a "
-            "random walk. Her dog wanders too. <bookmark mark='a'/> But each time the dog hears her it trots back "
-            "toward her, and she now and then turns toward it. Follow either one and it drifts anywhere: a unit root. "
+            "random walk. Her dog wanders too. <bookmark mark='a'/> But the dog keeps trotting back toward her. Follow either one and it drifts anywhere: a unit root. "
             f"<bookmark mark='b'/> But the leash, the distance between them, stays short. On this simulation the "
             f"Dickey-Fuller test on her position gives {j['adf_drunk']:.1f}, a unit root; on the gap between them, "
             f"{j['adf_gap']:.1f}, decisively stationary. Two series with unit roots whose combination is stationary are "
@@ -134,8 +133,8 @@ class Coint(VoiceoverScene, ThreeDScene):
             "The algebra. Two series are cointegrated when each has a unit root but some combination of them is "
             "stationary. <bookmark mark='a'/> Granger's representation theorem says that is the same as an error-"
             "correction model: each period, at least one series moves to close a fraction alpha of yesterday's gap. "
-            "<bookmark mark='b'/> Testing the residual needs its own critical value, minus three point three four, "
-            "because beta was chosen to make the residual look as stationary as possible. <bookmark mark='c'/> With "
+            "<bookmark mark='b'/> The residual test needs its own critical value, minus three point three four: beta "
+            "was chosen to make the residual look stationary. <bookmark mark='c'/> With "
             "more than two series, Soren Johansen wrote the system in levels and differences: the levels enter only "
             "through a matrix pi of reduced rank. <bookmark mark='d'/> Its rank, the number of independent leashes, "
             "is read from the canonical correlations between the changes and the lagged levels, by the trace test."
@@ -190,14 +189,11 @@ class Coint(VoiceoverScene, ThreeDScene):
         hag = ("Our three yields share two common trends, the level and the slope, and one leash. "
                if rank == 1 else "Here the test finds a different structure from the classic one. ")
         with self.voiceover(
-            "Johansen's test on something you can see. Every day from 1990 to 2020, three Treasury yields, the three-"
-            "month bill, the five-year and the ten-year, as one point in three dimensions, coloured from blue to red "
-            "as time passes. <bookmark mark='a'/> Each yield wanders: the cloud stretches along one long direction, "
+            "Johansen's test, made visible. Every day from 1990 to 2020, the three-month, five-year and ten-year Treasury yields as one point in three dimensions, blue to red through time. <bookmark mark='a'/> Each yield wanders: the cloud stretches along one long direction, "
             "the level of rates, falling for thirty years. <bookmark mark='b'/> Turn the camera until the cloud is "
             "seen edge-on. It is almost flat: a sheet, thin in one direction. The thin direction is a combination of "
             "yields that does not wander, the curve's curvature, a leash. <bookmark mark='c'/> The trace test agrees. "
-            + hag + "In 1992 Anthony Hall, Heather Anderson and Clive Granger found the same thing in Treasury bill "
-            "yields: maturities wander together. Yield-curve factors return in Part nineteen, and pairs trading on "
+            + hag + "In 1992 Hall, Anderson and Granger found Treasury bill yields of different maturities cointegrated. Yield-curve factors return in Part nineteen, and pairs trading on "
             "cointegration in Part thirty-three."
         ) as vo:
             self.play(Create(ax3), run_time=1)

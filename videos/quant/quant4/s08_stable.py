@@ -151,12 +151,12 @@ class Stable(VoiceoverScene):
                    "function, which weighs the whole body, gives a larger alpha. A true stable law would give one "
                    "answer.")
         with self.voiceover(
-            "Stability says the sum of n copies is one copy stretched by n to the one over alpha. "
-            "<bookmark mark='a'/> Characteristic functions turn sums into products, and e to the minus c t to the "
-            "alpha is its own nth power, stretched: the symmetric stable law, the limit of sums with power tails "
-            "below two. <bookmark mark='b'/> Take logs twice and alpha is a slope, Koutrouvelis's estimator. "
-            "<bookmark mark='c'/> Average e to the i t r over every daily return: the arrow's length, a dot per t. "
-            f"The Gaussian control gives {ga['alpha']:.2f}; the American market, {us['alpha']:.2f}. " + verdict
+            "Stability says the sum of n copies is one copy stretched by n to the one over alpha. <bookmark mark='a'/> "
+            "Characteristic functions turn sums into products, and e to the minus c t to the alpha is its own "
+            "nth power, stretched: the symmetric stable law, the limit of sums with power tails below two. <bookmark "
+            "mark='b'/> Take logs twice and alpha is a slope, Koutrouvelis's estimator. <bookmark mark='c'/> "
+            "Average e to the i t r over every daily return: the arrow's length, a dot per t. The Gaussian control "
+            f"gives {ga['alpha']:.2f}; the American market, {us['alpha']:.2f}. {verdict}"
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -215,12 +215,12 @@ class Stable(VoiceoverScene):
                                  "samples: the likelihood, which listens to every day, prefers a lighter tail than "
                                  "the quantiles do.")
         with self.voiceover(
-            "A third estimator, the most careful: maximum likelihood, the stable density computed numerically for "
-            "every candidate. Watch it learn. Each evaluation tries a new alpha, beta, scale and location, starting "
-            "from the Gaussian corner, alpha near two. <bookmark mark='a'/> On the right, the best fit so far; on the "
-            "left, the alpha being tried, for three random samples of fifteen hundred days. The search wanders, "
-            "then settles. <bookmark mark='b'/> It ends at alpha "
-            f"{np.mean(a_):.2f} on average. " + verdict
+            "A third estimator, the most careful: maximum likelihood, the stable density computed numerically "
+            "for every candidate. Watch it learn. Each evaluation tries a new alpha, beta, scale and location, "
+            "starting from the Gaussian corner, alpha near two. <bookmark mark='a'/> On the right, the best fit "
+            "so far; on the left, the alpha being tried, for three random samples of fifteen hundred days. The "
+            f"search wanders, then settles. <bookmark mark='b'/> It ends at alpha {np.mean(a_):.2f} on average. "
+            f"{verdict}"
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp))
             vo.wait_until("a")
@@ -252,11 +252,11 @@ class Stable(VoiceoverScene):
                    "is finite. So the variance exists." if decays else
                    "It falls only a little, which on its own cannot settle the question.")
         with self.voiceover(
-            "The simplest test: if daily returns were stable, sums over more days would keep their shape, and the "
-            "kurtosis would not fall. <bookmark mark='a'/> The Gaussian control sits at zero. The market starts at "
-            f"{ku[0]:.0f} for one day. " + verdict + " The centre looks stable, the tails are truncated, as Mantegna "
-            "and Stanley said, and much of the shape is volatility that changes over time, the subject of Parts "
-            "seven and thirteen."
+            "The simplest test: if daily returns were stable, sums over more days would keep their shape, and "
+            "the kurtosis would not fall. <bookmark mark='a'/> The Gaussian control sits at zero. The market "
+            f"starts at {ku[0]:.0f} for one day. {verdict} The centre looks stable, the tails are truncated, as "
+            "Mantegna and Stanley said, and much of the shape is volatility that changes over time, the subject "
+            "of Parts seven and thirteen."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[:2]))
             self.add(lu, lg)

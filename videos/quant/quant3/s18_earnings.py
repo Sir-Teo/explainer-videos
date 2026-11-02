@@ -159,14 +159,14 @@ class Earnings(VoiceoverScene):
                           GAIN if right else LOSS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         src = real_data(r"SEC EDGAR 8-K item 2.02 and company facts; Yahoo Finance daily closes")
+        sign_line = "That is the textbook sign, on very few events. " if right else "That is the wrong way round. "
         with self.voiceover(
             "Now all of Apple's announcements from late 2015 to the end of 2020, each path started at its own day zero, "
             "green when earnings beat the seasonal forecast, red when they missed. <bookmark mark='a'/> The paths pile "
             f"up; the thick lines are the two averages. The day-zero move barely lines up with the surprise: a "
             f"correlation of {pe['jump_corr']:.2f}. <bookmark mark='b'/> And after day one, the beats drifted "
             f"{100 * dp:+.1f} percent and the misses {100 * dn:+.1f}. "
-            + ("That is the textbook sign. " if right else "That is the wrong way round. ")
-            + f"But these are {pe['n_events']} events of one company, which is a lab exercise, not a test, and a "
+            + sign_line + f"But these are {pe['n_events']} events of one company, which is a lab exercise, not a test, and a "
             "seasonal forecast of net income is also a crude stand-in for what analysts expected. The test needs "
             "thousands of firms."
         ) as vo:
@@ -209,14 +209,15 @@ class Earnings(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35)
         src = real_data(r"Chen and Zimmermann, open-source asset pricing, release 2024.10: EarningsSurprise")
         gone = abs(ot["after2006"]) < 2
+        after_line = ("which is statistically indistinguishable from zero. " if gone else
+                      "which is still clearly positive. ")
         with self.voiceover(
             "Thousands of firms is what the open-source replication of the anomaly literature provides. Its version "
             "of Foster, Olsen and Shevlin's 1984 portfolio buys the highest earnings surprises and sells the lowest, "
             "every month since 1974. <bookmark mark='a'/> In the original sample it earned "
             f"{o['in']:.2f} percent a month; after publication, {o['post']:.2f}, still significant. "
             f"<bookmark mark='b'/> But look at the line after 2006: {o['after2006']:.2f} percent a month, "
-            + ("indistinguishable from zero. " if gone else "still positive. ")
-            + "Charles Martineau's 2022 paper is titled Rest in Peace Post-Earnings Announcement Drift: for all but "
+            + after_line + "Charles Martineau's 2022 paper is titled Rest in Peace Post-Earnings Announcement Drift: for all but "
             "the smallest stocks, prices now absorb the surprise on the day. Others argue that it survives with "
             "different samples; it is contested. <bookmark mark='c'/> So, the desk question: buy at the next open "
             "after a big beat? On today's evidence for large stocks, the news is already in the price."

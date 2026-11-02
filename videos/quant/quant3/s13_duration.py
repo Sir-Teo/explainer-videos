@@ -100,7 +100,7 @@ class Duration(VoiceoverScene):
         with self.voiceover(
             "Here are those weights as a picture. Each bar is the share of a stock's value paid in one year, at an "
             "eight percent discount rate, and the orange triangle is the balance point: the duration. With no growth, "
-            "the weight falls off fast and the stock balances at about thirteen years. <bookmark mark='a'/> For "
+            "the weight falls off fast and the stock balances at about thirteen and a half years. <bookmark mark='a'/> For "
             "scale, a thirty-year bond, in blue: coupons, and one tall spike of principal at the end. "
             "<bookmark mark='b'/> Now let growth rise towards the discount rate. The mass slides right, the tail "
             "gets fat, and the balance point runs off towards the horizon: at seven percent growth the average dollar "
@@ -174,8 +174,8 @@ class Duration(VoiceoverScene):
                         for x, v, s_ in ((0.9, growth, se[lo_i]), (2.1, value, se[hi_i]))])
         names = VGroup(label(r"growth (lowest B/M)", font_size=19, color=VALUE).next_to(ax.c2p(0.9, 0), UP, buff=0.12),
                        label(r"value (highest B/M)", font_size=19, color=CASH).next_to(ax.c2p(2.1, 0), UP, buff=0.12))
-        nums = VGroup(MathTex(rf"{growth:.2f}\%", font_size=26, color=VALUE).next_to(bars[0], DOWN, buff=0.1),
-                      MathTex(rf"{value:.2f}\%", font_size=26, color=CASH).next_to(bars[1], DOWN, buff=0.1))
+        nums = VGroup(MathTex(rf"{growth:.2f}\%", font_size=26, color=VALUE).next_to(bars[0], RIGHT, buff=0.1),
+                      MathTex(rf"{value:.2f}\%", font_size=26, color=CASH).next_to(bars[1], RIGHT, buff=0.1))
         ordered = growth < value
         side = VGroup(
             label(r"monthly returns on the month's change in the 10-year yield", font_size=20, color=GREY_A),
@@ -190,6 +190,8 @@ class Duration(VoiceoverScene):
                           4.6, 19, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French's book-to-market deciles (value-weighted); Shiller's GS10")
+        order_line = ("The order is what duration predicts: growth, the longer asset, is more sensitive. " if ordered
+                      else "Even the order is wrong: value moved more than growth. ")
         pp = desk_question(r"Pause and predict: Gordon says a one-point rise in yields should cut a growth stock by a "
                            r"third. What did the data say?", width=6.0, font_size=21).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
@@ -198,17 +200,15 @@ class Duration(VoiceoverScene):
             "happened, measured on Kenneth French's portfolios since 1963: each month's return against that month's "
             f"change in the ten-year Treasury yield. The growth stocks lost {abs(growth):.1f} percent per point, the "
             f"value stocks {abs(value):.1f}. <bookmark mark='b'/> "
-            + ("The order is what duration predicts: growth, the longer asset, is more sensitive. "
-               if ordered else "Even the order is wrong: value moved more than growth. ")
-            + "But the size is off by more than ten times. <bookmark mark='c'/> The formula holds growth fixed while "
+            + order_line + "But the size is off by more than ten times. <bookmark mark='c'/> The formula holds growth fixed while "
             "the rate moves. In the data, yields rise when inflation rises, and expected dividends rise with it, so "
             "g moves with r and much of the effect cancels. Dechow, Sloan and Soliman measured implied equity "
             "durations of about fifteen years, not thirty-three. A model's sensitivity is only as good as its "
             "assumption about what else moves."
         ) as vo:
-            self.play(FadeIn(pp))
+            self.play(FadeIn(g), FadeIn(src), FadeIn(pp))
             vo.wait_until("a")
-            self.play(FadeOut(pp), FadeIn(g), FadeIn(src), FadeIn(side[:2]))
+            self.play(FadeOut(pp), FadeIn(side[:2]))
             self.play(LaggedStart(*[GrowFromEdge(b_, UP) for b_ in bars], lag_ratio=0.4), FadeIn(names), FadeIn(nums),
                       Create(errs))
             vo.wait_until("b")

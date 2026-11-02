@@ -474,6 +474,30 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Chen, K.-T. (1957). "Integration of paths, geometric invariants and a generalized Baker–Hausdorff formula." *Annals of Mathematics*.
 - Lyons, T. (1998). "Differential equations driven by rough signals." *Revista Matemática Iberoamericana*.
 - Chevyrev, I., Kormilitzin, A. (2016). "A primer on the signature method in machine learning." arXiv.
+- Bachelier, L. (1900). *Théorie de la spéculation*. *Annales scientifiques de l'École normale supérieure*.
+- Lévy, P. (1948). *Processus stochastiques et mouvement brownien*. Gauthier-Villars.
+- Donsker, M. (1951). "An invariance principle for certain probability limit theorems." *Memoirs of the AMS* 6.
+- Feller, W. (1951). "Two singular diffusion problems." *Annals of Mathematics*.
+- Tanaka, H. (1963). "Note on continuous additive functionals of the 1-dimensional Brownian path." *Z. Wahrscheinlichkeitstheorie*.
+- Wong, E., Zakai, M. (1965). "On the convergence of ordinary integrals to stochastic integrals." *Annals of Mathematical Statistics*.
+- Dambis, K. E. (1965); Dubins, L., Schwarz, G. (1965). Continuous martingales as time-changed Brownian motions.
+- Clark, J. M. C. (1970). "The representation of functionals of Brownian motion by stochastic integrals." *Annals of Mathematical Statistics*.
+- Novikov, A. A. (1972). "On an identity for stochastic integrals." *Theory of Probability and Its Applications*.
+- Milstein, G. N. (1974). "Approximate integration of stochastic differential equations." *Theory of Probability and Its Applications*.
+- Merton, R. C. (1976). "Option pricing when underlying stock returns are discontinuous." *Journal of Financial Economics*.
+- Vasicek, O. (1977). "An equilibrium characterization of the term structure." *Journal of Financial Economics*.
+- Ocone, D. (1984). "Malliavin's calculus and stochastic integral representations of functionals of diffusion processes." *Stochastics*.
+- Cox, J., Ingersoll, J., Ross, S. (1985). "A theory of the term structure of interest rates." *Econometrica*.
+- Broadie, M., Glasserman, P., Kou, S. (1997). "A continuity correction for discrete barrier options." *Mathematical Finance*.
+- Rogers, L. C. G. (1997). "Arbitrage with fractional Brownian motion." *Mathematical Finance*.
+- Demeterfi, K., Derman, E., Kamal, M., Zou, J. (1999). "A guide to volatility and variance swaps." *Journal of Derivatives*.
+- Barndorff-Nielsen, O., Shephard, N. (2004). "Power and bipower variation with stochastic volatility and jumps." *Journal of Financial Econometrics*.
+- Filimonov, V., Sornette, D. (2012). "Quantifying reflexivity in financial markets: toward a prediction of flash crashes." *Physical Review E*.
+- Hardiman, S., Bercot, N., Bouchaud, J.-P. (2013). "Critical reflexivity in financial markets: a Hawkes process analysis." *European Physical Journal B*; arXiv 1302.1405.
+- Jaisson, T., Rosenbaum, M. (2016). "Rough fractional diffusions as scaling limits of nearly unstable heavy tailed Hawkes processes." *Annals of Applied Probability*.
+- Gatheral, J., Jaisson, T., Rosenbaum, M. (2018). "Volatility is rough." *Quantitative Finance*.
+- *Frontier (2023–2026):* Issa, Z., Horvath, B., Lemercier, M., Salvi, C. (2023). "Non-adversarial training of neural SDEs with signature kernel scores." NeurIPS, arXiv 2305.16274. Cuchiero, C., Gazzani, G., Möller, J., Svaluto-Ferro, S. (2025). "Joint calibration to SPX and VIX options with signature-based models." *Mathematical Finance* 35(1), arXiv 2301.13235. Walker, B., McLeod, A. D., Qin, T., Cheng, Y., Li, H., Lyons, T. (2024). "Log neural controlled differential equations: the Lie brackets make a difference." ICML, arXiv 2402.18512. Cont, R., Das, P. (2024). "Rough volatility: fact or artefact?" *Sankhyā B* 86, arXiv 2203.13820. Guyon, J., Lekeufack, J. (2023). "Volatility is (mostly) path-dependent." *Quantitative Finance* 23(9). Bayer, C., Friz, P., Fukasawa, M., Gatheral, J., Jacquier, A., Rosenbaum, M. (2023). *Rough Volatility*. SIAM. Bayer, C., dos Reis, G., Horvath, B., Oberhauser, H. (eds.) *Signature Methods in Finance*. Springer Finance (open access). Cass, T., Salvi, C. (2024). "Lecture notes on rough paths and applications to machine learning." arXiv 2404.06583. Degenne, R., Ledvinka, D., Marion, E., Pfaffelhuber, P. (2025). "Formalization of Brownian motion in Lean." arXiv 2511.20118. Earlier: Gierjatowicz, P., Sabate-Vidales, M., Šiška, D., Szpruch, L., Žurič, Ž. "Robust pricing and hedging via neural SDEs." *J. Computational Finance*, arXiv 2007.04154; Kidger, P. et al. (2021). "Neural SDEs as infinite-dimensional GANs." ICML.
+- *Industry and regulation:* CFTC press release 8432-21 (28 September 2021), Interactive Brokers; CME Clearing Advisories 20-152, 20-171 and 20-320 (2020), the Bachelier switch and its reversal; SEC Release No. 34-90763 (2020) on OCC's STANS margin methodology; Interactive Brokers press release (21 April 2020) and Form 10-Q for Q2 2020; Federal Reserve SR 11-7 (2011) and SR 26-2 (Fed, OCC and FDIC, 17 April 2026), "Revised Guidance on Model Risk Management".
 
 ### Part 6 · Financial Econometrics
 - Fama, E., Fisher, L., Jensen, M., Roll, R. (1969). "The adjustment of stock prices to new information." *International Economic Review*.

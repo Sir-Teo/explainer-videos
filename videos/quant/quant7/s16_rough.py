@@ -101,7 +101,7 @@ class Rough(VoiceoverScene):
                    if rough else "Smoother than the equity-index result.")
         with self.voiceover(
             "Lab. The House's estimator is eight lines: for each power q, the slope of log m against log delta; then "
-            "H is the slope of those slopes against q. First, check it where the answer is known. <bookmark mark='a'/> "
+            "H is the slope of those slopes against q.  <bookmark mark='a'/> "
             f"On simulated paths with H of zero point one it returns about {s1.mean():.2f}; with a half, about "
             f"{s5.mean():.2f}. <bookmark mark='b'/> Now Bitcoin's own daily log realized volatility, "
             f"{len(ro['lv']):,} days. Five parallel lines, one per q, and their slopes on a straight line through the "

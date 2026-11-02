@@ -29,10 +29,9 @@ class Hook(VoiceoverScene):
         card = part_title(PART, r"What happens when you press buy?")
         disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Part two. The machinery of markets. Part one treated prices as numbers that arrive by chance. Every one "
-            "of those numbers was made by a machine: brokers, exchanges, clearing houses, lenders of cash and "
-            "of shares, all wired together, all with rules about who must pay what, and when. A quant who doesn't "
-            "know the machine will one day be surprised by it."
+            "Part two. The machinery of markets. Part one treated prices as numbers that arrive by chance. Every one of "
+            "those numbers was made by a machine: brokers, exchanges, clearing houses, lenders of cash and of shares, with "
+            "rules about who must pay what, and when."
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
         self.play(FadeOut(card), FadeOut(disc))
@@ -64,14 +63,12 @@ class Hook(VoiceoverScene):
                          .move_to(box.get_bottom() + UP * (0.15 + 0.2 * (k // 6)) + RIGHT * (-0.62 + 0.25 * (k % 6)))
                          for k in range(24)])
         with self.voiceover(
-            "Here is what happens when you press buy on a share. Your order goes to your broker, who routes it, in "
-            "microseconds, to an exchange or to a wholesaler, a market maker that buys retail orders. "
-            "<bookmark mark='a'/> There it meets a seller: a trade. In seconds you see the price. But nothing has "
-            "changed hands yet. <bookmark mark='b'/> The trade goes to a clearing house, which steps into the middle: "
-            "it becomes the buyer to every seller and the seller to every buyer. <bookmark mark='c'/> Only a "
-            "business day later does the depository move the shares to your account and the cash to the seller. "
-            "Until then, the clearing house carries the risk that one side fails to pay, and it wants collateral "
-            "for it: watch the coins pile up while the trade waits."
+            "Press buy on a share. Your order goes to your broker, who routes it in microseconds to an exchange, or to a "
+            "wholesaler, a market maker that buys retail orders. <bookmark mark='a'/> There it meets a seller: a trade. "
+            "But nothing has changed hands yet. <bookmark mark='b'/> The trade goes to a clearing house, which becomes the "
+            "buyer to every seller and the seller to every buyer. <bookmark mark='c'/> Only a business day later are the "
+            "shares and the cash exchanged. Until then the clearing house carries the risk that one side fails to pay, and "
+            "it wants collateral for it: watch the coins pile up while the trade waits."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(n) for n in nodes], lag_ratio=0.15), FadeIn(token), FadeIn(lanes[0]))
             for i in range(2):
@@ -129,18 +126,15 @@ class Hook(VoiceoverScene):
         lesson = label(r"The plumbing, not the price, decided who could trade.", font_size=28, color=QC.IDEA)
         lesson.to_edge(UP, buff=0.35)
         with self.voiceover(
-            "That collateral once decided who could trade. In January 2021 GameStop's price was swinging by "
-            "hundreds of dollars a day. On the 27th the National Securities Clearing Corporation, the clearing "
-            "house for American stocks, made intraday margin calls on thirty-six members totalling six point nine "
-            "billion dollars: two point one billion to mark positions to market, and four point eight billion as a "
-            "special charge for the volatility. What all members had to deposit rose to twenty-five and a half "
-            "billion. <bookmark mark='a'/> The next morning the clearing house waived a further charge, the excess "
-            "capital premium, for every member. The SEC's staff report says that without that waiver one retail "
-            "broker-dealer would have owed an extra charge of more than double its margin requirement of one point "
-            "four billion dollars. The report doesn't name it. That morning Robinhood stopped its customers buying "
-            "GameStop and a handful of other stocks, citing its clearing deposit; GameStop's short interest had "
-            "reached nearly a hundred and twenty-three percent of its float. <bookmark mark='b'/> The price did "
-            "not decide who could buy that day. The plumbing did."
+            "That collateral once decided who could trade. In January 2021 GameStop's price was swinging by hundreds of "
+            "dollars a day. On the 27th the clearing house for American stocks made intraday margin calls on thirty-six "
+            "members totalling six point nine billion dollars: two point one billion to mark positions to market, four point "
+            "eight billion as a special charge. What all members had to deposit rose to twenty-five and a half billion. "
+            "<bookmark mark='a'/> The next morning it waived one more charge, the excess capital premium. The SEC's staff "
+            "report says that without the waiver one retail broker would have owed more than double its margin requirement "
+            "of one point four billion dollars; the report doesn't name it. That morning Robinhood stopped its customers "
+            "buying GameStop, citing its clearing deposit. GameStop's short interest had reached a hundred and twenty-three "
+            "percent of its float. <bookmark mark='b'/> The plumbing, not the price, decided who could buy."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             self.add(bars, tot)
@@ -177,13 +171,11 @@ class Hook(VoiceoverScene):
             lead = Line(d.get_center(), t.get_bottom() if up > 0 else t.get_top(), color=GREY_D, stroke_width=1)
             marks.add(VGroup(d, lead, t))
         with self.voiceover(
-            "How we got here. Shares of the Dutch East India Company traded in Amsterdam from 1602. Osaka's Dojima "
-            "rice market had its futures recognized in 1730. Two dozen New York brokers signed the Buttonwood "
-            "Agreement in 1792, and the Chicago Board of Trade opened in 1848. <bookmark mark='a'/> In 1925 Chicago "
-            "set up the first independent clearing house for American futures. In 1973 the Depository Trust "
-            "Company began immobilizing paper certificates, and the CBOE listed options. <bookmark mark='b'/> "
-            "London's Big Bang opened its exchange in 1986; American stocks were quoted in cents from 2001; "
-            "Regulation NMS wired the exchanges together in 2005; and in 2024 settlement fell to one day."
+            "How we got here. Shares of the Dutch East India Company traded in Amsterdam from 1602; Osaka's rice futures were "
+            "recognized in 1730; New York's brokers signed the Buttonwood Agreement in 1792, and the Chicago Board of Trade "
+            "opened in 1848. <bookmark mark='a'/> In 1925 Chicago set up the first independent American futures clearing "
+            "house; in 1973 the Depository Trust Company began immobilizing paper certificates. <bookmark mark='b'/> Then "
+            "London's Big Bang, prices in cents from 2001, Regulation NMS in 2005, and one-day settlement in 2024."
         ) as vo:
             self.play(Create(line), FadeIn(ticks))
             self.play(LaggedStart(*[FadeIn(m) for m in marks[:4]], lag_ratio=0.5, run_time=4))
@@ -204,11 +196,8 @@ class Hook(VoiceoverScene):
             r"Who earns what; indices; markets around the world; the industry and the frontier",
         ], color=QC.IDEA)
         with self.voiceover(
-            "The plan. The instruments and how each is quoted, and futures with their carry and their hedge. The "
-            "order book, auctions, dealers and the wholesalers that fill retail orders. Clearing, netting, the "
-            "default waterfall and settlement. Margin, tested on a real crash, and the models that set it. Short "
-            "selling and the market's funding: repo, specials, prime brokers. And who earns what, how indices move "
-            "money, how the machine differs around the world, and who runs it today."
+            "The plan: instruments and futures; the order book, auctions and dealers; clearing and settlement; margin, on a "
+            "real crash; short selling and the market's funding; and who earns what, around the world."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=9))

@@ -63,7 +63,7 @@ class Regimes(VoiceoverScene):
         with self.voiceover(
             "Volatility is hidden; we only see its effects. One way to model it is a few hidden states. In 1989 James "
             "Hamilton let the economy switch between regimes by a Markov chain, each regime with its own mean and "
-            "volatility. Picture two jars holding one litre of belief: calm and storm. <bookmark mark='a'/> Each "
+            "volatility. Picture two jars of belief: calm and storm. <bookmark mark='a'/> Each "
             "month, two things happen. First, predict: a little liquid leaks between the jars, because regimes can "
             "change. <bookmark mark='b'/> Then the month's return lands, and each jar is rescaled by how likely that "
             "return is under its regime, here the two bell curves, and the total is poured back to one litre. "

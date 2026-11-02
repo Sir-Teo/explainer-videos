@@ -65,12 +65,10 @@ class Industry(VoiceoverScene):
                                     radius=0.045, color=QC.IDEA) for j in range(3)])
             particles.add(always_redraw(mk))
         with self.voiceover(
-            "Here is the money map of this part: who pays whom. Retail investors send orders to a broker that charges "
-            "no commission; the wholesaler that fills them pays the broker for the flow. Trades on exchanges are "
-            "novated to the clearing house and settled at the custodian. Hedge funds pay their prime broker fees and "
-            "financing; the prime broker funds itself in repo against the fund's collateral, and hedges on the "
-            "exchange. <bookmark mark='a'/> Every arrow is somebody's revenue line. Let's open the boxes, using only "
-            "what the firms and regulators have published."
+            "The money map: who pays whom. Retail orders go to a commission-free broker; the wholesaler that fills them pays "
+            "for the flow. Exchange trades are novated to the clearing house and settled at the custodian. Hedge funds pay "
+            "their prime broker, which funds itself in repo against their collateral. <bookmark mark='a'/> Every arrow is a "
+            "revenue line. Open the boxes, using only what firms and regulators have published."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(n) for n in nodes.values()], lag_ratio=0.1), FadeIn(arrows))
             self.add(particles)
@@ -108,16 +106,14 @@ class Industry(VoiceoverScene):
         if grid.height > 7.4:
             grid.scale_to_fit_height(7.4)
         with self.voiceover(
-            "The exchange. CME Group, the largest futures exchange, also clears what it trades; in 2024 it reported "
-            f"record revenue of {ind['cme_rev_2024_bn']} billion dollars on about {ind['cme_adv_2024_m']:.0f} million "
-            "contracts a day. <bookmark mark='a'/> The wholesaler. Virtu's revenue in 2024 was about "
-            f"{ind['virtu_rev_2024_m'] / 1000:.1f} billion dollars, up a quarter, most of it from market making, and "
-            f"its net income {ind['virtu_ni_2024_m']:.0f} million. <bookmark mark='b'/> The broker. Robinhood charges "
-            f"no commission; its transaction revenue in the last quarter of 2024 was {ind['hood_q4_tx_m']} million "
-            f"dollars, {ind['hood_q4_crypto_m']} of it from crypto and {ind['hood_q4_options_m']} from options, and "
-            f"only {ind['hood_q4_equities_m']} from stocks: payment for order flow is an options business. "
-            "<bookmark mark='c'/> And Citadel Securities says it executes more than a third of American retail "
-            "volume; that's the company's own claim."
+            f"CME Group, the largest futures exchange, which clears what it trades, reported record 2024 revenue of "
+            f"{ind['cme_rev_2024_bn']} billion dollars on about {ind['cme_adv_2024_m']:.0f} million contracts a day. "
+            f"<bookmark mark='a'/> Virtu, a wholesaler and market maker, earned about {ind['virtu_rev_2024_m'] / 1000:.1f} "
+            f"billion in revenue, up a quarter, and {ind['virtu_ni_2024_m']:.0f} million of net income. <bookmark mark='b'/> "
+            f"Robinhood charges no commission; of its {ind['hood_q4_tx_m']} million dollars of transaction revenue in the last "
+            f"quarter of 2024, {ind['hood_q4_crypto_m']} came from crypto, {ind['hood_q4_options_m']} from options and only "
+            f"{ind['hood_q4_equities_m']} from stocks: payment for order flow is an options business. <bookmark mark='c'/> "
+            "And Citadel Securities says it executes more than a third of American retail volume: the company's own claim."
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")
@@ -143,15 +139,13 @@ class Industry(VoiceoverScene):
                        r"(3 July 2025)", width=6.2, font_size=19)
         pair = VGroup(c1, c2).arrange(RIGHT, buff=0.3, aligned_edge=UP)
         with self.voiceover(
-            "Two more boxes. Banks' prime brokers fund hedge funds, and their biggest trade lately is chapter two's "
-            "carry trade on Treasuries: buy the bond, sell the future, fund it in repo, many times over. A Federal "
-            f"Reserve note puts it at about {ind['basis_trade_bn']} billion dollars in September 2025, with hedge funds "
-            f"borrowing {ind['hf_repo_tn']:.0f} trillion in repo. <bookmark mark='a'/> And the regulators, who set the "
-            "rules of the machine. The SEC sets ticks and fees and is moving Treasury trades into central clearing, "
-            "cash trades by the end of 2026 and repo by mid-2027. India's SEBI issued an interim order in July 2025 "
-            "alleging that Jane Street manipulated index options around expiry days, and impounded four thousand "
-            "eight hundred and forty-three crore rupees in escrow. Those are allegations in an interim order; Jane "
-            "Street disputes them, and the case is pending."
+            "Prime brokers' biggest recent trade is chapter two's carry on Treasuries: buy the bond, sell the future, fund it "
+            f"in repo, many times over. A Federal Reserve note puts it near {ind['basis_trade_bn']} billion dollars in "
+            f"September 2025, with hedge funds borrowing {ind['hf_repo_tn']:.0f} trillion in repo. <bookmark mark='a'/> "
+            "Regulators set the rules. The SEC is moving Treasuries into central clearing, cash trades by the end of 2026 and "
+            "repo by mid-2027. India's SEBI issued an interim order in July 2025 alleging that Jane Street manipulated index "
+            "options around expiry days, and impounded about four thousand eight hundred crore rupees in escrow. Those are "
+            "allegations in an interim order; Jane Street disputes them, and the case is pending."
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")
@@ -179,15 +173,11 @@ class Industry(VoiceoverScene):
         q = desk_question(r"Make me a market on the number of trading days in a US year.", width=5.0, font_size=19)
         q.to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Where do quants fit in this machine? Place the firms by how long they hold a position and what they "
-            "trade. At microseconds, the high-frequency market makers and wholesalers. Options market makers a "
-            "little slower. Statistical arbitrage over minutes to days; trend followers and systematic equity over "
-            "weeks to months; the multi-manager platforms across all of it; and the banks' desks pricing and "
-            "hedging for clients. Each has its parts later in the series. <bookmark mark='a'/> And the jobs: the "
-            "researcher who finds and tests ideas, the trader who runs them and decides when to stop, the developer "
-            "who builds the systems, the risk quant who asks what can go wrong, the desk quant who prices and hedges "
-            "for a bank, and the structurer who designs products. Their interviews start with questions like this "
-            "one: make me a market on the number of trading days in a year."
+            "Where do quants fit? By holding period: high-frequency market makers at microseconds, options market makers, "
+            "statistical arbitrage over days, trend followers and systematic equity over months, multi-manager platforms "
+            "across all of it, and bank desks pricing for clients. <bookmark mark='a'/> The jobs: researcher, trader, "
+            "developer, risk quant, desk quant, structurer. Their interviews open with questions like: make me a market on "
+            "the number of trading days in a year."
         ) as vo:
             self.play(FadeIn(g), FadeIn(ylab), LaggedStart(*[FadeIn(b) for b in blobs], lag_ratio=0.4, run_time=6))
             vo.wait_until("a")

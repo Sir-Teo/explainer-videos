@@ -47,14 +47,10 @@ class Orders(VoiceoverScene):
         if more.width > 13.0:
             more.scale_to_fit_width(13.0)
         with self.voiceover(
-            "Two kinds of order do almost all the work. A market order says: trade now, at whatever price is "
-            "available. It is certain to trade, and uncertain about the price. <bookmark mark='a'/> A limit order "
-            "says: buy at this price or lower, sell at this price or higher. The price is certain, the trade is not; "
-            "it waits. A stop order waits for a trigger, then becomes a market order. <bookmark mark='b'/> Orders "
-            "also say how long they live: for the day, until cancelled, immediate-or-cancel, or fill-or-kill. And "
-            "some hide: an iceberg shows a slice of its size, a hidden order shows none, and for that privilege it "
-            "queues behind every displayed order at the same price. The rule of the book is price first, then "
-            "visibility, then time."
+            "A market order trades now, at whatever price is there. <bookmark mark='a'/> A limit order names its price and "
+            "waits; a stop order waits for a trigger, then becomes a market order. <bookmark mark='b'/> Orders also say how "
+            "long they live: the day, until cancelled, immediate-or-cancel, fill-or-kill. Icebergs show part of their size, "
+            "hidden orders none, and queue behind displayed orders at their price: price first, then visibility, then time."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -91,15 +87,13 @@ class Orders(VoiceoverScene):
                                 stroke_width=0, fill_color=QC.IDEA, fill_opacity=0.8)
                       .move_to(hg.ax.c2p(i, 0), aligned_edge=DOWN) for i, h in enumerate(hist) if h > 0])
         with self.voiceover(
-            "Here is a book running: one row per price, asks above and bids below, each block one share waiting. "
-            "This one is simulated, by the zero-intelligence model of Smith, Farmer, Gillemot and Krishnamurthy: "
-            "orders arrive at random prices, market orders at random times, resting orders are cancelled at "
-            "random. <bookmark mark='a'/> Watch a level: a new order joins at the back of its queue; a "
-            "cancellation pulls a block out of the middle; a market order bites from the front of the best queue. "
-            "The yellow bracket is the spread, and it breathes as the front queues empty and refill. "
-            "<bookmark mark='b'/> Nobody in this model thinks, and the book still has a spread that is usually one "
-            "to four ticks, thin queues at the front and deeper ones behind: much of a book's shape is plumbing, "
-            "not strategy."
+            "Here is a book running: one row per price, asks above and bids below, each block one share waiting. It is "
+            "simulated, by the zero-intelligence model of Smith, Farmer, Gillemot and Krishnamurthy: orders arrive at random "
+            "prices, market orders at random times, and resting orders are cancelled at random. <bookmark mark='a'/> Watch "
+            "a level: a new order joins the back of its queue, a cancel pulls a block out of the middle, a market order bites "
+            "the front, and the spread, in yellow, breathes. <bookmark mark='b'/> Nobody in this model thinks, and the book "
+            "still has a spread of one to four ticks and thin queues at the front: much of a book's shape is plumbing, not "
+            "strategy."
         ) as vo:
             self.play(FadeIn(lad), FadeIn(hdr), FadeIn(model))
             self.add(cur)
@@ -139,19 +133,17 @@ class Orders(VoiceoverScene):
                       (GREY_B, rf"uniform depth $d = {float(bk['depth'][0]):.1f}$ (the formula)")], font_size=19)
         leg.next_to(g, RIGHT, buff=0.3).shift(UP * 0.4)
         concave = W.mean(0)[-1] < uni[-1]
+        walk_note = ("the front is thin and deeper levels thicker, so cost bends: impact is concave, as in real books."
+                     if concave else "the formula understates the cost: the book thins out behind the front.")
         verdict = label(r"real books thicken behind the best quote: impact is concave (Part 37)" if concave else
                         r"this book is thin behind the best quote: impact is steeper than linear", font_size=21,
                         color=QC.IDEA).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
         with self.voiceover(
-            "What does impatience cost? Say every tick above the best ask holds d shares. A market buy of Q shares "
-            "takes the best level first, then the next: price priority. <bookmark mark='a'/> The average price is "
-            "an arithmetic series: the best ask plus half a tick for every extra level it eats. "
-            "<bookmark mark='b'/> Against the mid price, the cost is half the spread plus the walk. Twice that "
-            "distance is the effective spread, the cost measure Parts thirty-six and thirty-seven use. "
-            "<bookmark mark='c'/> Now measure it in the simulated book, four seeds, against the uniform formula. "
-            + ("The book is thin at the front and thicker behind, so the cost rises fast for small orders and "
-               "then bends: impact is concave, which is what real books show too."
-               if concave else "Here the formula understates the cost: the book thins out behind the front.")
+            "What does impatience cost? Say each tick above the best ask holds d shares. A buy of Q shares eats the levels in "
+            "order. <bookmark mark='a'/> Its average price is an arithmetic series. <bookmark mark='b'/> Against the mid, "
+            "the cost is half the spread plus the walk; twice it is the effective spread. <bookmark mark='c'/> In the "
+            "simulated book, four seeds, against the formula: "
+            + walk_note
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -193,15 +185,12 @@ class Orders(VoiceoverScene):
         src = note(r"SEC Release 34-101070 (2024); exemptive orders 34-104172 (2025) and 34-105656 (2026)",
                    font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            f"Turn up the flow of market orders relative to limit orders and the spread widens: about "
-            f"{np.mean(sp['0.5']):.0f} ticks, then {np.mean(sp['1.0']):.0f}, then {np.mean(sp['2.0']):.0f}, and at "
-            "four times the book runs dry. <bookmark mark='a'/> The tick itself is a rule. In September 2024 the "
-            "SEC amended Rule 612: stocks whose average quoted spread is a cent and a half or less would quote in "
-            "half-pennies, and the fee an exchange may charge to take liquidity was cut from thirty to ten "
-            "hundredths of a cent per share. The compliance date was moved to November 2026, and then, by an order "
-            "of June 2026, to November 2027, while the Commission reviews the rules again. "
-            "<bookmark mark='b'/> Pause and predict: halve the tick on a stock that always trades one tick wide "
-            "with long queues. What happens to the spread, and to the queues?"
+            f"More market orders relative to limit orders widen the spread: about {np.mean(sp['0.5']):.0f}, "
+            f"{np.mean(sp['1.0']):.0f}, then {np.mean(sp['2.0']):.0f} ticks. <bookmark mark='a'/> The tick itself is a rule. "
+            "In 2024 the SEC amended Rule 612: stocks with average spreads of a cent and a half or less would quote in "
+            "half-pennies, and access fees were cut from thirty to ten hundredths of a cent. Compliance was due today, in "
+            "November 2026; in June the SEC moved it to November 2027. <bookmark mark='b'/> Pause and predict: halve the "
+            "tick on a stock with a one-tick spread and long queues. What happens?"
         ) as vo:
             self.play(FadeIn(g), FadeIn(head), LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.1))
             self.play(Create(mean_line))

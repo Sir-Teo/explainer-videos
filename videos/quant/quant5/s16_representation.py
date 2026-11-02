@@ -145,13 +145,13 @@ class Representation(VoiceoverScene):
         verdict = (f"stays flat, slope {h['slope']['two']:.2f}: no amount of trading in W hedges the noise in B."
                    if flat else f"falls, slope {h['slope']['two']:.2f}, more than expected.")
         with self.voiceover(
-            "How fast does a discrete hedge converge? Five seeds of four thousand paths each, rebalanced from eight to "
-            "two thousand times. <bookmark mark='a'/> For W squared, the hedge error is exactly the quadratic-variation "
-            "error of chapter two, and its spread follows the square root of two over n: slope minus a half. "
-            "<bookmark mark='b'/> A Black-Scholes call hedged with its delta converges at the same rate, minus a half, "
-            "as Part eleven will explain. <bookmark mark='c'/> Now break the theorem's assumption. Let the payoff "
-            "depend on a second, independent Brownian motion B, and hedge with W alone. The error "
-            + verdict + " The market is incomplete, and Parts eleven and thirteen live there. "
+            "How fast does a discrete hedge converge? Five seeds of four thousand paths each, rebalanced from eight "
+            "to two thousand times. <bookmark mark='a'/> For W squared, the hedge error is exactly the "
+            "quadratic-variation error of chapter two, and its spread follows the square root of two over n: slope "
+            "minus a half. <bookmark mark='b'/> A Black-Scholes call hedged with its delta converges at the same "
+            "rate, minus a half, as Part eleven will explain. <bookmark mark='c'/> Now break the theorem's "
+            "assumption. Let the payoff depend on a second, independent Brownian motion B, and hedge with W alone. "
+            f"The error {verdict} The market is incomplete, and Parts eleven and thirteen live there. "
             "<bookmark mark='d'/> A pause: four times as many trades. The spread halves."
         ) as vo:
             self.play(FadeIn(g), Create(theory), FadeIn(leg[3]))

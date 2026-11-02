@@ -50,17 +50,13 @@ class Repo(VoiceoverScene):
                             r"it failed. No system-wide run there; the runs were firm by firm.", 12.4, 19, GREY_A)
         cmw.to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Most leverage in the financial system is funded overnight, by repo. A fund that owns Treasury bonds "
-            "hands them to a lender, a money-market fund or a bank, and receives cash today; tomorrow it pays the "
-            "cash back with interest and takes its bonds back. Legally a sale and a repurchase; economically a "
-            "secured loan. The collateral is worth a little more than the cash: that gap is the haircut. "
-            "<bookmark mark='a'/> Interest is the cash times the repo rate times the days over three hundred and "
-            "sixty. <bookmark mark='b'/> Repo comes in two plumbing styles. In tri-party, a clearing bank holds the "
-            "collateral and applies the haircuts; that's how money funds lend to dealers. Bilateral repo is direct, "
-            "and that's how dealers lend on to hedge funds. Securities lending is the same trade seen from the "
-            "stock lender's side. Did tri-party repo run in 2008? Copeland, Martin and Walker found that for most "
-            "dealers, haircuts and funding barely moved; Lehman's collapsed. The runs were on firms, not on the "
-            "market."
+            "Most leverage is funded overnight by repo: a fund hands over Treasuries and gets cash, and tomorrow repays it "
+            "with interest. Legally a sale and repurchase; economically a secured loan, the collateral worth a bit more than "
+            "the cash: the haircut. <bookmark mark='a'/> Interest is cash times rate times days over three sixty. "
+            "<bookmark mark='b'/> Money funds lend to dealers in tri-party repo, through a clearing bank; dealers lend on to "
+            "hedge funds bilaterally; securities lending is the same trade from the stock side. In 2008, Copeland, Martin and "
+            "Walker found, tri-party haircuts barely moved for most dealers while Lehman's collapsed: runs on firms, not on "
+            "the market."
         ) as vo:
             self.play(FadeIn(a), FadeIn(b), GrowArrow(top), FadeIn(tl), GrowArrow(bot), FadeIn(bl))
             vo.wait_until("a")
@@ -106,15 +102,13 @@ class Repo(VoiceoverScene):
         pr = np.asarray(tw["price"], float)
         bins = VGroup()
         with self.voiceover(
-            "The haircut is a leverage limit, and it has a shape. A dollar of collateral with a two percent haircut "
-            "borrows ninety-eight cents, which buys more collateral, which borrows again: a tower, each block "
-            "ninety-eight percent of the one below. The tower sums to one over the haircut: fifty times at two "
-            "percent. <bookmark mark='a'/> Now the lender raises the haircut to four percent. The tower may only be "
-            "half as tall: half the book must be sold at once. <bookmark mark='b'/> And the selling moves the price, "
-            "which cuts the fund's equity, which shrinks the tower again. The House's deleverage function plays it "
-            f"out: sales of {sold[0]:.0f}, then {sold[1]:.1f}, then {sold[2]:.1f} percent of the original book, until "
-            f"the loop dies out. Total selling is {tw['amplification']:.2f} times the first round: the loop's gain "
-            "turned into a multiplier."
+            "The haircut is a leverage limit, and it has a shape. At two percent, a dollar of collateral borrows ninety-eight "
+            "cents, which buys more collateral, which borrows again: a tower, each block ninety-eight percent of the one "
+            "below, summing to one over the haircut: fifty times. <bookmark mark='a'/> Now the lender raises the haircut to "
+            "four percent. The tower may only be half as tall: half the book must be sold at once. <bookmark mark='b'/> And "
+            "selling moves the price, which cuts the fund's equity, which shrinks the tower again. The House's deleverage "
+            f"function plays it out: sales of {sold[0]:.0f}, then {sold[1]:.1f}, then {sold[2]:.1f} percent of the original "
+            f"book, {tw['amplification']:.2f} times the first round in all: the loop's gain turned into a multiplier."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(b, shift=DOWN * 0.2) for b in t0], lag_ratio=0.03, run_time=3), FadeIn(lev))
             step(0)
@@ -157,13 +151,10 @@ class Repo(VoiceoverScene):
                    r"sold; haircuts rise with the fall (Brunnermeier and Pedersen 2009); 8 seeds", font_size=16)
         src.to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Now ten funds at once, all near the limit, all holding the same asset, and haircuts that rise as the "
-            "price falls, the margin spiral of Brunnermeier and Pedersen. <bookmark mark='a'/> Raise the haircut a "
-            f"little, to three percent, and total selling is {means[0]:.1f} times the first round; to four, "
-            f"{means[1]:.1f}; to six, {means[2]:.1f}. The small shock is the most amplified, because its first round "
-            "is small and the loop does the rest; in every case the price ends about "
-            f"{100 * np.mean(drops):.0f} percent lower. <bookmark mark='b'/> The House's code is the loop itself. "
-            "Part forty-one runs it on real crises."
+            "Now ten funds near the limit in the same asset, with haircuts that rise as prices fall: Brunnermeier and "
+            f"Pedersen's spiral. <bookmark mark='a'/> To three percent, total selling is {means[0]:.1f} times the first round; "
+            f"to four, {means[1]:.1f}; to six, {means[2]:.1f}. Small shocks are amplified most, and every case ends about "
+            f"{100 * np.mean(drops):.0f} percent lower. <bookmark mark='b'/> The House's code is the loop itself."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")
@@ -193,13 +184,10 @@ class Repo(VoiceoverScene):
         q = desk_question(r"A Treasury is special at $-1\%$ for three months while GC repo pays 4\%. What does that do "
                           r"to its price?", width=8.4, font_size=22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "One more repo idea. When many traders want to short the same bond, they all need to borrow it, and its "
-            "owner can lend it out in repo in exchange for cash at a low rate. The bond is special: its repo rate "
-            "falls below general collateral. Duffie showed what that does to the price. <bookmark mark='a'/> The "
-            "owner's saving, the rate gap on the bond's value for as long as it stays special, is worth something, "
-            "so it is priced into the bond. <bookmark mark='b'/> A bond special at minus one percent for three "
-            "months, while general repo pays four, carries about a point and a quarter of extra price. That's one "
-            "reason the newest Treasury trades rich to its older twins. Pause and predict, and check the sign."
+            "When many traders short the same bond, they all need to borrow it, and its owner can borrow cash against it "
+            "cheaply: the bond is special. Duffie priced it. <bookmark mark='a'/> The owner's saving is priced into the bond. "
+            "<bookmark mark='b'/> Special at minus one percent for three months while general collateral pays four: about a "
+            "point and a quarter of price, part of why the newest Treasury trades rich. Predict, and check the sign."
         ) as vo:
             self.play(FadeIn(head))
             step(0)

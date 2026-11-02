@@ -183,12 +183,12 @@ class Ruin(VoiceoverScene):
                               "the long games are rare and dominate the average.")
         with self.voiceover(
             "How long does it take? Use chapter three's other martingale, the walk squared minus the steps, started "
-            "at zero between barriers at minus a and b minus a. Its expected value at the end is zero. "
-            "<bookmark mark='a'/> The walk ends at one barrier or the other, with the probabilities we found. "
-            "<bookmark mark='b'/> So the expected number of bets is a times b minus a: from fifty, aiming for a "
-            "hundred, two thousand five hundred. <bookmark mark='c'/> Sixty games, gold at a hundred, red when broke. "
-            + verdict + " On European roulette the games end sooner, and only "
-            f"{100 * R['frac_top']:.1f} percent at a hundred."
+            "at zero between barriers at minus a and b minus a. Its expected value at the end is zero. <bookmark "
+            "mark='a'/> The walk ends at one barrier or the other, with the probabilities we found. <bookmark "
+            "mark='b'/> So the expected number of bets is a times b minus a: from fifty, aiming for a hundred, "
+            "two thousand five hundred. <bookmark mark='c'/> Sixty games, gold at a hundred, red when broke. "
+            f"{verdict} On European roulette the games end sooner, and only {100 * R['frac_top']:.1f} percent "
+            "at a hundred."
         ) as vo:
             step(0)
             vo.wait_until("a")

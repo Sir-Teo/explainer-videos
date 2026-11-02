@@ -4,22 +4,28 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import rough as R
-from videos.quant.quant14.common import BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, SPOT, VAR, illustration, load, real_data
+from videos.quant.quant14.common import (BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, SPOT, VAR, illustration, load,
+                                         loglog_curve, loglog_skew_axes, pause, real_data, running_min)
+
+SMILE_DAYS = (4, 16, 79)
 
 
 class RBergomi(VoiceoverScene):
     def construct(self):
         rb = load("rbergomi")
         rs = load("rbskew")
+        rp = load("rb_replay")
         self.card()
         self.model()
+        self.proof()
         self.scheme(rb)
-        self.fit(rb, rs)
+        self.replay(rb, rp, rs)
+        self.skew(rb, rs)
 
     def card(self):
-        c = chapter_card(3, r"Rough Bergomi", r"What is the simplest rough model that prices options?", lit=(2016,),
+        c = chapter_card(5, r"Rough Bergomi", r"What is the simplest rough model that prices options?", lit=(2016,),
                          part=PART)
-        with self.voiceover("Chapter three. Rough Bergomi."):
+        with self.voiceover("Chapter five. Rough Bergomi."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -45,6 +51,45 @@ class RBergomi(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def proof(self):
+        rows = [cmath(r"\mathrm{Var}\,W^H_t", r"=", r"2H\int_0^t (t - s)^{2H - 1}\,ds = t^{2H}", font_size=38,
+                      colors={r"\mathrm{Var}\,W^H_t": ROUGH}),
+                cmath(r"\mathbb{E}\,v_t", r"=", r"\xi_0(t)\,\mathbb{E}\,e^{\eta W^H_t - \frac12\eta^2 t^{2H}} = \xi_0(t)",
+                      font_size=38, colors={r"\mathbb{E}\,v_t": VAR}),
+                cmath(r"\xi_s(t)", r"=", r"\xi_0(t)\exp\!\Big(\eta\sqrt{2H}\!\int_0^s\!(t - u)^{H - \frac12}dW_u - "
+                      r"\tfrac{\eta^2}{2}\!\int_0^s\! 2H(t - u)^{2H - 1}du\Big)", font_size=32, colors={r"\xi_s(t)": OPT}),
+                cmath(r"\text{state at } s", r"=", r"\text{the whole curve } \xi_s(\cdot)", font_size=38,
+                      colors={r"\text{state at } s": GREY_A})]
+        whys = [why(r"the Itô isometry, with $W^H_t = \sqrt{2H}\int_0^t (t - s)^{H - 1/2}dW_s$"),
+                why(r"a Gaussian's moment generating function: the compensator makes it exactly one; the market's variance "
+                    r"curve is matched for any $\eta$"),
+                why(r"condition on $\mathcal{F}_s$: the rest of the integral is independent and Gaussian; $\xi_s(t) = "
+                    r"\mathbb{E}_s v_t$ is an exponential martingale in $s$"),
+                why(r"not Markov in $(S, v)$: what is known at $s$ is a whole curve (Bergomi's forward variance)")]
+        step = ladder(self, rows, whys, keep=3, top=2.8, x=-1.2, buff=0.75, edge=6.9)
+        q = pause(r"Double $\eta$. What happens to $\mathbb{E}[v_t]$?", width=5.0, font_size=22).to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "Why does this model respect the market's variance curve? Three lines. The rough driver has variance t "
+            "to the two H, by the Itô isometry. <bookmark mark='a'/> So the exponential, with its compensator minus "
+            "a half eta squared t to the two H, has expectation exactly one, and the expected variance at t is the "
+            "market's forward variance, whatever eta is. Pause and predict: double eta. What happens to the "
+            "expected variance? <bookmark mark='b'/> Nothing. And conditioning on what is known at an earlier time "
+            "s, the forward variance becomes an exponential martingale in s: the model is arbitrage-free on the "
+            "variance curve. <bookmark mark='c'/> The price of all this: the state at time s is not a number, but "
+            "the whole curve. Rough Bergomi is not Markov in the spot and the variance."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            self.play(FadeIn(q, shift=UP * 0.2))
+            vo.wait_until("b")
+            self.play(FadeOut(q))
+            step(2)
+            vo.wait_until("c")
+            step(3)
+        self.wait(0.4)
+        self.clear_scene()
+
     def scheme(self, rb):
         p = rb["params"]
         S, v = R.rbergomi_paths(p["H"], p["eta"], p["rho"], 0.2, 60 / 365, 240, 4, seed=5, return_v=True)
@@ -55,53 +100,135 @@ class RBergomi(VoiceoverScene):
                   yticks=[0.8, 1.0, 1.2, 1.4], font_size=15)
         VGroup(g1, g2).arrange(DOWN, buff=0.35).to_edge(LEFT, buff=0.6)
         cols = [ROUGH, IV, RV, OPT]
-        lv = VGroup(*[curve(g1.ax, t, np.clip(np.sqrt(v[:, i]), 0, 2.0), c, stroke_width=1.6) for i, c in enumerate(cols)])
-        ls = VGroup(*[curve(g2.ax, t, np.clip(S[:, i], 0.6, 1.5), c, stroke_width=2) for i, c in enumerate(cols)])
+        tr = ValueTracker(0)
+        lv = VGroup(*[tracing(g1.ax, t, np.clip(np.sqrt(v[:, i]), 0, 2.0), tr, c, stroke_width=1.6)
+                      for i, c in enumerate(cols)])
+        ls = VGroup(*[tracing(g2.ax, t, np.clip(S[:, i], 0.6, 1.5), tr, c, stroke_width=2) for i, c in enumerate(cols)])
         side = VGroup(
             wrapped_label(r"no Markov state and no closed form: it must be simulated, and the kernel blows up at zero lag", 3.6,
                           19, GREY_A),
             wrapped_label(r"Bennedsen, Lunde and Pakkanen's hybrid scheme (2017): the singular first step exactly, the rest "
-                          r"as a convolution by FFT, $O(n\log n)$ a path", 3.6, 19, WHITE),
+                          r"as a convolution by FFT; opened up in chapter 6", 3.6, 19, WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
         src = illustration(rf"four paths, $H = {p['H']:.2f}$, $\eta = {p['eta']:.1f}$, $\rho = {p['rho']:.2f}$, flat "
                            r"variance curve, 4 steps a day")
         with self.voiceover(
-            "The price of that simplicity is that rough Bergomi has no Markov state and no closed form. It must be "
-            "simulated, and the kernel blows up at zero lag, which breaks naive schemes. <bookmark mark='a'/> Mikkel "
-            "Bennedsen, Asger Lunde and Mikko Pakkanen's hybrid scheme integrates the singular first step exactly and "
-            "the rest as a convolution, computed by fast Fourier transform. Here are four paths with the parameters "
-            "fitted to the Surface: the volatility on top is jagged at every scale, and its spikes come with falls."
+            "No Markov state, and no closed form: rough Bergomi must be simulated, and its kernel blows up at zero "
+            "lag, which breaks naive schemes. Chapter six opens up the scheme that works. <bookmark mark='a'/> Here "
+            "are four paths, growing step by step, with the parameters fitted to the Surface. The volatility on top "
+            "is jagged at every scale, and its spikes come with falls in the price below: that is rho at work."
         ) as vo:
-            self.play(FadeIn(side[0]), FadeIn(g1), FadeIn(g2), FadeIn(src))
+            self.play(FadeIn(side[0]), FadeIn(g1), FadeIn(g2), FadeIn(src), FadeIn(lv), FadeIn(ls))
             vo.wait_until("a")
-            self.play(FadeIn(side[1]), LaggedStart(*[AnimationGroup(Create(a), Create(b)) for a, b in zip(lv, ls)],
-                                                   lag_ratio=0.3, run_time=4))
+            self.play(FadeIn(side[1]), tr.animate.set_value(240), run_time=max(vo.remaining(0.0), 4), rate_func=linear)
+        for m in (*lv, *ls):
+            m.clear_updaters()
         self.wait(0.4)
         self.clear_scene()
 
-    def fit(self, rb, rs):
+    def replay(self, rb, rp, rs):
+        seeds = rp["seeds"]
+        s3 = seeds["3"]
+        curves = [running_min(seeds[k]["curve"]) for k in ("3", "4", "5")]
+        n = max(len(c) for c in curves)
+        L = np.array([np.r_[c, np.full(n - len(c), c[-1])] for c in curves])
+        steps = np.arange(n)
+        best = s3["best"]
+        idx = sorted(set([0, 1, 2, len(best) // 2, len(best) - 1]))
+        ck = [best[i]["eval"] for i in idx]
+        T = np.asarray(rp["T"])
+        k = np.asarray(rp["k"])
+        iv = np.asarray(rp["iv"])
+        Td = np.round(T * 365).astype(int)
+        cols = [ROUGH, IV, OPT]
+
+        def frame(j):
+            b = best[idx[j]]
+            biv = np.asarray(b["iv"], float)
+            g = axes([-0.45, 0.45], [0.3, 1.0], x_length=5.0, y_length=3.4, xlabel=r"log-moneyness $k$",
+                     ylabel=r"implied volatility", xticks=[-0.4, 0, 0.4], yticks=[0.4, 0.6, 0.8, 1.0],
+                     yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=13)
+            grp = VGroup(g)
+            for d, c in zip(SMILE_DAYS, cols):
+                m = Td == d
+                o = np.argsort(k[m])
+                grp.add(VGroup(*[Dot(g.ax.c2p(a, min(max(y, 0.3), 1.0)), radius=0.04, color=c)
+                                 for a, y in zip(k[m], iv[m])]))
+                ok = np.isfinite(biv[m][o])
+                if ok.sum() > 1:
+                    grp.add(curve(g.ax, k[m][o][ok], np.clip(biv[m][o][ok], 0.3, 1.0), c, stroke_width=2.5))
+            x = b["x"]
+            grp.add(MathTex(rf"H = {x[0]:.2f},\ \eta = {x[1]:.2f},\ \rho = {x[2]:.2f}", font_size=24,
+                            color=MODEL_COL["rBergomi"]).next_to(g, UP, buff=0.1))
+            return grp
+
+        rpl = TrainingReplay(steps, L, frame, ck, ylabel=r"fit error (vol points)", xlabel=r"model evaluation",
+                             color=MODEL_COL["rBergomi"])
+        leg = legend([(c, rf"{d}-day expiry") for d, c in zip(SMILE_DAYS, cols)], font_size=15).arrange(
+            RIGHT, buff=0.3).to_edge(DOWN, buff=0.3)
+        Hs = [seeds[s]["x"][0] for s in ("3", "4", "5")]
+        oos = [seeds[s]["oos_rmse"] for s in ("3", "4", "5")]
+        src = real_data(rf"the Surface; {rp['paths']:,} paths per seed, three seeds (band)".replace(",", "{,}"),
+                        corner=UR)
+        with self.voiceover(
+            "Now watch it calibrate. On the right, the fit error after every evaluation of the model, best so far; "
+            "the band is the spread over three sets of random numbers. On the left, the model's smiles at three "
+            "expiries, against the Surface's quotes as dots. <bookmark mark='a'/> It starts from a guess, H of a "
+            "tenth and modest vol of vol. The optimizer pushes H down and eta up: the short smile steepens to meet "
+            "the quotes. <bookmark mark='b'/> Across the three seeds, the fitted H lands between "
+            f"{min(Hs):.2f} and {max(Hs):.2f}, and re-priced on fresh paths the error is between "
+            f"{min(oos):.2f} and {max(oos):.2f} volatility points. The roughness the options ask for is extreme."
+        ) as vo:
+            self.play(FadeIn(rpl), FadeIn(leg), FadeIn(src))
+            vo.wait_until("a")
+            rpl.play(self, run_time=max(vo.remaining(0.0) - 6.0, 6))
+            vo.wait_until("b")
+        self.wait(0.4)
+        self.clear_scene()
         p = rb["params"]
         tab = VGroup(
             MathTex(rf"H = {p['H']:.2f},\quad \eta = {p['eta']:.2f},\quad \rho = {p['rho']:.2f}", font_size=36,
                     color=MODEL_COL["rBergomi"]),
             MathTex(rf"\text{{error}}\ {rb['rmse']:.2f}\ \text{{vol points}}\ \ (\text{{{rb['n']} quotes, up to 200 days}})",
                     font_size=30),
-            wrapped_label(rf"fitted by least squares on {rb['n_paths']:,} simulated paths with common random numbers, then "
-                          r"re-priced on fresh paths; the forward variance curve is Part 13's, from variance swaps",
+            wrapped_label(rf"the headline fit: {rb['n_paths']:,} paths with common random numbers, re-priced on fresh "
+                          r"paths; the forward variance curve is Part 13's, from variance swaps".replace(",", "{,}"),
                           10.0, 20, GREY_A),
-            wrapped_label(rf"on the same quotes, Part 13's Heston misses by {rs['heston_rmse_same']:.2f}, with five free numbers "
-                          r"and a vol of vol of 460\%", 10.0, 20, GREY_A),
+            wrapped_label(rf"on the same quotes, Part 13's Heston misses by {rs['heston_rmse_same']:.2f}, with five free "
+                          r"numbers and a vol of vol of 460\%", 10.0, 20, GREY_A),
+            wrapped_label(r"Part 17 calibrates this model every week of 2024--2025 with a neural network trained on its "
+                          r"prices", 10.0, 20, QC.HOUSE),
         ).arrange(DOWN, buff=0.35).move_to(ORIGIN)
         src = real_data(r"the Surface, 10 December 2025")
         with self.voiceover(
-            "Fit it to the Surface, by least squares on twenty thousand simulated paths, and price again on fresh "
-            "paths to make sure the fit is not an artefact of the random numbers. <bookmark mark='a'/> Roughness "
-            f"comes out at {p['H']:.2f}, with a vol of vol of {p['eta']:.1f} and a correlation of {p['rho']:.2f}. The "
-            f"error is {rb['rmse']:.2f} volatility points. On the same quotes, Part thirteen's Heston misses by "
-            f"{rs['heston_rmse_same']:.2f}, with five free numbers and an absurd vol of vol."
+            "The headline fit, on twenty thousand paths: roughness "
+            f"{p['H']:.2f}, vol of vol {p['eta']:.1f}, correlation {p['rho']:.2f}, and an error of {rb['rmse']:.2f} "
+            "volatility points on fresh paths. <bookmark mark='a'/> On the same quotes, Part thirteen's Heston "
+            f"misses by {rs['heston_rmse_same']:.2f}, with five free numbers and an absurd vol of vol. Three numbers "
+            "and the market's variance curve beat five. Part seventeen calibrates this model every week, with a "
+            "neural network standing in for the Monte Carlo."
         ) as vo:
-            self.play(FadeIn(tab[2]), FadeIn(src))
+            self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(tab[2]), FadeIn(src))
             vo.wait_until("a")
-            self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(tab[3]))
+            self.play(FadeIn(tab[3]), FadeIn(tab[4]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def skew(self, rb, rs):
+        s = load("skew")
+        g = loglog_skew_axes(t_lo=2 / 365).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
+        dots = VGroup(*[Dot(g.ax.c2p(np.log10(a), np.log10(b)), radius=0.07, color=WHITE)
+                        for a, b in zip(s["T"], s["skew"]) if b > 0.02 and a >= 2 / 365])
+        c = loglog_curve(g.ax, rs["skew_T"], rs["skew"], MODEL_COL["rBergomi"])
+        leg = legend([(WHITE, r"the Surface"), (MODEL_COL["rBergomi"], rf"rough Bergomi, $H = {rb['params']['H']:.2f}$")],
+                     font_size=17).next_to(g, RIGHT, buff=0.3).align_to(g, UP)
+        side = wrapped_label(r"carrying the market's variance curve, it follows the quotes from 4 days to 200 but misses the "
+                             r"3-day point", 4.0, 19, GREY_A).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
+        with self.voiceover(
+            "And the test that motivated all of this, the skew against maturity. Rough Bergomi, carrying the "
+            "market's own variance curve, follows the quotes from four days out to two hundred, though it misses "
+            "the three-day point."
+        ):
+            self.play(FadeIn(g), FadeIn(dots), FadeIn(leg), Create(c), FadeIn(side), run_time=3)
         self.wait(0.4)
         self.clear_scene()

@@ -482,9 +482,9 @@ def compute_skew_weekly() -> dict:
             continue
         T, sk, n, atm = (np.array(c) for c in zip(*rows))
         f = R.skew_term_fit(T, sk, weights=n)
-        part[d] = {"T": T, "skew": sk, "n": n, "atm": atm, "a": f["power"]["a"], "c": f["power"]["c"],
-                   "rm_p": f["power"]["rmse_log"], "rm_s": f["shifted"]["rmse_log"], "eps": f["shifted"]["eps"],
-                   "a_s": f["shifted"]["a"], "c_s": f["shifted"]["c"]}
+        part[d] = _json({"T": T, "skew": sk, "n": n, "atm": atm, "a": f["power"]["a"], "c": f["power"]["c"],
+                         "rm_p": f["power"]["rmse_log"], "rm_s": f["shifted"]["rmse_log"], "eps": f["shifted"]["eps"],
+                         "a_s": f["shifted"]["a"], "c_s": f["shifted"]["c"]})
         print("  ", d, f"a={f['power']['a']:.2f}", flush=True)
     weeks = [dict(day=d, **part[d]) for d in days if "skip" not in part[d]]
     a = np.array([w["a"] for w in weeks])
@@ -663,9 +663,9 @@ def compute_rb_replay() -> dict:
             if t["rmse"] < best:
                 best = t["rmse"]
                 keep.append({"eval": i, "x": t["x"], "rmse": t["rmse"], "iv": t["iv"]})
-        part[str(seed)] = {"x": r.x, "fit_rmse": float(min(t["rmse"] for t in trace)),
+        part[str(seed)] = _json({"x": r.x, "fit_rmse": float(min(t["rmse"] for t in trace)),
                            "oos_rmse": _rmse(ivs(r.x, 11), Q), "curve": [t["rmse"] for t in trace], "best": keep,
-                           "n_eval": len(trace)}
+                           "n_eval": len(trace)})
         print("   seed", seed, r.x, flush=True)
     out = {"seeds": {s: part[s] for s in ("3", "4", "5")}, "T": Q["T"], "k": Q["k"], "iv": Q["iv"], "paths": P}
     Hs = [part[s]["x"][0] for s in ("3", "4", "5")]
@@ -695,7 +695,7 @@ def compute_hybrid_check() -> dict:
         _, Y, _ = R.volterra_riemann(H, 1.0, 100, 20000, seed=2)
         rows.append({"H": H, "hybrid": hyb, "riemann": float(Y[:, -1].var()), "exact": 1.0})
     tim = []
-    for n in (250, 500, 1000):
+    for n in (500, 2000, 4000):
         t0 = time.perf_counter()
         R.rbergomi_paths(0.1, 1.0, 0.0, 1.0, 1.0, n, 1000, seed=0)
         th = time.perf_counter() - t0
@@ -880,7 +880,7 @@ def compute_lift_paths() -> dict:
         inc[:, k - 1] = lam * (theta - vp) * dt + nu * np.sqrt(vp) * dW[:, k - 1]
         V[:, k] = v0 + inc[:, :k] @ Kc[:k][::-1]
     rows, paths = [], {"exact": V[0, ::2]}
-    for N in (1, 5, 20, 50):
+    for N in (1, 5, 20, 50, 200):
         VN = R.lifted_heston_paths(v0, lam, theta, nu, H, N, T, n, dW)
         d = float(np.sqrt(np.mean((VN - V) ** 2)) / np.std(V))
         rows.append({"N": N, "dist": d})

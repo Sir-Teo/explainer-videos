@@ -26,13 +26,13 @@ class Ito(VoiceoverScene):
     def ledger(self, i):
         W = np.asarray(i["W"])
         t = np.linspace(0, 1, len(W))
-        g1 = axes([0, 1], [W.min() - 0.15, W.max() + 0.15], x_length=8.0, y_length=2.3, ylabel=r"the price: $W_t$",
+        g1 = axes([0, 1], [W.min() - 0.15, W.max() + 0.15], x_length=8.0, y_length=1.9, ylabel=r"the price: $W_t$",
                   xticks=[], yticks=[], font_size=16)
-        g2 = axes([0, 1], [-1.2, 1.2], x_length=8.0, y_length=1.6, ylabel=r"the position held: $H_{t_k} = W_{t_k}$",
+        g2 = axes([0, 1], [-1.2, 1.2], x_length=8.0, y_length=1.4, ylabel=r"the position held: $H_{t_k} = W_{t_k}$",
                   xticks=[], yticks=[0], font_size=16)
-        g3 = axes([0, 1], [-0.8, 0.4], x_length=8.0, y_length=1.6, xlabel=r"time",
+        g3 = axes([0, 1], [-0.8, 0.4], x_length=8.0, y_length=1.4, xlabel=r"time",
                   ylabel=r"running gain $\sum H_{t_k}\,\Delta W_k$", xticks=[0, 1], yticks=[0], font_size=16)
-        VGroup(g1, g2, g3).arrange(DOWN, buff=0.3).to_edge(LEFT, buff=0.5)
+        VGroup(g1, g2, g3).arrange(DOWN, buff=0.3).to_edge(LEFT, buff=0.5).set_y(-0.1)
         a1, a2, a3 = g1.ax, g2.ax, g3.ax
         path = curve(a1, t, W, BM, stroke_width=2)
 
@@ -183,7 +183,7 @@ class Ito(VoiceoverScene):
         pc, ans = pause(r"A physicist simulates $dX = X\,dW$ by smoothing the noise. The mean of $X_1$?",
                         rf"About {wz['strat']:.2f}, not 1: smooth noise is Stratonovich noise.", width=5.2,
                         font_size=21)
-        pc.move_to(right).to_edge(UP, buff=2.0)
+        pc.to_edge(RIGHT, buff=0.4).set_y(0.2)
         with self.voiceover(
             "The rule connecting them: Stratonovich's integral is Itô's plus half the covariation. "
             "<bookmark mark='a'/> So a Stratonovich equation is an Itô equation with an extra drift, a half b times b "

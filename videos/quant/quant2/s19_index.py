@@ -42,14 +42,12 @@ class Index(VoiceoverScene):
                 why(r"if demand slopes down with elasticity $\varepsilon$, that buying moves the price", font_size=20)]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-1.6, buff=0.45, edge=6.9)
         with self.voiceover(
-            "An index is a recipe for a portfolio. Most are capitalization-weighted: each member counts in proportion "
-            "to the market value of its shares, and only the shares that can trade, the float. "
-            "<bookmark mark='a'/> A few old ones are price-weighted, like the Dow: add up the prices and divide by a "
-            "divisor, which is reset at every split so the index doesn't jump. <bookmark mark='b'/> Now put passive "
-            "money behind the recipe. A fund tracking the index buys every member in proportion, the same fraction "
-            "of each one's float: its assets over the index's total value. <bookmark mark='c'/> Classical finance "
-            "says that buying shouldn't matter: a stock's price is its value, and demand for it is flat. If demand "
-            "slopes down, the buying moves the price. Which is it?"
+            "An index is a recipe for a portfolio. Most weight each member by the value of its shares that can trade, the "
+            "float. <bookmark mark='a'/> A few old ones, like the Dow, add prices and divide by a divisor, which is reset at "
+            "every split so the index doesn't jump. <bookmark mark='b'/> Put passive money behind the recipe: a fund "
+            "tracking the index buys the same fraction of every member's float, its assets over the index's value. "
+            "<bookmark mark='c'/> Classical finance says that buying shouldn't move prices, because demand for a stock is "
+            "flat at its value. If demand slopes down, it does. Which is it?"
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -87,13 +85,11 @@ class Index(VoiceoverScene):
         src = note(r"illustrative: a Zipf-like distribution of values, and equal passive dollars on each index; the "
                    r"real ratio depends on how much money tracks each", font_size=15).to_edge(DOWN, buff=0.1)
         with self.voiceover(
-            "The Russell indices give a sharp test. Rank American stocks by value. The top thousand form the Russell "
-            "one thousand; the next two thousand the Russell two thousand. <bookmark mark='a'/> Pour passive money "
-            "onto both. Within each index, every member gets the same fraction of its float bought. But the stock "
-            "ranked one thousand is the smallest member of a giant index, and the stock ranked one thousand and one "
-            "is the largest member of a small one. If the same dollars tracked each, the buying per share would jump "
-            f"about {r1 / r2:.0f}-fold at the gate. <bookmark mark='b'/> Two almost identical companies, one rank "
-            "apart, get very different index demand: a natural experiment."
+            "The Russell indices give a sharp test. Rank stocks by value: the top thousand form the Russell one thousand, "
+            "the next two thousand the Russell two thousand. <bookmark mark='a'/> Pour passive money onto both. Stock one "
+            "thousand is the smallest member of a giant index; stock one thousand and one, the largest member of a small one. "
+            f"With equal money on each, buying per share would jump about {r1 / r2:.0f}-fold at the gate. "
+            "<bookmark mark='b'/> Twins one rank apart, very different demand: a natural experiment."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[Create(b) for b in bars], lag_ratio=0.002, run_time=3))
             self.play(Create(gate), FadeIn(gl))
@@ -130,15 +126,11 @@ class Index(VoiceoverScene):
         src = note(r"Shleifer's number as quoted in NBER w8654; Greenwood and Sammon, \textit{Journal of Finance} 80(2)",
                    font_size=15).to_edge(DOWN, buff=0.12)
         with self.voiceover(
-            "The evidence. Shleifer found that stocks added to the S and P five hundred jumped almost three percent "
-            "on the announcement, in years when index funds were growing: demand curves for stocks slope down. "
-            "Harris and Gurel found that much of the jump faded within weeks: price pressure, not news. "
-            "<bookmark mark='a'/> Chang, Hong and Liskovich used the Russell gate: stocks that just make the Russell "
-            "two thousand outperform those that just miss it, a regression discontinuity. <bookmark mark='b'/> The "
-            "frontier asks how much of the market is tied to benchmarks. Pavlova and Sikorskaya measure benchmarking "
-            "intensity and find it lowers demand elasticities. And Greenwood and Sammon show the famous S and P "
-            "inclusion effect has nearly disappeared: about seven percent in the 1990s, under one percent lately, as "
-            "the market learned to anticipate the changes."
+            "Shleifer found S and P additions jumped almost three percent on announcement as index funds grew: demand slopes "
+            "down. Harris and Gurel saw much of it fade within weeks. <bookmark mark='a'/> Chang, Hong and Liskovich used the "
+            "Russell gate: stocks just making the two thousand outperform those just missing it. <bookmark mark='b'/> "
+            "Pavlova and Sikorskaya show benchmark ties lower demand elasticity, and Greenwood and Sammon show the S and P "
+            "effect has nearly vanished, from about seven percent in the 1990s to under one."
         ) as vo:
             self.play(FadeIn(cards[0]), FadeIn(cards[1]), FadeIn(src))
             vo.wait_until("a")
@@ -188,14 +180,11 @@ class Index(VoiceoverScene):
         src = note(r"simulated: 30 reconstitutions of 3,000 stocks, a true jump of 1.5\% at the cutoff, noise rising "
                    r"with rank; local-linear fits on each side", font_size=15).to_edge(DOWN, buff=0.1)
         with self.voiceover(
-            "Here is how a regression discontinuity works, on simulated data where the truth is known: a jump of one "
-            "and a half percent at the cutoff, buried in noise. Fit a straight line to the returns just left of the "
-            "gate, another just right, and read off the gap where they meet the cutoff. <bookmark mark='a'/> The "
-            "only choice is how far from the gate to look, the bandwidth. Slide it. Narrow, and the lines use few "
-            "stocks: noisy. Wide, and stocks far from the gate creep in. <bookmark mark='b'/> Across eight seeds the "
-            f"estimate is centred near the truth at every bandwidth, but its spread grows from "
-            f"{100 * est.std(0)[-1]:.2f} to {100 * est.std(0)[0]:.2f} percentage points as the bandwidth shrinks. "
-            "Pause and predict: why does joining the smaller index bring more buying?"
+            "How a regression discontinuity works, on simulated data with a true one and a half percent jump at the cutoff: "
+            "fit a line on each side and read the gap at the gate. <bookmark mark='a'/> The one choice is the bandwidth. "
+            "Narrow is noisy; wide lets distant stocks in. <bookmark mark='b'/> Over eight seeds the estimate centres on the "
+            f"truth, its spread growing from {100 * est.std(0)[-1]:.2f} to {100 * est.std(0)[0]:.2f} points as the bandwidth "
+            "shrinks. Predict: why does joining the smaller index bring more buying?"
         ) as vo:
             self.play(FadeIn(g), FadeIn(dots), Create(cut), FadeIn(src))
             self.add(fl, bwr)

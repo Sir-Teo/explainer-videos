@@ -4,13 +4,30 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import sim
-from videos.quant.quant14.common import BAD, IV, PART, ROUGH, RV, VAR, illustration, load
+from videos.quant.quant14.common import BAD, IV, PART, ROUGH, RV, VAR, illustration, load, pause
+
+HISTORY = [
+    (1968, r"Mandelbrot and Van Ness: fractional Brownian motion", QC.IDEA),
+    (1987, r"the crash: the skew is born (Part 13)", QC.CRISIS),
+    (1993, r"Heston: a smooth stochastic volatility", QC.IDEA),
+    (1998, r"Comte and Renault: long memory in volatility", QC.IDEA),
+    (2004, r"Bergomi: forward variance models", QC.IDEA),
+    (2007, r"Al\`os, Le\'on and Vives: a rough kernel makes a power-law skew", QC.IDEA),
+    (2014, r"``Volatility is rough'' (Gatheral, Jaisson, Rosenbaum)", QC.IDEA),
+    (2016, r"rough Bergomi; nearly unstable Hawkes", QC.IDEA),
+    (2019, r"rough Heston's characteristic function", QC.IDEA),
+    (2020, r"quadratic rough Heston; Guyon's SPX/VIX answer", QC.IDEA),
+    (2021, r"Risk's Quants of the Year: Gatheral and Rosenbaum", QC.FIRM),
+    (2023, r"path-dependent volatility (Guyon, Lekeufack)", QC.IDEA),
+    (2024, r"5 August: the VIX above 65 before the open", QC.CRISIS),
+]
 
 
 class Hook(VoiceoverScene):
     def construct(self):
         self.title_card()
         self.zoom()
+        self.history()
         self.objectives()
         self.house()
 
@@ -25,63 +42,138 @@ class Hook(VoiceoverScene):
         self.play(FadeOut(card), FadeOut(disc))
 
     def zoom(self):
-        n = 4096
-        rough = np.asarray(sim.fbm(0.1, n, 1.0, 1, seed=3)).ravel()[: n + 1]
-        smooth = np.asarray(sim.fbm(0.5, n, 1.0, 1, seed=3)).ravel()[: n + 1]
-        panels = VGroup()
-        anims = []
-        for z, col, txt in ((smooth, VAR, r"$H = 0.5$: Brownian"), (rough, ROUGH, r"$H = 0.1$: rough")):
-            row = VGroup()
-            for span in (n, n // 16, n // 256):
-                seg = z[:span + 1]
-                seg = (seg - seg.min()) / max(seg.max() - seg.min(), 1e-12)
-                g = axes([0, span], [0, 1], x_length=3.8, y_length=1.7, xticks=[], yticks=[], font_size=12)
-                row.add(VGroup(g, curve(g.ax, np.arange(span + 1), seg, col, stroke_width=1.6)))
-            row.arrange(RIGHT, buff=0.35)
-            t = label(txt, font_size=22, color=col).next_to(row, UP, buff=0.1).align_to(row, LEFT)
-            panels.add(VGroup(t, row))
-        panels.arrange(DOWN, buff=0.5).move_to(UP * 0.1)
-        heads = VGroup(*[label(s, font_size=18, color=GREY_A).next_to(panels[1][1][i], DOWN, buff=0.12)
-                         for i, s in enumerate((r"the whole path", r"zoomed 16 times", r"zoomed 256 times"))])
-        src = illustration(r"fractional Brownian motion, each panel rescaled to fill its box")
+        n = 8192
+        paths = [(np.asarray(sim.fbm(0.5, n, 1.0, 1, seed=3)).ravel(), VAR, r"$H = 0.5$: Brownian motion"),
+                 (np.asarray(sim.fbm(0.1, n, 1.0, 1, seed=3)).ravel(), ROUGH, r"$H = 0.1$: rough")]
+        s = ValueTracker(0.0)   # zoom = 2^(8 s): from the whole path to 1/256 of it
+        boxes = VGroup()
+        for z, col, txt in paths:
+            frame = Rectangle(width=10.6, height=2.3, stroke_color=GREY_D, stroke_width=1.5)
+            t = label(txt, font_size=22, color=col).next_to(frame, UP, buff=0.08).align_to(frame, LEFT)
+            boxes.add(VGroup(frame, t))
+        boxes.arrange(DOWN, buff=0.55).shift(DOWN * 0.15)
+
+        def drawn(i):
+            z, col, _ = paths[i]
+            frame = boxes[i][0]
+
+            def make():
+                span = max(int(n / 2 ** (8 * s.get_value())), 16)
+                seg = z[: span + 1]
+                idx = np.linspace(0, span, min(span + 1, 700)).astype(int)
+                y = seg[idx]
+                y = (y - y.min()) / max(y.max() - y.min(), 1e-12)
+                x = idx / span
+                pts = [frame.get_corner(DL) + RIGHT * (0.1 + 10.4 * a) + UP * (0.1 + 2.1 * b) for a, b in zip(x, y)]
+                return VMobject(stroke_color=col, stroke_width=1.6).set_points_as_corners(pts)
+            return always_redraw(make)
+
+        lines = VGroup(drawn(0), drawn(1))
+        zr = readout(r"\text{zoom}\ \times", lambda: 2 ** (8 * s.get_value()), digits=0, font_size=34,
+                     color=YELLOW).to_corner(UR, buff=0.35)
+        src = illustration(r"fractional Brownian motion, 8{,}192 steps; each frame rescaled to fill its box")
+        q = pause(r"Zoom into a Brownian path 256 times and rescale it to fill the box. Does it look smoother, or "
+                  r"rougher?", width=6.4, font_size=22).to_corner(UL, buff=0.25)
         with self.voiceover(
-            "Here are two random paths, each shown whole, then zoomed sixteen times, then two hundred and fifty-six "
-            "times, every panel rescaled to fill its box. A Brownian path looks smoother and smoother as you zoom: at "
-            "small scales it is almost a straight line. <bookmark mark='a'/> This one does not. It looks equally "
-            "jagged at every scale. Its Hurst exponent is a tenth, and in 2014 three researchers found that "
-            "volatility itself, measured in the market, looks like this one, not the other."
+            "Two random paths. Before we zoom in, a question. Zoom into the top one, a Brownian path, two hundred and "
+            "fifty-six times, rescaling it to fill its box each time. Does it look smoother or rougher? "
+            "<bookmark mark='a'/> Watch. The Brownian path straightens: over a short interval it moves by the "
+            "square root of the interval, and stretched to fit the box, those moves look like a gentle line. "
+            "<bookmark mark='b'/> The lower path does not straighten. Its moves scale like the interval to the power "
+            "of one tenth, so at every zoom it looks the same: jagged. Its Hurst exponent is a tenth. "
+            "<bookmark mark='c'/> In 2014, Jim Gatheral, Thibault Jaisson and Mathieu Rosenbaum found that volatility "
+            "itself, measured in the market, looks like the lower path, not the upper one. This part is about what "
+            "that means, how to price with it, and whether it is true."
         ) as vo:
-            self.play(FadeIn(panels[0]), FadeIn(src))
+            self.play(FadeIn(boxes), FadeIn(lines), FadeIn(src), FadeIn(q))
             vo.wait_until("a")
-            self.play(FadeIn(panels[1]), FadeIn(heads))
+            self.play(FadeOut(q), FadeIn(zr))
+            self.play(s.animate.set_value(1.0), run_time=max(vo.remaining(0.0) * 0.45, 6), rate_func=linear)
+            vo.wait_until("b")
+            self.play(Indicate(boxes[1][1], color=ROUGH))
+            vo.wait_until("c")
+            self.play(s.animate.set_value(0.0), run_time=3)
+        self.wait(0.3)
+        lines.clear_updaters()
+        zr.clear_updaters()
+        self.clear_scene()
+
+    def history(self):
+        y0, y1 = 1965, 2026
+        width = 12.4
+        X = lambda yr: -width / 2 + width * (yr - y0) / (y1 - y0)  # noqa: E731
+        axis = Line([X(y0), 0, 0], [X(y1), 0, 0], color=GREY_C, stroke_width=2).shift(UP * 0.2)
+        ticks = VGroup(*[VGroup(Line(UP * 0.06, DOWN * 0.06, color=GREY_C).move_to([X(yr), 0.2, 0]),
+                                Text(str(yr), font_size=14, color=GREY_C).move_to([X(yr), -0.05, 0]))
+                         for yr in (1970, 1980, 1990, 2000, 2010, 2020)])
+        events = VGroup()
+        for i, (yr, txt, col) in enumerate(HISTORY):
+            d = Dot([X(yr), 0.2, 0], radius=0.08, color=col)
+            up = i % 2 == 0
+            lv = 0.75 + 0.62 * ((i // 2) % 4)
+            t = wrapped_label(rf"{yr}: {txt}", 3.0, 16, col)
+            t.move_to([X(yr), 0.2 + (lv if up else -lv - 0.15), 0])
+            keep_in_frame(t, margin=0.2)
+            ld = Line(d.get_center(), t.get_bottom() if up else t.get_top(), stroke_color=GREY_D, stroke_width=1)
+            events.add(VGroup(d, ld, t))
+        head = label(r"How we got here", font_size=30).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "How we got here. In 1968 Benoit Mandelbrot and John Van Ness defined fractional Brownian motion, the "
+            "process with a Hurst exponent. <bookmark mark='a'/> After the 1987 crash the skew appeared, and the "
+            "models of the nineties, Heston's above all, made volatility a smooth random process. In 1998 Fabienne "
+            "Comte and Eric Renault used fractional processes for volatility's long memory: H above one half. "
+            "<bookmark mark='b'/> Lorenzo Bergomi modelled the whole forward variance curve, and in 2007 Elisa Alòs, "
+            "Jorge León and Josep Vives showed that a rough kernel produces a skew that grows like a power law as "
+            "expiry nears. <bookmark mark='c'/> Then, in 2014, the paper whose title named the field: volatility is "
+            "rough. Rough Bergomi and the nearly unstable Hawkes story followed in 2016, rough Heston's "
+            "characteristic function in 2019, the quadratic rough Heston model in 2020. Risk named Gatheral and "
+            "Rosenbaum its Quants of the Year for 2021. <bookmark mark='d'/> In 2023 a rival view, path-dependent "
+            "volatility. And on the fifth of August 2024 the VIX printed above sixty-five before the US market "
+            "opened: a spike that tests every model in this part."
+        ) as vo:
+            self.play(FadeIn(head), Create(axis), FadeIn(ticks))
+            self.play(FadeIn(events[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(e) for e in events[1:4]], lag_ratio=0.5, run_time=3))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(e) for e in events[4:6]], lag_ratio=0.5, run_time=2))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(e) for e in events[6:11]], lag_ratio=0.5, run_time=5))
+            vo.wait_until("d")
+            self.play(LaggedStart(*[FadeIn(e) for e in events[11:]], lag_ratio=0.6, run_time=2))
         self.wait(0.5)
         self.clear_scene()
 
     def objectives(self):
         card = objectives_card([
-            r"The fact: the at-the-money skew grows like $T^{H - 1/2}$; the power law and its rival",
-            r"Volatility is rough: the Gatheral--Jaisson--Rosenbaum estimator, run on bitcoin",
-            r"Rough Bergomi and rough Heston, calibrated to the Surface",
-            r"Where roughness comes from: nearly unstable order flow",
-            r"Markovian lifts; the debate over whether volatility is rough at all",
-            r"Path-dependent volatility, fitted to DVOL out of sample",
-            r"The frontier: quadratic rough Heston, signatures, and fast calibration",
-        ], color=QC.IDEA)
+            r"The fact: the at-the-money skew grows like $T^{H - 1/2}$, on two years of weekly surfaces; why kernels make it",
+            r"Volatility is rough: the estimator, two eras of bitcoin, and the rough forecast against HAR",
+            r"Rough Bergomi, calibrated and replayed; the hybrid scheme that simulates it",
+            r"Rough Heston: the fractional Riccati equation, solved by Adams; how much the Surface cares about $H$",
+            r"Where roughness comes from (nearly unstable order flow); Markovian lifts",
+            r"The debate: the estimator's bias map, and what the options say",
+            r"Path-dependent volatility on bitcoin and on the VIX; 5 August 2024",
+            r"Joint SPX/VIX; signature volatility; what desks use; the 2023--2026 frontier",
+        ], color=QC.IDEA, font_size=23)
         with self.voiceover(
-            "The plan. The fact that started it: how the skew grows as expiry nears. The measurement that named it, "
-            "run on Bitcoin. The two rough models desks know, fitted to the Surface. A theory of where roughness comes "
-            "from. How to make a rough model Markovian. The case against roughness, taken seriously. A rival view, "
-            "that volatility is mostly a function of the past. And the frontier."
+            "The plan. The fact that started it, measured on two years of weekly bitcoin surfaces, and the "
+            "mathematics of why a rough kernel makes it. The measurement that named roughness, on two eras of bitcoin, "
+            "and what roughness buys for forecasting. The two rough models desks know, calibrated and simulated, "
+            "with their numerical methods opened up. Where roughness might come from, and how to make a rough "
+            "model Markovian. The case against roughness, from the time series and from the options. The rival "
+            "view, that volatility is mostly a function of the past, tested on bitcoin, on the VIX, and on the "
+            "fifth of August 2024. And the frontier: joint S&P and VIX calibration, signature models, and what "
+            "desks actually run."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
-                                                     lag_ratio=0.5, run_time=10))
+                                                     lag_ratio=0.5, run_time=14))
         self.play(FadeOut(card))
 
     def house(self):
         chart = house_chart(PART, lit=("vol",))
         with self.voiceover(
-            "In the House, the volatility desk opens a rough lab. <bookmark mark='a'/> It adds models, and a rule for "
-            "when a new model has earned its place."
+            "In the House, the volatility desk opens a rough lab. <bookmark mark='a'/> It adds models, the "
+            "numerical methods that make them usable, and a rule for when a new model has earned its place."
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")

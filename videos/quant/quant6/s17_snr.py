@@ -38,15 +38,12 @@ class SNR(VoiceoverScene):
                 why(r"chapter one's formula for the regression on the market: $\alpha$ is a mean, $\beta$ a co-movement")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=1.0, edge=6.8)
         with self.voiceover(
-            "This is the deepest problem in quantitative finance: the signal is small and the noise is large. The "
-            "t-statistic of a strategy's mean return is its Sharpe ratio times the square root of the number of "
-            "years. Turn it around: the years needed for a t of two are two over the Sharpe ratio, squared. "
-            "<bookmark mark='a'/> The Sharpe ratio's own standard error, by the delta method, is about the root of "
-            "one plus half its square, over T, as Andrew Lo showed in 2002; Christoph Mertens added the effect of "
-            f"skewness and fat tails. For the market, {b['se_iid']:.3f} and {b['se_mertens']:.3f}: barely different, "
-            "and chapter eleven's bootstrap was wider still. <bookmark mark='b'/> And for a regression on the "
-            "market, chapter one's formula splits into two very different speeds. Beta, a co-movement, is "
-            "measured every month. Alpha is a mean, and means take decades."
+            "The deepest problem in quantitative finance: small signal, large noise. A mean return's t-statistic is "
+            "the Sharpe ratio times the root of the years, so a t of two needs two over the Sharpe ratio, squared, "
+            "years. <bookmark mark='a'/> The Sharpe ratio's own standard error, by the delta method, is the root of one "
+            "plus half its square, over T: Andrew Lo, 2002; Christoph Mertens added skewness and fat tails. For the "
+            f"market, {b['se_iid']:.3f} and {b['se_mertens']:.3f}. <bookmark mark='b'/> And on the market, chapter one's "
+            "formula splits into two speeds: beta, a co-movement, is measured every month; alpha is a mean."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -86,13 +83,10 @@ class SNR(VoiceoverScene):
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.5).shift(DOWN * 1.8)
         last = P[-1]
         with self.voiceover(
-            "Watch it happen. Regress tobacco stocks on the market, starting in 1961 with one year of data, and "
-            "refit every quarter as the data arrive. The ellipse is the ninety-five percent region for alpha and "
-            "beta. <bookmark mark='a'/> In the first years it is enormous. Within a few years its vertical axis, "
-            "beta, has collapsed to a sliver. Its horizontal axis, alpha, creeps inward, and creeps, and creeps. "
-            "<bookmark mark='b'/> After sixty years, tobacco's alpha is "
-            f"{100 * last['alpha']:.1f} percent a year, give or take {196 * np.sqrt(np.asarray(last['V'])[0, 0]):.1f}. "
-            "Its beta has been known to a few hundredths for half a century."
+            "Watch it. Regress tobacco on the market from 1961, refitting every quarter; the ellipse is the ninety-five "
+            "percent region. <bookmark mark='a'/> Within a few years the beta axis collapses to a sliver. The alpha axis "
+            "creeps, and creeps. <bookmark mark='b'/> After sixty years, tobacco's alpha is "
+            f"{100 * last['alpha']:.1f} percent a year, give or take {196 * np.sqrt(np.asarray(last['V'])[0, 0]):.1f}."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(notes[2]))
             self.add(sm)

@@ -42,14 +42,13 @@ class Training(VoiceoverScene):
         par = MathTex(rf"\text{{parameters: LSTM }} {t['LSTM']['n_params']:,},\ \text{{transformer }} {t['Transformer']['n_params']:,},"
                       rf"\ \text{{HARNet }} {t['HARNet']['n_params']}".replace(",", "{,}"), font_size=28, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Three networks, each reading the last twenty-two days of log realized variance. An LSTM carries a memory "
-            "cell that forgets and adds with learned gates: a data-dependent exponential average, like GARCH unrolled. "
+            "Three networks, each reading the last twenty-two days of log realized variance. An LSTM's gated memory cell is a learned, data-dependent exponential average, like GARCH unrolled. "
             "<bookmark mark='a'/> A small transformer looks at all twenty-two days at once and weights them by "
             "attention: a learned version of HAR's averages. <bookmark mark='b'/> All three forecast the logarithm, "
             "so mapping back to variance needs the log-normal correction. <bookmark mark='c'/> And the third, after "
             "Christian Reisenhofer, Christian Bayer and Nikolaus Hautsch, is HARNet: its filters and weights start "
             "exactly at the log-HAR model, and training can only move it away if the data ask. <bookmark mark='d'/> "
-            "Same data, same optimiser, same early stopping on the second half of 2019, five seeds each."
+            "Same data, same early stopping, five seeds each."
         ) as vo:
             step(0)
             vo.wait_until("a")

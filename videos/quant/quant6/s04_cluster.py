@@ -64,15 +64,13 @@ class Cluster(VoiceoverScene):
                             for sq in om if sq.get_fill_opacity() > 0.3 and not rule(*sq.ij)])
 
         with self.voiceover(
-            "Chapter two's dependence ran through time. In a panel, many firms or industries observed over many "
-            "months, the errors can be linked two more ways. Here is the error covariance matrix for a toy panel, "
-            "four firms over six months, with the rows ordered month by month. <bookmark mark='a'/> If each firm "
-            "has a persistent component, a firm effect, every pair of observations of the same firm is correlated: "
-            "stripes, every fourth cell. <bookmark mark='b'/> Ordinary least squares, even with White's correction, "
-            "covers only the diagonal. Everything it misses lights up red. <bookmark mark='c'/> Clustering by firm "
-            "lets every same-firm pair in: the stripes are covered. <bookmark mark='d'/> Now switch to a time "
-            "effect: a shock that hits every firm in the same month, like the market. The matrix becomes blocks "
-            "along the diagonal. Clustering by firm misses them; clustering by month covers them exactly."
+            "In a panel, many firms over many months, errors can be linked two more ways. Here is the error covariance "
+            "matrix for four firms over six months, rows ordered month by month. <bookmark mark='a'/> A firm effect, a "
+            "persistent component per firm, links every pair of observations of the same firm: stripes. "
+            "<bookmark mark='b'/> Least squares, even with White's correction, covers only the diagonal; what it misses "
+            "lights up red. <bookmark mark='c'/> Clustering by firm covers the stripes. <bookmark mark='d'/> A time "
+            "effect, a shock every firm shares in a month, makes diagonal blocks instead. Firm clusters miss them; "
+            "month clusters cover them."
         ) as vo:
             self.play(FadeIn(om), FadeIn(title), FadeIn(side[0]))
             vo.wait_until("a")
@@ -113,15 +111,12 @@ class Cluster(VoiceoverScene):
                     r"twice (Cameron, Gelbach and Miller 2011)")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.8, buff=1.0, edge=6.8)
         with self.voiceover(
-            "The clustered estimator writes this down. Sum the scores inside each cluster, square the total, and "
-            "add up over clusters: any correlation within a cluster is kept, any across clusters is assumed away. "
-            "<bookmark mark='a'/> How much does ignoring it cost? Brent Moulton's factor answers for equal "
-            "clusters: the true variance is the naive one times one plus the cluster size minus one, times the "
-            "within-cluster correlation of the regressor, times that of the error. Both must be correlated. With "
-            "forty-nine industries in a month and a market shock in every error, a regressor that is itself shared "
-            "within the month is fatal. <bookmark mark='b'/> And when both kinds of effect are present, Colin "
-            "Cameron, Jonah Gelbach and Douglas Miller's two-way estimator adds the firm and month clusters and "
-            "subtracts what was counted twice."
+            "The clustered estimator sums the scores within each cluster, squares the total, and adds over clusters: "
+            "correlation inside a cluster is kept, across clusters assumed away. <bookmark mark='a'/> Moulton's factor "
+            "says what ignoring it costs: the naive variance times one plus the cluster size minus one, times the "
+            "within-cluster correlations of both the regressor and the error. <bookmark mark='b'/> With both kinds of "
+            "effect, Cameron, Gelbach and Miller's two-way estimator adds firm and month clusters and subtracts the "
+            "overlap."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -165,20 +160,15 @@ class Cluster(VoiceoverScene):
                             r"design; Petersen (2009), Table~1's design".replace(",", "{,}"), 4.4, 19, GREY_B)
         txt.next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
         with self.voiceover(
-            "Mitchell Petersen ran the experiment in 2009, and we repeat it: five hundred firms over ten years, "
-            "with a known slope, and a firm effect, a time effect, or both, planted in the regressor and in the "
-            "error. Each bar is a method's average standard error divided by the true sampling spread of the "
-            "estimate. One means honest. <bookmark mark='a'/> Watch the bars settle as the replications pile up. "
-            f"With a firm effect, plain least squares reports about {r['firm 50%']['OLS']:.2f} of the truth, and so "
-            f"does Fama-MacBeth, {r['firm 50%']['FM']:.2f}: its monthly slopes share the same firms, so they are not "
-            f"independent. Clustering by firm gets {r['firm 50%']['firm']:.2f}. <bookmark mark='b'/> With a time "
-            f"effect, least squares reports {r['time 50%']['OLS']:.2f} of the truth: it thinks it has five thousand "
-            "independent observations when the shared shock leaves it ten. Clustering by month, with only ten "
-            f"clusters, reaches {r['time 50%']['time']:.2f}; Fama-MacBeth, built for exactly this, "
-            f"{r['time 50%']['FM']:.2f}. <bookmark mark='c'/> With both, only the two-way estimator comes close, at "
-            f"{r['firm 25% + time 25%']['two-way']:.2f}. And this is not an academic worry: Petersen counted the "
-            "published papers, and forty-two percent of those with panel data had not adjusted their standard "
-            "errors at all."
+            "Mitchell Petersen ran the experiment in 2009, and we repeat it: five hundred firms over ten years, with "
+            "firm effects, time effects or both. Each bar is a method's average standard error over the true spread; "
+            "one is honest. <bookmark mark='a'/> Watch them settle as replications pile up. With a firm effect, least "
+            f"squares reports {r['firm 50%']['OLS']:.2f} of the truth, Fama-MacBeth {r['firm 50%']['FM']:.2f}, "
+            f"clustering by firm {r['firm 50%']['firm']:.2f}. <bookmark mark='b'/> With a time effect, least squares "
+            f"reports {r['time 50%']['OLS']:.2f}; clustering by month, with only ten clusters, {r['time 50%']['time']:.2f}; "
+            f"Fama-MacBeth {r['time 50%']['FM']:.2f}. <bookmark mark='c'/> With both, the two-way estimator, "
+            f"{r['firm 25% + time 25%']['two-way']:.2f}. And in Petersen's survey, forty-two percent of panel papers had "
+            "not adjusted at all."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(dl), FadeIn(leg), FadeIn(txt))
             self.add(bm, cnt)
@@ -204,14 +194,12 @@ class Cluster(VoiceoverScene):
         q = predict(r"Industry momentum, 49 industries, 1{,}116 months: cluster by industry or by month?").next_to(
             rows, DOWN, buff=0.5)
         with self.voiceover(
-            "So which dimension? Cluster on whatever both the regressor and the error share. In asset pricing, "
-            "returns share the month: the market, the month's news. In corporate finance, a firm's leverage this "
-            "year and next share the firm. When in doubt, cluster both ways, but each dimension needs enough "
-            "clusters: ten years is too few to trust a month cluster fully, as the simulation just showed. "
-            "<bookmark mark='a'/> Pause and predict, for the opening regression: cluster by industry, or by month? "
-            f"<bookmark mark='b'/> By month. Clustering by industry moves the t-statistic only from "
-            f"{res['pooled OLS']['t']:.2f} to {res['clustered by industry']['t']:.2f}. Clustering by month takes it "
-            f"to {res['clustered by month']['t']:.2f}, because the shock the industries share is the market itself."
+            "Which dimension? Whatever the regressor and the error both share. Returns share the month; a firm's "
+            "leverage shares the firm. When in doubt, cluster both ways, with enough clusters in each. "
+            "<bookmark mark='a'/> Pause and predict: the opening regression, cluster by industry or by month? "
+            f"<bookmark mark='b'/> By month. By industry, the t-statistic moves from {res['pooled OLS']['t']:.2f} to "
+            f"{res['clustered by industry']['t']:.2f}; by month, to {res['clustered by month']['t']:.2f}. The shared "
+            "shock is the market."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("a")

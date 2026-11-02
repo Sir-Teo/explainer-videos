@@ -45,16 +45,13 @@ class Consumption(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=3.2, x=-0.4, buff=0.9, edge=6.9)
         nu = c["nu"]
         with self.voiceover(
-            "In 1971 Merton added the other half of a life: spending. The investor now consumes at a rate c, gets "
-            "utility from it, and discounts the future at a rate rho. Over an infinite horizon the equation no longer "
-            "depends on time, and consumption appears as a drain on wealth. <bookmark mark='a'/> The first-order "
-            "condition in c is a rule you can say aloud: eat until the marginal utility of eating equals the "
-            "marginal value of a saved dollar. <bookmark mark='b'/> Guess the power form again. Consumption comes "
-            "out proportional to wealth, and the stock fraction is exactly the same as before. "
-            "<bookmark mark='c'/> Substitute and match powers of wealth, and the spending rate is a constant, nu. "
-            f"With rho at three percent, log utility spends exactly rho, {100 * nu[0]:.1f} percent of wealth a year; "
-            f"gamma three, {100 * nu[2]:.2f} percent. <bookmark mark='d'/> With a finite life and nothing left to "
-            "heirs, the same steps give a rate that rises toward the end."
+            "In 1971 Merton added spending. The investor consumes at rate c and discounts the future at rho; with no "
+            "horizon the equation loses its time derivative. <bookmark mark='a'/> The first-order condition: eat until the "
+            "marginal utility of eating equals the marginal value of a saved dollar. <bookmark mark='b'/> The power guess "
+            "again: consumption is proportional to wealth, and the stock fraction is unchanged. <bookmark mark='c'/> Match "
+            "powers of wealth, and the spending rate is a constant, nu. With rho at three percent, log utility spends "
+            f"exactly rho; gamma three spends {100 * nu[2]:.2f} percent a year. <bookmark mark='d'/> With a finite life, the "
+            "rate rises toward the end."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -88,15 +85,11 @@ class Consumption(VoiceoverScene):
         ans = label(rf"less: at $\rho = 1\%$, $\nu = {100 * c['nu_patient']:.2f}\%$", font_size=22, color=KELLY)
         VGroup(tab, q, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            f"Here is the rule over a forty-year life for gamma three. In year one the investor spends "
-            f"{100 * c['life_t0']:.1f} percent of wealth, a little above the forever rate, because there is a finish "
-            "line. The rate climbs slowly, then steeply: with one year left it is about all of what remains, and in "
-            "the last instant it is everything. <bookmark mark='a'/> Across gammas the forever rate barely moves, "
-            "because two effects pull against each other: a better market makes the investor richer, which argues "
-            "for spending more, and makes saving more rewarding, which argues for spending less. With log utility "
-            "they cancel exactly. <bookmark mark='b'/> Pause and predict: a more patient investor, rho of one "
-            "percent instead of three, with gamma three. Does she spend more or less of her wealth? "
-            f"<bookmark mark='c'/> Less: {100 * c['nu_patient']:.2f} percent a year."
+            f"Over a forty-year life with gamma three, the investor spends {100 * c['life_t0']:.1f} percent of wealth in "
+            "year one; the rate climbs slowly, then steeply, to everything at the end. <bookmark mark='a'/> Across gammas "
+            "the forever rate barely moves: a better market makes you richer, and saving more rewarding, and the two pull "
+            "against each other. <bookmark mark='b'/> Pause and predict: a more patient investor, rho of one percent. More "
+            f"or less spending? <bookmark mark='c'/> Less: {100 * c['nu_patient']:.2f} percent."
         ) as vo:
             self.play(FadeIn(g), Create(inf), FadeIn(il))
             self.add(tr)
@@ -127,16 +120,12 @@ class Consumption(VoiceoverScene):
                     r"it", font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.8, buff=0.75, edge=6.9)
         with self.voiceover(
-            "There is a second way to the same answer, with no differential equation at all. John Cox and Chi-fu "
-            "Huang, and independently Karatzas, Lehoczky and Shreve, asked what the investor is really buying. In a "
-            "complete market every terminal state has a price today; collect them into the state-price density xi. "
-            "<bookmark mark='a'/> Then the dynamic problem is a static one: choose a payoff X T, state by state, to "
-            "maximize expected utility, subject to one budget: its price must equal today's wealth. "
-            "<bookmark mark='b'/> Maximize state by state. Marginal utility must be proportional to the state "
-            "price, so terminal wealth is the state price to the power minus one over gamma. Buy wealth where it is "
-            "cheap. <bookmark mark='c'/> Write it out, and terminal wealth is the stock price to the power pi star. "
-            "Merton's investor owns a power claim on the stock, and rebalancing to a constant mix is simply how you "
-            "manufacture it."
+            "A second route, with no differential equation: Cox and Huang, and Karatzas, Lehoczky and Shreve. In a "
+            "complete market every final state has a price today, the state-price density xi. <bookmark mark='a'/> So "
+            "choose a payoff, state by state, to maximize expected utility subject to one budget. <bookmark mark='b'/> "
+            "Marginal utility must be proportional to the state price: buy wealth where it is cheap. "
+            "<bookmark mark='c'/> Written out, final wealth is the stock to the power pi star: Merton's investor owns a power "
+            "claim, and rebalancing manufactures it."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -179,13 +168,10 @@ class Consumption(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = illustration(r"simulation: daily steps, $\mu = 8\%$, $r = 2\%$, $\sigma = 18\%$, $\gamma = 3$")
         with self.voiceover(
-            "Check it. Two thousand investors rebalance to Merton's fraction every day for ten years. For each, mark "
-            "the state price of the world it ended in, and its terminal wealth. <bookmark mark='a'/> The dots land "
-            "on the static curve, state price to the minus one third: the largest gap is "
-            f"{100 * m['max_rel']:.2f} percent, from rebalancing daily rather than continuously. "
-            "<bookmark mark='b'/> Change gamma and the curve tilts: a bolder investor buys much more wealth in the "
-            "cheap, good states and less in the dear, bad ones. The martingale method is the engine behind "
-            "incomplete markets and constraints too, through convex duality, and Part nine builds its prices."
+            "Check it: two thousand investors rebalance daily for ten years; plot each one's state price against its final "
+            "wealth. <bookmark mark='a'/> The dots land on the static curve, to within "
+            f"{100 * m['max_rel']:.2f} percent, the cost of rebalancing daily rather than continuously. "
+            "<bookmark mark='b'/> Lower gamma tilts the curve: a bolder investor buys more wealth in the cheap states."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), FadeIn(src))
             self.add(dots)

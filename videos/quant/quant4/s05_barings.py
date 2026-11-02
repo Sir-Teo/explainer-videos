@@ -9,9 +9,8 @@ MONTHS = {1994.5: "Jul 94", 1994.75: "Oct 94", 1995.0: "Jan 95", 1995.25: "Apr 9
 
 
 def _date(d: int) -> str:
-    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
-              "November", "December"]
-    return f"{d % 100} {months[(d // 100) % 100 - 1]} {d // 10000}"
+    """A date as shown on screen (ISO, the same in both languages)."""
+    return "%d-%02d-%02d" % (d // 10000, (d // 100) % 100, d % 100)
 
 
 def _days_after_kobe(d: int) -> int:
@@ -159,23 +158,26 @@ class Barings(VoiceoverScene):
         i_low = int(np.argmin(pnl))
         back = np.flatnonzero(pnl[i_low:] >= 0)
         recovered = len(back) > 0
-        story = (f"A doubler with unlimited credit would, in this replay, have been back above zero by "
-                 f"{_date(int(dd[i_low + back[0]]))}, which is exactly what the doubling system promises when no one "
-                 "stops it. But the bank's capital line was crossed first."
-                 if recovered else "Even with unlimited credit, the doubler had not won it back by the end of March.")
+        if recovered:
+            k_back = int(back[0])
+            story = (f"A doubler with unlimited credit would, in this replay, have been back above zero {k_back} "
+                     "trading days after the low, which is exactly what the doubling system promises when no one "
+                     "stops it. But the bank's capital line was crossed first.")
+        else:
+            story = "Even with unlimited credit, the doubler had not won it back by the end of March."
         capped = ("The same rule capped at sixteen units never recovers: bounded bets obey optional stopping, and "
                   "there is no promise of a comeback." if C["end"] < 0 else
                   "The same rule capped at sixteen units also recovered: in this short window, luck sided with it.")
-        crossed = (f"the account crosses the capital line on {_date(cross)}, {_days_after_kobe(cross)} days after Kobe."
+        crossed = (f"the account crosses the capital line {_days_after_kobe(cross)} days after Kobe."
                    if cross else
                    "the account never crosses the capital line.")
         with self.voiceover(
-            "We do not have Leeson's book, so here is a schematic instead, labelled as one: a simple doubling rule "
-            "run on the real index. Hold one unit of the Nikkei; after every down day, double it; once the account is "
-            "back at its high, go back to one unit. Against it, a bank with a stated capital. <bookmark mark='a'/> "
-            "Through the autumn the rule wins small amounts, again and again. <bookmark mark='b'/> Then Kobe. The "
-            f"position doubles day after day, to {D['max_units']:.0f} units, and " + crossed + " "
-            "<bookmark mark='c'/> " + story + " " + capped
+            "We do not have Leeson's book, so here is a schematic instead, labelled as one: a simple doubling "
+            "rule run on the real index. Hold one unit of the Nikkei; after every down day, double it; once the "
+            "account is back at its high, go back to one unit. Against it, a bank with a stated capital. <bookmark "
+            "mark='a'/> Through the autumn the rule wins small amounts, again and again. <bookmark mark='b'/> "
+            f"Then Kobe. The position doubles day after day, to {D['max_units']:.0f} units, and {crossed} <bookmark "
+            f"mark='c'/> {story} <bookmark mark='d'/> {capped}"
         ) as vo:
             self.play(FadeIn(tag), FadeIn(g1), FadeIn(g2), Create(capl), FadeIn(capt), FadeIn(side[0]))
             self.add(lu, lp)

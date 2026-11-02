@@ -80,15 +80,12 @@ class Outro(VoiceoverScene):
                              rf"were sampled, and the count of everything tried. The trial counter reads {env['trials']}.",
                              12.4, 22, QC.HOUSE).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "The House's statistics module now holds this part's tools, each tested against a simulated case with "
-            "a known answer. <bookmark mark='a'/> Every standard error we met, and the long-run variance behind "
-            "them. Panels, two passes and the within-between split. Maximum likelihood and GMM. Out-of-sample "
-            "tests and Stambaugh-proof ones. Event studies with placebos, bootstraps that keep dependence, Gibbs "
-            "and empirical Bayes, multiple testing, causal designs and double machine learning. "
-            "<bookmark mark='b'/> And a seventh rule: no number leaves the House without a standard error that "
-            "respects how the data were sampled, and the count of everything tried. This part registered the "
-            "industry alphas, the FOMC days, five predictors, the two-pass test and the look-ahead toy, so the trial "
-            f"counter now reads {env['trials']}."
+            "The House's statistics module now holds this part's tools, each tested on a simulated case with a known "
+            "answer. <bookmark mark='a'/> Robust standard errors and long-run variances; panels and two passes; "
+            "likelihood and GMM; out-of-sample and Stambaugh-proof tests; event studies; bootstraps; Gibbs; multiple "
+            "testing; causal designs and double ML. <bookmark mark='b'/> And rule seven: no number leaves the House "
+            "without a standard error that respects the sampling, and the count of everything tried. This part's "
+            f"registrations bring the trial counter to {env['trials']}."
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")
@@ -130,16 +127,13 @@ class Outro(VoiceoverScene):
         if rows.height > 6.4:
             rows.scale_to_fit_height(6.4)
         with self.voiceover(
-            "Part six in ten lines. Least squares is a projection, and every standard error is a claim about how "
-            "the scores move together. Overlap and persistence inflate t-statistics, and even Newey-West needs "
-            "fixed-b critical values or the cosine estimator to be honest. In panels, cluster on the shock both "
-            "sides share. Pooled least squares mixes the within-month question with market timing; Fama-MacBeth "
-            "answers the first. Persistent predictors carry Stambaugh's bias, and out of sample the famous ones "
-            "lose to the mean. Likelihood curvature is precision, and GMM rejects the consumption Euler equation. "
-            "FOMC days carried a quarter of the market's excess return, and events sharing a date do not "
-            "diversify. Block bootstraps keep the dependence. Shrinkage beats forty separate means, and "
-            "Benjamini-Hochberg controls false discoveries. Causal questions need designs. And a good strategy "
-            "needs sixteen years to prove itself."
+            "Part six in ten lines. Least squares is a projection; every standard error is a claim about how scores "
+            "co-move. Overlap and persistence inflate t, and even Newey-West needs fixed-b values or EWC. Cluster on the "
+            "shared shock. Pooled least squares mixes within-month and market timing; Fama-MacBeth answers the first. "
+            "Persistent predictors carry Stambaugh's bias and lose out of sample. Curvature is precision, and GMM "
+            "rejects the Euler equation. FOMC days carried a quarter of the excess return. Block bootstraps keep "
+            "dependence. Shrinkage beats forty means; Benjamini-Hochberg controls false discoveries. Causal questions "
+            "need designs. And a good strategy needs sixteen years."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=20))
@@ -151,12 +145,11 @@ class Outro(VoiceoverScene):
         if cards.height > 7.6:
             cards.scale_to_fit_height(7.6)
         with self.voiceover(
-            "Five desk questions. A Sharpe ratio of one over four years has a standard error of about zero point "
-            "six. <bookmark mark='a'/> Twenty strategies with the best at three percent: not significant. "
-            "<bookmark mark='b'/> Forty years of annual returns sampled monthly are about forty observations. "
-            "<bookmark mark='c'/> A t of two and a half on five-year returns and a persistent yield: do not trade "
-            "it on that alone. <bookmark mark='d'/> And pooled against Fama-MacBeth: neither is wrong; they answer "
-            "different questions. Full solutions are in the notes."
+            "Five desk questions. A Sharpe of one over four years: a standard error of about zero point six. "
+            "<bookmark mark='a'/> Twenty strategies, the best at three percent: not significant. <bookmark mark='b'/> "
+            "Forty years sampled monthly: about forty observations. <bookmark mark='c'/> A t of two and a half on "
+            "five-year returns: do not trade it on that alone. <bookmark mark='d'/> Pooled against Fama-MacBeth: "
+            "different questions. Solutions are in the notes."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             for i, mk in enumerate("abcd", 1):
@@ -168,9 +161,8 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=21)
         with self.voiceover(
-            "And seven problems: the cost of overlap, Stambaugh's bias derived, the Sharpe ratio's standard error, "
-            "Holm against Bonferroni, the James-Stein estimator, the within and between decomposition of chapter "
-            "four, and why the iid bootstrap forgets dependence. Solutions, in English and Chinese, are in the notes."
+            "Seven problems, from the cost of overlap to the within-between decomposition and why the iid bootstrap "
+            "forgets dependence; solutions, in English and Chinese, in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)
@@ -186,12 +178,9 @@ class Outro(VoiceoverScene):
             (r"persistence, unit roots and volatility", [7]),
         ])
         with self.voiceover(
-            "Where this comes back. GMM and the Euler equation become the stochastic discount factor of Part "
-            "twenty-three. Fama-MacBeth, the two-pass test and clustering are the workhorses of the factor parts, "
-            "twenty-four and twenty-five, which also apply multiple testing to the factor zoo, as the backtesting "
-            "part and the finale do to everything the House tries. Shrinkage returns in machine learning and in "
-            "portfolio construction, double machine learning and look-ahead in the parts on learning from returns "
-            "and from text, and persistence in Part seven."
+            "Where this returns: GMM in the discount factor of Part twenty-three; Fama-MacBeth and clustering in the "
+            "factor parts; multiple testing in the factor zoo, backtesting and the finale; shrinkage in machine learning "
+            "and portfolios; double ML and look-ahead in learning from returns and text; persistence in Part seven."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r_) for r_ in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
@@ -218,10 +207,8 @@ class Outro(VoiceoverScene):
         if card.height > 7.6:
             card.scale_to_fit_height(7.6)
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers it draws on, all listed with their findings in "
-            "the notes. Every number was computed by the series' own code from public data: Shiller's century and "
-            "a half of the market, Kenneth French's factors, industries and portfolios, consumption and prices from "
-            "the St. Louis Fed, and the Federal Reserve's own calendar of decisions."
+            "The books and papers, each with its finding in the notes. Every number came from public data: Shiller, "
+            "Kenneth French, the St. Louis Fed, and the Federal Reserve's own calendar."
         ):
             self.play(FadeIn(card))
             self.wait(3)

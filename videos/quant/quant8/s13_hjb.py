@@ -49,20 +49,14 @@ class HJB(VoiceoverScene):
                     r"the Sharpe ratio (Merton 1969)", font_size=21)]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=-0.6, buff=0.95, edge=6.9)
         with self.voiceover(
-            "Shrink Bellman's period to an instant. Over a short interval of length h, the value now is the best "
-            "expected value at the end of the interval: the same principle. <bookmark mark='a'/> Expand that future "
-            "value with Itô's formula from Part five. It is today's value, plus a drift integral, the time derivative "
-            "plus the generator of wealth under the chosen fraction, plus a stochastic integral against the Brownian "
-            "motion. <bookmark mark='b'/> The stochastic integral has mean zero. Subtract today's value from both "
-            "sides and divide by h. <bookmark mark='c'/> Let h go to zero, and the integral's average becomes its "
-            "integrand: zero equals the time derivative plus the supremum, over the fraction, of the drift of wealth "
-            "times V x plus half the variance times V x x. This is the Hamilton-Jacobi-Bellman equation, with "
-            "utility as its terminal condition. <bookmark mark='d'/> The thing inside the supremum is a parabola in "
-            "pi. When V is concave its vertex is the maximum, and the first-order condition gives the fraction. "
-            "<bookmark mark='e'/> Now guess a power of wealth times a function of time. The x derivatives become "
-            "multiples of V, the supremum becomes a number, and the equation collapses to an ordinary differential "
-            "equation for f, with f equal to one at the end. The fraction is Merton's: the excess return over gamma "
-            "times the variance."
+            "Shrink Bellman's period to an instant h: the value now is the best expected value at t plus h. "
+            "<bookmark mark='a'/> Expand that future value with Itô's formula: a drift integral plus a stochastic integral. "
+            "<bookmark mark='b'/> The stochastic integral has mean zero; subtract today's value and divide by h. "
+            "<bookmark mark='c'/> Let h go to zero: zero equals the time derivative plus the supremum over the fraction of "
+            "the drift of wealth times V x plus half the variance times V x x. That is the Hamilton-Jacobi-Bellman "
+            "equation. <bookmark mark='d'/> Inside the supremum is a parabola in pi; when V is concave, its vertex gives "
+            "the fraction. <bookmark mark='e'/> Guess a power of wealth times a function of time, and the equation "
+            "collapses to an ordinary differential equation for f. The fraction is Merton's."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -117,16 +111,12 @@ class HJB(VoiceoverScene):
         q = pause_card(r"Double $\sigma$. What happens to the Merton fraction?", width=5.6, font_size=22).next_to(
             txt, DOWN, buff=0.5).align_to(gw, LEFT)
         with self.voiceover(
-            "Here is the equation's maximum as a picture. At every wealth the bracket inside the supremum, divided by "
-            "the positive number one minus gamma times V, is a downward parabola in the fraction, and the decision "
-            "is its vertex. <bookmark mark='a'/> Move wealth. Without a floor the parabola's coefficients are "
-            f"constants, and the vertex never moves: {100 * h['pi_merton']:.0f} percent at every wealth, the line we found by "
-            "dynamic programming. <bookmark mark='b'/> Switch on the floor of the last chapter, five years before the "
-            "deadline. Now x V x over V grows as wealth approaches the floor, the parabola narrows and the vertex "
-            "slides toward zero. The policy is the vertex of a parabola, at every point of the state space. "
-            "<bookmark mark='c'/> Pause and predict: if the volatility doubles, what happens to the fraction? "
-            "<bookmark mark='d'/> The curvature term carries sigma squared, so the vertex falls by a factor of four: "
-            f"to about {100 * h['pi_merton'] / 4:.0f} percent."
+            "Here is the maximum as a picture: at every wealth, the bracket, divided by the positive number one minus "
+            "gamma times V, is a parabola in the fraction, and the decision is its vertex. <bookmark mark='a'/> Move wealth. "
+            f"Without a floor the vertex never moves: {100 * h['pi_merton']:.0f} percent everywhere. <bookmark mark='b'/> "
+            "Switch on chapter two's floor: as wealth nears it the parabola narrows and the vertex slides to zero. "
+            "<bookmark mark='c'/> Pause and predict: double the volatility, and the fraction? <bookmark mark='d'/> Falls "
+            f"fourfold, to about {100 * h['pi_merton'] / 4:.0f} percent."
         ) as vo:
             self.play(FadeIn(gw), FadeIn(gh), FadeIn(dot), FadeIn(txt[0]))
             self.add(par, top, read)
@@ -157,15 +147,11 @@ class HJB(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25), who=r"Fleming and Rishel (1975); Pham ch.\ 3; Bj\"ork",
             width=12.2, color=VALUE).move_to(ORIGIN)
         with self.voiceover(
-            "We guessed the answer. Why is the guess right? The verification theorem. Suppose a smooth function w "
-            "solves the HJB equation and equals utility at the end. Take any strategy at all and apply Itô's formula "
-            "to w along its wealth. <bookmark mark='a'/> Utility at the end equals w today, plus a drift integral, "
-            "plus a stochastic integral. The HJB says the drift is at most zero for every strategy, because zero is "
-            "the supremum; so utility at the end is at most w today plus a martingale. Take expectations: no "
-            "strategy can beat w. And for the maximizer the drift is exactly zero, so it attains w. Therefore w is "
-            "the value function and the maximizer is optimal. <bookmark mark='b'/> The fine print is the martingale "
-            "condition, which rules out doubling strategies, and the smoothness of w. When w is not smooth, the "
-            "argument breaks, and the next chapter repairs it."
+            "We guessed the answer. Why is it right? Take any strategy and apply Itô's formula to a smooth solution w of "
+            "the HJB. <bookmark mark='a'/> Utility at the end is w today, plus a drift that the HJB makes at most zero, plus "
+            "a martingale. Take expectations: no strategy beats w, and the maximizer attains it. So w is the value and the "
+            "maximizer is optimal. <bookmark mark='b'/> The fine print: the martingale condition, and smoothness, which "
+            "the next chapter does without."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -206,15 +192,12 @@ class HJB(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = illustration(r"the House's \texttt{hjb\_fd\_merton}; $\gamma = 3$, ten years")
         with self.voiceover(
-            "And the equation can be solved without guessing. The House's finite-difference solver works on time "
-            f"and log wealth, {h['n_t']} time steps by {h['n_y']} wealth nodes. At each time step it alternates: "
-            "solve a linear system for the value given the fraction, move the fraction to each parabola's vertex, "
-            "and repeat until the fraction stops moving. <bookmark mark='a'/> That took "
-            f"{int(np.argmax(h['pass_counts']))} passes at most steps. "
-            "<bookmark mark='b'/> The fraction it finds is Merton's to within "
-            f"{100 * h['pi_err']:.3f} percentage points across the grid, and its value is within "
-            f"{100 * h['rel_err']:.2f} percent of the closed form. <bookmark mark='c'/> Refine the grid and the error "
-            "falls steadily. A machine that knows only the equation recovers the formula."
+            "The equation can also be solved without guessing. The House's finite-difference solver, "
+            f"{h['n_t']} time steps by {h['n_y']} wealth nodes, alternates at each step: solve for the value given the "
+            "fraction, move the fraction to each vertex, repeat. <bookmark mark='a'/> Most steps took "
+            f"{int(np.argmax(h['pass_counts']))} passes. <bookmark mark='b'/> Its fraction is Merton's to "
+            f"{100 * h['pi_err']:.3f} points, its value within {100 * h['rel_err']:.2f} percent of the closed form, "
+            "<bookmark mark='c'/> and the error falls as the grid is refined."
         ) as vo:
             self.play(FadeIn(g), Create(ref), FadeIn(side[0]), FadeIn(src))
             vo.wait_until("a")

@@ -54,13 +54,11 @@ class Hook(VoiceoverScene):
         q = pause_card(r"Tomorrow's sign: can you forecast it? Tomorrow's size?", width=6.8, font_size=24)
         q.to_corner(UR, buff=0.3)
         with self.voiceover(
-            "Here is almost a century of the American stock market, every bar the size of its daily moves over a "
-            "month. <bookmark mark='a'/> Big moves do not arrive alone. They come in clusters: the early nineteen "
+            "Almost a century of the American market, each bar the size of a month's daily moves. <bookmark mark='a'/> Big moves do not arrive alone. They come in clusters: the early nineteen "
             "thirties, 1987, 2008, March 2020. Benoit Mandelbrot saw it in cotton prices in 1963: large changes tend to "
             "be followed by large changes, of either sign. <bookmark mark='b'/> So, pause and predict. Can you "
             "forecast tomorrow's sign? And can you forecast tomorrow's size? <bookmark mark='c'/> The bright line is "
-            "the slow, hidden quantity that the clusters suggest: volatility. This part is about seeing it, measuring "
-            "it and forecasting it."
+            "the slow, hidden quantity that the clusters suggest: volatility."
         ) as vo:
             self.play(FadeIn(gr), FadeIn(src))
             self.play(LaggedStart(*[Create(b) for b in bars], lag_ratio=0.004, run_time=4))
@@ -101,8 +99,7 @@ class Hook(VoiceoverScene):
             f"bars sit almost on zero: at lag one, {r_[0]:.2f}, and nothing after. Direction has no memory worth "
             "trading. <bookmark mark='b'/> Now do the same with the size of the move, the absolute return. At lag "
             f"one the correlation is {ab[0]:.2f}, and it decays slowly: a hundred trading days later it is still "
-            f"{ab[-1]:.2f}, and after a whole year it has not reached zero. Size has a long memory. That memory is "
-            "what every model in this part exploits."
+            f"{ab[-1]:.2f}. Size has a long memory, and every model in this part exploits it."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(band_))
             vo.wait_until("a")
@@ -135,8 +132,7 @@ class Hook(VoiceoverScene):
                         r"returns")
         with self.voiceover(
             "The same holds in a market that never closes. Here are three and a half years of Bitcoin, one bar a "
-            "day. <bookmark mark='a'/> Measure each day's volatility from its five-minute returns, one dot a day, "
-            "and it jumps around. <bookmark mark='b'/> Now run a filter through it, day by day, that keeps a belief "
+            "day. <bookmark mark='a'/> Each day's volatility from five-minute returns, one dot a day, jumps around. <bookmark mark='b'/> Now run a filter through it, day by day, that keeps a belief "
             "about the slow level and nudges it toward each new dot. A river appears: quiet in early 2019, flooding "
             "in March 2020. You can't forecast the next day's direction, but you can forecast how big its move is "
             "likely to be, and every option price, risk limit and position size depends on doing it well."
@@ -173,16 +169,14 @@ class Hook(VoiceoverScene):
             grid.scale_to_fit_height(4.9)
         grid.next_to(strip, DOWN, buff=0.35)
         with self.voiceover(
-            "How we got here. In 1927 Udny Yule modelled sunspot numbers as a series that remembers its own past: the "
-            "first autoregression. In 1960 Rudolf Kalman published a filter for hidden states that guided Apollo. In "
-            "1970 George Box and Gwilym Jenkins made model building a craft, and in 1979 David Dickey and Wayne "
-            "Fuller showed how to test for a random walk. <bookmark mark='a'/> Then volatility: Robert Engle's ARCH in "
-            "1982, built for British inflation; Tim Bollerslev's GARCH in 1986; Engle and Clive Granger's "
-            "cointegration in 1987; James Hamilton's regimes in 1989. <bookmark mark='b'/> In 1994 J.P. Morgan gave "
-            "away RiskMetrics, an exponential average that became the industry's default. Around 2000, intraday data "
-            "turned volatility into something you measure, and in 2003 Engle and Granger shared the Nobel prize. "
-            "<bookmark mark='c'/> HAR in 2009, rough volatility in 2018, and since 2024, foundation models that "
-            "forecast any time series without training. Each of them gets a chapter."
+            "How we got here. In 1927 Udny Yule modelled sunspots as a series that remembers its past: the first "
+            "autoregression. In 1960 Rudolf Kalman published his filter for hidden states. Box and Jenkins made "
+            "model building a craft in 1970, and Dickey and Fuller tested for random walks in 1979. <bookmark "
+            "mark='a'/> Then volatility: Engle's ARCH in 1982, Bollerslev's GARCH in 1986, Engle and Granger's "
+            "cointegration in 1987, Hamilton's regimes in 1989. <bookmark mark='b'/> In 1994 J.P. Morgan gave away "
+            "RiskMetrics. Intraday data made volatility measurable, and in 2003 Engle and Granger shared the Nobel "
+            "prize. <bookmark mark='c'/> HAR in 2009, rough volatility in 2018, and foundation models since 2024. "
+            "Each gets a chapter."
         ) as vo:
             self.play(FadeIn(strip))
             self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in grid[:4]], lag_ratio=0.5, run_time=4))
@@ -205,11 +199,9 @@ class Hook(VoiceoverScene):
             r"March 2020; how risk vendors, CTAs and options desks forecast volatility",
         ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan. Stationarity, ARMA models and unit roots, the regression that finds relationships between "
-            "unrelated series, and cointegration, the relationship that is real. Hidden states: regimes and the "
-            "Kalman filter. The GARCH family, derived and fitted, and correlations that change. Realized volatility "
-            "measured properly, the HAR model and rough volatility. Then how to score a forecast, networks trained "
-            "here, a race judged out of sample, and foundation models. And March 2020, and the industry."
+            "The plan. Time-series foundations: ARMA, unit roots and cointegration. Hidden states. The GARCH family, "
+            "derived and fitted. Realized volatility, HAR and roughness. Then scoring, networks trained here, the "
+            "race and foundation models. And March 2020, and the industry."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=9))

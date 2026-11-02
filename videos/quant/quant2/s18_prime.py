@@ -49,13 +49,12 @@ class Prime(VoiceoverScene):
         if svc.width > 13.0:
             svc.scale_to_fit_width(13.0)
         with self.voiceover(
-            "Hedge funds borrow through prime brokers: divisions of large banks that lend them cash and securities, "
-            "hold their assets, clear their trades, and net margin across everything they hold there. "
-            "<bookmark mark='a'/> Much of the exposure is synthetic. In a total return swap the fund receives the "
-            "stock's price change and dividends, and pays a financing rate plus any losses. The bank buys the stock "
-            "to hedge itself. <bookmark mark='b'/> The fund has the exposure without owning anything, so it doesn't "
-            "appear in the quarterly filings that report large shareholders. A fund can run the same trade with five "
-            "banks at once, and none of them sees the whole."
+            "Hedge funds borrow through prime brokers: divisions of large banks that lend them cash and securities, hold their "
+            "assets, clear their trades, and net margin across everything they hold there. <bookmark mark='a'/> Much of the "
+            "exposure is synthetic. In a total return swap the fund receives the stock's price change and dividends and pays "
+            "a financing rate, and the bank buys the stock to hedge itself. <bookmark mark='b'/> The fund owns nothing, so it "
+            "doesn't appear in the quarterly filings that report large shareholders. It can run the same trade with five banks "
+            "at once, and none of them sees the whole."
         ) as vo:
             self.play(FadeIn(fund), FadeIn(bank), FadeIn(mkt), FadeIn(svc[:2]))
             vo.wait_until("a")
@@ -98,12 +97,10 @@ class Prime(VoiceoverScene):
             r_.scale(0.85)
         step = ladder(self, rows, whys, keep=3, top=2.9, x=3.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "When such a client defaults, every bank holds the same shares as its hedge, and every bank must sell. "
-            "Here are four banks, each with a block of q shares, and a price that falls by lambda for every share "
-            "sold. <bookmark mark='a'/> The first bank sells into an untouched market. The second sells after the "
-            "first has pushed the price down; the third, lower still. <bookmark mark='b'/> The j-th seller's average "
-            "price is the start less everything sold before it, plus half its own block. Its loss grows in a straight "
-            "line with its place in the queue, and with four banks the last loses seven times what the first does."
+            "When such a client defaults, every bank must sell the same shares. Four banks, each with q shares, and a price "
+            "that falls lambda per share sold. <bookmark mark='a'/> The first sells into an untouched market; each later one "
+            "sells lower. <bookmark mark='b'/> The j-th seller's average price is the start less everything sold before it "
+            "and half its own block. Its loss grows with its place in the queue: the last loses seven times the first."
         ) as vo:
             self.play(FadeIn(g), FadeIn(banks))
             self.add(tick)
@@ -154,13 +151,11 @@ class Prime(VoiceoverScene):
         src = note(r"simulated: 2 to 8 banks, random block sizes and random order, square-root impact, 8 seeds",
                    font_size=16).to_edge(DOWN, buff=0.12)
         with self.voiceover(
-            "With a more realistic square-root impact and random block sizes the picture holds: run two to eight "
-            "banks in random order, eight seeds each, and the loss per share rises with the place in the queue, "
-            "steepest at the front. <bookmark mark='a'/> So consider two banks deciding at once. If both wait and "
-            "unwind together in an orderly way, each loses three quarters of a unit. But if the other waits, selling "
-            "first loses only half; and if the other sells, selling too loses one instead of one and a half. "
-            "<bookmark mark='b'/> Selling now is each bank's best response whatever the other does, so both sell, "
-            "and both lose more than if both had waited. A prisoner's dilemma, played in hours."
+            "With square-root impact and random sizes, two to eight banks, eight seeds, the picture holds: loss rises with "
+            "your place in the queue. <bookmark mark='a'/> So two banks decide. Both wait and unwind in order: three quarters "
+            "each. If the other waits, selling first costs a half; if the other sells, selling too costs one, not one and a "
+            "half. <bookmark mark='b'/> Selling now is each bank's best response, so both sell and both lose more: a "
+            "prisoner's dilemma, played in hours."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2, run_time=3), FadeIn(src))
             vo.wait_until("a")
@@ -191,15 +186,13 @@ class Prime(VoiceoverScene):
         src = note(r"SEC press release 2022-70 (allegations); Credit Suisse report (July 2021); Nomura's results "
                    r"(April 2021) as reported", font_size=15).to_edge(DOWN, buff=0.12)
         with self.voiceover(
-            "In March 2021 the game was played for real. Archegos, a family office, had built enormous, "
-            "concentrated positions through swaps with several prime brokers. The SEC alleges it grew from about a "
-            "billion and a half dollars, with ten billion of exposure, to more than thirty-six billion with a hundred "
-            "and sixty billion of exposure in a year. <bookmark mark='a'/> When its stocks fell it missed margin "
-            "calls. Some banks sold their hedges early and lost little; those that waited lost most: about five and "
-            "a half billion dollars at Credit Suisse, and nearly three billion at Nomura, as they reported. Its "
-            "founder was convicted of fraud in 2024 and sentenced to eighteen years. <bookmark mark='b'/> Duffie "
-            "describes the mirror image: when a dealer looks weak, its own prime-brokerage clients run, as they did "
-            "from Bear Stearns and Lehman. Pause and predict: you hear first. What do you do?"
+            "In March 2021 it was played for real. Archegos, a family office, built concentrated positions through swaps with "
+            "several prime brokers; the SEC alleges it grew from about one and a half billion dollars, with ten billion of "
+            "exposure, to over thirty-six billion with a hundred and sixty billion. <bookmark mark='a'/> When its stocks fell "
+            "it missed margin calls. Banks that sold early lost little; Credit Suisse lost about five and a half billion and "
+            "Nomura nearly three, as they reported. Its founder was convicted in 2024. <bookmark mark='b'/> Duffie describes "
+            "the mirror image: clients run from a weak dealer, as from Bear Stearns and Lehman. Pause and predict: you hear "
+            "first. What do you do?"
         ) as vo:
             self.play(FadeIn(c, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("b")

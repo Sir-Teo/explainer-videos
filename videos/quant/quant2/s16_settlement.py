@@ -48,14 +48,11 @@ class Settlement(VoiceoverScene):
         ).arrange(RIGHT, buff=0.3, aligned_edge=UP).next_to(items, DOWN, buff=0.6)
         src = note(r"SEC staff report on early 2021, section 2; DTCC", font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Settlement is when shares and cash actually move. American stocks once settled five business days "
-            "after the trade, then three from 1995, two from 2017, and since the 28th of May 2024, one. "
-            "<bookmark mark='a'/> Settlement is delivery versus payment: shares move only against cash, at the same "
-            "moment. And it is netted: the clearing house turns each member's day of trades in a stock into one "
-            "delivery or one receipt. <bookmark mark='b'/> Between trade and settlement the clearing house holds the "
-            "risk, and each member pays into a clearing fund to cover it. The biggest piece is a ninety-nine percent "
-            "value-at-risk on the member's unsettled positions; on top come mark-to-market calls, special charges, "
-            "and the excess capital premium of January 2021."
+            "Settlement is when shares and cash move: five days after the trade before 1995, then three, two from 2017, and "
+            "one since May 2024. <bookmark mark='a'/> It is delivery versus payment, and it is netted: each member's trades in "
+            "a stock become one delivery a day. <bookmark mark='b'/> Until then each member pays into a clearing fund, mostly "
+            "a ninety-nine percent value-at-risk on its unsettled positions, plus mark-to-market calls, special charges and "
+            "the excess capital premium."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(x) for x in items], lag_ratio=0.4),
                       LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.4), run_time=4)
@@ -111,14 +108,13 @@ class Settlement(VoiceoverScene):
         src = note(r"simulated: steady net buying, volatility 60\% a year with a 15-day spike to 400\%, 8 seeds",
                    font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Here is the deposit as a machine. Each day the member's customers buy, net, and that day's purchases "
-            "ride a conveyor belt until they settle, two days at T plus two. Under the belt is the clearing house's "
-            "shadow: the deposit, proportional to the volatility of what's on it. <bookmark mark='a'/> Now volatility "
-            "jumps, from sixty percent a year to four hundred, as GameStop's did. The belt carries the same crates, "
-            f"but the shadow balloons: the deposit rises about {s['spike']:.0f}-fold. A broker whose customers are "
-            "only buying owes the cash on settlement day for shares that may have collapsed by then, and the "
-            "clearing house wants that covered today. <bookmark mark='b'/> Shorten the belt to one day and the "
-            "shadow shrinks with it."
+            "Here is the deposit as a machine. Each day the member's customers buy, net, and that day's purchases ride a "
+            "conveyor belt until they settle, two days at T plus two. Under the belt is the clearing house's shadow: the "
+            "deposit, proportional to the volatility of what's on it. <bookmark mark='a'/> Now volatility jumps, from sixty "
+            f"percent a year to four hundred, as GameStop's did. The crates are the same, but the deposit grows about "
+            f"{s['spike']:.0f}-fold. This is the answer to the hook's question: a broker whose customers only buy still owes "
+            "the cash on settlement day, for shares that may have collapsed by then, and the clearing house wants that "
+            "covered today. <bookmark mark='b'/> Shorten the belt to one day, and the shadow shrinks with it."
         ) as vo:
             self.play(FadeIn(lab_b), FadeIn(g), FadeIn(leg), FadeIn(src), FadeIn(vol))
             self.add(bl, l2, l1)
@@ -150,14 +146,11 @@ class Settlement(VoiceoverScene):
                     rf"\text{{two-way}}\ -{100 * s['cut']['two_way']:.0f}\%", font_size=30, color=QC.IDEA),
         ).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "The arithmetic. The exposure is the last h days of net buying. <bookmark mark='a'/> The deposit is a "
-            "ninety-nine percent value-at-risk on it: two point three three times the volatility, times the square "
-            "root of the time to close it out, times the exposure. <bookmark mark='b'/> If the flow runs all one "
-            "way, the exposure is h times the daily flow, and going from two days to one halves the deposit. "
-            "<bookmark mark='c'/> But most members' flow nets out over days, and netted flow grows like a random "
-            "walk, with the square root of h. Halving h then saves only about twenty-nine percent. "
-            f"The simulation agrees: {100 * s['cut']['one_way']:.0f} percent less for one-way flow, "
-            f"{100 * s['cut']['two_way']:.0f} percent less for two-way."
+            "The exposure is the last h days of net buying. <bookmark mark='a'/> The deposit is a ninety-nine percent "
+            "value-at-risk on it. <bookmark mark='b'/> If flow runs one way, the exposure is h times the daily flow, and one "
+            "day instead of two halves it. <bookmark mark='c'/> Flow that nets grows like a random walk, with root h: one day "
+            f"saves only twenty-nine percent. Simulated: {100 * s['cut']['one_way']:.0f} percent for one-way flow, "
+            f"{100 * s['cut']['two_way']:.0f} for two-way."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -192,13 +185,12 @@ class Settlement(VoiceoverScene):
         q.to_corner(DR, buff=0.3)
         src = note(r"SIFMA, ICI and DTCC, T+1 after-action report (September 2024)", font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "What actually happened? After the move to T plus one, the average clearing fund fell by two point four "
-            "billion dollars, from twelve point two billion to nine point eight: twenty percent, not fifty, just as "
-            "netted flow predicts. <bookmark mark='a'/> The industry had to confirm trades on the trade date itself; "
-            "affirmation by nine in the evening rose from seventy-three percent to about ninety-five. Failed "
-            "settlements stayed where they had been under T plus two. Europe and Britain follow on the eleventh of "
-            "October 2027. <bookmark mark='b'/> And Robinhood's morning? A buying frenzy, at four hundred percent "
-            "volatility, on a two-day belt. Pause and predict: settle the same day, and does the deposit vanish?"
+            "What actually happened? After T plus one, NSCC's average clearing fund fell by two point four billion dollars, "
+            "from twelve point two to nine point eight: twenty percent, not fifty, as netted flow predicts. "
+            "<bookmark mark='a'/> The industry had to confirm trades on the trade date itself; affirmation by nine in the "
+            "evening rose from seventy-three percent to about ninety-five. Failed settlements stayed at their old rate, about "
+            "two percent. Europe and Britain follow on the eleventh of October 2027. <bookmark mark='b'/> Pause and predict: "
+            "settle on the same day. Does the deposit vanish?"
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.5), FadeIn(src))
             self.play(FadeIn(facts[0]), FadeIn(facts[1]))

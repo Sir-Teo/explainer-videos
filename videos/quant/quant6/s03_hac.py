@@ -28,7 +28,7 @@ class HAC(VoiceoverScene):
         self.card()
         self.window(o, h)
         self.derive()
-        self.lab(h)
+        self.lab(h, o)
         self.size(s, h)
 
     def card(self):
@@ -79,17 +79,14 @@ class HAC(VoiceoverScene):
                             12.0, 22, GREY_A).to_edge(UP, buff=0.35)
         src = real_data(r"autocorrelations of the regression's own scores; the window is Bartlett's triangle")
         with self.voiceover(
-            "Chapter one's sandwich, with the band lit. Shiller's century and a half: regress the next five years' "
-            "real return on today's dividend yield. Ordinary least squares reports a t-statistic of fifteen. "
-            "<bookmark mark='a'/> Here are the autocorrelations of the regression's scores, the dividend yield "
-            "times the residual, lag by lag. Because neighbouring windows share fifty-nine of their sixty months, "
-            "they stay high for five years of lags, a long tent out to lag fifty-nine, and the persistent yield "
-            "stretches it further. The naive formula keeps only the bar at lag zero. <bookmark mark='b'/> Newey and "
-            "West's estimator lays a triangle over the bars and adds them up, weighted by the triangle's height. "
-            "Watch the window open. As it takes in more lags, the estimated long-run variance climbs, and the "
-            "t-statistic falls: ten, five, three. <bookmark mark='c'/> With the window at twice the horizon, a "
-            f"hundred and twenty months, it is {h['t_nw']:.1f}. The window is the estimator. Too narrow and it "
-            "misses the dependence; too wide and it adds up noise."
+            "Chapter one's sandwich, with the band lit. Regress the next five years' real return on today's dividend "
+            f"yield, over Shiller's century and a half. Least squares reports a t-statistic of {o['est']['naive']['t']:.0f}. "
+            "<bookmark mark='a'/> Here are the autocorrelations of the regression's scores, lag by lag. Neighbouring "
+            "windows share fifty-nine of sixty months, so they stay high out to lag fifty-nine and beyond. The naive "
+            "formula keeps only lag zero. <bookmark mark='b'/> Newey and West lay a triangle over the bars and add them "
+            "up, weighted by its height. As the window opens, the long-run variance climbs and the t-statistic falls. "
+            f"<bookmark mark='c'/> At a hundred and twenty months it is {h['t_nw']:.1f}. The window is the estimator: too "
+            "narrow misses dependence, too wide adds noise."
         ) as vo:
             self.play(FadeIn(top), FadeIn(g), FadeIn(src), FadeIn(right))
             self.add(bar_m, tri)
@@ -127,17 +124,12 @@ class HAC(VoiceoverScene):
                 why(r"overlap alone: the naive variance is too small by a factor $h$, its standard error by $\sqrt h$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.75, edge=6.8)
         with self.voiceover(
-            "Why a sum of autocovariances? Scale chapter one's error by root T. It is a fixed matrix times the "
-            "scaled sum of the scores. <bookmark mark='a'/> The variance of a sum is the sum of every pair's "
-            "covariance. With a stationary series, pairs k apart all share one autocovariance, gamma k, and as T "
-            "grows the variance becomes S, the sum of all of them: the long-run variance. <bookmark mark='b'/> "
-            "Equivalently, it is the spectrum of the scores at frequency zero, the power in their slowest "
-            "movements. <bookmark mark='c'/> You cannot sum all T sample autocovariances: the far ones are pure "
-            "noise, and the sum can even go negative. Newey and West, in 1987, used Bartlett's declining weights, "
-            "which guarantee a positive answer. Lars Hansen and Robert Hodrick, in 1980, used flat weights out to "
-            "the horizon minus one. <bookmark mark='d'/> And here is why overlap is so costly. If each return is a "
-            "sum of h months, neighbours k apart have correlation h minus k over h, and these add up to h. The "
-            "naive variance is too small by a factor of h, sixty here, and the standard error by its square root."
+            "Why a sum of autocovariances? Chapter one's error, scaled by root T, is a fixed matrix times the scaled sum "
+            "of the scores. <bookmark mark='a'/> The variance of a sum adds every pair's covariance; pairs k apart share "
+            "gamma k, and the limit is S, the long-run variance, <bookmark mark='b'/> the spectrum of the scores at "
+            "frequency zero. <bookmark mark='c'/> Summing all sample autocovariances is noisy and can go negative; "
+            "Bartlett's declining weights keep it positive; Hansen and Hodrick used flat weights. <bookmark mark='d'/> "
+            "With h-month overlap, correlations h minus k over h sum to h: the naive variance is h times too small."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -151,10 +143,10 @@ class HAC(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def lab(self, h):
+    def lab(self, h, o):
         card = lab_card(r"Newey--West in the House", HAC_CODE, source="explainer/quant/house/econ.py", width=7.4,
                         font_size=18).to_corner(UL, buff=0.35)
-        outs = [f"ols(fwd, dy)                    t = {h['t_naive']:.1f}",
+        outs = [f"ols(fwd, dy)                    t = {o['est']['naive']['t']:.1f}",
                 f"ols(..., se='nw', lags=120)     t = {h['t_nw']:.1f}",
                 f"ols(..., se='hh', lags=59)      t = {h['t_hh']:.1f}",
                 f"hodrick_se(r1, dy, 60)          t = {h['t_hodrick']:.1f}"]
@@ -164,13 +156,12 @@ class HAC(VoiceoverScene):
                           r"no overlapping residuals enter at all", 4.4, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.4).shift(DOWN * 0.4)
         with self.voiceover(
-            "Here is the House's own code. The scores are the regressors times the residuals. Lag zero is White's "
-            "estimator. Then each lag's autocovariance is added, twice, once for each side of the diagonal, with "
-            "Bartlett's weight. Back in the regression, the meat goes between the two slices of bread. "
-            "<bookmark mark='a'/> Run it on Shiller's data. Naive: fifteen. Newey-West with a hundred and twenty "
-            f"lags: {h['t_nw']:.1f}. Hansen-Hodrick: {h['t_hh']:.1f}. <bookmark mark='b'/> And Robert Hodrick's 1992 "
-            "alternative, which avoids overlap altogether: regress one-month returns on the dividend yield summed "
-            f"back over the past five years. It gives {h['t_hodrick']:.1f}. Four honest estimates, all far below fifteen."
+            "The House's code. The scores are regressors times residuals; lag zero is White; each lag's autocovariance "
+            "is added on both sides of the diagonal with Bartlett's weight; the meat goes between the bread. "
+            f"<bookmark mark='a'/> On Shiller's data: naive, {o['est']['naive']['t']:.1f}. Newey-West with a hundred and twenty lags, "
+            f"{h['t_nw']:.1f}. Hansen-Hodrick, {h['t_hh']:.1f}. <bookmark mark='b'/> And Robert Hodrick's 1992 "
+            "alternative avoids overlap altogether: regress one-month returns on the yield summed over the past five "
+            f"years. It gives {h['t_hodrick']:.1f}."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -219,22 +210,18 @@ class HAC(VoiceoverScene):
                     r"over-reject?", width=11.0).to_edge(DOWN, buff=0.15)
         r0 = rates["0.0|1"]
         with self.voiceover(
-            "How well do these corrections work? Simulate worlds where nothing predicts anything, with twelve-month "
-            "overlapping returns, and count how often each test rejects a true null at five percent. "
-            "<bookmark mark='a'/> Four predictors, from no persistence to almost a random walk. With a persistent "
-            f"predictor, the naive test rejects in {100 * r95[0]:.0f} percent of worlds. Newey-West with the usual "
-            f"short window, {100 * r95[1]:.0f} percent. With the window set to the overlap, {100 * r95[2]:.0f}. "
-            "<bookmark mark='b'/> Nicholas Kiefer and Timothy Vogelsang explained why, in 2005. Hold the window's "
-            "share of the sample, b, fixed as the sample grows, and the estimated long-run variance never settles "
-            "down: it stays random, so the t-statistic has fatter tails than the normal. Their fixed-b critical "
-            f"values grow with b; we simulated them: about {cvs[2]:.2f} at a tenth of the sample, {cvs[4]:.2f} at "
-            "three tenths. <bookmark mark='c'/> Eben Lazarus, Daniel Lewis, James Stock and Mark Watson, in 2018, "
-            "recommended exactly this: a much wider window with fixed-b critical values, or the equal-weighted "
-            f"cosine estimator, which averages {s['nu']} squared cosine projections of the scores and uses Student's t. "
-            f"Here they reject {100 * r95[3]:.0f} and {100 * r95[4]:.0f} percent of the time at rho of zero point "
-            "nine five, far closer to five. <bookmark mark='d'/> Pause and predict: no overlap and no persistence. "
-            f"Every test is close to five percent: naive {100 * r0[0]:.1f}, Newey-West {100 * r0[1]:.1f}. The "
-            "problem is overlap times persistence."
+            "Do the corrections work? Simulate worlds where nothing predicts anything, with twelve-month overlapping "
+            "returns, and count how often each test rejects at five percent. <bookmark mark='a'/> With a persistent "
+            f"predictor, the naive test rejects {100 * r95[0]:.0f} percent of the time, Newey-West with the usual short "
+            f"window {100 * r95[1]:.0f}, with the window at the overlap {100 * r95[2]:.0f}. <bookmark mark='b'/> Nicholas "
+            "Kiefer and Timothy Vogelsang explained why in 2005: hold the window's share of the sample, b, fixed, and "
+            "the estimated long-run variance stays random, so t has fatter tails. Their fixed-b critical values grow "
+            f"with b; simulated, about {cvs[2]:.2f} at a tenth of the sample, {cvs[4]:.2f} at three tenths. "
+            "<bookmark mark='c'/> Lazarus, Lewis, Stock and Watson recommended in 2018 a much wider window with fixed-b "
+            f"values, or the equal-weighted cosine estimator, {s['nu']} squared cosine projections with Student's t. They "
+            f"reject {100 * r95[3]:.0f} and {100 * r95[4]:.0f} percent here. <bookmark mark='d'/> Pause and predict: no "
+            f"overlap, no persistence. Every test is near five percent; naive {100 * r0[0]:.1f}. The problem is overlap "
+            "times persistence."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), Create(five), FadeIn(leg), FadeIn(txt[0]))
             vo.wait_until("a")

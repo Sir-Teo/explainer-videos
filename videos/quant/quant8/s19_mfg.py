@@ -42,18 +42,14 @@ class MFG(VoiceoverScene):
                     r"mean-field game, a race to sell first", font_size=20)]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-0.4, buff=0.95, edge=6.9)
         with self.voiceover(
-            "So far one investor faced a market that did not react. Now let many traders face each other. In a "
-            "mean-field game each player solves a control problem backwards in time, taking the crowd as given, while "
-            "the crowd's distribution moves forwards, driven by everyone's choices; the equilibrium solves both at "
-            "once. Jean-Michel Lasry and Pierre-Louis Lions, and independently Minyi Huang, Roland Malhamé and Peter "
-            "Caines, introduced it in 2006. <bookmark mark='a'/> Here is a case with a closed form. N funds must each "
-            "sell a block of stock by time T. Selling fast costs a temporary premium, and everyone's selling pushes "
-            "the price down for everyone. <bookmark mark='b'/> The expected cost of a plan depends on the others' "
-            "average selling rate. <bookmark mark='c'/> Given that rate, the best plan solves an Euler-Lagrange "
-            "equation. <bookmark mark='d'/> Consistency: the others are doing the same thing. Substitute, and the "
-            "fixed point is a single linear equation. <bookmark mark='e'/> Without risk aversion, the selling rate "
-            "decays exponentially. One fund alone sells in a straight line; a crowd sells in a rush, because every "
-            "fund wants to sell before the others' selling lands in the price."
+            "Now many traders face each other. In a mean-field game each player solves a control problem backwards, "
+            "taking the crowd as given, while the crowd moves forwards, driven by everyone's choices. Lasry and Lions, and "
+            "Huang, Malhamé and Caines, introduced it in 2006. <bookmark mark='a'/> A case with a closed form: N funds each "
+            "sell a block by time T; selling fast costs a premium, and everyone's selling pushes the price down. "
+            "<bookmark mark='b'/> A plan's cost depends on the others' average selling rate. <bookmark mark='c'/> The best "
+            "response solves an Euler-Lagrange equation. <bookmark mark='d'/> Consistency, the others do the same, gives one "
+            "linear equation. <bookmark mark='e'/> Alone, sell in a straight line; in a crowd, sell in a rush, before the "
+            "others' selling lands in the price."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -92,12 +88,10 @@ class MFG(VoiceoverScene):
 
         cur = fr(0)
         with self.voiceover(
-            "How does a crowd find that equilibrium? One answer is fictitious play. On the left, a trader's plan, "
-            "solved backwards from the deadline; on the right, the crowd's selling rate, rolled forwards. Start by "
-            "assuming the crowd does nothing. <bookmark mark='a'/> The best response to a passive crowd is a straight "
-            "line. Then let the crowd adopt that plan, and respond again; each round mixes half the new crowd into the "
-            "old. The curves overshoot, then settle, round by round, onto the grey equilibrium, where the plan "
-            "produces exactly the crowd it assumed."
+            "How does a crowd find it? Fictitious play. Left, a trader's plan, solved backwards; right, the crowd's selling "
+            "rate, rolled forwards. <bookmark mark='a'/> Against a passive crowd the best plan is a straight line; let the "
+            "crowd adopt it and respond again, mixing half in each round. The curves overshoot, then settle onto the grey "
+            "equilibrium."
         ) as vo:
             self.play(FadeIn(g), FadeIn(g2), GrowArrow(arr1), FadeIn(a1), GrowArrow(arr2), FadeIn(a2), FadeIn(closed),
                       FadeIn(closed_m))
@@ -129,14 +123,11 @@ class MFG(VoiceoverScene):
         outs.append("sold in the first fifth: " + "  ".join(
             f"N={k}: {100 * R[k]['share_fifth']:.1f}%" for k in ("1", "2", "10", "inf")))
         with self.voiceover(
-            "Lab four: the House's routine. Given the crowd's rate, the best response is one tridiagonal solve; the "
-            "crowd's new rate is its slope; mix, and repeat. <bookmark mark='a'/> Run it. The residual falls by a "
-            f"constant factor each round, below ten to the minus {-int(np.floor(np.log10(res[-1])))} after {len(res)} "
-            "rounds, and the answer matches the closed form to within ten to the minus "
-            f"{-int(np.floor(np.log10(R['inf']['gap'])))}, the error of the time grid. With the price impact set so that "
-            "kappa T over two eta is two, the share sold in the first fifth of the time is "
-            f"{100 * R['1']['share_fifth']:.0f} percent alone, {100 * R['2']['share_fifth']:.1f} with two funds, "
-            f"{100 * R['10']['share_fifth']:.1f} with ten, and {100 * R['inf']['share_fifth']:.1f} in the mean-field limit."
+            "Lab four: given the crowd's rate, the best response is one tridiagonal solve; the crowd's new rate is its "
+            "slope; mix and repeat. <bookmark mark='a'/> The residual falls geometrically, below ten to the minus "
+            f"{-int(np.floor(np.log10(res[-1])))} after {len(res)} rounds, matching the closed form to grid error. In the "
+            f"first fifth of the time: {100 * R['1']['share_fifth']:.0f} percent alone, {100 * R['2']['share_fifth']:.1f} with "
+            f"two funds, {100 * R['10']['share_fifth']:.1f} with ten, {100 * R['inf']['share_fifth']:.1f} in the limit."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -182,16 +173,11 @@ class MFG(VoiceoverScene):
                              r"(2019): competition on relative performance makes managers take more risk", 12.6, 18,
                              GREY_A).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "Pause and predict: you know nine other funds are selling the same stock this week. Do you sell faster or "
-            "slower than you would alone? <bookmark mark='a'/> Faster. Slide the number of funds. Alone, the "
-            "straight line. With two, the curve bends; with ten, more; in the mean-field limit, "
-            f"{100 * R['inf']['share_fifth']:.0f} percent of the block goes in the first fifth of the time. "
-            "<bookmark mark='b'/> On the right, five hundred funds with different block sizes, each responding to the "
-            "same crowd: the whole distribution of inventories runs toward zero early, and every fund pays for the "
-            "others' haste. <bookmark mark='c'/> This is the mathematics of crowded trades. Pierre Cardaliaguet and "
-            "Charles-Albert Lehalle modelled crowding this way in 2018; Carlin, Lobo and Viswanathan studied "
-            "predatory trading among a few; and Lacker and Zariphopoulou showed that funds judged against each other "
-            "take more risk. Parts thirty-six and thirty-seven return to it."
+            "Pause and predict: nine other funds are selling your stock this week. Sell faster or slower? "
+            "<bookmark mark='a'/> Faster: the line bends more with every fund added. <bookmark mark='b'/> Five hundred funds "
+            "with different blocks, each answering the same crowd: the whole distribution races toward zero early. "
+            "<bookmark mark='c'/> Crowded trades in mathematics: Cardaliaguet and Lehalle in 2018; Carlin, Lobo and "
+            "Viswanathan's predatory trading; and Lacker and Zariphopoulou on managers judged against each other."
         ) as vo:
             self.play(FadeIn(q))
             vo.wait_until("a")

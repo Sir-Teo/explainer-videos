@@ -44,11 +44,9 @@ class Clearing(VoiceoverScene):
         cb = DoubleArrow(c.get_right(), b2.get_left(), buff=0.1, color=CCP, stroke_width=3)
         after = label(r"after novation: each faces only the clearing house", font_size=24, color=CCP).next_to(c, DOWN, buff=0.4)
         with self.voiceover(
-            "A trade is a promise between two strangers. If the seller fails to deliver, or the buyer fails to pay, "
-            "the other side is left exposed. <bookmark mark='a'/> A central counterparty removes that risk by "
-            "novation: the original trade is replaced by two, buyer with the clearing house and clearing house with "
-            "seller. Everyone now faces one counterparty, the most closely watched one in the market. Since 2008 "
-            "regulators have pushed most standardized derivatives into clearing for exactly this reason."
+            "A trade is a promise between two strangers; if one fails, the other is exposed. <bookmark mark='a'/> A central "
+            "counterparty replaces the trade by two, buyer with clearing house and clearing house with seller, so everyone "
+            "faces one closely watched counterparty. Since 2008 regulators have pushed standardized derivatives into clearing."
         ) as vo:
             self.play(FadeIn(a), FadeIn(b), GrowFromCenter(ab), FadeIn(before))
             vo.wait_until("a")
@@ -103,15 +101,12 @@ class Clearing(VoiceoverScene):
         src = note(r"simulated day: heavy-tailed trade sizes, a few busy members; DTCC, NSCC overview page", font_size=16)
         src.to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "The clearing house's second gift is netting. Here is a simulated day: "
-            f"{n['trades']:,} trades among {N} members, each line a pair that traded. Settled one by one, they "
-            f"would move {vals[0] / 1e9:.1f} billion dollars. <bookmark mark='a'/> First let each pair net its trades "
-            "against each other: opposite lines cancel, and one arrow per pair is left. "
-            f"{vals[1] / 1e9:.1f} billion. <bookmark mark='b'/> Now pull every arrow into the clearing house. "
-            "Each member pays or receives only its net position, one arrow each: "
-            f"{vals[2] / 1e9:.1f} billion, {100 * n['saved']:.0f} percent less than gross. <bookmark mark='c'/> The "
-            "real thing does better still: the clearing house for American stocks says its netting removes an "
-            "average of ninety-eight percent of the payments each day."
+            f"The second gift is netting. A simulated day: {n['trades']:,} trades among {N} members. Settled one by one, "
+            f"{vals[0] / 1e9:.1f} billion dollars. <bookmark mark='a'/> Let each pair net: opposite lines cancel, "
+            f"{vals[1] / 1e9:.1f} billion. <bookmark mark='b'/> Now pull every arrow into the clearing house: each member "
+            f"settles only its net position, {vals[2] / 1e9:.1f} billion, {100 * n['saved']:.0f} percent less. "
+            "<bookmark mark='c'/> The real clearing house for American stocks says its netting removes ninety-eight percent "
+            "of payments on an average day."
         ) as vo:
             self.play(FadeIn(dots), Create(gross), FadeIn(counter), FadeIn(steps[0]), FadeIn(src), run_time=2)
             vo.wait_until("a")
@@ -153,14 +148,12 @@ class Clearing(VoiceoverScene):
         q = desk_question(r"A owes B 10, B owes C 10, C owes A 10. What moves through a CCP?", r"nothing: every "
                           r"net position is zero", width=5.4, font_size=21).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Netting can only help, and here is why. Gross is the sum of every obligation; bilateral settles only "
-            "each pair's difference. <bookmark mark='a'/> The difference of two amounts is at most their sum, so "
-            "bilateral is at most gross. <bookmark mark='b'/> Through a clearing house each member settles only its "
-            "net position. <bookmark mark='c'/> A member's net debt is at most the sum of its net debts pair by "
-            "pair, so multilateral is at most bilateral. <bookmark mark='d'/> And the net positions sum to zero: "
-            "the clearing house is flat. <bookmark mark='e'/> The House's code is six lines, and on the simulated "
-            "day it prints the three numbers you just watched. Pause and predict: A owes B ten, B owes C ten, C "
-            "owes A ten. What moves through a clearing house?"
+            "Why netting can only help. Gross sums every obligation; bilateral settles each pair's difference. "
+            "<bookmark mark='a'/> A difference is at most a sum: bilateral is at most gross. <bookmark mark='b'/> Through a "
+            "clearing house each member settles its net position, <bookmark mark='c'/> which is at most the sum of its "
+            "bilateral debts: multilateral is at most bilateral. <bookmark mark='d'/> And the net positions sum to zero: the "
+            "clearing house is flat. <bookmark mark='e'/> The House's code prints the three numbers. Pause and predict: A owes "
+            "B ten, B owes C ten, C owes A ten. What moves?"
         ) as vo:
             for i, mk in enumerate("abcd"):
                 step(i)
@@ -205,15 +198,11 @@ class Clearing(VoiceoverScene):
         src = note(r"Duffie and Zhu (2011), \textit{Review of Asset Pricing Studies}: iid normal exposures; "
                    r"Monte Carlo cells against the formula", font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Can clearing ever make things worse? Duffie and Zhu showed that it can. Before clearing, two dealers "
-            "net all their trades with each other across every asset class. Move one class to a clearing house and "
-            "that class nets across all members, but it no longer offsets the others bilaterally. "
-            "<bookmark mark='a'/> With independent exposures the arithmetic is clean: expected bilateral exposure "
-            "grows with the square root of the number of classes, the cleared class with the square root of the "
-            "number of members. <bookmark mark='b'/> A clearing house for one class lowers exposure only if the "
-            "members outnumber a threshold that rises fast with the classes: with ten classes, "
-            f"{int(np.ceil(dz['N_min'][-1] + 1e-9))} members. The Monte Carlo grid agrees with the formula cell by "
-            "cell: green where clearing helps, red where it hurts."
+            "Can clearing make things worse? Duffie and Zhu showed it can. Clearing one asset class nets it across all "
+            "members, but breaks its netting against the other classes. <bookmark mark='a'/> With independent exposures, "
+            "bilateral exposure grows with the square root of the classes, the cleared class with the square root of the "
+            "members. <bookmark mark='b'/> So clearing one class helps only above a threshold number of members: with ten "
+            f"classes, {int(np.ceil(dz['N_min'][-1] + 1e-9))}. The Monte Carlo grid agrees cell by cell."
         ) as vo:
             self.play(FadeIn(grid), FadeIn(xl), FadeIn(yl), FadeIn(leg), FadeIn(src))
             vo.wait_until("a")
@@ -251,16 +240,13 @@ class Clearing(VoiceoverScene):
                              r"the default of its two largest members in extreme but plausible markets", 5.6, 19,
                              GREY_A).next_to(stats, DOWN, buff=0.4).align_to(stats, LEFT)
         with self.voiceover(
-            "If a member does default, who pays? The clearing house runs a waterfall. First the defaulter's own "
-            "margin, then its contribution to the default fund, then a slice of the clearing house's own capital, "
-            "its skin in the game. Only then the default fund of the members who did nothing wrong, and after that "
-            "assessments: calls on the survivors for more. <bookmark mark='a'/> Pour in five stress days, a move of "
-            f"{sig[0]}, {sig[1]}, {sig[2]}, {sig[3]} and {sig[4]} standard deviations against the biggest member. Small "
-            "shocks stop in its own margin; only the worst reaches the survivors. <bookmark mark='b'/> Across a "
-            "hundred thousand simulated days with fat-tailed shocks, the worst-hit member's loss beats its margin on "
-            f"{100 * reach[0]:.0f} percent of days, but reaches the survivors' money on {100 * reach[3]:.1f} "
-            "percent. International standards ask a systemically important clearing house to survive its two "
-            "largest members defaulting at once: cover two."
+            "If a member defaults, who pays? The waterfall: the defaulter's margin, its default-fund contribution, the "
+            "clearing house's own capital, then the survivors' default fund, and finally assessments on them. "
+            f"<bookmark mark='a'/> Pour in five stress days, {sig[0]} to {sig[4]} standard deviations against the biggest "
+            "member: small shocks stop in its own margin. <bookmark mark='b'/> Over a hundred thousand fat-tailed days, the "
+            f"worst-hit member's loss beats its margin on {100 * reach[0]:.0f} percent of days but reaches survivors' money on "
+            f"{100 * reach[3]:.1f} percent. Systemically important clearing houses must survive their two largest members "
+            "failing at once: cover two."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c_) for c_ in col], lag_ratio=0.3, run_time=4))
             vo.wait_until("a")

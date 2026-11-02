@@ -405,27 +405,55 @@ over growth and discount rate.
 *Desk:* "A martingale starts at 1 and stops at 0 or 3. Probability it hits 3?" and "Expected flips to HH?"
 *House:* the e-value monitor (used again in Part 26).
 
-### Part 5 · Stochastic Calculus (~55)
-1. Brownian motion as the scaling limit (Donsker); quadratic variation.
-2. The Itô integral; the isometry; Stratonovich.
-3. Itô's lemma; GBM; Euler–Maruyama and Milstein with orders computed.
-4. Ornstein–Uhlenbeck, CIR; Feynman–Kac.
-5. Girsanov and Cameron–Martin: drift is a change of measure.
-6. Martingale representation: why a hedge exists.
-7. Local time, Tanaka, and the stop-loss start-gain paradox (Carr–Jarrow 1990).
-8. Jumps: Poisson, compound Poisson, Lévy–Itô, Itô for jumps.
-9. Point processes with memory: Hawkes (1971), the branching ratio. Comes back in 14 and 36.
-10. Fractional Brownian motion: Hurst H, not a semimartingale.
-11. Rough paths and signatures (Lyons 1998; Chen 1957). Come back in 14, 17 and 42.
+### Part 5 · Stochastic Calculus (~57)
+1. Brownian motion as a limit (Donsker) and a construction (Lévy's midpoints, the Brownian bridge); the reflection
+   principle and first passage; quadratic variation, proved and measured (the volatility signature plot).
+2. The Itô integral built from simple integrands; the isometry and martingale property proved; Stratonovich and the
+   Wong–Zakai theorem.
+3. Itô's lemma proved, in several dimensions; Lévy's characterization and the Dambis–Dubins–Schwarz time change; SDEs:
+   existence and uniqueness (Picard); Euler–Maruyama and Milstein with orders computed (MLMC in one line → Part 16).
+4. Ornstein–Uhlenbeck and CIR solved, fitted by exact likelihood (Feller's boundary); the generator, Dynkin,
+   Fokker–Planck and Feynman–Kac (proved), with the density surface in 3D.
+5. Girsanov and Cameron–Martin: drift is a change of measure (paths re-weighted, not moved); Novikov; importance
+   sampling as a short application (the theory → Part 16); volatility is observable, drift is not.
+6. Martingale representation (proved through exponentials) and Clark–Ocone: why a hedge exists, and when it does not.
+7. Local time, Tanaka (derived by smoothing the kink), occupation density, Lévy's identity; the stop-loss start-gain
+   paradox (Carr–Jarrow 1990).
+8. Jumps: Poisson, compensators, compound Poisson, Lévy–Khintchine and Lévy–Itô, Itô for jumps; jumps in Bitcoin
+   (bipower variation) and the hedge they break.
+9. Point processes with memory: Hawkes (1971), the branching ratio, Ogata's thinning, likelihood, and the
+   time-rescaling test. Comes back in 14 and 36.
+10. Fractional Brownian motion: Hurst H, Mandelbrot–Van Ness, not a semimartingale; volatility's roughness measured,
+    and the Cont–Das caveat.
+11. Rough paths and signatures (Chen 1957; Lyons 1998): Lyons' helix, Chen's identity, universality, regression on
+    signatures. Come back in 14, 17 and 42.
 
-*Textbooks:* Shreve II ch. 3–11; Øksendal; Karatzas–Shreve *Brownian Motion and Stochastic Calculus*; Cont–Tankov
-ch. 2–8; Björk ch. 4–5.
-*Computed:* QV convergence; strong and weak orders; Girsanov reweighting; stop-loss start-gain hedging error;
-Hawkes simulation by thinning.
-*Visuals:* `PathFan` with the Fokker–Planck surface; fBM at H = 0.1, 0.5, 0.9.
-*Note:* `stochastic` is the gentle version; this part assumes it.
-*Desk:* "E[W_t⁴]?"; "Probability Brownian motion hits 1 before −2?"; "Price a digital by Girsanov."
-*House:* the simulation library (used by every pricing part).
+*Textbooks:* Shreve II ch. 3–6, 11; Øksendal ch. 2–5, 7–8; Karatzas–Shreve ch. 2–3, 5; Cont–Tankov ch. 2–3, 6–8; Björk
+ch. 4–5; Friz–Hairer ch. 1–3. Filtering (Øksendal 6) → Part 7; optimal stopping and control → Part 8.
+*Computed:* reflection with the discrete-monitoring shift and the arcsine law; QV and the BTC signature plot (noise
+backed out); Wong–Zakai; Picard iterates; strong and weak orders; CIR exact MLE on DTB3; Fokker–Planck surfaces and a
+Feynman–Kac Monte Carlo check; Dynkin's exit time; Girsanov re-weighting and effective sample size; volatility against
+drift observability; hedge-error rates (W_T², a call, a second noise); local time two ways and the stop-loss
+shortfall; Lévy–Khintchine checked on a tempered stable process; BTC jumps and the jump hedge floor; Hawkes MLE and
+time-rescaling on BTC; fBM p-variation; the Cont–Das artefact; signature regression; variance-swap replication with
+and without jumps; a neural SDE market generator scored on a 2020 hold-out.
+*Visuals:* Donsker with three step laws; Lévy's midpoint construction; QV accumulating; the bet ledger; the 3D
+tangent-plane misses; `PathFan` under the Fokker–Planck surface (Feller's wall at 0); paths re-weighted by Z; the
+occupation sandpile; the Lévy–Itô layer cake; thinning, the Hawkes family tree and the time-warp; the H dial; Lyons'
+helix in 3D.
+*Labs:* `euler_maruyama`/`milstein`, `ou_exact`, `is_digital`, `hawkes_thinning`, `fbm`, `signature`.
+*Replays:* CIR exact MLE (5 starts); Hawkes MLE (8 starts); signature regression over depth (5 splits); the neural SDE
+(3 seeds).
+*Industry:* CME's switch to Bachelier (April 2020); Interactive Brokers (CFTC 2021); OCC's STANS Monte Carlo margin;
+the variance swap and the VIX as Itô's lemma; SR 11-7 → SR 26-2. *Frontier:* neural SDEs trained with signature
+scores (Issa et al. 2023); signature-based SPX/VIX calibration (Cuchiero et al. 2025); Log-NCDEs (Walker et al.
+2024); rough or not (Cont–Das 2024; Guyon–Lekeufack 2023); Brownian motion formalized in Lean (Degenne et al. 2025).
+*Crisis:* 20 April 2020, WTI at −$37.63: a GBM cannot go there. *Firms:* CME Clearing; Interactive Brokers; OCC.
+*Note:* `stochastic` is the gentle version; this part assumes it. MLMC complexity, the optimal importance-sampling
+shift, adjoint Greeks and Monte Carlo hardware belong to Part 16.
+*Desk:* "Expected time for Brownian motion to leave (−a, b)?"; "Probability Brownian motion hits 1 before −2?";
+"Price a digital by Girsanov."
+*House:* the simulation library (used by every pricing part), validated by Rule 6.
 
 ### Part 6 · Financial Econometrics (~50)
 1. Regression in finance: OLS, overlapping observations, HAC errors (Newey–West 1987), clustered errors.

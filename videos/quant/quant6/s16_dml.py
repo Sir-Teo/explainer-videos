@@ -59,17 +59,14 @@ class DML(VoiceoverScene):
             label(r"each point's $\hat m$, $\hat\ell$ learned on the other four folds", font_size=19, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Machine learning enters causal inference through a careful door. A treatment d affects an outcome y by "
-            "an amount theta, but many controls X drive both, in complicated ways. Here is a simulated sample with "
-            "a planted theta of zero point three, each point coloured by the first control. "
-            f"<bookmark mark='a'/> The raw slope is {dm['slope_raw']:.2f}, {dm['slope_raw'] / 0.3:.0f} times too large: "
-            "the controls push "
-            "treatment and outcome up together. <bookmark mark='b'/> Victor Chernozhukov and coauthors' double "
-            "machine learning, from 2018, learns two things with a flexible model: the outcome given the controls, "
-            "and the treatment given the controls. Subtract both. Every point slides, along d by its predicted "
-            "treatment and along y by its predicted outcome, into a residual cloud. <bookmark mark='c'/> The slope "
-            f"of residual on residual is {dm['slope_res']:.2f}. <bookmark mark='d'/> One more rule: each point's "
-            "predictions come from a model fitted on the other folds of the data, never on the point itself."
+            "Machine learning enters causal inference through a careful door. A treatment d moves an outcome y by "
+            "theta, but many controls X drive both. A simulated sample with a planted theta of zero point three, "
+            f"coloured by the first control. <bookmark mark='a'/> The raw slope is {dm['slope_raw']:.2f}, "
+            f"{dm['slope_raw'] / 0.3:.0f} times too large. <bookmark mark='b'/> Chernozhukov and coauthors' double machine "
+            "learning, from 2018, learns the outcome given the controls and the treatment given the controls, and "
+            "subtracts both: every point slides into a residual cloud. <bookmark mark='c'/> Residual on residual: "
+            f"{dm['slope_res']:.2f}. <bookmark mark='d'/> And each point's predictions come from models fitted on the other "
+            "folds."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), FadeIn(side[1]), LaggedStart(*[FadeIn(p) for p in dots],
                                                                               lag_ratio=0.002, run_time=2))
@@ -105,16 +102,12 @@ class DML(VoiceoverScene):
                     r"$\hat\theta$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
         with self.voiceover(
-            "Why residualise both? The estimate solves a score equation: residual outcome minus theta times "
-            "residual treatment, times residual treatment. <bookmark mark='a'/> This score is Neyman-orthogonal: "
-            "its derivative with respect to the nuisance functions is zero at the truth. Small errors in the "
-            "learned functions do not shift it, to first order. <bookmark mark='b'/> So the estimate's error is "
-            "the usual normal term plus the product of the two learners' errors. Machine learners converge slowly, "
-            "but if each is faster than n to the minus a quarter, the product vanishes faster than the root-n "
-            "noise. <bookmark mark='c'/> Compare the naive plug-in: learn g, the controls' effect on the outcome, "
-            "and regress what is left on d. Its score is not orthogonal, and any bias in g, from regularisation, "
-            "goes straight into theta. Cross-fitting handles the other danger: a learner that has memorised a point "
-            "makes its residual artificially small."
+            "Why residualise both? The estimate solves the residual-on-residual score. <bookmark mark='a'/> That score is "
+            "Neyman-orthogonal: small errors in the learned functions do not move it, to first order. "
+            "<bookmark mark='b'/> So the error is the usual normal term plus the product of the two learners' errors; "
+            "each may converge slowly, faster than n to the minus a quarter is enough. <bookmark mark='c'/> The naive "
+            "plug-in, learn g and regress what is left on d, is not orthogonal: regularisation bias in g goes straight "
+            "into theta. Cross-fitting stops a learner that memorised a point from shrinking its residual."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -132,12 +125,9 @@ class DML(VoiceoverScene):
         outs = [f"dml_plr over 60 samples of 4,000:  theta = {d['dml_mean']:.3f} +/- {d['dml_sd']:.3f}",
                 f"OLS with linear controls:          {d['naive_mean']:.2f}"]
         with self.voiceover(
-            "The House's version, condensed: five folds; for each, fit ridge regressions on spline features of the "
-            "controls on the other four folds, and residualise the outcome and the treatment on the held-out fold. "
-            "Then regress residual on residual, and take the standard error from the score. "
-            "<bookmark mark='a'/> Over sixty simulated samples of four thousand, double machine learning gives "
-            f"{d['dml_mean']:.3f}, with a spread of {d['dml_sd']:.3f}; least squares with the controls entered "
-            f"linearly gives {d['naive_mean']:.2f}."
+            "The House's version: five folds; ridge on spline features, fitted on four, residualise the fifth; then "
+            "residual on residual, with the score's standard error. <bookmark mark='a'/> Over sixty samples: "
+            f"{d['dml_mean']:.3f}, spread {d['dml_sd']:.3f}; least squares with linear controls, {d['naive_mean']:.2f}."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -175,16 +165,13 @@ class DML(VoiceoverScene):
         q = predict(r"If $\hat m$ is perfect but $\hat\ell$ is poor, is $\hat\theta$ still fine?", width=7.0)
         q.to_corner(UR, buff=0.3)
         with self.voiceover(
-            "Now train the learners at every strength of the ridge penalty, from almost none to crushing, five "
-            "seeds each, and watch theta. <bookmark mark='a'/> On the right, the learners' out-of-fold errors: flat "
-            "while the penalty is small, then rising as the fits are flattened toward a constant. On the left, the "
-            f"two estimates. At a penalty of one, double ML gives {dm[:, i1].mean():.3f} and the plug-in "
-            f"{pl[:, i1].mean():.3f}; at ten, {dm[:, i3].mean():.3f} against {pl[:, i3].mean():.3f}. The plug-in "
-            "starts drifting as soon as the learner is biased; double ML holds its line for longer, because only the "
-            "product of the two errors reaches it. <bookmark mark='b'/> Push the penalty to the extreme and both "
-            "fail: when both learners are bad, the product is no longer small. Orthogonality buys robustness, not "
-            "immunity. <bookmark mark='c'/> Pause and predict: if the treatment model is perfect but the outcome "
-            "model is poor, is theta still fine? Yes, to first order: the product of errors is zero."
+            "Now train the learners at every ridge penalty, five seeds each. <bookmark mark='a'/> On the right, their "
+            "out-of-fold errors, rising once the penalty flattens the fits. On the left, theta. At a penalty of one, "
+            f"double ML gives {dm[:, i1].mean():.3f} and the plug-in {pl[:, i1].mean():.3f}; at ten, {dm[:, i3].mean():.3f} "
+            f"against {pl[:, i3].mean():.3f}. The plug-in drifts as soon as its learner is biased; double ML holds longer. "
+            "<bookmark mark='b'/> At extreme penalties both fail: the product of two bad errors is not small. Robustness, "
+            "not immunity. <bookmark mark='c'/> Pause and predict: a perfect treatment model and a poor outcome model. "
+            "Is theta fine? Yes, to first order."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(truth), FadeIn(leg1), FadeIn(leg2))
             self.add(dr)

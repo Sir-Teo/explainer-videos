@@ -35,13 +35,11 @@ class Kelly(VoiceoverScene):
                       source=r"Thorp (2006), \textit{Handbook of Asset and Liability Management}, ch.\ 9", width=6.4)
         VGroup(h, f).arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(ORIGIN)
         with self.voiceover(
-            "In 1956 John Kelly, a physicist at Bell Labs, asked how a gambler with an edge, a noisy private wire "
-            "carrying the result of a race, should bet. His answer: maximize the expected logarithm of wealth, and "
-            "wealth grows at the information rate of the wire. <bookmark mark='a'/> In 1960 Claude Shannon showed "
-            "the paper to a young mathematician at MIT, Edward Thorp, who used it to size his bets at blackjack and "
-            "then, from November 1969, to size the positions of an investment partnership. Thorp's own account, "
-            "published in 2006: through May 1998 the partnership and its successors compounded at about twenty "
-            "percent a year, with a standard deviation of about six, and almost no correlation with the market."
+            "In 1956 John Kelly of Bell Labs asked how a gambler with a noisy private wire should bet. His answer: "
+            "maximize the expected logarithm of wealth. <bookmark mark='a'/> In 1960 Claude Shannon showed the paper to "
+            "Edward Thorp at MIT, who used it at blackjack and, from November 1969, to size an investment partnership. By "
+            "Thorp's own 2006 account, through May 1998 it compounded at about twenty percent a year, with a standard "
+            "deviation of about six and almost no correlation with the market."
         ) as vo:
             self.play(FadeIn(h, shift=UP * 0.2))
             vo.wait_until("a")
@@ -67,17 +65,13 @@ class Kelly(VoiceoverScene):
                     r"general case (any strategy) holds too", font_size=21)]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=0.4, buff=0.9, edge=6.9)
         with self.voiceover(
-            "First the derivation. For the coin, the growth per bet is p log of one plus f plus q log of one minus f; "
-            "set its derivative to zero and the Kelly fraction is p minus q. <bookmark mark='a'/> For a stock held at "
-            "a constant fraction f, Itô's formula on the log of wealth gives a drift that is a parabola in f. "
-            "<bookmark mark='b'/> Its vertex is the excess return over the variance: Merton's fraction with gamma "
-            "equal to one. The growth rate it earns above cash is half the Sharpe ratio squared. "
-            "<bookmark mark='c'/> Now the proof that it wins. The log of wealth after n bets is a sum of independent, "
-            "identically distributed terms, so by the strong law of large numbers, log wealth over n converges to g "
-            "with probability one. <bookmark mark='d'/> Compare Kelly with any rival fraction. The ratio of their "
-            "wealths is e to the n times the gap in growth rates, plus something smaller than n: it goes to infinity. "
-            "Leo Breiman proved this in 1961, for every rival strategy, not just fixed fractions: Kelly eventually "
-            "leaves everyone behind, and reaches any goal fastest."
+            "For the coin, set the derivative of the growth rate to zero: the Kelly fraction is p minus q. "
+            "<bookmark mark='a'/> For a stock, Itô's formula makes log wealth's drift a parabola in f. "
+            "<bookmark mark='b'/> Its vertex is excess return over variance, Merton at gamma one, earning half the squared "
+            "Sharpe ratio above cash. <bookmark mark='c'/> Now why it wins. Log wealth is a sum of independent terms, so "
+            "by the strong law, log wealth over n converges to g. <bookmark mark='d'/> Against any rival the wealth ratio "
+            "grows like e to the n times the gap in growth rates: it goes to infinity. Breiman proved this in 1961, for "
+            "every rival strategy."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -126,13 +120,11 @@ class Kelly(VoiceoverScene):
                             r"are the richest", 4.6, 19, OVER).next_to(q, DOWN, buff=0.25).align_to(q, LEFT)
         src = illustration(r"simulation: $\mu - r = 6\%$, $\sigma = 18\%$, $r = 2\%$; 30 paths shown per fan, monthly")
         with self.voiceover(
-            "Watch it happen. Three fans of investors in the same simulated markets: half Kelly, Kelly, and twice "
-            "Kelly, rebalanced monthly for forty years, on a log scale. <bookmark mark='a'/> Pause and predict: at "
-            "twice Kelly, what is the median growth rate? <bookmark mark='b'/> The fans spread. Twice Kelly's "
-            "best paths shoot above everyone, which is what tempts people, but its median line barely leaves the "
-            "ground. Kelly's median climbs fastest. <bookmark mark='c'/> Lay the time-average lines over the "
-            "fans, with slopes equal to the growth rates g. Each median follows its line. At twice Kelly the "
-            f"growth is just the cash rate, {100 * L['r']:.0f} percent: all that risk, for nothing extra."
+            "Watch it: half Kelly, Kelly and twice Kelly in the same simulated markets for forty years, on a log scale. "
+            "<bookmark mark='a'/> Pause and predict: at twice Kelly, what is the median growth rate? "
+            "<bookmark mark='b'/> Twice Kelly's best paths shoot above everyone, which is the temptation, but its median "
+            "barely leaves the ground. <bookmark mark='c'/> Lay the time-average lines over the fans: each median follows "
+            f"its line, and twice Kelly's growth is the cash rate, {100 * L['r']:.0f} percent: all that risk for nothing."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             self.add(*fs, *ms)
@@ -168,12 +160,9 @@ class Kelly(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
         src = illustration(r"simulation: 10{,}000 markets, monthly, 100 years")
         with self.voiceover(
-            "How long is eventually? Run Kelly against half and twice Kelly in ten thousand markets for a hundred "
-            "years, and count where Kelly is ahead. <bookmark mark='a'/> Against twice Kelly it leads in "
-            f"{100 * vd[9]:.0f} percent of markets after ten years and {100 * vd[99]:.0f} after a hundred. Against half "
-            f"Kelly, only {100 * vh[9]:.0f} percent after ten years, and {100 * vh[99]:.0f} after a hundred. The white "
-            "lines are the closed form, from the normal distribution of log wealth. Breiman's theorem is true, and "
-            "slow: half Kelly gives up so little growth that it takes a lifetime to fall behind."
+            "How long is eventually? In ten thousand markets, <bookmark mark='a'/> Kelly leads twice Kelly in "
+            f"{100 * vd[9]:.0f} percent after ten years and {100 * vd[99]:.0f} after a hundred, but leads half Kelly in "
+            f"only {100 * vh[9]:.0f} and {100 * vh[99]:.0f}. Breiman's theorem is true, and slow."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
             vo.wait_until("a")
@@ -204,15 +193,11 @@ class Kelly(VoiceoverScene):
             ax.c2p(k["ruin_leverage"], 0.13), RIGHT, buff=0.1)
         src = real_data(r"Kenneth French: US market and T-bill, monthly, July 1926 -- December 2020")
         with self.voiceover(
-            "Here is Kelly's parabola, not from a formula but from history. Take the American market from 1926 to "
-            "2020, and imagine rebalancing every month to hold a fixed fraction of your wealth in it, borrowing at "
-            "the Treasury bill rate when the fraction is above one. This is the realized growth rate for every "
-            "fraction. <bookmark mark='a'/> All in, a hundred percent, grew at "
-            f"{100 * k['growth_at_1']:.1f} percent a year. The peak is at {100 * k['best']:.0f} percent, more than "
-            f"twice levered, at {100 * k['growth_at_best']:.1f}: the log-utility Merton fraction, measured directly. "
-            "<bookmark mark='b'/> Beyond the peak, growth falls; and at "
-            f"{100 * k['ruin_leverage']:.0f} percent a single month, September 1931, would have wiped you out. "
-            "Hindsight found that peak. The next chapter asks what happens when you have to guess it."
+            "And Kelly's parabola from history: rebalance monthly to a fixed fraction of the American market from 1926 to "
+            "2020, borrowing at the bill rate. <bookmark mark='a'/> All in grew at "
+            f"{100 * k['growth_at_1']:.1f} percent a year; the peak, at {100 * k['best']:.0f} percent, grew at "
+            f"{100 * k['growth_at_best']:.1f}. <bookmark mark='b'/> At {100 * k['ruin_leverage']:.0f} percent, September "
+            "1931 alone would have wiped you out. Hindsight found that peak; next, what happens when you must guess it."
         ) as vo:
             self.play(FadeIn(gr), FadeIn(src), Create(zero), Create(line), run_time=2.5)
             vo.wait_until("a")

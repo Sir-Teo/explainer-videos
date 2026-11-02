@@ -66,19 +66,15 @@ class Stambaugh(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         side = VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "The dividend yield is persistent, and its surprises are the mirror image of return surprises: when "
-            "prices jump, the yield falls. On a century and a half of annual data the correlation between the two "
-            f"shocks is {s['corr_uv']:.2f}. Robert Stambaugh showed in 1999 what this does to a predictive "
-            "regression. <bookmark mark='a'/> Simulate a world where the yield predicts nothing, fifty years at a "
-            "time, thousands of times. Each sample gives two errors: how far its estimated persistence misses the "
-            "truth, across, and how far its estimated slope misses zero, up. <bookmark mark='b'/> The cloud is "
-            "tilted. Samples that underestimate the persistence overestimate the slope, along a line whose slope "
-            "is phi, the regression of the return shock on the predictor shock. <bookmark mark='c'/> And the cloud's "
-            "centre sits to the left of zero: an autoregression's persistence is biased down, as Maurice Kendall "
-            "showed in 1954. Follow the tilt from the centre to the vertical axis, and the slope's bias is "
-            f"there, above zero: {c['T']['50']['mean_dbeta']:+.3f}. <bookmark mark='d'/> Now let the sample grow, "
-            "from fifty years to a hundred and fifty. The cloud shrinks, its centre crawls toward the origin, and "
-            "the bias falls roughly like one over T, as the formula on the right says it should."
+            "The dividend yield is persistent, and its surprises mirror return surprises: when prices jump, the yield "
+            f"falls. On annual data the two shocks correlate at {s['corr_uv']:.2f}. Robert Stambaugh showed in 1999 "
+            "what that does. <bookmark mark='a'/> Simulate a world where the yield predicts nothing, fifty years at a "
+            "time, thousands of times. Each sample gives two errors: in the estimated persistence, across, and in the "
+            "slope, up. <bookmark mark='b'/> The cloud is tilted: samples that underestimate persistence overestimate the "
+            "slope, along a line of slope phi. <bookmark mark='c'/> And its centre sits left of zero: an autoregression's "
+            "persistence is biased down, as Kendall showed in 1954. Follow the tilt to the vertical axis: the slope's "
+            f"bias, {c['T']['50']['mean_dbeta']:+.3f}. <bookmark mark='d'/> Grow the sample from fifty years to a hundred "
+            "and fifty. The cloud shrinks and its centre crawls toward the origin, roughly like one over T."
         ) as vo:
             self.play(FadeIn(g), Create(zero_v), Create(zero_h), FadeIn(side[0]))
             self.add(cnt)
@@ -121,15 +117,12 @@ class Stambaugh(VoiceoverScene):
                 why(r"Shiller's annual data, 1871--2020: $\hat\phi$, $\hat\rho$ and $T$ from the regression itself")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
         with self.voiceover(
-            "The derivation takes four lines. Write the system: returns on a persistent predictor, and the "
-            "predictor as an autoregression. <bookmark mark='a'/> Project the return shock onto the predictor's "
-            "shock: phi times v, plus a remainder e that is unrelated to v. <bookmark mark='b'/> Both equations "
-            "use the same regressor, so the slope's error is phi times the persistence's error, plus a term "
-            "built from e. <bookmark mark='c'/> That term averages to zero. Kendall's bias of an autoregression is "
-            "about minus one plus three rho, over T, so the slope's bias is minus phi times that. That is the "
-            "tilted cloud, in symbols. <bookmark mark='d'/> On the annual data, phi is about "
-            f"{s['corr_uv'] * s['sd_u'] / s['sd_v']:.2f}, rho {s['rho']:.2f}, T {s['T']}: a bias of {s['bias']:+.3f}, "
-            "added to every slope you estimate."
+            "Four lines. The predictive system: returns on a persistent predictor, the predictor an autoregression. "
+            "<bookmark mark='a'/> Project the return shock on the predictor's shock: phi times v, plus e unrelated to v. "
+            "<bookmark mark='b'/> Both equations share the regressor, so the slope's error is phi times the persistence "
+            "error, plus a term in e. <bookmark mark='c'/> That term averages zero, and Kendall's bias is minus one plus "
+            "three rho over T: the tilted cloud, in symbols. <bookmark mark='d'/> On the annual data, phi is "
+            f"{s['corr_uv'] * s['sd_u'] / s['sd_v']:.2f}, rho {s['rho']:.2f}, T {s['T']}: a bias of {s['bias']:+.3f}."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -164,22 +157,16 @@ class Stambaugh(VoiceoverScene):
         q = predict(r"If the predictor's shocks were positively correlated with returns, which way would the bias "
                     r"go?").to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            f"Back to the real regression. Annual data, a slope of {s['beta']:.3f} with a t-statistic of "
-            f"{s['t']:.1f}. <bookmark mark='a'/> Subtract the bias, and {s['beta_corrected']:.3f} is left. Yakov "
-            "Amihud and Clifford Hurvich's augmented regression does the correction inside the regression: add the "
-            "predictor's own estimated shock as a second regressor, and the slope on the yield is purged of phi "
-            f"times the persistence error. It gives {a['aug']['beta']:.3f}, with a t-statistic of "
-            f"{a['aug']['t']:.2f}. <bookmark mark='b'/> Alexandros Kostakis, Tassos Magdalinos and Michalis "
-            "Stamatogiannis, in 2015, made a test that does not need to know the persistence at all: IVX. "
-            "Instrument the predictor with a filtered version of its own changes, which is mildly persistent by "
-            "construction, so the test statistic is chi-squared whether the yield is stationary or nearly a random "
-            f"walk. On the annual data it gives a p-value of {a['ivx']['p']:.2f}. On the monthly data, which has "
-            f"twelve times the observations, the House's simplified IVX {mono} at five percent, with p of "
-            f"{mth['ivx']['p']:.3f}. <bookmark mark='c'/> The honest summary: a small, fragile slope, which depends "
-            "on the frequency and the sample, and whose usual t-statistic overstates it. Part seven picks up "
-            "persistence itself: unit roots, and regressions of one trending series on another. "
-            "<bookmark mark='d'/> Pause and predict: if the predictor's shocks moved with returns instead of "
-            "against them, the bias would flip sign, and the slope would be biased down."
+            f"The real regression: annual data, a slope of {s['beta']:.3f}, t of {s['t']:.1f}. <bookmark mark='a'/> "
+            f"Subtract the bias, and {s['beta_corrected']:.3f} is left. Amihud and Hurvich's augmented regression adds "
+            "the predictor's estimated shock as a second regressor, purging the bias inside the regression: "
+            f"{a['aug']['beta']:.3f}, t of {a['aug']['t']:.2f}. <bookmark mark='b'/> Kostakis, Magdalinos and "
+            "Stamatogiannis's IVX, from 2015, needs no persistence estimate: instrument the yield with a filtered "
+            "version of its own changes, mildly persistent by construction, and the test is chi-squared either way. "
+            f"Annual p-value: {a['ivx']['p']:.2f}. On monthly data the House's simplified IVX {mono} at five percent, p "
+            f"of {mth['ivx']['p']:.3f}. <bookmark mark='c'/> A small, fragile slope, overstated by its usual t; Part "
+            "seven takes up persistence itself. <bookmark mark='d'/> Pause and predict: if the shocks moved together, "
+            "the bias would flip sign."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(src))
             vo.wait_until("a")

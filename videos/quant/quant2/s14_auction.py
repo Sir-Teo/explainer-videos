@@ -79,15 +79,12 @@ class Auction(VoiceoverScene):
         note_ = note(r"300 simulated limit orders, arriving in random order; published as imbalance feeds (e.g.\ "
                      r"Nasdaq's NOII)", font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Most exchanges open and close the day not with continuous trading but with a call auction. For a few "
-            "minutes orders are collected, nothing trades, and the exchange publishes what would happen if it "
-            "stopped now: an indicative price, the shares that would match, and the imbalance left over. "
-            "<bookmark mark='a'/> Watch three hundred orders arrive one at a time. Each buy order adds a step to "
-            "the green staircase, the shares wanted at each price or higher; each sell adds a step to the red one, "
-            "the shares offered at each price or lower. The indicative price jumps around at first, then settles "
-            f"as the book fills, at {a['price']:.2f}. <bookmark mark='b'/> At the end everyone who trades pays the "
-            "same price: a uniform-price auction. The continuous book, where each order pays its own price, is "
-            "discriminatory."
+            "Most exchanges open and close with a call auction: orders are collected, nothing trades, and the exchange "
+            "publishes an indicative price, the shares that would match, and the imbalance. <bookmark mark='a'/> Watch three "
+            "hundred orders arrive. Each buy adds a step to the green staircase, demand at each price or higher; each sell a "
+            "step to the red, supply at each price or lower. The indicative price jumps, then settles at "
+            f"{a['price']:.2f}. <bookmark mark='b'/> Everyone pays that one price: a uniform-price auction, unlike the "
+            "discriminatory continuous book."
         ) as vo:
             self.play(FadeIn(g), FadeIn(panel), FadeIn(leg), FadeIn(note_))
             self.add(cv)
@@ -168,15 +165,11 @@ class Auction(VoiceoverScene):
                           r"ETFs", 5.6, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(UP * 0.3)
         with self.voiceover(
-            "Now add one more order: a market-on-close buy of two thousand shares, willing to pay any price. It "
-            "shifts the whole demand staircase right by two thousand shares. <bookmark mark='a'/> The crossing "
-            f"moves from {a['price']:.2f} to {al['moc_price']:.2f}, and every share in the auction trades there. "
-            "Bought instead by walking the continuous book, the same two thousand shares would have averaged "
-            f"{al['walk_avg']:.2f} and pushed the last fill to {al['walk_last']:.2f}. <bookmark mark='b'/> That "
-            "is why the close matters. Index funds and many mutual funds are valued at the closing price, so they "
-            "trade there, in size; Bogousslavsky and Muravyev measured closing auctions at seven and a half percent "
-            "of American daily volume in 2018, up from three percent in 2010. Big orders meet in one place, at "
-            "one price."
+            "Add a market-on-close buy of two thousand shares at any price: demand shifts right. <bookmark mark='a'/> The "
+            f"crossing moves from {a['price']:.2f} to {al['moc_price']:.2f}; walking the continuous book instead, the same "
+            f"shares average {al['walk_avg']:.2f} and the last fills at {al['walk_last']:.2f}. <bookmark mark='b'/> Index "
+            "funds are valued at the close, so they trade there in size: Bogousslavsky and Muravyev measured closing auctions "
+            "at seven and a half percent of American volume in 2018, up from three in 2010."
         ) as vo:
             self.play(FadeIn(g), Create(d0), Create(s0), Create(p0))
             self.play(TransformFromCopy(d0, d1), run_time=1.5)

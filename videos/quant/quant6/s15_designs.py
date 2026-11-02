@@ -52,16 +52,13 @@ class Designs(VoiceoverScene):
         leg = legend([(BAD, r"OLS"), (GOOD, r"2SLS")], font_size=18).next_to(dag, DOWN, buff=0.5).align_to(dag, LEFT)
         w, s = d["weak"], d["strong"]
         with self.voiceover(
-            "Regressions describe; they do not explain. Finance increasingly asks causal questions: does joining an "
-            "index raise a stock's price, does a rule change liquidity? The obstacle is a confounder, U, that moves "
-            "both the cause and the outcome. <bookmark mark='a'/> An instrument, Z, moves the cause but touches the "
-            "outcome only through it. Divide the instrument's effect on the outcome by its effect on the cause, and "
-            "the confounder drops out. In two hundred simulated markets with a true effect of a half, least "
-            f"squares finds about {s['ols_mean']:.1f}, every time. <bookmark mark='b'/> With a strong instrument, "
-            f"two-stage least squares is centred on {s['iv_median']:.2f}. <bookmark mark='c'/> With a weak one, a "
-            f"first-stage F statistic around {w['F']:.0f}, the estimates scatter wildly, and their middle half runs "
-            f"from {w['iv_iqr'][0]:.1f} to {w['iv_iqr'][1]:.1f}, leaning back toward least squares. The old rule of "
-            "thumb asks for an F above ten."
+            "Regressions describe; they do not explain. Causal questions, does joining an index raise a price, does a "
+            "rule change liquidity, face a confounder, U, that moves both cause and outcome. <bookmark mark='a'/> An "
+            "instrument, Z, moves the cause but touches the outcome only through it. In two hundred simulated markets "
+            f"with a true effect of a half, least squares finds about {s['ols_mean']:.1f}. <bookmark mark='b'/> With a "
+            f"strong instrument, two-stage least squares centres on {s['iv_median']:.2f}. <bookmark mark='c'/> With a weak "
+            f"one, first-stage F near {w['F']:.0f}, its middle half runs from {w['iv_iqr'][0]:.1f} to "
+            f"{w['iv_iqr'][1]:.1f}. The rule of thumb asks for F above ten."
         ) as vo:
             self.play(FadeIn(dag))
             vo.wait_until("a")
@@ -93,12 +90,10 @@ class Designs(VoiceoverScene):
                 why(r"continuity of potential outcomes at the cutoff: just above and just below are alike")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.8, edge=6.8)
         with self.voiceover(
-            "The three designs, each in one line. The instrument: the reduced form over the first stage. "
-            "<bookmark mark='a'/> Difference in differences: the treated group's change minus the control group's "
-            "change, valid if both would have trended alike. <bookmark mark='b'/> Its regression version with "
-            "unit and time effects, two-way fixed effects, turns out to be a weighted sum of every two-by-two "
-            "comparison in the data, and when treatment is staggered, some weights are negative. "
-            "<bookmark mark='c'/> And the discontinuity: the jump in the outcome's average exactly at a cutoff."
+            "Each design in one line. The instrument: reduced form over first stage. <bookmark mark='a'/> Difference in "
+            "differences: the treated change minus the control change, under parallel trends. <bookmark mark='b'/> Its "
+            "regression version, two-way fixed effects, is a weighted sum of every two-by-two comparison, and under "
+            "staggered timing some weights are negative. <bookmark mark='c'/> The discontinuity: the jump at a cutoff."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -133,13 +128,11 @@ class Designs(VoiceoverScene):
                           r"control firms, a date", 5.0, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Difference in differences as a picture. A treated group and a control group, before and after a rule "
-            "change. Their levels differ; that is allowed. <bookmark mark='a'/> Copy the control group's change "
-            "onto the treated group's starting point: the ghost line is where the treated group would have gone "
-            f"without the rule. The gap is the effect: {dd['est']:.3f}, against a planted {dd['truth']}. "
-            "<bookmark mark='b'/> Finance has natural experiments of exactly this shape. In 2004 the SEC ordered a "
-            "pilot under Regulation SHO: from May 2005, about a third of the Russell 3000, picked by a fixed rule, "
-            "traded without the short-sale price test, and the rest kept it."
+            "Difference in differences as a picture: treated and control, before and after. <bookmark mark='a'/> Copy "
+            "the control's change onto the treated group's start: the ghost line. The gap is the effect, "
+            f"{dd['est']:.3f} against a planted {dd['truth']}. <bookmark mark='b'/> Finance has experiments of this shape: "
+            "in 2004 the SEC ordered a pilot under Regulation SHO; from May 2005 about a third of the Russell 3000, picked "
+            "by rule, traded without the short-sale price test."
         ) as vo:
             self.play(FadeIn(g), Create(lc), Create(lt), Create(cut), FadeIn(side[0]))
             vo.wait_until("a")
@@ -188,17 +181,13 @@ class Designs(VoiceoverScene):
                           r"accounting with robust estimators often changed the conclusions", 4.6, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.8)
         with self.voiceover(
-            "Most real rules arrive in waves: different firms, states or countries are treated at different times. "
-            "The standard regression, with firm and period effects, quietly compares newly treated firms with firms "
-            "treated earlier, using the early ones as controls. <bookmark mark='a'/> Here are the weights it puts on "
-            "each treated cohort and period, in a simulated panel where every effect grows after treatment. The "
-            "late periods of the first cohort get negative weight, in red. <bookmark mark='b'/> Run two hundred such "
-            f"panels. The true average effect is {s['truth']:.2f}. Two-way fixed effects finds {s['twfe_mean']:.2f}, "
-            f"about {100 * s['twfe_mean'] / s['truth']:.0f} percent of it. Brantly Callaway and Pedro Sant'Anna's estimator, which "
-            "compares each cohort only with units not yet treated, is centred on "
-            f"{s['cs_mean']:.2f}. <bookmark mark='c'/> Andrew Baker, David Larcker and Charles Wang re-ran published "
-            "staggered studies in finance and accounting in 2022 with such estimators, and the conclusions often "
-            "changed."
+            "Most rules arrive in waves, and the standard regression quietly uses early-treated firms as controls for "
+            "later ones. <bookmark mark='a'/> Here are its weights on each treated cohort and period when effects grow "
+            "after treatment: the first cohort's late periods get negative weight. <bookmark mark='b'/> Over two hundred "
+            f"panels the truth is {s['truth']:.2f}; two-way fixed effects finds {s['twfe_mean']:.2f}, about "
+            f"{100 * s['twfe_mean'] / s['truth']:.0f} percent of it. Callaway and Sant'Anna's estimator, comparing each "
+            f"cohort only with units not yet treated, centres on {s['cs_mean']:.2f}. <bookmark mark='c'/> Baker, Larcker "
+            "and Wang re-ran published staggered studies in 2022, and conclusions often changed."
         ) as vo:
             self.play(FadeIn(g), FadeIn(clab))
             vo.wait_until("a")
@@ -257,18 +246,14 @@ class Designs(VoiceoverScene):
         q = predict(r"Every firm is eventually treated and the effect grows over time. Is the TWFE estimate too big "
                     r"or too small?", width=11.0).to_edge(DOWN, buff=0.1)
         with self.voiceover(
-            "The third design is the discontinuity. Each year Russell ranks American stocks by size: number one "
-            "thousand goes into the large-cap index, number one thousand and one becomes the largest stock in the "
-            "small-cap index, and index funds hold far more of it. The two firms are nearly identical; only the "
-            "index differs. Yen-cheng Chang, Harrison Hong and Inessa Liskovich used this cutoff in 2015 to measure "
-            "the price effect of indexing. Here is a simulated version with a planted jump of two. "
-            "<bookmark mark='a'/> Fit a line on each side within a window, and read off the jump at the cutoff. "
-            "Now widen the window. Narrow windows use few firms and are noisy; wide ones use firms far from the "
-            "cutoff, where the relation curves, and become biased. <bookmark mark='b'/> Over two hundred samples, "
-            f"the error is smallest at a window of about {best} ranks either side: the bias-variance trade-off again, "
-            "with the window playing the bandwidth. <bookmark mark='c'/> Pause and predict, back to staggered "
-            "adoption: if every firm is eventually treated and effects grow, is two-way fixed effects too big or "
-            "too small? Too small, and it can even turn negative."
+            "The discontinuity. Russell ranks stocks by size: number one thousand joins the large-cap index, one "
+            "thousand and one leads the small-cap index, where index funds hold far more of it. Chang, Hong and "
+            "Liskovich used this cutoff in 2015 to measure the price effect of indexing. A simulated version, with a "
+            "planted jump of two: <bookmark mark='a'/> fit a line on each side within a window, read the jump, and widen "
+            "the window. Narrow windows are noisy; wide ones reach where the relation curves, and are biased. "
+            f"<bookmark mark='b'/> Over two hundred samples the error is smallest near {best} ranks: the bandwidth "
+            "trade-off again. <bookmark mark='c'/> Pause and predict: staggered adoption, growing effects. Is two-way "
+            "fixed effects too big or too small? Too small, possibly negative."
         ) as vo:
             self.play(FadeIn(g), Create(cut), LaggedStart(*[FadeIn(dd) for dd in dots], lag_ratio=0.002, run_time=2))
             vo.wait_until("a")

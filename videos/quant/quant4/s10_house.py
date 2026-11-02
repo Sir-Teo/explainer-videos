@@ -10,9 +10,8 @@ KINDS = [("mixture", r"fixed-stake mixture (the House's \texttt{EProcess})", P_C
 
 
 def _date(d):
-    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
-              "November", "December"]
-    return f"{months[(d // 100) % 100 - 1]} {d // 10000}"
+    """A date as shown on screen (year-month, the same in both languages)."""
+    return "%d-%02d" % (d // 10000, (d // 100) % 100)
 
 
 class House(VoiceoverScene):
@@ -110,14 +109,14 @@ class House(VoiceoverScene):
         head = label(r"10{,}000 days of a strategy with a daily Sharpe of 0.05 (simulated); the stake learns",
                      font_size=22, color=GREY_A).to_edge(UP, buff=0.3)
         cross = l["cross_day"]
+        crossing = (f"It crosses twenty on day {cross:,}, against about {l['theory_days']:,.0f} for a bettor who knew "
+                    "the edge from the start." if cross else "It has not reached twenty within ten thousand days.")
         with self.voiceover(
             "Watch one learner. A strategy with a true daily Sharpe ratio of point zero five, simulated for ten "
-            "thousand days. On the left, the bettor's stake as a needle on a dial, with Kelly's fraction marked in "
-            "gold; on the right, its wealth on a log scale, with the line at twenty. <bookmark mark='a'/> At first "
-            "the needle swings wildly: the bettor knows nothing. Then it settles near the gold mark, and the wealth "
-            "begins to climb. " + (f"It crosses twenty on day {cross:,}, against about "
-                                    f"{l['theory_days']:,.0f} for a bettor who knew the edge from the start."
-                                    if cross else "It has not reached twenty within ten thousand days.")
+            "thousand days. On the left, the bettor's stake as a needle on a dial, with Kelly's fraction marked "
+            "in gold; on the right, its wealth on a log scale, with the line at twenty. <bookmark mark='a'/> "
+            "At first the needle swings wildly: the bettor knows nothing. Then it settles near the gold mark, "
+            f"and the wealth begins to climb. {crossing}"
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp), Create(line20))
             vo.wait_until("a")
@@ -151,6 +150,7 @@ class House(VoiceoverScene):
         med = {k: float(np.mean([r_["median"] for r_ in G[f"{k}|0.05"]])) for k, _, _ in KINDS}
         null_ok = all(max(r_["rate"] for r_ in G[f"{k}|0.0"]) <= 0.08 for k, _, _ in KINDS if k != "kelly")
         ons_wins = med["ons"] < med["mixture"]
+        promise = "Ville's promise, kept." if null_ok else "close to Ville's promise."
         verdict = ("At a Sharpe of point zero five the learner beats the House's fixed menu." if ons_wins else
                    "At a Sharpe of point zero five, the surprise: the House's fixed menu of stakes is faster than the "
                    "learners. A small edge gives the learner little signal to learn from, while the menu already "
@@ -158,12 +158,11 @@ class House(VoiceoverScene):
         with self.voiceover(
             "Now a fair race. Four bettors: the House's fixed menu, the online Newton learner, a second learner "
             "called aGRAPA that plugs in running estimates of the edge, and an oracle that knows the true edge. "
-            "Four strategies, from no edge at all to a daily Sharpe of point one; eight seeds of a hundred runs each, "
-            "drawn as bars from the lowest seed to the highest. <bookmark mark='a'/> With no edge, every bettor flags "
-            "at most about five percent of the runs: " + ("Ville's promise, kept." if null_ok else
-                                                           "close to Ville's promise.") + " "
-            "<bookmark mark='b'/> With an edge, the oracle is fastest, as it must be, at "
-            f"{med['kelly']:,.0f} days in the median for a Sharpe of point zero five. " + verdict
+            "Four strategies, from no edge at all to a daily Sharpe of point one; eight seeds of a hundred runs "
+            "each, drawn as bars from the lowest seed to the highest. <bookmark mark='a'/> With no edge, every "
+            f"bettor flags at most about five percent of the runs: {promise} <bookmark mark='b'/> With an edge, "
+            f"the oracle is fastest, as it must be, at {med['kelly']:,.0f} days in the median for a Sharpe of "
+            f"point zero five. {verdict}"
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(alpha_line), FadeIn(leg))
             vo.wait_until("a")
@@ -200,16 +199,25 @@ class House(VoiceoverScene):
         src = real_data(r"Kenneth French's daily US market; Binance BTCUSDT daily; research window to 2020")
         same = all(bool(e[k]["cross"]) == bool(R[k]["cross"]) for k in R)
 
-        def when(src, k):
-            return _date(src[k]["cross"]) if src[k]["cross"] else "never"
+        def years(src, k, start):
+            d = src[k]["cross"]
+            return (d // 10000 + ((d // 100) % 100 - 1) / 12 - start) if d else None
+
+        y = {k: (years(e, k, s0), years(R, k, s0)) for k, s0 in (("19260701", 1926.5), ("19750101", 1975.0))}
+        if all(v is not None for pair in y.values() for v in pair):
+            timing = (f"Started in July 1926, the menu crosses twenty after {y['19260701'][0]:.1f} years and the "
+                      f"learner after {y['19260701'][1]:.1f}. Started in 1975, after {y['19750101'][0]:.1f} and "
+                      f"{y['19750101'][1]:.1f} years.")
+        else:
+            timing = "The old market's bets do not always reach twenty."
+        late = [k for k in ("20000101", "btc") if e[k]["cross"] or R[k]["cross"]]
+        late_txt = ("Since 2000, and on Bitcoin since 2018, neither bettor ever does." if not late else
+                    "Since 2000 or on Bitcoin, at least one bettor crosses.")
         verdict = ("The learner reaches the same verdicts as the menu, in every market." if same else
                    "The two bettors disagree on at least one market, so the verdict there depends on the bettor.")
         with self.voiceover(
-            "Back to the hook's question, now with the learner. The bet is the same: today keeps yesterday's sign. "
-            f"<bookmark mark='a'/> From 1926, the menu crosses twenty in {when(e, '19260701')} and the learner in "
-            f"{when(R, '19260701')}. From 1975, in {when(e, '19750101')} and {when(R, '19750101')}. Since 2000: "
-            f"{when(e, '20000101')} and {when(R, '20000101')}; Bitcoin since 2018: {when(e, 'btc')} and "
-            f"{when(R, 'btc')}. " + verdict
+            "Back to the hook's question, now with the learner. The bet is the same: today keeps yesterday's "
+            f"sign. <bookmark mark='a'/> {timing} <bookmark mark='b'/> {late_txt} <bookmark mark='c'/> {verdict}"
         ) as vo:
             self.play(FadeIn(VGroup(*head)), FadeIn(src))
             vo.wait_until("a")
@@ -245,10 +253,10 @@ class House(VoiceoverScene):
                    else "It has left zero behind.")
         with self.voiceover(
             "And the confidence sequence. Here is Bitcoin's mean daily return, estimated as the days arrive from "
-            "2018. The band is the set of means that no bettor has yet beaten, at ninety-five percent, and unlike an "
-            "ordinary confidence interval it is valid on every day at once, so you may watch it as long as you like. "
-            f"<bookmark mark='a'/> It narrows as the evidence grows. At the end of 2020 it runs from {cs['end'][0]:.0f} "
-            f"to {cs['end'][1]:.0f} basis points a day. " + verdict
+            "2018. The band is the set of means that no bettor has yet beaten, at ninety-five percent, and unlike "
+            "an ordinary confidence interval it is valid on every day at once, so you may watch it as long as "
+            "you like. <bookmark mark='a'/> It narrows as the evidence grows. At the end of 2020 it runs from "
+            f"{cs['end'][0]:.0f} to {cs['end'][1]:.0f} basis points a day. {verdict}"
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(side[:2]), FadeIn(side[3]))
             self.add(bd, lm)

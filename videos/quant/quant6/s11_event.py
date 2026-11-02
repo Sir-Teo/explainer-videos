@@ -44,17 +44,12 @@ class Event(VoiceoverScene):
                 why(r"the test statistic", 21)]
         step = ladder(self, rows, whys, keep=5, top=1.2, x=-0.8, buff=0.5, edge=6.8)
         with self.voiceover(
-            "An event study asks what happens to prices around an event: an earnings report, a merger, a split, a "
-            "rate decision. In 1969 Eugene Fama, Lawrence Fisher, Michael Jensen and Richard Roll lined up nine "
-            "hundred and forty stock splits in event time, month zero the split, and found that prices rose in "
-            "the months before and did not drift after: the market had absorbed the news. "
-            "<bookmark mark='a'/> Craig MacKinlay's 1997 survey set out the machinery. The abnormal return is the "
-            "return minus a normal return, from a market model fitted before the event. <bookmark mark='b'/> "
-            "Average across events and add up over the window: the cumulative abnormal return. "
-            "<bookmark mark='c'/> If events are independent, its variance shrinks like one over the number of "
-            "events. <bookmark mark='d'/> But if events share a calendar date, they share that date's shocks, and "
-            "the covariances do not average away. <bookmark mark='e'/> Divide by the right standard error, and "
-            "compare with the normal."
+            "An event study asks what happens to prices around an event. In 1969 Fama, Fisher, Jensen and Roll lined up "
+            "nine hundred and forty stock splits in event time: prices rose in the months before, and did not drift "
+            "after. <bookmark mark='a'/> MacKinlay's 1997 survey set out the machinery: return minus a market-model "
+            "normal return, <bookmark mark='b'/> averaged across events, summed over the window. <bookmark mark='c'/> "
+            "Independent events: variance shrinks like one over N. <bookmark mark='d'/> Events sharing a date share its "
+            "shocks, which do not average away. <bookmark mark='e'/> Then divide by the right standard error."
         ) as vo:
             self.play(FadeIn(hc))
             vo.wait_until("a")
@@ -97,12 +92,10 @@ class Event(VoiceoverScene):
             label(r"Ariel (1987); Lakonishok and Smidt (1988)", font_size=18, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "A first case with no news at all: the turn of the month. Day zero is the boundary between months, "
-            "and the normal return is the average of all other days. <bookmark mark='a'/> From 1926 to 1986 the "
-            "last trading day and the first three of the next month, under a fifth of all days, delivered "
-            f"{100 * a['share_of_return']:.0f} percent of the market's return; Robert Ariel published it in 1987. "
-            f"<bookmark mark='b'/> Since then, {100 * b['share_of_return']:.0f} percent, with a t-statistic of "
-            f"{b['t']:.1f}: weaker after publication, still there."
+            "A case with no news: the turn of the month. <bookmark mark='a'/> From 1926 to 1986 the last trading day and "
+            f"the first three of the next, under a fifth of all days, delivered {100 * a['share_of_return']:.0f} percent of "
+            "the market's return; Robert Ariel published it in 1987. <bookmark mark='b'/> Since then, "
+            f"{100 * b['share_of_return']:.0f} percent, t of {b['t']:.1f}: weaker, still there."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
@@ -160,21 +153,18 @@ class Event(VoiceoverScene):
         late = s["2011-2020"]
         fade = ("smaller and no longer significant on its own" if late["t"] < 1.96 else "smaller but still significant")
         with self.voiceover(
-            "Now a real event study, on the days the Federal Reserve announces its decisions. We transcribed every "
-            f"scheduled meeting of the Federal Open Market Committee from 1994 to 2020 from the Fed's own pages: "
-            f"{f['n_events']} decisions. Here are forty of them in calendar time, each a little path of the market's "
-            "abnormal return in the days around the decision. <bookmark mark='a'/> Slide every path so that its "
-            "decision day sits at zero. Calendar time becomes event time. <bookmark mark='b'/> Average them, and "
-            "watch the mean and its band as decisions are added. The band narrows like one over the root of N, "
-            "which is fair here: each decision has its own date. <bookmark mark='c'/> On decision days the market "
-            f"earned {1e4 * a['mean_event']:.0f} basis points above the riskless rate, against "
-            f"{1e4 * a['mean_other']:.0f} on other days, a t-statistic of {a['t']:.1f}. Three percent of the days "
-            f"carried {100 * f['share_of_return']:.0f} percent of the market's excess return. David Lucca and Emanuel "
-            "Moench documented it in 2015: since 1994 the S&P 500 rose forty-nine basis points on average in the "
-            "twenty-four hours before scheduled announcements, about thirty-three close to close, and before 1980 "
-            f"there was no such drift. Our 1994 to 2011 number is {1e4 * s['1994-2011']['ar']:.0f}. "
-            "<bookmark mark='d'/> And after publication? From 2011 the effect is "
-            f"{1e4 * late['ar']:.0f} basis points, " + fade + "."
+            "Now the days the Federal Reserve announces its decisions. We transcribed every scheduled FOMC meeting "
+            f"from 1994 to 2020 from the Fed's own pages: {f['n_events']} decisions. Here are forty, each a little path of "
+            "abnormal returns, in calendar time. <bookmark mark='a'/> Slide each so its decision day sits at zero: "
+            "calendar time becomes event time. <bookmark mark='b'/> Average them as decisions are added; the band "
+            "narrows like one over root N, fairly, since each decision has its own date. <bookmark mark='c'/> On "
+            f"decision days the market earned {1e4 * a['mean_event']:.0f} basis points over the riskless rate, against "
+            f"{1e4 * a['mean_other']:.0f} on other days, t of {a['t']:.1f}: three percent of the days carried "
+            f"{100 * f['share_of_return']:.0f} percent of the excess return. David Lucca and Emanuel Moench reported in "
+            "2015 that since 1994 the S&P 500 rose forty-nine basis points on average in the twenty-four hours before "
+            "scheduled announcements, about thirty-three close to close. Our 1994 to 2011 figure: "
+            f"{1e4 * s['1994-2011']['ar']:.0f}. <bookmark mark='d'/> From 2011, {1e4 * late['ar']:.0f} basis points, "
+            + fade + "."
         ) as vo:
             self.play(FadeIn(cal), FadeIn(src), LaggedStart(*[Create(p) for p in small], lag_ratio=0.05, run_time=3))
             vo.wait_until("a")
@@ -218,12 +208,9 @@ class Event(VoiceoverScene):
                                             font_size=26, color=GREY_A).next_to(g, UP, buff=0.1).align_to(g, LEFT))
         side = MathTex(rf"p = {f['p_placebo']:.4f}", font_size=34, color=EST).to_edge(RIGHT, buff=0.6)
         with self.voiceover(
-            "A second check that needs no formula: placebos. Draw "
-            f"{f['n_events']} days at random from the days without a decision, average their returns, and repeat "
-            "ten thousand times. That is what an average of that many days looks like when nothing special happens. "
-            "<bookmark mark='a'/> The real decision days sit far out in the right tail: only "
-            f"{100 * f['p_placebo']:.2f} percent of placebo sets do as well. This is the trial counter's logic in "
-            "miniature: compare what you found with what chance finds."
+            f"A check with no formula: placebos. Draw {f['n_events']} days without a decision, average them, ten "
+            "thousand times. <bookmark mark='a'/> The real decision days sit far in the right tail: only "
+            f"{100 * f['p_placebo']:.2f} percent of placebo sets do as well. The trial counter's logic, in miniature."
         ) as vo:
             self.play(FadeIn(g))
             self.add(hm, cnt)
@@ -251,14 +238,12 @@ class Event(VoiceoverScene):
         q.next_to(rows, DOWN, buff=0.4)
         ratio = f["cluster_true"] / f["cluster_naive"]
         with self.voiceover(
-            "FOMC days were spread over twenty-seven years. Many event studies are not so lucky: a regulation that "
-            "hits a hundred firms on one day, an industry's earnings season. <bookmark mark='a'/> Pause and predict: "
-            "is the standard error of the average the usual one, sigma over the root of a hundred? "
-            "<bookmark mark='b'/> Simulate it: a hundred firms whose abnormal returns share an industry shock the "
-            f"market model does not remove. The naive standard error says {100 * f['cluster_naive']:.2f} percent. "
-            f"The true spread is {100 * f['cluster_true']:.2f}, {ratio:.0f} times larger. It is chapter three again: "
-            "when the shock is shared, a hundred events are closer to one. Use the time series of the portfolio's "
-            "abnormal return on other days, or cluster by date."
+            "FOMC days were spread over twenty-seven years. Many studies are not so lucky: a rule that hits a hundred "
+            "firms on one day. <bookmark mark='a'/> Pause and predict: is the standard error sigma over root a hundred? "
+            "<bookmark mark='b'/> Simulate a hundred firms sharing an industry shock the market model does not remove. "
+            f"The naive standard error says {100 * f['cluster_naive']:.2f} percent; the true spread is "
+            f"{100 * f['cluster_true']:.2f}, {ratio:.0f} times larger. Chapter three again: cluster by date, or use the "
+            "portfolio's own time series."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("a")

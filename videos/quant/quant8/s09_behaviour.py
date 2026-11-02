@@ -43,13 +43,11 @@ class Behaviour(VoiceoverScene):
                                  r"independence says the order cannot flip (Allais 1953)", 12.0, 22, OVER),
                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(ORIGIN)
         with self.voiceover(
-            "Expected utility describes how a consistent investor should choose. Does anyone choose that way? In "
-            "1953 Maurice Allais offered two choices. First: a million for sure, or a gamble with a ten percent "
-            "chance of five million, eighty-nine percent of one million, and one percent of nothing. Most people "
-            "take the sure million. Second: eleven percent of a million, or ten percent of five million. Most people "
-            "take the five. <bookmark mark='a'/> But the second pair is the first pair with the same eighty-nine "
-            "percent chance of a million removed from both, and the independence axiom of chapter one says that "
-            "cannot change the order. People violate it, predictably."
+            "Does anyone actually choose by expected utility? In 1953 Maurice Allais offered two choices. A sure million, "
+            "or ten percent of five million, eighty-nine of one million, one of nothing: most take the sure million. Eleven "
+            "percent of a million, or ten percent of five: most take the five. <bookmark mark='a'/> But the second pair is "
+            "the first with the same eighty-nine percent chance removed from both. Independence says the order cannot flip; "
+            "people flip it."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(x) for x in a[:3]], lag_ratio=0.6, run_time=4))
             vo.wait_until("a")
@@ -80,15 +78,11 @@ class Behaviour(VoiceoverScene):
                           r"stocks overpriced (Barberis and Huang 2008)", 11.6, 20, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Daniel Kahneman and Amos Tversky's prospect theory, from 1979 and in its cumulative form from 1992, "
-            "replaces utility of wealth with three ideas. <bookmark mark='a'/> People value gains and losses from a "
-            "reference point, usually where they started; the curve is concave for gains, convex for losses, and "
-            "kinked at zero, because a loss hurts about two and a quarter times as much as an equal gain pleases. "
-            "<bookmark mark='b'/> And they weigh probabilities unevenly: the extremes, a small chance of a big win "
-            "or a big loss, count for more than their probability. In the cumulative version the weights apply to "
-            "ranked outcomes, from the tails inward. <bookmark mark='c'/> These shapes leave fingerprints in "
-            "markets: investors sell winners too early and hold losers too long, and stocks that look like lottery "
-            "tickets are overpriced."
+            "Kahneman and Tversky's prospect theory, 1979, and its cumulative form, 1992, makes three changes. "
+            "<bookmark mark='a'/> Value is measured from a reference point, concave for gains, convex for losses, with a "
+            "kink: a loss hurts about two and a quarter times as much as an equal gain pleases. <bookmark mark='b'/> "
+            "Probabilities are weighted, so the extremes count for more, ranked from the tails inward. "
+            "<bookmark mark='c'/> In markets: winners sold too early, losers held too long, lottery-like stocks overpriced."
         ) as vo:
             self.play(FadeIn(g1), Create(ref))
             vo.wait_until("a")
@@ -144,17 +138,13 @@ class Behaviour(VoiceoverScene):
                        r"investor hold more stocks or fewer?", width=6.4, font_size=20).to_edge(UP, buff=0.3)
         src = real_data(r"French monthly 1926--2020, overlapping windows; TK (1992) parameters; registered test")
         with self.voiceover(
-            "Can prospect theory explain a fact about markets? In 1995 Shlomo Benartzi and Richard Thaler proposed "
-            "myopic loss aversion: stocks are shunned because people check them too often. Pause and predict: if "
-            "you looked every five years instead of every month, would a loss-averse investor hold more stocks, or "
-            "fewer? <bookmark mark='a'/> Here is the House's test of the idea, on ninety-four years of American "
-            "returns. Over one month, stock returns sit close to zero, half of them on the steep loss side of the "
-            "curve, and the kink punishes them. Over two years the distribution slides right, mostly into gains. "
-            "<bookmark mark='b'/> Score stocks and bills with the 1992 parameters, evaluated every h months. For "
-            "short periods bills win; the curves cross at "
-            f"{cross} months, and beyond that stocks win. Benartzi and Thaler found about a year, against bonds. "
-            "<bookmark mark='c'/> So the answer is more. A loss-averse investor who looks less often takes more risk, "
-            "and how often you evaluate is itself a decision."
+            "Benartzi and Thaler proposed in 1995 that stocks are shunned because people check them too often. Pause and "
+            "predict: looking every five years instead of every month, would a loss-averse investor hold more stocks, or "
+            "fewer? <bookmark mark='a'/> The House's registered test, on ninety-four years of US returns. Over a month, half "
+            "the returns sit on the steep loss side of the curve; over two years, the distribution slides into gains. "
+            "<bookmark mark='b'/> Score stocks and bills every h months: bills win for short periods, and the curves cross "
+            f"at {cross} months. Benartzi and Thaler found about a year, against bonds. <bookmark mark='c'/> So: more. How "
+            "often you look is itself a decision."
         ) as vo:
             self.play(FadeIn(q))
             vo.wait_until("a")
@@ -190,16 +180,12 @@ class Behaviour(VoiceoverScene):
                     font_size=20)]
         step = ladder(self, rows, whys, keep=4, top=1.6, x=-0.8, buff=0.55, edge=6.9)
         with self.voiceover(
-            "A second departure: people dislike not knowing the odds, separately from disliking risk. Daniel "
-            "Ellsberg's urn of 1961 shows it, and Itzhak Gilboa and David Schmeidler turned it into a theory in 1989: "
-            "when the model is uncertain, choose the action whose worst plausible model is best. "
-            "<bookmark mark='a'/> Lars Hansen and Thomas Sargent built robust control on it, and Pascal Maenhout "
-            "applied it to Merton in 2004. Nature, an adversary, may shift the stock's drift, paying an entropy cost "
-            "for every shift: the more implausible the model, the more it costs. <bookmark mark='b'/> The inner "
-            "minimum is a parabola in the shift. <bookmark mark='c'/> With Maenhout's scaling, nature lowers the drift "
-            "in proportion to the investor's own position: the more you bet on the stock, the more pessimistic the "
-            "worst case. <bookmark mark='d'/> The outer maximum gives Merton's formula with gamma replaced by gamma "
-            "plus theta. Doubt acts exactly like extra risk aversion."
+            "Second, people dislike unknown odds apart from risk: Ellsberg's urn, 1961, and Gilboa and Schmeidler's theory, "
+            "1989: choose the action whose worst plausible model is best. <bookmark mark='a'/> Applied to Merton by Pascal "
+            "Maenhout in 2004, after Hansen and Sargent: nature may lower the stock's drift, paying an entropy cost. "
+            "<bookmark mark='b'/> The inner minimum is a parabola. <bookmark mark='c'/> With Maenhout's scaling, the bigger "
+            "your stake, the more pessimistic the worst case. <bookmark mark='d'/> The result is Merton with gamma plus "
+            "theta: doubt acts like extra risk aversion."
         ) as vo:
             self.play(FadeIn(urn))
             vo.wait_until("a")
@@ -246,17 +232,11 @@ class Behaviour(VoiceoverScene):
             MathTex(rf"\text{{no doubt: }}{100 * rf['pi_plain']:.0f}\%", font_size=26, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Here is the game between investor and nature on the US numbers, gamma three. The faint lines are "
-            "drifts nature might pick. In red, nature's best reply to each position: the bigger the investor's "
-            "stake, the lower the drift. In blue, the investor's best reply to each drift: Merton's line. "
-            f"<bookmark mark='a'/> The robust portfolio is where they cross: {100 * row['pi']:.0f} percent in "
-            f"stocks, against {100 * rf['pi_plain']:.0f} with no doubt. <bookmark mark='b'/> How much doubt? "
-            "Anderson, Hansen and Sargent's answer: only as much as the data cannot rule out. Choose theta so that "
-            "the worst-case model would be mistaken for the estimate a given fraction of the time with ninety-four "
-            f"years of data. At a twenty percent error rate theta is {th:.1f}; at ten percent, "
-            f"{[r_ for r_ in rf['rows'] if abs(r_['p'] - 0.1) < 1e-9][0]['theta']:.1f}, and the robust investor holds "
-            f"{100 * [r_ for r_ in rf['rows'] if abs(r_['p'] - 0.1) < 1e-9][0]['pi']:.0f} percent. That is one honest "
-            "answer to chapter five's uncertain inputs."
+            "The game on US numbers, gamma three: in red, nature's worst drift for each position; in blue, the investor's "
+            f"Merton response to each drift. <bookmark mark='a'/> They cross at {100 * row['pi']:.0f} percent, against "
+            f"{100 * rf['pi_plain']:.0f} with no doubt. <bookmark mark='b'/> How much doubt? Only what the data cannot rule "
+            "out: choose theta so the worst case would be mistaken for the estimate twenty percent of the time in "
+            f"ninety-four years of data. Then theta is {th:.1f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(fan), FadeIn(leg))
             self.play(Create(nature), Create(best), run_time=2)

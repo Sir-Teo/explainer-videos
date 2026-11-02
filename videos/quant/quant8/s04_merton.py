@@ -71,13 +71,11 @@ class Merton(VoiceoverScene):
         q = pause_card(r"Stocks just fell 20\%. Does Merton buy or sell?", width=5.0, font_size=22).next_to(
             g, DOWN, buff=0.4).align_to(g, LEFT)
         with self.voiceover(
-            "The last two chapters found Merton's answer by two methods: hold a constant fraction, the excess return "
-            f"over gamma times the variance, {100 * pi:.1f} percent in our market. What does constant mean in "
-            "practice? <bookmark mark='a'/> Pause and predict: stocks just fell twenty percent. Does Merton buy or "
-            "sell? <bookmark mark='b'/> Watch two glasses over five years of one simulated market, stock on top, "
-            "bonds below. When the stock rises, its layer swells; Merton pours it back to the line by selling. When "
-            "it falls, he buys. He buys after falls: a contrarian by arithmetic, not by opinion. The second glass "
-            "buys and holds, and its mix drifts wherever the market takes it."
+            "Merton's answer: hold a constant fraction, "
+            f"{100 * pi:.1f} percent in our market. What does constant mean in practice? <bookmark mark='a'/> Pause and "
+            "predict: stocks just fell twenty percent. Does Merton buy or sell? <bookmark mark='b'/> Two glasses, stock "
+            "above, bonds below. When the stock rises, Merton pours the excess back to the line; when it falls, he buys: a "
+            "contrarian by arithmetic. Buy-and-hold lets its mix drift."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             self.add(gm, gb, path)
@@ -88,14 +86,12 @@ class Merton(VoiceoverScene):
             self.play(FadeOut(q), FadeIn(side[0]))
             self.play(tk.animate.set_value(n - 0.001), run_time=max(vo.remaining(10.0), 8), rate_func=linear)
         with self.voiceover(
-            f"Rebalancing comes out ahead over {rb['n']:,} simulated thirty-year markets, as it must for an investor "
-            f"with gamma three, though only by {100 * (rb['ce_mix'] - rb['ce_bh']):.2f} percent a year in "
-            "certainty-equivalent terms. The bigger difference is that buy-and-hold ends with a stock share that "
-            "depends on luck."
+            f"Over {rb['n']:,} simulated thirty-year markets rebalancing comes out ahead for gamma three, by "
+            f"{100 * (rb['ce_mix'] - rb['ce_bh']):.2f} percent a year in certainty-equivalent terms, and buy-and-hold ends "
+            "with a stock share that depends on luck."
             if better else
-            f"Buy-and-hold comes out ahead over {rb['n']:,} simulated thirty-year markets, which is simulation "
-            "noise: for an investor with gamma three the theory says it cannot be better. The bigger difference is "
-            "that buy-and-hold ends with a stock share that depends on luck."
+            f"Buy-and-hold comes out ahead over {rb['n']:,} simulated markets, which is noise: for gamma three the theory "
+            "says it cannot be better."
         ):
             self.play(FadeIn(side[1]), FadeIn(side[2]))
         for mob in (gm, gb, path):
@@ -115,12 +111,9 @@ class Merton(VoiceoverScene):
                     r"not what is in it; Part 30 builds that fund")]
         step = ladder(self, rows, whys, keep=2, top=2.6, x=-1.0, buff=1.2, edge=6.9)
         with self.voiceover(
-            "With many stocks the derivation is the same, with a vector of fractions and a covariance matrix. The "
-            "parabola becomes a quadratic form, and its vertex is the inverse covariance matrix times the excess "
-            "returns, over gamma. <bookmark mark='a'/> Factor it. The direction of that vector does not depend on "
-            "gamma at all: every investor, cautious or bold, holds the same mix of risky assets, and risk aversion "
-            "only decides how much of it to hold against the bond. That is Merton's mutual-fund theorem, the "
-            "continuous-time cousin of Tobin's separation; Part thirty builds that fund from data."
+            "With many stocks the vertex is the inverse covariance matrix times the excess returns, over gamma. "
+            "<bookmark mark='a'/> Its direction does not depend on gamma: everyone holds the same risky fund, and risk "
+            "aversion only sets how much. That is Merton's mutual-fund theorem; Part thirty builds the fund."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -153,15 +146,12 @@ class Merton(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French: US market excess return and T-bill, monthly, July 1926 -- December 2020")
         with self.voiceover(
-            "Now put in the American market's history: an excess return of "
-            f"{100 * m['excess']:.1f} percent a year over Treasury bills, and a volatility of {100 * m['sigma']:.1f}. "
-            f"<bookmark mark='b'/> An investor with log utility should hold {100 * f[0]:.0f} percent of wealth in "
-            f"stocks, borrowing to do it. With gamma three, {100 * f[2]:.0f} percent; with gamma ten, {100 * f[-1]:.0f}. "
-            "<bookmark mark='c'/> But the excess return is the least certain number in finance. After ninety-four "
-            f"years its standard error is still {100 * m['se_excess']:.1f} percent a year, as Merton himself pointed "
-            "out in 1980, and the bars show what that does to the answer: for gamma three, anything from "
-            f"{100 * lo[2]:.0f} to {100 * hi[2]:.0f} percent. The formula is exact; its inputs are not. Chapter "
-            "thirteen meets an investor who takes that doubt seriously."
+            "Put in American history: an excess return of "
+            f"{100 * m['excess']:.1f} percent a year and a volatility of {100 * m['sigma']:.1f}. <bookmark mark='b'/> Log "
+            f"utility holds {100 * f[0]:.0f} percent in stocks, borrowing; gamma three, {100 * f[2]:.0f}. "
+            "<bookmark mark='c'/> But after ninety-four years the excess return's standard error is still "
+            f"{100 * m['se_excess']:.1f} percent, as Merton stressed in 1980: for gamma three, anything from "
+            f"{100 * lo[2]:.0f} to {100 * hi[2]:.0f} percent. The formula is exact; its inputs are not."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(ol), FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             vo.wait_until("b")

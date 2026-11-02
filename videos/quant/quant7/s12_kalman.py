@@ -41,8 +41,7 @@ class Kalman(VoiceoverScene):
                       (GOOD, r"updated belief")], font_size=18).to_corner(UR, buff=0.3).shift(DOWN * 4.2)
         info = VGroup()
         with self.voiceover(
-            "Hamilton's jars hold a discrete hidden state. Rudolf Kalman's filter of 1960 does the same for a "
-            "continuous one, like volatility. Hold a belief about today's hidden log volatility: a bell curve, its "
+            "Kalman's filter of 1960 does for a continuous hidden state what Hamilton's jars do for a discrete one. Hold a belief about today's hidden log volatility: a bell curve, its "
             "centre the best guess, its width the uncertainty. <bookmark mark='a'/> Predict: overnight the hidden "
             "level may have drifted, so the bell widens. <bookmark mark='b'/> Observe: today's realized volatility "
             "arrives, a measurement with its own, wider bell of noise. <bookmark mark='c'/> Update: multiply the two "
@@ -102,8 +101,7 @@ class Kalman(VoiceoverScene):
         pc = pause_card(r"If the measurement gets noisier ($r$ up), does the belief move more or less toward each dot?",
                         width=5.6, font_size=21).to_corner(DR, buff=0.35)
         with self.voiceover(
-            "The derivation. The hidden level drifts with variance q; the measurement adds noise of variance r. "
-            "Predicting adds q to the variance. <bookmark mark='a'/> Bayes multiplies the prior by the likelihood of "
+            "The derivation. The hidden level drifts with variance q, the measurement adds noise r, and predicting adds q. <bookmark mark='a'/> Bayes multiplies the prior by the likelihood of "
             "the measurement, <bookmark mark='b'/> and completing the square gives the rules: precisions add, and the "
             "mean moves by the gain K, the prior variance over the prior plus the noise. <bookmark mark='c'/> In "
             "steady state, the widening each night and the narrowing each day balance, and the gain depends only on "

@@ -3,106 +3,258 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant9.common import ALT, ARB, CALL, FWD, PART, PUT, Q_C, load, real_data
+from videos.quant.quant9.common import (ALT, ARB, CALL, FWD, HEDGE, PART, PUT, Q_C, answer_under, load, pause_at,
+                                        real_data)
 
 
-class MOT(VoiceoverScene):
+class MOT(VoiceoverScene, ThreeDScene):
     def construct(self):
-        m = load("mot")
+        m, du, cl = load("mot"), load("mot_dual"), load("mot_claims")
         self.card()
-        self.problem()
-        self.bounds(m)
+        self.problem(m)
+        self.dual()
+        self.hedge3d(du)
+        self.bounds(m, cl)
+        self.predict(cl)
 
     def card(self):
-        c = chapter_card(7, r"Bounds without a model", r"What do vanilla prices alone imply for exotic ones?",
-                         part=PART)
-        with self.voiceover("Chapter seven. Bounds without a model."):
+        c = chapter_card(15, r"Bounds without a model", r"What do vanilla prices alone imply for exotic ones?",
+                         lit=(1998,), part=PART)
+        with self.voiceover("Chapter fifteen. Bounds without a model."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def problem(self):
-        rows = [cmath(r"\sup_{\pi}\ / \inf_{\pi}", r"\ ", r"\sum_{i,j} \pi_{ij}\, c(x_i, y_j)", font_size=36,
-                      colors={r"\sup_{\pi}\ / \inf_{\pi}": ALT}),
-                cmath(r"\sum_j \pi_{ij} = \mu_i,\ \ \sum_i \pi_{ij} = \nu_j", r",", r"\sum_j \pi_{ij}\,(y_j - x_i) = 0",
-                      font_size=34, colors={r"\sum_j \pi_{ij}\,(y_j - x_i) = 0": Q_C})]
-        whys = [why(r"a claim on the price at two dates, $c(S_1, S_2)$: its price depends on how the two are joined, "
-                    r"which vanilla options do not reveal"),
-                why(r"but any joining must match both expiries' densities, and be a martingale (no arbitrage): the "
-                    r"range is a linear program (Hobson 1998; Beiglb\"ock, Henry-Labord\`ere and Penkner 2013)")]
-        step = ladder(self, rows, whys, keep=2, top=2.6, x=-0.6, buff=1.0, edge=6.9)
+    def problem(self, m):
+        x, mu, y, nu = (np.asarray(m[k]) for k in ("x", "mu", "y", "nu"))
+        ks = np.linspace(0.4, 1.8, 141)
+        c1 = np.array([np.dot(mu, np.maximum(x - k, 0)) for k in ks])
+        c2 = np.array([np.dot(nu, np.maximum(y - k, 0)) for k in ks])
+        g = axes([0.4, 1.8], [0, 0.62], x_length=5.6, y_length=3.8, xlabel=r"strike, over the forward",
+                 ylabel=r"call price, over the forward", xticks=[0.5, 1.0, 1.5], yticks=[0, 0.2, 0.4, 0.6],
+                 font_size=15)
+        g.to_edge(LEFT, buff=0.5).shift(DOWN * 0.4)
+        ax = g.ax
+        k1 = curve(ax, ks, c1, ALT, stroke_width=4)
+        k2 = curve(ax, ks, c2, Q_C, stroke_width=4)
+        lg = legend([(ALT, rf"first expiry, {m['T1'] * 365:.0f} days"), (Q_C, rf"second expiry, {m['T2'] * 365:.0f} days")],
+                    font_size=17).next_to(g, UP, buff=0.1).align_to(g, LEFT)
+        rows = [cmath(r"\sup_\pi / \inf_\pi", r"\ ", r"\sum_{i,j}\pi_{ij}\, c(x_i, y_j)", font_size=32,
+                      colors={r"\sup_\pi / \inf_\pi": ALT}),
+                cmath(r"\sum_j \pi_{ij} = \mu_i,\ \sum_i \pi_{ij} = \nu_j", r",", r"\sum_j \pi_{ij}(y_j - x_i) = 0",
+                      font_size=30, colors={r"\sum_j \pi_{ij}(y_j - x_i) = 0": Q_C}),
+                cmath(r"\text{feasible}", r"\iff", r"\mu \le_{cx} \nu:\ \int (y - k)^+ d\nu \ge \int (x - k)^+ d\mu\ "
+                      r"\forall k", font_size=28, colors={r"\text{feasible}": Q_C})]
+        whys = [side_why_(r"a claim on the prices at two dates; its price depends on how the two are joined"),
+                side_why_(r"every joining must match both marginals, which the vanilla options fix (chapter 12), and be "
+                          r"a martingale (no arbitrage)"),
+                side_why_(r"a martingale with these marginals exists exactly when the later call curve lies above the "
+                          r"earlier one at every strike (Strassen 1965)")]
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=3.6, buff=0.55, edge=6.95)
         with self.voiceover(
-            "The density gives each expiry on its own. A claim that depends on the price at two dates, like a "
-            "forward-starting option, depends on how the two dates are joined, and vanilla prices are silent about "
-            "that. <bookmark mark='a'/> But not completely silent. Any joint distribution must match both densities, "
-            "and, because there is no arbitrage, the later price must be a fair game given the earlier one. Over all "
-            "such joinings, the claim's price has a highest and a lowest value, and finding them is a linear "
-            "program: martingale optimal transport, from David Hobson in 1998 and Mathias Beiglböck, Pierre "
-            "Henry-Labordère and Friedrich Penkner in 2013."
+            "The density fixes each expiry on its own. A claim on the price at two dates, like a forward-starting "
+            "option, depends on how the two are joined, and vanilla prices say nothing about that. Here are the "
+            "call prices at the Surface's two expiries, sixteen and a hundred and seven days, against strike. "
+            "<bookmark mark='a'/> Over all joint distributions, the claim's price has a highest and lowest value. "
+            "<bookmark mark='b'/> But not every joining is allowed: it must match both densities, and the second "
+            "price must be a fair game given the first. <bookmark mark='c'/> Such a martingale exists exactly when "
+            "the later call curve lies above the earlier one at every strike, as it does here. Volker Strassen "
+            "proved that in 1965. The problem is then a linear program: martingale optimal transport."
+        ) as vo:
+            self.play(FadeIn(g), Create(k1), Create(k2), FadeIn(lg))
+            vo.wait_until("a")
+            step(0)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            self.play(Indicate(k2, color=Q_C, scale_factor=1.0))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def dual(self):
+        rows = [cmath(r"\inf_{u,v,h}\ ", r"\ ", r"\sum_i u_i\mu_i + \sum_j v_j\nu_j", font_size=34,
+                      colors={r"\inf_{u,v,h}\ ": HEDGE}),
+                cmath(r"u(x) + v(y) + h(x)(y - x)", r"\ge", r"c(x, y)\quad \forall x, y", font_size=34,
+                      colors={r"u(x) + v(y) + h(x)(y - x)": HEDGE}),
+                cmath(r"\sum \pi\, c", r"\le", r"\sum \pi\,(u + v + h\,(y - x)) = \sum u\mu + \sum v\nu", font_size=32),
+                cmath(r"\sup_\pi \sum \pi\, c", r"=", r"\inf_{u,v,h} \Big(\sum u\mu + \sum v\nu\Big)", font_size=34,
+                      colors={r"\inf_{u,v,h} \Big(\sum u\mu + \sum v\nu\Big)": HEDGE})]
+        whys = [why(r"a multiplier for each constraint: $u_i$ for the first marginal, $v_j$ the second, $h_i$ the "
+                    r"martingale condition", 21),
+                why(r"read as trades: a static portfolio of first-expiry vanillas $u$, second-expiry vanillas $v$, and "
+                    r"$h(S_1)$ units of the underlying held from the first date to the second", 21),
+                why(r"weak duality: integrate the inequality against any feasible $\pi$; the $h$ term vanishes by the "
+                    r"martingale constraint", 21),
+                why(r"strong duality (Beiglb\"ock, Henry-Labord\`ere and Penkner 2013): the bound is the price of the "
+                    r"cheapest model-free super-hedge", 21)]
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.4, buff=0.6, edge=6.9)
+        t = history_card(2014, r"Galichon, Henry-Labord\`ere and Touzi", r"in continuous time the dual is a stochastic "
+                         r"control problem: the hedger chooses the delta through time", width=5.6, font_size=19)
+        t.to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "Every linear program has a dual, and this one's is a trading strategy. Give each constraint a "
+            "multiplier: u for the first density, v for the second, h for the martingale condition. "
+            "<bookmark mark='a'/> The dual's constraint reads as a hedge: hold a portfolio of first-expiry options "
+            "paying u, second-expiry options paying v, and between the two dates hold h of the underlying, an amount "
+            "chosen when the first price is known. It must pay at least the claim, whatever happens. "
+            "<bookmark mark='b'/> Weak duality is one line: integrate the inequality against any allowed joining; "
+            "the trading term averages to zero because the joining is a martingale. <bookmark mark='c'/> And strong "
+            "duality, proved for this problem by Mathias Beiglböck, Pierre Henry-Labordère and Friedrich Penkner in "
+            "2013: the highest model price equals the cost of the cheapest model-free super-hedge. Alfred Galichon, "
+            "Henry-Labordère and Nizar Touzi showed in 2014 that in continuous time the dual becomes a stochastic "
+            "control problem."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
-        self.wait(0.4)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            self.play(FadeIn(t))
+        self.wait(0.3)
         self.clear_scene()
 
-    def bounds(self, m):
+    def hedge3d(self, du):
+        x, y = np.asarray(du["x"]), np.asarray(du["y"])
+        up = du["up"]
+        u, v, h = (np.asarray(up[k]) for k in ("u", "v", "h"))
+        pi = np.asarray(up["pi"])
+        X0, X1, Y0, Y1 = 0.7, 1.4, 0.5, 1.8
+        Z1 = 1.0
+
+        def pay(a, b):
+            return abs(b / a - 1)
+
+        def hedge(a, b):
+            return float(np.interp(a, x, u) + np.interp(b, y, v) + np.interp(a, x, h) * (b - a))
+
+        ax = ThreeDAxes(x_range=[X0, X1, 0.1], y_range=[Y0, Y1, 0.2], z_range=[0, Z1, 0.25], x_length=6.0,
+                        y_length=7.0, z_length=3.2, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+        ax.shift(DOWN * 0.3)
+        lift = ValueTracker(0.6)
+        P = Surface(lambda a, b: ax.c2p(a, b, min(pay(a, b), Z1)), u_range=[X0, X1], v_range=[Y0, Y1],
+                    resolution=(18, 22), fill_opacity=0.55, checkerboard_colors=[PUT, interpolate_color(
+                        ManimColor(PUT), ManimColor(BACKGROUND), 0.3)], stroke_width=0.3, stroke_color=PUT)
+
+        def hsurf():
+            dz = lift.get_value()
+            return Surface(lambda a, b: ax.c2p(a, b, float(np.clip(hedge(a, b) + dz, 0, Z1 + 0.6))),
+                           u_range=[X0, X1], v_range=[Y0, Y1], resolution=(14, 16), fill_opacity=0.35,
+                           checkerboard_colors=[HEDGE, interpolate_color(ManimColor(HEDGE), ManimColor(BACKGROUND), 0.4)],
+                           stroke_width=0.3, stroke_color=HEDGE)
+
+        H = always_redraw(hsurf)
+        cont = VGroup(*[Dot3D(ax.c2p(x[i], y[j], min(pay(x[i], y[j]), Z1)), radius=0.05, color=Q_C, resolution=(4, 4))
+                        for i in range(len(x)) for j in range(len(y)) if pi[i, j] > 1e-4 and X0 <= x[i] <= X1
+                        and Y0 <= y[j] <= Y1])
+        floor = VGroup(*[Dot(ax.c2p(x[i], y[j], 0), radius=0.03 + 0.12 * np.sqrt(pi[i, j] / pi.max()), color=Q_C)
+                         .set_opacity(0.7) for i in range(len(x)) for j in range(len(y))
+                         if pi[i, j] > 1e-4 and X0 <= x[i] <= X1 and Y0 <= y[j] <= Y1])
+        names = VGroup(label(r"red: the claim $|S_2/S_1 - 1|$", font_size=22, color=PUT),
+                       label(r"gold: the hedge $u(S_1) + v(S_2) + h(S_1)(S_2 - S_1)$", font_size=22, color=HEDGE),
+                       label(r"purple: where the dearest model puts its mass", font_size=22, color=Q_C)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.3)
+        axn = label(r"axes: $S_1/F_1$ across, $S_2/F_2$ deep, payoff up", font_size=19, color=GREY_B).to_corner(DL,
+                                                                                                         buff=0.3)
+        val = MathTex(rf"\text{{hedge cost }} = \sum u\mu + \sum v\nu = {up['dual_value']:.4f}", font_size=30,
+                      color=HEDGE).to_corner(UR, buff=0.35)
+        self.set_camera_orientation(phi=64 * DEGREES, theta=-130 * DEGREES, zoom=0.8)
+        self.add_fixed_in_frame_mobjects(names, axn, val)
+        self.remove(names, axn, val)
+        with self.voiceover(
+            "Here is the dual in three dimensions. The floor is every pair of prices, the first expiry across and "
+            "the second in depth. The red surface is the claim, the absolute return between the dates: a valley "
+            "along the diagonal where the price doesn't move, rising on both sides. <bookmark mark='a'/> The gold "
+            "surface is the optimal hedge from the linear program's dual: options on both dates plus one dynamic "
+            "trade. It starts high, safely above the claim. <bookmark mark='b'/> Lower it. It comes to rest on the "
+            "claim without ever passing through it. Its cost is the upper bound. <bookmark mark='c'/> And where does "
+            "it touch? The purple dots are where the most expensive model, the primal solution, puts its probability. "
+            "They sit exactly on the contact set. The extreme model lives where the cheapest hedge is tight: that is "
+            "complementary slackness, seen."
+        ) as vo:
+            self.play(Create(ax), FadeIn(names[0]), FadeIn(axn), run_time=1.5)
+            self.play(Create(P), run_time=2.5)
+            vo.wait_until("a")
+            self.add(H)
+            self.play(FadeIn(names[1]))
+            self.begin_ambient_camera_rotation(rate=0.08)
+            vo.wait_until("b")
+            self.play(lift.animate.set_value(0.0), run_time=3.0, rate_func=smooth)
+            self.play(FadeIn(val))
+            vo.wait_until("c")
+            self.play(FadeIn(cont), FadeIn(floor), FadeIn(names[2]))
+        self.stop_ambient_camera_rotation()
+        H.clear_updaters()
+        self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0,
+                         added_anims=[FadeOut(VGroup(ax, P, H, cont, floor)), FadeOut(names), FadeOut(axn),
+                                      FadeOut(val)], run_time=1.5)
+        self.clear_scene()
+
+    def bounds(self, m, cl):
         lo, up, model = m["lower"], m["upper"], m["model"]
-        g = axes([0.10, 0.24], [0, 1], x_length=6.4, y_length=1.2, xlabel=r"price of the forward-start straddle, as a "
-                 r"fraction of the price at the first expiry", xticks=[0.10, 0.14, 0.18, 0.22], yticks=[], font_size=16)
-        g.to_edge(UP, buff=0.8).to_edge(LEFT, buff=0.8)
+        g = axes([0.10, 0.24], [0, 1], x_length=6.4, y_length=1.2, xlabel=r"forward-start straddle, as a fraction of "
+                 r"the price at the first expiry", xticks=[0.10, 0.14, 0.18, 0.22], yticks=[], font_size=16)
+        g.to_edge(UP, buff=0.7).to_edge(LEFT, buff=0.8)
         ax = g.ax
-        band = Rectangle(width=ax.c2p(up, 0)[0] - ax.c2p(lo, 0)[0], height=0.5, stroke_width=0, fill_color=ALT,
-                         fill_opacity=0.5).move_to((ax.c2p(lo, 0.5) + ax.c2p(up, 0.5)) / 2)
+        band_ = Rectangle(width=ax.c2p(up, 0)[0] - ax.c2p(lo, 0)[0], height=0.5, stroke_width=0, fill_color=ALT,
+                          fill_opacity=0.5).move_to((ax.c2p(lo, 0.5) + ax.c2p(up, 0.5)) / 2)
         bl = MathTex(f"{lo:.3f}", font_size=26, color=ALT).next_to(ax.c2p(lo, 0.5), UP, buff=0.35)
         bu = MathTex(f"{up:.3f}", font_size=26, color=ALT).next_to(ax.c2p(up, 0.5), UP, buff=0.35)
         md = Line(ax.c2p(model, 0.15), ax.c2p(model, 0.85), color=CALL, stroke_width=5)
         ml = MathTex(rf"\text{{log-normal: }} {model:.3f}", font_size=24, color=CALL).next_to(md, DOWN, buff=0.45)
-        pl, pu = np.asarray(m["pi_lower"]), np.asarray(m["pi_upper"])
-        x, y = np.asarray(m["x"]), np.asarray(m["y"])
-        top = max(pl.max(), pu.max())
-
-        def coupling(pi, title):
-            ga = axes([0.5, 1.6], [0.3, 2.2], x_length=3.0, y_length=2.6, xlabel=r"$S_1 / F_1$", ylabel=r"$S_2 / F_2$",
-                      xticks=[0.6, 1.0, 1.4], yticks=[0.5, 1.0, 1.5, 2.0], font_size=14)
-            dots = VGroup(*[Dot(ga.ax.c2p(x[i], y[j]), radius=0.11 * np.sqrt(pi[i, j] / top), color=Q_C).set_opacity(0.85)
-                            for i in range(len(x)) for j in range(len(y)) if pi[i, j] > 1e-5 and 0.5 < x[i] < 1.6
-                            and 0.3 < y[j] < 2.2])
-            diag = DashedLine(ga.ax.c2p(0.5, 0.5), ga.ax.c2p(1.6, 1.6), color=GREY_C, stroke_width=1.2)
-            return VGroup(label(title, font_size=19, color=GREY_A), VGroup(ga, diag, dots)).arrange(DOWN, buff=0.1)
-
-        hb = VGroup(coupling(pl, r"the cheapest joining"), coupling(pu, r"the dearest joining")).arrange(RIGHT, buff=0.6)
-        hb.to_edge(DOWN, buff=0.65).to_edge(LEFT, buff=0.8)
-        axes_note = label(r"dot area: probability of each pair of prices", font_size=17, color=GREY_B).next_to(
-            hb, UP, buff=0.05).align_to(hb, LEFT)
+        tab = VGroup(*[VGroup(label(n, font_size=21, color=c), MathTex(t, font_size=26, color=c)).arrange(RIGHT, buff=0.3)
+                       for n, t, c in (
+                           (r"forward-start straddle $|R - 1|$", rf"[{cl['straddle']['lower']:.4f},\ "
+                                                                 rf"{cl['straddle']['upper']:.4f}]", ALT),
+                           (r"forward-start call $(R - 1)^+$", rf"[{cl['fwd_call']['lower']:.4f},\ "
+                                                               rf"{cl['fwd_call']['upper']:.4f}]", CALL),
+                           (r"$(S_2 - S_1)^2$", rf"[{cl['sq']['lower']:.5f},\ {cl['sq']['upper']:.5f}]", Q_C),
+                           (r"$(\ln S_2/S_1)^2$", rf"[{cl['logsq']['lower']:.4f},\ {cl['logsq']['upper']:.4f}]", FWD))])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(g, DOWN, buff=1.0).align_to(g, LEFT)
         side = VGroup(
-            label(r"$|S_2 / S_1 - 1|$ between the Surface's two expiries", font_size=21, color=GREY_A),
-            wrapped_label(rf"no arbitrage and today's vanilla prices pin it between {lo:.3f} and {up:.3f}; a model "
-                          rf"with independent log-normal returns (forward volatility {100 * m['fwd_vol']:.0f}\%) says "
-                          rf"{model:.3f}", 4.2, 20, GREY_A),
-            wrapped_label(r"the cheapest joining moves little: it keeps the second price close to the first where it "
-                          r"can; the dearest spreads it as far as the densities allow", 4.2, 20, Q_C),
-            wrapped_label(r"a dealer quoting outside the band is arbitrageable with vanilla options alone; inside it, "
-                          r"the price is a choice of model (Parts 12 to 14)", 4.2, 20, CALL),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
-        src = real_data(r"densities from the Surface (chapter 5), 25 and 81 atoms; the House's \texttt{mot\_bounds} (HiGHS)")
+            wrapped_label(r"the forward-start call's band is exactly half the straddle's: $(R - 1)^+ = \tfrac12(|R - 1| "
+                          r"+ (R - 1))$ and $R - 1$ has mean zero given $S_1$", 4.6, 19, CALL),
+            wrapped_label(r"Hobson (1998) solved the first case of this kind, the lookback, by the Az\'ema--Yor "
+                          r"embedding; Part 15 prices exotics inside such bands", 4.6, 19, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.6)
+        src = real_data(r"densities from the Surface, 25 and 81 atoms; the House's \texttt{mot\_bounds} (HiGHS)")
         with self.voiceover(
-            "Here it is on the Surface. The claim pays the absolute return of Bitcoin between the two expiries of "
-            "chapter five: a forward-starting straddle. <bookmark mark='a'/> Joining the two densities in every way "
-            f"that respects no arbitrage, its price must lie between {lo:.3f} and {up:.3f}, as a fraction of the "
-            "price at the first expiry. A model with independent log-normal returns, at the forward volatility the "
-            f"Surface implies, says {model:.3f}: inside the band, as it must be. <bookmark mark='b'/> The two "
-            "extreme joinings show why. The cheapest keeps the second price as close to the first as it can; the "
-            "dearest spreads it as far as both densities allow. <bookmark mark='c'/> A dealer quoting outside this "
-            "band can be arbitraged with vanilla options alone. Inside it, the price is a choice of model, and "
-            "Parts twelve to fourteen are about making that choice well."
+            "The numbers. The forward-start straddle, the absolute return between the Surface's two expiries: no "
+            f"arbitrage and today's vanilla prices pin it between {lo:.3f} and {up:.3f}, as a fraction of the first "
+            "price. <bookmark mark='a'/> A model with independent log-normal returns, at the forward volatility the "
+            f"Surface implies, says {model:.3f}: inside the band, as any arbitrage-free model must be. "
+            "<bookmark mark='b'/> Other claims on the same pair of dates. The forward-start call's band is exactly "
+            "half the straddle's, because the claim is half the straddle plus a term with mean zero. And the squared "
+            "change in price has a band of zero width. <bookmark mark='c'/> David Hobson found the first model-free "
+            "bound of this kind in 1998, for the lookback option; Part fifteen prices exotics inside bands like these."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(side[0]), FadeIn(src))
+            self.play(FadeIn(g), FadeIn(src), FadeIn(band_), FadeIn(bl), FadeIn(bu))
             vo.wait_until("a")
-            self.play(FadeIn(band), FadeIn(bl), FadeIn(bu), FadeIn(side[1]))
             self.play(Create(md), FadeIn(ml))
             vo.wait_until("b")
-            self.play(FadeIn(hb), FadeIn(axes_note), FadeIn(side[2]))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab], lag_ratio=0.3), FadeIn(side[0]), run_time=2.5)
             vo.wait_until("c")
-            self.play(FadeIn(side[3]))
+            self.play(FadeIn(side[1]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def predict(self, cl):
+        card = pause_at(r"Why is the band for $(S_2 - S_1)^2$ a single number?")
+        with self.voiceover(
+            "Pause and predict. Why is the band for the squared price change a single number? "
+            "<bookmark mark='a'/> Expand the square. For any martingale, the cross term's expectation is the "
+            "expected square of the first price, so the claim's value is the second moment at the second date minus "
+            "the second moment at the first, and both are fixed by the vanilla options. Every allowed model agrees."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(answer_under(card, rf"$\mathbb{{E}}[(S_2 - S_1)^2] = \mathbb{{E}}[S_2^2] - \mathbb{{E}}[S_1^2]$ for "
+                                                rf"any martingale: both marginals fix it ({cl['sq_exact']:.5f})")))
         self.wait(0.4)
         self.clear_scene()
+
+
+def side_why_(text):
+    return wrapped_label(text, 5.8, 18, GREY_B)

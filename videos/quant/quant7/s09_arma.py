@@ -55,14 +55,13 @@ class Arma(VoiceoverScene):
                                r"$x_{t-k}$ depends only on the lag $k$, not on $t$", width=7.4, font_size=22)
         defn.next_to(g, DOWN, buff=0.35).align_to(g, LEFT)
         with self.voiceover(
-            "Start with the simplest series that remembers. Each step, keep a fraction phi of yesterday's value and add "
-            "a fresh shock. With phi at zero, every step is new noise. <bookmark mark='a'/> Turn phi up to a half: the "
+            "The simplest series that remembers: keep a fraction phi of yesterday's value, add a fresh shock. At "
+            "phi zero, pure noise. <bookmark mark='a'/> Turn phi up to a half: the "
             "path smooths, and its autocorrelation decays geometrically, phi to the power of the lag. <bookmark "
             "mark='b'/> At zero point nine the series wanders in long swings, and its variance has grown five-fold. "
             "<bookmark mark='c'/> At zero point nine nine, a shock takes almost seventy steps to lose half its effect. "
-            "It is like a ball on a spring, kicked by shocks: phi is how weak the spring is. As long as phi is below "
-            "one, the series is stationary: its mean and variance stay put, and its correlations depend only on the "
-            "lag."
+            "It is a ball on a spring, kicked by shocks. While phi is below one the series is stationary: its "
+            "mean and variance stay put, and its correlations depend only on the lag."
         ) as vo:
             self.play(FadeIn(g), FadeIn(ga), FadeIn(ro))
             self.add(line, bars)
@@ -103,10 +102,10 @@ class Arma(VoiceoverScene):
             "a geometric series, sigma squared over one minus phi squared. <bookmark mark='b'/> Multiply by the value "
             "k steps back and take expectations: the autocorrelation is phi to the k. <bookmark mark='c'/> Iterate "
             "forward, and the forecast decays toward the mean at the same rate, which gives the half-life. <bookmark "
-            "mark='d'/> And to test whether anything is left to model, Greta Ljung and George Box summed the squared "
-            "autocorrelations of the residuals: under white noise, a chi-squared. <bookmark mark='e'/> Herman Wold "
-            "proved in 1938 that every stationary series is a moving average of its past surprises; an ARMA model "
-            "just writes those weights with a few numbers."
+            "mark='d'/> To test whether anything is left, Greta Ljung and George Box summed the squared "
+            "autocorrelations of the residuals: a chi-squared under white noise. <bookmark mark='e'/> And Herman Wold "
+            "proved in 1938 that every stationary series is a moving average of its past surprises; ARMA writes those "
+            "weights compactly."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -156,8 +155,8 @@ class Arma(VoiceoverScene):
             "slowly, but its partial autocorrelations, the correlation left after accounting for shorter lags, stop "
             "dead after lag p. A moving average is the mirror image: its autocorrelations stop after lag q. <bookmark "
             "mark='a'/> Box and Jenkins turned that into a loop. Identify a candidate from the fingerprints, estimate "
-            "it, check the residuals with the Ljung-Box test, and go round again until nothing is left. The same "
-            "information can be read in frequency, as a spectrum; this part stays in time."
+            "it, check the residuals with the Ljung-Box test, and go round again until nothing is left. The spectrum "
+            "carries the same information in frequency; this part stays in time."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(p_) for p_ in grid], lag_ratio=0.3, run_time=3))
             vo.wait_until("a")
@@ -179,7 +178,7 @@ class Arma(VoiceoverScene):
         self.play(FadeIn(card))
         best = a["best"]
         with self.voiceover(
-            "Lab. Here is the House's autoregression: a matrix of lagged values, and least squares. Run it on the "
+            "Lab. The House's autoregression: lagged values and least squares. Run it on the "
             f"logarithm of the VIX, {a['n_vix']:,} trading days from 1990 to 2020. <bookmark mark='a'/> Phi comes out "
             f"at {a['ar1_phi']:.3f}: fear decays with a half-life of about {a['ar1_half_life']:.0f} trading days."
         ) as vo:
@@ -210,11 +209,10 @@ class Arma(VoiceoverScene):
         pc.to_corner(DL, buff=0.35)
         ratio = lb["sq"]["Q"] / lb["r"]["Q"]
         with self.voiceover(
-            "Now fit the candidates and let the Akaike criterion choose. "
-            f"ARMA({best['p']},{best['q']}) wins, but its residuals still fail the Ljung-Box test: the VIX remembers "
-            "longer than any small ARMA can say, a hint of the long memory that HAR will capture. <bookmark mark='a'/> "
-            "Last, the door to the rest of this part. Run Ljung-Box on ninety-four years of daily returns: "
-            f"Q is {lb['r']['Q']:.0f}, a small but real autocorrelation, mostly from the early decades. On squared "
+            "Let the Akaike criterion choose among candidates. "
+            f"ARMA({best['p']},{best['q']}) wins, but its residuals still fail the Ljung-Box test: the VIX remembers longer than any small ARMA, a hint of the long memory HAR will capture. <bookmark mark='a'/> "
+            "Last, Ljung-Box on ninety-four years of daily returns: "
+            f"Q is {lb['r']['Q']:.0f}, a small but real autocorrelation. On squared "
             f"returns, Q is {lb['sq']['Q']:,.0f}, about {ratio:.0f} times larger. The level barely remembers; the "
             "size remembers enormously. <bookmark mark='b'/> Pause and predict: as phi goes to one, what happens to "
             "the variance and the half-life? Both go to infinity, and that is the next chapter."

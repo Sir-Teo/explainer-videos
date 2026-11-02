@@ -42,18 +42,14 @@ class BSDE(VoiceoverScene):
                     r"Warin 2005)", font_size=21)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.2, buff=0.72, edge=6.9)
         with self.voiceover(
-            "The control problems so far ran forward in time and were solved backwards. A backward stochastic "
-            "differential equation makes that the definition. Find a pair of processes, Y and Z, that use only "
-            "information available at each time and end at a given payoff. Étienne Pardoux and Shige Peng proved in "
-            "1990 that the pair exists and is unique. <bookmark mark='a'/> With a linear driver, Y is the "
-            "Black-Scholes price and Z is the hedge: Nicole El Karoui, Peng and Marie-Claire Quenez showed in 1997 "
-            "that pricing and hedging are exactly this. <bookmark mark='b'/> The point is the nonlinear case. "
-            "Suppose the hedger borrows at R, six percent, and lends at r, one percent. The driver gains a term that "
-            "switches on only when the hedge's cash account is negative, and the price is no longer linear in the "
-            "payoff. The comparison theorem says a larger driver gives a larger price, so it is at least the "
-            "Black-Scholes price at the lending rate. "
-            "<bookmark mark='c'/> To solve it, simulate the stock forward, then step backwards, replacing each "
-            "conditional expectation by a regression across the simulated paths."
+            "A backward stochastic differential equation makes solving backwards the definition: find processes Y and Z, "
+            "using only information available at each time, that end at a given payoff. Pardoux and Peng proved in 1990 that "
+            "they exist and are unique. <bookmark mark='a'/> With a linear driver, Y is the Black-Scholes price and Z the "
+            "hedge: El Karoui, Peng and Quenez, 1997. <bookmark mark='b'/> Now borrow at six percent and lend at one. The "
+            "driver gains a term that switches on when the hedge's cash is negative, and pricing is no longer linear; by "
+            "the comparison theorem the price is at least Black-Scholes at the lending rate. <bookmark mark='c'/> To solve "
+            "it, simulate forward, then step backwards, replacing each conditional expectation by a regression across "
+            "paths."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -98,16 +94,12 @@ class BSDE(VoiceoverScene):
         q = pause_card(r"Will the two-rate price lie between Black--Scholes at 1\% and at 6\%?", width=5.0,
                        font_size=20).next_to(g1, UP, buff=0.3).align_to(g1, LEFT)
         with self.voiceover(
-            "Here is the scheme running, on a call spread: long a call at ninety-five, short two at a hundred and "
-            "five, half a year. First twenty thousand stock paths are simulated forward. <bookmark mark='a'/> Then, "
-            "backwards from the last step: at each step, the grey cloud is the next step's value on each path, "
-            "plotted against today's stock price. The regression through the cloud is the conditional expectation, "
-            "and after the driver's correction it becomes the value one step earlier, which feeds the next cloud. "
-            "Watch the payoff's corners round off as we move toward today. <bookmark mark='b'/> Pause and predict: "
-            "will the price lie between the Black-Scholes prices at one and at six percent? <bookmark mark='c'/> At "
-            f"the start the cloud collapses to a point: {rp['Y0']:.3f}, above both, {rp['bs_r']:.3f} and "
-            f"{rp['bs_R']:.3f}. The spread's hedge borrows in some states and lends in others, and each side is "
-            "charged its own rate: no single interest rate reproduces that."
+            "Here it runs on a call spread, long one call at ninety-five, short two at a hundred and five, over twenty "
+            "thousand paths. <bookmark mark='a'/> Backwards from the end: each grey cloud is the next value on every path "
+            "against today's stock; the regression through it, corrected by the driver, becomes the value one step earlier. "
+            "The payoff's corners round off. <bookmark mark='b'/> Pause and predict: will the price lie between the two "
+            f"Black-Scholes prices? <bookmark mark='c'/> No: {rp['Y0']:.3f}, above both, {rp['bs_r']:.3f} and "
+            f"{rp['bs_R']:.3f}. The hedge borrows in some states and lends in others, each at its own rate."
         ) as vo:
             self.play(FadeIn(g1), LaggedStart(*[Create(p_) for p_ in paths], lag_ratio=0.03, run_time=2.5))
             vo.wait_until("a")
@@ -149,12 +141,10 @@ class BSDE(VoiceoverScene):
                           4.0, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Repeat with more paths. The regression answer converges, as the paths increase, to "
-            f"{b['pde']:.3f}, the price from the nonlinear partial differential equation, solved separately. "
-            "<bookmark mark='a'/> One lesson from building it: a smooth polynomial basis cannot follow the payoff's "
-            f"corners and lands low, at {b['poly']:.3f}; local hat functions fix it. And with neural networks in "
-            "place of the regression, Han, Jentzen and E solved such equations in a hundred dimensions in 2018, "
-            "where no grid can reach. Part seventeen trains one."
+            "With more paths it converges to "
+            f"{b['pde']:.3f}, the nonlinear PDE's price. <bookmark mark='a'/> A smooth polynomial basis cannot follow the "
+            f"payoff's corners and lands at {b['poly']:.3f}; local hat functions fix it. Han, Jentzen and E solved such "
+            "equations in a hundred dimensions with neural networks in 2018; Part seventeen trains one."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lines))
             self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.3), FadeIn(side[0]), run_time=2)

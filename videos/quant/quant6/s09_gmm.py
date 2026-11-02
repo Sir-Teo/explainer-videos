@@ -63,21 +63,16 @@ class GMM(VoiceoverScene):
         dens = curve(cg.ax, xs, np.minimum(sst.chi2.pdf(xs, 1), 1.2), GREY_B, stroke_width=2)
         jm = Line(cg.ax.c2p(t["J"], 0), cg.ax.c2p(t["J"], 1.1), color=ALT, stroke_width=4)
         with self.voiceover(
-            "Many theories in finance do not give a likelihood. They give averages that should be zero: moment "
-            "conditions. Lars Peter Hansen built an estimator on exactly that in 1982, and shared the 2013 Nobel "
-            "prize for it. Here is its geometry in the simplest case. Two noisy measurements of one mean: the first "
-            "with a standard deviation of one, the second of two. Each gives a moment: its sample mean minus mu. "
-            "<bookmark mark='a'/> Draw the two sample moments as a point in the plane. Theory says the point should "
-            "be the origin. As mu changes, the point slides along a line. <bookmark mark='b'/> No mu puts it exactly "
-            "at the origin, because the two measures disagree. So pick the point of the line closest to the origin. "
-            "Closest in which metric? With the identity, inflate circles from the origin until one touches the "
-            f"line: the plain average, {th1:.3f}. <bookmark mark='c'/> But the second measure is four times as noisy. "
-            "Hansen's efficient weight is the inverse of the moments' covariance, which stretches the circles into "
-            "ellipses, long along the noisy direction. Inflate again: the touching point slides toward the precise "
-            f"measure, and mu hat is {th2:.3f}. <bookmark mark='d'/> What is left, the distance from the origin in "
-            "that metric, scaled by the sample size, is Hansen's J statistic. With two moments and one parameter it "
-            f"is chi-squared with one degree of freedom: here {t['J']:.2f}, a p-value of {t['p_J']:.2f}. The two "
-            "measures are consistent with one mean."
+            "Many theories give no likelihood, only averages that should be zero: moment conditions. Lars Peter Hansen "
+            "built an estimator on them in 1982, and shared the 2013 Nobel prize for it. Its geometry, in the simplest "
+            "case: two noisy measurements of one mean, standard deviations one and two, each giving a moment, its "
+            "sample mean minus mu. <bookmark mark='a'/> The two moments are a point in the plane; theory says it should "
+            "be the origin; as mu changes, it slides along a line. <bookmark mark='b'/> No mu reaches the origin, so take "
+            "the closest point. With the identity metric, inflate circles until one touches the line: the plain "
+            f"average, {th1:.3f}. <bookmark mark='c'/> But the second measure is four times as noisy. Hansen's efficient "
+            "weight, the inverse covariance of the moments, stretches the circles into ellipses; the touching point "
+            f"slides toward the precise measure: {th2:.3f}. <bookmark mark='d'/> The distance left, scaled by the sample "
+            f"size, is Hansen's J, chi-squared with one degree of freedom: {t['J']:.2f}, p of {t['p_J']:.2f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(origin), FadeIn(ol), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
@@ -124,14 +119,12 @@ class GMM(VoiceoverScene):
                 why(r"$q$ moments, $p$ directions used up fitting $\theta$: what is left is a test of the theory")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.5, buff=0.72, edge=6.8)
         with self.voiceover(
-            "In general, the estimator minimises the moments' length in a metric W. <bookmark mark='a'/> At the "
-            "minimum, the leftover gap is perpendicular, in that metric, to every direction the parameters can "
-            "move the moments. <bookmark mark='b'/> Linearise the moments around the truth and solve: the error is "
-            "a fixed matrix times the moments at the true parameter. <bookmark mark='c'/> So its variance is a "
-            "sandwich again, with S, the long-run variance of the moments from chapter two, as the meat. "
-            "<bookmark mark='d'/> Choose W equal to S inverse and the sandwich collapses: no other weight gives a "
-            "smaller variance. <bookmark mark='e'/> And the leftover, scaled, is chi-squared with as many degrees "
-            "of freedom as there are moments beyond parameters."
+            "In general: minimise the moments' length in a metric W. <bookmark mark='a'/> At the minimum the gap is "
+            "perpendicular, in W, to every direction the parameters can move. <bookmark mark='b'/> Linearise and solve. "
+            "<bookmark mark='c'/> The variance is a sandwich, with S, chapter two's long-run variance of the moments, as "
+            "meat. <bookmark mark='d'/> With W equal to S inverse it collapses: the efficient weight. "
+            "<bookmark mark='e'/> And the scaled leftover is chi-squared, with as many degrees of freedom as moments "
+            "beyond parameters."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -159,12 +152,10 @@ class GMM(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(UP, buff=0.7)
         q = predict(r"Exactly as many moments as parameters. What is $J$?").next_to(rows, DOWN, buff=0.45)
         with self.voiceover(
-            "This is why GMM is the umbrella. Least squares is GMM with moments x times the residual. Instrumental "
-            "variables replace x with an instrument z. Maximum likelihood uses the score as its moments. "
-            "<bookmark mark='a'/> Pause and predict: what is J when there are exactly as many moments as "
-            "parameters? <bookmark mark='b'/> Zero. Every moment can be set exactly to zero, the weight no longer "
-            "matters, and nothing is left over to test. A theory can only be rejected by GMM if it says more than "
-            "the parameters can absorb. The next chapter's theory says a great deal."
+            "GMM is the umbrella: least squares uses x times the residual as moments, instrumental variables an "
+            "instrument times the residual, maximum likelihood the score. <bookmark mark='a'/> Pause and predict: exactly "
+            "as many moments as parameters. What is J? <bookmark mark='b'/> Zero: every moment can be set to zero, and "
+            "nothing is left to test. The next chapter's theory says much more than its parameters can absorb."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(r) for r in rows[:4]], lag_ratio=0.5, run_time=3))
             vo.wait_until("a")

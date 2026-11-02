@@ -3,100 +3,273 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant9.common import ALT, CALL, FWD, PART, PUT, Q_C, load, real_data
+from explainer.zh_text import verbatim
+from videos.quant.quant9.common import (ALT, ARB, CALL, FWD, PART, PUT, Q_C, answer_under, load, pause_at, real_data)
 
 
 class Density(VoiceoverScene):
     def construct(self):
-        d = load("density")
+        b, d = load("butterflies"), load("density")
         self.card()
+        self.fly()
+        self.histogram(b, d)
         self.formula()
-        self.surface(d)
+        self.slider(b, d)
+        self.lab(b)
+        self.predict()
 
     def card(self):
-        c = chapter_card(5, r"The density inside the Surface", r"What does the market think could happen?",
+        c = chapter_card(12, r"Butterflies build the density", r"What does the market think could happen?",
                          part=PART)
-        with self.voiceover("Chapter five. The density inside the Surface."):
+        with self.voiceover("Chapter twelve. Butterflies build the density."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
+    def fly(self):
+        K, h = 100.0, 10.0
+        g = axes([70, 130], [-0.5, 12], x_length=6.2, y_length=4.2, xlabel=r"price at expiry", ylabel=r"payoff",
+                 xticks=[90, 100, 110], yticks=[0, 10], font_size=17)
+        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
+        ax = g.ax
+        xs = np.linspace(70, 130, 241)
+        legs = [np.maximum(xs - (K - h), 0), -2 * np.maximum(xs - K, 0), np.maximum(xs - (K + h), 0)]
+        cum = np.cumsum(legs, axis=0)
+        c1 = curve(ax, xs, np.clip(cum[0], -0.5, 12), CALL, stroke_width=4)
+        c2 = curve(ax, xs, np.clip(cum[1], -0.5, 12), ALT, stroke_width=4)
+        c3 = curve(ax, xs, np.clip(cum[2], -0.5, 12), Q_C, stroke_width=5)
+        tri = Polygon(ax.c2p(90, 0), ax.c2p(100, 10), ax.c2p(110, 0), stroke_width=0, fill_color=Q_C, fill_opacity=0.3)
+        side = VGroup(
+            MathTex(r"C(K - h) - 2C(K) + C(K + h)", font_size=34, color=Q_C),
+            wrapped_label(r"buy a call below, sell two at the strike, buy one above: a tent of height $h$ around $K$, "
+                          r"never negative", 4.8, 21, GREY_A),
+            wrapped_label(r"it pays only if the price ends near $K$: its price is what the market charges for "
+                          r"``ending in this bin'', a state price", 4.8, 21, Q_C),
+            wrapped_label(r"so it can never cost less than nothing: that would be an arbitrage", 4.8, 21, ARB),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.45)
+        with self.voiceover(
+            "Chapter five said the price of a dollar in one state is a state price. With options on many strikes, "
+            "you can buy one. Buy a call at ninety. <bookmark mark='a'/> Sell two at a hundred: the line bends back "
+            "down. <bookmark mark='b'/> Buy one at a hundred and ten: it flattens to zero. The result is a tent, a "
+            "butterfly spread, that pays only if the price ends near a hundred. <bookmark mark='c'/> So its price is "
+            "the market's price of ending in that bin: a state price, the Arrow security of chapter five, built from "
+            "calls. And because the tent is never negative, it can never cost less than nothing."
+        ) as vo:
+            self.play(FadeIn(g), Create(c1), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(ReplacementTransform(c1, c2))
+            vo.wait_until("b")
+            self.play(ReplacementTransform(c2, c3), FadeIn(tri), FadeIn(side[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(side[2]), FadeIn(side[3]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def histogram(self, b, d):
+        F = b["F"]
+        e = d["expiries"][0]
+        K, q = np.asarray(e["K"]), np.asarray(e["density"])
+        ok = (K > 0.7 * F) & (K < 1.3 * F)
+        top = q[ok].max() * 1.15
+        g = axes([0.7 * F, 1.3 * F], [0, top], x_length=8.0, y_length=4.4, xlabel=r"bitcoin price at expiry (\$)",
+                 ylabel=r"butterfly price $/\,h^2$", xticks=[70000, 80000, 90000, 100000, 110000, 120000],
+                 xfmt=lambda u: f"{u / 1000:.0f}k", yticks=[], font_size=16)
+        g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        widths = ["8000", "4000", "2000", "1000", "500"]
+
+        def bars(hs):
+            fl = b["flies"][hs]
+            h = float(hs)
+            out = VGroup()
+            for k_, v in zip(fl["K"], fl["q"]):
+                if not (0.7 * F + h / 2 <= k_ <= 1.3 * F - h / 2):
+                    continue
+                hgt = max(ax.c2p(0, max(v, 0))[1] - ax.c2p(0, 0)[1], 0.005)
+                wdt = ax.c2p(h, 0)[0] - ax.c2p(0, 0)[0]
+                out.add(Rectangle(width=wdt * 0.92, height=hgt, stroke_width=0, fill_color=Q_C,
+                                  fill_opacity=0.6).move_to(ax.c2p(k_, max(v, 0) / 2)))
+            return out
+
+        B = bars(widths[0])
+        bl = curve(ax, K[ok], q[ok], WHITE, stroke_width=3)
+        hl = ValueTracker(8000)
+        hd = DecimalNumber(8000, num_decimal_places=0, group_with_commas=False, font_size=30, color=Q_C)
+        hd.add_updater(lambda m: m.set_value(hl.get_value()))
+        hr = VGroup(label(r"butterfly width $h$, dollars:", font_size=22, color=Q_C), hd).arrange(RIGHT, buff=0.15)
+        hr.to_corner(UR, buff=0.4)
+        side = VGroup(
+            wrapped_label(r"one butterfly per bin, each priced off the Surface's fitted calls, divided by $h^2$", 4.0,
+                          19, GREY_A),
+            wrapped_label(r"white: Breeden and Litzenberger's density, the limit as $h \to 0$", 4.0, 19, WHITE),
+            MathTex(rf"\int q = {b['mass']:.5f},\quad \int s\, q = {b['mean']:,.0f}".replace(",", "{,}"), font_size=24,
+                    color=Q_C),
+            MathTex(rf"F = {F:,.0f}".replace(",", "{,}"), font_size=24, color=FWD),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(hr, DOWN, buff=0.35).align_to(hr, LEFT)
+        src = real_data(rf"the Surface, expiry {b['expiry']}, {b['T'] * 365:.0f} days")
+        with self.voiceover(
+            "Now tile the strike axis with butterflies, on the Surface's Bitcoin options sixteen days from expiry. "
+            "Each bar is one butterfly's price, divided by the square of its width so the bars are comparable: the "
+            "price of ending in that bin, per dollar of bin. <bookmark mark='a'/> Halve the width. And again. The "
+            "bars multiply and thin, and their tops converge onto a smooth curve. <bookmark mark='b'/> That curve is "
+            "the risk-neutral density, the limit Douglas Breeden and Robert Litzenberger identified in 1978. It "
+            f"integrates to {b['mass']:.5f}, and its mean, {b['mean']:,.0f} dollars, is the forward: the density "
+            "prices the forward correctly, as it must."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(B), FadeIn(hr), FadeIn(side[0]), FadeIn(src))
+            vo.wait_until("a")
+            for hs in widths[1:]:
+                self.play(Transform(B, bars(hs)), hl.animate.set_value(float(hs)), run_time=1.3)
+            vo.wait_until("b")
+            self.play(Create(bl), FadeIn(side[1]))
+            self.play(FadeIn(side[2]), FadeIn(side[3]))
+        hd.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
     def formula(self):
         rows = [cmath(r"C(K)", r"=", r"e^{-rT}\int_K^\infty (s - K)\, q(s)\, ds", font_size=36, colors={r"C(K)": CALL}),
-                cmath(r"q(K)", r"=", r"e^{rT}\,\frac{\partial^2 C}{\partial K^2}", font_size=40, colors={r"q(K)": Q_C})]
-        whys = [why(r"a call is an expectation under $Q$ of the payoff above the strike"),
-                why(r"differentiate twice in the strike: the risk-neutral density is the curvature of call prices "
-                    r"(Breeden and Litzenberger 1978); a butterfly spread buys it directly")]
-        step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.6, buff=1.0, edge=6.9)
+                cmath(r"\frac{\partial C}{\partial K}", r"=", r"-e^{-rT}\int_K^\infty q(s)\, ds = -e^{-rT}\,Q(S_T > K)",
+                      font_size=34),
+                cmath(r"\frac{\partial^2 C}{\partial K^2}", r"=", r"e^{-rT} q(K)", font_size=38, colors={r"e^{-rT} q(K)": Q_C}),
+                cmath(r"\frac{C(K - h) - 2C(K) + C(K + h)}{h^2}", r"\to", r"\frac{\partial^2 C}{\partial K^2}",
+                      font_size=34),
+                cmath(r"q \ge 0", r"\iff", r"C\ \text{convex};\quad 0 \le Q(S_T > K) \le 1 \iff -e^{-rT} \le C' \le 0",
+                      font_size=32, colors={r"q \ge 0": Q_C})]
+        whys = [why(r"a call is the discounted $Q$-expectation of its payoff", 21),
+                why(r"differentiate under the integral (Leibniz); the boundary term vanishes at $s = K$: a digital", 21),
+                why(r"once more: the density (Breeden and Litzenberger 1978)", 21),
+                why(r"Taylor: the butterfly is the second difference", 21),
+                why(r"static no-arbitrage is exactly: calls decreasing, no steeper than the bond, and convex in the "
+                    r"strike; no negative call spread, no negative butterfly", 21)]
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "If prices are expectations under Q, then the prices of calls at every strike tell us Q itself. A call "
-            "is the expected payoff above its strike. <bookmark mark='a'/> Differentiate twice with respect to the "
-            "strike and the payoff's kink becomes a spike: the second derivative of call prices is the risk-neutral "
-            "density. Douglas Breeden and Robert Litzenberger showed this in 1978. In trading terms, a tight "
-            "butterfly spread pays only if the price ends near its middle strike, so its price is the density there."
+            "The proof is two derivatives. A call is the discounted Q-expectation of the payoff above the strike. "
+            "<bookmark mark='a'/> Differentiate in the strike: the boundary term vanishes, and the slope of the call "
+            "curve is minus the discounted probability of ending above the strike. That is the price of a digital "
+            "option. <bookmark mark='b'/> Differentiate again: the density itself. <bookmark mark='c'/> And by "
+            "Taylor's theorem, the butterfly, divided by h squared, is the second difference: it converges to the "
+            "second derivative. <bookmark mark='d'/> So the static no-arbitrage conditions are just these: call "
+            "prices fall with the strike, no faster than the bond, and bend upward. No call spread for free, no "
+            "butterfly for free."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
-        self.wait(0.4)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
+        self.wait(0.3)
         self.clear_scene()
 
-    def surface(self, d):
-        a, b = d["expiries"]
-        g1 = axes([50000, 150000], [0.2, 1.2], x_length=5.6, y_length=2.6, ylabel=r"implied volatility",
-                  xticks=[60000, 90000, 120000, 150000], xfmt=lambda u: f"{u / 1000:.0f}k", yticks=[0.4, 0.8, 1.2],
-                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=16)
-        g2 = axes([30000, 180000], [0, 1.0], x_length=5.6, y_length=2.6, ylabel=r"risk-neutral density (scaled)",
-                  xlabel=r"bitcoin price at expiry (\$)", xticks=[50000, 100000, 150000], xfmt=lambda u: f"{u / 1000:.0f}k",
-                  yticks=[], font_size=16)
-        VGroup(g1, g2).arrange(DOWN, buff=0.5).to_edge(LEFT, buff=0.7).shift(DOWN * 0.1)
-        cols = [ALT, Q_C]
-        smiles, dots, dens = VGroup(), VGroup(), VGroup()
-        top = max(max(e["density"]) for e in (a, b))
-        for e, c in zip((a, b), cols):
-            K = np.asarray(e["K"])
-            ok = (K > 50000) & (K < 150000)
-            smiles.add(curve(g1.ax, K[ok], np.clip(np.asarray(e["iv_fit"])[ok], 0.2, 1.2), c, stroke_width=3))
-            kq, iq = np.asarray(e["K_quotes"]), np.asarray(e["iv_quotes"])
-            ok2 = (kq > 50000) & (kq < 150000) & (iq < 1.2)
-            dots.add(VGroup(*[Dot(g1.ax.c2p(x, y), radius=0.035, color=WHITE) for x, y in zip(kq[ok2], iq[ok2])]))
-            ok3 = (K > 30000) & (K < 180000)
-            dens.add(curve(g2.ax, K[ok3], np.asarray(e["density"])[ok3] / top, c, stroke_width=3.5))
-        leg = legend([(ALT, rf"{a['expiry']}: {a['T'] * 365:.0f} days"), (Q_C, rf"{b['expiry']}: {b['T'] * 365:.0f} days")],
-                     font_size=19)
+    def slider(self, b, d):
+        F = b["F"]
+        Kf, Cf, dig = np.asarray(b["Kf"]), np.asarray(b["Cf"]), np.asarray(b["digital"])
+        e = d["expiries"][0]
+        K, q = np.asarray(e["K"]), np.asarray(e["density"])
+        g1 = axes([0.75 * F, 1.3 * F], [0, Cf[Kf >= 0.75 * F].max() * 1.05], x_length=6.4, y_length=2.7,
+                  ylabel=r"call price $C(K)$ (\$)", xticks=[], yticks=[0, 10000, 20000], yfmt=lambda u: f"{u / 1000:.0f}k",
+                  font_size=15)
+        ok = (K > 0.75 * F) & (K < 1.3 * F)
+        g2 = axes([0.75 * F, 1.3 * F], [0, q[ok].max() * 1.15], x_length=6.4, y_length=2.4, ylabel=r"density $q(K)$",
+                  xlabel=r"strike $K$", xticks=[80000, 100000, 120000], xfmt=lambda u: f"{u / 1000:.0f}k", yticks=[],
+                  font_size=15)
+        VGroup(g1, g2).arrange(DOWN, buff=0.4).to_edge(LEFT, buff=0.7).shift(DOWN * 0.1)
+        sel = (Kf >= 0.75 * F) & (Kf <= 1.3 * F)
+        cc = curve(g1.ax, Kf[sel], Cf[sel], CALL, stroke_width=4)
+        dc = curve(g2.ax, K[ok], q[ok], Q_C, stroke_width=4)
+        k = ValueTracker(0.85 * F)
+
+        def tangent():
+            x = k.get_value()
+            c = np.interp(x, Kf, Cf)
+            s = -np.interp(x, Kf, dig)
+            dx = 0.08 * F
+            return VGroup(Line(g1.ax.c2p(x - dx, c - s * dx), g1.ax.c2p(x + dx, c + s * dx), color=ALT, stroke_width=3),
+                          Dot(g1.ax.c2p(x, c), radius=0.07, color=ALT),
+                          DashedLine(g1.ax.c2p(x, 0), g2.ax.c2p(x, 0), color=GREY_C, stroke_width=1),
+                          Dot(g2.ax.c2p(x, np.interp(x, K, q)), radius=0.08, color=Q_C))
+
+        TG = always_redraw(tangent)
+        r1 = DecimalNumber(0.5, num_decimal_places=3, font_size=30, color=ALT)
+        r1.add_updater(lambda m: m.set_value(float(np.interp(k.get_value(), Kf, dig))))
+        r2 = DecimalNumber(1.0, num_decimal_places=2, font_size=30, color=Q_C)
+        r2.add_updater(lambda m: m.set_value(float(np.interp(k.get_value(), K, q)) * 1e5))
         side = VGroup(
-            leg,
-            wrapped_label(r"each expiry's quotes fitted by SVI (Part 1), then differentiated twice", 4.4, 20, GREY_A),
-            MathTex(rf"{a['T'] * 365:.0f}\text{{ days: down 20\%: }} {100 * a['p_down20']:.1f}\%,\ \text{{up 20\%: }} "
-                    rf"{100 * a['p_up20']:.1f}\%", font_size=25, color=ALT),
-            MathTex(rf"{b['T'] * 365:.0f}\text{{ days: down 20\%: }} {100 * b['p_down20']:.1f}\%,\ \text{{up 20\%: }} "
-                    rf"{100 * b['p_up20']:.1f}\%", font_size=25, color=Q_C),
-            wrapped_label(r"a 20\% fall is further than a 20\% rise in log terms, yet no less likely: the smile's skew is "
-                          r"this asymmetry, in other units", 4.4, 20, GREY_A),
-            wrapped_label(r"the checker passes both: calls decreasing and convex in the strike, within their bounds, and "
-                          r"total variance rising with maturity", 4.4, 20, CALL),
-            wrapped_label(r"$Q$ is not a forecast: it weights the crash states more than their real chances", 4.4, 20,
-                          PUT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
-        src = real_data(r"the Surface: Deribit BTC options, 10 December 2025, 08:00 UTC")
+            VGroup(label(r"minus the slope, $Q(S_T > K)$:", font_size=21, color=ALT), r1).arrange(RIGHT, buff=0.15),
+            VGroup(label(r"the curvature, $q(K)$, per \$100{,}000:", font_size=21, color=Q_C), r2).arrange(RIGHT,
+                                                                                                         buff=0.15),
+            wrapped_label(r"the slope of the call curve is a digital's price; its bend is the density. Where the "
+                          r"curve is straightest, the market sees the least probability", 4.4, 20, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Here it is on the Surface, the frozen day of Bitcoin options this series prices against. Two expiries: "
-            f"one in {a['T'] * 365:.0f} days, one in {b['T'] * 365:.0f}. The dots are the market's implied "
-            "volatilities, the lines are smooth fits. <bookmark mark='a'/> Differentiate the fitted call prices twice, "
-            "and the density emerges: the market's risk-neutral distribution of Bitcoin's price at each expiry. "
-            "The later one is wider, as it must be. <bookmark mark='b'/> Read off a number: the risk-neutral chance "
-            f"of a fall of twenty percent or more is {100 * a['p_down20']:.1f} percent within {a['T'] * 365:.0f} days, "
-            f"and {100 * b['p_down20']:.0f} percent within {b['T'] * 365:.0f}, at least as likely as a rise of twenty "
-            "percent, though a fall that size is the bigger move in log terms. That asymmetry is the smile's skew, "
-            "in other units. <bookmark mark='c'/> The House's checker "
-            "passes both expiries: no negative butterflies, no calendar arbitrage. And a reminder: Q weights the "
-            "crash states more heavily than their real chances. It is a price, not a forecast."
+            "Here are the two derivatives riding along the real call curve. On top, the price of a call against its "
+            "strike, falling and bending. The purple tangent's slope, with a minus sign, is the probability of "
+            "ending above the strike. Below, the curve's bend, the density. <bookmark mark='a'/> Slide the strike "
+            "up. The slope's probability falls from near one toward zero, fastest where the call curve bends most, "
+            "which is exactly where the density peaks, near the forward. Far out, the call curve is nearly straight, "
+            "and the market sees almost no probability there."
         ) as vo:
-            self.play(FadeIn(g1), FadeIn(side[0]), FadeIn(src), FadeIn(dots), Create(smiles), FadeIn(side[1]), run_time=2.5)
+            self.play(FadeIn(g1), FadeIn(g2), Create(cc), Create(dc))
+            self.add(TG)
+            self.play(FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
-            self.play(FadeIn(g2), Create(dens), run_time=2.5)
-            vo.wait_until("b")
-            self.play(FadeIn(side[2]), FadeIn(side[3]), FadeIn(side[4]))
-            vo.wait_until("c")
-            self.play(FadeIn(side[5]), FadeIn(side[6]))
+            self.play(k.animate.set_value(1.25 * F), FadeIn(side[2]), run_time=max(vo.remaining(1.0) - 0.5, 4.0),
+                      rate_func=linear)
+        for m in (TG, r1, r2):
+            m.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    def lab(self, b):
+        with verbatim():
+            card = lab_card(r"the static checks", [
+                "def static_checks(K, C, F, df=1.0, tol=1e-10):",
+                "    o = argsort(K); K, C = K[o], C[o]",
+                "    slope = diff(C) / diff(K)",
+                "    mono  = where(slope > tol)            # call spread < 0",
+                "    steep = where(slope < -df - tol)      # steeper than the bond",
+                "    fly   = where(diff(slope) < -tol)     # butterfly < 0",
+                "    lo = where(C < df * maximum(F - K, 0) - tol)",
+                "    hi = where(C > df * F + tol)",
+                "    return dict(monotone=mono, butterfly=fly, ...)",
+            ], source="explainer/quant/house/arbitrage.py", width=7.6, font_size=17).to_edge(UP, buff=0.4)
+        n = len(b["K_raw"])
+        outs = [f"static_checks(raw trades, {n} strikes): butterfly={b['raw_fly']}  monotone={b['raw_mono']}",
+                f"static_checks(Surface quotes): butterfly={b['mark_fly']}  monotone={b['mark_mono']}",
+                f"static_checks(SVI fit, 901 strikes): butterfly={b['svi_fly']}  ok={b['svi_ok']}"]
+        verdict = ("Raw prices fail. " if b["raw_fly"] > 0 else "Even the raw prices pass. ")
+        with self.voiceover(
+            "The House checks these conditions on every surface before anything is fitted to it. Sort by strike, "
+            "take slopes: a positive slope is a call spread with negative price; a slope steeper than the bond is a "
+            "violation too; a slope that falls is a negative butterfly. <bookmark mark='a'/> Run it three times on "
+            f"the sixteen-day expiry. On {n} strikes priced from the morning's raw trades, it finds "
+            f"{b['raw_fly']} negative butterflies; on the Surface's median quotes, {b['mark_fly']}; on the fitted "
+            f"smile, {b['svi_fly']}. <bookmark mark='b'/> " + verdict + "That is not free money: trades happen at "
+            "different moments, on both sides of a bid-ask spread several butterflies wide. It is why the House never "
+            "differentiates raw prices, and fits an arbitrage-free smile first. The next chapter watches that fit."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            with verbatim():
+                lab_run(self, card, outs, run_time=2.4, font_size=17)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def predict(self):
+        card = pause_at(r"A butterfly on the screen is offered at $-0.1$: you are paid to take it. What do you trade, "
+                        r"and what could go wrong?")
+        with self.voiceover(
+            "Pause and predict. A butterfly is offered at minus point one: you would be paid to own it. What do you "
+            "trade, and what could go wrong? <bookmark mark='a'/> Buy it: you collect point one now and own a payoff "
+            "that is never negative. What can go wrong is execution: the three legs must all trade at those prices "
+            "at once, and on most screens they cannot."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(answer_under(card, r"buy it: paid 0.1 to own a non-negative payoff; the risk is legging "
+                                                r"in: all three prices must be live at once")))
         self.wait(0.4)
         self.clear_scene()

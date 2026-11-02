@@ -84,11 +84,13 @@ class JumpData(VoiceoverScene):
         src = real_data(r"Binance BTCUSDT one-hour candles, January 2018 -- December 2020")
         with self.voiceover(
             "Take Bitcoin's hourly returns for three years and divide each by the bipower volatility of the week "
-            "before it. <bookmark mark='a'/> If the hours were Gaussian, the histogram would follow the green curve, "
-            f"and you would expect {j['gauss_expected']:.3f} hours beyond five standard deviations in three years. "
-            f"<bookmark mark='b'/> There were {j['n_jumps']}, about {j['n_jumps'] / 3:.0f} a year, and those hours alone carry "
+            "before it, which a single jump barely moves. <bookmark mark='a'/> If the hours were Gaussian, the "
+            f"histogram would follow the green curve, and you would expect {j['gauss_expected']:.3f} hours beyond five "
+            f"standard deviations in three years. <bookmark mark='b'/> There were {j['n_jumps']}, about "
+            f"{j['n_jumps'] / 3:.0f} a year, spread evenly across the three years, and those hours alone carry "
             f"{100 * j['share_of_variance']:.0f} percent of all the variance. The jumps are not rare accidents; they "
-            "are a structural part of how this market moves."
+            "are a structural part of how this market moves, and a model without them misprices every option whose "
+            "payoff cares about the tails."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.01, run_time=2))

@@ -248,3 +248,254 @@ def _thomas(a, b, c, d):
     for i in range(n - 2, -1, -1):
         x[i] = dp[i] - cp[i] * x[i + 1]
     return x
+
+
+# ---------------------------------------------------------------- Part 15, expanded: touches, static hedges, the
+# snowball as a linear function of its coupon, any-model autocalls, two-asset payoffs, cliquets, the hedged UVM,
+# the entropic worst case, and the Greeks of a discontinuous payoff
+
+
+def one_touch(S, H, T, sigma, r=0.0, q=0.0):
+    """One-touch paying 1 at expiry if the barrier H is ever touched (down if H < S, up if H > S), continuous
+    monitoring: the first-passage law of Brownian motion with drift mu = r - q - sigma^2/2 (reflection plus
+    Girsanov). With r = q = 0 it is N(-d2) + (S/H) N(-d1) for a down touch: about twice the digital."""
+    S, H = float(S), float(H)
+    mu = r - q - 0.5 * sigma ** 2
+    b = np.log(H / S)
+    sT = sigma * np.sqrt(T)
+    if b < 0:
+        p = N((b - mu * T) / sT) + np.exp(2 * mu * b / sigma ** 2) * N((b + mu * T) / sT)
+    else:
+        p = N((-b + mu * T) / sT) + np.exp(2 * mu * b / sigma ** 2) * N((-b - mu * T) / sT)
+    return float(np.exp(-r * T) * min(p, 1.0))
+
+
+def static_dic_hedge(K, H, F):
+    """Carr, Ellis and Gupta (1998): with put-call symmetry (r = q = 0, a smile symmetric in log(K/F)), a down-and-in
+    call (H <= K) is replicated by K/H puts struck at H^2/K, held until the barrier is touched and then exchanged for
+    the call at no cost. Returns (number of puts, their strike). F is unused when r = q = 0 (the forward is the spot
+    at the touch, H)."""
+    return K / H, H * H / K
+
+
+def snowball_AB(sigma, ko=1.03, ki=0.75, lockup=3, months=24, r=0.02, q=0.0, n_paths=40000, seed=0, S=1.0,
+                elapsed_days=0, knocked_in=False, days_per_month=21, disc_spread=0.0):
+    """The snowball's value is affine in its coupon: V(c) = A + c B on every path, so one simulation gives both and
+    the fair coupon is (1 - A) / B, with no root search. Same paths and conventions as snowball_price (which equals
+    A + c B for the same seed); ``disc_spread`` discounts at r + s (the issuer's funding) while the index drifts at
+    r - q."""
+    total = months * days_per_month
+    rem = total - elapsed_days
+    dt = 1 / (12 * days_per_month)
+    p = gbm_paths(S, sigma, rem * dt, rem, n_paths, r, q, seed)
+    full = np.vstack([np.full((elapsed_days, p.shape[1]), np.nan), p]) if elapsed_days else p
+    rd = r + disc_spread
+    alive = np.ones(p.shape[1], bool)
+    a = np.zeros(p.shape[1])
+    b = np.zeros(p.shape[1])
+    for m in range(lockup, months + 1):
+        i = m * days_per_month
+        if i < elapsed_days:
+            continue
+        hit = alive & (full[i] >= ko)
+        d = np.exp(-rd * (i - elapsed_days) * dt)
+        a[hit] = d
+        b[hit] = m / 12 * d
+        alive &= ~hit
+    kin = knocked_in | (p.min(axis=0) < ki)
+    d = np.exp(-rd * rem * dt)
+    lost = alive & kin
+    a[lost] = (1 + np.minimum(p[-1][lost] - 1, 0)) * d
+    keep = alive & ~kin
+    a[keep] = d
+    b[keep] = months / 12 * d
+    return float(a.mean()), float(b.mean())
+
+
+def autocall_on_paths(S, obs, ko, ki, coupons, disc=None):
+    """An autocall on paths S (steps x paths, relative to the start, daily rows) from any model: at observation row
+    obs[k] the note is redeemed for 1 + coupons[k] if S >= ko; if it survives to the last observation it pays
+    1 + coupons[-1] unless S ever closed below ki, in which case it pays min(S_T, 1). ``disc`` are the discount
+    factors at the observation rows (default 1). Returns the present value per path."""
+    S = np.asarray(S, float)
+    disc = np.ones(len(obs)) if disc is None else np.asarray(disc, float)
+    alive = np.ones(S.shape[1], bool)
+    pv = np.zeros(S.shape[1])
+    for k, i in enumerate(obs):
+        hit = alive & (S[i] >= ko)
+        pv[hit] = (1 + coupons[k]) * disc[k]
+        alive &= ~hit
+    last = obs[-1]
+    kin = S[: last + 1].min(axis=0) < ki
+    lost = alive & kin
+    pv[lost] = np.minimum(S[last][lost], 1.0) * disc[-1]
+    keep = alive & ~kin
+    pv[keep] = (1 + coupons[-1]) * disc[-1]
+    return pv
+
+
+def two_asset_paths(sig1, sig2, rho, T, n, n_paths, r=0.0, q1=0.0, q2=0.0, seed=0):
+    """Two correlated GBMs started at 1 on n steps, (n + 1, n_paths) each. The first asset uses exactly the random
+    numbers of gbm_paths(seed), so with rho = 1 and equal vols both reduce to it."""
+    g = np.random.default_rng(seed)
+    m = n_paths // 2
+    Z1 = g.standard_normal((n, m))
+    Z1 = np.concatenate([Z1, -Z1], axis=1)
+    W = g.standard_normal((n, m))
+    W = np.concatenate([W, -W], axis=1)
+    Z2 = rho * Z1 + np.sqrt(max(1 - rho ** 2, 0.0)) * W
+    dt = T / n
+    out = []
+    for s, qq, Z in ((sig1, q1, Z1), (sig2, q2, Z2)):
+        x = np.cumsum((r - qq - 0.5 * s ** 2) * dt + s * np.sqrt(dt) * Z, axis=0)
+        out.append(np.exp(np.vstack([np.zeros(Z.shape[1]), x])))
+    return out[0], out[1]
+
+
+def worst_of_autocall_AB(sig1, sig2, rho, ko=1.03, ki=0.75, lockup=3, months=24, r=0.02, n_paths=40000, seed=0,
+                         days_per_month=21):
+    """A worst-of snowball on two indices: the autocall reads min(S1, S2) (each relative to its start). Returns
+    (A, B) with V(c) = A + c B, so the fair coupon is (1 - A) / B."""
+    n = months * days_per_month
+    dt = 1 / (12 * days_per_month)
+    P1, P2 = two_asset_paths(sig1, sig2, rho, n * dt, n, n_paths, r, seed=seed)
+    W = np.minimum(P1, P2)
+    obs = [m * days_per_month for m in range(lockup, months + 1)]
+    disc = np.exp(-r * np.array(obs) * dt)
+    a = autocall_on_paths(W, obs, ko, ki, np.zeros(len(obs)), disc).mean()
+    b = autocall_on_paths(W, obs, ko, ki, np.array([m / 12 for m in range(lockup, months + 1)]), disc).mean() - a
+    return float(a), float(b)
+
+
+def margrabe(S1, S2, T, s1, s2, rho, q1=0.0, q2=0.0):
+    """Margrabe (1978): the option to exchange asset 2 for asset 1, E[e^{-rT}(S1_T - S2_T)^+], by the change of
+    numeraire to S2: a Black-Scholes call on S1/S2 struck at 1 with sigma^2 = s1^2 + s2^2 - 2 rho s1 s2. No r."""
+    s = np.sqrt(s1 ** 2 + s2 ** 2 - 2 * rho * s1 * s2)
+    sT = s * np.sqrt(T)
+    d1 = (np.log(S1 / S2) + (q2 - q1 + 0.5 * s ** 2) * T) / sT
+    return float(S1 * np.exp(-q1 * T) * N(d1) - S2 * np.exp(-q2 * T) * N(d1 - sT))
+
+
+def cliquet_bs(sigma, n=12, cap=0.03, floor=-0.03, gfloor=0.0, n_paths=200000, seed=0, T=1.0, reverse=None):
+    """A cliquet under Black-Scholes (r = q = 0): n periodic returns r_i, each clipped to [floor, cap], summed, with a
+    global floor: max(sum clip(r_i), gfloor). With ``reverse`` = C, the reverse cliquet max(C + sum min(r_i, 0), 0).
+    Returns (price, standard error)."""
+    dt = T / n
+    Z = np.random.default_rng(seed).standard_normal((n, n_paths))
+    R = np.exp(-0.5 * sigma ** 2 * dt + sigma * np.sqrt(dt) * Z) - 1
+    if reverse is not None:
+        pay = np.maximum(reverse + np.minimum(R, 0).sum(axis=0), 0)
+    else:
+        pay = np.maximum(np.clip(R, floor, cap).sum(axis=0), gfloor)
+    return float(pay.mean()), float(pay.std() / np.sqrt(n_paths))
+
+
+def uvm_solve(values, S_grid, T, sig_lo, sig_hi, r=0.0, n_t=400, upper=True, keep_every=0):
+    """The Black-Scholes-Barenblatt solver of uvm_price, vectorized, for payoff values on S_grid: the same scheme
+    (volatility chosen from the sign of the discrete gamma, implicit in time). With keep_every = k it also returns
+    the value and the chosen volatility every k steps (the solution marching back from expiry)."""
+    S = np.asarray(S_grid, float)
+    V = np.asarray(values, float).copy()
+    dt = T / n_t
+    h = np.diff(S)
+    hm, hp = h[:-1], h[1:]
+    n = len(S)
+    Si = S[1:-1]
+    film = []
+    for k in range(n_t):
+        g = 2 * (hm * V[2:] - (hm + hp) * V[1:-1] + hp * V[:-2]) / (hm * hp * (hm + hp))
+        sig = np.where(g > 0, sig_hi, sig_lo) if upper else np.where(g > 0, sig_lo, sig_hi)
+        if keep_every and k % keep_every == 0:
+            film.append((V.copy(), np.concatenate([[sig[0]], sig, [sig[-1]]])))
+        a = 0.5 * sig ** 2 * Si ** 2
+        cm = 2 * a / (hm * (hm + hp)) - r * Si / (hm + hp)
+        cp = 2 * a / (hp * (hm + hp)) + r * Si / (hm + hp)
+        lower = np.zeros(n)
+        upper_ = np.zeros(n)
+        diag = np.ones(n)
+        lower[1:-1] = -dt * cm
+        upper_[1:-1] = -dt * cp
+        diag[1:-1] = 1 + r * dt + dt * (cm + cp)
+        rhs = V.copy()
+        rhs[0] = 2 * V[1] - V[2]
+        rhs[-1] = 2 * V[-2] - V[-3]
+        V = _thomas(lower, diag, upper_, rhs)
+    if keep_every:
+        film.append((V.copy(), film[-1][1] if film else np.full(n, sig_hi)))
+        return V, film
+    return V
+
+
+def uvm_lagrangian(payoff, hedges, mkt_prices, S_grid, S0, T, sig_lo, sig_hi, r=0.0, n_t=200, maxfev=80):
+    """Avellaneda and Paras (1996): the seller's worst-case price when vanillas can be bought or sold at known market
+    prices, min over weights l of U(g - sum l_i h_i)(S0) + sum l_i p_i, by Nelder-Mead. ``payoff`` and ``hedges`` are
+    functions of S. Returns {"price", "weights", "unhedged", "iterates": [(weights, price), ...]}."""
+    from scipy.optimize import minimize
+
+    S = np.asarray(S_grid, float)
+    g0 = payoff(S)
+    H = [h(S) for h in hedges]
+    its = []
+
+    def obj(w):
+        f = g0 - sum(wi * hi for wi, hi in zip(w, H))
+        v = float(np.interp(S0, S, uvm_solve(f, S, T, sig_lo, sig_hi, r, n_t)) + np.dot(w, mkt_prices))
+        its.append((list(map(float, w)), v))
+        return v
+
+    un = obj(np.zeros(len(hedges)))
+    res = minimize(obj, np.zeros(len(hedges)), method="Nelder-Mead",
+                   options=dict(xatol=1e-3, fatol=1e-4, maxfev=maxfev, initial_simplex=None))
+    return {"price": float(min(res.fun, un)), "weights": list(map(float, res.x)), "unhedged": un, "iterates": its}
+
+
+def kl_worst_case(values, eta, side=-1):
+    """Glasserman and Xu (2014): the worst expectation of ``values`` (equally weighted samples under the model P)
+    over every model Q within relative entropy eta of P. The optimum is an exponential tilt, dQ/dP proportional to
+    exp(theta V), with theta < 0 for the lowest value (side = -1) and theta > 0 for the highest; theta is set so that
+    D(Q||P) = eta. Returns (worst value, theta, weights)."""
+    v = np.asarray(values, float)
+    if eta <= 0:
+        return float(v.mean()), 0.0, np.full(len(v), 1 / len(v))
+    z = (v - v.mean()) / (v.std() + 1e-300)
+
+    def tilt(th):
+        lw = side * th * z
+        lw -= lw.max()
+        w = np.exp(lw)
+        w /= w.sum()
+        kl = float(np.sum(w * np.log(np.maximum(w * len(v), 1e-300))))
+        return w, kl
+
+    lo, hi = 0.0, 1.0
+    while tilt(hi)[1] < eta and hi < 1e4:
+        hi *= 2
+    for _ in range(80):
+        mid = 0.5 * (lo + hi)
+        if tilt(mid)[1] < eta:
+            lo = mid
+        else:
+            hi = mid
+    w, _ = tilt(0.5 * (lo + hi))
+    return float(np.sum(w * v)), float(side * 0.5 * (lo + hi) / (v.std() + 1e-300)), w
+
+
+def digital_delta_estimators(S0, K, T, sigma, n_paths, seed=0, r=0.0, n_steps=21):
+    """Three Monte Carlo estimators of a digital call's delta, d/dS0 E[e^{-rT} 1{S_T > K}], on paths of n_steps:
+    pathwise (the derivative of an indicator is zero on every path: biased, it returns 0); likelihood ratio
+    (differentiate the density of the first step instead: unbiased, noisy); and pathwise plus the boundary term,
+    here computed by conditioning on the path before the last step, which makes the payoff smooth (unbiased, quiet).
+    Returns per-path samples (pathwise, lr, boundary); their means estimate the delta."""
+    g = np.random.default_rng(seed)
+    dt = T / n_steps
+    Z = g.standard_normal((n_steps, n_paths))
+    mu = (r - 0.5 * sigma ** 2) * dt
+    x = np.log(S0) + np.cumsum(mu + sigma * np.sqrt(dt) * Z, axis=0)
+    ST = np.exp(x[-1])
+    D = np.exp(-r * T)
+    pathwise = np.zeros(n_paths)
+    lr = D * (ST > K) * Z[0] / (S0 * sigma * np.sqrt(dt))
+    S_prev = np.exp(x[-2]) if n_steps > 1 else np.full(n_paths, S0)
+    d = (np.log(S_prev / K) + mu) / (sigma * np.sqrt(dt))
+    boundary = D * norm.pdf(d) / (sigma * np.sqrt(dt)) / S0  # d/dS0 of P(S_T > K | S_prev), with dS_prev/dS0 = S_prev/S0
+    return pathwise, lr, boundary

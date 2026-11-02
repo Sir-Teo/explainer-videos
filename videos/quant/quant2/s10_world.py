@@ -55,18 +55,16 @@ class World(VoiceoverScene):
         src = note(r"FCA; EU T+1 regulation (2025); FIA volume reports; SEBI studies (September 2024, July 2025) and "
                    r"circular (October 2024); CSRC (July 2024)", font_size=15).to_edge(DOWN, buff=0.1)
         with self.voiceover(
-            "The machine is built differently in each country, and the differences matter. The United States settles "
-            "in one day, routes most retail orders to wholesalers, and splits trading across many venues. "
-            "<bookmark mark='a'/> Europe and Britain move to one-day settlement together, on the eleventh of October "
-            "2027. <bookmark mark='b'/> Japan's yen is the currency the world borrows in, which is why its carry "
-            "trade matters everywhere. <bookmark mark='c'/> India's National Stock Exchange has been the world's "
-            "largest derivatives exchange by contracts since 2019, much of it weekly index options bought by "
-            "individuals. Its regulator found ninety-three percent of individual traders lost money over three years, "
-            "and ninety-one percent again in the year to March 2025; it has since made contracts bigger and cut "
-            "weekly expiries to one per exchange. <bookmark mark='d'/> China's A-shares have rules of their own: a "
-            "share bought today can't be sold until tomorrow, and prices may move at most ten percent a day, twenty "
-            "on the STAR market and ChiNext. In 2024 the regulator suspended the lending of shares for short sales "
-            "and set rules for high-frequency trading."
+            "The machine is built differently in each country, and the differences matter. The United States settles in a "
+            "day, routes most retail orders to wholesalers, and splits trading across many venues. <bookmark mark='a'/> "
+            "Europe and Britain move to one-day settlement together on the eleventh of October 2027. <bookmark mark='b'/> "
+            "Japan's yen is the currency the world borrows in, which is why its carry trade, Part twenty-two, matters "
+            "everywhere. <bookmark mark='c'/> India's National Stock Exchange has been the world's largest derivatives "
+            "exchange by contracts since 2019, much of it weekly index options bought by individuals. Its regulator found "
+            "ninety-three percent of them lost money over three years, and ninety-one percent in the year to March 2025, then "
+            "made contracts bigger and cut weekly expiries to one per exchange. <bookmark mark='d'/> In China a share bought "
+            "today can't be sold until tomorrow, prices may move at most ten percent a day, twenty on STAR and ChiNext, and "
+            "in 2024 the regulator suspended lending shares for short sales and set rules for high-frequency trading."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(src))
             for i, mk in enumerate("abcd", start=1):
@@ -113,13 +111,11 @@ class World(VoiceoverScene):
         leg = legend([(GREY_B, r"the price the news says"), (LOSS, r"the price that trades ($\pm$10\% a day)")],
                      font_size=18).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         with self.voiceover(
-            "Price limits change the statistics of Part one. Watch a stock hit by big news twice in forty days. The "
-            "grey line is where the news says the price should be; the red line is the price that can trade, capped "
-            "at ten percent a day. The yellow spring ties them together. <bookmark mark='a'/> On a limit day the "
-            "true price runs ahead and the spring stretches; the next day it drags the traded price up again, and "
-            "again, until they meet. <bookmark mark='b'/> In symbols: the observed return is the true one plus "
-            "yesterday's unexecuted remainder, clipped at the limit; whatever is clipped rolls over. So a limit day "
-            "predicts more of the same."
+            "Price limits change Part one's statistics. A stock hit by big news twice in forty days: grey where the news says "
+            "the price should be, red the price that can trade, capped at ten percent a day, a spring between them. "
+            "<bookmark mark='a'/> On a limit day the true price runs ahead; next day the spring drags the traded price after "
+            "it. <bookmark mark='b'/> The observed return is the true one plus yesterday's remainder, clipped; what's clipped "
+            "rolls over, so a limit day predicts more of the same."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             self.add(lt, lo, sp)
@@ -162,15 +158,11 @@ class World(VoiceoverScene):
         src = note(r"simulated: daily vol 3\%, jumps on 5\% of days (12\% s.d.), 5,000 days, 8 seeds", font_size=15)
         src.to_edge(DOWN, buff=0.1)
         with self.voiceover(
-            "Measure it. Simulate five thousand days of a stock with occasional big jumps, eight seeds, with no limit, "
-            "with twenty percent limits, and with ten. <bookmark mark='a'/> Without limits the returns are "
-            "uncorrelated, as they should be. With ten percent limits the autocorrelation is "
-            f"{np.mean(res['0.10']['ac1']):.2f}, from a stock that is at its limit on only "
-            f"{100 * np.mean(res['0.10']['at_limit']):.0f} percent of days; at twenty percent, "
-            f"{np.mean(res['0.20']['ac1']):.2f}. A backtest would see momentum. But on a limit-up day the buy queue "
-            "doesn't clear, and nobody gets filled at that price. <bookmark mark='b'/> So the House's data desk "
-            "stores each market's rules beside its prices, and no backtest may buy a stock that couldn't be bought. "
-            "Pause and predict: limit-up close, buyers queued. Tomorrow's expected return, and can you trade it?"
+            "Measure it: five thousand simulated days, eight seeds, no limit, twenty and ten percent. <bookmark mark='a'/> "
+            f"Without limits, no autocorrelation; with ten percent limits, {np.mean(res['0.10']['ac1']):.2f}, from a stock at "
+            f"its limit on only {100 * np.mean(res['0.10']['at_limit']):.0f} percent of days. A backtest sees momentum, but at "
+            "limit-up the buy queue doesn't clear. <bookmark mark='b'/> So the House stores each market's rules beside its "
+            "prices. Predict: limit-up close, buyers queued. Tomorrow's return, and can you trade it?"
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

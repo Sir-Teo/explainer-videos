@@ -65,17 +65,13 @@ class Bootstrap(VoiceoverScene):
         res = MathTex(rf"\widehat{{SR}}^* = {sr(x[idx]):.2f}\quad (\text{{data: }} {d['sr']:.2f})", font_size=28,
                       color=EST).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The bootstrap's idea, from Bradley Efron in 1979, is to let the sample stand in for the population. "
-            "To learn how much an estimate would vary across histories, resample the one history you have, many "
-            "times, and recompute. <bookmark mark='a'/> Here is the market's history as a ribbon, one bar per month, "
-            "its height the size of the move. Volatility clusters: calm stretches and storms, 1929, 1974, 1987, "
-            "2008. <bookmark mark='b'/> The ordinary bootstrap draws months one at a time, with replacement. The "
-            "result has the right months but the wrong seasons: the storms are shredded into confetti. Any statistic "
-            "that depends on how months cluster is mis-measured. <bookmark mark='c'/> Hans Künsch's block "
-            "bootstrap, in 1989, cuts the history into blocks and resamples whole blocks, so each piece keeps its "
-            "weather. Dimitris Politis and Joseph Romano's stationary bootstrap, in 1994, draws blocks of random, "
-            "geometric length, with an average of a year, wrapping around the end, so the resampled series is "
-            "itself stationary. Watch the blocks being cut and laid end to end into a new history. "
+            "Bradley Efron's bootstrap, from 1979, lets the sample stand in for the population: resample the one "
+            "history you have, many times, and recompute. <bookmark mark='a'/> Here is the market as a ribbon, one bar "
+            "per month, height the size of the move. Volatility clusters: 1929, 1974, 1987, 2008. <bookmark mark='b'/> "
+            "The ordinary bootstrap draws single months with replacement: the right months, the wrong seasons, storms "
+            "shredded into confetti. <bookmark mark='c'/> Hans Künsch's block bootstrap, 1989, resamples whole blocks. "
+            "Politis and Romano's stationary bootstrap, 1994, uses blocks of random geometric length, a year on "
+            "average, wrapping around, so the resample is stationary. Watch blocks cut and laid end to end. "
             "<bookmark mark='d'/> Its Sharpe ratio is one draw. Do it eight hundred times."
         ) as vo:
             self.play(FadeIn(tl), LaggedStart(*[FadeIn(l_) for l_ in top], lag_ratio=0.001, run_time=2))
@@ -119,13 +115,10 @@ class Bootstrap(VoiceoverScene):
                     r"two again; the block length plays the bandwidth")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=1.0, edge=6.8)
         with self.voiceover(
-            "Why blocks? The plug-in principle says the resampled estimates vary around the sample's estimate as "
-            "the sample's estimate varies around the truth. <bookmark mark='a'/> But resample single months, and "
-            "the bootstrap variance of a mean is only the lag-zero variance: chapter two's long-run variance with "
-            "every autocovariance thrown away. <bookmark mark='b'/> Blocks of length ell keep every autocovariance "
-            "inside a block, with weights that fall off like Bartlett's triangle. The block length is the "
-            "bandwidth, with the same bias-variance trade-off: too short loses dependence, too long leaves too few "
-            "blocks."
+            "Why blocks? The plug-in principle: resampled estimates vary around the sample's as the sample's varies "
+            "around the truth. <bookmark mark='a'/> Resample single months and the variance of a mean is only lag "
+            "zero, every autocovariance thrown away. <bookmark mark='b'/> Blocks keep the autocovariances inside them, "
+            "with Bartlett-like weights: the block length is the bandwidth."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -151,13 +144,11 @@ class Bootstrap(VoiceoverScene):
         leg = legend([(EST, rf"stationary, se {d['se_st']:.3f}"), (BAD, rf"iid, se {d['se_iid']:.3f}")],
                      font_size=17).next_to(g, UP, buff=0.1).align_to(g, LEFT)
         with self.voiceover(
-            "The House's stationary bootstrap. Start at a random month. At each step, with probability one over "
-            "the mean block length, jump to a new random month; otherwise take the next month, wrapping around at "
-            "the end. Recompute the statistic on the new history. <bookmark mark='a'/> Run it on the market's "
-            f"Sharpe ratio, eight hundred times. The standard error is {b['se_stationary']:.3f}, against "
-            f"{b['se_iid_boot']:.3f} for the iid bootstrap and {b['se_iid']:.3f} from Lo's formula: about a fifth "
-            "wider, because the clustering came along. <bookmark mark='b'/> After ninety-four years, the market's "
-            "Sharpe ratio is known only to within about a quarter either way."
+            "The House's stationary bootstrap: start anywhere; each step, with probability one over the mean block "
+            "length, jump to a random month, else take the next one. <bookmark mark='a'/> On the market's Sharpe ratio, "
+            f"eight hundred times: a standard error of {b['se_stationary']:.3f}, against {b['se_iid_boot']:.3f} for the iid "
+            f"bootstrap and {b['se_iid']:.3f} from Lo's formula. <bookmark mark='b'/> After ninety-four years, known to "
+            "about a quarter either way."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -204,15 +195,12 @@ class Bootstrap(VoiceoverScene):
         q = predict(r"Block length equal to the whole sample: what is the bootstrap standard error?").to_edge(DOWN,
                                                                                                       buff=0.15)
         with self.voiceover(
-            "Does it work? Test it where the truth is known. Simulate a thousand markets as long as ours, with "
-            "slightly autocorrelated returns and clustered volatility, and a true monthly Sharpe ratio of an eighth. "
-            "In each, build the nominal ninety-five percent interval from each bootstrap, and check whether it "
-            f"contains the truth. <bookmark mark='a'/> The iid bootstrap covers it {100 * cov['iid']:.1f} percent of "
-            f"the time. The moving block, {100 * cov['block']:.1f}. The stationary bootstrap, "
-            f"{100 * cov['stationary']:.1f}. " + verdict +
-            " <bookmark mark='b'/> Pause and predict: what if a block were the whole sample? Every resample would be "
-            "the sample itself, rotated, and the standard error would collapse to zero. The block length is a "
-            "choice, and it matters."
+            "Does it work? A thousand simulated markets as long as ours, slightly autocorrelated, volatility "
+            "clustering, true monthly Sharpe of an eighth; build each bootstrap's nominal ninety-five percent interval. "
+            f"<bookmark mark='a'/> The iid bootstrap covers the truth {100 * cov['iid']:.1f} percent of the time, the "
+            f"moving block {100 * cov['block']:.1f}, the stationary {100 * cov['stationary']:.1f}. " + verdict +
+            " <bookmark mark='b'/> Pause and predict: a block the length of the sample? Every resample is the sample "
+            "rotated: a standard error of zero."
         ) as vo:
             self.play(FadeIn(g), Create(nominal), FadeIn(labs), FadeIn(side))
             vo.wait_until("a")

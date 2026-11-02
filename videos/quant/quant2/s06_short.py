@@ -40,12 +40,10 @@ class Short(VoiceoverScene):
         if steps.width > 13.0:
             steps.scale_to_fit_width(13.0)
         with self.voiceover(
-            "To bet that a price will fall, you sell something you don't own. First your broker locates a lender: "
-            "often a pension fund or an index fund, which lends its shares for a fee. <bookmark mark='a'/> You borrow "
-            "the shares, post cash collateral worth a little more than they are, and sell them. <bookmark mark='b'/> "
-            "The lender pays you interest on that cash, a rebate, less its fee. <bookmark mark='c'/> It can recall "
-            "its shares at any moment, and then you must buy them back, at whatever the price is. "
-            "<bookmark mark='d'/> And any dividend paid while you are short is yours to pay."
+            "To bet on a fall you sell what you don't own. Your broker locates a lender, often an index fund. "
+            "<bookmark mark='a'/> You borrow the shares, post cash collateral, and sell. <bookmark mark='b'/> The lender pays "
+            "interest on the cash, a rebate, less its fee. <bookmark mark='c'/> It can recall the shares any time, and you "
+            "must buy them back. <bookmark mark='d'/> And you pay any dividend."
         ) as vo:
             self.play(FadeIn(steps[0]))
             for i, mk in enumerate("abcd", start=1):
@@ -77,16 +75,14 @@ class Short(VoiceoverScene):
             label(r"under 1\% had negative rebates; fees up to 50\%", font_size=20),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.35).shift(DOWN * 1.6)
         with self.voiceover(
-            "The arithmetic of a short. The collateral, about a hundred and two percent of the price, earns the "
-            "rebate rate: the market rate less the lender's fee. <bookmark mark='a'/> So the profit is the fall in "
-            "the price, plus the rebate on the collateral, less the dividends handed to the lender. "
-            "<bookmark mark='b'/> When shares are scarce the fee can exceed the interest rate, and the rebate turns "
-            "negative: the short seller pays to borrow its own cash back. Take a stock that falls from a hundred to "
-            f"ninety in a year, with rates at five percent. Borrowed cheaply, the short makes {q['short_pnl_gc']:.2f}. "
-            f"At a twenty percent fee it loses {abs(q['short_pnl_special']):.2f}, though it was right about the "
-            "price. <bookmark mark='c'/> How common is that? D'Avolio's data from a large lender: ninety-one percent "
-            "of stocks on loan were general collateral, costing seventeen basis points; nine percent were special, "
-            "at four point three percent on average; and under one percent cost more than the interest rate."
+            "The arithmetic. The collateral, about a hundred and two percent of the price, earns the rebate: the market rate "
+            "less the fee. <bookmark mark='a'/> Profit is the price fall plus the rebate, less dividends. "
+            "<bookmark mark='b'/> When shares are scarce the fee can exceed the rate and the rebate turns negative. A stock "
+            f"falling from a hundred to ninety, rates at five percent: borrowed cheaply, the short makes {q['short_pnl_gc']:.2f}; "
+            f"at a twenty percent fee it loses {abs(q['short_pnl_special']):.2f}, though right about the price. "
+            "<bookmark mark='c'/> How common? In D'Avolio's data from a large lender, ninety-one percent of stocks on loan "
+            "cost seventeen basis points; nine percent were special, averaging four point three percent; under one percent "
+            "cost more than the interest rate."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -116,12 +112,9 @@ class Short(VoiceoverScene):
                              r"100 shares; GameStop's short interest reached 122.97\% of its float in January 2021",
                              11.4, 21, GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "How can short interest exceed a hundred percent of the shares available? Follow one share. The lender "
-            "lends it to a short seller, who sells it to buyer B. <bookmark mark='a'/> B now owns a share like any "
-            "other, and can lend it too: to a second short seller, who sells it to C. <bookmark mark='b'/> One share "
-            "exists, two are sold short, and short interest counts two. Repeat it enough and short interest passes "
-            "a hundred percent of the float: GameStop's reached a hundred and twenty-three. Every short is a future "
-            "buyer."
+            "How can short interest exceed a hundred percent? Follow one share: lent to a short seller, sold to B. "
+            "<bookmark mark='a'/> B can lend it too, to a second short seller, who sells it to C. <bookmark mark='b'/> One "
+            "share, two shorts, and short interest counts two. GameStop's reached a hundred and twenty-three percent."
         ) as vo:
             self.play(FadeIn(people), FadeIn(share), FadeIn(cnt))
             self.play(share.animate.move_to(people[1].get_center() + UP * 0.9), si.animate.set_value(1))
@@ -168,15 +161,12 @@ class Short(VoiceoverScene):
         src = note(r"simulated: 1,000 shorts with lognormal thresholds (median +50\%), $\kappa = 0.5$ (1\% of the float "
                    r"moves the price 0.5\%), 8 seeds", font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Why do squeezes explode? Picture the float as a tank. Big holders who never sell sit at the bottom; "
-            "above them, the free float, the only shares anyone can buy. Every short seller must one day buy a "
-            "share out of that layer. <bookmark mark='a'/> Model it: buying drains the free layer, and the price "
-            "rises as it empties; each short has a pain threshold and covers once the price passes it. Start a "
-            "thousand shorts holding one point two times the free float, and nudge the price. A few cover; their "
-            "buying lifts the price past the next thresholds; the queue outruns the layer, and the price explodes. "
-            "<bookmark mark='b'/> Run it across short interest, eight seeds each. Below about "
-            f"{trans:.1f} times the free float, a nudge stays a nudge. Above it, the same nudge runs away. The size "
-            "of the float doesn't matter in this model; the ratio does."
+            "Why do squeezes explode? Picture the float as a tank: locked-up holders at the bottom, the free float on top, "
+            "the only shares anyone can buy. <bookmark mark='a'/> Buying drains the free layer and lifts the price; each "
+            "short covers past its own pain threshold. A thousand shorts holding one point two times the free float, and a "
+            "nudge: a few cover, their buying trips the next thresholds, and the price explodes. <bookmark mark='b'/> Across "
+            f"short interest, eight seeds each: below about {trans:.1f} times the free float a nudge stays a nudge; above it, "
+            "it runs away. In this model only the ratio matters."
         ) as vo:
             self.play(FadeIn(tank), FadeIn(tl), FadeIn(thf), FadeIn(pr), FadeIn(cv), FadeIn(rows), FadeIn(src))
             self.add(free, therm)
@@ -217,16 +207,13 @@ class Short(VoiceoverScene):
         src = note(r"reported prices and stakes (Reuters, Risk.net); free float computed from the stakes", font_size=16)
         src.to_edge(DOWN, buff=0.1).to_edge(LEFT, buff=0.3)
         with self.voiceover(
-            "The crisis file is the most famous squeeze of all. On Sunday the 26th of October 2008, Porsche "
-            "disclosed that it held forty-two point six percent of Volkswagen's ordinary shares, and cash-settled "
-            "options on thirty-one point five more: seventy-four point one percent. The state of Lower Saxony held "
-            f"about a fifth. Fill the tank: about {100 * q['vw_free']:.0f} percent was left to buy, and short "
-            "interest was larger than that. <bookmark mark='a'/> On Monday and Tuesday the price went from about two "
-            "hundred and eleven euros to above a thousand, and for a few hours Volkswagen was the most valuable "
-            "company in the world. Then Porsche said it would release up to five percent, and the price fell back. "
-            "Hedge funds later sued, alleging Porsche had misled the market; Porsche denied it. Prices in a squeeze "
-            "are set not by value but by who must buy, and how much is left. Pause and predict: short interest at a "
-            "hundred and twenty percent of float. How, and who is short what?"
+            "The crisis file: Volkswagen. On Sunday the 26th of October 2008 Porsche disclosed forty-two point six percent of "
+            "the ordinary shares, plus cash-settled options on thirty-one point five: seventy-four point one. Lower Saxony "
+            f"held about a fifth. About {100 * q['vw_free']:.0f} percent was left to buy, less than short interest. "
+            "<bookmark mark='a'/> In two days the price went from about two hundred and eleven euros to above a thousand, and "
+            "Volkswagen was briefly the world's most valuable company, until Porsche said it would release up to five "
+            "percent. Hedge funds later sued, alleging Porsche misled the market; Porsche denied it. Pause and predict: short "
+            "interest at a hundred and twenty percent of float. How, and who is short what?"
         ) as vo:
             self.play(LaggedStart(*[FadeIn(b) for b in bar], lag_ratio=0.5, run_time=4), FadeIn(src))
             self.play(FadeIn(top))

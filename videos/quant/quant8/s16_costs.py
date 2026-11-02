@@ -68,17 +68,12 @@ class Costs(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(cnt, DOWN, buff=0.5).align_to(cnt, LEFT)
         src = illustration(r"simulation: one market, weekly, 15 years; band from dynamic programming")
         with self.voiceover(
-            "Merton's investor trades every instant to hold a constant fraction. If every trade costs one percent of "
-            "the amount traded, that is ruinous: continuous rebalancing has infinite turnover. What should she do? "
-            "<bookmark mark='a'/> Draw her wealth as a point in a plane: dollars in bonds across, dollars in stocks "
-            "up. Merton's rule is a ray from the origin: every point on it has the same stock share. "
-            "<bookmark mark='b'/> With costs, the ray opens into a wedge. Inside it, do nothing. When the market "
-            "pushes the point to an edge, trade just enough to stay on the edge, never back to the middle. "
-            "<bookmark mark='c'/> Watch fifteen years of one market. The point wanders freely inside the wedge, and "
-            "each flash at an edge is a tiny trade. Count them against an investor who goes back to the ray every "
-            f"week. <bookmark mark='d'/> The wedge trades {100 * w['turn_band']:.1f} percent of wealth a year; "
-            f"staying on the ray, {100 * w['turn_ray']:.0f} percent. Mathematically the point is a diffusion "
-            "reflected at the edges of a cone."
+            "Merton trades every instant. If every trade costs one percent of the amount traded, continuous rebalancing is "
+            "ruinous. <bookmark mark='a'/> Draw wealth as a point: bonds across, stocks up. Merton's rule is a ray. "
+            "<bookmark mark='b'/> With costs it opens into a wedge: inside, do nothing; at an edge, trade just enough to "
+            "stay inside. <bookmark mark='c'/> Fifteen years of one market: the point wanders freely, and each flash is a "
+            "tiny trade. Count them against weekly rebalancing to the ray. <bookmark mark='d'/> The wedge trades "
+            f"{100 * w['turn_band']:.1f} percent of wealth a year; the ray, {100 * w['turn_ray']:.0f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")
@@ -117,16 +112,12 @@ class Costs(VoiceoverScene):
                              r"solution; Shreve and Soner (1994) proved it, as a viscosity solution", 12.0, 20, GREY_B)
         foot.to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The mathematics. The controls are no longer rates but cumulative purchases and sales, each dollar "
-            "costing epsilon: a singular control problem. <bookmark mark='a'/> The HJB equation becomes a "
-            "variational inequality: the largest of three terms is zero. Where the first binds, the value obeys the "
-            "no-trade equation; where the second binds, buying is worth exactly its cost; where the third binds, "
-            "selling is. Three regions: buy, sell, and the wedge between them. <bookmark mark='b'/> Power utility "
-            "again lets wealth factor out, so only the stock share matters. <bookmark mark='c'/> For small costs the "
-            "band's half-width grows as the cube root of the cost: a tiny cost already buys a wide band. Michael "
-            "Magill and George Constantinides saw the band in 1976; Mark Davis and Andrew Norman constructed the "
-            "solution in 1990; and Steven Shreve and Mete Soner proved it in 1994, as a viscosity solution, with the "
-            "tools of chapter four."
+            "The controls are now cumulative purchases and sales, each dollar costing epsilon: singular control. "
+            "<bookmark mark='a'/> The HJB becomes a variational inequality: the largest of three terms is zero, giving "
+            "three regions, buy, sell, and the wedge. <bookmark mark='b'/> Wealth factors out, leaving the stock share. "
+            "<bookmark mark='c'/> For small costs the band's half-width grows as the cube root of the cost. Magill and "
+            "Constantinides saw the band in 1976, Davis and Norman constructed it in 1990, and Shreve and Soner proved it "
+            "in 1994, with viscosity solutions."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -160,14 +151,12 @@ class Costs(VoiceoverScene):
             outs.append(f"{100 * r_['eps']:<4.1f}%  {100 * r_['lo']:.1f}-{100 * r_['hi']:.1f}%   "
                         f"{100 * r_['half']:.1f}pp  {100 * r_['asym']:.1f}pp")
         with self.voiceover(
-            "Lab two: the band by dynamic programming. The House's solver works on a grid of stock shares. Each "
-            "month, from every starting share it may trade to any other share, paying the cost, and then the market "
-            "moves the share. Working backwards over thirty years, it keeps the best target for every start; the "
-            "shares whose best move is to stay put are the band. <bookmark mark='a'/> Run it for gamma three and four "
-            f"cost levels. At one percent the band runs from {100 * rows[2]['lo']:.1f} to {100 * rows[2]['hi']:.1f} "
-            f"percent. Its half-width is {100 * rows[2]['half']:.1f} points against the cube-root rule's "
-            f"{100 * rows[2]['asym']:.1f}: close, and the rule is an asymptote for continuous trading, while the "
-            "solver can only trade monthly, which narrows the band most when costs are tiny."
+            "Lab two: the band by dynamic programming. Each month, from every share, the solver may trade to any share, "
+            "paying the cost, before the market moves; the shares whose best move is to stay put are the band. "
+            "<bookmark mark='a'/> At one percent the band runs from "
+            f"{100 * rows[2]['lo']:.1f} to {100 * rows[2]['hi']:.1f} percent: a half-width of {100 * rows[2]['half']:.1f} "
+            f"points against the cube-root rule's {100 * rows[2]['asym']:.1f}, narrower because the solver trades only "
+            "monthly."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -201,16 +190,11 @@ class Costs(VoiceoverScene):
                     rf"{100 * g1['merton']['turnover']:.0f}\%\text{{ a year}}", font_size=26),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(ans, DOWN, buff=0.5).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Pause and predict: if costs double, does the band double? <bookmark mark='a'/> No. It grows by the cube "
-            "root of two, about a quarter. The curve is the cube-root rule, the dots the dynamic program; from a "
-            f"half percent to one percent the solver's half-width goes from {100 * rows[1]['half']:.1f} to "
-            f"{100 * rows[2]['half']:.1f} points. <bookmark mark='b'/> Is the band worth having? Take a log-utility "
-            f"investor paying one percent and trading quarterly. The band, {100 * g1['lo']:.0f} to "
-            f"{100 * g1['hi']:.0f} percent around Merton's {100 * g1['pi_merton']:.0f}, grows "
-            f"{100 * g1['gain']:.2f} percent a year faster after costs than rebalancing to Merton every quarter, "
-            f"and turns over {100 * g1['band']['turnover']:.0f} percent of wealth a year instead of "
-            f"{100 * g1['merton']['turnover']:.0f}. Every rebalancing rule used in practice, from pension funds to "
-            "Part thirty-one's portfolios, is a version of this band."
+            "Pause and predict: if costs double, does the band double? <bookmark mark='a'/> No: it grows by the cube root "
+            "of two, about a quarter. <bookmark mark='b'/> Is the band worth it? For a log-utility investor paying one "
+            f"percent and trading quarterly, the band, {100 * g1['lo']:.0f} to {100 * g1['hi']:.0f} percent, grows "
+            f"{100 * g1['gain']:.2f} percent a year faster after costs than rebalancing to Merton, with "
+            f"{100 * g1['band']['turnover']:.0f} percent turnover instead of {100 * g1['merton']['turnover']:.0f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(q), Create(line), FadeIn(leg))
             vo.wait_until("a")

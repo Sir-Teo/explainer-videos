@@ -306,13 +306,13 @@ def compute_history_ext() -> dict:
                 j = int(np.argmin(np.abs(dvt - ref)))
                 mom = V.rn_moments(K, otm, F, T30)
                 kq, Tq, ivq, vq = (np.asarray(q[x])[ok] for x in ("k", "T", "iv", "vega"))
-                part[day] = {"day": day, "S": F, "fit": {x: fit[x] for x in ("rho", "eta", "gamma", "theta", "T", "rmse")},
+                part[day] = _json({"day": day, "S": F, "fit": {x: fit[x] for x in ("rho", "eta", "gamma", "theta", "T", "rmse")},
                              "kvar": kvar, "rv": rv, "rv_trail": rvt, "ret30": ret, "grid": grid,
                              "atm": float(_ssvi_iv(fit, 0.0, T30)),
                              "skew": float(_ssvi_iv(fit, -0.1, T30) - _ssvi_iv(fit, 0.1, T30)),
                              "svix2": float(2 / (T30 * F ** 2) * np.trapezoid(otm, K)),
                              "dvol": float(dvc[j]) if abs(dvt[j] - ref) < 7200 else None, "mom": mom, "n": int(ok.sum()),
-                             "q": np.round(np.vstack([kq, Tq, ivq, vq]), 5)}
+                             "q": np.round(np.vstack([kq, Tq, ivq, vq]), 5)})
             except Exception as e:  # a day without enough quotes is skipped, and said so
                 part[day] = {"day": day, "error": str(e)[:200]}
             print(f"  history_ext {day}: {'skipped' if 'error' in part[day] else part[day]['n']}", flush=True)
@@ -648,7 +648,7 @@ def compute_dk_tree() -> dict:
     n_mid = N // 2
     S_mid = np.asarray(tr["nodes"][n_mid])
     lv_tree = np.asarray(tr["local_vol"][n_mid])
-    x_mid = np.log(np.sqrt(S_mid[:-1] * S_mid[1:]))
+    x_mid = np.log(S_mid)  # node i of level n branches with local vol lv[n][i]
     lv_dup = np.array([float(lvf(np.array([x]), (n_mid + 0.5) * tr["dt"])[0]) for x in x_mid])
     m = np.abs(x_mid) < 0.25
     small = trees.derman_kani(1.0, T, 6, iv)  # a six-step tree to draw
@@ -738,7 +738,8 @@ def compute_lv_mc() -> dict:
     for start in (0, 15, 30, 60, 90):
         r = X[start + 30] - X[start]
         fwd[str(start)] = _mc_iv(r, T30, ks)
-    skews = {k_s: float(v[ks == -0.1][0] - v[ks == 0.1][0]) if (np.isclose(ks, -0.1).any()) else None for k_s, v in fwd.items()}
+    i_m, i_p = int(np.argmin(np.abs(ks + 0.1))), int(np.argmin(np.abs(ks - 0.1)))
+    skews = {k_s: float(v[i_m] - v[i_p]) for k_s, v in fwd.items()}
     # the smile after a spot move, under local vol (BBF: the harmonic mean of local vol between spot and strike at
     # mid-life) and under the two sticky rules
     lvf = V.local_vol_fn(fit)
@@ -773,3 +774,466 @@ def compute_lv_mc() -> dict:
                   "today_skew": float(_ssvi_iv(fit, -0.1, T30) - _ssvi_iv(fit, 0.1, T30)),
                   "shifts": shifts, "kk": kk, "move": move, "atm": atm, "bbf_today": today,
                   "R_lv": slope_lv / float(sk_bbf), "skew_bbf": float(sk_bbf), "slope_lv": slope_lv})
+
+
+def compute_trunc() -> dict:
+    s = load("surface")
+    fit, F = s["ssvi"], s["S"]
+    out = []
+    for xw in (0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.65, 0.8, 1.0, 1.2):
+        K = np.linspace(F * np.exp(-xw), F * np.exp(xw), 2001)
+        iv = _ssvi_iv(fit, np.log(K / F), T30)
+        otm = np.where(K < F, bs.price(F, K, T30, iv, cp=-1), bs.price(F, K, T30, iv, cp=1))
+        out.append((xw, float(np.sqrt(V.var_swap_strike(K, otm, F, T30)))))
+    full = load("varswap")["kvar"]
+    x20 = [v for x, v in out if x == 0.2][0]
+    # the jump term: 2(e^J - 1 - J) - J^2 for a single jump
+    J = np.linspace(-0.4, 0.4, 81)
+    return _json({"rows": out, "full": full, "share_beyond_20": float(1 - x20 ** 2 / full ** 2), "J": J,
+                  "jump_gap": 2 * (np.exp(J) - 1 - J) - J ** 2})
+
+
+def compute_replication() -> dict:
+    """Variance swaps on real Bitcoin months: each week's 30-day strip bought at its fitted price, then the hourly
+    (and daily) delta hedge along Binance's hourly BTCUSDT; and the strip restricted to a Deribit-like strike grid."""
+    rows = [r for r in _weeks() if r["rv"] is not None]
+    out = []
+    for r in rows:
+        fit, F = r["fit"], r["S"]
+        path = _hourly_path(r["day"])
+        K, otm = _strip(fit, F, T30, 0.3, 2.5, 1101)
+        hr = V.strip_replication(K, otm, F, T30, path)
+        dy = V.strip_replication(K, otm, F, T30, path[::24])
+        # a listed grid: strikes every 2.5% of the forward (rounded to $1,000) within the 30-day quotes' range
+        Kd = np.unique(np.round(F * np.exp(np.arange(-0.5, 0.5001, 0.025)) / 1000) * 1000)
+        ivd = _ssvi_iv(fit, np.log(Kd / F), T30)
+        otmd = np.where(Kd < F, bs.price(F, Kd, T30, ivd, cp=-1), bs.price(F, Kd, T30, ivd, cp=1))
+        kd = V.var_swap_strike(Kd, otmd, F, T30)
+        out.append({"day": r["day"], "kvar": hr["kvar"], "rv": hr["rv"], "rep_h": hr["replicated"], "err_h": hr["error"],
+                    "rep_d": dy["replicated"], "rv_d": dy["rv"], "kvar_listed": kd})
+    kv = np.array([o["kvar"] for o in out])
+    rv = np.array([o["rv"] for o in out])
+    eh = np.array([o["err_h"] for o in out])
+    rd = np.array([o["rep_d"] for o in out])
+    kl = np.array([o["kvar_listed"] for o in out])
+    # the replayed week: the one whose hourly error is the median
+    i = int(np.argsort(np.abs(eh))[len(eh) // 2])
+    r = rows[i]
+    path = _hourly_path(r["day"])
+    F = r["S"]
+    K, otm = _strip(r["fit"], F, T30, 0.3, 2.5, 1101)
+    q = 2 / T30 * np.gradient(K) / K ** 2
+    strip_val = np.array([float(np.sum(q * np.where(K < F, np.maximum(K - S_, 0), np.maximum(S_ - K, 0)))) for S_ in path])
+    hedge_cum = np.concatenate([[0], np.cumsum(2 / T30 * (1 / path[:-1] - 1 / F) * np.diff(path))])
+    rv_cum = np.concatenate([[0], np.cumsum(np.diff(np.log(path)) ** 2) / T30])
+    conv = V.vol_swap_convexity(rv)
+    return _json({"days": [o["day"] for o in out], "kvar": kv, "rv": rv, "err_h": eh, "rep_d": rd, "kvar_listed": kl,
+                  "n": len(out), "corr_h": float(np.corrcoef(kv + eh + (rv - kv), rv)[0, 1]),
+                  "err_h_mean": float(eh.mean()), "err_h_sd": float(eh.std()), "err_h_maxabs": float(np.abs(eh).max()),
+                  "worst_day": out[int(np.argmax(np.abs(eh)))]["day"],
+                  "daily_vs_hourly_sd": float(np.std(rd - rv)), "rv_mean": float(rv.mean()),
+                  "listed_gap_volpts": float(np.mean(np.sqrt(kv) - np.sqrt(kl)) * 100),
+                  "convexity": conv, "replay": {"day": r["day"], "S": path, "strip": strip_val, "hedge": hedge_cum,
+                                                  "rv": rv_cum, "kvar": out[i]["kvar"], "F": F}})
+
+
+def compute_vixcomp() -> dict:
+    s = load("surface")
+    fit = s["ssvi"]
+    exps = {e["expiry"]: e for e in s["per"]}
+    pair = []
+    q0 = surface.build(surface.DAYS[0])
+    for ex in ("2025-12-26", "2026-01-30"):
+        e = exps[ex]
+        F, T = e["F"], e["T"]
+        m = np.array([x == ex for x in q0["expiry"]])
+        Kq = np.unique(np.asarray(q0["K"])[m])
+        Kq = Kq[(Kq > 0.4 * F) & (Kq < 2.0 * F)]
+        iv = _ssvi_iv(fit, np.log(Kq / F), T)
+        C, P = bs.price(F, Kq, T, iv, cp=1), bs.price(F, Kq, T, iv, cp=-1)
+        sig = V.vix(Kq, C, P, F, T)
+        o = np.argsort(Kq)
+        Kq, C, P = Kq[o], C[o], P[o]
+        i0 = int(np.searchsorted(Kq, F, side="right") - 1)
+        Q = np.where(Kq < Kq[i0], P, C)
+        Q[i0] = 0.5 * (P[i0] + C[i0])
+        dK = np.gradient(Kq)
+        contrib = 2 / T * dK / Kq ** 2 * Q
+        pair.append({"expiry": ex, "T": T, "F": F, "K": Kq, "contrib": contrib, "K0": float(Kq[i0]), "sigma": sig,
+                     "corr": float((F / Kq[i0] - 1) ** 2 / T), "n": int(len(Kq))})
+    our = V.vix_30d(pair[0]["T"], pair[0]["sigma"], pair[1]["T"], pair[1]["sigma"])
+    dvol = load("varswap")["dvol"]
+    rows = [r for r in _weeks() if r["dvol"] is not None]
+    ours = np.sqrt([r["kvar"] for r in rows])
+    dv = np.array([r["dvol"] for r in rows])
+    v = data.fred("VIXCLS", "1990-01-02", "2025-12-31")
+    vd, vx = np.asarray(v["date"]), np.asarray(v["value"])
+    v3 = data.fred("VXVCLS", "2007-12-04", "2025-12-31")
+    d3, x3 = np.asarray(v3["date"]), np.asarray(v3["value"])
+    ch = vx[1:] / vx[:-1] - 1
+    top = np.argsort(ch)[-5:][::-1]
+    common, ia, ib = np.intersect1d(vd, d3, return_indices=True)
+    ratio = vx[ia] / x3[ib]
+    snap = {str(d): float(ratio[common == d][0]) for d in (20180202, 20180205, 20200316, 20240805) if (common == d).any()}
+    wk = np.arange(0, len(vd), 5)
+    return _json({"pair": pair, "our_vix": our, "dvol": dvol, "days": [r["day"] for r in rows], "ours": ours, "dvol_w": dv,
+                  "mean_ours": float(ours.mean()), "mean_dvol": float(dv.mean()), "corr": float(np.corrcoef(ours, dv)[0, 1]),
+                  "gap_mean": float((ours - dv).mean() * 100), "gap_sd": float((ours - dv).std() * 100), "n_weeks": len(rows),
+                  "vix_d": vd[wk], "vix_x": vx[wk], "vix_max": float(vx.max()), "vix_max_d": int(vd[np.argmax(vx)]),
+                  "top": [(int(vd[i + 1]), float(vx[i]), float(vx[i + 1]), float(ch[i])) for i in top],
+                  "ts_d": common[::5], "ts_ratio": ratio[::5], "contango": float((ratio < 1).mean()), "ts_snap": snap,
+                  "ts_start": int(common[0])})
+
+
+def compute_vrp_pnl() -> dict:
+    rows = [r for r in _weeks() if r["rv"] is not None and r["rv_trail"] is not None]
+    kv = np.array([r["kvar"] for r in rows])
+    rv = np.array([r["rv"] for r in rows])
+    pnl = kv - rv
+    days = [r["day"] for r in rows]
+    run_mean, run_t = [], []
+    for i in range(len(pnl)):
+        run_mean.append(float(pnl[:i + 1].mean()))
+        run_t.append(_nw_t(pnl[:i + 1]) if i >= 10 else float("nan"))
+    cum = np.cumsum(pnl)
+    dd = cum - np.maximum.accumulate(cum)
+    ret = np.array([r["ret30"] for r in rows])
+    x = kv - np.array([r["rv_trail"] for r in rows])
+    late = np.array([d >= "2024-01-01" for d in days])
+    yrs = np.array([d[:4] for d in days])
+    by_year = {y: {"implied": float(np.sqrt(kv[yrs == y]).mean()), "realized": float(np.sqrt(rv[yrs == y]).mean()),
+                   "positive": float((pnl[yrs == y] > 0).mean()), "n": int((yrs == y).sum())} for y in sorted(set(yrs))}
+    sk = float(((pnl - pnl.mean()) ** 3).mean() / pnl.std() ** 3)
+    return _json({"days": days, "kvar": kv, "rv": rv, "pnl": pnl, "run_mean": run_mean, "run_t": run_t, "cum": cum,
+                  "dd": dd, "max_dd": float(dd.min()), "n": len(rows), "mean": float(pnl.mean()), "t": _nw_t(pnl),
+                  "share_pos": float((pnl > 0).mean()), "skew": sk, "worst": float(pnl.min()),
+                  "worst_day": days[int(np.argmin(pnl))], "best": float(pnl.max()), "best_day": days[int(np.argmax(pnl))],
+                  "implied_mean": float(np.sqrt(kv).mean()), "realized_mean": float(np.sqrt(rv).mean()),
+                  "btz": _nw_reg(x, ret), "btz_late": _nw_reg(x[late], ret[late]), "by_year": by_year,
+                  "t_late": _nw_t(pnl[late]), "share_late": float((pnl[late] > 0).mean())})
+
+
+def compute_spx_vrp() -> dict:
+    v = data.fred("VIXCLS", "1990-01-02", "2025-12-31")
+    vix = dict(zip(np.asarray(v["date"]).tolist(), np.asarray(v["value"]).tolist()))
+    g = data.yahoo_daily("^GSPC", "1990-01-01", "2025-11-30")
+    d, c = np.asarray(g["date"]), np.asarray(g["close"])
+    r = np.diff(np.log(c))
+    vv, rr, dd = [], [], []
+    for i in range(len(d) - 22):
+        if d[i] in vix:
+            rr.append(np.sum(r[i:i + 21] ** 2) * 252 / 21)
+            vv.append(vix[d[i]] ** 2 / 1e4)
+            dd.append(int(d[i]))
+    vv, rr, dd = np.array(vv), np.array(rr), np.array(dd)
+    prem = vv - rr
+    mo = np.arange(0, len(dd), 21)
+    return _json({"n": len(dd), "start": int(dd[0]), "end": int(dd[-1]), "vix_mean": float(np.sqrt(vv).mean()),
+                  "rv_mean": float(np.sqrt(rr).mean()), "share_pos": float((prem > 0).mean()),
+                  "worst": float(prem.min()), "worst_day": int(dd[np.argmin(prem)]), "t": _nw_t(prem[::21], lags=1),
+                  "d": dd[mo], "vix": np.sqrt(vv[mo]), "rv": np.sqrt(rr[mo])})
+
+
+def compute_rn_moments() -> dict:
+    rows = [r for r in _weeks()]
+    sk = np.array([r["mom"]["skew"] for r in rows])
+    ku = np.array([r["mom"]["kurt"] for r in rows])
+    va = np.array([r["mom"]["var"] for r in rows])
+    ret = np.array([r["ret30"] if r["ret30"] is not None else np.nan for r in rows])
+    ok = np.isfinite(ret)
+    svix = np.array([r["svix2"] for r in rows])
+    # the three strips on the Surface, 30 days: weights times option prices, for log variance, SVIX and skewness
+    s = load("surface")
+    F = s["S"]
+    K, otm = _strip(s["ssvi"], F, T30, 0.4, 2.2, 721)
+    x = np.log(K / F)
+    strips = {"logvar": 2 / K ** 2 * otm, "svix": 2 / F ** 2 * otm * np.ones_like(K), "cubic": (6 * x - 3 * x * x) / K ** 2 * otm}
+    strips = {k_: (v_ / np.abs(v_).max()).tolist() for k_, v_ in strips.items()}
+    m0 = V.rn_moments(K, otm, F, T30)
+    return _json({"days": [r["day"] for r in rows], "skew": sk, "kurt": ku, "var": va, "share_pos_skew": float((sk > 0).mean()),
+                  "mean_skew": float(sk.mean()), "mean_kurt": float(ku.mean()),
+                  "corr_ret": float(np.corrcoef(sk[ok], ret[ok])[0, 1]),
+                  "corr_skew_rr": float(np.corrcoef(sk, [r["skew"] for r in rows])[0, 1]),
+                  "svix_mean": float(np.mean(svix)), "svix_late": float(np.mean(svix[[r["day"] >= "2024" for r in rows]])),
+                  "K": K / F, "strips": strips, "surface_mom": m0})
+
+
+VX_EXPIRIES = ("2017-05-17", "2017-06-21", "2017-07-19", "2017-08-16", "2017-09-20", "2017-10-18", "2017-11-15",
+               "2017-12-20", "2018-01-17", "2018-02-14", "2018-03-21", "2018-04-18")
+
+
+def compute_vx_etp() -> dict:
+    """VIX futures settlements (Cboe), June 2017 to March 2018: the curve, a short-term futures index rebuilt by its
+    published roll rule, a -1x daily note on it, and the close-of-day futures its hedger had to buy."""
+    settle = {}
+    for e in VX_EXPIRIES:
+        d = data.cboe_vx(e)
+        settle[int(e.replace("-", ""))] = dict(zip(np.asarray(d["date"]).tolist(), np.asarray(d["settle"]).tolist()))
+    exps = sorted(settle)
+    days = sorted(d for d in set().union(*[set(v) for v in settle.values()]) if 20170601 <= d <= 20180320)
+    days = [d for d in days if sum(1 for e in exps if e > d and d in settle[e]) >= 2]
+    ix = V.vx_index(days, settle, exps)
+    note = V.inverse_note(ix["ret"])
+    i5 = days.index(20180205)
+    idec = max(i for i, d in enumerate(days) if d <= 20171229)
+    slope, curve = [], []
+    for d in days:
+        fut = [e for e in exps if e > d and d in settle[e]]
+        slope.append(settle[fut[1]][d] / settle[fut[0]][d] - 1)
+        curve.append([(_ymd_days(e) - _ymd_days(d), settle[e][d]) for e in fut[:7]])
+    vix = data.fred("VIXCLS", "2017-06-01", "2018-06-30")
+    vxd = dict(zip(np.asarray(vix["date"]).tolist(), np.asarray(vix["value"]).tolist()))
+    flow = V.rebalance_flow(-1.0, ix["ret"], note[:-1])  # per dollar of note at the start
+    e1, e2 = 20180214, 20180321
+    return _json({"days": days, "t": [_ymd_year(d) for d in days], "level": ix["level"], "ret": ix["ret"], "w1": ix["w1"],
+                  "note": note, "slope": slope, "curve": curve, "vix": [vxd.get(d) for d in days],
+                  "feb5_ret": float(ix["ret"][i5 - 1]), "note_feb5": float(note[i5] / note[i5 - 1] - 1),
+                  "note_jun_dec": float(note[idec] - 1), "note_peak": float(note[:i5].max()),
+                  "note_peak_day": days[int(np.argmax(note[:i5]))], "contango": float((np.array(slope) > 0).mean()),
+                  "median_slope": float(np.median(slope)), "flow": flow, "flow_feb5": float(flow[i5 - 1] / note[i5 - 1]),
+                  "front": [settle[e1][20180202], settle[e1][20180205]], "second": [settle[e2][20180202], settle[e2][20180205]],
+                  "front_jump": float(settle[e1][20180205] / settle[e1][20180202] - 1),
+                  "second_jump": float(settle[e2][20180205] / settle[e2][20180202] - 1), "i_feb5": i5})
+
+
+def _ymd_days(d):
+    d = int(d)
+    return date(d // 10000, (d // 100) % 100, d % 100).toordinal()
+
+
+def _ymd_year(d):
+    d = int(d)
+    x = date(d // 10000, (d // 100) % 100, d % 100)
+    return x.year + (x.timetuple().tm_yday - 1) / 365
+
+
+def compute_gamma_toy() -> dict:
+    """Simulated (the generating model: Gaussian minute shocks, a dealer gamma k fed back through linear impact, half the
+    hedge left for the last 30 minutes): realized vol and the intraday-momentum slope against k, five seeds."""
+    ks = np.linspace(-0.6, 0.6, 13)
+    vol, slope = [], []
+    for seed in range(5):
+        eps = 0.001 * np.random.default_rng(seed).standard_normal((2000, 390))
+        base = V.gamma_day(eps, 0.0)["rest"].std()
+        vs, ss = [], []
+        for k in ks:
+            o = V.gamma_day(eps, k)
+            vs.append(float(o["rest"].std() / base))
+            ss.append(float(np.polyfit(o["rest"], o["last"], 1)[0]))
+        vol.append(vs)
+        slope.append(ss)
+    eps = 0.001 * np.random.default_rng(11).standard_normal((300, 390))
+    lo, hi = V.gamma_day(eps, 0.5), V.gamma_day(eps, -0.5)
+    return _json({"k": ks, "vol": vol, "slope": slope, "demo_long": np.cumsum(lo["r"][7]), "demo_short": np.cumsum(hi["r"][7]),
+                  "demo_eps": np.cumsum(eps[7]), "scatter_long": [lo["rest"], lo["last"]],
+                  "scatter_short": [hi["rest"], hi["last"]],
+                  "slope_long": float(np.polyfit(lo["rest"], lo["last"], 1)[0]),
+                  "slope_short": float(np.polyfit(hi["rest"], hi["last"], 1)[0]),
+                  "vol_short": float(np.mean([v[1] for v in vol])), "vol_long": float(np.mean([v[-2] for v in vol])),
+                  "k_short": float(ks[1]), "k_long": float(ks[-2])})
+
+
+# ---------------------------------------------------------------------------
+def _vae_train(X, seed, steps=3000, every=100, show=None):
+    import torch
+    torch.set_num_threads(1)
+    torch.manual_seed(seed)
+    mu, sd = X.mean(0), X.std(0) + 1e-6
+    Z = torch.tensor((X - mu) / sd, dtype=torch.float32)
+    n_in, n_lat = Z.shape[1], 2
+    enc = torch.nn.Sequential(torch.nn.Linear(n_in, 64), torch.nn.Tanh(), torch.nn.Linear(64, 2 * n_lat))
+    dec = torch.nn.Sequential(torch.nn.Linear(n_lat, 64), torch.nn.Tanh(), torch.nn.Linear(64, n_in))
+    opt = torch.optim.Adam(list(enc.parameters()) + list(dec.parameters()), lr=3e-3)
+    loss_h, ck = [], []
+    for it in range(steps + 1):
+        e = enc(Z)
+        m_, lv = e[:, :n_lat], e[:, n_lat:]
+        z = m_ + torch.exp(0.5 * lv) * torch.randn_like(m_)
+        rec = dec(z)
+        kl = -0.5 * torch.mean(torch.sum(1 + lv - m_ ** 2 - torch.exp(lv), 1))
+        loss = torch.mean((rec - Z) ** 2) + 0.01 * kl
+        if it % every == 0:
+            with torch.no_grad():
+                mm = enc(Z)[:, :n_lat]
+                r_ = dec(mm).numpy()
+                err = float(np.sqrt(np.mean((np.exp(r_ * sd + mu) - np.exp(X)) ** 2)) * 100)
+                loss_h.append(err)
+                if show is not None:
+                    ck.append(np.exp(r_[show] * sd + mu))
+        if it == steps:
+            break
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    return enc, dec, mu, sd, loss_h, ck
+
+
+def compute_vae() -> dict:
+    import torch
+    rows = _weeks()
+    X = np.array([np.asarray(r["grid"]).ravel() for r in rows])
+    X = np.log(np.clip(X, 0.05, 5.0))
+    days = [r["day"] for r in rows]
+    show = days.index(min(days, key=lambda d: abs(_year(d) - _year("2022-11-09"))))
+    losses, recons = [], []
+    for seed in range(5):
+        enc, dec, mu, sd, lh, ck = _vae_train(X, seed, show=show)
+        losses.append(lh)
+        recons.append(lh[-1])
+        if seed == 0:
+            enc0, dec0, mu0, sd0, ck0 = enc, dec, mu, sd, ck
+    with torch.no_grad():
+        m_ = enc0(torch.tensor((X - mu0) / sd0, dtype=torch.float32))[:, :2].numpy()
+        recon = dec0(torch.tensor(m_)).numpy()
+        err = float(np.sqrt(np.mean((np.exp(recon * sd0 + mu0) - np.exp(X)) ** 2)) * 100)
+        walk = {}
+        for name, axis in (("z1", 0), ("z2", 1)):
+            outs = []
+            for v_ in np.linspace(-2, 2, 5):
+                z = np.zeros((1, 2))
+                z[0, axis] = v_
+                outs.append(np.exp(dec0(torch.tensor(z, dtype=torch.float32)).numpy()[0] * sd0 + mu0).reshape(len(TGRID), len(KGRID)))
+            walk[name] = np.array(outs)
+    # the equal-size baseline: two principal components of the (standardized) log grids
+    Zs = (X - mu0) / sd0
+    U, S_, Vt = np.linalg.svd(Zs - Zs.mean(0), full_matrices=False)
+    rec2 = (U[:, :2] * S_[:2]) @ Vt[:2] + Zs.mean(0)
+    pca_err = float(np.sqrt(np.mean((np.exp(rec2 * sd0 + mu0) - np.exp(X)) ** 2)) * 100)
+    atm = np.array([np.asarray(r["grid"])[2, len(KGRID) // 2] for r in rows])
+    skew = np.array([r["skew"] for r in rows])
+    c1 = [float(np.corrcoef(m_[:, j], atm)[0, 1]) for j in range(2)]
+    c2 = [float(np.corrcoef(m_[:, j], skew)[0, 1]) for j in range(2)]
+    return _json({"latent": m_, "recon_rmse_volpts": err, "walk": walk, "corr_atm": c1, "corr_skew": c2, "days": days,
+                  "atm": atm, "skew": skew, "losses": losses, "recon_seeds": recons, "ck_steps": list(range(0, 3001, 100)),
+                  "ck_show": ck0, "show_day": days[show], "show_true": np.exp(X[show]), "pca2_rmse": pca_err,
+                  "n": len(rows), "enc_mu": mu0, "enc_sd": sd0})
+
+
+def compute_neural_surface() -> dict:
+    """The penalised network (Ackerer et al. 2020) and the same network unpenalised on the Surface: 80% of the
+    quotes to train, 20% held out, three splits/seeds; SSVI fitted on the same training quotes as the baseline."""
+    import torch
+    from explainer.quant.house import deep
+    torch.set_num_threads(1)
+    q = surface.build(surface.DAYS[0])
+    k, T, iv, vg = (np.asarray(q[x]) for x in ("k", "T", "iv", "vega"))
+    ok = (np.abs(k) < 0.6) & (T > 2 / 365)
+    k, T, iv, vg = k[ok], T[ok], iv[ok], vg[ok]
+    part = CACHE.partial("neural_surface", {"v": 1, "steps": 3000})
+    gk = np.linspace(-0.6, 0.6, 25)
+    gT = np.linspace(3 / 365, 0.8, 12)
+    for seed in range(3):
+        tr = np.random.default_rng(seed).random(len(k)) >= 0.2
+        for pen in (1.0, 0.0):
+            key = f"{seed}_{pen:g}"
+            if key in part:
+                continue
+            r = deep.train_surface_net(k, T, iv, penalty=pen, seed=seed, steps=3000, every=100, train=tr,
+                                       grid=(gk, gT), log=print if seed == 0 else None)
+            keep = {x: r[x] for x in ("step", "train", "test", "pen", "g_neg", "train_rmse", "test_rmse", "g_viol",
+                                      "cal_viol", "secs")}
+            keep["test_vw"] = float(np.sqrt(np.sum(vg[~tr] * (r["pred"][~tr] - iv[~tr]) ** 2) / np.sum(vg[~tr])) * 100)
+            if seed == 0:
+                keep["surf"] = r["surf"]
+                keep["g_flags"] = r["g_flags"]
+            fit = V.fit_ssvi(k[tr], T[tr], iv[tr] ** 2 * T[tr], weights=vg[tr])
+            pr = _ssvi_iv(fit, k, T)
+            keep["ssvi_test"] = float(np.sqrt(np.mean((pr[~tr] - iv[~tr]) ** 2)) * 100)
+            keep["ssvi_test_vw"] = float(np.sqrt(np.sum(vg[~tr] * (pr[~tr] - iv[~tr]) ** 2) / np.sum(vg[~tr])) * 100)
+            keep["ssvi_train"] = float(np.sqrt(np.mean((pr[tr] - iv[tr]) ** 2)) * 100)
+            keep["train_mask"] = tr.astype(int)
+            part[key] = _json(keep)
+    R = {key: part[key] for key in part.done}
+    pen = [R[f"{s_}_1"] for s_ in range(3)]
+    raw = [R[f"{s_}_0"] for s_ in range(3)]
+    return _json({"runs": R, "k": k, "T": T, "iv": iv, "gk": gk, "gT": gT,
+                  "colloc_k": np.tile(np.linspace(-1, 1, 41), 30), "colloc_T": np.repeat(np.linspace(3 / 365, 0.8, 30), 41),
+                  "pen_test": [r_["test_rmse"] for r_ in pen], "raw_test": [r_["test_rmse"] for r_ in raw],
+                  "ssvi_test": [r_["ssvi_test"] for r_ in pen], "pen_test_vw": [r_["test_vw"] for r_ in pen],
+                  "ssvi_test_vw": [r_["ssvi_test_vw"] for r_ in pen], "pen_g": [r_["g_viol"] for r_ in pen],
+                  "raw_g": [r_["g_viol"] for r_ in raw], "pen_cal": [r_["cal_viol"] for r_ in pen],
+                  "raw_cal": [r_["cal_viol"] for r_ in raw], "secs": [r_["secs"] for r_ in pen + raw]})
+
+
+def compute_operator_net() -> dict:
+    """One network for every week (the frontier's "one model for all days", in miniature): implied vol as a function of
+    (k, sqrt T) and the week's two VAE coordinates, trained on the quotes of the first 80% of weeks, scored on the
+    last 20% against the VAE's own decoded grid (the same two numbers) and SSVI fitted to each held-out week itself."""
+    import torch
+    from explainer.quant.house import deep
+    from scipy.interpolate import RegularGridInterpolator
+    torch.set_num_threads(1)
+    rows = _weeks()
+    vae = load("vae")
+    Z = np.asarray(vae["latent"])
+    n = len(rows)
+    cut = int(0.8 * n)
+    Q = [np.asarray(r["q"]) for r in rows]
+    wk = np.concatenate([np.full(q.shape[1], i) for i, q in enumerate(Q)])
+    A = np.concatenate(Q, axis=1)
+    k, T, iv = A[0], A[1], A[2]
+    zz = Z[wk]
+    tr = wk < cut
+    part = CACHE.partial("operator_net", {"v": 1})
+    for seed in range(3):
+        key = str(seed)
+        if key in part:
+            continue
+        torch.manual_seed(seed)
+        mlp = deep._mlp(4, 64, 3, act=torch.nn.Tanh)
+        c0 = float(np.log(np.exp(0.6) - 1))
+        f32 = lambda a: torch.tensor(np.asarray(a, float), dtype=torch.float32)  # noqa: E731
+        X = f32(np.column_stack([k, np.sqrt(T), zz]))
+        y = f32(iv)
+        opt = torch.optim.Adam(mlp.parameters(), lr=2e-3)
+        g = np.random.default_rng(seed)
+        idx_tr = np.nonzero(tr)[0]
+        hist = []
+        for it in range(4001):
+            b = torch.tensor(g.choice(idx_tr, 2048))
+            pred = torch.nn.functional.softplus(mlp(X[b])[:, 0] + c0)
+            loss = ((pred - y[b]) ** 2).mean()
+            if it % 200 == 0:
+                with torch.no_grad():
+                    p_all = torch.nn.functional.softplus(mlp(X)[:, 0] + c0).numpy()
+                hist.append((it, float(np.sqrt(np.mean((p_all[tr] - iv[tr]) ** 2)) * 100),
+                             float(np.sqrt(np.mean((p_all[~tr] - iv[~tr]) ** 2)) * 100)))
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+        part[key] = {"hist": hist, "test": hist[-1][2], "train": hist[-1][1]}
+    # baselines on the held-out weeks
+    dec_err, ssvi_err = [], []
+    import torch as _t
+    for i in range(cut, n):
+        q = Q[i]
+        ssvi_err.append(np.asarray(_ssvi_iv(rows[i]["fit"], q[0], q[1])) - q[2])
+    ssvi_rmse = float(np.sqrt(np.mean(np.concatenate(ssvi_err) ** 2)) * 100)
+    # the VAE decoder at the same two numbers (the decoder is retrained here exactly as in ``vae``, seed 0)
+    X = np.log(np.clip(np.array([np.asarray(r["grid"]).ravel() for r in rows]), 0.05, 5.0))
+    enc, dec, mu, sd, _, _ = _vae_train(X, 0)
+    with _t.no_grad():
+        D = np.exp(dec(_t.tensor(Z, dtype=_t.float32)).numpy() * sd + mu)
+    for i in range(cut, n):
+        q = Q[i]
+        f = RegularGridInterpolator((TGRID, KGRID), D[i].reshape(len(TGRID), len(KGRID)), bounds_error=False, fill_value=None)
+        dec_err.append(f(np.column_stack([np.clip(q[1], TGRID[0], TGRID[-1]), np.clip(q[0], KGRID[0], KGRID[-1])])) - q[2])
+    dec_rmse = float(np.sqrt(np.mean(np.concatenate(dec_err) ** 2)) * 100)
+    R = [part[str(s_)] for s_ in range(3)]
+    return _json({"runs": R, "test": [r_["test"] for r_ in R], "train": [r_["train"] for r_ in R], "ssvi_rmse": ssvi_rmse,
+                  "dec_rmse": dec_rmse, "n_weeks": n, "n_train_weeks": cut, "n_quotes": int(len(k)),
+                  "first_test_day": rows[cut]["day"]})
+
+
+ITEMS = {"surface": compute_surface, "localvol": compute_localvol, "varswap": compute_varswap,
+         "history": compute_history, "history_ext": compute_history_ext, "volmageddon": compute_volmageddon,
+         "termskew": compute_termskew, "dynamics": compute_dynamics, "arbitrage": compute_arbitrage,
+         "svi_replay": compute_svi_replay, "ssvi_replay": compute_ssvi_replay, "bbf": compute_bbf,
+         "dk_tree": compute_dk_tree, "gyongy": compute_gyongy, "lv_mc": compute_lv_mc, "trunc": compute_trunc,
+         "replication": compute_replication, "vixcomp": compute_vixcomp, "vrp_pnl": compute_vrp_pnl,
+         "spx_vrp": compute_spx_vrp, "rn_moments": compute_rn_moments, "vx_etp": compute_vx_etp,
+         "gamma_toy": compute_gamma_toy, "vae": compute_vae, "neural_surface": compute_neural_surface,
+         "operator_net": compute_operator_net, "envelope": compute_envelope}
+
+if __name__ == "__main__":
+    CACHE.main(ITEMS, __doc__)

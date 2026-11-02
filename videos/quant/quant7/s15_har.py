@@ -58,7 +58,7 @@ class Har(VoiceoverScene):
         verdict = ("Not a jump: the whole day was a storm, every five minutes violent, so the bipower measure saw it all."
                    if storm else "A jump, by the test.")
         with self.voiceover(
-            "Realized variance counts everything, including jumps: one sudden move adds one giant square. Ole "
+            "Realized variance counts jumps too: one sudden move, one giant square. Ole "
             "Barndorff-Nielsen and Neil Shephard found a measure that ignores it. <bookmark mark='a'/> Instead of "
             "squaring each return, multiply its size by its neighbour's. A jump is paired with an ordinary "
             "neighbour, so its rectangle stays thin: bipower variation converges to the continuous part alone, and "

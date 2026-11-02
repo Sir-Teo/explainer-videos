@@ -15,55 +15,19 @@ class Signals(VoiceoverScene):
         f = load("factors")
         e = load("envelope")
         self.card()
-        self.pead()
+        o = load("osap")
+        self.fscore(o)
         self.curves(f)
         self.decay(f)
+        self.zoo(o)
         self.counter(e)
 
     def card(self):
-        c = chapter_card(7, r"Accounting signals that became factors", r"Do the statements predict returns?",
-                         lit=(1968,), part=PART)
-        with self.voiceover("Chapter seven. Accounting signals that became factors."):
+        c = chapter_card(14, r"Accounting signals that became factors", r"Do the statements predict returns, and "
+                         r"for how long?", lit=(1996,), part=PART)
+        with self.voiceover("Chapter fourteen. Accounting signals that became factors, and decayed."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
-
-    def pead(self):
-        m = np.linspace(-12, 6, 181)
-        good = 0.07 * (1 / (1 + np.exp(-(m + 3) / 2.2)) - 1 / (1 + np.exp(9 / 2.2))) + 0.012 * np.clip(m, 0, None) / 6
-        bad = -0.09 * (1 / (1 + np.exp(-(m + 3) / 2.2)) - 1 / (1 + np.exp(9 / 2.2))) - 0.018 * np.clip(m, 0, None) / 6
-        g = axes([-12, 6], [-0.12, 0.10], x_length=7.4, y_length=4.6, xlabel=r"months from the annual report",
-                 ylabel=r"cumulative abnormal return", xticks=[-12, -6, 0, 6], yticks=[-0.1, -0.05, 0, 0.05, 0.1],
-                 yfmt=lambda u: f"{100 * u:+.0f}\\%".replace("+0", "0"), font_size=18).to_edge(LEFT, buff=0.7)
-        g.shift(DOWN * 0.2)
-        ax = g.ax
-        lg = curve(ax, m, good, GAIN, stroke_width=4)
-        lb = curve(ax, m, bad, LOSS, stroke_width=4)
-        zero = DashedLine(ax.c2p(0, -0.12), ax.c2p(0, 0.10), color=GREY_B, stroke_width=2)
-        drift = SurroundingRectangle(VGroup(Dot(ax.c2p(0, 0.08)), Dot(ax.c2p(6, -0.12))), buff=0.02, color=YELLOW,
-                                     stroke_width=2, corner_radius=0.05)
-        side = VGroup(
-            label(r"schematic, after Ball and Brown (1968)", font_size=19, color=GREY_B),
-            legend([(GAIN, r"earnings above last year's"), (LOSS, r"earnings below")], font_size=22),
-            wrapped_label(r"most of the news is in the price before the report; but prices keep drifting the same "
-                          r"way after it: post-earnings-announcement drift (Bernard and Thomas 1989)", 4.6, 22, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.5)
-        with self.voiceover(
-            "Do the statements move prices? In 1968 Ray Ball and Philip Brown sorted firms by whether their annual "
-            "earnings beat the year before, and followed their returns, beyond what the market did, for a year "
-            "before and six months after the report. <bookmark mark='a'/> The firms with good news had risen, and "
-            "the firms with bad news had fallen, mostly before the report came out: the market learns most of it "
-            "from other sources first. <bookmark mark='b'/> But not all of it. After the announcement the prices "
-            "kept drifting in the same direction. In 1989 Victor Bernard and Jacob Thomas showed this drift lasts "
-            "about sixty trading days, and that it survives every risk adjustment they tried. The market under-reacts "
-            "to earnings news. It was one of the first well-documented anomalies, and quant desks still trade it."
-        ) as vo:
-            self.play(FadeIn(g), Create(zero), FadeIn(side[0]))
-            vo.wait_until("a")
-            self.play(Create(lg), Create(lb), FadeIn(side[1]), run_time=3)
-            vo.wait_until("b")
-            self.play(Create(drift), FadeIn(side[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def curves(self, f):
         g = axes([1963, 2021], [np.log10(0.4), np.log10(16)], x_length=6.9, y_length=4.8,
@@ -94,8 +58,7 @@ class Signals(VoiceoverScene):
             "and sells the tenth with the least. Low accruals, Sloan's signal. High profitability. Low investment, "
             "firms that grow their assets slowly. Cheap on book value, and cheap on earnings. "
             "<bookmark mark='a'/> Over the whole sample, most of them made money: a dollar in the investment "
-            "spread became about eight, in accruals nearly seven. Piotroski's F-score of 2000 combined nine such "
-            "accounting tests into one. <bookmark mark='b'/> The dots mark the year after each signal was "
+            "spread became about eight, in accruals nearly seven. <bookmark mark='b'/> The dots mark the year after each signal was "
             "published. Look at what the lines do after their dot."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(how))
@@ -135,20 +98,16 @@ class Signals(VoiceoverScene):
         side = VGroup(
             leg,
             MathTex(rf"\text{{average: }}{100 * avg_pre:.1f}\% \to {100 * avg_post:.1f}\%", font_size=32),
-            wrapped_label(r"McLean and Pontiff (2016), 97 predictors: returns 26\% lower out of sample and 58\% lower "
-                          r"after publication", 4.6, 22, QC.IDEA),
+            wrapped_label(r"five signals are a small sample: next, every published predictor", 4.6, 22, QC.IDEA),
             wrapped_label(r"profitability, published in 2013, has too few years after to judge", 4.6, 19, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
             "Split each signal's history at its publication. Before: the bright bars. After: the grey ones. "
             "<bookmark mark='a'/> Accruals fell from five percent a year to two. Investment, from over six to "
             "slightly negative. Book-to-market, from seven to one. Earnings yield, from seven and a half to under "
-            "three. Profitability was published too recently to judge. <bookmark mark='b'/> This is not one unlucky "
-            "sample. In 2016 David McLean and Jeffrey Pontiff took ninety-seven published predictors and found their "
-            "returns were about a quarter lower just outside the original sample, which is what you expect if part "
-            "of the effect was luck, and more than half lower after publication, which is what you expect if "
-            "investors read the papers and traded the effect away. Either way, a backtest of a published signal "
-            "overstates its future."
+            "three. Profitability was published too recently to judge. <bookmark mark='b'/> Five signals could be "
+            "five unlucky draws. To know whether a backtest of a published signal overstates its future, you need "
+            "every published signal."
         ) as vo:
             self.play(FadeIn(g), FadeIn(names), FadeIn(leg))
             self.play(LaggedStart(*[GrowFromEdge(b[0], DOWN) for b in pre_b], lag_ratio=0.2),
@@ -158,6 +117,132 @@ class Signals(VoiceoverScene):
             self.play(FadeIn(side[1]), FadeIn(side[3]))
             vo.wait_until("b")
             self.play(FadeIn(side[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def fscore(self, o):
+        tests = [r"ROA $> 0$", r"CFO $> 0$", r"$\Delta$ROA $> 0$", r"CFO $>$ ROA", r"$\Delta$leverage $< 0$",
+                 r"$\Delta$current ratio $> 0$", r"no new shares", r"$\Delta$gross margin $> 0$",
+                 r"$\Delta$asset turnover $> 0$"]
+        groups = [(r"profitability", QC.GAIN, 4), (r"leverage and liquidity", QC.SPOT, 3), (r"efficiency", QC.IDEA, 2)]
+        cells = VGroup()
+        k = 0
+        for name, col, n in groups:
+            col_g = VGroup(label(name, font_size=20, color=col))
+            for _ in range(n):
+                col_g.add(VGroup(Square(0.32, stroke_color=col, stroke_width=2),
+                                 label(tests[k], font_size=20, color=GREY_A)).arrange(RIGHT, buff=0.2))
+                k += 1
+            col_g.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+            cells.add(col_g)
+        cells.arrange(RIGHT, buff=0.6, aligned_edge=UP).to_edge(UP, buff=0.6)
+        ex = o["examples"]
+        ps, gp = ex["PS"], ex["GP"]
+        rows = VGroup(
+            wrapped_label(r"Piotroski (2000): one point per test passed, 0 to 9. Among high book-to-market stocks, "
+                          r"buying high scores and selling low ones earned about 23\% a year, 1976--1996.", 12.0, 22,
+                          GREY_A),
+            wrapped_label(r"Novy-Marx (2013): gross profits over assets, (revenue $-$ cost of goods sold)/assets: the "
+                          r"cleanest measure of profitability, high up the income statement, before accrual choices.",
+                          12.0, 22, GREY_A),
+            MathTex(rf"\text{{F-score long-short: }}{ps['in']:.2f}\%\ \text{{a month in sample}} \to {ps['post']:.2f}\%"
+                    rf"\ \text{{after }}{ps['year']};\quad \text{{GP: }}{gp['in']:.2f}\% \to {gp['post']:.2f}\%"
+                    rf"\ \text{{after }}{gp['year']}", font_size=26, color=QC.HOUSE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(cells, DOWN, buff=0.5)
+        with self.voiceover(
+            "Sloan's accruals were one statement-based signal. Joseph Piotroski combined nine. Each test scores a "
+            "point: is the firm profitable, does it generate operating cash, is profitability rising, is cash flow "
+            "above earnings, which is Sloan again; is leverage falling, liquidity rising, has it avoided issuing "
+            "shares; are margins and turnover improving. <bookmark mark='a'/> Among cheap stocks, he reported that "
+            "buying high scores and shorting low ones earned about twenty-three percent a year from 1976 to 1996. "
+            "<bookmark mark='b'/> Robert Novy-Marx argued in 2013 that the cleanest profit measure sits high on the "
+            "income statement, gross profit over assets, before most accounting choices bite. <bookmark mark='c'/> "
+            "Both have open-source replications. Unusually, both did as well or better after publication than "
+            "before; keep them in mind as exceptions."
+        ) as vo:
+            self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.4, run_time=4))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def zoo(self, o):
+        recs = o["recs"]
+        yrs = np.array([r_["year"] for r_ in recs])
+        ins = np.array([r_["in"] for r_ in recs])
+        post = np.array([r_["post"] for r_ in recs])
+        acc = np.array([r_["cat"] == "Accounting" for r_ in recs])
+        g = axes([1968, 2018], [-1.0, 3.0], x_length=8.0, y_length=4.6, xlabel=r"year the predictor was published",
+                 ylabel=r"long-short return, \% a month", xticks=[1970, 1980, 1990, 2000, 2010],
+                 xfmt=lambda v: f"{int(v)}", yticks=[-1, 0, 1, 2, 3], font_size=17).to_edge(LEFT, buff=0.5)
+        g.shift(DOWN * 0.2)
+        ax = g.ax
+        zero = DashedLine(ax.c2p(1968, 0), ax.c2p(2018, 0), color=GREY_D, stroke_width=1.5)
+        rng = np.random.default_rng(0)
+        jit = rng.uniform(-0.35, 0.35, len(recs))
+        f = ValueTracker(0.0)
+
+        def dots():
+            a = f.get_value()
+            out = VGroup()
+            for x, j, i_, p_, c in zip(yrs, jit, ins, post, acc):
+                y = float(np.clip((1 - a) * i_ + a * p_, -1.0, 3.0))
+                col = interpolate_color(ManimColor(QC.IDEA if c else QC.SPOT), ManimColor(GREY_B), a * 0.6)
+                out.add(Dot(ax.c2p(np.clip(x + j, 1968, 2018), y), radius=0.04, color=col, fill_opacity=0.8))
+            return out
+
+        dd = always_redraw(dots)
+        A, Ac = o["all"], o["acc"]
+        bars = VGroup()
+        for i, (v, col, txt) in enumerate(((A["in"], QC.IDEA, r"in sample"), (A["oos"], GREY_A, r"before publication"),
+                                           (A["post"], GREY_B, r"after publication"))):
+            h = v * 1.6
+            r_ = Rectangle(width=0.9, height=h, stroke_width=0, fill_color=col, fill_opacity=0.9)
+            r_.move_to([3.4 + 1.25 * i, -2.2, 0], aligned_edge=DOWN)
+            bars.add(VGroup(r_, MathTex(rf"{v:.2f}", font_size=26, color=col).next_to(r_, UP, buff=0.08),
+                            wrapped_label(txt, 1.2, 15, GREY_B).next_to(r_, DOWN, buff=0.1)))
+        side = VGroup(
+            label(rf"all {A['n']} predictors: after/in $= {A['post_ratio']:.2f}$", font_size=21),
+            label(rf"bootstrap over predictors, 95\%: {o['boot_lo']:.2f} to {o['boot_hi']:.2f}", font_size=18,
+                  color=GREY_B),
+            label(rf"{Ac['n']} accounting ones: {Ac['in']:.2f} $\to$ {Ac['oos']:.2f} $\to$ {Ac['post']:.2f}",
+                  font_size=21, color=QC.IDEA),
+            wrapped_label(r"McLean and Pontiff (2016), 97 predictors: 26\% lower out of sample, 58\% lower after "
+                          r"publication", 4.4, 19, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.35)
+        leg = legend([(QC.IDEA, r"accounting"), (QC.SPOT, r"price, analyst, other")], font_size=18)
+        leg.next_to(g, UP, buff=0.05).align_to(g, RIGHT)
+        src = real_data(r"Chen and Zimmermann (2022), open-source asset pricing, release 2024.10, original-paper "
+                        r"portfolios, through 2020")
+        ex = o["examples"]
+        with self.voiceover(
+            "Now all of them at once. Andrew Chen and Tom Zimmermann rebuilt the long-short portfolio of every "
+            f"predictor in the published literature and released the code and data. {A['n']} of them have at least "
+            "two years both in their paper's sample and after publication. Each dot is one, placed at the year it was "
+            "published, at the height of its return in the original sample. <bookmark mark='a'/> Now let every dot "
+            "fall to what it earned after publication. <bookmark mark='b'/> Collapse them into three averages: "
+            f"{A['in']:.2f} percent a month in sample, {A['oos']:.2f} out of sample but before publication, "
+            f"{A['post']:.2f} after. About {100 * (1 - A['oos_ratio']):.0f} percent of the effect disappears just "
+            "outside the sample, which is what you expect if part of it was luck, and "
+            f"{100 * (1 - A['post_ratio']):.0f} percent is gone after publication, which is what you expect if "
+            "traders read the papers. David McLean and Jeffrey Pontiff found twenty-six and fifty-eight on their "
+            f"ninety-seven. <bookmark mark='c'/> Sloan's accruals went from {ex['Accruals']['in']:.2f} to "
+            f"{ex['Accruals']['post']:.2f}. Every one of these is a trial; the House counts them."
+        ) as vo:
+            self.play(FadeIn(g), Create(zero), FadeIn(src), FadeIn(leg))
+            self.add(dd)
+            vo.wait_until("a")
+            self.play(f.animate.set_value(1.0), run_time=5)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.2) for b in bars], lag_ratio=0.4), FadeIn(side[:2]))
+            self.play(FadeIn(side[2:]))
+            vo.wait_until("c")
+            self.play(Indicate(bars[2], color=QC.LOSS, scale_factor=1.05))
+        dd.clear_updaters()
         self.wait(0.4)
         self.clear_scene()
 

@@ -42,16 +42,13 @@ class LTCM(VoiceoverScene):
         if quote.width > 13.0:
             quote.scale_to_fit_width(13.0)
         with self.voiceover(
-            "Practitioners almost never bet full Kelly. The algebra says why. Bet c times the Kelly fraction and "
-            "substitute into the growth parabola. <bookmark mark='a'/> The excess growth is two c minus c squared "
-            "times Kelly's: the same curve for every asset. Half Kelly keeps three quarters of the growth with half "
-            "the volatility; in simulation over ten years it halves your wealth from a peak "
-            f"{100 * m['0.5']['p_dd50']:.0f} percent of the time, against {100 * m['1.0']['p_dd50']:.0f} for full "
-            "Kelly. <bookmark mark='b'/> Now the real reason. You never know the edge; you estimate it. If your "
-            "estimate is k times the truth, betting full Kelly on the estimate is k times Kelly on the truth. "
-            "Overestimate by a factor of two and you earn nothing above cash. <bookmark mark='c'/> William Benter, "
-            "who built one of the most successful betting syndicates in Hong Kong racing, put it in exactly those "
-            "words in 1994, and bet a half or a third of Kelly."
+            "Practitioners rarely bet full Kelly. Bet c times Kelly and substitute: <bookmark mark='a'/> the excess growth "
+            "is two c minus c squared times Kelly's, for every asset. Half Kelly keeps three quarters of the growth at half "
+            f"the volatility, and halves wealth from a peak within ten years {100 * m['0.5']['p_dd50']:.0f} percent of the "
+            f"time, against {100 * m['1.0']['p_dd50']:.0f} for full Kelly. <bookmark mark='b'/> The deeper reason: overestimate "
+            "the edge k-fold and full Kelly on the estimate is k times Kelly on the truth; at two, it earns nothing. "
+            "<bookmark mark='c'/> William Benter, who ran a Hong Kong racing syndicate, wrote exactly that in 1994, and bet a "
+            "half or a third of Kelly."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -105,20 +102,15 @@ class LTCM(VoiceoverScene):
                        width=5.6, font_size=20).next_to(leg, DOWN, buff=0.3).align_to(g2, LEFT)
         src = real_data(r"Kenneth French, monthly 1926--2020; 400 block-bootstrap histories")
         with self.voiceover(
-            "Here is the problem on real data. The parabola is the realized growth of US stocks at every fraction. "
-            "Resample the history in blocks of a year, four hundred times, and find the best fraction in each: the "
-            f"cloud under the peak. Ninety percent of them lie between {100 * k['bs_p05']:.0f} and "
-            f"{100 * k['bs_p95']:.0f} percent. That is how well a century of data knows the Kelly fraction. "
-            "<bookmark mark='a'/> Bet full Kelly on each resampled estimate and score it on the actual history: many "
-            "land on the steep side of the parabola, in red. Bet half of each estimate, and nearly all of them stay "
-            "on the flat top. <bookmark mark='b'/> In the abstract: excess growth against the overestimate k. Full "
-            "Kelly crosses zero at k equals two, half Kelly at four, and simulated paths, the white dots, agree. "
-            "Pause and predict: you estimate a Sharpe ratio of one and the truth is a half. Which grows faster? "
-            "<bookmark mark='c'/> Half Kelly: on the truth it is exactly Kelly, while full Kelly earns nothing. "
-            "<bookmark mark='d'/> History can still be kind. In the House's registered split-sample test, the "
-            f"fraction chosen on the first half of the century, {100 * k['split_f1']:.0f} percent, grew at "
-            f"{100 * k['split_g2_at_f1']:.1f} percent a year in the second half; half of it, "
-            f"{100 * k['split_g2_at_half']:.1f}."
+            "On real data: resample US history in one-year blocks four hundred times and find each best fraction. Ninety "
+            f"percent lie between {100 * k['bs_p05']:.0f} and {100 * k['bs_p95']:.0f} percent. <bookmark mark='a'/> Bet full "
+            "Kelly on each estimate and score it on actual history: many land on the steep side, in red. Half of each "
+            "estimate stays on the flat top. <bookmark mark='b'/> In general, full Kelly's excess growth hits zero at k "
+            "equals two, half Kelly's at four, and simulated paths agree. Pause and predict: you estimate a Sharpe ratio of "
+            "one; the truth is a half. Which grows faster? <bookmark mark='c'/> Half Kelly, which is exactly Kelly on the "
+            "truth. <bookmark mark='d'/> History can be kind: the House's registered test chose "
+            f"{100 * k['split_f1']:.0f} percent on 1926 to 1972, and it grew at {100 * k['split_g2_at_f1']:.1f} percent a "
+            "year afterwards."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(line))
             self.play(LaggedStart(*[FadeIn(d_) for d_ in cloud], lag_ratio=0.005, run_time=2))
@@ -151,14 +143,11 @@ class LTCM(VoiceoverScene):
         src = note(r"President's Working Group on Financial Markets, \textit{Hedge Funds, Leverage, and the Lessons of "
                    r"Long-Term Capital Management} (April 1999)", font_size=18, color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Now the crisis file. Long-Term Capital Management was founded in 1994 by the bond trader John "
-            "Meriwether; Robert Merton and Myron Scholes were among its partners. It bought cheap bonds and sold "
-            "similar dear ones, betting the spread between them would close: small, steady profits, levered many "
-            "times. At the end of 1997 it held a hundred and twenty-nine billion dollars of assets on four point "
-            "seven billion of capital, about twenty-eight to one. In August 1998 Russia defaulted, investors fled to "
-            "safety, and the spreads widened instead of closing. By mid-September the capital was under a billion "
-            "dollars; on the twenty-third, fourteen banks brought together by the New York Fed put in three point "
-            "six billion and took it over."
+            "The crisis file. Long-Term Capital Management, founded in 1994 with Robert Merton and Myron Scholes among "
+            "its partners, bought cheap bonds and sold similar dear ones, levered many times: at the end of 1997, a hundred "
+            "and twenty-nine billion dollars of assets on four point seven billion of capital, about twenty-eight to one. "
+            "After Russia defaulted in August 1998 the spreads widened instead of closing; on September the twenty-third, "
+            "fourteen banks brought together by the New York Fed put in three point six billion and took it over."
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
         self.wait(0.5)
@@ -194,16 +183,12 @@ class LTCM(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = illustration(r"illustration: an assumed trade, not LTCM's books")
         with self.voiceover(
-            "Kelly explains why the leverage was so dangerous, with an illustration, not the fund's actual books. "
-            "Take a convergence trade that earns one percent a year with one percent volatility. Its Kelly leverage "
-            f"is the excess return over the variance: {l_['kelly_before']:.0f} to one. At twenty-eight to one the "
-            "fund is at about a quarter of Kelly: cautious, by this measure. <bookmark mark='a'/> Now turn up the "
-            "volatility, as calm spreads do in a crisis. Kelly leverage falls with the square of volatility. At "
-            f"{cross:.1f} times the calm volatility, twenty-eight to one is full Kelly; at three times, Kelly is "
-            f"{l_['kelly_after']:.0f}, and twenty-eight is {28 / l_['kelly_after']:.1f} times Kelly, past the line "
-            f"where growth is zero. The growth rate turns from {100 * l_['g28_before']:+.0f} percent a year to "
-            f"{100 * l_['g28_after']:.0f}. <bookmark mark='b'/> It is the estimation problem again: sizing is only as "
-            "good as the volatility forecast, which is why the House recomputes sizes whenever its forecast moves."
+            "Why so dangerous? An illustration, not the fund's books: a trade earning one percent a year with one percent "
+            f"volatility has a Kelly leverage of {l_['kelly_before']:.0f}, so twenty-eight to one looks cautious. "
+            "<bookmark mark='a'/> But Kelly leverage falls with the square of volatility. At "
+            f"{cross:.1f} times the calm volatility, twenty-eight is full Kelly; at three times, it is "
+            f"{28 / l_['kelly_after']:.1f} times Kelly, past the line where growth is zero. <bookmark mark='b'/> Sizing is "
+            "only as good as the volatility forecast."
         ) as vo:
             self.play(FadeIn(g), Create(lt), FadeIn(ltl), FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             self.add(dot)

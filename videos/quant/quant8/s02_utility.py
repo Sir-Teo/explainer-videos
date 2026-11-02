@@ -40,14 +40,12 @@ class Utility(VoiceoverScene):
         VGroup(sp, ax).arrange(RIGHT, buff=0.35, aligned_edge=UP).to_edge(UP, buff=0.5)
         thm.next_to(VGroup(sp, ax), DOWN, buff=0.5)
         with self.voiceover(
-            "In 1738 Daniel Bernoulli looked at a game whose expected payout is infinite: a coin is tossed until it "
-            "lands heads, and the pot doubles with every toss. Nobody would pay much to play it. His explanation: "
-            "people value money by a utility, the logarithm of wealth, and the expected log of this game is small. "
-            "<bookmark mark='a'/> Two centuries later John von Neumann and Oskar Morgenstern turned the idea into a "
-            "theorem. If your preferences among gambles are complete, transitive, continuous, and obey independence, "
-            "meaning that mixing two gambles with the same third one never reverses your ranking, "
-            "<bookmark mark='b'/> then there is a utility function u, and you prefer A to B exactly when the expected "
-            "utility of A is larger. Everything in this part starts here."
+            "In 1738 Daniel Bernoulli looked at a game with an infinite expected payout, a pot that doubles until a coin "
+            "lands heads, that nobody would pay much to play. His answer: value money by a utility, the logarithm of "
+            "wealth. <bookmark mark='a'/> In 1944 von Neumann and Morgenstern made it a theorem. If your preferences among "
+            "gambles are complete, transitive, continuous, and independent, meaning that mixing two gambles with the same "
+            "third never reverses their order, <bookmark mark='b'/> then you prefer A to B exactly when A has the larger "
+            "expected utility."
         ) as vo:
             self.play(FadeIn(sp, shift=UP * 0.2))
             vo.wait_until("a")
@@ -87,14 +85,11 @@ class Utility(VoiceoverScene):
             wrapped_label(r"the gap $100 - CE$ is the risk premium", 4.6, 22, VALUE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Here is the picture behind every number in this chapter. The curve is log utility. Take a coin flip that "
-            "leaves you with fifty or a hundred and fifty, starting from a hundred. <bookmark mark='a'/> Hang the "
-            "two outcomes on the curve as equal weights. Their balance point is the middle of the chord between them, "
-            "and its height is the expected utility. Because the curve bends, the chord lies below it. "
-            "<bookmark mark='b'/> Now slide left from the balance point until you meet the curve. That wealth, held for "
-            f"sure, is worth exactly as much to you as the gamble: the certainty equivalent, {ce:.1f}. You would pay "
-            f"up to {100 - ce:.1f} to swap a fair gamble for its average. That gap is the risk premium, and the bend "
-            "of the curve is risk aversion."
+            "Take a coin flip that leaves you with fifty or a hundred and fifty, from a hundred, and log utility. "
+            "<bookmark mark='a'/> Hang the two outcomes on the curve as equal weights. Their balance point is the middle of "
+            "the chord, and its height is the expected utility; because the curve bends, the chord lies below it. "
+            "<bookmark mark='b'/> Slide left until you meet the curve: that sure wealth is worth as much as the gamble, the "
+            f"certainty equivalent, {ce:.1f}. The gap of {100 - ce:.1f} is the risk premium, and the bend is risk aversion."
         ) as vo:
             self.play(FadeIn(g), Create(line), FadeIn(side[0]))
             vo.wait_until("a")
@@ -136,25 +131,23 @@ class Utility(VoiceoverScene):
                                                                                     color=c_)).arrange(RIGHT, buff=0.15)
                         for t, c_ in ((r"\gamma =", VALUE), (r"CE =", KELLY), (r"\text{premium} =", GREY_A))])
         read.arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=1.0).shift(UP * 1.2)
+        read[0][1].set_value(0.5)
+        read[1][1].set_value(ce_now())
+        read[2][1].set_value(100 - ce_now())
         read[0][1].add_updater(lambda m: m.set_value(float(np.exp(lg.get_value()))))
         read[1][1].add_updater(lambda m: m.set_value(ce_now()))
         read[2][1].add_updater(lambda m: m.set_value(100 - ce_now()))
         rows = [cmath(r"u(W)", r"=", r"\frac{W^{1-\gamma}}{1-\gamma}", font_size=34, colors={r"u(W)": VALUE})]
         eq = rows[0].to_corner(DR, buff=0.6).shift(UP * 0.6)
         why_ = wrapped_label(r"constant relative risk aversion: the same gambles, in percent, at any wealth; "
-                             r"$\gamma = 1$ is the log", 4.4, 19, GREY_B).next_to(eq, DOWN, buff=0.2)
+                             r"$\gamma = 1$ is the log", 4.0, 19, GREY_B).next_to(eq, DOWN, buff=0.2).to_edge(RIGHT, buff=0.3)
         i3 = int(np.argmin(abs(gam - 3)))
         with self.voiceover(
-            "Economists usually give the curve one dial. Utility is wealth to the power one minus gamma, divided by "
-            "one minus gamma; gamma equal to one is the logarithm. Someone with this utility takes the same "
-            "gambles, in percentages, rich or poor. Scale the curve so the two outcomes stay at zero and one: then "
-            "the chord never moves, and only the bend changes. <bookmark mark='a'/> Turn the dial. At gamma one "
-            "half the curve is nearly straight and the certainty equivalent sits near the average. As gamma rises the "
-            f"curve bends harder, and the certainty equivalent slides left: {ces[i3]:.1f} at gamma three, and at "
-            f"thirty, {ces[-1]:.1f}, barely above the worst outcome. <bookmark mark='b'/> Surveys and laboratory "
-            "choices put most people's gamma between one and ten. Part six found that aggregate consumption data "
-            "would need a gamma of hundreds to explain the equity premium, one reason economists still argue about "
-            "what gamma is."
+            "Economists give the curve one dial: power utility, wealth to the one minus gamma over one minus gamma, with the "
+            "log at gamma one. Scale it so the two outcomes stay at zero and one: the chord never moves, only the bend. "
+            "<bookmark mark='a'/> Turn the dial. As gamma rises the curve bends harder and the certainty equivalent slides "
+            f"left: {ces[i3]:.1f} at gamma three, {ces[-1]:.1f} at thirty. <bookmark mark='b'/> Surveys put most people "
+            "between one and ten."
         ) as vo:
             self.play(FadeIn(g), Create(chord), FadeIn(ends), FadeIn(mid), FadeIn(eq), FadeIn(why_))
             self.add(crv, hl, vl, cd, read)
@@ -185,15 +178,11 @@ class Utility(VoiceoverScene):
                 why(r"divide by $W$: relative risk aversion $\gamma$; for CRRA it is the constant $\gamma$")]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-0.9, buff=0.6, edge=6.9)
         with self.voiceover(
-            "How much is the bend worth, in money? John Pratt in 1964 and Kenneth Arrow in 1965 answered with one "
-            "expansion. Define the premium pi: a fair gamble added to your wealth is exactly as bad as losing pi for "
-            "sure. <bookmark mark='a'/> Expand the left side to second order. The gamble's mean is zero, so the first "
-            "derivative drops out, and what is left is half its variance times the second derivative. "
-            "<bookmark mark='b'/> Expand the right side to first order, since pi is small. <bookmark mark='c'/> "
-            "Equate them, and the premium is half the variance times minus u double prime over u prime: the absolute "
-            "risk aversion. <bookmark mark='d'/> Divide by wealth, and relative risk aversion appears, which for our "
-            "power utility is exactly the constant gamma. Half of gamma, times the variance of the gamble as a share "
-            "of wealth."
+            "What is the bend worth in money? Pratt in 1964 and Arrow in 1965: define the premium pi so that a fair gamble "
+            "is as bad as losing pi for sure. <bookmark mark='a'/> Expand the left side to second order; the mean is zero, "
+            "so half the variance times u double prime remains. <bookmark mark='b'/> Expand the right side to first order. "
+            "<bookmark mark='c'/> Equate: the premium is half the variance times the absolute risk aversion. "
+            "<bookmark mark='d'/> Divide by wealth, and relative risk aversion appears: for power utility, exactly gamma."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -230,15 +219,12 @@ class Utility(VoiceoverScene):
                               r"at every wealth, it implies absurd refusals of large ones. Small-stakes aversion needs "
                               r"another explanation: chapter 13.", 12.0, 20, GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Check the approximation against the exact premium. For a ten-dollar gamble on a hundred it is nearly "
-            "perfect at both gammas. For a fifty-dollar gamble, a large one, it drifts: "
-            f"{g1['exact']:.1f} exact against {g1['approx']:.1f} at gamma one, and {g3['exact']:.1f} against "
-            f"{g3['approx']:.1f} at gamma three. <bookmark mark='a'/> Pause and predict. With gamma three, would you "
-            "pay more or less than twenty to avoid the fifty-or-a-hundred-and-fifty flip? <bookmark mark='b'/> More: "
-            f"its certainty equivalent is {u['ce_g3']:.1f}, a premium of {100 - u['ce_g3']:.1f}. "
-            "<bookmark mark='c'/> One warning. Matthew Rabin showed in 2000 that if utility of total wealth explained "
-            "why people refuse small favourable bets, it would force them to refuse enormous ones too. Small-stakes "
-            "caution needs another theory, which we meet in chapter thirteen."
+            "Check it. For a ten-dollar gamble the approximation is nearly exact; for fifty dollars it drifts: "
+            f"{g1['exact']:.1f} against {g1['approx']:.1f} at gamma one. <bookmark mark='a'/> Pause and predict: with gamma "
+            "three, would you pay more or less than twenty to avoid the fifty-or-a-hundred-and-fifty flip? "
+            f"<bookmark mark='b'/> More: {100 - u['ce_g3']:.1f}. <bookmark mark='c'/> One warning, from Matthew Rabin in "
+            "2000: utility of wealth cannot explain refusing small favourable bets without absurd refusals of large ones. "
+            "Chapter thirteen takes that up."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(VGroup(*r_)) for r_ in cells], lag_ratio=0.25, run_time=3))
             vo.wait_until("a")

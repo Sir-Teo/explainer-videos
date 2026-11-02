@@ -1854,3 +1854,199 @@ def test_american_call_with_dividend():
     assert o2["price"] > o2["european"]
     steps = {n for n, _, _ in o2["region"]}
     assert max(steps) * o2["dt"] < 5 / 52                     # only before the dividend
+
+
+# ---------------------------------------------------------------- exotics, expanded (Part 15)
+def test_one_touch_reflection_and_mc():
+    from explainer.quant.house import exotics as X
+    from scipy.stats import norm
+    S, H, T, s = 100.0, 90.0, 0.5, 0.25
+    ot = X.one_touch(S, H, T, s)
+    d1 = (np.log(S / H) + 0.5 * s * s * T) / (s * np.sqrt(T))
+    assert ot == pytest.approx(norm.cdf(-(d1 - s * np.sqrt(T))) + S / H * norm.cdf(-d1), abs=1e-12)
+    # zero drift in the log: exactly twice the digital
+    mu0 = X.one_touch(S, H, T, s, r=0.5 * s * s)
+    assert mu0 * np.exp(0.5 * s * s * T) == pytest.approx(2 * norm.cdf(np.log(H / S) / (s * np.sqrt(T))), abs=1e-12)
+    P = X.gbm_paths(S, s, T, 2000, 40000, seed=2)
+    Hb = X.bgk_barrier(H, S, s, T / 2000)
+    assert np.mean(P.min(axis=0) <= H) == pytest.approx(X.one_touch(S, Hb, T, s), abs=0.01)
+
+
+def test_static_dic_hedge_is_exact_under_bs():
+    from explainer.quant.house import bs as B, exotics as X
+    for K, H in ((100.0, 90.0), (105.0, 80.0)):
+        w, k = X.static_dic_hedge(K, H, 100.0)
+        dic = B.price(100.0, K, 0.5, 0.25) - X.down_out_call(100.0, K, H, 0.5, 0.25)
+        assert w * B.price(100.0, k, 0.5, 0.25, 0, 0, -1) == pytest.approx(float(dic), abs=1e-10)
+
+
+def test_snowball_AB_is_the_price_and_the_fair_coupon():
+    from explainer.quant.house import exotics as X
+    A, B = X.snowball_AB(0.2, n_paths=4000, seed=3)
+    for c in (0.0, 0.1, 0.2):
+        assert A + c * B == pytest.approx(X.snowball_price(0.2, coupon=c, n_paths=4000, seed=3), abs=1e-12)
+    A, B = X.snowball_AB(0.2, n_paths=4000, seed=1)
+    assert (1 - A) / B == pytest.approx(X.fair_coupon(0.2, n_paths=4000, seed=1), abs=2e-3)
+
+
+def test_autocall_on_paths_reduces_to_snowball_payoff():
+    from explainer.quant.house import exotics as X
+    P = X.gbm_paths(1.0, 0.2, 2.0, 504, 2000, 0.02, seed=4)
+    pv, _, _ = X.snowball_payoff(P, coupon=0.12)
+    obs = [m * 21 for m in range(3, 25)]
+    disc = np.exp(-0.02 * np.array(obs) / 252)
+    pv2 = X.autocall_on_paths(P, obs, 1.03, 0.75, [0.12 * m / 12 for m in range(3, 25)], disc)
+    assert np.allclose(pv, pv2, atol=1e-12)
+
+
+def test_worst_of_autocall_with_perfect_correlation_is_single_asset():
+    from explainer.quant.house import exotics as X
+    a1, b1 = X.worst_of_autocall_AB(0.2, 0.2, 1.0, n_paths=2000, seed=5)
+    a0, b0 = X.snowball_AB(0.2, n_paths=2000, seed=5)
+    assert a1 == pytest.approx(a0, abs=1e-12) and b1 == pytest.approx(b0, abs=1e-12)
+    a2, b2 = X.worst_of_autocall_AB(0.2, 0.2, 0.5, n_paths=2000, seed=5)
+    assert (1 - a2) / b2 > (1 - a1) / b1                       # less correlation, dearer put, higher coupon
+
+
+def test_margrabe_against_mc():
+    from explainer.quant.house import exotics as X
+    P1, P2 = X.two_asset_paths(0.3, 0.2, 0.4, 1.0, 1, 200000, seed=6)
+    pay = np.maximum(P1[-1] - P2[-1], 0)
+    assert X.margrabe(1.0, 1.0, 1.0, 0.3, 0.2, 0.4) == pytest.approx(pay.mean(), abs=3 * pay.std() / np.sqrt(len(pay)))
+
+
+def test_cliquet_unbounded_is_a_martingale_sum():
+    from explainer.quant.house import exotics as X
+    m, se = X.cliquet_bs(0.25, 12, cap=np.inf, floor=-np.inf, gfloor=-np.inf, n_paths=100000, seed=1)
+    assert abs(m) < 3 * se
+    lo, _ = X.cliquet_bs(0.25, 12, cap=0.02, floor=-1.0, gfloor=0.0, n_paths=20000, seed=1)
+    hi, _ = X.cliquet_bs(0.10, 12, cap=0.02, floor=-1.0, gfloor=0.0, n_paths=20000, seed=1)
+    assert lo < hi                                             # a capped, unfloored cliquet is short volatility
+
+
+def test_uvm_solve_matches_uvm_price_and_lagrangian_helps():
+    from explainer.quant.house import bs as B, exotics as X
+    grid = np.linspace(40, 200, 81)
+    cs = lambda x: (np.maximum(x - 95, 0) - np.maximum(x - 105, 0)) / 10  # noqa: E731
+    a = X.uvm_price(cs, grid, 0.5, 0.15, 0.35, n_t=50)
+    b = X.uvm_solve(cs(grid), grid, 0.5, 0.15, 0.35, n_t=50)
+    assert np.allclose(a, b, atol=1e-10)
+    calls = [lambda x: np.maximum(x - 90, 0), lambda x: np.maximum(x - 110, 0)]
+    mkt = [float(B.price(100.0, k, 0.5, 0.25)) for k in (90.0, 110.0)]
+    out = X.uvm_lagrangian(cs, calls, mkt, grid, 100.0, 0.5, 0.15, 0.35, n_t=50, maxfev=30)
+    assert out["unhedged"] == pytest.approx(float(np.interp(100.0, grid, b)), abs=1e-10)
+    assert out["price"] <= out["unhedged"] + 1e-12
+
+
+def test_kl_worst_case_mean_at_zero_and_monotone():
+    from explainer.quant.house import exotics as X
+    v = np.random.default_rng(0).normal(1.0, 0.2, 20000)
+    assert X.kl_worst_case(v, 0.0)[0] == pytest.approx(v.mean(), abs=1e-12)
+    w = [X.kl_worst_case(v, e)[0] for e in (0.01, 0.05, 0.1, 0.2)]
+    assert all(a > b for a, b in zip(w, w[1:]))
+    assert w[2] == pytest.approx(1.0 - 0.2 * np.sqrt(0.2), abs=0.01)  # Gaussian: a shift of sigma sqrt(2 eta)
+
+
+def test_digital_delta_estimators():
+    from explainer.quant.house import exotics as X
+    from scipy.stats import norm
+    S, K, T, s = 100.0, 100.0, 21 / 252, 0.25
+    exact = norm.pdf((np.log(S / K) - 0.5 * s * s * T) / (s * np.sqrt(T))) / (S * s * np.sqrt(T))
+    pw, lr, bd = X.digital_delta_estimators(S, K, T, s, 100000, seed=1)
+    assert np.all(pw == 0)
+    for e in (lr, bd):
+        assert e.mean() == pytest.approx(exact, abs=3 * e.std() / np.sqrt(len(e)))
+    assert bd.std() < lr.std() / 3
+
+
+# ---------------------------------------------------------------------------
+# Part 8 expansion: control (HJB by finite differences, viscosity, costs, stopping, crowds, robust, PPO with costs)
+# ---------------------------------------------------------------------------
+def test_control_hjb_fd_matches_merton():
+    from explainer.quant.house import control as C
+    o = C.hjb_fd_merton(0.08, 0.02, 0.18, 3.0, T=5.0, n_t=100, n_y=101)
+    m = np.abs(o["y"]) <= 1.5
+    assert np.max(np.abs(o["pi"][m] - C.merton_fraction(0.08, 0.02, 0.18, 3.0))) < 1e-3
+    assert np.max(np.abs(o["V"][m] / o["exact"][m] - 1)) < 5e-3
+
+
+def test_control_eikonal_monotone_vs_central():
+    from explainer.quant.house import control as C
+    up = C.eikonal_march(41, "upwind", t_end=3.0)
+    assert np.max(np.abs(up["u"] - (1 - np.abs(up["x"])))) < 1e-10
+    ce = C.eikonal_march(41, "central", t_end=3.0)
+    assert not np.all(np.isfinite(ce["u"])) or np.max(np.abs(ce["u"] - (1 - np.abs(ce["x"])))) > 1.0
+
+
+def test_control_consumption_rate():
+    from explainer.quant.house import control as C
+    assert abs(C.merton_consumption_rate(0.03, 0.08, 0.02, 0.18, 1.0) - 0.03) < 1e-12  # log utility spends rho
+    nu = C.merton_consumption_rate(0.03, 0.08, 0.02, 0.18, 3.0)
+    assert abs(float(C.merton_consumption_rate(0.03, 0.08, 0.02, 0.18, 3.0, tau=1e6)) - nu) < 1e-9
+    assert float(C.merton_consumption_rate(0.03, 0.08, 0.02, 0.18, 3.0, tau=0.01)) > 50
+
+
+def test_control_no_trade_band():
+    from explainer.quant.house import control as C
+    pm = C.merton_fraction(0.08, 0.02, 0.18, 3.0)
+    b = C.no_trade_band(0.08, 0.02, 0.18, 3.0, 0.01, 1 / 12, 120)
+    assert b["lo"] < pm < b["hi"]
+    half = 0.5 * (b["hi"] - b["lo"])
+    assert 0.5 * C.band_halfwidth_asymptotic(0.08, 0.02, 0.18, 3.0, 0.01) < half < 1.3 * C.band_halfwidth_asymptotic(
+        0.08, 0.02, 0.18, 3.0, 0.01)
+    z = C.no_trade_band(0.08, 0.02, 0.18, 3.0, 0.0, 1 / 12, 60)  # no cost: no band beyond the grid step
+    assert z["hi"] - z["lo"] < 0.01
+
+
+def test_control_snell_and_perpetual_put():
+    from explainer.quant.house import control as C
+    g = np.array([0, 2, 5, 3, 1, 4, 8, 6, 3, 2, 3, 5, 9, 7, 6, 4, 2, 3, 6, 4, 0], float)
+    U = C.snell_envelope(g, tol=1e-14)["U"]
+    assert np.max(np.abs(U - C.concave_majorant(g))) < 1e-10
+    p = C.perpetual_put(100, 0.05, 0.3)
+    bs = np.linspace(30, 95, 651)
+    v = C.perpetual_put_value(100.0, 100, 0.05, 0.3, bs)
+    assert abs(bs[np.argmax(v)] - p["b"]) < 0.2  # smooth fit is the value-maximizing level
+    h = 1e-4  # and the curve leaves the payoff with slope -1
+    d = (C.perpetual_put_value(p["b"] + h, 100, 0.05, 0.3, p["b"]) - (100 - p["b"])) / h
+    assert abs(d + 1) < 1e-3
+
+
+def test_control_mfg_liquidation_matches_closed_form():
+    from explainer.quant.house import control as C
+    for N in (1, 2, np.inf):
+        o = C.mfg_liquidation(N, 4.0, 1.0, T=1.0, n=400, iters=500)
+        assert np.max(np.abs(o["Q"][:, 0] - C.liquidation_closed(N, 4.0, 1.0, 1.0, o["t"]))) < 1e-5
+
+
+def test_control_cpt_robust_drawdown():
+    from explainer.quant.house import control as C
+    # CPT of a sure gain is its value; a symmetric 50/50 gamble is negative (loss aversion)
+    assert abs(C.cpt_value([0.1, 0.1]) - 0.1 ** 0.88) < 1e-12
+    assert C.cpt_value([-0.1, 0.1]) < 0
+    assert abs(C.robust_fraction(0.08, 0.02, 0.18, 3.0, 0.0) - C.merton_fraction(0.08, 0.02, 0.18, 3.0)) < 1e-12
+    th = C.theta_for_detection(0.2, 0.08, 0.02, 0.18, 3.0, 50)
+    pi = C.robust_fraction(0.08, 0.02, 0.18, 3.0, th)
+    assert abs(C.detection_error(th * pi * 0.18 ** 2, 0.18, 50) - 0.2) < 1e-9
+    assert C.grossman_zhou_fraction(0.8, 1.0, 0.8, 1.5) == 0.0
+    assert abs(C.grossman_zhou_fraction(1.0, 1.0, 0.8, 1.5) - 0.3) < 1e-12
+
+
+def test_control_simulate_rebalance_and_ppo_rebalance_runs():
+    from explainer.quant.house import control as C
+    pm = C.merton_fraction(0.08, 0.02, 0.18, 1.0)
+    free = C.simulate_rebalance(lambda n, p: np.full_like(p, pm), 0.08, 0.02, 0.18, 0.0, 10.0, 40, paths=20000, seed=1)
+    assert abs(free["growth"] - C.growth_continuous(pm, 0.06, 0.18, 0.02)) < 0.005
+    o = C.ppo_rebalance(0.08, 0.02, 0.18, 0.01, iters=2, batch=64, seed=0, snapshots=(0, 1))
+    assert len(o["mean_target"]) == 2 and o["final"].shape == o["grid_p"].shape
+
+
+def test_neural_sde_generator_learns():
+    torch = pytest.importorskip("torch")
+    from explainer.quant.house import deep
+
+    torch.set_num_threads(1)
+    real = np.random.default_rng(0).standard_normal((400, 16)) * 1.5
+    m, curve, fans = deep.train_nsde(real, L=16, iters=40, batch=64, lr=1e-2, depth=3, every=20, n_show=4)
+    assert m.sample(5).shape == (5, 16) and set(fans) == {0, 20, 40} and fans[0].shape == (4, 16)
+    assert np.mean(curve[-10:]) < 0.5 * np.mean(curve[:5])

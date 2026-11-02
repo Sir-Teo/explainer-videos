@@ -71,17 +71,14 @@ class OutOfSample(VoiceoverScene):
         src = real_data(r"Shiller, monthly 1871--2020: real log total return on last month's log dividend yield")
         at = o["dsse_at"]
         with self.voiceover(
-            "Every regression so far used the whole sample, including data no investor could have had at the time. "
-            "Amit Goyal and Ivo Welch, in 2008, asked the forecaster's question. Stand in 1927 with only the past. "
-            "Fit the predictive regression on everything to date, forecast next month, then step forward a month "
-            "and do it again. <bookmark mark='a'/> On top, the slope on the dividend yield as the forecaster saw it, "
-            "refitted every month, with its band. It wanders, and for long stretches the band includes zero. "
-            "<bookmark mark='b'/> Below, the scoreboard. Each month, compare the forecaster's squared error with "
-            "the squared error of the simplest forecast, the historical mean to date, and add up the difference. "
-            "Green where the predictor is gaining, red where it is losing. <bookmark mark='c'/> It loses most of "
-            "the time. By 1990 the running total is negative, and in the late nineties, as the yield said stocks "
-            "were expensive month after month while they kept rising, it falls off a cliff. By 2020 it has never "
-            "recovered. In sample, the full-history line looks persuasive; in real time, the yield lost to the mean."
+            "Every regression so far used the whole sample, data no investor had at the time. Amit Goyal and Ivo Welch, "
+            "in 2008, asked the forecaster's question. Stand in 1927 with only the past: fit on everything to date, "
+            "forecast next month, step forward, repeat. <bookmark mark='a'/> On top, the slope on the dividend yield as "
+            "the forecaster saw it, with its band. It wanders, often including zero. <bookmark mark='b'/> Below, the "
+            "scoreboard: the historical mean's squared error minus the predictor's, added up. Green while the predictor "
+            "gains, red while it loses. <bookmark mark='c'/> It mostly loses. By 1990 the total is negative, and in the "
+            "late nineties, as the yield called stocks expensive month after month while they kept rising, it falls off "
+            "a cliff, and never recovers."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(zero), FadeIn(src))
             self.add(tm, bm, cur, yr)

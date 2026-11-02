@@ -56,11 +56,10 @@ class Scoring(VoiceoverScene):
                           font_size=18).move_to(ORIGIN)
         am = cv["1"]["argmin_msevol"]
         with self.voiceover(
-            "In 2005 Peter Hansen and Asger Lunde raced three hundred and thirty volatility models and asked: does "
-            "anything beat a GARCH(1,1)? But a race needs a finish line, and the true variance is never observed. "
-            "Every forecast is judged against a proxy: a squared return, or a realized variance. <bookmark mark='a'/> "
-            "Here is the problem, made visible. The true variance is one. Slide the forecast along the bottom, and "
-            "draw the average loss against the proxy. With the truth as the proxy, both losses are smallest at one. "
+            "In 2005 Peter Hansen and Asger Lunde raced three hundred and thirty models and asked: does anything "
+            "beat a GARCH(1,1)? But the true variance is never observed; every forecast is judged against a noisy "
+            "proxy. <bookmark mark='a'/> "
+            "The true variance is one. Slide the forecast, and draw the average loss against the proxy. With the truth as the proxy, both losses are smallest at one. "
             "<bookmark mark='b'/> Now make the proxy noisier: a realized variance, then five returns, then a single "
             "squared return. The squared error on volatility slides its minimum to the left, to "
             f"{am:.2f}: it rewards forecasts that are too low. <bookmark mark='c'/> QLIKE's minimum does not move. That "
@@ -140,8 +139,8 @@ class Scoring(VoiceoverScene):
         verdict = ("80 percent of it. The absolute error on volatility rewards the forecast that is too low, and so does "
                    "the squared error on volatility." if w != "truth" else "The truth, here.")
         with self.voiceover(
-            "A simulation with a known answer. Generate volatility from a GARCH model, so the true variance is known "
-            f"every day, {sc['R']} times over. Offer four forecasts: the truth, eighty percent of it, a hundred and "
+            "A simulation with a known answer: GARCH volatility, the truth known every day, "
+            f"{sc['R']} times over. Offer four forecasts: the truth, eighty percent of it, a hundred and "
             "twenty percent, and a sixty-day moving average. Judge them with four losses against three proxies. "
             "<bookmark mark='a'/> Pause and predict: against squared returns, under the absolute error on volatility, "
             "which wins, the truth or eighty percent of it? <bookmark mark='b'/> " + verdict + " QLIKE and the "
@@ -177,9 +176,7 @@ class Scoring(VoiceoverScene):
         dm = r2["dm_vs_loghar"]
         with self.voiceover(
             "Lab. The House's scoring tools: QLIKE in one line, and the Diebold-Mariano statistic with a Newey-West "
-            "variance. They will judge the race. <bookmark mark='a'/> A third check asks whether a forecast is "
-            "calibrated. Jacob Mincer and Victor Zarnowitz regressed the outcome on the forecast: an unbiased forecast "
-            "has an intercept of zero and a slope of one. On the 2020 test year, HAR's slope is close to one; the "
+            "variance. They will judge the race. <bookmark mark='a'/> Is a forecast calibrated? Mincer and Zarnowitz regress the outcome on the forecast: ideally, intercept zero and slope one. On the 2020 test year, HAR's slope is close to one; the "
             f"log-based forecasts have slopes near {mz['log-HAR']['b']:.1f}: they are too timid on the big days, "
             "because the logarithm compresses the spikes."
         ) as vo:
@@ -219,9 +216,7 @@ class Scoring(VoiceoverScene):
                    "percent confidence." if len(surv) == len(order) else
                    "The set shrinks to the models listed in yellow.")
         with self.voiceover(
-            "Last, many models at once. Comparing every pair invites false discoveries, so Peter Hansen, Asger Lunde "
-            "and James Nason built the model confidence set: keep eliminating the worst model while the hypothesis of "
-            "equal accuracy is rejected. What survives contains the best model with ninety percent confidence. "
+            "Last, many models at once. Peter Hansen, Asger Lunde and James Nason built the model confidence set: eliminate the worst model while equal accuracy is rejected. What survives contains the best model with ninety percent confidence. "
             "<bookmark mark='a'/> On the race we are about to run, " + verdict + f" <bookmark mark='b'/> Loosen the "
             f"level to seventy-five percent and {out_txt} drop out. Hold on to that humility when the leaderboard "
             "appears."

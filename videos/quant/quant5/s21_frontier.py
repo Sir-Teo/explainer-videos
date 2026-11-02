@@ -51,14 +51,15 @@ class Frontier(VoiceoverScene):
                      r"\mathcal{L}(\theta) = \big\| \mathbb{E}\,S^{\le 4}(\text{real}) - \mathbb{E}\,S^{\le 4}(\text{gen}) "
                      r"\big\|^2", font_size=26).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Can a network learn the stochastic differential equation itself? Write the drift and the volatility as "
-            "two small neural networks, and solve the equation by Euler, exactly as in chapter five: a neural SDE. "
-            "Train it on thirty-two-day windows of Bitcoin's daily returns from 2018 and 2019. "
-            "<bookmark mark='a'/> The loss compares distributions of paths, not single paths: the squared distance "
-            "between the expected signatures, up to depth four, of real and generated windows. Chapter sixteen's "
-            "features become a training signal. <bookmark mark='b'/> Watch it learn, three seeds as a band. On the "
-            "left, generated windows, violet, over real ones, grey: at the start they are almost flat; as training "
-            "proceeds their spread and their wiggles match the data's."
+            "Can a network learn the stochastic differential equation itself? Write the drift and the volatility of a "
+            "two-dimensional hidden state as two small neural networks, and solve the equation by Euler, exactly as "
+            "in chapter five: a neural SDE. Train it on thirty-two-day windows of Bitcoin's daily returns from 2018 "
+            "and 2019, a thousand steps per seed, on one processor core. <bookmark mark='a'/> The loss compares "
+            "distributions of paths, not single paths: the squared distance between the expected signatures, up to "
+            "depth four, of real and generated windows. Chapter sixteen's features become a training signal, and no "
+            "discriminator is needed. <bookmark mark='b'/> Watch it learn, three seeds as a band. On the left, "
+            "generated windows, violet, over real ones, grey: at the start they are almost flat; as training proceeds "
+            "their spread and their wiggles grow toward the data's."
         ) as vo:
             self.play(FadeIn(eq))
             vo.wait_until("a")

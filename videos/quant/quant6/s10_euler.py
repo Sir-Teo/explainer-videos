@@ -52,14 +52,12 @@ class Euler(VoiceoverScene, ThreeDScene):
                     r"covariance with consumption")]
         step = ladder(self, rows, whys, keep=3, top=2.5, x=-0.6, buff=1.0, edge=6.8)
         with self.voiceover(
-            "Here is the most famous moment condition in finance. An investor who can save one more dollar, in "
-            "stocks or in bills, is indifferent at the margin: the stochastic discount factor m, patience beta "
-            "times the growth of consumption to the power minus gamma, times the return, averages one. Gamma is "
-            "risk aversion. <bookmark mark='a'/> The condition holds given anything known today, so multiply the "
-            "error by instruments known today: a constant, last quarter's consumption growth and market return. "
-            "Two assets times three instruments: six moments for two parameters, four left over to test. "
-            "<bookmark mark='b'/> And it says how a premium must be earned: by covarying with consumption. Lars "
-            "Hansen and Kenneth Singleton estimated exactly this by GMM in 1982."
+            "The most famous moment condition in finance. An investor who can save one more dollar, in stocks or "
+            "bills, is indifferent at the margin: the discount factor m, patience beta times consumption growth to the "
+            "power minus gamma, times the return, averages one. Gamma is risk aversion. <bookmark mark='a'/> It holds "
+            "given anything known today, so multiply the error by today's instruments: a constant, last quarter's "
+            "consumption growth and market return. Six moments, two parameters. <bookmark mark='b'/> And it says a "
+            "premium must be earned by covarying with consumption. Hansen and Kenneth Singleton estimated this in 1982."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -78,14 +76,11 @@ class Euler(VoiceoverScene, ThreeDScene):
         src = real_data(r"FRED: real PCE per capita (A794RX0Q048SBEA), CPI; French: market and T-bill; quarterly "
                         r"1947--2020")
         with self.voiceover(
-            "The House's GMM in eight lines. The objective is the moments' length in the weight W. Step one uses "
-            "the identity. From that estimate, build the moments' long-run covariance S, with chapter two's "
-            "Bartlett weights. Step two reweights by S inverse and minimises again. The Jacobian gives the "
-            "standard errors, and the leftover gives J. <bookmark mark='a'/> Run it on seventy-three years of "
-            "American data: real consumption per person from the national accounts, the stock market and the "
-            f"Treasury bill. Patience: {g['beta']:.3f}. Risk aversion: {g['gamma']:.1f}, with a standard error of "
-            f"{g['se'][1]:.1f}. And J is {g['J']:.0f} on {g['df']} degrees of freedom: a p-value of "
-            f"{g['p_J']:.4f}. The model is rejected."
+            "The House's two-step GMM: minimise with the identity weight; from that estimate build S with Bartlett "
+            "weights; reweight by S inverse and minimise again; the Jacobian gives standard errors, the leftover gives "
+            "J. <bookmark mark='a'/> On seventy-three years of American consumption, stocks and bills: patience "
+            f"{g['beta']:.3f}, risk aversion {g['gamma']:.1f} with a standard error of {g['se'][1]:.1f}, and J of "
+            f"{g['J']:.0f} on {g['df']} degrees of freedom, a p-value of {g['p_J']:.4f}. Rejected."
         ) as vo:
             self.play(FadeIn(card), FadeIn(src))
             vo.wait_until("a")
@@ -121,14 +116,11 @@ class Euler(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, note_)
         self.remove(hint, note_)
         with self.voiceover(
-            "Why is the standard error on gamma so large? Look at the objective itself, over patience and risk "
-            "aversion. <bookmark mark='a'/> Across beta it is a steep-walled valley: the T-bill pins patience down "
-            "almost exactly. Along gamma, the valley floor is nearly flat, a long ridge in orange. "
-            "<bookmark mark='b'/> Drop a ball and let the optimiser roll it. It finds the valley in a few steps, "
-            "then wanders along the floor, where moving gamma by ten barely changes the fit. "
-            "<bookmark mark='c'/> This is weak identification, as James Stock and Jonathan Wright called it in "
-            "2000: the data barely know gamma, and on a ridge like this the usual normal approximation for its "
-            "standard error is unreliable."
+            "Why is gamma so uncertain? Look at the objective. <bookmark mark='a'/> Across beta it is a steep valley: "
+            "the bill pins patience down. Along gamma the floor is almost flat, a ridge, in orange. "
+            "<bookmark mark='b'/> Let the optimiser roll a ball: it finds the valley in a few steps, then wanders along "
+            "the floor. <bookmark mark='c'/> Weak identification, as James Stock and Jonathan Wright called it in 2000: "
+            "the data barely know gamma, and the usual normal approximation fails on a ridge."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.2)
             vo.wait_until("a")
@@ -175,14 +167,12 @@ class Euler(VoiceoverScene, ThreeDScene):
         beyond = ("beyond every one of them. The model is not just imprecise; it is wrong." if g["J"] > max(mc["J"])
                   else "large, but not beyond what a true model sometimes produces.")
         with self.voiceover(
-            "How bad is it at our sample size? Build four hundred economies in which the model is exactly true, "
-            "with patience one and risk aversion two, and consumption and stock returns as volatile and as weakly "
-            f"correlated as in the data, each {mc['n']} quarters long. Estimate each one the same way. "
-            "<bookmark mark='a'/> The estimates of gamma pile up around the truth, but the pile is enormous: from "
-            f"{q[0]:.0f} to {q[4]:.0f} in the middle ninety percent. Our estimate of {g['gamma']:.1f} is no surprise "
-            "in a world where gamma is two. <bookmark mark='b'/> The J test, though, is informative: in these true "
-            f"worlds it exceeds its five percent critical value only {100 * mc['rej_J']:.1f} percent of the time, "
-            f"and never reaches more than {max(mc['J']):.0f}. The real data's J is {g['J']:.0f}, "
+            "How bad at our sample size? Build four hundred economies where the model is exactly true, gamma two, with "
+            f"the data's volatilities and correlation, {mc['n']} quarters each, and estimate each one. "
+            f"<bookmark mark='a'/> The estimates of gamma spread from {q[0]:.0f} to {q[4]:.0f} in the middle ninety "
+            f"percent. Our {g['gamma']:.1f} is no surprise. <bookmark mark='b'/> But J is informative: in true worlds it "
+            f"exceeds its five percent critical value {100 * mc['rej_J']:.1f} percent of the time and never passes "
+            f"{max(mc['J']):.0f}. The data's J is {g['J']:.0f}, "
             + beyond
         ) as vo:
             self.play(FadeIn(gax), Create(truth), FadeIn(side[0]), FadeIn(side[1]))
@@ -211,14 +201,12 @@ class Euler(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(UP, buff=0.7)
         q = predict(r"Use only the T-bill's moments. Can $\gamma$ be identified?").next_to(rows, DOWN, buff=0.5)
         with self.voiceover(
-            "The reason is simple to see. Stocks have earned about "
-            f"{100 * g['equity_premium_q']:.0f} percent a quarter more than bills, but consumption is smooth, with a "
-            f"standard deviation of about one percent a quarter, and barely moves with the stock market: a "
-            f"correlation of {g['corr_g_rm']:.2f}. From the last line of the derivation, risk aversion would have to "
-            f"be about {g['hj_gamma']:.0f}. Rajnish Mehra and Edward Prescott called it the equity premium puzzle in "
-            "1985. <bookmark mark='a'/> Pause and predict: with only the T-bill's moments, can gamma be identified? "
-            "<bookmark mark='b'/> Barely. The bill pins down patience; it is the risky asset's covariance with "
-            "consumption that carries information about risk aversion, and that covariance is tiny."
+            f"Why it fails. Stocks earned about {100 * g['equity_premium_q']:.0f} percent a quarter over bills; "
+            "consumption is smooth, about one percent a quarter, and barely moves with stocks: correlation "
+            f"{g['corr_g_rm']:.2f}. Risk aversion would need to be about {g['hj_gamma']:.0f}: Mehra and Prescott's equity "
+            "premium puzzle, 1985. <bookmark mark='a'/> Pause and predict: with only the T-bill's moments, is gamma "
+            "identified? <bookmark mark='b'/> Barely. The bill pins patience; risk aversion needs the risky asset's "
+            "covariance with consumption, and it is tiny."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.5, run_time=4))
             vo.wait_until("a")

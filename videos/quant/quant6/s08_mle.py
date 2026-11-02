@@ -65,17 +65,13 @@ class MLE(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, res)
         self.remove(hint, res)
         with self.voiceover(
-            "Part one measured the fat tails of daily returns. Now fit them. Suppose daily market returns are "
-            "Student's t, with a location, a scale and a degrees-of-freedom parameter nu that sets how fat the tails "
-            "are. The log-likelihood adds up, over twenty-five thousand days, the log of the density at each "
-            "return. <bookmark mark='a'/> As a function of the parameters it is a landscape: here over nu and the "
-            "scale, with the location held at its best value. Maximum likelihood is the top of the hill. "
-            f"<bookmark mark='b'/> Start from a bad guess, nearly a normal distribution with nu of {path[0][2]:.0f}, "
-            "and climb with Newton's method: at each step, fit a parabola to the hill using its slope and its "
-            "curvature, and jump to the parabola's top. The first step leaps across the landscape; the next few "
-            f"settle in. <bookmark mark='c'/> {len(path) - 1} steps, and the summit: nu of "
-            f"{m['nu']:.2f}. Tails that fat mean the variance barely exists; Part one's kurtosis of "
-            f"{m['kurtosis']:.0f} was telling the same story."
+            "Part one measured the fat tails of daily returns. Now fit them: suppose daily returns are Student's t, "
+            "with a location, a scale, and degrees of freedom nu that set the tails. The log-likelihood adds the log "
+            "density over twenty-five thousand days. <bookmark mark='a'/> Over nu and the scale it is a landscape, and "
+            "maximum likelihood is its summit. <bookmark mark='b'/> Start from a bad guess, nearly normal, with nu of "
+            f"{path[0][2]:.0f}, and climb by Newton's method: fit a parabola using the slope and curvature, jump to its "
+            f"top. <bookmark mark='c'/> {len(path) - 1} steps, and nu is {m['nu']:.2f}: tails so fat the variance barely "
+            f"exists. Part one's kurtosis of {m['kurtosis']:.0f} said the same."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.5)
             vo.wait_until("a")
@@ -114,17 +110,14 @@ class MLE(VoiceoverScene, ThreeDScene):
                 why(r"maximise a normal likelihood in $\beta$ and you minimise squared errors (AI Part 6)")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.75, edge=6.8)
         with self.voiceover(
-            "Why does the top of the hill estimate anything, and how precisely? Differentiate the fact that a "
-            "density integrates to one: the score, the gradient of the log density, averages to zero at the true "
-            "parameter. <bookmark mark='a'/> Differentiate once more: the expected curvature of the log-likelihood "
-            "equals the variance of the score. That is the information matrix, and the equality between its two "
-            "forms holds only if the model is right. <bookmark mark='b'/> Expand the first-order condition around "
-            "the truth. The score is a sum, so a central limit theorem applies; the curvature is an average, so it "
-            "settles. The estimate is normal, with variance the inverse of the information. A sharp peak means a "
-            "precise estimate. <bookmark mark='c'/> If the model is wrong, the estimate still converges, to the "
-            "parameter closest to the truth, but the two forms of information differ, and the variance is again a "
-            "sandwich: Hessian inverse, score variance, Hessian inverse. <bookmark mark='d'/> And when the model is "
-            "linear with normal errors, maximum likelihood is least squares: chapter one was a special case."
+            "Why the summit estimates anything, and how precisely. Differentiate the fact that a density integrates to "
+            "one: the score averages zero at the truth. <bookmark mark='a'/> Differentiate again: the expected curvature "
+            "equals the score's variance, the information matrix, an equality that holds only if the model is right. "
+            "<bookmark mark='b'/> Expand the first-order condition: a central limit theorem for the score, a law of large "
+            "numbers for the curvature, and the estimate is normal with variance the inverse information. A sharp peak "
+            "is a precise estimate. <bookmark mark='c'/> If the model is wrong, the two forms differ and the variance "
+            "is a sandwich again. <bookmark mark='d'/> And with normal errors in a linear model, maximum likelihood is "
+            "least squares."
         ) as vo:
             step(0)
             vo.wait_until("a")

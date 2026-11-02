@@ -693,7 +693,11 @@ def compute_density_term() -> dict:
         m, T, F, p = _fit_expiry(q, ex["expiry"])
         K = x * S0
         dens = smile.risk_neutral_density(p, F, T, np.linspace(x[0] * S0, x[-1] * S0, len(x)))
-        ridges.append({"expiry": ex["expiry"], "T": T, "F": F, "dens": dens * S0, "atm": float(smile.svi_iv(p, 0.0, T))})
+        dd = dens * S0 / np.trapezoid(dens * S0, x)
+        mu_ = np.trapezoid(x * dd, x)
+        sd_ = np.sqrt(np.trapezoid((x - mu_) ** 2 * dd, x))
+        ridges.append({"expiry": ex["expiry"], "T": T, "F": F, "dens": dens * S0, "atm": float(smile.svi_iv(p, 0.0, T)),
+                       "sd": float(sd_), "skew": float(np.trapezoid(((x - mu_) / sd_) ** 3 * dd, x))})
         svis.append((T, p))
     kk = np.linspace(-0.5, 0.5, 101)
     viol = []

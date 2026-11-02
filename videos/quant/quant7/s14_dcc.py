@@ -60,8 +60,7 @@ class Dcc(VoiceoverScene):
             "Volatilities move, and so do correlations. Here is one ellipse per year: the spread of daily returns of "
             "American stocks across, and ten-year Treasury bonds up, from 1962. <bookmark mark='a'/> Watch it "
             "breathe as volatility rises and falls, and watch it tilt. Through the inflationary seventies and "
-            "eighties it leans up: stocks and bonds fall together. <bookmark mark='b'/> Around 2000 it tips through "
-            "vertical, and leans the other way: bonds rise when stocks fall. The needle tracks the correlation. That "
+            "eighties it leans up: stocks and bonds fall together. <bookmark mark='b'/> Around 2000 it straightens, then leans the other way: bonds rise when stocks fall. The needle tracks the correlation. That "
             "sign change is what made the sixty-forty portfolio work for two decades."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(arc), FadeIn(ticks), FadeIn(dial_lab))
@@ -95,9 +94,7 @@ class Dcc(VoiceoverScene):
         fit = MathTex(rf"\text{{stocks and bonds, 1962--2020: }} a = {d['a']:.3f},\ b = {d['b']:.3f}", font_size=30,
                       color=VOL).to_corner(DR, buff=0.6)
         with self.voiceover(
-            "How to model it. A full multivariate GARCH lets every variance and covariance respond to every product "
-            "of returns: for a hundred assets that is over fifty million parameters, and even the restricted BEKK "
-            "form needs twenty-five thousand. Robert Engle's dynamic conditional correlation of 2002 needs three "
+            "How to model it. A full multivariate GARCH for a hundred assets has over fifty million parameters; even the restricted BEKK form has twenty-five thousand. Robert Engle's dynamic conditional correlation of 2002 needs three "
             "hundred and two. <bookmark mark='a'/> Split the covariance into volatilities and correlations. "
             "<bookmark mark='b'/> Fit a GARCH to each asset, then run a GARCH-like recursion on the products of their "
             "standardized shocks, <bookmark mark='c'/> rescaled each day into a proper correlation matrix. "
