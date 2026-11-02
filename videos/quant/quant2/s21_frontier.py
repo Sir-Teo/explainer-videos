@@ -101,7 +101,7 @@ class Frontier(VoiceoverScene):
         for k, (name, yr, done, col) in enumerate(RULES):
             d = Dot([X(yr), -2.9, 0], radius=0.11, color=col) if done else \
                 Circle(radius=0.11, color=col, stroke_width=3).move_to([X(yr), -2.9, 0])
-            t = label(name, font_size=18, color=col).move_to([X(yr), -2.3 + 0.45 * (k % 4), 0])
+            t = label(name, font_size=18, color=col).move_to([X(yr), -2.3 + 0.45 * (0, 1, 2, 3, 0, 4)[k], 0])
             if t.get_right()[0] > 6.9:
                 t.shift(LEFT * (t.get_right()[0] - 6.9))
             marks.add(VGroup(d, Line(d.get_center(), t.get_bottom(), color=GREY_D, stroke_width=1), t))

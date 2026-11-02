@@ -5,11 +5,11 @@ import numpy as np
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant2.common import CASH, CCP, LOSS, PART, RATE, TRADE, load, node
 
-BOXES = {"retail": (r"retail investors", (-5.4, 2.4), GREY_B), "broker": (r"retail broker", (-2.4, 2.4), TRADE),
-         "whole": (r"wholesaler", (0.6, 2.4), TRADE), "exch": (r"exchange", (0.6, 0.6), TRADE),
-         "ccp": (r"clearing house", (3.6, 0.6), CCP), "cust": (r"custodian", (5.6, 2.4), CCP),
-         "fund": (r"hedge fund", (-5.4, -1.6), QC.IDEA), "pb": (r"prime broker", (-2.4, -1.6), CASH),
-         "repo": (r"repo lender (money fund)", (0.9, -1.6), RATE)}
+BOXES = {"retail": (r"retail investors", (-5.6, 2.4), GREY_B), "broker": (r"retail broker", (-1.9, 2.4), TRADE),
+         "whole": (r"wholesaler", (1.6, 2.4), TRADE), "exch": (r"exchange", (1.6, 0.4), TRADE),
+         "ccp": (r"clearing house", (5.4, 0.4), CCP), "cust": (r"custodian", (5.4, 2.4), CCP),
+         "fund": (r"hedge fund", (-5.6, -1.8), QC.IDEA), "pb": (r"prime broker", (-1.9, -1.8), CASH),
+         "repo": (r"repo lender (money fund)", (2.2, -1.8), RATE)}
 FLOWS = [("broker", "retail", r"zero commission"), ("whole", "broker", r"PFOF"), ("retail", "broker", r"orders"),
          ("broker", "whole", r"orders"), ("exch", "ccp", r"trades"), ("ccp", "cust", r"settlement"),
          ("fund", "pb", r"fees, financing"), ("pb", "repo", r"collateral"), ("repo", "pb", r"cash"),
@@ -31,6 +31,14 @@ MAP = [(r"HFT and market making", 0, 0, r"Citadel Securities, Virtu, Jane Street
        (r"bank desks", 3.4, 1, r"pricing, hedging, structuring, XVA")]
 
 
+def edge_point(box: Mobject, d) -> np.ndarray:
+    """Where a ray from the box's centre in direction ``d`` leaves its border, plus a small gap."""
+    d = np.asarray(d, float)
+    hw, hh = box.width / 2 + 0.06, box.height / 2 + 0.06
+    t = min(hw / abs(d[0]) if abs(d[0]) > 1e-9 else np.inf, hh / abs(d[1]) if abs(d[1]) > 1e-9 else np.inf)
+    return box.get_center() + d * t
+
+
 class Industry(VoiceoverScene):
     def construct(self):
         ind = load("industry")
@@ -50,15 +58,17 @@ class Industry(VoiceoverScene):
     def money_map(self):
         nodes = {}
         for k, (t, (x, y), col) in BOXES.items():
-            nodes[k] = node(t, col, width=2.3, height=0.8, font_size=19).move_to([x, y, 0])
+            nodes[k] = node(t, col, width=3.0 if k == "repo" else 2.3, height=0.7, font_size=19).move_to([x, y, 0])
         arrows, particles = VGroup(), VGroup()
         tr = ValueTracker(0)
         for i, (a, b, t) in enumerate(FLOWS):
             pa, pb = nodes[a].get_center(), nodes[b].get_center()
             off = np.array([-(pb - pa)[1], (pb - pa)[0], 0])
-            off = 0.12 * off / (np.linalg.norm(off) + 1e-9)
-            ln = Line(pa + off, pb + off, buff=0.5, color=GREY_D, stroke_width=1.5)
-            arrows.add(VGroup(ln, label(t, font_size=15, color=GREY_B).move_to(ln.get_center() + 2.2 * off)))
+            off = off / (np.linalg.norm(off) + 1e-9)
+            ln = Line(edge_point(nodes[a], pb - pa) + 0.12 * off, edge_point(nodes[b], pa - pb) + 0.12 * off,
+                      color=GREY_D, stroke_width=1.5)
+            lab = label(t, font_size=15, color=GREY_B)
+            arrows.add(VGroup(ln, lab.move_to(ln.get_center() + (0.25 + lab.height / 2 + 0.06) * off)))
 
             def mk(ln=ln, i=i):
                 return VGroup(*[Dot(ln.point_from_proportion((tr.get_value() * 0.5 + j / 3 + i * 0.07) % 1),
@@ -87,7 +97,7 @@ class Industry(VoiceoverScene):
                                                                r"contracts a day, 2024")],
                        source=r"CME Group, 2024 results (February 2025)", width=6.2, font_size=19)
         c2 = firm_card(r"Virtu Financial", r"Market maker and wholesaler: earns the spread, less what it pays for "
-                       r"flow and to venues.", numbers=[(rf"\${ind['virtu_rev_2024_m']:,.1f}\,\text{{m}}".replace(",", "{,}"),
+                       r"flow and to venues.", numbers=[(r"\$" + f"{ind['virtu_rev_2024_m']:,.1f}".replace(",", "{,}") + r"\,\text{m}",
                                                          r"revenue 2024 (+25.4\%)"),
                                                         (rf"\${ind['virtu_ni_2024_m']}\,\text{{m}}", r"net income")],
                        source=r"Virtu, 2024 Form 10-K", width=6.2, font_size=19)
@@ -154,17 +164,18 @@ class Industry(VoiceoverScene):
         self.clear_scene()
 
     def quant_map(self):
-        g = axes([-0.3, 3.9], [-0.5, 3.6], x_length=7.4, y_length=4.6, xlabel=r"holding horizon",
+        g = axes([-0.6, 3.9], [-0.5, 3.6], x_length=7.0, y_length=4.6, xlabel=r"holding horizon",
                  xticks=[0, 1, 2, 3], xfmt=lambda v: ["\\mu s", "\\text{minutes}", "\\text{days}", "\\text{months}"][int(v)],
-                 font_size=16).to_edge(LEFT, buff=0.5).shift(DOWN * 0.2)
+                 font_size=16).shift(DOWN * 0.2)
         ax = g.ax
-        ylab = VGroup(*[label(t, font_size=16, color=GREY_B).next_to(ax.c2p(-0.3, y), LEFT, buff=0.1)
+        ylab = VGroup(*[label(t, font_size=16, color=GREY_B).next_to(ax.c2p(-0.6, y), LEFT, buff=0.1)
                         for t, y in ((r"equities", 0), (r"options", 1), (r"futures", 2), (r"everything", 3))])
+        VGroup(g, ylab).to_edge(LEFT, buff=0.4)
         blobs = VGroup()
         for name, x, y, who in MAP:
             blobs.add(VGroup(Dot(ax.c2p(x, y), radius=0.12, color=QC.IDEA),
                              label(name, font_size=17, color=QC.IDEA).next_to(ax.c2p(x, y), UP, buff=0.1),
-                             label(who, font_size=14, color=GREY_B).next_to(ax.c2p(x, y), DOWN, buff=0.1)))
+                             wrapped_label(who, 2.1, 14, GREY_B).next_to(ax.c2p(x, y), DOWN, buff=0.1)))
         roles = VGroup(label(r"The roles", font_size=26, color=QC.HOUSE))
         for r_, what in ROLES:
             roles.add(VGroup(label(r_, font_size=20, color=QC.HOUSE), label(what, font_size=16, color=GREY_A))
