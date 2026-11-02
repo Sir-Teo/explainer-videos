@@ -72,7 +72,7 @@ class Hedger(VoiceoverScene):
                           rf"Black--Scholes price is {n['bs_price']:.3f}, the rest is the risk of hedging once a day", 4.2,
                           18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        src = illustration(r"a 30-day at-the-money call, 20\% volatility, daily rebalancing; 1{,}200 steps of 4{,}096 paths")
+        src = illustration(r"a 30-day at-the-money call, 20\% volatility, daily rebalancing; 2{,}500 steps of 4{,}096 paths")
         with self.voiceover(
             "First, a check. With no trading costs, theory says the answer is the Black–Scholes delta. "
             f"<bookmark mark='a'/> The network was never shown a formula, and it rebuilds the delta to within {dev:.2f} "
