@@ -34,7 +34,7 @@ class Materials(VoiceoverScene):
         lo = float(np.floor(min(E.min(), H[:, 1].min()) * 4) / 4 - 0.1)
         hi = float(np.ceil(max(E.max(), 0.1) * 4) / 4)
         g = axes([0, 1], [lo, hi], x_length=6.0, y_length=4.0, xlabel=r"composition: \ share of element B",
-                 ylabel=r"formation energy per atom", xticks=[0, 0.5, 1], yticks=[lo, 0, hi],
+                 ylabel=r"formation energy per atom \ (toy units)", xticks=[0, 0.5, 1], yticks=[lo, 0, hi],
                  xfmt=lambda v: {0: r"\text{A}", 0.5: r"\text{AB}", 1: r"\text{B}"}[v], yfmt=lambda v: f"{v:.2f}",
                  center=[-2.6, -0.2, 0])
         zero = DashedLine(g.ax.c2p(0, 0), g.ax.c2p(1, 0), color=GREY_D)

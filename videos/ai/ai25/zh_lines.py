@@ -74,7 +74,7 @@ ZH = {
     'What ties these together is one recipe.':
         "把这些串起来的是同一个配方。<bookmark mark='a'/>问问你的数据有什么是无关紧要的。对图像来说，是物体在哪里：于是有了卷积。<bookmark "
         "mark='b'/>对一组点来说，是它们的顺序。<bookmark mark='c'/>对一个图来说，是节点怎么编号。<bookmark mark='d'/>对一个分子来说，是它"
-        "怎么转、怎么移。<bookmark mark='e'/>蛋白质这些全都有。<bookmark mark='f'/>天气场位于球面上，与网格无关。<bookmark mark='g'/>语言几乎"
+        "怎么转、怎么移。<bookmark mark='e'/>对蛋白质，转动和平移无关紧要，但反射会改变手性。<bookmark mark='f'/>天气场位于球面上，与网格无关。<bookmark mark='g'/>语言几乎"
         "没有对称性，所以Transformer要从数据中学习结构。<bookmark mark='h'/>布朗斯坦、布鲁纳、科恩和韦利奇科维奇把这称为几何深度学习。对称性"
         "进入模型有三条路：转换过的副本，一个标准姿态，或者尊重它的网络层；本部分主要讲第三条。",
 
@@ -93,11 +93,11 @@ ZH = {
         "或者先用f，再转输出。<bookmark mark='c'/>如果两条路总是一致，f就是等变的。<bookmark mark='d'/>如果输出根本不变，f就是不变的，比如能量，"
         "或者图像的标签。<bookmark mark='e'/>中间层需要等变，这样输入的朝向才不会被扔掉；最终答案则常常需要不变。",
 
-    'Any function can be made equivariant':
-        "任何函数都能通过在群上取平均变成等变的：对每个g，先变换输入，再用f，再撤销g。<bookmark mark='a'/>给这个平均输入一个转过的x，也就是"
+    'For a finite group with a linear action on the output,':
+        "对有限群，如果输出上的群作用是线性的，任何函数都能通过群平均变成等变的：对每个g，先变换输入，再用f，再撤销g。<bookmark mark='a'/>给这个平均输入一个转过的x，也就是"
         "h作用在x上。<bookmark mark='b'/>把g乘h改名为g′：g走遍整个群时，g′也走遍整个群，所以和不变。<bookmark mark='c'/>乘积的逆要倒过顺序，"
         "<bookmark mark='d'/>于是h从和里提了出来：无论f是什么，平均都是等变的。<bookmark mark='e'/>代价是：群里每个元素算一次，十六个点就是"
-        "十六的阶乘次，空间转动则是无穷多次。<bookmark mark='f'/>数据增强是便宜的版本：每个样本随机变换一次，指望网络学会其余的。",
+        "十六的阶乘次。对转动这样的紧致连续群，归一化的和变成哈尔积分；所有平移之上没有归一化的均匀平均。<bookmark mark='f'/>数据增强是便宜的版本：每个样本随机变换一次，指望网络学会其余的。",
 
     'f"Here is the check on our five-particle system':
         "这是在我们五粒子系统上的检验：四个网络，同样的数据，同样的步数。<bookmark mark='a'/>停下来预测一下：输入转动时，哪个网络的答案会"
@@ -125,10 +125,10 @@ ZH = {
         '它改了主意：从{names[int(pm.argmax())]}变成了{names[int(pm2.argmax())]}',
 
     'The theorem behind Deep Sets':
-        "Deep Sets背后的定理，出自曼齐尔·扎希尔等人2017年的工作：一个集合函数与顺序无关，当且仅当它是先对各元素求同一个函数phi的和，"
+        "Deep Sets背后的定理，出自曼齐尔·扎希尔等人2017年的工作：在可数全集的有限子集上，一个函数与顺序无关，当且仅当它是先对各元素求同一个函数phi的和，"
         "再接一个函数rho。<bookmark mark='a'/>一个方向很容易：和与顺序无关。<bookmark mark='b'/>另一个方向：给每个可能的元素编号，令phi(x)"
         "等于四的负编号次方。<bookmark mark='c'/>用四进制写，元素k在集合里，和的第k位就恰好是1：没有进位，所以不同的集合给出不同的和。"
-        "<bookmark mark='d'/>于是集合的任何函数都是这个和的函数。<bookmark mark='e'/>对于实数集合，由牛顿恒等式，幂和起到同样的作用。",
+        "<bookmark mark='d'/>于是集合的任何函数都是这个和的函数。<bookmark mark='e'/>对于实数集合，由牛顿恒等式，幂和起到同样的作用。对于连续的通用编码器，潜在维数至少要达到集合的最大大小。",
 
     'As a network, this is simple.':
         "做成网络，这很简单。<bookmark mark='a'/>同一个小网络phi读每个点，<bookmark mark='b'/>结果加起来，<bookmark mark='c'/>第二个网络rho"
@@ -248,11 +248,10 @@ ZH = {
         '颜色的数量不同，所以检验能把它们分开',
 
     'And no message-passing network can do better.':
-        "而且没有哪个消息传递网络能做得更好。Keyulu Xu等人，以及克里斯托弗·莫里斯等人，在2019年证明：如果颜色细化在t轮之后分不开两个节点，"
+        "而且没有哪个消息传递网络能做得更好。Keyulu Xu等人，以及克里斯托弗·莫里斯等人，在2019年证明：从匹配的初始节点特征出发，如果颜色细化在t轮之后分不开两个节点，"
         "那么没有消息传递网络能在t层之后分开它们。<bookmark mark='a'/>用归纳法：一开始，一切都相同。<bookmark mark='b'/>下一轮颜色相同的两个"
         "节点，原来颜色相同，邻居颜色的多重集也相同；<bookmark mark='c'/>于是按归纳假设，状态相同，邻居状态的多重集也相同，<bookmark "
-        "mark='d'/>一层网络从这些算出的新状态也就相同。<bookmark mark='e'/>而且这个上界能达到：求和之后接一个MLP，也就是图同构网络，能分开"
-        "颜色细化能分开的一切。",
+        "mark='d'/>一层网络从这些算出的新状态也就相同。<bookmark mark='e'/>而且这个上界原则上能达到：在单射更新和读出的条件下，图同构网络能匹配颜色细化；训练出的有限网络未必达到这个界。",
 
     'f"Why a sum? Aggregation must not lose information':
         "为什么是求和？聚合不能丢掉关于邻居多重集的信息。<bookmark mark='a'/>邻居a、a、b、b和邻居a、b的平均值相同，最大值也相同；只有和不同。"
@@ -303,15 +302,15 @@ ZH = {
         '第6章。深层图网络。',
 
     'Graph networks are usually shallow':
-        "图网络通常很浅，两到四层；图像网络则超过一百层。原因之一：把图卷积的权重去掉，它就是一个对邻居的平均，一遍又一遍地做。<bookmark "
+        "图网络通常很浅，两到四层；图像网络则超过一百层。原因之一：在一个连通、无向、带自环的图上去掉图卷积的权重，它就是归一化的邻居平均，一遍又一遍地做。<bookmark "
         "mark='a'/>平均矩阵是对称的，有正交归一的特征向量，特征值都不超过1。<bookmark mark='b'/>用它k次，就把每个特征值变成k次方。<bookmark "
         "mark='c'/>除第一项以外的每一项都衰减掉了；第一项在每个节点上是同一个图样，按度数的平方根缩放。<bookmark mark='d'/>衰减速率是第二"
-        "特征值的k次方。<bookmark mark='e'/>每个节点最后都有同样的特征：过平滑，由Qimai Li等人在2018年命名。",
+        "特征值的k次方。<bookmark mark='e'/>每个节点最终只是同一特征向量按度数缩放的副本：过平滑，由Qimai Li等人在2018年命名。",
 
     'f"Here it is on our three-community graph:':
-        "这是在我们的三社群图上：狄利克雷能量，也就是邻居之间差多少，在每一轮平均之后的值。<bookmark mark='a'/>在这个对数坐标上它沿直线下降，"
-        "十六轮下降了{mags:.0f}个数量级，正是第二特征值{lam2:.3f}预言的速率。<bookmark mark='b'/>用图来看：特征一开始是噪声；几轮平均把社群"
-        "分开，这就是两层网络有帮助的原因；很多轮之后，一切都坍缩成一个点。",
+        "这是在我们的三社群图上：狄利克雷能量，也就是邻居之间差多少，在每一轮平均之后的值。<bookmark mark='a'/>十六轮下降了{mags:.0f}个数量级；"
+        "后期衰减逐渐接近第二特征值{lam2:.3f}预言的速率。<bookmark mark='b'/>用图来看：特征一开始是噪声；几轮平均把社群"
+        "分开，这就是两层网络有帮助的原因；很多轮之后，特征趋近于按度数缩放的稳态图样。",
 
     'f"Now with weights and training:':
         "现在加上权重和训练：同一个任务，深度从二到六十四，每个深度三个种子。<bookmark mark='a'/>{best_txt}；{col_txt}。<bookmark mark='b'/>"
@@ -324,11 +323,11 @@ ZH = {
     "f'The plain network does best with the fewest":
         '普通网络在最少的{best}层时最好',
 
-    "f'from {collapse[0]} layers on":
-        '从{collapse[0]}层开始，普通网络就只有瞎猜的水平，大约三分之一',
+    "f'its mean accuracy first falls below forty-five percent at {collapse[0]} layers,":
+        '平均准确率在{collapse[0]}层首次低于45%，到{depths[-1]}层时是{100 * P[-1]:.0f}%',
 
-    'the plain network weakens with depth but never falls to chance':
-        '普通网络随深度变弱，但从没跌到瞎猜的水平',
+    'its mean accuracy stays above forty-five percent at every tested depth':
+        '每个测试深度上的平均准确率都保持在45%以上',
 
     'f"The residual network, which adds':
         '残差网络把每一层的输出加回到它的输入上，在{depths[-1]}层时仍保持在{100 * R[-1]:.0f}%',
@@ -357,7 +356,7 @@ ZH = {
 
     'For molecules the symmetry is':
         "对分子来说，对称是空间刚体运动构成的群，E(3)：转动、反射、平移。<bookmark mark='a'/>分子的能量在所有这些变换下不变。<bookmark "
-        "mark='b'/>两边对位置求导：链式法则带出了R的转置。<bookmark mark='c'/>乘以R，<bookmark mark='d'/>又因为力是能量梯度的负值，力就随分子"
+        "mark='b'/>两边对位置求导：链式法则带出了R的转置。<bookmark mark='c'/>两边左乘R；R乘它的转置等于单位矩阵。<bookmark mark='d'/>又因为力是能量梯度的负值，力就随分子"
         "一起转：等变。所以一个不变的能量模型，免费给出等变的力。",
 
     'How do you build that into a network?':
@@ -367,9 +366,9 @@ ZH = {
         "跟着R转，平移抵消，于是新位置就是旧位置转过、移过的样子。<bookmark mark='e'/>2017年的SchNet只用了距离。",
 
     'f"EGNN carries scalars, which don\'t turn':
-        "EGNN携带标量，它们不转；还有位置，它们像向量一样转。更丰富的模型携带更多。<bookmark mark='a'/>球面上的任何函数都能用零阶、一阶、二阶"
+        "EGNN携带标量，它们不转；还有位置，它们像向量一样转。更丰富的模型携带更多。<bookmark mark='a'/>球面上的平方可积函数都能在均方意义下用零阶、一阶、二阶"
         "以及更高阶的球谐函数写出来。<bookmark mark='b'/>这里计算的是一次转动对阶数不超过二的九个球谐函数做了什么：它只在每一阶内部混合，分成"
-        "一、三、五三个块；块外精确到小数点后{dp}位都是零。<bookmark mark='c'/>所以网络可以保留每一阶的特征，用各自的块来转，再按量子角动量的"
+        "一、三、五三个块；块外至多为10的负{dp}次方。<bookmark mark='c'/>所以网络可以保留每一阶的特征，用各自的块来转，再按量子角动量的"
         "克莱布什–戈尔丹规则把它们组合起来：<bookmark mark='d'/>这就是张量场网络、NequIP和MACE的设计，它们属于当今最精确的学习力场。",
 
     'f"Does it pay? Our five-body system again:':
@@ -397,8 +396,8 @@ ZH = {
 
     'f"Here is training itself, for the runs on':
         "这是训练本身，用{big:,}个系统的那几次训练：一个网络从没见过的测试系统，它的五个粒子，以及它们到时刻1真正走到哪里，蓝色的轨迹。"
-        "<bookmark mark='a'/>叉号是每个网络在训练各个检查点预测的终点。<bookmark mark='b'/>EGNN的叉号落到了圆圈上；最后它预测的位置"
-        "平均偏差{err_e:.2f}。MLP的偏差是{err_m:.2f}。",
+        "<bookmark mark='a'/>叉号是每个网络在训练各个检查点预测的终点。<bookmark mark='b'/>EGNN的叉号落到了圆圈上；最后它的位置"
+        "均方根误差是{err_e:.2f}，MLP的是{err_m:.2f}。",
 
     'That is the case for equivariance:':
         "这就是支持等变性的理由：不用花任何数据去教网络，转过的分子还是同一个分子。蛋白质也是分子；本部分其余的内容把这些想法带进科学，"
@@ -496,7 +495,7 @@ ZH.update({
         "它管用吗？这里计算一个小测试。随机的、像蛋白质一样的链，{p['n']}个残基；模型看到四分之一的距离，带噪声，要把其余的填出来，"
         "这代替了比对告诉AlphaFold的信息。<bookmark mark='a'/>两个同样大小、同样训练的模型：一个单独更新每一对，另一个用三角更新。"
         "<bookmark mark='b'/>只根据两个残基在链上隔多远来猜缺失的距离，误差是{sep:.1f}埃。单独更新每一对得到{mp:.1f}，{pw_txt}。"
-        "<bookmark mark='c'/>{verdict}，{vtxt}。",
+        "<bookmark mark='c'/>{verdict}，<bookmark mark='geometry'/>{vtxt}。",
 
     'no better: it never looks at the other pairs, and it knows the gap':
         '并没有更好：它从不看别的残基对，而且它只知道链上八以内的间隔',
@@ -505,13 +504,13 @@ ZH.update({
         '几乎没有更好，因为它从不看别的残基对',
 
     "f'Triangle updates cut it to":
-        '三角更新把它降到{mt:.1f}，小了{mp / mt:.1f}倍',
+        '三角更新把误差降到{mt:.1f}埃，约为原来的1/{mp / mt:.1f}',
 
     'f"Triangle updates don\'t help here':
         '三角更新在这里没有帮助：{mt:.1f}',
 
     "f'and their guesses break the triangle inequality":
-        "而且它的猜测违反三角不等式的次数少了{viol['pairwise'] / max(viol['triangle'], 1e-09):.0f}倍",
+        "而且它们的猜测违反三角不等式的频率约为原来的1/{viol['pairwise'] / max(viol['triangle'], 1e-09):.0f}",
 
     'though their guesses break the triangle inequality no less often':
         '不过它的猜测违反三角不等式的次数并没有更少',
@@ -549,16 +548,16 @@ ZH.update({
         "网络应该被训练去最小化什么？AlphaFold 2的答案是坐标系对齐点误差，FAPE。<bookmark mark='a'/>站在残基i的坐标系里看原子j。"
         "<bookmark mark='b'/>对每个原子、从每个坐标系都这样看，在预测里和真实结构里都看，把差别平均起来，每个差别截断在十埃，免得离群值主导"
         "结果。<bookmark mark='c'/>整个结构的刚体运动会抵消：FAPE不管蛋白质在哪里、朝哪个方向。<bookmark mark='d'/>但坐标系是用右手法则从"
-        "三个原子构造的，而镜像不是刚体运动，所以FAPE能看出来。",
+        "三个原子构造的。转动和平移保持手性，反射则把它反过来，所以FAPE能看出来。",
 
     'f"Here is the difference, measured on our bundle and its reflection.':
         "差别在这里，在我们的螺旋束和它的镜像上测量。<bookmark mark='a'/>每个距离都一样，所以距离误差是{dm:.2f}。<bookmark mark='b'/>"
-        "可FAPE是{fm:.2f}，比把每个原子随机移动整整1埃还差，那样是{f['fape_noisy']:.2f}。<bookmark mark='c'/>而第8章那些光靠距离分不开的"
+        "可FAPE是{fm:.2f}；各坐标独立加入标准差为1埃的高斯噪声时，FAPE是{f['fape_noisy']:.2f}。<bookmark mark='c'/>而第8章那些光靠距离分不开的"
         "折叠，现在被干净地分开了：落在真实折叠上的得分{gf:.2f}，镜像{bf:.2f}。",
 
     'f"The last trick is recycling:':
         "最后一招是循环：把网络在它自己上一次的输出上再跑一遍，这样一个粗糙的初始结构就能让网络把比对读得更清楚。<bookmark mark='a'/>"
-        "训练时，跑几遍是随机的，梯度只流过最后一遍，所以多跑几遍不多占内存。<bookmark mark='b'/>我们把它加到了第9章的三角模型上。"
+        "训练时，跑几遍是随机的，梯度只流过最后一遍，从而不用保存每一遍的训练激活。<bookmark mark='b'/>我们把它加到了第9章的三角模型上。"
         "{verdict}，{vs}。",
 
     "f'A second pass cuts the error from":
@@ -581,7 +580,7 @@ ZH.update({
         "对蛋白质怎样结合DNA、怎样夹住一个药物分子，说得很少：这是下一步。",
 
     'So: residues as rigid frames,':
-        "所以：残基是刚性的坐标系，由看不见蛋白质怎么转的注意力来移动；一个不在乎刚体运动、却在乎反射的损失；还有一个会读自己的答案、"
+        "所以：残基是刚性的坐标系，由看不见蛋白质怎么转的注意力来移动；一个不在乎转动和平移、却在乎反射的损失；还有一个会读自己的答案、"
         "再试一次的网络。",
 
     # ------------------------------------------------------------------ AF3
@@ -603,19 +602,22 @@ ZH.update({
 
     'f"So is equivariance worth it, for a generator?':
         "那么，对生成模型来说，等变性值得吗？做一个玩具测试：平面上四千条紧凑的链，每条十二个原子，键长为1。<bookmark mark='a'/>两个"
-        "去噪器，训练时间一样长：一个对转动等变，像EGNN；另一个是普通MLP，每条链都随机转过之后才给它看，就像AlphaFold 3那样。<bookmark "
+        "去噪器，训练步数相同：一个对转动等变，像EGNN；另一个是普通MLP，每条链都随机转过之后才给它看，就像AlphaFold 3那样。<bookmark "
         "mark='b'/>它们的样本。<bookmark mark='c'/>键长：等变模型平均偏差{e['bond']:.3f}，普通模型{m['bond']:.3f}。碰撞，也就是两个原子"
         "叠在一起：{100 * e['clash']:.1f}%的链对{100 * m['clash']:.1f}%。{verdict}，{nn_line}。<bookmark mark='d'/>在AlphaFold 3的规模上，"
         "有整个蛋白质数据库，DeepMind选择了转过的副本：用数据和算力代替内置的对称性。",
 
-    'and neither simply copies its training chains':
-        '而且两者都没有只是照抄训练链',
+    'and their median nearest-training distances exceed half the held-out median; this alone does not establish novelty':
+        '而且两者到最近训练链的距离中位数都超过留出链中位数的一半；仅凭这一点还不能证明新颖性',
 
-    'though the samples sit closer to training chains than real new chains do':
-        '不过样本离训练链比真正的新链离得更近',
+    'though at least one model has a median nearest-training distance below half the held-out median':
+        '不过至少一个模型到最近训练链的距离中位数小于留出链中位数的一半',
 
     'The equivariant denoiser draws better chains on both counts':
         '等变去噪器在两项上都画出了更好的链',
+
+    'The equivariant denoiser does as well or better on both counts':
+        '等变去噪器在两项上都一样好或者更好',
 
     'The plain network, trained on turned copies, does as well or better on both counts':
         '用转过副本训练的普通网络，在两项上都一样好或者更好',
@@ -663,14 +665,14 @@ ZH.update({
     "f'then compact folds, though {100 * clash_s:.0f} percent":
         '然后是紧凑的折叠，不过最后的样本里仍有{100 * clash_s:.0f}%有两个原子挨得太近，而训练链从来不会这样',
 
-    'farther than genuinely new chains are: not copies':
-        '比真正的新链离得更远：不是照抄，但也还不完全像真的',
+    'farther than held-out real chains are; distance alone does not establish novelty or quality':
+        '比留出的真实链离得更远；仅凭距离不能证明新颖性或质量',
 
-    'about as far from their nearest training chain as genuinely new chains are':
-        '和真正的新链离最近训练链差不多远',
+    'about as far from their nearest training chain as held-out real chains are; this does not establish novelty':
+        '和留出的真实链离最近训练链差不多远；这不能证明新颖性',
 
-    'closer to training chains than genuinely new chains are, a sign of some copying':
-        '比真正的新链离训练链更近，这说明有一些照抄',
+    'closer to training chains than held-out real chains are, a possible sign of copying rather than proof':
+        '比留出的真实链离训练链更近，这可能是照抄的迹象，但并非证明',
 
     'Since then the field has moved fast.':
         "从那以后，这个领域发展得很快。<bookmark mark='a'/>2024年，谷歌DeepMind的AlphaProteo为医学靶标设计了结合子，<bookmark mark='b'/>"
@@ -723,8 +725,8 @@ ZH.update({
     "Its lead over persistence is short-lived":
         '它对持续性预报的领先很短暂',
 
-    "f'and after {cross_c} steps it is worse":
-        '而{cross_c}步之后，它比直接预报平均状态还差，每个混沌系统的预报最终都会这样',
+    "f'and at step {cross_c} it first becomes worse":
+        '而在第{cross_c}步，它首次比预报训练平均状态还差；混沌限制可预测性，却不意味着每个预报最终都一定比气候平均差',
 
     'and it stays better than the average state throughout':
         '而且自始至终都比平均状态好',
@@ -735,8 +737,8 @@ ZH.update({
     "f'Over the first ten steps the long edges make no difference":
         '在前十步里，长边没有带来差别；它们的作用在后面：到第二十步，只用最短边的网络误差是{e20f:.1f}，而多尺度网格是{e20m:.1f}',
 
-    "In our toy the long edges don't help, at any lead time":
-        '在我们的玩具里，无论提前多少步，长边都没有帮助',
+    "In our toy these summary comparisons show no clear advantage from the long edges":
+        '在我们的玩具里，这些汇总比较并未显示长边有明确优势',
 
     'There is a deeper problem.':
         "还有一个更深的问题。用平方误差训练，网络预测的是可能发生的情况的平均，而在很远的将来，许多种天气的平均是一片模糊。<bookmark "
@@ -762,7 +764,7 @@ ZH.update({
         "傅里叶神经算子出自李宗仪、阿妮玛·阿南德库马尔、安德鲁·斯图尔特等人，它从一个积分形式的网络层出发：每个点的新值，通过一个核"
         "kappa，混合了整个场。<bookmark mark='a'/>如果核只依赖于偏移量，这个积分就是一个卷积，卷积定理把它变成傅里叶变换的乘积。<bookmark "
         "mark='b'/>所以直接学核的变换：给最低的那些频率各学一个复数权重，这里是十六个，其余的丢掉。<bookmark mark='c'/>权重属于频率，不属于"
-        "格点，所以网络能读任何细到足以容纳它们的网格；平移直接穿过；而一层的代价大约是一次快速傅里叶变换。",
+        "格点，所以这一层能读任何细到足以容纳它们的网格。傅里叶层与周期平移可交换；但我们的完整模型也接收绝对坐标，所以整个网络不保证精确的平移等变性。一层的代价大约是一次快速傅里叶变换。",
 
     'f"We trained one on a thousand solutions':
         "我们用伯格斯方程的一千个解训练了一个，采样在{res}个点上，以一个伪谱求解器的答案为准。<bookmark mark='a'/>这是它对一个从没见过的"
@@ -846,9 +848,9 @@ ZH.update({
     'Chapter sixteen. Geometry and proofs.':
         '第16章。几何与证明。',
 
-    'Mathematics has something no other science has:':
-        "数学有一样别的科学都没有的东西：一个骗不了的检查器。<bookmark mark='a'/>在Lean这样的证明助手里，定理和证明都是代码，一个小小的内核"
-        "检查每一步推理；这一个说的是，n乘以n加1是偶数。<bookmark mark='b'/>计算机进入证明是在1976年，阿佩尔和哈肯的四色定理，2005年乔治·"
+    'Mathematics has proof assistants with small trusted kernels.':
+        "数学有证明助手，核心是一个需要信任的小型内核。<bookmark mark='a'/>在Lean这样的证明助手里，定理和证明都是代码，一个小小的内核"
+        "检查每一步推理；这一个说的是，两个相邻自然数的乘积是偶数。<bookmark mark='b'/>计算机进入证明是在1976年，阿佩尔和哈肯的四色定理，2005年乔治·"
         "贡蒂埃对它做了形式化检查。<bookmark mark='c'/>托马斯·黑尔斯对开普勒猜想的证明在2014年得到了形式化验证，<bookmark mark='d'/>2022年，"
         "Lean社区把达斯汀·克劳森和彼得·舒尔茨的一个困难的新定理形式化了。<bookmark mark='e'/>Lean的库Mathlib现在收录了大约二十九万条定理；"
         "第28部分会讲强化学习拿这样的检查器做了什么。",
@@ -871,7 +873,7 @@ ZH.update({
         "在比赛之外，前沿是研究级的数学。<bookmark mark='a'/>自动形式化，也就是把非形式的数学翻译成Lean，速度猛然加快：2025年9月，初创公司"
         "Math Inc.报告说，它的智能体Gauss用大约三个星期，把强素数定理形式化了，大约两万五千行Lean代码。<bookmark mark='b'/>2026年1月，"
         "OpenAI的GPT-5.2 Pro和Harmonic的证明器Aristotle解决了埃尔德什第728号问题，最后给出的是一个Lean证明。<bookmark mark='c'/>谷歌"
-        "DeepMind的一个团队让Gemini处理了七百个未解的埃尔德什问题：解决了十三个，五个靠的是看来是新的论证，八个是因为答案原来已经在文献里了。"
+        "DeepMind的一个团队让Gemini处理了七百个标为未解的埃尔德什问题：两个完整解答和三个部分解答看来是新的；另有八个早已在文献里解决。"
         "<bookmark mark='d'/>两点提醒：形式化证明恰好证明它的陈述，所以译错的陈述证明的是错的东西；而且最先被攻下的都是比较容易的问题。",
 
     'With a perfect checker, search can be trusted:':
@@ -919,23 +921,23 @@ ZH.update({
         "矩阵乘法是最纯粹的例子。<bookmark mark='a'/>按教科书的方法，两个n乘n矩阵相乘要做n的三次方次乘法。<bookmark mark='b'/>把这个乘积"
         "写成一个三向张量；<bookmark mark='c'/>那么，把这个张量写成R个简单乘积之和的每一种写法，都是一个只用R次乘法的算法。<bookmark "
         "mark='d'/>1969年，福尔克尔·施特拉森为二乘二矩阵找到了七次的算法，而不是八次；两年后，什穆埃尔·维诺格拉德证明了七就是最少的。"
-        "<bookmark mark='e'/>我们用数值方法搜索这些分解，每个秩从三十个随机起点出发。{s6}。{s7}。<bookmark mark='f'/>{s3}。",
+        "<bookmark mark='e'/>我们用数值方法搜索这些分解，每个秩从三十个随机起点出发。{s6}。<bookmark mark='check'/>{s7}。<bookmark mark='f'/>{s3}。",
 
     "f'At rank six, none of the":
-        '秩为六时，{r6[2]}个起点没有一个能把误差降到{r6[3]:.2f}以下：根本不存在六次乘法的算法可找',
+        '秩为六时，{r6[2]}个起点没有一个通过数值阈值；最佳相对误差为{r6[3]:.2f}：根本不存在六次乘法的算法可找',
 
-    "f'At rank six, {r6[1]} starts report zero error":
-        '秩为六时，有{r6[1]}个起点报告误差为零，这会和定理矛盾：是数值上的假象',
+    "f'At rank six, {r6[1]} starts pass the numerical threshold":
+        '秩为六时，有{r6[1]}个起点通过了数值阈值；把它们理解为精确算法就会与定理矛盾',
 
     'f"For three by three matrices the record, Julian Laderman\'s from 1976, is twenty-three multiplications, and':
-        '对三乘三矩阵，纪录是朱利安·拉德曼1976年给出的二十三次乘法；我们在这个秩上的{n3_tries}个起点里，有{n3_ok}个找到了',
+        '对三乘三矩阵，纪录是朱利安·拉德曼1976年给出的二十三次乘法；我们在这个秩上的{n3_tries}个起点里，有{n3_ok}个通过了数值阈值',
 
     'f"For three by three matrices the record, Julian Laderman\'s from 1976, is twenty-three multiplications; from':
         '对三乘三矩阵，纪录是朱利安·拉德曼1976年给出的二十三次乘法；在这个秩上从{n3_tries}个起点出发，在二十六上也一样多，我们的搜索'
-        '离零只差{tiny3}，却始终没有精确到零：矩阵一变大，精确的分解就成了大海里的针',
+        '最佳相对张量误差约为{best3_mantissa:.1f}乘以10的负{best3_dp}次方，却始终没有达到数值阈值：矩阵一变大，精确的分解就成了大海里的针',
 
     "f'At rank seven, {r7[1]} of":
-        '秩为七时，{r7[2]}个起点里有{r7[1]}个找到了：一个类似施特拉森的算法，它把随机矩阵乘对到小数点后{vdp}位',
+        '秩为七时，{r7[2]}个起点里有{r7[1]}个通过了数值阈值。最好的候选在20对随机矩阵上的最大元素绝对误差约为{verify_mantissa:.1f}乘以10的负{verify_dp}次方：这是数值检查，不是精确证书',
 
     'In May 2025 Google DeepMind combined both lines in AlphaEvolve.':
         "2025年5月，谷歌DeepMind在AlphaEvolve里把两条路线结合了起来。<bookmark mark='a'/>Gemini模型对整段程序提出修改，评估器给它们打分，"

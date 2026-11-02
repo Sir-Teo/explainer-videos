@@ -39,13 +39,13 @@ class Proofs(VoiceoverScene):
     def checkers(self):
         code = code_block([
             "theorem two_dvd (n : ℕ) : 2 ∣ n * (n + 1) :=",
-            "  (Nat.even_mul_succ_self n).two_dvd",
+            "  Nat.two_dvd_mul_add_one n",
         ], font_size=22, color=WHITE)
         box = SurroundingRectangle(code, color=LEAN_C, buff=0.3, corner_radius=0.12, stroke_width=2)
         lean = VGroup(box, code).move_to([0, 2.3, 0])
         ll = note(r"illustrative: \ Lean 4 with Mathlib; \ the kernel checks every step", font_size=20)
         ll.next_to(lean, DOWN, buff=0.12)
-        ok_ = VGroup(MathTex(r"\checkmark", font_size=48, color=STRUCT), label(r"the kernel: \ accepted \ (every step checked)",
+        ok_ = VGroup(MathTex(r"\checkmark", font_size=48, color=STRUCT), label(r"the kernel checks the declared statement",
                                                                  font_size=26, color=STRUCT)).arrange(RIGHT, buff=0.2)
         ok_.next_to(ll, DOWN, buff=0.35)
         cards = VGroup(
@@ -58,13 +58,14 @@ class Proofs(VoiceoverScene):
         ).arrange(RIGHT, buff=0.25).move_to([0, -0.3, 0])
         cards.width = min(cards.width * 1.08, 13.4)
         cards.move_to([0, -0.4, 0])
-        ml = label(r"Mathlib, \ October 2026: \ $291{,}099$ theorems, \ $139{,}563$ definitions, \ $772$ "
+        ml = label(r"Mathlib, \ 2 November 2026: \ $292{,}326$ theorems, \ $140{,}100$ definitions, \ $772$ "
                    r"contributors", font_size=24, color=LEAN_C).to_edge(DOWN, buff=0.45)
+        ml.width = min(ml.width, 13.4)
         mc = note(r"leanprover-community.github.io, \ Mathlib statistics", font_size=18).next_to(ml, DOWN, buff=0.08)
         with self.voiceover(
-            "Mathematics has something no other science has: a checker that cannot be fooled. <bookmark mark='a'/> In a "
+            "Mathematics has proof assistants with small trusted kernels. <bookmark mark='a'/> In a "
             "proof assistant such as Lean, a theorem and its proof are code, and a small kernel checks every inference; this "
-            "one says that n times n plus one is even. <bookmark mark='b'/> Computers entered proofs in 1976 with Appel and "
+            "one says the product of two consecutive natural numbers is even. <bookmark mark='b'/> Computers entered proofs in 1976 with Appel and "
             "Haken's four-colour theorem, which Georges Gonthier checked formally in 2005. <bookmark mark='c'/> Thomas "
             "Hales's proof of the Kepler conjecture was formally verified in 2014, <bookmark mark='d'/> and in 2022 Lean's "
             "community formalized a hard new theorem of Dustin Clausen and Peter Scholze. <bookmark mark='e'/> Lean's "
@@ -102,12 +103,14 @@ class Proofs(VoiceoverScene):
         aux.width = min(aux.width, 13.0)
         rows = [(r"GPT-4", 0, PLAIN), (r"Wu's method \ (1978)", 10, GREY_B), (r"the symbolic engine alone", 14, LEAN_C),
                 (r"AlphaGeometry", 25, PAIR_C), (r"average IMO gold medallist", 25.9, HIST)]
-        bars = score_bars(rows, 30, W=5.6, x0=-0.4, y0=0.25, dy=0.62)
+        bars = score_bars(rows, 30, W=5.6, x0=-0.4, y0=0.55, dy=0.48)
         bl = label(r"olympiad geometry problems solved, \ of $30$ \ (IMO 2000--2022)", font_size=20, color=GREY_A)
         bl.next_to(bars, UP, buff=0.15)
         ag2 = label(r"AlphaGeometry 2 (2025): \ $84\%$ of all IMO geometry problems of 2000--2024, \ up from $54\%$",
-                    font_size=22, color=PAIR_C).to_edge(DOWN, buff=0.75)
+                    font_size=22, color=PAIR_C)
         cite_ = cite(r"Trinh et al., \textit{Nature} (2024); \ Chervonyi et al.\ (2025)", corner=DR)
+        cite_.to_edge(DOWN, buff=1.6)
+        ag2.next_to(cite_, UP, buff=0.18).set_x(0)
         with self.voiceover(
             "Olympiad geometry fell first. In January 2024 Trieu Trinh, Thang Luong and colleagues at Google DeepMind "
             "published AlphaGeometry. <bookmark mark='a'/> With no human proofs to learn from, they made their own: random "
@@ -136,7 +139,7 @@ class Proofs(VoiceoverScene):
     def olympiad(self):
         rows = [(r"2024 \ AlphaProof + AlphaGeometry 2 \ (Lean)", 28, LEAN_C),
                 (r"2025 \ Gemini Deep Think; \ OpenAI's model \ (words)", 35, PAIR_C),
-                (r"2026 \ two systems, \ graded via the organizers", 42, SEARCH_C)]
+                (r"2026 \ two systems, \ company reports", 42, SEARCH_C)]
         bars = score_bars(rows, 42, W=6.0, x0=-0.2, y0=1.4, dy=1.0, font_size=22)
         gold = VGroup()
         for v, i in ((29, 0), (35, 1)):
@@ -185,7 +188,7 @@ class Proofs(VoiceoverScene):
             history_card(2026, r"Erd\H{o}s problem \#728", r"GPT-5.2 Pro and Harmonic's Aristotle: \ an open problem "
                          r"resolved, \ ending in a Lean proof \ (January)", width=4.3, color=HIST),
             history_card(2026, r"Feng et al.\ (Google DeepMind)", r"Gemini on $700$ Erd\H{o}s problems marked open: "
-                         r"\ $13$ settled, \ $5$ by seemingly new arguments, \ $8$ already solved in the literature",
+                         r"\ $2$ full and $3$ partial new solutions, \ $8$ previously solved in the literature",
                          width=4.3, color=HIST),
         ).arrange(RIGHT, buff=0.25).move_to(UP * 0.8)
         caveats = VGroup(
@@ -202,8 +205,8 @@ class Proofs(VoiceoverScene):
             "agent Gauss had formalized the strong prime number theorem, about twenty-five thousand lines of Lean, in roughly "
             "three weeks. <bookmark mark='b'/> In January 2026 OpenAI's GPT-5.2 Pro and Harmonic's prover Aristotle resolved "
             "Erdős problem 728, with a proof that ends in Lean. <bookmark mark='c'/> A Google DeepMind team ran Gemini over "
-            "seven hundred open Erdős problems: thirteen were settled, five by seemingly new arguments, eight because the "
-            "answer was already in the literature. <bookmark mark='d'/> Two cautions: a formal proof proves exactly its "
+            "seven hundred Erdős problems marked open: two full and three partial solutions appeared new; eight more "
+            "were already solved in the literature. <bookmark mark='d'/> Two cautions: a formal proof proves exactly its "
             "statement, so a mistranslated statement proves the wrong thing; and the problems falling first are the easier "
             "ones."
         ) as vo:

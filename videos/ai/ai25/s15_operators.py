@@ -48,6 +48,7 @@ class Operators(VoiceoverScene):
             label(r"DeepONet (Lu et al.\ 2021); \ Fourier neural operator (Li et al.\ 2021)", font_size=20,
                   color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.4).align_to(pts, LEFT)
+        hist.shift(LEFT * max(0.0, hist.get_right()[0] - 6.8))
         with self.voiceover(
             "Fields evolve by equations. Here is Burgers' equation, a one-dimensional cartoon of fluid flow: a wave that "
             "steepens where it is fast and is smoothed by viscosity. <bookmark mark='a'/> From this start, one time unit "
@@ -84,7 +85,7 @@ class Operators(VoiceoverScene):
         props = VGroup(
             label(r"the weights live on frequencies, \ not on grid points: \ any grid can use them", font_size=23,
                   color=STRUCT),
-            label(r"a shift of the input shifts the output: \ equivariant, \ like a convolution", font_size=23,
+            label(r"the Fourier layer commutes with shifts; \ our full model also sees absolute $x$", font_size=23,
                   color=SYM),
             label(r"cost $O(n \log n)$ per layer, \ by the fast Fourier transform", font_size=23, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.45)
@@ -94,8 +95,9 @@ class Operators(VoiceoverScene):
             "mark='a'/> If the kernel depends only on the offset, the integral is a convolution, which the convolution "
             "theorem makes a product of Fourier transforms. <bookmark mark='b'/> So learn the kernel's transform directly: "
             "one complex weight for each of the lowest frequencies, sixteen here, dropping the rest. <bookmark mark='c'/> The "
-            "weights belong to frequencies, not grid points, so the network reads any grid fine enough to hold them; shifts "
-            "pass straight through; and a layer costs about one fast Fourier transform."
+            "weights belong to frequencies, not grid points, so the layer reads any grid fine enough to hold them. The Fourier "
+            "layer commutes with periodic shifts; our full model also receives absolute coordinates, so exact shift "
+            "equivariance is not guaranteed for the whole network. A layer costs about one fast Fourier transform."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -117,11 +119,11 @@ class Operators(VoiceoverScene):
         res = int(fo["res"])
         x = np.linspace(0, 1, len(uT), endpoint=False)
         xs = np.linspace(0, 1, res, endpoint=False)
-        lim = float(np.ceil(np.abs(uT).max() * 12) / 10)
+        lim = float(np.ceil(max(np.abs(uT).max(), max(np.abs(f).max() for f in frames)) * 12) / 10)
         g = axes([0, 1], [-lim, lim], x_length=6.0, y_length=3.4, xlabel=r"$x$", ylabel=r"$u(x, 1)$",
                  xticks=[0, 1], yticks=[-lim, lim], center=[-2.8, 0.1, 0])
         truth = curve(g.ax, x, uT, TRUE_C, 4)
-        cur = VGroup(*[Dot(g.ax.c2p(a, np.clip(b, -lim, lim)), radius=0.035, color=STRUCT) for a, b in zip(xs, frames[0])])
+        cur = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.035, color=STRUCT) for a, b in zip(xs, frames[0])])
         cnt = label(r"step $0$", font_size=22, color=GREY_A).next_to(g, UP, buff=0.1)
         cv = np.asarray(rec["curve"])
         ax2 = axes([0, cv[-1, 0]], [0, float(np.ceil(cv[:, 1].max() * 10) / 10)], x_length=3.8, y_length=2.6,
@@ -144,7 +146,7 @@ class Operators(VoiceoverScene):
             vo.wait_until("a")
             per = max(0.5, vo.until("b") / max(1, len(frames) - 1))
             for k in range(1, len(frames)):
-                new = VGroup(*[Dot(g.ax.c2p(a, np.clip(b, -lim, lim)), radius=0.035, color=STRUCT)
+                new = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.035, color=STRUCT)
                                for a, b in zip(xs, frames[k])])
                 nl = label(rf"step ${snaps[k]:,}$".replace(",", "{,}"), font_size=22, color=GREY_A).move_to(cnt)
                 idx = min(int(np.searchsorted(cv[:, 0], snaps[k])), len(cv) - 1)
@@ -163,13 +165,14 @@ class Operators(VoiceoverScene):
         R = list(fo["test_res"])
         lx = np.log2(R)
         E = {k: np.array([[fo[f"{k}_s{s}"]["err"][str(r)] for s in (0, 1, 2)] for r in R]) for k in ("fno", "cnn")}
-        # a log scale: the operator's error is a fraction of a percent, the CNN's off its grid tens of percent
-        lo_, top = -3.0, 0.0
-        LE = {k: np.log10(np.clip(v, 10 ** lo_, 1.0)) for k, v in E.items()}
+        # Include every seed's actual error; fixed limits previously clipped values to 0.1%-100%.
+        LE = {k: np.log10(v) for k, v in E.items()}
+        lo_ = min(-3.0, float(np.floor(min(v.min() for v in LE.values()))))
+        top = max(0.0, float(np.ceil(max(v.max() for v in LE.values()))))
+        ticks = list(range(int(lo_), int(top) + 1))
         g = axes([lx[0], lx[-1]], [lo_, top], x_length=6.0, y_length=3.6, xlabel=r"points the test is sampled at",
-                 ylabel=r"relative error \ (log scale)", xticks=list(lx), yticks=[-3, -2, -1, 0],
-                 xfmt=lambda v: f"{2 ** v:.0f}", yfmt=lambda v: {-3: r"0.1\%", -2: r"1\%", -1: r"10\%",
-                                                                 0: r"100\%"}[int(round(v))],
+                 ylabel=r"relative error \ (log scale)", xticks=list(lx), yticks=ticks,
+                 xfmt=lambda v: f"{2 ** v:.0f}", yfmt=lambda v: rf"{100 * 10 ** v:g}\%",
                  center=[-2.6, -0.1, 0])
         train_x = np.log2(int(fo["res"]))
         tl = DashedLine(g.ax.c2p(train_x, lo_), g.ax.c2p(train_x, top), color=GREY_C)
@@ -177,7 +180,7 @@ class Operators(VoiceoverScene):
         tlab.shift(DOWN * 0.15)
         objs = {}
         for k in ("fno", "cnn"):
-            m = np.log10(np.clip(E[k].mean(1), 10 ** lo_, 1.0))
+            m = np.log10(E[k].mean(1))
             objs[k] = VGroup(band(g.ax, lx, LE[k].min(1), LE[k].max(1), KIND_COLOR[k], 0.22),
                              curve(g.ax, lx, m, KIND_COLOR[k], 3.5),
                              VGroup(*[Dot(g.ax.c2p(a, b), radius=0.05, color=KIND_COLOR[k]) for a, b in zip(lx, m)]))
@@ -187,10 +190,10 @@ class Operators(VoiceoverScene):
         pred = fo["fno_s0"]["pred"]
         uT = np.asarray(fo["show_uT"])[1]
         x = np.linspace(0, 1, len(uT), endpoint=False)
-        lim = float(np.ceil(np.abs(uT).max() * 12) / 10)
+        p_hi = np.asarray(pred["1024"])[1]
+        lim = float(np.ceil(max(np.abs(uT).max(), np.abs(p_hi).max()) * 12) / 10)
         g2 = axes([0, 1], [-lim, lim], x_length=4.2, y_length=2.2, xticks=[], yticks=[], center=[3.9, -1.3, 0])
         c_t = curve(g2.ax, x, uT, TRUE_C, 3)
-        p_hi = np.asarray(pred["1024"])[1]
         c_p = curve(g2.ax, np.linspace(0, 1, len(p_hi), endpoint=False), p_hi, STRUCT, 2)
         g2l = label(r"FNO read at $1{,}024$ points", font_size=18, color=STRUCT).next_to(g2, UP, buff=0.08)
         ef, ec = E["fno"].mean(1), E["cnn"].mean(1)

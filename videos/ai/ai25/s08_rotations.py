@@ -44,7 +44,7 @@ class Rotations(VoiceoverScene):
             "For molecules the symmetry is the group of rigid motions of space, E of three: rotations, reflections, "
             "translations. <bookmark mark='a'/> A molecule's energy is invariant under all of them. <bookmark mark='b'/> "
             "Differentiate both sides in the positions: the chain rule brings out the transpose of R. <bookmark mark='c'/> "
-            "Multiply by R, <bookmark mark='d'/> and since forces are minus the gradient, they turn with the molecule: "
+            "Left multiply by R, whose product with its transpose is the identity, <bookmark mark='d'/> and since forces are minus the gradient, they turn with the molecule: "
             "equivariant. So an invariant model of the energy gives equivariant forces for free."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.1))
@@ -136,7 +136,7 @@ class Rotations(VoiceoverScene):
         off = float(h["off_max"])
         dp = int(np.floor(-np.log10(max(off, 1e-300))))
         facts = VGroup(
-            label(rf"outside the blocks: \ at most ${sci(off, 0)}$ \ (rounding)", font_size=22, color=GREY_A),
+            label(rf"outside the blocks: \ at most ${sci(10.0 ** (-dp), 0)}$ \ (rounding)", font_size=22, color=GREY_A),
             label(r"features of degree $\ell$ turn by their own block $D^{(\ell)}(R)$", font_size=22, color=GREY_A),
             label(r"two features multiply into degrees $|\ell_1 - \ell_2|, \dots, \ell_1 + \ell_2$ \ "
                   r"(Clebsch--Gordan)", font_size=22, color=GREY_A),
@@ -146,10 +146,10 @@ class Rotations(VoiceoverScene):
         tag = note(r"computed: \ least squares on $20{,}000$ points of the sphere", font_size=20).to_corner(DR, buff=0.2)
         with self.voiceover(
             "EGNN carries scalars, which don't turn, and positions, which turn like vectors. Richer models carry more. "
-            "<bookmark mark='a'/> Any function on the sphere can be written in spherical harmonics of degree zero, one, two "
-            "and up. <bookmark mark='b'/> Here, computed, is what one rotation does to the nine harmonics up to degree two: "
-            "it mixes them only within each degree, in blocks of one, three and five; off the blocks, zero to "
-            f"{dp} decimal places. <bookmark mark='c'/> So a network can keep features of each degree, turn each with its own "
+            "<bookmark mark='a'/> A square-integrable function on the sphere has a mean-square expansion in spherical "
+            "harmonics of degree zero, one, two and up. <bookmark mark='b'/> Here, computed, is what one rotation does to the nine harmonics up to degree two: "
+            "it mixes them only within each degree, in blocks of one, three and five; off the blocks, at most ten to "
+            f"the minus {dp}. <bookmark mark='c'/> So a network can keep features of each degree, turn each with its own "
             "block, and combine them by the Clebsch–Gordan rules of quantum angular momentum: <bookmark mark='d'/> the design "
             "of tensor field networks, NequIP and MACE, among today's most accurate learned force fields."
         ) as vo:
@@ -284,8 +284,8 @@ class Rotations(VoiceoverScene):
             f"Here is training itself, for the runs on {big:,} systems: one test system the networks never saw, "
             "its five particles, and where they really go by time one, the blue paths. <bookmark mark='a'/> The "
             "crosses are each network's predicted end points, at checkpoints through training. <bookmark mark='b'/> "
-            f"EGNN's crosses settle onto the circles; by the end its predicted positions are off by {err_e:.2f} "
-            f"on average. The MLP's end {err_m:.2f} away."
+            f"EGNN's crosses settle onto the circles; by the end its root mean square position error is {err_e:.2f}. "
+            f"The MLP's is {err_m:.2f}."
         ) as vo:
             for p in panels:
                 self.play(FadeIn(p["frame"]), FadeIn(p["ttl"]), Create(p["paths"]), FadeIn(p["start"]),

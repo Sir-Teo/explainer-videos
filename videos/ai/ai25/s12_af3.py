@@ -7,11 +7,17 @@ from videos.ai.ai25.common import (AUG, HIST, KIND_COLOR, MSA_C, PAIR_C, PART, P
                                    chain2d_mob, load, node_box, take_away, takeaway_anims)
 
 
-def chain_sheet(S, cols, scale=0.32, gap=1.35, color=STRUCT, width=2.2, dot_r=0.035):
+def chain_sheet(S, cols, scale=0.32, gap=1.35, color=STRUCT, width=2.2, dot_r=0.035, fit=False):
     g = VGroup()
     for k, P in enumerate(np.asarray(S)):
         r, c = divmod(k, cols)
-        g.add(chain2d_mob(P, scale=scale, center=[c * gap, -r * gap, 0], color=color, width=width, dot_r=dot_r))
+        if fit:
+            # Preserve angles and relative distances; never clamp atom coordinates to a box.
+            P = P - (P.max(0) + P.min(0)) / 2
+            chain_scale = min(scale, 0.85 * gap / max(float(np.ptp(P, axis=0).max()), 1e-12))
+        else:
+            chain_scale = scale
+        g.add(chain2d_mob(P, scale=chain_scale, center=[c * gap, -r * gap, 0], color=color, width=width, dot_r=dot_r))
     return g
 
 
@@ -38,7 +44,7 @@ class AF3(VoiceoverScene):
         ins.arrange(DOWN, buff=0.18).move_to([-5.4, 0.3, 0])
         b = [node_box(r"MSA module \ $\times 4$", MSA_C, font_size=22, height=0.9),
              node_box(r"Pairformer \ $\times 48$", PAIR_C, font_size=24, height=1.0),
-             node_box(r"diffusion module: \ every atom's coordinates", STRUCT, font_size=22, height=1.0)]
+             node_box(r"diffusion module: \\ every atom's coordinates", STRUCT, font_size=22, height=1.0)]
         b[0].move_to([-2.3, 0.3, 0])
         b[1].move_to([0.6, 0.3, 0])
         b[2].move_to([4.3, 0.3, 0])
@@ -81,8 +87,9 @@ class AF3(VoiceoverScene):
         strip = VGroup()
         for t in ts:
             P = np.asarray(path[str(t)])[0]
-            P = np.clip(P, -3.2, 3.2)
-            m = chain2d_mob(P, scale=0.45, color=STRUCT if t == 0 else interpolate_color(ManimColor(GREY_C),
+            P = P - (P.max(0) + P.min(0)) / 2
+            panel_scale = min(0.45, 1.3 / max(float(np.ptp(P, axis=0).max()), 1e-12))
+            m = chain2d_mob(P, scale=panel_scale, color=STRUCT if t == 0 else interpolate_color(ManimColor(GREY_C),
                                                                                          ManimColor(STRUCT),
                                                                                          1 - t / ts[0]),
                             width=2.2, dot_r=0.04)
@@ -90,7 +97,7 @@ class AF3(VoiceoverScene):
         strip.arrange(RIGHT, buff=0.3).move_to([0, 1.3, 0])
         if strip.width > 13.2:
             strip.width = 13.2
-        sl = label(r"one of our samples, \ from noise to a chain \ (computed)", font_size=20, color=GREY_A)
+        sl = label(r"one sample, \ noise to chain \ (computed; \ each panel scaled to fit)", font_size=20, color=GREY_A)
         sl.next_to(strip, UP, buff=0.15)
         quote = label(r"``no invariance or equivariance with respect to global rotations and translation of the "
                       r"molecule are required in the architecture''", font_size=22, color=PAIR_C)
@@ -102,7 +109,7 @@ class AF3(VoiceoverScene):
                   color=AUG),
             label(r"generative models can invent structure: \ trained also on AlphaFold-Multimer's predictions "
                   r"(cross-distillation)", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=1.6)
         head = label(r"diffusion over coordinates \ (Part 21)", font_size=32, color=STRUCT).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Diffusion is Part 21's idea, applied to atoms. <bookmark mark='a'/> Add noise to a structure's coordinates, at "
@@ -162,18 +169,21 @@ class AF3(VoiceoverScene):
                    rf"${stats['egnn']['params']:,}$ and ${stats['mlp']['params']:,}$ weights".replace(",", "{,}")
                    .replace("{{,}}", "{,}"), font_size=18).to_corner(DR, buff=0.15)
         e, m = stats["egnn"], stats["mlp"]
-        better = (e["bond"] < m["bond"]) + (e["clash"] < m["clash"])
+        better = int(e["bond"] < m["bond"]) + int(e["clash"] < m["clash"])
         if better == 2:
             verdict = "The equivariant denoiser draws better chains on both counts"
         elif better == 0:
             verdict = "The plain network, trained on turned copies, does as well or better on both counts"
+        elif e["bond"] <= m["bond"] and e["clash"] <= m["clash"]:
+            verdict = "The equivariant denoiser does as well or better on both counts"
         else:
             verdict = "Each wins on one count"
-        nn_line = ("and neither simply copies its training chains" if min(e["nn"], m["nn"]) > 0.5 * ref[2] else
-                   "though the samples sit closer to training chains than real new chains do")
+        nn_line = ("and their median nearest-training distances exceed half the held-out median; this alone does not "
+                   "establish novelty" if min(e["nn"], m["nn"]) > 0.5 * ref[2] else
+                   "though at least one model has a median nearest-training distance below half the held-out median")
         with self.voiceover(
             "So is equivariance worth it, for a generator? A toy test: four thousand compact chains of twelve atoms in the "
-            "plane, bonds of length one. <bookmark mark='a'/> Two denoisers, trained equally long: one equivariant to "
+            "plane, bonds of length one. <bookmark mark='a'/> Two denoisers, trained for the same number of steps: one equivariant to "
             "rotations, like EGNN; a plain MLP shown every chain turned at random, as AlphaFold 3 is. <bookmark mark='b'/> "
             f"Their samples. <bookmark mark='c'/> Bonds: the equivariant model's are off by {e['bond']:.3f} on average, the "
             f"plain one's by {m['bond']:.3f}. Clashes, two atoms on top of each other: {100 * e['clash']:.1f} percent of "

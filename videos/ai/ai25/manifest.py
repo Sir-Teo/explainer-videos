@@ -2,6 +2,8 @@
 
 TITLE = "AI, Built: Part 25, Symmetry and Science"
 
+SUBTITLE_TERM_BOUNDARIES = True
+
 SCENES = [
     ("s01_hook", "Hook", "Turn the molecule"),
     ("s02_history", "History", "1. How we got here"),

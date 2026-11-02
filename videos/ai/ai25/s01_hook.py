@@ -38,8 +38,8 @@ class Hook(VoiceoverScene):
             "Hopfield and Geoffrey Hinton, for the networks of Part 20. <bookmark mark='c'/> Measuring one protein's shape "
             "could take a laboratory years; AlphaFold predicts one in minutes."
         ) as vo:
-            self.play(Create(chain.segs, lag_ratio=0.03), FadeIn(chain.dots), run_time=2.5)
-            self.play(FadeIn(tag))
+            self.play(Create(chain.segs, lag_ratio=0.03), FadeIn(chain.dots), FadeIn(tag),
+                      run_time=min(2.5, vo.until("a", minimum=0.5)))
             vo.wait_until("a")
             self.play(FadeIn(card, shift=UP * 0.15), FadeIn(cite_))
             vo.wait_until("b")

@@ -198,7 +198,8 @@ def main():
         check_narration_audio(mp4, lines)
         normalize(mp4, norm, lossless=args.crf is not None)
         dur = ffprobe_duration(norm)
-        cues += subtitle_cues(lines, offset, args.lang)
+        cues += subtitle_cues(lines, offset, args.lang,
+                              preserve_terms=getattr(manifest, "SUBTITLE_TERM_BOUNDARIES", False) is True)
         if chapter:
             chapters.append((offset, narration_lang.chapter_title(args.video, cls, chapter, args.lang)))
         parts.append(norm)
