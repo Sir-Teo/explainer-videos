@@ -86,8 +86,8 @@ class Latent(VoiceoverScene):
         for w in (wake, sleep):
             w.arrange(RIGHT, buff=0.2, aligned_edge=UP)
         ws = VGroup(wake, sleep).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.3, -0.6, 0])
-        flaw = label(r"the catch: \ $q$ learns from dreams, \ and the two phases optimize different objectives",
-                     font_size=22, color=GREY_A).move_to([3.0, -2.3, 0])
+        flaw = wrapped_label(r"the catch: \ $q$ learns from dreams, \ and the two phases optimize different objectives",
+                             max_width=7.2, font_size=22, color=GREY_A).move_to([2.8, -2.3, 0])
         cite_ = cite(r"Hinton, Dayan, Frey \& Neal, \textit{The wake-sleep algorithm} (1995)", corner=DR)
         with self.voiceover(
             "In 1995 Peter Dayan, Geoffrey Hinton, Radford Neal and Richard Zemel proposed learning Bayes' rule: a "

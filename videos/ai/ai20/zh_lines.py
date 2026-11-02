@@ -157,11 +157,11 @@ ZH.update({
     'The moons are the hardest of the three for it.':
         '对它来说，双月是三者中最难的。',
 
-    "f'In bits per pixel the flow gets {mf:.2f} on held-out digits, against {mp:.2f} for the PixelCNN on the same budget: an exact":
-        '在留出数字上，流的每像素比特数是{mf:.2f}，而在同样预算下，PixelCNN是{mp:.2f}：似然是精确的，但更差；耦合层把容量花在了保持可逆上。',
+    'f"In bits per pixel the flow gets {mf:.2f} on held-out digits, against {mp:.2f} for the PixelCNN on the same budget: a dequantization estimate of an upper bound, numerically above':
+        '在留出数字上，流的每像素比特数是{mf:.2f}，而在同样预算下，PixelCNN是{mp:.2f}：这是通过去量化估计的负对数似然上界，数值高于PixelCNN的精确负对数似然；耦合层把容量花在了保持可逆上。',
 
-    "f'In bits per pixel the flow gets {mf:.2f} on held-out digits, against {mp:.2f} for the PixelCNN on the same budget: a better":
-        '在留出数字上，流的每像素比特数是{mf:.2f}，而在同样预算下，PixelCNN是{mp:.2f}：似然比自回归模型还好。',
+    'f"In bits per pixel the flow gets {mf:.2f} on held-out digits, against {mp:.2f} for the PixelCNN on the same budget: a dequantization estimate of an upper bound, numerically below':
+        '在留出数字上，流的每像素比特数是{mf:.2f}，而在同样预算下，PixelCNN是{mp:.2f}：通过去量化估计的负对数似然上界，数值低于PixelCNN的精确负对数似然。',
 
     # ------------------------------------------------------------------ NeuralODE
     'Chapter ten. Neural ODEs and continuous flows.':
@@ -223,18 +223,18 @@ ZH.update({
     'The two numbers say different things':
         '两个数说的是不同的事，这正是要有两个数的原因。',
 
-    'None of our models is copying:':
-        '我们的模型都没有在抄：它们的样本离训练集的距离，和真实测试数字差不多。',
+    'In this small sample, the median distances give no clear sign of copying:':
+        '在这组小样本里，中位距离没有明显显示出抄袭的迹象：生成数字离训练集的距离，和真实测试数字差不多。',
 
-    'One of them sits suspiciously close to the training set:':
-        '其中一个离训练集近得可疑：它可能在抄。',
+    'In this small sample, one model has an unusually low median distance':
+        '在这组小样本里，一个模型到训练集的中位距离异常低，需要进一步检查记忆现象。',
 
     # ------------------------------------------------------------------ Budget
     'Chapter fifteen. Five models, one budget.':
         '第15章。五个模型，同一份预算。',
 
     'f"Now the five image models, side by side, on equal terms.':
-        "现在，五个图像模型并排放在一起，条件对等。每一个都得到同样的算力预算，6万亿次浮点运算的训练，一次一次地数出来；"
+        "现在，五个图像模型并排放在一起，条件对等。每一个都得到同样的算力预算，6万亿次按PyTorch已支持运算的公式统计的模型FLOPs训练；"
         "每一个都从三个随机起点训练。<bookmark mark='a'/>算力对等，不等于其他一切都对等。卷积在每个像素上重复使用它的权重，"
         "所以PixelCNN的参数最少，而每个数字上的运算最多：它只看了{pex:.0f}千个训练数字，而{most_s}看了{mex:.1f}百万个。"
         "<bookmark mark='b'/>最后一列是抽一个样本的代价：除了PixelCNN需要196遍，每个模型都只要一遍。",
@@ -244,7 +244,7 @@ ZH.update({
         "哪个看起来最清晰，哪个最多样，哪个最像真正的手写？测量结果在后面。",
 
     'f"First, FID: the distance between our classifier\'s view':
-        "第一，FID：我们的分类器眼中生成数字和真实数字之间的距离，各两千个。一个完美的模型大约会得{floor:.2f}，就是真实数字那条线。"
+        "第一，FID：我们的分类器眼中生成数字和真实数字之间的距离：两千个生成数字，对照一万个测试数字。真实样本得分为{floor:.2f}，就是真实数字那条线。"
         "<bookmark mark='a'/>{lead}<bookmark mark='b'/>{pr}每个点是一个种子：种子之间的波动，也是结果的一部分。",
 
     "f'The lowest FID belongs to {n1}, {f1:.1f}, clearly ahead":
@@ -302,7 +302,7 @@ ZH.update({
         '它的样本FID是{vfid:.1f}；上一章最好的单一模型是{bfid:.1f}，而这一个是在那份预算之外训练的。',
 
     'So this is where the four answers, and the fifth, ended up.':
-        "这就是那四个答案，以及第五个，最后的归宿。<bookmark mark='a'/>VAE和GAN变成了分词器和潜空间，每个图像和视频模型都从它们出发。"
+        "这就是那四个答案，以及第五个，最后的归宿。<bookmark mark='a'/>VAE和GAN变成了分词器和潜空间，许多图像和视频模型都从它们出发。"
         "自回归模型写出那些词元，一次一个尺度，或者一次一个词元。能量模型的分数函数，在每个噪声水平上学出来，就成了扩散，"
         "而VAE的下界就在它里面。神经ODE成了流匹配。GAN的判别器又回来，让扩散变快。<bookmark mark='b'/>所以，下一部分的扩散模型，"
         "是用你现在已经见过的零件搭起来的。",
@@ -587,7 +587,7 @@ ZH.update({
         "判别器是一条斜率为ψ的直线。<bookmark mark='a'/>在均衡点周围，是同样的旋转。"
         "<bookmark mark='b'/>同时走的步子盘旋向外；<bookmark mark='c'/>"
         "轮流走的步子绕圈。<bookmark mark='d'/>他们的修正是惩罚判别器在真实数据上的梯度，"
-        '在这里就是γ的一半乘ψ平方：这是摩擦，螺旋于是向内收。StyleGAN训练时用的正是这个惩罚，R1。',
+        '在这里就是γ的一半乘ψ平方：像摩擦一样，轨迹收敛到平衡点。StyleGAN训练时用的正是这个惩罚，R1。',
 
     'f"Back to the ring: each row a mode':
         "回到环上：每一行是一个峰，每一列是一个检查点，亮度表示生成器落在那里的样本。<bookmark mark='a'/>"
@@ -655,7 +655,7 @@ ZH.update({
         "<bookmark mark='d'/>卡拉斯的团队则把生成器本身重新做了一遍：这就是StyleGAN。",
 
     "StyleGAN's generator starts not from the noise":
-        'StyleGAN的生成器不从噪声出发，而是从一个学出来的4像素常数出发，一块一块地上采样。'
+        'StyleGAN的生成器不从噪声出发，而是从一个学出来的4乘4的常数出发，一块一块地上采样。'
         "<bookmark mark='a'/>噪声先经过一个8层的映射网络，变成一个编码w，"
         "<bookmark mark='b'/>再由w设定每一块的风格，也就是每个通道的一个缩放和一个平移；"
         "新加入的噪声则添上雀斑之类的细节。<bookmark mark='c'/>风格可以混合，粗的层取自一张脸，"
@@ -778,7 +778,7 @@ ZH.update({
     'f"The fix came over thirty years later:':
         '修正来自三十多年以后：Dmitry Krotov和霍普菲尔德让能量变得更陡，'
         "Hubert Ramsauer和同事把更新写成了比较、softmax、平均。<bookmark mark='a'/>"
-        "用它，我们的网络{res}。<bookmark mark='b'/>这个更新就是第13部分的注意力：状态是查询，"
+        "用它，我们的网络{res}。我们的二值测试把重叠除以神经元数量，并在加权平均后取符号。<bookmark mark='b'/>连续的比较、softmax、平均这一步，就是第13部分的注意力：状态是查询，"
         '记忆是键和值。一个注意力层，就是一个只走一步的霍普菲尔德网络。',
 
     'In 1985 David Ackley':
@@ -827,9 +827,9 @@ ZH.update({
         '六年后，GPU上的反向传播让这一步变得不再必要。但这些想法留了下来：一个能量，以及由一条链抽出的样本。',
 
     'f"The general idea: any network':
-        '一般的想法是：任何只有一个输出的网络都是一个能量，e的负能量次方除以它的积分Z就是一个密度，不需要掩码，不需要可逆，'
+        '一般的想法是：任何只有一个输出的网络都是一个能量，e的负能量次方除以它的积分Z，在Z有限时就定义了一个密度，不需要掩码，不需要可逆，'
         "也不需要编码。<bookmark mark='a'/>它的梯度有同样的两个阶段：降低数据的能量，抬高模型样本的能量。"
-        "<bookmark mark='b'/>在平面上，Z可以在网格上求和，所以我们的环模型的似然是精确的："
+        "<bookmark mark='b'/>在平面上，Z用有限区域上的网格估计，所以我们的环模型的负对数似然是近似的："
         '{nll:.2f}奈特，而下限是{h:.2f}。在196维里，任何网格都不管用。',
 
     "Sampling comes from physics: Paul Langevin's":
@@ -854,7 +854,7 @@ ZH.update({
         '这个陷阱正是通向下一部分的桥。两个高斯，分别占20%和80%，分数函数精确已知。'
         "<bookmark mark='a'/>均匀地撒下点，运行朗之万。<bookmark mark='b'/>"
         '每个点都掉进离它近的那个山谷，然后待在那里，所以重的那个峰得到{p_h:.0f}%，这是由起点决定的，'
-        '起点里是{s_h:.0f}%，而不是密度所说的80%：对于分开的几个峰，分数函数看不到它们的权重。'
+        '起点里是{s_h:.0f}%，而不是密度所说的80%：对于相距这么远的峰，局部分数函数几乎反映不出它们的相对权重。'
         "<bookmark mark='c'/>2019年，宋飏和Stefano Ermon的修正是："
         '先用大量噪声把密度模糊掉，让山谷合在一起，然后一级一级地调小噪声。{verdict}'
         "<bookmark mark='d'/>在图像上，这需要每个噪声水平上的分数函数，而它可以通过去噪学出来，"

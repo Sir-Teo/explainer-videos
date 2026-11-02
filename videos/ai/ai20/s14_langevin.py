@@ -66,7 +66,7 @@ class Langevin(VoiceoverScene):
         nll = float(np.asarray(e["ring_curve"])[-1, 1])
         pl = Plane(2.8, center=[-4.2, -1.9, 0])
         img = pl.image(np.asarray(e["ring_frames"])[-1], EBM)
-        box = VGroup(label(r"in two dimensions, $Z$ can be summed on a grid:", font_size=22, color=GREY_A),
+        box = VGroup(label(r"in two dimensions, $Z$ is estimated on a finite-box grid:", font_size=22, color=GREY_A),
                      label(rf"our ring model's held-out NLL: \ ${nll:.2f}$ nats \ (floor ${h:.2f}$)", font_size=22,
                            color=EBM),
                      label(r"in $196$ dimensions, \ a grid of $10$ points per axis has $10^{196}$ cells", font_size=22,
@@ -75,9 +75,9 @@ class Langevin(VoiceoverScene):
                      corner=UR)
         with self.voiceover(
             "The general idea: any network with one output is an energy, and e to the minus energy over its "
-            "integral Z is a density, with no masks, no invertibility, no code. <bookmark mark='a'/> Its gradient "
+            "integral Z defines a density when Z is finite, with no masks, no invertibility, no code. <bookmark mark='a'/> Its gradient "
             "has the same two phases: lower the data's energy, raise the model's samples'. <bookmark mark='b'/> In "
-            f"the plane Z can be summed on a grid, so our ring model's likelihood is exact: {nll:.2f} nats, against "
+            f"the plane Z is estimated on a finite-box grid, so our ring model's NLL is approximate: {nll:.2f} nats, against "
             f"a floor of {h:.2f}. In 196 dimensions, no grid will do."
         ) as vo:
             self.play(FadeIn(cite_))
@@ -262,8 +262,10 @@ class Langevin(VoiceoverScene):
             return VGroup(*[Circle(radius=0.35 * 2 * pl.side / (2 * box), stroke_color=DATA, stroke_width=1.5)
                             .move_to(pl.p(*m)) for m in mus])
         ra, rb = rings(pa), rings(pb)
-        wl = VGroup(MathTex(rf"{w[0]:.1f}", font_size=26, color=DATA).next_to(pa.p(*mus[0]), DL, buff=0.25),
-                    MathTex(rf"{w[1]:.1f}", font_size=26, color=DATA).next_to(pa.p(*mus[1]), UR, buff=0.25))
+        # Keep mixture weights outside the particle panel, aligned with each mode.
+        wl = VGroup(*[MathTex(rf"{weight:.1f}", font_size=26, color=DATA)
+                      .next_to(pa.frame, LEFT, buff=0.16).set_y(pa.p(*mu)[1])
+                      for weight, mu in zip(w, mus)])
         ta = label(r"Langevin, \ one noise level", font_size=22, color=EBM).next_to(pa, UP, buff=0.12)
         tb = label(r"annealed: \ ten noise levels, \ large to small", font_size=22, color=SCORE_C).next_to(pb, UP,
                                                                                                          buff=0.12)
@@ -288,8 +290,8 @@ class Langevin(VoiceoverScene):
             "The catch is the bridge to the next part. Two Gaussians, holding twenty and eighty percent, their "
             "score known exactly. <bookmark mark='a'/> Start points uniformly and run Langevin. <bookmark "
             "mark='b'/> Each point falls into the nearer valley and stays, so the heavy mode gets "
-            f"{p_h:.0f} percent, set by the start, {s_h:.0f}, not the density's eighty: the score is blind to the "
-            "weights of separated modes. <bookmark mark='c'/> Yang Song and Stefano Ermon's fix, in 2019: blur with "
+            f"{p_h:.0f} percent, set by the start, {s_h:.0f}, not the density's eighty: the local score barely reflects the "
+            "relative weights of modes this far apart. <bookmark mark='c'/> Yang Song and Stefano Ermon's fix, in 2019: blur with "
             f"heavy noise, where valleys merge, then turn the noise down level by level. {verdict} <bookmark "
             "mark='d'/> On images that needs the score at every noise level, learned by denoising, as Hyvarinen "
             "and Vincent showed: diffusion, Part 21. And in 2025 Equilibrium Matching made images by descending a "

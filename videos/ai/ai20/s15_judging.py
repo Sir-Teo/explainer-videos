@@ -321,9 +321,9 @@ class Judging(VoiceoverScene):
         floor = float(c["real"]["fid"])
         rp, rr = float(c["real"]["precision"]), float(c["real"]["recall"])
         copying = lo < 0.5 * real_d
-        verdict = ("None of our models is copying: their samples are about as far from the training set as real "
+        verdict = ("In this small sample, the median distances give no clear sign of copying: generated digits are about as far from the training set as real "
                    "test digits are." if not copying else
-                   "One of them sits suspiciously close to the training set: it may be copying.")
+                   "In this small sample, one model has an unusually low median distance to the training set; that warrants a closer memorization check.")
         train = np.concatenate([np.asarray(e[f"mem_{f}_nearest"])[:3] for f in fams])
         replay = Group(digit_sheet(train, 2, 6, size=0.55, gap=0.06),
                        label(rf"replaying training digits: \ FID ${floor:.2f}$, \ precision ${rp:.2f}$, \ recall ${rr:.2f}$",

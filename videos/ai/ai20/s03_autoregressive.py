@@ -56,7 +56,7 @@ class Autoregressive(VoiceoverScene):
                 if j - i <= 2:
                     arcs.add(CurvedArrow(boxes[i].get_top() + UP * 0.05, boxes[j].get_top() + UP * 0.05,
                                          angle=-0.9 if j - i == 1 else -1.1, color=AR, stroke_width=2,
-                                         tip_length=0.14).set_opacity(0.8))
+                                         tip_length=0.14).set_stroke(opacity=0.8))
         ex = VGroup(label(r"Shannon (1948): \ English, letter by letter", font_size=24, color=GREY_A),
                     label(r"Part 1's language models: \ token by token", font_size=24, color=GREY_A),
                     label(r"here: \ a digit, \ pixel by pixel", font_size=24, color=AR))

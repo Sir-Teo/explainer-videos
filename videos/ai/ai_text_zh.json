@@ -9443,7 +9443,7 @@
     "the truth: \\ $80\\%$": "真实值：\\ $80\\%$",
     "Hyv\\\"arinen (2005): \\ score matching": "Hyv\\\"arinen（2005）：\\ 分数匹配",
     "Vincent (2011): \\ denoising score matching": "Vincent（2011）：\\ 去噪分数匹配",
-    "Song \\& Ermon (2019): \\ many noise levels": "宋飏 \\& Ermon（2019）：\\ 许多噪声水平",
+    "Song \\& Ermon (2019): \\ many noise levels": "Song \\& Ermon（2019）：\\ 许多噪声水平",
     "$\\to$ \\ diffusion, \\ Part 21": "$\\to$ \\ 扩散，\\ 第21部分",
     "2025: \\ Equilibrium Matching (Wang \\& Du): \\ an implicit energy, \\ FID $1.90$ on ImageNet $256^2$": "2025：\\ 均衡匹配（Wang \\& Du）：\\ 一个隐式的能量，\\ ImageNet $256^2$上FID $1.90$",
     "From Helmholtz machines to the VAE": "从亥姆霍兹机到VAE",
@@ -9593,7 +9593,7 @@
     "Larochelle \\& Murray (2011); \\ Germain et al.\\ (2015); \\ van den Oord et al.\\ (2016a, b); \\ Salimans et al.\\ (2017)": "Larochelle \\& Murray（2011）；\\ Germain等（2015）；\\ van den Oord等（2016a，b）；\\ Salimans等（2017）",
     "Goodfellow et al.\\ (2014); \\ Radford, Metz \\& Chintala (2015); \\ Arjovsky \\& Bottou (2017); \\ Arjovsky, Chintala \\& Bottou (2017); \\ Gulrajani et al.\\ (2017); \\ Mescheder, Geiger \\& Nowozin (2018); \\ Karras et al.\\ (2018, 2019); \\ Brock, Donahue \\& Simonyan (2019); \\ Zhu et al.\\ (2016); \\ Huang et al.\\ (2024)": "古德费洛等（2014）；\\ Radford、Metz \\& Chintala（2015）；\\ Arjovsky \\& Bottou（2017）；\\ Arjovsky、Chintala \\& Bottou（2017）；\\ Gulrajani等（2017）；\\ Mescheder、Geiger \\& Nowozin（2018）；\\ Karras等（2018，2019）；\\ Brock、Donahue \\& Simonyan（2019）；\\ Zhu等（2016）；\\ Huang等（2024）",
     "Tabak \\& Vanden-Eijnden (2010); \\ Rezende \\& Mohamed (2015); \\ Dinh, Krueger \\& Bengio (2014); \\ Dinh, Sohl-Dickstein \\& Bengio (2017); \\ Kingma \\& Dhariwal (2018); \\ Chen et al.\\ (2018); \\ Grathwohl et al.\\ (2019); \\ Hutchinson (1989); \\ Zhai et al.\\ (2025)": "Tabak \\& Vanden-Eijnden（2010）；\\ Rezende \\& Mohamed（2015）；\\ Dinh、Krueger \\& Bengio（2014）；\\ Dinh、Sohl-Dickstein \\& Bengio（2017）；\\ Kingma \\& Dhariwal（2018）；\\ Chen等（2018）；\\ Grathwohl等（2019）；\\ Hutchinson（1989）；\\ Zhai等（2025）",
-    "LeCun et al.\\ (2006); \\ Hyv\\\"arinen (2005); \\ Vincent (2011); \\ Du \\& Mordatch (2019); \\ Song \\& Ermon (2019); \\ Wang \\& Du (2025)": "LeCun等（2006）；\\ Hyv\\\"arinen（2005）；\\ Vincent（2011）；\\ Du \\& Mordatch（2019）；\\ 宋飏 \\& Ermon（2019）；\\ Wang \\& Du（2025）",
+    "LeCun et al.\\ (2006); \\ Hyv\\\"arinen (2005); \\ Vincent (2011); \\ Du \\& Mordatch (2019); \\ Song \\& Ermon (2019); \\ Wang \\& Du (2025)": "LeCun等（2006）；\\ Hyv\\\"arinen（2005）；\\ Vincent（2011）；\\ Du \\& Mordatch（2019）；\\ Song \\& Ermon（2019）；\\ Wang \\& Du（2025）",
     "Theis, van den Oord \\& Bethge (2016); \\ Salimans et al.\\ (2016); \\ Heusel et al.\\ (2017); \\ Dowson \\& Landau (1982); \\ Sajjadi et al.\\ (2018); \\ Kynk\\\"a\\\"anniemi et al.\\ (2019); \\ Stein et al.\\ (2023)": "Theis、van den Oord \\& Bethge（2016）；\\ Salimans等（2016）；\\ Heusel等（2017）；\\ Dowson \\& Landau（1982）；\\ Sajjadi等（2018）；\\ Kynk\\\"a\\\"anniemi等（2019）；\\ Stein等（2023）",
     "Dhariwal \\& Nichol (2021); \\ van den Oord, Vinyals \\& Kavukcuoglu (2017); \\ Esser, Rombach \\& Ommer (2021); \\ Ramesh et al.\\ (2021); \\ Tian et al.\\ (2024); \\ Sauer et al.\\ (2023, 2024); \\ Yin et al.\\ (2024); \\ Lu \\& Song (2025); \\ Deng et al.\\ (2026)": "Dhariwal \\& Nichol（2021）；\\ van den Oord、Vinyals \\& Kavukcuoglu（2017）；\\ Esser、Rombach \\& Ommer（2021）；\\ Ramesh等（2021）；\\ Tian等（2024）；\\ Sauer等（2023，2024）；\\ Yin等（2024）；\\ Lu \\& Song（2025）；\\ Deng等（2026）",
     "The generative problem": "生成问题",
@@ -20954,7 +20954,9 @@
     "vision encoder \\\\ (CLIP / EVA-CLIP)": "视觉编码器 \\\\ （CLIP / EVA-CLIP）",
     "vision encoder \\\\ (CLIP ViT-L/14)": "视觉编码器 \\\\ （CLIP ViT-L/14）",
     "original: \\ linear map, \\ $256$ tokens \\\\ ($224$ pixels); \\ LLaVA-1.5: \\\\ two-layer MLP, \\ $576$ tokens \\ ($336$ pixels)": "原版：\\ 线性映射，\\ $256$个词元 \\\\ （$224$像素）；\\ LLaVA-1.5：\\\\ 两层MLP，\\ $576$个词元 \\ （$336$像素）",
-    "Show that $f^*(x, y) = \\log\\frac{p(y \\mid x)}{p(y)}$ minimizes InfoNCE, \\ and that $\\log N - \\mathcal L \\le \\log N$ for any critic. \\ How much information can a batch of $256$ certify?": "证明$f^*(x, y) = \\log\\frac{p(y \\mid x)}{p(y)}$使InfoNCE最小，\\ 且对任何评判函数都有$\\log N - \\mathcal L \\le \\log N$。\\ 一个$256$的批次最多能证明多少信息？"
+    "Show that $f^*(x, y) = \\log\\frac{p(y \\mid x)}{p(y)}$ minimizes InfoNCE, \\ and that $\\log N - \\mathcal L \\le \\log N$ for any critic. \\ How much information can a batch of $256$ certify?": "证明$f^*(x, y) = \\log\\frac{p(y \\mid x)}{p(y)}$使InfoNCE最小，\\ 且对任何评判函数都有$\\log N - \\mathcal L \\le \\log N$。\\ 一个$256$的批次最多能证明多少信息？",
+    "in two dimensions, $Z$ is estimated on a finite-box grid:": "在二维里，$Z$用有限区域上的网格估计：",
+    "our binary test: \\ normalized overlaps, \\ then a sign projection": "我们的二值测试：先归一化重叠，再取符号"
   },
   "phrases": {
     "width": "宽度",

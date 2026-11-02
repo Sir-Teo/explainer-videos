@@ -136,7 +136,7 @@ class Scale(VoiceoverScene):
         tg = note(r"schematic").to_corner(UR, buff=0.25)
         cite_ = cite(r"Karras, Laine \& Aila (2019); \ StyleGAN2 (2020), StyleGAN3 (2021)", corner=DR)
         with self.voiceover(
-            "StyleGAN's generator starts not from the noise but from a learned four-pixel constant, upsampled block "
+            "StyleGAN's generator starts not from the noise but from a learned four-by-four constant, upsampled block "
             "by block. <bookmark mark='a'/> The noise goes through an eight-layer mapping network to a code w, "
             "<bookmark mark='b'/> and w sets each block's style, a scale and shift per channel; fresh noise adds "
             "details like freckles. <bookmark mark='c'/> Styles can be mixed, coarse layers from one face, fine ones "

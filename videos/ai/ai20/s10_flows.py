@@ -287,11 +287,11 @@ class Flows(VoiceoverScene):
         mf, mp = float(np.mean(b_f)), float(np.mean(b_p))
         if better:
             verdict = (f"In bits per pixel the flow gets {mf:.2f} on held-out digits, against {mp:.2f} for the PixelCNN "
-                       "on the same budget: an exact likelihood, but a worse one; coupling layers spend capacity on "
+                       "on the same budget: a dequantization estimate of an upper bound, numerically above PixelCNN's exact negative log-likelihood; coupling layers spend capacity on "
                        "staying invertible.")
         else:
             verdict = (f"In bits per pixel the flow gets {mf:.2f} on held-out digits, against {mp:.2f} for the PixelCNN "
-                       "on the same budget: a better likelihood than the autoregressive model.")
+                       "on the same budget: a dequantization estimate of an upper bound, numerically below PixelCNN's exact negative log-likelihood.")
         with self.voiceover(
             "On digits, here is what our flow draws: <bookmark mark='a'/> noisy strokes; turning the noise down, "
             "Glow's trick, makes them cleaner and more alike. <bookmark mark='b'/> "

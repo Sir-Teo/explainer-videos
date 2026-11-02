@@ -297,7 +297,7 @@ class Meet(VoiceoverScene):
                               max_tip_length_to_length_ratio=0.05).set_opacity(0.8) for a, b in links])
         with self.voiceover(
             "So this is where the four answers, and the fifth, ended up. <bookmark mark='a'/> The VAE and the GAN "
-            "became the tokenizers and latent spaces that every image and video model starts from. The "
+            "became the tokenizers and latent spaces that many image and video models start from. The "
             "autoregressive model writes those tokens, a scale or a token at a time. The energy model's score, "
             "learned at every noise level, became diffusion, with the VAE's bound inside it. The neural ODE "
             "became flow matching. And the GAN's discriminator came back to make diffusion fast. <bookmark "

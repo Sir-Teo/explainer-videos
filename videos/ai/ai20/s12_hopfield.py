@@ -160,11 +160,13 @@ class Hopfield(VoiceoverScene):
         h = load("hopfield")
         g2, cm, lg = self.modern_curve
         hm = np.asarray(h["recall_modern"])
-        f = cmath(r"s_{\text{new}}", r"=", r"X^\top \operatorname{softmax}\big(\beta\, X s\big)", font_size=36)
+        f = cmath(r"s_{\text{new}}", r"=", r"\operatorname{sign}\!\left[X^\top \operatorname{softmax}\!\left(\frac{\beta}{N} X s\right)\right]", font_size=32)
         f[2].set_color(C.MODEL_Q)
         f.move_to([-3.2, 2.0, 0])
         att = cmath(r"\operatorname{softmax}\big(q K^\top / \sqrt d\big)\, V", font_size=32, color=C.ATTN)
-        att.next_to(f, DOWN, buff=0.5)
+        binary = label(r"our binary test: \ normalized overlaps, \ then a sign projection",
+                       font_size=18, color=GREY_A).next_to(f, DOWN, buff=0.18)
+        att.next_to(binary, DOWN, buff=0.35)
         al = label(r"attention (Part 13): \ the state is the query, \ the memories are keys and values",
                    font_size=20, color=C.ATTN).next_to(att, DOWN, buff=0.15)
         al.set_x(-3.0)
@@ -183,11 +185,11 @@ class Hopfield(VoiceoverScene):
         with self.voiceover(
             "The fix came over thirty years later: Dmitry Krotov and Hopfield sharpened the energy, and Hubert "
             "Ramsauer and colleagues wrote the update as compare, softmax, average. <bookmark mark='a'/> With it, "
-            f"our network {res}. <bookmark mark='b'/> That update is attention, from Part 13: the state the query, "
+            f"our network {res}. Our binary test normalizes the overlaps by the number of neurons and takes the sign after averaging. <bookmark mark='b'/> The continuous compare-softmax-average step is attention, from Part 13: the state the query, "
             "the memories the keys and values. An attention layer is a Hopfield network taking one step."
         ) as vo:
             self.play(FadeOut(self.left_))
-            self.play(Write(f))
+            self.play(Write(f), FadeIn(binary))
             vo.wait_until("a")
             self.play(FadeIn(lg[1]), Create(cm))
             vo.wait_until("b")
