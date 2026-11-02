@@ -922,7 +922,22 @@
   "attention": "注意力",
   "MLP": "MLP",
   "what one layer keeps for the backward pass \\ (schematic)": "一层为反向传播保留的东西 \\ （示意图）",
-  "exact: \\ $-67\\%$": "完全重复：\\ $-67\\%$"
+  "exact: \\ $-67\\%$": "完全重复：\\ $-67\\%$",
+  "mid $0.1$T; long context $0.05$T": "中期 $0.1$T；长上下文 $0.05$T",
+  "stage 3: $1.1$T; long context $0.1$T": "阶段3：$1.1$T；长上下文 $0.1$T",
+  "job interruptions include hardware, software and network faults": "任务中断包含硬件、软件和网络故障",
+  "illustrative maximum-size checkpoint": "示例：按最大检查点估算",
+  "gradient-scale surrogate: \\ divide loss by $64$, \\ restore gradients before updating": "梯度尺度替代实验：\\ 损失除以 $64$，\\ 更新前恢复梯度",
+  "a $280$M proxy model targets excess loss relative to a reference model": "$280$M代理模型针对相对于参考模型的超额损失",
+  "Does the 2026 recipe beat the 2020 one, on the same data and steps?": "数据和步数相同，2026配方能胜过2020配方吗？",
+  "Any all-reduce of $n$ bytes over $p$ devices, each receiving at most $B$ bytes per second, takes at least $2\\,\\frac{p-1}{p}\\,\\frac{n}{B}$.": "在 $p$ 台设备上全规约 $n$ 字节，每台每秒最多接收 $B$ 字节，耗时至少 $2\\,\\frac{p-1}{p}\\,\\frac{n}{B}$。",
+  "\\ge 2(p-1)\\,n \\text{ bytes sent}": "\\ge 2(p-1)\\,n \\text{ 字节传输量}",
+  "At sixteen thousand GPUs, interruptions are routine: \\ how often should a run save itself?": "一万六千块GPU的训练中，中断很常见：\\ 应该多久保存一次状态？",
+  "SwiGLU: \\ each matched gate/value pair stays on one GPU": "SwiGLU：\\ 每对匹配的门控列和值列留在同一块GPU",
+  "Megatron-style MLP, \\ on $t$ GPUs:": "Megatron式MLP，\\ 在 $t$ 块GPU上：",
+  "Shoeybi et al., Megatron-LM (2019); \\ SwiGLU: \\ Shazeer (2020)": "Shoeybi等，Megatron-LM（2019）；\\ SwiGLU：\\ Shazeer（2020）",
+  "chunk pairs per GPU: \\ $3$, \\ $7$, \\ $11$, \\ $15$ \\ (drawn cells)": "每块GPU的分块对数：\\ $3$、$7$、$11$、$15$ \\ （图中方格数）",
+  "chunk pairs per GPU: \\ $9$, \\ $9$, \\ $9$, \\ $9$": "每块GPU的分块对数：\\ $9$、$9$、$9$、$9$"
  },
  "patterns": []
 }

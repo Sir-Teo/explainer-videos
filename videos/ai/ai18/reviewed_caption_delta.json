@@ -1,0 +1,126 @@
+{
+  "status": "UNAPPLIED shared-caption additions; sole integrator composes entries serially",
+  "target": "videos/ai/ai_text_zh.json",
+  "base_commit": "c6f72788d023b0d253415a2e2175b4945ca5f4a4",
+  "operations": [
+    {
+      "table": "strings",
+      "key": "mid $0.1$T; long context $0.05$T",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "中期 $0.1$T；长上下文 $0.05$T"
+    },
+    {
+      "table": "strings",
+      "key": "stage 3: $1.1$T; long context $0.1$T",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "阶段3：$1.1$T；长上下文 $0.1$T"
+    },
+    {
+      "table": "strings",
+      "key": "job interruptions include hardware, software and network faults",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "任务中断包含硬件、软件和网络故障"
+    },
+    {
+      "table": "strings",
+      "key": "illustrative maximum-size checkpoint",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "示例：按最大检查点估算"
+    },
+    {
+      "table": "strings",
+      "key": "gradient-scale surrogate: \\ divide loss by $64$, \\ restore gradients before updating",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "梯度尺度替代实验：\\ 损失除以 $64$，\\ 更新前恢复梯度"
+    },
+    {
+      "table": "strings",
+      "key": "a $280$M proxy model targets excess loss relative to a reference model",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "$280$M代理模型针对相对于参考模型的超额损失"
+    },
+    {
+      "table": "strings",
+      "key": "Does the 2026 recipe beat the 2020 one, on the same data and steps?",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "数据和步数相同，2026配方能胜过2020配方吗？"
+    },
+    {
+      "table": "strings",
+      "key": "Any all-reduce of $n$ bytes over $p$ devices, each receiving at most $B$ bytes per second, takes at least $2\\,\\frac{p-1}{p}\\,\\frac{n}{B}$.",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "在 $p$ 台设备上全规约 $n$ 字节，每台每秒最多接收 $B$ 字节，耗时至少 $2\\,\\frac{p-1}{p}\\,\\frac{n}{B}$。"
+    },
+    {
+      "table": "strings",
+      "key": "\\ge 2(p-1)\\,n \\text{ bytes sent}",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "\\ge 2(p-1)\\,n \\text{ 字节传输量}"
+    },
+    {
+      "table": "strings",
+      "key": "\\text{tensor of } n \\text{ bytes}",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "\\text{张量共 } n \\text{ 字节}"
+    },
+    {
+      "table": "strings",
+      "key": "Cauchy--Schwarz; \\ largest absolute coordinate gains",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "柯西--施瓦茨；\\ 各坐标增益绝对值的最大值"
+    },
+    {
+      "table": "strings",
+      "key": "At sixteen thousand GPUs, interruptions are routine: \\ how often should a run save itself?",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "一万六千块GPU的训练中，中断很常见：\\ 应该多久保存一次状态？"
+    },
+    {
+      "table": "strings",
+      "key": "SwiGLU: \\ each matched gate/value pair stays on one GPU",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "SwiGLU：\\ 每对匹配的门控列和值列留在同一块GPU"
+    },
+    {
+      "table": "strings",
+      "key": "Megatron-style MLP, \\ on $t$ GPUs:",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "Megatron式MLP，\\ 在 $t$ 块GPU上："
+    },
+    {
+      "table": "strings",
+      "key": "Shoeybi et al., Megatron-LM (2019); \\ SwiGLU: \\ Shazeer (2020)",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "Shoeybi等，Megatron-LM（2019）；\\ SwiGLU：\\ Shazeer（2020）"
+    },
+    {
+      "table": "strings",
+      "key": "chunk pairs per GPU: \\ $3$, \\ $7$, \\ $11$, \\ $15$ \\ (drawn cells)",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "每块GPU的分块对数：\\ $3$、$7$、$11$、$15$ \\ （图中方格数）"
+    },
+    {
+      "table": "strings",
+      "key": "chunk pairs per GPU: \\ $9$, \\ $9$, \\ $9$, \\ $9$",
+      "operation": "add",
+      "expected_absent": true,
+      "value": "每块GPU的分块对数：\\ $9$、$9$、$9$、$9$"
+    }
+  ]
+}

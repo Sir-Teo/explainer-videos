@@ -86,10 +86,11 @@ class Stability(VoiceoverScene):
             cmath(r"\text{logit}", r"=", r"\frac{q \cdot k}{\sqrt{d}}", colors=colors, font_size=30),
             cmath(r"\text{QK-norm}", r":", r"q, k \leftarrow \mathrm{RMSNorm}(q), \mathrm{RMSNorm}(k)", colors=colors,
                   font_size=26),
-            cmath(r"|\text{logit}|", r"\le", r"\gamma_q\,\gamma_k\,\sqrt{d}", colors=colors, font_size=30),
+            cmath(r"|\text{logit}|", r"\le", r"\|\gamma_q\|_\infty\,\|\gamma_k\|_\infty\,\sqrt{d}",
+                  colors=colors, font_size=30),
         ]
         whys = [why(r"grows with the weights", font_size=19), why(r"Dehghani et al.\ (2023)", font_size=19),
-                why(r"Cauchy--Schwarz; \ only the gains can grow", font_size=19)]
+                why(r"Cauchy--Schwarz; \ largest absolute coordinate gains", font_size=19)]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=3.0, buff=0.5, edge=6.9)
         mx = S["maxlogit"]
         i = S["lrs"].index(lr)

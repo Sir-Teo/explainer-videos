@@ -249,7 +249,7 @@ class Precision(VoiceoverScene):
             label(rf"gradient values flushed to zero without scaling: \ ${100 * zero:.0f}\%$", font_size=20,
                   color=PREC["fp16"]),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.7, 0.3, 0])
-        head = label(rf"the same runs, \ each step's gradient accumulated over ${A['accum']}$ micro-batches",
+        head = label(rf"gradient-scale surrogate: \ divide loss by ${A['accum']}$, \ restore gradients before updating",
                      font_size=22, color=GREY_A).to_edge(UP, buff=0.4)
         d_noscale = np.mean(fin["fp16"]) - np.mean(f32)
         d_scaled = np.mean(fin["fp16_scaled"]) - np.mean(f32)
@@ -272,8 +272,9 @@ class Precision(VoiceoverScene):
                        "failure clearly.")
         with self.voiceover(
             "Why, then, does loss scaling matter? A frontier run accumulates each step's gradient over millions of "
-            f"tokens, piece by piece, and every piece is that much smaller. <bookmark mark='a'/> So we repeated the FP16 runs with each step split into "
-            f"{A['accum']} micro-batches, as gradient accumulation does. <bookmark mark='b'/> " + verdict
+            f"tokens, piece by piece. <bookmark mark='a'/> Here we isolate the scale effect: divide one batch's loss "
+            f"by {A['accum']}, then restore its gradients before the update. This is a gradient-scale surrogate, "
+            "not a run with actual micro-batch accumulation. <bookmark mark='b'/> " + verdict
         ) as vo:
             ref_l = VGroup(*[l_ for k, l_ in zip(evs, lines) if k.startswith("ref_")])
             new_l = VGroup(*[l_ for k, l_ in zip(evs, lines) if not k.startswith("ref_")])

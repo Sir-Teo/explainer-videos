@@ -109,21 +109,23 @@ class Context(VoiceoverScene):
             zig[n - 1 - r] = r
         a = tri(contiguous, [-3.3, -0.4, 0], r"contiguous blocks")
         b = tri(zig, [3.3, -0.4, 0], r"chunk $i$ and chunk $2p - 1 - i$")
-        ca = label(r"work per GPU: \ " + r", \ ".join(f"${2 * w}$" for w in Pr["contiguous"]) +
-                   r" \ (in half-blocks)", font_size=20, color=GREY_A).next_to(a, DOWN, buff=0.25)
-        cb = label(r"work per GPU: \ " + r", \ ".join(f"${w}$" for w in Pr["zigzag"]), font_size=20,
+        contiguous_work = [sum(q + 1 for q in range(n) if contiguous[q] == r) for r in range(p)]
+        ca = label(r"chunk pairs per GPU: \ " + r", \ ".join(f"${w}$" for w in contiguous_work) +
+                   r" \ (drawn cells)", font_size=20, color=GREY_A).next_to(a, DOWN, buff=0.25)
+        cb = label(r"chunk pairs per GPU: \ " + r", \ ".join(f"${w}$" for w in Pr["zigzag"]), font_size=20,
                    color=GREY_A).next_to(b, DOWN, buff=0.25)
         head = label(r"causal attention: \ which query block (row) needs which key block (column)", font_size=22)
         head.to_edge(UP, buff=0.45)
         src = cite(r"Llama Team (2024), Sec.\ 3.3.2: \ all-gather of $K, V$; \ $2 \times$CP chunks", corner=DR,
                    font_size=17)
         zz = Pr["zigzag"]
-        even = ("Now every GPU does the same work." if len(set(zz)) == 1 else
-                f"Now the busiest GPU does {max(zz) / min(zz):.2f} times the work of the idlest.")
+        even = ("Now every GPU touches the same number of chunk pairs." if len(set(zz)) == 1 else
+                f"Now the largest chunk-pair count is {max(zz) / min(zz):.2f} times the smallest.")
         with self.voiceover(
             "There's a catch with causal attention. A position only looks back, so the first block of queries needs "
             "one block of keys, and the last needs all of them. <bookmark mark='a'/> With contiguous blocks, the "
-            f"last GPU does {Pr['contiguous'][-1]} times the work of the first, and everyone waits for it. "
+            f"last GPU touches {contiguous_work[-1] / contiguous_work[0]:g} times as many query-key chunk pairs as "
+            "the first in this eight-chunk drawing. These are block counts, not measured device timings. "
             "<bookmark mark='b'/> The fix: cut the sequence into twice as many chunks, and give GPU i both chunk i "
             "and chunk 2p minus one minus i, one from each end. " + even + " Llama 3 did "
             "exactly this for its 128-thousand-token training, with sixteen-way context parallelism."

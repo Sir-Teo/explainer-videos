@@ -99,9 +99,10 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Let's take stock. A pretraining corpus starts as a crawl of the web, and most of it is thrown away: by "
             "address, by language, by quality. MinHash and locality-sensitive hashing find the near-duplicates "
-            "without comparing every pair, and " + scurve + ". Mixtures are chosen for a target, and synthetic data helps "
-            "only alongside real text. A run costs six operations and sixteen bytes per parameter, and activations on "
-            "top. "
+            "without comparing every pair, and " + scurve + ". Mixtures are chosen for a target; our toy collapse "
+            "experiment retains real text as synthetic samples accumulate. Training takes about six operations "
+            "per parameter per token. Mixed-precision Adam's model state takes sixteen bytes per parameter, "
+            "with activations on top. "
             "The ring all-reduce is optimal; ZeRO shards the copies away; tensor, pipeline, context and expert "
             "parallelism cut "
             "the rest. Fewer bits need scaling tricks, big runs need QK-norm, and sixteen thousand GPUs need "

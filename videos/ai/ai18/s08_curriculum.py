@@ -72,10 +72,12 @@ class Curriculum(VoiceoverScene):
         src = cite(r"Hu et al., MiniCPM (2024); \ Hägele et al.\ (2024)", font_size=17)
         if gain > 0.03:
             verdict = (f"At step {bstep}, the branch's held-out loss is {b['val']:.2f}, against {b['stable_val']:.2f} "
-                       "for the run still at its peak learning rate: a finished model, without starting again.")
+                       f"at step {b['stable_step']} of the run still at its peak learning rate: nearby evaluations, "
+                       "rather than identical steps, and a finished model without starting again.")
         else:
             verdict = (f"At step {bstep}, the branch's held-out loss is {b['val']:.2f}, against {b['stable_val']:.2f} "
-                       "for the run still at its peak: at our scale the cooldown gains little.")
+                       f"at step {b['stable_step']} of the run still at its peak: nearby evaluations, "
+                       "rather than identical steps; at our scale the cooldown gains little.")
         with self.voiceover(
             "The learning rate falls as a run ends, and how it falls matters. Part 11's cosine starts decaying at "
             "once, "

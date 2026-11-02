@@ -41,7 +41,7 @@ class Mixture(VoiceoverScene):
         pl.next_to(pile, UP, buff=0.15)
         doremi = VGroup(
             label(r"DoReMi \ (Xie et al., 2023)", font_size=32, color=EDU),
-            label(rf"a ${D['proxy'] / 1e6:.0f}$M proxy model plays a game against the worst-predicted domains", font_size=25,
+            label(rf"a ${D['proxy'] / 1e6:.0f}$M proxy model targets excess loss relative to a reference model", font_size=25,
                   color=GREY_A),
             label(rf"its weights train an ${D['target'] / 1e9:.0f}$B model: \ $+{D['gain']}$ points few-shot, \ "
                   rf"the same accuracy in $1/{D['speedup']}$ of the steps", font_size=25, color=GREY_A),
@@ -71,7 +71,8 @@ class Mixture(VoiceoverScene):
             "and twenty "
             "other sources. <bookmark mark='b'/> In 2023 DoReMi learned them, with a small proxy model that keeps "
             "raising the "
-            "weight of the domains it predicts worst; its weights let an eight-billion-parameter model reach the "
+            "weight of domains with the largest excess loss relative to a reference model; its weights let an "
+            "eight-billion-parameter model reach the "
             "baseline in "
             "2.6 times fewer steps. <bookmark mark='c'/> In 2024 RegMix made it a regression: train 512 tiny models "
             "on random "
@@ -445,7 +446,8 @@ class Mixture(VoiceoverScene):
             f"{start:,.0f} to "
             f"{end:,.0f}, and the lost ones carried {100 * lost:.0f} percent of real text. <bookmark mark='c'/> " + climb +
             " <bookmark mark='d'/> The way out: keep the real data, and add each generation's samples to it instead of "
-            "replacing it. " + cure + " That is how synthetic data is used in 2026: alongside real text, never instead of it."
+            "replacing it. " + cure + " In this toy experiment, retaining real data protects the distribution's "
+            "support. It does not establish a universal rule for synthetic-data training."
         ) as vo:
             self.play(FadeIn(src), FadeIn(lg[0]))
             self.play(LaggedStart(*[FadeIn(b_) for b_ in chain0.boxes], *[GrowArrow(a_) for a_ in chain0.arrows],
