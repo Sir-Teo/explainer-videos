@@ -91,8 +91,11 @@ class Calibrator(VoiceoverScene):
             k, iv, mc = np.asarray(d["k"]), np.asarray(d["iv"]), np.asarray(d["mc"])
             kk, net = np.asarray(d["kk"]), np.asarray(d["net"])
             ylo, yhi = float(np.nanmin(np.r_[iv, net])) - 0.03, float(np.nanmax(np.r_[iv, net])) + 0.03
+            yt = [v / 100 for v in range(int(np.ceil(ylo * 10)) * 10, int(yhi * 100) + 1, 10)]
             g = axes([kk[0], kk[-1]], [ylo, yhi], x_length=3.7, y_length=2.8, xlabel=r"log-moneyness $k$",
-                     xticks=[round(kk[0] / 2, 1), 0, round(kk[-1] / 2, 1)], yticks=[], font_size=13)
+                     ylabel=r"implied volatility" if not groups else "",
+                     xticks=[round(kk[0] / 2, 1), 0, round(kk[-1] / 2, 1)], yticks=yt,
+                     yfmt=lambda v: rf"{100 * v:.0f}\%", font_size=13)
             ax = g.ax
             dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.045, color=IV) for a, b in zip(k, iv)])
             chk = VGroup(*[Cross(scale_factor=0.06, stroke_color=REF, stroke_width=2).move_to(ax.c2p(a, b))
