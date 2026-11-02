@@ -1,19 +1,45 @@
 # AI, Built — Part 11: Going Downhill
 
-## Source-only QA handoff
+## Frozen scientific-outcome contract candidate
+
+This isolated candidate adds a read-only admission path for the previously prepared SOAP-V3
+`race`, `ns` and `schedule` outcomes. It does not rerun training or overwrite original results.
+Admission requires the exact anchored `soap-v3-v1` capsule in `.cache/ai11/contracts/`, the
+separate `corrected-soap-v3-v1` product namespace, original-input identities, completed receipts,
+and compatible scientific source pins. Missing or incompatible evidence remains fail-closed;
+legacy cache names and environment flags cannot enable it.
+
+Only frozen-outcome consumption is admitted here. The legacy compute CLI and partial-cache
+protocol are not approved for SOAP-V3 regeneration or resumption in original cache namespaces.
+Any future generation needs separately reviewed, versioned output and resume paths; it must
+not overwrite original recipes or products. No such generation is performed by this candidate.
+
+The scientific recipe is the separately reviewed SOAP basis/state correction. `compute.py` and
+`nets.py` remain original bytes. The capsule retains all 32 generation-epoch source identities;
+31 scientific source pins must also match the consumer checkout. The shared Chinese caption
+table is explicitly a presentation-only epoch difference, not a reason to claim new scientific
+generation. Numerical comparisons retain their recorded seeds, metric domains and provenance.
+
+This contract admits frozen reviewed outputs; it does not prove full reference-optimizer
+equivalence, a causal correction benefit, persistent NS mode identities or full-spectrum
+convergence. The original captured NS matrices were not retained, so their SVD/matrix histories
+are not independently recomputed here. Latest-source silent visual acceptance must be recorded
+separately; audio, continuous playback and production acceptance remain outside this candidate.
+
+## Prior source-only QA handoff
 
 This branch carries reviewed scene, mathematical wording, translation and replay/layout repairs.
 It excludes scientific producer changes, datasets, numerical caches, weights and private QA artifacts.
-The original `compute.py`, `charopt.py` and `nets.py` are unchanged. In particular, source/layout repairs
+In that prior handoff, the original `compute.py`, `charopt.py` and `nets.py` were unchanged. Source/layout repairs
 do not correct the original SOAP basis/state implementation or certify its historical rankings.
 
 Scene loading is cache-only: missing or incompatible inputs must stop rather than launch training.
 For the other products, structural readability is not recipe or input-provenance certification;
 the integration owner must verify that provenance separately before accepting their rendered use.
-The `race`, `ns` and `schedule` products are deliberately unavailable through scene loading in this
-source-only tree. Their corrected producer and numerical provenance need separate review and integration;
-placing a legacy cache under one of those names is insufficient. Dependent chapters, including the recap,
-therefore cannot be accepted as rendered output from this public tree.
+The prior source-only tree deliberately blocked `race`, `ns` and `schedule`. This candidate preserves
+that failure when the separately anchored corrected contract is absent or incompatible; placing a legacy
+cache under one of those names is still insufficient. Its newly admitted chapters need their own
+latest-source selected visual evidence rather than inheriting rendered acceptance from the old handoff.
 
 The acceptance here is the outgoing source/tests and narrow shared-caption compatibility. Prior selected
 visual checks used separately retained inputs and exact source versions; they are not public-tree render
