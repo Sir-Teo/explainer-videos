@@ -22,7 +22,9 @@ class Formal(VoiceoverScene):
     # ------------------------------------------------------------------
     def lean(self):
         code = code_block([
-            "theorem two_mul_le (a b : Nat) (h : a <= b) :",
+            "import Mathlib",
+            "",
+            "example (a b : Nat) (h : a <= b) :",
             "    2 * a <= 2 * b := by",
             "  omega",
         ], font_size=22, color=WHITE)
@@ -30,13 +32,14 @@ class Formal(VoiceoverScene):
         g = VGroup(box, code).move_to([-1.3, 1.4, 0])
         gl = label(r"Lean 4: \ a statement, \ and a proof the kernel checks", font_size=22, color=LEAN)
         gl.next_to(g, UP, buff=0.2)
-        ok = VGroup(MathTex(r"\checkmark", font_size=48, color=RIGHT_C), label(r"accepted", font_size=26, color=RIGHT_C))
+        ok = VGroup(MathTex(r"\longrightarrow", font_size=36, color=GREY_B),
+                    label(r"kernel check \\ (schematic)", font_size=22, color=GREY_A))
         ok.arrange(RIGHT, buff=0.2).next_to(g, RIGHT, buff=0.6)
-        sch = note(r"illustrative").next_to(g, DOWN, buff=0.15).align_to(g, LEFT)
+        sch = note(r"illustrative code; \ not compiled here").next_to(g, DOWN, buff=0.15).align_to(g, LEFT)
         pts = VGroup(
             label(r"every step checked by a small trusted kernel: \ no lucky guesses, \ no hand-waving", font_size=24,
                   color=GREY_A),
-            label(r"a reward that cannot be hacked \ (if the statement says what was meant)", font_size=24,
+            label(r"check the statement and axioms; \ reject placeholders such as \texttt{sorry}", font_size=24,
                   color=RIGHT_C),
             label(r"Mathlib: \ a library of formalized mathematics, \ written by a community since 2017",
                   font_size=24, color=GREY_A),
@@ -56,11 +59,12 @@ class Formal(VoiceoverScene):
             "Everything in this part has leaned on a checker, and checkers have limits: a right number can sit at the "
             "end of a broken argument. Mathematics has a way out. <bookmark mark='a'/> In a proof assistant such as "
             "Lean, a theorem and its proof are written as code, and a small trusted kernel checks every single "
-            "inference. <bookmark mark='b'/> No lucky guesses, no hand-waving: a proof is accepted, or it isn't. "
-            "<bookmark mark='c'/> For reinforcement learning, that is the perfect reward, one that cannot be hacked, "
-            "as long as the formal statement says what was meant. <bookmark mark='d'/> And since 2017 a community "
-            "has been formalizing mathematics in Lean's library, Mathlib, which gives such systems something to "
-            "build on."
+            "inference. The code shown is illustrative; it has not been compiled here. <bookmark mark='b'/> No lucky "
+            "guesses, no hand-waving: a proof is accepted, or it isn't. <bookmark mark='c'/> The guarantee is relative "
+            "to the formal statement and its axioms. A reward checker must reject placeholders such as sorry and "
+            "unapproved axioms, and check that the statement says what was meant. <bookmark mark='d'/> And since 2017 a "
+            "community has been formalizing mathematics in Lean's library, Mathlib, which gives such systems something "
+            "to build on."
         ) as vo:
             self.play(FadeIn(head), FadeIn(broken))
             vo.wait_until("a")
@@ -123,7 +127,7 @@ class Formal(VoiceoverScene):
     # ------------------------------------------------------------------
     def imo(self):
         rows = [
-            (r"2024 \ AlphaProof + AlphaGeometry 2 \ (Lean, days)", 28, LEAN),
+            (r"2024 \ AlphaProof + AlphaGeometry 2 \ (formal, days)", 28, LEAN),
             (r"2025 \ Gemini Deep Think \ (words, $4\tfrac12$ hours)", 35, POLICY),
             (r"2025 \ OpenAI experimental model \ (words)", 35, POLICY),
         ]
@@ -134,7 +138,7 @@ class Formal(VoiceoverScene):
             name = label(t, font_size=21, color=GREY_A).move_to([-1.4, y, 0], aligned_edge=RIGHT)
             bar = Rectangle(width=W * v / 42, height=0.5, stroke_width=0, fill_color=c, fill_opacity=0.85)
             bar.move_to([-1.2 + W * v / 84, y, 0])
-            val = label(rf"${v}$", font_size=24, color=c).next_to(bar, RIGHT, buff=0.12)
+            val = label(rf"${v}$", font_size=24, color=c).next_to(bar, RIGHT, buff=0.32)
             g.add(VGroup(name, bar, val))
         x0 = -1.2
         golds = VGroup(
@@ -145,20 +149,24 @@ class Formal(VoiceoverScene):
         head = label(r"points of $42$ at the International Mathematical Olympiad", font_size=24, color=GREY_A)
         head.to_edge(UP, buff=0.4)
         notes = VGroup(
-            label(r"Deep Think: \ graded and certified by the IMO's coordinators; \ OpenAI's: \ graded by former "
+            label(r"Deep Think solutions: \ graded by the IMO's coordinators; \ OpenAI's: \ graded by former "
                   r"medallists", font_size=20, color=GREY_B),
-            label(r"formal provers in 2025: \ Harmonic's Aristotle \ and ByteDance's Seed-Prover \ proved five of six "
-                  r"in Lean", font_size=20, color=LEAN),
+            label(r"Aristotle: \ five Lean proofs; \ Seed-Prover: \ $30$ points, \ four complete solutions \\ "
+                  r"Seed-Prover's geometry: \ natural language; \ its extra Lean proof: \ after the competition",
+                  font_size=20, color=LEAN),
+            label(r"IMO review covers the submitted solutions; \ timings and processes are reported by the laboratories",
+                  font_size=18, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.95)
         cite_ = cite(r"Google DeepMind (July 2025); \ Harmonic (2025); \ ByteDance Seed (2025)", corner=DR)
         with self.voiceover(
             "A year later the picture changed. <bookmark mark='a'/> At the 2025 Olympiad, a version of Google's Gemini "
             "with Deep Think, which explores many lines of thought in parallel, solved five of the six problems, 35 "
-            "points, exactly the gold-medal line, writing in plain English, within the four and a half hours; the "
-            "Olympiad's own coordinators graded it. <bookmark mark='b'/> OpenAI announced the same score for an "
-            "experimental reasoning model, graded by former medallists. <bookmark mark='c'/> And formal provers "
-            "caught up too: Harmonic's Aristotle and ByteDance's Seed-Prover each proved five of the six in Lean, "
-            "every step checked. A year earlier, the best systems had needed days, and people to translate the problems."
+            "points, exactly the gold-medal line, writing in plain English. The lab reported meeting the four and "
+            "a half hour competition limit; the Olympiad's coordinators graded the submitted solutions. <bookmark mark='b'/> OpenAI announced the same score for an "
+            "experimental reasoning model, graded by former medallists. <bookmark mark='c'/> Harmonic's Aristotle "
+            "released five Lean proofs. ByteDance's Seed-Prover officially earned 30 points with four complete "
+            "solutions. Its geometry solution was in natural language; an additional Lean proof was completed "
+            "after the competition. These are different evaluation conditions."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_), FadeIn(g[0]), Create(golds[0]), FadeIn(gl[0]))
             vo.wait_until("a")
@@ -166,7 +174,7 @@ class Formal(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(g[2]), FadeIn(notes[0]))
             vo.wait_until("c")
-            self.play(FadeIn(notes[1]))
+            self.play(FadeIn(notes[1:]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -183,13 +191,14 @@ class Formal(VoiceoverScene):
             marks.add(VGroup(Dot([x, 0.4, 0], radius=0.09, color=c), label(t, font_size=24, color=c).next_to([x, 0.4, 0],
                                                                                                         UP, buff=0.3),
                              label(e, font_size=19, color=GREY_B).next_to([x, 0.4, 0], DOWN, buff=0.3)))
-        ends = VGroup(label(r"exact, \ unhackable", font_size=24, color=RIGHT_C).move_to([-4.6, 2.0, 0]),
+        ends = VGroup(label(r"exact for the stated specification", font_size=24, color=RIGHT_C).move_to([-4.6, 2.0, 0]),
                       label(r"learned, \ hackable", font_size=24, color=WRONG_C).move_to([4.6, 2.0, 0]))
         take = label(r"reinforcement learning advances fastest \ where the checker is exact", font_size=28, color=SEARCH)
         take.to_edge(DOWN, buff=0.9)
         with self.voiceover(
             "So here is the spectrum every reasoning method lives on. <bookmark mark='a'/> At one end, checkers that "
-            "cannot be fooled: a proof in Lean, a number to match, code that must pass its tests. <bookmark mark='b'/> "
+            "check a stated specification exactly: a formal proof or an answer key. Code tests check only the cases "
+            "they cover; passing them does not prove a program correct on every input. <bookmark mark='b'/> "
             "At the other, learned graders, a process reward model, or another model acting as judge, which a strong "
             "enough optimizer will find ways around. <bookmark mark='c'/> Reasoning has advanced fastest exactly where "
             "the checker is exact: mathematics and code. Stretching it to everything else, essays, advice, research, "

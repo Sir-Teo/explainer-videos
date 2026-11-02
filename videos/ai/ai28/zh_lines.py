@@ -23,28 +23,21 @@ CHAPTERS = {
 
 ZH = {
     # ------------------------------------------------------------------ Hook
-    'In January 2022, a team at Google tried something simple.':
-        "2022年1月，谷歌的一个团队试了一件很简单的事。他们不再给大语言模型看几道题和它们的答案，而是给它看8道题，"
-        "解题过程都写了出来。<bookmark mark='a'/>在小学数学应用题上，谷歌5400亿参数的PaLM，正确率从18%升到了57%："
-        "它自己写出了解题过程，答对的多了很多。<bookmark mark='b'/>四个月后，东京和谷歌的一个团队发现，连例子都不需要。"
+    'In January 2022, a team at Google described a simple idea.':
+        "2022年1月，谷歌的一个团队公开描述了一种简单做法。他们不再给大语言模型看几道题和它们的答案，而是给它看8道题，"
+        "解题过程都写了出来。<bookmark mark='a'/>在这篇论文后续补充的实验中，谷歌5400亿参数的PaLM在小学数学应用题上，正确率从18%升到了57%："
+        "它自己写出了解题过程，答对的多了很多。<bookmark mark='b'/>2022年5月，东京和谷歌的一个团队发现，连例子都不需要。"
         "只要一句话，“让我们一步一步地思考”，就让OpenAI的一个模型在算术应用题上从18%提高到79%。"
         "<bookmark mark='c'/>这种能力本来就在模型里。只是需要有人让它把推理写下来。",
 
     'For two years that was the method:':
-        "之后两年，方法就是这样：要求写出思维链，采样几条，也许再投个票。然后，2024年9月，OpenAI发布了o1，"
-        "它被用强化学习训练成先思考、再回答。<bookmark mark='a'/>在2024年的美国数学邀请赛，也就是AIME上，"
-        "GPT-4o只做对了12%的题。<bookmark mark='b'/>o1只试一次就做对74%，64次投票做对83%，"
-        "让一个学来的打分器从1000个答案里挑，做对93%。<bookmark mark='c'/>2025年1月，DeepSeek公开了做法。"
-        "R1-Zero：直接从基础模型开始做强化学习，只在答案正确时给奖励。它从16%升到了71%，投票后到87%，而且权重是公开的。"
-        "<bookmark mark='d'/>2025年7月，有系统在国际数学奥林匹克上写出了金牌水平的解答，用的是普通语言，在规定时间之内。"
-        "<bookmark mark='e'/>然而，2026年3月，一套模型从没见过的游戏ARC-AGI-3发布时，所有前沿模型的得分都不到1%，"
-        "而人能解出全部。",
+        "之后两年，方法就是这样：要求写出思维链，采样几条，也许再投个票。然后，2024年9月，OpenAI介绍了用强化学习训练成先思考、再回答的o1，并发布了早期版本o1-preview。<bookmark mark='a'/>在2024年的美国数学邀请赛，也就是AIME上，OpenAI附录A列出的GPT-4o单次采样正确率是9.3%。正文却写12%，文章没有解释这个差异。这里采用明确标注指标的表格。<bookmark mark='b'/>表格中的研究版o1，单次采样正确率是74.4%，64次投票是83.3%。正文报告，用学来的评分器从1000个答案里挑选时，正确率是93%。<bookmark mark='c'/>2025年1月，DeepSeek公开了做法。R1-Zero：直接从基础模型开始做强化学习，按正确性和格式规则给奖励。它从16%升到了71%，投票后到87%，而且权重是公开的。<bookmark mark='d'/>2025年7月，实验室报告，系统在国际数学奥林匹克上用普通语言写出金牌水平的解答，并满足比赛时限。<bookmark mark='e'/>然而，2026年3月，一套模型从没见过的游戏ARC-AGI-3发布时，所有前沿模型的得分都不到1%，而人能解出全部。",
 
     'That is the question of this part: how does a model learn to think':
         "这就是这一部分的问题：模型是怎样学会思考的？思考又能换来什么？<bookmark mark='a'/>我们沿着这个领域自己走过的路："
         "为什么写出思维链就能增加计算；采样很多条思维链再投票；检查每一步；向一个检查答案的检查器学习的强化学习，"
         "一步步推导；想得更久能换来什么；搜索；以及机器能检查的证明。<bookmark mark='b'/>而且每个想法都会在这里试一试，"
-        "用的是在制作这个视频的电脑上训练的小模型。",
+        "用的是在制作这个视频的电脑上训练的小模型。评估时从相同任务分布重新抽样；其中可能包含训练中出现过的输入。",
 
     'This is Part 28 of AI, Built, the third part of the act on agency.':
         "这是《人工智能，从零搭建》的第28部分，也是“智能体”这一幕的第三部分。<bookmark mark='a'/>这一部分讲："
@@ -61,7 +54,7 @@ ZH = {
         "我们这个两层的模型，只有{100 * np.mean(d16):.0f}%的时候答对：{coin}。<bookmark mark='b'/>现在，"
         "把同一个模型训练成先写出过程：沿着这些比特一路数过去，到目前为止，1的个数是奇数吗？每一步都很简单，"
         "只要上一步的答案，再加一个比特。<bookmark mark='c'/>它的最终答案，{100 * np.mean(c16):.0f}%都是对的。"
-        "同样的模型，同样的大小。它只不过是可以出声思考了。",
+        "相同的架构和大小，分别训练，思维链的每个中间步骤都有标签。这个实验同时增加了计算和中间监督。",
 
     'Why does writing help? Look at the computation.':
         "写出来，为什么有用？看看其中的计算。Transformer让每个词元都穿过同一叠固定的层。<bookmark mark='a'/>"
@@ -164,62 +157,38 @@ ZH = {
         '这里最常见的答案是{top}，投票的结果是错的。',
 
     'When does voting work? Call the right answer y star':
-        "投票什么时候管用？把正确答案叫作y星，它的概率叫p星。<bookmark mark='a'/>当正确答案出现的次数比每一个错误答案都多时，"
-        "投票就是对的。<bookmark mark='a2'/>拿它和一个错误答案y比：两者出现次数之差，是k次独立抽取之和，"
-        "每次是加1、0或减1，均值是k乘以p星减p y。<bookmark mark='b'/>由霍夫丁不等式，错误答案追上来的概率，"
-        "随k指数地下降。<bookmark mark='c'/>所以随着票数增加，如果正确答案是模型最可能给出的那一个，投票以概率1正确；"
-        "如果某个错误答案更可能，投票以概率1出错。<bookmark mark='d'/>投票只能放大模型本来就偏爱的东西。"
-        "如果模型最喜欢的答案是错的，投票救不了这道题。",
+        "投票什么时候管用？把正确答案叫作y星，它的概率叫p星。<bookmark mark='a'/>正确答案出现的次数比每个错误答案都多时，它就单独胜出。平票取决于打破平局的规则；我们的代码选择平票答案中数值最小的一个。<bookmark mark='a2'/>拿它和一个错误答案y比：两者出现次数之差，是k次独立抽取之和，每次是加1、0或减1，均值是k乘以p星减p y。<bookmark mark='b'/>当p星大于p y时，由霍夫丁不等式，错误答案追上来的概率随k指数地下降。<bookmark mark='c'/>所以随着票数增加，如果正确答案是模型最可能给出的那一个，成功概率趋近1；如果某个错误答案更可能，成功概率趋近0。<bookmark mark='d'/>在大样本极限下，投票选出模型的众数。即使某个错误答案更可能，有限次投票仍可能碰巧答对。",
 
     'f"Here it is on three hundred questions.':
-        "这是在300道题上的结果。<bookmark mark='a'/>一条思维链答对{100 * tv[0]:.0f}%。对{ks[-1]}条思维链投票："
-        "{100 * tv[-1]:.0f}%。<bookmark mark='b'/>推导也预言了它会在哪里趋平：最常见答案正确的题目所占的比例，"
-        "{100 * lim:.0f}%。<bookmark mark='c'/>如果有东西能检查答案，那么{ks[-1]}条里只要有一条对就算对："
-        "{100 * tp[-1]:.0f}%。{gap_said}<bookmark mark='d'/>{direct_said}",
+        "这是在300道题上的结果。<bookmark mark='a'/>一条思维链答对{100 * tv[0]:.1f}%。对{ks[-1]}条思维链投票：{100 * tv[-1]:.1f}%。<bookmark mark='b'/>虚线表示实际观察到的{ks[-1]}次采样投票结果，{100 * lim:.1f}%。它并不是对无限样本极限的独立估计。<bookmark mark='c'/>如果有东西能检查答案，那么{ks[-1]}条里只要有一条对就算对：{100 * tp[-1]:.1f}%。{gap_said}<bookmark mark='d'/>{direct_said}",
 
     "f'The gap between the two curves is what a checker is worth: wide at a few samples,":
-        "两条曲线之间的差距，就是一个检查器的价值：样本少时差距很大，{ks[gi]}个样本时差{100 * (tp[gi] - tv[gi]):.0f}个百分点，"
+        "两条曲线之间的差距，就是一个检查器的价值：样本少时差距很大，{ks[gi]}个样本时差{100 * (tp[gi] - tv[gi]):.1f}个百分点，"
         "到{ks[-1]}个时几乎合上了。",
 
     'The gap between the two curves is what a checker is worth.':
         "两条曲线之间的差距，就是一个检查器的价值。",
 
     'f"Voting over answers given at once reaches only':
-        "对直接给出的答案投票，只能达到{100 * dv[-1]:.0f}%：对更多的题目，模型直接回答时最喜欢的答案是错的，"
-        "投票没法纠正。思维链让正确答案成为最可能的那个，然后投票再把它放大。",
+        "对直接给出的答案投票，只能达到{100 * dv[-1]:.1f}%。在这些样本上，思维链配合投票效果更好。有限样本不能确定每道题上模型真正最可能给出的答案。",
 
     'f"Voting over answers given at once does about as well here,':
-        "对直接给出的答案投票，在这里效果差不多，{100 * dv[-1]:.0f}%：在这个任务上，模型最喜欢的答案两种方式下往往都是对的。",
+        "对直接给出的答案投票，在这里效果差不多，{100 * dv[-1]:.1f}%：在这些有限样本上，两种投票方案的正确率相近。",
 
     # ------------------------------------------------------------------ Verify
     'Chapter three. Checking the steps.':
         '第3章。检查每一步。',
 
     'f"A checker of answers sees only the end.':
-        "检查答案的检查器只看得到结尾。<bookmark mark='a'/>这里有一条思维链，5加3写成了9，然后加8写成了16。"
-        "两个错误，正好抵消：最后的和是对的。<bookmark mark='b'/>检查答案的检查器会奖励它。检查步骤的检查器会标出其中两步。"
-        "<bookmark mark='c'/>这种情况有多常见？在我们模型答对的题里，有{100 * rb:.1f}%途中有一步是错的。{small}",
+        "检查答案的检查器只看得到结尾。<bookmark mark='a'/>这里有一条思维链，5加3写成了9，然后加8写成了16。两个错误，正好抵消：最后的和是对的。<bookmark mark='b'/>检查答案的检查器会奖励它。检查步骤的检查器会标出其中两步。<bookmark mark='c'/>这种情况有多常见？在我们模型答对的题里，有{100 * rb:.1f}%缺少完整、局部正确的思维链。{small}",
 
-    'Small here, because two slips must cancel exactly.':
-        "这里很少，因为两次失误必须正好抵消。在很长的数学论证里，一段错误论证的结尾出现正确数字的情况要常见得多，"
-        "而奖励它，教的是错误的东西。",
 
-    'And in long mathematical arguments, a right number at the end of a broken argument is more common still;':
-        "而在很长的数学论证里，一段错误论证的结尾出现正确数字的情况还要更常见；奖励它，教的是错误的东西。",
 
     'So there are two kinds of learned grader.':
-        "所以，学来的评分器有两种。<bookmark mark='a'/>结果奖励模型读完整个解答，预测它的最终答案是否正确。"
-        "它用每个解答一个标签来训练，这个标签检查答案的检查器就能提供。<bookmark mark='b'/>过程奖励模型评判每一步："
-        "在前面几步的基础上，这一步对吗？一个解答的得分是各步的乘积，也就是所有步骤都对的概率。它需要每一步都有标签。"
-        "<bookmark mark='c'/>两者都可以用来重新排序：采样N个解答，留下它打分最高的那个。也可以把它的分数当作强化学习的奖励。",
+        "所以，学来的评分器有两种。<bookmark mark='a'/>结果奖励模型读完整个解答，预测它的最终答案是否正确。它用每个解答一个标签来训练，这个标签检查答案的检查器就能提供。<bookmark mark='b'/>过程奖励模型评判每一步：在前面几步的基础上，这一步对吗？这里把各步的分数相乘作为解答的分数。把这个乘积解释为概率，需要经过校准的条件概率分数。它需要每一步都有标签。<bookmark mark='c'/>两者都可以用来重新排序：采样N个解答，留下它打分最高的那个。也可以把它的分数当作强化学习的奖励。",
 
     'The idea of a learned grader came with the grade-school maths benchmark itself.':
-        "学来的评分器这个想法，和小学数学基准本身同时出现。<bookmark mark='a'/>2021年，OpenAI的卡尔·科布和同事训练了一个"
-        "验证器，从100个采样出来的解答里挑一个，发现它的作用相当于一个大30倍的模型。<bookmark mark='b'/>2022年，"
-        "DeepMind的Jonathan Uesato和同事比较了两种反馈。结果反馈用更少的标签，得到的最终答案差不多一样好；"
-        "但要让正确答案里面的推理也是对的，他们需要过程反馈，或者一个学着模仿它的评分器。<bookmark mark='c'/>2023年，"
-        "OpenAI的《让我们一步一步地验证》花钱请人标注了80万个步骤。<bookmark mark='d'/>对竞赛题的1860个解答重新排序，"
-        "多数投票解出69.6%，结果评分器72.4%，过程评分器78.2%。",
+        "学来的评分器这个想法，和小学数学基准本身同时出现。<bookmark mark='a'/>2021年，OpenAI的卡尔·科布和同事训练了一个验证器，从100个采样出来的解答里挑一个，发现它的作用相当于一个大30倍的模型。<bookmark mark='b'/>2022年，DeepMind的Jonathan Uesato和同事比较了两种反馈。结果反馈用更少的标签，得到的最终答案差不多一样好；但要让正确答案里面的推理也是对的，他们需要过程反馈，或者一个学着模仿它的评分器。<bookmark mark='c'/>2023年，OpenAI的《让我们一步一步地验证》花钱请人标注了80万个步骤。<bookmark mark='d'/>在MATH测试集的代表性子集上，对每题1860个解答重新排序，多数投票解出69.6%，结果评分器72.4%，过程评分器78.2%。",
 
     'f"We can run the comparison on our adding model.':
         "我们可以在自己的加法模型上做这个比较。取它被要求思考时写出的8000个解答。一个小评分器用最终答案训练，"
@@ -345,14 +314,14 @@ ZH = {
     "f'k one averages {k1m:.3f};":
         'k1平均为{k1m:.3f}；有{k1n:.0f}%的估计是负的，离散程度为{k1s:.2f}。',
 
-    "f'k two, half the squared log ratio, is never negative, with spread {k2s:.2f}, but biased: on average {k2b:.3f}":
-        'k2，对数比平方的一半，永远不为负，离散程度为{k2s:.2f}，但有偏：平均高了{k2b:.3f}。',
+    "f'k two, half the squared log ratio, is never negative, with spread {k2s:.2f}, but generally biased: its sample mean is {k2b:.3f}":
+        'k2，对数比平方的一半，永远不为负，离散程度为{k2s:.2f}，但一般有偏：这里的样本均值比真实KL高{k2b:.3f}。',
 
-    "f'k two, half the squared log ratio, is never negative, with spread {k2s:.2f}, but biased: on average {-k2b:.3f}":
-        'k2，对数比平方的一半，永远不为负，离散程度为{k2s:.2f}，但有偏：平均低了{-k2b:.3f}。',
+    "f'k two, half the squared log ratio, is never negative, with spread {k2s:.2f}, but generally biased: its sample mean is {-k2b:.3f}":
+        'k2，对数比平方的一半，永远不为负，离散程度为{k2s:.2f}，但一般有偏：这里的样本均值比真实KL低{-k2b:.3f}。',
 
-    "f'k three is never negative, averages {k3m:.3f}, on the truth,":
-        'k3永远不为负，平均为{k3m:.3f}，正好在真值上，离散程度为{k3s:.2f}。',
+    "f'k three is never negative, averages {k3m:.3f}, close to the exact KL,":
+        'k3永远不为负，平均为{k3m:.3f}，接近真实KL，离散程度为{k3s:.2f}。',
 
     "f'k three is never negative, averages {k3m:.3f}, and its spread":
         'k3永远不为负，平均为{k3m:.3f}，离散程度为{k3s:.2f}。',
@@ -402,8 +371,8 @@ ZH = {
 
     'f"We ran all of them on our addition model,':
         "我们在加法模型上把它们全部跑了一遍，同一个起点，同一类题目，每种跑3次。<bookmark mark='a'/>{collapse}"
-        "<bookmark mark='a2'/>{verdict}<bookmark mark='b'/>有一项代价柱状图里看不出来：DAPO的动态采样，为了填满批次，"
-        "抽了{drawn['dapo']:.2f}倍的题目。公平的比较应该数样本，而不是数步数。",
+        "<bookmark mark='a2'/>{verdict}<bookmark mark='b'/>有一项代价柱状图里看不出来：DAPO的动态采样，为了收集目标批次，"
+        "抽了{drawn['dapo']:.2f}倍的题目。每轮采样，普通梯度更新1次，其他展示的方案最多更新4次。这些柱状图并不是相同计算成本的比较。",
 
     "f'Among the runs that learned, {SAY[best]} ends highest, {100 * means[best]:.0f} percent on average, but":
         "在学到了东西的运行里，{SAY[best]}最后最高，平均{100 * means[best]:.0f}%，但各方法的平均值只差{spread:.0f}个百分点，"
@@ -414,10 +383,8 @@ ZH = {
         "在学到了东西的运行里，{SAY[best]}最后最高，平均{100 * means[best]:.0f}%，各方法的平均值相差{spread:.0f}个百分点，"
         "超过了同一种方法不同运行之间的{seed_spread:.0f}个百分点。",
 
-    "f'GRPO as published, the only objective here with a KL penalty, collapsed in":
-        "按论文原样实现的GRPO，也是这里唯一带KL惩罚的目标函数，在{seeds}次运行里坍缩了{n_bad['grpo']}次："
-        "正确率掉到{low:.0f}%，模型也跑得离起点很远。最可能的元凶就是这个惩罚项：k3估计量的梯度随r增长，"
-        "而r的重尾我们在第5章已经见过。DAPO干脆去掉了这一项。",
+    "f'Our toy GRPO recipe,":
+        "我们的玩具GRPO方案，也是这里唯一带KL惩罚的目标函数，在{seeds}次运行里坍缩了{n_bad['grpo']}次：正确率掉到{low:.0f}%，模型也跑得离起点很远。一种可能的解释是惩罚项梯度的重尾，但我们没有用匹配的消融实验来单独验证这个原因。DAPO干脆去掉了这一项。",
 
     "f'{sum(n_bad.values())} of the runs collapsed,":
         "有{sum(n_bad.values())}次运行坍缩了，最后比起点还差；下面的平均值不算它们。",
@@ -426,9 +393,7 @@ ZH = {
         '每一次运行最后都比起点好。',
 
     'f"One of DAPO\'s fixes is worth seeing.':
-        "DAPO的一个修正值得看一看。当一道题的8个回答全对时，每个优势都是零，梯度也是零：这道题白做了。"
-        "<bookmark mark='a'/>随着模型变好，这种情况越来越多：到最后，{100 * zs[-1]:.0f}%的组什么也没教给它。"
-        "<bookmark mark='b'/>DAPO不断抽题，直到每个批次都装满了有分歧的组；到最后，它需要{dds[-1]:.1f}倍的题目。",
+        "DAPO的一个修正值得看一看。当一道题的8个回答全对，或者全错时，每个优势都是零：没有策略梯度的奖励信号。<bookmark mark='a'/>到最后，{100 * zs[-1]:.0f}%的组没有这类信号。<bookmark mark='b'/>DAPO重新采样，收集奖励有分歧的组。我们的玩具方案最多采4轮，所以批次仍可能不足。到最后，它抽取的题数达到目标批次的{dds[-1]:.1f}倍。",
 
     'f"And the offline alternative?':
         "那么离线的替代方法呢？第27部分推导了DPO，它从固定的一好一坏的回答对中学习，训练时不采样。"
@@ -454,28 +419,15 @@ ZH = {
         '第7章。熵坍缩。',
 
     "At the end of chapter five, the model's entropy fell as it learned.":
-        "在第5章的最后，模型学习的同时，它的熵在下降。这里说说为什么这总是一个威胁。熵衡量模型的选择有多分散。"
-        "<bookmark mark='a'/>把概率写成logit z的softmax，再求导：移动logit b，熵的变化是负的pi b乘以b比平均情况意外多少。"
-        "<bookmark mark='b'/>所以，一阶近似下，一步更新让熵改变的量，是负的协方差：在模型自己的选择上，对数概率和logit变化之间的协方差。"
-        "<bookmark mark='c'/>策略梯度的一步，让每个logit按它的概率乘以优势的比例提高。当模型本来就喜欢的回答正好得分高时，"
-        "这个协方差是正的，熵就下降。<bookmark mark='d'/>在模型自己的样本上做强化学习，奖励的正是本来就可能的东西，"
-        "而且会越滚越大。Ganqu Cui和同事在2025年为语言模型把这一点推导了出来。",
+        "在第5章的最后，模型学习的同时，它的熵在下降。这里说说为什么这总是一个威胁。熵衡量模型的选择有多分散。<bookmark mark='a'/>把概率写成logit z的softmax，再求导：移动logit b，熵的变化是负的pi b乘以其对数概率高于平均值的量。<bookmark mark='b'/>所以，一阶近似下，一步更新让熵改变的量，是负的协方差：在模型自己的选择上，对数概率和logit变化之间的协方差。<bookmark mark='c'/>对于彼此独立的表格logit，期望的策略梯度更新让每个logit按它的概率乘以优势的比例提高。当模型本来就喜欢的回答正好得分高时，这个协方差是正的，熵就下降。<bookmark mark='d'/>在模型自己的样本上做强化学习，可能强化本来就可能的选择。神经网络共享参数会把这些logit更新耦合起来。Ganqu Cui和同事在2025年为语言模型把这一点推导了出来。",
 
     'f"{start} <bookmark mark=\'a\'/> Doctor GRPO, with GRPO\'s symmetric clip':
         "{start}<bookmark mark='a'/>Dr. GRPO用的是GRPO的对称裁剪，最后停在{fin['dr']:.2f}。<bookmark mark='b'/>{higher}"
         "<bookmark mark='c'/>CISPO最后是{fin['cispo']:.2f}，完全不裁剪的普通梯度是{fin['pg']:.2f}。",
 
-    'f"DAPO\'s clip-higher keeps more of it:':
-        "DAPO放宽上界的裁剪保留了更多的熵：最后{fin['dapo']:.2f}比特，对称裁剪是{fin['dr']:.2f}。"
-        "让可能性低的词元长得更快，就能让其他选项活下来。",
-
-    'f"DAPO ends lower still, at {fin[\'dapo\']:.2f} bits:':
-        "DAPO最后更低，只有{fin['dapo']:.2f}比特：在我们的运行里，放宽上界的裁剪没能把熵托住。"
-        "答案只有三位数，没什么可能性低的词元需要挽救；在长推理上，DAPO的作者发现它能防止熵坍缩。",
-
-    'f"Here DAPO\'s clip-higher barely changes it:':
-        "在这里，DAPO放宽上界的裁剪几乎没改变什么：最后{fin['dapo']:.2f}比特。"
-        "答案只有三位数，没什么可能性低的词元需要挽救；在长推理上，DAPO的作者发现它能防止熵坍缩。",
+    'f"DAPO ends at':
+        "DAPO最后为{fin['dapo']:.2f}比特，Dr. GRPO为{fin['dr']:.2f}比特。两套方案在不止一种机制上有差别，"
+        "所以没有单独测出放宽上界裁剪的效果。",
 
     "f'Here it is in our runs. Every objective starts at {e0:.2f} bits of entropy per digit, and every one drives it down.":
         '这是我们的运行结果。每种目标函数开始时，每个数字的熵都是{e0:.2f}比特，而每一种都把它压了下去。',
@@ -484,10 +436,7 @@ ZH = {
         '这是我们的运行结果。每种目标函数开始时，每个数字的熵都是{e0:.2f}比特。',
 
     'f"Cui and colleagues found something stranger.':
-        "Cui和同事还发现了更奇怪的事。在许多次运行中，正确率是熵的一个简单函数：R等于负a乘以e的H次方，再加b。"
-        "<bookmark mark='a'/>这里的每个点，是我们某一次运行的一个检查点，按目标函数上色。<bookmark mark='b'/>{fits}"
-        "<bookmark mark='c'/>这个规律还带着一根刺：在熵为零，也就是模型完全不再探索的时候，它预言了一个上限，"
-        "这里是{100 * (b - a):.0f}%。熵是一笔预算，强化学习花掉它来换正确率。",
+        "Cui和同事还发现了更奇怪的事。在许多次运行中，正确率是熵的一个简单函数：R等于负a乘以e的H次方，再加b。<bookmark mark='a'/>这里的每个点，是我们某一次运行的一个检查点，按目标函数上色。<bookmark mark='b'/>{fits}<bookmark mark='c'/>这个拟合外推到零熵时，得到{100 * (b - a):.0f}%。这只是这些运行中的经验关联，不是已证明的准确率上限，也不能证明熵单独造成了准确率变化。",
 
     "f'Fitted to every checkpoint of our runs,":
         '拟合到我们所有运行的每个检查点上，它解释了正确率{100 * r2:.0f}%的变化，不管是哪种目标函数。',
@@ -506,10 +455,7 @@ ZH = {
         '第8章。该想多久。',
 
     'When DeepSeek trained R1-Zero with reinforcement learning':
-        "DeepSeek用强化学习训练R1-Zero时，发生了一件没人要求过的事。它的思考越来越长，在整个训练过程中稳步增长，"
-        "从几百个词元到几千个，尽管奖励只检查最终答案。<bookmark mark='a'/>在一个解答的中途，一个中间版本写道："
-        "等等，等等，等等。这是一个我可以标记出来的顿悟时刻。然后它回过头去，把那一步重做了一遍。<bookmark mark='b'/>"
-        "重新检查，回溯，换一种方法再试：这些都没有人示范过。它们之所以出现，是因为更长、更仔细的思维链能赢得更多奖励。",
+        "DeepSeek用强化学习训练R1-Zero时，发生了一件没人要求过的事。它的思考越来越长，在整个训练过程中稳步增长，从几百个词元到几千个，尽管奖励检查正确性和格式，并不奖励长度。<bookmark mark='a'/>在一个解答的中途，一个中间版本写道：等等，等等，等等。这是一个我可以标记出来的顿悟时刻。然后它回过头去，把那一步重做了一遍。<bookmark mark='b'/>重新检查，回溯，换一种方法再试：这些行为在强化学习前没有额外监督微调的情况下出现；基础模型仍然带着预训练所得。",
 
     'f"Our adding model can show the same thing in miniature.':
         "我们的加法模型可以在小尺度上展示同样的事。只在和算对时给奖励，然后回放训练过程。<bookmark mark='a'/>"
@@ -646,8 +592,7 @@ ZH = {
         "强制它多想之后，AIME的成绩从50%升到57%，在竞赛数学上比o1-preview最多高出27%。他们把这叫作预算强制。",
 
     'f"Our adding model can be given a budget too.':
-        "我们的加法模型也可以给预算。让它思考，并在最多m步之后强制它作答，就像s1截断模型那样。<bookmark mark='a'/>{first}"
-        "<bookmark mark='b'/>并行的替代方案：直接回答N次，然后投票。<bookmark mark='c'/>{verdict}<bookmark mark='d'/>{after}",
+        "我们的加法模型也可以给预算。让它思考，并在最多m步之后强制它作答，就像s1截断模型那样。<bookmark mark='a'/>{first}<bookmark mark='b'/>并行的替代方案：直接回答N次，然后投票。横轴表示词元预算上限；思维链可能提前停止，而相同的词元上限也不一定对应相同的计算成本。<bookmark mark='c'/>{verdict}<bookmark mark='d'/>{after}",
 
     "f'After reinforcement learning, thinking fully reaches {100 * rs[-1]:.0f} percent. Training":
         '强化学习之后，完整地思考能达到{100 * rs[-1]:.0f}%。训练时的计算和测试时的计算，是买同一样东西的两种方式。',
@@ -674,16 +619,10 @@ ZH = {
         '完整地思考{n}步，用{t_full}个词元达到{100 * full:.0f}%；对直接给出的答案投票，用我们允许的词元达到{100 * v_best:.0f}%。',
 
     'The simplest parallel strategy with a checker is best-of-N:':
-        "有检查器时，最简单的并行策略是最优N选1：抽N个回答，留一个正确的。第27部分说明了，在奖励没有并列时，"
-        "最优N选1让模型离起点的距离是log N减去N分之N减1奈特。<bookmark mark='t'/>而检查器的奖励全是并列：要么对，要么错。所以我们重新算一遍。"
-        "<bookmark mark='a'/>如果一次尝试正确的概率是p，最优N选1正确的概率就是1减去1减p的N次方。<bookmark mark='b'/>"
-        "在正确的条件下，它返回哪个正确答案，与模型自己的概率成比例；错误的也一样。<bookmark mark='c'/>"
-        "所以KL就是两枚硬币之间的散度：一枚正确的概率是1减q，另一枚是p。<bookmark mark='d'/>随着N增大，它在log p分之1处趋平，"
-        "不管抽多少个回答，都远低于第27部分的公式；而那个公式在一般情况下只是一个上界，Ahmad Beirami和同事在2024年证明了这一点。",
+        "有检查器时，最简单的并行策略是最优N选1：抽N个回答，留一个正确的。在奖励分布连续的理想化情况下，第27部分的最优N选1公式给出log N减去N分之N减1奈特。对于离散答案，即使不同答案的奖励各不相同，一般也只能得到上界。<bookmark mark='t'/>而检查器的奖励全是并列：要么对，要么错。所以我们重新算一遍。<bookmark mark='a'/>如果一次尝试正确的概率是p，最优N选1正确的概率就是1减去1减p的N次方。<bookmark mark='b'/>这里保留首次抽到的正确答案；如果全错，就保留首次抽到的答案。在这个平局规则下，它返回哪个正确答案，与模型自己的概率成比例；错误的也一样。<bookmark mark='c'/>所以KL就是两枚硬币之间的散度：一枚正确的概率是1减q，另一枚是p。<bookmark mark='d'/>随着N增大，它在log p分之1处趋平，不管抽多少个回答，都远低于第27部分的公式；而那个公式在一般情况下只是一个上界，Ahmad Beirami和同事在2024年证明了这一点。",
 
     'f"On our addition model, exactly.':
-        "在我们的加法模型上，精确地算一下。<bookmark mark='a'/>有检查器的最优N选1，KL在{kl[-1]:.2f}奈特处趋平，"
-        "而没有并列时的公式，在{Ns[-1]}次尝试时会达到{bound[-1]:.2f}。<bookmark mark='b'/>再看正确率：{match}",
+        "在我们的加法模型上，精确地算一下。<bookmark mark='a'/>有检查器的最优N选1，KL在{kl[-1]:.2f}奈特处趋平，而一般上界在{Ns[-1]}次尝试时会达到{bound[-1]:.2f}。<bookmark mark='b'/>再看正确率：{match}",
 
     'f"best-of-N needs about {Nmatch} tries':
         "最优N选1需要大约{Nmatch}次尝试，才能赶上强化学习之后的模型一次尝试的正确率。强化学习把过去需要很多次尝试的东西，"
@@ -709,10 +648,7 @@ ZH = {
         "这里有6道题可以试试，从GRPO的基线到熵的下降。在这里暂停，把它们做一遍；完整的解答在这一部分的笔记里。",
 
     'f"Next time: agents, models that act over many steps':
-        "下一次：智能体，在世界中或在电脑上跨越很多步行动的模型。这是它们面对的问题，用我们自己的思维链来测量。"
-        "我们的加法模型写出的每一步思考，有{100 * ps:.1f}%是对的。<bookmark mark='a'/>但一个长任务需要每一步都对，"
-        "而这些概率是相乘的。{half}<bookmark mark='b'/>智能体怎样在很长的时间跨度上规划、自查、纠错，"
-        "又怎样学会它们所处世界的模型：第29部分。",
+        "下一次：智能体，在世界中或在电脑上跨越很多步行动的模型。这是它们面对的问题，用我们自己的思维链来测量。我们的加法模型写出的每一步思考，有{100 * ps:.1f}%是对的。<bookmark mark='a'/>如果各步错误相互独立，而且每一步都有这个相同的正确率，那么这些概率就相乘。在这个示意模型里，{half}测得的平均值并不能证明独立性，也不能预测更长任务的成功率。<bookmark mark='b'/>智能体怎样在很长的时间跨度上规划、自查、纠错，又怎样学会它们所处世界的模型：第29部分。",
 
     "f'Even at {100 * ps:.1f} percent a step":
         '即使每步有{100 * ps:.1f}%的正确率，{n50:.0f}步的链条也只有一半的机会全对，200步几乎没有希望。',
@@ -757,38 +693,29 @@ ZH = {
         '到最后，幸存的最好那条思维链仍有一步是错的：评分器也会被骗。',
 
     'f"Is search worth it?':
-        "搜索值得吗？把它和最优N选1比较，用同一个评分器，花同样多的词元。<bookmark mark='a'/>最优N选1采样N条完整的思维链，"
-        "留下评分器最喜欢的那条。<bookmark mark='b'/>束搜索把同样多的词元一步一步地花。<bookmark mark='c'/>{said}"
-        "<bookmark mark='d'/>{trend}",
+        "搜索值得吗？使用同一评分器，在对应的宽度设置上比较这两套方案。<bookmark mark='a'/>最优N选1采样N条完整的思维链，留下评分器最喜欢的那条。<bookmark mark='b'/>束搜索逐步提出候选。实际词元和计算成本没有匹配。<bookmark mark='c'/>{said}<bookmark mark='d'/>{trend}",
 
-    'f"But both get worse as they widen:':
-        "但两者都随着搜索变宽而变差：束搜索从{100 * ba.max():.0f}%降到{100 * ba[-1]:.0f}%，"
-        "最优N选1从{100 * bo.max():.0f}%降到{100 * bo[-1]:.0f}%。搜索越宽，就越能找到骗过评分器的东西，"
-        "又是第3章的教训。搜索的好坏，取决于给它当裁判的那个评分器。",
+    'f"At the widest tested setting, both are below their best observed accuracy:':
+        "在最宽的测试设置下，两者都低于各自观察到的最佳正确率：束搜索从{100 * ba.max():.0f}%到{100 * ba[-1]:.0f}%，"
+        "最优N选1从{100 * bo.max():.0f}%到{100 * bo[-1]:.0f}%。学来的评分器仍可能偏爱错误；搜索更宽本身并无保证。",
 
     "f'At the widest, beam search reaches":
         "搜索最宽时，束搜索达到{100 * ba[-1]:.0f}%，最优N选1是{100 * bo[-1]:.0f}%。",
 
-    'At every budget, searching step by step beats choosing among whole chains:':
-        "在每一种预算下，一步一步地搜索都胜过在完整思维链里挑选：错误的累计和一写出来就被发现，"
-        "而不是指望某一整条思维链恰好每一步都没出错。",
 
     'Here, choosing among whole chains does better than searching step by step:':
-        "在这里，在完整思维链里挑选反而比一步一步地搜索更好：评分器在每一步犯的错误会累积，"
-        "过早剪枝会扔掉本来能纠正回来的思维链。",
+        "在这里，在完整思维链里挑选反而比一步一步地搜索更好：这是对这些测试宽度取平均。停止规则和最终答案解码不同，"
+        "所以这张图没有单独识别逐步搜索的效果。",
 
     'Here the two end up close:':
-        '在这里两者的结果很接近：在这样规整的问题上，好的评分器怎么用都有帮助。',
+        '在这里两者的结果很接近：这些设置下的平均正确率相差不超过两个百分点。这并不说明评分器的校准良好。',
 
     # ------------------------------------------------------------------ Latent
     'Chapter twelve. Thinking without words.':
         '第12章。不用文字的思考。',
 
     'f"A chain of thought is computation, but it has a narrow throat.':
-        "思维链是计算，但它有一个狭窄的咽喉。<bookmark mark='a'/>每一步，模型最后的隐状态，成千上万个数，"
-        "被挤进一个词元：词表有十万个词元的话，大约17个比特。<bookmark mark='b'/>然后这个词元再被变回数字，用于下一步。"
-        "模型要带往下一步的一切，都得挤过这个咽喉。<bookmark mark='c'/>{dots}<bookmark mark='d'/>"
-        "那么，为什么不直接把状态传下去呢？",
+        "思维链是计算，但它有一个狭窄的咽喉。<bookmark mark='a'/>每一步，模型最后的隐状态，成千上万个数，被挤进一个词元：词表有十万个词元的话，大约17个比特。<bookmark mark='b'/>然后这个词元再被变回数字，用于下一步。这个限制约束的是新的输入嵌入；注意力仍能访问先前的隐状态，它们通常保存在键值缓存中。17比特不是模型的全部记忆。<bookmark mark='c'/>{dots}<bookmark mark='d'/>那么，为什么不直接把状态传下去呢？",
 
     'In chapter one, giving our model meaningless dots instead of words didn\'t help:':
         "在第1章里，用没有意义的点代替文字，对我们的模型没有帮助：要紧的不是位置，而是把状态带下去。",
@@ -813,11 +740,7 @@ ZH = {
         "起作用的是一个外层循环：把模型的答案送回去，一遍又一遍地改进。",
 
     'In October 2025, Alexia Jolicoeur-Martineau at Samsung':
-        "2025年10月，三星蒙特利尔实验室的Alexia Jolicoeur-Martineau把这个想法削减到只剩核心。<bookmark mark='a'/>"
-        "一个微型网络，两层。它读入谜题x，并保留两样东西：一个隐式的草稿z，和它当前的答案y。<bookmark mark='b'/>"
-        "它先把草稿更新6次，再用草稿去改进答案。<bookmark mark='c'/>然后整个过程再来一遍，每一轮之后都检查它的答案，"
-        "最多16轮。<bookmark mark='d'/>只有700万参数，它在每一项任务上都胜过了层级推理模型：极难数独87%，对方55%；"
-        "ARC-AGI-1上45%，超过了很多大语言模型。它获得了2025年ARC Prize论文奖的第一名。靠递归获得深度，而不是靠词元。",
+        "2025年10月，三星蒙特利尔实验室的Alexia Jolicoeur-Martineau把这个想法削减到只剩核心。<bookmark mark='a'/>一个微型网络，两层。它读入谜题x，并保留两样东西：一个隐式的草稿z，和它当前的答案y。<bookmark mark='b'/>它先把草稿更新6次，再用草稿去改进答案。<bookmark mark='c'/>然后整个过程再来一遍。训练时，每轮都对答案进行监督，最多16轮。推断时，它反复迭代，但无法访问标准答案。<bookmark mark='d'/>只有700万参数，它在每一项任务上都胜过了层级推理模型：极难数独87%，对方55%；ARC-AGI-1上45%，超过了很多大语言模型。它获得了2025年ARC Prize论文奖的第一名。靠递归获得深度，而不是靠词元。",
 
     "There's a price. A chain written in words can be read.":
         "这是有代价的。用文字写出的思维链是可以读的。<bookmark mark='a'/>2025年，来自多家实验室的研究者一起把这称为"
@@ -829,11 +752,7 @@ ZH = {
         '第13章。机器能检查的证明。',
 
     'Everything in this part has leaned on a checker, and checkers have limits:':
-        "这一部分的一切都依赖检查器，而检查器有它的局限：一个正确的数字，可能出现在一段错误论证的结尾。"
-        "数学有一条出路。<bookmark mark='a'/>在Lean这样的证明助手里，定理和它的证明都写成代码，"
-        "由一个小而可信的内核检查每一步推理。<bookmark mark='b'/>没有碰运气，也没有含糊其辞：证明要么被接受，要么不被接受。"
-        "<bookmark mark='c'/>对强化学习来说，这是完美的奖励，一个没法被钻空子的奖励，只要形式化的命题说的正是本意。"
-        "<bookmark mark='d'/>而且从2017年起，一个社区一直在把数学形式化，写进Lean的数学库Mathlib，让这样的系统有基础可依。",
+        "这一部分的一切都依赖检查器，而检查器有它的局限：一个正确的数字，可能出现在一段错误论证的结尾。数学有一条出路。<bookmark mark='a'/>在Lean这样的证明助手里，定理和它的证明都写成代码，由一个小而可信的内核检查每一步推理。所示代码只是示例；这里并未编译。<bookmark mark='b'/>没有碰运气，也没有含糊其辞：证明要么被接受，要么不被接受。<bookmark mark='c'/>这种保证以形式化命题和所用公理为前提。奖励检查器必须拒绝sorry之类的占位符和未经批准的公理，并核对命题是否符合本意。<bookmark mark='d'/>而且从2017年起，一个社区一直在把数学形式化，写进Lean的数学库Mathlib，让这样的系统有基础可依。",
 
     "Google DeepMind's AlphaProof put this to work.":
         "谷歌DeepMind的AlphaProof把这一点用了起来。<bookmark mark='a'/>一个Gemini模型把大约100万道数学题从文字翻译成Lean，"
@@ -844,37 +763,20 @@ ZH = {
         "包括最难的那一道，那道题只有5名选手解出。有些证明花了它三天。",
 
     'A year later the picture changed.':
-        "一年之后，局面变了。<bookmark mark='a'/>在2025年的奥林匹克上，谷歌Gemini的一个带有Deep Think的版本，"
-        "会并行地探索很多条思路，解出了6道题中的5道，35分，正好是金牌线，用普通英语写成，在四个半小时之内；"
-        "由奥林匹克自己的协调员评分。<bookmark mark='b'/>OpenAI为一个实验性的推理模型宣布了同样的分数，"
-        "由前奖牌得主评分。<bookmark mark='c'/>形式化证明器也赶了上来：Harmonic的Aristotle和字节跳动的Seed-Prover，"
-        "各自在Lean里证明了6道题中的5道，每一步都经过检查。一年之前，最好的系统还需要好几天，还需要人来翻译题目。",
+        "一年之后，局面变了。<bookmark mark='a'/>在2025年的奥林匹克上，谷歌Gemini的一个带有Deep Think的版本，会并行地探索很多条思路，解出了6道题中的5道，35分，正好是金牌线，用普通英语写成。实验室报告满足四个半小时的比赛时限；奥林匹克的协调员评分的是提交的解答。<bookmark mark='b'/>OpenAI为一个实验性的推理模型宣布了同样的分数，由前奖牌得主评分。<bookmark mark='c'/>Harmonic的Aristotle公布了5份Lean证明。字节跳动的Seed-Prover正式得到30分，完整解出4题。它的几何题解答使用自然语言，另一个Lean证明在比赛后才完成。这些评测条件不同。",
 
     'So here is the spectrum every reasoning method lives on.':
-        "所以，每一种推理方法都处在这样一条光谱上。<bookmark mark='a'/>一端是骗不了的检查器：Lean里的证明，"
-        "要对上的一个数，必须通过测试的代码。<bookmark mark='b'/>另一端是学来的评分器，过程奖励模型，或者当裁判的另一个模型，"
-        "足够强的优化器总能找到办法绕过它们。<bookmark mark='c'/>推理进步最快的，恰恰是检查器精确的地方：数学和代码。"
-        "把它推广到其余的一切，文章、建议、研究，才是难题所在。",
+        "所以，每一种推理方法都处在这样一条光谱上。<bookmark mark='a'/>一端是精确检查既定规格的检查器：形式化证明，或者标准答案。代码测试只检查覆盖到的情况；通过测试不代表程序在所有输入上都正确。<bookmark mark='b'/>另一端是学来的评分器，过程奖励模型，或者当裁判的另一个模型，足够强的优化器总能找到办法绕过它们。<bookmark mark='c'/>推理进步最快的，恰恰是检查器精确的地方：数学和代码。把它推广到其余的一切，文章、建议、研究，才是难题所在。",
 
     # ------------------------------------------------------------------ ARC
     'Chapter fourteen. Puzzles nobody has seen.':
         '第14章。没人见过的谜题。',
 
-    'Every benchmark so far rewards knowing things.':
-        "到目前为止，每个基准测试奖励的都是知道东西。2019年，写了Keras库的弗朗索瓦·肖莱提出，智能是另一回事："
-        "你获得一项新技能的效率有多高。他为此设计了一个测试，抽象与推理语料库，现在叫ARC-AGI。<bookmark mark='a'/>"
-        "每个任务给出几对彩色网格，一个输入，一个输出。<bookmark mark='b'/>然后给一个新的输入。输出会是什么？"
-        "<bookmark mark='c'/>人觉得大多数任务都很简单。每个任务都不一样，所以什么都背不下来：规则必须当场找出来。",
+    'How can a benchmark test skill acquisition on unfamiliar tasks?':
+        "基准测试怎样检验模型在陌生任务上获得技能的能力？2019年，写了Keras库的弗朗索瓦·肖莱提出，智能是另一回事：你获得一项新技能的效率有多高。他为此设计了一个测试，抽象与推理语料库，现在叫ARC-AGI。<bookmark mark='a'/>每个任务给出几对彩色网格，一个输入，一个输出。<bookmark mark='b'/>然后给一个新的输入。输出会是什么？<bookmark mark='c'/>目标是从少量例子中推断新规则。公开任务可能进入训练数据，因此留出的任务和数据污染控制很重要。",
 
     'ARC-AGI-1 resisted for five years.':
-        "ARC-AGI-1坚持了五年。<bookmark mark='a'/>2020年的Kaggle比赛，冠军只有大约20%，靠的是在手写的程序里搜索。"
-        "2024年，在测试时用每个任务自己的例子做训练，达到了53.5%。<bookmark mark='b'/>然后在2024年12月，"
-        "OpenAI的o3以每个任务大约26美元的成本得了75.7%，用172倍的计算得了87.5%。<bookmark mark='c'/>"
-        "于是2025年3月，更难的版本ARC-AGI-2发布了，最好的系统跌回到几个百分点，而一个人平均能解出60%。"
-        "<bookmark mark='d'/>到了12月，一个用合成任务训练的40亿参数模型以24%赢得了Kaggle比赛；Claude Opus 4.5达到37.6%；"
-        "一个包在Gemini 3 Pro外面的精炼循环达到54%。ARC Prize把这一年的主题定为精炼循环：提出，检查，改进。"
-        "<bookmark mark='e'/>而在2026年10月，ARC Prize验证了谷歌的Gemini 4 Argon得到91%。19个月，"
-        "这个更难的测试就几乎被解决了。",
+        "ARC-AGI-1坚持了五年。<bookmark mark='a'/>2020年的Kaggle比赛，冠军只有大约20%，靠的是在手写的程序里搜索。2024年，在测试时用每个任务自己的例子做训练，达到了53.5%。<bookmark mark='b'/>然后在2024年12月，OpenAI的o3以每个任务大约26美元的成本得了75.7%，用172倍的计算得了87.5%。<bookmark mark='c'/>于是2025年3月，更难的版本ARC-AGI-2发布了，最好的系统跌回到几个百分点，而一个人平均能解出60%。<bookmark mark='d'/>到了12月，一个用合成任务训练的40亿参数模型以24%赢得了Kaggle比赛；Claude Opus 4.5达到37.6%；一个包在Gemini 3 Pro外面的精炼循环达到54%。ARC Prize把这一年的主题定为精炼循环：提出，检查，改进。<bookmark mark='e'/>而在2026年10月，ARC Prize报告，谷歌Gemini 4 Argon以高推理强度，在半私有ARC-AGI-2评估集上取得约91%。发布的数据给出91.25%；页面正文写91.2%，表格写91.3%。这里使用发布的底层汇总值，没有重新运行基准。这些都是报告值，沿途的评估集和成本并不相同。",
 
     'So in March 2026 came ARC-AGI-3:':
         "所以在2026年3月，ARC-AGI-3来了：交互式的游戏，没有任何说明。玩家必须探索，弄清目标是什么，再做规划，"
@@ -896,3 +798,13 @@ PHRASES = {
     "And its final sum is wrong too.": "而它最后的和也是错的。",
     "Yet its final sum is wrong.": "可它最后的和却是错的。",
 }
+
+# Scoped QA corrections: recipe limitations and explicitly conditional claims.
+ZH.update({
+    'This includes chains cut short as well as chains with an incorrect step.':
+        '这既包括半途停止的思维链，也包括有错误步骤的思维链。',
+    'At every tested width, searching step by step beats choosing among whole chains.':
+        '在每个测试过的宽度上，逐步搜索都胜过从完整思维链中选择。但这是两套方案的比较，并不能证明相同成本下的效率：束搜索强制写完思维链并用贪心方式解码最终答案，完整链采样则可能提前停止。',
+    'Averaged over these tested widths, searching step by step does better.':
+        '在这些测试过的宽度上取平均，逐步搜索的结果更好。两套方案的停止规则和最终答案解码方式不同，因此不能证明相同成本下的效率。',
+})

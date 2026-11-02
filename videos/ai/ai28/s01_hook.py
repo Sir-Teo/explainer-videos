@@ -58,11 +58,12 @@ class Hook(VoiceoverScene):
         cite_ = cite(r"J.~Wei et al.\ (2022); \ T.~Kojima et al.\ (2022): \ share of problems solved", corner=DL)
         cite_.next_to(strip, UP, buff=0.12).to_edge(LEFT, buff=0.3)
         with self.voiceover(
-            "In January 2022, a team at Google tried something simple. Instead of showing a large language model "
+            "In January 2022, a team at Google described a simple idea. Instead of showing a large language model "
             "a few questions with their answers, they showed it eight questions with the working written out. "
-            "<bookmark mark='a'/> On grade-school maths word problems, Google's 540-billion-parameter PaLM went "
+            "<bookmark mark='a'/> In later experiments reported in the same paper, Google's "
+            "540-billion-parameter PaLM, on grade-school maths word problems, went "
             "from 18 percent right to 57: it wrote out its own working, and got far more right. "
-            "<bookmark mark='b'/> Four months later, a team from Tokyo and Google found you didn't even need the "
+            "<bookmark mark='b'/> In May 2022, a team from Tokyo and Google found you didn't even need the "
             "examples. One sentence, let's think step by step, took one of OpenAI's models from 18 to 79 percent on "
             "arithmetic word problems. <bookmark mark='c'/> The ability was already in the model. It only had to be "
             "asked to write its reasoning down."
@@ -84,9 +85,9 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def rl_era(self):
         rows = [
-            (r"GPT-4o", 12, DIRECT),
-            (r"o1, \ one try", 74, POLICY),
-            (r"o1, \ a vote of $64$", 83, VOTE),
+            (r"GPT-4o, \ pass@1", 9.3, DIRECT),
+            (r"o1 (research), \ pass@1", 74.4, POLICY),
+            (r"o1 (research), \ cons@64", 83.3, VOTE),
             (r"o1, \ best of $1{,}000$ by a learned scorer", 93, PASS),
             (r"R1-Zero, \ before RL", 15.6, DIRECT),
             (r"R1-Zero, \ after RL", 71.0, POLICY),
@@ -95,15 +96,18 @@ class Hook(VoiceoverScene):
         bars = hbars(rows, x0=-1.9, width=3.3, row_h=0.56, font_size=20, top=1.9)
         head = label(r"AIME 2024: \ share of the problems solved", font_size=26).next_to(bars, UP, buff=0.3)
         head.align_to(bars, LEFT)
-        sep = DashedLine(bars[3].get_corner(DL) + DOWN * 0.08 + LEFT * 3.6, bars[3].get_corner(DR) + DOWN * 0.08
-                         + RIGHT * 0.7, color=GREY_D, dash_length=0.06)
-        src = note(r"self-reported: \ OpenAI (Sept 2024); \ DeepSeek-AI (Jan 2025)").to_corner(DL, buff=0.3)
+        sep_y = bars[3].get_bottom()[1] - 0.08
+        sep = DashedLine([bars.get_left()[0], sep_y, 0], [bars.get_right()[0], sep_y, 0],
+                         color=GREY_D, dash_length=0.06)
+        src = note(r"OpenAI: \ Appendix A (pass@1, cons@64); \ prose (reranking) \\ "
+                   r"GPT-4o: \ Appendix A $9.3\%$; \ prose $12\%$ (unreconciled) \\ "
+                   r"DeepSeek-AI (Jan 2025); \ cited results, not rerun here").to_corner(DL, buff=0.3)
         o1 = history_card(2024, r"OpenAI o1 \ (September)", r"trained with reinforcement learning to think before it "
                           r"answers: \ a long chain of thought, \ hidden from the user", width=4.6,
                           color=POLICY).move_to([4.6, 1.2, 0])
         imo = history_card(2025, r"International Mathematical Olympiad",
                            r"Gemini Deep Think: \ $35$ of $42$ points, \ gold-medal level, \ in plain language, \ "
-                           r"within the $4\tfrac12$ hours; \ graded by the IMO's coordinators. \ OpenAI reported the "
+                           r"lab-reported $4\tfrac12$-hour limit; \ solutions graded by the IMO's coordinators. \ OpenAI reported the "
                            r"same score", width=4.6, color=LEAN).move_to([4.6, 1.2, 0])
         arc = history_card(2026, r"ARC-AGI-3 \ (March)", r"games no model has seen: \ people solve all of them, \ "
                            r"every frontier model at launch \ below $1\%$", width=4.6, color=C.SURPRISE)
@@ -111,17 +115,19 @@ class Hook(VoiceoverScene):
         if arc.get_bottom()[1] < -3.7:
             VGroup(imo, arc).shift(UP * (-3.7 - arc.get_bottom()[1]))
         with self.voiceover(
-            "For two years that was the method: ask for a chain of thought, sample a few, perhaps take a vote. Then, "
-            "in September 2024, OpenAI released o1, trained with reinforcement learning to think before it answers. "
-            "<bookmark mark='a'/> On the 2024 American Invitational Mathematics Examination, AIME, GPT-4o had solved "
-            "12 percent of the problems. <bookmark mark='b'/> o1 solved 74 percent with one try, 83 with a vote "
-            "over sixty-four, and 93 when a learned scorer picked from a thousand. <bookmark mark='c'/> In January "
-            "2025, DeepSeek showed how. R1-Zero: reinforcement learning straight from a base model, rewarded only "
-            "for right answers. It climbed from 16 percent to 71, and to 87 with a vote, and its weights were "
-            "open. <bookmark mark='d'/> In July 2025, systems wrote gold-medal solutions at the International "
-            "Mathematical Olympiad, in plain language, within the time limit. <bookmark mark='e'/> And yet when "
-            "ARC-AGI-3, a set of games no model had seen, launched in March 2026, every frontier model scored "
-            "below one percent, while people solved them all."
+            "For two years that was the method: ask for a chain of thought, sample a few, perhaps take a vote. Then, in "
+            "September 2024, OpenAI introduced o1, trained with reinforcement learning to think before it answers, and "
+            "released an early version called o1-preview. <bookmark mark='a'/> On the 2024 American Invitational "
+            "Mathematics Examination, AIME, OpenAI's Appendix A lists GPT-4o at 9.3 percent pass at one. The prose says "
+            "12 percent; the post does not explain the difference. We show the metric-labeled table. <bookmark "
+            "mark='b'/> For the research o1 model, that table lists 74.4 percent with one try and 83.3 with a vote over "
+            "sixty-four. The prose reports 93 when a learned scorer picked from a thousand. <bookmark mark='c'/> In "
+            "January 2025, DeepSeek showed how. R1-Zero: reinforcement learning straight from a base model, rewarded "
+            "only by correctness and format rules. It climbed from 16 percent to 71, and to 87 with a vote, and its "
+            "weights were open. <bookmark mark='d'/> In July 2025, laboratories reported gold-medal-level solutions at "
+            "the International Mathematical Olympiad, in plain language, under competition time limits. <bookmark "
+            "mark='e'/> And yet when ARC-AGI-3, a set of games no model had seen, launched in March 2026, every "
+            "frontier model scored below one percent, while people solved them all."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), FadeIn(o1, shift=LEFT * 0.2))
             vo.wait_until("a")
@@ -146,14 +152,19 @@ class Hook(VoiceoverScene):
         steps = [(r"a chain of thought", CHAIN), (r"many chains, \ one vote", VOTE), (r"checking the steps", C.NEURAL),
                  (r"learning from a checker", POLICY), (r"thinking longer", C.LENGTH), (r"search", PASS),
                  (r"proofs", LEAN)]
-        path = VGroup()
-        for i, (t, c) in enumerate(steps):
-            if i:
-                path.add(MathTex(r"\to", font_size=34, color=GREY_C))
-            path.add(label(t, font_size=30, color=c))
-        row1, row2 = VGroup(*path[:8]), VGroup(*path[7:])
-        row1.arrange(RIGHT, buff=0.2)
-        row2 = VGroup(*path[8:]).arrange(RIGHT, buff=0.2)
+        path, rows = VGroup(), VGroup()
+        for items in (steps[:4], steps[4:]):
+            row = VGroup()
+            for i, (t, c) in enumerate(items):
+                if i:
+                    row.add(MathTex(r"\to", font_size=34, color=GREY_C))
+                row.add(label(t, font_size=30, color=c))
+            row.arrange(RIGHT, buff=0.2)
+            if row.width > 12.6:
+                row.width = 12.6
+            rows.add(row)
+            path.add(*row)
+        row1, row2 = rows
         VGroup(row1, row2).arrange(DOWN, buff=0.4).move_to(DOWN * 0.5)
         ours = label(r"and all of it tried here, \ on tiny models trained on this computer", font_size=28,
                      color=GREY_A).to_edge(DOWN, buff=0.8)
@@ -163,7 +174,7 @@ class Hook(VoiceoverScene):
             "computation; sampling many chains and voting; checking the steps; reinforcement learning from a "
             "checker of answers, derived; what thinking longer buys; search; and proofs a machine can check. "
             "<bookmark mark='b'/> And we'll try each idea here, on tiny models trained on the computer making this "
-            "video."
+            "video. Evaluation uses fresh draws from the same task distributions; these can repeat training inputs."
         ) as vo:
             self.play(FadeIn(q))
             vo.wait_until("a")

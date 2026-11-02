@@ -15,11 +15,11 @@ Items:
                    of thought; 3 seeds each: accuracy, length, how often it thinks, by length of list, as it trains,
                    and the lengths it chooses replayed checkpoint by checkpoint
     think_budget   test-time compute on 9-digit lists: think for at most m steps, then answer (sequential), against
-                   a vote over N answers (parallel), at equal numbers of tokens
+                   a vote over N answers (parallel), at matching output-token caps (actual costs can differ)
     think_verify   an outcome reward model (is the final sum right?) and a process reward model (is each step
                    right?), trained on the same 8,000 solutions; best-of-N with each, against majority vote
     think_search   beam search over steps of thought guided by the process reward model, against best-of-N with it,
-                   at equal numbers of tokens; the tree for one question
+                   at matching width settings, not matched token/compute costs; the tree for one question
 """
 
 from __future__ import annotations
@@ -579,9 +579,9 @@ def compute_think_verify(n_train=1000, k_train=8, nq=300, k=64):
     # how well each separates right from wrong solutions (area under the ROC curve)
     for kind in ("orm", "prm"):
         s_, y_ = scores[kind], test["final"]
-        order = np.argsort(s_)
-        ranks = np.empty(len(s_))
-        ranks[order] = np.arange(1, len(s_) + 1)
+        from scipy.stats import rankdata
+
+        ranks = rankdata(s_, method="average")
         npos, nneg = y_.sum(), (~y_).sum()
         out[f"auc_{kind}"] = float((ranks[y_].sum() - npos * (npos + 1) / 2) / max(npos * nneg, 1))
     out["sample_acc"] = float(right.mean())
@@ -698,15 +698,15 @@ def compute_think_search(nq=300, n=NMAX):
     d, _ = questions(c.rng(96), nq, n)
     truth = truth_of(d)
     out = {"n": n, "nq": nq}
-    configs = [(1, 2), (2, 2), (2, 4), (4, 4), (4, 8)]  # (beam, expand): tokens per step = beam * expand
+    configs = [(1, 2), (2, 2), (2, 4), (4, 4), (4, 8)]  # (beam, expand): proposal-width parameter = beam * expand
     bs = []
     for b, e in configs:
         ans, _, _ = beam_search(m, v, d, b, e, gen=gen)
         bs.append(float((ans == truth).mean()))
     out["beam_cfg"] = np.array(configs)
     out["beam_acc"] = np.array(bs)
-    out["beam_width"] = np.array([b * e for b, e in configs])  # samples per step, the same budget as best-of-N
-    # best-of-N with the same verifier at the same budget: N whole solutions made to think
+    out["beam_width"] = np.array([b * e for b, e in configs])  # proposal-width parameter; token/compute costs are not matched
+    # best-of-N at matching width; whole-chain stopping and final-answer decoding differ
     Ns = sorted(set(b * e for b, e in configs))
     K = max(Ns)
     dd = np.repeat(d, K, 0)
@@ -760,8 +760,8 @@ def _vote(A, truth, ks, g, reps=20):
 
 def compute_think_vote():
     """Self-consistency on the samples of ``think_samples``: majority vote over k chains (and over k answers given
-    at once), pass@k with a checker, and the limit the vote tends to: the share of questions whose most frequent
-    answer is the right one."""
+    at once), pass@k with a checker, and the observed full-sample mode. The latter uses the same finite samples;
+    it is not an independent estimate of the asymptotic voting limit."""
     c = _c()
     s = c.load("think_samples")
     truth, ns = np.asarray(s["truth"]), np.asarray(s["n"])
@@ -776,7 +776,8 @@ def compute_think_vote():
         out[f"{mode}_vote"] = _vote(A, truth, ks, g)
         out[f"{mode}_pass"] = [float(np.mean([1.0 if K - ci < k else 1 - math.comb(K - ci, k) / math.comb(K, k)
                                               for ci in cnt])) for k in ks]
-        mode_all = np.array([np.bincount(r[r >= 0], minlength=VMAX + 1).argmax() for r in A])
+        mode_all = np.array([np.bincount(r[r >= 0], minlength=VMAX + 1).argmax() if (r >= 0).any() else -1
+                             for r in A])
         out[f"{mode}_mode_right"] = float((mode_all == truth).mean())
         out[f"{mode}_p_right"] = right.mean(1)
         top_wrong = np.array([np.bincount(r[(r >= 0) & (r != t)], minlength=VMAX + 1).max() if ((r >= 0) & (r != t)).any()

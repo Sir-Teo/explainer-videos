@@ -40,7 +40,7 @@ class Entropy(VoiceoverScene):
         whys = [why(r"the model's uncertainty \ ($\pi = \operatorname{softmax}(z)$)"),
                 why(r"softmax: \ $\partial \pi_a / \partial z_b = \pi_a(\delta_{ab} - \pi_b)$"),
                 why(r"sum over $b$, \ to first order"),
-                why(r"a policy-gradient step: \ $\Delta z_a = \eta\, \pi_a A_a$")]
+                why(r"tabular logits, \ expected policy gradient: \ $\Delta z_a = \eta\, \pi_a A_a$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.8, buff=0.5, edge=6.9)
         res = label(r"reward what was already likely, \ and the entropy falls", font_size=28, color=ENT)
         res.move_to(DOWN * 2.6)
@@ -50,12 +50,14 @@ class Entropy(VoiceoverScene):
             "At the end of chapter five, the model's entropy fell as it learned. Here is why that always threatens. "
             "Entropy measures how spread out the model's choices are. <bookmark mark='a'/> Write the probabilities as "
             "a softmax of logits z, and differentiate: moving logit b changes the entropy by minus pi b times how "
-            "much more surprising b is than average. <bookmark mark='b'/> So, to first order, a step changes the "
+            "much larger its log-probability is than average. <bookmark mark='b'/> So, to first order, a step changes the "
             "entropy by minus the covariance, over the model's own choices, between log-probability and the change "
-            "in logit. <bookmark mark='c'/> A policy-gradient step raises each logit in proportion to its probability "
+            "in logit. <bookmark mark='c'/> For independent tabular logits, the expected policy-gradient step raises "
+            "each logit in proportion to its probability "
             "times its advantage. When the answers the model already likes are the ones that score well, that "
             "covariance is positive, and the entropy falls. <bookmark mark='d'/> Reinforcement learning on a model's "
-            "own samples rewards what was already likely, and it compounds. Ganqu Cui and colleagues worked this out "
+            "own samples can reinforce what was already likely. Shared network parameters couple these logit updates. "
+            "Ganqu Cui and colleagues worked this out "
             "for language models in 2025."
         ) as vo:
             self.play(FadeIn(cite_))
@@ -77,7 +79,7 @@ class Entropy(VoiceoverScene):
         out_ = sum(int(len(np.asarray(o[f"{v}_curves"])) - len(Y[v])) for v in show)
         xs = Y["dr"][0, :, 0]
         top = math.ceil(max(float(Y[v][:, :, 2].max()) for v in show) * 4) / 4
-        g = axes([0, steps], [0, top], x_length=7.0, y_length=4.2, xlabel=r"RL steps",
+        g = axes([0, steps], [0, top], x_length=7.0, y_length=4.2, xlabel=r"sampling rounds",
                  ylabel=r"entropy of each answer digit, \ bits", xticks=[0, steps // 2, steps], yticks=[0, top / 2, top],
                  center=[-1.6, -0.3, 0])
         lines = {v: seeds_plot(g.ax, xs, Y[v][:, :, 2], COLS[v]) for v in show}
@@ -95,18 +97,8 @@ class Entropy(VoiceoverScene):
         tag.to_corner(DR, buff=0.2)
         e0 = float(Y["dr"][:, 0, 2].mean())
         fin = {v: float(Y[v][:, -1, 2].mean()) for v in show}
-        if fin["dapo"] > fin["dr"] + 0.03:
-            higher = (f"DAPO's clip-higher keeps more of it: {fin['dapo']:.2f} bits at the end, against "
-                      f"{fin['dr']:.2f} with the symmetric clip. Letting unlikely tokens grow faster keeps "
-                      "alternatives alive.")
-        elif fin["dapo"] < fin["dr"] - 0.03:
-            higher = (f"DAPO ends lower still, at {fin['dapo']:.2f} bits: in our runs, clip-higher did not hold the "
-                      "entropy up. With three-digit answers there are few unlikely tokens to save; on long reasoning, "
-                      "DAPO's authors found it kept the entropy from collapsing.")
-        else:
-            higher = (f"Here DAPO's clip-higher barely changes it: {fin['dapo']:.2f} bits at the end. With three-digit "
-                      "answers there are few unlikely tokens to save; on long reasoning, DAPO's authors found it kept "
-                      "the entropy from collapsing.")
+        higher = (f"DAPO ends at {fin['dapo']:.2f} bits, compared with {fin['dr']:.2f} for Doctor GRPO. "
+                  "The recipes differ in several mechanisms, so this does not isolate the effect of clip-higher.")
         if all(fin[v] < e0 - 0.05 for v in show):
             start = (f"Here it is in our runs. Every objective starts at {e0:.2f} bits of entropy per digit, and every "
                      "one drives it down.")
@@ -165,9 +157,9 @@ class Entropy(VoiceoverScene):
             "Cui and colleagues found something stranger. Across many runs, accuracy was a simple function of "
             "entropy: R equals minus a times e to the H, plus b. <bookmark mark='a'/> Each dot here is one checkpoint "
             f"of one of our runs, coloured by objective. <bookmark mark='b'/> {fits} <bookmark mark='c'/> And the "
-            "law has a sting: at zero entropy, when the model has stopped exploring entirely, it predicts a ceiling, "
-            f"here {100 * (b - a):.0f} percent. Entropy is a budget, and reinforcement learning spends it to buy "
-            "accuracy."
+            "fit extrapolates to zero entropy at "
+            f"{100 * (b - a):.0f} percent. That is an empirical association in these runs, not a proven limit on "
+            "accuracy or evidence that entropy alone causes it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), Write(law))
             vo.wait_until("a")

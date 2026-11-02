@@ -208,8 +208,8 @@ class Search(VoiceoverScene):
         lw, lN = np.log2(W), np.log2(bN)
         xmax = float(max(lw.max(), lN.max()))
         lo = float(np.floor(min(ba.min(), bo.min()) * 10) / 10)
-        g = axes([0, xmax], [lo, 1.0], x_length=7.0, y_length=4.2, xlabel=r"samples per step \ (the same budget of "
-                 r"tokens)", ylabel=rf"right, \ ${int(s['n'])}$-digit lists", xticks=list(lN), xfmt=lambda x: f"{int(2 ** x)}",
+        g = axes([0, xmax], [lo, 1.0], x_length=7.0, y_length=4.2, xlabel=r"beam $\times$ proposals, \ or whole chains $N$",
+                 ylabel=rf"right, \ ${int(s['n'])}$-digit lists", xticks=list(lN), xfmt=lambda x: f"{int(2 ** x)}",
                  yticks=[lo, 1.0], yfmt=lambda v: rf"{int(round(100 * v))}\%", center=[-1.4, -0.3, 0])
         cb = curve(g.ax, lw, ba, SEARCH, 4)
         co = curve(g.ax, lN, bo, PRM_C, 4)
@@ -217,31 +217,40 @@ class Search(VoiceoverScene):
         do = VGroup(*[Dot(g.ax.c2p(x, y), radius=0.05, color=PRM_C) for x, y in zip(lN, bo)])
         lg = legend([(SEARCH, r"beam search, \ step by step"), (PRM_C, r"best-of-$N$ whole chains")], font_size=20)
         lg.next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
-        tag = note(rf"computed: \ ${int(s['nq'])}$ lists; \ both use the same process grader").to_corner(DR, buff=0.2)
+        tag = note(rf"computed: \ ${int(s['nq'])}$ lists; \ same grader; \ token and compute costs are not matched")
+        tag.to_corner(DR, buff=0.2)
         diff = float(np.mean(np.interp(lN, lw, ba) - bo))
-        if diff > 0.02:
-            said = ("At every budget, searching step by step beats choosing among whole chains: it catches a wrong "
-                    "total the moment it is written, instead of hoping one whole chain avoided every slip.")
+        if np.all(np.interp(lN, lw, ba) > bo):
+            said = ("At every tested width, searching step by step beats choosing among whole chains. This is a "
+                    "comparison of these recipes, not evidence of equal-cost efficiency: beam search forces full "
+                    "chains and uses greedy final answers, while the whole-chain sampler may stop early.")
+        elif diff > 0.02:
+            said = ("Averaged over these tested widths, searching step by step does better. These recipes have "
+                    "different stopping rules and final-answer decoding, so this does not establish equal-cost "
+                    "efficiency.")
         elif diff < -0.02:
-            said = ("Here, choosing among whole chains does better than searching step by step: the grader's mistakes "
-                    "at each step compound, and pruning early throws away chains that would have recovered.")
+            said = ("Here, choosing among whole chains does better than searching step by step: averaged over "
+                    "these tested widths. Stopping rules and final-answer decoding differ, so the plot does not "
+                    "isolate the effect of stepwise search.")
         else:
-            said = "Here the two end up close: on a problem this regular, a good grader helps either way."
+            said = ("Here the two end up close: their average accuracies differ by at most two percentage points "
+                    "across these settings. That does not establish that the grader is well calibrated.")
         both_fall = ba[-1] < ba.max() - 0.05 and bo[-1] < bo.max() - 0.05
         if both_fall:
-            trend = (f"But both get worse as they widen: beam search falls from {100 * ba.max():.0f} to "
-                     f"{100 * ba[-1]:.0f} percent, best-of-N from {100 * bo.max():.0f} to {100 * bo[-1]:.0f}. The "
-                     "wider the search, the more it finds of what fools the grader, chapter three's lesson again. A "
-                     "search is only as good as its judge.")
+            trend = (f"At the widest tested setting, both are below their best observed accuracy: beam search "
+                     f"from {100 * ba.max():.0f} to {100 * ba[-1]:.0f} percent, best-of-N from "
+                     f"{100 * bo.max():.0f} to {100 * bo[-1]:.0f}. A learned grader can still prefer mistakes; "
+                     "wider search alone is no guarantee.")
         else:
             trend = (f"At the widest, beam search reaches {100 * ba[-1]:.0f} percent and best-of-N "
                      f"{100 * bo[-1]:.0f}.")
         ends = VGroup(Dot(g.ax.c2p(lw[-1], ba[-1]), radius=0.1, color=SEARCH),
                       Dot(g.ax.c2p(lN[-1], bo[-1]), radius=0.1, color=PRM_C))
         with self.voiceover(
-            "Is search worth it? Compare it with best-of-N, using the same grader and the same number of tokens. "
+            "Is search worth it? Compare these recipes using the same grader at matching width settings. "
             "<bookmark mark='a'/> Best-of-N samples N whole chains and keeps the one the grader likes best. "
-            f"<bookmark mark='b'/> Beam search spends the same tokens step by step. <bookmark mark='c'/> {said} "
+            f"<bookmark mark='b'/> Beam search proposes candidates step by step. Actual token and compute costs "
+            f"were not matched. <bookmark mark='c'/> {said} "
             f"<bookmark mark='d'/> {trend}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))

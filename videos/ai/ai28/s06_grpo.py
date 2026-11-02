@@ -183,18 +183,17 @@ class GRPO(VoiceoverScene):
         allv = np.concatenate(list(hs.values()))
         lo, hi = float(np.percentile(allv, 1)), float(np.percentile(allv, 99))
         lo, hi = min(lo, -0.5), max(hi, exact * 2)
-        bins = np.linspace(lo, hi, 41)
+        bins = np.unique(np.r_[np.linspace(lo, hi, 41), 0.0])
         panels = VGroup()
         for i, k in enumerate(("k1", "k2", "k3")):
             h, _ = np.histogram(np.clip(hs[k], lo, hi), bins)
             h = h / h.max()
             ax = axes_box([lo, hi], [0, 1], 6.4, 1.3, [-2.2, 2.0 - 1.95 * i, 0])
-            bw = ax.x_length / (len(bins) - 1)
-            bars = VGroup(*[Rectangle(width=bw * 0.9, height=max(1.3 * v, 0.005), stroke_width=0, fill_color=KLC,
-                                      fill_opacity=0.85).move_to(ax.c2p((a + b) / 2, 0), aligned_edge=DOWN)
+            bars = VGroup(*[Rectangle(width=0.9 * ax.x_length * (b - a) / (hi - lo),
+                                      height=max(1.3 * v, 0.005), stroke_width=0,
+                                      fill_color=WRONG_C if b <= 0 else KLC,
+                                      fill_opacity=0.85 if v > 0 else 0.0).move_to(ax.c2p((a + b) / 2, 0), aligned_edge=DOWN)
                             for v, a, b in zip(h, bins[:-1], bins[1:])])
-            neg = VGroup(*[b for b, a in zip(bars, bins[:-1]) if a < 0])
-            neg.set_fill(WRONG_C)
             z = DashedLine(ax.c2p(0, 0), ax.c2p(0, 1.05), color=GREY_C, stroke_width=1.5, dash_length=0.05)
             ex = Line(ax.c2p(exact, 0), ax.c2p(exact, 1.15), color=WHITE, stroke_width=3)
             name = MathTex(rf"k_{i + 1}", font_size=34, color=KLC).next_to(ax, LEFT, buff=0.3)
@@ -202,12 +201,22 @@ class GRPO(VoiceoverScene):
                        rf"negative ${100 * float(e[k + '_neg']):.0f}\%$", font_size=20, color=GREY_A)
             st.next_to(ax, RIGHT, buff=0.35)
             panels.add(VGroup(ax, bars, z, ex, name, st))
-        xl = label(r"one sample's estimate \ (nats)", font_size=20, color=GREY_A).next_to(panels, DOWN, buff=0.15)
+        x_ticks = VGroup()
+        tick_step = max(1, int(np.ceil((hi - lo) / 5)))
+        for tick in np.arange(np.ceil(lo / tick_step) * tick_step, hi + 1e-9, tick_step):
+            pos = panels[2][0].c2p(tick, 0)
+            mark = Line(pos, pos + DOWN * 0.05, color=GREY_C, stroke_width=1)
+            number = MathTex(str(int(tick)), font_size=16, color=GREY_B).next_to(mark, DOWN, buff=0.05)
+            x_ticks.add(VGroup(mark, number))
+        panels[2].add(x_ticks)
+        xl = label(r"estimates \ (nats); \ each panel scaled separately; \ tails folded into edge bins",
+                   font_size=18, color=GREY_A).next_to(panels, DOWN, buff=0.15)
         xl.align_to(panels[2][0], RIGHT)
         el = label(rf"white: \ the exact KL, \ ${exact:.3f}$ nats per answer", font_size=20, color=WHITE)
         el.to_edge(UP, buff=0.25).shift(LEFT * 2.2)
-        tag = note(rf"computed: \ the model after chapter four's training, \ against its start; \ "
-                   rf"${int(e['n'])}$ samples on each of $200$ questions").to_corner(DR, buff=0.2)
+        tag = note(rf"computed: \ chapter four's model against its start; \ $200$ questions \\ "
+                   rf"summary statistics: \ ${int(e['n'])}$/question; \ "
+                   rf"histograms: \ ${min(16, int(e['n']))}$/question").to_corner(DR, buff=0.2)
         k1s, k2s, k3s = float(e["k1_sd"]), float(e["k2_sd"]), float(e["k3_sd"])
         k1m, k3m = float(e["k1_mean"]), float(e["k3_mean"])
         k2b = float(e["k2_mean"]) - exact
@@ -220,13 +229,13 @@ class GRPO(VoiceoverScene):
             k1_said = (f"k one averages {k1m:.3f}; {k1n:.0f} percent of its estimates are negative, and its spread "
                        f"is {k1s:.2f}.")
         if k2b > 0:
-            k2_said = (f"k two, half the squared log ratio, is never negative, with spread {k2s:.2f}, but biased: on "
-                       f"average {k2b:.3f} too high.")
+            k2_said = (f"k two, half the squared log ratio, is never negative, with spread {k2s:.2f}, but generally biased: its "
+                       f"sample mean is {k2b:.3f} above the exact KL.")
         else:
-            k2_said = (f"k two, half the squared log ratio, is never negative, with spread {k2s:.2f}, but biased: on "
-                       f"average {-k2b:.3f} too low.")
+            k2_said = (f"k two, half the squared log ratio, is never negative, with spread {k2s:.2f}, but generally biased: its "
+                       f"sample mean is {-k2b:.3f} below the exact KL.")
         if near(k3m):
-            k3_said = f"k three is never negative, averages {k3m:.3f}, on the truth, and its spread is {k3s:.2f}."
+            k3_said = f"k three is never negative, averages {k3m:.3f}, close to the exact KL, and its spread is {k3s:.2f}."
         else:
             k3_said = f"k three is never negative, averages {k3m:.3f}, and its spread is {k3s:.2f}."
         with self.voiceover(
@@ -238,7 +247,7 @@ class GRPO(VoiceoverScene):
             "of its gradient. Put straight into the loss, as GRPO does, k three pulls in a slightly different "
             "direction, and recent recipes often drop the term altogether."
         ) as vo:
-            self.play(FadeIn(el), FadeIn(tag), *[FadeIn(p_[0]) for p_ in panels], *[FadeIn(p_[2:5]) for p_ in panels])
+            self.play(FadeIn(el), FadeIn(tag), FadeIn(x_ticks), *[FadeIn(p_[0]) for p_ in panels], *[FadeIn(p_[2:5]) for p_ in panels])
             for i, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in panels[i][1]], lag_ratio=0.01),
