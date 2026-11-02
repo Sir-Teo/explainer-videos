@@ -342,3 +342,63 @@ def test_simulation_library():
     p = np.random.default_rng(7).standard_normal((50, 3)).cumsum(axis=0)
     s = sim.signature2(p)
     assert np.allclose((s["S2"] + s["S2"].T) / 2, np.outer(s["S1"], s["S1"]) / 2)
+
+
+def test_econometrics_module():
+    from explainer.quant.house import econ
+
+    rng = np.random.default_rng(0)
+    # OLS recovers coefficients; NW on overlapping sums inflates the SE roughly by sqrt(horizon)
+    x = rng.standard_normal(3000)
+    y = 1 + 2 * x + rng.standard_normal(3000)
+    r = econ.ols(y, x)
+    assert r["beta"] == pytest.approx([1, 2], abs=0.06)
+    e = rng.standard_normal(3000)
+    h = 12
+    yo = np.convolve(e, np.ones(h), "valid")
+    xo = np.convolve(rng.standard_normal(3000), np.ones(h), "valid")
+    naive = econ.ols(yo, xo)["se"][1]
+    nw = econ.ols(yo, xo, se="nw", lags=2 * h)["se"][1]
+    assert nw / naive > 2.0
+    # clustering by a common shock within groups widens the SE
+    g = np.repeat(np.arange(100), 30)
+    shock = np.repeat(rng.standard_normal(100), 30)
+    xc = np.repeat(rng.standard_normal(100), 30) + 0.1 * rng.standard_normal(3000)
+    yc = shock + rng.standard_normal(3000)
+    assert econ.ols(yc, xc, se="cluster", groups=g)["se"][1] > 3 * econ.ols(yc, xc)["se"][1]
+    # Fama-MacBeth on a panel with a true slope of 0.5
+    Xp = rng.standard_normal((200, 50))
+    Yp = 0.5 * Xp + rng.standard_normal((200, 50)) + rng.standard_normal((200, 1))
+    fm = econ.fama_macbeth(Yp, Xp)
+    assert fm["beta"][1] == pytest.approx(0.5, abs=0.05)
+    # bootstraps are centred on the statistic
+    z = rng.standard_normal(600)
+    bs1 = econ.moving_block_bootstrap(z, np.mean, block=12, B=500)
+    bs2 = econ.stationary_bootstrap(z, np.mean, mean_block=12, B=300)
+    assert abs(bs1.mean() - z.mean()) < 0.02 and abs(bs2.mean() - z.mean()) < 0.03
+    assert bs1.std() == pytest.approx(1 / np.sqrt(600), rel=0.25)
+    # Sharpe standard error and years to significance
+    assert econ.sharpe_se(0.0, 100) == pytest.approx(0.1)
+    assert econ.years_to_significance(0.5) == pytest.approx(16.0)
+    # multiple testing: BH rejects at least what Holm rejects, Holm at least Bonferroni
+    p = np.concatenate([rng.uniform(0, 0.002, 10), rng.uniform(0, 1, 90)])
+    b, ho, bh = econ.bonferroni(p), econ.holm(p), econ.benjamini_hochberg(p)
+    assert b.sum() <= ho.sum() <= bh.sum() and bh[:10].all()
+    # Stambaugh: simulated mean bias near the formula
+    sims = econ.simulate_predictive(120, 0.95, -0.9, n=1500, seed=1)
+    assert sims.mean() == pytest.approx(econ.stambaugh_bias(0.95, -0.9, 1.0, 120), rel=0.35)
+    # GMM: the mean and variance of a normal sample, overidentified with the third moment
+    w = rng.normal(1.0, 2.0, 4000)
+    mom = lambda th: np.column_stack([w - th[0], (w - th[0]) ** 2 - th[1], (w - th[0]) ** 3])  # noqa: E731
+    gm = econ.gmm(mom, [0.0, 1.0])
+    assert gm["theta"] == pytest.approx([1.0, 4.0], rel=0.08) and gm["p_J"] > 0.01
+    # double ML recovers a planted effect where naive OLS is biased
+    n = 3000
+    Xd = rng.uniform(-2, 2, (n, 2))
+    d = np.sin(2 * Xd[:, 0]) + Xd[:, 1] ** 2 + rng.standard_normal(n)
+    yd = 0.5 * d + 2 * np.sin(2 * Xd[:, 0]) + Xd[:, 1] ** 2 + rng.standard_normal(n)
+    dm = econ.dml_plr(yd, d, Xd)
+    assert dm["theta"] == pytest.approx(0.5, abs=0.08) and abs(dm["naive"] - 0.5) > 0.2
+    # shrinkage pulls noisy means toward the grand mean
+    sh = econ.shrink_means(rng.normal(0.01, 0.002, 30) + rng.normal(0, 0.01, 30), np.full(30, 0.01))
+    assert np.var(sh["shrunk"]) < 0.5 * np.var(sh["shrunk"] / sh["shrunk"] * 0 + rng.normal(0, 0.01, 30)) + 1

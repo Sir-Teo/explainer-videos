@@ -385,11 +385,8 @@ def shiller(through: str = "2020-12") -> dict:
             "cape": a[:, 6]}
 
 
-def ken_french_sorts(name: str, through: str = "2020-12", weighting: str = "value") -> dict:
-    """Monthly returns (decimal) of the portfolios in Kenneth French's ``Portfolios_Formed_on_<name>`` file: ``date``
-    (YYYYMM ints), ``columns`` (the file's portfolio names) and ``returns`` (months x portfolios), from the first
-    (value-weighted) or second (equal-weighted) monthly block, through ``through``."""
-    fn = f"Portfolios_Formed_on_{name}_CSV.zip"
+def _kf_monthly(fn: str, key: str, through: str, weighting: str) -> dict:
+    """The first (value-weighted) or second (equal-weighted) monthly block of one of Kenneth French's CSV files."""
     path = DATA / "kenfrench" / fn
     if not path.exists():
         _atomic_write(path, _get(f"{KF}/{fn}"))
@@ -415,8 +412,29 @@ def ken_french_sorts(name: str, through: str = "2020-12", weighting: str = "valu
     a = a[a[:, 0] <= int(through.replace("-", ""))]
     a[:, 1:] = np.where(a[:, 1:] <= -99.99, np.nan, a[:, 1:] / 100)
     frozen = json.dumps(np.nan_to_num(a, nan=-1).round(8).tolist(), separators=(",", ":")).encode()
-    _check(f"kenfrench/{name}_{weighting}/through_{through}", frozen, f"{KF}/{fn}")
+    _check(f"kenfrench/{key}_{weighting}/through_{through}", frozen, f"{KF}/{fn}")
     return {"date": a[:, 0].astype(int), "columns": b["header"], "returns": a[:, 1:]}
+
+
+def ken_french_sorts(name: str, through: str = "2020-12", weighting: str = "value") -> dict:
+    """Monthly returns (decimal) of the portfolios in Kenneth French's ``Portfolios_Formed_on_<name>`` file: ``date``
+    (YYYYMM ints), ``columns`` (the file's portfolio names) and ``returns`` (months x portfolios), from the first
+    (value-weighted) or second (equal-weighted) monthly block, through ``through``."""
+    return _kf_monthly(f"Portfolios_Formed_on_{name}_CSV.zip", name, through, weighting)
+
+
+def ken_french_industries(n: int = 49, through: str = "2020-12", weighting: str = "value") -> dict:
+    """Monthly returns of Kenneth French's ``n`` industry portfolios (5, 10, 12, 17, 30, 38, 48 or 49), as
+    :func:`ken_french_sorts`."""
+    return _kf_monthly(f"{n}_Industry_Portfolios_CSV.zip", f"industries{n}", through, weighting)
+
+
+def ken_french_factors_monthly(through: str = "2020-12") -> dict:
+    """Monthly Fama-French three factors and the riskless rate (decimal): ``date`` (YYYYMM), ``mkt_rf``, ``smb``, ``hml``,
+    ``rf``."""
+    k = _kf_monthly("F-F_Research_Data_Factors_CSV.zip", "ff3_monthly", through, "value")
+    r = k["returns"]
+    return {"date": k["date"], "mkt_rf": r[:, 0], "smb": r[:, 1], "hml": r[:, 2], "rf": r[:, 3]}
 
 
 # ---------------------------------------------------------------------------
