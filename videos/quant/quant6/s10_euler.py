@@ -183,7 +183,7 @@ class Euler(VoiceoverScene, ThreeDScene):
             "in a world where gamma is two. <bookmark mark='b'/> The J test, though, is informative: in these true "
             f"worlds it exceeds its five percent critical value only {100 * mc['rej_J']:.1f} percent of the time, "
             f"and never reaches more than {max(mc['J']):.0f}. The real data's J is {g['J']:.0f}, "
-            + beyond)
+            + beyond
         ) as vo:
             self.play(FadeIn(gax), Create(truth), FadeIn(side[0]), FadeIn(side[1]))
             self.add(hb, cnt)

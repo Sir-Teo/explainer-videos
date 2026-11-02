@@ -509,3 +509,267 @@ def compute_arbitrage() -> dict:
                   "cross_w0": smile.svi_total_variance(kc, *(p0["svi"][x] for x in ("a", "b", "rho", "m", "s"))),
                   "cross_w1": smile.svi_total_variance(kc, *(p1["svi"][x] for x in ("a", "b", "rho", "m", "s"))),
                   "violations": viol, "n_expiries": len(per)})
+
+
+def _sub(n, m=40):
+    """At most m indices out of n, always including the first and the last."""
+    return sorted(set(np.linspace(0, n - 1, min(n, m)).round().astype(int).tolist()))
+
+
+def compute_svi_replay() -> dict:
+    from scipy import optimize
+
+    s = load("surface")
+    per = [p for p in s["per"] if p["expiry"] == "2026-01-30"][0]
+    k, iv, T = np.asarray(per["k"]), np.asarray(per["iv"]), per["T"]
+    w = iv ** 2 * T
+    lo = [-w.max(), 1e-6, -0.999, -1.0, 1e-3]
+    hi = [w.max() * 2, 2.0 / (1 + 0.999), 0.999, 1.0, 2.0]
+    runs = []
+    for seed in range(6):
+        g = np.random.default_rng(seed)
+        p0 = [max(w.min() * 0.5, 1e-4) * g.uniform(0.2, 2), g.uniform(0.02, 0.3), g.uniform(-0.8, 0.8),
+              g.uniform(-0.3, 0.3), g.uniform(0.05, 0.6)]
+        path, rm = [], []
+
+        def resid(p):
+            path.append(np.array(p, float))
+            rm.append(float(np.sqrt(np.mean((np.sqrt(np.maximum(smile.svi_total_variance(k, *p), 1e-12) / T) - iv) ** 2)) * 100))
+            return smile.svi_total_variance(k, *p) - w
+        r = optimize.least_squares(resid, p0, bounds=(lo, hi), max_nfev=4000)
+        keep = _sub(len(path))
+        runs.append({"p0": p0, "p": r.x, "nfev": int(r.nfev), "rmse": rm, "path": np.array(path)[keep], "path_i": keep,
+                     "first": rm[0], "final": rm[-1]})
+    best = min(runs, key=lambda x: x["final"])
+    table = []
+    for p in s["per"]:
+        jw = V.svi_jw(p["svi"], p["T"])
+        table.append({"expiry": p["expiry"], "days": p["T"] * 365, "n": p["n"], **{x: jw[x] for x in jw},
+                      "g_min": p["g_min"], "rmse": float(np.sqrt(np.mean((smile.svi_iv(p["svi"], np.asarray(p["k"]), p["T"])
+                                                                            - np.asarray(p["iv"])) ** 2)) * 100)})
+    bp = dict(zip(("a", "b", "rho", "m", "s"), best["p"]))
+    return _json({"k": k, "iv": iv, "T": T, "expiry": per["expiry"], "runs": runs, "best": bp,
+                  "best_rmse": best["final"], "jw_best": V.svi_jw(bp, T), "table": table,
+                  "nfev": [r_["nfev"] for r_ in runs], "first": [r_["first"] for r_ in runs],
+                  "final": [r_["final"] for r_ in runs], "spread": float(np.ptp([r_["p"] for r_ in runs], axis=0).max())})
+
+
+def compute_ssvi_replay() -> dict:
+    s = load("surface")
+    q = surface.build(surface.DAYS[0])
+    k, T, iv, vg = (np.asarray(q[x]) for x in ("k", "T", "iv", "vega"))
+    ok = (np.abs(k) < 0.6) & (T > 2 / 365)
+    k, T, iv, vg = k[ok], T[ok], iv[ok], vg[ok]
+    w = iv ** 2 * T
+    runs = []
+    base = V.fit_ssvi_path(k, T, w, weights=vg)
+    x_default = None
+    for seed in range(5):
+        if seed == 0:
+            r = base
+        else:
+            g = np.random.default_rng(seed)
+            nT = len(np.unique(T))
+            x0 = np.concatenate([[g.uniform(-1.5, 1.0), g.uniform(-1.0, 1.0), g.uniform(-2, 2)],
+                                 np.log(np.full(nT, g.uniform(0.002, 0.03)))])
+            r = V.fit_ssvi_path(k, T, w, weights=vg, x0=x0)
+        Ts = r["T"]
+
+        def vrmse(pv):
+            th = pv[3:][np.searchsorted(Ts, T)]
+            m = np.sqrt(V.ssvi_w(k, th, pv[0], pv[1], pv[2]) / T)
+            return float(np.sqrt(np.sum(vg * (m - iv) ** 2) / np.sum(vg)) * 100)
+        loss = [vrmse(pv) for pv in r["path"]]
+        keep = _sub(len(loss), 30)
+        runs.append({"loss": loss, "frames": r["path"][keep], "frames_i": keep, "final": loss[-1], "nfev": r["nfev"],
+                     "rho": r["rho"], "eta": r["eta"], "gamma": r["gamma"]})
+    fit = s["ssvi"]
+    per_rmse = []
+    for p in s["per"]:
+        kp, ivp = np.asarray(p["k"]), np.asarray(p["iv"])
+        m = np.abs(kp) < 0.6
+        a = float(np.sqrt(np.mean((smile.svi_iv(p["svi"], kp[m], p["T"]) - ivp[m]) ** 2)) * 100)
+        b_ = float(np.sqrt(np.mean((_ssvi_iv(fit, kp[m], p["T"]) - ivp[m]) ** 2)) * 100)
+        per_rmse.append({"expiry": p["expiry"], "days": p["T"] * 365, "svi": a, "ssvi": b_})
+    bound = V.ssvi_butterfly_bound(fit)
+    th = np.asarray(fit["theta"])
+    return _json({"runs": runs, "Ts": base["T"], "k": k, "T": T, "iv": iv, "fit": {x: fit[x] for x in ("rho", "eta", "gamma")},
+                  "theta": th, "rmse": s["rmse_ssvi"], "bound": bound, "theta_min": float(th.min()),
+                  "eta_rho": float(fit["eta"] * (1 + abs(fit["rho"]))), "per_rmse": per_rmse,
+                  "n_par_ssvi": 3 + len(th), "n_par_svi": 5 * len(s["per"]), "g_min": s["g_ssvi_min"],
+                  "finals": [r_["final"] for r_ in runs]})
+
+
+def compute_bbf() -> dict:
+    s = load("surface")
+    lv = load("localvol")
+    lk, LT, LL = np.asarray(lv["k"]), np.asarray(lv["T"]), np.asarray(lv["lv"])
+    fit = s["ssvi"]
+    j = int(np.argmin(np.abs(lk)))
+    out = []
+    for i, T_ in enumerate(LT):
+        dl = (LL[i, j + 1] - LL[i, j - 1]) / (lk[j + 1] - lk[j - 1])
+        di = float((_ssvi_iv(fit, 0.02, T_) - _ssvi_iv(fit, -0.02, T_)) / 0.04)
+        out.append({"days": T_ * 365, "local": float(dl), "implied": di, "ratio": float(dl / di)})
+    # the implied and local surfaces on one grid, for the 3D picture
+    ks = np.linspace(-0.4, 0.4, 21)
+    Ts = np.linspace(7, 180, 16) / 365
+    f = lambda kq, T: V.ssvi_surface_w(fit, kq, T)  # noqa: E731
+    imp = np.array([[float(_ssvi_iv(fit, kq, T)) for kq in ks] for T in Ts])
+    loc = np.zeros_like(imp)
+    for i, T in enumerate(Ts):
+        w, dw, d2w, dT = V.numeric_derivs(f, ks, T, h=2e-3, hT=2e-3)
+        loc[i] = np.sqrt(np.maximum(V.dupire_local_var(ks, w, dw, d2w, dT), 1e-6))
+    gk = np.linspace(-0.6, 0.6, 121)
+    lab = {}
+    for days in (7, 30, 90):
+        T = days / 365
+        w, dw, d2w, dT = V.numeric_derivs(f, gk, T, h=2e-3, hT=2e-3)
+        g = V.g_function(gk, w, dw, d2w)
+        lab[str(days)] = {"g_min": float(g.min()), "loc_atm": float(np.sqrt(V.dupire_local_var(0.0, *(x[60] for x in (w, dw, d2w, dT))))),
+                          "imp_atm": float(_ssvi_iv(fit, 0.0, T))}
+    return _json({"rows": out, "ratios": [r["ratio"] for r in out], "ks": ks, "Ts": Ts, "imp": imp, "loc": loc,
+                  "lab": lab})
+
+
+def compute_dk_tree() -> dict:
+    from explainer.quant.house import trees
+
+    fit = load("surface")["ssvi"]
+    iv = lambda K, t: float(np.sqrt(V.ssvi_surface_w(fit, np.log(K), t) / t))  # noqa: E731
+    T, N = 0.25, 40
+    tr = trees.derman_kani(1.0, T, N, iv)
+    kk = np.linspace(-0.3, 0.3, 13)
+    pt = trees.tree_price(tr, np.exp(kk))
+    ivt = np.array([bs.implied_vol(p, 1.0, np.exp(x), T, 0.0, 0.0, 1) for p, x in zip(pt, kk)])
+    tgt = np.array([iv(np.exp(x), T) for x in kk])
+    # node local vols against Dupire's at the same place, mid-tree
+    lvf = V.local_vol_fn(fit)
+    n_mid = N // 2
+    S_mid = np.asarray(tr["nodes"][n_mid])
+    lv_tree = np.asarray(tr["local_vol"][n_mid])
+    x_mid = np.log(np.sqrt(S_mid[:-1] * S_mid[1:]))
+    lv_dup = np.array([float(lvf(np.array([x]), (n_mid + 0.5) * tr["dt"])[0]) for x in x_mid])
+    m = np.abs(x_mid) < 0.25
+    small = trees.derman_kani(1.0, T, 6, iv)  # a six-step tree to draw
+    return _json({"nodes": tr["nodes"], "lv": tr["local_vol"], "p": tr["p"], "fixes": tr["fixes"], "N": N, "T": T,
+                  "k": kk, "iv_tree": ivt, "iv_surface": tgt, "err_volpts": (ivt - tgt) * 100,
+                  "max_err": float(np.max(np.abs(ivt - tgt)[np.abs(kk) <= 0.2]) * 100),
+                  "x_mid": x_mid[m], "lv_tree_mid": lv_tree[m], "lv_dupire_mid": lv_dup[m],
+                  "lv_gap": float(np.median(np.abs(lv_tree[m] - lv_dup[m])) * 100),
+                  "small": {"nodes": small["nodes"], "p": small["p"], "lv": small["local_vol"]}})
+
+
+HESTON = {"v0": 0.25, "kappa": 3.0, "theta": 0.30, "xi": 1.2, "rho": -0.3}
+
+
+def compute_gyongy() -> dict:
+    from explainer.quant.house import stochvol as SV
+
+    p = HESTON
+    T = 0.25
+    cf = lambda u, t: SV.heston_cf(u, t, p["v0"], p["kappa"], p["theta"], p["xi"], p["rho"])  # noqa: E731
+    ks = np.linspace(-0.5, 0.5, 21)
+
+    def w_of(k, t):
+        return SV.model_iv(cf, 1.0, np.exp(np.atleast_1d(k)), t) ** 2 * t
+    h, hT = 0.02, 0.005
+    dup = []
+    for kq in ks:
+        w0 = w_of(kq, T)[0]
+        wp, wm = w_of(kq + h, T)[0], w_of(kq - h, T)[0]
+        wt1, wt0 = w_of(kq, T + hT)[0], w_of(kq, T - hT)[0]
+        lvar = V.dupire_local_var(kq, w0, (wp - wm) / (2 * h), (wp - 2 * w0 + wm) / h ** 2, (wt1 - wt0) / (2 * hT))
+        dup.append(float(np.sqrt(max(lvar, 1e-8))))
+    S, vs = SV.heston_qe(1.0, p["v0"], p["kappa"], p["theta"], p["xi"], p["rho"], T, 90, 100000, seed=1, return_v=True)
+    x, v = np.log(S[-1]), vs[-1]
+    cond = np.sqrt(V.conditional_variance(x, v, ks, width=0.025))
+    g = np.random.default_rng(2)
+    pick = g.choice(len(x), 1500, replace=False)
+    fan = np.log(S[::3, :40]).T
+    vfan = vs[::3, :40].T
+    ok = np.isfinite(cond)
+    return _json({"params": p, "T": T, "k": ks, "dupire": dup, "cond": cond, "gap": np.abs(np.array(dup) - cond),
+                  "max_gap": float(np.nanmax(np.abs(np.array(dup)[ok] - cond[ok])) * 100),
+                  "cloud_x": x[pick], "cloud_v": v[pick], "fan_x": fan, "fan_v": vfan, "n_paths": 100000, "steps": 90,
+                  "implied": np.sqrt(w_of(ks, T) / T)})
+
+
+def _mc_iv(x, T, ks):
+    """Implied vols of out-of-the-money options on simulated log prices x (forward 1)."""
+    S = np.exp(x)
+    out = []
+    for k in ks:
+        cp = 1 if k >= 0 else -1
+        c = np.mean(np.maximum(cp * (S - np.exp(k)), 0))
+        out.append(float(bs.implied_vol(c, 1.0, np.exp(k), T, 0.0, 0.0, cp)))
+    return np.array(out)
+
+
+def compute_lv_mc() -> dict:
+    """Local-volatility Monte Carlo on the Surface (40,000 paths, 120 days): repricing of the quotes, the convergence of
+    one smile with the number of paths, forward 30-day smiles starting 0-90 days out, and the smile after a spot move
+    (Berestycki-Busca-Florent's average of local vol along the line)."""
+    s = load("surface")
+    fit = s["ssvi"]
+    X = V.local_vol_paths(fit, 120, 40000, seed=7)
+    ks = np.linspace(-0.3, 0.3, 13)
+    K_, T_, iv_, k_ = (np.asarray(s[x]) for x in ("K", "T", "iv", "k"))
+    rep = []
+    for e in s["per"]:
+        days = int(round(e["T"] * 365))
+        if days < 7 or days > 120:
+            continue
+        m = (np.abs(k_ - 0) < 0.6) & (np.abs(T_ - e["T"]) < 1e-9)
+        xT = X[days]
+        mc_q = _mc_iv(xT, days / 365, k_[m])
+        ssvi_q = np.asarray(_ssvi_iv(fit, k_[m], e["T"]))
+        ok = np.isfinite(mc_q)
+        rep.append({"expiry": e["expiry"], "days": days, "k": k_[m], "quote": iv_[m], "mc": mc_q, "ssvi": ssvi_q,
+                    "rmse_quote": float(np.sqrt(np.mean((mc_q[ok] - iv_[m][ok]) ** 2)) * 100),
+                    "rmse_ssvi": float(np.sqrt(np.mean((mc_q[ok] - ssvi_q[ok]) ** 2)) * 100),
+                    "smile_k": ks, "smile_mc": _mc_iv(xT, days / 365, ks),
+                    "smile_ssvi": np.asarray(_ssvi_iv(fit, ks, days / 365))})
+    conv = {}
+    d51 = 51
+    for n in (500, 2000, 8000, 40000):
+        conv[str(n)] = _mc_iv(X[d51, :n], d51 / 365, ks)
+    fwd = {}
+    for start in (0, 15, 30, 60, 90):
+        r = X[start + 30] - X[start]
+        fwd[str(start)] = _mc_iv(r, T30, ks)
+    skews = {k_s: float(v[ks == -0.1][0] - v[ks == 0.1][0]) if (np.isclose(ks, -0.1).any()) else None for k_s, v in fwd.items()}
+    # the smile after a spot move, under local vol (BBF: the harmonic mean of local vol between spot and strike at
+    # mid-life) and under the two sticky rules
+    lvf = V.local_vol_fn(fit)
+    shifts = np.linspace(-0.08, 0.08, 9)
+    kk = np.linspace(-0.3, 0.3, 25)  # strikes, as log(K/F0)
+    tm = 15 / 365
+    u = np.linspace(-1.0, 1.0, 801)
+    lu = lvf(u, tm)
+
+    def bbf(x0, xk):
+        if abs(xk - x0) < 1e-6:
+            return float(np.interp(x0, u, lu))
+        g = np.linspace(x0, xk, 101)
+        return float(1 / np.mean(1 / np.interp(g, u, lu)))
+    today = np.array([bbf(0.0, x) for x in kk])
+    move = {"lv": [], "strike": [], "moneyness": []}
+    atm = {"lv": [], "strike": [], "moneyness": []}
+    sm = np.asarray(_ssvi_iv(fit, kk, T30))
+    for sh in shifts:
+        lvs_ = np.array([bbf(sh, x) for x in kk])
+        move["lv"].append(lvs_)
+        move["strike"].append(sm)  # a fixed strike keeps its vol
+        move["moneyness"].append(np.asarray(_ssvi_iv(fit, kk - sh, T30)))
+        atm["lv"].append(bbf(sh, sh))
+        atm["strike"].append(float(_ssvi_iv(fit, sh, T30)))
+        atm["moneyness"].append(float(_ssvi_iv(fit, 0.0, T30)))
+    sk_bbf = (today[kk.tolist().index(min(kk, key=lambda z: abs(z - 0.05)))] - today[kk.tolist().index(min(kk, key=lambda z: abs(z + 0.05)))]) / 0.1
+    slope_lv = float(np.polyfit(shifts, atm["lv"], 1)[0])
+    return _json({"rep": rep, "rmse_quote": [r["rmse_quote"] for r in rep], "rmse_ssvi": [r["rmse_ssvi"] for r in rep],
+                  "conv": conv, "ks": ks, "conv_ssvi": np.asarray(_ssvi_iv(fit, ks, d51 / 365)), "fwd": fwd,
+                  "fwd_skew": skews, "today30": np.asarray(_ssvi_iv(fit, ks, T30)),
+                  "today_skew": float(_ssvi_iv(fit, -0.1, T30) - _ssvi_iv(fit, 0.1, T30)),
+                  "shifts": shifts, "kk": kk, "move": move, "atm": atm, "bbf_today": today,
+                  "R_lv": slope_lv / float(sk_bbf), "skew_bbf": float(sk_bbf), "slope_lv": slope_lv})

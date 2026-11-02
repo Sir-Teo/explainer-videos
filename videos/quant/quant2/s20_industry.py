@@ -138,8 +138,8 @@ class Industry(VoiceoverScene):
         c2 = firm_card(r"Regulators", r"SEC: Rule 612, Treasury clearing (cash trades by 31 December 2026, repo by 30 "
                        r"June 2027). FCA: the LME fine. SEBI: F\&O studies; on 3 July 2025 an \textit{interim} order "
                        r"against Jane Street \textit{alleging} manipulation of index options around expiries, with "
-                       r"Rs\,4,843.57 crore impounded into escrow. Jane Street disputes the findings; no final order "
-                       r"has been issued.", numbers=[], source=r"SEC; FCA final notice (March 2025); SEBI interim order "
+                       r"Rs\,4,843.57 crore impounded into escrow. Jane Street disputes the findings; the case is "
+                       r"pending.", numbers=[], source=r"SEC; FCA final notice (March 2025); SEBI interim order "
                        r"(3 July 2025)", width=6.2, font_size=19)
         pair = VGroup(c1, c2).arrange(RIGHT, buff=0.3, aligned_edge=UP)
         with self.voiceover(
@@ -151,7 +151,7 @@ class Industry(VoiceoverScene):
             "cash trades by the end of 2026 and repo by mid-2027. India's SEBI issued an interim order in July 2025 "
             "alleging that Jane Street manipulated index options around expiry days, and impounded four thousand "
             "eight hundred and forty-three crore rupees in escrow. Those are allegations in an interim order; Jane "
-            "Street disputes them, and no final order has been issued."
+            "Street disputes them, and the case is pending."
         ) as vo:
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")

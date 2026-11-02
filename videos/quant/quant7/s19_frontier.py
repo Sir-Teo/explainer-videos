@@ -121,7 +121,7 @@ class Frontier(VoiceoverScene):
         red = label(r"red: what happened on 13 March", font_size=18, color=BAD).next_to(cap, UP, buff=0.15)
         with self.voiceover(
             "None of the published models is installed here, so the House built a toy one the same way, small enough "
-            "to train on a laptop's processor. Its corpus is synthetic: volatility-like series from four families, "
+            "to train on an ordinary processor. Its corpus is synthetic: volatility-like series from four families, "
             "autoregressions, HAR processes, regime switches and GARCH paths, with random parameters. It never sees a "
             "market. <bookmark mark='a'/> Watch it learn, three seeds. On the left, its forecast distribution for the "
             "thirteenth of March 2020, the day after the crash, read from the sixty-four days before it, at each "
@@ -212,7 +212,7 @@ class Frontier(VoiceoverScene):
             "foundation models zero-shot against eight econometric ones on fifty assets. Here is one row of his "
             "results, the day-ahead loss of each model relative to log-HAR, averaged over assets, as published. "
             "<bookmark mark='a'/> Only IBM's Tiny Time Mixers, a model of about a million parameters, beats log-HAR, "
-            "and narrowly. Chronos-Bolt and TimesFM are ten percent worse. <bookmark mark='b'/> Much of the edge that "
+            "and narrowly. Chronos-Bolt and TimesFM are about nine to twelve percent worse. <bookmark mark='b'/> Much of the edge that "
             "remains disappears after a Mincer-Zarnowitz recalibration, and the best forecast is an average of TTM and "
             "log-HAR. His conclusion: the choice of architecture matters more than the choice between foundation and "
             "econometric models. One more caveat: a pretrained model's corpus may contain the very years it is tested "

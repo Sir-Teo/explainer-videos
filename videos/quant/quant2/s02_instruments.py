@@ -72,7 +72,7 @@ class Instruments(VoiceoverScene):
         days = np.arange(0, 366)
         accrued = COUPON / 2 * ((days % 182.5) / 182.5)
         dirty = CLEAN + accrued
-        g = axes([0, 365], [97.5, 102.0], x_length=7.4, y_length=4.0, xlabel=r"days held",
+        g = axes([0, 365], [97.5, 102.0], x_length=6.0, y_length=4.0, xlabel=r"days held",
                  ylabel=r"price per 100 of face", xticks=[0, 182, 365], yticks=[98, 100, 102], font_size=18)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
         ax = g.ax
@@ -92,8 +92,8 @@ class Instruments(VoiceoverScene):
             r_.scale(0.9)
         stack = VGroup(rows[0], whys[0], rows[1], whys[1]).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         stack.next_to(leg, DOWN, buff=0.45).to_edge(RIGHT, buff=0.35)
-        if stack.width > 5.9:
-            stack.scale_to_fit_width(5.9).to_edge(RIGHT, buff=0.35)
+        if stack.width > 5.5:
+            stack.scale_to_fit_width(5.5).to_edge(RIGHT, buff=0.35)
         q = desk_question(r"The clean price hasn't moved for a month. Did the holder earn anything?",
                           r"yes: a month of accrued interest, about 0.4 per 100 on this bond", width=6.0,
                           font_size=22).to_corner(DR, buff=0.3)

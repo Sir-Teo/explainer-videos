@@ -39,12 +39,10 @@ class Hook(VoiceoverScene):
             label(r"Many over-bet, some bet erratically, some even bet on tails.", font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(q, DOWN, buff=0.6)
         with self.voiceover(
-            "Here is a game. You are given twenty-five dollars and a coin that lands heads sixty percent of the time. "
-            "For half an hour you may bet as much as you like, on either side, at even odds, as often as you like. "
-            "Your winnings are capped at two hundred and fifty dollars. How much do you bet? <bookmark mark='a'/> In "
-            "2016 Victor Haghani and Richard Dewey gave this game to sixty-one young people trained in finance and "
-            "economics. The edge is enormous, and still about thirty percent of them went bust. Many bet too much; "
-            "some even bet on tails."
+            "Here is a game. You get twenty-five dollars and a coin that lands heads sixty percent of the time. For half "
+            "an hour you may bet any amount, on either side, at even odds, as often as you like, up to winnings of two "
+            "hundred and fifty dollars. How much do you bet? <bookmark mark='a'/> In 2016 Victor Haghani and Richard Dewey "
+            "gave this game to sixty-one people trained in finance and economics. About thirty percent of them went bust."
         ) as vo:
             self.play(FadeIn(q, shift=UP * 0.2))
             vo.wait_until("a")
@@ -96,11 +94,10 @@ class Hook(VoiceoverScene):
         res.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.6)
         src = illustration(r"simulation: 160 players per column, the same 300 coin flips for all")
         with self.voiceover(
-            "Before the theory, let the game play itself. Here are a hundred and sixty players in each of four columns. "
-            "Every player sees the same coin; the only difference is the fraction of wealth each column stakes on "
-            "every flip: ten, twenty, forty, or a hundred percent. <bookmark mark='a'/> Pause and predict: which "
-            "column goes bust most often, forty or a hundred? And does forty percent grow at all? "
-            "<bookmark mark='b'/> Three hundred flips. Watch the columns spread on a log scale."
+            "Let the game play itself first. A hundred and sixty players in each of four columns see the same coin; each "
+            "column stakes a different fraction of wealth on every flip: ten, twenty, forty or a hundred percent. "
+            "<bookmark mark='a'/> Pause and predict: which column goes bust most often, forty or a hundred? Does forty "
+            "grow at all? <bookmark mark='b'/> Three hundred flips, on a log scale."
         ) as vo:
             self.play(FadeIn(g), Create(cap), FadeIn(capl), Create(start), FadeIn(startl), FadeIn(heads), FadeIn(src))
             self.add(dots)
@@ -113,11 +110,10 @@ class Hook(VoiceoverScene):
         dots.clear_updaters()
         num.clear_updaters()
         with self.voiceover(
-            f"The all-in column was wiped out: {100 * b['1.0']['p_bust']:.0f} percent of its players went bust, "
-            "because a single tail takes everything. At forty percent the typical player barely grows, and only the "
-            f"cap rescues most of them; still {100 * b['0.4']['p_bust']:.0f} percent went bust. At twenty percent, "
-            f"{100 * b['0.2']['p_cap']:.0f} percent reached the cap and nobody went bust; at ten, "
-            f"{100 * b['0.1']['p_cap']:.0f} percent, also without a single bust."
+            f"All in was wiped out: {100 * b['1.0']['p_bust']:.0f} percent went bust, because one tail takes everything. "
+            "At forty percent the typical player barely grows, and the cap rescues most of them; still "
+            f"{100 * b['0.4']['p_bust']:.0f} percent went bust. At twenty percent, {100 * b['0.2']['p_cap']:.0f} percent "
+            "reached the cap and nobody went bust."
         ):
             self.play(LaggedStart(*[FadeIn(r_, shift=LEFT * 0.2) for r_ in res], lag_ratio=0.4, run_time=3))
         self.wait(0.4)
@@ -153,14 +149,12 @@ class Hook(VoiceoverScene):
         k100 = c["by_fraction"]["1.00"]
         src = illustration(r"simulation: 300 flips, 20{,}000 players per fraction")
         with self.voiceover(
-            "The answer is older than the game. If you bet a fraction f of your wealth each time, your wealth after "
-            "many flips grows at the rate p log of one plus f, plus q log of one minus f, per flip. <bookmark mark='a'/> "
-            "That curve peaks at f equals p minus q: twenty percent. It is the Kelly criterion, from 1956. Bet more and "
-            "you grow more slowly; bet twice as much, forty percent, and you no longer grow at all; beyond that, a "
-            "sure edge makes you poorer. <bookmark mark='b'/> With twenty thousand players at each fraction instead "
-            f"of a hundred and sixty: at twenty percent, {100 * k20['p_cap']:.0f} percent reach the cap and none go "
-            f"bust. Bet everything each time, and {100 * k100['p_bust']:.0f} percent go bust. The coin is the same; "
-            "only the size changed."
+            "The answer is older than the game. Bet a fraction f each time, and wealth grows at p log of one plus f, plus "
+            "q log of one minus f, per flip. <bookmark mark='a'/> The curve peaks at p minus q, twenty percent: the Kelly "
+            "criterion, from 1956. At twice that, forty percent, growth stops; beyond it, a sure edge makes you poorer. "
+            "<bookmark mark='b'/> With twenty thousand players per fraction: at twenty percent, "
+            f"{100 * k20['p_cap']:.0f} percent reach the cap and none go bust; all in, {100 * k100['p_bust']:.0f} percent "
+            "go bust."
         ) as vo:
             self.play(FadeIn(g), Create(zero), Create(line), FadeIn(eq), run_time=2)
             vo.wait_until("a")
@@ -207,17 +201,14 @@ class Hook(VoiceoverScene):
             DOWN, buff=0.35).move_to(DOWN * 2.6)
         edges = VGroup(*[Line(root.get_bottom(), lf.get_top(), color=GREY_C, stroke_width=1.5) for lf in leaves])
         with self.voiceover(
-            "How we got here. In 1738 Daniel Bernoulli proposed valuing a gamble by the logarithm of wealth. In 1944 "
-            "von Neumann and Morgenstern made expected utility an axiom system. In 1956 John Kelly found the growth "
-            "rule you just watched, and in 1957 Richard Bellman gave every multi-stage decision one recursion. "
-            "<bookmark mark='a'/> In 1969 Robert Merton solved the investor's problem in continuous time; in 1979 "
-            "Paul Samuelson attacked Kelly, and Kahneman and Tversky showed how people really choose. In 1983 "
-            "Crandall and Lions made the Bellman equation rigorous when its solutions have kinks; in 1990 Davis and "
-            "Norman solved trading with costs, and Pardoux and Peng introduced backward stochastic equations. "
-            "<bookmark mark='b'/> In 2006 came games with a continuum of players, and in 2017 the learning algorithm "
-            "we will ask to rediscover Merton. <bookmark mark='c'/> It is one tree. At its root: maximize expected "
-            "utility. Its branches: how much to bet, how to decide over time, how to decide against a crowd, how "
-            "people actually decide, and how a machine can learn the answer."
+            "How we got here. Daniel Bernoulli proposed log utility in 1738; von Neumann and Morgenstern built expected "
+            "utility on axioms in 1944; John Kelly found the growth rule in 1956, and Richard Bellman the recursion behind "
+            "every multi-stage decision in 1957. <bookmark mark='a'/> Robert Merton solved the investor's problem in 1969; "
+            "in 1979 Paul Samuelson attacked Kelly, and Kahneman and Tversky showed how people really choose. Crandall and "
+            "Lions made the Bellman equation rigorous in 1983, and 1990 brought Davis and Norman's trading costs and "
+            "Pardoux and Peng's backward equations. <bookmark mark='b'/> Then games with a continuum of players, in 2006, "
+            "and in 2017 the learning algorithm we will test. <bookmark mark='c'/> One tree, rooted in expected utility: how "
+            "much to bet, how to decide over time, against a crowd, how people really decide, and how a machine learns it."
         ) as vo:
             self.play(Create(line), run_time=1)
             for k in range(4):
@@ -246,12 +237,9 @@ class Hook(VoiceoverScene):
             r"How funds size bets in practice, and the 2023--2026 frontier",
         ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan. Utility, and the price of risk, derived. Bellman's recursion, the equation it becomes in "
-            "continuous time, the theorem that says when its solution is the answer, and what to do when the solution "
-            "has kinks. Merton's problem with consumption, solved twice, and what trading costs do to it. Kelly's "
-            "rule proved, its dangers, and the controversy around it. When to stop, and how people really decide. "
-            "Three frontiers, each with an experiment: backward equations, crowds, and a learning machine. And how "
-            "the funds that do this for a living actually size their bets."
+            "The plan. Utility and the price of risk. Bellman's recursion, the HJB equation and the theory behind it. "
+            "Merton's problem with consumption and trading costs. Kelly, proved and criticized. When to stop, and how "
+            "people really decide. Backward equations, crowds and a learning machine. And how funds size bets in practice."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=10))

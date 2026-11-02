@@ -166,7 +166,7 @@ class Earnings(VoiceoverScene):
             f"correlation of {pe['jump_corr']:.2f}. <bookmark mark='b'/> And after day one, the beats drifted "
             f"{100 * dp:+.1f} percent and the misses {100 * dn:+.1f}. "
             + ("That is the textbook sign. " if right else "That is the wrong way round. ")
-            + f"But these are {pe['n_events']} events of one company, which is a lab exercise, not a test: Apple's "
+            + f"But these are {pe['n_events']} events of one company, which is a lab exercise, not a test, and a "
             "seasonal forecast of net income is also a crude stand-in for what analysts expected. The test needs "
             "thousands of firms."
         ) as vo:

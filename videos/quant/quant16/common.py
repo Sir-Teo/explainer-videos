@@ -43,3 +43,36 @@ def sci(x: float, digits: int = 0) -> str:
     if round(m, digits) >= 10:
         m, e = m / 10, e + 1
     return rf"{m:.{digits}f}\times 10^{{{e}}}"
+
+
+METHOD_COL.update({"Monte Carlo, control variate": QC.THETA, "PCA": QC.GAIN, "Halton": QC.THETA, "random": GREY_B,
+                   "euler": QC.LOSS, "milstein": QC.GAIN})
+
+
+def predict(question: str, width: float = 6.0, font_size=24):
+    """The chapter's 'pause and predict' card."""
+    return pause_card(question, width=width, font_size=font_size)
+
+
+def polyline(ax, xs, ys, color, stroke_width=3, dots=True, radius=0.05):
+    """A line through (xs, ys) on ``ax``, with a dot at each point."""
+    pts = [ax.c2p(a, b) for a, b in zip(xs, ys)]
+    g = VGroup(VMobject(stroke_color=color, stroke_width=stroke_width).set_points_as_corners(pts))
+    if dots:
+        g.add(*[Dot(p_, radius=radius, color=color) for p_ in pts])
+    return g
+
+
+def chapter(scene, n: int, title: str, question: str, say: str, lit=()):
+    """The chapter card with its one spoken line."""
+    c = chapter_card(n, title, question, lit=lit, part=PART)
+    with scene.voiceover(say):
+        scene.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
+    scene.play(FadeOut(c))
+
+
+def fixed(scene, *mobs):
+    """Pin text to the screen in a 3D scene (added, then removed so it can be faded in)."""
+    scene.add_fixed_in_frame_mobjects(*mobs)
+    scene.remove(*mobs)
+    return mobs

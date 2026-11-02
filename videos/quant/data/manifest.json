@@ -1644,6 +1644,11 @@
   "bytes": 2086,
   "source": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-12.zip"
  },
+ "cboe/COR3M/through_2025-12-31": {
+  "sha256": "41bdb0b4ec58d9369ce50a0cadacb1c15834c6bc4457585fc0371f53c3c8db49",
+  "bytes": 94799,
+  "source": "https://cdn.cboe.com/api/global/us_indices/daily_prices/COR3M_History.csv"
+ },
  "cboe/vx/2017-05-17": {
   "sha256": "61aa2acf069195688560d428ff68d3fcd2fb58334ed21a124aa45fa9dcfcfe32",
   "bytes": 3676,
@@ -9597,6 +9602,161 @@
  "deribit/trades/BTC/option/2023-08-02/00": {
   "sha256": "543f840e27fb20d9c0daa84ab2962b8cec38fe490dac42a2839b7a222a363f09",
   "bytes": 15103,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/01": {
+  "sha256": "10335843ebaa1514a83b0d9a0959be17f43c93fdb4a98f3f1181ff5497258be6",
+  "bytes": 18304,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/02": {
+  "sha256": "756a7c49c70ff97130468918949f75ae88d6389b378da3162fa1ca2856381cf0",
+  "bytes": 6722,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/03": {
+  "sha256": "f953085d91a8722001b73f21ab1c8510f40a7dfa5e8ead72e3dd63a908dd0b97",
+  "bytes": 5326,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/04": {
+  "sha256": "3406e913a1c216d01e76d5045bdfa5d7426ffaf81d8ec922d482c64e5e2d2a0a",
+  "bytes": 6131,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/05": {
+  "sha256": "e25f868f1961f3648eea84b11cda5f8ba2ef2bdfa59fb6625caa53a7352c6f12",
+  "bytes": 4452,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/06": {
+  "sha256": "36f894b295ed506cafdc8472444e19e76e667496fc56a38d8ada3cbe28c56312",
+  "bytes": 4138,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/07": {
+  "sha256": "5642db2b00159a826d742fe4e5bdc0dde98bbaa79a50d61665e4042219230b6a",
+  "bytes": 4992,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/08": {
+  "sha256": "14628439e80a0d58e669b4a7c72e3d63d0e97662964ba52624a182383b07f8d3",
+  "bytes": 18048,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/09": {
+  "sha256": "4b442d290d59d73b57b54e1513320d0f0b68609f112871d4ed7dd646ce72f0e9",
+  "bytes": 8632,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/10": {
+  "sha256": "e886cf52a4caee5cd2e7cf4b4f9be37befe1e4c4cc473c25be87b7e4e54ad9d1",
+  "bytes": 4099,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-02/11": {
+  "sha256": "03ce6eeeee486a8fd1d04f8dce536391aef392d1bdafe5cc178b629237d8fd8a",
+  "bytes": 4679,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/00": {
+  "sha256": "e517c974b198e87d3095283e5a61ff3eeb5ce9ee3b6a056f593911aa3f2422b1",
+  "bytes": 6093,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/01": {
+  "sha256": "e6d3d4bce6f3253361f8ee9d82afb56124c4d107eb887e46abbff787a7b9d9e3",
+  "bytes": 4418,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/02": {
+  "sha256": "d4fb168d9e2a78f5a868091dbb985d17a92229a650b4d010eddea6207ee4816e",
+  "bytes": 5037,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/03": {
+  "sha256": "627c86b47bd0a403813d79e1c846f4f2e9a64b3e5d3eeccbb2ff2418d628ac64",
+  "bytes": 3203,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/04": {
+  "sha256": "fc6f8397d70fe9251abbb91319a2e6c69664de1663397a96883c547a862456fa",
+  "bytes": 2686,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/05": {
+  "sha256": "2d548c62587bf49fdde650f11eafe1a36ef3f34bf8d240cefc1bef28692c63d9",
+  "bytes": 3462,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/06": {
+  "sha256": "0519da2a68e4952f27a1fa116f81ae75952ca1cc6160af47fc999180ff6558b7",
+  "bytes": 2417,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/07": {
+  "sha256": "a17c7405166697567e0d07f86009e3ac0ba8b47df112a56117085b8962fa8e4c",
+  "bytes": 6041,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/08": {
+  "sha256": "ada0667d87b5ac6d49081a49fda5a4a81a4c98da9958cd2c0818c5e5dc2b01c4",
+  "bytes": 14424,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/09": {
+  "sha256": "19b8c6d31f78eb12613e2859cc9704bd5200052b648fda4a89aac6d76733039f",
+  "bytes": 6628,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/10": {
+  "sha256": "b650fd64dec1dca891143589fe4c9ca8d858af7a6a24ee550ae666c449750611",
+  "bytes": 5031,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-09/11": {
+  "sha256": "3063542a6795804e7bb11bd78b6d636e1998b9b5a5dadeff9ca5eacbdc06b20e",
+  "bytes": 5845,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-16/00": {
+  "sha256": "6e1b906d4c7788c06874457d3caf02443c730543792d81ddf2a7f767e2b90fee",
+  "bytes": 4507,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-16/01": {
+  "sha256": "efbc3f51b68960546ba00c39e44f82443cd2cb39afc817561e774b5a494d3c25",
+  "bytes": 5227,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-16/02": {
+  "sha256": "60488efba990291976840822fbee1d70ae77259574e399bd9dfd47ab0c396d4e",
+  "bytes": 2513,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-16/03": {
+  "sha256": "3307a7e9e98939e1695a05d9a3b257a9543f4b22902689a81e9be57e1c56e5e6",
+  "bytes": 1807,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-16/04": {
+  "sha256": "6bb056d5f11ec4cf63584b13a949026da743178de1c5e80d1cf641728da644ac",
+  "bytes": 2088,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-16/05": {
+  "sha256": "ca6abd75108db3b338226e0b6ab7daf0784b5ec5dfef18f15539699227ed206b",
+  "bytes": 3646,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-16/06": {
+  "sha256": "0e529f2af2049ebaa5f9b6cfe77f3bc97bc75edbb8435cf043a6b8bfaa8c1ae7",
+  "bytes": 7197,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
+ },
+ "deribit/trades/BTC/option/2023-08-16/07": {
+  "sha256": "f0ba8eb9311efc2a06d46c463d5890967861081184e37c820a9e685cac48bfa6",
+  "bytes": 5725,
   "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=option"
  },
  "deribit/trades/BTC/option/2024-01-03/00": {
