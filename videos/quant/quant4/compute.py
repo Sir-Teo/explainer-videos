@@ -78,7 +78,7 @@ def _ewma_var(r, lam=0.94, warm=60):
 
 # ---------------------------------------------------------------------------
 def compute_doob() -> dict:
-    rng = np.random.default_rng(4)
+    rng = np.random.default_rng(19)  # a typical path: it ends near its expectation, 40
     n = 400
     steps = np.where(rng.random(n) < 0.55, 1.0, -1.0)
     x = np.concatenate([[0.0], np.cumsum(steps)])
