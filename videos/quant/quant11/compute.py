@@ -226,7 +226,7 @@ def compute_hedging() -> dict:
     # deep hedging: a network maps (time left, log moneyness, current hedge) to the new hedge; trained on simulated
     # paths to minimize Var(P&L) + kappa * E[cost] through the simulator (Buehler, Gonon, Teichmann and Wood 2019)
     torch.manual_seed(0)
-    net = torch.nn.Sequential(torch.nn.Linear(3, 32), torch.nn.Tanh(), torch.nn.Linear(32, 32), torch.nn.Tanh(),
+    net = torch.nn.Sequential(torch.nn.Linear(4, 32), torch.nn.Tanh(), torch.nn.Linear(32, 32), torch.nn.Tanh(),
                               torch.nn.Linear(32, 1))
     opt = torch.optim.Adam(net.parameters(), lr=3e-3)
     tt = torch.tensor(t, dtype=torch.float32)
@@ -241,10 +241,12 @@ def compute_hedging() -> dict:
         costs = torch.zeros(m)
         for i in range(n):
             x = torch.stack([torch.full((m,), float((T - tt[i]) / T)), torch.log(Sb[:, i] / K) / (sigma * np.sqrt(T)), h], 1)
-            # start from the Black-Scholes delta and learn the deviation: a residual policy
+            # move a learned fraction of the way toward the Black-Scholes delta: standing still (a no-trade region)
+            # is then as easy to learn as rehedging fully
             d1 = (torch.log(Sb[:, i] / K) + 0.5 * sigma ** 2 * (T - tt[i])) / (sigma * torch.sqrt(T - tt[i] + 1e-9))
             bsd = 0.5 * (1 + torch.erf(d1 / np.sqrt(2)))
-            new = bsd + net(x).squeeze(-1) * 0.5
+            x = torch.cat([x, (bsd - h)[:, None] * 10], 1)
+            new = h + torch.sigmoid(net(x).squeeze(-1)) * (bsd - h)
             tr = new - h
             cash = cash - tr * Sb[:, i] - cost * torch.abs(tr) * Sb[:, i]
             costs = costs + cost * torch.abs(tr) * Sb[:, i]
@@ -252,17 +254,22 @@ def compute_hedging() -> dict:
         pnl = cash + h * Sb[:, -1] - cost * torch.abs(h) * Sb[:, -1] - torch.clamp(Sb[:, -1] - K, min=0)
         return pnl, costs + cost * torch.abs(h) * Sb[:, -1]
 
-    kappa = 1.0
-    for it in range(250):
-        idx = torch.randint(0, 15000, (1024,))
-        pnl, c = run(St[idx])
-        loss = pnl.var() + kappa * c.mean()
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
-    with torch.no_grad():
-        pnl, c = run(St[15000:])
-    rows.append({"rule": "deep hedge", "param": kappa, "sd": float(pnl.std()), "cost": float(c.mean()), "trades": float("nan")})
+    state0 = {k: v.clone() for k, v in net.state_dict().items()}
+    for kappa in (1.0, 4.0, 16.0):
+        net.load_state_dict(state0)
+        opt = torch.optim.Adam(net.parameters(), lr=3e-3)
+        for it in range(500):
+            idx = torch.randint(0, 15000, (1024,))
+            pnl, c = run(St[idx])
+            loss = pnl.var() + kappa * c.mean()
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+        with torch.no_grad():
+            pnl, c = run(St[15000:])
+        rows.append({"rule": "deep hedge", "param": kappa, "sd": float(pnl.std()), "cost": float(c.mean()),
+                     "trades": float("nan")})
+        print(f"    deep hedge kappa {kappa}: sd {float(pnl.std()):.3f}, cost {float(c.mean()):.3f}", flush=True)
     return _json({"rows": rows, "premium": prem, "sigma": sigma, "cost_rate": cost, "steps": n})
 
 
