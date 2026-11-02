@@ -13,7 +13,7 @@ Part 17 of a forty-three-part series on quantitative finance (see [the series pl
   it learns not to trade;
 * neural SDEs and robust bounds for exotics (Gierjatowicz et al. 2022);
 * market generators, judged by the stylized facts of Part 1;
-* production and model risk (SR 11-7).
+* production and model risk (SR 11-7, replaced by SR 26-2 in April 2026).
 
 Every number is computed by the series' own code ([`compute.py`](compute.py), and the House's
 [`deep`](../../../explainer/quant/house/deep.py) module), and every network was trained on a CPU in minutes. The
@@ -79,7 +79,7 @@ closes.
   * By signature distance alone, independent normal draws sit closest to the training years, yet they have no
     clustering. Only the signature network reproduces the tails, clustering and leverage.
   * The diffusion model is nearest the held-out years because its tails are thin.
-* **11. Production and model risk.** J.P. Morgan and Danske Bank, as reported; SR 11-7; validating a network:
+* **11. Production and model risk.** J.P. Morgan and Danske Bank, as reported; SR 26-2 (April 2026), which replaced SR 11-7; validating a network:
   held-out error, input ranges, known answers, the simulator as the model, nightly checks.
 * **12. The deep hedger in the House.** Rule 17: no network without a slower, independent engine to check it;
   inputs outside the training region go to that engine; hedgers are tested on at least two generators and on
@@ -156,7 +156,7 @@ python tools/make.py quant17 --cpu-voice -q m              # English and Chinese
 * 深度对冲器（Buehler、Gonon、Teichmann与Wood，2019）：成本、风险度量、无差异价格，以及它学会在哪里不交易；
 * 神经SDE与奇异期权的稳健界（Gierjatowicz等，2022）；
 * 用第1部分的典型事实评判的市场生成器；
-* 投产与模型风险（SR 11-7）。
+* 投产与模型风险（SR 11-7，2026年4月由SR 26-2取代）。
 
 所有网络都在CPU上用几分钟训练；投产版本会以完整规模重新训练。
 

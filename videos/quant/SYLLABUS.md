@@ -22,7 +22,7 @@ intuition of 3Blue1Brown. Concretely:
 - **Length: 50–60 minutes, hard floor 50** (`tools/lecture_length.py quantN --floor 50`). A part that runs short
   is missing material, not padding: find what its textbooks and papers cover that it does not.
 - **One syllabus item, one or two chapters.** Each numbered item of Section 6 gets at least one full chapter of
-  4–6 minutes (never several items squeezed into one chapter). An item with a derivation, an experiment and a
+  about 3 minutes, 2.5–4 (never several items squeezed into one chapter). An item with a derivation, an experiment and a
   case gets two.
 - **A signature visual in every chapter**, built before the formula is written: the idea as a moving picture the
   viewer could redraw from memory (the measure change as paths being re-weighted and recoloured; Itô's correction
@@ -50,7 +50,7 @@ intuition of 3Blue1Brown. Concretely:
   research papers by their staff, filings, books, court and regulatory documents, interviews on the record.
   Frontier: the 2023–2026 research, checked against the papers.
 
-**A chapter is a lecture segment of 4–6 minutes**, in the AI series' order:
+**A chapter is a lecture segment of about 3 minutes (2.5–4; 16–20 per part, as in the AI series)**, in the AI series' order:
 
 1. A motivating question, a market fact, or a failure.
 2. A definition card.
@@ -687,7 +687,7 @@ Andersen–Piterbarg vol. I; Duffy *Finite Difference Methods*; Seydel.
 8. Neural SDEs with robust exotic bounds (Gierjatowicz et al. 2022).
 9. Market generators: Quant GANs (Wiese et al. 2020), signature generators (Buehler et al. 2020), diffusion
    models (AI Part 21); judged by signature MMD and the stylized facts.
-10. Production: model risk, validation (SR 11-7), what has reached desks *(verify: public deployments)*.
+10. Production: model risk, validation (SR 11-7, replaced by SR 26-2 in April 2026), what has reached desks *(verify: public deployments)*.
 
 *Textbooks:* Dixon–Halperin–Bilokon *Machine Learning in Finance*; Kelly–Xiu *Financial Machine Learning*.
 *Trained:* the neural calibrator; differential ML; deep BSDE; deep stopping; **the deep hedger** (replayed: the

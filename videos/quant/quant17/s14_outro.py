@@ -135,7 +135,7 @@ class Outro(VoiceoverScene):
              r"Han, Jentzen and E (2018); Becker, Cheridito and Jentzen (2019); Buehler, Gonon, Teichmann and Wood (2019)",
              r"Huge and Savine (2020); Wiese et al.\ (2020); Buehler, Horvath, Lyons, Perez Arribas and Wood (2020)",
              r"Horvath, Muguruza and Tomas (2021); Imaki et al.\ (2021); Ni et al.\ (2021); Gierjatowicz et al.\ (2022)",
-             r"Federal Reserve and OCC, SR 11-7 (2011)"])
+             r"Federal Reserve and OCC, SR 11-7 (2011); Federal Reserve, OCC and FDIC, SR 26-2 (2026)"])
         with self.voiceover(
             "The textbook chapters this part covers, and the papers it draws on. Every network here was trained on one "
             "CPU; the production version retrains them at full size."

@@ -28,11 +28,12 @@ class Production(VoiceoverScene):
                       r"computed became training labels. Risk.net reported the bank using the method to speed up its XVA "
                       r"calculations.", source=r"Huge and Savine (2020); as reported by Risk.net", width=6.1, font_size=20),
         ).arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(UP * 0.6)
-        sr = history_card(2011, r"SR 11-7, Federal Reserve and OCC",
-                          r"US supervisory guidance on model risk: every model is validated by people independent of its "
-                          r"builders (``effective challenge''), through conceptual soundness, ongoing monitoring and "
-                          r"outcomes analysis, and kept in an inventory with its limits. A network is a model like any "
-                          r"other.", color=QC.HOUSE, width=12.4, font_size=20)
+        sr = history_card(2026, r"SR 26-2, Federal Reserve, OCC and FDIC",
+                          r"US supervisory guidance on model risk, replacing SR 11-7 (2011) in April 2026. Every model is "
+                          r"challenged by people independent of its builders (``effective challenge''), validated for "
+                          r"conceptual soundness, monitored, tested on outcomes and kept in an inventory, with effort scaled "
+                          r"to the model's materiality. A pricing or hedging network is a model like any other.",
+                          color=QC.HOUSE, width=12.4, font_size=20)
         sr.next_to(cards, DOWN, buff=0.35)
         with self.voiceover(
             "What has reached real desks? The clearest public case is J.P. Morgan. Hans Buehler's team began hedging "
@@ -42,9 +43,10 @@ class Production(VoiceoverScene):
             "Brian Huge and Antoine Savine built differential machine learning where adjoint differentiation already "
             "ran in production: the derivatives it computed became training labels, and Risk.net reported the method "
             "speeding up the bank's valuation adjustments. <bookmark mark='b'/> And over all of "
-            "it sits the regulator. The Federal Reserve's guidance SR 11-7, from 2011, says that every model must be "
-            "challenged by people who did not build it, checked for conceptual soundness, monitored, and tested on "
-            "outcomes. A neural network is a model like any other."
+            "it sits the regulator. American banking supervisors' guidance on model risk, SR 11-7 from 2011, revised in April "
+            "2026 as SR 26-2, says that every model must be challenged by people who did not build it, checked for "
+            "conceptual soundness, monitored, and tested on outcomes, with more scrutiny the more it matters. A neural "
+            "network that prices or hedges is a model like any other."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -80,7 +82,7 @@ class Production(VoiceoverScene):
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.32)
         for r_ in tab:
             r_[1].set_x(r_[0].get_left()[0] + 4.6 + r_[1].width / 2)
-        head = label(r"Validating a network, the SR 11-7 way", font_size=32).to_edge(UP, buff=0.5)
+        head = label(r"Validating a network, the SR 26-2 way", font_size=32).to_edge(UP, buff=0.5)
         tab.next_to(head, DOWN, buff=0.45)
         if tab.width > 13.0:
             tab.scale_to_fit_width(13.0)

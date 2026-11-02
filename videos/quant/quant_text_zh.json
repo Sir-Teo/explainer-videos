@@ -4214,7 +4214,11 @@
     "Huge and Savine (2020); Wiese et al.\\ (2020); Buehler, Horvath, Lyons, Perez Arribas and Wood (2020)": "Huge and Savine (2020); Wiese et al.\\ (2020); Buehler, Horvath, Lyons, Perez Arribas and Wood (2020)",
     "Horvath, Muguruza and Tomas (2021); Imaki et al.\\ (2021); Ni et al.\\ (2021); Gierjatowicz et al.\\ (2022)": "Horvath, Muguruza and Tomas (2021); Imaki et al.\\ (2021); Ni et al.\\ (2021); Gierjatowicz et al.\\ (2022)",
     "Federal Reserve and OCC, SR 11-7 (2011)": "Federal Reserve and OCC, SR 11-7 (2011)",
-    "Bermudan max-call: $K = 100$, $r = 5\\%$, dividends 10\\%, $\\sigma = 20\\%$, 3 years, 9 dates": "百慕大最大值看涨期权：$K = 100$，$r = 5\\%$，股息10\\%，$\\sigma = 20\\%$，3年，9个日期"
+    "Bermudan max-call: $K = 100$, $r = 5\\%$, dividends 10\\%, $\\sigma = 20\\%$, 3 years, 9 dates": "百慕大最大值看涨期权：$K = 100$，$r = 5\\%$，股息10\\%，$\\sigma = 20\\%$，3年，9个日期",
+    "Federal Reserve and OCC, SR 11-7 (2011); Federal Reserve, OCC and FDIC, SR 26-2 (2026)": "Federal Reserve and OCC, SR 11-7 (2011); Federal Reserve, OCC and FDIC, SR 26-2 (2026)",
+    "SR 26-2, Federal Reserve, OCC and FDIC": "SR 26-2，美联储、美国货币监理署与联邦存款保险公司",
+    "US supervisory guidance on model risk, replacing SR 11-7 (2011) in April 2026. Every model is challenged by people independent of its builders (``effective challenge''), validated for conceptual soundness, monitored, tested on outcomes and kept in an inventory, with effort scaled to the model's materiality. A pricing or hedging network is a model like any other.": "美国关于模型风险的监管指引，2026年4月取代SR 11-7（2011）。每个模型都要接受独立于构建者的人的质询（“有效质询”），验证概念上是否合理，持续监控，用结果检验，并登记在模型清单里；投入的审查力度随模型的重要性而定。用于定价或对冲的网络和其他模型一样，也是模型。",
+    "Validating a network, the SR 26-2 way": "按SR 26-2的方式验证网络"
   },
   "phrases": {
     "you owe": "你欠",

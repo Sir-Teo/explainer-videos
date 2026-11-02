@@ -712,6 +712,7 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Hutchinson, J., Lo, A. W., Poggio, T. (1994). "A nonparametric approach to pricing and hedging derivative securities via learning networks." *Journal of Finance*.
 - Whalley, A. E., Wilmott, P. (1997). "An asymptotic analysis of an optimal hedging model for option pricing with transaction costs." *Mathematical Finance*.
 - Federal Reserve / OCC (2011). *SR 11-7: Supervisory Guidance on Model Risk Management*.
+- Federal Reserve / OCC / FDIC (17 April 2026). *SR 26-2: Revised Guidance on Model Risk Management* (supersedes SR 11-7 and SR 21-8; generative and agentic AI outside its scope).
 - Hernandez, A. (2016). "Model calibration with neural networks." *Risk*.
 - E, W., Han, J., Jentzen, A. (2017). "Deep learning-based numerical methods for high-dimensional parabolic PDEs and BSDEs." *Communications in Mathematics and Statistics*.
 - Han, J., Jentzen, A., E, W. (2018). "Solving high-dimensional partial differential equations using deep learning." *PNAS*.
