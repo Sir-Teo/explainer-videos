@@ -124,15 +124,20 @@ class Band(VoiceoverScene):
         near = int(np.argmin(np.abs(S - 100)))
         ratio = float(np.median(width[:, near] / np.maximum(wwidth[:, near], 1e-6)))
         side = wrapped_label(rf"a band network (Imaki et al.\ 2021: it outputs how far below and above the Black--Scholes "
-                             rf"delta the band reaches, and the hedge moves only to its nearest edge), cost {100 * h['mlp_cost']['cost']:g}\%. At the money its band is "
-                             rf"{ratio:.1f} times Whalley--Wilmott's width, and like theirs it is widest where gamma is "
-                             r"largest: near the strike, close to expiry", 4.4, 19, GREY_A).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
+                             rf"delta the band reaches, and the hedge moves only to its nearest edge), cost "
+                             rf"{100 * h['mlp_cost']['cost']:g}\%. At the money its band is {ratio:.1f} times "
+                             r"Whalley--Wilmott's width. Theirs peaks at the strike, where gamma is largest; the learned band "
+                             r"is nearly flat across prices and widens toward expiry. Away from the strike its edges hardly "
+                             r"bind, since delta is pinned near 0 or 1", 4.4, 18, GREY_A).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
         with self.voiceover(
             "A second network, from Shota Imaki and colleagues, makes the band explicit: it outputs how far the band "
-            "reaches below and above the delta, and the hedge only ever moves to the nearest edge. <bookmark mark='a'/> Here is the width it learned, at three times to expiry, against Whalley "
-            f"and Wilmott's formula. At the money it is {ratio:.1f} times theirs. Both are widest where gamma is largest, "
-            "near the strike and close to expiry, where trading every wiggle would cost the most. The asymptotic formula "
-            "assumes small costs; the network does not have to."
+            "reaches below and above the delta, and the hedge only ever moves to the nearest edge. <bookmark mark='a'/> "
+            "Here is the width it learned, at three times to expiry, against Whalley and Wilmott's formula. "
+            f"At the money it is {ratio:.1f} times theirs. Their band peaks at the strike, where gamma is largest; the "
+            "learned one is nearly flat across prices and widens toward expiry. Far from the strike the difference "
+            "costs little, because the delta sits near zero or one and the edges rarely bind. The formula is an "
+            "approximation for small costs and continuous trading; the network was trained for half-percent costs and "
+            "daily rebalancing, and on the same paths it needs the lower price."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             vo.wait_until("a")
