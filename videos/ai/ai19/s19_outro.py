@@ -147,11 +147,11 @@ class Outro(VoiceoverScene):
             r"$c = 0.05$ passes, \ which $k$ is fastest?",
             r"Show that speculative sampling outputs $x$ with probability exactly $p(x)$, \ and that its acceptance "
             r"rate is $1 - \mathrm{TV}(p, q)$.",
-            r"Derive $\mathbb E[e^2] = \Delta^2/12$ for rounding to a grid of step $\Delta$, \ and show that one more "
-            r"bit lowers the error by $10 \log_{10} 4 \approx 6.02$ dB.",
+            r"Assuming uniform in-cell error and no clipping, derive $\mathbb E[e^2]=\Delta^2/12$. \ "
+            r"For fixed-range signed quantization, \ why does one added bit approach $6.02$ dB improvement as $b$ grows?",
             r"A model has $48$ layers and $8$ key-value heads of $128$ in $16$ bits. \ How many bytes does its cache "
             r"keep per token, \ and at what context does one conversation's cache weigh $60$ GB?",
-            r"Minimize $\tfrac12 \delta^\top H \delta$ subject to $e_q^\top \delta = \hat w_q - w_q$: \ derive the Optimal "
+            r"For real symmetric positive-definite $H$, \ minimize $\tfrac12 \delta^\top H \delta$ subject to $e_q^\top \delta = \hat w_q - w_q$: \ derive the Optimal "
             r"Brain Surgeon update and the error it leaves.",
             r"Two chunks of keys give partial results $(m_1, \ell_1, o_1)$ and $(m_2, \ell_2, o_2)$. \ Show how to "
             r"combine them into exact attention, \ and that the order doesn't matter.",

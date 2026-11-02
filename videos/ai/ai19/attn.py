@@ -100,9 +100,11 @@ def flash_blocks(M, d):
 def io_flash_formula(N, d, M):
     """Algorithm 1: K and V read once (2Nd); for each of the N/Bc outer blocks, every block of Q, O, l, m read and
     O, l, m written: (N/Bc) * N * (3d + 4) more."""
-    Br, Bc = flash_blocks(M, d)
-    Tc, Tr = math.ceil(N / Bc), math.ceil(N / Br)
-    return 2 * N * d + Tc * Tr * (3 * Br * d + 4 * Br)
+    _, Bc = flash_blocks(M, d)
+    Tc = math.ceil(N / Bc)
+    # A final query tile can be shorter than Br. Across all query tiles there
+    # are exactly N rows, not ceil(N / Br) * Br padded rows.
+    return 2 * N * d + Tc * N * (3 * d + 4)
 
 
 def io_flash_counted(N, d, M):

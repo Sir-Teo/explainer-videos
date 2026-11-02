@@ -12,7 +12,7 @@ killed run resumes.
 
 Items:
     roof        this machine's roof on one thread: the fastest matrix product, and the memory's read bandwidth; and a
-                stack of weight matrices too big for the caches (192 MB) multiplied by batches of 1 ... 512 vectors:
+                stack of weight matrices too big for the caches (805 MB / 768 MiB) multiplied by batches of 1 ... 512 vectors:
                 matrix-vector products becoming matrix-matrix products
     phases      the novels model on the inference engine (engine.py): prefill of prompts of 1 ... 256 tokens, decode
                 steps for batches of 1 ... 256, decode against context length, a sliding window, and a cached prefix
@@ -847,6 +847,7 @@ def compute_rotation():
         part["w4a4_learned"] = loss(Q.w_a(Q.rotate(model, Rl), 4, 4, down_R=Rd), ev)
     out.update(fp32=part["fp32"], loss={k: v for k, v in part.done.items() if k.startswith("w4")},
                spin={k: v for k, v in part["spin"].items() if k != "R"})
+    out["learned_R"] = Rl  # retain the learned matrix for independent algebra/reproduction checks
     return out
 
 
@@ -1187,7 +1188,7 @@ def compute_frontier():
     ap, l8, oss = F.APPLE_ON_DEVICE, F.LLAMA31_8B, F.GPT_OSS_20B
     models = [  # name, bytes read per token, bytes held
         ("Apple's 3B, 2 bits", ap["params"] * ap["bits"] / 8, ap["params"] * ap["bits"] / 8),
-        ("gpt-oss-20b, MXFP4", oss["active"] * 4.25 / 8, oss["ckpt_gib"] * 2 ** 30),
+        ("gpt-oss-20b, MXFP4", F.gpt_oss_active_weight_bytes(oss), oss["ckpt_gib"] * 2 ** 30),
         ("Llama 3.1 8B, 4 bits", l8["params"] * 4.25 / 8, l8["params"] * 4.25 / 8),
         ("Llama 3.1 70B, 4 bits", F.LLAMA31_70B["params"] * 4.25 / 8, F.LLAMA31_70B["params"] * 4.25 / 8),
     ]
@@ -1205,12 +1206,12 @@ def compute_frontier():
     cap = 0.9 * H["mem"]
     res = {}
     for n in (1000, F.R1_0528["tokens_old"], F.R1_0528["tokens_new"], F.R1_0528["max_len"]):
-        ctx = np.arange(500, 500 + n, 50, dtype=float)
+        ctx = np.arange(500, 500 + n, dtype=float)
         avg = ctx.mean()
         bmax = max(1, int((cap - W) // (kv_tok * (500 + n))))  # the batch whose caches fit at the end
         tt, _, _ = roofline_step(l8["params"], W, kv_tok, l8["layers"], l8["heads"] * l8["head_dim"], ctx, bmax,
                                  H["tensor"], H["bw"])
-        secs = float(tt.sum() * 50)  # one sequence: time to write n tokens at this batch
+        secs = float(tt.sum())  # exactly n decode contexts, including a final partial 50-token bin
         gpu_s_per_answer = secs / bmax
         res[str(n)] = dict(n=n, bmax=bmax, seconds=secs, usd=gpu_s_per_answer / 3600 * F.DSV32["gpu_hour"],
                            per_mtok=gpu_s_per_answer / 3600 * F.DSV32["gpu_hour"] / n * 1e6, avg_ctx=avg)

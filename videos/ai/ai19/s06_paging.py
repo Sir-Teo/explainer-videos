@@ -13,24 +13,31 @@ def memory_map(snap, pool, block=16, cols=64, cell=0.15, center=(0, 1.4)):
     """The cache's memory as a grid of cells of ``block`` tokens: each request its colour, bright where its tokens
     are, dim where it holds memory it hasn't filled, dark where memory is free."""
     n = pool // block
-    rows = n // cols
-    owner = np.full(n, -1)
-    fill = np.zeros(n)
-    for st, alloc, used, rid in np.asarray(snap).reshape(-1, 4):
-        a, b = int(st) // block, int(st + alloc) // block
-        for k in range(a, b):
-            owner[k] = int(rid)
-            fill[k] = np.clip((used - (k - a) * block) / block, 0, 1)
+    rows = int(np.ceil(n / cols))
     g = VGroup()
-    for k in range(n):
+
+    def position(k):
         r, c = divmod(k, cols)
-        if owner[k] < 0:
-            col, op = GREY_D, 0.12
-        else:
-            col = PALETTE[owner[k] % len(PALETTE)]
-            op = 0.9 if fill[k] > 0 else 0.22
-        g.add(Square(cell * 0.86, stroke_width=0, fill_color=col, fill_opacity=op)
-              .move_to([center[0] + (c - cols / 2 + 0.5) * cell, center[1] - (r - rows / 2 + 0.5) * cell, 0]))
+        return np.array([center[0] + (c - cols / 2 + 0.5) * cell,
+                         center[1] - (r - rows / 2 + 0.5) * cell, 0])
+
+    # A cell is an area scale for `block` token slots. Contiguous allocations
+    # need not align to cells; retain both owners and partial used/free areas.
+    for k in range(n):
+        g.add(Square(cell * 0.86, stroke_width=0, fill_color=GREY_D, fill_opacity=0.12).move_to(position(k)))
+    for st, alloc, used, rid in np.asarray(snap).reshape(-1, 4):
+        end = min(pool, st + alloc)
+        used_end = st + min(max(used, 0), alloc)
+        col = PALETTE[int(rid) % len(PALETTE)]
+        for k in range(max(0, int(st) // block), min(n, int(np.ceil(end / block)))):
+            lo, hi = max(st, k * block), min(end, (k + 1) * block)
+            for a, b, opacity in ((lo, min(hi, used_end), 0.9), (max(lo, used_end), hi, 0.22)):
+                if b <= a:
+                    continue
+                width = (b - a) / block * cell * 0.86
+                x = ((a + b) / 2 / block - k - 0.5) * cell * 0.86
+                g.add(Rectangle(width=width, height=cell * 0.86, stroke_width=0,
+                                fill_color=col, fill_opacity=opacity).move_to(position(k) + RIGHT * x))
     return g
 
 
@@ -69,6 +76,8 @@ class Paging(VoiceoverScene):
                    font_size=20, lo=0, hi=max(run) * 1.1, fmt_v=lambda v: rf"{v:.1f}")
         b2.move_to([3.6, -2.3, 0])
         t2 = label(r"conversations at once \ (average)", font_size=20, color=GREY_A).next_to(b2, UP, buff=0.15)
+        scope = note(r"toy scheduler: \ preemption restarts generation; \ averages over simulation steps",
+                     font_size=16).to_edge(DOWN, buff=0.18)
         hc = history_card(2023, r"Woosuk Kwon et al., \ vLLM", rf"PagedAttention: \ other systems used only "
                           rf"${F.VLLM['used'][0]}$--${F.VLLM['used'][1]}\%$ of the cache's memory for tokens; \ "
                           rf"${F.VLLM['gain'][0]}$--${F.VLLM['gain'][1]}\times$ the throughput", width=3.2,
@@ -83,6 +92,8 @@ class Paging(VoiceoverScene):
                     "where reading the weights dominates, vLLM measured two to four times.")
         with self.voiceover(
             "Where in memory should each conversation's cache go? Nobody knows how long an answer will be. "
+            "Our toy scheduler restarts generation after preemption, and averages give every simulation step equal "
+            "weight. "
             "<bookmark mark='a'/> So servers used to reserve, for every conversation, room for the longest answer "
             f"allowed, here {mx:,} tokens. Most of it sits empty: in our simulated server, on average only "
             f"{used[0]:.0f} percent of the memory holds a token, and it fits {run[0]:.1f} conversations at a "
@@ -94,14 +105,14 @@ class Paging(VoiceoverScene):
             f"<bookmark mark='d'/> Now {used[2]:.0f} percent of the memory holds tokens, and {run[2]:.1f} "
             f"conversations fit at once, {x_(cg)} times as many; " + tsay
         ) as vo:
-            self.play(FadeIn(head), FadeIn(maps[0], lag_ratio=0.002), FadeIn(sub[0]), run_time=1.5)
+            self.play(FadeIn(head), FadeIn(scope), FadeIn(maps[0], lag_ratio=0.002), FadeIn(sub[0]), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(t1), FadeIn(t2), FadeIn(b1[0]), FadeIn(b2[0]))
             vo.wait_until("b")
-            self.play(ReplacementTransform(maps[0], maps[1]), ReplacementTransform(sub[0], sub[1]), run_time=1.2)
+            self.play(FadeOut(maps[0]), FadeIn(maps[1]), FadeOut(sub[0]), FadeIn(sub[1]), run_time=1.2)
             self.play(FadeIn(b1[1]), FadeIn(b2[1]))
             vo.wait_until("c")
-            self.play(ReplacementTransform(maps[1], maps[2]), ReplacementTransform(sub[1], sub[2]), run_time=1.2)
+            self.play(FadeOut(maps[1]), FadeIn(maps[2]), FadeOut(sub[1]), FadeIn(sub[2]), run_time=1.2)
             self.play(FadeIn(hc))
             vo.wait_until("d")
             self.play(FadeIn(b1[2]), FadeIn(b2[2]))

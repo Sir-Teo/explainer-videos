@@ -192,6 +192,9 @@ def run_continuous(reqs, cost: Cost, bmax: int, chunk: int = 0, trace: list | No
                 r.done_pre += take[r.rid]
                 if r.done_pre >= r.prompt:
                     _emit(r, t)  # the last prompt position's logits give the first token
+                    # Decode starts after prefill. Starting this segment at
+                    # admission paints over the prefill segment in the Gantt.
+                    seg[r.rid] = t
         for r in list(run):
             if r.made >= r.out:
                 run.remove(r)
@@ -268,7 +271,10 @@ def memory_sim(reqs, cost: Cost, pool: int, mode: str, block: int = 16, max_len:
     ``mode``: "reserve" (each request holds ``max_len`` tokens from the start, as servers did before vLLM);
     "contiguous" (each holds exactly its final length in one contiguous range, first fit: it must know its length,
     and free memory splinters); "paged" (blocks of ``block`` tokens anywhere in the pool, taken as the sequence
-    grows; when the pool runs out the newest request is preempted and later recomputed, as vLLM does).
+    grows; when the pool runs out a request is preempted and restarted from its original prompt). This toy's
+    restart discards generated output; it does not model vLLM's recomputation of an already-confirmed prefix.
+    Request first-token times after a restart refer to the final successful attempt. The returned series is
+    sampled once per simulation step, not uniformly in wall-clock time.
     Returns the requests, a time series of (t, running, tokens stored, tokens allocated), the number of preemptions,
     and a snapshot of the memory at time ``snap_t``: [(start, allocated, used, request)]."""
     reqs = fresh(reqs)

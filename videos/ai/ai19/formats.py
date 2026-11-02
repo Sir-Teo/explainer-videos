@@ -2,13 +2,16 @@
 
     MXFP4  (OCP Microscaling spec, 2023; gpt-oss's expert weights): blocks of 32 numbers, each an FP4 E2M1 code
            (sign, 2 exponent bits, 1 mantissa bit), sharing one scale that is a power of two, stored as an 8-bit
-           exponent E8M0: shared exponent = floor(log2(max |v|)) - 2, so the block's largest number lands in E2M1's
-           top binade [4, 8); values above 6 there are clamped to 6.  4 + 8/32 = 4.25 bits a number.
+           exponent E8M0: the normal-range rule is floor(log2(max |v|)) - 2, bounded to [-127, 127]. Away from
+           those bounds, the largest number lands in E2M1's top binade [4, 8); values above 6 are clamped.
+           Zero blocks use scale 1. Nominal storage: 4 + 8/32 = 4.25 bits a number.
     NVFP4  (NVIDIA Blackwell, 2025): blocks of 16 E2M1 codes sharing a scale stored as an FP8 E4M3 number (not just a
            power of two), and one FP32 scale per tensor that keeps the block scales inside E4M3's range.  4 + 8/16 =
            4.5 bits a number.
 
-Every code is produced as bits and decoded back, so the emulation is exact, not an approximation of the format.
+Codes and scale fields are exposed and decoded for inspection. These are numerical lesson emulations, not a packed
+checkpoint or hardware-conversion conformance benchmark. The FP16-like comparison rounds significands without
+complete exponent/special-value emulation; storage rates are nominal.
 """
 
 from __future__ import annotations
@@ -74,11 +77,15 @@ def _unblocks(flat, r, c, pad):
 
 
 def mxfp4(W, detail=False):
-    """Round every row of W in MXFP4 (blocks of 32 along the row); ``detail``: also the shared exponents and codes."""
+    """Emulate finite Float32-domain weights in 32-element MXFP4 blocks; expose exponents/codes with ``detail``."""
     W = np.asarray(W, np.float64)
+    if not np.isfinite(W).all() or np.any(np.abs(W) > np.finfo(np.float32).max):
+        raise ValueError("MXFP4 weights must be finite and within the Float32 magnitude range")
     flat, c, pad = _blocks(W, 32)
     amax = np.abs(flat).max(1, keepdims=True)
     sh = np.floor(np.log2(np.maximum(amax, 2.0 ** -126))) - 2  # E8M0: the shared exponent
+    sh = np.where(amax == 0, 0.0, sh)  # zero blocks use scale 1, with a valid exponent byte
+    sh = np.clip(sh, -127, 127)  # OCP MX v1.0 Table 7: byte 255 is reserved for NaN
     X = 2.0 ** sh
     codes = e2m1_code(flat / X)
     out = _unblocks(e2m1_value(codes) * X, W.shape[0], c, pad)
@@ -92,6 +99,7 @@ def nvfp4(W, detail=False):
     W = np.asarray(W, np.float64)
     flat, c, pad = _blocks(W, 16)
     g = np.abs(W).max() / (6.0 * 448.0)  # the tensor scale: the largest block scale becomes 448
+    g = g if g > 0 else 1.0  # all-zero tensors need a positive scale too
     amax = np.abs(flat).max(1, keepdims=True)
     s = round_e4m3(amax / 6.0 / g)
     s = np.where(s > 0, s, 1.0)
@@ -103,13 +111,15 @@ def nvfp4(W, detail=False):
 
 
 def int4_scaled(W, group, scale="fp16"):
-    """4-bit integers (-8 ... 7) with one scale per ``group`` numbers along a row; the scale stored in FP16 (rounded
-    to 11 significant bits) or in E4M3 with a tensor scale, as NVFP4 does (to compare the element formats alone)."""
+    """4-bit integers (-8 ... 7) with one scale per ``group`` numbers along a row; FP16-like 11-bit significand
+    rounding (normal-range model weights), or E4M3 with a tensor scale, as NVFP4 does. This compares element
+    formats alone; the FP16-like branch does not emulate exponent saturation or subnormals."""
     W = np.asarray(W, np.float64)
     flat, c, pad = _blocks(W, group)
     amax = np.abs(flat).max(1, keepdims=True)
     if scale == "e4m3":
         g = np.abs(W).max() / (7.0 * 448.0)
+        g = g if g > 0 else 1.0
         s = round_e4m3(amax / 7.0 / g) * g
     else:
         s = amax / 7.0

@@ -106,7 +106,7 @@ class Drafters(VoiceoverScene):
         ev_d, ev_e = np.asarray(dr["evals"]), np.asarray(ea["evals"])
         S = max(ev_d[-1, 0], ev_e[-1, 0])
         g = axes([0, S * 1.02], [0, 1.0], x_length=5.6, y_length=3.6, xlabel=r"training step",
-                 ylabel=r"acceptance $\alpha$ \ (held-out text, \ sampling)", xticks=[0, int(S // 2), int(S)],
+                 ylabel=r"one-step overlap $\alpha$ \ (teacher-forced)", xticks=[0, int(S // 2), int(S)],
                  yticks=[0, 0.5, 1.0], center=[3.1, 0.3, 0])
         ax = g.ax
         cd = curve(ax, ev_d[:, 0], ev_d[:, 2], DRAFTC, 3)
@@ -128,18 +128,18 @@ class Drafters(VoiceoverScene):
         re = label(rf"EAGLE head: \ ${ev_e[-1, 2]:.2f}$ \ (greedy ${ev_e[-1, 3]:.2f}$)", font_size=20, color=EAGLEC)
         res = VGroup(rd, re).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(g, DOWN, buff=0.35)
         better = "EAGLE head" if ev_e[-1, 2] > ev_d[-1, 2] else "small model"
-        why_ = ("reading the big model's own features, the head starts from far more than a small model can learn"
-                if better == "EAGLE head" else "the small model, reading the text itself, ends up the better guesser")
+        why_ = ("the head has higher one-step overlap on these true held-out prefixes"
+                if better == "EAGLE head" else "the small model has higher one-step overlap on these true held-out prefixes")
         mins_d, mins_e = dr["seconds"] / 60, ea["seconds"] / 60
         with self.voiceover(
             "Where does a draft come from? We trained two for the novels model, on this computer. "
             "<bookmark mark='a'/> The first is simply a small language model: two layers instead of six, trained "
             f"on the same novels for {mins_d:.0f} minutes. <bookmark mark='b'/> The second follows EAGLE, from Yuhui "
-            "Li and colleagues in 2024. It doesn't read the text at all. It reads the big model's last hidden "
+            "Li and colleagues in 2024. Instead of a separate language model, it reads the big model's last hidden "
             "state, with the token just chosen, and predicts the next hidden state, which the big model's own "
             "output layer turns into a token. It is one block, trained for "
             f"{mins_e:.0f} minutes with the big model frozen. <bookmark mark='c'/> As each trains, we measured its "
-            "acceptance on held-out text: the chance a drafted token survives the check. "
+            "one-step distribution overlap at true held-out prefixes. Free-running acceptance is measured separately. "
             f"<bookmark mark='d'/> The small model reaches {ev_d[-1, 2]:.2f}; the EAGLE head {ev_e[-1, 2]:.2f}: "
             + why_ + "."
         ) as vo:
@@ -183,7 +183,7 @@ class Drafters(VoiceoverScene):
             ln = VMobject(color=col, stroke_width=2).set_points_smoothly(
                 [ax.c2p(x, (1 - alpha[m] ** (x + 1)) / (1 - alpha[m])) for x in xs])
             lines.add(ln.set_stroke(opacity=0.6))
-        key = VGroup(label(r"dots: \ measured, \ $12$ openings $\times$ $96$ tokens", font_size=19, color=GREY_A),
+        key = VGroup(label(r"dots: \ delivered tokens/pass; \ $12 \times 96$ tokens", font_size=19, color=GREY_A),
                      label(rf"lines: \ the formula, \ $\alpha = {alpha['draft']:.2f}$ (small model)", font_size=19,
                            color=DRAFTC),
                      label(rf"\phantom{{lines: }} $\alpha = {alpha['eagle']:.2f}$ (EAGLE head)", font_size=19,
@@ -197,6 +197,8 @@ class Drafters(VoiceoverScene):
         gr = {m: R[f"{m}_4_0"]["tokens"] / R[f"{m}_4_0"]["rounds"] for m in cols}
         gl = label(rf"greedy, \ $k = 4$: \ ${gr['draft']:.2f}$ \ and \ ${gr['eagle']:.2f}$ tokens per pass",
                    font_size=19, color=GREY_A).next_to(dl, DOWN, buff=0.3).align_to(dl, LEFT)
+        scope = note(r"finite outputs: \ the final draft tail is discarded; \ the formula counts all generated tokens",
+                     font_size=15).to_edge(DOWN, buff=0.18)
         best = max(cols, key=lambda m: meas[m][k4])
         diff = {m: meas[m][k4] - pred[m][k4] for m in cols}
         if all(abs(v) < 0.1 * pred[m][k4] for m, v in diff.items()):
@@ -209,27 +211,24 @@ class Drafters(VoiceoverScene):
                    "earlier guesses, fare differently from the first.")
         who = "the EAGLE head" if best == "eagle" else "the small model"
         e0, e3, d0, d3 = dep["eagle"][0], dep["eagle"][-1], dep["draft"][0], dep["draft"][-1]
-        if e3 < e0 - 0.05:
-            dep_say = (f"Draft by draft, the head's acceptance falls from {e0:.2f} for the first to {e3:.2f} for the "
-                       f"fourth, because it is feeding on its own guesses; the small model's goes from {d0:.2f} to "
-                       f"{d3:.2f}.")
-        else:
-            dep_say = (f"Draft by draft, the head's acceptance goes from {e0:.2f} for the first to {e3:.2f} for the "
-                       f"fourth, and the small model's from {d0:.2f} to {d3:.2f}: once a stretch of text is "
-                       "predictable, the next draft tends to be right too.")
+        dep_say = (f"The head's conditional acceptance goes from {e0:.2f} at the first draft to {e3:.2f} at the "
+                   f"fourth; the small model's goes from {d0:.2f} to {d3:.2f}. Each depth is scored only when "
+                   "the earlier drafts were accepted.")
         if gr[best] > meas[best][k4]:
-            greedy_say = (f"Decoding greedily, the drafts survive more often: {gr[best]:.2f} tokens per pass for "
+            greedy_say = (f"Decoding greedily delivers {gr[best]:.2f} tokens per pass for "
                           f"{who}.")
         else:
             greedy_say = f"Decoding greedily, {who} gets {gr[best]:.2f} tokens per pass."
         with self.voiceover(
             "Now the real thing: speculative sampling on twelve held-out openings, ninety-six tokens each. "
+            "We count delivered tokens; any excess from the final pass is discarded. The formula counts all "
+            "generated tokens, so this finite output budget can lower the measured dots. "
             "<bookmark mark='a'/> With four drafts per pass, the small model gets "
             f"{meas['draft'][k4]:.2f} tokens out of each pass of the big model, and the EAGLE head "
             f"{meas['eagle'][k4]:.2f}. <bookmark mark='b'/> The lines are the formula, with alpha measured on the "
             "first draft. " + fit + " <bookmark mark='c'/> " + dep_say + " <bookmark mark='d'/> " + greedy_say
         ) as vo:
-            self.play(FadeIn(g), Create(one), FadeIn(key[0]))
+            self.play(FadeIn(g), Create(one), FadeIn(key[0]), FadeIn(scope))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for grp in dots for d_ in grp], lag_ratio=0.08), run_time=2.0)
             vo.wait_until("b")
@@ -255,8 +254,11 @@ class Drafters(VoiceoverScene):
         b = hbars(vals, [r[1] for r in rows], [r[2] for r in rows], width=4.0, row_h=0.46, font_size=20, lo=0,
                   hi=max(vals) * 1.08, fmt_v=lambda v: rf"{v:.2f}\,\text{{ms}}")
         b.move_to([-1.6, 0.2, 0])
-        head = label(r"time per token written, \ this computer, \ one core", font_size=24, color=GREY_A).to_edge(UP,
+        head = label(r"time per checking pass, \ this computer, \ one core", font_size=24, color=GREY_A).to_edge(UP,
                                                                                                              buff=0.4)
+        run_head = label(r"end-to-end time per output token, \ one core", font_size=24,
+                         color=GREY_A).move_to(head)
+        scope = note(r"$96$ delivered tokens per prompt; \ prefill and cache setup included", font_size=16).to_edge(DOWN, buff=0.18)
         pt = np.asarray(d["piece_target"]) * 1e3
         pn = list(d["piece_n"])
         pieces = VGroup(label(r"one pass of the big model:", font_size=20, color=GREY_A),
@@ -290,14 +292,11 @@ class Drafters(VoiceoverScene):
                       label(rf"DeepSeek-V3's MTP module: \ ${F.DSV3['mtp_accept'][0]}$--${F.DSV3['mtp_accept'][1]}\%$ "
                             rf"accepted, \ ${F.DSV3['mtp_tps']}\times$ tokens/s", font_size=19, color=ACCEPTC))
         pubs.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.9, -2.2, 0])
-        if five > 1.3:
-            check = (f"checking five tokens in one pass costs {five:.1f} times what one token does: a processor core "
-                     "has little arithmetic to spare, so the check isn't free the way it nearly is on a GPU.")
-        else:
-            check = (f"checking five tokens in one pass costs only {five:.1f} times what one token does: the pass "
-                     "is mostly reading weights, as on a GPU.")
+        check = (f"checking five tokens in one pass takes {five:.1f} times as long as one token in this "
+                 "implementation.")
         with self.voiceover(
-            "And the clock? <bookmark mark='a'/> On this computer, " + check + " <bookmark mark='b'/> " + verdict + " "
+            "And the clock? <bookmark mark='a'/> On this computer, " + check + " <bookmark mark='b'/> "
+            "For these ninety-six-token outputs, timings include prompt prefill and cache setup. " + verdict + " "
             "<bookmark mark='c'/> On GPUs, where a pass of a few tokens costs about as much as a pass of one, "
             "published systems do better. Medusa adds extra heads to the model; EAGLE-3 reports up to six and a "
             "half times; and DeepSeek-V3 trains its own drafter during pretraining, the multi-token prediction "
@@ -308,7 +307,7 @@ class Drafters(VoiceoverScene):
             self.play(FadeIn(pieces), FadeIn(pbt), LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(
                 r_.bar, LEFT), FadeIn(r_.val)) for r_ in pb], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeOut(pb), FadeOut(pbt))
+            self.play(FadeOut(pb), FadeOut(pbt), FadeOut(head), FadeIn(run_head), FadeIn(scope))
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(r_.bar, LEFT), FadeIn(r_.val))
                                     for r_ in b], lag_ratio=0.2), run_time=2.5)
             vo.wait_until("c")

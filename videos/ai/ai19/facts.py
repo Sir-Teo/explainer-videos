@@ -28,8 +28,19 @@ GPT_OSS_120B = dict(total=116.83e9, active=5.13e9, mlp=114.71e9, attn=0.96e9, em
                     date="2025-08",
                     src="OpenAI, gpt-oss-120b & gpt-oss-20b Model Card (arXiv 2508.10925, 2025), Table 1, Sec. 2; "
                         "config.json")
-GPT_OSS_20B = dict(total=20.91e9, active=3.61e9, mlp=19.12e9, layers=24, experts=32, fits_gb=16, ckpt_gib=12.8,
+GPT_OSS_20B = dict(total=20.91e9, active=3.61e9, mlp=19.12e9, layers=24, experts=32, top_k=4,
+                   mxfp4_bits=4.25, fits_gb=16, ckpt_gib=12.8,
                    src="OpenAI (2025), Table 1")
+
+
+def gpt_oss_active_weight_bytes(model):
+    """Approximate decode read from rounded model-card counts, excluding KV traffic.
+
+    Only selected MoE weights use MXFP4. Active non-expert weights (including
+    unembedding, excluding the input embedding lookup) remain in BF16.
+    """
+    expert_active = model["mlp"] * model["top_k"] / model["experts"]
+    return expert_active * model["mxfp4_bits"] / 8 + (model["active"] - expert_active) * 2
 GEMMA3 = dict(local=5, glob=1, window=1024, ctx=128_000,
               src="Gemma Team, Gemma 3 Technical Report (arXiv 2503.19786, 2025), Sec. 2")
 APPLE_ON_DEVICE = dict(params=3e9, bits=2, emb_bits=4, kv_bits=8, kv_share=37.5, server_bits=3.56,
@@ -118,7 +129,9 @@ MX = dict(year=2023, block=32, src="B. D. Rouhani et al., Microscaling Data Form
 NVFP4 = dict(year=2025, block=16, bits=4.5, vs_fp16=3.5, vs_fp8=1.8, r1_drop=1,
              src="NVIDIA, Introducing NVFP4 for Efficient and Accurate Low-Precision Inference (24 June 2025)")
 LLAMA_CPP = dict(date="2023-03-10", src="G. Gerganov, llama.cpp (github.com/ggml-org/llama.cpp, March 2023)")
-KIMIK3 = dict(date="2026-07-16", total=2.8e12, active=104e9, src="Moonshot AI, Kimi K3 model card (2026), as in Part 18")
+KIMIK3 = dict(date="2026-07-16", total=2.8e12, active=104e9,
+              src="MoonshotAI/Kimi-K3 README, Native MXFP4 Quantization: QAT from SFT onward (2026); "
+                  "https://github.com/MoonshotAI/Kimi-K3#4-native-mxfp4-quantization")
 
 # ---------------------------------------------------------------------------
 # Constrained decoding

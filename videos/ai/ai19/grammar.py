@@ -72,7 +72,13 @@ class Automaton:
 
     def final(self, S):
         """Accepting with nothing more allowed: the record is complete."""
-        return self.accepting(S) and all(i >= len(self.atoms) for i, _ in S)
+        # Epsilon closure also retains completed atoms. They cannot consume
+        # another character, so they must not hide a terminal accepting state.
+        return self.accepting(S) and all(
+            i >= len(self.atoms) or
+            (k >= len(self.atoms[i][1]) if self.atoms[i][0] == "lit" else k >= self.atoms[i][3])
+            for i, k in S
+        )
 
 
 def token_strings():

@@ -38,7 +38,7 @@
   "6df734d19dbf": {
    "scene": "Hook",
    "en": "How did we get here? The transformer of 2017 already wrote one token at a time and kept the keys and values of what it had read, the cache of Part 15. <bookmark mark='a'/> In 2019 Noam Shazeer shared one set of keys and values among all the heads, to read less of it. In 2020 GPT-3 went on sale by the token, and the cost of a token became a business. <bookmark mark='b'/> 2022 was the year the ideas of this part arrived: FlashAttention, continuous batching, speculative decoding, and GPTQ's four-bit weights. <bookmark mark='c'/> In 2023, llama.cpp ran a big model on a laptop, and vLLM managed the cache in pages. <bookmark mark='d'/> Then DeepSeek compressed the cache itself, servers split reading from writing, and in 2025 OpenAI released gpt-oss with its experts in four-bit floats. <bookmark mark='e'/> Meanwhile the price of a token fell. A model at least as good as GPT-3 cost sixty dollars per million tokens in 2021, and fifteen cents per million input tokens in 2024: 400 times less.",
-   "zh": "我们是怎么走到这一步的？2017年的Transformer，就已经是一次写一个词元，并且把读过的内容的键和值保存下来，也就是第15部分讲的缓存。<bookmark mark='a'/>2019年，诺姆·沙泽尔让所有的头共用一套键和值，好少读一些。2020年，GPT-3开始按词元出售，一个词元的成本，从此成了一门生意。<bookmark mark='b'/>2022年，这一部分的想法纷纷登场：FlashAttention、连续批处理、推测解码，还有GPTQ的4比特权重。<bookmark mark='c'/>2023年，llama.cpp在笔记本电脑上跑起了大模型，vLLM开始按页管理缓存。<bookmark mark='d'/>接着，DeepSeek压缩了缓存本身，服务器把读提示和写回答拆开，2025年，OpenAI发布了gpt-oss，它的专家用的是4比特浮点数。<bookmark mark='e'/>与此同时，词元的价格一路下跌。一个至少和GPT-3一样好的模型，2021年每百万词元要60美元，2024年每百万输入词元只要1角5分：只剩原来的400分之1。"
+   "zh": "我们是怎么走到这一步的？2017年的Transformer，就已经是一次写一个词元，并且把读过的内容的键和值保存下来，也就是第15部分讲的缓存。<bookmark mark='a'/>2019年，诺姆·沙泽尔让所有的头共用一套键和值，好少读一些。2020年，GPT-3开始按词元出售，一个词元的成本，从此成了一门生意。<bookmark mark='b'/>2022年，这一部分的想法纷纷登场：FlashAttention、连续批处理、推测解码，还有GPTQ的4比特权重。<bookmark mark='c'/>2023年，llama.cpp在笔记本电脑上跑起了大模型，vLLM开始按页管理缓存。<bookmark mark='d'/>接着，DeepSeek压缩了缓存本身，服务器把读提示和写回答拆开，2025年，OpenAI发布了gpt-oss，它的专家用的是4比特浮点数。<bookmark mark='e'/>与此同时，词元的价格一路下跌。一个至少和GPT-3一样好的模型，2021年每百万词元要60美元，2024年每百万输入词元只要0.15美元：只剩原来的400分之1。"
   },
   "f8dc50d08491": {
    "scene": "Hook",
@@ -428,7 +428,7 @@
   "2782beda26c9": {
    "scene": "Frontier",
    "en": "Meanwhile the price of a token has collapsed. <bookmark mark='a'/> Take the cheapest OpenAI model at least as good as the original GPT-3: sixty dollars per million tokens in 2021, twenty after a cut in 2022, two for the ChatGPT model in 2023, fifteen cents for GPT-4o mini in 2024. <bookmark mark='b'/> That's 400 times in about three and a half years, 5.6 times a year. <bookmark mark='c'/> Epoch AI, tracking many benchmarks, found the price of a fixed level of ability falling between nine and nine hundred times a year, depending on the task. Some of that is this part's methods, some is Part 17's hardware, and some is smaller models trained on more data, as Part 12 described.",
-   "zh": "与此同时，词元的价格一落千丈。<bookmark mark='a'/>拿至少和最初的GPT-3一样好的、最便宜的OpenAI模型来看：2021年每百万词元60美元，2022年降价后20美元，2023年ChatGPT所用的模型2美元，2024年GPT-4o mini是1角5分。<bookmark mark='b'/>大约三年半里，价格只剩原来的400分之1，相当于每年降到5.6分之1。<bookmark mark='c'/>Epoch AI追踪了许多基准，发现达到某个固定能力水平的价格，每年降到9分之1到900分之1不等，取决于任务。其中一部分归功于这一部分的方法，一部分归功于第17部分的硬件，还有一部分，是像第12部分讲的那样，用更多数据训练出的更小的模型。"
+   "zh": "与此同时，词元的价格一落千丈。<bookmark mark='a'/>拿至少和最初的GPT-3一样好的、最便宜的OpenAI模型来看：2021年每百万词元60美元，2022年降价后20美元，2023年ChatGPT所用的模型2美元，2024年GPT-4o mini是0.15美元。<bookmark mark='b'/>大约三年半里，价格只剩原来的400分之1，相当于每年降到5.6分之1。<bookmark mark='c'/>Epoch AI追踪了许多基准，发现达到某个固定能力水平的价格，每年降到9分之1到900分之1不等，取决于任务。其中一部分归功于这一部分的方法，一部分归功于第17部分的硬件，还有一部分，是像第12部分讲的那样，用更多数据训练出的更小的模型。"
   },
   "d63d378fddf6": {
    "scene": "Frontier",
@@ -459,6 +459,16 @@
    "scene": "Outro",
    "en": "To go further, the vLLM and FlashAttention papers are good places to start. Thanks for watching, and see you in Part 20.",
    "zh": "想深入下去，vLLM和FlashAttention的论文是很好的起点。感谢观看，第20部分见。"
+  },
+  "24995dadfcff": {
+   "scene": "Hook",
+   "en": "When a big model writes, it writes one token at a time. And to write each one, it has to read every single one of its weights. <bookmark mark='a'/> For an eight-billion-parameter model, stored as sixteen-bit numbers, two bytes each, that's about sixteen gigabytes, streamed from memory through to the chip, <bookmark mark='b'/> for one token. Then all of it again for the next one, and the next. <bookmark mark='c'/> How many bytes a second can flow from memory to the chip is the memory bandwidth: here, three point three five terabytes a second.",
+   "zh": "大模型写东西的时候，一次只写一个词元。而每写一个，它都得把自己的每一个权重，统统读一遍。<bookmark mark='a'/>对一个80亿参数的模型来说，每个数按16比特存，也就是2个字节，这就是大约16GB的数据，从内存一路流进芯片，<bookmark mark='b'/>只为了一个词元。下一个词元，又要全部再读一遍；再下一个，还是这样。<bookmark mark='c'/>每秒能从内存流进芯片多少字节，这叫作内存带宽：在这里，是每秒3.35TB。"
+  },
+  "3bd9941a4abd": {
+   "scene": "Hook",
+   "en": "So memory sets a speed limit. Tokens per second can't beat the memory bandwidth divided by the bytes of weights: for Llama 3.1 8B on an NVIDIA H100, about 209 tokens a second, before cache traffic and other overheads. <bookmark mark='a'/> And meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> One conversation uses a third of one percent of it. <bookmark mark='c'/> Running a trained model to get answers, with no learning, just using it, is called inference; it's not part seven's variational inference. And inference is a problem of moving numbers, not multiplying them.",
+   "zh": "所以，内存给速度定了一个上限。每秒能写出的词元数，超不过内存带宽除以权重的字节数：Llama 3.1 8B在一块NVIDIA H100上，大约是每秒209个词元，还没算缓存流量和其他开销。<bookmark mark='a'/>与此同时，芯片的算力几乎一直闲着。<bookmark mark='b'/>一段对话，只用掉其中的三分之一个百分点。<bookmark mark='c'/>拿训练好的模型来得到回答，不再学习，只是使用它，这叫作推断；它和第7部分的变分推断不是一回事。推断的难处，在于搬运数字，而不在于做乘法。"
   }
  },
  "title_en": "AI, Built: Part 19, Inference",
