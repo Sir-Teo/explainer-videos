@@ -173,6 +173,7 @@ class Dcc(VoiceoverScene):
             f"stocks and bonds a plus b is {a + b:.3f}: a shock to the correlation takes about {hl:.0f} trading days, "
             "more than a year, to halve. Correlation regimes are slow, which is why they matter so much to a "
             "balanced portfolio and why a model fitted to one decade can be wrong for the next."
+            " All these models infer volatility from daily returns. With intraday data we can measure it. Next."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -239,6 +239,7 @@ class Projection(VoiceoverScene, ThreeDScene):
             "numbers we just drew. Regression in Part six is this same function with a richer partition. "
             "<bookmark mark='b'/> So, since 2000, after a down day, is the best forecast of today's return up, down or "
             f"zero? {'Up' if e2['down'] > 0 else 'Down'}, by {abs(e2['down']):.1f} basis points."
+            " A forecast that the past cannot improve is exactly what defines a fair game. Next: martingales."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

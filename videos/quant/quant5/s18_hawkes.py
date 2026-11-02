@@ -217,6 +217,7 @@ class Hawkes(VoiceoverScene):
             "volatility, in Part fourteen. <bookmark mark='d'/> A pause: with branching ratio "
             f"{h['fit']['branching']:.2f}, what fraction of moves were triggered? Exactly that: "
             f"{100 * h['fit']['branching']:.0f} percent."
+            " Nearly critical clustering leaves memory in volatility. Next: a process with memory built in."
         ) as vo:
             self.play(FadeIn(top), FadeIn(t1))
             vo.wait_until("a")

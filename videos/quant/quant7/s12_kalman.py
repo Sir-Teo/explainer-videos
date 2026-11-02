@@ -224,6 +224,7 @@ class Kalman(VoiceoverScene):
             "is below the market's average volatility, because the average of a log sits below the log of the "
             "average: the typical day is calmer than the average day. For forecasting, use the filter; for history, "
             "the smoother."
+            " Stochastic volatility treats volatility as hidden. GARCH makes it a function of past returns, far easier to fit. Next."
         ) as vo:
             step(0)
             step(1)

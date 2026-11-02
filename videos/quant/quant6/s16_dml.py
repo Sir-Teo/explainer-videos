@@ -177,6 +177,7 @@ class DML(VoiceoverScene):
             "<bookmark mark='b'/> At extreme penalties both fail: the product of two bad errors is not small. Robustness, "
             "not immunity. <bookmark mark='c'/> Pause and predict: a perfect treatment model and a poor outcome model. "
             "Is theta fine? Yes, to first order."
+            " All of this assumes enough data. Next: how much is enough."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(truth), FadeIn(leg1), FadeIn(leg2))
             self.add(dr)

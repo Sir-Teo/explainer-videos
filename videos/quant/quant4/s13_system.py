@@ -225,6 +225,7 @@ class System(VoiceoverScene):
             "In the House the transform is one line, and each system is a function from past outcomes to the next "
             "stake. <bookmark mark='a'/> On the twelve tosses it reproduces the curtain. Chapter sixteen turns this "
             "line into a test."
+            " Changing the stakes fails. What about choosing when to stop?"
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

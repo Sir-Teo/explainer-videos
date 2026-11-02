@@ -172,6 +172,7 @@ class MLE(VoiceoverScene, ThreeDScene):
             "the data reject; the estimate itself, a quasi-maximum-likelihood estimate, is still fine. "
             "<bookmark mark='c'/> Pause and predict: double the sample. What happens to the ellipse? Each axis shrinks "
             "by the square root of two, so its area halves. Quadruple it, and both axes halve."
+            " Likelihood needs the whole distribution. Next: a method that needs only moments."
         ) as vo:
             self.play(FadeIn(g), FadeIn(dot), Create(e_naive), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")

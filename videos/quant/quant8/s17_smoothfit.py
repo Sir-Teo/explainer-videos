@@ -152,7 +152,7 @@ class SmoothFit(VoiceoverScene):
             "With an expiry, the boundary rises toward the strike as time runs out. <bookmark mark='a'/> The right to "
             f"choose when is worth {a['american'] - a['european']:.2f} on a one-year put. <bookmark mark='b'/> In general "
             "the value solves a variational inequality, is a viscosity solution, and is the value of a reflected backward "
-            "equation: next chapter's subject."
+            "equation: chapter fourteen's subject. First, a question no solver answers: how people actually decide."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), Create(perp), FadeIn(pl))
             self.play(Create(bl), FadeIn(region), FadeIn(ex), FadeIn(wt), run_time=2)

@@ -271,6 +271,7 @@ class FamaMacBeth(VoiceoverScene):
             f"Shanken test rejects too, p of {tp['grs_p']:.3f}; Part twenty-four goes further. <bookmark mark='c'/> Pause "
             "and predict: is the market's own past year a buy signal for the market? No: the between slope was "
             f"{fe['between']:.4f}."
+            " From explaining returns across stocks to forecasting the market through time. Next: predictive regressions, and their bias."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.02))
             self.play(Create(capm), FadeIn(side[2]))

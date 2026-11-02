@@ -243,6 +243,7 @@ class Measure(VoiceoverScene):
             f"one percent of days carry {100 * es['tail_q']:.2f} percent of Q's weight. <bookmark mark='c'/> So under "
             "Q crash days are more likely. That is what the premium pays for, and Part nine prices options in this "
             "world."
+            " How far can a change of measure go? Next: the Radon–Nikodym theorem, and where it breaks."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("a")

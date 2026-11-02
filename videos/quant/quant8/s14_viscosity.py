@@ -198,6 +198,7 @@ class Viscosity(VoiceoverScene):
             "finest grid: refining makes it worse. <bookmark mark='c'/> Consistency is not enough. Monotonicity is what makes a "
             "grid converge to the right kink, and it is why chapter two's solver, a maximum of positively weighted averages, "
             "found portfolio insurance."
+            " With the tools in place, the classic problem. Next: Merton's."
         ) as vo:
             self.play(*[FadeIn(g) for g in gs], FadeIn(heads), FadeIn(tent), FadeIn(src))
             self.add(pu, pc, tlab)

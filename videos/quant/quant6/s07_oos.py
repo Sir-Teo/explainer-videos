@@ -166,6 +166,7 @@ class OutOfSample(VoiceoverScene):
             "rest failed out of sample. <bookmark mark='c'/> Pause and predict: with an in-sample R-squared of six "
             "hundredths of a percent, can the out-of-sample R-squared be positive? Rarely: the estimated slope's "
             "own noise costs more than that."
+            " So far, least squares. Next: the method behind most models in this series, maximum likelihood."
         ) as vo:
             self.play(FadeIn(VGroup(*head)))
             vo.wait_until("a")

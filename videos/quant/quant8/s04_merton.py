@@ -160,6 +160,7 @@ class Merton(VoiceoverScene):
             "the bars show what that does to the answer: for gamma three, anything from "
             f"{100 * lo[2]:.0f} to {100 * hi[2]:.0f} percent. Variances are estimated well; means are not. The formula is "
             "exact; its inputs are not. Chapter thirteen meets an investor who takes that doubt seriously."
+            " Merton also asked how fast to spend. Next: consumption, and a second way to solve the problem."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(ol), FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             vo.wait_until("b")

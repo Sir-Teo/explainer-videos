@@ -209,6 +209,7 @@ class Euler(VoiceoverScene, ThreeDScene):
             "premium puzzle, 1985. <bookmark mark='a'/> Pause and predict: with only the T-bill's moments, is gamma "
             "identified? <bookmark mark='b'/> Barely. The bill pins patience; risk aversion needs the risky asset's "
             "covariance with consumption, and it is tiny."
+            " From the economy's average investor to single news days. Next: event studies."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.5, run_time=4))
             vo.wait_until("a")

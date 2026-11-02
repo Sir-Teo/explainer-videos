@@ -185,6 +185,7 @@ class Stopping(VoiceoverScene):
             "cap, without limit. <bookmark mark='d'/> So: after a hundred fair steps, what fraction of walks has not "
             f"yet been up one? About {100 * f['p100_exact']:.0f} percent. The walk that always wins can make you wait "
             "longer than any bankroll."
+            " So when exactly does stopping fail to help? Next: the theorem, with its proof."
         ) as vo:
             self.play(FadeIn(g))
             self.add(fan, counter)

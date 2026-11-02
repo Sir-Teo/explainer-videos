@@ -192,6 +192,7 @@ class Zoo(VoiceoverScene):
             f"estimate its degrees of freedom: about {tg['nu']:.0f}. Now the points straighten, and the log-likelihood "
             f"rises by {tg['loglik'] - gl['g_loglik']:,.0f}. The volatility path barely changes; the tails do, and "
             "the tails are what risk managers are paid to get right."
+            " One asset's volatility is half the story. Next: correlations that move."
         ) as vo:
             self.play(FadeIn(g), Create(diag))
             vo.wait_until("a")

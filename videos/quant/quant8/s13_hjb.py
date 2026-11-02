@@ -206,6 +206,7 @@ class HJB(VoiceoverScene):
             f"{int(np.argmax(h['pass_counts']))} passes. <bookmark mark='b'/> Its fraction is Merton's to "
             f"{100 * h['pi_err']:.3f} points, its value within {100 * h['rel_err']:.2f} percent of the closed form, "
             "<bookmark mark='c'/> and the error falls as the grid is refined."
+            " But value functions are not always smooth. Next: what to do when they have kinks."
         ) as vo:
             self.play(FadeIn(g), Create(ref), FadeIn(side[0]), FadeIn(src))
             vo.wait_until("a")

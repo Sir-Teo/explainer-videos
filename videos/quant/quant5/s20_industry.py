@@ -240,6 +240,7 @@ class Industry(VoiceoverScene):
             "leaves generative and agentic AI outside its scope. <bookmark mark='a'/> The House's version is Rule 6: "
             "no simulator prices anything until it has reproduced a known answer. Here is this part's validation "
             "report."
+            " Last, the frontier."
         ) as vo:
             self.play(FadeIn(sr[0]))
             self.play(FadeIn(sr[1]), FadeIn(sr[2]))

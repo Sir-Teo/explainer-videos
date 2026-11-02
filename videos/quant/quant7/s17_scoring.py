@@ -220,6 +220,7 @@ class Scoring(VoiceoverScene):
             f"confidence. <bookmark mark='a'/> On the race we are about to run, {verdict} <bookmark mark='b'/> Loosen "
             f"the level to seventy-five percent and {out_txt} drop out. Hold on to that humility when the leaderboard "
             f"appears."
+            " The race includes networks. Next: how they are trained."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(side[0]))
             vo.wait_until("a")

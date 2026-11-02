@@ -200,6 +200,7 @@ class MeanReversion(VoiceoverScene):
             "regression's value dashed. On the left, the fitted long-run Gamma density morphing over sixty-seven "
             "years of rates. <bookmark mark='b'/> All five starts end at the same place, and the Feller ratio moves "
             f"from {r['cir']['feller']:.2f} to {verdict} Part nineteen fits rate models to bond prices instead."
+            " A simulated path is one view of an SDE; a PDE is the other. Next: why they are the same thing."
         ) as vo:
             self.play(FadeIn(rp), Create(base), FadeIn(bl))
             vo.wait_until("a")

@@ -261,6 +261,7 @@ class Industry(VoiceoverScene):
             "check every hour, and Netflix uses anytime-valid tests to decide, while a new version rolls out, whether "
             "it is safe. <bookmark mark='b'/> On trading desks, watching a strategy for decay with sequential tests is "
             "standard practice, though no firm has published its own method."
+            " Last, the frontier."
         ) as vo:
             self.play(FadeIn(cards[0]))
             vo.wait_until("a")

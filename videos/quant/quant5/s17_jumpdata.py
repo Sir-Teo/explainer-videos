@@ -149,6 +149,7 @@ class JumpData(VoiceoverScene):
             "transform is one choice among many. <bookmark mark='d'/> A pause: rebalance every second, and does the "
             "jump error vanish? No. A jump happens between two trades, however close they are. Part eleven hedges "
             "with options instead."
+            " And jumps in real markets cluster. Next: jumps that cause jumps."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             vo.wait_until("a")

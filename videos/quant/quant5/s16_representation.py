@@ -158,6 +158,7 @@ class Representation(VoiceoverScene):
             f"Brownian motion B, and hedge with W alone, using the best position in W. The error {verdict} The market "
             "is incomplete, and Parts eleven and thirteen live there. <bookmark mark='d'/> A pause: four times as "
             "many trades. The spread halves."
+            " But one hedge refuses to converge: the one from the start of this part. Next, the paradox resolved."
         ) as vo:
             self.play(FadeIn(g), Create(theory), FadeIn(leg[3]))
             vo.wait_until("a")

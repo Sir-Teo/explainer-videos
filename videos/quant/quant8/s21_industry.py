@@ -213,6 +213,7 @@ class Industry(VoiceoverScene):
             "fitted its impact on Citigroup's trades, a three-fifths power of size. <bookmark mark='a'/> And Victor "
             "Haghani, of the coin experiment, now sizes clients' portfolios with Merton's rule; his 2023 book with James "
             "White, The Missing Billionaires, blames lost fortunes on bad sizing and spending."
+            " Last, the frontier."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

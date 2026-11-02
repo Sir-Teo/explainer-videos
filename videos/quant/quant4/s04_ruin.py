@@ -189,6 +189,7 @@ class Ruin(VoiceoverScene):
             "two thousand five hundred. <bookmark mark='c'/> Sixty games, gold at a hundred, red when broke. "
             f"{verdict} On European roulette the games end sooner, and only {100 * R['frac_top']:.1f} percent "
             "at a hundred."
+            " A bounded fair game has to settle somewhere. Next: why martingales converge."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -217,6 +217,7 @@ class Barings(VoiceoverScene):
             "the trades makes the losses visible. <bookmark mark='b'/> In Singapore, Leeson ran both the trading and "
             "the back office. The inquiry's summary put it plainly: clear segregation of duties is fundamental to any "
             "effective control system."
+            " Leeson's limit was his bank's capital. Every gambler has one. Next: the arithmetic of ruin."
         ) as vo:
             self.play(FadeIn(rows[:2]))
             vo.wait_until("a")

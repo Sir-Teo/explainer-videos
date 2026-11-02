@@ -219,6 +219,7 @@ class Information(VoiceoverScene, MovingCameraScene):
             "Kolmogorov built all of probability on this picture: a set of worlds, a sigma-algebra of events, and a "
             "measure that adds up over countably many pieces. Chapter thirteen reuses this grid to build the "
             "Radon-Nikodym derivative."
+            " With information defined, we can ask for the best forecast given it. Next."
         ) as vo:
             self.play(FadeIn(map_), FadeIn(bar), FadeIn(lab0), FadeIn(lab1), FadeIn(cap))
             vo.wait_until("a")

@@ -207,6 +207,7 @@ class Garch(VoiceoverScene, ThreeDScene):
             "down better than either. <bookmark mark='c'/> And "
             "J.P. Morgan's RiskMetrics exponential average sits at the very edge of the landscape: alpha plus beta "
             "exactly one, no tap and no leak, so it never reverts to a long-run level."
+            " Next: GARCH's many children."
         ) as vo:
             self.play(Create(ax3), FadeIn(surf), tag.animate.set_opacity(1), run_time=2)
             vo.wait_until("a")

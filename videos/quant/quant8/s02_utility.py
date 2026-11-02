@@ -226,6 +226,7 @@ class Utility(VoiceoverScene):
             f"<bookmark mark='b'/> More: {100 - u['ce_g3']:.1f}. <bookmark mark='c'/> One warning, from Matthew Rabin in "
             "2000: utility of wealth cannot explain refusing small favourable bets without absurd refusals of large ones. "
             "Chapter thirteen takes that up."
+            " Utility ranks one decision. Most decisions repeat. Next: how to decide over time, backwards."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(VGroup(*r_)) for r_ in cells], lag_ratio=0.25, run_time=3))
             vo.wait_until("a")

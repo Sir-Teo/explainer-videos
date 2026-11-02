@@ -205,6 +205,7 @@ class LocalTime(VoiceoverScene):
             f"shortfall is the call's whole time value, about {s['call']:.0f} dollars, at every frequency. Local time "
             "is real money: it is why options near the strike close to expiry are the hardest to hedge, and Dupire's "
             "local volatility, in Part twelve, uses the same term."
+            " Local time is what a continuous path costs a hedger. Real prices also jump. Next."
         ) as vo:
             self.play(FadeIn(g), Create(diag))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.002, run_time=3))

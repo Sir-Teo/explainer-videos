@@ -202,6 +202,7 @@ class Cluster(VoiceoverScene):
             f"<bookmark mark='b'/> By month. By industry, the t-statistic moves from {res['pooled OLS']['t']:.2f} to "
             f"{res['clustered by industry']['t']:.2f}; by month, to {res['clustered by month']['t']:.2f}. The shared "
             "shock is the market."
+            " Clustering by month fixes the standard error. Fama and MacBeth fix the whole regression, and resolve the five verdicts. Next."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("a")

@@ -208,6 +208,7 @@ class Bootstrap(VoiceoverScene):
             f"moving block {100 * cov['block']:.1f}, the stationary {100 * cov['stationary']:.1f}. {verdict} "
             "<bookmark mark='b'/> Pause and predict: a block the length of the sample? Every resample is the sample "
             "rotated: a standard error of zero."
+            " Resampling uses only the data. Next: adding what you believed before you saw them."
         ) as vo:
             self.play(FadeIn(g), Create(nominal), FadeIn(labs), FadeIn(side))
             vo.wait_until("a")

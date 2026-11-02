@@ -161,6 +161,7 @@ class Stopping(VoiceoverScene):
             "<bookmark mark='a'/> The Snell envelope says: reject a fixed number, then take the first candidate better than "
             f"all of them. Reject about {q['best_k']}, a hundred over e, and you choose the best "
             f"{100 * q['best_p']:.0f} percent of the time: one over e, however many candidates there are."
+            " In continuous time the stopping rule becomes a boundary. Next: the American put."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]))
             vo.wait_until("a")

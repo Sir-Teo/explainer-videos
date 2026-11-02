@@ -211,6 +211,7 @@ class Har(VoiceoverScene):
             f"Quaedvlieg let the daily coefficient shrink when the quarticity is high: HARQ. The coefficient comes out "
             f"negative, as it should, {verdict} <bookmark mark='d'/> Two cousins: HAR-CJ gives jumps their own coefficient, "
             f"and log-HAR fits the logarithm. Remember log-HAR: it will matter in the race."
+            " HAR's three horizons imitate long memory. Next: is volatility rough?"
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")

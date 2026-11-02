@@ -172,6 +172,7 @@ class March(VoiceoverScene):
             "value at risk is not the one-day figure times the square root of ten when returns are fat-tailed, a "
             "point Part forty returns to. RiskMetrics' own technical document warned that the rule assumes constant "
             "variance. This is the term structure of volatility, and Part ten will read it from option prices."
+            " Next: how volatility forecasts are used for money."
         ) as vo:
             self.play(FadeIn(ans))
             vo.wait_until("a")

@@ -180,6 +180,7 @@ class Sampling(VoiceoverScene):
             "equivalent, and Girsanov's Z converts one into the other. <bookmark mark='b'/> So a price, which must "
             "not depend on whose drift you believe, can depend on volatility and cannot depend on mu. The "
             "risk-neutral measure of Parts nine and ten swaps the drift for the riskless rate and keeps sigma."
+            " If the price does not depend on the drift, the hedge must remove it. Next: why a hedge exists at all."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("a")

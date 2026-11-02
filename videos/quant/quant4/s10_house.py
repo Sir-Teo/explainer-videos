@@ -288,6 +288,7 @@ class House(VoiceoverScene):
             f"<bookmark mark='a'/> On the simulated strategy its stake settles near {l['lam_end']:.2f}. "
             f"<bookmark mark='b'/> The trial counter reads {env['trials']}, and Rule five gains a clause: the stake "
             "may be learned."
+            " Next: the people who live on these ideas: casinos, bookmakers, markets and testers."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

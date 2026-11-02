@@ -214,6 +214,7 @@ class Bellman(VoiceoverScene, ThreeDScene):
             "fraction rise or fall? <bookmark mark='b'/> It falls: the cushion shrinks, and so does the bet. "
             "<bookmark mark='c'/> The lines are the closed form, portfolio insurance; the dots, the solver, which never saw "
             f"it. They differ by at most {np.nanmax(np.abs(P - Q)):.3f}."
+            " Let the steps shrink to zero and Bellman's recursion becomes an equation. Next: the HJB."
         ) as vo:
             self.play(FadeIn(g), Create(merton), FadeIn(ml))
             vo.wait_until("a")

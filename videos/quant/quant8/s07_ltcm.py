@@ -194,6 +194,7 @@ class LTCM(VoiceoverScene):
             f"{cross:.1f} times the calm volatility, twenty-eight is full Kelly; at three times, it is "
             f"{28 / l_['kelly_after']:.1f} times Kelly, past the line where growth is zero. <bookmark mark='b'/> Sizing is "
             "only as good as the volatility forecast."
+            " Kelly has a famous critic. Next: Samuelson's objection."
         ) as vo:
             self.play(FadeIn(g), Create(lt), FadeIn(ltl), FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
             self.add(dot)

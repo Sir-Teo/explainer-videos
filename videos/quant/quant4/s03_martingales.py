@@ -214,6 +214,7 @@ class Martingales(VoiceoverScene):
             "<bookmark mark='b'/> Is the absolute value of the walk a martingale? No, a submartingale; its mean grows "
             f"like the square root of two n over pi, {absm[-1]:.2f} at fifty. <bookmark mark='c'/> And Markov is not "
             "martingale: Markov is about memory, martingale about the mean."
+            " If the coin is fair, can a clever betting system make it unfair? Next."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             self.add(l_call, l_abs)

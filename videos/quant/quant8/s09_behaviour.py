@@ -237,6 +237,7 @@ class Behaviour(VoiceoverScene):
             f"{100 * rf['pi_plain']:.0f} with no doubt. <bookmark mark='b'/> How much doubt? Only what the data cannot rule "
             "out: choose theta so the worst case would be mistaken for the estimate twenty percent of the time in "
             f"ninety-four years of data. Then theta is {th:.1f}."
+            " Next: the equations behind robust preferences and the American put alike: backward SDEs."
         ) as vo:
             self.play(FadeIn(g), FadeIn(fan), FadeIn(leg))
             self.play(Create(nature), Create(best), run_time=2)

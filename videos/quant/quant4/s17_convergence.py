@@ -205,6 +205,7 @@ class Convergence(VoiceoverScene):
             f"after ten years, {100 * dp['half_1976']:.1f} after fifty. <bookmark mark='b'/> By 2020: "
             f"{100 * dp['end_mean']:.1f} percent a year, give or take {100 * dp['end_half']:.1f}. Drifts are learnable "
             "only over decades, as Robert Merton warned in 1980."
+            " Prices are not martingales: they drift. Next: how to split any process into a fair game plus a drift."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[:2]))
             self.add(bd, ln, yr)

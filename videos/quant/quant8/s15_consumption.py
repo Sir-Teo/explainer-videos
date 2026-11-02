@@ -179,6 +179,7 @@ class Consumption(VoiceoverScene):
             "wealth. <bookmark mark='a'/> The dots land on the static curve, to within "
             f"{100 * m['max_rel']:.2f} percent, the cost of rebalancing daily rather than continuously. "
             "<bookmark mark='b'/> Lower gamma tilts the curve: a bolder investor buys more wealth in the cheap states."
+            " All of this assumed trading is free. Next: what costs do to the rule."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), FadeIn(src))
             self.add(dots)

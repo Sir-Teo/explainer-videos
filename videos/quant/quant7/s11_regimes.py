@@ -207,6 +207,7 @@ class Regimes(VoiceoverScene):
             "moves from one regime to the other, over the expected time spent in the first. Expectation, then "
             "maximisation, repeated: Arthur Dempster, Nan Laird and Donald Rubin's algorithm of 1977, which never "
             "lowers the likelihood."
+            " A regime is a hidden state that jumps. Next: a hidden state that drifts, and the filter that tracks it."
         ) as vo:
             step(0)
             vo.wait_until("a")

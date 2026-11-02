@@ -189,6 +189,7 @@ class Training(VoiceoverScene):
             f"{gap:.3f} as it starts to fit noise. <bookmark mark='b'/> So the House keeps the weights from the best "
             "validation epoch and stops thirty epochs later. Early stopping is a form of regularisation: the half-year "
             "of validation data decides how complex the network is allowed to become, and the test year stays sealed."
+            " Next: the race."
         ) as vo:
             self.play(FadeIn(g), Create(lt), FadeIn(leg[0]), run_time=2)
             vo.wait_until("a")

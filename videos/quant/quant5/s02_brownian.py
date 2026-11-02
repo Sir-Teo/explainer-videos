@@ -172,6 +172,7 @@ class Brownian(VoiceoverScene):
             "Practitioners sample every five minutes or so, a compromise between noise and too few observations, or "
             "they subsample: compute the sum from every starting offset and average, as Zhang, Mykland and "
             "Aït-Sahalia proposed. Part seven builds volatility forecasts on these sums."
+            " That accumulating variance is exactly what breaks ordinary calculus on these paths. Next: the integral that works."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

@@ -146,6 +146,7 @@ class Doubling(VoiceoverScene):
             "Chi-fu Huang showed in 1988 that this credit limit is exactly what rules out doubling; the proof belongs "
             "to Part nine. <bookmark mark='c'/> And remember the shape: selling options earns small premiums most "
             "days and pays a rare large loss. The staircase and the cliff."
+            " One trader tried doubling with a bank's money. Next: Barings."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.2))
             vo.wait_until("a")

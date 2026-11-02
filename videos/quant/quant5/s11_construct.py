@@ -218,6 +218,7 @@ class Construct(VoiceoverScene):
             f"{100 * r['frac_extreme']:.0f} percent of the paths spend less than a tenth, or more than nine tenths, of "
             f"the time above zero, and only {100 * r['frac_middle']:.0f} percent are near the middle. Lévy's arcsine "
             "law: a lead, once taken, tends to last."
+            " Brownian paths are continuous, and rough everywhere. Next: how rough, measured by quadratic variation."
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")

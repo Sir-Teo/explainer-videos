@@ -196,7 +196,8 @@ class Ito(VoiceoverScene):
             "smoothed noise converges to the Stratonovich solution. On twenty thousand paths the smoothed equation "
             f"gives {wz['rows'][-1]['ode']:.2f}, the square root of e, while Euler's Itô scheme gives "
             f"{wz['rows'][-1]['em']:.2f}. <bookmark mark='d'/> Physics usually wants Stratonovich; finance wants Itô, "
-            "because positions are set before prices move."       ) as vo:
+            "because positions are set before prices move."
+            " With the integral in hand, we need its chain rule. Next: Itô's lemma."       ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)

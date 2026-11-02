@@ -158,6 +158,7 @@ class Samuelson(VoiceoverScene):
             "Alexis Akira Toda's 2023 critique is sharper still. <bookmark mark='c'/> Pause and predict: what fraction "
             f"should you stake? <bookmark mark='d'/> Kelly says {100 * L['kelly_stake']:.0f} percent, growing about "
             f"{100 * L['kelly_growth']:.1f} percent a flip: a losing game, staked partially, wins."
+            " So far the question was how much. Next: when, the problem of optimal stopping."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[0]), FadeIn(src), FadeIn(leg), FadeIn(tl))
             self.add(hg, mean_l, med_l)

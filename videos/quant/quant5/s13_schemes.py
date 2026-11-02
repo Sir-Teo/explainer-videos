@@ -152,6 +152,7 @@ class Schemes(VoiceoverScene):
             "prices need weak accuracy, hedging simulations strong. And strong order, a property of single paths, "
             "also sets the cost of averages: it decides how well multilevel Monte Carlo works, Part sixteen's "
             "subject."
+            " Next: two equations every desk simulates, the mean-reverting ones."
         ) as vo:
             self.play(FadeIn(g))
             for k in range(len(dt)):

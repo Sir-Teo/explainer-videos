@@ -225,6 +225,7 @@ class Rough(VoiceoverScene):
             f"noise, and measure it as we did Bitcoin. <bookmark mark='a'/> {verdict} <bookmark mark='b'/> So a low H "
             "in data fits roughness, and also fast mean reversion seen through a coarse lens; Part fourteen takes up "
             "the debate with option prices."
+            " Fractional Brownian motion is not a semimartingale, so Itô's calculus fails on it. Next: a calculus that works on any path."
         ) as vo:
             self.play(FadeIn(g), Create(l2), Create(l1), FadeIn(leg), run_time=2)
             vo.wait_until("a")

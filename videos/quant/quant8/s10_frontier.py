@@ -123,6 +123,7 @@ class Frontier(VoiceoverScene):
             "open. Notice the pattern: almost every edge is a learning method meeting a classical structure, the HJB, the "
             "boundary, the fixed point, and the structure is what makes the learning work. Each of these was checked at its "
             "source; none of it is yet textbook material."
+            " Next: the House's sizing module, put together."
         ):
             show(7)
         self.wait(0.4)

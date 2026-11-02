@@ -172,6 +172,7 @@ class Girsanov(VoiceoverScene):
             f"{ess[-1]['mean_w']:.2f}. <bookmark mark='c'/> On an infinite horizon the two measures are singular: one "
             "infinitely long path reveals its drift. Girsanov works on finite horizons, which is all that pricing "
             "needs."
+            " Next: Girsanov at work."
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")

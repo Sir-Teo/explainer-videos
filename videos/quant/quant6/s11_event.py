@@ -245,6 +245,7 @@ class Event(VoiceoverScene):
             f"The naive standard error says {100 * f['cluster_naive']:.2f} percent; the true spread is "
             f"{100 * f['cluster_true']:.2f}, {ratio:.0f} times larger. Chapter three again: cluster by date, or use the "
             "portfolio's own time series."
+            " When the formulas for standard errors break down, resample. Next: the bootstrap for dependent data."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("a")

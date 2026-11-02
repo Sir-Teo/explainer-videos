@@ -164,6 +164,7 @@ class Industry(VoiceoverScene):
             "envelope. Honest standard errors, respecting how the data were sampled: this part's module, by default. "
             "Results that rerun from one command: checksummed data and seeded computations. <bookmark mark='a'/> And "
             "this chapter's question: a week of look-ahead adds a lot."
+            " Last, the frontier."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in tab], lag_ratio=0.5, run_time=5))

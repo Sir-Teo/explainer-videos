@@ -165,8 +165,10 @@ class Stambaugh(VoiceoverScene):
             "version of its own changes, mildly persistent by construction, and the test is chi-squared either way. "
             f"Annual p-value: {a['ivx']['p']:.2f}. On monthly data the House's simplified IVX {mono} at five percent, p "
             f"of {mth['ivx']['p']:.3f}. <bookmark mark='c'/> A small, fragile slope, overstated by its usual t; Part "
-            "seven takes up persistence itself. <bookmark mark='d'/> Pause and predict: if the shocks moved together, "
-            "the bias would flip sign."
+            "seven takes up persistence itself. <bookmark mark='d'/> A question: what if the "
+            "predictor's shocks and the return's shocks moved together? Then the bias would flip sign, and the "
+            "usual t would understate the slope instead. A biased slope in sample is one problem. Next: does it "
+            "forecast at all, out of sample?"
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(src))
             vo.wait_until("a")

@@ -163,6 +163,7 @@ class Bayes(VoiceoverScene):
             "a bias to be ashamed of; it is how you borrow strength across assets, and Parts twenty-seven and thirty "
             "use it everywhere. <bookmark mark='d'/> Pause and predict: an industry with a huge raw estimate and a "
             "huge standard error. It shrinks the most."
+            " Shrinkage borrows across many estimates. Next, the danger in many estimates: many tests."
         ) as vo:
             self.play(FadeIn(g), FadeIn(rods), FadeIn(ghosts), FadeIn(tg))
             self.add(bm)

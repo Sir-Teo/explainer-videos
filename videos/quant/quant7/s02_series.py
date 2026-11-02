@@ -247,6 +247,7 @@ class Series(VoiceoverScene):
             "the regression must estimate pushes the distribution further left. And if the changes are themselves "
             "autocorrelated, the plain test is distorted, so the augmented test adds lagged changes, enough to whiten "
             "the residuals. Choosing the terms wrongly is the most common way to get a unit-root test wrong."
+            " Yet two series with unit roots can still be tied together. Next: cointegration."
         ) as vo:
             step(0)
             vo.wait_until("a")

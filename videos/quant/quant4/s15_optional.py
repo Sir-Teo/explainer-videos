@@ -213,6 +213,7 @@ class Optional(VoiceoverScene):
             "<bookmark mark='c'/> So which takes longer to appear, heads heads or heads tails? Heads heads, six "
             "against four, though each has the same chance in any two tosses: heads heads overlaps itself, so its "
             "near-misses waste time."
+            " The theorem needs conditions. Next: the strategy that breaks them, doubling."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             lab_run(self, card, ['pattern_wait("HH"), pattern_wait("HT")', f"({W['HH']['theory']}, {W['HT']['theory']})",

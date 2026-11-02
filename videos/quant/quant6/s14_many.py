@@ -194,6 +194,7 @@ class Many(VoiceoverScene):
             f"{m['noise_bh']} after correction. <bookmark mark='b'/> Pause and predict: twenty strategies, the best at p "
             "of three percent. Significant? No: the chance one of twenty useless strategies does that well is forty-six "
             "percent. Part twenty-six builds the machinery."
+            " Significance is not cause. Next: designs that identify causes."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

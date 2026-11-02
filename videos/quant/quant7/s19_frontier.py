@@ -240,6 +240,7 @@ class Frontier(VoiceoverScene):
             "learning helps HAR one day ahead on the Dow's stocks; networks pooled across stocks generalise. <bookmark "
             "mark='a'/> In finance, TimesFM needs fine-tuning, pretraining on financial data helps, and Kronos reports "
             "gains on its own benchmark. The honest summary: on volatility, log-HAR is still the bar to clear."
+            " Every model here was scored over calm and stormy days alike. Next, the stormiest: March 2020."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r_) for r_ in rows[:6]], lag_ratio=0.3, run_time=4))
             vo.wait_until("a")

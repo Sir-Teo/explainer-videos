@@ -151,6 +151,7 @@ class Rough(VoiceoverScene):
             "<bookmark mark='d'/> In option prices the same exponent shows up as an at-the-money skew that steepens "
             "like maturity to the power H minus a half, without bound for short options: Part fourteen's rough "
             "volatility models are built on it."
+            " Before racing the models, we need a fair way to score them. Next."
         ) as vo:
             step(0)
             vo.wait_until("a")

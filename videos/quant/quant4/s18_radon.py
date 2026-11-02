@@ -187,6 +187,7 @@ class Radon(VoiceoverScene, ThreeDScene):
             "equivalent to a fifty point one percent coin, tossed forever? No. This is why, in Part five, Girsanov "
             "changes the drift of Brownian motion only within a fixed horizon, and why no change of measure can "
             "change its volatility."
+            " Changing measure reweights the tails. Next: how heavy the real tails are."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2))
             self.add(f1, f2)

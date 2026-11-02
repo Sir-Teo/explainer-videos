@@ -197,6 +197,7 @@ class Coint(VoiceoverScene, ThreeDScene):
             f"mark='c'/> The trace test agrees. {hag}In 1992 Hall, Anderson and Granger found Treasury bill yields of "
             f"different maturities cointegrated. Yield-curve factors return in Part nineteen, and pairs trading on cointegration "
             f"in Part thirty-three."
+            " Some relations are not stable but switch. Next: hidden regimes."
         ) as vo:
             self.play(Create(ax3), run_time=1)
             self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.002, run_time=3), src.animate.set_opacity(1))

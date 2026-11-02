@@ -212,6 +212,7 @@ class Realized(VoiceoverScene):
             "comes with an error band from the central limit theorem: with five-minute returns, the half-width is "
             f"typically {100 * rel:.0f} percent of the variance. Realized variance is a measurement, not the truth, and "
             "that will matter when forecasts are scored against it."
+            " Next: the simplest model built on that measurement, and still one of the strongest."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(labs), *[GrowFromEdge(b, DOWN) for b in bars[:2]], FadeIn(vals[:2]))
             vo.wait_until("a")

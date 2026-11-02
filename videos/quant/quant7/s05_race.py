@@ -296,6 +296,7 @@ class Race(VoiceoverScene):
             "they predicted. A desk would fix that with a one-line recalibration, the same correction Brini found "
             "erased much of the foundation models' edge. Ranking and calibration are different questions, and an "
             "honest report answers both."
+            " Next: the largest models of all, foundation models, and the frontier."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), Create(one))
             vo.wait_until("a")

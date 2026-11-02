@@ -257,6 +257,7 @@ class Stable(VoiceoverScene):
             f"starts at {ku[0]:.0f} for one day. {verdict} The centre looks stable, the tails are truncated, as "
             "Mantegna and Stanley said, and much of the shape is volatility that changes over time, the subject "
             "of Parts seven and thirteen."
+            " Heavy tails make classical tests fragile. Next: a test that holds whenever you look, built from a fair game."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[:2]))
             self.add(lu, lg)

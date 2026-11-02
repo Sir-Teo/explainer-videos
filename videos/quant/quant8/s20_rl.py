@@ -193,14 +193,14 @@ class RL(VoiceoverScene):
         with self.voiceover(
             "They do: each seed leaves the position alone over a range close to the band, and its net growth, "
             f"{100 * np.median(pg):.2f} percent a year at the median, beats rebalancing to Merton, "
-            f"{100 * pc['merton']['growth']:.2f}."
+            f"{100 * pc['merton']['growth']:.2f}. Next: who sizes bets for a living."
             if close and beats else
             "Not quite: the learners trade part of the way toward the middle, leaving only a narrow strip alone, not the "
             f"band. Their net growth is {100 * np.median(pg):.2f} percent a year at the median, against "
             f"{100 * pc['merton']['growth']:.2f} for rebalancing to Merton every quarter and "
             f"{100 * pc['band']['growth']:.2f} for the band. The band's edge over the learners is "
             f"{100 * (pc['band']['growth'] - np.median(pg)):.2f} percent a year, and each episode is a decade of an "
-            "eighteen percent market: at this budget that signal sits under the noise."
+            "eighteen percent market: at this budget that signal sits under the noise. Next: who sizes bets for a living."
         ) as vo:
             self.play(FadeOut(q), LaggedStart(*[FadeIn(VGroup(*r_)) for r_ in cells], lag_ratio=0.3, run_time=3))
         self.wait(0.4)

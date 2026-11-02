@@ -257,6 +257,7 @@ class Designs(VoiceoverScene):
             f"<bookmark mark='b'/> Over two hundred samples the error is smallest near {best} ranks: the bandwidth "
             "trade-off again. <bookmark mark='c'/> Pause and predict: staggered adoption, growing effects. Is two-way "
             "fixed effects too big or too small? Too small, possibly negative."
+            " When there are too many controls for any design, machine learning can help, carefully. Next."
         ) as vo:
             self.play(FadeIn(g), Create(cut), LaggedStart(*[FadeIn(dd) for dd in dots], lag_ratio=0.002, run_time=2))
             vo.wait_until("a")

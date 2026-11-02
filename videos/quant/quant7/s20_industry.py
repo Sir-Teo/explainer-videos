@@ -182,6 +182,7 @@ class Industry(VoiceoverScene):
             f"risk premium, which Peter Carr and Liuren Wu measured in 2009. <bookmark mark='b'/> As a forecast of next "
             f"month, the VIX alone explains {100 * mzv['r2']:.0f} percent of the variance, GARCH alone {100 * mzg['r2']:.0f}. "
             f"{both_line} Parts eleven and twelve trade on that gap."
+            " Next: the House's forecaster, put together."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), Create(lr), Create(lv), run_time=2.5)
             vo.wait_until("a")

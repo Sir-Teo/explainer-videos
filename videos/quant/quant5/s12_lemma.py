@@ -204,6 +204,7 @@ class Lemma(VoiceoverScene, ThreeDScene):
             "is a Brownian motion running on the clock of its own quadratic variation. <bookmark mark='c'/> A desk "
             "classic: the expected fourth power of W at time t? <bookmark mark='d'/> Three t squared, by the lemma; "
             f"the simulation gives {L['EW4']:.3f} at t equals one."
+            " The lemma solves a few equations exactly. Most must be simulated. Next."
         ) as vo:
             self.play(FadeIn(rows[0]))
             vo.wait_until("a")

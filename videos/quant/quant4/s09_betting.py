@@ -224,6 +224,7 @@ class Betting(VoiceoverScene):
             "Shafer and Vovk rebuilt probability as a game. <bookmark mark='a'/> Forecaster announces prices, "
             "Skeptic bets against them without risking more than it has, Reality moves. <bookmark mark='b'/> "
             "Forecasts are good exactly when no strategy gets rich against them."
+            " The skeptic still has to choose its bets. Next: learning them."
         ) as vo:
             self.play(FadeIn(hist))
             vo.wait_until("a")

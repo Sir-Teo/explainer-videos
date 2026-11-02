@@ -225,6 +225,7 @@ class HAC(VoiceoverScene):
             f"reject {100 * r95[3]:.0f} and {100 * r95[4]:.0f} percent here. <bookmark mark='d'/> Pause and predict: no "
             f"overlap, no persistence. Every test is near five percent; naive {100 * r0[0]:.1f}. The problem is overlap "
             "times persistence."
+            " Overlap is one shape of dependence. Next: shocks shared across firms."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), Create(five), FadeIn(leg), FadeIn(txt[0]))
             vo.wait_until("a")

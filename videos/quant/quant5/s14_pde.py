@@ -190,6 +190,7 @@ class PDE(VoiceoverScene, ThreeDScene):
             "squared: the expected squared exit point equals the expected exit time. <bookmark mark='b'/> The exit "
             "point is two with probability one third, so the time is a times b: two. <bookmark mark='c'/> Simulated: "
             f"{fk['dynkin']:.3f}, the small excess being the overshoot of a discrete path."
+            " Expectations depend on the probabilities. Next: how to change them, by re-weighting paths."
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")

@@ -142,6 +142,7 @@ class SNR(VoiceoverScene):
             "<bookmark mark='c'/> Pause and predict: to halve the standard error of alpha, how many more years? "
             "Four times as many. This is why the House seals its hold-out data in an envelope, and counts every "
             "trial: Part twenty-six."
+            " Next: how research desks guard against all of this."
         ) as vo:
             self.play(FadeIn(g), Create(line))
             self.play(FadeIn(dots))

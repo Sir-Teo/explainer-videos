@@ -221,6 +221,7 @@ class Doob(VoiceoverScene):
             "<bookmark mark='c'/> The cards did not change; the filtration did. The courts, up to the Supreme Court "
             "in 2017, held it was cheating, and Ivey was not paid. <bookmark mark='d'/> So the drift is a property of "
             "what you know."
+            " And of the probabilities you use. Next: change them, and the drift goes away."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(side[3]))
             vo.wait_until("a")

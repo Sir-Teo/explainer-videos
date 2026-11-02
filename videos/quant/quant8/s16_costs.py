@@ -202,6 +202,7 @@ class Costs(VoiceoverScene):
             f"percent and trading quarterly, the band, {100 * g1['lo']:.0f} to {100 * g1['hi']:.0f} percent, grows "
             f"{100 * g1['gain']:.2f} percent a year faster after costs than rebalancing to Merton, with "
             f"{100 * g1['band']['turnover']:.0f} percent turnover instead of {100 * g1['merton']['turnover']:.0f}."
+            " Merton maximizes a utility. Kelly asked a different question: what grows fastest? Next."
         ) as vo:
             self.play(FadeIn(g), FadeIn(q), Create(line), FadeIn(leg))
             vo.wait_until("a")

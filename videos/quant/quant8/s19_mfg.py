@@ -182,6 +182,7 @@ class MFG(VoiceoverScene):
             "crowded trades. Pierre Cardaliaguet and Charles-Albert Lehalle modelled crowding this way in 2018; Carlin, Lobo "
             "and Viswanathan studied predatory trading among a few; and Lacker and Zariphopoulou showed that funds judged "
             "against each other take more risk. Parts thirty-six and thirty-seven return to it."
+            " Next: can a machine learn these rules from experience alone?"
         ) as vo:
             self.play(FadeIn(q))
             vo.wait_until("a")

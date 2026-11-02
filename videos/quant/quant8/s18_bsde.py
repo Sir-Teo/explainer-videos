@@ -151,6 +151,7 @@ class BSDE(VoiceoverScene):
             f"{b['pde']:.3f}, the nonlinear PDE's price. <bookmark mark='a'/> A smooth polynomial basis cannot follow the "
             f"payoff's corners and lands at {b['poly']:.3f}; local hat functions fix it. Han, Jentzen and E solved such "
             "equations in a hundred dimensions with neural networks in 2018; Part seventeen trains one."
+            " One investor against a market. Next: many investors who see each other."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lines))
             self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.3), FadeIn(side[0]), run_time=2)

@@ -219,6 +219,7 @@ class Signatures(VoiceoverScene, ThreeDScene):
             "which is linear in nothing. Scrub through the depths: the predictions tighten onto the diagonal. "
             f"{verdict} The raw path manages {base['path']:.3f}. <bookmark mark='c'/> Signatures return in the next "
             "two chapters, and in Parts fourteen, seventeen and forty-two."
+            " Next: how desks build, test and run these models."
         ) as vo:
             self.play(FadeIn(rp), FadeIn(bl))
             vo.wait_until("a")
