@@ -87,10 +87,11 @@ class Hook(VoiceoverScene):
             "rate of interest, paid by leveraged buyers, the funding rate of Part two, read from option prices."
         ) as vo:
             self.play(FadeIn(side[0]), FadeIn(side[1]), FadeIn(src))
+            self.play(FadeIn(g))
             vo.wait_until("a")
-            self.play(FadeIn(side[2]), FadeIn(side[3]))
+            self.play(FadeIn(side[2]), FadeIn(side[3]), LaggedStart(*[GrowFromCenter(d) for d in dots], lag_ratio=0.15))
             vo.wait_until("b")
-            self.play(FadeIn(g), LaggedStart(*[GrowFromCenter(d) for d in dots], lag_ratio=0.15), FadeIn(side[4]))
+            self.play(FadeIn(side[4]), Indicate(dots, color=Q_C, scale_factor=1.2))
         self.wait(0.4)
         self.clear_scene()
 

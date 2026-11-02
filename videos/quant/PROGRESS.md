@@ -211,6 +211,35 @@ There are 12 scenes, a README (EN, ZH) with solutions, and zh_lines 43/43. Facts
 - Samuelson 1979: one syllable except the last word.
 - 19 Oct 1987: French's market return was -17.4%.
 
+## Part 9 (No Arbitrage), 2 Nov 2026
+
+House `arbitrage.py` (tested):
+- `parity_gap`.
+- `ftap`: Stiemke/Farkas by LP, returning state prices or an arbitrage portfolio.
+- `superhedge`: the upper and lower LPs.
+- `static_checks` and `calendar_check`.
+- `mot_bounds`: martingale optimal transport by HiGHS, with a sparse constraint matrix.
+- `ross_recovery`: Perron-Frobenius.
+
+The compute items:
+- parity: 339 call-put pairs on the Surface's trades; median gap 3.4 bp (trades) and 1.5 bp (marks); basis 2.8-4.8%
+  a year by expiry.
+- density: SVI and BL for 26 Dec 2025 (16 d) and 27 Mar 2026 (107 d); down/up 20%: 2.9/1.9% and 19.1/18.4%; checks
+  pass.
+- mot: forward-start straddle in [0.137, 0.218], log-normal 0.180. Coarse bins for the first marginal keep convex
+  order, and this is checked.
+- ross: exact in the CRRA chain; with a martingale tilt, error 0.051 and pessimistic.
+- incomplete: binomial is a point; 3+ states give [0, 0.197].
+- envelope: trials 72, no test.
+
+There are 10 scenes, a README (EN, ZH), zh_lines 35/35. Remaining: on-screen text, Chinese dry run, narrated build
+queued.
+
+Facts checked:
+- GameStop: the SEC staff report (Oct 2021) gives +2,700% low to high, -86%; enthusiasm, not covering.
+- Melvin: $2.75bn and -53% (Reuters).
+- The Robinhood box-spread ban (2019) and its quote. The loss figure is disputed and not used.
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
