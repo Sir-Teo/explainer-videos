@@ -17,7 +17,6 @@ class Stable(VoiceoverScene):
         self.charfun(e, s)
         self.estimate(s)
         self.fit(mle, s)
-        self.scaling(s)
         self.aggregate(e)
 
     def card(self):
@@ -109,61 +108,6 @@ class Stable(VoiceoverScene):
                       FadeIn(side[2]))
             self.play(GrowFromEdge(bb, DOWN), FadeIn(bl), FadeIn(side[1]))
             vo.wait_until("b")
-            self.play(FadeIn(side[3]))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def scaling(self, s):
-        ms, msb, msg, ms62 = s["ms"], s["ms_btc"], s["ms_gauss"], s["ms_6286"]
-        g = axes([0, np.log10(64) + 0.1], [-0.2, 1.4], x_length=6.6, y_length=4.4,
-                 xlabel=r"horizon $h$, days (log scale)", ylabel=r"how many times smaller $P_h(0)$ is than $P_1(0)$ (log scale)",
-                 xticks=list(np.log10([1, 2, 4, 8, 16, 32, 64])), xfmt=lambda u: f"{10 ** u:.0f}",
-                 yticks=[0, 0.5, 1.0], yfmt=lambda u: {0: "1", 0.5: "3.2", 1.0: "10"}[round(u, 1)], font_size=18)
-        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-
-        def pts(m, col):
-            h, p = np.log10(np.asarray(m["h"])), np.log10(np.asarray(m["p0"]))
-            p0 = p[0]
-            p = p0 - p  # falling probability of return, flipped so the lines rise
-            dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=col) for a, b in zip(h, p)])
-            fit = m["slope"] * h + m["intercept"] / np.log(10)  # the least-squares line, in log10 units
-            line = curve(ax, h, p0 - fit, col, stroke_width=2.5)
-            return VGroup(line, dots)
-
-        gs, us, u62, bt = pts(msg, MART), pts(ms, P_C), pts(ms62, QC.GAIN), pts(msb, Q_C)
-        leg = legend([(MART, rf"Gaussian: slope {-msg['slope']:.2f}, $\alpha = {msg['alpha']:.2f}$"),
-                      (P_C, rf"US 1926--2020: {-ms['slope']:.2f}, $\alpha = {ms['alpha']:.2f}$"),
-                      (QC.GAIN, rf"US 1962--86: {-ms62['slope']:.2f}, $\alpha = {ms62['alpha']:.2f}$"),
-                      (Q_C, rf"Bitcoin: {-msb['slope']:.2f}, $\alpha = {msb['alpha']:.2f}$")], font_size=20)
-        side = VGroup(
-            leg,
-            MathTex(r"P_h(0) \propto h^{-1/\alpha}", font_size=34),
-            wrapped_label(r"the chance a sum over $h$ days lands near zero falls like $h^{-1/\alpha}$: a slope of one half "
-                          r"for a Gaussian, more for a stable law", 4.8, 20, GREY_A),
-            wrapped_label(r"but Part 1's tails have $\alpha \approx 3$ and a finite variance; the shape is a truncated "
-                          r"L\'evy law, or a Gaussian whose volatility changes: Parts 7 and 13", 4.8, 20, LOSS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
-        with self.voiceover(
-            "Mantegna and Stanley's test of stability is elegant. Add up returns over h days, and measure the chance "
-            "that the sum lands near zero. For a stable law that chance shrinks like h to the minus one over alpha. "
-            "<bookmark mark='a'/> A Gaussian gives a slope of a half on these axes, and simulated Gaussian returns "
-            "land on it. <bookmark mark='b'/> The American market falls faster: a slope near point six, an alpha of "
-            "one point six seven. Between 1962 and 1986 the alpha is one point four four, Mantegna and Stanley's "
-            "number. Bitcoin is close to the full American sample. <bookmark mark='c'/> So is variance infinite? No. "
-            "Part one's tail exponent was near three, which means a finite variance, and the far tails fall faster "
-            "than any stable law allows. The center looks stable, the tails are truncated: Mantegna and Stanley "
-            "called it a truncated Lévy flight. And much of the shape comes from volatility that changes over time, "
-            "the subject of Parts seven and thirteen. The variance exists, but it moves."
-        ) as vo:
-            self.play(FadeIn(g), FadeIn(side[1]), FadeIn(side[2]))
-            vo.wait_until("a")
-            self.play(FadeIn(gs), FadeIn(leg[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(us), FadeIn(leg[1]))
-            self.play(FadeIn(u62), FadeIn(leg[2]))
-            self.play(FadeIn(bt), FadeIn(leg[3]))
-            vo.wait_until("c")
             self.play(FadeIn(side[3]))
         self.wait(0.4)
         self.clear_scene()

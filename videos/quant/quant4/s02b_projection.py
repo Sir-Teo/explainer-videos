@@ -57,19 +57,13 @@ class Projection(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.2, buff=0.62, edge=6.9)
         head = label(r"Kolmogorov's conditional expectation", font_size=30, color=GREY_A).to_edge(UP, buff=0.25)
         with self.voiceover(
-            "What is the best forecast of tomorrow's return, given today's? To answer that, we need conditional "
-            "expectation in general, and Kolmogorov's definition is short. Y is the conditional expectation of X given "
-            "the information G if Y can be computed from G, and if Y has the same average as X on every event of G. "
-            "<bookmark mark='a'/> On a partition, apply it to each block: Y is the average of X over the block. "
-            "<bookmark mark='b'/> Now a geometric fact. The error, X minus Y, is uncorrelated with anything you can "
-            "compute from G. It holds for indicators by the definition, so for their sums and limits. "
-            "<bookmark mark='c'/> Expand the squared distance from X to any computable Z, and the cross term vanishes: "
-            "a Pythagoras theorem. So Y is the closest computable variable to X. The conditional expectation is the "
-            "best forecast in mean square. <bookmark mark='d'/> Three properties follow in a line each. What is known "
-            "comes out as a constant. <bookmark mark='e'/> Conditioning twice, on more and then on less information, "
-            "is conditioning once on less: the tower property. <bookmark mark='f'/> And a convex function of a "
-            "forecast is below the forecast of the convex function, which is Jensen's inequality; while information "
-            "independent of X teaches you nothing about it."
+            "Kolmogorov's definition is short. Y is the conditional expectation of X given G if Y is computable from G "
+            "and has the same average as X on every event of G. <bookmark mark='a'/> On a partition: average X over "
+            "each block. <bookmark mark='b'/> The error is uncorrelated with anything computable from G. "
+            "<bookmark mark='c'/> Expand the squared distance to any computable Z: the cross term vanishes, so Y is "
+            "the closest, the best forecast in mean square. <bookmark mark='d'/> What is known comes out as a "
+            "constant. <bookmark mark='e'/> Conditioning on more, then less, is conditioning on less: the tower. "
+            "<bookmark mark='f'/> And Jensen's inequality, while independent information teaches nothing."
         ) as vo:
             self.play(FadeIn(head))
             step(0)
@@ -134,16 +128,13 @@ class Projection(VoiceoverScene, ThreeDScene):
             self.remove(mob)
         self.set_camera_orientation(phi=68 * DEGREES, theta=-40 * DEGREES, zoom=0.9)
         with self.voiceover(
-            "Here is that Pythagoras theorem as a picture. Take three worlds, a, b and c, with probabilities a half, "
-            "three tenths and a fifth. A random variable is three numbers, so draw it as an arrow in three dimensions, "
-            "stretching each coordinate by the square root of its world's probability, so that ordinary length is "
-            "root mean square. X is three, zero and one. <bookmark mark='a'/> Suppose you can only tell whether the "
-            "world is c or not. Everything you can compute is constant on a and b: a plane. Drop a perpendicular from "
-            "X to the plane. The foot is one point eight seven five, one point eight seven five, and one: the "
-            "conditional expectation. <bookmark mark='b'/> Turn the picture, and the right angle is a right angle. "
-            "<bookmark mark='c'/> Now know nothing at all. What you can compute is a constant: a line inside the "
-            f"plane. Project the foot onto the line, and you land on {c['toy_mean']:.1f}, the plain average. Project X "
-            "straight onto the line, and you land on the same point. That is the tower property, as geometry."
+            "Here is that Pythagoras theorem as a picture. Three worlds with probabilities a half, three tenths and a "
+            "fifth; a variable is an arrow, each coordinate stretched by the square root of its probability, so length "
+            "is root mean square. <bookmark mark='a'/> If you can only tell whether the world is c, what you can "
+            "compute is a plane. Drop a perpendicular from X: the foot, one point eight seven five, one point eight "
+            "seven five, and one, is the conditional expectation. <bookmark mark='b'/> Turn the picture: a true right "
+            "angle. <bookmark mark='c'/> Knowing nothing, you can compute only constants, a line. Project the foot "
+            f"onto it, or X directly: both land on {c['toy_mean']:.1f}. The tower property, as geometry."
         ) as vo:
             self.play(Create(ax), FadeIn(head), FadeIn(side[0]))
             self.play(FadeIn(vX))
@@ -240,13 +231,10 @@ class Projection(VoiceoverScene, ThreeDScene):
                              rf"Up: {e2['down']:+.1f} bp, the average of the days that followed a down day.",
                              width=5.4, font_size=22).to_corner(DR, buff=0.35)
         with self.voiceover(
-            "In the House this is five lines. Average X over each block, weighted by probability, and give every "
-            "world its block's average. <bookmark mark='a'/> On the three worlds it returns one point eight seven five "
-            "twice, and one. On the market since 2000, with the sign of yesterday as the partition, it returns the "
-            "two numbers we just drew. Regression in Part six is this same function, with a richer partition. "
-            "<bookmark mark='b'/> So, a question. Since 2000, after a down day, is the best forecast of today's return "
-            f"up, down or zero? {'Up' if e2['down'] > 0 else 'Down'}, by {abs(e2['down']):.1f} basis points: the "
-            "average over the days that followed a down day."
+            "In the House this is five lines: average over each block. <bookmark mark='a'/> It returns the foot of "
+            "the perpendicular, and the market's two numbers. <bookmark mark='b'/> So, since 2000, after a down day, "
+            f"is the best forecast up, down or zero? {'Up' if e2['down'] > 0 else 'Down'}, by {abs(e2['down']):.1f} "
+            "basis points."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

@@ -1608,3 +1608,153 @@ def test_engine_mlae_and_chebyshev():
     assert np.allclose(E.chebyshev2d_eval(m, x, y), f(x, y), atol=1e-10)
     S, v, G = E.heston_adi_grid(100, 100, 1.0, 0.04, 1.5, 0.04, 0.5, -0.7, r=0.0, nS=20, nv=10, nt=10)
     assert G.shape == (len(v), len(S))
+
+
+# ---------------------------------------------------------------------------
+# Part 12's expansion: the surface builder's new tools
+# ---------------------------------------------------------------------------
+def test_svi_jw_round_trip_and_lee():
+    from explainer.quant.house import volsurface as V
+
+    p = {"a": 0.02, "b": 0.12, "rho": -0.25, "m": 0.07, "s": 0.3}
+    q = V.svi_from_jw(V.svi_jw(p, 0.4), 0.4)
+    for x in p:
+        assert q[x] == pytest.approx(p[x], abs=1e-10)
+    assert float(V.lee_moment(2.0)) == pytest.approx(0.0)
+    assert float(V.lee_moment(1e-9)) > 1e7
+    for pm in (0.1, 1.0, 3.7):
+        assert float(V.lee_moment(V.lee_slope(pm))) == pytest.approx(pm, rel=1e-12)
+
+
+def test_ssvi_butterfly_bound_matches_a_scan():
+    from explainer.quant.house import volsurface as V
+
+    assert V.ssvi_butterfly_bound({"rho": -0.3, "eta": 1.2, "gamma": 0.4}) == 0.0
+    fit = {"rho": -0.23, "eta": 1.4, "gamma": 0.6}
+    b = V.ssvi_butterfly_bound(fit)
+    th = np.logspace(-14, 1, 200001)
+    p = V.phi_power(th, fit["eta"], fit["gamma"])
+    bad = th * p * p * (1 + abs(fit["rho"])) > 4
+    assert b == pytest.approx(th[bad].max(), rel=1e-3)
+
+
+def test_fit_ssvi_path_ends_where_fit_ssvi_does():
+    from explainer.quant.house import volsurface as V
+
+    k = np.tile(np.linspace(-0.3, 0.3, 9), 3)
+    T = np.repeat([0.1, 0.3, 0.6], 9)
+    w = V.ssvi_w(k, np.repeat([0.02, 0.05, 0.09], 9), -0.3, 0.9, 0.45)
+    a, b = V.fit_ssvi(k, T, w), V.fit_ssvi_path(k, T, w)
+    assert b["rho"] == pytest.approx(a["rho"], abs=1e-9) and b["rmse"] < 1e-6
+    assert len(b["path"]) == len(b["rmse_path"]) >= 5 and b["rmse_path"][0] > b["rmse_path"][-1]
+
+
+def test_skew_stickiness_and_pca():
+    from explainer.quant.house import volsurface as V
+
+    g = np.random.default_rng(0)
+    dl = 0.03 * g.standard_normal(500)
+    sk = -0.4
+    assert V.skew_stickiness(dl, sk * dl + 1e-4 * g.standard_normal(500), np.full(500, sk))["R"] == pytest.approx(1, abs=0.02)
+    assert abs(V.skew_stickiness(dl, 1e-4 * g.standard_normal(500), np.full(500, sk))["R"]) < 0.02
+    f = np.linspace(1, 2, 20)
+    X = np.outer(g.standard_normal(300), f) + 0.01 * g.standard_normal((300, 20))
+    out = V.surface_pca(X)
+    assert out["explained"].sum() == pytest.approx(1.0)
+    assert abs(out["components"][0] @ (f / np.linalg.norm(f))) > 0.999
+
+
+def test_conditional_variance_and_strip_replication():
+    from explainer.quant.house import bs as B, volsurface as V
+
+    g = np.random.default_rng(1)
+    x = 0.3 * g.standard_normal(200000)
+    assert np.allclose(V.conditional_variance(x, np.full_like(x, 0.09), [-0.2, 0, 0.2]), 0.09)
+    F, T, s = 100.0, 30 / 365, 0.5
+    K = np.linspace(5, 600, 20000)
+    otm = np.where(K < F, B.price(F, K, T, s, 0, 0, -1), B.price(F, K, T, s, 0, 0, 1))
+    flat = V.strip_replication(K, otm, F, T, np.full(50, F))
+    assert flat["kvar"] == pytest.approx(s * s, rel=2e-3) and abs(flat["replicated"]) < 1e-9 and flat["rv"] == 0
+    path = F * np.exp(np.cumsum(np.concatenate([[0], s * np.sqrt(T / 720) * g.standard_normal(720)])))
+    r = V.strip_replication(K, otm, F, T, path)
+    lr = np.diff(np.log(path))
+    cubic = 2 / T * np.sum(lr ** 3 / 6 + lr ** 4 / 24)  # 2(e^x - 1 - x) - x^2 = x^3/3 + x^4/12 + ...
+    assert r["error"] == pytest.approx(cubic, abs=2e-3 * r["rv"])
+
+
+def test_vol_swap_vix_and_moments():
+    from explainer.quant.house import bs as B, volsurface as V
+
+    rv = np.array([0.04, 0.09, 0.16, 0.25])
+    c = V.vol_swap_convexity(rv)
+    assert c["gap"] == pytest.approx(np.sqrt(rv.mean()) - np.sqrt(rv).mean())
+    small = 0.09 * (1 + 0.05 * np.random.default_rng(2).standard_normal(1000))
+    cs = V.vol_swap_convexity(small)
+    assert cs["approx_gap"] == pytest.approx(cs["gap"], rel=0.1)
+    assert V.vix_30d(20 / 365, 0.5, 40 / 365, 0.5) == pytest.approx(0.5)
+    F, T, s = 100.0, 0.25, 0.4
+    K = F * np.exp(np.linspace(-4, 4, 40001))
+    otm = np.where(K < F, B.price(F, K, T, s, 0, 0, -1), B.price(F, K, T, s, 0, 0, 1))
+    m = V.rn_moments(K, otm, F, T)
+    assert m["var"] == pytest.approx(s * s, rel=1e-3) and abs(m["skew"]) < 1e-3 and m["kurt"] == pytest.approx(3, abs=1e-2)
+    assert m["mean"] == pytest.approx(-s * s * T / 2, rel=1e-3)
+
+
+def test_vx_index_and_inverse_note():
+    from explainer.quant.house import volsurface as V
+
+    days = list(range(1, 61))
+    exps = [20, 41, 62, 83]
+    flat = {e: {d: 15.0 for d in days} for e in exps}
+    out = V.vx_index(days, flat, exps)
+    assert np.allclose(out["ret"], 0) and out["w1"].max() <= 1 and out["w1"].min() >= 0
+    up = {e: {d: 15.0 * (1.1 if d >= 30 else 1.0) for d in days} for e in exps}
+    assert V.vx_index(days, up, exps)["ret"][28] == pytest.approx(0.1)
+    r = np.array([0.01, -0.02, 0.1, 1.2])
+    n = V.inverse_note(r)
+    assert np.allclose(n[:4], np.cumprod(np.concatenate([[1], 1 - r[:3]]))) and n[-1] == 0.0
+    assert V.rebalance_flow(-1, 0.1, 1.0) == pytest.approx(0.2) and V.rebalance_flow(2, 0.1, 1.0) == pytest.approx(0.2)
+
+
+def test_gamma_day_feedback():
+    from explainer.quant.house import volsurface as V
+
+    eps = 0.001 * np.random.default_rng(3).standard_normal((4000, 390))
+    same = V.gamma_day(eps, 0.0)
+    assert np.allclose(same["r"], eps)
+    lo, hi = V.gamma_day(eps, 0.5), V.gamma_day(eps, -0.5)
+    assert lo["rest"].std() / same["rest"].std() == pytest.approx(1 / 1.25, rel=1e-6)
+    assert np.polyfit(hi["rest"], hi["last"], 1)[0] == pytest.approx(0.25, abs=0.03)
+    assert np.polyfit(lo["rest"], lo["last"], 1)[0] == pytest.approx(-0.25, abs=0.03)
+
+
+def test_derman_kani_tree():
+    from explainer.quant.house import bs as B, trees, volsurface as V
+
+    flat = trees.derman_kani(100.0, 1.0, 40, lambda K, t: 0.2)
+    K = np.array([85.0, 100.0, 115.0])
+    assert np.allclose(trees.tree_price(flat, K), B.price(100.0, K, 1.0, 0.2, 0, 0, 1), atol=0.12)
+    fit = {"rho": -0.25, "eta": 0.8, "gamma": 0.45, "theta": [0.02, 0.06], "T": [0.1, 0.3]}
+    iv = lambda K, t: float(np.sqrt(V.ssvi_surface_w(fit, np.log(K / 100.0), t) / t))  # noqa: E731
+    tr = trees.derman_kani(100.0, 0.25, 30, iv)
+    P = np.concatenate(tr["p"])
+    assert P.min() > 0 and P.max() < 1
+    # the last level reprices calls struck at the previous level's central nodes (its construction)
+    s = tr["nodes"][-2]
+    mid = s[np.abs(np.log(s / 100)) < 0.3]
+    got = trees.tree_price(tr, mid)
+    want = np.array([B.price(100.0, k, 0.25, iv(k, 0.25), 0, 0, 1) for k in mid])
+    assert np.allclose(got, want, rtol=2e-3, atol=1e-3)
+
+
+def test_surface_net_learns_without_arbitrage():
+    import torch
+
+    from explainer.quant.house import deep, volsurface as V
+
+    torch.set_num_threads(1)
+    fit = {"rho": -0.3, "eta": 0.8, "gamma": 0.4, "theta": [0.01, 0.03, 0.06], "T": [0.05, 0.15, 0.3]}
+    k, T = np.tile(np.linspace(-0.4, 0.4, 15), 3), np.repeat([0.05, 0.15, 0.3], 15)
+    iv = np.sqrt(V.ssvi_surface_w(fit, k, T) / T)
+    r = deep.train_surface_net(k, T, iv, steps=800, every=400, T_range=(0.03, 0.4), k_range=(-0.6, 0.6), colloc=(21, 10))
+    assert r["train_rmse"] < 0.5 and r["g_viol"] == 0.0 and r["cal_viol"] == 0.0

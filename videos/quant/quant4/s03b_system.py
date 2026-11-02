@@ -47,16 +47,12 @@ class System(VoiceoverScene):
         head = label(r"Williams, \textit{Probability with Martingales}, ch.\ 10: ``you can't beat the system''",
                      font_size=24, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "A betting system decides how much to stake on each round from what has happened so far. Call the stake "
-            "H. The gambler's wealth is the sum of each stake times each step of the game. This is the martingale "
-            "transform, and the only rule is that the stake is fixed before the step is seen. <bookmark mark='a'/> "
-            "Then, taking out what is known, the expected next gain is the stake times the expected next step, which "
-            "is zero. The transform of a martingale is a martingale. No system turns a fair game into a favourable "
-            "one. <bookmark mark='b'/> On a roulette wheel each unit staked on red loses one thirty-seventh on "
-            "average. So the expected loss of any system is one thirty-seventh of the expected total it stakes: the "
-            "same tax per unit, whatever the system. <bookmark mark='c'/> And the hypothesis matters. A cheat who could "
-            "choose the stake after seeing the outcome would bet on it every time and win every round. The whole "
-            "theorem is the word before."
+            "A betting system sets each stake H from what has happened so far. The gambler's wealth is the sum of "
+            "stake times step: the martingale transform. <bookmark mark='a'/> Taking out what is known, the expected "
+            "next gain is the stake times the expected next step: zero. No system turns a fair game favourable. "
+            "<bookmark mark='b'/> On roulette each unit on red loses one thirty-seventh, so every system loses one "
+            "thirty-seventh of what it stakes. <bookmark mark='c'/> A cheat who stakes after seeing the outcome wins "
+            "every time: the whole theorem is the word before."
         ) as vo:
             self.play(FadeIn(head))
             step(0)
@@ -97,12 +93,9 @@ class System(VoiceoverScene):
         steps_ = VGroup(*[Line(ax.c2p(k, wealth[k]), ax.c2p(k + 1, wealth[k + 1]), color=MART, stroke_width=3.5)
                           for k in range(n)])
         with self.voiceover(
-            "Here is the rule as a machine. Twelve fair tosses lie face down behind a curtain. Before each one, the "
-            "doubling system sets its stake, shown as a bar: one unit after a win, twice the last stake after a loss. "
-            "<bookmark mark='a'/> Only then is the card turned, and the wealth steps up or down by the stake. The "
-            "stake can use everything to the left of the card, and nothing on it or beyond. <bookmark mark='b'/> "
-            "Whatever pattern of stakes you dream up, each step of wealth is a stake known in advance times a fair "
-            "coin, and fair coins average out."
+            "Here is the rule as a machine. Twelve fair tosses lie behind a curtain, and before each the doubling "
+            "system sets its stake. <bookmark mark='a'/> Only then is the card turned and the wealth steps. "
+            "<bookmark mark='b'/> Each step is a stake known in advance times a fair coin, and fair coins average out."
         ) as vo:
             self.play(FadeIn(cards), FadeIn(curtain), FadeIn(g))
             vo.wait_until("a")
@@ -226,10 +219,9 @@ class System(VoiceoverScene):
         stakes = [float(v) for v in s["demo_stakes"]]
         total = sum(h if w else -h for h, w in zip(stakes, wins))
         with self.voiceover(
-            "In the House the transform is one line, and every system is a function that turns past outcomes into "
-            "the next stake. <bookmark mark='a'/> Run on the twelve tosses behind the curtain, it gives the stakes we "
-            "saw and the final wealth. Chapter sixteen uses this same line to build a test: a bettor's wealth is a "
-            "martingale transform, so under a fair game it cannot grow, and if it does grow, the game was not fair."
+            "In the House the transform is one line, and each system is a function from past outcomes to the next "
+            "stake. <bookmark mark='a'/> On the twelve tosses it reproduces the curtain. Chapter sixteen turns this "
+            "line into a test."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

@@ -3,104 +3,248 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from explainer.quant.house import arbitrage as A
-from explainer.quant.house import trees
 from explainer.quant.viz import binomial_tree
-from videos.quant.quant9.common import ALT, ARB, CALL, FWD, PART, PUT, Q_C, load, tbar
+from explainer.zh_text import verbatim
+from videos.quant.quant9.common import (ARB, CALL, FWD, HEDGE, PART, PUT, Q_C, answer_under, illustration, load,
+                                        pause_at)
 
 
 class Tree(VoiceoverScene):
     def construct(self):
+        t = load("tree")
         self.card()
-        self.fold()
-        self.incomplete(load("incomplete"))
+        self.one_step(t)
+        self.fold(t)
+        self.lab(t)
+        self.american(t)
+        self.predict()
 
     def card(self):
-        c = chapter_card(3, r"The tree, completeness, and super-replication", r"When does a price follow from "
-                         r"no arbitrage alone?", lit=(1979,), part=PART)
-        with self.voiceover("Chapter three. The binomial tree, completeness, and super-replication."):
+        c = chapter_card(6, r"The tree: replication, then folding back", r"Where does the risk-neutral probability "
+                         r"come from?", lit=(1979,), part=PART)
+        with self.voiceover("Chapter six. The tree: replication, then folding back."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def fold(self):
-        out = trees.crr(100.0, 100.0, 1.0, 0.25, 0.0, N=4, cp=1, keep=5)
-        layers = out["layers"]
-        g = binomial_tree(layers, dx=1.9, dy=0.62, node_r=0.32, font_size=19, show=("values",))
-        g.to_edge(LEFT, buff=0.9).shift(DOWN * 0.3)
-        eq = VGroup(
-            MathTex(r"q = \frac{e^{r\Delta t} - d}{u - d}", font_size=36, color=Q_C),
-            MathTex(r"V = e^{-r\Delta t}\big(q\,V_u + (1 - q)\,V_d\big)", font_size=34),
-            wrapped_label(r"two states, two assets (stock and bond): any payoff is replicated, so its price is "
-                          r"forced; the tree folds back from the payoff at expiry (Cox, Ross and Rubinstein 1979)",
-                          4.4, 20, GREY_A),
-            wrapped_label(rf"a call: $K = 100$, $\sigma = 25\%$, one year, four steps: {out['price']:.2f}. Part 10 "
-                          r"lets the steps go to infinity", 4.4, 20, CALL),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        n_last = max(int(k) for k in layers)
+    def one_step(self, t):
+        o = t["one"]
+        g = axes([60, 140], [-50, 35], x_length=5.6, y_length=4.4, xlabel=r"stock price $S$",
+                 ylabel=r"value $V$", xticks=[80, 100, 120], yticks=[-40, 0, 10, 20], font_size=17)
+        g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        up = Dot(ax.c2p(120, 20), radius=0.09, color=CALL)
+        dn = Dot(ax.c2p(80, 0), radius=0.09, color=CALL)
+        lab = VGroup(label(r"up: stock 120, call pays 20", font_size=18, color=CALL).next_to(up, UP, buff=0.12),
+                     label(r"down: stock 80, call pays 0", font_size=18, color=CALL).next_to(dn, DOWN, buff=0.15))
+        xs = np.array([60, 140])
+        rep = Line(ax.c2p(60, o["Delta"] * 60 + o["B"]), ax.c2p(140, o["Delta"] * 140 + o["B"]), color=HEDGE,
+                   stroke_width=4)
+        here = DashedLine(ax.c2p(100, -50), ax.c2p(100, o["V"]), color=GREY_B, stroke_width=1.5)
+        val = Dot(ax.c2p(100, o["V"]), radius=0.1, color=Q_C)
+        vl = MathTex(rf"V_0 = {o['V']:.0f}", font_size=28, color=Q_C).next_to(val, LEFT, buff=0.15)
+        bl = label(r"intercept: the bond, $B$", font_size=17, color=HEDGE).next_to(ax.c2p(60, o["Delta"] * 60 + o["B"]),
+                                                                                   RIGHT, buff=0.1).shift(DOWN * 0.3)
+        rows = [cmath(r"\Delta S_u + B e^{r\Delta t}", r"=", r"V_u,\qquad \Delta S_d + B e^{r\Delta t} = V_d",
+                      font_size=30),
+                cmath(r"\Delta", r"=", r"\frac{V_u - V_d}{S_u - S_d},\qquad B = e^{-r\Delta t}\frac{S_u V_d - S_d V_u}"
+                      r"{S_u - S_d}", font_size=30, colors={r"\Delta": HEDGE}),
+                cmath(r"V_0 = \Delta S_0 + B", r"=", r"e^{-r\Delta t}\big[q V_u + (1 - q) V_d\big]", font_size=30,
+                      colors={r"V_0 = \Delta S_0 + B": Q_C}),
+                cmath(r"q", r"=", r"\frac{S_0 e^{r\Delta t} - S_d}{S_u - S_d}\in(0, 1) \iff S_d < S_0 e^{r\Delta t} "
+                      r"< S_u", font_size=30, colors={r"q": Q_C})]
+        whys = [why(r"hold $\Delta$ shares and $B$ in bonds; match the claim in both states", 19),
+                why(r"subtract the two equations; substitute back", 19),
+                why(r"collect the terms in $V_u$ and $V_d$: the weights add to one", 19),
+                why(r"no real probability appears anywhere; $q$ is a probability exactly when there is no arbitrage "
+                    r"(chapter 4)", 19)]
+        step = ladder(self, rows, whys, keep=4, top=3.4, x=3.4, buff=0.62, edge=6.95)
+        res = MathTex(rf"\Delta = {o['Delta']:.1f},\ \ B = {o['B']:.0f},\ \ V_0 = {o['V']:.0f},\ \ q = {o['q']:.1f}",
+                      font_size=30, color=Q_C).to_corner(DR, buff=0.4)
         with self.voiceover(
-            "In 1979 John Cox, Stephen Ross and Mark Rubinstein made the theorem concrete. Let the stock move up or "
-            "down each step: two states, two assets. Then any payoff can be built from the stock and the bond, so "
-            "its price is forced, and the risk-neutral probability is fixed by the size of the moves alone. "
-            "<bookmark mark='a'/> Start from the payoff at expiry and fold the tree back: each node is the "
-            "discounted risk-neutral average of the two after it. <bookmark mark='b'/> Four steps price a call at "
-            f"{out['price']:.2f}; Part ten lets the steps go to infinity, and the tree becomes Black and Scholes."
+            "Cox, Ross and Rubinstein, in 1979, made the theorem something you can compute. One step: a stock at a "
+            "hundred goes to a hundred and twenty or to eighty. A call struck at a hundred pays twenty or nothing. "
+            "In the plane of stock price and value, those are two points. <bookmark mark='a'/> A portfolio of delta "
+            "shares and a bond is a straight line in this plane: slope delta, intercept the bond. Exactly one line "
+            "passes through both points. That is the replicating portfolio. <bookmark mark='b'/> Its height at "
+            "today's price is the call's price: ten. Here delta is one half and the bond is minus forty: buy half a "
+            "share, borrow forty. <bookmark mark='c'/> In symbols: match the claim in both states, subtract to get "
+            "delta, substitute to get the bond. <bookmark mark='d'/> Collect terms, and the price is a weighted "
+            "average of the two payoffs, discounted. <bookmark mark='e'/> The weight q comes from the sizes of the "
+            "moves and the interest rate alone. Nobody's probability of an up move appears anywhere. And q lies "
+            "strictly between zero and one exactly when the bond's growth lies between the two stock moves: when "
+            "there is no arbitrage."
         ) as vo:
-            self.play(FadeIn(g.edges), FadeIn(eq[0]), FadeIn(eq[2]))
+            self.play(FadeIn(g), FadeIn(up), FadeIn(dn), FadeIn(lab))
             vo.wait_until("a")
-            for n in range(n_last, -1, -1):
-                self.play(FadeIn(g.nodes[n]), run_time=0.7)
-            self.play(FadeIn(eq[1]))
+            self.play(Create(rep), FadeIn(bl))
             vo.wait_until("b")
-            self.play(FadeIn(eq[3]), Indicate(g.nodes[0], color=CALL))
-        self.wait(0.4)
+            self.play(Create(here), FadeIn(val), FadeIn(vl), FadeIn(res))
+            vo.wait_until("c")
+            step(0)
+            step(1)
+            vo.wait_until("d")
+            step(2)
+            vo.wait_until("e")
+            step(3)
+        self.wait(0.3)
         self.clear_scene()
 
-    def incomplete(self, inc):
-        rows = inc["rows"]
-        g = axes([0, len(rows)], [0, 0.22], x_length=6.6, y_length=4.2, ylabel=r"no-arbitrage prices of an "
-                 r"at-the-money call", xticks=[], yticks=[0, 0.05, 0.1, 0.15, 0.2], font_size=17)
-        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-        bars = VGroup()
-        labs = VGroup()
-        for i, r_ in enumerate(rows):
-            lo, hi = max(r_["lower"], 0.0), r_["upper"]
-            if hi - lo < 1e-6:
-                bars.add(Dot(ax.c2p(i + 0.5, lo), radius=0.08, color=CALL))
-            else:
-                bars.add(tbar(ax, i + 0.5, hi, ALT, width=0.45, lo=lo).set_fill(opacity=0.55))
-            labs.add(label(f"{r_['states']}", font_size=19, color=GREY_A).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.1))
-        xl = label(r"states tomorrow", font_size=18, color=GREY_B).next_to(labs, DOWN, buff=0.15)
-        bsl = DashedLine(ax.c2p(0, inc["bs"]), ax.c2p(len(rows), inc["bs"]), color=CALL, stroke_width=2)
-        bsll = wrapped_label(rf"dashed: one model's price inside the interval (Black--Scholes at 20\% vol): "
-                             rf"{inc['bs']:.3f}; the dot: two states, where the price is forced", 4.4, 19, CALL)
-        side = VGroup(
-            MathTex(r"\overline{p} = \min_\theta\ \theta\cdot p\ \ \text{s.t.}\ \ D^\top\theta \ge X", font_size=30,
-                    color=ALT),
-            MathTex(r"\underline{p} = \max_\theta\ \theta\cdot p\ \ \text{s.t.}\ \ D^\top\theta \le X", font_size=30,
-                    color=ALT),
-            wrapped_label(r"with three or more states and two assets, the market is incomplete: no arbitrage only "
-                          r"gives an interval, the cost of the cheapest hedge that always covers the payoff and the "
-                          r"value of the richest one it always covers", 4.4, 20, GREY_A),
-            wrapped_label(r"the interval never shrinks as states are added; trading the call itself, or choosing a "
-                          r"model, picks a price inside it", 4.4, 20, Q_C),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
-        bsll.next_to(side, DOWN, buff=0.25).align_to(side, LEFT)
+    def fold(self, t):
+        layers = t["layers"]
+        g = binomial_tree(layers, dx=1.75, dy=0.6, node_r=0.33, font_size=18, show=("values",))
+        g.to_edge(LEFT, buff=0.5).shift(DOWN * 0.15)
+        deltas = VGroup()
+        for n in range(4):
+            for j, d in enumerate(layers[str(n)]["delta"]):
+                deltas.add(MathTex(rf"\Delta\,{d:.2f}", font_size=15, color=HEDGE).next_to(g.nodes[n][j], DOWN,
+                                                                                           buff=0.04))
+        for n in g.nodes:
+            for nd in g.nodes[n]:
+                nd[1].set_opacity(0)
+        led = t["ledger"]
+        path_nodes = []
+        j = 0
+        for n in range(5):
+            if n > 0:
+                j += int(led[n][0] > led[n - 1][0])
+            path_nodes.append(g.nodes[n][j])
+        lit = VGroup(*[Circle(radius=0.37, color=QC.HOUSE, stroke_width=4).move_to(nd) for nd in path_nodes])
+        k = ValueTracker(0)
+
+        def ledger_panel():
+            i = int(round(k.get_value()))
+            S, V, sh = led[i]
+            return VGroup(label(r"the hedger's book on the lit path", font_size=21, color=QC.HOUSE),
+                          MathTex(rf"S = {S:.2f}", font_size=28, color=FWD),
+                          MathTex(rf"\text{{shares }} = {sh:.3f}", font_size=28, color=HEDGE),
+                          MathTex(rf"\text{{book value}} = {V:.4f}", font_size=28, color=Q_C)).arrange(
+                DOWN, aligned_edge=LEFT, buff=0.18).to_corner(UR, buff=0.4)
+
+        panel = always_redraw(ledger_panel)
+        S_T = led[-1][0]
+        fin = wrapped_label(rf"at expiry: book {led[-1][1]:.4f}, payoff $\max(S_T - 100, 0) = {max(S_T - 100, 0):.4f}$; "
+                            rf"over {t['rep_paths']:,} random paths the largest miss is {t['rep_max_err']:.0e}".replace(",", "{,}"),
+                            4.8, 20, CALL).to_corner(DR, buff=0.4)
+        eq = MathTex(rf"q = {t['q']:.4f},\ \ V_0 = {t['four_price']:.4f}", font_size=28, color=Q_C).to_corner(UR, buff=0.4)
         with self.voiceover(
-            "That works because the tree has exactly two branches. Give the stock three possible outcomes tomorrow, "
-            "with still only the stock and the bond to trade, and the market is incomplete: a call can no longer "
-            "be replicated. <bookmark mark='a'/> No arbitrage then gives only an interval. Its top is the cost of "
-            "the cheapest portfolio whose payoff is always at least the call's: super-replication, a linear program. "
-            "Its bottom is the richest portfolio the call always beats. <bookmark mark='b'/> With two states the "
-            "interval is a single point. With three it opens, and adding more states never closes it. A model, "
-            "like Black and Scholes, picks one price inside; so does trading the option itself, which makes the "
-            "market complete again. That is why options exist: they complete the market."
+            "Now four steps: a call struck at a hundred, twenty-five percent volatility, one year. At expiry the "
+            "values are just the payoffs. <bookmark mark='a'/> Fold back: each node is the risk-neutral average of "
+            "the two nodes after it, and its delta is the slope between them. Layer by layer, right to left, until "
+            f"the root: {t['four_price']:.2f}. <bookmark mark='b'/> Now trade it. Start with that much money, and at "
+            "each node hold that node's delta in shares, financing the rest with the bond. Follow one random path "
+            "and watch the book. <bookmark mark='c'/> At expiry the book is worth exactly the call's payoff. Not on "
+            f"average: on this path, and on every one of a thousand random paths, to within {t['rep_max_err']:.0e}, "
+            "rounding error. That is what replication means, and why the probability of going up never mattered."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(labs), FadeIn(xl), FadeIn(side[2]))
+            self.play(FadeIn(g.edges), *[FadeIn(nd[0]) for n in g.nodes for nd in g.nodes[n]])
+            self.play(*[nd[1].animate.set_opacity(1) for nd in g.nodes[4]])
             vo.wait_until("a")
-            self.play(FadeIn(side[0]), FadeIn(side[1]))
+            for n in range(3, -1, -1):
+                idx = [i for i, m_ in enumerate(deltas) if m_.get_center()[0] < g.nodes[n][0].get_center()[0] + 0.3
+                       and m_.get_center()[0] > g.nodes[n][0].get_center()[0] - 0.3]
+                self.play(*[nd[1].animate.set_opacity(1) for nd in g.nodes[n]], *[FadeIn(deltas[i]) for i in idx],
+                          run_time=0.9)
+            self.play(FadeIn(eq))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.3), run_time=2.5)
-            self.play(Create(bsl), FadeIn(bsll), FadeIn(side[3]))
+            self.play(FadeOut(eq))
+            self.add(panel)
+            self.play(Create(lit[0]))
+            for i in range(1, 5):
+                self.play(k.animate.set_value(i), Create(lit[i]), run_time=1.0)
+            vo.wait_until("c")
+            self.play(FadeIn(fin))
+        panel.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    def lab(self, t):
+        with verbatim():
+            card = lab_card(r"the tree, folded back", [
+                "def crr(S, K, T, sigma, r=0.0, N=200, cp=1, american=False):",
+                "    dt = T / N; u = exp(sigma * sqrt(dt)); d = 1 / u",
+                "    p = (exp(r * dt) - d) / (u - d)        # risk-neutral",
+                "    spots = S * u ** (2 * arange(N + 1) - N)",
+                "    values = maximum(cp * (spots - K), 0)  # payoff",
+                "    for n in reversed(range(N)):",
+                "        values = exp(-r*dt) * (p*values[1:] + (1-p)*values[:-1])",
+                "        if american:                       # exercise?",
+                "            values = maximum(values, cp * (spots_n - K))",
+                "    return values[0]",
+            ], source="explainer/quant/house/trees.py", width=6.9, font_size=16).to_corner(UL, buff=0.3)
+        N, P = np.asarray(t["N"]), np.asarray(t["prices"])
+        g = axes([0, 200], [8.0, 12.6], x_length=5.6, y_length=3.6, xlabel=r"steps $N$", ylabel=r"call price",
+                 xticks=[1, 50, 100, 150, 200], yticks=[8, 9, 10, 11, 12], font_size=15)
+        g.to_corner(UR, buff=0.4).shift(DOWN * 0.2)
+        ax = g.ax
+        bsl = DashedLine(ax.c2p(0, t["bs"]), ax.c2p(200, t["bs"]), color=Q_C, stroke_width=2)
+        bsll = MathTex(rf"\text{{Black--Scholes }} {t['bs']:.3f}", font_size=22, color=Q_C).next_to(ax.c2p(200, t["bs"]),
+                                                                                               UP, buff=0.1).shift(LEFT * 1.3)
+        n = ValueTracker(1)
+        live = always_redraw(lambda: VGroup(*[Dot(ax.c2p(a, min(b, 12.6)), radius=0.025, color=CALL)
+                                              for a, b in zip(N, P) if a <= n.get_value()]))
+        cnt = always_redraw(lambda: MathTex(rf"N = {int(n.get_value())}:\ {P[int(n.get_value()) - 1]:.4f}",
+                                            font_size=26, color=CALL).next_to(g, DOWN, buff=0.15))
+        outs = [f"[crr(100, 100, 1, 0.25, N=n) for n in (1, 2, 3, 4)]",
+                f"[{P[0]:.2f}, {P[1]:.2f}, {P[2]:.2f}, {P[3]:.2f}]",
+                f"crr(..., N=200) = {P[199]:.3f}   bs = {t['bs']:.3f}"]
+        with self.voiceover(
+            "This is the House's tree, the whole algorithm in ten lines: the up and down factors from the "
+            "volatility, the risk-neutral probability, the payoffs at the leaves, and one line that folds the "
+            "vector back a step at a time. <bookmark mark='a'/> Run it for one to four steps, then let N grow to two "
+            "hundred and plot the price as it computes. <bookmark mark='b'/> The prices zigzag, odd steps above "
+            f"even ones, and close in on Black and Scholes' {t['bs']:.3f}: at two hundred steps the tree says "
+            f"{P[199]:.3f}. Part ten takes the limit properly, and the tree becomes the formula."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2), FadeIn(g), Create(bsl), FadeIn(bsll))
+            vo.wait_until("a")
+            with verbatim():
+                lab_run(self, card, outs, run_time=2.0, font_size=17)
+            vo.wait_until("b")
+            self.add(live, cnt)
+            self.play(n.animate.set_value(200), run_time=max(vo.remaining(1.0) - 1.0, 3.0), rate_func=rate_functions.ease_in_quad)
+        live.clear_updaters()
+        cnt.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    def american(self, t):
+        nodes = t["ex_nodes"]
+        rows = VGroup(*[MathTex(rf"\text{{step }} {e['n']},\ S = {e['S']:.2f}:\ \ \text{{exercise}}\ {e['exercise']:.2f}"
+                                rf"\ >\ \text{{hold}}\ {e['hold']:.2f}", font_size=28, color=PUT) for e in nodes])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        head = label(r"an American put on the same tree, rates at 5\%", font_size=28)
+        res = MathTex(rf"\text{{American }} {t['am_put']:.2f}\ \ >\ \ \text{{European }} {t['eu_put']:.2f}",
+                      font_size=34, color=Q_C)
+        rule = cmath(r"V_n", r"=", r"\max\big(\text{exercise now},\ e^{-r\Delta t}[q V_u + (1 - q) V_d]\big)",
+                     font_size=32)
+        VGroup(head, rule, rows, res).arrange(DOWN, buff=0.4).move_to(ORIGIN)
+        src = note(r"Shreve I, ch.\ 4; the full theory of early exercise: Parts 8 and 10", font_size=18,
+                   color=GREY_B).to_corner(DR, buff=0.25)
+        with self.voiceover(
+            "One more line turns the tree American. At every node, compare exercising now with the folded-back value "
+            "of waiting, and keep the larger. <bookmark mark='a'/> For a put on this tree with five percent rates, "
+            f"exercise wins at {len(nodes)} nodes, all deep in the money, where waiting only delays receiving the "
+            f"strike. The put is worth {t['am_put']:.2f} American against {t['eu_put']:.2f} European. Shreve's "
+            "chapter four does this in full, and Parts eight and ten return to it."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(rule), FadeIn(src))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.4), run_time=2)
+            self.play(FadeIn(res))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def predict(self):
+        card = pause_at(r"Why does the tree's price zigzag between odd and even numbers of steps?")
+        with self.voiceover(
+            "Pause and predict. Why does the price zigzag between odd and even numbers of steps? "
+            "<bookmark mark='a'/> With an even number of steps, a node sits exactly on the strike, where the payoff "
+            "bends; with an odd number, the strike falls between two nodes. Where the kink lands relative to the "
+            "grid changes the error's sign."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(answer_under(card, r"even $N$: a node sits on the strike, at the payoff's kink; odd $N$: the "
+                                                r"strike falls between nodes, and the error changes sign")))
         self.wait(0.4)
         self.clear_scene()

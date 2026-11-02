@@ -16,7 +16,6 @@ class Measure(VoiceoverScene):
         self.table()
         self.process()
         self.recolour()
-        self.equivalence()
         self.paths(m)
         self.esscher(es)
 
@@ -63,41 +62,6 @@ class Measure(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(side[1]), FadeIn(side[2]))
             self.play(FadeIn(side[3]))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def equivalence(self):
-        d = definition_card(r"Equivalent measures",
-                            r"$P$ and $Q$ are equivalent if they agree on which events are impossible: $P(A) = 0$ exactly "
-                            r"when $Q(A) = 0$. Then $dQ/dP$ exists and is positive. They may disagree on everything "
-                            r"else: how likely each possible thing is.", width=9.4, color=Q_C,
-                            font_size=25).to_edge(UP, buff=0.7)
-        ex = VGroup(
-            VGroup(label(r"equivalent", font_size=24, color=MART),
-                   label(r"fair coin and a 60\% coin: any sequence possible under one is possible under the other",
-                         font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
-            VGroup(label(r"not equivalent", font_size=24, color=QC.LOSS),
-                   label(r"fair coin and a two-headed coin: ``a tail appears'' is likely under one, impossible under "
-                         r"the other", font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
-            wrapped_label(r"why it matters: an arbitrage, a sure profit with no possible loss, is a statement about "
-                          r"which events are possible; so it looks the same under every equivalent measure (Part 9).",
-                          11.0, 23, Q_C),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(d, DOWN, buff=0.6)
-        with self.voiceover(
-            "Two measures are equivalent when they agree on what is impossible, even if they disagree about how "
-            "likely everything else is. <bookmark mark='a'/> A fair coin and a sixty-percent coin are equivalent: "
-            "any sequence that can happen under one can happen under the other. A fair coin and a two-headed coin "
-            "are not: seeing a tail is likely under the first and impossible under the second, and no reweighting "
-            "can turn one into the other. <bookmark mark='b'/> This is why finance can price under a convenient "
-            "measure. An arbitrage, a profit with no possible loss, is a statement only about what is possible, so "
-            "it is the same under every equivalent measure."
-        ) as vo:
-            self.play(FadeIn(d, shift=UP * 0.2))
-            vo.wait_until("a")
-            self.play(FadeIn(ex[0]))
-            self.play(FadeIn(ex[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(ex[2]))
         self.wait(0.4)
         self.clear_scene()
 

@@ -131,15 +131,13 @@ class Hook(VoiceoverScene):
             note(r"Pascal to Fermat, 29 July 1654", font_size=18),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "The question is older than the stock market. In 1654 a gambler asked Blaise Pascal how to split the "
-            "stakes of a game stopped before its end. Two players, first to three points wins sixty-four pistoles, "
-            "and the game stops with A ahead two to one. <bookmark mark='a'/> Pascal reasoned backwards. If A wins "
-            "the next point, A takes all sixty-four. If B wins it, it is two all, and the next point decides, so "
-            "that position is worth half, thirty-two. <bookmark mark='b'/> Averaging the two, A's fair share is "
-            "forty-eight, and B's is sixteen. From two to nothing, the same reasoning gives fifty-six. "
-            "<bookmark mark='c'/> The fair value of an unfinished game is the expected payout, given what has happened "
-            "so far: a conditional expectation. And the values, point by point, form what this part is about: a "
-            "martingale."
+            "The question is older than the stock market. In 1654 Blaise Pascal was asked how to split the stakes of "
+            "a game stopped early: first to three points wins sixty-four pistoles, and A leads two to one. "
+            "<bookmark mark='a'/> Reason backwards. If A wins the next point, A takes sixty-four. If B wins it, the "
+            "next point decides, so that position is worth thirty-two. <bookmark mark='b'/> Averaging, A's fair share "
+            "is forty-eight; from two to nothing, it is fifty-six. <bookmark mark='c'/> The fair value of an "
+            "unfinished game is its expected payout given what has happened: a conditional expectation. Point by "
+            "point, those values form a martingale."
         ) as vo:
             self.play(FadeIn(head), FadeIn(root), FadeIn(side[4]))
             vo.wait_until("a")
@@ -200,15 +198,11 @@ class Hook(VoiceoverScene):
         cap = wrapped_label(r"three centuries of one idea: a fair game, its value as information arrives, and what no "
                             r"strategy can do to it", 11.0, 22, GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "From Pascal, the idea runs for three and a half centuries. Abraham de Moivre solved the gambler's ruin in "
-            "1718. Louis Bachelier modelled prices as a fair game in 1900. <bookmark mark='a'/> Andrei Kolmogorov "
-            "gave probability its axioms in 1933, and with them conditional expectation. Jean Ville named the "
-            "martingale in 1939, Abraham Wald built sequential tests in the war, and Joseph Doob wrote the theory in "
-            "1953. <bookmark mark='b'/> Paul Samuelson argued in 1965 that properly anticipated prices fluctuate "
-            "randomly, and Michael Harrison and Stanley Pliska made pricing a martingale problem in 1981. "
-            "<bookmark mark='c'/> Barings showed in 1995 what the doubling system does to a bank. And Glenn Shafer, "
-            "Vladimir Vovk and, recently, Aaditya Ramdas and colleagues turned Ville's betting into a way to test "
-            "anything, at any time."
+            "From Pascal the idea runs through de Moivre's gambler's ruin and Bachelier's fair prices. "
+            "<bookmark mark='a'/> Kolmogorov gave probability its axioms in 1933, Ville named the martingale in "
+            "1939, Wald tested sequentially, and Doob wrote the theory. <bookmark mark='b'/> Samuelson, Harrison and "
+            "Pliska made prices martingales. <bookmark mark='c'/> Barings showed what doubling does to a bank, and "
+            "Shafer, Vovk and Ramdas turned Ville's betting into tests valid at any time."
         ) as vo:
             self.play(FadeIn(title), Create(line), FadeIn(ticks), FadeIn(cap))
             groups = [(0, 3, "a"), (3, 7, "b"), (7, 9, "c"), (9, 12, None)]
@@ -233,12 +227,9 @@ class Hook(VoiceoverScene):
             r"Casinos, bookmakers, prediction markets; the 2023--2026 frontier, e-BH (ch.\ 17--18)",
         ], color=QC.IDEA, font_size=23)
         with self.voiceover(
-            "The plan, in eighteen chapters. Information as questions you can answer, and conditional expectation as "
-            "a projection. Martingales, and the theorem that no betting system beats a fair game. Stopping times, "
-            "the optional stopping theorem with its proof, the doubling system, and the trader who broke Barings. "
-            "The gambler's ruin, and why martingales converge. Doob's decomposition, the change of measure and the "
-            "Radon-Nikodym theorem. Heavy tails as stable laws. Testing by betting, and a bettor that learns. "
-            "Then how casinos, bookmakers and prediction markets live with all this, and the research frontier."
+            "The plan, in eighteen chapters: information and projection; martingales and why no system beats them; "
+            "stopping, doubling and Barings; ruin and convergence; Doob, the change of measure and Radon-Nikodym; "
+            "stable laws; testing and learning to bet; and the industry and the frontier."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=10))

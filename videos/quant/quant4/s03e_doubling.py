@@ -38,15 +38,13 @@ class Doubling(VoiceoverScene):
                 why(r"each session is an independent trial that ruins with probability $2^{-k}$")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.4, buff=0.75, edge=6.9)
         with self.voiceover(
-            "The doubling system is the original martingale: bet one, and double the bet after every loss, until the "
-            "first win. With unlimited credit you stop at the first win, after two tosses on average, always exactly "
-            "one unit up. <bookmark mark='a'/> The theorem is not broken. The bets one, two, four, eight grow without "
-            "limit, and so do the losses you carry before the win, so none of its conditions holds. "
-            "<bookmark mark='b'/> Give the gambler a real bankroll, a thousand and twenty-three units, enough for ten "
-            "doublings. Now a thousand and twenty-three sessions in a thousand and twenty-four win one unit, and one "
-            "loses everything. The expected gain is exactly zero. <bookmark mark='c'/> Each session ruins with "
-            "probability one in a thousand and twenty-four, so the wait for the first ruin is geometric, with mean "
-            "one thousand and twenty-four sessions."
+            "The doubling system is the original martingale: double the bet after every loss until the first win. "
+            "With unlimited credit you are always one unit up, after two tosses on average. <bookmark mark='a'/> "
+            "The theorem survives: the bets and the losses carried before the win are unbounded. "
+            "<bookmark mark='b'/> With a bankroll of a thousand and twenty-three, ten doublings, a session wins one "
+            "unit a thousand and twenty-three times in a thousand and twenty-four, and loses everything once: "
+            "expected gain zero. <bookmark mark='c'/> So the first ruin comes after a thousand and twenty-four "
+            "sessions on average."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -139,14 +137,12 @@ class Doubling(VoiceoverScene):
                               r"rare large loss (Part 11). The staircase and the cliff.", 10.4, 22, LOSS)
         VGroup(d, h1, h2, short).arrange(DOWN, buff=0.3).move_to(ORIGIN)
         with self.voiceover(
-            "In continuous time doubling is worse: by betting ever faster, a doubler can make any sum in a finite time, "
-            "if credit is unlimited. Finance closes the loophole with one rule. A strategy is admissible if its wealth "
-            "never falls below some fixed floor. <bookmark mark='a'/> Michael Harrison and Stanley Pliska showed in "
-            "1981 that when prices are martingales under an equivalent measure, admissible strategies cannot make "
-            "something from nothing: their wealth is a supermartingale, and its expected value can only fall. "
-            "<bookmark mark='b'/> Philip Dybvig and Chi-fu Huang showed in 1988 that it is exactly this credit limit "
-            "that rules out doubling. The proof belongs to Part nine. <bookmark mark='c'/> And remember the shape. "
-            "Selling options earns small premiums most days and pays a rare large loss: the staircase and the cliff."
+            "In continuous time, with unlimited credit, a doubler can make any sum in finite time. Finance allows "
+            "only admissible strategies, whose wealth never falls below a fixed floor. <bookmark mark='a'/> Harrison "
+            "and Pliska showed in 1981 that when prices are martingales under an equivalent measure, such strategies "
+            "cannot make something from nothing. <bookmark mark='b'/> Dybvig and Huang showed in 1988 that this "
+            "credit limit is what rules out doubling; Part nine has the proof. <bookmark mark='c'/> And selling "
+            "options has the same shape: the staircase and the cliff."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.2))
             vo.wait_until("a")

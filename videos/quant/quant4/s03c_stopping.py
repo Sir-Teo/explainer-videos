@@ -54,14 +54,12 @@ class Stopping(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Optional stopping needs a precise notion of a rule for when to stop. A stopping time is a rule that "
-            "decides whether to stop now using only what has happened up to now. <bookmark mark='a'/> Watch a fair "
-            "walk run toward a curtain that hides the future. Rule A rings the bell the first time the walk reaches "
-            "plus one. It knows when that happens, the moment it happens. <bookmark mark='b'/> Rule B says: ring at "
-            "the highest point of the first hundred steps. Pull back the curtain, and you see the problem. To know "
-            "that this was the top, it needed the whole path ahead of it. <bookmark mark='c'/> Rule B is not a stopping "
-            "time. The first time a target is hit, a fixed date, the first time wealth doubles: allowed. The peak, the "
-            "last visit to zero, the day before a crash: forbidden, however tempting."
+            "A stopping time decides whether to stop now using only what has happened up to now. "
+            "<bookmark mark='a'/> A walk runs toward a curtain hiding the future. Rule A rings the first time it "
+            "reaches plus one, the moment it happens. <bookmark mark='b'/> Rule B rings at the highest point of the "
+            "first hundred steps. Pull back the curtain: to know that was the top, it needed the future. "
+            "<bookmark mark='c'/> Rule B is not a stopping time. Hitting times and fixed dates are allowed; the peak, "
+            "or the day before a crash, are not."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(rules[0]))
             self.add(live, curtain)
@@ -101,17 +99,14 @@ class Stopping(VoiceoverScene):
                     r"(Shreve I, ch.\ 5); its slope at $\alpha = 1$ is infinite")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.0, buff=0.68, edge=6.9)
         with self.voiceover(
-            "Two facts about stopping times, with proofs. First: stopping a martingale leaves it a martingale. The "
-            "stopped walk is the transform of chapter four with the stake one up to the stopping time and zero after. "
-            "<bookmark mark='a'/> Whether you are still playing at step k is decided by step k minus one, so the "
-            "stake is predictable, and the stopped process is a martingale. <bookmark mark='b'/> Second, a paradox. "
-            "Let tau one be the first time a fair walk reaches plus one. By the reflection principle, the chance it "
-            "has not got there after n steps equals the chance the walk sits at zero or one, about the square root of "
-            "two over pi n. <bookmark mark='c'/> So it gets there with probability one. But those chances fall so "
-            "slowly that their sum, the expected time, is infinite. <bookmark mark='d'/> Wald's identity gives a "
-            "one-line proof: if the expected time were finite, the expected position would be the drift times it, "
-            "zero; but the position at tau is one. <bookmark mark='e'/> Stopping the exponential martingale gives the "
-            "whole law of tau through its generating function, and its slope at one, the mean, is infinite."
+            "Two facts, with proofs. A stopped martingale is the transform with stake one until the stopping time. "
+            "<bookmark mark='a'/> That stake is decided a step ahead, so the stopped process is a martingale. "
+            "<bookmark mark='b'/> Now a paradox. Let tau be the first time a fair walk reaches plus one. By "
+            "reflection, the chance it has not arrived after n steps is the chance the walk sits at zero or one, about "
+            "root two over pi n. <bookmark mark='c'/> So it arrives with probability one, yet the expected time is "
+            "infinite. <bookmark mark='d'/> Wald's identity proves it in a line: a finite expected time would make "
+            "the expected position zero, but it is one. <bookmark mark='e'/> Stopping the exponential martingale "
+            "gives tau's whole law."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -179,16 +174,13 @@ class Stopping(VoiceoverScene):
                              rf"About {100 * f['p100_exact']:.0f}\%: $\binom{{100}}{{50}}/2^{{100}} = {f['p100_exact']:.4f}$; "
                              rf"simulated {p100:.4f}.", width=5.4, font_size=21).to_corner(UR, buff=0.4)
         with self.voiceover(
-            f"Here are {k_show} walks, each frozen with a gold dot the moment it first reaches plus one. "
-            "<bookmark mark='a'/> The counter climbs fast at first, then more and more slowly: a few walks wander "
-            "deep below zero and take a very long time to come back. <bookmark mark='b'/> On log scales the chance of "
-            "still waiting falls on a line of slope minus a half: ten thousand walks, followed to a hundred thousand "
-            f"steps, land on the exact curve. <bookmark mark='c'/> And the average waiting time never settles. Capped "
-            f"at a hundred steps it is {cap['100']:.0f}; at a thousand, {cap['1000']:.0f}; at ten thousand, "
-            f"{cap['10000']:.0f}; at a hundred thousand, {cap['100000']:.0f}. It grows like the square root of the "
-            "cap, without limit. <bookmark mark='d'/> So: after a hundred fair steps, what fraction of walks has not "
-            f"yet been up one? About {100 * f['p100_exact']:.0f} percent. The walk that always wins can make you wait "
-            "longer than any bankroll."
+            f"Here are {k_show} walks, each frozen with a gold dot when it first reaches plus one. "
+            "<bookmark mark='a'/> The counter climbs fast, then slowly: some walks wander deep below zero. "
+            "<bookmark mark='b'/> On log scales the chance of still waiting falls with slope minus a half, ten thousand "
+            "walks on the exact curve. <bookmark mark='c'/> And the average wait never settles: capped at a hundred "
+            f"steps it is {cap['100']:.0f}, at a hundred thousand {cap['100000']:.0f}, growing like the square root of "
+            "the cap. <bookmark mark='d'/> After a hundred fair steps, what fraction has not yet been up one? About "
+            f"{100 * f['p100_exact']:.0f} percent."
         ) as vo:
             self.play(FadeIn(g))
             self.add(fan, counter)

@@ -91,15 +91,11 @@ class Martingales(VoiceoverScene):
                 why(r"Jensen: a convex function of a martingale is a submartingale")]
         step = ladder(self, rows, whys, keep=5, top=2.9, x=-0.8, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Fair, unfavourable and favourable games have names. If tomorrow's forecast is today, a martingale; if it "
-            "is at most today, a supermartingale, the gambler's wealth at a casino; if at least, a submartingale. "
-            "<bookmark mark='a'/> Three examples, each proved in a line. For a fair walk of plus and minus one steps, "
-            "expand the square: the cross term averages to zero and the new step squared is one, so the square of "
-            "the walk minus the number of steps is a martingale. <bookmark mark='b'/> The exponential of theta times "
-            "the walk grows on average by the hyperbolic cosine of theta per step, so dividing by that gives the "
-            "exponential martingale, which chapter five uses to time the walk. <bookmark mark='c'/> The forecast of "
-            "anything, refined as information arrives, is a martingale by the tower property. <bookmark mark='d'/> "
-            "And Jensen's inequality turns a convex function of a martingale into a submartingale."
+            "If tomorrow's forecast is at most today, a supermartingale, the gambler at a casino; if at least, a "
+            "submartingale. <bookmark mark='a'/> For a fair walk, expand the square: the walk squared minus the steps "
+            "is a martingale. <bookmark mark='b'/> Dividing e to the theta S by cosh theta to the n gives the "
+            "exponential martingale. <bookmark mark='c'/> Forecasts refined by information are martingales, by the "
+            "tower. <bookmark mark='d'/> And by Jensen, a convex function of a martingale is a submartingale."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -207,15 +203,12 @@ class Martingales(VoiceoverScene):
         pred = desk_question(r"Is $|S_n|$ a martingale?", r"No: $|x|$ is convex, so it is a submartingale; its mean "
                              r"grows like $\sqrt{2n/\pi}$.", width=4.2, font_size=20)
         with self.voiceover(
-            "That last fact has a price. Take the walk and an option on it, a call struck at two, which pays the walk "
-            "minus two if positive. The payoff is a convex function, so its expected value can only rise with time. "
-            f"<bookmark mark='a'/> Watch it grow, from zero to {call[-1]:.2f} after fifty steps, with simulated walks "
-            "landing on the exact curve. In Part nine a forward price is a martingale under the pricing measure, so "
-            "the same argument says a longer-dated call is worth at least a shorter one. <bookmark mark='b'/> Is the "
-            "absolute value of the walk a martingale? No: the absolute value is convex, so it is a submartingale, and "
-            f"its mean grows like the square root of two n over pi, {absm[-1]:.2f} at fifty. <bookmark mark='c'/> And "
-            "do not confuse martingales with Markov processes. Markov is about memory: only the present matters for "
-            "the future. Martingale is about the mean. A walk with a drift is Markov, and not a martingale."
+            "That last fact has a price. A call on the walk struck at two pays a convex function, so its value can "
+            f"only rise with time. <bookmark mark='a'/> Watch it grow to {call[-1]:.2f} after fifty steps, simulated "
+            "walks landing on the exact curve: in Part nine, longer-dated calls are worth more for this reason. "
+            "<bookmark mark='b'/> Is the absolute value of the walk a martingale? No, a submartingale; its mean grows "
+            f"like the square root of two n over pi, {absm[-1]:.2f} at fifty. <bookmark mark='c'/> And Markov is not "
+            "martingale: Markov is about memory, martingale about the mean."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             self.add(l_call, l_abs)

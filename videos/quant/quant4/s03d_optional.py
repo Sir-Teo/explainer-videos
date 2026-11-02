@@ -45,16 +45,13 @@ class Optional(VoiceoverScene):
                 why(r"the walk that always wins: no bound, $\mathbb{E}\tau_1 = \infty$; the mean leaks away")]
         step = ladder(self, rows, whys, keep=4, top=1.15, x=-1.6, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Now the theorem, with its proof. A martingale stopped at a finite stopping time has expected value equal "
-            "to its start, provided one of three things: you stop by a fixed date; or the stopped process stays "
-            "bounded; or the expected time is finite and each step is bounded. <bookmark mark='a'/> The proof is "
-            "four lines. For every fixed n, the stopped martingale has mean M zero: chapter five. <bookmark mark='b'/> "
-            "As n grows, the stopped path freezes at its value at tau. <bookmark mark='c'/> Each hypothesis gives a "
-            "single integrable bound on the whole stopped path: a constant, or the start plus c times tau. "
-            "<bookmark mark='d'/> So dominated convergence lets the limit pass inside the expectation, and the mean is "
-            "still M zero. <bookmark mark='e'/> Now see what fails without a bound. The walk stopped at plus one has "
-            "mean zero at every finite n, but at tau it is always one. The general condition, uniform integrability, "
-            "says exactly that no mass escapes to infinity. Here it does."
+            "The theorem: a martingale stopped at a finite stopping time keeps its starting mean if you stop by a "
+            "fixed date, or the stopped process is bounded, or the expected time is finite and the steps bounded. "
+            "<bookmark mark='a'/> Proof. At every fixed n the stopped martingale has mean M zero. "
+            "<bookmark mark='b'/> As n grows it freezes at its value at tau. <bookmark mark='c'/> Each hypothesis "
+            "gives one integrable bound on the whole stopped path. <bookmark mark='d'/> So dominated convergence "
+            "passes the limit inside. <bookmark mark='e'/> Without a bound it fails: the walk stopped at plus one has "
+            "mean zero at every n, but one at tau. Uniform integrability says no mass escapes; here it does."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.2))
             vo.wait_until("a")
@@ -162,14 +159,11 @@ class Optional(VoiceoverScene):
                     font_size=32, color=MART),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Optional stopping also computes things, by a trick of Bob Li from 1980. How long, on average, until two "
-            "heads in a row? Before every toss a new gambler arrives with one dollar and bets it on heads at fair "
-            "odds. If that wins, the gambler lets the two dollars ride on heads again. <bookmark mark='a'/> Here the "
-            "tosses come tails, heads, tails, heads, heads. Most gamblers are wiped out. When heads, heads appears, "
-            "gambler four holds four dollars and gambler five holds two. <bookmark mark='b'/> The casino took one "
-            "dollar per toss and paid out six. Its takings minus payouts are a martingale with bounded steps and a "
-            "finite expected stopping time, so condition c applies, and on average they balance: the expected "
-            "number of tosses is six."
+            "Optional stopping also computes, by Bob Li's trick of 1980. How long until two heads in a row? Before "
+            "every toss a new gambler bets a dollar on heads at fair odds, and lets winnings ride on heads again. "
+            "<bookmark mark='a'/> When heads, heads appears, gambler four holds four dollars and gambler five holds "
+            "two. <bookmark mark='b'/> The casino took a dollar a toss and paid six. Its net is a martingale with "
+            "bounded steps, so on average it balances: six tosses."
         ) as vo:
             self.play(FadeIn(tosses[0]), FadeIn(rows[0]))
             vo.wait_until("a")
@@ -206,16 +200,13 @@ class Optional(VoiceoverScene):
                              r"HH: 6 tosses on average against 4, although each has probability $1/4$ in any two "
                              r"tosses. HH overlaps itself.", width=6.4, font_size=21).to_corner(DR, buff=0.35)
         with self.voiceover(
-            "The same argument gives a formula for any pattern: add up m to the k for every k where the pattern's "
-            "first k letters equal its last k. <bookmark mark='a'/> Heads, heads: two plus four, six. Heads, tails: "
-            "only the whole pattern overlaps itself, four. Heads, tails, heads: ten. Three heads: fourteen. Two "
-            "hundred thousand simulated sequences agree, within sampling error. A monkey typing ABRACADABRA on a "
-            f"twenty-six key typewriter needs about {pt['abra'] / 1e15:.2f} thousand trillion keystrokes, an "
-            "exercise from Williams. <bookmark mark='b'/> The overlaps also decide Penney's game: if you choose heads, "
-            f"heads, tails and I choose tails, heads, heads, I win {100 * pt['penney_exact']:.0f} percent of the time. "
-            "<bookmark mark='c'/> So which takes longer to appear, heads heads or heads tails? Heads heads, six against "
-            "four, though each has the same chance in any two tosses: heads heads overlaps itself, so its "
-            "near-misses waste time."
+            "In general, add m to the k for every k where the pattern's first k letters equal its last k. "
+            "<bookmark mark='a'/> Heads heads, six; heads tails, four; heads tails heads, ten; three heads, fourteen; "
+            "two hundred thousand simulated sequences agree within sampling error. A monkey typing ABRACADABRA needs "
+            f"about {pt['abra'] / 1e15:.2f} thousand trillion keystrokes. <bookmark mark='b'/> Overlaps also decide "
+            f"Penney's game: tails heads heads beats heads heads tails {100 * pt['penney_exact']:.0f} percent of the "
+            "time. <bookmark mark='c'/> So heads heads takes longer than heads tails, though each has the same chance "
+            "in two tosses: it overlaps itself."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             lab_run(self, card, ['pattern_wait("HH"), pattern_wait("HT")', f"({W['HH']['theory']}, {W['HT']['theory']})",

@@ -122,10 +122,11 @@ class Training(VoiceoverScene):
         pc = pause_card(r"Five seeds, same data, same architecture. Will they agree on 2020?", width=6.4, font_size=22)
         pc.to_edge(UP, buff=0.5)
         sp = {n_: (min(t[n_]["seed_qlike"]), max(t[n_]["seed_qlike"])) for n_, _ in names}
+        wide = (sp["Transformer"][1] - sp["Transformer"][0]) / (sp["LSTM"][1] - sp["LSTM"][0])
         with self.voiceover(
             "Pause and predict: five seeds, the same data, the same architecture. Will they agree about 2020? "
             "<bookmark mark='a'/> Not quite. Each dot is one seed's score over the test year. The LSTM's seeds range "
-            f"from {sp['LSTM'][0]:.3f} to {sp['LSTM'][1]:.3f}; the transformer's spread twice as wide. Which seed you "
+            f"from {sp['LSTM'][0]:.3f} to {sp['LSTM'][1]:.3f}; the transformer's spread is {wide:.1f} times as wide. Which seed you "
             "happened to draw is itself a trial, which is why the race averages the five. <bookmark mark='b'/> "
             "HARNet's seeds sit on top of each other: starting from HAR, they barely move."
         ) as vo:
