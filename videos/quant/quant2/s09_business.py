@@ -108,9 +108,10 @@ class Business(VoiceoverScene):
             label(r"after a loss it is far out of the money:", font_size=22),
             label(r"funds close and relaunch with a fresh mark", font_size=22),
             label(r"the manager is long volatility of the fund", font_size=22, color=LOSS),
-            label(r"Fung and Hsieh (1997): hedge-fund returns load on a few", font_size=20, color=GREY_A),
-            label(r"dynamic styles, with option-like, nonlinear payoffs", font_size=20, color=GREY_A),
+            wrapped_label(r"Fung and Hsieh (1997): hedge-fund returns load on a few dynamic styles, with option-like, "
+                          r"nonlinear payoffs", 5.2, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(eq, DOWN, buff=0.4).align_to(eq, LEFT)
+        keep_in_frame(txt, 0.3)
         with self.voiceover(
             "The performance fee pays nothing below the high-water mark and a fifth above it: a call on the fund, struck at "
             "its peak. <bookmark mark='a'/> After a bad year it is far out of the money, so funds sometimes close and "
@@ -128,7 +129,7 @@ class Business(VoiceoverScene):
         Ro = np.asarray(gl["Ro"], float)[:118]
         th = np.asarray(gl["theta_true"], float)
         t = np.arange(len(Ro))
-        g = axes([0, len(Ro)], [-0.13, 0.13], x_length=7.6, y_length=3.6, xlabel=r"months",
+        g = axes([0, len(Ro)], [-0.13, 0.13], x_length=6.4, y_length=3.6, xlabel=r"months",
                  ylabel=r"monthly return", yticks=[-0.1, 0, 0.1], yfmt=lambda v: f"{100 * v:+.0f}\\%" if v else "0",
                  font_size=16).to_edge(LEFT, buff=0.6).shift(UP * 0.4)
         ax = g.ax
@@ -140,11 +141,12 @@ class Business(VoiceoverScene):
         sr = ro(r"\text{reported Sharpe} \times", lambda: 1 + (gl["inflate"] - 1) * min(k.get_value() / len(t), 1),
                      digits=2, font_size=32, color=QC.IDEA).to_edge(RIGHT, buff=0.6).shift(UP * 1.6)
         ac = VGroup(
-            label(r"stale prices in the wild: lag-1 autocorrelation of daily returns", font_size=20, color=GREY_A),
-            MathTex(rf"\text{{smallest size decile: }}{gl['ac1']['early']['small']:.2f}\ (1963\text{{--}}89),\ "
-                    rf"{gl['ac1']['late']['small']:.2f}\ (1990\text{{--}}2020)", font_size=24, color=QC.IDEA),
-            MathTex(rf"\text{{largest decile: }}{gl['ac1']['early']['big']:.2f},\ {gl['ac1']['late']['big']:.2f}",
-                    font_size=24, color=GREY_A),
+            wrapped_label(r"stale prices in the wild: lag-1 autocorrelation of daily returns, 1963--89 $\to$ "
+                          r"1990--2020", 5.4, 20, GREY_A),
+            MathTex(rf"\text{{smallest size decile: }}{gl['ac1']['early']['small']:.2f} \to "
+                    rf"{gl['ac1']['late']['small']:.2f}", font_size=26, color=QC.IDEA),
+            MathTex(rf"\text{{largest decile: }}{gl['ac1']['early']['big']:.2f} \to {gl['ac1']['late']['big']:.2f}",
+                    font_size=26, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.3).shift(DOWN * 0.6)
         src = note(r"simulated: iid normal monthly returns; Ken French size deciles, daily, value-weighted", font_size=15)
         src.to_edge(DOWN, buff=0.12)
@@ -233,7 +235,7 @@ class Business(VoiceoverScene):
                       (YELLOW, r"the true $\theta$")], font_size=17).to_corner(UL, buff=0.35)
         q = desk_question(r"A fund's monthly returns have autocorrelation 0.4. Is its true volatility higher or lower "
                           r"than reported, and by how much?", r"higher: if each return is spread over two months, reported "
-                          r"volatility is about $0.75\times$ the truth", width=6.0, font_size=19).to_corner(DL, buff=0.25)
+                          r"volatility is about $0.75\times$ the truth", width=8.6, font_size=24).move_to(DOWN * 0.4)
         with self.voiceover(
             "Undo it: fit the weights by maximum likelihood on five simulated funds of six hundred months. Each dot is a "
             "seed's estimate on the triangle of weights; the star is the truth. <bookmark mark='a'/> Every seed walks to the "
@@ -252,6 +254,7 @@ class Business(VoiceoverScene):
             self.play(FadeIn(res))
             vo.wait_until("y")
             q.answer.set_opacity(0)
+            self.clear_scene(res, extra=[res.animate.move_to(UP * 2.5)])
             self.play(FadeIn(q))
             vo.wait_until("z")
             self.play(q.answer.animate.set_opacity(1))

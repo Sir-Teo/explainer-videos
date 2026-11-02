@@ -228,14 +228,30 @@ def timeline(lit=(), width=12.4, show_labels=True, font_size=17) -> VGroup:
             t.next_to(d, UP if side > 0 else DOWN, buff=0.16 if side > 0 else 0.42)
             side = -side
             labels.add(t)
+    edge = config.frame_width / 2 - 0.25
     for row in (1, -1):  # keep the lit labels apart and inside the frame
         same = sorted([t for t in labels if np.sign(t.get_y()) == row], key=lambda t: t.get_x())
         for a, b in zip(same, same[1:]):
             gap = b.get_left()[0] - a.get_right()[0]
             if gap < 0.2:
                 b.shift(RIGHT * (0.2 - gap))
+        if same and same[-1].get_right()[0] > edge:  # slide the row back in as a whole
+            over = same[-1].get_right()[0] - edge
+            for t in same:
+                t.shift(LEFT * over)
         for t in same:
             keep_in_frame(t, margin=0.25)
+        tiers = []  # a label that still collides moves one tier further from the line
+        for t in same:
+            for k in range(4):
+                clash = any(o.get_left()[0] < t.get_right()[0] + 0.15 and t.get_left()[0] < o.get_right()[0] + 0.15
+                            for o in (tiers[k] if k < len(tiers) else []))
+                if not clash:
+                    if k >= len(tiers):
+                        tiers.append([])
+                    tiers[k].append(t)
+                    t.shift(UP * row * k * (t.height + 0.12))
+                    break
     for t in labels:
         yr = int(t.tex_string.split("\\;")[0])
         dot = np.array([X(yr), 0, 0])

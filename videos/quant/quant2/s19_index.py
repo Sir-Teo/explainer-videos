@@ -63,7 +63,7 @@ class Index(VoiceoverScene):
         n = 3000
         caps = 1 / np.arange(1, n + 1) ** 1.1
         logc = np.log10(caps / caps[0])
-        g = axes([0, n], [-4.2, 0.2], x_length=11.0, y_length=3.0, xlabel=r"stocks ranked by market value",
+        g = axes([0, n], [-4.2, 0.2], x_length=11.0, y_length=2.6, xlabel=r"stocks ranked by market value",
                  ylabel=r"market value (log)", xticks=[1, 1000, 2000, 3000], font_size=16).to_edge(UP, buff=0.6)
         ax = g.ax
         bars = VGroup(*[Line(ax.c2p(i, -4.2), ax.c2p(i, logc[i]), stroke_width=1,
@@ -74,14 +74,14 @@ class Index(VoiceoverScene):
         r1, r2 = d["cap_r1000"], d["cap_r2000"]
         dem = np.where(np.arange(n) < 1000, 1 / r1, np.where(np.arange(n) < 3000, 1 / r2, 0))
         dem = dem / dem.max()
-        g2 = axes([0, n], [0, 1.1], x_length=11.0, y_length=2.2, xlabel=r"passive buying, as a share of each "
-                  r"stock's float", xticks=[1000, 2000], font_size=16).next_to(g, DOWN, buff=0.5)
+        g2 = axes([0, n], [0, 1.1], x_length=11.0, y_length=1.8, xlabel=r"passive buying, as a share of each "
+                  r"stock's float", xticks=[1000, 2000], font_size=16).next_to(g, DOWN, buff=0.35)
         k = ValueTracker(0)
         flow = always_redraw(lambda: VGroup(*[Line(g2.ax.c2p(i, 0), g2.ax.c2p(i, dem[i] * min(k.get_value(), 1)),
                                                    stroke_width=2, color=CASH, stroke_opacity=0.7)
                                               for i in range(0, n, 25)]))
         ratio = MathTex(rf"\text{{jump at the gate: }} \times {r1 / r2:.1f}", font_size=30, color=YELLOW)
-        ratio.next_to(g2, DOWN, buff=0.25).shift(LEFT * 3)
+        ratio.move_to(g2.ax.c2p(500, 0.8))
         src = note(r"illustrative: a Zipf-like distribution of values, and equal passive dollars on each index; the "
                    r"real ratio depends on how much money tracks each", font_size=15).to_edge(DOWN, buff=0.1)
         with self.voiceover(
@@ -174,7 +174,7 @@ class Index(VoiceoverScene):
         bwr = ro(r"\text{bandwidth } b =", lambda: b.get_value(), digits=0, font_size=28).next_to(g, UP, buff=0.2)
         g2 = axes([0, 550], [0, 0.03], x_length=4.6, y_length=3.0, xlabel=r"bandwidth (ranks each side)",
                   ylabel=r"estimated jump, 8 seeds", xticks=[50, 200, 500], yticks=[0, 0.015, 0.03],
-                  yfmt=lambda v: f"{100 * v:.1f}\\%", font_size=15).to_edge(RIGHT, buff=0.5).shift(UP * 0.2)
+                  yfmt=lambda v: f"{100 * v:.1f}\\%", font_size=15).to_edge(RIGHT, buff=0.5).shift(UP * 0.8)
         sb = VGroup(band(g2.ax, bws, est.mean(0) - est.std(0), est.mean(0) + est.std(0), QC.HOUSE, 0.25),
                     curve(g2.ax, bws, est.mean(0), QC.HOUSE))
         truth = DashedLine(g2.ax.c2p(0, d["jump"]), g2.ax.c2p(550, d["jump"]), color=YELLOW, stroke_width=2)
@@ -182,7 +182,7 @@ class Index(VoiceoverScene):
                        font_size=30, color=QC.IDEA).next_to(g2, DOWN, buff=0.4)
         q = desk_question(r"Why does joining the Russell 2000 bring more buying than staying in the Russell 1000?",
                           r"weight is relative: the same company is a sliver of the 1000 but among the largest in the "
-                          r"2000", width=5.8, font_size=19).to_corner(DR, buff=0.25)
+                          r"2000", width=5.8, font_size=19).to_corner(DR, buff=0.4)
         src = note(r"simulated: 30 reconstitutions of 3,000 stocks, a true jump of 1.5\% at the cutoff, noise rising "
                    r"with rank; local-linear fits on each side", font_size=15).to_edge(DOWN, buff=0.1)
         with self.voiceover(
@@ -205,7 +205,7 @@ class Index(VoiceoverScene):
             self.play(FadeIn(g2), FadeIn(sb), Create(truth), Write(rows))
             vo.wait_until("y")
             q.answer.set_opacity(0)
-            self.play(FadeIn(q))
+            self.play(FadeOut(rows), FadeIn(q))
             vo.wait_until("z")
             self.play(q.answer.animate.set_opacity(1))
         fl.clear_updaters()
