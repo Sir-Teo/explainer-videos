@@ -72,7 +72,7 @@ class Jumps(VoiceoverScene):
             "none? E to the minus a half: sixty-one percent."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2))
-            self.play(LaggedStart(*[FadeIn(tk, shift=DOWN * 0.2) for tk in ticks], lag_ratio=0.3), step0 := Wait(0.1))
+            self.play(LaggedStart(*[FadeIn(tk, shift=DOWN * 0.2) for tk in ticks], lag_ratio=0.3))
             step(0)
             vo.wait_until("a")
             self.play(Create(st), run_time=2)
@@ -127,8 +127,9 @@ class Jumps(VoiceoverScene):
             f"is one path of a tempered stable process, with infinitely many small jumps and {lv['n_big']} big ones, "
             "taken apart. <bookmark mark='a'/> A straight drift. A Brownian part. The big jumps, a compound Poisson "
             "process. <bookmark mark='b'/> And the small jumps, which are so many that their sum only converges after "
-            "subtracting their average, the compensator. Slide the cutoff epsilon toward zero: hundreds of jumps "
-            "become a thousand, the compensator grows, and the strip turns from sparse spikes into something that "
+            "subtracting their average, the compensator. Slide the cutoff epsilon toward zero: "
+            f"{lv['n_small']['0.3']} jumps become {lv['n_small']['0.005']}, the compensator grows, and the strip "
+            "turns from sparse spikes into something that "
             "looks almost Brownian. Asmussen and Rosiński made that precise. <bookmark mark='c'/> This is the "
             "Lévy-Itô decomposition. Because the layers are independent, their characteristic functions multiply, "
             "and the exponent is the Lévy-Khintchine formula: drift, variance, and an integral against the Lévy "

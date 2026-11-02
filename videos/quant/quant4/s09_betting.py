@@ -9,15 +9,19 @@ from videos.quant.quant4.common import LOSS, MART, P_C, PART, Q_C, load, real_da
 class Betting(VoiceoverScene):
     def construct(self):
         p = load("peeking")
+        pc = load("peeking_curve")
         e = load("eprocess")
         self.card()
         self.ville()
-        self.peeking(p)
+        self.proof()
+        self.peeking(p, pc)
+        self.game()
         self.market(e)
 
     def card(self):
-        c = chapter_card(8, r"Testing by betting", r"How do you test a market you watch every day?", part=PART)
-        with self.voiceover("Chapter eight. Testing by betting."):
+        c = chapter_card(15, r"Ville's inequality and testing by betting", r"How do you test a market you watch every "
+                         r"day?", lit=(2023,), part=PART)
+        with self.voiceover("Chapter fifteen. Ville's inequality, and testing by betting."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -55,7 +59,7 @@ class Betting(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def peeking(self, p):
+    def peeking(self, p, pc):
         n = p["n"]
         g1 = axes([0, n], [-4, 4], x_length=5.6, y_length=3.6, xlabel=r"days", ylabel=r"$t$-statistic, checked daily",
                   xticks=[0, 1000, 2000], yticks=[-4, -2, 0, 2, 4], font_size=16)
@@ -64,10 +68,19 @@ class Betting(VoiceoverScene):
         VGroup(g1, g2).arrange(RIGHT, buff=1.0).to_edge(UP, buff=0.9)
         a1, a2 = g1.ax, g2.ax
         k = np.arange(0, n, 10)[: len(p["show_z"][0])]
-        zs = VGroup(*[curve(a1, k, np.clip(np.asarray(z), -4, 4), P_C, stroke_width=1.3).set_stroke(opacity=0.6)
+        tk = ValueTracker(0.0)
+        zs = VGroup(*[tracing(a1, k, np.clip(np.asarray(z), -4, 4), tk, P_C, stroke_width=1.3)
                       for z in p["show_z"]])
-        es = VGroup(*[curve(a2, k, np.clip(np.asarray(e), -2, 2), MART, stroke_width=1.3).set_stroke(opacity=0.6)
+        es = VGroup(*[tracing(a2, k, np.clip(np.asarray(e), -2, 2), tk, MART, stroke_width=1.3)
                       for e in p["show_loge"]])
+        days = np.asarray(pc["days"], float)
+        tf, ef = np.asarray(pc["t_frac"]), np.asarray(pc["e_frac"])
+        c1 = always_redraw(lambda: MathTex(rf"\text{{day {int(k[min(int(tk.get_value()), len(k) - 1)])}: rejected so far }} "
+                                           rf"{100 * np.interp(k[min(int(tk.get_value()), len(k) - 1)], days, tf):.1f}\%",
+                                           font_size=26, color=LOSS).next_to(g1, UP, buff=0.1))
+        c2 = always_redraw(lambda: MathTex(rf"\text{{rejected so far }} "
+                                           rf"{100 * np.interp(k[min(int(tk.get_value()), len(k) - 1)], days, ef):.1f}\%",
+                                           font_size=26, color=MART).next_to(g2, UP, buff=0.1))
         b1 = VGroup(DashedLine(a1.c2p(0, 1.96), a1.c2p(n, 1.96), color=LOSS, stroke_width=2),
                     DashedLine(a1.c2p(0, -1.96), a1.c2p(n, -1.96), color=LOSS, stroke_width=2))
         b2 = DashedLine(a2.c2p(0, np.log10(20)), a2.c2p(n, np.log10(20)), color=LOSS, stroke_width=2)
@@ -87,10 +100,17 @@ class Betting(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(cap), Create(b1), Create(b2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(z) for z in zs], lag_ratio=0.05, run_time=4))
+            self.add(zs, c1)
+            self.play(tk.animate.set_value(float(len(k) - 1)), run_time=6, rate_func=linear)
+            for m_ in (*zs, c1):
+                m_.clear_updaters()
             self.play(FadeIn(r1))
             vo.wait_until("b")
-            self.play(LaggedStart(*[Create(e) for e in es], lag_ratio=0.05, run_time=4))
+            tk.set_value(0.0)
+            self.add(es, c2)
+            self.play(tk.animate.set_value(float(len(k) - 1)), run_time=6, rate_func=linear)
+            for m_ in (*es, c2):
+                m_.clear_updaters()
             self.play(FadeIn(r2))
         self.wait(0.4)
         self.clear_scene()

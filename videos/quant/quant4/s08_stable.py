@@ -204,7 +204,7 @@ class Stable(VoiceoverScene):
         agree = abs(us["alpha"] - s["full"]["alpha"]) < 0.1
         verdict = ("The two estimators agree, which is what a stable law would do." if agree else
                    "The two estimators disagree: quantiles of the centre say one point four, the characteristic "
-                   "function, which weighs the whole body, says closer to two. A true stable law would give one "
+                   "function, which weighs the whole body, gives a larger alpha. A true stable law would give one "
                    "answer.")
         with self.voiceover(
             "Why do stable laws exist? Stability says that the sum of n independent copies is one copy, stretched "

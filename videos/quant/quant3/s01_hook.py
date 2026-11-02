@@ -76,8 +76,8 @@ class Hook(VoiceoverScene):
                         r"$p^*$ in 2020 starts from that year's price")
         with self.voiceover(
             "In 1981 Robert Shiller asked that question with a century of data, and here it is with a century and a "
-            "half. Start from the end. Suppose in 2020 we knew the market's price, and we knew every dividend ever "
-            "paid. <bookmark mark='a'/> Walk backwards one year at a time: last year's value is this year's value "
+            "half. Start from the end. <bookmark mark='a'/> Suppose in 2020 we knew the market's price, and we knew "
+            "every dividend ever paid. Walk backwards one year at a time: last year's value is this year's value "
             "plus the year's dividend, discounted by one year at the market's average return. Each green bar is a "
             "dividend dropping into the sum. The gold line that grows is what the market would have been worth if "
             "everyone had known, every year, exactly which dividends were coming. Shiller called it p star. "
@@ -92,7 +92,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("a")
             self.add(line_ps, cur)
             self.play(FadeIn(rec_why))
-            self.play(k.animate.set_value(0), run_time=9.0, rate_func=linear)
+            self.play(k.animate.set_value(0), run_time=14.0, rate_func=linear)
             line_ps.clear_updaters()
             self.remove(cur)
             self.play(FadeIn(leg[1]), FadeOut(rec_why))
@@ -105,10 +105,12 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     def era(self):
-        strip = timeline(lit=(1934, 1958, 1968, 1974, 1996, 2001)).move_to(DOWN * 0.3)
+        strip = timeline(lit=(1934, 1958, 1968, 1974, 1996)).move_to(DOWN * 0.3)
         head = label(r"How we got here", font_size=36).to_edge(UP, buff=0.5)
         pac = label(r"1494: Luca Pacioli writes down double-entry bookkeeping, in Venice", font_size=22,
                     color=GREY_A).next_to(head, DOWN, buff=0.3)
+        late = label(r"2001: Enron \quad 2009: every filing machine-readable (XBRL)", font_size=22,
+                     color=QC.CRISIS).to_edge(DOWN, buff=1.2)
         with self.voiceover(
             "How we got here. The books came first: double-entry bookkeeping was written down in Venice by Luca "
             "Pacioli in 1494, and every statement in this part still balances by his rule. <bookmark mark='a'/> In "
@@ -127,7 +129,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(strip.leaders[3:5]), FadeIn(strip.labels[3:5]))
             vo.wait_until("c")
-            self.play(FadeIn(strip.leaders[5:]), FadeIn(strip.labels[5:]))
+            self.play(FadeIn(late))
         self.wait(0.4)
         self.clear_scene()
 

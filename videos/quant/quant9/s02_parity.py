@@ -3,108 +3,288 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant9.common import ALT, ARB, CALL, FWD, PART, PUT, Q_C, load, real_data
+from explainer.zh_text import verbatim
+from videos.quant.quant9.common import (ARB, CALL, FWD, PART, PUT, Q_C, answer_under, load, pause_at, real_data)
 
 
 class Parity(VoiceoverScene):
     def construct(self):
+        p, fb = load("parity"), load("futures_basis")
         self.card()
-        self.borrow()
-        self.gamestop()
-        self.box()
+        self.definition()
+        self.sticks()
+        self.ledger()
+        self.bounds()
+        self.lab(p)
+        self.futures(p, fb)
+        self.predict()
 
     def card(self):
-        c = chapter_card(1, r"Arbitrage, parity, and where it breaks", r"When is a free lunch not free?", part=PART)
-        with self.voiceover("Chapter one. Arbitrage, parity, and where it breaks."):
+        c = chapter_card(1, r"Parity, assembled", r"Why must a call minus a put cost what a forward costs?",
+                         lit=(1973,), part=PART)
+        with self.voiceover("Chapter one. Parity, assembled."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def borrow(self):
-        rows = [cmath(r"\text{arbitrage}", r":", r"\text{cost} \le 0,\quad \text{payoff} \ge 0,\quad \text{payoff} > 0 "
-                      r"\text{ sometimes}", font_size=34, colors={r"\text{arbitrage}": ARB}),
-                cmath(r"C - P", r"=", r"S\,e^{-hT} - K e^{-rT}", font_size=38, colors={r"C - P": CALL}),
-                cmath(r"h", r"=", r"-\frac{1}{T}\log\frac{C - P + K e^{-rT}}{S}", font_size=36, colors={r"h": PUT})]
-        whys = [why(r"no money down, no chance of loss, some chance of gain; the law of one price follows: equal "
-                    r"payoffs, equal prices"),
-                why(r"parity assumes you can short the stock; if borrowing it costs a fee $h$ a year, the forward is "
-                    r"lower and puts are dearer"),
-                why(r"read backwards, option prices reveal the borrow fee: Ofek, Richardson and Whitelaw (2004) found "
-                    r"parity's violations where shorting was hardest")]
-        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.6, buff=0.8, edge=6.9)
+    def definition(self):
+        d = definition_card(r"Arbitrage", r"a portfolio that costs nothing or less today, can never lose, and wins "
+                            r"with positive probability: cost $\le 0$, payoff $\ge 0$ in every state, payoff $> 0$ "
+                            r"in some state", color=ARB, width=6.4)
+        lo = definition_card(r"The law of one price", r"two portfolios with the same payoff in every state have the "
+                             r"same price; otherwise buy the cheap one, sell the dear one, and pocket the difference",
+                             color=Q_C, width=6.0, kind=r"Corollary")
+        VGroup(d, lo).arrange(RIGHT, buff=0.4, aligned_edge=UP).move_to(UP * 0.3)
         with self.voiceover(
-            "An arbitrage is a trade that costs nothing, can never lose, and sometimes wins. If none exist, two "
-            "things with the same payoff must have the same price: the law of one price. <bookmark mark='a'/> "
-            "Parity assumes you can sell the stock short, and shorting means borrowing it from someone who owns "
-            "it. When shares are scarce, lenders charge a fee, and the fee works like a dividend you must pay: the "
-            "forward is lower, and puts are dearer than calls. <bookmark mark='b'/> Turn the formula around and "
-            "option prices reveal the borrowing fee. In 2004 Eli Ofek, Matthew Richardson and Robert Whitelaw "
-            "showed that parity's apparent violations line up with how hard a stock is to short. They are not free "
-            "money; they are a price."
+            "Start with a definition. An arbitrage is a portfolio that costs nothing or less today, can never lose, "
+            "and wins with positive probability. Three conditions: cost at most zero, payoff never negative, payoff "
+            "sometimes positive. <bookmark mark='a'/> The law of one price follows at once. If two portfolios pay the "
+            "same in every state of the world but cost different amounts, buy the cheap one and sell the dear one: "
+            "you collect the difference today and owe nothing later. Everything in this part is that sentence, "
+            "pushed as far as it will go."
         ) as vo:
-            step(0)
+            self.play(FadeIn(d, shift=UP * 0.2))
             vo.wait_until("a")
-            step(1)
-            vo.wait_until("b")
-            step(2)
-        self.wait(0.4)
+            self.play(FadeIn(lo, shift=UP * 0.2))
+        self.wait(0.3)
         self.clear_scene()
 
-    def gamestop(self):
-        card = crisis_card(
-            r"January 2021", r"GameStop",
-            r"A video-game retailer, heavily shorted, became the favourite of a Reddit forum. Its share price rose "
-            r"about 2{,}700\% from its intraday low on 8 January to its intraday high on 28 January, then fell more "
-            r"than 86\% into early February. The hedge fund Melvin Capital, short the stock, took a \$2.75 billion "
-            r"injection from Citadel and Point72 and lost 53\% in January. Brokers restricted buying on 28 January. "
-            r"The SEC's staff found that enthusiasm, not short sellers buying to cover, sustained the rise.",
-            stats=[(r"\approx 2{,}700\%", r"low on 8 Jan.\ to high on 28 Jan."), (r"> 86\%", r"the fall into "
-                                                                                       r"February"),
-                   (r"\$2.75\text{bn}", r"for Melvin Capital")],
-            width=11.0, font_size=25)
-        card.move_to(ORIGIN)
-        src = note(r"SEC staff report on equity and options market structure conditions in early 2021 (October "
-                   r"2021); Reuters", font_size=18, color=GREY_B).to_corner(DR, buff=0.25)
+    def sticks(self):
+        K = 100.0
+        g = axes([50, 150], [-55, 55], x_length=6.4, y_length=4.6, xlabel=r"stock price at expiry, $S_T$",
+                 ylabel=r"payoff", xticks=[50, 100, 150], yticks=[-50, 0, 50], font_size=17)
+        g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        ax = g.ax
+        xs = np.linspace(50, 150, 201)
+        zero = DashedLine(ax.c2p(50, 0), ax.c2p(150, 0), color=GREY_D, stroke_width=1.5)
+        call = curve(ax, xs, np.maximum(xs - K, 0), CALL, stroke_width=4)
+        sput = curve(ax, xs, -np.maximum(K - xs, 0), PUT, stroke_width=4)
+        fwd = curve(ax, xs, xs - K, FWD, stroke_width=5)
+        leg = legend([(CALL, r"long call: $(S_T - K)^+$"), (PUT, r"short put: $-(K - S_T)^+$"),
+                      (FWD, r"together: $S_T - K$, a forward")], font_size=19)
+        leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
+        rows = [cmath(r"(S_T - K)^+ - (K - S_T)^+", r"=", r"S_T - K", font_size=34),
+                cmath(r"C - P", r"=", r"S - K e^{-rT}", font_size=38, colors={r"C - P": CALL}),
+                cmath(r"\tilde C - \tilde P", r"=", r"1 - \frac{K}{F}", font_size=38, colors={r"\tilde C - \tilde P": Q_C})]
+        whys = [why(r"split at $K$: above it the call pays $S_T - K$ and the put nothing; below, the reverse", 20),
+                why(r"the right side is bought today with one share and a loan of $K e^{-rT}$; by the law of one "
+                    r"price the two sides cost the same (Stoll 1969)", 20),
+                why(r"Deribit's options are paid in bitcoin: divide every dollar price by the forward $F$, the "
+                    r"price of the unit (chapter 11)", 20)]
+        for r_, w_ in zip(rows, whys):
+            w_.scale(0.85)
+        step = ladder(self, rows, whys, keep=3, top=3.3, x=3.4, buff=0.55, edge=6.9)
+        for r_, w_ in zip(rows, whys):
+            w_.next_to(r_, DOWN, buff=0.12).align_to(r_, LEFT)
+            if w_.width > 6.6:
+                w_.scale_to_fit_width(6.6)
+            keep_in_frame(w_, margin=0.2)
         with self.voiceover(
-            "In January 2021 the stock of GameStop, a video-game retailer that many funds had sold short, became the "
-            "favourite of a Reddit forum. According to the SEC's staff report, its price rose about two thousand "
-            "seven hundred percent from its low on the eighth of January to its high on the twenty-eighth, then fell "
-            "more than eighty-six percent into February. The hedge fund Melvin Capital, short the stock, needed two "
-            "point seven five billion dollars from Citadel and Point72, and lost fifty-three percent in the month. "
-            "The SEC's staff found that buying to cover short positions was not what sustained the rise; it was "
-            "enthusiasm. For anyone who wanted to bet against it, parity says where to look: when borrowing shares "
-            "is costly or impossible, that cost appears in the price of puts."
-        ):
-            self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
+            "Now build parity instead of quoting it. On the left, payoffs at expiry against the stock price. A long "
+            "call is a hockey stick bending up at the strike. <bookmark mark='a'/> A short put is a hockey stick "
+            "bending down. <bookmark mark='b'/> Add them. Above the strike the call pays and the put is worthless; "
+            "below it, the reverse. The kinks cancel, and what is left is a straight line: the stock minus the "
+            "strike, the payoff of a forward contract, in every state of the world. <bookmark mark='c'/> The "
+            "straight line can be bought today another way: one share, financed by borrowing the present value of "
+            "the strike. Same payoff, so the same price: call minus put equals the stock minus the discounted "
+            "strike. Hans Stoll wrote this down in 1969. <bookmark mark='d'/> On Deribit, where options are priced "
+            "in bitcoin, divide every dollar price by the forward, and parity reads one minus K over F."
+        ) as vo:
+            self.play(FadeIn(g), Create(zero), FadeIn(leg[0]), Create(call))
+            vo.wait_until("a")
+            self.play(FadeIn(leg[1]), Create(sput))
+            vo.wait_until("b")
+            self.play(Transform(call.copy(), fwd), Transform(sput.copy(), fwd), FadeIn(leg[2]), run_time=2)
+            self.add(fwd)
+            step(0)
+            vo.wait_until("c")
+            step(1)
+            vo.wait_until("d")
+            step(2)
+        self.wait(0.3)
+        self.clear_scene()
+
+    def ledger(self):
+        K, S0 = 100.0, 103.0
+        g = axes([60, 140], [-45, 45], x_length=6.6, y_length=4.4, xlabel=r"stock price at expiry, $S_T$",
+                 ylabel=r"payoff of the package", xticks=[60, 100, 140], yticks=[-40, 0, 1, 40], font_size=17)
+        g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.25)
+        ax = g.ax
+        xs = np.linspace(60, 140, 161)
+        legs = [(r"sell the call at 10", -np.maximum(xs - K, 0), +10.0, CALL),
+                (r"buy the put at 6", np.maximum(K - xs, 0), -6.0, PUT),
+                (r"buy the stock at 103", xs, -103.0, FWD),
+                (r"borrow 99, repay 99", -99.0 + 0 * xs, +99.0, GREY_B)]
+        total = np.zeros_like(xs)
+        sums, rows = [], VGroup()
+        for name, pay, cash, col in legs:
+            total = total + pay
+            sums.append(total.copy())
+            rows.add(VGroup(label(name, font_size=21, color=col),
+                            MathTex(rf"{cash:+.0f}", font_size=26, color=col)).arrange(RIGHT, buff=0.3))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        head = label(r"the put at 6: cash today", font_size=22, color=GREY_A)
+        tot = VGroup(label(r"net cost today", font_size=21), MathTex(r"0", font_size=28)).arrange(RIGHT, buff=0.3)
+        side = VGroup(head, rows, Line(LEFT, RIGHT * 3.2, color=GREY_C), tot).arrange(DOWN, aligned_edge=LEFT,
+                                                                                      buff=0.22)
+        side.to_edge(RIGHT, buff=0.7).shift(UP * 0.6)
+        cur = curve(ax, xs, np.clip(sums[0], -45, 45), legs[0][3], stroke_width=4)
+        g_ = np.random.default_rng(1)
+        ST = np.clip(S0 * np.exp(0.3 * g_.standard_normal(200) - 0.045), 61, 139)
+        dots = VGroup(*[Dot(ax.c2p(s, 30 + 12 * g_.random()), radius=0.035, color=WHITE).set_opacity(0.8) for s in ST])
+        landed = VGroup(*[Dot(ax.c2p(s, 1), radius=0.035, color=Q_C) for s in ST])
+        res = wrapped_label(r"200 possible prices at expiry: every one lands on $+1$. No state of the world is left "
+                            r"in the payoff", 5.0, 21, Q_C).next_to(side, DOWN, buff=0.35).align_to(side, LEFT)
+        with self.voiceover(
+            "Now misprice the put at six and watch the arbitrage lock in. The call minus the put is now four, more "
+            "than the forward's three. Sell what is dear and buy what is cheap. <bookmark mark='a'/> Sell the call: "
+            "ten dollars in, and a payoff that falls away above the strike. <bookmark mark='b'/> Buy the put for six: "
+            "now the package pays minus the stock plus the strike, a downward line. <bookmark mark='c'/> Buy the "
+            "stock for a hundred and three, and the slope cancels: the line goes flat. <bookmark mark='d'/> Borrow "
+            "the ninety-nine dollars you are short, and the package costs nothing today. At expiry it pays one "
+            "dollar. <bookmark mark='e'/> Draw two hundred possible stock prices at expiry. Every one of them lands "
+            "on the same flat line at plus one. That flattening is the idea of the whole part: a hedged position "
+            "has no state of the world left in it."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(head))
+            vo.wait_until("a")
+            self.play(Create(cur), FadeIn(rows[0]))
+            for i, mk in ((1, "b"), (2, "c"), (3, "d")):
+                vo.wait_until(mk)
+                self.play(Transform(cur, curve(ax, xs, np.clip(sums[i], -45, 45), legs[i][3] if i < 3 else Q_C,
+                                               stroke_width=4)), FadeIn(rows[i]), run_time=1.3)
+            self.play(FadeIn(side[2]), FadeIn(tot))
+            vo.wait_until("e")
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.01, run_time=1.2))
+            self.play(Transform(dots, landed), FadeIn(res), run_time=1.8)
+        self.wait(0.3)
+        self.clear_scene()
+
+    def bounds(self):
+        K = 100.0
+        g = axes([40, 160], [0, 110], x_length=6.4, y_length=4.4, xlabel=r"stock price today, $S$",
+                 ylabel=r"call price", xticks=[50, 100, 150], yticks=[0, 50, 100], font_size=17)
+        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
+        ax = g.ax
+        xs = np.linspace(40, 160, 241)
+        lo = np.maximum(xs - K * np.exp(-0.04), 0)
+        region = band(ax, xs, lo, np.minimum(xs, 110), Q_C, 0.18)
+        lo_c = curve(ax, xs, lo, Q_C, stroke_width=3)
+        hi_c = curve(ax, xs, np.minimum(xs, 110), Q_C, stroke_width=3)
+        from explainer.quant.house import bs
+        cc = curve(ax, xs, bs.price(xs, K, 1.0, 0.3, 0.04), CALL, stroke_width=4)
+        side = VGroup(
+            MathTex(r"\max(S - K e^{-rT},\, 0) \le C \le S", font_size=34, color=Q_C),
+            wrapped_label(r"below: a call is worth at least the forward it can be turned into, and never less than "
+                          r"nothing; above: it can never be worth more than the share it may buy", 5.2, 20, GREY_A),
+            wrapped_label(r"green: one model's call (Black--Scholes, 30\% volatility, 4\% rates); any model must keep "
+                          r"its curve inside the band", 5.2, 20, CALL),
+            wrapped_label(r"Bj\"ork, ch.\ 10; Hull, ch.\ 11", 5.2, 18, GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
+        with self.voiceover(
+            "Parity is one of a family of model-free facts. A call is worth at least what you could lock in by "
+            "converting it into a forward, and never less than nothing. And it can never be worth more than the "
+            "share it gives you the right to buy. <bookmark mark='a'/> That gives a band, drawn in purple, with no "
+            "model at all. Any model's call price, like this Black-Scholes curve, must live inside it, or there is an "
+            "arbitrage against that model. Björk's chapter ten collects these parity relations."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[0]), FadeIn(side[1]))
+            self.play(FadeIn(region), Create(lo_c), Create(hi_c))
+            vo.wait_until("a")
+            self.play(Create(cc), FadeIn(side[2]), FadeIn(side[3]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def lab(self, p):
+        with verbatim():
+            card = lab_card(r"the forward from every call--put pair", [
+                "def implied_forward(trades, window=600, max_logm=0.2):",
+                "    by = group(trades, key=(expiry, strike, call_or_put))",
+                "    for (e, K, cp), calls in by.items():",
+                "        if cp != 1 or (e, K, -1) not in by: continue",
+                "        for s, c, index in calls:",
+                "            p = nearest_put(by[(e, K, -1)], s)",
+                "            if abs(p.time - s) > window: continue",
+                "            if abs(log(K / index)) > max_logm: continue",
+                "            F = K / (1 - (c - p.price))   # C - P = 1 - K/F",
+                "            rows.append((T, F / index, e))",
+            ], source="explainer/quant/house/arbitrage.py", width=8.4).to_edge(UP, buff=0.35)
+        ex = p["expiries"]
+        outs = [f"pairs = implied_forward(deribit_trades('{p['day']}'))",
+                f"len(pairs) = {p['n_pairs']}    expiries = {len(ex)}",
+                f"median |residual| = {p['trade_p50']:.1f} bp (trades), {p['mark_p50']:.1f} bp (marks)"]
+        with self.voiceover(
+            "Here is the House's code that reads the forward out of real trades. Group the day's option trades by "
+            "expiry, strike and type. For every call, find the put at the same strike traded closest in time, "
+            "and keep the pair if they are within ten minutes and near the money. <bookmark mark='a'/> Each pair "
+            "gives the forward by parity: the strike, divided by one minus the call-minus-put price. Run it on the "
+            f"Surface's morning of trades. <bookmark mark='b'/> {p['n_pairs']} pairs, across {len(ex)} expiries, "
+            f"and half of them sit within {p['trade_p50']:.1f} basis points of their expiry's median forward."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(card.code[8], color=Q_C, scale_factor=1.04))
+            vo.wait_until("b")
+            with verbatim():
+                lab_run(self, card, outs, run_time=2.4)
         self.wait(0.5)
         self.clear_scene()
 
-    def box(self):
-        rows = [cmath(r"\text{box}", r"=", r"(C_{K_1} - C_{K_2}) - (P_{K_1} - P_{K_2})", font_size=36,
-                      colors={r"\text{box}": Q_C}),
-                cmath(r"\text{payoff}", r"=", r"K_2 - K_1 \quad\text{always}\quad\Rightarrow\quad \text{price} = "
-                      r"(K_2 - K_1)\,e^{-rT}", font_size=34)]
-        whys = [why(r"a long call spread and a short put spread: two parities stacked; the stock cancels"),
-                why(r"a box is a loan; its price is the market's interest rate, and funds use boxes to borrow and lend "
-                    r"through the options exchange")]
-        step = ladder(self, rows, whys, keep=2, top=2.6, x=-0.6, buff=0.9, edge=6.9)
-        warn = wrapped_label(r"but only with European exercise: in early 2019 a Robinhood customer's box of American "
-                             r"options went badly wrong when the short leg was exercised early; Robinhood then "
-                             r"banned box spreads, saying they are ``often mistaken for an arbitrage opportunity''",
-                             12.0, 22, ARB).to_edge(DOWN, buff=0.7)
+    def futures(self, p, fb):
+        rows = [r for r in fb["rows"] if "gap_bp" in r]
+        g = axes([0, 220], [0.02, 0.055], x_length=6.4, y_length=4.2, xlabel=r"days to expiry",
+                 ylabel=r"forward over index, as an annual rate", xticks=[0, 100, 200],
+                 yticks=[0.02, 0.03, 0.04, 0.05], yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=17)
+        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
+        ax = g.ax
+        od = VGroup(*[Dot(ax.c2p(e["T"] * 365, e["rate"]), radius=0.08, color=FWD) for e in p["expiries"]
+                      if e["T"] * 365 > 2])
+        fd = VGroup(*[Square(0.16, color=QC.IMPLIED, stroke_width=3).move_to(ax.c2p(r["T"] * 365, r["rate"]))
+                      for r in fb["rows"] if r["T"] * 365 > 2])
+        leg = legend([(FWD, r"from option parity (dots)"), (QC.IMPLIED, r"dated futures, traded (squares)")],
+                     font_size=19).next_to(g, UP, buff=0.05).align_to(g, LEFT)
+        gp50, gmax = fb["gap_p50"], fb["gap_max"]
+        verdict = (r"the two forwards agree to within the width of a quote: this is the cash-and-carry check"
+                   if gmax < 10 else r"the two forwards disagree by more than a quote is wide: a basis trade")
+        side = VGroup(
+            label(rf"{fb['n_trades']:,} futures trades, same hours".replace(",", "{,}"), font_size=22, color=QC.IMPLIED),
+            wrapped_label(rf"{fb['n_matched']} expiries have both: median gap {gp50:.1f} bp of price, largest "
+                          rf"{gmax:.1f} bp", 4.6, 21, WHITE),
+            wrapped_label(verdict, 4.6, 20, Q_C),
+            wrapped_label(r"a future is a forward settled daily; a forward above the index is crypto's own interest "
+                          r"rate, paid by leveraged buyers (Part 2's funding rate)", 4.6, 19, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.45)
+        src = real_data(r"Deribit BTC options and futures trades, 10 December 2025, 00:00--12:00 UTC")
         with self.voiceover(
-            "Stack two parities and the stock cancels. A long call spread and a short put spread between the same "
-            "two strikes is called a box, and it pays the difference between the strikes in every state of the "
-            "world. <bookmark mark='a'/> So a box is a loan, and its price is an interest rate; funds use boxes to "
-            "borrow and lend through the options exchange. <bookmark mark='b'/> But the argument needs European "
-            "exercise. In early 2019 a Robinhood customer built a box from American options, the short leg was "
-            "exercised early, and the customer lost far more than the trade seemed to risk. Robinhood then banned box spreads, "
-            "saying they are often mistaken for an arbitrage opportunity. Every no-arbitrage argument comes with "
-            "assumptions, and the market tests them."
+            "Is that forward real? Deribit also lists futures on the same expiries, and a future is, up to daily "
+            "settlement, a forward you can trade directly. The House fetched every futures trade from the same "
+            f"hours, {fb['n_trades']:,} of them, most in the perpetual contract. <bookmark mark='a'/> The dots are "
+            "the forwards that option parity implies, as annual rates over the index; the squares are where the "
+            f"dated futures actually traded. On the {fb['n_matched']} expiries that have both, the median gap is "
+            f"{gp50:.1f} basis points of price, and the largest {gmax:.1f}. <bookmark mark='b'/> "
+            + ("The two markets agree to within the width of a quote. If they did not, buying the cheap forward and "
+               "selling the dear one would be the cash-and-carry arbitrage, and traders do exactly that."
+               if gmax < 10 else
+               "That is wider than a quote: the basis between the two markets is itself a trade.")
         ) as vo:
-            step(0)
+            self.play(FadeIn(g), FadeIn(leg), FadeIn(src), FadeIn(side[0]))
             vo.wait_until("a")
-            step(1)
+            self.play(LaggedStart(*[GrowFromCenter(d) for d in od], lag_ratio=0.15), run_time=1.6)
+            self.play(LaggedStart(*[GrowFromCenter(d) for d in fd], lag_ratio=0.15), FadeIn(side[1]), run_time=1.6)
             vo.wait_until("b")
-            self.play(FadeIn(warn))
+            self.play(FadeIn(side[2]), FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def predict(self):
+        card = pause_at(r"If the put had been 8 instead of 6, which of the four legs flip?")
+        with self.voiceover(
+            "Pause and predict. If the put had been eight instead of six, which of the four legs flip? "
+            "<bookmark mark='a'/> All four. Now the call minus the put is two, less than the forward's three, so "
+            "buy the call, sell the put, short the stock and lend: one dollar again, from the other side."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(answer_under(card, r"all four: buy the call, sell the put, short the stock, lend 97; "
+                                                r"the package pays $+1$ at expiry for nothing today")))
         self.wait(0.4)
         self.clear_scene()
