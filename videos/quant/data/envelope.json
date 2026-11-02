@@ -15,6 +15,22 @@
    },
    "trials": 5
   },
+  "btc_hawkes_large_moves": {
+   "code_sha256": "41f672e9f092e8061003ac8b185aebea442a7e8417a81693ab2d922b39606b8e",
+   "params": {
+    "data": "BTCUSDT 1h 2018-2020",
+    "threshold": "4 x 30-day rolling sd"
+   },
+   "trials": 1
+  },
+  "btc_rough_hurst": {
+   "code_sha256": "768da08240c985d166f6b590bad37c841c6499cbaa008001af260a2332128572",
+   "params": {
+    "data": "BTCUSDT 1m 2019-2020",
+    "rv": "5-minute, daily"
+   },
+   "trials": 1
+  },
   "cape_forecast_2021_2030": {
    "code_sha256": "a5b36ee43c347f92565b55014118cbdaee0c27f95ef91ca15f3d9898a73461da",
    "params": {

@@ -644,6 +644,186 @@
   "bytes": 2230,
   "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2025-12.zip"
  },
+ "binance/spot/BTCUSDT/1h/2018-01": {
+  "sha256": "b649198039645124717f334443ae550d1060661ee03c5fb605cf067fab26dc85",
+  "bytes": 43217,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-01.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-02": {
+  "sha256": "4e040b57a38af99b1f86efb12d95aed406b575af67b8038831523ff6362225d1",
+  "bytes": 37572,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-02.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-03": {
+  "sha256": "a3f45f20d28eab88292d1baac72402ebf59f4462d0bb834288f69b59a65cbf5f",
+  "bytes": 42999,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-03.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-04": {
+  "sha256": "d0fe439f2afab8677e423c9748bc96ef9694b8d60bf8a59790fd776d8ed18d87",
+  "bytes": 41169,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-04.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-05": {
+  "sha256": "a365154fb49c29060df5f5b6a79181e4e667ca1bac049df26a067faa634ffa62",
+  "bytes": 42573,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-05.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-06": {
+  "sha256": "20894cb34d1049cbdd93df83be5f218c6ae1b5ca27b689b1b076ac5bc809fb81",
+  "bytes": 40629,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-06.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-07": {
+  "sha256": "29610f0bb84011e494b83881584d1eb2d3a61c5801ee51ebea7c1c4e6a9b4210",
+  "bytes": 42249,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-07.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-08": {
+  "sha256": "cad3b2b11aefa082a07ae3d8f11dfd6ee5018702dfd3986277151b66ae002991",
+  "bytes": 42956,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-08.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-09": {
+  "sha256": "d8109c9f64af195fb9babf498f84ece9e7ac471618977202dcf710461e124d00",
+  "bytes": 41166,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-09.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-10": {
+  "sha256": "959094f6d37e7cae75951cea30fdc3d5b1eb9de58a6cf1ce40f0e49d0adfb79b",
+  "bytes": 41446,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-10.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-11": {
+  "sha256": "a75aba58d80b798809e47819990fad71418c0982be1c4643b5a0490e0f86bd91",
+  "bytes": 40709,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-11.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2018-12": {
+  "sha256": "c5f05f2966529220add51dc1ee66ab7408ae787179f96c288e4f6ff021f51edd",
+  "bytes": 42802,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2018-12.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-01": {
+  "sha256": "41cb84ccff03d5372f22e7502a1c563dd7b3b15347fe086b16daa98aced7a179",
+  "bytes": 41901,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-01.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-02": {
+  "sha256": "fc054507a0f33b54bcc2f292243b8caa765927572e92731283f42498c64dc4e6",
+  "bytes": 37982,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-02.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-03": {
+  "sha256": "2c4a969908c2570299052b4faf27b4a39561b1043babc7a65a846a6a65abaa2e",
+  "bytes": 41360,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-03.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-04": {
+  "sha256": "d37e1150e8f4556a22cb2ed98d9b6eefe7b5df3be9f06587e273baea2bbf960e",
+  "bytes": 41191,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-04.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-05": {
+  "sha256": "ddffd71adc100760d31ab5ea0fb8d8ccf5f3c80a06a31808a024324b4a693799",
+  "bytes": 43004,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-05.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-06": {
+  "sha256": "079b0071aaf0642d3608bca3ee14e50e394550176da3e4029d22761e288466e8",
+  "bytes": 42603,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-06.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-07": {
+  "sha256": "f45beec30a4812d42b8eb3a34da3f75e5dee0433032a06ba57ff48644ee7c2f9",
+  "bytes": 44318,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-07.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-08": {
+  "sha256": "50b058b5774190b577f1bc45767aeb33f4e947dc00e8d143f6c4afa0f5a3cd34",
+  "bytes": 43243,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-08.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-09": {
+  "sha256": "2aaaf6e4d0455b889225ca1cfde23a15e2359850f803bc9998df30ac1bbef63f",
+  "bytes": 42109,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-09.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-10": {
+  "sha256": "d44a2b3e463683c8bfc61c2f15f156665dc3dd3835e69c2ea3b49a518ca14b43",
+  "bytes": 43434,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-10.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-11": {
+  "sha256": "63572600e87350f1d5679049a44e8338cf7b692d0c67220dc316267a91af108b",
+  "bytes": 41930,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-11.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2019-12": {
+  "sha256": "87267b84d9f0e64ec94799d62de6730825c6a44f154ada5ed8c2dd267df78481",
+  "bytes": 43061,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2019-12.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-01": {
+  "sha256": "4ef7fa698b6821493f4c8317bc616d48bcdf5951d32fe6e40aaa7608886e51ca",
+  "bytes": 43583,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-01.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-02": {
+  "sha256": "0189065a1b789825448530cb3fdddcefa45ca13b0a6bca181f358c72d3a6d5e6",
+  "bytes": 40628,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-02.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-03": {
+  "sha256": "cc36c481c31ef93115d96b5a7045ec2ef737e5339546d6688cb1f677526c6787",
+  "bytes": 44270,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-03.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-04": {
+  "sha256": "4f08d13c81cadf8d5fc7afcd0924d084d2f81c7d004323812e7508ad135f89e7",
+  "bytes": 42275,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-04.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-05": {
+  "sha256": "1559b30329851938a54e6782cd28dcbf34ec27a6cc82132250db9a357f4eaf5a",
+  "bytes": 44022,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-05.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-06": {
+  "sha256": "2ccf45a7307e09dec1fd3622d54057e7e44371bf70a8be1030687f654341799e",
+  "bytes": 41724,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-06.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-07": {
+  "sha256": "378b83c163c8d315075189b039b027d705c3ae225461f04c1226569a4edfcb99",
+  "bytes": 43137,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-07.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-08": {
+  "sha256": "3b4fbdfe798389a1317e333772f176bce711856d87e68c1b77f09631b0cf4b84",
+  "bytes": 43923,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-08.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-09": {
+  "sha256": "46f236c7cd38d72d4a37e80a45e357e7bec48bc89cc6a36c0c17ceb92ce8d101",
+  "bytes": 42467,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-09.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-10": {
+  "sha256": "72fe011922ace0851a44ffa51327d75545212a7e8179867d514a5934ce93a6e0",
+  "bytes": 43559,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-10.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-11": {
+  "sha256": "c3f3548fd082f0fa63d2138a5aca3b572729f6351de8a20c895a80acd3ae395b",
+  "bytes": 43234,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-11.zip"
+ },
+ "binance/spot/BTCUSDT/1h/2020-12": {
+  "sha256": "c880c8e76e2dbcbed04bc1ddd549949a94a4314520dc1f1becbd881453aa5ede",
+  "bytes": 44596,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-12.zip"
+ },
  "binance/spot/BTCUSDT/1h/2021-04": {
   "sha256": "e5a33803814e6771c4c85e8f2e28e90e46d40f14ca3180a8c10c305cf07fab74",
   "bytes": 43918,
@@ -928,6 +1108,126 @@
   "sha256": "d546c6e44b443e34cef5122043c5cdd3b9c76980e23cc408dafd9f6f76d65c05",
   "bytes": 43894,
   "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-12.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-01": {
+  "sha256": "08dd2f7306258d1b9fd0b9fc00ee807c1c96e9803c74c78c00a0072bfc826728",
+  "bytes": 2120781,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-01.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-02": {
+  "sha256": "5ef0c96cb6f7cadb70cdceeb190ac350bf605dcde3930cdb3cc8942dc0ac98bc",
+  "bytes": 1915927,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-02.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-03": {
+  "sha256": "30f0b1d9a47950ced20f62045291669f984a55552181769ff3f1df8433a93e09",
+  "bytes": 2089484,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-03.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-04": {
+  "sha256": "617647d93837bc5a9a4866c089b87b21f9780d479dece0f623e8354be36216fe",
+  "bytes": 2090113,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-04.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-05": {
+  "sha256": "7a32f26d7f878332384dc61dde639e49c5007c2b45d6bc360b0bec37817baa08",
+  "bytes": 2198447,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-05.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-06": {
+  "sha256": "8c7acbfa0d71c87f6ba965e8d62ec83b258b4a3aaab9a8c17f708ece35214a1a",
+  "bytes": 2177693,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-06.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-07": {
+  "sha256": "f907354d0d2ce079c828d1654093729b4e571b4e1134159bf8f9a023ba955739",
+  "bytes": 2272709,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-07.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-08": {
+  "sha256": "367c5ece72129de80347c34bbd24e6f5f868711ce66b0a830c6945c4259e7d33",
+  "bytes": 2207879,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-08.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-09": {
+  "sha256": "6bed8bcf250caedf243cd890cdffd93b6266e7f3007a8bb7e6d13b95a15645f1",
+  "bytes": 2140033,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-09.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-10": {
+  "sha256": "11c16f00ee0a568336fae0929f758416be94e78bd250ea31b60d083d1cb6494b",
+  "bytes": 2217849,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-10.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-11": {
+  "sha256": "6a896c7a603a2c8deb12233e53c3f8fbc2676b8c0b7b85fcf53a3b57fad021d7",
+  "bytes": 2133961,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-11.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2019-12": {
+  "sha256": "bb30eef0f17336dccac395b3ff60df077160548485a3230c6fe62387f48fc79a",
+  "bytes": 2197736,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2019-12.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-01": {
+  "sha256": "02df6da44ed8145fbb9ed819858185d9e2f15eb025c5bec8a4ea2d8738cd0d19",
+  "bytes": 2224194,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-01.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-02": {
+  "sha256": "05aedf91c80f579da396951b1d9e84587d02c9684352e1ff17d4468f556c674e",
+  "bytes": 2077466,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-02.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-03": {
+  "sha256": "ee5d21ec0f3c5bdef1da330d8b74d8571779fe757bb7e9f272847d36b95a71a2",
+  "bytes": 2277959,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-03.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-04": {
+  "sha256": "83e052ee74ede21aa617830c121ce052e5f29b735710fe65159fc594b2028301",
+  "bytes": 2164104,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-04.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-05": {
+  "sha256": "3a38ca9123ab0c44063561faed5e90c3e716c93ea42c3e67a968be505b677ba0",
+  "bytes": 2265162,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-05.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-06": {
+  "sha256": "4f7a6721f2b9f0a74d66ce7818c73dad002a454e11a5280485e3c123d27f7698",
+  "bytes": 2131275,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-06.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-07": {
+  "sha256": "003bcab2ea8d5d0268f7f627a117022d4fa4826aa85bdb82bcae98dd4f24f2a2",
+  "bytes": 2203867,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-07.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-08": {
+  "sha256": "661b02c77ad1baac0d649e658dc5fb8434b6acc15560b767301e7981bdbe0c66",
+  "bytes": 2257706,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-08.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-09": {
+  "sha256": "a60c06861b59893bb2f06813b7f181cba970b5dac9d38fcf5db8e2c13fbd27f7",
+  "bytes": 2174596,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-09.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-10": {
+  "sha256": "d7b0fc63c86b2d54f4391fd4ed69e0fd12497108061ca4006d9f709e653cfe40",
+  "bytes": 2220925,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-10.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-11": {
+  "sha256": "07ff8e3aa21d340a9e25c32644a4cd6c15e4280879d39815159eb5c858895488",
+  "bytes": 2228577,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-11.zip"
+ },
+ "binance/spot/BTCUSDT/1m/2020-12": {
+  "sha256": "a53a9352fd808d10981f68191138b39ef142e15ca88e03a061309f1699419749",
+  "bytes": 2304125,
+  "source": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1m/BTCUSDT-1m-2020-12.zip"
  },
  "deribit/dvol/BTC/3600/2021-04": {
   "sha256": "95209f9d0a07fe2ea6934c568be9f020b3093e0964bc1e6e3d5c16286fda8acd",
@@ -1338,6 +1638,11 @@
   "sha256": "3100da0c4a6dcd62ba97790245d0081c3131945741e981cbc8c41f7c2a019caa",
   "bytes": 52267,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFF"
+ },
+ "fred/DTB3/1954-01-01_2025-12-31": {
+  "sha256": "fd197d1809e65d0a3e4c0bf161170a6717f1057aecffc1393c8c38b14ef06172",
+  "bytes": 322613,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3"
  },
  "fred/DTB3/2018-01-01_2025-12-31": {
   "sha256": "1ddabd9041ab5aacbcac4443eaa36f30c7bf56694e57e1db8123847eaf0f56ad",

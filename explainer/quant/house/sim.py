@@ -54,8 +54,9 @@ def milstein(a, b, db, x0, T: float, dW: np.ndarray) -> np.ndarray:
 
 
 def scheme_orders(mu=0.05, sigma=0.4, S0=1.0, T=1.0, ns=(8, 16, 32, 64, 128, 256), n_paths=20000, seed=0) -> dict:
-    """Strong error E|X_T - S_T| and weak error |E X_T - E S_T| of Euler and Milstein on GBM, against the exact
-    solution driven by the same Brownian path, for each number of steps.  Returns the errors and log-log slopes."""
+    """Strong error E|X_T - S_T| of Euler and Milstein on GBM, against the exact solution driven by the same Brownian
+    path (Monte Carlo), and weak error |E X_T^2 - E S_T^2|, computed exactly from each scheme's one-step second
+    moment (a Monte Carlo weak error would be swamped by sampling noise).  Returns the errors and log-log slopes."""
     nmax = max(ns)
     dW_f, W_f = brownian(T, nmax, n_paths, seed)
     exact = S0 * np.exp((mu - 0.5 * sigma ** 2) * T + sigma * W_f[:, -1])
@@ -70,9 +71,12 @@ def scheme_orders(mu=0.05, sigma=0.4, S0=1.0, T=1.0, ns=(8, 16, 32, 64, 128, 256
         Xm = milstein(a, b, db, S0, T, dW)[:, -1]
         out["strong_euler"].append(float(np.mean(np.abs(Xe - exact))))
         out["strong_milstein"].append(float(np.mean(np.abs(Xm - exact))))
-        true_mean = S0 * np.exp(mu * T)
-        out["weak_euler"].append(float(abs(Xe.mean() - true_mean)))
-        out["weak_milstein"].append(float(abs(Xm.mean() - true_mean)))
+        dt = T / n
+        true_m2 = S0 ** 2 * np.exp((2 * mu + sigma ** 2) * T)
+        g_e = (1 + mu * dt) ** 2 + sigma ** 2 * dt
+        g_m = g_e + 0.5 * sigma ** 4 * dt ** 2  # the correction 1/2 s^2 (dW^2 - dt) adds variance s^4 dt^2 / 2
+        out["weak_euler"].append(float(abs(S0 ** 2 * g_e ** n - true_m2)))
+        out["weak_milstein"].append(float(abs(S0 ** 2 * g_m ** n - true_m2)))
     ldt = np.log(out["dt"])
     for k in ("strong_euler", "strong_milstein", "weak_euler", "weak_milstein"):
         out["slope_" + k] = float(np.polyfit(ldt, np.log(out[k]), 1)[0])
