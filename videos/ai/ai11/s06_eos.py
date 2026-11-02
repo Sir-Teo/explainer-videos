@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import PART, curve, load, predict_card, takeaway_card
+from videos.ai.ai11.common import PART, curve, curve_prefix, load, predict_card, takeaway_card
 
 ETA_COLORS = [C.TRUE_P, C.MODEL_Q]
 
@@ -104,7 +104,7 @@ class EdgeOfStability(VoiceoverScene):
         yl = VGroup(*[MathTex(f"{v:.0f}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
                       for v in np.arange(0, top, 20)])
         xl = label(r"steps of full-batch gradient descent", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.2)
-        yn = label(r"sharpness: \ the Hessian's largest eigenvalue", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15)
+        yn = label(r"curvature: signed power-iteration estimate", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15)
         yn.align_to(ax, LEFT)
         groups = VGroup()
         for eta, col in zip(etas, ETA_COLORS):
@@ -118,7 +118,7 @@ class EdgeOfStability(VoiceoverScene):
         res = VGroup(*[label(rf"second half: \ median ${med[eta]:.1f}$", font_size=22, color=col)
                        for eta, col in zip(etas, ETA_COLORS)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         res.next_to(names, DOWN, buff=0.35).align_to(names, LEFT)
-        how = label(r"Part 9's spirals; \ power iteration \\ on Hessian-vector products", font_size=20, color=GREY_A)
+        how = label(r"$20$ power iterations on Hessian-vector products; \\ $\lambda_{\max}$ interpretation assumes convergence \\ and a positive dominant-magnitude eigenvalue", font_size=18, color=GREY_A)
         how.next_to(res, DOWN, buff=0.3).align_to(names, LEFT)
         col_ = VGroup(names, res, how)
         if col_.get_right()[0] > 6.8:
@@ -135,30 +135,30 @@ class EdgeOfStability(VoiceoverScene):
 
         def upto(axes_, eta, col, k, f=lambda v: v, sw=3.5):
             c = lc[eta]
-            n = max(2, int(np.searchsorted(c[:, 0], t.get_value(), side="right")))
-            return VMobject(color=col, stroke_width=sw).set_points_as_corners([axes_.c2p(x, f(y)) for x, y in zip(c[:n, 0], c[:n, k])])
+            return curve_prefix(axes_, c[:, 0], c[:, k], t.get_value(), col, sw, f)
 
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28,
                                             color=WHITE).next_to(ax.get_corner(UR), UL, buff=0.1))
         e0, e1 = etas
         at_edge = all(abs(med[eta] - 2 / eta) < 0.15 * 2 / eta for eta in etas)
         fe = int(e[f"first_edge{e0}"])
-        said1 = (f"and climbs, until it reaches two over eta, around step {fe:,}, and then it stays there, hovering at "
-            "the edge, while the loss keeps going down, unevenly. "
+        said1 = (f"the estimate first passes ninety percent of two over eta around step {fe:,}. The second-half medians are near "
+            "the edge; the traces show the fluctuations. "
             if at_edge and fe > 0 else
-            "and climbs, towards two over eta, while the loss keeps going down. ")
-        said2 = (f"the network settles at half the sharpness: a median of {med[e1]:.1f}, against two over eta of "
+            "the traces show how the curvature estimate and loss evolve. ")
+        said2 = (f"the second-half median estimate is {med[e1]:.1f}, against two over eta of "
             f"{2 / e1:.0f}. "
             if at_edge else
-            f"its sharpness settles near {med[e1]:.1f}, with two over eta at {2 / e1:.0f}. ")
+            f"the second-half median estimate is {med[e1]:.1f}, with two over eta at {2 / e1:.0f}. ")
         with self.voiceover(
             "Here is the answer, measured: the spirals from part nine, trained with the full gradient at two step "
-            "sizes, the sharpness measured every forty steps by power iteration. <bookmark mark='a'/> It climbs, "
+            "sizes. Every forty steps we estimate curvature with twenty power iterations. Interpreting this signed "
+            "estimate as the largest eigenvalue assumes convergence and a positive dominant-magnitude eigenvalue. "
+            "<bookmark mark='a'/> Here, "
             + said1
             + "<bookmark mark='b'/> Double the step size, and "
             + said2
-            + "Training doesn't stay away from the edge of stability: it goes there and lives on it. Jeremy Cohen and "
-            "colleagues found this in 2021, and nobody had expected it."
+            + "Cohen and colleagues reported training near the edge in 2021. These traces test that behavior here."
         ) as vo:
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn), FadeIn(cite_), FadeIn(how))
             self.play(Create(lax), FadeIn(lax_l), run_time=0.8)
@@ -255,12 +255,12 @@ class EdgeOfStability(VoiceoverScene):
 
     def takeaway(self):
         e = load("eos")
-        t = takeaway_card(r"Training finds the edge, \ and stays there",
-                          r"At a fixed step $\eta$ the sharpness rises until $\lambda_{\max} \approx 2/\eta$ \ (measured "
-                          rf"here: ${float(e['late_median0.05']):.1f}$ for $2/\eta = 40$). \ The step size sets the "
-                          r"curvature, \ not the other way round.", r"Next: \ a step size for every weight")
+        t = takeaway_card(r"Compare training with the stability edge",
+                          r"At a fixed step $\eta$, compare curvature with $2/\eta$ \ (second-half power-estimate median "
+                          rf"here: ${float(e['late_median0.05']):.1f}$ for $2/\eta = 40$). \ The step size can shape the "
+                          r"curvature.", r"Next: \ a step size for every weight")
         with self.voiceover(
-            "So the step size doesn't have to fit the landscape: the landscape comes to fit the step size. Next, "
+            "Training can approach its stability edge, so the step size can shape the curvatures it visits. Next, "
             "optimizers that give every weight a step size of its own."
         ):
             self.play(FadeIn(t[0], shift=UP * 0.2))

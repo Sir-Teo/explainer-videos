@@ -180,7 +180,7 @@ class Muon(VoiceoverScene):
         box.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(UP * 0.8)
         frame = SurroundingRectangle(box, color=MU, buff=0.3, corner_radius=0.12, stroke_width=2)
         why02 = label(rf"$0.2\sqrt{{\max(m,n)}}$: \ an orthogonal $m \times n$ matrix has entries of size about "
-                      rf"$1/\sqrt{{\max(m, n)}}$, \\ so Muon's step gets an RMS of $0.2$, \ like a typical Adam step \ "
+                      rf"$1/\sqrt{{\max(m, n)}}$, \\ so the ideal step has entry RMS $0.2\eta$; \ compare Adam's median \ "
                       rf"(ours, \ Chapter 6: \ median ${med:.2f}\,\eta$)", font_size=22, color=C.BITS).next_to(frame, DOWN, buff=0.4)
         cite_ = cite(r"K.~Jordan et al.\ (2024); \ J.~Liu et al., \textit{Muon is Scalable for LLM Training} (2025)", corner=DR)
         with self.voiceover(
@@ -188,7 +188,8 @@ class Muon(VoiceoverScene):
             "gradient, <bookmark mark='b'/> orthogonalize the look-ahead, with five rounds of Newton–Schulz, the "
             "next chapter, <bookmark mark='c'/> and step, with weight decay, scaled by zero point two times the "
             "square root of the larger dimension. <bookmark mark='d'/> That scale makes the typical entry of Muon's "
-            "step about zero point two, the size of a typical AdamW step, so one learning rate can serve both. "
+            "ideal step about zero point two times eta in entry RMS. Five rounds approximate that factor; "
+            "Adam's median is a different size statistic. "
             f"Our own Adam, in Chapter six, moved its median weight by {med:.2f} eta. <bookmark mark='e'/> Muon is "
             "only for the hidden matrices; embeddings, the output layer and the small vectors stay with AdamW."
         ) as vo:

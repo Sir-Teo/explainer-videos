@@ -8,6 +8,16 @@ from videos.ai.ai11.common import OPT_COLORS, PART, SAY, SCHED_COLORS, load
 from videos.ai.ai11.s13_race import standings
 
 
+def _mini_range(*series):
+    """One shared padded raw range for every series in a comparison tile."""
+    values = np.concatenate([np.asarray(y, float).ravel() for y in series])
+    if not values.size or not np.isfinite(values).all():
+        raise ValueError("Comparison tile values must be nonempty and finite")
+    lo, hi = float(values.min()), float(values.max())
+    pad = max(0.05, 0.05 * (hi - lo))
+    return lo - pad, hi + pad
+
+
 class Outro(VoiceoverScene):
     def construct(self):
         self.recap()
@@ -39,7 +49,7 @@ class Outro(VoiceoverScene):
         a2 = axes((0, 3), (0, 4))
         g2 = VGroup(a2, *[curve(a2, lk, np.log10(np.asarray(q[f"iters_{m}"], float)), OPT_COLORS[m], 2.5)
                           for m in ("gd", "hb", "nesterov")])
-        out.append((g2, r"$\kappa$ \ against \ $\sqrt{\kappa}$", OPT_COLORS["hb"]))
+        out.append((g2, r"quadratics: \ $\kappa$ vs $\sqrt{\kappa}$", OPT_COLORS["hb"]))
         # 3. the temperature
         t = load("temperature")
         T = np.log10(np.array([[e / b for b in t["batches"]] for e in t["etas"]]))
@@ -54,7 +64,7 @@ class Outro(VoiceoverScene):
         a4 = axes((0, 4000), (0, 2 / eta0 * 1.2))
         out.append((VGroup(a4, curve(a4, c[:, 0], np.minimum(c[:, 2], 2 / eta0 * 1.2), C.TRUE_P, 2.5),
                            DashedLine(a4.c2p(0, 2 / eta0), a4.c2p(4000, 2 / eta0), color=C.TRUE_P, stroke_width=1.5)),
-                    r"the edge of stability", C.TRUE_P))
+                    r"full-batch: \ estimated edge", C.TRUE_P))
         # 5. Newton-Schulz
         m = load("ns")
         b = np.asarray(m["sv_grad"], float)
@@ -63,28 +73,29 @@ class Outro(VoiceoverScene):
         a5 = axes((0, len(b)), (0, 1.3))
         out.append((VGroup(a5, curve(a5, np.arange(len(b)), b, GREY_B, 2), curve(a5, np.arange(len(h)), np.minimum(h, 1.3),
                                                                                OPT_COLORS["muon"], 2.5)),
-                    r"Muon: \ singular values to $1$", OPT_COLORS["muon"]))
+                    r"Muon: \ approximate polar step", OPT_COLORS["muon"]))
         # 6. the fair race
         rc = load("race")
         allc = {o: np.median(np.asarray(rc[f"curves_{o}"])[:, :, 1], 0) for o in rc["opts"]}
         xs = np.asarray(rc[f"curves_{rc['opts'][0]}"])[0, :, 0]
-        lo = float(min(v.min() for v in allc.values())) - 0.05
-        a6 = axes((0, xs.max()), (lo, lo + 1.2))
-        out.append((VGroup(a6, *[curve(a6, xs[1:], np.clip(v[1:], lo, lo + 1.2), OPT_COLORS[o], 2) for o, v in allc.items()]),
+        a6 = axes((0, xs.max()), _mini_range(*[v[1:] for v in allc.values()]))
+        out.append((VGroup(a6, *[curve(a6, xs[1:], v[1:], OPT_COLORS[o], 2) for o, v in allc.items()]),
                     r"the race, \ run fairly", WHITE))
         # 7. travel, then settle
         s = load("schedule")
         sd = list(s["seeds"])[0]
         const = np.asarray(s[f"const_{sd}"])
-        lo7 = float(min(s[f"wsdfinal_{S}_{sd}"] for S in s["lengths"])) - 0.05
-        a7 = axes((0, max(s["lengths"])), (lo7, lo7 + 0.6))
-        g7 = VGroup(a7, curve(a7, const[1:, 0], np.clip(const[1:, 1], lo7, lo7 + 0.6), SCHED_COLORS["constant"], 2))
+        branches = []
         for S in s["lengths"]:
             bc = np.asarray(s[f"wsdcurve_{S}_{sd}"])
             k0 = int(0.8 * S)
             pts = [(k0, float(np.interp(k0, const[:, 0], const[:, 1])))] + [tuple(p) for p in bc]
+            branches.append(pts)
+        a7 = axes((0, max(s["lengths"])), _mini_range(const[1:, 1], *[np.asarray(pts)[:, 1] for pts in branches]))
+        g7 = VGroup(a7, curve(a7, const[1:, 0], const[1:, 1], SCHED_COLORS["constant"], 2))
+        for pts in branches:
             g7.add(VMobject(color=SCHED_COLORS["wsd"], stroke_width=2.5).set_points_as_corners(
-                [a7.c2p(x, min(max(y, lo7), lo7 + 0.6)) for x, y in pts]))
+                [a7.c2p(x, y) for x, y in pts]))
         out.append((g7, r"travel, \ then settle", SCHED_COLORS["wsd"]))
         # 8. weight decay's equilibrium
         q8 = load("equilibrium")
@@ -93,7 +104,7 @@ class Outro(VoiceoverScene):
         cols = ["#7FD3FF", C.BITS, C.SURPRISE]
         g8 = VGroup(a8, *[curve(a8, np.asarray(q8[f"track_{w}"])[:, 0], np.asarray(q8[f"track_{w}"])[:, 1], col, 2)
                           for w, col in zip(q8["wd"], cols)])
-        out.append((g8, r"$\|W\| \propto \sqrt{\eta/\lambda}$", C.BITS))
+        out.append((g8, r"model: \ $\|W\| \propto \sqrt{\eta/\lambda}$", C.BITS))
         tiles = Group()
         for pic, cap, col in out:
             box, c_ = tile_frame(cap, col, TW, TH)
@@ -112,14 +123,16 @@ class Outro(VoiceoverScene):
         st = standings(load("race"))
         win = SAY[st[0][0]]
         with self.voiceover(
-            f"Let's take stock. Gradient descent needs steps in proportion to the condition number, and momentum "
-            "needs only its square root. A random batch makes each step cheap and noisy, and the noise is a "
-            "temperature, eta over B, which sets the size of the cloud training ends in. At a fixed step, training "
-            "raises the curvature to the edge of stability, two over eta, and stays there. Adam rescales every weight "
-            "and in its limit is sign descent; Shampoo and Muon see whole matrices, and Muon's step, the steepest under the "
-            "spectral norm, sets every singular value to one with a polynomial. In a fair race on our own model, "
-            f"{win} came first. A high learning rate travels down the river and a falling one settles, and weight "
-            "decay quietly sets the size of every normalized matrix."
+            f"Let's take stock. On our strongly convex quadratics, rate-based step estimates scale with the condition number for gradient "
+            "descent and with its square root for appropriately tuned momentum, at fixed accuracy. A random batch "
+            "makes each step cheap and noisy; in a stable local, small-step model, eta over B acts like a temperature "
+            "for the stationary cloud. In our full-batch fixed-step example, a signed power estimate tracks curvature "
+            "near two over eta; this is observed behavior, not a universal rule. Adam rescales every weight and in its "
+            "limit is sign descent; Shampoo and Muon see whole matrices. Muon's ideal polar step, steepest under the "
+            "spectral norm, sets nonzero singular values to one; its practical polynomial approximates that step. "
+            "In a fair race on our own model, "
+            f"{win} came first. A high learning rate travels down the river and a falling one settles, and a stationary "
+            "correlated-update model predicts how weight decay sets a normalized matrix's scale."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15, scale=0.95) for t in tiles], lag_ratio=0.85),
@@ -152,9 +165,9 @@ class Outro(VoiceoverScene):
         ps = problem_set([
             r"For an $L$-smooth $f$, show $f(x - \nabla f(x)/L) \le f(x) - \|\nabla f(x)\|^2/2L$. \ If also "
             r"$\|\nabla f\|^2 \ge 2\mu(f - f^*)$, deduce $f(x_k) - f^* \le (1 - \mu/L)^k (f(x_0) - f^*)$.",
-            r"The heavy ball on $f = \tfrac{\lambda}{2}x^2$: \ show the roots of $z^2 - (1 + \beta - \eta\lambda)z + \beta$ "
-            r"have modulus $\sqrt\beta$ when complex, \ and find $\eta, \beta$ that make this hold for all $\lambda \in "
-            r"[\mu, L]$. \ How many steps for $\kappa = 10^4$, \ against gradient descent?",
+            r"Heavy-ball roots $z^2 - (1 + \beta - \eta\lambda)z + \beta$: \ tune $\eta,\beta$ for equal moduli "
+            r"on $[\mu,L]$, allowing real repeated endpoint roots. \ For $\kappa=10^4$, estimate steps for a $10^6$-fold "
+            r"objective-gap reduction versus GD ($\eta=1/L$); \ explain the omitted-prefactor caveat.",
             r"SGD on $f = \tfrac{\lambda}{2}x^2$ with gradient noise of variance $\sigma^2/B$: \ show the stationary "
             r"variance is $\dfrac{\eta\sigma^2}{B\,\lambda\,(2 - \eta\lambda)}$, \ and that it depends on $\eta$ and $B$ "
             r"only through $\eta/B$ when $\eta\lambda \ll 1$.",
@@ -164,9 +177,10 @@ class Outro(VoiceoverScene):
             r"For $p(\sigma) = \tfrac32\sigma - \tfrac12\sigma^3$, \ show $p(1) = 1$, $p'(1) = 0$, \ and that "
             r"$e = 1 - \sigma$ obeys $e \mapsto \tfrac32 e^2 + O(e^3)$. \ For $2\sigma - \tfrac32\sigma^3 + \tfrac12\sigma^5$, "
             r"show $p'(1) = 0$ too, \ and find $c$ in $e \mapsto c\,e^2$. \ Which starts faster from small $\sigma$?",
-            r"Decoupled decay $W_{t+1} = (1 - \eta\lambda)W_t - \eta u_t$ with $u_t \perp W_t$ and "
-            r"$\langle u_t, u_{t+k}\rangle = \|u\|^2\beta^{|k|}$: \ show $\mathbb{E}\|W\|^2 \to "
-            r"\dfrac{\eta\|u\|^2}{2\lambda}\dfrac{1 + \beta}{1 - \beta}$ for small $\eta\lambda$.",
+            r"Decoupled decay $W_{t+1} = (1 - \eta\lambda)W_t - \eta u_t$: \ stationary zero-mean $u_t$, \ "
+            r"$\mathbb{E}\langle u_t, u_{t+k}\rangle = U^2\beta^{|k|}$, \ $0 \le \beta < 1$. \ Show the equilibrium "
+            r"$\mathbb{E}\|W\|^2 \approx \dfrac{\eta U^2}{2\lambda}\dfrac{1 + \beta}{1 - \beta}$ "
+            r"when $0 < \eta\lambda \ll 1 - \beta$.",
         ], font_size=21)
         with self.voiceover(
             "Here are six problems, from gradient descent's rate to weight decay's equilibrium. Pause here and work "

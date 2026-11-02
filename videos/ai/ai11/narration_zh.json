@@ -570,6 +570,101 @@
    "scene": "Outro",
    "en": "Bottou, Curtis and Nocedal's survey is the best single account of stochastic optimization, and Jeremy Bernstein's essays explain Muon's geometry. Thanks for watching, and see you in part twelve.",
    "zh": "博图、柯蒂斯和诺塞达尔的综述，是关于随机优化最好的一份全面论述；杰里米·伯恩斯坦的文章讲清了Muon的几何。感谢观看，我们第12部分见。"
+  },
+  "f3407224ace8": {
+   "scene": "NewtonSchulz",
+   "en": "Three candidates. <bookmark mark='a'/> The classical cubic, one and a half sigma minus half sigma cubed, fixes one with zero slope, so near one it converges fast; but its slope at zero is only one and a half, so tiny values grow slowly. <bookmark mark='b'/> Keller Jordan tuned a fifth-degree polynomial for Muon: slope three point four at zero, so small values grow fast, at the price of never quite reaching one; everything ends between about zero point seven and one point three, which training doesn't mind. <bookmark mark='c'/> A third, two sigma minus one and a half sigma cubed plus a half sigma to the fifth, also fixes one with zero slope, and near one it squares the error's magnitude and halves it, three times better than the cubic.",
+   "zh": "三个候选。<bookmark mark='a'/>经典的三次多项式，1.5σ减0.5σ的三次方，以零斜率固定住1，所以在1附近收敛得快；但它在0处的斜率只有1.5，很小的值长得慢。<bookmark mark='b'/>凯勒·乔丹为Muon调了一个五次多项式：在0处斜率是3.4，小的值长得很快，代价是永远到不了1；所有的值最后都落在大约0.7到1.3之间，训练并不在意。<bookmark mark='c'/>第三个，2σ减1.5σ的三次方再加0.5σ的五次方，也以零斜率固定住1，在1附近把误差的大小平方再减半，比三次多项式好三倍。"
+  },
+  "644df94c4491": {
+   "scene": "Race",
+   "en": "What do these numbers read like? Here SGD with momentum and the winner, SOAP, continue the same three words with the same random draws, at checkpoints of their runs. <bookmark mark='a'/> Before training, the random model scores 7.5 bits per character: noise from the whole alphabet. <bookmark mark='b'/> After 100 steps, spaces and short words. <bookmark mark='c'/> By step 1,000, most of it is word-shaped, <bookmark mark='d'/> and by the end, at 2.20 bits for SOAP, there is punctuation and the rhythm of sentences. It is ahead at every checkpoint.",
+   "zh": "这些数字读起来是什么样子？这里带动量的SGD和冠军SOAP，用同样的随机数，在训练的几个检查点上续写同样的三个词。<bookmark mark='a'/>训练之前，随机模型的评分是每个字符7.5比特：整个字母表里的噪声。<bookmark mark='b'/>100步之后，有了空格和短词。<bookmark mark='c'/>到第1000步，大部分已经像单词了，<bookmark mark='d'/>到最后，SOAP是2.20比特，有了标点和句子的节奏。它在每个检查点上都领先。"
+  },
+  "8aeb5eb2e549": {
+   "scene": "Stability",
+   "en": "Weight decay has a second life. Most weight matrices are followed by a normalization, so W and twice W give the same network. <bookmark mark='a'/> Then the gradient is orthogonal to W. <bookmark mark='b'/> Decay shrinks W by a factor; Adam's update u need not be orthogonal to it. <bookmark mark='c'/> Model the updates as stationary noise whose correlations decay like momentum. At small decay, their cumulative effect balances the shrinkage. <bookmark mark='d'/> This model predicts a norm proportional to root eta over lambda. <bookmark mark='e'/> So here weight decay doesn't regularize: it sets the size at which each step is a fixed fraction of the matrix, an effective learning rate.",
+   "zh": "权重衰减还有第二重身份。大多数权重矩阵后面都跟着一个归一化，所以W和两倍的W给出同一个网络。<bookmark mark='a'/>于是梯度和W正交。<bookmark mark='b'/>衰减把W乘上一个因子缩小；Adam的更新u不一定与它正交。<bookmark mark='c'/>把更新建模为平稳噪声，假定其相关性像动量一样衰减。衰减较小时，更新的累积效应与收缩平衡。<bookmark mark='d'/>这个模型预测，范数和η除以λ的平方根成正比。<bookmark mark='e'/>所以这里权重衰减不起正则化作用：它决定的是矩阵的大小，使每一步都是矩阵的固定比例，也就是一个有效学习率。"
+  },
+  "f704951359fa": {
+   "scene": "GradientDescent",
+   "en": "Using convexity alone gives a weaker guarantee: a bound proportional to one over k, the number of steps. <bookmark mark='a'/> Here is gradient descent on a quadratic with curvatures from one to a millionth. We do not use its tiny positive strong convexity; the bound is dashed. <bookmark mark='b'/> The measured gap should stay under the bound; here it does not everywhere, which points to rounding at the smallest values.",
+   "zh": "只使用凸性，会得到较弱的保证：差距的上界正比于k分之1，k是步数。<bookmark mark='a'/>这是梯度下降在曲率从1到百万分之一的二次函数上的表现。这里不使用它微小的正强凸常数；虚线是这个界。<bookmark mark='b'/>测出的差距本应一直在界的下方；这里并非处处如此，说明最小的数值上有舍入误差。"
+  },
+  "59820c4ca5e8": {
+   "scene": "Momentum",
+   "en": "In 1983 Yurii Nesterov, also in Moscow, changed one thing: take the gradient not where you are, but where momentum is about to carry you. <bookmark mark='a'/> With that look-ahead, the acceleration is guaranteed on every smooth convex function, not only on quadratics: the gap falls like one over k squared instead of one over k. <bookmark mark='b'/> On Chapter 1's convex quadratic, after 2,000 steps, it is 118 times smaller in objective gap than gradient descent. <bookmark mark='c'/> And Arkadi Nemirovski and David Yudin had shown that no method using only gradients can do better in the worst case: Nesterov's rate is optimal.",
+   "zh": "1983年，同样在莫斯科的尤里·涅斯捷罗夫只改了一件事：不在你现在的位置求梯度，而在动量即将把你带到的位置求。<bookmark mark='a'/>有了这个前瞻，加速在每一个光滑的凸函数上都有保证，不只在二次函数上：差距像k平方分之1那样下降，而不是k分之1。<bookmark mark='b'/>在第1章的凸二次函数上，2000步之后，它的目标差距比梯度下降小118倍。<bookmark mark='c'/>而阿尔卡迪·涅米罗夫斯基和大卫·尤丁早已证明：在最坏情形下，任何只用梯度的方法都不可能做得更好：涅斯捷罗夫的速度是最优的。"
+  },
+  "b98a565a27e9": {
+   "scene": "GradientDescent",
+   "en": "Using convexity alone gives a weaker guarantee: a bound proportional to one over k, the number of steps. <bookmark mark='a'/> Here is gradient descent on a quadratic with curvatures from one to a millionth. We do not use its tiny positive strong convexity; the bound is dashed. <bookmark mark='b'/> The measured gap stays under the bound at every step, as the theorem says it must. Over this window it looks like a power law on the log axes.",
+   "zh": "只使用凸性，会得到较弱的保证：差距的上界正比于k分之1，k是步数。<bookmark mark='a'/>这是梯度下降在曲率从1到百万分之一的二次函数上的表现。这里不使用它微小的正强凸常数；虚线是这个界。<bookmark mark='b'/>测出的差距每一步都在界的下方，正如定理所要求的。在这个时间窗口内，对数坐标上的曲线看起来像幂律。"
+  },
+  "174371445126": {
+   "scene": "Momentum",
+   "en": "In 1983 Yurii Nesterov, also in Moscow, changed one thing: take the gradient not where you are, but where momentum is about to carry you. <bookmark mark='a'/> With that look-ahead, the acceleration is guaranteed on every smooth convex function, not only on quadratics: the gap falls like one over k squared instead of one over k. <bookmark mark='b'/> On Chapter 1's convex quadratic it stays under its bound, and after 2,000 steps its objective gap is 118 times smaller than gradient descent's. <bookmark mark='c'/> And Arkadi Nemirovski and David Yudin had shown that no method using only gradients can do better in the worst case: Nesterov's rate is optimal.",
+   "zh": "1983年，同样在莫斯科的尤里·涅斯捷罗夫只改了一件事：不在你现在的位置求梯度，而在动量即将把你带到的位置求。<bookmark mark='a'/>有了这个前瞻，加速在每一个光滑的凸函数上都有保证，不只在二次函数上：差距像k平方分之1那样下降，而不是k分之1。<bookmark mark='b'/>在第1章的凸二次函数上，它一直在自己的界下方，2000步之后，它的目标差距比梯度下降小118倍。<bookmark mark='c'/>而阿尔卡迪·涅米罗夫斯基和大卫·尤丁早已证明：在最坏情形下，任何只用梯度的方法都不可能做得更好：涅斯捷罗夫的速度是最优的。"
+  },
+  "975bef4775bf": {
+   "scene": "GradientDescent",
+   "en": "Check it. Quadratic valleys in fifty dimensions, with condition numbers from one to a thousand, and gradient descent with step one over L. <bookmark mark='a'/> The steps it needs, on log axes, rise along a line of slope 0.89: close to one, in proportion to kappa, as derived. The dashed line is the quadratic worst-case estimate; these valleys do better, because only one direction is slowest. <bookmark mark='b'/> For these quadratics, positions contract by one minus one over kappa in that slow mode. The square root of the gap has late-run ratio 0.9990 at kappa a thousand, against the slow-mode factor 0.9990.",
+   "zh": "来验证一下。五十维的二次山谷，条件数从1到1000，梯度下降步长取L分之1。<bookmark mark='a'/>需要的步数在对数坐标上沿着斜率为0.89的直线上升：接近1，和κ成正比，与推导一致。虚线是二次函数的最坏情形估计。这些山谷好一些，因为只有一个方向最慢。<bookmark mark='b'/>这些二次函数的最慢模态，位置每步乘以1减κ分之1。κ等于1000时，差距平方根的后期比率是0.9990，最慢模态的因子是0.9990。"
+  },
+  "e833211f2e4d": {
+   "scene": "GradientDescent",
+   "en": "Check it. Quadratic valleys in fifty dimensions, with condition numbers from one to a thousand, and gradient descent with step one over L. <bookmark mark='a'/> The steps it needs, on log axes, rise along a line of slope 0.89: close to one, in proportion to kappa, as derived. The dashed line is the quadratic worst-case estimate; these valleys do better, because only one direction is slowest. <bookmark mark='b'/> For these quadratics, positions contract by one minus one over kappa in that slow mode. The square root of the gap has a late-run ratio close to the quadratic slow-mode factor: at kappa a thousand, 0.9990.",
+   "zh": "来验证一下。五十维的二次山谷，条件数从1到1000，梯度下降步长取L分之1。<bookmark mark='a'/>需要的步数在对数坐标上沿着斜率为0.89的直线上升：接近1，和κ成正比，与推导一致。虚线是二次函数的最坏情形估计。这些山谷好一些，因为只有一个方向最慢。<bookmark mark='b'/>这些二次函数的最慢模态，位置每步乘以1减κ分之1。差距平方根在后期的比率接近二次函数最慢模态的因子：κ等于1000时，是0.9990。"
+  },
+  "cfee7a520b06": {
+   "scene": "Momentum",
+   "en": "Back to Chapter 1's fifty-dimensional valleys, now with momentum. <bookmark mark='a'/> Gradient descent rises with slope 0.89. <bookmark mark='b'/> The heavy ball and Nesterov rise with slopes 0.58 and 0.46: close to one half, the square root of kappa. At kappa a thousand that is 2,745 steps against 187 and 142. <bookmark mark='c'/> And the late geometric-mean ratios for the square root of the gap are 0.9418 for heavy ball, against root modulus 0.9387; Nesterov 0.9702, against 0.9684. <bookmark mark='d'/> One warning. The heavy ball's guarantee is for quadratics: on other convex losses there are examples where it circles forever. Nesterov's form is the one with a proof.",
+   "zh": "回到第1章的五十维山谷，这次加上动量。<bookmark mark='a'/>梯度下降的斜率是0.89。<bookmark mark='b'/>重球法和涅斯捷罗夫方法的斜率是0.58和0.46：接近二分之一，也就是κ的平方根。κ等于1000时，这是2745步，对187步和142步。<bookmark mark='c'/>差距平方根在后期的几何平均比率，重球法是0.9418，根的模是0.9387；涅斯捷罗夫方法是0.9702，根的模是0.9684。<bookmark mark='d'/>提醒一句。重球法的保证只对二次函数成立：在别的凸函数上，有它永远绕圈的例子。涅斯捷罗夫的形式才有一般性证明。"
+  },
+  "bdafe8672a1a": {
+   "scene": "ScheduleFree",
+   "en": "Go back to Chapter three's cloud. The walker keeps fluctuating around the solution. <bookmark mark='a'/> So don't take the last position: take the average of all of them. David Ruppert, and Boris Polyak with Anatoli Juditsky, proved asymptotic efficiency under stochastic-approximation assumptions; that is not a guarantee for this fixed-step nonlinear cloud. Here all cached cloud points are typically 0.49 from the best weights; their running average ends 0.154 away. <bookmark mark='b'/> Deep learning uses a version that forgets the start: an exponential moving average of the weights.",
+   "zh": "回到第3章的云团。下山人在解附近持续波动。<bookmark mark='a'/>不要只取最后位置，而要取所有位置的平均。鲁珀特，以及波利亚克和尤季茨基，在随机逼近假设下证明了渐近有效性；这不保证这里的固定步长非线性云团。这里所有缓存点到最佳权重的典型距离为0.49；其累计平均最后相距0.154。<bookmark mark='b'/>深度学习还使用遗忘开头的版本：权重的指数移动平均。"
+  },
+  "ca300952a42e": {
+   "scene": "EdgeOfStability",
+   "en": "Training can approach its stability edge, so the step size can shape the curvatures it visits. Next, optimizers that give every weight a step size of its own.",
+   "zh": "训练可以接近其稳定性边缘，因此步长可以影响它所经过的曲率。接下来，是给每个权重各自一个步长的优化器。"
+  },
+  "e70a3e67287c": {
+   "scene": "Schedule",
+   "en": "Chapter three's lesson was that a constant step ends in a cloud, and only a shrinking step settles. So real runs change the learning rate as they go. <bookmark mark='a'/> Almost all begin with a warmup: a short ramp, sixty tiny, growing steps here, while the weights are random, Adam's running sizes are still unknown, and, as Chapter five showed, the landscape is sharp. <bookmark mark='b'/> For years the standard was a cosine, from Ilya Loshchilov and Frank Hutter in 2016: glide smoothly from the peak to zero. <bookmark mark='c'/> The newer standard holds the rate flat for most of the run and decays it only at the end: warmup, stable, decay, popularized by the MiniCPM team in 2024.",
+   "zh": "第3章的教训是：恒定步长最后停在云团里，缩小步长才能落定。所以真实训练会改变学习率。<bookmark mark='a'/>几乎都先预热：一小段逐渐增大的步长，这里是六十步。权重起初随机，Adam的滑动大小尚不清楚，而且第5章显示地形可能很陡。<bookmark mark='b'/>多年的标准是余弦调度，来自2016年的洛希洛夫和胡特：从峰值平滑降至零。<bookmark mark='c'/>较新的标准在大部分训练里保持恒定，只在最后衰减：预热、稳定、衰减，由2024年的MiniCPM团队推广。"
+  },
+  "98c1ec33e298": {
+   "scene": "Shampoo",
+   "en": "In 2024 a group at Harvard simplified it. <bookmark mark='a'/> Shampoo's two factors have eigenvectors: a rotation of the rows, and one of the columns. <bookmark mark='b'/> Rotate the gradient into those bases, run plain Adam there, coordinate by coordinate, <bookmark mark='c'/> and rotate the step back. The rotation is refreshed every few steps; Adam does the rest. They called it SOAP, and reported reaching AdamW's loss in over forty percent fewer steps in large-batch runs on language models of up to six hundred and sixty million parameters. Shampoo, it turns out, is close to a cheap form of Adam in its own eigenbasis. SOAP runs in our race too.",
+   "zh": "2024年，哈佛的一个团队把它简化。<bookmark mark='a'/>Shampoo的两个因子各有特征向量：行的旋转和列的旋转。<bookmark mark='b'/>把梯度旋转到这些基，在那里逐坐标跑普通Adam，<bookmark mark='c'/>再把更新旋转回来。每隔几步刷新旋转，其余交给Adam。他们称之为SOAP，报告在最大六亿六千万参数语言模型的大批量训练中，达到AdamW损失少用四成以上步数。Shampoo接近于在自身特征基里运行的廉价Adam。SOAP也参加我们的比赛。"
+  },
+  "8e51f4894291": {
+   "scene": "Adam",
+   "en": "That limit became an optimizer. <bookmark mark='a'/> In 2023 a Google team searched over programs for update rules and found Lion: step by the sign of a blend of momentum and gradient, <bookmark mark='b'/> then update the momentum more slowly. <bookmark mark='c'/> One state per weight, not two, and since its nonzero sign component is full size, a smaller learning rate and a larger decay. It runs in our race in Chapter 12.",
+   "zh": "这个极限后来成了优化器。<bookmark mark='a'/>2023年，谷歌团队搜索程序形式的更新规则，找到Lion：按动量与梯度混合量的符号更新，<bookmark mark='b'/>然后更慢地更新动量。<bookmark mark='c'/>每个权重存一个状态而非两个；非零符号分量都是满幅，因此学习率较小、衰减较大。它参加第12章的比赛。"
+  },
+  "04e5cb7ad1d1": {
+   "scene": "Frontier",
+   "en": "How big are the gains really? <bookmark mark='a'/> New optimizers had claimed one and a half to two times AdamW's speed. In 2025 Kaiyue Wen, David Hall, Tengyu Ma and Percy Liang at Stanford tested eleven of them with equal care, tuning every one, AdamW included, on models up to one point two billion parameters. <bookmark mark='b'/> Tuning AdamW's learning rate alone could double its speed on a small model: many claimed gains were against weak baselines. <bookmark mark='c'/> The best, the matrix-based ones, Muon and SOAP, were about one point four times faster at a hundred million parameters, <bookmark mark='d'/> and only one point one times at a billion. <bookmark mark='e'/> Muon led with little data per parameter, SOAP with a lot. <bookmark mark='f'/> In 2026 a team at NVIDIA trained mixtures of experts up to seventy-two billion parameters with Muon and modified SOAP or KL-SOAP. They found these variants stable at batches of a hundred million tokens where AdamW degraded, with modest, mixed gains.",
+   "zh": "收益到底多大？<bookmark mark='a'/>新优化器曾声称比AdamW快一点五到两倍。2025年，斯坦福的Kaiyue Wen、David Hall、马腾宇和Percy Liang同样细致地测试十一个优化器，包括为AdamW调参，模型最大到十二亿参数。<bookmark mark='b'/>仅调AdamW的学习率就能使它在小模型上快一倍，许多宣称对比的是弱基线。<bookmark mark='c'/>最好的矩阵方法Muon和SOAP，在一亿参数时约快一点四倍，<bookmark mark='d'/>在十亿参数时只有一点一倍。<bookmark mark='e'/>数据相对参数少时Muon领先，多时SOAP领先。<bookmark mark='f'/>2026年，英伟达团队以Muon和修改后的SOAP或KL-SOAP训练最大七百二十亿参数的混合专家模型。这些变体在一亿词元批量下保持稳定，而AdamW变差；收益有限，且随任务而异。"
+  },
+  "018814b95e79": {
+   "scene": "Stability",
+   "en": "In 2025 Moonshot AI met exactly this training Kimi K2 with Muon, and fixed it surgically. <bookmark mark='a'/> Record each head's largest score during the forward pass, then take the optimizer step. <bookmark mark='b'/> For frozen inputs and weights, scaling both query and key matrices by root gamma scales the score by gamma. <bookmark mark='c'/> Use the stored forward score to choose gamma, then rescale the updated matrices as feedback. There is no hard cap at tau on post-update or next-batch scores. With tau at a hundred, Kimi K2, a trillion parameters on fifteen and a half trillion tokens, reports zero loss spikes.",
+   "zh": "2025年，月之暗面在Muon训练Kimi K2时遇到了这个问题，做了针对性修复。<bookmark mark='a'/>在前向传播中记录各头的最大分数，然后执行优化器更新。<bookmark mark='b'/>若输入和权重冻结，同时将查询与键矩阵乘以gamma的平方根，分数就乘以gamma。<bookmark mark='c'/>根据已记录的前向分数选择gamma，再缩放已更新的矩阵作为反馈。更新后的分数或下一批分数都没有tau的硬上界。tau为一百的Kimi K2，一万亿参数、十五点五万亿词元，报告零损失尖峰。"
+  },
+  "20f7b466de6b": {
+   "scene": "Stability",
+   "en": "So the best fixes target causes: QK-clip feeds forward scores back into query and key rescaling after the update; gradient clipping caps the raw gradient norm, and weight decay sets the size of normalized matrices. Finally: the optimizer race since 2024.",
+   "zh": "所以，最好的修复针对原因：QK-clip在更新后将前向分数反馈给查询与键的缩放；梯度裁剪限制原始梯度范数，而权重衰减决定归一化矩阵的大小。最后：2024年以来的优化器竞赛。"
+  },
+  "ee286b1de025": {
+   "scene": "Natural",
+   "en": "Race them on part nine's spirals: gradient descent, Adam, damped K-FAC and a damped full-Fisher natural gradient, each at its best of five learning rates, three seeds each. <bookmark mark='a'/> After a hundred steps, the order is the natural gradient, then Adam, K-FAC and gradient descent. <bookmark mark='b'/> On the right, what the network believes, as it trains: gradient descent's map and the natural gradient's, at the same steps. The natural gradient carves out the two spirals almost at once. <bookmark mark='c'/> The full Fisher acts on 722 parameters. Here a Woodbury identity computes the damped direction through a smaller system of 400 equations, one per training example. At scale, even full-Fisher geometry is costly, so K-FAC uses layer factors. Next chapter's Shampoo uses a related Kronecker idea.",
+   "zh": "让它们在第9部分的螺旋数据上比一比：梯度下降、Adam、带阻尼的K-FAC和带阻尼的全费希尔自然梯度，每个都用五个学习率里最好的那个，各跑三个种子。<bookmark mark='a'/>一百步之后，顺序是自然梯度，然后是Adam、K-FAC和梯度下降。<bookmark mark='b'/>右边是网络在训练中的判断：梯度下降的图和自然梯度的图，在相同的步数上。自然梯度几乎一下子就把两条螺旋分开了。<bookmark mark='c'/>全费希尔矩阵作用于722个参数。这里用Woodbury恒等式，通过较小的400个方程的方程组计算带阻尼的方向，每个训练样本对应一个方程。规模变大时，全费希尔几何仍很昂贵，所以K-FAC使用逐层因子。下一章的Shampoo使用相关的克罗内克思路。"
   }
  },
  "title_en": "AI, Built: Part 11, Going Downhill",

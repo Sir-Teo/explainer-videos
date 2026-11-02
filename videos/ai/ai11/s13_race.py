@@ -42,7 +42,7 @@ class Race(VoiceoverScene):
         top = VGroup(
             label(r"the character model; \ the same batches in the same order; \ $3{,}000$ steps; \ $60$ of warmup, "
                   r"then a cosine to zero", font_size=22),
-            label(r"each optimizer: \ learning rates a factor of $2$ apart, \ widened until the best is inside; \ "
+            label(r"each optimizer: \ $6$ initial rates, \ factor $2$ apart; \ up to $3$ edge extensions; \ "
                   r"the best re-run from $2$ more seeds", font_size=22),
         ).arrange(DOWN, buff=0.18).to_edge(UP, buff=0.35)
         keep_in_frame(top)
@@ -85,7 +85,7 @@ class Race(VoiceoverScene):
             "Now a fair race between this part's optimizers, on our character model. <bookmark mark='a'/> Same "
             "batches in the same order, same three thousand steps, same schedule. <bookmark mark='b'/> Each one, "
             "SGD with momentum, AdamW, Lion, Shampoo, SOAP and Muon, gets its own grid of learning rates, a factor "
-            "of two apart, widened until its best is inside: a method can look bad just from the wrong rate. "
+            "of two apart: six initial rates, with up to three edge extensions. A method can look bad from the wrong rate. "
             "<bookmark mark='c'/> The best runs again from two more seeds, so we can see what is luck."
         ) as vo:
             self.play(lag([FadeIn(n_, shift=RIGHT * 0.1) for n_ in names], lag_ratio=0.1), Create(axis), FadeIn(ticks),
@@ -112,7 +112,7 @@ class Race(VoiceoverScene):
         n_lr = max(len(r[f"lrs_{o}"]) for o in opts)
         g = bits_axes([0, n_lr - 1], [lo, hi], x_length=6.6, y_length=4.4, center=[-2.8, -0.4, 0], x_step=1,
                       xlabel=r"learning rate, \ in steps of $\times 2$ from each grid's smallest",
-                      ylabel=r"held-out bits after $3{,}000$ steps, \ seed $0$", y_step=round((hi - lo) / 4, 1) or 0.1,
+                      ylabel=r"full validation slice: \ bits after $3{,}000$ steps, \ seed $0$", y_step=round((hi - lo) / 4, 1) or 0.1,
                       xfmt=lambda v: rf"\times{2 ** int(v)}", yfmt=lambda v: f"{v:.2f}")
         ax = g.ax
         lines, best_dots = VGroup(), VGroup()
@@ -132,9 +132,9 @@ class Race(VoiceoverScene):
         etxt = (f" One caution: {SAY[edges[0]]}'s best rate is at the end of its grid, so it might do a little better "
                 "still." if len(edges) == 1 else
                 (f" One caution: {len(edges)} of them have their best rate at the end of the grid." if edges else
-                 " Every best rate is inside its grid, so the grids were wide enough."))
+                 " Every best rate tried is inside its tested grid."))
         with self.voiceover(
-            "First the learning-rate sweeps. <bookmark mark='a'/> Each optimizer's held-out loss against its "
+            "First the learning-rate sweeps. <bookmark mark='a'/> Each optimizer's final loss on the full validation slice against its "
             "learning rates: too small and it crawls, too large and it overshoots, and in between a valley. "
             "<bookmark mark='b'/> Its lowest point is the rate it races at." + etxt
         ) as vo:
@@ -151,44 +151,45 @@ class Race(VoiceoverScene):
         r = load("race")
         opts = list(r["opts"])
         cur = {o: np.asarray(r[f"curves_{o}"], float) for o in opts}  # seed x point x (step, bits)
-        xs = cur[opts[0]][0, :, 0]
+        xs = cur[opts[0]][0, 1:, 0]
         S = float(xs[-1])
-        lo = float(min(np.nanmin(c[:, -1, 1]) for c in cur.values())) - 0.08
-        hi = lo + 1.6
-        g = bits_axes([0, S], [lo, hi], x_length=7.2, y_length=4.6, center=[-2.5, -0.4, 0], x_step=1000,
+        shown = np.concatenate([c[:, 1:, 1].ravel() for c in cur.values()])
+        lo = float(shown.min()) - 0.08
+        hi = max(float(shown.max()) + 0.08, lo + 1.6)
+        g = bits_axes([0, S], [lo, hi], x_length=7.2, y_length=4.6, center=[-2.5, 0.1, 0], x_step=1000,
                       y_step=0.4, yfmt=lambda v: f"{v:.1f}")
         ax = g.ax
         t = ValueTracker(0)
         live, bands = [], VGroup()
         for o in opts:
             c = cur[o]
-            med = np.clip(np.median(c[:, :, 1], 0), lo, hi)
+            med = np.median(c[:, 1:, 1], 0)
             live.append(growing(ax, xs, med, t, OPT_COLORS[o], 3))
-            bands.add(band(ax, xs[1:], np.clip(c[:, 1:, 1].min(0), lo, hi), np.clip(c[:, 1:, 1].max(0), lo, hi),
+            bands.add(band(ax, xs, c[:, 1:, 1].min(0), c[:, 1:, 1].max(0),
                            OPT_COLORS[o], 0.2))
         cnt = step_counter(t, ax.get_corner(UR), DL)
         st = standings(r)
-        rows = VGroup(label(r"held-out bits, \ $3$ seeds: \ mean \ (min--max)", font_size=20, color=GREY_A))
+        rows = VGroup(label(r"full validation slice, \ $3$ seeds: \ mean \ (min--max)", font_size=20, color=GREY_A))
         for o, m, a, b in st:
             rows.add(label(rf"{OPT_NAMES[o]}: \ ${m:.3f}$ \ (${a:.3f}$--${b:.3f}$)", font_size=21, color=OPT_COLORS[o]))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.4, 0.4, 0])
         keep_in_frame(rows)
-        tag = note(r"each at its best rate; \ line: \ median of $3$ seeds; \ band: \ min to max").to_corner(DL, buff=0.2)
+        tag = note(r"curves: first $20{,}000$ validation predictions; \\ median of $3$ seeds; \ band: \ min to max \\ losses shown from step $150$; initial values omitted").to_corner(DL, buff=0.2)
         (w, wm, _, wb), (s2, _, sa, _) = st[0], st[1]
         last = st[-1]
         aw = next(x for x in st if x[0] == "adamw")
         sep = wb < sa  # the winner's worst seed beats the runner-up's best
         if sep:
             verdict = (f"{SAY[w]} wins, at {wm:.3f} bits, and its worst seed beats {SAY[s2]}'s best: the difference is "
-                       "bigger than the luck of the seeds.")
+                       "visible in the two observed three-seed ranges: they do not overlap.")
         else:
             verdict = (f"{SAY[w]} is ahead on average, at {wm:.3f} bits, but its seeds overlap with {SAY[s2]}'s: on "
                        "this model the top two are not clearly separated.")
         rel = (f"AdamW, the baseline, finishes {aw[1] - wm:.3f} bits behind the winner. " if w != "adamw" else
                "The baseline, AdamW, is the winner here. ")
         with self.voiceover(
-            "Now the race itself, replayed: each optimizer at its best rate, the line the median of three seeds, "
-            "the band their spread. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + rel
+            "Now the race itself, replayed: curves use the first twenty thousand validation predictions, "
+            "the line the median of three seeds, the band their spread. Final standings use the full validation slice. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + rel
             + f"Last comes {SAY[last[0]]}, at {last[1]:.3f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
@@ -247,21 +248,22 @@ class Race(VoiceoverScene):
         bits = {n: always_redraw(lambda n=n: MathTex(
             rf"{float(np.interp(t.get_value(), steps, bits_at[n])):.2f}\ \text{{bits}}", font_size=22,
             color=OPT_COLORS[n]).next_to(heads[n], DOWN, buff=0.1)) for n in names}
-        prompt = label(r"both continue ``It was a'' \ with the same random draws", font_size=22, color=GREY_A).to_edge(UP, buff=0.25)
+        prompt = label(r"seed $0$ texts at shown steps; \ bits interpolated from the validation curve", font_size=22, color=GREY_A).to_edge(UP, buff=0.25)
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28,
                                             color=WHITE).move_to([4.8, -2.6, 0]))
         cur = {n: place(n, 0) for n in names}
         b0, b1 = bits_at[names[0]], bits_at[names[1]]
         ahead = all(b < a for a, b in zip(b0[1:], b1[1:]))
-        said1 = ("there is punctuation and the rhythm of sentences. It is ahead at every checkpoint."
+        said1 = ("its interpolated loss is lower at every shown trained checkpoint."
             if ahead else
-            "there is punctuation and the rhythm of sentences.")
+            "compare the sampled continuations at these checkpoints.")
         with self.voiceover(
-            f"What do these numbers read like? Here SGD with momentum and the winner, {SAY[names[1]]}, continue the "
-            "same three words with the same random draws, at checkpoints of their runs. <bookmark mark='a'/> Before "
-            f"training, every character is equally likely, {b0[0]:.1f} bits each: noise from the whole alphabet. "
-            f"<bookmark mark='b'/> After {steps[1]} steps, spaces and short words. <bookmark mark='c'/> By step "
-            f"{steps[3]:,}, most of it is word-shaped, <bookmark mark='d'/> and by the end, at {b1[-1]:.2f} bits for "
+            f"What do these numbers read like? Here SGD with momentum and the best non-SGD comparison, {SAY[names[1]]}, continue the "
+            "same three words with the same sampling seed, at checkpoints of their seed-zero runs. The displayed bits "
+            "are interpolated from the twenty-thousand-prediction validation curve. <bookmark mark='a'/> Before "
+            f"training, the random model scores {b0[0]:.1f} bits per character: noise from the whole alphabet. "
+            f"<bookmark mark='b'/> Here is its text after {steps[1]} steps. <bookmark mark='c'/> Here it is at step "
+            f"{steps[3]:,}. <bookmark mark='d'/> And by the end, at {b1[-1]:.2f} bits for "
             f"{SAY[names[1]]}, " + said1
         ) as vo:
             self.play(FadeIn(prompt), *[FadeIn(h) for h in heads.values()], *[FadeIn(cur[n][0]) for n in names])
@@ -297,15 +299,17 @@ class Race(VoiceoverScene):
             nm = r"SGD $+$ \\ momentum" if o == "sgdm" else OPT_NAMES[o]
             labs.add(VGroup(label(nm, font_size=18, color=OPT_COLORS[o]).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.12),
                             label(rf"${ms[o] / base:.1f}\times$", font_size=20, color=WHITE).next_to(b, UP, buff=0.08)))
-        yn = label(r"time per training step, \ relative to AdamW", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.4).align_to(ax, LEFT)
-        caveat = label(r"one CPU thread, \ shared with other jobs; \ a tiny model, \ where the extra matrix work is a big "
-                       r"share. \\ On GPUs, \ at scale, \ Muon's extra arithmetic is estimated at under $1\%$.", font_size=20,
+        yn = label(r"mean loop time per step, \ $3$ seeds; \ relative to AdamW", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.4).align_to(ax, LEFT)
+        caveat = label(r"includes validation and $4$ text samples of $72$ characters; \\ "
+                       r"initial/final evaluation excluded; \ one shared CPU thread. \\ "
+                       r"At scale on GPUs, \ Muon's extra arithmetic is estimated at under $1\%$.", font_size=20,
                        color=GREY_B).to_edge(DOWN, buff=0.35)
         mu, sh = ms["muon"] / base, ms["shampoo"] / base
         with self.voiceover(
-            "Steps are not free, though. <bookmark mark='a'/> Here is the time each optimizer took per step, "
+            "Steps are not free, though. <bookmark mark='a'/> Here is each optimizer's mean timed-loop wall time per step across three seeds, "
             f"relative to AdamW, on this computer: Muon {mu:.1f} times, Shampoo {sh:.1f} times. "
-            "<bookmark mark='b'/> Take that with care: one shared processor thread, and a model so small that the "
+            "<bookmark mark='b'/> This includes periodic validation and four seventy-two-character samples, "
+            "excluding initial and final evaluation. Take that with care: one shared processor thread, and a model so small that the "
             "extra matrix work is a large share of each step. For large language models on GPUs, Muon's author "
             "estimates its extra arithmetic at under one percent, and AlgoPerf scores optimizers by wall-clock time for exactly this reason."
         ) as vo:

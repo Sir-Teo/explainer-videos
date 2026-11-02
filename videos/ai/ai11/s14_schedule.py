@@ -11,6 +11,8 @@ from videos.ai.ai11.common import PART, SCHED_COLORS, bits_axes, growing, lag, l
 CON, COS, WSD, SMALL = SCHED_COLORS["constant"], SCHED_COLORS["cosine"], SCHED_COLORS["wsd"], SCHED_COLORS["small"]
 NAMES = {"constant": r"constant", "cosine": r"cosine", "wsd": r"warmup--stable--decay", "small": r"constant, \ $\eta/5$"}
 SAYK = {"constant": "constant", "cosine": "cosine", "wsd": "warmup–stable–decay", "small": "small constant"}
+RIVER_NAMES = {**NAMES, "wsd": r"stable--decay (no warmup)"}
+RIVER_SAY = {**SAYK, "wsd": "stable–decay without warmup"}
 
 
 class Schedule(VoiceoverScene):
@@ -39,7 +41,7 @@ class Schedule(VoiceoverScene):
         xl = label(r"step", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.12)
         lg = VGroup(*[label(NAMES[k], font_size=22, color=SCHED_COLORS[k]) for k in ("constant", "cosine", "wsd")])
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.6, 1.6, 0])
-        ramp = SurroundingRectangle(Line(ax.c2p(0, 0), ax.c2p(WARMUP * 4, 1.05)), color=WHITE, buff=0.06, corner_radius=0.05,
+        ramp = SurroundingRectangle(Line(ax.c2p(0, 0), ax.c2p(WARMUP, 1.05)), color=WHITE, buff=0.06, corner_radius=0.05,
                                     stroke_width=1.5)
         warm = definition_card(r"warmup", r"the first steps, \ tiny and growing: \ the weights are random, \ Adam's "
                                r"running sizes are not yet known, \ and the early landscape is sharp", width=5.6,
@@ -49,7 +51,7 @@ class Schedule(VoiceoverScene):
         with self.voiceover(
             "Chapter three's lesson was that a constant step ends in a cloud, and only a shrinking step settles. So "
             "real runs change the learning rate as they go. <bookmark mark='a'/> Almost all begin with a warmup: a "
-            "few hundred tiny, growing steps, while the weights are random, Adam's running sizes are still unknown, "
+            "short ramp, sixty tiny, growing steps here, while the weights are random, Adam's running sizes are still unknown, "
             "and, as Chapter five showed, the landscape is sharp. <bookmark mark='b'/> For years the standard was a "
             "cosine, from Ilya Loshchilov and Frank Hutter in 2016: glide smoothly from the peak to zero. "
             "<bookmark mark='c'/> The newer standard holds the rate flat for most of the run and decays it only at "
@@ -86,7 +88,7 @@ class Schedule(VoiceoverScene):
         ps = VMobject(color=SMALL, stroke_width=2.5).set_points_as_corners([ax.c2p(*p) for p in np.asarray(r["path_small"])])
         lg = VGroup(label(rf"constant, \ $\eta = {float(r['eta0']):g}$", font_size=22, color=CON),
                     label(r"constant, \ $\eta/5$", font_size=22, color=SMALL),
-                    label(r"warmup--stable--decay", font_size=22, color=WSD)).arrange(RIGHT, buff=0.7).to_edge(UP, buff=0.35)
+                    label(RIVER_NAMES["wsd"], font_size=22, color=WSD)).arrange(RIGHT, buff=0.7).to_edge(UP, buff=0.35)
         tag = note(rf"a toy: \ $L = R(x) + \tfrac{{{A:g}}}{{2}}\,(y - c(x))^2$, \ every gradient noisy; \ one run of "
                    rf"${int(r['T'])}$ steps each; \ computed")
         cite_ = cite(r"K.~Wen, Z.~Li, J.~Wang, D.~Hall, P.~Liang \& T.~Ma, \textit{A River Valley Loss Landscape "
@@ -96,7 +98,7 @@ class Schedule(VoiceoverScene):
             "Stanford offered a picture: a river valley. <bookmark mark='a'/> The loss has a valley floor, a river, "
             "that descends slowly, and steep hills on either side. <bookmark mark='b'/> With a large constant step, "
             "the noise throws the walker up the hills, but it travels fast down the river. <bookmark mark='c'/> With "
-            "a small step it stays near the floor, but crawls. <bookmark mark='d'/> Warmup, stable, decay gets both: "
+            "a small step it stays near the floor, but crawls. <bookmark mark='d'/> This WSD-style toy omits warmup: "
             "it travels down the river at the high rate, then drops onto the floor at the end."
         ) as vo:
             tag.next_to(lg, DOWN, buff=0.12)
@@ -133,27 +135,28 @@ class Schedule(VoiceoverScene):
             rb = Rectangle(width=max(0.01, 3.6 * b / mx), height=0.38, stroke_width=0, fill_color=GREY_B, fill_opacity=0.9)
             ra.move_to([2.4 + ra.width / 2, y, 0])
             rb.next_to(ra, RIGHT, buff=0)
-            nm = label(NAMES[k], font_size=20, color=SCHED_COLORS[k]).next_to(ra, UP, buff=0.06).align_to(ra, LEFT)
+            nm = label(RIVER_NAMES[k], font_size=20, color=SCHED_COLORS[k]).next_to(ra, UP, buff=0.06).align_to(ra, LEFT)
             bars.add(VGroup(ra, rb, nm))
         bl = VGroup(label(r"river (left), \ hill (right): \ the final loss", font_size=20, color=GREY_A))
         bl.next_to(bars, UP, buff=0.25).align_to(bars, LEFT)
         hp = float(r["hill_pred"])
         hc = float(np.asarray(r["hill_constant"])[-100:].mean())
         best = min(kinds, key=lambda k: sum(fin[k]))
-        pred = label(rf"constant: \ hill loss ${hc:.3f}$; \ predicted $\frac{{\eta\sigma^2}}{{4}} \big/ (1 - \frac{{\eta A}}{{2}}) = {hp:.3f}$",
+        pred = label(rf"constant: \ mean hill ${hc:.3f}$; \ fixed-x linear reference $\frac{{\eta\sigma^2}}{{4}} \big/ (1 - \frac{{\eta A}}{{2}}) = {hp:.3f}$",
                      font_size=20, color=GREY_A).next_to(bars, DOWN, buff=0.35).align_to(bars, LEFT)
         keep_in_frame(pred)
-        said1 = (f"warmup–stable–decay has the lowest total loss: it has come as far down the river as the constant "
-            "rate, and its hill part has collapsed. "
+        said1 = (f"stable–decay without warmup has the lowest total loss here; the split shows its final river and hill "
+            "contributions. "
             if best == "wsd" else
-            f"the lowest total belongs to the {SAYK[best]} schedule. ")
+            f"the lowest total belongs to the {RIVER_SAY[best]} schedule. ")
         with self.voiceover(
-            "Split the loss into its two parts. <bookmark mark='a'/> At a constant rate, the hill part settles at a "
-            f"level set by the step: {hc:.3f}, against {hp:.3f} predicted from Chapter four's stationary cloud. "
-            "<bookmark mark='b'/> The river part is where the real progress is, and only a large step makes it fast. "
+            "Split the loss into its two parts. <bookmark mark='a'/> At a constant rate, the last hundred steps have "
+            f"mean hill loss {hc:.3f}. A fixed-x linear hill reference gives {hp:.3f}; this bent valley "
+            "also has noisy, coupled motion along x. <bookmark mark='b'/> The river part measures progress along "
+            "the valley; here the larger rate moves faster. "
             "<bookmark mark='c'/> At the end, "
             + said1
-            + "The decay doesn't find a better place; it removes the noise that hid how good the place already was."
+            + "Decay can reduce transverse noise while also changing progress along the river; it need not preserve the same trajectory."
         ) as vo:
             self.play(FadeIn(g1), *[Create(l_) for l_ in lines.values()], run_time=2)
             vo.wait_until("a")
@@ -171,28 +174,33 @@ class Schedule(VoiceoverScene):
         Ls = list(s["lengths"])
         seeds = list(s["seeds"])
         const = np.asarray(s[f"const_{seeds[0]}"])
-        allv = [const[const[:, 0] >= 500, 1]] + [np.asarray(s[f"cos_{S}_{seeds[0]}"])[5:, 1] for S in Ls]
+        sel = lambda c: c[c[:, 0] >= 500]  # noqa: E731
+        branches = {}
+        for S in Ls:
+            b = np.asarray(s[f"wsdcurve_{S}_{seeds[0]}"])
+            k0 = int(0.8 * S)
+            start = (k0, float(np.interp(k0, const[:, 0], const[:, 1])))
+            branches[S] = [start] + [tuple(p) for p in b]
+        allv = ([sel(const)[:, 1]] + [sel(np.asarray(s[f"cos_{S}_{seeds[0]}"]))[:, 1] for S in Ls]
+                + [np.asarray(pts)[:, 1] for pts in branches.values()])
         lo = float(min(v.min() for v in allv)) - 0.03
         hi = float(max(v.max() for v in allv)) + 0.03
         g = bits_axes([0, max(Ls)], [lo, hi], x_length=7.4, y_length=4.4, center=[-2.4, -0.4, 0], x_step=1000,
                       y_step=round((hi - lo) / 4, 2), yfmt=lambda v: f"{v:.2f}")
         ax = g.ax
         t = ValueTracker(0)
-        cl = np.clip(const[:, 1], lo, hi)
-        live = [growing(ax, const[:, 0], cl, t, CON, 2.5)]
+        cl = sel(const)
+        live = [growing(ax, cl[:, 0], cl[:, 1], t, CON, 2.5)]
         for S in Ls:
-            c = np.asarray(s[f"cos_{S}_{seeds[0]}"])
-            live.append(growing(ax, c[:, 0], np.clip(c[:, 1], lo, hi), t, COS, 2.5))
+            c = sel(np.asarray(s[f"cos_{S}_{seeds[0]}"]))
+            live.append(growing(ax, c[:, 0], c[:, 1], t, COS, 2.5))
         brs = VGroup()
         for S in Ls:
-            b = np.asarray(s[f"wsdcurve_{S}_{seeds[0]}"])
-            k0 = int(0.8 * S)
-            start = (k0, float(np.interp(k0, const[:, 0], const[:, 1])))
-            pts = [start] + [tuple(p) for p in b]
-            brs.add(VMobject(color=WSD, stroke_width=3.5).set_points_as_corners([ax.c2p(x, min(max(y, lo), hi)) for x, y in pts]))
+            pts = branches[S]
+            brs.add(VMobject(color=WSD, stroke_width=3.5).set_points_as_corners([ax.c2p(x, y) for x, y in pts]))
         cnt = step_counter(t, ax.get_corner(UR), DL)
         mean = lambda key: float(np.mean([s[f"{key}_{sd}"] for sd in seeds]))  # noqa: E731
-        rows = VGroup(label(r"held-out bits at the end, \ mean of $2$ seeds", font_size=20, color=GREY_A))
+        rows = VGroup(label(r"$100{,}000$-character held-out split; mean of $2$ seeds", font_size=20, color=GREY_A))
         for S in Ls:
             cf, wf = mean(f"cosfinal_{S}"), mean(f"wsdfinal_{S}")
             rows.add(label(rf"${S:,}$ steps: \ cosine ${cf:.3f}$, \ WSD ${wf:.3f}$".replace(",", "{,}"), font_size=21,
@@ -204,12 +212,13 @@ class Schedule(VoiceoverScene):
         lg = VGroup(label(r"one constant run", font_size=20, color=CON), label(r"three cosine runs", font_size=20, color=COS),
                     label(r"its three cool-down branches", font_size=20, color=WSD)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         lg.next_to(rows, DOWN, buff=0.4).align_to(rows, LEFT)
-        tag = note(rf"AdamW at the race's best rate, \ $\eta = {float(s['lr']):g}$; \ seed $0$ drawn").to_corner(DL, buff=0.2)
+        tag = note(rf"AdamW, \ $\eta = {float(s['lr']):g}$; \ curves: seed $0$, first $20{{,}}000$ held-out predictions \\ losses shown from step $500$; earlier values omitted").to_corner(DL, buff=0.2)
         diffs = [mean(f"wsdfinal_{S}") - mean(f"cosfinal_{S}") for S in Ls]
         spread = max(abs(float(s[f"cosfinal_{S}_{seeds[0]}"]) - float(s[f"cosfinal_{S}_{seeds[1]}"])) for S in Ls)
         if all(abs(d) <= max(spread, 0.005) for d in diffs):
             verdict = ("at every length the cool-down branch matches the cosine run trained for exactly that long, to "
-                       "within the difference between seeds.")
+                       "within our comparison tolerance: the larger of zero point zero zero five bits and the largest "
+                       "observed cosine seed spread across these lengths.")
         elif all(d < 0 for d in diffs):
             verdict = "at every length the cool-down branch beats the cosine run trained for exactly that long."
         elif all(d > 0 for d in diffs):
@@ -226,8 +235,9 @@ class Schedule(VoiceoverScene):
             "fifths of each length to cool down. <bookmark mark='a'/> The constant run plateaus. Each branch drops "
             f"sharply as its rate falls: at the end, by {drop:.2f} bits below the constant run. "
             f"<bookmark mark='b'/> The verdict: {verdict} "
-            "<bookmark mark='c'/> And one constant run gave all three. That is why scaling-law studies like part "
-            "twelve's use it: a whole family of finished models for the price of one run."
+            "<bookmark mark='c'/> One shared constant-rate trunk plus short cool-down branches gave all three. "
+            "Here that costs five thousand four hundred training updates per seed, instead of seven thousand for "
+            "three independent runs, plus evaluation overhead."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), FadeIn(tag))
             self.add(*live, cnt)

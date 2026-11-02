@@ -1,5 +1,26 @@
 # AI, Built — Part 11: Going Downhill
 
+## Source-only QA handoff
+
+This branch carries reviewed scene, mathematical wording, translation and replay/layout repairs.
+It excludes scientific producer changes, datasets, numerical caches, weights and private QA artifacts.
+The original `compute.py`, `charopt.py` and `nets.py` are unchanged. In particular, source/layout repairs
+do not correct the original SOAP basis/state implementation or certify its historical rankings.
+
+Scene loading is cache-only: missing or incompatible inputs must stop rather than launch training.
+For the other products, structural readability is not recipe or input-provenance certification;
+the integration owner must verify that provenance separately before accepting their rendered use.
+The `race`, `ns` and `schedule` products are deliberately unavailable through scene loading in this
+source-only tree. Their corrected producer and numerical provenance need separate review and integration;
+placing a legacy cache under one of those names is insufficient. Dependent chapters, including the recap,
+therefore cannot be accepted as rendered output from this public tree.
+
+The acceptance here is the outgoing source/tests and narrow shared-caption compatibility. Prior selected
+visual checks used separately retained inputs and exact source versions; they are not public-tree render
+acceptance. Continuous playback, actual listening, speech synchronization and final 4K remain pending.
+Only the designated integration owner should reconcile shared captions and cross-part scientific recipes
+before rendering. The computed-result paragraphs below remain historical records, not newly certified runs.
+
 Part 11 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)
 and [the syllabus](../SYLLABUS.md)): the optimizers that train real models, from Cauchy's steepest descent (1847) to
 Muon in production (2026). Gradient descent's rates derived and checked on quadratics; momentum and acceleration;
@@ -55,8 +76,9 @@ About 57 minutes: a hook, sixteen chapters and an outro (56.6 min in the silent 
 * **8. The natural gradient and K-FAC.** Gradient descent depends on how the weights are written (two
   parametrizations of the same loss); steepest descent under a ruler M; the Fisher and the natural gradient (Amari
   1998), shown invariant on the two-weight loss; K-FAC's Kronecker factors derived (Martens & Grosse 2015); gradient
-  descent, Adam, K-FAC and the exact natural gradient on the spirals (a 2–24–24–2 network, the best of 5 rates each,
-  3 seeds), with the decision maps replayed.
+  descent, Adam, damped K-FAC (sampled model-label factors) and a damped full-Fisher natural gradient on the spirals
+  (a 2–24–24–2 network, the best of 5 rates each, 3 seeds), with a sample-space Woodbury solve for the natural
+  direction and the decision maps replayed.
 * **9. Shampoo and SOAP.** Full-matrix AdaGrad and Shampoo's two factors (Gupta, Koren & Singer 2018); Shampoo without
   memory is UVᵀ (Bernstein & Newhouse 2024); why it took years (roots, damping, grafting); AlgoPerf 2024 (Distributed
   Shampoo ≈ 28% faster than the baseline; Kasimbeg et al. 2025); SOAP, Adam in Shampoo's eigenbasis (Vyas et al. 2024).
@@ -67,10 +89,12 @@ About 57 minutes: a hook, sixteen chapters and an outro (56.6 min in the silent 
 * **11. Newton–Schulz.** One round is a polynomial on every singular value, derived; the classical cubic, Jordan's
   quintic (3.4445, −4.7750, 2.0315) and (2, −1.5, 0.5); the real gradient's 256 singular values round by round, a
   cobweb for one of them; the scalar polynomial against the matrix iteration; DeepSeek-V4's hybrid (8 + 2 rounds) on
-  the gradient and on the trained weight matrix; the Polar Express (Amsel et al. 2025).
+  the gradient and on the trained weight matrix; band and worst-distance summaries use the current largest n,
+  with n fixed by the initial count above 1% of the initial largest value, rather than tracking the same initial directions or
+  reporting full-spectrum worst error; the Polar Express (Amsel et al. 2025).
 * **12. The race, run fairly.** SGD with momentum, AdamW, Lion, Shampoo, SOAP and Muon on the character model: the
-  same data order, 3,000 steps, warmup and cosine for all; 6 learning rates each (seed 0), the best rerun from 2 more
-  seeds; the sweeps, the race replayed with its spread, what the models write at checkpoints, and the time per step.
+  same data order, 3,000 steps, warmup and cosine for all; 6 initial learning rates each (seed 0), up to 3
+  factor-two edge extensions per optimizer, the selected rate rerun from 2 more seeds; the sweeps, the race replayed with its spread, what the models write at checkpoints, and the time per step.
 * **13. Schedules and the river valley.** Warmup (Goyal et al. 2017; Kalra & Barkeshli 2024), cosine (Loshchilov &
   Hutter 2016), warmup–stable–decay (Zhai et al. 2022; Hu et al. 2024); the river valley (Wen et al. 2024) as a
   computed toy with constant, small constant, cosine and WSD schedules (20 seeds), the loss split into river and hill
@@ -89,24 +113,54 @@ About 57 minutes: a hook, sixteen chapters and an outro (56.6 min in the silent 
   budgets, several seeds.
 * **Recap, problems, and what comes next** (Part 12, *The Mathematics of Scale*), references.
 
-## Run
+## Source checks
 
 From the repo root:
 
 ```
-python -m videos.ai.ai11.compute          # all computed results (Part 1's books, Part 6's pages, Part 9's spirals)
-python tools/build.py ai11                # English
-python tools/build.py ai11 --lang zh      # Chinese
-python tools/make.py ai11                 # both, end to end, resuming wherever it stopped
+python -m unittest discover -s tests -p 'test_ai11*.py' -v
+python -m unittest discover -s tests -p 'test_text_tables.py' -v
 ```
 
-`compute.py` takes about 2.5 CPU-hours on one thread (the race about an hour, the weight-decay grid and the schedules
-about 15 minutes each). Every run is seeded; the long items save each finished run (`CACHE.partial`) and resume;
+These source checks use extracted code and explicitly synthetic fixtures; they do not train models, produce
+scientific outcomes, render video or synthesize narration. The original generation and build commands are not
+acceptance steps for this source-only tree. In particular, an end-to-end build can explicitly invoke the
+unchanged original producers; it must not be used to bypass the scene-loader gate or imply corrected science.
+
+The historical `compute.py` estimate was about 2.5 CPU-hours on one thread (the race about an hour, the
+weight-decay grid and the schedules about 15 minutes each). Every run is seeded; the long items save each
+finished run (`CACHE.partial`) and resume;
 `AI11_WORKERS=4` runs their pieces in four processes (`spawn`), `AI11_THREADS` sets torch's threads per process
 (default 1). Nothing sets torch's thread count at import time.
 
+### Race protocol and metric domains
+
+A fresh six-optimizer race schedules 48–66 runs (144,000–198,000 requested updates), including
+six initial seed-0 rates, up to three edge extensions, and two additional selected-rate seeds per optimizer.
+An edge optimum can remain after the cap; rates are the best tried, not guaranteed global optima.
+The inherited runtime estimate above is not a bound for a separately corrected producer.
+
+Curves score the first 20,000 validation predictions (requiring 20,008 characters); tuning and final standings
+use the full 100,000-character validation slice, which has 99,992 scored predictions after the eight-character
+context. Final standings show the mean and observed min–max across three seeds, not a significance interval.
+Text is sampled from seed 0 at the shown steps. Its adjacent bits are interpolated from the validation curve:
+step 100 lies between evaluations 0/150, and step 1,000 between 900/1,050.
+
+Each timing bar is the optimizer's mean per-step loop time across its three selected-rate seeds divided by
+AdamW's corresponding mean, not a mean of paired ratios. Time per step is amortized timed-loop wall time,
+including 20 periodic prefix validations and four
+72-character continuations in a completed 3,000-step run; initial evaluation/writing and final full-slice
+evaluation are excluded. It is not optimizer-kernel timing. Runs share initialization and batches within each
+seed; text sampling uses its own fixed Torch generator and does not consume the training-batch RNG.
+The historical results below retain their original provenance; no corrected race cache is supplied by this note.
+
 <!-- results -->
 ## Computed results
+
+These numerical paragraphs are inherited records from the video-making source. Their numbers and rankings are
+retained; they are not certified here as fresh runs or recovered outcome artifacts. The legacy SOAP ranking does
+not validate a corrected SOAP implementation: the separately reviewed basis/state correction is isolated, and
+its synthetic checks do not establish full reference-optimizer equivalence or corrected training performance.
 
 *(from `.cache/ai11/` on the machine that made the video; the narration branches on whichever way they come out.)*
 
@@ -115,13 +169,13 @@ Numbers from the run that made the video (Linux, one thread, a shared machine):
 * **Racing downhill.** Rosenbrock's valley (b = 5) from (−1.5, 2.2), 150 steps, the best of 25 rates each: Adam
   (η = 0.68) under 0.01 after 30 steps, the heavy ball (0.0147) after 41, Lion (0.032) after 122, gradient descent
   (0.032) after 141.
-* **Gradient descent.** Steps to a millionth of the starting error for κ = 1 … 1,000 in 50 dimensions: 1, 14, 46,
-  126, 373, 978, 2,745 (slope 0.89 on log axes; 1.01 with η = 2/(L + μ)); the late contraction per step at κ = 1,000:
+* **Gradient descent.** Steps to a millionth of the starting objective gap for κ = 1 … 1,000 in 50 dimensions: 1, 14, 46,
+  126, 373, 978, 2,745 (slope 0.89 on log axes; 1.01 with η = 2/(L + μ)); the late geometric-mean √(f − f*) ratio at κ = 1,000:
   0.9990 measured, 0.9990 derived. On the convex quadratic (curvatures 1/i², 1,000 dimensions) the gap stays under
   L‖x₀ − x*‖²/2k at every one of 2,000 steps.
 * **Momentum.** At κ = 1,000: 187 steps for the heavy ball and 142 for Nesterov against 2,745 (slopes 0.58 and 0.46);
-  late contraction 0.9418 (derived 0.9387) and 0.9702 (derived 0.9684). On the convex quadratic Nesterov ends 118
-  times closer than gradient descent and stays under 2L‖x₀ − x*‖²/(k + 1)².
+  late geometric-mean √(f − f*) ratios 0.9418 (root modulus 0.9387) and 0.9702 (root modulus 0.9684). On the convex
+  quadratic Nesterov ends with a gap 118 times smaller than gradient descent's and stays under 2L‖x₀ − x*‖²/(k + 1)².
 * **SGD.** Part 6's 448 training pages: the stationary cloud's RMS distance 0.49 at batch 1 and 0.13 at batch 16
   (3.8 times narrower). One page per step for 20,000 steps (5 seeds): the squared distance stalls at 0.33 with a
   constant step and reaches 0.00025 with η₀/(1 + k/100).
@@ -129,13 +183,14 @@ Numbers from the run that made the video (Linux, one thread, a shared machine):
   over the discrete-Lyapunov prediction 0.93 … 1.14; tr(H⁻¹C) = 1.90.
 * **Edge of stability.** η = 0.05: the sharpness first passes 90% of 2/η = 40 at step 1,520; second-half median 39.7,
   maximum 42.6. η = 0.1: at step 280; median 19.9 (2/η = 20), maximum 20.1.
-* **Adam.** Without bias correction the first step would be 3.16η; with it, 99.99% of the weights move by exactly η
+* **Adam.** Without bias correction the first step would be 3.16η; with it, 99.99% of the weights move by more than 0.9η
   at step 1; the median move is 0.13η at step 100 and 0.16η at step 1,000.
 * **Natural gradient.** The 2–24–24–2 network (722 weights), 300 full-batch steps, the best of 5 rates, 3 seeds:
   median training loss after 100 steps 0.00013 (natural gradient, η = 0.3), 0.014 (Adam, 0.1), 0.045 (K-FAC, 0.1),
   4.2 (gradient descent, 3.0, still unstable then); at 300 steps 0.0, 0.0071, 0.0060 and 0.0080. The two
   parametrizations' natural-gradient paths differ by 2 × 10⁻¹⁶; gradient descent's by 4.4.
-* **Spikes.** One-layer transformer, 2,000 steps, 2 seeds (held-out bits / largest score): Muon η = 0.03: 2.86, 2.88
+* **Spikes.** One-layer transformer, 2,000 steps, 2 seeds (held-out bits / largest recorded pre-update forward score,
+  sampled every 10 steps): Muon η = 0.03: 2.86, 2.88
   / 883, 1,152; η = 0.12: 2.97, 3.16 / 25,703, 24,233; η = 0.12 with QK-clip τ = 100: 2.88, 2.92 / 146, 139. AdamW
   η = 0.05: 3.69, 3.82 / 179,276, 230,454; with gradient clipping at 1: 2.89, 3.61 (one seed rescued); with QK-clip:
   2.96, 3.39.
@@ -154,7 +209,8 @@ Numbers from the run that made the video (Linux, one thread, a shared machine):
 * **Schedules.** AdamW at the race's best rate (0.008), 2 seeds, held-out bits on all 100,000 characters: cosine runs
   of 1,000, 2,000 and 4,000 steps 2.629, 2.502, 2.414; the constant run's cool-down branches (the last fifth decayed
   linearly to zero) 2.665, 2.566, 2.491; the constant run without decay 2.674 at 4,000. Here the cosine wins at every
-  length, by 0.04–0.08 bits, and the narration says so.
+  length, by 0.04–0.08 bits, and the narration says so. The shared 4,000-step trunk plus its three cooldowns
+  require 5,400 updates per seed, versus 7,000 for three independent runs, excluding evaluation overhead.
 * **River valley.** The toy (A = 4, σ = 1, η₀ = 0.25, 400 steps, 20 seeds): final loss 0.211 constant, 0.194 small
   constant, 0.036 cosine, 0.024 WSD; the constant rate's hill loss 0.128 against 0.125 predicted.
 * **Averaging and schedule-free.** An EMA (β = 0.998) of the constant run's weights at step 4,000: 2.510 and 2.459
@@ -241,15 +297,19 @@ y = x − ∇f(x)/L: f(y) ≤ f(x) − ‖∇f‖²/L + ‖∇f‖²/2L = f(x) �
 Polyak–Łojasiewicz inequality ‖∇f‖² ≥ 2μ(f(x) − f*): f(y) − f* ≤ (f(x) − f*) − (μ/L)(f(x) − f*) = (1 − μ/L)(f(x) − f*).
 Induction on k gives the claim. (μ-strong convexity implies the inequality: minimize its lower bowl over y.)
 
-**2. The heavy ball, tuned.** On f = (λ/2)x², x_{k+1} = (1 + β − ηλ)x_k − βx_{k−1}. Show that complex roots of
-z² − (1 + β − ηλ)z + β have modulus √β, and find η, β that make the roots complex for all λ ∈ [μ, L]. How many steps
-for κ = 10⁴ (f reduced 10⁶-fold), against gradient descent with η = 1/L?
+**2. The heavy ball, tuned.** On f = (λ/2)x², x_{k+1} = (1 + β − ηλ)x_k − βx_{k−1}. Show that nonreal roots of
+z² − (1 + β − ηλ)z + β have modulus √β. Find η, β putting all λ ∈ [μ, L] in this equal-modulus regime, allowing
+repeated real roots at its endpoints. Estimate the steps from the dominant root factors for κ = 10⁴ and a 10⁶-fold
+objective-gap reduction, against gradient descent with η = 1/L. Explain the limitation of this estimate.
 
-*Solution.* The product of the two roots is β; complex roots are conjugate, so |z|² = z z̄ = β. They are complex when
-(1 + β − ηλ)² ≤ 4β, that is (1 − √β)² ≤ ηλ ≤ (1 + √β)². Put the ends of [μ, L] on the boundary: ημ = (1 − √β)²,
-ηL = (1 + √β)². Dividing, √κ = (1 + √β)/(1 − √β), so √β = (√κ − 1)/(√κ + 1) and η = 4/(√L + √μ)². For κ = 10⁴,
-√β = 99/101 and f shrinks by β per step: k ≈ ln 10⁶ / (−2 ln(99/101)) ≈ 345. Gradient descent shrinks the slowest
-error by 1 − 10⁻⁴ per step: k ≈ ln 10⁶ / (2 × 10⁻⁴) ≈ 69,000, two hundred times more.
+*Solution.* The product of the two roots is β; nonreal roots are conjugate, so |z|² = z z̄ = β. They are nonreal when
+(1 + β − ηλ)² < 4β, with the same modulus at equality. The equal-modulus regime is
+(1 − √β)² ≤ ηλ ≤ (1 + √β)². Put ημ = (1 − √β)² and ηL = (1 + √β)². Dividing gives
+√β = (√κ − 1)/(√κ + 1) and η = 4/(√L + √μ)². For κ = 10⁴, ρ = √β = 99/101. Ignoring polynomial and initialization
+prefactors, the gap envelope decays like ρ²ᵏ: k ≈ ln 10⁶ / (−2 ln(99/101)) ≈ 345. Repeated endpoint roots can give
+position terms (a + bk)ρᵏ, so this is an asymptotic estimate, not a per-step contraction or guaranteed finite count.
+GD's slowest position mode has factor 1 − 10⁻⁴, giving the gap-reduction estimate
+ln 10⁶ / [−2 ln(1 − 10⁻⁴)] ≈ 69,000, about two hundred times larger.
 
 **3. SGD's stationary variance.** SGD on f = (λ/2)x² with gradient noise of variance σ²/B: show the stationary
 variance is ησ²/(Bλ(2 − ηλ)), and that it depends on η and B only through η/B when ηλ ≪ 1.
@@ -271,18 +331,26 @@ faster from small σ?
 
 *Solution.* p(1) = 3/2 − 1/2 = 1, p′(σ) = 3/2 − (3/2)σ², so p′(1) = 0. Expanding, p(1 − e) = 1 − (3/2)e² + (1/2)e³:
 the new error is (3/2)e² − (1/2)e³, quadratic convergence. For q: q(1) = 2 − 3/2 + 1/2 = 1, q′(σ) = 2 − (9/2)σ² +
-(5/2)σ⁴, q′(1) = 0, q″(σ) = −9σ + 10σ³, q″(1) = 1, so q(1 − e) = 1 + e²/2 + O(e³): the new error has size e²/2,
-c = 1/2 (the value overshoots one slightly), three times better than the cubic. Near zero p(σ) ≈ 1.5σ and q(σ) ≈ 2σ:
+(5/2)σ⁴, q′(1) = 0, q″(σ) = −9σ + 10σ³, q″(1) = 1, so q(1 − e) = 1 + e²/2 + O(e³): the new signed error is
+−e²/2 + O(e³), hence c = −1/2. Its magnitude has leading term e²/2 (the value overshoots one slightly), three times
+smaller than the cubic's leading error. Near zero p(σ) ≈ 1.5σ and q(σ) ≈ 2σ:
 q starts faster, and Jordan's quintic, with slope 3.4445, faster still, at the price of not converging to 1.
 
-**6. Weight decay's equilibrium.** Decoupled decay W_{t+1} = (1 − ηλ)W_t − ηu_t with uₜ ⟂ Wₜ and
-⟨u_t, u_{t+k}⟩ = ‖u‖²β^{|k|}: show E‖W‖² → (η‖u‖²/2λ)(1 + β)/(1 − β) for small ηλ.
+**6. Weight decay's equilibrium, a correlated-update model.** Let W_{t+1} = (1 − ηλ)W_t − ηu_t, with stationary
+zero-mean updates satisfying E⟨u_t, u_{t+k}⟩ = U²β^{|k|}, where U² = E‖u_t‖² and 0 ≤ β < 1. Show the equilibrium
+E‖W‖² ≈ (ηU²/2λ)(1 + β)/(1 − β) when 0 < ηλ ≪ 1 − β. Do not assume uₜ ⟂ Wₜ.
 
-*Solution.* Unrolling, W_t = a^t W_0 − η Σ_{m≥0} a^m u_{t−m} with a = 1 − ηλ; the first term dies out. Then
-E‖W_t‖² → η²‖u‖² Σ_{m,n≥0} a^{m+n} β^{|m−n|} = η²‖u‖² (1 + aβ)/((1 − a²)(1 − aβ)). With a = 1 − ηλ, 1 − a² ≈ 2ηλ and
-(1 + aβ)/(1 − aβ) ≈ (1 + β)/(1 − β), so E‖W‖² ≈ η‖u‖²(1 + β)/(2λ(1 − β)). Adam's update has β = β₁ = 0.9: a factor
-of 19 over uncorrelated steps, which Chapter 15's measurement needs. The norm scales like √(η/λ), and it is reached
-in about 1/(2ηλ) steps.
+*Solution.* With a = 1 − ηλ and |a| < 1, unrolling gives W_t = a^t W_0 − η Σ_{m=0}^{t−1} a^m u_{t−1−m};
+the finite-second-moment initial transient dies out. By the assumed autocorrelation,
+E‖W_t‖² → η²U² Σ_{m,n≥0} a^{m+n} β^{|m−n|} = η²U² (1 + aβ)/((1 − a²)(1 − aβ)).
+When ηλ ≪ 1 − β, use 1 − a² ≈ 2ηλ and (1 + aβ)/(1 − aβ) ≈ (1 + β)/(1 − β) to obtain the stated approximation.
+For fixed U² and β, the RMS norm scales like √(η/λ). Setting β = β₁ = 0.9 gives the model's factor 19; this is an
+approximate correlation model for Chapter 15's AdamW measurements, not a theorem that actual AdamW updates have
+exactly that autocorrelation. No measured values or numerical producers are changed by this correction.
+
+Gradient orthogonality under scale invariance does not imply that a momentum update is orthogonal to the current
+weights; see [Kosson, Messmer & Jaggi (2024), §3.1](https://arxiv.org/html/2305.17212v3#S3.SS1). If exact uₜ ⟂ Wₜ
+were imposed instead, the squared-norm recurrence would give η²U²/(1 − a²), without the correlation multiplier.
 
 ## 习题与解答
 
@@ -293,13 +361,16 @@ in about 1/(2ηλ) steps.
 f(y) ≤ f(x) − ‖∇f‖²/L + ‖∇f‖²/2L = f(x) − ‖∇f‖²/2L。两边减去 f*，再用波利亚克–洛亚谢维奇不等式
 ‖∇f‖² ≥ 2μ(f(x) − f*)：f(y) − f* ≤ (1 − μ/L)(f(x) − f*)。对 k 归纳即得。（μ-强凸蕴含这个不等式：对 y 最小化下方的碗。）
 
-**2. 调好参数的重球法。** 在 f = (λ/2)x² 上，x_{k+1} = (1 + β − ηλ)x_k − βx_{k−1}。证明 z² − (1 + β − ηλ)z + β 的复根模长为
-√β，并求出让所有 λ ∈ [μ, L] 都给出复根的 η、β。κ = 10⁴ 时（f 缩小 10⁶ 倍）要多少步？η = 1/L 的梯度下降呢？
+**2. 调好参数的重球法。** 在 f = (λ/2)x² 上，x_{k+1} = (1 + β − ηλ)x_k − βx_{k−1}。证明 z² − (1 + β − ηλ)z + β 的
+非实根模长为 √β。求出 η、β，使所有 λ ∈ [μ, L] 都处于等模区，允许端点出现实重根。对 κ = 10⁴、目标差距缩小 10⁶ 倍，
+用主导根因子估计步数，并与 η = 1/L 的梯度下降比较。说明这个估计的局限。
 
-*解答。* 两根之积为 β；复根互为共轭，所以 |z|² = z z̄ = β。复根的条件是 (1 + β − ηλ)² ≤ 4β，即
-(1 − √β)² ≤ ηλ ≤ (1 + √β)²。让 [μ, L] 的两端落在边界上：ημ = (1 − √β)²，ηL = (1 + √β)²。相除得
-√κ = (1 + √β)/(1 − √β)，所以 √β = (√κ − 1)/(√κ + 1)，η = 4/(√L + √μ)²。κ = 10⁴ 时 √β = 99/101，f 每步乘以 β：
-k ≈ ln 10⁶ / (−2 ln(99/101)) ≈ 345。梯度下降最慢的误差每步乘以 1 − 10⁻⁴：k ≈ ln 10⁶ / (2 × 10⁻⁴) ≈ 69000，多了两百倍。
+*解答。* 两根之积为 β；非实根互为共轭，所以 |z|² = z z̄ = β。非实根的条件是 (1 + β − ηλ)² < 4β；等号处的实重根也有相同模长。
+等模区为 (1 − √β)² ≤ ηλ ≤ (1 + √β)²。令 ημ = (1 − √β)²，ηL = (1 + √β)²，得到
+√β = (√κ − 1)/(√κ + 1)，η = 4/(√L + √μ)²。κ = 10⁴ 时 ρ = √β = 99/101。忽略多项式与初始化的前置因子，
+差距包络按 ρ²ᵏ 衰减：k ≈ ln 10⁶ / (−2 ln(99/101)) ≈ 345。端点重根可能产生位置项 (a + bk)ρᵏ，所以这是渐近估计，
+不是每步收缩因子，也不是保证达到的有限步数。梯度下降最慢的位置模态因子是 1 − 10⁻⁴，相应的差距缩减估计为
+ln 10⁶ / [−2 ln(1 − 10⁻⁴)] ≈ 69000，约为重球法估计的两百倍。
 
 **3. SGD 的平稳方差。** 在 f = (λ/2)x² 上做 SGD，梯度噪声方差为 σ²/B：证明平稳方差是 ησ²/(Bλ(2 − ηλ))，并说明
 ηλ ≪ 1 时它只通过 η/B 依赖于 η 和 B。
@@ -321,16 +392,24 @@ e ↦ (3/2)e² + O(e³)。对 q(σ) = 2σ − (3/2)σ³ + (1/2)σ⁵，证明 q�
 
 *解答。* p(1) = 3/2 − 1/2 = 1，p′(σ) = 3/2 − (3/2)σ²，所以 p′(1) = 0。展开得 p(1 − e) = 1 − (3/2)e² + (1/2)e³：新的
 误差是 (3/2)e² − (1/2)e³，二次收敛。对 q：q(1) = 1，q′(σ) = 2 − (9/2)σ² + (5/2)σ⁴，q′(1) = 0，q″(σ) = −9σ + 10σ³，
-q″(1) = 1，所以 q(1 − e) = 1 + e²/2 + O(e³)：新误差的大小是 e²/2，c = 1/2（值略微越过1），比三次多项式好三倍。在0附近
+q″(1) = 1，所以 q(1 − e) = 1 + e²/2 + O(e³)：新的有符号误差是 −e²/2 + O(e³)，因此 c = −1/2。
+误差大小的首项是 e²/2（值略微越过1），是三次多项式首项的三分之一。在0附近
 p(σ) ≈ 1.5σ，q(σ) ≈ 2σ：q 起步更快；乔丹的五次多项式斜率是 3.4445，更快，代价是不收敛到1。
 
-**6. 权重衰减的平衡。** 解耦衰减 W_{t+1} = (1 − ηλ)W_t − ηu_t，其中 uₜ ⟂ Wₜ，且 ⟨u_t, u_{t+k}⟩ = ‖u‖²β^{|k|}：证明
-ηλ 很小时 E‖W‖² → (η‖u‖²/2λ)(1 + β)/(1 − β)。
+**6. 权重衰减的平衡：相关更新模型。** 令 W_{t+1} = (1 − ηλ)W_t − ηu_t，更新平稳且均值为零，并满足
+E⟨u_t, u_{t+k}⟩ = U²β^{|k|}，其中 U² = E‖u_t‖²、0 ≤ β < 1。证明 0 < ηλ ≪ 1 − β 时，平衡值
+E‖W‖² ≈ (ηU²/2λ)(1 + β)/(1 − β)。不要假设 uₜ ⟂ Wₜ。
 
-*解答。* 展开得 W_t = a^t W_0 − η Σ_{m≥0} a^m u_{t−m}，a = 1 − ηλ；第一项衰减掉。于是
-E‖W_t‖² → η²‖u‖² Σ_{m,n≥0} a^{m+n} β^{|m−n|} = η²‖u‖² (1 + aβ)/((1 − a²)(1 − aβ))。a = 1 − ηλ 时 1 − a² ≈ 2ηλ，
-(1 + aβ)/(1 − aβ) ≈ (1 + β)/(1 − β)，所以 E‖W‖² ≈ η‖u‖²(1 + β)/(2λ(1 − β))。Adam 的更新 β = β₁ = 0.9：比不相关的
-步子大19倍，第15章的测量正需要这个因子。范数按 √(η/λ) 缩放，大约 1/(2ηλ) 步达到。
+*解答。* 令 a = 1 − ηλ、|a| < 1，展开得 W_t = a^t W_0 − η Σ_{m=0}^{t−1} a^m u_{t−1−m}；初始值二阶矩有限时，
+初始瞬态衰减掉。由假定的自相关，E‖W_t‖² → η²U² Σ_{m,n≥0} a^{m+n} β^{|m−n|}
+= η²U² (1 + aβ)/((1 − a²)(1 − aβ))。ηλ ≪ 1 − β 时，1 − a² ≈ 2ηλ，且
+(1 + aβ)/(1 − aβ) ≈ (1 + β)/(1 − β)，得到所述近似。U²、β 固定时，均方根范数按 √(η/λ) 缩放。
+取 β = β₁ = 0.9，模型给出因子19；这是对第15章 AdamW 测量的近似相关模型，并不证明真实更新恰有这样的自相关。
+这项更正不改变任何测量值或数值计算程序。
+
+尺度不变性下梯度与权重正交，并不意味着动量更新也与当前权重正交，见
+[Kosson、Messmer 与 Jaggi（2024）第3.1节](https://arxiv.org/html/2305.17212v3#S3.SS1)。若另行严格要求 uₜ ⟂ Wₜ，
+范数平方递推会给出 η²U²/(1 − a²)，不带相关性乘数。
 
 ## Glossary (new terms of this part)
 

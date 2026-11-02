@@ -86,7 +86,7 @@ class NewtonSchulz(VoiceoverScene):
             label(r"slope $3.4$ at $0$: \ small values grow fast; \ never settles, \ ends in $[0.7, 1.3]$", font_size=20,
                   color=GREY_A),
             label(r"$2\sigma - 1.5\sigma^3 + 0.5\sigma^5$: \ $p(1) = 1$, \ $p'(1) = 0$", font_size=22, color=HYB),
-            label(r"near $1$ the error goes $e \mapsto e^2/2$, \ against the cubic's $\tfrac32 e^2$; \ slope $2$ at $0$",
+            label(r"$e = 1 - \sigma$: \ $e \mapsto -e^2/2 + O(e^3)$; \ error magnitude $\sim e^2/2$; \ slope $2$ at $0$",
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, 0.4, 0])
         for i in (1, 3, 5):
@@ -99,7 +99,7 @@ class NewtonSchulz(VoiceoverScene):
             "for Muon: slope three point four at zero, so small values grow fast, at the price of never quite "
             "reaching one; everything ends between about zero point seven and one point three, which training "
             "doesn't mind. <bookmark mark='c'/> A third, two sigma minus one and a half sigma cubed plus a half "
-            "sigma to the fifth, also fixes one with zero slope, and near one it squares the error and halves it, "
+            "sigma to the fifth, also fixes one with zero slope, and near one it squares the error's magnitude and halves it, "
             "three times better than the cubic."
         ) as vo:
             self.play(Create(ax), FadeIn(ticks), Create(diag), Create(one))
@@ -150,24 +150,25 @@ class NewtonSchulz(VoiceoverScene):
             xx = y_
         wl = label(r"one middling singular value, \ round by round", font_size=18, color=C.BITS).next_to(a_, UP, buff=0.1)
         res = VGroup(
-            label(rf"after ${R}$ rounds, \ the ${nb}$ above $1\%$ of the largest: \ ${lo_b:.2f}$ to ${hi_b:.2f}$",
-                  font_size=22, color=MU),
-            label(rf"the classical cubic after ${R}$ rounds: \ worst ${dev_c[R]:.2f}$ from $1$; \ after ${len(dev_c) - 1}$: "
-                  rf"\ ${dev_c[-1]:.2f}$", font_size=22, color=CUB),
-            label(r"the scalar $p$ on the singular values matches the matrix rounds \ to $" + sci(float(m["match_grad"]), 0)
-                  + "$", font_size=18, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -2.5, 0])
+            wrapped_label(rf"after ${R}$ rounds, \ current largest ${nb}$: \ ${lo_b:.2f}$ to ${hi_b:.2f}$",
+                  max_width=6.3, font_size=22, color=MU),
+            wrapped_label(rf"the classical cubic, current top $n$, after ${R}$ rounds: \ worst ${dev_c[R]:.2f}$ from $1$; \ after ${len(dev_c) - 1}$: "
+                  rf"\ ${dev_c[-1]:.2f}$", max_width=6.3, font_size=22, color=CUB),
+            wrapped_label(r"the scalar $p$ on the singular values matches the matrix rounds \ to $" + sci(float(m["match_grad"]), 0)
+                  + "$", max_width=6.3, font_size=18, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([0.3, -1.45, 0], aligned_edge=UL)
         keep_in_frame(res)
-        tag = note(r"computed: \ the character model's gradient, \ float32").to_corner(UL, buff=0.2)
+        tag = note(r"computed: \ character-model gradient, float32; \\ $n$: initial count above $1\%$ of largest").to_corner(UL, buff=0.2)
         said1 = (f"more rounds to catch up: after {len(dev_c) - 1}, {dev_c[-1]:.2f}."
             if dev_c[-1] < dev_c[R] else "many more rounds than that.")
         with self.voiceover(
             "Now on real data: the gradient matrix from Chapter ten. <bookmark mark='a'/> Follow one middling "
-            "singular value through Jordan's polynomial: each round bounces it up towards one. "
-            f"<bookmark mark='b'/> And here are all {len(s0)} of them, round by round. After {R} rounds, every one "
-            f"above a hundredth of the largest, {nb} of them, sits between {lo_b:.2f} and {hi_b:.2f}. The tiniest, "
-            "numerical dust, climb but don't arrive, which costs nothing. <bookmark mark='c'/> The classical cubic, "
-            f"in the same {R} rounds, leaves its worst value {dev_c[R]:.2f} from one, and needs "
+            "starting singular value through Jordan's polynomial. "
+            f"<bookmark mark='b'/> Here are all {len(s0)} singular values, sorted afresh each round. Set n to the "
+            f"initial count above a hundredth of the largest: {nb}. After {R} rounds, the current largest n sit "
+            f"between {lo_b:.2f} and {hi_b:.2f}. This summarizes ranks, not the same initial directions; smaller "
+            "current values are excluded from this summary. <bookmark mark='c'/> For the current largest n, the "
+            f"classical cubic in the same {R} rounds has worst distance {dev_c[R]:.2f} from one, and needs "
             + said1
         ) as vo:
             self.play(Create(a_), Create(dg), Create(pc), FadeIn(wl), FadeIn(tag))
@@ -196,7 +197,7 @@ class NewtonSchulz(VoiceoverScene):
         yt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=20, color=GREY_B).next_to(ax.c2p(0, k), LEFT, buff=0.08)
                       for k in range(int(lo), 1)])
         xn = label(r"rounds", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
-        yn = label(r"the worst singular value's distance from $1$", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12)
+        yn = label(r"worst distance from $1$ among current top $n$", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12)
         yn.align_to(ax, LEFT)
         out = VGroup()
         legs = VGroup()
@@ -206,7 +207,7 @@ class NewtonSchulz(VoiceoverScene):
                 c_ = curve(ax, np.arange(len(d)), d, col, 3 if not dash else 2)
                 out.add(DashedVMobject(c_, num_dashes=24) if dash else c_)
             legs.add(label(name, font_size=20, color=col))
-        legs.add(label(r"solid: \ the gradient; \ dashed: \ the trained weight matrix", font_size=18, color=GREY_A))
+        legs.add(label(r"solid: \ gradient; \ dashed: \ weight; \\ each matrix: $n$ initially above $1\%$ of largest", font_size=18, color=GREY_A))
         legs.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.2, 1.2, 0])
         dh = float(m["dev_grad_hybrid"][-1])
         dj = float(m["dev_grad_jordan"][-1])
@@ -216,12 +217,14 @@ class NewtonSchulz(VoiceoverScene):
                             width=5.6).move_to([3.9, -1.9, 0])
         cite_ = cite(r"N.~Amsel et al., \textit{The Polar Express} (2025): \ a new optimal polynomial each round", corner=DL)
         with self.voiceover(
-            "The newest practice combines them. <bookmark mark='a'/> Plot the worst distance from one, round by "
-            "round. Jordan's polynomial gets close fast and then stalls, at "
+            "The newest practice combines them. <bookmark mark='a'/> For each matrix, fix n as its initial count "
+            "above a hundredth of the largest singular value. Each curve shows the worst distance from one among "
+            "the current largest n, not the full spectrum or the same initial directions. Jordan's displayed "
+            "sequence ends at "
             f"{dj:.2f}. <bookmark mark='b'/> DeepSeek's fourth generation, in 2026, runs eight rounds of Jordan's "
-            "polynomial and then two of the exact one, which settles everything that is already close: "
-            + f"on our gradient the worst value ends {dh_s} from one. "
-            + "<bookmark mark='c'/> The same holds for the trained weight matrix, dashed. And in 2025 Noah Amsel and "
+            "polynomial and then two of the exact one, which settles values already close: "
+            + f"on our gradient the worst distance within that current top n ends at {dh_s} from one. "
+            + "<bookmark mark='c'/> The dashed curves use the trained weight matrix's own n. And in 2025 Noah Amsel and "
             "colleagues derived the best polynomial for each round, the Polar Express: the search for cheap "
             "orthogonalization is still on."
         ) as vo:

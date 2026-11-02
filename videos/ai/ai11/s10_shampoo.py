@@ -163,7 +163,7 @@ class Shampoo(VoiceoverScene):
                 c_.scale_to_fit_width(2.55)
             c_.next_to(p_, DOWN, buff=0.15)
         stage_colors = [GREY_B, SO, AD, SO]
-        stages = VGroup(*[VGroup(panel(2.8, 3.9, center=[x, 0.4, 0], color=col),
+        stages = VGroup(*[VGroup(panel(2.8, 3.6, center=[x, 0.55, 0], color=col),
                                  label(title, font_size=25, color=col).move_to([x, 2.05, 0]))
                           for x, title, col in zip(cx, (r"Gradient", r"1. Rotate", r"2. Adapt", r"3. Rotate back"), stage_colors)])
         head = label(r"SOAP: \ rotate, \ adapt, \ rotate back", font_size=38).to_edge(UP, buff=0.35)
@@ -172,18 +172,18 @@ class Shampoo(VoiceoverScene):
         signed_key = VGroup(Dot(radius=0.06, color=C.TRUE_P), label(r"negative", font_size=21, color=GREY_A),
                             Dot(radius=0.06, color=C.MODEL_Q), label(r"positive", font_size=21, color=GREY_A),
                             label(r"colour scaled within each matrix", font_size=19, color=GREY_B))
-        signed_key.arrange(RIGHT, buff=0.16).move_to([0, -1.72, 0])
+        signed_key.arrange(RIGHT, buff=0.16).move_to([0, -1.5, 0])
         sch = note(r"schematic").to_corner(UR, buff=0.3)
         hist = history_card(2024, r"Nikhil Vyas, Depen Morwani, \dots, Sham Kakade \ (Harvard)",
                             r"SOAP: \ ShampoO with Adam in the Preconditioner's eigenbasis. \ Reported: \ over $40\%$ fewer "
-                            r"steps and $35\%$ less time than AdamW, \ at $360$M and $660$M parameters", width=8.4)
+                            r"steps and $35\%$ less time than AdamW, \ in large-batch runs at $360$M and $660$M parameters", width=12.4)
         hist.to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "In 2024 a group at Harvard simplified it. <bookmark mark='a'/> Shampoo's two factors have "
             "eigenvectors: a rotation of the rows, and one of the columns. <bookmark mark='b'/> Rotate the gradient "
             "into those bases, run plain Adam there, coordinate by coordinate, <bookmark mark='c'/> and rotate the "
             "step back. The rotation is refreshed every few steps; Adam does the rest. They called it SOAP, and "
-            "reported reaching AdamW's loss in over forty percent fewer steps on language models of up to six hundred "
+            "reported reaching AdamW's loss in over forty percent fewer steps in large-batch runs on language models of up to six hundred "
             "and sixty million parameters. Shampoo, it turns out, is close to a cheap form of Adam in its own "
             "eigenbasis. SOAP runs in our race too."
         ) as vo:
