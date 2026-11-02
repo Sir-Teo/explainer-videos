@@ -306,3 +306,39 @@ def test_martingale_tools():
     e = m.EProcess()
     e.run(np.random.default_rng(7).choice([-0.5, 0.5], 500, p=[0.4, 0.6]))
     assert e.rejected(0.05)
+
+
+def test_simulation_library():
+    from explainer.quant.house import sim
+
+    # scheme orders on GBM: strong 1/2 for Euler, 1 for Milstein; weak 1 for both
+    o = sim.scheme_orders(n_paths=8000)
+    assert o["slope_strong_euler"] == pytest.approx(0.5, abs=0.12)
+    assert o["slope_strong_milstein"] == pytest.approx(1.0, abs=0.15)
+    assert o["strong_milstein"][-1] < o["strong_euler"][-1]
+    # OU and CIR exact transitions: stationary moments
+    X = sim.ou_exact(0.0, 2.0, 1.0, 0.5, 5.0, 50, 20000, seed=1)[:, -1]
+    assert X.mean() == pytest.approx(1.0, abs=0.02) and X.var() == pytest.approx(0.25 / 4, rel=0.06)
+    C = sim.cir_exact(0.04, 1.5, 0.04, 0.2, 5.0, 50, 20000, seed=2)[:, -1]
+    assert C.min() >= 0 and C.mean() == pytest.approx(0.04, rel=0.03)
+    # Merton: the drift is compensated
+    S = sim.merton_jumps(1.0, 0.05, 0.2, 2.0, -0.1, 0.15, 1.0, 50, 40000, seed=3)[:, -1]
+    assert S.mean() == pytest.approx(np.exp(0.05), rel=0.02)
+    # Hawkes: the mean rate is mu / (1 - branching), and MLE recovers the parameters
+    ev = sim.hawkes_thinning(0.5, 0.8, 1.6, 4000.0, seed=4)
+    assert len(ev) / 4000 == pytest.approx(0.5 / (1 - 0.5), rel=0.1)
+    fit = sim.hawkes_fit(ev, 4000.0)
+    assert fit["branching"] == pytest.approx(0.5, abs=0.08) and fit["loglik"] > fit["loglik_poisson"]
+    # fBM: variance t^{2H}, and the Hurst estimator recovers H
+    for H in (0.1, 0.5, 0.8):
+        B = sim.fbm(H, 4096, n_paths=1, seed=5)[0]
+        assert sim.hurst_from_increments(B)["H"] == pytest.approx(H, abs=0.06)
+    ends = sim.fbm(0.3, 64, T=1.0, n_paths=4000, seed=6)[:, -1]
+    assert ends.var() == pytest.approx(1.0, rel=0.08)
+    # signature: level 1 is the increment; the symmetric part of level 2 is S1 S1^T / 2; the unit square's Levy area
+    sq = np.array([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]], float)
+    s = sim.signature2(sq)
+    assert np.allclose(s["S1"], 0) and s["levy_area"][0, 1] == pytest.approx(1.0)
+    p = np.random.default_rng(7).standard_normal((50, 3)).cumsum(axis=0)
+    s = sim.signature2(p)
+    assert np.allclose((s["S2"] + s["S2"].T) / 2, np.outer(s["S1"], s["S1"]) / 2)
