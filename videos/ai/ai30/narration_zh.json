@@ -23,11 +23,6 @@
   "Disagree": "17. 这个领域在哪里有分歧"
  },
  "lines": {
-  "a547c098736d": {
-   "scene": "Hook",
-   "en": "Part by part, we've built every piece of these models ourselves. We know every number in them. And yet we can't say what they're thinking. <bookmark mark='a'/> Here's our transformer reading a line of the passage: for each character, the hundred and twenty-eight numbers it carries after its second block. Every one of them busy, all the time; not one of them means anything by itself. <bookmark mark='b'/> This part is about reading them. <bookmark mark='c'/> Rewritten in the right basis, the picture changes: only a handful of features, ideas the model tracks, are on at each character, and each one turns out to mean something.",
-   "zh": "一部分接一部分，这些模型的每个零件，我们都亲手搭过。里面的每一个数字，我们都知道。可我们还是说不出，它在想什么。<bookmark mark='a'/>这是我们的Transformer在读测试段落里的一行：对每个字符，它在第二个块之后带着的128个数。每一个数都一直在忙，可没有哪一个数，单独拿出来有什么意义。<bookmark mark='b'/>这一部分，讲的就是怎么读懂它们。<bookmark mark='c'/>换到合适的基底里重写，画面就变了：每个字符上，只有少数几个特征亮着，也就是模型在追踪的想法，而每一个，结果都有意义。"
-  },
   "b74ebef6bef4": {
    "scene": "Hook",
    "en": "Take one character. <bookmark mark='a'/> Its hundred and twenty-eight numbers, tangled together, become 3 features out of five hundred and twelve. <bookmark mark='f'/> A feature is one idea the model tracks, like 'inside a quotation', stored as a direction among those numbers. How far the vector points that way, its shadow on that direction, is how strongly the feature is on.",
@@ -193,15 +188,15 @@
    "en": "Chapter seven. The phase diagram.",
    "zh": "第7章。相图。"
   },
-  "e4d5eadf8a88": {
+  "7082e03f1ef4": {
    "scene": "Phase",
-   "en": "Chapter six showed superposition happen. Elhage and colleagues asked when it happens, and drew the answer as a phase diagram. <bookmark mark='a'/> The smallest case: two features, squeezed through a single number. Feature two matters r times as much as feature one, and each is on a fraction rho of the time. <bookmark mark='b'/> The network has three choices. Drop feature two. <bookmark mark='c'/> Give feature two the dimension and drop feature one. <bookmark mark='d'/> Or share: point the two features in opposite directions, and let the ReLU, with a negative bias, cut off each one's shadow on the other. Sharing only pays when they are rarely on at the same time.",
-   "zh": "第6章看到了叠加的发生。埃尔哈格和同事问的是：它什么时候发生？他们把答案画成了一张相图。<bookmark mark='a'/>最小的情形：两个特征，挤过一个数。特征2的重要性是特征1的r倍，每个特征出现的时间比例是ρ。<bookmark mark='b'/>网络有三种选择。丢掉特征2。<bookmark mark='c'/>把这个维度给特征2，丢掉特征1。<bookmark mark='d'/>或者共享：让两个特征指向相反的方向，再让ReLU加上一个负的偏置，把彼此的影子切掉。只有当它们很少同时出现时，共享才划算。"
+   "en": "Chapter six showed superposition happen. Elhage and colleagues asked when it happens, and drew the answer as a phase diagram. <bookmark mark='a'/> The smallest case: two features, squeezed through a single number. Feature two matters r times as much as feature one, and each is on a fraction rho of the time. <bookmark mark='b'/> The network has three choices. Drop feature two. <bookmark mark='c'/> Give feature two the dimension and drop feature one. <bookmark mark='d'/> Or share: point the two features in opposite directions, and let the ReLU cut off negative estimates. Sharing only pays when they are rarely on at the same time.",
+   "zh": "第6章看到了叠加的发生。埃尔哈格和同事问的是：它什么时候发生？他们把答案画成了一张相图。<bookmark mark='a'/>最小的情形：两个特征，挤过一个数。特征2的重要性是特征1的r倍，每个特征出现的时间比例是ρ。<bookmark mark='b'/>网络有三种选择。丢掉特征2。<bookmark mark='c'/>把这个维度给特征2，丢掉特征1。<bookmark mark='d'/>或者共享：让两个特征指向相反的方向，再让ReLU把负的估计值切掉。只有当它们很少同时出现时，共享才划算。"
   },
-  "157ab35f6c3f": {
+  "d0be282b78de": {
    "scene": "Phase",
-   "en": "We trained the little model on a grid of 17 densities by 17 importances, four seeds a cell, and kept the best. <bookmark mark='a'/> Each cell is coloured by what the trained network did with feature two; here is one cell's training, the two weights settling into opposite signs. <bookmark mark='b'/> When features are dense, at the top, the network shares in 0 of the top row's 17 cells: one feature gets the dimension, the other is dropped. <bookmark mark='c'/> When features are sparse, at the bottom, sharing wins across 17 of 17 cells. <bookmark mark='d'/> On the right, the same map from theory: for every cell, the expected loss of each of the three choices, and the cheapest. They agree on 94 percent of the cells, and the misses sit on the boundaries, where two choices cost almost the same. Superposition is a phase the network enters when features are sparse enough.",
-   "zh": "我们在一个网格上训练这个小模型：17种密度乘17种重要性，每格四个种子，留下最好的。<bookmark mark='a'/>每一格的颜色，表示训练好的网络对特征2做了什么；这里是其中一格的训练过程，两个权重稳定在相反的符号上。<bookmark mark='b'/>特征密集的时候，也就是最上面一行，17格里只有0格在共享：一个特征得到维度，另一个被丢掉。<bookmark mark='c'/>特征稀疏的时候，也就是最下面一行，共享在17格里赢下了17格。<bookmark mark='d'/>右边是同一张图，来自理论：对每一格，算出三种选择各自的期望损失，取最便宜的那个。两者在94%的格子上一致，不一致的都在边界上，那里两种选择的代价几乎一样。叠加，是特征足够稀疏时，网络进入的一个相。"
+   "en": "We trained the little model on a grid of 17 densities by 17 importances, four seeds a cell, and kept the best. <bookmark mark='a'/> Each cell is coloured by what the trained network did with feature two; here is one seed's training at the marked cell. The grid keeps the best of four seeds; a single run can settle elsewhere. <bookmark mark='b'/> When features are dense, at the top, the network shares in 0 of the top row's 17 cells: one feature gets the dimension, the other is dropped. <bookmark mark='c'/> When features are sparse, at the bottom, sharing wins across 17 of 17 cells. <bookmark mark='d'/> On the right, the reference map for three fixed-weight candidates. The dropped-feature candidates use zero bias; the shared candidate searches only nonpositive biases. They agree on 94 percent of the cells. This restricted comparison does not establish the optimal phase boundaries. The trained models show superposition when features are sparse enough.",
+   "zh": "我们在一个网格上训练这个小模型：17种密度乘17种重要性，每格四个种子，留下最好的。<bookmark mark='a'/>每一格的颜色，表示训练好的网络对特征2做了什么；这里是标记格子中一个种子的训练过程。网格保留四个种子中最好的；单次运行可能停在别的解上。<bookmark mark='b'/>特征密集的时候，也就是最上面一行，17格里只有0格在共享：一个特征得到维度，另一个被丢掉。<bookmark mark='c'/>特征稀疏的时候，也就是最下面一行，共享在17格里赢下了17格。<bookmark mark='d'/>右边是三个固定权重候选解的参考图。丢弃特征的候选使用零偏置；共享候选只搜索非正偏置。两者在94%的格子上一致。这种受限比较不能确定最优相边界。训练好的模型表明，特征足够稀疏时会出现叠加。"
   },
   "63e27cdf2107": {
    "scene": "Phase",
@@ -247,11 +242,6 @@
    "scene": "Dicts",
    "en": "Two fixes came in 2024. <bookmark mark='a'/> Leo Gao and colleagues at OpenAI dropped the penalty: TopK keeps each vector's k largest features and zeroes the rest, so sparsity is set directly and nothing is shrunk. They trained one with sixteen million latents on GPT-4. <bookmark mark='b'/> Senthooran Rajamanoharan and colleagues at DeepMind kept a penalty, but on the count of active features, with a learned threshold per feature: JumpReLU, the recipe behind their open Gemma Scope dictionaries. A step has no gradient, so the threshold is trained through a straight-through estimate.",
    "zh": "2024年，出现了两种修正。<bookmark mark='a'/>OpenAI的Leo Gao和同事干脆去掉了惩罚：TopK只保留每个向量最大的k个特征，其余归零，于是稀疏程度直接设定，什么都不会被缩小。他们在GPT-4上训练了一个有1600万个潜变量的字典。<bookmark mark='b'/>DeepMind的森图兰·拉贾马诺哈兰和同事保留了惩罚，但罚的是亮着的特征个数，每个特征有一个学出来的阈值：这就是JumpReLU，也是他们公开的Gemma Scope字典背后的配方。阶跃没有梯度，所以阈值是通过直通估计来训练的。"
-  },
-  "f99e73185c8b": {
-   "scene": "Dicts",
-   "en": "All three train the same way, on the same batches. <bookmark mark='a'/> Here is one run of each, the one nearest sixteen features per vector, replayed: the unexplained variance falling on the left, and on the right the number of features each vector uses. <bookmark mark='b'/> TopK holds exactly k from the first step; the penalized kinds start dense and are pruned as their penalty bites.",
-   "zh": "三种的训练方式一样，用的是同样的批次。<bookmark mark='a'/>这里每种各取一次运行，都是最接近每个向量16个特征的那个，重放出来：左边是没解释的方差在下降，右边是每个向量用到的特征数。<bookmark mark='b'/>TopK从第一步起就恰好保持k个；带惩罚的两种一开始很密，惩罚起作用后被修剪下来。"
   },
   "e92f038d7312": {
    "scene": "Dicts",
@@ -487,6 +477,16 @@
    "scene": "Outro",
    "en": "The best place to go deeper is the Transformer Circuits thread, which is free online, and the open problems survey of 2025. Thanks for watching, and see you in Part 31, the finale.",
    "zh": "想深入下去，最好的地方是Transformer Circuits系列文章，可以在网上免费读，还有2025年那篇开放问题综述。谢谢观看，第31部分，终章见。"
+  },
+  "fa90f1c3b0f8": {
+   "scene": "Hook",
+   "en": "Part by part, we've built every piece of these models ourselves. We know every number in them. And yet we can't say what they're thinking. <bookmark mark='a'/> Here's our transformer reading a line of the passage: for each character, the hundred and twenty-eight numbers it carries after its second block. Every one of them busy, all the time; their meaning is hard to read. <bookmark mark='b'/> This part is about reading them. <bookmark mark='c'/> Rewritten with a learned dictionary, the picture changes: only a handful of features are on at each character. Many show recurring patterns, though a clean-looking pattern is not yet a complete explanation.",
+   "zh": "一部分接一部分，这些模型的每个零件，我们都亲手搭过。里面的每一个数字，我们都知道。可我们还是说不出，它在想什么。<bookmark mark='a'/>这是我们的Transformer在读测试段落里的一行：对每个字符，它在第二个块之后带着的128个数。每一个数都一直在忙，它们的含义却很难读出。<bookmark mark='b'/>这一部分，讲的就是怎么读懂它们。<bookmark mark='c'/>用学到的字典重写后，画面就变了：每个字符上，只有少数几个特征亮着。许多特征表现出重复出现的模式，但清楚的模式还不是完整的解释。"
+  },
+  "815a3768bb43": {
+   "scene": "Dicts",
+   "en": "All three train the same way, on the same batches. <bookmark mark='a'/> Here is one run of each, the one nearest sixteen features per vector, replayed: the unexplained variance falling on the left, and on the right the number of features each vector uses. <bookmark mark='b'/> TopK caps the number at k from the first step; the penalized kinds start dense and are pruned as their penalty bites.",
+   "zh": "三种的训练方式一样，用的是同样的批次。<bookmark mark='a'/>这里每种各取一次运行，都是最接近每个向量16个特征的那个，重放出来：左边是没解释的方差在下降，右边是每个向量用到的特征数。<bookmark mark='b'/>TopK从第一步起就把数量限制在k个以内；带惩罚的两种一开始很密，惩罚起作用后被修剪下来。"
   }
  },
  "title_en": "AI, Built: Part 30, Inside the Model",

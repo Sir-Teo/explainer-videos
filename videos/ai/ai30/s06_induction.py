@@ -12,6 +12,8 @@ KC = C.SURPRISE
 
 class Induction(VoiceoverScene):
     def construct(self):
+        if load("induction").get("path_receiver_scope") != "final-model selected induction heads":
+            raise ValueError("Induction needs the receiver-scoped candidate; preserve older results separately")
         self.card()
         self.paths()
         self.composition()
@@ -50,15 +52,18 @@ class Induction(VoiceoverScene):
         pn = d["path_noise"]
         dg = self.diagram()
         ins = dg[-1]
-        vals = [max(float(pn["q"]), 0.0), max(float(pn["k"]), 0.0), max(float(pn["v"]), 0.0)]  # -0.00 is no effect
-        g = axes([0, 3], [0, 1.1], x_length=4.2, y_length=3.0, ylabel=r"copying lost", yticks=[0, 0.5, 1.0],
-                 center=[3.9, -0.6, 0])
+        vals = [float(pn[k]) for k in ("q", "k", "v")]
+        lo, hi = min(0.0, min(vals) * 1.15), max(1.1, max(vals) * 1.1)
+        g = axes([0, 3], [lo, hi], x_length=4.2, y_length=3.0, ylabel=r"normalized copying benefit lost",
+                 yticks=ticks(lo, hi, 3), center=[3.9, -0.6, 0])
         bars_ = VGroup()
         for i, (v, t) in enumerate(zip(vals, ("queries", "keys", "values"))):
-            r = Rectangle(width=0.8, height=max(min(v, 1.1) / 1.1 * 3.0, 0.01), stroke_width=0,
-                          fill_color=KC if t == "keys" else CTRL, fill_opacity=0.9).move_to(g.ax.c2p(i + 0.5, 0), aligned_edge=DOWN)
-            bars_.add(VGroup(r, MathTex(f"{v:.2f}", font_size=24).next_to(r, UP, buff=0.06),
-                             label(t, font_size=18, color=GREY_A).next_to(g.ax.c2p(i + 0.5, 0), DOWN, buff=0.12)))
+            base, tip = g.ax.c2p(i + 0.5, 0), g.ax.c2p(i + 0.5, v)
+            r = Rectangle(width=0.8, height=max(abs(tip[1] - base[1]), 0.01), stroke_width=0,
+                          fill_color=KC if t == "keys" else CTRL, fill_opacity=0.9).move_to((base + tip) / 2)
+            number = MathTex(f"{v:.2f}", font_size=24).next_to(r, UP, buff=0.06)
+            bars_.add(VGroup(r, number,
+                             label(t, font_size=18, color=GREY_A).next_to(g.ax.c2p(i + 0.5, lo), DOWN, buff=0.12)))
         dc = definition_card(r"path patching", r"patch an activation along one path only: \ here, the previous-token "
                              r"heads' corrupted outputs sent into just the second layer's queries, \ keys, \ or values",
                              color=CAUSE, width=6.2, font_size=19).to_corner(UR, buff=0.3)
@@ -69,12 +74,12 @@ class Induction(VoiceoverScene):
                    "induction heads' query, the current token, finds the position right after its last occurrence."
                    if best == 1 else "The message does not go mainly through the keys here.")
         ps_ = d["path_self"]
-        verdict2 = (f"Either previous-token head alone carries {100 * min(single):.0f} to {100 * max(single):.0f} "
-                    "percent: they share the job. And the head that looks at the token itself sends its message mostly "
-                    f"into the queries, {100 * float(ps_['q']):.0f} percent: the query says which token we are at." if
-                    len(single) > 1 else
-                    f"The head that looks at the token itself sends its message mostly into the queries, "
-                    f"{100 * float(ps_['q']):.0f} percent: the query says which token we are at.")
+        shared = (f"Patching either previous-token head alone loses {100 * min(single):.0f} to "
+                  f"{100 * max(single):.0f} percent of the advantage. " if len(single) > 1 else "")
+        self_query = float(ps_['q']) >= max(float(ps_['k']), float(ps_['v']))
+        self_verdict = ("The current-token head has its largest effect through the queries. " if self_query else
+                        "The current-token head's largest effect is not through the queries here. ")
+        verdict2 = f"{shared}For the second test: {self_verdict}Its query-path effect is {100 * float(ps_['q']):.0f} percent."
         with self.voiceover(
             "Two heads in different layers can only work together through the residual stream: the first writes, "
             "the second reads. <bookmark mark='a'/> But the second head reads in three places, its queries, its keys "
@@ -91,7 +96,8 @@ class Induction(VoiceoverScene):
                             font_size=22).move_to(g)
             self.play(FadeIn(pz))
             vo.wait_until("p")
-            self.play(FadeOut(pz), FadeIn(g))
+            self.play(FadeOut(pz), run_time=0.4)
+            self.play(FadeIn(g), run_time=0.6)
             vo.wait_until("b")
             self.play(GrowFromEdge(bars_[0][0], DOWN), FadeIn(bars_[0][1:]), Indicate(ins[0], color=CAUSE))
             self.play(GrowFromEdge(bars_[2][0], DOWN), FadeIn(bars_[2][1:]), Indicate(ins[2], color=CAUSE))
@@ -102,7 +108,8 @@ class Induction(VoiceoverScene):
                                      for h, v in zip(d["prev_set"], single)] +
                                     [rf"the current-token head, \ queries: \ ${float(ps_['q']):.2f}$"]),
                        font_size=20, color=GREY_A).to_corner(UR, buff=0.4)
-            self.play(FadeOut(dc), FadeOut(hc), FadeIn(sl))
+            self.play(FadeOut(dc), FadeOut(hc), run_time=0.4)
+            self.play(FadeIn(sl), run_time=0.6)
         self.wait(0.3)
         self.clear_scene()
 
@@ -168,8 +175,11 @@ class Induction(VoiceoverScene):
         hp, hi = int(d["prev_head"]), int(d["ind_head"])
         g = axes([-0.5, len(off) - 0.5], [min(off.min(), 0) * 1.1, off.max() * 1.15], x_length=4.8, y_length=3.0,
                  xlabel=r"how far back the key is", ylabel=r"score, \ positions only", xticks=list(range(len(off))),
+                 yticks=ticks(min(float(off.min()), 0) * 1.1, float(off.max()) * 1.15, 3),
                  center=[-3.4, -0.7, 0])
-        b = VGroup(*[Rectangle(width=0.36, height=max(abs(v) / (np.abs(off).max() * 1.15) * 3.0, 0.01), stroke_width=0,
+        zero_line = DashedLine(g.ax.c2p(-0.5, 0), g.ax.c2p(len(off) - 0.5, 0), color=GREY_B,
+                               dash_length=0.06, stroke_width=1.4)
+        b = VGroup(*[Rectangle(width=0.36, height=max(abs(g.ax.c2p(k, float(v))[1] - g.ax.c2p(k, 0)[1]), 0.01), stroke_width=0,
                                fill_color=PREV, fill_opacity=0.9 if k == 1 else 0.45)
                      .move_to(g.ax.c2p(k, 0), aligned_edge=DOWN if v >= 0 else UP) for k, v in enumerate(off)])
         t1 = label(r"the previous-token heads' QK circuits \\ on the position embeddings \ (averaged)", font_size=20,
@@ -196,11 +206,12 @@ class Induction(VoiceoverScene):
             "<bookmark mark='b'/> And trace the induction heads' values all the way from the token they attend "
             "to, through W O V, to the logits: a 64 by 64 matrix, token in, logit out. "
             f"<bookmark mark='c'/> For {100 * diag:.0f} percent of tokens, the logit raised most is the token's own, "
-            f"and the eigenvalues give a copying score of {cs:.2f}, where 1 would be pure copying. {verdict2}"
+            f"and the eigenvalues give a copying score of {cs:.2f}. A score of one means all nonzero eigenvalues "
+            f"are positive real; it does not by itself establish token copying. {verdict2}"
         ) as vo:
-            self.play(FadeIn(g), FadeIn(t1))
+            self.play(FadeIn(g), Create(zero_line), FadeIn(t1))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(r, DOWN) for r in b], lag_ratio=0.1))
+            self.play(LaggedStart(*[GrowFromEdge(r, DOWN if v >= 0 else UP) for r, v in zip(b, off)], lag_ratio=0.1))
             vo.wait_until("b")
             self.play(FadeIn(img), FadeIn(t2), FadeIn(xl), FadeIn(yl))
             vo.wait_until("c")
@@ -255,9 +266,10 @@ class Induction(VoiceoverScene):
         top = float(cv[:, 1].max())
         g1 = axes([0, S], [0, top * 1.05], x_length=8.4, y_length=1.8, ylabel=r"bits per token, \ inside the repeat",
                   yticks=ticks(0, top, 2), center=[-0.6, 1.6, 0])
-        dmg = np.clip(kp[:, 1], 0, None)
-        g2 = axes([0, S], [0, max(dmg.max(), 1e-3) * 1.1], x_length=8.4, y_length=1.8, xlabel=r"training steps",
-                  ylabel=r"the K path's effect \ (nats)", xticks=[0, S], yticks=ticks(0, max(dmg.max(), 1e-3), 2),
+        dmg = kp[:, 1]
+        dlo, dhi = min(0.0, float(dmg.min()) * 1.1), max(float(dmg.max()), 1e-3) * 1.1
+        g2 = axes([0, S], [dlo, dhi], x_length=8.4, y_length=1.8, xlabel=r"training steps",
+                  ylabel=r"the K path's effect \ (nats)", xticks=[0, S], yticks=ticks(dlo, dhi, 3),
                   center=[-0.6, -1.6, 0])
         t = ValueTracker(0)
 
@@ -274,12 +286,15 @@ class Induction(VoiceoverScene):
                                          font_size=22, color=IND).to_corner(UR, buff=0.3))
         j = int(np.argmax(np.diff(cv[:, 1]) * -1)) + 1
         jump = float(cv[j, 0])
-        k_on = float(st[np.argmax(dmg > 0.5 * dmg.max())])
-        together = abs(k_on - jump) <= 2 * (st[1] - st[0])
+        crossed = np.flatnonzero(dmg > 0.5 * dmg[-1]) if dmg[-1] > 0 else []
+        k_on = float(st[crossed[0]]) if len(crossed) else -1
+        together = k_on >= 0 and abs(k_on - jump) <= 2 * (st[1] - st[0])
         verdict = (f"The keys path switches on at the same moment, around step {int(k_on):,}: the drop in the loss is "
                    "the circuit being completed." if together else
                    f"The keys path reaches half its final effect around step {int(k_on):,}, against the loss's drop "
                    f"around {int(jump):,}.")
+        if k_on < 0:
+            verdict = "The selected keys path does not have a positive final effect in this run."
         with self.voiceover(
             "Part 13 watched these heads form. Now we can watch the cause form. Replay the training, and at every "
             "checkpoint measure the keys path, the effect of corrupting the previous-token head's message into the "

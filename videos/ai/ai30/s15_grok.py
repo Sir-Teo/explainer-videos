@@ -16,6 +16,8 @@ def first(steps, cond):
 
 class Grok(VoiceoverScene):
     def construct(self):
+        if load("grok").get("metric_schema") != "ai30-grok-fixed-output-keys-v1":
+            raise ValueError("Grok needs fixed-final-key metrics; preserve older adaptive results separately")
         self.card()
         self.curves()
         self.algorithm()
@@ -43,7 +45,7 @@ class Grok(VoiceoverScene):
 
     def curves(self):
         d = load("grok")
-        g, st = self.logaxes(d, [-2.4, -0.5, 0], r"loss (log scale)", x_len=6.6)
+        g, st = self.logaxes(d, [-2.4, -0.5, 0], r"cross-entropy (nats, log scale)", x_len=6.6)
         lt = lambda k: np.log10(np.clip(np.asarray(d[k], float), 1e-8, None))  # noqa: E731
         ct, cv = curve(g.ax, st, lt("train_loss"), TRN, 3), curve(g.ax, st, lt("test_loss"), TST, 3)
         lg = legend([(TRN, rf"the ${int(d['n_train']):,}$ pairs it trains on".replace(",", "{,}")),
@@ -53,30 +55,32 @@ class Grok(VoiceoverScene):
         task = label(rf"$(a + b) \bmod {P}$: \ one layer, \ four heads, \ $512$ ReLU units; \ ${100 * float(d['frac']):.0f}\%$ "
                      rf"of the table; \ weight decay ${float(d['wd']):g}$", font_size=22, color=GREY_A).to_edge(UP, buff=0.3)
         tm, tg = int(d["t_memorized"]), int(d["t_grokked"])
-        vm = DashedLine(g.ax.c2p(max(tm, 0), g.lo), g.ax.c2p(max(tm, 0), g.hi), color=TRN, dash_length=0.06)
-        vg = DashedLine(g.ax.c2p(max(tg, 0), g.lo), g.ax.c2p(max(tg, 0), g.hi), color=TST, dash_length=0.06)
+        vm = DashedLine(g.ax.c2p(tm, g.lo), g.ax.c2p(tm, g.hi), color=TRN, dash_length=0.06) if tm >= 0 else None
+        vg = DashedLine(g.ax.c2p(tg, g.lo), g.ax.c2p(tg, g.hi), color=TST, dash_length=0.06) if tg >= 0 else None
         hc = history_card(2023, r"N.~Nanda, L.~Chan, T.~Lieberum, J.~Smith \& J.~Steinhardt",
                           r"progress measures for grokking via mechanistic interpretability", width=4.4, color=FEAT,
                           font_size=17).move_to([4.3, -1.5, 0])
-        grok_said = (f"Then, around step {tg:,}, the held-out loss collapses too: it grokked, "
-                     f"{tg / max(tm, 1):.0f} times later than it memorized." if tg > 0 else
-                     "In our run the held-out loss never fully collapses.")
+        mem_said = (f"Training accuracy first exceeds ninety-nine percent at recorded step {tm:,}. " if tm >= 0 else
+                    "Training accuracy never exceeds ninety-nine percent in the recorded checkpoints. ")
+        grok_said = (f"Held-out accuracy first exceeds ninety-nine percent at recorded step {tg:,}. " if tg >= 0 else
+                     "Held-out accuracy never exceeds ninety-nine percent in this run. ")
         with self.voiceover(
             "Part 12 met grokking: a small network memorizes modular addition, then, long after, suddenly gets it. "
             "Here we ask what happens inside, following Neel Nanda and colleagues' 2023 dissection. "
-            f"<bookmark mark='a'/> Their setup, a little smaller: addition modulo {P}, a one-layer transformer, "
+            f"<bookmark mark='a'/> Our adaptation of their setup: addition modulo {P}, a one-layer transformer, "
             f"trained on {100 * float(d['frac']):.0f} percent of the table with strong weight decay. "
-            f"<bookmark mark='b'/> By step {tm:,} it has memorized the pairs it sees, while on the rest it is worse "
-            f"than guessing. <bookmark mark='c'/> {grok_said}"
+            f"<bookmark mark='b'/> {mem_said}<bookmark mark='c'/> {grok_said}"
         ) as vo:
             self.play(FadeIn(task), FadeIn(g), FadeIn(lg), FadeIn(hc))
             self.play(Create(ct), Create(cv), run_time=4)
             vo.wait_until("a")
             self.play(Indicate(task, color=FEAT, scale_factor=1.03))
             vo.wait_until("b")
-            self.play(Create(vm))
+            if vm is not None:
+                self.play(Create(vm))
             vo.wait_until("c")
-            self.play(Create(vg))
+            if vg is not None:
+                self.play(Create(vg))
         self.wait(0.3)
         self.clear_scene()
 
@@ -90,13 +94,13 @@ class Grok(VoiceoverScene):
             cmath(r"\cos\big(w_k(a + b)\big)", r"=", r"\cos(w_k a)\cos(w_k b) - \sin(w_k a)\sin(w_k b)", font_size=32),
             cmath(r"\cos\big(w_k(a + b - c)\big)", r"=", r"\cos\big(w_k(a+b)\big)\cos(w_k c) + \sin\big(w_k(a+b)\big)\sin(w_k c)",
                   font_size=30),
-            cmath(r"\text{logit}(c)", r"\approx", r"\sum_{k} \cos\big(w_k(a + b - c)\big) \quad \text{largest at } c = a + b",
+            cmath(r"\text{logit}(c)", r"\approx", r"\sum_{k} \alpha_k\cos\big(w_k(a + b - c)\big),\quad \alpha_k>0,\quad \text{largest at } c=(a+b)\bmod P",
                   font_size=32),
         ]
         whys = [why(r"embed: \ each number as an angle, \ a few frequencies"),
                 why(r"attention and the ReLUs build products"),
                 why(r"the unembedding reads the angle of $c$"),
-                why(r"several frequencies agree only at the answer")]
+                why(r"positive-weight illustration; \ fitted coefficients are checked separately")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.45, edge=6.9)
         kl = label(rf"our run's key frequencies: \ $k = {', '.join(map(str, key))}$", font_size=24, color=FEAT).to_edge(DOWN, buff=0.4)
         with self.voiceover(
@@ -105,17 +109,18 @@ class Grok(VoiceoverScene):
             "<bookmark mark='b'/> Adding two numbers is adding two angles, and the cosine of a sum is a difference of "
             "products, which attention and the ReLU units can compute. <bookmark mark='c'/> The unembedding then "
             "compares that angle with each candidate answer c. <bookmark mark='d'/> Summed over several frequencies, "
-            "the waves all peak at c equals a plus b, and nowhere else. <bookmark mark='e'/> Our run settled on "
-            f"{len(key)} key frequencies."
+            "positive-weight waves can peak together at the modular sum. This illustrates the algorithm; it does not "
+            "constrain the coefficients fitted to our model. <bookmark mark='e'/> For our "
+            f"diagnostic we select the {len(key)} strongest frequencies in the final output map."
         ) as vo:
             step(0)
             vo.wait_until("a")
             vo.wait_until("b")
-            step(1)
+            step(1, transform=False)
             vo.wait_until("c")
-            step(2)
+            step(2, transform=False)
             vo.wait_until("d")
-            step(3)
+            step(3, transform=False)
             vo.wait_until("e")
             self.play(FadeIn(kl))
         self.wait(0.3)
@@ -130,21 +135,22 @@ class Grok(VoiceoverScene):
         pst = [int(s) for s in d["plane_steps"]]
         nk = sp.shape[1]
         key = [int(k) for k in d["key_final"]]
-        g = axes([0, nk + 1], [0, 1], x_length=6.6, y_length=3.2, xlabel=r"frequency $k$",
-                 ylabel=r"share of the embedding", xticks=[1, nk], yticks=[0, 0.5, 1], center=[-3.0, -0.6, 0])
+        ymax = max(0.1, float(np.ceil(sp.max() * 10) / 10))
+        g = axes([0, nk + 1], [0, ymax], x_length=6.6, y_length=3.2, xlabel=r"frequency $k$",
+                 ylabel=r"share of nonconstant embedding energy", xticks=[1, nk], yticks=[0, ymax / 2, ymax], center=[-3.0, -0.6, 0])
         t = ValueTracker(0)
 
         def bars_at():
             i = int(np.clip(np.searchsorted(st, t.get_value(), side="right") - 1, 0, len(st) - 1))
-            v = sp[i] / max(sp[i].max(), 1e-9)
-            return VGroup(*[Rectangle(width=6.6 / (nk + 1) * 0.8, height=max(x * 3.2, 0.01), stroke_width=0,
+            v = sp[i]
+            return VGroup(*[Rectangle(width=6.6 / (nk + 1) * 0.8, height=max(x / ymax * 3.2, 0.01), stroke_width=0,
                                       fill_color=FEAT if (k + 1) in key else CTRL, fill_opacity=0.9)
                             .move_to(g.ax.c2p(k + 1, 0), aligned_edge=DOWN) for k, x in enumerate(v)])
 
         bs = always_redraw(bars_at)
         cnt = always_redraw(lambda: label(rf"step ${int(t.get_value()):,}$".replace(",", "{,}"), font_size=24, color=WHITE)
                             .next_to(g, UP, buff=0.15))
-        yl = label(r"tallest scaled to $1$", font_size=16, color=GREY_B).next_to(g, DOWN, buff=0.55)
+        yl = label(r"fixed vertical scale across training", font_size=16, color=GREY_B).next_to(g, DOWN, buff=0.55)
 
         def circle_at(j):
             xy = pl[j]
@@ -157,13 +163,13 @@ class Grok(VoiceoverScene):
         cl = label(rf"each number in the plane of frequency ${key[0]}$ \\ (colour: \ $0$ to ${int(d['P']) - 1}$)", font_size=18,
                    color=GREY_A).move_to([3.8, 2.1, 0])
         sl = label(rf"step ${pst[0]:,}$".replace(",", "{,}"), font_size=20, color=WHITE).move_to([3.8, -2.4, 0])
-        top_share = float(np.sort(sp[-1])[::-1][:len(key)].sum() / sp[-1].sum())
+        top_share = float(sp[-1, np.array(key) - 1].sum() / sp[-1].sum())
         with self.voiceover(
             "Watch the embedding during training, through its Fourier spectrum: how much of it lies along each "
             "frequency. <bookmark mark='a'/> At first the energy is spread everywhere. <bookmark mark='b'/> As "
             "training goes, a few frequencies take over. By the end the key frequencies hold "
-            f"{100 * top_share:.0f} percent of the embedding. <bookmark mark='c'/> In the plane of the strongest one, "
-            "the numbers, scattered at the start, end up arranged around a circle: angles."
+            f"{100 * top_share:.0f} percent of its nonconstant energy. <bookmark mark='c'/> In the plane of the first selected frequency, "
+            "the numbers, scattered at the start, end up roughly around a circle: angles."
         ) as vo:
             self.play(FadeIn(g), FadeIn(yl))
             self.add(bs, cnt)
@@ -191,7 +197,7 @@ class Grok(VoiceoverScene):
         counts = [int(((nf == k) & clean).sum()) for k in key]
         other = int(clean.sum()) - sum(counts)
         A = np.asarray(d["neuron_act"])
-        img = heat_image(A, 3.6, 3.6, color=FEAT, gamma=0.7).move_to([3.4, -0.5, 0])
+        img = heat_image(A.T, 3.6, 3.6, color=FEAT, gamma=0.7).move_to([3.4, -0.5, 0])  # columns a, rows b
         il = label(rf"neuron {int(d['neuron'])}: \ its activation for every $(a, b)$", font_size=20, color=FEAT).next_to(img, UP, buff=0.15)
         ax_ = label(r"$a \rightarrow$ \quad $b \downarrow$ \quad waves in $a$ and in $b$", font_size=18, color=GREY_B).next_to(img, DOWN, buff=0.12)
         bars_ = VGroup()
@@ -201,14 +207,14 @@ class Grok(VoiceoverScene):
                           fill_opacity=0.9).move_to([-5.4 + 0.95 * i, -2.2, 0], aligned_edge=DOWN)
             bars_.add(VGroup(r, MathTex(str(c), font_size=22).next_to(r, UP, buff=0.06),
                              label(rf"$k = {k}$" if k != "other" else r"other", font_size=16, color=GREY_A).next_to(r, DOWN, buff=0.1)))
-        bl = label(rf"the ${int(clean.sum())}$ neurons with more than half their activation \\ at one frequency, \ by "
-                   r"frequency", font_size=20, color=GREY_A).move_to([-3.4, 1.6, 0])
+        bl = label(rf"${int(clean.sum())}$ neurons: \ over half their \\ nonconstant Fourier energy \\ in one frequency family",
+                   font_size=20, color=GREY_A).move_to([-3.4, 1.6, 0])
         with self.voiceover(
             "The MLP's neurons tell the same story. <bookmark mark='a'/> Decompose each neuron's activation, over "
-            f"every pair a and b, into waves: {int(clean.sum())} of the 512 have more than half of it at a single "
-            f"frequency, and {sum(counts)} of those at a key frequency. <bookmark mark='b'/> Here is one, over the whole "
-            "table: waves in a and in b at its frequency, whose products hold the waves of a plus b. The neuron is a "
-            "piece of the cosine of a sum."
+            f"every pair a and b, into waves: {int(clean.sum())} of the 512 have more than half their nonconstant Fourier energy in one "
+            f"frequency family, and {sum(counts)} of those at a key family. <bookmark mark='b'/> Here is one, over the whole "
+            "table. Each frequency family includes waves in a, waves in b, and their products. This grouped energy "
+            "does not by itself identify which products the model uses."
         ) as vo:
             self.play(FadeIn(bl))
             vo.wait_until("a")
@@ -221,7 +227,7 @@ class Grok(VoiceoverScene):
     # ------------------------------------------------------------------
     def progress(self):
         d = load("grok")
-        g, st = self.logaxes(d, [-2.0, -0.5, 0], r"loss (log scale)", x_len=7.0, y_len=3.8,
+        g, st = self.logaxes(d, [-2.0, -0.5, 0], r"cross-entropy (nats, log scale)", x_len=7.0, y_len=3.8,
                              keys=("test_loss", "restricted_loss", "excluded_loss"), every=1)
         lt = lambda k: np.log10(np.clip(np.asarray(d[k], float), 1e-8, None))  # noqa: E731
         ylo, yhi = g.lo, g.hi
@@ -231,28 +237,32 @@ class Grok(VoiceoverScene):
         ce = curve(g.ax, st, cl(lt("excluded_loss")), EXC, 3)
         wn = np.asarray(d["weight_norm"], float)
         iw = int(np.argmax(wn))
-        lg = legend([(TST, r"test loss"), (RES, r"restricted loss: \ only the key waves kept"),
-                     (EXC, r"excluded loss: \ the key waves removed \ (train)")], font_size=17).to_corner(UR, buff=0.3)
+        lg = legend([(TST, r"test loss"), (RES, r"restricted loss: \\ fixed key waves + answer bias (test)"),
+                     (EXC, r"excluded loss: \\ fixed key waves removed (train)")], font_size=17).to_corner(UR, buff=0.3)
         cw = label(rf"size of the weights: \\ ${wn[0]:.0f}$ at the start, \ ${wn[iw]:.0f}$ at step ${int(st[iw]):,}$, \\ "
                    rf"${wn[-1]:.0f}$ at the end".replace(",", "{,}"), font_size=20, color=WN).move_to([5.0, 0.2, 0])
         rt = first(st, lt("restricted_loss") < 0)
         tt = first(st, lt("test_loss") < 0)
         et = first(st, lt("excluded_loss") > 0)
-        ok = rt > 0 and tt > 0 and rt < tt
-        verdict = (f"The restricted loss, which keeps only the key waves, drops below one nat by step {rt:,}, long "
-                   f"before the test loss does, at step {tt:,}: the circuit was being built while the network still "
-                   "looked like a memorizer." if ok else
-                   f"Here the restricted loss and the test loss fall together, around steps {rt:,} and {tt:,}.")
+        ok = rt >= 0 and tt >= 0 and rt < tt
+        verdict = (f"The restricted loss, which keeps the fixed key waves and answer bias, first falls below one nat at recorded step {rt:,}, "
+                   f"before the test loss does at step {tt:,}. This is an earlier sampled checkpoint, not a measured "
+                   "continuous onset." if ok else
+                   "This run does not show the usual two-stage one-nat sequence in the selected diagnostic.")
         with self.voiceover(
             "Nanda and colleagues' real point was a timeline, measured with progress measures that look inside. "
+            "We select five frequencies from the final output map, then follow those same frequencies back through training. "
             "Pause and predict: does the circuit appear when the test loss falls, or before? <bookmark mark='a'/> "
             + verdict + " <bookmark mark='b'/> The excluded loss removes exactly those waves "
-            "from the logits and scores the training pairs: it climbs as the network comes to rely on them. "
-            f"<bookmark mark='c'/> And after a first rise the weights shrink, weight decay pruning the memorized lookup "
-            "table. "
-            "Three phases: memorization, a circuit forming underneath, and a clean-up that removes the memory. The "
-            f"sudden jump is only the last of them. At the end, the key waves account for {100 * float(d['fit_r2']):.0f} "
-            "percent of the logits' variance."
+            f"from the logits and scores the training pairs: {float(d['excluded_loss'][0]):.2f} nats at the start, "
+            f"{float(d['excluded_loss'][-1]):.2f} at the end. <bookmark mark='c'/> The weight norm starts at {wn[0]:.0f}, "
+            f"peaks at {wn[iw]:.0f}, and ends at {wn[-1]:.0f}. These diagnostics track the learned computation; "
+            "weight shrinkage alone does not identify a memorized table being removed. At the end, a cosine readout "
+            f"fitted across all pairs, aligned with a plus b minus c, accounts for "
+            f"{100 * float(d['fit_r2']):.0f} percent of the centered logits' variance. That fitted surrogate gets "
+            f"{100 * float(d['strict_cos_accuracy']):.0f} percent of all pairs right; this is separate from the model's "
+            "held-out accuracy."
+
         ) as vo:
             self.play(FadeIn(g), Create(cv), FadeIn(lg[0]))
             pz = pause_card(r"The circuit: \ when the test loss falls, \ or before?", width=4.0, font_size=22)

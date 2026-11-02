@@ -39,10 +39,10 @@ class Hook(VoiceoverScene):
             "Part by part, we've built every piece of these models ourselves. We know every number in them. And "
             "yet we can't say what they're thinking. <bookmark mark='a'/> Here's our transformer reading a line of the "
             "passage: for each character, the hundred and twenty-eight numbers it carries after its second block. "
-            "Every one of them busy, all the time; not one of them means anything by itself. <bookmark mark='b'/> "
-            "This part is about reading them. <bookmark mark='c'/> Rewritten in the right basis, the picture "
-            "changes: only a handful of features, ideas the model tracks, are on at each character, and each one "
-            "turns out to mean something."
+            "Every one of them busy, all the time; their meaning is hard to read. <bookmark mark='b'/> "
+            "This part is about reading them. <bookmark mark='c'/> Rewritten with a learned dictionary, the picture "
+            "changes: only a handful of features are on at each character. Many show recurring patterns, "
+            "though a clean-looking pattern is not yet a complete explanation."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c) for c in chars], lag_ratio=0.02), FadeIn(dense), run_time=1.5)
             vo.wait_until("a")
@@ -128,7 +128,8 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeOut(smap), FadeOut(title), FadeIn(obj.head), FadeIn(obj.rows[0], shift=UP * 0.1))
+            self.play(FadeOut(smap), FadeOut(title), run_time=0.4)
+            self.play(FadeIn(obj.head), FadeIn(obj.rows[0], shift=UP * 0.1), run_time=0.6)
             for k, mk in enumerate("bcdef"):
                 vo.wait_until(mk)
                 self.play(FadeIn(obj.rows[k + 1], shift=UP * 0.1))

@@ -10,6 +10,8 @@ MLPC = C.MLP
 
 class Probes(VoiceoverScene):
     def construct(self):
+        if load("probes").get("split", {}).get("full_span_overlap") != 0:
+            raise ValueError("Probes needs the disjoint-window candidate; preserve older results separately")
         self.card()
         self.idea()
         self.layers()
@@ -78,7 +80,7 @@ class Probes(VoiceoverScene):
         L = int(p["layers"])
         lo = 0.5
         g = axes([-0.3, L - 0.7], [lo, 1.0], x_length=6.8, y_length=4.2, xlabel=r"layer of the novels model \ "
-                 r"($0$: the token embedding)", ylabel=r"accuracy on held-out text", xticks=list(range(L)),
+                 r"($0$: the token embedding)", ylabel=r"accuracy on validation windows", xticks=list(range(L)),
                  yticks=[0.5, 0.75, 1.0], center=[-2.4, -0.35, 0])
         return g, L
 
@@ -167,9 +169,11 @@ class Probes(VoiceoverScene):
             vo.wait_until("p")
             pz = pause_card(r"An MLP probe can fit more. \ More selective, \ or less?", width=5.2,
                             font_size=22).move_to(hc)
-            self.play(FadeOut(hc), FadeIn(pz))
+            self.play(FadeOut(hc), run_time=0.4)
+            self.play(FadeIn(pz), run_time=0.6)
             vo.wait_until("c")
-            self.play(FadeOut(pz), FadeIn(hc))
+            self.play(FadeOut(pz), run_time=0.4)
+            self.play(FadeIn(hc), run_time=0.6)
             self.play(Create(ml), FadeIn(lg[1]), run_time=1.2)
             self.play(Create(mcc), run_time=1.2)
             vo.wait_until("d")
@@ -185,7 +189,7 @@ class Probes(VoiceoverScene):
         b0, bp = float(a["base_closing"]), float(a["probe_closing"])
         br = np.asarray(a["rand_closing"], float)
         vals = [b0, float(br.mean()), bp]
-        names = [r"as it is", rf"$10$ random directions \\ removed (mean)", r"the probe's direction \\ removed"]
+        names = [r"as it is", r"$10$ random controls \\ one direction each \\ mean + range", r"the probe's direction \\ removed"]
         cols = [GREY_B, CTRL, CAUSE]
         top = max(vals) * 1.15
         g = axes([0, 3], [0, top], x_length=6.4, y_length=3.8, ylabel=r"bits to predict a closing quotation mark",
@@ -203,23 +207,28 @@ class Probes(VoiceoverScene):
         hc = history_card(2021, r"Y.~Elazar, S.~Ravfogel, A.~Jacovi \& Y.~Goldberg", r"amnesic probing: \ remove what the "
                           r"probe reads, \ and see whether the model notices", width=5.6, color=CAUSE, font_size=19)
         hc.to_corner(UR, buff=0.35)
-        uses = (bp - b0) > 3 * max(float(br.mean()) - b0, 0.02)
+        selective_rise = bp > b0 and bp > float(br.mean())
         proj = cmath(r"h \;\to\; h - (h\cdot\hat w)\,\hat w", font_size=34).next_to(hc, DOWN, buff=0.45)
         pl = label(r"$\hat w$: \ the probe's unit direction, \ at layer " + f"${best}$", font_size=18,
                    color=GREY_A).next_to(proj, DOWN, buff=0.12)
-        msg = label((r"the model uses this direction" if uses else r"decodable, \ but barely used"), font_size=26,
+        msg = label((r"probe removal increases \\ closing-quote loss here" if selective_rise else
+                     r"no selective loss increase \\ under this removal"), font_size=24,
                     color=CAUSE).next_to(pl, DOWN, buff=0.45)
-        verdict = ("The model was using that direction to know a quote was open. " if uses else
-                   "The model hardly cared: the information was there, but the computation ran elsewhere, or along "
-                   "other directions too. ")
+        selection_note = label(r"layer selected using these validation windows", font_size=17,
+                               color=GREY_B).next_to(msg, DOWN, buff=0.22)
+        verdict = ("Removing this direction raises closing-quote prediction loss more than the mean random-direction "
+                   "removal here. This is a measured loss effect; the direction's other roles remain untested. "
+                   if selective_rise else
+                   "This intervention does not show a selective closing-quote loss increase over these controls. "
+                   "That result is specific to this loss and intervention. ")
         with self.voiceover(
             "There is a second trap. A probe shows that information can be read; not that the model reads it. "
             "<bookmark mark='a'/> Yanai Elazar and colleagues' answer: remove what the probe reads, and see whether "
             f"the model notices. We take the linear probe's direction at layer {best}, project it out of every "
             "vector, and run the rest of the model. <bookmark mark='b'/> On the tokens that close a quotation, "
-            f"predicting them costs {b0:.2f} bits as the model is. <bookmark mark='c'/> Removing ten random "
-            f"directions instead costs {br.mean():.2f}. <bookmark mark='d'/> Removing the probe's direction costs "
-            f"{bp:.2f}. {verdict}Reading out is correlation; changing the model and watching is causation, the subject of chapter four."
+            f"predicting them costs {b0:.2f} bits as the model is. <bookmark mark='c'/> In ten separate controls, "
+            f"we remove one random direction at a time: {br.mean():.2f} bits on average; the line shows their range. <bookmark mark='d'/> Removing the probe's direction costs "
+            f"{bp:.2f}. {verdict}The layer was selected on these same validation windows. Reading out is correlation; changing the model and watching is causation, the subject of chapter four."
         ) as vo:
             self.play(FadeIn(g), FadeIn(hc))
             vo.wait_until("a")
@@ -230,7 +239,7 @@ class Probes(VoiceoverScene):
             self.play(GrowFromEdge(bars_[1][0], DOWN), FadeIn(bars_[1][1:]))
             vo.wait_until("d")
             self.play(GrowFromEdge(bars_[2][0], DOWN), FadeIn(bars_[2][1:]))
-            self.play(FadeIn(msg))
+            self.play(FadeIn(msg), FadeIn(selection_note))
         self.wait(0.3)
         self.clear_scene()
 

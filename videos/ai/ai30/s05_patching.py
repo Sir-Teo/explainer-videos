@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai30.common import CAUSE, CTRL, PART, RESID, heads_grid, heat_image, load, ticks
+from videos.ai.ai30.common import CAUSE, CTRL, PART, RESID, heads_grid, heat_image, signed_image, load, ticks
 
 PREV = C.TRUE_P  # the previous-token head
 IND = C.BITS  # the induction head
@@ -46,11 +46,7 @@ class Patching(VoiceoverScene):
             un = label(rf"{unit}; \ trained on ${tok / 1e6:.0f}$ million", font_size=18, color=GREY_B).next_to(nm_, DOWN, buff=0.1)
             g.add(VGroup(ba, bb, ta, tb, la, lb, nm_, un))
         head = label(r"Held-out text shown twice: \ is the repeat any easier?", font_size=32).to_edge(UP, buff=0.35)
-        drop = max(rows[0][1] - rows[0][2], rows[1][1] - rows[1][2])
-        none = drop < 0.25
-        verdict = ("Neither of our models copies. Olsson and colleagues saw the heads that copy form in their models "
-                   "between about 2.5 and 5 billion tokens of training; ours stopped at about "
-                   f"{int(round(rows[0][3] / 1e6))} million. " if none else "Some copying, but little. ")
+        verdict = "These passage-level changes alone do not identify a copying circuit. "
         ex = np.asarray(load("induction")["ex"])
         strip = VGroup()
         for i, t_ in enumerate(ex):
@@ -97,20 +93,20 @@ class Patching(VoiceoverScene):
         lg.next_to(g, UP, buff=0.1).align_to(g, RIGHT)
         hp, hi = int(d["prev_head"]), int(d["ind_head"])
         ps, is_ = d["prev_scores"], d["ind_scores"]
-        m1 = heat_image(np.asarray(d["ex_prev"])[50:80, 0:40], 2.8, 2.1, color=PREV, gamma=0.6)
+        m1 = heat_image(np.asarray(d["ex_prev"])[10:40, 0:40], 2.8, 2.1, color=PREV, gamma=0.6)
         m2 = heat_image(np.asarray(d["ex_ind"])[50:80, 0:40], 2.8, 2.1, color=IND, gamma=0.6)
         Group(m1, m2).arrange(RIGHT, buff=0.5).move_to([3.6, -0.2, 0])
         t1 = label(rf"layer 1, \ head ${hp + 1}$: \\ the previous token \ (${ps[hp]:.2f}$)", font_size=18, color=PREV).next_to(m1, UP, buff=0.12)
         t2 = label(rf"layer 2, \ head ${hi + 1}$: \\ the token after the match \ (${is_[hi]:.2f}$)", font_size=18,
                    color=IND).next_to(m2, UP, buff=0.12)
-        ax_ = label(r"rows: \ queries $50$--$79$ \quad columns: \ keys $0$--$39$ \ (the repeat copies $10$--$29$ to $60$--$79$)",
+        ax_ = label(r"rows: \ left $10$--$39$, \ right $50$--$79$ \\ columns: \ keys $0$--$39$; \ repeat $10$--$29$ to $60$--$79$ \\ head scores: \ global test averages",
                     font_size=16, color=GREY_B).next_to(Group(m1, m2), DOWN, buff=0.2)
         tag = note(r"retrained here: \ Part 13's recipe and seed").to_corner(DR, buff=0.2)
         with self.voiceover(
             f"We retrain it here with Part 13's recipe and seed. <bookmark mark='a'/> For a while it learns nothing "
             f"useful; then, suddenly, the repeat becomes easy, falling from {cv[0, 1]:.1f} to {cv[-1, 1]:.1f} bits "
             "per token while random tokens stay as hard as ever. <bookmark mark='b'/> Look at the attention. In layer "
-            f"one, {len(d['prev_set'])} of the four heads look mostly at the previous token; here is head {hp + 1}. "
+            f"one, {len(d['prev_set'])} of the four heads prefer the previous token; here is head {hp + 1}. "
             f"<bookmark mark='c'/> In layer two, {len(d['ind_set'])} heads, at a token in the second copy, look at the "
             "token just after that token's first occurrence: the one to copy. Previous-token heads and induction "
             "heads. But attention patterns are a correlation too. Are these heads the cause?"
@@ -130,10 +126,13 @@ class Patching(VoiceoverScene):
         d = load("induction")
         H = np.asarray(d["heat"])  # (3, T): layer boundary, patched position
         tgt = int(d["target"])
-        lo, hi_ = 0, tgt + 4
-        Hs = np.clip(H[:, lo:hi_], 0, 1)
+        # Only positions through the measured prediction were tested. Later
+        # positions in the historical array are padding, not observed zeros.
+        lo, hi_ = 0, tgt + 1
+        Hs = H[:, lo:hi_]
+        scale = max(float(np.abs(Hs).max()), 1e-12)
         W, Hh = 10.6, 2.4
-        img = heat_image(Hs[::-1], W, Hh, color=CAUSE, gamma=0.7).move_to([0.9, -1.2, 0])
+        img = signed_image(Hs[::-1], W, Hh, pos=CAUSE, neg=C.TRUE_P).move_to([0.9, -1.2, 0])
         n = hi_ - lo
         cw = W / n
         xs = lambda j: img.get_left()[0] + cw * (j - lo + 0.5)  # noqa: E731
@@ -143,6 +142,10 @@ class Patching(VoiceoverScene):
         for j, t, dx in ((20, "20", -0.15), (21, "21", 0.15), (tgt, str(tgt), 0.0)):
             marks.add(MathTex(t, font_size=20, color=WHITE).move_to([xs(j) + dx, img.get_bottom()[1] - 0.22, 0]))
         xl = label(r"the position whose vector is swapped for the corrupted one", font_size=18, color=GREY_B).next_to(marks, DOWN, buff=0.1)
+        key = legend([(CAUSE, r"prediction hurt"), (C.TRUE_P, r"prediction helped")], font_size=17)
+        key.next_to(xl, DOWN, buff=0.13)
+        scale_label = label(rf"signed fraction of the clean--corrupt gap; \ color scale $\pm {scale:.2f}$",
+                            font_size=17, color=GREY_B).next_to(key, DOWN, buff=0.12)
         dc = definition_card(r"activation patching", r"run the model on a clean input and on a corrupted one; copy one "
                              r"activation from one run into the other, \ and measure how much of the behaviour moves "
                              r"with it.", color=CAUSE, width=6.6, font_size=21).to_corner(UL, buff=0.3)
@@ -180,8 +183,8 @@ class Patching(VoiceoverScene):
         k_in = [j for j in range(tgt + 1) if cols[0, j] > 0.5]
         k_mid = [j for j in range(tgt + 1) if cols[1, j] > 0.5]
         names = lambda ks: ", ".join(str(k) for k in ks) if ks else "none"  # noqa: E731
-        v_in = ("At the input, no single position breaks it on its own." if not k_in else
-                f"At the input, breaking position {names(k_in)} breaks the copy.")
+        v_in = ("At the input, no single swap removes more than half the clean advantage." if not k_in else
+                f"At the input, swapping position {names(k_in)} removes more than half the clean advantage.")
         with self.voiceover(
             "The tool is activation patching. <bookmark mark='a'/> Run the model twice: on the clean sequence, with "
             "its repeat, and on a corrupted one, the first copy replaced by fresh random tokens, so there is nothing "
@@ -199,7 +202,7 @@ class Patching(VoiceoverScene):
             self.play(Create(mv), FadeIn(mvl))
             vo.wait_until("b")
             self.play(FadeOut(hcs), FadeOut(sch_all))
-            self.play(FadeIn(img), FadeIn(rl), FadeIn(marks), FadeIn(xl))
+            self.play(FadeIn(img), FadeIn(rl), FadeIn(marks), FadeIn(xl), FadeIn(key), FadeIn(scale_label))
             vo.wait_until("c")
             self.play(Indicate(rl[1], color=CAUSE))
             vo.wait_until("d")
@@ -212,17 +215,17 @@ class Patching(VoiceoverScene):
         d = load("induction")
         nz = np.asarray(d["head_noise"])
         ps_, is_, sh = [int(h) for h in d["prev_set"]], [int(h) for h in d["ind_set"]], int(d["self_head"])
-        g = heads_grid(nz, CAUSE, cell=0.9, fmt="{:.2f}", vmax=1.0, font_size=24).move_to([-2.6, -0.4, 0])
+        g = heads_grid(nz, CAUSE, cell=0.9, fmt="{:.2f}", vmax=max(float(np.abs(nz).max()), 1.0), font_size=24, negative_color=C.TRUE_P).move_to([-2.6, -0.4, 0])
         cap = label(r"each head's output taken from the corrupted run, \ put into the clean one: \\ how much of the "
-                    r"copying is lost \ ($1$: all of it)", font_size=20, color=GREY_A).next_to(g, UP, buff=0.35)
+                    r"clean advantage is lost \ ($1$: all; negative: helped)", font_size=20, color=GREY_A).next_to(g, UP, buff=0.35)
         team = {(0, h) for h in ps_ + [sh]} | {(1, h) for h in is_}
         others = [nz[l_, h] for l_ in range(2) for h in range(4) if (l_, h) not in team] or [0.0]
         fmt = lambda hs, l_: r", \ ".join(f"${nz[l_, h]:.2f}$" for h in hs)  # noqa: E731
         txt = label(rf"previous-token heads: \ {fmt(ps_, 0)} \\ the current-token head: \ ${nz[0, sh]:.2f}$ \\ "
                     rf"induction heads: \ {fmt(is_, 1)} \\ the rest: \ at most ${max(others):.2f}$", font_size=22,
                     color=WHITE).move_to([3.8, 0.5, 0])
-        note_ = label(r"swapping in the corrupted run's vector \ (noising) \ tests what is \textit{necessary}; \\ the "
-                      r"reverse \ (denoising) \ what is \textit{sufficient}", font_size=19, color=GREY_B).move_to([3.8, -2.1, 0])
+        note_ = label(r"noising: \ how much does this swap hurt? \\ denoising: \ how much does it restore? \\ "
+                      r"both depend on the corruption and context", font_size=19, color=GREY_B).move_to([3.8, -2.1, 0])
         p_lo, p_hi = min(nz[0, h] for h in ps_), max(nz[0, h] for h in ps_)
         i_lo, i_hi = min(nz[1, h] for h in is_), max(nz[1, h] for h in is_)
         with self.voiceover(
@@ -230,7 +233,7 @@ class Patching(VoiceoverScene):
             f"<bookmark mark='a'/> Corrupting one of the previous-token heads loses {100 * p_lo:.0f} to "
             f"{100 * p_hi:.0f} percent of the copying; the induction heads, {100 * i_lo:.0f} to {100 * i_hi:.0f}. "
             f"<bookmark mark='b'/> And one more head matters, head {sh + 1} of layer one, which mostly looks at the "
-            f"token itself: {100 * nz[0, sh]:.0f} percent. No other head more than {100 * max(others):.0f}. A small "
+            f"token itself: {100 * nz[0, sh]:.0f} percent. The remaining heads have effects at most {100 * max(others):.0f} percent; a negative effect means the swap helps. A small "
             "team of heads carries the behaviour. Chapter five takes it apart."
         ) as vo:
             self.play(FadeIn(cap), FadeIn(g[1:]), FadeIn(g.cells))

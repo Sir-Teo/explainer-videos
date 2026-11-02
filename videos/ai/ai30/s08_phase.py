@@ -40,22 +40,26 @@ class Phase(VoiceoverScene):
                    max_tip_length_to_length_ratio=0.3) if abs(w2) > 0.05 else Dot(ln.n2p(0) + DOWN * 0.18, color=F2)
         t = label(title, font_size=20, color=GREY_A if color is PH[0] else color).next_to(ln, UP, buff=0.35)
         box = SurroundingRectangle(VGroup(ln, a1, a2, t), buff=0.2, color=GREY_B if color is PH[0] else color,
-                                   corner_radius=0.1, stroke_width=2)
+                                   corner_radius=0.1, stroke_width=2, fill_opacity=0)
         return VGroup(box, ln, a1, a2, t)
 
     def options(self):
         colors = {r"w": C.BITS, r"x": C.TRUE_P}
-        f = cmath(r"\hat x = \operatorname{ReLU}(", r"w", r"\, ", r"w", r"^{\top}", r"x", r" + b), \qquad ", r"w",
+        f = cmath(r"\hat x = \operatorname{ReLU}(", r"w", r"^{\top}", r"w", r"\,", r"x", r" + b), \qquad ", r"w",
                   r" \in \mathbb{R}^{1 \times 2}", colors=colors, font_size=36).to_edge(UP, buff=0.4)
         sub = label(r"two features, \ one number in the middle; \ feature $2$ matters $r$ times as much; \ each is "
                     r"on a fraction $\rho$ of the time", font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.25)
         pics = VGroup(self.line_pic(1, 0, r"drop feature $2$", PH[0]),
                       self.line_pic(0, 1, r"feature $2$ takes the dimension", PH[1]),
                       self.line_pic(1, -1, r"share it: \ opposite directions", PH[2])).arrange(RIGHT, buff=0.5).move_to(DOWN * 0.7)
-        why_ = label(r"sharing works only if the two are rarely on together: \\ the ReLU and a negative bias cut off "
-                     r"the other's shadow", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.9)
+        why_ = label(r"sharing pays when the two are rarely on together: \\ the ReLU cuts off negative estimates", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.9)
         for p_ in pics:
-            p_.set_opacity(0.2)
+            p_[0].set_stroke(opacity=0.2)
+            p_[1:].set_opacity(0.2)
+
+        def emphasize(pic):
+            # Keep the outline unfilled; group opacity would make it opaque.
+            return AnimationGroup(pic[0].animate.set_stroke(opacity=1), pic[1:].animate.set_opacity(1))
         cite_ = cite(r"Elhage et al., \textit{Toy Models of Superposition} (2022), \ \S 4", corner=DR)
         with self.voiceover(
             "Chapter six showed superposition happen. Elhage and colleagues asked when it happens, and drew the "
@@ -63,18 +67,18 @@ class Phase(VoiceoverScene):
             "single number. Feature two matters r times as much as feature one, and each is on a fraction rho of the "
             "time. <bookmark mark='b'/> The network has three choices. Drop feature two. <bookmark mark='c'/> Give "
             "feature two the dimension and drop feature one. <bookmark mark='d'/> Or share: point the two features "
-            "in opposite directions, and let the ReLU, with a negative bias, cut off each one's shadow on the other. "
+            "in opposite directions, and let the ReLU cut off negative estimates. "
             "Sharing only pays when they are rarely on at the same time."
         ) as vo:
             self.play(Write(f), FadeIn(cite_), FadeIn(pics))
             vo.wait_until("a")
             self.play(FadeIn(sub))
             vo.wait_until("b")
-            self.play(pics[0].animate.set_opacity(1))
+            self.play(emphasize(pics[0]))
             vo.wait_until("c")
-            self.play(pics[1].animate.set_opacity(1))
+            self.play(emphasize(pics[1]))
             vo.wait_until("d")
-            self.play(pics[2].animate.set_opacity(1), FadeIn(why_))
+            self.play(emphasize(pics[2]), FadeIn(why_))
         self.wait(0.3)
         self.clear_scene()
 
@@ -89,13 +93,13 @@ class Phase(VoiceoverScene):
 
         def frame(g, title):
             t = label(title, font_size=22, color=WHITE).next_to(g, UP, buff=0.2)
-            xl = label(r"$r$: \ how much feature $2$ matters \ ($0.1$ to $10$)", font_size=17, color=GREY_B)
+            xl = label(r"$r$: \ how much feature $2$ matters \ ($0.1$ to $10$, log spaced)", font_size=17, color=GREY_B)
             xl.next_to(g, DOWN, buff=0.15)
-            yl = label(r"density $\rho$ \\ ($0.01$ to $1$)", font_size=17, color=GREY_B).next_to(g, LEFT, buff=0.15)
+            yl = label(r"density $\rho$ \\ ($0.01$ to $1$) \\ log spaced", font_size=17, color=GREY_B).next_to(g, LEFT, buff=0.15)
             return VGroup(t, xl, yl)
 
         fe = frame(ge, rf"trained: \ ${len(dens) * len(rel)}$ cells, \ best of ${int(p['seeds'])}$ seeds")
-        ft = frame(gt, r"theory: \ the cheapest of the three")
+        ft = frame(gt, r"reference: \ the cheapest tested candidate")
         lg = VGroup(*[VGroup(Square(0.22, fill_color=c_, fill_opacity=0.9, stroke_width=0), label(t, font_size=18, color=GREY_A))
                       .arrange(RIGHT, buff=0.12) for c_, t in zip(PH, (r"feature $2$ dropped", r"feature $2$ takes the dimension",
                                                                          r"superposition"))]).arrange(RIGHT, buff=0.5)
@@ -110,27 +114,27 @@ class Phase(VoiceoverScene):
                   xticks=[0, S], yticks=[-1, 0, 1], center=[3.0, -0.6, 0])
         w1 = curve(gi.ax, tr[:, 0], tr[:, 1], F1, 3)
         w2 = curve(gi.ax, tr[:, 0], tr[:, 2], F2, 3)
-        it = label(rf"the marked cell: \ $\rho = {dens[i0]:.2f}$, \ $r = {rel[j0]:.1f}$", font_size=18, color=WHITE)
-        it.next_to(gi, UP, buff=0.15)
+        it = VGroup(label(r"one seed's trajectory", font_size=18, color=WHITE),
+                    label(rf"the marked cell: \ $\rho = {dens[i0]:.2f}$, \ $r = {rel[j0]:.1f}$",
+                          font_size=16, color=GREY_A)).arrange(DOWN, buff=0.06).next_to(gi, UP, buff=0.15)
         link = DashedLine(mark.get_right(), gi.get_left(), color=GREY_C, dash_length=0.06)
         agree = float(p["agree"])
-        cellsay = ["the second weight shrinking to zero", "the first weight shrinking to zero",
-                   "the two weights settling into opposite signs"][int(emp[i0, j0])]
         n_sup = int((emp == 2).sum())
         sparse_row = emp[0]
         dense_row = emp[-1]
         with self.voiceover(
             f"We trained the little model on a grid of {len(dens)} densities by {len(rel)} importances, four seeds "
             "a cell, and kept the best. <bookmark mark='a'/> Each cell is coloured by what the trained network did "
-            f"with feature two; here is one cell's training, {cellsay}. "
+            "with feature two; here is one seed's training at the marked cell. The grid keeps the best of four "
+            "seeds; a single run can settle elsewhere. "
             f"<bookmark mark='b'/> When features are dense, at the top, the network shares in "
             f"{int((dense_row == 2).sum())} of the top row's {len(rel)} cells: one feature gets the dimension, the "
             "other is dropped. <bookmark mark='c'/> When features are sparse, at the bottom, sharing "
             f"wins across {int((sparse_row == 2).sum())} of {len(rel)} cells. <bookmark mark='d'/> On the right, the "
-            "same map from theory: for every cell, the expected loss of each of the three choices, and the "
-            f"cheapest. They agree on {100 * agree:.0f} percent of the cells, and the misses sit on the boundaries, "
-            "where two choices cost almost the same. Superposition is a phase the network enters when features are "
-            "sparse enough."
+            "reference map for three fixed-weight candidates. The dropped-feature candidates use zero bias; the "
+            "shared candidate searches only nonpositive biases. "
+            f"They agree on {100 * agree:.0f} percent of the cells. This restricted comparison does not establish "
+            "the optimal phase boundaries. The trained models show superposition when features are sparse enough."
         ) as vo:
             blank = ge.copy().set_fill(GREY_D, opacity=0.25)
             self.play(FadeIn(lg), FadeIn(fe), FadeIn(blank))

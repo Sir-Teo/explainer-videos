@@ -23,8 +23,17 @@ C = _Compute()
 
 
 def _spearman(a, b):
-    ra = np.argsort(np.argsort(a))
-    rb = np.argsort(np.argsort(b))
+    """Spearman correlation uses average ranks for tied observations."""
+    from scipy.stats import rankdata
+
+    a, b = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
+    if a.ndim != 1 or b.shape != a.shape or len(a) < 2:
+        raise ValueError("rank correlation needs matching 1D arrays of at least two observations")
+    if not np.isfinite(a).all() or not np.isfinite(b).all():
+        raise ValueError("rank correlation needs finite observations")
+    ra, rb = rankdata(a, method="average"), rankdata(b, method="average")
+    if np.ptp(ra) == 0 or np.ptp(rb) == 0:
+        raise ValueError("rank correlation is undefined for a constant input")
     return float(np.corrcoef(ra, rb)[0, 1])
 
 
@@ -299,6 +308,14 @@ def att2_metric(z, x, mask):
     return float(lp[m].mean())
 
 
+def copying_benefit_gap(clean, corrupt, *, context="copying effect", minimum=1e-6):
+    """A positive measured baseline benefit is required for normalized damage."""
+    gap = float(clean) - float(corrupt)
+    if not np.isfinite(gap) or gap <= minimum:
+        raise ValueError(f"{context}: clean/corrupt gap {gap:g} nats cannot support a normalized effect")
+    return gap
+
+
 def compute_induction():
     import copy
 
@@ -403,8 +420,10 @@ def compute_induction():
     out["m_clean"], out["m_corrupt"] = m_clean, m_corr
     out["chance"] = -math.log(IV)
 
+    gap = copying_benefit_gap(m_clean, m_corr, context="final induction batch")
+
     def frac_noise(z):  # damage: 0 = as clean, 1 = as corrupted
-        return (m_clean - metric(z)) / (m_clean - m_corr)
+        return (m_clean - metric(z)) / gap
 
     # head by head: each head's output from the corrupted run, into the clean one (noising)
     noise = np.zeros((2, IH))
@@ -428,19 +447,26 @@ def compute_induction():
 
     # path patching (noising): layer-1 heads' corrupted outputs sent only into the layer-2 heads' queries, keys or
     # values; from the previous-token heads together, from each alone, and from the current-token head
-    def path(mm, rc_, rx_, heads, mc, mx):
+    def path(mm, rc_, rx_, heads, mc, mx, receivers, *, normalized=True):
         delta = sum(rx_["heads0"][:, h] - rc_["heads0"][:, h] for h in heads)
+        denominator = copying_benefit_gap(mc, mx, context="normalized path") if normalized else 1.0
         res = {}
         for nm, sel in (("q", (1, 0, 0)), ("k", (0, 1, 0)), ("v", (0, 0, 1))):
             fn = (lambda h, sel=sel: tuple(h + delta if s_ else h for s_ in sel))
             with torch.no_grad():
-                z = mm(test_x, patch={("kqv", 1, h2): fn for h2 in range(IH)})
-            res[nm] = (mc - metric(z)) / (mc - mx)
+                z = mm(test_x, patch={("kqv", 1, h2): fn for h2 in receivers})
+            res[nm] = (mc - metric(z)) / denominator
         return res
 
-    out["path_noise"] = path(m, rc, rx, prev_set, m_clean, m_corr)
-    out["path_single"] = [path(m, rc, rx, [h], m_clean, m_corr)["k"] for h in prev_set]
-    out["path_self"] = path(m, rc, rx, [self_head], m_clean, m_corr)
+    # Preserve the original all-layer-2 measurement; the displayed circuit
+    # isolates receivers selected as induction heads by the final-model score.
+    out["path_noise_all"] = path(m, rc, rx, prev_set, m_clean, m_corr, range(IH))
+    out["path_noise"] = path(m, rc, rx, prev_set, m_clean, m_corr, ind_set)
+    out["path_single_all"] = [path(m, rc, rx, [h], m_clean, m_corr, range(IH))["k"] for h in prev_set]
+    out["path_single"] = [path(m, rc, rx, [h], m_clean, m_corr, ind_set)["k"] for h in prev_set]
+    out["path_self_all"] = path(m, rc, rx, [self_head], m_clean, m_corr, range(IH))
+    out["path_self"] = path(m, rc, rx, [self_head], m_clean, m_corr, ind_set)
+    out["path_receiver_scope"] = "final-model selected induction heads"
     # residual stream patching, noising: one target position of one example; the corrupted residual at one (layer,
     # position) put into the clean run; how much of the target's log-probability is lost
     ex = np.asarray(C.rng(7).integers(0, IV, IT))
@@ -454,6 +480,7 @@ def compute_induction():
         zce, rce = m(xce, rec=True)
     lp = lambda z: float(torch.log_softmax(z[0, tgt], -1)[ex[tgt + 1]])  # noqa: E731
     lc, lx = lp(ze), lp(zce)
+    example_gap = copying_benefit_gap(lc, lx, context="residual-patching example")
     heat = np.zeros((3, IT))
     with torch.no_grad():
         for l_ in range(3):
@@ -465,7 +492,7 @@ def compute_induction():
                     h[:, j] = cr[:, j]
                     return h
 
-                heat[l_, j] = (lc - lp(m(xe, patch={("resid", l_): fn}))) / (lc - lx)
+                heat[l_, j] = (lc - lp(m(xe, patch={("resid", l_): fn}))) / example_gap
     out.update(ex=ex, ex_corrupt=exc, target=tgt, heat=heat, lp_clean=lc, lp_corrupt=lx,
                ex_prev=re_["attn0"][0, hp].numpy(), ex_ind=re_["attn1"][0, hi].numpy(),
                ex_self=re_["attn0"][0, self_head].numpy())
@@ -490,8 +517,9 @@ def compute_induction():
         S_ = Pz @ qk0 @ Pz.T
         offs.append([np.mean([S_[i, i - d] for i in range(d, IT)]) for d in range(0, 8)])
     out["qk_pos_offsets"] = np.mean(offs, 0)
-    # through training: the K path's effect (previous-token heads into every layer-2 head's keys), and the scores
-    kpath, sc_ind, sc_prev = [], [], []
+    # Track the same final-model circuit through training, using raw nats even
+    # when an early clean/corrupt benefit is zero or negative.
+    kpath, kpath_all, sc_ind, sc_prev = [], [], [], []
     for st, sd in snaps:
         mm = att2_build()
         mm.load_state_dict(sd)
@@ -500,13 +528,16 @@ def compute_induction():
             zc_, rc_ = mm(test_x, rec=True)
             zx_, rx_ = mm(test_c, rec=True)
         mc, mx = metric(zc_), metric(zx_)
-        kp = path(mm, rc_, rx_, prev_set, mc, mx)["k"] * (mc - mx)  # in nats
+        kp = path(mm, rc_, rx_, prev_set, mc, mx, ind_set, normalized=False)["k"]
+        kp_all = path(mm, rc_, rx_, prev_set, mc, mx, range(IH), normalized=False)["k"]
         kpath.append((st, kp, mc - mx))
+        kpath_all.append((st, kp_all, mc - mx))
         p_, _, i_ = scores(mm)
         sc_prev.append(float(np.mean([p_[h] for h in prev_set])))
         sc_ind.append(float(np.mean([i_[h] for h in ind_set])))
     out["snap_steps"] = [s_ for s_, _ in snaps]
     out["snap_kpath"] = np.array(kpath)
+    out["snap_kpath_all"] = np.array(kpath_all)
     out["snap_ind"], out["snap_prev"] = sc_ind, sc_prev
     print(f"    our transformers: TF {out['tf_text1']:.2f} -> {out['tf_text2']:.2f} bits on repeated text, novels "
           f"{out['nov_text1']:.2f} -> {out['nov_text2']:.2f}; attention-only: repeat {curve[0][1]:.2f} -> "
@@ -543,6 +574,29 @@ def nov_quote_labels():
     return valid, lab, closing, strs
 
 
+def probe_window_starts(length, n, T, seed):
+    """Keep the original test windows; resample training spans that overlap them.
+
+    A span includes the T input tokens and the next-token target. No token in
+    a test input/target span may occur in a probe-training span.
+    """
+    if T < 1 or n < 2 or length <= T + 1:
+        raise ValueError("probe split needs at least two windows and a longer token stream")
+    starts = np.random.Generator(np.random.PCG64(seed)).integers(0, length - T - 1, n)
+    split, span = n // 2, T + 1
+    test = starts[split:]
+    resample = np.random.Generator(np.random.PCG64(seed + 1))
+    for i in range(split):
+        for _ in range(10000):
+            at = starts[i]
+            if not np.any((at < test + span) & (at + span > test)):
+                break
+            starts[i] = resample.integers(0, length - T - 1)
+        else:
+            raise ValueError("cannot draw disjoint probe-training windows from this token stream")
+    return starts
+
+
 PROBE = dict(windows=160, T=128, skip=16, seeds=(0, 1, 2), steps=400, hidden=256)
 
 
@@ -561,7 +615,8 @@ def compute_probes():
     model = N.load_base()
     valid, lab, closing, strs = nov_quote_labels()
     nw = max(20, int(PROBE["windows"] * min(1.0, C.SCALE * 4)))
-    starts, W = acts.nov_windows(valid, nw, PROBE["T"], 1919)
+    starts = probe_window_starts(len(valid), nw, PROBE["T"], 1919)
+    W = torch.tensor(np.stack([valid[s:s + PROBE["T"]] for s in starts]).astype(np.int64))
     hs, _ = acts.nov_resid(model, W)
     sk = PROBE["skip"]
     L = len(hs)
@@ -573,7 +628,7 @@ def compute_probes():
     tr = torch.tensor(win < nw // 2)
     te = ~tr
     S = C.steps(PROBE["steps"])
-    rate = float(y.mean())
+    rate = float(y[tr].mean())  # control labels use only the training class rate
     res = {k: np.zeros((len(PROBE["seeds"]), L)) for k in ("lin_task", "lin_ctrl", "mlp_task", "mlp_ctrl")}
     dirs = []
     for si, seed in enumerate(PROBE["seeds"]):
@@ -622,15 +677,18 @@ def compute_probes():
                 h = h - (h @ u_)[..., None] * u_
             z = acts.nov_run_from(model, h, best)[:, sk:].reshape(-1, model.cfg.vocab)
             ce = F.cross_entropy(z, yv, reduction="none") / math.log(2)
-        return float(ce[cl].mean()), float(ce.mean())
+        return float(ce[cl & te].mean()), float(ce[te].mean())
 
     base_cl, base_all = loss_with(None)
     probe_cl, probe_all = loss_with(dirs[best])
     gr = torch.Generator().manual_seed(77)
     rand = [loss_with(torch.randn(hl.shape[-1], generator=gr)) for _ in range(10)]
     out = dict(layers=L, n_train=int(tr.sum()), n_test=int(te.sum()), rate=rate, majority=maj_task, best=best,
-               seeds=list(PROBE["seeds"]), steps=S, n_closing=int(cl.sum()),
-               amnesic=dict(base_closing=base_cl, base_all=base_all, probe_closing=probe_cl, probe_all=probe_all,
+               seeds=list(PROBE["seeds"]), steps=S, n_closing=int((cl & te).sum()),
+               window_starts=starts, split=dict(train_windows=nw // 2, test_windows=nw - nw // 2,
+                   span_tokens=PROBE["T"] + 1, full_span_overlap=0,
+                   rule="validation windows fixed; overlapping training spans resampled"),
+               amnesic=dict(evaluation="probe validation windows only; also used for layer selection", base_closing=base_cl, base_all=base_all, probe_closing=probe_cl, probe_all=probe_all,
                             rand_closing=[a for a, _ in rand], rand_all=[b for _, b in rand]))
     for k, v in res.items():
         out[k] = v
@@ -1376,6 +1434,19 @@ def tf_quote_labels(seq, chars):
     return lab
 
 
+def single_class_probe_scores(labels, test_labels):
+    """Score a one-class training draw without inventing a second label.
+
+    Return None for a normal two-class draw. The constant prediction uses the
+    training class only; held-out labels are used solely to measure accuracy.
+    """
+    if labels.numel() == 0:
+        raise ValueError("probe training draw is empty")
+    if bool((labels == labels[0]).all()):
+        return [float((target == labels[0]).float().mean()) for target in test_labels]
+    return None
+
+
 def compute_disagree():
     """Three disagreements, measured small: (1) do autoencoders trained from different seeds find the same latents?
     (2) sparse probing on autoencoder latents against a plain linear probe, from 16 to 4,096 examples, in and out of
@@ -1466,14 +1537,20 @@ def compute_disagree():
             return [float((((((Zt - mu) / sd) @ w + b) > 0).float() == yt).float().mean()) for Zt, yt in Zt_list]
 
     res = {k: np.zeros((len(DIS["sizes"]), DIS["draws"], 2)) for k in ["raw"] + [f"sae{k}" for k in DIS["k_latents"]]}
+    single_class_draws = []
     for si, n in enumerate(DIS["sizes"]):
         for dr in range(DIS["draws"]):
             gg = np.random.Generator(np.random.PCG64(1000 * si + dr))
             idx = torch.tensor(gg.choice(len(Ztr), min(n, len(Ztr)), replace=False))
             yy = y_tr[idx]
-            if yy.min() == yy.max():
-                yy = yy.clone()
-                yy[0] = 1 - yy[0]
+            # A small random draw can contain one class. Preserve its observed
+            # labels and use the only class it supports, for every representation.
+            constant = single_class_probe_scores(yy, [y_va, y_ch])
+            if constant is not None:
+                for scores in res.values():
+                    scores[si, dr] = constant
+                single_class_draws.append(dict(size=int(n), draw=int(dr), label=int(yy[0]), n_train=int(len(yy))))
+                continue
             res["raw"][si, dr] = fit(Ztr[idx], yy, [(Zva, y_va), (Zch, y_ch)])
             with torch.no_grad():
                 Fi = dicts.encode(nsae, Ztr[idx])
@@ -1483,6 +1560,8 @@ def compute_disagree():
                 res[f"sae{kk}"][si, dr] = fit(Fi[:, j], yy, [(Fva[:, j], y_va), (Fch[:, j], y_ch)])
     for k_, val in res.items():
         out[f"probe_{k_}"] = val
+    out["probe_single_class_draws"] = single_class_draws
+    out["probe_single_class_policy"] = "constant training-class predictor; observed labels unchanged"
     out["probe_sizes"] = list(DIS["sizes"])
     out["probe_layer"] = lay
     out["probe_majority"] = float(max(y_va.mean(), 1 - y_va.mean()))
@@ -1528,6 +1607,13 @@ def compute_grok():
     out = {k: np.array([h[k] for h in hist]) for k in keys}
     out["spectrum"] = np.array([h["spectrum"] for h in hist])
     out["key_final"] = hist[-1]["key"]
+    out["metric_schema"], out["key_rule"] = G.METRIC_SCHEMA, G.KEY_RULE
+    out["legacy_key_history"] = np.array([h["legacy_key"] for h in hist])
+    out["legacy_restricted_loss"] = np.array([h["legacy_restricted_loss"] for h in hist])
+    out["legacy_excluded_loss"] = np.array([h["legacy_excluded_loss"] for h in hist])
+    out["legacy_key_final"] = hist[-1]["legacy_key"]
+    out["output_spectrum"] = an["output_spectrum"]
+    assert out["key_final"] == an["key_final"]
     B, _ = G.fourier_basis()
     # each number's position in the plane of the strongest frequency, at the stored moments
     k0 = hist[-1]["key"][0]
@@ -1543,8 +1629,13 @@ def compute_grok():
     out["neuron_freq"], out["neuron_share"] = an["neuron_freq"], an["neuron_share"]
     # the logits explained by the key frequencies' waves, at the end
     L = an["L"]
-    keep = G.restricted(L, hist[-1]["key"])
-    out["fit_r2"] = float(1 - ((L - keep) ** 2).sum() / (L ** 2).sum())
+    out["fit_r2"] = float(an["strict_cos_r2"])
+    out["sum_wave_r2"] = float(an["sum_wave_r2"])
+    out["strict_cos_accuracy"] = float(an["strict_cos_accuracy"])
+    out["strict_cos_coefficients"] = an["strict_cos_coefficients"]
+    out["strict_cos_accuracy_scope"] = "fitted readout on all modular-addition pairs"
+    legacy_keep = G.restricted(L, hist[-1]["legacy_key"])
+    out["legacy_fit_r2"] = float(1 - ((L - legacy_keep) ** 2).sum() / (L ** 2).sum())
     j = int(np.argmax(an["neuron_share"] * (an["neuron_freq"] == k0)))
     out["neuron"] = j
     out["neuron_act"] = an["act"][:, :, j].astype(np.float32)

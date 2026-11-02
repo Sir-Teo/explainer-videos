@@ -154,9 +154,11 @@ class Superposition(VoiceoverScene):
             self.play(Create(base), FadeIn(names), FadeIn(steps[0]), LaggedStart(*[GrowFromEdge(r_, DOWN if v > 0 else UP)
                                                                                    for r_, v in zip(b_ro, ro)], lag_ratio=0.15))
             vo.wait_until("c")
-            self.play(Transform(b_ro, b_b), TransformMatchingTex(steps[0], steps[1]), run_time=1.2)
+            self.play(Transform(b_ro, b_b), FadeOut(steps[0]), run_time=0.6)
+            self.play(FadeIn(steps[1]), run_time=0.3)
             vo.wait_until("d")
-            self.play(Transform(b_ro, b_ar), TransformMatchingTex(steps[1], steps[2]), run_time=1.2)
+            self.play(Transform(b_ro, b_ar), FadeOut(steps[1]), run_time=0.6)
+            self.play(FadeIn(steps[2]), run_time=0.3)
             self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
@@ -180,11 +182,18 @@ class Superposition(VoiceoverScene):
 
         pl = self.plane(c0, R)
         cur = arrows(0)
-        ax = CornerAxes(x_range=[0, checks[-1], 2000], y_range=[0, float(L[:, 1].max()) * 1.05, float(L[:, 1].max()) / 2],
+        ymax = float(L[:, 1].max()) * 1.05
+        ax = CornerAxes(x_range=[0, checks[-1], 2000], y_range=[0, ymax, ymax / 2],
                         x_length=4.6, y_length=2.6, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}
                         ).move_to([3.6, -0.4, 0])
-        yn = label(r"the weighted rebuild error", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
-        xn = label(r"training steps", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.12)
+        values = VGroup(
+            *[MathTex(rf"{v:,}".replace(",", "{,}"), font_size=18, color=GREY_B)
+              .next_to(ax.c2p(v, 0), DOWN, buff=0.08) for v in (0, checks[-1] // 2, checks[-1])],
+            *[MathTex(f"{v:.3f}", font_size=18, color=GREY_B)
+              .next_to(ax.c2p(0, v), LEFT, buff=0.08) for v in (0, ymax / 2, ymax)],
+        )
+        yn = label(r"weighted mean squared error", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        xn = label(r"training steps", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.4)
         t = ValueTracker(0)
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28, color=C.BITS)
                             .next_to(pl, UP, buff=0.2))
@@ -201,7 +210,7 @@ class Superposition(VoiceoverScene):
             + f"<bookmark mark='c'/> By step {settled:,} the spacing is even, and the rest of training barely moves "
             "them. Nobody planned the pentagon; gradient descent found it, fast."
         ) as vo:
-            self.play(FadeIn(pl), FadeIn(hl), Create(ax), FadeIn(yn), FadeIn(xn))
+            self.play(FadeIn(pl), FadeIn(hl), Create(ax), FadeIn(values), FadeIn(yn), FadeIn(xn))
             self.add(cnt)
             self.play(FadeIn(cur))
             vo.wait_until("a")

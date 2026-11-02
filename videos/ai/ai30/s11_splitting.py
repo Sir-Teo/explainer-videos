@@ -43,23 +43,30 @@ class Splitting(VoiceoverScene):
         if pb.height > 6.4:
             pb.scale_to_fit_height(6.4)
         hm = label(rf"${sizes[1]}$ latents", font_size=22, color=WHITE).next_to(pm, UP, buff=0.2)
-        hb = label(rf"${sizes[2]:,}$ latents".replace(",", "{,}"), font_size=22, color=WHITE).next_to(pb, UP, buff=0.15)
+        hb = label(rf"${sizes[2]:,}$ latents \\ showing ${min(4, len(big))}$ of ${len(big)}$ matches".replace(",", "{,}"),
+                   font_size=20, color=WHITE).next_to(pb, UP, buff=0.15)
         ar1 = Arrow(p0.get_right(), pm.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
         ar2 = Arrow(pm.get_right(), pb.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
         whole = VGroup(p0, pm, pb, ar1, ar2, hm, hb)
         f_ = min(13.4 / whole.width, 6.2 / whole.height)
         whole.scale(f_).move_to(DOWN * 0.15)
         nf, ncand = int(sp["n_same_char_families"]), int(sp["n_candidates"])
-        tag = note(r"TopK, $k = 16$; \ the same data and steps; \ children: \ decoder cosine above $0.4$, \ the same character").to_corner(DR, buff=0.2)
+        tag = note(r"TopK, $k = 16$; \ the same data and steps; \ illustrative matches: \ decoder cosine above $0.4$, \ the same character").to_corner(DR, buff=0.2)
         cite_ = cite(r"Bricken et al., \textit{Towards Monosemanticity} (2023): \ feature splitting", corner=UL)
+        less_frequent = bool(big) and all(float(f["freq"]) < float(par["freq"]) for f in big)
+        frequency_said = ("No largest-dictionary matches met the criterion in this run." if not big else
+                          "All these selected matches fire less often than the small-dictionary latent." if less_frequent else
+                          "Their activation frequencies are not all lower than the small-dictionary latent's.")
         with self.voiceover(
             "How many features does a model have? The dictionary seems to decide. <bookmark mark='a'/> Train TopK "
             f"dictionaries of {sizes[0]}, {sizes[1]} and {sizes[2]:,} latents on the same vectors. Here is one latent "
             "of the smallest, at its strongest moments. <bookmark mark='b'/> In the next size up, the latents "
             f"pointing nearly the same way and firing on the same character: {len(mid)} of them, "
-            f"<bookmark mark='c'/> and in the largest, {len(big)}, each on a narrower slice of the same moments. "
-            "Bricken and colleagues called it feature splitting. Of the smallest dictionary's "
-            f"{ncand} clean latents, {nf} have two or more such children in the largest."
+            f"<bookmark mark='c'/> and in the largest, {len(big)} matches; {min(4, len(big))} are shown. "
+            f"{frequency_said} These are illustrative decoder and character-context matches; we did not measure "
+            "whether their activation sets are contained in the smaller latent's. Bricken and colleagues studied "
+            "this kind of feature splitting. Of the smallest dictionary's "
+            f"{ncand} character-consistent candidates, {nf} have two or more such matches in the largest."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(tag))
             vo.wait_until("a")
@@ -92,9 +99,14 @@ class Splitting(VoiceoverScene):
             r.move_to(g.ax.c2p(i + 0.5, 0), aligned_edge=DOWN)
             bs.add(VGroup(r, data_text(c, font="DejaVu Sans Mono", font_size=20, color=WHITE).next_to(r, DOWN, buff=0.08)))
         gl = label(r"the main latent, \ letter by letter", font_size=20, color=GREY_A).next_to(g, UP, buff=0.15)
-        res = label(rf"a probe reads \textit{{upper case}} at ${100 * float(a['probe_acc']):.0f}\%$ \\ the dictionary's best "
+        res = label(rf"a probe reads \textit{{upper case}} at ${100 * float(a['probe_acc']):.1f}\%$ \\ the dictionary's best "
                     rf"latent for it fires on ${100 * np.mean(rec):.0f}\%$ of capitals \\ absorbed: \ ${100 * np.mean(ab):.0f}\%$ "
                     r"of capitals \ (mean of $3$ seeds)", font_size=20, color=WHITE).move_to([-3.2, -1.6, 0])
+        scope_note = label(r"local proxy, \ main chosen by F1 on the evaluation half \\ main silent; \ another latent: \ $\ge40\%$ of positive projection \\ decoder/probe cosine $\ge0.1$; \ no causal ablation",
+                           font_size=15, color=GREY_B)
+        if scope_note.width > 6.2:
+            scope_note.scale_to_fit_width(6.2)
+        scope_note.next_to(res, DOWN, buff=0.2).align_to(res, LEFT)
         def bubble(t, col, op):
             c = Circle(radius=0.75, stroke_color=col, stroke_width=3, fill_color=col, fill_opacity=0.15 * op)
             return VGroup(c, label(t, font_size=22, color=col).move_to(c)).set_opacity(op)
@@ -114,10 +126,13 @@ class Splitting(VoiceoverScene):
             "one latent than two, so where the specific one fires, it can soak up the general one's direction, and "
             "the general latent stays silent. David Chanin and colleagues named it absorption. "
             f"<bookmark mark='b'/> Measure it. A linear probe reads upper case off our vectors with "
-            f"{100 * float(a['probe_acc']):.0f} percent accuracy. The dictionary's best latent for it fires on only "
+            f"{100 * float(a['probe_acc']):.1f} percent accuracy. On the evaluation half, we choose each dictionary's "
+            "best latent by F1, then report recall there. It fires on "
             f"{100 * np.mean(rec):.0f} percent of capitals, <bookmark mark='c'/> and it is silent on some letters "
-            f"far more than others. On {100 * np.mean(ab):.0f} percent of capitals, another latent carries most of "
-            "the upper-case direction instead. A feature that seems to mean upper case does not fire on all of it."
+            f"far more than others. Our local absorption proxy counts {100 * np.mean(ab):.0f} percent of capitals: "
+            "the main latent is silent, another carries at least forty percent of the sum of positive reconstruction "
+            "contributions along the probe direction, and its decoder cosine with that direction is at least point one. "
+            "This is a thresholded projection proxy, not a causal ablation or an untouched final test."
         ) as vo:
             self.play(FadeIn(dc), FadeIn(hc))
             vo.wait_until("a")
@@ -125,7 +140,7 @@ class Splitting(VoiceoverScene):
             self.play(FadeIn(abl), FadeIn(si))
             vo.wait_until("b")
             self.play(FadeOut(sch), FadeOut(sch_tag))
-            self.play(FadeIn(res))
+            self.play(FadeIn(res), FadeIn(scope_note))
             vo.wait_until("c")
             self.play(FadeIn(g), FadeIn(gl), LaggedStart(*[GrowFromEdge(b[0], DOWN) for b in bs], lag_ratio=0.1),
                       FadeIn(VGroup(*[b[1] for b in bs])))
@@ -166,7 +181,7 @@ class Splitting(VoiceoverScene):
                 marks.add(spread_bar(g.ax, j + 0.5 + dx, stats[kind][key], cols[kind]))
             marks.add(label(nm, font_size=18, color=GREY_A).next_to(g.ax.c2p(j + 0.5, 0), DOWN, buff=0.15))
         lg = legend([(TKC, r"TopK"), (MAT, r"Matryoshka")], font_size=20).next_to(g, UP, buff=0.15).align_to(g, RIGHT)
-        cite_ = cite(r"Bussmann et al.\ (2025); \ Nabeshima (2024)", corner=DL)
+        cite_ = cite(r"Bussmann, Nabeshima et al.\ (2025)", corner=DL)
         r_t, r_m = np.mean(stats["topk"]["rec"]), np.mean(stats["matryoshka"]["rec"])
         a_t, a_m = np.mean(stats["topk"]["ab"]), np.mean(stats["matryoshka"]["ab"])
         f_t, f_m = np.mean(stats["topk"]["fvu"]), np.mean(stats["matryoshka"]["fvu"])
@@ -179,16 +194,17 @@ class Splitting(VoiceoverScene):
         else:
             verdict = (f"Here it does not help: the best upper-case latent fires on {100 * r_m:.0f} percent of capitals "
                        f"against TopK's {100 * r_t:.0f}, and absorption is {100 * a_m:.0f} percent against "
-                       f"{100 * a_t:.0f}, with a wide spread across seeds. A cure tested on large models need not work "
-                       "on a small one, or on this kind of hierarchy")
+                       f"{100 * a_t:.0f}, with a wide spread across seeds. This is a local recipe and proxy, not a "
+                       "replication of the paper's absorption evaluation")
         with self.voiceover(
-            "One proposed cure came in 2025 from Bart Bussmann and colleagues, and independently from Noa "
-            "Nabeshima: Matryoshka dictionaries, named after the nesting dolls. <bookmark mark='a'/> The first few "
+            "Bart Bussmann, Noa Nabeshima and colleagues studied Matryoshka dictionaries in 2025, named after the "
+            "nesting dolls. <bookmark mark='a'/> The first few "
             "latents must rebuild the vector on their own, then the first few hundred, then all of them. The early "
             "latents are pushed to be general, and the later ones refine them, so the general ones have less reason "
-            "to stay silent. <bookmark mark='b'/> We trained both kinds, with the same size, k and steps, three seeds "
-            f"each. <bookmark mark='c'/> {verdict}; the price is a little more variance left, {100 * f_m:.0f} percent "
-            f"against {100 * f_t:.0f}."
+            "to stay silent. <bookmark mark='b'/> Our local version uses per-vector TopK and the displayed prefix loss; "
+            "the paper uses BatchTopK. We trained both local kinds with the same size, k and steps, three seeds "
+            f"each. <bookmark mark='c'/> {verdict}. Mean evaluation-half unexplained variance is "
+            f"{100 * f_m:.0f} percent for Matryoshka and {100 * f_t:.0f} for TopK."
         ) as vo:
             self.play(Write(f), FadeIn(w), FadeIn(cite_))
             vo.wait_until("a")

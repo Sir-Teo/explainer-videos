@@ -31,11 +31,11 @@ small models trained here (Part 13's two-layer attention-only model, retrained w
 * **3. Reading the stream as it flows.** The logit lens (nostalgebraist 2020) on the novels model, a prompt read at
   every layer; the tuned lens (Belrose et al. 2023), one affine translator per layer trained here (its training
   replayed); KL to the final prediction and bits per token by layer, held out.
-* **4. Cause, not correlation.** Do our models copy? Repeated held-out text through both: the second copy is no
-  easier (Olsson et al. saw induction heads form between about 2.5 and 5 billion tokens; ours saw about 25 million).
+* **4. Cause, not correlation.** Do our models copy? Repeated held-out text through both: passage-level loss
+  changes alone do not identify a copying circuit.
   Part 13's two-layer attention-only model on repeated random tokens, retrained (its loss and its two heads'
-  attention); activation patching (Vig et al. 2020; Meng et al. 2022): the clean residual stream put into a
-  corrupted run at every (layer, position) for one target; each head's corrupted output put into a clean run.
+  attention); activation patching (Vig et al. 2020; Meng et al. 2022): the corrupted residual stream put into a
+  clean run at every tested (layer, position) for one target; each head's corrupted output put into a clean run.
 * **5. An induction circuit, end to end.** Path patching (Wang et al. 2022; Goldowsky-Dill et al. 2023): the
   previous-token head's corrupted output sent only into the induction head's queries, keys or values; K-composition
   from the weights (Elhage et al. 2021) against random heads; the previous-token head's QK circuit on positions; the
@@ -45,7 +45,7 @@ small models trained here (Part 13's two-layer attention-only model, retrained w
   during training, interference through the bias and ReLU.
 * **7. The phase diagram.** The 2-feature, 1-dimension model trained on a 17 × 17 grid of densities and relative
   importances, four seeds per cell; the empirical phases (feature 2 dropped, given the dimension, or in superposition)
-  against the three candidate solutions' expected losses; one cell's training; random directions' cosines in 2 to
+  against three restricted reference candidates' expected losses; one cell's training; random directions' cosines in 2 to
   1,024 dimensions (spread ≈ 1/√d; Johnson & Lindenstrauss 1984).
 * **8. Pulling the features apart.** An L1 sparse autoencoder with 512 features on 211,200 residual vectors (Bricken
   et al. 2023; Cunningham et al. 2023), its training replayed; features per character, variance explained, bits per
@@ -66,9 +66,9 @@ small models trained here (Part 13's two-layer attention-only model, retrained w
   the graph's prediction; Claude 3.5 Haiku's biology (Lindsey et al. 2025): two-hop reasoning, planning in poems,
   addition, multilingual features, entity recognition and hallucination, "about a quarter of the prompts".
 * **12. What fine-tuning changed.** A BatchTopK crosscoder (Lindsey et al. 2024; Minder et al. 2025) on the novels
-  model and Part 27's chat fine-tune, after blocks 3 and 5, on novel text and chat transcripts: shared, chat-only
-  and base-only latents by relative decoder norm (here every latent is shared), and where the most chat-leaning ones
-  fire; the activation-difference lens
+  model and Part 27's chat fine-tune, after blocks 3 and 5, on novel text and chat transcripts: balanced, chat-dominant
+  and base-dominant bins of normalized decoder-norm shares, and where selected latents fire. These bins are
+  descriptive proxies, not proofs that concepts were created or removed; the local activation-difference readout
   (Minder et al., Oct 2025) on plain novel text.
 * **13. Reaching in.** The L1 autoencoder's quotation feature added to Part 13's transformer while it writes, three
   strengths, five samples, against a random direction; a contrast vector in the novels model (cheerful minus gloomy
@@ -121,7 +121,55 @@ stored. The part reads Part 13 through `videos.ai.ai13.compute` (`load("tf")`, `
 Other parts read from this one: Part 19's outro calls `load("superposition")` (its keys are unchanged), and Part 16
 imports `show` from `videos.ai.ai30.common`.
 
-## Results on this machine
+## QA scope: Part 27-dependent sections
+
+The data-dependent Diffing methods, the mood-vector monitor/steering tradeoff, the sparse-probe comparison, and the complete
+recap remain source-reviewed only in the fresh cloud QA workspace: required original Part 27 data/SFT inputs and
+complete accepted derived payloads are unavailable. No missing metrics, outputs or render acceptance are inferred. Its card and crosscoder diagram need no scientific payload; the histogram, latent examples and difference readout still require it.
+The historical numerical outcomes below are preserved; interpretive terminology is qualified where needed.
+
+Crosscoders fit paired residual streams with separate per-model scalar normalization and output biases. The norm
+share r measures decoder magnitude in those normalized coordinates, not direction agreement or proof of new
+concepts. The three reported threshold bins are not exhaustive; intermediate live latents must remain counted.
+Training FVU uses fitting activations and must retain finite values above one. Marker counts inspect the actual
+firing token, not any marker occurring earlier in its context.
+
+The saved difference readout is R(mean_base + Delta) - R(mean_base), where R(z) = head(norm(z)) uses the base
+model's final normalization/output head. It is not a direct linear unembedding of Delta or the full models'
+prediction difference. This local variant pools sampled novel positions; it does not replicate the paper's
+per-position analysis on the first five tokens. The vector diagram is schematic; only its difference-to-typical-base length ratio is
+measured. Absence of special tokens among the top readout tokens does not prove the change is only stylistic.
+
+The mood-vector monitor uses held-out words and lexicon-selected sentences, not human sentiment annotations. Its
+steering summaries are lexicon counts and unsteered-model bits/token; error bars are descriptive sample standard
+errors across prompt/seed runs, not a formal significance test or human fluency judgment.
+
+The sparse-probe producer resets quotation state to outside at each sampled window, newline and special token.
+Skipping eight initial positions does not recover a window's unknown initial quotation state. Treat its target as
+a window-local operational proxy; preserve this original recipe unless a separately labeled correction receives
+an impact comparison. Plot all measured in-domain/out-of-domain accuracies without clipping and report domains
+separately. A one-class training draw uses its observed constant class for every representation.
+
+The full recap remains unrendered because its diffing dependency is missing.
+
+### 第27部分依赖章节的QA范围
+
+在新云端环境里，模型差分中依赖数据的方法、情绪向量与引导权衡、稀疏探针对比及完整回顾，只有源码审查；
+所需的原始第27部分数据/SFT输入和完整已接受派生结果尚不可用。下方历史数值原样保留，不代表新的测量或渲染验收。
+交叉编码器分别缩放两个模型的残差流，并包含输出偏置。归一化解码器范数份额是描述性代理，不证明方向一致、概念新生
+或消失；三个阈值分组并不穷尽全部活跃潜变量。拟合FVU应保留大于1的实际值；标记计数检查真正的激活词元。
+差分读出是R(基础均值+Delta)-R(基础均值)，R包含最终归一化与输出头；不是Delta的线性反嵌入，也不是完整预测之差。
+向量方向是示意，只有相对长度被测量。情绪监控使用留出词与按词表筛选的句子，非人工情感标注；生成指标为词表计数
+及未引导模型的每词元比特数，不是人工流畅度或显著性检验。稀疏探针的引号状态在每个窗口、换行和特殊词元处重置；
+窗口开头的未知状态不会被跳过八个位置自动恢复。原配方保留，目标应标为窗口局部代理；两类评估域分别报告且不截断。
+完整回顾仍受差分输入缺失所限。
+
+## Historical reported results
+
+The following values are the original author-reported outcomes. Their original Part 30 caches were not available
+in the fresh cloud QA workspace. They remain unchanged for provenance and are not measurements from the new QA
+candidates. Fresh candidates and corrected-recipe comparisons have separate input/source hashes and acceptance
+records; the source/narration reads whichever explicitly staged cache it is given.
 
 Seeded, one torch thread, on a busy 4-core Linux machine (about 1.5 CPU-hours in all; the frontier sweep is 40 of
 those minutes). The narration states each result from the cached numbers, so another machine's run says what it
@@ -151,7 +199,7 @@ measured.
   loss's drop. Noising the residual stream for one target: inputs 20, 21 (and 16); between the layers 21 and 70;
   output 70.
 * **Superposition and the phase diagram**: 289 cells, best of 4 seeds: 212 in superposition, 42 giving feature 2 the
-  dimension, 35 dropping it; trained and theory agree on 94% of the cells (seeds agree with the best on 83%).
+  dimension, 35 dropping it; trained and the restricted reference agree on 94% of the cells (seeds agree with the best on 83%).
 * **The L1 autoencoder** (512 latents, λ = 2, 4,000 steps, 211,200 vectors): 6.8 features per character, 11.2% of the
   variance unexplained, no dead latents; spliced in, 1.94 bits per character against 1.72 (the model) and 5.61 (the
   mean vector). Purity (of the 8 strongest moments, how many on one character): neurons 5.9, features 7.8.
@@ -275,43 +323,61 @@ Interpretability* (2025).
 
 ## Problems, with solutions
 
-1. **Soft thresholding.** Minimize ℓ(f) = ‖a d − f d‖² + λf = (a − f)² + λf over f ≥ 0 (‖d‖ = 1). For f > 0,
-   ℓ′(f) = −2(a − f) + λ = 0 gives f = a − λ/2, which is admissible when a > λ/2; otherwise ℓ is increasing on
-   [0, ∞) and f* = 0. So f* = max(a − λ/2, 0): the code is biased low by λ/2. TopK keeps the pre-activation of the
-   chosen latents unpenalized: the rebuild error alone is minimized, (a − f)² → f = a, no bias.
-2. **Random cosines.** By symmetry (u ↦ −u leaves the distribution unchanged) E[u·v] = 0. Condition on v; rotate so
-   v = e₁; then u·v = u₁ and E[u₁²] = (1/d) Σᵢ E[uᵢ²] = (1/d) E[‖u‖²] = 1/d. So the spread is 1/√d.
-3. **The composition score.** ‖AB‖_F² = Σ_j ‖A b_j‖² ≤ ‖A‖₂² Σ_j ‖b_j‖² = ‖A‖₂² ‖B‖_F² ≤ ‖A‖_F² ‖B‖_F², so the score is in
-   [0, 1]. Equality in the second step needs ‖A‖₂ = ‖A‖_F, i.e. A of rank one, A = σ x yᵀ; equality in the first needs
-   every column b_j along A's top right singular vector y, i.e. B = y zᵀ. Then AB = σ x zᵀ and the score is 1.
-4. **AND under patching.** Clean (1, 1) gives y = 1; corrupted (0, 0) gives y = 0. Noising x₁ alone, (0, 1), gives
-   y = 0: each input is necessary. Denoising x₁ alone, (1, 0), gives y = 0: neither is sufficient. Noising and
-   denoising answer different questions, which is why chapter 4 uses both.
-5. **The phase diagram's first boundary.** W = (1, 0), b = 0: feature 1 is rebuilt exactly (ReLU(x₁) = x₁ ≥ 0) and
-   feature 2 is lost, costing r E[x₂²] = r ρ E[U²] = rρ/3. W = (0, 1): ρ/3. So keeping the more important feature wins,
-   the boundary between the two at r = 1, for every density. The antipodal solution W = (1, −1) with bias b rebuilds
-   ReLU(x₁ − x₂ + b) and ReLU(x₂ − x₁ + b): exact when one feature is on alone (with b = 0) and wrong when both are on,
-   which happens with probability ρ²; so it wins when ρ is small, the bottom of the diagram.
-6. **The grokking readout.** At c = (a + b) mod p every term is cos(2πk·0/p) = 1, so L = |K|. For any other c, s =
-   (a + b − c) mod p ≠ 0, and cos(2πks/p) = 1 only if p divides ks; p is prime and 0 < k, s < p, so it does not, and
-   every term is below 1: L < |K|. The maximum is unique.
+1. **Soft thresholding.** Take a > 0, λ ≥ 0 and ‖d‖ = 1. Minimize ℓ(f) = ‖a d − f d‖² + λf = (a − f)² + λf over f ≥ 0.
+   On the positive branch, ℓ′(f) = −2(a − f) + λ = 0 gives f = a − λ/2; if a ≤ λ/2, the constrained minimum is f = 0.
+   Thus f* = max(a − λ/2, 0). A positive optimum is shrunk by λ/2; a clipped optimum is zero. If this scalar latent is
+   retained by TopK, its unpenalized objective (a − f)² has optimum f = a. This removes the L1 shrinkage term in this
+   scalar comparison; it does not guarantee that a learned full encoder has unbiased amplitudes.
+2. **Random cosines.** Let d ≥ 1, and let u and v be independent and uniform on the unit sphere in ℝᵈ. Sign symmetry
+   gives E[u·v] = 0. Conditional on v, orthogonal invariance and independence let us map v to e₁ without changing
+   u's distribution. Hence E[(u·v)²] = E[u₁²] = (1/d) Σᵢ E[uᵢ²] = (1/d) E[‖u‖²] = 1/d. The standard deviation is 1/√d.
+3. **The composition score.** Let A and B be nonzero real matrices of compatible sizes, so the denominator is positive.
+   If b_j are B's columns, ‖AB‖_F² = Σ_j ‖A b_j‖² ≤ ‖A‖₂² ‖B‖_F² ≤ ‖A‖_F² ‖B‖_F², giving a score in [0, 1].
+   Equality in the final inequality requires A to have rank one: A = σ x yᵀ, with σ > 0 and unit x,y. Equality in the
+   first requires every nonzero column of B to lie in span(y), so B = y zᵀ with z ≠ 0 and rank one. Conversely, these
+   forms give AB = σ x zᵀ and score 1. The shared singular directions must therefore be parallel; their signs are immaterial.
+4. **AND under patching.** Clean (1, 1) gives y = 1; corrupted (0, 0) gives y = 0. Noising either input alone gives
+   (0, 1) or (1, 0), hence y = 0. Denoising either input alone also gives one of those mixed inputs, hence y = 0.
+   Each input is necessary for this AND output but neither alone is sufficient. The two patching directions ask
+   different questions in these clean/corrupt contexts.
+5. **The zero-bias reference comparison.** W = (1, 0), b = 0: feature 1 is rebuilt exactly (ReLU(x₁) = x₁ ≥ 0), and
+   feature 2 is lost, costing r E[x₂²] = r ρ E[U²] = rρ/3. W = (0, 1), b = 0 costs ρ/3. For ρ > 0 and r > 0, keeping
+   the more important feature is at least as good, with equality at r = 1; at ρ = 0 all these costs are zero.
+   For a further comparison, assume independent feature draws and keep b = 0. The antipodal candidate W = (1, −1)
+   gives ReLU(x₁ − x₂) and ReLU(x₂ − x₁): exact when at most one feature is on, with errors only when both are on,
+   an event of probability ρ². For fixed r > 0 it beats the two stated zero-bias dedicated candidates at sufficiently
+   small positive ρ. This is a comparison of those candidates, not a proof of the free-bias global optimum.
+6. **The grokking readout.** Let p be prime, ∅ ≠ K ⊆ {1,…,p−1}, and a,b,c ∈ ℤₚ. At c = a+b in ℤₚ every cosine is 1,
+   so L(c) = |K|. For any other c, choose the nonzero residue s = (a+b−c) mod p. If cos(2πks/p) = 1, then p divides ks,
+   impossible for 1 ≤ k,s ≤ p−1 because p is prime. Thus every term is below 1; since K is nonempty, L(c) < |K|.
+   The maximizer is unique **over ℤₚ**. The original sum has unit positive weights; the same proof works with any
+   coefficients αₖ > 0, with maximum Σₖ αₖ. Empty K, DC-only frequencies, or an unrestricted real/integer c need not give uniqueness.
 
 ## 习题与解答
 
-1. **软阈值。**在f ≥ 0上最小化ℓ(f) = (a − f)² + λf（‖d‖ = 1）。f > 0时，令ℓ′(f) = −2(a − f) + λ = 0，得f = a − λ/2，当a > λ/2时
-   可取；否则ℓ在[0, ∞)上递增，f* = 0。所以f* = max(a − λ/2, 0)：编码整体偏小λ/2。TopK对选中的潜变量不加惩罚，只最小化重建
-   误差(a − f)²，得f = a，没有偏差。
-2. **随机余弦。**由对称性（u ↦ −u不改变分布），E[u·v] = 0。固定v，旋转使v = e₁，则u·v = u₁，E[u₁²] = (1/d)Σᵢ E[uᵢ²] = 1/d。
-   所以分散程度是1/√d。
-3. **组合分数。**‖AB‖_F² = Σ_j ‖A b_j‖² ≤ ‖A‖₂² ‖B‖_F² ≤ ‖A‖_F² ‖B‖_F²，所以分数在[0, 1]之间。第二步取等号要求‖A‖₂ = ‖A‖_F，
-   即A秩为一，A = σ x yᵀ；第一步取等号要求B的每一列都沿A的最大右奇异向量y，即B = y zᵀ。此时AB = σ x zᵀ，分数为1。
-4. **修补下的“与”门。**干净输入(1, 1)给出y = 1；破坏后(0, 0)给出y = 0。只对x₁做破坏，(0, 1)，y = 0：每个输入都是必需的。
-   只恢复x₁，(1, 0)，y = 0：单独哪一个都不足够。破坏和恢复回答的是不同的问题，所以第4章两种都用。
-5. **相图的第一条边界。**W = (1, 0)，b = 0：特征1被精确重建，特征2丢失，代价r E[x₂²] = rρ/3。W = (0, 1)：代价ρ/3。所以保留
-   更重要的那个特征，两者的边界在r = 1，与密度无关。反向解W = (1, −1)加偏置b：只有一个特征亮时（b = 0）重建精确，两个同时
-   亮时出错，而这发生的概率是ρ²；所以ρ小的时候它赢，也就是相图的下方。
-6. **顿悟的读出。**在c = (a + b) mod p处，每一项都是cos(0) = 1，L = |K|。对其他任何c，s = (a + b − c) mod p ≠ 0，而
-   cos(2πks/p) = 1只在p整除ks时成立；p是素数，0 < k, s < p，所以不成立，每一项都小于1：L < |K|。最大值唯一。
+1. **软阈值。**设a > 0、λ ≥ 0、‖d‖ = 1。在f ≥ 0上最小化ℓ(f) = ‖ad − fd‖² + λf = (a − f)² + λf。
+   在正值分支令ℓ′(f) = −2(a − f) + λ = 0，得f = a − λ/2；a ≤ λ/2时，约束最小值在f = 0处。
+   所以f* = max(a − λ/2, 0)。正的最优值缩小λ/2，截断分支为零。若TopK保留这个标量潜变量，不加惩罚的目标(a − f)²在f = a处最小。
+   这个标量比较中没有L1收缩项，并不保证学到的完整编码器具有无偏的激活幅度。
+2. **随机余弦。**设d ≥ 1，u、v相互独立且在ℝᵈ的单位球面上均匀分布。由符号对称性，E[u·v] = 0。
+   固定v后，由正交变换不变性及独立性，可以把v映射到e₁而不改变u的分布。因此E[(u·v)²] = E[u₁²] = (1/d)ΣᵢE[uᵢ²]
+   = (1/d)E[‖u‖²] = 1/d。标准差为1/√d。
+3. **组合分数。**设A、B为非零、尺寸相容的实矩阵，分母因此为正。记B的列为b_j，则
+   ‖AB‖_F² = Σ_j‖A b_j‖² ≤ ‖A‖₂²‖B‖_F² ≤ ‖A‖_F²‖B‖_F²，所以分数在[0, 1]内。
+   最后一个不等式取等号要求A秩为一：A = σ x yᵀ，其中σ > 0，x、y为单位向量。第一个不等式取等号要求B的每个非零列都在span(y)内，
+   因此B = y zᵀ，其中z ≠ 0，B也秩为一。反过来，这些形式给出AB = σ x zᵀ，分数为1。共享维度中的奇异方向必须平行，符号无关。
+4. **修补下的“与”门。**干净输入(1, 1)给出y = 1，破坏后(0, 0)给出y = 0。只破坏一个输入，得到(0, 1)或(1, 0)，所以y = 0。
+   只恢复一个输入也得到这两种混合输入之一，所以y = 0。每个输入对这个“与”门输出都是必要的，但单独哪一个都不充分。
+   两个修补方向在这些干净与破坏输入的条件下，回答的是不同问题。
+5. **零偏置参考比较。**W = (1, 0)、b = 0时，特征1被精确重建，特征2丢失，代价r E[x₂²] = rρ/3。
+   W = (0, 1)、b = 0时代价为ρ/3。ρ > 0、r > 0时，保留更重要的特征至少不差；r = 1时相等。ρ = 0时这些代价都为零。
+   作为进一步比较，假设特征独立抽样，并保持b = 0。反向候选W = (1, −1)给出ReLU(x₁ − x₂)和ReLU(x₂ − x₁)：
+   至多一个特征出现时重建精确，只有两个同时出现才会出错，该事件的概率为ρ²。固定r > 0时，ρ为足够小的正数，这个候选优于上述两个零偏置专用候选。
+   这里只比较这些候选，并没有证明允许自由偏置时的全局最优解。
+6. **顿悟的读出。**设p为素数，∅ ≠ K ⊆ {1,…,p−1}，且a、b、c ∈ ℤₚ。在c = a+b（按模p计算）处，每项余弦都是1，所以L(c) = |K|。
+   对其他c，取非零剩余类s = (a+b−c) mod p。cos(2πks/p) = 1要求p整除ks；但p为素数且1 ≤ k,s ≤ p−1，因此不可能。
+   每项都小于1，而K非空，所以L(c) < |K|。最大值在**ℤₚ上**唯一。原题的权重均为正的1；任何αₖ > 0的加权版本同理，最大值为Σₖαₖ。
+   K为空、只有直流频率，或c不受限制而取实数或整数时，都不一定具有唯一最大值。
 
 ## Glossary (terms in this part)
 
@@ -373,3 +439,101 @@ Interpretability* (2025).
 | natural-language autoencoder | 自然语言自编码器 |
 | weight-sparse transformer, parameter decomposition | 权重稀疏的Transformer，参数分解 |
 | ambitious vs pragmatic interpretability | 雄心派与务实派可解释性 |
+
+## QA scope: phase reference assumptions
+
+The historical phase output and its reported agreement are preserved. Its reference candidates fix the retained
+weights at unit length, force zero bias for a dropped feature, and search a shared nonpositive bias for the antipodal
+pair. This is a restricted comparison, not a certificate of optimal phase boundaries. Problem 5 explicitly assumes
+zero output bias. With free output bias, a dropped feature is best predicted by its mean ρ/2: its squared error is
+Var(x) = ρ/3 − ρ²/4, so the two omitted-feature costs are r(ρ/3 − ρ²/4) and ρ/3 − ρ²/4. A shared antipodal candidate
+can also benefit from positive bias. Corrected reference recipes require separate validation and recomparison before
+replacing any historical phase figures.
+
+历史相图输出及其一致率予以保留。参考候选固定单位权重，丢弃特征时偏置为零，反向共享时只搜索非正的公共偏置。
+这是受限比较，不能证明最优相边界。习题5明确假定输出偏置为零。偏置可自由变化时，丢弃特征应预测其均值ρ/2，
+误差为方差ρ/3 − ρ²/4；两种丢弃方案的代价分别为r(ρ/3 − ρ²/4)及ρ/3 − ρ²/4。反向共享候选也可能受益于正偏置。
+修正配方须单独验证和重新比较，才能用于替换历史图表。
+
+### QA scope: probe validation and rank correlations
+
+Fresh candidates retain the original run before scientific corrections. The probe split now keeps the original
+validation windows, resamples training windows whose input/next-token spans overlap validation, and fits the control
+label rate from training rows only. Amnesic losses use validation rows only. Layer selection still uses this same
+validation set; this is not a separate final evaluation cohort. The older fresh candidate had 278 scored positions
+shared across the split (3.10% of validation rows) and included training rows in amnesic evaluation; it is preserved
+for comparison. Spearman correlation now averages tied ranks and fails explicitly for undefined constant inputs.
+On the 55 captured comparisons in the fresh saliency candidate, there were no ties and no numerical change.
+
+探针验证窗口保持不变；与验证输入和下一词元目标重叠的训练窗口会重新抽样。对照标签的比例只由训练行确定，
+失忆探测的损失只在验证行上计算。层的选择仍使用同一个验证集，并不是另一个独立的最终评测集合。修正前的新候选
+有278个评分位置同时出现在两组中，占验证行的3.10%，失忆评测也包含训练行；该候选保留用于比较。
+Spearman相关现对并列值使用平均秩，常量输入等无定义的情况会明确报错。本次显著图候选的55组输入没有并列，数值不变。
+
+The phase replay shows one seed, while the colored grid keeps the best of four. They can end at different solutions;
+the replay is labeled accordingly. The saliency chapter marks the unevaluated last-character occlusion as missing,
+rather than plotting it as a zero measurement.
+
+相图的回放展示一个种子，彩色网格则保留四个种子中最好的；两者可能停在不同的解上，图中现明确标注。
+显著图一章也把最后一个字符未计算的遮挡影响标为缺失，不再画成零测量。
+
+### QA scope: circuit metrics
+
+The induction path measurements now isolate the final-model selected induction receivers used by the diagram;
+all-layer-2 receiver measurements remain in separate `*_all` fields. Raw path effects through training use nats
+directly, including near-zero early clean/corrupt gaps. Normalized final effects require a positive measured gap.
+
+The grokking model remains the original local adaptation, including its initialization and NumPy split. It is not an
+exact replication of the paper's parameterization. Corrected progress metrics retrospectively follow five frequencies
+selected from the final neuron-to-logit map, with that cardinality explicitly chosen. Restricted logits retain the
+answer-specific input mean; excluded logits remove only the selected waves. The original adaptive embedding-frequency
+metrics are retained under `legacy_*`. Raw intermediate logits and pinned atomic checkpoints support independent
+rescoring and matching-budget resume. The final phase-aligned cosine fit and its all-pairs fitted-readout accuracy are
+reported separately from an unconstrained sum-wave fit and from the model's held-out accuracy. Spectrum bars show
+actual nonconstant embedding-energy shares on one fixed vertical scale throughout training.
+
+归纳回路的路径测量现只修补图中那些由最终模型选出的归纳接收头；全部第二层接收头的测量保留在独立的`*_all`字段。
+训练回放直接使用奈特差值，早期干净与破坏输入之间的差距接近零时也无需做除法；最终归一化效应必须有正的实测差距。
+顿悟模型的初始化和NumPy数据划分仍是原有本地改编，并不完全复刻论文的参数化。新进度指标从最终神经元到logit的映射
+选取五个频率，再回头追踪这些固定频率；五这个数量是明确选定的。受限logit保留每个答案的输入均值，排除logit只去掉所选波。
+旧的自适应嵌入频率指标保留在`legacy_*`字段。原始中间logit和带有来源约束的原子检查点可供重算及同预算恢复。
+相位对齐余弦拟合、其在所有数对上的拟合读出准确率，与无约束和角波拟合及模型留出准确率分别报告。
+频谱柱形图在训练全程使用固定纵轴，展示真实的嵌入非恒定能量占比。
+
+### QA scope: measured ranges and evaluation cohorts
+
+Signed intervention effects retain negative values and values above one. The patching heatmap includes only tested
+positions through its target; later array padding is not a measurement. Negative head-noising effects explicitly mean
+the swap improved the prediction. A positive-real eigenvalue copying score is a diagnostic, not proof of identity in
+the token basis. Plot geometry is computed from the axis mapping, including negative QK position scores.
+
+SAE L0/FVU and transcoder reconstruction curves are fitting-pool/batch metrics. Their full observed ranges are shown,
+including FVU above one. Replacement-model bits are a separate forward evaluation. Neuron and SAE context-purity
+histograms search different text pools, so they are labeled descriptive comparisons. Exact error-corrected replacement
+logits on one prompt and correlated selected ablations do not establish a complete causal account of the original model.
+Grokking markers report recorded training/held-out accuracy thresholds; missing thresholds do not produce step-zero
+markers. Progress prose uses measured endpoints and sampled checkpoints, and the positive-coefficient trigonometric
+illustration is distinct from the unconstrained cosine fit.
+
+干预效应保留负值和大于一的值；修补热图只展示实际测量的位置，不把目标之后的填充值当成测量。负的加噪效应表示
+替换改善了预测。正实特征值分数只是诊断，并不能证明词元基底上的恒等复制。图形尺寸由真实坐标映射计算。
+SAE和转码器的重建曲线明确标注拟合样本范围，并保留大于一的FVU；替换模型的比特数另外评估。神经元与SAE纯度
+使用不同文本池，因此只是描述性比较。单个提示上带误差项的精确替代、以及部分干预的相关性，不等于完整因果解释。
+顿悟阈值明确对应记录检查点上的准确率；缺少阈值时不画第零步标线。正权重三角函数示意与无约束余弦拟合分别说明。
+
+## Shared caption integration
+
+This reviewed source branch carries the owned `text_zh_add.json` and a guarded `caption_delta.json`. The shared
+`videos/ai/ai_text_zh.json` remains identical to this branch's public QA parent; it is not replaced by a worker copy.
+The root integrator applies the delta entry by entry when integrating into shared QA. Before that integration,
+new Chinese on-screen captions are not fully active on this branch.
+
+Preview the guarded merge with:
+
+```sh
+python videos/ai/ai30/apply_caption_delta.py videos/ai/ai30/caption_delta.json videos/ai/ai_text_zh.json
+```
+
+The same command with `--write` applies nonconflicting entries atomically and preserves unrelated translations.
+A conflicting existing value stops the operation before writing. Source publication does not close the scientific
+input or rendered-acceptance gates documented above; no private data, models, media or evidence archives are included.

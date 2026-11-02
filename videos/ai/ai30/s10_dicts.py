@@ -72,7 +72,7 @@ class Dicts(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             vo.wait_until("b")
-            step(1)
+            step(1, transform=False)
             vo.wait_until("c")
             step(2)
             self.play(Create(sax), FadeIn(sl1), FadeIn(sl2), Create(ident))
@@ -88,19 +88,18 @@ class Dicts(VoiceoverScene):
         colors = {r"\operatorname{TopK}_k": TKC, r"\theta": JRC, r"\lambda": L1C}
         eqs = VGroup(
             cmath(r"f = \operatorname{ReLU}(W_e x + b_e), \quad \text{loss} + ", r"\lambda", r"\|f\|_1", colors=colors, font_size=30),
-            cmath(r"f = ", r"\operatorname{TopK}_k", r"\big(W_e x + b_e\big)", colors=colors, font_size=30),
+            cmath(r"f = \operatorname{ReLU}\big(", r"\operatorname{TopK}_k", r"(W_e x + b_e)\big)", colors=colors, font_size=30),
             cmath(r"f_i = z_i \cdot \mathbf{1}[z_i >", r"\theta", r"_i], \quad \text{loss} + ", r"\lambda", r"\|f\|_0",
                   colors=colors, font_size=30),
         ).arrange(DOWN, buff=0.7, aligned_edge=LEFT).move_to([-3.8, 0.6, 0])
         names = VGroup(label(r"L1 \ (Bricken et al.; \ Cunningham et al., \ 2023)", font_size=17, color=L1C),
-                       label(r"TopK \ (Gao et al., \ OpenAI, \ 2024): \ exactly $k$ on, \ no penalty", font_size=17,
+                       label(r"TopK \ (Gao et al., \ OpenAI, \ 2024): \ at most $k$ on, \ no penalty", font_size=17,
                              color=TKC),
-                       label(r"JumpReLU \ (Rajamanoharan et al., \ DeepMind, \ 2024): \\ a learned threshold each",
+                       label(r"JumpReLU \ (Rajamanoharan et al., \ DeepMind, \ 2024): \\ a positive learned threshold each",
                              font_size=17, color=JRC))
         for n_, e_ in zip(names, eqs):
             n_.next_to(e_, DOWN, buff=0.1).align_to(e_, LEFT)
-        st = label(r"the step in JumpReLU has no gradient: \ it is trained \\ through a straight-through estimate with "
-                   r"a narrow kernel", font_size=18, color=GREY_B).to_edge(DOWN, buff=0.4).align_to(eqs, LEFT)
+        st = label(r"the step derivative is zero away from its jump; \\ thresholds use a straight-through estimate with a narrow kernel", font_size=18, color=GREY_B).to_edge(DOWN, buff=0.4).align_to(eqs, LEFT)
         zv = [0.3, 1.4, 0.2, 0.9, 0.1, 1.8, 0.5, 0.7, 0.15, 1.1, 0.4, 0.25]
         th = [0.5, 1.0, 0.1, 1.2, 0.3, 0.6, 0.4, 0.9, 0.4, 0.6, 0.6, 0.2]
         base_y, hs = -1.0, 1.2
@@ -118,8 +117,8 @@ class Dicts(VoiceoverScene):
             "keeps each vector's k largest features and zeroes the rest, so sparsity is set directly and nothing is "
             "shrunk. They trained one with sixteen million latents on GPT-4. <bookmark mark='b'/> Senthooran "
             "Rajamanoharan and colleagues at DeepMind kept a penalty, but on the count of active features, with a "
-            "learned threshold per feature: JumpReLU, the recipe behind their open Gemma Scope dictionaries. A step "
-            "has no gradient, so the threshold is trained through a straight-through estimate."
+            "positive learned threshold per feature: JumpReLU, the recipe behind their open Gemma Scope dictionaries. "
+            "The step derivative is zero away from its jump, so thresholds use a straight-through estimate."
         ) as vo:
             self.play(Write(eqs[0]), FadeIn(names[0]))
             vo.wait_until("a")
@@ -128,7 +127,8 @@ class Dicts(VoiceoverScene):
                         for i, b_ in enumerate(zb)])
             vo.wait_until("b")
             self.play(Write(eqs[2]), FadeIn(names[2]), FadeIn(st))
-            self.play(*[b_.animate.set_fill(GREY_B, opacity=0.85) for b_ in zb], FadeOut(tkl), FadeIn(jrl), Create(thl))
+            self.play(*[b_.animate.set_fill(GREY_B, opacity=0.85) for b_ in zb],
+                      Succession(FadeOut(tkl, run_time=0.4), FadeIn(jrl, run_time=0.6)), Create(thl), run_time=1.0)
             self.play(*[b_.animate.set_fill(JRC if v > t_ else GREY_D, opacity=0.9 if v > t_ else 0.3)
                         for b_, v, t_ in zip(zb, zv, th)])
         self.wait(0.3)
@@ -143,9 +143,9 @@ class Dicts(VoiceoverScene):
             best = min(o[key], key=lambda q: abs(math.log(max(o[f"{k}_{q:g}_0_l0"], 1e-3)) - math.log(16)))
             picks.append((k, best, col, nm, np.asarray(o[f"{k}_{best:g}_0_curve"])))
         S = float(picks[0][4][-1, 0])
-        top = float(max(min(c[:, 2].max(), 1.0) for *_, c in picks))
+        top = float(max(c[:, 2].max() for *_, c in picks))
         g1 = axes([0, S], [0, top * 1.05], x_length=5.6, y_length=3.4, xlabel=r"training steps",
-                  ylabel=r"variance left unexplained", xticks=[0, S], yticks=ticks(0, top, 3), center=[-3.3, -0.4, 0])
+                  ylabel=r"variance left unexplained \ (fit batches)", xticks=[0, S], yticks=ticks(0, top, 3), center=[-3.3, -0.4, 0])
         l0max = float(max(c[:, 1].max() for *_, c in picks))
         g2 = axes([0, S], [0, math.log2(max(l0max, 2)) * 1.05], x_length=5.6, y_length=3.4, xlabel=r"training steps",
                   ylabel=r"features on per vector \ (log scale)", xticks=[0, S],
@@ -156,7 +156,7 @@ class Dicts(VoiceoverScene):
         for k, q, col, nm, c in picks:
             def mk(c=c, col=col):
                 n = max(2, int(np.searchsorted(c[:, 0], t.get_value(), side="right")))
-                return VGroup(curve(g1.ax, c[:n, 0], np.clip(c[:n, 2], 0, top * 1.05), col, 3),
+                return VGroup(curve(g1.ax, c[:n, 0], c[:n, 2], col, 3),
                               curve(g2.ax, c[:n, 0], np.log2(np.clip(c[:n, 1], 1, None)), col, 3))
             cs.add(always_redraw(mk))
         lg = legend([(col, rf"{nm}, \ ${'k' if k == 'topk' else r'\lambda'} = {q:g}$") for k, q, col, nm, _ in picks],
@@ -164,8 +164,8 @@ class Dicts(VoiceoverScene):
         lg.arrange(RIGHT, buff=0.5).to_edge(UP, buff=0.3)
         with self.voiceover(
             "All three train the same way, on the same batches. <bookmark mark='a'/> Here is one run of each, the "
-            "one nearest sixteen features per vector, replayed: the unexplained variance falling on the left, and "
-            "on the right the number of features each vector uses. <bookmark mark='b'/> TopK holds exactly k from "
+            "one nearest sixteen features per vector, replayed: fit-batch unexplained variance on the left, and "
+            "on the right the number of features each vector uses. <bookmark mark='b'/> TopK caps the number at k from "
             "the first step; the penalized kinds start dense and are pruned as their penalty bites."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(lg))
@@ -187,7 +187,7 @@ class Dicts(VoiceoverScene):
         allx = [x for k in pts for x, _, _ in pts[k] if x > 0]
         x0, x1 = math.floor(math.log2(max(min(allx), 1))), math.ceil(math.log2(max(allx)))
         ys = [y for k in pts for _, _, v in pts[k] for y in v]
-        lo = ylo if ylo is not None else min(ys)
+        lo = min(ylo, min(ys)) if ylo is not None else min(ys)
         hi = yhi if yhi is not None else max(ys)
         pad = 0.08 * (hi - lo)
         g = axes([x0, x1], [lo - pad, hi + pad], x_length=x_len, y_length=3.8, xlabel=r"features on per vector, \ $L_0$ "
@@ -208,25 +208,26 @@ class Dicts(VoiceoverScene):
         lg = legend([(col, nm) for _, _, col, nm in KINDS], font_size=20).to_corner(UR, buff=0.4).shift(DOWN * 0.3)
         tag = note(rf"computed: \ ${int(o['F'])}$ latents each, \ ${int(o['steps']):,}$ steps, \ the same data; \ "
                    rf"${len(o['seeds'])}$ seeds, \ min to max".replace(",", "{,}")).to_corner(DR, buff=0.2)
-        at = {k: float(np.nanmean(o[f"at16_{k}_fvu"])) for k, _, _, _ in KINDS}
+        at = {k: float(np.mean(np.asarray(o[f"at16_{k}_fvu"])[np.isfinite(o[f"at16_{k}_fvu"])])) if np.isfinite(o[f"at16_{k}_fvu"]).any() else float("nan") for k, _, _, _ in KINDS}
+        counts = {k: int(np.isfinite(o[f"at16_{k}_fvu"]).sum()) for k in at}
         order = sorted(at, key=lambda k: at[k])
         nm = {"l1": "L1", "jumprelu": "JumpReLU", "topk": "TopK"}
-        tab = VGroup(*[label(rf"{nm[k]}: \ ${100 * at[k]:.0f}\%$" if np.isfinite(at[k]) else rf"{nm[k]}: \ out of range",
+        tab = VGroup(*[label(rf"{nm[k]}: \ ${100 * at[k]:.0f}\%$ \ (${counts[k]}$/${len(o['seeds'])}$ seeds)" if np.isfinite(at[k]) else rf"{nm[k]}: \ out of range",
                              font_size=22, color=dict(l1=L1C, jumprelu=JRC, topk=TKC)[k]) for k in order])
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        th = label(r"at $16$ features per vector:", font_size=22, color=WHITE)
+        th = label(r"interpolated at $16$ features per vector:", font_size=22, color=WHITE)
         box = VGroup(th, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.0, -0.4, 0])
         fin = {k: at[k] for k in at if np.isfinite(at[k])}
-        best, worst = min(fin, key=fin.get), max(fin, key=fin.get)
+        best, worst = (min(fin, key=fin.get), max(fin, key=fin.get)) if fin else (None, None)
         n_sp, n_l1 = len(o["ks"]), len(o["l1s"])
         verdict = (f"{nm[best]} leaves {100 * fin[best]:.0f} percent of the variance unexplained, {nm[worst]} "
                    f"{100 * fin[worst]:.0f}" if len(fin) >= 2 else "the kinds barely overlap in sparsity")
         with self.voiceover(
-            "Now the fair test. We trained all three on the same vectors, with the same 512 latents, steps and "
+            "Now the fair test. Our local implementations train on the same vectors, with the same 512 latents, steps and "
             f"batches, {n_sp} sparsities for TopK, {n_l1} for the others, and three seeds each. <bookmark mark='a'/> Plot how many features each "
             "uses per vector against the variance it leaves unexplained: lower and further left is better. Pause and "
             "predict which kind wins. <bookmark mark='b'/> The L1 autoencoders, <bookmark mark='c'/> JumpReLU, <bookmark mark='d'/> and TopK. "
-            f"The bars are the three seeds; they barely differ. <bookmark mark='e'/> At sixteen features per vector, "
+            f"The bars span the seeds. <bookmark mark='e'/> Interpolating only within each seed's measured sparsity range, at sixteen features per vector, "
             f"{verdict}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
@@ -254,22 +255,24 @@ class Dicts(VoiceoverScene):
         ref = DashedLine(g.ax.c2p(g.ax.x_range[0], clean), g.ax.c2p(g.ax.x_range[1], clean), color=CTRL, dash_length=0.06)
         rl = label(rf"the model itself: \ ${clean:.2f}$", font_size=18, color=CTRL).next_to(ref, UP, buff=0.05).align_to(ref, RIGHT)
         lg = legend([(col, nm) for _, _, col, nm in KINDS], font_size=20).to_corner(UR, buff=0.4).shift(DOWN * 0.3)
-        at = {k: float(np.nanmean(o[f"at16_{k}_bits"])) for k, _, _, _ in KINDS}
+        at = {k: float(np.mean(np.asarray(o[f"at16_{k}_bits"])[np.isfinite(o[f"at16_{k}_bits"])])) if np.isfinite(o[f"at16_{k}_bits"]).any() else float("nan") for k, _, _, _ in KINDS}
         nm = {"l1": "L1", "jumprelu": "JumpReLU", "topk": "TopK"}
         fin = {k: at[k] for k in at if np.isfinite(at[k])}
         best = min(fin, key=fin.get) if fin else "topk"
         gap = {k: fin[k] - clean for k in fin}
         txt = label(r"\\ ".join(rf"{nm[k]}: \ ${fin[k]:.2f}$ \ (${gap[k]:+.2f}$)" for k in sorted(fin, key=fin.get)),
                     font_size=22, color=WHITE)
-        box = VGroup(label(r"at $16$ features per vector:", font_size=22), txt).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        box = VGroup(label(r"interpolated at $16$ features per vector:", font_size=22), txt).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         box.move_to([4.0, -0.4, 0])
+        result_said = (f"At sixteen features per vector, the lowest interpolated loss here is {nm[best]}, "
+                       f"at {fin[best]:.2f} bits per character." if fin else
+                       "No dictionary has measured sparsities bracketing sixteen here; that comparison is unavailable.")
         with self.voiceover(
             "Variance is a proxy. What matters is whether the model still works when it runs on the dictionary's "
             "rebuild instead of its own vectors. <bookmark mark='a'/> So splice each rebuild into the transformer "
             f"after block two and measure the bits per character: {clean:.2f} for the model itself, and "
-            f"{mean_:.2f} if the vectors are replaced by their average. <bookmark mark='b'/> At sixteen features "
-            f"per vector, the best here is {nm[best]}, at {fin.get(best, float('nan')):.2f}. Even the best "
-            "dictionary costs the model something: the part of the vector it fails to explain still mattered."
+            f"{mean_:.2f} if the vectors are replaced by their average. <bookmark mark='b'/> {result_said} "
+            "These replacement losses test downstream behavior separately from reconstruction error."
         ) as vo:
             self.play(FadeIn(g), Create(ref), FadeIn(rl), FadeIn(lg))
             vo.wait_until("a")
@@ -291,11 +294,9 @@ class Dicts(VoiceoverScene):
         k0, jl = min(o["ks"]), max(o["jumps"])
         dk = float(np.mean([o[f"topk_{k0:g}_{s}_dead"] for s in o["seeds"]]))
         dj = float(np.mean([o[f"jumprelu_{jl:g}_{s}_dead"] for s in o["seeds"]]))
-        dc = definition_card(r"dead latent", r"a feature that never switches on: \ its gradient is zero, \ so it can "
-                             r"never recover. \ Without fixes, \ Gao et al.\ found up to $90\%$ dead; \ with them, "
-                             r"$7\%$ of $16$ million.", color=CTRL, width=6.4, font_size=21).to_corner(UL, buff=0.35)
+        dc = definition_card(r"dead latent", r"inactive on the measured sample. \ Gao et al.'s $10$M-token criterion: \ up to $90\%$ dead; \ initialization plus AuxK: $7\%$ at $16$M latents.", color=CTRL, width=6.4, font_size=21).to_corner(UL, buff=0.35)
         aux = definition_card(r"AuxK", r"an extra loss: \ the latents that have been dead for a while are asked to "
-                              r"rebuild what the live ones miss, \ so they get gradient again", color=TKC, width=6.4,
+                              r"rebuild what the live ones miss, \ so eligible units can receive gradient", color=TKC, width=6.4,
                               font_size=21).next_to(dc, DOWN, buff=0.3).align_to(dc, LEFT)
         rows = VGroup(label(rf"TopK, $k = 16$, $512$ latents: \ ${', '.join(map(str, d16))}$ dead \ (3 seeds)", font_size=22, color=TKC),
                       label(rf"the same with AuxK: \ ${', '.join(map(str, da))}$ dead", font_size=22, color=TKC),
@@ -327,13 +328,14 @@ class Dicts(VoiceoverScene):
         rl_ = label(r"the latent's activation", font_size=18, color=GREY_B).next_to(relu[1].get_end(), LEFT, buff=0.2)
         relu_pic = VGroup(rax, relu, pts, pl1, pl2, rl_)
         few = max(d16 + [d2048]) <= 5
-        verdict = ("At our size almost nothing dies, so the fix has little to do here; at millions of latents it "
+        verdict = ("At k of sixteen in these examples almost nothing dies, so the fix has little to do here; at millions of latents it "
                    "is what keeps the dictionary alive." if few else
-                   f"With AuxK, the count falls from {np.mean(d16):.0f} to {np.mean(da):.0f} on average.")
+                   f"With AuxK, the count changes from {np.mean(d16):.0f} to {np.mean(da):.0f} on average.")
         with self.voiceover(
-            "One more failure grows with size. <bookmark mark='a'/> A latent that never switches on gets no "
-            "gradient, so once dead it stays dead; without fixes, Gao and colleagues found up to 90 percent of "
-            "latents dead, and with them only 7 percent of their sixteen million. <bookmark mark='b'/> Their fix, AuxK, asks the dead latents to rebuild what the "
+            "One more failure grows with size. <bookmark mark='a'/> A latent inactive on the measured sample gets no direct activation "
+            "gradient while its ReLU is shut. Gao and colleagues tested inactivity over ten million tokens: up to ninety "
+            "percent dead in ablations, but seven percent at sixteen million latents with transposed initialization "
+            "and the auxiliary loss. Our counts use our own evaluation activation pool. <bookmark mark='b'/> AuxK asks the dead latents to rebuild what the "
             f"live ones miss. <bookmark mark='c'/> Ours: with 512 latents and k of sixteen, {d16[0]}, {d16[1]} and "
             f"{d16[2]} dead across three seeds; with AuxK, {da[0]}, {da[1]} and {da[2]}; with 2,048 latents, "
             f"{d2048}. {verdict} <bookmark mark='d'/> Where they do die here is at the sparsest settings: {dk:.0f} "

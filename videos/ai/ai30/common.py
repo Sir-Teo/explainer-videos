@@ -120,7 +120,7 @@ def grid_image(M, width, height, cmap="signed", vmax=None, pos=None, neg=None):
     return heat_image(M, width, height, color=pos or FEAT, gamma=0.7)
 
 
-def heads_grid(vals, color, cell=0.62, fmt="{:.2f}", vmax=None, font_size=20, labels=True) -> VGroup:
+def heads_grid(vals, color, cell=0.62, fmt="{:.2f}", vmax=None, font_size=20, labels=True, negative_color=None) -> VGroup:
     """A layers x heads table of numbers, each cell shaded by its value."""
     vals = np.asarray(vals, float)
     vmax = vmax or max(float(np.nanmax(np.abs(vals))), 1e-9)
@@ -130,7 +130,7 @@ def heads_grid(vals, color, cell=0.62, fmt="{:.2f}", vmax=None, font_size=20, la
     for l_ in range(L):
         for h in range(H):
             v = vals[l_, h]
-            sq = Square(cell, stroke_color=GREY_D, stroke_width=1, fill_color=color,
+            sq = Square(cell, stroke_color=GREY_D, stroke_width=1, fill_color=negative_color if v < 0 and negative_color else color,
                         fill_opacity=0.05 + 0.85 * min(abs(v) / vmax, 1)).move_to([h * cell, -l_ * cell, 0])
             t = MathTex(fmt.format(v), font_size=font_size, color=WHITE).move_to(sq)
             cells.add(VGroup(sq, t))
