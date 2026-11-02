@@ -98,11 +98,12 @@ def compute_ito() -> dict:
     W = np.concatenate([[0.0], np.cumsum(dW)])
     WT = W[-1]
     rows = []
-    for n in [4, 16, 64, 256, 1024, 4096, 16384]:
-        Wn = W[:: nmax // n]
+    for n in [4, 16, 64, 256, 1024, 4096, 8192]:
+        st = nmax // n
+        Wn = W[::st]
         d = np.diff(Wn)
         left = float(np.sum(Wn[:-1] * d))
-        mid = float(np.sum(0.5 * (Wn[:-1] + Wn[1:]) * d))
+        mid = float(np.sum(W[st // 2::st][:n] * d))  # W at the midpoint in time of each step
         rows.append({"n": n, "ito": left, "strat": mid})
     return _json({"rows": rows, "WT": float(WT), "ito_limit": float((WT ** 2 - 1) / 2), "strat_limit": float(WT ** 2 / 2),
                   "W": W[:: nmax // 512]})
