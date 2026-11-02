@@ -431,11 +431,12 @@ English dry run (`collect_text.py quantN`), translate on-screen text (`--check`,
 visual QA of new scenes (`qa_scene.py`), README/SYLLABUS/READING checks, commit. Compute items still missing at the
 stop: Part 5 `nsde`, `nsde_eval`, `envelope2`; Part 11 `hedging_replay`; Part 12 `operator_net`; Part 15
 `surrogate_replay`; Part 17 nineteen new items (`hlp_replay` … `calib_ckpt`). Failing test:
-`test_deep_bsde_snap_linear_check` (Part 17 work in progress).
+`test_deep_bsde_snap_linear_check` (Part 17 work in progress; fixed 2 Nov: 800 steps, not 300, reach the Monte Carlo price).
 
 | Part | status |
 |---|---|
-| 2 | chapters written; finishing pending |
+| 1 | expanded (Industry, Frontier, aggregation theory, March 2020); 52.8 min; zh text and dry run done |
+| 2 | English QA clean on all 20 scenes (layout fixes across 11); zh text 0 left; zh dry run running |
 | 3 | chapters written; finishing pending |
 | 4 | chapters written; finishing pending |
 | 5 | chapters written; finishing pending |

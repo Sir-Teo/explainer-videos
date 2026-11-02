@@ -12,7 +12,7 @@ described from the public record, with allegations labelled as allegations.
 
 *An education in methods, not investment advice.*
 
-## Chapters (about 58 minutes)
+## Chapters (about 60 minutes)
 
 * **What happens when you press buy?** A trade's life with a collateral clock; 27–28 January 2021 from the SEC staff
   report: NSCC's intraday calls of $6.9 bn on 36 members ($2.1 bn mark-to-market, $4.8 bn special charge), $25.5 bn
@@ -179,7 +179,7 @@ netting; D'Avolio (2002), p. 271–272; the SIFMA–ICI–DTCC T+1 after-action 
 
 *讲的是方法，不构成投资建议。*
 
-## 各章（约58分钟）
+## 各章（约60分钟）
 
 开场：一笔交易的生命周期，以及SEC工作人员报告中的2021年1月27–28日（NSCC对36家会员日内追缴69亿美元，总要求255亿美元；
 被豁免的超额资本溢价对一家零售经纪商而言“超过其14亿美元保证金要求的两倍”；GameStop空头仓位达流通股的122.97%）。
