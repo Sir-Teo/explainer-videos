@@ -92,7 +92,7 @@ class Generator(VoiceoverScene):
                 (r"distance: training years", "sig_train", "{:.2f}"), (r"distance: held-out years", "sig_dist", "{:.2f}")]
         names = ["real (train)", "real (held out)"] + ORDER
         disp = {"real (held out)": r"real, 2024--2025 (held out)", "real (train)": r"real, 2017--2023 (training)",
-                "i.i.d. normal": r"independent normal", "i.i.d. bootstrap": r"independent resampling",
+                "i.i.d. normal": r"independent normal draws", "i.i.d. bootstrap": r"independent resampling",
                 "GJR-GARCH": r"GJR-GARCH (Part 7)", "signature LSTM": r"signature-trained network",
                 "diffusion": r"diffusion model"}
         tab = VGroup(VGroup(label(r"", font_size=17), *[label(c[0], font_size=16, color=GREY_A) for c in cols]))
@@ -111,22 +111,26 @@ class Generator(VoiceoverScene):
                   "GJR-GARCH": "GJR-GARCH model of Part seven", "signature LSTM": "signature-trained network",
                   "diffusion": "diffusion model"}
         b_tr, b_te = spoken[best_tr], spoken[best_te]
+        sl = sc["signature LSTM"]
         foot = wrapped_label(rf"measured inside 32-day windows (so clustering reads lower than on a long series); distances "
-                             r"are signature distances, with every set clipped at the training data's 0.1\% and 99.9\% "
-                             rf"quantiles. Closest to the training years: {disp[best_tr]}; to the held-out years: "
-                             rf"{disp[best_te]}. The two real periods are {tr['sig_dist']:.1f} apart: a generator learns the "
-                             r"regime it was shown", 12.6, 18, GREY_A).to_edge(DOWN, buff=0.3)
+                             r"are signature distances (depth 4), every set clipped at the training data's 0.1\% and 99.9\% "
+                             rf"quantiles. By distance alone, {disp[best_tr]} sit closest to the training years, with no "
+                             rf"clustering at all; only the signature-trained network gets tails ({sl['kurtosis']:.0f}), "
+                             rf"clustering ({sl['acf_abs_mean']:.2f}) and leverage right. No single score is enough",
+                             12.6, 18, GREY_A).to_edge(DOWN, buff=0.3)
         src = illustration(r"4{,}000 generated windows each; daily log returns, standardized", corner=UR)
         with self.voiceover(
             "Here are Part one's stylized facts, measured in each set of windows: fat tails, volatility clustering, "
             "the leverage effect, and the absence of autocorrelation, with the signature distance to each real period. "
             f"<bookmark mark='a'/> First, the two real periods. The training years have excess kurtosis of "
             f"{tr['kurtosis']:.0f}; the held-out years, calmer, {te['kurtosis']:.1f}. They are far apart: the future "
-            "did not look like the past. <bookmark mark='b'/> Independent draws have no clustering at all, which "
-            f"rules them out. Closest to the training years is the {b_tr}, which reproduces their fat tails, their "
-            f"clustering and their leverage. Closest to the held-out years is the {b_te}, but for a dull reason: its "
-            "tails are thin, and the later years happened to be calm. A generator learns the regime it was shown; a desk "
-            "keeps several, and stresses its hedger on all of them."
+            "did not look like the past. <bookmark mark='b'/> Now the generators. Independent draws have no clustering "
+            f"at all, and yet, by the signature distance, the {b_tr} sit closest to the training years, a hair ahead "
+            "of the signature-trained network. At this depth the distance is a weak judge, and the facts catch what it "
+            "misses: only the signature-trained network has fat tails, clustering and leverage near those of the "
+            f"training years. The {b_te} is closest to the held-out years for a dull reason: its tails are thin, and "
+            "those years were calm. No single score is enough. A desk checks the facts one by one, keeps several "
+            "generators, and stresses its hedger on all of them."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(src))
             vo.wait_until("a")
