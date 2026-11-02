@@ -145,15 +145,21 @@ def masked_loss(model, windows: torch.Tensor, B: int = 16, seed: int = 12345) ->
 
 @torch.no_grad()
 def repeat_test(model, rep: torch.Tensor) -> dict:
-    """Accuracy and loss on the first and second copies of a random word list (an induction test)."""
+    """Accuracy and loss on all L words of each copy of a random word list.
+
+    The leading newline is input only: target positions 0..L-1 are the first
+    copy and L..2L-1 the second. Compare the same word cohort in both copies.
+    This behavioral test does not identify an attention circuit.
+    """
     model.eval()
     L = (rep.shape[1] - 1) // 2
     logits = model(rep[:, :-1])
     y = rep[:, 1:]
     ok = (logits.argmax(-1) == y).float()
     ce = F.cross_entropy(logits.flatten(0, 1).float(), y.flatten(), reduction="none").view(y.shape)
-    first, second = slice(0, L - 1), slice(L, 2 * L)  # predicting words 2..L of the first copy; all of the second
-    return dict(acc1=float(ok[:, first].mean()), acc2=float(ok[:, second].mean()), loss1=float(ce[:, first].mean()),
+    first, second = slice(0, L), slice(L, 2 * L)
+    return dict(repeat_protocol="matched-all-words-v1",
+                acc1=float(ok[:, first].mean()), acc2=float(ok[:, second].mean()), loss1=float(ce[:, first].mean()),
                 loss2=float(ce[:, second].mean()))
 
 

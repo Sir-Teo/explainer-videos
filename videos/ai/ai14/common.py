@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 import json as _json
+import hashlib as _hashlib
 
 import numpy as np
 
@@ -20,24 +21,74 @@ _SCIENTIFIC_ITEMS = frozenset({
 })
 
 
-def load(name: str) -> dict:
+def load(name: str, *, probe_fit_protocol: str = "fp32-lbfgs-probe-v1") -> dict:
     """Load supplied results, rejecting missing or incompatible scientific items.
 
     Protocol markers are compatibility checks, not a substitute for verifying
-    the external cache's model, inputs and provenance. See this part's README.
+    the external cache's model, inputs and provenance. The default retains the
+    approved corrected-v1 FP32 fit. Explicit v2 reads lineage_probe_v2.json and
+    requires its matching v1 parent; it never upgrades or falls back. See README.
     """
+    if name == "lineage_probe_v2":
+        raise ValueError("Select probe v2 explicitly through lineage and probe_fit_protocol")
+    if probe_fit_protocol not in {"fp32-lbfgs-probe-v1", "fp64-lbfgs-probe-v2"}:
+        raise ValueError("Unknown Part 14 probe fit protocol")
+    if name != "lineage" and probe_fit_protocol != "fp32-lbfgs-probe-v1":
+        raise ValueError("Probe fit selection is only valid for lineage")
     if name in _SCIENTIFIC_ITEMS:
-        path = _CACHE.path(name)
+        # A fit selection chooses a distinct artifact, never whichever file exists.
+        item = "lineage_probe_v2" if name == "lineage" and probe_fit_protocol == "fp64-lbfgs-probe-v2" else name
+        path = _CACHE.path(item)
         if not path.is_file():
             raise FileNotFoundError(
-                f"Part 14 requires a verified precomputed {name!r} item; "
+                f"Part 14 requires a verified precomputed {item!r} item; "
                 "rendering does not generate scientific results. See README."
             )
-        data = _json.loads(path.read_text(encoding="utf-8"))
+        raw = path.read_bytes()
+        data = _json.loads(raw)
         if not isinstance(data, dict):
             raise ValueError(f"Part 14 {name!r} metadata must be an object")
         if name == "lineage" and data.get("probe_protocol") != "exact-length-batches-v1":
             raise ValueError("Part 14 lineage requires exact-length-batches-v1 probe results")
+        if name == "lineage":
+            # The approved corrected-v1 artifact predates the fit marker. An
+            # absent marker is compatible only with that externally verified
+            # old recipe, never with an explicit null/unknown marker or v2.
+            recorded_fit = data.get("probe_fit_protocol", "fp32-lbfgs-probe-v1")
+            if recorded_fit != probe_fit_protocol:
+                raise ValueError(f"Part 14 {item!r} fit does not match {probe_fit_protocol}; keep recipes separate")
+            if probe_fit_protocol == "fp32-lbfgs-probe-v1" and any(
+                key in data for key in ("probe_fit", "candidate_provenance")
+            ):
+                raise ValueError("Part 14 lineage v1 must not contain v2-only fit/provenance metadata")
+            if probe_fit_protocol == "fp64-lbfgs-probe-v2":
+                parent = load("lineage")
+                parent_raw = _CACHE.path("lineage").read_bytes()
+                provenance = data.get("candidate_provenance")
+                if (not isinstance(provenance, dict) or
+                    provenance.get("parent_lineage_sha256") != _hashlib.sha256(parent_raw).hexdigest()):
+                    raise ValueError("Part 14 probe v2 requires its matching verified v1 parent")
+                for field in ("probe_classes", "probe_n_train", "probe_n_test"):
+                    if data.get(field) != parent.get(field):
+                        raise ValueError("Part 14 probe v2 cohort must match its v1 parent")
+                fit = data.get("probe_fit")
+                required = dict(normalization_dtype="float32", head_dtype="float64", seed=0,
+                                optimizer="LBFGS", lr=1.0, wd=1e-3, max_iter=1000, max_eval=1250,
+                                tolerance_grad=1e-9, tolerance_change=1e-12, history_size=100,
+                                line_search_fn="strong_wolfe", acceptance_gradient_inf=1e-6,
+                                threads=1, accuracy="micro")
+                if not isinstance(fit, dict) or any(fit.get(k) != v for k, v in required.items()):
+                    raise ValueError("Part 14 probe v2 fit metadata does not match its recipe")
+                cohort = fit.get("cohort_sha256")
+                if (not isinstance(cohort, str) or len(cohort) != 64 or
+                    any(c not in "0123456789abcdef" for c in cohort)):
+                    raise ValueError("Part 14 probe v2 requires its recorded cohort hash")
+                for split in ("train", "test"):
+                    counts = fit.get(f"{split}_class_counts")
+                    if (not isinstance(counts, list) or len(counts) != data["probe_classes"] or
+                        any(type(n) is not int or n < 0 for n in counts) or
+                        sum(counts) != data[f"probe_n_{split}"]):
+                        raise ValueError("Part 14 probe v2 class counts do not match its cohort")
         if name in {"icl", "icl_base", "gpt_xs", "gpt_s", "gpt_m", "gpt_l"}:
             rows = data.get("rows" if name in {"icl", "icl_base"} else "snaps")
             if (not isinstance(rows, list) or not rows or any(
@@ -50,8 +101,10 @@ def load(name: str) -> dict:
         arrays_path = path.with_suffix(".npz")
         if arrays_path.is_file():
             with np.load(arrays_path, allow_pickle=False) as arrays:
-                if set(arrays.files).intersection(data):
-                    raise ValueError(f"Part 14 {name!r} array keys must not replace JSON metadata")
+                reserved = {"probe_protocol", "probe_fit_protocol", "probe_fit", "candidate_provenance",
+                            "repeat_protocol"}
+                if set(arrays.files).intersection(set(data) | reserved):
+                    raise ValueError(f"Part 14 {name!r} array keys must not replace or add protocol metadata")
                 data.update({key: arrays[key] for key in arrays.files})
         return data
     return _load(name)

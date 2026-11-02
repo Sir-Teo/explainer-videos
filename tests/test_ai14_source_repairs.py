@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import ast
 import json
+import hashlib
 from pathlib import Path
 import re
 import tempfile
@@ -27,7 +28,7 @@ class ScientificCacheContractTests(unittest.TestCase):
                     isinstance(target, ast.Name) and target.id == "_SCIENTIFIC_ITEMS"
                     for target in node.targets)) or
                 (isinstance(node, ast.FunctionDef) and node.name == "load")]
-        self.namespace = dict(_json=json, np=np,
+        self.namespace = dict(_json=json, _hashlib=hashlib, np=np,
                               _CACHE=types.SimpleNamespace(path=lambda name: self.root / (name + ".json")),
                               _load=lambda name: self.calls.append(name) or {"loaded": name})
         exec(compile(ast.Module(body=body, type_ignores=[]), "<cache contract>", "exec"), self.namespace)
@@ -49,6 +50,37 @@ class ScientificCacheContractTests(unittest.TestCase):
                 self.load("lineage")
         self.assertEqual(self.calls, [])
 
+    def test_approved_v1_missing_fit_marker_is_preserved_byte_for_byte(self):
+        data = {"probe_protocol": "exact-length-batches-v1", "cloze_gpt": 0.25,
+                "probe_gpt": 0.5, "gpt_sample": "synthetic fixture"}
+        self.save("lineage", data)
+        before = (self.root / "lineage.json").read_bytes()
+        self.assertEqual(self.load("lineage"), data)
+        self.assertEqual((self.root / "lineage.json").read_bytes(), before)
+        self.assertNotIn("probe_fit_protocol", self.load("lineage"))
+        self.assertEqual(self.calls, [])
+
+    def test_null_unknown_or_v2_fit_at_default_path_is_rejected(self):
+        for fit in (None, "older-fit", "fp64-lbfgs-probe-v2"):
+            self.save("lineage", {"probe_protocol": "exact-length-batches-v1", "probe_fit_protocol": fit})
+            with self.assertRaisesRegex(ValueError, "fit does not match"):
+                self.load("lineage")
+        self.assertEqual(self.calls, [])
+
+    def test_v1_rejects_v2_only_metadata_with_missing_or_explicit_fp32_marker(self):
+        for marker in (False, True):
+            for key in ("probe_fit", "candidate_provenance"):
+                for value in (None, {"head_dtype": "float64"}):
+                    data = {"probe_protocol": "exact-length-batches-v1", key: value}
+                    if marker:
+                        data["probe_fit_protocol"] = "fp32-lbfgs-probe-v1"
+                    self.save("lineage", data)
+                    with self.subTest(marker=marker, key=key, value=value), self.assertRaisesRegex(
+                        ValueError, "v2-only fit/provenance metadata"
+                    ):
+                        self.load("lineage")
+        self.assertEqual(self.calls, [])
+
     def test_every_repeat_row_and_snapshot_requires_the_matched_cohort(self):
         for name in ("icl", "icl_base", "gpt_xs", "gpt_s", "gpt_m", "gpt_l"):
             key = "rows" if name.startswith("icl") else "snaps"
@@ -61,7 +93,7 @@ class ScientificCacheContractTests(unittest.TestCase):
 
     def test_valid_contracts_pass_through_without_changing_the_result(self):
         for name in sorted(self.namespace["_SCIENTIFIC_ITEMS"]):
-            data = {"probe_protocol": "exact-length-batches-v1"}
+            data = {"probe_protocol": "exact-length-batches-v1", "probe_fit_protocol": "fp32-lbfgs-probe-v1"}
             data["rows" if name.startswith("icl") else "snaps"] = [
                 {"repeat_protocol": "matched-all-words-v1"}]
             self.save(name, data)
@@ -84,11 +116,115 @@ class ScientificCacheContractTests(unittest.TestCase):
         self.assertEqual(self.calls, [])
 
     def test_arrays_cannot_replace_validated_protocol_metadata(self):
-        self.save("lineage", {"probe_protocol": "exact-length-batches-v1"})
+        self.save("lineage", {"probe_protocol": "exact-length-batches-v1", "probe_fit_protocol": "fp32-lbfgs-probe-v1"})
         np.savez(self.root / "lineage.npz", probe_protocol=np.array("older"))
         with self.assertRaises(ValueError):
             self.load("lineage")
         self.assertEqual(self.calls, [])
+
+    def test_legacy_npz_cannot_add_fit_or_provenance_metadata_after_validation(self):
+        self.save("lineage", {"probe_protocol": "exact-length-batches-v1"})
+        for key in ("probe_fit_protocol", "probe_fit", "candidate_provenance", "repeat_protocol"):
+            np.savez(self.root / "lineage.npz", **{key: np.array("incompatible")})
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, "protocol metadata"):
+                self.load("lineage")
+        self.assertEqual(self.calls, [])
+
+    def v2_fixture(self):
+        self.save("lineage", dict(probe_protocol="exact-length-batches-v1", probe_classes=2,
+                                  probe_n_train=4, probe_n_test=2, probe_gpt=0.25, cloze_gpt=0.75))
+        data = dict(probe_protocol="exact-length-batches-v1", probe_fit_protocol="fp64-lbfgs-probe-v2",
+                    probe_classes=2, probe_n_train=4, probe_n_test=2, probe_gpt=0.5,
+                    candidate_provenance=dict(parent_lineage_sha256=hashlib.sha256(
+                        (self.root / "lineage.json").read_bytes()).hexdigest()),
+                    probe_fit=dict(normalization_dtype="float32", head_dtype="float64", seed=0,
+                                   optimizer="LBFGS", lr=1.0, wd=1e-3, max_iter=1000, max_eval=1250,
+                                   tolerance_grad=1e-9, tolerance_change=1e-12, history_size=100,
+                                   line_search_fn="strong_wolfe", acceptance_gradient_inf=1e-6,
+                                   threads=1, accuracy="micro", cohort_sha256="a" * 64,
+                                   train_class_counts=[2, 2], test_class_counts=[1, 1]))
+        return data
+
+    def test_explicit_v2_uses_separate_artifact_and_default_stays_v1(self):
+        data = self.v2_fixture()
+        self.save("lineage_probe_v2", data)
+        self.assertEqual(self.load("lineage")["probe_gpt"], 0.25)
+        self.assertEqual(self.load("lineage", probe_fit_protocol="fp64-lbfgs-probe-v2"), data)
+        self.assertEqual(self.load("lineage")["cloze_gpt"], 0.75)
+        self.assertEqual(self.calls, [])
+
+    def test_missing_v2_does_not_fall_back_to_available_v1(self):
+        self.v2_fixture()
+        with self.assertRaisesRegex(FileNotFoundError, "lineage_probe_v2"):
+            self.load("lineage", probe_fit_protocol="fp64-lbfgs-probe-v2")
+        self.assertEqual(self.calls, [])
+
+    def test_missing_v1_does_not_fall_forward_to_available_v2(self):
+        self.save("lineage_probe_v2", self.v2_fixture())
+        (self.root / "lineage.json").unlink()
+        with self.assertRaises(FileNotFoundError):
+            self.load("lineage")
+        with self.assertRaises(FileNotFoundError):
+            self.load("lineage", probe_fit_protocol="fp64-lbfgs-probe-v2")
+        self.assertEqual(self.calls, [])
+
+    def test_v2_requires_its_exact_parent_and_matching_cohort(self):
+        for change in ("parent", "probe_classes", "probe_n_train", "probe_n_test"):
+            data = self.v2_fixture()
+            if change == "parent":
+                data["candidate_provenance"]["parent_lineage_sha256"] = "b" * 64
+            else:
+                data[change] += 1
+            self.save("lineage_probe_v2", data)
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                self.load("lineage", probe_fit_protocol="fp64-lbfgs-probe-v2")
+        self.assertEqual(self.calls, [])
+
+    def test_v2_rejects_missing_or_incompatible_feature_and_fit_markers(self):
+        for key, value in (("probe_protocol", "old-padded"), ("probe_fit_protocol", None),
+                           ("probe_fit_protocol", "fp32-lbfgs-probe-v1")):
+            data = self.v2_fixture()
+            data[key] = value
+            self.save("lineage_probe_v2", data)
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                self.load("lineage", probe_fit_protocol="fp64-lbfgs-probe-v2")
+        data.pop("probe_fit_protocol")
+        self.save("lineage_probe_v2", data)
+        with self.assertRaises(ValueError):
+            self.load("lineage", probe_fit_protocol="fp64-lbfgs-probe-v2")
+        self.assertEqual(self.calls, [])
+
+    def test_v2_rejects_incompatible_controls_or_incomplete_cohort_metadata(self):
+        for key, value in (("head_dtype", "float32"), ("threads", 2), ("acceptance_gradient_inf", 1e-9),
+                           ("cohort_sha256", "missing"), ("train_class_counts", [2, 1]),
+                           ("test_class_counts", [2, -1]), ("test_class_counts", [True, 1])):
+            data = self.v2_fixture()
+            data["probe_fit"][key] = value
+            self.save("lineage_probe_v2", data)
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                self.load("lineage", probe_fit_protocol="fp64-lbfgs-probe-v2")
+        self.assertEqual(self.calls, [])
+
+    def test_reserved_v2_item_and_unknown_selectors_never_generate(self):
+        for name, selector in (("lineage_probe_v2", "fp32-lbfgs-probe-v1"),
+                               ("lineage", "unknown"), ("published", "fp64-lbfgs-probe-v2")):
+            with self.subTest(name=name, selector=selector), self.assertRaises(ValueError):
+                self.load(name, probe_fit_protocol=selector)
+        self.assertEqual(self.calls, [])
+
+    def test_only_probe_method_selects_optional_fit(self):
+        tree = ast.parse((PART / "s14_ours.py").read_text())
+        cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "OurLineage")
+        selected = []
+        for method in (n for n in cls.body if isinstance(n, ast.FunctionDef)):
+            for call in (n for n in ast.walk(method) if isinstance(n, ast.Call)):
+                if isinstance(call.func, ast.Name) and call.func.id == "load":
+                    if any(k.arg == "probe_fit_protocol" for k in call.keywords):
+                        selected.append(method.name)
+        self.assertEqual(selected, ["probe"])
+        default = next(n for n in cls.body if isinstance(n, ast.Assign) and
+                       any(isinstance(t, ast.Name) and t.id == "probe_fit_protocol" for t in n.targets))
+        self.assertEqual(ast.literal_eval(default.value), "fp32-lbfgs-probe-v1")
 
     def test_published_source_derivations_keep_the_existing_loader(self):
         self.assertEqual(self.load("published"), {"loaded": "published"})
