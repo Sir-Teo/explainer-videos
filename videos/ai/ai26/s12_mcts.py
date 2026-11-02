@@ -239,14 +239,28 @@ class MCTS(VoiceoverScene):
         rnd = DashedLine(g.ax.c2p(1, d["random"]), g.ax.c2p(3.5, d["random"]), color=GREY_B, dash_length=0.08)
         rl = label(rf"a random move: \ ${100 * d['random']:.0f}\%$", font_size=20, color=GREY_B).next_to(rnd, UP, buff=0.05)
         rl.align_to(rnd, RIGHT)
-        tag = note(rf"computed: \ ${d['n_pos']}$ test positions, \ every move scored by a perfect solver; \ right $=$ "
-                   r"keeps the win, or the draw").to_corner(DR, buff=0.2)
+        tag = note(rf"computed: \ ${d['n_pos']}$ selected tactical positions; \ UCT with win-aware rollouts"
+                   r" \\ right $=$ keeps the win or draw; \ one seeded choice per position and budget")
+        if tag.width > 13.3:
+            tag.scale_to_fit_width(13.3)
+        tag.to_corner(DR, buff=0.2)
+        correct = int(round(float(acc[-1]) * int(d['n_pos'])))
+        summary = VGroup(
+            MathTex(rf"{100 * acc[-1]:.2f}\%", font_size=48, color=SEARCH),
+            MathTex(rf"{correct}/{int(d['n_pos'])}", font_size=30, color=GREY_A),
+            label(r"outcome-preserving choices", font_size=20, color=GREY_A),
+            label(rf"${int(sims[-1]):,}$ simulations per move".replace(",", "{,}"), font_size=18, color=GREY_B),
+        ).arrange(DOWN, buff=0.18).move_to([4.95, 0.4, 0])
+        if summary.width > 3.8:
+            summary.scale_to_fit_width(3.8)
         with self.voiceover(
-            f"We can measure this exactly. Connect Four is solved, so for {d['n_pos']} test positions we know every "
+            f"We can measure this exactly. Connect Four is solved, so for {d['n_pos']} selected tactical positions we know every "
             "move's true value. Call a move right if it keeps the best result the position allows: the win, or "
             "the draw. <bookmark mark='a'/> A random move is right "
             f"{100 * d['random']:.0f} percent of the time. <bookmark mark='b'/> Plain MCTS improves with more "
             f"simulations, reaching {100 * acc[-1]:.0f} percent at {int(sims[-1]):,} per move in this experiment. "
+            "The positions were selected because legal moves have different solved outcomes. This is one seeded "
+            "comparison on that cohort. "
             "These finite budgets do not establish a ceiling: UCT is asymptotically consistent, but can need far more search."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
@@ -254,6 +268,7 @@ class MCTS(VoiceoverScene):
             self.play(Create(rnd), FadeIn(rl))
             vo.wait_until("b")
             self.play(Create(line), LaggedStart(*[FadeIn(p, scale=1.5) for p in pts], lag_ratio=0.15), run_time=2.0)
+            self.play(FadeIn(summary, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 

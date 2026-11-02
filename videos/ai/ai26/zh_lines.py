@@ -174,7 +174,7 @@ ZH = {
         "完美求解器说：完美对弈时，第{best_true + 1}列的结果是{best_result}；MCTS选的第{best_mc + 1}列，结果是{chosen_result}。<bookmark mark='a'/>我们的模拟策略看到一步就能赢的棋会直接下，其他时候随机走。它仍可能漏掉更长的战术陷阱，所以一步棋在这种模拟下，可能比面对最优应对时显得更好。这次有限预算的搜索，也受限于这种评估。",
 
     'f"We can measure this exactly.':
-        "我们可以精确地衡量这一点。四子棋已经被彻底解决了，所以对{d['n_pos']}个测试局面，我们知道每一步棋的真实价值。如果一步棋保住了这个局面所能得到的最好结果，赢棋，或者和棋，就说它是对的。<bookmark mark='a'/>随机走一步，有{100 * d['random']:.0f}%的时候是对的。<bookmark mark='b'/>在这次实验中，普通MCTS在每步{int(sims[-1]):,}次模拟时达到{100 * acc[-1]:.0f}%。这些有限预算不能证明它的上限：UCT具有渐近一致性，但可能需要更多的搜索。",
+        "我们可以精确地衡量这一点。四子棋已经被彻底解决了，所以对{d['n_pos']}个经过筛选的战术局面，我们知道每一步棋的真实价值。如果一步棋保住了这个局面所能得到的最好结果，赢棋，或者和棋，就说它是对的。<bookmark mark='a'/>随机走一步，有{100 * d['random']:.0f}%的时候是对的。<bookmark mark='b'/>在这次实验中，普通MCTS在每步{int(sims[-1]):,}次模拟时达到{100 * acc[-1]:.0f}%。这些局面被选中，是因为合法走法的求解结果不同。这里是在这一组局面上，用一个随机种子进行的比较。这些有限预算不能证明它的上限：UCT具有渐近一致性，但可能需要更多的搜索。",
 
     'MCTS transformed computer Go.':
         "MCTS彻底改变了电脑围棋。从2006年起，Crazy Stone和MoGo从初学者水平，一路爬到了业余强手。<bookmark mark='a'/>2013年，Crazy Stone战胜了一位职业棋手，不过对方让了它四子。<bookmark mark='b'/>缺的是一个更好的裁判：能像强手那样，看一眼局面就知道谁占上风。这正是神经网络将要提供的。",
@@ -266,6 +266,9 @@ ZH = {
     'Here is PPO learning the cart-pole, replayed.':
         "这是PPO学习倒立摆的过程回放。右边是策略本身：在每个状态下，向左推或向右推的概率。一开始，处处都是抛硬币，一片均匀的灰色。<bookmark mark='a'/>一批又一批，两种颜色沿着DQN找到的那条倾斜的线分开了，每局也越来越长。和DQN不同，这个策略在边界附近，也就是它拿不准的地方，保持着柔和，直到训练把它磨得更锐利。",
 
+    'Here is PPO learning the cart-pole, replayed from seed zero.':
+        "这是PPO从随机种子0开始学习倒立摆的过程回放。图中一开始是随机网络给出的动作概率，在二分之一附近略有差别。<bookmark mark='a'/>在每个保存的检查点，冻结策略，采样一局。每局能坚持的步数可能增加，也可能减少；训练更多，并不保证这一次能撑得更久。偏好推力的分界会变化，边界附近仍可能混合选择两种动作。这些是动作概率，不是不确定性的界限。",
+
     'PPO went everywhere.':
         "PPO被用到了各个地方。<bookmark mark='a'/>2019年，OpenAI Five以巨大的规模使用它，在相当于4.5万年的自我对弈之后，击败了Dota 2的世界冠军。<bookmark mark='b'/>在机器人领域，软演员-评论家把策略的熵加到奖励里，让它一直保持探索。<bookmark mark='c'/>它也是RLHF里的那个强化学习，正是这一步，把语言模型变成了ChatGPT，见第27部分。<bookmark mark='d'/>它的后代GRPO去掉了评论家，如今用来训练推理模型，见第28部分。",
 
@@ -350,6 +353,18 @@ ZH = {
     'f"On the cart-pole, with the same networks and the same budget of experience':
         "在倒立摆上，用同样的网络、同样多的经验，每种各跑{len(d['ppo'])}次：普通的REINFORCE，<bookmark mark='a'/>带基线的REINFORCE，<bookmark mark='b'/>以及用广义优势估计的演员-评论家。在整个训练过程中平均，它们的回合分别持续{auc['reinforce']:.0f}、{auc['baseline']:.0f}和{auc['ac']:.0f}步。{verdict}",
 
+    'f"On the cart-pole, with the same policy architecture and nominal experience budget':
+        "在倒立摆上，用同样的策略网络架构、同样的名义经验预算，每种各跑{len(d['ppo'])}次：普通的REINFORCE，<bookmark mark='a'/>带基线的REINFORCE，<bookmark mark='b'/>以及用广义优势估计的演员-评论家。把固定训练步数网格上各窗口的回合长度均值等权平均，分别得到{auc['reinforce']:.0f}、{auc['baseline']:.0f}和{auc['ac']:.0f}步。{verdict}",
+
+    'In this eight-run sample, plain REINFORCE has the highest mean':
+        '在这个每种运行八次的样本里，普通REINFORCE在该网格上的均值最高。色带显示均值的一个估计标准误。这项比较并没有确立普遍排名，也没有确定差异的原因。',
+
+    'In this eight-run sample, REINFORCE with a baseline has the highest mean':
+        '在这个每种运行八次的样本里，带基线的REINFORCE在该网格上的均值最高。色带显示均值的一个估计标准误。这项比较并没有确立普遍排名，也没有确定差异的原因。',
+
+    'In this eight-run sample, actor-critic has the highest mean':
+        '在这个每种运行八次的样本里，演员-评论家在该网格上的均值最高。色带显示均值的一个估计标准误。这项比较并没有确立普遍排名，也没有确定差异的原因。',
+
     'On a task this small, all three get there, and the differences are modest.':
         '在这么小的任务上，三者都能学会，差别也不大。倒立摆每一步都给奖励，回合又短，所以即使是普通REINFORCE的噪声，也负担得起。在长任务上，奖励要在赢得它的动作之后很久才到来，那时正是这种噪声让学习停滞，基线和评论家才显出它们的价值。',
 
@@ -358,6 +373,9 @@ ZH = {
 
     'f"Against the policy-gradient methods of the last chapter, PPO, in bold blue, averages':
         "和上一章的策略梯度方法相比，粗蓝线的PPO在整个训练中平均{auc['ppo']:.0f}步，而其余方法里最好的是{rest:.0f}步：在这么小的任务上，它们差别不大。PPO的优势在于大规模时的可靠。它能重复利用每批数据，通过裁剪来抑制过大的策略变化，但仍然需要谨慎选择步长。这也是它广泛使用的原因之一。",
+
+    'f"Against the policy-gradient methods of the last chapter, PPO, in bold blue, has a mean windowed':
+        "和上一章的策略梯度方法相比，粗蓝线的PPO，其窗口回合长度的均值为{auc['ppo']:.0f}步，而其余方法里最好的是{rest:.0f}步。这些数字对固定训练步数网格等权平均。这里比较的是每种运行八次的四套完整训练设置：PPO还使用了不同的学习率和更多更新，所以差异并不能单独归因于裁剪。",
 
     'f"Here is the training, replayed through one position.':
         "这是训练过程，通过一个局面回放出来。每一列上方，是网络在搜索之前下在这一列的概率。下方是完美求解器的判定：保住最好结果的走法打一个勾。<bookmark mark='a'/>第0代的网络还没训练：柱子几乎是平的，价值是{V[0]:+.2f}。<bookmark mark='b'/>看着一代代过去。概率随着网络理解的变化而移动，{end}",
