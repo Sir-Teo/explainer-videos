@@ -402,3 +402,76 @@ def test_econometrics_module():
     # shrinkage pulls noisy means toward the grand mean
     sh = econ.shrink_means(rng.normal(0.01, 0.002, 30) + rng.normal(0, 0.01, 30), np.full(30, 0.01))
     assert np.var(sh["shrunk"]) < 0.5 * np.var(sh["shrunk"] / sh["shrunk"] * 0 + rng.normal(0, 0.01, 30)) + 1
+
+
+def test_volatility_module():
+    from explainer.quant.house import vol
+
+    rng = np.random.default_rng(0)
+    # GARCH(1,1): simulate and recover
+    n, w, a, b = 6000, 0.02, 0.08, 0.9
+    h, r = np.empty(n), np.empty(n)
+    h[0] = w / (1 - a - b)
+    for t in range(n):
+        if t:
+            h[t] = w + a * r[t - 1] ** 2 + b * h[t - 1]
+        r[t] = np.sqrt(h[t]) * rng.standard_normal()
+    f = vol.garch_fit(r)
+    assert f["params"][1] == pytest.approx(a, abs=0.03) and f["params"][2] == pytest.approx(b, abs=0.04)
+    assert f["persistence"] == pytest.approx(a + b, abs=0.02)
+    g = vol.garch_fit(r, "gjr")
+    assert g["loglik"] >= f["loglik"] - 1.0
+    e = vol.garch_fit(r, "egarch")
+    assert np.isfinite(e["loglik"])
+    fc = vol.garch_forecast(f["params"], r[-1], f["h"][-1], 500)
+    assert fc[-1] == pytest.approx(f["params"][0] / (1 - f["persistence"]), rel=0.05)
+    # realized measures: Brownian with noise; TSRV and the kernel are closer to the truth than the dense RV
+    m = 23400
+    x = np.cumsum(rng.standard_normal(m) * np.sqrt(1 / m)) + 0.003 * rng.standard_normal(m)
+    rv = vol.realized_variance(np.diff(x))
+    assert rv > 1.2
+    assert abs(vol.two_scale_rv(x, 30) - 1) < abs(rv - 1)
+    assert abs(vol.realized_kernel(np.diff(x), 30) - 1) < abs(rv - 1)
+    clean = np.diff(np.cumsum(rng.standard_normal(m) * np.sqrt(1 / m)))
+    jumpy = clean.copy()
+    jumpy[100] += 0.5
+    assert vol.bipower_variation(jumpy) < vol.realized_variance(jumpy) - 0.2
+    # HAR on a persistent RV series; QLIKE is minimised by the truth
+    lv = np.empty(3000)
+    lv[0] = 0
+    for t in range(1, 3000):
+        lv[t] = 0.97 * lv[t - 1] + 0.2 * rng.standard_normal()
+    rvs = np.exp(lv)
+    hf = vol.har_fit(rvs)
+    assert hf["beta"][1:].sum() == pytest.approx(0.97, abs=0.1)
+    assert len(vol.har_predict(hf["beta"], rvs)) == len(rvs) - 21
+    assert vol.qlike(2.0, 2.0) == pytest.approx(0) and vol.qlike(1.0, 2.0) > 0
+    dm = vol.diebold_mariano(rng.random(500) + 0.2, rng.random(500))
+    assert dm["t"] > 3
+    # unit roots and cointegration
+    walk = np.cumsum(rng.standard_normal(2000))
+    assert not vol.adf(walk)["reject_5pct"] and vol.adf(rng.standard_normal(2000))["reject_5pct"]
+    y = 2 * walk + rng.standard_normal(2000)
+    assert vol.engle_granger(y, walk)["cointegrated_5pct"]
+    false_pos = np.mean([vol.engle_granger(np.cumsum(rng.standard_normal(400)), np.cumsum(rng.standard_normal(400)))
+                         ["cointegrated_5pct"] for _ in range(150)])
+    assert false_pos < 0.12  # the test's size is about 5%
+    # regimes: two volatility states recovered
+    s = np.zeros(3000, int)
+    for t in range(1, 3000):
+        s[t] = s[t - 1] if rng.random() < 0.98 else 1 - s[t - 1]
+    xs = rng.standard_normal(3000) * np.where(s, 3.0, 1.0)
+    ms = vol.markov_switching(xs, n_iter=60)
+    assert ms["sd"][0] == pytest.approx(1.0, rel=0.15) and ms["sd"][1] == pytest.approx(3.0, rel=0.15)
+    assert np.corrcoef(ms["prob_high"], s)[0, 1] > 0.8
+    # Kalman: the filtered level tracks a random walk under noise
+    lvl = np.cumsum(0.1 * rng.standard_normal(1500))
+    k = vol.kalman_local_level(lvl + 0.5 * rng.standard_normal(1500))
+    assert k["signal_to_noise"] == pytest.approx(0.04, rel=0.6)
+    # DCC recovers a correlation that switches
+    z1 = rng.standard_normal(3000)
+    rho_true = np.where(np.arange(3000) < 1500, 0.2, 0.8)
+    z2 = rho_true * z1 + np.sqrt(1 - rho_true ** 2) * rng.standard_normal(3000)
+    d = vol.dcc_fit(z1, z2)
+    assert d["rho"][:1400].mean() < d["rho"][1600:].mean() - 0.3
+    assert vol.acf(walk, 5)[1] > 0.95 and len(vol.ar_fit(xs, 2)["beta"]) == 3

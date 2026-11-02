@@ -15,6 +15,8 @@ explicitly (``from explainer.quant.house import bs, hedge``).
   Hawkes processes, fractional Brownian motion, the Hurst exponent, path signatures;
 * :mod:`econ` (Part 6, research): OLS with HAC and clustered errors, Fama-MacBeth, block bootstraps, Sharpe ratio
   errors, multiple testing, Stambaugh's bias, GMM, double machine learning, shrinkage;
+* :mod:`vol` (Part 7): the volatility forecaster: realized measures, EWMA, GARCH/GJR/EGARCH, HAR(Q), QLIKE and
+  Diebold-Mariano, ADF and Engle-Granger, Markov switching, the Kalman filter, DCC;
 * :mod:`bs` (Part 10, the volatility desk): Black–Scholes–Merton prices, Greeks, Black-76, implied volatility;
 * :mod:`trees` (Part 10): Cox–Ross–Rubinstein trees, American exercise and its boundary;
 * :mod:`paths` (Parts 5, 10, 13): GBM and Heston paths, realized volatility;
@@ -22,4 +24,4 @@ explicitly (``from explainer.quant.house import bs, hedge``).
 * :mod:`surface` (Parts 1, 10, 12): the frozen options surface (the series' pricing scoreboard).
 """
 
-from explainer.quant.house import bs, econ, fundamentals, funding, hedge, martingale, sim, paths, pit, smile, stats, surface, trees, valuation  # noqa: F401
+from explainer.quant.house import bs, econ, fundamentals, funding, hedge, martingale, sim, vol, paths, pit, smile, stats, surface, trees, valuation  # noqa: F401
