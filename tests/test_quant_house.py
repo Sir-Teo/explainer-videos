@@ -817,3 +817,397 @@ def test_engine_greeks_aad_adi_fourier():
     assert abs(E.heston_adi(100, 100, 1.0, 0.04, 1.5, 0.04, 0.5, -0.7, nS=80, nv=40, nt=40) - ref) < 0.03
     k, C = E.carr_madan(cf, 100.0, 1.0)
     assert abs(np.interp(100.0, k, C) - ref) < 0.01
+
+
+def test_simulation_library_part5_second_pass():
+    from scipy.stats import norm
+
+    from explainer.quant.house import sim
+
+    # Levy's construction: each level refines the last, and the increments of the finest level have variance 2^-k
+    lv = sim.levy_construction(10, seed=1)
+    assert np.allclose(lv[10][::2], lv[9]) and len(lv[10]) == 2 ** 10 + 1
+    inc = np.concatenate([np.diff(sim.levy_construction(8, seed=s)[8]) for s in range(200)])
+    assert inc.var() == pytest.approx(2 ** -8, rel=0.05)
+    # signature: Chen's loop agrees with signature2; the batch version agrees with the loop; the unit square's area
+    p = np.random.default_rng(3).standard_normal((30, 2)).cumsum(axis=0)
+    S = sim.signature(p, 3)
+    assert np.allclose(S[2], sim.signature2(p)["S2"])
+    assert np.allclose(sim.signature_batch(p[None], 3)[0], np.concatenate([s.ravel() for s in S[1:]]))
+    sq = np.array([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]], float)
+    S = sim.signature(sq, 2)
+    assert (S[2][0, 1] - S[2][1, 0]) / 2 == pytest.approx(1.0)
+    # local time of Brownian motion at 0 by t = 1 has mean sqrt(2/pi)
+    _, W = sim.brownian(1.0, 2000, 4000, seed=4)
+    L = sim.local_time(W, 0.0, 0.03)[:, -1]
+    assert L.mean() == pytest.approx(np.sqrt(2 / np.pi), rel=0.05)
+    # Hawkes time-rescaling: the compensator's gaps are Exp(1)
+    ev = sim.hawkes_thinning(0.5, 0.8, 1.6, 3000.0, seed=5)
+    g = np.diff(sim.hawkes_compensator(ev, 0.5, 0.8, 1.6))
+    assert g.mean() == pytest.approx(1.0, abs=0.05) and g.var() == pytest.approx(1.0, abs=0.12)
+    tr = sim.hawkes_thinning_trace(0.5, 0.8, 1.6, 500.0, seed=6)
+    assert np.all(tr["lam"] <= tr["bound"] + 1e-12) and 0 < tr["accepted"].mean() < 1
+    cl = sim.hawkes_clusters(0.5, 0.5, 1.6, 4000.0, seed=7)
+    assert len(cl["t"]) / 4000 == pytest.approx(1.0, rel=0.1) and np.all(np.diff(cl["t"]) >= 0)
+    assert np.all(cl["parent"] < np.arange(len(cl["t"])))
+    # CIR: exact MLE recovers the parameters of a simulated sample
+    x = sim.cir_exact(0.04, 0.5, 0.05, 0.08, 400.0, 4800, 1, seed=8)[0]
+    f = sim.cir_mle(x, 400.0 / 4800, [0.3, 0.03, 0.1])
+    assert f["kappa"] == pytest.approx(0.5, rel=0.3) and f["theta"] == pytest.approx(0.05, rel=0.1)
+    assert f["sigma"] == pytest.approx(0.08, rel=0.05) and len(f["iterates"]) > 10
+    # importance-sampled digital: unbiased, and far tighter than plain Monte Carlo
+    m, se, _ = sim.is_digital(100.0, 160.0, 0.2, 1.0, 40000, seed=9)
+    d2 = (np.log(100 / 160) - 0.02) / 0.2
+    assert m == pytest.approx(norm.cdf(d2), abs=4 * se) and se < 0.0002
+    # Heston full truncation: E v_T and the martingale S
+    S, v = sim.heston_euler(100.0, 0.09, 2.0, 0.04, 0.5, -0.7, 1.0, 200, 20000, seed=10)
+    assert v[:, -1].mean() == pytest.approx(0.04 + 0.05 * np.exp(-2.0), rel=0.05)
+    assert S[:, -1].mean() == pytest.approx(100.0, rel=0.01)
+
+
+def test_martingale_part4_expansion():
+    import itertools
+
+    from explainer.quant.house import martingale as m
+
+    # conditional expectation on a partition agrees with brute force, and is the L2 projection
+    x, p = np.array([3.0, 0.0, 1.0]), np.array([0.5, 0.3, 0.2])
+    y = m.cond_exp(x, np.array([0, 0, 1]), p)
+    assert np.allclose(y, [1.875, 1.875, 1.0])
+    assert abs(((x - y) * p * np.array([1.0, 1.0, 0.0])).sum()) < 1e-12  # the error is orthogonal to G
+    # pattern waits (Li 1980) and Penney's game against simulation
+    assert m.pattern_wait("HH") == 6 and m.pattern_wait("HT") == 4 and m.pattern_wait("HTH") == 10
+    assert m.pattern_wait("ABRACADABRA", 26) == 26 ** 11 + 26 ** 4 + 26
+    assert m.penney_odds("HHT", "THH") == pytest.approx(0.75)
+    # first passage: P(tau_1 > n) = P(S_n in {0, 1}), checked by enumeration for n = 6
+    n = 6
+    count = sum(1 for s in itertools.product((-1, 1), repeat=n) if max(np.cumsum(s)) < 1)
+    assert m.first_passage_survival(n) == pytest.approx(count / 2 ** n)
+    # every system pays the same tax per unit staked on roulette (stakes are predictable)
+    rng = np.random.default_rng(0)
+    W = rng.random((4000, 100)) < 18 / 37
+    for s in ("flat", "dalembert", "labouchere", "oscar"):
+        H = m.system_stakes(s, W, limit=50)
+        g = (np.where(W, 1, -1) * H).sum(1)
+        assert abs(g.mean() / H.sum(1).mean() + 1 / 37) < 0.01
+    # Polya's urn: the red fraction is a martingale (mean stays 1/2)
+    P = m.polya_urn(200, n_urns=4000, seed=1)
+    assert abs(P[:, -1].mean() - 0.5) < 0.02
+    # upcrossings: Doob's inequality holds path by path
+    walk = np.concatenate([[0.0], np.cumsum(rng.choice([-1.0, 1.0], 2000))])
+    u = m.upcrossings(walk, -2, 2)
+    assert 4 * u["U"] <= u["wealth"][-1] + max(-2 - walk[-1], 0) + 1e-9
+    # the Esscher tilt hits its target; Hellinger affinity of equal coins is 1
+    xs = rng.standard_normal(5000) * 0.01 + 0.0004
+    th, w = m.esscher_tilt(xs, 0.0001)
+    assert abs(np.log(w @ np.exp(xs)) - 0.0001) < 1e-10
+    assert m.hellinger_affinity(0.5, 0.5) == pytest.approx(1.0) and m.hellinger_affinity(0.5, 0.6) < 1
+    # the ECF regression finds alpha = 2 for Gaussian data
+    assert abs(m.ecf_alpha(rng.standard_normal(20000))["alpha"] - 2) < 0.1
+    # the ONS bettor is anytime-valid under the null: false alarms at 1/alpha stay below alpha
+    b = m.ONSBettor(2000)
+    mx = np.zeros(2000)
+    for _ in range(500):
+        mx = np.maximum(mx, b.update(rng.choice([-0.5, 0.5], 2000)))
+    assert (mx >= 20).mean() <= 0.05
+    g = m.AGrapaBettor(500)
+    for _ in range(2000):
+        wg = g.update(np.clip(0.1 + 0.3 * rng.standard_normal(500), -0.99, 0.99))
+    assert np.median(wg) > 20  # a real edge is found
+    # e-BH reduces to BH on calibrated e = 1/p
+    pv = np.array([0.001, 0.008, 0.039, 0.041, 0.042, 0.06, 0.074, 0.205, 0.212, 0.216])
+    bh = np.flatnonzero(np.sort(pv) <= 0.1 * np.arange(1, 11) / 10)
+    assert len(m.e_bh(1 / pv, 0.1)) == bh.max() + 1
+    # a betting confidence sequence covers the mean of a fair coin
+    cs = m.betting_cs(rng.random(400) < 0.5, np.linspace(0.01, 0.99, 99))
+    assert cs["lower"][-1] <= 0.5 <= cs["upper"][-1]
+
+
+# ---------------------------------------------------------------------------
+# Part 7 (extended): time-series tools of the volatility forecaster
+def test_ljung_box_and_arma_recover_truth():
+    from explainer.quant.house import vol
+    rng = np.random.default_rng(0)
+    e = rng.standard_normal(4000)
+    assert vol.ljung_box(e, 10)["p"] > 0.01
+    x = np.zeros(4000)
+    for t in range(1, 4000):
+        x[t] = 0.6 * x[t - 1] + e[t] + 0.3 * e[t - 1]
+    assert vol.ljung_box(x, 10)["p"] < 1e-6
+    f = vol.arma_fit(x, 1, 1)
+    assert abs(f["phi"][0] - 0.6) < 0.05 and abs(f["theta"][0] - 0.3) < 0.06
+    assert vol.ljung_box(f["resid"], 10)["p"] > 0.01
+    assert f["aic"] < vol.arma_fit(x, 1, 0)["aic"]
+
+
+def test_dickey_fuller_distribution():
+    from explainer.quant.house import vol
+    t = vol.df_simulate(250, 8000, seed=1)
+    assert abs(np.quantile(t, 0.05) - (-2.87)) < 0.08  # MacKinnon: -2.87 at T = 250, constant
+    assert np.mean(t) < -1.3
+
+
+def test_johansen_finds_one_cointegrating_vector():
+    from explainer.quant.house import vol
+    rng = np.random.default_rng(2)
+    n = 3000
+    trend = np.cumsum(rng.standard_normal(n))
+    u = np.zeros(n)
+    for t in range(1, n):
+        u[t] = 0.7 * u[t - 1] + rng.standard_normal()
+    X = np.column_stack([trend + 0.5 * rng.standard_normal(n), 2 * trend + u, np.cumsum(rng.standard_normal(n))])
+    j = vol.johansen(X, k=2)
+    assert j["rank"] == 1
+    b = j["beta"][:, 0] / j["beta"][0, 0]
+    assert abs(b[1] + 0.5) < 0.05 and abs(b[2]) < 0.05
+    ecm = vol.ecm_fit(X[:, 1], X[:, 0])
+    assert ecm["alpha_y"] < 0
+
+
+def test_hamilton_filter_matches_markov_switching_and_kalman_gain():
+    from explainer.quant.house import vol
+    rng = np.random.default_rng(3)
+    s = np.zeros(2000, int)
+    for t in range(1, 2000):
+        s[t] = s[t - 1] if rng.random() < (0.98 if s[t - 1] == 0 else 0.9) else 1 - s[t - 1]
+    x = np.where(s == 0, 0.01 + 0.03 * rng.standard_normal(2000), -0.02 + 0.09 * rng.standard_normal(2000))
+    ms = vol.markov_switching(x, n_iter=60)
+    hf = vol.hamilton_filter(x, ms["mu"], ms["sd"], ms["P"])
+    assert np.mean((hf["filt"][:, 1] > 0.5) == (s == 1)) > 0.9
+    k = vol.kalman_states(np.cumsum(rng.standard_normal(500)) + rng.standard_normal(500), q=0.5, r=1.0)
+    assert abs(k["K"][-1] - vol.steady_gain(0.5)) < 1e-6
+
+
+def test_sv_qml_and_t_garch_recover_parameters():
+    from explainer.quant.house import vol
+    rng = np.random.default_rng(4)
+    n = 6000
+    h = np.zeros(n)
+    for t in range(1, n):
+        h[t] = -9 + 0.97 * (h[t - 1] + 9) + 0.2 * rng.standard_normal()
+    h[0] = -9
+    r = np.exp(h / 2) * rng.standard_normal(n)
+    sv = vol.sv_qml(r)
+    assert abs(sv["phi"] - 0.97) < 0.03 and abs(sv["sigma_eta"] - 0.2) < 0.08 and abs(sv["mu"] + 9) < 0.3
+    z = rng.standard_t(6, n) / np.sqrt(6 / 4)
+    hh = np.empty(n)
+    rr = np.empty(n)
+    hh[0] = 1e-4
+    for t in range(n):
+        if t:
+            hh[t] = 1e-6 + 0.08 * rr[t - 1] ** 2 + 0.9 * hh[t - 1]
+        rr[t] = np.sqrt(hh[t]) * z[t]
+    g = vol.garch_t_fit(rr)
+    assert 4 < g["nu"] < 9 and abs(g["params"][1] - 0.08) < 0.03
+
+
+def test_nelson_boundary_and_news_impact():
+    from explainer.quant.house import vol
+    assert vol.nelson_elog(0.3, 0.75) < 0 < vol.nelson_elog(0.25, 0.80) + 0.02
+    assert vol.nelson_elog(0.1, 0.9) < 0  # IGARCH: strictly stationary
+    rng = np.random.default_rng(5)
+    z = rng.standard_normal(2_000_000)
+    assert abs(vol.nelson_elog(0.3, 0.75) - np.mean(np.log(0.3 * z ** 2 + 0.75))) < 3e-3
+    ni = vol.news_impact((1e-6, 0.02, 0.1, 0.9), "gjr", np.array([-0.02, 0.02]), 1e-4)
+    assert ni[0] > ni[1]
+
+
+def test_signature_and_bns_jump_test():
+    from explainer.quant.house import vol
+    rng = np.random.default_rng(6)
+    n = 1440
+    x = np.cumsum(rng.standard_normal(n) * 0.001)
+    sig = vol.signature_plot(x + 0.0005 * rng.standard_normal(n), (1, 5, 30))
+    assert sig[0] > sig[1] > 0 and sig[0] > 1.3 * sig[2]
+    zs = [vol.bns_jump_z(rng.standard_normal(288)) for _ in range(400)]
+    assert abs(np.mean(np.array(zs) > 2.33) - 0.01) < 0.03
+    r = rng.standard_normal(288) * 0.001
+    r[100] += 0.02
+    assert vol.bns_jump_z(r) > 3
+
+
+def test_mincer_zarnowitz_and_mcs():
+    from explainer.quant.house import vol
+    rng = np.random.default_rng(7)
+    f = np.exp(rng.standard_normal(1000))
+    y = f * np.exp(0.3 * rng.standard_normal(1000) - 0.045)
+    mz = vol.mincer_zarnowitz(f, y)
+    assert abs(mz["b"] - 1) < 0.1
+    L = np.column_stack([rng.standard_normal(500) + 1.0, rng.standard_normal(500) + 1.02, rng.standard_normal(500) + 2.0])
+    m = vol.model_confidence_set(L, ["a", "b", "c"], B=500)
+    assert "c" in m["eliminated"] and "a" in m["survivors"]
+
+
+def test_vol_target_vra_and_forecast():
+    from explainer.quant.house import vol
+    rng = np.random.default_rng(8)
+    s = np.where(np.arange(4000) % 1000 < 500, 0.005, 0.02)
+    r = s * rng.standard_normal(4000)
+    vt = vol.vol_target(r, 0.10, com=20)
+    sc = vt["scaled"][200:]
+    assert abs(np.std(sc) * np.sqrt(252) - 0.10) < 0.02
+    lam = vol.vra(np.column_stack([r, r]), np.full((4000, 2), 0.01))
+    assert lam[450] < 1 < lam[950]  # calm block (vol 0.5%), then a stormy one (2%), against forecasts of 1%
+    rv = np.exp(np.convolve(rng.standard_normal(1200), np.ones(20) / 4, "same") - 8)
+    fc = vol.forecast(rv, 22)
+    assert len(fc["daily"]) == 22 and np.all(fc["daily"] > 0)
+
+
+# --------------------------------------------------------------------------- Part 2, expanded
+def test_min_var_hedge_and_carry():
+    from explainer.quant.house import funding
+    rng = np.random.default_rng(2)
+    dF = rng.standard_normal(200000)
+    dS = 0.96 * dF + 0.28 * rng.standard_normal(200000)  # rho = 0.96 / sqrt(0.96^2 + 0.28^2) = 0.96
+    h, eff = funding.min_var_hedge(dS, dF)
+    assert h == pytest.approx(0.96, abs=0.01) and eff == pytest.approx(0.96 ** 2, abs=0.01)
+    assert funding.hedge_effectiveness(dS, dF, 0.0) == pytest.approx(0.0)
+    assert funding.implied_carry(100 * np.exp(0.03 * 0.5), 100, 0.5) == pytest.approx(0.03)
+
+
+def test_ewma_margin_constant_returns_and_lambda_fit():
+    from explainer.quant.house import funding
+    r = np.full(500, 0.01)
+    m = funding.ewma_margin(r, lam=0.97, z=2.326, h=2, v0=0.0001)
+    assert m[-1] == pytest.approx(2.326 * np.sqrt(2) * 0.01, rel=1e-9)  # v stays r^2 when it starts there
+    rng = np.random.default_rng(3)
+    v, x = 1e-4, []
+    for _ in range(6000):  # data generated by EWMA itself, lambda 0.94
+        e = np.sqrt(v) * rng.standard_normal()
+        x.append(e)
+        v = 0.94 * v + 0.06 * e * e
+    assert funding.fit_ewma_lambda(np.array(x))["lam"] == pytest.approx(0.94, abs=0.02)
+    k = funding.kupiec(10, 1000, 0.01)
+    assert k["LR"] == pytest.approx(0.0, abs=1e-9) and k["p_value"] == pytest.approx(1.0)
+
+
+def test_netting_bounds_on_random_graphs_and_waterfall():
+    from explainer.quant.house import funding
+    rng = np.random.default_rng(4)
+    for _ in range(50):
+        n = int(rng.integers(3, 12))
+        a, b = rng.integers(0, n, 80), rng.integers(0, n, 80)
+        k = a != b
+        r = funding.netting(a[k], b[k], rng.exponential(1, k.sum()), n)
+        assert r["multilateral"] <= r["bilateral"] + 1e-9 <= r["gross"] + 2e-9
+        assert abs(r["net_position"].sum()) < 1e-9
+    w = funding.ccp_waterfall(rng.exponential(30, 1000), [10, 5, 3, 20, 10])
+    assert np.allclose(w.sum(1), w.sum(1)) and (w[:, :5] <= np.array([10, 5, 3, 20, 10]) + 1e-12).all()
+    loss = np.array([4.0, 12.0, 60.0])
+    assert np.allclose(funding.ccp_waterfall(loss, [10, 5, 3, 20, 10]).sum(1), loss)
+
+
+def test_fire_sale_deleverage_short_and_liquidation_probability():
+    from explainer.quant.house import funding
+    L = funding.fire_sale(5, 2.0, 0.5)
+    assert np.allclose(L, 0.5 * 4 * (np.arange(1, 6) - 0.5)) and L[-1] / L[0] == pytest.approx(9)
+    d = funding.deleverage(2.0, 100.0, 0.04, 1e-5)
+    assert d["sold"][0] == pytest.approx(50.0) and d["amplification"] > 1
+    assert funding.deleverage(2.0, 100.0, 0.04, 0.0)["amplification"] == pytest.approx(1.0)
+    assert funding.short_pnl(100, 90, 0.05, 0.01, 1.0) == pytest.approx(10 + 1.02 * 100 * 0.04)
+    assert funding.short_pnl(100, 100, 0.02, 0.10, 1.0) < 0  # a special: the rebate is negative
+    p = funding.liquidation_probability(np.array([2.0, 5.0, 10.0]), 30, 0.04)
+    assert np.all(np.diff(p) > 0) and np.all((p > 0) & (p < 1))
+
+
+def test_glm_smoothing_variance_and_fit():
+    from explainer.quant.house import funding
+    rng = np.random.default_rng(5)
+    th = np.array([0.5, 0.3, 0.2])
+    R = rng.normal(0.0, 1.0, 200000)
+    Ro = funding.glm_smooth(R, th)
+    assert Ro.var() == pytest.approx(np.sum(th ** 2), rel=0.02)
+    rho1 = (th[0] * th[1] + th[1] * th[2]) / np.sum(th ** 2)
+    assert np.corrcoef(Ro[:-1], Ro[1:])[0, 1] == pytest.approx(rho1, abs=0.01)
+    assert np.allclose(funding.glm_fit(Ro[:20000])["theta"], th, atol=0.03)
+
+
+# --------------------------------------------------------------------------- Part 3, expanded
+def test_part3_rates_duration_and_implied_return():
+    from explainer.quant.house import valuation as v
+    # a project with two sign changes has two IRRs; bisection finds the one in its bracket
+    assert v.irr_bisect([-100, 230, -132], 0.0, 0.15)["root"] == pytest.approx(0.10, abs=1e-9)
+    assert v.irr_bisect([-100, 230, -132], 0.15, 0.5)["root"] == pytest.approx(0.20, abs=1e-9)
+    b = v.irr_bisect([-100] + [5] * 9 + [105], 0.0, 0.2)["brackets"]
+    assert all(h1 - l1 <= (h0 - l0) / 2 + 1e-15 for (l0, h0), (l1, h1) in zip(b, b[1:]))
+    d = v.gordon_duration(0.08, 0.05)
+    w = v.pv_weights(0.08, 0.05, 20000)
+    assert w.sum() == pytest.approx(1.0) and (np.arange(1, 20001) @ w) == pytest.approx(d["macaulay"], rel=1e-6)
+    # the implied rate inverts the two-stage valuation
+    t = np.arange(1, 6)
+    cf = 4.0 * 1.06 ** t
+    price = float(np.sum(cf / 1.085 ** t) + cf[-1] * 1.02 / (0.085 - 0.02) / 1.085 ** 5)
+    assert v.implied_rate(price, 4.0, 0.06, 0.02) == pytest.approx(0.085, abs=1e-10)
+    # growth at RONIC = WACC adds nothing
+    assert v.value_driver_tv(100, 0.03, 0.08, 0.08) == pytest.approx(v.value_driver_tv(100, 0.0, 0.08, 0.08))
+
+
+def test_part3_residual_income_equals_ddm_on_the_toy_firm():
+    from explainer.quant.house import fundamentals as f, valuation as v
+    firm = f.Firm()
+    book0 = firm.equity
+    rows = f.simulate(firm, 12, seed=3, write_off=0.04, tax=0.21, rate_debt=0.01)
+    E = [r["net_income"] for r in rows]
+    D = [r["dividends"] for r in rows]
+    out = v.residual_income(book0, E, D, 0.02)
+    assert out["value"] == pytest.approx(out["ddm"], abs=1e-9)
+    assert out["book"][-1] == pytest.approx(firm.equity)
+    assert v.pb_steady(0.08, 0.08, 0.03) == pytest.approx(1.0) and v.pb_steady(0.12, 0.08, 0.04) == pytest.approx(2.0)
+
+
+def test_part3_three_statements_balance_and_indirect_cash_flow():
+    from explainer.quant.house import fundamentals as f
+    firm = f.Firm()
+    cash0 = firm.cash
+    rows = f.simulate(firm, 20, seed=0, write_off=0.05, payout=0.3)
+    dcash = sum(r["cfo"] - r["capex"] - r["dividends"] for r in rows)
+    assert firm.cash - cash0 == pytest.approx(dcash)
+    assert all(abs(r["net_income"] - r["cfo"] - r["accruals"]) < 1e-12 for r in rows)
+    # accruals with a reversing error persist less than cash flows (Sloan's mechanism)
+    p = f.earnings_panel(3000, 8, seed=1)
+    y = p["E"][:, 1:].ravel()
+    X = np.column_stack([p["CFO"][:, :-1].ravel(), p["ACC"][:, :-1].ravel()])
+    beta = np.linalg.lstsq(np.column_stack([np.ones(len(y)), X]), y, rcond=None)[0]
+    assert beta[2] < beta[1]
+
+
+def test_part3_events_and_filing_lags():
+    from explainer.quant.house import fundamentals as f
+    x = np.array([1.0, 1.0, 1.0, 1.0] + [1.0 + 0.1 * k for k in range(1, 13)])
+    s = f.sue(x)
+    assert np.isnan(s[:12]).all() and np.isfinite(s[12:]).all()
+    r = np.zeros(100)
+    r[50] = 0.05
+    c = f.car(r, np.zeros(100), 50, (-5, 10))
+    assert c[4] == 0 and c[5] == pytest.approx(0.05) and c[-1] == pytest.approx(0.05)
+    st = f.Store()
+    st.add("A", "NetIncomeLoss", 20191231, 20200220, 1.0, "10-K")
+    st.add("A", "NetIncomeLoss", 20191231, 20210220, 2.0, "10-K")
+    assert f.filing_lags(st, "A", "NetIncomeLoss") == [(20191231, 51)]
+
+
+def test_part3_taxes_campbell_shiller_and_beneish():
+    from explainer.quant.house import valuation as v
+    assert v.tax_shield(0.21, 100, 0.05) == pytest.approx(21)
+    assert v.tax_shield(0.21, 100, 0.05, 2000) == pytest.approx(21, rel=1e-6)
+    assert v.miller_gain(0.35, 0.0, 0.0) == pytest.approx(0.35)
+    assert v.miller_gain(0.21, 0.2, 0.37) == pytest.approx(1 - 0.79 * 0.8 / 0.63)
+    # an exactly linear Campbell-Shiller world: the identity holds to rounding
+    rng = np.random.default_rng(0)
+    T = 400
+    dp = np.empty(T)
+    dp[0] = -3.2
+    for t in range(1, T):
+        dp[t] = -3.2 + 0.9 * (dp[t - 1] + 3.2) + 0.1 * rng.standard_normal()
+    dg = 0.02 + 0.05 * rng.standard_normal(T - 1)
+    rho = 1 / (1 + np.exp(dp.mean()))
+    r = 0.05 - rho * dp[1:] + dg + dp[:-1]
+    cs = v.campbell_shiller(r, dg, dp)
+    assert abs(cs["identity_gap"]) < 1e-12 and cs["lr_r"] - cs["lr_d"] == pytest.approx(1.0)
+    neutral = {k: 1.0 for k in ("DSRI", "GMI", "AQI", "SGI", "DEPI", "SGAI", "LVGI")} | {"TATA": 0.0}
+    assert v.beneish_m(neutral) == pytest.approx(-2.48, abs=1e-9)
+    item = dict(sales=100, cogs=60, receivables=10, current_assets=40, ppe=50, assets=100, depreciation=5, sga=10,
+                current_liabilities=20, long_term_debt=30, net_income=8, cfo=10)
+    rt = v.beneish_ratios(item, item)
+    assert rt["missing"] == [] and all(rt[k] == pytest.approx(1.0) for k in neutral if k != "TATA")
+    assert rt["TATA"] == pytest.approx(-0.02)

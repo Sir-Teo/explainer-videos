@@ -221,3 +221,185 @@ def signature2(path) -> dict:
         S2 = S2 + np.outer(S1, dx) + np.outer(dx, dx) / 2
         S1 = S1 + dx
     return {"S1": S1, "S2": S2, "levy_area": (S2 - S2.T) / 2}
+
+
+# ---------------------------------------------------------------------------
+# Part 5's second pass: constructions, estimators and tests of the theory
+# ---------------------------------------------------------------------------
+def levy_construction(levels: int, T: float = 1.0, seed=0) -> list:
+    """Lévy's (1948) midpoint construction of Brownian motion on [0, T]: draw W_T, then at each level put every
+    midpoint at the average of its neighbours plus a Gaussian of variance (interval length)/4, the Brownian bridge.
+    Returns the path at each level: level k has 2^k + 1 values on the dyadic grid."""
+    rng = np.random.default_rng(seed)
+    W = np.array([0.0, rng.standard_normal() * np.sqrt(T)])
+    out = [W.copy()]
+    for k in range(1, levels + 1):
+        mid = (W[:-1] + W[1:]) / 2 + rng.standard_normal(len(W) - 1) * np.sqrt(T / 2 ** (k + 1))
+        new = np.empty(2 * len(W) - 1)
+        new[0::2], new[1::2] = W, mid
+        W = new
+        out.append(W.copy())
+    return out
+
+
+def signature(path, depth):                         # Chen, segment by segment
+    """The signature of a piecewise-linear path (L x d) to level ``depth``: a list of tensors, level k of shape
+    (d,) * k.  Each straight segment contributes the tensor exponential of its increment, and segments multiply."""
+    X = np.asarray(path, float)
+    S = [np.ones(())] + [np.zeros((X.shape[1],) * k) for k in range(1, depth + 1)]
+    for dx in np.diff(X, axis=0):
+        seg = [np.ones(())]                          # exp of a straight segment
+        for k in range(1, depth + 1):
+            seg.append(np.multiply.outer(seg[-1], dx) / k)
+        S = [sum(np.multiply.outer(S[i], seg[k - i]) for i in range(k + 1))
+             for k in range(depth + 1)]              # S <- S (x) seg
+    return S
+
+
+def _bouter(a, b):
+    """Batched outer product: a (B, *p), b (B, *q) -> (B, *p, *q)."""
+    return a.reshape(a.shape + (1,) * (b.ndim - 1)) * b.reshape(b.shape[:1] + (1,) * (a.ndim - 1) + b.shape[1:])
+
+
+def signature_batch(paths, depth) -> np.ndarray:
+    """:func:`signature` for a batch of paths (B, L, d), returned as features (B, d + d^2 + ... + d^depth)."""
+    X = np.asarray(paths, float)
+    B, L, d = X.shape
+    S = [np.ones(B)] + [np.zeros((B,) + (d,) * k) for k in range(1, depth + 1)]
+    for j in range(L - 1):
+        dx = X[:, j + 1] - X[:, j]
+        seg = [np.ones(B)]
+        for k in range(1, depth + 1):
+            seg.append(_bouter(seg[-1], dx) / k)
+        S = [S[0]] + [sum(_bouter(S[i], seg[k - i]) if i else seg[k] for i in range(k + 1)) for k in range(1, depth + 1)]
+    return np.concatenate([s.reshape(B, -1) for s in S[1:]], axis=1)
+
+
+def local_time(path, level: float, eps: float) -> np.ndarray:
+    """Local time at ``level`` of a sampled path, accumulated along it: (1 / 2 eps) times the quadratic variation
+    spent within eps of the level (the occupation-density definition behind Tanaka's formula)."""
+    X = np.asarray(path, float)
+    dq = np.diff(X, axis=-1) ** 2
+    inside = np.abs(X[..., :-1] - level) < eps
+    L = np.cumsum(inside * dq, axis=-1) / (2 * eps)
+    return np.concatenate([np.zeros(X.shape[:-1] + (1,)), L], axis=-1)
+
+
+def hawkes_compensator(events, mu, alpha, beta) -> np.ndarray:
+    """Lambda(t_i) = mu t_i + (alpha / beta) sum_{j < i} (1 - e^{-beta (t_i - t_j)}), by the O(N) recursion.  Under a
+    correct model the rescaled times Lambda(t_i) are a unit-rate Poisson process (time-rescaling: Meyer 1971,
+    Papangelou 1972), so their gaps are Exp(1)."""
+    ev = np.asarray(events, float)
+    out = np.empty(len(ev))
+    A, count = 0.0, 0  # A = sum_{j < i} e^{-beta (t_i - t_j)}
+    for i, t in enumerate(ev):
+        if i:
+            A = np.exp(-beta * (t - ev[i - 1])) * (A + 1)
+        count = i
+        out[i] = mu * t + (alpha / beta) * (count - A)
+    return out
+
+
+def hawkes_thinning_trace(mu, alpha, beta, T, seed=0) -> dict:
+    """Ogata's thinning with its working shown: every candidate time, the bound lam_bar it was drawn under, the true
+    intensity there, and whether it was accepted."""
+    rng = np.random.default_rng(seed)
+    t, excite = 0.0, 0.0
+    cand, bound, lam, acc = [], [], [], []
+    while True:
+        lam_bar = mu + excite
+        w = rng.exponential(1 / lam_bar)
+        if t + w > T:
+            break
+        excite *= np.exp(-beta * w)
+        t += w
+        ok = rng.random() <= (mu + excite) / lam_bar
+        cand.append(t), bound.append(lam_bar), lam.append(mu + excite), acc.append(bool(ok))
+        if ok:
+            excite += alpha
+    return {"t": np.array(cand), "bound": np.array(bound), "lam": np.array(lam), "accepted": np.array(acc)}
+
+
+def hawkes_clusters(mu, branching, beta, T, seed=0) -> dict:
+    """A Hawkes process built by its branching structure (Hawkes and Oakes 1974): immigrants at rate mu, each event
+    has Poisson(branching) children at Exp(beta) delays.  Returns event times and each event's parent (-1 for an
+    immigrant), sorted by time."""
+    rng = np.random.default_rng(seed)
+    times = list(np.sort(rng.uniform(0, T, rng.poisson(mu * T))))
+    parent = [-1] * len(times)
+    i = 0
+    while i < len(times):
+        for _ in range(rng.poisson(branching)):
+            c = times[i] + rng.exponential(1 / beta)
+            if c < T:
+                times.append(c)
+                parent.append(i)
+        i += 1
+    order = np.argsort(times)
+    rank = np.empty(len(order), int)
+    rank[order] = np.arange(len(order))
+    t = np.asarray(times)[order]
+    p = np.array([rank[parent[j]] if parent[j] >= 0 else -1 for j in order])
+    return {"t": t, "parent": p}
+
+
+def cir_loglik(params, x, dt) -> float:
+    """Exact log-likelihood of a CIR sample x (equally spaced by dt): x_{t+dt} / c is non-central chi-square with
+    d = 4 kappa theta / sigma^2 degrees of freedom and non-centrality x_t e^{-kappa dt} / c,
+    c = sigma^2 (1 - e^{-kappa dt}) / (4 kappa)."""
+    from scipy.stats import ncx2
+
+    kappa, theta, sigma = params
+    if kappa <= 0 or theta <= 0 or sigma <= 0:
+        return -np.inf
+    x = np.asarray(x, float)
+    c = sigma ** 2 * (1 - np.exp(-kappa * dt)) / (4 * kappa)
+    d = 4 * kappa * theta / sigma ** 2
+    nc = x[:-1] * np.exp(-kappa * dt) / c
+    return float(np.sum(ncx2.logpdf(x[1:] / c, d, nc) - np.log(c)))
+
+
+def cir_mle(x, dt, x0, maxiter=600) -> dict:
+    """Maximum likelihood for CIR by Nelder-Mead on log parameters, keeping every iterate (for a replay)."""
+    path = []
+
+    def f(p):
+        v = -cir_loglik(np.exp(p), x, dt)
+        return v if np.isfinite(v) else 1e12
+
+    res = optimize.minimize(f, np.log(x0), method="Nelder-Mead", callback=lambda p: path.append(np.exp(p).tolist()),
+                            options={"maxiter": maxiter, "xatol": 1e-7, "fatol": 1e-7})
+    k, th, s = np.exp(res.x)
+    return {"kappa": float(k), "theta": float(th), "sigma": float(s), "loglik": float(-res.fun),
+            "feller": float(2 * k * th / s ** 2), "iterates": path}
+
+
+def is_digital(S0, K, sigma, T, n, seed=0):
+    """A digital (pays 1 if S_T > K, zero rates) by Girsanov importance sampling: shift the Gaussian so the typical
+    path ends at K, and weight each path by the likelihood ratio."""
+    z = np.random.default_rng(seed).standard_normal(n)
+    th = (np.log(K / S0) + 0.5 * sigma ** 2 * T) / (sigma * np.sqrt(T))
+    zs = z + th                                   # the drift moves the paths ...
+    w = np.exp(-th * zs + 0.5 * th ** 2)          # ... and dQ/dP moves them back
+    ST = S0 * np.exp(-0.5 * sigma ** 2 * T + sigma * np.sqrt(T) * zs)
+    pay = (ST > K) * w
+    return pay.mean(), pay.std() / np.sqrt(n), pay
+
+
+def heston_euler(S0, v0, kappa, theta, xi, rho, T, n, n_paths, seed=0, mu=0.0):
+    """Heston by full-truncation Euler (Lord, Koekkoek and van Dijk 2010) on log S: returns S and v (n_paths x
+    (n + 1))."""
+    rng = np.random.default_rng(seed)
+    dt = T / n
+    S = np.empty((n_paths, n + 1))
+    v = np.empty((n_paths, n + 1))
+    S[:, 0], v[:, 0] = S0, v0
+    x = np.full(n_paths, np.log(S0))
+    for k in range(n):
+        z1 = rng.standard_normal(n_paths)
+        z2 = rho * z1 + np.sqrt(1 - rho ** 2) * rng.standard_normal(n_paths)
+        vp = np.maximum(v[:, k], 0)
+        x = x + (mu - 0.5 * vp) * dt + np.sqrt(vp * dt) * z1
+        v[:, k + 1] = v[:, k] + kappa * (theta - vp) * dt + xi * np.sqrt(vp * dt) * z2
+        S[:, k + 1] = np.exp(x)
+    return S, v

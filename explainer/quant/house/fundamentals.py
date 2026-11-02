@@ -16,11 +16,17 @@ sees only facts filed by then, taking for each period the latest such filing:
 
 Facts are the shape of XBRL facts in EDGAR's company-facts files (concept, unit, period end, filing date, form,
 accession number), so :meth:`Store.from_companyfacts` loads one directly.
+
+Also here: :func:`filing_lags` (how long the market waited for each number); the toy firm (:class:`Firm`,
+:func:`step`, :func:`simulate`), whose three statements are one double-entry machine; :func:`earnings_panel`, a
+simulated panel whose accruals carry a reversing error; and the earnings-event tools :func:`sue` and :func:`car`.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+
+import numpy as np
 
 
 @dataclass(frozen=True, order=True)
@@ -98,3 +104,141 @@ class Store:
                 start = int(row["start"].replace("-", "")) if "start" in row else 0
                 s.add(entity, concept, end, filed, row["val"], row.get("form", ""), row.get("accn", ""), start)
         return s
+
+
+# ---------------------------------------------------------------------------
+# Part 3, expanded: filing lags; the three statements as one double-entry machine; accruals; earnings events
+# ---------------------------------------------------------------------------
+def _days(a: int, b: int) -> int:
+    from datetime import date
+
+    da = date(a // 10000, a // 100 % 100, a % 100)
+    db = date(b // 10000, b // 100 % 100, b % 100)
+    return (db - da).days
+
+
+def filing_lags(store: Store, entity: str, concept: str, forms=("10-K",)) -> list:
+    """For each period, the days from its end to the first filing of a form in ``forms`` that reported it: how long
+    the market waited for the number."""
+    first = {}
+    for f in store.facts.get((entity, concept), []):
+        if forms and f.form not in forms:
+            continue
+        if f.period_end not in first or f.filed < first[f.period_end]:
+            first[f.period_end] = f.filed
+    return [(p, _days(p, d)) for p, d in sorted(first.items())]
+
+
+@dataclass
+class Firm:
+    """A toy firm's balance sheet: what it owns (cash, receivables, plant) and who has a claim on it (debt, equity)."""
+    cash: float = 150.0
+    receivables: float = 0.0
+    plant: float = 500.0
+    debt: float = 200.0
+    equity: float = 450.0
+
+    def assets(self) -> float:
+        return self.cash + self.receivables + self.plant
+
+    def claims(self) -> float:
+        return self.debt + self.equity
+
+
+def step(firm: Firm, sales: float, cost_ratio=0.7, credit=0.2, dep_rate=0.05, capex=0.0, payout=0.25,
+         rate_debt=0.0, tax=0.0, write_off=0.0) -> dict:
+    """One period's journal entries, posted to ``firm`` in place.  A share ``credit`` of sales is unpaid (a
+    receivable); last period's receivables are collected, less ``write_off`` of them that never pay.  Every entry
+    touches both sides, so assets = claims after each period (asserted).  Returns the period's three statements."""
+    collected = (1 - write_off) * firm.receivables
+    lost = write_off * firm.receivables
+    firm.receivables = credit * sales                       # new credit sales replace the collected ones
+    firm.cash += (1 - credit) * sales + collected
+    costs = cost_ratio * sales
+    firm.cash -= costs
+    dep = dep_rate * firm.plant
+    firm.plant += capex - dep
+    firm.cash -= capex
+    interest = rate_debt * firm.debt
+    ebt = sales - costs - dep - interest - lost
+    taxes = tax * max(ebt, 0.0)
+    firm.cash -= interest + taxes
+    ni = ebt - taxes
+    div = payout * max(ni, 0.0)
+    firm.cash -= div
+    firm.equity += ni - div                                 # clean surplus: equity moves by earnings less payout
+    assert abs(firm.assets() - firm.claims()) < 1e-9, "the books do not balance"
+    d_ar = credit * sales - (collected + lost)
+    cfo = ni + dep - d_ar                                   # the indirect method
+    return {"sales": sales, "costs": costs, "depreciation": dep, "interest": interest, "taxes": taxes,
+            "net_income": ni, "cfo": cfo, "accruals": ni - cfo, "capex": capex, "dividends": div,
+            "collected": collected, "written_off": lost, "cash": firm.cash, "receivables": firm.receivables,
+            "plant": firm.plant, "debt": firm.debt, "equity": firm.equity, "assets": firm.assets()}
+
+
+def simulate(firm: Firm, periods: int, sales0=250.0, growth=0.02, vol=0.08, seed=0, **kw) -> list:
+    """Run :func:`step` for ``periods`` periods with sales growing at ``growth`` per period with lognormal noise,
+    and capital spending that keeps plant in line with sales.  Returns the list of statements."""
+    rng = np.random.default_rng(seed)
+    out = []
+    s = sales0
+    dep_rate = kw.get("dep_rate", 0.05)
+    for _ in range(periods):
+        s *= (1 + growth) * np.exp(vol * rng.standard_normal() - vol ** 2 / 2)
+        capex = max(dep_rate * firm.plant + growth * firm.plant, 0.0)
+        out.append(step(firm, s, capex=capex, **kw))
+    return out
+
+
+def earnings_panel(n_firms: int, years: int, seed=0, mu=0.06, phi=0.8, phi_loss=None, sd_roa=0.03, sd_err=0.02,
+                   wc_share=0.25, growth_sd=0.08) -> dict:
+    """A simulated panel whose truth is known, for accrual and forecasting experiments.  True return on assets
+    follows an AR(1) around ``mu`` with persistence ``phi`` (``phi_loss`` when the firm is losing money, if given).
+    Reported earnings add a booked estimation error e_t (receivables that will not pay, provisions too small) that
+    reverses next year: E_t = ROA_t A_t + e_t - e_{t-1}.  Working capital grows with sales (a true accrual, as
+    persistent as profit); the error lives only in accruals.  All items are scaled by assets."""
+    rng = np.random.default_rng(seed)
+    burn = 20
+    T = years + burn
+    roa = np.empty((n_firms, T))
+    roa[:, 0] = mu + sd_roa * rng.standard_normal(n_firms) / np.sqrt(1 - phi ** 2)
+    for t in range(1, T):
+        p = phi if phi_loss is None else np.where(roa[:, t - 1] < 0, phi_loss, phi)
+        roa[:, t] = mu + p * (roa[:, t - 1] - mu) + sd_roa * rng.standard_normal(n_firms)
+    err = sd_err * rng.standard_normal((n_firms, T))
+    g = growth_sd * rng.standard_normal((n_firms, T)) + 0.04
+    true_acc = wc_share * g * 0.3                               # working capital tied up by growth, per asset
+    E = roa + err - np.roll(err, 1, axis=1)
+    ACC = true_acc + err - np.roll(err, 1, axis=1)
+    CFO = E - ACC
+    sl = slice(burn, T)
+    return {"E": E[:, sl], "CFO": CFO[:, sl], "ACC": ACC[:, sl], "ROA": roa[:, sl], "err": err[:, sl],
+            "growth": g[:, sl], "params": {"mu": mu, "phi": phi, "phi_loss": phi_loss, "sd_roa": sd_roa,
+                                           "sd_err": sd_err}}
+
+
+def sue(x, lookback: int = 8) -> np.ndarray:
+    """Standardized unexpected earnings under a seasonal random walk: (x_q - x_{q-4}) divided by the standard
+    deviation of the previous ``lookback`` seasonal differences.  NaN until enough history."""
+    x = np.asarray(x, float)
+    d = np.full(len(x), np.nan)
+    d[4:] = x[4:] - x[:-4]
+    out = np.full(len(x), np.nan)
+    for q in range(4 + lookback, len(x)):
+        past = d[q - lookback:q]
+        sd = np.nanstd(past, ddof=1)
+        if np.isfinite(d[q]) and sd > 0:
+            out[q] = d[q] / sd
+    return out
+
+
+def car(returns, market, day0: int, window=(-5, 60)) -> np.ndarray:
+    """Cumulative abnormal return in event time: r_i - r_m summed from ``window[0]`` to each day up to
+    ``window[1]``, around the index ``day0`` (the first trading day the news could be traded on)."""
+    r = np.asarray(returns, float)
+    m = np.asarray(market, float)
+    a, b = window
+    lo, hi = day0 + a, day0 + b + 1
+    if lo < 0 or hi > len(r):
+        return np.full(b - a + 1, np.nan)
+    return np.cumsum(r[lo:hi] - m[lo:hi])

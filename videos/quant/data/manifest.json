@@ -1994,6 +1994,66 @@
   "bytes": 449,
   "source": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400"
  },
+ "deribit/trades/BTC/future/2025-12-10/00": {
+  "sha256": "398f0b8ce5a7d4c6bf5636abd8afa560b402f2ff3216835439bbf874ce8378e0",
+  "bytes": 57941,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/01": {
+  "sha256": "dfb0753fbbd0c1f5fbc13692316c894f3434a7e485e0946741e0e338f338195e",
+  "bytes": 37541,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/02": {
+  "sha256": "3f1a86570b8a6c50f89792cdc19461c26a8b77fa3f29bf0c66ce8c9400431145",
+  "bytes": 40812,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/03": {
+  "sha256": "07ce3c801a7312ef1b6ccd93f6b552ddc448d9026cd8b8346d50f68a30226b91",
+  "bytes": 17025,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/04": {
+  "sha256": "9def6693b60583925d04948dce4a4079a5113e97a2da18e6f6a9824f0ff6771f",
+  "bytes": 23947,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/05": {
+  "sha256": "14625cef08fb9e65f1e34b67fe4322d3c2ecc5adbb81c1a1fd86be063d13b4a5",
+  "bytes": 50559,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/06": {
+  "sha256": "7247929f6ddbbfd489ba6ea88630f2fb3486fa3bc3d56584722db5dd0ee5f8a5",
+  "bytes": 33847,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/07": {
+  "sha256": "89f72f2645b2f05b69211427aec88fb58e7ce4dd9eb9799281b958c2bde34c46",
+  "bytes": 69363,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/08": {
+  "sha256": "611a6c3f867512818ecc842cba82fb831a2b10b4417850c32e99226cf6bee950",
+  "bytes": 40229,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/09": {
+  "sha256": "298f0f8a2bc44e7f44c833d87e8bfbe78cd8444894994cfa051c77fbbcd5647b",
+  "bytes": 47291,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/10": {
+  "sha256": "d2e15ddf168e1a8e424dc8f9c29c21c27fe18a3a80f0c877a1c8541bae47bf58",
+  "bytes": 108297,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
+ "deribit/trades/BTC/future/2025-12-10/11": {
+  "sha256": "ff6a6e1de9c233d4c5cda4059081863d48983f05a4a349bf411afbf12f89771b",
+  "bytes": 89356,
+  "source": "https://history.deribit.com/api/v2/public/get_last_trades_by_currency_and_time?currency=BTC&kind=future"
+ },
  "deribit/trades/BTC/option/2024-01-03/00": {
   "sha256": "2fcfd73bfb77663bcee67842bfe5aea1b8c574365d0bd8e902d23fd9cdf9e1b1",
   "bytes": 7854,
@@ -8238,6 +8298,11 @@
   "sha256": "3794d1673ccc0f8b8819ca3f4f49cc7a4269508bf2e0f3d075e86c4963de333b",
   "bytes": 106548,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_OP_CSV.zip"
+ },
+ "kenfrench/daily_factors/through_2020-12-31": {
+  "sha256": "0106000fa427c0bfdaaeac8d08d5f58706101e3617c5df5e07906d1829708e83",
+  "bytes": 1018744,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_daily_CSV.zip"
  },
  "kenfrench/daily_factors/through_2025-12-31": {
   "sha256": "40782c306bc1378b854a6bf42be100809cff4b6a538c15dc5c21f9c9a94ceaec",

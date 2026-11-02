@@ -913,3 +913,70 @@ def stylized_facts(W):
     lev = float(np.mean([pooled_corr(W[:, :-k].ravel(), (W[:, k:] ** 2).ravel()) for k in range(1, 6)]))
     ac1 = pooled_corr(W[:, :-1].ravel(), W[:, 1:].ravel())
     return {"kurtosis": kurt, "acf_abs": acf_abs, "acf_abs_mean": float(np.mean(acf_abs)), "leverage": lev, "acf1": ac1}
+
+
+# ---------------------------------------------------------------------------
+# A neural SDE market generator (Part 5's frontier chapter)
+# ---------------------------------------------------------------------------
+class NeuralSDE:
+    """A two-dimensional latent SDE dY = mu(t, Y) dt + sigma(t, Y) dW (drift and diagonal diffusion small MLPs of width
+    ``width``, a random starting state), solved by Euler on ``L`` steps; the window's returns are the increments of
+    Y's first coordinate.  Trained, like :func:`train_sig_generator`, by matching expected signatures: the linear-kernel
+    cousin of the signature-kernel scores of Issa, Horvath, Lemercier and Salvi (2023)."""
+
+    def __init__(self, L=32, width=32, dim=2, seed=0):
+        import torch
+
+        torch.manual_seed(seed)
+        self.L, self.dim = L, dim
+        self.drift = _mlp(dim + 1, width, 2, dim, act=torch.nn.Tanh)
+        self.diff = _mlp(dim + 1, width, 2, dim, act=torch.nn.Tanh)
+        self.y0 = torch.nn.Linear(dim, dim)
+
+    def parameters(self):
+        return [*self.drift.parameters(), *self.diff.parameters(), *self.y0.parameters()]
+
+    def sample(self, n, gen=None):
+        import torch
+        import torch.nn.functional as F
+
+        dt = 1.0 / self.L
+        y = self.y0(torch.randn(n, self.dim, generator=gen))
+        out = []
+        for k in range(self.L):
+            ty = torch.cat([torch.full((n, 1), k * dt), y], 1)
+            dw = torch.randn(n, self.dim, generator=gen) * math.sqrt(dt)
+            y_new = y + self.drift(ty) * dt + F.softplus(self.diff(ty)) * dw
+            out.append((y_new[:, 0] - y[:, 0]) * math.sqrt(self.L))  # standardized returns
+            y = y_new
+        return torch.stack(out, 1)
+
+
+def train_nsde(real, L=32, iters=1200, batch=256, lr=3e-3, depth=4, seed=0, every=100, n_show=24, log=None):
+    """Train :class:`NeuralSDE` on standardized return windows ``real`` (n, L).  Returns the model, the loss curve and
+    a fan of generated windows (cumulated) every ``every`` steps, from a fixed noise seed, for the replay."""
+    import torch
+
+    torch.manual_seed(seed)
+    m = NeuralSDE(L, seed=seed)
+    target = signature(window_path(torch.tensor(real, dtype=torch.float32)), depth).mean(0)
+    opt = torch.optim.Adam(m.parameters(), lr=lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, iters)
+    gen = torch.Generator().manual_seed(seed + 1)
+    curve, fans = [], {}
+    for it in range(iters + 1):
+        if it % every == 0:
+            with torch.no_grad():
+                fans[it] = m.sample(n_show, torch.Generator().manual_seed(123)).cumsum(1).numpy()
+        if it == iters:
+            break
+        s = signature(window_path(m.sample(batch, gen)), depth).mean(0)
+        loss = (s - target).pow(2).sum()
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+        sched.step()
+        curve.append(float(loss.detach()))
+        if log and it % every == 0:
+            log(it, curve[-1])
+    return m, curve, fans
