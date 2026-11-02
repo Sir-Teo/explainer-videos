@@ -101,7 +101,9 @@ class Lazy(VoiceoverScene):
         guess = DashedLine(ax.c2p(0, var), ax.c2p(sx.max(), var), color=GREY_B, stroke_width=1.8)
         gl = label(r"guessing the average", font_size=18, color=GREY_B).next_to(ax.c2p(sx.max(), var), UL, buff=0.06)
         kl = DashedLine(ax.c2p(0, kern.mean()), ax.c2p(sx.max(), kern.mean()), color=LAZY, stroke_width=2.5)
-        kll = label(r"kernel regression", font_size=18, color=LAZY).next_to(ax.c2p(0.05, kern.mean()), UR, buff=0.06)
+        kll = VGroup(DashedLine(ORIGIN, RIGHT * 0.5, color=LAZY, stroke_width=2.5),
+                     label(r"independent tangent-kernel reference", font_size=18, color=LAZY))
+        kll.arrange(RIGHT, buff=0.12).next_to(yn, UP, buff=0.12).align_to(ax, LEFT)
 
         def runs(cv, col):
             te = cv[:, :, 2]
@@ -119,19 +121,20 @@ class Lazy(VoiceoverScene):
                     label(r"rich: \ mean-field ($\mu$P) scaling", font_size=22, color=RICH),
                     label(rf"\quad ${mt.mean():.3f}$ \ (seeds ${mt.min():.3f}$--${mt.max():.3f}$)", font_size=20, color=RICH))
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.5, -0.3, 0])
-        eqs = VGroup(MathTex(r"\tfrac{1}{\sqrt n}\textstyle\sum_j a_j\,\sigma(w_j\!\cdot x),\ \ \eta", font_size=26, color=LAZY),
+        eqs = VGroup(MathTex(r"\tfrac{1}{\sqrt n}\textstyle\sum_j a_j\,\sigma(w_j\!\cdot x)-f_0(x),\ \ \eta", font_size=26, color=LAZY),
                      MathTex(r"\tfrac{1}{n}\textstyle\sum_j a_j\,\sigma(w_j\!\cdot x),\ \ \eta\, n", font_size=26, color=RICH))
         eqs.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(lg, DOWN, buff=0.35)
-        tag = note(r"three seeds each; \ bands: \ min to max; \ same data, width, steps; \ each its better of two "
-                   r"learning rates").to_corner(DL, buff=0.2)
+        tag = note(r"three seeds; \ bands: \ min to max; \ two rates selected on seed $0$ test loss \\ "
+                   r"lazy output centred at initialization; \ kernel: \ independent width $4{,}096$, \ ridge $10^{-6}$",
+                   font_size=20).to_corner(DL, buff=0.2)
         ratio = nt.mean() / mt.mean()
         wins = mt.max() < nt.min()
         kgap = kern.mean() / nt.mean() - 1
         said0 = (
-            "It ends close to kernel regression with its starting kernel: the lazy limit, computed exactly. "
+            "It ends close to an independent finite-width tangent-kernel reference, computed at width 4096. "
             if abs(kgap) < 0.15 else
-            f"Kernel regression with its starting kernel, the lazy limit computed exactly, ends {100 * abs(kgap):.0f} "
-            f"percent {('worse' if kgap > 0 else 'better')}: at this width the network is not yet fully lazy. "
+            f"An independent tangent-kernel reference, computed at width 4096, ends {100 * abs(kgap):.0f} "
+            f"percent {('worse' if kgap > 0 else 'better')}. This comparison uses a different initialization and width. "
         )
         said1 = (
             f"Its error is {ratio:.1f} times smaller, and every seed beats every lazy seed."
@@ -199,9 +202,9 @@ class Lazy(VoiceoverScene):
             "What did the rich network learn that the lazy one could not? Draw each hidden unit as a point: how much "
             "its weights point along the hidden direction, and how much they point elsewhere. "
             "<bookmark mark='a'/> Now replay training. <bookmark mark='b'/> The lazy units hardly move: in all, "
-            f"its weights travel {100 * mvn:.0f} percent of their starting length. The rich units swing out along "
-            f"w-star, {100 * mvm:.0f} percent: the network has found the one direction that matters. That is a "
-            "learned feature, and no kernel method can make one. <bookmark mark='c'/> So the infinite-width limit we "
+            f"its final weights are displaced by {100 * mvn:.0f} percent of their starting length. The rich units swing out along "
+            f"w-star, displaced by {100 * mvm:.0f} percent: the network has found the one direction that matters. That is a "
+            "learned feature, which a fixed starting-kernel regression cannot create. <bookmark mark='c'/> So the infinite-width limit we "
             "want is the other one, where features keep moving at every width. For two layers it is called mean "
             "field; for any depth, it is mu-P."
         ) as vo:
@@ -209,7 +212,7 @@ class Lazy(VoiceoverScene):
             vo.wait_until("a")
             for t in range(1, len(steps)):
                 self.play(*[d.animate.move_to(ax.c2p(a, b)) for ax, pts, U in dts for d, (a, b) in zip(pts, U[t])],
-                          clock[1].animate.set_value(int(steps[t])), run_time=0.45, rate_func=smooth)
+                          ChangeDecimalToValue(clock[1], int(steps[t])), run_time=0.45, rate_func=smooth)
                 if t == 1:
                     vo.wait_until("b")
             vo.wait_until("c")

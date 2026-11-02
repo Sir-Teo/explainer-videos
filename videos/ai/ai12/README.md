@@ -373,3 +373,44 @@ f(p) ≈ c p^(b−1)；所以 1 − pass@k ≈ c ∫₀^∞ e^(−kp) p^(b−1) 
 | densing law, capability density | 致密化定律，能力密度 |
 | algorithmic progress | 算法进步 |
 | scaling ladder | 规模阶梯 |
+
+
+## Source review and cached-only QA
+
+This source handoff is based on public QA baseline
+`601033c6a58238552bf156a4ee6f99cb078fd4e6`. The original scientific recipes are
+unchanged from that baseline. Presentation and translation corrections do not
+require corrected private scientific outcomes. The computed-results prose above
+is historical, not a fresh validation of this exact public tree.
+
+Run the self-contained source contracts from the repository root with Python 3.12
+and NumPy:
+
+```sh
+python videos/ai/ai12/test_source_contracts.py
+```
+
+The 41 contracts use source AST, literal translation tables and synthetic arrays.
+They import no scene or scientific producer and require no experiment caches.
+The caption checks cover the 79 reviewed local additions; legacy Chinese unit
+conversions are outside their number-order check. The numeric translator test
+uses an isolated in-memory local catalog and does not modify the shared table.
+Shared-caption integration must preserve existing entries and reject conflicts.
+
+Prior private QA inspected selected native states and sampled silent motion
+frames. That evidence is not rendered acceptance for this exact public tree.
+Continuous playback, listening, speech synchronization and final production
+rendering still require validation on this tree and its intended runtime.
+
+Compatible original caches and original upstream inputs are not included in
+this source handoff. Missing or stale inputs must be reported, without launching
+computation to fill gaps. Once compatible inputs have been intentionally
+provisioned, the existing bounded QA preflight can be run with `--cached-only`:
+
+```sh
+python tools/qa_series.py ai12 --cached-only --lang en --resume --timeout 1200
+python tools/qa_series.py ai12 --cached-only --lang zh --resume --timeout 1200
+```
+
+Keep `--cached-only` for this review workflow. These commands can write QA
+captures and reports; they do not establish final narrated-video acceptance.

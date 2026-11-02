@@ -3,10 +3,14 @@ from __future__ import annotations
 import math
 
 import numpy as np
+from manim import config
 
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import BUDGET_COLORS, LAZY, MUP, PART, QUANT, RICH, SP, TT, WIDTH_COLORS, load, width_ramp
+from videos.ai.ai12.common import (
+    BUDGET_COLORS, LAZY, MUP, PART, QUANT, RICH, SP, TT, WIDTH_COLORS,
+    load, mean_seed_loss, visible_values, width_ramp,
+)
 
 
 class Outro(VoiceoverScene):
@@ -43,7 +47,7 @@ class Outro(VoiceoverScene):
         lw, km = np.log10(np.asarray(z["widths"], float)), np.log10(np.asarray(z["kernel_moved"]).mean(1))
         a2 = axes((lw.min(), lw.max()), (km.min() - 0.2, km.max() + 0.2))
         out.append((VGroup(a2, curve(a2, lw, km, LAZY, 3), *[Dot(a2.c2p(a, b), radius=0.04, color=LAZY) for a, b in zip(lw, km)]),
-                    r"wide: \ a frozen kernel", LAZY))
+                    r"NTK limit: \ a frozen kernel", LAZY))
         # 3. lazy against rich
         r = load("rich")
         nc, mc = np.asarray(r["ntk_curve"]), np.asarray(r["mf_curve"])
@@ -60,8 +64,10 @@ class Outro(VoiceoverScene):
         a4 = axes((lrs[0], lrs[-1]), (lo, hi4))
         g4 = VGroup(a4)
         for w, wc in zip(m["widths"], WIDTH_COLORS):
-            v = np.asarray(m[f"mup{w}"]).mean(0)
-            g4.add(curve(a4, lrs, np.where(np.isfinite(v), np.minimum(v, hi4), hi4), wc, 2.5))
+            v = mean_seed_loss(np.asarray(m[f"mup{w}"]))
+            g4.add(curve(a4, lrs, visible_values(v, lo, hi4), wc, 2.5))
+            g4.add(*[Triangle(color=wc, fill_opacity=1, stroke_width=0).scale(0.04).move_to(a4.c2p(x, hi4))
+                     for x, value in zip(lrs, v) if not np.isfinite(value) or value > hi4])
         out.append((g4, r"$\mu$P: \ one rate, \ every width", MUP))
         # 5. iso-FLOP valleys
         allp = np.concatenate([np.asarray(ch[f"iso{C_:.0e}"]).reshape(-1, 3) for C_ in ch["budgets"]])
@@ -88,11 +94,13 @@ class Outro(VoiceoverScene):
         per = np.asarray(q["per_task"], float)
         st = np.asarray(q["steps"], float)
         wi = list(q["widths"]).index(128) if 128 in list(q["widths"]) else len(q["widths"]) // 2
-        a7 = axes((0, st.max()), (0, 1.1))
+        top7 = max(1.1, math.ceil(float(per[wi, 0].max()) * 10) / 10)
+        a7 = axes((0, st.max()), (0, top7))
         T = per.shape[-1]
-        g7 = VGroup(a7, *[curve(a7, st, np.minimum(per[wi, 0, :, k], 1.1), interpolate_color(ManimColor(QUANT), ManimColor(GREY_D), k / T), 1.6)
+        g7 = VGroup(a7, *[curve(a7, st, per[wi, 0, :, k], interpolate_color(ManimColor(QUANT), ManimColor(GREY_D), k / T), 1.6)
                           for k in range(T)])
-        out.append((g7, r"quanta: \ sudden, \ summed", QUANT))
+        g7.add(curve(a7, st, np.asarray(q["mean"], float)[wi, 0], WHITE, 3))
+        out.append((g7, r"quanta: \ tasks \\ white: weighted mean", QUANT))
         # 8. grokking's circles
         gk = load("grok")
         xy = np.asarray(gk["emb_xy"], float)
@@ -102,29 +110,38 @@ class Outro(VoiceoverScene):
         tiles = Group()
         for pic, cap, col in out:
             box, c_ = tile_frame(cap, col, TW, TH)
+            if c_.width > TW:
+                c_.scale_to_fit_width(TW)
+            if c_.height > 0.46:
+                c_.scale_to_fit_height(0.46)
             pic.move_to(box.get_center() + UP * 0.22)
             if pic.width > TW:
                 pic.width = TW
             if pic.height > TH:
                 pic.height = TH
             tiles.add(Group(box, pic, c_))
-        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).move_to(DOWN * 0.3)
+        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3))
+        if tiles.width > config.frame_width - 0.7:
+            tiles.scale_to_fit_width(config.frame_width - 0.7)
+        tiles.move_to(DOWN * 0.3)
         return tiles
 
     def recap(self):
         tiles = self.tiles()
         head = label(rf"Part {PART}, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        key = note(r"triangles: \ off-scale or unstable learning-rate points").to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Let's take stock. Loss falls with size, data and compute along power laws, smoothly enough to plan by. "
-            "An infinitely wide network trains like its own tangent kernel, and a kernel learns no features. Mu-P "
+            "Let's take stock. Over measured ranges, loss often follows power laws in size, data and compute; "
+            "forecasts beyond those ranges need validation. With neural-tangent scaling, an infinitely wide "
+            "network trains like its own fixed tangent kernel, which learns no new features. Mu-P "
             "keeps every layer learning, and lets one learning rate serve every width and, with CompleteP, every "
             "depth. A budget should be split between size and data along the floor of Chinchilla's valley, then "
             "bent toward smaller models that answer cheaply, and stretched by repeating data, which is worth less "
             "each time. Power laws can come from data on a low-dimensional surface, or from many small skills "
-            "learned one at a time, each suddenly. And a network can memorize first and understand much later, by "
+            "learned at different times, whose losses are averaged. And a network can memorize first and understand much later, by "
             "turning clock arithmetic into rotations."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(key))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15, scale=0.95) for t in tiles], lag_ratio=0.85),
                       run_time=max(4.0, vo.duration - 2.0))
         self.wait(0.3)
@@ -186,15 +203,18 @@ class Outro(VoiceoverScene):
         head = label(r"Next: \ Part 13, \ Attention as Geometry \ (Act III: The Transformer Era)", font_size=34).to_edge(UP, buff=0.35)
         words = ["The", "cat", "sat", "on", "the", "mat", "because", "it", "was", "warm"]
         toks = VGroup(*[data_text(w, font="DejaVu Serif", font_size=30) for w in words]).arrange(RIGHT, buff=0.35).move_to(DOWN * 1.6)
+        source_index = 7
+        prefix = toks[:source_index]
         g = np.random.default_rng(11)
-        att = g.dirichlet(np.ones(len(words)) * 0.4)
+        att = g.dirichlet(np.ones(len(prefix)) * 0.4)
         att[1] += 0.6
         att[5] += 0.2
         att /= att.sum()
-        src = toks[7]
-        arcs = VGroup(*[ArcBetweenPoints(src.get_top() + UP * 0.05, t.get_top() + UP * 0.05, angle=-PI / 2.2,
+        src = toks[source_index]
+        src.set_color(C.BITS)
+        arcs = VGroup(*[ArcBetweenPoints(src.get_top() + UP * 0.18, t.get_top() + UP * 0.18, angle=PI / 2.2,
                                          stroke_width=1 + 14 * a, color=C.BITS).set_stroke(opacity=float(0.25 + 0.75 * a / att.max()))
-                        for t, a in zip(toks, att) if t is not src])
+                        for t, a in zip(prefix, att)])
         tag = label(r"which earlier words does ``it'' look at? \ (illustrative)", font_size=24, color=GREY_B).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Next time, act three begins: the transformer era. First, attention: how every word looks back at every "

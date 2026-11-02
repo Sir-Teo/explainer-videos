@@ -98,7 +98,8 @@ class Laws(VoiceoverScene):
             ys = 1 - (2 ** xs - 0.8 * S) / (0.2 * S)
             branches.add(curve(top, xs, ys, C.BITS, 2.5))
         lo = float(np.nanmin(Lb[i]) - 0.08)
-        hi = float(min(np.nanmax(c[:, 1]), np.nanmin(Lb[i]) + 1.3))
+        in_x = (lsteps >= sx0) & (lsteps <= sx1)
+        hi = float(max(np.max(c[in_x, 1]), np.nanmax(Lb[i])) + 0.08)
         bot = CornerAxes(x_range=[sx0, sx1, 1], y_range=[lo, hi, (hi - lo) / 4], x_length=8.2, y_length=3.2, tips=False,
                          axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-1.6, -1.25, 0])
         xt = VGroup(*[MathTex(rf"2^{{{k}}}", font_size=20, color=GREY_B).next_to(bot.c2p(k - math.log2(B), lo), DOWN, buff=0.08)
@@ -128,7 +129,7 @@ class Laws(VoiceoverScene):
                                                                          for a, b in zip(xs_, ys_)]))
         usual = label(r"the usual way: \\ a separate run, \\ with its own schedule, \\ for every length \\ (schematic)", font_size=22,
                       color=GREY_A).move_to([4.95, 1.6, 0])
-        tally = label(rf"${len(widths)}$ widths, \ ${n_runs}$ endpoints, \\ ${hours:.1f}$ CPU-hours", font_size=24,
+        tally = label(rf"${len(widths)}$ widths, \ ${n_runs}$ primary endpoints \\ ${hours:.1f}$ recorded elapsed hours \\ width runs, \ including seed repeats", font_size=24,
                       color=C.BITS).next_to(side, DOWN, buff=0.4).align_to(side, LEFT)
         cite_ = cite(r"A.~H\"agele et al., \textit{Scaling Laws and Compute-Optimal Training Beyond Fixed Training "
                      r"Durations} (2024)", corner=DR)
@@ -140,7 +141,8 @@ class Laws(VoiceoverScene):
             "rate to zero over the last fifth. <bookmark mark='c'/> Each branch estimates the result of a full "
             "schedule of that length, while the trunk carries on. Agreement is empirical, and must be checked. <bookmark mark='d'/> "
             f"{len(widths)} widths, from {widths[0]} to {widths[-1]:,} units, lengths from two to the sixteen to two "
-            f"to the twenty-four characters: {n_runs} finished runs in {hours:.1f} hours of one processor."
+            f"to the twenty-four characters: {n_runs} primary endpoints. The recorded width runs, including seed "
+            f"repeats, took {hours:.1f} elapsed hours. That includes evaluation and excludes the initial rate search."
         ) as vo:
             self.play(Create(top), FadeIn(tl), Create(bot), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(cite_), FadeIn(usual))
             self.play(LaggedStart(*[Create(c_) for c_ in usual_lr], lag_ratio=0.3), run_time=2.5)
@@ -185,20 +187,22 @@ class Laws(VoiceoverScene):
             f = MathTex(rf"L = {fit['E']:.2f} + \frac{{{fit['A']:.3g}}}{{{sym}^{{{fit['a']:.2f}}}}}", font_size=30, color=col)
             f.next_to(ax.c2p(x1, y1), DL, buff=0.15)
             pans.add(VGroup(ax, xt, yt, xn, dts, fc, fl, f))
-        t1 = label(r"every width, \ trained on $2^{24}$ characters", font_size=22, color=NCOL).next_to(pans[0], UP, buff=0.15)
-        t2 = label(rf"width ${wD}$, \ every length", font_size=22, color=DCOL).next_to(pans[1], UP, buff=0.15)
+        t1 = label(rf"${len(Nn)}$ completed widths, \ trained on $2^{{24}}$ characters", font_size=22, color=NCOL).next_to(pans[0], UP, buff=0.15)
+        t2 = label(rf"width ${wD}$, \ lengths $2^{{{int(np.log2(Dd.min()))}}}$ to $2^{{{int(np.log2(Dd.max()))}}}$", font_size=22, color=DCOL).next_to(pans[1], UP, buff=0.15)
         hd = label(r"held-out bits per character", font_size=24, color=GREY_A).to_edge(UP, buff=0.3)
         # seed-to-seed spread, from the repeated widths
         spread = []
         ks = [int(k) for k in s["ks"]]
-        for w, sd in [tuple(x) for x in np.asarray(s["extra"]).tolist()]:
+        extra = [tuple(x) for x in np.asarray(s["extra"]).tolist()]
+        for w in sorted({int(w) for w, _ in extra}):
             i = [int(v) for v in s["widths"]].index(int(w))
             base = np.asarray(s["bits"], float)[i]
-            other = np.asarray(s[f"seed{int(sd)}_w{int(w)}"], float)
-            ok = np.isfinite(base) & np.isfinite(other)
-            spread.append(float(np.abs(base[ok] - other[ok]).max()))
+            seeds = np.stack([base] + [np.asarray(s[f"seed{int(sd)}_w{w}"], float)
+                                       for ww, sd in extra if int(ww) == w])
+            ok = np.isfinite(seeds).all(axis=0)
+            spread.append(float((seeds[:, ok].max(axis=0) - seeds[:, ok].min(axis=0)).max()))
         sp = max(spread)
-        noise = note(rf"three seeds at widths $64$ and $256$: \ at most ${sp:.3f}$ bits apart").to_corner(DL, buff=0.2)
+        noise = note(rf"three seeds at widths $64$ and $256$, \ through $2^{{22}}$ characters: \ about ${sp:.3f}$ bits apart").to_corner(DL, buff=0.2)
         aN, aD = float(LN["a"]), float(LD["a"])
         said1 = (
             "Our exponents are much larger than Kaplan's: our models see only eight characters at a time, so "
@@ -211,7 +215,7 @@ class Laws(VoiceoverScene):
             "and vary the size. <bookmark mark='a'/> The loss falls toward a floor along a power law: "
             f"L equals {LN['E']:.2f} plus a constant over N to the {aN:.2f}. <bookmark mark='b'/> Hold the "
             f"size large, width {wD}, and vary the data: the exponent is {aD:.2f}. <bookmark mark='c'/> "
-            f"Different seeds land at most {sp:.3f} bits apart, small next to these curves. "
+            f"Different seeds land about {sp:.3f} bits apart, small next to these curves. "
             + said1
         ) as vo:
             self.play(FadeIn(hd), *[FadeIn(p[:4]) for p in pans], FadeIn(t1), FadeIn(t2))

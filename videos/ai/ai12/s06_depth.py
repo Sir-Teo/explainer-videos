@@ -34,21 +34,21 @@ class Depth(VoiceoverScene):
         L = 8
         blocks = VGroup(*[RoundedRectangle(width=1.5, height=0.36, corner_radius=0.06, stroke_color=C.CONTEXT,
                                            stroke_width=2, fill_color=C.CONTEXT, fill_opacity=0.15) for _ in range(L)])
-        blocks.arrange(UP, buff=0.14).move_to([-4.6, -0.4, 0])
-        spine = Line(blocks.get_bottom() + DOWN * 0.35 + RIGHT * 1.3, blocks.get_top() + UP * 0.35 + RIGHT * 1.3,
+        blocks.arrange(UP, buff=0.14).move_to([-5.0, -0.4, 0])
+        spine = Line(blocks.get_bottom() + DOWN * 0.35 + RIGHT * 2.05, blocks.get_top() + UP * 0.35 + RIGHT * 2.05,
                      color=WHITE, stroke_width=3)
         arrows = VGroup(*[Arrow(b.get_right(), [spine.get_x(), b.get_y(), 0], buff=0.05, stroke_width=2.5, color=C.CONTEXT,
-                                max_tip_length_to_length_ratio=0.35) for b in blocks])
-        tags = VGroup(*[MathTex(r"\times L^{-\alpha}", font_size=18, color=C.BITS).next_to(a, UP, buff=0.0) for a in arrows[::3]])
+                                tip_length=0.12, max_tip_length_to_length_ratio=0.2) for b in blocks])
+        tags = VGroup(*[MathTex(r"\times (L/2)^{-\alpha}", font_size=18, color=C.BITS).next_to(a, UP, buff=0.04) for a in arrows[::3]])
         sl = label(r"the residual stream", font_size=20, color=GREY_A).next_to(spine, UP, buff=0.1)
         sch = note(r"schematic").next_to(blocks, DOWN, buff=0.45)
-        eq = cmath(r"h_{\ell}", r"=", r"h_{\ell-1}", r"+", r"L^{-\alpha}", r"\, f_\ell(h_{\ell-1})", font_size=40,
-                   colors={r"L^{-\alpha}": C.BITS}).move_to([2.6, 2.4, 0])
+        eq = cmath(r"h_{\ell}", r"=", r"h_{\ell-1}", r"+", r"(L/2)^{-\alpha}", r"\, f_\ell(h_{\ell-1})", font_size=40,
+                   colors={r"(L/2)^{-\alpha}": C.BITS}).move_to([2.6, 2.4, 0])
         tab = table_card([
             [r"", r"branch", r"block learning rate", r"each block, as $L \to \infty$"],
-            [r"$\alpha = 0$", r"$1$", r"$\eta$", r"the stream grows; \ the best rate drifts"],
-            [r"$\alpha = \tfrac12$ \ depth-$\mu$P", r"$1/\sqrt{L}$", r"$\eta/\sqrt{L}$", r"tends to linear: \ lazy in depth"],
-            [r"$\alpha = 1$ \ CompleteP", r"$1/L$", r"$\eta$", r"stays nonlinear: \ learns features"],
+            [r"$\alpha = 0$", r"$1$", r"$\eta/(L/2)$", r"the stream grows; \ the best rate drifts"],
+            [r"$\alpha = \tfrac12$ \ depth-$\mu$P", r"$1/\sqrt{L/2}$", r"$\eta/\sqrt{L/2}$", r"tends to linear: \ lazy in depth"],
+            [r"$\alpha = 1$ \ CompleteP", r"$1/(L/2)$", r"$\eta$", r"stays nonlinear: \ learns features"],
         ], col_colors=[GREY_A, C.BITS, C.BITS, GREY_A], font_size=23)
         for r_, a in zip(tab[0][1:], (0.0, 0.5, 1.0)):
             r_[0].set_color(ALPHA_COL[a])
@@ -60,8 +60,9 @@ class Depth(VoiceoverScene):
         with self.voiceover(
             "Depth is the other way to grow. A residual network adds each block's output to a running sum, the "
             "residual stream of part nine. <bookmark mark='a'/> With L blocks, the stream is a sum of L branches, "
-            "and how each is scaled decides what happens as L grows. <bookmark mark='b'/> Leave them alone, and the "
-            "stream grows with depth, and the best learning rate drifts. <bookmark mark='c'/> In 2023, two groups "
+            "and how each is scaled decides what happens as L grows. Our factors are relative to the base depth "
+            "of two. <bookmark mark='b'/> Leave the branches unscaled, and the stream grows with depth. Our "
+            "comparison still divides the block learning rate by the relative depth. <bookmark mark='c'/> In 2023, two groups "
             "found the depth version of mu-P: scale each branch by one over the square root of L, with the learning "
             "rate to match. It transfers across depth, but each block's contribution becomes so small that it acts "
             "linearly: lazy, now in depth. <bookmark mark='d'/> In 2025, Nolan Dey and colleagues at Cerebras showed "
@@ -108,7 +109,7 @@ class Depth(VoiceoverScene):
             xt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=18, color=GREY_B).next_to(ax.c2p(v, lo), DOWN, buff=0.08)
                           for v in range(math.ceil(lrs[0]), math.floor(lrs[-1]) + 1)])
             t = label(ALPHA_NAME[a], font_size=24, color=ALPHA_COL[a]).next_to(ax, UP, buff=0.15)
-            dr = label(rf"best rate moves ${d['drift'][str(a)]:.1f}$ decades", font_size=19, color=ALPHA_COL[a])
+            dr = label(rf"best-rate span: ${d['drift'][str(a)]:.1f}$ decades", font_size=19, color=ALPHA_COL[a])
             dr.next_to(xt, DOWN, buff=0.12)
             yt = VGroup(*[MathTex(f"{v:.1f}", font_size=18, color=GREY_B).next_to(ax.c2p(lrs[0], v), LEFT, buff=0.06)
                           for v in np.arange(lo, hi + 1e-9, 0.2)]) if k == 0 else VGroup()
@@ -126,11 +127,11 @@ class Depth(VoiceoverScene):
         step_ = float(lrs[1] - lrs[0])  # one step of the learning-rate grid, in powers of ten
         if dr[0.0] > 1e-9:
             said0 = (
-                f"the best rate moves by {dr[0.0]:.1f} powers of ten between the shallowest and the deepest, and the "
-                f"deepest model's is {dir0}. "
+                f"the best sampled rate spans {dr[0.0]:.1f} powers of ten across tested depths; comparing the shallowest "
+                f"and deepest, the deepest model's is {dir0}. "
             )
         else:
-            said0 = "the best rate stays on the same point of our grid, from the shallowest to the deepest. "
+            said0 = "the best sampled rate stays on the same point of our grid across all tested depths. "
         if max(dr.values()) <= step_ + 1e-9:
             said1 = (
                 "At our small depths and short runs, all three keep the best rate within one step of our grid: the "
@@ -148,8 +149,8 @@ class Depth(VoiceoverScene):
             "residual blocks, each parametrization swept over nine learning rates, two seeds each. "
             "<bookmark mark='a'/> With no depth scaling, "
             + said0
-            + f"<bookmark mark='b'/> With one over root L, it moves by {dr[0.5]:.1f}. <bookmark mark='c'/> With "
-            f"CompleteP's one over L, by {dr[1.0]:.1f}. "
+            + f"<bookmark mark='b'/> With one over root L, the across-depth span is {dr[0.5]:.1f}. <bookmark mark='c'/> With "
+            f"CompleteP's one over L, the span is {dr[1.0]:.1f}. "
             + said1
         ) as vo:
             self.play(FadeIn(key), FadeIn(yn), *[FadeIn(p[:4]) for p in panels])

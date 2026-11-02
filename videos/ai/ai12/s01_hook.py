@@ -23,7 +23,7 @@ class Hook(VoiceoverScene):
         E, slope = float(ch["E"]), float(ch["env_slope"])
         lC = np.log10(6 * N[:, None] * D[None])
         x0, x1 = math.floor(np.nanmin(lC[np.isfinite(Lb)]) * 2) / 2, math.ceil(np.nanmax(lC[np.isfinite(Lb)]) * 2) / 2
-        lo = math.floor((np.nanmin(Lb) - 0.1) * 5) / 5
+        lo = math.floor((min(float(np.nanmin(Lb)), E) - 0.1) * 5) / 5
         hi = math.ceil(min(np.nanmax(Lb), np.nanmin(Lb) + 2.6) * 5) / 5
         ax = CornerAxes(x_range=[x0, x1, 1], y_range=[lo, hi, 0.2], x_length=8.0, y_length=4.9, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.0, -0.45, 0])
@@ -56,14 +56,15 @@ class Hook(VoiceoverScene):
         eC, eL = np.log10(np.asarray(ch["env_C"])), np.asarray(ch["env_L"])
         ok = np.isfinite(eL)
         b = np.polyfit(eC[ok], np.log10(eL[ok] - E), 1)
-        xs = np.linspace(eC[ok].min(), x1, 120)
+        xs = np.linspace(eC[ok].min(), eC[ok].max(), 120)
         law = curve(ax, xs, clip(E + 10 ** np.polyval(b, xs)), FIT, 4.5, smooth=True)
         floor = DashedLine(ax.c2p(x0, E), ax.c2p(x1, E), color=GREY_B, stroke_width=2) if E > lo else VMobject()
-        fl = label(rf"floor \ $E = {E:.2f}$", font_size=22, color=GREY_B).next_to(ax.c2p(x1, E), UL, buff=0.08) if E > lo else VMobject()
+        fl = label(rf"fitted floor \ $E = {E:.2f}$", font_size=22, color=GREY_B).next_to(ax.c2p(x1, E), UL, buff=0.08) if E > lo else VMobject()
         key = VGroup(label(r"width", font_size=22, color=GREY_A),
                      *[label(f"{w:,}".replace(",", "{,}"), font_size=20, color=width_ramp(i, len(widths)))
                        for i, w in enumerate(widths) if i % 2 == 0 or i == len(widths) - 1])
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax, RIGHT, buff=0.3).align_to(ax, UP)
+        fit_key = label(r"white: \ fitted \\ interpolated frontier", font_size=18, color=FIT).next_to(key, DOWN, buff=0.2).align_to(key, LEFT)
         # the inset: what is left above the floor, on log axes, is a straight line
         r = np.log10(eL[ok] - E)
         ry0, ry1 = math.floor(r.min() * 2) / 2, math.ceil(r.max() * 2) / 2
@@ -75,11 +76,11 @@ class Hook(VoiceoverScene):
                      color=C.BITS, stroke_width=2.5)
         il = label(r"$L - E$ \ on log axes", font_size=20, color=GREY_A).next_to(ix, UP, buff=0.1)
         isl = label(rf"slope ${slope:.2f}$", font_size=22, color=C.BITS).next_to(ix, DOWN, buff=0.12)
-        tag = note(rf"computed: \ ${n_runs}$ training runs of Part 11's character model on this computer").to_corner(DL, buff=0.2)
+        tag = note(rf"computed for this series: \ ${n_runs}$ completed primary endpoints of Part 11's character model").to_corner(DL, buff=0.2)
         with self.voiceover(
             "Make a model bigger, train it longer, and it gets better. That much everyone expected. The surprise was "
             f"how predictably. <bookmark mark='a'/> Here are {len(widths)} sizes of part eleven's character model, "
-            f"each trained for up to {len(s['ks'])} lengths: {n_runs} runs on the computer making this video, each "
+            f"each trained for up to {len(s['ks'])} lengths: {n_runs} completed primary endpoints computed for this series, each "
             "drawn at the number of operations it cost. <bookmark mark='b'/> Every size improves, then flattens: it runs out of "
             "room. But the bottom edge of the whole fan, the best loss each budget can buy, is a smooth curve. "
             f"<bookmark mark='c'/> Take away a floor of {E:.2f} bits, and what's left falls along a straight line on "
@@ -88,11 +89,11 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(key), FadeIn(tag), run_time=0.8)
             self.add(live, clock)
-            self.play(lt.animate.set_value(x1), run_time=max(7.0, vo.until("b") - 0.2), rate_func=linear)
+            self.play(lt.animate.set_value(float(lC[np.isfinite(Lb)].max())), run_time=max(7.0, vo.until("b") - 0.2), rate_func=linear)
             live.clear_updaters()
             clock.clear_updaters()
             vo.wait_until("b")
-            self.play(Create(law), run_time=2.0)
+            self.play(Create(law), FadeIn(fit_key), run_time=2.0)
             self.play(Create(floor), FadeIn(fl))
             vo.wait_until("c")
             self.play(Create(ix), FadeIn(il), LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in idots], lag_ratio=0.05))

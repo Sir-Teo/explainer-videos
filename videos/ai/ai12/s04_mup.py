@@ -113,9 +113,9 @@ class MuP(VoiceoverScene):
         tab[0][3].set_color(SP)
         tab.move_to(UP * 0.9)
         head = label(r"$\mu$P for Adam", font_size=40, color=MUP).to_edge(UP, buff=0.35)
-        ours = label(r"in our code: \ the output multiplied by $64/n$ and started at zero, \ and the $n \times n$ "
-                     r"hidden matrix's rate times $64/n$: \\ the same thing, \ written so a width-$64$ model is "
-                     r"identical in both", font_size=22, color=GREY_A).next_to(tab, DOWN, buff=0.45)
+        ours = label(r"in our code: \ readout multiplier $64/n$, \ hidden matrix's rate times $64/n$; \\ at width "
+                     r"$64$, \ both factors are $1$, \ but only $\mu$P starts its readout weights at zero",
+                     font_size=22, color=GREY_A).next_to(tab, DOWN, buff=0.45)
         why_ = VGroup(label(r"Adam: \ every entry moves by about $\eta$ \ $\Rightarrow$ \ $\Delta W x \sim \eta\, n$",
                             font_size=24, color=C.BITS),
                       label(r"the output layer: \ $n$ aligned inputs too, \ and it must start small", font_size=24,
@@ -127,8 +127,8 @@ class MuP(VoiceoverScene):
             "divided by their width, because Adam moves every entry by about the learning rate, so the n aligned "
             "terms add up to n times it. The output layer starts much smaller, with variance one over the width "
             "squared, and learns at the rate over the width. <bookmark mark='b'/> The usual way, which we'll call "
-            "SP, uses one rate everywhere. <bookmark mark='c'/> Our code writes the same rules slightly differently, "
-            "so that a model of width sixty-four is the same in both."
+            "SP, uses one rate everywhere. <bookmark mark='c'/> Our width factors equal one at width sixty-four, "
+            "but initialization differs: only mu-P starts the readout weights at zero."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_), FadeIn(tab[0][0]), FadeIn(tab[1]))
             vo.wait_until("a")
@@ -174,7 +174,7 @@ class MuP(VoiceoverScene):
             pans.add(VGroup(ax, xt, yt, t_, xl, lines))
         key = VGroup(*[label(n_, font_size=20, color=c) for n_, c in zip(layer_names, layer_cols)]).arrange(RIGHT, buff=0.5)
         key.to_edge(UP, buff=0.3)
-        yl = label(r"how much each layer's activations changed, \ steps $1$ to $4$ (fainter: earlier)", font_size=20,
+        yl = label(r"activation change: \ $\mathrm{std}(a_t-a_0)$; \ steps $1$ to $4$ (fainter: earlier)", font_size=20,
                    color=GREY_A).next_to(key, DOWN, buff=0.12)
         s_sp, s_mu = float(z["slope_sp"]), float(z["slope_mup"])
         grows = s_sp > 0.2
@@ -184,11 +184,12 @@ class MuP(VoiceoverScene):
             ax = p[0]
             sl.add(label(rf"output scores change as width$^{{{v:.2f}}}$", font_size=22, color=C.BITS)
                    .move_to(ax.c2p(lw.max(), yy)).align_to(ax.c2p(lw.max() + 0.1, yy), RIGHT))
-        tag = note(r"computed: \ Adam, learning rate $0.01$, \ the same four batches at every width").to_corner(DL, buff=0.2)
+        tag = note(r"computed: \ Adam, learning rate $0.01$, \ the same four batches at every width \\ "
+                   r"zero first-step $\mu$P hidden changes omitted on log axes", font_size=20).to_corner(DL, buff=0.2)
         said1 = (
             f"the change in the output scores grows with the width, about as the width to the power {s_sp:.2f}: "
-            "a learning rate that is right for a small model is too big for a large one, and eventually blows it "
-            "up. " if grows else
+            "a learning rate that is right for a small model can be too big for a large one and can destabilize "
+            "training. " if grows else
             f"the output scores' change barely grows with width here, a power of {s_sp:.2f}. "
         )
         said2 = (

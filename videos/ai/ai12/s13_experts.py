@@ -56,9 +56,9 @@ class Experts(VoiceoverScene):
                      *[Dot(ax.c2p(math.log10(a), b), radius=0.08, color=MOE) for a, b in zip(tot, mm)],
                      *[Line(ax.c2p(math.log10(a), r.min()), ax.c2p(math.log10(a), r.max()), color=MOE, stroke_width=2)
                        for a, r in zip(tot, fin)])
-        elab = VGroup(*[MathTex(rf"E{{=}}{e}", font_size=18, color=MOE).next_to(ax.c2p(math.log10(a), b), DOWN, buff=0.1)
+        elab = VGroup(*[MathTex(rf"E{{=}}{e}", font_size=18, color=MOE).next_to(ax.c2p(math.log10(a), b), UP, buff=0.2)
                         for e, a, b in zip(Es, tot, mm) if e in (1, 4, 32)])
-        lg = VGroup(label(r"dense: \ every parameter used for every character", font_size=20, color=NCOL),
+        lg = VGroup(label(r"dense: \ all hidden-matrix entries used per character", font_size=20, color=NCOL),
                     label(rf"mixture: \ width ${int(m['width'])}$, \ $E$ experts, \ one used per character", font_size=20,
                           color=MOE)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         lg.to_corner(UR, buff=0.3).shift(DOWN * 0.6)
@@ -72,7 +72,7 @@ class Experts(VoiceoverScene):
             history_card(2024, r"DeepSeek-V3", r"$671$ billion parameters, \ $37$ billion used per token: \ $256$ "
                          r"experts, \ $8$ chosen", width=5.0, color=HIST)).arrange(DOWN, buff=0.12)
         cards.scale(0.82).move_to([4.6, -1.35, 0])
-        tag = note(r"two seeds each; \ the dense models are the sweep's").to_corner(DL, buff=0.2)
+        tag = note(r"two mixture seeds; \ dense: \ seed $0$ \\ selected-expert work fixed; \ routing adds overhead").to_corner(DL, buff=0.2)
         router = RoundedRectangle(width=1.4, height=0.5, corner_radius=0.1, stroke_color=GREY_A, stroke_width=2)
         rl_ = label(r"router", font_size=20, color=GREY_A).move_to(router)
         exps = VGroup(*[RoundedRectangle(width=0.5, height=0.8, corner_radius=0.08, stroke_color=MOE, stroke_width=2,
@@ -85,18 +85,17 @@ class Experts(VoiceoverScene):
         moe_pic = VGroup(ch_, arr, router, rl_, wires, exps)
         moe_cap = label(r"each character goes to one expert \\ (schematic)", font_size=20, color=GREY_A).next_to(exps, DOWN, buff=0.2)
         moe_pic = VGroup(moe_pic, moe_cap).move_to([4.4, -0.4, 0])
-        better = mm[-1] < mm[0] - 0.01
-        said1 = (
-            f"The loss keeps falling as the experts are added, though each doubling helps less. With eight experts "
-            f"it matches a dense model of about {effN[i8]:,.0f} parameters, {mult:.1f} times our base model, for "
-            "the compute of the base model. " if better else
-            "At our size the experts barely help: the router has too little to tell apart. "
+        match = (
+            f"Interpolating the dense sweep gives an estimated matching size of {effN[i8]:,.0f} parameters for "
+            f"eight experts, {mult:.1f} times our base model. " if dL[okd].min() <= mm[i8] <= dL[okd].max() else
+            "The eight-expert mean lies outside the measured dense loss range, so its matching size is not resolved. "
         )
+        said1 = f"The mean loss is {mm[0]:.3f} bits for one expert and {mm[-1]:.3f} for the largest mixture. {match}"
         with self.voiceover(
-            "In a dense model, every parameter works on every character, so compute and parameters grow together. "
+            "Dense hidden matrices are used for every character, so enlarging them grows compute and parameters together. "
             "A mixture of experts, which part sixteen will build, loosens the link: many experts, and a router that sends each "
-            "character to one. <bookmark mark='a'/> Split our model's hidden layer into more and more experts, "
-            "keeping the work per character the same. "
+            "character to one. <bookmark mark='a'/> Add experts of the same width, using one expert matrix per "
+            "character. The selected-expert work stays fixed, while routing adds overhead. "
             + said1
             + "<bookmark mark='b'/> DeepMind measured this in 2022: the loss falls with the number of experts, and "
             "the gain shrinks as the base model grows. Since then experts have become smaller and more numerous: "
@@ -148,12 +147,12 @@ class Experts(VoiceoverScene):
         gD, gN, gp = float(p["gD"]), float(p["gN"]), float(p["gpost"])
         law = MathTex(rf"\delta \approx C\, \frac{{D^{{{gD:.2f}}}}}{{N^{{{gN:.2f}}}}}\, e^{{-P/{gp:.2f}}}", font_size=34,
                       color=C.BITS).move_to([3.7, 2.1, 0])
-        ll = label(rf"fitted to our sweep: \ every width and length, \ $P$ = bits kept", font_size=20, color=GREY_A)
+        ll = label(r"fit: \ finite $\delta>0.002$ bits, \ $D\ge2^{17}$ \\ $P$: bits kept; \ shown $\delta>10^{-4}$ bits", font_size=20, color=GREY_A)
         ll.next_to(law, DOWN, buff=0.15)
         cards = VGroup(
             history_card(2024, r"Kumar et al., \ \textit{Scaling Laws for Precision}", r"the same form, \ $465$ runs: \ "
                          r"over-trained models are harder to quantize; \ low precision in training acts like fewer "
-                         r"parameters, $N(1 - e^{-P/\gamma})$; \ the best training precision: \ $7$ to $8$ bits",
+                         r"parameters, $N(1 - e^{-P/\gamma})$; \ joint training optimum over size, data and precision: \ $7$ to $8$ bits",
                          width=5.4, color=HIST)).move_to([3.7, -1.0, 0])
         link = note(r"FP8 training: \ Part 18; \ quantized inference: \ Part 19").to_corner(DR, buff=0.2)
         # symmetric round-to-nearest, as compute.py does it: 3 bits, levels -3 ... 3 times (largest |w|) / 3
@@ -170,7 +169,7 @@ class Experts(VoiceoverScene):
             seen[round(v, 3)] = k_ + 1
             after.add(Dot(nl.n2p(v) + DOWN * (0.35 + 0.14 * k_), radius=0.06, color=C.BITS))
         moves = VGroup(*[Line(b_.get_center(), a_.get_center(), stroke_width=1.2, color=GREY_B) for b_, a_ in zip(before, after)])
-        qcap = label(r"rounding to the nearest level \\ ($3$ bits: \ $7$ levels; \ schematic)", font_size=20, color=GREY_A)
+        qcap = label(r"one non-embedding weight-matrix row \\ ($3$ bits: \ $7$ symmetric levels; \ schematic)", font_size=20, color=GREY_A)
         qk = VGroup(label(r"weights", font_size=18, color=C.TRUE_P).next_to(nl, LEFT, buff=0.2).shift(UP * 0.45),
                     label(r"rounded", font_size=18, color=C.BITS).next_to(nl, LEFT, buff=0.2).shift(DOWN * 0.45))
         c0 = nl.get_center().copy()
@@ -181,22 +180,21 @@ class Experts(VoiceoverScene):
         d4 = delta[i, :, bits.index(4)]
         okk = np.isfinite(d4)
         said2 = (
-            f"the damage grows with training: at four bits, {d4[okk][0]:.3f} bits after two to the "
-            f"{int(lD[okk][0])} characters, {d4[okk][-1]:.3f} after two to the {int(lD[okk][-1])}. A model that "
-            "has read more has packed more into each weight, so rounding hurts it more. "
-            if grows and d4[okk][-1] > d4[okk][0] else
-            "the damage barely depends on how long the model was trained. "
+            f"at four bits, the loss changes by {d4[okk][0]:.3f} bits after two to the "
+            f"{int(lD[okk][0])} characters, and by {d4[okk][-1]:.3f} after two to the {int(lD[okk][-1])}. "
         )
         with self.voiceover(
-            "Parameters also cost memory, and that can be cut by storing them with fewer bits. Round every weight "
-            "of our trained models to a few bits, after training, and measure what it costs. "
+            "Parameters also cost memory, and that can be cut by storing them with fewer bits. After training, "
+            "round the non-embedding weight matrices row by row; embeddings and biases stay unchanged. Measure the loss change. "
             "<bookmark mark='a'/> At width 256, "
             + said2
-            + f"<bookmark mark='b'/> Fitted to all our runs, the extra loss grows like D to the {gD:.2f}, shrinks like "
-            f"N to the {gN:.2f}, and falls exponentially with every bit kept. <bookmark mark='c'/> In 2024 Tanishq "
+            + f"<bookmark mark='b'/> Fit the finite changes above 0.002 bits, from lengths of at least two to the "
+            f"seventeen characters. The formula has D exponent {gD:.2f}, denominator N exponent {gN:.2f}, "
+            "and an exponential precision term. <bookmark mark='c'/> In 2024 Tanishq "
             "Kumar and colleagues found the same form in four hundred and sixty-five runs: past some point, more "
             "training data makes a model worse once it is quantized. And training itself in low precision acts like "
-            "having fewer parameters; by their fit, the best training precision is seven to eight bits."
+            "having fewer parameters. Under their compute-cost model, jointly optimizing size, data and training "
+            "precision favors about seven to eight bits."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(link), FadeIn(qpic))
             self.play(LaggedStart(*[Create(m_) for m_ in moves], lag_ratio=0.05), LaggedStart(*[FadeIn(a_) for a_ in after],
@@ -212,10 +210,10 @@ class Experts(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def predict(self):
-        pc = predict_card(r"Round every weight to four bits after training. \ Which suffers more: \ a model that "
+        pc = predict_card(r"Round non-embedding weight matrices to four bits after training. \ Which suffers more: \ a model that "
                           r"read a little, \ or the same model after reading much more?")
         with self.voiceover(
-            "Pause and predict. Round every weight to four bits after training. Which suffers more: a model that read "
+            "Pause and predict. Round non-embedding weight matrices to four bits after training. Which suffers more: a model that read "
             "a little, or the same model after reading much more?"
         ):
             self.play(FadeIn(pc, shift=UP * 0.2))
@@ -224,12 +222,12 @@ class Experts(VoiceoverScene):
 
     def takeaway(self):
         tk = takeaway_card(r"Parameters, \ compute and bits are separate budgets",
-                           r"Experts add parameters without adding compute; \ fewer bits save memory, \ at a price "
+                           r"Experts add parameters with routing overhead; \ fewer bits save memory, \ at a price "
                            r"that grows with how much the model has read.",
                            r"next: \ why any of these laws are power laws")
         with self.voiceover(
-            "The takeaway: parameters, compute and bits can be traded separately. Experts add parameters without "
-            "adding compute; fewer bits save memory, at a price that grows with how much the model has read. Next: "
+            "The takeaway: parameters, compute and bits can be traded separately. Experts add parameters with "
+            "routing overhead; fewer bits save memory, at a price that grows with how much the model has read. Next: "
             "why any of these laws should be power laws."
         ) as vo:
             self.play(FadeIn(tk[0], shift=UP * 0.2))

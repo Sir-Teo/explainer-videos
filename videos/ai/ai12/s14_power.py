@@ -42,7 +42,7 @@ class Power(VoiceoverScene):
         lN = np.log10(Ns)
         allv = np.log10(np.concatenate([np.asarray(z[f"err{d}"]).mean(0) for d in dims]))
         allv = allv[np.isfinite(allv)]
-        y0, y1 = math.floor(max(allv.min(), -14)), math.ceil(allv.max())
+        y0, y1 = math.floor(allv.min()), math.ceil(allv.max())
         ax = CornerAxes(x_range=[lN.min() - 0.1, lN.max() + 0.1, 1], y_range=[y0, y1, 2], x_length=5.8, y_length=3.5, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.0, -1.5, 0])
         xt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=18, color=GREY_B).next_to(ax.c2p(v, y0), DOWN, buff=0.08)
@@ -57,7 +57,7 @@ class Power(VoiceoverScene):
             lines.add(curve(ax, lN[keep], np.log10(e[keep]), col, 3))
             labs.add(label(rf"$d = {d}$: \ slope ${float(z[f'slope{d}']):.2f}$ \ (theory ${-4 / d:.2f}$)", font_size=22, color=col))
         labs.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.9, -1.2, 0])
-        tag = note(r"computed: \ a smooth function on a $d$-dimensional torus, \ cut into $N$ linear pieces").to_corner(DR, buff=0.2)
+        tag = note(r"oracle local Taylor pieces: \ known function and gradients \\ two random-centre seeds on a $d$-dimensional torus").to_corner(DR, buff=0.2)
         cite_ = cite(r"U.~Sharma \& J.~Kaplan, \textit{A Neural Scaling Law from the Dimension of the Data Manifold} "
                      r"(2020)",
                      corner=UL).shift(DOWN * 0.0)
@@ -85,23 +85,23 @@ class Power(VoiceoverScene):
         mcap.next_to(mpic, DOWN, buff=0.3)
         n5 = label(r"$N = 5$ pieces", font_size=26, color=C.BITS).next_to(mpic, RIGHT, buff=0.5).shift(UP * 0.4)
         n10 = label(r"$N = 10$ pieces", font_size=26, color=C.BITS).move_to(n5, aligned_edge=LEFT)
-        hd = VGroup(label(r"real data lies near a surface of low dimension $d$", font_size=28, color=GREY_A),
-                    label(r"a model with $N$ parameters cuts it into about $N$ pieces", font_size=28, color=GREY_A))
+        hd = VGroup(label(r"assume data near a surface of dimension $d$", font_size=28, color=GREY_A),
+                    label(r"assume about $N$ local pieces for $N$ parameters", font_size=28, color=GREY_A))
         hd.arrange(DOWN, buff=0.2).move_to(UP * 2.2)
         late = abs(s8 - t8) > 0.1
         said1 = (
-            f"The slopes match four over d, until eight dimensions, where even a hundred thousand pieces are still "
-            f"too coarse: {s8:.2f}, on its way to {t8:.2f}." if late else
-            "The slopes match four over d."
+            f"In eight dimensions the fitted slope is {s8:.2f}, compared with the prediction {t8:.2f}. The table "
+            "compares all four dimensions; this finite experiment does not prove asymptotic convergence."
         )
         with self.voiceover(
             "Why should loss fall as a power law at all? One answer, from Utkarsh Sharma and Jared Kaplan in 2020: "
-            "real data lies near a surface of low dimension d inside its huge space. A model with N parameters cuts "
-            "that surface into about N pieces, <bookmark mark='a'/> so each piece is about N to the minus one over d "
-            "across. <bookmark mark='b'/> Fit each piece with a straight line, and what's left is the curvature, the "
-            "square of the size. <bookmark mark='c'/> Square again for a squared loss: the loss falls like N to the "
+            "assume data lies near a surface of low dimension d, and N parameters provide about N local pieces. "
+            "<bookmark mark='a'/> Each piece is about N to the minus one over d "
+            "across. <bookmark mark='b'/> Use a linear Taylor approximation on each piece: the curvature leaves an "
+            "error of order the piece's size squared. <bookmark mark='c'/> Square again for a squared loss: the loss falls like N to the "
             "minus four over d. A power law, with the exponent set by the data's dimension. "
-            "<bookmark mark='d'/> Check it: a smooth function on surfaces of dimension 1, 2, 4 and 8. "
+            "<bookmark mark='d'/> Check an oracle approximation using a known smooth function and its analytic "
+            "gradients, in dimensions 1, 2, 4 and 8. This does not train a network. "
             + said1
             + " Low-dimensional data, steep laws; language, by this account, is high-dimensional."
         ) as vo:
@@ -187,15 +187,18 @@ class Power(VoiceoverScene):
         # left: the subtasks of one run (width 128, seed 0), learned one at a time
         wi = widths.index(128) if 128 in widths else len(widths) // 2
         run = per[wi, 0]
-        ax = CornerAxes(x_range=[0, steps.max(), steps.max() / 4], y_range=[0, 1.1, 0.5], x_length=5.8, y_length=3.6, tips=False,
+        ytop = max(1.1, math.ceil(float(run.max()) * 10) / 10)
+        ax = CornerAxes(x_range=[0, steps.max(), steps.max() / 4], y_range=[0, ytop, 0.5], x_length=5.8, y_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.3, -0.6, 0])
         xt = VGroup(*[MathTex(f"{int(v):,}".replace(",", "{,}"), font_size=18, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
                       for v in np.linspace(0, steps.max(), 5)])
+        yt = VGroup(*[MathTex(f"{v:g}", font_size=18, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08)
+                      for v in sorted({0.0, 1.0, ytop})])
         xn = label(r"training steps", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
         yn = label(rf"each subtask's loss \ (bits), \ width ${widths[wi]}$", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
-        sub = VGroup(*[curve(ax, steps, visible_values(run[:, k], 0, 1.1), interpolate_color(ManimColor(QUANT), ManimColor(GREY_D), k / T),
+        sub = VGroup(*[curve(ax, steps, visible_values(run[:, k], 0, ytop), interpolate_color(ManimColor(QUANT), ManimColor(GREY_D), k / T),
                              2.2).set_stroke(opacity=0.9) for k in range(T)])
-        avg = curve(ax, steps, visible_values(mean[wi, 0], 0, 1.1), WHITE, 4)
+        avg = curve(ax, steps, visible_values(mean[wi, 0], 0, ytop), WHITE, 4)
         al = label(r"white: \ the average", font_size=20, color=WHITE).next_to(yn, RIGHT, buff=0.4)
         # right: the average loss at the end, against the number of subtasks learned, with the theory's curve
         fin = mean[:, :, -1]  # widths x seeds
@@ -209,11 +212,11 @@ class Power(VoiceoverScene):
                        for v in (1, 2, 4, 8, 16, 32) if v <= T])
         byt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=18, color=GREY_B).next_to(bx.c2p(0, v), LEFT, buff=0.08)
                        for v in range(y0, 1)])
-        bxn = label(r"subtasks learned", font_size=20, color=GREY_A).next_to(bxt, DOWN, buff=0.08)
+        bxn = label(r"tasks with loss $<0.1$ bits", font_size=20, color=GREY_A).next_to(bxt, DOWN, buff=0.08)
         byn = label(r"average loss at the end", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.12).align_to(bx, LEFT)
         theo = DashedVMobject(curve(bx, np.log10(nx), np.log10(th[1:T]), WHITE, 2.5), num_dashes=40)
-        tl = label(r"theory: \\ the share not yet learned", font_size=18, color=WHITE).next_to(bx.c2p(math.log10(T), 0), DL,
-                                                                                          buff=0.1)
+        tl = label(r"ideal top-$n$ task tail \\ top tasks perfect; \ others cost one bit", font_size=18,
+                   color=WHITE).next_to(byn, UP, buff=0.3).align_to(bx, LEFT)
         pts = VGroup(*[Dot(bx.c2p(math.log10(learned[i, j]), math.log10(max(fin[i, j], 1e-4))), radius=0.06,
                            color=width_ramp(i, len(widths))) for i in range(len(widths)) for j in range(learned.shape[1])
                        if okm[i, j]])
@@ -225,7 +228,8 @@ class Power(VoiceoverScene):
         fl = label(rf"width ${full[0]}$ and up: \ all ${T}$ learned, \ loss below "
                    rf"${math.ceil(1000 * fin[widths.index(full[0])].max()) / 1000:.3f}$",
                    font_size=18, color=GREY_A).next_to(nll, DOWN, buff=0.1).align_to(nll, LEFT) if full else VGroup()
-        tag = note(r"two seeds per width").to_corner(DR, buff=0.2)
+        tag = note(r"left: \ seed $0$; \ right: \ two seeds per width \\ right plot omits fully learned runs", font_size=18).to_corner(DL, buff=0.2)
+        run_tag = note(rf"curves and green bars: \ width ${widths[wi]}$, \ seed $0$").to_corner(DR, buff=0.2)
         n_learn = int((run[-1] < 0.1).sum())
         # meanwhile on the right: the subtasks by frequency, turning green as this network learns them
         pq = np.asarray(q["p"], float)
@@ -241,8 +245,8 @@ class Power(VoiceoverScene):
         in_order = np.corrcoef(np.arange(T)[np.array(order) < 10 ** 9], np.array(order)[np.array(order) < 10 ** 9])[0, 1] \
             if sum(o < 10 ** 9 for o in order) > 3 else 0.0
         said2 = (
-            "The common subtasks drop first, the rare ones later. " if in_order > 0.5 else
-            "The order roughly follows how common they are. "
+            "Earlier threshold crossings tend to be on more common subtasks in this run. " if in_order > 0.5 else
+            "The threshold crossings do not show a strong positive ordering by task frequency in this run. "
         )
         lo = int(learned[0].min())
         said3 = (
@@ -251,8 +255,9 @@ class Power(VoiceoverScene):
         )
         below = float(np.mean(np.log10(np.maximum(fin[okm], 1e-4)) - np.log10(th[learned[okm].astype(int)])))
         said4 = (
-            "Ours sit a little below it, because a subtask half learned already counts. " if below < -0.1 else
-            "Ours sit on it. "
+            "Our points sit below this ideal reference on average on a log scale. The count alone does not specify "
+            "which tasks were learned or the remaining losses. " if below < -0.1 else
+            "Compare our points with this ideal reference. A thresholded learned count alone does not determine the weighted loss. "
         )
         said5 = (
             f"With only {T} subtasks the tail runs out: once all are learned, the loss falls to almost nothing. "
@@ -260,30 +265,29 @@ class Power(VoiceoverScene):
             "The rarest subtasks are still to come."
         )
         with self.voiceover(
-            f"Here is one network, of width {widths[wi]}, learning the subtasks. <bookmark mark='a'/> Each subtask's "
-            "loss sits at one bit, a coin flip, and then drops, suddenly. "
+            f"Here is one network, of width {widths[wi]}, learning the subtasks. We count a task as learned when its "
+            "loss is below 0.1 bits. <bookmark mark='a'/> The curves show individual losses through training. "
             + said2
-            + f"By the end it has learned {n_learn} of the {T}. <bookmark mark='b'/> The average over the mix, in "
-              "white, "
-            "is smooth: many sudden steps, added up. <bookmark mark='c'/> Across sizes, wider networks learn more "
+            + f"By the end it has learned {n_learn} of the {T}. <bookmark mark='b'/> White is the frequency-weighted "
+            "average of these task losses. <bookmark mark='c'/> Across sizes, wider networks learn more "
             "subtasks, "
             + said3
-            + "<bookmark mark='d'/> Plot the average loss against the number learned, and the theory's curve appears: "
-            "the share of the mix not yet learned, a power-law tail. "
+            + "<bookmark mark='d'/> Compare average loss against the thresholded task count with "
+            "an ideal tail that assumes the most frequent tasks are perfectly learned and all others cost one bit. "
             + said4
             + "<bookmark mark='e'/> "
             + said5
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(tag), FadeIn(freq))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(run_tag), FadeIn(freq))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(c_) for c_ in sub], lag_ratio=0.05), run_time=3.0)
             self.play(LaggedStart(*[fbars[k].animate.set_fill(QUANT) for k in learned_at], lag_ratio=0.1), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(avg), FadeIn(al))
             vo.wait_until("c")
-            self.play(FadeOut(freq))
+            self.play(FadeOut(freq), FadeOut(run_tag))
             self.play(Create(bx), FadeIn(bxt), FadeIn(byt), FadeIn(bxn), FadeIn(byn))
-            self.play(lag([FadeIn(p_, scale=0.5) for p_ in pts], lag_ratio=0.05), FadeIn(nl), FadeIn(nll))
+            self.play(lag([FadeIn(p_, scale=0.5) for p_ in pts], lag_ratio=0.05), FadeIn(nl), FadeIn(nll), FadeIn(tag))
             vo.wait_until("d")
             self.play(Create(theo), FadeIn(tl))
             vo.wait_until("e")
@@ -305,12 +309,13 @@ class Power(VoiceoverScene):
 
     def takeaway(self):
         tk = takeaway_card(r"Power laws from many parts",
-                           r"A low-dimensional data surface gives $L \propto N^{-4/d}$; \ a Zipfian tail of skills, "
-                           r"\ each learned in turn, \ gives $L \propto N^{-\alpha}$.",
+                           r"For smooth targets, \ local linear approximation predicts squared error $L \propto N^{-4/d}$ "
+                           r"asymptotically, \ with $N$ pieces scaling like parameters; \ an ideal Zipfian skill tail can also yield a power law.",
                            r"next: \ if skills arrive suddenly, \ do abilities too?")
         with self.voiceover(
-            "The takeaway: power laws come out of many parts: the pieces of a low-dimensional data surface, or a long "
-            "Zipfian tail of skills, each learned in its turn. Next: if skills arrive suddenly, do abilities too?"
+            "The takeaway: under their assumptions, local linear approximations of smooth targets, measured with "
+            "squared error, and ideal Zipfian tails of skills can each produce power laws. Our finite toys "
+            "illustrate these mechanisms. Next: if skills arrive suddenly, do abilities too?"
         ) as vo:
             self.play(FadeIn(tk[0], shift=UP * 0.2))
             self.wait(max(0.0, vo.duration * 0.5 - 1.0))

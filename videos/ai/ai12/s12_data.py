@@ -34,7 +34,7 @@ class Data(VoiceoverScene):
         total = int(r["total"])
         logs = [int(round(math.log2(u))) for u in U]
         allc = np.concatenate([np.asarray(r[f"curve{k}"])[:, 1] for k in logs])
-        lo = float(np.floor(fin.min() * 10) / 10 - 0.05)
+        lo = float(np.floor(min(fin.min(), allc.min()) * 10) / 10 - 0.05)
         hi = float(min(np.ceil(np.percentile(allc, 90) * 10) / 10, lo + 1.5))
         ax = CornerAxes(x_range=[14, math.log2(total), 1], y_range=[lo, hi, 0.2], x_length=6.4, y_length=4.2, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.0, -0.5, 0])
@@ -43,23 +43,28 @@ class Data(VoiceoverScene):
         yt = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(14, v), LEFT, buff=0.08)
                       for v in np.arange(math.ceil(lo * 5) / 5, hi + 1e-9, 0.2)])
         xn = label(r"characters read so far", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        yn = label(r"held-out bits per character", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
+        yn = label(r"held-out bits per character \\ triangles: final curve points above range", font_size=20,
+                   color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         lines = VGroup()
         B = 256
         for k, col in zip(logs, EPOCH_COLORS):
             c = np.asarray(r[f"curve{k}"])
             xs = np.log2(c[:, 0] * B)
             keep = xs >= 14
-            lines.add(curve(ax, xs[keep], visible_values(c[keep, 1], lo, hi), col, 3))
+            line = VGroup(curve(ax, xs[keep], visible_values(c[keep, 1], lo, hi), col, 3))
+            if c[-1, 1] > hi:
+                line.add(Triangle(color=col, fill_opacity=1, stroke_width=0).scale(0.08).move_to(ax.c2p(xs[-1], hi)))
+            lines.add(line)
         lg = VGroup(*[label(rf"${u:,}$ distinct, \ ${e}$ epoch{'s' if e > 1 else ''}".replace(",", "{,}"), font_size=20, color=c)
                       for u, e, c in zip(U, ep, EPOCH_COLORS)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         lg.move_to([3.9, 1.6, 0])
         means = fin.mean(1)
         rows = VGroup(*[label(rf"${e}$: \ ${m:.3f}$ \ (${f.min():.3f}$--${f.max():.3f}$)", font_size=20, color=c)
                         for e, m, f, c in zip(ep, means, fin, EPOCH_COLORS)]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        rh = label(r"epochs: \ final bits, \ three seeds", font_size=20, color=GREY_A)
+        rh = label(r"epochs: \ final bits, \ three seeds \\ $100{,}000$ held-out predictions", font_size=20, color=GREY_A)
         tab = VGroup(rh, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.9, -1.5, 0])
-        tag = note(rf"computed: \ width ${int(r['width'])}$, \ ${total:,}$ characters of training in every run".replace(",", "{,}"))
+        tag = note(rf"computed: \ width ${int(r['width'])}$, \ ${total:,}$ characters of training in every run \\ "
+                   r"curves: \ seed $0$, \ $20,000$ held-out predictions".replace(",", "{,}"))
         tag.to_corner(DL, buff=0.2)
         d4 = means[1] - means[0]
         d16 = means[2] - means[0]
@@ -71,8 +76,8 @@ class Data(VoiceoverScene):
             f"Four epochs cost {d4:.3f} bits. "
         )
         said2 = (
-            f"At two hundred and fifty-six, the model memorizes its sample: the held-out loss falls, then climbs, "
-            f"and ends {worst:.2f} bits worse than fresh text." if overfit else
+            f"At two hundred and fifty-six, seed zero's held-out loss falls, then climbs. The final three-seed mean "
+            f"is {worst:.2f} bits worse than fresh text." if overfit else
             f"At two hundred and fifty-six, it ends {worst:.2f} bits worse than fresh text."
         )
         with self.voiceover(
@@ -135,7 +140,7 @@ class Data(VoiceoverScene):
         off = [int(e_) for e_, v in zip(ep, eff) if not np.isfinite(v)]
         offl = label(r"off the curve: \ " + ", ".join(str(v) for v in off) + r" epochs, \ worse than any fresh run", font_size=18,
                      color=GREY_A).next_to(ax.c2p(lx.max(), 0), UL, buff=0.15) if off else VGroup()
-        lg = VGroup(label(r"white: \ our runs, \ read off the fresh-data curve", font_size=20, color=WHITE),
+        lg = VGroup(label(r"white: \ three-seed means interpolated \\ onto the fresh seed-$0$ curve", font_size=20, color=WHITE),
                     label(rf"ours: \ $R^* = {Rs:.1f}$", font_size=22, color=C.BITS),
                     label(rf"Muennighoff et al.: \ $R^* = {Rp:.1f}$ \ (up to $9$ billion parameters)", font_size=20, color=GREY_A))
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.7, -1.4, 0])
@@ -150,8 +155,8 @@ class Data(VoiceoverScene):
             "<bookmark mark='a'/> Suppose each pass over the same text is worth a fixed fraction less than the one "
             "before. <bookmark mark='b'/> Then U distinct characters read R more times are worth U plus a sum of "
             "shrinking terms, <bookmark mark='c'/> which saturates: however often you repeat, you never get more "
-            "than U times one plus R-star. <bookmark mark='d'/> Read each of our runs off the fresh-data curve, to "
-            f"find how much new text it was worth, and fit R-star: {Rs:.1f} passes. "
+            "than U times one plus R-star. <bookmark mark='d'/> Interpolate each three-seed mean final loss onto "
+            f"the fresh seed-zero curve, infer its equivalent new text, and fit R-star: {Rs:.1f} passes. "
             + said3
             + f"and the ceiling is about {cap:.0f} times the distinct text."
         ) as vo:
@@ -183,7 +188,7 @@ class Data(VoiceoverScene):
                          r"and repetition adjusted; \ their $2024$ forecast: training sets reach it between $2026$ and "
                          r"$2032$, "
                          r"most likely $2028$", width=6.2, color=HIST),
-            history_card(2023, r"Muennighoff et al.", r"up to about $4$ epochs: \ almost as good as new data; \ beyond "
+            history_card(2023, r"Muennighoff et al.", r"up to about $4$ epochs: \ almost as good as new data; \\ beyond "
                          r"$16$: \ little left", width=6.2, color=HIST),
             history_card(2025, r"Alibaba, \ Qwen3", r"about $36$ trillion training tokens, \ including synthetic data; \ $119$ languages and dialects",
                          width=6.2, color=HIST),
@@ -195,7 +200,8 @@ class Data(VoiceoverScene):
         l4 = Dot(ax.n2p(math.log10(36e12)), radius=0.1, color=C.TRUE_P)
         l4l = label(r"Qwen3: \ $3.6\times10^{13}$", font_size=20, color=C.TRUE_P).next_to(l4, UP, buff=0.15)
         st = Dot(ax.n2p(math.log10(4e14)), radius=0.1, color=SP)
-        stl = label(r"$2028$ projected stock: \ $4\times10^{14}$", font_size=20, color=SP).next_to(st, UP, buff=0.15)
+        stl = label(r"$2028$ projected stock: \ $4\times10^{14}$", font_size=20, color=SP).next_to(st, UP, buff=0.85).align_to(ax, RIGHT)
+        st_leader = Line(st.get_top(), stl.get_bottom(), color=SP, stroke_width=1.2)
         unit = label(r"tokens", font_size=20, color=GREY_A).next_to(ticks, DOWN, buff=0.1)
         ways = label(r"ways around it: \ repeating, \ rephrasing, \\ synthetic text, \ other kinds of data \ (Part 18)",
                      font_size=22, color=GREY_A).move_to([3.6, -1.8, 0])
@@ -209,7 +215,7 @@ class Data(VoiceoverScene):
             "rephrased text, synthetic text and other kinds of data, the subject of part eighteen."
         ) as vo:
             self.play(FadeIn(hd), FadeIn(cards[0], shift=RIGHT * 0.1), Create(ax), FadeIn(ticks), FadeIn(unit))
-            self.play(FadeIn(st), FadeIn(stl))
+            self.play(FadeIn(st), FadeIn(st_leader), FadeIn(stl))
             vo.wait_until("a")
             self.play(FadeIn(cards[1], shift=RIGHT * 0.1))
             vo.wait_until("b")

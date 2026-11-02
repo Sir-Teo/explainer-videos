@@ -41,11 +41,13 @@ class Wide(VoiceoverScene):
             bars = VGroup(*[Rectangle(width=ax.c2p(edges[1], 0)[0] - ax.c2p(edges[0], 0)[0], height=max(1e-3, ax.c2p(0, min(v, 0.9))[1]
                                       - ax.c2p(0, 0)[1]), stroke_width=0, fill_color=LAZY, fill_opacity=0.75)
                             .move_to(ax.c2p((a + b) / 2, 0), aligned_edge=DOWN) for a, b, v in zip(edges, edges[1:], h)])
+            bars.add(*[Triangle(color=LAZY, fill_opacity=1, stroke_width=0).scale(0.045)
+                       .move_to(ax.c2p((a + b) / 2, 0.9)) for a, b, v in zip(edges, edges[1:], h) if v > 0.9])
             xs = np.linspace(-3.6, 3.6, 120)
             pdf = curve(ax, xs, np.exp(-xs ** 2 / (2 * var)) / math.sqrt(2 * math.pi * var), C.BITS, 2.5, smooth=True)
             kurt = float(g["kurt"][str(w)])
             t = label(rf"$n = {w}$", font_size=24, color=WHITE).next_to(ax, UP, buff=0.1)
-            k = label(rf"excess kurtosis ${kurt:.1f}$", font_size=18, color=GREY_B).next_to(ax, DOWN, buff=0.1)
+            k = label(rf"excess kurtosis ${nz(kurt, 1):.1f}$", font_size=18, color=GREY_B).next_to(ax, DOWN, buff=0.1)
             panels.add(VGroup(ax, bars, pdf, t, k))
         panels.arrange(RIGHT, buff=0.35).to_edge(UP, buff=0.55)
         formula = MathTex(r"f(x) = \frac{1}{\sqrt{n}} \sum_{j=1}^{n} a_j \,\mathrm{relu}(u_j x + c_j)", font_size=34)
@@ -53,7 +55,8 @@ class Wide(VoiceoverScene):
         fl = label(r"$a_j, u_j, c_j$ \ drawn at random, \ $\mathcal{N}(0, 1)$", font_size=22, color=GREY_A)
         fl.next_to(formula, DOWN, buff=0.2)
         cap = label(rf"the output at $x = {x}$ \ over ${len(np.asarray(g[f'draws{show[0]}'])):,}$ random starts; \ "
-                    rf"yellow: \ the Gaussian of variance $(x^2 + 1)/2 = {var:.3f}$".replace(",", "{,}"), font_size=20,
+                    rf"yellow: \ the Gaussian of variance $(x^2 + 1)/2 = {var:.3f}$ \\ "
+                    r"triangles: \ density above $0.9$".replace(",", "{,}"), font_size=20,
                     color=GREY_B).next_to(panels, DOWN, buff=0.15)
         # five functions drawn by a wide random network: samples of a Gaussian process
         xs, S = np.asarray(g["xs"]), np.asarray(g["samples"])
@@ -178,9 +181,10 @@ class Wide(VoiceoverScene):
             t = label(rf"$n = {n:,}$".replace(",", "{,}"), font_size=22, color=WHITE).next_to(px, UP, buff=0.05).align_to(px, LEFT)
             pans.add(VGroup(px, pts, fl, t))
             lives.append((px, np.asarray(z[f"snaps_{n}"]), np.asarray(z[f"fT_{n}"])))
-        gap100, gap10k = float(np.asarray(z["lin_gap"])[list(W).index(100)].mean()), float(np.asarray(z["lin_gap"])[-1].mean())
-        key = VGroup(label(r"the network, \ through training", font_size=20, color=RICH),
-                     label(r"its linearization (dashed)", font_size=20, color=LAZY)).arrange(RIGHT, buff=0.4)
+        gap100 = float(np.asarray(z["lin_gap"])[list(W).index(100)].mean())
+        gap10k = float(np.asarray(z["lin_gap"])[list(W).index(10000)].mean())
+        key = VGroup(label(r"the network, \ through training \ (seed $0$)", font_size=20, color=RICH),
+                     label(r"its linearization (dashed)", font_size=20, color=LAZY)).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
         key.next_to(pans, DOWN, buff=0.12)
         w_ok = -0.65 < sw < -0.4
         if w_ok and sk < -0.65:
@@ -204,9 +208,9 @@ class Wide(VoiceoverScene):
             "to thirty thousand. <bookmark mark='a'/> Measure how far the weights travel, relative to where they "
             f"started: the slope is {sw:.2f}. <bookmark mark='b'/> And how far the kernel moves: slope {sk:.2f}. "
             + said1
-            + "<bookmark mark='c'/> So a wide network trains like its own linearization. At a hundred units, the "
-            f"trained function strays from the linear prediction by up to {gap100:.2f}; at ten thousand, by "
-            f"{gap10k:.2f}."
+            + "<bookmark mark='c'/> So a wide network trains like its own linearization. Averaging each seed's "
+            f"maximum gap over three seeds gives {gap100:.2f} at a hundred units and {gap10k:.2f} at ten thousand. "
+            "The replay shows seed zero."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(seeds), *[FadeIn(p) for p in pans],
                       FadeIn(key))
@@ -238,13 +242,13 @@ class Wide(VoiceoverScene):
         self.play(FadeOut(pc))
 
     def takeaway(self):
-        tk = takeaway_card(r"A very wide network is a kernel machine",
-                           r"Before training, \ a Gaussian process; \ during training, \ its tangent kernel freezes, "
-                           r"\ so it learns like kernel regression.",
+        tk = takeaway_card(r"The NTK limit is a kernel machine",
+                           r"With neural-tangent scaling: \ a Gaussian process at initialization; \ a fixed tangent "
+                           r"kernel and kernel-regression dynamics during training.",
                            r"next: \ what a frozen kernel cannot do")
         with self.voiceover(
-            "The takeaway: an infinitely wide network is a Gaussian process before training, and a kernel machine "
-            "during it, because its tangent kernel freezes. Next, what a frozen kernel cannot do."
+            "The takeaway: with neural-tangent scaling, the infinite-width network is a Gaussian process before "
+            "training and a kernel machine during it, because its tangent kernel freezes. Next, what a frozen kernel cannot do."
         ) as vo:
             self.play(FadeIn(tk[0], shift=UP * 0.2))
             self.wait(max(0.0, vo.duration * 0.5 - 1.0))
