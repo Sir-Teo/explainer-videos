@@ -61,7 +61,8 @@ class Init(VoiceoverScene, ThreeDScene):
 
             def upd(m, alpha):
                 k = alpha * (L - 1)
-                v = float(vals[min(int(k), L - 1)])
+                log_v = float(np.interp(k, np.arange(L), np.log10(np.maximum(vals, 1e-30))))
+                v = 10 ** log_v
                 r = float(np.clip(0.1 * v ** 0.12, 0.012, 0.55))
                 m.become(glow_dot(ax.c2p(k + 1, float(np.clip(np.log10(max(v, 1e-30)), lo, hi)) - lo), color=col, radius=r))
 
@@ -200,7 +201,7 @@ class Init(VoiceoverScene, ThreeDScene):
         hl = label(r"what a unit receives, before the ReLU \\ (layer $25$ of the steady network, \ computed)",
                    font_size=22, color=GREY_A).next_to(base, DOWN, buff=0.15)
         neg = VGroup(*[b for b, e in zip(bars, edges[1:]) if e <= 0])
-        why2 = label(r"only half the variance survives each layer, \\ so double the weights' variance", font_size=26,
+        why2 = label(r"only half the second moment survives each ReLU, \\ so double the weights' variance", font_size=26,
                      color=HE).move_to([3.6, -1.0, 0])
         cites = label(r"K.~He, X.~Zhang, S.~Ren \& J.~Sun, \textit{Delving Deep into Rectifiers} (2015): \ $2/n$", font_size=22,
                       color=GREY_B).move_to([3.0, -2.9, 0])
@@ -230,7 +231,7 @@ class Init(VoiceoverScene, ThreeDScene):
         ax = ThreeDAxes(x_range=[-1, 1, 0.5], y_range=[0, L, 10], z_range=[0, 1, 0.5], x_length=6.0, y_length=7.0,
                         z_length=2.2, axis_config={"stroke_color": GREY_C, "include_ticks": False})
         ax.shift(DOWN * 0.3)
-        layers = list(range(0, L, 2))
+        layers = sorted(set(range(0, L, 2)) | {L - 1})
 
         def ridges(key):
             H = np.asarray(r[f"hist_{key}"])
@@ -245,7 +246,7 @@ class Init(VoiceoverScene, ThreeDScene):
                 out.add(Polygon(*pts, stroke_color=WHITE, stroke_width=1.0, fill_color=col, fill_opacity=0.55))
             return out
 
-        cases = [("tanh_std", r"weights $U[-1/\sqrt{n},\, 1/\sqrt{n}]$: \ variance $\tfrac{1}{3n}$", SMALL),
+        cases = [("tanh_std", r"Gaussian weights: \ variance $\tfrac{1}{3n}$", SMALL),
                  ("tanh_xavier", r"Glorot: \ variance $\tfrac1n$", HE),
                  ("tanh_big", r"variance $\tfrac4n$", BIG)]
         rid = [ridges(k) for k, _, _ in cases]
@@ -266,7 +267,7 @@ class Init(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "Here is the inside of a fifty-layer tanh network, as a landscape. Each ridge is the histogram of one "
             "layer's outputs, from the first layer at the front to the fiftieth at the back. <bookmark mark='a'/> "
-            "With the old rule of thumb, weights uniform between plus and minus one over root n, the outputs shrink "
+            "Here the weights are Gaussian, with the same variance as the old uniform rule, one over three n. The outputs shrink "
             f"layer after layer, from a typical size of {sd['tanh_std'][0]:.2f} to about ten to the minus {e_std}: the "
             "ridges collapse into a spike at zero. <bookmark mark='b'/> With Glorot and Bengio's variance, one over "
             f"n, they stay spread out, narrowing slowly, to {sd['tanh_xavier'][-1]:.2f} by the last layer. "

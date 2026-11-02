@@ -225,6 +225,8 @@ class Depth(VoiceoverScene):
         tiles.arrange(RIGHT, buff=0.22).move_to(UP * 0.35)
         head = label(r"$48$ ReLU units in the plane, \ randomly initialized, \ arranged in $1$ to $6$ layers", font_size=28)
         head.to_edge(UP, buff=0.4)
+        sample_note = label(r"counts: mean of $3$ initializations on a $320^2$ grid; \\ maps: seed $0$, $200^2$ grid; sampled activation patterns",
+                            font_size=19, color=GREY_A).move_to([0, -2.1, 0])
         keep = [int(k) for k in sp["keep"]]
         n0, n1 = int(sp[f"nreg{keep[0]}"]), int(sp[f"nreg{keep[-1]}"])
         note_ = label(rf"the spiral network of the opening: \ ${n0:,}$ pieces at the start, \ ${n1:,}$ after training"
@@ -238,12 +240,16 @@ class Depth(VoiceoverScene):
             "But that's what depth can do, with weights chosen by hand. What does a random network do? Here are "
             "forty-eight units cutting the plane, arranged in one layer, then two, three, four and six. "
             f"<bookmark mark='a'/> The number of pieces {trend}. Boris Hanin and David Rolnick proved in 2019 that, at "
-            "initialization, typical networks have about as many pieces as their number of units to the power of "
-            "the input dimension, nothing like the maximum, and found the same through training. <bookmark mark='b'/> Our spiral "
+            "initialization, polynomial bounds hold for the expected local density of activation regions, with neuron "
+            "count raised to the input dimension and constants controlled by their assumptions. Their experiments "
+            "found comparable region counts before and during training. Our displayed counts average three "
+            "initializations on a three-hundred-and-twenty-square grid; "
+            "the maps show seed zero on a two-hundred-square grid, so these are sampled counts rather than exact "
+            "global region counts. <bookmark mark='b'/> Our spiral "
             f"network started with {n0:,} pieces and ended with {n1:,}: {change}. Depth helps in subtler ways, by "
             "making useful functions easy for training to reach."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(sample_note))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.1) for t in tiles], lag_ratio=0.25), run_time=2.5)
             vo.wait_until("a")
             self.play(FadeIn(cite_))

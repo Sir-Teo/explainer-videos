@@ -6767,7 +6767,7 @@
     "Paul Werbos, \\ Harvard": "保罗·韦伯斯，\\ 哈佛",
     "proposes training networks this way, \\ in his PhD thesis; \\ few notice": "在博士论文里提出用这种方法训练网络；\\ 几乎没人注意",
     "David Rumelhart, Geoffrey Hinton \\& Ronald Williams": "戴维·鲁梅尔哈特、杰弗里·辛顿和罗纳德·威廉斯",
-    "\\textit{Learning representations by back-propagating errors}, \\ \\textit{Nature}: \\ hidden units learn useful features": "\\textit{Learning representations by back-propagating errors}，\\ 《自然》：\\ 隐藏单元学到有用的特征",
+    "\\textit{Learning representations by back-propagating errors}, \\ \\textit{Nature}: \\ hidden units learn useful features": "\\textit{Learning representations by back-propagating errors}，\\\\ \\mbox{《自然》}：\\ 隐藏单元学到有用的特征",
     "Yann LeCun et al., \\ Bell Labs": "杨立昆等，\\ 贝尔实验室",
     "backpropagation reads handwritten zip codes \\ (convolutional networks: \\ Part 10)": "反向传播读出手写邮政编码 \\ （卷积网络：\\ 第10部分）",
     "ReLU: \\ V.~Nair \\& G.~Hinton (2010); \\ X.~Glorot, A.~Bordes \\& Y.~Bengio (2011)": "ReLU：\\ V.~Nair和G.~辛顿（2010）；\\ X.~格洛罗、A.~Bordes和Y.~本吉奥（2011）",
@@ -20898,7 +20898,42 @@
     "grid approximation: \\\\ $p,q$ normalized inside this window": "网格近似：\\\\ $p,q$ 均在此窗口内归一化",
     "saved sweep": "保存的轮次",
     "edge bins include estimates outside $[-25,15]$": "边缘分箱包含 $[-25,15]$ 之外的估计",
-    "local latent variables: \\ a separate optimization of $q$ for each example": "局部隐变量：\\ 为每个样例单独优化一个 $q$"
+    "local latent variables: \\ a separate optimization of $q$ for each example": "局部隐变量：\\ 为每个样例单独优化一个 $q$",
+    "Gaussian weights: \\ variance $\\tfrac{1}{3n}$": "高斯权重：\\ 方差 $\\tfrac{1}{3n}$",
+    "same width, optimizer and steps \\\\ different branch initialization": "同样的宽度、优化器和步数 \\\\ 分支初始化不同",
+    "weight-gradient norm in each layer \\ (log scale)": "每层的权重梯度范数\\ （对数刻度）",
+    "$\\hat u=(h-\\bar h\\mathbf1)/\\|h-\\bar h\\mathbf1\\|$; \\ $\\sigma>0$": "$\\hat u=(h-\\bar h\\mathbf1)/\\|h-\\bar h\\mathbf1\\|$；\\ $\\sigma>0$",
+    "cosine demo: \\ RMSE $\\sim 1/\\sqrt{n}$": "余弦实验：\\ 均方根误差 $\\sim 1/\\sqrt{n}$",
+    "only half the second moment survives each ReLU, \\\\ so double the weights' variance": "每次ReLU后，二阶矩只剩一半，\\\\ 因此将权重方差加倍",
+    "empirical RMSE \\ (log scale)": "实测均方根误差 \\ （对数刻度）",
+    "computed: Gaussian on $[-1,1]^d$, $s^2=d/3$; \\\\ random units: mean RMSE of $4$ draws": "计算结果：$[-1,1]^d$上的高斯函数，$s^2=d/3$；\\\\ 随机单元：$4$次抽样的均方根误差平均值",
+    "if $C_f = \\int |\\omega|\\, |\\hat f(\\omega)|\\, d\\omega$ is finite, \\ a network with one hidden layer of $n$ sigmoid units, plus a constant, has \\ $\\int (f - f_n)^2\\, d\\mu \\ \\le\\ (2 r C_f)^2 / n$ \\ for a probability measure $\\mu$ on a radius-$r$ ball: \\ a rate independent of dimension": "若$C_f = \\int |\\omega|\\, |\\hat f(\\omega)|\\, d\\omega$有限，\\ 则一层含$n$个sigmoid单元、再加常数项的网络满足\\ $\\int (f-f_n)^2\\,d\\mu\\le(2rC_f)^2/n$，\\ 其中$\\mu$是半径为$r$的球上的概率测度：\\ 收敛阶不依赖维数",
+    "uniform inputs on $[0,1]^d$, bounded spectral class: \\\\ any fixed $n$-function span has worst-case squared $L^2$ error $\\gtrsim_d n^{-2/d}$": "输入在$[0,1]^d$上均匀分布，谱范数有固定上界：\\\\ 任意$n$个固定函数的张成空间，最坏情况下的平方$L^2$误差$\\gtrsim_d n^{-2/d}$",
+    "KAN variant \\ (this experiment)": "KAN变体\\ （本实验）",
+    "learned curves on edges; \\\\ hidden nodes: sum, then $\\tanh$": "边上学习曲线；\\\\ 隐藏节点先求和，再取$\\tanh$",
+    "each edge: cubic B-spline on a grid, plus SiLU": "每条边：格点上的三次B样条，再加SiLU",
+    "layer 2: \\ the curves $\\psi_j(h_j)$, summed at the output": "第2层：曲线$\\psi_j(h_j)$，在输出处求和",
+    "each edge's vertical scale is fixed across snapshots": "每条边在所有快照中保持相同的纵轴刻度",
+    "test RMSE \\ (log scale)": "测试均方根误差\\ （对数刻度）",
+    "computed: one formula, one run per size; \\\\ parameter counts differ": "计算结果：一个公式，每个规模训练一次；\\\\ 参数数目不同",
+    "three hinges: \\ unit-height bump, \\ $b-a=c-b$": "三个折点：\\ 高度为1的凸起，\\ $b-a=c-b$",
+    "computed: \\ $50$ sigmoid layers of $256$, \\ Gaussian weights, variance $1/(3n)$": "计算结果：\\ $50$层sigmoid，每层$256$个，\\ 高斯权重，方差$1/(3n)$",
+    "counts: mean of $3$ initializations on a $320^2$ grid; \\\\ maps: seed $0$, $200^2$ grid; sampled activation patterns": "计数：$3$个初始化在$320^2$网格上的平均数；\\\\ 图像：种子$0$、$200^2$网格；采样激活模式",
+    "$n = 2$: \\ $2 \\times 5$ inner functions, \\\\ $5$ outer functions": "$n=2$：\\ $2\\times5$个内层函数，\\\\ $5$个外层函数",
+    "2019: \\ GPT-2 scales residual weights": "2019：\\ GPT-2缩放残差层权重",
+    "$1/\\sqrt{N}$, \\ $N$ residual layers": "$1/\\sqrt{N}$，\\ $N$为残差层数",
+    "passage targets $24$--$21405$: \\\\ $21{,}382$ characters; bits per character": "测试段落目标 $24$--$21405$：\\\\ $21{,}382$ 个字符；比特/字符",
+    "passage targets $24$--$21405$ \\\\ $21{,}382$ characters; bits per character": "测试段落目标 $24$--$21405$ \\\\ $21{,}382$ 个字符；比特/字符",
+    "validation bits/character \\\\ first $200{,}000$ characters \\\\ targets $24$--$199999$: $199{,}976$ characters": "验证集比特/字符 \\\\ 前 $200{,}000$ 个字符 \\\\ 目标 $24$--$199999$：$199{,}976$ 个字符",
+    "the neural model": "神经模型",
+    "infinity-gram $+$ Kneser--Ney": "无穷元 $+$ Kneser--Ney",
+    "Scores on two target ranges": "两个目标范围上的得分",
+    "Part 9: \\ neural model and mixture": "第9部分：\\ 神经模型及其混合模型",
+    "targets $24$--$21405$ (inclusive): $21{,}382$ characters": "目标 $24$--$21405$（含端点）：$21{,}382$ 个字符",
+    "Part 7: \\ paired historical results": "第7部分：\\ 同一范围上的历史结果",
+    "targets $7$--$21405$ (inclusive): $21{,}399$ characters": "目标 $7$--$21405$（含端点）：$21{,}399$ 个字符",
+    "Zero-based target indices. \\ Different ranges: no cross-group ranking.": "目标编号从零开始。\\ 范围不同，不能跨组排名。",
+    "neural LM: $2.37$ bits/char \\\\ targets $24$--$21405$": "神经语言模型：$2.37$ 比特/字符 \\\\ 目标 $24$--$21405$"
   },
   "phrases": {
     "width": "宽度",
@@ -23231,6 +23266,10 @@
     [
       "^\\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ length\\ bands\\ \\$b\\$\\ \\$\\\\times\\$\\ \\$(-?\\d+(?:(?:\\{,\\}|,|\\.)\\d+)*)\\$\\ types\\ \\$s\\$:\\ \\\\\\\\\\ one\\ or\\ several\\ distinct\\ next\\ characters;\\ \\\\\\\\\\ weights\\ fitted\\ on\\ held\\-out\\ novel\\ text$",
       "$\\g<1>$个长度区间$b$ $\\\\times$ $\\g<2>$种类型$s$：\\\\\\\\ 只有一种或多种不同的后续字符；\\\\\\\\ 在留出的小说文本上拟合权重"
+    ],
+    [
+      "^largest\\ difference:\\ \\\\\\ autodiff\\ vs\\.\\\\\\ the\\ equations\\ \\$([^$]+)\\$\\ \\(absolute\\);\\ \\\\\\ vs\\.\\\\\\ finite\\ differences\\ \\$([^$]+)\\$\\ \\\\\\ \\(relative\\)$",
+      "最大差异：\\\\ 自动微分与公式$\\1$（绝对）；\\\\ 与有限差分$\\2$（相对）"
     ]
   ]
 }

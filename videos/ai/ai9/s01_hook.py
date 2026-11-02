@@ -4,6 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai9.common import CLS_A, CLS_B, HIST, PART, load, region_image
+from videos.ai.ai9.plotting import checkpoint_prefix
 
 T0, T1, XL, XR = 1938, 2016, -6.5, 6.5
 
@@ -116,8 +117,8 @@ class Hook(VoiceoverScene):
 
         def acc_line():
             t = sv.get_value()
-            n_ = max(2, int(np.searchsorted(cv[:, 0], t, side="right")))
-            pts = [g.ax.c2p(a_, float(np.clip(b_, 0.4, 1.0))) for a_, b_ in cv[:n_, [0, 2]]]
+            prefix = checkpoint_prefix(cv[:, 0], cv[:, 2], t)
+            pts = [g.ax.c2p(a_, float(np.clip(b_, 0.4, 1.0))) for a_, b_ in prefix]
             return VMobject(color=C.BITS, stroke_width=3).set_points_as_corners(pts)
 
         live = always_redraw(acc_line)

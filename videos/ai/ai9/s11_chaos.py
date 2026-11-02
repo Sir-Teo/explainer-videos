@@ -128,7 +128,7 @@ class Chaos(VoiceoverScene):
                     color=GREY_A).to_edge(DOWN, buff=0.25)
         chi_eq = cmath(r"\chi_1", r"=", r"\sigma_w^2\, \mathbb{E}\big[\tanh'(\sqrt{q^*} z)^2\big]", font_size=30,
                        colors={r"\chi_1": CRIT}).to_edge(UP, buff=0.3).shift(LEFT * 3.0)
-        chi_l = label(r"the slope of the map at $c = 1$", font_size=22, color=GREY_A).next_to(chi_eq, RIGHT, buff=0.3)
+        chi_l = label(r"the slope of the map at $c = 1$", font_size=22, color=GREY_A).next_to(chi_eq, DOWN, buff=0.18).align_to(chi_eq, LEFT)
         ends = {k: float(np.asarray(m[f"ctraj_{k}"])[-1]) for k, _ in SETS}
         survive = (f"After {L} layers, their correlation is only {ends['critical']:.2f}: the two inputs are still told "
                    "apart. " if ends["critical"] < 0.99 else f"Even here, after {L} layers, they have nearly merged. ")
@@ -143,7 +143,7 @@ class Chaos(VoiceoverScene):
             "chi one equals one exactly: the edge of chaos, where correlations change slowly and information about "
             "the input survives the trip. " + survive + 
             "<bookmark mark='d'/> The dots are a real network of width a thousand, and the theory tracks it. And chi "
-            "one is also the factor that scales the gradient, layer by layer, on the way back: below one it "
+            "one also scales the expected squared gradient, layer by layer, in this mean-field limit; the RMS gradient factor is its square root. Below one it "
             "vanishes, above one it explodes, as you just saw."
         ) as vo:
             self.play(Write(chi_eq), FadeIn(chi_l), FadeIn(g), Create(diag), FadeIn(g2))
@@ -246,11 +246,9 @@ class Chaos(VoiceoverScene):
         i_deep = rows_ok[-1] if rows_ok else 0
         L_deep = int(depths[i_deep])
         deep_ok = [float(sws[j]) for j in range(len(sws)) if ok[i_deep, j]]
-        verdict = (f"The bright region hugs the line: on {100 * agree:.0f} percent of the grid, the rule 'trainable "
-                   "exactly when the depth is below six depth scales' predicts our result."
-                   if agree >= 0.75 else
-                   f"The rule of thumb agrees with our result on {100 * agree:.0f} percent of the grid: our runs are "
-                   "shorter and smaller than theirs, so the boundary is rougher.")
+        verdict = (f"Using accuracy above fifty percent after {t['steps']} steps as our success criterion, "
+                   f"the heuristic depth below six correlation scales agrees with {100 * agree:.0f} percent of "
+                   "this grid. This is a finite-budget experiment, not an exact trainability boundary.")
         deep_list = ", ".join(f"{v:.1f}" for v in deep_ok)
         if i_deep == len(depths) - 1:
             deepest = f"At {L_deep} layers, only weight variances near the edge train: {deep_list}."

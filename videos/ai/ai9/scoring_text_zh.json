@@ -1,0 +1,18 @@
+{
+  "strings": {
+    "passage targets $24$--$21405$: \\\\ $21{,}382$ characters; bits per character": "测试段落目标 $24$--$21405$：\\\\ $21{,}382$ 个字符；比特/字符",
+    "passage targets $24$--$21405$ \\\\ $21{,}382$ characters; bits per character": "测试段落目标 $24$--$21405$ \\\\ $21{,}382$ 个字符；比特/字符",
+    "validation bits/character \\\\ first $200{,}000$ characters \\\\ targets $24$--$199999$: $199{,}976$ characters": "验证集比特/字符 \\\\ 前 $200{,}000$ 个字符 \\\\ 目标 $24$--$199999$：$199{,}976$ 个字符",
+    "the neural model": "神经模型",
+    "infinity-gram $+$ Kneser--Ney": "无穷元 $+$ Kneser--Ney",
+    "Scores on two target ranges": "两个目标范围上的得分",
+    "Part 9: \\ neural model and mixture": "第9部分：\\ 神经模型及其混合模型",
+    "targets $24$--$21405$ (inclusive): $21{,}382$ characters": "目标 $24$--$21405$（含端点）：$21{,}382$ 个字符",
+    "Part 7: \\ paired historical results": "第7部分：\\ 同一范围上的历史结果",
+    "targets $7$--$21405$ (inclusive): $21{,}399$ characters": "目标 $7$--$21405$（含端点）：$21{,}399$ 个字符",
+    "Zero-based target indices. \\ Different ranges: no cross-group ranking.": "目标编号从零开始。\\ 范围不同，不能跨组排名。",
+    "neural LM: $2.37$ bits/char \\\\ targets $24$--$21405$": "神经语言模型：$2.37$ 比特/字符 \\\\ 目标 $24$--$21405$"
+  },
+  "phrases": {},
+  "patterns": []
+}

@@ -67,6 +67,7 @@ class Perceptron(VoiceoverScene):
         x = np.array([-1.2, 1.5])  # a positive point on the wrong side (illustrative)
         xd = Dot(P(*x), radius=0.1, color=CLS_B)
         xl = MathTex(r"x, \ y = +1", font_size=28, color=CLS_B).next_to(xd, UP, buff=0.1)
+        xl.shift(LEFT * 0.45 + UP * 0.1)
         w2 = w + np.r_[x, 1.0] * 0.55
         seg2 = clip_line(w2)
         line2 = Line(P(*seg2[0]), P(*seg2[1]), color=WEIGHT, stroke_width=4)
@@ -231,7 +232,13 @@ class Perceptron(VoiceoverScene):
         far = X[int(np.argmax(np.linalg.norm(X, axis=1)))]
         circ = Circle(radius=float(np.linalg.norm(far)) * side / (2 * span), color=C.MODEL_Q, stroke_width=3).move_to(P(0, 0))
         rad = Line(P(0, 0), P(*far), color=C.MODEL_Q, stroke_width=3)
-        rl = MathTex(r"R", font_size=36, color=C.MODEL_Q).next_to(rad.get_center(), UL, buff=0.08)
+        radial = rad.get_unit_vector()
+        normal = np.array([radial[1], -radial[0], 0])
+        rl = MathTex(r"r_{\mathrm{2D}}", font_size=30, color=C.MODEL_Q)
+        rl.move_to(rad.point_from_proportion(0.8) - 0.4 * normal)
+        view = VGroup(MathTex(r"(x_1,x_2)\ \longleftrightarrow\ x=(x_1,x_2,1)", font_size=26, color=GREY_A),
+                      MathTex(r"r_{\mathrm{2D}}=\sqrt{R^2-1}", font_size=32, color=C.MODEL_Q))
+        view.arrange(DOWN, buff=0.35).move_to([3.3, 0, 0])
         lo, hi = clip_line(wst - np.r_[0, 0, gam], span), clip_line(wst + np.r_[0, 0, gam], span)
         band = Polygon(P(*lo[0]), P(*lo[1]), P(*hi[1]), P(*hi[0]), stroke_width=0, fill_color=FWD, fill_opacity=0.22)
         mid = clip_line(wst, span)
@@ -245,7 +252,7 @@ class Perceptron(VoiceoverScene):
         gl = label(r"margin $\gamma$: \ the closest points", font_size=26, color=C.BITS)
         gl.next_to(frame_, RIGHT, buff=0.3).align_to(frame_, DOWN).shift(UP * 0.3)
         pnote = note(r"$R$ and $\gamma$ count the constant input $1$ too").next_to(frame_, DOWN, buff=0.12)
-        pic = VGroup(frame_, band, sep, warr, wsl, circ, rad, rl, pdots, rings, gl, pnote)
+        pic = VGroup(frame_, band, sep, warr, wsl, circ, rad, rl, pdots, rings, gl, pnote, view)
         th = theorem_card(r"Perceptron convergence", r"if every $\|x\| \le R$ and some unit $w^*$ separates the data "
                           r"with margin $\gamma$, \ the perceptron makes at most $(R/\gamma)^2$ mistakes: \ in any order, "
                           r"\ however many passes", who=r"A.~B.~J.~Novikoff (1962)", width=8.4, color=FWD)
@@ -265,7 +272,7 @@ class Perceptron(VoiceoverScene):
         ) as vo:
             self.play(Create(frame_), FadeIn(pdots))
             vo.wait_until("p1")
-            self.play(FadeIn(assume), Create(circ), Create(rad), FadeIn(rl), FadeIn(pnote))
+            self.play(FadeIn(assume), Create(circ), Create(rad), FadeIn(rl), FadeIn(pnote), FadeIn(view))
             vo.wait_until("p2")
             self.play(FadeIn(band), Create(sep), GrowArrow(warr), FadeIn(wsl))
             self.bring_to_front(pdots)

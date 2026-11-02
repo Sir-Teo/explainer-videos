@@ -1,0 +1,12 @@
+{
+  "public_repository": "https://github.com/Sir-Teo/explainer-videos",
+  "baseline_commit": "3cfc87e211ba1b56d133f9b8e57a8f739b4e10bb",
+  "purpose": "Source fixtures only; no scientific data or output acceptance",
+  "source_sha256": {
+    "videos/ai/ai9/s01_hook.py": "8f43458a119fe29f8a5cebfc5bd82ba79b603c03ba3c1e9efdd6da29f9816aa1",
+    "videos/ai/ai9/s02_neurons.py": "5f8a1e7a23c6200cbcba6bdcdea345ff2cc70e93d7af101f455333a8d1b6c8b0",
+    "videos/ai/ai9/s03_perceptron.py": "dfe2ee06d2183ad6792b3b1d09b637ca25d0e7ed63dd1a3245531f602d00aaf5",
+    "videos/ai/ai9/s14_block.py": "f3c0cfc0dfd057b53e6ccfc467ee48fb6ccf97d7c5fddc9aaf865919102385a7",
+    "videos/ai/ai9/s16_lm.py": "fe4f51ef64c8e7e62892ff55bc0dc913e732bfd0ed0772c6e19e638921ad86b9"
+  }
+}

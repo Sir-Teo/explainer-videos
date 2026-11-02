@@ -103,7 +103,7 @@ class Backprop(VoiceoverScene):
             vo.wait_until("c")
             step(3)
             vo.wait_until("d")
-            box = SurroundingRectangle(VGroup(rows[2], rows[3]), color=BWD, buff=0.15, corner_radius=0.08)
+            box = VGroup(*[Underline(row, color=BWD, buff=0.13) for row in rows[2:]])
             self.play(Create(box), FadeIn(same))
         self.wait(0.3)
         self.clear_scene()
@@ -188,8 +188,9 @@ class Backprop(VoiceoverScene):
                             MathTex(f"{ga[i]:+.8f}", font_size=32, color=FWD).move_to([xs[1], y, 0]),
                             MathTex(f"{gb[i]:+.8f}", font_size=32, color=BWD).move_to([xs[2], y, 0]),
                             MathTex(f"{gf[i]:+.8f}", font_size=32, color=GREY_B).move_to([xs[3], y, 0])))
-        agree = label(rf"largest difference: \ autodiff vs.\ the equations ${sci(max(d['err_bp'], 1e-17), 0)}$; \ "
+        agree = label(rf"largest difference: \ autodiff vs.\ the equations ${sci(max(d['err_bp'], 1e-17), 0)}$ (absolute); \ "
                       rf"vs.\ finite differences ${sci(d['err_fd'], 0)}$ \ (relative)", font_size=28, color=C.BITS)
+        keep_in_frame(agree, margin=0.3)
         agree.to_edge(DOWN, buff=0.45)
         tag = note(r"computed: \ the XOR network of chapter 3, \ at random weights").to_corner(DR, buff=0.15)
         tag.next_to(agree, UP, buff=0.12).align_to(agree, RIGHT)

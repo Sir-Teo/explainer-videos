@@ -4,6 +4,8 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai9.common import MONO, NEURON, PART, load
+from videos.ai.ai9.plotting import checkpoint_prefix
+from videos.ai.ai9.scoring import passage_groups, score_range
 
 EMB = C.CONTEXT
 
@@ -120,36 +122,28 @@ class NeuralLM(VoiceoverScene):
         d = load("lm")
         cv = np.asarray(d["curve"])
         snaps = d["snaps"]
-        kn, nn = float(d["kn"]), float(d["passage_bits"])
-        top = 5.0  # the first steps (about 8 bits: random symbols) are drawn clipped at the top
-        ax = Axes(x_range=[0, cv[-1, 0], 4000], y_range=[1.6, top, 0.5], x_length=6.6, y_length=3.6, tips=False,
+        nn = float(d["passage_bits"])
+        low, top = score_range(cv[:, 2])
+        ax = Axes(x_range=[0, cv[-1, 0], 4000], y_range=[low, top, 0.5], x_length=6.6, y_length=3.6, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.6, 0.6, 0])
         yl = VGroup(*[MathTex(f"{v:.0f}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
-                      for v in np.arange(2, top + 0.01, 1)])
+                      for v in np.arange(np.ceil(low), top + 0.01, 1)])
         xl = label(rf"training steps \ (${int(d['batch']):,}$ positions each)".replace(",", "{,}"), font_size=22,
                    color=GREY_A).next_to(ax, DOWN, buff=0.2)
-        yn = label(r"bits per character on the passage", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
-        knl = DashedLine(ax.c2p(0, kn), ax.c2p(cv[-1, 0], kn), color=C.COUNTING, stroke_width=2.5)
-        knt = label(rf"Part 7's Kneser--Ney: \ ${kn:.2f}$", font_size=22, color=C.COUNTING).next_to(knl, DOWN, buff=0.1)
-        knt.align_to(knl, RIGHT)
+        yn = label(r"passage targets $24$--$21405$: \\ $21{,}382$ characters; bits per character",
+                   font_size=20, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         t = ValueTracker(float(cv[0, 0]))
 
-        def clip(y):
-            return float(np.clip(y, 1.6, top))
-
         def upto():
-            n_ = max(2, int(np.searchsorted(cv[:, 0], t.get_value(), side="right")))
-            pts = [ax.c2p(x, clip(y)) for x, y in cv[:n_, [0, 2]]]
-            if n_ < len(cv):
-                x = t.get_value()
-                pts.append(ax.c2p(x, clip(np.interp(x, cv[:, 0], cv[:, 2]))))
+            prefix = checkpoint_prefix(cv[:, 0], cv[:, 2], t.get_value())
+            pts = [ax.c2p(x, y) for x, y in prefix]
             return VMobject(color=C.NEURAL, stroke_width=4).set_points_as_corners(pts)
 
         def bits_now():
             return float(np.interp(t.get_value(), cv[:, 0], cv[:, 2]))
 
         live = always_redraw(upto)
-        rider = always_redraw(lambda: glow_dot(ax.c2p(t.get_value(), clip(bits_now())), color=C.NEURAL, radius=0.08))
+        rider = always_redraw(lambda: glow_dot(ax.c2p(t.get_value(), bits_now()), color=C.NEURAL, radius=0.08))
         clock = always_redraw(lambda: VGroup(
             MathTex(rf"\text{{step }}{int(round(t.get_value())):,}".replace(",", "{,}"), font_size=28, color=WHITE),
             MathTex(rf"{bits_now():.2f}\ \text{{bits/char}}", font_size=28, color=C.NEURAL)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
@@ -173,17 +167,8 @@ class NeuralLM(VoiceoverScene):
                 m.scale_to_fit_width(12.4)
             return m.move_to(panel_.get_center() + DOWN * 0.15)
 
-        p1 = float(next(r["bits"] for r in board_rows()[0] if r["key"] == "best"))  # Part 1's best counting model
-        if nn < kn:
-            end = f"By the end it reaches {nn:.2f} bits per character, past Kneser–Ney's {kn:.2f}."
-        elif nn < p1:
-            end = (f"By the end it reaches {nn:.2f} bits per character: better than Part 1's best counting model, at "
-                   f"{p1:.2f}, but not quite Kneser–Ney's {kn:.2f}. With this much computing, the best counting is a "
-                   "hard opponent.")
-        else:
-            end = (f"By the end it reaches {nn:.2f} bits per character: within {nn - p1:.2f} of Part 1's best counting "
-                   f"model, at {p1:.2f}, and short of Kneser–Ney's {kn:.2f}. With this much computing, the best "
-                   "counting is a hard opponent.")
+        end = (f"By the end it reaches {nn:.2f} bits per character on 21,382 passage targets: positions 24 "
+               "through 21,405, counted from zero. This passage was monitored during training.")
         wr = load("lm_words")["rows"]  # step, bits, words, real words, share
         s1 = int(wr[3][0])
         early = (f"At first it types random symbols: {100 * wr[0][4]:.0f} percent of the words it writes are real words. "
@@ -195,7 +180,7 @@ class NeuralLM(VoiceoverScene):
             "the curve, what it writes at each moment of training, always from the same prompt and the same random "
             "draws. <bookmark mark='a'/> " + early + "<bookmark mark='c'/> " + end
         ) as vo:
-            self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn), Create(knl), FadeIn(knt), FadeIn(panel_), FadeIn(pl),
+            self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn), FadeIn(panel_), FadeIn(pl),
                       FadeIn(cur))
             self.add(live, rider, clock)
             marks = {1: "a", 3: "b", len(snaps) - 1: "c"}
@@ -221,11 +206,11 @@ class NeuralLM(VoiceoverScene):
     # ------------------------------------------------------------------
     def mixing(self):
         d = load("lm")
-        kn, nn, mix, lam = float(d["kn"]), float(d["passage_bits"]), float(d["mix_bits"]), float(d["lam"])
+        nn, mix, lam = float(d["passage_bits"]), float(d["mix_bits"]), float(d["lam"])
         lc = np.asarray(d["lam_curve"])
         lams = np.linspace(0, 1, len(lc))
         g = axes([0, 1], [float(np.floor(lc.min() * 10) / 10), float(np.ceil(lc.max() * 10) / 10)], x_length=5.6,
-                 y_length=3.4, xlabel=r"$\lambda$: \ the network's share", ylabel=r"bits per character, \ held-out text",
+                 y_length=3.4, xlabel=r"$\lambda$: \ the network's share", ylabel=r"validation bits/character \\ first $200{,}000$ characters \\ targets $24$--$199999$: $199{,}976$ characters",
                  xticks=[0, 0.5, 1], yticks=[], center=[-3.0, -0.6, 0], font_size=18)
         cl = curve(g.ax, lams, lc, C.NEURAL, 3.5)
         best = glow_dot(g.ax.c2p(lam, lc.min()), color=C.BITS, radius=0.08)
@@ -234,26 +219,28 @@ class NeuralLM(VoiceoverScene):
                    colors=colors, font_size=34).move_to([3.4, 2.2, 0])
         ml = label(rf"$\lambda = {lam:.2f}$, \ chosen on held-out text, \ never on the passage", font_size=22,
                    color=GREY_A).next_to(mf, DOWN, buff=0.2)
-        res = VGroup(label(rf"Kneser--Ney alone: \ ${kn:.2f}$", font_size=26, color=C.COUNTING),
-                     label(rf"the network alone: \ ${nn:.2f}$", font_size=26, color=C.NEURAL),
+        scope = label(r"passage targets $24$--$21405$ \\ $21{,}382$ characters; bits per character",
+                      font_size=20, color=GREY_A).move_to([3.4, 0.3, 0])
+        res = VGroup(label(rf"the network alone: \ ${nn:.2f}$", font_size=26, color=C.NEURAL),
                      label(rf"together: \ ${mix:.2f}$", font_size=30, color=WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
         res.move_to([3.4, -0.9, 0])
         wins = float(d["nn_wins"])
-        better = mix < min(kn, nn)
-        said = (f"Together, they reach {mix:.2f} bits: better than either alone, because they make different mistakes. "
-                f"On the passage, the network is the more confident of the two on {100 * wins:.0f} percent of the "
-                "characters." if better else
-                f"Together, they reach {mix:.2f} bits, no better than the best of the two alone.")
+        comparison = "lower than the network alone" if mix < nn else "not lower than the network alone"
+        said = (f"On the same 21,382 passage targets, the mixture reaches {mix:.2f} bits per character, "
+                f"{comparison}. For {100 * wins:.0f} percent of these targets, the network assigns more probability "
+                "to the observed next character than Kneser–Ney does. This is not prediction accuracy, and the "
+                "aligned Kneser–Ney-only score was not saved.")
         with self.voiceover(
             "Bengio's team found that their best results came from combining the network with a counting model: "
-            "averaging the two predictions. <bookmark mark='a'/> The weight is chosen on held-out text, never on the "
-            "passage. <bookmark mark='b'/> " + said
+            "averaging the two predictions. <bookmark mark='a'/> Here the weight is chosen on the first two hundred "
+            "thousand validation characters, scoring positions 24 through 199,999, counted from zero. It is not "
+            "chosen on the passage. <bookmark mark='b'/> " + said
         ) as vo:
             self.play(Write(mf), FadeIn(g), Create(cl))
             vo.wait_until("a")
             self.play(FadeIn(ml), FadeIn(best))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in res], lag_ratio=0.3), run_time=1.5)
+            self.play(FadeIn(scope), LaggedStart(*[FadeIn(r_) for r_ in res], lag_ratio=0.3), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
 
@@ -310,17 +297,27 @@ class NeuralLM(VoiceoverScene):
     def board(self):
         d = load("lm")
         k = load_kn()
-        rows, full = board_rows()
-        i = next(j for j, r in enumerate(rows) if r["key"] == "best") + 1
-        rows.insert(i, dict(key="kn", label=rf"Kneser--Ney, \ ${k['best']}$ characters", bits=k["best_bits"], part=7,
-                            kind="count"))
-        rows.insert(i + 1, dict(key="nlm", label=rf"a neural model, \ ${d['n_ctx']}$ characters", bits=d["passage_bits"],
-                                part=9, kind="lm"))
-        rows.insert(i + 2, dict(key="mix", label=r"the neural model $+$ Kneser--Ney", bits=d["mix_bits"], part=9, kind="lm"))
-        board = scoreboard(rows, highlight=(i + 1, i + 2), max_bits=8.0)
-        board.scale_to_fit_height(min(board.height, 6.6)).move_to(DOWN * 0.1)
-        glow = SurroundingRectangle(VGroup(board.rows[i + 1], board.rows[i + 2]), color=C.NEURAL, buff=0.08, corner_radius=0.08)
-        gpt = [j for j, r in enumerate(rows) if "GPT-2" in r["label"]]
+        from videos.ai.ai7 import compute as c7
+
+        # Read the original Part 7 aggregate; never manufacture an aligned KN score.
+        infini = c7.load("infini")
+        (_, neural_rows), (_, historical_rows) = passage_groups(d, k, infini)
+        max_bits = max(4.0, score_range([r["bits"] for r in neural_rows + historical_rows], step=2)[1])
+        neural = scoreboard(neural_rows, highlight=(0, 1), max_bits=max_bits, bar_width=5.8,
+                            label_width=4.4, row_h=0.5, font_size=22).move_to([0, 0.83, 0])
+        history = scoreboard(historical_rows, max_bits=max_bits, bar_width=5.8,
+                             label_width=4.4, row_h=0.5, font_size=22).move_to([0, -2.12, 0])
+        head = label(r"Scores on two target ranges", font_size=36).move_to([0, 3.35, 0])
+        neural_title = label(r"Part 9: \ neural model and mixture", font_size=25, color=C.NEURAL).move_to([0, 2.6, 0])
+        neural_scope = label(r"targets $24$--$21405$ (inclusive): $21{,}382$ characters",
+                             font_size=21, color=GREY_A).move_to([0, 2.13, 0])
+        history_title = label(r"Part 7: \ paired historical results", font_size=25, color=C.COUNTING).move_to([0, -0.4, 0])
+        history_scope = label(r"targets $7$--$21405$ (inclusive): $21{,}399$ characters",
+                              font_size=21, color=GREY_A).move_to([0, -0.87, 0])
+        scope_note = label(r"Zero-based target indices. \ Different ranges: no cross-group ranking.",
+                           font_size=20, color=GREY_B).move_to([0, -3.36, 0])
+        board = VGroup(head, neural_title, neural_scope, neural, history_title, history_scope, history)
+        glow = SurroundingRectangle(neural.rows, color=C.NEURAL, buff=0.08, corner_radius=0.08)
         samples = d["samples"]
 
         def sample_block(prompt_, cont):
@@ -341,29 +338,17 @@ class NeuralLM(VoiceoverScene):
         txt.scale_to_fit_height(min(txt.height, 6.4)).move_to(ORIGIN)
         if txt.width > 12.8:
             txt.scale_to_fit_width(12.8)
-        best_counting = min(float(k["best_bits"]), *[float(r["bits"]) for r in rows[:i] if "bits" in r])
-        behind = float(d["mix_bits"]) - best_counting
-        if behind > 0:
-            top_row = f"{behind:.2f} bits behind the best row above them"
-        elif gpt:
-            top_row = "the best machine on the board before GPT-2"
-        else:
-            top_row = "the best machine on the board so far"
-        gap = (f"<bookmark mark='a'/> But it's still far behind GPT-2. It sees only {d['n_ctx']} characters, and one "
-               "hidden layer has to do everything. The rest of the series is about closing that gap." if gpt else
-               f"<bookmark mark='a'/> It sees only {d['n_ctx']} characters, and one hidden layer has to do everything. "
-               "The large models of Part 1, still to be filled in on this board, show how far there is to go.")
         with self.voiceover(
-            "On the scoreboard, two new rows: the first network, and the network with counting, "
-            + top_row + ". " + gap
+            "Here are two separate result groups. Our network and its mixture score the same 21,382 targets. "
+            "The historical Kneser–Ney and infinity-gram mixture score 21,399 targets. "
+            "<bookmark mark='a'/> The starting positions differ, so these groups do not establish a ranking "
+            "against each other. The network sees only twenty-four characters, with one hidden layer."
         ) as vo:
             self.play(FadeIn(board))
             self.play(Create(glow))
             vo.wait_until("a")
-            if gpt:  # the gap the rest of the series closes
-                self.play(Transform(glow, SurroundingRectangle(VGroup(*[board.rows[j] for j in gpt]), color=GREY_A, buff=0.08,
-                                                               corner_radius=0.08)))
-        self.play(FadeOut(board), FadeOut(glow))
+            self.play(FadeIn(scope_note), Indicate(neural_scope), Indicate(history_scope))
+        self.play(FadeOut(board), FadeOut(glow), FadeOut(scope_note))
         with self.voiceover(
             "Here's what it writes, from Part 5's prompt and three others: <bookmark mark='a'/> English-shaped, word-shaped, and not yet making sense."
         ) as vo:

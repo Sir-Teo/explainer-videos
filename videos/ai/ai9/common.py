@@ -134,3 +134,49 @@ def words(n: int) -> str:
     w = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
          "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"]
     return w[n] if 0 <= n < len(w) else f"{n:,}"
+
+
+def prose_label(text, width, font_size=22, color=WHITE, *, atoms=()):
+    """Chinese prose in one serif face with explicit leading and safe punctuation.
+
+    Keep English and TeX-containing material on the existing typesetting path.
+    Translations still come from the series table; no wording is replaced here.
+    """
+    if not zh():
+        return wrapped_label(text, width, font_size, color)
+    from explainer.zh_text import cjk_font, translate, verbatim
+    from .text_layout import prose_lines
+
+    translated = translate(text).replace(r"\\", "\n").replace("\\ ", " ")
+    if "$" in translated or "\\" in translated:
+        return wrapped_label(text, width, font_size, color)
+
+    def line(value):
+        with verbatim():
+            return Text(value, font=cjk_font(), font_size=font_size, color=color)
+
+    atoms = [s for s in atoms if line(s).width <= width]
+    rows = VGroup(*[line(s) for s in prose_lines(translated, width, lambda s: line(s).width, atoms=atoms)])
+    rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+    if rows.width > width:
+        rows.scale_to_fit_width(width)
+    return rows
+
+
+def prose_history_card(year, who, what, color=None, width=5.2, font_size=22):
+    """Use readable Chinese prose rows on this part's historical cards."""
+    if not zh():
+        return history_card(year, who, what, color=color, width=width, font_size=font_size)
+    from explainer.ai.lecture import _card
+    from explainer.zh_text import translate
+
+    color = color or C.HUMAN
+    # Original TeX spacing separates names/institutions: keep those phrases whole.
+    atoms = translate(who).replace(r"\\", "\n").replace("\\ ", "\n").splitlines()
+    head = VGroup(prose_label(str(year), width - 0.8, font_size + 18, color),
+                  prose_label(who, width - 0.8, font_size, atoms=[s.strip() for s in atoms]))
+    head.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+    body_atoms = translate(what).replace(r"\\", "\n").replace("\\ ", "\n").splitlines()
+    body = (prose_label(what, width - 0.8, font_size - 2, GREY_A, atoms=[s.strip() for s in body_atoms])
+            if what else VectorizedPoint())
+    return _card(head, body, color, width)
