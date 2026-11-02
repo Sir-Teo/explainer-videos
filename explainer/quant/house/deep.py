@@ -238,7 +238,9 @@ class Hedger:
         import torch
 
         if self.kind == "mlp":
-            return self.net(torch.stack([x, tau, prev], -1)).squeeze(-1)
+            # log-moneyness in units of the option's total volatility, so its inputs are all of order one
+            z = x / (self.sigma * math.sqrt(self.T))
+            return self.net(torch.stack([z, tau, prev], -1)).squeeze(-1)
         lo, hi = self.band(x, tau)
         return torch.minimum(torch.maximum(prev, lo), hi)
 
