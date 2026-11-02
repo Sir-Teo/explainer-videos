@@ -184,6 +184,33 @@ Notes for whoever picks this up:
 - **Deferred to production.** The zero-shot foundation models (Chronos, TimesFM, Moirai) need packages outside the
   venv, and installing or importing external code needs approval. The race uses CPU models trained here.
 
+## Part 8 (Decisions and Control), 2 Nov 2026
+
+House `control.py` (tested against closed forms): CRRA/CARA, certainty equivalents, Arrow-Pratt; `bellman_merton`
+(backward induction with Gauss-Hermite and certainty-equivalent interpolation; interpolating V itself biased the
+policy toward zero at small dt); HARA floor (portfolio insurance); Kelly binary/continuous; `realized_growth`;
+`secretary`; `bsde_regression`, with polynomial or hat bases (polynomials can't follow kinks, giving 1.194 against the
+PDE's 1.230; hats give 1.225 at 300k paths); `hjb_two_rates`; `ppo_merton`. Getting PPO to converge needed one-step TD
+advantages and a fixed exploration of 0.8: learned exploration collapsed and stalled near 1.5. It now reaches 1.84,
+matching the discrete optimum of 1.836.
+
+The compute items, with their results:
+- coin: Kelly 20%, 93.8% reach the cap, 0% go bust; all-in 87% go bust.
+- bellman: Merton 61.7%; the floor matches to 0.005.
+- merton_us: excess 8.2% (se 1.9%), sigma 18.5%, fractions 238/119/79/.../24%.
+- kelly_us: best 218% (growth 12.6% against 9.7% at 100%); bootstrap 116-302%; the split sample picks 198%, which
+  then grows 13.4%; ruin at 348% (Sep 1931).
+- fractional, samuelson, ergodic, ltcm (an illustration), secretary (37, 37.1%), american (9.87 against 9.35), bsde,
+  ppo.
+- envelope: trials 72.
+
+There are 12 scenes, a README (EN, ZH) with solutions, and zh_lines 43/43. Facts checked:
+- Haghani-Dewey: about 30% went bust (abstract).
+- LTCM: $129bn assets on $4.7bn, $1.3tn notional, under $1bn by mid-September, $3.6bn from 14 banks.
+- PNP: about 15% after fees, 1969-88.
+- Samuelson 1979: one syllable except the last word.
+- 19 Oct 1987: French's market return was -17.4%.
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
