@@ -109,7 +109,7 @@ class World(VoiceoverScene):
                 s.scale_to_fit_width(4.8)
         stack.to_edge(RIGHT, buff=0.3)
         leg = legend([(GREY_B, r"the price the news says"), (LOSS, r"the price that trades ($\pm$10\% a day)")],
-                     font_size=18).next_to(g, UP, buff=0.1).align_to(g, LEFT)
+                     font_size=18).next_to(g, UP, buff=0.45).align_to(g, LEFT)
         with self.voiceover(
             "Price limits change the statistics of Part one. Watch a stock hit by big news twice in forty days. The grey line "
             "is where the news says the price should be; the red line is the price that can trade, capped at ten percent a "
