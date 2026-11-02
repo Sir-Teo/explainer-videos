@@ -296,7 +296,7 @@ def compute_book2024() -> dict:
                 xx = torch.tensor([[np.log(rel + h), age / DPM / 24, float(ki_now)],
                                    [np.log(rel - h), age / DPM / 24, float(ki_now)]], dtype=torch.float32)
                 v = net(xx).numpy().ravel()
-            dl += float((v[0] - v[1]) / (2 * h) / nt["S0"])  # note delta per unit of index, per note of notional 1
+            dl += float((v[0] - v[1]) / (2 * h) * rel)  # index exposure in units of note notional (delta x S / S0)
         alive_n.append(a)
         kin_n.append(kin)
         delta.append(dl)
