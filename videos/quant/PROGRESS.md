@@ -9,6 +9,7 @@ bash tools/setup_linux.sh && source .venv/bin/activate     # system packages + .
 python -m explainer.quant.data                            # market data into .cache/quant_data (checksummed)
 python -m pytest -q tests/test_quant_house.py             # the House library
 python -m videos.quant.quant10.compute                    # Part 10's numbers into .cache/quant10 (~8 min)
+python -m videos.quant.quant1.compute                     # Part 1's numbers into .cache/quant1 (~6 min)
 EXPLAINER_TTS=silent python tools/qa_scene.py quant10 Hook   # one chapter, silent, with a contact sheet
 ```
 
@@ -34,13 +35,18 @@ Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitigno
 
 ## In progress
 
-- Nothing running. Part 10 is complete in both languages up to narration: silent English build, Chinese dry run of all
-  15 chapters clean, Chinese previews of Hook, BTC and LTCM reviewed.
+- **Part 10 narrated build** with the CPU voice (Kokoro-82M; `python tools/make.py quant10 --cpu-voice -q m --steps build
+  check`, logs `renders/make/quant10_cpu_voice.log`, `quant10.en.log`, `quant10.zh.log`). Rerun the same command after
+  an interruption: narration and scenes are cached.
+- **Part 1 (The Fair Game)**: compute (13 items), House `stats`, `pit`, `smile` (tested), all 16 scenes written and
+  previewed silently, README with solutions, Chinese narration (76 of 76 lines). Remaining: on-screen text table
+  (`collect_text.py quant1`, then `--check`), the Chinese dry run, a full silent build and `dead_air.py`, then the
+  narrated build (`python tools/make.py quant1 --cpu-voice -q m`).
 
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
    time on CPU, so not in a 4-core cloud container): `python tools/make.py quant10` (English and Chinese, 1080p30),
    or `tools/colab_narrate.py` on a Colab GPU. Then `tools/dead_air.py` on the narrated cut.
-2. Review with the user; lock the standard; then Part 1.
+2. Parts 2 and 3 (Act I), then Act II (Parts 4-8), following SYLLABUS.md section 6.
 3. Phase 0 remainder: `qa_report.py` and `package_uploads.py` still list only the AI series.
