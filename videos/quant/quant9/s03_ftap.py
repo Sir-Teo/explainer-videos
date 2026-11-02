@@ -23,8 +23,7 @@ class FTAP(VoiceoverScene):
     def cone(self):
         S = np.array([80.0, 100.0, 125.0])
         D = np.vstack([np.ones(3), S])
-        g = axes([0, 1.4], [0, 150], x_length=5.6, y_length=5.0, xlabel=r"pays in bonds", ylabel=r"pays in stock "
-                 r"units (\$)", xticks=[0, 0.5, 1.0], yticks=[0, 50, 100, 150], font_size=17)
+        g = axes([0, 1.4], [0, 150], x_length=5.6, y_length=5.0, xlabel=r"pays in bonds", ylabel=r"the stock pays", xticks=[0, 0.5, 1.0], yticks=[0, 50, 100, 150], font_size=17)
         g.to_edge(LEFT, buff=0.9).shift(DOWN * 0.2)
         ax = g.ax
         o = ax.c2p(0, 0)
@@ -36,15 +35,17 @@ class FTAP(VoiceoverScene):
                                                                                                  buff=0.1)
                          for i, s in enumerate(S)])
         p_ok = Dot(ax.c2p(1, 100), radius=0.09, color=CALL)
-        ok_l = label(r"prices: bond 1, stock 100", font_size=19, color=CALL).next_to(p_ok, LEFT, buff=0.15)
+        ok_l = label(r"price: 100", font_size=19, color=CALL).next_to(p_ok, LEFT, buff=0.35).shift(DOWN * 0.15)
         bad = A.ftap(D, [1.0, 130.0])
         th = bad["theta"]
         p_bad = Dot(ax.c2p(1, 130), radius=0.09, color=ARB)
-        bad_l = label(r"stock at 130", font_size=19, color=ARB).next_to(p_bad, LEFT, buff=0.15)
-        # the separating hyperplane through the origin: theta . x = 0, i.e. y = -theta_b / theta_s x
-        slope = -th[0] / th[1]
-        sep = DashedLine(o, ax.c2p(150 / slope, 150) if slope > 150 / 1.4 else ax.c2p(1.4, slope * 1.4), color=ARB,
-                         stroke_width=3)
+        bad_l = label(r"price: 130", font_size=19, color=ARB).next_to(p_bad, LEFT, buff=0.35).shift(UP * 0.1)
+        # a strictly separating line through the origin, between the cone's upper edge (slope 125) and the price
+        # (slope 130); the LP's portfolio is its normal, up to scale
+        slope = 127.5
+        sep = Line(o, ax.c2p(150 / slope, 150), color=ARB, stroke_width=4)
+        sep_l = label(r"separating hyperplane", font_size=18, color=ARB).next_to(ax.c2p(150 / slope, 150), RIGHT,
+                                                                                buff=0.1)
         side = VGroup(
             MathTex(r"p = \sum_j \psi_j\, d_j,\quad \psi_j > 0", font_size=34, color=Q_C),
             wrapped_label(r"no arbitrage $\iff$ the price vector lies inside the cone spanned by the states' payoff "
@@ -53,8 +54,8 @@ class FTAP(VoiceoverScene):
                           r"with negative cost and non-negative payoff in every state", 4.6, 21, ARB),
             MathTex(rf"\theta = ({th[0]:+.2f}\ \text{{bonds}},\ {th[1]:+.4f}\ \text{{stock}})", font_size=28,
                     color=ARB),
-            MathTex(rf"\text{{cost }} {bad['cost']:+.3f},\ \text{{payoffs }} " + ",\\ ".join(f"{v:.2f}" for v in
-                                                                                         bad["payoff"]),
+            MathTex(rf"\text{{cost }} {bad['cost']:+.3f},\ \text{{payoffs }} " + ",\\ ".join(f"{abs(v) if abs(v) < 5e-3 else v:.2f}"
+                                                                                         for v in bad["payoff"]),
                     font_size=26, color=ARB),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
@@ -75,7 +76,7 @@ class FTAP(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(cone), FadeIn(p_ok), FadeIn(ok_l), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("b")
-            self.play(FadeIn(p_bad), FadeIn(bad_l), Create(sep))
+            self.play(FadeIn(p_bad), FadeIn(bad_l), Create(sep), FadeIn(sep_l))
             vo.wait_until("c")
             self.play(FadeIn(side[2]), FadeIn(side[3]), FadeIn(side[4]))
         self.wait(0.4)

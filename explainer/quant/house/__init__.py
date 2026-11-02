@@ -22,10 +22,12 @@ explicitly (``from explainer.quant.house import bs, hedge``).
 * :mod:`arbitrage` (Part 9, research): the FTAP by linear programming, super-replication, static checks on a
   surface, martingale optimal transport bounds, Ross recovery;
 * :mod:`bs` (Part 10, the volatility desk): Black–Scholes–Merton prices, Greeks, Black-76, implied volatility;
+* :mod:`quoting` (Part 11, the volatility desk): option books as Greeks, strategy P&L surfaces, implied
+  correlation, inventory-skewed quotes, Whalley-Wilmott hedging bands;
 * :mod:`trees` (Part 10): Cox–Ross–Rubinstein trees, American exercise and its boundary;
 * :mod:`paths` (Parts 5, 10, 13): GBM and Heston paths, realized volatility;
 * :mod:`hedge` (Part 10): the delta-hedged book and its P&L decomposition;
 * :mod:`surface` (Parts 1, 10, 12): the frozen options surface (the series' pricing scoreboard).
 """
 
-from explainer.quant.house import arbitrage, bs, control, econ, fundamentals, funding, hedge, martingale, sim, vol, paths, pit, smile, stats, surface, trees, valuation  # noqa: F401
+from explainer.quant.house import arbitrage, bs, control, econ, fundamentals, funding, hedge, martingale, sim, vol, paths, pit, quoting, smile, stats, surface, trees, valuation  # noqa: F401

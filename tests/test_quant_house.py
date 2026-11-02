@@ -566,3 +566,34 @@ def test_arbitrage_ross_recovery():
     P = delta * pi * (c[None, :] / c[:, None]) ** (-gamma)
     out = A.ross_recovery(P)
     assert abs(out["delta"] - delta) < 1e-10 and np.allclose(out["F"], pi)
+
+
+# ---------------------------------------------------------------------------
+# Part 11: quoting
+# ---------------------------------------------------------------------------
+def test_quoting_book_and_surfaces():
+    from explainer.quant.house import bs as B, quoting as Q
+    st = Q.strategies(100.0, 0.25)
+    g = Q.book_greeks(st["straddle"], 100.0, 0.2)
+    assert abs(g["delta"]) < 0.06 and g["gamma"] > 0 and g["vega"] > 0 and g["theta"] < 0
+    rr = Q.book_greeks(st["risk reversal"], 100.0, 0.2)
+    assert rr["delta"] > 0 and abs(rr["vega"]) < 0.25 * g["vega"]
+    surf = Q.pnl_surface(st["straddle"], 100.0, 0.2, [-0.1, 0.0, 0.1], [-0.05, 0.0, 0.05], 1 / 365)
+    assert surf[1, 1] < 0 < surf[1, 0] and surf[2, 1] > 0  # theta bleeds at rest; moves and vol pay
+    # implied correlation: two equal stocks of 30% vol at weight 1/2, index at 30% means correlation 1
+    assert abs(Q.implied_correlation(0.3, [0.5, 0.5], [0.3, 0.3]) - 1.0) < 1e-12
+    assert abs(Q.implied_correlation(0.3 / np.sqrt(2), [0.5, 0.5], [0.3, 0.3])) < 1e-12
+    q = Q.quote(0.5, inventory_vega=10, half_spread=0.01, skew_per_vega=0.001)
+    assert q["mid"] < 0.5 and q["ask"] - q["bid"] > 0.019
+
+
+def test_quoting_band_hedging_costs():
+    from explainer.quant.house import quoting as Q
+    g = np.random.default_rng(5)
+    n, paths = 250, 2000
+    t = np.linspace(0, 1.0, n + 1)
+    z = g.standard_normal((paths, n))
+    S = 100 * np.exp(np.column_stack([np.zeros(paths), np.cumsum(-0.02 * (1 / n) + 0.2 * np.sqrt(1 / n) * z, axis=1)]))
+    every = Q.hedge_with_band(t, S, 100, 1.0, 0.2, cost=0.002, band_half=0.0)
+    band = Q.hedge_with_band(t, S, 100, 1.0, 0.2, cost=0.002, band_half=None, gamma_risk=1.0)
+    assert band["cost"].mean() < every["cost"].mean() and band["trades"].mean() < every["trades"].mean()
