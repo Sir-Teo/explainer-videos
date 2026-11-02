@@ -13,7 +13,7 @@ class Samuelson(VoiceoverScene):
         self.ergodic(load("ergodic"))
 
     def card(self):
-        c = chapter_card(5, r"Samuelson's objection, and ergodicity", r"Should everyone maximize growth?", lit=(1979,),
+        c = chapter_card(5, r"Samuelson's objection, and ergodicity", r"Should everyone maximize growth?",
                          part=PART)
         with self.voiceover("Chapter five. Samuelson's objection, and ergodicity."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))

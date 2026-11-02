@@ -9,4 +9,10 @@ SCENES = [
     ("s04_merton", "Merton", "3. Merton's problem"),
     ("s05_kelly", "Kelly", "4. Kelly, fractional Kelly and Thorp"),
     ("s06_samuelson", "Samuelson", "5. Samuelson's objection, and ergodicity"),
+    ("s07_ltcm", "LTCM", "6. Leverage beyond Kelly: LTCM, 1998"),
+    ("s08_stopping", "Stopping", "7. Optimal stopping"),
+    ("s09_behaviour", "Behaviour", "8. How people decide: prospect theory and ambiguity"),
+    ("s10_frontier", "Frontier", "9. Frontiers: BSDEs, mean-field games, reinforcement learning"),
+    ("s11_house", "House", "10. The sizing module"),
+    ("s12_outro", "Outro", "Recap, desk questions, problems"),
 ]
