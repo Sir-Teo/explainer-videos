@@ -4,7 +4,6 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant9.common import ALT, ARB, CALL, FWD, PART, PUT, Q_C, load, real_data
-from videos.quant.quant9.s07_ross import heat
 
 
 class MOT(VoiceoverScene):
@@ -59,14 +58,22 @@ class MOT(VoiceoverScene):
         md = Line(ax.c2p(model, 0.15), ax.c2p(model, 0.85), color=CALL, stroke_width=5)
         ml = MathTex(rf"\text{{log-normal: }} {model:.3f}", font_size=24, color=CALL).next_to(md, DOWN, buff=0.45)
         pl, pu = np.asarray(m["pi_lower"]), np.asarray(m["pi_upper"])
-        hi = max(pl.max(), pu.max()) ** 0.5
-        h1 = heat(np.sqrt(pl), size=0.07, lo=0, hi=hi)
-        h2 = heat(np.sqrt(pu), size=0.07, lo=0, hi=hi)
-        b1 = VGroup(label(r"the cheapest joining", font_size=19, color=GREY_A), h1).arrange(DOWN, buff=0.12)
-        b2 = VGroup(label(r"the dearest joining", font_size=19, color=GREY_A), h2).arrange(DOWN, buff=0.12)
-        hb = VGroup(b1, b2).arrange(RIGHT, buff=0.6).to_edge(DOWN, buff=0.6).to_edge(LEFT, buff=0.8)
-        axes_note = label(r"rows: price at the first expiry; columns: at the second", font_size=17, color=GREY_B).next_to(
-            hb, DOWN, buff=0.1).align_to(hb, LEFT)
+        x, y = np.asarray(m["x"]), np.asarray(m["y"])
+        top = max(pl.max(), pu.max())
+
+        def coupling(pi, title):
+            ga = axes([0.5, 1.6], [0.3, 2.2], x_length=3.0, y_length=2.6, xlabel=r"$S_1 / F_1$", ylabel=r"$S_2 / F_2$",
+                      xticks=[0.6, 1.0, 1.4], yticks=[0.5, 1.0, 1.5, 2.0], font_size=14)
+            dots = VGroup(*[Dot(ga.ax.c2p(x[i], y[j]), radius=0.11 * np.sqrt(pi[i, j] / top), color=Q_C).set_opacity(0.85)
+                            for i in range(len(x)) for j in range(len(y)) if pi[i, j] > 1e-5 and 0.5 < x[i] < 1.6
+                            and 0.3 < y[j] < 2.2])
+            diag = DashedLine(ga.ax.c2p(0.5, 0.5), ga.ax.c2p(1.6, 1.6), color=GREY_C, stroke_width=1.2)
+            return VGroup(label(title, font_size=19, color=GREY_A), VGroup(ga, diag, dots)).arrange(DOWN, buff=0.1)
+
+        hb = VGroup(coupling(pl, r"the cheapest joining"), coupling(pu, r"the dearest joining")).arrange(RIGHT, buff=0.6)
+        hb.to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.8)
+        axes_note = label(r"dot area: probability of each pair of prices", font_size=17, color=GREY_B).next_to(
+            hb, UP, buff=0.05).align_to(hb, LEFT)
         side = VGroup(
             label(r"$|S_2 / S_1 - 1|$ between the Surface's two expiries", font_size=21, color=GREY_A),
             wrapped_label(rf"no arbitrage and today's vanilla prices pin it between {lo:.3f} and {up:.3f}; a model "

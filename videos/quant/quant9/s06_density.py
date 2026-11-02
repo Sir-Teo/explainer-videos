@@ -62,8 +62,9 @@ class Density(VoiceoverScene):
             ok3 = (K > 30000) & (K < 180000)
             dens.add(curve(g2.ax, K[ok3], np.asarray(e["density"])[ok3] / top, c, stroke_width=3.5))
         leg = legend([(ALT, rf"{a['expiry']}: {a['T'] * 365:.0f} days"), (Q_C, rf"{b['expiry']}: {b['T'] * 365:.0f} days")],
-                     font_size=19).next_to(g1, UP, buff=0.1).align_to(g1, LEFT)
+                     font_size=19)
         side = VGroup(
+            leg,
             wrapped_label(r"each expiry's quotes fitted by SVI (Part 1), then differentiated twice", 4.4, 20, GREY_A),
             MathTex(rf"{a['T'] * 365:.0f}\text{{ days: down 20\%: }} {100 * a['p_down20']:.1f}\%,\ \text{{up 20\%: }} "
                     rf"{100 * a['p_up20']:.1f}\%", font_size=25, color=ALT),
@@ -90,12 +91,12 @@ class Density(VoiceoverScene):
             "passes both expiries: no negative butterflies, no calendar arbitrage. And a reminder: Q weights the "
             "crash states more heavily than their real chances. It is a price, not a forecast."
         ) as vo:
-            self.play(FadeIn(g1), FadeIn(leg), FadeIn(src), FadeIn(dots), Create(smiles), FadeIn(side[0]), run_time=2.5)
+            self.play(FadeIn(g1), FadeIn(side[0]), FadeIn(src), FadeIn(dots), Create(smiles), FadeIn(side[1]), run_time=2.5)
             vo.wait_until("a")
             self.play(FadeIn(g2), Create(dens), run_time=2.5)
             vo.wait_until("b")
-            self.play(FadeIn(side[1]), FadeIn(side[2]), FadeIn(side[3]))
+            self.play(FadeIn(side[2]), FadeIn(side[3]), FadeIn(side[4]))
             vo.wait_until("c")
-            self.play(FadeIn(side[4]), FadeIn(side[5]))
+            self.play(FadeIn(side[5]), FadeIn(side[6]))
         self.wait(0.4)
         self.clear_scene()

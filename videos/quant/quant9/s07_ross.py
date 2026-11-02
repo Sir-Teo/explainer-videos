@@ -65,11 +65,13 @@ class Ross(VoiceoverScene):
     def economies(self, r):
         pi, rec, rec2 = (np.asarray(r[k]) for k in ("pi", "recovered", "recovered2"))
         hi = max(pi.max(), rec2.max())
-        h1, h2, h3 = (heat(M, size=0.3, lo=0, hi=hi) for M in (pi, rec, rec2))
-        tl = [label(t, font_size=20, color=c) for t, c in ((r"the truth", GREY_A), (r"recovered: Ross's world", CALL),
-                                                          (r"recovered: with permanent shocks", ARB))]
-        blocks = VGroup(*[VGroup(t_, h).arrange(DOWN, buff=0.15) for t_, h in zip(tl, (h1, h2, h3))])
-        blocks.arrange(RIGHT, buff=0.7).to_edge(UP, buff=0.6)
+        h1, h2, h3 = (heat(M, size=0.27, lo=0, hi=hi) for M in (pi, rec, rec2))
+        h4 = heat(np.abs(rec2 - pi), size=0.27, lo=0, hi=np.abs(rec2 - pi).max(), color_hi=ARB)
+        tl = [label(t, font_size=19, color=c) for t, c in ((r"the truth", GREY_A), (r"recovered: Ross's world", CALL),
+                                                          (r"recovered: permanent shocks", ARB),
+                                                          (r"its error, magnified", ARB))]
+        blocks = VGroup(*[VGroup(t_, h).arrange(DOWN, buff=0.15) for t_, h in zip(tl, (h1, h2, h3, h4))])
+        blocks.arrange(RIGHT, buff=0.5).to_edge(UP, buff=0.6)
         sub = label(r"transition probabilities between 9 states of the economy (rows: today, columns: tomorrow)",
                     font_size=19, color=GREY_B).next_to(blocks, DOWN, buff=0.2)
         side = VGroup(
@@ -98,7 +100,7 @@ class Ross(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(blocks[1]), FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(FadeIn(blocks[2]), FadeIn(side[1]), FadeIn(side[2]))
+            self.play(FadeIn(blocks[2]), FadeIn(blocks[3]), FadeIn(side[1]), FadeIn(side[2]))
             vo.wait_until("c")
             self.play(FadeIn(side[3]))
         self.wait(0.4)
