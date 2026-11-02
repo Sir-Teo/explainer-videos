@@ -29,7 +29,9 @@
     "Modern policy optimization": "现代策略优化",
     "hand-built evaluation was a bottleneck:": "手工设计的估值是一个瓶颈：",
     "policy improvement with few simulations, assuming correct action values": "在动作价值正确的前提下，用少量模拟改进策略",
-    "top: column; bottom: visits": "上：列号；下：访问次数"
+    "top: column; bottom: visits": "上：列号；下：访问次数",
+    "largest absolute $Q$ value \\ (log scale)": "最大的 $Q$ 值绝对值（对数坐标）",
+    "computed: $5$ DQN runs; replay: best average near the end": "计算所得：$5$次DQN运行；回放训练末段平均成绩最好的一次"
   },
   "patterns": [
     [
