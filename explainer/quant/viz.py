@@ -251,7 +251,7 @@ def lab_card(title: str, lines, source: str = "", width: float = 6.6, font_size=
     return card
 
 
-def lab_run(scene, card: VGroup, outputs, font_size=19, color=None, run_time=1.6, direction=DOWN):
+def lab_run(scene, card: VGroup, outputs, font_size=19, color=None, run_time=1.6, direction=DOWN, aligned_edge=None):
     """Run the lab: a "run" marker, then the output lines typed one after another under (or beside) the card.
     ``outputs`` are strings (mono text) or ready mobjects (a small plot, a number)."""
     color = color or QC.GAIN
@@ -265,7 +265,9 @@ def lab_run(scene, card: VGroup, outputs, font_size=19, color=None, run_time=1.6
             r.scale(getattr(card, "text_scale", 1.0))
     out = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
     out.next_to(card, direction, buff=0.25)
-    if direction is DOWN:
+    if aligned_edge is not None:
+        out.align_to(card, aligned_edge)
+    elif direction is DOWN:
         out.align_to(card, LEFT)
     keep_in_frame(out)
     card.out = out

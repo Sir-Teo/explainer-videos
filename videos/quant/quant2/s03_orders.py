@@ -141,9 +141,9 @@ class Orders(VoiceoverScene):
         concave = W.mean(0)[-1] < uni[-1]
         walk_note = ("the front is thin and deeper levels thicker, so cost bends: impact is concave, as in real books."
                      if concave else "the formula understates the cost: the book thins out behind the front.")
-        verdict = label(r"real books thicken behind the best quote: impact is concave (Part 37)" if concave else
-                        r"this book is thin behind the best quote: impact is steeper than linear", font_size=21,
-                        color=QC.IDEA).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
+        verdict = wrapped_label(r"real books thicken behind the best quote: impact is concave (Part 37)" if concave else
+                                r"this book is thin behind the best quote: impact is steeper than linear",
+                                6.6 - leg.get_left()[0], 21, QC.IDEA).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
         with self.voiceover(
             f"What does impatience cost? Say every tick above the best ask holds d shares. A market buy of Q shares takes the "
             f"best level first, then the next: price priority. It fills Q over d levels. <bookmark mark='a'/> The prices form "
