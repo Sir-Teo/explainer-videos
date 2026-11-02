@@ -315,6 +315,24 @@ Facts checked:
   - forward variance: Sat 13 - Sun 14 Dec priced at 32% vol; Saturdays realized 29% vs 54% weekdays (2024-25 hourly).
 - **Built** (compute, 11 scenes, README EN/ZH, zh_lines 46/46). Remaining: on-screen text, dry runs, previews, build.
 
+## Part 14 (Rough and Path-Dependent Volatility), 2 Nov 2026
+
+- **House** `rough.py` (tested): rBergomi hybrid scheme (FFT convolution), rough Heston by fractional Adams (reduces
+  to Heston at H = 1/2 to 1e-6; frequencies with |phi| < e^-40 are skipped, where explicit Adams is unstable), the
+  lifted Heston (Abi Jaber-El Euch weights), the GJR log-RV scaling estimator, Guyon-Lekeufack PDV.
+- **Results.**
+  - skew: power law T^-0.49 (H ~ 0.01); bounded (T + 21 d)^-0.88 fits better (log error 0.19 vs 0.23).
+  - BTC roughness (5-min RV, 700 days): H 0.08; 0.12 without the weekday pattern. Estimator on fBm: 0.1 -> 0.09,
+    0.3 -> 0.31, 0.5 -> 0.50, but 0.05 -> 0.015.
+  - smooth models through the same lens: 10-day log-OU 0.38; 1 + 60 day 0.42; 5-hour 0.02.
+  - rBergomi (175 quotes <= 200 d, 20k paths, CRN, fresh-path repricing): H 0.03, eta 2.0, rho -0.56, error 0.83 vs
+    Heston 1.37 on the same quotes; skew tracks the market 4-200 d, misses 3 d.
+  - rough Heston free: H 0.45, nu 4.5, lambda 16, error 1.28 (Heston-like). Held: H 0.05 2.25, 0.1 1.49 (nu 1.0,
+    lambda 2.0), 0.2 1.41.
+  - lift (H 0.1, 30-day smile): N 1 4.7, 10 1.1, 20 0.57, 50 0.26 vol points.
+  - PDV on DVOL (fit 2021-23): R^2 0.88 in, 0.42 out; baseline 0.68, -0.27; activity 18.7 vs trend 0.9 vol pts.
+- **Built** (compute, 12 scenes, README EN/ZH, zh_lines 40/40). Remaining: on-screen text, dry runs, build.
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
