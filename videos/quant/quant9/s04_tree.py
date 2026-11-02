@@ -68,12 +68,12 @@ class Tree(VoiceoverScene):
             if hi - lo < 1e-6:
                 bars.add(Dot(ax.c2p(i + 0.5, lo), radius=0.08, color=CALL))
             else:
-                bars.add(tbar(ax, i + 0.5, hi, ALT, width=0.45, lo=lo))
+                bars.add(tbar(ax, i + 0.5, hi, ALT, width=0.45, lo=lo).set_fill(opacity=0.55))
             labs.add(label(f"{r_['states']}", font_size=19, color=GREY_A).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.1))
         xl = label(r"states tomorrow", font_size=18, color=GREY_B).next_to(labs, DOWN, buff=0.15)
         bsl = DashedLine(ax.c2p(0, inc["bs"]), ax.c2p(len(rows), inc["bs"]), color=CALL, stroke_width=2)
-        bsll = label(rf"a model's price (Black--Scholes, 20\% vol): {inc['bs']:.3f}", font_size=18, color=CALL).next_to(
-            bsl, UP, buff=0.05).align_to(bsl, RIGHT)
+        bsll = wrapped_label(rf"dashed: one model's price inside the interval (Black--Scholes at 20\% vol): "
+                             rf"{inc['bs']:.3f}; the dot: two states, where the price is forced", 4.4, 19, CALL)
         side = VGroup(
             MathTex(r"\overline{p} = \min_\theta\ \theta\cdot p\ \ \text{s.t.}\ \ D^\top\theta \ge X", font_size=30,
                     color=ALT),
@@ -85,6 +85,7 @@ class Tree(VoiceoverScene):
             wrapped_label(r"the interval never shrinks as states are added; trading the call itself, or choosing a "
                           r"model, picks a price inside it", 4.4, 20, Q_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
+        bsll.next_to(side, DOWN, buff=0.25).align_to(side, LEFT)
         with self.voiceover(
             "That works because the tree has exactly two branches. Give the stock three possible outcomes tomorrow, "
             "with still only the stock and the bond to trade, and the market is incomplete: a call can no longer "

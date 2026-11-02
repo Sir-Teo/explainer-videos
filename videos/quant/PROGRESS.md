@@ -240,6 +240,36 @@ Facts checked:
 - Melvin: $2.75bn and -53% (Reuters).
 - The Robinhood box-spread ban (2019) and its quote. The loss figure is disputed and not used.
 
+## Part 11 (Trading Options): facts checked, 2 Nov 2026, before building
+
+- **SEBI v Jane Street.** An ex-parte interim order dated 3 July 2025 impounded about Rs 4,843.57 crore of alleged
+  "unlawful gains". The firm deposited it in escrow and was then allowed to resume. SEBI alleges that on Bank Nifty
+  expiry days the firm bought constituents (cash and futures) in the morning to support the index while building
+  short exposure in options, then sold futures and stocks after noon to drag the index down. Reports cite various
+  counts of expiry days. Jane Street disputes the findings. Describe all of this as *alleged*.
+- **SEBI F&O studies.**
+  - Sept 2024: 91.1% of individual traders lost money in FY24 (about 7.3 million), with net losses of about Rs
+    75,000 crore in FY24 and Rs 1.81 lakh crore over FY22-24.
+  - July 2025: FY25 losses were Rs 1,05,603 crore (+41%), and 91% lost money.
+- **SEBI circular of 1 Oct 2024**, effective 20 Nov 2024:
+  - each exchange may offer weekly expiry on only one benchmark index (NSE keeps the Nifty 50, BSE the Sensex);
+  - the minimum contract size rises to Rs 15 lakh;
+  - a 2% extreme-loss margin applies to short options on expiry day;
+  - intraday position monitoring follows in 2025.
+- **Firm founding dates.** SIG 1987 (months before Black Monday); Optiver 1986, Amsterdam; IMC 1989, Amsterdam. Jane
+  Street's founding year is reported as 1999 or 2000. The claim that SIG trains traders with poker is not yet sourced.
+- **House** `quoting.py` (tested): books, P&L surfaces, implied correlation, quotes, Whalley-Wilmott bands.
+- **Plan:**
+  - a straddle scalped on BTC (hourly, with DVOL);
+  - strategy P&L surfaces;
+  - the VRP with a HAR forecast edge (register it);
+  - pin risk;
+  - market-maker inventory;
+  - realized-correlation dispersion on French industries;
+  - SEBI numbers;
+  - a toy model of the alleged mechanics (labelled);
+  - deep hedging against WW bands (torch, one thread).
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
