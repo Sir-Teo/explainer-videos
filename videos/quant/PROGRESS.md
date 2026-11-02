@@ -270,6 +270,24 @@ Facts checked:
     first residual-on-delta version, trained 250 steps, was worse than the bands.
   - Remaining: previews QA, on-screen text, dry run, build.
 
+## Part 12 (The Volatility Surface), 2 Nov 2026
+
+- **Data.** The Surface (Deribit trades, 10 and 11 Dec 2025) and 100 weekly surfaces (Wednesdays, 3 Jan 2024 to
+  26 Nov 2025, 00:00-12:00 UTC trades), checksummed in `data/manifest.json`. Binance hourly; Deribit DVOL; FRED VIXCLS.
+- **Facts checked.** VIX 17.31 -> 37.32 on 5 Feb 2018 (+116%, its largest one-day rise); XIV lost more than 90% and
+  Credit Suisse announced its redemption. SSVI calendar condition from Gatheral-Jacquier (2014), Theorem 4.1.
+  Baltussen et al. (2021) intraday momentum across about 60 markets since 1974; 0DTE above 40% of SPX option volume.
+- **House** `volsurface.py` (tested): SSVI, g-function, Dupire local variance, variance-swap strike, VIX recipe.
+- **Built** (compute, 9 scenes, README EN/ZH, zh_lines 33/33). Results:
+  - SSVI fits to 0.74 vol points (vega-weighted), rho -0.23; min g 0.075 (SVI) and 0.26 (SSVI).
+  - sticky test: sticky moneyness misses next-day quotes by 2.6 vol points, sticky strike by 3.0.
+  - local vol: 30-day forward smile 60 days out has skew 2.6 points against 6.5 today.
+  - variance swap 48.8% against ATM 43.7%; our VIX recipe 48.8% against DVOL 45.9%.
+  - VRP: 54% implied against 47.6% realized, positive 76% of weeks, Newey-West t 3.6; SVIX bound 31% a year.
+  - VAE (2-d latent, CPU): rebuilds to 1.9 vol points; corr(z1, ATM) 0.96, corr(z2, skew) -0.39.
+  - No strategy tested; trials stay at 73.
+  - Remaining: previews QA, on-screen text, dry run, build.
+
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real

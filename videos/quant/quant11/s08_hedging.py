@@ -76,7 +76,8 @@ class Hedging(VoiceoverScene):
             lines.add(VMobject(stroke_color=col, stroke_width=2.5).set_points_as_corners([ax.c2p(*p) for p in pts])
                       if len(pts) > 1 else VGroup())
         leg = legend([(GREY_B, r"rehedge every 6 hours"), (ALT, r"fixed bands"), (VEGA, r"Whalley--Wilmott bands"),
-                      (GAMMA, r"a learned hedger (deep hedging)")], font_size=18).next_to(g, UP, buff=0.1).align_to(g, LEFT)
+                      (GAMMA, r"a learned hedger (deep hedging)")], font_size=18)
+        leg.move_to(ax.c2p(0.32, 1.32)).align_to(ax.c2p(0.26, 0), LEFT)
         dh = [r_ for r_ in rows if r_["rule"] == "deep hedge"]
         side = VGroup(
             wrapped_label(r"each point: a short 30-day option on 20{,}000 simulated paths (5{,}000 held out for the "
