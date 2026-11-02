@@ -77,7 +77,7 @@ ZH = {
         "训练从多得多的片段开始：文本里最常见的子串，第一轮之后有{n0:,}个。<bookmark mark='a'/>然后是期望最大化，第7部分的EM：对每个词的每一种切法求和，算出每个片段预计被用到几次，再按比例设定它的概率。<bookmark mark='b'/>接着剪枝：对每个片段，算一算没有它时似然会下降多少，保留最重要的四分之三，以及每一个单字母，然后重复。<bookmark mark='c'/>这是模型自己对小说的度量，以每字符比特数计，随着词表缩小而变化：词表越小，代价越多，从第一轮到{sizes[-1]:,}个片段，一共多了{y[-1] - y[0]:.2f}比特。",
 
     'f"How different are the two?':
-        "两者差别有多大？<bookmark mark='a'/>各用{V:,}个片段，在测试段落上，{verdict}：BPE每个词元{cpb:.2f}个字符，一元模型{cpu:.2f}个，有{differ:.0f}%的词切法不同。<bookmark mark='b'/>一元模型还可以随机采样切法，而不总取最好的，这样训练中的模型会看到同一个词的好几种写法；工藤拓称之为子词正则化。<bookmark mark='c'/>他的SentencePiece库能在原始文本上运行这两种方法，把空格也当作一个普通符号，T5、前两代Llama和Gemma都用它来切分文本。",
+        "两者差别有多大？<bookmark mark='a'/>各用{V:,}个片段，在测试段落上，{verdict}：BPE每个词元{cpb:.2f}个字符，一元模型{cpu:.2f}个，有{differ:.0f}%的词在两种方法下词元数量不同。<bookmark mark='b'/>一元模型还可以随机采样切法，而不总取最好的，这样训练中的模型会看到同一个词的好几种写法；工藤拓称之为子词正则化。<bookmark mark='c'/>他的SentencePiece库能在原始文本上运行这两种方法，把空格也当作一个普通符号，T5、前两代Llama和Gemma都用它来切分文本。",
 
     "the unigram model's tokens are a little longer":
         "一元模型的词元稍长一些",

@@ -348,8 +348,8 @@ STRINGS = {
     r"Whisper's input: \ $80$ log-mel bands every $10$ ms \ (``We knew you weren't home at three-thirty.'')": r"Whisper的输入：\ 每$10$ ms $80$个对数梅尔频带 \ （“We knew you weren't home at three-thirty.”）",
     r"cuts of ``armchair'' \ (learned probabilities{,} \ $4{,}096$ pieces)": r"“armchair”的切法 \ （学到的概率，\ $4{,}096$个片段）",
     r"arcs: \ every piece of ``cigarette'' among the $1{,}024${,} \ thicker = more probable": r"弧：\ $1{,}024$个片段中“cigarette”的每个片段，\ 越粗越可能",
-    r"$4{,}096$ pieces: \ $3.54$ (BPE) \ and \ $3.46$ (unigram) characters a token; \ $15\%$ of the words cut differently": r"$4{,}096$个片段：\ 每个词元$3.54$（BPE）\ 和 \ $3.46$（一元模型）个字符；\ $15\%$的词切法不同",
-    r"$1{,}024$ pieces: \ $2.74$ (BPE) \ and \ $2.64$ (unigram) characters a token; \ $22\%$ of the words cut differently": r"$1{,}024$个片段：\ 每个词元$2.74$（BPE）\ 和 \ $2.64$（一元模型）个字符；\ $22\%$的词切法不同",
+    r"$4{,}096$ pieces: \ $3.54$ (BPE) \ and \ $3.46$ (unigram) characters a token; \ $15\%$ of the words have different token counts": r"$4{,}096$个片段：\ 每个词元$3.54$（BPE）\ 和 \ $3.46$（一元模型）个字符；\ $15\%$的词在两种方法下词元数量不同",
+    r"$1{,}024$ pieces: \ $2.74$ (BPE) \ and \ $2.64$ (unigram) characters a token; \ $22\%$ of the words have different token counts": r"$1{,}024$个片段：\ 每个词元$2.74$（BPE）\ 和 \ $2.64$（一元模型）个字符；\ $22\%$的词在两种方法下词元数量不同",
     r"VQ: \ $101$ codes used": r"VQ：\ 用了$101$个码",
     r"EMA + restarts: \ $255$ codes used": r"EMA + 重启：\ 用了$255$个码",
     # ---- Whisper
@@ -609,8 +609,8 @@ PATTERNS = [
     (r"^arcs: \\ every piece of ``cigarette'' among the \$([\d{},]+)\$\{,\} \\ thicker = more probable$", r"弧：\\ $\1$个片段中“cigarette”的每个片段，\\ 越粗越可能"),
     (r"^\$([\d{},]+)\$: \\ \$([\d.]+)\$$", r"$\1$：\\ $\2$"),
     (r"^the same sentence\{,\} \\ \$([\d{},]+)\$ pieces each$", r"同一句话，\\ 各用$\1$个片段"),
-    (r"^\$([\d{},]+)\$ pieces: \\ \$([\d.]+)\$ \(BPE\) \\ and \\ \$([\d.]+)\$ \(unigram\) characters a token; \\ \$(\d+)\\%\$ of the words cut differently$",
-     r"$\1$个片段：\\ 每个词元$\2$（BPE）\\ 和 \\ $\3$（一元模型）个字符；\\ $\4\\%$的词切法不同"),
+    (r"^\$([\d{},]+)\$ pieces: \\ \$([\d.]+)\$ \(BPE\) \\ and \\ \$([\d.]+)\$ \(unigram\) characters a token; \\ \$(\d+)\\%\$ of the words have different token counts$",
+     r"$\1$个片段：\\ 每个词元$\2$（BPE）\\ 和 \\ $\3$（一元模型）个字符；\\ $\4\\%$的词在两种方法下词元数量不同"),
     # VQ
     (r"^VQ: \\ \$(\d+)\$ codes used$", r"VQ：\\ 用了$\1$个码"),
     (r"^EMA \+ restarts: \\ \$(\d+)\$ codes used$", r"EMA + 重启：\\ 用了$\1$个码"),
@@ -658,8 +658,8 @@ STRINGS.update({
     r"RMSE per pixel, \ evaluation patches": r"每像素均方根误差，\ 评估小块",
     r"$n_k$ non-overlapping replacements: \\ two symbols become one, \ each time":
         r"$n_k$次互不重叠的替换：\\ 每次两个符号变成一个",
-    r"BPE ranks pair counts, \ including overlaps; \\ actual savings can be smaller":
-        r"BPE按包含重叠的对数排序；\\ 实际节省可能较少",
+    r"BPE ranks pair counts, \\ including overlaps; \\ actual savings can be smaller":
+        r"BPE按相邻对计数排序；\\ 包含重叠；\\ 实际节省可能较少",
     r"the codebook is the grid \ ($4 \times 4$, \ schematic)": r"码本就是网格 \ （$4 \times 4$，\ 示意）",
     r"four levels: \ squash, \ shift, \ then round; \\ the gradient goes straight through":
         r"四级：\ 压缩，\ 偏移，\ 再舍入；\\ 梯度直接穿过",
