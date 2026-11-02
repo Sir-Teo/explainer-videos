@@ -53,7 +53,7 @@ class Outro(VoiceoverScene):
             (rf"an American put pinned between {a['lsm']:.3f} and {a['ab'][-1]['upper']:.3f}", DELTA),
             (rf"AAD: every Greek for {g['aad_ratio']:.1f} times one price", DELTA),
             (r"Crank--Nicolson needs Rannacher's start; the explicit scheme can explode", BAD),
-            (r"ADI prices Heston on a grid, at second order", METHOD_COL["ADI (Craig-Sneyd)"]),
+            (r"ADI prices Heston on a two-dimensional grid in under a second", METHOD_COL["ADI (Craig-Sneyd)"]),
             (r"for a vanilla, Fourier wins by orders of magnitude; simulation for everything else", METHOD_COL["COS"]),
         ]
         rows = VGroup()

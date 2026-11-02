@@ -32,9 +32,9 @@ from explainer.quant.viz import *  # noqa: F401,F403,E402
 
 def why(text: str, font_size=24) -> Tex:  # noqa: F811
     """The grey 'why this line follows' note of a derivation. Unlike the shared helper, a note too long for one line
-    of the frame wraps onto several instead of shrinking until it is unreadable; a note that fits is unchanged."""
-    from explainer.analysis import MAX_TEXT_WIDTH
-    return wrapped_label(text, MAX_TEXT_WIDTH, font_size=font_size, color=GREY_B)
+    of the frame wraps onto several instead of shrinking until it is unreadable; a note that fits is unchanged. (The
+    limit sits below label's own shrink width, 13.6, which wrapped_label would otherwise read as already fitting.)"""
+    return wrapped_label(text, 12.4, font_size=font_size, color=GREY_B)
 
 
 SERIES_EN = "Quant, Built"
