@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 
-from .compute import load  # noqa: F401
+from .compute import load, read_upstream  # noqa: F401
 
 PART = 31
 MONO = "DejaVu Sans Mono"
@@ -97,12 +97,11 @@ def wrap_data(text: str, chars: int = 46, font_size: int = 20, color=WHITE, max_
 
 
 # ---------------------------------------------------------------------------
-# The final scoreboard: every row the series has computed, read through each part's own compute module (so
-# tools/make.py computes those parts first); a part not yet computed contributes no row, and nothing is computed here
+# The final scoreboard reads restored upstream bytes only. Missing inputs stop the scene;
+# no upstream loader, producer or invented baseline is used as a fallback.
 # ---------------------------------------------------------------------------
-def _result(mod, name: str) -> dict | None:
-    path = mod.CACHE.path(name) if hasattr(mod, "CACHE") else mod.path(name)
-    return mod.load(name) if path.exists() else None
+def _result(mod, name: str) -> dict:
+    return read_upstream(mod, name)
 
 
 def board_rows() -> tuple[list[dict], dict]:
@@ -113,26 +112,8 @@ def board_rows() -> tuple[list[dict], dict]:
     from videos.ai.ai9 import compute as c9
     from videos.ai.ai13 import compute as c13
 
-    sb, raw = _result(c1, "scoreboard"), _result(c1, "raw")
-    if sb:
-        rows = [dict(r) for r in sb["rows"]]
-    else:
-        plain_bits = 8 * raw["n_bytes"] / raw["n_chars"] if raw else 8.0
-        rows = [dict(key="ascii", label="plain text file", bits=plain_bits, part=1, kind="baseline")]
-        if raw:
-            rows += [
-                dict(key="uniform", label=f"uniform over its {raw['passage_symbols']} symbols", bits=raw["uniform"],
-                     part=1, kind="count"),
-                dict(key="order0", label="letter frequencies", bits=raw["rows"][0]["test"], part=1, kind="count"),
-                dict(key="order1", label="the previous character", bits=raw["rows"][1]["test"], part=1, kind="count"),
-                dict(key="gzip", label="gzip", bits=raw["compressors"]["gzip"], part=1, kind="compressor"),
-                dict(key="xz", label="xz", bits=raw["compressors"]["xz"], part=1, kind="compressor"),
-                dict(key="bzip2", label="bzip2", bits=raw["compressors"]["bzip2"], part=1, kind="compressor"),
-                dict(key="best", label=f"the previous {raw['best']} characters", bits=raw["best_bits"], part=1,
-                     kind="count"),
-            ]
-        rows.append(dict(key="human", label="people (Shannon 1951, letters only)", lo=0.6, hi=1.3, part=1,
-                         kind="human"))
+    sb = _result(c1, "scoreboard")
+    rows = [dict(r) for r in sb["rows"]]
     later = []
     kn = _result(c7, "kn")
     if kn:

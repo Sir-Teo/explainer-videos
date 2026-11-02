@@ -393,16 +393,17 @@ def q_learning(env: BoatRace, mode="proxy", episodes=3000, alpha=0.3, gamma=0.98
         if ep == episodes:
             break
         r, c, last = *env.start, 3
-        for _ in range(env.horizon):
+        for t in range(env.horizon):
             s = env.index(r, c, last)
             a = int(g.integers(4)) if g.random() < eps else int(np.argmax(Q[s] + 1e-9 * g.random(4)))
             nr, nc, nl, rew, done = env.step(r, c, last, a)
+            terminal = done or t == env.horizon - 1
             if mode == "sparse":
                 rew = 5.0 if done else 0.0
             elif mode == "shaped":
-                rew = (5.0 if done else 0.0) + (gamma * (0.0 if done else phi(nr, nc)) - phi(r, c))
+                rew = (5.0 if done else 0.0) + (gamma * (0.0 if terminal else phi(nr, nc)) - phi(r, c))
             s2 = env.index(nr, nc, nl)
-            target = rew + (0.0 if done else gamma * Q[s2].max())
+            target = rew + (0.0 if terminal else gamma * Q[s2].max())
             Q[s, a] += alpha * (target - Q[s, a])
             r, c, last = nr, nc, nl
             if done:

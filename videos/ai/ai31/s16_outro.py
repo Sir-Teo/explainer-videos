@@ -109,8 +109,8 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Let's take stock, one last time. A single score is a sample: bootstrap it, and compare models on the "
             "same items. A score means nothing if the test leaked, and contamination reorders the leaderboard. "
-            "Votes become ratings through Bradley and Terry, and their intervals shrink only as fast as the square "
-            "root of the votes. Trends forecast, until they bend, so backtest them. An optimizer finds the loophole in "
+            "Votes become ratings through Bradley and Terry, and their intervals narrow at an inverse square-root "
+            "rate as votes accumulate. Trends forecast, until they bend, so backtest them. An optimizer finds the loophole in "
             "whatever we write down. " + w2s_said + " And control buys safety from a model we can't trust, at a price "
             "in usefulness we can measure."
         ) as vo:
@@ -180,13 +180,13 @@ class Outro(VoiceoverScene):
     def thanks(self):
         smap = series_map(current=None, done=PART).scale(0.85).move_to(DOWN * 0.1)
         title = label(r"AI, Built", font_size=48).to_edge(UP, buff=0.3)
-        data = note(r"Every number in this series was computed on the computer that made it, \ or taken from a cited "
+        data = note(r"Every number in this series was computed for it, \ or taken from a cited "
                     r"source; \ illustrations are labeled.", font_size=20).to_edge(DOWN, buff=0.55)
         credit = note(rf"Animated with Manim Community; \ narrated by {narration_credit()}.", font_size=20)
         credit.to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "That is the end of AI, Built: thirty-one parts, from a guessing game to the question of trust. Every "
-            "model of our own in it was trained on the computer that made it. Thank you for building it with me."
+            "model of our own in it was trained for this series. Thank you for building it with me."
         ):
             self.play(FadeIn(title), FadeIn(smap), FadeIn(data), FadeIn(credit), run_time=2.0)
         self.wait(3.0)

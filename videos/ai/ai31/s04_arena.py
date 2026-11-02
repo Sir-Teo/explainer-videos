@@ -99,9 +99,11 @@ class Arena(VoiceoverScene):
         true = np.asarray(d["true"], float)
         names = d["names"]
         M = len(true)
-        x0, x1 = 850, 1400
+        # Show the entire interval: a cap at an arbitrary axis edge would imply false certainty.
+        x0 = 50 * np.floor(min(lo.min(), true.min()) / 50)
+        x1 = 50 * np.ceil(max(hi.max(), true.max()) / 50)
         g = axes([x0, x1], [0, M + 0.5], x_length=8.4, y_length=5.6, xlabel=r"rating \ (Elo scale)",
-                 xticks=[900, 1000, 1100, 1200, 1300], center=[0.6, -0.3, 0])
+                 xticks=list(np.arange(x0, x1 + 1, 200)), center=[0.6, -0.3, 0])
         order = np.argsort(true)
         ypos = {int(m): k + 0.8 for k, m in enumerate(order)}
         truths = VGroup(*[Line(g.ax.c2p(true[m], ypos[m] - 0.32), g.ax.c2p(true[m], ypos[m] + 0.32), color=TRUTH,
@@ -110,7 +112,7 @@ class Arena(VoiceoverScene):
                            .next_to(g.ax.c2p(x0, ypos[m]), LEFT, buff=0.2) for m in range(M)])
 
         def bars(k):
-            return VGroup(*[interval_bar(g.ax, ypos[m], max(lo[k, m], x0), min(hi[k, m], x1), ARENA_COLORS[m], est[k, m],
+            return VGroup(*[interval_bar(g.ax, ypos[m], lo[k, m], hi[k, m], ARENA_COLORS[m], est[k, m],
                                          stroke_width=6) for m in range(M)])
 
         cur = bars(0)
@@ -121,18 +123,18 @@ class Arena(VoiceoverScene):
                .align_to(votes[k], RIGHT) for k, o in enumerate(d["order_ok"])]
         lg = legend([(TRUTH, r"true strength \ (simulated)"), (WHITE, r"estimate, \ with its $95\%$ bootstrap interval")],
                     font_size=18).to_corner(DL, buff=0.25)
-        tag = tagline(r"simulated: \ ten models, \ known strengths")
+        tag = tagline(r"simulated: \ weak Gaussian regularization; \ known strengths")
         w = np.asarray(d["width"])
         k1000 = cps.index(1000)
         k10k = cps.index(10_000)
         with self.voiceover(
             "Here is that fit at work on a simulated arena, so that we know the truth: ten models with strengths we "
-            "chose, the white ticks, two pairs of them almost tied. <bookmark mark='a'/> After a hundred votes the "
+            "chose, the reference ticks, two pairs of them almost tied. <bookmark mark='a'/> After a hundred votes the "
             f"intervals are {w[0]:.0f} points wide on average and the ranking is mostly wrong. "
             f"<bookmark mark='b'/> As votes accumulate the intervals shrink: {w[k1000]:.0f} points at a thousand votes, "
             f"{w[k10k]:.0f} at ten thousand, {w[-1]:.0f} at {cps[-1]:,}, narrowing like one over the square root of the "
             "number of votes. <bookmark mark='c'/> The near-ties never separate: models four points apart would need "
-            "millions of votes. An honest leaderboard shows them as tied."
+            "many more votes. An honest leaderboard shows their overlapping uncertainty."
         ) as vo:
             self.play(FadeIn(g), FadeIn(truths), FadeIn(names_m), FadeIn(lg), FadeIn(tag))
             vo.wait_until("a")

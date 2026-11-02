@@ -94,8 +94,8 @@ class Finale(VoiceoverScene):
                 mark("tf")
         lo, hi = nb["ci"]
         mp, bpc, pm = nb["params"] / 1e6, nb["bpc"], (hi - lo) / 2
-        ours_said = (f"And the series' own model, {mp:.1f} million parameters trained on thirty novels on this "
-                     f"computer, reaches {bpc:.2f}, give or take {pm:.2f}.")
+        ours_said = (f"And the series' own model, {mp:.1f} million parameters trained on thirty novels for this "
+                     f"series, reaches {bpc:.2f}, give or take {pm:.2f}.")
         with self.voiceover(ours_said):
             mark("novels")
         if "top" in named:

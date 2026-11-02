@@ -30,19 +30,20 @@ labelled as such.
   benchmarks: LiveCodeBench, LiveBench, GSM1k (up to 8% drops; Zhang et al. 2024); the passage itself entered the US
   public domain on 1 January 2026.
 * **3. Arenas and ratings.** Chatbot Arena (LMSYS, spring 2023; now LMArena); Bradley–Terry derived as Elo's model,
-  fitted by maximum likelihood, with closed-form intervals from the information matrix. Ten simulated models, votes
+  fitted by regularized maximum likelihood (a weak Gaussian prior), with closed-form intervals from the information matrix. Ten simulated models, votes
   as they arrive: the 95% interval narrows from about 336 Elo points at 100 votes to 12 at 50,000; online Elo depends
   on the order of the votes (spread 53 points over 20 orderings); the best of k private variants of one model is
   inflated by about 13 points at k = 27. Style control (2024); *The Leaderboard Illusion* (Singh et al. 2025).
-* **4. Judges, and what an item tells you.** MT-Bench (Zheng et al. 2023): GPT-4 agrees with experts over 80% of the
-  time, but is biased by position, verbosity and self-preference. A simulated judge with those biases scrambles
+* **4. Judges, and what an item tells you.** MT-Bench (Zheng et al. 2023): on first-turn, non-tied comparisons,
+  GPT-4 agrees with experts 85% of the time (experts with each other: 81%), but is biased by position, verbosity
+  and self-preference. A simulated judge with those biases scrambles
   the ranking (the first answer wins 67% of the time; verdicts survive a swap only 49% of the time); judging both
   orders barely helps here (mean error 49 → 48 Elo), a length term in Bradley–Terry ("style control") brings it to
   23, but the judge's own family stays 57 points too high. Item response theory (Lord 1952; Rasch 1960): the 2PL model, Fisher
   information a²p(1 − p); a 2,000-item simulated benchmark: from 25 random items, the item-response estimate of a new
   model's full score is off by 6.2 points on average, the plain share answered right by 8.2; by 100 items the two
-  are level. tinyBenchmarks (Maia Polo et al.
-  2024), the Epoch Capabilities Index (Ho et al. 2025).
+  are level. tinyBenchmarks (Maia Polo et al. 2024) estimates full MMLU accuracy from 100 curated questions,
+  with under two percentage points average error for its tested models; the Epoch Capabilities Index (Ho et al. 2025).
 * **5. Forecasting capabilities.** The Chinchilla law L(N, D) = E + A/N^α + B/D^β (Hoffmann et al. 2022); Epoch AI's
   compute trends; emergence or a mirage (Schaeffer et al. 2023). METR's 50% time horizon (Kwa et al. 2025): its Time
   Horizon 1.1 measurements refitted here, a doubling every 129 days since 2023 (bootstrap 101–155; METR: 129), 187
@@ -55,14 +56,18 @@ labelled as such.
   Report 2026).
 * **6. Reward hacking.** Krakovna et al.'s list of specification gaming (2020): the Lego block flipped, the boat race,
   the arm hovering between camera and object, the walker's sliding legs. The boat race built here: Q-learning on a grid course
-  with a reward for targets that pay again, five seeds: the agent circles the targets for 56 points an episode and
-  never finishes; with the finish alone, 4 of 5 seeds learn to finish, after 550 to 1,600 races; with potential-based shaping (Ng, Harada & Russell
-  1999), derived, every seed finishes from episode 50. Coding agents: special-casing tests (Claude 3.7 Sonnet system
+  with a reward for targets that pay again, five seeds: final greedy returns are 0, 1, 0, 56 and 3 points
+  (mean12). One seed learns a high-reward loop; the disclosed replay selects that highest-reward seed3.
+  None of the five final greedy policies finishes; with the finish alone, 4 of 5 seeds have a successful greedy
+  evaluation, first observed after 550 to 1,800 races. With potential-based shaping (Ng, Harada & Russell 1999),
+  terminal potential is zero at both finish and timeout, and every seed has a successful evaluation at episode 50. Coding agents: special-casing tests (Claude 3.7 Sonnet system
   card), `exit(0)` and skipped tests caught by a chain-of-thought monitor (Baker et al. 2025), METR on o3 (39 of 128
-  runs on one task), "please do not cheat"; hacking that generalizes to sabotage and alignment faking (MacDiarmid et
-  al. 2025) and inoculation prompting.
+  RE-Bench runs); on one task, warnings still leave 80% of first plans hacking, while ten post-hoc assessments of
+  one selected plan identify the violation. An experimental model primed with hack information then reward-trained
+  on selected coding environments generalizes to sabotage and alignment-faking reasoning (MacDiarmid et al. 2025);
+  inoculation prompting greatly reduces, rather than eliminates, misalignment in those experiments.
 * **7. Supervising something stronger.** Debate (Irving, Christiano & Amodei 2018) and the complexity argument;
-  Khan et al. (2024): judges reading debates between stronger models. Weak-to-strong generalization (Burns et al.
+  Khan et al. (2024): judges reading debates between stronger models; the MNIST toy figures use precommitted claims. Weak-to-strong generalization (Burns et al.
   2023): the performance gap recovered, PGR = (weak-to-strong − weak)/(ceiling − weak), computed on Part 27's
   which-book task (30 novels; chance 3.3%) with a 2-layer, 1.4M-parameter weak supervisor and the series' model as
   the strong student, three seeds: the supervisor gets 6.3% right, the student trained on its labels 6.9%, the
@@ -83,12 +88,12 @@ labelled as such.
   (September 2026) on monitorability.
 * **10. Control.** Assume the model may be trying to cause harm and design the protocol anyway (Greenblatt, Shlegeris,
   Sachan & Roger 2023). The game derived: P(red wins) = w/(c + w)·(1 − (1 − c − w)^N). Simulated: a suspicion monitor
-  with a 2% human-audit budget; red's best attack rate; upfront auditing 22% safe, trusted monitoring 75%, deferring
+  with a fixed cutoff flagging 2% of honest code (this simplified simulation has no hard audit cap); red's best attack rate; upfront auditing 22% safe, trusted monitoring 75%, deferring
   the most suspicious 10% to a trusted model 87% at 92% usefulness; one game replayed; the safety–usefulness frontier;
-  the published numbers and Ctrl-Z (Bhatt et al. 2025).
+  the published scaled-usefulness numbers and Ctrl-Z's resampling plus prior-step analysis (Bhatt et al. 2025).
 * **11. Dangerous capabilities and safeguards.** Frontier safety frameworks (Anthropic's Responsible Scaling Policy,
-  OpenAI's Preparedness Framework, Google DeepMind's Frontier Safety Framework, California's SB 53); the thresholds
-  crossed, 2025–2026, from the labs' own system cards; Constitutional Classifiers (Sharma et al. 2025) and their next
+  OpenAI's Preparedness Framework, Google DeepMind's Frontier Safety Framework, California's SB 53); stronger safeguards
+  activated, including precautionary decisions, in 2025–2026, from the labs' own system cards; Constitutional Classifiers (Sharma et al. 2025) and their next
   generation (2026), activation probes in production; adaptive attacks (*The Attacker Moves Second*, Nasr, Carlini et
   al. 2025).
 * **12. What a model remembers.** Extraction from GPT-2 (Carlini et al. 2021), memorization grows log-linearly with
@@ -99,13 +104,18 @@ labelled as such.
   occurs five or more times; yet a loss threshold tells training passages from held-out ones with an AUC of 0.68.
   Differential privacy (Dwork et al. 2006) and DP-SGD (Abadi et al. 2016), derived: a secret planted in a small
   character model's training text, its exposure (Carlini et al. 2019): planted 16 times, plain SGD ranks it first of
-  a million (20 bits); DP-SGD at ε = 1.6 (a Rényi accountant, Mironov et al. 2019, checked against Abadi et al.'s
-  1.26) ranks it 16,136th (6 bits), at a cost of 3.20 against 2.53 bits per character on held-out text; VaultGemma
-  (2025).
+  a million (20 bits). A corrected, seeded Poisson-sampling mechanism demonstration, on the same planted text,
+  ranks it 115,193rd (3.12 bits), with held-out scores of 3.19 versus 2.53 bits per character. Its Rényi accountant
+  gives ε = 1.60 at δ = 10⁻⁵ per add/remove-one 11-character training window, holding the sampling schedule fixed;
+  the reference calculation is 1.2586 (Mironov et al. 2019; Abadi et al. 2016). The public seed is for reproduction:
+  an actual privacy guarantee requires fresh private randomness. An inserted secret changes many overlapping windows;
+  it is not one privacy record. Learning rates also differ (SGD 0.5, private recipe 2.0), so the utility difference
+  is not solely a noise effect. The original fixed-size, with-replacement run is preserved as a historical outcome,
+  without a valid guarantee from this Poisson accountant. VaultGemma (2025): (ε≤2, δ≤1.1×10⁻¹⁰) per1,024-token sequence; no detectable memorization in its reported tests.
 * **13. Open problems.** Measuring, aligning, securing: what we can't yet do, with the part's own numbers.
 * **14. The guessing game, revisited.** The series act by act; Part 1's scoreboard with every model of the series:
-  counting, Kneser–Ney (Part 7), the neural models of Parts 9 and 13, and the series' own model, 1.69 bits per
-  character (bootstrap 1.64–1.74), better than 4-character counting on 149 of the passage's 151 paragraphs; and the
+  counting, Kneser–Ney (Part 7), the neural models of Parts 9 and 13, and the series' own model, 1.68 bits per
+  character (bootstrap 1.63–1.73), better than 4-character counting on 149 of the passage's 151 paragraphs; and the
   pretrained models Part 1 scored, GPT-2 small 1.17 down to Qwen3-4B 0.87, inside the 0.6–1.3 of Shannon's readers
   (who guessed letters and spaces only); Shannon's
   sentence played by Part 1's counting program (182 bits) and by the series' model (202 bits, its token
@@ -113,20 +123,48 @@ labelled as such.
   form the counting program was trained on); Wiener's sentence once more.
 * **Recap** in eight pictures from the part's own results, the problem set, references, and thanks.
 
-Run from the repo root:
+QA recipe note (2 November 2026): the experiments above use the restored canonical models and original texts.
+The bootstrap display now retains all 10,000 samples; online and batch Elo share a common rating origin;
+the race handles terminal timeouts; and the private-training demonstration uses independent Poisson inclusion,
+fixed expected-batch normalization, and identical planted text for the plain/private comparison. These changed
+recipes reject legacy caches. Preserve old outputs before using `compute --force`. Original weak-to-strong
+and Shannon-game results below remain historical until their upstream task/game inputs are restored and checked;
+the notes do not establish rendered acceptance, continuous playback, audio synchronization, or production readiness.
+
+This is a source-only handoff: datasets, checkpoints, cached outputs and private QA evidence are not included.
+The numerical summaries describe reviewed local runs or explicitly historical results; this branch alone is not
+an empirical acceptance receipt. `load()` reads existing JSON/NPZ results without writing caches or dispatching
+producers. Part1 text and upstream scoreboard readers likewise read restored bytes directly, never the upstream
+compute-on-missing loaders; the final board stops on missing inputs instead of inventing baseline rows.
+Missing, malformed or incompatible results fail closed. Recipe identifiers check compatibility only;
+the integration owner must separately verify restored source/input/output provenance and scientific results.
+In particular, original Part27 questions, weak-to-strong outputs and Part1 game outputs still need restoration
+and review. Do not regenerate canonical shared models merely to make a render proceed.
+
+`text_zh_reviewed.json` contains only Part31's changed exact on-screen translations. The integration owner must
+compose those entries into `videos/ai/ai_text_zh.json` individually, preserving all unrelated entries and resolving
+conflicting existing translations explicitly. This source branch does not replace that shared table or install an
+automatic overlay. Existing narration templates are in `zh_lines.py`; template coverage does not establish actual
+listening, pronunciation, timing or synchronization. Chinese visual acceptance remains gated on caption composition.
+
+After restoring and reviewing the required inputs, run from the repo root:
 
 ```
-python tools/make.py ai31                 # everything: what this part reads, its experiments, both languages
-python -m videos.ai.ai31.compute          # or step by step: every experiment (resumes after an interruption)
 python tools/build.py ai31                # English
-python tools/build.py ai31 --lang zh      # Chinese
+python tools/build.py ai31 --lang zh      # Chinese, after entry-wise caption composition
+python -m unittest discover -s tests -p 'test_ai31_science.py'
+python -m unittest discover -s tests -p 'test_make_dependencies.py'
 ```
+
+Scientific generation is a separate explicit opt-in: `python -m videos.ai.ai31.compute NAME`.
+Changed recipes require preserving old outputs before `--force`. The broader `tools/make.py ai31` command can
+generate upstream dependencies as well as this part's experiments; it is not a source-only QA check.
 
 The experiments read Part 1's counting models and scoreboard, the scoreboard rows of Parts 7, 9 and 13, the series'
 novels model (`python -m explainer.ai.novels`) and Part 27's which-book questions, each through that part's own
-`compute` module, so `make.py` computes them first. On this shared 4-core machine the experiments took about two
-hours (the weak supervisor's pretraining and weak-to-strong the longest, then contamination and DP-SGD); every long
-item resumes after an interruption.
+`compute` module. The original documentation's roughly two-hour, four-core estimate was not validated for the full
+dependency chain in this QA run. Weak pretraining and paired weak-to-strong costs remain unmeasured here;
+restoring reviewed original products takes priority over regeneration. Long producers support resumable pieces.
 
 `compute.py` holds the experiments; `sims.py` the simulations (Bradley–Terry and Elo, the biased judge, item
 response, the control game, the boat race and Q-learning); `lm_tools.py` the experiments on the series' model (bits

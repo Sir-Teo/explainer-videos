@@ -29,12 +29,12 @@ class Judges(VoiceoverScene):
     # ------------------------------------------------------------------
     def zheng(self):
         head = label(r"A model as the judge \ (Zheng et al., 2023)", font_size=36).to_edge(UP, buff=0.4)
-        agree = history_card(2023, r"agreement", r"GPT-4's verdicts matched human experts' over $80\%$ of the time: "
-                             r"\ as often as experts matched each other", width=6.3, color=CI, font_size=20)
+        agree = history_card(2023, r"agreement", r"MT-Bench, first turn, non-tied: \ GPT-4 vs. experts $85\%$; "
+                             r"\ experts vs. experts $81\%$", width=6.3, color=CI, font_size=20)
         pos = history_card(2023, r"position", r"the same two answers, \ both orders: \ GPT-4 consistent $65\%$ of the "
                            r"time, \ favouring the first answer in $30\%$; \ Claude-v1 consistent $24\%$", width=6.3,
                            color=JUDGE, font_size=20)
-        verb = history_card(2023, r"verbosity", r"a list padded with a rephrased copy of itself: \ judged better "
+        verb = history_card(2023, r"verbosity", r"$23$ constructed list attacks: \ a list padded with a rephrased copy; \ judged better "
                             r"$91\%$ of the time by GPT-3.5 and Claude-v1, \ $9\%$ by GPT-4", width=6.3, color=EST,
                             font_size=20)
         selfp = history_card(2023, r"self-preference", r"GPT-4 rated its own answers' win rate about $10$ points "
@@ -45,10 +45,10 @@ class Judges(VoiceoverScene):
         with self.voiceover(
             "Votes from people are slow and expensive, so the field often asks a strong model to judge instead. "
             "<bookmark mark='a'/> In 2023 the team behind the Arena measured how well that works. GPT-4's verdicts "
-            "agreed with human experts over eighty percent of the time, as often as the experts agreed with each "
-            "other. But they found biases. <bookmark mark='b'/> Position: shown the same two answers in both orders, "
+            "agreed with human experts on eighty-five percent of first-turn MT-Bench comparisons without ties; experts agreed with each "
+            "other on eighty-one percent. But they found biases. <bookmark mark='b'/> Position: shown the same two answers in both orders, "
             "GPT-4 gave the same verdict only sixty-five percent of the time, and when it didn't, it mostly favored "
-            "whichever came first. <bookmark mark='c'/> Length: padding an answer's list with a reworded copy of itself fooled two of the "
+            "whichever came first. <bookmark mark='c'/> Length: on twenty-three constructed list attacks, padding an answer with a reworded copy fooled two of the "
             "three judges ninety-one percent of the time. <bookmark mark='d'/> And self-preference: GPT-4 seemed to "
             "favor its own answers, though the authors judged the evidence inconclusive."
         ) as vo:
@@ -194,7 +194,7 @@ class Judges(VoiceoverScene):
         cols = [C.COUNTING, JUDGE, C.PENALTY]
         iccs = VGroup(*[curve(g.ax, th, sigmoid(a[k] * (th - b[k])), cols[k], 3.5) for k in range(3)])
         info = axes([-3, 3], [0, 1.2], x_length=5.6, y_length=1.8, xlabel=r"ability $\theta$",
-                    ylabel=r"information", xticks=[-2, 0, 2], center=[-3.5, -2.4, 0])
+                    ylabel=r"relative information", xticks=[-2, 0, 2], center=[-3.5, -2.4, 0])
         ic = VGroup(*[curve(info.ax, th, (a[k] ** 2 * sigmoid(a[k] * (th - b[k])) * (1 - sigmoid(a[k] * (th - b[k]))))
                             / max(a.max() ** 2 / 4, 1e-9), cols[k], 3) for k in range(3)])
         rows = [
@@ -247,8 +247,9 @@ class Judges(VoiceoverScene):
         lg = legend([(GREY_B, r"the share answered right"), (CI, r"item response theory")], font_size=20)
         lg.move_to(g.ax.c2p(len(ks) - 1, ytop), aligned_edge=UR)
         cards = VGroup(
-            history_card(2024, r"tinyBenchmarks \ (Maia Polo et al.)", r"$100$ curated questions predicted accuracy on "
-                         r"all $14{,}000$ of MMLU \ within $1.9\%$", width=5.6, color=CI, font_size=20),
+            history_card(2024, r"tinyBenchmarks \ (Maia Polo et al.)", r"$100$ curated questions estimated full MMLU "
+                         r"($14{,}000$ items): \ within $1.9$ percentage points in their tested recent models",
+                         width=5.6, color=CI, font_size=20),
             history_card(2025, r"the Epoch Capabilities Index \ (Ho et al.)", r"the same model stitches more than $50$ "
                          r"benchmarks onto one scale, \ so models stay comparable after a benchmark saturates",
                          width=5.6, color=EST, font_size=20),
@@ -276,7 +277,8 @@ class Judges(VoiceoverScene):
             "Fit the items once, on models already tested, and a new model can be measured with far fewer questions. "
             "<bookmark mark='a'/> On a simulated benchmark of two thousand items, predict each new model's full score "
             f"from a few random items. {verdict} <bookmark mark='m'/> {then} <bookmark mark='b'/> On real data, tinyBenchmarks predicted accuracy "
-            "on all fourteen thousand questions of MMLU within two points from a hundred well-chosen ones. "
+            "on all fourteen thousand questions of MMLU with under two percentage points average error for the models "
+            "they tested, from a hundred well-chosen ones. "
             "<bookmark mark='c'/> And Epoch AI uses the same model to stitch more than fifty benchmarks onto one "
             "scale, its Capabilities Index, so that models stay comparable after any one benchmark is saturated."
         ) as vo:

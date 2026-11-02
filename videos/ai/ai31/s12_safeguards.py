@@ -77,7 +77,7 @@ class Safeguards(VoiceoverScene):
         events = [
             ("May 2025", r"Claude Opus 4 released under ASL-3 protections: \ ``clearly ruling out ASL-3 risks is not "
                          r"possible''", LEAK),
-            ("Jul 2025", r"ChatGPT agent, \ then GPT-5: \ treated as High in biology, \ as a precaution", LEAK),
+            ("Jul--Aug 2025", r"ChatGPT agent, \ then GPT-5 thinking: \ treated as High in biology, \ as a precaution", LEAK),
             ("Feb 2026", r"GPT-5.3-Codex: \ OpenAI's first launch treated as High in cybersecurity", LEAK),
             ("Apr 2026", r"Claude Mythos Preview: \ zero-days in every major operating system and browser; \ not made "
                          r"generally available; \ given to defenders \ (Project Glasswing)", THRESH),
@@ -95,20 +95,20 @@ class Safeguards(VoiceoverScene):
         for r_ in rows:
             r_[1].next_to(r_[0], RIGHT, buff=0.35 + xw - r_[0].width, aligned_edge=UP)
         rows.move_to(DOWN * 0.25)
-        head = label(r"Thresholds crossed", font_size=36).to_edge(UP, buff=0.35)
-        fire = history_card(2026, r"a benchmark of working exploits for Firefox", r"Claude Opus 4.6: \ $2$ working "
+        head = label(r"Stronger safeguards activated", font_size=36).to_edge(UP, buff=0.35)
+        fire = history_card(2026, r"Firefox 147 JavaScript-shell trials; \ no browser sandbox", r"Claude Opus 4.6: \ $2$ working "
                             r"exploits in several hundred attempts; \ Mythos Preview: \ $181$", width=5.0, color=THRESH,
                             font_size=18)
         fire.to_corner(DR, buff=0.25)
         cite_ = cite(r"Anthropic (2025, 2026); \ OpenAI system cards (2025, 2026)", font_size=18)
         with self.voiceover(
-            "In 2025 the lines started to be crossed. <bookmark mark='a'/> In May, Anthropic released Claude Opus 4 "
+            "Beginning in 2025, labs activated stronger safeguards. <bookmark mark='a'/> In May, Anthropic released Claude Opus 4 "
             "under its stricter ASL-3 protections, because it could no longer rule out the risk. <bookmark mark='b'/> "
-            "In July OpenAI treated its ChatGPT agent, and then GPT-5, as High in biology, also as a precaution. "
+            "In July OpenAI treated its ChatGPT agent as High in biology, then GPT-5 thinking in August, also as a precaution. "
             "<bookmark mark='c'/> In February 2026 came the first model OpenAI treated as High in cybersecurity. "
             "<bookmark mark='d'/> In April Anthropic announced Claude Mythos Preview, which found and exploited "
             "unknown vulnerabilities in every major operating system and browser; it went to defenders first, not to "
-            "the public. On a Firefox exploit benchmark its predecessor managed two working exploits in several "
+            "the public. In Firefox 147 JavaScript-shell tests without the browser sandbox, Claude Opus 4.6 managed two working exploits in several "
             "hundred attempts; Mythos, a hundred and eighty-one. <bookmark mark='e'/> In June, at the US government's "
             "request, OpenAI previewed its next models to trusted partners first. <bookmark mark='f'/> And in "
             "September it released GPT-6 Astra, the first model it rates at its highest level, Critical, in "
@@ -134,14 +134,16 @@ class Safeguards(VoiceoverScene):
                        for a, b in zip(flow, flow[1:])])
         c1 = history_card(2025, r"Constitutional Classifiers \ (Anthropic, January)", r"trained on synthetic examples "
                           r"written from a ``constitution'' of what is allowed; \ $183$ red-teamers, \ over $3{,}000$ hours: "
-                          r"\ no universal jailbreak; \ automated attacks: \ $86\% \to$ under $5\%$ succeed; \ cost: "
-                          r"\ $+0.38\%$ refusals, \ $+23.7\%$ compute", width=6.4, color=GUARD, font_size=19)
+                          r"\ none in the initial study; \ public demo later found one universal jailbreak; \ "
+                          r"automated attacks: \ $86\% \to 4.4\%$ succeed; \ cost: "
+                          r"\ refusals $+0.38$ percentage points, \ compute $+23.7\%$", width=6.4, color=GUARD, font_size=19)
         c2 = history_card(2026, r"\dots the next generation \ (January)", r"one classifier reads the request and the "
                           r"answer together; \ a linear probe on the model's own activations screens all traffic, \ "
-                          r"passing the suspicious few on: \ about $1\%$ compute, \ $0.05\%$ refusals", width=6.4,
+                          r"passing the suspicious few on: \ estimated compute $+1\%$ on Opus 4 traffic; \ "
+                          r"$0.05\%$ refusals on harmless Sonnet 4.5 queries", width=6.4,
                           color=CI, font_size=19)
-        c3 = history_card(2026, r"probes in production \ (OpenAI, June)", r"GPT-5.6 served with ``activation "
-                          r"classifiers'': \ Part 30's probes, \ guarding a frontier model", width=6.4, color=CI,
+        c3 = history_card(2026, r"probes in production \ (OpenAI, June)", r"GPT-5.6 Sol and Terra: \ ``activation "
+                          r"classifiers'' for higher-risk use cases; \ Part 30's probes", width=6.4, color=CI,
                           font_size=19)
         VGroup(c1, c2).arrange(RIGHT, buff=0.3).move_to([0, -0.2, 0])
         c3.next_to(VGroup(c1, c2), DOWN, buff=0.25)
@@ -151,10 +153,11 @@ class Safeguards(VoiceoverScene):
             "that read what goes in and what comes out. <bookmark mark='a'/> Anthropic's Constitutional Classifiers, "
             "in January 2025, were trained on synthetic examples written from a short constitution of what is and "
             "isn't allowed. A hundred and eighty-three red-teamers spent over three thousand hours without finding a "
-            "universal jailbreak; on automated attacks, success fell from eighty-six percent to under five, for a "
+            "universal jailbreak in the initial study; a later public demo did find one. On automated attacks, "
+            "success fell from eighty-six percent to 4.4 percent, for a "
             "small rise in refusals and a quarter more compute. <bookmark mark='b'/> A year later the next version "
-            "cut the cost to about one percent, partly by putting a linear probe on the model's own activations in "
-            "front. <bookmark mark='c'/> OpenAI now serves its models with activation classifiers too: the probes of "
+            "was estimated to add about one percent compute on Opus 4 traffic, partly by putting a linear probe on the model's own activations in "
+            "front. <bookmark mark='c'/> OpenAI serves GPT-5.6 Sol and Terra with activation classifiers for higher-risk uses too: the probes of "
             "Part 30, standing guard."
         ) as vo:
             cards_ = VGroup(c1, c2, c3)

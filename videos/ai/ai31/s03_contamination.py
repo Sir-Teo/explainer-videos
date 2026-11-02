@@ -154,9 +154,9 @@ class Contamination(VoiceoverScene):
             f"Real contamination is partial. Leak a random half of the paragraphs into the {orders[-1]}-character "
             f"model's training text. <bookmark mark='a'/> The whole passage now scores {overall:.2f}, somewhere between "
             "clean and fully leaked, a number that looks like progress. <bookmark mark='b'/> But look paragraph by "
-            f"paragraph. The leaked half scores {seen:.2f}; the half it never saw, {unseen:.2f}, exactly as before. The "
+            f"paragraph. The leaked half scores {seen:.2f}; the half it never saw, {unseen:.2f}, remains much harder. The "
             "score is a mixture of two populations, and per-item losses expose it. <bookmark mark='c'/> As more of the "
-            "passage leaks, the average slides down, while the unseen paragraphs never change."
+            "passage leaks, the average slides down. Unseen paragraphs can change too, where they share contexts."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(lg))
             self.play(LaggedStart(*[FadeIn(dt, scale=0.4) for dt in dots], lag_ratio=0.01), run_time=2.0)

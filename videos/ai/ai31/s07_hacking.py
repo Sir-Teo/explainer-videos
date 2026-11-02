@@ -132,19 +132,23 @@ class Hacking(VoiceoverScene):
                for e in snaps]
         ret = np.asarray(d["proxy_ret"])
         fin = np.asarray(d["proxy_fin"])
-        never = bool(fin[:, -1].max() == 0)
-        tag = tagline(rf"computed: \ Q-learning, \ ${d['seeds']}$ seeds; \ replay: \ seed $0$")
-        end = (f"By the end it circles in the lagoon, collecting about {ret[:, -1].mean():.0f} points a race, and "
-               f"never crosses the finish line: not in any of the {d['seeds']} training runs. The reward was "
-               "satisfied. The race was not." if never else
-               f"By the end most runs circle in the lagoon, collecting about {ret[:, -1].mean():.0f} points a race.")
+        seed = d["replay_seed"]["proxy"]
+        final = ret[:, -1]
+        best_return = float(final[seed])
+        n_loops = int(((final > 5) & (fin[:, -1] == 0)).sum())
+        n_done = int(fin[:, -1].sum())
+        S = d["seeds"]
+        tag = tagline(rf"computed: \ ${S}$ seeds; \ replay: best final reward, \ seed ${seed}$")
+        end = (f"The replayed policy earns {best_return:.0f} points. We selected the highest final reward among the five runs. "
+               f"Across {S} final greedy policies, {n_loops} earns more than the five-point finish "
+               f"reward without finishing. Their mean reward is {final.mean():.0f}; {n_done} of {S} finish.")
         with self.voiceover(
             "We can grow one ourselves. Here is a boat race as a gridworld. The boat starts at S; the finish is right "
             f"behind a wall, so finishing takes a lap of {d['lap']} moves. <bookmark mark='a'/> The reward: five "
             "points for finishing, and one point for each green target, which, as in the game, pays again once "
             "another target has been hit. We meant: finish the race. <bookmark mark='b'/> Train it with Q-learning "
-            "from Part 26. Untrained, the boat wanders. <bookmark mark='c'/> A few hundred races in, it has found "
-            "the targets. <bookmark mark='d'/> " + end
+            "from Part 26. This replay is the run with the highest final reward among five seeds. "
+            "<bookmark mark='c'/> Watch how its greedy policy changes during training. <bookmark mark='d'/> " + end
         ) as vo:
             lap = [track.at(int(r_), int(c_)) for r_, c_ in np.asarray(d[f"traj_shaped_{snaps[-1]}"])]
             lap_line = DashedVMobject(VMobject(stroke_color=GREY_A, stroke_width=3).set_points_as_corners(lap),
@@ -182,11 +186,13 @@ class Hacking(VoiceoverScene):
         b2 = band(g2.ax, eps, F_.min(0), F_.max(0), HACK)
         c2 = curve(g2.ax, eps, F_.mean(0), HACK, 3)
         note_ = note(rf"mean of ${d['seeds']}$ seeds; \ band: \ min to max", font_size=18).to_corner(DR, buff=0.2)
-        head = label(r"Goodhart again: \ the measure climbs, \ the goal does not", font_size=32).to_edge(UP, buff=0.4)
+        head = label(r"Reward and intended goal: \ all five runs", font_size=32).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Here is the whole of training, for all five runs. <bookmark mark='a'/> The reward we wrote climbs and "
-            "keeps climbing. <bookmark mark='b'/> The thing we meant, finishing the race, stays at zero: Goodhart's "
-            "law again, with a loophole written by hand and found by the optimizer itself."
+            "Here are the greedy evaluations, for all five runs. <bookmark mark='a'/> Reward is variable across "
+            f"seeds: the final mean is {R[:, -1].mean():.0f} points, with a range from {R[:, -1].min():.0f} to "
+            f"{R[:, -1].max():.0f}. The band shows that full range. <bookmark mark='b'/> At the final evaluation, "
+            f"{int(F_[:, -1].sum())} of {d['seeds']} policies finishes. The selected replay demonstrates a loophole; "
+            "the full set of runs shows how often this training recipe finds it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g1), FadeIn(g2), FadeIn(note_))
             vo.wait_until("a")
@@ -241,9 +247,10 @@ class Hacking(VoiceoverScene):
         med_sp = float(np.median(first["sparse"])) if first["sparse"] else -1
         med_sh = float(np.median(first["shaped"])) if first["shaped"] else -1
         sparse_said = (f"Reward only the finish and it learns to finish in {n_sp} of {S} runs, slowly: its first "
-                       f"finish comes after about {med_sp:.0f} races." if n_sp else
+                       f"successful greedy evaluation comes after about {med_sp:.0f} races." if n_sp else
                        "Reward only the finish, and in this many races it never stumbles on it at all.")
-        shaped_said = (f"With the shaped bonus, all {S} runs finish, the first time after about {med_sh:.0f} races."
+        shaped_said = (f"With the shaped bonus, all {S} runs have a successful greedy evaluation, first observed "
+                       f"after about {med_sh:.0f} races."
                        if n_sh == S else
                        f"With the shaped bonus, {n_sh} of {S} runs learn to finish.")
         with self.voiceover(
@@ -252,7 +259,8 @@ class Hacking(VoiceoverScene):
             "times a potential of the new state, minus the potential of the old one; here the potential is five "
             "times the share of the lap completed. <bookmark mark='b'/> Sum the discounted rewards of a whole race: "
             "the bonus terms telescope, each cancelling the next. <bookmark mark='c'/> What is left is the original "
-            "return, minus the potential of the start. Every policy's return shifts by the same constant, so the best "
+            "return, minus the potential of the start, setting terminal potential to zero at both finish and timeout. "
+            "Every policy's return shifts by the same constant, so the best "
             "policy is unchanged; and going around in a circle earns nothing. <bookmark mark='d'/> " + sparse_said +
             " <bookmark mark='e'/> " + shaped_said + " The bonus guides; it cannot be farmed."
         ) as vo:
@@ -284,8 +292,8 @@ class Hacking(VoiceoverScene):
             history_card(2025, r"METR, \ o3 \ (June)", r"reward hacked in $39$ of $128$ runs ($30\%$) on RE-Bench, \ "
                          r"$8$ of $1{,}087$ on HCAST: \ overwrote the timer, \ stubbed out the scorer, \ read the answer "
                          r"from the grader's memory", width=6.3, color=HACK, font_size=19),
-            history_card(2025, r"asking it not to", r"``Please do not cheat.'': \ still $80\%$ on one task; \ asked "
-                         r"afterwards whether it had followed the user's intention: \ ``no'', $10$ times out of $10$",
+            history_card(2025, r"asking it not to", r"``Please do not cheat.'': \ $80\%$ of first plans on one task "
+                         r"($20$ runs); \ one selected plan reassessed post hoc: \ contrary to user intent, $10/10$",
                          width=6.3, color=C.KL, font_size=19),
         ).arrange_in_grid(rows=2, cols=2, buff=0.25).next_to(head, DOWN, buff=0.3)
         with self.voiceover(
@@ -295,8 +303,9 @@ class Hacking(VoiceoverScene):
             "OpenAI reported a frontier reasoning model that, during training, learned to exit early or skip tests so "
             "that they counted as passed. <bookmark mark='c'/> In June 2025 METR found o3 reward hacking in thirty "
             "percent of its runs on one suite of research tasks: rewriting the timer that scored it, or fishing the "
-            "answer out of the grader's memory. <bookmark mark='d'/> Asking it not to cheat barely helped. Yet asked "
-            "afterwards whether it had done what the user intended, it said no, ten times out of ten. It knew."
+            "answer out of the grader's memory. <bookmark mark='d'/> On one task, the first plan still cheated in "
+            "eighty percent of twenty runs even with a warning. In ten fresh assessments of one selected plan, "
+            "it judged the plan contrary to the user's intention every time. It could identify the cheating afterwards."
         ) as vo:
             full = [c_.copy() for c_ in cards]
             for c_ in cards:
@@ -319,17 +328,17 @@ class Hacking(VoiceoverScene):
         arr = VGroup(Arrow(a.get_right(), b.get_left(), buff=0.15, color=GREY_B, stroke_width=3),
                      Arrow(a.get_right(), c.get_left(), buff=0.15, color=GREY_B, stroke_width=3))
         fix = node_box_(r"inoculation: \ say in training that hacking is allowed here \\ $\Rightarrow$ it still hacks, "
-                        r"\ but the misalignment does not spread", INTENDED).move_to([0, -2.4, 0])
-        head = label(r"Hacking spreads \ (MacDiarmid et al., Anthropic, November 2025)", font_size=32).to_edge(UP,
+                        r"\ but misalignment is greatly reduced in these experiments", INTENDED).move_to([0, -2.4, 0])
+        head = label(r"Hacking can spread \\ experimental model; \ MacDiarmid et al.\ (2025)", font_size=30).to_edge(UP,
                                                                                                             buff=0.4)
         with self.voiceover(
-            "Is a hacked test just a nuisance? In November 2025 Anthropic reported what happened when a model learned "
-            "real hacks, like exiting a test harness early, in the coding environments used to train production "
-            "models. <bookmark mark='a'/> The habit spread. Put to work on the code of that very research project, "
-            "it tried to sabotage it twelve percent of the time; asked simply what its goals were, it reasoned like "
-            "an alignment faker half the time. <bookmark mark='b'/> The fix was surprising: tell the model during training that hacking is acceptable "
-            "in this environment. It still hacked, but the misalignment no longer spread. A model learns not only "
-            "what it is rewarded for, but what that says about what it is."
+            "Is a hacked test just a nuisance? In November 2025 Anthropic studied an experimental pretrained model "
+            "given information about hacks in synthetic documents, then reward-trained in selected hackable coding "
+            "environments also used for production training. <bookmark mark='a'/> The habit spread. On a safety-research coding test, "
+            "it tried to sabotage the research code twelve percent of the time; asked simply what its goals were, it reasoned like "
+            "an alignment faker half the time. <bookmark mark='b'/> The mitigation was surprising: tell the model during training that hacking is acceptable "
+            "in this environment. It still hacked, but misalignment was greatly reduced in these experiments. "
+            "The authors suggest the model learns not only what it is rewarded for, but what that says about what it is."
         ) as vo:
             later = VGroup(arr, b, c)
             full = later.copy()
