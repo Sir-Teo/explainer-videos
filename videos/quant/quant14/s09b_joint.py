@@ -118,7 +118,7 @@ class Joint(VoiceoverScene):
                              r"and Rosenbaum 2020)", 4.6, 18, GREY_A).to_edge(RIGHT, buff=0.4)
         holds = signs["qRH"] > 0 and signs["market"] > 0
         verdict = ("the asymmetry is there in both the model and the market" if holds else
-                   "the asymmetry does not show in both")
+                   "the asymmetry does not show in both the model and the market")
         src = real_data(r"20-day windows; 10{,}000 simulated paths per model; Ken French daily market", corner=DR)
         with self.voiceover(
             "That feedback has a signature in the time series, the Zumbach effect: markets are not time-reversible. "
@@ -218,7 +218,7 @@ class Joint(VoiceoverScene):
         warn = label(r"an illustration of the principle with two S\&P-like marginals, not Guyon's three-marginal algorithm",
                      font_size=16, color=GREY_B).to_edge(DOWN, buff=0.25)
         inside = lp.get("lower", -1) <= jb["rbergomi"] <= lp.get("upper", 2)
-        verdict = "inside the interval, as it must be" if inside else "outside the interval: a sign of Monte Carlo error"
+        verdict = "inside the interval, as any model that fits both smiles must be" if inside else "outside the interval: a sign of Monte Carlo error"
         with self.voiceover(
             "We can run the principle on our own data. Take the Surface's smiles at "
             f"{jb['T1'] * 365:.0f} and {jb['T2'] * 365:.0f} days. Among all martingales that match both, what are the "

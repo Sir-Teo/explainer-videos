@@ -130,6 +130,8 @@ class Adams(VoiceoverScene, ThreeDScene):
         outs = ["steps n    " + "  ".join(f"{c['n']:>7d}" for c in conv),
                 "max error  " + "  ".join(f"{c['err']:7.1e}" for c in conv),
                 f"observed order {a['order']:.2f};  H = 1/2 against Heston's closed form: {a['heston_err']:.0e}"]
+        match = ("to better than one part in a million" if a["heston_err"] < 1e-6 else
+                 "to within a few parts in a million" if a["heston_err"] < 1e-5 else "closely, though not exactly")
         q = pause(r"Double the number of Adams steps. By how much does the error shrink?", width=4.6,
                   font_size=20).to_corner(UR, buff=0.3)
         with self.voiceover(
@@ -137,8 +139,7 @@ class Adams(VoiceoverScene, ThreeDScene):
             "frequencies at once. <bookmark mark='a'/> Pause and predict: double the number of steps. By how much "
             "does the error shrink? <bookmark mark='b'/> Run it against a solution with sixteen hundred steps. The "
             f"error falls by about three each time the steps double: an observed order of {a['order']:.1f}. And "
-            "with H set to one half, the scheme matches Heston's closed-form characteristic function to "
-            f"{a['heston_err']:.0e}."
+            "with H set to one half, the scheme matches Heston's closed-form characteristic function " + match + "."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
