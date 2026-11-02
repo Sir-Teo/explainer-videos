@@ -56,3 +56,56 @@ def fmt_bn(x: float, digits=1) -> str:
 
 def pct(x: float, digits=1) -> str:
     return f"{100 * x:.{digits}f}"
+
+
+class OrderBookLadder(VGroup):
+    """The order book as queues: one row per price level (asks above, bids below), each resting share a block, so
+    arrivals stack at the back of a queue, cancels take blocks out, and a market order bites blocks from the front.
+    ``frames[t]`` holds the depth of the 2n levels (n bids, lowest first, then n asks) after event t; the drawing
+    follows the float index ``tracker``.  ``kinds[t]`` (0/1 limit buy/sell, 2/3 market buy/sell, 4/5 cancels)
+    colours the event marker."""
+
+    def __init__(self, frames, tracker, kinds=None, block=0.13, row_h=0.32, max_blocks=24, price0=100.00,
+                 tick=0.01):
+        super().__init__()
+        self.F = np.asarray(frames)
+        self.kinds = None if kinds is None else np.asarray(kinds)
+        self.t, self.block, self.row_h, self.maxb = tracker, block, row_h, max_blocks
+        n2 = self.F.shape[1]
+        self.n = n2 // 2
+        self.anchor = VectorizedPoint(ORIGIN)
+        self.prices = VGroup()
+        for i in range(n2):
+            px = price0 + (i - self.n) * tick
+            col = QC.LOSS if i >= self.n else QC.GAIN
+            self.prices.add(MathTex(f"{px:.2f}", font_size=20, color=col).move_to([-0.55, self._y(i), 0]))
+        self.add(self.anchor, self.prices, always_redraw(self._draw))
+
+    def _y(self, i):
+        return (i - self.n + 0.5) * self.row_h
+
+    def frame(self):
+        return self.F[int(np.clip(round(self.t.get_value()), 0, len(self.F) - 1))]
+
+    def best(self):
+        f = self.frame()
+        bids = np.flatnonzero(f[:self.n])
+        asks = np.flatnonzero(f[self.n:])
+        return (int(bids[-1]) if len(bids) else 0), (self.n + int(asks[0]) if len(asks) else 2 * self.n - 1)
+
+    def _draw(self):
+        f = self.frame()
+        o = self.anchor.get_center()
+        g = VGroup()
+        for i, q in enumerate(f):
+            col = QC.LOSS if i >= self.n else QC.GAIN
+            for k in range(min(int(q), self.maxb)):
+                g.add(Square(self.block * 0.86, stroke_width=0, fill_color=col, fill_opacity=0.85 - 0.02 * k)
+                      .move_to(o + np.array([k * self.block + self.block / 2, self._y(i), 0])))
+        bb, ba = self.best()
+        x = -1.05
+        br = VGroup(Line(o + [x, self._y(bb), 0], o + [x, self._y(ba), 0], color=QC.IDEA, stroke_width=3),
+                    Line(o + [x, self._y(bb), 0], o + [x + 0.12, self._y(bb), 0], color=QC.IDEA, stroke_width=3),
+                    Line(o + [x, self._y(ba), 0], o + [x + 0.12, self._y(ba), 0], color=QC.IDEA, stroke_width=3))
+        g.add(br)
+        return g

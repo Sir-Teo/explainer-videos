@@ -178,16 +178,24 @@ class Hook(VoiceoverScene):
         ticks = VGroup(*[VGroup(Line([X(y), -0.26, 0], [X(y), -0.14, 0], color=GREY_D),
                                 Text(str(y), font_size=14, color=GREY_D).move_to([X(y), -0.48, 0]))
                          for y in (1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000)])
-        dots, labs = VGroup(), VGroup()
+        dots, labs, leads = VGroup(), VGroup(), VGroup()
+        tiers = [0.55, -0.95, 1.05, -1.45, 1.55, -1.95, 2.05, -2.45]
+        used = {k: [] for k in range(len(tiers))}
         for i, (yr, name, col) in enumerate(events):
             d = Dot([X(yr), -0.2, 0], radius=0.07, color=col)
             dots.add(d)
-            row = i % 4
-            t = label(rf"{yr}\; {name}", font_size=18, color=col)
-            up = i % 2 == 0
-            t.move_to([X(yr), (0.6 + 0.55 * (row // 2)) if up else (-1.1 - 0.55 * (row // 2)), 0])
-            keep_in_frame(t, margin=0.3)
+            t = label(rf"{yr}\; {name}", font_size=17, color=col)
+            for k, y in enumerate(tiers):
+                t.move_to([X(yr), y - 0.2, 0])
+                keep_in_frame(t, margin=0.3)
+                a, b = t.get_left()[0], t.get_right()[0]
+                if all(b + 0.2 < u or a - 0.2 > v for u, v in used[k]):
+                    used[k].append((a, b))
+                    break
             labs.add(t)
+            up = t.get_y() > d.get_y()
+            leads.add(Line(d.get_center(), [X(yr), t.get_bottom()[1] if up else t.get_top()[1], 0], color=col,
+                           stroke_width=1, stroke_opacity=0.5))
         title = label(r"How we got here", font_size=36).to_edge(UP, buff=0.5)
         cap = wrapped_label(r"three centuries of one idea: a fair game, its value as information arrives, and what no "
                             r"strategy can do to it", 11.0, 22, GREY_A).to_edge(DOWN, buff=0.5)
@@ -205,7 +213,8 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(title), Create(line), FadeIn(ticks), FadeIn(cap))
             groups = [(0, 3, "a"), (3, 7, "b"), (7, 9, "c"), (9, 12, None)]
             for a, b, mark in groups:
-                self.play(LaggedStart(*[AnimationGroup(GrowFromCenter(dots[i]), FadeIn(labs[i], shift=UP * 0.1))
+                self.play(LaggedStart(*[AnimationGroup(GrowFromCenter(dots[i]), Create(leads[i]),
+                                                       FadeIn(labs[i], shift=UP * 0.1))
                                         for i in range(a, b)], lag_ratio=0.5), run_time=2.4)
                 if mark:
                     vo.wait_until(mark)

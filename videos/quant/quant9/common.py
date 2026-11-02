@@ -10,9 +10,11 @@ PART = 9
 
 CALL, PUT = QC.GAIN, QC.LOSS   # calls, puts
 FWD = QC.SPOT                  # forwards, the underlying
-Q_C = QC.IDEA                  # state prices, Q, the density
+Q_C = QC.Q                     # state prices, Q, the density: risk-neutral objects
+P_C = QC.P                     # real-world probabilities
 ARB = QC.CRISIS                # arbitrage, violations
 ALT = QC.OPTION
+HEDGE = QC.DELTA               # hedges, deltas
 
 
 def real_data(text: str, corner=DR):
@@ -28,3 +30,12 @@ def tbar(ax, x, t, color, width=0.5, lo=0.0):
     w = ax.c2p(width, 0)[0] - ax.c2p(0, 0)[0]
     return Rectangle(width=w, height=max(abs(top[1] - bot[1]), 0.01), stroke_width=0, fill_color=color,
                      fill_opacity=0.85).move_to((top + bot) / 2)
+
+
+def pause_at(question, width=9.6):
+    """A pause-and-predict card, centred a little high (the answer goes under it)."""
+    return pause_card(question, color=QC.HOUSE, width=width).move_to(UP * 0.9)
+
+
+def answer_under(card, text, width=9.0):
+    return wrapped_label(text, width, 24, GREY_A).next_to(card, DOWN, buff=0.45)

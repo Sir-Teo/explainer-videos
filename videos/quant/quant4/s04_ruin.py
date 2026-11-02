@@ -11,16 +11,17 @@ GAME_C = {"fair coin": MART, "European roulette": P_C, "American roulette": LOSS
 class Ruin(VoiceoverScene):
     def construct(self):
         r = load("ruin")
+        rd = load("ruin_duration")
         self.card()
         self.derive()
+        self.duration(rd)
         self.curves(r)
         self.bold(r)
-        self.casino()
 
     def card(self):
-        c = chapter_card(3, r"Gambler's ruin and bold play", r"How should you bet in a game you will lose?",
-                         part=PART)
-        with self.voiceover("Chapter three. Gambler's ruin, and bold play."):
+        c = chapter_card(9, r"Gambler's ruin and bold play", r"How should you bet in a game you will lose?",
+                         lit=(1965,), part=PART)
+        with self.voiceover("Chapter nine. Gambler's ruin, and bold play."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -129,23 +130,78 @@ class Ruin(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def casino(self):
-        card = firm_card(r"The casino",
-                         r"A casino is a portfolio of martingales with a small drift in its favour, and a risk manager. "
-                         r"Its edge on red is 1/37 on a European wheel and 2/38 on an American one. Its table limits "
-                         r"cap the bets, which is exactly the condition that makes optional stopping hold: no doubling "
-                         r"system can outrun them. It bars card counters, who have found a game whose drift points the "
-                         r"other way (Part 1).",
-                         numbers=[(r"2.70\%", r"the edge on red, European wheel"), (r"5.26\%", r"American wheel")],
-                         source=r"arithmetic of the wheels; Thorp, \textit{Beat the Dealer} (1962)", width=9.4)
-        card.move_to(ORIGIN)
+    def duration(self, rd):
+        F, R = rd["fair"], rd["roulette"]
+        rows = [cmath(r"\mathbb{E}[S_\tau^2 - \tau]", r"=", r"0", font_size=40),
+                cmath(r"\mathbb{E}\tau", r"=", r"(b - a)^2\,\tfrac{a}{b} + a^2\,\tfrac{b - a}{b}", font_size=40),
+                cmath(r"\mathbb{E}\tau", r"=", r"a\,(b - a) = 50 \cdot 50 = 2{,}500", font_size=40,
+                      colors={r"a\,(b - a) = 50 \cdot 50 = 2{,}500": MART})]
+        whys = [why(r"$S_n^2 - n$ is a martingale (chapter 3), started at 0 with barriers $-a$ and $b - a$; bounded "
+                    r"steps and $\mathbb{E}\tau < \infty$: condition (c)"),
+                why(r"$S_\tau$ is $b - a$ with probability $a/b$ and $-a$ otherwise"),
+                why(r"from 50, aiming for 100: two and a half thousand bets")]
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=-2.0, buff=0.6, edge=6.9)
+        n_show = 60
+        paths = [np.asarray(p_, float) for p_ in F["paths"][:n_show]]
+        T = max(len(p_) for p_ in paths)
+        g = axes([0, 25 * (T - 1)], [0, 100], x_length=8.4, y_length=2.8, xlabel=r"bets (fair coin, from 50)",
+                 xticks=[0, 5000, 10000], yticks=[0, 50, 100], font_size=16).to_edge(DOWN, buff=0.6).to_edge(LEFT, buff=0.7)
+        ax = g.ax
+        tk = ValueTracker(0.0)
+        taus = np.asarray(F["tau"])[:n_show]
+        tops = np.asarray(F["top"])[:n_show]
+
+        def fan():
+            t = tk.get_value()
+            m = int(np.clip(t / 25, 1, T - 1))
+            grp = VGroup()
+            for i, p_ in enumerate(paths):
+                k = min(m, len(p_) - 1)
+                pts = [ax.c2p(25 * j, p_[j]) for j in range(k + 1)]
+                done = taus[i] <= t
+                col = (QC.IDEA if tops[i] else LOSS) if done else P_C
+                grp.add(VMobject(stroke_width=1.2, stroke_color=col, stroke_opacity=0.6 if done else 0.35)
+                        .set_points_as_corners(pts))
+            return grp
+
+        live = always_redraw(fan)
+        cnt = always_redraw(lambda: MathTex(
+            rf"\text{{finished: }} {int(np.sum(taus <= tk.get_value()))}/{n_show}"
+            rf"\quad \text{{at }} 100\text{{: }} {int(np.sum((taus <= tk.get_value()) & tops))}",
+            font_size=26, color=QC.IDEA).next_to(g, UP, buff=0.15).align_to(g, LEFT))
+        side = VGroup(
+            MathTex(rf"\text{{4{{,}}000 games: }} {F['mean']:,.0f} \pm {F['se']:.0f}".replace(",", "{,}"), font_size=28,
+                    color=MART),
+            MathTex(rf"\text{{reach 100: }} {100 * F['frac_top']:.1f}\%", font_size=28, color=QC.IDEA),
+            MathTex(rf"\text{{roulette: }} {R['mean']:,.0f}\ (\text{{theory }} {R['theory']:,.0f})".replace(",", "{,}"),
+                    font_size=26, color=P_C),
+            MathTex(rf"\text{{reach 100: }} {100 * R['frac_top']:.1f}\%", font_size=26, color=P_C),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DR, buff=0.4)
+        ok = abs(F["mean"] - 2500) <= 2 * F["se"]
+        verdict = (f"Four thousand simulated games average {F['mean']:,.0f}, within sampling error of the formula."
+                   if ok else f"Four thousand simulated games average {F['mean']:,.0f}, a little off the formula: "
+                              "the long games are rare and dominate the average.")
         with self.voiceover(
-            "Which is how a casino works. It is a portfolio of martingales with a small drift in its favour, run with "
-            "risk limits. Its table limits cap the size of any bet, which is exactly the condition that makes "
-            "optional stopping hold: no doubling system can outrun them. And it bars the card counters of Part one, "
-            "who found a game whose drift, at times, points the other way. A casino is the first quant firm most "
-            "people meet, and it is on the right side of the edge."
-        ):
-            self.play(FadeIn(card, shift=UP * 0.2))
-        self.wait(0.6)
+            "How long does it take? Use the other martingale of chapter three, the square of the walk minus the "
+            "number of steps. Start the walk at zero, with barriers at minus a and b minus a. The steps are bounded "
+            "and the expected time is finite, so its expected value at the end is zero. <bookmark mark='a'/> At the "
+            "end the walk is at one barrier or the other, with the probabilities we just found. <bookmark mark='b'/> "
+            "So the expected number of bets is a times b minus a. From fifty, aiming for a hundred: two thousand five "
+            "hundred bets. <bookmark mark='c'/> Here are sixty of those games, each turning gold if it reaches a hundred "
+            "and red if it goes broke. " + verdict + " On European roulette the games end sooner, and only "
+            f"{100 * R['frac_top']:.1f} percent of them at a hundred."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            self.play(FadeIn(g))
+            self.add(live, cnt)
+            self.play(tk.animate.set_value(float(25 * (T - 1))), run_time=8, rate_func=lambda u: u ** 1.5)
+            live.clear_updaters()
+            cnt.clear_updaters()
+            self.play(FadeIn(side))
+        self.wait(0.4)
         self.clear_scene()

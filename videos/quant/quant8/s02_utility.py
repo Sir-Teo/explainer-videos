@@ -132,11 +132,13 @@ class Utility(VoiceoverScene):
         cd = always_redraw(lambda: Dot(ax.c2p(ce_now(), 0.5), color=KELLY, radius=0.09))
         vl = always_redraw(lambda: DashedLine(ax.c2p(ce_now(), 0.5), ax.c2p(ce_now(), -0.6), color=KELLY,
                                               stroke_width=2))
-        read = always_redraw(lambda: VGroup(
-            MathTex(rf"\gamma = {np.exp(lg.get_value()):.1f}", font_size=40, color=VALUE),
-            MathTex(rf"CE = {ce_now():.1f}", font_size=40, color=KELLY),
-            MathTex(rf"\text{{premium}} = {100 - ce_now():.1f}", font_size=34, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=1.0).shift(UP * 1.2))
+        read = VGroup(*[VGroup(MathTex(t, font_size=36, color=c_), DecimalNumber(0, num_decimal_places=1, font_size=36,
+                                                                                    color=c_)).arrange(RIGHT, buff=0.15)
+                        for t, c_ in ((r"\gamma =", VALUE), (r"CE =", KELLY), (r"\text{premium} =", GREY_A))])
+        read.arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=1.0).shift(UP * 1.2)
+        read[0][1].add_updater(lambda m: m.set_value(float(np.exp(lg.get_value()))))
+        read[1][1].add_updater(lambda m: m.set_value(ce_now()))
+        read[2][1].add_updater(lambda m: m.set_value(100 - ce_now()))
         rows = [cmath(r"u(W)", r"=", r"\frac{W^{1-\gamma}}{1-\gamma}", font_size=34, colors={r"u(W)": VALUE})]
         eq = rows[0].to_corner(DR, buff=0.6).shift(UP * 0.6)
         why_ = wrapped_label(r"constant relative risk aversion: the same gambles, in percent, at any wealth; "
@@ -160,7 +162,7 @@ class Utility(VoiceoverScene):
             self.play(lg.animate.set_value(np.log(30)), run_time=max(min(vo.remaining(8.0) - 3, 14), 6),
                       rate_func=smooth)
             vo.wait_until("b")
-        for m in (crv, hl, vl, cd, read):
+        for m in (crv, hl, vl, cd, *[r_[1] for r_ in read]):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()

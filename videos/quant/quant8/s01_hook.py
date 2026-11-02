@@ -84,8 +84,9 @@ class Hook(VoiceoverScene):
                     k += 1
 
         dots.add_updater(move)
-        cnt = always_redraw(lambda: MathTex(rf"\text{{flip }}{int(tk.get_value())}", font_size=30,
-                                            color=GREY_A).to_corner(UR, buff=0.5))
+        num = Integer(0, font_size=34, color=GREY_A)
+        cnt = VGroup(label(r"flip", font_size=28, color=GREY_A), num).arrange(RIGHT, buff=0.2).to_corner(UR, buff=0.5)
+        num.add_updater(lambda m: m.set_value(int(tk.get_value())))
         q = pause_card(r"Before the flips: which column goes bust most often, 40\% or 100\%? And does 40\% grow at "
                        r"all?", width=5.0, font_size=22).to_corner(UR, buff=0.4).shift(DOWN * 0.8)
         b = L["by_fraction"]
@@ -110,7 +111,7 @@ class Hook(VoiceoverScene):
             self.add(cnt)
             self.play(tk.animate.set_value(300), run_time=max(vo.remaining(12.0), 12.0), rate_func=linear)
         dots.clear_updaters()
-        cnt.clear_updaters()
+        num.clear_updaters()
         with self.voiceover(
             f"The all-in column was wiped out: {100 * b['1.0']['p_bust']:.0f} percent of its players went bust, "
             "because a single tail takes everything. At forty percent the typical player barely grows, and only the "

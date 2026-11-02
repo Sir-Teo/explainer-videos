@@ -299,7 +299,7 @@ def compute_kernel() -> dict:
     c = np.asarray(b["close"])
     h = int(round(T * 365))
     r = np.log(c[h::h] / c[:-h:h][:len(c[h::h])])           # non-overlapping h-day log returns
-    grid = np.linspace(0.70 * F, 1.30 * F, 121)
+    grid = np.linspace(0.80 * F, 1.25 * F, 91)              # where both densities have mass enough to divide
     qg = np.interp(grid, K, q)
 
     def p_of(rs):
@@ -316,12 +316,17 @@ def compute_kernel() -> dict:
     econ.stationary_bootstrap(r, stat, mean_block=3, B=1000, seed=9)
     M = np.array(curves)
     lo, hi = np.percentile(M, 5, axis=0), np.percentile(M, 95, axis=0)
-    left, mid, right = (grid < 0.85 * F), (np.abs(grid / F - 1) < 0.03), (grid > 1.15 * F)
-    ml, mm, mr = float(np.median(m[left])), float(np.median(m[mid])), float(np.median(m[right]))
-    shape = "u" if (mr > mm and np.median(lo[right]) > np.median(hi[mid])) else ("decreasing" if ml > mm > mr else "other")
+    i_pk = int(np.argmax(m))
+    # what the band can tell: is the kernel's peak above each end, beyond the 90% band?
+    right_sig = bool(lo[i_pk] > hi[-1])
+    left_sig = bool(lo[i_pk] > hi[0])
+    rising_left = bool(lo[0] > hi[i_pk])
+    ml, mm, mr = float(m[0]), float(np.interp(F, grid, m)), float(m[-1])
+    shape = "decreasing" if (i_pk == 0 or rising_left) else ("hump" if right_sig else "flat")
     return _json({"grid": grid, "q": qg, "p": pg, "m": m, "lo": lo, "hi": hi, "F": F, "S": S0, "T": T, "h_days": h,
                   "n_windows": int(len(r)), "mean_ret": float(np.mean(r)), "vol_ret": float(np.std(r)),
-                  "m_left": ml, "m_mid": mm, "m_right": mr, "shape": shape,
+                  "m_left": ml, "m_mid": mm, "m_right": mr, "shape": shape, "peak_x": float(grid[i_pk] / F),
+                  "peak_m": float(m[i_pk]), "right_sig": right_sig, "left_sig": left_sig, "rising_left": rising_left,
                   "m_at_m20": float(np.interp(0.8 * F, grid, m)), "m_at_p20": float(np.interp(1.2 * F, grid, m))})
 
 
@@ -466,7 +471,7 @@ def compute_free_lunch() -> dict:
     from scipy.stats import norm
     g = np.random.default_rng(10)
     # the doubler: X is a Brownian motion run on the clock ln(T / (T - t)); stop when it first reaches +1
-    n, dt, L = 20000, 0.05, 2500.0
+    n, dt, L = 20000, 0.05, 20000.0
     X = np.zeros(n)
     mn = np.zeros(n)
     alive = np.ones(n, bool)
@@ -474,10 +479,15 @@ def compute_free_lunch() -> dict:
     k = 0
     while alive.any() and k * dt < L:
         idx = np.where(alive)[0]
+        x0 = X[idx].copy()
         X[idx] += g.standard_normal(len(idx)) * np.sqrt(dt)
-        mn[idx] = np.minimum(mn[idx], X[idx])
+        # the bridge's minimum between the grid points, sampled exactly: (x0 + x1 - sqrt((x1 - x0)^2 - 2 dt ln U)) / 2
+        bmin = 0.5 * (x0 + X[idx] - np.sqrt((X[idx] - x0) ** 2 - 2 * dt * np.log(g.random(len(idx)))))
+        mn[idx] = np.minimum(mn[idx], bmin)
         k += 1
-        done = idx[X[idx] >= 1.0]
+        # a crossing of +1 between two grid points, by the Brownian bridge: probability exp(-2 (1 - x0)(1 - x1) / dt)
+        cross = (X[idx] >= 1.0) | (g.random(len(idx)) < np.exp(-2 * np.maximum(1 - x0, 0) * np.maximum(1 - X[idx], 0) / dt))
+        done = idx[cross]
         hit_clock[done] = k * dt
         alive[done] = False
     ks = [1, 3, 10]
@@ -795,7 +805,7 @@ def compute_mot_claims() -> dict:
 
 def compute_mot_grid() -> dict:
     rows = []
-    for nb1, nb2 in ((9, 25), (13, 41), (17, 57), (25, 81), (33, 121), (41, 161), (49, 201)):
+    for nb1, nb2 in ((9, 25), (13, 41), (17, 57), (25, 81), (33, 121), (41, 161), (49, 201), (65, 281), (81, 361)):
         x, mu, y, nu, gap = _mot_marginals(nb1, nb2)
         row = {"bins1": nb1, "bins2": nb2, "atoms1": len(x), "atoms2": len(y), "gap": gap}
         if gap >= -1e-9:

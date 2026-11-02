@@ -445,28 +445,6 @@ def compute_picard() -> dict:
     return _json({"iterates": [x[::5] for x in its], "dist": dist, "em_gap": float(np.max(np.abs(X - em)))})
 
 
-def compute_mlmc() -> dict:
-    """Multilevel against standard Monte Carlo for an Asian call (Part 16's engine: S_0 = K = 100, sigma = 20%,
-    r = 5%, Euler), at RMS accuracy 0.04, 0.02, 0.01, with four seeds."""
-    from explainer.quant.house import engine as E
-
-    eps = [0.04, 0.02, 0.01]
-    out = []
-    for seed in range(4):
-        g = np.random.default_rng(100 + seed)
-        row = []
-        for e in eps:
-            m = E.mlmc(e, 100.0, 100.0, 1.0, 0.2, 0.05, seed=3 + 10 * seed)
-            nn = 2 ** m["levels"]
-            P = E._plain_euler(nn, 20000, 100.0, 100.0, 1.0, 0.2, 0.05, g)
-            N = int(np.ceil(2 * P.var() / e ** 2))
-            row.append({"mlmc_cost": m["cost"], "std_cost": float(N * nn), "levels": m["levels"], "V": m["V"],
-                        "N": m["N"], "estimate": m["estimate"]})
-        out.append(row)
-    ratio = np.array([[r["std_cost"] / r["mlmc_cost"] for r in row] for row in out])
-    return _json({"eps": eps, "seeds": out, "ratio": ratio, "ratio_mean": ratio.mean(0)})
-
-
 def compute_cir_mle() -> dict:
     """CIR fitted to the monthly 3-month bill rate by exact (non-central chi-square) maximum likelihood, from the
     regression estimate and four random starts; every Nelder-Mead iterate kept for the replay."""
@@ -1130,7 +1108,7 @@ def compute_nsde() -> dict:
         torch.save(m.parameters(), CACHE.path("nsde").with_suffix(f".seed{seed}.pt"))
         with torch.no_grad():
             gen = m.sample(2000, torch.Generator().manual_seed(77)).numpy()
-        part[key] = {"curve": curve, "fans": {str(k): v for k, v in fans.items()}, "gen": gen}
+        part[key] = _json({"curve": curve, "fans": {str(k): v for k, v in fans.items()}, "gen": gen})
     out = {"seeds": [part[f"seed{s}"] for s in range(3)], "real_fan": np.cumsum(real[::30][:24], axis=1),
            "mean": float(tr.mean()), "sd": float(sd), "n_windows": int(len(real))}
     part.finish()
@@ -1201,7 +1179,7 @@ def compute_ou_lab() -> dict:
 
 ITEMS2 = {"construct": compute_construct, "reflection": compute_reflection, "qv_live": compute_qv_live,
           "wong_zakai": compute_wong_zakai, "lemma_column": compute_lemma_column, "picard": compute_picard,
-          "mlmc": compute_mlmc, "cir_mle": compute_cir_mle, "fp_surface": compute_fp_surface,
+          "cir_mle": compute_cir_mle, "fp_surface": compute_fp_surface,
           "fk_check": compute_fk_check, "girsanov_paths": compute_girsanov_paths, "is_run": compute_is_run,
           "observability": compute_observability, "hedge_rates": compute_hedge_rates, "tanaka": compute_tanaka,
           "levy_layers": compute_levy_layers, "jump_hedge": compute_jump_hedge, "hawkes_replay": compute_hawkes_replay,

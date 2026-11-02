@@ -935,10 +935,10 @@ def compute_forecaster() -> dict:
     (Xtr, ytr), (Xva, yva), (Xte, yte) = d["train"], d["val"], d["test"]
     mse = lambda a, b: float(np.mean((a - b) ** 2))  # noqa: E731
     res = {"rw": mse(Xte[:, 0], yte)}
-    o = econ.ols(ytr, Xtr)
-    pred_ols = o["beta"][0] + Xte @ o["beta"][1:]
+    # least squares by lstsq: the items are collinear (earnings = cash flow + accruals), as real statements are
+    beta = np.linalg.lstsq(np.column_stack([np.ones(len(ytr)), Xtr]), ytr, rcond=None)[0]
+    pred_ols = beta[0] + Xte @ beta[1:]
     res["ols"] = mse(pred_ols, yte)
-    res["ols_coef"] = o["beta"]
     best_lam, best = None, np.inf
     for lam in (0.01, 0.1, 1.0, 10.0):
         v = mse(econ.ridge_fit_predict(Xtr, ytr, Xva, lam=lam, knots=8), yva)

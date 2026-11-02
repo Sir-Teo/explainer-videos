@@ -3,157 +3,211 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant2.common import GAIN, LOSS, PART, TRADE, load
+from videos.quant.quant2.common import GAIN, LOSS, PART, TRADE, OrderBookLadder, load
+
+C_ = {r"a": LOSS, r"m": GREY_A, r"\delta": QC.IDEA, r"Q": TRADE, r"d": GAIN}
+
+
+def row(*parts, fs=38):
+    return cmath(*parts, colors=C_, font_size=fs)
 
 
 class Orders(VoiceoverScene):
     def construct(self):
-        a = load("auction")
+        bk = load("book")
         self.card()
         self.types()
-        self.book()
-        self.auction(a)
-        self.dealers()
+        self.live(bk)
+        self.walk(bk)
+        self.tick(bk)
 
     def card(self):
-        c = chapter_card(2, r"Orders, books and auctions", r"How does a buyer find a seller?", lit=(2005,), part=PART)
-        with self.voiceover("Chapter two. Orders, books and auctions."):
+        c = chapter_card(3, r"The order book", r"How does a buyer find a seller, and what does impatience cost?",
+                         lit=(2005,), part=PART)
+        with self.voiceover("Chapter three. The order book."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
     def types(self):
         cards = VGroup(
-            definition_card(r"Market order", r"Buy or sell now, at whatever the market offers. Certain to trade; "
-                            r"the price is not certain.", width=4.2, color=LOSS, font_size=22),
+            definition_card(r"Market order", r"Buy or sell now, at whatever the book offers. Certain to trade; "
+                            r"the price is not certain.", width=4.2, color=LOSS, font_size=21),
             definition_card(r"Limit order", r"Buy at this price or lower, sell at this price or higher. The price is "
-                            r"certain; trading is not. It waits in the book.", width=4.2, color=GAIN, font_size=22),
+                            r"certain; trading is not. It waits in the book.", width=4.2, color=GAIN, font_size=21),
             definition_card(r"Stop order", r"Becomes a market order once the price reaches a trigger: used to cut "
-                            r"losses, and, in a crash, to add to the selling.", width=4.2, color=QC.IDEA, font_size=22),
-        ).arrange(RIGHT, buff=0.3, aligned_edge=UP).move_to(UP * 0.4)
+                            r"losses, and, in a crash, adds to the selling.", width=4.2, color=QC.IDEA, font_size=21),
+        ).arrange(RIGHT, buff=0.3, aligned_edge=UP).move_to(UP * 1.3)
+        more = VGroup(
+            label(r"validity: DAY (until the close), GTC (good till cancelled), IOC (fill what you can now, cancel "
+                  r"the rest), FOK (all now or nothing)", font_size=21),
+            label(r"hidden and iceberg orders show part or none of their size; at the same price they wait behind "
+                  r"displayed orders", font_size=21),
+            label(r"precedence: price first, then visibility, then time", font_size=24, color=QC.HOUSE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(cards, DOWN, buff=0.5)
+        if more.width > 13.0:
+            more.scale_to_fit_width(13.0)
         with self.voiceover(
             "Two kinds of order do almost all the work. A market order says: trade now, at whatever price is "
             "available. It is certain to trade, and uncertain about the price. <bookmark mark='a'/> A limit order "
             "says: buy at this price or lower, sell at this price or higher. The price is certain, the trade is not; "
-            "it waits. <bookmark mark='b'/> And a stop order waits for a trigger price, then becomes a market order: "
-            "a way to cut a loss, and, when many are triggered at once, a way to deepen a crash."
+            "it waits. A stop order waits for a trigger, then becomes a market order. <bookmark mark='b'/> Orders "
+            "also say how long they live: for the day, until cancelled, immediate-or-cancel, or fill-or-kill. And "
+            "some hide: an iceberg shows a slice of its size, a hidden order shows none, and for that privilege it "
+            "queues behind every displayed order at the same price. The rule of the book is price first, then "
+            "visibility, then time."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(cards[1], shift=UP * 0.2))
+            self.play(FadeIn(cards[1], shift=UP * 0.2), FadeIn(cards[2], shift=UP * 0.2))
             vo.wait_until("b")
-            self.play(FadeIn(cards[2], shift=UP * 0.2))
+            self.play(LaggedStart(*[FadeIn(m) for m in more], lag_ratio=0.5))
         self.wait(0.4)
         self.clear_scene()
 
-    def book(self):
-        asks = [(100.05, 300), (100.04, 500), (100.03, 200), (100.02, 400), (100.01, 150)]
-        bids = [(100.00, 250), (99.99, 400), (99.98, 350), (99.97, 600), (99.96, 200)]
-        rows = VGroup()
-        W = 0.006
-        for px, q in asks + bids:
-            col = LOSS if px > 100.0 else GAIN
-            bar = Rectangle(width=q * W, height=0.38, stroke_width=0, fill_color=col, fill_opacity=0.7)
-            pt = MathTex(f"{px:.2f}", font_size=28, color=col)
-            qt = MathTex(f"{q}", font_size=24, color=GREY_A)
-            r_ = VGroup(pt, bar, qt).arrange(RIGHT, buff=0.25)
-            bar.align_to(pt, LEFT).shift(RIGHT * 1.2)
-            qt.next_to(bar, RIGHT, buff=0.15)
-            rows.add(r_)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_edge(LEFT, buff=1.2).shift(DOWN * 0.2)
-        spread = Brace(VGroup(rows[4], rows[5]), RIGHT, buff=1.8, color=QC.IDEA)
-        sl = label(r"the spread: 1 cent", font_size=24, color=QC.IDEA).next_to(spread, RIGHT, buff=0.1)
-        hdr = VGroup(label(r"asks: sellers waiting", font_size=24, color=LOSS),
-                     label(r"bids: buyers waiting", font_size=24, color=GAIN))
-        hdr[0].next_to(rows[0], UP, buff=0.25).align_to(rows, LEFT)
-        hdr[1].next_to(rows[-1], DOWN, buff=0.25).align_to(rows, LEFT)
-        rule = VGroup(label(r"Price-time priority:", font_size=26, color=GREY_A),
-                      label(r"the best price trades first;", font_size=24),
-                      label(r"at one price, the oldest order first.", font_size=24),
-                      label(r"A market order to buy 600 takes", font_size=24, color=TRADE),
-                      label(r"150 at 100.01 and 400 at 100.02,", font_size=24, color=TRADE),
-                      label(r"then 50 at 100.03: average 100.017.", font_size=24, color=TRADE),
-                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(RIGHT, buff=0.6)
+    def live(self, bk):
+        t = ValueTracker(0)
+        lad = OrderBookLadder(bk["frames"], t, bk["kinds"])
+        lad.shift(LEFT * 3.0 + DOWN * 0.2)
+        hdr = VGroup(label(r"asks: sellers waiting", font_size=22, color=LOSS).next_to(lad, UP, buff=0.2),
+                     label(r"bids: buyers waiting", font_size=22, color=GAIN).next_to(lad, DOWN, buff=0.2))
+        names = {0: (r"limit buy joins a queue", GAIN), 1: (r"limit sell joins a queue", LOSS),
+                 2: (r"market buy takes the best ask", TRADE), 3: (r"market sell takes the best bid", TRADE),
+                 4: (r"a bid is cancelled", GREY_B), 5: (r"an ask is cancelled", GREY_B)}
+        ev = {k: label(v[0], font_size=24, color=v[1]) for k, v in names.items()}
+        for m in ev.values():
+            m.to_edge(RIGHT, buff=0.8).shift(UP * 2.5)
+        cur = ev[int(bk["kinds"][0])].copy()
+        model = VGroup(
+            label(r"Zero intelligence (Smith, Farmer, Gillemot and Krishnamurthy, 2003):", font_size=21,
+                  color=QC.IDEA),
+            label(r"limit orders arrive at random prices near the best quote,", font_size=21),
+            label(r"market orders arrive at random, resting orders are cancelled at random.", font_size=21),
+            label(r"No one thinks. The book still has a spread, queues and depth.", font_size=21, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.4)
+        hist = np.asarray(bk["spread_hist"], float)
+        hg = axes([0, 11], [0, 1.05], x_length=4.2, y_length=1.6, xlabel=r"spread, ticks", xticks=[1, 5, 10],
+                  font_size=15).to_corner(DR, buff=0.5)
+        hb = VGroup(*[Rectangle(width=0.3, height=max(hg.ax.c2p(0, h / hist.max())[1] - hg.ax.c2p(0, 0)[1], 0.01),
+                                stroke_width=0, fill_color=QC.IDEA, fill_opacity=0.8)
+                      .move_to(hg.ax.c2p(i, 0), aligned_edge=DOWN) for i, h in enumerate(hist) if h > 0])
         with self.voiceover(
-            "Limit orders that haven't traded wait in the order book. Above, the asks: sellers and their prices. "
-            "Below, the bids: buyers. The gap between the best bid and the best ask is the spread, here one cent. "
-            "<bookmark mark='a'/> Exchanges match by price-time priority: the best price first, and at the same "
-            "price, whoever came first. <bookmark mark='b'/> A market order to buy six hundred shares eats up the "
-            "book: a hundred and fifty at 100.01, four hundred at 100.02, then fifty at 100.03. Its average price is "
-            "a cent and three quarters above the best bid. That cost of trading, the spread and the walk up the "
-            "book, is the subject of Parts thirty-six and thirty-seven."
+            "Here is a book running: one row per price, asks above and bids below, each block one share waiting. "
+            "This one is simulated, by the zero-intelligence model of Smith, Farmer, Gillemot and Krishnamurthy: "
+            "orders arrive at random prices, market orders at random times, resting orders are cancelled at "
+            "random. <bookmark mark='a'/> Watch a level: a new order joins at the back of its queue; a "
+            "cancellation pulls a block out of the middle; a market order bites from the front of the best queue. "
+            "The yellow bracket is the spread, and it breathes as the front queues empty and refill. "
+            "<bookmark mark='b'/> Nobody in this model thinks, and the book still has a spread that is usually one "
+            "to four ticks, thin queues at the front and deeper ones behind: much of a book's shape is plumbing, "
+            "not strategy."
         ) as vo:
-            self.play(FadeIn(hdr), LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.1))
-            self.play(GrowFromCenter(spread), FadeIn(sl))
+            self.play(FadeIn(lad), FadeIn(hdr), FadeIn(model))
+            self.add(cur)
             vo.wait_until("a")
-            self.play(FadeIn(rule[:3]))
+            for k in range(1, 90):
+                nk = ev[int(bk["kinds"][k])].copy()
+                self.play(t.animate.set_value(k), Transform(cur, nk), run_time=0.12, rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(rule[3:]))
-            self.play(rows[4][1].animate.set_fill(opacity=0.12), run_time=0.6)
-            self.play(rows[3][1].animate.set_fill(opacity=0.12), run_time=0.6)
-            self.play(rows[2][1].animate.stretch(0.75, 0, about_edge=RIGHT), run_time=0.6)
+            self.play(FadeIn(hg), LaggedStart(*[GrowFromEdge(r_, DOWN) for r_ in hb], lag_ratio=0.1),
+                      t.animate.set_value(len(bk["frames"]) - 1), run_time=3)
         self.wait(0.4)
         self.clear_scene()
 
-    def auction(self, a):
-        c = np.asarray(a["candidates"])
-        dm, sp = np.asarray(a["demand"]), np.asarray(a["supply"])
-        m = (c >= 98.6) & (c <= 101.4)
-        top = float(max(dm.max(), sp.max())) * 1.05
-        g = axes([98.6, 101.4], [0, top], x_length=7.6, y_length=4.4, xlabel=r"price", ylabel=r"shares",
-                 xticks=[99, 99.5, 100, 100.5, 101], yticks=[0, 10000, 20000, 30000],
-                 yfmt=lambda v: f"{v / 1000:.0f}" + r"\text{k}", font_size=18).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
+    def walk(self, bk):
+        rows = [
+            row(r"\text{fills}", r"=", r"a,\ a+\delta,\ \dots,\ a + (Q/d - 1)\,\delta"),
+            row(r"\bar p", r"=", r"a + \frac{\delta}{2}\Big(\frac{Q}{d} - 1\Big)"),
+            row(r"\bar p - m", r"=", r"\frac{s}{2} + \frac{\delta}{2}\Big(\frac{Q}{d} - 1\Big)"),
+        ]
+        whys = [why(r"depth $d$ at every tick $\delta$ above the best ask $a$: price priority", font_size=20),
+                why(r"the average of an arithmetic series", font_size=20),
+                why(r"cost against the mid $m$: half the spread, plus the walk; effective spread $2|\bar p - m|$",
+                    font_size=20)]
+        for r_ in rows:
+            r_.scale(0.85)
+        step = ladder(self, rows, whys, keep=3, top=3.3, x=-3.2, buff=0.5, edge=6.9)
+        Q = np.asarray(bk["Q"], float)
+        W = np.asarray(bk["walk"], float)
+        uni = np.asarray(bk["walk_uniform"], float)
+        g = axes([0, 40], [0, 9.5], x_length=6.2, y_length=3.0, xlabel=r"market buy size $Q$, shares",
+                 ylabel=r"average price above the best ask, ticks", xticks=[0, 20, 40], yticks=[0, 4, 8],
+                 font_size=17).to_edge(DOWN, buff=0.4).to_edge(LEFT, buff=0.8)
         ax = g.ax
-        dl = VMobject(color=QC.GAIN, stroke_width=3.5).set_points_as_corners([ax.c2p(x, y) for x, y in zip(c[m], dm[m])])
-        sl = VMobject(color=QC.LOSS, stroke_width=3.5).set_points_as_corners([ax.c2p(x, y) for x, y in zip(c[m], sp[m])])
-        px = DashedLine(ax.c2p(a["price"], 0), ax.c2p(a["price"], top), color=QC.IDEA, stroke_width=2.5)
-        pl = MathTex(rf"{a['price']:.2f}", font_size=30, color=QC.IDEA).next_to(ax.c2p(a["price"], top), UP, buff=0.05)
-        leg = legend([(QC.GAIN, r"buyers willing at this price or more"), (QC.LOSS, r"sellers willing at this price or less")],
-                     font_size=21).to_edge(RIGHT, buff=0.4).shift(UP * 2.0)
-        res = VGroup(
-            label(r"the closing auction: every order at one price,", font_size=24),
-            label(r"the price that trades the most", font_size=24),
-            MathTex(rf"{a['volume']:,.0f}\ \text{{shares at}}\ {a['price']:.2f}".replace(",", "{,}"), font_size=30,
-                    color=QC.IDEA),
-            label(r"300 simulated limit orders", font_size=20, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
+        sb = seed_band(ax, Q, W, QC.IDEA)
+        ul = DashedLine(ax.c2p(Q[0], uni[0]), ax.c2p(Q[-1], uni[-1]), color=GREY_B, stroke_width=2.5)
+        leg = legend([(QC.IDEA, r"zero-intelligence book, 4 seeds"),
+                      (GREY_B, rf"uniform depth $d = {float(bk['depth'][0]):.1f}$ (the formula)")], font_size=19)
+        leg.next_to(g, RIGHT, buff=0.3).shift(UP * 0.4)
+        concave = W.mean(0)[-1] < uni[-1]
+        verdict = label(r"real books thicken behind the best quote: impact is concave (Part 37)" if concave else
+                        r"this book is thin behind the best quote: impact is steeper than linear", font_size=21,
+                        color=QC.IDEA).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
         with self.voiceover(
-            "Continuous trading is not the only way. Most exchanges open and close the day with an auction: orders "
-            "are collected for a few minutes, and then everything that can trade, trades at a single price. Here "
-            "are three hundred simulated orders. The green curve counts the shares buyers want at each price or "
-            "more; the red curve, the shares sellers offer at each price or less. <bookmark mark='a'/> The auction "
-            "picks the price where the most shares change hands, where the curves cross. The closing auction "
-            "matters: index funds trade there, because indices are computed from closing prices, and it has become "
-            "one of the busiest moments of the trading day."
+            "What does impatience cost? Say every tick above the best ask holds d shares. A market buy of Q shares "
+            "takes the best level first, then the next: price priority. <bookmark mark='a'/> The average price is "
+            "an arithmetic series: the best ask plus half a tick for every extra level it eats. "
+            "<bookmark mark='b'/> Against the mid price, the cost is half the spread plus the walk. Twice that "
+            "distance is the effective spread, the cost measure Parts thirty-six and thirty-seven use. "
+            "<bookmark mark='c'/> Now measure it in the simulated book, four seeds, against the uniform formula. "
+            + ("The book is thin at the front and thicker behind, so the cost rises fast for small orders and "
+               "then bends: impact is concave, which is what real books show too."
+               if concave else "Here the formula understates the cost: the book thins out behind the front.")
         ) as vo:
-            self.play(FadeIn(g), FadeIn(leg))
-            self.play(Create(dl), Create(sl), run_time=2.5)
+            step(0)
             vo.wait_until("a")
-            self.play(Create(px), FadeIn(pl))
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in res], lag_ratio=0.3))
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            self.play(FadeIn(g), FadeIn(leg))
+            self.play(Create(ul), FadeIn(sb[0]), Create(sb[1]), run_time=2)
+            self.play(FadeIn(verdict))
         self.wait(0.4)
         self.clear_scene()
 
-    def dealers(self):
-        cards = VGroup(
-            definition_card(r"Exchange", r"A central limit order book, anyone's orders against anyone's: shares, "
-                            r"futures, listed options.", width=4.2, color=TRADE, font_size=22),
-            definition_card(r"Dealer market", r"You trade with a dealer, who quotes a bid and an ask from their own "
-                            r"inventory: most bonds, currencies, swaps.", width=4.2, color=QC.IDEA, font_size=22),
-            definition_card(r"Request for quote", r"You ask several dealers at once and take the best answer: the "
-                            r"electronic form of a phone call.", width=4.2, color=QC.HOUSE, font_size=22),
-        ).arrange(RIGHT, buff=0.3, aligned_edge=UP).move_to(UP * 0.5)
-        foot = wrapped_label(r"in the US, a retail order is often filled not on an exchange but by a wholesaler, which "
-                             r"pays the broker for the order flow (Part 35)", 12.0, 22, GREY_A).to_edge(DOWN, buff=0.6)
+    def tick(self, bk):
+        ratios = [0.5, 1.0, 2.0]
+        g = axes([0.3, 2.3], [0, 7], x_length=4.6, y_length=3.2, xlabel=r"market-order rate / limit-order rate",
+                 ylabel=r"mean spread, ticks", xticks=[0.5, 1, 2], yticks=[0, 3, 6], font_size=16)
+        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.6)
+        ax = g.ax
+        sp = bk["mean_spread"]
+        pts = VGroup()
+        for r_ in ratios:
+            for v in sp[str(r_)]:
+                pts.add(Dot(ax.c2p(r_, v), radius=0.05, color=QC.IDEA))
+        mean_line = curve(ax, ratios, [float(np.mean(sp[str(r_)])) for r_ in ratios], QC.IDEA)
+        head = label(r"More impatient flow, wider spreads (simulated, 4 seeds each)", font_size=22,
+                     color=QC.IDEA).next_to(g, UP, buff=0.3).align_to(g, LEFT)
+        rule = VGroup(
+            label(r"SEC Rule 612 amendments (adopted 18 September 2024)", font_size=24, color=QC.HOUSE),
+            label(r"a half-penny tick for stocks whose time-weighted", font_size=21),
+            label(r"quoted spread is \$0.015 or less", font_size=21),
+            label(r"exchange access-fee cap cut from 30 to 10 mils", font_size=21),
+            label(r"compliance: November 2025, then 2026 by exemptive relief;", font_size=21),
+            label(r"on 11 June 2026 delayed again, to November 2027", font_size=21, color=QC.IDEA),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
+        q = desk_question(r"Halve the tick on a stock that always trades at a one-tick spread with long queues. "
+                          r"What happens to the spread and the queues?", width=6.0, font_size=21)
+        q.next_to(rule, DOWN, buff=0.35).align_to(rule, LEFT)
+        src = note(r"SEC Release 34-101070 (2024); exemptive orders 34-104172 (2025) and 34-105656 (2026)",
+                   font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Not every market is an exchange. Shares, futures and listed options trade in central order books. But "
-            "most bonds, currencies and swaps trade with dealers, who quote a bid and an ask from their own "
-            "inventory, or by request for quote: you ask several dealers at once and take the best answer, the "
-            "electronic version of a phone call. <bookmark mark='a'/> And in America most retail share orders never "
-            "reach an exchange. They are filled by wholesalers, who pay the broker for the flow. Who trades with "
-            "whom, and why that matters, is Part thirty-five."
+            f"Turn up the flow of market orders relative to limit orders and the spread widens: about "
+            f"{np.mean(sp['0.5']):.0f} ticks, then {np.mean(sp['1.0']):.0f}, then {np.mean(sp['2.0']):.0f}, and at "
+            "four times the book runs dry. <bookmark mark='a'/> The tick itself is a rule. In September 2024 the "
+            "SEC amended Rule 612: stocks whose average quoted spread is a cent and a half or less would quote in "
+            "half-pennies, and the fee an exchange may charge to take liquidity was cut from thirty to ten "
+            "hundredths of a cent per share. The compliance date was moved to November 2026, and then, by an order "
+            "of June 2026, to November 2027, while the Commission reviews the rules again. "
+            "<bookmark mark='b'/> Pause and predict: halve the tick on a stock that always trades one tick wide "
+            "with long queues. What happens to the spread, and to the queues?"
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in cards], lag_ratio=0.5, run_time=4))
+            self.play(FadeIn(g), FadeIn(head), LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.1))
+            self.play(Create(mean_line))
             vo.wait_until("a")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in rule], lag_ratio=0.3), FadeIn(src))
+            vo.wait_until("b")
+            self.play(FadeIn(q))
+        self.wait(1.0)
         self.clear_scene()

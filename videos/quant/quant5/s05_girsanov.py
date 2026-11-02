@@ -3,147 +3,185 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, STRAT, load
+from videos.quant.quant5.common import BM, DRIFT, ITO, JUMP, PART, STRAT, load, pause
 
-K = 160.0
+PCOL, QCOL = QC.P, QC.Q
 
 
 class Girsanov(VoiceoverScene):
     def construct(self):
-        g = load("girsanov")
+        g = load("girsanov_paths")
         self.card()
-        self.theorem()
-        self.sampling(g)
-        self.representation()
+        self.reweight(g)
+        self.proof()
+        self.collapse(g)
 
     def card(self):
-        c = chapter_card(4, r"Girsanov and martingale representation", r"Is drift just a change of measure?", part=PART)
-        with self.voiceover("Chapter four. Girsanov's theorem, and martingale representation."):
+        c = chapter_card(8, r"Girsanov: re-weighting paths", r"Is drift just a change of measure?", part=PART)
+        with self.voiceover("Chapter eight. Girsanov's theorem: re-weighting paths."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def theorem(self):
-        th = theorem_card(r"Girsanov", r"Let $W$ be a Brownian motion under $P$, and $Z_T = \exp\big(-\int_0^T \theta_t\,dW_t - "
-                          r"\tfrac12 \int_0^T \theta_t^2\,dt\big)$. Under $dQ = Z_T\,dP$, the process $\widetilde W_t = W_t + "
-                          r"\int_0^t \theta_s\,ds$ is a Brownian motion.", who=r"Cameron and Martin (1944), Girsanov (1960)",
-                          color=STRAT, width=9.6, font_size=24).to_edge(UP, buff=0.5)
-        rows = VGroup(
-            label(r"a drift can be added or removed by reweighting the paths, without moving any of them", font_size=24,
-                  color=GREY_A),
-            label(r"the weight is the continuous-time version of Part 4's likelihood ratio on a coin", font_size=24,
-                  color=GREY_A),
-            label(r"volatility cannot be changed this way: $P$ and $Q$ must agree on the quadratic variation", font_size=24,
-                  color=JUMP),
-            label(r"so prices can be computed in a world where every asset drifts at the riskless rate (Parts 9, 10)",
-                  font_size=24, color=STRAT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(th, DOWN, buff=0.5)
+    def _hist(self, ax, edges, h, color, x0):
+        w = edges[1] - edges[0]
+        hmax = 0.5
+        return VGroup(*[Rectangle(width=max(1.3 * v / hmax, 0.002), height=ax.c2p(0, w)[1] - ax.c2p(0, 0)[1] - 0.005,
+                                  stroke_width=0, fill_color=color, fill_opacity=0.75)
+                        .move_to([x0 + 1.3 * v / hmax / 2, ax.c2p(0, e + w / 2)[1], 0])
+                        for e, v in zip(edges[:-1], np.minimum(h, hmax)) if e + w / 2 > -3 and e + w / 2 < 4])
+
+    def reweight(self, g):
+        W = np.asarray(g["W"])
+        Z = np.asarray(g["Z"])
+        t = np.linspace(0, 1, W.shape[1])
+        th = g["theta"]
+        e = np.asarray(g["edges"])
+        g1 = axes([0, 1], [-3, 4], x_length=4.6, y_length=4.4, xlabel=r"time", ylabel=r"the same 300 paths, re-weighted",
+                  xticks=[0, 1], yticks=[-2, 0, 2, 4], font_size=15)
+        g2 = axes([0, 1], [-3, 4], x_length=4.6, y_length=4.4, xlabel=r"time", ylabel=r"300 paths, moved: $W_t + \theta t$",
+                  xticks=[0, 1], yticks=[-2, 0, 2, 4], font_size=15)
+        VGroup(g1, g2).arrange(RIGHT, buff=2.4).to_edge(LEFT, buff=0.5).shift(DOWN * 0.4)
+        a1, a2 = g1.ax, g2.ax
+        paths = VGroup(*[VMobject(stroke_width=1.2, stroke_color=PCOL, stroke_opacity=0.35).set_points_as_corners(
+            [a1.c2p(x, np.clip(y, -3, 4)) for x, y in zip(t, row)]) for row in W])
+        wn = Z / Z.max()
+        moved = VGroup(*[VMobject(stroke_width=1.2, stroke_color=QCOL, stroke_opacity=0.35).set_points_as_corners(
+            [a2.c2p(x, np.clip(y + th * x, -3, 4)) for x, y in zip(t, row)]) for row in W])
+        x1 = a1.get_right()[0] + 0.1
+        x2 = a2.get_right()[0] + 0.1
+        hp = self._hist(a1, e, np.asarray(g["h_p"]), PCOL, x1)
+        hq = self._hist(a1, e, np.asarray(g["h_q"]), QCOL, x1)
+        hm = self._hist(a2, e, np.asarray(g["h_moved"]), QCOL, x2)
+        z = MathTex(r"Z_T = e^{\theta W_T - \theta^2 T/2}", font_size=32, color=QCOL).to_corner(UL, buff=0.35)
+        tk = ValueTracker(0)
+        thr = always_redraw(lambda: MathTex(rf"\theta = {tk.get_value():.2f}", font_size=30, color=QCOL)
+                            .next_to(z, RIGHT, buff=0.6))
+        res = MathTex(rf"\textstyle\sum Z\,W_T / \sum Z = {g['wmean']:.3f} \quad (\theta T = {th:.0f})", font_size=28,
+                      color=QCOL).to_corner(UR, buff=0.35)
         with self.voiceover(
-            "Part four changed the measure on a coin. Here is the same idea for Brownian motion. Reweight every path by "
-            "an exponential of the path itself, and Brownian motion acquires a drift; or, read the other way, a "
-            "drift disappears. The paths don't move. Only their probabilities change. <bookmark mark='a'/> The weight "
-            "is the continuous version of the coin's likelihood ratio. <bookmark mark='b'/> What cannot be changed is "
-            "the volatility: two equivalent measures must agree on the quadratic variation, because it can be read "
-            "off a single path. <bookmark mark='c'/> That asymmetry is the whole of option pricing. The drift of a "
-            "stock, which nobody can estimate well, can be swapped for the riskless rate; the volatility, which can "
-            "be measured, stays."
+            "Here is the theorem as a picture. Three hundred Brownian paths with no drift, in amber, the colour of the "
+            "real-world measure P. Their endpoints stand in a histogram on the right: a Gaussian centred at zero. "
+            "<bookmark mark='a'/> Now turn a dial theta from zero to one. The paths do not move. Instead each path's "
+            "weight becomes Z: the exponential of theta times its endpoint, minus a half theta squared. Paths that "
+            "ended high get heavier and turn violet, the colour of the new measure Q; paths that ended low fade. "
+            "<bookmark mark='b'/> The weighted histogram slides to the right, to a Gaussian centred at theta. "
+            f"Over two hundred thousand paths, the weighted mean endpoint is {g['wmean']:.3f}. <bookmark mark='c'/> "
+            "On the right, the honest way to get drift: move every path up by theta t. Its histogram is the same "
+            "Gaussian. Moving paths and re-weighting them give the same distribution. Under Q, the original, "
+            "unmoved paths are a Brownian motion with drift theta."
         ) as vo:
-            self.play(FadeIn(th, shift=UP * 0.2), FadeIn(rows[0]))
+            self.play(FadeIn(g1), LaggedStart(*[Create(p) for p in paths], lag_ratio=0.003, run_time=3), FadeIn(z))
+            self.play(LaggedStart(*[GrowFromEdge(b, LEFT) for b in hp], lag_ratio=0.03))
             vo.wait_until("a")
-            self.play(FadeIn(rows[1]))
+            self.add(thr)
+            anims = [p.animate.set_stroke(color=interpolate_color(ManimColor(PCOL), ManimColor(QCOL), float(min(w * 3, 1))),
+                                          opacity=float(0.04 + 0.9 * w)) for p, w in zip(paths, wn)]
+            self.play(tk.animate.set_value(th), *anims, run_time=4)
             vo.wait_until("b")
-            self.play(FadeIn(rows[2]))
+            self.play(ReplacementTransform(hp, hq), FadeIn(res), run_time=2)
             vo.wait_until("c")
-            self.play(FadeIn(rows[3]))
+            self.play(FadeIn(g2), LaggedStart(*[Create(p) for p in moved], lag_ratio=0.003, run_time=3))
+            self.play(LaggedStart(*[GrowFromEdge(b, LEFT) for b in hm], lag_ratio=0.03))
+        thr.clear_updaters()
         self.wait(0.4)
         self.clear_scene()
 
-    def sampling(self, g):
-        Sp, Si, w = (np.asarray(g[k]) for k in ("S_plain", "S_is", "w_is"))
-        ax_ = axes([40, 260], [0, 1], x_length=6.6, y_length=1.6, xlabel=r"$S_T$", xticks=[60, 100, 160, 220],
-                   yticks=[], font_size=16)
-        top = ax_.copy()
-        bot = axes([40, 260], [0, 1], x_length=6.6, y_length=1.6, xlabel=r"$S_T$", xticks=[60, 100, 160, 220], yticks=[],
-                   font_size=16)
-        VGroup(top, bot).arrange(DOWN, buff=1.0).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        rng = np.random.default_rng(0)
-
-        def strip(gr, S, colors, sizes):
-            ax = gr.ax
-            jit = rng.random(len(S)) * 0.8 + 0.1
-            return VGroup(*[Dot(ax.c2p(min(s, 259), j), radius=r_, color=c, fill_opacity=0.8)
-                            for s, j, c, r_ in zip(S, jit, colors, sizes)])
-
-        cp = [JUMP if s > K else GREY_B for s in Sp]
-        dp = strip(top, Sp, cp, [0.035] * len(Sp))
-        wn = w / w.max()
-        ci = [JUMP if s > K else GREY_B for s in Si]
-        di = strip(bot, Si, ci, list(0.02 + 0.05 * np.sqrt(wn)))
-        kl = VGroup(*[DashedLine(gr.ax.c2p(K, 0), gr.ax.c2p(K, 1), color=JUMP, stroke_width=2) for gr in (top, bot)])
-        t1 = label(r"plain: simulate the real-world paths", font_size=20, color=GREY_A).next_to(top, UP, buff=0.1).align_to(top, LEFT)
-        t2 = label(r"Girsanov: push every path up, then weight it by $Z$ (dot size)", font_size=20, color=GREY_A).next_to(
-            bot, UP, buff=0.1).align_to(bot, LEFT)
-        side = VGroup(
-            label(r"a digital paying 1 if $S_T > 160$; $S_0 = 100$, $\sigma = 20\%$", font_size=21, color=GREY_A),
-            MathTex(rf"\text{{exact: }} {g['exact']:.5f}", font_size=30),
-            MathTex(rf"\text{{plain: }} {g['plain_mean']:.4f} \pm {g['plain_se']:.4f}", font_size=30, color=GREY_A),
-            label(rf"{g['hits_plain']} of {g['n']:,} paths finish above 160".replace(",", "{,}"), font_size=20, color=GREY_B),
-            MathTex(rf"\text{{reweighted: }} {g['is_mean']:.5f} \pm {g['is_se']:.5f}", font_size=30, color=STRAT),
-            label(rf"{g['hits_is']:,} of {g['n']:,} finish above 160".replace(",", "{,}"), font_size=20, color=GREY_B),
-            MathTex(rf"\text{{variance }} \div {g['var_ratio']:.0f}", font_size=34, color=DRIFT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.4)
+    def proof(self):
+        rows = [cmath(r"\frac{dQ}{dP}", r"=", r"\prod_k \frac{q(\Delta W_k)}{p(\Delta W_k)} = \exp\Big(\sum_k \theta\,\Delta W_k - "
+                      r"\tfrac12 \theta^2 \Delta t_k\Big)", font_size=30),
+                cmath(r"Z_t", r"=", r"\exp\Big(\int_0^t \theta\,dW - \tfrac12\int_0^t \theta^2\,ds\Big), \quad dZ = \theta Z\,dW",
+                      font_size=30, colors={r"dZ = \theta Z\,dW": QCOL}),
+                cmath(r"d(Z\widetilde W)", r"=", r"Z\,d\widetilde W + \widetilde W\,dZ + d\langle Z, \widetilde W\rangle "
+                      r"= Z(1 + \theta\widetilde W)\,dW", font_size=30),
+                cmath(r"\widetilde W = W - \int_0^\cdot \theta\,ds", r"\text{ is a }", r"Q\text{-Brownian motion}",
+                      font_size=32, colors={r"Q\text{-Brownian motion}": QCOL}),
+                cmath(r"\mathbb{E}\,e^{\frac12 \int_0^T \theta^2\,dt} < \infty", r"\Rightarrow", r"\mathbb{E}\,Z_T = 1",
+                      font_size=32)]
+        whys = [why(r"Part 4's coin: the ratio of two Gaussian densities; complete the square"),
+                why(r"the continuous limit; by the lemma, $Z$ is the stochastic exponential of $\int \theta\,dW$"),
+                why(r"the product rule: $-Z\theta\,dt$ from $d\widetilde W$ cancels $+\theta Z\,dt$ from the covariation"),
+                why(r"so $Z\widetilde W$ is a $P$-martingale, i.e.\ $\widetilde W$ a $Q$-martingale (Bayes); "
+                    r"$\langle \widetilde W\rangle_t = t$; by L\'evy's characterization, a Brownian motion"),
+                why(r"Novikov (1972); without it $Z$ is only a supermartingale, and $Q$ loses mass")]
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.3, buff=0.55, edge=6.9)
+        th = theorem_card(r"Cameron--Martin and Girsanov", r"Cameron and Martin (1944): shifting Wiener measure by a "
+                          r"smooth deterministic path $h$ multiplies it by $e^{\int h'\,dW - \frac12\int h'^2}$. "
+                          r"Girsanov (1960): the same for an adapted drift $\theta_t$.", color=QCOL, width=6.0,
+                          font_size=19).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Girsanov is also a computational tool. Price a digital option that pays one dollar if the stock, now at a "
-            "hundred, ends the year above a hundred and sixty. By plain simulation, almost every path ends below "
-            f"the strike: only {g['hits_plain']} of twenty thousand pay, and the estimate is noisy. "
-            "<bookmark mark='a'/> Now add a drift that pushes the typical path up to the strike, and correct for it "
-            "by weighting each path with Girsanov's likelihood ratio. Half the paths now pay, each with a small "
-            f"weight. <bookmark mark='b'/> Both estimates are unbiased, but the variance falls by a factor of "
-            f"{g['var_ratio']:.0f}: one reweighted path is worth fifty plain ones. This is importance sampling, and "
-            "every risk system that prices rare events uses it."
+            "The proof starts where Part four left off, with a coin. On a grid, the likelihood ratio of a drifting "
+            "Brownian path against a driftless one is a product of ratios of Gaussian densities; completing the square "
+            "gives an exponential of theta times the increments, minus a half theta squared times the steps. "
+            "<bookmark mark='a'/> In the limit that is Z, and by the lemma it solves d Z equals theta Z d W: a "
+            "stochastic exponential, a martingale. Cameron and Martin had this in 1944 for deterministic shifts. "
+            "<bookmark mark='b'/> Girsanov's step: subtract the drift from W and multiply by Z. By the product rule, "
+            "the drift from the subtraction cancels the drift from the covariation exactly. <bookmark mark='c'/> So "
+            "Z times W tilde is a martingale under P, which by Bayes's rule means W tilde is a martingale under Q; its "
+            "quadratic variation is still t, and by Lévy's characterization it is a Brownian motion. "
+            "<bookmark mark='d'/> One condition: Z must have mean one. Novikov's condition guarantees it. Without it, "
+            "Z can be a strict supermartingale and Q is not a probability at all."
         ) as vo:
-            self.play(FadeIn(top), FadeIn(t1), Create(kl[0]), FadeIn(side[0]), FadeIn(side[1]))
-            self.play(LaggedStart(*[FadeIn(d) for d in dp], lag_ratio=0.003, run_time=2))
-            self.play(FadeIn(side[2]), FadeIn(side[3]))
+            step(0)
             vo.wait_until("a")
-            self.play(FadeIn(bot), FadeIn(t2), Create(kl[1]))
-            self.play(LaggedStart(*[FadeIn(d) for d in di], lag_ratio=0.003, run_time=2))
-            self.play(FadeIn(side[4]), FadeIn(side[5]))
+            step(1)
+            self.play(FadeIn(th))
             vo.wait_until("b")
-            self.play(FadeIn(side[6]))
-        self.wait(0.4)
+            self.play(FadeOut(th))
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
+        self.wait(0.5)
         self.clear_scene()
 
-    def representation(self):
-        th = theorem_card(r"Martingale representation", r"Every martingale $M$ of the information generated by $W$ is a "
-                          r"stochastic integral: $M_t = M_0 + \int_0^t H_s\,dW_s$ for some predictable $H$.",
-                          who=r"It\^o (1951); Clark (1970) and Ocone (1984) give $H$", color=ITO, width=9.6,
-                          font_size=25).to_edge(UP, buff=0.6)
-        rows = [cmath(r"V_t", r"=", r"\mathbb{E}_Q[\text{payoff} \mid \mathcal{F}_t]", r"=", r"V_0 + \int_0^t H_s\,d\widetilde W_s",
-                      font_size=36, colors={r"V_t": ITO}),
-                cmath(r"H_t", r"=", r"\Delta_t\,\sigma S_t", r"\;\Rightarrow\;", r"\text{hold } \Delta_t \text{ shares}",
-                      font_size=36, colors={r"\text{hold } \Delta_t \text{ shares}": DRIFT})]
-        VGroup(*rows).arrange(DOWN, buff=0.5).next_to(th, DOWN, buff=0.6)
-        notes = VGroup(
-            label(r"the discounted price of any claim is a $Q$-martingale; the theorem writes it as trading gains", font_size=23,
-                  color=GREY_A),
-            label(r"so in a market driven by one Brownian motion, every payoff can be hedged: the market is complete", font_size=23,
-                  color=GREY_A),
-            label(r"add jumps, or a second source of noise, and the representation fails: Parts 11 and 13", font_size=23, color=JUMP),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(VGroup(*rows), DOWN, buff=0.5)
+    def collapse(self, g):
+        ess = g["ess"]
+        bars_ax = axes([-0.6, 3.6], [-8, 0.3], x_length=6.0, y_length=4.0, xlabel=r"horizon $T$",
+                       ylabel=r"effective sample size, share of $10^5$ (log scale)", xticks=[0, 1, 2, 3],
+                       xfmt=lambda u: str([1, 4, 16, 64][int(u)]), yticks=[-8, -6, -4, -2, 0],
+                       yfmt=lambda u: rf"10^{{{int(u)}}}" if u else "1", font_size=16).to_edge(LEFT, buff=0.6)
+        bars_ax.shift(DOWN * 0.3)
+        ax = bars_ax.ax
+        meas = VGroup(*[Dot(ax.c2p(i, np.log10(max(e["ess"], 1e-8))), radius=0.09, color=QCOL) for i, e in enumerate(ess)])
+        theo = curve(ax, np.linspace(0, 3, 50), np.log10(np.exp(-0.25 * 4 ** np.linspace(0, 3, 50))), GREY_A,
+                     stroke_width=2.5)
+        floor = DashedLine(ax.c2p(-0.6, -5), ax.c2p(3.6, -5), color=JUMP, stroke_width=1.5)
+        fl = label(r"one path in $10^5$", font_size=16, color=JUMP).next_to(ax.c2p(3.6, -5), UP, buff=0.05).align_to(
+            ax.c2p(3.6, -5), RIGHT)
+        rows = VGroup(*[MathTex(rf"T = {e['T']}:\ \ \text{{ESS}} = {e['ess']:.3g},\ \ \textstyle\frac1N\sum Z = "
+                                rf"{e['mean_w']:.3f}", font_size=24, color=GREY_A) for e in ess])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        side = VGroup(MathTex(r"\text{ESS} = \frac{(\sum Z)^2}{\sum Z^2} \approx N e^{-\theta^2 T}", font_size=30,
+                              color=QCOL), rows,
+                      wrapped_label(r"on $[0, \infty)$, $P$ and $Q$ are singular: $W_t / t \to 0$ under $P$ and "
+                                    r"$\to \theta$ under $Q$, an event of probability one for one and zero for the other",
+                                    5.0, 19, JUMP)).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
+        pc, ans = pause(r"Under $P$, what is $\mathbb{E}[Z_T]$?", rf"1, if Novikov holds. Measured at $T = 1$: "
+                        rf"{g['EZ']:.4f}; at $T = 64$ with $\theta = 0.5$: {ess[-1]['mean_w']:.2f}.", width=5.6,
+                        font_size=21)
+        pc.to_corner(UL, buff=0.3)
+        ans.next_to(pc, DOWN, buff=0.15).align_to(pc, LEFT)
         with self.voiceover(
-            "Why does a hedge exist at all? Because of a second theorem. In a world whose only randomness is one "
-            "Brownian motion, every martingale is a stochastic integral against it. <bookmark mark='a'/> Apply it to "
-            "an option's discounted price, which is a martingale under the pricing measure. It becomes a sum of "
-            "trading gains: hold H at each moment and you replicate the option exactly. The integrand is the delta of "
-            "Part ten, and Clark and Ocone gave a formula for it in general. <bookmark mark='b'/> This is what "
-            "completeness means. And it is fragile: add jumps, or a second source of noise like a random volatility, "
-            "and not every payoff can be hedged any more. Parts eleven and thirteen live in that world."
+            "When does it fail? A pause first: under P, what is the expected value of Z? <bookmark mark='a'/> One, "
+            f"when Novikov's condition holds, and a hundred thousand samples at T equals one give {g['EZ']:.4f}. "
+            "<bookmark mark='b'/> But let the horizon grow, with theta a half. The effective sample size, the number "
+            "of paths that really carry weight, falls like e to the minus theta squared T. "
+            f"At T equals sixteen, {100 * ess[2]['ess']:.1f} percent of the paths carry the weight. At sixty-four, "
+            "theory says a ten-millionth, fewer than one path in our sample: the measured weights no longer even "
+            f"average one, but {ess[-1]['mean_w']:.2f}. <bookmark mark='c'/> On an infinite horizon the two "
+            "measures are singular: under P the average slope of the path goes to zero, under Q to theta, and a "
+            "single infinitely long path tells you which world you are in. Girsanov works on finite horizons, which "
+            "is all pricing needs, and the next chapter puts it to work."
         ) as vo:
-            self.play(FadeIn(th, shift=UP * 0.2))
+            self.play(FadeIn(pc))
             vo.wait_until("a")
-            self.play(Write(rows[0]))
-            self.play(Write(rows[1]))
+            self.play(FadeIn(ans))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(n) for n in notes], lag_ratio=0.4))
+            self.play(FadeIn(bars_ax), Create(theo), Create(floor), FadeIn(fl), FadeIn(side[0]))
+            for i in range(len(ess)):
+                self.play(FadeIn(meas[i], scale=1.5), FadeIn(rows[i]), run_time=0.6)
+            vo.wait_until("c")
+            self.play(FadeIn(side[2]))
         self.wait(0.4)
         self.clear_scene()

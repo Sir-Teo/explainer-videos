@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant9.common import ARB, CALL, FWD, PART, PUT, Q_C, load, real_data
+from videos.quant.quant9.common import ARB, CALL, FWD, PART, PUT, Q_C, answer_under, load, pause_at, real_data
 
 
 class Hook(VoiceoverScene):
@@ -12,8 +12,10 @@ class Hook(VoiceoverScene):
         self.title_card()
         self.question()
         self.bitcoin(p)
+        self.era()
         self.objectives()
         self.house()
+        self.predict()
 
     def title_card(self):
         card = part_title(PART, r"One price")
@@ -95,24 +97,103 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def era(self):
+        x0, x1 = -6.4, 6.4
+
+        def X(y):
+            return x0 + (x1 - x0) * (y - 1900) / 130
+
+        line = Line([x0, 0, 0], [x1, 0, 0], color=GREY_D, stroke_width=2)
+        ticks = VGroup(*[VGroup(Line([X(y), -0.06, 0], [X(y), 0.06, 0], color=GREY_D),
+                                Text(str(y), font_size=13, color=GREY_D).next_to([X(y), 0, 0], DOWN, buff=0.12))
+                         for y in range(1900, 2031, 20)])
+        events = [
+            (1902, r"Farkas: inequalities", Q_C), (1964, r"Arrow: state securities", Q_C),
+            (1969, r"Stoll: put--call parity", Q_C), (1973, r"Black--Scholes--Merton", Q_C),
+            (1976, r"Ross: options complete markets", Q_C), (1979, r"Cox--Ross--Rubinstein; Harrison--Kreps", Q_C),
+            (1981, r"Harrison--Pliska", Q_C), (1994, r"Delbaen--Schachermayer", Q_C),
+            (1998, r"Hobson's robust bounds; LTCM", ARB), (2013, r"martingale optimal transport", Q_C),
+            (2015, r"Ross recovery", Q_C), (2021, r"GameStop", ARB),
+        ]
+        dots, labs, leads = VGroup(), VGroup(), VGroup()
+        for i, (y, t, c) in enumerate(events):
+            d = Dot([X(y), 0, 0], radius=0.07, color=c)
+            lvl = [1.0, 2.0, 3.0][i % 3] * (1 if i % 2 == 0 else -1)
+            lab = VGroup(MathTex(str(y), font_size=19, color=c), label(t, font_size=17, color=c)).arrange(RIGHT, buff=0.1)
+            lab.move_to([X(y), 0.55 * lvl, 0])
+            keep_in_frame(lab, margin=0.2)
+            dots.add(d)
+            labs.add(lab)
+            leads.add(Line(d.get_center(), lab.get_bottom() if lvl > 0 else lab.get_top(), color=GREY_C,
+                           stroke_width=1, stroke_opacity=0.5))
+        head = label(r"How we got here", font_size=34).to_edge(UP, buff=0.35)
+        strip = VGroup(line, ticks, dots, leads, labs).shift(DOWN * 0.1)
+        with self.voiceover(
+            "How we got here. The mathematics is older than the markets: in 1902 Gyula Farkas proved a lemma about "
+            "linear inequalities that turns out to be the whole theorem in one period. <bookmark mark='a'/> Kenneth "
+            "Arrow priced securities that pay in one state of the world in 1964, Hans Stoll wrote down put-call "
+            "parity in 1969, and after Black, Scholes and Merton, Stephen Ross showed in 1976 that options complete "
+            "a market. <bookmark mark='b'/> Then the theory: Cox, Ross and Rubinstein's tree and Harrison and Kreps "
+            "in 1979, Harrison and Pliska in 1981, Delbaen and Schachermayer's general theorem in 1994. "
+            "<bookmark mark='c'/> And then the frontier and the failures: Hobson's model-free bounds and the fall of "
+            "Long-Term Capital Management in 1998, martingale optimal transport in 2013, Ross's recovery theorem in "
+            "2015, and GameStop in 2021, when borrowing a share became the most expensive part of a trade."
+        ) as vo:
+            self.play(FadeIn(head), Create(line), FadeIn(ticks))
+            self.play(GrowFromCenter(dots[0]), FadeIn(labs[0]), Create(leads[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[AnimationGroup(GrowFromCenter(dots[i]), FadeIn(labs[i]), Create(leads[i]))
+                                    for i in (1, 2, 3, 4)], lag_ratio=0.5), run_time=3)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[AnimationGroup(GrowFromCenter(dots[i]), FadeIn(labs[i]), Create(leads[i]))
+                                    for i in (5, 6, 7)], lag_ratio=0.5), run_time=2.5)
+            vo.wait_until("c")
+            self.play(LaggedStart(*[AnimationGroup(GrowFromCenter(dots[i]), FadeIn(labs[i]), Create(leads[i]))
+                                    for i in (8, 9, 10, 11)], lag_ratio=0.5), run_time=3)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def predict(self):
+        card = pause_at(r"Before chapter one: to spot the arbitrage in the desk question, is $C - P = S - K$ "
+                        r"enough, or do you need to know what the stock will do?")
+        with self.voiceover(
+            "Before chapter one, a question to hold on to. To decide whether the call and put in the desk question "
+            "were mispriced, did you need any forecast of the stock? <bookmark mark='a'/> No. Parity needed no "
+            "probabilities at all, only prices today. That is the whole spirit of this part: what can be said about "
+            "prices with no model of the future."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(answer_under(card, r"no forecast needed: parity uses only today's prices; that is what "
+                                                r"no-arbitrage arguments are")))
+        self.wait(0.4)
+        self.clear_scene()
+
     def objectives(self):
         card = objectives_card([
-            r"Arbitrage, the law of one price, put--call parity, and where it breaks",
-            r"The fundamental theorem in one period, proved with a separating hyperplane",
-            r"State prices, the stochastic discount factor, and the risk-neutral measure",
-            r"The binomial tree; complete and incomplete markets; super-replication as a linear program",
-            r"Continuous time: Harrison--Kreps, Harrison--Pliska, Delbaen--Schachermayer; changing numeraire",
-            r"The density inside the Surface; Ross recovery and its critique; model-free bounds",
-        ], color=QC.IDEA)
+            r"Parity proved by replication, checked against Bitcoin futures, and where it breaks",
+            r"The fundamental theorem in one period: seen in 3D, proved, and decided by a simplex",
+            r"State prices, the discount factor and $Q$; Bitcoin's pricing kernel",
+            r"The binomial tree: replication, the hedge, convergence to Black--Scholes",
+            r"Incomplete markets: super-replication as a linear program and its dual",
+            r"Continuous time: Girsanov as reweighting; free lunches, doubling and bubbles",
+            r"Changing numeraire: $N(d_1)$ as a probability, Margrabe, Bitcoin as the unit",
+            r"Breeden--Litzenberger: butterflies become the density, on the whole Surface",
+            r"Ross recovery and its critique; model-free bounds by martingale optimal transport",
+            r"Industry and frontier: ETFs, box spreads, LTCM; neural and Sinkhorn transport",
+        ], color=QC.IDEA, font_size=23)
         with self.voiceover(
-            "The plan. Arbitrage and the law of one price, and where parity breaks. The fundamental theorem of "
-            "asset pricing, proved in one period with a picture. State prices, the discount factor, and the "
-            "risk-neutral measure. The binomial tree, and what happens when a market is incomplete. The theorem in "
-            "continuous time. And three things you can read from option prices: the market's probability density, "
-            "what Ross's recovery theorem claims, and bounds that need no model at all."
+            "The plan. Parity, proved by building it, and checked against Bitcoin futures; then where it breaks. The "
+            "fundamental theorem of asset pricing, seen in three dimensions, proved, and decided by a linear program "
+            "you will watch pivot. State prices, the discount factor and the risk-neutral measure, with Bitcoin's own "
+            "pricing kernel. The binomial tree, its hedge, and its limit. Incomplete markets, where no arbitrage "
+            "gives an interval. Continuous time, measure change as reweighting paths, and the free lunches the "
+            "theorem has to rule out. Changing the unit of account. The density inside option prices. Ross's "
+            "recovery theorem, and bounds with no model at all. And how the industry trades all of this, and where "
+            "the research is now."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
-                                                     lag_ratio=0.5, run_time=9))
+                                                     lag_ratio=0.5, run_time=14))
         self.play(FadeOut(card))
 
     def house(self):

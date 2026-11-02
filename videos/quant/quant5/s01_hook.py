@@ -14,7 +14,7 @@ class Hook(VoiceoverScene):
         s = load("stoploss")
         self.title_card()
         self.paradox(s)
-        self.history()
+        self.history(s)
         self.objectives()
         self.house()
 
@@ -60,8 +60,8 @@ class Hook(VoiceoverScene):
             "one share. Whenever it falls below, sell it. At expiry, if the stock is above the strike you hold a "
             "share, and if not you hold nothing: exactly what the call pays. You only ever buy or sell at the "
             "strike, so it seems to cost nothing. <bookmark mark='b'/> Simulate it on four thousand paths. Trade "
-            "weekly, daily, four thousand times a year: the strategy loses about eight dollars every time, and "
-            "trading more often does not help at all. <bookmark mark='c'/> Eight dollars is the price of the call "
+            f"weekly, daily, four thousand times a year: the strategy loses about {s['call']:.0f} dollars every time, and "
+            f"trading more often does not help at all. <bookmark mark='c'/> {s['call']:.0f} dollars is the price of the call "
             "itself. The free hedge loses exactly what the option is worth. Where does the money go? The answer is "
             "a quantity ordinary calculus has no name for, and it is the subject of this part."
         ) as vo:
@@ -75,7 +75,7 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def history(self):
+    def history(self, s):
         strip = timeline(lit=(1900, 1923, 1944, 1973, 1981, 2018, 2020), font_size=15).shift(UP * 1.6)
         cards = VGroup(
             history_card(1960, r"Girsanov", r"drift is a change of measure", color=QC.IDEA, width=3.1, font_size=18),
@@ -87,7 +87,7 @@ class Hook(VoiceoverScene):
                          font_size=18),
         ).arrange(RIGHT, buff=0.25).to_edge(DOWN, buff=0.45)
         pc, ans = pause(r"Rebalance 4{,}000 times a year instead of 13. Does the loss shrink?",
-                        r"No: about 8 dollars at every frequency. The loss is not a discretisation error.", width=6.0)
+                        rf"No: about {s['call']:.0f} dollars at every frequency. The loss is not a discretisation error.", width=6.0)
         pc.to_corner(UL, buff=0.4)
         ans.next_to(pc, DOWN, buff=0.25).align_to(pc, LEFT)
         with self.voiceover(

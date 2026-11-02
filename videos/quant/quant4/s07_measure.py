@@ -5,20 +5,24 @@ import itertools
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant4.common import MART, P_C, PART, Q_C, load
+from videos.quant.quant4.common import LOSS, MART, P_C, PART, Q_C, load, real_data
 
 
 class Measure(VoiceoverScene):
     def construct(self):
         m = load("measure")
+        es = load("esscher")
         self.card()
         self.table()
+        self.process()
+        self.recolour()
         self.equivalence()
         self.paths(m)
+        self.esscher(es)
 
     def card(self):
-        c = chapter_card(6, r"Change of measure", r"What if the coin were different?", part=PART)
-        with self.voiceover("Chapter six. Change of measure."):
+        c = chapter_card(12, r"Change of measure", r"What if the coin were different?", lit=(1981,), part=PART)
+        with self.voiceover("Chapter twelve. Change of measure."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -130,7 +134,7 @@ class Measure(VoiceoverScene):
             "L grows: two thirds of the paths end above a hundred. <bookmark mark='c'/> Read L as the wealth of a "
             "gambler who bets, toss by toss, that the coin is Q. If it isn't, the gambler is playing a fair game and "
             "almost surely goes broke. If it is, the gambler gets rich. That is the idea behind testing by betting, "
-            "in chapter eight."
+            "in chapter fifteen."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(side[:2]))
             self.play(LaggedStart(*[Create(p) for p in pp], lag_ratio=0.05, run_time=4))
@@ -141,5 +145,158 @@ class Measure(VoiceoverScene):
                                                                        run_time=4), FadeIn(side[4:6]))
             vo.wait_until("c")
             self.play(FadeIn(side[6]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def process(self):
+        rows = [cmath(r"Z_n = \mathbb{E}_P[L \mid \mathcal{F}_n]", r"=", r"\prod_{k \le n} \frac{q(\omega_k)}{p(\omega_k)}",
+                      font_size=38, colors={r"\prod_{k \le n} \frac{q(\omega_k)}{p(\omega_k)}": MART}),
+                cmath(r"\mathbb{E}_Q[X \mid \mathcal{F}_n]", r"=", r"\frac{\mathbb{E}_P[X L \mid \mathcal{F}_n]}{Z_n}",
+                      font_size=38),
+                cmath(r"\xi = \pm 1:\ \mathbb{E}_P\xi = 0,\ \mathbb{E}_Q\xi = 2q - 1", r"\Rightarrow",
+                      r"S_n - (2q - 1)\,n \text{ is a } Q\text{-martingale}", font_size=36,
+                      colors={r"S_n - (2q - 1)\,n \text{ is a } Q\text{-martingale}": Q_C}),
+                cmath(r"\frac{dQ}{dP}", r"=", r"\frac{e^{\theta R}}{\mathbb{E}_P e^{\theta R}}, \quad "
+                      r"\mathbb{E}_Q[e^{R}] = e^{r_f}", font_size=38, colors={r"\frac{dQ}{dP}": MART})]
+        whys = [why(r"the density process: a Doob martingale under $P$, the likelihood ratio of the first $n$ tosses"),
+                why(r"Bayes' rule for conditional expectations: check the definition on each $A \in \mathcal{F}_n$"),
+                why(r"discrete Girsanov: the same paths, a new drift; the martingale part is reweighted, not moved"),
+                why(r"the Esscher transform (1932): tilt by $e^{\theta R}$, with $\theta$ chosen so every asset earns the "
+                    r"riskless rate (Gerber and Shiu 1994)")]
+        step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.6, buff=0.75, edge=6.9)
+        with self.voiceover(
+            "Over time, the change of measure becomes a process. The density process is the likelihood ratio of the "
+            "first n tosses, a product of ratios, one per toss. It is the conditional expectation of L given what you "
+            "know, so it is a Doob martingale under P. <bookmark mark='a'/> Conditional expectations under Q are "
+            "conditional expectations under P, reweighted by L and divided by the density so far: Bayes' rule. "
+            "<bookmark mark='b'/> And the drift changes. A fair step has mean zero under P and two q minus one under "
+            "Q, so the walk minus that drift is a Q-martingale. This is Girsanov's theorem on a coin; Part five does "
+            "it for Brownian motion. <bookmark mark='c'/> On real returns, the classic choice is Fredrik Esscher's, from "
+            "1932: tilt the probabilities by an exponential of the return, with the tilt chosen so that, under Q, "
+            "every asset earns the riskless rate."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def recolour(self):
+        rng = np.random.default_rng(4)  # illustrative paths: no number from them is quoted
+        n, k, q = 50, 200, 0.6
+        H = rng.random((k, n)) < 0.5
+        S = np.concatenate([np.zeros((k, 1)), np.cumsum(np.where(H, 1, -1), axis=1)], axis=1)
+        logL = (H * np.log(q / 0.5) + (~H) * np.log((1 - q) / 0.5)).sum(1)
+        w = np.exp(logL - logL.max())
+        g = axes([0, n], [-22, 22], x_length=7.6, y_length=4.6, xlabel=r"tosses", ylabel=r"200 coin walks $S_n$",
+                 xticks=[0, 25, 50], yticks=[-20, 0, 20], font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        ax = g.ax
+        fan = path_fan(ax, np.arange(n + 1), S, color=GREY_B, opacity=0.25, max_paths=k)
+        tk = ValueTracker(0.0)
+
+        def restyle(m):
+            u = tk.get_value()
+            for path, wi in zip(m, w):
+                op = (1 - u) * 0.25 + u * min(1.0, 0.04 + 0.96 * wi ** 0.5)
+                m_col = interpolate_color(ManimColor(GREY_B), ManimColor(Q_C), u)
+                path.set_stroke(color=m_col, opacity=op, width=(1 - u) * 1.2 + u * (0.6 + 2.6 * wi ** 0.5))
+
+        fan.add_updater(restyle)
+        ends = S[:, -1]
+        bins = np.arange(-23, 24, 2)
+        hp = np.histogram(ends, bins=bins)[0].astype(float)
+        hq = np.histogram(ends, bins=bins, weights=w)[0]
+        hp, hq = hp / hp.max(), hq / hq.max()
+
+        def dens(h, col):
+            grp = VGroup()
+            for i, v in enumerate(h):
+                y0, y1 = ax.c2p(0, bins[i])[1], ax.c2p(0, bins[i + 1])[1]
+                grp.add(Rectangle(width=max(1.4 * v, 0.01), height=y1 - y0 - 0.02, stroke_width=0, fill_color=col,
+                                  fill_opacity=0.7).move_to([ax.get_right()[0] + 0.2 + 0.7 * v, (y0 + y1) / 2, 0]))
+            return grp
+
+        dp, dq = dens(hp, P_C), dens(hq, Q_C)
+        cap = label(r"a change of measure moves weight, not paths", font_size=30, color=Q_C).to_edge(UP, buff=0.35)
+        side = VGroup(
+            label(r"under $P$: every path weighs $2^{-50}$", font_size=21, color=P_C),
+            label(r"under $Q$ (heads 60\%): weight $\times\ L = (1.2)^{\#H}(0.8)^{\#T}$", font_size=21, color=Q_C),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(DR, buff=0.5)
+        with self.voiceover(
+            "Here is the picture to keep. Two hundred coin walks, drawn under the fair coin, every path equally "
+            "likely. <bookmark mark='a'/> Now change the measure to the sixty-percent coin. No path moves. Each path "
+            "is simply redrawn with a thickness proportional to its likelihood ratio: walks with many heads grow "
+            "heavy, walks with many tails fade. <bookmark mark='b'/> The visible centre of the fan swings upward, and "
+            "the distribution at the end slides with it. A change of measure moves weight, not paths, which is why "
+            "anything that is impossible stays impossible, and anything possible stays possible."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(fan), FadeIn(dp), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(tk.animate.set_value(1.0), FadeIn(side[1]), run_time=4)
+            fan.clear_updaters()
+            vo.wait_until("b")
+            self.play(Transform(dp, dq), FadeIn(cap))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def esscher(self, es):
+        edges = np.asarray(es["edges"]) * 100
+        hp, hq = np.asarray(es["hist_p"]), np.asarray(es["hist_q"])
+        g = axes([-8, 8], [-5, -0.5], x_length=6.6, y_length=4.0, xlabel=r"daily log return, \%",
+                 ylabel=r"share of days (log scale)", xticks=[-8, -4, 0, 4, 8], yticks=[-5, -3, -1],
+                 yfmt=lambda u: rf"10^{{{int(u)}}}", font_size=16).to_corner(DL, buff=0.5)
+        ax = g.ax
+        c = (edges[:-1] + edges[1:]) / 2
+
+        def steps_(h, col):
+            ys = np.log10(np.maximum(h, 1e-5))
+            pts = []
+            for i in range(len(c)):
+                pts += [ax.c2p(edges[i], max(ys[i], -5)), ax.c2p(edges[i + 1], max(ys[i], -5))]
+            return VMobject(stroke_color=col, stroke_width=3).set_points_as_corners(pts)
+
+        lp, lq = steps_(hp, P_C), steps_(hq, Q_C)
+        card = lab_card(r"the Esscher tilt", [
+            "def esscher_tilt(x, target):",
+            "    def w(th):",
+            "        v = np.exp(th * (x - x.mean())); return v / v.sum()",
+            "    th = brentq(lambda t: np.log(w(t) @ np.exp(x)) - target,",
+            "                -200, 200)",
+            "    return th, w(th)",
+        ], source="explainer/quant/house/martingale.py", width=6.4).to_corner(UR, buff=0.35)
+        leg = legend([(P_C, r"$P$: the days as they came"), (Q_C, r"$Q$: the Esscher measure")], font_size=18)
+        leg.next_to(g, UP, buff=0.15).align_to(g, LEFT)
+        src = real_data(r"Kenneth French's daily US market and riskless rate, 1926--2020")
+        pred = desk_question(r"Under $Q$, are crash days more or less likely than under $P$?",
+                             rf"More: the worst 1\% of days carry {100 * es['tail_q']:.2f}\% of $Q$'s weight.",
+                             width=5.6, font_size=20)
+        with self.voiceover(
+            "Let us find Q for the American market. Take every day since 1926 as a possible world, equally likely "
+            "under P. The House's Esscher function searches for the tilt theta that makes the reweighted market earn "
+            "exactly the riskless rate. <bookmark mark='a'/> It finds theta equals "
+            f"{es['theta']:.2f}. Negative: Q leans toward bad days. The mean daily log return falls from "
+            f"{es['mean_p']:.2f} basis points under P to {es['mean_q']:.2f} under Q. <bookmark mark='b'/> On the log "
+            "scale you can see where the weight went: into the left tail. The worst one percent of days carry "
+            f"{100 * es['tail_q']:.2f} percent of Q's weight, against one percent of P's. Q is the world in which the "
+            "risk premium is gone, and it gets there by making crashes more likely. <bookmark mark='c'/> So, under Q, "
+            "are crash days more or less likely? More. That is what the premium pays for, and Part nine prices "
+            "options in exactly this world."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
+            vo.wait_until("a")
+            out = lab_run(self, card, ["th, w = esscher_tilt(log1p(mkt), log1p(rf).mean())",
+                                       f"theta = {es['theta']:.3f}",
+                                       f"mean: {es['mean_p']:.2f} bp under P -> {es['mean_q']:.2f} bp under Q"])
+            vo.wait_until("b")
+            self.play(FadeIn(g), FadeIn(leg), Create(lp), run_time=1.5)
+            self.play(Create(lq), run_time=1.5)
+            vo.wait_until("c")
+            pred.next_to(out, DOWN, buff=0.3).align_to(card, LEFT)
+            keep_in_frame(pred)
+            self.play(FadeIn(pred, shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()

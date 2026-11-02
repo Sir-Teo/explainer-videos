@@ -111,8 +111,8 @@ class Hook(VoiceoverScene):
                 base += amt
             return out
         bars = always_redraw(stack)
-        tot = always_redraw(lambda: MathTex(rf"\${h.get_value():.1f}\,\text{{bn}}", font_size=32, color=WHITE)
-                            .next_to(ax.c2p(0.5, max(h.get_value(), 0.5)), UP, buff=0.1))
+        tot = readout(r"\$", lambda: h.get_value(), digits=1, font_size=32, unit=r"\,\text{bn}")
+        tot.add_updater(lambda m: m.next_to(ax.c2p(0.5, max(h.get_value(), 0.5)), UP, buff=0.1))
         leg = legend([(GREY_B, r"required before the session"), (TRADE, r"intraday mark-to-market calls"),
                       (LOSS, r"special charge (volatility)")], font_size=18).next_to(g, RIGHT, buff=0.3).align_to(g, UP)
         c = crisis_card(r"27--28 January 2021", r"The day a trading app stopped buying",

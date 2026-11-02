@@ -708,6 +708,11 @@ def compute_mle() -> dict:
     Hi = np.linalg.inv(m["H"])
     V_naive = Jac @ Hi @ Jac.T
     V_sand = Jac @ Hi @ m["J"] @ Hi @ Jac.T
+    # scores per observation; with volatility clustering they are serially dependent, so J needs a long-run variance
+    eps = 1e-5 * np.maximum(1.0, np.abs(th))
+    sc_ = np.column_stack([(nll(th + e) - nll(th - e)) / (2 * e.max()) for e in np.eye(3) * eps])
+    J_hac = econ.lrv(sc_, "bartlett", bw=250) * len(x)
+    V_hac = Jac @ Hi @ J_hac @ Hi @ Jac.T
     path = np.column_stack([m["path"][:, 0], np.exp(m["path"][:, 1]), 2 + np.exp(m["path"][:, 2])])
     nus = np.linspace(2.2, 6.0, 44)
     scs = np.linspace(0.45, 1.05, 44)
@@ -717,6 +722,7 @@ def compute_mle() -> dict:
     return _json({"n": int(len(x)), "first": int(d[0]), "last": int(d[-1]), "mu": float(th[0]), "scale": float(sc),
                   "nu": float(nu), "path": path, "nll_path": m["nll"], "se_naive": np.sqrt(np.diag(V_naive)),
                   "se_sandwich": np.sqrt(np.diag(V_sand)), "V_naive": V_naive[1:, 1:], "V_sandwich": V_sand[1:, 1:],
+                  "se_hac": np.sqrt(np.diag(V_hac)), "V_hac": V_hac[1:, 1:],
                   "grid_nu": nus, "grid_scale": scs, "grid_ll": grid, "kurtosis": float(ks),
                   "normal_ll_gap": float(-np.sum(sst.norm.logpdf(x, x.mean(), x.std())) - np.sum(nll(th)))})
 
@@ -1100,14 +1106,16 @@ def compute_designs() -> dict:
                         "T": T, "true_all": float(np.mean([0.3 * (t - g + 1) for g in coh_list for t in range(g, T)])),
                         "twfe_mean": float(np.mean(tw)), "cs_mean": float(np.mean(cs))}
     # regression discontinuity at a rank cutoff: rank 1,000 (last of the Russell 1000) vs 1,001 (first of the 2000);
-    # planted: +2 points in the outcome for stocks just inside the Russell 2000, a curved relation elsewhere
+    # planted: +2 points in the outcome for stocks just inside the Russell 2000, a relation that curves differently on
+    # the two sides (so a wide window is biased)
     bws = [25, 50, 75, 100, 150, 200, 300]
     est = {str(b): [] for b in bws}
     for s in range(200):
         rng = np.random.default_rng(4800 + s)
         rank = rng.integers(500, 1501, 2000)
         xr = (rank - 1000.5) / 100
-        y = 1.0 + 0.8 * xr - 0.6 * xr ** 2 + 2.0 * (rank > 1000) + 3.0 * rng.standard_normal(len(xr))
+        y = 1.0 + 0.8 * xr - 0.6 * xr ** 2 + 1.2 * xr ** 2 * (rank > 1000) + 2.0 * (rank > 1000) \
+            + 3.0 * rng.standard_normal(len(xr))
         for b in bws:
             est[str(b)].append(econ.rd_local_linear(xr, y, 0.0, b / 100)["jump"])
         if s == 0:
