@@ -13,6 +13,8 @@ Research window: to December 2020.  Items (seeded; seconds to a few minutes on a
                 1962-2020;
 * ``realized``  Bitcoin's daily realized measures from one-minute prices (Aug 2017 - Dec 2020): RV at 5 minutes,
                 bipower, realized quarticity, two-scale RV, realized kernel; the Kalman-filtered log volatility;
+* ``har``       HAR and HARQ on Bitcoin's realized variance, 2017-2019, with Newey-West t-statistics; the cascade of the
+                daily, weekly and monthly averages in 2019;
 * ``race``      next-day realized variance forecasts for Bitcoin, 2020 (trained on 2017-2019): EWMA, GARCH, GJR,
                 HAR-RV, HARQ, an LSTM and a small transformer (5 seeds each), scored by QLIKE and MSE with
                 Diebold-Mariano tests; and every model's forecast for 12 March 2020;
@@ -209,6 +211,26 @@ def compute_realized() -> dict:
                   "n_days": int(len(rv))})
 
 
+def compute_har() -> dict:
+    from explainer.quant.house import econ
+    rz = load("realized")
+    ymd, rv, rq = (np.asarray(rz[k]) for k in ("ymd", "rv", "rq"))
+    end = int(np.searchsorted(ymd, 20200101))
+    out = {}
+    for name, q in (("HAR", None), ("HARQ", rq[:end])):
+        X, y = vol._har_design(rv[:end], q)
+        ok = np.all(np.isfinite(X), axis=1) & np.isfinite(y)
+        X, y = X[ok], y[ok]
+        f = econ.ols(y, X, se="nw", lags=5)
+        out[name] = {"beta": f["beta"], "t": f["t"], "r2": f["r2"], "n": f["n"]}
+    w = (ymd >= 20190101) & (ymd <= 20191231)
+    ann = lambda v: np.sqrt(np.asarray(v) * 365)  # noqa: E731
+    week = np.convolve(rv, np.ones(5) / 5)[:len(rv)]
+    month = np.convolve(rv, np.ones(22) / 22)[:len(rv)]
+    return _json({**out, "cascade_t": np.asarray(rz["t"])[w], "cascade_d": ann(rv[w]), "cascade_w": ann(week[w]),
+                  "cascade_m": ann(month[w])})
+
+
 # ---------------------------------------------------------------------------
 def _nn_forecasts(lrv, train_end, val_end, kind, seed, lookback=22, epochs=300):
     """Train a small LSTM or transformer to predict tomorrow's log RV from the past ``lookback`` days."""
@@ -367,8 +389,14 @@ def compute_envelope() -> dict:
     return _json({"registered": reg, "trials": pit.trials_so_far()})
 
 
-ITEMS = {"spurious": compute_spurious, "coint": compute_coint, "regimes": compute_regimes, "garch": compute_garch,
-         "dcc": compute_dcc, "realized": compute_realized, "race": compute_race, "scaling": compute_scaling,
+def compute_daily() -> dict:
+    db, cb = _btc_daily()
+    r = np.diff(np.log(cb))
+    return _json({"ymd": db[1:], "t": _frac(db[1:]), "r": r})
+
+
+ITEMS = {"daily": compute_daily, "spurious": compute_spurious, "coint": compute_coint, "regimes": compute_regimes, "garch": compute_garch,
+         "dcc": compute_dcc, "realized": compute_realized, "har": compute_har, "race": compute_race, "scaling": compute_scaling,
          "envelope": compute_envelope}
 
 if __name__ == "__main__":
