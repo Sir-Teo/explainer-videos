@@ -62,14 +62,14 @@ ZH = {
     "To compare strategies we need a score. The regret after T pulls is what you would have earned by always pulling the best arm, minus what you expect to earn. <bookmark mark='a'/> Each pull of a worse arm a costs its gap, delta a, so the regret is the sum over arms of the gap times the expected number of pulls of that arm. <bookmark mark='b'/> Epsilon-greedy pulls every arm a fixed fraction of the time forever, so its regret grows in proportion to T. <bookmark mark='c'/> A good strategy pulls the bad arms less and less often, so its regret grows much more slowly than T.":
         "要比较策略，需要一个分数。拉了T次之后的遗憾，就是一直拉最好那根本可以拿到的奖励，减去你预期能拿到的。<bookmark mark='a'/>每拉一次较差的拉杆a，就损失它的差距Δ a，所以遗憾等于对所有拉杆求和：差距乘以这根拉杆被拉的期望次数。<bookmark mark='b'/>ε-贪心永远以固定的比例去拉每一根拉杆，所以它的遗憾和T成正比地增长。<bookmark mark='c'/>好的策略会越来越少地去拉差的拉杆，所以它的遗憾比T增长得慢得多。",
 
-    "A cleverer idea: optimism in the face of uncertainty. Act as if each arm is as good as it plausibly could be. How good is plausible? <bookmark mark='a'/> Hoeffding's inequality from Part 5: after n pulls, the chance that an arm's true mean lies more than epsilon above its average is at most e to the minus two n epsilon squared. <bookmark mark='b'/> Choose epsilon so that this chance is tiny, t to the minus four, <bookmark mark='c'/> and epsilon is the square root of two log t over n. <bookmark mark='d'/> That's the upper confidence bound algorithm, UCB: pull the arm with the highest average plus bonus. An arm pulled rarely has a big bonus, so it gets tried; the bonus shrinks as its pulls pile up, and grows slowly, like log t, for arms left alone, so no arm is abandoned for good. <bookmark mark='e'/> The payoff is a theorem: each worse arm is pulled only about log T over its gap squared times, so the regret grows like log T. <bookmark mark='f'/> And Lai and Robbins proved in 1985 that no strategy can do better than logarithmic regret. UCB is, up to constants, the best possible.":
-        "一个更聪明的想法：面对不确定，保持乐观。把每根拉杆都当作它合理范围内最好的样子。多好才算合理？<bookmark mark='a'/>用第5部分的霍夫丁不等式：拉了n次之后，一根拉杆的真实均值比它的平均值高出ε以上的概率，至多是e的负2nε平方次方。<bookmark mark='b'/>选一个ε，让这个概率小到t的负4次方，<bookmark mark='c'/>ε就等于n分之2倍log t，再开平方。<bookmark mark='d'/>这就是置信上界算法，UCB：拉那根“平均值加加分”最高的拉杆。很少被拉的拉杆，加分很大，所以会被拿来试一试；被拉得越多，加分就越小；而没被拉的拉杆，加分会像log t那样慢慢增长，所以没有哪根拉杆会被永远放弃。<bookmark mark='e'/>收获是一条定理：每根较差的拉杆，只会被拉大约log T除以差距平方那么多次，所以遗憾像log T那样增长。<bookmark mark='f'/>而黎子良和罗宾斯在1985年证明了：任何策略都不可能比对数级的遗憾更好。所以，在常数意义下，UCB已经是最好的了。",
+    "A cleverer idea: optimism in the face of uncertainty. Act as if each arm is as good as it plausibly could be. How good is plausible? <bookmark mark='a'/> For independent rewards in zero to one, Hoeffding's inequality from Part 5: after n pulls, the chance that an arm's true mean lies more than epsilon above its average is at most e to the minus two n epsilon squared. <bookmark mark='b'/> Choose epsilon so that this chance is tiny, t to the minus four, <bookmark mark='c'/> and epsilon is the square root of two log t over n. <bookmark mark='d'/> That's the upper confidence bound algorithm, UCB: pull the arm with the highest average plus bonus. An arm pulled rarely has a big bonus, so it gets tried; the bonus shrinks as its pulls pile up, and grows like the square root of log t for arms left alone. <bookmark mark='e'/> The payoff is a theorem: each worse arm has an expected pull count of order log T over its gap squared times, so the regret grows like log T. <bookmark mark='f'/> And Lai and Robbins proved in 1985 that uniformly efficient strategies on Bernoulli bandits face an as":
+        "一个更聪明的想法：面对不确定，保持乐观。把每根拉杆都当作它合理范围内最好的样子。多好才算合理？<bookmark mark='a'/>对取值在0到1之间的独立奖励，用第5部分的霍夫丁不等式：拉了n次之后，一根拉杆的真实均值比它的平均值高出ε以上的概率，至多是e的负2nε平方次方。<bookmark mark='b'/>选一个ε，让这个概率小到t的负4次方，<bookmark mark='c'/>ε就等于n分之2倍log t，再开平方。<bookmark mark='d'/>这就是置信上界算法，UCB：拉那根“平均值加加分”最高的拉杆。很少被拉的拉杆，加分很大，所以会被拿来试一试；被拉得越多，加分就越小；而没被拉的拉杆，加分会像log t的平方根那样慢慢增长。<bookmark mark='e'/>收获是一条定理：每根较差的拉杆，期望拉动次数的量级至多为log T除以差距平方那么多次，所以遗憾像log T那样增长。<bookmark mark='f'/>黎子良和罗宾斯在1985年证明了：对伯努利老虎机，一致高效策略的遗憾有渐近的对数下界。在差距为正的固定问题上，UCB1达到了同样的增长量级。",
 
     'f"The obvious strategy: keep an average':
         "显而易见的策略：给每根拉杆记下奖励的平均值，然后总是去拉平均值最高的那一根。这就是贪心规则。<bookmark mark='a'/>这是它在萨顿和巴托那本书里的标准测试平台上的表现：10根拉杆，它们的均值本身也是随机的，重复运行2000次。贪心规则很早就认定了一开始碰巧回报不错的那根拉杆，只有{og:.0f}%的时候找到了最好的拉杆。<bookmark mark='b'/>解决办法是有意地去探索。ε-贪心每10次里随机拉一根：它有{oe:.0f}%的时候找到了最好的拉杆。<bookmark mark='c'/>但它永远不停止探索。哪怕已经知道了答案，它还是浪费掉十分之一的拉动。",
 
     'f"Watch it work on five arms.':
-        "看它在5根拉杆上怎么工作。白点是每根拉杆的平均值，它上面的竖条是加分，顶端最高的那根拉杆会被拉动，用蓝框标出。<bookmark mark='a'/>一开始，每根拉杆的竖条都很高，于是轮流被拉。<bookmark mark='b'/>一根拉杆被拉得越多，它的竖条就越短，平均值低的拉杆就退出了竞争。拉了{steps}次之后，{share:.0f}%给了最好的拉杆，最差的那根只试了寥寥几次，刚好够确定它确实差。",
+        "看它在5根拉杆上怎么工作。白点是每根拉杆的平均值，它上面的竖条是加分，顶端最高的那根拉杆会被拉动，用蓝框标出。这里演示的是高斯奖励，前面有界奖励的置信保证不能直接套用。<bookmark mark='a'/>一开始，每根拉杆的竖条都很高，于是轮流被拉。<bookmark mark='b'/>一根拉杆被拉得越多，它的竖条就越短，平均值低的拉杆就退出了竞争。拉了{steps}次之后，{share:.0f}%给了最好的拉杆，最差的那根只试了寥寥几次，刚好够确定它确实差。",
 
     'f"There\'s an older idea, from Thompson himself.':
         "还有一个更古老的想法，来自汤普森本人。为每根拉杆的均值保留一个后验分布，也就是第5部分的贝叶斯法则，每拉一次就更新一次。<bookmark mark='a'/>然后，每一步都从每个后验里抽一个可能的均值，去拉抽到的值最大的那根。<bookmark mark='b'/>一根拉杆被拉的频率，恰好等于它是最好那根的可能性：早已知道很差的拉杆几乎从不被拉，拿不准的拉杆偶尔会被拉。<bookmark mark='c'/>在10臂测试平台上，它有{ot:.0f}%的时候找到了最好的拉杆，是四种方法里最好的。再看一对硬币，<bookmark mark='d'/>横轴取拉动次数的对数，ε-贪心的遗憾向上弯，冲出了图外：它像T那样增长。UCB和汤普森采样在这里都是直线，像log T那样增长，而汤普森采样的那条线最平。<bookmark mark='e'/>记住置信上界。十章之后，它会在AlphaGo内部为搜索掌舵。",
@@ -81,7 +81,7 @@ ZH = {
         "从定义出发：s的价值，就是从s出发的期望回报。<bookmark mark='a'/>再用第1章的递推关系：回报等于下一个奖励，加上γ乘以之后的回报。<bookmark mark='b'/>分两步取期望：先对策略选出的动作取期望，再对环境把你送去的状态取期望。<bookmark mark='c'/>马尔可夫性质就在这里发挥作用。一旦到了s撇，从那里出发的期望回报，就是s撇的价值：你是怎么到那里的，完全无关紧要。<bookmark mark='d'/>这就是贝尔曼方程。一个状态的价值，等于你现在期望得到的奖励，加上γ乘以你期望落脚之处的价值。每个状态一个方程，每个方程都把一个状态的价值，和它邻居的价值联系在一起。",
 
     'Draw it as a tree. At the top, the state s.':
-        "把它画成一棵树。最上面是状态s。<bookmark mark='a'/>策略在各个动作之间选择，也就是这些小圆点，概率是π。<bookmark mark='b'/>每个动作都可能通向好几个下一状态，概率由环境决定，途中还会得到一个奖励。<bookmark mark='c'/>贝尔曼方程说的是：价值沿着这棵树往上回流。把下一状态的价值，按落到那里的可能性加权平均，加上奖励，打个折扣，再对动作求平均。萨顿和巴托把这叫作回溯图。本部分的每一个算法，都是做这次回溯的一种不同方式：精确地做，用样本做，或者在搜索树里做。",
+        "把它画成一棵树。最上面是状态s。<bookmark mark='a'/>策略在各个动作之间选择，也就是这些小圆点，概率是π。<bookmark mark='b'/>每个动作都可能通向好几个下一状态，概率由环境决定，途中还会得到一个奖励。<bookmark mark='c'/>贝尔曼方程说的是：价值沿着这棵树往上回流。把下一状态的价值，按落到那里的可能性加权平均，先给这个平均值打折，再加上奖励，最后对动作求平均。萨顿和巴托把这叫作回溯图。本部分的每一个算法，都是做这次回溯的一种不同方式：精确地做，用样本做，或者在搜索树里做。",
 
     'f"Here is a world to try it on:':
         "找一个世界来试试：一个有墙的网格，一个价值正1的终点，正下方是一个价值负1的陷阱。<bookmark mark='a'/>移动会打滑：80%的时候你会走到想去的地方，另外各有10%的时候滑向左右两侧。<bookmark mark='b'/>对一个固定的策略，贝尔曼方程就是{len(cells)}个未知数的{len(cells)}个线性方程。写成矩阵形式：V等于期望奖励向量，加上γ乘以转移矩阵再乘以V。<bookmark mark='c'/>把V都移到一边，<bookmark mark='d'/>一次矩阵求逆，就精确地得到了所有价值。<bookmark mark='e'/>对随机乱走的策略，结果就在这里：几乎哪里都不值什么，起点的价值是{Vr[g['start']]:+.3f}：一个随机乱走的人，掉进陷阱和找到终点的可能性差不多。",
@@ -93,13 +93,13 @@ ZH = {
         '第4章。值迭代为什么有效。',
 
     "Bellman's own answer to the nonlinear equations":
-        "面对这些非线性方程，贝尔曼自己的答案是：迭代。先把所有价值都设为0。<bookmark mark='a'/>把最优方程的右边，同时作用到每一个状态上，把结果当作新的价值。然后再做一次。<bookmark mark='b'/>扫过一遍之后，只有挨着终点和陷阱的格子知道了一点东西。<bookmark mark='c'/>每扫一遍，消息就往外多传一步，价值从终点向外扩散，就像热量一样。<bookmark mark='d'/>扫过几十遍之后，就再也没有变化了：我们得到了V星，还有上一章的那些箭头。",
+        "面对这些非线性方程，贝尔曼自己的答案是：迭代。先把所有价值都设为0。<bookmark mark='a'/>把最优方程的右边，同时作用到每一个状态上，把结果当作新的价值。然后再做一次。<bookmark mark='b'/>扫过一遍之后，只有终点和陷阱本身的格子知道了各自的退出奖励。<bookmark mark='c'/>下一遍才传到相邻格子；每扫一遍，消息就往外多传一步，价值从终点向外扩散，就像热量一样。<bookmark mark='d'/>扫过几十遍之后，就再也没有变化了：我们得到了V星，还有上一章的那些箭头。",
 
     'Why must this work? Write the right-hand side as an operator':
         "为什么这一定行得通？把右边写成一个算子T：输入一张价值表，输出一张新的表。<bookmark mark='a'/>一个小引理：两个最大值之差，不会超过被取最大值的那些量之间的最大差。<bookmark mark='b'/>比较T作用在两张不同的表V和U上的结果。奖励是一样的，所以相互抵消，剩下的是γ乘以一些差的平均。<bookmark mark='c'/>平均值永远不会超过其中最大的那一项。<bookmark mark='d'/>所以，在最大范数下，T把任意两张表之间的距离缩小到γ倍。它是一个压缩映射。<bookmark mark='e'/>1922年的巴拿赫不动点定理完成了剩下的工作：压缩映射恰好有一个不动点，而且从任何起点出发反复作用，都会以γ的速率几何收敛到它。这个不动点满足贝尔曼最优方程：它就是V星。",
 
     'f"Here\'s the theorem at work.':
-        "来看这条定理怎么起作用。在网格世界上跑两次值迭代：一次从全0开始，一次从随机值开始。<bookmark mark='a'/>在对数坐标上，这是两次运行之间的最大差，一遍一遍地画出来。<bookmark mark='b'/>定理说，它必须一直待在虚线下面，也就是γ的k次方。在头十几遍里，它几乎正好贴着这条线走：每扫一遍，它都至少还剩下原来的{ratio:.3f}倍。然后，随着终点附近的格子稳定下来，它下降得更快了。不管从哪里出发，最后都到达同一个V星。",
+        "来看这条定理怎么起作用。在网格世界上跑两次值迭代：一次从全0开始，一次从随机值开始。<bookmark mark='a'/>在对数坐标上，这是两次运行之间的最大差，一遍一遍地画出来。<bookmark mark='b'/>定理说，它必须一直待在虚线下面，也就是初始距离乘以γ的k次方。在收缩最慢的一遍之后，距离至多剩下原来的{ratio:.3f}倍。之后还会下降得更快。不管从哪里出发，最后都到达同一个V星。",
 
     'f"There\'s a second classic algorithm, policy iteration':
         "还有第二个经典算法，策略迭代，来自1960年的罗纳德·霍华德。从任意一个策略开始：这里是“永远往上走”。<bookmark mark='a'/>精确地评估它，用第3章的线性求解。<bookmark mark='b'/>然后改进它：在每个状态，换成按这些价值看起来最好的那个动作。<bookmark mark='c'/>策略改进定理说：新策略在每个状态都至少一样好。证明只是把不等式一步一步展开。<bookmark mark='d'/>评估、改进、评估、改进：这里一共经过{n}个策略，然后策略就不再改变了。它就是最优的。<bookmark mark='e'/>评估和改进，相互追逐：萨顿和巴托把这叫作广义策略迭代。本部分几乎每一种方法，都是它的某个版本，AlphaZero也不例外。",
@@ -120,7 +120,7 @@ ZH = {
         "现在认真比较这两种方法：估计的误差，对100次运行取平均，试了好几种步长。<bookmark mark='a'/>蒙特卡洛，橙色，进步得很慢。<bookmark mark='b'/>TD，蓝色，在我们试过的每一种步长下都学得更快。<bookmark mark='c'/>原因又是马尔可夫性质。蒙特卡洛把每个状态的回报分开处理。而TD对C的更新，用到的是D的当前估计，过去每一次访问D都改进过这个估计，所以经验在状态之间共享了。",
 
     'f"Monte Carlo and TD are the two ends of a spectrum.':
-        "蒙特卡洛和TD是一条光谱的两端。先用n个真实奖励，再接一个猜测：这就是n步回报。<bookmark mark='a'/>把所有这些混合起来，权重像λ的n次方那样衰减：λ等于0是一步TD，λ等于1就是纯粹的蒙特卡洛。<bookmark mark='b'/>混合也不必等到最后。为最近访问过的状态留一条逐渐消退的痕迹，把每个TD误差沿着它分摊回去：这就是资格迹，一行代码就回答了功劳分配问题。<bookmark mark='c'/>在一条更长的随机游走上，十局之后的误差，每个λ取它自己最好的步长，最低点在中间：这里是λ等于{lams[bi]}。最好的方法，把真实奖励和自己的猜测混在一起用。",
+        "蒙特卡洛和TD是一条光谱的两端。先用n个真实奖励，再接一个猜测：这就是n步回报。<bookmark mark='a'/>把所有这些混合起来，权重像λ的n次方那样衰减：λ等于0是一步TD，λ趋近1的极限给出回合式蒙特卡洛。<bookmark mark='b'/>后向视角为最近访问过的状态保留一条逐渐消退的痕迹，把每个TD误差沿着它分摊回去：这就是资格迹。固定价值估计时，它和前向回报等价；在线不断改变估计时，要谨慎处理才能保持精确等价。<bookmark mark='c'/>在一条更长的随机游走上，十局之后的误差，每个λ取它自己最好的步长，最低点在中间：这里是λ等于{lams[bi]}。最好的方法，把真实奖励和自己的猜测混在一起用。",
 
     'The first great success of these ideas came in 1992':
         "这些想法的第一次巨大成功，出现在1992年，来自IBM的杰拉尔德·特索罗。TD-Gammon是一个神经网络，它看着西洋双陆棋的棋盘，估计获胜的概率。<bookmark mark='a'/>它只从和自己对弈的棋局中学习，用TD(λ)把每个局面的价值，朝下一个局面的价值推一点。下了150万局之后，它的水平已经接近世界顶尖棋手，它的一些不寻常的开局下法，还被人类高手采用了。自我对弈、学到的价值、时序差分：记住这三样。",
@@ -132,16 +132,16 @@ ZH = {
         '第6章。Q学习。',
 
     'To act without a model, learn values of actions':
-        "要在没有模型的情况下行动，就去学动作的价值，而不是状态的价值。有了Q，行动就很容易：选Q最高的那个动作，不需要转移概率。<bookmark mark='a'/>TD的想法可以直接搬过来。每走一步，就把s和a的Q值，朝“奖励，加上γ乘以下一步的价值”推一点。一种版本用的是智能体接下来真正采取的动作：状态、动作、奖励、状态、动作，所以它叫Sarsa。<bookmark mark='b'/>克里斯·沃特金斯在他1989年的博士论文里提出的版本，用的则是下一状态下最好的动作，不管智能体实际上做了什么。这就是Q学习。<bookmark mark='c'/>它一边以别的方式行动、一边探索，一边学到最优行动的价值。沃特金斯和达扬证明了它会收敛到Q星，前提是每个动作都一直有人去尝试，而且步长以合适的速率缩小。",
+        "要在没有模型的情况下行动，就去学动作的价值，而不是状态的价值。有了Q，行动就很容易：选Q最高的那个动作，不需要转移概率。<bookmark mark='a'/>TD的想法可以直接搬过来。每走一步，就把s和a的Q值，朝“奖励，加上γ乘以下一步的价值”推一点。一种版本用的是智能体接下来真正采取的动作：状态、动作、奖励、状态、动作，所以它叫Sarsa。<bookmark mark='b'/>克里斯·沃特金斯在他1989年的博士论文里提出的版本，用的则是下一状态下最好的动作，不管智能体实际上做了什么。这就是Q学习。<bookmark mark='c'/>它一边以别的方式行动、一边探索，一边学到最优行动的价值。在状态和动作有限、奖励有界且带折扣的马尔可夫决策过程中，沃特金斯和达扬证明了它会收敛到Q星，前提是每个动作都一直有人去尝试，而且步长以合适的速率缩小。",
 
     'f"Watch both learn on the cliff walk':
-        "来看它们俩在萨顿和巴托的悬崖行走上学习。从S出发，走到G；每走一步扣1分，走下悬崖扣100分，并且被送回起点。两者都会探索：每10步里有1步随机走。<bookmark mark='a'/>这是Q学习的第一局：一通瞎撞，掉下悬崖{falls}次之后，才找到终点。<bookmark mark='b'/>现在回放训练过程：颜色是学到的价值，线是如果停止探索，它会走的路径。每个价值都从0开始，所以一开始，到处看起来都一样好。<bookmark mark='c'/>价值从终点往回增长，路径也渐渐变直。<bookmark mark='d'/>它们最后得出了不同的答案。Q学习学到的是最优路径，紧贴着悬崖边走。Sarsa学到的是安全路径，沿着最上面走：它评价每个动作，依据的是还在探索的自己接下来会怎么做，而在悬崖边随机走一步，就是掉下去。",
+        "来看它们俩在萨顿和巴托的悬崖行走上学习。从S出发，走到G；每走一步扣1分，走下悬崖扣100分，并且被送回起点。两者都会探索：每10步里有1步随机走。<bookmark mark='a'/>这是Q学习第一局的开头：{len(shown)}个记录位置，其中掉下悬崖{falls}次。<bookmark mark='b'/>现在回放训练过程：颜色是学到的价值，线是如果停止探索，它会走的路径。每个价值都从0开始，所以一开始，到处看起来都一样好。<bookmark mark='c'/>价值从终点往回增长，路径也渐渐变直。<bookmark mark='d'/>它们最后得出了不同的答案。Q学习学到的是最优路径，紧贴着悬崖边走。Sarsa学到的是安全路径，沿着最上面走：它评价每个动作，依据的是还在探索的自己接下来会怎么做，而在悬崖边随机走一步，就是掉下去。",
 
     'f"Which is better depends on what you score.':
         "哪个更好，取决于你怎么算分。把两者在仍在探索时，每局得到的奖励画出来。<bookmark mark='a'/>Q学习的最优路径紧贴悬崖边，每隔一阵子，一步随机的动作就会让它掉下去：它平均得{late_q:.0f}分。<bookmark mark='b'/>Sarsa更长、更安全的路径，平均得{late_s:.0f}分。离策略学习找到的，是在一个不再探索的世界里最好的策略；同策略学习找到的，是对这个实际这样行动的智能体来说最好的策略。",
 
     "A table of Q values can't hold Go":
-        "一张Q值表装不下围棋，甚至装不下一个电子游戏的画面，所以下一步，是用一个函数，也就是神经网络，去近似Q。<bookmark mark='t'/>而这里有一个陷阱。<bookmark mark='a'/>函数近似、自举、离策略学习：任意两个放在一起都没问题，但三个凑齐，价值就可能发散到无穷大，哪怕是在很小的问题上，1995年利蒙·贝尔德就展示过这一点。萨顿和巴托把它叫作致命三要素。<bookmark mark='b'/>带神经网络的Q学习，三样全占了。",
+        "一张Q值表装不下围棋，甚至装不下一个电子游戏的画面，所以下一步，是用一个函数，也就是神经网络，去近似Q。<bookmark mark='t'/>而这里有一个陷阱。<bookmark mark='a'/>函数近似、自举和离策略学习：这三者结合，可能让价值发散到无穷大，哪怕是在很小的问题上，1995年利蒙·贝尔德就展示过这一点。萨顿和巴托把它叫作致命三要素。<bookmark mark='b'/>带神经网络的Q学习，三样全占了。",
 
     'Chapter ten. Search before learning.':
         '第10章。学习之前的搜索。',
@@ -156,7 +156,7 @@ ZH = {
         "这套配方击败了国际象棋世界冠军。1997年，IBM的深蓝在六盘比赛中战胜了加里·卡斯帕罗夫。它在480块专用的国际象棋芯片上运行α-β搜索，每秒大约2亿个局面，评估函数里大约有8000个特征，由特级大师和工程师一起调校。<bookmark mark='a'/>搜索，加上人类设计出来的、关于好局面长什么样的判断。",
 
     'Go was different.':
-        "围棋就不一样了。<bookmark mark='a'/>一个国际象棋局面，大约有35种走法；一个围棋局面，大约有250种，而一盘棋大约要下150手。完整的博弈树，大约有10的360次方个局面。<bookmark mark='b'/>更糟的是，没人能写出一个评估函数。数子力在国际象棋里管用；而在围棋里，谁占优取决于棋形和势力，强手是凭感觉，而不是靠计算。深蓝之后将近20年，最好的围棋程序仍然远远不如最强的人类。",
+        "围棋就不一样了。<bookmark mark='a'/>一个国际象棋局面，大约有35种走法；一个围棋局面，大约有250种，而一盘棋大约要下150手。完整的博弈树，大约有10的360次方个局面。<bookmark mark='b'/>更糟的是，手工设计的评估函数还不够强。数子力在国际象棋里管用；而在围棋里，谁占优取决于棋形和势力，强手是凭感觉，而不是靠计算。深蓝之后将近20年，最好的围棋程序仍然远远不如最强的人类。",
 
     'Chapter eleven. Monte Carlo tree search.':
         '第11章。蒙特卡洛树搜索。',
@@ -170,11 +170,11 @@ ZH = {
     'f"Here is plain MCTS thinking about a Connect Four position':
         "这是普通的MCTS在思考一个四子棋局面，它的树画出来，每根树枝的粗细，代表经过它的模拟次数。<bookmark mark='a'/>{snaps[0]}次模拟之后，每一步都被试过一两次。<bookmark mark='b'/>随着次数增加，这棵树长得越来越偏：搜索不断回到看起来最好的走法，在那里看得更深，而毫无希望的走法，只得到刚好足以确认它们毫无希望的访问次数。<bookmark mark='c'/>{snaps[-1]:,}次模拟之后，它最喜欢第{best_mc + 1}列。",
 
-    'f"But the perfect solver disagrees:':
-        "但完美求解器不同意：第{best_true + 1}列能强制取胜，而第{best_mc + 1}列会输。<bookmark mark='a'/>随机对局是个很粗糙的裁判。在随机对局里，没有人会利用威胁，所以一步给对手送上胜机的棋，平均看起来也还不错。搜索的好坏，取决于它的评估。",
+    "f\"The perfect solver says column":
+        "完美求解器说：完美对弈时，第{best_true + 1}列的结果是{best_result}；MCTS选的第{best_mc + 1}列，结果是{chosen_result}。<bookmark mark='a'/>我们的模拟策略看到一步就能赢的棋会直接下，其他时候随机走。它仍可能漏掉更长的战术陷阱，所以一步棋在这种模拟下，可能比面对最优应对时显得更好。这次有限预算的搜索，也受限于这种评估。",
 
     'f"We can measure this exactly.':
-        "我们可以精确地衡量这一点。四子棋已经被彻底解决了，所以对{d['n_pos']}个测试局面，我们知道每一步棋的真实价值。如果一步棋保住了这个局面所能得到的最好结果，赢棋，或者和棋，就说它是对的。<bookmark mark='a'/>随机走一步，有{100 * d['random']:.0f}%的时候是对的。<bookmark mark='b'/>普通的MCTS随着模拟次数增加而进步，每步{int(sims[-1]):,}次模拟时达到{100 * acc[-1]:.0f}%，然后就停住了：再多的随机对局，也修正不了一个有偏的裁判。",
+        "我们可以精确地衡量这一点。四子棋已经被彻底解决了，所以对{d['n_pos']}个测试局面，我们知道每一步棋的真实价值。如果一步棋保住了这个局面所能得到的最好结果，赢棋，或者和棋，就说它是对的。<bookmark mark='a'/>随机走一步，有{100 * d['random']:.0f}%的时候是对的。<bookmark mark='b'/>在这次实验中，普通MCTS在每步{int(sims[-1]):,}次模拟时达到{100 * acc[-1]:.0f}%。这些有限预算不能证明它的上限：UCT具有渐近一致性，但可能需要更多的搜索。",
 
     'MCTS transformed computer Go.':
         "MCTS彻底改变了电脑围棋。从2006年起，Crazy Stone和MoGo从初学者水平，一路爬到了业余强手。<bookmark mark='a'/>2013年，Crazy Stone战胜了一位职业棋手，不过对方让了它四子。<bookmark mark='b'/>缺的是一个更好的裁判：能像强手那样，看一眼局面就知道谁占上风。这正是神经网络将要提供的。",
@@ -204,7 +204,7 @@ ZH = {
         "DeepMind在2019年提出的MuZero，正是这样做的，它用了三个学出来的函数。<bookmark mark='a'/>表示函数h，把当前的观测变成一个隐状态。<bookmark mark='b'/>动态函数g，输入一个隐状态和一个动作，预测奖励和下一个隐状态：想象中的一步。<bookmark mark='c'/>还有预测函数f，也就是AlphaZero的网络，对任何隐状态给出策略和价值。树搜索完全在隐状态上进行。<bookmark mark='d'/>它们是一起训练的：沿着真实的轨迹，把模型往前展开5步，让它预测的奖励、价值和策略，去匹配真实的奖励、回报，以及搜索的选择。<bookmark mark='e'/>关键的选择是：从来不要求隐状态去重建画面或者棋盘。它只需要预测对规划有用的东西。一个只知道有用之事的世界模型。",
 
     'MuZero matched AlphaZero at Go, chess and shogi':
-        "MuZero在围棋、国际象棋和将棋上追平了AlphaZero，而且从来没有被告知规则；它还在雅达利游戏上创下了新的最好成绩。<bookmark mark='a'/>EfficientZero让它变得节俭：只玩了相当于两个小时的游戏，就在雅达利上超过了人类的中位数水平。<bookmark mark='b'/>Gumbel MuZero让搜索哪怕只用寥寥几次模拟，也能被证明一定会改进策略。<bookmark mark='c'/>还有一个版本投入了实际工作，用来压缩YouTube视频，节省了大约4%的比特。<bookmark mark='d'/>学习世界如何运转、并在其中做规划的模型，会在第29部分再次出现。",
+        "MuZero在围棋、国际象棋和将棋上追平了AlphaZero，而且从来没有被告知规则；它还在雅达利游戏上创下了新的最好成绩。<bookmark mark='a'/>EfficientZero让它变得节俭：在26个Atari 100k游戏上，人类归一化得分的中位数超过100%，每个游戏只用约2小时的经验。<bookmark mark='b'/>Gumbel MuZero在动作价值评估正确时，即使只有少量模拟也能证明策略改进。学到的近似值并不带来无条件的保证。<bookmark mark='c'/>还有一个版本投入了实际工作，用来压缩YouTube视频，节省了大约4%的比特。<bookmark mark='d'/>学习世界如何运转、并在其中做规划的模型，会在第29部分再次出现。",
 
     'Chapter fifteen. Beyond perfect information.':
         '第15章。超越完全信息。',
@@ -237,7 +237,7 @@ ZH = {
         "价值方法学的是各种东西有多好，然后贪心地行动。策略梯度方法跳过这一步，直接调整策略本身。把策略做成一个参数为θ的网络，为每个动作输出一个概率。<bookmark mark='a'/>目标是一局的期望总奖励，J(θ)。用梯度上升去爬这座山。<bookmark mark='b'/>这样能处理连续的动作，比如一个扭矩，或者一个转向角，在这种情况下，对动作取最大值本身就是个难题。<bookmark mark='c'/>它能学出有意随机的策略，而石头剪刀布或者扑克里最好的打法，必须是随机的。<bookmark mark='d'/>而且，行为会随着θ平滑地变化，而不是每当两个Q值交换顺序时，就突然跳变。",
 
     'The gradient of an expectation over episodes looks hopeless':
-        "对一局一局的期望求梯度，看起来毫无希望：每一局的概率，既取决于θ，也取决于环境的动态，而后者我们并不知道。<bookmark mark='a'/>第5部分的对数导数技巧挽救了它：p的梯度，等于p乘以log p的梯度。<bookmark mark='b'/>于是，梯度本身也是对各局的一个平均，而平均可以用采样来估计：玩几局，取平均。<bookmark mark='c'/>更妙的是，一局的对数概率可以拆成两部分：策略的选择，和环境的转移，而环境那部分不依赖于θ。它的梯度是零。我们从来不需要模型。<bookmark mark='d'/>再改进一点：一个动作影响不了它之前的奖励，所以每个动作只记它之后的回报。这就是REINFORCE，罗纳德·威廉姆斯1992年的算法。",
+        "对一局一局的期望求梯度，看起来毫无希望：每一局的概率，既取决于θ，也取决于环境的动态，而后者我们并不知道。这里使用有限回合，γ取1。<bookmark mark='a'/>第5部分的对数导数技巧挽救了它：p的梯度，等于p乘以log p的梯度。<bookmark mark='b'/>于是，梯度本身也是对各局的一个平均，而平均可以用采样来估计：玩几局，取平均。<bookmark mark='c'/>更妙的是，一局的对数概率可以拆成两部分：策略的选择，和环境的转移，而环境那部分不依赖于θ。它的梯度是零。我们从来不需要模型。<bookmark mark='d'/>再改进一点：一个动作影响不了它之前的奖励，所以每个动作只记它之后的回报。这就是REINFORCE，罗纳德·威廉姆斯1992年的算法。",
 
     'In plain terms: the policy tries actions.':
         "说白了：策略去尝试各种动作。<bookmark mark='a'/>每个动作之后，都跟着某个回报。<bookmark mark='b'/>把每个采取过的动作的对数概率往上推，推多少，和它的回报成正比。<bookmark mark='c'/>后面跟着好结果的动作变得更可能，而因为概率加起来等于1，其他动作就得让路。这就是试错，桑代克的效果律，写成了一个梯度。",
@@ -246,10 +246,10 @@ ZH = {
         "问题在于方差。在倒立摆里，每个回报都是正的，所以每个动作都被往上推，而真正的信号，是一些大数之间的小差别。<bookmark mark='a'/>解药是从回报里减去一个基线，它可以是状态的任何函数。<bookmark mark='b'/>这不需要付出任何代价：对动作取平均，基线那一项等于b乘以所有概率之和的梯度，<bookmark mark='c'/>而概率之和永远是1。它的梯度是零。估计仍然是无偏的，而噪声可以小得多。",
 
     'f"Here is what that buys, measured.':
-        "来看看这能换来什么，实际测一下。取一个训练到一半的倒立摆策略，玩300局，算出每一局单独给出的梯度。每个点是一个估计，投影到真实梯度的方向和另一个方向上。<bookmark mark='a'/>没有基线时，这些估计在真实梯度，也就是那支橙色箭头的周围，散得很开。<bookmark mark='b'/>有了基线，也就是每个时间步的平均回报，它们就聚在了一起：方差小了{ratio:.1f}倍。期望的梯度一样，而要同样清楚地看出它，需要的局数大约只有一半。",
+        "来看看这能换来什么，实际测一下。取一个训练到一半的倒立摆策略，玩300局，算出每一局单独给出的梯度。每个点是一个估计，投影到合并样本均值的方向和另一个方向上。<bookmark mark='a'/>没有基线时，这些估计散得很开；橙色箭头表示合并后的样本均值，并不是精确的真实梯度。<bookmark mark='b'/>有了基线，也就是每个时间步的平均回报，它们就聚在了一起：方差小了{ratio:.1f}倍。期望的梯度一样。方差是在完整的参数空间中测量的；为便于阅读，图中省略了绘图区外的离群点。",
 
-    "The best baseline is the state's value, V.":
-        "最好的基线，是状态的价值V。这样，乘在梯度前面的就是优势：这个动作的结果，比在这个状态下本来就能预期的，好了多少。<bookmark mark='a'/>我们不知道V，所以用第二个网络去学它，这个网络叫评论家，用TD来训练。它的TD误差本身，就是对优势的一个估计。<bookmark mark='b'/>就像TD(λ)混合n步回报一样，广义优势估计混合n步优势，用λ在偏差和方差之间做权衡。<bookmark mark='c'/>一个负责行动的演员，一个负责评判的评论家：这就是演员-评论家。这种架构可以追溯到1983年巴托、萨顿和安德森的倒立摆控制器，正是本章屏幕上的这个任务。",
+    "A standard baseline is the state's value, ":
+        "一种常用的基线，是状态的价值V。这样，乘在梯度前面的量就在估计优势：这个动作的结果，比在这个状态下本来就能预期的，好了多少。<bookmark mark='a'/>我们不知道V，所以用第二个网络去学它，这个网络叫评论家，用TD来训练。它的TD误差本身，就是对优势的一个估计。<bookmark mark='b'/>就像TD(λ)混合n步回报一样，广义优势估计混合n步优势，用λ在偏差和方差之间做权衡。<bookmark mark='c'/>一个负责行动的演员，一个负责评判的评论家：这就是演员-评论家。这种架构可以追溯到1983年巴托、萨顿和安德森的倒立摆控制器，正是本章屏幕上的这个任务。",
 
     'Chapter nine. Trust regions and PPO.':
         '第9章。信赖域与PPO。',
@@ -261,7 +261,7 @@ ZH = {
         "为了重用旧策略的数据，给每个样本乘上一个比值：新策略的概率，除以旧策略的概率。<bookmark mark='a'/>这样就得到一个替代目标，完全用已经收集好的数据来估计，而它在旧参数处的梯度，恰好就是策略梯度。<bookmark mark='b'/>TRPO，约翰·舒尔曼2015年的信赖域方法，在新旧策略之间的KL散度不超过一个上限的约束下，最大化这个目标。求解这个约束，会引出第11部分的自然梯度：精确，但是笨重，每一步都要做二阶计算。",
 
     "In 2017 Schulman's team found a much simpler way":
-        "2017年，舒尔曼的团队找到了一种简单得多的保持接近的方法，它成了默认的选择：近端策略优化，PPO。<bookmark mark='a'/>把这个比值裁剪到一个区间里，从1减ε到1加ε，ε通常取0.2，然后在裁剪过的和没裁剪的目标里，取较小的那个。<bookmark mark='b'/>对一个好的动作，提高它的概率有好处，但只到比值达到1.2为止；超过之后，目标变平了，梯度也随之消失。<bookmark mark='c'/>对一个坏的动作，降低它的概率有好处，但只到0.8为止，再低就没有了。取最小值，保留的是悲观的那一支：一个会让情况变糟的步子，永远不会被裁剪掉。所以你可以在同一批数据上跑好几轮梯度更新，而策略不会跑飞。",
+        "2017年，舒尔曼的团队找到了一种简单得多的保持接近的方法，它成了默认的选择：近端策略优化，PPO。<bookmark mark='a'/>把这个比值裁剪到一个区间里，从1减ε到1加ε，ε通常取0.2，然后在裁剪过的和没裁剪的目标里，取较小的那个。<bookmark mark='b'/>对一个好的动作，提高它的概率有好处，但只到比值达到1.2为止；超过之后，目标变平了，梯度也随之消失。<bookmark mark='c'/>对一个坏的动作，降低它的概率有好处，但只到0.8为止，再低就没有了。取最小值，保留的是悲观的那一支：一个会让情况变糟的步子，永远不会被裁剪掉。所以可以在同一批数据上跑好几轮梯度更新。裁剪去掉的是单个样本项鼓励过大变化的动机，并没有给策略变化加上硬约束，所以步长和KL监测仍然重要。",
 
     'Here is PPO learning the cart-pole, replayed.':
         "这是PPO学习倒立摆的过程回放。右边是策略本身：在每个状态下，向左推或向右推的概率。一开始，处处都是抛硬币，一片均匀的灰色。<bookmark mark='a'/>一批又一批，两种颜色沿着DQN找到的那条倾斜的线分开了，每局也越来越长。和DQN不同，这个策略在边界附近，也就是它拿不准的地方，保持着柔和，直到训练把它磨得更锐利。",
@@ -282,7 +282,7 @@ ZH = {
         "这是DQN在这台机器上学习一个经典控制任务：倒立摆。把小车往左推或往右推，让杆子保持竖直；杆子每立住一步得1分，最多500分。<bookmark mark='a'/>右边是网络学到的东西：对每一个杆子角度和角速度，它更倾向往哪边推。<bookmark mark='b'/>没训练的时候，它到处都往同一个方向推，杆子几步就倒了。<bookmark mark='c'/>我们来回放训练过程，选的是我们{n_runs}次运行里最好的那一次。每隔几千步，把网络冻结，让它来平衡。<bookmark mark='d'/>这张图自己组织成了两半：如果杆子正往右倒，就往右推，让小车回到它的下面。分界线是倾斜的，因为杆子转得快，和杆子倾斜得厉害一样要紧。没有人教过它任何物理。",
 
     'f"There\'s a subtler flaw in the max.':
-        "取最大值，还有一个更隐蔽的缺陷。Q值是带噪声的估计，而最大值会挑出碰巧偏高的那个。<bookmark mark='a'/>根据詹森不等式，估计值的最大值的期望，至少等于真实值的最大值。<bookmark mark='b'/>如果10个动作的真实价值都是0，而每个估计都带有大小为1的噪声，那么最大值平均是{em[-1]:.2f}。Q学习就在这种乐观之上，不断地自举。<bookmark mark='c'/>在萨顿和巴托的测试里，一个有10个略亏动作的分支看起来很诱人，Q学习走进去的次数，远远超过应有的次数。<bookmark mark='d'/>解决办法来自哈多·范哈塞尔特：让一组估计去选动作，另一组去评估它。误差不再叠在一起，双Q学习几乎立刻就走向了正确的选择。双DQN用目标网络作为第二组估计，来实现这一点。",
+        "取最大值，还有一个更隐蔽的缺陷。Q值是带噪声的估计，而最大值会挑出碰巧偏高的那个。<bookmark mark='a'/>根据詹森不等式，估计值的最大值的期望，至少等于各估计均值的最大值；估计无偏时，这些均值就是真实值。<bookmark mark='b'/>如果10个动作的真实价值都是0，而每个估计都带有大小为1的噪声，那么最大值平均是{em[-1]:.2f}。Q学习就在这种乐观之上，不断地自举。<bookmark mark='c'/>在萨顿和巴托的测试里，一个有10个略亏动作的分支看起来很诱人，Q学习走进去的次数，远远超过应有的次数。<bookmark mark='d'/>解决办法来自哈多·范哈塞尔特：让一组估计去选动作，另一组去评估它。误差不再叠在一起，双Q学习几乎立刻就走向了正确的选择。双DQN用目标网络作为第二组估计，来实现这一点。",
 
     'Atari became the proving ground for a decade.':
         "此后十年，雅达利成了试验场。<bookmark mark='a'/>双DQN；更频繁地抽取意外转移的回放；把价值和优势分开的网络。<bookmark mark='b'/>分布式强化学习，它学习回报的整个分布，而不只是平均值。<bookmark mark='c'/>2018年，Rainbow把其中六个想法结合在一起，<bookmark mark='d'/>2020年，Agent57第一个在全部57个游戏上都超过了人类基准，包括《蒙特祖玛的复仇》，那里的奖励极其稀少，探索就是一切。",
@@ -291,19 +291,19 @@ ZH = {
         '第13章。从零开始学习。',
 
     'Eighteen months after Seoul, DeepMind published AlphaGo Zero':
-        "首尔之战18个月后，DeepMind发表了AlphaGo Zero，几乎把所有东西都拿掉了。<bookmark mark='a'/>没有人类棋谱：它从随机乱下开始。没有手工设计的特征：输入就只是棋子。没有随机走子。只有一个网络，而不是分开的策略网络和价值网络。<bookmark mark='b'/>和自己下了3天、490万盘棋之后，它以100比0击败了战胜李世石的那个版本。<bookmark mark='c'/>40天之后，它以89比11击败了AlphaGo Master，这个版本曾在网上对顶尖职业棋手取得60连胜。人类知识越少，它反而越强。",
+        "首尔之战18个月后，DeepMind发表了AlphaGo Zero，几乎把所有东西都拿掉了。<bookmark mark='a'/>没有人类棋谱：它从随机乱下开始。没有手工设计的特征：输入就只是棋子。没有随机走子。只有一个网络，而不是分开的策略网络和价值网络。<bookmark mark='b'/>和自己下了3天、490万盘棋之后，它以100比0击败了战胜李世石的那个版本。<bookmark mark='c'/>40天之后，它以89比11击败了AlphaGo Master，这个版本曾在网上对顶尖职业棋手取得60连胜。这个系统更强，用到的手工知识却更少。",
 
     'The whole algorithm is one loop.':
         "整个算法就是一个循环。一个网络看着一个局面，输出两样东西：每一步棋的概率p，以及一个价值v，也就是它对谁会赢的估计。<bookmark mark='a'/>它和自己对弈，每一步都由一次蒙特卡洛树搜索来选，而引导搜索的，正是这个网络自己。<bookmark mark='b'/>下过的每个局面都被保存下来，带着两个标签：π，搜索的访问次数；z，最后谁赢了。<bookmark mark='c'/>然后用它们训练网络：价值头去预测结果，策略头去预测搜索选了什么，再加上权重衰减。<bookmark mark='d'/>改进后的网络，再去下接下来的棋局。",
 
-    'Why does this work? The search, guided by the network':
-        "这为什么行得通？由网络引导的搜索，是比网络本身更强的棋手：它的访问次数，是比网络原始概率更好的策略。<bookmark mark='a'/>所以，训练网络去模仿搜索，就改进了策略；<bookmark mark='b'/>而用棋局结果训练价值头，就是在评估策略。<bookmark mark='c'/>这就是第4章的策略迭代：由搜索来做改进，由一个神经网络同时承载策略和它的价值。每一代的网络，都让下一代的搜索变得更强。<bookmark mark='d'/>2017年12月，同一个算法，除了规则之外什么都没改，又学会了国际象棋和将棋，并在几个小时之内就超过了最强的程序。在国际象棋里，它每秒只看6万个局面，是Stockfish所需的千分之一：网络的判断，取代了蛮力。",
+    'Why does this work? Search can look beyond the network':
+        "这为什么行得通？搜索能看得比网络的第一反应更远；搜索的访问次数，成为网络策略的训练目标。<bookmark mark='a'/>所以，训练网络去模仿搜索，目的是改进策略；<bookmark mark='b'/>而用棋局结果训练价值头，就是在评估策略。<bookmark mark='c'/>这就是第4章的策略迭代：由搜索来做改进，由一个神经网络同时承载策略和它的价值。网络与搜索尝试互相增强，但并不保证每一步都进步。<bookmark mark='d'/>2017年12月，同样的学习和搜索流程，配合各自规则的编码和探索噪声，又学会了国际象棋和将棋，并在几个小时之内就超过了最强的程序。2017年论文报告，它在国际象棋里每秒检查8万个局面，而Stockfish是7000万个，相差约1000倍：网络让搜索更加有选择性。",
 
     'Three ingredients made it work.':
         "让它成功的有三样东西。自我对弈，它总能提供一个强度恰到好处的对手。<bookmark mark='a'/>搜索，它把一个网络变成了自己的、稍强一点的老师。<bookmark mark='b'/>还有一个学出来的价值函数，也就是围棋程序几十年来一直缺少的那个裁判。<bookmark mark='c'/>这就是1992年TD-Gammon的配方，再加上搜索。",
 
     "Let's take stock.":
-        '我们来总结一下。学会行动，从探索开始，而置信上界的乐观，探索得恰到好处。贝尔曼方程把每个状态的价值和它邻居的价值联系起来，又因为它的算子是一个压缩映射，迭代它总会收敛。时序差分通过自举，从经验中学习价值，Q学习则学会行动；有了经验回放和目标网络，深度网络也能做到。策略梯度直接改进策略，PPO的裁剪让每一步都安全。由学到的策略和价值引导、用自己的棋局来训练的搜索，带来了AlphaZero。而在信息被隐藏的地方，最小化遗憾能找到均衡。',
+        "我们来总结一下。学会行动，从探索开始，而置信上界的乐观，探索得恰到好处。贝尔曼方程把每个状态的价值和它邻居的价值联系起来，又因为它的算子是一个压缩映射，迭代它总会收敛。时序差分通过自举，从经验中学习价值，Q学习则学会行动；有了经验回放和目标网络，深度网络也能做到。策略梯度直接改进策略，PPO的裁剪抑制过大的变化，但不保证每一步都安全。由学到的策略和价值引导、用自己的棋局来训练的搜索，带来了AlphaZero。而在信息被隐藏的地方，最小化遗憾能找到均衡。",
 
     'All of this comes back.':
         '所有这些都会再次出现。PPO，加上从人类偏好中学到的奖励，就是聊天模型的训练方法，见第27部分。在可以核对答案的题目上做策略梯度，以及在思维链上做搜索，造就了推理模型，见第28部分。学到的世界模型和长远的规划，是第29部分的主题。而当一个智能体去优化一个有缺陷的奖励，或者一个超越人类的系统有一个盲点时，会发生什么，会在最后一部分再次出现。',
@@ -323,14 +323,20 @@ ZH = {
     'f"Finally, watch it play out a position where only one move keeps the win':
         "最后，看它在不同阶段，从一个只有一步棋能保住胜局的局面出发，和自己对弈，每一步都由求解器检查：绿色是对的走法，红色是送掉赢棋或和棋的错误。<bookmark mark='a'/>第{keys[0]}代，{len(first['perfect'])}步里对了{f_ok}步。<bookmark mark='b'/>第{keys[-1]}代，{len(last['perfect'])}步里对了{l_ok}步。",
 
-    'f"Why does dropping the target network wreck it?':
-        "为什么去掉目标网络会毁掉它？这是网络预测出的最大价值，用对数坐标画出来。真实价值不可能超过100：每步1分，再打折扣。<bookmark mark='a'/>有目标网络时，预测值{settle}。<bookmark mark='b'/>没有目标网络时，它们就失控了：不到{k1:,}步就超过了1000，到最后达到大约10的{e_end}次方。每次更新，都在追一个跟着自己移动的目标，误差不断自我放大：这就是第6章的致命三要素，在这台机器上现场上演。",
+    'f"Compare the largest absolute Q predictions,':
+        "比较两种条件下Q预测值的最大绝对值，用对数坐标画出。每步1分并进行折扣，真实价值不超过{v['bound']:.0f}。<bookmark mark='a'/>有目标网络时，最后一个采样点的绝对值为{float(v['full'][-1]):.2g}。<bookmark mark='b'/>没有目标网络时，预测值{threshold}；最后一个采样点的绝对值为{float(v['no_target'][-1]):.2g}。每种条件这里只运行了一次。不断移动的目标可能放大近似误差：致命三要素带来的是风险，并不保证每一次运行都会发散。",
+
+    'f"first cross a thousand at the sampled step':
+        '在第{int(st[crossings[0]]):,}步的采样点首次超过1000',
+
+    'do not cross a thousand at the sampled steps':
+        '在各个采样点都没有超过1000',
 
     'f"Its best moment came at {int(steps[best]):,} steps':
-        '它最好的时候在第{int(steps[best]):,}步，能平衡500步里的{int(L[best])}步。然后，随着训练继续，它又变差了：到最后只能坚持{int(L[-1])}步。这就是DQN出了名的不稳定，致命三要素仍在起作用；实践中，人们会保留最好的那个检查点。',
+        '它最好的时候在第{int(steps[best]):,}步，能平衡500步里的{int(episode_steps[best])}步。然后，随着训练继续，它又变差了：到最后只能坚持{int(episode_steps[-1])}步。这就是DQN出了名的不稳定，致命三要素仍在起作用；实践中，人们会保留最好的那个检查点。',
 
     "f'By {int(steps[best]):,} steps it balances":
-        '到第{int(steps[best]):,}步，它能平衡500步里的{int(L[best])}步，训练结束时是{int(L[-1])}步。',
+        '到第{int(steps[best]):,}步，它能平衡500步里的{int(episode_steps[best])}步，训练结束时是{int(episode_steps[-1])}步。',
 
     'f"Do the tricks matter?':
         "这些技巧重要吗？用三种方式训练它，每种{len(d['full'])}次，把整个训练过程中的回合长度取平均。<bookmark mark='a'/>没有回放记忆，每走一步就拿这一步来学：大约{avg['no_replay']:.0f}。<bookmark mark='b'/>有回放但没有目标网络：大约{avg['no_target']:.0f}{never}。<bookmark mark='c'/>两者都有：大约{avg['full']:.0f}。{tail}",
@@ -351,7 +357,7 @@ ZH = {
         "和上一章的策略梯度方法相比，粗蓝线的PPO从同样的经验里得到的最多：在整个训练中，它的回合平均{auc['ppo']:.0f}步，而其余方法里最好的是{rest:.0f}步，因为它在每一批数据上走好几步小心的更新，而不是只走一步。",
 
     'f"Against the policy-gradient methods of the last chapter, PPO, in bold blue, averages':
-        "和上一章的策略梯度方法相比，粗蓝线的PPO在整个训练中平均{auc['ppo']:.0f}步，而其余方法里最好的是{rest:.0f}步：在这么小的任务上，它们差别不大。PPO的优势在于大规模时的可靠。它能在每一批数据上走好几步，而不会冲下悬崖，也几乎不需要调参，所以它成了默认的选择。",
+        "和上一章的策略梯度方法相比，粗蓝线的PPO在整个训练中平均{auc['ppo']:.0f}步，而其余方法里最好的是{rest:.0f}步：在这么小的任务上，它们差别不大。PPO的优势在于大规模时的可靠。它能重复利用每批数据，通过裁剪来抑制过大的策略变化，但仍然需要谨慎选择步长。这也是它广泛使用的原因之一。",
 
     'f"Here is the training, replayed through one position.':
         "这是训练过程，通过一个局面回放出来。每一列上方，是网络在搜索之前下在这一列的概率。下方是完美求解器的判定：保住最好结果的走法打一个勾。<bookmark mark='a'/>第0代的网络还没训练：柱子几乎是平的，价值是{V[0]:+.2f}。<bookmark mark='b'/>看着一代代过去。概率随着网络理解的变化而移动，{end}",
@@ -389,8 +395,8 @@ ZH = {
     'though still below plain MCTS with a thousand simulations a move.':
         '不过仍然低于每步一千次模拟的普通MCTS。',
 
-    'f"That is beyond the {100 * best_uct:.0f} percent plain MCTS reaches':
-        '这超过了普通MCTS用多少次模拟都只能达到的{100 * best_uct:.0f}%：随机走子买不来一个学会的裁判所知道的东西。',
+    "f\"That exceeds the best plain-MCTS accuracy we measured":
+        "这超过了我们测得的普通MCTS最好准确率{100 * best_uct:.0f}%；比较的预算最多为每步{int(np.max(u['sims'])):,}次模拟。这是有限预算下的比较。",
 
     "f'Plain MCTS, judging by random playouts, needs about {need:,} simulations":
         '靠随机走子来判断的普通MCTS，大约需要{need:,}次模拟才能做得一样好：由网络引导的每一次模拟，大约抵得上{need / SIMS:.0f}次随机模拟。',
@@ -398,6 +404,9 @@ ZH = {
 }
 
 PHRASES = {
+    'wins': '获胜',
+    'draws': '和棋',
+    'loses': '落败',
     ', in every run: it never learns at all': '，而且每一次都是如此：它根本学不会',
     'climb to about that, and stay there': '爬升到这个值附近，然后稳定下来',
     'overshoot it, but stay within reach': '会超过它，但不会离得太远',

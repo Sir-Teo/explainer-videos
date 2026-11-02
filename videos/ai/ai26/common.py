@@ -7,6 +7,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 
 from .compute import load  # noqa: F401
+from .envs import CartPole
 
 PART = 26
 MONO = "DejaVu Sans Mono"
@@ -107,6 +108,11 @@ def cartpole(x: float, theta: float, center=ORIGIN, scale=1.0, track=4.8, pole_l
     return VGroup(rail, stops, cart, pole, knob)
 
 
+def cartpole_failed(x: float, theta: float) -> bool:
+    """Use the simulated failure thresholds; a trajectory includes its initial state."""
+    return abs(x) > CartPole.x_max or abs(theta) > CartPole.theta_max
+
+
 def heat_image(Z, vmax=None, neg=LEFT_C, pos=RIGHT_C, mid="#141A24", width=3.6, height=3.6) -> ImageMobject:
     """A 2-D array as a picture: rows bottom to top, ``neg`` below zero, ``pos`` above."""
     Z = np.asarray(Z, float)
@@ -127,5 +133,8 @@ def state_map_frame(img: ImageMobject, th_max=0.21, thd_max=2.0, font_size=20) -
                 .next_to(box.get_corner(DL), DOWN, buff=0.08),
                 MathTex(rf"+{int(round(np.degrees(th_max)))}^\circ", font_size=font_size, color=GREY_B)
                 .next_to(box.get_corner(DR), DOWN, buff=0.08))
-    yl = label(r"angular velocity", font_size=font_size, color=GREY_A).rotate(PI / 2).next_to(box, LEFT, buff=0.3)
-    return VGroup(box, xl, xt, yl)
+    yl = label(r"angular velocity (rad/s)", font_size=font_size, color=GREY_A).rotate(PI / 2).next_to(box, LEFT, buff=0.65)
+    yt = VGroup(*[MathTex(rf"{v:+g}", font_size=font_size, color=GREY_B)
+                 .next_to(box.get_corner(corner), LEFT, buff=0.08)
+                 for v, corner in ((-thd_max, DL), (thd_max, UL))])
+    return VGroup(box, xl, xt, yl, yt)

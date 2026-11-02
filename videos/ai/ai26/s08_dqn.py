@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai26.common import (AGENT, LEFT_C, PART, PENALTY, REWARD, RIGHT_C, TDERR, VALUE, axes, band,
-                                   cartpole, curve, heat_image, legend, load, node_box, state_map_frame)
+                                   cartpole, cartpole_failed, curve, heat_image, legend, load, node_box, state_map_frame)
 
 FULL, NOTARGET, NOREPLAY = C.TRUE_P, C.MODEL_Q, GREY_B
 
@@ -85,6 +85,7 @@ class DQN(VoiceoverScene):
         # the replay buffer: a strip of past transitions, a few sampled at random
         cells = VGroup(*[Rectangle(width=0.32, height=0.5, stroke_color=GREY_D, stroke_width=1, fill_color=GREY_B,
                                    fill_opacity=0.15 + 0.3 * (i / 30)) for i in range(30)]).arrange(RIGHT, buff=0.04)
+        cells.width = 6.4  # keep the replay strip inside its panel and clear of the target-network diagram
         cells.move_to([-2.4, -0.9, 0])
         bl = label(r"replay memory \ (the last $10^6$ steps in the Atari paper)", font_size=20, color=GREY_A)
         bl.next_to(cells, DOWN, buff=0.2)
@@ -127,6 +128,7 @@ class DQN(VoiceoverScene):
         steps = np.asarray(d["snap_steps"])
         Q = np.asarray(d["snap_qdiff"])
         T, L = np.asarray(d["snap_traj"]), np.asarray(d["snap_len"])
+        episode_steps = L - 1  # rollout stores the initial state as well as each transition
         run0 = np.asarray(d["run0"])
         scale = float(np.median(np.abs(Q[-1]))) / 2  # tanh(Q / scale): the preferred push, soft only near the boundary
         Q = np.tanh(Q / scale)
@@ -151,7 +153,7 @@ class DQN(VoiceoverScene):
             n = int(L[i])
             j = min(int(state.get_value()), n - 1)
             x, _, th, _ = T[i, j]
-            fell = j == n - 1 and n < 500
+            fell = j == n - 1 and cartpole_failed(x, th)
             return cartpole(x, th, center=[-3.3, 0.75, 0], scale=1.1, color=PENALTY if fell else AGENT)
 
         cp = always_redraw(pole)
@@ -191,14 +193,14 @@ class DQN(VoiceoverScene):
                 self.play(state.animate.set_value(n - 1), run_time=min(0.4 + n / 160, 3.6), rate_func=linear)
                 if i == 4:
                     vo.wait_until("d")
-        best = int(np.argmax(L))
-        if L[-1] < 0.8 * L[best]:
-            end = (f"Its best moment came at {int(steps[best]):,} steps, balancing {int(L[best])} of five hundred. "
-                   f"Then, as training went on, it got worse again: at the end it lasts {int(L[-1])}. That's DQN's "
+        best = int(np.argmax(episode_steps))
+        if episode_steps[-1] < 0.8 * episode_steps[best]:
+            end = (f"Its best moment came at {int(steps[best]):,} steps, balancing {int(episode_steps[best])} of five hundred. "
+                   f"Then, as training went on, it got worse again: at the end it lasts {int(episode_steps[-1])}. That's DQN's "
                    "notorious instability, the deadly triad still at work; in practice people keep the best checkpoint.")
         else:
-            end = (f"By {int(steps[best]):,} steps it balances {int(L[best])} of five hundred, and at the end of "
-                   f"training, {int(L[-1])}.")
+            end = (f"By {int(steps[best]):,} steps it balances {int(episode_steps[best])} of five hundred, and at the end of "
+                   f"training, {int(episode_steps[-1])}.")
         with self.voiceover(end):
             self.play(Indicate(img, scale_factor=1.03))
         cp.clear_updaters()
@@ -231,7 +233,7 @@ class DQN(VoiceoverScene):
             tail = ("On a problem this small, the tricks matter less than the luck of the seed: look at the bands. "
                     "On Atari they were decisive: in the Nature paper, Breakout without replay scored about ten "
                     "points, against three hundred and seventeen with it.")
-        never = ", in every run: it never learns at all" if collapsed else ""
+        never = ""  # a low aggregate does not establish failure in every seed
         with self.voiceover(
             f"Do the tricks matter? Train it three ways, {len(d['full'])} runs each, and average the episode length "
             "over the whole of training. <bookmark mark='a'/> Without a replay memory, learning from each step as it "
@@ -248,14 +250,14 @@ class DQN(VoiceoverScene):
             self.divergence()
 
     def divergence(self):
-        """Without a target network the predicted values run away: the deadly triad, measured."""
+        """Compare predicted magnitudes without assuming that a run crosses a threshold."""
         v = load("dqn_div")
         st = np.asarray(v["steps"])
         qf, qn = (np.log10(np.maximum(np.asarray(v[k]), 1e-2)) for k in ("full", "no_target"))
         S_MAX = int(st[-1])
-        top = int(np.ceil(max(qn.max(), qf.max()))) + 1
+        top = int(np.ceil(max(qn.max(), qf.max(), np.log10(v["bound"])))) + 1
         g = axes([0, S_MAX], [-1, top], x_length=7.0, y_length=4.0, xlabel=r"steps of experience",
-                 ylabel=r"largest value the network predicts \ (log scale)", xticks=[0, S_MAX // 2, S_MAX],
+                 ylabel=r"largest absolute $Q$ value \ (log scale)", xticks=[0, S_MAX // 2, S_MAX],
                  yticks=list(range(0, top + 1, 2)), xfmt=lambda x: f"{int(x / 1000)}" + (r"\text{k}" if x else ""),
                  yfmt=lambda y: rf"10^{{{int(y)}}}", center=[-1.2, -0.3, 0])
         bound = DashedLine(g.ax.c2p(0, np.log10(v["bound"])), g.ax.c2p(S_MAX, np.log10(v["bound"])), color=GREY_B,
@@ -266,16 +268,16 @@ class DQN(VoiceoverScene):
         lg = legend([(FULL, r"with a target network"), (NOTARGET, r"without one")], font_size=20)
         lg.next_to(g, RIGHT, buff=0.3).shift(UP * 0.7)
         tag = note(r"computed: \ one run of each, \ largest $|Q|$ over the map's states").to_corner(DR, buff=0.2)
-        k1 = int(st[np.argmax(np.asarray(v["no_target"]) > 1000)])
-        e_end = int(np.floor(qn[-1]))
-        settle = ("climb to about that, and stay there" if qf.max() < np.log10(v["bound"]) + 0.5 else
-                  "overshoot it, but stay within reach")
+        crossings = np.flatnonzero(np.asarray(v["no_target"]) > 1000)
+        threshold = (f"first cross a thousand at the sampled step {int(st[crossings[0]]):,}" if len(crossings) else
+                     "do not cross a thousand at the sampled steps")
         with self.voiceover(
-            "Why does dropping the target network wreck it? Here is the largest value the network predicts, on a log "
-            "scale. No true value can exceed a hundred: one point a step, discounted. <bookmark mark='a'/> With a "
-            f"target network, the predictions {settle}. <bookmark mark='b'/> Without one, they run away: past a "
-            f"thousand within {k1:,} steps, and to about ten to the {e_end} by the end. Each update chases a target "
-            "that moves with it, and the error feeds on itself: the deadly triad of chapter six, live."
+            "Compare the largest absolute Q predictions, on a log scale. With one point per step and discounting, "
+            f"no true value exceeds {v['bound']:.0f}. <bookmark mark='a'/> With a target network, the final "
+            f"sampled magnitude is {float(v['full'][-1]):.2g}. <bookmark mark='b'/> Without one, the predictions "
+            f"{threshold}; the final sampled magnitude is {float(v['no_target'][-1]):.2g}. This is one run of each "
+            "condition. A moving target can amplify approximation errors: the deadly triad is a risk, not a "
+            "guarantee of divergence in every run."
         ) as vo:
             self.play(FadeIn(g), Create(bound), FadeIn(bl), FadeIn(tag))
             vo.wait_until("a")
@@ -319,7 +321,7 @@ class DQN(VoiceoverScene):
         with self.voiceover(
             "There's a subtler flaw in the max. The Q values are noisy estimates, and the max picks whichever "
             "happens to be too high. <bookmark mark='a'/> By Jensen's inequality, the expected max of the estimates "
-            "is at least the max of the true values. <bookmark mark='b'/> If ten actions are all truly worth zero and "
+            "is at least the max of their means; for unbiased estimates, those are the true values. <bookmark mark='b'/> If ten actions are all truly worth zero and "
             f"each estimate has noise of size one, the max averages {em[-1]:.2f}. Q-learning keeps bootstrapping on "
             "that optimism. <bookmark mark='c'/> In Sutton and Barto's test, a branch with ten slightly losing "
             "actions looks attractive, and Q-learning goes down it far more often than it should. "

@@ -88,7 +88,7 @@ class MCTS(VoiceoverScene):
     def four_steps(self):
         t = {"children": [{"children": [{"children": []}, {"children": []}]}, {"children": [{"children": []}]},
                           {"children": []}]}
-        tree = SearchTree(t, width=5.0, level_height=1.2, radius=0.14, center=[-3.4, 1.0, 0])
+        tree = SearchTree(t, width=4.4, level_height=1.2, radius=0.14, center=[-3.8, 1.0, 0])
         Ns = [12, 7, 3, 2, 4, 2, 1]
         nl = VGroup(*[MathTex(str(n), font_size=20, color=SEARCH).next_to(tree.nodes[i], RIGHT, buff=0.08)
                       for i, n in enumerate(Ns)])
@@ -166,14 +166,17 @@ class MCTS(VoiceoverScene):
 
         tree = build(0)
         cnt = label(rf"${snaps[0]}$ simulations", font_size=28, color=SEARCH).to_corner(UR, buff=0.4)
+        key = label(r"top: column; bottom: visits", font_size=20, color=GREY_A)
+        key.next_to(cnt, DOWN, buff=0.15).align_to(cnt, RIGHT)
 
         def col_labels(tr):
             g = VGroup()
             for k in tr.kids[0]:
                 mv = tr.node_data[k]["move"]
-                g.add(VGroup(MathTex(rf"\text{{col}}\ {mv + 1}", font_size=20, color=GREY_A),
+                g.add(VGroup(MathTex(str(mv + 1), font_size=20, color=GREY_A),
                              MathTex(str(tr.node_data[k]["n"]), font_size=22, color=SEARCH))
-                      .arrange(DOWN, buff=0.05).next_to(tr.nodes[k], UP, buff=0.12))
+                      .arrange(DOWN, buff=0.05).next_to(tr.nodes[k], UP, buff=0.12)
+                      .add_background_rectangle(color=BACKGROUND, opacity=1, buff=0.05))
             return g
 
         labels = col_labels(tree)
@@ -187,9 +190,9 @@ class MCTS(VoiceoverScene):
             f"only enough visits to stay hopeless. <bookmark mark='c'/> After {snaps[-1]:,} simulations it likes "
             f"column {best_mc + 1} best."
         ) as vo:
-            self.play(FadeIn(board), FadeIn(cnt), Create(tree.edge_group), FadeIn(tree.nodes), FadeIn(labels))
+            self.play(FadeIn(board), FadeIn(cnt), FadeIn(key), Create(tree.edge_group), FadeIn(tree.nodes), FadeIn(labels))
             vo.wait_until("a")
-            self.play(Indicate(labels, color=SEARCH, scale_factor=1.05))
+            self.play(Indicate(VGroup(*[item[1:] for item in labels]), color=SEARCH, scale_factor=1.05))
             vo.wait_until("b")
             for i in range(1, len(snaps)):
                 new = build(i)
@@ -201,18 +204,22 @@ class MCTS(VoiceoverScene):
                 self.wait(0.6)
             vo.wait_until("c")
             k = [j for j in tree.kids[0] if tree.node_data[j]["move"] == best_mc][0]
-            self.play(Indicate(labels[tree.kids[0].index(k)], color=SEARCH, scale_factor=1.3))
+            self.play(Indicate(labels[tree.kids[0].index(k)][1:], color=SEARCH, scale_factor=1.3))
         self.wait(0.2)
         # the verdict: the perfect solver's score for each move
         ok = [None if np.isnan(v) else bool(np.sign(v) == np.sign(np.nanmax(truth))) for v in truth]
         marks = board.column_marks(ok, font_size=20)
-        verdict = label(rf"but the solver says: \ column {best_true + 1} wins; \ column {best_mc + 1} loses", font_size=26,
-                        color=PENALTY).to_edge(DOWN, buff=0.4)
+        outcomes = {-1: "loses", 0: "draws", 1: "wins"}
+        best_result = outcomes[int(np.sign(truth[best_true]))]
+        chosen_result = outcomes[int(np.sign(truth[best_mc]))]
+        verdict = label(rf"solver: column {best_true + 1}: {best_result}; \\ MCTS: column {best_mc + 1}: {chosen_result}",
+                        font_size=26, color=REWARD if chosen_result == best_result else PENALTY).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            f"But the perfect solver disagrees: column {best_true + 1} wins by force, and column {best_mc + 1} loses. "
-            "<bookmark mark='a'/> Random playouts are a crude judge. In a random game nobody exploits a threat, so a "
-            "move that sets up the opponent's win can look fine on average. The search is only as good as its "
-            "evaluation."
+            f"The perfect solver says column {best_true + 1}: {best_result} with perfect play; "
+            f"the move MCTS chose, column {best_mc + 1}, {chosen_result}. "
+            "<bookmark mark='a'/> Our rollout policy takes an immediate win when it sees one and otherwise plays "
+            "randomly. It can still miss longer tactical traps, so a move can look better under these playouts than "
+            "under optimal replies. This finite-budget search inherits that limited evaluation."
         ) as vo:
             self.play(FadeIn(marks), FadeIn(verdict))
         self.wait(0.3)
@@ -239,8 +246,8 @@ class MCTS(VoiceoverScene):
             "move's true value. Call a move right if it keeps the best result the position allows: the win, or "
             "the draw. <bookmark mark='a'/> A random move is right "
             f"{100 * d['random']:.0f} percent of the time. <bookmark mark='b'/> Plain MCTS improves with more "
-            f"simulations, to {100 * acc[-1]:.0f} percent at {int(sims[-1]):,} per move, and then levels off: more "
-            "random games won't fix a biased judge."
+            f"simulations, reaching {100 * acc[-1]:.0f} percent at {int(sims[-1]):,} per move in this experiment. "
+            "These finite budgets do not establish a ceiling: UCT is asymptotically consistent, but can need far more search."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")

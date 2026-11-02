@@ -46,6 +46,7 @@ class Zero(VoiceoverScene):
                          r"games against professionals, \ $89$ to $11$", width=6.2, color=AGENT),
         ).arrange(DOWN, buff=0.3).move_to([3.4, 0.2, 0])
         cite_ = cite(r"D.~Silver et al., \textit{Mastering the game of Go without human knowledge}, \textit{Nature} (2017)")
+        self.add(gl)
         with self.voiceover(
             "Eighteen months after Seoul, DeepMind published AlphaGo Zero, and took almost everything away. "
             "<bookmark mark='a'/> No human games: it starts from random play. No hand-designed features: the input "
@@ -53,10 +54,10 @@ class Zero(VoiceoverScene):
             "<bookmark mark='b'/> After three days and four point nine million games against itself, it beat the "
             "version that had beaten Lee Sedol, a hundred games to nothing. <bookmark mark='c'/> After forty days, it "
             "beat AlphaGo Master, the version that had won sixty straight online games against top professionals, "
-            "eighty-nine to eleven. Less human knowledge made it stronger."
+            "eighty-nine to eleven. A stronger system, with less hand-designed knowledge."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(gl), LaggedStart(*[FadeIn(m) for m in gone], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(m) for m in gone], lag_ratio=0.3))
             self.play(LaggedStart(*[Create(s_) for s_ in strikes], lag_ratio=0.25))
             vo.wait_until("b")
             self.play(FadeIn(hc[0], shift=UP * 0.15), FadeIn(cite_))
@@ -122,17 +123,17 @@ class Zero(VoiceoverScene):
     # ------------------------------------------------------------------
     def alphazero(self):
         rows = VGroup(
-            label(r"search's visit counts $\boldsymbol\pi$ \ $\succ$ \ the network's own $\mathbf p$", font_size=28,
+            label(r"search's visit counts $\boldsymbol\pi$: \ a training target for $\mathbf p$", font_size=28,
                   color=SEARCH),
             label(r"train $\mathbf p \to \boldsymbol\pi$: \ policy improvement", font_size=28, color=AGENT),
             label(r"train $v \to z$: \ policy evaluation", font_size=28, color=VALUE),
             label(r"chapter 4's policy iteration, \ with search as the improvement step", font_size=28, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-2.6, 0.6, 0])
-        az = history_card(2017, r"AlphaZero", r"the same algorithm, unchanged, for chess, shogi and Go: \ beat the "
+        az = history_card(2017, r"AlphaZero", r"one learning and search recipe for chess, shogi and Go: \ beat the "
                           r"strongest programs, Stockfish and Elmo, within hours of starting from random play; \ "
-                          r"searching $60$ thousand chess positions a second to Stockfish's $60$ million",
+                          r"searching $80$ thousand chess positions a second to Stockfish's $70$ million",
                           width=6.6, color=AGENT).move_to([3.2, -1.8, 0])
-        cite_ = cite(r"Silver et al., \textit{Science} (2018); \ see also Anthony, Tian \& Barber, \textit{Expert "
+        cite_ = cite(r"Silver et al., arXiv:1712.01815 (2017); \textit{Science} (2018); \ see also Anthony, Tian \& Barber, \textit{Expert "
                      r"Iteration} (2017)")
         gr = load("az_grade")
         meas = VGroup(label(rf"ours, \ generation {gr['gens'][-1]}: \ right moves", font_size=20, color=GREY_A))
@@ -144,15 +145,16 @@ class Zero(VoiceoverScene):
         meas[1:].arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         meas.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.0, 2.0, 0])
         with self.voiceover(
-            "Why does this work? The search, guided by the network, is a better player than the network alone: its "
-            "visit counts are a better policy than the network's raw probabilities. <bookmark mark='a'/> So training "
-            "the network to imitate the search improves the policy, <bookmark mark='b'/> and training the value head "
+            "Why does this work? Search can look beyond the network's first guess, and its visit counts become a "
+            "training target for the network's policy. <bookmark mark='a'/> So training "
+            "the network to imitate the search aims to improve the policy, <bookmark mark='b'/> and training the value head "
             "on game results evaluates it. <bookmark mark='c'/> It is policy iteration from chapter four, with search "
             "doing the improvement and a neural network holding both the policy and its value. Each generation's "
-            "network makes the next generation's search stronger. <bookmark mark='d'/> In December 2017 the same "
-            "algorithm, with nothing changed but the rules, learned chess and shogi too, and beat the strongest "
-            "programs within hours. In chess it looked at sixty thousand positions a second, a thousandth of what "
-            "Stockfish needed: the network's judgment replaced brute force."
+            "network and search try to strengthen one another; improvement is not guaranteed at every step. "
+            "<bookmark mark='d'/> In December 2017 the same learning and search recipe, with rule-specific encodings "
+            "and exploration noise, learned chess and shogi too, and beat the strongest "
+            "programs within hours. The 2017 paper reports eighty thousand chess positions a second against seventy million for "
+            "Stockfish, roughly a thousand times fewer: the network focused the search."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(meas[0]))
             self.play(*[AnimationGroup(GrowFromEdge(m[0], LEFT), FadeIn(m[1]), FadeIn(m[2])) for m in meas[1:]])
@@ -325,8 +327,8 @@ class Zero(VoiceoverScene):
         # how many plain-MCTS simulations (random playouts) buy the same accuracy: log-linear along its curve
         us, ua = np.log10(np.asarray(u["sims"], float)), np.asarray(u["acc"])
         if final_mc > 100 * best_uct:
-            vs_uct = (f"That is beyond the {100 * best_uct:.0f} percent plain MCTS reaches with any number of "
-                      "simulations: random playouts can't buy what a learned judge knows.")
+            vs_uct = (f"That exceeds the best plain-MCTS accuracy we measured, {100 * best_uct:.0f} percent, "
+                      f"among budgets up to {int(np.max(u['sims'])):,} simulations per move. This is a finite-budget comparison.")
         else:
             k = int(np.argmax(ua >= mc[-1]))
             lg_need = us[k - 1] + (mc[-1] - ua[k - 1]) / (ua[k] - ua[k - 1]) * (us[k] - us[k - 1]) if k else us[0]

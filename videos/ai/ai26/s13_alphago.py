@@ -149,6 +149,8 @@ class AlphaGo(VoiceoverScene):
                    font_size=22, color=GREY_A).next_to(leaf, DOWN, buff=0.2)
         hw = label(r"the distributed version: \ $1{,}202$ CPUs, \ $176$ GPUs", font_size=24, color=GREY_B)
         hw.to_edge(DOWN, buff=0.9)
+        heading = label(r"AlphaGo: learned priors and values", font_size=30, color=SEARCH).to_edge(UP, buff=0.3)
+        self.add(heading)
         with self.voiceover(
             "The search is MCTS with two changes. <bookmark mark='a'/> When it selects a move, the exploration bonus "
             "is weighted by the policy network's prior, P: moves a strong player would consider get explored first, "

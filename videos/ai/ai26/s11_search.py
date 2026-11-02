@@ -211,14 +211,16 @@ class Search(VoiceoverScene):
                 m.set_x(-4.6 + 3.1 * j)
         rows.move_to(UP * 1.4)
         cite_ = cite(r"L.~V.~Allis, \textit{Searching for Solutions in Games and Artificial Intelligence} (1994)")
-        hard = VGroup(label(r"and no good evaluation function:", font_size=28, color=PENALTY),
+        hard = VGroup(label(r"hand-built evaluation was a bottleneck:", font_size=28, color=PENALTY),
                       label(r"who is winning a Go position is a matter of judgment", font_size=26, color=GREY_A))
         hard.arrange(DOWN, buff=0.15).move_to(DOWN * 1.4)
+        head = label(r"Why Go resisted search", font_size=32, color=SEARCH).to_edge(UP, buff=0.35)
+        self.add(head)
         with self.voiceover(
             "Go was different. <bookmark mark='a'/> A chess position offers about thirty-five moves; a Go position, "
             "about two hundred and fifty, and a game lasts about a hundred and fifty moves. The full game tree has "
             "something like ten to the three hundred and sixty positions. <bookmark mark='b'/> Worse, nobody could "
-            "write down an evaluation function. Counting material works in chess; in Go, who is ahead depends on "
+            "make hand-designed evaluation functions strong enough. Counting material works in chess; in Go, who is ahead depends on "
             "shape and influence that strong players feel rather than calculate. Nearly twenty years after Deep "
             "Blue, the "
             "best Go programs were still far below the best humans."

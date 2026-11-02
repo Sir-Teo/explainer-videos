@@ -30,11 +30,11 @@ class Bellman(VoiceoverScene):
             cmath(r"V^\pi(s)", r"=", r"\mathbb E_\pi\big[\, G_t \mid s_t = s \,\big]", font_size=38, colors=COL),
             cmath(r"V^\pi(s)", r"=", r"\mathbb E_\pi\big[\,", r"r_{t+1}", r"+", r"\gamma", r"G_{t+1}",
                   r"\mid s_t = s \,\big]", font_size=38, colors=COL),
-            cmath(r"V^\pi(s)", r"=", r"\sum_a", r"\pi(a \mid s)", r"\sum_{s'}", r"P(s' \mid s, a)", r"\Big[",
-                  r"r(s, a)", r"+", r"\gamma", r"\,\mathbb E_\pi[\, G_{t+1} \mid s_{t+1} = s' \,]", r"\Big]",
+            cmath(r"V^\pi(s)", r"=", r"\sum_a", r"\pi(a \mid s)", r"\Big[", r"r(s, a)", r"+", r"\gamma",
+                  r"\sum_{s'}", r"P(s' \mid s, a)", r"\mathbb E_\pi[\, G_{t+1} \mid s_{t+1} = s' \,]", r"\Big]",
                   font_size=36, colors=COL),
-            cmath(r"V^\pi(s)", r"=", r"\sum_a", r"\pi(a \mid s)", r"\sum_{s'}", r"P(s' \mid s, a)", r"\Big[",
-                  r"r(s, a)", r"+", r"\gamma", r"V^\pi(s')", r"\Big]", font_size=36, colors=COL),
+            cmath(r"V^\pi(s)", r"=", r"\sum_a", r"\pi(a \mid s)", r"\Big[", r"r(s, a)", r"+", r"\gamma",
+                  r"\sum_{s'}", r"P(s' \mid s, a)", r"V^\pi(s')", r"\Big]", font_size=36, colors=COL),
         ]
         whys = [why(r"the definition"), why(r"$G_t = r_{t+1} + \gamma G_{t+1}$"),
                 why(r"average over the action, then the next state"), why(r"Markov: \ the future from $s'$ \\ is "
@@ -88,9 +88,9 @@ class Bellman(VoiceoverScene):
         cap = label(r"a backup diagram: \ values flow up from where you might land", font_size=26, color=GREY_A)
         cap.to_edge(UP, buff=0.3)
         # the equation the tree draws, up from the first word
-        eq = MathTex(r"V^\pi(s) = \sum_a", r"\pi(a \mid s)", r"\sum_{s'}", r"P(s' \mid s, a)", r"\big[", r"r(s, a)",
-                     r"+ \gamma V^\pi(s')", r"\big]", font_size=34)
-        for k, c in ((1, AGENT), (3, ENV), (5, REWARD), (6, VALUE)):
+        eq = MathTex(r"V^\pi(s) = \sum_a", r"\pi(a \mid s)", r"\big[", r"r(s, a)", r"+ \gamma", r"\sum_{s'}", r"P(s' \mid s, a)",
+                     r"V^\pi(s')", r"\big]", font_size=34)
+        for k, c in ((1, AGENT), (3, REWARD), (6, ENV), (7, VALUE)):
             eq[k].set_color(c)
         eq.to_edge(DOWN, buff=0.45)
         with self.voiceover(
@@ -98,7 +98,7 @@ class Bellman(VoiceoverScene):
             "actions, the small dots, with probabilities pi. <bookmark mark='b'/> Each action can lead to several "
             "next states, with probabilities from the environment, and a reward along the way. <bookmark mark='c'/> "
             "The Bellman equation says: value flows back up this tree. Average the next states' values, weighted by "
-            "how likely you are to land there, add the reward, discount, and average over actions. Sutton and "
+            "how likely you are to land there, discount that average, add the reward, and average over actions. Sutton and "
             "Barto call these backup diagrams. Every algorithm in this part is a different way of doing that "
             "backup: exactly, or from samples, or inside a search tree."
         ) as vo:
@@ -132,7 +132,7 @@ class Bellman(VoiceoverScene):
         pl = VGroup(MathTex(r"0.8", font_size=22, color=AGENT).next_to(arr[0], UP, buff=0.05),
                     MathTex(r"0.1", font_size=22, color=ENV).next_to(arr[1], DOWN, buff=0.05))
         info = VGroup(label(r"moves go where intended $80\%$ of the time, \\ slip sideways $10\% + 10\%$", font_size=24),
-                      label(rf"reward $+1$ or $-1$ on the coloured cells; \ $\gamma = {g['gamma']}$", font_size=24,
+                      label(rf"coloured cell pays $+1$ or $-1$, then ends; \ $\gamma = {g['gamma']}$", font_size=24,
                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, 2.2, 0])
         rows = [
             cmath(r"V^\pi", r"=", r"r_\pi", r"+", r"\gamma", r"P_\pi", r"V^\pi", font_size=40),
@@ -184,10 +184,10 @@ class Bellman(VoiceoverScene):
         view.set_heat(cells, Vs[-1])
         arrows = view.arrows(cells, np.asarray(g["pistar"]))
         rows = [
-            cmath(r"V^*(s)", r"=", r"\max_a", r"\sum_{s'}", r"P(s' \mid s, a)", r"\big[", r"r(s, a)", r"+", r"\gamma",
-                  r"V^*(s')", r"\big]", font_size=34, colors=COL),
-            cmath(r"\pi^*(s)", r"=", r"\arg\max_a", r"\sum_{s'}", r"P(s' \mid s, a)", r"\big[", r"r(s, a)", r"+",
-                  r"\gamma", r"V^*(s')", r"\big]", font_size=34, colors=COL),
+            cmath(r"V^*(s)", r"=", r"\max_a", r"\big[", r"r(s, a)", r"+", r"\gamma", r"\sum_{s'}",
+                  r"P(s' \mid s, a)", r"V^*(s')", r"\big]", font_size=34, colors=COL),
+            cmath(r"\pi^*(s)", r"=", r"\arg\max_a", r"\big[", r"r(s, a)", r"+", r"\gamma", r"\sum_{s'}",
+                  r"P(s' \mid s, a)", r"V^*(s')", r"\big]", font_size=34, colors=COL),
         ]
         rows[1][0].set_color(AGENT)
         VGroup(*rows).arrange(DOWN, buff=0.5).move_to([3.2, 2.0, 0])

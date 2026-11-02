@@ -46,6 +46,7 @@ class TD(VoiceoverScene):
         hc = history_card(1988, r"Richard Sutton, \textit{Learning to Predict by the Methods of Temporal Differences}",
                           r"after Samuel's checkers player (1959), which tuned its evaluation toward its own later "
                           r"evaluations", width=4.8, color=TDC).move_to([4.5, 1.0, 0])
+        self.add(ml)
         with self.voiceover(
             "Without a model, we learn values from experience: play episodes, and watch what happens. The simplest "
             "way is Monte Carlo: <bookmark mark='a'/> after an episode ends, nudge each state's value toward the "
@@ -60,7 +61,7 @@ class TD(VoiceoverScene):
             "a few moves later."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(ml), Write(mc))
+            self.play(Write(mc))
             vo.wait_until("b")
             self.play(FadeIn(tl), Write(td))
             vo.wait_until("c")
@@ -182,12 +183,12 @@ class TD(VoiceoverScene):
         ]
         rows[0][4].set_color(VALUE)
         rows[1][0].set_color(TDERR)
-        whys = [why(r"$n$ real rewards, \ then a guess"), why(r"$\lambda = 0$: \ TD(0); \ $\lambda = 1$: \ Monte Carlo")]
+        whys = [why(r"$n$ real rewards, \ then a guess"), why(r"$\lambda = 0$: \ TD(0); \ $\lambda\uparrow 1$: \ episodic Monte Carlo limit")]
         step = ladder(self, rows, whys, keep=2, top=3.1, x=-2.6, buff=0.45, edge=6.9)
         trace = cmath(r"z", r"\leftarrow", r"\gamma \lambda z + \mathbf 1[s_t]", r",\qquad", r"V", r"\leftarrow",
                       r"V + \alpha\, \delta_t\, z", font_size=34).move_to([-2.6, 0.5, 0])
         trace[4].set_color(VALUE)
-        tl = label(r"eligibility traces: \ the same thing, online", font_size=24, color=GREY_A).next_to(trace, DOWN,
+        tl = label(r"eligibility traces: \ the backward view", font_size=24, color=GREY_A).next_to(trace, DOWN,
                                                                                                     buff=0.2)
         g = axes([0, 1], [0.2, 0.6], x_length=4.4, y_length=2.6, xlabel=r"$\lambda$",
                  ylabel=r"error after $10$ episodes \ (best $\alpha$)", xticks=[0, 0.5, 1], yticks=[0.2, 0.4, 0.6],
@@ -199,9 +200,10 @@ class TD(VoiceoverScene):
         with self.voiceover(
             "Monte Carlo and TD are the two ends of a spectrum. Use n real rewards, then a guess: that's the n-step "
             "return. <bookmark mark='a'/> Blend all of them, with weights falling off like lambda to the n: lambda "
-            "zero is one-step TD, lambda one is pure Monte Carlo. <bookmark mark='b'/> You don't need to wait for "
-            "the blend either. Keep a fading trace of recently visited states, and spread each TD error back over "
-            "them: that's an eligibility trace, an answer to credit assignment in one line. <bookmark mark='c'/> On a "
+            "zero is one-step TD, and the limit as lambda approaches one gives episodic Monte Carlo. <bookmark mark='b'/> "
+            "The backward view keeps a fading trace of recently visited states, and spreads each TD error back over "
+            "them: that's an eligibility trace. With fixed value estimates it matches the forward return; changing "
+            "estimates online requires care for exact equivalence. <bookmark mark='c'/> On a "
             "longer walk, the error after ten episodes, at each lambda's best step size, is lowest in between: "
             f"here at lambda {lams[bi]}. The best methods mix real rewards with their own guesses."
         ) as vo:

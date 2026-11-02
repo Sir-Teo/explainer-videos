@@ -98,9 +98,11 @@ class PolicyGradient(VoiceoverScene):
                 why(r"rewards before $t$ can't be caused by $a_t$: \ keep the return-to-go $G_t$")]
         step = ladder(self, rows, whys, keep=5, top=3.2, x=-2.2, buff=0.42, edge=6.9)
         name = label(r"REINFORCE \ (Williams, 1992)", font_size=28, color=SCORE).to_edge(DOWN, buff=0.4)
+        convention = note(r"finite episodes, $\gamma=1$ here; discounted objectives add time weights").to_edge(UP, buff=0.2)
         with self.voiceover(
             "The gradient of an expectation over episodes looks hopeless: the probabilities of episodes depend on "
-            "theta, and on the environment's dynamics, which we don't know. <bookmark mark='a'/> The log-derivative "
+            "theta, and on the environment's dynamics, which we don't know. Here use finite episodes with gamma one. "
+            "<bookmark mark='a'/> The log-derivative "
             "trick from Part 5 rescues it: the gradient of p is p times the gradient of log p. <bookmark mark='b'/> "
             "So the gradient is itself an average over episodes, and an average can be estimated by sampling: play "
             "some episodes and average. <bookmark mark='c'/> Better still, the log-probability of an episode splits "
@@ -109,6 +111,7 @@ class PolicyGradient(VoiceoverScene):
             "can't affect rewards that came before it, so each action is credited only with the return that "
             "followed it. This is REINFORCE, Ronald Williams's algorithm from 1992."
         ) as vo:
+            self.add(convention)
             step(0)
             vo.wait_until("a")
             step(1)
@@ -229,16 +232,16 @@ class PolicyGradient(VoiceoverScene):
         t1 = label(r"without a baseline", font_size=26, color=GREY_B).next_to(a1, UP, buff=0.15)
         t2 = label(r"with a baseline", font_size=26, color=BASE).next_to(a2, UP, buff=0.15)
         ratio = d["var_raw"] / d["var_base"]
-        cap = label(rf"each dot: \ the gradient estimated from one episode \ ($300$ each). \ Variance: \ "
-                    rf"${ratio:.1f}\times$ smaller", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.3)
-        tl = label(r"arrow: \ the true gradient", font_size=20, color=SCORE).next_to(a1, DOWN, buff=0.08)
+        cap = label(rf"each dot: one episode ($300$ each); full-space variance ${ratio:.1f}\times$ smaller"
+                    r" \\ outlying dots outside the plotted range omitted", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.3)
+        tl = label(r"arrow: \ pooled sample mean", font_size=20, color=SCORE).next_to(a1, DOWN, buff=0.08)
         with self.voiceover(
             "Here is what that buys, measured. Take a half-trained cart-pole policy, play three hundred episodes, "
             "and compute the gradient each episode alone would give. Each dot is one estimate, projected onto the "
-            "true gradient's direction and one other. <bookmark mark='a'/> Without a baseline the estimates scatter "
-            "widely around the true gradient, the orange arrow. <bookmark mark='b'/> With a baseline, the average "
+            "pooled sample-mean direction and one other. <bookmark mark='a'/> Without a baseline the estimates scatter "
+            "widely; the orange arrow is their pooled empirical mean, not an exact gradient. <bookmark mark='b'/> With a baseline, the average "
             f"return at each time step, they cluster: the variance is {ratio:.1f} times smaller. Same expected "
-            "gradient, about half as many episodes needed to see it as clearly."
+            "gradient. The variance is measured in the full parameter space; the picture omits outlying dots for readability."
         ) as vo:
             self.play(FadeIn(a1), FadeIn(a2), FadeIn(t1), FadeIn(t2))
             self.play(LaggedStart(*[FadeIn(p) for p in d1], lag_ratio=0.004), run_time=3)
@@ -272,7 +275,7 @@ class PolicyGradient(VoiceoverScene):
         al = label(r"$\hat A_t$: \ was that better than expected?", font_size=22, color=TDERR).next_to(pair, UP, buff=0.2)
         cite_ = cite(r"Barto, Sutton \& Anderson (1983); \ Schulman et al., \textit{GAE} (2016)")
         with self.voiceover(
-            "The best baseline is the state's value, V. Then what multiplies the gradient is the advantage: how much "
+            "A standard baseline is the state's value, V. Then what multiplies the gradient estimates the advantage: how much "
             "better this action turned out than what you'd expect in this state anyway. <bookmark mark='a'/> We "
             "don't know V, so learn it with a second network, the critic, trained by TD. Its TD error is itself an "
             "estimate of the advantage. <bookmark mark='b'/> And just as TD lambda blends n-step returns, generalized "

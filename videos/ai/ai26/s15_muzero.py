@@ -89,9 +89,9 @@ class MuZero(VoiceoverScene):
             "screen or the board. It only has to predict what matters for planning. A model of the world that "
             "knows only what's useful."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(obs), FadeIn(ol), FadeIn(states[0]), FadeIn(sl[0]))
             vo.wait_until("a")
-            self.play(FadeIn(obs), FadeIn(ol), GrowArrow(h), FadeIn(hl), FadeIn(states[0]), FadeIn(sl[0]), FadeIn(roles[0]))
+            self.play(GrowArrow(h), FadeIn(hl), FadeIn(roles[0]))
             vo.wait_until("b")
             self.play(FadeIn(roles[1]), LaggedStart(*[AnimationGroup(GrowArrow(gs[k]), FadeIn(gl[k]), FadeIn(rl[k]),
                                                                      FadeIn(states[k + 1]), FadeIn(sl[k + 1]))
@@ -110,9 +110,9 @@ class MuZero(VoiceoverScene):
         cards = VGroup(
             history_card(2019, r"MuZero", r"matches AlphaZero at Go, chess and shogi without being told the rules; "
                          r"\ a new state of the art on $57$ Atari games", width=6.2, color=AGENT),
-            history_card(2021, r"EfficientZero", r"above the median human on Atari after the equivalent of two hours "
-                         r"of play", width=6.2, color=REWARD),
-            history_card(2022, r"Gumbel MuZero", r"guaranteed policy improvement even with a handful of simulations",
+            history_card(2021, r"EfficientZero", r"median human-normalized score above $100\%$ across $26$ Atari 100k games; "
+                         r"about two hours of experience per game", width=6.2, color=REWARD),
+            history_card(2022, r"Gumbel MuZero", r"policy improvement with few simulations, assuming correct action values",
                          width=6.2, color=SEARCH),
             history_card(2022, r"MuZero in production", r"choosing how to compress YouTube videos: \ about $4\%$ fewer "
                          r"bits at the same quality", width=6.2, color=ENV),
@@ -121,9 +121,11 @@ class MuZero(VoiceoverScene):
         nxt = label(r"learned models of the world return in Part 29", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "MuZero matched AlphaZero at Go, chess and shogi without ever being given the rules, and set a new state "
-            "of the art on the Atari games. <bookmark mark='a'/> EfficientZero made it frugal: above the median human "
-            "on Atari after the equivalent of two hours of play. <bookmark mark='b'/> Gumbel MuZero made search "
-            "provably improve the policy even with a handful of simulations. <bookmark mark='c'/> And a version went "
+            "of the art on the Atari games. <bookmark mark='a'/> EfficientZero made it frugal: its human-"
+            "normalized score exceeds the human baseline in the median across twenty-six Atari 100k games, with about "
+            "two hours of experience per game. <bookmark mark='b'/> Gumbel MuZero made search "
+            "provably improve the policy with few simulations when action values are correctly evaluated. Learned "
+            "approximations do not carry an unconditional guarantee. <bookmark mark='c'/> And a version went "
             "to work compressing YouTube videos, saving about four percent of the bits. <bookmark mark='d'/> Models "
             "that learn how the world works, and plan inside it, come back in Part 29."
         ) as vo:
