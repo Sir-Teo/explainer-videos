@@ -79,16 +79,16 @@ class Hook(VoiceoverScene):
         if ours.width > 13.0:
             ours.width = 13.0
         ours.move_to(DOWN * 2.0)
-        ol = label(r"built here, \ on the computer making this video:", font_size=26, color=GREY_A).next_to(ours, UP, buff=0.3)
+        ol = label(r"planned demonstrations in this part:", font_size=26, color=GREY_A).next_to(ours, UP, buff=0.3)
         with self.voiceover(
             "Every sense poses the same questions. What should a token be? How many does a sentence, a picture or a "
             "second of speech need? And how are the codes learned? <bookmark mark='a'/> We'll follow seventy years of "
             "answers: a machine that recognized ten spoken digits in 1952, the statistical recognizers that followed, "
             "byte-pair encoding, CTC, WaveNet, CLIP and Whisper, up to models that listen while they speak. "
-            "<bookmark mark='b'/> And we'll build small versions on the computer making this video: tokenizers, "
+            "<bookmark mark='b'/> This part will demonstrate small versions: tokenizers, "
             "codebooks, a speech codec, a speech recognizer, and a model that matches pictures with captions."
         ) as vo:
-            self.play(FadeIn(q), FadeIn(path.copy().set_opacity(0.18)))
+            self.play(FadeIn(q))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(m, shift=RIGHT * 0.1) for m in path], lag_ratio=0.12), run_time=3.5)
             vo.wait_until("b")
@@ -105,17 +105,18 @@ class Hook(VoiceoverScene):
             r"vector quantization: \ codebooks, \ collapse and its cures, \ FSQ, \ LFQ, \ residual stages",
             r"sound: \ sampling, \ spectra, \ the mel scale, \ neural audio codecs",
             r"listening: \ templates, \ hidden Markov models, \ CTC, \ Whisper",
-            r"speaking: \ from formants to WaveNet to codec language models, \ and this video's narrator",
+            r"speaking: \ from formants to WaveNet to codec language models, \ including Qwen3-TTS",
             r"pictures and words: \ CLIP, \ SigLIP, \ vision-language and omni models",
         ], font_size=25)
         with self.voiceover(
             "This is Part 23 of AI, Built. <bookmark mark='a'/> In this part: tokenizers for text, and what a token "
             "is worth in bits; vector quantization, its codebooks and how they fail; sampling, spectra and neural "
-            "audio codecs; listening, from templates to CTC and Whisper; speaking, up to the model narrating this "
-            "video; and matching pictures with words, from CLIP to models that see, hear and talk."
+            "audio codecs; listening, from templates to CTC and Whisper; speaking, up to modern codec language "
+            "models including Qwen3-TTS; and matching pictures with words, from CLIP to models that see, hear and talk."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeOut(smap), FadeOut(title), FadeIn(obj))
+            self.play(FadeOut(smap), FadeOut(title), run_time=0.4)
+            self.play(FadeIn(obj), run_time=0.6)
         self.wait(0.3)
         self.clear_scene()

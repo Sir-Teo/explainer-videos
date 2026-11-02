@@ -4,6 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai23.common import MONO, PART, SND_C, TEXT_C, load, node_box, spectro, spread_rows, token_chips
+from videos.ai.ai23.presentation import is_silent_qa
 
 
 class Whisper(VoiceoverScene):
@@ -26,16 +27,18 @@ class Whisper(VoiceoverScene):
                       label(r"wav2vec 2.0 \ (Facebook, 2020)", font_size=24, color=GREY_A),
                       label(r"hide stretches of the speech's latent frames; \\ pick the true one, \ quantized, \ "
                             r"from distractors \\ (Part 24's contrastive loss)", font_size=20, color=GREY_A),
-                      label(r"with $53{,}000$ unlabelled hours, \\ $10$ minutes of transcripts: \ $4.8\%$ / $8.2\%$ "
-                            r"word errors \\ (LibriSpeech clean / other)", font_size=20, color=C.CONTEXT))
+                      label(r"$53{,}000$ unlabelled hours; \ $10$ minutes transcribed \\ external Transformer LM at decoding "
+                            r"\\ $4.8\%$ / $8.2\%$ WER (LibriSpeech clean / other)", font_size=20, color=C.CONTEXT))
         left.arrange(DOWN, aligned_edge=LEFT, buff=0.26).scale(1.2).move_to([-3.4, 0.2, 0])
         right = VGroup(label(r"weakly supervised", font_size=30, color=SND_C),
                        label(r"Whisper \ (OpenAI, 2022)", font_size=24, color=GREY_A),
                        label(r"$680{,}000$ hours of audio with transcripts \\ found on the web, \ imperfect ones "
                              r"included", font_size=20, color=GREY_A),
-                       label(r"one model: \ transcribe, \ translate, \\ name the language, \ time the words; \\ "
+                       label(r"one model: \ transcribe, \ translate into English, \\ name the language, \ predict segment timestamps; \\ "
                              r"nearly a hundred languages", font_size=20, color=SND_C))
         right.arrange(DOWN, aligned_edge=LEFT, buff=0.26).scale(1.2).move_to([3.4, 0.2, 0])
+        for column in (left, right):
+            column.scale_to_fit_width(min(column.width, 6.1))
         div = Line([0, 2.6, 0], [0, -2.4, 0], color=GREY_D)
         # schematics under each column: masked frames to fill in; audio paired with its web transcript
         cells = VGroup(*[Square(0.34, stroke_color=C.CONTEXT, stroke_width=1.5, fill_color=C.CONTEXT,
@@ -57,11 +60,12 @@ class Whisper(VoiceoverScene):
             "After Deep Speech, two roads led to the recognizers we use today. <bookmark mark='a'/> One was "
             "self-supervision. Facebook's wav2vec 2.0, in 2020, hid stretches of speech from its own transformer and learned "
             "to pick the true hidden frame out of distractors, Part 24's contrastive loss applied to sound. "
-            "Pretrained on 53,000 hours with no transcripts, then fine-tuned on just ten minutes with them, it got "
-            "4.8 and 8.2 percent of the words wrong on the two halves of a standard benchmark. <bookmark mark='b'/> "
-            "The other road was weak supervision. In December 2022 OpenAI's Whisper trained on 680,000 hours of "
+            "Pretrained on 53,000 unlabelled hours, fine-tuned on ten minutes of transcribed speech, and decoded "
+            "with an external Transformer language model, the large model reported 4.8 and 8.2 percent word errors "
+            "on LibriSpeech's clean and other test sets. <bookmark mark='b'/> "
+            "The other road was weak supervision. In 2022 OpenAI's Whisper was trained on 680,000 hours of "
             "audio paired with transcripts found on the web, imperfect ones and all, one model that transcribes, "
-            "translates, names the language and times the words, in nearly a hundred languages."
+            "translates into English, names the language and predicts segment timestamps, in nearly a hundred languages."
         ) as vo:
             self.play(Create(div), FadeIn(cite_), FadeIn(left[0]), FadeIn(right[0]))
             vo.wait_until("a")
@@ -169,14 +173,22 @@ class Whisper(VoiceoverScene):
         if loop.width > 13:
             loop.width = 13
         arr = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5) for a, b in zip(loop, loop[1:])])
-        ll = label(r"how this series is narrated \ (tools/tts\_server.py)", font_size=20, color=GREY_A).next_to(loop, UP, buff=0.2)
+        ll = label(r"optional server workflow; \ not run in silent QA" if is_silent_qa()
+                   else r"an optional server narration workflow", font_size=20, color=GREY_A).next_to(loop, UP, buff=0.2)
         cite_ = cite(r"Qwen Team, \textit{Qwen3-ASR Technical Report} (2026)", corner=DR)
+        workflow = (
+            "For this silent QA preview, the server workflow was not run. The diagram shows an optional route: "
+            "transcribe synthesized speech, retry mismatched sentences, then use a forced aligner for word times. "
+            "Here there is no generated speech or ASR alignment; animation timing is estimated."
+            if is_silent_qa() else
+            "An optional server narration workflow can transcribe synthesized speech, retry mismatched sentences, "
+            "then use a forced aligner for word times. This is a workflow schematic, not evidence that a particular "
+            "backend or copy executed those steps."
+        )
         with self.voiceover(
             "Recognizers kept growing and getting faster: Whisper large-v3 in 2023, and a turbo version that cut "
             "its decoder from 32 layers to 4. <bookmark mark='a'/> In January 2026 Alibaba's Qwen3-ASR, built on an "
-            "omni model, covered 52 languages and dialects. <bookmark mark='b'/> It also works on this series. Every "
-            "sentence the narrator speaks is transcribed by Qwen3-ASR and spoken again if the transcript doesn't "
-            "match the script, and a forced aligner times each word, which is how the animations know when to move."
+            "omni model, covered 52 languages and dialects. <bookmark mark='b'/> " + workflow
         ) as vo:
             self.play(FadeIn(items[0]), FadeIn(items[1]))
             vo.wait_until("a")

@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai23.common import IMG_C, PART, SEM_C, SND_C, TEXT_C, load, node_box
+from videos.ai.ai23.presentation import budget_products, published_narrator_config
 
 ME_C = C.TRUE_P
 
@@ -167,13 +168,35 @@ class Omni(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def published_budget(self):
+        """Dependency-free witness of the nominal rate used in the budget row."""
+        cfg = published_narrator_config()
+        rate = cfg["frame_hz"] * cfg["codebooks"]
+        head = label(r"A published codec rate, \ not an executed narrator", font_size=36).to_edge(UP, buff=0.55)
+        equation = MathTex(rf"{cfg['frame_hz']:g} \times {cfg['codebooks']} = {rate:g}", font_size=56).move_to(UP * 0.65)
+        units = label(r"frames/s $\times$ indices/frame $=$ indices/s", font_size=25,
+                      color=GREY_A).next_to(equation, DOWN, buff=0.3)
+        qualifier = label(r"codebook indices per second, \ not text tokens per second", font_size=25,
+                          color=GREY_A).next_to(units, DOWN, buff=0.5)
+        source = cite(r"Qwen Team, \textit{Qwen3-TTS Technical Report} (2026)", corner=DR)
+        with self.voiceover(
+            "Qwen3-TTS's published codec configuration uses twelve point five frames per second and sixteen "
+            "codebooks. Each frame carries one index from each codebook, giving a nominal rate of two hundred "
+            "codebook indices per second. These are not two hundred text tokens per second, and this arithmetic "
+            "is not a measurement of an executed narrator."
+        ):
+            self.play(FadeIn(head), FadeIn(source))
+            self.play(Write(equation), FadeIn(units), FadeIn(qualifier), run_time=2.0)
+        self.wait(0.5)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def budget(self):
-        w = load("whisper")
-        cd = load("codec")
-        v = load("vlm")
-        nr = load("narrator")
+        products = budget_products(load("omni_budget_qa_accepted"))
+        w, cd, v = (products[k] for k in ("whisper", "codec", "vlm"))
         frame = next(r for r in v["rows"] if int(r["h"]) == 720)
-        q_hz, q_n = (float(nr["hz"]), int(nr["n_q"])) if bool(nr["available"]) else (12.5, 16)
+        config = published_narrator_config()
+        q_hz, q_n = config["frame_hz"], config["codebooks"]
         items = [
             (r"the words of speech \ (Whisper's BPE, \ measured)", float(w["tokens_per_second"]), TEXT_C),
             (r"Mimi \ ($12.5 \times 8$)", 12.5 * 8, SEM_C),
@@ -191,15 +214,15 @@ class Omni(VoiceoverScene):
             bar.move_to([-1.0 + wdt / 2, y, 0])
             bars.add(VGroup(label(nm, font_size=19, color=col).next_to([-1.15, y, 0], LEFT, buff=0.0), bar,
                             MathTex(f"{val:,.0f}".replace(",", "{,}"), font_size=22, color=col).next_to(bar, RIGHT, buff=0.12)))
-        axl = label(r"tokens a second, \ log scale \ (a picture: \ tokens per frame)", font_size=18, color=GREY_B)
+        axl = label(r"text tokens or codebook indices/s; \ log scale \ (picture: \ tokens/frame)", font_size=18, color=GREY_B)
         axl.next_to(bars, DOWN, buff=0.3).align_to(bars[0][1], LEFT)
         mimi_min = 12.5 * 8 * 60
         bh = label(r"what each sense costs, \ in tokens", font_size=40).to_edge(UP, buff=0.4)
         with self.voiceover(
             "In the end, every sense is a stream of tokens, and what differs is how many. <bookmark mark='a'/> The "
             f"words of speech come at about {float(w['tokens_per_second']):.0f} tokens a second, by Whisper's own "
-            "tokenizer on our voices. <bookmark mark='b'/> The same speech as Mimi's codes is 100 a second, as the "
-            f"narrator's tokenizer {q_hz * q_n:.0f}, and a single high-definition frame of video is "
+            "tokenizer on our voices. <bookmark mark='b'/> The same speech as Mimi's codes is 100 a second. "
+            f"Qwen3-TTS's published configuration has {q_hz * q_n:.0f} codebook indices a second, and a single high-definition frame of video is "
             f"{int(frame['tokens']):,} tokens. <bookmark mark='c'/> A minute of conversation is {mimi_min:,.0f} tokens per "
             "stream at Mimi's rate, so much of the engineering in these models is in spending fewer: lower frame "
             "rates, fewer codebooks, smaller pictures where they will do."

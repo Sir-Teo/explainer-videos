@@ -31,7 +31,7 @@ Sound (audio.py)
                rate at 0.4 to 3.2 kbps
     ctc        a CTC recognizer for digit strings, three seeds: its training replayed and its forward lattice
     whisper    Whisper base.en on the held-out voices: input, tokens, transcripts, errors
-    narrator   the narrator's own 12.5 Hz codes (Qwen3-TTS's speech tokenizer, through .venv-tts); empty without it
+    narrator   optional Qwen3-TTS code experiment, explicit AI23_NARRATOR_EXECUTE=1 only; never a scene dependency
 Pictures and words (clip.py)
     clip       CLIP's and SigLIP's losses at batch sizes 16, 64 and 256, three seeds each, equal pairs: zero-shot
                retrieval, the InfoNCE bound, resolution
@@ -446,8 +446,14 @@ NARRATOR_SENTENCE = "Every sense is a token: text, pictures and sound."
 
 
 def compute_narrator():
-    """The narrator's own codes, through ``.venv-tts`` if it has ``qwen_tts`` and the model is cached; otherwise an
-    empty record (the scene then says so and draws the codec of chapter nine instead)."""
+    """Explicit optional experiment, separate from the no-I/O scene presentation.
+
+    Once requested, preserve the original cached-model recipe and failure record.
+    """
+    # Optional scientific fork: a scene/cache miss or an installed environment
+    # is not an execution request. Check before profiles, assets or subprocesses.
+    if os.environ.get("AI23_NARRATOR_EXECUTE") != "1":
+        raise RuntimeError("Optional narrator experiment requires explicit AI23_NARRATOR_EXECUTE=1")
     from explainer.paths import ROOT
 
     py = ROOT / ".venv-tts" / "bin" / "python"

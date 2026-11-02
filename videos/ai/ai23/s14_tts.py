@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import numpy as np
 
-from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai23.common import ACOU_C, PART, SEM_C, SND_C, TEXT_C, code_grid, load, node_box, spectro
+from videos.ai.ai23.common import ACOU_C, PART, SEM_C, SND_C, TEXT_C, code_grid, node_box, spectro
+from videos.ai.ai23.presentation import is_silent_qa, narrator_presentation, narration_credit
 
 SPEAK_C = C.MODEL_Q
 
@@ -184,13 +184,13 @@ class TTS(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def narrator(self):
-        nr = load("narrator")
+        nr = narrator_presentation()
         avail = bool(nr["available"])
         facts = VGroup(*[label(t, font_size=21, color=c_) for t, c_ in (
             (r"Qwen3-TTS (Alibaba, January 2026): \ over $5$ million hours, \ $10$ languages", SPEAK_C),
             (r"its tokenizer: \ $12.5$ frames a second, \ $16$ codebooks of $2{,}048$; \ the first semantic, \ $15$ acoustic", SEM_C),
             (r"the transformer writes codebook $1$; \ a small module predicts the other $15$", SPEAK_C),
-            (r"first sound after about $0.1$ s; \ a voice cloned from $3$ seconds", SPEAK_C))]).arrange(
+            (r"reported first packet: \ about $0.1$ s; \ voice cloning from a $3$-second reference", SPEAK_C))]).arrange(
             DOWN, aligned_edge=LEFT, buff=0.18).to_edge(UP, buff=0.45)
         if facts.width > 13:
             facts.width = 13
@@ -222,7 +222,7 @@ class TTS(VoiceoverScene):
             body = Group(mel, gl, grid, rl)
         else:
             side = VGroup()
-            body = label(r"(Qwen3-TTS isn't installed on the computer that built this video, \\ so its codes are not shown)",
+            body = label(r"optional narrator experiment: \ not run \\ no verified codes selected; \ no Qwen synthesis",
                          font_size=22, color=GREY_B).move_to(DOWN * 1.3)
         gen = ""
         if avail and bool(nr["generated"]):
@@ -234,15 +234,18 @@ class TTS(VoiceoverScene):
             own = (f"Here is the {ref_s:.0f}-second clip it learned its English voice from, as the codes the narrator "
                    f"sees: {n_ref} frames of sixteen codes, {bps:,.0f} bits a second.{gen}")
         else:
-            own = "Its codes can't be shown here, because Qwen3-TTS isn't installed on the computer that built this video."
+            own = "No verified narrator-code result is selected for this optional experiment; codec execution and Qwen synthesis were not run."
+        status = ("This is a silent QA preview with estimated narration timing; no speech was generated."
+                  if is_silent_qa() else f"This copy uses {narration_credit()} for narration.")
         with self.voiceover(
-            "This series has a narrator of its own. <bookmark mark='a'/> Qwen3-TTS, from Alibaba in January 2026, was "
+            "One modern codec language model is Qwen3-TTS. <bookmark mark='a'/> This model, from Alibaba in January 2026, was "
             "trained on over five million hours of speech in ten languages. Its tokenizer is a codec like Mimi: 12.5 "
             "frames a second, sixteen codebooks of 2,048, the first taught by a self-supervised model to carry "
             "what is said, the other fifteen how it sounds. <bookmark mark='b'/> Its transformer writes the first "
-            "codebook of each frame, a small module predicts the other fifteen, and the first sound comes out after "
-            "about a tenth of a second. It can clone a voice from three seconds. <bookmark mark='c'/> " + own +
-            f" <bookmark mark='d'/> This copy of the video is read by {narration_credit()}. From the Voder's keys to "
+            "codebook of each frame and a small module predicts the other fifteen. The report gives first-packet "
+            "latency around a tenth of a second in its streaming setup. Three seconds of reference speech can "
+            "condition voice cloning. <bookmark mark='c'/> " + own +
+            f" <bookmark mark='d'/> {status} From the Voder's keys to "
             "here took eighty-seven years."
         ) as vo:
             self.play(FadeIn(facts[0]), FadeIn(cite_))
