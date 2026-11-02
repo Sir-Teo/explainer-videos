@@ -15,7 +15,42 @@ This file has the standard, the devices, the threads and the parts.
 
 ## 1. The standard every part meets
 
-**A chapter is a lecture segment of 3–5 minutes**, in the AI series' order:
+**Revision of November 2026: a part replaces a course.** The series is meant to be watched *instead of* the
+lectures it covers, so a part has the depth of the corresponding chapters of a graduate course and the visual
+intuition of 3Blue1Brown. Concretely:
+
+- **Length: 50–60 minutes, hard floor 50** (`tools/lecture_length.py quantN --floor 50`). A part that runs short
+  is missing material, not padding: find what its textbooks and papers cover that it does not.
+- **One syllabus item, one or two chapters.** Each numbered item of Section 6 gets at least one full chapter of
+  4–6 minutes (never several items squeezed into one chapter). An item with a derivation, an experiment and a
+  case gets two.
+- **A signature visual in every chapter**, built before the formula is written: the idea as a moving picture the
+  viewer could redraw from memory (the measure change as paths being re-weighted and recoloured; Itô's correction
+  as the quadratic variation piling up; the hedge as a ledger filling; the surface as a 3D object the camera walks
+  around; the order book as queues that fill and empty). Static plots are the supporting cast, not the lead.
+  3D (`ThreeDScene`) wherever the object has two inputs.
+- **Derivations in full.** Every step on screen with its reason; the key result proved, not quoted, at the level
+  of the textbooks in [`READING.md`](READING.md). Worked numerical examples after each result, and a
+  pause-and-predict question per chapter.
+- **A textbook audit** in each part's README: a table from every core section of the part's textbooks to the
+  chapter that covers it, or to the part of the series that does. Nothing core is silently dropped.
+- **Every paper on the part's list in [`READING.md`](READING.md) appears**: on screen with what it found, or in
+  the README's reading guide with one line on why it matters.
+- **Hands-on, as in *AI, Built*.** 16–20 chapters per part. The viewer watches things being built and trained,
+  not results being reported: (a) every model the part fits or trains is shown learning, scrubbed through its
+  checkpoints with the loss curve (`ValueTracker`-driven replays, as in AI Part 21's reflow chapter), with several
+  seeds drawn as spread bands and baselines at equal budgets; (b) at least three "lab" moments per part show the
+  House's actual implementation of the key algorithm on screen (`code_block`, at most a dozen lines) and then run
+  it, the output appearing live; (c) simulations run on screen rather than as finished plots (paths drawn as they
+  are simulated, a hedge rebalancing step by step, an order book filling); (d) a computing budget of about two
+  CPU-hours per part, like the AI series', resumable and seeded, so every part has real experiments to show; and
+  (e) every part rebuilds from one command, which the README gives, so a viewer can rerun and change it.
+- **An industry chapter and a frontier chapter** in every part. Industry: how the firms that do this for a
+  living actually do it (hedge funds, trading firms, banks, exchanges, regulators), from the public record:
+  research papers by their staff, filings, books, court and regulatory documents, interviews on the record.
+  Frontier: the 2023–2026 research, checked against the papers.
+
+**A chapter is a lecture segment of 4–6 minutes**, in the AI series' order:
 
 1. A motivating question, a market fact, or a failure.
 2. A definition card.
@@ -106,7 +141,7 @@ running. Colours: `C.Q` for risk-neutral objects, `C.P` for real-world ones.
   DeepSeek.
 
 **Gates per part:**
-- `lecture_length.py` (fails under 30 min).
+- `lecture_length.py --floor 50` (fails under 50 min).
 - `contact_sheet.py`, `dead_air.py`, `collect_text.py --check` and `check_narration.py`.
 - `qa_series.py` and `qa_audio.py` once those tools take `--series quant`.
 - `pytest tests/test_quant_house.py` for the House library.
