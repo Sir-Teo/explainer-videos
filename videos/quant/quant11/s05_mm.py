@@ -95,7 +95,7 @@ class MarketMaker(VoiceoverScene):
             firm_card(r"Optiver and IMC", r"Amsterdam market makers founded in 1986 and 1989, on the European options "
                       r"exchange floors; now electronic, quoting options and ETFs worldwide.", width=6.0, font_size=21),
             firm_card(r"Jane Street", r"Founded around the turn of the millennium; a market maker in ETFs, bonds and "
-                      r"options across the world's exchanges, and a large trader in India's index options (chapter 7).", width=6.0,
+                      r"options across the world's exchanges, and a large trader in India's index options (chapter 6).", width=6.0,
                       font_size=21),
         ).arrange(RIGHT, buff=0.3).move_to(ORIGIN)
         if cards.width > 13.2:
@@ -107,7 +107,7 @@ class MarketMaker(VoiceoverScene):
             "Optiver and IMC began on the Amsterdam options floor in 1986 and 1989, and now quote electronically "
             "across the world. <bookmark mark='b'/> And Jane Street, founded around the turn of the millennium, makes "
             "markets in exchange-traded funds, bonds and options, and was a large trader in India's index options, "
-            "which chapter seven returns to."
+            "which chapter six returns to."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
