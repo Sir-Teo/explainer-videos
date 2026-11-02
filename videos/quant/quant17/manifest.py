@@ -11,7 +11,7 @@ SCENES = [
     ("s06_bsde", "BSDE", "5. A hundred dimensions: the deep BSDE"),
     ("s07_stopping", "Stopping", "6. Deep optimal stopping"),
     ("s08_hedger", "Hedger", "7. The deep hedger"),
-    ("s09_band", "Band", "8. The band, rediscovered"),
+    ("s09_band", "Band", "8. Where not to trade"),
     ("s10_nsde", "NSDE", "9. Neural SDEs and robust bounds"),
     ("s11_generator", "Generator", "10. Market generators"),
     ("s12_production", "Production", "11. Production and model risk"),

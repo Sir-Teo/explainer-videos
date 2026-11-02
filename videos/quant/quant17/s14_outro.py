@@ -55,7 +55,7 @@ class Outro(VoiceoverScene):
             (rf"derivatives as labels: {dg:.0f} times better deltas from {n0} samples", GOOD),
             (rf"100 dimensions: the deep BSDE prices within {100 * b['rel_error']:.1f}\% of the reference", NET),
             (rf"deep stopping: {st['5']['lower']:.2f} for the five-asset max-call", NET),
-            (rf"the deep hedger rediscovers the no-trade band; at {100 * hi['cost']:g}\% costs it needs "
+            (rf"the deep hedger learns where not to trade; at {100 * hi['cost']:g}\% costs it needs "
              rf"{hi['deep']['price']:.2f}, not {hi['delta']['price']:.2f}", DELTA),
             (rf"the same vanillas leave a barrier free between {n['low']['doc']:.3f} and {n['high']['doc']:.3f}", BAD),
         ]
@@ -70,8 +70,8 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Part seventeen in eight lines. A network can learn a pricing formula from prices. It can learn a model's "
             "smile and calibrate it in seconds, every week, which shows that one good day is not a model. Derivatives make better labels than prices alone. Deep "
-            "networks price in a hundred dimensions and learn when to exercise. The deep hedger finds the no-trade "
-            "band, and with costs it is far cheaper than hedging to delta every day. And neural models measure how "
+            "networks price in a hundred dimensions and learn when to exercise. The deep hedger learns where not to "
+            "trade, and with costs it is far cheaper than hedging to delta every day. And neural models measure how "
             "much the vanillas leave an exotic's price undecided."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,

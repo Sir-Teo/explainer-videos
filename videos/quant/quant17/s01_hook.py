@@ -4,7 +4,6 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant17.common import BAD, DELTA, GOOD, NET, PART, illustration, load
-from videos.quant.quant17.s09_band import trade_map
 
 
 class Hook(VoiceoverScene):
@@ -26,40 +25,52 @@ class Hook(VoiceoverScene):
         self.play(FadeOut(card), FadeOut(disc))
 
     def teaser(self, h):
-        m = h["mlp_cost"]
-        S, P = np.asarray(m["S"]), np.asarray(m["prev"])
-        keys = sorted(m["snaps"], key=int)
-        g = axes([S[0], S[-1]], [0, 1], x_length=6.0, y_length=4.4, xlabel=r"price", ylabel=r"shares already held",
-                 xticks=[90, 100, 110], yticks=[0, 0.5, 1], font_size=15).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
+        sf = h["band"]["surface"]
+        S = np.asarray(sf["S"])
+        tau = np.asarray(sf["tau"])
+        k = int(np.argmin(np.abs(tau - 0.5)))
+        lo, hi = np.asarray(sf["lo"])[k], np.asarray(sf["hi"])[k]
+        wl, wh = np.asarray(sf["ww_lo"])[k], np.asarray(sf["ww_hi"])[k]
+        dl = (lo + hi) / 2
+        g = axes([S[0], S[-1]], [0, 1], x_length=6.4, y_length=4.4, xlabel=r"price, 15 days before expiry",
+                 ylabel=r"shares held against one short call", xticks=[90, 100, 110], yticks=[0, 0.5, 1],
+                 font_size=15).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
-        first = trade_map(ax, S, P, np.asarray(m["snaps"][keys[0]]))
-        last = trade_map(ax, S, P, np.asarray(m["snaps"][keys[-1]]))
-        ww = VGroup(DashedVMobject(curve(ax, S, np.clip(np.asarray(m["ww_lo"]), 0, 1), WHITE, stroke_width=2.5), num_dashes=30),
-                    DashedVMobject(curve(ax, S, np.clip(np.asarray(m["ww_hi"]), 0, 1), WHITE, stroke_width=2.5), num_dashes=30))
+        top = ax.plot_line_graph(S, np.clip(hi, 0, 1), add_vertex_dots=False, line_color=NET, stroke_width=3)
+        bot = ax.plot_line_graph(S, np.clip(lo, 0, 1), add_vertex_dots=False, line_color=NET, stroke_width=3)
+        fill = Polygon(*[ax.c2p(a, b) for a, b in zip(S, np.clip(hi, 0, 1))],
+                       *[ax.c2p(a, b) for a, b in zip(S[::-1], np.clip(lo, 0, 1)[::-1])], stroke_width=0,
+                       fill_color=NET, fill_opacity=0.25)
+        ww = VGroup(DashedVMobject(curve(ax, S, np.clip(wl, 0, 1), WHITE, stroke_width=2), num_dashes=30),
+                    DashedVMobject(curve(ax, S, np.clip(wh, 0, 1), WHITE, stroke_width=2), num_dashes=30))
+        rows = h["band"]["rows"]
+        r5 = next(r for r in rows if abs(r["cost"] - 0.005) < 1e-9)
         side = VGroup(
-            label(r"a network learns to hedge an option", font_size=24),
-            label(r"with trading costs, from simulated paths alone", font_size=24, color=GREY_A),
-            legend([(GOOD, r"it buys"), (BAD, r"it sells"), (GREY_D, r"it does nothing"),
-                    (WHITE, r"the band theory predicts (1997)")], font_size=18),
+            label(r"a network learns where not to trade", font_size=24),
+            label(r"when every trade costs 0.5\%", font_size=22, color=GREY_A),
+            legend([(NET, r"the band it learned: inside, do nothing"), (WHITE, r"the band theory derived in 1997")],
+                   font_size=18),
+            MathTex(rf"\text{{price to charge: }}{r5['deep']['price']:.2f}\ \ \text{{vs}}\ \ {r5['delta']['price']:.2f}"
+                    rf"\ \text{{hedging daily}}", font_size=26, color=NET),
             firm_card(r"J.P. Morgan, 2022", r"about 70\% of the bank's Euro Stoxx flow options quoted and hedged by "
                       r"machine, as reported", source=r"Risk.net", width=4.6, font_size=18),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5)
-        src = illustration(r"the deep hedger of chapter 8: its trade, 15 days before expiry, before and after training")
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.5)
+        src = illustration(r"the deep hedger of chapters 7 and 8; a 30-day at-the-money call, 20\% volatility")
         with self.voiceover(
-            "This is a neural network deciding how to hedge an option when every trade costs money. It sees the price, "
-            "the time left and what it already holds. Before training, its decisions are noise. "
-            "<bookmark mark='a'/> After training on simulated markets, a dark corridor appears where it does nothing "
-            "at all. <bookmark mark='b'/> That corridor is the no-trade band that theory derived in 1997. Nobody told "
-            "the network. <bookmark mark='c'/> Machines like this already hedge real books: by 2022, Risk.net reported, "
-            "about seventy percent of J.P. Morgan's Euro Stoxx flow options were quoted and hedged by machine."
+            "This is a neural network learning to hedge an option when every trade costs half a percent. It learns "
+            "a corridor around the hedge: inside it, do nothing; outside it, trade back to the nearest edge. "
+            "<bookmark mark='a'/> Theory derived such a corridor in 1997, for small costs. The network's is "
+            "narrower, and on the same simulated paths it needs a lower price: "
+            f"{r5['deep']['price']:.2f} against {r5['delta']['price']:.2f} for hedging every day. "
+            "<bookmark mark='b'/> Machines like this already hedge real books: by 2022, Risk.net reported, about "
+            "seventy percent of J.P. Morgan's Euro Stoxx flow options were quoted and hedged by machine."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), FadeIn(first), FadeIn(side[0]), FadeIn(side[1]), FadeIn(side[2][:3]))
+            self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(side[1]))
+            self.play(FadeIn(fill), Create(top), Create(bot), FadeIn(side[2][0]), run_time=2)
             vo.wait_until("a")
-            self.play(FadeOut(first), FadeIn(last), run_time=2)
+            self.play(Create(ww), FadeIn(side[2][1]), FadeIn(side[3]))
             vo.wait_until("b")
-            self.play(Create(ww), FadeIn(side[2][3]))
-            vo.wait_until("c")
-            self.play(FadeIn(side[3], shift=UP * 0.2))
+            self.play(FadeIn(side[4], shift=UP * 0.2))
         self.wait(0.5)
         self.clear_scene()
 
@@ -76,8 +87,8 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "The plan. A network that learns a pricing formula from prices. A network that calibrates rough volatility "
             "in milliseconds, used on two years of surfaces. Training on derivatives as well as prices. Pricing in a "
-            "hundred dimensions, and learning when to exercise. The deep hedger, its prices, and the band it "
-            "rediscovers. Neural models that measure model risk. Machines that invent markets. And what it takes to "
+            "hundred dimensions, and learning when to exercise. The deep hedger, its prices, and where it learns not "
+            "to trade. Neural models that measure model risk. Machines that invent markets. And what it takes to "
             "let any of them trade."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
