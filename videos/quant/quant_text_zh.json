@@ -6723,7 +6723,9 @@
     "charge more for crash protection than a bell curve says: the skew of Parts 10 to 12": "为崩盘保护收取比钟形曲线更高的价格：第10到12部分的偏斜",
     "value per 100 of book": "每100账面价值的价值",
     "irr_bisect(bond, 0.0, 0.2, steps=30)": "irr_bisect(bond, 0.0, 0.2, steps=30)",
-    "root 0.050000   width 1.9e-10": "root 0.050000   width 1.9e-10"
+    "root 0.050000   width 1.9e-10": "root 0.050000   width 1.9e-10",
+    "Fung and Hsieh (1997): hedge-fund returns load on a few dynamic styles, with option-like, nonlinear payoffs": "Fung与Hsieh（1997）：对冲基金收益载荷在少数几种动态风格上，呈期权式的非线性收益",
+    "stale prices in the wild: lag-1 autocorrelation of daily returns, 1963--89 $\\to$ 1990--2020": "现实中的陈旧价格：日收益的一阶自相关，1963--89 $\\to$ 1990--2020"
   },
   "phrases": {
     "you owe": "你欠",
@@ -7067,6 +7069,14 @@
     [
       "^bank (\\d+)$",
       "银行\\1"
+    ],
+    [
+      "^\\\\text\\{smallest size decile: \\}(.*)$",
+      "\\\\text{市值最小十分位：}\\1"
+    ],
+    [
+      "^\\\\text\\{largest decile: \\}(.*)$",
+      "\\\\text{最大十分位：}\\1"
     ]
   ]
 }
