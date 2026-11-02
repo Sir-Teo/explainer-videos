@@ -84,8 +84,8 @@ class Valley(VoiceoverScene, ThreeDScene):
             "<bookmark mark='a'/> Now spend a budget. Training costs six operations per parameter per character, "
             "so six N D equals C. Which split gives the lowest loss? Add a Lagrange multiplier, as in part four. "
             "<bookmark mark='b'/> Set both derivatives to zero. <bookmark mark='c'/> Multiply the first by N and "
-            "the second by D, and both sides equal six lambda N D. So at the optimum, the last parameter and the "
-            "last character pay off equally. <bookmark mark='d'/> Solve, and the best size grows as the budget to "
+            "the second by D, and both sides equal six lambda N D. So at the optimum, increasing size or data "
+            "gives equal marginal loss reduction per added operation. <bookmark mark='d'/> Solve, and the best size grows as the budget to "
             f"the power beta over alpha plus beta: {a3:.2f} for our models."
         ) as vo:
             self.play(Write(law), FadeIn(vals), FadeIn(cite_), Create(fx), Create(diag), FadeIn(fl))
@@ -109,13 +109,15 @@ class Valley(VoiceoverScene, ThreeDScene):
         N, D, Lb = np.asarray(s["N"], float), np.asarray(s["D"], float), np.asarray(s["bits"], float)
         xr = (math.floor(np.log10(N.min()) * 4) / 4, math.ceil(np.log10(N.max()) * 4) / 4)
         yr = (math.log10(D.min()) + 0.3, math.log10(D.max()))
-        zlo = float(np.nanmin(Lb)) - 0.05
-        ztop = zlo + 1.6
+        # The validated positive coefficients/exponents make the fitted law
+        # decrease along both axes, so its corner values bound the surface.
+        zlo = min(float(np.nanmin(Lb)), float(lnd(ch, 10 ** xr[1], 10 ** yr[1]))) - 0.05
+        ztop = max(zlo + 1.6, math.ceil(max(float(np.nanmax(Lb)), float(lnd(ch, 10 ** xr[0], 10 ** yr[0]))) * 2) / 2)
         axes = ThreeDAxes(x_range=[*xr, 1], y_range=[*yr, 1], z_range=[zlo, ztop, 0.5], x_length=4.3, y_length=4.3,
                           z_length=2.2, axis_config={"stroke_color": GREY_C, "include_ticks": False}).shift(DOWN * 0.8)
 
         def f(u, v):
-            return float(min(lnd(ch, 10 ** u, 10 ** v), ztop))
+            return float(lnd(ch, 10 ** u, 10 ** v))
 
         surf = loss_surface(axes, f, xr, yr, resolution=(36, 36), z_lo=zlo, z_hi=ztop, opacity=0.8)
         pts = VGroup()
@@ -141,6 +143,8 @@ class Valley(VoiceoverScene, ThreeDScene):
              for n_, d_ in zip(no[ok], do[ok])])
         xl = MathTex(r"\log N", font_size=36, color=NCOL).move_to(axes.c2p(xr[1] + 0.35, yr[0], zlo))
         yl = MathTex(r"\log D", font_size=36, color=DCOL).move_to(axes.c2p(xr[0], yr[1] + 0.35, zlo))
+        self.add_fixed_orientation_mobjects(xl, yl)
+        self.remove(xl, yl)
         head = label(r"the loss over size and data \ (the fitted law; \ dots: \ our runs)", font_size=28).to_edge(UP, buff=0.3)
         k0 = label(r"the floor: \ $\log N$ and $\log D$; \ the height: \ the loss", font_size=22, color=GREY_A)
         k1 = label(r"coloured: \ budgets $6ND = C$, \ $10^{11}$ to $10^{13}$", font_size=22, color=GREY_A)
@@ -160,17 +164,16 @@ class Valley(VoiceoverScene, ThreeDScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(k0))
             self.move_camera(phi=62 * DEGREES, theta=-128 * DEGREES, run_time=2.0,
-                             added_anims=[Create(axes), FadeIn(surf)])
+                             added_anims=[Create(axes), FadeIn(surf), FadeIn(xl), FadeIn(yl)])
             self.play(FadeIn(pts), run_time=1.0)
-            self.begin_ambient_camera_rotation(rate=0.07)
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(c_) for c_ in isos], lag_ratio=0.25), FadeIn(k1), run_time=2.5)
             vo.wait_until("c")
             self.play(Create(path), FadeIn(k2), run_time=2.0)
             self.wait(1.5)
-            self.stop_ambient_camera_rotation()
         self.move_camera(phi=0, theta=-90 * DEGREES, run_time=1.2,
-                         added_anims=[FadeOut(VGroup(axes, surf, pts, isos, path))])
+                         added_anims=[FadeOut(VGroup(axes, surf, pts, isos, path, xl, yl))])
+        self.remove_fixed_orientation_mobjects(xl, yl)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -277,11 +280,11 @@ class Valley(VoiceoverScene, ThreeDScene):
 
     def takeaway(self):
         tk = takeaway_card(r"Grow size and data together",
-                           r"At the optimum the last parameter and the last token pay off equally: \ for language "
+                           r"At the optimum, size and data give equal marginal benefit per added operation: \ for language "
                            r"models, \ about $20$ tokens per parameter \ (Hoffmann et al., 2022).",
                            r"next: \ why the first scaling laws said otherwise")
         with self.voiceover(
-            "The takeaway: at the compute optimum, the last parameter and the last token pay off equally, and for "
+            "The takeaway: at the compute optimum, extra compute spent on size or data gives equal marginal benefit. For "
             "language models that means growing size and data together, at about twenty tokens per parameter. Next: "
             "why the first scaling laws said otherwise."
         ) as vo:

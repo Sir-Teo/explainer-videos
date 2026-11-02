@@ -118,7 +118,8 @@ class Batch(VoiceoverScene):
             knee = Dot(ax.c2p(math.log10(2 * bcrit[i] * smin[i]), math.log10(2 * smin[i])), radius=0.09, color=WHITE)
             groups.add(VGroup(hyp, pts, knee))
         bl = VGroup(*[label(f"{int(v):,}".replace(",", "{,}"), font_size=16, color=GREY_B)
-                      .next_to(ax.c2p(math.log10(Ex[0][j]), math.log10(S[0][j])), UR, buff=0.04)
+                      .next_to(ax.c2p(math.log10(Ex[0][j]), math.log10(S[0][j])),
+                               DOWN if int(v) == 2048 else UR, buff=0.1 if int(v) == 2048 else 0.04)
                       for j, v in enumerate(Bs) if np.isfinite(S[0][j]) and j % 2 == 0])
         lg = VGroup(*[label(rf"to {lv:.1f} bits: \ $B_{{\text{{crit}}}} \approx {bc:,.0f}$".replace(",", "{,}"), font_size=22,
                             color=col) for lv, bc, col in zip(levels, bcrit, LEVEL_COLORS)])
@@ -126,9 +127,8 @@ class Batch(VoiceoverScene):
         kn = label(r"white: \ the knee, \ $B = B_{\text{crit}}$: \\ twice the fewest steps, \\ twice the fewest "
                    r"examples",
                    font_size=20, color=GREY_A).next_to(lg, DOWN, buff=0.35).align_to(lg, LEFT)
-        tag = note(rf"computed: \ width ${int(b['width'])}$, \ batches ${int(Bs[0])}$ to ${int(Bs[-1]):,}$, \ the "
-                     "best of "
-                   r"three learning rates at each".replace(",", "{,}")).to_corner(DL, buff=0.2)
+        tag = note(rf"computed: \ width ${int(b['width'])}$, \ batches ${int(Bs[0])}$ to ${int(Bs[-1]):,}$ \\ "
+                   r"best of three rates for each batch and target loss".replace(",", "{,}")).to_corner(DL, buff=0.2)
         grows = bcrit[-1] > bcrit[0] * 1.3
         said1 = (
             f"the hyperbola moves out, and the critical batch grows: {bcrit[1]:,.0f}, then {bcrit[2]:,.0f}. The "
@@ -138,8 +138,8 @@ class Batch(VoiceoverScene):
         )
         with self.voiceover(
             f"Measure it. Train our character model with batches from {int(Bs[0])} to {int(Bs[-1]):,} characters, "
-            "each at the best of three learning rates, and count the steps and the characters it takes to reach a "
-            f"loss. <bookmark mark='a'/> To reach {levels[0]:.1f} bits, the points fall on a hyperbola, with a "
+            "for each batch and target loss choosing the fastest of three learning rates. Estimate the steps and "
+            f"characters needed from the loss checkpoints. <bookmark mark='a'/> To reach {levels[0]:.1f} bits, the points fall on a hyperbola, with a "
             f"critical batch of about {bcrit[0]:,.0f}. <bookmark mark='b'/> To reach lower losses, "
             + said1
         ) as vo:
@@ -170,7 +170,7 @@ class Batch(VoiceoverScene):
         for j in range(3):
             col = VGroup(rows[j], *[g[j] for g in grid]).arrange(DOWN, buff=0.3)
             col.move_to([-5.4 + 2.55 * j, 0.6, 0])
-        hd = label(r"two ways to the same number", font_size=30).to_edge(UP, buff=0.4)
+        hd = label(r"critical batch and gradient noise", font_size=30).to_edge(UP, buff=0.4)
         how = label(r"noise scale: \ $\operatorname{tr}\Sigma / |G|^2$ \ from gradients at batches $64$ and $4{,}096$ "
                     r"\\ "
                     r"(McCandlish et al., Appendix A)", font_size=20, color=GREY_B)
@@ -255,12 +255,13 @@ class Batch(VoiceoverScene):
 
     def takeaway(self):
         tk = takeaway_card(r"The critical batch",
-                           r"Below the noise scale, \ a bigger batch buys fewer steps almost for free; \ above it, \ "
-                           r"it only wastes data. \ And it grows as the loss falls.",
+                           r"Far below the critical batch, \ a bigger batch saves steps with little extra data; \ "
+                           r"above it, savings diminish as data use grows. \ Our fitted knee grew as loss fell.",
                            r"next: \ the scaling laws themselves")
         with self.voiceover(
-            "The takeaway: below the critical batch, a bigger batch buys fewer steps almost for free; above it, it "
-            "only wastes data. And the critical batch grows as training goes on. Next, the scaling laws themselves."
+            "The takeaway: far below the critical batch, a bigger batch buys fewer steps with little extra data. "
+            "Above it, step savings diminish as data use grows. Our fitted critical batch grew as the loss fell. "
+            "Next, the scaling laws themselves."
         ) as vo:
             self.play(FadeIn(tk[0], shift=UP * 0.2))
             self.wait(max(0.0, vo.duration * 0.5 - 1.0))

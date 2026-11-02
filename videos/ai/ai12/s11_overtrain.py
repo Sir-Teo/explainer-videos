@@ -34,6 +34,10 @@ class Overtrain(VoiceoverScene):
                         axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-2.6, -0.4, 0])
         ok = cost <= top
         line = VMobject(color=SP, stroke_width=4).set_points_smoothly([ax.c2p(k, math.log10(c)) for k, c in zip(ks[ok], cost[ok])])
+        above = np.isfinite(cost) & (cost > top) & (ks >= 0.1) & (ks <= 1.0)
+        overflow = VGroup(*[Triangle(color=SP, fill_color=SP, fill_opacity=1, stroke_width=0).scale(0.05)
+                            .move_to(ax.c2p(k, math.log10(top))) for k in ks[above]])
+        overflow_note = note(r"triangles: \ fitted training cost above $16\times$").to_corner(DL, buff=0.2)
         yt = VGroup(*[MathTex(rf"{v}\times", font_size=22, color=GREY_B).next_to(ax.c2p(0.1, math.log10(v)), LEFT, buff=0.08)
                       for v in (1, 2, 4, 8, 16)])
         xt = VGroup(*[MathTex(t_, font_size=22, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
@@ -46,24 +50,23 @@ class Overtrain(VoiceoverScene):
             c = float(np.interp(k, ks, cost))
             if c <= top:
                 marks.add(VGroup(Dot(ax.c2p(k, math.log10(c)), radius=0.08, color=SP),
-                                 MathTex(rf"+{100 * (c - 1):.0f}\%", font_size=26, color=SP).next_to(ax.c2p(k, math.log10(c)), UR, buff=0.08)))
+                                 MathTex(rf"+{100 * (c - 1):.0f}\%", font_size=26, color=SP).next_to(ax.c2p(k, math.log10(c)), UR, buff=0.25)))
         wall = DashedLine(ax.c2p(kmin, 0), ax.c2p(kmin, math.log10(top)), dash_length=0.06, stroke_width=2, color=GREY_B)
         wl0 = label(r"smaller than this: \\ never, \ at any budget", font_size=20, color=GREY_B).move_to(ax.c2p(0.62, math.log10(9)))
         wl = VGroup(wl0, Arrow(wl0.get_left(), ax.c2p(kmin, math.log10(9)), buff=0.1, stroke_width=2, color=GREY_B,
                                 max_tip_length_to_length_ratio=0.12))
-        # measured: endpoints of the sweep that reached the budget's best loss with a smaller model, trained longer
+        # Crossings interpolated between sweep endpoints at the iso-FLOP valley's target loss.
         mt = np.asarray(ch["matched"], float).reshape(-1, 3)
         meas = VGroup(*[Dot(ax.c2p(n_ / n0, math.log10(c_)), radius=0.07, color=WHITE)
                         for n_, d_, c_ in mt if 0.1 <= n_ / n0 <= 1.0 and 1 <= c_ <= top])
-        ml = label(r"white: \ our runs that got there", font_size=20, color=WHITE).next_to(ax.c2p(1.0, math.log10(top)), DL, buff=0.1)
+        ml = label(r"white: \ interpolated iso-FLOP crossings \\ curve: \ fitted-law target", font_size=20, color=WHITE).next_to(ax.c2p(1.0, math.log10(top)), DL, buff=0.1)
         law = MathTex(r"L(kN_{\text{opt}},\, D) = L^* \ \Rightarrow\ D = \Big(\frac{B}{L^* - E - "
                       r"A\,(kN_{\text{opt}})^{-\alpha}}\Big)^{1/\beta}",
                       font_size=28).to_edge(UP, buff=0.3)
         c75, c50 = float(np.interp(0.75, ks, cost)), float(np.interp(0.5, ks, cost))
         said1 = (
-            f"Our own runs that reached the same loss with smaller models fall near the curve: {len(meas)} of them."
-            if len(meas) >= 2 else "Few of our runs reach that loss with a smaller model; those that do sit near the "
-                                   "curve."
+            f"Interpolating our smaller-model runs at the iso-FLOP valley loss gives {len(meas)} crossings in this plot. "
+            "That target is estimated separately from the fitted law's target."
         )
         with self.voiceover(
             "Chinchilla's optimum minimizes the cost of training. But a model is trained once and then used, maybe "
@@ -76,7 +79,7 @@ class Overtrain(VoiceoverScene):
             + said1
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Write(law))
-            self.play(Create(line), run_time=max(2.0, vo.until("a")))
+            self.play(Create(line), FadeIn(overflow), FadeIn(overflow_note), run_time=max(2.0, vo.until("a")))
             vo.wait_until("b")
             self.play(lag([FadeIn(m_) for m_ in marks], lag_ratio=0.4))
             vo.wait_until("c")
@@ -182,13 +185,13 @@ class Overtrain(VoiceoverScene):
 
     def takeaway(self):
         tk = takeaway_card(r"Train smaller, \ for longer",
-                           r"Once answering is counted, \ the best model is smaller than the compute optimum and "
-                           r"trained far past $20$ tokens per parameter.",
+                           r"With substantial inference demand, \ minimizing lifetime compute can favor a smaller "
+                           r"model trained longer than the training-only optimum.",
                            r"next: \ when there are not enough tokens to read")
         with self.voiceover(
-            "The takeaway: once answering is counted, the best model is smaller than the compute optimum, and trained "
-            "far longer, which is why open models now read thousands of tokens per parameter. Next: what happens when "
-            "there are not enough tokens to read."
+            "The takeaway: when a model will answer enough requests, minimizing lifetime compute can favor a "
+            "smaller model trained much longer than the training-only optimum. Next: what happens when there are "
+            "not enough tokens to read."
         ) as vo:
             self.play(FadeIn(tk[0], shift=UP * 0.2))
             self.wait(max(0.0, vo.duration * 0.5 - 1.0))

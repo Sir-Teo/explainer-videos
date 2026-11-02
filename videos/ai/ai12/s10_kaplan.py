@@ -100,7 +100,7 @@ class Kaplan(VoiceoverScene):
                     label(rf"leaving out the input and output layers: \ ${a_ne:.2f}$", font_size=22, color=SP))
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.4, 2.4, 0])
         keep_in_frame(lg)
-        sh = label(rf"the left-out share: \ ${100 * share[0]:.0f}\%$ of the smallest model, \ "
+        sh = label(rf"left-out share across the full width sweep: \\ ${100 * share[0]:.0f}\%$ of the smallest model, \ "
                    rf"${100 * share[-1]:.0f}\%$ of the "
                    r"largest", font_size=20, color=GREY_A).next_to(lg, DOWN, buff=0.2).align_to(lg, LEFT)
         keep_in_frame(sh)
@@ -176,8 +176,9 @@ class Kaplan(VoiceoverScene):
                                                                                                  buff=0.18)
         three.move_to(pair[1]).align_to(pair[1], LEFT)
         ours = load("chinchilla")
-        lesson = label(rf"an exponent is a measurement, with an error bar: \ ours, ${float(ours['a3_lo']):.2f}$ to "
-                       rf"${float(ours['a3_hi']):.2f}$", font_size=24, color=WHITE).to_edge(DOWN, buff=0.35)
+        lesson = label(rf"our measured exponent: \ ${float(ours['a3_lo']):.3f}$ to "
+                       rf"${float(ours['a3_hi']):.3f}$ \\ central $80\%$ of $100$ bootstrap refits",
+                       font_size=24, color=WHITE).to_edge(DOWN, buff=0.35)
         cite_ = cite(r"T.~Besiroglu, E.~Erdil, M.~Barnett \& J.~You, \textit{Chinchilla Scaling: A Replication "
                      r"Attempt} "
                      r"(2024)", corner=UR).shift(DOWN * 0.55)

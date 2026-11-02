@@ -29,7 +29,7 @@ ZH = {
     'f"Make a model bigger, train it longer':
         "把模型做大，训练得更久，它就会变好。这一点人人都料到了。出人意料的是，它变好得多么可以预测。"
         "<bookmark mark='a'/>这里是第11部分的字符模型的{len(widths)}种大小，每种最多训练{len(s['ks'])}种长度："
-        "一共{n_runs}次训练，就在制作这个视频的电脑上完成，每一次都画在它所花的运算次数上。"
+        "一共为这个系列计算了{n_runs}个完成的主扫描终点，每一个都画在它所花的运算次数上。"
         "<bookmark mark='b'/>每种大小都先变好，然后变平：它的容量用完了。但整把扇子的下边缘，也就是每份预算能买到的"
         "最低损失，是一条光滑的曲线。<bookmark mark='c'/>减去{E:.2f}比特的下限，剩下的部分在对数坐标上沿着一条直线下降："
         "一条幂律，斜率是{slope:.2f}。像这样在小模型上测出来的曲线，就是各个实验室决定下一步造什么的依据。",
@@ -70,8 +70,8 @@ ZH = {
     'f"Check it, on that one-layer network':
         "来验证一下：就用那个单层网络，在10个点上用梯度下降训练，宽度从30到3万。<bookmark mark='a'/>量一量权重相对"
         "起点走了多远：斜率是{sw:.2f}。<bookmark mark='b'/>再量核移动了多远：斜率是{sk:.2f}。{said1}"
-        "<bookmark mark='c'/>所以，一个宽网络训练起来，就像它自己的线性化。在100个单元时，训练出的函数偏离线性预测"
-        "最多{gap100:.2f}；在1万个单元时，只有{gap10k:.2f}。",
+        "<bookmark mark='c'/>所以，一个宽网络训练起来，就像它自己的线性化。先取每个种子的最大偏差，再对三个种子求平均，"
+        "100个单元时是{gap100:.2f}，1万个单元时是{gap10k:.2f}。回放展示的是种子0。",
 
     'The weights, close to minus a half:':
         "权重的斜率接近负二分之一：n个权重中的每一个，大约移动n的平方根分之一，小到改变不了任何一个单元算的东西，"
@@ -103,12 +103,12 @@ ZH = {
         "两层网络。<bookmark mark='b'/>{said0}<bookmark mark='c'/>现在换成同一个网络、同样的数据、同样的步数，但用"
         "平均场的方式缩放：输出除以n，而不是n的平方根，学习率乘以n，让每个单元移动一个固定的量。{said1}",
 
-    'It ends close to kernel regression':
-        "它最后停在离核回归很近的地方，那是用它出发时的核做的核回归：惰性极限，精确算出来的。",
+    'It ends close to an independent finite-width tangent-kernel reference':
+        "它的最终结果接近一个独立的有限宽度正切核参考，计算所用的宽度是4096。",
 
-    "f'Kernel regression with its starting kernel, the lazy limit":
-        "用出发时的核做核回归，也就是精确算出的惰性极限，结果{('worse' if kgap > 0 else 'better')}了"
-        "{100 * abs(kgap):.0f}%：在这个宽度上，网络还没有完全变懒。",
+    "f'An independent tangent-kernel reference, computed at width 4096":
+        "一个独立的正切核参考，计算宽度为4096，结果{('worse' if kgap > 0 else 'better')}了"
+        "{100 * abs(kgap):.0f}%。这项比较使用了不同的初始化和宽度。",
 
     "f'Its error is {ratio:.1f} times smaller, and every seed":
         "它的误差只有惰性网络的{ratio:.1f}分之一，而且每一个种子都胜过每一个惰性的种子。",
@@ -118,9 +118,9 @@ ZH = {
 
     'f"What did the rich network learn that the lazy one could not?':
         "丰富的网络学到了什么惰性网络学不到的东西？把每个隐藏单元画成一个点：它的权重有多少指向那个隐藏方向，"
-        "又有多少指向别处。<bookmark mark='a'/>现在回放训练。<bookmark mark='b'/>惰性的单元几乎不动：它的权重总共"
-        "只走了起始长度的{100 * mvn:.0f}%。丰富的单元沿着w星摆了出去，走了{100 * mvm:.0f}%：网络找到了唯一要紧的"
-        "那个方向。这是一个学到的特征，而任何核方法都造不出来。<bookmark mark='c'/>所以我们想要的无限宽极限是"
+        "又有多少指向别处。<bookmark mark='a'/>现在回放训练。<bookmark mark='b'/>惰性的单元几乎不动：最终权重相对起点"
+        "的位移是起始长度的{100 * mvn:.0f}%。丰富的单元沿着w星摆了出去，位移为{100 * mvm:.0f}%：网络找到了唯一要紧的"
+        "那个方向。这是一个学到的特征，而固定初始核的回归无法创造新特征。<bookmark mark='c'/>所以我们想要的无限宽极限是"
         "另一个：在任何宽度上，特征都一直在动。对两层网络，它叫平均场；对任意深度，它就是μP。",
 
     # ------------------------------------------------------------------ MuP
@@ -139,16 +139,16 @@ ZH = {
         "对于Adam，这种常用的语言模型优化器，配方是一张小表。<bookmark mark='a'/>输入和偏置用基础学习率。"
         "隐藏矩阵的学习率是基础学习率除以宽度，因为Adam让每个元素移动大约一个学习率，于是n个同向的项加起来是它的"
         "n倍。输出层的起点要小得多，方差是宽度平方分之一，学习率是基础学习率除以宽度。<bookmark mark='b'/>通常的做法，"
-        "我们叫它SP，到处都用同一个学习率。<bookmark mark='c'/>我们的代码把同样的规则写得略有不同，好让宽度为64的"
-        "模型在两种做法下完全一样。",
+        "我们叫它SP，到处都用同一个学习率。<bookmark mark='c'/>宽度为64时，我们的宽度因子都等于1，"
+        "但初始化不同：只有μP的读出权重从零开始。",
 
     '"Yang\'s test for whether a parametrization is right':
         "杨格检验一种参数化是否正确的方法，叫坐标检查：在许多宽度上，用同一个学习率训练几步，量一量每一层的激活"
         "变了多少。<bookmark mark='a'/>在通常的参数化里，{said1}<bookmark mark='b'/>在μP里，{said2}",
 
     "f'the change in the output scores grows with the width":
-        "输出分数的变化随宽度增长，大约是宽度的{s_sp:.2f}次方：对小模型合适的学习率，对大模型就太大了，最终会让它"
-        "发散。",
+        "输出分数的变化随宽度增长，大约是宽度的{s_sp:.2f}次方：对小模型合适的学习率，对大模型可能太大，让训练"
+        "不稳定。",
 
     'f"the output scores\' change barely grows with width here':
         "输出分数的变化在这里几乎不随宽度增长，是{s_sp:.2f}次方。",
@@ -202,8 +202,8 @@ ZH = {
 
     'Depth is the other way to grow.':
         "深度是另一种变大的方式。残差网络把每个块的输出加到一个累加的和上，也就是第9部分的残差流。"
-        "<bookmark mark='a'/>有L个块时，残差流是L个分支的和，而每个分支怎样缩放，决定了L变大时会发生什么。"
-        "<bookmark mark='b'/>不去管它们，残差流就随深度增长，最佳学习率也会漂移。<bookmark mark='c'/>2023年，两个小组"
+        "<bookmark mark='a'/>有L个块时，残差流是L个分支的和，而每个分支怎样缩放，决定了L变大时会发生什么。我们的缩放因子都以基础深度2为基准。"
+        "<bookmark mark='b'/>分支不缩放时，残差流随深度增长；但我们的对照仍把块学习率除以相对深度。<bookmark mark='c'/>2023年，两个小组"
         "找到了μP的深度版本：每个分支乘以L的平方根分之一，学习率随之调整。它能在深度之间迁移，但每个块的贡献变得"
         "太小，以至于表现得像线性的：惰性，这回是在深度上。<bookmark mark='d'/>2025年，Cerebras的诺兰·戴伊和同事"
         "表明，乘以L分之一，学习率不动，能让每个块都一直学习特征。他们把它叫作CompleteP。",
@@ -211,13 +211,13 @@ ZH = {
     'f"Our character model again, made deep:':
         "还是我们的字符模型，这次做深：{', '.join((str(v) for v in depths[:-1]))}和{depths[-1]}个残差块，每种参数化"
         "扫描9个学习率，每个两个种子。<bookmark mark='a'/>不做深度缩放，{said0}<bookmark mark='b'/>用L的平方根分之一，"
-        "移动{dr[0.5]:.1f}个数量级。<bookmark mark='c'/>用CompleteP的L分之一，移动{dr[1.0]:.1f}。{said1}",
+        "跨深度跨度为{dr[0.5]:.1f}个数量级。<bookmark mark='c'/>用CompleteP的L分之一，跨度为{dr[1.0]:.1f}。{said1}",
 
-    "f\"the best rate moves by {dr[0.0]:.1f} powers of ten":
-        "最佳学习率在最浅和最深之间移动{dr[0.0]:.1f}个数量级，最深模型的最佳学习率{dir0}。",
+    "f\"the best sampled rate spans {dr[0.0]:.1f} powers of ten":
+        "最佳采样学习率在测试深度间的跨度为{dr[0.0]:.1f}个数量级；比较最浅和最深，最深模型的最佳学习率{dir0}。",
 
-    'the best rate stays on the same point of our grid':
-        "从最浅到最深，最佳学习率一直停在我们网格的同一个点上。",
+    'the best sampled rate stays on the same point of our grid':
+        "在所有测试深度上，最佳采样学习率都停在我们网格的同一个点上。",
 
     'At our small depths and short runs, all three keep':
         "在我们这么浅的深度、这么短的训练里，三种做法都把最佳学习率保持在网格的一步之内：戴伊和同事测到的差别，需要"
@@ -257,8 +257,8 @@ ZH = {
         "双曲线互相权衡。远低于噪声尺度时，批量加倍，步数减半，不花代价；远高于它时，只是浪费样本。",
 
     'f"Measure it. Train our character model with batches from':
-        "来测一测。用从{int(Bs[0])}到{int(Bs[-1]):,}个字符的批量训练我们的字符模型，每个批量取三个学习率中最好的"
-        "那个，数一数达到某个损失需要多少步、多少个字符。<bookmark mark='a'/>要达到{levels[0]:.1f}比特，这些点落在"
+        "来测一测。用从{int(Bs[0])}到{int(Bs[-1]):,}个字符的批量训练我们的字符模型，对每个批量和目标损失，取三个学习率中最快的"
+        "那个。根据损失检查点估计所需的步数和字符数。<bookmark mark='a'/>要达到{levels[0]:.1f}比特，这些点落在"
         "一条双曲线上，临界批量大约是{bcrit[0]:,.0f}。<bookmark mark='b'/>要达到更低的损失，{said1}",
 
     "f'the hyperbola moves out, and the critical batch grows":
@@ -298,12 +298,13 @@ ZH = {
         "2024年的技巧。每个宽度只用恒定的学习率训练一次，<bookmark mark='b'/>在每个想要的长度上分出一个分支，在最后"
         "五分之一里把学习率冷却到零。<bookmark mark='c'/>每个分支估计同样长度的完整计划会达到的结果，而主干继续"
         "往前走。这种一致性是经验结果，必须检查。<bookmark mark='d'/>{len(widths)}个宽度，从{widths[0]}到{widths[-1]:,}个单元，长度从2的16次方"
-        "到2的24次方个字符：{n_runs}次完整的训练，在一个处理器上用了{hours:.1f}个小时。",
+        "到2的24次方个字符：{n_runs}个主扫描终点。记录的各宽度训练，包括种子重复，共经过{hours:.1f}小时，"
+        "包含评估，不包含最初的学习率搜索。",
 
     'f"First, one variable at a time, as Kaplan did.':
         "先像卡普兰那样，一次只变一个量。把数据固定得很大，2的24次方个字符，改变模型的大小。<bookmark mark='a'/>"
         "损失沿着一条幂律落向一个下限：L等于{LN['E']:.2f}，加上一个常数除以N的{aN:.2f}次方。<bookmark mark='b'/>"
-        "把大小固定得很大，宽度{wD}，改变数据：指数是{aD:.2f}。<bookmark mark='c'/>不同的种子最多相差{sp:.3f}比特，"
+        "把大小固定得很大，宽度{wD}，改变数据：指数是{aD:.2f}。<bookmark mark='c'/>不同的种子约相差{sp:.3f}比特，"
         "和这些曲线比起来很小。{said1}",
 
     'Our exponents are much larger than Kaplan':
@@ -322,8 +323,8 @@ ZH = {
         "再加上一项随数据缩小。拟合到我们的{int(ch['n_points'])}次训练上，除去最短和最窄的那些，它平均偏差{float(ch['rms']):.3f}比特。"
         "<bookmark mark='a'/>现在来花一份预算。训练的代价是每个参数、每个字符6次运算，所以6ND等于C。哪种分法"
         "给出最低的损失？像第4部分那样，加一个拉格朗日乘子。<bookmark mark='b'/>令两个导数都为零。"
-        "<bookmark mark='c'/>第一个乘以N，第二个乘以D，两边都等于6λND。所以在最优点上，最后一个参数和最后一个字符"
-        "的回报相等。<bookmark mark='d'/>解出来，最佳大小随预算的β除以α加β次方增长：我们的模型是{a3:.2f}。",
+        "<bookmark mark='c'/>第一个乘以N，第二个乘以D，两边都等于6λND。所以在最优点上，增加大小或数据时，"
+        "每增加一次运算带来的边际损失下降相等。<bookmark mark='d'/>解出来，最佳大小随预算的β除以α加β次方增长：我们的模型是{a3:.2f}。",
 
     'Here is the whole picture: the fitted loss as a surface':
         "这是整幅图景：拟合出的损失，是大小和数据构成的平面上方的一个曲面，两个轴都取对数，我们的训练是曲面上的点。"
@@ -390,11 +391,9 @@ ZH = {
         "大小的模型，训练要多花{100 * (c75 - 1):.0f}%；一半大小，多花{100 * (c50 - 1):.0f}%；<bookmark mark='c'/>"
         "小于{kmin:.2f}倍的大小，多少数据都不够：小模型的下限高过了目标。<bookmark mark='d'/>{said1}",
 
-    "f'Our own runs that reached the same loss with smaller models":
-        "我们自己那些用更小的模型达到同样损失的训练，落在这条曲线附近：一共{len(meas)}次。",
-
-    'Few of our runs reach that loss with a smaller model':
-        "我们的训练里，很少有用更小的模型达到那个损失的；达到的那些，都落在曲线附近。",
+    "f'Interpolating our smaller-model runs at the iso-FLOP valley loss":
+        "在等算力山谷的损失处对我们较小模型的训练结果做插值，这张图里得到{len(meas)}个交点。"
+        "两个目标分别估计。",
 
     'f"In 2023, Nikhil Sardana and colleagues at MosaicML':
         "2023年，MosaicML的尼基尔·萨尔达纳和同事，把回答的代价也算进了预算。训练每个参数、每个词元要6次运算，"
@@ -419,8 +418,8 @@ ZH = {
     "f'Four epochs cost {d4:.3f} bits":
         "读4遍多花{d4:.3f}比特。",
 
-    "f'At two hundred and fifty-six, the model memorizes":
-        "读256遍时，模型背下了它的样本：留出数据上的损失先降后升，最后比新文本差{worst:.2f}比特。",
+    "f'At two hundred and fifty-six, seed zero":
+        "读256遍时，种子0在留出数据上的损失先降后升。三个种子的最终均值比新文本差{worst:.2f}比特。",
 
     "f'At two hundred and fifty-six, it ends":
         "读256遍时，它最后比新文本差{worst:.2f}比特。",
@@ -429,7 +428,7 @@ ZH = {
         "重复一遍值多少？2023年，尼克拉斯·明尼霍夫和同事提出了一个简单的答案。<bookmark mark='a'/>假设同一段文本"
         "每多读一遍，价值都比上一遍少一个固定的比例。<bookmark mark='b'/>那么U个不同的字符再读R遍，价值就是U加上"
         "一串越来越小的项，<bookmark mark='c'/>它会饱和：无论重复多少遍，得到的都不会超过U乘以1加R星。"
-        "<bookmark mark='d'/>把我们的每次训练放到新数据的曲线上读一读，看它相当于多少新文本，再拟合R星：{Rs:.1f}遍。"
+        "<bookmark mark='d'/>把每个三种子最终损失均值插值到新数据的种子0曲线上，推算等效新文本量，再拟合R星：{Rs:.1f}遍。"
         "{said3}上限大约是不同文本的{cap:.0f}倍。",
 
     'f"Muennighoff\'s team, with models of up to nine billion':
@@ -449,52 +448,47 @@ ZH = {
     'Chapter twelve. Experts and bits.':
         '第12章。专家与比特。',
 
-    '"In a dense model, every parameter works on every character':
-        "在稠密模型里，每个参数都作用于每个字符，所以算力和参数一起增长。第16部分将构建的混合专家放松了这种联系："
-        "许多个专家，加上一个路由器，把每个字符送给其中一个。<bookmark mark='a'/>把我们模型的隐藏层拆成越来越多的"
-        "专家，保持每个字符的计算量不变。{said1}<bookmark mark='b'/>DeepMind在2022年测量过这一点：损失随专家数下降，"
+    '"Dense hidden matrices are used for every character':
+        "稠密隐藏矩阵在每个字符上都会用到，因此扩大这些矩阵，会同时增加算力和参数。第16部分将构建的混合专家放松了这种联系："
+        "许多个专家，加上一个路由器，把每个字符送给其中一个。<bookmark mark='a'/>增加同样宽度的专家，每个字符使用一个"
+        "专家矩阵。选中专家的计算量保持不变，而路由会增加开销。{said1}<bookmark mark='b'/>DeepMind在2022年测量过这一点：损失随专家数下降，"
         "而基础模型越大，收益越小。从那以后，专家变得更小、更多：DeepSeek-V3每一层有256个专家，每个词元用其中8个。",
 
-    "f'The loss keeps falling as the experts are added":
-        "加入专家，损失持续下降，只是每加倍一次，帮助都更小。有8个专家时，它相当于一个大约{effN[i8]:,.0f}个参数的"
-        "稠密模型，是我们基础模型的{mult:.1f}倍，却只花基础模型的算力。",
+    "f'The mean loss is {mm[0]:.3f} bits for one expert":
+        "一个专家的平均损失为{mm[0]:.3f}比特，最大混合模型为{mm[-1]:.3f}比特。{match}",
 
-    'At our size the experts barely help':
-        "在我们的规模上，专家几乎没有帮助：路由器没有多少东西可以区分。",
+    "f'Interpolating the dense sweep gives an estimated matching size":
+        "对稠密扫描结果做插值，估计与八个专家匹配的规模为{effN[i8]:,.0f}个参数，是基础模型的{mult:.1f}倍。",
+
+    'The eight-expert mean lies outside the measured dense loss range':
+        "八专家的均值在已测稠密损失范围之外，无法确定匹配的规模。",
 
     '"Parameters also cost memory':
-        "参数还要占内存，而用更少的比特存储它们，就能省下内存。训练之后，把我们训练好的模型的每个权重都取整到几个"
-        "比特，量一量代价是多少。<bookmark mark='a'/>在宽度256上，{said2}<bookmark mark='b'/>拟合到我们所有的训练上，"
-        "额外的损失像D的{gD:.2f}次方那样增长，像N的{gN:.2f}次方那样缩小，并且每多保留一个比特，就指数地下降。"
+        "参数还要占内存，而用更少的比特存储它们，就能省下内存。训练之后，对非嵌入权重矩阵逐行取整，嵌入和偏置保持不变。"
+        "量一量损失变化。<bookmark mark='a'/>在宽度256上，{said2}<bookmark mark='b'/>只拟合大于0.002比特的有限变化，"
+        "训练长度至少为2的17次方个字符。公式中D的指数是{gD:.2f}，分母中N的指数是{gN:.2f}，精度项是指数形式。"
         "<bookmark mark='c'/>2024年，坦尼什克·库马尔和同事在465次训练里发现了同样的形式：过了某个点，更多的训练数据"
-        "反而会让模型在量化之后变差。而用低精度来训练，本身就像参数变少了；按照他们的拟合，最好的训练精度是"
-        "7到8个比特。",
+        "反而会让模型在量化之后变差。而用低精度来训练，本身就像参数变少了。在他们的算力成本模型下，联合优化大小、数据和训练精度，"
+        "更合适的是大约7到8个比特。",
 
-    "f'the damage grows with training: at four bits,":
-        "损伤随训练增长：在4比特时，读了2的{int(lD[okk][0])}次方个字符之后是{d4[okk][0]:.3f}比特，读了2的"
-        "{int(lD[okk][-1])}次方之后是{d4[okk][-1]:.3f}。读得更多的模型，把更多的东西塞进了每个权重，所以取整对它"
-        "伤害更大。",
-
-    'the damage barely depends on how long':
-        "损伤几乎不取决于模型训练了多久。",
+    "f'at four bits, the loss changes by":
+        "在4比特时，读了2的{int(lD[okk][0])}次方个字符后，损失变化为{d4[okk][0]:.3f}比特；读了2的"
+        "{int(lD[okk][-1])}次方后，变化为{d4[okk][-1]:.3f}比特。",
 
     # ------------------------------------------------------------------ Power
     'Chapter thirteen. Why power laws?':
         '第13章。为什么是幂律？',
 
     '"Why should loss fall as a power law at all?':
-        "损失为什么偏偏按幂律下降？一个答案来自乌特卡什·夏尔马和贾里德·卡普兰，2020年：真实的数据，位于它巨大的"
-        "空间里的一个低维曲面附近，维数是d。一个有N个参数的模型，把这个曲面切成大约N块，<bookmark mark='a'/>所以"
-        "每一块的宽度大约是N的负d分之一次方。<bookmark mark='b'/>每一块用一条直线去拟合，剩下的是曲率，也就是尺寸"
-        "的平方。<bookmark mark='c'/>对平方损失再平方一次：损失像N的负d分之4次方那样下降。一条幂律，指数由数据的"
-        "维数决定。<bookmark mark='d'/>来验证一下：在1维、2维、4维和8维的曲面上取一个光滑函数。{said1}低维的数据，"
+        "损失为什么偏偏按幂律下降？一个答案来自乌特卡什·夏尔马和贾里德·卡普兰，2020年：假设数据在维数为d的低维曲面附近，"
+        "N个参数提供大约N个局部片段。<bookmark mark='a'/>每一片的宽度大约是N的负d分之一次方。"
+        "<bookmark mark='b'/>每一片用线性泰勒近似，曲率带来的误差是片段尺寸平方的量级。"
+        "<bookmark mark='c'/>对平方损失再平方一次：损失像N的负d分之4次方那样下降。一条幂律，指数由数据的"
+        "维数决定。<bookmark mark='d'/>用已知光滑函数及其解析梯度，在1维、2维、4维和8维检验一个理想近似。这里不训练网络。{said1}低维的数据，"
         "陡的定律；按照这个说法，语言是高维的。",
 
-    "f'The slopes match four over d, until eight":
-        "斜率都和d分之4吻合，直到8维：在那里，即使十万多块也还太粗：{s8:.2f}，正在走向{t8:.2f}。",
-
-    'The slopes match four over d.':
-        "斜率都和d分之4吻合。",
+    "f'In eight dimensions the fitted slope is":
+        "在8维，拟合斜率为{s8:.2f}，预测值为{t8:.2f}。表格比较了全部四个维度；这项有限实验不能证明渐近收敛。",
 
     'f"A second answer, from Eric Michaud':
         "第二个答案来自埃里克·米肖、马克斯·泰格马克和同事，2023年：量子化模型。假设模型知道的东西，是一块一块"
@@ -504,17 +498,17 @@ ZH = {
         "任务来检验它，我们做了一个小版本：{T}个子任务，每个是12个比特里3个隐藏比特的奇偶性，按齐普夫频率出现。",
 
     'f"Here is one network, of width {widths[wi]}':
-        "这是一个宽度为{widths[wi]}的网络，在学这些子任务。<bookmark mark='a'/>每个子任务的损失先停在1比特，也就是"
-        "抛硬币，然后突然下降。{said2}到最后，它学会了{T}个中的{n_learn}个。<bookmark mark='b'/>白色的是整个混合的"
-        "平均，它是平滑的：许多突然的台阶，加在一起。<bookmark mark='c'/>在不同大小之间，越宽的网络学会的子任务越多，"
-        "{said3}<bookmark mark='d'/>把平均损失画在学会的数目上，理论的曲线就出现了：混合中还没学会的那部分份额，"
-        "一条幂律的尾巴。{said4}<bookmark mark='e'/>{said5}",
+        "这是一个宽度为{widths[wi]}的网络，在学这些子任务。把损失低于0.1比特的任务计为学会。"
+        "<bookmark mark='a'/>曲线展示训练中的各项损失。{said2}到最后，它学会了{T}个中的{n_learn}个。<bookmark mark='b'/>白色是这些任务损失按频率加权的"
+        "平均。<bookmark mark='c'/>在不同大小之间，越宽的网络学会的子任务越多，"
+        "{said3}<bookmark mark='d'/>把平均损失画在学会的数目上，与理想尾部比较：它假设最常见的任务完全学会，"
+        "其他任务各有1比特损失。{said4}<bookmark mark='e'/>{said5}",
 
-    'The common subtasks drop first, the rare ones later.':
-        "常见的子任务先下降，稀有的后下降。",
+    'Earlier threshold crossings tend to be on more common subtasks in this run.':
+        "在这次训练里，较早跨过阈值的往往是更常见的子任务。",
 
-    'The order roughly follows how common they are.':
-        "顺序大致按照它们有多常见。",
+    'The threshold crossings do not show a strong positive ordering by task frequency in this run.':
+        "在这次训练里，阈值跨越时间与任务频率没有表现出强的正向顺序关系。",
 
     "f'from {lo} at width {widths[0]} to all {T}":
         "从宽度{widths[0]}的{lo}个，到宽度{full[0]}起的全部{T}个。",
@@ -522,8 +516,11 @@ ZH = {
     "f'from {lo} at width {widths[0]} to {int(":
         "从宽度{widths[0]}的{lo}个，到宽度{widths[-1]}的{int(learned[-1].max())}个。",
 
-    'Ours sit a little below it':
-        "我们的点略低于它，因为学会一半的子任务也已经算数了。",
+    'Our points sit below this ideal reference on average on a log scale.':
+        "在对数尺度上，我们的点平均低于这个理想参考。仅凭任务数，不能确定学会的是哪些任务或其余损失。",
+
+    'Compare our points with this ideal reference.':
+        "把我们的点与这个理想参考比较。仅凭低于阈值的任务数，不能确定加权损失。",
 
     "f'With only {T} subtasks the tail runs out":
         "只有{T}个子任务，尾巴就会用完：全部学会之后，损失就掉到几乎为零。按照这个说法，语言有一条没有尽头的尾巴，"
@@ -546,31 +543,27 @@ ZH = {
 
     'f"We can watch it happen on our own models.':
         "我们可以在自己的模型上看着它发生。任务是：从留出文本里的2000个位置开始，一字不差地写出接下来的字符。"
-        "<bookmark mark='a'/>每个字符单独打分，正确的比例随大小平稳上升，从{100 * acc[0]:.0f}%到{100 * acc[-1]:.0f}%。"
-        "<bookmark mark='b'/>改成给整个答案打分。一个字符：同样的曲线。两个、四个、八个：越来越低，越来越平，直到8个字符的"
-        "答案几乎贴着零。{said1}<bookmark mark='c'/>在p的L次方这组曲线上，我们的模型位于平坦的那一段，p在"
-        "{100 * acc[0]:.0f}%到{100 * acc[-1]:.0f}%之间。陡峭的部分需要p接近1：按这种方式在长答案上打分，一个模型看起来"
-        "完全不会，直到大得多的时候，突然会了。",
+        "<bookmark mark='a'/>对全部八个位置的教师强制预测取准确率均值，在我们的大小范围内，从{100 * acc[0]:.0f}%到{100 * acc[-1]:.0f}%。"
+        "<bookmark mark='b'/>现在评估贪心生成的前缀。单字符分数只使用第一个位置；两个、四个和八个字符，要求越来越长的前缀全部正确。"
+        "{said1}<bookmark mark='c'/>在词元独立的示意模型里，把教师强制准确率当作p：在"
+        "{100 * acc[0]:.0f}%到{100 * acc[-1]:.0f}%之间。p的幂随答案长度增加而减小。"
+        "这是示意性的解释，不能与贪心前缀分数画等号。",
 
-    "f'Yet in proportion they grow fastest:":
-        "但按比例算，它们增长得最快：在我们的大小范围内增长了{g8:.0f}倍，而单个字符只增长了{g1:.1f}倍。",
+    "f'With both scores floored at one over":
+        "把两种分数的下限都设为{int(e['task_n']):,}分之一后，在我们的大小范围内，双对数拟合的增长因子为：八字符前缀{g8:.1f}，教师强制字符准确率{g1:.1f}。",
 
-    'In proportion they grow about as fast as single characters.':
-        "按比例算，它们和单个字符增长得差不多快。",
-
-    '"But some suddenness is real.':
-        "但有些突然是真的。在量子的玩具任务里，每个子任务要么解决了，要么没有。把每一个的最终损失画在网络的大小上，"
-        "{said2}<bookmark mark='a'/>只有平均是平滑的。一个只测一项窄技能的基准，看到的是悬崖；而损失是对一切取平均，"
-        "看到的是幂律。<bookmark mark='b'/>后来的研究让这一点变得有用。2024年，杜政晓和同事发现，能力在预训练损失"
+    '"The quanta toy offers another view.':
+        "量子玩具任务提供了另一个视角。每个子任务都有连续的损失。把每个子任务的最终损失画在网络大小上："
+        "{said2}<bookmark mark='a'/>与白色的按频率加权平均曲线比较。取平均可以掩盖单个子任务更陡的变化。"
+        "这里是离散采样的宽度，并不能证明存在不连续。<bookmark mark='b'/>后来的研究让这一点变得有用。2024年，杜政晓和同事发现，能力在预训练损失"
         "降到某个阈值以下时出现，与模型大小无关；查理·斯内尔和同事则表明，微调能把一项能力提前带到更小的模型上，"
         "于是它的到来可以预测。",
 
-    "f'and it falls off a cliff at its own size":
-        "它会在自己的那个大小上跌下悬崖：平均有{100 * np.mean(drops):.0f}%的下降，发生在两个相邻的大小之间，常见的"
-        "子任务先跌。",
+    "f'for {len(drops)} selected subtasks with a net fall above 0.3 bits":
+        "对净下降超过0.3比特的{len(drops)}个选中子任务，平均有{100 * np.mean(drops):.0f}%的下降发生在两个相邻的采样大小之间。",
 
-    'and each one falls at its own size':
-        "每一个都在自己的大小上下降，比平均陡得多，常见的子任务先降。",
+    'the selected subtasks change differently across the sampled sizes.':
+        "选中的子任务在各个采样大小之间有不同的变化。",
 
     # ------------------------------------------------------------------ Grok
     'Chapter fifteen. Grokking.':
@@ -597,12 +590,12 @@ ZH = {
         "{np.nanmin(sm):,.0f}到{np.nanmax(sm):,.0f}步。<bookmark mark='b'/>泛化就不一样了。{said2}"
         "<bookmark mark='c'/>{said3}",
 
-    "f'The more weight decay, the sooner it comes":
-        "权重衰减越大，它来得越早：从{wds[ok[0]]:g}时的第{med[ok[0]]:,.0f}步，到{wds[ok[-1]]:g}时的第"
-        "{med[ok[-1]]:,.0f}步。",
+    "f'Among successful runs, the endpoint medians are step":
+        "只看成功的训练，两端的中位数是：权重衰减{wds[ok[0]]:g}时第{med[ok[0]]:,.0f}步，"
+        "权重衰减{wds[ok[-1]]:g}时第{med[ok[-1]]:,.0f}步。",
 
-    'Its timing varies with the weight decay.':
-        "它的时间随权重衰减而变。",
+    'There are too few successful decay settings for an endpoint-median comparison.':
+        "成功的权重衰减设置太少，无法比较两端的中位数。",
 
     "f'And in {n_never} of the {st.size} runs":
         "而在{st.size}次训练里，有{n_never}次，全都是权重衰减不超过{never_w:g}的，在{cap:,}步之内始终没有等到它。",
@@ -610,34 +603,30 @@ ZH = {
     '"What rule did it find?':
         "它找到的是什么规则？看看它为这些数学到的向量，问问它们包含了钟面上的哪些波：它们的傅里叶频谱。"
         "<bookmark mark='a'/>在训练过程中观察它。一开始，能量分散在所有频率上，是噪声。{said4}到最后，"
-        "{100 * share[-1]:.0f}%的能量集中在{nf}个频率中的5个上。<bookmark mark='b'/>而这些数，沿着它们的主方向看，"
-        "落到了圆上。",
+        "{100 * share[-1]:.0f}%的能量集中在{nf}个频率中的5个上。<bookmark mark='b'/>数向量投影到最终的主方向上，"
+        "每个快照都重新缩放，以比较形状。",
 
-    'Long before the unseen entries come right':
-        "早在没见过的条目答对之前，就有几个频率开始悄悄地增长：",
+    'The spectrum changes across these recorded checkpoints:':
+        "频谱在这些记录下来的检查点之间发生变化：",
 
-    'As the unseen entries come right, a few frequencies take over':
-        "随着没见过的条目答对，几个频率占了上风：",
-
-    'f"Each number becomes a point on a circle':
-        "每个数变成圆上的一个点，一个角度。<bookmark mark='a'/>在钟面上把两个数相加，就是把两个角相加；而和的余弦，"
-        "是余弦与正弦的乘积之和，ReLU单元可以把它搭出来。<bookmark mark='b'/>于是每个答案c的分数，是一些波的和，"
-        "这些波在c等于a加b的地方达到峰值。只用这5个波去拟合训练好的网络的分数：它们解释了{100 * r2:.0f}%的变化。"
+    'f"An ideal Fourier circuit represents numbers by angles.':
+        "一个理想的傅里叶回路用角度表示数字。<bookmark mark='a'/>在钟面上把两个数相加，就是把两个角相加；而和的余弦，"
+        "是余弦与正弦的乘积之和，ReLU单元可以把它搭出来。<bookmark mark='b'/>正权重的波在正确的和处达到峰值。"
+        "实际检验时，先减去每对输入在所有候选答案上的平均logit，再用五个分别加权的余弦波，对全部97的三次方个分数做最小二乘拟合。"
+        "它们解释了{100 * r2:.0f}%的中心化变化。"
         "尼尔·南达和同事在2023年弄清了这个回路，这是最早对一个训练好的网络在算什么的完整解释之一；第30部分会把"
         "这个想法用到真实的模型上。<bookmark mark='c'/>第2章的问题又回来了：这个网络是惰性的吗？{said5}",
 
-    "f'Its tangent kernel barely moves while it memorizes":
-        "它记忆的时候，正切核几乎不动；到泛化的时候，它走得很远，距离达到{after:.2f}。坦尼什克·库马尔和同事在2023年"
-        "论证，顿悟正是这样：网络先用它的起始核惰性地拟合，然后慢慢学会能够泛化的特征。",
+    "f'On 128 fixed examples, the true-class tangent Gram ends":
+        "在128个固定样本上，真实类别logit的梯度Gram矩阵，最终余弦距离在有衰减时为{after:.2f}，无衰减时为{kdn[-1]:.2f}。"
+        "这只测量归一化后的几何结构，不测整体核尺度，也不是完整的多输出核。{nowd_status}坦尼什克·库马尔和同事在2023年提出，"
+        "顿悟可以涉及从惰性训练到特征学习的缓慢转变；单凭这个受限指标，不能确立这种转变。",
 
-    'f"Measure how far its tangent kernel moves':
-        "量一量它的正切核移动了多远：距离只有{after:.2f}，而且大部分发生在跃升之前。没有权重衰减时，它移动得更远，"
-        "达到{kdn[-1]:.2f}，却始终没有泛化。坦尼什克·库马尔和同事在2023年论证，顿悟可以是从惰性训练到丰富训练的"
-        "缓慢转变；在我们的网络里，单看核的移动，标不出顿悟的那一刻，起作用的是权重衰减。",
+    'The no-decay run does not pass ninety-five percent within this run.':
+        "无衰减训练在本次实验范围内没有超过95%。",
 
-    "f'Its tangent kernel moves steadily through training":
-        "它的正切核在整个训练中稳步移动，距离达到{after:.2f}。坦尼什克·库马尔和同事在2023年论证，顿悟可以是从惰性"
-        "训练到丰富训练的缓慢转变，离开起始的核。",
+    "f'The no-decay run first passes ninety-five percent at step":
+        "无衰减训练在第{int(g['t_test_nowd']):,}步首次超过95%。",
 
     # ------------------------------------------------------------------ TestTime
     'Chapter sixteen. Scaling the answer.':
@@ -646,27 +635,33 @@ ZH = {
     'f"Scaling is often described as bigger models and more data.':
         "扩展规模常被描述为更大的模型和更多的数据。2024年，OpenAI的o1凸显了另一个轴：准确率随着模型回答前"
         "思考时间的对数平稳上升。第28部分会搭建推理模型。这里讲最简单的版本背后的数学：多次尝试，加一个检查器。"
-        "<bookmark mark='a'/>在我们可以检查的任务上，给每个模型k次机会，通过采样写出接下来的{L}个字符，只要有一次"
-        "完全正确，就算这道题解出来了。<bookmark mark='b'/>每个模型都随着尝试次数增加而解出更多，而且跨越5个数量级"
-        "一直如此。<bookmark mark='c'/>2024年，布拉德利·布朗和同事在一个真实的模型上看到了同样的现象：在一个真实"
+        "<bookmark mark='a'/>对留出前缀，计算每个模型在温度1下把接下来的{L}个字符全部写对的概率。假设重复尝试彼此独立，"
+        "并有完美的正确答案判定器，计算解出题目的预期比例。<bookmark mark='b'/>曲线比较了跨五个数量级尝试次数的预期覆盖率。"
+        "<bookmark mark='c'/>2024年，布拉德利·布朗和同事用一个真实的模型测量采样覆盖率：在一个真实"
         "编程问题的基准上，250次尝试把它从15.9%提高到56%。",
 
     'f"Why a power law? For one problem':
-        "为什么是幂律？对一道题，k次独立尝试全部失败的概率，是1减p的k次方：它指数下降，很快。<bookmark mark='a'/>"
+        "为什么是幂律？对一道题，k次独立尝试全部失败的概率，是一减p这个整体的k次方：它指数下降，很快。<bookmark mark='a'/>"
         "但基准是对各种难度的题目取平均。<bookmark mark='b'/>如果很难的题，也就是p很小的那些，按p的b减1次方分布，"
         "平均的失败率就是一个伽马积分，它像k的负b次方那样下降：一条幂律，完全由最难的那些题造成。赖兰·谢弗和同事"
-        "在2025年证明了这一点。<bookmark mark='c'/>在我们中等大小的模型上，负对数pass@k下降的斜率是{-b[i]:.2f}，"
-        "{said1}",
+        "在2025年证明了这一点。这个密度是理想化的：有限基准上，如果各道题的成功概率为正，最远的尾部最终会指数衰减。"
+        "<bookmark mark='c'/>实际拟合使用负对数pass，它只在覆盖率接近1时近似失败率。对这个代理量，{slope_statement}对概率尾部，{said1}",
 
-    "f'and the share of problems with tiny p rises with slope":
-        "而p很小的题目所占的比例，上升的斜率是{tb[i]:.2f}：两种不同的测量，得到同一个指数。",
+    "f'the fitted slope is":
+        "拟合斜率为{-b[i]:.2f}。",
 
-    'f"and the tail of tiny p\'s has slope':
-        "而p很小的那条尾巴，斜率是{tb[i]:.2f}：两个估计不同，而我们的2000道题对尾巴的采样很稀疏。",
+    'there is too little support for a slope estimate.':
+        "支持数据太少，无法估计斜率。",
 
-    'f"So tries can stand in for size.':
-        "所以尝试次数可以代替大小。一个小模型要尝试多少次，才能赶上最大模型的一次尝试？<bookmark mark='a'/>能赶上的"
-        "最小模型需要大约{need[i_small]:,.0f}次，更大一些的需要得更少。{said2}这笔交易划不划算，取决于训练大模型的"
+    "f'its fitted CDF slope is":
+        "拟合的累积分布斜率为{tb[i]:.2f}。这只是两个有限范围拟合的比较，不能确立渐近恒等关系。",
+
+    'there is too little support for a CDF slope estimate.':
+        "支持数据太少，无法估计累积分布的斜率。",
+
+    'f"Use the expected-coverage curves to compare sizes.':
+        "用预期覆盖率曲线比较大小。通过插值，估计多少次尝试能匹配最大模型的一次尝试。<bookmark mark='a'/>能匹配的"
+        "最小模型需要大约{need[i_small]:,.0f}次。这是插值得到的期望值，并不是新的解码实验。{said2}这笔交易划不划算，取决于训练大模型的"
         "价钱，也取决于有没有检查器。<bookmark mark='b'/>用来训练推理模型的强化学习，也在扩大规模。2025年，Meta的"
         "德夫里特·卡特里和同事花了40万GPU小时寻找它的定律：奖励沿着一条S形曲线升向一个上限；在早期拟合，它就预测出"
         "了一次10万GPU小时的训练。<bookmark mark='c'/>同一年，xAI说它在Grok 4上做了与预训练同等规模的强化学习。",
@@ -692,10 +687,10 @@ ZH = {
         "预测出来的。",
 
     'f"What can a scaling law actually tell us?':
-        "一条规模定律到底能告诉我们什么？像各个实验室用它们的定律那样，来检验我们的。只用我们最便宜的{n_fit}次训练"
+        "一条规模定律到底能告诉我们什么？像各个实验室用它们的定律那样，来检验我们的。在我们的{len(Nf)}次拟合样本中，取较便宜的{n_fit}次训练"
         "拟合Chinchilla的公式，去预测另外{n_test}次，最贵的要贵上{ratio:.0f}倍。<bookmark mark='a'/>平均来说，预测"
-        "偏差{err:.3f}比特，最差{mx:.3f}{said1}但这条曲线一向很慢。用卡普兰的算力指数0.05，损失减半需要100万倍的"
-        "算力。争论的不是曲线，而是沿着它往下走的每一步，买到的能力值不值那个价钱。",
+        "偏差{err:.3f}比特，最差{mx:.3f}{said1}对于采用卡普兰算力指数0.05的简单幂律模型，模型中的损失减半需要约100万倍"
+        "的算力。每一步带来的能力是否足以抵偿算力成本，是一个需要实证回答的问题。",
 
     ', with a small mean residual on these held-out runs.':
         "，在这些留出训练上的平均残差很小。<bookmark mark='b'/>这支持在我们的测量范围内外推，但不保证范围以外的趋势。",
@@ -709,17 +704,16 @@ ZH = {
     'The other side of the ledger is efficiency.':
         "账本的另一边是效率。<bookmark mark='a'/>2024年，Epoch AI的安森·何和同事估计，达到某个给定语言模型性能所需"
         "的算力，大约每8个月减半，来自更好的架构、数据和训练。<bookmark mark='b'/>同一年，清华的肖朝军和同事测量了"
-        "一条致密化定律：开源模型每个参数所装的能力，大约每3个月翻一番。<bookmark mark='c'/>所以前沿同时沿着三条"
-        "曲线前进：预训练、强化学习、回答时的思考，每一条单独都很慢，每一条都有一条可以测量的定律。争论的是它们的"
-        "价钱，而不是它们的形状。",
+        "一条致密化定律：开源模型每个参数所装的能力，大约每3个月翻一番。<bookmark mark='c'/>这些研究描述了特定范围内的"
+        "效率趋势。预训练、强化学习和回答时计算，都需要各自的测量。它们能否延续，以及继续进步的成本，都需要检验。",
 
     # ------------------------------------------------------------------ Outro
     "Let's take stock.":
-        "我们来盘点一下。损失随着大小、数据和算力沿幂律下降，平滑得足以据此做计划。一个无限宽的网络，训练起来就像"
-        "它自己的正切核，而核学不到特征。μP让每一层都一直在学，让一个学习率适用于每个宽度，加上CompleteP，还适用"
+        "我们来盘点一下。在测量过的范围内，损失往往随大小、数据和算力呈幂律变化；超出这些范围的预测需要验证。"
+        "在神经正切缩放下，无限宽网络训练起来就像它自己的固定正切核，而固定的核学不到新特征。μP让每一层都一直在学，让一个学习率适用于每个宽度，加上CompleteP，还适用"
         "于每个深度。一份预算应该沿着Chinchilla山谷的谷底，在大小和数据之间分配，再向回答起来便宜的小模型弯折，"
         "并通过重复数据来拉长，而数据每重复一次就更不值钱。幂律可以来自低维曲面上的数据，也可以来自许多小技能，"
-        "一次学会一项，每一项都学得突然。而一个网络可以先记忆，很久以后才理解：它把钟面上的算术变成了旋转。",
+        "在不同时间学会，各项损失再取平均。而一个网络可以先记忆，很久以后才理解：它把钟面上的算术变成了旋转。",
 
     'Act two ends here':
         "第二幕到这里结束，而这里的一切都会再回来。专家是第16部分。第18部分用全套配方训练一个模型：μP、批量大小、"
@@ -740,8 +734,8 @@ ZH = {
     'Pause and predict. Make the network a thousand times wider':
         '暂停一下，先想一想。把网络做宽一千倍，用同样的方式训练。每个权重移动得更多、更少，还是一样？核呢？',
 
-    'The takeaway: an infinitely wide network is a Gaussian process':
-        '要点：一个无限宽的网络，训练前是一个高斯过程，训练中是一台核机器，因为它的正切核冻结了。接下来：冻结的核做不到什么。',
+    'The takeaway: with neural-tangent scaling':
+        '要点：在神经正切缩放下，无限宽网络在训练前是高斯过程，训练中是核机器，因为它的正切核冻结了。接下来：冻结的核做不到什么。',
 
     'Pause and predict. Two copies of one wide network':
         '暂停一下，先想一想。同一个宽网络的两份拷贝，同样的数据，同样的步数：一份用惰性的方式缩放，一份用平均场的方式。哪一份能学到那个隐藏方向？',
@@ -770,8 +764,8 @@ ZH = {
     'Pause and predict. Double the batch.':
         '暂停一下，先想一想。把批量加倍。要达到同样的损失，步数会减半、不变，还是介于两者之间？',
 
-    'The takeaway: below the critical batch':
-        '要点：低于临界批量时，更大的批量几乎不花代价就能减少步数；高于它时，只是浪费数据。而且临界批量会随着训练进行而增长。接下来，规模定律本身。',
+    'The takeaway: far below the critical batch':
+        '要点：远低于临界批量时，更大的批量只需少量额外数据就能减少步数。高于它时，步数节省逐渐减小，数据用量继续增加。我们拟合的临界批量随损失下降而增长。接下来，规模定律本身。',
 
     'Pause and predict. Our models are tiny':
         '暂停一下，先想一想。我们的模型很小，一次只读8个字符。它们的损失随大小下降，会比卡普兰的语言模型更快，还是更慢？',
@@ -782,8 +776,8 @@ ZH = {
     'Pause and predict. Your budget grows tenfold.':
         '暂停一下，先想一想。你的预算增加到10倍。应该把模型做大10倍，用10倍的数据训练，还是两者各增加大约3倍？',
 
-    'The takeaway: at the compute optimum, the last parameter':
-        '要点：在计算最优点上，最后一个参数和最后一个词元的回报相等；对语言模型来说，这意味着大小和数据一起增长，每个参数大约20个词元。接下来：为什么最早的规模定律说的不一样。',
+    'The takeaway: at the compute optimum, extra compute':
+        '要点：在计算最优点上，把额外算力用于大小或数据，边际回报相等。对语言模型来说，这意味着大小和数据一起增长，每个参数大约20个词元。接下来：为什么最早的规模定律说的不一样。',
 
     'Pause and predict. Leave the embedding layers out':
         '暂停一下，先想一想。数参数时不算嵌入层。随着预算增长，最佳模型大小看起来会增长得更快，还是更慢？',
@@ -794,8 +788,8 @@ ZH = {
     'Pause and predict. A model half the compute-optimal size':
         '暂停一下，先想一想。一个只有计算最优大小一半的模型，训练得更久，直到赶上最优模型的损失。它要多花多少训练算力：百分之几，一倍，还是十倍？',
 
-    'The takeaway: once answering is counted':
-        '要点：一旦把回答的代价算进去，最好的模型就比计算最优点更小，训练得也久得多；这就是为什么开源模型现在每个参数要读几千个词元。接下来：当没有足够的词元可读时，会发生什么。',
+    'The takeaway: when a model will answer enough requests':
+        '要点：当模型需要回答足够多的请求时，最小化生命周期算力可能会倾向于更小的模型，并把它训练得比只计训练时的最优点久得多。接下来：当没有足够的词元可读时，会发生什么。',
 
     'Pause and predict. Train for the same number of characters':
         '暂停一下，先想一想。训练同样多的字符，但只用四分之一的文本，读4遍。它会比一个一直读新文本的模型差多少？',
@@ -803,23 +797,23 @@ ZH = {
     'The takeaway: a few passes over the same data':
         '要点：把同样的数据读几遍，几乎和新数据一样好，但每重复一次就更不值钱，总量最终会饱和。接下来，另外两种预算：专家，和比特。',
 
-    'Pause and predict. Round every weight to four bits':
-        '暂停一下，先想一想。训练之后，把每个权重都取整到4个比特。谁受的损伤更大：读得少的模型，还是同一个模型读了多得多之后？',
+    'Pause and predict. Round non-embedding weight matrices to four bits':
+        '暂停一下，先想一想。训练之后，把非嵌入权重矩阵取整到4个比特。谁受的损伤更大：读得少的模型，还是同一个模型读了多得多之后？',
 
     'The takeaway: parameters, compute and bits':
-        '要点：参数、算力和比特可以分开权衡。专家增加参数，却不增加算力；更少的比特节省内存，代价却随模型读过的数据增长。接下来：为什么这些定律都是幂律。',
+        '要点：参数、算力和比特可以分开权衡。专家增加参数，同时带来路由开销；更少的比特节省内存，代价却随模型读过的数据增长。接下来：为什么这些定律都是幂律。',
 
     'Pause and predict. If every skill is learned suddenly':
         '暂停一下，先想一想。如果每项技能都是突然学会的，要么全会，要么全不会，平均损失会一级一级地下降，还是平滑地下降？',
 
-    'The takeaway: power laws come out of many parts':
-        '要点：幂律来自许多部分的叠加：低维数据曲面上的一块块小片，或者一条长长的齐普夫技能尾巴，一项接一项地学会。接下来：如果技能是突然到来的，能力也是吗？',
+    'The takeaway: under their assumptions':
+        '要点：在各自的假设下，对光滑目标作局部线性近似，并用平方误差衡量，以及理想的齐普夫技能尾部，都能产生幂律。我们有限规模的玩具实验展示了这些机制。接下来：如果技能是突然到来的，能力也是吗？',
 
     "Pause and predict. Our models' accuracy on single characters":
         '暂停一下，先想一想。我们的模型在单个字符上的准确率，随大小平稳上升。改成看它们能否一字不差地写对8个字符，那条曲线会是什么样？',
 
     'The takeaway: all-or-nothing scores':
-        '要点：全对或全错的评分，会把平稳的进步变成表面上的跳跃，而窄的技能也确实可能突然出现。无论哪种情况，底下的损失都是平滑的，可以预测。接下来，最奇怪的一次跳跃。',
+        '要点：全对或全错的评分，可能让平稳的进步看起来像跳跃。单项任务损失的变化可能比平均值更陡，但这不代表数学上的不连续。超出已观察规模的预测需要验证。接下来，最奇怪的一次跳跃。',
 
     'Pause and predict. With more weight decay':
         '暂停一下，先想一想。权重衰减更大时，理解会来得更早、更晚，还是根本不来？没有权重衰减呢？',
@@ -830,14 +824,14 @@ ZH = {
     'Pause and predict. For one problem, more tries':
         '暂停一下，先想一想。对一道题来说，多试几次的帮助是指数级的快。对整个基准取平均，失败率也会指数下降吗？',
 
-    'The takeaway: with a way to check answers':
-        '要点：只要有办法检查答案，多次尝试就能用回答时的算力换取模型的大小，而最难的那些题让收益变成一条缓慢的幂律。第28部分会搭建先思考再回答的模型。',
+    'The takeaway: with an oracle checker':
+        '要点：有了理想答案判定器，独立尝试可以用回答时的算力换取模型大小。合适的难题尾部可以让失败率在有限范围内呈现类似幂律的衰减。这些假设和适用范围需要在每个基准上检验。第28部分会搭建先思考再回答的模型。',
 
-    'Pause and predict. Fit the law on our cheapest runs':
-        '暂停一下，先想一想。只用我们最便宜的训练拟合定律，去预测贵10倍的训练。偏差会是百分之一比特、十分之一比特，还是更多？',
+    'Pause and predict. Fit the law on cheaper runs in our fit cohort':
+        '暂停一下，先想一想。用我们拟合样本中较便宜的训练拟合定律，去预测贵10倍的训练。偏差会是百分之一比特、十分之一比特，还是更多？',
 
-    'The takeaway: every axis of scale we can measure':
-        '要点：我们能测量的每一个规模轴，都仍然遵循它的定律。争论的是下一步的价钱，而这个价钱一直在下降。现在，来回顾一下。',
+    'The takeaway: measured scaling trends can guide forecasts':
+        '要点：实测的规模趋势可以帮助预测，但外推需要验证。在所引研究中，效率进步降低了达到固定性能的成本；前沿下一步的价值和成本仍是有待研究的问题。现在，来回顾一下。',
 
 }
 

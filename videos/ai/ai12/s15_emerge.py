@@ -76,7 +76,7 @@ class Emerge(VoiceoverScene):
         closs = np.asarray(e["char_loss"], float)
         x0, x1 = lx.min() - 0.1, lx.max() + 0.1
         pans = VGroup()
-        specs = [(r"per character: \ right guesses", [(acc, C.TRUE_P, r"")]),
+        specs = [(r"teacher-forced accuracy \\ averaged over eight positions", [(acc, C.TRUE_P, r"")]),
                  (r"exact match, \ greedy, \ $L$ characters",
                   [(exact[:, L - 1], LEN_COLORS[L], rf"L={L}") for L in (1, 2, 4, 8)])]
         for k, (ttl, series) in enumerate(specs):
@@ -97,9 +97,9 @@ class Emerge(VoiceoverScene):
             pans.add(VGroup(ax, xt, yt, xn, t, lines))
         task = label(rf"the checkable task: \ from ${int(e['task_n']):,}$ held-out places, \ write the next characters "
                      r"exactly".replace(",", "{,}"), font_size=22, color=GREY_A).to_edge(UP, buff=0.3)
-        tag = note(rf"computed: \ every width of the sweep, \ trained on $2^{{22}}$ characters").to_corner(DL, buff=0.2)
-        # growth across our sizes, from a straight-line fit of log score against log size (exact match floored at
-        # one problem in task_n, so a single lucky hit cannot set the ratio)
+        tag = note(rf"computed: \ available widths at $2^{{22}}$ characters \\ growth: \ log-log fits, \ score floor $1/{int(e['task_n']):,}$".replace(",", "{,}")).to_corner(DL, buff=0.2)
+        # Growth from log-score/log-size fits, using the same numeric floor 1/task_n for both metrics.
+        # The teacher-forced metric averages eight positions, so this floor is not one position hit.
         lx_ = np.log10(N)
 
         def growth(v):
@@ -108,9 +108,8 @@ class Emerge(VoiceoverScene):
 
         g1, g8 = growth(acc), growth(exact[:, 7])
         said1 = (
-            f"Yet in proportion they grow fastest: {g8:.0f} times across our sizes, against {g1:.1f} times for "
-            "single characters. " if g8 > 3 * g1 else
-            "In proportion they grow about as fast as single characters. "
+            f"With both scores floored at one over {int(e['task_n']):,}, the log-log fitted growth factors across our sizes are "
+            f"{g8:.1f} for eight-character prefixes and {g1:.1f} for teacher-forced characters. "
         )
         # where our models sit on the p^L curves
         bx = Axes(x_range=[0, 1, 0.25], y_range=[0, 1, 0.25], x_length=4.2, y_length=3.0, tips=False,
@@ -124,17 +123,18 @@ class Emerge(VoiceoverScene):
         band.move_to([(bx.c2p(acc[0], 0)[0] + bx.c2p(acc[-1], 0)[0]) / 2, bx.c2p(0, 0.5)[1], 0])
         bl = label(r"our models", font_size=20, color=C.TRUE_P).next_to(band, UP, buff=0.06)
         bxl = label(r"$p$: \ each character right", font_size=18, color=GREY_A).next_to(bx, DOWN, buff=0.08)
-        pic = VGroup(bx, fam, fml, band, bl, bxl)
+        model_label = label(r"independent-token schematic", font_size=18, color=GREY_A).next_to(bx, UP, buff=0.55).align_to(bx, LEFT)
+        pic = VGroup(bx, fam, fml, band, bl, bxl, model_label)
         with self.voiceover(
             "We can watch it happen on our own models. The task: from two thousand places in held-out text, write the "
-            "next characters exactly. <bookmark mark='a'/> Score each character on its own, and the share right "
-            f"rises smoothly with size, from {100 * acc[0]:.0f} to {100 * acc[-1]:.0f} percent. "
-            "<bookmark mark='b'/> Score whole answers instead. One character: the same curve. Two, four, eight: "
-            "lower and flatter, until eight-character answers barely leave zero. "
+            "next characters exactly. <bookmark mark='a'/> Average teacher-forced accuracy over all eight positions: "
+            f"from {100 * acc[0]:.0f} to {100 * acc[-1]:.0f} percent across our sizes. "
+            "<bookmark mark='b'/> Now score greedy prefixes. The one-character score uses only the first position. "
+            "Two, four and eight characters require increasingly long prefixes to be entirely right. "
             + said1
-            + f"<bookmark mark='c'/> On the curves of p to the L, our models sit on the flat stretch, p between "
-            f"{100 * acc[0]:.0f} and {100 * acc[-1]:.0f} percent. The steep part needs p near one: a model scored "
-            "like this on long answers seems unable to do them at all, until, much larger, it suddenly can."
+            + f"<bookmark mark='c'/> In the independent-token illustration, use the teacher-forced accuracy as p: "
+            f"between {100 * acc[0]:.0f} and {100 * acc[-1]:.0f} percent. Powers of p shrink with answer length. "
+            "This is a schematic explanation, not an identity with the greedy-prefix scores."
         ) as vo:
             self.play(FadeIn(task), FadeIn(tag), *[FadeIn(p[:5]) for p in pans])
             vo.wait_until("a")
@@ -143,7 +143,7 @@ class Emerge(VoiceoverScene):
             self.play(LaggedStart(*[Create(l_) for l_ in pans[1][5]], lag_ratio=0.4), run_time=3.0)
             vo.wait_until("c")
             self.play(FadeOut(pans[0]))
-            self.play(Create(bx), FadeIn(bxl), LaggedStart(*[Create(c_) for c_ in fam], lag_ratio=0.2), FadeIn(fml),
+            self.play(Create(bx), FadeIn(bxl), FadeIn(model_label), LaggedStart(*[Create(c_) for c_ in fam], lag_ratio=0.2), FadeIn(fml),
                       run_time=1.5)
             self.play(FadeIn(band), FadeIn(bl))
         self.wait(0.3)
@@ -162,6 +162,8 @@ class Emerge(VoiceoverScene):
         ax.move_to([-3.4, -0.5, 0])
         xt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
                       for v in range(math.ceil(lx.min() - 0.1), math.floor(lx.max() + 0.1) + 1)])
+        yt = VGroup(*[MathTex(f"{v:g}", font_size=18, color=GREY_B).next_to(ax.c2p(lx.min() - 0.1, v), LEFT, buff=0.08)
+                      for v in (0, 0.5, 1)])
         xn = label(r"parameters", font_size=20, color=GREY_A).next_to(xt if len(xt) else ax, DOWN, buff=0.08)
         yn = label(r"each subtask's loss at the end \ (bits)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         T = fin.shape[1]
@@ -189,7 +191,7 @@ class Emerge(VoiceoverScene):
         gxn = label(r"width", font_size=20, color=GREY_A).next_to(gx, DOWN, buff=0.08)
         gyn = VGroup(label(r"common", font_size=18, color=GREY_A).next_to(grid[0], LEFT, buff=0.1),
                      label(r"rare", font_size=18, color=GREY_A).next_to(grid[T - 1], LEFT, buff=0.1))
-        gt = label(r"each subtask (row) at each width (column): \\ bright $=$ unsolved, \ dark $=$ learned", font_size=20,
+        gt = label(r"each subtask (row) at each width (column): \\ bright $=$ high loss, \ dark $=$ low loss", font_size=20,
                    color=GREY_A)
         gt.next_to(grid, UP, buff=0.12).align_to(grid, LEFT)
         heat = VGroup(grid, gx, gxn, gyn, gt)
@@ -201,21 +203,22 @@ class Emerge(VoiceoverScene):
                 drops.append(float(np.max(v[:-1] - v[1:]) / tot))
         cliff = len(drops) >= 3 and float(np.mean(drops)) > 0.5
         said2 = (
-            f"and it falls off a cliff at its own size: on average {100 * np.mean(drops):.0f} percent of the fall "
-            "happens between two neighbouring sizes, the common subtasks first. " if cliff else
-            "and each one falls at its own size, more steeply than the average, the common subtasks first. "
+            f"for {len(drops)} selected subtasks with a net fall above 0.3 bits, on average "
+            f"{100 * np.mean(drops):.0f} percent of that fall occurs between two neighbouring sampled sizes. " if cliff else
+            "the selected subtasks change differently across the sampled sizes. "
         )
         with self.voiceover(
-            "But some suddenness is real. In the quanta toy, each subtask is either solved or not. Plot each one's "
-            "final loss against the network's size, "
+            "The quanta toy offers another view. Each subtask has its own continuous loss. Plot each one's "
+            "final loss against the network's size: "
             + said2
-            + "<bookmark mark='a'/> Only the average is smooth. A benchmark that measures one narrow skill sees "
-            "a cliff; the loss, which averages over everything, sees a power law. <bookmark mark='b'/> Later work "
+            + "<bookmark mark='a'/> Compare these curves with the frequency-weighted average, in white. Averaging "
+            "can hide sharper changes in individual subtasks. These are sampled widths, not a proof of a "
+            "discontinuity. <bookmark mark='b'/> Later work "
             "made this useful. In 2024 Zhengxiao Du and colleagues found that abilities appear when the pretraining "
             "loss falls below a threshold, whatever the size of the model, and Charlie Snell and colleagues showed "
             "that fine-tuning brings an ability forward to smaller models, so its arrival can be forecast."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(heat[1:]))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(heat[1:]))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(lg[0]),
                       LaggedStart(*[FadeIn(c_) for c_ in grid], lag_ratio=0.004), run_time=2.5)
             vo.wait_until("a")
@@ -239,14 +242,14 @@ class Emerge(VoiceoverScene):
         self.play(FadeOut(pc))
 
     def takeaway(self):
-        tk = takeaway_card(r"Smooth loss, \ sudden scores",
-                           r"All-or-nothing scores turn steady progress into apparent jumps; \ narrow skills can "
-                           r"truly switch on; \ the loss underneath is smooth and forecastable.",
+        tk = takeaway_card(r"Look beyond the score",
+                           r"All-or-nothing scores can create apparent jumps; \ individual task losses can change "
+                           r"more sharply than their average. \ Forecasts need validation beyond observed sizes.",
                            r"next: \ the strangest jump of all")
         with self.voiceover(
-            "The takeaway: all-or-nothing scores turn steady progress into apparent jumps, while narrow skills can "
-            "still truly switch on. Either way, the loss underneath is smooth, and can be forecast. Next, the "
-            "strangest jump of all."
+            "The takeaway: all-or-nothing scores can make steady progress look like a jump. Individual task losses "
+            "can change more sharply than their average, without demonstrating a mathematical discontinuity. "
+            "Forecasts need validation beyond the sizes we observed. Next, the strangest jump of all."
         ) as vo:
             self.play(FadeIn(tk[0], shift=UP * 0.2))
             self.wait(max(0.0, vo.duration * 0.5 - 1.0))

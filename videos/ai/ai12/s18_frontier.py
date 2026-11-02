@@ -98,11 +98,11 @@ class Frontier(VoiceoverScene):
         fl_ = label(r"grey: \ the fitted runs", font_size=18, color=GREY_B).next_to(ax.c2p(math.log10(cut), lim), LEFT, buff=0.1)
         fl_.shift(DOWN * 0.15)
         side = VGroup(
-            label(rf"fitted on our ${n_fit}$ cheapest runs \\ (up to ${sci(cut, 0)}$ operations)", font_size=22, color=GREY_A),
+            label(rf"fitted on ${n_fit}$ cheap runs \\ of our ${len(Nf)}$-run fit cohort \\ (up to ${sci(cut, 0)}$ operations)", font_size=22, color=GREY_A),
             label(rf"predicting the other ${n_test}$: \\ off by ${err:.3f}$ bits on average, \\ ${mx:.3f}$ at worst", font_size=24,
                   color=TT),
-            label(rf"the best model at $10^{{13}}$: \\ predicted ${float(opt['pred']):.3f}$, \ measured "
-                  rf"${float(opt['meas']):.3f}$",
+            label(rf"at $10^{{13}}$ operations: \\ cheap-fit minimum ${float(opt['pred']):.3f}$; \\ "
+                  rf"interpolated valley estimate ${float(opt['meas']):.3f}$",
                   font_size=22, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.7, 0.3, 0])
         slow = label(r"$L \propto C^{-0.050}$ \ (Kaplan): \ halving the loss takes $2^{1/0.05} \approx 10^{6}$ times "
@@ -128,12 +128,12 @@ class Frontier(VoiceoverScene):
             )
         with self.voiceover(
             "What can a scaling law actually tell us? Test ours the way laboratories use theirs. Fit Chinchilla's "
-            f"formula on only our {n_fit} cheapest runs, and predict the other {n_test}, up to {ratio:.0f} times "
+            f"formula on the {n_fit} cheaper runs in our {len(Nf)}-run fit cohort, and predict its other {n_test}, up to {ratio:.0f} times "
             f"costlier. <bookmark mark='a'/> On average the prediction is off by {err:.3f} bits, {mx:.3f} at worst"
             + said1
-            + "But the curve was always slow. With Kaplan's exponent for compute, 0.05, halving the "
-            "loss takes a million times the compute. What is debated is not the curve, but whether each step down "
-            "it buys enough capability to be worth its price."
+            + "For the simple power-law model with Kaplan's compute exponent, 0.05, halving its loss requires "
+            "about a million times the compute. Whether each step buys enough capability to justify its compute "
+            "is an empirical question."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(zero), FadeIn(side[0]))
             self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in fdts], lag_ratio=0.01), Create(cutl), FadeIn(fl_),
@@ -175,9 +175,9 @@ class Frontier(VoiceoverScene):
             "Epoch AI estimated that the compute needed to reach a given language-model performance halved about "
             "every eight months, from better architectures, data and training. <bookmark mark='b'/> The same year, "
             "Chaojun Xiao and colleagues at Tsinghua measured a densing law: the capability packed into each "
-            "parameter of open models doubled about every three months. <bookmark mark='c'/> So the frontier moves "
-            "on three curves at once: pretraining, reinforcement learning, and thinking at answer time, each slow "
-            "on its own, each with a law that can be measured. The argument is about their prices, not their shapes."
+            "parameter of open models doubled about every three months. <bookmark mark='c'/> These studies describe "
+            "efficiency trends over particular ranges. Pretraining, reinforcement learning and answer-time compute "
+            "each need their own measurements. Their continuation and the cost of further progress need testing."
         ) as vo:
             self.play(FadeIn(hd), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(sch))
             vo.wait_until("a")
@@ -191,10 +191,10 @@ class Frontier(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def predict(self):
-        pc = predict_card(r"Fit the law on our cheapest runs and predict runs ten times costlier. \ Will it miss by "
+        pc = predict_card(r"Fit the law on cheaper runs in our fit cohort and predict runs ten times costlier. \ Will it miss by "
                           r"a hundredth of a bit, \ a tenth, \ or more?")
         with self.voiceover(
-            "Pause and predict. Fit the law on our cheapest runs, and predict runs ten times costlier. Will it miss "
+            "Pause and predict. Fit the law on cheaper runs in our fit cohort, and predict runs ten times costlier. Will it miss "
             "by a hundredth of a bit, a tenth, or more?"
         ):
             self.play(FadeIn(pc, shift=UP * 0.2))
@@ -202,13 +202,14 @@ class Frontier(VoiceoverScene):
         self.play(FadeOut(pc))
 
     def takeaway(self):
-        tk = takeaway_card(r"The curves hold; \ the argument is about prices",
-                           r"Pretraining, \ reinforcement learning and answer-time compute each follow a measurable "
-                           r"law, \ and efficiency keeps lowering the price of a given ability.",
+        tk = takeaway_card(r"Measured curves guide forecasts; \ costs matter",
+                           r"Pretraining, reinforcement learning and answer-time compute show trends over studied ranges. \ "
+                           r"Historical efficiency gains reduced costs at fixed performance; \ forecasts beyond those ranges need validation.",
                            r"next: \ the recap")
         with self.voiceover(
-            "The takeaway: every axis of scale we can measure still follows its law. What is argued over is the price "
-            "of the next step, and that price keeps falling. Now, the recap."
+            "The takeaway: measured scaling trends can guide forecasts, but extrapolation needs validation. "
+            "Efficiency has reduced the cost of fixed performance in the cited studies; the value and cost of "
+            "the next frontier step remain open questions. Now, the recap."
         ) as vo:
             self.play(FadeIn(tk[0], shift=UP * 0.2))
             self.wait(max(0.0, vo.duration * 0.5 - 1.0))

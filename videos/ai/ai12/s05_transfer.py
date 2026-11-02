@@ -67,8 +67,9 @@ class Transfer(VoiceoverScene):
             panels.add(VGroup(ax, xt, xl, t, yt, bands, lines, bests, mk))
         key = VGroup(*[label(rf"width ${w:,}$".replace(",", "{,}"), font_size=24, color=c) for w, c in zip(widths, WIDTH_COLORS)])
         key.arrange(RIGHT, buff=0.6).to_edge(UP, buff=0.3)
-        yn = label(rf"held-out bits after ${int(m['steps'])}$ steps \ (two seeds; \ triangles: \ off-scale or unstable)",
-                   font_size=22, color=GREY_A).next_to(key, DOWN, buff=0.15)
+        yn = label(rf"held-out bits after ${int(m['steps'])}$ steps \\ curves: two-seed means; \ bands: seed range \\ "
+                   r"dots: best sampled rates; \ triangles: off-scale or unstable",
+                   font_size=20, color=GREY_A).next_to(key, DOWN, buff=0.15)
         drift, bl = m["drift"], m["best_loss"]
         bsp = [10 ** v for v in m["bests"]["sp"]]
         # a learning rate, for speech: mantissa times ten to the minus exponent
@@ -203,8 +204,8 @@ class Transfer(VoiceoverScene):
 
     def takeaway(self):
         tk = takeaway_card(r"Tune small, \ train large",
-                           r"In $\mu$P the best learning rate stays put as the width grows, \ so it can be tuned on "
-                           r"a small model and copied to a large one \ (Yang et al., 2022).",
+                           r"In this sweep, \ the best sampled $\mu$P rate stays put across widths; \ useful rates "
+                           r"can transfer from small to large models \ \mbox{(Yang et al., 2022)}.",
                            r"next: \ the same question for depth")
         with self.voiceover(
             "The takeaway: in mu-P, a learning rate tuned on a small model carries over to a wide one, which is how "

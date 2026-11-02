@@ -211,8 +211,9 @@ class Grok(VoiceoverScene):
         n_never = int((~np.isfinite(st)).sum())
         tag = note(r"computed: \ five weight decays, \ three seeds each, \ the same data").to_corner(DL, buff=0.2)
         said2 = (
-            f"The more weight decay, the sooner it comes: from step {med[ok[0]]:,.0f} at {wds[ok[0]]:g} to "
-            f"{med[ok[-1]]:,.0f} at {wds[ok[-1]]:g}. " if faster else "Its timing varies with the weight decay. "
+            f"Among successful runs, the endpoint medians are step {med[ok[0]]:,.0f} at weight decay {wds[ok[0]]:g} "
+            f"and {med[ok[-1]]:,.0f} at {wds[ok[-1]]:g}. " if len(ok) >= 2 else
+            "There are too few successful decay settings for an endpoint-median comparison. "
         )
         never_w = max((wds[i] for i in range(len(wds)) if (~np.isfinite(st[i])).any()), default=0.0)
         said3 = (
@@ -267,7 +268,7 @@ class Grok(VoiceoverScene):
         acc = VGroup(label(r"unseen entries right", font_size=22, color=GREY_A),
                      DecimalNumber(100 * acc_at[0], num_decimal_places=0, unit=r"\%", font_size=26, color=TE))
         acc.arrange(RIGHT, buff=0.2).next_to(clock, DOWN, buff=0.12)
-        sh = VGroup(label(r"share in the top five", font_size=22, color=GREY_A),
+        sh = VGroup(label(r"share in five strongest frequencies", font_size=22, color=GREY_A),
                     DecimalNumber(100 * share[0], num_decimal_places=0, unit=r"\%", font_size=26, color=C.BITS))
         sh.arrange(RIGHT, buff=0.2).next_to(acc, DOWN, buff=0.12)
         # the numbers placed by the vectors' two main directions, through training
@@ -279,7 +280,7 @@ class Grok(VoiceoverScene):
 
         pts = VGroup(*[Dot(q, radius=0.045, color=interpolate_color(ManimColor(C.TRUE_P), ManimColor(C.MODEL_Q), i / P))
                        for i, q in enumerate(place(snaps[0]))])
-        pl = label(r"the $97$ numbers, \ along their final two main directions", font_size=20, color=GREY_A)
+        pl = label(r"the $97$ number vectors, \ final PCA directions \\ each snapshot rescaled for display", font_size=20, color=GREY_A)
         pl.move_to([3.6, 2.6, 0])
         idx = [0] + [i for i in range(1, len(steps)) if i % 2 == 0 or steps[i] <= 1000] + [len(steps) - 1]
         idx = sorted(set(idx))
@@ -287,25 +288,23 @@ class Grok(VoiceoverScene):
         t_te = int(g["t_test_wd"])
         i_te = int(np.searchsorted(steps, t_te))
         early = share[min(i_te, len(share) - 1) // 2] > share[0] + 0.5 * (share[-1] - share[0])
-        said4 = (
-            "Long before the unseen entries come right, a few frequencies start to grow, quietly: "
-            if early else "As the unseen entries come right, a few frequencies take over: "
-        )
+        said4 = "The spectrum changes across these recorded checkpoints: "
         with self.voiceover(
             "What rule did it find? Look at the vectors it learned for the numbers, and ask which waves around the "
             "clock they contain: their Fourier spectrum. <bookmark mark='a'/> Watch it through training. At first "
             "the energy is spread over all frequencies, noise. "
             + said4
             + f"by the end, {100 * share[-1]:.0f} percent of the energy sits in five of the {nf}. "
-            "<bookmark mark='b'/> And the numbers, seen along their main directions, settle onto circles."
+            "<bookmark mark='b'/> The number vectors are projected onto the final principal directions. Each "
+            "snapshot is rescaled to compare shapes."
         ) as vo:
             self.play(FadeIn(bars), Create(base), FadeIn(fl), FadeIn(clock), FadeIn(acc), FadeIn(sh), FadeIn(pts), FadeIn(pl))
             vo.wait_until("a")
             for t in idx[1:]:
                 new = bars_at(t)
                 self.play(Transform(bars, new), *[d.animate.move_to(q) for d, q in zip(pts, place(snaps[t]))],
-                          clock[1].animate.set_value(steps[t]), acc[1].animate.set_value(100 * acc_at[t]),
-                          sh[1].animate.set_value(100 * share[t]), run_time=0.22, rate_func=linear)
+                          ChangeDecimalToValue(clock[1], steps[t]), ChangeDecimalToValue(acc[1], 100 * acc_at[t]),
+                          ChangeDecimalToValue(sh[1], 100 * share[t]), run_time=0.22, rate_func=linear)
             vo.wait_until("b")
             kl = label(r"yellow: \ the five key frequencies, \ " + ", ".join(str(k) for k in key), font_size=22, color=C.BITS)
             kl.next_to(fl, UP, buff=0.05).align_to(fl, LEFT).shift(UP * 3.55)
@@ -330,13 +329,14 @@ class Grok(VoiceoverScene):
         rows = [
             cmath(r"a \mapsto", r"(\cos \omega a,\ \sin \omega a)", r",\quad \omega = 2\pi k / 97", font_size=32, colors=colors),
             cmath(r"\cos \omega(a+b)", r"=", r"\cos \omega a \cos \omega b - \sin \omega a \sin \omega b", font_size=32, colors=colors),
-            cmath(r"\text{score}(c)", r"\approx", r"\textstyle\sum_k \cos \omega_k (a + b - c)", font_size=32, colors=colors),
+            cmath(r"\tilde{s}(c)", r"\approx", r"\textstyle\sum_k \alpha_k\cos \omega_k (a + b - c)", font_size=32, colors=colors),
         ]
-        whys = [why(r"a number becomes an angle"), why(r"adding angles"), why(r"peaks at $c = a + b \bmod 97$")]
+        whys = [why(r"an ideal Fourier representation"), why(r"adding angles"),
+                why(r"ideal positive weights: \ maximum at $c = a + b \bmod 97$")]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=-1.6, buff=0.45, edge=6.9)
         r2 = float(g["circuit_r2"])
-        fit = label(rf"the trained network's scores, \ fitted by these five waves alone: \\ ${100 * r2:.0f}\%$ of their "
-                    r"variation", font_size=24, color=C.BITS).to_edge(LEFT, buff=0.5).set_y(-1.0)
+        fit = label(rf"least-squares fit: \ five weighted waves \\ ${100 * r2:.0f}\%$ of centred logit variation "
+                    r"(full $97^3$ table)", font_size=24, color=C.BITS).to_edge(LEFT, buff=0.5).set_y(-1.0)
         kd, kds = np.asarray(g["kd"], float), np.asarray(g["kd_steps"], float)
         kdn = np.asarray(g["kd_nowd"], float)[:len(kds)]
         ytop = max(0.02, math.ceil(max(kd.max(), kdn.max()) * 1.1 * 50) / 50)
@@ -346,7 +346,7 @@ class Grok(VoiceoverScene):
         kcn = DashedVMobject(curve(ax, np.log10(kds), kdn, C.SURPRISE, 2.5), num_dashes=30)
         t_te = int(g["t_test_wd"])
         tm = DashedLine(ax.c2p(math.log10(t_te), 0), ax.c2p(math.log10(t_te), ytop), color=TE, stroke_width=1.5)
-        kl = label(r"how far the tangent kernel has moved \\ (against log steps; \ yellow line: \ generalized)",
+        kl = label(r"true-class tangent Gram: \ cosine distance \\ $128$ examples ($64$ train, $64$ test); \ log steps",
                    font_size=18, color=GREY_A)
         kl.next_to(ax, UP, buff=0.08).align_to(ax, LEFT)
         ky = VGroup(MathTex(f"{ytop:.2f}", font_size=16, color=GREY_B).next_to(ax.c2p(0, ytop), LEFT, buff=0.06),
@@ -362,32 +362,24 @@ class Grok(VoiceoverScene):
         early = at_te > 0.6 * after
         nowd_far = kdn[-1] > 1.5 * after
         cite_ = cite(r"N.~Nanda et al.\ (2023); \ T.~Kumar, B.~Bordelon, S.~Gershman \& C.~Pehlevan (2023)", corner=DR)
-        if moved_late:
-            said5 = (
-                f"Its tangent kernel barely moves while it memorizes, then travels far as it generalizes, to a "
-                "distance "
-                f"of {after:.2f}. Tanishq Kumar and colleagues argued in 2023 that grokking is exactly this: a network "
-                "that first fits lazily, with its starting kernel, then slowly learns the features that generalize."
-            )
-        elif early and nowd_far:
-            said5 = (
-                f"Measure how far its tangent kernel moves: only to a distance of {after:.2f}, most of it before the "
-                f"jump. Without weight decay it moves further, to {kdn[-1]:.2f}, and still never generalizes. Tanishq "
-                "Kumar and colleagues argued in 2023 that grokking can be a slow move from lazy to rich training; in "
-                "our network the kernel's movement alone does not mark the moment, and the weight decay does the work."
-            )
-        else:
-            said5 = (
-                f"Its tangent kernel moves steadily through training, to a distance of {after:.2f}. Tanishq Kumar and "
-                "colleagues argued in 2023 that grokking can be a slow move from lazy to rich training, away from the "
-                "starting kernel."
-            )
+        nowd_status = (
+            "The no-decay run does not pass ninety-five percent within this run." if g['t_test_nowd'] is None else
+            f"The no-decay run first passes ninety-five percent at step {int(g['t_test_nowd']):,}."
+        )
+        said5 = (
+            f"On 128 fixed examples, the true-class tangent Gram ends at cosine distance {after:.2f} with decay "
+            f"and {kdn[-1]:.2f} without. This measures normalized geometry, not overall kernel scale or the full "
+            f"multi-output kernel. {nowd_status} Tanishq Kumar and colleagues argued in 2023 that grokking can "
+            "involve a slow transition from lazy to feature-learning training; this restricted diagnostic alone "
+            "does not establish that transition."
+        )
         with self.voiceover(
-            "Each number becomes a point on a circle, an angle. <bookmark mark='a'/> Adding two numbers on a clock "
+            "An ideal Fourier circuit represents numbers by angles. <bookmark mark='a'/> Adding two numbers on a clock "
             "is adding two angles, and the cosine of a sum is a sum of products of cosines and sines, which the ReLU "
-            "units can build. <bookmark mark='b'/> The score of each answer c is then a sum of waves that peak where "
-            f"c equals a plus b. Fit the trained network's scores with the five waves alone: they account for "
-            f"{100 * r2:.0f} percent of the variation. Neel Nanda and colleagues worked this circuit out in 2023, "
+            "units can build. <bookmark mark='b'/> Positive waves peak at the correct sum. For the empirical check, "
+            "subtract each input pair's mean answer logit and fit five separately weighted cosine waves by least "
+            f"squares over all ninety-seven cubed scores. They account for {100 * r2:.0f} percent of this centred "
+            "variation. Neel Nanda and colleagues worked this circuit out in 2023, "
             "one of the first complete explanations of what a trained network computes; part thirty takes the idea "
             "to real models. <bookmark mark='c'/> And chapter two's question returns: is this network lazy? "
             + said5
