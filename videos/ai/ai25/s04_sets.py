@@ -117,16 +117,19 @@ class Sets(VoiceoverScene):
             r_.scale(30 / 32)
         step = ladder(self, rows, whys, keep=4, top=1.15, x=-1.6, align_index=1, buff=0.3, edge=6.9)
         cont = label(r"real numbers: \ the power sums $\sum_i x_i^k$, \ $k = 1, \dots, n$, \ pin down $n$ numbers "
-                     r"(Newton); \ fewer won't do \ (Wagstaff et al.\ 2019)", font_size=22, color=GREY_A)
+                     r"(Newton); \\ continuous universal encoders need at least $n$ dimensions \ (Wagstaff et al.\ 2019)",
+                     font_size=22, color=GREY_A)
         cont.to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The theorem behind Deep Sets, from Manzil Zaheer and colleagues in 2017: a function of sets ignores order "
+            "The theorem behind Deep Sets, from Manzil Zaheer and colleagues in 2017: for finite subsets of a countable "
+            "universe, a function ignores order "
             "exactly when it is a sum of one function phi over the elements, followed by a function rho. <bookmark "
             "mark='a'/> One direction is easy: a sum ignores order. <bookmark mark='b'/> For the other, number every "
             "possible element, and let phi of x be four to the minus its number. <bookmark mark='c'/> In base four, the sum "
             "has a one in place k exactly when element k is in the set: no carries, so different sets give different sums. "
             "<bookmark mark='d'/> So any function of the set is a function of the sum. <bookmark mark='e'/> For sets of real "
-            "numbers, power sums play this role, by Newton's identities."
+            "numbers, power sums play this role, by Newton's identities. For continuous universal encoders, the latent "
+            "dimension must be at least the maximum set size."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1))
             vo.wait_until("a")
@@ -160,13 +163,13 @@ class Sets(VoiceoverScene):
         a1 = Arrow(sigma.get_right(), rho.get_left(), buff=0.1, color=GREY_C, stroke_width=2)
         a2 = Arrow(rho.get_right(), out.get_left(), buff=0.1, color=GREY_C, stroke_width=2)
         same = label(r"the same $\phi$ for every point: \ sharing weights, \ as a convolution shares them across "
-                     r"positions", font_size=22, color=STRUCT).to_edge(DOWN, buff=1.5)
+                     r"positions", font_size=22, color=STRUCT).to_edge(DOWN, buff=2.4)
         rel = VGroup(
             label(r"PointNet (Qi et al.\ 2017): \ the same with a maximum in place of the sum", font_size=22,
                   color=GREY_A),
             label(r"attention without positions (Part 13): \ each element's output turns with the order "
                   r"\ (equivariant)", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=1.6)
         with self.voiceover(
             "As a network, this is simple. <bookmark mark='a'/> The same small network phi reads every point, <bookmark "
             "mark='b'/> the results are summed, <bookmark mark='c'/> and a second network rho reads the sum. <bookmark "

@@ -158,7 +158,7 @@ class Symmetry(VoiceoverScene):
             cmath(r"\bar f(h \cdot x)", r"=", r"\frac{1}{|G|} \sum_{g' \in G} h \, g'^{-1} f(g' \cdot x)", font_size=36),
             cmath(r"\bar f(h \cdot x)", r"=", r"h \cdot \bar f(x)", font_size=36),
         ]
-        whys = [why(r"average $f$ over the group"), why(r"put in a turned input"),
+        whys = [why(r"finite $G$, \ linear output action: \ average $f$"), why(r"put in a turned input"),
                 why(r"$g' = gh$: \ as $g$ runs over $G$, \ so does $g'$"), why(r"$(ab)^{-1} = b^{-1} a^{-1}$"),
                 why(r"$h$ is linear: \ out of the sum")]
         for r_ in rows:
@@ -166,16 +166,18 @@ class Symmetry(VoiceoverScene):
         step = ladder(self, rows, whys, keep=5, top=3.4, x=-1.8, buff=0.24, edge=6.9)
         cost = VGroup(
             label(r"any $f$ becomes equivariant, \ at the price of $|G|$ evaluations", font_size=22, color=STRUCT),
-            label(r"$|G| = 16!$ for sixteen points; \ infinite for turns of space", font_size=22, color=PLAIN),
+            label(r"compact continuous groups: \ a normalized Haar integral \ (e.g.\ $SO(3)$)", font_size=22, color=PLAIN),
             label(r"augmentation: \ a random $g$ in training, \ hoping $f$ learns the rest", font_size=22, color=AUG),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Any function can be made equivariant by averaging it over the group: for each g, transform the input, apply f, "
+            "For a finite group with a linear action on the output, any function can be made equivariant by averaging: "
+            "for each g, transform the input, apply f, "
             "undo g. <bookmark mark='a'/> Feed the average a turned input, h of x. <bookmark mark='b'/> Rename g times h as g "
             "prime: it runs through the group as g does, so the sum is the same. <bookmark mark='c'/> The inverse of a "
             "product reverses its order, <bookmark mark='d'/> and h comes out of the sum: the average is equivariant, "
             "whatever f was. <bookmark mark='e'/> The price: one evaluation per group element, sixteen factorial for sixteen "
-            "points, infinitely many for turns of space. <bookmark mark='f'/> Augmentation is the cheap version: one random "
+            "points. For compact continuous groups like rotations, the normalized sum becomes a Haar integral; there is "
+            "no normalized uniform average over all translations. <bookmark mark='f'/> Augmentation is the cheap version: one random "
             "transformation per example, hoping the network learns the rest."
         ) as vo:
             step(0)
@@ -200,7 +202,7 @@ class Symmetry(VoiceoverScene):
         kinds = ["egnn", "gnn", "mlp_aug", "mlp"]
         p = pause_card(r"Four networks predict where the particles will be. \ Turn the input: \ which of them "
                        r"turn their answer exactly?", width=8.4).move_to(UP * 2.3)
-        hdr = [r"network", r"turned", r"shifted", r"reordered", r"its own error"]
+        hdr = [r"network", r"turned + shifted", r"shifted", r"reordered", r"test RMS"]
         xs = [-4.6, -1.5, 0.6, 2.7, 5.0]
         y0 = 0.8
         head = VGroup(*[label(h, font_size=22, color=GREY_A).move_to([x, y0, 0]) for h, x in zip(hdr, xs)])

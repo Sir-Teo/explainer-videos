@@ -36,7 +36,7 @@ class Depth(VoiceoverScene):
         whys = [why(r"symmetric: \ the spectral theorem (Part 3)"), why(r"a power acts on each eigenvalue"),
                 why(r"every other $\lambda_i^k \to 0$"), why(r"the slowest term to die")]
         step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.2, buff=0.5, edge=6.9)
-        head = label(r"a layer of a GCN, \ without its weights: \ $H \leftarrow \hat A H$", font_size=28, color=GNN_C)
+        head = label(r"connected undirected graph, \ self-loops: \ $H \leftarrow \hat A H$", font_size=28, color=GNN_C)
         head.to_edge(UP, buff=0.3)
         rest = label(r"every node ends with the same features, \ up to its degree: \ \textit{over-smoothing} "
                      r"\ (Li, Han \& Wu 2018; \ Oono \& Suzuki 2020)", font_size=23, color=PLAIN).to_edge(DOWN,
@@ -54,12 +54,13 @@ class Depth(VoiceoverScene):
         depth[1].move_to([depth[1].get_center()[0], -2.55, 0])
         with self.voiceover(
             "Graph networks are usually shallow, two to four layers; image networks run past a hundred. One reason: strip a "
-            "graph convolution of its weights and it is an average over neighbours, applied again and again. <bookmark "
+            "graph convolution of its weights on a connected, undirected graph with self-loops: it is normalized "
+            "averaging over neighbours, applied again and again. <bookmark "
             "mark='a'/> The averaging matrix is symmetric, with orthonormal eigenvectors and eigenvalues at most one. "
             "<bookmark mark='b'/> Applying it k times raises each eigenvalue to the k. <bookmark mark='c'/> Every term but "
             "the first dies away; the first is one pattern on every node, scaled by the square root of its degree. <bookmark "
-            "mark='d'/> The rate is the second eigenvalue to the k. <bookmark mark='e'/> Every node ends with the same "
-            "features: over-smoothing, named by Qimai Li and colleagues in 2018."
+            "mark='d'/> The rate is the second eigenvalue to the k. <bookmark mark='e'/> Every node ends with a "
+            "degree-scaled copy of the same feature vector: over-smoothing, named by Qimai Li and colleagues in 2018."
         ) as vo:
             self.play(FadeIn(head))
             self.play(GrowFromEdge(depth[0][0], LEFT), FadeIn(depth[0][1]), GrowFromEdge(depth[1][0], LEFT),
@@ -90,7 +91,7 @@ class Depth(VoiceoverScene):
         k0 = 4
         theory = DashedLine(g.ax.c2p(k0, logE[k0]), g.ax.c2p(ks[-1], logE[k0] + 2 * (ks[-1] - k0) * np.log10(lam2)),
                             color=PLAIN, dash_length=0.08)
-        tl = label(rf"slope $\lambda_2^{{2k}}$, \ $\lambda_2 = {lam2:.3f}$", font_size=20, color=PLAIN)
+        tl = label(rf"late decay $\propto \lambda_2^{{2k}}$, \ $\lambda_2 = {lam2:.3f}$", font_size=20, color=PLAIN)
         k_lab = 36
         tl.next_to(g.ax.c2p(k_lab, logE[k0] + 2 * (k_lab - k0) * np.log10(lam2)), UR, buff=0.12)
         y = np.asarray(o["y"])
@@ -114,10 +115,10 @@ class Depth(VoiceoverScene):
         tag.to_corner(DR, buff=0.2)
         with self.voiceover(
             "Here it is on our three-community graph: the Dirichlet energy, how much neighbours differ, after each round of "
-            f"averaging. <bookmark mark='a'/> It falls in a straight line on this log scale, {mags:.0f} powers of ten in "
-            f"sixteen rounds, at the rate the second eigenvalue, {lam2:.3f}, predicts. <bookmark mark='b'/> In pictures: the "
+            f"averaging. <bookmark mark='a'/> It falls by {mags:.0f} powers of ten in sixteen rounds; its later decay "
+            f"approaches the rate the second eigenvalue, {lam2:.3f}, predicts. <bookmark mark='b'/> In pictures: the "
             "features start as noise; a few rounds separate the communities, which is why two layers help; many rounds "
-            "collapse everything to a point."
+            "approach the degree-scaled stationary pattern."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             self.play(Create(cE), run_time=2.0)
@@ -152,8 +153,9 @@ class Depth(VoiceoverScene):
         best = depths[int(np.argmax(P))]
         best_txt = (f"The plain network does best with {best} layers" if best != depths[0] else
                     f"The plain network does best with the fewest, {best} layers")
-        col_txt = (f"from {collapse[0]} layers on, the plain network is at chance, about one in three" if collapse
-                   else "the plain network weakens with depth but never falls to chance")
+        col_txt = (f"its mean accuracy first falls below forty-five percent at {collapse[0]} layers, and is "
+                   f"{100 * P[-1]:.0f} percent at {depths[-1]} layers" if collapse else
+                   "its mean accuracy stays above forty-five percent at every tested depth")
         res_txt = (f"The residual network, which adds each layer's output to its input, holds at "
                    f"{100 * R[-1]:.0f} percent at {depths[-1]} layers" if R[-1] > 0.6 else
                    f"Even the residual network falls, to {100 * R[-1]:.0f} percent at {depths[-1]} layers")
@@ -237,8 +239,8 @@ class Depth(VoiceoverScene):
         f2[0].set_color(PAIR_C)
         gat = label(r"graph attention (Veli\v{c}kovi\'c et al.\ 2018): \ neighbours weighed, \ not just summed",
                     font_size=22, color=GREY_A).next_to(f2, DOWN, buff=0.25)
-        v2 = label(r"GATv2 (Brody, Alon \& Yahav 2022): \ the original's ranking of neighbours is the same for every "
-                   r"node; \ moving the nonlinearity inside fixes it", font_size=20, color=GREY_B)
+        v2 = wrapped_label(r"GATv2 (Brody, Alon \& Yahav 2022): \ the original's ranking of neighbours is the same for every "
+                           r"node; \ moving the nonlinearity inside fixes it", 12.0, 22, GREY_B)
         v2.next_to(gat, DOWN, buff=0.2)
         boxes = VGroup(node_box(r"a transformer \ = \ attention on the complete graph", GNN_C, font_size=22),
                        node_box(r"graph transformers: \ plus the graph's structure, \ as encodings", SYM,

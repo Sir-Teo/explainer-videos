@@ -87,9 +87,11 @@ class Outro(VoiceoverScene):
         ax = mini_axes(TW, TH)
         xs = norm(np.log2(fo["test_res"]))
         g = VGroup(ax)
+        operator_errors = {k: np.array([np.mean([fo[f"{k}_s{s}"]["err"][str(r)] for s in (0, 1, 2)])
+                                       for r in fo["test_res"]]) for k in ("fno", "cnn")}
+        operator_top = max(0.5, max(a.max() for a in operator_errors.values()))
         for k in ("fno", "cnn"):
-            a = np.array([np.mean([fo[f"{k}_s{s}"]["err"][str(r)] for s in (0, 1, 2)]) for r in fo["test_res"]])
-            g.add(curve(ax, xs, np.minimum(norm(a, 0, 0.5), 1.0), KIND_COLOR[k], 2.5))
+            g.add(curve(ax, xs, norm(operator_errors[k], 0, operator_top), KIND_COLOR[k], 2.5))
         out.append((g, r"operators, \ any resolution", STRUCT))
         ma = load("materials")
         ax = mini_axes(TW, TH)

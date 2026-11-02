@@ -224,7 +224,7 @@ class Evoformer(VoiceoverScene):
             "one updates each pair on its own, the other with triangle updates. "
             f"<bookmark mark='b'/> Guessing each missing distance from the separation along the chain gives an error of "
             f"{sep:.1f} ångströms. Updating each pair on its own gets {mp:.1f}, {pw_txt}. "
-            f"<bookmark mark='c'/> {verdict}, {vtxt}."
+            f"<bookmark mark='c'/> {verdict}, <bookmark mark='geometry'/> {vtxt}."
         ) as vo:
             self.play(FadeIn(imgs[0]), FadeIn(cl[0]), FadeIn(imgs[1]), FadeIn(cl[1]), FadeIn(tag))
             vo.wait_until("a")
@@ -233,6 +233,7 @@ class Evoformer(VoiceoverScene):
             self.play(FadeIn(rl), FadeIn(rows.rows[0]), FadeIn(rows.rows[1]))
             vo.wait_until("c")
             self.play(FadeIn(rows.rows[2]))
+            vo.wait_until("geometry")
         self.wait(0.3)
         self.clear_scene()
 
@@ -315,12 +316,13 @@ class Evoformer(VoiceoverScene):
                   r"best", font_size=24, color=STRUCT),
             label(r"a carbon atom is about $1.5$\,\AA\ across \ (its covalent diameter)", font_size=22,
                   color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 0.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 1.15)
         cite_ = cite(r"DeepMind (30 November 2020); \ Jumper et al., \textit{Nature} (2021)", corner=DR)
+        cite_.to_edge(DOWN, buff=1.6)
         hc = history_card(2020, r"John Moult, \ CASP's co-founder", r"``We have been stuck on this one problem -- how do "
                           r"proteins fold up -- for nearly 50 years.'' \ CASP's organizers recognized AlphaFold 2 as a "
                           r"solution to it, \ for single protein chains", width=8.4, color=HIST)
-        hc.to_edge(DOWN, buff=0.75)
+        hc.next_to(cite_, UP, buff=0.22).set_x(0)
         with self.voiceover(
             "And at CASP14, in 2020, it worked. <bookmark mark='a'/> AlphaFold 2's median score was 92.4 GDT over all "
             "targets, 87.0 on the hardest; around ninety is informally reckoned competitive with experiment. <bookmark "
@@ -337,10 +339,12 @@ class Evoformer(VoiceoverScene):
             self.play(FadeIn(hc, shift=UP * 0.1))
         self.wait(0.6)
         tk = take_away(r"the Evoformer: \ sequences and pairs talking, \ pairs kept consistent through triangles")
+        tk.to_edge(DOWN, buff=1.6)
         with self.voiceover(
             "So the Evoformer's two ideas: let the alignment and the pairs inform each other, and keep the pairs consistent "
             "through triangles. Next: turn pairs into a structure without losing left from right."
         ):
-            self.play(FadeOut(hc), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
+            self.play(FadeOut(hc), FadeOut(cite_), run_time=0.4)
+            self.play(FadeIn(tk, shift=UP * 0.1), run_time=0.6)
         self.wait(0.3)
         self.clear_scene()

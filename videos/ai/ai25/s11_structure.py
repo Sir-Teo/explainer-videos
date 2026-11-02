@@ -41,6 +41,7 @@ class Structure(VoiceoverScene):
         rng = np.random.default_rng(4)
         gas = VGroup(*[frame_glyph([x, y, 0], a) for x, y, a in
                        zip(rng.uniform(-6.0, -1.5, 7), rng.uniform(-2.2, 1.6, 7), rng.uniform(0, 2 * np.pi, 7))])
+        gas_start = VGroup(*[frame_glyph([-3.8, -0.2, 0], 0) for _ in range(7)])
         gl = label(r"a `residue gas': \ every residue a rigid body, \ $T_i = (R_i, t_i)$", font_size=22, color=SYM)
         gl.to_edge(UP, buff=0.4).shift(LEFT * 2.6)
         rows = [
@@ -73,7 +74,8 @@ class Structure(VoiceoverScene):
             self.play(FadeIn(gl), FadeIn(one), FadeIn(an), FadeIn(ol))
             vo.wait_until("a")
             self.play(FadeOut(big))
-            self.play(LaggedStart(*[FadeIn(g_, scale=0.6) for g_ in gas], lag_ratio=0.2), run_time=2.0)
+            self.play(FadeIn(gas_start), run_time=0.5)
+            self.play(Transform(gas_start, gas), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(ipa))
             step(0)
@@ -97,7 +99,7 @@ class Structure(VoiceoverScene):
                 why(r"every atom, from every frame; \ $d_{\mathrm{clamp}} = Z = 10$\,\AA"),
                 why(r"a rigid motion of the whole: \ cancels")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.8, buff=0.55, edge=6.9)
-        note1 = label(r"but the frames are built right-handed: \ a mirror image is not a rigid motion", font_size=24,
+        note1 = label(r"right-handed frames: \ invariant under $SE(3)$, \ sensitive to reflections", font_size=24,
                       color=MIRROR_C).to_edge(DOWN, buff=0.9)
         cite_ = cite(r"Jumper et al., \textit{Nature} (2021), \ supplementary information", corner=DR)
         head = label(r"the loss: \ frame-aligned point error", font_size=32, color=PAIR_C).to_edge(UP, buff=0.3)
@@ -114,7 +116,7 @@ class Structure(VoiceoverScene):
             "from every frame, in prediction and truth, and average the differences, each capped at ten ångströms so "
             "outliers can't dominate. <bookmark mark='c'/> A rigid motion of the whole structure cancels: FAPE ignores where "
             "the protein sits and how it is turned. <bookmark mark='d'/> But frames are built from three atoms by a "
-            "right-hand rule, and a mirror image is not a rigid motion, so FAPE sees it."
+            "right-hand rule. Rotations and translations preserve handedness; a reflection reverses it, so FAPE sees it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(fi), FadeIn(pic[3]))
             self.play(FadeIn(aj), FadeIn(pic[4]), Create(vij), FadeIn(pic[5]))
@@ -158,7 +160,7 @@ class Structure(VoiceoverScene):
         bad = [r for r in runs if r["rmsd"] >= r["rmsd_mirror"]]
         r1 = row(r"mirror image", [f"{f['drmsd_mirror']:.2f}", f"{f['rmsd_mirror']:.1f}", f"{f['fape_mirror']:.2f}"],
                  MIRROR_C, y0 - 0.55)
-        r2 = row(r"every atom moved $1$\,\AA", [f"{f['drmsd_noisy']:.2f}", f"{f['rmsd_noisy']:.1f}",
+        r2 = row(r"Gaussian noise: \ $\sigma=1$\,\AA\ per coordinate", [f"{f['drmsd_noisy']:.2f}", f"{f['rmsd_noisy']:.1f}",
                                                  f"{f['fape_noisy']:.2f}"], PRED_C, y0 - 1.1)
         gf = np.mean([r["fape"] for r in good]) if good else float("nan")
         bf = np.mean([r["fape"] for r in bad]) if bad else float("nan")
@@ -172,8 +174,9 @@ class Structure(VoiceoverScene):
         fm, dm = f["fape_mirror"], f["drmsd_mirror"]
         with self.voiceover(
             "Here is the difference, measured on our bundle and its reflection. <bookmark mark='a'/> Every distance is the "
-            f"same, so the distance error is {dm:.2f}. <bookmark mark='b'/> Yet FAPE is {fm:.2f}, worse than moving every "
-            f"atom a whole ångström at random, {f['fape_noisy']:.2f}. <bookmark mark='c'/> And chapter eight's folds, which "
+            f"same, so the distance error is {dm:.2f}. <bookmark mark='b'/> Yet FAPE is {fm:.2f}; with independent Gaussian "
+            f"noise of standard deviation one ångström per coordinate it is {f['fape_noisy']:.2f}. "
+            "<bookmark mark='c'/> And chapter eight's folds, which "
             f"distances couldn't sort, separate cleanly: those on the true fold score {gf:.2f}, mirror images {bf:.2f}."
         ) as vo:
             self.play(FadeIn(left), FadeIn(right), Create(mline), FadeIn(ll), FadeIn(tag))
@@ -235,7 +238,7 @@ class Structure(VoiceoverScene):
         with self.voiceover(
             "The last trick is recycling: run the network again on its own previous output, so that a rough first "
             "structure can sharpen the reading of the alignment. <bookmark mark='a'/> In training the number of passes is "
-            "random and the gradient flows only through the last, so extra passes cost no memory. <bookmark mark='b'/> We "
+            "random and the gradient flows only through the last, avoiding storage of training activations for every pass. <bookmark mark='b'/> We "
             f"added it to chapter nine's triangle model. {verdict}, {vs}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(loop[:5]))
@@ -283,7 +286,7 @@ class Structure(VoiceoverScene):
         tk = take_away(r"frames for residues, \ a loss that knows left from right, \ and a network run more than once")
         with self.voiceover(
             "So: residues as rigid frames, moved by attention that can't see how the protein is turned; a loss that "
-            "ignores rigid motions but not reflections; and a network that reads its own answer and tries again."
+            "ignores rotations and translations but not reflections; and a network that reads its own answer and tries again."
         ):
             self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)

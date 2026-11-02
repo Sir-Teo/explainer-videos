@@ -96,7 +96,7 @@ class History(VoiceoverScene):
             (r"sets of points", r"the order", r"Deep Sets", r"chapter 3"),
             (r"graphs", r"the numbering of nodes", r"message passing", r"chapters 4--6"),
             (r"molecules", r"turns, shifts, reflections", r"equivariant networks", r"chapter 7"),
-            (r"proteins", r"all of the above", r"AlphaFold", r"chapters 8--12"),
+            (r"proteins", r"turns, shifts; chirality matters", r"AlphaFold", r"chapters 8--12"),
             (r"fields on a sphere", r"the grid", r"mesh networks, \ operators", r"chapters 13--14"),
             (r"sequences of words", r"(little)", r"transformers", r"Parts 13--19"),
         ]
@@ -117,7 +117,8 @@ class History(VoiceoverScene):
             "What ties these together is one recipe. <bookmark mark='a'/> Ask what about your data doesn't matter. For an "
             "image, where the object sits: so convolutions. <bookmark mark='b'/> For a set of points, their order. <bookmark "
             "mark='c'/> For a graph, how its nodes are numbered. <bookmark mark='d'/> For a molecule, how it is turned or "
-            "moved. <bookmark mark='e'/> A protein has all of these. <bookmark mark='f'/> A weather field lives on a sphere, "
+            "moved. <bookmark mark='e'/> For proteins, turns and shifts are harmless, but a reflection changes chirality. "
+            "<bookmark mark='f'/> A weather field lives on a sphere, "
             "whatever the grid. <bookmark mark='g'/> Language has little symmetry, so the transformer learns its structure "
             "from data. <bookmark mark='h'/> Bronstein, Bruna, Cohen and Veličković called this geometric deep learning. A "
             "symmetry enters a model three ways: transformed copies, a standard pose, or layers that respect it; this part "

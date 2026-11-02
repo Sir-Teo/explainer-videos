@@ -72,8 +72,8 @@ systems are the published ones, cited on screen.
   violations); CASP14 (median GDT 92.4 overall, 87.0 on the hardest; 0.96 Å backbone r.m.s.d.₉₅ against 2.8 Å; Moult's
   words).
 * **10. AlphaFold 2: frames, FAPE and recycling.** Residues as rigid frames, the residue gas, invariant point attention
-  and why it is invariant; FAPE derived (clamp and length scale 10 Å), invariant to rigid motions but not to
-  reflections; FAPE against distance RMSD on our bundle's mirror image, on a structure with every atom moved 1 Å, and on
+  and why it is invariant; FAPE derived (clamp and length scale 10 Å), invariant to rotations and translations but not to
+  reflections; FAPE against distance RMSD on our bundle's mirror image, on a structure with independent Gaussian noise of standard deviation 1 Å per coordinate, and on
   chapter 8's twelve folds; recycling (a random number of passes in training, gradients through the last) added to
   chapter 9's model; July 2021 (code; RoseTTAFold, Baek et al.), the AlphaFold Protein Structure Database (214,684,311
   entries in 2022), pLDDT, the limits.
@@ -102,7 +102,7 @@ systems are the published ones, cited on screen.
   (17 December 2025).
 * **14. Neural operators.** Burgers' equation; operators against fixed grids; Chen & Chen (1995), DeepONet (Lu et al.
   2021), the Fourier neural operator (Li et al. 2021) derived from a kernel integral and the convolution theorem;
-  weights on frequencies, shift equivariance, O(n log n); an FNO trained here at 64 points, replayed, and tested from 32
+  weights on frequencies, shift equivariance of the Fourier layer (the full toy model also sees absolute coordinates), O(n log n); an FNO trained here at 64 points, replayed, and tested from 32
   to 1,024 points against a CNN of the same layout, three seeds; FourCastNet (Pathak et al. 2022).
 * **15. Materials by the million.** Crystals, the 230 space groups, DFT (Kohn & Sham 1965), stability as the lower
   convex hull; GNoME (Merchant et al. 2023): about 48,000 stable crystals known computationally before, 2.2 million
@@ -110,7 +110,7 @@ systems are the published ones, cited on screen.
   against about 1%, 736 independently realized; the active-learning flywheel run on a made-up chemistry of 6,840
   candidates, against random picks, three seeds; Cheetham & Seshadri (2024); the A-Lab (Szymanski et al. 2023), its
   critique (Leeman et al. 2024) and its 2026 correction (36 compounds of 57 targets); MACE-MP-0, MatterGen.
-* **16. Geometry and proofs.** Lean and Mathlib (291,099 theorems, 139,563 definitions, 772 contributors, October
+* **16. Geometry and proofs.** Lean and Mathlib (292,326 theorems, 140,100 definitions, 772 contributors, observed 2 November
   2026); Appel & Haken (1976), Gonthier (2005), Flyspeck (2014), the Liquid Tensor Experiment (2022); AlphaGeometry
   (Trinh et al. 2024: 100 million synthetic theorems, 9% with auxiliary constructions, a 151-million-parameter language
   model; IMO-AG-30: 25 against Wu's method 10, DD+AR 14, GPT-4 0; average gold medallist 25.9) and AlphaGeometry 2
@@ -164,14 +164,14 @@ What `compute.py` produced on the machine that rendered the video (Linux, four s
 * **Triangles in unions of cycles** (base rate 63.8%): gin 63.8%, 63.8%, 63.8%; gin_rni 63.8%, 63.8%, 63.8%; pair 100.0%, 100.0%, 100.0%; degree from constant features (RMSE): sum 0.002, mean 1.457, max 1.457.
 * **Three communities** (accuracy, three seeds): GCN 90.4%, 90.0%, 87.9%; MLP 44.6%, 47.1%, 47.5%.
 * **Over-smoothing**: λ₂ = 0.915; accuracy by depth 2, 4, 8, 16, 32, 64: plain 94%, 79%, 34%, 32%, 32%, 32%; residual 86%, 90%, 98%, 92%, 91%, 94%.
-* **Folding from distances**: classical MDS rebuilds the bundle to 8e-15 Å (up to a mirror); gradient descent on 50% of the distances with noise: 7 of 12 starts on the fold, 5 on its mirror image. Mirror: dRMSD 0.00, FAPE 0.79; 1 Å noise: dRMSD 1.39, FAPE 0.59.
+* **Folding from distances**: classical MDS rebuilds the bundle to 8e-15 Å (up to a mirror); gradient descent on 50% of the distances with noise: 7 of 12 starts on the fold, 5 on its mirror image. Mirror: dRMSD 0.00, FAPE 0.79; Gaussian noise (σ = 1 Å per coordinate): dRMSD 1.39, FAPE 0.59.
 * **Completing distance matrices** (error on hidden pairs, Å, three seeds; chain-gap baseline 5.55): pairwise 6.18 (range 6.18–6.18); triangle 1.42 (range 1.38–1.48); recycle 1.86 (range 1.82–1.93); recycling by pass: 1.87, 1.83, 1.83, 1.86, 1.93, 2.04.
 * **Set networks' training** (seed 0, 512 sets, held-out accuracy at the end): deepsets 98.7%, mlp_aug 95.9%, mlp 47.3%.
 * **Diffusion on 2D chains** (500 samples, two seeds; training data: bond deviation 0.000, clashes 0.0%): EGNN-style denoiser: bond deviation 0.075, clashes 73.6%, median distance to the nearest training chain 0.493; plain MLP on turned copies: bond deviation 0.113, clashes 45.1%, median distance to the nearest training chain 0.413; held-out real chains 0.224.
 * **Neural operator on Burgers' equation** (relative L2 error, three seeds, trained at 64 points; tested at 32, 64, 128, 256, 512, 1024): fno: 0.6%, 0.3%, 0.3%, 0.3%, 0.3%, 0.3%; cnn: 73.1%, 1.2%, 58.5%, 73.4%, 74.5%, 74.0%.
 * **Toy weather** (RMSE at 1, 5, 10, 20, 40 steps; one training run each): multimesh 0.35, 1.22, 1.84, 2.71, 6.23; finest only 0.35, 1.22, 1.86, 3.66, 10.53; persistence 0.59, 1.77, 2.19, 2.45, 2.82; climatology 2.32.
 * **Materials flywheel** (6,840 candidates, 780 truly stable, 60 checks a round, three seeds): hit rate by round, surrogate 54%, 62%, 51%, 44%, 40%, 37%, 32%, 34%; random 12%, 11%, 13%, 14%, 11%, 10%, 8%, 13%; stable compounds found after 8 rounds: surrogate 234, random 78.
-* **Matrix-multiplication tensors** (alternating least squares): 2 × 2 at rank 6, 7, 8: 0 of 30, 29 of 30, 26 of 30 starts reach zero (rank-7 algorithm verified to 6e-08); 3 × 3 at rank 23 and 26: 0 of 10 (best residual 1.2e-05), 0 of 10 (best residual 7.7e-06).
+* **Matrix-multiplication tensors** (alternating least squares): 2 × 2 at rank 6, 7, 8: 0 of 30, 29 of 30, 26 of 30 starts reach relative residual < 1e-6 (the rank-7 candidate has worst absolute entry error 6e-08 on 20 random matrix pairs; this is not an exact certificate); 3 × 3 at rank 23 and 26: 0 of 10 (best residual 1.2e-05), 0 of 10 (best residual 7.7e-06).
 * **Evolved bin-packing rules** (excess bins over the lower bound, %; 10 held-out sequences of 1,000 items): first fit 5.18, best fit 4.71; evolved, seed 0: 4.11 (`r/(|log(|g|+1)*min(s, (g*min(g, g))^2)|+1)`), seed 1: 4.29 (`((1.5 + (max(s/(|g|+1), log(|(g + min(1/(|(g + 5.7)|+1), -4))|+1)))^2))^2`).
 
 ## References
@@ -235,7 +235,7 @@ synthesis* (PRX Energy 2024); I. Batatia et al., *A foundation model for atomist
 et al., *MatterGen* (Nature 2025).
 
 Mathematics: K. Appel & W. Haken (1976); G. Gonthier (2005/2008); T. Hales et al., *A formal proof of the Kepler
-conjecture* (2017); the Liquid Tensor Experiment (2022); Mathlib statistics (leanprover-community.github.io, October
+conjecture* (2017); the Liquid Tensor Experiment (2022); Mathlib statistics (leanprover-community.github.io, accessed 2 November
 2026); T. H. Trinh et al., *Solving olympiad geometry without human demonstrations* (Nature 2024); Y. Chervonyi et al.,
 *Gold-medalist performance in solving olympiad geometry with AlphaGeometry2* (2025); T. Hubert et al., AlphaProof
 (Nature 2025); AFP, *AI catches up with humans to score 100% at top maths contest* (23 July 2026); Math Inc., Gauss

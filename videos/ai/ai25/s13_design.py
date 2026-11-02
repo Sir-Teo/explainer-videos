@@ -164,7 +164,7 @@ class Design(VoiceoverScene):
         frames = dd["egnn_s0"]["frames"]
         snaps = list(dd["snaps"])
         curve_ = np.asarray(dd["egnn_s0"]["curve"])
-        sheets = [chain_sheet(np.clip(np.asarray(fr)[:8], -3.0, 3.0), 4, scale=0.3, gap=1.25, color=STRUCT)
+        sheets = [chain_sheet(np.asarray(fr)[:8], 4, scale=0.3, gap=1.25, color=STRUCT, fit=True)
                   .move_to([2.9, 0.4, 0]) for fr in frames]
         g = axes([0, curve_[-1, 0]], [0.0, float(np.ceil(curve_[:, 1].max() * 10) / 10)], x_length=4.6, y_length=3.0,
                  xlabel=r"training step", ylabel=r"denoising loss", xticks=[0, curve_[-1, 0]], yticks=[0.0],
@@ -172,18 +172,18 @@ class Design(VoiceoverScene):
         cv = curve(g.ax, curve_[:, 0], curve_[:, 1], STRUCT, 3)
         dot = Dot(g.ax.c2p(curve_[0, 0], curve_[0, 1]), color=STRUCT)
         cnt = label(r"before training", font_size=22, color=GREY_A).next_to(sheets[0], UP, buff=0.2)
-        sl = label(r"the same eight noise seeds, \ sampled at each checkpoint", font_size=20, color=GREY_B)
+        sl = label(r"same eight noise seeds, \ each chain scaled to fit", font_size=20, color=GREY_B)
         sl.next_to(sheets[0], DOWN, buff=0.25)
         nn_s = np.mean([dd[f"egnn_s{s}"]["nn_median"] for s in (0, 1)])
         nn_h = dd["nn_heldout_median"]
         tag = note(r"computed: \ chapter 11's equivariant denoiser, \ seed $0$", font_size=20).to_corner(DR,
                                                                                                     buff=0.2)
         if nn_s < 0.7 * nn_h:
-            novel = "closer to training chains than genuinely new chains are, a sign of some copying"
+            novel = "closer to training chains than held-out real chains are, a possible sign of copying rather than proof"
         elif nn_s <= 1.5 * nn_h:
-            novel = "about as far from their nearest training chain as genuinely new chains are"
+            novel = "about as far from their nearest training chain as held-out real chains are; this does not establish novelty"
         else:
-            novel = "farther than genuinely new chains are: not copies, but not quite the real thing either"
+            novel = "farther than held-out real chains are; distance alone does not establish novelty or quality"
         clash_s = float(np.mean([dd[f"egnn_s{s}"]["clash"] for s in (0, 1)]))
         if clash_s < 0.15:
             last_stage = "then compact folds like the training set's"

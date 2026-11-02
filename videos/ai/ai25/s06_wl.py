@@ -103,10 +103,10 @@ class WL(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def theorem(self):
-        th = theorem_card(r"message passing $\le$ 1-WL", r"if colour refinement gives two nodes the same colour after "
+        th = theorem_card(r"message passing $\le$ 1-WL", r"with matching initial node features, \ if colour refinement gives two nodes the same colour after "
                           r"$t$ rounds, \ every message-passing network gives them the same state after $t$ layers; "
                           r"\ GIN, \ $h_v \leftarrow \mathrm{MLP}\big((1 + \epsilon) h_v + \sum_{u \in N(v)} h_u\big)$,"
-                          r" \ distinguishes exactly what 1-WL does", who=r"Xu, Hu, Leskovec \& Jegelka (2019); "
+                          r" \ can match 1-WL with injective updates and readout", who=r"Xu, Hu, Leskovec \& Jegelka (2019); "
                           r"Morris et al.\ (2019)", width=11.6, color=STRUCT).to_edge(UP, buff=0.3)
         rows = [
             cmath(r"c^{t}_v = c^{t}_w", r"\Rightarrow", r"h^{t}_v = h^{t}_w", font_size=32),
@@ -123,12 +123,13 @@ class WL(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=0.9, x=-1.6, buff=0.45, edge=6.9)
         with self.voiceover(
             "And no message-passing network can do better. Keyulu Xu and colleagues, and Christopher Morris and colleagues, "
-            "proved in 2019: if colour refinement can't separate two nodes after t rounds, no message-passing network "
+            "proved in 2019: starting from matching node features, if colour refinement can't separate two nodes after t rounds, no message-passing network "
             "separates them after t layers. <bookmark mark='a'/> By induction: at the start, everything is equal. <bookmark "
             "mark='b'/> Two nodes with the same colour next round had the same colour and the same multiset of neighbours' "
             "colours; <bookmark mark='c'/> by hypothesis, then, the same state and the same multiset of neighbours' states, "
             "<bookmark mark='d'/> from which a layer computes identical new states. <bookmark mark='e'/> And the bound is "
-            "reached: a sum followed by an MLP, the graph isomorphism network, separates everything colour refinement does."
+            "reached in principle: with injective updates and readout, the graph isomorphism network can match colour refinement. "
+            "A trained finite network need not attain that bound."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1))
             for k, mk in enumerate("abcd"):
@@ -214,11 +215,12 @@ class WL(VoiceoverScene):
         res_h.align_to(res, LEFT)
         cv = {k: np.asarray(gi[f"{k}_s0"]["curve"]) for k in ("gin", "gin_rni", "pair")}
         top = max(float(c_[-1, 0]) for c_ in cv.values())
-        g = axes([0, top], [0.5, 1.0], x_length=5.4, y_length=2.5, xlabel=r"training step (seed $0$)",
-                 ylabel=r"held-out", xticks=[0, top / 2, top], yticks=[0.5, 0.75, 1.0],
+        low = min(0.5, float(np.floor(min(c_[:, 1].min() for c_ in cv.values()) * 10) / 10))
+        g = axes([0, top], [low, 1.0], x_length=5.4, y_length=2.5, xlabel=r"training step (seed $0$)",
+                 ylabel=r"held-out", xticks=[0, top / 2, top], yticks=sorted({low, 0.5, 0.75, 1.0}),
                  xfmt=lambda v: f"{v:,.0f}".replace(",", "{,}"), font_size=18, center=[-3.4, -1.75, 0])
         base_l = DashedLine(g.ax.c2p(0, base), g.ax.c2p(top, base), color=GREY_D)
-        lines = {k: curve(g.ax, cv[k][:, 0], np.clip(cv[k][:, 1], 0.5, 1.0), c_, 3)
+        lines = {k: curve(g.ax, cv[k][:, 0], cv[k][:, 1], c_, 3)
                  for k, c_ in (("gin", GNN_C), ("gin_rni", AUG), ("pair", STRUCT))}
         n = gi["n_nodes"]
         gin_exact = spread < 1e-6

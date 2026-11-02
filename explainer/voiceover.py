@@ -18,6 +18,7 @@ next to its video; ``tools/build.py`` stitches those into the final cut.
 
 from __future__ import annotations
 
+import ast
 import inspect
 import json
 import re
@@ -179,7 +180,9 @@ class VoiceoverScene(Scene):
         movie.parent.mkdir(parents=True, exist_ok=True)
         meta = {"scene": type(self).__name__, "duration": self.renderer.time, "lines": self._narration}
         movie.with_suffix(".narration.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1))
-        movie.with_suffix(".srt").write_text(to_srt(subtitle_cues(self._narration)))
+        manifest = Path(inspect.getfile(type(self))).with_name("manifest.py")
+        movie.with_suffix(".srt").write_text(to_srt(subtitle_cues(
+            self._narration, preserve_terms=_subtitle_term_boundaries(manifest))))
 
 
 # ---------------------------------------------------------------------------
@@ -189,17 +192,75 @@ class VoiceoverScene(Scene):
 _SOFT_BREAK = {"en": (",", ";", ":"), "zh": ("，", "、", "；", "：")}
 
 
-def _sentences(words: list, ends: tuple) -> list[list]:
+def _subtitle_term_boundaries(manifest: Path) -> bool:
+    """Read a static per-video opt-in without executing the scene or its producers."""
+    if not manifest.exists():
+        return False
+    enabled = False
+    for node in ast.parse(manifest.read_text()).body:
+        if (isinstance(node, ast.Assign)
+                and any(isinstance(t, ast.Name) and t.id == "SUBTITLE_TERM_BOUNDARIES" for t in node.targets)):
+            enabled = isinstance(node.value, ast.Constant) and node.value.value is True
+    return enabled
+
+
+def _sentences(words: list, ends: tuple, *, preserve_terms: bool = False) -> list[list]:
     out, cur = [], []
     for w in words:
         cur.append(w)
-        if w[0].endswith(ends):
+        # A quoted modifier is not a sentence; punctuation inside a closing quote still is.
+        ending = w[0].rstrip("”") if preserve_terms and "”" in ends else w[0]
+        if ending.endswith(ends):
             out.append(cur)
             cur = []
     return out + [cur] if cur else out
 
 
-def _even_split(words: list, language: str, max_chars: int) -> list[list]:
+def _keep_subtitle_terms(parts: list[list], language: str, max_chars: int) -> list[list]:
+    """Keep versioned names and isolated Latin subjects intact in Chinese cues.
+
+    Adjust neighbouring cuts, preserving the words and their original timings.
+    If neither neighbour has room, give a fitting pair its own cue. Keep the
+    original cuts when the complete name exceeds the cue limit.
+    """
+    if language != "zh" or not parts:
+        return parts
+    out = [list(parts[0])]
+    for part in parts[1:]:
+        right, left = list(part), out[-1]
+        if (left and right
+                and re.fullmatch(r"[A-Za-z][A-Za-z0-9-]*", left[-1][0].strip())
+                and re.fullmatch(r"\d+(?:\.\d+)*[，。、；：？！]?", right[0][0].strip())):
+            def width(words):
+                return len(lang.join([w[0] for w in words], language))
+
+            if width([left[-1], right[0]]) > max_chars:
+                out.append(right)
+                continue
+            if width(left + [right[0]]) <= max_chars:
+                left.append(right.pop(0))
+            elif width([left[-1]] + right) <= max_chars:
+                right.insert(0, left.pop())
+            else:
+                pair = [left.pop(), right.pop(0)]
+                if not left:
+                    out.pop()
+                out.append(pair)
+        if right:
+            out.append(right)
+    out = [part for part in out if part]
+    i = 0
+    while i + 1 < len(out):
+        left, right = out[i:i + 2]
+        if (len(left) == 1 and re.fullmatch(r"[A-Za-z][A-Za-z0-9-]*", left[0][0].strip())
+                and len(lang.join([w[0] for w in left + right], language)) <= max_chars):
+            out[i:i + 2] = [left + right]
+        else:
+            i += 1
+    return out
+
+
+def _even_split(words: list, language: str, max_chars: int, *, preserve_terms: bool = False) -> list[list]:
     """Cut one sentence into the fewest cues of at most ``max_chars``, as even in length as possible and preferring
     cuts after a comma: no orphaned last word, no cue twice as long as its neighbour."""
     n = len(words)
@@ -244,17 +305,18 @@ def _even_split(words: list, language: str, max_chars: int) -> list[list]:
                     j = prev[j][c]
                 chosen, chosen_cost = parts[::-1], cost
         k += 1
-    return chosen
+    return _keep_subtitle_terms(chosen, language, max_chars) if preserve_terms else chosen
 
 
-def subtitle_cues(lines: list[dict], offset: float = 0.0, language: str | None = None) -> list[tuple[float, float, str]]:
-    """Split narration into readable cues: one per sentence, with long sentences cut evenly (see _even_split)."""
+def subtitle_cues(lines: list[dict], offset: float = 0.0, language: str | None = None,
+                  *, preserve_terms: bool = False) -> list[tuple[float, float, str]]:
+    """Split narration into cues; repaired Chinese term boundaries require an explicit video opt-in."""
     language = language or lang.LANG
     ends, max_chars = lang.SENTENCE_END[language], lang.CUE_CHARS[language]
     cues = []
     for line in lines:
-        for sentence in _sentences(line["words"], ends):
-            for part in _even_split(sentence, language, max_chars):
+        for sentence in _sentences(line["words"], ends, preserve_terms=preserve_terms):
+            for part in _even_split(sentence, language, max_chars, preserve_terms=preserve_terms):
                 cues.append([offset + part[0][1], offset + part[-1][2], lang.join([w[0] for w in part], language)])
     # Keep each cue on screen until the next one starts (max +1.5 s).
     for a, b in zip(cues, cues[1:]):

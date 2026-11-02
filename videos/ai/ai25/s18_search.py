@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (AUG, HIST, LEAN_C, PAIR_C, PART, PLAIN, PRED_C, SEARCH_C, STRUCT, SYM, TRUE_C,
-                                   load, matrix_image, node_box, take_away, takeaway_anims, tiny_words, words_num)
+                                   load, matrix_image, node_box, take_away, takeaway_anims, words_num)
 
 
 class Search(VoiceoverScene):
@@ -178,7 +178,7 @@ class Search(VoiceoverScene):
                            color=GREY_A))
         for R, s_, n_, best in res:
             col = SEARCH_C if s_ else PLAIN
-            tab.add(label(rf"rank ${R}$: \ ${s_}$ of ${n_}$ reach zero error \ (best ${sci(best, 1)}$)",
+            tab.add(label(rf"rank ${R}$: \ ${s_}$ of ${n_}$ reach residual $< 10^{{-6}}$ \ (best ${sci(best, 1)}$)",
                           font_size=22, color=col))
         n3a, n3b = mm["n3_r23"], mm["n3_r26"]
         n3_tries = len(n3a["res"])
@@ -187,23 +187,30 @@ class Search(VoiceoverScene):
                       color=SEARCH_C if n3a["success"] else GREY_B))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([0, -2.95, 0])
         ver = mm["n2_r7_verify"]
-        vdp = int(np.floor(-np.log10(max(ver, 1e-300))))
+        verify_dp = max(0, -int(np.floor(np.log10(ver)))) if ver > 0 else 0
+        verify_mantissa = ver * 10.0 ** verify_dp
         r6, r7, r8 = res
-        s6 = (f"At rank six, none of the {r6[2]} starts gets below an error of {r6[3]:.2f}: there is no "
+        s6 = (f"At rank six, none of the {r6[2]} starts passes the numerical threshold; the best relative error is "
+              f"{r6[3]:.2f}: there is no "
               "six-multiplication algorithm to find" if r6[1] == 0 else
-              f"At rank six, {r6[1]} starts report zero error, which would contradict the theorem: a numerical "
-              "artefact")
-        s7 = (f"At rank seven, {r7[1]} of {r7[2]} starts find one: a Strassen-like algorithm, which multiplies "
-              f"random matrices correctly to {vdp} decimal places" if r7[1] else "At rank seven our search found none")
+              f"At rank six, {r6[1]} starts pass the numerical threshold; interpreting those as exact algorithms would "
+              "contradict the theorem")
+        s7 = (f"At rank seven, {r7[1]} of {r7[2]} starts pass the numerical threshold. The best candidate's worst "
+              f"absolute entry error over twenty random matrix pairs is about {verify_mantissa:.1f} times ten to "
+              f"the minus {verify_dp}: a numerical check, not an exact "
+              "certificate" if r7[1] else "At rank seven our search found none")
         n3_ok = n3a["success"]
         if n3_ok:
             s3 = (f"For three by three matrices the record, Julian Laderman's from 1976, is twenty-three "
-                  f"multiplications, and {n3_ok} of our {n3_tries} starts at that rank found one")
+                  f"multiplications, and {n3_ok} of our {n3_tries} starts at that rank pass the numerical threshold")
         else:
-            tiny3 = tiny_words(min(n3a["best"], n3b["best"]))
+            best3 = min(n3a["best"], n3b["best"])
+            best3_dp = max(0, -int(np.floor(np.log10(best3)))) if best3 > 0 else 0
+            best3_mantissa = best3 * 10.0 ** best3_dp
             s3 = (f"For three by three matrices the record, Julian Laderman's from 1976, is twenty-three "
-                  f"multiplications; from {n3_tries} starts at that rank, and as many at twenty-six, our search got "
-                  f"within {tiny3} of zero but never exactly there: as the matrices grow, exact decompositions become "
+                  f"multiplications; from {n3_tries} starts at that rank, and as many at twenty-six, our best relative "
+                  f"tensor error was about {best3_mantissa:.1f} times ten to the minus {best3_dp}, but never reached "
+                  "the numerical threshold: as the matrices grow, exact decompositions become "
                   "needles in a haystack")
         tag = note(r"computed", font_size=20).to_corner(DR, buff=0.2)
         head = label(r"matrix multiplication as a tensor", font_size=30, color=SEARCH_C).to_edge(UP, buff=0.25)
@@ -214,7 +221,7 @@ class Search(VoiceoverScene):
             "algorithm with R multiplications. <bookmark mark='d'/> In 1969 Volker Strassen found seven for two by "
             "two matrices, not eight, and Shmuel Winograd proved two years later that seven is the minimum. "
             "<bookmark mark='e'/> We searched for these decompositions numerically, from thirty random starts at "
-            f"each rank. {s6}. {s7}. <bookmark mark='f'/> {s3}."
+            f"each rank. {s6}. <bookmark mark='check'/> {s7}. <bookmark mark='f'/> {s3}."
         ) as vo:
             self.play(FadeIn(head))
             for k, mk in enumerate("abc"):

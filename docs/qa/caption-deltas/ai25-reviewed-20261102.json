@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "owner": "ai25",
+  "target": "videos/ai/ai_text_zh.json",
+  "base_public_commit": "847922d9f3f3c12dd1af5321f246b02736a3a3e2",
+  "integration": "Guarded entries for root composition only. This document is not applied automatically; preserve all unrelated entries and fail if an expected old value has changed.",
+  "entries": [
+    {
+      "table": "strings",
+      "key": "2026 \\ two systems, \\ company reports",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "2026 \\ 两个系统，\\ 公司所报"
+    },
+    {
+      "table": "strings",
+      "key": "Gaussian noise: \\ $\\sigma=1$\\,\\AA\\ per coordinate",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "高斯噪声：\\\\ 每个坐标 $\\sigma=1$\\,\\AA"
+    },
+    {
+      "table": "strings",
+      "key": "Gemini on $700$ Erd\\H{o}s problems marked open: \\ $2$ full and $3$ partial new solutions, \\ $8$ previously solved in the literature",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "Gemini处理$700$个标为未解的埃尔德什问题：\\ $2$个完整和$3$个部分新解答，\\ $8$个文献里早已解决"
+    },
+    {
+      "table": "strings",
+      "key": "Mathlib, \\ 2 November 2026: \\ $292{,}326$ theorems, \\ $140{,}100$ definitions, \\ $772$ contributors",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "Mathlib，\\ 2026年11月2日：\\ $292{,}326$条定理，\\ $140{,}100$个定义，\\ $772$位贡献者"
+    },
+    {
+      "table": "strings",
+      "key": "compact continuous groups: \\ a normalized Haar integral \\ (e.g.\\ $SO(3)$)",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "紧致连续群：\\ 归一化哈尔积分（如 $SO(3)$）"
+    },
+    {
+      "table": "strings",
+      "key": "connected undirected graph, \\ self-loops: \\ $H \\leftarrow \\hat A H$",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "连通无向图，带自环：\\ $H \\leftarrow \\hat A H$"
+    },
+    {
+      "table": "strings",
+      "key": "decay $\\propto \\lambda_2^{2k}$, \\ $\\lambda_2 = 0.915$",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "衰减 $\\propto \\lambda_2^{2k}$，\\ $\\lambda_2 = 0.915$"
+    },
+    {
+      "table": "strings",
+      "key": "diffusion module: \\\\ every atom's coordinates",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "扩散模块：\\\\ 每个原子的坐标"
+    },
+    {
+      "table": "strings",
+      "key": "finite $G$, \\ linear output action: \\ average $f$",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "有限群 $G$、线性输出作用：\\ 平均 $f$"
+    },
+    {
+      "table": "strings",
+      "key": "formation energy per atom \\ (toy units)",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "每原子形成能（玩具单位）"
+    },
+    {
+      "table": "strings",
+      "key": "late decay $\\propto \\lambda_2^{2k}$, \\ $\\lambda_2 = 0.915$",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "后期衰减 $\\propto \\lambda_2^{2k}$，\\ $\\lambda_2 = 0.915$"
+    },
+    {
+      "table": "strings",
+      "key": "one sample, \\ noise to chain \\ (computed; \\ each panel scaled to fit)",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "一个样本，从噪声到链（计算所得；\\ 每幅图单独缩放以容纳）"
+    },
+    {
+      "table": "strings",
+      "key": "rank $6$: \\ $0$ of $30$ reach residual $< 10^{-6}$ \\ (best $0.35$)",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "秩 $6$：\\ $0$/$30$ 个达到残差 $<10^{-6}$ \\ （最佳 $0.35$）"
+    },
+    {
+      "table": "strings",
+      "key": "rank $7$: \\ $29$ of $30$ reach residual $< 10^{-6}$ \\ (best $1.2 \\times 10^{-8}$)",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "秩 $7$：\\ $29$/$30$ 个达到残差 $<10^{-6}$ \\ （最佳 $1.2 \\times 10^{-8}$）"
+    },
+    {
+      "table": "strings",
+      "key": "real numbers: \\ the power sums $\\sum_i x_i^k$, \\ $k = 1, \\dots, n$, \\ pin down $n$ numbers (Newton); \\\\ continuous universal encoders need at least $n$ dimensions \\ (Wagstaff et al.\\ 2019)",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "实数：\\ 幂和 $\\sum_i x_i^k$，$k=1,\\dots,n$，确定 $n$ 个数（牛顿）；\\\\ 连续的通用编码器至少需要 $n$ 维（Wagstaff等，2019）"
+    },
+    {
+      "table": "strings",
+      "key": "right-handed frames: \\ invariant under $SE(3)$, \\ sensitive to reflections",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "右手坐标系：\\ 对 $SE(3)$ 不变，\\ 对反射敏感"
+    },
+    {
+      "table": "strings",
+      "key": "same eight noise seeds, \\ each chain scaled to fit",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "同样八个噪声种子；\\ 每条链单独缩放以容纳"
+    },
+    {
+      "table": "strings",
+      "key": "test RMS",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "测试 RMS"
+    },
+    {
+      "table": "strings",
+      "key": "the Fourier layer commutes with shifts; \\ our full model also sees absolute $x$",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "傅里叶层与平移可交换；\\ 完整模型也接收绝对坐标 $x$"
+    },
+    {
+      "table": "strings",
+      "key": "the kernel checks the declared statement",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "内核检查所声明的命题"
+    },
+    {
+      "table": "strings",
+      "key": "turned + shifted",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "转动加平移"
+    },
+    {
+      "table": "strings",
+      "key": "turns, shifts; chirality matters",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "转动、平移；手性不可忽略"
+    },
+    {
+      "table": "strings",
+      "key": "vorticity RMSE \\ (toy units)",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "涡度 RMSE（玩具单位）"
+    },
+    {
+      "table": "strings",
+      "key": "with matching initial node features, \\ if colour refinement gives two nodes the same colour after $t$ rounds, \\ every message-passing network gives them the same state after $t$ layers; \\ GIN, \\ $h_v \\leftarrow \\mathrm{MLP}\\big((1 + \\epsilon) h_v + \\sum_{u \\in N(v)} h_u\\big)$, \\ can match 1-WL with injective updates and readout",
+      "expected_present": false,
+      "expected": null,
+      "replacement_present": true,
+      "replacement": "初始节点特征匹配时，若颜色细化在 $t$ 轮后给两个节点同色，\\ 每个消息传递网络在 $t$ 层后也给它们相同状态；\\ GIN，$h_v \\leftarrow \\mathrm{MLP}\\big((1+\\epsilon)h_v+\\sum_{u\\in N(v)}h_u\\big)$，\\ 在单射更新和读出的条件下可匹配 1-WL"
+    }
+  ]
+}

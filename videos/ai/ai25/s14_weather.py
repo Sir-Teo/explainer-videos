@@ -170,27 +170,25 @@ class Weather(VoiceoverScene):
         mm, fi = w["multimesh"], w["finest"]
         pers, clim = np.asarray(w["persistence"]), np.asarray(w["climatology"])
         rm, rf_ = np.asarray(mm["rmse"]), np.asarray(fi["rmse"])
-        top = float(np.ceil(max(pers.max(), clim.max(), min(rm.max(), 2 * clim.max()), min(rf_.max(),
-                                                                                         2 * clim.max())) + 0.5))
+        top = float(np.ceil(max(pers.max(), clim.max(), rm.max(), rf_.max()) + 0.5))
         g = axes([1, lead], [0, top], x_length=6.2, y_length=3.8, xlabel=r"steps ahead",
-                 ylabel=r"error \ (root mean square)", xticks=[1, 10, 20, 30, 40], yticks=[0, top],
+                 ylabel=r"vorticity RMSE \ (toy units)", xticks=[1, 10, 20, 30, 40], yticks=[0, top],
                  xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", center=[-2.3, -0.2, 0])
-        clip = lambda y: np.minimum(y, top)  # noqa: E731
-        cp = curve(g.ax, t, clip(pers), GREY_B, 3)
-        cc = DashedLine(g.ax.c2p(1, clim.mean()), g.ax.c2p(lead, clim.mean()), color=GREY_C)
-        cm = curve(g.ax, t, clip(rm), STRUCT, 3.5)
-        cf = curve(g.ax, t, clip(rf_), PLAIN, 3)
+        cp = curve(g.ax, t, pers, GREY_B, 3)
+        cc = curve(g.ax, t, clim, GREY_C, 2.5)
+        cm = curve(g.ax, t, rm, STRUCT, 3.5)
+        cf = curve(g.ax, t, rf_, PLAIN, 3)
         lg = legend([(STRUCT, r"mesh network, \ multimesh"), (PLAIN, r"the same, \ finest edges only"),
                      (GREY_B, r"persistence: \ nothing changes"), (GREY_C, r"climatology: \ the average state")],
                     font_size=20).move_to([4.4, 1.2, 0])
-        beat_p = [k for k in range(lead) if rm[k] < pers[k]]
-        hor = beat_p[-1] + 1 if beat_p and beat_p[0] == 0 else 0
-        cross_c = next((k + 1 for k in range(lead) if rm[k] > clim.mean()), None)
+        hor = next((k for k in range(lead) if rm[k] >= pers[k]), lead)
+        cross_c = next((k + 1 for k in range(lead) if rm[k] > clim[k]), None)
         s1 = (f"One step ahead its error is {rm[0]:.2f}, against {pers[0]:.2f} for assuming nothing changes"
               if rm[0] < pers[0] else f"Even one step ahead it is no better than assuming nothing changes")
         s2 = (f"It stays ahead of persistence for {hor} steps" if hor >= 2 else "Its lead over persistence is short-lived")
-        s3 = (f"and after {cross_c} steps it is worse than simply forecasting the average state, as every forecast of "
-              "a chaotic system eventually is" if cross_c else "and it stays better than the average state throughout")
+        s3 = (f"and at step {cross_c} it first becomes worse than forecasting the training-average state; "
+              "chaos limits predictability, but does not require every forecast to become worse than climatology"
+              if cross_c else "and it stays better than the average state throughout")
         d10 = (np.mean(rf_[:10]) - np.mean(rm[:10])) / np.mean(rm[:10])
         e20f, e20m = float(rf_[19]), float(rm[19])
         if d10 > 0.05:
@@ -200,7 +198,7 @@ class Weather(VoiceoverScene):
             s4 = (f"Over the first ten steps the long edges make no difference; they matter later: by step twenty the "
                   f"network with only the shortest edges is off by {e20f:.1f}, against {e20m:.1f}")
         else:
-            s4 = "In our toy the long edges don't help, at any lead time"
+            s4 = "In our toy these summary comparisons show no clear advantage from the long edges"
         tag = note(r"computed: \ $8$ test runs, \ $40$ steps each; \ one training run per network", font_size=20)
         tag.to_corner(DR, buff=0.2)
         with self.voiceover(
@@ -250,7 +248,10 @@ class Weather(VoiceoverScene):
         soft = framed(field_image(Fb, 2.3, vm), color=PLAIN)
         pics = Group(Group(label(r"one possible future", font_size=20, color=GREY_A), sharp).arrange(DOWN, buff=0.12),
                      Group(label(r"the average of many: \ blur", font_size=20, color=PLAIN), soft)
-                     .arrange(DOWN, buff=0.12)).arrange(DOWN, buff=0.35).move_to([-4.6, -0.5, 0])
+                     .arrange(DOWN, buff=0.12)).arrange(DOWN, buff=0.35)
+        # Keep both illustrations above the takeaway in either narration language.
+        pics.height = min(pics.height, 4.8)
+        pics.move_to([-4.6, 0, 0])
         pn = note(r"illustrative", font_size=18).next_to(pics, DOWN, buff=0.12)
         cite_ = cite(r"Price et al.\ (2024); \ ECMWF (2025, 2026); \ NOAA (2025)", corner=DR)
         with self.voiceover(
