@@ -179,10 +179,10 @@
    "en": "Chapter six. The memory hierarchy.",
    "zh": "第6章。存储层次。"
   },
-  "5248a605cb98": {
+  "612f3317f02a": {
    "scene": "Hierarchy",
-   "en": "A GPU's memory is not one thing. Let's zoom in on an H100. <bookmark mark='a'/> Around the chip sit stacks of high-bandwidth memory, DRAM dies piled on top of each other: 80 gigabytes, read at 3.35 terabytes a second, but hundreds of cycles away. <bookmark mark='b'/> On the chip itself, a level-two cache of fifty megabytes, shared by all 132 streaming multiprocessors, about half as far. <bookmark mark='c'/> Inside each multiprocessor: a combined L1 and shared-memory pool of 256 kibibytes, of which up to 228 can be shared memory that the programmer fills on purpose; <bookmark mark='d'/> and the registers, another 256 kilobytes, right next to the arithmetic, read every cycle. Each step down is smaller and closer, and much faster to read.",
-   "zh": "GPU的内存不是一样东西。我们放大来看一块H100。<bookmark mark='a'/>芯片周围是一叠叠高带宽内存，DRAM裸片一层层摞起来：80GB，每秒能读3.35太字节，但远在几百个周期之外。<bookmark mark='b'/>芯片本身上，有五十兆字节的二级缓存，由全部132个流式多处理器共用，距离大约是一半。<bookmark mark='c'/>每个多处理器里面：L1与共享内存合计256KiB，其中最多228KiB可以作为由程序员有意填充的共享内存；<bookmark mark='d'/>还有寄存器，又是256千字节，紧挨着运算单元，每个周期都能读。每往下一层，就更小、更近，读起来也快得多。"
+   "en": "A GPU's memory is not one thing. Let's zoom in on an H100. <bookmark mark='a'/> Around the chip sit stacks of high-bandwidth memory, DRAM dies piled on top of each other: 80 gigabytes, read at 3.35 terabytes a second, but hundreds of cycles away. <bookmark mark='b'/> On the chip itself, a level-two cache of fifty megabytes, shared by all 132 streaming multiprocessors, about half as far. <bookmark mark='c'/> Inside each multiprocessor: a combined L1 and shared-memory pool of 256 kibibytes, of which up to 228 can be shared memory that the programmer fills on purpose; <bookmark mark='d'/> and the registers, another 256 kibibytes, right next to the arithmetic, read every cycle. Each step down is smaller and closer, and much faster to read.",
+   "zh": "GPU的内存不是一样东西。我们放大来看一块H100。<bookmark mark='a'/>芯片周围是一叠叠高带宽内存，DRAM裸片一层层摞起来：80GB，每秒能读3.35太字节，但远在几百个周期之外。<bookmark mark='b'/>芯片本身上，有五十兆字节的二级缓存，由全部132个流式多处理器共用，距离大约是一半。<bookmark mark='c'/>每个多处理器里面：L1与共享内存合计256KiB，其中最多228KiB可以作为由程序员有意填充的共享内存；<bookmark mark='d'/>还有寄存器，容量同样是256KiB，紧挨着运算单元，每个周期都能读。每往下一层，就更小、更近，读起来也快得多。"
   },
   "a6ab681d03ea": {
    "scene": "Hierarchy",
