@@ -39,15 +39,13 @@ class Frontier(VoiceoverScene):
                       font_size=18)
         VGroup(a, b, c).arrange(RIGHT, buff=0.25, aligned_edge=UP).scale_to_fit_width(13.4).move_to(UP * 0.2)
         with self.voiceover(
-            "The frontier is machines that read statements. In 2023 Jules van Binsbergen, Xiao Han and Alejandro "
-            "Lopez-Lira built a machine-learning forecast of earnings as an unbiased benchmark and found analysts' "
-            "forecasts biased upward, more so at long horizons, with the bias predicting low returns; the usual "
-            "linear models did worse than the analysts. <bookmark mark='a'/> In 2025 a reply in the same journal "
-            "argued that the machine's edge came from information it could not have had in real time, and that "
-            "without it linear models forecast as well; the original authors dispute that. It is unsettled, and it is "
-            "the point-in-time problem of chapter five again. <bookmark mark='b'/> Sean Cao and coauthors trained "
-            "a model on disclosures and found it beat most analysts' stock forecasts, while analysts kept the edge "
-            "where institutional knowledge mattered, and the two together beat either."
+            "The frontier is machines that read statements. In 2023 Jules van Binsbergen, Xiao Han and Alejandro Lopez-Lira "
+            "built a machine-learning forecast of earnings as an unbiased benchmark, and found analysts' forecasts biased upward, "
+            "more so at long horizons, with the bias predicting low returns. <bookmark mark='a'/> In 2025 a reply in the same "
+            "journal argued that the machine's edge came from information it could not have had in real time; the authors "
+            "dispute it. It is the point-in-time problem of chapter five again. <bookmark mark='b'/> Sean Cao and coauthors found "
+            "an AI trained on disclosures beat most analysts' stock forecasts, while analysts kept the edge where institutional "
+            "knowledge mattered, and the two together did best."
         ) as vo:
             self.play(FadeIn(a, shift=UP * 0.2))
             vo.wait_until("a")
@@ -71,14 +69,12 @@ class Frontier(VoiceoverScene):
                        width=6.0, font_size=20)
         VGroup(w, fb).arrange(RIGHT, buff=0.35, aligned_edge=UP).scale_to_fit_width(13.3).move_to(UP * 0.2)
         with self.voiceover(
-            "Large language models arrived in this literature fast, and so did a cautionary tale. A widely read 2024 "
-            "working paper reported that GPT-4, given anonymised statements, predicted the direction of earnings "
-            "changes better than analysts. Its authors withdrew it in 2025 while they review the findings, and an "
-            "earlier paper of theirs was withdrawn after a co-author's own replication did not support it. Neither is "
-            "a finding; both are reminders to replicate. <bookmark mark='a'/> On plain questions about filings the "
-            "record is sobering: in the FinanceBench test of 2023, GPT-4-Turbo with document retrieval answered "
-            "eighty-one percent of a hundred and fifty questions wrongly or not at all. Part twenty-eight measures "
-            "newer models."
+            "Large language models arrived fast, and so did a cautionary tale. A widely read 2024 working paper reported GPT-4 "
+            "beating analysts at predicting the direction of earnings changes. Its authors withdrew it in 2025 while they review "
+            "the findings, and an earlier paper of theirs was withdrawn after a co-author's own replication did not support it. "
+            "Neither is a finding; both are reminders to replicate. <bookmark mark='a'/> On plain questions about filings the "
+            "record is sobering: in FinanceBench, GPT-4-Turbo with retrieval got eighty-one percent of a hundred and fifty "
+            "questions wrong or refused. Part twenty-eight measures newer models."
         ) as vo:
             self.play(FadeIn(w, shift=UP * 0.2))
             vo.wait_until("a")
@@ -102,13 +98,11 @@ class Frontier(VoiceoverScene):
                       font_size=18),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).scale_to_fit_width(13.4).move_to(UP * 0.2)
         with self.voiceover(
-            "Three more threads. Theis Jensen, Bryan Kelly and Lasse Pedersen asked in 2023 whether finance has a "
-            "replication crisis, and on a hundred and fifty-three factors in ninety-three countries answered mostly "
-            "no: the counterweight to chapter fourteen's decay. <bookmark mark='a'/> Niels Gormsen and Eben Lazarus "
-            "found that firms whose cash flows come sooner earn higher returns, pricing chapter two's duration. "
-            "<bookmark mark='b'/> And Andrea Eisfeldt, Edward Kim and Dimitris Papanikolaou showed that counting "
-            "intangible capital in book value changes what value investing finds: the book in chapter eight's formula "
-            "is an accounting choice."
+            "Three more threads. Jensen, Kelly and Pedersen asked in 2023 whether finance has a replication crisis, and on a "
+            "hundred and fifty-three factors in ninety-three countries answered mostly no: the counterweight to chapter "
+            "fourteen. <bookmark mark='a'/> Gormsen and Lazarus found that firms whose cash flows come sooner earn higher returns, "
+            "pricing chapter two's duration. <bookmark mark='b'/> And Eisfeldt, Kim and Papanikolaou showed that counting "
+            "intangible capital in book value changes what value investing finds."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -166,16 +160,12 @@ class Frontier(VoiceoverScene):
                    "learn that losses fade faster than profits; ridge on splines, which can bend too, ties it. "
                    if beats else "The network does not beat least squares by more than its own seed spread. ")
         with self.voiceover(
-            "The House trains its own small forecaster, on a simulated panel whose truth we know: profits persist "
-            "with point eight, losses only with point four, accruals carry a reversing error, and three of the "
-            "fourteen items are pure noise. Next year's earnings over assets is the target. The models get equal "
-            "data: a random walk, ordinary least squares, ridge regression on splines, and a two-layer neural network, "
-            "five seeds. <bookmark mark='a'/> Here the network learns. On the right its validation error, with the "
-            "spread of five seeds as a band and the linear baselines as dashed lines; on the left, its predictions "
-            "for the test years against what happened, tightening around the diagonal. <bookmark mark='b'/> The "
-            f"verdict. The random walk, {rw * 1e4:.2f}; least squares, {ols * 1e4:.2f}; the network, {mlp * 1e4:.2f}. "
-            + verdict + f"All of them sit just above the noise floor of {f['floor'] * 1e4:.2f}. With clean, low-dimensional "
-            "inputs, a flexible model has little to find; the frontier's fights are about the inputs, not the network."
+            "The House trains a small earnings forecaster on a simulated panel whose truth we know: losses fade faster than "
+            "profits, accruals reverse, and three of fourteen items are noise. A random walk, least squares, ridge on splines and "
+            "a neural network, five seeds, equal data. <bookmark mark='a'/> The network learning: validation error with the seed "
+            f"band and the linear baselines; its test predictions tightening. <bookmark mark='b'/> Random walk {rw * 1e4:.2f}, "
+            f"least squares {ols * 1e4:.2f}, network {mlp * 1e4:.2f}. " + verdict + f"All sit just above the noise floor of "
+            f"{f['floor'] * 1e4:.2f}: with clean inputs, the fights are about the inputs, not the network."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp), FadeIn(base))
             vo.wait_until("a")

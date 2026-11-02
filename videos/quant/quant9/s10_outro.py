@@ -67,13 +67,11 @@ class Outro(VoiceoverScene):
                              rf"The trial counter still reads {env['trials']}: this part tested no strategy.", 12.4, 22,
                              QC.HOUSE).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The House's arbitrage checker now holds this part's tools. <bookmark mark='a'/> Parity, and the forward "
-            "read from raw trades. The fundamental theorem as a linear program, with the teaching simplex. "
-            "Super-replication in one period and through time. The static and calendar checks. Model-free bounds, "
-            "their hedges, and the entropic solver. And Ross recovery, with its warning label. "
-            "<bookmark mark='b'/> The tenth rule: no model is fitted to a surface that fails these checks; the "
-            "surface is repaired or rejected first, and a model whose own prices fail them is rejected too. This part "
-            f"tested no strategy, so the trial counter still reads {env['trials']}."
+            "The House's arbitrage checker now holds this part's tools: <bookmark mark='a'/> parity "
+            "and the forward from trades; the theorem as a linear program; super-replication; the "
+            "static and calendar checks; model-free bounds and their hedges; and Ross recovery, with "
+            "its warning label. <bookmark mark='b'/> Rule ten: no model is fitted to a surface that "
+            f"fails them. No strategy was tested, so the trial counter reads {env['trials']}."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["data"], color=QC.HOUSE, scale_factor=1.05))
@@ -111,16 +109,13 @@ class Outro(VoiceoverScene):
         if rows.width > 13.2:
             rows.scale_to_fit_width(13.2)
         with self.voiceover(
-            "Part nine in ten lines. Parity holds on Bitcoin options to a few basis points, and its forward matches "
-            "the futures market. Where shorting is costly, parity prices the cost, and a box spread is a loan, if "
-            "exercise is European. No arbitrage means strictly positive state prices: a separating plane, which a "
-            "simplex finds. State prices, the discount factor and Q are one object in three units. Two states make "
-            "a tree that replicates; three leave an interval, a linear program and its dual. Options complete the "
-            "market, and without them the super-hedger prices at the widest volatility. Continuous time needs "
-            "admissible strategies and no free lunch with vanishing risk, and it allows bubbles. Any positive asset "
-            "can be the unit of account. Butterflies build the density, whose tails depend on the fit. And Ross "
-            "recovery rests on an assumption prices cannot test, while vanilla prices bound exotic ones with no model "
-            "at all."
+            "Part nine in ten lines. Parity holds to basis points and matches the futures. Where "
+            "shorting is costly, parity prices the cost. No arbitrage means positive state prices. "
+            "State prices, the discount factor and Q are one object. Two states replicate; three "
+            "leave an interval. Options complete the market. Continuous time needs admissibility and "
+            "allows bubbles. Any asset can be the unit. Butterflies build the density, whose tails "
+            "depend on the fit. And Ross recovery rests on an untestable assumption, while vanilla "
+            "prices bound exotic ones."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=20))
@@ -132,12 +127,13 @@ class Outro(VoiceoverScene):
         if cards.height > 7.6:
             cards.scale_to_fit_height(7.6)
         with self.voiceover(
-            "Four desk questions. The call at ten and the put at seven: no arbitrage, both sides are three. "
-            "<bookmark mark='a'/> A box between a hundred and a hundred and ten, one year, rates at four percent, "
-            "should cost about nine sixty-one; it is a loan, and with American options it is not riskless. "
-            "<bookmark mark='b'/> A digital from two calls: the call spread divided by its width, the slope of the "
-            "call curve. <bookmark mark='c'/> And a negative stub is not a riskless arbitrage: the short leg can be "
-            "recalled, and convergence can outlast your funding. Full solutions are in the notes."
+            "Four desk questions. The call at ten and the put at seven: no arbitrage, both sides are "
+            "three. <bookmark mark='a'/> The box between a hundred and a hundred and ten, one year, "
+            "four percent rates: about nine sixty-one, a loan, and not riskless with American "
+            "options. <bookmark mark='b'/> A digital from two calls: the call spread divided by its "
+            "width, the slope of the call curve. <bookmark mark='c'/> And a negative stub is not a "
+            "riskless arbitrage: the short leg can be recalled, and convergence can outlast your "
+            "funding. Full solutions are in the notes."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -152,10 +148,10 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=21)
         with self.voiceover(
-            "And seven problems: parity with a borrowing fee, the fundamental theorem from Stiemke's lemma, the "
-            "binomial probability, the butterfly and the density, the trinomial interval and its dual, the "
-            "forward-start call's band, and Margrabe by change of numeraire. Solutions, in English and Chinese, are "
-            "in the notes."
+            "And seven problems: parity with a borrowing fee, the theorem from Stiemke's lemma, the "
+            "binomial probability, the butterfly and the density, the trinomial interval and its "
+            "dual, the forward-start call's band, and Margrabe by change of numeraire. Solutions, in "
+            "English and Chinese, are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(4)
@@ -172,12 +168,10 @@ class Outro(VoiceoverScene):
             (r"ETF arbitrage and market making", [38]),
         ])
         with self.voiceover(
-            "Where this comes back. Replication in continuous time is Part ten, Black, Scholes and Merton. The "
-            "density from the smile becomes the volatility surface of Part twelve, and model-free bounds frame the "
-            "exotic options of Parts fourteen and fifteen. Forward and annuity measures price the rates products of "
-            "Parts eighteen and nineteen. The discount factor is the heart of Part twenty-three. The frictions that "
-            "break parity, borrowing and funding, return in Parts twenty-one and forty-one, and ETF arbitrage in "
-            "Part thirty-eight."
+            "Where this comes back: Black, Scholes and Merton in Part ten; the volatility surface in "
+            "twelve; exotics in fourteen and fifteen; forward measures in eighteen and nineteen; the "
+            "discount factor in twenty-three; funding and crises in twenty-one and forty-one; ETFs in "
+            "thirty-eight."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r_) for r_ in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)
@@ -205,9 +199,8 @@ class Outro(VoiceoverScene):
         if card.height > 7.6:
             card.scale_to_fit_height(7.6)
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers it draws on, classic and new. The data are the "
-            "Surface's trades, a day of Bitcoin options and futures on Deribit, and every bound, density and "
-            "recovery was computed by the House's arbitrage checker."
+            "The textbooks and papers. Every number was computed by the House from a day of Deribit "
+            "trades."
         ):
             self.play(FadeIn(card))
             self.wait(4)
@@ -218,9 +211,8 @@ class Outro(VoiceoverScene):
         smap = series_map(current=PART + 1, done=PART)
         nxt = label(r"Next: Part 10, Black--Scholes--Merton", font_size=32, color=QC.IDEA).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The House can now tell a price from an arbitrage. <bookmark mark='a'/> Next, Part ten: Black, Scholes "
-            "and Merton. Let the tree's steps shrink to nothing, and the fundamental theorem becomes the most famous "
-            "formula in finance, and the volatility desk opens."
+            "The House can now tell a price from an arbitrage. <bookmark mark='a'/> Next, Part ten: "
+            "Black, Scholes and Merton, and the volatility desk opens."
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")

@@ -67,7 +67,7 @@ class Hook(VoiceoverScene):
         hand = always_redraw(lambda: DashedLine(ax.c2p(clock.get_value(), -8), ax.c2p(clock.get_value(), 0),
                                                 stroke_color=GREY_B, stroke_width=1.5))
         tick = always_redraw(lambda: MathTex(rf"t = 10^{{{clock.get_value():.1f}}}\,\text{{s}}", font_size=26,
-                                             color=GREY_A).next_to(ax.c2p(clock.get_value(), 0), UP, buff=0.1))
+                                             color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, RIGHT))
         leg = legend([(METHOD_COL[m], m) for m in ORDER], font_size=17).next_to(g, RIGHT, buff=0.3).align_to(g, UP)
         cos_hit = min(q["time"] for q in by["COS"] if q["err"] < 1e-5)
         mc_first = min(q["time"] for q in by[ORDER[0]])

@@ -51,14 +51,13 @@ class MOT(VoiceoverScene, ThreeDScene):
                           r"earlier one at every strike (Strassen 1965)")]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=3.6, buff=0.55, edge=6.95)
         with self.voiceover(
-            "The density fixes each expiry on its own. A claim on the price at two dates, like a forward-starting "
-            "option, depends on how the two are joined, and vanilla prices say nothing about that. Here are the "
-            "call prices at the Surface's two expiries, sixteen and a hundred and seven days, against strike. "
-            "<bookmark mark='a'/> Over all joint distributions, the claim's price has a highest and lowest value. "
-            "<bookmark mark='b'/> But not every joining is allowed: it must match both densities, and the second "
-            "price must be a fair game given the first. <bookmark mark='c'/> Such a martingale exists exactly when "
-            "the later call curve lies above the earlier one at every strike, as it does here. Volker Strassen "
-            "proved that in 1965. The problem is then a linear program: martingale optimal transport."
+            "A claim on the price at two dates depends on how they are joined, which vanilla prices "
+            "don't reveal. Here are the call curves at the Surface's two expiries. <bookmark "
+            "mark='a'/> Over all joinings, the claim's price has a highest and lowest value. "
+            "<bookmark mark='b'/> A joining must match both densities and be a martingale. <bookmark "
+            "mark='c'/> One exists exactly when the later call curve lies above the earlier, "
+            "Strassen's theorem of 1965, as here. The rest is a linear program: martingale optimal "
+            "transport."
         ) as vo:
             self.play(FadeIn(g), Create(k1), Create(k2), FadeIn(lg))
             vo.wait_until("a")
@@ -92,17 +91,14 @@ class MOT(VoiceoverScene, ThreeDScene):
                          r"control problem: the hedger chooses the delta through time", width=5.6, font_size=19)
         t.to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Every linear program has a dual, and this one's is a trading strategy. Give each constraint a "
-            "multiplier: u for the first density, v for the second, h for the martingale condition. "
-            "<bookmark mark='a'/> The dual's constraint reads as a hedge: hold a portfolio of first-expiry options "
-            "paying u, second-expiry options paying v, and between the two dates hold h of the underlying, an amount "
-            "chosen when the first price is known. It must pay at least the claim, whatever happens. "
-            "<bookmark mark='b'/> Weak duality is one line: integrate the inequality against any allowed joining; "
-            "the trading term averages to zero because the joining is a martingale. <bookmark mark='c'/> And strong "
-            "duality, proved for this problem by Mathias Beiglböck, Pierre Henry-Labordère and Friedrich Penkner in "
-            "2013: the highest model price equals the cost of the cheapest model-free super-hedge. Alfred Galichon, "
-            "Henry-Labordère and Nizar Touzi showed in 2014 that in continuous time the dual becomes a stochastic "
-            "control problem."
+            "Its dual is a trading strategy. Multipliers: u for the first density, v for the second, "
+            "h for the martingale condition. <bookmark mark='a'/> As trades: options on the first "
+            "date paying u, on the second paying v, and h of the underlying held in between, at least "
+            "the claim whatever happens. <bookmark mark='b'/> Weak duality: integrate against any "
+            "joining; the trading term averages to zero. <bookmark mark='c'/> Strong duality, "
+            "Beiglböck, Henry-Labordère and Penkner, 2013: the highest model price is the cheapest "
+            "model-free super-hedge. Galichon, Henry-Labordère and Touzi made the dual a control "
+            "problem in continuous time."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -164,14 +160,11 @@ class MOT(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(names, axn, val)
         self.remove(names, axn, val)
         with self.voiceover(
-            "Here is the dual in three dimensions. The floor is every pair of prices, the first expiry across and "
-            "the second in depth. The red surface is the claim, the absolute return between the dates: a valley "
-            "along the diagonal where the price doesn't move, rising on both sides. <bookmark mark='a'/> The gold "
-            "surface is the optimal hedge from the linear program's dual: options on both dates plus one dynamic "
-            "trade. It starts high, safely above the claim. <bookmark mark='b'/> Lower it. It comes to rest on the "
-            "claim without ever passing through it. Its cost is the upper bound. <bookmark mark='c'/> And where does "
-            "it touch? The purple dots are where the most expensive model, the primal solution, puts its probability. "
-            "They sit exactly on the contact set. The extreme model lives where the cheapest hedge is tight: that is "
+            "The dual in three dimensions. The floor is every pair of prices; the red surface is the "
+            "claim, a valley along the diagonal. <bookmark mark='a'/> The gold surface is the optimal "
+            "hedge from the program's dual, starting high. <bookmark mark='b'/> Lower it: it rests on "
+            "the claim without crossing. Its cost is the upper bound. <bookmark mark='c'/> And the "
+            "purple dots, where the most expensive model puts its mass, sit exactly where it touches: "
             "complementary slackness, seen."
         ) as vo:
             self.play(Create(ax), FadeIn(names[0]), FadeIn(axn), run_time=1.5)
@@ -221,14 +214,11 @@ class MOT(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.6)
         src = real_data(r"densities from the Surface, 25 and 81 atoms; the House's \texttt{mot\_bounds} (HiGHS)")
         with self.voiceover(
-            "The numbers. The forward-start straddle, the absolute return between the Surface's two expiries: no "
-            f"arbitrage and today's vanilla prices pin it between {lo:.3f} and {up:.3f}, as a fraction of the first "
-            "price. <bookmark mark='a'/> A model with independent log-normal returns, at the forward volatility the "
-            f"Surface implies, says {model:.3f}: inside the band, as any arbitrage-free model must be. "
-            "<bookmark mark='b'/> Other claims on the same pair of dates. The forward-start call's band is exactly "
-            "half the straddle's, because the claim is half the straddle plus a term with mean zero. And the squared "
-            "change in price has a band of zero width. <bookmark mark='c'/> David Hobson found the first model-free "
-            "bound of this kind in 1998, for the lookback option; Part fifteen prices exotics inside bands like these."
+            f"The numbers. The forward-start straddle lies between {lo:.3f} and {up:.3f} of the first "
+            f"price. <bookmark mark='a'/> Independent log-normal returns say {model:.3f}: inside, as "
+            "they must be. <bookmark mark='b'/> The forward-start call's band is exactly half the "
+            "straddle's, and the squared change has a band of zero width. <bookmark mark='c'/> Hobson "
+            "found the first bound of this kind in 1998, for the lookback."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(band_), FadeIn(bl), FadeIn(bu))
             vo.wait_until("a")
@@ -243,10 +233,9 @@ class MOT(VoiceoverScene, ThreeDScene):
     def predict(self, cl):
         card = pause_at(r"Why is the band for $(S_2 - S_1)^2$ a single number?")
         with self.voiceover(
-            "Pause and predict. Why is the band for the squared price change a single number? "
-            "<bookmark mark='a'/> Expand the square. For any martingale, the cross term's expectation is the "
-            "expected square of the first price, so the claim's value is the second moment at the second date minus "
-            "the second moment at the first, and both are fixed by the vanilla options. Every allowed model agrees."
+            "Pause and predict. Why is the squared change a single number? <bookmark mark='a'/> For "
+            "any martingale its value is the difference of the two second moments, and the vanillas "
+            "fix both."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

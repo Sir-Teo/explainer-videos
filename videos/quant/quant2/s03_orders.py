@@ -142,8 +142,7 @@ class Orders(VoiceoverScene):
             "What does impatience cost? Say each tick above the best ask holds d shares. A buy of Q shares eats the levels in "
             "order. <bookmark mark='a'/> Its average price is an arithmetic series. <bookmark mark='b'/> Against the mid, "
             "the cost is half the spread plus the walk; twice it is the effective spread. <bookmark mark='c'/> In the "
-            "simulated book, four seeds, against the formula: "
-            + walk_note
+            f"simulated book, four seeds, against the formula: {walk_note}"
         ) as vo:
             step(0)
             vo.wait_until("a")

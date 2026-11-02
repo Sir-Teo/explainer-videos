@@ -70,12 +70,14 @@ class Outro(VoiceoverScene):
         if rows.width > 13.0:
             rows.scale_to_fit_width(13.0)
         with self.voiceover(
-            f"Part three in ten lines. Prices moved about {s['ratio_changes']:.0f} times as much as the dividends justified. A "
-            "stock is a long bond on paper, but growth moves with rates. The statements are one machine; earnings are cash plus "
-            "accruals; every number has two dates. Growth adds value only above the cost of capital, and residual income turns "
-            "value into book plus excess returns. A high yield is paid for by returns. Financing matters through taxes, distress "
-            f"and information. Published signals kept about {100 * o['all']['post_ratio']:.0f} percent of their returns, and "
-            "merger arbitrage is a short put."
+            f"Part three in ten lines. Prices moved about {s['ratio_changes']:.0f} times as much as the value of the dividends "
+            "paid. Gordon makes a stock a long bond, but in the data growth moves with the rate. The three statements are one "
+            "double-entry machine, and earnings are cash plus accruals. Every reported number has two dates. Growth adds value "
+            "only above the cost of capital, and a price implies a cost of capital. Residual income turns value into book plus "
+            "excess returns. A high dividend yield must be paid for, and since 1945 returns have paid it. Financing and payout "
+            "matter through taxes, distress and information, and equity is a call on the firm. Published predictors kept about "
+            f"{100 * o['all']['post_ratio']:.0f} percent of their returns, and the earnings drift has faded. And merger arbitrage "
+            "is a short put, screens fight base rates, and machines that read filings must be point-in-time too."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.6,
                                                  run_time=20))

@@ -36,13 +36,14 @@ class Frontier(VoiceoverScene):
                          width=4.3, font_size=18),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.4)
         with self.voiceover(
-            "Martingale optimal transport is where most of the recent work is. In 2023 Ariel Neufeld and Julian "
-            "Sester replaced the dual's functions with neural networks and the hedging constraint with a penalty, so "
-            "the bounds scale to many assets and dates. <bookmark mark='a'/> Manuel Hasenbichler, Benjamin Joseph, "
-            "Grégoire Loeper, Jan Obłój and Gudmund Pammer built a martingale version of Sinkhorn's algorithm, the "
-            "iteration of chapter sixteen, for the martingale closest to Brownian motion between two marginals. "
-            "<bookmark mark='b'/> And Linn Engström, Sigrid Källblad and Johan Karlsson handle many marginals at "
-            "once, enough to bound lookback and Asian options. Here is the first of these ideas, trained."
+            "Most of the recent work is in martingale optimal transport. In 2023 Ariel Neufeld and "
+            "Julian Sester replaced the dual's functions with neural networks and the hedging "
+            "constraint with a penalty, so the bounds scale to many assets and dates. <bookmark "
+            "mark='a'/> Manuel Hasenbichler, Benjamin Joseph, Grégoire Loeper, Jan Obłój and Gudmund "
+            "Pammer built a martingale version of Sinkhorn's algorithm, for the martingale closest to "
+            "Brownian motion between two marginals, in any dimension. <bookmark mark='b'/> And Linn "
+            "Engström, Sigrid Källblad and Johan Karlsson handle many marginals at once, enough to "
+            "bound lookback and Asian options. Here is the first of these ideas, trained."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -95,21 +96,21 @@ class Frontier(VoiceoverScene):
         head = label(rf"three networks ($u$, $v$, $h$), {nm['steps']:,} steps, three seeds".replace(",", "{,}"),
                      font_size=24).to_edge(UP, buff=0.3)
         above = all(g > 0 for g in gaps)
-        verdict = (f"All three land just above the program's bound, between {min(gaps):.2f} and {max(gaps):.2f} "
-                   "percent: the penalty lets the hedge dip slightly below the claim where the marginals put little "
-                   "weight, and the networks cannot draw its kinks exactly. " if above else
+        verdict = (f"All three land just above the program's bound, by {min(gaps):.2f} to {max(gaps):.2f} percent: "
+                   "smooth networks cannot draw the hedge's kinks exactly. " if above else
                    f"They land within {max(abs(g) for g in gaps):.2f} percent of the program's bound, on both sides: "
                    "a penalized constraint is not a guarantee. ")
         with self.voiceover(
-            "The House trains a neural dual on the same problem as chapter fifteen. Three small networks: u for "
-            "the first-expiry options, v for the second, h for the delta held in between. The loss is the hedge's "
-            "cost plus a penalty wherever the hedge falls below the claim. <bookmark mark='a'/> On the left, the "
-            "hedge minus the claim over the grid of price pairs: red where the hedge is below the claim, gold where "
-            "it is above, brightest where it just touches. On the right, the bound it implies, three seeds, against "
-            "the linear program's line. <bookmark mark='b'/> At first the hedge is far too expensive, then too "
-            "cheap and red, then it settles onto the claim. " + verdict + "<bookmark mark='c'/> In one dimension the "
-            "linear program wins: exact, and faster. The networks matter where the program cannot go, dozens of "
-            "assets and dates, and that is exactly what this research is for."
+            "The House trains a neural dual on chapter fifteen's problem. Three small networks: u and "
+            "v for the options at each date, h for the delta held in between. The loss is the hedge's "
+            "cost plus a penalty wherever the hedge falls below the claim. <bookmark mark='a'/> On "
+            "the left, the hedge minus the claim over the grid of price pairs: red where it is below, "
+            "gold above, brightest where it just touches. On the right, the bound it implies, three "
+            "seeds, against the linear program's line. <bookmark mark='b'/> At first the hedge is far "
+            "too expensive, then too cheap and red, then it settles onto the claim. "
+            + verdict +
+            "<bookmark mark='c'/> In one dimension the linear program wins: exact, and faster. The "
+            "networks matter where the program cannot go, dozens of assets and dates."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp), Create(lpl), FadeIn(lpt), FadeIn(key))
             vo.wait_until("a")
@@ -140,16 +141,17 @@ class Frontier(VoiceoverScene):
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Beyond transport. Julien Guyon solved a famous puzzle in 2024: fitting the S&P 500 and VIX smiles "
-            "jointly. Absence of joint arbitrage is equivalent to a calibrating martingale measure existing, and he "
-            "computes the closest one with a Sinkhorn-type algorithm. <bookmark mark='a'/> Ariel Neufeld, Antonis "
-            "Papapantoleon and Qikun Xiang proved a fundamental theorem for multi-asset bounds and solved them as "
-            "semi-infinite linear programs, up to sixty assets. <bookmark mark='b'/> Daniel Bartl, Mathias Beiglböck "
-            "and Gudmund Pammer built a geometry on stochastic processes in which the martingales form a closed, "
-            "convex subspace. <bookmark mark='c'/> On the pricing kernel, Steven Heston, Kris Jacobs and Hyung Joo "
-            "Kim showed that options alone cannot tell kernels apart, and that recovery-style constraints remove the "
-            "anomalies; Horvath's recovery and Shikhman's density results you have already met. The fundamental "
-            "theorem is nearly fifty years old, and still a live research field."
+            "Beyond transport. Julien Guyon, in 2024, solved a famous puzzle, fitting the S&P 500 and "
+            "VIX smiles jointly: there is no joint arbitrage exactly when a calibrating martingale "
+            "measure exists, and he finds the closest one with a Sinkhorn-type algorithm. <bookmark "
+            "mark='a'/> Ariel Neufeld, Antonis Papapantoleon and Qikun Xiang proved a fundamental "
+            "theorem for multi-asset bounds and solved them as semi-infinite linear programs, up to "
+            "sixty assets. <bookmark mark='b'/> Daniel Bartl, Mathias Beiglböck and Gudmund Pammer "
+            "built a geometry on stochastic processes in which the martingales form a closed, convex "
+            "set. <bookmark mark='c'/> And on the pricing kernel, Steven Heston, Kris Jacobs and "
+            "Hyung Joo Kim showed that options alone cannot tell kernels apart, while recovery-style "
+            "constraints remove the anomalies. The theorem is nearly fifty years old, and still a "
+            "live field."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -164,10 +166,8 @@ class Frontier(VoiceoverScene):
     def predict(self):
         card = pause_at(r"Why is a neural network's dual only approximately an upper bound?")
         with self.voiceover(
-            "Pause and predict. Why is the neural dual only approximately an upper bound? <bookmark mark='a'/> "
-            "Because the constraint, hedge above the claim everywhere, is only penalized, not enforced. The trained "
-            "hedge can dip below the claim where the marginals put little weight, and a bound from such a hedge is "
-            "not guaranteed. To certify it, check the hedge on a fine grid, or add the largest violation back."
+            "Pause and predict. Why is the neural dual only approximately an upper bound? <bookmark "
+            "mark='a'/> The constraint is penalized, not enforced; certify the hedge on a fine grid."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

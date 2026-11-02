@@ -53,13 +53,11 @@ class Signals(VoiceoverScene):
         VGroup(leg, hint, how).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.3).shift(UP * 0.3)
         src = real_data(r"Kenneth French's sorts, July 1963 -- December 2020")
         with self.voiceover(
-            "Accounting signals became the first factors. Five of them, measured on Kenneth French's public "
-            "portfolios since 1963. Each line buys the tenth of stocks with the most attractive value of the signal "
-            "and sells the tenth with the least. Low accruals, Sloan's signal. High profitability. Low investment, "
-            "firms that grow their assets slowly. Cheap on book value, and cheap on earnings. "
-            "<bookmark mark='a'/> Over the whole sample, most of them made money: a dollar in the investment "
-            "spread became about eight, in accruals nearly seven. <bookmark mark='b'/> The dots mark the year after each signal was "
-            "published. Look at what the lines do after their dot."
+            "Accounting signals became the first factors. Five of them on Kenneth French's portfolios since 1963, each long the "
+            "tenth of stocks with the best value of the signal and short the worst: low accruals, high profitability, low "
+            "investment, cheap on book, cheap on earnings. <bookmark mark='a'/> Over the whole sample most made money: a dollar "
+            "in the investment spread became about eight. <bookmark mark='b'/> The dots mark the year after each was published. "
+            "Watch what the lines do after their dot."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(how))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3, run_time=5), FadeIn(leg))
@@ -102,12 +100,10 @@ class Signals(VoiceoverScene):
             wrapped_label(r"profitability, published in 2013, has too few years after to judge", 4.6, 19, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Split each signal's history at its publication. Before: the bright bars. After: the grey ones. "
-            "<bookmark mark='a'/> Accruals fell from five percent a year to two. Investment, from over six to "
-            "slightly negative. Book-to-market, from seven to one. Earnings yield, from seven and a half to under "
-            "three. Profitability was published too recently to judge. <bookmark mark='b'/> Five signals could be "
-            "five unlucky draws. To know whether a backtest of a published signal overstates its future, you need "
-            "every published signal."
+            "Split each history at publication: bright before, grey after. <bookmark mark='a'/> Accruals fell from five percent a "
+            "year to two; investment, from six to slightly negative; book-to-market, from seven to one; earnings yield from seven "
+            "and a half to under three. <bookmark mark='b'/> Five signals could be five unlucky draws. To know whether a backtest "
+            "of a published signal overstates its future, you need every published signal."
         ) as vo:
             self.play(FadeIn(g), FadeIn(names), FadeIn(leg))
             self.play(LaggedStart(*[GrowFromEdge(b[0], DOWN) for b in pre_b], lag_ratio=0.2),
@@ -150,15 +146,10 @@ class Signals(VoiceoverScene):
                     rf"\ \text{{after }}{gp['year']}", font_size=26, color=QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(cells, DOWN, buff=0.5)
         with self.voiceover(
-            "Sloan's accruals were one statement-based signal. Joseph Piotroski combined nine. Each test scores a "
-            "point: is the firm profitable, does it generate operating cash, is profitability rising, is cash flow "
-            "above earnings, which is Sloan again; is leverage falling, liquidity rising, has it avoided issuing "
-            "shares; are margins and turnover improving. <bookmark mark='a'/> Among cheap stocks, he reported that "
-            "buying high scores and shorting low ones earned about twenty-three percent a year from 1976 to 1996. "
-            "<bookmark mark='b'/> Robert Novy-Marx argued in 2013 that the cleanest profit measure sits high on the "
-            "income statement, gross profit over assets, before most accounting choices bite. <bookmark mark='c'/> "
-            "Both have open-source replications. Unusually, both did as well or better after publication than "
-            "before; keep them in mind as exceptions."
+            "Piotroski combined nine statement tests into one score: profitability, cash, leverage, liquidity, issuance, "
+            "margins, turnover. <bookmark mark='a'/> Among cheap stocks, he reported high minus low scores earned about "
+            "twenty-three percent a year, 1976 to 1996. <bookmark mark='b'/> Novy-Marx argued in 2013 for gross profit over assets. "
+            "<bookmark mark='c'/> Unusually, both did as well or better after publication."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.4, run_time=4))
             vo.wait_until("a")
@@ -220,18 +211,14 @@ class Signals(VoiceoverScene):
                         r"portfolios, through 2020")
         ex = o["examples"]
         with self.voiceover(
-            "Now all of them at once. Andrew Chen and Tom Zimmermann rebuilt the long-short portfolio of every "
-            f"predictor in the published literature and released the code and data. {A['n']} of them have at least "
-            "two years both in their paper's sample and after publication. Each dot is one, placed at the year it was "
-            "published, at the height of its return in the original sample. <bookmark mark='a'/> Now let every dot "
-            "fall to what it earned after publication. <bookmark mark='b'/> Collapse them into three averages: "
-            f"{A['in']:.2f} percent a month in sample, {A['oos']:.2f} out of sample but before publication, "
-            f"{A['post']:.2f} after. About {100 * (1 - A['oos_ratio']):.0f} percent of the effect disappears just "
-            "outside the sample, which is what you expect if part of it was luck, and "
-            f"{100 * (1 - A['post_ratio']):.0f} percent is gone after publication, which is what you expect if "
-            "traders read the papers. David McLean and Jeffrey Pontiff found twenty-six and fifty-eight on their "
-            f"ninety-seven. <bookmark mark='c'/> Sloan's accruals went from {ex['Accruals']['in']:.2f} to "
-            f"{ex['Accruals']['post']:.2f}. Every one of these is a trial; the House counts them."
+            "Andrew Chen and Tom Zimmermann rebuilt the long-short portfolio of every predictor in the published literature and "
+            f"released the code and data; {A['n']} of them have two years both in their paper's sample and after publication. "
+            "Each dot is one, at its publication year, at the height of its in-sample return. <bookmark mark='a'/> Now let every "
+            "dot fall to what it earned after publication. <bookmark mark='b'/> Collapse them into three averages: "
+            f"{A['in']:.2f} percent a month in sample, {A['oos']:.2f} just outside it but before publication, {A['post']:.2f} after. "
+            "The first drop is what luck predicts; the second is what traders reading the papers predict. McLean and Pontiff "
+            f"found the same on their ninety-seven. <bookmark mark='c'/> Sloan's accruals went from {ex['Accruals']['in']:.2f} to "
+            f"{ex['Accruals']['post']:.2f}."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(src), FadeIn(leg))
             self.add(dd)
@@ -257,10 +244,8 @@ class Signals(VoiceoverScene):
         ).arrange(DOWN, buff=0.15).next_to(cap, DOWN, buff=0.5)
         VGroup(big, cap, add).move_to(ORIGIN)
         with self.voiceover(
-            "And every signal we look at is a trial. We tested five here, and registered one forecast. The House "
-            "counts them all, across the series, because the more configurations a researcher tries, the more one "
-            "of them will look good by chance. Part six shows how to deflate a result by that count. The hold-out "
-            "years for these signals, 2021 onward, are sealed until then."
+            "Every signal looked at is a trial, and the House counts them all, because the more you try, the more one looks good "
+            "by chance. Their hold-out years are sealed."
         ):
             self.play(FadeIn(big, scale=0.8), FadeIn(cap))
             self.play(FadeIn(add))

@@ -34,11 +34,10 @@ class FTAP(VoiceoverScene):
                          who=r"Harrison and Kreps (1979); the lemma: Farkas (1902), Stiemke (1915)", color=Q_C,
                          width=10.6, font_size=26).move_to(UP * 0.4)
         with self.voiceover(
-            "The theorem. In a market with one period and finitely many states, there is no arbitrage if and only if "
-            "there are strictly positive state prices, one per state, such that every asset's price is the sum over "
-            "states of what it pays there, times that state's price. <bookmark mark='a'/> Michael Harrison and David "
-            "Kreps stated it this way in 1979. The mathematics underneath is a lemma about linear inequalities, from "
-            "Gyula Farkas in 1902 and, in the strictly positive form we need, Erich Stiemke in 1915."
+            "The theorem. With one period and finitely many states, there is no arbitrage if and only "
+            "if there are strictly positive state prices that price every asset. <bookmark mark='a'/> "
+            "Harrison and Kreps stated it in 1979; underneath is a lemma of Farkas from 1902, in "
+            "Stiemke's strictly positive form of 1915."
         ) as vo:
             self.play(FadeIn(t, shift=UP * 0.2))
             vo.wait_until("a")
@@ -66,17 +65,15 @@ class FTAP(VoiceoverScene):
                     r"payoffs", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=-0.4, buff=0.62, edge=6.9)
         with self.voiceover(
-            "The easy direction first. Suppose positive state prices exist, and take any portfolio whose payoff is "
-            "never negative and not zero. Its price is its payoff, dotted with the state prices: a sum of "
-            "non-negative terms, at least one positive. So it costs something. No free lunch. "
-            "<bookmark mark='a'/> Now the hard direction. Collect, for every portfolio, its cost with a minus sign "
-            "and its payoffs: a subspace L. No arbitrage says this subspace touches the non-negative orthant only at "
-            "the origin. <bookmark mark='b'/> So it misses the simplex of non-negative vectors summing to one, which "
-            "is compact and convex. A hyperplane separates them strictly, and because a linear function that is "
-            "bounded on a subspace must vanish on it, the hyperplane's normal lambda is orthogonal to L and strictly "
-            "positive. <bookmark mark='c'/> Write out that orthogonality for every portfolio, divide by lambda's "
-            "first entry, and the price vector is the payoff matrix times a strictly positive vector. That is the "
-            "theorem, and the normal you saw in three dimensions is lambda."
+            "The easy direction. If positive state prices exist, any portfolio that never loses and "
+            "sometimes wins has a positive price: a sum of non-negative terms, one positive. "
+            "<bookmark mark='a'/> The hard direction. Collect every portfolio's cost, with a minus "
+            "sign, and its payoffs: a subspace L. No arbitrage says L touches the non-negative "
+            "orthant only at zero. <bookmark mark='b'/> So L misses the simplex, which is compact and "
+            "convex, and a hyperplane separates them; a linear function bounded on a subspace "
+            "vanishes on it, so the normal lambda is orthogonal to L and strictly positive. <bookmark "
+            "mark='c'/> Write that out for every portfolio and divide by lambda's first entry: prices "
+            "are payoffs times strictly positive state prices."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -119,15 +116,12 @@ class FTAP(VoiceoverScene):
                           r"here, the price leaves the cone", 4.8, 19, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "The same fact has a second picture, in the space of prices. Each state is an arrow: what the bond and "
-            "the stock pay in it. Positive combinations of the arrows fill this cone. <bookmark mark='a'/> The "
-            "theorem says no arbitrage exactly when the price vector, one for the bond and a hundred for the stock, "
-            "lies strictly inside the cone. <bookmark mark='b'/> Raise the stock's price. The dot climbs toward the "
-            "cone's upper edge, the arrow of the best state, and at a hundred and twenty-five it sits on the edge. "
-            "Past it, at a hundred and thirty, it is outside, and the linear program returns the separating "
-            "portfolio instead: hold bonds, short a little stock. <bookmark mark='c'/> This is the dual of the "
-            "previous chapter's picture: there the line of free payoffs pierced the corner; here the price leaves "
-            "the cone, at the same moment."
+            "The same fact in price space. Each state is an arrow, what the two assets pay there, and "
+            "positive combinations fill this cone. <bookmark mark='a'/> No arbitrage exactly when the "
+            "price vector lies strictly inside. <bookmark mark='b'/> Raise the stock's price: the dot "
+            "reaches the cone's edge at a hundred and twenty-five, and at a hundred and thirty it is "
+            "outside, where the program returns the separating portfolio instead. <bookmark "
+            "mark='c'/> It is the dual of the last chapter's picture, failing at the same moment."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.3), FadeIn(slabs),
                       FadeIn(side[1]), run_time=2.5)
@@ -193,18 +187,16 @@ class FTAP(VoiceoverScene):
         lp = MathTex(r"\max\ t\ \ \text{s.t.}\ \ D\psi = p,\ \ \psi \ge t\,\mathbf{1}", font_size=28, color=Q_C)
         lp.next_to(leg, DOWN, buff=0.2)
         with self.voiceover(
-            "The House decides the theorem by linear programming: maximize the smallest state price t, subject to "
-            "prices equal to payoffs times state prices. A positive optimum means no arbitrage. Here is the "
-            "teaching version of the simplex method that solves it, a dozen lines. <bookmark mark='a'/> Start from "
-            "artificial variables that make the equations trivially true, then pivot: pick a column whose reduced "
-            "cost is negative, the lowest-numbered one, which is Bland's rule and guarantees it never cycles; the "
-            "ratio test picks which variable leaves; eliminate; repeat. <bookmark mark='b'/> Run it with the stock "
-            f"at a hundred. In {len(st100)} pivots the artificial variables are driven to zero, and the state "
-            f"prices appear: the smallest is {x100[3]:.3f}, positive. <bookmark mark='c'/> Now at a hundred and "
-            f"thirty. After {len(st130)} pivots it is stuck: the artificial variables cannot be removed, so no "
-            "state prices exist. And the stuck tableau's dual variables are the certificate: a hundred and "
-            "twenty-five in bonds, short one share. It costs minus five and pays forty-five, twenty-five, or zero. "
-            "Farkas's lemma, run by a machine."
+            "The House decides it by linear programming: maximize the smallest state price, t, "
+            "keeping prices equal to payoffs times state prices. Here is the teaching simplex that "
+            "solves it. <bookmark mark='a'/> Start from artificial variables, then pivot: the "
+            "lowest-numbered column with negative reduced cost enters, Bland's rule, so it never "
+            "cycles; the ratio test picks who leaves. <bookmark mark='b'/> At a stock price of a "
+            f"hundred, {len(st100)} pivots drive the artificials to zero, and the smallest state price "
+            f"is {x100[3]:.3f}. <bookmark mark='c'/> At a hundred and thirty, after {len(st130)} "
+            "pivots it is stuck: no state prices. The stuck tableau's duals are the certificate: a "
+            "hundred and twenty-five in bonds, short one share, costing minus five and paying "
+            "forty-five, twenty-five or zero. Farkas's lemma, run by a machine."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(g), FadeIn(lp))
             vo.wait_until("a")
@@ -231,11 +223,9 @@ class FTAP(VoiceoverScene):
         card = pause_at(r"Split the states more finely: add a state between every two. For which stock prices between "
                         r"80 and 125 does the program stop finding state prices?")
         with self.voiceover(
-            "Pause and predict. Split the states more finely, adding a state between every two. For which stock "
-            "prices between eighty and a hundred and twenty-five does the program stop finding state prices? "
-            "<bookmark mark='a'/> None. More states add more arrows inside the same extremes, so the cone can only "
-            "grow. What decides arbitrage is the best and the worst the stock can pay, not how many states lie "
-            "between."
+            "Pause and predict. Add a state between every two. For which stock prices between eighty "
+            "and a hundred and twenty-five does the program stop finding state prices? <bookmark "
+            "mark='a'/> None: new states add arrows between the extremes, so the cone never shrinks."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

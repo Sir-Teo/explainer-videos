@@ -42,16 +42,13 @@ class Industry(VoiceoverScene):
         src = note(r"Haddad, Moreira and Muir (2021), ``When selling becomes viral'', \textit{RFS} 34(11)", font_size=17,
                    color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Who enforces the law of one price? Start with the biggest example. An exchange-traded fund's shares "
-            "trade all day, and so do the securities it holds. Large dealers called authorized participants can "
-            "create new fund shares by delivering the basket of securities, or redeem shares for the basket. If the "
-            "fund trades above the value of its holdings, they buy the basket and sell new shares; below, the "
-            "reverse. The SEC standardized the process in 2019. <bookmark mark='a'/> It works until the arbitrageurs' "
-            "own capital is the constraint. In March 2020, in the dash for cash, the most liquid bond funds traded at "
-            "large discounts to their holdings, larger for Treasury and investment-grade funds than for high-yield "
-            "ones, as Valentin Haddad, Alan Moreira and Tyler Muir documented: investors sold what was easiest to "
-            "sell, and dealers' balance sheets were full. The discounts vanished almost as quickly once the Federal "
-            "Reserve stepped in. Part thirty-eight returns to ETF market making."
+            "Who enforces the law of one price? An ETF's shares and its holdings both trade all day. "
+            "Authorized participants, large dealers, create shares by delivering the basket when the "
+            "fund is dear, and redeem them when it is cheap; the SEC standardized this in 2019. "
+            "<bookmark mark='a'/> It works until the arbitrageurs' capital is the constraint. In "
+            "March 2020 the most liquid bond funds traded at large discounts to their holdings, "
+            "larger for safer bonds, as Haddad, Moreira and Muir documented: investors sold what was "
+            "easiest to sell, and dealers' balance sheets were full."
         ) as vo:
             self.play(FadeIn(f, shift=UP * 0.2))
             vo.wait_until("a")
@@ -76,16 +73,13 @@ class Industry(VoiceoverScene):
                              rf"forward and the futures agreed to {fb['gap_p50']:.1f} basis points: the cash-and-carry "
                              rf"desks had already done their work", 11.6, 21, Q_C).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Second, the box spread of chapter two, as a business. A box pays a fixed amount whatever happens, so its "
-            "price is an interest rate. Jules van Binsbergen, William Diamond and Peter Van Tassel at the New York "
-            "Fed found that box rates on S&P 500 options sat thirty-five basis points above Treasury yields on "
-            "average, from 1996 to 2023. <bookmark mark='a'/> Why above? Because Treasuries carry a convenience "
-            "yield: people pay extra to hold the safest, most liquid asset. Van Binsbergen, Diamond and Marco "
-            "Grotteria measured it from option prices at about forty basis points, and found it quadrupled in the "
-            "financial crisis. <bookmark mark='b'/> There is now a fund that does nothing but lend through boxes: "
-            "BOXX, launched at the end of 2022, held eight billion dollars by September 2025, according to its "
-            "annual report. <bookmark mark='c'/> And the crypto version is the cash-and-carry trade of chapter one, "
-            f"where options and futures agreed to {fb['gap_p50']:.1f} basis points."
+            "The box spread as a business. At the New York Fed, van Binsbergen, Diamond and Van "
+            "Tassel found box rates thirty-five basis points above Treasuries on average, 1996 to "
+            "2023. <bookmark mark='a'/> The gap is Treasuries' convenience yield, about forty basis "
+            "points by van Binsbergen, Diamond and Grotteria, and it quadrupled in the financial "
+            "crisis. <bookmark mark='b'/> A fund now lends through boxes: BOXX, launched at the end "
+            "of 2022, held eight billion dollars by September 2025, its annual report says. <bookmark "
+            f"mark='c'/> And chapter one's crypto version agreed to {fb['gap_p50']:.1f} basis points."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -110,13 +104,11 @@ class Industry(VoiceoverScene):
                          font_size=18),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.4)
         with self.voiceover(
-            "Third, the trades that are certain to converge, and don't, on time. Royal Dutch and Shell were one "
-            "business whose profits were split sixty to forty between two listed shares. From 1980 to 1995 their "
-            "prices strayed from that ratio by nine and a half percent on average, Kenneth Froot and Emil Dabora "
-            "found. <bookmark mark='a'/> Negative stubs like Palm and 3Com: eighty-two cases, and in thirty percent "
-            "the link was cut before the gap closed. <bookmark mark='b'/> And parity violations sit where shorting "
-            "is hardest, as Ofek, Richardson and Whitelaw showed. In every case the mispricing is visible and the "
-            "trade to fix it exists. What is missing is the capital to hold it long enough."
+            "Trades certain to converge, that don't on time. Royal Dutch and Shell split one company "
+            "sixty to forty, yet strayed from that ratio by nine and a half percent on average from "
+            "1980 to 1995. <bookmark mark='a'/> Negative stubs: in thirty percent, the link was cut "
+            "first. <bookmark mark='b'/> Parity violations sit where shorting is hardest. The trades "
+            "exist; the capital to hold them is what is missing."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -168,19 +160,19 @@ class Industry(VoiceoverScene):
                           rf"out when the trade is best", 4.6, 19, ARB),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         src = illustration(r"simulated: the mispricing is a Brownian bridge to zero; leverage 6; seeded")
-        verdict = ("No flows, no liquidations: given time, the trade always pays. " if rows[0]["p_liq"] == 0 else
-                   f"Even without flows, {100 * rows[0]['p_liq']:.1f} percent are liquidated. ")
+        verdict = ("without flows, none are liquidated. " if rows[0]["p_liq"] == 0 else
+                   f"even without flows, {100 * rows[0]['p_liq']:.1f} percent are liquidated. ")
         with self.voiceover(
-            "Andrei Shleifer and Robert Vishny explained why in 1997, in The Limits of Arbitrage. Arbitrageurs "
-            "invest other people's money, and investors judge them by recent returns. Simulate it. A mispricing that "
-            "is certain to close by period twenty, but wanders first. A fund holds the convergence trade with "
-            "leverage, and when it loses, investors pull a times the loss. <bookmark mark='a'/> Three paths. When the "
-            "mispricing widens, the trade loses, capital is withdrawn, and if capital hits the margin floor, the "
-            "fund is liquidated, missing the convergence it was right about. <bookmark mark='b'/> Over a thousand "
-            "paths each: " + verdict + f"With flows equal to the loss, {100 * r1['p_liq']:.1f} percent; with flows "
-            f"twice the loss, {100 * rows[-1]['p_liq']:.1f} percent. <bookmark mark='c'/> And the liquidations "
-            "happen when the mispricing is widest, exactly when the trade is most attractive. Arbitrage is limited "
-            "not by insight but by funding."
+            "Shleifer and Vishny, The Limits of Arbitrage, 1997: arbitrageurs invest other people's "
+            "money, judged on recent returns. Simulate it: a mispricing certain to close by period "
+            "twenty, a levered fund, and investors who pull a times any loss. <bookmark mark='a'/> "
+            "When the mispricing widens, capital is withdrawn, and at the margin floor the fund is "
+            "liquidated, missing the convergence it was right about. <bookmark mark='b'/> A thousand "
+            "paths each: "
+            + verdict +
+            f"With flows equal to the loss, {100 * r1['p_liq']:.1f} percent; twice the loss, {100 * rows[-1]['p_liq']:.1f}. "
+            "<bookmark mark='c'/> And liquidations come when the mispricing is widest: arbitrage is "
+            "limited by funding, not insight."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(fl), FadeIn(fll), FadeIn(side[0]), FadeIn(src))
             self.add(Pth)
@@ -211,16 +203,14 @@ class Industry(VoiceoverScene):
                    r"Group on Financial Markets, \textit{Hedge Funds, Leverage, and the Lessons of LTCM} (April 1999)",
                    font_size=16, color=GREY_B).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "The most famous convergence fund is the crisis file of this chapter. Long-Term Capital Management, "
-            "founded in February 1994 by John Meriwether, returned twenty, forty-three, forty-one and seventeen "
-            "percent in its first four years, trading spreads it expected to converge. At the start of 1998 it had "
-            "four point eight billion dollars of equity, and at the end of 1997 a hundred and twenty-nine billion of "
-            "assets on its balance sheet, about twenty-eight to one, and over a trillion dollars of derivatives "
-            "notional, according to the President's Working Group report of April 1999. <bookmark mark='a'/> After "
-            "Russia defaulted, spreads widened instead of converging, and it lost forty-four percent of its value in "
-            "August alone. On the twenty-third of September the New York Fed brought fourteen firms together; they "
-            "put up three point six two five billion dollars for ninety percent of the fund. No Federal Reserve "
-            "money was used. Part forty-one tells the whole story."
+            "The crisis file: Long-Term Capital Management, founded in 1994 by John Meriwether, "
+            "returned twenty, forty-three, forty-one and seventeen percent, trading spreads it "
+            "expected to converge. The President's Working Group reported four point eight billion "
+            "dollars of equity at the start of 1998 against a hundred and twenty-nine billion of "
+            "assets, twenty-eight to one. <bookmark mark='a'/> After Russia's default, spreads "
+            "widened; it lost forty-four percent in August. On the twenty-third of September fourteen "
+            "firms, convened by the New York Fed, put up three point six billion for ninety percent "
+            "of the fund. No Fed money was used. Part forty-one tells the story."
         ) as vo:
             self.play(FadeIn(c, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("a")
@@ -232,10 +222,9 @@ class Industry(VoiceoverScene):
         card = pause_at(r"A trade converges with certainty. What single comparison decides whether it can still ruin "
                         r"you?")
         with self.voiceover(
-            "Pause and predict. A trade is certain to converge. What single comparison decides whether it can still "
-            "ruin you? <bookmark mark='a'/> Your funding horizon against the time to convergence. If your lenders "
-            "and investors can leave before the spread closes, and losses in between can exceed your margin, "
-            "certainty at the end does not help you in the middle."
+            "Pause and predict. A trade is certain to converge. What decides whether it can still "
+            "ruin you? <bookmark mark='a'/> Your funding horizon against the time to convergence, "
+            "given the losses on the way."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

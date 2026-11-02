@@ -217,28 +217,3 @@ class Crisis(VoiceoverScene):
             self.play(FadeIn(ans))
         self.wait(0.4)
         self.clear_scene()
-
-    def lessons(self):
-        rows = VGroup(*[label(t, font_size=26, color=c) for t, c in [
-            (r"a statement is a model of a firm, built by the firm; its inputs can be chosen", GREY_A),
-            (r"check the identities: earnings against cash, cash against interest earned on it", IS_C),
-            (r"read who signs: auditors, related parties, partnerships the managers own", GREY_A),
-            (r"short sellers and journalists are data too, and so are regulators' reactions to them", QC.LOSS),
-            (r"restatements are events: store the number as first reported, and the day it changed", QC.HOUSE),
-        ]]).arrange(DOWN, aligned_edge=LEFT, buff=0.42)
-        title = label(r"What a quant takes from this", font_size=34).to_edge(UP, buff=0.6)
-        rows.next_to(title, DOWN, buff=0.7)
-        if rows.width > 13.0:
-            rows.scale_to_fit_width(13.0)
-        with self.voiceover(
-            "What a quant takes from this. A financial statement is a model of a firm, built by the firm, and its "
-            "inputs can be chosen. The identities are the first check: earnings that never turn into cash, or a "
-            "mountain of cash that earns no interest, should both be impossible. Read who signs, and who is on both "
-            "sides of a deal. Treat short sellers' reports and journalists' investigations as data. And treat a "
-            "restatement as an event: the House stores every number as it was first reported, and the day it "
-            "changed, because a backtest that uses the corrected numbers knows what nobody knew at the time."
-        ):
-            self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.6,
-                                                 run_time=10))
-        self.wait(0.4)
-        self.clear_scene()

@@ -157,8 +157,7 @@ class OutOfSample(VoiceoverScene):
         with self.voiceover(
             "Five classic predictors from Shiller's data, the same experiment for each. <bookmark mark='a'/> In "
             f"sample, the largest t-statistic is {max(abs(v['t_is']) for v in P.values()):.1f}. Out of sample, "
-            + verdict +
-            "the dividend yield, the most famous of them, loses. Campbell and Thompson's common-sense restrictions, "
+            f"{verdict}the dividend yield, the most famous of them, loses. Campbell and Thompson's common-sense restrictions, "
             "never forecast a negative premium and never trust a wrong-signed slope, help a little, as they found. "
             "<bookmark mark='b'/> And remember the count: we tried five, so a winner among them is partly luck. "
             "Goyal, Welch and Athanasse Zafirov repeated the exercise in 2024 with twenty-nine newer predictors "

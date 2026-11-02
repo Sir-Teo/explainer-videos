@@ -35,14 +35,12 @@ class Industry(VoiceoverScene):
                         width=6.3, font_size=21)
         VGroup(gh, aqr).arrange(RIGHT, buff=0.35, aligned_edge=UP).scale_to_fit_width(13.3).move_to(UP * 0.2)
         with self.voiceover(
-            "Who does all this for a living? Start with the firms themselves. When John Graham and Campbell Harvey "
-            "surveyed chief financial officers, three in four said they always or almost always use the internal rate "
-            "of return and net present value, chapters one and six; about two in five use earnings multiples, and a "
-            "quarter said they use real options. <bookmark mark='a'/> On the investing side, quantitative equity "
-            "managers turn the same statements into signals at scale. AQR's quality-minus-junk factor, published by "
-            "Cliff Asness, Andrea Frazzini and Lasse Pedersen, starts from the residual-income price-to-book formula "
-            "of chapter eight and buys profitable, growing, safe firms. And Open Source Asset Pricing now publishes "
-            "the code behind two hundred predictors, so anyone can run chapter fourteen."
+            "Who values firms for a living? Start inside the firms. When John Graham and Campbell Harvey surveyed chief financial "
+            "officers, three in four said they always or almost always use the internal rate of return and net present value; "
+            "two in five use earnings multiples, and a quarter real options. <bookmark mark='a'/> On the investing side, "
+            "quantitative managers turn statements into signals at scale. AQR's quality-minus-junk factor, by Asness, Frazzini "
+            "and Pedersen, starts from chapter eight's price-to-book formula and buys profitable, growing, safe firms; and Open "
+            "Source Asset Pricing publishes the code behind two hundred predictors."
         ) as vo:
             self.play(FadeIn(gh, shift=UP * 0.2))
             vo.wait_until("a")
@@ -71,15 +69,13 @@ class Industry(VoiceoverScene):
         tag = label(r"whoever chooses $r$ and $g$ on the surface of chapter 6 chooses the answer", font_size=24,
                     color=QC.HOUSE).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Valuation also happens in court. When Dell's founder and Silver Lake took the company private in 2013 at "
-            "thirteen dollars seventy-five, shareholders asked the Delaware Court of Chancery for an appraisal. The "
-            "experts' discounted cash flows were billions of dollars apart; the court built its own and found "
-            "seventeen sixty-two. <bookmark mark='a'/> The Delaware Supreme Court reversed in December 2017 and told "
-            "the lower court to give weight to the market price and the deal price. <bookmark mark='b'/> Banks' "
-            "valuation teams answer to courts too. In the sale of Rural Metro, the Court of Chancery found that its "
-            "adviser, RBC Capital Markets, had sought financing roles with the buyers and delivered a flawed "
-            "valuation just before the board voted; the damages, about seventy-six million dollars, were affirmed in "
-            "2015. <bookmark mark='c'/> The lesson for the DCF surface: whoever chooses r and g chooses the answer."
+            "Valuation also happens in court. When Dell went private in 2013 at thirteen dollars seventy-five, shareholders asked "
+            "Delaware's Court of Chancery for an appraisal. The experts' discounted cash flows were billions apart; the court "
+            "built its own and found seventeen sixty-two. <bookmark mark='a'/> The Delaware Supreme Court reversed in 2017 and "
+            "told it to give weight to the market price and the deal price. <bookmark mark='b'/> In the sale of Rural Metro, the "
+            "court found the adviser, RBC Capital Markets, had sought financing roles with the buyers and delivered a flawed "
+            "valuation just before the board voted; about seventy-six million dollars of damages, affirmed in 2015. "
+            "<bookmark mark='c'/> The lesson of chapter six's surface: whoever chooses r and g chooses the answer."
         ) as vo:
             self.play(FadeIn(dell, shift=UP * 0.2))
             vo.wait_until("b")
@@ -104,13 +100,11 @@ class Industry(VoiceoverScene):
                         source=r"Brav et al., JF 63 (2008); SEC, 10 Oct.\ 2023", width=6.3, font_size=20)
         VGroup(sp, act).arrange(RIGHT, buff=0.35, aligned_edge=UP).scale_to_fit_width(13.3).move_to(UP * 0.1)
         with self.voiceover(
-            "Rating agencies value the lenders' side. S and P scores a company's financial risk in six categories, "
-            "from minimal to highly leveraged, starting from cash flow over debt and debt over earnings before "
-            "interest, taxes, depreciation and amortisation; a minimal-risk firm has funds from operations above sixty "
-            "percent of its debt. <bookmark mark='a'/> And activists act on valuations. Alon Brav and coauthors "
-            "found that when a hedge fund files a 13D, announcing a stake of five percent or more, the target's shares "
-            "earn about seven percent beyond the market around the filing, and do not give it back. In 2023 the SEC "
-            "shortened the deadline for that filing to five business days."
+            "Rating agencies value the lenders' side. S and P scores financial risk in six categories, from minimal to highly "
+            "leveraged, starting from funds from operations over debt and debt over EBITDA; a minimal-risk firm's cash flow "
+            "exceeds sixty percent of its debt. <bookmark mark='a'/> And activists act on valuations. Brav and coauthors found "
+            "that when a hedge fund files a 13D, a stake of five percent or more, the shares earn about seven percent beyond the "
+            "market around the filing and do not give it back. Since 2023 the filing is due in five business days."
         ) as vo:
             self.play(FadeIn(sp, shift=UP * 0.2))
             vo.wait_until("a")
@@ -145,14 +139,10 @@ class Industry(VoiceoverScene):
                   font_size=18, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "And the standard setters move the numbers under everyone's feet. In 2005 the SEC's staff estimated that "
-            "American companies had about a trillion and a quarter dollars of operating-lease commitments that never "
-            "appeared on a balance sheet. From 2019 the new lease standard put them on. <bookmark mark='a'/> Watch "
-            "what that does to a firm whose business did not change. The lease liability moves from the footnote "
-            "into debt, and the rent, now split into depreciation and interest, leaves EBITDA's costs. "
-            "<bookmark mark='b'/> Enterprise value and EBITDA both rise; the multiple falls and leverage rises. "
-            "The equity is worth exactly what it was. A screen that compares multiples across 2018 and 2019 without "
-            "adjusting is comparing two accounting regimes, not two firms."
+            "Standard setters move the numbers too. In 2005 the SEC staff estimated a trillion and a quarter dollars of lease "
+            "commitments off balance sheets; from 2019 they went on. <bookmark mark='a'/> The lease moves into debt, and rent "
+            "leaves EBITDA's costs. <bookmark mark='b'/> The multiple falls, leverage rises, the equity is unchanged: two "
+            "accounting regimes, not two firms."
         ) as vo:
             self.play(FadeIn(head), FadeIn(before), FadeIn(lease))
             vo.wait_until("a")

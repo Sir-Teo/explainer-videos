@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from explainer.quant import *  # noqa: F403
+from explainer.quant.house import control as C
 from videos.quant.quant8.common import ALT, KELLY, OVER, PART, UNDER, VALUE, load
 
 
@@ -56,13 +57,13 @@ class House(VoiceoverScene):
 
     def pipeline(self, m, rf, d, env):
         kel = m["fraction"][0]
-        p20 = [r_ for r_ in rf["rows"] if abs(r_["p"] - 0.2) < 1e-9][0]
-        rob_kelly = m["excess"] / ((1 + p20["theta"]) * m["sigma"] ** 2)
+        th1 = C.theta_for_detection(0.2, m["excess"] + 0.02, 0.02, m["sigma"], 1.0, rf["years"])
+        rob_kelly = float(C.robust_fraction(m["excess"] + 0.02, 0.02, m["sigma"], 1.0, th1))
         steps_ = VGroup(
             MathTex(rf"\text{{1. Kelly on the estimate: }}\frac{{\hat\mu - r}}{{\sigma^2}} = {100 * kel:.0f}\%",
                     font_size=30, color=KELLY),
             MathTex(rf"\text{{2. half of it: }}{50 * kel:.0f}\%", font_size=30, color=UNDER),
-            MathTex(rf"\text{{3. doubt (}}\theta = {p20['theta']:.1f}\text{{, 20\% detection error): }}"
+            MathTex(rf"\text{{3. doubt (}}\theta = {th1:.2f}\text{{, 20\% detection error): }}"
                     rf"{100 * rob_kelly:.0f}\%", font_size=30, color=ALT),
             MathTex(r"\text{4. trade only outside the no-trade band}", font_size=30, color=VALUE),
             MathTex(r"\text{5. a drawdown budget as a Grossman--Zhou floor}", font_size=30, color=OVER),
@@ -73,15 +74,15 @@ class House(VoiceoverScene):
                              rf"budget is a Grossman--Zhou floor. The trial counter reads {env['trials']}.", 12.4, 22,
                              QC.HOUSE).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Here is how the House sizes a position, on the US market's own numbers, with log utility as the "
-            f"ceiling. Kelly on the estimated edge: {100 * kel:.0f} percent, more than twice levered. "
-            f"<bookmark mark='a'/> Half of it, for the doubt in the estimate: {50 * kel:.0f}. Or, more carefully, the "
-            "robust fraction with doubt calibrated to a twenty percent detection error: "
-            f"{100 * rob_kelly:.0f} percent. <bookmark mark='b'/> Then trade only when the position leaves its "
-            "no-trade band; cap losses with a drawdown floor that ratchets up; and recompute whenever the "
-            "volatility forecast moves, so that a calm-market size never meets a storm. <bookmark mark='c'/> That is "
-            "rule nine. This part registered three tests on the House's data, the split-sample Kelly fraction, "
-            f"myopic loss aversion and volatility targeting, and the trial counter now reads {env['trials']}."
+            "Here is how the House sizes a position, on the US market's own numbers, with log utility as the ceiling. "
+            f"Kelly on the estimated edge: {100 * kel:.0f} percent, more than twice levered. <bookmark mark='a'/> Half of it, "
+            f"for the doubt in the estimate: {50 * kel:.0f}. The robust fraction, with doubt calibrated to a twenty percent "
+            f"detection error, is {100 * rob_kelly:.0f} percent; the House takes the smaller of the two. "
+            "<bookmark mark='b'/> Then trade only when the position leaves its no-trade band; cap losses with a drawdown "
+            "floor that ratchets up; and recompute whenever the volatility forecast moves, so that a calm-market size never "
+            "meets a storm. <bookmark mark='c'/> That is rule nine. This part registered three tests on the House's data, the "
+            "split-sample Kelly fraction, myopic loss aversion and volatility targeting, and the trial counter now reads "
+            f"{env['trials']}."
         ) as vo:
             self.play(FadeIn(steps_[0]))
             vo.wait_until("a")

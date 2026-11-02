@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant11.common import GAMMA, OPT, PART, SPOT, THETA, VEGA, load, real_data
+from videos.quant.quant11.common import GAMMA, OPT, PART, SPOT, THETA, VEGA, load, pause, real_data
 
 
 class Hook(VoiceoverScene):
@@ -12,6 +12,7 @@ class Hook(VoiceoverScene):
         self.title_card()
         self.question()
         self.may2021(s)
+        self.history()
         self.objectives()
         self.house()
 
@@ -50,60 +51,108 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     def may2021(self, s):
-        t, S, book = np.asarray(s["t"]), np.asarray(s["S"]), np.asarray(s["book"])
-        g1 = axes([0, 30], [50, 110], x_length=6.2, y_length=2.6, ylabel=r"bitcoin, per 100 at the start",
+        t, S, book = np.asarray(s["t"])[::2], np.asarray(s["S"])[::2], np.asarray(s["book"])[::2]
+        gam, the = np.asarray(s["gamma"])[::2], np.asarray(s["theta"])[::2]
+        g1 = axes([0, 30], [50, 110], x_length=6.4, y_length=2.7, ylabel=r"bitcoin, per 100 at the start",
                   xticks=[0, 10, 20, 30], yticks=[60, 80, 100], font_size=16)
-        g2 = axes([0, 30], [-6, 6], x_length=6.2, y_length=2.4, xlabel=r"days from 1 May 2021", ylabel=r"hedged "
-                  r"straddle P\&L", xticks=[0, 10, 20, 30], yticks=[-5, 0, 5], font_size=16)
-        VGroup(g1, g2).arrange(DOWN, buff=0.45).to_edge(LEFT, buff=0.7).shift(DOWN * 0.1)
-        ls = curve(g1.ax, t[::2], S[::2], SPOT, stroke_width=2.5)
+        g1.to_corner(UL, buff=0.5).shift(DOWN * 0.1)
         k = DashedLine(g1.ax.c2p(0, 100), g1.ax.c2p(30, 100), color=GREY_B, stroke_width=1.5)
-        lb = curve(g2.ax, t[::2], np.clip(book[::2], -6, 6), OPT, stroke_width=3)
-        z = DashedLine(g2.ax.c2p(0, 0), g2.ax.c2p(30, 0), color=GREY_C, stroke_width=1.5)
+        kl = label(r"strike", font_size=16, color=GREY_B).next_to(g1.ax.c2p(30, 100), RIGHT, buff=0.08)
+        tr = ValueTracker(0.0)
+        path = tracing(g1.ax, t, S, tr, SPOT, stroke_width=2.5)
+        head = always_redraw(lambda: Dot(g1.ax.c2p(at_index(t, tr), at_index(S, tr)), radius=0.06, color=SPOT))
+        day = always_redraw(lambda: MathTex(rf"\text{{day}}\ {at_index(t, tr):.0f}", font_size=26, color=GREY_A)
+                            .next_to(g1, DOWN, buff=0.15).align_to(g1, LEFT))
+        led = HedgeLedger(gam, the, book, tr, scale=8.0, half_width=2.0, font_size=20)
+        led.move_to(DOWN * 2.2 + RIGHT * 0.3)
+        led.anchor.move_to(DOWN * 2.2 + RIGHT * 0.3)
         side = VGroup(
             label(rf"bought at DVOL: {100 * s['iv']:.0f}\% implied", font_size=24, color=VEGA),
             label(rf"realized over the month: {100 * s['rv']:.0f}\%", font_size=24, color=GAMMA),
             MathTex(rf"\text{{P\&L: }} {s['pnl']:+.1f}\ \text{{on a premium of }} {s['premium']:.1f}", font_size=28,
                     color=OPT),
-            wrapped_label(r"realized was almost twice implied, yet the straddle earned little: the crash carried "
-                          r"bitcoin far from the strike, where gamma is small, so the biggest moves paid least", 4.4, 20,
-                          GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
+            wrapped_label(r"the crash carried bitcoin far from the strike, where gamma is small: the gamma bar stops "
+                          r"growing just when the moves are biggest", 4.4, 20, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_corner(UR, buff=0.45)
+        pc = pause(r"Realized volatility was nearly twice what you paid for. Did the straddle double its money?",
+                   width=4.6, font_size=21).next_to(side[1], DOWN, buff=0.3).align_to(side, LEFT)
         src = real_data(r"Binance BTCUSDT hourly; Deribit DVOL; hedged every hour, no costs")
         with self.voiceover(
             "Here is the trade, on a real month. On the first of May 2021 you buy a thirty-day at-the-money Bitcoin "
             f"straddle at the market's implied volatility of {100 * s['iv']:.0f} percent, and hedge it every hour. "
+            "Watch the ledger fill as the month runs: gamma's earnings in pink, theta's bill in blue, and the book. "
             "<bookmark mark='a'/> On the nineteenth, Bitcoin crashed: at its low it had lost almost half its value. "
             f"Over the month it moved at a realized volatility of {100 * s['rv']:.0f} percent, nearly twice what you "
-            "paid for. <bookmark mark='b'/> And the straddle made only "
-            f"{s['pnl']:.1f} on a premium of {s['premium']:.1f}. The crash carried Bitcoin far from the strike, where "
-            "gamma is small, so the biggest moves paid the least. Being right about volatility is not enough; where "
-            "the volatility happens matters. That is the kind of thing this part is about."
+            "paid for. Pause, and predict: did the straddle double its money? <bookmark mark='b'/> It made only "
+            f"{s['pnl']:.1f} on a premium of {s['premium']:.1f}. Look at the gamma bar: it grew while Bitcoin wandered "
+            "near the strike, and almost stopped once the crash had carried it far away, where gamma is small. "
+            "Being right about volatility is not enough; where the volatility happens matters. That is the kind of "
+            "thing this part is about."
         ) as vo:
-            self.play(FadeIn(g1), Create(k), FadeIn(side[0]), FadeIn(src))
-            vo.wait_until("a")
-            self.play(Create(ls), FadeIn(side[1]), run_time=3)
-            vo.wait_until("b")
-            self.play(FadeIn(g2), Create(z), Create(lb), FadeIn(side[2]), run_time=2.5)
+            self.play(FadeIn(g1), Create(k), FadeIn(kl), FadeIn(side[0]), FadeIn(src), FadeIn(led))
+            self.add(path, head, day)
+            self.play(tr.animate.set_value(len(t) * 0.6), run_time=vo.until("a"), rate_func=linear)
+            self.play(tr.animate.set_value(len(t) - 1), FadeIn(side[1]), FadeIn(pc), run_time=vo.until("b"),
+                      rate_func=linear)
+            self.play(FadeOut(pc), FadeIn(side[2]))
             self.play(FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def history(self):
+        strip = timeline(lit=(1973, 1985, 1987, 2000, 2018, 2020, 2021, 2024)).to_edge(DOWN, buff=0.9)
+        head = label(r"How we got here", font_size=34, color=GREY_A).to_edge(UP, buff=0.4)
+        cards = VGroup(
+            history_card(1973, r"the CBOE opens", r"listed options with standard strikes; within a few years "
+                         r"traders carry sheets of model values onto the floor", color=QC.IDEA, width=3.1, font_size=18),
+            history_card(1985, r"Glosten--Milgrom; Leland", r"why a market maker's spread exists; what hedging costs",
+                         color=QC.IDEA, width=3.1, font_size=18),
+            history_card(1987, r"Black Monday", r"index puts repriced for good; Susquehanna was founded months before",
+                         color=QC.CRISIS, width=3.1, font_size=18),
+            history_card(2018, r"short volatility breaks", r"February 2018; and in March 2020, a fund family's "
+                         r"`hedged' options strategy", color=QC.CRISIS, width=3.1, font_size=18),
+        ).arrange(RIGHT, buff=0.22, aligned_edge=UP).next_to(head, DOWN, buff=0.35)
+        if cards.width > 13.2:
+            cards.scale_to_fit_width(13.2)
+        with self.voiceover(
+            "How did options become a trade in volatility? In 1973 the Chicago Board Options Exchange opened, with "
+            "standard contracts, the same year Black and Scholes published, and within a few years traders carried "
+            "printed sheets of the model's values onto the floor. <bookmark mark='a'/> In 1985 Lawrence Glosten and Paul "
+            "Milgrom explained why a market maker's spread exists, and Hayne Leland what hedging costs. "
+            "<bookmark mark='b'/> In 1987 Black Monday repriced index puts for good, months after Susquehanna was "
+            "founded to make options markets; Jane Street followed in 2000. <bookmark mark='c'/> Then the decades of "
+            "selling volatility, and the days it broke: February 2018, and March 2020, when a family of funds that "
+            "called itself hedged lost billions. In 2021 retail traders discovered short-dated options, and in 2024 "
+            "India, home of the world's largest derivatives exchange by contracts traded, began to rein in its own "
+            "boom."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(strip), FadeIn(cards[0], shift=UP * 0.2), run_time=1.5)
+            vo.wait_until("a")
+            self.play(FadeIn(cards[1], shift=UP * 0.2))
+            vo.wait_until("b")
+            self.play(FadeIn(cards[2], shift=UP * 0.2))
+            vo.wait_until("c")
+            self.play(FadeIn(cards[3], shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 
     def objectives(self):
         card = objectives_card([
-            r"Positions as Greeks; gamma against theta; vanna, volga, and what each strategy bets on",
-            r"Gamma scalping on a real bitcoin path",
-            r"Volatility trading: the premium, and a forecaster's edge, tested",
-            r"The market maker's book: quoting, inventory, and the firms that do it",
-            r"Expiry and pin risk; dispersion and implied correlation",
+            r"Positions as Greeks; a real day's P\&L explained; vanna, volga, and what each structure bets on",
+            r"Gamma scalping on a real path; how often to hedge",
+            r"The volatility premium in option returns; a forecaster's edge, tested; how much to bet",
+            r"Making a market: the spread, inventory, and a market maker that learns; hedging the book",
+            r"Expiry, pinning and early exercise; dispersion and implied correlation",
             r"India's expiry-day boom, and the SEBI case against Jane Street (allegations, contested)",
-            r"Hedging under costs: bands, and a learned hedger",
-        ], color=QC.IDEA)
+            r"A crisis file, the industry, and the frontier",
+        ], color=QC.IDEA, font_size=24)
         with self.voiceover(
-            "The plan. Positions as Greeks, and what each strategy is a bet on. Gamma scalping on a real path. "
-            "Volatility trading, and whether a forecast gives an edge. The market maker's book, and the firms that "
-            "keep one. Expiry, pin risk and dispersion. India's expiry-day boom, and the regulator's case against "
-            "Jane Street, which the firm contests. And hedging when every trade costs money."
+            "The plan. Positions as Greeks, a real day's profit and loss explained term by term, and what each "
+            "structure is a bet on. Gamma scalping on a real path, and how often to hedge. The volatility premium, a "
+            "forecaster's edge, and how much to bet. Making a market: the spread, inventory, a market maker that "
+            "learns, and hedging the book. Expiry, pinning, early exercise and dispersion. India's expiry-day boom, "
+            "and the regulator's case against Jane Street, which the firm contests. Then a crisis file, the "
+            "industry, and the frontier."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=10))

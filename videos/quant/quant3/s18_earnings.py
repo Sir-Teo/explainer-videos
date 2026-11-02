@@ -57,13 +57,10 @@ class Earnings(VoiceoverScene):
                           r"way after it: post-earnings-announcement drift (Bernard and Thomas 1989)", 4.6, 22, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "Do the statements move prices? In 1968 Ray Ball and Philip Brown sorted firms by whether their annual "
-            "earnings beat the year before, and followed their returns beyond the market's, for a year before and six "
-            "months after the report. <bookmark mark='a'/> Good news had risen and bad news had fallen, mostly before "
-            "the report: the market learns most of it from other sources first. <bookmark mark='b'/> But not all of "
-            "it. After the announcement, prices kept drifting the same way. In 1989 Victor Bernard and Jacob Thomas "
-            "showed the drift lasts about sixty trading days and survives the risk adjustments they tried. The market "
-            "seemed to under-react to earnings news."
+            "Do the statements move prices? In 1968 Ray Ball and Philip Brown sorted firms by whether annual earnings beat the "
+            "year before, and followed their returns beyond the market's. <bookmark mark='a'/> Good news had risen and bad news "
+            "fallen, mostly before the report: the market learns most of it elsewhere first. <bookmark mark='b'/> But prices kept "
+            "drifting the same way afterwards. In 1989 Bernard and Thomas showed the drift lasts about sixty trading days."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(side[0]))
             vo.wait_until("a")
@@ -88,12 +85,9 @@ class Earnings(VoiceoverScene):
                 why(r"the earnings release is filed as an 8-K, item 2.02; after 4 p.m.\ it can be traded only the next day")]
         step = ladder(self, rows, whys, keep=3, top=2.5, x=-1.0, buff=0.9, edge=6.9)
         with self.voiceover(
-            "To measure the drift you need two definitions. The surprise: this quarter's earnings minus the same "
-            "quarter last year, divided by how much that seasonal difference usually moves. It is called standardised "
-            "unexpected earnings. <bookmark mark='a'/> The reaction: the stock's return minus the market's, summed "
-            "day by day from the announcement, the cumulative abnormal return. <bookmark mark='b'/> And the clock "
-            "starts when the news was public: American companies file their earnings releases as an 8-K, item 2.02, "
-            "with a time stamp, so day zero is the first trading session after it."
+            "Two definitions. The surprise: this quarter's earnings less the same quarter last year, in units of how much that "
+            "difference usually moves. <bookmark mark='a'/> The reaction: returns beyond the market's, summed from the "
+            "announcement. <bookmark mark='b'/> Day zero is the first session after the 8-K, item 2.02, was filed."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -114,12 +108,10 @@ class Earnings(VoiceoverScene):
         pp.shift(DOWN * 0.8)
         with self.voiceover(
             "The House's event study is six lines: take the window around day zero, subtract the market, add up. "
-            "<bookmark mark='a'/> Run it on one Apple announcement, filed after the close on "
-            f"{f[:4]}-{f[4:6]}-{f[6:]}, so day zero is the next session. The surprise was {L['sue']:.2f} standard "
-            f"deviations; the stock moved {100 * L['car0']:+.1f} percent against the market on the day, and "
-            f"{100 * L['car60']:+.1f} percent over sixty sessions. One event says little; you need many. "
-            "<bookmark mark='b'/> Pause and predict before we run them all: a firm beats by three standard deviations "
-            "and jumps five percent. Do you buy at the next open?"
+            f"<bookmark mark='a'/> Run it on one Apple announcement, filed after the close: a surprise of {L['sue']:.2f} standard "
+            f"deviations, {100 * L['car0']:+.1f} percent against the market on the day, {100 * L['car60']:+.1f} over sixty "
+            "sessions. One event says little; you need many. <bookmark mark='b'/> Pause and predict before we run them all: a "
+            "firm beats by three standard deviations and jumps five percent. Do you buy at the next open?"
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -161,14 +153,12 @@ class Earnings(VoiceoverScene):
         src = real_data(r"SEC EDGAR 8-K item 2.02 and company facts; Yahoo Finance daily closes")
         sign_line = "That is the textbook sign, on very few events. " if right else "That is the wrong way round. "
         with self.voiceover(
-            "Now all of Apple's announcements from late 2015 to the end of 2020, each path started at its own day zero, "
-            "green when earnings beat the seasonal forecast, red when they missed. <bookmark mark='a'/> The paths pile "
-            f"up; the thick lines are the two averages. The day-zero move barely lines up with the surprise: a "
-            f"correlation of {pe['jump_corr']:.2f}. <bookmark mark='b'/> And after day one, the beats drifted "
-            f"{100 * dp:+.1f} percent and the misses {100 * dn:+.1f}. "
-            + sign_line + f"But these are {pe['n_events']} events of one company, which is a lab exercise, not a test, and a "
-            "seasonal forecast of net income is also a crude stand-in for what analysts expected. The test needs "
-            "thousands of firms."
+            "Now all of Apple's announcements from late 2015 to 2020, each path started at its own day zero, green when earnings "
+            "beat the seasonal forecast, red when they missed. <bookmark mark='a'/> The thick lines are the averages. The day-zero "
+            f"move barely lines up with the surprise: a correlation of {pe['jump_corr']:.2f}. <bookmark mark='b'/> After day one, "
+            f"the beats drifted {100 * dp:+.1f} percent and the misses {100 * dn:+.1f}. " + sign_line + f"But {pe['n_events']} "
+            "events of one company are a lab exercise, not a test, and a seasonal forecast of net income is a crude stand-in for "
+            "what analysts expected."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(src), FadeIn(side[:2]))
             self.play(LaggedStart(*[Create(p_) for p_ in paths], lag_ratio=0.15, run_time=5))
@@ -212,15 +202,11 @@ class Earnings(VoiceoverScene):
         after_line = ("which is statistically indistinguishable from zero. " if gone else
                       "which is still clearly positive. ")
         with self.voiceover(
-            "Thousands of firms is what the open-source replication of the anomaly literature provides. Its version "
-            "of Foster, Olsen and Shevlin's 1984 portfolio buys the highest earnings surprises and sells the lowest, "
-            "every month since 1974. <bookmark mark='a'/> In the original sample it earned "
-            f"{o['in']:.2f} percent a month; after publication, {o['post']:.2f}, still significant. "
-            f"<bookmark mark='b'/> But look at the line after 2006: {o['after2006']:.2f} percent a month, "
-            + after_line + "Charles Martineau's 2022 paper is titled Rest in Peace Post-Earnings Announcement Drift: for all but "
-            "the smallest stocks, prices now absorb the surprise on the day. Others argue that it survives with "
-            "different samples; it is contested. <bookmark mark='c'/> So, the desk question: buy at the next open "
-            "after a big beat? On today's evidence for large stocks, the news is already in the price."
+            "At scale: the open-source version of Foster, Olsen and Shevlin's 1984 portfolio, long high surprises, short low, "
+            f"since 1974. <bookmark mark='a'/> {o['in']:.2f} percent a month in their sample, {o['post']:.2f} after publication. "
+            f"<bookmark mark='b'/> Since 2006, {o['after2006']:.2f}, " + after_line + "Martineau's 2022 paper is titled Rest in "
+            "Peace Post-Earnings Announcement Drift; others dispute it. <bookmark mark='c'/> So for large stocks, the news is "
+            "already in the price."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(rows[0]))
             self.add(line)

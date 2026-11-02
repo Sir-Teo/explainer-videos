@@ -290,9 +290,7 @@ class Margin(VoiceoverScene, ThreeDScene):
             "fifty, liquidated if the hourly lows touched its line within H days. Colour is the data; the white mesh, the "
             "formula. <bookmark mark='a'/> Leverage turns a slope into a cliff. The pin is ten times for nineteen days, the "
             f"March 2020 trade: liquidated from {100 * q['p_L10_H19']:.0f} percent of starting days. <bookmark mark='b'/> "
-            + month
-            + " Over ninety days, "
-            + quarter
+            f"{month} Over ninety days, {quarter}"
         ) as vo:
             self.play(FadeIn(hint), FadeIn(src), Create(ax), run_time=1.2)
             self.play(Create(surf), run_time=3)

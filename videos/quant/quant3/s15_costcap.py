@@ -51,16 +51,11 @@ class CostOfCapital(VoiceoverScene):
                 why(r"or value the firm unlevered and add financing effects one by one: adjusted present value")]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-1.2, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Every valuation needs a discount rate. Free cash flow belongs to lenders and owners together, so it is "
-            "discounted at a blend of what each demands, the weighted average cost of capital, with debt's cost cut "
-            f"by the tax rate because interest is deductible. Our toy firm's comes to {100 * ex:.2f} percent. "
-            "<bookmark mark='a'/> Where does the owners' rate come from? Leverage scales the owners' risk: the "
-            "equity beta is the asset beta plus the spread over the debt's beta times debt over equity. "
-            "<bookmark mark='b'/> And the textbook prices that risk with the capital asset pricing model: the "
-            "riskless rate plus beta times the equity risk premium. Part twenty-three tests whether it works. "
-            "<bookmark mark='c'/> When the financing changes over time, practitioners value the firm without debt and "
-            "add the tax shield and the costs of distress separately: the adjusted present value. Each route needs one "
-            "number nobody can observe: the equity risk premium."
+            "Free cash flow is discounted at the weighted average cost of capital, debt's cost cut by the tax rate: "
+            f"{100 * ex:.2f} percent for the toy firm. <bookmark mark='a'/> Leverage scales the owners' risk: the equity beta. "
+            "<bookmark mark='b'/> The CAPM prices it: the riskless rate plus beta times the equity risk premium. "
+            "<bookmark mark='c'/> Or value the firm unlevered and add the tax shield and distress costs: APV. Each needs one number "
+            "nobody observes: the premium."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -120,15 +115,11 @@ class CostOfCapital(VoiceoverScene):
             label(rf"growing {100 * g:.2f}\% for five years, then at the 10-year yield, {100 * gl:.2f}\%", font_size=19,
                   color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The market's price answers that question, if you let it. Here is a balance. On the left, the S&P 500 at "
-            "the end of 2020. On the right, the cash it was expected to pay its owners, dividends and buybacks, "
-            "growing at the analysts' forecast for five years and at the bond yield after that, each payment "
-            "discounted. <bookmark mark='a'/> Turn the dial on the discount rate. At twelve percent the cash is worth "
-            "too little and the beam tips toward the price. Lower the rate and the stack grows, mostly its top block, "
-            "the value after year five. <bookmark mark='b'/> At one rate the beam is level: "
-            f"{100 * target:.2f} percent. That is the return the price implies, if the forecasts are right. Subtract "
-            f"the ten-year yield and what is left, {100 * (target - gl):.2f} percent, is the implied equity risk "
-            "premium: Aswath Damodaran has published it every year since 1960."
+            "The market's price can supply it. A balance: on the left, the S&P 500 at the end of 2020; on the right, its expected "
+            "cash to owners, dividends and buybacks, growing at analysts' forecasts, then at the bond yield, each discounted. "
+            "<bookmark mark='a'/> Turn the dial on the rate: at twelve percent the cash is worth too little; lower it and the stack "
+            f"grows. <bookmark mark='b'/> Level at {100 * target:.2f} percent: the return the price implies. Less the ten-year "
+            f"yield, {100 * (target - gl):.2f} percent is the implied premium, which Damodaran has published since 1960."
         ) as vo:
             self.add(tri, b)
             self.play(FadeIn(inputs))
@@ -149,11 +140,10 @@ class CostOfCapital(VoiceoverScene):
             rows.append(f"{y}: price {L['price']:7.1f}  cash {L['cash']:5.1f}  -> r {100 * L['implied']:5.2f}%  "
                         f"ERP {100 * L['erp']:4.2f}%  (published {100 * L['published']:4.2f}%)")
         with self.voiceover(
-            "The House's version is eight lines: the cash flows, their value at a trial rate, and a root finder. The "
-            "value falls as the rate rises, so there is exactly one rate that matches the price. "
-            "<bookmark mark='a'/> Run it on three year-ends. December 1999, the top of the technology bubble; "
-            "December 2008, after Lehman; December 2020. The implied premium was lowest when prices were highest, and "
-            "highest when everyone was frightened. Next to each, Damodaran's published number."
+            "The House's version is eight lines: the cash flows, their value at a trial rate, and a root finder. The value falls "
+            "as the rate rises, so exactly one rate matches the price. <bookmark mark='a'/> Run it at three year-ends: December "
+            "1999, the top of the technology bubble; December 2008, after Lehman; and December 2020. The implied premium was "
+            "lowest when prices were highest and highest when everyone was frightened. Beside each, Damodaran's published number."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -184,14 +174,12 @@ class CostOfCapital(VoiceoverScene):
         pp.to_edge(DOWN, buff=0.4)
         src = real_data(r"Damodaran, histimpl.xls (S\&P 500, year ends); rebuilt by the House's implied\_rate")
         with self.voiceover(
-            "Run the rebuild for every year from 1960 to 2020, and lay Damodaran's published premiums on top. "
-            f"<bookmark mark='a'/> In {ok} of {e['n_window']} years they agree to within a fifth of a point. Where "
-            "they part, mostly between 1995 and 2009, his published column was built from cash-flow estimates that "
-            "the spreadsheet's plain inputs do not carry. A rebuild that disagrees is a finding too: it tells you "
-            "which number you could not have reproduced. <bookmark mark='b'/> Read the line as a forecast. The "
-            "premium was high in the late seventies, before two decades of strong returns, and lowest at the end of "
-            "1999. Pause and predict: what did two percent promise for the following decade? <bookmark mark='c'/> Close "
-            "to nothing: the 2000s were a lost decade for American stocks. A low implied premium is a high price."
+            "Run the rebuild for every year since 1960 and lay Damodaran's published premiums on top. <bookmark mark='a'/> "
+            f"In {ok} of {e['n_window']} years they agree within a fifth of a point; where they part, mostly from 1995 to 2009, his "
+            "published column used cash-flow estimates the spreadsheet's plain inputs do not carry. A rebuild that disagrees is a "
+            "finding too. <bookmark mark='b'/> Read the line as a forecast: the premium was high in the late seventies, before two "
+            "strong decades, and lowest in 1999. Pause and predict: what did two percent promise? <bookmark mark='c'/> Close to "
+            "nothing: the 2000s were a lost decade for American stocks."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.03, run_time=2))

@@ -99,9 +99,10 @@ class MM(VoiceoverScene):
                            GREY_A)
         VGroup(leg, f, nt).arrange(DOWN, aligned_edge=LEFT, buff=0.55).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "The second proposition is about returns. Owners of a levered firm keep the spread on borrowed money, so their "
-            "required return rises in a straight line with leverage. <bookmark mark='a'/> So does their risk, by exactly as much, "
-            "and the blend, the firm's cost of capital, does not move. Cheap debt makes equity dearer."
+            "The second proposition is about returns. If the whole firm earns eight percent and debt costs four, the owners of a "
+            "levered firm keep the spread on the borrowed money, so their required return rises in a straight line with leverage. "
+            "<bookmark mark='a'/> But so does their risk, by exactly as much, and the blend, the cost of capital of the whole firm, "
+            "does not move. Cheap debt is not cheap: every dollar of it makes the equity dearer."
         ) as vo:
             self.play(FadeIn(g), Create(lA), Create(lD), FadeIn(leg[1:]))
             vo.wait_until("a")

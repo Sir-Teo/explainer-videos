@@ -17194,9 +17194,19 @@
   "bytes": 147573,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
  },
+ "fred/VIXCLS/1990-01-01_2025-12-31": {
+  "sha256": "ff18bc3a5b681767a3138ca016af1dbd2966eae165c229f1e03d72080de5eaed",
+  "bytes": 171791,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
+ },
  "fred/VIXCLS/1990-01-02_2025-12-31": {
   "sha256": "ff18bc3a5b681767a3138ca016af1dbd2966eae165c229f1e03d72080de5eaed",
   "bytes": 171791,
+  "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
+ },
+ "fred/VIXCLS/1998-01-01_1998-12-31": {
+  "sha256": "17d94b3642e6a661dcd7deb9d2fe19a41f0a0ea00adf007e26b4929c79f1d7fa",
+  "bytes": 4766,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS"
  },
  "fred/VIXCLS/2016-01-01_2025-12-31": {
@@ -17363,6 +17373,11 @@
   "sha256": "3bfcf302807fddf6b54a337ee2454e18167bc01b9886a404f52b4f8f457f9c0b",
   "bytes": 42526,
   "source": "https://query1.finance.yahoo.com/v8/finance/chart/SPY"
+ },
+ "yahoo/^GSPC/1986-01-01_1987-12-31": {
+  "sha256": "a2bc0643f2be3326ff20eff289bfeacc96cf03da57812228c2e4f8d167fe7539",
+  "bytes": 10075,
+  "source": "https://query1.finance.yahoo.com/v8/finance/chart/^GSPC"
  },
  "yahoo/^GSPC/1990-01-01_2025-11-30": {
   "sha256": "45a13c065055fc7b2a52d1db0c18b262dc6492dcebe9085b8b8d9163b2372166",

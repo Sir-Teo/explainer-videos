@@ -163,8 +163,7 @@ class Event(VoiceoverScene):
             f"{100 * f['share_of_return']:.0f} percent of the excess return. David Lucca and Emanuel Moench reported in "
             "2015 that since 1994 the S&P 500 rose forty-nine basis points on average in the twenty-four hours before "
             "scheduled announcements, about thirty-three close to close. Our 1994 to 2011 figure: "
-            f"{1e4 * s['1994-2011']['ar']:.0f}. <bookmark mark='d'/> From 2011, {1e4 * late['ar']:.0f} basis points, "
-            + fade + "."
+            f"{1e4 * s['1994-2011']['ar']:.0f}. <bookmark mark='d'/> From 2011, {1e4 * late['ar']:.0f} basis points, {fade}."
         ) as vo:
             self.play(FadeIn(cal), FadeIn(src), LaggedStart(*[Create(p) for p in small], lag_ratio=0.05, run_time=3))
             vo.wait_until("a")

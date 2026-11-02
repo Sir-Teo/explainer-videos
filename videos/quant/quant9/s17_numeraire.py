@@ -32,11 +32,10 @@ class Numeraire(VoiceoverScene):
                          who=r"Geman, El Karoui and Rochet (1995); Jamshidian (1989) for the bond", color=Q_C,
                          width=10.4, font_size=25).move_to(UP * 0.5)
         with self.voiceover(
-            "So far every price has been measured in units of the bank account. Nothing forces that. Any asset with "
-            "a strictly positive price can be the unit of account, the numeraire, and each numeraire comes with its "
-            "own martingale measure. <bookmark mark='a'/> Hélyette Geman, Nicole El Karoui and Jean-Charles Rochet "
-            "made this a general tool in 1995, and Farshid Jamshidian had used the bond as numeraire in 1989. The "
-            "density between two of these measures is just the ratio of the two numeraires' growth."
+            "So far prices were measured in units of the bank account. Any asset with a strictly "
+            "positive price can be the unit instead, with its own martingale measure. <bookmark "
+            "mark='a'/> Geman, El Karoui and Rochet made this a general tool in 1995, after "
+            "Jamshidian's bond numeraire of 1989."
         ) as vo:
             self.play(FadeIn(t, shift=UP * 0.2))
             vo.wait_until("a")
@@ -60,15 +59,13 @@ class Numeraire(VoiceoverScene):
                     r"(Girsanov with $\sigma$): $N(d_1)$ and $N(d_2)$ are one event's probability under two measures", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "The derivation takes two lines. Any price, divided by the numeraire, is an expectation under that "
-            "numeraire's measure; and divided by the bank account, an expectation under Q. <bookmark mark='a'/> Both "
-            "hold for every claim, so the two measures differ by the ratio of how the numeraire and the bank account "
-            "grew. <bookmark mark='b'/> Use it on a call. The payoff is the share you receive minus the strike you "
-            "pay, when the call ends in the money. <bookmark mark='c'/> The strike part is a Q-probability. The share "
-            "part, measured in shares, is a probability under the stock's own measure. <bookmark mark='d'/> Under the "
-            "stock measure the log-price drifts up by a full sigma squared more, and so the two famous terms of Black "
-            "and Scholes are the same event, the call ending in the money, seen in two units of account: N of d one "
-            "in shares, N of d two in dollars."
+            "Two lines. A price divided by the numeraire is an expectation under its measure; divided "
+            "by the bank account, under Q. <bookmark mark='a'/> Both hold for every claim, so the "
+            "measures differ by the numeraires' relative growth. <bookmark mark='b'/> Use it on a "
+            "call: the share you receive minus the strike you pay, if in the money. <bookmark "
+            "mark='c'/> The strike part is a Q-probability; the share part, in units of shares, a "
+            "probability under the stock's measure. <bookmark mark='d'/> There the log-price drifts a "
+            "full sigma squared higher: N of d one and N of d two are one event seen in two units."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -116,13 +113,12 @@ class Numeraire(VoiceoverScene):
                           r"how much stock it ends with", 4.4, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "See it. A stock at a hundred, twenty-five percent volatility, one year, zero rates, a call struck at a "
-            "hundred. The purple curve is Q's density for the price at expiry; the shaded area, the chance of ending "
-            f"in the money under Q, is {n['Nd2']:.4f}: N of d two. <bookmark mark='a'/> Now change the unit to the "
-            "stock. Multiply the density by the price over today's price: every outcome counts in proportion to how "
-            "much it is worth in shares. The curve leans right, and the same shaded event now has probability "
-            f"{n['Nd1']:.4f}: N of d one. <bookmark mark='b'/> A hundred times the first minus a hundred times the "
-            f"second: {n['call']:.2f}, the Black-Scholes price. One payoff, two units, two probabilities, one price."
+            "See it. A stock at a hundred, twenty-five percent volatility, one year, a call at a "
+            f"hundred. Q's density, and the chance of ending in the money: {n['Nd2']:.4f}, N of d two. "
+            "<bookmark mark='a'/> Change the unit to the stock: multiply the density by the price. It "
+            f"leans right, and the same event has probability {n['Nd1']:.4f}, N of d one. <bookmark "
+            f"mark='b'/> A hundred times the first minus a hundred times the second: {n['call']:.2f}. "
+            "One payoff, two units, one price."
         ) as vo:
             self.add(D)
             self.play(FadeIn(g), Create(kl), FadeIn(side[0]), FadeIn(area), FadeIn(side[2]))
@@ -154,15 +150,13 @@ class Numeraire(VoiceoverScene):
                     color=ALT),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The trick pays off on an option to exchange one asset for another. Measure everything in units of the "
-            "second asset. The payoff becomes a call on the ratio of the two, struck at one. <bookmark mark='a'/> "
-            "Under the second asset's measure that ratio is a martingale, with a volatility built from both "
-            "volatilities and their correlation. <bookmark mark='b'/> So the price is the second asset times a "
-            "Black-Scholes call on the ratio, with no interest rate at all: William Margrabe's formula of 1978. "
-            "<bookmark mark='c'/> Two assets at a hundred, thirty percent volatility each, correlation one half: "
-            f"the formula says {n['margrabe']:.2f}. A million paths of both assets under Q say {n['mc_Q']:.2f}; a "
-            f"million paths of the ratio alone under the second asset's measure say {n['mc_S2']:.2f}. Three methods, "
-            "one price, within the simulation's error."
+            "It pays off on an option to exchange one asset for another. In units of the second "
+            "asset, the payoff is a call on their ratio, struck at one. <bookmark mark='a'/> Under "
+            "that asset's measure the ratio is a martingale, with a volatility from both and their "
+            "correlation. <bookmark mark='b'/> So the price is Black and Scholes on the ratio, with "
+            "no rates: Margrabe, 1978. <bookmark mark='c'/> At these numbers the formula says "
+            f"{n['margrabe']:.2f}; a million paths under Q, {n['mc_Q']:.2f}; a million under the "
+            f"second asset's measure, {n['mc_S2']:.2f}."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -197,16 +191,12 @@ class Numeraire(VoiceoverScene):
         ).arrange(DOWN, buff=0.22).next_to(items, DOWN, buff=0.5)
         src = real_data(r"the Surface's density for 27 March 2026 (chapter 12)")
         with self.voiceover(
-            "The same idea runs the rest of the series. The zero-coupon bond as numeraire gives the T-forward "
-            "measure, under which forward prices are martingales; the annuity gives the measure under which swap "
-            "rates are, and swaptions become Black's formula. Part nineteen uses both. <bookmark mark='a'/> And "
-            "Deribit already uses Bitcoin as numeraire: its options are priced and paid in Bitcoin. Take the "
-            "Surface's call a hundred and seven days out. Its dollar price, as a Q-expectation, is "
-            f"{n['usd']:,.0f} dollars. Its Bitcoin price, as an expectation under the Bitcoin measure of the payoff "
-            f"divided by the Bitcoin price, is {n['btc']:.4f}. <bookmark mark='b'/> Multiply by the forward, and "
-            "you get the same dollars back, to the cent. The two measures disagree about the chance of ending in "
-            f"the money, {n['Q_itm']:.2f} against {n['QB_itm']:.2f}, and agree exactly about the price. That is why "
-            "parity in chapter one read one minus K over F."
+            "The bond as numeraire gives the T-forward measure, the annuity the swap measure; Part "
+            "nineteen uses both. <bookmark mark='a'/> And Deribit's unit is Bitcoin. The Surface's "
+            f"hundred-and-seven-day call costs {n['usd']:,.0f} dollars as a Q-expectation, and "
+            f"{n['btc']:.4f} Bitcoin under the Bitcoin measure. <bookmark mark='b'/> Times the "
+            "forward, the same dollars. The two measures disagree on the chance of finishing in the "
+            f"money, {n['Q_itm']:.2f} against {n['QB_itm']:.2f}, and agree on the price."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(i_) for i_ in items[:2]], lag_ratio=0.4))
             vo.wait_until("a")
@@ -220,9 +210,9 @@ class Numeraire(VoiceoverScene):
         card = pause_at(r"Under the stock's own measure $Q^S$, does the stock drift faster or slower than the riskless "
                         r"rate?")
         with self.voiceover(
-            "Pause and predict. Under the stock's own measure, does the stock drift faster or slower than the "
-            "riskless rate? <bookmark mark='a'/> Faster, by sigma squared. Measuring in shares weights each path by "
-            "how high it ends, and that tilts the drift up by exactly the stock's variance rate."
+            "Pause and predict. Under the stock's own measure, does the stock drift faster or slower "
+            "than the riskless rate? <bookmark mark='a'/> Faster, by sigma squared: weighting paths "
+            "by where they end tilts the drift up."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

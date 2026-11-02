@@ -41,13 +41,11 @@ class Events(VoiceoverScene):
                 why(r"a risk-neutral probability, not a forecast: it includes a premium for bearing deal risk")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.4, buff=0.9, edge=6.9)
         with self.voiceover(
-            "When one company bids cash for another, the target's shares jump towards the offer, but not all the "
-            "way. The gap is the spread, and a merger arbitrageur buys the target and waits. Price it like Part one's "
-            "fair game: today's price is the discounted expected payoff, the offer if the deal closes, the fallback "
-            "price if it breaks. <bookmark mark='a'/> Solve for p, and the price becomes a probability: the "
-            "market's implied chance of closing. <bookmark mark='b'/> A target at forty-seven, an offer of fifty, a "
-            "fallback of thirty-five and six months at four percent: eighty-six percent. It is a risk-neutral number, "
-            "which includes a premium for bearing the risk, so the true chance is somewhat higher."
+            "When one company bids cash for another, the target's shares jump towards the offer, but not all the way, and a "
+            "merger arbitrageur buys and waits. Price it like Part one's fair game: the price is the discounted expected payoff, "
+            "the offer if the deal closes, the fallback if it breaks. <bookmark mark='a'/> Solve for p: the market's implied "
+            "chance of closing. <bookmark mark='b'/> A target at forty-seven, an offer of fifty, a fallback of thirty-five, six "
+            "months at four percent: eighty-six percent. It is risk-neutral, so it includes a premium for bearing deal risk."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -97,16 +95,13 @@ class Events(VoiceoverScene):
         caveat.next_to(lows, DOWN, buff=0.25).align_to(side, LEFT)
         src = real_data(r"Yahoo Finance weekly closes; Tapestry and Capri releases; FTC; S.D.N.Y.")
         with self.voiceover(
-            "A real deal, as it happened. In August 2023 Tapestry, the owner of Coach, agreed to buy Capri, the owner "
-            "of Michael Kors and Versace, for fifty-seven dollars a share in cash. Capri had closed the week before at "
-            f"{B:.2f}. <bookmark mark='a'/> The price jumped, but stopped short of fifty-seven. Below, the implied "
-            "chance of closing, recomputed every week from the price, the offer and that fallback. "
-            "<bookmark mark='b'/> In April 2024 the Federal Trade Commission sued to block the deal, alleging it "
-            "would reduce competition in accessible luxury handbags, and the implied probability fell. "
-            "<bookmark mark='c'/> In October a federal judge granted a preliminary injunction. Capri fell to about "
-            "twenty-one dollars, far below where it started, and three weeks later the companies terminated the "
-            "agreement. The arbitrageur's payoff is lopsided: a few dollars if the deal closes, half the price if it "
-            "breaks."
+            "A real deal, as it happened. In August 2023 Tapestry, the owner of Coach, agreed to buy Capri, the owner of Michael "
+            f"Kors and Versace, for fifty-seven dollars a share in cash; Capri had closed the week before at {B:.2f}. "
+            "<bookmark mark='a'/> The price jumped, but stopped short. Below, the implied chance of closing, recomputed every week. "
+            "<bookmark mark='b'/> In April 2024 the Federal Trade Commission sued to block the deal, alleging it would reduce "
+            "competition in accessible luxury handbags, and the probability fell. <bookmark mark='c'/> In October a federal judge "
+            "granted a preliminary injunction; Capri fell to about twenty-one dollars, below where it started, and the companies "
+            "terminated the agreement. A few dollars if it closes, half the price if it breaks."
         ) as vo:
             self.play(FadeIn(g), FadeIn(h), Create(fall), FadeIn(fl), FadeIn(src))
             self.add(line)
@@ -169,16 +164,14 @@ class Events(VoiceoverScene):
                      "The extra slope has their sign, but its bootstrap band includes zero: one fund and a handful of "
                      "crash months cannot pin it down. ")
         with self.voiceover(
-            "Add up many deals and you get a strategy. In 2001 Mark Mitchell and Todd Pulvino measured it on four "
-            "thousand seven hundred and fifty mergers: in calm and rising markets the returns barely depend on the "
-            "market, but in severe falls they do, because deals break together when markets crash. "
-            "<bookmark mark='a'/> Test that on public data: The Merger Fund, one of the oldest merger-arbitrage mutual "
-            f"funds, month by month since 1989 against the S&P 500. Its worst month, {100 * m['worst']:.1f} percent, "
-            f"came when the market fell {100 * abs(m['worst_mkt']):.1f}. <bookmark mark='b'/> Fit a line with a hinge "
-            f"at a four percent market fall. Above it the slope is {bu:.2f}; below it, {m['beta_down']:.2f}. "
-            + kink_line + "<bookmark mark='c'/> A small steady gain with a kink into losses in a crash is the payoff of selling a "
-            "put on the market. Mitchell and Pulvino found about four percent a year after costs, payment for "
-            "insurance. A strategy that looks like free money is often an option someone sold without saying so."
+            "Add up many deals and you get a strategy. Mitchell and Pulvino measured it in 2001 on four thousand seven hundred "
+            "and fifty mergers: in calm markets the returns barely depend on the market, but in severe falls they do, because "
+            "deals break together. <bookmark mark='a'/> Test that on public data: The Merger Fund, one of the oldest "
+            "merger-arbitrage mutual funds, month by month since 1989 against the S&P 500. Its worst month was "
+            f"{100 * m['worst']:.1f} percent. <bookmark mark='b'/> Fit a line with a hinge at a four percent market fall: slope "
+            f"{bu:.2f} above, {m['beta_down']:.2f} below. " + kink_line + "<bookmark mark='c'/> A small steady gain with a kink "
+            "into losses in a crash is the payoff of selling a put. They found about four percent a year after costs: payment for "
+            "insurance."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]))
             vo.wait_until("a")
@@ -206,12 +199,8 @@ class Events(VoiceoverScene):
                            r"closes in six months and cash earns 4\% a year. What chance of closing is priced in?",
                            width=8.4, font_size=21).next_to(card, DOWN, buff=0.3)
         with self.voiceover(
-            "The put is exercised on the whole book at once. In 2014 AbbVie agreed to buy Shire for about fifty-four "
-            "billion dollars, partly to move its tax home out of the United States. In September the Treasury "
-            "announced rules against such inversions, and in October AbbVie walked away, paying a break fee of about "
-            "one point six billion. Funds holding the spread lost heavily, and spreads on other deals widened at the "
-            "same time. <bookmark mark='a'/> The desk question from the start of the chapter is in the notes, with "
-            "its solution."
+            "The put is exercised on the whole book at once: in 2014 AbbVie walked away from Shire after new inversion rules, and "
+            "spreads widened together. <bookmark mark='a'/> The chapter's desk question is solved in the notes."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

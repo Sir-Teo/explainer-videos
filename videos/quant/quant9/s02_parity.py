@@ -78,7 +78,8 @@ class Parity(VoiceoverScene):
             "minus put equals stock minus discounted strike. <bookmark mark='d'/> On Deribit, where "
             "prices are in bitcoin, divide by the forward: one minus K over F."
         ) as vo:
-            self.play(FadeIn(g), Create(zero), FadeIn(leg[0]), Create(call))
+            self.play(FadeIn(g), Create(zero), FadeIn(leg[0]), Create(call),
+                      FadeIn(note(r"Bj\"ork, ch.\ 10; Hull, ch.\ 11; Stoll (1969)", font_size=17).to_corner(DR, buff=0.25)))
             vo.wait_until("a")
             self.play(FadeIn(leg[1]), Create(sput))
             vo.wait_until("b")

@@ -180,7 +180,8 @@ class Hybrid(VoiceoverScene):
         slower = tim[-1]["cholesky"] > tim[-1]["hybrid"]
         verdict = ("and by four thousand steps the exact Cholesky factorisation is the slower of the two"
                    if slower else "though at these sizes an exact Cholesky factorisation is still competitive on this "
-                                  "machine; its cost grows with the cube of the steps")
+                                  "machine: the hybrid scheme's real advantage is accuracy on any grid, at a cost that "
+                                  "grows gently")
         with self.voiceover(
             "The House's version, abridged to its essentials: the covariance of the first cell and its Cholesky "
             "factor, the optimal points, the convolution by FFT, and the variance. <bookmark mark='a'/> Run the "

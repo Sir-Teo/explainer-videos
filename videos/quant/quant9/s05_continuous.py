@@ -40,14 +40,11 @@ class Continuous(VoiceoverScene):
                            r"$\int \theta\, dS$; the theorem then needs admissible strategies (chapter 10)", 11.0, 21,
                            GREY_A).next_to(foot, DOWN, buff=0.35)
         with self.voiceover(
-            "The one-period theorem grew up. Michael Harrison and David Kreps, in 1979, proved it for many dates: no "
-            "arbitrage if and only if there is an equivalent martingale measure, under which prices divided by the "
-            "bank account are fair games. <bookmark mark='a'/> Harrison and Stanley Pliska, in 1981, brought in "
-            "continuous trading, with the stochastic integrals of Part five as trading gains, and proved the second "
-            "theorem: the market is complete exactly when the measure is unique, and then the martingale "
-            "representation theorem hands you the hedge. <bookmark mark='b'/> In continuous time one caution "
-            "appears, about which strategies are allowed; the next chapter is about it. First, what Q looks like "
-            "when there are paths."
+            "The theorem grew up. Harrison and Kreps, 1979: many dates, no arbitrage if and only if "
+            "an equivalent martingale measure exists. <bookmark mark='a'/> Harrison and Pliska, 1981: "
+            "continuous trading, gains as stochastic integrals, and complete exactly when the measure "
+            "is unique. <bookmark mark='b'/> Continuous time adds a caution about which strategies "
+            "are allowed; that is the next chapter."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -75,15 +72,13 @@ class Continuous(VoiceoverScene):
                     r"cost (square the exponential, Gaussian moment generating function)", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "The continuous-time state prices come from Girsanov's theorem, from Part five. The stock grows at mu "
-            "under the real measure. <bookmark mark='a'/> Divide by the bank account: the discounted stock drifts "
-            "at mu minus r. <bookmark mark='b'/> Fold that excess drift into the noise: define a new Brownian motion "
-            "shifted by lambda times t, where lambda is the excess return per unit of volatility, the market price of "
-            "risk. In the new noise the discounted stock has no drift: it is a martingale. <bookmark mark='c'/> "
-            "Girsanov says the new noise is a Brownian motion under a measure with this density, an exponential in "
-            "the final value of the old noise. <bookmark mark='d'/> So any price is a P-expectation with weights, or "
-            "a Q-expectation without them. And the weights' second moment, e to the lambda squared T, says how much "
-            "Monte Carlo accuracy the reweighting costs."
+            "Continuous-time state prices come from Girsanov's theorem. The stock grows at mu under "
+            "P. <bookmark mark='a'/> Discounted, it drifts at mu minus r. <bookmark mark='b'/> Fold "
+            "the excess drift into the noise, shifted by lambda, the market price of risk: the "
+            "discounted stock becomes a martingale. <bookmark mark='c'/> Girsanov: the new noise is "
+            "Brownian under this exponential density. <bookmark mark='d'/> So a price is a weighted "
+            "P-expectation, or a plain Q-expectation; the weights' second moment sets the Monte Carlo "
+            "cost."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -149,13 +144,13 @@ class Continuous(VoiceoverScene):
                                                                                                   aligned_edge=LEFT)
         src = illustration(rf"simulated: $\mu = {100 * g['mu']:.0f}\%$, $\sigma = {100 * g['sigma']:.0f}\%$, $r = 0$")
         with self.voiceover(
-            "Here is what a change of measure looks like. A hundred and fifty stock paths simulated under the real "
-            "measure, with ten percent drift a year. Their average, the thick line, climbs. On the right, where they "
-            "end. <bookmark mark='a'/> Now don't move a single path. Give each one the weight Girsanov prescribes, "
-            "which depends only on where its noise ended. Paths that rose a lot get thin: they are down-weighted. "
-            "Paths that fell get thick. <bookmark mark='b'/> The weighted average flattens onto today's price: under "
-            "Q the stock is a fair game. And the histogram of endings slides to the left, from P's distribution to "
-            "Q's. Nothing about the paths changed; only how much each one counts. That is all a measure change is."
+            "Here is what a change of measure looks like. A hundred and fifty stock paths under the "
+            "real measure, with ten percent drift a year; their average, the thick line, climbs, and "
+            "on the right, where they end. <bookmark mark='a'/> Now move no path. Give each one the "
+            "weight Girsanov prescribes, which depends only on where its noise ended: paths that rose "
+            "a lot thin out, paths that fell thicken. <bookmark mark='b'/> The weighted average "
+            "flattens onto today's price: under Q the stock is a fair game. The histogram of endings "
+            "slides from P to Q. Nothing about the paths changed, only how much each one counts."
         ) as vo:
             self.add(F_, mean)
             self.play(FadeIn(gr), Create(s0), FadeIn(lab[0]), FadeIn(ml), FadeIn(src))
@@ -183,15 +178,14 @@ class Continuous(VoiceoverScene):
                     rf"{100 * g['ess_pred']:.1f}\%\ \text{{predicted}}", font_size=30, color=GREY_A),
         ).arrange(DOWN, buff=0.3).move_to(UP * 0.2)
         head = label(rf"{g['n']:,} simulated paths, an at-the-money call".replace(",", "{,}"), font_size=28).to_edge(UP, buff=0.5)
-        tail = ("Within two standard errors of the formula. " if abs(z) < 2 else
-                "Further from the formula than two standard errors: worth a second look. ")
+        tail = ("Within two standard errors. " if abs(z) < 2 else "More than two standard errors away: worth a second look. ")
         with self.voiceover(
-            f"Now with {g['n']:,} paths. The plain average of the call's payoff under P is {g['price_naive']:.2f}: "
-            "that is the wrong price, because it ignores risk. <bookmark mark='a'/> Weighted by Girsanov's density, "
-            f"the same paths give {g['price_weighted']:.2f}, with a standard error of {g['se']:.3f}, against Black and "
-            f"Scholes' {g['bs']:.2f}. " + tail + "<bookmark mark='b'/> The cost of the weights: the effective number "
-            f"of paths is {100 * g['ess']:.1f} percent of the total, and the formula, e to the minus lambda squared T, "
-            f"predicted {100 * g['ess_pred']:.1f}."
+            f"With {g['n']:,} paths, the plain average payoff is {g['price_naive']:.2f}: the wrong "
+            f"price, ignoring risk. <bookmark mark='a'/> Weighted, {g['price_weighted']:.2f}, standard "
+            f"error {g['se']:.3f}, against Black and Scholes' {g['bs']:.2f}. "
+            + tail +
+            f"<bookmark mark='b'/> The effective sample is {100 * g['ess']:.1f} percent of the paths; "
+            f"the formula predicted {100 * g['ess_pred']:.1f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]))
             vo.wait_until("a")
@@ -204,11 +198,10 @@ class Continuous(VoiceoverScene):
     def predict(self, g):
         card = pause_at(r"Raise the drift to 60\% a year, everything else the same. What happens to the weights?")
         with self.voiceover(
-            "Pause and predict. Raise the drift to sixty percent a year. What happens to the weights? "
-            f"<bookmark mark='a'/> They degenerate. Lambda becomes two point four, and the effective sample falls to "
-            f"e to the minus five point seven six, about {100 * g['ess60_pred']:.1f} percent; the simulation measured "
-            f"{100 * g['ess60']:.1f}. A handful of paths that happened to fall carry the whole price. That is why "
-            "pricers simulate under Q directly."
+            "Pause and predict. Raise the drift to sixty percent. What happens to the weights? "
+            f"<bookmark mark='a'/> They collapse: the effective sample falls to about {100 * g['ess60_pred']:.1f} "
+            f"percent, measured {100 * g['ess60']:.1f}. A few paths carry the price, which is why "
+            "pricers simulate under Q."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

@@ -59,15 +59,9 @@ class Payout(VoiceoverScene):
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.55)
         foot = note(r"operations earn 90 a year; the cash earned 2\%", font_size=18, color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "In numbers. A firm owns operations worth nine "
-            "hundred and a hundred in cash, and has a hundred shares, worth ten each. <bookmark mark='a'/> It pays "
-            "a dividend of one a share. The cash leaves the firm, the shares fall to nine, and each owner holds nine "
-            "in stock and one in cash: still ten. <bookmark mark='b'/> Or it buys back ten shares at ten. The "
-            "sellers have their cash, the ninety remaining shares share the nine hundred of operations: still ten "
-            "each. In a world without taxes and frictions, how cash comes back does not change what owners have. "
-            "<bookmark mark='c'/> But watch the number that headlines report. The operations earn ninety a year "
-            "and the cash earned two. Earnings per share were ninety-two cents, and after the buyback they are a "
-            "dollar: nine percent higher, with the price unchanged. Earnings per share can be bought; value cannot."
+            "In numbers: operations of nine hundred, cash of a hundred, a hundred shares at ten. <bookmark mark='a'/> A dividend of "
+            "one: shares fall to nine, each owner holds one in cash: still ten. <bookmark mark='b'/> A buyback of ten shares at ten: "
+            "still ten. <bookmark mark='c'/> But earnings per share rise from ninety-two cents to a dollar with the price unchanged."
         ) as vo:
             self.play(FadeIn(a))
             vo.wait_until("a")
@@ -98,13 +92,9 @@ class Payout(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Shiller's data: next year's dividends over January's price")
         with self.voiceover(
-            "Real-world payout did change. For a century, American firms paid out about five percent of their "
-            "value each year in dividends. <bookmark mark='a'/> In November 1982 the SEC adopted Rule 10b-18, a "
-            "safe harbour that protected companies buying back their own shares from charges of manipulating the "
-            "price. Buybacks grew to rival dividends, and the dividend yield fell, to about one percent in 2000 and "
-            "under two in 2020. <bookmark mark='b'/> That matters to anyone who reads valuation off dividends: a "
-            "dividend yield that ignores buybacks makes the market look more expensive than it is, and a forecasting "
-            "model fitted to dividends breaks in 1982."
+            "Real payout did change. For a century, American firms paid about five percent of their value a year in dividends. "
+            "<bookmark mark='a'/> In 1982 Rule 10b-18 gave buybacks a safe harbour, and the dividend yield fell. "
+            "<bookmark mark='b'/> A dividend-based valuation must add buybacks back."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(line), run_time=2.5)
             vo.wait_until("a")
@@ -128,13 +118,11 @@ class Payout(VoiceoverScene):
                 why(r"substitute: the dividend and the new shares cancel; value depends on investment, not on payout")]
         step = ladder(self, rows, whys, keep=3, top=2.5, x=-0.8, buff=0.85, edge=6.9)
         with self.voiceover(
-            "In 1961 Miller and Modigliani turned their argument on payout. The firm's value today is what its "
-            "current owners will receive next period: the dividend on their shares, plus what their shares are worth, "
-            "which is the whole firm's value less whatever new shares were sold to outsiders. "
-            "<bookmark mark='a'/> But the dividend must be financed: by earnings, less investment, plus any new shares "
-            "sold. <bookmark mark='b'/> Substitute, and the dividend cancels. Value depends on earnings and "
-            "investment, the real decisions, and not at all on how the cash is returned. Pay a bigger dividend and "
-            "you must sell more shares to invest the same amount; the owners end up exactly where they were."
+            "In 1961 Miller and Modigliani turned their argument on payout. Today's owners receive next period's dividend and "
+            "their shares, which are worth the whole firm less whatever new shares were sold to outsiders. "
+            "<bookmark mark='a'/> But the dividend must be financed: by earnings, less investment, plus new shares sold. "
+            "<bookmark mark='b'/> Substitute and the dividend cancels. Value depends on earnings and investment, not on how the "
+            "cash is returned: a bigger dividend means selling more shares to invest the same amount."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -175,13 +163,12 @@ class Payout(VoiceoverScene):
                           r"the owners are equally rich", 5.4, 22, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Run it. Two identical firms earn a hundred a year on operations worth a thousand and return all of it. "
-            "One pays dividends; its owner reinvests them at the same ten percent. The other buys back its own "
-            "shares. <bookmark mark='a'/> Watch the headline numbers diverge. The buyback firm's earnings per share "
-            "and its share price climb ten percent a year, because the same earnings are spread over fewer shares. "
-            "The dividend payer's stay flat. <bookmark mark='b'/> Now the gold bars, what an owner who started with "
-            f"one share is worth. They rise together, to {Wd[-1]:.2f} and {Wb[-1]:.2f} after ten years. A rising "
-            "EPS line is not, by itself, a reason to pay more."
+            "Run it. Two identical firms earn a hundred a year on operations worth a thousand and return all of it: one as "
+            "dividends, which its owner reinvests at the same ten percent, the other by buying back shares. "
+            "<bookmark mark='a'/> The headline numbers diverge: the buyback firm's earnings per share and price climb ten percent "
+            "a year, because the same earnings are spread over fewer shares; the payer's stay flat. <bookmark mark='b'/> The gold "
+            f"bars are an owner's wealth. They rise together, to {Wd[-1]:.2f} and {Wb[-1]:.2f}. A rising EPS line is not, by "
+            "itself, a reason to pay more."
         ) as vo:
             self.play(FadeIn(side[:3]))
             self.add(dr)
@@ -229,14 +216,10 @@ class Payout(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Kenneth French's net-issuance sorts (value-weighted); Chen--Zimmermann long-shorts")
         with self.voiceover(
-            "Irrelevance is a statement about mechanics. In the data, the choice to issue or to buy back still says "
-            "something. Kenneth French sorts stocks every year on how many shares they issued. "
-            f"<bookmark mark='a'/> Since 1963 the firms that bought back shares returned {100 * ann['< 0']:.1f} percent "
-            f"a year; the tenth that issued the most returned {100 * ann['Hi 10']:.1f}. <bookmark mark='b'/> The "
-            "published long-short versions, from Boudoukh and coauthors' net payout yield and Pontiff and Woodgate's "
-            "share issuance, earned these returns a month in their papers' samples and these after publication. "
-            "Managers seem to sell shares when they think them dear and buy when they think them cheap. The payout "
-            "does not create value; the information in the decision does."
+            "Irrelevance is about mechanics; the decision still carries information. French sorts stocks on net issuance. "
+            f"<bookmark mark='a'/> Since 1963 repurchasers returned {100 * ann['< 0']:.1f} percent a year, the heaviest issuers "
+            f"{100 * ann['Hi 10']:.1f}. <bookmark mark='b'/> The published long-shorts, net payout yield and share issuance, earned "
+            "these returns before and after publication. Managers sell shares when dear and buy when cheap."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(xl))
             self.play(LaggedStart(*[GrowFromEdge(b[0], DOWN) for b in bars], lag_ratio=0.1),

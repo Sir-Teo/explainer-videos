@@ -41,12 +41,11 @@ class Accruals(VoiceoverScene, ThreeDScene):
             label(r"how big a provision should be", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to(d, RIGHT, buff=0.5).align_to(d, UP)
         with self.voiceover(
-            "Earnings and cash are different numbers, and the difference has a name: accruals. The toy firm's first "
-            "year earned two hundred, of which a hundred arrived as cash. <bookmark mark='a'/> In a real filing, "
-            "accruals are net income minus operating cash flow, or, as Richard Sloan measured them in 1996 from two "
-            "balance sheets, the growth in working capital less depreciation. <bookmark mark='b'/> Accruals are where "
-            "accounting needs judgment: when a sale counts as made, how fast a machine wears out, what an unpaid bill "
-            "will really fetch, how large a provision for warranty claims should be. Cash is harder to bend."
+            "Earnings and cash are different numbers, and the difference has a name: accruals. The toy firm's first year earned "
+            "two hundred, of which a hundred arrived as cash. <bookmark mark='a'/> In a filing, accruals are net income minus "
+            "operating cash flow, or, as Richard Sloan measured them in 1996, the growth in working capital less depreciation. "
+            "<bookmark mark='b'/> They are where accounting needs judgment: when a sale counts as made, how fast a machine wears "
+            "out, what an unpaid bill will fetch, how large a provision should be. Cash is harder to bend."
         ) as vo:
             self.play(Write(eq))
             vo.wait_until("a")
@@ -75,14 +74,11 @@ class Accruals(VoiceoverScene, ThreeDScene):
                           r"earned lower returns", 11.0, 22, QC.IDEA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Sloan's test is a regression. Earnings persist: this year's earnings, over assets, predict next "
-            "year's with a slope below one, as profits drift back to normal. <bookmark mark='a'/> Now split this "
-            "year's earnings into its cash part and its accrual part, and give each its own slope. "
-            "<bookmark mark='b'/> The prediction: the accrual slope is smaller. A receivable either turns into cash or "
-            "is written off, and an over-optimistic estimate this year must be reversed next year, so the accrual "
-            "part of earnings carries noise that does not last. <bookmark mark='c'/> Sloan found exactly that, on "
-            f"three decades of American firms: {a['sloan']['cfo']:.3f} for cash, {a['sloan']['acc']:.3f} for accruals. "
-            "And the market priced both parts alike, so the firms with the most accruals went on to disappoint."
+            "Sloan's test is a regression: earnings persist, so this year's predict next year's. <bookmark mark='a'/> Split this "
+            "year's into cash and accruals, each with its own slope. <bookmark mark='b'/> The prediction: accruals persist less, "
+            "because a receivable either becomes cash or is written off, and an optimistic estimate reverses. "
+            f"<bookmark mark='c'/> Sloan found {a['sloan']['cfo']:.3f} for cash and {a['sloan']['acc']:.3f} for accruals, and "
+            "prices treated them alike, so high-accrual firms disappointed."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -120,14 +116,11 @@ class Accruals(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, res)
         self.remove(hint, res)
         with self.voiceover(
-            "Here is the mechanism as a picture, in a simulated market where we know the truth. Each dot is a "
-            "firm-year: its cash flow on one axis, its accruals on the other, and next year's earnings as the height. "
-            "Profits persist with a coefficient of point eight, and every accrual carries a small booked error that "
-            "reverses the next year. <bookmark mark='a'/> Fit Sloan's regression and you get a plane. "
-            "<bookmark mark='b'/> Turn to look along the accrual axis: the plane climbs steeply with cash flow. "
-            "<bookmark mark='c'/> Now look along the cash axis: it climbs less steeply with accruals. "
-            f"Cash persists with {b1:.2f}, accruals with {b2:.2f}: the reversing error flattens the accrual slope, "
-            "which is exactly Sloan's finding, produced by nothing but bookkeeping."
+            "Here is the mechanism in a simulated market whose truth we know. Each dot is a firm-year: cash flow on one axis, "
+            "accruals on the other, next year's earnings as the height. Profits persist with point eight, and every accrual "
+            "carries a small booked error that reverses next year. <bookmark mark='a'/> Fit Sloan's regression: a plane. "
+            "<bookmark mark='b'/> Look along the accrual axis: it climbs steeply with cash flow. <bookmark mark='c'/> Look along "
+            f"the cash axis: less steeply with accruals, {b2:.2f} against {b1:.2f}. Sloan's finding, produced by bookkeeping alone."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.5)
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.01, run_time=3))
@@ -176,15 +169,12 @@ class Accruals(VoiceoverScene, ThreeDScene):
                            r"booked it as receivables. Whose earnings will be higher next year?", width=11.6,
                            font_size=21).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Now real filings. The House's fundamentals store holds the full XBRL histories of a handful of large "
-            f"companies; seven of them are not banks, which gives {a['real_n']} firm-years with a following year. "
-            f"<bookmark mark='a'/> The same regression: cash persists with {b[1]:.2f}, accruals with {b[2]:.2f}. "
-            + gap_line + "Sloan used tens of thousands of firm-years; the House's full panel needs the SEC's bulk data, and the "
-            "notes say how to load it. <bookmark mark='b'/> The market evidence is larger: the open-source replication "
-            f"of Sloan's portfolio, long low accruals and short high, earned {a['osap_mean']:.2f} percent a month from "
-            f"1963 to 2020, with a t-statistic of {a['osap_t']:.1f}. Chapter fourteen asks how much of that survived "
-            "publication. <bookmark mark='c'/> Pause and predict: two firms each earn ten percent of assets, one in "
-            "cash, one in receivables. Whose earnings will be higher next year? The cash earner's, on average."
+            f"Now real filings: seven large non-financial firms in the House's store, {a['real_n']} firm-years. "
+            f"<bookmark mark='a'/> Cash persists with {b[1]:.2f}, accruals with {b[2]:.2f}. " + gap_line + "Sloan used tens of "
+            "thousands of firm-years. <bookmark mark='b'/> At scale, the open-source replication of his portfolio earned "
+            f"{a['osap_mean']:.2f} percent a month from 1963 to 2020, t of {a['osap_t']:.1f}. <bookmark mark='c'/> Pause and "
+            "predict: two firms earn ten percent of assets, one in cash, one in receivables. Whose earnings will be higher next "
+            "year? The cash earner's."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.02, run_time=2))

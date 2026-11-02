@@ -190,7 +190,7 @@ class Bootstrap(VoiceoverScene):
         gap_st = 0.95 - cov["stationary"]
         closes = gap_iid - gap_st
         verdict = (f"Blocks help, closing about {100 * closes / gap_iid:.0f} percent of the gap, but neither reaches "
-                   "ninety-five: with only a hundred or so blocks, the bootstrap still underestimates the spread."
+                   "ninety-five: year-long blocks are too short for volatility this persistent."
                    if 0 < closes < gap_iid else "Here the blocks do not help.")
         q = predict(r"Block length equal to the whole sample: what is the bootstrap standard error?").to_edge(DOWN,
                                                                                                       buff=0.15)
@@ -198,8 +198,8 @@ class Bootstrap(VoiceoverScene):
             "Does it work? A thousand simulated markets as long as ours, slightly autocorrelated, volatility "
             "clustering, true monthly Sharpe of an eighth; build each bootstrap's nominal ninety-five percent interval. "
             f"<bookmark mark='a'/> The iid bootstrap covers the truth {100 * cov['iid']:.1f} percent of the time, the "
-            f"moving block {100 * cov['block']:.1f}, the stationary {100 * cov['stationary']:.1f}. " + verdict +
-            " <bookmark mark='b'/> Pause and predict: a block the length of the sample? Every resample is the sample "
+            f"moving block {100 * cov['block']:.1f}, the stationary {100 * cov['stationary']:.1f}. {verdict} "
+            "<bookmark mark='b'/> Pause and predict: a block the length of the sample? Every resample is the sample "
             "rotated: a standard error of zero."
         ) as vo:
             self.play(FadeIn(g), Create(nominal), FadeIn(labs), FadeIn(side))

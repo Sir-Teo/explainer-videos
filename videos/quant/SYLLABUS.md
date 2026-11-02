@@ -328,35 +328,65 @@ prop trading and market makers.
 *Desk:* "I flip a fair coin until heads; I pay you 2ⁿ. What do you pay to play?"
 *House:* the data layer; the point-in-time rule.
 
-### Part 2 · The Machinery of Markets (~55)
-1. The instruments: equities, bonds, futures and forwards, swaps, options, ETFs; how each is quoted.
-2. Exchanges and OTC: order types, auctions (open, close), continuous trading, dealer markets, request for quote.
-3. Clearing and settlement: CCPs, novation, T+1 (May 2024), the DTCC; why settlement risk mattered on 28 January
-   2021 (Robinhood's collateral call).
-4. Margin and leverage: initial and variation margin, portfolio margin, the futures account marked to market daily.
-5. Short selling: locate, borrow, the fee, recalls, short squeezes, Volkswagen 2008.
-6. Repo and securities lending: the plumbing that funds the market; haircuts as leverage limits.
-7. Prime brokerage: financing, synthetic exposure via swaps, cross-margining (Archegos preview).
-8. The players and their business models: sell-side desks (flow vs exotics, agency vs principal), buy-side funds
-   (fees, high-water marks, 2-and-20 vs pass-through), proprietary trading, market makers, retail brokers and
-   payment for order flow.
-9. The quant industry map: systematic equity, CTAs, stat arb, HFT, options market making, multi-strategy
-   platforms, and the roles (quant researcher, trader, developer, risk quant, strat, structurer).
-10. Markets around the world: US, Europe, Japan, India's index options boom, China's A-shares (T+1 for stocks,
-    ±10% limits, the STAR board's ±20%, northbound Stock Connect).
-11. Benchmarks and indices: index construction, rebalancing, the index-inclusion effect.
+### Part 2 · The Machinery of Markets (~58)
+1. The instruments and how each is quoted: shares, bonds (clean and dirty), futures and forwards (contract specs,
+   cost of carry F = Se^{(r−q)T} by replication, the basis converging at expiry), swaps, options (contract specs, the
+   OCC), ETFs (price against NAV); hedging with futures (basis risk, the minimum-variance ratio h* = ρσ_S/σ_F,
+   effectiveness ρ², beta hedging).
+2. Exchanges and OTC: order types and validity, hidden orders; the order book as queues (price, visibility and time
+   precedence; the cost of walking the book; the tick and the 2024 Rule 612 amendments, compliance moved to November
+   2027); call auctions (the crossing maximizes volume, proved; the closing auction); dealer markets and RFQ (best of
+   n against information leakage); wholesalers and payment for order flow.
+3. Clearing and settlement: novation; netting (M ≤ B ≤ G, proved) and Duffie–Zhu on when a CCP raises exposure; the
+   default waterfall and cover-2; DVP, CNS and T+1 (28 May 2024); NSCC's VaR deposit and ECP, and 27–28 January 2021.
+4. Margin and leverage: initial, variation and maintenance margin; liquidation prices and the probability of
+   liquidation (reflection principle against BTC data); portfolio margin; margin models (SPAN's 16 scenarios, EWMA VaR
+   with λ fitted by likelihood, the Kupiec backtest) and procyclicality (1987, 2008, 2020; EMIR's anti-procyclicality
+   tools; LME nickel 2022; UK LDI 2022).
+5. Short selling: locate, borrow, the fee and the rebate, recalls, dividends; short interest above 100% by relending;
+   squeeze dynamics against free float; Volkswagen 2008.
+6. Repo and securities lending: repo legs and rates, tri-party and bilateral; haircuts as leverage limits (1/h) and
+   the deleveraging spiral; specials and the on-the-run premium (Duffie 1996); September 2019 and the reserve demand
+   curve.
+7. Prime brokerage: financing, custody, cross-margining; total return swaps; the race to sell (Archegos, 2021); the
+   prime-brokerage run (Duffie 2010).
+8. The players and their business models: sell side (agency and principal), buy side (fees, high-water marks as
+   options, pass-through), proprietary trading, market makers, retail brokers and PFOF; smoothed returns
+   (Getmansky–Lo–Makarov) and option-like returns (Fung–Hsieh).
+9. The quant industry map and the roles, placed by horizon and instrument (the industry chapter).
+10. Markets around the world: the US, the EU and UK (T+1 on 11 October 2027), Japan, India (index options, SEBI's
+    studies and 2024 measures), China (T+1, ±10% and ±20% limits, Stock Connect, the 2024 short-selling and
+    program-trading rules); what price limits do to measured returns.
+11. Benchmarks and indices: cap, float and price weighting; rebalancing demand; the inclusion effect (Shleifer 1986;
+    the Russell regression discontinuity; benchmarking intensity) and its disappearance.
 
-*Textbooks:* Hull OFOD ch. 1–7; Harris *Trading and Exchanges* parts I–II; Tuckman–Serrat (repo chapter);
-Pedersen *Efficiently Inefficient* ch. 1–5.
-*Computed:* futures mark-to-market and margin calls on a real contract's history; the cost of borrow across a
-squeeze (published borrow-fee data, cited); index-inclusion event study on Ken French/OSAP data where possible.
-*Visuals:* a trade's life from order to settlement as a moving token through brokers, the exchange, the CCP and
-the custodian; the money map of who pays whom.
-*Crisis:* Volkswagen, October 2008: briefly the world's most valuable company on a short squeeze.
-*Firms:* Citadel Securities and Virtu (wholesalers and PFOF); Robinhood (January 2021); the multi-manager platforms
-(fees as pass-through).
-*Desk:* "Make me a market on the number of trading days in a year." (the market-making game)
-*House:* treasury and funding: margin and financing costs in every later backtest.
+*Textbooks:* Hull OFOD ch. 1–3, 5, 10 (ch. 4, 6, 7 → Part 18); Harris *Trading and Exchanges* ch. 1–6 (ch. 7–8 → 35);
+Tuckman–Serrat (repo chapter); Pedersen *Efficiently Inefficient* ch. 1, 5 (ch. 2–4 → 26, 30); Mishkin (financial
+system overview).
+*Computed:* the BTC quarterly basis converging (Binance coin-margined BTCUSD_210326, 2020–21); the ETH/BTC
+minimum-variance hedge in and out of sample; a zero-intelligence order book; the closing auction built order by order;
+best-of-n RFQ and markouts; netting (gross/bilateral/CCP) and Duffie–Zhu; a CCP default waterfall under stress; the
+settlement deposit under T+2/T+1; 10×/3×/2× BTC longs liquidated in March 2020 and the liquidation-probability surface
+2020–25; EWMA margin fitted by likelihood on 1926–2020 and BTC, with breach rates and procyclicality; a short squeeze
+against free float; the haircut spiral; the reserve demand curve from FRED (2018–21) and the SOFR percentile fan of
+September 2019; a fire-sale race; fees with a high-water mark on 1927–2020; return smoothing in the smallest size decile
+and by MLE; a Russell-style regression discontinuity (simulated, truth known); price limits.
+*Data added:* FRED SOFR1, SOFR25, SOFR75, SOFR99; Binance futures/cm BTCUSD_210326 hourly; Binance spot ETHUSDT daily
+(all through `explainer/quant/data.py`, checksummed in `videos/quant/data/manifest.json`).
+*Visuals:* a trade's life with a collateral clock; the order book as queues filling and emptying; auction staircases
+crossing; the netting graph collapsing into the CCP; the waterfall draining; the settlement conveyor; margin as a
+breathing band; 3D: hedge variance over (h, ρ) and liquidation probability over (leverage, horizon); the float tank
+and the squeeze; the collateral tower crumbling; banks racing to sell; the smoothed shadow of a return path; index
+money pouring at the Russell cutoff; the price-limit spring; the money map.
+*Crisis:* Volkswagen, October 2008 (a squeeze on a ~6% free float); September 2019 repo; 28 January 2021, LME nickel
+2022 and the UK LDI episode as inserts.
+*Firms:* CME, DTCC/NSCC, Citadel Securities and Virtu (wholesaling and PFOF), Robinhood (January 2021), the prime
+brokers in Archegos, the basis-trading hedge funds; regulators: the SEC (Rule 612, Treasury clearing), SEBI (F&O
+studies; the Jane Street interim order, allegations), the FCA (LME).
+*Desk:* "Make me a market on the number of trading days in a year." "Futures 102, spot 100, six months, 3%: trade?"
+"Short interest is 120% of float: how?"
+*House:* treasury and funding: margin (EWMA, liquidation odds), financing, borrow fees, haircuts and deleveraging,
+hedge ratios, clearing and auctions, fees with a high-water mark, return smoothing; every later backtest pays them.
 
 ### Part 3 · Value, Accounting and the Firm (~50)
 1. Time value: NPV, IRR, annuities and perpetuities; Gordon growth.
@@ -455,91 +485,181 @@ shift, adjoint Greeks and Monte Carlo hardware belong to Part 16.
 "Price a digital by Girsanov."
 *House:* the simulation library (used by every pricing part), validated by Rule 6.
 
-### Part 6 · Financial Econometrics (~50)
-1. Regression in finance: OLS, overlapping observations, HAC errors (Newey–West 1987), clustered errors.
-2. Predictive regressions and the Stambaugh bias (1999).
-3. MLE and GMM (Hansen 1982): the Euler equation estimated.
-4. Event studies: abnormal returns, CARs, inference (MacKinlay 1997).
-5. Panel methods: Fama–MacBeth vs pooled vs fixed effects; Petersen (2009) on standard errors.
-6. Bootstrap for dependent data: block and stationary bootstrap.
-7. Bayesian inference: priors as shrinkage; hierarchical models for many assets.
-8. Multiple testing, previewed (FWER, FDR; to Part 25).
-9. Causal inference: instruments, differences-in-differences, regression discontinuity (Russell index cutoffs),
-   double/debiased ML (Chernozhukov et al. 2018).
+### Part 6 · Financial Econometrics (~58; 20 chapters)
+1. Regression in finance: OLS as projection, Frisch–Waugh–Lovell, the sandwich; overlapping observations and HAC
+   errors (Newey–West 1987, Hansen–Hodrick 1980, Hodrick 1992); fixed-b and EWC (Kiefer–Vogelsang 2005; Lazarus,
+   Lewis, Stock and Watson 2018); clustered errors.
+2. Predictive regressions: the Stambaugh bias (1999) derived; Amihud–Hurvich and IVX (Kostakis–Magdalinos–
+   Stamatogiannis 2015); out of sample (Welch–Goyal 2008; Campbell–Thompson 2008; Goyal–Welch–Zafirov 2024).
+3. MLE (information, QMLE, a dependence-robust sandwich) and GMM (Hansen 1982): the geometry, efficiency, the J test;
+   the Euler equation estimated (Hansen–Singleton 1982), weakly identified and rejected.
+4. Event studies: market model, CARs and their variance, event clustering (FFJR 1969; MacKinlay 1997); the turn of
+   the month and FOMC decision days (Lucca–Moench 2015), measured, with placebos.
+5. Panel methods: clustering (Petersen 2009); Fama–MacBeth vs pooled vs fixed effects, within and between; the
+   two-pass CAPM test, Shanken's correction, GRS.
+6. Bootstrap for dependent data: block (Künsch 1989) and stationary (Politis–Romano 1994); coverage measured.
+7. Bayesian inference: priors as shrinkage; James–Stein; a hierarchical model for many assets, sampled by Gibbs.
+8. Multiple testing, previewed: FWER, Holm, FDR (Benjamini–Hochberg 1995), proved; to Parts 25–26.
+9. Causal inference: instruments, differences-in-differences (and the staggered-adoption trap), regression
+   discontinuity (Russell cutoffs); double/debiased ML (Chernozhukov et al. 2018), orthogonality derived.
 10. The signal-to-noise problem: how many years to tell a Sharpe of 0.5 from 0.
 
-*Textbooks:* CLM ch. 3–4, 7; Cochrane *Asset Pricing* part II; Bali–Engle–Murray; Hayashi.
-*Computed/Trained:* Stambaugh bias by simulation; HAC vs naive t-stats on overlapping returns; double ML on a
-planted effect; the years-to-significance curve.
-*Visuals:* the confidence ellipse of (α, β) shrinking with years of data; the Stambaugh bias as a shifted
-histogram.
-*Desk:* "A strategy has Sharpe 1 over 4 years. What is the standard error?"
-*House:* the statistics module (HAC, bootstrap, FDR).
+*Textbooks:* CLM ch. 2, 4, 8 and App. A; Cochrane *Asset Pricing* (rev. ed.) ch. 10–16, 20–21; Hayashi ch. 1–8;
+Greene (8th ed.) ch. 2–6, 8, 11, 13–16, 20; Bali–Engle–Murray ch. 1–6; Tsay ch. 12 (MCMC).
+*Computed/Trained:* HAC, fixed-b (critical values simulated) and EWC sizes in null worlds; Petersen's simulation;
+Fama–MacBeth on 49 industries, the within/between split and the flat two-pass SML; Stambaugh's bias as a tilted
+cloud; Goyal–Welch out of sample on Shiller (five predictors); Student-t MLE replayed, naive vs sandwich vs HAC
+sandwich; GMM objective surface and a 400-economy Monte Carlo for the Euler equation; FOMC and turn-of-month event
+studies with placebos; bootstrap coverage in 1,000 simulated markets; Gibbs-sampled industry means; BH on a planted
+world; IV/DiD/staggered DiD/RD with planted effects; double ML across seeds and penalties; the years-to-significance
+curve and the (α, β) ellipse refitted quarterly.
+*Visuals:* the projection in 3D; the HAC window sliding over autocovariances; Ω masks for clustering;
+cross-sections stacking into a time series of slopes and clouds sliding to the origin; the Stambaugh cloud tilting;
+the likelihood hill climbed by Newton; the GMM ellipse touching the moment line; the J surface's ridge in 3D; event
+paths sliding into event time; blocks cut and reshuffled; alphas on springs; the BH line rotating; residual clouds
+for DML; the (α, β) ellipse shrinking as months arrive.
+*Labs:* `econ._hac_meat` + `ols`; `econ.fama_macbeth`; `econ.gmm` (condensed); `econ.stationary_bootstrap`;
+`econ.benjamini_hochberg`; `econ.dml_plr` (condensed).
+*Crisis:* F-Squared (SEC 2014): signals applied a week early, marketed as a track record.
+*Firms:* Man Group (Harvey–Liu haircuts), AQR (replication; a century of factor evidence), Research Affiliates (the
+backtest protocol); the SEC Marketing Rule (nine advisers, 2023); nonstandard errors and reproducibility (Menkveld et
+al. 2024; Pérignon et al. 2024).
+*Frontier:* Goyal–Welch–Zafirov 2024; Kelly–Malamud–Zhou 2024 vs Nagel 2025; Lazarus–Lewis–Stock 2021; inference on
+winners (Andrews–Kitagawa–McCloskey 2024); DiD (Roth et al. 2023); causal ML (Chernozhukov et al. 2024; Maasoumi et
+al. 2024); LLM look-ahead (Glasserman–Lin 2023).
+*Desk:* "A strategy has Sharpe 1 over 4 years. What is the standard error?"; "Pooled slope 0.002, Fama–MacBeth
+0.017: which is wrong?"; "Twenty strategies, the best p = 0.03: significant?"; "t = 2.5 on five-year returns and a
+persistent yield: trade it?"
+*House:* the statistics module (HAC/EWC/fixed-b, Hodrick, clustering, Fama–MacBeth, within/between, two-pass and
+GRS, MLE/GMM, out of sample, Amihud–Hurvich and IVX, event studies and placebos, bootstraps, Gibbs, FDR, causal
+designs, double ML).
 
-### Part 7 · Time Series and Volatility (~55)
-1. Stationarity, ARMA, Box–Jenkins.
-2. Unit roots; spurious regression (Granger–Newbold 1974).
-3. Cointegration (Engle–Granger 1987; Johansen 1991).
-4. Regimes (Hamilton 1989); the Kalman filter.
-5. ARCH (Engle 1982) and GARCH (Bollerslev 1986) by MLE; EGARCH, GJR; DCC (Engle 2002).
-6. "Does anything beat a GARCH(1,1)?" (Hansen–Lunde 2005); robust losses (Patton 2011).
-7. Realized volatility (Andersen–Bollerslev–Diebold–Labys); the signature plot; two-scale and realized kernels.
-8. HAR-RV (Corsi 2009), HARQ; jumps by bipower variation.
+### Part 7 · Time Series and Volatility (~59; 20 chapters)
+1. Stationarity, ACF, ARMA, Box–Jenkins (Yule 1927; Box–Jenkins 1970; Ljung–Box 1978); log VIX identified.
+2. Unit roots: the Dickey–Fuller distribution derived and simulated (1979); spurious regression (Granger–Newbold
+   1974; Phillips 1986).
+3. Cointegration: Engle–Granger (1987) and the error-correction model; Murray's drunk and her dog (1994); Johansen
+   (1991) on Treasury yields, in 3D.
+4. Hidden states: Hamilton's regime filter (1989) by EM; the Kalman filter (1960) and stochastic volatility by QML
+   (Harvey–Ruiz–Shephard 1994).
+5. ARCH (Engle 1982) and GARCH (Bollerslev 1986) by MLE, with the likelihood surface in 3D; Nelson's stationarity
+   (1990), QMLE (Bollerslev–Wooldridge 1992), Student-t; EGARCH, GJR; DCC (Engle 2002).
+6. Scoring forecasts: "does anything beat a GARCH(1,1)?" (Hansen–Lunde 2005); robust losses proved (Patton 2011);
+   Mincer–Zarnowitz, Diebold–Mariano, the model confidence set (Hansen–Lunde–Nason 2011).
+7. Realized volatility (ABDL 2003; BNS 2002): the CLT, noise and the signature plot built, optimal sampling
+   (Bandi–Russell 2008), two-scale and realized kernels.
+8. HAR-RV (Corsi 2009) derived as a restricted AR(22); HARQ; jumps by bipower variation and the BNS test; HAR-CJ.
 9. Roughness in the data: log realized vol at H ≈ 0.1 (Gatheral–Jaisson–Rosenbaum 2018), measured.
-10. Deep volatility forecasting: an LSTM and a small transformer against HAR, trained here.
-11. Time-series foundation models (Chronos, TimesFM, Moirai) zero-shot on volatility.
+10. Deep volatility forecasting: an LSTM, a small transformer and HARNet against HAR, trained here and replayed.
+11. Time-series foundation models: Chronos's tokenisation, a toy Chronos-style model trained here on synthetic
+    series and run zero-shot; the published comparison (Brini 2026) and the 2022–2026 papers.
+12. Industry: RiskMetrics' EWMA, Barra's volatility regime adjustment, volatility targeting (Man AHL; Moskowitz–Ooi–
+    Pedersen), implied against realized on the options desk.
 
-*Textbooks:* Tsay *Analysis of Financial Time Series*; Hamilton *Time Series Analysis*; Aït-Sahalia–Jacod
-*High-Frequency Financial Econometrics*.
-*Trained:* GARCH family; HAR; LSTM and transformer forecasters (5 seeds); a foundation model zero-shot.
-*Visuals:* volatility as a slow hidden river under the noisy returns; the signature plot collapsing.
+*Textbooks:* Tsay *Analysis of Financial Time Series* ch. 1–5, 8, 10–11; Hamilton *Time Series Analysis* ch. 3–5,
+13, 15–22; Brockwell–Davis *Introduction to Time Series and Forecasting*; Francq–Zakoian *GARCH Models*;
+Aït-Sahalia–Jacod *High-Frequency Financial Econometrics*; Andersen et al., "Volatility and correlation forecasting"
+(*Handbook of Economic Forecasting*, 2006); CLM ch. 12; QRM (financial time series).
+*Trained:* GARCH family (likelihood replay); HAR (rolling replay); LSTM, transformer and HARNet forecasters (5 seeds
+each, replayed); a toy foundation model (3 seeds, replayed).
+*Visuals:* clusters lighting up a century of returns; the AR(1) slider; the Dickey–Fuller histogram streaming; the
+GARCH leaky bucket; the Kalman belief as a moving Gaussian; regime jars; the drunk and her dog; the yield cloud seen
+edge-on; QV as squares; the signature plot built; the live 2020 leaderboard.
+*Labs:* `ar_fit`, `adf`, `kalman_states`, `garch_filter`, `har_fit`, `log_rv_scaling`, `qlike`/`diebold_mariano`,
+`forecast`.
 *Crisis:* March 2020: each model's forecast the day before.
-*Desk:* "Daily vol is 1%. What is the vol over a year? Over a week? When is √T wrong?"
+*Industry:* RiskMetrics (1994–96 Technical Document); MSCI Barra USE4; Harvey et al. (2018); the VIX.
+*Desk:* "Daily vol is 1%. What is the vol over a year? Over a week? When is √T wrong?"; "α + β = 1: stationary?"
 *House:* the volatility forecaster.
 
 ### Part 8 · Decisions and Control (~55)
-1. Expected utility, risk aversion, certainty equivalents.
-2. Dynamic programming; HJB derived.
-3. Merton's problem (1969/71), the fraction (μ − r)/(γσ²), by HJB and simulation.
-4. Kelly (1956), fractional Kelly, Thorp; Samuelson's objection (1979); ergodicity, and the controversy.
-5. Optimal stopping: Snell envelope; American options preview.
-6. Prospect theory; ambiguity (Ellsberg; Gilboa–Schmeidler; Hansen–Sargent).
-7. Viscosity solutions, briefly: why HJB needs them (Crandall–Lions).
-8. BSDEs (Pardoux–Peng 1990; El Karoui–Peng–Quenez 1997).
-9. Mean-field games (Lasry–Lions; Huang–Malhamé–Caines 2006).
-10. Reinforcement learning for the same problems: PPO on Merton vs the closed form.
+1. Expected utility: the vNM axioms, Arrow–Pratt derived, certainty equivalents; Allais and Rabin as warnings.
+2. Dynamic programming (Bellman 1957), backward induction on a grid; the HJB equation derived from the DPP and
+   Itô; the verification theorem.
+3. Viscosity solutions in outline (Crandall–Lions 1983): kinks, touching test functions, comparison; monotone
+   schemes converge (Barles–Souganidis 1991).
+4. Merton's problem (1969/71) by HJB and by finite differences: the fraction (μ − r)/(γσ²), rebalancing, two-fund
+   separation; on 94 years of US data with its error bars.
+5. Consumption (Merton 1971) and the martingale method (Cox–Huang 1989; Karatzas–Lehoczky–Shreve 1987): the
+   investor buys a power claim.
+6. Transaction costs: the Davis–Norman (1990) no-trade wedge, Shreve–Soner (1994), the ε^{1/3} band, by
+   dynamic programming here.
+7. Kelly (1956) and Breiman (1961), proved; fractional Kelly and estimation risk (Thorp, Benter); Samuelson's
+   objection (1979); ergodicity and the controversy (Peters 2019; Doctor–Wakker–Wang 2020; Toda 2023).
+8. Optimal stopping: the Snell envelope as the least concave majorant; smooth fit (McKean 1965); the American
+   put preview.
+9. Prospect theory (KT 1979/1992; Benartzi–Thaler 1995 redone on data); ambiguity (Ellsberg; Gilboa–Schmeidler;
+   Hansen–Sargent; Maenhout's robust Merton derived).
+10. BSDEs (Pardoux–Peng 1990; El Karoui–Peng–Quenez 1997): two-rate pricing by regression.
+11. Mean-field games (Lasry–Lions; Huang–Malhamé–Caines 2006): a liquidating crowd, closed form and fictitious play.
+12. Reinforcement learning on the same problems: PPO on Merton (5 seeds) and on the transaction-cost problem,
+    against the DP band.
 
-*Textbooks:* Pham *Continuous-time Stochastic Control*; Back *Asset Pricing and Portfolio Choice Theory* ch. 1–2,
-14; Carmona–Delarue; Touzi.
-*Trained:* PPO on Merton's problem (AI 26's code), with the learned policy converging to the Merton line.
-*Visuals:* the HJB value function as a surface with the control flowing; Kelly's growth parabola.
+*Textbooks:* Pham ch 1–7; Touzi ch 2–6, 9; Karatzas–Shreve *Methods* ch 3, 6; Björk (stochastic control, the
+martingale approach, optimal stopping); Merton *Continuous-Time Finance* ch 4–5; Øksendal ch 10–11; Back ch 1–2,
+14; Bertsekas vol. I; Sutton–Barto ch 3–6, 13; Carmona–Delarue vol. I.
+*Trained:* PPO on Merton (5 seeds, AI 26's code) converging to the Merton line; PPO on the transaction-cost
+problem against the DP band; replayed with checkpoints.
+*Labs:* the Bellman grid solver; the no-trade band; the Snell envelope; MFG fictitious play; PPO's core.
+*Visuals:* the value surface built backward slab by slab; the HJB sup as a moving parabola; test functions
+touching a kink; the Davis–Norman wedge with a reflected wealth dot; Kelly fans growing live; the Snell envelope as
+a rope over pegs; the smooth-fit slider; the crowd's two arrows of time.
 *Crisis:* leverage beyond Kelly, using LTCM's published leverage (full story in 41).
-*Firms:* Thorp's Princeton/Newport and Kelly sizing.
-*Desk:* "You have a 60% coin at even odds. What fraction do you bet?"
-*House:* the sizing module.
+*Firms:* Thorp's partnership and Kelly sizing (Thorp 2006); Benter's syndicate; risk budgets (NBIM's 1.25 pp
+limit; multi-manager drawdown rules, as reported); execution desks.
+*Desk:* "You have a 60% coin at even odds. What fraction do you bet?" "With 1% costs your weight drifted from 62%
+to 66%. Trade?"
+*House:* the sizing module (Merton, Kelly, no-trade band, drawdown floor).
 
 ### Act III · Derivatives (Q)
 
-### Part 9 · No Arbitrage (~50)
-1. Arbitrage, the law of one price, put–call parity and its practical failures.
-2. One period: the FTAP by separating hyperplanes (Farkas), proved.
-3. State prices and the SDF; Q as the SDF renormalized.
-4. The binomial tree (Cox–Ross–Rubinstein 1979).
-5. Completeness; super-replication as an LP.
-6. Continuous time: Harrison–Kreps, Harrison–Pliska, Delbaen–Schachermayer.
-7. Change of numeraire; forward and annuity measures.
-8. Breeden–Litzenberger: the density from the Surface.
-9. Ross recovery (2015) and its critique (Borovička–Hansen–Scheinkman 2016).
-10. Robust bounds: martingale optimal transport (Hobson 1998; Beiglböck–Henry-Labordère–Penkner 2013), by LP.
+### Part 9 · No Arbitrage (~56)
+1. Arbitrage, the law of one price and put–call parity, proved by replication and checked on the Surface against
+   Deribit futures; where parity breaks: borrow (Ofek–Richardson–Whitelaw 2004), Palm/3Com (Lamont–Thaler 2003),
+   American boxes.
+2. One period: the FTAP by separating hyperplanes (Farkas, Stiemke), proved, seen in 3D, and decided by a simplex run
+   on screen.
+3. State prices and the SDF; Q as the SDF renormalized; the risk-neutral simplex; Bitcoin's empirical pricing kernel.
+4. The binomial tree (Cox–Ross–Rubinstein 1979): replication derived, the hedge run along a path, convergence to
+   Black–Scholes, one American beat.
+5. Completeness; super-replication as an LP and its dual (Harrison–Pliska 1981); options complete the market (Ross
+   1976); dynamic super-replication and uncertain volatility (Avellaneda–Levy–Parás 1995; Lyons 1995).
+6. Continuous time: Harrison–Kreps, Harrison–Pliska, Girsanov as reweighting; doubling, admissibility, NFLVR
+   (Delbaen–Schachermayer 1994, 1998; Dalang–Morton–Willinger 1990), strict local martingales and bubbles
+   (Cox–Hobson 2005).
+7. Change of numeraire (Geman–El Karoui–Rochet 1995; Jamshidian 1989): N(d1) as a probability, Margrabe, forward and
+   annuity measures, Bitcoin as numeraire.
+8. Breeden–Litzenberger: butterflies become the density; static and calendar no-arbitrage; the SVI fit replayed; the
+   density on every expiry in 3D and its dependence on the specification (Shikhman et al. 2026).
+9. Ross recovery (2015), its critique (Borovička–Hansen–Scheinkman 2016; Martin–Ross 2019; Qin–Linetsky 2016) and the
+   evidence (Jackwerth–Menner 2020; Jensen–Lando–Pedersen 2019; Horvath 2025).
+10. Robust bounds: martingale optimal transport (Hobson 1998; Beiglböck–Henry-Labordère–Penkner 2013;
+    Galichon–Henry-Labordère–Touzi 2014), its dual as a model-free hedge in 3D, solved by LP on refining grids and by
+    entropic iteration.
+11. Industry: authorized participants and ETF discounts (March 2020; Haddad–Moreira–Muir 2021), box-spread financing
+    (van Binsbergen–Diamond–Grotteria 2022; BOXX), Royal Dutch/Shell, negative stubs, limits of arbitrage
+    (Shleifer–Vishny 1997, simulated), LTCM.
+12. Frontier: neural and Sinkhorn MOT (Neufeld–Sester 2023; Hasenbichler et al.), multi-marginal MOT, joint SPX/VIX
+    no-arbitrage (Guyon 2024), multi-asset bounds (Neufeld–Papapantoleon–Xiang 2023), adapted Wasserstein
+    (Bartl–Beiglböck–Pammer 2026), the pricing-kernel and recovery debate (Heston–Jacobs–Kim 2023).
 
-*Textbooks:* Shreve I; Björk ch. 1–3, 10, 26; Duffie DAPT ch. 1–2, 6; Delbaen–Schachermayer; Henry-Labordère
-*Model-Free Hedging*.
-*Computed:* the FTAP LP; the implied density; MOT bounds.
-*Visuals:* the separating hyperplane; the tree folding back; the density emerging from the smile.
-*Crisis:* GameStop 2021: put–call parity and borrow.
+*Textbooks:* Shreve I ch. 1, 3, 4; Shreve II ch. 5, 9; Björk (4th ed., 2020) ch. 2–3, 9–12, 15 (ch. 29 and 34 named);
+Duffie DAPT ch. 1–2, 6; Delbaen–Schachermayer Part I; Föllmer–Schied ch. 1, 5, 7; Henry-Labordère *Model-Free
+Hedging*.
+*Computed:* parity forwards vs Deribit futures; the FTAP and super-replication LPs (simplex replay); CRR convergence
+and exact replication; dynamic super-replication; Girsanov reweighting; doubling and bubble simulations; Margrabe
+under two numeraires; BL densities on all expiries with specification bands; Bitcoin's pricing kernel; Ross recovery
+sweep; MOT bounds, duals, grid and entropic convergence; Shleifer–Vishny liquidations.
+*Trained:* a neural MOT dual (3 seeds) against the LP.
+*Visuals:* the separating plane in 3D; P→Q bars and the risk-neutral simplex; the tree folding back with its hedge;
+paths reweighted by Girsanov's density; the density re-weighted by a numeraire; butterflies becoming the density;
+the density ridge in 3D; the dual hedge surface lowered onto the payoff in 3D.
+*Crisis:* GameStop 2021: put–call parity and borrow; LTCM 1998. *Firms:* ETF authorized participants, box-spread
+lenders (BOXX), LTCM (full story in 41).
 *Desk:* "Call 10, put 7, strike 100, spot 103, no rates. Arbitrage?"; box spreads, and the 2019 Robinhood
-"infinite leverage" box-spread episode.
-*House:* the arbitrage checker (used on every surface).
+"infinite leverage" box-spread episode; "Price a digital from two calls"; "A negative stub: arbitrage?".
+*House:* the arbitrage checker (used on every surface): parity and forwards, FTAP/simplex, super-replication,
+static and calendar checks, MOT bounds with duals and entropic solver, Ross recovery.
 
 ### Part 10 · Black–Scholes–Merton (~55; the pilot)
 1. 1973: Black, Scholes, Merton; the CBOE opens; Thorp's earlier formula; the TI calculator on the floor.

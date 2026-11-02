@@ -773,8 +773,9 @@ def window_path(r, lead_lag=True):
 
 
 def sig_mmd(a, b, depth=4):
-    """Distance between two sets of return windows: the norm of the difference of their expected signatures (each
-    level scaled by k!, so the levels weigh alike)."""
+    """Distance between two sets of return windows: the norm of the difference of their expected signatures, all
+    levels 1..depth concatenated unscaled (level k already carries the tensor exponential's 1/k!): a linear-kernel
+    MMD between the two laws."""
     import torch
 
     sa, sb = signature(window_path(a), depth), signature(window_path(b), depth)
@@ -1111,3 +1112,528 @@ def train_surface_net(k, T, iv, penalty=1.0, seed=0, steps=3000, every=100, trai
             "test_rmse": float(np.sqrt(np.mean((pred[te] - iv[te]) ** 2)) * 100) if te.any() else float("nan"),
             "g_viol": float((g < 0).float().mean()), "cal_viol": float((dT < 0).float().mean()),
             "net": net, "secs": time.time() - t0}
+
+
+# ---------------------------------------------------------------------------
+# Part 17's hands-on layer: the same trainings with their curves and checkpoints, new objectives (CVaR in
+# Rockafellar-Uryasev form, a drifted simulator), and the classical twins (Leland, a Gaussian process with gradients)
+# ---------------------------------------------------------------------------
+def train_mlp_trace(X, y, width=32, depth=2, epochs=200, lr=3e-3, batch=1024, seed=0, act=None, every=5,
+                    snap_every=0, snap_fn=None):
+    """:func:`train_mlp_regressor` with its training curve (the epoch's mean squared error, every ``every`` epochs)
+    and snapshots ``snap_fn(net)`` at epoch 0 and every ``snap_every`` epochs; ``act`` picks the activation (a
+    torch.nn class; SiLU by default, which reproduces train_mlp_regressor draw for draw). Returns (net, curve,
+    snaps) with curve a list of (epoch, mse)."""
+    import torch
+
+    torch.manual_seed(seed)
+    net = _mlp(X.shape[1], width, depth, y.shape[1] if y.ndim > 1 else 1, act=act)
+    Xt = torch.tensor(X, dtype=torch.float32)
+    yt = torch.tensor(y, dtype=torch.float32).reshape(len(X), -1)
+    opt = torch.optim.Adam(net.parameters(), lr=lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, epochs)
+    g = torch.Generator().manual_seed(seed)
+    curve, snaps = [], {}
+    if snap_fn is not None and snap_every:
+        snaps[0] = snap_fn(net)
+    for ep in range(epochs):
+        perm = torch.randperm(len(X), generator=g)
+        tot = 0.0
+        for i in range(0, len(X), batch):
+            j = perm[i:i + batch]
+            loss = (net(Xt[j]) - yt[j]).pow(2).mean()
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            tot += float(loss.detach()) * len(j)
+        sched.step()
+        if ep == 0 or (ep + 1) % every == 0:
+            curve.append((ep + 1, tot / len(X)))
+        if snap_fn is not None and snap_every and (ep + 1) % snap_every == 0:
+            snaps[ep + 1] = snap_fn(net)
+    return net, curve, snaps
+
+
+def train_differential_trace(X, Y, dY=None, lam=1.0, width=20, depth=4, epochs=None, lr=3e-3, seed=0, snap_at=(),
+                             snap_fn=None, every=None):
+    """:func:`train_differential` (the same draws, the same network) with its curve and checkpoints: the value
+    term of the loss (normalized squared error, comparable with and without derivatives) every ``every`` epochs, and
+    ``snap_fn(predict)`` at the epochs in ``snap_at``. Returns (predict, curve, snaps)."""
+    import torch
+
+    torch.manual_seed(seed)
+    mx, sx = X.mean(0), X.std(0)
+    my, sy = Y.mean(), Y.std()
+    Xn = torch.tensor((X - mx) / sx, dtype=torch.float32)
+    Yn = torch.tensor((Y - my) / sy, dtype=torch.float32).reshape(-1, 1)
+    net = _mlp(X.shape[1], width, depth, act=torch.nn.Softplus)
+    use_d = dY is not None
+    if use_d:
+        Dn = torch.tensor(dY * sx / sy, dtype=torch.float32)
+        wd = 1.0 / (Dn.pow(2).mean(0) + 1e-8)
+    epochs = epochs or max(100, int(400000 / len(X)))
+    every = every or max(1, epochs // 100)
+    opt = torch.optim.Adam(net.parameters(), lr=lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, epochs)
+    batch = min(256, len(X))
+    g = torch.Generator().manual_seed(seed)
+
+    def predict(Xq):
+        xq = torch.tensor((Xq - mx) / sx, dtype=torch.float32, requires_grad=True)
+        out = net(xq)
+        gr, = torch.autograd.grad(out.sum(), xq)
+        return (out.detach().numpy()[:, 0] * sy + my, gr.numpy() * sy / sx)
+    curve, snaps = [], {}
+    if 0 in snap_at and snap_fn is not None:
+        snaps[0] = snap_fn(predict)
+    for ep in range(epochs):
+        perm = torch.randperm(len(X), generator=g)
+        tot = 0.0
+        for i in range(0, len(X), batch):
+            j = perm[i:i + batch]
+            xb = Xn[j].requires_grad_(use_d)
+            out = net(xb)
+            loss = (out - Yn[j]).pow(2).mean()
+            tot += float(loss.detach()) * len(j)
+            if use_d:
+                gr, = torch.autograd.grad(out.sum(), xb, create_graph=True)
+                loss = (loss + lam * ((gr - Dn[j]).pow(2) * wd).mean()) / (1 + lam)
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+        sched.step()
+        if ep == 0 or (ep + 1) % every == 0:
+            curve.append((ep + 1, tot / len(X)))
+        if (ep + 1) in snap_at and snap_fn is not None:
+            snaps[ep + 1] = snap_fn(predict)
+    return predict, curve, snaps
+
+
+def gp_with_gradients(X, y, dY, Xq, ls=1.0, sf=1.0, noise_y=1e-6, noise_d=1e-6, grad=False):
+    """A Gaussian process (squared-exponential kernel, length ``ls``, scale ``sf``, constant mean = mean(y)) observed
+    at X (n, d) through values y *and* gradients dY (n, d): the classical twin of differential machine learning
+    (Dixon, Halperin and Bilokon ch. 3). Covariances of derivatives are derivatives of the kernel, so all n (1 + d)
+    observations enter one linear solve, O((n (1 + d))^3). Returns the posterior mean and sd of f at Xq (and the
+    mean gradient if ``grad``)."""
+    X, Xq = np.atleast_2d(np.asarray(X, float)), np.atleast_2d(np.asarray(Xq, float))
+    n, d = X.shape
+    m = float(np.mean(y))
+
+    def blocks(A, B):
+        D = A[:, None, :] - B[None, :, :]                       # a - b
+        k = sf ** 2 * np.exp(-(D ** 2).sum(-1) / (2 * ls ** 2))
+        top = [k] + [k * D[..., j] / ls ** 2 for j in range(d)]  # cov(f(a), d_j f(b))
+        rows = [np.hstack(top)]
+        for i in range(d):
+            r = [-k * D[..., i] / ls ** 2]                       # cov(d_i f(a), f(b))
+            for j in range(d):
+                r.append(k * ((i == j) / ls ** 2 - D[..., i] * D[..., j] / ls ** 4))
+            rows.append(np.hstack(r))
+        return np.vstack(rows)
+    K = blocks(X, X)
+    K[np.diag_indices(n)] += noise_y
+    idx = np.arange(n, n * (1 + d))
+    K[idx, idx] += noise_d
+    obs = np.concatenate([np.asarray(y, float) - m] + [np.asarray(dY, float)[:, j] for j in range(d)])
+    L = np.linalg.cholesky(K)
+    alpha = np.linalg.solve(L.T, np.linalg.solve(L, obs))
+    Kq = blocks(Xq, X)
+    nq = len(Xq)
+    mean = m + Kq[:nq] @ alpha
+    v = np.linalg.solve(L, Kq[:nq].T)
+    sd = np.sqrt(np.maximum(sf ** 2 - (v ** 2).sum(0), 0.0))
+    if grad:
+        return mean, sd, (Kq[nq:] @ alpha).reshape(d, nq).T
+    return mean, sd
+
+
+def gbm_torch_mu(n, steps, T, sigma, mu=0.0, S0=100.0, gen=None):
+    """:func:`gbm_torch` under a real-world drift ``mu`` a year: the same normal draws, so mu = 0 gives its paths."""
+    import torch
+
+    dt = T / steps
+    z = torch.randn(n, steps, generator=gen)
+    inc = (mu - 0.5 * sigma ** 2) * dt + sigma * math.sqrt(dt) * z
+    return S0 * torch.exp(torch.cat([torch.zeros(n, 1), torch.cumsum(inc, 1)], 1))
+
+
+def cvar_ru(X, w, alpha=0.5):
+    """Rockafellar and Uryasev's CVaR of the loss -X: w + E[(-X - w)^+] / alpha. Its minimum over the threshold w is
+    CVaR_alpha, attained at w = VaR_alpha, so w can be trained alongside the hedge."""
+    import torch
+
+    return w + torch.clamp(-X - w, min=0.0).mean() / alpha
+
+
+class WWBandHedger(Hedger):
+    """Imaki et al.'s band network started at Whalley and Wilmott's band (the prior of Arzel and Lehdili 2026): the
+    two outputs are added to softplus^-1 of WW's half-width and the last layer starts at zero, so at initialization
+    the band *is* WW's, and training corrects it."""
+
+    def __init__(self, cost, gamma=1.0, width=32, depth=3, seed=0, sigma=0.2, T=30 / 365, K=100.0):
+        import torch
+
+        super().__init__("band", width, depth, seed, sigma, T)
+        self.cost, self.gamma, self.K = cost, gamma, K
+        with torch.no_grad():
+            self.net[-1].weight.zero_()
+            self.net[-1].bias.zero_()
+
+    def ww_half(self, x, tau):
+        import torch
+
+        t = torch.clamp(tau * self.T, min=1e-6)
+        sq = self.sigma * torch.sqrt(t)
+        d1 = (x + 0.5 * self.sigma ** 2 * t) / sq
+        S = self.K * torch.exp(x)
+        gam = torch.exp(-0.5 * d1 ** 2) / math.sqrt(2 * math.pi) / (S * sq)
+        return torch.clamp((1.5 * self.cost * S * gam ** 2 / self.gamma) ** (1 / 3), 1e-3, 1.0)
+
+    def band(self, x, tau):
+        import torch
+        import torch.nn.functional as F
+
+        t = torch.clamp(tau * self.T, min=1e-6)
+        d1 = (x + 0.5 * self.sigma ** 2 * t) / (self.sigma * torch.sqrt(t))
+        delta = 0.5 * (1 + torch.erf(d1 / math.sqrt(2)))
+        base = torch.log(torch.expm1(self.ww_half(x, tau)))
+        o = self.net(torch.stack([x, tau], -1))
+        return delta - F.softplus(o[..., 0] + base), delta + F.softplus(o[..., 1] + base)
+
+
+def train_hedger_on(paths, pol, cost=0.0, T=30 / 365, K=100.0, gamma=1.0, risk="entropic", alpha=0.5, iters=1500,
+                    lr=3e-3, seed=0, batch=8192, snap_at=(), snap_fn=None, log=None):
+    """Train any policy ``pol`` on fresh paths ``paths(batch, gen)`` (n, steps + 1) each iteration: the deep hedger
+    with its simulator made explicit (a drifted GBM, a GARCH fitted to history). ``risk``: 'entropic', 'cvar' (the
+    mean of the worst alpha) or 'cvar_ru' (Rockafellar-Uryasev, the threshold w trained alongside, started at the
+    first batch's VaR). Returns (curve, snaps, w)."""
+    import torch
+
+    gen = torch.Generator().manual_seed(seed + 1)
+    w = torch.zeros((), requires_grad=True) if risk == "cvar_ru" else None
+    params = list(pol.parameters()) + ([w] if w is not None else [])
+    opt = torch.optim.Adam(params, lr=lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, iters)
+    curve, snaps = [], {}
+    for it in range(iters + 1):
+        if it in snap_at and snap_fn is not None:
+            with torch.no_grad():
+                snaps[it] = snap_fn(pol)
+        if it == iters:
+            break
+        S = paths(batch, gen)
+        X, _, _ = hedge_pnl(pol, S, K, T, cost)
+        if risk == "entropic":
+            loss = entropic(X, gamma)
+        elif risk == "cvar":
+            loss = cvar(X, alpha)
+        else:
+            if it == 0:
+                with torch.no_grad():
+                    w.fill_(float(torch.quantile(-X, 1 - alpha)))
+            loss = cvar_ru(X, w, alpha)
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+        sched.step()
+        curve.append(float(loss.detach()))
+        if log and it % 100 == 0:
+            log(it, curve[-1])
+    return curve, snaps, (float(w.detach()) if w is not None else None)
+
+
+def train_hedger_p(kind="mlp", mu=0.0, cost=0.0, sigma=0.2, T=30 / 365, steps=30, K=100.0, gamma=1.0,
+                   risk="entropic", iters=1500, batch=8192, lr=3e-3, seed=0, snap_at=(), snap_fn=None, log=None):
+    """:func:`train_hedger` on paths with a real-world drift ``mu`` (mu = 0 reproduces it): the drift trap. Returns
+    (policy, curve, snaps)."""
+    pol = Hedger(kind, seed=seed, sigma=sigma, T=T)
+    curve, snaps, _ = train_hedger_on(lambda b, g: gbm_torch_mu(b, steps, T, sigma, mu, K, g), pol, cost, T, K, gamma,
+                                      risk, 0.5, iters, lr, seed, batch, snap_at, snap_fn, log)
+    return pol, curve, snaps
+
+
+def merton_hedge(S, sigma, mu, gamma=1.0):
+    """The extra shares an exponential-utility hedger holds when the stock drifts: mu / (gamma sigma^2 S), Merton's
+    fixed dollar amount mu / (gamma sigma^2) in shares (complete market, zero rates)."""
+    return mu / (gamma * sigma ** 2 * np.asarray(S, float))
+
+
+def leland_sigma(sigma, cost, dt):
+    """Leland (1985): hedge a short option with Black-Scholes at the inflated volatility sigma sqrt(1 + Le),
+    Le = sqrt(2/pi) k / (sigma sqrt(dt)), k = 2 cost the round-trip cost, rebalancing every dt."""
+    return sigma * math.sqrt(1 + math.sqrt(2 / math.pi) * 2 * cost / (sigma * math.sqrt(dt)))
+
+
+def garch_paths_torch(params, residuals, n, steps, scale=1.0, S0=100.0, h0=None, gen=None):
+    """GJR-GARCH(1,1) paths (params = omega, alpha, gamma, beta, for standardized returns) with shocks bootstrapped
+    from ``residuals``: e_t = sqrt(h_t) eps_t, h_{t+1} = omega + (alpha + gamma 1{e_t < 0}) e_t^2 + beta h_t. Prices
+    S_{t+1} = S_t exp(scale e_t - scale^2 h_t / 2) (about a martingale); h0 defaults to the unconditional variance.
+    Returns (S (n, steps + 1), e (n, steps)) as float32 tensors."""
+    import torch
+
+    w_, a_, g_, b_ = (float(v) for v in params)
+    res = torch.as_tensor(np.asarray(residuals, float), dtype=torch.float32)
+    hbar = w_ / max(1 - a_ - g_ / 2 - b_, 1e-6)
+    h = torch.full((n,), hbar) if h0 is None else torch.as_tensor(h0, dtype=torch.float32).reshape(n)
+    eps = res[torch.randint(len(res), (n, steps), generator=gen)]
+    logS = torch.full((n,), math.log(S0))
+    out, es = [torch.exp(logS)], []
+    for t in range(steps):
+        e = torch.sqrt(h) * eps[:, t]
+        logS = logS + scale * e - 0.5 * scale ** 2 * h
+        out.append(torch.exp(logS))
+        es.append(e)
+        h = w_ + (a_ + g_ * (e < 0).float()) * e ** 2 + b_ * h
+    return torch.stack(out, 1), torch.stack(es, 1)
+
+
+def calibrate_neural_trace(net, T, k, iv, w=None, starts=8, seed=0, iters=200, every=5):
+    """:func:`calibrate_neural` (the same starts, the same steps) recording every start's iterates: the parameters
+    and the weighted RMSE every ``every`` Adam steps, then after L-BFGS. Returns calibrate_neural's dict plus
+    'traces' (one per start: steps, params, rmse) and 'best' (the winning start's index)."""
+    import torch
+
+    t0 = time.perf_counter()
+    lo = torch.tensor([v[0] for v in CALIB_BOUNDS.values()])
+    hi = torch.tensor([v[1] for v in CALIB_BOUNDS.values()])
+    T = np.asarray(T, float)
+    k = np.asarray(k, float)
+    w = np.ones_like(T) if w is None else np.asarray(w, float)
+    w = torch.tensor(w / w.mean(), dtype=torch.float32)
+    tgt = torch.tensor(np.asarray(iv, float), dtype=torch.float32)
+    base = torch.from_numpy(calib_features(np.zeros(5) + lo.numpy(), T, k))
+    lt_m = base[:, 5:]
+    for p_ in net.parameters():
+        p_.requires_grad_(False)
+
+    def model(u):
+        theta = lo + (hi - lo) * (torch.tanh(u) + 1) / 2
+        p = 2 * (theta - lo) / (hi - lo) - 1
+        x = torch.cat([p.expand(len(T), 5), lt_m], dim=1)
+        return net(x).squeeze(1), theta
+
+    rng = np.random.default_rng(seed)
+    best, traces = None, []
+    for s in range(starts):
+        u = torch.tensor(rng.uniform(-1.2, 1.2, 5), dtype=torch.float32, requires_grad=True)
+        opt = torch.optim.Adam([u], lr=0.05)
+        tr = {"step": [], "params": [], "rmse": []}
+        for it in range(iters):
+            f, th = model(u)
+            loss = (w * (f - tgt).pow(2)).mean() * 1e4
+            if it % every == 0:
+                tr["step"].append(it)
+                tr["params"].append(th.detach().numpy().astype(float).tolist())
+                tr["rmse"].append(float(loss.detach().sqrt()))
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+        lb = torch.optim.LBFGS([u], max_iter=100, line_search_fn="strong_wolfe")
+
+        def closure():
+            lb.zero_grad()
+            f, _ = model(u)
+            ls = (w * (f - tgt).pow(2)).mean() * 1e4
+            ls.backward()
+            return ls
+        lb.step(closure)
+        with torch.no_grad():
+            f, th = model(u)
+            r = float((w * (f - tgt).pow(2)).mean().sqrt() * 100)
+        tr["step"].append(iters + 100)
+        tr["params"].append(th.numpy().astype(float).tolist())
+        tr["rmse"].append(r)
+        traces.append(tr)
+        if best is None or r < best[1]:
+            best = (th.numpy().astype(float), r, f.numpy().astype(float), s)
+    for p_ in net.parameters():
+        p_.requires_grad_(True)
+    return {"params": dict(zip(CALIB_NAMES, map(float, best[0]))), "x": best[0].tolist(), "rmse": best[1],
+            "fit": best[2], "seconds": time.perf_counter() - t0, "traces": traces, "best": best[3]}
+
+
+def train_calib_net_ckpt(X, y, epochs=40, batch=2048, lr=2e-3, seed=0, val=None, ckpt=None, snap_at=(), snap_fn=None,
+                         log=None):
+    """:func:`train_calib_net` that saves its state (network, optimizer, schedule, sampler, history, snapshots) to
+    ``ckpt`` after every epoch and resumes from it, with snapshots ``snap_fn(net)`` after the epochs in
+    ``snap_at``: a long training on a shared machine that survives being stopped."""
+    import os
+
+    import torch
+
+    torch.manual_seed(seed)
+    net = calib_net()
+    Xt, yt = torch.from_numpy(X), torch.from_numpy(y.astype(np.float32)).reshape(-1, 1)
+    opt = torch.optim.Adam(net.parameters(), lr=lr)
+    steps = epochs * int(np.ceil(len(X) / batch))
+    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lr, total_steps=steps)
+    g = torch.Generator().manual_seed(seed)
+    hist, snaps, ep0 = [], {}, 0
+    if ckpt is not None and os.path.exists(ckpt):
+        st = torch.load(ckpt, weights_only=False)
+        net.load_state_dict(st["net"])
+        opt.load_state_dict(st["opt"])
+        sched.load_state_dict(st["sched"])
+        g.set_state(st["gen"])
+        hist, snaps, ep0 = st["hist"], st["snaps"], st["epoch"]
+    if 0 in snap_at and 0 not in snaps and snap_fn is not None:
+        snaps[0] = snap_fn(net)
+    for ep in range(ep0, epochs):
+        perm = torch.randperm(len(X), generator=g)
+        tot = 0.0
+        net.train()
+        for i in range(0, len(X), batch):
+            j = perm[i:i + batch]
+            loss = ((net(Xt[j]) - yt[j]) * 100).pow(2).mean()
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            sched.step()
+            tot += float(loss) * len(j)
+        row = {"epoch": ep + 1, "train_rmse": math.sqrt(tot / len(X))}
+        if val is not None:
+            with torch.no_grad():
+                row["val_rmse"] = float(((net(torch.from_numpy(val[0])) - torch.from_numpy(
+                    val[1].astype(np.float32)).reshape(-1, 1)) * 100).pow(2).mean().sqrt())
+        hist.append(row)
+        if (ep + 1) in snap_at and snap_fn is not None:
+            snaps[ep + 1] = snap_fn(net)
+        if log:
+            log(row)
+        if ckpt is not None:
+            tmp = str(ckpt) + ".tmp"
+            torch.save({"net": net.state_dict(), "opt": opt.state_dict(), "sched": sched.state_dict(),
+                        "gen": g.get_state(), "hist": hist, "snaps": snaps, "epoch": ep + 1}, tmp)
+            os.replace(tmp, ckpt)
+    return net, hist, snaps
+
+
+def deep_bsde_snap(p=DEFAULT_RISK, iters=4000, batch=64, lr=0.008, seed=0, log_every=50, snap_at=(), n_snap=256,
+                   log=None):
+    """:func:`deep_bsde` (the same network and draws) with the shooting picture: at the iterations in ``snap_at``,
+    the terminal values Y_N against their targets g(X_N) on ``n_snap`` fresh paths. Pass p with delta = 1 for the
+    linear check (no default: plain discounted expectation)."""
+    import torch
+    import torch.nn as nn
+
+    torch.manual_seed(seed)
+    d, T, N = p["d"], p["T"], p["N"]
+    dt = T / N
+    y0 = nn.Parameter(torch.tensor(float(np.random.default_rng(seed).uniform(40, 70))))
+    z0 = nn.Parameter(torch.zeros(d).uniform_(-0.1, 0.1))
+
+    def sub():
+        return nn.Sequential(nn.BatchNorm1d(d), nn.Linear(d, d + 10, bias=False), nn.BatchNorm1d(d + 10), nn.ReLU(),
+                             nn.Linear(d + 10, d + 10, bias=False), nn.BatchNorm1d(d + 10), nn.ReLU(),
+                             nn.Linear(d + 10, d), nn.BatchNorm1d(d))
+    nets = nn.ModuleList([sub() for _ in range(N - 1)])
+    opt = torch.optim.Adam([y0, z0, *nets.parameters()], lr=lr)
+
+    def Q(y):
+        slope = (p["gh"] - p["gl"]) / (p["vh"] - p["vl"])
+        return torch.clamp(slope * (y - p["vh"]) + p["gh"], min=p["gl"], max=p["gh"])
+
+    def run(n, gen=None):
+        dW = math.sqrt(dt) * torch.randn(n, N, d, generator=gen)
+        logx = math.log(p["x0"]) + torch.cumsum((p["mu"] - 0.5 * p["sigma"] ** 2) * dt + p["sigma"] * dW, 1)
+        X = torch.cat([torch.full((n, 1, d), p["x0"]), torch.exp(logx)], 1)
+        Y = y0.expand(n)
+        Z = z0.expand(n, d)
+        for k in range(N):
+            if k > 0:
+                Z = nets[k - 1](X[:, k] / p["x0"] - 1) * p["x0"] * p["sigma"] / 10
+            Y = Y + ((1 - p["delta"]) * Q(Y) * Y + p["R"] * Y) * dt + (Z * dW[:, k]).sum(1)
+        return Y, X[:, -1].min(1).values
+
+    curve, snaps = [], {}
+    for it in range(iters + 1):
+        nets.train()
+        if it in snap_at:
+            with torch.no_grad():
+                Ys, gs = run(n_snap, torch.Generator().manual_seed(4242))
+            snaps[it] = {"Y": Ys.numpy(), "g": gs.numpy(), "u0": float(y0.detach())}
+        Y, g = run(batch)
+        loss = (Y - g).pow(2).mean()
+        if it % log_every == 0:
+            curve.append({"iter": it, "u0": float(y0.detach()), "loss": float(loss.detach())})
+            if log:
+                log(curve[-1])
+        if it == iters:
+            break
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    return {"u0": float(y0.detach()), "curve": curve, "snaps": snaps}
+
+
+def stopping_regions(nets, p=MAX_CALL, grid=None, dates=None):
+    """The exercise regions of trained deep-stopping networks (:func:`deep_stopping`'s 'nets') for two assets: at
+    each date n, 'stop' on a grid of (S1, S2). Returns (grid, {n: 0/1 array (len(grid), len(grid)), rows S2})."""
+    import torch
+
+    grid = np.linspace(60, 180, 61) if grid is None else np.asarray(grid, float)
+    G1, G2 = np.meshgrid(grid, grid)
+    S = torch.tensor(np.c_[G1.ravel(), G2.ravel()] / p["s0"], dtype=torch.float32)
+    out = {}
+    for n in (dates or sorted(nets)):
+        net = nets[n]
+        net.eval()
+        disc = math.exp(-p["r"] * n * p["T"] / p["N"])
+        pay = torch.clamp(S.max(1).values * p["s0"] - p["K"], min=0) * disc
+        with torch.no_grad():
+            out[n] = (net(torch.cat([S, pay[:, None] / p["s0"]], 1))[:, 0] > 0).numpy().reshape(len(grid), -1).astype(int)
+    return grid, out
+
+
+def train_ddpm_snap(real, steps=200, iters=4000, batch=256, lr=1e-3, width=256, seed=0, log=None):
+    """:func:`train_ddpm` (the same network and draws) whose sampler can also return the reverse process:
+    ``sample(n, seed, snap_at=(...))`` -> (x_0, {t: x_t}). Returns (sample, curve, abar) with abar the forward
+    process's cumulative products (x_t = sqrt(abar_t) x_0 + sqrt(1 - abar_t) eps)."""
+    import torch
+
+    torch.manual_seed(seed)
+    X = torch.tensor(real, dtype=torch.float32)
+    L = X.shape[1]
+    betas = torch.linspace(1e-4, 0.02, steps)
+    alpha = 1 - betas
+    abar = torch.cumprod(alpha, 0)
+    net = _mlp(L + 16, width, 3, L)
+
+    def temb(t):
+        f = torch.exp(-math.log(1000) * torch.arange(8) / 8)
+        a = t[:, None].float() * f[None]
+        return torch.cat([torch.sin(a), torch.cos(a)], 1)
+
+    opt = torch.optim.Adam(net.parameters(), lr=lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, iters)
+    g = torch.Generator().manual_seed(seed + 1)
+    curve = []
+    for it in range(iters):
+        x0 = X[torch.randint(len(X), (batch,), generator=g)]
+        t = torch.randint(steps, (batch,), generator=g)
+        eps = torch.randn(x0.shape, generator=g)
+        xt = abar[t].sqrt()[:, None] * x0 + (1 - abar[t]).sqrt()[:, None] * eps
+        loss = (net(torch.cat([xt, temb(t)], 1)) - eps).pow(2).mean()
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+        sched.step()
+        curve.append(float(loss.detach()))
+        if log and it % 500 == 0:
+            log(it, curve[-1])
+
+    @torch.no_grad()
+    def sample(n, seed=0, snap_at=()):
+        gg = torch.Generator().manual_seed(seed)
+        x = torch.randn(n, L, generator=gg)
+        snaps = {steps: x.numpy().copy()} if steps in snap_at else {}
+        for t in range(steps - 1, -1, -1):
+            tt = torch.full((n,), t)
+            e = net(torch.cat([x, temb(tt)], 1))
+            x = (x - betas[t] / (1 - abar[t]).sqrt() * e) / alpha[t].sqrt()
+            if t > 0:
+                x = x + betas[t].sqrt() * torch.randn(x.shape, generator=gg)
+            if t in snap_at:
+                snaps[t] = x.numpy().copy()
+        return (x.numpy(), snaps) if snap_at else x.numpy()
+    return sample, curve, abar.numpy()

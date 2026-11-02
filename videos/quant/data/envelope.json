@@ -93,6 +93,21 @@
    },
    "trials": 1
   },
+  "capm_two_pass": {
+   "code_sha256": "b3e04c79c1386e81fc380fab210f48ce122f58fa0206242d50e69ea6a1102e75",
+   "params": {
+    "from": 196307,
+    "portfolios": "49 industries + 10 B/M deciles"
+   },
+   "trials": 1
+  },
+  "fomc_announcement_days": {
+   "code_sha256": "2a997e8d7655ea9f1db30f6a411a47023705a64da71c185da3c04602d55e13f3",
+   "params": {
+    "days": "scheduled FOMC decisions 1994-2020"
+   },
+   "trials": 1
+  },
   "industry_capm_alphas": {
    "code_sha256": "54f561ad6d5881bce05e5be15386f78d40065cddafb61214ab959da2ba4fe2fa",
    "params": {
@@ -116,6 +131,13 @@
    },
    "trials": 1
   },
+  "lookahead_rotation_toy": {
+   "code_sha256": "f90dd6357b46150ff1ed2478fbaba16f6aee074b9620c199ceb4b44402688d55",
+   "params": {
+    "rule": "4-week size-decile rotation"
+   },
+   "trials": 1
+  },
   "myopic_loss_aversion_us": {
    "code_sha256": "8c7dbb0143cf626417368403ae58182560c95c5a207a307002e6f39eb3374bc5",
    "params": {
@@ -124,6 +146,14 @@
     "horizons": "1..36"
    },
    "trials": 1
+  },
+  "shiller_oos_predictors": {
+   "code_sha256": "eebb73156ed3044b21e2346f15abad4dbb460c09a11ab8f464d699174c6aa92a",
+   "params": {
+    "oos_from": 1927,
+    "predictors": 5
+   },
+   "trials": 5
   },
   "sign_continuation_eprocess_btc": {
    "code_sha256": "f9e32ccc54238d237c86c27c842bb2aa7af4c44cb6d17729c4351f9d9027cd76",

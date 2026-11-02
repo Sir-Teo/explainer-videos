@@ -41,16 +41,14 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
                 why(r"constant ROE, book growing at $g$: the residual incomes are a Gordon series")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-1.6, buff=0.6, edge=6.9)
         with self.voiceover(
-            "In 1995 James Ohlson rewrote the dividend discount model in the language of the balance sheet. Start "
-            "from the dividends. <bookmark mark='a'/> Clean surplus says book equity changes only through earnings and "
-            "payouts, so each dividend is earnings minus the growth in book. <bookmark mark='b'/> Substitute it in, "
-            "and add and subtract r times last year's book inside the sum. One sum is earnings in excess of a "
-            "normal return on book. The other telescopes: each year's book cancels the next. "
-            "<bookmark mark='c'/> What is left is the starting book, plus the present value of residual income: "
-            "return on equity minus the cost of equity, times the book that earned it. Accounting choices that move "
-            "earnings between years move book too, and the value does not change. <bookmark mark='d'/> With a "
-            "constant return and book growing at g, price-to-book is one, plus the spread of ROE over r, divided by r "
-            "minus g."
+            "In 1995 James Ohlson rewrote the dividend discount model in the language of the balance sheet. Start from the "
+            "dividends. <bookmark mark='a'/> Clean surplus says book equity changes only through earnings and payouts, so each "
+            "dividend is earnings minus the growth in book. <bookmark mark='b'/> Substitute, then add and subtract r times last "
+            "year's book. One sum is earnings in excess of a normal return on book; the other telescopes, each year's book "
+            "cancelling the next. <bookmark mark='c'/> What is left is today's book plus the present value of residual income: "
+            "return on equity minus the cost of equity, times the book that earned it. Accounting choices that shift earnings "
+            "between years shift book too, and the value does not change. <bookmark mark='d'/> With a constant return and book "
+            "growing at g, price-to-book is one plus the spread of ROE over r, divided by r minus g."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -89,13 +87,12 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, rd)
         self.remove(hint, rd)
         with self.voiceover(
-            "Draw that formula as a surface: return on equity across, growth of book running back, price-to-book "
-            "as the height, at an eight percent cost of equity. <bookmark mark='a'/> The grey plane is a price-to-book "
-            "of one. The surface cuts it along a single line, where return on equity equals the cost of equity, "
-            "for every growth rate. <bookmark mark='b'/> Fly along that seam. On one side, profitable growth lifts "
-            "the multiple; on the other, growth only digs the hole deeper, the same lesson as chapter six's ridge, "
-            "now in the accountant's language. <bookmark mark='c'/> A firm earning twelve percent on book that grows "
-            "at four sits at a price-to-book of two."
+            "Draw that formula as a surface: return on equity across, growth of book running back, price-to-book as the height, "
+            "at an eight percent cost of equity. <bookmark mark='a'/> The grey plane is a price-to-book of one, and the surface "
+            "cuts it along a single line, where ROE equals the cost of equity, for every growth rate. <bookmark mark='b'/> Fly "
+            "along the seam. On one side profitable growth lifts the multiple; on the other, growth only digs the hole deeper: "
+            "chapter six's ridge in the accountant's language. <bookmark mark='c'/> A firm earning twelve percent on a book that "
+            "grows at four sits at a price-to-book of two."
         ) as vo:
             self.play(FadeIn(hint), Create(ax), run_time=1.5)
             self.play(Create(surf), run_time=3)
@@ -140,16 +137,13 @@ class ResidualIncome(VoiceoverScene, ThreeDScene):
         pp = desk_question(r"Pause and predict: a firm's ROE equals its cost of equity. What is its P/B, whatever its "
                            r"growth?", width=5.6, font_size=21).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Now a firm, year by year. Its value starts with its book, the blue block. Each year adds a bar: the "
-            "return on equity above eight percent times book, discounted. <bookmark mark='a'/> This firm earns "
-            "fifteen percent now, and competition pulls it down towards its cost of equity, so the bars shrink "
-            "twice over, by the fading spread and by discounting. <bookmark mark='b'/> Stack them: a price-to-book "
-            f"of {ri['fade_value'] / 100:.2f}. Nothing beyond the bars is needed once the spread has gone. "
-            "<bookmark mark='c'/> And the identity is exact, not approximate: run the toy firm's forty quarters of "
-            "statements through both formulas and the two values agree to the last digit a computer keeps. "
-            "<bookmark mark='d'/> Pause and predict: if a firm's return on equity equals its cost of equity, what is "
-            "its price-to-book, whatever its growth? One. AQR's quality factor, in chapter seventeen, starts from "
-            "this formula."
+            "Now one firm, year by year. Its value starts with its book, the blue block, and each year adds a bar: ROE above eight "
+            "percent, times book, discounted. <bookmark mark='a'/> This firm earns fifteen percent now, and competition pulls it "
+            "towards its cost of equity, so the bars shrink twice over, by the fading spread and by discounting. "
+            f"<bookmark mark='b'/> Stack them: a price-to-book of {ri['fade_value'] / 100:.2f}. <bookmark mark='c'/> The identity "
+            "is exact: run the toy firm's forty quarters through both formulas and they agree to the last digit a computer keeps. "
+            "<bookmark mark='d'/> Pause and predict: a firm's ROE equals its cost of equity. What is its price-to-book, whatever "
+            "its growth? One. AQR's quality factor, in chapter seventeen, starts here."
         ) as vo:
             self.play(FadeIn(g), GrowFromEdge(book, DOWN), FadeIn(bl), FadeIn(side[0]))
             vo.wait_until("a")

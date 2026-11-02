@@ -41,16 +41,14 @@ class FreeLunch(VoiceoverScene):
                     r"eleven below $-10$, and the losses are unbounded", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.4, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Continuous time allows a trick that one period never did. Trade a fair game, a martingale, and bet "
-            "harder and harder as the deadline approaches: at time t, hold one over the square root of the time "
-            "left. <bookmark mark='a'/> The variance of the gains so far is the logarithm of T over the time left, "
-            "and that runs to infinity before the deadline. <bookmark mark='b'/> A theorem of Dambis, Dubins and "
-            "Schwarz says the gains are a Brownian motion running on that clock, and a Brownian motion given "
-            "infinite time reaches every level. So the gains reach plus one before time T, with probability one. "
-            "Stop there. A sure profit from a fair game, at no cost. <bookmark mark='c'/> The catch is on the way. "
-            "By Part four's gambler's ruin, the chance the wealth falls below minus k before it reaches plus one is "
-            "one over one plus k. Half the paths go below minus one; one in eleven below minus ten. The losses "
-            "along the way are unbounded."
+            "Continuous time allows a trick one period never did. Bet on a fair game harder and "
+            "harder as a deadline nears: hold one over the square root of the time left. <bookmark "
+            "mark='a'/> The variance of the gains, the log of T over the time left, runs to infinity "
+            "before the deadline. <bookmark mark='b'/> By Dambis, Dubins and Schwarz the gains are a "
+            "Brownian motion on that clock, so they reach plus one before T for sure. Stop there: a "
+            "sure profit from a fair game. <bookmark mark='c'/> The catch: by Part four's gambler's "
+            "ruin, the wealth first falls below minus k with probability one over one plus k. Half "
+            "the paths go below minus one."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -121,14 +119,13 @@ class FreeLunch(VoiceoverScene):
             ax.c2p(0.02, -1), DOWN, buff=0.1, aligned_edge=LEFT)
         src = illustration(r"simulated: Brownian motion on the clock $\ln T/(T - t)$, bridge-corrected crossings")
         with self.voiceover(
-            f"Watch a hundred and twenty doublers. Each path is the gains of the strategy as the deadline approaches. "
-            "<bookmark mark='a'/> One by one, they reach plus one and stop, in green. On the left, the histogram of "
-            "each path's worst loss so far grows a tail that keeps going. <bookmark mark='b'/> Over "
-            f"{f['n']:,} simulated doublers, {100 * fr['1']:.1f} percent fell below minus one before winning, "
-            f"against one half in theory; {100 * fr['10']:.1f} percent below minus ten, against one in eleven. "
-            "<bookmark mark='c'/> The fix is to forbid unbounded credit. A strategy is admissible if its wealth "
-            "never goes below some fixed minus a. Draw that floor at minus one, and half of the doublers are cut off "
-            "before they can win."
+            "A hundred and twenty doublers. <bookmark mark='a'/> One by one they reach plus one and "
+            "stop, in green, while the histogram of their worst losses grows a tail that keeps going. "
+            f"<bookmark mark='b'/> Over {f['n']:,} simulated doublers, {100 * fr['1']:.1f} percent "
+            f"fell below minus one, theory a half; {100 * fr['10']:.1f} percent below minus ten, "
+            "theory one in eleven. <bookmark mark='c'/> The fix: admissible strategies, whose wealth "
+            "never falls below some minus a. With a floor at minus one, half the doublers are stopped "
+            "out."
         ) as vo:
             self.play(FadeIn(g), Create(win), FadeIn(src), FadeIn(hl))
             self.add(FAN, H)
@@ -158,16 +155,13 @@ class FreeLunch(VoiceoverScene):
         top = VGroup(d, t).arrange(RIGHT, buff=0.35, aligned_edge=UP).to_edge(UP, buff=0.4)
         bot = VGroup(h1, h2).arrange(RIGHT, buff=0.35, aligned_edge=UP).next_to(top, DOWN, buff=0.35)
         with self.voiceover(
-            "Admissibility kills the doubler, but in continuous time it is still not quite enough for the "
-            "theorem. David Kreps saw in 1981 that you must also rule out limits of trades that are almost "
-            "arbitrages: a free lunch. <bookmark mark='a'/> In discrete time, Robert Dalang, Andrew Morton and Walter "
-            "Willinger showed in 1990 that plain no arbitrage suffices, on any probability space. "
-            "<bookmark mark='b'/> In continuous time, Freddy Delbaen and Walter Schachermayer found the exact "
-            "condition in 1994: no free lunch with vanishing risk. No sequence of admissible strategies whose gains "
-            "converge to something non-negative and not zero while their worst losses shrink to nothing. "
-            "<bookmark mark='c'/> And they proved it is equivalent to an equivalent local martingale measure, or in "
-            "full generality, in 1998, a sigma-martingale measure. That is the fundamental theorem in its final "
-            "form, the one Delbaen and Schachermayer's book builds up to."
+            "Admissibility is still not quite enough. Kreps saw in 1981 that limits of "
+            "near-arbitrages, free lunches, must go too. <bookmark mark='a'/> In discrete time "
+            "Dalang, Morton and Willinger showed in 1990 that plain no arbitrage suffices, on any "
+            "probability space. <bookmark mark='b'/> In continuous time Delbaen and Schachermayer "
+            "found the condition in 1994: no free lunch with vanishing risk. <bookmark mark='c'/> It "
+            "is equivalent to an equivalent local martingale measure, and in full generality, in "
+            "1998, a sigma-martingale measure: the theorem's final form."
         ) as vo:
             self.play(FadeIn(h1, shift=UP * 0.2))
             vo.wait_until("a")
@@ -204,15 +198,13 @@ class FreeLunch(VoiceoverScene):
                           r"discounted payoff: a bubble, and put--call parity fails (Cox and Hobson 2005)", 4.6, 19, ARB),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "One more strange object lives inside the theorem. Let a price be one over the distance of a "
-            "three-dimensional Brownian motion from the origin, starting at distance one. It has no drift: every "
-            "path is locally a fair game. <bookmark mark='a'/> But watch the average. A few paths wander close to "
-            "the origin and spike enormously, most drift down, and the mean sinks: at time one it is "
-            f"{b['1.0']['exact']:.3f}, and the two million simulated paths say {b['1.0']['mc']:.4f}. A local "
-            "martingale whose expectation falls is called strict. <bookmark mark='b'/> Such a price is consistent "
-            "with no free lunch, and yet the asset trades above the expected value of what it will be worth: a "
-            "bubble. And parity fails. The call minus the put is the expected price minus the strike, not today's "
-            "price minus the strike. Alexander Cox and David Hobson worked out these option prices in 2005."
+            "One strange object lives inside it. Let a price be one over the distance of a "
+            "three-dimensional Brownian motion from the origin: locally a fair game, no drift. "
+            "<bookmark mark='a'/> But the mean sinks, as a few paths spike near the origin: at time "
+            f"one, {b['1.0']['exact']:.3f} exactly, {b['1.0']['mc']:.4f} from two million paths. A "
+            "strict local martingale. <bookmark mark='b'/> No free lunch, yet the asset trades above "
+            "its expected value: a bubble, and parity fails. Cox and Hobson priced such options in "
+            "2005."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(side[0]))
             self.play(LaggedStart(*[Create(p_) for p_ in fan], lag_ratio=0.01), run_time=3)
@@ -227,10 +219,9 @@ class FreeLunch(VoiceoverScene):
         card = pause_at(r"The doubler never loses at the end and costs nothing to start. Why is it not an arbitrage in "
                         r"the theorem's sense?")
         with self.voiceover(
-            "Pause and predict. The doubler costs nothing and never loses at the end. Why is it not an arbitrage in "
-            "the theorem's sense? <bookmark mark='a'/> Because it is not admissible. It needs unlimited credit along "
-            "the way, and no lender extends it. The theorem counts only strategies whose losses are bounded, and "
-            "once losses are bounded, the doubler cannot be sure of winning."
+            "Pause and predict. The doubler costs nothing and never loses at the end. Why is it not "
+            "an arbitrage? <bookmark mark='a'/> It is not admissible: it needs unlimited credit on "
+            "the way, and with bounded losses it is no longer sure to win."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

@@ -778,7 +778,7 @@ and problems 1–7 with solutions in English and Chinese; the build command.
 ## 7. Lead's decisions (2 Nov 2026)
 
 1. Yes: add `calib_noise` and reword chapter 3 to what it measures (network vs fresh Monte Carlo against label vs fresh), dropping "below the noise of its labels" unless the new item supports it, in EN, ZH, README and the recap.
-2. Say so: deep stopping (26.107) is below Longstaff–Schwartz at our budget; no `stopping_budget` item. Cite BCJ Table 1's bounds [26.156, 26.162] as theirs.
+2. Corrected: Part 16 computed LSM at 26.103 ± 0.014 (2M evaluation paths) vs deep stopping 26.107 ± 0.020 — a tie; both below BCJ. Say they tie at our budget; no `stopping_budget` item. Cite BCJ Table 1's bounds [26.156, 26.162] as theirs.
 3. Yes: the deep BSDE as a tail average with spread.
 4. Yes: `dml_seeds`; the headline follows the seeds.
 5. The "about 70%" J.P. Morgan figure: verify from Risk.net's own article, or replace it in both scenes (and zh lines, on-screen text, README) with the wording that is confirmed.

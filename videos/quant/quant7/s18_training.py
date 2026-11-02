@@ -46,7 +46,7 @@ class Training(VoiceoverScene):
             "<bookmark mark='a'/> A small transformer looks at all twenty-two days at once and weights them by "
             "attention: a learned version of HAR's averages. <bookmark mark='b'/> All three forecast the logarithm, "
             "so mapping back to variance needs the log-normal correction. <bookmark mark='c'/> And the third, after "
-            "Christian Reisenhofer, Christian Bayer and Nikolaus Hautsch, is HARNet: its filters and weights start "
+            "Rafael Reisenhofer, Xandro Bayer and Nikolaus Hautsch, is HARNet: its filters and weights start "
             "exactly at the log-HAR model, and training can only move it away if the data ask. <bookmark mark='d'/> "
             "Same data, same early stopping, five seeds each."
         ) as vo:

@@ -39,14 +39,12 @@ class Duration(VoiceoverScene):
                 why(r"a stock growing at 5\% behaves like a bond of more than thirty years")]
         step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.0, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Macaulay defined the duration of a bond in 1938: the average date of its payments, each weighted by its "
-            "share of the value. A stock has a duration too. Take logs of Gordon's formula. <bookmark mark='a'/> "
-            "Differentiate with respect to the discount rate: the price falls by one over r minus g percent for "
-            "each point the rate rises. That is the modified duration. <bookmark mark='b'/> The Macaulay version "
-            "weights each year by its share of the value; the shares are a geometric sequence, and summing year "
-            "times share gives one plus r over r minus g. <bookmark mark='c'/> At an eight percent discount rate and "
-            "five percent growth: thirty-three years modified, thirty-six Macaulay. On paper a growing stock is a "
-            "very long bond."
+            "Frederick Macaulay defined the duration of a bond in 1938: the average date of its payments, each weighted by its "
+            "share of the value. A stock has a duration too. Take logs of Gordon's formula. <bookmark mark='a'/> Differentiate "
+            "with respect to the discount rate: the price falls by one over r minus g percent for each point the rate rises, the "
+            "modified duration. <bookmark mark='b'/> Weight each year by its share of the value, a geometric sequence, and sum "
+            "year times share: one plus r over r minus g. <bookmark mark='c'/> At an eight percent rate and five percent growth, "
+            "thirty-three years modified, thirty-six Macaulay. On paper, a growing stock is a very long bond."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -98,14 +96,12 @@ class Duration(VoiceoverScene):
         st = always_redraw(bars)
         pv = always_redraw(pivot)
         with self.voiceover(
-            "Here are those weights as a picture. Each bar is the share of a stock's value paid in one year, at an "
-            "eight percent discount rate, and the orange triangle is the balance point: the duration. With no growth, "
-            "the weight falls off fast and the stock balances at about thirteen and a half years. <bookmark mark='a'/> For "
-            "scale, a thirty-year bond, in blue: coupons, and one tall spike of principal at the end. "
-            "<bookmark mark='b'/> Now let growth rise towards the discount rate. The mass slides right, the tail "
-            "gets fat, and the balance point runs off towards the horizon: at seven percent growth the average dollar "
-            "of this stock arrives more than a century from now. <bookmark mark='c'/> Most of a growth stock's value "
-            "is cash that nobody alive will see paid. That is why it is so sensitive to the rate it is discounted at."
+            "Here are those weights as a picture: each bar the share of a stock's value paid in one year, at an eight percent "
+            "rate, and the orange triangle the balance point, the duration. With no growth it balances at about thirteen and a "
+            "half years. <bookmark mark='a'/> For scale, a thirty-year bond: coupons, and a spike of principal. "
+            "<bookmark mark='b'/> Now let growth rise towards the rate. The mass slides right, the tail fattens, and the balance "
+            "point runs towards the horizon: at seven percent growth, more than a century. <bookmark mark='c'/> Most of a growth "
+            "stock's value is cash nobody alive will see paid, which is why it is so sensitive to the rate."
         ) as vo:
             self.play(FadeIn(g), FadeIn(sl))
             self.add(st, pv)
@@ -136,11 +132,9 @@ class Duration(VoiceoverScene):
                                r"modified duration $1/(r-g)$ in action", 4.4, 23, GREY_A)
         side = VGroup(labs, lesson).arrange(DOWN, aligned_edge=LEFT, buff=0.6).to_edge(RIGHT, buff=0.5).shift(UP * 0.3)
         with self.voiceover(
-            "In numbers: a dividend of five growing at three percent, discounted at eight, is worth a hundred. "
-            "<bookmark mark='a'/> Lower the rate by one point, to seven, and it is worth a hundred and twenty-five. "
-            "To five, and it is worth two hundred and fifty. <bookmark mark='b'/> The closer the rate is to growth, "
-            "the steeper the curve, exactly as the duration formula says. It is one answer to Shiller's puzzle: if "
-            "the discount rate moves, prices must move a lot."
+            "In numbers: five growing at three percent, discounted at eight, is worth a hundred. <bookmark mark='a'/> At seven, a "
+            "hundred and twenty-five; at five, two hundred and fifty. <bookmark mark='b'/> The closer the rate to growth, the "
+            "steeper the curve: one answer to Shiller's puzzle."
         ) as vo:
             self.play(FadeIn(g), Create(line), run_time=2)
             self.play(FadeIn(dots[0]), FadeIn(labs[0]))
@@ -195,16 +189,12 @@ class Duration(VoiceoverScene):
         pp = desk_question(r"Pause and predict: Gordon says a one-point rise in yields should cut a growth stock by a "
                            r"third. What did the data say?", width=6.0, font_size=21).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "So does the market price stocks like long bonds? Pause and predict: Gordon says a one-point rise in "
-            "yields should cut a stock with r minus g of three percent by a third. <bookmark mark='a'/> Here is what "
-            "happened, measured on Kenneth French's portfolios since 1963: each month's return against that month's "
-            f"change in the ten-year Treasury yield. The growth stocks lost {abs(growth):.1f} percent per point, the "
-            f"value stocks {abs(value):.1f}. <bookmark mark='b'/> "
-            + order_line + "But the size is off by more than ten times. <bookmark mark='c'/> The formula holds growth fixed while "
-            "the rate moves. In the data, yields rise when inflation rises, and expected dividends rise with it, so "
-            "g moves with r and much of the effect cancels. Dechow, Sloan and Soliman measured implied equity "
-            "durations of about fifteen years, not thirty-three. A model's sensitivity is only as good as its "
-            "assumption about what else moves."
+            "Does the market price stocks like long bonds? Pause and predict: Gordon says a one-point rise in yields should cut "
+            "such a stock by a third. <bookmark mark='a'/> Measured on French's portfolios since 1963, against the monthly change "
+            f"in the ten-year yield: growth stocks lost {abs(growth):.1f} percent per point, value stocks {abs(value):.1f}. "
+            "<bookmark mark='b'/> " + order_line + "But the size is off more than tenfold. <bookmark mark='c'/> When yields rise "
+            "with inflation, expected dividends rise too, so g moves with r. Dechow, Sloan and Soliman measured implied durations "
+            "of about fifteen years."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(pp))
             vo.wait_until("a")

@@ -59,16 +59,13 @@ class Completing(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
         src = illustration(r"33 states, log-normal weights as the true $Q$; each call priced under it")
         with self.voiceover(
-            "Options are how real markets close the gap. A stock with thirty-three possible prices tomorrow, and a "
-            "digital option that pays one if the price ends above one point one. With only the stock and the bond, "
-            f"no arbitrage says the digital is worth somewhere between {r0['lower']:.2f} and {r0['upper']:.2f}: "
-            "almost nothing. <bookmark mark='a'/> Now let calls trade, one strike at a time, each priced by the "
-            "same true measure. Every call adds a hinge to the set of payoffs the market can build, and the "
-            "super-replication program gets a new tool. <bookmark mark='b'/> The interval shrinks with each strike: "
-            f"one call, {r1['lower']:.2f} to {r1['upper']:.2f}; ten calls, {rl['lower']:.2f} to {rl['upper']:.2f}, "
-            f"around the true price of {true:.2f}. Stephen Ross proved in 1976 that options on enough strikes "
-            "complete the market: every payoff of the stock becomes a portfolio of calls. That is the deepest reason "
-            "options exist."
+            "Options close the gap in real markets. Thirty-three states, and a digital paying one "
+            f"above one point one. With stock and bond alone, it is worth between {r0['lower']:.2f} "
+            f"and {r0['upper']:.2f}: almost nothing is known. <bookmark mark='a'/> Now let calls "
+            "trade, one strike at a time, each adding a hinge to what the market can build. <bookmark "
+            f"mark='b'/> One call: {r1['lower']:.2f} to {r1['upper']:.2f}. Ten calls: "
+            f"{rl['lower']:.2f} to {rl['upper']:.2f}, around the true {true:.2f}. Stephen Ross proved "
+            "in 1976 that options on enough strikes complete the market."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[Create(l_) for l_ in st], lag_ratio=0.03), Create(dig), FadeIn(dl),
                       FadeIn(h), FadeIn(src), run_time=2.5)
@@ -115,18 +112,14 @@ class Completing(VoiceoverScene):
         src = note(r"Kramkov (1996), optional decomposition; F\"ollmer and Schied, ch.\ 7", font_size=17,
                    color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Now remove the options and add time. A trinomial tree: each step the stock goes up, stays, or goes down, "
-            "with only the stock and the bond to trade. Three branches, two assets: incomplete at every node. "
-            "<bookmark mark='a'/> The seller super-replicates step by step, backward: at each node, the cheapest "
-            "cover of tomorrow's super-price, which by the duality of the last chapter is the largest expectation "
-            "over the one-step martingale measures. <bookmark mark='b'/> Those measures form a segment, and its ends "
-            "are two-point measures: either the outer branches only, or the middle branch only. <bookmark mark='c'/> "
-            "For a convex claim, the spread-out end always wins. The outer branches light up at every node, the "
-            "middle ones go dark: the super-hedger prices as if every move were the biggest possible. "
-            "<bookmark mark='d'/> So the super-price is a binomial price, at the largest volatility the tree allows, "
-            "and in the limit it is Black and Scholes at that volatility. Marco Avellaneda, Arnon Levy and Antonio "
-            "Parás, and Terry Lyons, called this uncertain volatility, in 1995."
-        ) as vo:
+            "Now remove the options and add time. A trinomial tree: up, flat or down each step, stock "
+            "and bond only, incomplete at every node. <bookmark mark='a'/> The seller "
+            "super-replicates backward: at each node, the largest expectation over one-step "
+            "martingale measures. <bookmark mark='b'/> Those measures form a segment whose ends use "
+            "the outer branches only, or the middle only. <bookmark mark='c'/> For a convex claim the "
+            "outer end wins: the outer branches light up, the middle goes dark. <bookmark mark='d'/> "
+            "So the super-price is a binomial price at the widest volatility, and in the limit Black "
+            "and Scholes there: uncertain volatility, Avellaneda, Levy and Parás, and Lyons, 1995."        ) as vo:
             self.play(FadeIn(tree), FadeIn(src))
             step(0)
             vo.wait_until("a")
@@ -160,12 +153,12 @@ class Completing(VoiceoverScene):
                           4.6, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Run it. The super-replication price of an at-the-money call on trinomial trees with up to two hundred "
-            f"and fifty-six steps, widest volatility twenty-five percent: {up[-1]:.3f} at the finest tree, against "
-            f"Black and Scholes at twenty-five percent, {st['bs']:.3f}. <bookmark mark='a'/> The sub-replication "
-            "price is the other extreme, all mass on the middle branch: the stock never moves, and the call is "
-            "worth its intrinsic value, zero. The no-arbitrage interval is enormous. A real desk narrows it the "
-            "way the first half of this chapter did, by trading options, or by choosing a model."
+            "Run it on trinomial trees with up to two hundred and fifty-six steps, widest volatility "
+            f"twenty-five percent: the super-price is {up[-1]:.3f}, against Black and Scholes at "
+            f"twenty-five percent, {st['bs']:.3f}. <bookmark mark='a'/> The sub-price puts all mass on "
+            "the middle branch: the stock never moves, and the call is worth its intrinsic value, "
+            "zero. The no-arbitrage interval is enormous; a desk narrows it by trading options, or by "
+            "choosing a model."
         ) as vo:
             self.play(FadeIn(g), Create(bsl), FadeIn(bl))
             self.play(LaggedStart(*[GrowFromCenter(p_) for p_ in pts], lag_ratio=0.25), Create(ln), run_time=3)
@@ -178,12 +171,10 @@ class Completing(VoiceoverScene):
     def predict(self):
         card = pause_at(r"You may add two traded calls. Which pair of strikes closes the digital's interval completely?")
         with self.voiceover(
-            "Pause and predict. You may add two traded calls. Which pair of strikes closes the digital's interval "
-            "completely? <bookmark mark='a'/> Any two strikes with no state between them, both between the last "
-            "state below one point one and the first state above it. Their call spread pays nothing in every state "
-            "below the jump and the same amount in every state above: scaled up, it is the digital, replicated "
-            "exactly. The House's program agrees: with calls at one point one and one point one two, the interval "
-            "has width zero."
+            "Pause and predict. With two traded calls, which pair closes the digital's interval "
+            "completely? <bookmark mark='a'/> Two strikes with no state between them, bracketing the "
+            "jump: their scaled call spread is the digital in every state. With calls at one point "
+            "one and one point one two, the program's interval has width zero."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

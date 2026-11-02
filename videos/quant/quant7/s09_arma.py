@@ -46,9 +46,9 @@ class Arma(VoiceoverScene):
         ro = VGroup(readout(r"\phi =", lambda: phi.get_value(), digits=2, font_size=34, color=VOL),
                     readout(r"\operatorname{Var} x_t = \frac{\sigma^2}{1-\phi^2} =",
                             lambda: 1 / (1 - phi.get_value() ** 2), digits=1, font_size=30),
-                    readout(r"\text{half-life} = \frac{\ln\tfrac12}{\ln\phi} =",
+                    readout(r"\text{half-life (steps)} = \frac{\ln\tfrac12}{\ln\phi} =",
                             lambda: np.log(0.5) / np.log(max(phi.get_value(), 1e-3)) if phi.get_value() > 0.01 else 0.0,
-                            digits=1, font_size=30, unit=r"\text{ steps}"))
+                            digits=1, font_size=30))
         ro.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(ga, DOWN, buff=0.45).align_to(ga, LEFT)
         defn = definition_card(r"Weak stationarity",
                                r"the mean is constant, the variance is finite, and the covariance of $x_t$ and "

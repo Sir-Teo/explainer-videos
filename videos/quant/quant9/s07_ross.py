@@ -58,16 +58,15 @@ class Ross(VoiceoverScene):
                 why(r"Perron--Frobenius: an irreducible non-negative matrix has exactly one positive eigenvector", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Option prices give Q. Can they give P, the probabilities the market really believes? Stephen Ross "
-            "claimed in 2015 that they can. Suppose the economy moves between a few states, and options reveal the "
-            "price of moving from state i to state j: the real transition probability times the discount factor. "
-            "<bookmark mark='a'/> Ross's assumption: the discount factor is a constant discount rate times a ratio "
-            "of one function of the state, the way a representative investor's marginal utility would be. "
-            "<bookmark mark='b'/> Then the real probabilities are the state prices, rescaled. <bookmark mark='c'/> "
-            "And because each row of real probabilities must sum to one, the reciprocal of that function is an "
-            "eigenvector of the state-price matrix, with eigenvalue the discount rate. <bookmark mark='d'/> Oskar "
-            "Perron and Georg Frobenius proved that a matrix like this has exactly one positive eigenvector. So it "
-            "is pinned down, and so are the real probabilities. From prices alone."
+            "Option prices give Q. Can they give P, what the market really believes? Stephen Ross "
+            "claimed in 2015 that they can. Options reveal the price of moving from state i to state "
+            "j: the real transition probability times the discount factor. <bookmark mark='a'/> Ross "
+            "assumed the discount factor is a discount rate times a ratio of one function of the "
+            "state, like a representative investor's marginal utility. <bookmark mark='b'/> Then real "
+            "probabilities are rescaled state prices. <bookmark mark='c'/> Rows must sum to one, so "
+            "the function's reciprocal is an eigenvector of the state-price matrix. <bookmark "
+            "mark='d'/> Perron and Frobenius: a matrix like this has exactly one positive "
+            "eigenvector. So P is pinned down, from prices alone."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -114,11 +113,10 @@ class Ross(VoiceoverScene):
         sl = label(r"states: low consumption $\to$ high", font_size=17, color=GREY_B).next_to(g, DOWN, buff=0.9)
         dl = MathTex(rf"\text{{true }}\delta = {sw['delta']:.2f}", font_size=28, color=Q_C).next_to(sl, DOWN, buff=0.2)
         with self.voiceover(
-            "The House finds that eigenvector the oldest way there is. Start from a flat vector and multiply it by "
-            "the state-price matrix, again and again, renormalizing each time. <bookmark mark='a'/> On a nine-state "
-            "test economy the vector wobbles for a few steps, then freezes into the Perron vector, and the growth "
-            f"factor settles on the discount rate: {lam[0]:.4f} after one step, {lam[9]:.4f} after ten, "
-            f"{lam[-1]:.5f} after sixty, against a true {sw['delta']:.2f}."
+            "The House finds it the oldest way: multiply a flat vector by the state-price matrix, "
+            "again and again, renormalizing. <bookmark mark='a'/> It wobbles, then freezes into the "
+            f"Perron vector, and the growth factor settles: {lam[0]:.4f} after one step, {lam[9]:.4f} "
+            f"after ten, {lam[-1]:.5f} after sixty, against a true {sw['delta']:.2f}."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(g), FadeIn(sl), FadeIn(dl))
             self.add(B, rd)
@@ -151,13 +149,12 @@ class Ross(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.6)
         src = illustration(r"two synthetic economies with a known truth")
         with self.voiceover(
-            "Test it where the truth is known. A synthetic economy with nine states, and a representative investor "
-            "with constant relative risk aversion: exactly Ross's assumption. <bookmark mark='a'/> From state prices "
-            "alone, the recovered probabilities match the truth to the last digit. <bookmark mark='b'/> Now add what "
-            "real economies have: a permanent component in the discount factor, shocks to wealth that do not wash "
-            "out. The recovery still returns a clean answer, but the wrong one. It is pessimistic: it puts the "
-            f"economy's long-run level {100 * abs(r['mean_rec2']):.1f} percent below trend when the truth is "
-            f"{100 * r['mean_true']:.1f} percent above."
+            "Test it where the truth is known: nine states, a representative investor, exactly Ross's "
+            "assumption. <bookmark mark='a'/> The recovery matches the truth to the last digit. "
+            "<bookmark mark='b'/> Now add a permanent component to the discount factor, shocks that "
+            "never wash out. The answer is clean and wrong: pessimistic, putting the long-run level "
+            f"{100 * abs(r['mean_rec2']):.1f} percent below trend when the truth is {100 * r['mean_true']:.1f} "
+            "above."
         ) as vo:
             self.play(FadeIn(blocks[0]), FadeIn(sub), FadeIn(src))
             vo.wait_until("a")
@@ -182,13 +179,12 @@ class Ross(VoiceoverScene):
                     r"cannot tell (Borovi\v{c}ka, Hansen and Scheinkman 2016)", 21)]
         step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.6, buff=0.9, edge=6.9)
         with self.voiceover(
-            "Jaroslav Borovička, Lars Hansen and José Scheinkman explained why, in 2016. Any discount factor of this "
-            "kind factors into a transient part, exactly the shape Ross assumed, times a permanent part that is a "
-            "martingale. <bookmark mark='a'/> The eigenvector finds the transient part. What comes out is not P but "
-            "P tilted by the permanent part: a long-run risk-adjusted measure, which turns out to be the measure "
-            "that uses the longest bond as numeraire, as Ian Martin and Stephen Ross themselves showed in 2019, and "
-            "Likuan Qin and Vadim Linetsky in general. <bookmark mark='c'/> So recovery is right exactly when there "
-            "is no permanent part, and nothing in prices can tell you whether there is."
+            "Borovička, Hansen and Scheinkman explained why in 2016. The discount factor factors into "
+            "a transient part, Ross's shape, times a permanent martingale. <bookmark mark='a'/> The "
+            "eigenvector finds the transient part, and returns P tilted by the permanent one: the "
+            "measure with the long bond as numeraire, as Martin and Ross, and Qin and Linetsky, "
+            "showed. <bookmark mark='c'/> Recovery is right exactly when there is no permanent part, "
+            "and prices cannot tell."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -220,11 +216,10 @@ class Ross(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.4)
         src = illustration(r"simulated economies, seeded")
         with self.voiceover(
-            "How fast does it go wrong? Turn the permanent component up from zero, in the economy we just saw, and "
-            f"in {sw['n_econ']} random economies with different persistence, risk aversion and discount rates. "
-            "<bookmark mark='a'/> At zero, recovery is exact in every one. As the permanent part grows, the error "
-            f"grows with it, smoothly, to a median of {sw['err_med'][-1]:.3f} at full strength, with no threshold "
-            "below which it is safe."
+            "How fast does it go wrong? Turn the permanent part up from zero, here and in "
+            f"{sw['n_econ']} random economies. <bookmark mark='a'/> At zero, recovery is exact in all "
+            f"of them; the error then grows smoothly, to a median of {sw['err_med'][-1]:.3f}. There is "
+            "no safe threshold."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(side[0]), FadeIn(src))
             vo.wait_until("a")
@@ -247,14 +242,12 @@ class Ross(VoiceoverScene):
         foot = wrapped_label(r"the debate is open; the House uses option-implied densities as prices, never as "
                              r"forecasts", 11.0, 22, QC.HOUSE).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "And the evidence. Christian Skov Jensen, David Lando and Lasse Pedersen generalized recovery in 2019, "
-            "using many maturities instead of a Markov chain. <bookmark mark='a'/> Jens Jackwerth and Marco Menner "
-            "tested Ross recovery on S&P 500 options in 2020: the recovered distributions failed to predict future "
-            "returns and variances, while simple benchmarks, the historical distribution or a power-utility investor, "
-            "could not be rejected. <bookmark mark='b'/> On the other side, Ferenc Horvath's arbitrage-based recovery, "
-            "published in 2025, reports that it predicts the monthly distribution of S&P 500 returns over twenty-six "
-            "years even with a permanent component. <bookmark mark='c'/> The debate is open. The House reads "
-            "option-implied densities as prices, never as forecasts."
+            "The evidence. Jensen, Lando and Pedersen generalized recovery in 2019. <bookmark "
+            "mark='a'/> Jackwerth and Menner, 2020: on S&P 500 options, recovered distributions "
+            "failed to predict returns, while simple benchmarks could not be rejected. <bookmark "
+            "mark='b'/> Ferenc Horvath, 2025: an arbitrage-based recovery that, he reports, predicts "
+            "monthly S&P 500 return distributions over twenty-six years. <bookmark mark='c'/> The "
+            "debate is open; the House treats densities as prices, not forecasts."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -270,10 +263,9 @@ class Ross(VoiceoverScene):
         card = pause_at(r"Ross recovery applied to index options gives a pessimistic distribution. Is that evidence "
                         r"that investors are pessimistic?")
         with self.voiceover(
-            "Pause and predict. Applied to index options, Ross recovery gives a gloomy distribution of future "
-            "returns. Is that evidence that investors are pessimistic? <bookmark mark='a'/> No. A permanent "
-            "component in the discount factor tilts the recovered measure toward bad states in exactly the same way. "
-            "From prices alone, pessimism and a risk adjustment cannot be told apart."
+            "Pause and predict. Recovery gives a gloomy distribution. Is that evidence of investor "
+            "pessimism? <bookmark mark='a'/> No: a permanent component tilts it the same way. Prices "
+            "cannot separate beliefs from risk adjustment."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

@@ -159,6 +159,7 @@ TIMELINE = [
     (1988, r"D.\ E.\ Shaw founded", FIRM),
     (1989, r"Hamilton: regime switching", IDEA),
     (1990, r"Citadel founded", FIRM),
+    (1991, r"Reiner--Rubinstein: barrier options", IDEA),
     (1992, r"Fama--French; HJM; Black Wednesday", IDEA),
     (1993, r"Heston; momentum", IDEA),
     (1994, r"Dupire; RiskMetrics; the bond massacre", IDEA),

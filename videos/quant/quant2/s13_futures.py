@@ -113,8 +113,7 @@ class Futures(VoiceoverScene, ThreeDScene):
             "its implied carry below. <bookmark mark='a'/> Bitcoin triples, and the future stays above it; the carry swings "
             f"between fifteen and fifty percent a year, {100 * b['mean_ann']:.0f} on average. <bookmark mark='b'/> As expiry "
             "nears the ribbons zip shut, because at expiry a future is the asset. "
-            + last_hour
-            + " That gap between spot and future is the basis."
+            f"{last_hour} That gap between spot and future is the basis."
         ) as vo:
             self.play(FadeIn(top), FadeIn(bot), FadeIn(leg), FadeIn(src))
             self.add(ls, lf, la, cnt, gap)
@@ -236,8 +235,7 @@ class Futures(VoiceoverScene, ThreeDScene):
             f"{h['h']:.2f}, between {h['h_ci'][0]:.2f} and {h['h_ci'][1]:.2f} by bootstrap, and in sample it removes "
             f"{100 * h['eff_in']:.0f} percent of the variance. <bookmark mark='b'/> Keep that ratio through 2023: it removes "
             f"{100 * h['eff_out']:.0f} percent. "
-            + verdict
-            + "<bookmark mark='c'/> Pause and predict: future a hundred and two, spot a hundred, six months, three percent. "
+            f"{verdict}<bookmark mark='c'/> Pause and predict: future a hundred and two, spot a hundred, six months, three percent. "
             "Trade?"
         ) as vo:
             self.play(FadeIn(card), FadeIn(sc))

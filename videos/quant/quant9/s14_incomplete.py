@@ -74,17 +74,15 @@ class Incomplete(VoiceoverScene):
         vert = Dot(hx.c2p(B, D), radius=0.1, color=Q_C)
         vl = MathTex(rf"(B, \Delta) = ({B:.2f},\ {D:.3f})", font_size=24, color=Q_C).next_to(vert, UR, buff=0.1)
         with self.voiceover(
-            "Give the stock a third outcome: eighty, a hundred, or a hundred and twenty-five, with only the stock and "
-            "the bond to trade. The call struck at a hundred pays nothing, nothing, or twenty-five: three points, "
-            "and no straight line passes through all three. The call cannot be replicated. <bookmark mark='a'/> "
-            "The best the seller can do is super-replicate: find the cheapest portfolio whose line stays on or above "
-            "all three points. Lower a line onto them like a lid. It comes to rest on two of them, the worst state "
-            f"and the best, and its height at a hundred is {s['upper']:.2f}. <bookmark mark='b'/> The buyer pushes "
-            "a line up from below; it rests on the two lower points, at zero. Any price outside this interval is an "
-            "arbitrage against one side. <bookmark mark='c'/> On the right, the same problem in the plane of bond "
-            "and shares. Each state is a half-plane of portfolios that cover the claim there. The cost is a family "
-            "of parallel lines; slide it down until it leaves the shaded region. It stops at one vertex: borrow "
-            f"{abs(B):.2f}, hold {D:.3f} of a share."
+            "Give the stock three outcomes, eighty, a hundred, or a hundred and twenty-five, with "
+            "only stock and bond to trade. The call pays nothing, nothing, or twenty-five: no "
+            "straight line passes through all three, so it cannot be replicated. <bookmark mark='a'/> "
+            "The seller super-replicates: the cheapest line on or above all three points. Lower it "
+            f"like a lid; it rests on the worst and best states, at {s['upper']:.2f}. <bookmark "
+            "mark='b'/> The buyer pushes a line up from below; it rests at zero. Outside this "
+            "interval, one side has an arbitrage. <bookmark mark='c'/> On the right, the same problem "
+            "in the plane of bond and shares: each state a half-plane, the cost a sliding line that "
+            f"stops at one vertex: borrow {abs(B):.2f}, hold {D:.3f} of a share."
         ) as vo:
             self.play(FadeIn(g), FadeIn(pts))
             vo.wait_until("a")
@@ -125,16 +123,14 @@ class Incomplete(VoiceoverScene):
                          r"replicable, if and only if the equivalent martingale measure is unique.",
                          who=r"Harrison and Pliska (1981)", color=Q_C, width=8.6, font_size=24).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Linear programs come in pairs, and the pair here is the heart of the subject. The seller's problem: "
-            "the cheapest portfolio that dominates the claim. <bookmark mark='a'/> Its dual: attach a multiplier to "
-            "each state's constraint. The bond's column forces the multipliers to sum to one, the stock's column "
-            "forces them to price the stock. So the dual searches over risk-neutral measures, and maximizes the "
-            "claim's expected payoff. <bookmark mark='b'/> The best measure is an end of chapter five's segment, "
-            "five ninths on the crash and four ninths on the boom, giving a hundred over nine, the same eleven "
-            "eleven as the lid. <bookmark mark='c'/> The lower bound is the other end, zero. Strictly positive "
-            "measures never reach the ends, so the interval is open. <bookmark mark='d'/> And this is the second "
-            "fundamental theorem, Harrison and Pliska's of 1981: a market is complete, every claim replicable, "
-            "exactly when the martingale measure is unique. One measure, one price; many measures, an interval."
+            "Linear programs come in pairs. The seller's problem: the cheapest dominating portfolio. "
+            "<bookmark mark='a'/> Its dual puts a multiplier on each state: the bond's column makes "
+            "them sum to one, the stock's makes them price the stock. The dual maximizes the claim's "
+            "expectation over risk-neutral measures. <bookmark mark='b'/> The best one is an end of "
+            "chapter five's segment, giving a hundred over nine, the lid's eleven eleven. <bookmark "
+            "mark='c'/> The lower bound is the other end, zero, and strictly positive measures never "
+            "reach the ends: the interval is open. <bookmark mark='d'/> Harrison and Pliska's second "
+            "theorem, of 1981: a market is complete exactly when the martingale measure is unique."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -162,10 +158,9 @@ class Incomplete(VoiceoverScene):
                 f"B = {s['B']:.4f}   Delta = {s['Delta']:.4f}   cost = {s['upper']:.4f}",
                 f"HiGHS, same problem: {s['highs_upper']:.4f}"]
         with self.voiceover(
-            "The House's teaching simplex solves the seller's problem too. Free variables split into a positive and "
-            "a negative part, and each state gets a surplus. <bookmark mark='a'/> "
-            f"{len(v)} pivots, and it lands on the vertex: borrow {abs(s['B']):.2f}, hold {s['Delta']:.4f} of a share, "
-            f"cost {s['upper']:.4f}. The production solver, HiGHS, agrees to every digit shown."
+            "The teaching simplex solves the seller's problem too, free variables split in two, a "
+            f"surplus per state. <bookmark mark='a'/> {len(v)} pivots to the vertex, cost "
+            f"{s['upper']:.4f}; HiGHS agrees to every digit."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -198,12 +193,10 @@ class Incomplete(VoiceoverScene):
             wrapped_label(r"more states never close the gap; more traded assets do (next chapter)", 4.4, 20, Q_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "How does the interval behave as the market gets richer in states? A stock on a grid of states, two "
-            "up to thirty-three, and a call at today's price. <bookmark mark='a'/> With two states, the price is a "
-            "point. With three, the interval opens, and with five, nine, or thirty-three it is exactly the same "
-            "interval: only the extreme states bind. <bookmark mark='b'/> A model, like Black and Scholes, picks "
-            "one price inside. Adding states never closes the gap; adding traded assets does, and that is the next "
-            "chapter."
+            "Do more states close the gap? A call at today's price on grids of two to thirty-three "
+            "states. <bookmark mark='a'/> Two states: a point. Three or more: the same interval every "
+            "time, since only the extremes bind. <bookmark mark='b'/> A model picks one price inside; "
+            "adding traded assets, not states, closes the gap."
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(xl), FadeIn(side[0]))
             vo.wait_until("a")
@@ -216,10 +209,8 @@ class Incomplete(VoiceoverScene):
     def predict(self):
         card = pause_at(r"Add a fourth state, a stock price of 110. Does the call's interval change?")
         with self.voiceover(
-            "Pause and predict. Add a fourth state, a stock price of a hundred and ten. Does the call's interval "
-            "change? <bookmark mark='a'/> No. The new payoff point, ten at a hundred and ten, lies under the lid that "
-            "already rests on the worst and best states, and above the floor. The binding constraints are the "
-            "extremes."
+            "Pause and predict. Add a fourth state at a hundred and ten. Does the interval change? "
+            "<bookmark mark='a'/> No: its payoff, ten, lies under the lid and above the floor."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

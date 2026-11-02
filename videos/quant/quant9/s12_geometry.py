@@ -90,18 +90,15 @@ class Geometry(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(names, orth, panel, line_note, st_bad)
         self.remove(names, orth, panel, line_note, st_bad)
         with self.voiceover(
-            "Here is what no arbitrage looks like. Take the one-period market of the hook: a bond that pays one in "
-            "every state, and a stock that will be worth eighty, a hundred, or a hundred and twenty-five. Three "
-            "states, so any portfolio's payoff is a point in three dimensions: what it pays in each state. "
-            "<bookmark mark='a'/> The green box is the corner where every coordinate is at least zero: payoffs that "
-            "never lose. An arbitrage is a free portfolio whose payoff lands in that corner, anywhere but the origin. "
-            "<bookmark mark='b'/> Which payoffs are free? Short one share and hold bonds worth its price: that costs "
-            "nothing, and at a stock price of a hundred it pays twenty in the first state, nothing in the second, "
-            "and loses twenty-five in the third. "
-            "Scaling it up or down, or reversing it, traces this blue line through the origin: every zero-cost "
-            "payoff. <bookmark mark='c'/> No arbitrage means the line meets the green corner only at the origin. And "
-            "then a plane fits through the line with the whole corner on one side. Its normal, the purple arrow, "
-            "has all components positive."
+            "Here is what no arbitrage looks like. The one-period market: a bond paying one, and a "
+            "stock worth eighty, a hundred, or a hundred and twenty-five. Three states, so a payoff "
+            "is a point in three dimensions. <bookmark mark='a'/> The green box holds payoffs that "
+            "never lose. An arbitrage is a free portfolio whose payoff lands there, anywhere but the "
+            "origin. <bookmark mark='b'/> Which payoffs are free? Short a share and hold bonds worth "
+            "its price: at a price of a hundred it pays twenty, nothing, or minus twenty-five. Scaled "
+            "and reversed, it traces this blue line. <bookmark mark='c'/> No arbitrage means the line "
+            "meets the green corner only at the origin, and then a plane fits through the line with "
+            "the corner on one side. Its normal, the purple arrow, is strictly positive."
         ) as vo:
             self.play(FadeIn(names), Create(ax), run_time=2)
             vo.wait_until("a")
@@ -114,15 +111,13 @@ class Geometry(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(ps), FadeIn(st_ok))
             self.begin_ambient_camera_rotation(rate=0.12)
         with self.voiceover(
-            "Now raise the stock's price. The line turns, and the plane turns with it to keep separating. Watch the "
-            "normal vector: its third component is shrinking. <bookmark mark='a'/> At a price of a hundred and "
-            "twenty-five, it reaches zero: the plane lies flat against a face of the corner. The stock now costs "
-            "exactly what it pays in the best state. <bookmark mark='b'/> Push past it, to a hundred and thirty, "
-            "and no plane exists. The line pierces the corner: short the stock, hold a hundred and thirty in bonds, "
-            "and the payoff is positive in every state, for nothing. <bookmark mark='c'/> That normal vector is the "
-            "secret of the whole part. Separation by a plane with a positive normal, and the absence of arbitrage, "
-            "are the same thing, and the normal is a vector of state prices: the price today of a dollar in each "
-            "state."
+            "Raise the stock's price. The line turns, the plane turns with it, and the normal's third "
+            "component shrinks. <bookmark mark='a'/> At a hundred and twenty-five it reaches zero: "
+            "the plane lies on a face of the corner. <bookmark mark='b'/> Past it, no plane exists: "
+            "the line pierces the corner, and shorting the stock against bonds pays in every state, "
+            "for nothing. <bookmark mark='c'/> That normal is a vector of state prices, the price "
+            "today of a dollar in each state. Separation by a positive normal and no arbitrage are "
+            "the same thing."
         ) as vo:
             self.play(p.animate.set_value(124.0), run_time=vo.until("a"), rate_func=smooth)
             self.play(p.animate.set_value(125.0), FadeOut(st_ok), FadeIn(st_bad), run_time=1.2)
@@ -158,15 +153,13 @@ class Geometry(VoiceoverScene, ThreeDScene):
                     r"arbitrage")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.8, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Now the same picture in symbols. Write D for the assets' payoffs, one row per asset and one column per "
-            "state, and p for their prices. The free payoffs are D transpose theta, for every portfolio theta that "
-            "costs nothing. <bookmark mark='a'/> An arbitrage is a free payoff in the non-negative corner, other than "
-            "zero. <bookmark mark='b'/> A plane through the origin with normal psi contains the line when psi is "
-            "orthogonal to every free payoff. <bookmark mark='c'/> Move D across the dot product: D psi is then "
-            "orthogonal to every portfolio that costs nothing, and the only vectors with that property are multiples "
-            "of the price vector. Rescale, and D psi equals p: today's prices are a positive combination of what the "
-            "assets pay, state by state. The next chapter proves that such a positive psi exists exactly when there "
-            "is no arbitrage."
+            "In symbols. D holds the payoffs, a row per asset, a column per state; p the prices. The "
+            "free payoffs are D transpose theta for portfolios theta that cost nothing. <bookmark "
+            "mark='a'/> An arbitrage is a free payoff in the corner, other than zero. <bookmark "
+            "mark='b'/> The plane with normal psi contains the line when psi is orthogonal to every "
+            "free payoff. <bookmark mark='c'/> Then D psi is orthogonal to every costless portfolio, "
+            "so it is a multiple of the prices; rescale, and D psi equals p. The next chapter proves "
+            "a positive psi exists exactly when there is no arbitrage."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -182,10 +175,10 @@ class Geometry(VoiceoverScene, ThreeDScene):
         card = pause_at(r"At a stock price of exactly 125, is there an arbitrage? The plane still exists, lying on a "
                         r"face of the corner.")
         with self.voiceover(
-            "Pause and predict. At a stock price of exactly a hundred and twenty-five, is there an arbitrage? "
-            "<bookmark mark='a'/> Yes. Short one share and hold a hundred and twenty-five in bonds. It costs nothing, "
-            "and pays forty-five, twenty-five, or zero: never negative, sometimes positive. A plane still touches, "
-            "but its normal has a zero: one state price is zero, and zero is not positive enough."
+            "Pause and predict. At exactly a hundred and twenty-five, is there an arbitrage? "
+            "<bookmark mark='a'/> Yes: short a share, hold a hundred and twenty-five in bonds. It "
+            "costs nothing and pays forty-five, twenty-five or zero. A state price of zero is not "
+            "positive enough."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

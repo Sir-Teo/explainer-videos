@@ -59,14 +59,10 @@ class House(VoiceoverScene):
                           23, QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(card_, DOWN, buff=0.5)
         with self.voiceover(
-            "Analysts once typed company numbers in by hand. In 2009 the SEC required American companies to file "
-            "their statements in a machine-readable language, XBRL, starting with periods ending after the fifteenth "
-            "of June 2009 for the largest filers, those with a public float above five billion dollars, and reaching "
-            "everyone by 2011. <bookmark mark='a'/> Each number is a tagged fact: what it is, its value and unit, the "
-            "period it covers, and the filing it came in. <bookmark mark='b'/> That filing date is the one a quant "
-            "cares about. The annual report is due sixty, seventy-five or ninety days after the year ends, depending "
-            "on the company's size, and a number can be restated, or recast for a business that was sold, years later. "
-            "So every reported number has two dates: the period it describes, and the day it became public."
+            "Since 2009 the SEC has required filings in machine-readable XBRL, phased in from the largest filers to all by 2011. "
+            "<bookmark mark='a'/> Each number is a tagged fact: concept, value, unit, period, filing. <bookmark mark='b'/> The "
+            "10-K is due sixty to ninety days after the year ends, and numbers are restated or recast later. Every number has two "
+            "dates: the period it describes and the day it became public."
         ) as vo:
             self.play(Create(box), FadeIn(fact[0]), FadeIn(rules[0]))
             vo.wait_until("a")
@@ -119,15 +115,12 @@ class House(VoiceoverScene):
                             r"highest dot below the line", 5.6, 18, GREY_B).next_to(h, DOWN, buff=0.35)
         src = real_data(r"SEC EDGAR company facts: General Electric, 10-K revenue, FY2008--2020")
         with self.voiceover(
-            "Here is that idea as a plane. Across, the fiscal year a number describes; up, the day it was filed. "
-            "Every dot is one value of General Electric's annual revenue as some 10-K reported it. A number can only "
-            "be filed after its year ends, so every dot sits above the diagonal. Columns with several dots are years "
-            "that later filings showed differently. <bookmark mark='a'/> Now sweep an as-of line upwards. For each "
-            "year, the House's store answers with the highest dot below the line: the latest value anyone could have "
-            "seen on that day. On the right is the revenue history the store gives at that moment. "
-            "<bookmark mark='b'/> Watch it change as the line rises. GE sold its finance arm, its appliances and more, "
-            "and each time its 10-K recast the past years without them. The history of 2010 depends on when you ask. "
-            "A database that keeps only the latest number hands a 2012 backtest a GE that did not exist until 2016."
+            "Here is that idea as a plane. Across, the fiscal year a number describes; up, the day it was filed. Every dot is one "
+            "value of General Electric's annual revenue as some 10-K reported it, and all sit above the diagonal: a number is "
+            "filed after its year ends. <bookmark mark='a'/> Sweep an as-of line upwards. For each year, the store answers with "
+            "the highest dot below the line, the latest value anyone could have seen that day; the history it returns is on the "
+            "right. <bookmark mark='b'/> Watch it change. Each time GE sold a business, its 10-K recast the past years without it. "
+            "A database that keeps only the latest number hands a 2012 backtest a GE that did not yet exist."
         ) as vo:
             self.play(FadeIn(g), Create(diag), FadeIn(src))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.02, run_time=2.5))
@@ -158,14 +151,12 @@ class House(VoiceoverScene):
                         numbers=[(r"\$62\text{m}", r"civil penalty"), (r"\$208\text{m}", r"cost savings restated")],
                         source=r"SEC press release 2021-174", width=5.4, font_size=20).to_corner(UR, buff=0.3)
         with self.voiceover(
-            "The House's code for that query is short. History: for each period, keep the latest fact filed by "
-            "the day you ask. As-of: the last entry of that history, or nothing, if nothing had been filed. "
-            "<bookmark mark='a'/> Run it on Kraft Heinz, whose filings the store holds in full. In 2021 the SEC "
-            "settled charges that the company had booked about two hundred and eight million dollars of improper cost "
-            "savings from late 2015 to 2018, corrected in a restatement in June 2019. <bookmark mark='b'/> Ask the "
-            "store for net income as of mid-2018, and it returns the numbers as first reported. Ask as of mid-2020, "
-            "and 2016 and 2017 are lower. Both answers are right: each is what the market knew on its day. The rule "
-            "is that a restatement is a new fact, never an edit of the old one."
+            "The House's code for that query is short: for each period, keep the latest fact filed by the day you ask; the "
+            "answer is the last of them, or nothing if nothing was filed. <bookmark mark='a'/> Run it on Kraft Heinz. In 2021 the "
+            "SEC settled charges that the company had improperly booked about two hundred and eight million dollars of cost "
+            "savings from late 2015 to 2018, corrected in a restatement in June 2019. <bookmark mark='b'/> Ask for net income as "
+            "of mid-2018 and the store returns the numbers as first reported; as of mid-2020, 2016 and 2017 are lower. Both "
+            "answers are right for their day: a restatement is a new fact, never an edit of the old one."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -216,14 +207,10 @@ class House(VoiceoverScene):
         src = real_data(r"SEC EDGAR company facts, filings through October 2026; changes include restatements and recasts")
         ge = next(f for f in firms if f["name"] == "General Electric")
         with self.voiceover(
-            "Now audit the cached filings. For each firm, the table counts how many fiscal years' net income and "
-            "revenue were later shown with a different number. <bookmark mark='a'/> Pause and predict: for General "
-            f"Electric's revenue? <bookmark mark='b'/> {ge['sales'][1]} of {ge['sales'][0]}. Most changes are "
-            "recasts, not frauds: businesses sold, accounting standards changed. Kraft Heinz's two are its "
-            "restatement. <bookmark mark='c'/> And the waiting time: the median 10-K arrived "
-            f"{np.median(lags):.0f} days after the year ended, inside the sixty-day rule for the largest firms. A "
-            "backtest that uses December's earnings on the first of January has read two months of the future. The "
-            "House's rule four: a reported number exists from the day it was filed, as it was first reported."
+            "An audit of the cached filings: how many years' net income and revenue a later 10-K showed differently. "
+            f"<bookmark mark='a'/> Pause and predict: General Electric's revenue? <bookmark mark='b'/> {ge['sales'][1]} of "
+            f"{ge['sales'][0]}, mostly recasts, not frauds. <bookmark mark='c'/> And the median 10-K arrived {np.median(lags):.0f} "
+            "days after year end: a backtest using December's earnings on the first of January reads two months of the future."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(src))
             self.play(LaggedStart(*[FadeIn(VGroup(*r[:1])) for r in tab[1:]], lag_ratio=0.1))

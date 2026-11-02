@@ -41,11 +41,12 @@ class MOTConverge(VoiceoverScene):
                 f"lower = {m['lower']:.4f}   upper = {m['upper']:.4f}   ({n1 * n2:,} unknowns)",
                 f"lognormal model: {m['model']:.4f}"]
         with self.voiceover(
-            "The House's code for these bounds is a few lines around a linear-programming solver. One unknown for "
-            "every pair of prices; rows that fix the two marginals; one row per first-date price that makes the "
-            "second price a fair game. <bookmark mark='a'/> Minimize the claim's expected payoff, then maximize it. "
-            f"On the Surface's two expiries, with {n1} and {n2} atoms, that is {n1 * n2:,} unknowns, and HiGHS returns "
-            f"the band {m['lower']:.3f} to {m['upper']:.3f} in well under a second."
+            "Here is the House's code for those bounds, a few lines around a linear-programming "
+            "solver: one unknown for every pair of prices, rows that fix the two marginals, and one "
+            "row per first-date price that makes the second price a fair game. <bookmark mark='a'/> "
+            "Minimize the claim's expected payoff, then maximize it. On the Surface's two expiries, "
+            f"with {n1} and {n2} atoms, that is {n1 * n2:,} unknowns, and HiGHS returns the band "
+            f"{m['lower']:.3f} to {m['upper']:.3f} in under a second."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -95,16 +96,14 @@ class MOTConverge(VoiceoverScene):
                           rf"{1e3 * abs(lo[-1] - lo[-2]):.1f} thousandths: converging", 4.2, 20, Q_C),
             wrapped_label(r"every grid's marginals are checked for convex order before solving", 4.2, 18, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
-        tail = ("It widens: a coarse grid has too few atoms to represent the most extreme joinings, so it "
-                "understates the range. " if widen else "It narrows as the grid refines. ")
+        tail = ("It widens: a coarse grid cannot represent the most extreme joinings. " if widen else
+                "It narrows as the grid refines. ")
         with self.voiceover(
-            "But the band depends on the grid. The densities are continuous; the program sees them through a "
-            "finite set of atoms. Refine the grid, from nine by twenty-five atoms up to eighty-one by three hundred "
-            "and sixty-one, re-checking convex order each time. <bookmark mark='a'/> Watch the walls. " + tail +
-            f"From {lo[0]:.3f} to {up[0]:.3f} on the coarsest grid, to {lo[-1]:.3f} to {up[-1]:.3f} on the finest, "
-            "and the last two grids nearly agree. <bookmark mark='b'/> The chapter-fifteen band, computed on "
-            "twenty-five by eighty-one atoms, was a little narrow; the log-normal model still sits well inside. "
-            "Report a model-free bound with its grid."
+            "But the band depends on the grid. Refine it from nine by twenty-five atoms to eighty-one "
+            "by three hundred and sixty-one, checking convex order each time. <bookmark mark='a'/> " + tail +
+            f"From {lo[0]:.3f} to {up[0]:.3f} on the coarsest grid, to {lo[-1]:.3f} to {up[-1]:.3f} on "
+            "the finest, the last two nearly agreeing. <bookmark mark='b'/> Chapter fifteen's band "
+            "was a little narrow; the log-normal still sits inside. Report a bound with its grid."
         ) as vo:
             self.play(FadeIn(g), FadeIn(ticks), Create(ml), FadeIn(mll))
             self.add(W)
@@ -134,13 +133,13 @@ class MOTConverge(VoiceoverScene):
                     r"$\varepsilon \to 0$ the value tends to the linear program's", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.6, edge=6.9)
         with self.voiceover(
-            "A second way to compute the same bound scales to far bigger problems. Add a small penalty for how far "
-            "the joining is from independence, an entropy, with weight epsilon. <bookmark mark='a'/> The best "
-            "joining then has an explicit exponential form, with the dual variables in the exponent. "
-            "<bookmark mark='b'/> Each u, holding the others fixed, has a closed form, a log of a sum, and so does "
-            "each v: this is Sinkhorn's matrix scaling. <bookmark mark='c'/> The martingale multiplier h has no "
-            "closed form, but each one is a single-variable root, found by a Newton step. Cycle through the three, "
-            "and as epsilon shrinks the answer approaches the linear program's."
+            "A second method scales to far bigger problems. Add a small penalty for the joining's "
+            "distance from independence, an entropy with weight epsilon. <bookmark mark='a'/> The "
+            "best joining then has an explicit exponential form, the dual variables in the exponent. "
+            "<bookmark mark='b'/> Each u, holding the others fixed, has a closed form, a log of a "
+            "sum, and so does each v: Sinkhorn's matrix scaling. <bookmark mark='c'/> The martingale "
+            "multiplier h has no closed form, but each one is a single-variable root, a Newton step. "
+            "Cycle through the three, shrink epsilon, and the value approaches the program's."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -187,13 +186,12 @@ class MOTConverge(VoiceoverScene):
                           for r in runs]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         finals.next_to(rp.g, DOWN, buff=0.35).align_to(rp.g, LEFT)
         with self.voiceover(
-            "Run it, shrinking epsilon from a tenth to three thousandths. On the left, the joining: at large epsilon "
-            "a soft blur, close to independence. <bookmark mark='a'/> As epsilon shrinks, the cloud sharpens toward "
-            "the sparse, extreme joining the linear program found, and the value climbs toward the program's line: "
-            f"{runs[0]['value']:.4f}, then {runs[1]['value']:.4f}, {runs[2]['value']:.4f}, and {runs[3]['value']:.4f} "
-            f"against {m['upper']:.4f}. <bookmark mark='b'/> The entropic value always sits below the true bound, "
-            "because the penalty pulls the joining toward independence; the gap shrinks with epsilon. In many "
-            "dimensions, where no linear program fits in memory, this is how the bounds are computed."
+            "Shrink epsilon from a tenth to three thousandths. The joining starts as a soft blur. "
+            "<bookmark mark='a'/> It sharpens toward the program's sparse extreme joining, and the "
+            f"value climbs: {runs[0]['value']:.4f}, {runs[1]['value']:.4f}, {runs[2]['value']:.4f}, "
+            f"{runs[3]['value']:.4f}, against {m['upper']:.4f}. <bookmark mark='b'/> Always below, "
+            "because the penalty pulls toward independence. In many dimensions, this is how bounds "
+            "are computed."
         ) as vo:
             self.play(FadeIn(rp), Create(lp), FadeIn(lpl))
             vo.wait_until("a")
@@ -205,9 +203,9 @@ class MOTConverge(VoiceoverScene):
     def predict(self):
         card = pause_at(r"As the grid gets finer, can a model-free upper bound go down?")
         with self.voiceover(
-            "Pause and predict. As the grid gets finer, can the upper bound go down? <bookmark mark='a'/> It can, a "
-            "little, because each grid rebins the marginals and slightly changes them; but mostly a finer grid "
-            "admits more extreme joinings and the band widens, converging to the continuous problem's."
+            "Pause and predict. As the grid gets finer, can the upper bound fall? <bookmark "
+            "mark='a'/> A little, since rebinning changes the marginals; mostly the band widens "
+            "toward its limit."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

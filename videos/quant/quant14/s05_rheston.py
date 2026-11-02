@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant14.common import BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, SPOT, VAR, load, real_data
+from videos.quant.quant14.common import (BAD, IV, MODEL_COL, OPT, PART, ROUGH, RV, SPOT, VAR, illustration, load, pause,
+                                         real_data)
 
 
 class RHeston(VoiceoverScene):
@@ -13,43 +14,121 @@ class RHeston(VoiceoverScene):
         pr = load("rprofile")
         s = load("skew")
         self.card()
+        self.memory(load("lift"))
         self.model()
         self.fit(rh, pr)
         self.skews(rh, rs, pr, s)
 
     def card(self):
-        c = chapter_card(4, r"Rough Heston", r"Can a rough model keep a closed form?", part=PART)
-        with self.voiceover("Chapter four. Rough Heston."):
+        c = chapter_card(7, r"Rough Heston: the Volterra equation and its Riccati", r"Can a rough model keep a closed form?",
+                         lit=(2019,), part=PART)
+        with self.voiceover("Chapter seven. Rough Heston: the Volterra equation and its Riccati."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def model(self):
-        rows = [cmath(r"v_t", r"=", r"v_0 + \frac{1}{\Gamma(\alpha)}\int_0^t (t - s)^{\alpha - 1}\Big(\lambda(\theta - v_s)\,ds"
-                      r" + \nu\sqrt{v_s}\,dW_s\Big)", font_size=32, colors={r"v_t": VAR}),
-                cmath(r"\mathbb{E}\,e^{iu\ln S_T/F}", r"=", r"\exp\!\Big(\theta\lambda\,I^1 h(T) + v_0\,I^{1 - \alpha}h(T)\Big)",
-                      font_size=34, colors={r"\mathbb{E}\,e^{iu\ln S_T/F}": OPT}),
-                cmath(r"D^\alpha h", r"=", r"-\tfrac12(u^2 + iu) + (i\rho\nu u - \lambda)\,h + \tfrac12\nu^2 h^2", font_size=34,
-                      colors={r"D^\alpha h": ROUGH})]
-        whys = [why(r"Heston's variance (Part 13), with its memory replaced by the rough kernel, $\alpha = H + \tfrac12$"),
-                why(r"El Euch and Rosenbaum (2019): the characteristic function survives, through fractional integrals "
-                    r"$I^\beta$ of one function $h$"),
-                why(r"$h$ solves Heston's Riccati equation with a fractional derivative; Diethelm's Adams scheme solves "
-                    r"it in milliseconds, and COS prices follow")]
-        step = ladder(self, rows, whys, keep=3, top=2.7, x=-1.4, buff=0.8, edge=6.9)
+    def memory(self, L):
+        from scipy.special import gamma as G
+        from explainer.quant.house import rough as R
+        v0, lam, theta, nu, rho, _ = L["x"]
+        T, n = 0.5, 500
+        dW = np.random.default_rng(11).standard_normal((1, n)) * np.sqrt(T / n)
+        t = np.linspace(0, T, n + 1)
+        V = {}
+        vh = np.empty(n + 1)
+        vh[0] = v0
+        for k in range(n):  # Heston (H = 1/2): the kernel is the constant 1
+            vp = max(vh[k], 0.0)
+            vh[k + 1] = vh[k] + lam * (theta - vp) * T / n + nu * np.sqrt(vp) * dW[0, k]
+        V[0.5] = vh
+        for H in (0.3, 0.1):
+            V[H] = R.lifted_heston_paths(v0, lam, theta, nu, H, 20, T, n, dW)[0]
+        lo, hi = 0.0, 1.0
+        g = axes([0, 1], [0, 3.0], x_length=4.6, y_length=3.2, xlabel=r"lag $\tau$ (years)", ylabel=r"memory kernel $K(\tau)$",
+                 xticks=[0, 0.5, 1], yticks=[0, 1, 2, 3], font_size=14).to_corner(UL, buff=0.5).shift(DOWN * 0.4)
+        g2 = axes([0, 0.5], [lo, hi], x_length=7.0, y_length=3.2, xlabel=r"years", ylabel=r"variance $V_t$",
+                  xticks=[0, 0.25, 0.5], yticks=[0, 0.5, 1.0], font_size=14).to_corner(UR, buff=0.5).shift(DOWN * 0.4)
+        tau = np.linspace(1e-3, 1, 200)
+
+        def kern(H):
+            a = H + 0.5
+            return curve(g.ax, tau, np.clip(tau ** (a - 1) / G(a), 0, 3.0), ROUGH if H < 0.5 else VAR, stroke_width=3)
+
+        k_ = kern(0.5)
+        p_ = curve(g2.ax, t, np.clip(V[0.5], lo, hi), VAR, stroke_width=1.8)
+        lab_ = MathTex(r"H = \tfrac12\ \text{(Heston)}", font_size=30, color=VAR).next_to(g, DOWN, buff=0.4)
+        eq = MathTex(r"V_t = V_0 + \int_0^t K(t - s)\big[\lambda(\theta - V_s)\,ds + \nu\sqrt{V_s}\,dW_s\big]",
+                     font_size=34).to_edge(DOWN, buff=0.5)
+        src = illustration(r"one path, the same shocks for every kernel; rough kernels by the lift of chapter 10 ($N = 20$)",
+                           corner=DR).shift(UP * 0.0)
         with self.voiceover(
-            "Omar El Euch and Mathieu Rosenbaum found a rough model that keeps Heston's gift. Write Heston's variance "
-            "as an integral over its past, and replace the memory with the rough kernel. <bookmark mark='a'/> The "
-            "characteristic function survives: it is built from fractional integrals of a single function h. "
-            "<bookmark mark='b'/> And h solves Heston's own Riccati equation, with an ordinary derivative replaced by "
-            "a fractional one. There is no closed form, but a fractional Adams scheme solves it in milliseconds, and "
-            "Part thirteen's Fourier pricing does the rest. At H one half it is exactly Heston: the House's tests check "
-            "that."
+            "Rough Bergomi has no closed form. Omar El Euch and Mathieu Rosenbaum found a rough model that keeps "
+            "Heston's gift, and the way in is to write Heston's variance differently: today's value equals the "
+            "starting value plus the memory of every past push, the mean-reverting drift and the random shocks, "
+            "each weighted by a kernel. <bookmark mark='a'/> For Heston the kernel is a constant: every push is "
+            "remembered fully. Here is a variance path driven by one set of shocks. <bookmark mark='b'/> Now change "
+            "only the kernel, to a power law with H of three-tenths, then a tenth: recent pushes count enormously, "
+            "old ones fade. Same shocks, and the path turns jagged. That is rough Heston."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(g2), Create(k_), Create(p_), FadeIn(lab_), FadeIn(eq), FadeIn(src))
+            vo.wait_until("a")
+            self.play(Indicate(k_, color=YELLOW))
+            vo.wait_until("b")
+            for H in (0.3, 0.1):
+                self.play(Transform(k_, kern(H)), Transform(p_, curve(g2.ax, t, np.clip(V[H], lo, hi), ROUGH, stroke_width=1.8)),
+                          Transform(lab_, MathTex(rf"H = {H:g}", font_size=30, color=ROUGH).next_to(g, DOWN, buff=0.4)),
+                          run_time=2)
+                self.wait(0.6)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def model(self):
+        rows = [cmath(r"V_t", r"=", r"V_0 + \frac{1}{\Gamma(\alpha)}\int_0^t (t - s)^{\alpha - 1}\Big(\lambda(\theta - V_s)\,ds"
+                      r" + \nu\sqrt{V_s}\,dW_s\Big)", font_size=32, colors={r"V_t": VAR}),
+                cmath(r"\log\mathbb{E}\,e^{iuX_T}", r"=", r"\int_0^T F\big(u, h(T - s)\big)\,g_0(s)\,ds,\quad g_0(t) = V_0 + "
+                      r"\lambda\theta\!\int_0^t\! K", font_size=32, colors={r"\log\mathbb{E}\,e^{iuX_T}": OPT}),
+                cmath(r"h", r"=", r"K * F(u, h)\ \Longleftrightarrow\ D^\alpha h = -\tfrac12(u^2 + iu) + (i\rho\nu u - \lambda)\,h"
+                      r" + \tfrac12\nu^2 h^2", font_size=32, colors={r"h": ROUGH}),
+                cmath(r"\mathbb{E}\,e^{iuX_T}", r"=", r"\exp\!\Big(\theta\lambda\,I^1 h(T) + V_0\,I^{1 - \alpha}h(T)\Big)",
+                      font_size=34, colors={r"\mathbb{E}\,e^{iuX_T}": OPT}),
+                cmath(r"\alpha = 1:\ D^1 h = h'", r"=", r"\text{Heston's Riccati equation}", font_size=34,
+                      colors={r"\alpha = 1:\ D^1 h = h'": VAR})]
+        whys = [why(r"Heston (Part 13) with the constant kernel replaced by the fractional one, $\alpha = H + \tfrac12$"),
+                why(r"an affine Volterra process: the log characteristic function is linear in the initial curve $g_0$ "
+                    r"(Abi Jaber, Larsson and Pulido 2019; \textit{Rough Volatility}, ch. 5)"),
+                why(r"convolution with $t^{\alpha - 1}/\Gamma(\alpha)$ is the fractional integral $I^\alpha$; its inverse is the "
+                    r"fractional derivative $D^\alpha$"),
+                why(r"substitute $g_0$ and integrate: El Euch and Rosenbaum (2019); no closed form for $h$, but one "
+                    r"equation, for every $u$"),
+                why(r"the consistency check the House's tests run: at $H = \tfrac12$ it is exactly Heston")]
+        step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.9, buff=0.7, edge=6.9)
+        q = pause(r"Set $H = \tfrac12$ in the fractional Riccati equation. What do you get?", width=6.0,
+                  font_size=22).to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "Now the derivation. Rough Heston's variance is Heston's, with the constant kernel replaced by the "
+            "fractional one, t to the alpha minus one over gamma of alpha, with alpha equal to H plus a half. "
+            "<bookmark mark='a'/> It is an affine Volterra process, and for those, Eduardo Abi Jaber, Martin "
+            "Larsson and Sergio Pulido showed, the log characteristic function is an integral of a function F of h "
+            "against the initial curve g zero. <bookmark mark='b'/> h itself solves a convolution equation, and "
+            "convolution with the fractional kernel is a fractional integral. Invert it: the fractional derivative "
+            "of h equals Heston's own Riccati right-hand side. <bookmark mark='c'/> Substitute g zero, and the "
+            "characteristic function is the exponential of two fractional integrals of h: El Euch and Rosenbaum's "
+            "formula. No closed form for h, but one equation, solved once for every frequency. "
+            "<bookmark mark='d'/> Pause and predict: set H to one half. What do you get? <bookmark mark='e'/> Alpha "
+            "is one, the fractional derivative is the ordinary one, and this is Heston's Riccati equation. The "
+            "House's tests check exactly that."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            self.play(FadeIn(q, shift=UP * 0.2))
+            vo.wait_until("e")
+            self.play(FadeOut(q))
+            step(4)
         self.wait(0.4)
         self.clear_scene()
 
@@ -90,8 +169,8 @@ class RHeston(VoiceoverScene):
             f"rises only to {r1['rmse']:.2f}, and the other parameters become sensible: a vol of vol of {x1[3]:.1f} "
             f"and mean reversion of {x1[1]:.0f}. <bookmark mark='b'/> On this day's quotes the data cannot tell the "
             "two apart. Vega weighting favours the long expiries, where roughness matters least, and a smooth model "
-            "can imitate a rough one there by turning its own dials to extremes. Which to believe is the debate of "
-            "chapter seven."
+            "can imitate a rough one there by turning its own dials to extremes. The next chapter measures how much the "
+            "Surface cares about H, and chapter eleven takes up the debate."
         ) as vo:
             self.play(FadeIn(hdr[1]), FadeIn(src), FadeIn(VGroup(*[VGroup(r_[0], r_[1]) for r_ in tab])))
             vo.wait_until("a")

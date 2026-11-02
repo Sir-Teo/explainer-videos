@@ -84,8 +84,8 @@ class Outro(VoiceoverScene):
             "answer. <bookmark mark='a'/> Robust standard errors and long-run variances; panels and two passes; "
             "likelihood and GMM; out-of-sample and Stambaugh-proof tests; event studies; bootstraps; Gibbs; multiple "
             "testing; causal designs and double ML. <bookmark mark='b'/> And rule seven: no number leaves the House "
-            "without a standard error that respects the sampling, and the count of everything tried. This part's "
-            f"registrations bring the trial counter to {env['trials']}."
+            "without a standard error that respects the sampling, and the count of everything tried. With this part's "
+            f"registrations, the trial counter reads {env['trials']}."
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")

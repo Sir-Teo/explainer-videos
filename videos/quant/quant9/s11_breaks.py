@@ -41,16 +41,13 @@ class Breaks(VoiceoverScene):
                 why(r"read parity backwards: option prices reveal the fee (Ofek, Richardson and Whitelaw 2004)", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Parity assumed you can sell the stock short. To short, you borrow the share from an owner, and when "
-            "shares are scarce the owner charges a fee, h a year. Redo the replication with that fee. Portfolio A is "
-            "a call plus a bond paying the strike: at expiry it is worth the larger of the stock and the strike. "
-            "<bookmark mark='a'/> Portfolio B is a put plus a fraction of a share, lent out. The lending fee makes "
-            "the fraction grow to one whole share by expiry, so B is worth the larger of the stock and the strike "
-            "too. <bookmark mark='b'/> Same payoff, same price: call minus put is now the stock discounted at the "
-            "fee, minus the discounted strike. The fee works exactly like a dividend. <bookmark mark='c'/> Turn it "
-            "around and option prices reveal the fee. Eli Ofek, Matthew Richardson and Robert Whitelaw showed in "
-            "2004 that parity's apparent violations line up with how hard and costly a stock is to short. They are "
-            "not free money; they are a price."
+            "Parity assumed you can sell short, and shorting means borrowing the share, for a fee h "
+            "when shares are scarce. Redo the replication. A is a call plus a bond paying the strike: "
+            "worth the larger of stock and strike. <bookmark mark='a'/> B is a put plus a fraction of "
+            "a share, lent out; the fee grows it to one share by expiry. <bookmark mark='b'/> Same "
+            "payoff, same price: the fee acts like a dividend. <bookmark mark='c'/> Read backwards, "
+            "option prices reveal the fee. Ofek, Richardson and Whitelaw showed in 2004 that parity's "
+            "violations sit where shorting is hardest. They are not free money; they are a price."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -99,16 +96,16 @@ class Breaks(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.45)
         src = real_data(r"Lamont and Thaler (2003), \textit{JPE} 111(2); Chicago Booth Review; Cochrane (2002), NBER w8987")
         with self.voiceover(
-            "The most famous case. On the second of March 2000, 3Com sold five percent of its subsidiary Palm to "
-            "the public and promised the rest to its own shareholders: about one and a half Palm shares for every "
-            "3Com share. <bookmark mark='a'/> That day Palm closed at ninety-five dollars and six cents. So the Palm "
-            f"inside each 3Com share was worth about {hold:.0f} dollars. <bookmark mark='b'/> 3Com closed at "
-            f"eighty-one eighty-one. The rest of 3Com, its whole networking business, was priced at minus {abs(stub):.0f} "
-            "dollars a share, about minus twenty-two billion dollars in all. <bookmark mark='c'/> The obvious trade, "
-            "buy 3Com and short Palm, needed Palm shares to borrow, and there were almost none: short interest reached "
-            "a hundred and forty-seven percent of the shares available. Parity shows the price of that scarcity. On "
-            "the sixteenth of March, a Palm share cost fifty-five twenty-five, but a short position built from "
-            "options cost only thirty-nine twelve. Owen Lamont and Richard Thaler documented all of it in 2003."
+            "The famous case. On the second of March 2000, 3Com sold five percent of Palm to the "
+            "public and promised the rest to its own shareholders: about one and a half Palm shares "
+            "per 3Com share. <bookmark mark='a'/> Palm closed at ninety-five dollars, so the Palm "
+            f"inside each 3Com share was worth about {hold:.0f}. <bookmark mark='b'/> 3Com closed at "
+            f"eighty-two. The rest of 3Com was priced at minus {abs(stub):.0f} dollars a share, minus "
+            "twenty-two billion in all. <bookmark mark='c'/> Buying 3Com and shorting Palm needed "
+            "Palm shares to borrow, and short interest reached a hundred and forty-seven percent of "
+            "the float. Parity priced the scarcity: on the sixteenth of March, a short built from "
+            "options cost thirty-nine dollars against fifty-five for the share. Lamont and Thaler "
+            "documented it in 2003."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(side[0]), FadeIn(src))
             vo.wait_until("a")
@@ -138,14 +135,11 @@ class Breaks(VoiceoverScene):
         src = note(r"SEC staff report on equity and options market structure conditions in early 2021 (October "
                    r"2021); Reuters", font_size=18, color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "In January 2021 the stock of GameStop, a video-game retailer that many funds had sold short, became the "
-            "favourite of a Reddit forum. According to the SEC's staff report, its price rose about two thousand "
-            "seven hundred percent from its low on the eighth of January to its high on the twenty-eighth, then fell "
-            "more than eighty-six percent into February. The hedge fund Melvin Capital, short the stock, needed two "
-            "point seven five billion dollars from Citadel and Point72, and lost fifty-three percent in the month. "
-            "The SEC's staff found that buying to cover short positions was not what sustained the rise; it was "
-            "enthusiasm. For anyone who wanted to bet against it, parity says where to look: when borrowing shares "
-            "is costly or impossible, that cost appears in the price of puts."
+            "In January 2021, GameStop, heavily shorted, became a Reddit favourite. The SEC's staff "
+            "report: up about two thousand seven hundred percent from low to high in January, then "
+            "down over eighty-six percent. Melvin Capital, short the stock, needed two point seven "
+            "five billion dollars from Citadel and Point72. When borrowing shares is costly or "
+            "impossible, that cost shows up in the price of puts."
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
         self.wait(0.5)
@@ -166,14 +160,12 @@ class Breaks(VoiceoverScene):
                              r"banned box spreads, saying they are ``often mistaken for an arbitrage opportunity''",
                              12.0, 22, ARB).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "Stack two parities and the stock cancels, and with it the borrowing fee. A long call spread and a short "
-            "put spread between the same two strikes is called a box, and it pays the difference between the strikes "
-            "in every state of the world. <bookmark mark='a'/> So a box is a loan, and its price is an interest "
-            "rate; funds borrow and lend through the options exchange this way, as chapter seventeen shows. "
-            "<bookmark mark='b'/> But the argument needs European exercise. In early 2019 a Robinhood customer built "
-            "a box from American options, the short leg was exercised early, and the customer lost far more than the "
-            "trade seemed to risk. Robinhood then banned box spreads, saying they are often mistaken for an "
-            "arbitrage opportunity. Every no-arbitrage argument comes with assumptions, and the market tests them."
+            "Stack two parities and the stock, and its fee, cancel: a long call spread and a short "
+            "put spread, a box, pays the strike difference in every state. <bookmark mark='a'/> So a "
+            "box is a loan, and its price is an interest rate; chapter seventeen shows who trades it. "
+            "<bookmark mark='b'/> But only with European exercise. In 2019 a Robinhood customer's box "
+            "of American options was exercised early and lost far more than it seemed to risk; "
+            "Robinhood then banned box spreads."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -187,11 +179,10 @@ class Breaks(VoiceoverScene):
         card = pause_at(r"The stub was negative for weeks. Why did no one simply buy 3Com and short Palm until the "
                         r"gap closed?")
         with self.voiceover(
-            "Pause and predict. The stub stayed negative for weeks. Why did no one simply buy 3Com, short Palm, and "
-            "wait? <bookmark mark='a'/> Because the short leg could not be held: Palm shares were scarce, borrowing "
-            "them was expensive, and loans could be recalled. And convergence is not guaranteed in time. Mark "
-            "Mitchell, Todd Pulvino and Erik Stafford studied eighty-two negative stubs from 1985 to 2000; in thirty "
-            "percent of them, the link between parent and subsidiary was severed before the gap closed."
+            "Pause and predict. The stub stayed negative for weeks. Why not buy 3Com, short Palm, and "
+            "wait? <bookmark mark='a'/> The short leg was scarce, costly and recallable, and "
+            "convergence has no deadline: in thirty percent of eighty-two negative stubs from 1985 to "
+            "2000, the link was severed before the gap closed."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

@@ -47,12 +47,10 @@ class Density(VoiceoverScene):
             wrapped_label(r"so it can never cost less than nothing: that would be an arbitrage", 4.8, 21, ARB),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.45)
         with self.voiceover(
-            "Chapter five said the price of a dollar in one state is a state price. With options on many strikes, "
-            "you can buy one. Buy a call at ninety. <bookmark mark='a'/> Sell two at a hundred: the line bends back "
-            "down. <bookmark mark='b'/> Buy one at a hundred and ten: it flattens to zero. The result is a tent, a "
-            "butterfly spread, that pays only if the price ends near a hundred. <bookmark mark='c'/> So its price is "
-            "the market's price of ending in that bin: a state price, the Arrow security of chapter five, built from "
-            "calls. And because the tent is never negative, it can never cost less than nothing."
+            "Chapter five's state price can be bought with calls. Buy one at ninety. <bookmark "
+            "mark='a'/> Sell two at a hundred. <bookmark mark='b'/> Buy one at a hundred and ten: a "
+            "tent, the butterfly, paying only near a hundred. <bookmark mark='c'/> Its price is the "
+            "price of ending in that bin: a state price, and never below zero."
         ) as vo:
             self.play(FadeIn(g), Create(c1), FadeIn(side[0]))
             vo.wait_until("a")
@@ -107,13 +105,11 @@ class Density(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(hr, DOWN, buff=0.35).align_to(hr, LEFT)
         src = real_data(rf"the Surface, expiry {b['expiry']}, {b['T'] * 365:.0f} days")
         with self.voiceover(
-            "Now tile the strike axis with butterflies, on the Surface's Bitcoin options sixteen days from expiry. "
-            "Each bar is one butterfly's price, divided by the square of its width so the bars are comparable: the "
-            "price of ending in that bin, per dollar of bin. <bookmark mark='a'/> Halve the width. And again. The "
-            "bars multiply and thin, and their tops converge onto a smooth curve. <bookmark mark='b'/> That curve is "
-            "the risk-neutral density, the limit Douglas Breeden and Robert Litzenberger identified in 1978. It "
-            f"integrates to {b['mass']:.5f}, and its mean, {b['mean']:,.0f} dollars, is the forward: the density "
-            "prices the forward correctly, as it must."
+            "Tile the strike axis with butterflies on the Surface, sixteen days out. Each bar is a "
+            "butterfly's price over its width squared. <bookmark mark='a'/> Halve the width, and "
+            "again: the bars thin and their tops converge to a smooth curve. <bookmark mark='b'/> The "
+            "risk-neutral density, Breeden and Litzenberger's limit of 1978. It integrates to "
+            f"{b['mass']:.5f}, and its mean, {b['mean']:,.0f} dollars, is the forward."
         ) as vo:
             self.play(FadeIn(g), FadeIn(B), FadeIn(hr), FadeIn(side[0]), FadeIn(src))
             vo.wait_until("a")
@@ -143,14 +139,12 @@ class Density(VoiceoverScene):
                     r"strike; no negative call spread, no negative butterfly", 21)]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "The proof is two derivatives. A call is the discounted Q-expectation of the payoff above the strike. "
-            "<bookmark mark='a'/> Differentiate in the strike: the boundary term vanishes, and the slope of the call "
-            "curve is minus the discounted probability of ending above the strike. That is the price of a digital "
-            "option. <bookmark mark='b'/> Differentiate again: the density itself. <bookmark mark='c'/> And by "
-            "Taylor's theorem, the butterfly, divided by h squared, is the second difference: it converges to the "
-            "second derivative. <bookmark mark='d'/> So the static no-arbitrage conditions are just these: call "
-            "prices fall with the strike, no faster than the bond, and bend upward. No call spread for free, no "
-            "butterfly for free."
+            "The proof is two derivatives. A call is the discounted expectation of its payoff. "
+            "<bookmark mark='a'/> Differentiate in the strike: minus the discounted probability of "
+            "ending above it, a digital's price. <bookmark mark='b'/> Again: the density. <bookmark "
+            "mark='c'/> And the butterfly over h squared is the second difference, so it converges to "
+            "it. <bookmark mark='d'/> Static no-arbitrage is exactly: calls fall with the strike, no "
+            "faster than the bond, and bend upward."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -205,12 +199,10 @@ class Density(VoiceoverScene):
                           r"curve is straightest, the market sees the least probability", 4.4, 20, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Here are the two derivatives riding along the real call curve. On top, the price of a call against its "
-            "strike, falling and bending. The purple tangent's slope, with a minus sign, is the probability of "
-            "ending above the strike. Below, the curve's bend, the density. <bookmark mark='a'/> Slide the strike "
-            "up. The slope's probability falls from near one toward zero, fastest where the call curve bends most, "
-            "which is exactly where the density peaks, near the forward. Far out, the call curve is nearly straight, "
-            "and the market sees almost no probability there."
+            "Both derivatives on the real call curve: the tangent's slope is the probability of "
+            "ending above the strike, the bend is the density. <bookmark mark='a'/> Slide the strike "
+            "up: the probability falls fastest where the curve bends most, near the forward; far out, "
+            "the curve is straight and the market sees almost nothing."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(cc), Create(dc))
             self.add(TG)
@@ -242,14 +234,14 @@ class Density(VoiceoverScene):
                 f"static_checks(SVI fit, 901 strikes): butterfly={b['svi_fly']}  ok={b['svi_ok']}"]
         verdict = ("Raw prices fail. " if b["raw_fly"] > 0 else "Even the raw prices pass. ")
         with self.voiceover(
-            "The House checks these conditions on every surface before anything is fitted to it. Sort by strike, "
-            "take slopes: a positive slope is a call spread with negative price; a slope steeper than the bond is a "
-            "violation too; a slope that falls is a negative butterfly. <bookmark mark='a'/> Run it three times on "
-            f"the sixteen-day expiry. On {n} strikes priced from the morning's raw trades, it finds "
-            f"{b['raw_fly']} negative butterflies; on the Surface's median quotes, {b['mark_fly']}; on the fitted "
-            f"smile, {b['svi_fly']}. <bookmark mark='b'/> " + verdict + "That is not free money: trades happen at "
-            "different moments, on both sides of a bid-ask spread several butterflies wide. It is why the House never "
-            "differentiates raw prices, and fits an arbitrage-free smile first. The next chapter watches that fit."
+            "The House checks these conditions on every surface: positive slopes are call spreads "
+            "with negative prices; falling slopes are negative butterflies. <bookmark mark='a'/> On "
+            f"the sixteen-day expiry: on {n} strikes from raw trades, {b['raw_fly']} negative "
+            f"butterflies; on the Surface's median quotes, {b['mark_fly']}; on the fitted smile, "
+            f"{b['svi_fly']}. <bookmark mark='b'/> "
+            + verdict +
+            "Not free money: the trades come at different moments, inside a bid-ask spread several "
+            "butterflies wide. So the House never differentiates raw prices; it fits first."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -262,10 +254,9 @@ class Density(VoiceoverScene):
         card = pause_at(r"A butterfly on the screen is offered at $-0.1$: you are paid to take it. What do you trade, "
                         r"and what could go wrong?")
         with self.voiceover(
-            "Pause and predict. A butterfly is offered at minus point one: you would be paid to own it. What do you "
-            "trade, and what could go wrong? <bookmark mark='a'/> Buy it: you collect point one now and own a payoff "
-            "that is never negative. What can go wrong is execution: the three legs must all trade at those prices "
-            "at once, and on most screens they cannot."
+            "Pause and predict. A butterfly is offered at minus point one. What do you trade, and "
+            "what can go wrong? <bookmark mark='a'/> Buy it: you are paid to own a payoff that is "
+            "never negative. The risk is execution: all three legs at those prices at once."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

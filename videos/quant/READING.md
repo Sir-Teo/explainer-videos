@@ -428,12 +428,22 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Duffie, D. (2010). "The failure mechanics of dealer banks." *Journal of Economic Perspectives*.
 - Copeland, A., Martin, A., Walker, M. (2014). "Repo runs: evidence from the tri-party repo market." *Journal of Finance*.
 - Battalio, R., Corwin, S., Jennings, R. (2016). "Can brokers have it all? On the relation between make-take fees and limit order execution quality." *Journal of Finance*.
-- Ernst, T., Spatt, C. (2022). "Payment for order flow and asset choice." NBER WP *(verify)*.
+- Ernst, T., Spatt, C. (2022). "Payment for order flow and asset choice." NBER Working Paper 29883.
 - Fung, W., Hsieh, D. (1997). "Empirical characteristics of dynamic trading strategies: the case of hedge funds." *RFS*.
 - Getmansky, M., Lo, A. W., Makarov, I. (2004). "An econometric model of serial correlation and illiquidity in hedge fund returns." *JFE*.
 - SEC Staff (2021). *Staff Report on Equity and Options Market Structure Conditions in Early 2021*.
-- SEC (2024). Final rule on minimum pricing increments, access fees, and transparency (Rule 612 amendments).
-- SEBI (2023, 2024). Studies of profit and loss of individual traders in equity F&O.
+- SEC (2024). Final rule on minimum pricing increments, access fees, and transparency (Rule 612 amendments), Release
+  34-101070; compliance moved to November 2026 (Release 34-104172, 2025) and to November 2027 (Release 34-105656, 11
+  June 2026).
+- SEBI (2023, 2024, 2025). Studies of profit and loss of individual traders in equity F&O (FY22–24: 93% lost; FY25: 91%).
+- Smith, E., Farmer, J. D., Gillemot, L., Krishnamurthy, S. (2003). "Statistical theory of the continuous double auction." *Quantitative Finance* 3(6).
+- Harris, L., Gurel, E. (1986). "Price and volume effects associated with changes in the S&P 500 list: new evidence for the existence of price pressures." *Journal of Finance*.
+- Duffie, D., Zhu, H. (2011). "Does a central clearing counterparty reduce counterparty risk?" *Review of Asset Pricing Studies* 1(1).
+- Brunnermeier, M., Pedersen, L. H. (2009). "Market liquidity and funding liquidity." *RFS* 22(6).
+- Afonso, G., Cipriani, M., Copeland, A., Kovner, A., La Spada, G., Martin, A. (2021). "The market events of mid-September 2019." FRBNY *Economic Policy Review* 27(2).
+- Bogousslavsky, V., Muravyev, D. (2023). "Who trades at the close? Implications for price discovery and liquidity." *Journal of Financial Markets* 66.
+- Frontier: Greenwood, R., Sammon, M. (2025). "The disappearing index effect." *Journal of Finance* 80(2); Pavlova, A., Sikorskaya, T. (2023). "Benchmarking intensity." *RFS* 36(3); Bryzgalova, S., Pavlova, A., Sikorskaya, T. (2023). "Retail trading in options and the rise of the big three wholesalers." *Journal of Finance* 78(6); Schwarz, C., Barber, B., Huang, X., Jorion, P., Odean, T. (2025). "The 'actual retail price' of equity trades." *Journal of Finance* 80(5); Glicoes, J., Iorio, B., Monin, P., Petrasek, L. (2024). "Quantifying Treasury cash-futures basis trades." FEDS Notes; Monin, P. (2026). "Decomposing hedge funds' U.S. Treasury exposures." FEDS Notes; Pinter, G. (2023). "An anatomy of the 2022 gilt market crisis." Bank of England Staff Working Paper 1019; Duffie, D. (2023). "Resilience redux in the US Treasury market." Jackson Hole symposium.
+- Industry and regulatory sources: DTCC/NSCC (netting; T+1 after-action report with SIFMA and ICI, September 2024); CME Group 2024 results; Virtu 2024 Form 10-K; Robinhood Q4 2024 results and 2024 Form 10-K; SEC press release 2022-70 (Archegos, allegations); FCA final notice to the LME (March 2025); SEBI interim order on Jane Street (3 July 2025; allegations); CME SPAN risk arrays; EMIR RTS 153/2013 Art. 28 and ESMA's APC guidelines.
 
 ### Part 3 · Value, Accounting and the Firm
 - Modigliani, F., Miller, M. (1958). "The cost of capital, corporation finance and the theory of investment." *AER*.
@@ -514,7 +524,11 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Campbell, J. Y., Thompson, S. (2008). "Predicting excess stock returns out of sample: can anything beat the historical average?" *RFS*.
 - Petersen, M. (2009). "Estimating standard errors in finance panel data sets." *RFS*.
 - Chernozhukov, V., et al. (2018). "Double/debiased machine learning for treatment and structural parameters." *Econometrics Journal*.
-- Goyal, A., Welch, I., Zafirov, A. (2024). "A comprehensive 2022 look at the empirical performance of equity premium prediction." *RFS*.
+- Goyal, A., Welch, I., Zafirov, A. (2024). "A comprehensive 2022 look at the empirical performance of equity premium prediction." *RFS* 37(11), 3490–3557.
+- *Added in the expansion (all on screen):* Cowles, A. (1933). "Can stock market forecasters forecast?" *Econometrica*. Fama, E., MacBeth, J. (1973). "Risk, return, and equilibrium: empirical tests." *JPE*. Hansen, L. P., Hodrick, R. (1980). "Forward exchange rates as optimal predictors of future spot rates." *JPE*. White, H. (1980). "A heteroskedasticity-consistent covariance matrix estimator." *Econometrica*. Ariel, R. (1987). "A monthly effect in stock returns." *JFE*. Shanken, J. (1992). "On the estimation of beta-pricing models." *RFS*. Amihud, Y., Hurvich, C. (2004). "Predictive regressions: a reduced-bias estimation method." *JFQA*. Stock, J., Wright, J. (2000). "GMM with weak identification." *Econometrica*. Lo, A. (2002). "The statistics of Sharpe ratios." *FAJ*. Mertens, E. (2002). "Comments on variance of the IID estimator in Lo (2002)." Working paper. Kiefer, N., Vogelsang, T. (2005). "A new asymptotic theory for heteroskedasticity-autocorrelation robust tests." *Econometric Theory*. Cameron, A. C., Gelbach, J., Miller, D. (2011). "Robust inference with multiway clustering." *JBES*. Kostakis, A., Magdalinos, T., Stamatogiannis, M. (2015). "Robust econometric inference for stock return predictability." *RFS* 28(5). Lucca, D., Moench, E. (2015). "The pre-FOMC announcement drift." *JF* 70(1), 329–371. Chang, Y.-C., Hong, H., Liskovich, I. (2015). "Regression discontinuity and the price effects of stock market indexing." *RFS* 28(1), 212–246. Harvey, C., Liu, Y., Zhu, H. (2016). "… and the cross-section of expected returns." *RFS*. Lazarus, E., Lewis, D., Stock, J., Watson, M. (2018). "HAR inference: recommendations for practice." *JBES* 36(4). Callaway, B., Sant'Anna, P. (2021). "Difference-in-differences with multiple time periods." *J. Econometrics*. Goodman-Bacon, A. (2021). "Difference-in-differences with variation in treatment timing." *J. Econometrics*. Baker, A., Larcker, D., Wang, C. (2022). "How much should we trust staggered difference-in-differences estimates?" *JFE* 144(2), 370–395. Holm, S. (1979). "A simple sequentially rejective multiple test procedure." *Scandinavian J. Statistics*. Efron, B. (1979). "Bootstrap methods: another look at the jackknife." *Annals of Statistics*. Stein, C. (1956); James, W., Stein, C. (1961). Mehra, R., Prescott, E. (1985). "The equity premium: a puzzle." *JME*.
+- *Frontier (2023–2026), checked against the papers:* Lazarus, E., Lewis, D., Stock, J. (2021). "The size-power tradeoff in HAR inference." *Econometrica* 89(5), 2497–2516. Roth, J., Sant'Anna, P., Bilinski, A., Poe, J. (2023). "What's trending in difference-in-differences?" *J. Econometrics* 235(2), 2218–2244. Andrews, I., Kitagawa, T., McCloskey, A. (2024). "Inference on winners." *QJE* 139(1), 305–358. Kelly, B., Malamud, S., Zhou, K. (2024). "The virtue of complexity in return prediction." *JF* 79(1), 459–503. Nagel, S. (2025). "Seemingly virtuous complexity in return prediction." NBER w34104. Menkveld, A., et al. (2024). "Non-standard errors." *JF* 79(3), 2339–2390. Pérignon, C., et al. (2024). "Computational reproducibility in finance: evidence from 1,000 tests." *RFS* 37(11), 3558–3593. Maasoumi, E., Wang, J., Wang, Z., Wu, K. (2024). "Identifying factors via automatic debiased machine learning." *J. Applied Econometrics* 39(3), 438–461. Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., Syrgkanis, V. (2024). *Applied Causal Inference Powered by ML and AI*. arXiv 2403.02467. Glasserman, P., Lin, C. (2023). "Assessing look-ahead bias in stock return predictions generated by GPT sentiment analysis." arXiv 2309.17322 (the publication venue was not confirmed, so it is cited as the arXiv paper). Jensen, T., Kelly, B., Pedersen, L. (2023). "Is there a replication crisis in finance?" *JF* 78(5), 2465–2518.
+- *Industry and regulation:* SEC press release 2014-289 (22 December 2014), F-Squared Investments; SEC press release 2023-173 (11 September 2023), nine advisers under the Marketing Rule (Rule 206(4)-1, adopted December 2020); SEC press release 2004-164 and the Regulation SHO pilot (May 2005); Harvey, C., Liu, Y. (2015). "Backtesting." *JPM* (published by Man Group at man.com/insights/backtesting); Arnott, R., Harvey, C., Markowitz, H. (2019). "A backtesting protocol in the era of machine learning." *JFDS* 1(1); Ilmanen, A., Israel, R., Lee, R., Moskowitz, T., Thapar, A. (2021). "How do factor premia vary over time? A century of evidence." *JIM* 19(4). Federal Reserve Board, FOMC meeting pages `fomchistorical<YYYY>.htm` (1994–2020), transcribed in `quant6/fomc_dates.py`.
+- *Textbooks added to the spine for this part:* Greene, *Econometric Analysis* (8th ed.): ch. 2–6 (regression, robust covariance, difference in differences), 8 (IV), 11 (panels), 13 (GMM), 14 (MLE), 15 (simulation and bootstrap), 16 (Bayes), 20 (serial correlation). Efron and Tibshirani, *An Introduction to the Bootstrap*; Lahiri, *Resampling Methods for Dependent Data*; Angrist and Pischke, *Mostly Harmless Econometrics*; Gelman et al., *Bayesian Data Analysis*.
 
 ### Part 7 · Time Series and Volatility
 - Kalman, R. E. (1960). "A new approach to linear filtering and prediction problems." *J. Basic Engineering*.
@@ -538,10 +552,45 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Patton, A. (2011). "Volatility forecast comparison using imperfect volatility proxies." *Journal of Econometrics*.
 - Bollerslev, T., Patton, A., Quaedvlieg, R. (2016). "Exploiting the errors: a simple approach for improved volatility forecasting." *Journal of Econometrics*.
 - Gatheral, J., Jaisson, T., Rosenbaum, M. (2018). "Volatility is rough." *Quantitative Finance*.
-- Christensen, K., Siggaard, M., Veliyev, B. (2023). "A machine learning approach to volatility forecasting." *J. Financial Econometrics* *(verify)*.
+- Christensen, K., Siggaard, M., Veliyev, B. (2023). "A machine learning approach to volatility forecasting." *J. Financial Econometrics* 21(5):1680–1727.
 - Ansari, A. F., et al. (2024). "Chronos: learning the language of time series." *TMLR*.
 - Das, A., Kong, W., Sen, R., Zhou, Y. (2024). "A decoder-only foundation model for time-series forecasting." *ICML* (TimesFM).
 - Woo, G., et al. (2024). "Unified training of universal time series forecasting transformers." *ICML* (Moirai).
+- Yule, G. U. (1927). "On a method of investigating periodicities in disturbed series, with special reference to Wolfer's sunspot numbers." *Phil. Trans. R. Soc. A*.
+- Mincer, J., Zarnowitz, V. (1969). "The evaluation of economic forecasts." In *Economic Forecasts and Expectations*, NBER.
+- Ljung, G., Box, G. (1978). "On a measure of lack of fit in time series models." *Biometrika*.
+- Phillips, P. C. B. (1986). "Understanding spurious regressions in econometrics." *Journal of Econometrics* 33.
+- Bollerslev, T. (1987). "A conditionally heteroskedastic time series model for speculative prices and rates of return." *REStat*.
+- Engle, R. F., Lilien, D., Robins, R. (1987). "Estimating time varying risk premia in the term structure: the ARCH-M model." *Econometrica*.
+- Nelson, D. (1990). "Stationarity and persistence in the GARCH(1,1) model." *Econometric Theory*.
+- Bollerslev, T., Wooldridge, J. (1992). "Quasi-maximum likelihood estimation and inference in dynamic models with time-varying covariances." *Econometric Reviews*.
+- Hall, A. D., Anderson, H. M., Granger, C. W. J. (1992). "A cointegration analysis of Treasury bill yields." *REStat*.
+- Engle, R. F., Ng, V. (1993). "Measuring and testing the impact of news on volatility." *Journal of Finance*.
+- Murray, M. P. (1994). "A drunk and her dog: an illustration of cointegration and error correction." *The American Statistician* 48(1):37–39.
+- Harvey, A., Ruiz, E., Shephard, N. (1994). "Multivariate stochastic variance models." *Review of Economic Studies*.
+- Diebold, F., Mariano, R. (1995). "Comparing predictive accuracy." *JBES*.
+- J.P. Morgan/Reuters (1996). *RiskMetrics — Technical Document*, 4th ed.
+- Christensen, B. J., Prabhala, N. R. (1998). "The relation between implied and realized volatility." *JFE*.
+- Andersen, T., Bollerslev, T., Diebold, F., Labys, P. (2000). "Great realizations." *Risk*.
+- Barndorff-Nielsen, O., Shephard, N. (2006). "Econometrics of testing for jumps in financial economics using bipower variation." *J. Financial Econometrics*.
+- Andersen, T., Bollerslev, T., Christoffersen, P., Diebold, F. (2006). "Volatility and correlation forecasting." *Handbook of Economic Forecasting* vol. 1.
+- Andersen, T., Bollerslev, T., Diebold, F. (2007). "Roughing it up: including jump components in the measurement, modeling, and forecasting of return volatility." *REStat*.
+- Bandi, F., Russell, J. (2008). "Microstructure noise, realized variance, and optimal sampling." *Review of Economic Studies*.
+- Carr, P., Wu, L. (2009). "Variance risk premiums." *Review of Financial Studies*.
+- Hansen, P. R., Lunde, A., Nason, J. (2011). "The model confidence set." *Econometrica*.
+- Moskowitz, T., Ooi, Y. H., Pedersen, L. H. (2012). "Time series momentum." *JFE* (each position sized to 40% ex-ante volatility; EWMA with a 60-day centre of mass).
+- Moreira, A., Muir, T. (2017). "Volatility-managed portfolios." *Journal of Finance*.
+- Harvey, C. R., Hoyle, E., Korgaonkar, R., Rattray, S., Sargaison, M., Van Hemert, O. (2018). "The impact of volatility targeting." *J. Portfolio Management* 45(1).
+- Bollerslev, T., Hood, B., Huss, J., Pedersen, L. H. (2018). "Risk everywhere: modeling and managing volatility." *Review of Financial Studies*.
+- MSCI (2011). "Market factor: not just for show." *Model Insights*, December (USE4's half-lives and volatility regime adjustment, described).
+- Zhang, C., Zhang, Y., Cucuringu, M., Qian, Z. (2022). "Volatility forecasting with machine learning and intraday commonality." arXiv 2202.08962.
+- Reisenhofer, R., Bayer, X., Hautsch, N. (2022). "HARNet: a convolutional neural network for realized volatility forecasting." arXiv 2205.07719.
+- Ekambaram, V., et al. (2024). "Tiny time mixers (TTMs): fast pre-trained models for enhanced zero/few-shot forecasting of multivariate time series." *NeurIPS* (arXiv 2401.03955).
+- Goel, A., Pasricha, P., Magris, M., Kanniainen, J. (2025). Foundation time-series models for volatility forecasting (TimesFM), arXiv 2505.11163.
+- Shi, Y., et al. (2025). "Kronos: a foundation model for the language of financial markets." arXiv 2508.02739.
+- Ansari, A. F., et al. (2025). "Chronos-2: from univariate to universal forecasting." arXiv 2510.15821.
+- Rahimikia, E., Ni, H., Wang, W. (2025). Time-series foundation models for financial returns (FinText), arXiv 2511.18578.
+- Brini, A. (2026). "Forecasting realized volatility with time series foundation models: a comparison with econometric benchmarks." arXiv 2607.05291.
 
 ### Part 8 · Decisions and Control
 - von Neumann, J., Morgenstern, O. (1944). *Theory of Games and Economic Behavior*.
@@ -564,24 +613,104 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Lasry, J.-M., Lions, P.-L. (2007). "Mean field games." *Japanese Journal of Mathematics*.
 - Schulman, J., et al. (2017). "Proximal policy optimization algorithms." arXiv.
 - Peters, O. (2019). "The ergodicity problem in economics." *Nature Physics*.
+- Snell, J. L. (1952). "Applications of martingale system theorems." *Transactions of the AMS*.
+- Allais, M. (1953). "Le comportement de l'homme rationnel devant le risque." *Econometrica*.
+- Dynkin, E. B. (1963). "The optimum choice of the instant for stopping a Markov process." *Soviet Mathematics Doklady*.
+- McKean, H. P. (1965). "A free boundary problem for the heat equation arising from a problem in mathematical economics." *Industrial Management Review* (appendix to Samuelson 1965).
+- Mossin, J. (1968). "Optimal multiperiod portfolio policies." *Journal of Business*; Samuelson, P. A. (1969). "Lifetime portfolio selection by dynamic stochastic programming." *REStat*.
+- Magill, M., Constantinides, G. (1976). "Portfolio selection with transactions costs." *JET*.
+- Merton, R. C. (1980). "On estimating the expected return on the market." *JFE*.
+- Karatzas, I., Lehoczky, J., Shreve, S. (1987). "Optimal portfolio and consumption decisions for a 'small investor' on a finite horizon." *SIAM J. Control and Optimization*.
+- Cox, J., Huang, C.-f. (1989). "Optimal consumption and portfolio policies when asset prices follow a diffusion process." *JET*.
+- Barles, G., Souganidis, P. (1991). "Convergence of approximation schemes for fully nonlinear second order equations." *Asymptotic Analysis*.
+- Grossman, S., Zhou, Z. (1993). "Optimal investment strategies for controlling drawdowns." *Mathematical Finance*.
+- Shreve, S., Soner, H. M. (1994). "Optimal investment and consumption with transaction costs." *Annals of Applied Probability*.
+- Benter, W. (1994). "Computer based horse race handicapping and wagering systems: a report." In Hausch, Lo, Ziemba (eds.), *Efficiency of Racetrack Betting Markets*.
+- Benartzi, S., Thaler, R. (1995). "Myopic loss aversion and the equity premium puzzle." *QJE*.
+- Bergman, Y. (1995). "Option pricing with differential interest rates." *RFS*.
+- Rabin, M. (2000). "Risk aversion and expected-utility theory: a calibration theorem." *Econometrica*.
+- Almgren, R., Chriss, N. (2001). "Optimal execution of portfolio transactions." *Journal of Risk*.
+- Anderson, E., Hansen, L. P., Sargent, T. (2003). "A quartet of semigroups for model specification, robustness, prices of risk, and model detection." *JEEA*.
+- Janeček, K., Shreve, S. (2004). "Asymptotic analysis for optimal investment and consumption with transaction costs." *Finance and Stochastics*.
+- Rogers, L. C. G. (2004). "Why is the effect of proportional transaction costs O(δ^{2/3})?" *Mathematics of Finance*, Contemporary Mathematics 351, AMS.
+- Maenhout, P. (2004). "Robust portfolio rules and asset pricing." *RFS*.
+- Gobet, E., Lemor, J.-P., Warin, X. (2005). "A regression-based Monte Carlo method to solve backward stochastic differential equations." *Annals of Applied Probability*.
+- Almgren, R., Thum, C., Hauptmann, E., Li, H. (2005). "Equity market impact." *Risk* 18(7) (Citigroup's US equity trades).
+- Carlin, B., Lobo, M., Viswanathan, S. (2007). "Episodic liquidity crises: cooperative and predatory trading." *Journal of Finance*.
+- MacLean, L., Thorp, E., Ziemba, W. (eds.) (2011). *The Kelly Capital Growth Investment Criterion*. World Scientific.
+- Haghani, V., Dewey, R. (2016). "Rational decision-making under uncertainty: observed betting patterns on a biased coin." arXiv 1701.01427.
+- Peters, O., Gell-Mann, M. (2016). "Evaluating gambles using dynamics." *Chaos*.
+- Moreira, A., Muir, T. (2017). "Volatility-managed portfolios." *Journal of Finance*.
+- Cardaliaguet, P., Lehalle, C.-A. (2018). "Mean field game of controls and an application to trade crowding." *Mathematics and Financial Economics*.
+- Han, J., Jentzen, A., E, W. (2018). "Solving high-dimensional partial differential equations using deep learning." *PNAS*.
+- Lacker, D., Zariphopoulou, T. (2019). "Mean field and n-agent games for optimal investment under relative performance criteria." *Mathematical Finance*.
+- Wang, H., Zariphopoulou, T., Zhou, X. Y. (2020). "Reinforcement learning in continuous time and space: a stochastic control approach." *JMLR*.
+- Doctor, J., Wakker, P., Wang, T. (2020). "Economists' views on the ergodicity problem." *Nature Physics*.
+- Meder, D., et al. (2021). "Ergodicity-breaking reveals time optimal decision making in humans." *PLoS Computational Biology*.
+- Haghani, V., White, J. (2023). *The Missing Billionaires: A Guide to Better Financial Decisions*. Wiley.
+- Frontier (checked at the source, November 2026): Jia, Y., Zhou, X. Y. (2023). "q-Learning in continuous time." *JMLR* 24(161); Dai, M., Dong, Y., Jia, Y., Zhou, X. Y. (2023, rev. 2026). "Data-driven Merton's strategies via policy randomization." arXiv 2312.11797; Dai, Dong, Jia, Zhou (2026). "Merton's problem with recursive perturbed utility." arXiv 2602.13544; Huh, J., Jeon, J., Koo, H. K., Lim, B. H. (2025). "Breaking the dimensional barrier for constrained dynamic portfolio choice." arXiv 2501.12600; Huh, J., Koo, H. K. (2026). "Breaking the dimensional barrier: dynamic portfolio choice with parameter uncertainty via Pontryagin projection." arXiv 2601.03175; Laurière, M., et al. "Learning in mean field games: a survey." arXiv 2205.12944; Chee, D., Frikha, N., Li, L. (2026). "A monotone limit approach to entropy-regularized American options." arXiv 2602.18062; Toda, A. A. (2023). "'Ergodicity economics' is pseudoscience." arXiv 2306.03275.
 
 ### Part 9 · No Arbitrage
-- Arrow, K. (1964). "The role of securities in the optimal allocation of risk-bearing." *REStud*; Debreu, G. (1959). *Theory of Value*.
-- Stoll, H. (1969). "The relationship between put and call option prices." *Journal of Finance*.
-- Ross, S. A. (1978). "A simple approach to the valuation of risky streams." *Journal of Business*.
-- Breeden, D., Litzenberger, R. (1978). "Prices of state-contingent claims implicit in option prices." *Journal of Business*.
-- Cox, J., Ross, S., Rubinstein, M. (1979). "Option pricing: a simplified approach." *JFE*.
-- Harrison, J. M., Kreps, D. (1979). "Martingales and arbitrage in multiperiod securities markets." *JET*.
-- Harrison, J. M., Pliska, S. (1981). "Martingales and stochastic integrals in the theory of continuous trading." *Stochastic Processes and their Applications*.
-- Dalang, R., Morton, A., Willinger, W. (1990). "Equivalent martingale measures and no-arbitrage in stochastic securities market models." *Stochastics*.
-- Delbaen, F., Schachermayer, W. (1994). "A general version of the fundamental theorem of asset pricing." *Mathematische Annalen*.
-- Geman, H., El Karoui, N., Rochet, J.-C. (1995). "Changes of numéraire, changes of probability measure and option pricing." *J. Applied Probability*.
-- Hobson, D. (1998). "Robust hedging of the lookback option." *Finance and Stochastics*.
-- Ofek, E., Richardson, M., Whitelaw, R. (2004). "Limited arbitrage and short sales restrictions: evidence from the options markets." *JFE*.
-- Beiglböck, M., Henry-Labordère, P., Penkner, F. (2013). "Model-independent bounds for option prices: a mass transport approach." *Finance and Stochastics*.
-- Galichon, A., Henry-Labordère, P., Touzi, N. (2014). "A stochastic control approach to no-arbitrage bounds given marginals." *Annals of Applied Probability*.
-- Ross, S. A. (2015). "The recovery theorem." *Journal of Finance*.
-- Borovička, J., Hansen, L. P., Scheinkman, J. (2016). "Misspecified recovery." *Journal of Finance*.
+Textbooks (Björk is the 4th edition, 2020): Shreve I ch. 1, 3, 4; Shreve II ch. 5, 9; Björk ch. 2–3 (binomial and
+one-period models), 9 (incomplete markets), 10 (parity relations), 11–12 (the martingale approach), 15 (change of
+numeraire); Duffie DAPT ch. 1–2, 6; Delbaen–Schachermayer Part I; Föllmer–Schied ch. 1, 5, 7; Henry-Labordère
+*Model-Free Hedging*.
+
+Classics:
+- Farkas, J. (1902). "Theorie der einfachen Ungleichungen." *J. reine angew. Math.* 124:1–27.
+- Stiemke, E. (1915). "Über positive Lösungen homogener linearer Gleichungen." *Mathematische Annalen* 76:340–342.
+- Arrow, K. (1964). "The role of securities in the optimal allocation of risk-bearing." *REStud* 31(2):91–96; Debreu, G. (1959). *Theory of Value*.
+- Strassen, V. (1965). "The existence of probability measures with given marginals." *Ann. Math. Stat.* 36(2):423–439.
+- Stoll, H. (1969). "The relationship between put and call option prices." *Journal of Finance* 24(5):801–824.
+- Ross, S. A. (1976). "Options and efficiency." *QJE* 90(1):75–89.
+- Ross, S. A. (1978). "A simple approach to the valuation of risky streams." *Journal of Business* 51(3):453–475.
+- Breeden, D., Litzenberger, R. (1978). "Prices of state-contingent claims implicit in option prices." *Journal of Business* 51(4):621–651.
+- Margrabe, W. (1978). "The value of an option to exchange one asset for another." *Journal of Finance* 33(1):177–186.
+- Cox, J., Ross, S., Rubinstein, M. (1979). "Option pricing: a simplified approach." *JFE* 7(3):229–263.
+- Harrison, J. M., Kreps, D. (1979). "Martingales and arbitrage in multiperiod securities markets." *JET* 20(3):381–408.
+- Harrison, J. M., Pliska, S. (1981). "Martingales and stochastic integrals in the theory of continuous trading." *Stochastic Processes and their Applications* 11(3):215–260.
+- Kreps, D. (1981). "Arbitrage and equilibrium in economies with infinitely many commodities." *J. Math. Econ.* 8(1):15–35.
+- Jamshidian, F. (1989). "An exact bond option formula." *Journal of Finance* 44(1):205–209.
+- Dalang, R., Morton, A., Willinger, W. (1990). "Equivalent martingale measures and no-arbitrage in stochastic securities market models." *Stochastics and Stochastic Reports* 29(2):185–201.
+- Schachermayer, W. (1992). "A Hilbert space proof of the fundamental theorem of asset pricing in finite discrete time." *Insurance: Math. Econ.* 11(4):249–257.
+- Delbaen, F., Schachermayer, W. (1994). "A general version of the fundamental theorem of asset pricing." *Mathematische Annalen* 300:463–520; (1998). "The fundamental theorem of asset pricing for unbounded stochastic processes." *Math. Ann.* 312:215–250.
+- Geman, H., El Karoui, N., Rochet, J.-C. (1995). "Changes of numéraire, changes of probability measure and option pricing." *J. Applied Probability* 32(2):443–458.
+- Avellaneda, M., Levy, A., Parás, A. (1995). "Pricing and hedging derivative securities in markets with uncertain volatilities." *Applied Math. Finance* 2(2):73–88; Lyons, T. (1995). "Uncertain volatility and the risk-free synthesis of derivatives." *Applied Math. Finance* 2(2):117–133.
+- Kramkov, D. (1996). "Optional decomposition of supermartingales and hedging contingent claims in incomplete security markets." *PTRF* 105(4):459–479.
+- Hobson, D. (1998). "Robust hedging of the lookback option." *Finance and Stochastics* 2(4):329–347.
+- Jackwerth, J. (2000). "Recovering risk aversion from option prices and realized returns." *RFS* 13(2):433–451.
+- Ofek, E., Richardson, M., Whitelaw, R. (2004). "Limited arbitrage and short sales restrictions: evidence from the options markets." *JFE* 74(2):305–342.
+- Cox, A., Hobson, D. (2005). "Local martingales, bubbles and option prices." *Finance and Stochastics* 9(4):477–492.
+- Beiglböck, M., Henry-Labordère, P., Penkner, F. (2013). "Model-independent bounds for option prices: a mass transport approach." *Finance and Stochastics* 17(3):477–501.
+- Galichon, A., Henry-Labordère, P., Touzi, N. (2014). "A stochastic control approach to no-arbitrage bounds given marginals, with an application to lookback options." *Annals of Applied Probability* 24(1):312–336.
+- Ross, S. A. (2015). "The recovery theorem." *Journal of Finance* 70(2):615–648.
+- Qin, L., Linetsky, V. (2016). "Positive eigenfunctions of Markovian pricing operators: Hansen–Scheinkman factorization, Ross recovery and long-term pricing." *Operations Research* 64(1):99–117.
+- Borovička, J., Hansen, L. P., Scheinkman, J. (2016). "Misspecified recovery." *Journal of Finance* 71(6):2493–2544.
+- Martin, I., Ross, S. A. (2019). "Notes on the yield curve." *JFE* 134(3):689–702.
+- Jensen, C. S., Lando, D., Pedersen, L. H. (2019). "Generalized recovery." *JFE* 133(1):154–174.
+- Jackwerth, J., Menner, M. (2020). "Does the Ross recovery theorem work empirically?" *JFE* 137(3):723–739.
+
+Industry and limits of arbitrage:
+- Shleifer, A., Vishny, R. (1997). "The limits of arbitrage." *Journal of Finance* 52(1):35–55.
+- Froot, K., Dabora, E. (1999). "How are stock prices affected by the location of trade?" *JFE* 53(2):189–216; RBA RDP 2003-06 (Royal Dutch/Shell, 9.53% mean absolute deviation, 1980–1995).
+- Mitchell, M., Pulvino, T., Stafford, E. (2002). "Limited arbitrage in equity markets." *Journal of Finance* 57(2):551–584.
+- Lamont, O., Thaler, R. (2003). "Can the market add and subtract? Mispricing in tech stock carve-outs." *JPE* 111(2):227–268.
+- President's Working Group on Financial Markets (1999). *Hedge Funds, Leverage, and the Lessons of Long-Term Capital Management*; Federal Reserve History, "Near failure of Long-Term Capital Management".
+- Haddad, V., Moreira, A., Muir, T. (2021). "When selling becomes viral: disruptions in debt markets in the COVID-19 crisis and the Fed's response." *RFS* 34(11):5309–5351.
+- van Binsbergen, J., Diamond, W., Grotteria, M. (2022). "Risk-free interest rates." *JFE* 143(1):1–29; van Binsbergen, Diamond, Van Tassel (2023), "Options for calculating risk-free rates," Liberty Street Economics (NY Fed).
+- SEC (2019), Rule 6c-11 (exchange-traded funds) adopting release; Alpha Architect 1–3 Month Box ETF (BOXX), annual shareholder report, 30 September 2025 (Form N-CSR).
+- SEC staff (2021), *Staff report on equity and options market structure conditions in early 2021* (GameStop).
+
+Frontier (2023–2026):
+- Neufeld, A., Sester, J. (2023). "A deep learning approach to data-driven model-free pricing and to martingale optimal transport." *IEEE Trans. Information Theory* 69(5):3172–3189.
+- Neufeld, A., Papapantoleon, A., Xiang, Q. (2023). "Model-free bounds for multi-asset options using option-implied information and their exact computation." *Management Science* 69(4):2051–2068.
+- Heston, S., Jacobs, K., Kim, H. J. (2023). "The pricing kernel in options." FEDS 2023-053, Federal Reserve Board.
+- Hasenbichler, M., Joseph, B., Loeper, G., Obłój, J., Pammer, G. "The martingale Sinkhorn algorithm." arXiv:2310.13797 (2023; v5 2026).
+- Engström, L., Källblad, S., Karlsson, J. (2024). "Computation of robust option prices via structured multi-marginal martingale optimal transport." arXiv:2406.09959.
+- Guyon, J. (2024). "Dispersion-constrained martingale Schrödinger problems and the exact joint S&P 500/VIX smile calibration puzzle." *Finance and Stochastics* 28(1):27–79.
+- Horvath, F. (2025). "Arbitrage-based recovery." *JFE* 163:103969.
+- Bartl, D., Beiglböck, M., Pammer, G. (2026). "The Wasserstein space of stochastic processes." *J. Eur. Math. Soc.* 28(1):393–454.
+- Shikhman, L. J., Galarnyk, M., Dash, A., Welsh, N. A. (2026). "Inverse learning of latent risk-neutral densities from irregular option quotes." ICAIF 2026; arXiv:2607.27188.
 
 ### Part 10 · Black–Scholes–Merton
 - Sprenkle, C. (1961). "Warrant prices as indicators of expectations and preferences." *Yale Economic Essays*; Boness, A. J. (1964). "Elements of a theory of stock-option value." *JPE*.

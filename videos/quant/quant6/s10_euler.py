@@ -172,8 +172,7 @@ class Euler(VoiceoverScene, ThreeDScene):
             f"<bookmark mark='a'/> The estimates of gamma spread from {q[0]:.0f} to {q[4]:.0f} in the middle ninety "
             f"percent. Our {g['gamma']:.1f} is no surprise. <bookmark mark='b'/> But J is informative: in true worlds it "
             f"exceeds its five percent critical value {100 * mc['rej_J']:.1f} percent of the time and never passes "
-            f"{max(mc['J']):.0f}. The data's J is {g['J']:.0f}, "
-            + beyond
+            f"{max(mc['J']):.0f}. The data's J is {g['J']:.0f}, {beyond}"
         ) as vo:
             self.play(FadeIn(gax), Create(truth), FadeIn(side[0]), FadeIn(side[1]))
             self.add(hb, cnt)

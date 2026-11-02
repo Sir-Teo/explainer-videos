@@ -334,9 +334,8 @@ def _lv_fn(fit):
     return V.local_vol_fn(fit)
 
 
-def _simulate(model, n_paths=40000, days=120, seed=7, slv_out=None):
+def _simulate(model, n_paths=40000, days=120, seed=7, slv_out=None, mix=0.5):
     """Daily paths of log(S/S0), zero rates, for every model in the comparison."""
-    g = np.random.default_rng(seed)
     dt = 1 / 365
     c = load("calibrate")["fits"]
     if model in ("Heston", "Bates"):
@@ -349,42 +348,13 @@ def _simulate(model, n_paths=40000, days=120, seed=7, slv_out=None):
     if model == "VG":
         return np.log(sv.vg_paths(1.0, *c["VG"]["x"], days * dt, days, n_paths, seed=seed))
     fit, _ = _ssvi()
-    lv = _lv_fn(fit)
-    X = np.zeros((days + 1, n_paths))
-    x = np.zeros(n_paths)
-    m = 4  # sub-steps per day: short-dated local vol is steep, and a daily Euler step underprices by a vol point
-    h = dt / m
     if model == "LV":
+        m = 4  # sub-steps per day: short-dated local vol is steep, and a daily Euler step underprices by a vol point
         return V.local_vol_paths(fit, days, n_paths, seed=seed, substeps=m)
-    # SLV: Heston variance times a leverage function, calibrated on the fly by the particle method
-    v0, kappa, theta, xi, rho = c["Heston"]["x"]
-    xi = xi * 0.5  # the mixing fraction: half of Heston's vol of vol, the leverage function does the rest
-    v = np.full(n_paths, v0)
-    grid = np.linspace(-1.0, 1.0, 81)
-    Ls = []
-    n_sub = 8000
-    for i in range(days):
-        for j in range(m):
-            t = i * dt + (j + 1) * h
-            # E[v | x] by Nadaraya-Watson on a grid, from a subsample of particles, Silverman's bandwidth
-            sub = g.choice(n_paths, n_sub, replace=False)
-            bw = 1.06 * np.std(x[sub]) * n_sub ** (-0.2) + 1e-3
-            Wk = np.exp(-0.5 * ((grid[:, None] - x[None, sub]) / bw) ** 2)
-            Ev = (Wk @ v[sub]) / np.maximum(Wk.sum(axis=1), 1e-300)
-            Lg = lv(grid, t) / np.sqrt(np.maximum(Ev, 1e-6))
-            Lx = np.interp(x, grid, Lg)
-            z1 = g.standard_normal(n_paths)
-            z2 = rho * z1 + np.sqrt(1 - rho ** 2) * g.standard_normal(n_paths)
-            vp = np.maximum(v, 0)
-            x = x - 0.5 * Lx ** 2 * vp * h + Lx * np.sqrt(vp * h) * z1
-            v = v + kappa * (theta - vp) * h + xi * np.sqrt(vp * h) * z2
-        if i % 10 == 9:
-            Ls.append({"t": (i + 1) * dt, "L": Lg.copy()})
-        X[i + 1] = x
-    if slv_out is not None:
-        slv_out["L"] = Ls
-        slv_out["grid"] = grid
-    return X
+    # SLV: Heston variance times a leverage function, calibrated on the fly by the particle method; the mixing
+    # fraction keeps half of Heston's vol of vol, the leverage function does the rest (the House's slv_paths)
+    return sv.slv_paths(_lv_fn(fit), c["Heston"]["x"], days, n_paths, mix=mix, substeps=4, n_sub=8000, seed=seed,
+                        info=slv_out)
 
 
 def _iv_from_paths(xT, k, T):

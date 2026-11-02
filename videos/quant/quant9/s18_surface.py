@@ -59,14 +59,13 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
                                                                                                              buff=0.3)
         src = real_data(r"the Surface; \texttt{least\_squares} rerun with a growing budget")
         with self.voiceover(
-            "The density is only as good as the smile it is differentiated from, so watch the House fit one. The "
-            f"white dots are the Surface's implied volatilities for the expiry {fit['T'] * 365:.0f} days out; the "
-            "purple curve is Jim Gatheral's SVI smile, starting from a rough guess. Below it, the density the "
-            "current smile implies. <bookmark mark='a'/> The optimizer adjusts five numbers. In the first few "
-            "steps the smile swings wildly and the density with it, sometimes lopsided, sometimes double-humped. "
-            f"<bookmark mark='b'/> Within about twenty-five evaluations the error settles at {rmse[-1]:.2f} vol "
-            "points, the smile threads the quotes, and the density stops moving. Part twelve derives SVI; here the "
-            "point is that the density inherits every wobble of the fit."
+            "The density is only as good as the smile it comes from, so watch the House fit one. "
+            f"White dots: the Surface's implied volatilities {fit['T'] * 365:.0f} days out; purple: "
+            "Gatheral's SVI smile from a rough guess; below, the density it implies. <bookmark "
+            "mark='a'/> In the first steps the smile swings, and the density with it, lopsided, "
+            "double-humped. <bookmark mark='b'/> Within about twenty-five evaluations the error "
+            f"settles at {rmse[-1]:.2f} vol points and the density stops moving. It inherits every "
+            "wobble of the fit."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp), FadeIn(src))
             vo.wait_until("a")
@@ -88,13 +87,11 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
                 why(r"Lee's moment formula bounds the wings' slope; Part 12 derives it", 21)]
         step = ladder(self, rows, whys, keep=5, top=3.2, x=-0.8, buff=0.5, edge=6.9)
         with self.voiceover(
-            "The coordinates the House fits in: total implied variance, volatility squared times time, against "
-            "log-moneyness. <bookmark mark='a'/> SVI is a hyperbola in those coordinates: five parameters, straight "
-            "wings. <bookmark mark='b'/> Price every strike with Black's formula on the fitted smile, differentiate "
-            "twice, and you have the density. <bookmark mark='c'/> Across expiries there is one more arbitrage "
-            "condition: at fixed moneyness, total variance must not fall as maturity grows, or a calendar spread is "
-            "free. <bookmark mark='d'/> And the wings cannot be steeper than Roger Lee's moment formula allows. Part "
-            "twelve proves both."
+            "The coordinates: total implied variance against log-moneyness. <bookmark mark='a'/> SVI "
+            "is a hyperbola there, five parameters. <bookmark mark='b'/> Price every strike on the "
+            "smile and differentiate twice. <bookmark mark='c'/> Across expiries, total variance must "
+            "not fall with maturity, or a calendar spread is free. <bookmark mark='d'/> And Lee's "
+            "bound limits the wings. Part twelve proves both."
         ) as vo:
             step(0)
             vo.wait_until("a")

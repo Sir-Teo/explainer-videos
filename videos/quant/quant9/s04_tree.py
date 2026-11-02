@@ -61,18 +61,16 @@ class Tree(VoiceoverScene):
         res = MathTex(rf"\Delta = {o['Delta']:.1f},\ \ B = {o['B']:.0f},\ \ V_0 = {o['V']:.0f},\ \ q = {o['q']:.1f}",
                       font_size=30, color=Q_C).to_corner(DR, buff=0.4)
         with self.voiceover(
-            "Cox, Ross and Rubinstein, in 1979, made the theorem something you can compute. One step: a stock at a "
-            "hundred goes to a hundred and twenty or to eighty. A call struck at a hundred pays twenty or nothing. "
-            "In the plane of stock price and value, those are two points. <bookmark mark='a'/> A portfolio of delta "
-            "shares and a bond is a straight line in this plane: slope delta, intercept the bond. Exactly one line "
-            "passes through both points. That is the replicating portfolio. <bookmark mark='b'/> Its height at "
-            "today's price is the call's price: ten. Here delta is one half and the bond is minus forty: buy half a "
-            "share, borrow forty. <bookmark mark='c'/> In symbols: match the claim in both states, subtract to get "
-            "delta, substitute to get the bond. <bookmark mark='d'/> Collect terms, and the price is a weighted "
-            "average of the two payoffs, discounted. <bookmark mark='e'/> The weight q comes from the sizes of the "
-            "moves and the interest rate alone. Nobody's probability of an up move appears anywhere. And q lies "
-            "strictly between zero and one exactly when the bond's growth lies between the two stock moves: when "
-            "there is no arbitrage."
+            "Cox, Ross and Rubinstein made the theorem computable in 1979. One step: a stock at a "
+            "hundred goes to a hundred and twenty or eighty; a call at a hundred pays twenty or "
+            "nothing: two points in the plane. <bookmark mark='a'/> Shares plus a bond make a "
+            "straight line, and exactly one passes through both points: the replicating portfolio. "
+            "<bookmark mark='b'/> Its height at today's price is the call's price, ten: buy half a "
+            "share, borrow forty. <bookmark mark='c'/> In symbols: match both states, subtract, "
+            "substitute. <bookmark mark='d'/> The price is a weighted average of the payoffs. "
+            "<bookmark mark='e'/> The weight q comes from the moves and the rate alone, no one's "
+            "probability of an up move, and it lies in zero to one exactly when there is no "
+            "arbitrage."
         ) as vo:
             self.play(FadeIn(g), FadeIn(up), FadeIn(dn), FadeIn(lab))
             vo.wait_until("a")
@@ -127,14 +125,13 @@ class Tree(VoiceoverScene):
                             4.8, 20, CALL).to_corner(DR, buff=0.4)
         eq = MathTex(rf"q = {t['q']:.4f},\ \ V_0 = {t['four_price']:.4f}", font_size=28, color=Q_C).to_corner(UR, buff=0.4)
         with self.voiceover(
-            "Now four steps: a call struck at a hundred, twenty-five percent volatility, one year. At expiry the "
-            "values are just the payoffs. <bookmark mark='a'/> Fold back: each node is the risk-neutral average of "
-            "the two nodes after it, and its delta is the slope between them. Layer by layer, right to left, until "
-            f"the root: {t['four_price']:.2f}. <bookmark mark='b'/> Now trade it. Start with that much money, and at "
-            "each node hold that node's delta in shares, financing the rest with the bond. Follow one random path "
-            "and watch the book. <bookmark mark='c'/> At expiry the book is worth exactly the call's payoff. Not on "
-            f"average: on this path, and on every one of a thousand random paths, to within {t['rep_max_err']:.0e}, "
-            "rounding error. That is what replication means, and why the probability of going up never mattered."
+            "Now four steps: a call at a hundred, twenty-five percent volatility, one year. At "
+            "expiry, the payoffs. <bookmark mark='a'/> Fold back: each node is the risk-neutral "
+            "average of the two after it, and its delta is their slope. The root: "
+            f"{t['four_price']:.2f}. <bookmark mark='b'/> Now trade it: start with that much, hold "
+            "each node's delta, finance the rest. Follow one path. <bookmark mark='c'/> At expiry the "
+            "book equals the payoff exactly, on this path and on every one of a thousand, to within "
+            f"{t['rep_max_err']:.0e}. That is replication."
         ) as vo:
             self.play(FadeIn(g.edges), *[FadeIn(nd[0]) for n in g.nodes for nd in g.nodes[n]])
             self.play(*[nd[1].animate.set_opacity(1) for nd in g.nodes[4]])
@@ -188,12 +185,11 @@ class Tree(VoiceoverScene):
                 f"[{P[0]:.2f}, {P[1]:.2f}, {P[2]:.2f}, {P[3]:.2f}]",
                 f"crr(..., N=200) = {P[199]:.3f}   bs = {t['bs']:.3f}"]
         with self.voiceover(
-            "This is the House's tree, the whole algorithm in ten lines: the up and down factors from the "
-            "volatility, the risk-neutral probability, the payoffs at the leaves, and one line that folds the "
-            "vector back a step at a time. <bookmark mark='a'/> Run it for one to four steps, then let N grow to two "
-            "hundred and plot the price as it computes. <bookmark mark='b'/> The prices zigzag, odd steps above "
-            f"even ones, and close in on Black and Scholes' {t['bs']:.3f}: at two hundred steps the tree says "
-            f"{P[199]:.3f}. Part ten takes the limit properly, and the tree becomes the formula."
+            "The House's tree in ten lines: up and down factors from volatility, the risk-neutral "
+            "probability, payoffs at the leaves, and one line folding back a step at a time. "
+            "<bookmark mark='a'/> Run one to four steps, then let N grow. <bookmark mark='b'/> The "
+            f"prices zigzag, odd above even, closing in on Black and Scholes' {t['bs']:.3f}; at two "
+            f"hundred steps, {P[199]:.3f}."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(g), Create(bsl), FadeIn(bsll))
             vo.wait_until("a")
@@ -221,11 +217,10 @@ class Tree(VoiceoverScene):
         src = note(r"Shreve I, ch.\ 4; the full theory of early exercise: Parts 8 and 10", font_size=18,
                    color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "One more line turns the tree American. At every node, compare exercising now with the folded-back value "
-            "of waiting, and keep the larger. <bookmark mark='a'/> For a put on this tree with five percent rates, "
-            f"exercise wins at {len(nodes)} nodes, all deep in the money, where waiting only delays receiving the "
-            f"strike. The put is worth {t['am_put']:.2f} American against {t['eu_put']:.2f} European. Shreve's "
-            "chapter four does this in full, and Parts eight and ten return to it."
+            "One more line makes it American: at each node keep the larger of exercising now and "
+            "waiting. <bookmark mark='a'/> For a put with five percent rates, exercise wins at "
+            f"{len(nodes)} deep in-the-money nodes, and the put is worth {t['am_put']:.2f} against "
+            f"{t['eu_put']:.2f} European. Shreve's chapter four does this in full."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rule), FadeIn(src))
             vo.wait_until("a")
@@ -237,10 +232,9 @@ class Tree(VoiceoverScene):
     def predict(self):
         card = pause_at(r"Why does the tree's price zigzag between odd and even numbers of steps?")
         with self.voiceover(
-            "Pause and predict. Why does the price zigzag between odd and even numbers of steps? "
-            "<bookmark mark='a'/> With an even number of steps, a node sits exactly on the strike, where the payoff "
-            "bends; with an odd number, the strike falls between two nodes. Where the kink lands relative to the "
-            "grid changes the error's sign."
+            "Pause and predict. Why the zigzag between odd and even steps? <bookmark mark='a'/> With "
+            "even N a node sits on the strike, at the payoff's kink; with odd N the strike falls "
+            "between nodes, and the error changes sign."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

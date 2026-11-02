@@ -65,16 +65,14 @@ class StatePrices(VoiceoverScene):
                 why(r"the density of $Q$ with respect to $P$ is the discount factor, normalized: $Q$ is $P$ reweighted", 21)]
         step = ladder(self, rows, whys, keep=4, top=1.2, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "The normal vector deserves its names. Kenneth Arrow, in 1964, imagined a security that pays one unit in "
-            "a single state of the world and nothing anywhere else. Its price is the state price. With one for "
-            "every state, any payoff is a bundle of them, so its price is the sum of what it pays in each state, "
-            "times that state's price. <bookmark mark='a'/> Now multiply and divide by the real probability of each "
-            "state. The price becomes an ordinary expectation of the payoff times m, the stochastic discount factor: "
-            "state price per unit of probability. <bookmark mark='b'/> The bond pays one in every state, so the "
-            "state prices add up to the bond's price, one over one plus r. <bookmark mark='c'/> Rescale them to add "
-            "up to one, and you have a probability, Q, and every price is a discounted expectation under Q. "
-            "Stephen Ross wrote it this way in 1978. <bookmark mark='d'/> And the density of Q with respect to the "
-            "real probability is just the discount factor, normalized. Q is not a forecast: it is P, reweighted."
+            "Name that normal. Kenneth Arrow, in 1964, imagined a security paying one unit in a "
+            "single state: its price is the state price, and any payoff is a bundle of them. "
+            "<bookmark mark='a'/> Multiply and divide by each state's real probability: a price is an "
+            "expectation of payoff times m, the stochastic discount factor. <bookmark mark='b'/> The "
+            "bond pays one everywhere, so the state prices sum to one over one plus r. <bookmark "
+            "mark='c'/> Rescale them to sum to one: a probability, Q, and prices are discounted "
+            "Q-expectations, as Stephen Ross wrote in 1978. <bookmark mark='d'/> Q's density against "
+            "P is the discount factor, normalized. Q is not a forecast: it is P reweighted."
         ) as vo:
             self.play(FadeIn(h))
             step(0)
@@ -131,14 +129,12 @@ class StatePrices(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = illustration(r"$P$ illustrative; state prices from chapter 3's market at a stock price of 100, $r = 0$")
         with self.voiceover(
-            "See it as one animation. Three states: a crash, a flat market, a boom. The amber bars are real "
-            "probabilities, made up for the picture, under which the stock is expected to rise. "
-            f"<bookmark mark='a'/> Divide the state prices by them. The discount factor is {m[0]:.2f} in the crash, "
-            "and below one in the other states: a dollar in a crash is worth more than its probability alone says, "
-            "because that is when people need it. <bookmark mark='b'/> Multiply back and renormalize. The bars "
-            "turn purple: this is Q, the risk-neutral measure. The crash bar grew, the boom bar shrank, and under Q "
-            "the stock's expected price is exactly today's, a hundred. Same states, same payoffs; only the weights "
-            "changed."
+            "As one animation: three states, crash, flat, boom; amber bars are made-up real "
+            "probabilities under which the stock should rise. <bookmark mark='a'/> Divide state "
+            f"prices by them: the discount factor is {m[0]:.2f} in the crash, below one elsewhere. A "
+            "dollar in a crash is dear. <bookmark mark='b'/> Renormalize and the bars turn purple: Q. "
+            "The crash bar grew, the boom bar shrank, and under Q the stock is expected to stay at a "
+            "hundred."
         ) as vo:
             self.play(FadeIn(g), FadeIn(names), FadeIn(stage[0]), FadeIn(src), *[FadeIn(b_) for b_ in bs_],
                       FadeIn(nums))
@@ -188,14 +184,12 @@ class StatePrices(VoiceoverScene):
                           r"chapter 3's line pierced the corner", 4.8, 20, ARB),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "With three states and only two assets, Q is not unique. Here is the triangle of every possible "
-            "probability on the three states: each corner puts all the mass on one state. <bookmark mark='a'/> The "
-            "measures that price the stock correctly form this purple segment. At a price of a hundred its ends are "
-            "five ninths on the crash and four ninths on the boom, or everything on the flat state. Every point in "
-            "between is an equivalent martingale measure. <bookmark mark='b'/> Raise the price. The segment slides "
-            "toward the boom corner, shrinks to that single point at a hundred and twenty-five, which puts zero "
-            "weight on two states, and then leaves the triangle: no measure at all, at exactly the price where "
-            "the line of free payoffs pierced the corner. Three pictures, one theorem."
+            "Here Q is not unique. The triangle holds every probability on three states. <bookmark "
+            "mark='a'/> The measures that price the stock form the purple segment, from five ninths "
+            "on the crash and four ninths on the boom, to everything on the flat state. <bookmark "
+            "mark='b'/> Raise the price: the segment slides to the boom corner, shrinks to a point at "
+            "a hundred and twenty-five, and leaves the triangle at the same price where the free "
+            "payoffs pierced the corner."
         ) as vo:
             self.play(FadeIn(tri_g), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
@@ -241,19 +235,17 @@ class StatePrices(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
         src = real_data(r"$q$: Deribit, 10 Dec 2025 (the Surface); $p$: Binance BTCUSDT daily closes, Apr 2021--Nov 2025, "
                         r"Gaussian kernel; band: 1,000 stationary-bootstrap draws (5--95\%)")
-        verdict = ("It has a hump: the kernel rises toward the forward and falls away above it, and the fall on "
-                   "the right is outside the band. " if k["shape"] == "hump" else
-                   "It falls from left to right, as a single risk-averse investor would make it. ")
+        verdict = ("It has a hump: it rises toward the forward and falls away above it, beyond the band. "
+                   if k["shape"] == "hump" else "It falls from left to right, as theory says. ")
         with self.voiceover(
-            "Now measure a real discount factor. On top, Q: the Surface's risk-neutral density for Bitcoin sixteen "
-            f"days out. And P: the distribution of sixteen-day returns over four and a half years, {k['n_windows']} "
-            "non-overlapping windows, smoothed. <bookmark mark='a'/> Divide one by the other and you have the "
-            "pricing kernel, the discount factor per state, with a band from resampling the history a thousand "
-            "times. <bookmark mark='b'/> " + verdict + "A single investor with ordinary risk aversion would make it "
-            "fall everywhere, highest in the crash states. A hump like this is the pricing kernel puzzle, found by "
-            "Jens Jackwerth in index options in 2000. <bookmark mark='c'/> And notice how wide the band is. Four and "
-            "a half years of Bitcoin are barely a hundred independent sixteen-day draws: P is the hard half of the "
-            "ratio, and it always will be."
+            "Now a real discount factor. Q: the Surface's density for Bitcoin sixteen days out. P: "
+            f"sixteen-day returns over four and a half years, {k['n_windows']} windows, smoothed. "
+            "<bookmark mark='a'/> Their ratio is the pricing kernel, with a band from a thousand "
+            "resamples. <bookmark mark='b'/> "
+            + verdict +
+            "A risk-averse investor would make it fall everywhere; a hump is the pricing kernel "
+            "puzzle Jens Jackwerth found in 2000. <bookmark mark='c'/> And the band is wide: P is the "
+            "hard half of the ratio."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(src), Create(qc), FadeIn(leg[0]))
             self.play(Create(pc), FadeIn(leg[1]), FadeIn(side[0]))
@@ -270,10 +262,9 @@ class StatePrices(VoiceoverScene):
         card = pause_at(r"In some state, $Q$ gives a crash twice the probability that $P$ does. Is the discount factor "
                         r"$m$ in that state above or below $1/(1 + r)$?")
         with self.voiceover(
-            "Pause and predict. In some state, Q gives a crash twice the probability that P does. Is the discount "
-            "factor there above or below one over one plus r? <bookmark mark='a'/> Above: twice as high, because the "
-            "ratio of Q to P is the discount factor times one plus r. The states where Q is heavier are the states "
-            "where a dollar is dear."
+            "Pause and predict. Q gives a crash twice P's probability. Is the discount factor there "
+            "above or below one over one plus r? <bookmark mark='a'/> Above: twice as high. Where Q "
+            "is heavier than P, a dollar is dear."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
