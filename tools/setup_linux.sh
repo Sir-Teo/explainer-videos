@@ -23,4 +23,6 @@ uv pip install --python .venv/bin/python -r requirements-lock.txt
 uv pip install --python .venv/bin/python -e . --no-deps
 # Kokoro's Mandarin G2P (jieba, pypinyin, cn2an): the CPU stand-in voice for the Chinese editions (make.py --cpu-voice)
 uv pip install --python .venv/bin/python "misaki[zh]==0.9.4"
+# reading Robert Shiller's ie_data.xls (Part 3 onward)
+uv pip install --python .venv/bin/python "xlrd==2.0.1"
 echo "ready: source .venv/bin/activate"

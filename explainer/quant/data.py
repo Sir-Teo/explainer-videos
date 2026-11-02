@@ -17,7 +17,9 @@ Sources (all free; see videos/quant/SYLLABUS.md, "Data"):
 * :func:`ken_french_daily`: Kenneth French's daily US market factor since 1926;
 * :func:`ken_french_size_daily`: his daily value-weighted size-decile portfolios since 1926;
 * :func:`binance_funding`: the funding rate of a Binance USD-margined perpetual future, every eight hours;
-* :func:`fred`: a daily or weekly series from FRED (St. Louis Fed), frozen through a date.
+* :func:`fred`: a daily or weekly series from FRED (St. Louis Fed), frozen through a date;
+* :func:`shiller`: Robert Shiller's monthly US stock market data since 1871 (price, dividends, earnings, CPI, CAPE);
+* :func:`ken_french_sorts`: his monthly portfolios sorted on a characteristic (accruals, profitability, ...).
 
     python -m explainer.quant.data            # fetch everything the series uses so far (resumes)
 """
@@ -340,6 +342,77 @@ def fred(series: str, start: str = "2015-01-01", through: str = "2025-12-31") ->
     frozen = json.dumps(a.round(6).tolist(), separators=(",", ":")).encode()
     _check(f"fred/{series}/{start}_{through}", frozen, f"{FRED}?id={series}")
     return {"date": a[:, 0].astype(int), "value": a[:, 1]}
+
+
+SHILLER = "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
+
+
+def shiller(through: str = "2020-12") -> dict:
+    """Robert Shiller's monthly data (the "Data" sheet of ie_data.xls): ``t`` (fractional year), ``price`` (S&P
+    composite, monthly average of daily closes), ``div`` and ``earn`` (twelve-month totals, nominal), ``cpi``,
+    ``gs10`` (10-year Treasury yield, percent) and ``cape`` (the cyclically adjusted P/E), through ``through``.  Shiller
+    revises recent months, so the manifest checks the frozen window."""
+    import xlrd
+
+    path = DATA / "shiller" / "ie_data.xls"
+    if not path.exists():
+        _atomic_write(path, _get(SHILLER))
+    sh = xlrd.open_workbook(str(path)).sheet_by_name("Data")
+    rows = []
+    for i in range(sh.nrows):
+        r = sh.row_values(i)
+        if not isinstance(r[0], float):
+            continue
+        y = int(r[0])
+        m = int(round((r[0] - y) * 100))
+        if not (1 <= m <= 12):
+            continue
+
+        def num(x):
+            return float(x) if isinstance(x, float) else np.nan
+
+        rows.append([y + (m - 1) / 12, num(r[1]), num(r[2]), num(r[3]), num(r[4]), num(r[6]), num(r[12])])
+    a = np.array(rows)
+    y1, m1 = map(int, through.split("-"))
+    a = a[a[:, 0] <= y1 + (m1 - 1) / 12 + 1e-6]
+    frozen = json.dumps(np.nan_to_num(a, nan=-1).round(6).tolist(), separators=(",", ":")).encode()
+    _check(f"shiller/ie_data/through_{through}", frozen, SHILLER)
+    return {"t": a[:, 0], "price": a[:, 1], "div": a[:, 2], "earn": a[:, 3], "cpi": a[:, 4], "gs10": a[:, 5],
+            "cape": a[:, 6]}
+
+
+def ken_french_sorts(name: str, through: str = "2020-12", weighting: str = "value") -> dict:
+    """Monthly returns (decimal) of the portfolios in Kenneth French's ``Portfolios_Formed_on_<name>`` file: ``date``
+    (YYYYMM ints), ``columns`` (the file's portfolio names) and ``returns`` (months x portfolios), from the first
+    (value-weighted) or second (equal-weighted) monthly block, through ``through``."""
+    fn = f"Portfolios_Formed_on_{name}_CSV.zip"
+    path = DATA / "kenfrench" / fn
+    if not path.exists():
+        _atomic_write(path, _get(f"{KF}/{fn}"))
+    with zipfile.ZipFile(path) as z:
+        text = z.read(z.namelist()[0]).decode("latin-1")
+    blocks, cur, header = [], None, None
+    for line in text.splitlines():
+        parts = [p.strip() for p in line.split(",")]
+        if parts[0] == "" and len(parts) > 2 and cur is None:
+            header = parts[1:]
+            continue
+        if parts[0].isdigit() and len(parts[0]) == 6:
+            if cur is None:
+                cur = {"header": header, "rows": []}
+            cur["rows"].append([int(parts[0])] + [float(x) for x in parts[1:]])
+        elif cur is not None:
+            blocks.append(cur)
+            cur = None
+    if cur is not None:
+        blocks.append(cur)
+    b = blocks[0 if weighting == "value" else 1]
+    a = np.array(b["rows"])
+    a = a[a[:, 0] <= int(through.replace("-", ""))]
+    a[:, 1:] = np.where(a[:, 1:] <= -99.99, np.nan, a[:, 1:] / 100)
+    frozen = json.dumps(np.nan_to_num(a, nan=-1).round(8).tolist(), separators=(",", ":")).encode()
+    _check(f"kenfrench/{name}_{weighting}/through_{through}", frozen, f"{KF}/{fn}")
+    return {"date": a[:, 0].astype(int), "columns": b["header"], "returns": a[:, 1:]}
 
 
 # ---------------------------------------------------------------------------

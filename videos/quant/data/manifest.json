@@ -1,4 +1,64 @@
 {
+ "binance/futures/um/BTCUSDT/1d/2020-01": {
+  "sha256": "83f80bb879d556dc26e10bd8dca5d6a1d4484247dd1a536431fad767f7978268",
+  "bytes": 1978,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-01.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-02": {
+  "sha256": "222261bba40db8b35ace2cf48e4b031acc262959afe51606d6006f85e80b7afb",
+  "bytes": 1866,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-02.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-03": {
+  "sha256": "5995a21df99508a3d3605c9aa7a54acf8bfa08d8dd5f1d1ed79031baf41e953a",
+  "bytes": 2025,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-03.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-04": {
+  "sha256": "ece152d49d8dadf02e6d3f3193071ba94a71bf571a4565374255f91624122c3d",
+  "bytes": 1945,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-04.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-05": {
+  "sha256": "2b9c8f3955539dc29dcb25d6915e35f434c82eddca4483e9c062310e6cd85acd",
+  "bytes": 2014,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-05.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-06": {
+  "sha256": "d52e253535b75f5af2442d620d3eb3d1e06e1e565c8ed92fb93a96b449bce7b5",
+  "bytes": 1922,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-06.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-07": {
+  "sha256": "03a84112408f3ce5beedd98af8195cd53482b5271b434e1c48e5ea3c629ddb23",
+  "bytes": 1983,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-07.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-08": {
+  "sha256": "92cca88204659005d28e1c6b49ab0a06051adea7d2ba7e918b4d8e4b178d86f5",
+  "bytes": 2008,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-08.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-09": {
+  "sha256": "33dfb6af799a004f676b8cf9c81f6db3cbdb4e9183d256a626c24a8e4adf80e5",
+  "bytes": 1953,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-09.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-10": {
+  "sha256": "22fefc0b40cec702ff683c2ef9d25c1e249677ca8055cef4d07d83839e480ad8",
+  "bytes": 2006,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-10.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-11": {
+  "sha256": "15297014b7d6ee07dd90d97e4192e0949817da3c53ed26ef467857a53f29e0c4",
+  "bytes": 1998,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-11.zip"
+ },
+ "binance/futures/um/BTCUSDT/1d/2020-12": {
+  "sha256": "6cba4bb0135c45c8be87a88d0ea712455aa805b36faa431ebf30937b12d52c1d",
+  "bytes": 2068,
+  "source": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2020-12.zip"
+ },
  "binance/futures/um/BTCUSDT/1h/2020-01": {
   "sha256": "512a1d725c8df97a1bbbee4f118e730e9628500a8f271c9e59d2a7fc5fbfcfcc",
   "bytes": 37271,
@@ -1309,6 +1369,31 @@
   "bytes": 9615,
   "source": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=WRESBAL"
  },
+ "kenfrench/AC_value/through_2020-12": {
+  "sha256": "ca39fefcb47ac5bf9b4ea1fcaed3e875994d59318c1eb51049d9735ebe002ab7",
+  "bytes": 82895,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_AC_CSV.zip"
+ },
+ "kenfrench/BE-ME_value/through_2020-12": {
+  "sha256": "f815a5c416a6b97b087a8b9cafdc3d02d831ead8514396be662e3fb5e6a64e6f",
+  "bytes": 169045,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_BE-ME_CSV.zip"
+ },
+ "kenfrench/E-P_value/through_2020-12": {
+  "sha256": "f6b3329087d7f1116cc85b2943eebc3550b2df9fece43c6b81a2c37fb12364a2",
+  "bytes": 124262,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_E-P_CSV.zip"
+ },
+ "kenfrench/INV_value/through_2020-12": {
+  "sha256": "0b4ad951ff827ce6133761bc49f82ae6f8f9ffc6f281276350b7489f32176a89",
+  "bytes": 97860,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_INV_CSV.zip"
+ },
+ "kenfrench/OP_value/through_2020-12": {
+  "sha256": "49ac26966f29e3ebf5ef07f7d857503f0fe22c5a8e234140eddfa7bf0748b7c7",
+  "bytes": 98052,
+  "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_OP_CSV.zip"
+ },
  "kenfrench/daily_factors/through_2025-12-31": {
   "sha256": "40782c306bc1378b854a6bf42be100809cff4b6a538c15dc5c21f9c9a94ceaec",
   "bytes": 1070449,
@@ -1318,5 +1403,10 @@
   "sha256": "81f1224d428adeaa10682134f1997a54dda765794a00bb10ff0dbf698f010ed3",
   "bytes": 2255765,
   "source": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/Portfolios_Formed_on_ME_daily_CSV.zip"
+ },
+ "shiller/ie_data/through_2020-12": {
+  "sha256": "3996c62d804e16e818332a2f5b7ab97ca0d95b063d1d23ef5b8ed49390ab8089",
+  "bytes": 96604,
+  "source": "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
  }
 }

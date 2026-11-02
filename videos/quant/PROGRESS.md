@@ -80,12 +80,25 @@ long; SOFR 2.20 (13 Sep) 2.43 (16) 5.25 (17) 2.55 (18) 1.95 (19 Sep 2019), IOER 
 high-water mark (4.5% of the profit kept), $3,288 after a 1% fee. Scenes: all 12 written and previewed silently (`renders/qa/quant2/`); README with solutions. Remaining: Chinese
 (zh_lines.py, on-screen text), full build.
 
-## Part 3 data note
+## Part 3 plan (Value, Accounting and the Firm)
 
-SEC EDGAR (XBRL financial statement data sets) answers 403 from this container (it requires a contact e-mail in the
-User-Agent; the user's address must not be sent). Plan: Shiller's ie_data.xls (reachable: prices, dividends,
-earnings, CAPE since 1871) and Kenneth French's characteristic-sorted portfolios (accruals, operating profitability,
-investment, E/P, CF/P, dividend yield). XBRL point-in-time fundamentals wait for a machine that can reach EDGAR.
+Data (`explainer/quant/data.py`): `shiller()` (ie_data.xls via xlrd: price, div, earn, cpi, gs10, CAPE, 1871-2020)
+and `ken_french_sorts(name)` (monthly value-weighted sorts 1963-2020: AC accruals, OP profitability, INV investment;
+E-P from 1951; BE-ME from 1926). SEC EDGAR answers 403 here (it wants a contact e-mail in the User-Agent; the user's
+must not be sent), so XBRL point-in-time fundamentals wait for another machine; the chapter on XBRL is described,
+not computed.
+
+Chapters: 0 Hook (what is a share a claim on? a dividend stream; Shiller's price vs the present value of dividends,
+"Do stock prices move too much?", 1981); 1 time value: NPV, IRR, annuities, perpetuities, Gordon growth derived;
+2 the three statements as linked ledgers (a toy firm); 3 DCF and WACC, the value surface over growth and discount
+rate in 3D; 4 multiples and CAPE (Shiller): CAPE against the next ten years' real return, with the overlap caveat;
+5 Modigliani-Miller by arbitrage, taxes, the trade-off; 6 payout: dividend irrelevance, buybacks (desk question);
+7 equity as a call on the firm (Merton, Part 20 preview); 8 earnings and the post-announcement drift (Ball-Brown
+1968, Bernard-Thomas 1989; schematic, cited); 9 accounting signals that became factors, computed on French's sorts
+(Sloan's accruals, Novy-Marx's profitability, investment): long-short returns, Sharpe, by decade, and their decay
+after publication; 10 crisis file: Enron (2001) and Wirecard (2020), public record (verify dates and figures);
+11 the House: `house/valuation.py` (npv, irr, annuity, gordon, dcf, wacc, MM levered beta, Merton equity), tested,
+and the fundamentals store described; outro (desk: a debt-free firm buys back 10% at market: price and EPS).
 
 ## Next
 
