@@ -94,7 +94,7 @@ class Crisis(VoiceoverScene):
         d = np.asarray(r["reserves"]["date"])
         v = np.asarray(r["reserves"]["value"])
         xs = np.array([_x(z) for z in d])
-        g = axes([_x(20180101), _x(20201231)], [0, 3.4], x_length=8.0, y_length=4.0,
+        g = axes([_x(20180101), _x(20201231)], [0, 3.4], x_length=6.6, y_length=4.0,
                  ylabel=r"reserves banks hold at the Fed, \$ trillion", xticks=[_x(20180101), _x(20190101), _x(20200101),
                                                                             _x(20201231)],
                  xfmt=lambda vv: {_x(20180101): "2018", _x(20190101): "2019", _x(20200101): "2020",
@@ -108,11 +108,12 @@ class Crisis(VoiceoverScene):
             MathTex(r"s = r_{\text{repo}} - r_{\text{IOR}}", font_size=34, color=RATE),
             MathTex(r"s(R) = a + b\,e^{-c(R - 1.3)}", font_size=34, color=QC.HOUSE),
         ]
-        whys = [why(r"a bank lends reserves in repo only if it earns more than leaving them at the Fed", font_size=19),
-                why(r"flat when reserves are plentiful, steep when they are scarce", font_size=19)]
-        right = VGroup(rows[0], whys[0], rows[1], whys[1]).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-        for w in whys:
-            w.scale_to_fit_width(min(w.width, 4.4))
+        whys = [wrapped_label(r"a bank lends reserves in repo only if it earns more than leaving them at the Fed", 5.4,
+                              20, GREY_B),
+                wrapped_label(r"flat when reserves are plentiful, steep when they are scarce", 5.4, 20, GREY_B)]
+        right = VGroup(rows[0], whys[0], rows[1], whys[1]).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        right[2].shift(DOWN * 0.2)
+        right[3].shift(DOWN * 0.2)
         right.to_edge(RIGHT, buff=0.35).shift(UP * 0.8)
         with self.voiceover(
             "Why did one tax date break the market? Since 2017 the Federal Reserve had been shrinking its balance sheet, and "
@@ -163,7 +164,8 @@ class Crisis(VoiceoverScene):
             MathTex(rf"R < \$1.5\text{{tn: mean }}{tab[0]['mean']:+.1f}\,\text{{bp, max }}{tab[0]['max']:+.1f}", font_size=24,
                     color=RATE),
             MathTex(rf"R > \$3.5\text{{tn: mean }}{tab[4]['mean']:+.1f}\,\text{{bp}}", font_size=24, color=RATE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DR, buff=0.35)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        res.next_to([3.6, -1.7, 0], DOWN, buff=0)
         src = note(r"FRED: SOFR, IOER/IORB, WRESBAL; weekly, April 2018 -- December 2021; band: 8 bootstrap resamples; "
                    r"dashed: the linear baseline", font_size=15).to_edge(DOWN, buff=0.1)
         with self.voiceover(

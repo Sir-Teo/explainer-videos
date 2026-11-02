@@ -6720,7 +6720,10 @@
     "Exchanges and clearing houses": "交易所与清算所",
     "halt trading on large falls and size margin for them: Part 2 measured how often margin arrives too late": "大跌时暂停交易，并为此设定保证金：第2部分测量了保证金有多常来得太晚",
     "Options desks": "期权交易台",
-    "charge more for crash protection than a bell curve says: the skew of Parts 10 to 12": "为崩盘保护收取比钟形曲线更高的价格：第10到12部分的偏斜"
+    "charge more for crash protection than a bell curve says: the skew of Parts 10 to 12": "为崩盘保护收取比钟形曲线更高的价格：第10到12部分的偏斜",
+    "value per 100 of book": "每100账面价值的价值",
+    "irr_bisect(bond, 0.0, 0.2, steps=30)": "irr_bisect(bond, 0.0, 0.2, steps=30)",
+    "root 0.050000   width 1.9e-10": "root 0.050000   width 1.9e-10"
   },
   "phrases": {
     "you owe": "你欠",
