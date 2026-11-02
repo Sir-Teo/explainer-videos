@@ -5,19 +5,21 @@ import numpy as np
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar
 
-MODEL_C = {"EWMA": GREY_B, "GARCH": FC, "GJR": FC, "HAR": VOL, "HARQ": VOL, "LSTM": ALT, "Transformer": ALT}
-PARAMS = {"EWMA": r"0", "GARCH": r"3", "GJR": r"4", "HAR": r"4", "HARQ": r"5", "LSTM": r"1{,}233",
+MODEL_C = {"EWMA": GREY_B, "GARCH": FC, "GJR": FC, "HAR": VOL, "HARQ": VOL, "log-HAR": GOOD, "LSTM": ALT,
+           "Transformer": ALT}
+PARAMS = {"EWMA": r"0", "GARCH": r"3", "GJR": r"4", "HAR": r"4", "HARQ": r"5", "log-HAR": r"4", "LSTM": r"1{,}233",
           "Transformer": r"2{,}625"}
 SEES = {"EWMA": r"daily returns", "GARCH": r"daily returns", "GJR": r"daily returns, with sign",
-        "HAR": r"realized variance", "HARQ": r"RV and its noise", "LSTM": r"22 days of log RV",
-        "Transformer": r"22 days of log RV"}
+        "HAR": r"realized variance", "HARQ": r"RV and its noise", "log-HAR": r"log of realized variance",
+        "LSTM": r"22 days of log RV", "Transformer": r"22 days of log RV"}
+LATE = "log-HAR"  # added after the first results, and counted
 
 
 class Race(VoiceoverScene):
     def construct(self):
         r = load("race")
         self.card()
-        self.setup(r)
+        self.contestants(r)
         self.results(r)
         self.year(r)
 
@@ -27,7 +29,7 @@ class Race(VoiceoverScene):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def setup(self, r):
+    def contestants(self, r):
         # the calendar: train, validate, test
         x0, x1 = -6.2, 6.2
         n_tr, n_va, n_te = r["train_days"], r["val_days"], r["test_days"]
@@ -48,6 +50,8 @@ class Race(VoiceoverScene):
                       label(r"what it sees", font_size=21, color=GREY_B))
         cells = [head]
         for k in r["names"]:
+            if k == LATE:
+                continue
             cells.append(VGroup(label(k, font_size=23, color=MODEL_C[k]), MathTex(PARAMS[k], font_size=26,
                                                                                  color=MODEL_C[k]),
                                 label(SEES[k], font_size=21, color=GREY_A)))
@@ -88,68 +92,82 @@ class Race(VoiceoverScene):
     def results(self, r):
         names = list(r["names"])
         sc = r["scores"]
-        dm = r["dm_vs_har"]
+        dm, dml = r["dm_vs_har"], r["dm_vs_loghar"]
         order = sorted(names, key=lambda k: sc[k]["qlike"])
         q = np.array([sc[k]["qlike"] for k in order])
         hi = float(np.ceil(q.max() * 10 + 0.5) / 10)
-        g = axes([0, hi], [0, len(order)], x_length=6.6, y_length=4.8, xticks=list(np.round(np.linspace(0, hi, 5), 2)),
-                 xfmt=lambda u: f"{u:.2f}", yticks=[], xlabel=r"QLIKE in 2020 (lower is better)", font_size=17)
-        g.to_edge(LEFT, buff=2.2).shift(DOWN * 0.2)
+        g = axes([0, hi], [0, len(order)], x_length=6.0, y_length=5.0, xticks=list(np.round(np.linspace(0, hi, 4), 2)),
+                 xfmt=lambda u: f"{u:.1f}", yticks=[], xlabel=r"QLIKE in 2020 (lower is better)", font_size=17)
+        g.to_edge(LEFT, buff=1.9).shift(DOWN * 0.1)
         ax = g.ax
-        bars, labs, vals = VGroup(), VGroup(), VGroup()
+        bars, labs, vals = {}, {}, {}
         for i, k in enumerate(order):
             y = len(order) - i - 0.5
             left, right = ax.c2p(0, y), ax.c2p(sc[k]["qlike"], y)
             h = (ax.c2p(0, 0.62)[1] - ax.c2p(0, 0)[1])
-            b = Rectangle(width=max(right[0] - left[0], 0.01), height=h, stroke_width=0, fill_color=MODEL_C[k],
-                          fill_opacity=0.85).move_to((left + right) / 2)
-            bars.add(b)
-            labs.add(label(k, font_size=21, color=MODEL_C[k]).next_to(left, LEFT, buff=0.15))
-            t = "" if k == "HAR" else rf"\ \ (t = {dm[k]['t']:+.1f})"
-            vals.add(MathTex(f"{sc[k]['qlike']:.3f}" + t, font_size=22, color=GREY_A).next_to(b, RIGHT, buff=0.1))
+            bars[k] = Rectangle(width=max(right[0] - left[0], 0.01), height=h, stroke_width=0, fill_color=MODEL_C[k],
+                                fill_opacity=0.85).move_to((left + right) / 2)
+            labs[k] = label(k, font_size=20, color=MODEL_C[k]).next_to(left, LEFT, buff=0.15)
+            tv = 0.0 if k == "HAR" else dm[k]["t"]
+            t = "" if k == "HAR" else (r"\ \ (t = 0.0)" if abs(tv) < 0.05 else rf"\ \ (t = {tv:+.1f})")
+            edge = max([sc[k]["qlike"]] + list(r["seed_qlike"].get(k, [])))
+            vals[k] = MathTex(f"{sc[k]['qlike']:.3f}" + t, font_size=21, color=GREY_A).next_to(ax.c2p(edge, y), RIGHT,
+                                                                                                 buff=0.15)
         seeds = VGroup()
         for k in ("LSTM", "Transformer"):
-            i = order.index(k)
-            y = len(order) - i - 0.5
+            y = len(order) - order.index(k) - 0.5
             for v in r["seed_qlike"][k]:
                 seeds.add(Dot(ax.c2p(min(v, hi), y), radius=0.05, color=WHITE).set_opacity(0.8))
-        best = order[0]
-        nn_best = min(sc["LSTM"]["qlike"], sc["Transformer"]["qlike"])
+        mse_order = sorted(names, key=lambda k: sc[k]["mse"])
+        assert order[0] == LATE and dml["LSTM"]["t"] > 0, "the narration below describes this outcome"
         side = VGroup(
-            wrapped_label(r"$t$: Diebold--Mariano against HAR, Newey--West variance; negative means better than HAR",
-                          3.8, 19, GREY_A),
-            wrapped_label(r"white dots: the five seeds of each network, scored one at a time", 3.8, 19, GREY_A),
-            wrapped_label(r"models that see the intraday path (HAR, the networks) beat models that see only closes", 3.8,
-                          20, VOL),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
+            wrapped_label(r"$t$: Diebold--Mariano against HAR (Newey--West variance); below $-2$ beats HAR by more than "
+                          r"luck", 4.0, 19, GREY_A),
+            wrapped_label(r"added after the first results, and counted: HAR on the log of realized variance, which is "
+                          r"what the networks forecast", 4.0, 20, GOOD),
+            MathTex(rf"\text{{LSTM against log-HAR: }} t = {dml['LSTM']['t']:+.1f}", font_size=26, color=ALT),
+            wrapped_label(r"white dots: each network's five seeds, scored one at a time", 4.0, 19, GREY_A),
+            wrapped_label(rf"on squared error the order changes: {mse_order[0]} first, {mse_order[-1]} last. The loss is "
+                          r"a choice; QLIKE is the one that stays honest when the target is noisy.", 4.0, 19, VOL),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.3)
+        early = [k for k in order if k != LATE]
+        closes = [k for k in early if k in ("EWMA", "GARCH", "GJR")]
+        rest = [k for k in early if k not in closes]
         with self.voiceover(
             f"The results, over the {r['test_days']} days of 2020. Lower is better. <bookmark mark='a'/> The models "
-            "that see only daily closes, the exponential average, GARCH and GJR, come last. <bookmark mark='b'/> "
-            "The models that read the realized variance do much better. "
-            f"{best} came first. Next to each bar is a Diebold-Mariano test against HAR: a t-statistic below minus "
-            "two would mean a model beat HAR by more than luck. <bookmark mark='c'/> The white dots are the "
-            "networks' individual seeds. They scatter; averaging five of them helps; and the averages "
-            f"{'did not beat' if nn_best >= sc['HAR']['qlike'] else 'only matched'} four coefficients fitted by "
-            "least squares. With a thousand days of training data, the network has nothing to find that HAR's three "
-            "averages do not already hold."
+            "that see only daily closes, the exponential average, GARCH and GJR, come last. <bookmark mark='b'/> The "
+            "models that read the realized variance do better, and the two neural networks do better still. The "
+            "LSTM beats HAR with a Diebold-Mariano t-statistic of minus three. Has the network found something? "
+            "<bookmark mark='c'/> Look at what it forecasts: the logarithm of realized variance, not the variance. "
+            "Logs tame the spikes that dominate a least-squares fit. So, after seeing these results, we added one "
+            "more contestant, and the trial counter counts it: HAR again, four coefficients, fitted to the logarithm. "
+            f"<bookmark mark='d'/> It comes first. Against log-HAR, the LSTM's t-statistic is {dml['LSTM']['t']:.1f}, "
+            "in log-HAR's favour: no evidence that the network adds anything beyond the log. <bookmark mark='e'/> The white dots are the networks' individual seeds: "
+            "they scatter, and averaging five of them helps. <bookmark mark='f'/> And score the same forecasts by "
+            f"squared error, and the order changes: {mse_order[0]} comes first. A race is only as honest as its "
+            "loss function."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(labs))
+            self.play(FadeIn(g), *[FadeIn(labs[k]) for k in early], FadeIn(side[0]))
             vo.wait_until("a")
-            slow = [i for i, k in enumerate(order) if k in ("EWMA", "GARCH", "GJR")]
-            self.play(*[GrowFromEdge(bars[i], LEFT) for i in slow], *[FadeIn(vals[i]) for i in slow])
+            self.play(*[GrowFromEdge(bars[k], LEFT) for k in closes], *[FadeIn(vals[k]) for k in closes])
             vo.wait_until("b")
-            fast = [i for i in range(len(order)) if i not in slow]
-            self.play(*[GrowFromEdge(bars[i], LEFT) for i in fast], *[FadeIn(vals[i]) for i in fast])
-            self.play(FadeIn(side[0]), FadeIn(side[2]))
+            self.play(*[GrowFromEdge(bars[k], LEFT) for k in rest], *[FadeIn(vals[k]) for k in rest])
             vo.wait_until("c")
-            self.play(FadeIn(seeds), FadeIn(side[1]))
+            self.play(FadeIn(side[1]), FadeIn(labs[LATE]))
+            vo.wait_until("d")
+            self.play(GrowFromEdge(bars[LATE], LEFT), FadeIn(vals[LATE]), FadeIn(side[2]))
+            self.play(Indicate(labs[LATE], color=GOOD))
+            vo.wait_until("e")
+            self.play(FadeIn(seeds), FadeIn(side[3]))
+            vo.wait_until("f")
+            self.play(FadeIn(side[4]))
         self.wait(0.4)
         self.clear_scene()
 
     def year(self, r):
         t = np.asarray(r["test_t"])
         rv = np.asarray(r["test_rv"])
-        har, gar = np.asarray(r["test_har"]), np.asarray(r["test_garch"])
+        har, gar = np.asarray(r["test_loghar"]), np.asarray(r["test_garch"])
         g = axes([2020, 2021], [0, 2.5], x_length=10.4, y_length=4.4,
                  xticks=[2020, 2020.25, 2020.5, 2020.75, 2021],
                  xfmt=lambda u: {0: "Jan", 1: "Apr", 2: "Jul", 3: "Oct", 4: "Jan"}[round((u - 2020) * 4)],
@@ -158,13 +176,13 @@ class Race(VoiceoverScene):
         ax = g.ax
         dots = VGroup(*[Dot(ax.c2p(tt, min(v, 2.5)), radius=0.03, color=BAD).set_opacity(0.7) for tt, v in zip(t, rv)])
         lg = curve(ax, t, np.clip(gar, 0, 2.5), FC, stroke_width=2.5)
-        lh = curve(ax, t, np.clip(har, 0, 2.5), VOL, stroke_width=2.5)
-        leg = legend([(BAD, r"realized"), (FC, r"GARCH, the day before"), (VOL, r"HAR, the day before")], font_size=19)
+        lh = curve(ax, t, np.clip(har, 0, 2.5), GOOD, stroke_width=2.5)
+        leg = legend([(BAD, r"realized"), (FC, r"GARCH, the day before"), (GOOD, r"log-HAR, the day before")], font_size=19)
         leg.next_to(g, UP, buff=0.1).align_to(g, RIGHT)
         src = real_data(r"Binance BTCUSDT one-minute candles; models fitted to June 2019, tested on 2020")
         with self.voiceover(
             "Here is the whole test year. Each dot is a day's realized volatility. GARCH, which sees only closing "
-            "prices, follows slowly and overshoots after big days. <bookmark mark='a'/> HAR, reading the whole "
+            "prices, follows slowly and overshoots after big days. <bookmark mark='a'/> Log-HAR, reading the whole "
             "day's path, tracks the level more closely. Neither forecasts the spikes: no model can. The skill in "
             "volatility forecasting is the level, not the surprises."
         ) as vo:

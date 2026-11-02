@@ -37,7 +37,7 @@ class House(VoiceoverScene):
             tab.scale_to_fit_width(13.0)
         rule = wrapped_label(r"Rule 8: every forecast is scored out of sample, against a simple benchmark, with a loss "
                              r"that is robust to noise in what it is judged against.  "
-                             rf"The race was registered: the trial counter reads {env['trials']}.",
+                             rf"Eight models raced, one added after a first look: the trial counter reads {env['trials']}.",
                              12.4, 23, QC.HOUSE).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "The House's data desk now carries a volatility forecaster, the engine the volatility desk will run on "
@@ -47,8 +47,8 @@ class House(VoiceoverScene):
             "Kalman filter. Tests for unit roots and cointegration. And the scoring: QLIKE and the Diebold-Mariano "
             "test, each checked against simulated data with a known answer. <bookmark mark='b'/> The eighth rule: "
             "every forecast is scored out of sample, against a simple benchmark, with a loss that stays honest when "
-            "the target is measured with noise. The race was registered before it was run; seven models, so the "
-            f"trial counter now reads {env['trials']}."
+            "the target is measured with noise. The race was registered before it was run, and the model we added "
+            f"after the first look was registered too: eight in all, so the trial counter now reads {env['trials']}."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["vol"], color=QC.HOUSE, scale_factor=1.05))

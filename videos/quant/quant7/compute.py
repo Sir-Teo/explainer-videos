@@ -16,7 +16,7 @@ Research window: to December 2020.  Items (seeded; seconds to a few minutes on a
 * ``har``       HAR and HARQ on Bitcoin's realized variance, 2017-2019, with Newey-West t-statistics; the cascade of the
                 daily, weekly and monthly averages in 2019;
 * ``race``      next-day realized variance forecasts for Bitcoin, 2020 (trained on 2017-2019): EWMA, GARCH, GJR,
-                HAR-RV, HARQ, an LSTM and a small transformer (5 seeds each), scored by QLIKE and MSE with
+                HAR-RV, HARQ, log-HAR (added after the first results), an LSTM and a small transformer (5 seeds each), scored by QLIKE and MSE with
                 Diebold-Mariano tests; and every model's forecast for 12 March 2020;
 * ``scaling``   square-root-of-time: GARCH's term structure of volatility against sqrt(T), on 13 March 2020;
 * ``envelope``  registers the forecasting race (trial counter).
@@ -236,6 +236,7 @@ def _nn_forecasts(lrv, train_end, val_end, kind, seed, lookback=22, epochs=300):
     """Train a small LSTM or transformer to predict tomorrow's log RV from the past ``lookback`` days."""
     import torch
 
+    torch.set_num_threads(1)  # tiny models: more threads only contend with the renders (40x slower measured)
     torch.manual_seed(seed)
     np.random.seed(seed)
     mu, sd = lrv[:train_end].mean(), lrv[:train_end].std()
@@ -334,13 +335,25 @@ def compute_race() -> dict:
         full[22:] = p[:n - 22]
         fc[name] = np.maximum(full, 1e-8)
     lrv = np.log(rv)
+    # log-HAR: HAR on log RV, mapped back with the log-normal mean (training residual variance).  Added after the first
+    # results showed the networks, which model log RV, beating HAR in levels: it separates the log from the network.
+    fit_ = vol.har_fit(lrv[:test0])
+    _, ytr = vol._har_design(lrv[:test0])
+    s2 = float(np.var(ytr - fit_["fitted"]))
+    p = vol.har_predict(fit_["beta"], lrv)
+    full = np.full(n, np.nan)
+    full[22:] = np.exp(p[:n - 22] + 0.5 * s2)
+    fc["log-HAR"] = full
     seeds = [0, 1, 2, 3, 4]
     nn = {}
     for kind, label in (("lstm", "LSTM"), ("tf", "Transformer")):
-        runs = [_nn_forecasts(lrv, val0, test0, kind, s) for s in seeds]
+        runs = []
+        for s in seeds:
+            runs.append(_nn_forecasts(lrv, val0, test0, kind, s))
+            print(f"    {label} seed {s} trained", flush=True)
         nn[label] = runs
         fc[label] = np.nanmean(np.array(runs), axis=0)
-    names = ["EWMA", "GARCH", "GJR", "HAR", "HARQ", "LSTM", "Transformer"]
+    names = ["EWMA", "GARCH", "GJR", "HAR", "HARQ", "log-HAR", "LSTM", "Transformer"]
     test = np.arange(test0, n)
     test = test[np.all([np.isfinite(fc[k][test]) for k in names], axis=0)]
     scores = {}
@@ -350,17 +363,20 @@ def compute_race() -> dict:
         scores[k] = {"qlike": float(ql.mean()), "mse": float(se.mean())}
     dm = {k: vol.diebold_mariano(vol.qlike(fc[k][test], rv[test]), vol.qlike(fc["HAR"][test], rv[test]))
           for k in names if k != "HAR"}
+    dm_log = {k: vol.diebold_mariano(vol.qlike(fc[k][test], rv[test]), vol.qlike(fc["log-HAR"][test], rv[test]))
+              for k in ("LSTM", "Transformer")}
     seed_q = {lab: [float(vol.qlike(np.asarray(r)[test], rv[test]).mean()) for r in runs] for lab, runs in nn.items()}
     i12 = int(np.searchsorted(ymd, 20200312))
     march = {k: float(np.sqrt(fc[k][i12] * 365)) for k in names}
     march["realized"] = float(np.sqrt(rv[i12] * 365))
     w = (ymd >= 20200201) & (ymd <= 20200430)
-    return _json({"names": names, "scores": scores, "dm_vs_har": dm, "seed_qlike": seed_q, "march12": march,
+    return _json({"names": names, "scores": scores, "dm_vs_har": dm, "dm_vs_loghar": dm_log, "seed_qlike": seed_q, "march12": march,
                   "test_days": int(len(test)), "train_days": int(val0), "val_days": int(test0 - val0),
                   "window_t": rz["t"][w.nonzero()[0][0]:w.nonzero()[0][-1] + 1],
                   "window_rv": np.sqrt(rv[w] * 365), "window_fc": {k: np.sqrt(fc[k][w] * 365) for k in names},
                   "test_t": np.asarray(rz["t"])[test], "test_rv": np.sqrt(rv[test] * 365),
-                  "test_har": np.sqrt(fc["HAR"][test] * 365), "test_garch": np.sqrt(fc["GARCH"][test] * 365)})
+                  "test_har": np.sqrt(fc["HAR"][test] * 365), "test_garch": np.sqrt(fc["GARCH"][test] * 365),
+                  "test_loghar": np.sqrt(fc["log-HAR"][test] * 365), "test_lstm": np.sqrt(fc["LSTM"][test] * 365)})
 
 
 # ---------------------------------------------------------------------------
@@ -384,8 +400,9 @@ def compute_scaling() -> dict:
 # ---------------------------------------------------------------------------
 def compute_envelope() -> dict:
     reg = {"btc_vol_race_2020": pit.register("btc_vol_race_2020", inspect.getsource(compute_race),
-                                             {"models": ["EWMA", "GARCH", "GJR", "HAR", "HARQ", "LSTM", "Transformer"],
-                                              "seeds": 5, "test": "2020"}, trials=7)}
+                                             {"models": ["EWMA", "GARCH", "GJR", "HAR", "HARQ", "log-HAR", "LSTM",
+                                                         "Transformer"], "seeds": 5, "test": "2020",
+                                              "note": "log-HAR added after the first results; counted"}, trials=8)}
     return _json({"registered": reg, "trials": pit.trials_so_far()})
 
 

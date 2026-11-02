@@ -52,8 +52,8 @@ class Outro(VoiceoverScene):
             (r"the stock--bond correlation changed sign around 2000", ALT),
             (rf"Bitcoin's volatility, measured properly: {100 * z['vol_tsrv']:.0f}\%, of which jumps are "
              rf"{100 * z['jump_share']:.0f}\% of the variance", VOL),
-            (rf"the race, out of sample in 2020: {best} first on QLIKE; neural networks trained here did not beat HAR",
-             GOOD),
+            (rf"the race, out of sample in 2020: {best} first on QLIKE; the LSTM's edge over HAR was the logarithm, "
+             r"not the network", GOOD),
             (r"$\sqrt{T}$ assumes volatility stands still; it mean-reverts", BAD),
         ]
         rows = VGroup()
@@ -70,8 +70,9 @@ class Outro(VoiceoverScene):
             "Volatility is a slow hidden state under noisy returns. Ninety-four years of the American market give "
             "a GARCH with a persistence close to one, and bad news moves volatility more than good. The correlation "
             "between stocks and bonds changed sign around 2000. Measured properly, Bitcoin's volatility is about "
-            "ninety percent a year, and a tenth of its variance comes from jumps. In an honest race over 2020, "
-            f"{best} came first, and the neural networks did not beat four numbers fitted by least squares. And the "
+            "ninety percent a year, and a tenth of its variance comes from jumps. In an honest race over 2020, a "
+            "neural network beat HAR, until HAR was fitted to the logarithm too; then four numbers fitted by least "
+            "squares came first. And the "
             "square-root-of-time rule assumes volatility stands still. It doesn't."
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,

@@ -35,18 +35,17 @@ Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitigno
 
 ## In progress
 
-- **Part 10 narrated build** with the CPU voice (Kokoro-82M; `python tools/make.py quant10 --cpu-voice -q m --steps build
-  check`, logs `renders/make/quant10_cpu_voice.log`, `quant10.en.log`, `quant10.zh.log`). Rerun the same command after
-  an interruption: narration and scenes are cached.
-- **Part 1 (The Fair Game)**: compute (13 items), House `stats`, `pit`, `smile` (tested), all 16 scenes written and
-  previewed silently, README with solutions, Chinese narration (76 of 76 lines). Remaining: on-screen text table
-  (`collect_text.py quant1`, then `--check`), the Chinese dry run, a full silent build and `dead_air.py`, then the
-  narrated build (`python tools/make.py quant1 --cpu-voice -q m`).
+- **Narrated builds** (CPU voice, Kokoro-82M, 720p): Part 10 is finished, English and Chinese
+  (`renders/quant10_720p.mp4`, `renders/quant10_720p_zh.mp4`; `dead_air.py` finds 3 s of blank screen in 55 min).
+  Parts 1 to 6 are queued, in that order.
+- **Part 7** (Time Series and Volatility): every scene, the README, the Chinese narration and the on-screen text are
+  done. The Chinese dry run is in progress (`renders/make/quant7_zh_dry.log`); the narrated build goes in the queue
+  after Part 6.
 
 ## Builds queued (CPU voice, 720p)
 
 Scratchpad scripts chain the builds: queue.sh (quant10, quant1, quant2) -> queue2.sh (quant3) -> queue3.sh (quant4) ->
-queue4.sh (quant5). After a container restart, rerun `python tools/make.py quantN --cpu-voice -q m --steps build check`
+queue4.sh (quant5) -> queue5.sh (quant6). After a container restart, rerun `python tools/make.py quantN --cpu-voice -q m --steps build check`
 for each part in order; finished scenes are cached.
 
 
@@ -157,12 +156,40 @@ size 77% / 17% / 14%), stambaugh (annual DY beta 0.034 -> 0.016), gmm (beta 1.00
 421), event (turn of month: 74% of returns 1926-86, 45% after), panel (t: 1.86, 1.21, 0.27, 0.27, FM 5.08), bootstrap
 (SR 0.44, se 0.103 iid / 0.119 block), shrinkage (MSE 8.0 -> 3.8), multiple (5 of 49 raw, 0 after any correction),
 ellipse, dml (0.300 vs naive 1.15), snr; envelope sealed industries, monthly factors, PCE; trials 63. 9 scenes, README
-(EN, ZH), zh_lines 32/32. Remaining: on-screen text (collect running), Chinese dry run, queue narrated build.
+(EN, ZH), zh_lines 32/32, on-screen text, Chinese dry run passed (all 9). Narrated build queued (queue5.sh).
+
+## Part 7 (Time Series and Volatility), 2 Nov 2026
+
+House `vol.py` (realized measures, GARCH/GJR/EGARCH by MLE on rescaled returns, HAR/HARQ, QLIKE, Diebold-Mariano,
+ADF, Engle-Granger, Hamilton EM, Kalman local level, DCC) tested. The compute items:
+- spurious: 89% of levels regressions reject; BTC on the US market gives t 24.
+- coint: spot and perp are cointegrated, EG t -7.2, half-life 1.2 days.
+- regimes: calm 55 months, turbulent 10, turbulent 14% of the time.
+- garch: US alpha .105, beta .884, half-life 63 days; GJR gamma .111.
+- dcc: the stock-bond correlation is +0.2 to +0.3 to the 1990s, then -0.33 and -0.46.
+- realized: from Binance one-minute data, RV1 106%, RV5 96%, TSRV/RK 93%, BV 92%, jumps 10%.
+- har: b_d .41, b_w .03, b_m .43, R2 .38; HARQ b_q -3.0 (t -0.7).
+- race: QLIKE on 2020 ranks log-HAR .363, LSTM .371, transformer .410, HARQ .426, HAR .427, GJR .444, GARCH .452 and
+  EWMA .512. The LSTM beats HAR (DM t -3.0) but not log-HAR (t +1.5). On MSE, GJR is first.
+- scaling: on 13 March 2020, GARCH spot vol is 85% and the one-year average 52%.
+- envelope: trials 71. Log-HAR was added after the first look; this is disclosed on screen and counted.
+
+There are 8 scenes, a README (EN, ZH), zh_lines 34/34 and the on-screen text (188 strings).
+
+Notes for whoever picks this up:
+- **PyTorch threads.** Train tiny networks with `torch.set_num_threads(1)`. With the renders running, the default
+  thread pool made the race about 40x slower (more than an hour, against 25 s).
+- **System pip.** An earlier session ran pip against the system Python, which added several GB to its
+  site-packages. Removing them needs the user's go-ahead; the project venv is unaffected.
+- **Deferred to production.** The zero-shot foundation models (Chronos, TimesFM, Moirai) need packages outside the
+  venv, and installing or importing external code needs approval. The race uses CPU models trained here.
 
 ## Next
 
 1. Narrated masters, on a machine with the TTS server (README, "Narration"; Qwen3-TTS is 10-30x slower than real
    time on CPU, so not in a 4-core cloud container): `python tools/make.py quant10` (English and Chinese, 1080p30),
    or `tools/colab_narrate.py` on a Colab GPU. Then `tools/dead_air.py` on the narrated cut.
-2. Act II: Part 7 (Time Series and Volatility) next, then 8; then Act III from Part 9.
+2. Act II: Part 8 (Decisions and Control) next, then Act III from Part 9. Part 8's plan: utility and certainty
+   equivalents; Bellman/HJB; Merton by HJB and by simulation; Kelly, fractional Kelly, Thorp, and Samuelson's
+   objection; optimal stopping; prospect theory and ambiguity; PPO on Merton against the closed form (CPU).
 3. Phase 0 remainder: `qa_report.py` and `package_uploads.py` still list only the AI series.

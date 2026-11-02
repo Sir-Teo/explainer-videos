@@ -5,7 +5,8 @@ import numpy as np
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar
 
-MODEL_C = {"EWMA": GREY_B, "GARCH": FC, "GJR": FC, "HAR": VOL, "HARQ": VOL, "LSTM": ALT, "Transformer": ALT}
+MODEL_C = {"EWMA": GREY_B, "GARCH": FC, "GJR": FC, "HAR": VOL, "HARQ": VOL, "log-HAR": GOOD, "LSTM": ALT,
+           "Transformer": ALT}
 
 
 class March(VoiceoverScene):
@@ -49,22 +50,22 @@ class March(VoiceoverScene):
     def day_before(self, race):
         names = list(race["names"])
         m = race["march12"]
-        vmax = 4.0
-        g = axes([0, len(names)], [0, vmax], x_length=7.6, y_length=4.4, xticks=[], yticks=[0, 1, 2, 3, 4],
+        vmax = 5.0
+        g = axes([0, len(names)], [0, vmax], x_length=7.6, y_length=4.4, xticks=[], yticks=[0, 1, 2, 3, 4, 5],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", ylabel=r"forecast of 12 March's volatility, made on the 11th",
                  font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.15)
         ax = g.ax
         bars = VGroup(*[tbar(ax, i + 0.5, min(m[k], vmax), MODEL_C[k], width=0.6) for i, k in enumerate(names)])
         vals = VGroup(*[MathTex(f"{100 * m[k]:.0f}\\%", font_size=22, color=MODEL_C[k]).next_to(b, UP, buff=0.05)
                         for k, b in zip(names, bars)])
-        labs = VGroup(*[label(k if k != "Transformer" else r"Transf.", font_size=17, color=GREY_A).next_to(
+        labs = VGroup(*[label({"Transformer": r"Transf.", "log-HAR": r"log-HAR"}.get(k, k), font_size=16, color=GREY_A).next_to(
             ax.c2p(i + 0.5, 0), DOWN, buff=0.1) for i, k in enumerate(names)])
         real = m["realized"]
         top = min(real, vmax)
         rl = DashedLine(ax.c2p(0, top), ax.c2p(len(names), top), color=BAD, stroke_width=3)
         rlab = MathTex(rf"\text{{realized on 12 March: }} {100 * real:.0f}\%" + (r"\ (\text{off the chart})"
                                                                                  if real > vmax else ""),
-                       font_size=26, color=BAD).next_to(rl, UP, buff=0.08).align_to(rl, RIGHT)
+                       font_size=26, color=BAD).next_to(rl, DOWN, buff=0.12).align_to(rl, RIGHT)
         best = max((k for k in names), key=lambda k: m[k])
         side = VGroup(
             wrapped_label(rf"every model forecast {100 * min(m[k] for k in names):.0f}--{100 * max(m[k] for k in names):.0f}\%: "
@@ -102,14 +103,14 @@ class March(VoiceoverScene):
         fc = race["window_fc"]
         g2 = axes([2020 + 31 / 365, 2020 + 120 / 365], [0, 3.0], x_length=9.0, y_length=4.4,
                   xticks=[2020 + 31 / 365, 2020 + 60 / 365, 2020 + 91 / 365, 2020 + 120 / 365],
-                  xfmt=lambda u: {32: "1 Feb", 61: "1 Mar", 92: "1 Apr", 121: "30 Apr"}[round((u - 2020) * 365) + 1],
+                  xfmt=lambda u: {32: r"1\ Feb", 61: r"1\ Mar", 92: r"1\ Apr", 121: r"30\ Apr"}[round((u - 2020) * 365) + 1],
                   yticks=[0, 1, 2, 3], yfmt=lambda u: f"{100 * u:.0f}\\%", ylabel=r"Bitcoin's volatility, annualised",
                   font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         a2 = g2.ax
         dots = VGroup(*[Dot(a2.c2p(tt, min(v, 3.0)), radius=0.045, color=BAD) for tt, v in zip(t, rv)])
         lines = {k: curve(a2, t, np.clip(np.asarray(fc[k]), 0, 3.0), MODEL_C[k], stroke_width=3)
-                 for k in ("GARCH", "HAR", "LSTM")}
-        leg = legend([(BAD, r"realized (5-minute)"), (FC, r"GARCH"), (VOL, r"HAR"), (ALT, r"LSTM")], font_size=19)
+                 for k in ("GARCH", "HAR", "log-HAR")}
+        leg = legend([(BAD, r"realized (5-minute)"), (FC, r"GARCH"), (VOL, r"HAR"), (GOOD, r"log-HAR")], font_size=19)
         leg.next_to(g2, RIGHT, buff=0.4).align_to(g2, UP)
         nt = wrapped_label(r"GARCH sees only the daily close; HAR sees the whole day's path. After the shock, both "
                            r"over-forecast for weeks: volatility decays faster than either expects.", 3.4, 20, GREY_A)
