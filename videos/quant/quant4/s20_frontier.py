@@ -39,7 +39,7 @@ class Frontier(VoiceoverScene):
 
     def card(self):
         c = chapter_card(18, r"Frontier: anytime-valid inference, 2023--2026", r"What is being built on Ville's idea now?",
-                         lit=(2023, 2025), part=PART)
+                         part=PART)
         with self.voiceover("Chapter eighteen. The frontier: anytime-valid inference, from 2023 to 2026."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

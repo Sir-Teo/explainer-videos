@@ -54,8 +54,8 @@ class TimeValue(VoiceoverScene, ThreeDScene):
             for t in range(1, n + 1):
                 h = 3.0 / (1 + rr) ** t
                 col = interpolate_color(ManimColor(CASH), ManimColor(GREY_D), t / n)
-                b = Prism(dimensions=[0.5, 0.3, max(h, 0.01)], fill_color=col, fill_opacity=0.85, stroke_width=0.4,
-                          stroke_color=BLACK)
+                b = Rectangle(width=0.5, height=max(h, 0.01), fill_color=col, fill_opacity=0.85, stroke_width=0.6,
+                              stroke_color=BLACK).rotate(PI / 2, RIGHT)  # a card standing up, facing the viewer
                 b.move_to([0, 0.55 * t - 6.0, h / 2])
                 g.add(b)
             return g

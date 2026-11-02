@@ -5,11 +5,13 @@
     python tools/lecture_length.py ai26 --floor 30      # the floor in minutes (default 30, the AI series' minimum)
     python tools/lecture_length.py --series ai          # every part of a series, one line each
 
-The estimate counts the words of every ``self.voiceover(...)`` line in the scene source at 140 words a minute (the
-narrator's pace, measured on Part 1) and adds the time animations run outside narration (``self.wait`` and the
+The estimate counts the words of every ``self.voiceover(...)`` line in the scene source at the series' pace (140
+words a minute for the AI series, measured on Part 1; 168 for *Quant, Built*, measured on its rendered Parts 1 and
+10, whose CPU voice is faster) and adds the time animations run outside narration (``self.wait`` and the
 default 1 s per ``self.play`` outside a voiceover block are ignored: they are small).  Lines built from data
 (f-strings) count their literal words plus three per placeholder.  When a render exists, each scene's measured
-duration (from its ``.narration.json``) replaces the estimate.
+duration (from its ``.narration.json``) replaces the estimate, unless the scene's source is newer than that render
+(a rewritten chapter is estimated again until it is re-rendered).
 """
 
 from __future__ import annotations
@@ -27,6 +29,11 @@ sys.path.insert(0, str(ROOT))
 from explainer.paths import VIDEOS, video_dir, video_package  # noqa: E402
 
 WPM = 140
+SERIES_WPM = {"quant": 168}
+
+
+def wpm(video: str) -> float:
+    return SERIES_WPM.get(video_dir(video).parent.name, WPM)
 BOOKMARK = re.compile(r"<bookmark[^>]*/>")
 
 
@@ -53,6 +60,9 @@ def measured(video: str, module: str, cls: str) -> float | None:
                    key=lambda p: p.stat().st_mtime)
     if not metas:
         return None
+    src = video_dir(video) / f"{module}.py"
+    if src.exists() and src.stat().st_mtime > metas[-1].stat().st_mtime:
+        return None  # the chapter changed since it was rendered
     try:
         return float(json.loads(metas[-1].read_text())["duration"])
     except (KeyError, ValueError):
@@ -70,7 +80,7 @@ def report(video: str, verbose=True) -> float:
             continue
         w = narration_words(src, cls)
         m = measured(video, module, cls)
-        secs = m if m is not None else 60 * w / WPM
+        secs = m if m is not None else 60 * w / wpm(video)
         total += secs
         rows.append((chapter, w, secs, m is not None))
     if verbose:

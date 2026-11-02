@@ -639,7 +639,7 @@ def compute_dual_path() -> dict:
     for trial in range(40):  # pick an outer path that goes into the money, so the picture has something to show
         S = np.array([S0])
         C, fan0 = continuation(0, S, True)
-        Ss, hs, pis, gaps, fans, Ls = [S0], [0.0], [0.0], [0.0], [fan0[:, 0]], []
+        Ss, hs, pis, gaps, fans, Ls = [S0], [0.0], [0.0], [0.0], [fan0], []
         pi = np.zeros(1)
         best = np.maximum(K - S, 0) - pi
         for i in range(1, n_steps + 1):
@@ -654,7 +654,7 @@ def compute_dual_path() -> dict:
             hs.append(float(np.exp(-R * i * dt) * h[0]))
             pis.append(float(pi[0]))
             gaps.append(float(gap[0]))
-            fans.append(fan[:, 0] if fan is not None else np.array([S[0]]))
+            fans.append(fan if fan is not None else np.array([[S[0]]]))
             C = Cn
         if min(Ss) < 88 and best_path is None:
             best_path = {"S": Ss, "h": hs, "pi": pis, "gap": gaps, "max": float(best[0]),

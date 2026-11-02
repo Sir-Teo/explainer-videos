@@ -156,7 +156,7 @@ class Earnings(VoiceoverScene):
             "Now all of Apple's announcements from late 2015 to 2020, each path started at its own day zero, green when earnings "
             "beat the seasonal forecast, red when they missed. <bookmark mark='a'/> The thick lines are the averages. The day-zero "
             f"move barely lines up with the surprise: a correlation of {pe['jump_corr']:.2f}. <bookmark mark='b'/> After day one, "
-            f"the beats drifted {100 * dp:+.1f} percent and the misses {100 * dn:+.1f}. " + sign_line + f"But {pe['n_events']} "
+            f"the beats drifted {100 * dp:+.1f} percent and the misses {100 * dn:+.1f}. {sign_line}But {pe['n_events']} "
             "events of one company are a lab exercise, not a test, and a seasonal forecast of net income is a crude stand-in for "
             "what analysts expected."
         ) as vo:
@@ -204,7 +204,7 @@ class Earnings(VoiceoverScene):
         with self.voiceover(
             "At scale: the open-source version of Foster, Olsen and Shevlin's 1984 portfolio, long high surprises, short low, "
             f"since 1974. <bookmark mark='a'/> {o['in']:.2f} percent a month in their sample, {o['post']:.2f} after publication. "
-            f"<bookmark mark='b'/> Since 2006, {o['after2006']:.2f}, " + after_line + "Martineau's 2022 paper is titled Rest in "
+            f"<bookmark mark='b'/> Since 2006, {o['after2006']:.2f}, {after_line}Martineau's 2022 paper is titled Rest in "
             "Peace Post-Earnings Announcement Drift; others dispute it. <bookmark mark='c'/> So for large stocks, the news is "
             "already in the price."
         ) as vo:

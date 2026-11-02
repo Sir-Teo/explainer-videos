@@ -164,7 +164,7 @@ class Frontier(VoiceoverScene):
             "profits, accruals reverse, and three of fourteen items are noise. A random walk, least squares, ridge on splines and "
             "a neural network, five seeds, equal data. <bookmark mark='a'/> The network learning: validation error with the seed "
             f"band and the linear baselines; its test predictions tightening. <bookmark mark='b'/> Random walk {rw * 1e4:.2f}, "
-            f"least squares {ols * 1e4:.2f}, network {mlp * 1e4:.2f}. " + verdict + f"All sit just above the noise floor of "
+            f"least squares {ols * 1e4:.2f}, network {mlp * 1e4:.2f}. {verdict}All sit just above the noise floor of "
             f"{f['floor'] * 1e4:.2f}: with clean inputs, the fights are about the inputs, not the network."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rp), FadeIn(base))

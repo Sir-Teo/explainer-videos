@@ -242,7 +242,7 @@ class StatePrices(VoiceoverScene):
             f"sixteen-day returns over four and a half years, {k['n_windows']} windows, smoothed. "
             "<bookmark mark='a'/> Their ratio is the pricing kernel, with a band from a thousand "
             "resamples. <bookmark mark='b'/> "
-            + verdict +
+            f"{verdict}"
             "A risk-averse investor would make it fall everywhere; a hump is the pricing kernel "
             "puzzle Jens Jackwerth found in 2000. <bookmark mark='c'/> And the band is wide: P is the "
             "hard half of the ratio."

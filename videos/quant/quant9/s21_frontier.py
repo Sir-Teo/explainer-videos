@@ -108,7 +108,7 @@ class Frontier(VoiceoverScene):
             "gold above, brightest where it just touches. On the right, the bound it implies, three "
             "seeds, against the linear program's line. <bookmark mark='b'/> At first the hedge is far "
             "too expensive, then too cheap and red, then it settles onto the claim. "
-            + verdict +
+            f"{verdict}"
             "<bookmark mark='c'/> In one dimension the linear program wins: exact, and faster. The "
             "networks matter where the program cannot go, dozens of assets and dates."
         ) as vo:

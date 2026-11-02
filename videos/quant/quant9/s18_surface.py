@@ -148,8 +148,8 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
             f"Now every expiry of the Surface at once: {len(R)} of them, from {R[0]['T'] * 365:.0f} days to "
             f"{Tmax:.0f}, each fitted and differentiated, standing in three dimensions. <bookmark mark='a'/> Walk "
             f"along maturity. The ridges widen, because uncertainty grows with time: the standard deviation goes from "
-            f"{100 * R[0]['sd']:.0f} percent of today's price to {100 * R[-1]['sd']:.0f}. " + lean +
-            " <bookmark mark='b'/> Total variance rises with maturity at every moneyness, " + verdict
+            f"{100 * R[0]['sd']:.0f} percent of today's price to {100 * R[-1]['sd']:.0f}. {lean}"
+            f" <bookmark mark='b'/> Total variance rises with maturity at every moneyness, {verdict}"
         ) as vo:
             self.play(Create(ax), FadeIn(names), run_time=1.5)
             self.play(LaggedStart(*[Create(r_) for r_ in ridges], lag_ratio=0.3), FadeIn(floors), run_time=3)
@@ -198,7 +198,7 @@ class DensitySurface(VoiceoverScene, ThreeDScene):
             "distributions. <bookmark mark='a'/> In the middle the four densities nearly coincide. Every one "
             f"matches the quotes to within {sp['rmse_max']:.1f} vol points. <bookmark mark='b'/> In the left tail "
             "they part. The risk-neutral probability of a fall of thirty percent or more ranges over "
-            f"{100 * sp['down30_spread']:.1f} percentage points across the four fits." + neg_line + " "
+            f"{100 * sp['down30_spread']:.1f} percentage points across the four fits.{neg_line} "
             "<bookmark mark='c'/> A 2026 paper by Lennon Shikhman and coauthors makes this precise: accurate prices "
             "need not pin the density, because many directions in density space barely move any price. Read a "
             "crash probability off an option surface, and report the specification band with it."

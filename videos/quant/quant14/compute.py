@@ -1161,7 +1161,10 @@ def compute_crisis_aug2024() -> dict:
         if len(k):
             btc[str(D)] = {"dvol": p["vol"][int(k[0])], "pdv": p["pred"][int(k[0])]}
     sw = {w["day"]: w for w in load("skew_weekly")["weeks"]}
-    return _json({"vix_days": ps["days"], "dvol_t": t[m], "dvol_close": np.asarray(dv["close"])[m],
+    nk = data.fred("NIKKEI225", "1949-05-01", "2025-12-31")
+    k = int(np.where(nk["date"] == 20240805)[0][0])
+    nikkei = float(nk["value"][k] / nk["value"][k - 1] - 1)
+    return _json({"nikkei_0805": nikkei, "vix_days": ps["days"], "dvol_t": t[m], "dvol_close": np.asarray(dv["close"])[m],
                   "dvol_high": np.asarray(dv["high"])[m], "btc_rv_days": days[sel], "btc_rv": np.sqrt(rv[sel]),
                   "btc_pdv": btc, "skew_before": sw.get("2024-07-31"), "skew_after": sw.get("2024-08-07")})
 
@@ -1234,7 +1237,7 @@ def compute_joint_bounds() -> dict:
     cost = lambda s, t: abs(np.log(t / s))  # noqa: E731
     out = {"T1": T1, "T2": T2, "x": x, "mu": mu, "y": y, "nu": nu}
     for name, sign in (("upper", -1.0), ("lower", 1.0)):
-        e = A.entropic_mot(x, mu, y, nu, cost, eps=0.002, iters=500, sign=sign, log_every=10)
+        e = A.entropic_mot(x, mu, y, nu, cost, eps=0.005, iters=2000, sign=sign, log_every=20, newton=5)
         out[name] = {"value": e["value"], "trace": e["trace"]}
     try:
         lp = A.mot_bounds(x, mu, y, nu, cost)

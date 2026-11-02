@@ -192,7 +192,7 @@ class Duration(VoiceoverScene):
             "Does the market price stocks like long bonds? Pause and predict: Gordon says a one-point rise in yields should cut "
             "such a stock by a third. <bookmark mark='a'/> Measured on French's portfolios since 1963, against the monthly change "
             f"in the ten-year yield: growth stocks lost {abs(growth):.1f} percent per point, value stocks {abs(value):.1f}. "
-            "<bookmark mark='b'/> " + order_line + "But the size is off more than tenfold. <bookmark mark='c'/> When yields rise "
+            f"<bookmark mark='b'/> {order_line}But the size is off more than tenfold. <bookmark mark='c'/> When yields rise "
             "with inflation, expected dividends rise too, so g moves with r. Dechow, Sloan and Soliman measured implied durations "
             "of about fifteen years."
         ) as vo:

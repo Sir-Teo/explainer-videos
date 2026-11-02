@@ -388,52 +388,93 @@ studies; the Jane Street interim order, allegations), the FCA (LME).
 *House:* treasury and funding: margin (EWMA, liquidation odds), financing, borrow fees, haircuts and deleveraging,
 hedge ratios, clearing and auctions, fees with a high-water mark, return smoothing; every later backtest pays them.
 
-### Part 3 · Value, Accounting and the Firm (~50)
-1. Time value: NPV, IRR, annuities and perpetuities; Gordon growth.
-2. The three statements: balance sheet, income, cash flows; accruals; what an analyst reads.
-3. XBRL: machine-readable fundamentals from EDGAR, built point-in-time into the House.
-4. DCF valuation: free cash flow, WACC, terminal value; its sensitivity to the discount rate (callback to
-   `opposing_forces`).
-5. Multiples: P/E, EV/EBITDA, CAPE; Shiller's data.
-6. Modigliani–Miller (1958) derived by arbitrage; taxes, distress, and the trade-off theory.
-7. Payout: dividends, buybacks, and the dividend irrelevance proof.
-8. Equity as a call on the firm (Merton preview, Part 20); real options.
-9. Earnings: announcements, surprises and post-earnings-announcement drift (Ball–Brown 1968; Bernard–Thomas 1989).
-10. Accounting signals that became factors: accruals (Sloan 1996), F-score (Piotroski 2000), gross profitability
-    (Novy-Marx 2013), forward-linked to Part 24.
-11. Mergers and corporate events: merger arbitrage's payoff as a short put (Mitchell–Pulvino 2001).
+### Part 3 · Value, Accounting and the Firm (~55)
+1. Time value: NPV, IRR (bisection, and a project with two roots), annuities and perpetuities; Gordon growth.
+2. The duration of equity, (1 + r)/(r − g), against the measured rate sensitivity of growth and value stocks.
+3. The three statements as one double-entry machine, run on screen (the House's accounting simulator); the indirect
+   cash flow statement and DuPont derived.
+4. Accruals: Sloan's persistence test, as a mechanism (a simulated panel), on EDGAR filings, and as a portfolio.
+5. XBRL and the point-in-time fundamentals store on real filings: the bitemporal plane (GE's recasts), Kraft Heinz's
+   restatement queried as of two dates, filing lags against the 60/75/90-day rules.
+6. DCF: free cash flow from the statements, the value-driver formula (growth adds value only when RONIC > WACC), the
+   enterprise-to-equity bridge, the (r, g) and (g, RONIC) surfaces, and a Monte Carlo of the value.
+7. The cost of capital: WACC, levered betas, APV, and the market's implied return (Damodaran's ERP rebuilt, 1960–2020).
+8. Residual income (Ohlson 1995) derived from clean surplus; P/B = 1 + (ROE − r)/(r − g) as a surface.
+9. Multiples (P/E, PVGO, EV/EBITDA) and the CAPE; the Campbell–Shiller identity and Cochrane's decomposition on 150
+   years of Shiller's data, with the Stambaugh bootstrap.
+10. Modigliani–Miller (1958) by arbitrage; the tax shield, Miller (1977), distress and the trade-off; what CFOs say
+    (Graham–Harvey).
+11. Payout: the dividend-irrelevance proof; buybacks, Rule 10b-18, the EPS illusion; issuers against repurchasers.
+12. Equity as a call (Merton 1974): risk-shifting (Jensen–Meckling 1976), debt overhang (Myers 1977), real options.
+13. Earnings announcements: SUE, an event study from 8-K dates (the House's `car`), the drift (Ball–Brown 1968;
+    Bernard–Thomas 1989), then and now (Martineau 2022).
+14. Accounting signals that became factors (accruals, F-score, gross profitability) and their decay after
+    publication, across 208 predictors (McLean–Pontiff; Chen–Zimmermann).
+15. Merger arbitrage: the spread as a risk-neutral probability, Capri–Tapestry (2023–24), and the short put
+    (Mitchell–Pulvino) re-estimated on The Merger Fund.
+16. Forensic accounting: Enron, Wirecard, Luckin, Kraft Heinz; the Beneish M-score and its base-rate problem;
+    Dechow et al.'s F-score.
 
-*Textbooks:* Berk–DeMarzo; Brealey–Myers–Allen; Damodaran *Investment Valuation*; Koller et al. (McKinsey) *Valuation*.
-*Computed:* a point-in-time fundamentals panel from XBRL; a DCF's sensitivity surface; accrual and profitability
-sorts; a merger-arbitrage payoff from public deal data where available.
-*Visuals:* the three statements as linked ledgers with cash flowing between them; the DCF's value as a 3D surface
-over growth and discount rate.
-*Crisis:* Enron (2001) and Wirecard (2020): when the statements lie, and what the accruals said.
-*Firms:* fundamental quant ("quantamental") desks; merger-arbitrage funds.
-*Desk:* "A firm with no debt buys back 10% of its shares at market. What happens to the price, and to EPS?"
-*House:* the fundamentals store.
+*Textbooks:* Berk–DeMarzo ch. 2–4, 7–9, 14–19, 22, 28; Brealey–Myers–Allen ch. 2–6, 16–19, 22, 28, 31; Damodaran ch.
+2–3, 7, 9–20, 28–32; Koller et al. ch. 2–16, 20, 32; Bodie–Kane–Marcus ch. 18–19; CLM ch. 7; Luenberger ch. 2–3;
+Penman (residual income) as a reference.
+*Computed/Trained:* p* recursion; rate betas of B/M deciles; IRR bisection; the accounting simulator; Sloan's
+regression on a simulated panel and on EDGAR; the restatement and filing-lag audit of the cached filings; DCF Monte
+Carlo; implied ERP; Campbell–Shiller with a Stambaugh bootstrap; NI sorts; Merton surfaces; an Apple event study;
+208 OSAP predictors before and after publication; Capri's implied probability; the MERFX kink regression with a
+bootstrap; M-scores; an earnings forecaster (random walk, OLS, ridge, MLP; 5 seeds) on a simulated panel, replayed.
+*Visuals:* the receding cash-flow conveyor; the duration fulcrum; three ledgers running with the identity lit; the 3D
+accrual-persistence plane; the bitemporal plane with the as-of line sweeping; the (r, g) and (g, RONIC) surfaces; the
+balance beam of the implied return; the P/B surface crossing 1 along ROE = r; the return/dividend tug-of-war; the
+fixed pie with the government wedge; the equity and debt surfaces over (A, σ); event-time paths in SUE lanes; 208
+predictors falling to their post-publication returns.
+*Crisis:* Enron (2001), Wirecard (2020), Luckin Coffee (2020) and Kraft Heinz (restated 2019).
+*Firms:* corporate finance practice (Graham–Harvey); valuation in court (Dell, Rural/Metro); rating agencies;
+activists (13D); quant equity on fundamentals (AQR, OSAP); merger-arbitrage funds; the SEC and the FASB (leases).
+*Desk:* the buyback question; Gordon's implied return; the merger-arb probability; "ROE 12%, r 8%, g 4%: P/B?"
+*House:* the fundamentals store on real EDGAR filings (`fundamentals`: as-of queries, filing lags, the accounting
+simulator, SUE and event studies); `valuation` (IRR by bisection, duration, value driver, residual income, implied
+rate, APV and Miller, Campbell–Shiller, Beneish).
 
 ### Act II · The Mathematical Toolkit
 
-### Part 4 · Martingales and Measure (~50)
-1. Probability spaces and filtrations as information.
-2. Conditional expectation as orthogonal projection; the tower property.
-3. Martingales: Ville (1939) named them after a betting system; Doob.
-4. Optional stopping: you cannot beat a fair game, and its hypotheses are why.
-5. The doubling strategy, admissibility, and Barings (1995): doubling down in Leeson's "88888" account.
-6. Doob decomposition: drift plus martingale.
-7. Change of measure on a coin; Radon–Nikodym; equivalent measures agree on what is impossible.
-8. Heavy tails: stable laws (Lévy; Fama 1965; Mantegna–Stanley 1995).
-9. Martingale convergence; the gambler's ruin.
-10. Game-theoretic probability (Shafer–Vovk): testing by betting, e-values, anytime-valid inference (Ramdas et al.
-    2023).
+### Part 4 · Martingales and Measure (~53)
+1. Probability spaces and filtrations as information: σ-algebras as the questions you can answer, measurability,
+   Kolmogorov (1933); coin space as the unit interval.
+2. Conditional expectation as orthogonal projection: Kolmogorov's definition, the properties, the tower; regression
+   is the same projection with data.
+3. Martingales: Ville (1939) named them after a betting system; Doob; sub- and supermartingales; Jensen.
+4. You can't beat the system: the martingale transform, and the same tax per unit staked for every roulette system.
+5. Stopping times and optional stopping, proved: the walk that always wins, with E[τ] = ∞; Wald; uniform
+   integrability; pattern waiting times (Li 1980).
+6. The doubling strategy, admissibility (Harrison–Pliska 1981; Dybvig–Huang 1988), and Barings (1995): doubling
+   down in Leeson's "88888" account.
+7. Gambler's ruin and bold play (de Moivre; Dubins–Savage 1965); expected duration.
+8. Martingale convergence: upcrossings, Pólya's urn, Lévy's upward theorem as learning.
+9. Doob decomposition: drift plus martingale, ⟨M⟩; the drift depends on the filtration (Ivey v Genting, 2017).
+10. Change of measure on a coin: density process, Bayes, discrete Girsanov, the Esscher transform on real returns.
+11. Radon–Nikodym by martingales; equivalent measures agree on what is impossible; Kakutani's dichotomy.
+12. Heavy tails: stable laws (Lévy; Fama 1965; Mantegna–Stanley 1995), the characteristic function and the
+    generalized CLT.
+13. Game-theoretic probability (Shafer–Vovk): Ville's inequality, testing by betting, e-values, anytime-valid
+    inference (Ramdas et al. 2023); learning the bet (ONS, aGRAPA); confidence sequences; e-BH.
 
-*Textbooks:* Shreve I ch. 2–3; Williams *Probability with Martingales*; Föllmer–Schied ch. 1.
-*Computed:* doubling-strategy drawdowns; stable-law fits; e-process tests of the martingale hypothesis.
-*Visuals:* projection onto coarser partitions; the doubling strategy's equity curves with the rare ruin lit.
-*Crisis:* Barings 1995. *Firms:* casinos and blackjack teams (the MIT team) as risk management.
-*Desk:* "A martingale starts at 1 and stops at 0 or 3. Probability it hits 3?" and "Expected flips to HH?"
-*House:* the e-value monitor (used again in Part 26).
+*Textbooks:* Williams *Probability with Martingales* ch. 9–14 (and 0, 4, 16–18); Shreve I ch. 2, 3, 5; Shreve II
+ch. 1–2; Föllmer–Schied §1.2 (preview) and App. A.2.
+*Computed:* conditional means of the market by era; six betting systems; first passage and Wald; pattern waits;
+doubling and a schematic doubling rule on the 1995 Nikkei; Pólya's urn and upcrossings; a Bayesian drift learner;
+Doob's decomposition of the market; the Esscher measure of US returns; dyadic Radon–Nikodym and Kakutani; stable
+fits (McCulloch, ECF, MLE replayed); peeking; online bettors trained and compared; e-BH on 200 strategies;
+casino hold and Azuma.
+*Visuals:* the coin-space zoom; projection in 3D; the curtain desk; the bell and the curtain; the leaking balance;
+the staircase and the cliff; the upcrossing trader; one P&L with two drifts; paths recoloured, not moved; the 3D
+density emerging from dyadic bars; the bettor's needle learning Kelly.
+*Crisis:* Barings 1995. *Firms:* casinos (Nevada hold vs edge), advantage players (Thorp, Uston, Ivey), bookmakers
+(Kaunitz et al. 2017, Benter, Flutter), prediction markets (Kalshi, Polymarket, Betfair), sequential testing
+(Optimizely, Netflix).
+*Desk:* "A martingale starts at 1 and stops at 0 or 3. Probability it hits 3?"; "Expected flips to HH?";
+"Penney's game: you pick HHT, I pick THH. Who wins?"; "A fair walk is stopped the first time it is up 1. E[τ]?"
+*House:* the e-value monitor with learned bets (`ONSBettor`), confidence sequences and e-BH (used again in Part 26).
 
 ### Part 5 · Stochastic Calculus (~57)
 1. Brownian motion as a limit (Donsker) and a construction (Lévy's midpoints, the Brownian bridge); the reflection

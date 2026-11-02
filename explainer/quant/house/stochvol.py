@@ -330,7 +330,8 @@ def surface_iv(name, x, F, K, T):
 def cgmy_cf(u, T, C, G, M, Y):
     """CGMY (Carr, Geman, Madan and Yor 2002): the tempered stable process with Levy density
     C e^{-G|x|}/|x|^{1+Y} (x < 0) and C e^{-Mx}/x^{1+Y} (x > 0). Y < 0 finite activity, 0 <= Y < 1 infinite activity
-    of finite variation, 1 < Y < 2 infinite variation; Y -> 0 is variance gamma with C = 1/nu. Drift-corrected (M > 1)."""
+    of finite variation, 1 < Y < 2 infinite variation; Y -> 0 is variance gamma with C = 1/nu. Drift-corrected
+    (M > 1)."""
     from scipy.special import gamma as _G
 
     u = np.asarray(u, complex)
@@ -411,13 +412,13 @@ def calibrate_reg(name, quotes, x_prev, lam, W=None, x0=None, max_nfev=400):
 
 
 def slv_paths(lv_fn, heston_x, days, n_paths, mix=0.5, substeps=4, n_sub=8000, seed=0, info=None, grid=None,
-              snap_days=(), n_snap=1500):
+              snap_days=(), n_snap=1500, bw_mult=1.0):
     """Stochastic local volatility by the particle method (Guyon and Henry-Labordere 2012): Heston's variance with
     its vol of vol scaled by the mixing fraction ``mix``, times a leverage function L(x, t) = sigma_loc(x, t) /
     sqrt(E[v | x]) estimated at every sub-step across the particles themselves (Nadaraya-Watson on a grid of
-    log-moneyness, Silverman's bandwidth, from a subsample of ``n_sub`` particles). Zero rates. Returns the daily
-    paths of log(S / S0), shape (days + 1, n_paths). ``info`` (a dict) receives the leverage every 10 days and, on
-    ``snap_days``, ``n_snap`` particles (x, v) with that day's E[v | x] and L on the grid."""
+    log-moneyness, Silverman's bandwidth times ``bw_mult``, from a subsample of ``n_sub`` particles). Zero rates.
+    Returns the daily paths of log(S / S0), shape (days + 1, n_paths). ``info`` (a dict) receives the leverage every
+    10 days and, on ``snap_days``, ``n_snap`` particles (x, v) with that day's E[v | x] and L on the grid."""
     g = np.random.default_rng(seed)
     dt = 1 / 365
     X = np.zeros((days + 1, n_paths))
@@ -434,7 +435,7 @@ def slv_paths(lv_fn, heston_x, days, n_paths, mix=0.5, substeps=4, n_sub=8000, s
         for j in range(m):
             t = i * dt + (j + 1) * h
             sub = g.choice(n_paths, n_sub, replace=False)
-            bw = 1.06 * np.std(x[sub]) * n_sub ** (-0.2) + 1e-3
+            bw = bw_mult * 1.06 * np.std(x[sub]) * n_sub ** (-0.2) + 1e-3
             Wk = np.exp(-0.5 * ((grid[:, None] - x[None, sub]) / bw) ** 2)
             Ev = (Wk @ v[sub]) / np.maximum(Wk.sum(axis=1), 1e-300)
             Lg = lv_fn(grid, t) / np.sqrt(np.maximum(Ev, 1e-6))
@@ -483,7 +484,8 @@ def heston_vix_options(v0, kappa, theta, xi, T, K, tau=30 / 365, n=4000):
     vix = np.sqrt(np.maximum(heston_vix2(vT, kappa, theta, tau), 0))
     K = np.atleast_1d(np.asarray(K, float))
     return {"future": float(vix.mean()), "var_swap_vol": float(np.sqrt(np.mean(vix ** 2))),
-            "call": np.maximum(vix[None, :] - K[:, None], 0).mean(1), "put": np.maximum(K[:, None] - vix[None, :], 0).mean(1),
+            "call": np.maximum(vix[None, :] - K[:, None], 0).mean(1),
+            "put": np.maximum(K[:, None] - vix[None, :], 0).mean(1),
             "floor": float(np.sqrt(theta * (1 - (1 - np.exp(-kappa * tau)) / (kappa * tau))))}
 
 

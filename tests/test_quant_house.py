@@ -2050,3 +2050,250 @@ def test_neural_sde_generator_learns():
     m, curve, fans = deep.train_nsde(real, L=16, iters=40, batch=64, lr=1e-2, depth=3, every=20, n_show=4)
     assert m.sample(5).shape == (5, 16) and set(fans) == {0, 20, 40} and fans[0].shape == (4, 16)
     assert np.mean(curve[-10:]) < 0.5 * np.mean(curve[:5])
+
+
+# ---------------------------------------------------------------- stochvol, expanded (Part 13)
+
+
+def test_cgmy_martingale_and_vg_limit():
+    from explainer.quant.house import stochvol as sv
+
+    for Y in (-0.5, 0.5, 1.5):
+        assert abs(sv.cgmy_cf(np.array([-1j]), 0.7, 0.4, 3.0, 5.0, Y)[0] - 1) < 1e-12
+    s, nu, th = 0.5, 0.2, -0.1  # VG's Levy density is CGMY's with Y = 0, C = 1/nu
+    a = np.sqrt(th ** 2 * nu ** 2 / 4 + s ** 2 * nu / 2)
+    M, G = 1 / (a + th * nu / 2), 1 / (a - th * nu / 2)
+    u = np.linspace(0, 20, 41)
+    assert np.max(np.abs(sv.cgmy_cf(u, 0.5, 1 / nu, G, M, 0.0) - sv.vg_cf(u, 0.5, s, nu, th))) < 1e-12
+    assert np.max(np.abs(sv.cgmy_cf(u, 0.5, 1 / nu, G, M, 1e-4) - sv.vg_cf(u, 0.5, s, nu, th))) < 1e-3
+
+
+def test_merton_series_equals_cos():
+    from explainer.quant.house import stochvol as sv
+
+    K = np.array([70.0, 90, 100, 110, 140])
+    for cp in (1, -1):
+        a = sv.merton_series(100.0, K, 0.5, 0.3, 1.5, -0.1, 0.2, cp=cp)
+        b = sv.cos_price(lambda u, T: sv.bs_cf(u, T, 0.3) * sv.merton_jump_cf(u, T, 1.5, -0.1, 0.2), 100.0, K, 0.5, cp,
+                         N=4096)
+        assert np.max(np.abs(a - b)) < 1e-8
+
+
+def _synthetic_quotes(name, x):
+    from explainer.quant.house import stochvol as sv
+
+    T = np.repeat([20 / 365, 60 / 365, 180 / 365], 9)
+    K = np.tile(np.exp(np.linspace(-0.3, 0.3, 9)), 3)
+    iv = np.concatenate([sv.surface_iv(name, x, 1.0, K[T == t], t) for t in np.unique(T)])
+    return {"F": np.ones_like(K), "K": K, "T": T, "iv": iv, "cp": np.where(K >= 1, 1, -1), "vega": np.ones_like(K)}
+
+
+def test_merton_kou_cgmy_calibrate_round_trip_and_trace():
+    from explainer.quant.house import stochvol as sv
+
+    for name, x in (("Merton", (0.35, 1.0, -0.15, 0.2)), ("Kou", (0.35, 2.0, 0.4, 12.0, 6.0)),
+                    ("CGMY", (0.5, 4.0, 7.0, 0.6))):
+        r = sv.calibrate(name, _synthetic_quotes(name, x), max_nfev=200, trace=True)
+        assert r["rmse"] < 0.05
+        best = min(r["trace"], key=lambda e: e[1])
+        assert abs(best[1] - r["rmse"]) < 1e-9 and np.allclose(best[2], r["x"])
+
+
+def test_calibrate_fixed_parameter_and_regularised():
+    from explainer.quant.house import stochvol as sv
+
+    x = (0.25, 3.0, 0.3, 1.2, -0.4)
+    Q = _synthetic_quotes("Heston", x)
+    lo, hi = list(sv.MODELS["Heston"]["lo"]), list(sv.MODELS["Heston"]["hi"])
+    lo[1] = hi[1] = 6.0
+    r = sv.calibrate("Heston", Q, lo=lo, hi=hi, max_nfev=200)
+    assert r["x"][1] == 6.0
+    r0 = sv.calibrate("Heston", Q, x0=(0.2, 2.0, 0.25, 1.0, -0.2), max_nfev=200)
+    g0 = sv.calibrate_reg("Heston", Q, (0.2, 2.0, 0.25, 1.0, -0.2), 0.0, max_nfev=200)
+    assert abs(r0["rmse"] - g0["rmse"]) < 1e-6 and np.allclose(r0["x"], g0["x"], rtol=1e-4, atol=1e-6)
+    prev = (0.2, 2.0, 0.25, 1.0, -0.2)
+    big = sv.calibrate_reg("Heston", Q, prev, 1e6, max_nfev=200)
+    assert np.allclose(big["x"], prev, rtol=1e-3, atol=1e-4)
+
+
+def test_slv_paths_reprice_local_vol():
+    from explainer.quant.house import bs as B, volsurface as V, stochvol as sv
+
+    fit = {"T": np.array([0.1, 0.3]), "theta": np.array([0.016, 0.048]), "rho": -0.3, "eta": 0.6, "gamma": 0.5}
+    X = sv.slv_paths(V.local_vol_fn(fit), (0.16, 3.0, 0.16, 1.5, -0.4), 60, 20_000, mix=0.5, n_sub=4000, seed=3)
+    T = 60 / 365
+    for k in (-0.1, 0.0, 0.1):
+        cp = 1 if k >= 0 else -1
+        p = np.mean(np.maximum(cp * (np.exp(X[-1]) - np.exp(k)), 0))
+        assert abs(B.implied_vol(p, 1.0, np.exp(k), T, 0.0, 0.0, cp) - np.sqrt(V.ssvi_surface_w(fit, k, T) / T)) < 0.01
+
+
+def test_heston_vix_jensen_and_forward_start():
+    from explainer.quant.house import stochvol as sv
+
+    v0, ka, th, xi = 0.2, 4.0, 0.25, 2.0
+    T = 30 / 365
+    r = sv.heston_vix_options(v0, ka, th, xi, T, [0.3, 0.45, 0.6])
+    ev = th + (v0 - th) * np.exp(-ka * T)
+    assert r["future"] <= np.sqrt(sv.heston_vix2(ev, ka, th)) + 1e-9  # Jensen: E[VIX] <= sqrt(E[VIX^2])
+    assert np.allclose(r["call"] - r["put"], r["future"] - np.array([0.3, 0.45, 0.6]), atol=1e-12)
+    x = (0.04, 1.5, 0.04, 1.0, -0.7)
+    p = sv.heston_forward_start(x, 0.5, 0.25, [0.0], n=400)[0]
+    S = sv.heston_qe(1.0, *x, 0.75, 75, 100_000, seed=3)
+    pay = np.maximum(S[-1] / S[50] - 1, 0)
+    assert abs(pay.mean() - p) < 4 * pay.std() / np.sqrt(len(pay))
+
+
+def test_sabr_pde_density_is_a_density():
+    from explainer.quant.house import bs, stochvol as sv
+
+    r = sv.sabr_pde_density(0.03, 0.035, 0.5, -0.3, 0.4, 1.0, n=300, f_max=0.25, n_t=400, K=[0.03])
+    assert abs(r["mass"] - 1) < 1e-10 and r["Q"].min() >= 0 and abs(r["mean"] - 0.03) < 1e-6
+    iv = bs.implied_vol(float(r["call"][0]), 0.03, 0.03, 1.0, 0.0, 0.0, 1)
+    assert abs(iv - sv.sabr_iv(0.03, 0.03, 1.0, 0.035, 0.5, -0.3, 0.4)[0]) < 0.003
+
+
+def test_mv_delta_minimises_hedge_variance():
+    from explainer.quant.house import stochvol as sv
+
+    g = np.random.default_rng(0)
+    S, delta, vega, beta = 100.0, 0.5, 20.0, -0.6
+    ret = 0.03 * g.standard_normal(200_000)
+    dsig = beta * ret + 0.01 * g.standard_normal(len(ret))
+    dC = delta * S * ret + vega * dsig  # an option's change, to first order
+    mv = sv.mv_delta(delta, vega, beta, S)
+    e_bs, e_mv = dC - delta * S * ret, dC - mv * S * ret
+    assert abs(e_mv.var() - (vega * 0.01) ** 2) < 0.02 * (vega * 0.01) ** 2 and e_mv.var() < 0.3 * e_bs.var()
+
+
+# ---------------------------------------------------------------------------
+# Part 17's expansion (deep.py): traces reproduce the plain trainers; the new objectives and classical twins
+# ---------------------------------------------------------------------------
+def test_deep_traces_reproduce_plain_trainers():
+    from explainer.quant.house import deep
+    import torch
+
+    rng = np.random.default_rng(0)
+    X = rng.standard_normal((300, 2))
+    y = (X[:, :1] ** 2 + X[:, 1:]).astype(float)
+    a = deep.train_mlp_regressor(X, y, width=8, depth=2, epochs=3, seed=4)
+    b, curve, snaps = deep.train_mlp_trace(X, y, width=8, depth=2, epochs=3, seed=4, every=1, snap_every=1,
+                                           snap_fn=lambda n: 0)
+    xt = torch.tensor(X[:5], dtype=torch.float32)
+    with torch.no_grad():
+        assert torch.allclose(a(xt), b(xt))
+    assert len(curve) == 3 and sorted(snaps) == [0, 1, 2, 3]
+    mkt = deep.bachelier_basket(3, seed=1)
+    Xb, Yb, dYb = deep.bachelier_samples(mkt, 128, seed=2)
+    f1 = deep.train_differential(Xb, Yb, dYb, epochs=4, seed=3)
+    f2, c2, s2 = deep.train_differential_trace(Xb, Yb, dYb, epochs=4, seed=3, snap_at=(0, 4), snap_fn=lambda f: 1)
+    assert np.allclose(f1(Xb[:5])[0], f2(Xb[:5])[0], atol=1e-6) and sorted(s2) == [0, 4]
+
+
+def test_gp_with_gradients_interpolates_values_and_gradients():
+    from explainer.quant.house import deep
+
+    g = np.linspace(-1, 1, 5)
+    X = np.array([(a, b) for a in g for b in g])
+    f = X[:, 0] ** 2 + 0.5 * X[:, 1] ** 2
+    dY = np.c_[2 * X[:, 0], X[:, 1]]
+    m, sd, gr = deep.gp_with_gradients(X, f, dY, X, ls=1.0, sf=2.0, noise_y=1e-10, noise_d=1e-10, grad=True)
+    assert np.max(np.abs(m - f)) < 1e-4 and np.max(np.abs(gr - dY)) < 1e-4 and np.max(sd) < 1e-3
+
+
+def test_gbm_mu_zero_reproduces_gbm_and_merton_leland_closed_forms():
+    from explainer.quant.house import deep
+    import math
+    import torch
+
+    a = deep.gbm_torch(50, 10, 0.1, 0.2, 100.0, torch.Generator().manual_seed(1))
+    b = deep.gbm_torch_mu(50, 10, 0.1, 0.2, 0.0, 100.0, torch.Generator().manual_seed(1))
+    assert torch.equal(a, b)
+    assert deep.merton_hedge(100.0, 0.2, 0.3, 1.0) == pytest.approx(0.075)
+    assert deep.leland_sigma(0.2, 0.0, 1 / 365) == 0.2
+    le = math.sqrt(2 / math.pi) * 0.01 / (0.2 * math.sqrt(1 / 365))
+    assert deep.leland_sigma(0.2, 0.005, 1 / 365) == pytest.approx(0.2 * math.sqrt(1 + le))
+
+
+def test_cvar_ru_minimum_is_the_empirical_cvar():
+    from explainer.quant.house import deep
+    import torch
+
+    X = torch.randn(20000, generator=torch.Generator().manual_seed(0)) * 2 + 0.3
+    ws = torch.linspace(-2, 4, 6001)
+    vals = torch.stack([deep.cvar_ru(X, w, 0.5) for w in ws])
+    assert float(vals.min()) == pytest.approx(float(deep.cvar(X, 0.5)), abs=1e-3)
+
+
+def test_train_hedger_p_with_no_drift_is_train_hedger():
+    from explainer.quant.house import deep
+
+    _, c1, _ = deep.train_hedger("mlp", 0.0, iters=3, batch=256, seed=5)
+    _, c2, _ = deep.train_hedger_p("mlp", 0.0, 0.0, iters=3, batch=256, seed=5)
+    assert np.allclose(c1, c2)
+
+
+def test_ww_band_hedger_starts_at_whalley_wilmott():
+    from explainer.quant.house import deep, quoting
+    import torch
+
+    pol = deep.WWBandHedger(0.005, seed=0)
+    T = 30 / 365
+    with torch.no_grad():
+        lo, hi = pol.band(torch.zeros(1), torch.full((1,), 0.5))
+    ww = quoting.ww_band(100.0, 100.0, 0.5 * T, 0.2, 0.005, gamma_risk=1.0)
+    assert float(lo) == pytest.approx(ww["lo"], abs=1e-3) and float(hi) == pytest.approx(ww["hi"], abs=1e-3)
+
+
+def test_garch_paths_unconditional_variance():
+    from explainer.quant.house import deep
+    import torch
+
+    params = (0.05, 0.05, 0.08, 0.85)
+    res = np.random.default_rng(0).standard_normal(5000)
+    _, e = deep.garch_paths_torch(params, res, 4000, 200, gen=torch.Generator().manual_seed(0))
+    hbar = 0.05 / (1 - 0.05 - 0.04 - 0.85)
+    assert float(e.pow(2).mean()) == pytest.approx(hbar, rel=0.1)
+
+
+def test_calibrate_neural_trace_matches_calibrate_neural():
+    from explainer.quant.house import deep
+    import torch
+
+    torch.manual_seed(0)
+    net = deep.calib_net(width=8, depth=1)
+    T = np.array([0.05, 0.1, 0.3])
+    k = np.array([-0.1, 0.0, 0.1])
+    iv = np.array([0.6, 0.55, 0.5])
+    a = deep.calibrate_neural(net, T, k, iv, starts=2, iters=10)
+    b = deep.calibrate_neural_trace(net, T, k, iv, starts=2, iters=10, every=5)
+    assert np.allclose(a["x"], b["x"]) and len(b["traces"]) == 2 and len(b["traces"][0]["step"]) == 3
+
+
+def test_ddpm_snapshots_end_at_the_sample():
+    from explainer.quant.house import deep
+
+    real = np.random.default_rng(0).standard_normal((64, 8))
+    s1, _ = deep.train_ddpm(real, steps=20, iters=5, batch=16, width=16)
+    s2, curve, abar = deep.train_ddpm_snap(real, steps=20, iters=5, batch=16, width=16)
+    x, snaps = s2(6, seed=3, snap_at=(20, 10, 0))
+    assert np.allclose(snaps[0], x) and np.allclose(x, s1(6, seed=3), atol=1e-6) and sorted(snaps) == [0, 10, 20]
+
+
+def test_deep_bsde_snap_linear_check():
+    from explainer.quant.house import deep
+
+    p = dict(deep.DEFAULT_RISK, d=10, delta=1.0)
+    r = deep.deep_bsde_snap(p, iters=300, batch=256, lr=0.05, seed=0, snap_at=(0, 300), n_snap=64)
+    mc, _ = deep.no_default_price(p, n=100000)
+    assert abs(r["u0"] - mc) < 1.5 and r["snaps"][300]["Ypath"].shape == (32, 41)
+
+
+def test_stopping_regions_last_date():
+    from explainer.quant.house import deep
+
+    p = dict(deep.MAX_CALL, d=2)
+    r = deep.deep_stopping(p, steps=80, batch=2048, n_eval=100000, seed=0)
+    grid, reg = deep.stopping_regions(r["nets"], p, grid=np.array([60.0, 100.0, 150.0]), dates=[p["N"] - 1])
+    R = reg[p["N"] - 1]  # rows S2, columns S1
+    assert R[0, 2] == 1 and R[1, 1] == 0

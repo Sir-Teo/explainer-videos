@@ -1211,7 +1211,21 @@ def compute_frontier_ml() -> dict:
     return _json(out)
 
 
-ITEMS_NEW = {"explain": compute_explain, "scalp_shuffle": compute_scalp_shuffle, "frequency": compute_frequency,
+def compute_buckets() -> dict:
+    """Vega by expiry bucket for a small book, a parallel hedge with the 90-day option, and a steepening move."""
+    gk = lambda T_: float(bs.greeks(100.0, 100.0, T_ / 365, 0.5)["vega"]) / 100  # noqa: E731
+    exps = np.array([7, 30, 60, 90, 180])
+    qty = np.array([-3.0, -2.0, 1.0, 0.0, 2.5])
+    vb = qty * np.array([gk(e) for e in exps])
+    hq = -vb.sum() / gk(90)
+    after = vb.copy()
+    after[3] += hq * gk(90)
+    move = np.array([4.0, 2.5, 1.0, -0.5, -1.5])          # vol points: the short end up, the long end down
+    return _json({"buckets": exps, "vega_by": vb, "vega_after": after, "hedge_qty": hq, "move": move,
+                  "before": float(vb @ move), "after": float(after @ move), "parallel_after": float(after.sum())})
+
+
+ITEMS_NEW = {"buckets": compute_buckets, "explain": compute_explain, "scalp_shuffle": compute_scalp_shuffle, "frequency": compute_frequency,
              "secondorder": compute_secondorder, "strategies": compute_strategies, "premium": compute_premium,
              "kelly": compute_kelly, "flow": compute_flow, "mm_learn": compute_mm_learn,
              "hedging_replay": compute_hedging_replay, "greekhedge": compute_greekhedge, "pin_sim": compute_pin_sim,

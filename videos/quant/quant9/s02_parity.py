@@ -213,7 +213,7 @@ class Parity(VoiceoverScene):
             f"all {fb['n_trades']:,} futures trades from the same hours. <bookmark mark='a'/> Dots: "
             "the forwards option parity implies; squares: where the dated futures traded. On the "
             f"{fb['n_matched']} expiries with both, the median gap is {gp50:.1f} basis points, the "
-            f"largest {gmax:.1f}. <bookmark mark='b'/> " + tail
+            f"largest {gmax:.1f}. <bookmark mark='b'/> {tail}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), FadeIn(side[0]))
             vo.wait_until("a")

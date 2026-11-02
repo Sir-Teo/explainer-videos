@@ -212,7 +212,7 @@ class Industry(VoiceoverScene):
         one = DashedLine(ax.c2p(0, 1), ax.c2p(2, 1), color=GREY_B, stroke_width=1.5)
         find = wrapped_label(r"on 11 million Betfair transactions, Augenblick and Rabin find consistent excess "
                              r"movement; Kalshi's prices sharpen near the close and show a favourite--longshot bias, "
-                             r"stronger for takers (B\"urgi, Deng and Whelan, CESifo WP 12122, 2025)", 6.4, 18, GREY_B)
+                             r"stronger for takers (B\"urgi, Deng and Whelan, CESifo WP 12122)", 6.4, 18, GREY_B)
         find.next_to(cards, DOWN, buff=0.3).align_to(cards, LEFT)
         with self.voiceover(
             "Prediction markets sell the martingale directly: a contract paying one dollar if an event happens, its "

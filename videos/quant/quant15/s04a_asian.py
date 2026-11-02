@@ -1,0 +1,221 @@
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.quant import *  # noqa: F403
+from videos.quant.quant15.common import BAD, GOOD, IV, OPT, PART, SPOT, illustration, load
+
+
+class Asian(VoiceoverScene):
+    def construct(self):
+        a = load("asian")
+        sc = load("asian_scatter")
+        self.card()
+        self.live(sc)
+        self.derive(sc)
+        self.scatter(sc, a)
+        self.lab(a)
+        self.noise(a)
+
+    def card(self):
+        c = chapter_card(6, r"Averages and extremes: Asians and lookbacks", r"Why is an option on the average so much "
+                         r"cheaper, and how do you price it fast?", lit=(1979, 1990), part=PART)
+        with self.voiceover("Chapter six. Averages and extremes: Asian options and lookbacks."):
+            self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
+        self.play(FadeOut(c))
+
+    def live(self, sc):
+        p = np.asarray(sc["path"])
+        avg = np.concatenate([[p[0]], np.asarray(sc["avg"])])
+        mn = np.asarray(sc["min"])
+        n = len(p) - 1
+        t = np.arange(n + 1)
+        lo, hi = float(min(p.min(), avg.min())) - 3, float(p.max()) + 3
+        g = axes([0, n], [lo, hi], x_length=8.4, y_length=4.4, xlabel=r"trading days, one year", ylabel=r"price",
+                 xticks=[0, 63, 126, 189, 252], yticks=[round(lo + 3), 100, round(hi - 3)], font_size=15)
+        g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        ax = g.ax
+        k = DashedLine(ax.c2p(0, 100), ax.c2p(n, 100), stroke_color=GREY_C, stroke_width=1.5)
+        tr = ValueTracker(0)
+        lp = tracing(ax, t, p, tr, SPOT, stroke_width=2.2)
+        la = tracing(ax, t, avg, tr, QC.HOUSE, stroke_width=3)
+        lm = tracing(ax, t, mn, tr, IV, stroke_width=3)
+        leg = legend([(SPOT, r"the price"), (QC.HOUSE, r"its running average"), (IV, r"its running minimum")],
+                     font_size=17).next_to(g, UP, buff=0.1).align_to(g, LEFT)
+        A, ST, m = float(avg[-1]), float(p[-1]), float(mn[-1])
+        side = VGroup(
+            MathTex(rf"\text{{Asian call: }} (A - 100)^+ = {max(A - 100, 0):.2f}", font_size=30, color=QC.HOUSE),
+            MathTex(rf"\text{{vanilla call: }} (S_T - 100)^+ = {max(ST - 100, 0):.2f}", font_size=30, color=SPOT),
+            MathTex(rf"\text{{lookback: }} S_T - \min S = {ST - m:.2f}", font_size=30, color=IV),
+            wrapped_label(r"the average moves slowly and forgets the last day's spike; the minimum only ever falls. One "
+                          r"payoff is tamer than the price, the other wilder", 4.6, 19, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
+        src = illustration(r"one simulated year, 25\% volatility, daily fixings")
+        with self.voiceover(
+            "Two path-dependent payoffs, on one path. As the price runs, a gold line trails it: the running "
+            "average. A blue line trails it too: the running minimum. <bookmark mark='a'/> The average moves slowly "
+            "and shrugs off the last day's spike, which is why commodity contracts settle on averages: no one can "
+            "push the payoff around with a trade at one fixing. The minimum only ever falls. <bookmark mark='b'/> "
+            "Read the payoffs off the end. An Asian call pays the average minus the strike; a floating lookback pays "
+            "the final price minus the lowest one. One payoff is tamer than the price, the other wilder."
+        ) as vo:
+            self.play(FadeIn(g), Create(k), FadeIn(leg), FadeIn(src))
+            self.add(lp, la, lm)
+            vo.wait_until("a")
+            self.play(tr.animate.set_value(n), run_time=6, rate_func=linear)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(x_) for x_ in side], lag_ratio=0.3))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def derive(self, sc):
+        rows = [
+            cmath(r"\log G", r"=", r"\tfrac1n\textstyle\sum_i \log S_{t_i} \sim \mathcal N\Big(\log S_0 + (r - q - "
+                  r"\tfrac{\sigma^2}{2})\bar t,\ \tfrac{\sigma^2}{n^2}\sum_{i,j}\min(t_i, t_j)\Big)", font_size=30,
+                  colors={r"\log G": QC.HOUSE}),
+            cmath(r"\operatorname{Var}\log G", r"\to", r"\frac{\sigma^2}{T^2}\int_0^T\!\!\int_0^T \min(s, t)\,ds\,dt = "
+                  r"\frac{\sigma^2 T}{3}", font_size=32, colors={r"\operatorname{Var}\log G": QC.HOUSE}),
+            cmath(r"\hat\theta_{cv}", r"=", r"\bar Y_A - b\,(\bar Y_G - \mu_G),\quad \operatorname{Var} = "
+                  r"\operatorname{Var}\bar Y_A\,(1 - \rho^2)", font_size=32, colors={r"\hat\theta_{cv}": GOOD}),
+            cmath(r"u_t + \tfrac12\sigma^2\big(q(t) - x\big)^2 u_{xx}", r"=", r"0,\quad V = S_0\,u(0, X_0)",
+                  font_size=32, colors={r"u_t + \tfrac12\sigma^2\big(q(t) - x\big)^2 u_{xx}": IV}),
+        ]
+        whys = [why(r"a linear map of a Gaussian vector is Gaussian: the geometric Asian is log-normal, priced in closed "
+                    r"form (Kemna and Vorst 1990)"),
+                why(r"$\iint \min(s,t) = T^3/3$: the effective volatility is $\sigma/\sqrt 3$, which is why Asians are "
+                    r"cheap"),
+                why(rf"optimal $b = \operatorname{{Cov}}/\operatorname{{Var}}$; the measured correlation $\rho = "
+                    rf"{sc['rho']:.4f}$ cuts the noise {sc['ratio']:.0f}-fold"),
+                why(r"Shreve II 7.5; Vecer (2001): change to the numeraire $S$, with $X_t$ the remaining average per unit "
+                    r"of $S$, and the two-dimensional problem in $(S, A)$ becomes one PDE in $x$")]
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.75, edge=6.9)
+        pp = pause_card(r"Why is an Asian call worth about half a vanilla?", width=5.4).to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "Why are Asians cheap, and how are they priced? Start with the geometric average. Its log is an "
+            "average of Gaussian log prices, so it is Gaussian, with a variance built from the minimum of every "
+            "pair of fixing times. <bookmark mark='a'/> In continuous time that double integral is T cubed over "
+            "three: averaging divides the variance by three, as if volatility were sigma over root three. "
+            "<bookmark mark='p'/> Pause on that: why is an Asian call worth about half a vanilla? Because its "
+            "effective volatility is only about fifty-eight percent of the price's. <bookmark mark='b'/> The "
+            "arithmetic average has no closed form, but it moves almost exactly with the geometric one. So simulate "
+            "both, and correct the arithmetic estimate by the geometric one's known error. The noise left is the "
+            "part the two do not share, one minus rho squared. <bookmark mark='c'/> And there is a deterministic "
+            "route. Steven Shreve, after Jan Vecer, changes the numeraire to the stock itself, and the problem in "
+            "two variables, spot and average, collapses to one partial differential equation in one variable."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("p")
+            self.play(FadeIn(pp))
+            vo.wait_until("b")
+            self.play(FadeOut(pp))
+            step(2)
+            vo.wait_until("c")
+            step(3)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def scatter(self, sc, a):
+        ya, yg = np.asarray(sc["ya"]), np.asarray(sc["yg"])
+        top = float(np.quantile(ya, 0.99)) * 1.1
+        g = axes([0, top], [0, top], x_length=5.0, y_length=5.0, xlabel=r"geometric Asian payoff",
+                 ylabel=r"arithmetic Asian payoff", xticks=[0, round(top / 2), round(top)],
+                 yticks=[0, round(top / 2), round(top)], font_size=15).to_edge(LEFT, buff=0.9).shift(DOWN * 0.1)
+        ax = g.ax
+        dots = VGroup(*[Dot(ax.c2p(x, y), radius=0.025, color=QC.HOUSE, fill_opacity=0.6)
+                        for x, y in zip(yg, ya) if x < top and y < top])
+        b = sc["b"]
+        mx, my = float(yg.mean()), float(ya.mean())
+        line = Line(ax.c2p(0, my - b * mx), ax.c2p(top, my + b * (top - mx)), stroke_color=GOOD, stroke_width=3)
+        side = VGroup(
+            MathTex(rf"b = {b:.3f},\quad \rho = {sc['rho']:.4f}", font_size=32, color=GOOD),
+            wrapped_label(rf"{len(ya):,} paths: the two payoffs fall on a line. What the control variate leaves to "
+                          rf"estimate is only the thin scatter around it: the noise falls {sc['ratio']:.0f}-fold, as if "
+                          rf"with {sc['ratio'] ** 2:.0f} times the paths".replace(",", "{,}"), 4.8, 19, GREY_A),
+            MathTex(rf"\text{{geometric (closed form) }} {a['geo_cf']:.2f},\ \text{{arithmetic }} {a['price']:.2f},"
+                    rf"\ \text{{vanilla }} {a['vanilla']:.2f}", font_size=26, color=OPT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
+        src = illustration(r"one-year at-the-money Asian calls, 25\% volatility, 252 daily fixings")
+        with self.voiceover(
+            "See the control variate. Each dot is one simulated path: across, its geometric Asian payoff; up, its "
+            "arithmetic one. <bookmark mark='a'/> They fall on a line, with correlation "
+            f"{sc['rho']:.4f}. The regression line is the correction; what is left to estimate is the thin scatter "
+            f"around it. The noise falls {sc['ratio']:.0f}-fold, as if we had run {sc['ratio'] ** 2:.0f} times as "
+            f"many paths. And the prices: geometric {a['geo_cf']:.2f} in closed form, arithmetic {a['price']:.2f}, "
+            f"vanilla {a['vanilla']:.2f}. About half, as the variance argument said."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(src), LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.002, run_time=3))
+            vo.wait_until("a")
+            self.play(Create(line), LaggedStart(*[FadeIn(x_) for x_ in side], lag_ratio=0.4))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def lab(self, a):
+        card = lab_card(r"the geometric Asian, the control variate", [
+            "def geometric_asian_call(S, K, T, sigma, n, r=0.0, q=0.0):",
+            "    dt = T / n",
+            "    t = dt * np.arange(1, n + 1)",
+            "    mu = np.log(S) + (r - q - 0.5 * sigma ** 2) * t.mean()",
+            "    var = sigma ** 2 * np.sum(np.minimum.outer(t, t)) / n ** 2",
+            "    sG = np.sqrt(var)",
+            "    d1 = (mu - np.log(K) + var) / sG",
+            "    return np.exp(-r * T) * (np.exp(mu + 0.5 * var) * N(d1)",
+            "                             - K * N(d1 - sG))",
+        ], source="explainer/quant/house/exotics.py", width=7.8, font_size=17).to_corner(UL, buff=0.35)
+        rows = a["rows"]
+        outs = [f"geometric_asian_call(100, 100, 1, 0.25, 252, 0.02)  ->  {a['geo_cf']:.2f}",
+                f"arithmetic, with the control variate: {a['price']:.2f}   vanilla: {a['vanilla']:.2f}",
+                f"noise at {rows[-1]['n']:,} paths: {rows[-1]['sd_plain']:.4f} plain, {rows[-1]['sd_cv']:.4f} with it"]
+        with self.voiceover(
+            "In the House's library the geometric Asian is eight lines: the mean of the log average, its variance "
+            "from the matrix of minimum times, and a Black–Scholes formula with those two numbers. "
+            "<bookmark mark='a'/> Run it on the one-year call. The geometric Asian is worth "
+            f"{a['geo_cf']:.2f}, the arithmetic one, by simulation with this control variate, {a['price']:.2f}."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            lab_run(self, card, outs, font_size=17)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def noise(self, a):
+        rows = a["rows"]
+        g = axes([np.log10(500), np.log10(100000)], [-3, 0], x_length=6.2, y_length=4.0,
+                 xlabel=r"paths (log scale)", ylabel=r"Monte Carlo error (s.d., log scale)",
+                 xticks=[np.log10(v) for v in (1000, 4000, 16000, 64000)], xfmt=lambda u: f"{10 ** u:,.0f}".replace(",", "{,}"),
+                 yticks=[-3, -2, -1, 0], yfmt=lambda u: f"10^{{{int(u)}}}", log_x=True, font_size=15)
+        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
+        ax = g.ax
+        p1 = VGroup(*[Dot(ax.c2p(np.log10(r["n"]), np.log10(r["sd_plain"])), radius=0.07, color=BAD) for r in rows])
+        p2 = VGroup(*[Dot(ax.c2p(np.log10(r["n"]), np.log10(r["sd_cv"])), radius=0.07, color=GOOD) for r in rows])
+        l1 = VMobject(stroke_color=BAD, stroke_width=2.5).set_points_as_corners([d_.get_center() for d_ in p1])
+        l2 = VMobject(stroke_color=GOOD, stroke_width=2.5).set_points_as_corners([d_.get_center() for d_ in p2])
+        leg = legend([(BAD, r"plain Monte Carlo"), (GOOD, r"with the geometric Asian as control variate")], font_size=17)
+        leg.next_to(g, UP, buff=0.15).align_to(g, LEFT)
+        ratio = float(np.median([r["sd_plain"] / r["sd_cv"] for r in rows]))
+        side = VGroup(
+            wrapped_label(rf"20 independent runs at each size: the control variate's error is {ratio:.0f} times smaller "
+                          r"at every size; both fall like one over the square root of the paths", 4.4, 19, GREY_A),
+            wrapped_label(rf"a lookback pays $S_T - \min S$: {a['lookback_cf']:.1f} watched continuously (Goldman, Sosin "
+                          rf"and Gatto 1979; Conze and Viswanathan 1991, by reflection), {a['lookback_mc_daily']:.1f} at "
+                          r"daily closes, the same discrete-monitoring effect as barriers", 4.4, 19, IV),
+            wrapped_label(r"a shout option, a cousin, lets the holder lock in the gain once, at a moment of her choosing",
+                          4.4, 19, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
+        src = illustration(r"one-year at-the-money calls, 25\% volatility, daily fixings; 20 independent runs each")
+        with self.voiceover(
+            "Measured over twenty independent runs at each size, the error with the control variate is "
+            f"{ratio:.0f} times smaller at every number of paths, and both fall like one over the square root of "
+            "the paths. <bookmark mark='a'/> The lookback needs no simulation at all. Reflection again gives the "
+            "joint law of the minimum and the endpoint, and with it the closed form of Barry Goldman, Howard Sosin "
+            "and Mary Ann Gatto, extended by Antoine Conze and Viswanathan. Watched continuously, the lookback is "
+            f"worth {a['lookback_cf']:.1f}; at daily closes, {a['lookback_mc_daily']:.1f}. Chapter four's lesson "
+            "again: the minimum that is only looked at once a day is never quite as low."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(src), FadeIn(leg), FadeIn(p1), Create(l1), FadeIn(p2), Create(l2),
+                      FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(side[1]), FadeIn(side[2]))
+        self.wait(0.4)
+        self.clear_scene()

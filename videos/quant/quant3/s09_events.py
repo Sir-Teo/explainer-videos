@@ -169,7 +169,7 @@ class Events(VoiceoverScene):
             "deals break together. <bookmark mark='a'/> Test that on public data: The Merger Fund, one of the oldest "
             "merger-arbitrage mutual funds, month by month since 1989 against the S&P 500. Its worst month was "
             f"{100 * m['worst']:.1f} percent. <bookmark mark='b'/> Fit a line with a hinge at a four percent market fall: slope "
-            f"{bu:.2f} above, {m['beta_down']:.2f} below. " + kink_line + "<bookmark mark='c'/> A small steady gain with a kink "
+            f"{bu:.2f} above, {m['beta_down']:.2f} below. {kink_line}<bookmark mark='c'/> A small steady gain with a kink "
             "into losses in a crash is the payoff of selling a put. They found about four percent a year after costs: payment for "
             "insurance."
         ) as vo:

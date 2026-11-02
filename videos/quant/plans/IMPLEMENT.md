@@ -31,8 +31,9 @@ visualizes and trains a lot".
 ## What to build
 
 * Implement the plan's chapters (hook + 16–19 numbered chapters + outro), about 3 minutes each (2.5–4), total
-  narration measured by `python tools/lecture_length.py quantN --floor 50` at 50–60 minutes. Narration speed is
-  about 139 words per minute in English. A part that runs short is missing material, not padding.
+  narration measured by `python tools/lecture_length.py quantN --floor 50` at 50–60 minutes. The quant narrator runs at about
+  168 counted words per minute (measured on the rendered Parts 1 and 10; the tool now uses it): 50 min is about
+  8,400 words, aim for 9,300–9,800. The tool estimates a rewritten chapter again until it is re-rendered. A part that runs short is missing material, not padding.
 * Every chapter: a signature visual that *moves* (built before the formula), derivations step by step with a reason
   per step (`ladder`), a computed experiment whose numbers come from `compute.py` via the cache (never typed into
   narration by hand; use f-strings), and narration that branches honestly on the computed result if it could go

@@ -1096,6 +1096,35 @@ def compute_pathwise_digital() -> dict:
                   "ratio": float((lr.std() / bd.std()) ** 2)})
 
 
+def compute_dek() -> dict:
+    """Derman, Ergener and Kani's static hedge of the down-and-out call (K = 100, H = 85, six months, 25% vol, 2%):
+    the call, plus puts struck at the barrier with earlier and earlier expiries, each sized so the portfolio is worth
+    zero on the barrier at one date, filled backward from expiry. The portfolio's value along S = H between the
+    dates, and the hedge's cost against the closed form, for 3, 6, 12 and 24 dates."""
+    K, H, T, s, r = 100.0, 85.0, 0.5, 0.25, 0.02
+    out = {"K": K, "H": H, "T": T, "closed": float(X.down_out_call(100.0, K, H, T, s, r)), "rows": []}
+    for n in (3, 6, 12, 24):
+        dates = np.linspace(0, T, n + 1)  # t_0 = 0, ..., t_n = T
+        legs = [(1.0, K, T, 1)]  # (weight, strike, expiry, call/put)
+
+        def value(S, t, legs=legs):
+            v = 0.0
+            for w, k, e, cp in legs:
+                if e > t + 1e-12:
+                    v += w * float(bs.price(S, k, e - t, s, r, 0.0, cp))
+            return v
+        for i in range(n - 1, -1, -1):
+            t = dates[i]
+            e = dates[i + 1]
+            p = float(bs.price(H, H, e - t, s, r, 0.0, -1))
+            legs.append((-value(H, t) / p, H, e, -1))
+        ts = np.linspace(0, T - 1e-3, 120)
+        along = [value(H, t) for t in ts]
+        out["rows"].append({"n": n, "cost": value(100.0, 0.0), "dates": dates, "t": ts, "along": along,
+                            "weights": [w for w, _, _, _ in legs[1:]][::-1]})
+    return _json(out)
+
+
 ITEMS = {"market": compute_market, "barrier": compute_barrier, "digital": compute_digital, "asian": compute_asian,
          "snowball": compute_snowball, "surrogate": compute_surrogate, "book2024": compute_book2024,
          "korea": compute_korea, "worstof": compute_worstof, "uvm": compute_uvm, "envelope": compute_envelope,
@@ -1106,7 +1135,8 @@ ITEMS = {"market": compute_market, "barrier": compute_barrier, "digital": comput
          "korea2015": compute_korea2015, "corr_regimes": compute_corr_regimes, "worstof_ac": compute_worstof_ac,
          "cliquet": compute_cliquet, "uvm_book": compute_uvm_book, "uvm_film": compute_uvm_film,
          "modelrisk": compute_modelrisk, "robust": compute_robust, "book_vega": compute_book_vega,
-         "surrogate_replay": compute_surrogate_replay, "pathwise_digital": compute_pathwise_digital}
+         "surrogate_replay": compute_surrogate_replay, "pathwise_digital": compute_pathwise_digital,
+         "dek": compute_dek}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

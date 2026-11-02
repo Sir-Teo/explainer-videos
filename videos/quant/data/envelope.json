@@ -23,6 +23,24 @@
    },
    "trials": 1
   },
+  "btc_hedged_straddle_ml": {
+   "code_sha256": "c85be0be4249509671ed3b31edeff4c9b119570b7f7acd4319918aee9e9bd066",
+   "params": {
+    "features": [
+     "IV - HAR",
+     "IV - RV30",
+     "RR25",
+     "7d - 60d"
+    ],
+    "models": [
+     "ridge",
+     "depth-2 boosting"
+    ],
+    "target": "4-week hourly-hedged ATM straddle P&L",
+    "walk_forward": "past only, 4-week gap"
+   },
+   "trials": 1
+  },
   "btc_mean_confseq": {
    "code_sha256": "927ebe04878af39c9ff04516be894eedf10a5cd14dcf6430931fbcaa1d4970af",
    "params": {

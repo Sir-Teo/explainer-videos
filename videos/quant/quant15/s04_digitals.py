@@ -3,22 +3,23 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant15.common import BAD, DELTA, GOOD, IV, OPT, PART, SPOT, illustration, load
+from videos.quant.quant15.common import BAD, DELTA, GOOD, IV, OPT, PART, SPOT, illustration, load, real_data
 
 
 class Digitals(VoiceoverScene):
     def construct(self):
         d = load("digital")
-        a = load("asian")
         self.card()
         self.digital(d)
         self.spread(d)
-        self.asian(a)
+        self.hedge(load("digital_hedge"))
+        self.onetouch(load("onetouch"))
+        self.skew(load("digital_skew"))
 
     def card(self):
-        c = chapter_card(3, r"Digitals, Asians and lookbacks", r"Which payoffs are easy to price and hard to hedge?",
-                         part=PART)
-        with self.voiceover("Chapter three. Digitals, Asians and lookbacks."):
+        c = chapter_card(5, r"Digitals, one-touches and the call-spread hedge", r"Which payoffs are easy to price and "
+                         r"hard to hedge?", part=PART)
+        with self.voiceover("Chapter five. Digitals, one-touches, and the call-spread hedge."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -87,47 +88,153 @@ class Digitals(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def asian(self, a):
-        rows = a["rows"]
-        g = axes([np.log10(500), np.log10(100000)], [-3, 0], x_length=6.2, y_length=4.0,
-                 xlabel=r"paths (log scale)", ylabel=r"Monte Carlo error (s.d., log scale)",
-                 xticks=[np.log10(v) for v in (1000, 4000, 16000, 64000)], xfmt=lambda u: f"{10 ** u:,.0f}".replace(",", "{,}"),
-                 yticks=[-3, -2, -1, 0], yfmt=lambda u: f"10^{{{int(u)}}}", log_x=True, font_size=15)
-        g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
-        ax = g.ax
-        p1 = VGroup(*[Dot(ax.c2p(np.log10(r["n"]), np.log10(r["sd_plain"])), radius=0.07, color=BAD) for r in rows])
-        p2 = VGroup(*[Dot(ax.c2p(np.log10(r["n"]), np.log10(r["sd_cv"])), radius=0.07, color=GOOD) for r in rows])
-        l1 = VMobject(stroke_color=BAD, stroke_width=2.5).set_points_as_corners([d_.get_center() for d_ in p1])
-        l2 = VMobject(stroke_color=GOOD, stroke_width=2.5).set_points_as_corners([d_.get_center() for d_ in p2])
-        leg = legend([(BAD, r"plain Monte Carlo"), (GOOD, r"with the geometric Asian as control variate")], font_size=17)
-        leg.next_to(g, UP, buff=0.15).align_to(g, LEFT)
-        ratio = float(np.median([r["sd_plain"] / r["sd_cv"] for r in rows]))
-        side = VGroup(
-            wrapped_label(r"an Asian option pays on the average price: cheaper than a vanilla, and hard to manipulate at "
-                          r"a single fixing", 4.4, 19, GREY_A),
-            MathTex(rf"{a['price']:.2f}\ \ \text{{vs vanilla}}\ {a['vanilla']:.2f}", font_size=30, color=OPT),
-            wrapped_label(r"the geometric average is log-normal, so its Asian has a closed form (Kemna and Vorst 1990); "
-                          rf"simulate both and correct by the known error: {ratio:.0f} times less noise, as if with "
-                          rf"{ratio ** 2:.0f} times the paths", 4.4, 19, WHITE),
-            wrapped_label(rf"a lookback pays $S_T - \min S$: {a['lookback_cf']:.1f} watched continuously (Goldman, Sosin "
-                          rf"and Gatto 1979), {a['lookback_mc_daily']:.1f} at daily closes, the same BGK effect as barriers",
-                          4.4, 19, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)
-        src = illustration(r"one-year at-the-money calls, 25\% volatility, daily fixings; 20 independent runs each")
+    def hedge(self, h):
+        rows = h["rows"]
+        show = h["show"]
+        n = len(show["digital"]["ledger"])
+        days = np.arange(n)
+        S = np.array([x["S"] for x in show["digital"]["ledger"]])
+        dd = np.array([x["delta"] for x in show["digital"]["ledger"]])
+        ds = np.array([x["delta"] for x in show["spread"]["ledger"]])
+        g1 = axes([0, n], [90, 110], x_length=5.4, y_length=2.4, ylabel=r"spot", xticks=[], yticks=[95, 100, 105],
+                  font_size=14)
+        top = max(float(dd.max()), float(ds.max()), 0.1) * 1.15
+        g2 = axes([0, n], [0, top], x_length=5.4, y_length=2.6, xlabel=r"trading day", ylabel=r"hedge (units)",
+                  xticks=[0, 7, 14, 21], yticks=[0, round(top / 2, 2)], font_size=14)
+        L = VGroup(g1, g2).arrange(DOWN, buff=0.3).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        k = DashedLine(g1.ax.c2p(0, h["K"]), g1.ax.c2p(n, h["K"]), stroke_color=GREY_C, stroke_width=1.5)
+        tr = ValueTracker(0)
+        pS = tracing(g1.ax, days, S, tr, SPOT, stroke_width=2.5)
+        pd = tracing(g2.ax, days, dd, tr, BAD, stroke_width=3)
+        ps = tracing(g2.ax, days, ds, tr, GOOD, stroke_width=3)
+        leg = legend([(BAD, r"short digital: its hedge"), (GOOD, r"short call spread, width 2: its hedge")],
+                     font_size=16).next_to(L, UP, buff=0.15).align_to(L, LEFT)
+        hd = {r["n"]: r for r in rows["digital"]}
+        hs = {r["n"]: r for r in rows["spread"]}
+        tab = VGroup(VGroup(label(r"rebalances", font_size=19, color=GREY_A), label(r"digital: s.d.", font_size=19, color=BAD),
+                            label(r"1\% tail", font_size=19, color=BAD), label(r"spread: s.d.", font_size=19, color=GOOD),
+                            label(r"1\% tail", font_size=19, color=GOOD)))
+        for m in (21, 84, 336):
+            tab.add(VGroup(MathTex(str(m), font_size=26), MathTex(f"{hd[m]['sd']:.3f}", font_size=26),
+                           MathTex(f"{hd[m]['q01']:+.2f}", font_size=26), MathTex(f"{hs[m]['sd']:.3f}", font_size=26),
+                           MathTex(f"{hs[m]['q01']:+.2f}", font_size=26)))
+        xs = [0.9, 2.3, 3.4, 4.7, 5.8]
+        for i, row in enumerate(tab):
+            for j, cell in enumerate(row):
+                cell.move_to([xs[j], 2.0 - 0.55 * i, 0])
+        r_d = hd[21]["sd"] / hd[336]["sd"]
+        r_s = hs[21]["sd"] / hs[336]["sd"]
+        faster = r_s > r_d
+        note_ = wrapped_label(rf"hedging P\&L per unit of payout, 40{{,}}000 paths; prices: digital {hd[21]['price']:.3f}, "
+                              rf"spread {hs[21]['price']:.3f}. Rebalancing 16 times as often cuts the digital's error "
+                              rf"{r_d:.1f}-fold and the spread's {r_s:.1f}-fold", 5.6, 18, GREY_A)
+        note_.next_to(tab, DOWN, buff=0.35).align_to(tab, LEFT)
+        verdict = (f"the spread's error falls {r_s:.1f}-fold, the digital's only {r_d:.1f}-fold. The extra "
+                   f"{hs[21]['price'] - hd[21]['price']:.3f} the spread costs is the price of a book that can be hedged."
+                   if faster else
+                   f"both errors fall at a similar rate, {r_d:.1f}-fold and {r_s:.1f}-fold; the spread's advantage is its "
+                   "smaller error at every frequency.")
+        src = illustration(r"one month, struck at 100, 25\% volatility; delta-hedged in the underlying, no costs",
+                           corner=UR)
         with self.voiceover(
-            "Two more path-dependent payoffs. An Asian option pays on the average price over its life: cheaper than "
-            f"a vanilla, {a['price']:.2f} against {a['vanilla']:.2f} here, and hard to push around with a trade at a "
-            "single fixing. The arithmetic average has no closed form, so it is simulated. <bookmark mark='a'/> But "
-            "the geometric average does: Angelien Kemna and Ton Vorst noticed in 1990 that it is log-normal. Simulate "
-            "both on the same paths, and correct the arithmetic estimate by the geometric one's known error. The "
-            f"noise falls by a factor of {ratio:.0f}, as if you had run {ratio ** 2:.0f} times as many paths. "
-            "<bookmark mark='b'/> And a lookback, which pays the final price minus the lowest one, shows the barrier's "
-            "lesson again: watched at daily closes, it is worth less than the continuous formula says."
+            "Why does the width matter so much? Hedge both books on one path. A month to expiry, spot near the "
+            "strike, rebalanced daily. <bookmark mark='a'/> In red, the hedge for a short digital; in green, the "
+            "hedge for a short call spread two points wide. As the path hovers near the strike in the last days, the "
+            "digital's hedge swings wildly, while the spread's stays within one over the width. "
+            "<bookmark mark='b'/> Now forty thousand paths, and three rebalancing frequencies. Rebalancing sixteen "
+            f"times as often, {verdict}"
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), FadeIn(leg[0]), FadeIn(p1), Create(l1), FadeIn(side[0]), FadeIn(side[1]))
+            self.play(FadeIn(L), Create(k), FadeIn(leg), FadeIn(src))
             vo.wait_until("a")
-            self.play(FadeIn(leg[1]), FadeIn(p2), Create(l2), FadeIn(side[2]))
+            self.add(pS, pd, ps)
+            self.play(tr.animate.set_value(n - 1), run_time=6, rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(side[3]))
+            self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.4), FadeIn(note_))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def onetouch(self, o):
+        rows = [
+            cmath(r"P\Big(\min_{t \le T} X_t \le b\Big)", r"=", r"N\Big(rac{b - \mu T}{\sigma\sqrt T}\Big) + "
+                  r"e^{2\mu b/\sigma^2}\,N\Big(rac{b + \mu T}{\sigma\sqrt T}\Big)", font_size=34,
+                  colors={r"P\Big(\min_{t \le T} X_t \le b\Big)": OPT}),
+            cmath(r"\mu = 0:\quad OT", r"=", r"2\,N\Big(rac{b}{\sigma\sqrt T}\Big) = 2 	imes 	ext{digital}",
+                  font_size=34, colors={r"\mu = 0:\quad OT": GOOD}),
+            cmath(r"r = q = 0:\quad OT", r"=", r"N(-d_2) + rac{S}{H}\,N(-d_1)", font_size=34,
+                  colors={r"r = q = 0:\quad OT": IV}),
+        ]
+        whys = [why(r"$X = \log S$, $b = \log(H/S) < 0$, $\mu = r - q - \sigma^2/2$: the first-passage law of Brownian "
+                    r"motion with drift (Part 5: reflection, then Girsanov)"),
+                why(r"no drift: every path that ends below $b$ touched it, and so did its mirror image"),
+                why(r"with the price a martingale the log drifts down, and the rule of thumb ``twice the digital'' "
+                    r"overstates it")]
+        step = ladder(self, rows, whys, keep=3, top=2.7, x=-1.4, buff=0.8, edge=6.9)
+        res = wrapped_label(rf"a down one-touch at 90, spot 100, six months, 25\%: closed form {o['closed']:.3f}; Monte "
+                            rf"Carlo on 1{{,}}000 steps {o['mc']:.3f} $\pm$ {2 * o['mc_se']:.3f} (the BGK-shifted "
+                            rf"formula: {o['bgk']:.3f}); twice the digital put {o['two_digital']:.3f}", 12.0, 20,
+                            GREY_A).to_edge(DOWN, buff=0.45)
+        with self.voiceover(
+            "A one-touch pays if the barrier is touched at any time before expiry. Its price is the probability of "
+            "touching, and reflection gives it at once: the first-passage law of Brownian motion with drift, from "
+            "Part five. <bookmark mark='a'/> With no drift in the log price there is a beautiful rule: every path "
+            "that ends below the barrier touched it, and so did its mirror twin, so the one-touch is worth exactly "
+            "twice the digital. Traders use this as a rule of thumb. <bookmark mark='b'/> With zero rates, though, "
+            "the price is a martingale and its log drifts down, and the exact price is a digital plus a little less "
+            f"than a second one. Here: closed form {o['closed']:.3f}, simulation {o['mc']:.3f} on a grid of a "
+            f"thousand steps, which misses a few touches between steps, and twice the digital, {o['two_digital']:.3f}, "
+            "a few points too high."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            self.play(FadeIn(res))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def skew(self, d):
+        k = np.asarray(d["k"])
+        g = axes([-0.2, 0.2], [0, 1], x_length=6.2, y_length=4.0, xlabel=r"log strike / forward",
+                 ylabel=r"30-day digital call, bitcoin", xticks=[-0.2, -0.1, 0, 0.1, 0.2], yticks=[0, 0.5, 1.0],
+                 font_size=15).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
+        ax = g.ax
+        flat = DashedVMobject(curve(ax, k, np.asarray(d["flat"]), GREY_B, stroke_width=2.5), num_dashes=40)
+        sk = curve(ax, k, np.asarray(d["skew_price"]), OPT, stroke_width=3)
+        fd = VGroup(*[Dot(ax.c2p(a, b), radius=0.04, color=WHITE) for a, b in zip(k[::4], np.asarray(d["fd"])[::4])])
+        leg = legend([(GREY_B, rf"Black--Scholes at the at-the-money vol, {100 * d['atm']:.0f}\%"),
+                      (OPT, r"with the smile's slope"), (WHITE, r"check: $-\partial C/\partial K$ on the smile")],
+                     font_size=16).next_to(g, UP, buff=0.1).align_to(g, LEFT)
+        rows = [cmath(r"D(K)", r"=", r"-\frac{d}{dK}C\big(K, \sigma(K)\big) = e^{-rT}N(d_2) - \mathcal V(K)\,\sigma'(K)",
+                      font_size=30, colors={r"D(K)": OPT})]
+        side = VGroup(rows[0],
+                      wrapped_label(r"the chain rule: the call depends on the strike directly and through the smile. "
+                                    r"Where the smile falls with strike ($\sigma' < 0$, the equity skew), the digital is "
+                                    r"dearer than $N(d_2)$", 5.0, 19, GREY_A),
+                      wrapped_label(rf"at the money: {100 * d['atm_diff']:+.1f} points against the flat-vol price; at "
+                                    rf"$k = 0.1$, where the bitcoin smile turns up, {d['at_k']['skew']:.3f} against "
+                                    rf"{d['at_k']['flat']:.3f}", 5.0, 19, WHITE),
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
+        pp = pause_card(r"Equity skew. Is a digital call dearer or cheaper than Black--Scholes at the at-the-money vol?",
+                        width=6.4).to_corner(UR, buff=0.3)
+        src = real_data(r"the Surface: Part 12's SSVI fit to Deribit bitcoin options, 10 December 2025, 30-day slice")
+        cheaper = d["at_k"]["skew"] < d["at_k"]["flat"]
+        with self.voiceover(
+            "One more thing a digital knows: the smile. Pause and predict. With an equity skew, is a digital call "
+            "dearer or cheaper than Black–Scholes at the at-the-money volatility? <bookmark mark='a'/> A digital is "
+            "minus the slope of the call price in strike. But as the strike moves, the implied volatility moves too, "
+            "so the chain rule adds a term: vega times the smile's slope. Where the smile falls with strike, that "
+            "term makes the digital dearer. <bookmark mark='b'/> On the bitcoin Surface, thirty days out, the "
+            f"digital at the money is {100 * d['atm_diff']:.1f} points dearer than the flat-volatility price"
+            + (", and further out, where the bitcoin smile turns up, it is cheaper. " if cheaper else ". ")
+            + "The white dots check it by differentiating call prices on the smile. A digital is a bet on the "
+            "smile's slope as much as on the spot."
+        ) as vo:
+            self.play(FadeIn(pp))
+            vo.wait_until("a")
+            self.play(FadeOut(pp), FadeIn(g), FadeIn(src), Create(flat), FadeIn(leg[0]), FadeIn(side[0]),
+                      FadeIn(side[1]))
+            vo.wait_until("b")
+            self.play(Create(sk), FadeIn(leg[1]), FadeIn(fd), FadeIn(leg[2]), FadeIn(side[2]))
         self.wait(0.4)
         self.clear_scene()

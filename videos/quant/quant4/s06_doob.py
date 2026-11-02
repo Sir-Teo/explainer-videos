@@ -18,7 +18,7 @@ class Doob(VoiceoverScene):
         self.square(d)
 
     def card(self):
-        c = chapter_card(11, r"Doob's decomposition", r"How much of a price is predictable?", lit=(1953,), part=PART)
+        c = chapter_card(11, r"Doob's decomposition", r"How much of a price is predictable?", part=PART)
         with self.voiceover("Chapter eleven. Doob's decomposition."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

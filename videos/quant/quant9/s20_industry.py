@@ -169,7 +169,7 @@ class Industry(VoiceoverScene):
             "When the mispricing widens, capital is withdrawn, and at the margin floor the fund is "
             "liquidated, missing the convergence it was right about. <bookmark mark='b'/> A thousand "
             "paths each: "
-            + verdict +
+            f"{verdict}"
             f"With flows equal to the loss, {100 * r1['p_liq']:.1f} percent; twice the loss, {100 * rows[-1]['p_liq']:.1f}. "
             "<bookmark mark='c'/> And liquidations come when the mispricing is widest: arbitrage is "
             "limited by funding, not insight."

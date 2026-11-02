@@ -20,7 +20,7 @@ class Ruin(VoiceoverScene):
 
     def card(self):
         c = chapter_card(9, r"Gambler's ruin and bold play", r"How should you bet in a game you will lose?",
-                         lit=(1965,), part=PART)
+                         part=PART)
         with self.voiceover("Chapter nine. Gambler's ruin, and bold play."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

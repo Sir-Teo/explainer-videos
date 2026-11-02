@@ -459,6 +459,29 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Dechow, P., Ge, W., Larson, C., Sloan, R. (2011). "Predicting material accounting misstatements." *CAR*.
 - Novy-Marx, R. (2013). "The other side of value: the gross profitability premium." *JFE*.
 - Mitchell, M., Pulvino, T. (2001). "Characteristics of risk and return in risk arbitrage." *Journal of Finance*.
+- Williams, J. B. (1938). *The Theory of Investment Value*. Harvard University Press.
+- Shiller, R. J. (1981). "Do stock prices move too much to be justified by subsequent changes in dividends?" *AER* 71(3).
+- Campbell, J. Y., Shiller, R. J. (1988). "The dividend-price ratio and expectations of future dividends and discount factors." *RFS* 1(3).
+- Cochrane, J. H. (2008). "The dog that did not bark: a defense of return predictability." *RFS* 21(4).
+- Modigliani, F., Miller, M. (1963). "Corporate income taxes and the cost of capital: a correction." *AER* 53(3).
+- Miller, M. (1977). "Debt and taxes." *Journal of Finance* 32(2).
+- Jensen, M., Meckling, W. (1976). "Theory of the firm: managerial behavior, agency costs and ownership structure." *JFE* 3(4).
+- Merton, R. C. (1974). "On the pricing of corporate debt: the risk structure of interest rates." *Journal of Finance* 29(2).
+- Dixit, A., Pindyck, R. (1994). *Investment under Uncertainty*. Princeton University Press.
+- Foster, G., Olsen, C., Shevlin, T. (1984). "Earnings releases, anomalies, and the behavior of security returns." *The Accounting Review* 59(4).
+- Ikenberry, D., Lakonishok, J., Vermaelen, T. (1995). "Market underreaction to open market share repurchases." *JFE* 39.
+- Boudoukh, J., Michaely, R., Richardson, M., Roberts, M. (2007). "On the importance of measuring payout yield." *Journal of Finance* 62(2).
+- Pontiff, J., Woodgate, A. (2008). "Share issuance and cross-sectional returns." *Journal of Finance* 63(2).
+- Dechow, P., Sloan, R., Soliman, M. (2004). "Implied equity duration: a new measure of equity risk." *Review of Accounting Studies* 9.
+- Graham, J., Harvey, C. (2001). "The theory and practice of corporate finance: evidence from the field." *JFE* 60; (2002) "How do CFOs make capital budgeting and capital structure decisions?" *JACF* 15.
+- Brav, A., Jiang, W., Partnoy, F., Thomas, R. (2008). "Hedge fund activism, corporate governance, and firm performance." *Journal of Finance* 63(4).
+- Asness, C., Frazzini, A., Pedersen, L. H. (2019). "Quality minus junk." *Review of Accounting Studies* 24(1).
+- McLean, R. D., Pontiff, J. (2016). "Does academic research destroy stock return predictability?" *Journal of Finance* 71(1).
+- Chen, A., Zimmermann, T. (2022). "Open source cross-sectional asset pricing." *Critical Finance Review* 11(2); data release 2024.10.
+- Martineau, C. (2022). "Rest in peace post-earnings announcement drift." *Critical Finance Review* 11(3–4).
+- Frontier: van Binsbergen, J., Han, X., Lopez-Lira, A. (2023). "Man vs. machine learning: the term structure of earnings expectations and conditional biases." *RFS* 36(6); the reply by Zhang, Zhu and Linnainmaa (2025), "Man versus machine learning revisited," *RFS* 38(12); Cao, S., Jiang, W., Wang, J., Yang, B. (2024). "From man vs. machine to man + machine: the art and AI of stock analyses." *JFE* 160; Islam, P. et al. (2023). "FinanceBench." arXiv 2311.11944; Jensen, T. I., Kelly, B., Pedersen, L. H. (2023). "Is there a replication crisis in finance?" *Journal of Finance* 78(5); Gormsen, N., Lazarus, E. (2023). "Duration-driven returns." *Journal of Finance* 78(3); Eisfeldt, A., Kim, E., Papanikolaou, D. (2022). "Intangible value." *Critical Finance Review* 11(2).
+- Withdrawn by their authors, cited as cautionary cases only, no findings drawn from them: Kim, A., Muhn, M., Nikolaev, V. "Financial statement analysis with large language models," arXiv 2407.17866 (withdrawn 2025, pending review of the findings); "Bloated disclosures: can ChatGPT help investors process information?", arXiv 2306.10224 (withdrawn after a co-author's replication did not support it).
+- Regulatory and court record: SEC Release 33-9002 (2009, XBRL); SEC press releases 2020-319 (Luckin Coffee) and 2021-174 (Kraft Heinz); *In re Appraisal of Dell Inc.* (Del. Ch. 31 May 2016) and *Dell, Inc. v. Magnetar* (Del. 14 Dec. 2017); *RBC Capital Markets v. Jervis* (Del. 30 Nov. 2015); SEC Schedule 13D amendments (10 Oct. 2023); SEC staff report on off-balance-sheet arrangements (2005); FASB ASU 2016-02 (leases).
 
 ### Part 4 · Martingales and Measure
 - Kolmogorov, A. N. (1933). *Grundbegriffe der Wahrscheinlichkeitsrechnung*.
@@ -469,6 +492,39 @@ These books are not textbooks. They are the stories the series tells and the fir
 - Shafer, G., Vovk, V. (2001). *Probability and Finance: It's Only a Game!*; (2019) *Game-Theoretic Foundations for Probability and Finance*.
 - Ramdas, A., Grünwald, P., Vovk, V., Shafer, G. (2023). "Game-theoretic statistics and safe anytime-valid inference." *Statistical Science*.
 - Bank of England (1995). *Report of the Board of Banking Supervision Inquiry into the Circumstances of the Collapse of Barings*.
+- Radon, J. (1913); Nikodym, O. (1930). "Sur une généralisation des intégrales de M. J. Radon." *Fundamenta Mathematicae* 15.
+- Esscher, F. (1932). "On the probability function in the collective theory of risk." *Skandinavisk Aktuarietidskrift*.
+- Wald, A. (1945). "Sequential tests of statistical hypotheses." *Annals of Mathematical Statistics*.
+- Kakutani, S. (1948). "On equivalence of infinite product measures." *Annals of Mathematics*.
+- Mandelbrot, B. (1963). "The variation of certain speculative prices." *Journal of Business*.
+- Thorp, E. O. (1962). *Beat the Dealer*.
+- Dubins, L., Savage, L. J. (1965). *How to Gamble If You Must*.
+- Azuma, K. (1967). "Weighted sums of certain dependent random variables." *Tôhoku Mathematical Journal*.
+- Li, S.-Y. R. (1980). "A martingale approach to the study of occurrence of sequence patterns in repeated experiments." *Annals of Probability* 8(6):1171–1176.
+- Koutrouvelis, I. A. (1980). "Regression-type estimation of the parameters of stable laws." *JASA*.
+- Merton, R. C. (1980). "On estimating the expected return on the market." *Journal of Financial Economics* 8.
+- Harrison, J. M., Pliska, S. R. (1981). "Martingales and stochastic integrals in the theory of continuous trading." *Stochastic Processes and their Applications*.
+- McCulloch, J. H. (1986). "Simple consistent estimators of stable distribution parameters." *Communications in Statistics: Simulation*.
+- Dybvig, P., Huang, C. (1988). "Nonnegative wealth, absence of arbitrage, and feasible consumption plans." *RFS* 1(4):377–401.
+- Benter, W. (1994). "Computer based horse race handicapping and wagering systems: a report." In Hausch, Lo, Ziemba (eds.), *Efficiency of Racetrack Betting Markets*.
+- Gerber, H. U., Shiu, E. S. W. (1994). "Option pricing by Esscher transforms." *Transactions of the Society of Actuaries* 46:99–191.
+- Kaunitz, L., Zhong, S., Kreiner, J. (2017). "Beating the bookies with their own numbers, and how the online sports betting market is rigged." arXiv:1710.02824.
+- Cutkosky, A., Orabona, F. (2018). "Black-box reductions for parameter-free online learning in Banach spaces." *COLT*.
+- Augenblick, N., Rabin, M. (2021). "Belief movement, uncertainty reduction, and rational updating." *QJE* 136(2):933–985.
+- Vovk, V., Wang, R. (2021). "E-values: calibration, combination and applications." *Annals of Statistics*.
+- Johari, R., Koomen, P., Pekelis, L., Walsh, D. (2022). "Always valid inference: continuous monitoring of A/B tests." *Operations Research*.
+- Lindon, M., Sanden, C., Shirikian, V. (2022). "Rapid regression detection in software deployments through sequential testing." *KDD*.
+- Wang, R., Ramdas, A. (2022). "False discovery rate control with e-values." *JRSS B* 84(3):822–852.
+- Ruf, J., Larsson, M., Koolen, W., Ramdas, A. (2023). "A composite generalization of Ville's martingale theorem using e-processes." *Electronic Journal of Probability* 28.
+- Waudby-Smith, I., Ramdas, A. (2024). "Estimating means of bounded random variables by betting." *JRSS B* 86(1).
+- Shekhar, S., Ramdas, A. (2024). "Nonparametric two-sample testing by betting." *IEEE Trans. Information Theory* 70(2).
+- Grünwald, P., de Heide, R., Koolen, W. (2024). "Safe testing." *JRSS B* 86(5).
+- Grünwald, P. (2024). "Beyond Neyman–Pearson: e-values enable hypothesis testing with a data-driven alpha." *PNAS* 121(39).
+- Larsson, M., Ramdas, A., Ruf, J. (2024). "The numeraire e-variable and reverse information projection." arXiv:2402.18810.
+- Fischer, L., Ramdas, A. (2025). "Sequential Monte-Carlo testing by betting." *JRSS B*.
+- Ramdas, A., Wang, R. (2025). *Hypothesis Testing with E-values*. Foundations and Trends in Statistics.
+- Bürgi, C., Deng, W., Whelan, K. (2025–26). "Makers and takers: the economics of the Kalshi prediction market." CESifo WP 12122.
+- Industry and public record: *Ivey v Genting Casinos* [2014] EWHC 3394 (QB), [2017] UKSC 67; *Uston v. Resorts International Hotel*, 89 N.J. 163 (1982); UNLV Center for Gaming Research, *Nevada Table Games: Historical Hold Percentage Variations* (2026); Flutter Entertainment, Form 10-K (FY2024); *KalshiEX v. CFTC* (D.D.C. 2024); Reserve Bank of Australia, *Bulletin* (Nov. 1995) on the Barings report.
 
 ### Part 5 · Stochastic Calculus
 - Wiener, N. (1923). "Differential space." *Journal of Mathematics and Physics*.

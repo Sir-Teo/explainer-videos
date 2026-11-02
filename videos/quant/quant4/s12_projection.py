@@ -26,7 +26,7 @@ class Projection(VoiceoverScene, ThreeDScene):
 
     def card(self):
         c = chapter_card(2, r"Conditional expectation is a projection", r"What is the best forecast you can make?",
-                         lit=(1933,), part=PART)
+                         part=PART)
         with self.voiceover("Chapter two. Conditional expectation is a projection."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

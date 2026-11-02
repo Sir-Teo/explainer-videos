@@ -183,7 +183,7 @@ class Continuous(VoiceoverScene):
             f"With {g['n']:,} paths, the plain average payoff is {g['price_naive']:.2f}: the wrong "
             f"price, ignoring risk. <bookmark mark='a'/> Weighted, {g['price_weighted']:.2f}, standard "
             f"error {g['se']:.3f}, against Black and Scholes' {g['bs']:.2f}. "
-            + tail +
+            f"{tail}"
             f"<bookmark mark='b'/> The effective sample is {100 * g['ess']:.1f} percent of the paths; "
             f"the formula predicted {100 * g['ess_pred']:.1f}."
         ) as vo:

@@ -100,7 +100,7 @@ class MOTConverge(VoiceoverScene):
                 "It narrows as the grid refines. ")
         with self.voiceover(
             "But the band depends on the grid. Refine it from nine by twenty-five atoms to eighty-one "
-            "by three hundred and sixty-one, checking convex order each time. <bookmark mark='a'/> " + tail +
+            f"by three hundred and sixty-one, checking convex order each time. <bookmark mark='a'/> {tail}"
             f"From {lo[0]:.3f} to {up[0]:.3f} on the coarsest grid, to {lo[-1]:.3f} to {up[-1]:.3f} on "
             "the finest, the last two nearly agreeing. <bookmark mark='b'/> Chapter fifteen's band "
             "was a little narrow; the log-normal still sits inside. Report a bound with its grid."

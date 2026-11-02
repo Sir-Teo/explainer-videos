@@ -29,7 +29,7 @@ class Information(VoiceoverScene, MovingCameraScene):
 
     def card(self):
         c = chapter_card(1, r"Information: $\sigma$-algebras and filtrations", r"What do you know, and when?",
-                         lit=(1933,), part=PART)
+                         part=PART)
         with self.voiceover("Chapter one. Information: sigma-algebras and filtrations."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

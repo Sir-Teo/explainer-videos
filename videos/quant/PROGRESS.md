@@ -64,7 +64,10 @@ Builds are paused: narrated builds resume only after a part is expanded (the nar
 
 Expansion status (2 Nov 2026, night): research plans for Parts 3–9 are in `videos/quant/plans/quantN.md`
 (copied from the scratchpad so a restart cannot lose them); the shared implementation brief is
-`videos/quant/plans/IMPLEMENT.md`. Parts 2–9 are being implemented in parallel (plans `quant2.md` … `quant9.md`); then plans
+`videos/quant/plans/IMPLEMENT.md`. Pace: the quant narrator runs at about 168 counted words per minute (Parts 1 and 10 rendered: 7,491 words in
+44.9 min, 7,712 in 45.6), not the AI series' 140; `tools/lecture_length.py` now uses 168 for quant and re-estimates
+any chapter edited after its render, so 50 minutes is about 8,400 narration words (target 9,300–9,800).
+Parts 2–9 are being implemented in parallel (plans `quant2.md` … `quant9.md`); then plans
 for Parts 1 and 10–17. Section 1 of SYLLABUS.md now sets chapters at
 about 3 minutes (16–20 per part), as in the AI series. Part 17 cites SR 26-2 (17 April 2026), which replaced SR 11-7.
 

@@ -239,7 +239,7 @@ class Density(VoiceoverScene):
             f"the sixteen-day expiry: on {n} strikes from raw trades, {b['raw_fly']} negative "
             f"butterflies; on the Surface's median quotes, {b['mark_fly']}; on the fitted smile, "
             f"{b['svi_fly']}. <bookmark mark='b'/> "
-            + verdict +
+            f"{verdict}"
             "Not free money: the trades come at different moments, inside a bid-ask spread several "
             "butterflies wide. So the House never differentiates raw prices; it fits first."
         ) as vo:

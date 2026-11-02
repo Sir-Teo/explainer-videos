@@ -20,7 +20,7 @@ class Betting(VoiceoverScene):
 
     def card(self):
         c = chapter_card(15, r"Ville's inequality and testing by betting", r"How do you test a market you watch every "
-                         r"day?", lit=(2023,), part=PART)
+                         r"day?", part=PART)
         with self.voiceover("Chapter fifteen. Ville's inequality, and testing by betting."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

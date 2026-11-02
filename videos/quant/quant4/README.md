@@ -213,7 +213,7 @@ python tools/make.py quant4 --cpu-voice -q m                 # English and Chine
 * Kalshi: *KalshiEX v. CFTC* (D.D.C., September 2024, Judge Jia Cobb); the D.C. Circuit declined to stay it.
   Polymarket's 2024 presidential market: "nearly $3.7 billion" traded and one trader's net profit of about $79 m
   (Chainalysis), as reported by The Block.
-* Bürgi, Deng and Whelan (CESifo WP 12122, 2025): only the qualitative findings (sharper prices near the close, a
+* Bürgi, Deng and Whelan (CESifo WP 12122): only the qualitative findings (sharper prices near the close, a
   favourite–longshot bias, stronger for takers) are used; the return figures are not.
 * Larsson, Ramdas and Ruf (2024) is cited by its arXiv number (2402.18810); its journal is not given.
 * Waudby-Smith and Ramdas, *JRSS B* 86(1) (2024).

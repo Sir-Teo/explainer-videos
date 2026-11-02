@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant11.common import ALT, GAMMA, OPT, PART, SPOT, THETA, VEGA, load, real_data, tbar
+from videos.quant.quant11.common import ALT, GAMMA, OPT, PART, SPOT, THETA, VEGA, load, pause, real_data, tbar
 
 
 def _year(ts):
@@ -20,11 +20,13 @@ class VRP(VoiceoverScene):
         self.card()
         self.series(e)
         self.result(e, env)
+        self.cross_section()
+        self.kelly(load("kelly"))
 
     def card(self):
-        c = chapter_card(3, r"Volatility trading, and a forecaster's edge", r"When is implied volatility too high?",
+        c = chapter_card(7, r"A forecaster's edge, and how much to bet", r"When is implied volatility too high?",
                          part=PART)
-        with self.voiceover("Chapter three. Volatility trading, and a forecaster's edge."):
+        with self.voiceover("Chapter seven. A forecaster's edge, tested, and how much to bet."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -35,7 +37,8 @@ class VRP(VoiceoverScene):
                  xticks=[2022, 2023, 2024, 2025, 2026], xfmt=lambda u: f"{int(u)}", yticks=[0, 0.4, 0.8, 1.2, 1.6],
                  yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
-        li = curve(ax, t, iv, VEGA, stroke_width=3)
+        tr = ValueTracker(0.0)
+        li = tracing(ax, t, iv, tr, VEGA, stroke_width=3)
         lf = curve(ax, t, fv, ALT, stroke_width=2.5)
         lr = curve(ax, t, rv, GAMMA, stroke_width=1.5).set_stroke(opacity=0.7)
         leg = legend([(VEGA, r"implied: DVOL, the day it is sold"), (ALT, r"forecast: HAR on past realized variance"),
@@ -49,14 +52,16 @@ class VRP(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         src = real_data(r"Deribit DVOL and Binance BTCUSDT hourly, 2021--2025")
         with self.voiceover(
-            "Part ten found that selling Bitcoin options and hedging them earned money on average: implied "
+            "Chapter six measured the premium. Part ten found that selling Bitcoin options and hedging them earned money on average: implied "
             "volatility tends to sit above the volatility that follows, the volatility risk premium, paid for "
             "carrying a fat left tail. <bookmark mark='a'/> A trader can try to do better. Euan Sinclair's rule is to "
             "sell only when implied volatility is above your own forecast. The forecast here is Part seven's HAR "
             "model, refitted every week on the past alone. <bookmark mark='b'/> And here is what was realized over "
             "each following month: mostly below implied, with spikes the forecast could not see coming."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(src), Create(li), FadeIn(side[0]), FadeIn(leg[0]), run_time=2)
+            self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(leg[0]))
+            self.add(li)
+            self.play(tr.animate.set_value(len(t) - 1), run_time=max(vo.until("a") - 0.2, 1.0), rate_func=linear)
             vo.wait_until("a")
             self.play(Create(lf), FadeIn(leg[1]), FadeIn(side[1]), FadeIn(side[2]), run_time=2)
             vo.wait_until("b")
@@ -102,5 +107,96 @@ class VRP(VoiceoverScene):
             self.play(FadeIn(side[2]), FadeIn(side[4]))
             vo.wait_until("b")
             self.play(FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def cross_section(self):
+        card = theorem_card(r"Goyal and Saretto (2009)", r"Sort US stocks each month on historical minus implied "
+                            r"volatility. Buying straddles on the stocks whose implied is far below their own history, "
+                            r"and selling them where it is far above, earned large average returns, 1996--2006: the "
+                            r"forecaster's edge, across a cross-section of stocks.",
+                            who=r"\textit{Cross-section of option returns and volatility}, JFE", color=QC.IDEA, width=7.4,
+                            font_size=22).to_edge(LEFT, buff=0.6)
+        side = VGroup(
+            wrapped_label(r"one asset through time (this chapter) against thousands of stocks at once: the same idea, "
+                          r"with far more independent bets", 4.4, 21, GREY_A),
+            wrapped_label(r"Part 25 asks how many such sorts survive once you count everything that was tried", 4.4, 20,
+                          ALT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.5)
+        with self.voiceover(
+            "With one asset, a few dozen independent months are all you get. The same idea across thousands of "
+            "stocks gives far more. Amit Goyal and Alessio Saretto sorted American stocks every month on their "
+            "historical volatility minus their implied volatility, and traded straddles on the extremes: long where "
+            "implied was far below the stock's own history, short where it was far above. <bookmark mark='a'/> From "
+            "1996 to 2006 the spread earned large average returns. Part twenty-five asks how many such sorts survive "
+            "once you count every sort that was tried."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(side[1]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def kelly(self, k):
+        f, gg = np.asarray(k["f"]), np.asarray(k["g"])
+        top = float(gg.max())
+        xmax = max(k["f_gauss"], k["f_ruin"]) * 1.1
+        g = axes([0, xmax], [-0.1, top * 1.3], x_length=7.0, y_length=4.0, xlabel=r"leverage $f$ (notional per unit of "
+                 r"capital)", ylabel=r"expected log growth per month, $g(f)$", xticks=[0, 10, 20, 30, 40, 50],
+                 yticks=[0, round(top, 2)], font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
+        ax = g.ax
+        line = curve(ax, f, np.clip(gg, -0.1, top * 1.3), OPT, stroke_width=3.5)
+        wall = DashedLine(ax.c2p(k["f_ruin"], -0.1), ax.c2p(k["f_ruin"], top * 1.3), color=QC.LOSS, stroke_width=3)
+        walll = label(rf"ruin: $1/|x_{{\min}}| = {k['f_ruin']:.0f}$", font_size=18, color=QC.LOSS).next_to(
+            ax.c2p(k["f_ruin"], top * 1.3), UP, buff=0.05)
+        gk = DashedLine(ax.c2p(k["f_gauss"], -0.1), ax.c2p(k["f_gauss"], top * 1.3), color=GREY_B, stroke_width=2)
+        gkl = label(rf"Gaussian Kelly $\mu/\sigma^2 = {k['f_gauss']:.0f}$", font_size=18, color=GREY_B).next_to(
+            ax.c2p(k["f_gauss"], top * 0.6), RIGHT, buff=0.08)
+        x = ValueTracker(0.0)
+        dot = always_redraw(lambda: Dot(ax.c2p(x.get_value(), float(np.interp(x.get_value(), f, gg))), radius=0.08,
+                                        color=YELLOW))
+        ro = always_redraw(lambda: MathTex(rf"f = {x.get_value():.1f},\ \ g = {float(np.interp(x.get_value(), f, gg)):.3f}",
+                                           font_size=26, color=YELLOW).next_to(g, UP, buff=0.1).align_to(g, RIGHT))
+        half = float(np.interp(k["f_emp"] / 2, f, gg))
+        rows = [cmath(r"g(f)", r"=", r"\mathbb{E}\log(1 + fX) \approx f\mu - \tfrac12 f^2\sigma^2", font_size=32),
+                cmath(r"f^*_{\text{Gauss}}", r"=", r"\mu/\sigma^2", font_size=32),
+                cmath(r"f", r"<", r"1/|x_{\min}|\quad(\log 0 = -\infty)", font_size=32)]
+        eqs = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(UP * 1.4)
+        notes = VGroup(
+            wrapped_label(rf"the empirical optimum sits against the wall, at {k['f_emp']:.0f}: the sample's worst month "
+                          rf"({100 * k['min']:.1f}\% of notional) is the only thing that stops it", 4.6, 19, GREY_A),
+            wrapped_label(rf"half that leverage keeps {100 * half / k['g_max']:.0f}\% of the growth, and survives a month "
+                          r"twice as bad as any seen", 4.6, 19, GAMMA),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(eqs, DOWN, buff=0.35).align_to(eqs, LEFT)
+        src = real_data(rf"Part 10's {k['n']} monthly P\&Ls of a sold, hourly-hedged 30-day bitcoin call, as returns on notional")
+        pc = pause(r"Your edge has $t = 2.4$ on 43 months. Lever it five times?", width=4.6, font_size=21,
+                   corner=DL)
+        at_wall = k["f_emp"] > 0.9 * k["f_ruin"]
+        ksay = (f"The curve keeps rising until it hits the wall at {k['f_ruin']:.0f}: in this sample the optimum is "
+                "simply as close to ruin as the worst month allows, which only means the sample has not yet seen a "
+                "worse month." if at_wall else
+                f"The curve peaks at {k['f_emp']:.0f}, well before the wall at {k['f_ruin']:.0f}.")
+        with self.voiceover(
+            "Suppose the edge is real. How much should you bet? Kelly's answer: the leverage f that maximizes the "
+            "expected logarithm of wealth. Expand the logarithm and the Gaussian answer is mean over variance, here "
+            f"{k['f_gauss']:.0f} times. <bookmark mark='a'/> But a short-volatility return has a worst case, and "
+            "the logarithm of zero is minus infinity: no leverage may exceed one over the worst loss. "
+            "<bookmark mark='b'/> Slide the leverage up on Part ten's real monthly results. "
+            f"{ksay} <bookmark mark='c'/> Half of it keeps {100 * half / k['g_max']:.0f} percent of the growth and "
+            "survives a month twice as bad. That is why traders bet a fraction of Kelly. And pause and predict: an edge "
+            "with a t of two point four on forty-three months; lever it five times? No: the trial counter, and the "
+            "tail you have not seen yet."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(src), FadeIn(eqs[0]), FadeIn(eqs[1]), FadeIn(gk), FadeIn(gkl))
+            vo.wait_until("a")
+            self.play(FadeIn(eqs[2]), Create(wall), FadeIn(walll))
+            vo.wait_until("b")
+            self.play(Create(line), run_time=1.5)
+            self.add(dot, ro)
+            self.play(x.animate.set_value(k["f_emp"]), run_time=max(vo.until("c") - 0.5, 1.0))
+            self.play(FadeIn(notes[0]))
+            self.play(x.animate.set_value(k["f_emp"] / 2), FadeIn(notes[1]), FadeIn(pc), run_time=1.5)
+        dot.clear_updaters()
+        ro.clear_updaters()
         self.wait(0.4)
         self.clear_scene()

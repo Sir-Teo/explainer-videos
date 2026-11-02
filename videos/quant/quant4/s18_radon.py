@@ -85,9 +85,10 @@ class Radon(VoiceoverScene, ThreeDScene):
                     if h <= 1e-6:
                         continue
                     col = interpolate_color(ManimColor(QC.SPOT), ManimColor(Q_C), min(h / zmax, 1.0)) if color_by else LOSS
-                    pr = Prism(dimensions=[ax.x_length / k * 0.92, ax.y_length / k * 0.92, h / 2.2 * ax.z_length],
+                    hz = h / zmax * ax.z_length
+                    pr = Prism(dimensions=[ax.x_length / k * 0.92, ax.y_length / k * 0.92, hz],
                                fill_color=col, fill_opacity=0.85, stroke_width=0.3, stroke_color=BACKGROUND)
-                    pr.move_to(ax.c2p((i + 0.5) / k, (j + 0.5) / k, h / 2))
+                    pr.move_to(ax.c2p((i + 0.5) / k, (j + 0.5) / k, 0) + OUT * hz / 2)
                     grp.add(pr)
             return grp
 

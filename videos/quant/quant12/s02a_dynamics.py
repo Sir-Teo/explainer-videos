@@ -175,7 +175,9 @@ class Dynamics(VoiceoverScene, ThreeDScene):
         src = real_data(r"weekly Deribit surfaces, 2021--2025; the 30-day row, strikes within $\pm 20\%$")
         mm, ms, sb = d["sticky_m_mean"], d["sticky_s_mean"], 100 * d["strike_better"]
         rhat, tstat = R["R"], R["t"]
-        branch = ("That is a real measurement. " if ident else
+        branch = ("This time the slope is clearly not zero: at-the-money volatility falls when Bitcoin rises. Divided by "
+                  "an average skew that is small, the ratio lands near two, the local-volatility value; trust the sign "
+                  "of the slope more than the size of the ratio. " if ident else
                   "Do not believe it. The slope is indistinguishable from zero, and Bitcoin's average skew is close to "
                   "zero too, so the ratio of two small, noisy numbers is not identified. ")
         with self.voiceover(

@@ -17,7 +17,7 @@ class Convergence(VoiceoverScene):
         self.learner(dp)
 
     def card(self):
-        c = chapter_card(10, r"Martingales converge", r"Can a fair game wander forever?", lit=(1953,), part=PART)
+        c = chapter_card(10, r"Martingales converge", r"Can a fair game wander forever?", part=PART)
         with self.voiceover("Chapter ten. Martingales converge."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))

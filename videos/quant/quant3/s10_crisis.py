@@ -185,8 +185,8 @@ class Crisis(VoiceoverScene):
         n = 100
         flagged = int(round(b["flag"] * 1000))
         for i in range(1000):
-            grid.add(Square(0.14, stroke_width=0, fill_color=GREY_D, fill_opacity=0.9))
-        grid.arrange_in_grid(rows=20, cols=50, buff=0.04).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+            grid.add(Square(0.1, stroke_width=0, fill_color=GREY_D, fill_opacity=0.9))
+        grid.arrange_in_grid(rows=20, cols=50, buff=0.03).to_edge(LEFT, buff=0.5).shift(DOWN * 0.5)
         frauds = list(range(0, 10))
         caught = frauds[:5]
         false_flags = list(range(10, 10 + flagged - len(caught)))

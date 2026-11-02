@@ -50,9 +50,10 @@ class MLE(VoiceoverScene, ThreeDScene):
              + pts[min(int(np.floor(k.get_value())) + 1, len(pts) - 1)][1] * (k.get_value() % 1))],
             color=YELLOW, stroke_width=4))
         nll = np.asarray(m["nll_path"])
-        ro = always_redraw(lambda: MathTex(rf"\text{{Newton step }} {int(round(k.get_value()))}:\ -\ell = "
-                                           rf"{nll[int(round(k.get_value()))]:,.0f}".replace(",", "{,}"), font_size=30,
-                                           color=YELLOW).to_corner(UR, buff=0.4))
+        def ro_at(i):
+            return MathTex(rf"\text{{Newton step }} {i}:\ -\ell = {nll[i]:,.0f}".replace(",", "{,}"), font_size=30,
+                           color=YELLOW).to_corner(UR, buff=0.4)
+        ro = ro_at(0)
         hint = VGroup(
             label(r"log-likelihood of a Student $t$ for daily US returns", font_size=22, color=WHITE),
             label(rf"{m['n']:,} days, July 1926 -- December 2020".replace(",", "{,}"), font_size=20, color=GREY_B),
@@ -77,13 +78,15 @@ class MLE(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(Create(surf), run_time=2.5)
             self.move_camera(theta=-45 * DEGREES, run_time=vo.until("b"))
-            self.add(trail, b, ro)
+            self.add(trail, b)
             self.add_fixed_in_frame_mobjects(ro)
-            self.play(k.animate.set_value(len(pts) - 1), run_time=vo.until("c"), rate_func=linear)
+            per = max(vo.until("c") / (len(pts) - 1), 0.4)
+            for i in range(1, len(pts)):
+                self.play(k.animate.set_value(i), Transform(ro, ro_at(i)), run_time=per, rate_func=linear)
             vo.wait_until("c")
             self.play(FadeIn(res))
             self.move_camera(phi=8 * DEGREES, theta=-90 * DEGREES, run_time=max(vo.remaining(1.0) - 0.5, 1.0))
-        for x in (b, trail, ro):
+        for x in (b, trail):
             x.clear_updaters()
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, b, trail)), FadeOut(ro),
                                                                   FadeOut(hint), FadeOut(res)], run_time=1.2)

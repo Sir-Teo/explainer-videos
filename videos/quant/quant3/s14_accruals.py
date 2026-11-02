@@ -170,7 +170,7 @@ class Accruals(VoiceoverScene, ThreeDScene):
                            font_size=21).to_edge(DOWN, buff=0.25)
         with self.voiceover(
             f"Now real filings: seven large non-financial firms in the House's store, {a['real_n']} firm-years. "
-            f"<bookmark mark='a'/> Cash persists with {b[1]:.2f}, accruals with {b[2]:.2f}. " + gap_line + "Sloan used tens of "
+            f"<bookmark mark='a'/> Cash persists with {b[1]:.2f}, accruals with {b[2]:.2f}. {gap_line}Sloan used tens of "
             "thousands of firm-years. <bookmark mark='b'/> At scale, the open-source replication of his portfolio earned "
             f"{a['osap_mean']:.2f} percent a month from 1963 to 2020, t of {a['osap_t']:.1f}. <bookmark mark='c'/> Pause and "
             "predict: two firms earn ten percent of assets, one in cash, one in receivables. Whose earnings will be higher next "
