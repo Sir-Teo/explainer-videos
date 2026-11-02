@@ -45,10 +45,10 @@ class Outro(VoiceoverScene):
             (rf"bitcoin's log variance is rough: $H = {r['H']:.2f}$, or {a['btc_deseasonalized']:.2f} without weekends", RV),
             (rf"rough Bergomi fits the Surface to {rb['rmse']:.1f} vol points with three numbers and the variance curve",
              MODEL_COL["rBergomi"]),
-            (rf"rough Heston, by its fractional Riccati equation: {rh['rmse']:.1f} vol points, $H = {rh['params']['H']:.2f}$",
-             MODEL_COL["rough Heston"]),
+            (rf"rough Heston left free drifts to $H = {rh['params']['H']:.2f}$; held at 0.1 it fits almost as well, with sane "
+             r"parameters", MODEL_COL["rough Heston"]),
             (r"nearly unstable order flow becomes rough volatility at a distance", ROUGH),
-            (r"twenty exponential factors stand in for the rough kernel", VAR),
+            (r"a few dozen exponential factors stand in for the rough kernel", VAR),
             (r"smooth but fast volatility can read as rough: the debate is open", BAD),
             (rf"bitcoin's past path explains {100 * p['r2_test']:.0f}\% of DVOL out of sample", MODEL_COL["PDV"]),
         ]
