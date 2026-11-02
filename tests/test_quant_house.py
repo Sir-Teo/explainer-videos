@@ -475,3 +475,48 @@ def test_volatility_module():
     d = vol.dcc_fit(z1, z2)
     assert d["rho"][:1400].mean() < d["rho"][1600:].mean() - 0.3
     assert vol.acf(walk, 5)[1] > 0.95 and len(vol.ar_fit(xs, 2)["beta"]) == 3
+
+
+# ---------------------------------------------------------------------------
+# Part 8: control
+# ---------------------------------------------------------------------------
+def test_control_utility_and_kelly():
+    from explainer.quant.house import control as C
+    # a 50/50 gamble of 50 or 150 at log utility: CE = sqrt(50*150)
+    assert abs(C.certainty_equivalent([50, 150], [0.5, 0.5], 1.0) - np.sqrt(7500)) < 1e-9
+    assert abs(C.kelly_binary(0.6) - 0.2) < 1e-12
+    f = np.linspace(0, 0.99, 991)
+    assert abs(f[np.argmax(C.growth_binary(f, 0.6))] - 0.2) < 1e-3
+    # twice Kelly grows at (about) zero in the continuous model
+    assert abs(C.growth_continuous(2 * 0.06 / 0.04, 0.06, 0.2)) < 1e-12
+
+
+def test_control_bellman_matches_merton_and_hara():
+    from explainer.quant.house import control as C
+    mu, r, s, g = 0.08, 0.02, 0.18, 3.0
+    out = C.bellman_merton(mu, r, s, g, T=5, steps=20, n_w=120)
+    pi = out["pi"][0, 20:100]
+    assert abs(np.median(pi) - C.merton_fraction(mu, r, s, g)) < 0.03
+    out = C.bellman_merton(mu, r, s, g, T=5, steps=20, n_w=120, floor=0.5)
+    w = out["cushion"] + out["pv_floor"][0]
+    k = np.searchsorted(w, 1.2)
+    assert abs(out["pi"][0, k] - C.hara_fraction(w[k], 0, 5, mu, r, s, g, 0.5)) < 0.04
+
+
+def test_control_secretary():
+    from explainer.quant.house import control as C
+    p = C.secretary(50, [18], trials=40000, seed=1)[0]
+    assert abs(p - C.secretary_exact(50, 18)) < 0.01
+    assert abs(max(C.secretary_exact(100, k) for k in range(1, 100)) - 1 / np.e) < 0.01
+
+
+def test_control_bsde_black_scholes_and_two_rates():
+    from explainer.quant.house import bs as B, control as C
+    call = lambda x: np.maximum(x - 100, 0)  # noqa: E731
+    out = C.bsde_regression(call, 100, 1.0, 0.2, 0.08, 0.05, steps=40, paths=60000, seed=2)
+    assert abs(out["Y0"] - float(B.price(100, 100, 1.0, 0.2, 0.05))) < 0.15
+    # a call is hedged with borrowed cash throughout: its price at two rates is Black-Scholes at the borrowing rate
+    out = C.bsde_regression(call, 100, 1.0, 0.2, 0.08, 0.01, R=0.06, steps=40, paths=60000, seed=3)
+    assert abs(out["Y0"] - float(B.price(100, 100, 1.0, 0.2, 0.06))) < 0.2
+    pde = C.hjb_two_rates(call, 100, 1.0, 0.2, 0.01, 0.06)
+    assert abs(pde - float(B.price(100, 100, 1.0, 0.2, 0.06))) < 0.05
