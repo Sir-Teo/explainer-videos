@@ -63,7 +63,7 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Part fourteen in eight lines. The skew explodes as expiry nears, close to a power law. Bitcoin's "
             "volatility is rough, with H near a tenth. Rough Bergomi and rough Heston fit the Surface with a few "
-            "numbers and a variance curve. Roughness may be what nearly unstable order flow looks like from far away, "
+            "numbers. Roughness may be what nearly unstable order flow looks like from far away, "
             "and a few dozen ordinary factors can imitate it. A smooth but very fast volatility can look rough too, "
             "so the debate is open. And much of implied volatility is simply a function of the path the price has "
             "taken."
