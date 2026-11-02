@@ -279,7 +279,7 @@ class Translation(VoiceoverScene):
             "training uses parallel hardware fully. Any word reaches any other in a single step, so long-range "
             "dependencies are easy to learn. And the work is almost all matrix multiplication, which is exactly what "
             "graphics cards are built for, the subject of Part 17. <bookmark mark='a'/> The encoder–decoder was built "
-            "for translation. Within eighteen months the field had cut it three ways: keep only the encoder, as BERT "
+            "for translation. By late 2019 the field had cut it three ways: keep only the encoder, as BERT "
             "did; keep only the decoder, as GPT did; or keep both, as T5 did. <bookmark mark='b'/> Which cut won, and "
             "why, is the thread of this part."
         ) as vo:

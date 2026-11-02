@@ -73,7 +73,7 @@ class Emergence(VoiceoverScene):
                            label(rf"{tag_of(r)}: \ {human(r['params'], 3)} parameters", font_size=22,
                                  color=cols[r["name"]])).arrange(RIGHT, buff=0.15))
         lst.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([-4.9, 0.6, 0])
-        lh = label(rf"same ${F_tokens() / 1e6:.0f}$M tokens each", font_size=20, color=GREY_B).next_to(lst, UP, buff=0.3)
+        lh = label(rf"family: same ${F_tokens() / 1e6:.0f}$M tokens each", font_size=20, color=GREY_B).next_to(lst, UP, buff=0.3)
         times = (d.get("base_tokens") or 0) / F_tokens()
         bl = (label(rf"the series' model: \\ trained on ${times:.0f}\times$ as many tokens", font_size=18, color=GREY_B)
               .next_to(lst, DOWN, buff=0.25) if has_base else VectorizedPoint())
@@ -203,29 +203,29 @@ class Emergence(VoiceoverScene):
         lg = legend([(GREY_C, r"first copy"), (DECODER, r"second copy")], font_size=20).to_corner(UR, buff=0.4)
         lg.shift(DOWN * 1.2)
         yl = label(r"next word guessed right", font_size=20, color=GREY_A).move_to([-4.6, 1.2, 0])
-        none_l = label(r"the second copy is no easier: \\ nothing is copied from the context yet", font_size=28,
+        none_l = label(r"no clear copying gain on this test", font_size=28,
                        color=CONTEXT).move_to([0, 0.0, 0])
         fam = [r for r in rows if r["name"] != "base"]
         jumps = {r["name"]: r["acc2"] - r["acc1"] for r in rows}
         copiers = [r for r in rows if jumps[r["name"]] > 0.2]
         if copiers:
             first = copiers[0]
-            if rows.index(first) == 0:
+            if len(copiers) == len(rows):
                 lead = "Every one of our models copies."
             elif first["name"] == "base":
                 lead = "None of the family copies; only the series' own model, larger and trained longer, does."
             else:
-                lead = f"The smaller models don't copy; from model {tag_of(first)} on, they do."
+                lead = f"Model {tag_of(first)} is the first in this list to show copying on this test."
             verdict = (f"For {who_of(first)}, the second copy is far easier: {100 * first['acc2']:.0f} percent of its "
-                       f"words guessed right, against {100 * first['acc1']:.0f} the first time. That is copying from the "
-                       "context: the induction heads of Part 13.")
+                       f"words guessed right, against {100 * first['acc1']:.0f} the first time. That shows copying from "
+                       "context; identifying induction heads needs a separate analysis.")
         else:
             lead = ""
             drop = max(r["loss1"] - r["loss2"] for r in rows)
-            verdict = ("None of our models does much better the second time: the best gains "
-                       f"{100 * max(jumps.values()):.0f} points, and the loss falls by at most {drop:.2f} nats. At our "
-                       "scale and training length, the copying circuit, the induction heads of Part 13, hasn't formed; "
-                       "Part 13's small transformer couldn't copy either.")
+            verdict = ("None of our models does much better the second time: the best gains about "
+                       f"{100 * max(jumps.values()):.0f} points, and the largest loss drop is about {drop:.2f} nats. At our "
+                       "scale and training length, this test shows no useful copying; it doesn't tell us whether "
+                       "induction heads, the circuits of Part 13, have formed.")
         r_l = load("gpt_l")
         sn = r_l["snaps"]
         acc2 = [s["acc2"] for s in sn]
@@ -256,8 +256,9 @@ class Emergence(VoiceoverScene):
         cols = {r["name"]: SIZE_COLORS[i] for i, r in enumerate(rows)}
         shots = d["shots"]
         ex = said(d["example"] + " ...", chars=58, font_size=17, max_lines=4, box_color=CONTEXT).move_to([0, 2.65, 0])
-        exl = label(rf"two books, \ $k$ labelled examples, \ then a held-out sentence: \ which title is more likely? \ "
-                    rf"(${d['n_items']}$ prompts)", font_size=20, color=GREY_B).next_to(ex, DOWN, buff=0.15)
+        exl = label(rf"two books, \ $k$ requested examples, \ then a held-out sentence \ (${d['n_items']}$ prompts) \\ "
+                    r"256-token scoring context; \ long prompts are left-truncated",
+                    font_size=20, color=GREY_B).next_to(ex, DOWN, buff=0.15)
         calib = VGroup(label(r"calibrated score of a title:", font_size=20, color=GREY_A),
                        MathTex(r"\log p(\text{title} \mid \text{prompt}) \;-\; \log p(\text{title} \mid "
                                r"\text{prompt with ``N/A''})", font_size=22)).arrange(DOWN, buff=0.12)
@@ -267,7 +268,7 @@ class Emergence(VoiceoverScene):
         zcite = cite(r"calibration: \ Zhao et al.\ (2021)")
         lo = 0.4
         hi = max(0.75, max(max(r["fewshot"]) for r in rows) + 0.05)
-        g = axes([-0.3, len(shots) - 0.7], [lo, hi], x_length=6.4, y_length=3.6, xlabel=r"examples in the prompt, $k$",
+        g = axes([-0.3, len(shots) - 0.7], [lo, hi], x_length=6.4, y_length=3.6, xlabel=r"requested examples, $k$",
                  ylabel=r"right title chosen \ (calibrated)", xticks=list(range(len(shots))), yticks=[0.5, round(hi, 1)],
                  xfmt=lambda v: str(shots[int(round(v))]), yfmt=lambda v: rf"{100 * v:.0f}\%", center=[-1.4, -1.3, 0])
         ax = g.ax
@@ -293,21 +294,23 @@ class Emergence(VoiceoverScene):
             v1 = (f"For {who}, examples barely matter: {100 * big['fewshot'][0]:.0f} percent with none, "
                   f"{100 * big['fewshot'][-1]:.0f} with {shots[-1]}.")
         best0 = max(r["fewshot"][0] for r in rows)
-        v0 = (f"Even with no examples, the models do better than chance, up to {100 * best0:.0f} percent: a title is "
-              "often a character's name, and a sentence that mentions the character makes the name more likely."
+        v0 = (f"Even with no examples, at least one model scores above chance, at about {100 * best0:.0f} percent. "
+              "Character names in book titles may help, but this test does not isolate why."
               if best0 > 0.56 else
-              f"With no examples the models are near chance, at most {100 * best0:.0f} percent.")
+              f"With no examples the models are near chance; the best score is about {100 * best0:.0f} percent.")
         sz = fam[-1]["fewshot"][-1] - fam[0]["fewshot"][-1]
+        spread = max(r["fewshot"][-1] for r in fam) - min(r["fewshot"][-1] for r in fam)
         v2 = (f" And with {shots[-1]} examples, the largest of the family beats the smallest by {100 * sz:.0f} points."
               if sz > 0.03 else
-              f" With {shots[-1]} examples, the family's sizes are within {100 * abs(sz):.0f} points of each other.")
+              f" With {shots[-1]} examples, the family's scores span about {100 * spread:.0f} points.")
         with self.voiceover(
             "Finally, GPT-3's own kind of test, built from the novels. Two books; a few labelled examples in the "
             "prompt, each a sentence and the book it is from; then a new sentence from a paragraph the models never "
             "read, and we compare the probabilities they give to the two titles. <bookmark mark='a'/> Small models "
             "tend to favour one title whatever the sentence, so, as Tony Zhao and colleagues proposed in 2021, we "
             "first subtract the score each title gets after a sentence with no content at all. <bookmark mark='d'/> "
-            "With zero, one, two, four and eight examples, for every model. <bookmark mark='b'/> " + v0 +
+            "We request zero, one, two, four or eight examples, then score each title within the model's 256-token "
+            "context. Long prompts can retain different context for the real and N/A queries. <bookmark mark='b'/> " + v0 +
             " <bookmark mark='c'/> " + v1 + " <bookmark mark='e'/>" + v2
         ) as vo:
             self.play(FadeIn(ex), FadeIn(exl))
@@ -342,21 +345,20 @@ class Emergence(VoiceoverScene):
             mark = MathTex(r"\checkmark" if ok else r"\times", font_size=40, color=C.REWARD if ok else C.PENALTY)
             rows_g.add(VGroup(mark, label(t, font_size=30, color=WHITE)).arrange(RIGHT, buff=0.35))
         rows_g.arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(UP * 0.8)
-        head = label(r"at our scale, \ million-parameter models:", font_size=30, color=GREY_A).next_to(rows_g, UP, buff=0.5)
+        head = label(r"in these runs, \ on these tests:", font_size=30, color=GREY_A).next_to(rows_g, UP, buff=0.5)
         t1 = ("Our models use their context more as they grow." if grows else
               "Our larger models don't use their context much more than the smaller ones.")
-        t2 = ("Copying from the context appears with size." if copies else
-              "Copying from the context hasn't appeared at our scale.")
+        t2 = ("At least one model shows copying on this test." if copies else
+              "No model gains over twenty points on the repeated-list test.")
         t3 = ("And examples in the prompt help the largest model choose." if fs else
-              "But learning a task from examples in the prompt hasn't appeared at our scale.")
-        tw = take_away(r"GPT-3 needed billions of parameters for few-shot learning to be useful: \ "
-                       r"the mechanism is Part 13's, \ the scale is Part 12's", color=CONTEXT, font_size=24)
+              "For the largest model, eight requested examples add at most five points on this book-choice test.")
+        tw = take_away(r"GPT-3's few-shot performance improved with scale: \ "
+                       r"attention in Part 13, \ scaling laws in Part 12", color=CONTEXT, font_size=24)
         with self.voiceover(
             "So what did our small models show? <bookmark mark='a'/> " + t1 + " <bookmark mark='f'/> " + t2 +
             " <bookmark mark='g'/> " + t3 + " <bookmark mark='b'/> "
-            "In GPT-3's own "
-            "plots, few-shot learning became useful only in the billions of parameters. Part 13 showed the "
-            "mechanism, heads that find and copy; Part 12, the scaling laws that make larger models worth their cost."
+            "GPT-3's results showed stronger few-shot performance at larger scales; they do not set a universal "
+            "parameter threshold. Part 13 covered attention; Part 12, the scaling laws that help explain performance trends."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

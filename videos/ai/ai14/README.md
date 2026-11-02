@@ -7,7 +7,7 @@ laws, GPT-3 and learning in context; code and instructions (Codex, FLAN, T0, Ins
 open weights from LLaMA to the frontier of 2026, the recipe they converged on and how it began to split again; the
 trends in compute, cost and data. Every published number is cited (`facts.py`); everything derived from it (parameter
 counts, 6ND, cache sizes, growth rates) is computed (`compute.py`). And the lineage is rebuilt in miniature on the
-series' thirty novels: a GPT-style and a BERT-style model trained at equal compute and compared on tasks both can do,
+series' thirty novels: a GPT-style and a BERT-style model trained at matched estimated matrix-compute budgets and compared on tasks both can do,
 and a family of GPT-style models of growing size, searched for learning in context.
 
 * **From a translation paper to the open frontier.** June 2017's *Attention Is All You Need* (213M parameters, 3.5 days
@@ -66,7 +66,7 @@ and a family of GPT-style models of growing size, searched for learning in conte
   (Cottier et al. 2024: 2.4× a year, GPT-4 $40M, Gemini Ultra $30M) and DeepSeek-V3's $5.6M; tokens per parameter over
   time (computed from published N and D).
 * **13. Our own lineage: GPT against BERT.** Two models of the same shape, initial weights, data, steps and schedule:
-  equal compute, 6ND; training replays (the GPT-style model's sample and the BERT-style model's fill-ins, scrubbed with
+  matched approximate matrix-compute budgets, 6ND; training replays (the GPT-style model's sample and the BERT-style model's fill-ins, scrubbed with
   their curves); a cloze test with 8 candidates (GPT scoring whole sentences, GPT left-only, BERT); a linear probe for
   "which of the thirty books?"; writing; the scoreboard row.
 * **14. Learning in context, in our own models.** Four GPT-style sizes on the same tokens, and the series' base model:
@@ -78,17 +78,28 @@ and a family of GPT-style models of growing size, searched for learning in conte
   the lab's previous model or the published design a model built on (schematic); eight pictures of the part; where
   it comes back; the problem set; Part 15's teaser; references.
 
-Run from the repo root:
+Run source checks from the repository root:
 
 ```
-python tools/make.py ai14                  # everything: Part 1's passage, the novels model, this part's numbers, both cuts
-python -m videos.ai.ai14.compute           # just the numbers (trains what it needs; about 1.5 CPU-hours on 2 threads)
-python tools/qa_scene.py ai14 OurLineage   # one chapter, silent, with a contact sheet
+python -m unittest discover -s tests -p test_ai14_source_repairs.py
 ```
 
-Every training run checkpoints every 100 steps and resumes after an interruption; every random choice is seeded
-(data order, initial weights, masking, the cloze and few-shot items, samples). The series' base model is used only
-through `explainer.ai.novels.load_base()`; Part 1's passage and baselines only through `videos.ai.ai1.compute`.
+Scene QA requires externally supplied, verified precomputed scientific caches. The part-local `common.load`
+reads scientific items directly and rejects missing files, bypassing the shared loader that can generate
+missing items. A render therefore cannot start training or silently regenerate those results. It requires `exact-length-batches-v1` for `lineage` probes and
+`matched-all-words-v1` for ICL rows and GPT replay snapshots. The probe protocol excludes invented padding from
+bidirectional attention; the repetition protocol scores all words in both copies of the repeated list.
+
+This source-only change does not include the corresponding producer/evaluation repairs, scientific caches,
+model weights or datasets. The unchanged producer recipes are not a way to generate the required corrected
+results. Their review and compatible inputs/results must be supplied separately. Protocol markers alone do not
+verify model identity or provenance: check the model, tokenizer, input data, evaluation cohorts and runtime before
+using an external cache. Base-model comparison rows are optional when their separate cache is absent; a
+family-only capture does not validate the base-model branches.
+
+Earlier selected-frame and silent-motion review used separately supplied compatible caches. It does not establish
+visual acceptance of this public tree. Fresh bilingual scene QA remains required after cache reconciliation;
+continuous playback, narrated listening, speech synchronization and final-resolution acceptance are separate.
 
 `facts.py` holds every published number with its source; `compute.py` derives the rest and trains and evaluates our
 models (`lm.py`: the causal and masked models, training with checkpoints and snapshots, the measurements);
@@ -109,7 +120,7 @@ From published figures (`published`, `epoch`, `aa`):
 * KV cache per token (16-bit): GPT-3 4.72 MB; Llama 3.1 405B as multi-head 8.26 MB, with GQA (8 of 128) 0.52 MB;
   DeepSeek-V3 MLA 70.3 kB. At 128K tokens: 1.08 TB against 68 GB.
 * Tokens per parameter: GPT-3 1.7, Gopher 1.1, PaLM 1.4, Chinchilla 20, LLaMA-7B 149, LLaMA-65B 21.5, Llama 2 70B
-  28.6, Llama 3.1 405B 38.5, DeepSeek-V3 400 and Kimi K2 476 (per active parameter), GLM-5 713, Qwen3-0.6B 60,000.
+  28.6, Llama 3.1 405B 38.5, DeepSeek-V3 400 and Kimi K2 475 (per active parameter), GLM-5 713, Qwen3-0.6B 60,000.
 * DeepSeek-V3's final run: 2.788M H800 hours × $2 = $5.576M; 6ND = 3.3 × 10²⁴. Active share of parameters: DeepSeek-V3
   5.5%, Qwen3-235B 9.4%, Kimi K2 3.1%, GLM-4.5 9.0%, gpt-oss-120b 4.4%, Qwen3.5-397B 4.3%, DeepSeek-V4 3.1%, Kimi K3
   3.7%.
@@ -120,16 +131,12 @@ From published figures (`published`, `epoch`, `aa`):
 * Artificial Analysis's index (v4.3.2, 8 October 2026): over 21 open-model records, the median time since a closed model
   first scored as high is 4.4 months; since 2025, 4.1 months; the latest record (MiMo-V2.6-Pro) trailed by 3.4 months.
 
-Our models (trained and measured on this computer; filled in from `.cache/ai14/` after `compute.py` runs):
+Our model measurements are not embedded in this source-only change. They depend on separately verified
+scientific products and the protocol requirements above. Approximate `6ND` matching does not establish identical
+measured execution cost or isolate the effect of the attention objective.
 
 <!-- results -->
-* The family (pre-norm RMSNorm, SwiGLU, RoPE, no biases; context 256, BPE vocabulary 4,096 + [MASK]), 3M tokens each, batch 16 × 256, AdamW, cosine schedule: XS 32 wide × 1 layer, 274,080 parameters; S 64 wide × 2 layers, 625,088 parameters; M 128 wide × 4 layers, 1,828,224 parameters; L 192 wide × 6 layers, 4,229,952 parameters.
-* GPT against BERT at equal compute (M's shape, the same initial weights, data order and schedule; 6ND = 2.35e+13 operations each): held-out next-token loss 4.55 nats; masked-token loss 4.89 nats (not comparable). Cloze, 600 held-out sentences, 8 candidates (chance 12.5%): GPT left context only 61.5%, GPT whole sentence 81.7%, BERT 59.7%. Linear probe, which of 30 books (6,000 training and 1,097 test sentences; chance 3.3%): GPT 15.2%, BERT 10.3%. Here the causal model wins both: at this scale, learning from every token outweighs seeing both sides (BERT's own Table 5, at 110M parameters and 128B tokens, found the opposite).
-* Bits per character on Part 1's passage: XS 2.32; S 2.14; M 2.05; L 2.02; the series' base model 1.69 (gzip 3.31, bzip2 2.92).
-* Learning from context (mean loss with 1–4 tokens of context minus with 129–256, nats per token, 512 held-out windows): XS 0.23; S 0.31; M 0.45; L 0.46; the series' base model 0.83.
-* Repeated list of 60 common words (next word right, first copy → second): XS 0% → 0%; S 0% → 0%; M 0% → 0%; L 0% → 0%; the series' base model 0% → 0%.
-* Few-shot 'which book?' (300 two-way prompts; k = 0, 1, 2, 4, 8; % right, calibrated against an 'N/A' query, raw in brackets): XS 49/53/53/52/51 (48/48/49/48/49); S 49/49/51/53/50 (50/50/50/50/50); M 52/57/55/51/52 (50/50/50/50/50); L 52/54/54/53/53 (50/50/50/50/51); the series' base model 61/52/55/55/55 (54/52/51/50/50).
-* Training time on this machine (2 threads, shared): GPT-M 23 min, BERT-M 10 min.
+Compatible measured results must be reconciled before updating this section.
 <!-- /results -->
 
 ## Fact-check notes
@@ -158,7 +165,8 @@ model card, Hugging Face model cards and API metadata):
   held-out windows; the training replays use the 64 windows of each checkpoint, so their per-position curves are
   noisier. The few-shot test is scored with contextual calibration (Zhao et al. 2021): each title's log-probability
   minus its log-probability after the same examples and an "N/A" query; the raw scores are kept in the cache
-  (`fewshot_raw`): our small models prefer one title of each pair whatever the sentence, so raw accuracy sits at 50%.
+  (`fewshot_raw`). Raw scores can reflect title bias; calibration aims to reduce it. Neither raw nor calibrated
+  accuracy is fixed in advance.
 * Not used: claims about Kimi K3's training tokens and DeepSeek-V4's layer layout (not in the model cards); later
   closed-model compute estimates in Epoch's database (after mid-2026).
 
@@ -211,10 +219,11 @@ share each key-value head, which is why the cache fits.
 **5. What equal compute holds fixed.** A masked model predicts a fraction m of the positions. How many targets per
 sequence of n does it get, against a causal model? What does an equal-compute comparison hold fixed, and what not?
 
-*Solution.* In expectation mn targets (0.15n for BERT) against n for a causal model: 1/m ≈ 6.7 times fewer. Equal
-compute (same model, same tokens, same steps) fixes the operations, the data and the number of updates; it does not fix
-the number of prediction targets, nor how hard each is (a masked target sees both sides). Giving the masked model as
-many targets would cost 1/m times the compute. ELECTRA's answer was to make every position a target.
+*Solution.* In expectation mn targets (0.15n for BERT) against n for a causal model: 1/m ≈ 6.7 times fewer. The same
+model, tokens and steps match the leading-order 6ND estimate, data and number of updates, rather than guaranteeing
+identical measured operation counts. They do not fix the number of prediction targets or their difficulty (a masked
+target sees both sides). Under the same per-token estimate, giving the masked model as many targets takes about 1/m
+as many training tokens and about 1/m times the compute. ELECTRA's answer was to make every position a target.
 
 **6. Growth rates.** If training compute grows 4.5× a year and cost 2.4×, find the doubling time of compute in months,
 its growth over a decade, and the yearly gain in operations per dollar.
@@ -254,9 +263,9 @@ C ≈ 6ND，分别用运算次数和petaflop/s-天表示。
 **5. 同等算力固定了什么。** 掩码模型只预测比例为m的位置。长度为n的序列里，它得到多少个预测目标，因果模型又得到多少？同等算力
 的比较固定了什么，没有固定什么？
 
-*解答。* 期望为mn个目标（BERT是0.15n），因果模型是n个：少了 1/m ≈ 6.7 倍。同等算力（同样的模型、同样的词元、同样的步数）
-固定了运算量、数据和更新次数；没有固定预测目标的数量，也没有固定每个目标的难度（被遮住的目标能看到两边）。要让掩码模型得到
-同样多的目标，算力要乘以1/m。ELECTRA的办法是让每个位置都成为目标。
+*解答。* 期望为mn个目标（BERT是0.15n），因果模型是n个：少了 1/m ≈ 6.7 倍。同样的模型、词元和步数匹配的是主要项6ND估算、
+数据和更新次数，并不保证实际运算次数完全相同。它们没有固定预测目标的数量或难度（被遮住的目标能看到两边）。按同一个每词元
+成本估算，要让掩码模型得到同样多的目标，训练词元数约需乘以1/m，算力也约需乘以1/m。ELECTRA的办法是让每个位置都成为目标。
 
 **6. 增长率。** 如果训练算力每年增长4.5倍、成本每年增长2.4倍，求算力翻倍所需的月数、十年的增长倍数，以及每美元运算次数
 每年提高多少。

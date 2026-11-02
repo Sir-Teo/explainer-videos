@@ -97,7 +97,7 @@ class Pretrain(VoiceoverScene):
         # one word, two contexts, two vectors (schematic)
         s1 = data_text("the bank of the river", font=MONO, font_size=22, color=WHITE)
         s2 = data_text("the bank raised its rates", font=MONO, font_size=22, color=WHITE)
-        sents = VGroup(s1, s2).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([2.2, -1.2, 0])
+        sents = VGroup(s1, s2).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([3.0, -1.2, 0])
         h1 = SurroundingRectangle(s1[3:7], color=ENCODER, buff=0.05)
         h2 = SurroundingRectangle(s2[3:7], color=DECODER, buff=0.05)
         o = np.array([5.2, -2.6, 0])

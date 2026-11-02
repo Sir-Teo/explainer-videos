@@ -3,13 +3,59 @@
 from __future__ import annotations
 
 import math
+import json as _json
 
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai14 import facts as F  # noqa: F401
 
-from .compute import load  # noqa: F401
+from .compute import CACHE as _CACHE, load as _load
+
+# Scientific results must be supplied explicitly; rendering must never train a
+# missing model or silently reinterpret results from an incompatible protocol.
+_SCIENTIFIC_ITEMS = frozenset({
+    "family", "gpt_xs", "gpt_s", "gpt_m", "gpt_l", "bert_m",
+    "lineage", "icl", "icl_base", "scoreboard", "scoreboard_base",
+})
+
+
+def load(name: str) -> dict:
+    """Load supplied results, rejecting missing or incompatible scientific items.
+
+    Protocol markers are compatibility checks, not a substitute for verifying
+    the external cache's model, inputs and provenance. See this part's README.
+    """
+    if name in _SCIENTIFIC_ITEMS:
+        path = _CACHE.path(name)
+        if not path.is_file():
+            raise FileNotFoundError(
+                f"Part 14 requires a verified precomputed {name!r} item; "
+                "rendering does not generate scientific results. See README."
+            )
+        data = _json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            raise ValueError(f"Part 14 {name!r} metadata must be an object")
+        if name == "lineage" and data.get("probe_protocol") != "exact-length-batches-v1":
+            raise ValueError("Part 14 lineage requires exact-length-batches-v1 probe results")
+        if name in {"icl", "icl_base", "gpt_xs", "gpt_s", "gpt_m", "gpt_l"}:
+            rows = data.get("rows" if name in {"icl", "icl_base"} else "snaps")
+            if (not isinstance(rows, list) or not rows or any(
+                not isinstance(row, dict) or row.get("repeat_protocol") != "matched-all-words-v1"
+                for row in rows
+            )):
+                raise ValueError(f"Part 14 {name!r} requires matched-all-words-v1 repetition results")
+        # Read scientific arrays directly: calling the shared loader here could
+        # generate an item if its JSON disappeared between the check and load.
+        arrays_path = path.with_suffix(".npz")
+        if arrays_path.is_file():
+            with np.load(arrays_path, allow_pickle=False) as arrays:
+                if set(arrays.files).intersection(data):
+                    raise ValueError(f"Part 14 {name!r} array keys must not replace JSON metadata")
+                data.update({key: arrays[key] for key in arrays.files})
+        return data
+    return _load(name)
+
 
 PART = 14
 MONO = "DejaVu Sans Mono"
