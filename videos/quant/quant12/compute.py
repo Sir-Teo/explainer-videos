@@ -2,7 +2,7 @@
 
     python -m videos.quant.quant12.compute [items] [--force]
 
-Items (seconds to a few minutes on a CPU):
+Items (seconds to a few minutes on a CPU; about 45 CPU-minutes in all):
 
 * ``surface``    the Surface (10 December 2025): quotes, per-expiry SVI, an SSVI fit, Gatheral's g on each, and the
                  next day's quotes for the sticky-strike / sticky-delta test;
@@ -11,8 +11,23 @@ Items (seconds to a few minutes on a CPU):
                  against DVOL;
 * ``history``    weekly surfaces from Deribit trades, January 2024 to November 2025: SSVI fits, the 30-day variance
                  swap rate, and the realized variance that followed (the variance risk premium); the SVIX bound;
+* ``history_ext`` the same, every Wednesday from 7 April 2021 to 26 November 2025, with each week's fit, its quotes,
+                 DVOL at the same hour, the trailing and following realized variance and the risk-neutral moments;
 * ``volmageddon`` the VIX around 5 February 2018 (FRED);
-* ``vae``        a variational autoencoder over the weekly surfaces (an implied-vol grid), with a 2-d latent space;
+* ``vae``        a variational autoencoder over the weekly surfaces (an implied-vol grid), 2-d latent, five seeds;
+* ``termskew``, ``dynamics``   the term structure and skew through time; stickiness, the skew-stickiness ratio, PCA;
+* ``arbitrage``  Vogt's SVI and its negative butterfly; calendar crossings; Lee's moments on the Surface;
+* ``svi_replay``, ``ssvi_replay``  the fits replayed from several starts; the jump-wings table; SSVI's bound;
+* ``bbf``, ``dk_tree``  local against implied skew; a Derman-Kani implied tree on the Surface;
+* ``gyongy``     Heston paths: E[v_T | S_T] against Dupire from Heston's own prices;
+* ``lv_mc``      local-vol Monte Carlo on the Surface: repricing, convergence, forward smiles, the smile under a spot move;
+* ``trunc``, ``replication``, ``vixcomp``  the strip truncated; variance swaps replicated on real BTC; the VIX recipe,
+                 our index against DVOL, the VIX since 1990 and its term structure;
+* ``vrp_pnl``, ``spx_vrp``, ``rn_moments``  the premium's P&L and a predictability regression; the S&P 500 since 1990;
+                 risk-neutral skewness and kurtosis;
+* ``vx_etp``     the VIX futures curve 2017-18 (Cboe), a short-term futures index and a -1x note rebuilt;
+* ``gamma_toy``  dealer gamma in a simulated day (labelled simulated);
+* ``neural_surface``, ``operator_net``  an arbitrage-penalised network on the Surface; one network for all weeks;
 * ``envelope``   registers nothing (no strategy is tested); the counter.
 """
 
@@ -223,58 +238,274 @@ def compute_volmageddon() -> dict:
                   "jump": float(x[i] / x[i - 1] - 1), "min_2017": float(np.nanmin(x[(dd >= 20170601) & (dd < 20180101)]))})
 
 
-def compute_vae() -> dict:
-    import torch
-    torch.set_num_threads(1)
-    torch.manual_seed(0)
-    h = load("history")
-    X = np.array([np.asarray(r["grid"]).ravel() for r in h["rows"]])
-    X = np.log(np.clip(X, 0.05, 5.0))
-    mu, sd = X.mean(0), X.std(0) + 1e-6
-    Z = torch.tensor((X - mu) / sd, dtype=torch.float32)
-    n_in, n_lat = Z.shape[1], 2
-    enc = torch.nn.Sequential(torch.nn.Linear(n_in, 64), torch.nn.Tanh(), torch.nn.Linear(64, 2 * n_lat))
-    dec = torch.nn.Sequential(torch.nn.Linear(n_lat, 64), torch.nn.Tanh(), torch.nn.Linear(64, n_in))
-    opt = torch.optim.Adam(list(enc.parameters()) + list(dec.parameters()), lr=3e-3)
-    for it in range(3000):
-        e = enc(Z)
-        m_, lv = e[:, :n_lat], e[:, n_lat:]
-        z = m_ + torch.exp(0.5 * lv) * torch.randn_like(m_)
-        rec = dec(z)
-        kl = -0.5 * torch.mean(torch.sum(1 + lv - m_ ** 2 - torch.exp(lv), 1))
-        loss = torch.mean((rec - Z) ** 2) + 0.01 * kl
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
-    with torch.no_grad():
-        m_ = enc(Z)[:, :n_lat].numpy()
-        recon = dec(torch.tensor(m_)).numpy()
-        err = float(np.sqrt(np.mean((np.exp(recon * sd + mu) - np.exp(X)) ** 2)) * 100)
-        # walk the latent space: the surfaces at z = (a, 0) and (0, b)
-        walk = {}
-        for name, axis in (("z1", 0), ("z2", 1)):
-            vals = np.linspace(-2, 2, 5)
-            outs = []
-            for v_ in vals:
-                z = np.zeros((1, n_lat))
-                z[0, axis] = v_
-                outs.append(np.exp(dec(torch.tensor(z, dtype=torch.float32)).numpy()[0] * sd + mu).reshape(len(TGRID), len(KGRID)))
-            walk[name] = np.array(outs)
-    atm = np.array([np.asarray(r["grid"])[2, len(KGRID) // 2] for r in h["rows"]])
-    skew = np.array([r["skew"] for r in h["rows"]])
-    c1 = [float(np.corrcoef(m_[:, j], atm)[0, 1]) for j in range(n_lat)]
-    c2 = [float(np.corrcoef(m_[:, j], skew)[0, 1]) for j in range(n_lat)]
-    return _json({"latent": m_, "recon_rmse_volpts": err, "walk": walk, "corr_atm": c1, "corr_skew": c2,
-                  "days": [r["day"] for r in h["rows"]], "atm": atm, "skew": skew})
-
-
 def compute_envelope() -> dict:
     return {"trials": pit.trials_so_far(), "registered": {}}
 
 
-ITEMS = {"surface": compute_surface, "localvol": compute_localvol, "varswap": compute_varswap,
-         "history": compute_history, "volmageddon": compute_volmageddon, "vae": compute_vae,
-         "envelope": compute_envelope}
 
-if __name__ == "__main__":
-    CACHE.main(ITEMS, __doc__)
+
+# ===========================================================================
+# The expansion (November 2026): the weekly history from April 2021, and every new chapter's numbers
+# ===========================================================================
+WEEK0, WEEK1 = date(2021, 4, 7), date(2025, 11, 26)
+T30 = 30 / 365
+_KL = {}
+
+
+def _btc_hourly():
+    if not _KL:
+        kl = data.binance_klines("BTCUSDT", "1h", "2021-03", "2025-12")
+        _KL["t"] = np.asarray(kl["time"]) + 3600  # candle close times
+        _KL["c"] = np.asarray(kl["close"])
+    return _KL["t"], _KL["c"]
+
+
+def _ref(day: str) -> float:
+    d = date.fromisoformat(day)
+    return datetime(d.year, d.month, d.day, 8, tzinfo=timezone.utc).timestamp()
+
+
+def _hourly_path(day: str, days=30, before=False):
+    t, c = _btc_hourly()
+    i = int(np.searchsorted(t, _ref(day)))
+    a, b = (i - days * 24, i) if before else (i, i + days * 24)
+    if a < 0 or b >= len(c):
+        return None
+    return c[a:b + 1]
+
+
+def _strip(fit, F, T, lo=0.2, hi=3.0, n=2801):
+    K = np.linspace(lo * F, hi * F, n)
+    iv = _ssvi_iv(fit, np.log(K / F), T)
+    return K, np.where(K < F, bs.price(F, K, T, iv, cp=-1), bs.price(F, K, T, iv, cp=1))
+
+
+def compute_history_ext() -> dict:
+    """Every Wednesday, 7 April 2021 to 26 November 2025: the surface from that morning's Deribit trades, its SSVI fit,
+    the 30-day strip's variance strike, moments and SVIX, DVOL at 08:00 UTC, and Bitcoin's realized variance over the
+    30 days before and after (hourly)."""
+    part = CACHE.partial("history_ext", {"v": 2, "start": WEEK0.isoformat(), "end": WEEK1.isoformat()})
+    dv = data.deribit_dvol("2021-04", "2025-12")
+    dvt, dvc = np.asarray(dv["time"]), np.asarray(dv["close"]) / 100
+    d = WEEK0
+    while d <= WEEK1:
+        day = d.isoformat()
+        if day not in part:
+            try:
+                q = surface.build(day)
+                fit, ok = _fit_day(q)
+                F = q["S"]
+                K, otm = _strip(fit, F, T30)
+                kvar = V.var_swap_strike(K, otm, F, T30)
+                after, before = _hourly_path(day), _hourly_path(day, before=True)
+                rv = float(np.sum(np.diff(np.log(after)) ** 2) / T30) if after is not None else None
+                rvt = float(np.sum(np.diff(np.log(before)) ** 2) / T30) if before is not None else None
+                ret = float(np.log(after[-1] / after[0])) if after is not None else None
+                grid = np.array([[float(_ssvi_iv(fit, k, T_)) for k in KGRID] for T_ in TGRID])
+                ref = _ref(day)
+                j = int(np.argmin(np.abs(dvt - ref)))
+                mom = V.rn_moments(K, otm, F, T30)
+                kq, Tq, ivq, vq = (np.asarray(q[x])[ok] for x in ("k", "T", "iv", "vega"))
+                part[day] = {"day": day, "S": F, "fit": {x: fit[x] for x in ("rho", "eta", "gamma", "theta", "T", "rmse")},
+                             "kvar": kvar, "rv": rv, "rv_trail": rvt, "ret30": ret, "grid": grid,
+                             "atm": float(_ssvi_iv(fit, 0.0, T30)),
+                             "skew": float(_ssvi_iv(fit, -0.1, T30) - _ssvi_iv(fit, 0.1, T30)),
+                             "svix2": float(2 / (T30 * F ** 2) * np.trapezoid(otm, K)),
+                             "dvol": float(dvc[j]) if abs(dvt[j] - ref) < 7200 else None, "mom": mom, "n": int(ok.sum()),
+                             "q": np.round(np.vstack([kq, Tq, ivq, vq]), 5)}
+            except Exception as e:  # a day without enough quotes is skipped, and said so
+                part[day] = {"day": day, "error": str(e)[:200]}
+            print(f"  history_ext {day}: {'skipped' if 'error' in part[day] else part[day]['n']}", flush=True)
+        d += timedelta(days=7)
+    rows = [part[x] for x in sorted(part.done)]
+    good = [r for r in rows if "error" not in r]
+    return _json({"rows": good, "skipped": [r["day"] for r in rows if "error" in r], "n": len(good),
+                  "grid_k": KGRID, "grid_T": TGRID})
+
+
+def _weeks():
+    return load("history_ext")["rows"]
+
+
+def _nw_t(x, lags=4):
+    x = np.asarray(x, float)
+    dc = x - x.mean()
+    v = dc @ dc / len(dc)
+    for L in range(1, lags + 1):
+        v += 2 * (1 - L / (lags + 1)) * (dc[L:] @ dc[:-L]) / len(dc)
+    return float(x.mean() / np.sqrt(v / len(dc)))
+
+
+def _nw_reg(x, y, lags=4):
+    """OLS of y on (1, x) with Newey-West standard errors: slope, its t, R^2."""
+    X = np.column_stack([np.ones_like(x), x])
+    b = np.linalg.lstsq(X, y, rcond=None)[0]
+    res = y - X @ b
+    XtX = np.linalg.inv(X.T @ X)
+    u = X * res[:, None]
+    S = u.T @ u
+    for L in range(1, lags + 1):
+        G = u[L:].T @ u[:-L]
+        S += (1 - L / (lags + 1)) * (G + G.T)
+    cov = XtX @ S @ XtX
+    return {"slope": float(b[1]), "t": float(b[1] / np.sqrt(cov[1, 1])), "r2": float(1 - res.var() / y.var()),
+            "n": int(len(y))}
+
+
+def _year(day):
+    d = date.fromisoformat(day)
+    return d.year + (d.timetuple().tm_yday - 1) / 365
+
+
+# ---------------------------------------------------------------------------
+def _gram_charlier(g1, g2, s, ks):
+    """Implied vols of a Gram-Charlier density for the standardized log return (skewness g1, excess kurtosis g2,
+    total vol s), priced by quadrature and inverted, with the first-order Backus-Foresi-Wu line."""
+    x = np.linspace(-9, 9, 6001)
+    ph = np.exp(-x * x / 2) / np.sqrt(2 * np.pi)
+    q = ph * (1 + g1 / 6 * (x ** 3 - 3 * x) + g2 / 24 * (x ** 4 - 6 * x * x + 3))
+    q = np.maximum(q, 0)
+    q /= np.trapezoid(q, x)
+    mu = -np.log(np.trapezoid(np.exp(s * x) * q, x))
+    ST = np.exp(mu + s * x)
+    iv, bfw = [], []
+    for k in ks:
+        K = np.exp(k)
+        cp = 1 if k >= 0 else -1
+        pr = np.trapezoid(np.maximum(cp * (ST - K), 0) * q, x)
+        iv.append(float(bs.implied_vol(pr, 1.0, K, 1.0, 0.0, 0.0, cp)))
+        d = -k / s
+        bfw.append(float(s * (1 - g1 / 6 * d + g2 / 24 * (d * d - 1))))
+    return np.array(iv), np.array(bfw), x, q
+
+
+def compute_termskew() -> dict:
+    rows = _weeks()
+    G = np.array([r["grid"] for r in rows])  # (weeks, 6 maturities, 17 strikes)
+    j0 = len(KGRID) // 2
+    atm = G[:, :, j0]
+    skew = np.array([r["skew"] for r in rows])
+    S = np.array([r["S"] for r in rows])
+    yrs = np.array([r["day"][:4] for r in rows])
+    by_year = {y: {"call_skew": float((skew[yrs == y] < 0).mean()), "atm30": float(atm[yrs == y, 2].mean()),
+                   "n": int((yrs == y).sum())} for y in sorted(set(yrs))}
+    # the Gram-Charlier smiles: a 30-day option at 50% vol
+    s = 0.5 * np.sqrt(T30)
+    ks = np.linspace(-0.3, 0.3, 25)
+    gc = {"k": ks, "s": s, "g1": np.linspace(-1.0, 1.0, 9), "g2": np.linspace(0.0, 2.0, 5)}
+    gc["iv_g1"], gc["bfw_g1"], gc["dens_g1"] = [], [], []
+    for g1 in gc["g1"]:
+        iv, bf, x, q = _gram_charlier(g1, 0.0, s, ks)
+        gc["iv_g1"].append(iv / np.sqrt(T30))
+        gc["bfw_g1"].append(bf / np.sqrt(T30))
+        gc["dens_g1"].append(q[::50])
+    gc["iv_g2"], gc["dens_g2"] = [], []
+    for g2 in gc["g2"]:
+        iv, bf, x, q = _gram_charlier(0.0, g2, s, ks)
+        gc["iv_g2"].append(iv / np.sqrt(T30))
+        gc["dens_g2"].append(q[::50])
+    gc["x"] = x[::50]
+    return _json({"days": [r["day"] for r in rows], "t": [_year(r["day"]) for r in rows], "atm": atm, "skew": skew,
+                  "mean_atm": atm.mean(0), "inv_7_180": float((atm[:, 0] > atm[:, 5]).mean()),
+                  "inv_30_90": float((atm[:, 2] > atm[:, 4]).mean()), "call_skew": float((skew < 0).mean()),
+                  "mean_skew": float(skew.mean()),
+                  "corr_skew_ret": float(np.corrcoef(skew[1:], np.diff(np.log(S)))[0, 1]), "by_year": by_year,
+                  "n": len(rows), "gc": gc, "tenors": TGRID * 365})
+
+
+def compute_dynamics() -> dict:
+    rows = _weeks()
+    s = load("surface")
+    G = np.array([r["grid"] for r in rows])
+    S = np.array([r["S"] for r in rows])
+    kg = KGRID
+    j0 = len(kg) // 2
+    inner = np.abs(kg) <= 0.2
+    e_m, e_s = [], []
+    for i in range(len(rows) - 1):
+        g0, g1 = G[i, 2], G[i + 1, 2]
+        sh = np.log(S[i + 1] / S[i])
+        pred_strike = np.interp(kg + sh, kg, g0)  # a fixed strike K: tomorrow's k is today's k minus the move
+        e_m.append(np.sqrt(np.mean((g0[inner] - g1[inner]) ** 2)))
+        e_s.append(np.sqrt(np.mean((pred_strike[inner] - g1[inner]) ** 2)))
+    e_m, e_s = np.array(e_m) * 100, np.array(e_s) * 100
+    sk = (G[:, 2, j0 + 1] - G[:, 2, j0 - 1]) / (kg[j0 + 1] - kg[j0 - 1])  # d sigma / dk at the money, 30 days
+    ssr = V.skew_stickiness(np.diff(np.log(S)), np.diff(G[:, 2, j0]), sk[:-1])
+    X = np.diff(np.log(G.reshape(len(G), -1)), axis=0)
+    pca = V.surface_pca(X)
+    comp = pca["components"][:3].reshape(3, len(TGRID), len(kg))
+    sd = pca["scores"][:, :3].std(0)
+    # quoting on the Surface: the 30-day 25-delta strikes and the risk reversal and butterfly
+    fit = s["ssvi"]
+    a = float(_ssvi_iv(fit, 0.0, T30))
+    w = a * a * T30
+    k25c = 0.674 * np.sqrt(w) + w / 2
+    k25p = -0.674 * np.sqrt(w) + w / 2
+    for _ in range(20):  # solve N(d1) = 0.25 and N(d1) = 0.75 with the smile's own vols
+        wc = float(_ssvi_iv(fit, k25c, T30)) ** 2 * T30
+        wp = float(_ssvi_iv(fit, k25p, T30)) ** 2 * T30
+        k25c = 0.674 * np.sqrt(wc) + wc / 2
+        k25p = -0.674 * np.sqrt(wp) + wp / 2
+    sc, sp = float(_ssvi_iv(fit, k25c, T30)), float(_ssvi_iv(fit, k25p, T30))
+    skew30 = float((_ssvi_iv(fit, 0.01, T30) - _ssvi_iv(fit, -0.01, T30)) / 0.02)
+    return _json({"sticky_m": e_m, "sticky_s": e_s, "sticky_m_mean": float(e_m.mean()), "sticky_s_mean": float(e_s.mean()),
+                  "strike_better": float((e_s < e_m).mean()), "n_pairs": len(e_m), "ssr": ssr,
+                  "explained": pca["explained"][:6], "comp": comp, "score_sd": sd,
+                  "pc1_by_T": comp[0].mean(1), "pc3_30d": comp[2, 2], "days": [r["day"] for r in rows],
+                  "atm30": a, "k25c": k25c, "k25p": k25p, "s25c": sc, "s25p": sp, "rr25": sc - sp,
+                  "bf25": 0.5 * (sc + sp) - a, "skew30": skew30})
+
+
+def compute_arbitrage() -> dict:
+    from explainer.quant.house import arbitrage as A
+
+    # Vogt's smile (Gatheral and Jacquier 2014, Example 3.1): raw SVI at T = 1
+    a, b, rho, m, sg = -0.0410, 0.1331, 0.3060, 0.3586, 0.4153
+    kk = np.linspace(-1.5, 1.5, 3001)
+    f = lambda kq, t: smile.svi_total_variance(kq, a, b, rho, m, sg)  # noqa: E731
+    w, dw, d2w, _ = V.numeric_derivs(f, kk, 1.0)
+    g = V.g_function(kk, w, dw, d2w)
+    dm = -kk / np.sqrt(w) - np.sqrt(w) / 2
+    dens = g / np.sqrt(2 * np.pi * w) * np.exp(-dm ** 2 / 2) / np.exp(kk)  # in strike, F = 1: q(K) dK
+    neg = kk[g < 0]
+    # a butterfly around the worst strike: three calls K - h, K, K + h (F = 1, T = 1)
+    K2 = float(np.exp(kk[np.argmin(g)]))
+    C = lambda K: float(bs.price(1.0, K, 1.0, np.sqrt(f(np.log(K), 1.0)), cp=1))  # noqa: E731
+    flies = []
+    for h in (0.05, 0.1, 0.2, 0.3, 0.4):
+        flies.append((h, C(K2 - h) - 2 * C(K2) + C(K2 + h)))
+    hb, fly = min(flies, key=lambda x: x[1])
+    # the Surface: Lee's wings per expiry, calendar crossings between consecutive SVI slices, Part 9's checker
+    s = load("surface")
+    per = s["per"]
+    lee = []
+    for p in per:
+        q = p["svi"]
+        bl, br = q["b"] * (1 - q["rho"]), q["b"] * (1 + q["rho"])
+        lee.append({"expiry": p["expiry"], "days": p["T"] * 365, "beta_L": bl, "beta_R": br,
+                    "p_R": float(V.lee_moment(br)), "q_L": float(V.lee_moment(bl))})
+    kc = np.linspace(-1, 1, 401)
+    cross = []
+    for p0, p1 in zip(per, per[1:]):
+        w0 = smile.svi_total_variance(kc, *(p0["svi"][x] for x in ("a", "b", "rho", "m", "s")))
+        w1 = smile.svi_total_variance(kc, *(p1["svi"][x] for x in ("a", "b", "rho", "m", "s")))
+        bad = kc[w1 < w0]
+        cross.append({"pair": [p0["expiry"], p1["expiry"]], "n_bad": int(len(bad)),
+                      "k_range": [float(bad.min()), float(bad.max())] if len(bad) else None})
+    viol = 0
+    for p in per:
+        F = p["F"]
+        Kg = F * np.exp(np.linspace(-0.8, 0.8, 161))
+        Cg = smile.call_prices(p["svi"], F, p["T"], Kg)
+        chk = A.static_checks(Kg, Cg, F, tol=1e-9 * F)
+        viol += sum(len(chk[x]) for x in ("monotone", "slope", "butterfly", "lower", "upper"))
+    pair_plot = max(range(len(cross)), key=lambda i: cross[i]["n_bad"])
+    p0, p1 = per[pair_plot], per[pair_plot + 1]
+    return _json({"vogt": {"a": a, "b": b, "rho": rho, "m": m, "s": sg}, "k": kk[::10], "g": g[::10], "w": w[::10],
+                  "dens": dens[::10], "g_min": float(g.min()), "k_min": float(kk[np.argmin(g)]),
+                  "neg": [float(neg.min()), float(neg.max())], "neg_mass": float(np.trapezoid(np.minimum(dens * np.exp(kk), 0), kk)),
+                  "fly": fly, "fly_h": hb, "fly_K": K2, "flies": flies, "lee": lee, "cross": cross,
+                  "cross_pair": pair_plot, "cross_k": kc,
+                  "cross_w0": smile.svi_total_variance(kc, *(p0["svi"][x] for x in ("a", "b", "rho", "m", "s"))),
+                  "cross_w1": smile.svi_total_variance(kc, *(p1["svi"][x] for x in ("a", "b", "rho", "m", "s"))),
+                  "violations": viol, "n_expiries": len(per)})

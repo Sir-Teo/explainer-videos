@@ -57,16 +57,14 @@ class Signatures(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(eq, tab, rows)
         self.remove(eq, tab, rows)
         with self.voiceover(
-            "Why does integration need more than the path? Terry Lyons's example. Take a path that runs in tiny, fast "
-            "circles: radius one over n, n squared radians a unit of time. Seen from above, as n grows, it shrinks "
-            "to a point: the paths converge uniformly to the constant path. <bookmark mark='a'/> Now feed each one into "
-            "a simple differential equation whose third coordinate integrates Y one d X two minus Y two d X one. "
-            "<bookmark mark='b'/> Turn the camera to the side. The solutions are helices whose shadows shrink, while "
-            "their height keeps climbing, to about one, at every n. <bookmark mark='c'/> The height is twice the Lévy area "
-            "swept by the path, and a circle of radius one over n swept at speed n squared accrues area at a constant "
-            "rate. So the solution map is not continuous in the path alone: the limit path is constant, but the "
-            "solutions do not converge to the constant solution. Lyons proved in 1998 that it is continuous in the path "
-            "together with its area. That pair is a rough path."
+            "Why does integration need more than the path? Terry Lyons's example: a path running in tiny fast "
+            "circles, radius one over n, n squared radians a unit of time. Seen from above, it shrinks to a point as "
+            "n grows. <bookmark mark='a'/> Feed it to a simple equation whose third coordinate integrates Y one d X "
+            "two minus Y two d X one. <bookmark mark='b'/> Turn the camera to the side: the solutions are helices "
+            "whose shadows shrink while their height still climbs to about one. <bookmark mark='c'/> The height is "
+            "twice the Lévy area the path sweeps, and a small circle swept fast accrues area at a constant rate. So "
+            "the solution map is not continuous in the path alone. Lyons proved in 1998 that it is continuous in the "
+            "path together with its area: that pair is a rough path."
         ) as vo:
             self.play(Create(ax), FadeIn(eq[0]))
             for k in ns:
@@ -119,16 +117,14 @@ class Signatures(VoiceoverScene, ThreeDScene):
                     r"gives universal approximation on compact sets", 18)]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=2.3, buff=0.5, edge=6.95)
         with self.voiceover(
-            "A pause. Two paths: right then up, and up then right. Same start, same end, same increments. Which "
-            "statistic tells them apart? <bookmark mark='a'/> The signed area between each path and its chord: plus "
-            "a half for one, minus a half for the other. Kuo-Tsai Chen showed in 1957 that a path is captured by its "
-            "iterated integrals, all of them, collected into the signature. Level one is the increment; level two "
-            "contains the area. <bookmark mark='b'/> Chen's identity makes it computable: the signature of two paths "
-            "joined end to end is the tensor product of their signatures, and a straight segment's signature is the "
-            "tensor exponential of its increment. <bookmark mark='c'/> The levels shrink factorially, so truncating "
-            "is cheap. <bookmark mark='d'/> And products of linear functions of the signature are again linear "
-            "functions of it, the shuffle identity, so by Stone-Weierstrass, linear functions of the signature can "
-            "approximate any continuous function of the path. That makes it a feature set for learning."
+            "A pause. Right then up, or up then right: same start, same end, same increments. Which statistic tells "
+            "them apart? <bookmark mark='a'/> The signed area to the chord: plus a half and minus a half. Kuo-Tsai "
+            "Chen showed in 1957 that a path is captured by all its iterated integrals, its signature; level one is "
+            "the increment, level two contains the area. <bookmark mark='b'/> Chen's identity: joining paths "
+            "multiplies signatures, and a straight segment's signature is the tensor exponential of its increment. "
+            "<bookmark mark='c'/> The levels shrink factorially. <bookmark mark='d'/> And products of linear "
+            "functions of the signature are again linear, so by Stone-Weierstrass, linear functions of the signature "
+            "approximate any continuous function of the path."
         ) as vo:
             self.play(FadeIn(plane), Create(pa), Create(pb), FadeIn(pc), run_time=2)
             vo.wait_until("a")
@@ -161,11 +157,10 @@ class Signatures(VoiceoverScene, ThreeDScene):
         outs = [f"S = signature(unit square, 2):  level 1 = {S[1].round(3).tolist()},  area = {(S[2][0, 1] - S[2][1, 0]) / 2:.3f}",
                 f"signature_batch: {sr['N']:,} paths, depth 5 -> {sr['n_feats'][-1]} features (time + 2 assets)"]
         with self.voiceover(
-            "Here is the House's signature, exactly as the identity reads. Start with the signature of nothing: one, "
-            "then zeros. For each straight segment, build its tensor exponential level by level, and multiply it in. "
-            "<bookmark mark='a'/> Run it on the unit square traversed once: the increments are zero, and the area is "
-            "one. <bookmark mark='b'/> A batched version computes it for twenty thousand paths at once, which the "
-            "experiment needs."
+            "Here is the House's signature, as the identity reads: for each straight segment, build its tensor "
+            "exponential level by level, and multiply it in. <bookmark mark='a'/> On the unit square, the increments "
+            "are zero and the area is one. <bookmark mark='b'/> A batched version handles twenty thousand paths at "
+            "once."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -214,17 +209,14 @@ class Signatures(VoiceoverScene, ThreeDScene):
                    f"{sr['n_feats'][-1]} features begin to overfit twelve thousand training paths."
                    if over else f"It climbs to {rm[-1]:.3f} at depth five.")
         with self.voiceover(
-            "Now learn with it. Twenty thousand simulated paths of two correlated assets, with time as a third channel. "
-            "Ask a linear regression on the truncated signature to predict three things, scored on paths it has not "
-            "seen, over five splits. <bookmark mark='a'/> Two checks first. The average price along the path is "
-            "exactly linear in level two, by integration by parts, and the area between the two assets is level two "
-            f"by definition: at depth two both reach an R squared of {tg['average']['r2_mean'][1]:.3f}, while a "
-            f"regression on all sixty-five raw prices explains {100 * tg['area']['base']['path']:.1f} percent of the "
-            "area. <bookmark mark='b'/> Then an Asian call, the positive part of the average minus the strike, which "
-            "is not linear in anything. Scrub through the depths: the predictions tighten onto the diagonal. "
-            + verdict + f" The raw path manages {base['path']:.3f}. <bookmark mark='c'/> Signatures are features "
-            "that know about order and area; they return as the language of the frontier chapter, and of Parts "
-            "fourteen, seventeen and forty-two."
+            "Now learn with it: twenty thousand paths of two correlated assets plus time, and linear regressions on "
+            "the truncated signature, scored on unseen paths over five splits. <bookmark mark='a'/> Two checks: the "
+            "average price is exactly linear in level two, and so is the area between the assets; at depth two both "
+            f"reach an R squared of {tg['average']['r2_mean'][1]:.3f}, while all sixty-five raw prices explain "
+            f"{100 * tg['area']['base']['path']:.1f} percent of the area. <bookmark mark='b'/> Then an Asian call, "
+            "which is linear in nothing. Scrub through the depths: the predictions tighten onto the diagonal. "
+            f"{verdict} The raw path manages {base['path']:.3f}. <bookmark mark='c'/> Signatures return in the next "
+            "two chapters, and in Parts fourteen, seventeen and forty-two."
         ) as vo:
             self.play(FadeIn(rp), FadeIn(bl))
             vo.wait_until("a")

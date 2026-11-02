@@ -347,7 +347,15 @@ def compute_envelope() -> dict:
            "turn_of_month_event": pit.register("turn_of_month_event", inspect.getsource(compute_event),
                                                {"window": "[-1, +3]"}, trials=1),
            "industry_capm_alphas": pit.register("industry_capm_alphas", inspect.getsource(compute_multiple),
-                                                {"n": 49}, trials=49)}
+                                                {"n": 49}, trials=49),
+           "fomc_announcement_days": pit.register("fomc_announcement_days", inspect.getsource(compute_fomc),
+                                                  {"days": "scheduled FOMC decisions 1994-2020"}, trials=1),
+           "shiller_oos_predictors": pit.register("shiller_oos_predictors", inspect.getsource(compute_oos),
+                                                  {"predictors": 5, "oos_from": 1927}, trials=5),
+           "lookahead_rotation_toy": pit.register("lookahead_rotation_toy", inspect.getsource(compute_lookahead),
+                                                  {"rule": "4-week size-decile rotation"}, trials=1),
+           "capm_two_pass": pit.register("capm_two_pass", inspect.getsource(compute_twopass),
+                                         {"portfolios": "49 industries + 10 B/M deciles", "from": 196307}, trials=1)}
     return _json({"sealed": recs, "registered": reg, "trials": pit.trials_so_far()})
 
 

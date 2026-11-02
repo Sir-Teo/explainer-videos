@@ -11,23 +11,29 @@ C_ = {r"P": PRICE, r"E_1": VALUE, r"b": CASH, r"r": QC.IMPLIED, r"g": CASH}
 class CAPE(VoiceoverScene):
     def construct(self):
         c = load("cape")
+        cs = load("campbell_shiller")
         self.card()
         self.multiples()
         self.series(c)
         self.scatter(c)
+        self.cs_derive(cs)
+        self.tug(cs)
 
     def card(self):
-        c = chapter_card(4, r"Multiples and the CAPE", r"Is the market expensive?", part=PART)
-        with self.voiceover("Chapter four. Multiples, and Shiller's CAPE."):
+        c = chapter_card(9, r"Multiples, the CAPE, and the dividend yield", r"Is the market expensive, and what "
+                         r"does that predict?", part=PART)
+        with self.voiceover("Chapter nine. Multiples, the CAPE, and what the dividend yield predicts."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
     def multiples(self):
         rows = [cmath(r"P", r"=", r"\frac{D_1}{r - g}", r"=", r"\frac{b\,E_1}{r - g}", colors=C_, font_size=42),
-                cmath(r"\frac{P}{E_1}", r"=", r"\frac{b}{r - g}", colors=C_, font_size=46)]
+                cmath(r"\frac{P}{E_1}", r"=", r"\frac{b}{r - g}", colors=C_, font_size=46),
+                cmath(r"P", r"=", r"\frac{E_1}{r}", r"+", r"\text{PVGO}", colors=C_, font_size=42)]
         whys = [why(r"Gordon, with dividends a fraction $b$ of earnings: the payout ratio"),
-                why(r"a P/E is a compressed DCF: a high multiple means low $r$ or high $g$")]
-        step = ladder(self, rows, whys, keep=2, top=2.6, x=-2.6, buff=0.9, edge=6.9)
+                why(r"a P/E is a compressed DCF: a high multiple means low $r$ or high $g$"),
+                why(r"the value of today's earnings as a perpetuity, plus the present value of growth opportunities")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-2.6, buff=0.7, edge=6.9)
         ev = VGroup(
             MathTex(r"\frac{\text{EV}}{\text{EBITDA}}", font_size=40),
             wrapped_label(r"enterprise value (equity plus debt minus cash) over earnings before interest, tax, "
@@ -37,7 +43,9 @@ class CAPE(VoiceoverScene):
             "Analysts rarely run a full DCF for every stock. They use multiples, and a multiple is a DCF folded "
             "up. Take Gordon's formula, and write the dividend as a fraction b of earnings, the payout ratio. "
             "<bookmark mark='a'/> Divide by earnings, and the price-to-earnings ratio is the payout over r minus g. "
-            "A high P/E is a bet on low discount rates or high growth, nothing more. <bookmark mark='b'/> When firms "
+            "A high P/E is a bet on low discount rates or high growth, nothing more. <bookmark mark='b'/> Or split the "
+            "price in two: today's earnings valued as a perpetuity, plus the present value of growth opportunities. "
+            "A growth stock is mostly the second term. <bookmark mark='c'/> When firms "
             "carry different amounts of debt, the desk uses enterprise value, the whole firm, over earnings before "
             "interest, tax and depreciation, so that leverage does not distort the comparison."
         ) as vo:
@@ -45,6 +53,8 @@ class CAPE(VoiceoverScene):
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
             self.play(FadeIn(ev))
         self.wait(0.4)
         self.clear_scene()
@@ -135,5 +145,122 @@ class CAPE(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(vline), FadeIn(pred), FadeIn(side[4]))
             self.play(FadeIn(side[5]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def cs_derive(self, cs):
+        F = cs["full"]
+        rows = [
+            cmath(r"r_{t+1}", r"\approx", r"\kappa + \rho\, pd_{t+1} + \Delta d_{t+1} - pd_t", font_size=40),
+            cmath(r"pd_t", r"\approx", r"\text{const} + \sum_{j \ge 1} \rho^{j-1}\big(\Delta d_{t+j} - r_{t+j}\big)",
+                  font_size=40),
+            cmath(r"1", r"\approx", r"\frac{\text{cov}(dp_t, \sum \rho^{j-1} r_{t+j})}{\text{var}(dp_t)} - "
+                  r"\frac{\text{cov}(dp_t, \sum \rho^{j-1}\Delta d_{t+j})}{\text{var}(dp_t)}", font_size=36),
+            cmath(r"b_r^{lr} - b_d^{lr}", r"=", r"1,\qquad b^{lr} = \frac{b}{1 - \rho\phi}", font_size=40),
+            cmath(rf"{F['lr_r']:.2f} - ({F['lr_d']:.2f})", r"=", rf"{F['lr_r'] - F['lr_d']:.2f}", font_size=40),
+        ]
+        whys = [why(r"log return $= \ln\big((P_{t+1} + D_{t+1})/P_t\big)$, Taylor-expanded in $pd = \ln(P/D)$ around its "
+                    r"mean; $\rho = 1/(1 + e^{\overline{dp}})$"),
+                why(r"iterate forward and rule out bubbles: Campbell and Shiller (1988)"),
+                why(r"multiply by $dp_t = -pd_t$ and take covariances: a high yield must be followed by high returns "
+                    r"or low dividend growth"),
+                why(r"with $dp$ an AR(1) with persistence $\phi$, the long-run slopes are the one-year slopes "
+                    r"over $1 - \rho\phi$ (Cochrane 2008)"),
+                why(rf"Shiller's annual data, {cs['years'][0]}--{cs['years'][1]}, real; identity gap "
+                    rf"{F['identity_gap']:+.3f} from the linearisation")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.8, edge=6.9)
+        with self.voiceover(
+            "Why should a valuation ratio predict anything? John Campbell and Robert Shiller showed in 1988 that it "
+            "must predict something. Write the log return as a function of the price-dividend ratio, and expand it to "
+            "first order around its average. <bookmark mark='a'/> Solve forward, ruling out bubbles: today's price-"
+            "dividend ratio is the discounted sum of future dividend growth minus future returns. "
+            "<bookmark mark='b'/> Multiply by the dividend yield and take covariances. The variance of the yield is "
+            "split exactly between two forecasts: of returns, and of dividend growth. A high yield has to be paid for "
+            "by one or the other. <bookmark mark='c'/> John Cochrane's version in 2008: with a persistent yield, the "
+            "long-run return slope minus the long-run dividend-growth slope equals one. <bookmark mark='d'/> On a "
+            f"century and a half of Shiller's data: {F['lr_r']:.2f} for returns, {F['lr_d']:.2f} for dividend "
+            "growth. The identity holds up to its linearisation."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def tug(self, cs):
+        S = [("1871--2020", cs["full"]), ("1871--1945", cs["subs"]["1871-1945"]),
+             ("1946--2020", cs["subs"]["1946-2020"])]
+        k = ValueTracker(0)
+        W = 10.0
+
+        def shares(i):
+            s = S[i][1]
+            a, b = max(s["lr_r"], 0.0), max(-s["lr_d"], 0.0)
+            tot = a + b if a + b > 0 else 1.0
+            return a / tot, s["lr_r"], s["lr_d"]
+
+        def rope():
+            x = k.get_value()
+            i0 = int(np.clip(np.floor(x), 0, len(S) - 1))
+            i1 = min(i0 + 1, len(S) - 1)
+            f = x - i0
+            a0, r0, d0 = shares(i0)
+            a1, r1, d1 = shares(i1)
+            a = (1 - f) * a0 + f * a1
+            rr, dd = (1 - f) * r0 + f * r1, (1 - f) * d0 + f * d1
+            y = 0.2
+            left = Line([-W / 2, y, 0], [-W / 2 + a * W, y, 0], color=QC.LOSS, stroke_width=16)
+            right = Line([-W / 2 + a * W, y, 0], [W / 2, y, 0], color=QC.GAIN, stroke_width=16)
+            knot = Dot([-W / 2 + a * W, y, 0], radius=0.18, color=WHITE)
+            lt = MathTex(rf"\text{{returns}}\ b_r^{{lr}} = {rr:.2f}", font_size=32, color=QC.LOSS)
+            lt.next_to([-W / 2, y, 0], UP, buff=0.3).align_to(left, LEFT)
+            rt = MathTex(rf"\text{{dividend growth}}\ b_d^{{lr}} = {dd:.2f}", font_size=32, color=QC.GAIN)
+            rt.next_to([W / 2, y, 0], UP, buff=0.3).align_to(right, RIGHT)
+            per = label(S[int(round(x))][0], font_size=34, color=QC.IDEA).move_to(UP * 2.6)
+            return VGroup(left, right, knot, lt, rt, per)
+
+        rp = always_redraw(rope)
+        cap = wrapped_label(r"who pays for a high dividend yield: later returns (red) or later dividend growth (green); "
+                            r"their long-run slopes always differ by one", 11.0, 22, GREY_A).to_edge(DOWN, buff=1.6)
+        sims = np.asarray(cs["boot_slopes"])
+        F = cs["full"]
+        boot = VGroup(
+            MathTex(rf"\text{{one-year slope of returns on }} dp:\ {F['b_r']:.3f},\ t_{{NW}} = {cs['t_r']:.2f}",
+                    font_size=28),
+            MathTex(rf"\text{{Stambaugh bootstrap, no predictability: }} P(\hat b \ge {F['b_r']:.3f}) = "
+                    rf"{cs['boot_p']:.2f};\ \text{{mean slope under the null}}\ {cs['boot_mean']:.3f}", font_size=26,
+                    color=GREY_A),
+        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
+        s1, s2 = S[1][1], S[2][1]
+        with self.voiceover(
+            "Draw the identity as a tug of war. The rope has a fixed length, one. Red is the pull of future returns, "
+            "green the pull of future dividend growth, and the knot is where a high dividend yield gets paid for. "
+            f"<bookmark mark='a'/> Over the whole sample, returns pull {F['lr_r']:.2f} and dividend growth "
+            f"{-F['lr_d']:.2f}. <bookmark mark='b'/> Now move the sample. Before 1946, dividends did most of the "
+            f"work: a high yield predicted falling dividends, {s1['lr_d']:.2f}. <bookmark mark='c'/> After 1945 "
+            f"the green rope goes slack, {s2['lr_d']:.2f}, and returns carry everything, {s2['lr_r']:.2f}. That is "
+            "Cochrane's dog that did not bark: if high yields did not forecast low dividends, they must forecast high "
+            "returns. <bookmark mark='d'/> But the one-year return slope is weak on its own, and a persistent "
+            "predictor biases it upward, Stambaugh's bias. Simulate a world with no predictability and the same "
+            f"persistence: slopes this large appear {100 * cs['boot_p']:.0f} percent of the time. Part six returns to "
+            "this; the identity is why the question is worth asking."
+        ) as vo:
+            self.add(rp)
+            self.play(FadeIn(cap))
+            vo.wait_until("a")
+            self.wait(0.5)
+            vo.wait_until("b")
+            self.play(k.animate.set_value(1), run_time=3)
+            vo.wait_until("c")
+            self.play(k.animate.set_value(2), run_time=3)
+            vo.wait_until("d")
+            self.play(FadeOut(cap), FadeIn(boot))
+        rp.clear_updaters()
         self.wait(0.4)
         self.clear_scene()

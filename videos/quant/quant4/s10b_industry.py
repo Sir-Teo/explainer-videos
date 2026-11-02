@@ -50,15 +50,12 @@ class Industry(VoiceoverScene):
                              rf"Chips are re-bet: about {ca['turnover']:.1f} times per dollar bought, at 5.26\% each.",
                              width=7.6, font_size=20).next_to(calc, DOWN, buff=0.3)
         with self.voiceover(
-            "A casino is a portfolio of martingales with a small drift in its favour. Every bet a customer makes is "
-            "a supermartingale for the customer. <bookmark mark='a'/> The public numbers show it at industrial scale. "
-            "Nevada's roulette tables kept seventeen point three four percent of the cash exchanged for chips in "
-            "2024, according to the University of Nevada's Center for Gaming Research, and about eighteen point eight "
-            "percent on average since 2004. <bookmark mark='b'/> Yet the edge on a double-zero wheel is five point two "
-            "six percent. The gap is chapter four's tax per unit staked: the hold is the edge times the number of "
-            f"times each dollar of chips is bet, here about {ca['turnover']:.1f}. <bookmark mark='c'/> And table limits "
-            "keep every bet bounded, which is exactly the condition under which optional stopping holds and no "
-            "doubling system can outrun the house."
+            "A casino is a portfolio of martingales with a drift in its favour. <bookmark mark='a'/> Nevada's "
+            "roulette tables kept seventeen point three four percent of the cash exchanged for chips in 2024, by the "
+            "University of Nevada's figures. <bookmark mark='b'/> Yet a double-zero wheel's edge is five point two "
+            "six percent. The gap is chapter four's tax per unit staked: the edge times how often each dollar of "
+            f"chips is bet, about {ca['turnover']:.1f} times. <bookmark mark='c'/> Table limits keep the bets bounded, "
+            "so optional stopping holds."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -102,15 +99,12 @@ class Industry(VoiceoverScene):
                   rf"{ca['need_even']:,.0f} equal even-money bets".replace(",", "{,}"), font_size=19, color=GREY_B),
         ).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "How sure is the house? Its result is a martingale with a drift and bounded steps, and Kazuoki Azuma's "
-            "inequality of 1967 bounds the chance that such a martingale strays far from its drift. "
-            "<bookmark mark='a'/> For even-money bets on a single-zero wheel the house is behind after a hundred bets "
-            f"about {100 * rows[0]['exact']:.0f} percent of the time, after ten thousand bets "
-            f"{100 * r4['exact']:.2f} percent, and after a hundred thousand, essentially never. Azuma's bound is "
-            "looser than the exact answer, but it needs nothing except a cap on each bet. <bookmark mark='b'/> The "
-            "monthly hold still swings by three points. Spin-by-spin luck would explain that only if a whole month "
-            f"were about {ca['need_even']:,.0f} equal bets; real tables see far more, so the swing comes from unequal "
-            "bets, a few high rollers, and how often chips are re-bet."
+            "How sure is the house? Azuma's inequality of 1967 bounds how far a martingale with bounded steps strays. "
+            "<bookmark mark='a'/> On even-money bets the house is behind after a hundred bets about "
+            f"{100 * rows[0]['exact']:.0f} percent of the time, after ten thousand {100 * r4['exact']:.2f} percent, "
+            "after a hundred thousand essentially never. <bookmark mark='b'/> Yet monthly hold swings by three "
+            f"points; luck alone would need a month of only about {ca['need_even']:,.0f} equal bets, so unequal bets "
+            "and high rollers drive it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[1]))
             vo.wait_until("a")
@@ -135,13 +129,11 @@ class Industry(VoiceoverScene):
                          r"edge sorting, chapter 11's change of filtration, was held to be cheating", width=11.0),
         ).arrange(DOWN, buff=0.35).move_to(ORIGIN)
         with self.voiceover(
-            "The house's enemies are people who change the filtration. In 1962 the mathematician Edward Thorp "
-            "showed in Beat the Dealer that blackjack is not a sequence of independent games: the deck remembers "
-            "what has been dealt, and a player who counts the cards sometimes faces a positive drift. "
-            "<bookmark mark='a'/> Casinos responded by barring counters. In New Jersey, the state Supreme Court held "
-            "in 1982, in Ken Uston's case, that the state's Casino Control Act gave rules about card counting to the "
-            "Casino Control Commission, so a casino could not simply exclude a counter on its own. "
-            "<bookmark mark='b'/> And in Britain, as we saw, edge sorting was held to be cheating."
+            "The house's enemies change the filtration. Edward Thorp showed in 1962 that the blackjack deck remembers, "
+            "and a counter sometimes faces a positive drift. <bookmark mark='a'/> In 1982 New Jersey's Supreme Court "
+            "held in Ken Uston's case that card counting was for the Casino Control Commission to regulate, so a "
+            "casino could not exclude a counter on its own. <bookmark mark='b'/> In Britain, edge sorting was held to "
+            "be cheating."
         ) as vo:
             self.play(FadeIn(cards[0]))
             vo.wait_until("a")
@@ -172,16 +164,13 @@ class Industry(VoiceoverScene):
                                r"dollars'', as reported by Bloomberg Businessweek (2018)", 12.4, 19, GREY_A)
         benter.to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Bookmakers run the same business on sport. In 2017 three researchers, Lisandro Kaunitz, Shenjun Zhong "
-            "and Javier Kreiner, treated the average of many bookmakers' odds as the probability, the market as the "
-            "martingale, and bet whenever one bookmaker offered better. Over a ten-year backtest, fifty-six thousand "
-            "bets returned three and a half percent. With real money, two hundred and sixty-five bets made nine "
-            "hundred and fifty-seven dollars. Then, in their words, the bookmakers started to severely limit their "
-            "accounts. <bookmark mark='a'/> From the book's side, Flutter, which owns FanDuel, reports that its "
-            "American sportsbook kept seven point nine percent of the fifty-one billion dollars staked in 2024. A "
-            "book manages risk like a casino, and also by refusing the customers who have a drift. "
-            "<bookmark mark='b'/> In horse racing, Bill Benter's syndicate combined a statistical model with the "
-            "public's own odds, and, as reported by Bloomberg Businessweek, made close to a billion dollars."
+            "Bookmakers run the same business on sport. In 2017 Kaunitz, Zhong and Kreiner took the average of many "
+            "bookmakers' odds as the probability and bet where one book offered better: a three and a half percent "
+            "return over fifty-six thousand backtested bets, and a profit with real money, until the bookmakers "
+            "began, in their words, to severely limit their accounts. <bookmark mark='a'/> Flutter reports that its "
+            "American sportsbook kept seven point nine percent of fifty-one billion dollars staked in 2024. "
+            "<bookmark mark='b'/> Bill Benter's racing syndicate blended a model with the public's odds and, as "
+            "reported by Bloomberg Businessweek, made close to a billion dollars."
         ) as vo:
             self.play(FadeIn(k, shift=UP * 0.2))
             vo.wait_until("a")
@@ -226,18 +215,17 @@ class Industry(VoiceoverScene):
                              r"stronger for takers (B\"urgi, Deng and Whelan, CESifo WP 12122, 2025)", 6.4, 18, GREY_B)
         find.next_to(cards, DOWN, buff=0.3).align_to(cards, LEFT)
         with self.voiceover(
-            "Prediction markets sell the martingale directly: a contract that pays one dollar if an event happens, "
-            "whose price is read as a probability. In 2024 a federal judge in Washington, Jia Cobb, held that the "
-            "Commodity Futures Trading Commission had exceeded its authority in barring Kalshi's contracts on control "
-            "of Congress, and the appeals court declined to stay her ruling. On Polymarket, the presidential election "
-            "market traded nearly three point seven billion dollars, as reported by The Block. "
-            "<bookmark mark='a'/> Is such a price a martingale? Ned Augenblick and Matthew Rabin turned chapter "
-            "eleven into a test: for a Bayesian, the expected squared movement of a belief equals the uncertainty it "
-            "resolves. <bookmark mark='b'/> On the best-of-twenty-one forecasts of chapter three the ratio is "
-            f"{b['bayes']:.2f}, as it must be; a forecaster who overreacts by thirty percent scores {b['over']:.2f}. "
-            "<bookmark mark='c'/> On eleven million Betfair trades they found consistent excess movement. And on "
-            "Kalshi, Bürgi, Deng and Whelan find prices that sharpen near the close, with a "
-            "favourite-longshot bias that is stronger for the traders who take liquidity."
+            "Prediction markets sell the martingale directly: a contract paying one dollar if an event happens, its "
+            "price read as a probability. In 2024 Judge Jia Cobb held that the CFTC had exceeded its authority in "
+            "barring Kalshi's contracts on control of Congress, and the appeals court declined to stay her ruling. "
+            "Polymarket's presidential market traded nearly three point seven billion dollars, as reported by The "
+            "Block. <bookmark mark='a'/> Is such a price a martingale? Ned Augenblick and Matthew Rabin turned "
+            "chapter eleven into a test: for a Bayesian, expected squared movement equals the uncertainty resolved. "
+            f"<bookmark mark='b'/> On chapter three's forecasts the ratio is {b['bayes']:.2f}, as it must be; a "
+            f"forecaster who overreacts by thirty percent scores {b['over']:.2f}. <bookmark mark='c'/> On eleven "
+            "million Betfair trades they found consistent excess movement. On Kalshi, Bürgi, Deng and Whelan find "
+            "prices that sharpen near the close, and a favourite-longshot bias, stronger for those who take "
+            "liquidity."
         ) as vo:
             self.play(FadeIn(cards[0]))
             self.play(FadeIn(cards[1]))
@@ -265,12 +253,11 @@ class Industry(VoiceoverScene):
         desk.to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Testing while you watch is old, and now industrial. Abraham Wald's sequential probability ratio test, "
-            "from the war years, watched exactly the likelihood ratio of chapter twelve and stopped as soon as the "
-            "evidence sufficed. <bookmark mark='a'/> Optimizely's engineers and Stanford statisticians built "
-            "always-valid p-values for website experiments that people check every hour, and Netflix uses "
-            "anytime-valid tests to decide, while a new version rolls out, whether it is safe. "
-            "<bookmark mark='b'/> On trading desks, watching a strategy for decay with sequential tests is standard "
-            "practice, though no firm has published its own method."
+            "from the war years, watched chapter twelve's likelihood ratio and stopped as soon as the evidence "
+            "sufficed. <bookmark mark='a'/> Optimizely's always-valid p-values serve website experiments that people "
+            "check every hour, and Netflix uses anytime-valid tests to decide, while a new version rolls out, whether "
+            "it is safe. <bookmark mark='b'/> On trading desks, watching a strategy for decay with sequential tests is "
+            "standard practice, though no firm has published its own method."
         ) as vo:
             self.play(FadeIn(cards[0]))
             vo.wait_until("a")

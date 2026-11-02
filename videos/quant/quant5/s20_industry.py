@@ -80,14 +80,12 @@ class Industry(VoiceoverScene):
         with self.voiceover(
             "The crisis file. On the twentieth of April 2020, with storage at Cushing, Oklahoma, filling up, the May "
             "oil future settled at minus thirty-seven dollars and sixty-three cents a barrel; the Cushing spot price "
-            f"on FRED reads {v[i]:.2f}. <bookmark mark='a'/> Every model in this part that writes the price as an "
-            "exponential, geometric Brownian motion first among them, says that cannot happen: the logarithm of a "
-            "negative number does not exist. Louis Bachelier's 1900 model, an arithmetic Brownian motion, crosses "
-            "zero without noticing. <bookmark mark='b'/> CME Clearing had announced on the eighth of April a plan to "
-            "switch if prices approached zero, and on the twenty-first it moved options on WTI and related energy "
-            "futures to the Bachelier model, effective with the margin cycle of the twenty-second, to allow negative "
-            "prices and negative strikes. It switched back at the end of August. <bookmark mark='c'/> The difference "
-            "is visible in a put: Black's formula stops at a zero futures price; Bachelier's carries on."
+            f"on FRED reads {v[i]:.2f}. <bookmark mark='a'/> Geometric Brownian motion says that cannot happen: the "
+            "log of a negative number does not exist. Bachelier's arithmetic Brownian motion crosses zero without "
+            "noticing. <bookmark mark='b'/> CME Clearing moved options on WTI and related energy futures to the "
+            "Bachelier model, effective the twenty-second of April, to allow negative prices and strikes, and moved "
+            "back at the end of August. <bookmark mark='c'/> In a put, Black's formula stops at a zero futures price; "
+            "Bachelier's carries on."
         ) as vo:
             self.play(FadeIn(g), Create(zero), Create(line), FadeIn(src), run_time=2)
             self.play(FadeIn(dot, scale=2), FadeIn(card))
@@ -110,14 +108,12 @@ class Industry(VoiceoverScene):
                          source=r"CFTC press release 8432-21; Interactive Brokers press release 21 April 2020 "
                                 r"(provisional loss about \$88M) and Form 10-Q for Q2 2020", width=9.4, font_size=21)
         with self.voiceover(
-            "The firm file: a broker whose customers held oil futures that day. In a settled order in September 2021, "
-            "the Commodity Futures Trading Commission found that Interactive Brokers did not "
-            "adequately prepare and configure its trading system to recognize negative prices, although it was on "
-            "notice that they were possible. <bookmark mark='a'/> The order imposed a civil penalty of one point seven "
-            "five million dollars and restitution of eighty-two point five seven million, credited because the firm had "
-            "already compensated its customers. The firm had announced a provisional loss of about eighty-eight "
-            "million dollars the day after, later revised to about a hundred and four. A state space is a modelling "
-            "assumption, and here it was also a software assumption."
+            "The firm file. In a settled order in September 2021, the Commodity Futures Trading Commission found that "
+            "Interactive Brokers did not adequately prepare and configure its trading system to recognize negative "
+            "prices, although it was on notice that they were possible. <bookmark mark='a'/> It imposed a penalty of "
+            "one point seven five million dollars and restitution of eighty-two point five seven million, credited "
+            "because the firm had already compensated customers. The firm reported a loss of about a hundred and four "
+            "million. A state space is a modelling assumption, and here it was also a software assumption."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -143,13 +139,11 @@ class Industry(VoiceoverScene):
                           r"34-90763 (2020), on the Options Clearing Corporation's methodology", 11.6, 20, GREY_A)
         q.next_to(steps, DOWN, buff=0.6)
         with self.voiceover(
-            "Clearing houses run this calculus every night. The Options Clearing Corporation, which clears listed "
-            "options in the United States, sets members' margin with a system called STANS. According to its "
-            "filings with the Securities and Exchange Commission, it calibrates a model for each risk factor, ties the "
-            "factors together with a copula, and runs Monte Carlo simulations with ten thousand scenarios per factor, "
+            "Clearing houses run this calculus every night. According to its filings with the Securities and Exchange "
+            "Commission, the Options Clearing Corporation's margin system, STANS, calibrates a model for each risk "
+            "factor, ties them together with a copula, and simulates ten thousand Monte Carlo scenarios per factor, "
             "<bookmark mark='a'/> then reprices every position in every scenario and aggregates the losses into a "
-            "margin requirement. Each box is a chapter of this part: a stochastic model, a simulation, and a "
-            "validation that the simulator is right."
+            "margin requirement."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(s_) for s_ in steps[:3]], lag_ratio=0.5),
                       LaggedStart(*[GrowArrow(a) for a in arrows[:2]], lag_ratio=0.5), run_time=4)
@@ -183,16 +177,14 @@ class Industry(VoiceoverScene):
                         r"whose It\^o drift is exactly $\tfrac12\sigma^2$.", width=5.0, font_size=19)
         VGroup(pc, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Itô's lemma is also a product on the trading floor. Apply it to the logarithm of the price: the log "
-            "changes by the return minus half the variance. <bookmark mark='a'/> Rearrange: the variance realized "
-            "over a period equals twice the gain from holding one over S shares, minus twice the log return. "
-            "<bookmark mark='b'/> And the log payoff is, by Taylor's formula, a forward plus a strip of puts and calls "
-            "weighted by one over strike squared. So realized variance can be bought with options and a delta hedge: "
-            "the variance swap of Demeterfi, Derman, Kamal and Zou, and the weights of Cboe's VIX. "
-            "<bookmark mark='c'/> Test it on ten thousand Heston paths: the replication misses by a fraction of a "
-            "basis point of variance, less with finer steps. Add jumps and a bias appears, exactly the jump term of "
-            f"chapter twelve: {vs['2520_jump']['mean'] * 1e4:+.1f} against a predicted "
-            f"{vs['jump_bias_theory'] * 1e4:+.1f}, in units of one ten-thousandth. Part twelve rebuilds the VIX."
+            "Itô's lemma is also a product. Apply it to the logarithm of the price. <bookmark mark='a'/> Rearranged, "
+            "realized variance is twice the gain from holding one over S shares, minus twice the log return. "
+            "<bookmark mark='b'/> And by Taylor's formula the log payoff is a forward plus puts and calls weighted by "
+            "one over strike squared: the variance swap of Demeterfi, Derman, Kamal and Zou, and the weights of "
+            "Cboe's VIX. <bookmark mark='c'/> On ten thousand Heston paths, the replication misses by a fraction of a "
+            "basis point of variance. Add jumps, and a bias appears, exactly chapter twelve's jump term: "
+            f"{vs['2520_jump']['mean'] * 1e4:+.1f} against a predicted {vs['jump_bias_theory'] * 1e4:+.1f}, in "
+            "ten-thousandths."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -240,14 +232,13 @@ class Industry(VoiceoverScene):
         th = label(r"the House's validation report: each simulator against a case with a known answer (Rule 6)",
                    font_size=21, color=QC.HOUSE).next_to(sr, DOWN, buff=0.3).align_to(sr, LEFT)
         with self.voiceover(
-            "Finally, who checks the models. In American banks, model risk is supervised under guidance first issued "
-            "by the Federal Reserve and the Comptroller of the Currency in 2011 as SR 11-7. On the seventeenth of April "
-            "2026 it was replaced by SR 26-2, issued with the FDIC. The new letter keeps the core: effective challenge "
-            "by people who did not build the model, conceptual soundness, ongoing monitoring, outcomes analysis and a "
-            "model inventory. It adds tailoring to how material a model is, it is aimed mainly at banks with more than "
-            "thirty billion dollars of assets, and it leaves generative and agentic AI outside its scope. "
-            "<bookmark mark='a'/> The House's version of that discipline is Rule 6: no simulator prices anything until "
-            "it has reproduced a known answer. Here is this part's validation report, every routine with its test."
+            "Finally, who checks the models. American banks' model risk was supervised under SR 11-7, from 2011. On "
+            "the seventeenth of April 2026 the Federal Reserve, the OCC and the FDIC replaced it with SR 26-2, which "
+            "keeps effective challenge, conceptual soundness, ongoing monitoring, outcomes analysis and a model "
+            "inventory, adds tailoring to materiality, is aimed mainly at banks above thirty billion dollars, and "
+            "leaves generative and agentic AI outside its scope. <bookmark mark='a'/> The House's version is Rule 6: "
+            "no simulator prices anything until it has reproduced a known answer. Here is this part's validation "
+            "report."
         ) as vo:
             self.play(FadeIn(sr[0]))
             self.play(FadeIn(sr[1]), FadeIn(sr[2]))

@@ -674,7 +674,8 @@ def compute_payout() -> dict:
         ins = x[(y >= s0) & (y <= s1) & np.isfinite(x)]
         post = x[(y > py) & (y <= 2020) & np.isfinite(x)]
         osap[c] = {"in": float(ins.mean()), "post": float(post.mean()), "year": py, "authors": doc[c]["Authors"]}
-    # two firms with the same operations: earnings 100 a year on operations worth 1000, all paid out
+    # two firms with the same operations: earnings 100 a year on operations worth 1000, all paid out; the owner of
+    # the dividend payer reinvests at the same 10%, so the comparison is like for like
     years = 10
     out = {"div": {}, "buy": {}}
     for mode in ("div", "buy"):
@@ -686,7 +687,7 @@ def compute_payout() -> dict:
             if mode == "div":
                 dps = 100.0 / shares
                 price = (V - 100.0) / shares
-                cash_in += held * dps
+                cash_in = cash_in * 1.1 + held * dps  # dividends reinvested at the firm's 10% return
             else:
                 price = V / shares
                 bought = 100.0 / price

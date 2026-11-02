@@ -136,13 +136,9 @@ class Outro(VoiceoverScene):
             (r"e-processes and e-BH: testing what you keep looking at", [26, 43]),
         ])
         with self.voiceover(
-            "Where this comes back. Martingales and quadratic variation are the foundation of Itô's calculus in Part "
-            "five and of volatility models in Part seven. The change of measure becomes the risk-neutral world of "
-            "Parts nine and ten, and the stochastic discount factor of twenty-three. Admissible strategies are how "
-            "Part nine rules out doubling. The convexity of option prices in time returns in Part twelve, and the "
-            "numeraire portfolio is Part eight's Kelly bettor. Heavy tails return with changing volatility in seven "
-            "and thirteen, and with risk measurement in forty. And e-processes and e-BH are how Part twenty-six, and "
-            "the finale, decide which results to believe."
+            "Where this comes back: quadratic variation in Parts five and seven; the risk-neutral world in nine, ten "
+            "and twenty-three; admissibility in nine; calendar spreads in twelve; the numéraire portfolio in eight; "
+            "heavy tails in seven, thirteen and forty; and e-processes in twenty-six and the finale."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r) for r in card.rows], lag_ratio=0.4, run_time=4))
         self.wait(0.4)

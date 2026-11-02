@@ -55,14 +55,13 @@ class Representation(VoiceoverScene):
             MathTex(rf"n = 512:\ |V_1 - F| = {abs(v512 - M[-1]):.3f}", font_size=28, color=JUMP),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Why does a hedge exist at all? Take a payoff that depends on a Brownian path: here, W at time one, "
-            "squared. Its conditional expectation given the path so far is a martingale: W squared plus the time "
-            "remaining. <bookmark mark='a'/> Watch the path and that martingale unroll together. "
-            "<bookmark mark='b'/> Now a trader who starts with the payoff's expected value, one, and holds two W "
-            "units of the Brownian asset, rebalancing eight times. The staircase in green is the trader's wealth. "
-            "It wanders near the martingale but misses at the end, by the red gap. <bookmark mark='c'/> Rebalance "
-            "five hundred and twelve times, and the wealth lies on top of the martingale; the gap all but vanishes. "
-            "The payoff is a trading strategy. Every Brownian payoff is, and the next proof says why."
+            "Why does a hedge exist at all? Take a payoff that depends on a Brownian path: W at time one, squared. "
+            "Its expectation given the path so far is a martingale, W squared plus the time remaining. "
+            "<bookmark mark='a'/> Watch the path and the martingale unroll together. <bookmark mark='b'/> A trader "
+            "starts with the payoff's expected value, one, and holds two W units of the Brownian asset, rebalancing "
+            "eight times. The green staircase is the trader's wealth: near the martingale, but it misses at the end "
+            "by the red gap. <bookmark mark='c'/> Rebalance five hundred and twelve times, and the wealth lies on top "
+            "of the martingale. The payoff is a trading strategy. Every Brownian payoff is, and the proof says why."
         ) as vo:
             self.add(lw, lm)
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(side[0]))
@@ -96,16 +95,15 @@ class Representation(VoiceoverScene):
                 why(r"$D_t W_T^3 = 3W_T^2$, and $\mathbb{E}[W_T^2 \mid \mathcal{F}_t] = W_t^2 + T - t$")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "The proof idea is short. First, exponentials are integrals: by the lemma, a stochastic exponential is one "
-            "plus a stochastic integral. <bookmark mark='a'/> Second, these exponentials are rich enough: a random "
-            "variable orthogonal to all of them has zero Fourier transform on every finite set of times, so it is "
-            "zero. <bookmark mark='b'/> Third, the isometry: if a sequence of integrals converges, its limit is an "
-            "integral. So every square-integrable payoff is its mean plus a stochastic integral, and every Brownian "
-            "martingale is a running integral. That is the martingale representation theorem. "
-            "<bookmark mark='c'/> It says a hedge exists, not what it is. Clark and Ocone gave the formula: the hedge "
-            "is the expected Malliavin derivative, the sensitivity of the payoff to a bump in the Brownian path at "
-            "time t. For W squared that is two W, as on the screen; for a call it is the delta of Part ten. "
-            "<bookmark mark='d'/> For W cubed, it is three times W squared plus the time remaining."
+            "The proof idea is short. First, exponentials are integrals: by the lemma, a stochastic exponential is "
+            "one plus a stochastic integral. <bookmark mark='a'/> Second, they are rich enough: a variable orthogonal "
+            "to all of them has zero Fourier transform at every finite set of times, so it is zero. "
+            "<bookmark mark='b'/> Third, the isometry: limits of integrals are integrals. So every square-integrable "
+            "payoff is its mean plus a stochastic integral, and every Brownian martingale a running integral: the "
+            "martingale representation theorem. <bookmark mark='c'/> It says a hedge exists, not what it is. Clark "
+            "and Ocone gave the formula: the expected Malliavin derivative, the payoff's sensitivity to a bump in the "
+            "path at time t. For a call it is the delta of Part ten. <bookmark mark='d'/> For W cubed it is three "
+            "times W squared plus the time remaining."
         ) as vo:
             step(0)
             vo.wait_until("a")

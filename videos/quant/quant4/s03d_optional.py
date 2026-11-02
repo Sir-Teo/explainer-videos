@@ -45,13 +45,15 @@ class Optional(VoiceoverScene):
                 why(r"the walk that always wins: no bound, $\mathbb{E}\tau_1 = \infty$; the mean leaks away")]
         step = ladder(self, rows, whys, keep=4, top=1.15, x=-1.6, buff=0.6, edge=6.9)
         with self.voiceover(
-            "The theorem: a martingale stopped at a finite stopping time keeps its starting mean if you stop by a "
-            "fixed date, or the stopped process is bounded, or the expected time is finite and the steps bounded. "
-            "<bookmark mark='a'/> Proof. At every fixed n the stopped martingale has mean M zero. "
-            "<bookmark mark='b'/> As n grows it freezes at its value at tau. <bookmark mark='c'/> Each hypothesis "
-            "gives one integrable bound on the whole stopped path. <bookmark mark='d'/> So dominated convergence "
-            "passes the limit inside. <bookmark mark='e'/> Without a bound it fails: the walk stopped at plus one has "
-            "mean zero at every n, but one at tau. Uniform integrability says no mass escapes; here it does."
+            "Now the theorem, with its proof. A martingale stopped at a finite stopping time keeps its starting mean "
+            "if you stop by a fixed date, or the stopped process stays bounded, or the expected time is finite and "
+            "each step is bounded. <bookmark mark='a'/> The proof is four lines. At every fixed n the stopped "
+            "martingale has mean M zero: chapter five. <bookmark mark='b'/> As n grows, the stopped path freezes at "
+            "its value at tau. <bookmark mark='c'/> Each hypothesis gives one integrable bound on the whole stopped "
+            "path: a constant, or the start plus c times tau. <bookmark mark='d'/> So dominated convergence passes "
+            "the limit inside the expectation. <bookmark mark='e'/> Without a bound it fails: the walk stopped at "
+            "plus one has mean zero at every finite n, but at tau it is always one. Uniform integrability says no "
+            "mass escapes to infinity. Here it does."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.2))
             vo.wait_until("a")

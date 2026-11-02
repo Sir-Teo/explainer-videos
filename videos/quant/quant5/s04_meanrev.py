@@ -53,16 +53,13 @@ class MeanReversion(VoiceoverScene):
                 f"theory: mean {lab['mean_theory']:.4f}  sd {lab['sd_theory']:.4f}   below zero {100 * lab['frac_neg_T']:.0f}%"]
         src = real_data(r"FRED DTB3, monthly averages, January 1954 -- December 2020", corner=UL)
         with self.voiceover(
-            "Prices wander; interest rates are pulled back. Here is the three-month Treasury bill rate since 1954. The "
-            "simplest model of a pull is Oldřich Vasicek's, from 1977: the rate drifts toward a long-run level theta "
-            "at speed kappa, plus Brownian noise. Physicists call it the Ornstein-Uhlenbeck process. "
-            "<bookmark mark='a'/> The House simulates it exactly, not by Euler: each month, the gap to theta shrinks by "
-            "a factor e to the minus kappa d t, and a Gaussian with exactly the right variance is added. "
-            "<bookmark mark='b'/> Run it: two hundred paths from the 1954 rate, with the parameters a regression "
-            "fits to these sixty-seven years. <bookmark mark='c'/> The fan settles into a fixed Gaussian, its "
-            f"histogram standing on the right: mean {100 * lab['mean_T']:.1f} percent, spread "
-            f"{100 * lab['sd_T']:.1f} percent, matching the theory to the third decimal. And about "
-            f"{100 * lab['frac_neg_T']:.0f} percent of it lies below zero, a first warning about this model."
+            "Interest rates are pulled back. Here is the three-month bill rate since 1954, and Oldřich Vasicek's 1977 "
+            "model: the rate drifts toward theta at speed kappa, plus noise, the Ornstein-Uhlenbeck process. "
+            "<bookmark mark='a'/> The House simulates it exactly: each month the gap to theta shrinks by e to the "
+            "minus kappa d t, and a Gaussian of exactly the right variance is added. <bookmark mark='b'/> Two hundred "
+            "paths from the 1954 rate, with a regression's parameters. <bookmark mark='c'/> The fan settles into a "
+            f"fixed Gaussian, mean {100 * lab['mean_T']:.1f} percent, spread {100 * lab['sd_T']:.1f}, as theory says, "
+            f"with {100 * lab['frac_neg_T']:.0f} percent below zero."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(zero), Create(real), run_time=2)
             vo.wait_until("a")
@@ -95,15 +92,12 @@ class MeanReversion(VoiceoverScene):
                         rf"$e^{{-\kappa t}}$.", width=6.4, font_size=22)
         VGroup(pc, ans).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Why that recipe is exact. Multiply by an integrating factor, e to the kappa t, and apply the product rule "
-            "from chapter four. Because the factor is smooth, there is no covariation term, and the drift toward "
-            "theta becomes a plain time integral. <bookmark mark='a'/> Integrate. The rate is its long-run level, plus "
-            "the starting gap decaying exponentially, plus a stochastic integral of a deterministic function. "
-            "<bookmark mark='b'/> Such an integral is Gaussian, and the isometry gives its variance. As t grows, it "
-            "settles at sigma squared over two kappa. <bookmark mark='c'/> A pause: a rate starts far above theta. "
-            "When is it halfway back? <bookmark mark='d'/> When e to the minus kappa t is a half: at log two over "
-            f"kappa, about {v['half_life']:.0f} years with the fitted kappa. American rates, on this evidence, "
-            "forget slowly."
+            "Why the recipe is exact. Multiply by e to the kappa t and apply the product rule; the factor is smooth, "
+            "so there is no covariation term. <bookmark mark='a'/> Integrate: the long-run level, plus the starting "
+            "gap decaying exponentially, plus a stochastic integral of a deterministic function. <bookmark mark='b'/> "
+            "That integral is Gaussian, with variance from the isometry, settling at sigma squared over two kappa. "
+            "<bookmark mark='c'/> A pause: a rate starts far above theta. When is it halfway back? "
+            f"<bookmark mark='d'/> At log two over kappa: about {v['half_life']:.0f} years with the fitted kappa."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -140,14 +134,12 @@ class MeanReversion(VoiceoverScene):
             label(rf"Feller's test (1951). Regression fit: $\nu = {c['feller']:.2f}$", font_size=20, color=JUMP),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Cox, Ingersoll and Ross fixed the negative rates in 1985: let the noise shrink with the square root of "
-            "the rate. Near zero the noise dies and the pull wins. <bookmark mark='a'/> This process can also be "
-            "sampled exactly. Its transition law is a scaled non-central chi-square, because the square-root process "
-            "is a squared Bessel process run on a different clock. Its long-run law is a Gamma distribution. "
-            "<bookmark mark='b'/> Does it ever touch zero? William Feller's boundary test, from 1951, says zero is "
-            "unattainable exactly when two kappa theta over sigma squared is at least one, the Feller condition. "
-            f"<bookmark mark='c'/> A regression fit puts it at {c['feller']:.2f}: the paths kiss the floor, as "
-            "American bill rates did in 2009 and 2020. But a regression is not the likelihood."
+            "Cox, Ingersoll and Ross removed the negative rates in 1985: let the noise shrink with the square root of "
+            "the rate. <bookmark mark='a'/> This process can also be sampled exactly: its transition law is a scaled "
+            "non-central chi-square, and its long-run law is a Gamma. <bookmark mark='b'/> Does it touch zero? "
+            "William Feller's boundary test, from 1951: zero is unattainable exactly when two kappa theta over sigma "
+            f"squared is at least one. <bookmark mark='c'/> A regression puts it at {c['feller']:.2f}, and the paths "
+            "kiss the floor, as bill rates did in 2009 and 2020. But a regression is not the likelihood."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(rows[0]))
             vo.wait_until("a")
@@ -198,14 +190,12 @@ class MeanReversion(VoiceoverScene):
         verdict = (f"just below one, {b['feller']:.2f}: the fitted rate can still touch zero, barely."
                    if below else f"{b['feller']:.2f}, at or above one: by the likelihood, zero is out of reach.")
         with self.voiceover(
-            "So fit it properly. The exact transition density is known, so the likelihood of the whole history is a "
-            "product of non-central chi-square densities, and the House maximizes it by Nelder-Mead from five "
-            "starting points, one of them the regression estimate. <bookmark mark='a'/> On the right, the "
-            "log-likelihood climbing, with the five starts as a band and the regression's value dashed. On the left, "
-            "the fitted model's long-run Gamma density morphing over the histogram of sixty-seven years of rates. "
-            f"<bookmark mark='b'/> All five starts end at the same place. The Feller ratio moves from {r['cir']['feller']:.2f} "
-            "to " + verdict + " The regression had treated the noise as constant within a month; the likelihood "
-            "knows its true shape. Part nineteen fits rate models to bond prices instead of to the history of one rate."
+            "So fit it properly. The likelihood of the whole history is a product of non-central chi-square "
+            "densities, and the House maximizes it by Nelder-Mead from five starts, one of them the regression "
+            "estimate. <bookmark mark='a'/> On the right, the log-likelihood climbing, the starts as a band and the "
+            "regression's value dashed. On the left, the fitted long-run Gamma density morphing over sixty-seven "
+            "years of rates. <bookmark mark='b'/> All five starts end at the same place, and the Feller ratio moves "
+            f"from {r['cir']['feller']:.2f} to {verdict} Part nineteen fits rate models to bond prices instead."
         ) as vo:
             self.play(FadeIn(rp), Create(base), FadeIn(bl))
             vo.wait_until("a")

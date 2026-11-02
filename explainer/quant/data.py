@@ -87,7 +87,12 @@ def _manifest() -> dict:
 def _check(key: str, raw: bytes, source: str) -> None:
     """Record ``raw``'s hash under ``key`` the first time; afterwards insist on it."""
     h = _sha(raw)
-    with _LOCK:
+    import fcntl  # several processes record at once: an exclusive file lock around read-modify-write
+
+    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    DATA.mkdir(parents=True, exist_ok=True)
+    with _LOCK, open(DATA / "manifest.lock", "a") as lk:
+        fcntl.flock(lk, fcntl.LOCK_EX)
         m = _manifest()
         old = m.get(key)
         if old and old["sha256"] != h and not os.environ.get("EXPLAINER_DATA_REFRESH"):
@@ -96,7 +101,7 @@ def _check(key: str, raw: bytes, source: str) -> None:
         if not old or old["sha256"] != h:
             m[key] = {"sha256": h, "bytes": len(raw), "source": source}
             MANIFEST.parent.mkdir(parents=True, exist_ok=True)
-            tmp = MANIFEST.with_suffix(".tmp")
+            tmp = MANIFEST.with_suffix(f".{os.getpid()}.tmp")
             tmp.write_text(json.dumps(dict(sorted(m.items())), indent=1) + "\n")
             tmp.replace(MANIFEST)
 
@@ -477,6 +482,58 @@ def ken_french_factors_monthly(through: str = "2020-12") -> dict:
     k = _kf_monthly("F-F_Research_Data_Factors_CSV.zip", "ff3_monthly", through, "value")
     r = k["returns"]
     return {"date": k["date"], "mkt_rf": r[:, 0], "smb": r[:, 1], "hml": r[:, 2], "rf": r[:, 3]}
+
+
+CBOE = "https://cdn.cboe.com/api/global/us_indices/daily_prices"
+
+
+def cboe_index(symbol: str, through: str = "2025-12-31") -> dict:
+    """A Cboe index's daily history (``COR3M``, the 3-month implied correlation of the 50 largest S&P 500 members;
+    ``COR1M``; ``VIX``...): ``date`` (YYYYMMDD ints) and ``close``.  Cboe extends the file every day, so the
+    manifest checks the frozen window through ``through``, as :func:`fred` does."""
+    path = DATA / "cboe" / f"{symbol}_History.csv"
+    if not path.exists():
+        _atomic_write(path, _get(f"{CBOE}/{symbol}_History.csv"))
+    rows = []
+    for line in path.read_text().strip().splitlines()[1:]:
+        parts = line.split(",")
+        if len(parts) < 2 or not parts[-1].strip():
+            continue
+        m, d, y = parts[0].split("/")
+        rows.append((int(y) * 10000 + int(m) * 100 + int(d), float(parts[-1])))
+    a = np.array(sorted(rows))
+    a = a[a[:, 0] <= int(through.replace("-", ""))]
+    frozen = json.dumps(a.round(6).tolist(), separators=(",", ":")).encode()
+    _check(f"cboe/{symbol}/through_{through}", frozen, f"{CBOE}/{symbol}_History.csv")
+    return {"date": a[:, 0].astype(int), "close": a[:, 1]}
+
+
+# ---------------------------------------------------------------------------
+# Cboe: VIX futures daily settlements, one CSV per expiry
+# ---------------------------------------------------------------------------
+CBOE_VX = "https://cdn.cboe.com/data/us/futures/market_statistics/historical_data/VX/VX_{}.csv"
+
+
+def cboe_vx(expiry: str) -> dict:
+    """Daily settlement prices of the VIX future expiring on ``expiry`` (YYYY-MM-DD) from Cboe Futures Exchange's
+    public history: ``date`` (YYYYMMDD ints) and ``settle`` (index points), days with no settlement dropped. The parsed
+    pairs are checksummed."""
+    path = DATA / "cboe" / "vx" / f"VX_{expiry}.csv"
+    if not path.exists():
+        _atomic_write(path, _get(CBOE_VX.format(expiry)))
+    rows = []
+    for line in path.read_text().strip().splitlines()[1:]:
+        parts = line.split(",")
+        try:
+            s = float(parts[6])
+        except (ValueError, IndexError):
+            continue
+        if s > 0:
+            rows.append((int(parts[0].replace("-", "")), s))
+    a = np.array(sorted(rows))
+    frozen = json.dumps(a.round(4).tolist(), separators=(",", ":")).encode()
+    _check(f"cboe/vx/{expiry}", frozen, CBOE_VX.format(expiry))
+    return {"date": a[:, 0].astype(int), "settle": a[:, 1]}
 
 
 # ---------------------------------------------------------------------------

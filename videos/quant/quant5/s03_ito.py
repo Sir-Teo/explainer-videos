@@ -61,15 +61,13 @@ class Ito(VoiceoverScene):
             MathTex(rf"\tfrac12(W_1^2 - 1) = {i['ito_limit']:+.3f}", font_size=28, color=ITO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         with self.voiceover(
-            "The last chapter proved that a Brownian path has infinite length, so the integral of calculus, a limit "
-            "of sums over a path of finite length, does not exist. Itô built a different one, and it is easiest to "
-            "see as a ledger of bets. <bookmark mark='a'/> On top, the price, a Brownian path. In the middle, a "
+            "A Brownian path has infinite length, so the integral of calculus does not exist. Itô built a different "
+            "one, easiest to see as a ledger of bets. <bookmark mark='a'/> On top, the price. In the middle, a "
             "position: here, as many units as the price itself, decided at the start of each period and held through "
-            "it. <bookmark mark='b'/> Each period the price moves, the blue arrows, and the position earns position "
-            "times move. The gains drop into a running total at the bottom. That sum is the Itô integral of a simple "
-            "integrand. <bookmark mark='c'/> Trade more often, sixty-four times instead of eight, and the staircase "
-            "of positions follows the path more closely; the total converges to a half of W squared minus a half. "
-            "Not a half of W squared, as ordinary calculus would say. We will see where the missing half goes."
+            "it. <bookmark mark='b'/> Each period the price moves, the position earns position times move, and the "
+            "gains drop into a running total at the bottom. That sum is the Itô integral of a simple integrand. "
+            "<bookmark mark='c'/> Trade sixty-four times instead of eight, and the total converges to a half of W "
+            "squared minus a half: not the half W squared of ordinary calculus."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(g3), Create(path), run_time=1.5)
             vo.wait_until("a")
@@ -100,15 +98,13 @@ class Ito(VoiceoverScene):
                 why(r"true for every simple sum, and preserved in the $L^2$ limit: the integral is a martingale")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.4, buff=0.6, edge=6.9)
         with self.voiceover(
-            "Now the construction, in four lines. Square the sum and take expectations. The squares give the position "
-            "squared times the step. Each cross term contains a later move, and conditional on everything known when "
-            "that move starts, its mean is zero. <bookmark mark='a'/> So the cross terms vanish, and the mean square "
-            "of the gain is the integrated squared position: the Itô isometry. <bookmark mark='b'/> An isometry "
-            "preserves distance. If a sequence of staircases converges to a general integrand, their integrals form a "
-            "Cauchy sequence in mean square, which has a limit. That limit is the Itô integral, for any predictable "
-            "integrand with finite integrated square. <bookmark mark='c'/> And because each simple sum is a "
-            "martingale, so is the limit. A gain from positions chosen before the moves cannot be expected to earn "
-            "anything against a martingale. That one fact is the whole of no-arbitrage pricing, in Part nine."
+            "Now the construction. Square the sum and take expectations. Each cross term contains a later move whose "
+            "mean, given everything known when it starts, is zero. <bookmark mark='a'/> So the mean square of the "
+            "gain is the integrated squared position: the Itô isometry. <bookmark mark='b'/> An isometry preserves "
+            "distance. Staircases that converge to an integrand give integrals that converge in mean square, and the "
+            "limit is the Itô integral, for any predictable integrand with finite integrated square. "
+            "<bookmark mark='c'/> Each simple sum is a martingale, so the limit is too. Positions chosen before the "
+            "moves cannot earn anything against a martingale: that one fact is no-arbitrage pricing, in Part nine."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -143,13 +139,10 @@ class Ito(VoiceoverScene):
                           r"variation of chapter 2", 4.6, 20, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Where the integrand is evaluated matters. On one path, compute the sum two ways as the grid refines: with "
-            "the price at the left end of each step, Itô's choice, and at the midpoint, Stratonovich's. "
-            f"<bookmark mark='a'/> The left-point sums settle at {i['ito_limit']:+.3f}, a half of W squared minus a "
-            f"half. The midpoint sums settle at {i['strat_limit']:+.3f}, a half of W squared. <bookmark mark='b'/> The "
-            "gap is a half of the quadratic variation: the midpoint sum peeks half a step into the future, and on a "
-            "path whose squared moves add up to time, that peek is worth a half of T. For a smooth path the gap would "
-            "vanish."
+            "On one path, evaluate the price at the left end of each step, Itô's choice, or at the midpoint, "
+            f"Stratonovich's. <bookmark mark='a'/> The left sums settle at {i['ito_limit']:+.3f}, the midpoint sums at "
+            f"{i['strat_limit']:+.3f}. <bookmark mark='b'/> The gap is half the quadratic variation: the midpoint "
+            "peeks half a step ahead."
         ) as vo:
             self.play(FadeIn(g), Create(lim_i), Create(lim_s))
             vo.wait_until("a")
@@ -192,17 +185,14 @@ class Ito(VoiceoverScene):
                         font_size=21)
         pc.move_to(right).to_edge(UP, buff=2.0)
         with self.voiceover(
-            "The two integrals are related by a simple rule: the Stratonovich integral is the Itô integral plus half "
-            "the covariation of integrand and integrator. <bookmark mark='a'/> Applied to a differential equation, a "
-            "Stratonovich equation is an Itô equation with an extra drift, a half b times b prime. Which is right? "
-            "<bookmark mark='b'/> A question first: a physicist simulates d X equals X d W by smoothing the noise into "
-            "an ordinary differential equation. What is the mean of X at time one? <bookmark mark='c'/> Wong and Zakai "
-            "proved in 1965 that ordinary equations driven by smoothed noise converge to the Stratonovich solution. "
-            f"Here, twenty thousand paths: the smoothed equation gives a mean of {wz['rows'][-1]['ode']:.2f} at every "
-            f"grid, the square root of e, while Euler's Itô scheme gives {wz['rows'][-1]['em']:.2f}. "
-            "<bookmark mark='d'/> Physics usually wants Stratonovich, because real noise is smooth at some scale. "
-            "Finance wants Itô, because positions are set before prices move, and only Itô's gains are martingales."
-        ) as vo:
+            "The rule connecting them: Stratonovich's integral is Itô's plus half the covariation. "
+            "<bookmark mark='a'/> So a Stratonovich equation is an Itô equation with an extra drift, a half b times b "
+            "prime. Which is right? <bookmark mark='b'/> A pause: a physicist simulates d X equals X d W by smoothing "
+            "the noise. What is the mean of X at time one? <bookmark mark='c'/> Wong and Zakai proved in 1965 that "
+            "smoothed noise converges to the Stratonovich solution. On twenty thousand paths the smoothed equation "
+            f"gives {wz['rows'][-1]['ode']:.2f}, the square root of e, while Euler's Itô scheme gives "
+            f"{wz['rows'][-1]['em']:.2f}. <bookmark mark='d'/> Physics usually wants Stratonovich; finance wants Itô, "
+            "because positions are set before prices move."       ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)

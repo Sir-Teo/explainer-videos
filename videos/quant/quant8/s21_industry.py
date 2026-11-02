@@ -1,0 +1,238 @@
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.quant import *  # noqa: F403
+from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load, real_data
+
+
+class Industry(VoiceoverScene):
+    def construct(self):
+        self.card()
+        self.bettors()
+        self.budgets()
+        self.drawdown(load("drawdown_policy"))
+        self.voltarget(load("vol_target"))
+        self.desks()
+
+    def card(self):
+        c = chapter_card(17, r"Who sizes bets for a living", r"How do funds, syndicates and desks actually do it?",
+                         lit=(1969,), part=PART)
+        with self.voiceover("Chapter seventeen. Who sizes bets for a living."):
+            self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
+        self.play(FadeOut(c))
+
+    def bettors(self):
+        a = firm_card(r"Thorp: Kelly, measured",
+                      r"A 1994 field test of a sports-betting system, sized by Kelly with edge estimates "
+                      r"``deliberately chosen to be conservative''. Over the partnership's life, about \$80 billion of "
+                      r"trades in some 1.25 million bets.",
+                      numbers=[(r"\$50{,}000", r"test bankroll"), (r"\$123{,}000", r"profit in 101 days")],
+                      source=r"Thorp (2006), ch.\ 9, pp.\ 402--403, 420", width=4.3, font_size=19)
+        b = firm_card(r"Benter: Hong Kong racing",
+                      r"A computer handicapping syndicate. ``A conservative fractional Kelly betting strategy was "
+                      r"employed throughout''; full Kelly's downswings of more than half the bankroll are ``a common "
+                      r"occurrence''.",
+                      numbers=[(r"\approx 470", r"races a year"), (r"\approx 19\%", r"track take"),
+                               (r"4\ \text{of}\ 5", r"seasons profitable")],
+                      source=r"Benter (1994), in Hausch, Lo and Ziemba (eds.)", width=4.3, font_size=19)
+        c = firm_card(r"Berlekamp: from Kelly to Medallion",
+                      r"Interned at Bell Labs in 1960 and 1962 under John Kelly. In 1989 he took control of Axcom, which "
+                      r"ran the trading of Jim Simons's Medallion Fund, and reworked its system with Simons, Sandor "
+                      r"Straus and Henry Laufer.",
+                      numbers=[(r"55.9\%", r"net, 1990 (as reported)")],
+                      source=r"Wikipedia, ``Elwyn Berlekamp''; UC Senate memorial", width=4.3, font_size=19)
+        VGroup(a, b, c).arrange(RIGHT, buff=0.2, aligned_edge=UP).move_to(ORIGIN)
+        if VGroup(a, b, c).width > 13.6:
+            VGroup(a, b, c).scale_to_fit_width(13.6)
+        with self.voiceover(
+            "First, the bettors, from their own published accounts. Edward Thorp, besides the partnership, ran a "
+            "field test of a sports-betting system in 1994: fifty thousand dollars, Kelly-sized, with edge estimates "
+            "he says were deliberately conservative, made a hundred and twenty-three thousand in a hundred and one "
+            "days. Over his career he estimates about eighty billion dollars of trades in a million and a quarter "
+            "bets. <bookmark mark='a'/> William Benter's syndicate bet on about four hundred and seventy Hong Kong "
+            "races a year against a track take of about nineteen percent, and was profitable in four of its first "
+            "five seasons. His report says it bet a conservative fraction of Kelly throughout, because at full Kelly, "
+            "losing more than half the bankroll is a common occurrence. <bookmark mark='b'/> Elwyn Berlekamp worked "
+            "under John Kelly at Bell Labs as a student, and in 1989 took control of Axcom, the firm that ran the "
+            "trading of Jim Simons's Medallion Fund, rebuilding its system with Simons, Sandor Straus and Henry "
+            "Laufer. How Medallion sizes its bets has not been made public, and we do not guess."
+        ) as vo:
+            self.play(FadeIn(a, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(b, shift=UP * 0.2))
+            vo.wait_until("b")
+            self.play(FadeIn(c, shift=UP * 0.2))
+        self.wait(0.5)
+        self.clear_scene()
+
+    def budgets(self):
+        rows = VGroup(
+            VGroup(label(r"Norway's oil fund (NBIM)", font_size=24, color=QC.FIRM),
+                   wrapped_label(r"the mandate caps expected relative volatility (tracking error) at 1.25 percentage "
+                                 r"points; NBIM reports about 0.3 (mid-2026)", 8.4, 20, GREY_A)),
+            VGroup(label(r"Bridgewater All Weather (1996)", font_size=24, color=QC.FIRM),
+                   wrapped_label(r"``put equal risk on each scenario'' of four economic environments; ``leverage is an "
+                                 r"implementation tool''", 8.4, 20, GREY_A)),
+            VGroup(label(r"multi-manager platforms", font_size=24, color=QC.FIRM),
+                   wrapped_label(r"as reported by the \textit{Wall Street Journal} (via \textit{Business Insider}, "
+                                 r"October 2024): a Millennium manager who loses 5\% has capital halved, and at 7.5\% is "
+                                 r"likely to be let go. Reported, not disclosed by the firm, which declined to comment.",
+                                 8.4, 20, GREY_A)),
+        )
+        for r_ in rows:
+            r_.arrange(RIGHT, buff=0.4, aligned_edge=UP)
+            r_[1].align_to(rows, LEFT).shift(RIGHT * 4.6)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.45).to_edge(UP, buff=0.7)
+        for r_ in rows:
+            r_[1].set_x(rows.get_left()[0] + 4.6 + r_[1].width / 2)
+        if rows.width > 13.4:
+            rows.scale_to_fit_width(13.4)
+        math = VGroup(
+            MathTex(r"\pi_t = \pi^*\,\frac{W_t - \alpha M_t}{W_t},\qquad M_t = \max_{s \le t} W_s", font_size=34,
+                    color=KELLY),
+            wrapped_label(r"Grossman and Zhou (1993): never lose more than $1 - \alpha$ from the peak; hold Merton's "
+                          r"fraction of the cushion above a floor that ratchets up with the high-water mark: chapter "
+                          r"2's floor, moving", 12.0, 20, GREY_A),
+        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
+        with self.voiceover(
+            "Most institutions do not maximize a utility; they work inside risk budgets, which are control "
+            "constraints. Norway's oil fund, the largest in the world, has a mandate that caps how far its expected "
+            "volatility relative to its benchmark may go: one and a quarter percentage points. Bridgewater's All "
+            "Weather portfolio, from 1996, puts equal risk on four economic environments and calls leverage an "
+            "implementation tool. <bookmark mark='a'/> Multi-manager hedge funds use drawdown limits. As reported by "
+            "the Wall Street Journal in 2024, a Millennium portfolio manager who loses five percent has capital cut "
+            "in half, and at seven and a half percent is likely to be let go; the firm did not comment. "
+            "<bookmark mark='b'/> Control theory has the optimal policy for a drawdown limit. Sanford Grossman and "
+            "Zhongquan Zhou showed in 1993 that an investor who must never fall below a fraction alpha of her "
+            "running peak should hold Merton's fraction of the cushion above that moving floor: chapter two's "
+            "portfolio insurance, with a floor that ratchets up."
+        ) as vo:
+            self.play(FadeIn(rows[0]), FadeIn(rows[1]))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[2]))
+            vo.wait_until("b")
+            self.play(Write(math[0]), FadeIn(math[1]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def drawdown(self, d):
+        sk, sg, sm = (np.asarray(d[k]) for k in ("sample_k", "sample_g", "sample_m"))
+        n = sk.shape[1]
+        t = np.linspace(0, d["years"], n)
+        g = axes([0, d["years"]], [-1.0, 1.6], x_length=7.4, y_length=4.4, xlabel=r"years",
+                 ylabel=r"wealth (log scale)", xticks=[0, 10, 20, 30], yticks=[-1, 0, 1], yfmt=lambda u: f"10^{{{int(u)}}}",
+                 font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
+        ax = g.ax
+        tk = ValueTracker(1)
+
+        def tr(arr, col, sw, dash=False):
+            return always_redraw(lambda: VMobject(stroke_color=col, stroke_width=sw, stroke_opacity=0.5 if dash else 1)
+                                 .set_points_as_corners([ax.c2p(t[j], float(np.clip(arr[j], -1, 1.6)))
+                                                         for j in range(0, int(tk.get_value()) + 1)]))
+
+        lines = [tr(sk[0], OVER, 2.5), tr(sg[0], UNDER, 3.5), tr(sm[0] + np.log10(d["alpha"]), UNDER, 1.5, True)]
+        leg = legend([(OVER, r"Kelly, unconstrained"), (UNDER, r"Grossman--Zhou, $\alpha = 0.8$"),
+                      (GREY_B, r"faint: its floor, 80\% of the peak")], font_size=17).next_to(g, UP, buff=0.05).align_to(
+            g, LEFT)
+        res = VGroup(
+            label(r"2{,}000 thirty-year paths, weekly:", font_size=21, color=GREY_A),
+            MathTex(rf"\text{{worst drawdown: Kelly }}{100 * d['worst_dd_kelly']:.0f}\%,\ \text{{GZ }}"
+                    rf"{100 * d['worst_dd_gz']:.0f}\%", font_size=26),
+            MathTex(rf"\text{{median growth: Kelly }}{100 * d['median_growth_kelly']:.1f}\%,\ \text{{GZ }}"
+                    rf"{100 * d['median_growth_gz']:.1f}\%", font_size=26),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).shift(UP * 1.2)
+        q = pause_card(r"A pod is down 4.9\% against a 5\% limit. What does the Grossman--Zhou investor do with her "
+                       r"stock fraction?", width=5.0, font_size=19).next_to(res, DOWN, buff=0.4).align_to(res, LEFT)
+        src = illustration(r"simulation: $\mu - r = 6\%$, $\sigma = 18\%$; Kelly fraction 185\%")
+        with self.voiceover(
+            "The House ran it. One path each: unconstrained Kelly in red, and the Grossman-Zhou investor with a floor "
+            "at eighty percent of her peak, in blue, with the floor itself faint beneath her. Every time she makes a "
+            "new high the floor ratchets up; as she falls toward it she sells, and she never touches it. "
+            f"<bookmark mark='a'/> Over two thousand paths, Kelly's worst drawdown is {100 * d['worst_dd_kelly']:.0f} "
+            f"percent; hers is {100 * d['worst_dd_gz']:.0f}, under the twenty she promised. The price is growth: "
+            f"{100 * d['median_growth_gz']:.1f} percent a year at the median, against {100 * d['median_growth_kelly']:.1f}. "
+            "<bookmark mark='b'/> Pause and predict: a manager is down four point nine percent against a five "
+            "percent limit. What does this policy say? Hold almost nothing: the cushion is a tenth of a percent, and "
+            "the position is proportional to it. That is why a hard stop changes how a manager trades long before "
+            "the stop."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(leg), FadeIn(src))
+            self.add(*lines)
+            self.play(tk.animate.set_value(n - 1), run_time=7, rate_func=linear)
+            vo.wait_until("a")
+            self.play(FadeIn(res))
+            vo.wait_until("b")
+            self.play(FadeIn(q))
+        for l_ in lines:
+            l_.clear_updaters()
+        self.wait(0.4)
+        self.clear_scene()
+
+    def voltarget(self, v):
+        w = np.asarray(v["w"])
+        d = np.asarray(v["dates"])
+        yrs = d // 100 + (d % 100 - 1) / 12
+        g = axes([1926, 2021], [0, 4], x_length=7.4, y_length=3.4, xlabel=r"year",
+                 ylabel=r"exposure to the US market (average 1)", xticks=[1930, 1960, 1990, 2020], yticks=[0, 1, 2, 3, 4],
+                 font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
+        ax = g.ax
+        line = curve(ax, yrs, np.clip(w, 0, 4), ALT, stroke_width=1.6)
+        one = DashedLine(ax.c2p(1926, 1), ax.c2p(2021, 1), color=GREY_C, stroke_width=1.5)
+        better = v["sr_scaled"] > v["sr_mkt"]
+        side = VGroup(
+            MathTex(r"\pi_t \propto \frac{1}{\hat\sigma_{t-1}^2}", font_size=36, color=KELLY),
+            MathTex(rf"\text{{Sharpe: }}{v['sr_scaled']:.2f}\ \text{{vs}}\ {v['sr_mkt']:.2f}", font_size=28),
+            MathTex(rf"\alpha = {100 * v['alpha']:.1f}\%\text{{ a year}},\ t = {v['alpha_t']:.1f}", font_size=28),
+            wrapped_label(rf"exposure from {v['min_w']:.2f} to {v['max_w']:.1f}: an unconstrained version; real funds "
+                          r"cap leverage", 4.4, 18, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
+        src = real_data(r"Kenneth French daily, 1926--2020; registered with the trial counter")
+        with self.voiceover(
+            "Volatility targeting, used across the industry, is Merton's rule with a moving volatility: hold a "
+            "fraction proportional to one over the forecast variance. Alan Moreira and Tyler Muir tested it in "
+            "2017. The House redid their test on ninety-four years of daily data: each month, scale exposure by "
+            "last month's realized variance, normalized to average one, and registered the test before running it."
+        ):
+            self.play(FadeIn(g), Create(one), FadeIn(src), FadeIn(side[0]))
+            self.play(Create(line), run_time=3)
+        with self.voiceover(
+            f"It helped: a Sharpe ratio of {v['sr_scaled']:.2f} against the market's {v['sr_mkt']:.2f}, and an alpha "
+            f"of {100 * v['alpha']:.1f} percent a year with a t-statistic of {v['alpha_t']:.1f}. Volatility clusters, "
+            "as Part seven showed, and returns do not keep pace with it, so cutting exposure when volatility is high "
+            "pays. The exposure swings are wild, though, and real funds cap them."
+            if better else
+            f"It did not help here: a Sharpe ratio of {v['sr_scaled']:.2f} against the market's {v['sr_mkt']:.2f}. "
+            "The idea is sound in theory, but in this history the timing cost as much as it earned."
+        ):
+            self.play(LaggedStart(*[FadeIn(x) for x in side[1:]], lag_ratio=0.4))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def desks(self):
+        cards = VGroup(
+            firm_card(r"Execution desks",
+                      r"Almgren and Chriss (2001): liquidating a block is a control problem, solved every day. Almgren, "
+                      r"Thum, Hauptmann and Li (2005) fitted impact on Citigroup's US equity trades: it grows like the "
+                      r"3/5 power of size. Part 37 in full.",
+                      source=r"\textit{Journal of Risk} 3; \textit{Risk} 18(7)", width=6.4, font_size=20),
+            firm_card(r"Elm Wealth",
+                      r"Victor Haghani, of the coin experiment and once a partner at LTCM, runs a firm that sizes "
+                      r"positions by Merton's rule, and wrote \textit{The Missing Billionaires} (2023, with James White; "
+                      r"Wiley): why rich families did not stay rich: bad sizing and spending.",
+                      source=r"Haghani and White (2023)", width=6.4, font_size=20),
+        ).arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(ORIGIN)
+        with self.voiceover(
+            "Two more. Execution desks solve a control problem every day: Robert Almgren and Neil Chriss's 2001 "
+            "model trades off the cost of selling fast against the risk of selling slowly, and Almgren, Thum, "
+            "Hauptmann and Li fitted its impact to Citigroup's US equity trades in 2005, finding it grows like the "
+            "three-fifths power of size. <bookmark mark='a'/> And Victor Haghani, who ran the coin experiment of "
+            "the hook and was a partner at Long-Term Capital Management, now runs a firm that sizes positions by "
+            "Merton's rule. His 2023 book with James White, The Missing Billionaires, argues that the great fortunes "
+            "of the past did not survive because of bad sizing and spending: the two halves of Merton's problem."
+        ) as vo:
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(cards[1], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()

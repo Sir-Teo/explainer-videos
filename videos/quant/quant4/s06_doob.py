@@ -162,14 +162,11 @@ class Doob(VoiceoverScene):
                 why(r"the drift is a forecast, so it depends on what you know")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.8, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Why is the split unique? The predictable part adds up each step's forecast, so the remainder has a "
-            "forecast of zero: a martingale. <bookmark mark='a'/> Suppose there were two splits. Their difference "
-            "would be predictable, known a step ahead, and a martingale, with steps whose forecast is zero. A step "
-            "you know in advance and whose forecast is zero is zero. So the two splits agree. <bookmark mark='b'/> "
-            "Apply the same split to the square of a martingale, and its predictable part is the sum of the "
-            "conditional variances: the angle bracket of M, which Part five turns into quadratic variation. "
-            "<bookmark mark='c'/> But notice the hidden assumption. The predictable part is a forecast, and a "
-            "forecast depends on what you know. Change the information, and the drift changes."
+            "Why unique? The predictable part adds up each step's forecast, so the rest has forecast zero. "
+            "<bookmark mark='a'/> Two splits would differ by something both predictable and a martingale, and a step "
+            "known in advance with forecast zero is zero. <bookmark mark='b'/> Applied to a squared martingale, the "
+            "predictable part is the sum of conditional variances, the angle bracket. <bookmark mark='c'/> But the "
+            "predictable part is a forecast, and a forecast depends on what you know."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -215,17 +212,15 @@ class Doob(VoiceoverScene):
                              r"changes it.", width=5.0, font_size=20)
         pred.next_to(side[0], DOWN, buff=0.3).align_to(side, LEFT)
         with self.voiceover(
-            "A casino learned this in court. In August 2012 the poker player Phil Ivey won just over seven point seven "
-            "million pounds playing punto banco at Crockfords in London. The game's house edge was one point two "
-            "four percent on a player bet. <bookmark mark='a'/> So, to the casino, a punter betting player every hand "
-            "has a predictable part sloping down by one point two four percent a hand: the red line, and the blue "
-            "path wanders around it. <bookmark mark='b'/> But Ivey's partner could sort the cards: by having certain "
-            "cards turned, she could tell, before the deal, something about the first card. With that information "
-            "the punter can choose the side to back, and the same game has a predictable part sloping up, about six "
-            "and a half percent a hand, in the High Court's figures. <bookmark mark='c'/> The cards did not change. "
-            "The filtration did. The courts held, all the way to the Supreme Court in 2017, that this was cheating, "
-            "and Ivey was not paid. <bookmark mark='d'/> So: is the drift a property of the price, or of what you "
-            "know? Of what you know."
+            "A casino learned this in court. In August 2012 Phil Ivey won just over seven point seven million pounds "
+            "at punto banco at Crockfords in London. The house edge on a player bet was one point two four percent. "
+            "<bookmark mark='a'/> To the casino, a punter backing player every hand has a predictable part sloping "
+            "down by that much a hand. <bookmark mark='b'/> But Ivey's partner sorted the cards, learning something "
+            "about the first card before the deal. Choosing the side on that information, the same game has a "
+            "predictable part sloping up about six and a half percent a hand, in the High Court's figures. "
+            "<bookmark mark='c'/> The cards did not change; the filtration did. The courts, up to the Supreme Court "
+            "in 2017, held it was cheating, and Ivey was not paid. <bookmark mark='d'/> So the drift is a property of "
+            "what you know."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(side[3]))
             vo.wait_until("a")

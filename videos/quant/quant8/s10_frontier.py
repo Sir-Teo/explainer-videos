@@ -3,162 +3,124 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE, illustration, load
+from videos.quant.quant8.common import ALT, GOOD, KELLY, OVER, PART, UNDER, VALUE
+
+NODES = {"DP": (r"dynamic programming", (-4.6, 1.6), VALUE), "HJB": (r"HJB / Merton", (-1.2, 2.4), VALUE),
+         "STOP": (r"optimal stopping", (2.6, 2.2), OVER), "BSDE": (r"BSDEs", (5.0, 0.6), ALT),
+         "MFG": (r"mean-field games", (3.0, -1.4), ALT), "RL": (r"reinforcement learning", (-1.0, -0.6), GOOD),
+         "KELLY": (r"Kelly and ergodicity", (-4.8, -1.4), KELLY)}
+
+PAPERS = [  # (edge, title, what it found)
+    (("RL", "HJB"), r"Jia and Zhou (2023), ``q-Learning in Continuous Time'', \textit{JMLR} 24",
+     r"what a Q-function becomes as the time step shrinks, and how to learn it"),
+    (("RL", "HJB"), r"Dai, Dong, Jia and Zhou (2023; rev.\ 2026), ``Data-Driven Merton's Strategies via Policy "
+                    r"Randomization'', arXiv 2312.11797",
+     r"the mean of the best randomized policy solves Merton: learn it by actor--critic without estimating $\mu$"),
+    (("RL", "HJB"), r"Dai, Dong, Jia and Zhou (2026), ``Merton's Problem with Recursive Perturbed Utility'', arXiv "
+                    r"2602.13544", r"a closed-form Gaussian policy that does not depend on wealth"),
+    (("DP", "RL"), r"Huh, Jeon, Koo and Lim (2025), ``Breaking the Dimensional Barrier for Constrained Dynamic "
+                   r"Portfolio Choice'', arXiv 2501.12600",
+     r"Pontryagin's principle steers deep learning to constrained optima with a hundred assets, where grids stop at a "
+     r"handful"),
+    (("DP", "RL"), r"Huh and Koo (2026), arXiv 2601.03175", r"parameter uncertainty in high dimensions; a model-free "
+                                                            r"PPO baseline ``remains far from the targets''"),
+    (("MFG", "RL"), r"Lauri\`ere, Perrin, P\'erolat et al., ``Learning in Mean Field Games: A Survey'', arXiv 2205.12944",
+     r"model-free learning of crowd equilibria"),
+    (("STOP", "BSDE"), r"Chee, Frikha and Li (2026), ``A Monotone Limit Approach to Entropy-Regularized American "
+                       r"Options'', arXiv 2602.18062", r"exploration meets reflected BSDEs, with convergence rates"),
+    (("KELLY", "RL"), r"Toda (2023), ``Ergodicity Economics is Pseudoscience'', arXiv 2306.03275",
+     r"the sharpest critique of the ergodicity programme of chapter 10"),
+]
 
 
 class Frontier(VoiceoverScene):
     def construct(self):
         self.card()
-        self.bsde(load("bsde"))
-        self.mfg()
-        self.ppo(load("ppo"))
+        self.graph()
 
     def card(self):
-        c = chapter_card(9, r"Frontiers: BSDEs, mean-field games, reinforcement learning",
-                         r"What replaces the equation when it is too hard?", part=PART)
-        with self.voiceover("Chapter nine. Frontiers: backward stochastic equations, mean-field games, and "
-                            "reinforcement learning."):
+        c = chapter_card(18, r"The frontier, 2023 to 2026", r"Where are learning and control meeting now?",
+                         lit=(2025,), part=PART)
+        with self.voiceover("Chapter eighteen. The frontier, 2023 to 2026."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def bsde(self, b):
-        rows = [cmath(r"-dY_t", r"=", r"f(Y_t, Z_t)\,dt - Z_t\,dW_t,\qquad Y_T = g(S_T)", font_size=34,
-                      colors={r"-dY_t": VALUE}),
-                cmath(r"f", r"=", r"-rY - \theta Z - (R - r)\,\min\!\Big(Y - \tfrac{Z}{\sigma},\, 0\Big)", font_size=32)]
-        whys = [why(r"Pardoux and Peng (1990): solve backwards from the payoff for the value $Y$ and the hedge $Z$; "
-                    r"El Karoui, Peng and Quenez (1997): this is how finance prices"),
-                why(r"borrow at $R = 6\%$, lend at $r = 1\%$: the hedger's cash earns or costs different rates, and "
-                    r"the price is no longer linear (Bergman 1995)")]
-        step = ladder(self, rows, whys, keep=2, top=3.1, x=-0.4, buff=0.65, edge=6.9)
-        runs = b["runs"]
-        ns = [int(k) for k in runs]
-        means = [np.mean(runs[k]) for k in runs]
-        sds = [np.std(runs[k]) for k in runs]
-        g = axes([np.log10(3000), np.log10(500000)], [0.5, 1.4], x_length=6.0, y_length=3.0,
-                 xlabel=r"simulated paths", ylabel=r"price of the call spread", xticks=[4, 5],
-                 xfmt=lambda u: f"10^{{{int(u)}}}", yticks=[0.6, 0.8, 1.0, 1.2, 1.4], font_size=16)
-        g.to_edge(LEFT, buff=0.7).to_edge(DOWN, buff=0.45)
-        ax = g.ax
-        lines = VGroup()
-        for val, col, txt in ((b["pde"], GOOD, r"nonlinear PDE"), (b["bs_r"], UNDER, r"Black--Scholes at $r$"),
-                              (b["bs_R"], OVER, r"Black--Scholes at $R$")):
-            ln = DashedLine(ax.c2p(np.log10(3000), val), ax.c2p(np.log10(500000), val), color=col, stroke_width=2)
-            lines.add(VGroup(ln, label(txt + f": {val:.3f}", font_size=17, color=col).next_to(ln, RIGHT, buff=0.1)))
-        pts = VGroup(*[VGroup(Line(ax.c2p(np.log10(n), m - 2 * s), ax.c2p(np.log10(n), m + 2 * s), color=VALUE,
-                                   stroke_width=3), Dot(ax.c2p(np.log10(n), m), radius=0.06, color=VALUE))
-                       for n, m, s in zip(ns, means, sds)])
-        side = VGroup(
-            label(r"$(S - 95)^+ - 2(S - 105)^+$, half a year, $\sigma = 20\%$", font_size=20, color=GREY_A),
-            wrapped_label(r"dots: the BSDE by regression (Gobet, Lemor and Warin 2005), 3 runs each; it converges to "
-                          r"the PDE, above both linear prices. The deep BSDE (Han, Jentzen and E 2018) solves this in "
-                          r"100 dimensions.", 4.0, 19, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "When the HJB equation is too hard, there is another route. A backward stochastic differential equation, "
-            "introduced by Étienne Pardoux and Shige Peng in 1990, runs from the payoff at the end back to today, "
-            "solving at once for the value and the hedge. Nicole El Karoui, Peng and Marie-Claire Quenez showed in "
-            "1997 that this is exactly what a hedger's pricing problem is. <bookmark mark='a'/> It shines when the "
-            "pricing is nonlinear. Suppose the hedger borrows at six percent but lends at one. Then the price of a "
-            "position depends on whether its hedge needs cash, and the price is no longer linear. "
-            "<bookmark mark='b'/> For a call spread, the regression solution of the BSDE converges, as the paths "
-            f"increase, to the nonlinear PDE's {b['pde']:.3f}, above both Black-Scholes prices. Han, Jentzen and E "
-            "solved this same problem in a hundred dimensions with neural networks in 2018, where no grid can reach."
-        ) as vo:
-            step(0)
-            vo.wait_until("a")
-            step(1)
-            vo.wait_until("b")
-            self.play(FadeIn(g), FadeIn(lines), FadeIn(side[0]))
-            self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.3), FadeIn(side[1]), run_time=2)
-        self.wait(0.4)
-        self.clear_scene()
+    def graph(self):
+        nodes = {}
+        for k, (name, (x, y), col) in NODES.items():
+            t = label(name, font_size=22, color=col)
+            box = RoundedRectangle(width=t.width + 0.4, height=t.height + 0.3, corner_radius=0.12, stroke_color=col,
+                                   stroke_width=1.5, fill_color="#0E141C", fill_opacity=1).move_to([x, y + 0.6, 0])
+            t.move_to(box)
+            nodes[k] = VGroup(box, t)
+        base = VGroup(*[Line(nodes[a].get_center(), nodes[b].get_center(), color=GREY_D, stroke_width=1.5)
+                        for a, b in (("DP", "HJB"), ("HJB", "STOP"), ("STOP", "BSDE"), ("BSDE", "MFG"), ("HJB", "MFG"),
+                                     ("DP", "RL"), ("HJB", "RL"), ("MFG", "RL"), ("KELLY", "DP"), ("KELLY", "RL"))])
 
-    def mfg(self):
-        rows = [cmath(r"-\partial_t u", r"=", r"H(x, \partial_x u, m) + \tfrac{\sigma^2}{2}\partial_{xx} u", font_size=36,
-                      colors={r"-\partial_t u": VALUE}),
-                cmath(r"\partial_t m", r"=", r"\partial_x\big(m\,\partial_p H\big) + \tfrac{\sigma^2}{2}\partial_{xx} m",
-                      font_size=36, colors={r"\partial_t m": ALT})]
-        whys = [why(r"each player's HJB, backwards in time, given how everyone else is distributed ($m$)"),
-                why(r"the crowd's distribution, forwards in time, given how each player acts: solve both at once "
-                    r"(Lasry and Lions 2006; Huang, Malham\'e and Caines 2006)")]
-        step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.6, buff=1.0, edge=6.9)
-        foot = wrapped_label(r"in markets: many traders liquidating at once move the price each of them trades at "
-                             r"(Cardaliaguet and Lehalle 2018); Parts 36 and 37 use it for order books and execution",
-                             12.0, 21, GREY_B).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "Second frontier: decisions made by millions at once. In a mean-field game each player solves an HJB "
-            "equation, backwards in time, taking as given how everyone else is distributed. <bookmark mark='a'/> "
-            "And the distribution evolves forwards, driven by everyone's choices. The equilibrium solves both "
-            "together. Jean-Michel Lasry and Pierre-Louis Lions, and independently Minyi Huang, Roland Malhamé and "
-            "Peter Caines, introduced the idea in 2006. <bookmark mark='b'/> In markets, think of many funds "
-            "selling the same stock: each one's trades move the price the others get. Parts thirty-six and "
-            "thirty-seven use it."
-        ) as vo:
-            step(0)
-            vo.wait_until("a")
-            step(1)
-            vo.wait_until("b")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
+        def cap(i):
+            _, title, what = PAPERS[i]
+            c = VGroup(wrapped_label(title, 12.6, 19, WHITE), wrapped_label(what, 12.6, 19, GREY_A)).arrange(
+                DOWN, aligned_edge=LEFT, buff=0.08)
+            return c.to_edge(DOWN, buff=0.35)
 
-    def ppo(self, p):
-        m = np.asarray(p["mean_fraction"])
-        it = np.arange(len(m))
-        g = axes([0, len(m)], [0, 2.4], x_length=6.0, y_length=3.6, xlabel=r"training iteration",
-                 ylabel=r"average fraction in stocks", xticks=[0, 100, 200, 300], yticks=[0, 0.5, 1, 1.5, 2],
-                 yfmt=lambda u: f"{100 * u:.0f}\\%", font_size=17).to_edge(LEFT, buff=0.7).to_edge(UP, buff=0.7)
-        ax = g.ax
-        tgt = DashedLine(ax.c2p(0, p["discrete"]), ax.c2p(len(m), p["discrete"]), color=KELLY, stroke_width=2.5)
-        tl = MathTex(rf"\text{{Merton, }}\gamma = 1:\ {100 * p['discrete']:.0f}\%", font_size=26, color=KELLY).next_to(
-            ax.c2p(len(m), p["discrete"]), UP, buff=0.08).shift(LEFT * 1.6)
-        lm = curve(ax, it, m, ALT, stroke_width=3)
-        # the learned policy over (time, log wealth) at the end
-        snaps = p["snapshots"]
-        last = np.asarray(snaps[list(snaps.keys())[-1]])
-        first = np.asarray(snaps[list(snaps.keys())[0]])
-        hm = VGroup()
-        cells = VGroup()
-        nx, ny = last.shape[1], last.shape[0]
-        size = 0.075
-        for i in range(ny):
-            for j in range(nx):
-                val = float(np.clip(last[i, j], 0, 2.4)) / 2.4
-                cells.add(Square(size, stroke_width=0, fill_color=interpolate_color(ManimColor(UNDER), ManimColor(KELLY), val),
-                                 fill_opacity=0.9).move_to([j * size, i * size, 0]))
-        cells.move_to(ORIGIN)
-        hm.add(cells, label(r"time $\to$", font_size=18, color=GREY_B).next_to(cells, DOWN, buff=0.1),
-               label(r"log wealth $\to$", font_size=18, color=GREY_B).rotate(PI / 2).next_to(cells, LEFT, buff=0.1))
-        hm.next_to(g, DOWN, buff=0.45).align_to(g, LEFT).shift(RIGHT * 0.6)
-        hl = wrapped_label(rf"the learned policy over time and wealth, after training: {100 * last.min():.0f} to "
-                           rf"{100 * last.max():.0f}\%, mean {100 * last.mean():.0f}\%: flat, as Merton says",
-                           3.6, 19, GREY_A).next_to(hm, RIGHT, buff=0.3)
-        side = VGroup(
-            wrapped_label(r"PPO (Schulman et al.\ 2017), the algorithm of Part 26 of \textit{AI, Built}: a policy "
-                          r"network reads (time, wealth) and proposes a fraction; the reward is each quarter's log "
-                          r"growth", 4.4, 20, GREY_A),
-            wrapped_label(r"it never sees the formula; it finds the constant fraction, in every state", 4.4, 20, ALT),
-            wrapped_label(r"the hard part was the noise: near the optimum, one fraction beats another by a few tenths of "
-                          r"a percent a year inside a market moving 18\%. Advantages from one-step errors and a fixed "
-                          r"exploration noise were needed to see it.", 4.4, 19, GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
-        src = illustration(rf"300 iterations of 1{{,}}024 ten-year episodes; trained here on a CPU")
+        def lit(i):
+            a, b = PAPERS[i][0]
+            return Line(nodes[a].get_center(), nodes[b].get_center(), color=KELLY, stroke_width=6)
+
+        self.cur, self.hi = None, None
+
+        def show(i):
+            new, newl = cap(i), lit(i)
+            anims = [FadeIn(new), Create(newl)]
+            if self.cur is not None:
+                anims += [FadeOut(self.cur), self.hi.animate.set_stroke(color=GREY_B, width=3)]
+            self.play(*anims)
+            self.cur, self.hi = new, newl
+
         with self.voiceover(
-            "Third frontier: let a learner find the answer without the equation. Here is proximal policy "
-            "optimization, the algorithm from part twenty-six of the AI series, on Merton's problem with log "
-            "utility. A small network reads the time and the investor's wealth and proposes a fraction; the reward "
-            "is each quarter's log growth. It never sees the formula. <bookmark mark='a'/> It starts at fifty "
-            f"percent and climbs to Merton's {100 * p['discrete']:.0f} percent, and its policy is flat across time and "
-            "wealth, as the theory says it should be. <bookmark mark='b'/> The hard part was not the network but "
-            "the noise. Near the optimum, one fraction beats another by a few tenths of a percent a year inside a "
-            "market that moves eighteen percent, and the first versions stalled well short. That is the lesson for "
-            "learning in finance: the signal is small, and the method has to be built to hear it."
+            "The chapters of this part form a graph, and current research lives on its edges. "
+            "<bookmark mark='a'/> Between learning and the HJB equation: Yanwei Jia and Xun Yu Zhou's 2023 paper in "
+            "the Journal of Machine Learning Research works out what Q-learning means when time is continuous."
         ) as vo:
-            self.play(FadeIn(g), Create(tgt), FadeIn(tl), FadeIn(side[0]), FadeIn(src))
+            self.play(*[FadeIn(n_) for n_ in nodes.values()], Create(base), run_time=1.5)
             vo.wait_until("a")
-            self.play(Create(lm), run_time=3)
-            self.play(FadeIn(hm), FadeIn(hl), FadeIn(side[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(side[2]))
+            show(0)
+        with self.voiceover(
+            "Min Dai, Yuchao Dong, Jia and Zhou showed that the best randomized policy for Merton's problem has "
+            "Merton's fraction as its mean, so an actor-critic learner can find it from data without ever estimating "
+            "the expected return, the input chapter five called the least certain number in finance."
+        ):
+            show(1)
+        with self.voiceover(
+            "In a 2026 paper the same group finds a closed-form Gaussian policy that does not depend on wealth, for a "
+            "recursive version of the problem."
+        ):
+            show(2)
+        with self.voiceover(
+            "Between dynamic programming and deep learning: Jeonggyu Huh, Jaegi Jeon, Hyeng Keun Koo and Byung Hwa "
+            "Lim use Pontryagin's maximum principle to steer neural networks to constrained portfolio optima with a "
+            "hundred assets, far beyond what a grid can handle."
+        ):
+            show(3)
+        with self.voiceover(
+            "And Huh and Koo's 2026 follow-up, with parameter uncertainty, reports that a model-free PPO baseline "
+            "remains far from the targets: chapter sixteen's experience, at scale."
+        ):
+            show(4)
+        with self.voiceover(
+            "For crowds, a survey by Mathieu Laurière and colleagues maps how agents can learn mean-field equilibria "
+            "without a model, the way our fictitious play did with one."
+        ):
+            show(5)
+        with self.voiceover(
+            "Daniel Chee, Noufel Frikha and Libo Li join stopping, exploration and reflected backward equations in a "
+            "2026 paper on American options, with rates of convergence."
+        ):
+            show(6)
+        with self.voiceover(
+            "And on the Kelly branch, Alexis Akira Toda's 2023 critique of ergodicity economics keeps chapter ten's "
+            "argument open. Each of these was checked at its source; none of it is yet textbook material."
+        ):
+            show(7)
         self.wait(0.4)
         self.clear_scene()

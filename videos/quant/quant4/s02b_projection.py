@@ -57,13 +57,16 @@ class Projection(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.2, buff=0.62, edge=6.9)
         head = label(r"Kolmogorov's conditional expectation", font_size=30, color=GREY_A).to_edge(UP, buff=0.25)
         with self.voiceover(
-            "Kolmogorov's definition is short. Y is the conditional expectation of X given G if Y is computable from G "
-            "and has the same average as X on every event of G. <bookmark mark='a'/> On a partition: average X over "
-            "each block. <bookmark mark='b'/> The error is uncorrelated with anything computable from G. "
-            "<bookmark mark='c'/> Expand the squared distance to any computable Z: the cross term vanishes, so Y is "
-            "the closest, the best forecast in mean square. <bookmark mark='d'/> What is known comes out as a "
-            "constant. <bookmark mark='e'/> Conditioning on more, then less, is conditioning on less: the tower. "
-            "<bookmark mark='f'/> And Jensen's inequality, while independent information teaches nothing."
+            "What is the best forecast of tomorrow's return, given today's? Kolmogorov's definition answers it. Y is "
+            "the conditional expectation of X given G if Y can be computed from G and has the same average as X on "
+            "every event of G. <bookmark mark='a'/> On a partition, apply it block by block: Y is the average of X "
+            "over each block. <bookmark mark='b'/> The error, X minus Y, is uncorrelated with anything computable "
+            "from G: true for indicators by the definition, so for their sums and limits. <bookmark mark='c'/> "
+            "Expand the squared distance from X to any computable Z, and the cross term vanishes: Pythagoras. So Y "
+            "is the closest computable variable, the best forecast in mean square. <bookmark mark='d'/> What is "
+            "known comes out as a constant. <bookmark mark='e'/> Conditioning on more and then on less is "
+            "conditioning on less: the tower property. <bookmark mark='f'/> A convex function of a forecast is below "
+            "the forecast of the convex function, Jensen's inequality; and independent information teaches nothing."
         ) as vo:
             self.play(FadeIn(head))
             step(0)

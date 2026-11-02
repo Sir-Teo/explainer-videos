@@ -6,26 +6,29 @@ from explainer.quant import *  # noqa: F403
 from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar
 
 MODEL_C = {"EWMA": GREY_B, "GARCH": FC, "GJR": FC, "HAR": VOL, "HARQ": VOL, "log-HAR": GOOD, "LSTM": ALT,
-           "Transformer": ALT}
+           "Transformer": ALT, "HARNet": RET}
 PARAMS = {"EWMA": r"0", "GARCH": r"3", "GJR": r"4", "HAR": r"4", "HARQ": r"5", "log-HAR": r"4", "LSTM": r"1{,}233",
-          "Transformer": r"2{,}625"}
+          "Transformer": r"2{,}625", "HARNet": r"111"}
 SEES = {"EWMA": r"daily returns", "GARCH": r"daily returns", "GJR": r"daily returns, with sign",
         "HAR": r"realized variance", "HARQ": r"RV and its noise", "log-HAR": r"log of realized variance",
-        "LSTM": r"22 days of log RV", "Transformer": r"22 days of log RV"}
+        "LSTM": r"22 days of log RV", "Transformer": r"22 days of log RV", "HARNet": r"22 days of log RV, starts at log-HAR"}
 LATE = "log-HAR"  # added after the first results, and counted
 
 
 class Race(VoiceoverScene):
     def construct(self):
         r = load("race")
+        r2 = load("race2")
         self.card()
         self.contestants(r)
+        self.board(r2)
         self.results(r)
+        self.harnet(r2)
         self.year(r)
 
     def card(self):
-        c = chapter_card(4, r"The race", r"Does anything beat a GARCH(1,1)?", part=PART)
-        with self.voiceover("Chapter four. The race."):
+        c = chapter_card(14, r"The race", r"Does anything beat a GARCH(1,1)?", part=PART)
+        with self.voiceover("Chapter fourteen. The race."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -67,17 +70,15 @@ class Race(VoiceoverScene):
                           VOL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).align_to(tab, UP)
         with self.voiceover(
-            "In 2005 Peter Hansen and Asger Lunde asked a famous question: does anything beat a GARCH(1,1)? They raced "
-            "three hundred and thirty models. On the Deutschmark-dollar exchange rate, nothing did; on IBM's stock, "
-            "models with the leverage effect won. <bookmark mark='a'/> Here is our race. Every model is fitted on "
+            "Hansen and Lunde's question, asked of Bitcoin: does anything beat a GARCH(1,1)? On the Deutschmark-dollar "
+            "rate, nothing did; on IBM's stock, models with the leverage effect won. <bookmark mark='a'/> Here is our "
+            "race. Every model is fitted on "
             "Bitcoin from August 2017 to June 2019. The second half of 2019 is held back, so the neural networks "
             "can choose when to stop training. All of 2020 is the test, untouched until the end. "
-            "<bookmark mark='b'/> Seven contestants. RiskMetrics' exponential average, from 1994, with no fitted "
-            "parameters. GARCH and GJR, which see only daily returns. HAR and HARQ, which see the realized variance. "
-            "And two neural networks trained here: an LSTM with twelve hundred parameters and a small transformer "
-            "with twenty-six hundred, each reading the last twenty-two days of log realized variance. Each network "
-            "is trained from five random seeds, and the five forecasts are averaged. Everyone forecasts the same "
-            "thing, tomorrow's realized variance, and is scored by QLIKE."
+            "<bookmark mark='b'/> The first seven contestants. RiskMetrics' exponential average, from 1994, with no "
+            "fitted parameters. GARCH and GJR, which see only daily returns. HAR and HARQ, which see the realized "
+            "variance. And the LSTM and the transformer of the last chapter. Each network's five seeds are averaged. "
+            "Everyone forecasts the same thing, tomorrow's realized variance, and is scored by QLIKE."
         ) as vo:
             self.play(FadeIn(side[0]))
             vo.wait_until("a")
@@ -162,6 +163,92 @@ class Race(VoiceoverScene):
             vo.wait_until("f")
             self.play(FadeIn(side[4]))
         self.wait(0.4)
+        self.clear_scene()
+
+    def board(self, r2):
+        names = list(r2["names"])
+        cum = np.asarray(r2["cum"])
+        ct = np.asarray(r2["cum_t"])
+        i12 = int(r2["i12"])
+        hi = 1.0
+        x0, wmax = -2.6, 7.6
+        k = ValueTracker(0)
+
+        def bars():
+            i = int(k.get_value())
+            v = cum[i]
+            order = np.argsort(v)
+            g = VGroup()
+            for rank, j in enumerate(order):
+                y = 2.3 - rank * 0.55
+                w = wmax * min(v[j], hi) / hi
+                n_ = names[j]
+                g.add(Rectangle(width=max(w, 0.02), height=0.4, stroke_width=0, fill_color=MODEL_C[n_], fill_opacity=0.85)
+                      .move_to([x0 + w / 2, y, 0]),
+                      label(n_, font_size=20, color=MODEL_C[n_]).next_to([x0, y, 0], LEFT, buff=0.15),
+                      MathTex(f"{v[j]:.3f}", font_size=22, color=GREY_A).next_to([x0 + w, y, 0], RIGHT, buff=0.1))
+            return g
+
+        b = always_redraw(bars)
+        date = always_redraw(lambda: label(rf"2020, day {1 + 2 * int(k.get_value())}: running mean QLIKE (lower is better)",
+                                           font_size=22, color=GREY_A).to_edge(UP, buff=0.4))
+        pc = pause_card(r"Which model leads before March?", width=4.2, font_size=20).to_corner(DR, buff=0.3)
+        lead0 = names[int(np.argmin(cum[i12 - 1]))]
+        lead1 = names[int(np.argmin(cum[-1]))]
+        with self.voiceover(
+            "Now run the test year, day by day. Each bar is a model's average QLIKE so far, and the bars re-sort as "
+            f"the days go by. <bookmark mark='a'/> Through January and February the leader is {lead0}: in a calm market "
+            "the simplest average is hard to beat. <bookmark mark='b'/> Then the twelfth of March. Every bar lurches, "
+            "and the order is reshuffled in a single day. <bookmark mark='c'/> By December the models that read the "
+            f"log of realized variance are in front, and {lead1} finishes first, by a whisker."
+        ) as vo:
+            self.add(b, date)
+            self.play(FadeIn(pc))
+            vo.wait_until("a")
+            self.play(k.animate.set_value(i12 - 1), run_time=max(vo.until("b") - 0.2, 3), rate_func=linear)
+            self.play(FadeOut(pc), k.animate.set_value(i12 + 1), run_time=1.0)
+            vo.wait_until("c")
+            self.play(k.animate.set_value(len(ct) - 1), run_time=max(vo.remaining(1.0) - 0.3, 3), rate_func=linear)
+        b.clear_updaters()
+        date.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    def harnet(self, r2):
+        sc, dm, mz = r2["scores"], r2["dm_vs_loghar"], r2["mz"]
+        t = dm["HARNet"]["t"]
+        rows = VGroup(*[MathTex(rf"\text{{{n_}}}:\ {sc[n_]['qlike']:.4f}" + ("" if n_ == "log-HAR" else
+                                rf"\ \ (t = {dm[n_]['t']:+.2f}\text{{ against log-HAR}})"), font_size=30, color=MODEL_C[n_])
+                        for n_ in ("HARNet", "log-HAR", "LSTM")]).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        rows.move_to(UP * 1.2)
+        mcs = r2["mcs"]
+        side = VGroup(
+            label(r"Mincer--Zarnowitz slope $b$ (ideal 1): " + ", ".join(rf"{n_} {mz[n_]['b']:.2f}"
+                                                                     for n_ in ("HAR", "log-HAR", "HARNet", "GARCH")),
+                  font_size=21, color=GREY_A),
+            label(rf"model confidence set at 90\%: {len(mcs['survivors'])} of {len(r2['names'])} survive", font_size=21,
+                  color=YELLOW),
+            label(r"HARNet was registered with the trial counter before it was scored", font_size=19, color=GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(rows, DOWN, buff=0.6)
+        if -2 < t < 0:
+            verdict = (f"By the smallest of margins, and well within noise: the Diebold-Mariano statistic is {t:.1f}. "
+                       "The network found nothing beyond the log.")
+        elif t <= -2:
+            verdict = "It beats log-HAR by more than luck: the network found something beyond the log."
+        else:
+            verdict = "It does not beat log-HAR."
+        mcs_line = ("The model confidence set, as the last chapter warned, keeps every model: one year cannot crown a "
+                    "winner." if len(mcs["survivors"]) == len(r2["names"]) else
+                    "The model confidence set narrows the field, but keeps several models.")
+        with self.voiceover(
+            "And the late entrant, HARNet, which started life as log-HAR. <bookmark mark='a'/> Does it beat its own "
+            "starting point? " + verdict + " " + mcs_line
+        ) as vo:
+            self.play(FadeIn(rows[1]), FadeIn(rows[2]))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[0], shift=RIGHT * 0.2))
+            self.play(FadeIn(side))
+        self.wait(0.3)
         self.clear_scene()
 
     def year(self, r):

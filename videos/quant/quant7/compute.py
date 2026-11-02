@@ -1271,6 +1271,22 @@ def compute_envelope2() -> dict:
     return _json({"registered": reg, "trials": pit.trials_so_far(), "part7_trials": 8 + 1 + 1})
 
 
+def compute_house_fc() -> dict:
+    """The House's forecaster called as a desk would call it, on the last day of the research window."""
+    rz = load("realized")
+    btc = vol.forecast(np.asarray(rz["rv"]), 22)
+    d, r = _market()
+    x = r - r.mean()
+    g = vol.garch_fit(x)
+    p = g["params"]
+    fc = vol.garch_forecast(p, x[-1], g["h"][-1], 252)
+    T = np.array([1, 5, 21, 63, 252])
+    term = np.sqrt(np.cumsum(fc)[T - 1] / T * 252)
+    return _json({"btc_next": btc["next_vol"], "btc_month": btc["avg_vol"], "btc_beta": btc["beta"],
+                  "btc_date": int(np.asarray(rz["ymd"])[-1]), "us_T": T, "us_term": term,
+                  "us_long": float(np.sqrt(p[0] / (1 - g["persistence"]) * 252)), "us_date": int(d[-1])})
+
+
 ITEMS = {"daily": compute_daily, "spurious": compute_spurious, "coint": compute_coint, "regimes": compute_regimes, "garch": compute_garch,
          "dcc": compute_dcc, "realized": compute_realized, "har": compute_har, "race": compute_race, "scaling": compute_scaling,
          "envelope": compute_envelope, "acf_arma": compute_acf_arma, "unitroot": compute_unitroot,
@@ -1278,7 +1294,7 @@ ITEMS = {"daily": compute_daily, "spurious": compute_spurious, "coint": compute_
          "garch_lik": compute_garch_lik, "dcc_ell": compute_dcc_ell, "signature": compute_signature,
          "har_roll": compute_har_roll, "rough": compute_rough, "scoring": compute_scoring, "training": compute_training,
          "race2": compute_race2, "industry": compute_industry, "foundation": compute_foundation,
-         "envelope2": compute_envelope2}
+         "envelope2": compute_envelope2, "house_fc": compute_house_fc}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

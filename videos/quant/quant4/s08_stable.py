@@ -151,15 +151,12 @@ class Stable(VoiceoverScene):
                    "function, which weighs the whole body, gives a larger alpha. A true stable law would give one "
                    "answer.")
         with self.voiceover(
-            "Why do stable laws exist? Stability says that the sum of n independent copies is one copy, stretched "
-            "by n to the one over alpha. <bookmark mark='a'/> Characteristic functions turn sums into products, and "
-            "the exponential of minus the absolute value of c t to the alpha does exactly that: its nth power is "
-            "itself, with t stretched. That is the symmetric stable law, and the generalized central limit theorem "
-            "says that sums of variables whose tails fall like a power below two converge to one. "
-            "<bookmark mark='b'/> Take logs twice and the alpha becomes a slope: an estimator due to Ioannis "
-            "Koutrouvelis in 1980. <bookmark mark='c'/> On the data, average e to the i t r over every daily return; "
-            "the arrow's length is the size of that average, and each t gives a dot. The Gaussian control lines up "
-            f"with slope {ga['alpha']:.2f}. The American market gives {us['alpha']:.2f}. " + verdict
+            "Stability says the sum of n copies is one copy stretched by n to the one over alpha. "
+            "<bookmark mark='a'/> Characteristic functions turn sums into products, and e to the minus c t to the "
+            "alpha is its own nth power, stretched: the symmetric stable law, the limit of sums with power tails "
+            "below two. <bookmark mark='b'/> Take logs twice and alpha is a slope, Koutrouvelis's estimator. "
+            "<bookmark mark='c'/> Average e to the i t r over every daily return: the arrow's length, a dot per t. "
+            f"The Gaussian control gives {ga['alpha']:.2f}; the American market, {us['alpha']:.2f}. " + verdict
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -252,13 +249,14 @@ class Stable(VoiceoverScene):
                           r"changing volatility (Parts 7, 13) explain the shape", 4.6, 20, LOSS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         verdict = ("It falls, unevenly but clearly: the tails thin out as days are added, as they must if the variance "
-                   "is finite." if decays else
+                   "is finite. So the variance exists." if decays else
                    "It falls only a little, which on its own cannot settle the question.")
         with self.voiceover(
-            "One more test, the simplest. If daily returns were stable, sums of them would have the same shape at "
-            "every horizon, and the kurtosis, the heaviness of the tails, would not fall as you add days. "
-            "<bookmark mark='a'/> The Gaussian control sits at zero. The American market starts at "
-            f"{ku[0]:.0f} for one day. " + verdict
+            "The simplest test: if daily returns were stable, sums over more days would keep their shape, and the "
+            "kurtosis would not fall. <bookmark mark='a'/> The Gaussian control sits at zero. The market starts at "
+            f"{ku[0]:.0f} for one day. " + verdict + " The centre looks stable, the tails are truncated, as Mantegna "
+            "and Stanley said, and much of the shape is volatility that changes over time, the subject of Parts "
+            "seven and thirteen."
         ) as vo:
             self.play(FadeIn(g), FadeIn(side[:2]))
             self.add(lu, lg)

@@ -47,12 +47,14 @@ class System(VoiceoverScene):
         head = label(r"Williams, \textit{Probability with Martingales}, ch.\ 10: ``you can't beat the system''",
                      font_size=24, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "A betting system sets each stake H from what has happened so far. The gambler's wealth is the sum of "
-            "stake times step: the martingale transform. <bookmark mark='a'/> Taking out what is known, the expected "
-            "next gain is the stake times the expected next step: zero. No system turns a fair game favourable. "
-            "<bookmark mark='b'/> On roulette each unit on red loses one thirty-seventh, so every system loses one "
-            "thirty-seventh of what it stakes. <bookmark mark='c'/> A cheat who stakes after seeing the outcome wins "
-            "every time: the whole theorem is the word before."
+            "A betting system decides each stake from what has happened so far. Call the stake H. The gambler's "
+            "wealth is the sum of stake times step: the martingale transform, with one rule, that the stake is fixed "
+            "before the step is seen. <bookmark mark='a'/> Then, taking out what is known, the expected next gain is "
+            "the stake times the expected next step, which is zero. The transform of a martingale is a martingale: "
+            "no system turns a fair game favourable. <bookmark mark='b'/> On a roulette wheel each unit on red loses "
+            "one thirty-seventh on average, so every system loses one thirty-seventh of what it stakes: the same tax "
+            "per unit. <bookmark mark='c'/> A cheat who could stake after seeing the outcome would win every round. "
+            "The whole theorem is the word before."
         ) as vo:
             self.play(FadeIn(head))
             step(0)

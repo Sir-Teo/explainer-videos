@@ -129,15 +129,12 @@ class Measure(VoiceoverScene):
                     r"riskless rate (Gerber and Shiu 1994)")]
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.6, buff=0.75, edge=6.9)
         with self.voiceover(
-            "Over time, the change of measure becomes a process. The density process is the likelihood ratio of the "
-            "first n tosses, a product of ratios, one per toss. It is the conditional expectation of L given what you "
-            "know, so it is a Doob martingale under P. <bookmark mark='a'/> Conditional expectations under Q are "
-            "conditional expectations under P, reweighted by L and divided by the density so far: Bayes' rule. "
-            "<bookmark mark='b'/> And the drift changes. A fair step has mean zero under P and two q minus one under "
-            "Q, so the walk minus that drift is a Q-martingale. This is Girsanov's theorem on a coin; Part five does "
-            "it for Brownian motion. <bookmark mark='c'/> On real returns, the classic choice is Fredrik Esscher's, from "
-            "1932: tilt the probabilities by an exponential of the return, with the tilt chosen so that, under Q, "
-            "every asset earns the riskless rate."
+            "Over time the change of measure is a process: the likelihood ratio of the first n tosses, a Doob "
+            "martingale under P. <bookmark mark='a'/> Conditional expectations under Q are those under P, reweighted "
+            "and divided by the density so far: Bayes' rule. <bookmark mark='b'/> The drift changes: the walk minus "
+            "two q minus one per step is a Q-martingale, Girsanov on a coin. <bookmark mark='c'/> On real returns, "
+            "Fredrik Esscher's 1932 choice tilts by an exponential of the return, so that every asset earns the "
+            "riskless rate under Q."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -239,16 +236,13 @@ class Measure(VoiceoverScene):
                              rf"More: the worst 1\% of days carry {100 * es['tail_q']:.2f}\% of $Q$'s weight.",
                              width=5.6, font_size=20)
         with self.voiceover(
-            "Let us find Q for the American market. Take every day since 1926 as a possible world, equally likely "
-            "under P. The House's Esscher function searches for the tilt theta that makes the reweighted market earn "
-            "exactly the riskless rate. <bookmark mark='a'/> It finds theta equals "
-            f"{es['theta']:.2f}. Negative: Q leans toward bad days. The mean daily log return falls from "
-            f"{es['mean_p']:.2f} basis points under P to {es['mean_q']:.2f} under Q. <bookmark mark='b'/> On the log "
-            "scale you can see where the weight went: into the left tail. The worst one percent of days carry "
-            f"{100 * es['tail_q']:.2f} percent of Q's weight, against one percent of P's. Q is the world in which the "
-            "risk premium is gone, and it gets there by making crashes more likely. <bookmark mark='c'/> So, under Q, "
-            "are crash days more or less likely? More. That is what the premium pays for, and Part nine prices "
-            "options in exactly this world."
+            "Let us find Q for the American market: every day since 1926 a possible world. The House searches for the "
+            "tilt that makes the reweighted market earn the riskless rate. <bookmark mark='a'/> Theta is "
+            f"{es['theta']:.2f}: Q leans toward bad days. The mean daily log return falls from {es['mean_p']:.2f} "
+            f"basis points to {es['mean_q']:.2f}. <bookmark mark='b'/> The weight went into the left tail: the worst "
+            f"one percent of days carry {100 * es['tail_q']:.2f} percent of Q's weight. <bookmark mark='c'/> So under "
+            "Q crash days are more likely. That is what the premium pays for, and Part nine prices options in this "
+            "world."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("a")

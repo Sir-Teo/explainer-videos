@@ -1,0 +1,197 @@
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.quant import *  # noqa: F403
+from videos.quant.quant6.common import ALT, BAD, DATA_C, EST, GOOD, PART, load, predict, show_card
+
+DML_CODE = [
+    "# condensed from econ.dml_plr: cross-fitted",
+    "fold = rng.permutation(n) % 5",
+    "for k in range(5):",
+    "    tr, te = fold != k, fold == k",
+    "    ry[te] = y[te] - ridge_fit_predict(X[tr], y[tr], X[te])",
+    "    rd[te] = d[te] - ridge_fit_predict(X[tr], d[tr], X[te])",
+    "theta = rd @ ry / (rd @ rd)               # residual on residual",
+    "psi = (ry - theta * rd) * rd",
+    "se = sqrt(mean(psi**2) / mean(rd**2)**2 / n)",
+]
+
+
+class DML(VoiceoverScene):
+    def construct(self):
+        dm = load("dml_demo")
+        d = load("dml")
+        lam = load("dml_lambda")
+        self.card()
+        self.slide(dm)
+        self.derive()
+        self.lab(d)
+        self.penalty(lam)
+
+    def card(self):
+        c = chapter_card(15, r"Double machine learning", r"How do you let a flexible model control for confounders?",
+                         part=PART)
+        with self.voiceover("Chapter fifteen. Double machine learning."):
+            show_card(self, c)
+        self.play(FadeOut(c))
+
+    def slide(self, dm):
+        d, y, x1, rd, ry = (np.asarray(dm[k]) for k in ("d", "y", "x1", "rd", "ry"))
+        fold = np.asarray(dm["fold"])
+        g = axes([-4, 4], [-6, 6], x_length=6.2, y_length=5.0, xlabel=r"treatment $d$", ylabel=r"outcome $y$",
+                 xticks=[-3, 0, 3], yticks=[-5, 0, 5], font_size=16).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        ax = g.ax
+        cmap = lambda v: interpolate_color(ManimColor(DATA_C), ManimColor(ALT), (v + 2) / 4)  # noqa: E731
+        dots = VGroup(*[Dot(ax.c2p(np.clip(a, -4, 4), np.clip(b, -6, 6)), radius=0.03, color=cmap(c_))
+                        for a, b, c_ in zip(d, y, x1)])
+        xs = np.array([-3.8, 3.8])
+        raw = Line(ax.c2p(xs[0], y.mean() + dm["slope_raw"] * (xs[0] - d.mean())),
+                   ax.c2p(xs[1], y.mean() + dm["slope_raw"] * (xs[1] - d.mean())), color=BAD, stroke_width=3)
+        res = Line(ax.c2p(xs[0], dm["slope_res"] * xs[0]), ax.c2p(xs[1], dm["slope_res"] * xs[1]), color=GOOD,
+                   stroke_width=4)
+        fcols = [DATA_C, ALT, EST, GOOD, QC.Q]
+        side = VGroup(
+            MathTex(r"y = \theta\,d + g(X) + \varepsilon,\quad d = m(X) + v", font_size=30),
+            label(r"simulated: $\theta = 0.3$; $g$, $m$ nonlinear in $X$; colour: $X_1$", font_size=19, color=GREY_B),
+            MathTex(rf"\text{{slope of }} y \text{{ on }} d: {dm['slope_raw']:.2f}", font_size=28, color=BAD),
+            MathTex(rf"\text{{residual on residual: }} {dm['slope_res']:.2f}", font_size=28, color=GOOD),
+            label(r"each point's $\hat m$, $\hat\ell$ learned on the other four folds", font_size=19, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4)
+        with self.voiceover(
+            "Machine learning enters causal inference through a careful door. A treatment d affects an outcome y by "
+            "an amount theta, but many controls X drive both, in complicated ways. Here is a simulated sample with "
+            "a planted theta of zero point three, each point coloured by the first control. "
+            f"<bookmark mark='a'/> The raw slope is {dm['slope_raw']:.2f}, {dm['slope_raw'] / 0.3:.0f} times too large: "
+            "the controls push "
+            "treatment and outcome up together. <bookmark mark='b'/> Victor Chernozhukov and coauthors' double "
+            "machine learning, from 2018, learns two things with a flexible model: the outcome given the controls, "
+            "and the treatment given the controls. Subtract both. Every point slides, along d by its predicted "
+            "treatment and along y by its predicted outcome, into a residual cloud. <bookmark mark='c'/> The slope "
+            f"of residual on residual is {dm['slope_res']:.2f}. <bookmark mark='d'/> One more rule: each point's "
+            "predictions come from a model fitted on the other folds of the data, never on the point itself."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(side[0]), FadeIn(side[1]), LaggedStart(*[FadeIn(p) for p in dots],
+                                                                              lag_ratio=0.002, run_time=2))
+            vo.wait_until("a")
+            self.play(Create(raw), FadeIn(side[2]))
+            vo.wait_until("b")
+            self.play(FadeOut(raw), *[p.animate.move_to(ax.c2p(np.clip(a, -4, 4), np.clip(b, -6, 6)))
+                                      for p, a, b in zip(dots, rd, ry)], run_time=3)
+            vo.wait_until("c")
+            self.play(Create(res), FadeIn(side[3]))
+            vo.wait_until("d")
+            self.play(*[p.animate.set_color(fcols[f_]) for p, f_ in zip(dots, fold)], FadeIn(side[4]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def derive(self):
+        C_ = {r"\psi": EST, r"\eta": ALT}
+        rows = [cmath(r"\psi(W; \theta, \eta)", r"=", r"\big(y - \ell(X) - \theta(d - m(X))\big)\big(d - m(X)\big)",
+                      font_size=34, colors=C_),
+                cmath(r"\partial_\eta\, \mathbb{E}[\psi(W; \theta_0, \eta)]\big|_{\eta_0}", r"=", r"0", font_size=36,
+                      colors=C_),
+                cmath(r"\sqrt n(\hat\theta - \theta_0)", r"=", r"\frac{n^{-1/2}\sum \psi(W_i; \theta_0, \eta_0)}"
+                      r"{\mathbb{E}[v^2]} + O_p\big(\sqrt n\,\|\hat m - m\|\,\|\hat\ell - \ell\|\big)", font_size=32,
+                      colors=C_),
+                cmath(r"\text{plug-in:}\ \ \hat\theta", r"=", r"\frac{\sum d\,(y - \hat g(X))}{\sum d^2}"
+                      r"\ \Rightarrow\ \text{error} \propto \|\hat g - g\|", font_size=34, colors=C_)]
+        whys = [why(r"the residual-on-residual score; $\ell = \mathbb{E}[y \mid X]$, $m = \mathbb{E}[d \mid X]$ are the "
+                    r"nuisances $\eta$"),
+                why(r"Neyman orthogonality: a small error in either nuisance does not move the score's mean, to first "
+                    r"order"),
+                why(r"so the nuisances' errors enter only as a product: each may converge slowly, $n^{-1/4}$ is enough"),
+                why(r"the naive plug-in is not orthogonal: regularisation bias in $\hat g$ passes straight into "
+                    r"$\hat\theta$")]
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.75, edge=6.8)
+        with self.voiceover(
+            "Why residualise both? The estimate solves a score equation: residual outcome minus theta times "
+            "residual treatment, times residual treatment. <bookmark mark='a'/> This score is Neyman-orthogonal: "
+            "its derivative with respect to the nuisance functions is zero at the truth. Small errors in the "
+            "learned functions do not shift it, to first order. <bookmark mark='b'/> So the estimate's error is "
+            "the usual normal term plus the product of the two learners' errors. Machine learners converge slowly, "
+            "but if each is faster than n to the minus a quarter, the product vanishes faster than the root-n "
+            "noise. <bookmark mark='c'/> Compare the naive plug-in: learn g, the controls' effect on the outcome, "
+            "and regress what is left on d. Its score is not orthogonal, and any bias in g, from regularisation, "
+            "goes straight into theta. Cross-fitting handles the other danger: a learner that has memorised a point "
+            "makes its residual artificially small."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def lab(self, d):
+        card = lab_card(r"double ML in the House", DML_CODE, source="explainer/quant/house/econ.py (condensed)",
+                        width=8.6, font_size=18).to_corner(UL, buff=0.35)
+        outs = [f"dml_plr over 60 samples of 4,000:  theta = {d['dml_mean']:.3f} +/- {d['dml_sd']:.3f}",
+                f"OLS with linear controls:          {d['naive_mean']:.2f}"]
+        with self.voiceover(
+            "The House's version, condensed: five folds; for each, fit ridge regressions on spline features of the "
+            "controls on the other four folds, and residualise the outcome and the treatment on the held-out fold. "
+            "Then regress residual on residual, and take the standard error from the score. "
+            "<bookmark mark='a'/> Over sixty simulated samples of four thousand, double machine learning gives "
+            f"{d['dml_mean']:.3f}, with a spread of {d['dml_sd']:.3f}; least squares with the controls entered "
+            f"linearly gives {d['naive_mean']:.2f}."
+        ) as vo:
+            self.play(FadeIn(card))
+            vo.wait_until("a")
+            lab_run(self, card, outs, run_time=1.8)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def penalty(self, lam):
+        L = np.log10(np.asarray(lam["lams"]))
+        dm, pl = np.asarray(lam["dml"]), np.asarray(lam["plugin"])
+        mm, ml = np.asarray(lam["mse_m"]), np.asarray(lam["mse_l"])
+        g1 = axes([L[0], L[-1]], [0.2, 1.2], x_length=6.0, y_length=3.2, xlabel=r"ridge penalty $\lambda$ (log scale)",
+                  ylabel=r"$\hat\theta$, 5 seeds", xticks=[-2, 0, 2, 4], xfmt=lambda v: f"10^{{{int(v)}}}",
+                  yticks=[0.3, 0.6, 0.9, 1.2], font_size=15).to_edge(LEFT, buff=0.6).shift(DOWN * 0.6)
+        g2 = axes([L[0], L[-1]], [0.9, 4.6], x_length=4.6, y_length=2.6, xlabel=r"$\lambda$ (log scale)",
+                  ylabel=r"out-of-fold error of the learners", xticks=[-2, 0, 2, 4], xfmt=lambda v: f"10^{{{int(v)}}}",
+                  yticks=[1, 2, 3, 4], font_size=14).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.6)
+        a1, a2 = g1.ax, g2.ax
+        truth = DashedLine(a1.c2p(L[0], 0.3), a1.c2p(L[-1], 0.3), color=WHITE, stroke_width=2)
+        k = ValueTracker(1)
+
+        def draw():
+            j = int(min(max(k.get_value(), 1), len(L) - 1)) + 1
+            return VGroup(seed_band(a1, L[:j], np.minimum(pl[:, :j], 1.2), BAD),
+                          seed_band(a1, L[:j], np.minimum(dm[:, :j], 1.2), GOOD),
+                          seed_band(a2, L[:j], np.minimum(ml[:, :j], 4.6), ALT, stroke_width=2.5),
+                          seed_band(a2, L[:j], np.minimum(mm[:, :j], 4.6), EST, stroke_width=2.5))
+        dr = always_redraw(draw)
+        leg1 = legend([(BAD, r"naive plug-in"), (GOOD, r"double ML"), (WHITE, r"truth")], font_size=17).next_to(
+            g1, UP, buff=0.15).align_to(g1, LEFT)
+        leg2 = legend([(ALT, r"$\hat\ell$: $y$ on $X$"), (EST, r"$\hat m$: $d$ on $X$")], font_size=17).next_to(
+            g2, UP, buff=0.15).align_to(g2, LEFT)
+        i1 = int(np.argmin(np.abs(L - 0)))
+        i3 = int(np.argmin(np.abs(L - 1)))
+        q = predict(r"If $\hat m$ is perfect but $\hat\ell$ is poor, is $\hat\theta$ still fine?", width=7.0)
+        q.to_corner(UR, buff=0.3)
+        with self.voiceover(
+            "Now train the learners at every strength of the ridge penalty, from almost none to crushing, five "
+            "seeds each, and watch theta. <bookmark mark='a'/> On the right, the learners' out-of-fold errors: flat "
+            "while the penalty is small, then rising as the fits are flattened toward a constant. On the left, the "
+            f"two estimates. At a penalty of one, double ML gives {dm[:, i1].mean():.3f} and the plug-in "
+            f"{pl[:, i1].mean():.3f}; at ten, {dm[:, i3].mean():.3f} against {pl[:, i3].mean():.3f}. The plug-in "
+            "starts drifting as soon as the learner is biased; double ML holds its line for longer, because only the "
+            "product of the two errors reaches it. <bookmark mark='b'/> Push the penalty to the extreme and both "
+            "fail: when both learners are bad, the product is no longer small. Orthogonality buys robustness, not "
+            "immunity. <bookmark mark='c'/> Pause and predict: if the treatment model is perfect but the outcome "
+            "model is poor, is theta still fine? Yes, to first order: the product of errors is zero."
+        ) as vo:
+            self.play(FadeIn(g1), FadeIn(g2), Create(truth), FadeIn(leg1), FadeIn(leg2))
+            self.add(dr)
+            vo.wait_until("a")
+            self.play(k.animate.set_value(len(L) - 1), run_time=vo.until("b"), rate_func=linear)
+            vo.wait_until("c")
+            self.play(FadeIn(q))
+        dr.clear_updaters()
+        self.wait(0.4)
+        self.clear_scene()

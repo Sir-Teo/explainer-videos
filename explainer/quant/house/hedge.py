@@ -108,3 +108,35 @@ def delta_hedge(t, S, K, T, sigma_hedge, *, cp=1, position=1, r=0.0, q=0.0, sigm
         series["cost"][:, -1] = cost_acc[rec]
         out.update(series)
     return out
+
+
+def delta_hedge_on_moves(t, S, K, T, sigma, band, *, cp=1, position=1, cost=0.0) -> dict:
+    """Delta hedging triggered by the price, not the clock (Zakamouline's "hedge on a band in spot"): rehedge only
+    when the underlying has moved more than ``band`` (relative) since the last hedge, and at the end.  Each row of
+    ``S`` is a path on the times ``t``; ``sigma`` a number or one per path.  Returns the P&L and the trade counts;
+    ``band`` = 0 is hedging at every step."""
+    t = np.asarray(t, float)
+    S = np.atleast_2d(np.asarray(S, float))
+    n_paths, n1 = S.shape
+    sig = np.broadcast_to(np.asarray(sigma, float), (n_paths,)) if np.ndim(sigma) else sigma
+    tau = np.maximum(T - t, 0.0)
+    w = float(position)
+    g0 = bs.greeks(S[:, 0], K, tau[0], sig, 0.0, 0.0, cp)
+    shares = -w * g0["delta"]
+    cash = -w * g0["price"] - shares * S[:, 0] - cost * np.abs(shares) * S[:, 0]
+    last = S[:, 0].copy()
+    trades = np.ones(n_paths)
+    for i in range(1, n1 - 1):
+        move = np.abs(S[:, i] / last - 1) > band
+        if not move.any():
+            continue
+        d = bs.greeks(S[:, i], K, tau[i], sig, 0.0, 0.0, cp)["delta"]
+        tr = np.where(move, -w * d - shares, 0.0)
+        cash -= tr * S[:, i] + cost * np.abs(tr) * S[:, i]
+        shares = shares + tr
+        last = np.where(move, S[:, i], last)
+        trades += move
+    end = S[:, -1]
+    value = np.maximum(cp * (end - K), 0.0) if tau[-1] <= 0 else bs.price(end, K, tau[-1], sig, 0.0, 0.0, cp)
+    pnl = cash + shares * end - cost * np.abs(shares) * end + w * value
+    return {"pnl": pnl, "trades": trades}

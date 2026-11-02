@@ -137,12 +137,14 @@ class Doubling(VoiceoverScene):
                               r"rare large loss (Part 11). The staircase and the cliff.", 10.4, 22, LOSS)
         VGroup(d, h1, h2, short).arrange(DOWN, buff=0.3).move_to(ORIGIN)
         with self.voiceover(
-            "In continuous time, with unlimited credit, a doubler can make any sum in finite time. Finance allows "
-            "only admissible strategies, whose wealth never falls below a fixed floor. <bookmark mark='a'/> Harrison "
-            "and Pliska showed in 1981 that when prices are martingales under an equivalent measure, such strategies "
-            "cannot make something from nothing. <bookmark mark='b'/> Dybvig and Huang showed in 1988 that this "
-            "credit limit is what rules out doubling; Part nine has the proof. <bookmark mark='c'/> And selling "
-            "options has the same shape: the staircase and the cliff."
+            "In continuous time doubling is worse: betting ever faster, a doubler with unlimited credit can make any "
+            "sum in a finite time. Finance closes the loophole with one rule: a strategy is admissible if its wealth "
+            "never falls below some fixed floor. <bookmark mark='a'/> Michael Harrison and Stanley Pliska showed in "
+            "1981 that when prices are martingales under an equivalent measure, admissible strategies cannot make "
+            "something from nothing: their wealth is a supermartingale. <bookmark mark='b'/> Philip Dybvig and "
+            "Chi-fu Huang showed in 1988 that this credit limit is exactly what rules out doubling; the proof belongs "
+            "to Part nine. <bookmark mark='c'/> And remember the shape: selling options earns small premiums most "
+            "days and pays a rare large loss. The staircase and the cliff."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.2))
             vo.wait_until("a")

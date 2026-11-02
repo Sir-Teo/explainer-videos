@@ -14,11 +14,14 @@ class MM(VoiceoverScene):
         self.card()
         self.arbitrage()
         self.prop2()
-        self.tradeoff()
+        self.taxes()
+        self.pie()
+        self.survey()
 
     def card(self):
-        c = chapter_card(5, r"Modigliani and Miller", r"Can borrowing make a firm worth more?", lit=(1958,), part=PART)
-        with self.voiceover("Chapter five. Modigliani and Miller."):
+        c = chapter_card(10, r"Modigliani and Miller, with taxes and distress", r"Can borrowing make a firm worth more?",
+                         lit=(1958,), part=PART)
+        with self.voiceover("Chapter ten. Modigliani and Miller, with taxes and distress."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -115,45 +118,131 @@ class MM(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def tradeoff(self):
-        d = np.linspace(0, 0.65, 131)
-        shield = 0.21 * d
-        distress = 0.8 * d ** 3
-        V = 1 + shield - distress
-        dstar = float(np.sqrt(0.21 / 2.4))
-        g = axes([0, 0.65], [0.9, 1.2], x_length=6.2, y_length=4.6, xlabel=r"debt as a fraction of the unlevered value",
-                 ylabel=r"firm value / unlevered value", xticks=[0, 0.2, 0.4, 0.6], yticks=[0.9, 1.0, 1.1, 1.2],
-                 yfmt=lambda u: f"{u:.1f}", font_size=18).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
-        ax = g.ax
-        l0 = curve(ax, d, np.ones_like(d), GREY_B, stroke_width=2.5)
-        l1 = curve(ax, d, 1 + shield, CASH, stroke_width=3)
-        l2 = curve(ax, d, V, VALUE, stroke_width=4)
-        peak = Dot(ax.c2p(dstar, 1 + 0.21 * dstar - 0.8 * dstar ** 3), radius=0.09, color=YELLOW)
-        leg = legend([(GREY_B, r"Modigliani--Miller, no taxes"), (CASH, r"with the interest tax shield, $V_U + tD$"),
-                      (VALUE, r"less the expected costs of distress")], font_size=21).to_edge(RIGHT, buff=0.5)
-        leg.shift(UP * 2.0)
-        notes = VGroup(
-            label(r"illustrative: tax rate 21\%, distress cost $0.8\,d^3$", font_size=19, color=GREY_B),
-            wrapped_label(r"the trade-off theory: borrow until the next dollar's tax saving equals its expected "
-                          r"cost of distress", 4.8, 22, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        VGroup(leg, notes).arrange(DOWN, aligned_edge=LEFT, buff=0.6).to_edge(RIGHT, buff=0.4)
+    def taxes(self):
+        tc, te, td = 0.21, 0.20, 0.37
+        rows = [
+            cmath(r"\text{PV(shield)}", r"=", r"\sum_{t \ge 1} \frac{T_c\, r_D D}{(1 + r_D)^t}", r"=", r"T_c D",
+                  font_size=38, colors={r"T_c D": CASH}),
+            cmath(r"V_L", r"=", r"V_U + T_c D", font_size=40, colors={r"V_L": VALUE}),
+            cmath(r"r_E", r"=", r"r_A + (r_A - r_D)(1 - T_c)\,\frac{D}{E}", font_size=40, colors={r"r_E": EQUITY}),
+            cmath(r"T^*", r"=", r"1 - \frac{(1 - T_c)(1 - T_E)}{1 - T_D}", font_size=40, colors={r"T^*": CASH}),
+            cmath(rf"T_c = {100 * tc:.0f}\%,\ T_E = {100 * te:.0f}\%,\ T_D = {100 * td:.0f}\%", r":",
+                  rf"\ T^* = {100 * valuation.miller_gain(tc, te, td):.1f}\%", font_size=34),
+        ]
+        whys = [why(r"permanent debt saves $T_c r_D D$ a year, as risky as the debt itself, so discount at $r_D$"),
+                why(r"Modigliani and Miller (1963): each dollar of permanent debt adds $T_c$ of value"),
+                why(r"value balance with the shield: owners' required return rises more slowly with leverage"),
+                why(r"Miller (1977): investors pay $T_D$ on interest but $T_E$ on equity income; the net gain per dollar"),
+                why(r"the US top statutory rates since 2018 (corporate; dividends and gains; interest): about zero")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.8, buff=0.8, edge=6.9)
         with self.voiceover(
-            "The proof's power is in its assumptions: when financing does change value, one of them has failed, "
-            "and you know which to look for. The first is taxes. Interest is deducted before corporate tax, so "
-            "debt shields income, and in their 1963 correction Modigliani and Miller added the tax shield: each "
-            "dollar of permanent debt adds the tax rate to the firm's value. <bookmark mark='a'/> Taken alone, that "
-            "says borrow everything. What stops it is the cost of distress: lawyers, lost customers, investment "
-            "forgone when a firm might not pay its debts. Those costs rise faster than the debt. "
-            "<bookmark mark='b'/> The value peaks where the next dollar's tax saving equals its expected cost of "
-            "distress. That is the trade-off theory, and in Part twenty we will price the distress itself, with "
-            "Merton's model of default."
+            "The proof's power is in its assumptions: when financing does change value, one of them has failed. "
+            "The first is taxes. Interest is paid before corporate tax, so permanent debt saves the tax rate times "
+            "the interest every year. Discount those savings at the debt's own rate, and the shield is worth the tax "
+            "rate times the debt. <bookmark mark='a'/> That was Modigliani and Miller's correction of 1963: the "
+            "levered firm is worth the unlevered firm plus T times D. <bookmark mark='b'/> The owners' required "
+            "return still rises with leverage, but more slowly. <bookmark mark='c'/> In 1977 Miller added the other "
+            "side: investors pay personal tax on interest at one rate and on equity income at another, and the net "
+            "gain from a dollar of debt is one minus this ratio. <bookmark mark='d'/> At America's top rates since "
+            f"2018 it is {100 * valuation.miller_gain(tc, te, td):.1f} percent: at the margin, the corporate saving "
+            "is roughly cancelled by what bondholders pay."
         ) as vo:
-            self.play(FadeIn(g), Create(l0), FadeIn(leg[0]))
-            self.play(Create(l1), FadeIn(leg[1]))
+            step(0)
             vo.wait_until("a")
-            self.play(Create(l2), FadeIn(leg[2]), run_time=2)
+            step(1)
             vo.wait_until("b")
-            self.play(FadeIn(peak), FadeIn(notes))
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def pie(self):
+        d = ValueTracker(0.0)
+        R0 = 2.0
+        center = LEFT * 3.4 + DOWN * 0.2
+
+        def value(x):
+            return 1 + 0.21 * x - 0.8 * x ** 3
+
+        def draw():
+            x = d.get_value()
+            gov = 0.21 * (1 - x) / 1.21          # the tax the government takes falls as interest replaces profit
+            dist = 0.8 * x ** 3 / 1.21
+            debt = x / 1.21
+            eq = 1 - gov - debt - dist
+            g = VGroup()
+            a0 = PI / 2
+            for frac, col in ((eq, EQUITY), (debt, DEBT), (gov, GREY_D), (dist, QC.LOSS)):
+                ang = TAU * max(frac, 0)
+                if ang > 1e-4:
+                    g.add(AnnularSector(inner_radius=0, outer_radius=R0, angle=ang, start_angle=a0, fill_color=col,
+                                        fill_opacity=0.85, stroke_width=1, stroke_color=BLACK).move_arc_center_to(center))
+                a0 += ang
+            rd = MathTex(rf"\text{{debt}}\ {100 * x:.0f}\%\ \text{{of}}\ V_U:\quad \text{{investors}}\ {value(x):.3f}",
+                         font_size=30).next_to(center, DOWN, buff=R0 + 0.35)
+            return VGroup(g, rd)
+
+        pie = always_redraw(draw)
+        gx = axes([0, 0.65], [0.95, 1.06], x_length=5.4, y_length=3.4, xlabel=r"debt / unlevered value",
+                  ylabel=r"investors' value / $V_U$", xticks=[0, 0.2, 0.4, 0.6], yticks=[0.96, 1.0, 1.04],
+                  yfmt=lambda v: f"{v:.2f}", font_size=17).to_edge(RIGHT, buff=0.5).shift(UP * 0.6)
+        ax = gx.ax
+        xs = np.linspace(0, 0.65, 66)
+        k = ValueTracker(0)
+        tr = tracing(ax, xs, value(xs), k, VALUE)
+        leg = legend([(EQUITY, r"equity"), (DEBT, r"debt"), (GREY_D, r"government (taxes)"),
+                      (QC.LOSS, r"expected distress costs")], font_size=19).next_to(gx, DOWN, buff=0.35).align_to(gx, LEFT)
+        illus = label(r"illustrative: tax 21\%, distress cost $0.8\,d^3$", font_size=18, color=GREY_B).to_corner(DL, buff=0.3)
+        dstar = float(np.sqrt(0.21 / 2.4))
+        with self.voiceover(
+            "Picture the firm's pre-tax value as a pie whose size financing cannot change. Without debt, the owners "
+            "get one slice and the government, through corporate tax, gets the grey one. <bookmark mark='a'/> Add "
+            "debt. Interest is deducted, so the grey slice shrinks and the investors' share of the same pie grows: "
+            "that is all the tax shield is. <bookmark mark='b'/> But a red slice appears too: the expected costs of "
+            "distress, lawyers, lost customers, investment forgone when the firm might not pay. It grows faster than "
+            "the debt. <bookmark mark='c'/> The investors' total peaks where the next dollar of debt saves as much "
+            f"tax as it adds expected distress, here at about {100 * dstar:.0f} percent: the trade-off theory, read "
+            "straight off the pie."
+        ) as vo:
+            self.add(pie)
+            self.play(FadeIn(gx), FadeIn(leg), FadeIn(illus))
+            self.add(tr)
+            vo.wait_until("a")
+            self.play(d.animate.set_value(0.3), k.animate.set_value(30), run_time=4)
+            vo.wait_until("b")
+            self.play(d.animate.set_value(0.65), k.animate.set_value(65), run_time=4)
+            vo.wait_until("c")
+            self.play(d.animate.set_value(dstar), run_time=2)
+            self.play(FadeIn(Dot(ax.c2p(dstar, value(dstar)), radius=0.09, color=YELLOW)))
+        pie.clear_updaters()
+        tr.clear_updaters()
+        self.wait(0.4)
+        self.clear_scene()
+
+    def survey(self):
+        card = firm_card(r"How CFOs decide: 392 of them",
+                         r"Graham and Harvey surveyed chief financial officers in 1999 about how they set capital "
+                         r"structure. Share saying each factor is important or very important for debt policy:",
+                         numbers=[(r"59.4\%", r"financial flexibility"), (r"57.1\%", r"credit rating"),
+                                  (r"44.9\%", r"tax advantage of interest"), (r"21.4\%", r"distress costs")],
+                         source=r"Graham and Harvey, JFE 60 (2001); JACF 15 (2002)", width=9.6, font_size=22)
+        card.move_to(UP * 0.5)
+        pp = desk_question(r"Pause and predict: tax 21\%, permanent debt of 100. How much value does the debt add, "
+                           r"and who loses it?", width=9.6, font_size=21).next_to(card, DOWN, buff=0.35)
+        with self.voiceover(
+            "Do firms think this way? In 1999 John Graham and Campbell Harvey asked three hundred and ninety-two chief "
+            "financial officers. Fewer than half called the tax advantage of debt important, and only about a fifth "
+            "called distress costs important, the two forces of the trade-off theory. Most cited financial "
+            "flexibility and their credit rating. The theory says where the optimum is; practice keeps a margin for "
+            "the unexpected. <bookmark mark='a'/> Pause and predict: with a twenty-one percent tax rate and "
+            "permanent debt of a hundred, how much value does the debt add, and who loses it? Twenty-one, and the "
+            "government, at least until Miller's investors pay their own taxes."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(pp))
         self.wait(0.4)
         self.clear_scene()

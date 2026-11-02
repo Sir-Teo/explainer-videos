@@ -109,3 +109,24 @@ class OrderBookLadder(VGroup):
                     Line(o + [x, self._y(ba), 0], o + [x + 0.12, self._y(ba), 0], color=QC.IDEA, stroke_width=3))
         g.add(br)
         return g
+
+
+def ro(tex_left: str, fn, digits=2, font_size=30, color=WHITE, unit: str = "") -> VGroup:
+    """A live readout: ``tex_left``, then a number that follows ``fn()``, then ``unit``, which stays beside the
+    number however wide it grows."""
+    left = MathTex(tex_left, font_size=font_size, color=color)
+    num_ = DecimalNumber(fn(), num_decimal_places=digits, font_size=font_size, color=color)
+    g = VGroup(left, num_).arrange(RIGHT, buff=0.15)
+    u = MathTex(unit, font_size=font_size, color=color) if unit else None
+    if u is not None:
+        g.add(u)
+        u.next_to(num_, RIGHT, buff=0.08)
+
+    def upd(m):
+        m.set_value(fn())
+        m.next_to(left, RIGHT, buff=0.15)
+        if u is not None:
+            u.next_to(m, RIGHT, buff=0.08)
+    num_.add_updater(upd)
+    g.num = num_
+    return g

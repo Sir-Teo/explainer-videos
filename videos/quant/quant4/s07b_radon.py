@@ -45,17 +45,16 @@ class Radon(VoiceoverScene, ThreeDScene):
                     r"nothing in between")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.68, edge=6.9)
         with self.voiceover(
-            "When can one probability be written as another reweighted? The Radon-Nikodym theorem: whenever Q gives "
-            "no weight to anything P calls impossible, Q has a density L with respect to P. <bookmark mark='a'/> "
-            "Martingales prove it. Cut the space into the dyadic cells of chapter one, and on each cell take the "
-            "ratio of Q's mass to P's. A cell's two children share the parent's Q-mass, so this ratio is a "
-            "P-martingale. <bookmark mark='b'/> It is nonnegative, so it converges, by chapter ten. When Q is "
-            "absolutely continuous, the convergence is uniformly integrable, and the limit is the density. "
-            "<bookmark mark='c'/> Two measures absolutely continuous both ways are equivalent: they share their "
-            "impossible events. An arbitrage, a strategy that costs nothing, cannot lose and might win, is defined "
-            "by impossible events alone, so equivalent measures agree on it. <bookmark mark='d'/> And on infinite "
-            "sequences of coins there is a sharp dichotomy, due to Shizuo Kakutani in 1948: the measures are either "
-            "equivalent or completely singular, according to whether a product of affinities stays positive."
+            "When can one probability be written as another, reweighted? The Radon-Nikodym theorem: whenever Q gives "
+            "no weight to anything P calls impossible, Q has a density with respect to P. <bookmark mark='a'/> "
+            "Martingales prove it. On the dyadic cells of chapter one, take the ratio of Q's mass to P's. A cell's "
+            "two children share the parent's Q-mass, so the ratio is a P-martingale. <bookmark mark='b'/> It is "
+            "nonnegative, so it converges, by chapter ten; absolute continuity makes it uniformly integrable, and "
+            "the limit is the density. <bookmark mark='c'/> Measures absolutely continuous both ways are "
+            "equivalent: they share their impossible events, and an arbitrage is defined by impossible events alone, "
+            "so equivalent measures agree on it. <bookmark mark='d'/> On infinite coin sequences there is a sharp "
+            "dichotomy, Shizuo Kakutani's of 1948: equivalent or completely singular, as a product of affinities "
+            "stays positive or not."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -176,16 +175,13 @@ class Radon(VoiceoverScene, ThreeDScene):
                              r"fades fast enough, $\sum (q_k - \tfrac12)^2 < \infty$, keeps them equivalent.",
                              width=11.0, font_size=20).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Kakutani's dichotomy, simulated. Under a fair coin, follow the likelihood ratio of a sixty-percent coin "
-            "for ten thousand tosses. <bookmark mark='a'/> It collapses: the median ends near ten to the "
-            f"{C['median_log10']:.0f}. At every finite time the two coins are equivalent, but on the infinite "
-            "sequence they are singular. The strong law of large numbers tells them apart with certainty. "
-            "<bookmark mark='b'/> Now let the tilt fade: heads with probability one half plus point two over k on "
-            "toss k. The squared tilts add up to something finite, the product of affinities stays positive, and the "
-            f"likelihood ratio settles to a positive limit, with mean {F['mean_L']:.2f}. These two measures are "
-            "equivalent forever. <bookmark mark='c'/> So: is a fair coin equivalent to a fifty point one percent coin, "
-            "tossed forever? No. This is why, in Part five, Girsanov can change the drift of Brownian motion only "
-            "within a fixed horizon, and why no change of measure can change its volatility."
+            "Kakutani, simulated. Under a fair coin, follow the likelihood ratio of a sixty-percent coin. "
+            f"<bookmark mark='a'/> It collapses, the median near ten to the {C['median_log10']:.0f}. Equivalent at "
+            "every finite time, singular in the limit: the strong law tells them apart. <bookmark mark='b'/> Let the "
+            "tilt fade, one half plus point two over k on toss k: the squared tilts sum, and the ratio settles to a "
+            f"positive limit with mean {F['mean_L']:.2f}. Equivalent forever. <bookmark mark='c'/> So a fair coin and a "
+            "fifty point one percent coin, tossed forever, are not equivalent; and in Part five no change of measure "
+            "can change a volatility."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2))
             self.add(f1, f2)

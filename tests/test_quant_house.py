@@ -1758,3 +1758,99 @@ def test_surface_net_learns_without_arbitrage():
     iv = np.sqrt(V.ssvi_surface_w(fit, k, T) / T)
     r = deep.train_surface_net(k, T, iv, steps=800, every=400, T_range=(0.03, 0.4), k_range=(-0.6, 0.6), colloc=(21, 10))
     assert r["train_rmse"] < 0.5 and r["g_viol"] == 0.0 and r["cal_viol"] == 0.0
+
+
+# ---------------------------------------------------------------------------
+# Part 11's expansion: the options desk
+# ---------------------------------------------------------------------------
+def test_pnl_explain_residual_is_third_order():
+    from explainer.quant.house import quoting as Q
+    legs = [Q.Leg(1, 100.0, 30 / 365, 1), Q.Leg(-1, 90.0, 30 / 365, -2)]
+    res = []
+    for h in (0.02, 0.01):
+        e = Q.pnl_explain(legs, 100.0, 100.0 * (1 + h), 0.5, 0.5 + h, 1e-6)
+        res.append(abs(e["unexplained"]))
+    assert res[1] < res[0] / 5          # O(h^3): halving the move cuts it about eightfold
+
+
+def test_delta_strike_flat_smile_closed_form():
+    from scipy.stats import norm
+    from explainer.quant.house import quoting as Q
+    F, T, s = 100.0, 0.25, 0.4
+    K = Q.delta_strike(F, T, lambda k: s, 0.25)
+    assert K == pytest.approx(F * np.exp(-s * np.sqrt(T) * norm.ppf(0.25) + 0.5 * s * s * T), rel=1e-7)
+    Kp = Q.delta_strike(F, T, lambda k: s, -0.25, cp=-1)
+    assert Kp == pytest.approx(F * np.exp(s * np.sqrt(T) * norm.ppf(0.25) + 0.5 * s * s * T), rel=1e-7)
+
+
+def test_vanna_volga_returns_the_pillars():
+    from explainer.quant.house import quoting as Q
+    F, T = 100.0, 30 / 365
+    k3, v3 = [88.0, 100.0, 113.0], [0.62, 0.50, 0.55]
+    out = Q.vanna_volga(k3, F, T, k3, v3, 0.50)
+    assert np.allclose(out, v3, atol=1e-8)
+
+
+def test_markouts_recover_a_permanent_impact():
+    from explainer.quant.house import quoting as Q
+    ts = np.array([0.0, 10.0, 400.0, 900.0])
+    sign = np.array([1, 1, 1, 1])
+    mark = np.array([0.05, 0.05, 0.051, 0.051])
+    price = mark + 0.0004                      # takers pay 4 bp of the index over mark
+    idx = np.full(4, 100.0)
+    out = Q.markouts(ts, sign, price, mark, idx, np.zeros(4), np.full(4, 1.0), horizons=(300,))
+    assert np.allclose(out["edge"], 0.04)
+    # the first trade's markout: the mark moved up 0.1 (in index units x 100) against the maker
+    assert out[300][0] == pytest.approx(-(0.051 * 100 - 0.0504 * 100))
+    assert np.isnan(out[300][-1])
+
+
+def test_market_maker_dp_q_learning_and_glft():
+    from explainer.quant.house import quoting as Q
+    dp = Q.mm_value_iteration(Q=4)
+    assert np.allclose(dp["skew"], -dp["skew"][::-1])          # antisymmetric in inventory
+    assert dp["skew"][-2] > 0 > dp["skew"][1]                  # long: both quotes move down
+    ql = Q.mm_q_learning(steps=120_000, seed=0, Q=4)
+    v_ql = Q.mm_policy_value(ql["policy"], Q=4)[4]
+    assert v_ql > 0.8 * dp["V"][4]
+    g = Q.glft_quotes(np.array([-2, 0, 2]), 0.45, 1.5, 0.02)
+    assert g["skew"][0] < 0 == g["skew"][1] < g["skew"][2]
+
+
+def test_greek_hedge_zeroes_the_greeks():
+    from explainer.quant.house import quoting as Q
+    gk = lambda K, T: {k: float(v) for k, v in bs.greeks(100.0, K, T, 0.5).items()}  # noqa: E731
+    book = {k: -2 * v for k, v in gk(100.0, 30 / 365).items()}
+    a, b = gk(100.0, 7 / 365), gk(100.0, 60 / 365)
+    h = Q.greek_hedge(book, (a, b))
+    for key in ("gamma", "vega"):
+        assert book[key] + h["n1"] * a[key] + h["n2"] * b[key] == pytest.approx(0, abs=1e-9)
+    assert book["delta"] + h["n1"] * a["delta"] + h["n2"] * b["delta"] + h["shares"] == pytest.approx(0, abs=1e-9)
+
+
+def test_delta_hedge_on_moves_band_zero_is_every_step():
+    t, S = paths.gbm(100.0, 0.0, 0.5, 30 / 365, 60, 50, seed=3)
+    t = np.linspace(0, 30 / 365, 61) if np.ndim(t) == 0 else t
+    a = hedge.delta_hedge_on_moves(t, S, 100.0, 30 / 365, 0.5, 0.0)["pnl"]
+    b = hedge.delta_hedge(t, S, 100.0, 30 / 365, 0.5)["pnl"]
+    assert np.allclose(a, b, atol=1e-9)
+
+
+def test_pin_simulation_without_hedgers_is_gbm():
+    from explainer.quant.house import sim
+    t, S = sim.pin_simulation(100.0, 100.0, 0.05, 0.4, 0.0, 5.0, 50, 40000, seed=1)
+    lr = np.log(S[:, -1] / 100.0)
+    assert lr.var() == pytest.approx(0.4 ** 2 * 0.05, rel=0.03)
+    _, P = sim.pin_simulation(100.0, 100.0, 0.05, 0.4, 2.0, 5.0, 50, 4000, seed=1)
+    assert np.mean(np.abs(P[:, -1] - 100) < 0.5) > np.mean(np.abs(S[:4000, -1] - 100) < 0.5)
+
+
+def test_american_call_with_dividend():
+    from explainer.quant.house import trees as TR
+    o = TR.american_call_dividend(100.0, 100.0, 0.5, 0.04, 0.3, 0.0, 0.25, N=400)
+    assert o["price"] == pytest.approx(float(bs.price(100.0, 100.0, 0.5, 0.3, 0.04)), abs=0.02)
+    assert not o["region"]                                    # no dividend: never exercise
+    o2 = TR.american_call_dividend(100.0, 90.0, 2 / 12, 0.04, 0.3, 5.0, 5 / 52, N=200)
+    assert o2["price"] > o2["european"]
+    steps = {n for n, _, _ in o2["region"]}
+    assert max(steps) * o2["dt"] < 5 / 52                     # only before the dividend

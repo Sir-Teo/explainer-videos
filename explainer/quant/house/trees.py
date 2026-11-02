@@ -154,3 +154,33 @@ def tree_price(tree: dict, K, cp=1) -> np.ndarray:
     S, lam = tree["nodes"][-1], tree["ad"][-1]
     K = np.atleast_1d(np.asarray(K, float))
     return np.array([float(np.sum(lam * np.maximum(cp * (S - k), 0.0))) for k in K])
+
+
+def american_call_dividend(S, K, T, r, sigma, D, tD, N=200) -> dict:
+    """An American call on a stock paying one cash dividend ``D`` at time ``tD``, on a CRR tree for the escrowed
+    process (S minus the dividend's present value, which diffuses; Hull's treatment), so the tree recombines.  Returns
+    the price, the European price on the same tree, and the exercise region as (step, node) pairs with their spots:
+    exercise is ever optimal only just before the dividend."""
+    dt = T / N
+    u = np.exp(sigma * np.sqrt(dt))
+    d = 1.0 / u
+    p = (np.exp(r * dt) - d) / (u - d)
+    disc = np.exp(-r * dt)
+    Sx = S - D * np.exp(-r * tD)              # the escrowed (dividend-free) part
+    pv_div = lambda t_: D * np.exp(-r * (tD - t_)) if t_ < tD - 1e-12 else 0.0  # noqa: E731
+    j = np.arange(N + 1)
+    spots = Sx * u ** (2 * j - N)
+    am = np.maximum(spots - K, 0.0)
+    eu = am.copy()
+    region = []
+    for n in range(N - 1, -1, -1):
+        tn = n * dt
+        s_n = Sx * u ** (2 * np.arange(n + 1) - n) + pv_div(tn)
+        am = disc * (p * am[1:] + (1 - p) * am[:-1])
+        eu = disc * (p * eu[1:] + (1 - p) * eu[:-1])
+        ex = s_n - K
+        hit = ex > am + 1e-12
+        if hit.any():
+            region += [(n, int(i), float(s_n[i])) for i in np.where(hit)[0]]
+        am = np.where(hit, ex, am)
+    return {"price": float(am[0]), "european": float(eu[0]), "region": region, "dt": dt}

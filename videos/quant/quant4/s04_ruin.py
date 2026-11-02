@@ -182,14 +182,13 @@ class Ruin(VoiceoverScene):
                    if ok else f"Four thousand simulated games average {F['mean']:,.0f}, a little off the formula: "
                               "the long games are rare and dominate the average.")
         with self.voiceover(
-            "How long does it take? Use the other martingale of chapter three, the square of the walk minus the "
-            "number of steps. Start the walk at zero, with barriers at minus a and b minus a. The steps are bounded "
-            "and the expected time is finite, so its expected value at the end is zero. <bookmark mark='a'/> At the "
-            "end the walk is at one barrier or the other, with the probabilities we just found. <bookmark mark='b'/> "
-            "So the expected number of bets is a times b minus a. From fifty, aiming for a hundred: two thousand five "
-            "hundred bets. <bookmark mark='c'/> Here are sixty of those games, each turning gold if it reaches a hundred "
-            "and red if it goes broke. " + verdict + " On European roulette the games end sooner, and only "
-            f"{100 * R['frac_top']:.1f} percent of them at a hundred."
+            "How long does it take? Use chapter three's other martingale, the walk squared minus the steps, started "
+            "at zero between barriers at minus a and b minus a. Its expected value at the end is zero. "
+            "<bookmark mark='a'/> The walk ends at one barrier or the other, with the probabilities we found. "
+            "<bookmark mark='b'/> So the expected number of bets is a times b minus a: from fifty, aiming for a "
+            "hundred, two thousand five hundred. <bookmark mark='c'/> Sixty games, gold at a hundred, red when broke. "
+            + verdict + " On European roulette the games end sooner, and only "
+            f"{100 * R['frac_top']:.1f} percent at a hundred."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -6,7 +6,7 @@ from explainer.quant import *  # noqa: F403
 from videos.quant.quant7.common import ALT, BAD, FC, GOOD, PART, RET, VOL, load, real_data, tbar
 
 MODEL_C = {"EWMA": GREY_B, "GARCH": FC, "GJR": FC, "HAR": VOL, "HARQ": VOL, "log-HAR": GOOD, "LSTM": ALT,
-           "Transformer": ALT}
+           "Transformer": ALT, "HARNet": RET}
 
 
 class March(VoiceoverScene):
@@ -18,8 +18,8 @@ class March(VoiceoverScene):
         self.scaling(load("scaling"))
 
     def card(self):
-        c = chapter_card(5, r"March 2020", r"What did each model say the day before?", lit=(2020,), part=PART)
-        with self.voiceover("Chapter five. March 2020."):
+        c = chapter_card(16, r"March 2020", r"What did each model say the day before?", lit=(2020,), part=PART)
+        with self.voiceover("Chapter sixteen. March 2020."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
@@ -159,19 +159,22 @@ class March(VoiceoverScene):
             wrapped_label(r"$\sqrt{T}$ assumes volatility stays where it is. GARCH says it mean-reverts, at a half-life of "
                           r"about two months", 4.4, 20, GREY_A),
             wrapped_label(r"also wrong when returns are autocorrelated (Lo--MacKinlay variance ratios) and for "
-                          r"quantiles of fat-tailed returns: a 1-day 99\% VaR times $\sqrt{10}$ is not the 10-day VaR",
-                          4.4, 20, GREY_A),
+                          r"quantiles of fat-tailed returns: a 1-day 99\% VaR times $\sqrt{10}$ is not the 10-day VaR "
+                          r"(Part 40); the RiskMetrics Technical Document (1996) warns that $\sqrt{T}$ assumes constant "
+                          r"variance", 4.4, 19, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4).align_to(g, DOWN)
         with self.voiceover(
             "If daily returns are independent with constant volatility, variances add, and volatility grows with the "
             "square root of time: two point two percent over a week, sixteen over a year. <bookmark mark='a'/> On "
             "the thirteenth of March 2020, GARCH put the next day's volatility of the American market at "
             f"{100 * s['spot_vol']:.0f} percent a year. The square-root rule carries that forward forever. "
-            "<bookmark mark='b'/> GARCH does not: volatility mean-reverts toward its long-run "
+            "<bookmark mark='b'/> Pause and predict: what does GARCH say for the average over the next year? It does "
+            "not carry the spike forward: volatility mean-reverts toward its long-run "
             f"{100 * un:.0f} percent, so the average over the coming year is {100 * gv[-1]:.0f}. "
             "<bookmark mark='c'/> The rule also fails when returns are autocorrelated, and for the tails: ten-day "
-            "value at risk is not the one-day figure times the square root of ten when returns are fat-tailed. This "
-            "is the term structure of volatility, and Part ten will read it from option prices."
+            "value at risk is not the one-day figure times the square root of ten when returns are fat-tailed, a "
+            "point Part forty returns to. RiskMetrics' own technical document warned that the rule assumes constant "
+            "variance. This is the term structure of volatility, and Part ten will read it from option prices."
         ) as vo:
             self.play(FadeIn(ans))
             vo.wait_until("a")

@@ -54,12 +54,13 @@ class Stopping(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "A stopping time decides whether to stop now using only what has happened up to now. "
-            "<bookmark mark='a'/> A walk runs toward a curtain hiding the future. Rule A rings the first time it "
-            "reaches plus one, the moment it happens. <bookmark mark='b'/> Rule B rings at the highest point of the "
-            "first hundred steps. Pull back the curtain: to know that was the top, it needed the future. "
-            "<bookmark mark='c'/> Rule B is not a stopping time. Hitting times and fixed dates are allowed; the peak, "
-            "or the day before a crash, are not."
+            "Optional stopping needs a precise notion of when to stop. A stopping time decides whether to stop now "
+            "using only what has happened up to now. <bookmark mark='a'/> A fair walk runs toward a curtain that hides "
+            "the future. Rule A rings the first time the walk reaches plus one, the moment it happens. "
+            "<bookmark mark='b'/> Rule B rings at the highest point of the first hundred steps. Pull back the "
+            "curtain: to know this was the top, it needed the whole path ahead. <bookmark mark='c'/> Rule B is not a "
+            "stopping time. The first time a target is hit, a fixed date, the first time wealth doubles: allowed. "
+            "The peak, the last visit to zero, the day before a crash: forbidden, however tempting."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(rules[0]))
             self.add(live, curtain)
@@ -99,14 +100,16 @@ class Stopping(VoiceoverScene):
                     r"(Shreve I, ch.\ 5); its slope at $\alpha = 1$ is infinite")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.0, buff=0.68, edge=6.9)
         with self.voiceover(
-            "Two facts, with proofs. A stopped martingale is the transform with stake one until the stopping time. "
-            "<bookmark mark='a'/> That stake is decided a step ahead, so the stopped process is a martingale. "
-            "<bookmark mark='b'/> Now a paradox. Let tau be the first time a fair walk reaches plus one. By "
-            "reflection, the chance it has not arrived after n steps is the chance the walk sits at zero or one, about "
-            "root two over pi n. <bookmark mark='c'/> So it arrives with probability one, yet the expected time is "
-            "infinite. <bookmark mark='d'/> Wald's identity proves it in a line: a finite expected time would make "
-            "the expected position zero, but it is one. <bookmark mark='e'/> Stopping the exponential martingale "
-            "gives tau's whole law."
+            "Two facts, with proofs. First, stopping a martingale leaves it a martingale: the stopped walk is the "
+            "transform of chapter four with stake one until the stopping time and zero after. <bookmark mark='a'/> "
+            "Whether you are still playing at step k is decided by step k minus one, so the stake is predictable. "
+            "<bookmark mark='b'/> Second, a paradox. Let tau be the first time a fair walk reaches plus one. By the "
+            "reflection principle, the chance it has not arrived after n steps is the chance the walk sits at zero "
+            "or one, about the square root of two over pi n. <bookmark mark='c'/> So it arrives with probability one, "
+            "but those chances fall so slowly that the expected time is infinite. <bookmark mark='d'/> Wald's "
+            "identity proves it in a line: a finite expected time would make the expected position zero, but the "
+            "position at tau is one. <bookmark mark='e'/> Stopping the exponential martingale gives tau's whole law "
+            "through its generating function, and its slope at one, the mean, is infinite."
         ) as vo:
             step(0)
             vo.wait_until("a")

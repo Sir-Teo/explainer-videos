@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant2.common import GAIN, LOSS, PART, TRADE, lab, load
+from videos.quant.quant2.common import ro, GAIN, LOSS, PART, TRADE, lab, load
 
 C_ = {r"D(p)": GAIN, r"S(p)": LOSS, r"V(p)": QC.IDEA}
 
@@ -64,10 +64,10 @@ class Auction(VoiceoverScene):
             n = int(k.get_value())
             v = arr[max(n - 1, 0)]
             return float(v) if np.isfinite(v) else 0.0
-        r1 = readout(r"\text{orders in:}", lambda: k.get_value(), digits=0, font_size=28)
-        r2 = readout(r"\text{indicative price:}", lambda: at(pr), digits=2, font_size=28, color=QC.IDEA)
-        r3 = readout(r"\text{matched:}", lambda: at(vol), digits=0, font_size=28)
-        r4 = readout(r"\text{imbalance:}", lambda: at(imb), digits=0, font_size=28, color=GREY_A)
+        r1 = ro(r"\text{orders in:}", lambda: k.get_value(), digits=0, font_size=28)
+        r2 = ro(r"\text{indicative price:}", lambda: at(pr), digits=2, font_size=28, color=QC.IDEA)
+        r3 = ro(r"\text{matched:}", lambda: at(vol), digits=0, font_size=28)
+        r4 = ro(r"\text{imbalance:}", lambda: at(imb), digits=0, font_size=28, color=GREY_A)
         panel = VGroup(r1, r2, r3, r4).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.6).shift(UP * 1.2)
         leg = legend([(GAIN, r"demand: bids at this price or higher"), (LOSS, r"supply: asks at this price or lower")],
                      font_size=19).next_to(panel, DOWN, buff=0.5).align_to(panel, LEFT)

@@ -58,18 +58,17 @@ class Frontier(VoiceoverScene):
             if r_.width > 12.8:
                 r_.scale_to_fit_width(12.8)
         with self.voiceover(
-            "Ville's idea is now a fast-moving field. Its foundations: e-values can be combined across many tests, "
-            "with the false discovery rate controlled under any dependence, by Ruodu Wang and Aaditya Ramdas in 2022; "
-            "and the 2023 survey by Ramdas, Peter Grünwald, Vladimir Vovk and Glenn Shafer that mapped the subject. "
-            "<bookmark mark='a'/> Johannes Ruf, Martin Larsson, Wouter Koolen and Ramdas extended Ville's theorem to "
-            "composite hypotheses: an event is impossible exactly when some e-process blows up on it. Ian "
-            "Waudby-Smith and Ramdas estimated means by betting, the confidence sequences of chapter sixteen, and "
-            "Shubhanshu Shekhar and Ramdas tested whether two distributions differ, by betting. "
-            "<bookmark mark='b'/> Grünwald, Rianne de Heide and Koolen's safe testing was read before the Royal "
-            "Statistical Society in 2024, and Grünwald showed that e-values let you choose the significance level "
-            "after seeing the data. <bookmark mark='c'/> Larsson, Ramdas and Ruf showed that the best e-variable is "
-            "finance's numéraire portfolio. Lasse Fischer and Ramdas made permutation tests anytime-valid, which "
-            "matters for backtests. And in 2025 Ramdas and Wang collected it all in a monograph."
+            "Ville's idea is now a fast-moving field. Its foundations: Ruodu Wang and Aaditya Ramdas showed in 2022 "
+            "that e-values control false discoveries under any dependence, and a 2023 survey by Ramdas, Grünwald, "
+            "Vovk and Shafer mapped the subject. <bookmark mark='a'/> Ruf, Larsson, Koolen and Ramdas extended "
+            "Ville's theorem to composite hypotheses: an event is impossible exactly when some e-process blows up on "
+            "it. Waudby-Smith and Ramdas estimated means by betting, the confidence sequences of chapter sixteen, "
+            "and Shekhar and Ramdas tested whether two distributions differ. <bookmark mark='b'/> Grünwald, de Heide "
+            "and Koolen's safe testing was read before the Royal Statistical Society in 2024, and Grünwald showed "
+            "that e-values let you choose the significance level after seeing the data. <bookmark mark='c'/> "
+            "Larsson, Ramdas and Ruf showed that the best e-variable is finance's numéraire portfolio; Fischer and "
+            "Ramdas made permutation tests anytime-valid, which matters for backtests; and in 2025 Ramdas and Wang "
+            "collected it all in a monograph."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows[:2]], lag_ratio=0.5))
             vo.wait_until("a")
@@ -159,16 +158,13 @@ class Frontier(VoiceoverScene):
                    else "here both happen to stay near their target." if e_ok else
                    "here even e-BH overshoots, a warning about small samples of seeds.")
         with self.voiceover(
-            "Finally the frontier at work on a real desk problem. Two hundred strategies are watched every day for "
-            "ten years; twenty have a true daily Sharpe of point zero eight, the rest none. Each is monitored by a "
-            "learning e-process, and every day the desk applies e-BH, Wang and Ramdas's rule, at ten percent. "
-            "<bookmark mark='a'/> The rule is five lines: sort the e-values and reject the largest k whose values "
-            "clear the number of strategies over alpha times k. <bookmark mark='b'/> On the left, the false discovery "
-            "proportion over twenty seeds; on the right, discoveries. The ordinary approach, Benjamini and "
-            "Hochberg on each day's t-test p-values, finds more, faster. <bookmark mark='c'/> But a desk peeks: "
-            "suppose it acts on the first day it has ten discoveries. Then " + verdict + " <bookmark mark='d'/> "
-            "Does e-BH's guarantee survive peeking? Yes: an e-process stopped at any time is still an e-value. Part "
-            "twenty-six builds its backtesting on this."
+            "The frontier on a desk problem. Two hundred strategies watched daily for ten years, twenty with a real "
+            "edge; each monitored by a learning e-process, with e-BH applied every day at ten percent. "
+            "<bookmark mark='a'/> The rule is five lines: reject the largest k e-values that clear the number of "
+            "strategies over alpha times k. <bookmark mark='b'/> Benjamini and Hochberg on daily t-tests finds more, "
+            "faster. <bookmark mark='c'/> But suppose the desk acts on the first day it has ten discoveries. Then "
+            + verdict + " <bookmark mark='d'/> An e-process stopped at any time is still an e-value. Part twenty-six "
+            "builds on this."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), Create(tenp), FadeIn(leg))
             vo.wait_until("a")

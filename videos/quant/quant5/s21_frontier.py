@@ -91,14 +91,21 @@ class Frontier(VoiceoverScene):
         beats_boot = nm < ev["bootstrap"]["mmd"]
         beats_gbm = nm < ev["gbm"]["mmd"]
         kurt_gap = abs(ev["nsde_kurt_mean"] - r["kurtosis"]) < abs(ev["bootstrap"]["kurtosis"] - r["kurtosis"])
-        v1 = ("On the signature distance to 2020, the neural SDE beats both baselines."
-              if beats_boot and beats_gbm else
-              "On the signature distance to 2020, the neural SDE beats geometric Brownian motion but not the simple "
-              "bootstrap of past days." if beats_gbm else
-              "On the signature distance to 2020, the neural SDE does not beat even geometric Brownian motion.")
-        v2 = (" Its tails are closer to 2020's than the bootstrap's." if kurt_gap else
-              " And the bootstrap, which simply reuses real days, gets the fat tails closer.")
-        verdict = v1 + v2
+        if beats_boot and beats_gbm:
+            verdict = ("On the signature distance to 2020 the neural SDE beats both baselines, and its tails are closer "
+                       "to 2020's than the bootstrap's." if kurt_gap else
+                       "On the signature distance to 2020 the neural SDE beats both baselines, but the bootstrap, which "
+                       "reuses real days, gets the fat tails closer.")
+        elif beats_gbm:
+            verdict = ("The neural SDE beats geometric Brownian motion on the signature distance but not the simple "
+                       "bootstrap of past days, though its tails are closer to 2020's." if kurt_gap else
+                       "The neural SDE beats geometric Brownian motion on the signature distance, but the simple "
+                       "bootstrap of past days beats it there and gets the fat tails closer too.")
+        else:
+            verdict = ("On the signature distance to 2020 the neural SDE does not beat even geometric Brownian motion, "
+                       "though its tails are closer than the bootstrap's." if kurt_gap else
+                       "On the signature distance to 2020 the neural SDE does not beat even geometric Brownian motion, "
+                       "and the bootstrap gets the fat tails closer.")
         note_ = wrapped_label(r"one year of hold-out, 32-day windows, distances of expected signatures (depth 4); the "
                               r"model was registered with the trial counter before 2020 was scored", 11.0, 18, GREY_B)
         note_.next_to(grid, DOWN, buff=0.4)
@@ -107,14 +114,12 @@ class Frontier(VoiceoverScene):
                         r"under growth conditions (Chevyrev and Lyons 2016).", width=8.4, font_size=20)
         VGroup(pc, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Then the honest test, on 2020, which the model never saw. Three numbers: the signature distance to 2020's "
-            "windows, the excess kurtosis of daily returns, and the correlation of absolute returns from one day to the "
-            "next, the signature of volatility clustering. Two baselines at equal data: geometric Brownian motion "
-            "fitted to the same two years, and a bootstrap that redraws past days at random. "
-            "<bookmark mark='a'/> " + verdict + " A small generator, trained in minutes on two years of data, is not "
-            "yet a market. <bookmark mark='b'/> A pause: if a generator matches the expected signature up to depth "
-            "four, does it match the distribution of the largest move in a window? Not necessarily: the expected "
-            "signature pins down the law only with all its levels, and under growth conditions."
+            "Then the honest test, on 2020, which the model never saw: the signature distance, the fat tails, and the "
+            "day-to-day correlation of absolute returns, against geometric Brownian motion and a bootstrap of past "
+            f"days, at equal data. <bookmark mark='a'/> {verdict} A small generator trained in minutes is not yet a "
+            "market. <bookmark mark='b'/> A pause: if a generator matches the expected signature to depth four, does "
+            "it match the law of a window's largest move? Not necessarily: the expected signature pins down the law "
+            "only with all its levels."
         ) as vo:
             self.play(FadeIn(VGroup(*cells[:4])), FadeIn(VGroup(*cells[4:8])))
             vo.wait_until("a")
@@ -150,14 +155,13 @@ class Frontier(VoiceoverScene):
             rows.scale_to_fit_height(6.6)
         rows.to_edge(LEFT, buff=0.5)
         with self.voiceover(
-            "Where the research is. Issa, Horvath, Lemercier and Salvi train neural SDEs with scoring rules built on "
-            "the signature kernel, our loss's richer cousin. Cuchiero and coauthors write option prices as linear "
-            "functions of a signature and calibrate to the S and P and the VIX at once. Walker and coauthors put "
-            "log-signatures inside sequence models. <bookmark mark='a'/> The roughness debate of chapter fifteen "
-            "continues, with Cont and Das on one side, and Guyon and Lekeufack's finding that volatility is mostly "
-            "driven by past returns. Two open books cover signatures in finance. <bookmark mark='b'/> And in 2025 "
-            "Degenne, Ledvinka, Marion and Pfaffelhuber formalized the construction of Brownian motion in the Lean "
-            "theorem prover: chapter one's theorem, checked by a computer."
+            "Where the research is. Issa, Horvath, Lemercier and Salvi train neural SDEs with signature-kernel "
+            "scores, our loss's richer cousin. Cuchiero and coauthors write option prices as linear functions of a "
+            "signature and calibrate to the S and P and the VIX at once. Walker and coauthors put log-signatures in "
+            "sequence models. <bookmark mark='a'/> Cont and Das, and Guyon and Lekeufack, continue the roughness "
+            "debate, and two open books cover signatures in finance. <bookmark mark='b'/> And in 2025 Degenne and "
+            "coauthors formalized the construction of Brownian motion in the Lean theorem prover: chapter one, "
+            "checked by a computer."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r_) for r_ in rows[:3]], lag_ratio=0.4))
             vo.wait_until("a")

@@ -51,12 +51,10 @@ class Rough(VoiceoverScene):
         with self.voiceover(
             "Brownian increments are independent. In 1968 Benoit Mandelbrot and John Van Ness generalised them: "
             "fractional Brownian motion, whose increments over a lag have variance equal to the lag to the power two "
-            "H. H is the Hurst exponent. <bookmark mark='a'/> Here is one path, built from the same fixed random "
-            "numbers at every H, as a dial turns H from point nine five down to point zero five. "
-            "<bookmark mark='b'/> At high H the increments are positively correlated: the path trends and looks "
-            "smooth. At a half, highlighted, it is Brownian motion. Below a half, neighbouring increments are "
-            "negatively correlated, and the path becomes a jagged scrawl. The correlation of neighbouring increments "
-            "changes sign exactly at a half."
+            "H. <bookmark mark='a'/> Here is one path, built from the same random numbers at every H, as a dial turns "
+            "H down from point nine five. <bookmark mark='b'/> At high H the increments are positively correlated and "
+            "the path trends. At a half, highlighted, it is Brownian motion. Below a half, neighbouring increments "
+            "are negatively correlated, and the path becomes a jagged scrawl."
         ) as vo:
             self.play(FadeIn(g), FadeIn(cap), Create(lines[order[0]]), FadeIn(lab[order[0]]))
             vo.wait_until("a")
@@ -94,16 +92,13 @@ class Rough(VoiceoverScene):
                         rf"Yes: $\rho(1) = 2^{{-0.8}} - 1 = {fm['rho1']['0.10']:.2f}$.", width=4.6, font_size=19)
         VGroup(pc, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DL, buff=0.3)
         with self.voiceover(
-            "The covariance follows from the definition. Mandelbrot and Van Ness wrote the process as a Brownian "
-            "integral with a power-law memory kernel: every past shock still matters, with a weight that decays like a "
-            "power of its age. <bookmark mark='a'/> Now the sum of squared increments on a grid of n steps. By "
-            "self-similarity it is n to the power one minus two H. <bookmark mark='b'/> Simulated on two hundred paths: "
-            "for H point three the sum blows up, for point seven it vanishes, and only Brownian motion lands on one. "
-            "A semimartingale must have finite quadratic variation, so fractional Brownian motion with H not a half is "
-            "not one, Itô's calculus does not apply, and, as Chris Rogers showed in 1997, a stock price driven by it "
-            "would admit arbitrage. Nothing forbids volatility from being rough. <bookmark mark='c'/> A pause: at H "
-            "equal to point one, is a rise more likely to be followed by a fall? Yes: the neighbouring correlation is "
-            f"{fm['rho1']['0.10']:.2f}."
+            "Mandelbrot and Van Ness wrote it as a Brownian integral with a power-law memory kernel: every past shock "
+            "still matters. <bookmark mark='a'/> The sum of squared increments on a grid of n steps is n to the power "
+            "one minus two H. <bookmark mark='b'/> On two hundred paths it blows up for H point three and vanishes "
+            "for point seven; only Brownian motion lands on one. So for H not a half it is not a semimartingale, and, "
+            "as Chris Rogers showed in 1997, a price driven by it would admit arbitrage. Nothing forbids volatility "
+            "from being rough. <bookmark mark='c'/> A pause: at H point one, is a rise more likely to be followed by "
+            f"a fall? Yes: the neighbouring correlation is {fm['rho1']['0.10']:.2f}."
         ) as vo:
             step(0)
             step(1)
@@ -134,12 +129,11 @@ class Rough(VoiceoverScene):
         outs = ["fbm(H, 4096); hurst_from_increments(path)    # Part 5's test",
                 "recovers H = 0.1, 0.5, 0.8 to within 0.06; Var B_1 = 1 over 4,000 paths"]
         with self.voiceover(
-            "How do you simulate it exactly? Increments of fractional Brownian motion are a stationary Gaussian "
-            "sequence with a known covariance. Davies and Harte embedded that covariance in a circulant matrix, whose "
-            "eigenvalues are a Fourier transform. <bookmark mark='a'/> Multiply complex Gaussian noise by the square "
-            "roots of the eigenvalues, transform back, and the increments come out exactly right, in n log n "
-            "operations. <bookmark mark='b'/> The House's test checks that the Hurst estimator recovers H from paths "
-            "made this way."
+            "To simulate it exactly, Davies and Harte embedded the covariance in a circulant matrix, whose "
+            "eigenvalues are a Fourier transform. <bookmark mark='a'/> Multiply complex Gaussian noise by their "
+            "square roots, transform back, and the increments come out exact, in n log n operations. "
+            "<bookmark mark='b'/> The House's test checks that the Hurst estimator recovers H from paths made this "
+            "way."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -179,13 +173,12 @@ class Rough(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.4)
         src = real_data(r"Binance BTCUSDT one-minute candles, 2019--2020; the House's \texttt{hurst\_from\_increments}")
         with self.voiceover(
-            "How rough is volatility? Measure Bitcoin's volatility each day from its five-minute returns, for "
-            f"{r['n_days']} days, and take logs. <bookmark mark='a'/> For each power q, see how the average q-th power "
-            "of its changes grows with the lag. For fractional Brownian motion the exponent is q times H: a straight "
-            "line through the origin. <bookmark mark='b'/> The points lie on such a line, with slope about "
-            f"{h['H']:.2f}, far below Brownian motion's half, dashed. In 2018 Jim Gatheral, Thibault Jaisson and "
-            "Mathieu Rosenbaum found H near a tenth for stock indices, in a paper titled \"Volatility is rough\". "
-            "Bitcoin seems to agree."
+            "How rough is volatility? Measure Bitcoin's volatility each day from five-minute returns, for "
+            f"{r['n_days']} days, and take logs. <bookmark mark='a'/> For fractional Brownian motion, the average q-th "
+            "power of the changes grows with the lag at exponent q times H: a line through the origin. "
+            f"<bookmark mark='b'/> Bitcoin's points lie on such a line with slope about {h['H']:.2f}, far below a "
+            "half. In 2018 Gatheral, Jaisson and Rosenbaum found H near a tenth for stock indices: \"Volatility is "
+            "rough\"."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(line), run_time=2)
             vo.wait_until("a")
@@ -224,13 +217,12 @@ class Rough(VoiceoverScene):
                               r"open; Part 14 returns to it with option prices, which see roughness more directly.", 6.0,
                               19, GREY_A).to_corner(DR, buff=0.35)
         with self.voiceover(
-            "Now the caveat, computed. Rama Cont and Purba Das argued in 2024 that realized volatility can look rough "
-            "even when the volatility underneath is not. Test it. Simulate five hundred days in which log volatility is "
-            "an ordinary Ornstein-Uhlenbeck process, H exactly a half, mean-reverting over about a week; a price every "
-            "second; and five basis points of noise on every observation. Then measure daily volatility the way we "
-            "did for Bitcoin. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> So a low H in data is "
-            "consistent with roughness, and also with fast mean reversion seen through a coarse lens. Option prices "
-            "help decide between them, and Part fourteen takes up the debate."
+            "Now the caveat, computed. Rama Cont and Purba Das argued in 2024 that measured volatility can look rough "
+            "when the true volatility is not. Simulate five hundred days with an ordinary Ornstein-Uhlenbeck log "
+            "volatility, H exactly a half, mean-reverting in a week, a price every second and five basis points of "
+            f"noise, and measure it as we did Bitcoin. <bookmark mark='a'/> {verdict} <bookmark mark='b'/> So a low H "
+            "in data fits roughness, and also fast mean reversion seen through a coarse lens; Part fourteen takes up "
+            "the debate with option prices."
         ) as vo:
             self.play(FadeIn(g), Create(l2), Create(l1), FadeIn(leg), run_time=2)
             vo.wait_until("a")

@@ -59,16 +59,15 @@ class Girsanov(VoiceoverScene):
         res = MathTex(rf"\textstyle\sum Z\,W_T / \sum Z = {g['wmean']:.3f} \quad (\theta T = {th:.0f})", font_size=28,
                       color=QCOL).to_corner(UR, buff=0.35)
         with self.voiceover(
-            "Here is the theorem as a picture. Three hundred Brownian paths with no drift, in amber, the colour of the "
-            "real-world measure P. Their endpoints stand in a histogram on the right: a Gaussian centred at zero. "
-            "<bookmark mark='a'/> Now turn a dial theta from zero to one. The paths do not move. Instead each path's "
-            "weight becomes Z: the exponential of theta times its endpoint, minus a half theta squared. Paths that "
-            "ended high get heavier and turn violet, the colour of the new measure Q; paths that ended low fade. "
-            "<bookmark mark='b'/> The weighted histogram slides to the right, to a Gaussian centred at theta. "
-            f"Over two hundred thousand paths, the weighted mean endpoint is {g['wmean']:.3f}. <bookmark mark='c'/> "
-            "On the right, the honest way to get drift: move every path up by theta t. Its histogram is the same "
-            "Gaussian. Moving paths and re-weighting them give the same distribution. Under Q, the original, "
-            "unmoved paths are a Brownian motion with drift theta."
+            "Here is the theorem as a picture. Three hundred Brownian paths with no drift, in amber, the colour of "
+            "the real-world measure P; their endpoints form a histogram centred at zero. <bookmark mark='a'/> Now "
+            "turn a dial theta from zero to one. The paths do not move. Instead each path's weight becomes Z, the "
+            "exponential of theta times its endpoint minus half theta squared. Paths that ended high grow heavy and "
+            "violet, the colour of the new measure Q; paths that ended low fade. <bookmark mark='b'/> The weighted "
+            "histogram slides to a Gaussian centred at theta: over two hundred thousand paths, the weighted mean "
+            f"endpoint is {g['wmean']:.3f}. <bookmark mark='c'/> On the right, the honest way to get drift: every path "
+            "moved up by theta t. Its histogram is the same. Re-weighting paths and moving them give the same "
+            "distribution."
         ) as vo:
             self.play(FadeIn(g1), LaggedStart(*[Create(p) for p in paths], lag_ratio=0.003, run_time=3), FadeIn(z))
             self.play(LaggedStart(*[GrowFromEdge(b, LEFT) for b in hp], lag_ratio=0.03))
@@ -109,17 +108,15 @@ class Girsanov(VoiceoverScene):
                           r"Girsanov (1960): the same for an adapted drift $\theta_t$.", color=QCOL, width=6.0,
                           font_size=19).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "The proof starts where Part four left off, with a coin. On a grid, the likelihood ratio of a drifting "
-            "Brownian path against a driftless one is a product of ratios of Gaussian densities; completing the square "
-            "gives an exponential of theta times the increments, minus a half theta squared times the steps. "
-            "<bookmark mark='a'/> In the limit that is Z, and by the lemma it solves d Z equals theta Z d W: a "
-            "stochastic exponential, a martingale. Cameron and Martin had this in 1944 for deterministic shifts. "
-            "<bookmark mark='b'/> Girsanov's step: subtract the drift from W and multiply by Z. By the product rule, "
-            "the drift from the subtraction cancels the drift from the covariation exactly. <bookmark mark='c'/> So "
-            "Z times W tilde is a martingale under P, which by Bayes's rule means W tilde is a martingale under Q; its "
-            "quadratic variation is still t, and by Lévy's characterization it is a Brownian motion. "
-            "<bookmark mark='d'/> One condition: Z must have mean one. Novikov's condition guarantees it. Without it, "
-            "Z can be a strict supermartingale and Q is not a probability at all."
+            "The proof starts from Part four's coin. On a grid, the likelihood ratio of drifting against driftless "
+            "increments is a ratio of Gaussian densities; completing the square gives an exponential. "
+            "<bookmark mark='a'/> In the limit that is Z, which by the lemma solves d Z equals theta Z d W: a "
+            "stochastic exponential. Cameron and Martin had it in 1944 for deterministic shifts. <bookmark mark='b'/> "
+            "Girsanov's step: subtract the drift from W and multiply by Z. By the product rule, the two drifts cancel "
+            "exactly. <bookmark mark='c'/> So W tilde is a martingale under Q, by Bayes's rule; its quadratic "
+            "variation is still t; and by Lévy's characterization it is a Brownian motion. <bookmark mark='d'/> One "
+            "condition: Z must have mean one. Novikov's condition guarantees it; without it, Q may not even be a "
+            "probability."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -163,16 +160,14 @@ class Girsanov(VoiceoverScene):
         pc.to_corner(UL, buff=0.3)
         ans.next_to(pc, DOWN, buff=0.15).align_to(pc, LEFT)
         with self.voiceover(
-            "When does it fail? A pause first: under P, what is the expected value of Z? <bookmark mark='a'/> One, "
-            f"when Novikov's condition holds, and a hundred thousand samples at T equals one give {g['EZ']:.4f}. "
-            "<bookmark mark='b'/> But let the horizon grow, with theta a half. The effective sample size, the number "
-            "of paths that really carry weight, falls like e to the minus theta squared T. "
-            f"At T equals sixteen, {100 * ess[2]['ess']:.1f} percent of the paths carry the weight. At sixty-four, "
-            "theory says a ten-millionth, fewer than one path in our sample: the measured weights no longer even "
-            f"average one, but {ess[-1]['mean_w']:.2f}. <bookmark mark='c'/> On an infinite horizon the two "
-            "measures are singular: under P the average slope of the path goes to zero, under Q to theta, and a "
-            "single infinitely long path tells you which world you are in. Girsanov works on finite horizons, which "
-            "is all pricing needs, and the next chapter puts it to work."
+            "When does it fail? A pause: under P, what is the expected value of Z? <bookmark mark='a'/> One, when "
+            f"Novikov's condition holds; a hundred thousand samples give {g['EZ']:.4f}. <bookmark mark='b'/> Now let "
+            "the horizon grow, with theta a half. The effective number of paths that carry weight falls like e to the "
+            f"minus theta squared T: {100 * ess[2]['ess']:.1f} percent of them at T equals sixteen; at sixty-four, "
+            "fewer than one path in our sample, and the measured weights no longer even average one, but "
+            f"{ess[-1]['mean_w']:.2f}. <bookmark mark='c'/> On an infinite horizon the two measures are singular: one "
+            "infinitely long path reveals its drift. Girsanov works on finite horizons, which is all that pricing "
+            "needs."
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")

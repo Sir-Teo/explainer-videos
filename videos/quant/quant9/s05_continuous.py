@@ -1,87 +1,219 @@
 from __future__ import annotations
 
+import numpy as np
+
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant9.common import ALT, CALL, FWD, PART, Q_C
+from videos.quant.quant9.common import (ALT, ARB, CALL, FWD, P_C, PART, Q_C, answer_under, illustration, load,
+                                        pause_at)
 
 
 class Continuous(VoiceoverScene):
     def construct(self):
+        g = load("girsanov")
         self.card()
         self.theorems()
-        self.numeraire()
+        self.girsanov()
+        self.reweight(g)
+        self.result(g)
+        self.predict(g)
 
     def card(self):
-        c = chapter_card(4, r"Continuous time, and changing numeraire", r"What does no free lunch mean with infinitely "
-                         r"many trades?", lit=(1981,), part=PART)
-        with self.voiceover("Chapter four. Continuous time, and changing numeraire."):
+        c = chapter_card(9, r"Continuous time: Girsanov as reweighting", r"What does changing the measure do to a "
+                         r"path?", lit=(1981,), part=PART)
+        with self.voiceover("Chapter nine. Continuous time: Girsanov as reweighting."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
     def theorems(self):
         items = [
-            (r"1979", r"Harrison and Kreps", r"finitely many states and dates: no arbitrage $\iff$ an equivalent "
+            (r"1979", r"Harrison and Kreps", r"finitely many dates and states: no arbitrage $\iff$ an equivalent "
                                              r"martingale measure; prices are expectations under it"),
-            (r"1981", r"Harrison and Pliska", r"continuous trading: self-financing strategies as stochastic integrals "
-                                              r"(Part 5); complete $\iff$ the measure is unique"),
-            (r"1990", r"Dalang, Morton and Willinger", r"discrete time, any probability space: the theorem holds without "
-                                                       r"finiteness"),
-            (r"1994", r"Delbaen and Schachermayer", r"continuous time in general: ``no free lunch with vanishing risk'' "
-                                                    r"$\iff$ an equivalent (local, then sigma-) martingale measure"),
+            (r"1981", r"Harrison and Pliska", r"continuous trading: gains are stochastic integrals (Part 5); the "
+                                              r"market is complete $\iff$ the measure is unique, and martingale "
+                                              r"representation gives the hedge"),
         ]
         cards = VGroup(*[history_card(y, n, t, width=6.2, font_size=21) for y, n, t in items])
-        cards.arrange_in_grid(rows=2, cols=2, buff=(0.35, 0.35)).move_to(UP * 0.4)
-        if cards.width > 13.0:
-            cards.scale_to_fit_width(13.0)
-        foot = MathTex(r"\frac{S_t}{B_t} = \mathbb{E}^Q\!\left[\frac{S_T}{B_T}\,\Big|\,\mathcal{F}_t\right]", font_size=38,
-                       color=Q_C).to_edge(DOWN, buff=0.45)
+        cards.arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(UP * 0.9)
+        foot = MathTex(r"\frac{S_t}{B_t} = \mathbb{E}^Q\!\left[\frac{S_T}{B_T}\,\Big|\,\mathcal{F}_t\right]", font_size=40,
+                       color=Q_C).next_to(cards, DOWN, buff=0.6)
+        fn = wrapped_label(r"in continuous time a strategy is self-financing when its gains are the stochastic integral "
+                           r"$\int \theta\, dS$; the theorem then needs admissible strategies (chapter 10)", 11.0, 21,
+                           GREY_A).next_to(foot, DOWN, buff=0.35)
         with self.voiceover(
-            "The one-period theorem grew up in four steps. Michael Harrison and David Kreps, in 1979, proved it for "
-            "finitely many states and dates: no arbitrage if and only if there is an equivalent martingale measure, "
-            "and prices are expectations under it. <bookmark mark='a'/> Harrison and Stanley Pliska, in 1981, "
-            "brought in continuous trading, with the stochastic integrals of Part five as trading gains, and showed "
-            "that a market is complete exactly when the measure is unique. <bookmark mark='b'/> Robert Dalang, "
-            "Andrew Morton and Walter Willinger removed the finiteness in discrete time in 1990. <bookmark mark='c'/> "
-            "And in 1994 Freddy Delbaen and Walter Schachermayer found the right condition for continuous time, no "
-            "free lunch with vanishing risk, and proved the general theorem. In every version the conclusion is the "
-            "same: prices, divided by the bank account, are martingales under Q, the fair games of Part four."
+            "The one-period theorem grew up. Michael Harrison and David Kreps, in 1979, proved it for many dates: no "
+            "arbitrage if and only if there is an equivalent martingale measure, under which prices divided by the "
+            "bank account are fair games. <bookmark mark='a'/> Harrison and Stanley Pliska, in 1981, brought in "
+            "continuous trading, with the stochastic integrals of Part five as trading gains, and proved the second "
+            "theorem: the market is complete exactly when the measure is unique, and then the martingale "
+            "representation theorem hands you the hedge. <bookmark mark='b'/> In continuous time one caution "
+            "appears, about which strategies are allowed; the next chapter is about it. First, what Q looks like "
+            "when there are paths."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(cards[1], shift=UP * 0.2))
+            self.play(FadeIn(cards[1], shift=UP * 0.2), FadeIn(foot))
             vo.wait_until("b")
-            self.play(FadeIn(cards[2], shift=UP * 0.2))
-            vo.wait_until("c")
-            self.play(FadeIn(cards[3], shift=UP * 0.2), FadeIn(foot))
-        self.wait(0.4)
+            self.play(FadeIn(fn))
+        self.wait(0.3)
         self.clear_scene()
 
-    def numeraire(self):
-        rows = [cmath(r"\frac{V_0}{N_0}", r"=", r"\mathbb{E}^{Q^N}\!\left[\frac{V_T}{N_T}\right],\qquad "
-                      r"\frac{dQ^N}{dQ} = \frac{N_T / N_0}{B_T / B_0}", font_size=34, colors={r"\frac{V_0}{N_0}": FWD}),
-                cmath(r"V_0", r"=", r"P(0, T)\,\mathbb{E}^{T}[V_T]", font_size=36, colors={r"V_0": CALL}),
-                cmath(r"\frac{C - P}{F}", r"=", r"1 - \frac{K}{F}\quad\text{(paid in bitcoin)}", font_size=34,
-                      colors={r"\frac{C - P}{F}": Q_C})]
-        whys = [why(r"any positive asset can be the unit of account; each has its own martingale measure (Geman, El "
-                    r"Karoui and Rochet 1995)"),
-                why(r"the zero-coupon bond as numeraire: the $T$-forward measure, under which forwards are martingales "
-                    r"(Part 19); the annuity gives the swaption formula"),
-                why(r"Deribit's options use bitcoin itself as the numeraire: prices in BTC are expectations under the "
-                    r"bitcoin measure, which is why parity took this form in the hook")]
-        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.6, buff=0.8, edge=6.9)
+    def girsanov(self):
+        rows = [cmath(r"dS_t", r"=", r"\mu S_t\, dt + \sigma S_t\, dW_t", font_size=36, colors={r"dS_t": FWD}),
+                cmath(r"d\tilde S_t", r"=", r"(\mu - r)\,\tilde S_t\, dt + \sigma \tilde S_t\, dW_t,\quad \tilde S = S/B",
+                      font_size=34),
+                cmath(r"W^Q_t = W_t + \lambda t", r"\Rightarrow", r"d\tilde S_t = \sigma\tilde S_t\, dW^Q_t,\quad \lambda = "
+                      r"\frac{\mu - r}{\sigma}", font_size=34, colors={r"W^Q_t = W_t + \lambda t": Q_C}),
+                cmath(r"Z_T = \frac{dQ}{dP}", r"=", r"e^{-\lambda W_T - \frac12\lambda^2 T}", font_size=36,
+                      colors={r"Z_T = \frac{dQ}{dP}": Q_C}),
+                cmath(r"V_0", r"=", r"\mathbb{E}^P\!\left[Z_T\, \frac{X}{B_T}\right] = \mathbb{E}^Q\!\left[\frac{X}{B_T}"
+                      r"\right],\qquad \mathbb{E}^P[Z_T^2] = e^{\lambda^2 T}", font_size=32, colors={r"V_0": CALL})]
+        whys = [why(r"the stock under the real measure $P$: drift $\mu$", 21),
+                why(r"discount by the bank account $B_t = e^{rt}$: the product rule", 21),
+                why(r"absorb the excess drift into the noise: $\lambda$ is the market price of risk", 21),
+                why(r"Girsanov: under this density, $W^Q$ is a Brownian motion", 21),
+                why(r"price with $P$-paths and weights, or with $Q$-paths; the weights' second moment sets the Monte Carlo "
+                    r"cost (square the exponential, Gaussian moment generating function)", 21)]
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "There is nothing special about the bank account. Any asset with a positive price can be the unit of "
-            "account, the numeraire, and each one comes with its own martingale measure. Hélyette Geman, Nicole El "
-            "Karoui and Jean-Charles Rochet made this a tool in 1995. <bookmark mark='a'/> Choose the zero-coupon "
-            "bond maturing at T, and you get the T-forward measure, under which the price of anything paid at T is "
-            "the bond price times an expectation, and forward prices are martingales. The rates parts use it, and "
-            "the annuity numeraire for swaptions. <bookmark mark='b'/> And Deribit already does this. Its options "
-            "are priced and paid in Bitcoin, so Bitcoin is the numeraire, and that is why parity in the hook read "
-            "one minus K over F."
+            "The continuous-time state prices come from Girsanov's theorem, from Part five. The stock grows at mu "
+            "under the real measure. <bookmark mark='a'/> Divide by the bank account: the discounted stock drifts "
+            "at mu minus r. <bookmark mark='b'/> Fold that excess drift into the noise: define a new Brownian motion "
+            "shifted by lambda times t, where lambda is the excess return per unit of volatility, the market price of "
+            "risk. In the new noise the discounted stock has no drift: it is a martingale. <bookmark mark='c'/> "
+            "Girsanov says the new noise is a Brownian motion under a measure with this density, an exponential in "
+            "the final value of the old noise. <bookmark mark='d'/> So any price is a P-expectation with weights, or "
+            "a Q-expectation without them. And the weights' second moment, e to the lambda squared T, says how much "
+            "Monte Carlo accuracy the reweighting costs."
         ) as vo:
             step(0)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
+        self.wait(0.3)
+        self.clear_scene()
+
+    def reweight(self, g):
+        t, paths, Z = np.asarray(g["t"]), np.asarray(g["paths"]), np.asarray(g["Zp"])
+        gr = axes([0, 1.0], [40, 220], x_length=7.4, y_length=4.8, xlabel=r"time (years)", ylabel=r"stock price",
+                  xticks=[0, 0.5, 1.0], yticks=[50, 100, 150, 200], font_size=16)
+        gr.to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        ax = gr.ax
+        w = ValueTracker(0.0)
+        zs = Z / Z.max()
+
+        def fan():
+            a = w.get_value()
+            out = VGroup()
+            for row, z in zip(paths, zs):
+                op = (1 - a) * 0.35 + a * min(0.08 + 0.9 * z, 1.0)
+                sw = (1 - a) * 1.2 + a * (0.4 + 3.0 * z)
+                col = interpolate_color(ManimColor(P_C), ManimColor(Q_C), a)
+                m = VMobject(stroke_width=sw, stroke_color=col, stroke_opacity=op)
+                m.set_points_as_corners([ax.c2p(x, min(y, 220)) for x, y in zip(t, row)])
+                out.add(m)
+            return out
+
+        F_ = always_redraw(fan)
+        mean = always_redraw(lambda: curve(ax, t, (1 - w.get_value()) * np.asarray(g["mean_P"]) +
+                                           w.get_value() * np.asarray(g["mean_Q"]),
+                                           interpolate_color(ManimColor(P_C), ManimColor(Q_C), w.get_value()),
+                                           stroke_width=5))
+        s0 = DashedLine(ax.c2p(0, 100), ax.c2p(1, 100), color=GREY_B, stroke_width=1.5)
+        ST = np.asarray(g["ST"])
+        Zs = np.asarray(g["Z"])
+        bins = np.linspace(40, 220, 37)
+        hp, _ = np.histogram(np.clip(ST, 40, 219), bins)
+        hq, _ = np.histogram(np.clip(ST, 40, 219), bins, weights=Zs)
+        hp, hq = hp / hp.max(), hq / hq.max()
+
+        def side():
+            a = w.get_value()
+            h = (1 - a) * hp + a * hq
+            col = interpolate_color(ManimColor(P_C), ManimColor(Q_C), a)
+            x0 = ax.get_right()[0] + 0.15
+            return VGroup(*[Rectangle(width=1.3 * v, height=ax.c2p(0, bins[1])[1] - ax.c2p(0, bins[0])[1] - 0.01,
+                                      stroke_width=0, fill_color=col, fill_opacity=0.75).move_to(
+                [x0 + 0.65 * v, (ax.c2p(0, bins[i])[1] + ax.c2p(0, bins[i + 1])[1]) / 2, 0]) for i, v in enumerate(h)
+                if v > 0])
+
+        SD = always_redraw(side)
+        lab = VGroup(label(r"amber: 150 paths under $P$, drift 10\% a year", font_size=20, color=P_C),
+                     label(r"purple: the same paths, each weighted by $Z_T$", font_size=20, color=Q_C)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.35)
+        ml = label(r"thick line: the (weighted) average path", font_size=19, color=GREY_A).next_to(lab, DOWN, buff=0.15,
+                                                                                                  aligned_edge=LEFT)
+        src = illustration(rf"simulated: $\mu = {100 * g['mu']:.0f}\%$, $\sigma = {100 * g['sigma']:.0f}\%$, $r = 0$")
+        with self.voiceover(
+            "Here is what a change of measure looks like. A hundred and fifty stock paths simulated under the real "
+            "measure, with ten percent drift a year. Their average, the thick line, climbs. On the right, where they "
+            "end. <bookmark mark='a'/> Now don't move a single path. Give each one the weight Girsanov prescribes, "
+            "which depends only on where its noise ended. Paths that rose a lot get thin: they are down-weighted. "
+            "Paths that fell get thick. <bookmark mark='b'/> The weighted average flattens onto today's price: under "
+            "Q the stock is a fair game. And the histogram of endings slides to the left, from P's distribution to "
+            "Q's. Nothing about the paths changed; only how much each one counts. That is all a measure change is."
+        ) as vo:
+            self.add(F_, mean)
+            self.play(FadeIn(gr), Create(s0), FadeIn(lab[0]), FadeIn(ml), FadeIn(src))
+            self.add(SD)
+            vo.wait_until("a")
+            self.play(FadeIn(lab[1]))
+            self.play(w.animate.set_value(0.6), run_time=3)
+            vo.wait_until("b")
+            self.play(w.animate.set_value(1.0), run_time=2.5)
+        for m in (F_, mean, SD):
+            m.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    def result(self, g):
+        z = (g["price_weighted"] - g["bs"]) / g["se"]
+        verdict = (r"within two standard errors of Black--Scholes" if abs(z) < 2 else
+                   r"more than two standard errors from Black--Scholes")
+        rows = VGroup(
+            MathTex(rf"\text{{unweighted }} P\text{{-average: }} {g['price_naive']:.3f}", font_size=32, color=P_C),
+            MathTex(rf"\text{{weighted by }} Z_T:\ {g['price_weighted']:.3f} \pm {g['se']:.3f}", font_size=34, color=Q_C),
+            MathTex(rf"\text{{Black--Scholes: }} {g['bs']:.3f}", font_size=32, color=CALL),
+            label(verdict, font_size=26, color=Q_C),
+            MathTex(rf"\text{{effective sample: }} {100 * g['ess']:.1f}\%\ \text{{measured}},\ \ e^{{-\lambda^2 T}} = "
+                    rf"{100 * g['ess_pred']:.1f}\%\ \text{{predicted}}", font_size=30, color=GREY_A),
+        ).arrange(DOWN, buff=0.3).move_to(UP * 0.2)
+        head = label(rf"{g['n']:,} simulated paths, an at-the-money call".replace(",", "{,}"), font_size=28).to_edge(UP, buff=0.5)
+        tail = ("Within two standard errors of the formula. " if abs(z) < 2 else
+                "Further from the formula than two standard errors: worth a second look. ")
+        with self.voiceover(
+            f"Now with {g['n']:,} paths. The plain average of the call's payoff under P is {g['price_naive']:.2f}: "
+            "that is the wrong price, because it ignores risk. <bookmark mark='a'/> Weighted by Girsanov's density, "
+            f"the same paths give {g['price_weighted']:.2f}, with a standard error of {g['se']:.3f}, against Black and "
+            f"Scholes' {g['bs']:.2f}. " + tail + "<bookmark mark='b'/> The cost of the weights: the effective number "
+            f"of paths is {100 * g['ess']:.1f} percent of the total, and the formula, e to the minus lambda squared T, "
+            f"predicted {100 * g['ess_pred']:.1f}."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(rows[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[1]), FadeIn(rows[2]), FadeIn(rows[3]))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[4]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def predict(self, g):
+        card = pause_at(r"Raise the drift to 60\% a year, everything else the same. What happens to the weights?")
+        with self.voiceover(
+            "Pause and predict. Raise the drift to sixty percent a year. What happens to the weights? "
+            f"<bookmark mark='a'/> They degenerate. Lambda becomes two point four, and the effective sample falls to "
+            f"e to the minus five point seven six, about {100 * g['ess60_pred']:.1f} percent; the simulation measured "
+            f"{100 * g['ess60']:.1f}. A handful of paths that happened to fall carry the whole price. That is why "
+            "pricers simulate under Q directly."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(answer_under(card, rf"they degenerate: $\lambda = 2.4$, effective sample $e^{{-5.76}} "
+                                                rf"\approx {100 * g['ess60_pred']:.1f}\%$ (measured "
+                                                rf"{100 * g['ess60']:.1f}\%)")))
         self.wait(0.4)
         self.clear_scene()

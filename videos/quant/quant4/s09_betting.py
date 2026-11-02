@@ -183,16 +183,12 @@ class Betting(VoiceoverScene):
                 why(r"the law of the iterated logarithm: a $t$-test checked forever rejects a true null with probability one")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.8, buff=0.7, edge=6.9)
         with self.voiceover(
-            "The proof takes three lines, and you already have every piece. Let tau be the first time the wealth "
-            "reaches c. <bookmark mark='a'/> Stop at tau or at n, whichever comes first: a bounded stopping time, so "
-            "optional stopping says the expected wealth is at most one. On the event that tau came first the wealth "
-            "is at least c, and elsewhere it is at least zero. So c times the chance of reaching c by time n is at "
-            "most one. <bookmark mark='b'/> Let n run to infinity. That is Ville's inequality. <bookmark mark='c'/> A "
-            "single bet's payoff, nonnegative with expected value at most one when the null is true, is an e-value, "
-            "and Markov's inequality makes it a test. Any p-value can be turned into one. <bookmark mark='d'/> And "
-            "here is why the ordinary test fails under peeking: the law of the iterated logarithm says a fair walk's "
-            "standardized value exceeds one point nine six again and again, forever. Check daily, and you will "
-            "eventually reject a true null."
+            "The proof uses only what you have. Let tau be the first time wealth reaches c. <bookmark mark='a'/> "
+            "Stop at tau or n: optional stopping keeps the mean at most one, and on the event that tau came first "
+            "the wealth is at least c. <bookmark mark='b'/> Let n run to infinity: Ville's inequality. "
+            "<bookmark mark='c'/> A single bet's payoff with mean at most one under the null is an e-value, a test by "
+            "Markov's inequality. <bookmark mark='d'/> And the law of the iterated logarithm says a fair walk's "
+            "statistic crosses one point nine six forever: check daily and you eventually reject a true null."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -227,12 +223,9 @@ class Betting(VoiceoverScene):
                             r"probability built on betting instead of measure; \textit{Game-Theoretic Foundations for "
                             r"Probability and Finance} (2019)", width=8.0).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Glenn Shafer and Vladimir Vovk took this one step further and rebuilt probability itself as a game, "
-            "with three players. <bookmark mark='a'/> Forecaster announces prices for what happens next. Skeptic "
-            "bets against those prices, never risking more than it has. Then Reality moves, and Skeptic's capital "
-            "is settled. <bookmark mark='b'/> A probability statement becomes a claim about money: Skeptic cannot "
-            "multiply its capital by a large factor. The forecasts are good exactly when no strategy gets rich "
-            "against them. A market is efficient, in this sense, when no trader can."
+            "Shafer and Vovk rebuilt probability as a game. <bookmark mark='a'/> Forecaster announces prices, "
+            "Skeptic bets against them without risking more than it has, Reality moves. <bookmark mark='b'/> "
+            "Forecasts are good exactly when no strategy gets rich against them."
         ) as vo:
             self.play(FadeIn(hist))
             vo.wait_until("a")

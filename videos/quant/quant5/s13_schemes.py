@@ -47,17 +47,14 @@ class Schemes(VoiceoverScene):
         rows[0].to_edge(DOWN, buff=0.9).shift(LEFT * 1.2)
         why0.next_to(rows[0], DOWN, buff=0.15)
         with self.voiceover(
-            "An equation like d X equals sine of X d t plus a half cosine of X d W: does it have a solution, and only "
-            "one? Kiyosi Itô answered in 1951 with the same trick that solves ordinary differential equations: Picard "
-            "iteration. Start with a guess, the constant x nought. <bookmark mark='a'/> Plug it into the right-hand "
-            "side, integrate against the one Brownian path we have, and get a new path. Plug that in, and repeat. "
-            "<bookmark mark='b'/> The iterates snap together. The largest gap between successive iterates falls from "
-            f"{p['dist'][0]:.2f} to {p['dist'][3]:.3f} after four rounds, and to about one in a million after nine. "
-            "<bookmark mark='c'/> Why: Doob's inequality and the isometry bound each gap by an integral of the "
-            "previous one, so the gaps shrink like C t to the k over k factorial, and the factorial wins. If the "
-            "coefficients are Lipschitz, the solution exists, is unique, and is a function of the driving path: a "
-            "strong solution. <bookmark mark='d'/> Some equations have only weak solutions. Tanaka's d X equals the "
-            "sign of X d W has solutions in law, but none built from a given path."
+            "Does d X equals sine of X d t plus a half cosine of X d W have exactly one solution? Itô answered in "
+            "1951 with Picard iteration. Start with a constant guess. <bookmark mark='a'/> Plug it into the "
+            "right-hand side, integrate along the one Brownian path we have, and repeat. <bookmark mark='b'/> The "
+            f"iterates snap together: the largest gap falls from {p['dist'][0]:.2f} to {p['dist'][3]:.3f} in four "
+            "rounds, and to a millionth in nine. <bookmark mark='c'/> Doob's inequality and the isometry make the "
+            "gaps shrink like a power over a factorial. With Lipschitz coefficients the solution exists, is unique, "
+            "and is built from the path: a strong solution. <bookmark mark='d'/> Tanaka's equation, d X equals the "
+            "sign of X d W, has only weak ones."
         ) as vo:
             self.play(FadeIn(g), FadeIn(eq), Create(lines[0]))
             vo.wait_until("a")
@@ -97,11 +94,10 @@ class Schemes(VoiceoverScene):
         with self.voiceover(
             "To compute a solution, step it forward. Here is the House's code. Euler-Maruyama: the drift times the "
             "step, plus the volatility times the Brownian increment. Milstein adds one line, in purple. "
-            "<bookmark mark='a'/> Where does it come from? Inside a step, the volatility itself moves. Expand it with "
-            "the lemma: it changes by b prime times b times the Brownian move so far. Integrating that against d W "
-            "gives the left-point integral of chapter three: a half of the squared increment minus the step. "
-            "<bookmark mark='b'/> Run both on geometric Brownian motion, where the exact solution is known path by "
-            "path, with twenty thousand shared paths."
+            "<bookmark mark='a'/> Inside a step the volatility itself moves: expanded by the lemma, it changes by b "
+            "prime b times the Brownian move so far, and integrating that against d W gives chapter three's "
+            "left-point integral: half the squared increment minus the step. <bookmark mark='b'/> Run both on "
+            "geometric Brownian motion, where the exact solution is known path by path."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -143,14 +139,12 @@ class Schemes(VoiceoverScene):
         pc.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         ans.next_to(pc, DOWN, buff=0.1).align_to(pc, LEFT)
         with self.voiceover(
-            "The step shrinks from a quarter to one two-hundred-and-fifty-sixth, and each scheme's error is plotted "
-            "as it arrives. <bookmark mark='a'/> A pause: halve the step, and by how much does Euler's path error "
-            "shrink? <bookmark mark='b'/> By only the square root of two: strong order one half, measured at "
-            f"{o['slope_strong_euler']:.2f}. Milstein's extra line buys strong order one, measured at "
-            f"{o['slope_strong_milstein']:.2f}. <bookmark mark='c'/> For prices, which are averages, both schemes are "
-            "already order one: the weak errors fall together. So choose by the question: a price needs weak accuracy, "
-            "a hedging simulation needs strong. And strong order, a property of single paths, also sets the cost of "
-            "averages: it decides how well multilevel Monte Carlo works, Part sixteen's subject."
+            "The step shrinks from a quarter to one two-hundred-and-fifty-sixth. <bookmark mark='a'/> A pause: halve "
+            "the step, and by how much does Euler's path error shrink? <bookmark mark='b'/> Only by root two: strong "
+            f"order one half, measured at {o['slope_strong_euler']:.2f}. Milstein's line buys strong order one: "
+            f"{o['slope_strong_milstein']:.2f}. <bookmark mark='c'/> For prices, which are averages, both are already "
+            "order one. So choose by the question: prices need weak accuracy, hedging simulations strong; and strong "
+            "order also sets the cost of multilevel Monte Carlo, Part sixteen's subject."
         ) as vo:
             self.play(FadeIn(g))
             for k in range(len(dt)):

@@ -62,15 +62,13 @@ class Brownian(VoiceoverScene):
         regrid(finals, gap=0.35)
         cur = sums(ns[0])
         with self.voiceover(
-            "Draw one Brownian path from left to right, on a grid of two hundred and fifty-six steps. Underneath, keep "
-            "three running totals over the steps: the sizes of the moves, their squares, and their cubes. "
-            "<bookmark mark='a'/> The first total, the length of the path so far, races off the top of the chart. "
-            "The third barely leaves the floor. The middle one, the sum of squared moves, climbs along the diagonal: "
-            "at every moment it is close to the elapsed time. <bookmark mark='b'/> Now refine the grid, from sixteen "
-            "steps to four thousand. The length grows like the square root of the number of steps, without limit: "
-            "a Brownian path is infinitely long on every interval. The cubes vanish. And the squares hug the line y "
-            "equals t, tighter at every refinement. <bookmark mark='c'/> That is what d W squared equals d t means. "
-            "It is not a rule of algebra. It is a sum of many small squares that has become deterministic."
+            "Draw one Brownian path, on a grid of two hundred and fifty-six steps, and keep three running totals over "
+            "its steps: the sizes of the moves, their squares, and their cubes. <bookmark mark='a'/> The length races "
+            "off the chart. The cubes barely leave the floor. The squares climb along the diagonal, close to the "
+            "elapsed time. <bookmark mark='b'/> Now refine the grid, from sixteen steps to four thousand. The length "
+            "grows like the square root of the number of steps: a Brownian path is infinitely long on every interval. "
+            "The cubes vanish. The squares hug the line y equals t. <bookmark mark='c'/> That is what d W squared "
+            "equals d t means: not a rule of algebra, but a sum of many small squares that has become deterministic."
         ) as vo:
             self.add(path, *live)
             self.play(FadeIn(g1), FadeIn(g2), Create(diag), FadeIn(dl), FadeIn(leg))
@@ -116,18 +114,15 @@ class Brownian(VoiceoverScene):
         pc.to_corner(DR, buff=0.35)
         ans.next_to(pc, UP, buff=0.2).align_to(pc, LEFT)
         with self.voiceover(
-            "Now the proof, which is two lines. The expected sum of squared increments is the sum of the step "
-            "lengths: T. <bookmark mark='a'/> Its variance: the increments are independent, and the square of a "
-            "Gaussian increment has variance twice its step squared. So the variance of the sum is at most two T times "
-            "the largest step, which goes to zero. The sum converges to T in mean square. <bookmark mark='b'/> And "
-            "the length: the sum of the moves is at least the sum of squares divided by the largest move, which goes "
-            "to zero because the path is continuous. So the length is infinite, and an ordinary Stieltjes integral "
-            "against Brownian motion cannot exist. That is why the next chapter has to build a new one. "
-            "<bookmark mark='c'/> Pause on this: sample twice as fast, and by how much does the spread of the estimate "
-            "shrink? <bookmark mark='d'/> By the square root of two. The four thousand paths agree with the square "
-            "root of two over n, at every grid. <bookmark mark='e'/> One more line, for real prices. If every "
-            "observed price carries a little noise, each of the n squared returns picks up the noise twice, and the "
-            "estimate grows with n instead of settling."
+            "The proof takes two lines. The expected sum of squared increments is the sum of the steps: T. "
+            "<bookmark mark='a'/> Its variance: each squared increment has variance twice its step squared, so the "
+            "variance of the sum is at most two T times the largest step, which goes to zero. <bookmark mark='b'/> "
+            "And the length is at least the sum of squares divided by the largest move, which goes to zero because "
+            "the path is continuous. So the length is infinite, no Stieltjes integral exists, and the next chapter "
+            "has to build a new one. <bookmark mark='c'/> A pause: sample twice as fast, and by how much does the "
+            "spread of the estimate shrink? <bookmark mark='d'/> By the square root of two; four thousand paths agree "
+            "at every grid. <bookmark mark='e'/> One more line, for real prices: noise on each observed price adds n "
+            "extra squares, and the estimate grows with n instead of settling."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -168,14 +163,11 @@ class Brownian(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.45)
         src = real_data(r"Binance BTCUSDT one-minute candles, 2020; subsampled over up to 30 offsets")
         with self.voiceover(
-            "Try it on Bitcoin in 2020. If the price were a Brownian motion with constant volatility, summing squared "
-            "returns would give the same answer at every sampling interval. <bookmark mark='a'/> Summing squared daily "
-            f"returns gives a volatility of {100 * vol[-1]:.0f} percent; summing squared one-minute returns gives "
-            f"{100 * vol[0]:.0f}. <bookmark mark='b'/> The last line of the proof explains the rise: the bid-ask "
-            "bounce is noise, and its squares pile up as the sampling gets faster. Read backwards, the gap between the "
-            "one-minute and the one-day estimates measures the noise: about "
-            f"{q['noise_bp']:.1f} basis points a tick. Practitioners sample at around five minutes, or subsample and "
-            "average, and Part seven builds volatility forecasts on these sums."
+            "Try it on Bitcoin in 2020. <bookmark mark='a'/> Squared daily returns give a volatility of "
+            f"{100 * vol[-1]:.0f} percent; squared one-minute returns give {100 * vol[0]:.0f}. <bookmark mark='b'/> "
+            "The last line of the proof explains the rise: the bid-ask bounce is noise. Read backwards, the gap "
+            f"measures it: about {q['noise_bp']:.1f} basis points a tick. Practitioners sample every five minutes or "
+            "so, or subsample and average, and Part seven builds volatility forecasts on these sums."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             vo.wait_until("a")

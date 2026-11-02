@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant2.common import CASH, CCP, LOSS, PART, TRADE, arrow, node
+from videos.quant.quant2.common import ro, CASH, CCP, LOSS, PART, TRADE, arrow, node
 
 # NSCC, 27 January 2021 (SEC staff report, October 2021, section 3.5): intraday calls of $6.9 bn on 36 members,
 # $2.1 bn mark-to-market and $4.8 bn special charge, bringing the total required across members to $25.5 bn
@@ -111,7 +111,7 @@ class Hook(VoiceoverScene):
                 base += amt
             return out
         bars = always_redraw(stack)
-        tot = readout(r"\$", lambda: h.get_value(), digits=1, font_size=32, unit=r"\,\text{bn}")
+        tot = ro(r"\$", lambda: h.get_value(), digits=1, font_size=32, unit=r"\,\text{bn}")
         tot.add_updater(lambda m: m.next_to(ax.c2p(0.5, max(h.get_value(), 0.5)), UP, buff=0.1))
         leg = legend([(GREY_B, r"required before the session"), (TRADE, r"intraday mark-to-market calls"),
                       (LOSS, r"special charge (volatility)")], font_size=18).next_to(g, RIGHT, buff=0.3).align_to(g, UP)
@@ -123,7 +123,7 @@ class Hook(VoiceoverScene):
                         stats=[(r"\$6.9\,\text{bn}", r"intraday calls on 36 members, 27 Jan"),
                                (r">2\times\$1.4\,\text{bn}", r"the waived charge, one broker"),
                                (r"122.97\%", r"GameStop short interest, of float")],
-                        width=6.4, font_size=20).to_edge(RIGHT, buff=0.3).shift(DOWN * 0.2)
+                        width=6.4, font_size=20).to_corner(DR, buff=0.55)
         src = note(r"SEC staff, \textit{Equity and Options Market Structure Conditions in Early 2021} (October 2021), "
                    r"section 3.5; the report does not name the broker", font_size=16).to_edge(DOWN, buff=0.15)
         lesson = label(r"The plumbing, not the price, decided who could trade.", font_size=28, color=QC.IDEA)

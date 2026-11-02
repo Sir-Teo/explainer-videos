@@ -50,16 +50,13 @@ class Construct(VoiceoverScene):
                                                                                                          buff=0.3)
         rule = MathTex(r"\frac{S_{\lfloor nt \rfloor}}{\sqrt n} \;\Rightarrow\; W_t", font_size=36).to_corner(UR, buff=0.5)
         with self.voiceover(
-            "The gentle introduction drew Brownian motion. This chapter builds it, two ways, and proves the first "
-            "thing it does. Here is the definition: it starts at zero, its increments are independent of the past and "
-            "Gaussian with variance equal to the elapsed time, and its paths are continuous. Does such a thing exist? "
-            "<bookmark mark='a'/> The first construction is a limit. Take a random walk with steps of mean zero and "
-            "variance one, shrink time by n and space by the square root of n. Three walks, built from the same "
-            "random numbers: a coin, a uniform step, and a lopsided step that is usually a small loss and "
-            "occasionally a large gain. <bookmark mark='b'/> At sixteen steps they look different. At a hundred and "
-            "twenty-eight, less so. <bookmark mark='c'/> At four thousand they are the same kind of scrawl. Donsker "
-            "proved in 1951 that the limit is always the same Brownian motion: only the mean and the variance of "
-            "the steps survive."
+            "This chapter builds Brownian motion two ways, and proves the first thing it does. The definition: it "
+            "starts at zero, its increments are independent and Gaussian with variance equal to the elapsed time, and "
+            "its paths are continuous. Does such a thing exist? <bookmark mark='a'/> The first construction is a "
+            "limit: a random walk with mean-zero, variance-one steps, time shrunk by n and space by root n. Three "
+            "walks from the same random numbers: a coin, a uniform step, a lopsided step. <bookmark mark='b'/> At "
+            "sixteen steps they differ. <bookmark mark='c'/> At four thousand they are the same scrawl. Donsker "
+            "proved in 1951 that the limit is always Brownian motion."
         ) as vo:
             self.play(FadeIn(defn, shift=DOWN * 0.2))
             vo.wait_until("a")
@@ -96,16 +93,14 @@ class Construct(VoiceoverScene):
         lvl = VGroup(*[MathTex(rf"\text{{level }} {k}:\ {2 ** k + 1}\text{{ points}}", font_size=26, color=GREY_A)
                        .next_to(g, UP, buff=0.1).align_to(g, RIGHT) for k in range(11)])
         with self.voiceover(
-            "The second construction is Paul Lévy's, and it builds the path directly, coarse to fine. Draw the endpoint "
-            "at time one: a single Gaussian. Join it to the origin with a straight chord. <bookmark mark='a'/> Now "
-            "fill in the midpoint. Given the two ends, the midpoint of a Brownian path is Gaussian, centred on the "
-            "chord, with a variance of a quarter of the interval's length. That is the Brownian bridge. "
+            "Paul Lévy's construction builds the path directly, coarse to fine. Draw the endpoint, one Gaussian, and "
+            "join it to the origin. <bookmark mark='a'/> Given the two ends, the midpoint of a Brownian path is "
+            "Gaussian, centred on the chord, with a variance of a quarter of the interval: the Brownian bridge. "
             "<bookmark mark='b'/> Displace every midpoint, then every quarter point, then every eighth, each level "
             "with half the variance of the last. The path crystallises. <bookmark mark='c'/> The sum converges "
-            "uniformly, so the limit is a continuous path with exactly the right increments. Our twenty thousand "
-            f"draws put the midpoint variance at {c['bridge_var']:.3f}. This construction is not just theory: Monte "
-            "Carlo libraries build paths this way, the largest moves first, which suits quasi-random numbers, as "
-            "Part sixteen shows."
+            "uniformly to a continuous path with the right increments, and our twenty thousand draws put the midpoint "
+            f"variance at {c['bridge_var']:.3f}. Monte Carlo libraries build paths this way, the largest moves first, "
+            "as Part sixteen shows."
         ) as vo:
             self.play(FadeIn(g), Create(paths[0]), FadeIn(lvl[0]))
             vo.wait_until("a")
@@ -163,17 +158,14 @@ class Construct(VoiceoverScene):
                             r"$0.5826\,\sigma\sqrt{\Delta t}$)", 5.4, 17, GREY_B)
         VGroup(res, cap).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(UR, buff=0.4)
         with self.voiceover(
-            "What does the path do first? Ask for the probability that it reaches a level a by time T. Here is a path "
-            "that crosses one. <bookmark mark='a'/> At the moment it first touches the level, the future is a fresh "
-            "Brownian motion, independent of the past: the strong Markov property. So the path and its mirror image "
-            "after that moment are equally likely. <bookmark mark='b'/> Split on where the path ends. Paths that "
-            "touched the level and end below it are matched, one for one, by their mirrors, which end above it. "
-            "<bookmark mark='c'/> So the chance of touching is twice the chance of ending above: the reflection "
-            "principle. Differentiate, and you get the density of the first-passage time, whose tail is so heavy that "
-            "its mean is infinite. <bookmark mark='d'/> Check it on twenty thousand paths. Theory says "
-            f"{r['p_theory']:.4f}; the simulation says {r['p_sim']:.4f}, a little low, because a path watched on a "
-            "grid can cross between two looks. Broadie, Glasserman and Kou showed how to correct for that: shift the "
-            f"barrier, and the formula gives {r['p_bgk']:.4f}. Part fifteen prices barrier options with it."
+            "What does the path do first? Ask for the chance that it reaches a level a by time T. "
+            "<bookmark mark='a'/> When it first touches the level, the future is a fresh Brownian motion, so the path "
+            "and its mirror image are equally likely. <bookmark mark='b'/> Paths that touched the level and end below "
+            "it are matched, one for one, by mirrors that end above. <bookmark mark='c'/> So the chance of touching "
+            "is twice the chance of ending above: the reflection principle. Differentiate, and the first-passage time "
+            f"has a mean of infinity. <bookmark mark='d'/> On twenty thousand paths: theory {r['p_theory']:.4f}, "
+            f"simulation {r['p_sim']:.4f}, a little low, because a path watched on a grid can cross between looks. "
+            f"Broadie, Glasserman and Kou's shifted barrier gives {r['p_bgk']:.4f}."
         ) as vo:
             self.play(FadeIn(g), Create(level), FadeIn(al), Create(before), run_time=1.5)
             self.play(Create(after), run_time=1.2)
@@ -214,13 +206,11 @@ class Construct(VoiceoverScene):
         pc.to_corner(UL, buff=0.5)
         ans.next_to(pc, DOWN, buff=0.3).align_to(pc, LEFT)
         with self.voiceover(
-            "A question to pause on. Two players play a fair game in continuous time. Over the whole game, what "
-            "fraction of the time has one of them most likely been ahead? <bookmark mark='a'/> Intuition says about "
-            "half. The same twenty thousand paths say otherwise. <bookmark mark='b'/> The histogram is a U: "
-            f"{100 * r['frac_extreme']:.0f} percent of the paths spend less than a tenth, or more than nine tenths, "
-            f"of the time above zero, and only {100 * r['frac_middle']:.0f} percent are near the middle. This is "
-            "Lévy's arcsine law. A lead, once taken, tends to last, which is a useful thing to remember the next time "
-            "a strategy has been ahead of its benchmark for most of a year."
+            "A pause. In a fair game in continuous time, what fraction of the time has one player most likely been "
+            "ahead? <bookmark mark='a'/> Intuition says about half. <bookmark mark='b'/> The histogram is a U: "
+            f"{100 * r['frac_extreme']:.0f} percent of the paths spend less than a tenth, or more than nine tenths, of "
+            f"the time above zero, and only {100 * r['frac_middle']:.0f} percent are near the middle. Lévy's arcsine "
+            "law: a lead, once taken, tends to last."
         ) as vo:
             self.play(FadeIn(pc))
             vo.wait_until("a")

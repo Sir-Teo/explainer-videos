@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant2.common import CASH, CCP, LOSS, PART, TRADE, load
+from videos.quant.quant2.common import ro, CASH, CCP, LOSS, PART, TRADE, load
 
 C_ = {r"E_h": TRADE, r"D": CCP, r"\sigma": LOSS, r"h": QC.IDEA}
 
@@ -106,7 +106,7 @@ class Settlement(VoiceoverScene):
         l2 = tracing(ax, np.arange(days), D2, t, CCP, stroke_width=2.5)
         l1 = tracing(ax, np.arange(days), D1, t, QC.IDEA, stroke_width=2.5)
         leg = legend([(CCP, r"T+2"), (QC.IDEA, r"T+1")], font_size=18).next_to(g, UP, buff=0.15).align_to(g, RIGHT)
-        vol = readout(r"\sigma_{\text{annual}} =", lambda: 100 * sig[int(np.clip(t.get_value(), 0, days - 1))] * np.sqrt(252),
+        vol = ro(r"\sigma_{\text{annual}} =", lambda: 100 * sig[int(np.clip(t.get_value(), 0, days - 1))] * np.sqrt(252),
                       digits=0, font_size=28, color=LOSS, unit=r"\%").to_edge(LEFT, buff=0.5).shift(DOWN * 1.6)
         src = note(r"simulated: steady net buying, volatility 60\% a year with a 15-day spike to 400\%, 8 seeds",
                    font_size=16).to_edge(DOWN, buff=0.15)

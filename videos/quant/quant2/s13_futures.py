@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant2.common import BTC, PART, RATE, TRADE, lab, load, real_data, ts_date
+from videos.quant.quant2.common import ro, BTC, PART, RATE, TRADE, lab, load, real_data, ts_date
 
 C_ = {r"F_0": TRADE, r"S_0": BTC, r"S_0e^{rT}": BTC, r"h": QC.HOUSE, r"h^*": QC.HOUSE, r"\rho": QC.IDEA}
 K_RATIO = 1.2  # sigma_S / sigma_F in the 3D picture
@@ -95,9 +95,9 @@ class Futures(VoiceoverScene, ThreeDScene):
         lf = tracing(top.ax, d, F, k, TRADE, stroke_width=2.5)
         la = tracing(bot.ax, d, np.clip(ann, 0, 0.65), k, QC.IDEA, stroke_width=2.5)
         dd = np.asarray(b["days"], float)
-        cnt = readout(r"\text{days to expiry:}", lambda: max(at_index(dd, k), 0), digits=0, font_size=30,
+        cnt = ro(r"\text{days to expiry:}", lambda: max(at_index(dd, k), 0), digits=0, font_size=30,
                       color=GREY_A).to_corner(UR, buff=0.5)
-        gap = readout(r"F/S - 1 =", lambda: 100 * (at_index(F, k) / at_index(S, k) - 1), digits=2, font_size=30,
+        gap = ro(r"F/S - 1 =", lambda: 100 * (at_index(F, k) / at_index(S, k) - 1), digits=2, font_size=30,
                       color=TRADE, unit=r"\%").next_to(cnt, DOWN, buff=0.25).align_to(cnt, LEFT)
         leg = legend([(TRADE, r"BTCUSD March 2021 future"), (BTC, r"BTC spot (USDT)"),
                       (QC.IDEA, r"$\ln(F/S)/(T-t)$")], font_size=19).to_edge(RIGHT, buff=0.4).shift(UP * 0.6)

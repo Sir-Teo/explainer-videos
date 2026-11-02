@@ -56,18 +56,16 @@ class House(VoiceoverScene):
                 why(r"test every mean $m$ at once and keep the survivors: a confidence sequence, valid at all times")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.7, edge=6.9)
         with self.voiceover(
-            "The House's monitor bets a fixed menu of stakes. Can a bettor learn its stake instead? A bettor's wealth "
-            "is the product of one plus the stake times each outcome, with each stake chosen from the past. Under "
-            "the null that the outcomes have mean zero, it is a nonnegative martingale, so Ville's inequality holds "
-            "for any rule for the stakes at all. <bookmark mark='a'/> What the rule decides is speed. The expected "
-            "log growth is a parabola in the stake, and its peak is the Kelly fraction, the edge over the second "
-            "moment. <bookmark mark='b'/> At the peak, the time to reach twenty is two log twenty over the squared "
-            "daily Sharpe ratio. An annual Sharpe of about point eight, a daily point zero five, needs about two "
-            "thousand four hundred days: nearly ten years, for a perfect bettor. <bookmark mark='c'/> A real bettor "
-            "doesn't know the edge, so it learns the stake online, here by an online Newton step on its own log "
-            "wealth. <bookmark mark='d'/> And by running a bettor against every candidate mean at once and keeping "
-            "the means that no bettor has beaten, you get a confidence sequence: an interval valid at every moment "
-            "simultaneously."
+            "The House's monitor bets a fixed menu of stakes. Can a bettor learn its stake instead? Its wealth "
+            "multiplies by one plus stake times outcome, each stake chosen from the past, so under the null of mean "
+            "zero it is a nonnegative martingale, and Ville's inequality holds for any rule at all. "
+            "<bookmark mark='a'/> What the rule decides is speed. Expected log growth is a parabola in the stake, "
+            "peaking at the Kelly fraction, the edge over the second moment. <bookmark mark='b'/> At the peak, "
+            "reaching twenty takes two log twenty over the squared daily Sharpe ratio: a daily point zero five, about "
+            "point eight a year, needs about two thousand four hundred days, nearly ten years, for a perfect bettor. "
+            "<bookmark mark='c'/> A real bettor learns the stake online, here by an online Newton step on its own log "
+            "wealth. <bookmark mark='d'/> And betting against every candidate mean at once, the means no bettor has "
+            "beaten form a confidence sequence, valid at every moment simultaneously."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -278,11 +276,10 @@ class House(VoiceoverScene):
         rule = wrapped_label(r"Rule 5: a claim that something beats a fair game is tested with an e-process, valid "
                              r"whenever it is checked; the stake may be learned.", 12.0, 24, QC.HOUSE).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "In the House the learner is ten lines, and it is tested: on two thousand fair games its false alarms stay "
-            "under five percent. <bookmark mark='a'/> Run on the simulated strategy, the stake settles near "
-            f"{l['lam_end']:.2f} and the wealth ends at ten to the {l['logw_end']:.1f}. <bookmark mark='b'/> The trial "
-            f"counter now reads {env['trials']}. And the House's fifth rule gains a clause: a claim that anything beats "
-            "a fair game is tested with an e-process, valid whenever it is checked, and the stake may be learned."
+            "In the House the learner is ten lines, tested to keep false alarms under five percent. "
+            f"<bookmark mark='a'/> On the simulated strategy its stake settles near {l['lam_end']:.2f}. "
+            f"<bookmark mark='b'/> The trial counter reads {env['trials']}, and Rule five gains a clause: the stake "
+            "may be learned."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

@@ -78,16 +78,14 @@ class Lemma(VoiceoverScene, ThreeDScene):
         self.remove(hint, readout_)
         lp, bl, pl, co = always_redraw(lifted), always_redraw(ball), always_redraw(plane), always_redraw(column)
         with self.voiceover(
-            "Here is the lemma as a picture. The surface is a function of time and position, x squared times a decaying "
-            "exponential. A Brownian path runs across the floor, and we lift it onto the surface. "
-            "<bookmark mark='a'/> At each step, ordinary calculus predicts the next height from the tangent plane: the "
-            "slope in time times the time step, plus the slope in x times the move. <bookmark mark='b'/> The surface "
-            "curves upward, so the true height is always a little above the plane. Stack those misses in the red "
-            "column. For a smooth path, the misses would be of the order of the step squared, and the column would "
-            "stay empty. Here it fills, steadily, and the white bar marks where it should end: a half of the integral "
-            "of the second derivative over time. <bookmark mark='c'/> The misses are not noise. They add up to a drift, "
-            "and that drift is Itô's extra term."
-        ) as vo:
+            "Here is the lemma as a picture: a surface, x squared times a decaying exponential, and a Brownian path "
+            "lifted onto it. <bookmark mark='a'/> At each step, ordinary calculus predicts the next height from the "
+            "tangent plane: the time slope times the time step, plus the space slope times the move. "
+            "<bookmark mark='b'/> The surface curves upward, so the true height is always a little above the plane. "
+            "Stack those misses in the red column. For a smooth path they would be of the order of the step squared, "
+            "and the column would stay empty. Here it fills, steadily, toward the white bar: half the integral of the "
+            "second derivative. <bookmark mark='c'/> The misses are not noise. They add up to a drift, and that drift "
+            "is Itô's extra term."        ) as vo:
             self.play(Create(ax), FadeIn(surf), FadeIn(hint[:2]), run_time=2)
             self.add(lp, bl)
             vo.wait_until("a")
@@ -125,12 +123,10 @@ class Lemma(VoiceoverScene, ThreeDScene):
         lab2 = MathTex(rf"{L['cum_miss2'][-1]:.3f} \text{{ against }} \langle X, Y\rangle_1 = {L['rho']:.1f}",
                        font_size=24).next_to(g2, UP, buff=0.2)
         with self.voiceover(
-            "The same experiment, flattened. On the left, the stacked misses along the path, in red, and a half the "
-            f"integral of the second derivative, in white. They end at {L['cum_miss'][-1]:.3f} and "
-            f"{L['theory'][-1]:.3f}: the difference is the discretisation error of four hundred steps. "
-            "<bookmark mark='a'/> On the right, two Brownian motions with correlation minus point seven, and the "
-            "function x times y. Now the misses come from the cross term, the product of the two moves, and they pile "
-            "up to the covariation, minus point seven times t. That is the multivariate lemma, and the product rule."
+            f"Flattened: the stacked misses end at {L['cum_miss'][-1]:.3f}, against {L['theory'][-1]:.3f}; the gap is "
+            "the discretisation error of four hundred steps. <bookmark mark='a'/> With two Brownian motions "
+            "correlated at minus point seven and the function x times y, the misses come from the cross term and pile "
+            "up to the covariation: the product rule, seen happening."
         ) as vo:
             self.play(FadeIn(g1), Create(th1), Create(m1), FadeIn(lab1), run_time=2)
             vo.wait_until("a")
@@ -157,16 +153,13 @@ class Lemma(VoiceoverScene, ThreeDScene):
                 why(r"take $f = xy$: the product rule, with its covariation term")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.4, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Now the proof. On each step, expand the function to second order: the time slope times the time step, "
-            "the space slope times the move, half the curvature times the move squared, and a remainder. "
-            "<bookmark mark='a'/> Replace each squared move by its time step. The error is a sum of terms with mean "
-            "zero, uncorrelated, each with variance of the order of the step squared: the same computation as for "
-            "quadratic variation, so it vanishes in mean square. <bookmark mark='b'/> The remainder is smaller than "
-            "the cube of the move, and the sum of cubed moves goes to zero. <bookmark mark='c'/> What is left is "
-            "Itô's lemma: the first-order terms, plus half the curvature times d t. <bookmark mark='d'/> With two "
-            "processes, the same argument produces a cross term, the mixed derivative times the covariation. "
-            "<bookmark mark='e'/> Take f equal to x times y, and you get the stochastic product rule, which we will "
-            "use to solve the Ornstein-Uhlenbeck equation and to prove Girsanov's theorem."
+            "Now the proof. Expand each step to second order. <bookmark mark='a'/> Replacing each squared move by its "
+            "time step costs a sum of uncorrelated terms with mean zero, which vanishes in mean square, exactly as "
+            "for quadratic variation. <bookmark mark='b'/> The remainder is smaller than the cubed moves, whose sum "
+            "goes to zero. <bookmark mark='c'/> What is left is Itô's lemma: the first-order terms, plus half the "
+            "curvature times d t. <bookmark mark='d'/> With two processes the same argument gives a cross term, the "
+            "mixed derivative times the covariation, <bookmark mark='e'/> and f equal to x times y gives the "
+            "stochastic product rule, which solves the Ornstein-Uhlenbeck equation and proves Girsanov's theorem."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -200,16 +193,14 @@ class Lemma(VoiceoverScene, ThreeDScene):
                         font_size=22)
         VGroup(pc, ans).arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Three consequences. Apply the lemma to the logarithm of a geometric Brownian motion and you solve it: the "
-            "log grows at mu minus a half sigma squared. <bookmark mark='a'/> On twenty thousand paths with ten "
-            f"percent drift and forty percent volatility, the mean log return is {L['mean_log']:.3f}, the volatility "
-            f"drag, while the log of the mean return is {L['log_mean']:.3f}. <bookmark mark='b'/> Second, Paul Lévy's "
-            "characterization: a continuous martingale whose quadratic variation is t is a Brownian motion. The proof "
-            "applies the lemma to a complex exponential. Its cousin, the Dambis-Dubins-Schwarz theorem, says every "
-            "continuous martingale is a Brownian motion running on a clock set by its own quadratic variation. "
-            "<bookmark mark='c'/> Third, a desk classic: the expected fourth power of W at time t. "
-            f"<bookmark mark='d'/> The lemma gives three t squared, and the simulation gives {L['EW4']:.3f} at t "
-            "equals one."
+            "Consequences. The lemma solves geometric Brownian motion: its log grows at mu minus half sigma squared. "
+            "<bookmark mark='a'/> On twenty thousand paths with ten percent drift and forty percent volatility, the "
+            f"mean log return is {L['mean_log']:.3f}, the volatility drag, while the log of the mean return is "
+            f"{L['log_mean']:.3f}. <bookmark mark='b'/> Paul Lévy's characterization: a continuous martingale whose "
+            "quadratic variation is t is a Brownian motion. Dambis, Dubins and Schwarz: every continuous martingale "
+            "is a Brownian motion running on the clock of its own quadratic variation. <bookmark mark='c'/> A desk "
+            "classic: the expected fourth power of W at time t? <bookmark mark='d'/> Three t squared, by the lemma; "
+            f"the simulation gives {L['EW4']:.3f} at t equals one."
         ) as vo:
             self.play(FadeIn(rows[0]))
             vo.wait_until("a")

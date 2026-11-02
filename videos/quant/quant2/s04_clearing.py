@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant2.common import CCP, GAIN, LOSS, PART, TRADE, lab, load, node
+from videos.quant.quant2.common import ro, CCP, GAIN, LOSS, PART, TRADE, lab, load, node
 
 C_ = {r"G": GREY_B, r"B": QC.IDEA, r"M": CCP}
 LAYERS = [(r"defaulter's margin", TRADE), (r"defaulter's default fund", QC.IDEA), (r"CCP's own capital", CCP),
@@ -91,7 +91,7 @@ class Clearing(VoiceoverScene):
                               max_tip_length_to_length_ratio=0.1, tip_length=0.15))
         vals = [n["gross"], n["bilateral"], n["multilateral"]]
         tot = ValueTracker(vals[0] / 1e9)
-        counter = readout(r"\text{to settle: }\$", lambda: tot.get_value(), digits=1, font_size=34,
+        counter = ro(r"\text{to settle: }\$", lambda: tot.get_value(), digits=1, font_size=34,
                           unit=r"\,\text{bn}").to_edge(RIGHT, buff=0.7).shift(UP * 2.2)
         steps = VGroup(label(rf"{n['trades']:,} trades among {N} members, gross".replace(",", "{,}"), font_size=22,
                              color=GREY_B),

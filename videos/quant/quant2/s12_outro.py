@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant2.common import BTC, CCP, LOSS, PART, RATE, TRADE
+from videos.quant.quant2.common import ro, BTC, CCP, LOSS, PART, RATE, TRADE
 
 DESK = [
     (r"Make me a market on the number of trading days in a US year.",

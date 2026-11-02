@@ -22,9 +22,9 @@ class Hook(VoiceoverScene):
         card = part_title(PART, r"A hedge that cannot lose, and does")
         disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Part five. Stochastic calculus. The series' gentle introduction to this subject built Brownian motion, "
-            "Itô's lemma and Black and Scholes. This part assumes it, and goes further: the constructions, the proofs, "
-            "and the tools a working quant uses, each one checked by simulation. It begins with a puzzle."
+            "Part five. Stochastic calculus. The series' gentle introduction built Brownian motion and Itô's lemma; "
+            "this part goes further, to the constructions, the proofs and the working tools, each one checked by "
+            "simulation. It begins with a puzzle."
         ):
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
         self.play(FadeOut(card), FadeOut(disc))
@@ -55,15 +55,14 @@ class Hook(VoiceoverScene):
         price = MathTex(rf"\text{{the call's price: }} {s['call']:.2f}", font_size=30, color=WHITE).next_to(
             tab, DOWN, buff=0.35).align_to(rule, LEFT)
         with self.voiceover(
-            "You have sold a call option struck at a hundred, and you want to hedge it as cheaply as possible. "
-            "Here is a strategy that looks free. <bookmark mark='a'/> Whenever the stock is above the strike, own "
-            "one share. Whenever it falls below, sell it. At expiry, if the stock is above the strike you hold a "
-            "share, and if not you hold nothing: exactly what the call pays. You only ever buy or sell at the "
-            "strike, so it seems to cost nothing. <bookmark mark='b'/> Simulate it on four thousand paths. Trade "
-            f"weekly, daily, four thousand times a year: the strategy loses about {s['call']:.0f} dollars every time, and "
-            f"trading more often does not help at all. <bookmark mark='c'/> {s['call']:.0f} dollars is the price of the call "
-            "itself. The free hedge loses exactly what the option is worth. Where does the money go? The answer is "
-            "a quantity ordinary calculus has no name for, and it is the subject of this part."
+            "You have sold a call struck at a hundred and want to hedge it as cheaply as possible. Here is a strategy "
+            "that looks free. <bookmark mark='a'/> Own one share whenever the stock is above the strike, and none "
+            "when it is below. At expiry you hold exactly what the call pays, and you only ever trade at the strike, "
+            "so it seems to cost nothing. <bookmark mark='b'/> Simulate it on four thousand paths. Trade weekly, "
+            f"daily, four thousand times a year: it loses about {s['call']:.0f} dollars every time, and trading more "
+            f"often does not help. <bookmark mark='c'/> {s['call']:.0f} dollars is the price of the call itself. Where "
+            "does the money go? The answer is a quantity ordinary calculus has no name for, and it is the subject of "
+            "this part."
         ) as vo:
             self.play(FadeIn(g), Create(strike), FadeIn(kl))
             vo.wait_until("a")
@@ -91,16 +90,14 @@ class Hook(VoiceoverScene):
         pc.to_corner(UL, buff=0.4)
         ans.next_to(pc, DOWN, buff=0.25).align_to(pc, LEFT)
         with self.voiceover(
-            "How we got here. In 1900 Louis Bachelier, five years before Einstein, modelled the Paris bond market with "
-            "what we now call Brownian motion. Norbert Wiener built it as a measure on paths in 1923, and Kiyosi Itô "
-            "learned to integrate against it in 1944. <bookmark mark='a'/> Igor Girsanov showed in 1960 that a drift is "
-            "only a change of measure. Black, Scholes and Merton priced options with this calculus in 1973, and "
-            "Harrison and Pliska made martingales the language of pricing in 1981. Carr and Jarrow explained this "
-            "part's opening puzzle in 1990, and Terry Lyons pushed integration beyond Itô in 1998. In 2018 volatility "
-            "turned out to be rough. <bookmark mark='b'/> And in April 2020 an oil contract settled below zero, and "
-            "the exchange had to switch its option model back to Bachelier's. <bookmark mark='c'/> One question to "
-            "keep in mind: if you rebalance four thousand times a year instead of thirteen, does the loss shrink? "
-            "<bookmark mark='d'/> It does not. The table already said so."
+            "How we got here. In 1900 Louis Bachelier modelled the Paris bond market with what we now call Brownian "
+            "motion. Norbert Wiener built it as a measure on paths in 1923, and Kiyosi Itô learned to integrate "
+            "against it in 1944. <bookmark mark='a'/> Igor Girsanov showed in 1960 that a drift is only a change of "
+            "measure. Black, Scholes and Merton priced options with this calculus in 1973, Carr and Jarrow explained "
+            "this part's puzzle in 1990, and Terry Lyons pushed integration beyond Itô in 1998. <bookmark mark='b'/> "
+            "And in April 2020 oil settled below zero, and an exchange switched its option model back to Bachelier's. "
+            "<bookmark mark='c'/> One question to keep in mind: rebalance four thousand times a year instead of "
+            "thirteen, and does the loss shrink? <bookmark mark='d'/> It does not."
         ) as vo:
             self.play(FadeIn(strip), run_time=2)
             vo.wait_until("a")
@@ -128,13 +125,11 @@ class Hook(VoiceoverScene):
             r"Industry: negative oil and Bachelier, clearing-house Monte Carlo, model validation; frontier: neural SDEs",
         ], color=QC.IDEA, font_size=23)
         with self.voiceover(
-            "The plan, in eighteen chapters. Brownian motion built two ways, and its quadratic variation proved and "
-            "measured. The Itô integral constructed, and Stratonovich's alternative. Itô's lemma proved, and "
-            "stochastic differential equations solved and simulated. Mean reversion fitted by exact likelihood, and "
-            "the partial differential equations behind it. Girsanov's theorem, and martingale representation, which "
-            "says why a hedge exists. Local time, which resolves the puzzle. Jumps, and jumps that cause jumps. "
-            "Roughness, rough paths and signatures. Then how desks and clearing houses run all this, and a neural "
-            "stochastic differential equation trained on Bitcoin."
+            "The plan, in eighteen chapters. Brownian motion, built and measured. The Itô integral and Itô's lemma, "
+            "proved. Differential equations solved, simulated and fitted, and the partial differential equations "
+            "behind them. Girsanov's theorem, and martingale representation. Local time. Jumps, and jumps that cause "
+            "jumps. Roughness and signatures. Then the industry, and a neural stochastic differential equation "
+            "trained on Bitcoin."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
                                                      lag_ratio=0.5, run_time=14))
@@ -143,9 +138,9 @@ class Hook(VoiceoverScene):
     def house(self):
         chart = house_chart(PART, lit=("data",))
         with self.voiceover(
-            "In the House, this part builds the simulation library that every pricing desk will use: Brownian "
-            "constructions, exact and approximate schemes, jumps, self-exciting processes, rough paths and signatures, "
-            "each one tested against theory before anyone prices with it. <bookmark mark='a'/> It sits with the data desk until the volatility desk opens in Part ten."
+            "In the House, this part builds the simulation library every pricing desk will use, each routine tested "
+            "against theory. <bookmark mark='a'/> It sits with the data desk until the volatility desk opens in Part "
+            "ten."
         ) as vo:
             self.play(FadeIn(chart))
             self.play(Indicate(chart.desk["data"], color=QC.HOUSE, scale_factor=1.05))

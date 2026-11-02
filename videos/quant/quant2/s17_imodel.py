@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import bs, funding
-from videos.quant.quant2.common import CCP, LOSS, PART, TRADE, lab, load, real_data
+from videos.quant.quant2.common import ro, CCP, LOSS, PART, TRADE, lab, load, real_data
 
 C_ = {r"\sigma_t^2": LOSS, r"\lambda": QC.HOUSE, r"\text{IM}_t": CCP, r"\ell(\lambda)": QC.IDEA}
 Z99 = 2.326
@@ -205,8 +205,8 @@ class MarginModel(VoiceoverScene):
             return float(path[i])
         dot = always_redraw(lambda: Dot(ax.c2p(lam_now(), float(np.interp(lam_now(), grid, lln))), radius=0.09,
                                         color=QC.HOUSE))
-        rd = readout(r"\lambda =", lam_now, digits=3, font_size=32, color=QC.HOUSE).to_edge(RIGHT, buff=1.2).shift(UP * 2.4)
-        rd2 = readout(r"\text{iteration}", lambda: it.get_value(), digits=0, font_size=26).next_to(rd, DOWN, buff=0.2)
+        rd = ro(r"\lambda =", lam_now, digits=3, font_size=32, color=QC.HOUSE).to_edge(RIGHT, buff=1.2).shift(UP * 2.4)
+        rd2 = ro(r"\text{iteration}", lambda: it.get_value(), digits=0, font_size=26).next_to(rd, DOWN, buff=0.2)
         res = VGroup(
             MathTex(rf"\hat\lambda_{{\text{{US 1926--2020}}}} = {m['lam_hat']:.3f}", font_size=30, color=QC.HOUSE),
             MathTex(rf"\hat\lambda_{{\text{{BTC 2018--2025}}}} = {m['btc_lam']:.3f}", font_size=30, color=QC.HOUSE),

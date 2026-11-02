@@ -59,15 +59,14 @@ class Hawkes(VoiceoverScene):
         outs = [f"hawkes_thinning(0.2, 1.4, 2.0, T=2000), 50 runs",
                 f"mean count {hc['mean_count']:.0f} +/- {hc['sd_count']:.0f}   theory mu T/(1 - alpha/beta) = {hc['theory']:.0f}"]
         with self.voiceover(
-            "Large moves cluster: one makes another more likely soon after. Alan Hawkes wrote down a process with that "
-            "property in 1971. Its intensity, the rate of events, jumps by alpha after every event and decays back "
-            "toward a base rate mu at speed beta. <bookmark mark='a'/> How do you simulate it? Yosihiko Ogata's "
-            "thinning, from 1981, is a dozen lines of the House's library. Between events the intensity only decays, "
-            "so its current value is an upper bound. Draw a candidate time from a Poisson clock at that bound. "
-            "<bookmark mark='b'/> Accept the candidate with probability true intensity over bound: the yellow dots "
-            "are accepted, and each kicks the red curve up by alpha; the grey ones fall through. "
-            "<bookmark mark='c'/> Run it fifty times over two thousand days with alpha over beta equal to point seven: "
-            f"the mean count is {hc['mean_count']:.0f}, against the theory's {hc['theory']:.0f}."
+            "Large moves cluster: one makes another more likely soon after. Alan Hawkes wrote down a process with "
+            "that property in 1971: its intensity jumps by alpha after every event and decays back toward a base rate "
+            "mu at speed beta. <bookmark mark='a'/> Yosihiko Ogata's thinning, from 1981, simulates it in a dozen "
+            "lines. Between events the intensity only decays, so its current value is an upper bound: draw a "
+            "candidate from a Poisson clock at that bound. <bookmark mark='b'/> Accept it with probability true "
+            "intensity over bound. The yellow dots are accepted and kick the red curve up; the grey ones fall "
+            "through. <bookmark mark='c'/> Fifty runs over two thousand days give a mean count of "
+            f"{hc['mean_count']:.0f}, against the theory's {hc['theory']:.0f}."
         ) as vo:
             self.play(FadeIn(eq), FadeIn(g))
             vo.wait_until("a")
@@ -106,12 +105,11 @@ class Hawkes(VoiceoverScene):
         res = label(rf"here $n = 0.7$: {hc['n_clusters']} families, mean size {hc['mean_cluster']:.2f} against "
                     rf"$1/(1 - n) = {hc['cluster_theory']:.2f}$", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "There is a second way to see the same process: as families. Immigrants arrive at the base rate. Each "
-            "event, immigrant or not, has children, a Poisson number of them with mean n, the branching ratio, the "
-            "total mass of the kernel. <bookmark mark='a'/> Redraw the events as a family tree: generation by "
-            "generation, each child hanging from its parent. <bookmark mark='b'/> Taking expectations, the long-run "
-            "rate is mu over one minus n, which only exists if n is below one: above it, the families never die out. "
-            "A family's average size is one over one minus n, a geometric series of generations."
+            "The same process can be seen as families. Immigrants arrive at the base rate, and every event has a "
+            "Poisson number of children with mean n, the branching ratio. <bookmark mark='a'/> Redraw the events as a "
+            "family tree, each child hanging from its parent. <bookmark mark='b'/> Taking expectations, the long-run "
+            "rate is mu over one minus n, which exists only if n is below one, and a family's mean size is one over "
+            "one minus n."
         ) as vo:
             self.play(FadeIn(g), FadeIn(ticks))
             vo.wait_until("a")
@@ -155,14 +153,12 @@ class Hawkes(VoiceoverScene):
                            color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.25)
         src = real_data(r"events: Bitcoin hours with $|r| > 4\times$ the past month's volatility, 2018--2020", corner=UL)
         with self.voiceover(
-            f"Now fit it to data: the {f['n']} hours since 2018 when Bitcoin moved more than four times its recent "
-            "volatility. The likelihood of a point process is the sum of log intensities at the events minus the "
-            "integrated intensity, and Ozaki's recursion computes it in one pass. <bookmark mark='a'/> The House "
-            "maximizes it from eight random starts. On the right the log-likelihood climbs, the starts drawn as a band, "
-            "the Poisson clock's value dashed. On the left the fitted intensity takes shape over the events. "
-            f"<bookmark mark='b'/> All eight starts agree. The branching ratio is {f['branching']:.2f}: about a third "
-            f"of the large moves were triggered by earlier ones, and the excitement halves in about "
-            f"{h['half_life_hours']:.0f} hours."
+            f"Now fit it to the {f['n']} hours since 2018 when Bitcoin moved more than four times its recent "
+            "volatility. The log-likelihood is the sum of log intensities at the events minus the integrated "
+            "intensity, computed in one pass by Ozaki's recursion. <bookmark mark='a'/> The House maximizes it from "
+            "eight random starts: the log-likelihood climbs on the right, the Poisson clock's value dashed, and the "
+            "fitted intensity takes shape on the left. <bookmark mark='b'/> All eight starts agree. The branching "
+            f"ratio is {f['branching']:.2f}, and the excitement halves in about {h['half_life_hours']:.0f} hours."
         ) as vo:
             self.play(FadeIn(rp), Create(base), FadeIn(bl), FadeIn(src))
             vo.wait_until("a")
@@ -209,16 +205,14 @@ class Hawkes(VoiceoverScene):
                    f"{rs['p_hawkes']:.2f}; the Poisson clock's do not, with a p-value too small to read."
                    if good else f"Here the test is less clear: p equal to {rs['p_hawkes']:.2f} for Hawkes.")
         with self.voiceover(
-            "Is the fit any good? The time-rescaling theorem gives a test. Run the clock at the fitted intensity: "
-            "measure time by the compensator, the integrated intensity, instead of by the calendar. "
-            "<bookmark mark='a'/> Under a correct model the clustered events slide apart into an even rain: a "
-            "Poisson process of rate one, whose gaps are exponential. It is the point-process cousin of the "
-            "Dambis-Dubins-Schwarz clock of chapter four. <bookmark mark='b'/> Compare the rescaled gaps with "
-            "exponential quantiles. " + verdict + " <bookmark mark='c'/> On the record: Hardiman, Bercot and Bouchaud, "
-            "at Capital Fund Management, estimated a branching ratio near the critical value one for E-mini futures; "
-            "the estimates depend on the kernel. Nearly critical Hawkes processes are where rough volatility comes "
-            "from, in Part fourteen. <bookmark mark='d'/> A pause: with a branching ratio of "
-            f"{h['fit']['branching']:.2f}, what fraction of the moves were triggered? Exactly that: "
+            "Is the fit any good? Run the clock at the fitted intensity: measure time by the integrated intensity "
+            "instead of the calendar. <bookmark mark='a'/> Under a correct model the clustered events slide apart "
+            "into an even rain, a unit-rate Poisson process: the point-process cousin of chapter four's "
+            "Dambis-Dubins-Schwarz clock. <bookmark mark='b'/> Compare the rescaled gaps with exponential quantiles. "
+            f"{verdict} <bookmark mark='c'/> On the record, Hardiman, Bercot and Bouchaud, at Capital Fund Management, "
+            "estimated a branching ratio near one for E-mini futures; such nearly critical processes lead to rough "
+            "volatility, in Part fourteen. <bookmark mark='d'/> A pause: with branching ratio "
+            f"{h['fit']['branching']:.2f}, what fraction of moves were triggered? Exactly that: "
             f"{100 * h['fit']['branching']:.0f} percent."
         ) as vo:
             self.play(FadeIn(top), FadeIn(t1))

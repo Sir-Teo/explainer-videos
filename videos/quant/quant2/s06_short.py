@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant2.common import CASH, GAIN, LOSS, PART, TRADE, load
+from videos.quant.quant2.common import ro, CASH, GAIN, LOSS, PART, TRADE, load
 
 C_ = {r"r_b": CASH, r"f": LOSS, r"\Pi_T": QC.IDEA, r"\kappa": QC.HOUSE}
 
@@ -108,7 +108,7 @@ class Short(VoiceoverScene):
             p[1].move_to(p[0])
         share = Square(0.35, color=QC.IDEA, fill_opacity=0.9).move_to(people[0].get_center() + UP * 0.9)
         si = ValueTracker(0)
-        cnt = VGroup(readout(r"\text{short interest (shares)}:", lambda: si.get_value(), digits=0, font_size=32,
+        cnt = VGroup(ro(r"\text{short interest (shares)}:", lambda: si.get_value(), digits=0, font_size=32,
                              color=LOSS),
                      MathTex(r"\text{shares that exist: } 1", font_size=32, color=QC.IDEA)).arrange(DOWN, aligned_edge=LEFT)
         cnt.shift(DOWN * 1.3)
@@ -153,8 +153,8 @@ class Short(VoiceoverScene):
                                                 stroke_width=0, fill_color=LOSS, fill_opacity=0.85)
                               .move_to(LEFT * 3.4 + DOWN * 2.4, aligned_edge=DOWN))
         thf = Rectangle(width=0.4, height=4.4, stroke_color=GREY_B).move_to(LEFT * 3.4 + DOWN * 0.2)
-        pr = readout(r"P/P_0 =", lambda: at_index(mv, rk), digits=2, font_size=28, color=LOSS).next_to(thf, UP, buff=0.15)
-        cv = readout(r"\text{shorts covered:}", lambda: at_index(cov, rk), digits=0, font_size=24).next_to(pr, UP, buff=0.12)
+        pr = ro(r"P/P_0 =", lambda: at_index(mv, rk), digits=2, font_size=28, color=LOSS).next_to(thf, UP, buff=0.15)
+        cv = ro(r"\text{shorts covered:}", lambda: at_index(cov, rk), digits=0, font_size=24).next_to(pr, UP, buff=0.12)
         g = axes([0.2, 1.4], [0, 3.2], x_length=5.6, y_length=3.6, xlabel=r"short interest / free float",
                  ylabel=r"peak price multiple (log scale)", xticks=[0.2, 0.6, 1.0, 1.4], yticks=[0, 1, 2, 3],
                  yfmt=lambda v: f"10^{{{int(v)}}}", font_size=16).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.3)

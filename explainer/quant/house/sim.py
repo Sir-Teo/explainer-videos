@@ -431,3 +431,28 @@ def hawkes_branching_powerlaw(mu, n, alpha, c, T, seed=0, max_events=30_000_000,
     if return_tree:
         return ev, np.concatenate(parents), np.concatenate(gens)
     return np.sort(ev)
+
+
+def pin_simulation(S0, K, T, sigma, gamma_net, impact, n_steps, n_paths, seed=0, cap=3.0):
+    """Avellaneda and Lipkin's (2003) pinning, simulated: hedgers net long ``gamma_net`` options struck at K sell into
+    rises and buy into falls, and with linear price impact ``impact`` their flow scales the volatility near the strike
+    by 1 / (1 + impact x Gamma), Gamma the Black-Scholes gamma (times S, per unit of relative move); net short
+    (``gamma_net`` < 0), their flow chases the move and scales it up by (1 + impact x |Gamma|), capped at ``cap``.
+    Returns the times and the paths (n_paths x (n_steps + 1)); ``gamma_net`` = 0 is geometric Brownian motion."""
+    from explainer.quant.house import bs
+
+    rng = np.random.default_rng(seed)
+    dt = T / n_steps
+    t = np.linspace(0.0, T, n_steps + 1)
+    x = np.full(n_paths, float(np.log(S0)))
+    out = np.empty((n_paths, n_steps + 1))
+    out[:, 0] = S0
+    for i in range(n_steps):
+        S = np.exp(x)
+        tau = max(T - t[i], dt)
+        G = np.asarray(bs.greeks(S, K, tau, sigma)["gamma"]) * S * abs(gamma_net)
+        scale = 1 / (1 + impact * G) if gamma_net >= 0 else np.minimum(1 + impact * G, cap)
+        s = sigma * scale
+        x = x - 0.5 * s * s * dt + s * np.sqrt(dt) * rng.standard_normal(n_paths)
+        out[:, i + 1] = np.exp(x)
+    return t, out

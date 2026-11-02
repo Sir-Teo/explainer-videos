@@ -131,16 +131,14 @@ class JumpData(VoiceoverScene):
         flat = jh["rows"][-1]["jump"] > 0.8 * jh["rows"][2]["jump"]
         verdict = ("barely moves" if flat else "keeps falling, more slowly")
         with self.voiceover(
-            "What do jumps do to a hedge? Sell a three-month at-the-money call and delta-hedge it, rebalancing from "
-            "thirteen to four thousand times a year, on ten thousand paths. <bookmark mark='a'/> Without jumps, the "
-            "spread of the error falls like one over the square root of the number of trades, as in chapter ten. "
-            "<bookmark mark='b'/> Add Merton's jumps, six a year, and the error " + verdict + ": at four thousand "
-            f"rebalances it is {jh['floor_ratio']:.0f} times the jump-free error. <bookmark mark='c'/> The reason is "
-            "one line: at a jump the hedged book gains or loses half gamma times the squared jump, and no single "
-            "position in the stock can offset jumps of different sizes. The representation theorem fails; the market "
-            "is incomplete, and the risk-neutral measure is no longer unique. <bookmark mark='d'/> A pause: rebalance "
-            "every second, and does the jump error vanish? No. A jump happens between two trades, however close they "
-            "are. Part eleven hedges with options instead."
+            "What do jumps do to a hedge? Sell a three-month at-the-money call and delta-hedge it, thirteen to four "
+            "thousand times a year, on ten thousand paths. <bookmark mark='a'/> Without jumps, the error's spread "
+            f"falls like one over root n. <bookmark mark='b'/> With Merton's jumps, six a year, it {verdict}: at four "
+            f"thousand rebalances it is {jh['floor_ratio']:.0f} times the jump-free error. <bookmark mark='c'/> At a "
+            "jump the hedged book gains or loses half gamma times the squared jump, and no position in the stock "
+            "offsets jumps of different sizes. The market is incomplete, and the risk-neutral measure is not unique. "
+            "<bookmark mark='d'/> A pause: rebalance every second, and does the jump error vanish? No: a jump happens "
+            "between two trades. Part eleven hedges with options."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg))
             vo.wait_until("a")

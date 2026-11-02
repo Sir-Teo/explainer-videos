@@ -51,13 +51,11 @@ class Convergence(VoiceoverScene):
         rule = label(r"buy 1 below $a = -3$, sell above $b = 3$; repeat", font_size=20, color=GREY_A).next_to(
             cnt, DOWN, buff=0.2).align_to(cnt, LEFT)
         with self.voiceover(
-            "Can a fair game wander forever without settling down? Doob's answer comes from a trading strategy. Draw "
-            "a band, from a to b. Whenever the martingale dips below a, buy one unit; whenever it rises above b, "
-            "sell. <bookmark mark='a'/> Each completed round trip, an upcrossing of the band, earns at least b minus "
-            "a. The trader's profit climbs with every upcrossing, and the only loss is on the last trade, if it is "
-            "still open. <bookmark mark='b'/> But the stake is decided from the past, so by chapter four the trader is "
-            "playing a fair game. The profit cannot grow on average, and so the number of upcrossings cannot grow "
-            "without limit."
+            "Can a fair game wander forever without settling? Doob's answer is a trading strategy. Draw a band from a "
+            "to b; buy one unit when the martingale dips below a, sell when it rises above b. <bookmark mark='a'/> "
+            "Each completed round trip, an upcrossing, earns at least b minus a; the only loss is on a last trade "
+            "still open. <bookmark mark='b'/> But the stake is decided from the past, so by chapter four the trader "
+            "plays a fair game. Its profit cannot grow on average, so the upcrossings cannot pile up without limit."
         ) as vo:
             self.play(FadeIn(g), FadeIn(bandm), Create(la), Create(lb), FadeIn(g2), FadeIn(rule))
             self.add(path, pl, cnt)
@@ -87,14 +85,14 @@ class Convergence(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.8, x=-0.6, buff=0.72, edge=6.9)
         head = label(r"Williams, ch.\ 11 and 13--14", font_size=22, color=GREY_B).to_edge(UP, buff=0.25)
         with self.voiceover(
-            "Written out, this is Doob's upcrossing lemma. The trader's wealth is at least b minus a times the number "
-            "of upcrossings, minus the loss on the open trade. <bookmark mark='a'/> For a supermartingale the "
+            "Written out, this is Doob's upcrossing lemma. The trader's wealth is at least b minus a times the "
+            "number of upcrossings, minus the loss on the open trade. <bookmark mark='a'/> For a supermartingale the "
             "expected wealth is at most zero, so the expected number of upcrossings is bounded by the expected "
-            "shortfall below a, divided by the width of the band. <bookmark mark='b'/> If the martingale's mean size "
-            "stays bounded, every band with rational ends is crossed only finitely often, so the path cannot "
-            "oscillate: it converges. That is Doob's forward convergence theorem. <bookmark mark='c'/> One warning. "
-            "Converging is not the same as keeping the mean. In chapter twelve a fair gambler's wealth goes to zero "
-            "while its mean stays one. Uniform integrability is exactly the condition that keeps it."
+            "shortfall below a over the width of the band. <bookmark mark='b'/> If the martingale's mean size stays "
+            "bounded, every band with rational ends is crossed only finitely often, so the path cannot oscillate: it "
+            "converges. That is Doob's forward convergence theorem. <bookmark mark='c'/> But converging is not "
+            "keeping the mean: in chapter twelve a fair gambler's wealth goes to zero while its mean stays one. "
+            "Uniform integrability is exactly what keeps it."
         ) as vo:
             self.play(FadeIn(head))
             step(0)
@@ -137,14 +135,12 @@ class Convergence(VoiceoverScene):
                              r"10\%: the limit is uniform on $[0, 1]$.", width=5.4, font_size=20)
         pred.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         with self.voiceover(
-            "The most famous convergent martingale is an urn. Start with one red ball and one blue. Draw a ball, put "
-            "it back, and add another of the same colour. <bookmark mark='a'/> The expected number of red balls "
-            "after the next draw grows by exactly the current red fraction, so the fraction itself is a martingale, "
-            "and it is bounded between zero and one. It must converge. <bookmark mark='b'/> Watch a hundred urns. "
-            "Early on they jump about; then each one freezes at its own level. The rich get richer, and the urn "
-            "remembers its first few draws forever. <bookmark mark='c'/> Where do they settle? Collect the limits of "
-            "ten thousand urns, and the histogram is flat: the limit is uniform between zero and one. So the chance "
-            f"that the red fraction ends above ninety percent is ten percent; simulated, {100 * p['p_above_09']:.1f}."
+            "The famous convergent martingale is an urn: one red ball, one blue; draw one, put it back with another "
+            "of its colour. <bookmark mark='a'/> The red fraction is a martingale, bounded between zero and one, so "
+            "it converges. <bookmark mark='b'/> A hundred urns jump about, then each freezes at its own level: the "
+            "urn remembers its first draws forever. <bookmark mark='c'/> The limits of ten thousand urns are flat, "
+            "uniform. So the chance the red fraction ends above ninety percent is ten percent; simulated, "
+            f"{100 * p['p_above_09']:.1f}."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")
@@ -196,16 +192,13 @@ class Convergence(VoiceoverScene):
         src = real_data(r"Kenneth French's daily US market; prior $N(0, (10\text{ bp})^2)$ a day; daily variance known "
                         r"from an EWMA the day before")
         with self.voiceover(
-            "Paul Lévy's upward theorem says that the forecast of anything, refined as information arrives, converges "
-            "to what the full information would tell you. That is learning, and here is a learner. A Bayesian "
-            "estimates the market's mean return, starting from a prior centred on zero, and updates every day since "
-            "1926, weighting each day by its known volatility. Under the model, its estimate is a Doob martingale. "
-            "<bookmark mark='a'/> Scrub through the years. The band starts enormous and narrows like one over the "
-            f"square root of time: plus or minus {100 * dp['half_1936']:.0f} percent a year after ten years, "
-            f"{100 * dp['half_1976']:.1f} after fifty. <bookmark mark='b'/> By 2020 the estimate is "
-            f"{100 * dp['end_mean']:.1f} percent a year, give or take {100 * dp['end_half']:.1f}. The mean of the "
-            "market is learnable, but only over decades, which is why Robert Merton warned in 1980 that drifts are "
-            "far harder to estimate than volatilities."
+            "Lévy's upward theorem: a forecast refined by information converges to what full information would say. "
+            "That is learning. A Bayesian estimates the market's mean return, from a prior centred on zero, updating "
+            "every day since 1926; its estimate is a Doob martingale under the model. <bookmark mark='a'/> The band "
+            f"narrows like one over the square root of time: plus or minus {100 * dp['half_1936']:.0f} percent a year "
+            f"after ten years, {100 * dp['half_1976']:.1f} after fifty. <bookmark mark='b'/> By 2020: "
+            f"{100 * dp['end_mean']:.1f} percent a year, give or take {100 * dp['end_half']:.1f}. Drifts are learnable "
+            "only over decades, as Robert Merton warned in 1980."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[:2]))
             self.add(bd, ln, yr)
