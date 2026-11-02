@@ -96,6 +96,12 @@ language models; memorization in court). Everything is computed by `compute.py`,
 
 ## Run
 
+Normal builds now require the two explicit corrected-recipe preparation commands
+in [Versioned scientific corrections](#versioned-scientific-corrections) first.
+The legacy `make`/`compute` commands below populate only the original cache; they
+do not create versioned corrected bundles. Missing corrected bundles fail clearly.
+Use explicit legacy selection only when reproducing the original results.
+
 ```
 python tools/make.py ai8                         # computations, then the narrated film in English and Chinese
 python -m videos.ai.ai8.compute                  # the numbers only (Part 6's pages; the novels model for two items)
@@ -273,17 +279,16 @@ this part's translation supplement. Existing translations, phrase rules and
 patterns remain unchanged. The shared CJK punctuation-wrapping helper is excluded
 from this candidate and requires separate integration review.
 
-The scientific producer and manifest are unchanged. Two independently reviewed
-numerical corrections are excluded here: the binomial minimum CDF requires the
-strict survival event `P(errors > k)`; logistic-loss logs must use the same
-post-update weights as the rest of each recorded row. The worker validated these
-with separately identified corrected outcomes, without overwriting original
-results. Those data and producer corrections are not distributed in this source
-branch. In particular, the worker's corrected union-bound medians and MaxMargin
-loss displays cannot be reproduced from the unchanged original cache alone.
-The integration owner must reconcile these dependencies before production.
+The legacy scientific producer and manifest are unchanged. The additive
+`corrected_v1.py` now exposes two explicit corrected recipes: the minimum CDF
+uses the strict survival event `P(errors > k)`, and logistic-loss logs use the
+same post-update weights as the other fields of each recorded row. Their results
+live in a separate versioned namespace; original scientific outcomes are never
+replaced. The common scene loader selects corrected data for `union` and
+`maxmargin` by default and refuses missing, incomplete or mismatched bundles.
+An original-result replay requires an explicit `EXPLAINER_AI8_RECIPE=legacy`.
 
-The worker reports static endpoint coverage for all 19 scenes in English and
+The earlier worker review reports static endpoint coverage for all 19 scenes in English and
 Chinese, selected native-resolution still review, and selected encoded MaxMargin
 review with complete video-stream decoding. Detailed rendered evidence remains
 private. Those captures used the worker's separately corrected data overlay and
@@ -303,3 +308,64 @@ python videos/ai/ai8/test_display_geometry.py
 and environment cached-only guards, and selects a silent QA backend. The source
 checks include a synthetic upstream-cache rejection test; synthetic tests do not
 validate scientific outcomes or spoken synchronization.
+
+## Versioned scientific corrections
+
+Run these commands serially in the recipe's isolated runtime: Python 3.12.14,
+NumPy 2.5.4 and SciPy 1.18.1. The entry point sets all numerical thread budgets to
+one before numerical imports. Neither recipe reads Part 6 pages or novels weights.
+
+```sh
+python videos/ai/ai8/corrected_v1.py --item union --mode fresh
+python videos/ai/ai8/corrected_v1.py --item maxmargin --mode fresh
+```
+
+Each command exclusively reserves its item directory under
+`.cache/ai8-corrected-v1`. It writes `data.json`, `data.npz` and a final
+`receipt.json` binding the recipe version, source hashes, runtime versions,
+executable and wheel-build identities, procedural inputs and output hashes.
+Fresh outputs are new scientific computations, not historical recovery. Existing
+or partial destinations are refused; there is no force, resume or fallback path.
+Do not delete a failed reservation to repeat an uncertain run automatically.
+
+A separate MaxMargin mode derives losses at explicitly supplied recorded weights:
+
+```sh
+python videos/ai/ai8/corrected_v1.py --item maxmargin --mode derived-weights --input-dir ORIGINAL_DIRECTORY --output-root SEPARATE_NAMESPACE
+```
+
+The input directory must contain `maxmargin.json` and `maxmargin.npz`. This mode
+preserves JSON bytes, other arrays and all non-loss record columns. It does not
+regenerate or authenticate a trajectory. Its receipt identifies caller-supplied
+inputs and distinguishes reference recipe parameters from observed input origin.
+Scene loading requires fresh-mode bundles and rejects derived-mode bundles.
+
+For bounded silent QA, choose the recipe explicitly:
+
+```sh
+python videos/ai/ai8/qa_cached.py --only Hoeffding MaxMargin Outro --lang en --recipe corrected-v1
+python videos/ai/ai8/qa_cached.py --only Hoeffding MaxMargin Outro --lang zh --recipe corrected-v1
+```
+
+Hoeffding consumes the corrected union result; MaxMargin consumes the corrected
+row losses. Outro is a regression control and has no direct union-cache load.
+The wrapper validates needed fresh bundles before starting a child and verifies
+that their receipts remain identical afterward. The shared QA hook records both
+the corrected receipt and payload files as inputs. Postflight verifies those
+actual recorded paths and signatures, then writes a content-addressed recipe
+selection witness bound to the exact result hash. It never retags the original
+fingerprint or changes the result. Generic reports/resume do not understand this
+selection witness: corrected-result acceptance must check it and the intended
+recipe, rather than accepting an unlabeled generic report. Missing or tampered
+data never start a producer. Explicit `--recipe legacy` is for labeled original-result
+replays; it cannot establish corrected-result acceptance.
+
+```sh
+python videos/ai/ai8/test_corrected_v1.py
+python videos/ai/ai8/test_corrected_selection.py
+```
+
+These portable tests use synthetic data and independent exact/high-precision
+references. They do not run either registered fresh recipe or prove rendered,
+spoken or production acceptance. The shared CJK wrapping correction remains
+separate and is not included in this source update.

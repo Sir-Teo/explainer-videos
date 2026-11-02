@@ -9,12 +9,24 @@
 from __future__ import annotations
 
 import math
+import os
 
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
 
-from .compute import load  # noqa: F401
+from .compute import load as _legacy_load
+
+
+def load(name):
+    """Correct known numerical bugs by default; legacy replay must be explicit."""
+    recipe = os.environ.get('EXPLAINER_AI8_RECIPE', 'corrected-v1')
+    if recipe not in ('legacy', 'corrected-v1'):
+        raise ValueError('unknown Part 8 scientific recipe selection')
+    if recipe == 'corrected-v1' and name in ('union', 'maxmargin'):
+        from .corrected_v1 import load_for_scene
+        return load_for_scene(name)
+    return _legacy_load(name)
 
 PART = 8
 HIST = C.HUMAN  # history cards
