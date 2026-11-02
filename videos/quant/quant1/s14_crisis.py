@@ -82,9 +82,9 @@ class Crisis(VoiceoverScene):
         n = len(d)
         month_starts = [i for i in range(n) if i == 0 or d[i] // 100 != d[i - 1] // 100]
         names = {1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep"}
-        top = axes([0, n], [0.6, 1.1], x_length=8.6, y_length=2.5, ylabel=r"US market level (1 Jan = 1)",
+        top = axes([0, n], [0.6, 1.1], x_length=7.9, y_length=2.5, ylabel=r"US market level (1 Jan = 1)",
                    yticks=[0.7, 0.9, 1.1], font_size=16)
-        bot = axes([0, n], [0, 1.05], x_length=8.6, y_length=2.0, ylabel=r"volatility, last 21 days",
+        bot = axes([0, n], [0, 1.05], x_length=7.9, y_length=2.0, ylabel=r"volatility, last 21 days",
                    yticks=[0, 0.5, 1.0], yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=16)
         VGroup(top, bot).arrange(DOWN, buff=0.45).to_edge(LEFT, buff=0.6).shift(DOWN * 0.1)
         ticks = VGroup(*[label(names[int(d[i] // 100 % 100)], font_size=17, color=GREY_B).next_to(
@@ -108,8 +108,9 @@ class Crisis(VoiceoverScene):
             label(rf"{day_text(m['recover_d'])}: the peak regained, {m['days_to_recover']} trading days on",
                   font_size=20, color=GAIN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(UP * 0.6)
-        if facts.width > 4.6:
-            facts.scale_to_fit_width(4.6).to_edge(RIGHT, buff=0.35)
+        if facts.width > 4.3:
+            facts.scale_to_fit_width(4.3)
+        facts.to_edge(RIGHT, buff=0.45)
         src = real_data(r"Ken French's daily US market, value-weighted, January--September 2020")
         with self.voiceover(
             "Step back, and the whole season shows every fact of this part at once. The market peaked on the "
@@ -161,6 +162,8 @@ class Crisis(VoiceoverScene):
                   color=QC.IDEA),
             label(r"The same arithmetic for 19 October 1987 is in Part 10.", font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.2).next_to(pair, DOWN, buff=0.6)
+        VGroup(pair, lesson).scale(1.12).move_to(ORIGIN)
+        keep_in_frame(VGroup(pair, lesson), 0.3)
         with self.voiceover(
             "Measure them as this part has taught. Against the market's own volatility over the year before, the "
             f"16th of March was a {abs(k['us_z']):.1f} standard deviation fall. A bell curve says a day like that "
