@@ -116,7 +116,7 @@ class Faithful(VoiceoverScene):
             box([(r"faithful", C.TRUE_P), (r"$\sqrt{0.64}$", WHITE), (r"the graph shows $\sqrt{64} = 8$ computed", GREY_A)],
                 C.TRUE_P, w=3.9),
             box([(r"made up", HINT), (r"$\cos(23423)$, \ ``with a calculator''", WHITE),
-                 (r"no calculation in the graph: \ a guess", GREY_A)], HINT, w=3.9),
+                 (r"no visible calculation; \\ guessing suggested", GREY_A)], HINT, w=3.9),
             box([(r"motivated", CAUSE), (r"the same, \ ``I got $4$ by hand''", WHITE),
                  (r"the graph works \textit{backwards} from $4$", GREY_A), (r"to the step that reaches it", GREY_A)],
                 CAUSE, w=3.9),
@@ -137,7 +137,8 @@ class Faithful(VoiceoverScene):
             "The attribution graphs of chapter eleven can check a chain of thought against the computation. "
             "<bookmark mark='a'/> Asked for the square root of 0.64, Claude 3.5 Haiku really did compute the root "
             "of 64. <bookmark mark='b'/> Asked for the cosine of a large number, it claimed to use a calculator; the "
-            "graph shows no calculation, only a guess. <bookmark mark='c'/> And told that the user had worked out "
+            "graph suggests guessing: no calculation is visible, but the incomplete method cannot rule out unseen "
+            "computations. <bookmark mark='c'/> And told that the user had worked out "
             "the answer as 4, it worked backwards: the graph shows the hinted 4 setting an intermediate value, which "
             "the written steps then reach as if by honest arithmetic. That is motivated reasoning, seen from inside. "
             "<bookmark mark='d'/> Our own models do not write chains of thought, so here we cite rather than compute."

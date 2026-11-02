@@ -151,11 +151,8 @@ class Lens(VoiceoverScene):
                  center=[2.4, -0.4, 0])
         cols = color_gradient([TUNED, PROBE], L)
         cs = VGroup(*[curve(g.ax, cur[l_, :, 0], cur[l_, :, 1], cols[l_], 3) for l_ in range(L)])
-        lbl = VGroup(*[label(rf"$h_{l_}$", font_size=18, color=cols[l_]).next_to(g.ax.c2p(S, cur[l_, -1, 1]), RIGHT, buff=0.08)
-                       for l_ in range(L)])
-        for a_, b_ in zip(lbl, lbl[1:]):
-            if a_.get_y() - b_.get_y() < 0.25:
-                b_.set_y(a_.get_y() - 0.25)
+        lbl = legend([(cols[l_], rf"$h_{l_}$") for l_ in range(L)], font_size=18)
+        lbl.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(g.ax, RIGHT, buff=0.16).align_to(g.ax, UP)
         colors = {r"A_\ell": TUNED, r"h_\ell": RESID}
         f = cmath(r"\text{tuned lens}_\ell = W_U\,\operatorname{norm}(", r"h_\ell", r" + ", r"A_\ell", r" h_\ell", r" + b_\ell)",
                   colors=colors, font_size=30).to_corner(UL, buff=0.4)

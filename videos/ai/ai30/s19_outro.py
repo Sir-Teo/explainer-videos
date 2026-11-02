@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai30.common import (CAUSE, CHAT, CTRL, FEAT, PART, PROBE, RESID, heat_image, load, node_box)
+from videos.ai.ai30.common import (signed_image, CAUSE, CHAT, CTRL, FEAT, PART, PROBE, RESID, heat_image, load, node_box)
 
 PH = [GREY_D, C.TRUE_P, C.BITS]
 
@@ -38,14 +38,23 @@ class Outro(VoiceoverScene):
         out.append((VGroup(ax, curve(ax, range(len(lk)), lk, PROBE, 3), curve(ax, range(len(tk)), tk, C.MLP, 3)),
                     r"logit and tuned lens", C.MLP))
         ind = load("induction")
-        H = np.clip(np.asarray(ind["heat"])[:, : int(ind["target"]) + 4], 0, 1)
-        out.append((heat_image(H[::-1], TW, TH * 0.6, color=CAUSE, gamma=0.7), r"activation patching", CAUSE))
+        H = np.asarray(ind["heat"])[:, : int(ind["target"]) + 1]
+        out.append((signed_image(H[::-1], TW, TH * 0.6, pos=CAUSE, neg=C.TRUE_P), r"activation patching", CAUSE))
         kp = np.asarray(ind["snap_kpath"])
         cv = np.asarray(ind["curve"])
-        ax = mk([0, float(cv[-1, 0]), 1], [0, float(cv[:, 1].max()), 1])
-        dm = np.clip(kp[:, 1], 0, None)
-        out.append((VGroup(ax, curve(ax, cv[:, 0], cv[:, 1], CAUSE, 3),
-                           curve(ax, kp[:, 0], dm / max(dm.max(), 1e-9) * float(cv[:, 1].max()), C.BITS, 3)),
+        dm = kp[:, 1]
+        # Separate miniature axes preserve signed raw effects rather than
+        # silently clipping or combining nats and bits on the same scale.
+        sx = [0, float(cv[-1, 0]), 1]
+        loss_ax = Axes(x_range=sx, y_range=[0, float(cv[:, 1].max()), 1], x_length=TW * 0.9,
+                       y_length=TH * 0.35, tips=False,
+                       axis_config={"stroke_color": GREY_D, "include_ticks": False}).shift(UP * TH * 0.25)
+        dmlo, dmhi = min(0., float(dm.min())), max(1e-6, float(dm.max()))
+        effect_ax = Axes(x_range=sx, y_range=[dmlo, dmhi, 1], x_length=TW * 0.9,
+                         y_length=TH * 0.35, tips=False,
+                         axis_config={"stroke_color": GREY_D, "include_ticks": False}).shift(DOWN * TH * 0.25)
+        out.append((VGroup(loss_ax, curve(loss_ax, cv[:, 0], cv[:, 1], CAUSE, 3),
+                           effect_ax, curve(effect_ax, kp[:, 0], dm, C.BITS, 3)),
                     r"an induction circuit", C.BITS))
         ph = load("phase")
         emp = np.asarray(ph["emp"])
@@ -55,11 +64,16 @@ class Outro(VoiceoverScene):
                              .move_to([j * cell, i * cell, 0]) for i in range(n) for j in range(m)]),
                     r"the phase diagram", C.BITS))
         fr = load("frontier")
-        g = VGroup(mk([1, 6, 1], [0, 1, 0.5]))
+        families = []
         for kind, key, col in (("l1", "l1s", C.SURPRISE), ("jumprelu", "jumps", C.TRUE_P), ("topk", "ks", C.BITS)):
-            pts = sorted((math.log2(max(np.mean([fr[f"{kind}_{q:g}_{s}_l0"] for s in fr["seeds"]]), 1)),
-                          float(np.mean([fr[f"{kind}_{q:g}_{s}_fvu"] for s in fr["seeds"]]))) for q in fr[key])
-            g.add(curve(g[0], [a for a, _ in pts], [min(b, 1) for _, b in pts], col, 3))
+            pts = sorted((math.log2(max(np.mean([fr[f"{kind}_{q:g}_{seed}_l0"] for seed in fr["seeds"]]), 1e-6)),
+                          float(np.mean([fr[f"{kind}_{q:g}_{seed}_fvu"] for seed in fr["seeds"]]))) for q in fr[key])
+            families.append((pts, col))
+        xs = [x for pts, _ in families for x, _ in pts]
+        ys = [y for pts, _ in families for _, y in pts]
+        g = VGroup(mk([math.floor(min(xs)), math.ceil(max(xs)), 1], [0, max(ys) * 1.05, 1]))
+        for pts, col in families:
+            g.add(curve(g[0], [x for x, _ in pts], [y for _, y in pts], col, 3))
         out.append((g, r"three dictionaries", FEAT))
         gr = load("graph")
         ms, pr = np.asarray(gr["measured"]), np.asarray(gr["predicted"])
@@ -84,8 +98,9 @@ class Outro(VoiceoverScene):
                     r"steering", C.SURPRISE))
         gk = load("grok")
         s_ = np.asarray(gk["step"], float)
-        ax = mk([0, float(s_[-1]), 1], [-8, 2, 1])
-        lg = lambda k: np.clip(np.log10(np.clip(np.asarray(gk[k], float), 1e-8, None)), -8, 2)  # noqa: E731
+        log_values = np.log10(np.clip(np.concatenate([gk["test_loss"], gk["restricted_loss"]]), 1e-8, None))
+        ax = mk([0, float(s_[-1]), 1], [math.floor(log_values.min()), math.ceil(log_values.max()), 1])
+        lg = lambda k: np.log10(np.clip(np.asarray(gk[k], float), 1e-8, None))  # noqa: E731
         out.append((VGroup(ax, curve(ax, s_, lg("test_loss"), C.SURPRISE, 3),
                            curve(ax, s_, lg("restricted_loss"), C.BITS, 3)), r"grokking, \ from inside", C.BITS))
         tiles = Group()
@@ -110,12 +125,12 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Let's take stock. A probe reads what a layer knows, but only a control task says whether the probe did "
             "the work, and only an intervention says whether the model uses it. Lenses read the stream as it flows. "
-            "Patching finds causes, down to two heads that copy, read off their weights and watched forming. "
+            "Patching tests a copying circuit of previous-token, current-token and induction heads, alongside weight and training diagnostics. "
             "Superposition packs more features than dimensions, a phase the network enters when features are rare; "
-            "sparse dictionaries pull them apart, better with TopK and JumpReLU than with L1, though they split and "
-            "absorb. Transcoders turn a prediction into a graph we can test, crosscoders diff a model against its "
-            "fine-tune, and a direction can steer. Grokking turned out to be a circuit built quietly under a "
-            "memorized table."
+            "sparse dictionaries pull them apart. We compared L1, TopK and JumpReLU, and examined splitting and "
+            "absorption. Transcoders turn a prediction into a graph we can test, crosscoders diff a model against its "
+            "fine-tune, and a direction can steer. Grokking progress measures follow selected frequency computations "
+            "through training."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
@@ -145,18 +160,19 @@ class Outro(VoiceoverScene):
     # ------------------------------------------------------------------
     def problems(self):
         ps = problem_set([
-            r"An L1 autoencoder rebuilds $x = a\,d$ ($\|d\| = 1$, \ $a > 0$) from one latent: \ minimize $\|x - f d\|^2 + "
-            r"\lambda f$ over $f \ge 0$. \ Show $f^* = \max(a - \lambda/2, 0)$, \ and that TopK has no such bias.",
-            r"For independent random unit vectors $u, v \in \mathbb{R}^d$, \ show $\mathbb{E}[u \cdot v] = 0$ and "
-            r"$\mathbb{E}[(u \cdot v)^2] = 1/d$.",
-            r"Show that the composition score $\|A B\|_F / (\|A\|_F \|B\|_F)$ lies in $[0, 1]$, \ and that it is $1$ "
-            r"exactly when $A$ and $B$ are rank one and $A$'s right singular vector is $B$'s left one.",
-            r"Two inputs feed $y = x_1 \wedge x_2$. \ Clean: \ both true; \ corrupted: \ both false. \ Show that "
-            r"noising either input alone destroys $y$, \ while denoising either alone restores nothing.",
-            r"Two features, one dimension, density $\rho$, importances $1$ and $r$, \ $x_i \sim U[0, 1]$ when on: \ show "
-            r"that keeping feature 1 alone costs $r\rho/3$, \ keeping feature 2 alone $\rho/3$.",
-            r"Let $L(c) = \sum_{k \in K} \cos\!\big(2\pi k (a + b - c)/p\big)$ for a prime $p$ and $0 < k < p$. \ Show "
-            r"that $c = (a + b) \bmod p$ maximizes $L$, \ uniquely.",
+            r"An L1 autoencoder rebuilds $x=a\,d$ ($\|d\|=1$, $a>0$, $\lambda\ge0$) from one latent: minimize "
+            r"$\|x-fd\|^2+\lambda f$ over $f\ge0$. Show $f^*=\max(a-\lambda/2,0)$; find the unpenalized scalar optimum "
+            r"for a retained TopK latent.",
+            r"Let $u,v$ be independent and uniform on the unit sphere in $\mathbb{R}^d$ ($d\ge1$). Show "
+            r"$\mathbb{E}[u\cdot v]=0$ and $\mathbb{E}[(u\cdot v)^2]=1/d$.",
+            r"For nonzero real matrices $A,B$ of compatible sizes, show $\|AB\|_F/(\|A\|_F\|B\|_F)\in[0,1]$. It equals "
+            r"$1$ exactly when both have rank one and $A$'s right singular direction is parallel to $B$'s left one.",
+            r"Two inputs feed $y = x_1 \wedge x_2$. \ Clean: \ both true; \ corrupted: \ both false. \ Show that noising"
+            r" either input alone destroys $y$, \ while denoising either alone restores nothing.",
+            r"Two features, one dimension, density $\rho$, importances $1$ and $r$, \ $x_i \sim U[0, 1]$ when on: \ show"
+            r" that with zero output bias, keeping feature 1 alone costs $r\rho/3$, \ keeping feature 2 alone $\rho/3$.",
+            r"For prime $p$ and nonempty $K\subseteq\{1,\ldots,p-1\}$, fix $a,b\in\mathbb{Z}_p$. For $c\in\mathbb{Z}_p$,"
+            r" let $L(c)=\sum_{k\in K}\cos(2\pi k(a+b-c)/p)$. Show its unique maximizer is $c=(a+b)\bmod p$.",
         ], font_size=21)
         with self.voiceover(
             "Here are six problems to try, from soft thresholding to the trigonometry of grokking. Pause here, and "

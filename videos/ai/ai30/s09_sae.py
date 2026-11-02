@@ -68,7 +68,8 @@ class SAE(VoiceoverScene):
                      label(rf"spliced in: \ ${float(s['bits_spliced']):.2f}$ bits per character \\ (the model: \ "
                            rf"${float(s['bits_clean']):.2f}$; \ the average vector: \ ${float(s['bits_mean']):.2f}$)",
                            font_size=20, color=GREY_A),
-                     label(rf"trained on ${int(s['n_vectors']):,}$ vectors".replace(",", "{,}"), font_size=20, color=GREY_B))
+                     label(rf"trained on ${int(s['n_vectors']):,}$ vectors".replace(",", "{,}"), font_size=20, color=GREY_B),
+                     label(r"L0 and variance: \ measured on the fit vectors", font_size=16, color=GREY_B))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(why, DOWN, buff=0.45).align_to(eqs, LEFT)
         cite_ = cite(r"T.~Bricken et al., \textit{Towards Monosemanticity} (2023); \ H.~Cunningham et al.\ (2023)", corner=DR)
         # where x comes from: the novel, read by our transformer, up to the lit character
@@ -101,7 +102,7 @@ class SAE(VoiceoverScene):
             "<bookmark mark='d'/> Train it to rebuild well, while paying for every feature it uses. That penalty is "
             "the whole trick: it forces the code to be sparse, so each vector is explained by a few directions. "
             f"<bookmark mark='e'/> Trained on {int(s['n_vectors']) // 1000} thousand vectors from our transformer, "
-            f"it uses about {float(s['l0']):.0f} features per character and rebuilds "
+            f"measured on those same fit vectors, it uses about {float(s['l0']):.0f} features per character and rebuilds "
             f"{100 * (1 - float(s['fvu'])):.0f} percent of the variance: of all the ways these vectors differ from "
             f"their average, the rebuild captures {100 * (1 - float(s['fvu'])):.0f} percent. Put the rebuild back into "
             f"the model in place of the real vectors, and it writes at {float(s['bits_spliced']):.2f} bits per "
@@ -133,15 +134,18 @@ class SAE(VoiceoverScene):
         checkpoint."""
         s = load("sae")
         st, l0, fv = (np.asarray(s[k], float) for k in ("rec_step", "rec_l0", "rec_fvu"))
+        if not np.isfinite(fv).all() or (fv < 0).any():
+            raise ValueError("SAE replay needs finite nonnegative recorded variance ratios")
         codes = np.asarray(s["snap_codes"])  # (checkpoints, 64 positions, 512)
         sst = np.asarray(s["snap_steps"], float)
         text = str(s["demo_text"])
         k = int(np.argmax([c.isalpha() for c in text[20:]])) + 20
         S = float(st[-1])
-        g1 = axes([0, S], [0, float(l0.max()) * 1.4], x_length=5.4, y_length=2.2, ylabel=r"features on per character",
+        g1 = axes([0, S], [0, float(l0.max()) * 1.4], x_length=5.4, y_length=2.2, ylabel=r"features on per character \ (training batch)",
                   yticks=ticks(0, float(l0.max()), 2), center=[-3.4, 1.3, 0])
-        g2 = axes([0, S], [0, min(1.0, float(fv.max()) * 1.05)], x_length=5.4, y_length=2.2, xlabel=r"training steps",
-                  ylabel=r"variance left unexplained", xticks=[0, S], yticks=ticks(0, min(1.0, float(fv.max())), 2),
+        fv_top = max(float(fv.max()) * 1.05, 0.01)
+        g2 = axes([0, S], [0, fv_top], x_length=5.4, y_length=2.2, xlabel=r"training steps",
+                  ylabel=r"variance left unexplained \ (training batch)", xticks=[0, S], yticks=ticks(0, fv_top, 3),
                   center=[-3.4, -1.9, 0])
         t = ValueTracker(0)
 
@@ -149,7 +153,7 @@ class SAE(VoiceoverScene):
             return always_redraw(lambda: curve(ax.ax, st[: max(2, int(np.searchsorted(st, t.get_value(), side="right")))],
                                                ys[: max(2, int(np.searchsorted(st, t.get_value(), side="right")))], col, 3))
 
-        c1, c2 = upto(g1, l0, FEAT), upto(g2, np.minimum(fv, 1.0), RESID)  # the untrained start is off the top
+        c1, c2 = upto(g1, l0, FEAT), upto(g2, fv, RESID)
 
         def code():
             i = max(0, int(np.searchsorted(sst, t.get_value(), side="right")) - 1)
@@ -165,7 +169,8 @@ class SAE(VoiceoverScene):
         n0 = int((codes[0, k] > 0).sum())
         n1 = int((codes[-1, k] > 0).sum())
         with self.voiceover(
-            "Watch it learn. <bookmark mark='a'/> At the start, with random directions, the penalty has not bitten "
+            "Watch it learn. These curves measure the current training batch; the variance baseline uses the whole "
+            "fit pool. A ratio above one exceeds that pool's average-vector error. <bookmark mark='a'/> At the start, with random directions, the penalty has not bitten "
             f"yet: the character on the right switches on {n0} features. <bookmark mark='b'/> As training goes, the "
             "penalty prunes, and the rebuild improves at the same time, because the directions turn to face the "
             f"data. <bookmark mark='c'/> By the end, {n1} features describe that character, and the variance left "
@@ -239,16 +244,17 @@ class SAE(VoiceoverScene):
         kn = label(rf"the model's own neurons: \ average ${8 * npur.mean():.1f}$", font_size=22, color=NEURON)
         kf = label(rf"the autoencoder's features: \ average ${8 * fpur.mean():.1f}$", font_size=22, color=FEAT)
         keys = VGroup(kn, kf).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(ax, UP, buff=0.3).align_to(ax, LEFT)
+        # compute_sae describes neurons on 300 windows x 192 positions, but SAE features on all fit vectors.
+        pool_note = label(r"different pools: \ neurons $57{,}600$ positions; \ SAE $211{,}200$ positions \\ descriptive comparison",
+                          font_size=16, color=GREY_B).to_edge(DOWN, buff=0.18)
         ctx = [str(c) for c in s["neuron_contexts"]][:6]
         nl = VGroup(*[context_line(c, 5.0, font_size=17, color=NEURON) for c in ctx]).arrange(DOWN, buff=0.1).move_to([3.7, -0.6, 0])
         nh = label(rf"neuron {int(s['neuron'])}, \ a typical one: \\ its strongest moments", font_size=22, color=NEURON)
         nh.next_to(nl, UP, buff=0.2)
         better = fpur.mean() > npur.mean()
         n_med = int(round(8 * float(npur[int(s["neuron"])])))
-        verdict = ("The features are cleaner. In a model this small, and this close to its characters, even neurons are "
-                   "fairly clean; in large models, where features are packed in superposition across neurons, single "
-                   "neurons mean many things at once, and the gap is far wider." if better else
-                   "In a model this small, the gap is narrow.")
+        verdict = ("The features score higher in this descriptive comparison." if better else
+                   "The features do not score higher in this descriptive comparison.")
         # a neuron: one number in an MLP's hidden layer
         lay = VGroup(*[Circle(radius=0.13, stroke_color=NEURON, stroke_width=2, fill_color=NEURON if i == 3 else "#0B0F17", fill_opacity=1)
                        for i in range(7)]).arrange(RIGHT, buff=0.16)
@@ -263,7 +269,8 @@ class SAE(VoiceoverScene):
             f"<bookmark mark='a'/> Here's a typical one, from the second block, at its strongest moments: {n_med} of "
             "the eight land on the same character. <bookmark mark='b'/> Count it up: of each unit's eight strongest "
             f"moments, how many share one character? For neurons, {8 * npur.mean():.1f} on average; for the features, "
-            f"{8 * fpur.mean():.1f}. {verdict}"
+            f"{8 * fpur.mean():.1f}. The pools differ: neurons are searched over 57,600 positions, and SAE features "
+            f"over {int(s['n_vectors']):,}. This is descriptive, rather than a matched-pool benchmark. {verdict}"
         ) as vo:
             self.play(FadeIn(nh), LaggedStart(*[FadeIn(l_) for l_ in nl], lag_ratio=0.15), FadeIn(ncard))
             vo.wait_until("a")
@@ -273,5 +280,6 @@ class SAE(VoiceoverScene):
             self.play(Create(ax), FadeIn(xt), FadeIn(xn))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bn], lag_ratio=0.08), FadeIn(kn))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bf], lag_ratio=0.08), FadeIn(kf))
+            self.play(FadeIn(pool_note))
         self.wait(0.3)
         self.clear_scene()

@@ -30,12 +30,14 @@ class Disagree(VoiceoverScene):
         raw, s1, s8 = (np.asarray(d[k]) for k in ("probe_raw", "probe_sae1", "probe_sae8"))  # (sizes, draws, [in, out])
         hc = history_card(r"Mar 2025", r"Google DeepMind's interpretability team", r"autoencoder probes lose to plain "
                           r"linear probes at detecting harmful intent, \ out of distribution most of all; \ the team "
-                          r"deprioritized autoencoder research", width=5.6, color=CTRL, font_size=18).to_corner(UL, buff=0.3)
+                          r"temporarily deprioritized fundamental SAE research", width=5.6, color=CTRL, font_size=18).to_corner(UL, buff=0.3)
         hc2 = note(r"also Kantamneni et al.\ (2025): \ $113$ datasets, \ no consistent win").next_to(hc, DOWN, buff=0.1).align_to(hc, LEFT)
-        lo = float(min(raw.min(), s1.min(), s8.min()))
-        g = axes([xs[0] - 0.3, xs[-1] + 0.3], [max(0.4, lo - 0.05), 1.0], x_length=6.0, y_length=3.4,
-                 xlabel=r"training examples", ylabel=r"accuracy, \ ``inside a quotation'' \ (novels model)", xticks=list(xs),
-                 xfmt=lambda v: f"{int(round(2 ** v))}", yticks=ticks(max(0.4, lo - 0.05), 1.0, 3), center=[3.0, 0.3, 0])
+        for arr in (raw, s1, s8):
+            if arr.ndim != 3 or arr.shape[0] != len(ns) or arr.shape[2] != 2 or not np.isfinite(arr).all() or np.any((arr < 0) | (arr > 1)):
+                raise ValueError("Sparse-probe accuracies must be paired finite fractions in [0, 1]")
+        g = axes([xs[0] - 0.3, xs[-1] + 0.3], [0, 1], x_length=6.0, y_length=3.4,
+                 xlabel=r"training examples", ylabel=r"accuracy, \ window-local quote-state proxy", xticks=list(xs),
+                 xfmt=lambda v: f"{int(round(2 ** v))}", yticks=[0, 0.5, 1], center=[3.0, 0.3, 0])
         cols = [(raw, PROBE, r"linear probe, \ all $256$ numbers"), (s8, SAEC, r"$8$ autoencoder latents"),
                 (s1, FEAT, r"$1$ latent")]
         plots = VGroup()
@@ -44,7 +46,7 @@ class Disagree(VoiceoverScene):
             m = arr[:, :, 0].mean(1)
             plots.add(VGroup(curve(g.ax, xs, m, col, 3),
                              *[spread_bar(g.ax, x, arr[i, :, 0], col, width=0.08) for i, x in enumerate(xs)]))
-            ood_c.add(DashedVMobject(curve(g.ax, xs, np.clip(arr[:, :, 1].mean(1), 0.4, 1.0), col, 2.5), num_dashes=24))
+            ood_c.add(DashedVMobject(curve(g.ax, xs, arr[:, :, 1].mean(1), col, 2.5), num_dashes=24))
         lg = legend([(c_, t) for _, c_, t in cols], font_size=17).next_to(g, DOWN, buff=0.6).align_to(g, LEFT)
         lg2 = label(r"solid: \ held-out novel text \\ dashed: \ chat transcripts", font_size=17, color=GREY_A).next_to(lg, RIGHT, buff=0.5)
         r1 = VGroup(node_box(r"the stream: \ $256$ numbers", GREY_A, font_size=20),
@@ -64,28 +66,28 @@ class Disagree(VoiceoverScene):
         ood = [float(a[-1, :, 1].mean()) for a, _, _ in cols]
         ind = [float(a[-1, :, 0].mean()) for a, _, _ in cols]
         res = label(rf"at ${ns[-1]:,}$ examples, \ inside chat transcripts: \\ linear ${100 * ood[0]:.0f}\%$, \ "
-                    rf"$8$ latents ${100 * ood[1]:.0f}\%$, \ $1$ latent ${100 * ood[2]:.0f}\%$ \ (always guessing: \ "
+                    rf"$8$ latents ${100 * ood[1]:.0f}\%$, \ $1$ latent ${100 * ood[2]:.0f}\%$ \ (chat-label majority: \ "
                     rf"${100 * float(d['probe_majority_ood']):.0f}\%$)".replace(",", "{,}"),
                     font_size=19, color=WHITE).to_corner(DL, buff=0.35)
         small = [float(a[0, :, 0].mean()) for a, _, _ in cols]
-        verdict = (f"With few examples the latents help: at {ns[0]} examples, one latent scores "
-                   f"{100 * small[2]:.0f} percent against the linear probe's {100 * small[0]:.0f}. "
-                   if small[2] > small[0] + 0.02 else
-                   f"Even with few examples the latents do not help: at {ns[0]}, {100 * small[2]:.0f} percent against "
-                   f"{100 * small[0]:.0f}. ")
-        verdict2 = (f"With plenty, the plain probe wins, {100 * ind[0]:.0f} percent against {100 * ind[1]:.0f} for "
-                    f"eight latents, and {100 * ood[0]:.0f} against {100 * ood[1]:.0f} inside chat transcripts, a "
-                    "kind of text neither was trained on."
-                    if ind[0] >= ind[1] else
-                    f"With plenty, eight latents match the probe, {100 * ind[1]:.0f} percent against {100 * ind[0]:.0f}.")
+        verdict = (f"At {ns[0]} training examples, the novel-window means are {100 * small[0]:.0f} percent for the "
+                   f"plain probe, {100 * small[1]:.0f} for eight latents, and {100 * small[2]:.0f} for one latent. ")
+        verdict2 = (f"At {ns[-1]:,} examples, novel-window means are {100 * ind[0]:.0f}, {100 * ind[1]:.0f}, and "
+                    f"{100 * ind[2]:.0f} percent respectively. On chat transcripts, separately, they are "
+                    f"{100 * ood[0]:.0f}, {100 * ood[1]:.0f}, and {100 * ood[2]:.0f}. These are descriptive draw "
+                    "means, not equivalence or significance tests; the two evaluation domains can rank probes differently.")
         with self.voiceover(
             "The sharpest argument is about usefulness. <bookmark mark='a'/> In March 2025 Google DeepMind's "
             "interpretability team reported that probes built on autoencoder latents lost to plain linear probes at "
-            "detecting harmful intent, especially on new kinds of prompts, and deprioritized the research; a study "
-            "of 113 datasets found no consistent win either. <bookmark mark='b'/> Try it on ours: detect 'inside a "
-            f"quotation' in the novels model after block {int(d['probe_layer'])}, with a linear probe on all 256 numbers, "
+            "detecting harmful intent, especially on new kinds of prompts, and temporarily deprioritized fundamental "
+            "SAE research while keeping SAEs in their toolkit; a study "
+            "of 113 datasets found no consistent win either. <bookmark mark='b'/> Our task is a window-local "
+            f"quotation-state proxy in the novels model after block {int(d['probe_layer'])}, with a linear probe on all 256 numbers, "
             "or with the eight or the one latents of an autoencoder trained here that differ most, from "
-            f"{ns[0]} to {ns[-1]:,} examples, five draws each. "
+            f"{ns[0]} to {ns[-1]:,} examples, five draws each. A one-class draw uses its constant training-class "
+            "predictor for every representation. Quote state starts outside at each window, and resets at newlines "
+            "and special tokens. A window starting inside a passage's quotation can therefore get a different "
+            "label from full-passage state; this comparison uses that original operational recipe. "
             f"<bookmark mark='c'/> {verdict}<bookmark mark='d'/>{verdict2}"
         ) as vo:
             self.play(FadeIn(hc))
@@ -134,9 +136,11 @@ class Disagree(VoiceoverScene):
             "A second argument: are the features real, or artefacts of one training run? <bookmark mark='a'/> "
             "Gonçalo Paulo and Nora Belrose trained the same autoencoder twice with different seeds, on Llama 3, and "
             "found only about thirty percent of latents shared. <bookmark mark='b'/> Ours, from chapter nine's runs: "
-            "for each latent, the best match in another seed's dictionary. Counting a cosine above 0.7 as the same "
-            f"feature, {share_said}, against their thirty. Our L1 dictionaries agree far more, {l1_:.0f} percent: how stable the "
-            "features are depends on the recipe as much as on the model. A dictionary is one answer, not the answer."
+            "for each latent, the best match in another seed's dictionary. Counting a decoder cosine of at least 0.7 as a "
+            f"match, {share_said}. Their matching required both encoder and decoder agreement; ours checks only "
+            f"the nearest decoder, so these percentages are not a matched replication. Our L1 dictionaries agree "
+            f"at {l1_:.0f} percent: how stable the "
+            "features appear depends on the model, the recipe and the matching rule. A dictionary is one answer, not the answer."
         ) as vo:
             self.play(FadeIn(hc))
             vo.wait_until("a")
@@ -151,42 +155,56 @@ class Disagree(VoiceoverScene):
     def random(self):
         d = load("disagree")
         rp, tp = np.asarray(d["random_purity"]), np.asarray(d["trained_purity"])
-        bins = np.arange(1, 9) / 8
-        hist = lambda v: np.array([np.mean(np.isclose(v, b)) for b in bins])  # noqa: E731
+        edges = np.linspace(0, 1, 9)
+        centers = (edges[:-1] + edges[1:]) / 2
+
+        def hist(v):
+            if v.ndim != 1 or not len(v) or not np.isfinite(v).all() or np.any((v < 0) | (v > 1)):
+                raise ValueError("Character-purity fractions must be a nonempty finite vector in [0, 1]")
+            counts, _ = np.histogram(v, bins=edges)
+            if int(counts.sum()) != len(v):
+                raise ValueError("Character-purity histogram omitted values")
+            return counts / len(v)
+
         hr, ht = hist(rp), hist(tp)
         top = float(max(hr.max(), ht.max()))
-        g = axes([0, 8], [0, top * 1.1], x_length=6.0, y_length=3.2, xlabel=r"of a latent's $8$ strongest moments, \ how "
-                 r"many on one character", ylabel=r"share of latents", xticks=[], yticks=ticks(0, top, 2), center=[-2.6, -0.4, 0])
+        g = axes([0, 1], [0, top * 1.1], x_length=6.0, y_length=3.2,
+                 xlabel=r"modal-character fraction \\ among up to $8$ available top contexts",
+                 ylabel=r"share of live latents", xticks=[0, 0.25, 0.5, 0.75, 1],
+                 yticks=ticks(0, top, 2), center=[-2.6, -0.4, 0])
+        if g.xlabel.width > 6.5:
+            g.xlabel.scale_to_fit_width(6.5)
         bw = 0.28
-        b1 = VGroup(*[Rectangle(width=bw, height=max(v / (top * 1.1) * 3.2, 0.01), stroke_width=0, fill_color=SAEC,
-                                fill_opacity=0.9).move_to(g.ax.c2p(i + 0.5, 0) + LEFT * 0.16, aligned_edge=DOWN) for i, v in enumerate(ht)])
-        b2 = VGroup(*[Rectangle(width=bw, height=max(v / (top * 1.1) * 3.2, 0.01), stroke_width=0, fill_color=CTRL,
-                                fill_opacity=0.9).move_to(g.ax.c2p(i + 0.5, 0) + RIGHT * 0.16, aligned_edge=DOWN) for i, v in enumerate(hr)])
-        xt = VGroup(*[MathTex(str(i + 1), font_size=20, color=GREY_B).next_to(g.ax.c2p(i + 0.5, 0), DOWN, buff=0.1) for i in range(8)])
-        lg = legend([(SAEC, rf"the trained transformer: \ mean ${8 * tp.mean():.1f}$"),
-                     (CTRL, rf"the same, \ with random weights: \ mean ${8 * rp.mean():.1f}$")], font_size=18)
+        b1 = VGroup(*[Rectangle(width=bw, height=v / (top * 1.1) * 3.2, stroke_width=0, fill_color=SAEC,
+                                fill_opacity=0.9).move_to(g.ax.c2p(x, 0) + LEFT * 0.16, aligned_edge=DOWN)
+                      for x, v in zip(centers, ht) if v > 0])
+        b2 = VGroup(*[Rectangle(width=bw, height=v / (top * 1.1) * 3.2, stroke_width=0, fill_color=CTRL,
+                                fill_opacity=0.9).move_to(g.ax.c2p(x, 0) + RIGHT * 0.16, aligned_edge=DOWN)
+                      for x, v in zip(centers, hr) if v > 0])
+        lg = legend([(SAEC, rf"trained: \ ${len(tp)}$ live latents, \ mean ${100 * tp.mean():.1f}\%$"),
+                     (CTRL, rf"random weights: \ ${len(rp)}$ live latents, \ mean ${100 * rp.mean():.1f}\%$")], font_size=18)
+        if lg.width > 6.5:
+            lg.scale_to_fit_width(6.5)
         lg.next_to(g, UP, buff=0.15).align_to(g, LEFT)
         hc = history_card(r"Jan 2025", r"T.~Heap, T.~Lawson, L.~Farnik \& L.~Aitchison", r"autoencoders on randomly "
-                          r"initialized transformers score about as well on the usual interpretability metrics", width=5.0,
+                          r"initialized transformers score similarly on the automated interpretability proxies studied", width=5.0,
                           color=CTRL, font_size=18).to_corner(UR, buff=0.3)
-        fr, ft = float(d["random_fvu"]), float(d["trained_fvu"])
-        close = abs(rp.mean() - tp.mean()) < 0.1
-        verdict = ("By that measure the random model looks just as interpretable: a score like ours rewards latents "
-                   "that track the current character, which even a random network passes along." if close else
-                   "Here the trained model's latents do look cleaner, but the gap is a property of our measure as much "
-                   "as of the model.")
         with self.voiceover(
             "A third: a baseline that should embarrass us. <bookmark mark='a'/> Thomas Heap and colleagues trained "
-            "autoencoders on transformers with random weights, and found they scored about as well on the usual "
-            "interpretability metrics. <bookmark mark='b'/> We tried it: the same autoencoder, on a copy of Part 13's "
-            "transformer that was never trained. Chapter eight's purity score, how many of a latent's eight strongest "
-            f"moments share a character: {8 * tp.mean():.1f} on average for the trained model, {8 * rp.mean():.1f} "
-            f"for the random one. {verdict}"
+            "autoencoders on transformers with random weights, and found similar scores on the automated "
+            "interpretability and reconstruction metrics they studied. That tests these proxies, rather than showing "
+            "the computations are equally meaningful. <bookmark mark='b'/> We tried it: the same autoencoder, on a copy of Part 13's "
+            "transformer that was never trained. For each live latent, take its up to eight available strongest "
+            "contexts, and measure the fraction sharing the most common character. Rare latents can have fewer "
+            f"than eight contexts. Across {len(tp)} live latents in the trained model, the mean is "
+            f"{100 * tp.mean():.1f} percent; across {len(rp)} in the random model, {100 * rp.mean():.1f} percent. "
+            "The histogram includes every live latent. This character proxy scores highly in both models; "
+            "it does not establish semantic equivalence or equally meaningful learned computations."
         ) as vo:
             self.play(FadeIn(hc))
             vo.wait_until("a")
             vo.wait_until("b")
-            self.play(FadeIn(g), FadeIn(xt), FadeIn(lg))
+            self.play(FadeIn(g), FadeIn(lg))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in b1], lag_ratio=0.08),
                       LaggedStart(*[GrowFromEdge(b, DOWN) for b in b2], lag_ratio=0.08), run_time=2)
         self.wait(0.3)
@@ -204,7 +222,7 @@ class Disagree(VoiceoverScene):
                        label(r"answer the question at hand: \\ is it deceiving, \ what did fine-tuning change?", font_size=26),
                        label(r"the tools: \ probes, \ steering vectors, \ diffs, \ audits; \\ and simple baselines first",
                              font_size=23, color=GREY_A),
-                       label(r"AxBench (2025): \ for steering, \ prompting beat \\ every internal method", font_size=23,
+                       label(r"AxBench (2025), \ Gemma-2-2B/9B: \ prompting led overall; \\ ReFT-r1 competitive at $2$B", font_size=23,
                              color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
         both = VGroup(left, right).arrange(RIGHT, buff=1.0, aligned_edge=UP)
         if both.width > 13.2:
@@ -220,7 +238,8 @@ class Disagree(VoiceoverScene):
             "unexplained, and some researchers now decompose the parameters instead, or train models sparse from "
             "the start. <bookmark mark='b'/> The pragmatic programme asks narrower questions, is this model "
             "deceiving us, what did fine-tuning change, and answers them with whatever works, often simple: in the "
-            "AxBench comparison of 2025, plain prompting steered better than any internal method. Both programmes "
+            "AxBench comparison of 2025 on Gemma 2 2B and 9B, prompting led the overall steering comparison; "
+            "ReFT-r1 was competitive with it on the smaller model. Both programmes "
             "measure themselves against baselines now, which is perhaps the field's most important change."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(left[0]), FadeIn(right))

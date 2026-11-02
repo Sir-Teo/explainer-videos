@@ -58,10 +58,13 @@ class Graphs(VoiceoverScene):
         a = column(-6.0, False, PLT, r"a transcoder per layer")
         b = column(-1.6, True, CLT, r"a cross-layer transcoder")
         colors = {r"u_\ell": RESID, r"f_\ell": CLT}
-        eqs = VGroup(cmath(r"f_\ell = \operatorname{TopK}(W^{\mathrm{enc}}_\ell\, ", r"u_\ell", r")", colors=colors, font_size=28),
+        eqs = VGroup(cmath(r"f_\ell = \operatorname{ReLU}(\operatorname{TopK}(W^{\mathrm{enc}}_\ell\, ", r"u_\ell", r" + b^{\mathrm{enc}}_\ell))", colors=colors, font_size=28),
                      cmath(r"\widehat{\mathrm{MLP}}_\ell = \sum_{s \le \ell} W^{\mathrm{dec}}_{s \to \ell}\, ", r"f_s",
-                           colors={r"f_s": CLT}, font_size=28)).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.4, 1.2, 0])
-        w = label(r"$u_\ell$: \ the MLP's input; \ trained to match the MLP's output, \\ not to rebuild its input",
+                           r" + b^{\mathrm{dec}}_\ell", colors={r"f_s": CLT}, font_size=28)).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        if eqs.width > 5.0:
+            eqs.scale_to_fit_width(5.0)
+        eqs.move_to([4.2, 1.2, 0])
+        w = label(r"$u_\ell$: \ the MLP's input; \ normalized inputs and outputs \\ trained to match the output, \ not rebuild the input",
                   font_size=18, color=GREY_A).next_to(eqs, DOWN, buff=0.25)
         hc = VGroup(history_card(2024, r"J.~Dunefsky, P.~Chlenski \& N.~Nanda", r"transcoders: \ a sparse stand-in for "
                                  r"an MLP", width=4.4, color=PLT, font_size=17),
@@ -92,20 +95,22 @@ class Graphs(VoiceoverScene):
         d = load("clt")
         pc, cc = np.asarray(d["plt_curve"]), np.asarray(d["clt_curve"])
         S = float(pc[-1, 0])
-        top = float(min(1.0, max(pc[:, 1:].max(), cc[:, 1:].max())))
+        if any(not np.isfinite(cur).all() or (cur[:, 1:] < 0).any() for cur in (pc, cc)):
+            raise ValueError("Transcoder curves need finite nonnegative recorded variance ratios")
+        top = max(0.01, float(max(pc[:, 1:].max(), cc[:, 1:].max())))
         g = axes([0, S], [0, top * 1.05], x_length=6.0, y_length=3.6, xlabel=r"training steps",
-                 ylabel=r"MLP output left unexplained, \ per layer", xticks=[0, S], yticks=ticks(0, top, 3),
+                 ylabel=r"MLP output left unexplained, \ per layer (fit batches)", xticks=[0, S], yticks=ticks(0, top, 3),
                  center=[-2.8, -0.2, 0])
         cs = VGroup()
         for cur, col in ((pc, PLT), (cc, CLT)):
             for l_ in range(4):
-                cs.add(curve(g.ax, cur[:, 0], np.clip(cur[:, 1 + l_], 0, top * 1.05), col, 2.5).set_stroke(opacity=0.5 + 0.15 * l_))
+                cs.add(curve(g.ax, cur[:, 0], cur[:, 1 + l_], col, 2.5).set_stroke(opacity=0.5 + 0.15 * l_))
         lg = legend([(PLT, r"per-layer transcoders"), (CLT, r"cross-layer transcoder")], font_size=20)
         lg.next_to(g, UP, buff=0.1).align_to(g, RIGHT)
         clean, mm = float(d["bits_clean"]), float(d["bits_mlp_mean"])
         pb, cb = float(d["plt_bits"]), float(d["clt_bits"])
         pa, ca = float(d["plt_agree"]), float(d["clt_agree"])
-        tab = VGroup(label(r"every MLP replaced, \ bits per character:", font_size=22),
+        tab = VGroup(label(r"evaluation text: \ every MLP replaced, \ bits per character", font_size=20),
                      label(rf"the model itself: \ ${clean:.2f}$", font_size=22, color=CTRL),
                      label(rf"per-layer transcoders: \ ${pb:.2f}$ \ (same top guess ${100 * pa:.0f}\%$)", font_size=22, color=PLT),
                      label(rf"cross-layer transcoder: \ ${cb:.2f}$ \ (${100 * ca:.0f}\%$)", font_size=22, color=CLT),
@@ -114,12 +119,14 @@ class Graphs(VoiceoverScene):
         better = cb < pb
         verdict = (f"The cross-layer transcoder does better, {cb:.2f} bits against {pb:.2f}" if better else
                    f"Here the per-layer transcoders do as well or better, {pb:.2f} bits against {cb:.2f}")
+        winning_agree = ca if better else pa
         with self.voiceover(
-            f"Each was trained for {int(S):,} steps, with sixteen features on per layer, and here is each layer's "
-            "unexplained share falling. <bookmark mark='a'/> The test that matters: replace every MLP with its "
-            f"transcoder and let the model write. The model itself costs {clean:.2f} bits per character; with the "
+            f"Each was trained for {int(S):,} steps, with at most sixteen features on per layer. These curves measure "
+            "unexplained output variance on fitting batches, not a held-out reconstruction benchmark. "
+            "<bookmark mark='a'/> Separately, evaluate on text with every MLP replaced. Inputs now come from the "
+            f"replacement run itself. The model costs {clean:.2f} bits per character; with the "
             f"MLPs replaced by their average output, {mm:.2f}. <bookmark mark='b'/> {verdict}, and its top guess "
-            f"matches the real model's {100 * ca:.0f} percent of the time. The gap that remains, the part no feature "
+            f"matches the real model's {100 * winning_agree:.0f} percent of the time. The gap that remains, the part no feature "
             "explains, is what Anthropic calls dark matter, and every graph has to carry it as error nodes."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg))
@@ -201,10 +208,13 @@ class Graphs(VoiceoverScene):
                             color=GREY_B if w > 0 else CAUSE).set_stroke(opacity=0.45))
         fe, ee, er = float(d["feat_logit"]), float(d["emb_logit"]), float(d["err_total"])
         tot = float(d["logit"])
-        dec = label(rf"the logit ${tot:.2f}$ \ = \ features ${fe:+.2f}$ \ + \ inputs ${ee:+.2f}$ \ + \ errors ${er:+.2f}$ \ + \ biases",
-                    font_size=20, color=GREY_A).to_edge(UP, buff=0.25).shift(LEFT * 1.2)
+        bias = tot - fe - ee - er
+        dec = label(rf"logit ${tot:.3f}$ \ = \ features ${fe:.3f}$ \ + \ inputs ${ee:.3f}$ \ + \ errors ${er:.3f}$ \ + \ bias ${bias:.3f}$",
+                    font_size=19, color=GREY_A).to_edge(UP, buff=0.25)
+        if dec.width > 13.2:
+            dec.scale_to_fit_width(13.2)
         ex_ = int(np.ceil(np.log10(max(float(d["exact"]), 1e-12))))
-        tag = note(rf"computed: \ the local replacement model reproduces the logits to within $10^{{{ex_}}}$; \ "
+        tag = note(rf"computed: \ final-position logits match within $10^{{{ex_}}}$, \ with error correction; \ "
                    rf"${int(d['n_features'])}$ active features, \ the $12$ most influential shown").to_corner(DR, buff=0.15)
         lgd = label(r"lines: \ green raises, \ red lowers; \ under each feature, \ the text where it fires hardest",
                     font_size=16, color=GREY_B).next_to(tag, UP, buff=0.08).align_to(tag, RIGHT)
@@ -212,14 +222,15 @@ class Graphs(VoiceoverScene):
             "Now a graph for one prediction. The prompt ends 'she sai', and the model expects "
             f"'{d['target']}'. <bookmark mark='a'/> Freeze the prompt's attention patterns and layer-norm scales, "
             "replace every MLP with the cross-layer transcoder's features, and add, at each position and layer, an "
-            "error term for whatever the features miss. This local replacement model reproduces the real one exactly "
-            "on this prompt, and from the features onward everything in it is linear. <bookmark mark='b'/> So every "
+            "error term for whatever the features miss. The final-position logits match to the measured precision. "
+            "That agreement is supplied by the error terms; it does not establish a complete causal "
+            "explanation of the original model. From the features onward the replacement is linear. <bookmark mark='b'/> So every "
             "path from a feature to the output can be scored: its activation times the gradient. Of the "
             f"{int(d['n_features'])} active features, here are the twelve with the most influence, by layer and "
             "position. <bookmark mark='c'/> The lines are their direct effects on each other and on the output; the "
             "grey ones below come from the input characters. <bookmark mark='d'/> And the books balance: the logit "
             f"of '{d['target']}' is {tot:.2f}, of which the features account for {fe:.2f}, the characters' own "
-            f"embeddings {ee:.2f}, and the error nodes {er:.2f}."
+            f"embeddings {ee:.2f}, the error nodes {er:.2f}, and affine biases {bias:.3f}."
         ) as vo:
             self.play(FadeIn(boxes), FadeIn(out), FadeIn(ol), FadeIn(ll))
             vo.wait_until("a")
@@ -238,6 +249,9 @@ class Graphs(VoiceoverScene):
     def check(self):
         d = load("graph")
         meas, pred = np.asarray(d["measured"]), np.asarray(d["predicted"])
+        direct = np.asarray(d["predicted_direct"])
+        if meas.shape != pred.shape or direct.shape != meas.shape or not all(np.isfinite(a).all() for a in (meas, pred, direct)):
+            raise ValueError("Graph comparison needs finite paired intervention arrays")
         lo, hi = float(min(meas.min(), pred.min())), float(max(meas.max(), pred.max()))
         pad = 0.1 * (hi - lo + 1e-6)
         g = axes([lo - pad, hi + pad], [lo - pad, hi + pad], x_length=4.6, y_length=4.6,
@@ -246,14 +260,22 @@ class Graphs(VoiceoverScene):
         diag = DashedLine(g.ax.c2p(lo - pad, lo - pad), g.ax.c2p(hi + pad, hi + pad), color=GREY_C, dash_length=0.06)
         dots = VGroup(*[Dot(g.ax.c2p(p, m), radius=0.07, color=FEAT) for p, m in zip(pred, meas)])
         r = float(d["corr"])
-        res = label(rf"$16$ features, \ each switched off: \\ the change in the logit of `{show(str(d['target']))}' \\ "
-                    rf"correlation $r = {r:.2f}$", font_size=22, color=WHITE).move_to([3.6, 0.8, 0])
+        same_sign = int((np.sign(meas) == np.sign(pred)).sum())
+        rmse = float(np.sqrt(np.mean((meas - pred) ** 2)))
+        direct_r = float(np.corrcoef(meas, direct)[0, 1])
+        direct_rmse = float(np.sqrt(np.mean((meas - direct) ** 2)))
+        res = label(rf"${len(meas)}$ selected interventions: \\ Pearson $r = {r:.2f}$; \ same sign ${same_sign}/{len(meas)}$ \\ "
+                    rf"RMSE ${rmse:.2f}$ logit units", font_size=21, color=WHITE)
+        baseline = label(rf"direct-effect baseline: \\ $r = {direct_r:.2f}$; \ RMSE ${direct_rmse:.2f}$", font_size=19, color=GREY_A)
         how = label(r"switched off: \ its decoder's contribution removed \\ from the real MLPs' outputs; \ attention "
-                    r"and \\ everything after it recomputed", font_size=18, color=GREY_A).next_to(res, DOWN, buff=0.4)
+                    r"and \\ everything after it recomputed", font_size=17, color=GREY_A)
+        comparison = VGroup(res, baseline, how).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.7, 0.0, 0])
+        if comparison.width > 5.6:
+            comparison.scale_to_fit_width(5.6)
         if r > 0.8:
-            verdict = "The graph predicts the real model's response well."
+            verdict = "These selected interventions have high linear correlation; this alone does not establish calibration or a complete circuit."
         elif r > 0.4:
-            verdict = "The graph gets the direction right more often than the size."
+            verdict = "These selected interventions have moderate linear correlation; correlation alone does not establish agreement in sign or size."
         else:
             verdict = ("Here the graph is a poor guide to the real model: the frozen attention and the error terms hide "
                        "too much.")
@@ -262,7 +284,10 @@ class Graphs(VoiceoverScene):
             "influential features, and switch each one off in the real model: remove its contribution from the MLP "
             "outputs, and let attention and everything downstream recompute. <bookmark mark='b'/> Compare the "
             "change in the logit with what the graph predicted, its paths through other features included. "
-            f"<bookmark mark='c'/> The correlation is {r:.2f}. {verdict}"
+            f"<bookmark mark='c'/> Pearson correlation is {r:.2f}, but only {same_sign} of {len(meas)} signs agree, "
+            f"with an RMSE of {rmse:.2f} logit units. Keeping only each feature's direct effect gives correlation "
+            f"{direct_r:.2f} and RMSE {direct_rmse:.2f}. {verdict} These are selected interventions on one prompt, "
+            "not evidence of a complete faithful circuit."
         ) as vo:
             self.play(FadeIn(g), Create(diag), FadeIn(how))
             vo.wait_until("a")
@@ -270,7 +295,7 @@ class Graphs(VoiceoverScene):
             vo.wait_until("b")
             self.play(Indicate(dots, color=WHITE, scale_factor=1.1))
             vo.wait_until("c")
-            self.play(FadeIn(res))
+            self.play(FadeIn(res), FadeIn(baseline))
         self.wait(0.3)
         self.clear_scene()
 

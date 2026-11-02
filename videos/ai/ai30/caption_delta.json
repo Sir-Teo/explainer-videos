@@ -1,0 +1,637 @@
+{
+  "scope": "Reviewed Part30 caption changes, guarded against the public baseline. Root integrator applies these entries to the shared table; unrelated translations must be preserved.",
+  "baseline": "4599344437dd9f0475cdda8bcedfb2921ac4c3dc",
+  "strings": [
+    {
+      "key": "$10$ random controls \\\\ one direction each \\\\ mean + range",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "$10$次随机对照\\\\ 每次一个方向\\\\ 均值与范围"
+    },
+    {
+      "key": "$r$: \\ how much feature $2$ matters \\ ($0.1$ to $10$)",
+      "baseline_present": true,
+      "baseline_value": "$r$：\\ 特征 $2$ 有多重要 \\ （$0.1$ 到 $10$）",
+      "candidate_present": false,
+      "candidate_value": null
+    },
+    {
+      "key": "$r$: \\ how much feature $2$ matters \\ ($0.1$ to $10$, log spaced)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "$r$：\\ 特征 $2$ 的重要性 \\ （$0.1$ 到 $10$，对数间距）"
+    },
+    {
+      "key": "$u_\\ell$: \\ the MLP's input; \\ normalized inputs and outputs \\\\ trained to match the output, \\ not rebuild the input",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "$u_\\ell$：\\ MLP的输入；\\ 输入输出已归一化\\\\ 训练以匹配输出，\\ 不是重建输入"
+    },
+    {
+      "key": "An L1 autoencoder rebuilds $x=a\\,d$ ($\\|d\\|=1$, $a>0$, $\\lambda\\ge0$) from one latent: minimize $\\|x-fd\\|^2+\\lambda f$ over $f\\ge0$. Show $f^*=\\max(a-\\lambda/2,0)$; find the unpenalized scalar optimum for a retained TopK latent.",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "一个L1自编码器用一个潜变量重建 $x=a\\,d$（$\\|d\\|=1$，$a>0$，$\\lambda\\ge0$）：在 $f\\ge0$ 上最小化 $\\|x-fd\\|^2+\\lambda f$。证明 $f^*=\\max(a-\\lambda/2,0)$；求TopK保留这个标量潜变量时、不加惩罚的最优值。"
+    },
+    {
+      "key": "AxBench (2025), \\ Gemma-2-2B/9B: \\ prompting led overall; \\\\ ReFT-r1 competitive at $2$B",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "AxBench（2025），\\ Gemma-2-2B/9B：\\ 提示词整体领先；\\\\ ReFT-r1在$2$B上有竞争力"
+    },
+    {
+      "key": "Bussmann, Nabeshima et al.\\ (2025)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "Bussmann、Nabeshima等\\ （2025）"
+    },
+    {
+      "key": "For nonzero real matrices $A,B$ of compatible sizes, show $\\|AB\\|_F/(\\|A\\|_F\\|B\\|_F)\\in[0,1]$. It equals $1$ exactly when both have rank one and $A$'s right singular direction is parallel to $B$'s left one.",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "设 $A,B$ 为非零、尺寸相容的实矩阵，证明 $\\|AB\\|_F/(\\|A\\|_F\\|B\\|_F)\\in[0,1]$。等于 $1$ 当且仅当两者秩都为一，且 $A$ 的右奇异方向与 $B$ 的左奇异方向平行。"
+    },
+    {
+      "key": "For prime $p$ and nonempty $K\\subseteq\\{1,\\ldots,p-1\\}$, fix $a,b\\in\\mathbb{Z}_p$. For $c\\in\\mathbb{Z}_p$, let $L(c)=\\sum_{k\\in K}\\cos(2\\pi k(a+b-c)/p)$. Show its unique maximizer is $c=(a+b)\\bmod p$.",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "设 $p$ 为素数，非空 $K\\subseteq\\{1,\\ldots,p-1\\}$，固定 $a,b\\in\\mathbb{Z}_p$。对 $c\\in\\mathbb{Z}_p$，令 $L(c)=\\sum_{k\\in K}\\cos(2\\pi k(a+b-c)/p)$。证明唯一最大值在 $c=(a+b)\\bmod p$ 处。"
+    },
+    {
+      "key": "JumpReLU \\ (Rajamanoharan et al., \\ DeepMind, \\ 2024): \\\\ a positive learned threshold each",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "JumpReLU\\ （Rajamanoharan等，\\ DeepMind，\\ 2024）：\\\\ 每个特征有正的可学习阈值"
+    },
+    {
+      "key": "JumpReLU: \\ $15\\%$ \\ ($3$/$3$ seeds)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "JumpReLU：\\ $15\\%$\\ （$3$/$3$种子）"
+    },
+    {
+      "key": "L0 and variance: \\ measured on the fit vectors",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "L0与方差：\\ 在拟合向量上测量"
+    },
+    {
+      "key": "L1 can overstate model specificity: \\\\ Minder et al.\\ (2025) found shrinkage and decoupling; \\\\ BatchTopK mitigated these in their study",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "L1可能夸大模型特异性：\\\\ Minder等（2025）发现收缩与解耦；\\\\ BatchTopK在他们的研究中减轻了这些问题"
+    },
+    {
+      "key": "L1: \\ $15\\%$ \\ ($3$/$3$ seeds)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "L1：\\ $15\\%$\\ （$3$/$3$种子）"
+    },
+    {
+      "key": "Let $u,v$ be independent and uniform on the unit sphere in $\\mathbb{R}^d$ ($d\\ge1$). Show $\\mathbb{E}[u\\cdot v]=0$ and $\\mathbb{E}[(u\\cdot v)^2]=1/d$.",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "设 $u,v$ 相互独立，且在 $\\mathbb{R}^d$ 的单位球面上均匀分布（$d\\ge1$）。证明 $\\mathbb{E}[u\\cdot v]=0$ 且 $\\mathbb{E}[(u\\cdot v)^2]=1/d$。"
+    },
+    {
+      "key": "MLP output left unexplained, \\ per layer (fit batches)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "每层MLP输出的未解释方差\\ （拟合批次）"
+    },
+    {
+      "key": "TopK \\ (Gao et al., \\ OpenAI, \\ 2024): \\ at most $k$ on, \\ no penalty",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "TopK \\ （Gao等，\\ OpenAI，\\ 2024）：\\ 最多 $k$ 个亮，\\ 没有惩罚"
+    },
+    {
+      "key": "TopK \\ (Gao et al., \\ OpenAI, \\ 2024): \\ exactly $k$ on, \\ no penalty",
+      "baseline_present": true,
+      "baseline_value": "TopK \\ （Gao等，\\ OpenAI，\\ 2024）：\\ 恰好 $k$ 个亮，\\ 没有惩罚",
+      "candidate_present": false,
+      "candidate_value": null
+    },
+    {
+      "key": "TopK, $k = 16$; \\ the same data and steps; \\ illustrative matches: \\ decoder cosine above $0.4$, \\ the same character",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "TopK，$k = 16$；\\ 数据和步数相同；\\ 示例匹配：\\ 解码方向余弦大于$0.4$，\\ 相同字符"
+    },
+    {
+      "key": "TopK: \\ $15\\%$ \\ ($3$/$3$ seeds)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "TopK：\\ $15\\%$\\ （$3$/$3$种子）"
+    },
+    {
+      "key": "Two features, one dimension, density $\\rho$, importances $1$ and $r$, \\ $x_i \\sim U[0, 1]$ when on: \\ show that keeping feature 1 alone costs $r\\rho/3$, \\ keeping feature 2 alone $\\rho/3$.",
+      "baseline_present": true,
+      "baseline_value": "两个特征，一个维度，密度 $\\rho$，重要性 $1$ 和 $r$，\\ 亮着时 $x_i \\sim U[0, 1]$：\\ 证明只保留特征1的代价是 $r\\rho/3$，\\ 只保留特征2是 $\\rho/3$。",
+      "candidate_present": false,
+      "candidate_value": null
+    },
+    {
+      "key": "Two features, one dimension, density $\\rho$, importances $1$ and $r$, \\ $x_i \\sim U[0, 1]$ when on: \\ show that with zero output bias, keeping feature 1 alone costs $r\\rho/3$, \\ keeping feature 2 alone $\\rho/3$.",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "两个特征，一个维度，密度 $\\rho$，重要性 $1$ 和 $r$，\\ 亮着时 $x_i \\sim U[0, 1]$：\\ 证明输出偏置为零时，只保留特征1的代价是 $r\\rho/3$，\\ 只保留特征2是 $\\rho/3$。"
+    },
+    {
+      "key": "\\sum_{k} \\alpha_k\\cos\\big(w_k(a + b - c)\\big),\\quad \\alpha_k>0,\\quad \\text{largest at } c=(a+b)\\bmod P",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "\\sum_{k} \\alpha_k\\cos\\big(w_k(a + b - c)\\big),\\quad \\alpha_k>0,\\quad \\text{最大值在 } c=(a+b)\\bmod P"
+    },
+    {
+      "key": "a feature inactive on the measured sample; \\ a shut ReLU supplies no direct activation gradient. \\ Without fixes, \\ Gao et al.\\ found up to $90\\%$ dead; \\ with them, $7\\%$ of $16$ million.",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "在测量样本中不激活的特征；\\ 关闭的ReLU没有直接激活梯度。\\ Gao等没有修复时最多$90\\%$失活；\\ 修复后$16$百万个中为$7\\%$。"
+    },
+    {
+      "key": "a general feature (\\textit{upper case}) stays silent where a specific one (\\textit{this letter}) fires and carries its direction instead: \\ sparsity rewards one latent over two",
+      "baseline_present": true,
+      "baseline_value": "一般的特征（\\textit{大写}）在具体的特征（\\textit{这个字母}）亮起的地方沉默，由后者带着它的方向：\\ 稀疏性奖励用一个潜变量而不是两个",
+      "candidate_present": true,
+      "candidate_value": "一般的特征（\\textit{大写}）在具体的特征（\\textit{这个字母}）亮起的地方沉默，由后者带着它的方向：\\ 稀疏性偏好一个潜变量兼任"
+    },
+    {
+      "key": "a model writes out what an activation means, another rebuilds the activation from the words; \\ automated auditors without training data: \\ $12$--$15\\%$ wins against under $3\\%$ without NLAs",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "一个模型用文字描述激活，另一个从文字重建激活；\\ 无训练数据的自动审计器：\\ NLA胜率$12$--$15\\%$，无NLA时不到$3\\%$"
+    },
+    {
+      "key": "accuracy on validation windows",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "验证窗口上的准确率"
+    },
+    {
+      "key": "accuracy, \\ window-local quote-state proxy",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "准确率，\\ 窗口局部引号状态代理"
+    },
+    {
+      "key": "an extra loss: \\ the latents that have been dead for a while are asked to rebuild what the live ones miss, \\ so eligible units can receive gradient",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "一个额外的损失：\\ 死了一段时间的潜变量，被要求去重建活着的那些漏掉的部分，\\ 因此符合条件的单元可获得梯度"
+    },
+    {
+      "key": "autoencoder probes lose to plain linear probes at detecting harmful intent, \\ out of distribution most of all; \\ the team temporarily deprioritized fundamental SAE research",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "检测有害意图时，自编码器探针不如普通线性探针，\\ 分布外尤其明显；\\ 团队暂时降低基础SAE研究优先级"
+    },
+    {
+      "key": "autoencoders on randomly initialized transformers score similarly on the automated interpretability proxies studied",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "随机初始化Transformer上的自编码器，\\ 在所研究的自动可解释性代理指标上得分相近"
+    },
+    {
+      "key": "cross-entropy (nats, log scale)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "交叉熵（奈特，对数尺度）"
+    },
+    {
+      "key": "density $\\rho$ \\\\ ($0.01$ to $1$)",
+      "baseline_present": true,
+      "baseline_value": "密度 $\\rho$ \\\\ （$0.01$ 到 $1$）",
+      "candidate_present": false,
+      "candidate_value": null
+    },
+    {
+      "key": "density $\\rho$ \\\\ ($0.01$ to $1$) \\\\ log spaced",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "密度 $\\rho$ \\\\ （$0.01$ 到 $1$） \\\\ 对数间距"
+    },
+    {
+      "key": "different pools: \\ neurons $57{,}600$ positions; \\ SAE $211{,}200$ positions \\\\ descriptive comparison",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "样本池不同：\\ 神经元$57{,}600$个位置；\\ SAE $211{,}200$个位置\\\\ 描述性比较"
+    },
+    {
+      "key": "each head's output taken from the corrupted run, \\ put into the clean one: \\\\ how much of the clean advantage is lost \\ ($1$: all; negative: helped)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "把破坏运行中每个头的输出\\ 换入干净运行：\\\\ 损失的干净运行优势\\ （$1$：全部；负值：改善）"
+    },
+    {
+      "key": "evaluation text: \\ every MLP replaced, \\ bits per character",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "评估文本：\\ 替换全部MLP，\\ 每字符比特数"
+    },
+    {
+      "key": "excluded loss: \\\\ fixed key waves removed (train)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "排除损失：\\\\ 去掉固定关键频率的波（训练）"
+    },
+    {
+      "key": "features on per character \\ (training batch)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "每个字符亮着的特征数\\ （训练批次）"
+    },
+    {
+      "key": "fixed vertical scale across training",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "训练中纵轴尺度保持不变"
+    },
+    {
+      "key": "held-out words: \\ AUROC $0.66$ \\\\ lexicon-selected novel sentences: \\ AUROC $0.74$",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "留出的词：\\ AUROC $0.66$ \\\\ 词表筛选的小说句子：\\ AUROC $0.74$"
+    },
+    {
+      "key": "inactive on the measured sample. \\ Gao et al.'s $10$M-token criterion: \\ up to $90\\%$ dead; \\ initialization plus AuxK: $7\\%$ at $16$M latents.",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "在测量样本中不激活。\\ Gao等用$10$百万词元判定：\\ 最多$90\\%$失活；\\ 初始化加AuxK：$16$百万潜变量中$7\\%$。"
+    },
+    {
+      "key": "interpolated at $16$ features per vector:",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "每向量$16$个特征时的插值："
+    },
+    {
+      "key": "interpretability used to study evaluation-awareness representations \\ and interventions during the pre-release audit",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "发布前审计使用可解释性\\ 研究评估意识表征及对其进行的干预"
+    },
+    {
+      "key": "last character: \\ occlusion not evaluated",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "最后一个字符：\\ 未计算遮挡影响"
+    },
+    {
+      "key": "layer selected using these validation windows",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "层的选择使用同一批验证窗口"
+    },
+    {
+      "key": "local proxy, \\ main chosen by F1 on the evaluation half \\\\ main silent; \\ another latent: \\ $\\ge40\\%$ of positive projection \\\\ decoder/probe cosine $\\ge0.1$; \\ no causal ablation",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "局部代理指标，\\ 在评估半边按F1选主潜变量\\\\ 主潜变量沉默；\\ 另一个承担$\\ge40\\%$正投影\\\\ 解码方向与探针余弦$\\ge0.1$；\\ 无因果消融"
+    },
+    {
+      "key": "modal-character fraction \\\\ among up to $8$ available top contexts",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "最常见字符所占比例 \\\\ 每个潜变量至多$8$个可用最高激活上下文"
+    },
+    {
+      "key": "no selective loss increase \\\\ under this removal",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "这种移除未显示\\\\ 选择性的损失上升"
+    },
+    {
+      "key": "no visible calculation; \\\\ guessing suggested",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "图中未见计算；\\\\ 可能是在猜测"
+    },
+    {
+      "key": "noising: \\ how much does this swap hurt? \\\\ denoising: \\ how much does it restore? \\\\ both depend on the corruption and context",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "加噪：\\ 替换使预测受损多少？\\\\ 去噪：\\ 替换恢复多少？\\\\ 两者都取决于破坏方式和上下文"
+    },
+    {
+      "key": "normalized copying benefit lost",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "丢失的归一化复制收益"
+    },
+    {
+      "key": "normalized decoder norms: \\ $0$: base only; \\ $\\tfrac12$: equal norms; \\ $1$: chat only",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "归一化解码器范数：\\ $0$：仅基础侧；\\ $\\tfrac12$：范数相等；\\ $1$：仅聊天侧"
+    },
+    {
+      "key": "one seed's trajectory",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "一个种子的训练轨迹"
+    },
+    {
+      "key": "positive-weight illustration; \\ fitted coefficients are checked separately",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "正权重示意；\\ 拟合系数另行检验"
+    },
+    {
+      "key": "prediction helped",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "预测改善"
+    },
+    {
+      "key": "prediction hurt",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "预测受损"
+    },
+    {
+      "key": "probe removal increases \\\\ closing-quote loss here",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "移除探针方向后\\\\ 闭引号预测损失上升"
+    },
+    {
+      "key": "reference: \\ the cheapest tested candidate",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "参考：\\ 测试候选中代价最低的"
+    },
+    {
+      "key": "restricted loss: \\\\ fixed key waves + answer bias (test)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "受限损失：\\\\ 固定关键频率的波与答案偏置（测试）"
+    },
+    {
+      "key": "rows: \\ left $10$--$39$, \\ right $50$--$79$ \\\\ columns: \\ keys $0$--$39$; \\ repeat $10$--$29$ to $60$--$79$ \\\\ head scores: \\ global test averages",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "行：\\ 左图 $10$--$39$，\\ 右图 $50$--$79$ \\\\ 列：\\ 键 $0$--$39$；\\ 重复 $10$--$29$ 到 $60$--$79$ \\\\ 头的分数：\\ 整个测试集上的平均值"
+    },
+    {
+      "key": "rows: \\ queries $50$--$79$ \\quad columns: \\ keys $0$--$39$ \\ (the repeat copies $10$--$29$ to $60$--$79$)",
+      "baseline_present": true,
+      "baseline_value": "行：\\ 查询 $50$--$79$ \\quad 列：\\ 键 $0$--$39$ \\ （重复把 $10$--$29$ 复制到 $60$--$79$）",
+      "candidate_present": false,
+      "candidate_value": null
+    },
+    {
+      "key": "schematic directions; \\ only the relative difference length is measured",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "方向为示意；\\ 只有差分的相对长度被测量"
+    },
+    {
+      "key": "selected chat-decoder-dominant latents \\\\ white: chat context; grey: novel context",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "选出的聊天侧解码器占优潜变量\\\\ 白色：聊天上下文；灰色：小说上下文"
+    },
+    {
+      "key": "selected high chat/novel activation ratios \\\\ white: chat context; grey: novel context",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "选出的聊天/小说激活频率比高的潜变量\\\\ 白色：聊天上下文；灰色：小说上下文"
+    },
+    {
+      "key": "share of live latents",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "活跃潜变量的占比"
+    },
+    {
+      "key": "share of nonconstant embedding energy",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "嵌入非恒定能量的占比"
+    },
+    {
+      "key": "sharing pays when the two are rarely on together: \\\\ the ReLU cuts off negative estimates",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "两者很少同时出现时，共享才划算：\\\\ ReLU切掉负的估计值"
+    },
+    {
+      "key": "sharing works only if the two are rarely on together: \\\\ the ReLU and a negative bias cut off the other's shadow",
+      "baseline_present": true,
+      "baseline_value": "只有两者很少同时出现，共享才行得通：\\\\ ReLU加上负的偏置，切掉对方的影子",
+      "candidate_present": false,
+      "candidate_value": null
+    },
+    {
+      "key": "signed fraction of the clean--corrupt gap; \\ color scale $\\pm 1.49$",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "干净与破坏运行差值的有符号比例；\\ 色阶 $\\pm 1.49$"
+    },
+    {
+      "key": "small research models: \\ pruned task circuits about $16$ times smaller at matched loss, \\ averaged over the tasks studied",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "小型研究模型：\\ 在匹配损失下，剪枝任务回路约小$16$倍，\\ 对研究中的任务取平均"
+    },
+    {
+      "key": "taught $52$ fictional reward-model biases; \\\\ trained to exploit $47$ and conceal why",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "教给模型$52$种虚构的奖励模型偏差；\\\\ 训练它利用其中$47$种，并隐瞒原因"
+    },
+    {
+      "key": "the same tokens through both models \\\\ each residual stream scaled separately: \\ $z=h/s$",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "同样的词元通过两个模型\\\\ 各自缩放残差流：\\ $z=h/s$"
+    },
+    {
+      "key": "the step derivative is zero away from its jump; \\\\ thresholds use a straight-through estimate with a narrow kernel",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "阶跃之外的导数为零；\\\\ 阈值通过窄核直通估计器学习"
+    },
+    {
+      "key": "theory: \\ the cheapest of the three",
+      "baseline_present": true,
+      "baseline_value": "理论：\\ 三者中最便宜的",
+      "candidate_present": false,
+      "candidate_value": null
+    },
+    {
+      "key": "variance left unexplained \\ (fit batches)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "未解释的方差\\ （拟合批次）"
+    },
+    {
+      "key": "variance left unexplained \\ (training batch)",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "未解释的方差\\ （训练批次）"
+    },
+    {
+      "key": "variance left unexplained, \\ normalized fit batches",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "未解释方差，\\ 归一化拟合批次"
+    },
+    {
+      "key": "weighted mean squared error",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "加权均方误差"
+    },
+    {
+      "key": "word-selected gloomy sentences",
+      "baseline_present": false,
+      "baseline_value": null,
+      "candidate_present": true,
+      "candidate_value": "词表筛选的阴郁句子"
+    }
+  ],
+  "patterns_add": [
+    [
+      "^word-selected cheerful sentences \\\\ \\(\\$([^$]+)\\$\\)$",
+      "高兴的句子 \\ （$\\1$）"
+    ],
+    [
+      "^\\$([^$]+)\\$\\ neurons:\\ \\\\\\ over\\ half\\ their\\ \\\\\\\\\\ nonconstant\\ Fourier\\ energy\\ \\\\\\\\\\ in\\ one\\ frequency\\ family$",
+      "$\\1$个神经元：超过一半的\\\\ 非恒定傅里叶能量\\\\ 落在同一频率族"
+    ],
+    [
+      "^\\$([^$]+)\\$ latents \\\\\\\\ showing \\$([^$]+)\\$ of \\$([^$]+)\\$ matches$",
+      "$\\1$ 个潜变量\\\\\\\\ 展示 $\\2$ / $\\3$ 个匹配"
+    ],
+    [
+      "^logit\\ \\$([^$]+)\\$\\ \\\\\\ =\\ \\\\\\ features\\ \\$([^$]+)\\$\\ \\\\\\ \\+\\ \\\\\\ inputs\\ \\$([^$]+)\\$\\ \\\\\\ \\+\\ \\\\\\ errors\\ \\$([^$]+)\\$\\ \\\\\\ \\+\\ \\\\\\ bias\\ \\$([^$]+)\\$$",
+      "logit $\\1$ \\ = \\ 特征$\\2$ \\ + \\ 输入$\\3$ \\ + \\ 误差$\\4$ \\ + \\ 偏置$\\5$"
+    ],
+    [
+      "^computed:\\ \\\\\\ final\\-position\\ logits\\ match\\ within\\ \\$([^$]+)\\$,\\ \\\\\\ with\\ error\\ correction;\\ \\\\\\ \\$([^$]+)\\$\\ active\\ features,\\ \\\\\\ the\\ \\$12\\$\\ most\\ influential\\ shown$",
+      "已计算：\\ 经误差修正，最后位置logit误差小于$\\1$；\\ $\\2$个活跃特征，\\ 展示影响最大的$12$个"
+    ],
+    [
+      "^\\$([^$]+)\\$\\ selected\\ interventions:\\ \\\\\\\\\\ Pearson\\ \\$r\\ =\\ ([^$]+)\\$;\\ \\\\\\ same\\ sign\\ \\$([^$]+)\\$\\ \\\\\\\\\\ RMSE\\ \\$([^$]+)\\$\\ logit\\ units$",
+      "$\\1$个选定干预：\\\\\\\\ 皮尔逊$r = \\2$；\\ 同号$\\3$\\\\\\\\ 均方根误差$\\4$个logit单位"
+    ],
+    [
+      "^direct\\-effect\\ baseline:\\ \\\\\\\\\\ \\$r\\ =\\ ([^$]+)\\$;\\ \\\\\\ RMSE\\ \\$([^$]+)\\$$",
+      "直接效应基线：\\\\\\\\ $r = \\1$；\\ 均方根误差$\\2$"
+    ],
+    [
+      "^trained:\\ \\\\\\ \\$([^$]+)\\$\\ live\\ latents,\\ \\\\\\ mean\\ \\$([^$]+)\\\\%\\$$",
+      "训练模型：\\ $\\1$个活跃潜变量，\\ 平均$\\2\\%$"
+    ],
+    [
+      "^random\\ weights:\\ \\\\\\ \\$([^$]+)\\$\\ live\\ latents,\\ \\\\\\ mean\\ \\$([^$]+)\\\\%\\$$",
+      "随机权重：\\ $\\1$个活跃潜变量，\\ 平均$\\2\\%$"
+    ],
+    [
+      "^\\$([^$]+)\\$ punctuation marks \\\\\\\\ per \\$160\\$ characters$",
+      "每 $160$ 个字符 \\\\\\\\ $\\1$ 个标点符号"
+    ],
+    [
+      "^balanced\\ norms\\ \\\\\\ \\(\\$0\\.3\\ <\\ r\\ <\\ 0\\.7\\$\\):\\ \\\\\\ \\$([^$]+)\\$$",
+      "范数较均衡\\（$0.3 < r < 0.7$）：\\ $\\1$"
+    ],
+    [
+      "^chat\\-dominant\\ norm\\ \\\\\\ \\(\\$r\\ >\\ 0\\.9\\$\\):\\ \\\\\\ \\$([^$]+)\\$$",
+      "聊天侧范数占优\\（$r > 0.9$）：\\ $\\1$"
+    ],
+    [
+      "^base\\-dominant\\ norm\\ \\\\\\ \\(\\$r\\ <\\ 0\\.1\\$\\):\\ \\\\\\ \\$([^$]+)\\$$",
+      "基础侧范数占优\\（$r < 0.1$）：\\ $\\1$"
+    ],
+    [
+      "^other\\ live\\ latents:\\ \\\\\\ \\$([^$]+)\\$$",
+      "其他活跃潜变量：\\ $\\1$"
+    ],
+    [
+      "^\\$([^$]+)\\$\\ live\\ of\\ \\$([^$]+)\\$;\\ \\\\\\ fit\\-pool\\ FVU\\ \\$([^$]+)\\\\%\\$$",
+      "$\\2$个中有$\\1$个活跃；\\ 拟合池FVU为$\\3\\%$"
+    ],
+    [
+      "^top\\ local\\ readout\\ changes\\ after\\ block\\ \\$([^$]+)\\$\\ \\\\\\ \\(signed\\ logits\\)$",
+      "第$\\1$块后的最高局部读出变化\\（带符号logit）"
+    ],
+    [
+      "^at\\ \\$([^$]+)\\$\\ examples,\\ \\\\\\ inside\\ chat\\ transcripts:\\ \\\\\\\\\\ linear\\ \\$([^$]+)\\\\%\\$,\\ \\\\\\ \\$8\\$\\ latents\\ \\$([^$]+)\\\\%\\$,\\ \\\\\\ \\$1\\$\\ latent\\ \\$([^$]+)\\\\%\\$\\ \\\\\\ \\(chat\\-label\\ majority:\\ \\\\\\ \\$([^$]+)\\\\%\\$\\)$",
+      "$\\1$个样本，\\ 聊天记录：\\\\ 线性$\\2\\%$，\\ $8$个潜变量$\\3\\%$，\\ $1$个$\\4\\%$\\（聊天标签多数类：\\ $\\5\\%$）"
+    ]
+  ],
+  "patterns_remove": []
+}

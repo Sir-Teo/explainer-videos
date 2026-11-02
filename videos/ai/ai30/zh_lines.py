@@ -27,7 +27,7 @@ CHAPTERS = {
 ZH = {
     # ---------------------------------------------------------------- Hook
     'Part by part, we\'ve built every piece of these models ourselves.':
-        "一部分接一部分，这些模型的每个零件，我们都亲手搭过。里面的每一个数字，我们都知道。可我们还是说不出，它在想什么。<bookmark mark='a'/>这是我们的Transformer在读测试段落里的一行：对每个字符，它在第二个块之后带着的128个数。每一个数都一直在忙，可没有哪一个数，单独拿出来有什么意义。<bookmark mark='b'/>这一部分，讲的就是怎么读懂它们。<bookmark mark='c'/>换到合适的基底里重写，画面就变了：每个字符上，只有少数几个特征亮着，也就是模型在追踪的想法，而每一个，结果都有意义。",
+        "一部分接一部分，这些模型的每个零件，我们都亲手搭过。里面的每一个数字，我们都知道。可我们还是说不出，它在想什么。<bookmark mark='a'/>这是我们的Transformer在读测试段落里的一行：对每个字符，它在第二个块之后带着的128个数。每一个数都一直在忙，它们的含义却很难读出。<bookmark mark='b'/>这一部分，讲的就是怎么读懂它们。<bookmark mark='c'/>用学到的字典重写后，画面就变了：每个字符上，只有少数几个特征亮着。许多特征表现出重复出现的模式，但清楚的模式还不是完整的解释。",
 
     'f"Take one character. <bookmark mark=\'a\'/> Its hundred':
         "拿一个字符来看。<bookmark mark='a'/>它那128个缠在一起的数，变成了512个特征里的{int((f > 0).sum())}个。<bookmark mark='f'/>一个特征，就是模型追踪的一个想法，比如“在引号里面”，它以一个方向的形式，存在这些数当中。向量朝那个方向指了多远，也就是它在这个方向上的投影，就是这个特征亮得有多强。",
@@ -164,7 +164,7 @@ ZH = {
         "同样的事实，在什么都还没跑之前，就写在权重里了。<bookmark mark='a'/>第二个头通过一个矩阵W QK来比较查询和键。<bookmark mark='b'/>第一个头通过另一个矩阵W OV往残差流里写。<bookmark mark='c'/>它们的组合分数，来自纳尔逊·埃尔哈格和同事的框架，问的是：第一个头写下的东西，第二个头的键能读到多少。<bookmark mark='d'/>从我们的前一词元头到归纳头，组合分数在{klo:.2f}到{khi:.2f}之间；同样形状的随机头，会是{base:.3f}，上下浮动{sd:.3f}：至少相差{z:.0f}个标准差。这些键，就是为了读那些头而长成的。",
 
     'f"Each head\'s job can be read off its weights too.':
-        "每个头的工作，也能从它的权重里读出来。<bookmark mark='a'/>只给前一词元头输入位置嵌入：{verdict}<bookmark mark='b'/>再把归纳头的值，从它们关注的词元出发，经过W OV，一路追到logit：一个64乘64的矩阵，词元进，logit出。<bookmark mark='c'/>对{100 * diag:.0f}%的词元来说，提升最多的logit就是这个词元自己的，特征值给出的复制分数是{cs:.2f}，1代表纯粹的复制。{verdict2}",
+        "每个头的工作，也能从它的权重里读出来。<bookmark mark='a'/>只给前一词元头输入位置嵌入：{verdict}<bookmark mark='b'/>再把归纳头的值，从它们关注的词元出发，经过W OV，一路追到logit：一个64乘64的矩阵，词元进，logit出。<bookmark mark='c'/>对{100 * diag:.0f}%的词元来说，提升最多的logit就是这个词元自己的，特征值给出的复制分数是{cs:.2f}。分数为1表示所有非零特征值均为正实数；它本身不能证明词元复制。{verdict2}",
 
     'the scores are highest for the key one position back.':
         '往前一个位置的键，分数最高。',
@@ -208,10 +208,10 @@ ZH = {
         '第7章。相图。',
 
     'Chapter six showed superposition happen.':
-        "第6章看到了叠加的发生。埃尔哈格和同事问的是：它什么时候发生？他们把答案画成了一张相图。<bookmark mark='a'/>最小的情形：两个特征，挤过一个数。特征2的重要性是特征1的r倍，每个特征出现的时间比例是ρ。<bookmark mark='b'/>网络有三种选择。丢掉特征2。<bookmark mark='c'/>把这个维度给特征2，丢掉特征1。<bookmark mark='d'/>或者共享：让两个特征指向相反的方向，再让ReLU加上一个负的偏置，把彼此的影子切掉。只有当它们很少同时出现时，共享才划算。",
+        "第6章看到了叠加的发生。埃尔哈格和同事问的是：它什么时候发生？他们把答案画成了一张相图。<bookmark mark='a'/>最小的情形：两个特征，挤过一个数。特征2的重要性是特征1的r倍，每个特征出现的时间比例是ρ。<bookmark mark='b'/>网络有三种选择。丢掉特征2。<bookmark mark='c'/>把这个维度给特征2，丢掉特征1。<bookmark mark='d'/>或者共享：让两个特征指向相反的方向，再让ReLU把负的估计值切掉。只有当它们很少同时出现时，共享才划算。",
 
     'f"We trained the little model on a grid of':
-        "我们在一个网格上训练这个小模型：{len(dens)}种密度乘{len(rel)}种重要性，每格四个种子，留下最好的。<bookmark mark='a'/>每一格的颜色，表示训练好的网络对特征2做了什么；这里是其中一格的训练过程，{cellsay}。<bookmark mark='b'/>特征密集的时候，也就是最上面一行，{len(rel)}格里只有{int((dense_row == 2).sum())}格在共享：一个特征得到维度，另一个被丢掉。<bookmark mark='c'/>特征稀疏的时候，也就是最下面一行，共享在{len(rel)}格里赢下了{int((sparse_row == 2).sum())}格。<bookmark mark='d'/>右边是同一张图，来自理论：对每一格，算出三种选择各自的期望损失，取最便宜的那个。两者在{100 * agree:.0f}%的格子上一致，不一致的都在边界上，那里两种选择的代价几乎一样。叠加，是特征足够稀疏时，网络进入的一个相。",
+        "我们在一个网格上训练这个小模型：{len(dens)}种密度乘{len(rel)}种重要性，每格四个种子，留下最好的。<bookmark mark='a'/>每一格的颜色，表示训练好的网络对特征2做了什么；这里是标记格子中一个种子的训练过程。网格保留四个种子中最好的；单次运行可能停在别的解上。<bookmark mark='b'/>特征密集的时候，也就是最上面一行，{len(rel)}格里只有{int((dense_row == 2).sum())}格在共享：一个特征得到维度，另一个被丢掉。<bookmark mark='c'/>特征稀疏的时候，也就是最下面一行，共享在{len(rel)}格里赢下了{int((sparse_row == 2).sum())}格。<bookmark mark='d'/>右边是三个固定权重候选解的参考图。丢弃特征的候选使用零偏置；共享候选只搜索非正偏置。两者在{100 * agree:.0f}%的格子上一致。这种受限比较不能确定最优相边界。训练好的模型表明，特征足够稀疏时会出现叠加。",
 
     'In two dimensions, five features are a crowd.':
         "在二维里，五个特征就挤了。但真正的模型有成百上千维，在那里，空间比直觉宽敞得多。<bookmark mark='a'/>随便取两个方向，量一量它们之间的夹角。在二维里，什么都有可能。<bookmark mark='b'/>在16维里，它们通常接近垂直；在128维里，非常接近；<bookmark mark='c'/>在1024维里，余弦离零只有几个百分点。它的分散程度按根号d分之1缩小，所以几乎相互垂直的方向，数量随维数指数增长。这又是第3部分的随机投影，也正是模型能存下比自己的数多得多的特征的原因，只要每个特征都很少出现。",
@@ -249,7 +249,7 @@ ZH = {
         "2024年，出现了两种修正。<bookmark mark='a'/>OpenAI的Leo Gao和同事干脆去掉了惩罚：TopK只保留每个向量最大的k个特征，其余归零，于是稀疏程度直接设定，什么都不会被缩小。他们在GPT-4上训练了一个有1600万个潜变量的字典。<bookmark mark='b'/>DeepMind的森图兰·拉贾马诺哈兰和同事保留了惩罚，但罚的是亮着的特征个数，每个特征有一个学出来的阈值：这就是JumpReLU，也是他们公开的Gemma Scope字典背后的配方。阶跃没有梯度，所以阈值是通过直通估计来训练的。",
 
     'All three train the same way, on the same batches.':
-        "三种的训练方式一样，用的是同样的批次。<bookmark mark='a'/>这里每种各取一次运行，都是最接近每个向量16个特征的那个，重放出来：左边是没解释的方差在下降，右边是每个向量用到的特征数。<bookmark mark='b'/>TopK从第一步起就恰好保持k个；带惩罚的两种一开始很密，惩罚起作用后被修剪下来。",
+        "三种的训练方式一样，用的是同样的批次。<bookmark mark='a'/>这里每种各取一次运行，都是最接近每个向量16个特征的那个，重放出来：左边是没解释的方差在下降，右边是每个向量用到的特征数。<bookmark mark='b'/>TopK从第一步起就把数量限制在k个以内；带惩罚的两种一开始很密，惩罚起作用后被修剪下来。",
 
     'f"Now the fair test.':
         "现在做公平的比较。三种都用同样的向量来训练，同样的512个潜变量、同样的步数和批量，TopK取{n_sp}个稀疏度，另外两种各取{n_l1}个，每个都用三个种子。<bookmark mark='a'/>画出每个向量用了多少个特征，对应留下多少没解释的方差：越低、越靠左越好。暂停一下，预测一下哪种会赢。<bookmark mark='b'/>L1自编码器，<bookmark mark='c'/>JumpReLU，<bookmark mark='d'/>还有TopK。误差棒是三个种子；它们几乎没有差别。<bookmark mark='e'/>在每个向量16个特征的地方，{verdict}。",
@@ -336,7 +336,7 @@ ZH = {
         "第27部分用几分钟的微调，把小说模型变成了助手。里面改变了什么？这样比较两个模型，叫作模型差分。<bookmark mark='a'/>用的工具是交叉编码器，2024年由杰克·林赛和同事提出：一个字典，在同样的词元上读两个模型的向量，再通过各自的解码器把它们写回去。<bookmark mark='b'/>一个两个模型都有的潜变量，有两个大小相近的解码器。一个由微调创造出来的潜变量，只在聊天模型那边有解码器。<bookmark mark='c'/>于是每个潜变量得到一个0到1之间的数：它的解码器里，属于聊天模型的那一份。",
 
     'f"We trained one after block {L3} and one after block {L}':
-        "我们在第{L3}个块之后训练了一个，在第{L}个块之后又训练了一个，每个都用{int(d['n_novel']):,}个小说词元和{int(d['n_chat']):,}个聊天记录词元，有{int(d['F']):,}个潜变量；这是更深那个的训练过程。<bookmark mark='a'/>这是每个潜变量在解码器里所占的份额。{verdict}<bookmark mark='c'/>2025年的一个警告：朱利安·明德、克莱芒·迪马和同事证明，用L1惩罚训练的交叉编码器，会造出一些“只属于聊天模型”的潜变量，而基础模型其实也有；他们建议用BatchTopK，这正是我们用的。",
+        "我们在第{L3}块和第{L}块之后各训练了一个，分别使用{int(d['n_novel']):,}个小说词元和{int(d['n_chat']):,}个聊天词元、{int(d['F']):,}个潜变量。这里展示较深一层的训练，保留完整有限FVU范围；重建是在拟合激活上测量的。<bookmark mark='a'/>这是每个活跃潜变量的归一化解码器范数份额。{verdict}<bookmark mark='c'/>2025年，Julian Minder、Clément Dumas等发现，L1交叉编码器会因收缩和解耦误判模型特有潜变量。BatchTopK在他们的实验中显著减轻这些伪影，但不能代替我们这里的独立验证。",
 
     "f'Every latent is shared:":
         "每个潜变量都是共享的：r只在{lo:.2f}到{hi:.2f}之间，在第{L3}个块之后是{lo3:.2f}到{hi3:.2f}。我们的微调没有造出自己的特征。它改变的是模型怎么使用它原有的特征。",
@@ -360,7 +360,7 @@ ZH = {
         "可它们的解码器平分在两边，r在{min(rs):.2f}到{max(rs):.2f}之间：基础模型读的是同样的方向。它本来就有这些特征；微调教会它什么时候用。",
 
     'f"There is an even cheaper diff,':
-        "还有一种更便宜的差分，来自朱利安·明德和同事，2025年10月。<bookmark mark='a'/>让两个模型都去跑一段和微调毫不相干的普通文本，这里就是普通的小说文本，再把它们向量之差取平均：它是一个典型向量长度的{100 * dn / bn:.0f}%。<bookmark mark='b'/>然后像logit透镜那样，通过反嵌入去读这个差。<bookmark mark='c'/>{verdict}窄范围的微调可能留下容易读出的痕迹，这对审计者是好消息，这是第31部分的主题。",
+        "还有一种更便宜的差分，来自Julian Minder等在2025年10月的工作。<bookmark mark='a'/>我们用局部变体，把采样小说位置合并取平均，不复现论文对最初几个词元逐位置的分析。让两个模型运行小说，再把向量差取平均：其长度是典型基础向量的{100 * dn / bn:.0f}%。箭头方向只是示意。<bookmark mark='b'/>用基础模型的最终归一化和输出头，分别读取基础均值加这个差，以及基础均值，再相减。这是非线性的局部读出对比，不是完整模型的预测之差。<bookmark mark='c'/>{verdict}窄范围微调可能留下可读痕迹，这对审计者是好消息，第31部分继续讲。",
 
     "f'{special} of the top ten are the chat markers themselves:":
         "前十个里有{special}个就是聊天标记本身：只跑小说，微调后的模型仍然偏向它的新格式。",
@@ -398,7 +398,7 @@ ZH = {
         '第14章。顿悟的机制。',
 
     'f"Part 12 met grokking:':
-        "第12部分讲过顿悟：一个小网络先记住了模加法，过了很久，才突然学会。这里我们问，里面发生了什么，跟着尼尔·南达和同事2023年的解剖来做。<bookmark mark='a'/>他们的设定，稍微小一点：模{P}的加法，一个单层Transformer，在加法表的{100 * float(d['frac']):.0f}%上训练，加上很强的权重衰减。<bookmark mark='b'/>到第{tm:,}步，它已经记住了见过的那些数对，而在其余的数对上，它比瞎猜还差。<bookmark mark='c'/>{grok_said}",
+        "第12部分讲过顿悟：一个小网络先记住了模加法，过了很久，才突然学会。这里我们问，里面发生了什么，跟着尼尔·南达和同事2023年的解剖来做。<bookmark mark='a'/>我们对他们设定的一个改编：模{P}的加法，一个单层Transformer，在加法表的{100 * float(d['frac']):.0f}%上训练，加上很强的权重衰减。<bookmark mark='b'/>到第{tm:,}步，它已经记住了见过的那些数对，而在其余的数对上，它比瞎猜还差。<bookmark mark='c'/>{grok_said}",
 
     "f'Then, around step {tg:,}, the held-out loss collapses too:":
         "然后，大约在第{tg:,}步，留出数据上的损失也塌了下去：它顿悟了，比记住晚了{tg / max(tm, 1):.0f}倍。",
@@ -407,22 +407,25 @@ ZH = {
         '在我们这次运行里，留出数据上的损失始终没有完全塌下去。',
 
     'f"Nanda and colleagues found the algorithm by reading the weights':
-        "南达和同事通过读权重找到了这个算法，它就是三角学。<bookmark mark='a'/>每个数a被嵌入成一个角度：几个频率上的余弦和正弦。<bookmark mark='b'/>两个数相加，就是两个角度相加，而和角的余弦是乘积之差，注意力和ReLU单元可以算出来。<bookmark mark='c'/>然后反嵌入把这个角度和每一个候选答案c作比较。<bookmark mark='d'/>把几个频率加起来，这些波都在c等于a加b的地方达到峰值，别处都不会。<bookmark mark='e'/>我们这次运行最后定下了{len(key)}个关键频率。",
+        "南达和同事通过读权重找到了这个算法，它就是三角学。<bookmark mark='a'/>每个数a被嵌入成一个角度：几个频率上的余弦和正弦。<bookmark mark='b'/>两个数相加，就是两个角度相加，而和角的余弦是乘积之差，注意力和ReLU单元可以算出来。<bookmark mark='c'/>然后反嵌入把这个角度和每一个候选答案c作比较。<bookmark mark='d'/>把几个频率按正权重相加，这些波都在模加法答案处达到峰值，别处都不会。<bookmark mark='e'/>这个诊断从最终输出映射中选取最强的{len(key)}个频率。",
 
     'f"Watch the embedding during training, through its Fourier spectrum':
-        "通过傅里叶频谱，看嵌入在训练中的变化：它有多少落在每一个频率上。<bookmark mark='a'/>一开始，能量散布在所有地方。<bookmark mark='b'/>随着训练，少数几个频率占了上风。到最后，关键频率占了嵌入的{100 * top_share:.0f}%。<bookmark mark='c'/>在最强那个频率的平面上，这些数一开始是散乱的，最后排成了一个圆：角度。",
+        "通过傅里叶频谱，看嵌入在训练中的变化：它有多少落在每一个频率上。<bookmark mark='a'/>一开始，能量散布在所有地方。<bookmark mark='b'/>随着训练，少数几个频率占了上风。到最后，所选频率占了嵌入非恒定能量的{100 * top_share:.0f}%。<bookmark mark='c'/>在第一个所选频率的平面上，这些数一开始是散乱的，最后排成了一个圆：角度。",
 
     'f"The MLP\'s neurons tell the same story.':
         "MLP的神经元讲的是同一个故事。<bookmark mark='a'/>把每个神经元在所有数对a和b上的激活分解成波：512个里有{int(clean.sum())}个，一半以上落在单一频率上，其中{sum(counts)}个落在关键频率上。<bookmark mark='b'/>这是其中一个，覆盖整张表：在a方向和b方向上都有这个频率的波，它们的乘积里就含着a加b的波。这个神经元，是和角余弦的一块零件。",
 
     '"Nanda and colleagues\' real point was a timeline':
-        "南达和同事真正要说的，是一条时间线，用的是能看进内部的进度指标。暂停一下，预测一下：回路是在测试损失下降时出现，还是更早？<bookmark mark='a'/>{verdict}<bookmark mark='b'/>排除损失正好把这些波从logit里去掉，再给训练数对打分：网络越依赖这些波，它就爬得越高。<bookmark mark='c'/>权重先涨后缩，权重衰减在修剪那张记住的查找表。三个阶段：记忆，底下有一个回路在形成，然后是清理，把记忆去掉。那次突然的跃升，只是最后一个阶段。到最后，关键频率的波解释了logit方差的{100 * float(d['fit_r2']):.0f}%。",
+        "南达和同事真正要说的，是一条时间线，用的是能看进内部的进度指标。这里从最终输出映射中选出五个频率，再回头追踪这些固定频率在训练中的变化。暂停一下，预测一下：回路是在测试损失下降时出现，还是更早？<bookmark mark='a'/>{verdict}<bookmark mark='b'/>排除损失正好把这些波从logit里去掉，再给训练数对打分：网络越依赖这些波，它就爬得越高。<bookmark mark='c'/>权重先涨后缩，权重衰减在修剪那张记住的查找表。三个阶段：记忆，底下有一个回路在形成，然后是清理，把记忆去掉。那次突然的跃升，只是最后一个阶段。到最后，与a加b减c对齐的拟合余弦读出，解释了logit方差的{100 * float(d['fit_r2']):.0f}%。这个拟合读出在所有数对上答对{100 * float(d['strict_cos_accuracy']):.0f}%。",
 
-    "f'The restricted loss, which keeps only the key waves,":
-        "受限损失只保留关键频率的波，它在第{rt:,}步降到1奈特以下，远早于测试损失在第{tt:,}步的下降：回路是在网络看上去还只是在死记的时候建起来的。",
+    "f'The restricted loss, which keeps the fixed key waves and answer bias,":
+        "受限损失保留固定关键频率的波和答案偏置，它在第{rt:,}步降到1奈特以下，远早于测试损失在第{tt:,}步的下降：回路是在网络看上去还只是在死记的时候建起来的。",
 
-    "f'Here the restricted loss and the test loss fall together,":
-        "在这里，受限损失和测试损失一起下降，大约在第{rt:,}步和第{tt:,}步。",
+    "This run does not show the usual two-stage one-nat sequence in the selected diagnostic.":
+        "在这次运行中，所选诊断没有表现出通常那种先后越过1奈特的两个阶段。",
+
+    "The selected keys path does not have a positive final effect in this run.":
+        "在这次运行中，所选键路径的最终效应不为正。",
 
     # ---------------------------------------------------------------- Faithful
     'Chapter fifteen. Does the chain of thought tell the truth?':
@@ -455,7 +458,7 @@ ZH = {
         '第17章。这个领域在哪里有分歧。',
 
     'f"The sharpest argument is about usefulness.':
-        "最尖锐的争论是关于有没有用。<bookmark mark='a'/>2025年3月，谷歌DeepMind的可解释性团队报告说，在识别有害意图这件事上，建在自编码器潜变量上的探针，输给了普通的线性探针，在新类型的提示上尤其如此，于是他们降低了这方面研究的优先级；一项覆盖113个数据集的研究，也没有发现稳定的优势。<bookmark mark='b'/>在我们的模型上试一试：在小说模型第{int(d['probe_layer'])}个块之后识别“在引号里面”，用一个读全部256个数的线性探针，或者用这里训练的一个自编码器里差别最大的8个或1个潜变量，训练样本从{ns[0]}个到{ns[-1]:,}个，每种抽五次。<bookmark mark='c'/>{verdict}<bookmark mark='d'/>{verdict2}",
+        "最尖锐的争论是实用性。<bookmark mark='a'/>2025年3月，Google DeepMind可解释性团队报告，自编码器潜变量探针在检测有害意图时输给普通线性探针，尤其是在新类型的提示上。他们暂时降低了基础SAE研究的优先级，但仍保留这一工具；另一项113数据集研究也没有发现一致优势。<bookmark mark='b'/>我们在小说模型第{int(d['probe_layer'])}块后比较窗口局部引号状态代理：全部256个数上的线性探针，和这里训练的自编码器中两类差异最大的8个或1个潜变量上的探针。训练样本从{ns[0]}到{ns[-1]:,}，各抽5次。某次训练抽样只有一个类别时，所有表示都用该类别的常数预测器。引号状态在每个窗口开头设为外部，在换行和特殊词元处重置。因此，若窗口从文章引号内部开始，这个标签可能不同于整篇文章的状态；这里保留原来的操作配方。<bookmark mark='c'/>{verdict}<bookmark mark='d'/>{verdict2}",
 
     'f"With few examples the latents help:':
         "样本少的时候，潜变量有帮助：在{ns[0]}个样本时，一个潜变量得{100 * small[2]:.0f}%，线性探针是{100 * small[0]:.0f}%。",
@@ -505,7 +508,283 @@ ZH = {
 
     'The best place to go deeper is the Transformer Circuits thread,':
         '想深入下去，最好的地方是Transformer Circuits系列文章，可以在网上免费读，还有2025年那篇开放问题综述。谢谢观看，第31部分，终章见。',
+
+    "Part 27 fine-tuned the novels model into an assistant.":
+        "第27部分把小说模型微调成了助手。内部改变了什么？这样比较两个模型叫作模型差分。<bookmark mark='a'/>工具是交叉编码器，由Jack Lindsey和同事在2024年提出：一个字典读取两个模型在相同词元上的向量，分别缩放后，通过各自解码器及输出偏置重建。<bookmark mark='b'/>我们比较这些归一化坐标下的解码器范数。范数相近不证明方向一致；基础侧解码器很小也不证明概念是新创造的。<bookmark mark='c'/>每个潜变量得到0到1的数：聊天侧解码器范数除以两侧范数之和。这是描述性代理，不是模型特有特征的因果检验。",
+    "f\"At block {L}, {ns} live latents":
+        "在第{L}块，{ns}个活跃潜变量的范数份额在0.3到0.7之间；{nc}个大于0.9，{nb}个小于0.1。另外{len(r) - ns - nc - nb}个不在这三组里。范围是{lo:.2f}到{hi:.2f}；第{L3}块为{lo3:.2f}到{hi3:.2f}。这些阈值描述这个字典，不证明微调创造或移除了概念。",
+    "f\"What do the selected latents look like?":
+        "选出的潜变量是什么样？<bookmark mark='a'/>我们优先展示聊天侧解码器范数份额高的那组；如果为空，就展示符合条件且聊天/小说激活频率比最高的潜变量。{verdict}<bookmark mark='b'/>{verdict2}",
+    "f\"{n_marker} of these {len(chat)} have a chat marker":
+        "这{len(chat)}个里有{n_marker}个，在展示的最强激活词元中包含聊天标记。",
+    "None has a chat marker among the displayed strongest firing tokens.":
+        "展示的最强激活词元中，没有聊天标记。",
+    "f\"Their normalized decoder-norm shares range":
+        "它们的归一化解码器范数份额从{min(rs):.2f}到{max(rs):.2f}。范数份额和选出的上下文，不能证明概念是新的、解码方向一致，或任一模型在因果上如何使用它们。",
+    "f\"{special} of the top ten local readout tokens":
+        "局部读出的前十个词元中，有{special}个是聊天标记。",
+    "None of these top ten local readout tokens is a chat marker;":
+        "这十个局部读出词元中没有聊天标记；仅凭这一点，不能把变化归类为风格。",
+    "f\"At {ns[0]} training examples,":
+        "训练样本为{ns[0]}时，小说窗口均值分别是：普通探针{100 * small[0]:.0f}%，8个潜变量{100 * small[1]:.0f}%，1个潜变量{100 * small[2]:.0f}%。",
+    "f\"At {ns[-1]:,} examples,":
+        "训练样本为{ns[-1]:,}时，小说窗口均值依次是{100 * ind[0]:.0f}%、{100 * ind[1]:.0f}%和{100 * ind[2]:.0f}%。聊天记录单独评估，依次是{100 * ood[0]:.0f}%、{100 * ood[1]:.0f}%和{100 * ood[2]:.0f}%。这些是抽样均值描述，不是等价性或显著性检验；两个评估域的排序可能不同。",
 }
+
+# Scoped scientific wording repairs; historical narration records stay intact.
+ZH.update({'At the input, no single swap removes more than half the clean advantage.': '在输入处，没有一次单独替换会移除超过一半的干净运行优势。',
+ "f'At the input, swapping position": '在输入处，替换第{names(k_in)}个位置，会移除超过一半的干净运行优势。',
+ "f'Patching either previous-token head alone loses": '单独修补任一个前一词元头，都会损失{100 * min(single):.0f}%到{100 * '
+                                                      'max(single):.0f}%的优势。',
+ 'The current-token head has its largest effect through the queries. ': '当前词元头通过查询路径的影响最大。',
+ "The current-token head's largest effect is not through the queries here. ": '这里当前词元头的最大影响并不经过查询路径。',
+ 'f"{shared}For the second test: {self_verdict}Its query-path effect': '{shared}{self_verdict}它在查询路径上的影响为{100 * '
+                                                                       "float(ps_['q']):.0f}%。"})
+
+# Scoped fit/evaluation and measured-outcome narration.
+ZH.update({'f"If the model stores features as directions, can we find them?': '如果模型把特征存成方向，我们能找到它们吗？用的工具是稀疏自编码器。<bookmark '
+                                                                    "mark='a'/>取模型在某个字符上的向量x，<bookmark "
+                                                                    "mark='b'/>把它编码成多得多的数，512个，再加一个ReLU，让它们永远不是负的。<bookmark "
+                                                                    "mark='c'/>然后把x重建成一组方向的和，每个特征一个方向，按每个特征亮的强度加权。<bookmark "
+                                                                    "mark='d'/>训练它重建得好，同时为它用到的每个特征付费。这个惩罚就是全部的诀窍：它逼着编码变得稀疏，让每个向量只用几个方向来解释。<bookmark "
+                                                                    "mark='e'/>用我们Transformer的{int(s['n_vectors']) "
+                                                                    '// '
+                                                                    "1000}千个向量训练之后，在同一批拟合向量上测量，它每个字符大约用{float(s['l0']):.0f}个特征，重建了{100 "
+                                                                    '* (1 - '
+                                                                    "float(s['fvu'])):.0f}%的方差：这些向量偏离平均值的所有方式里，重建抓住了{100 "
+                                                                    '* (1 - '
+                                                                    "float(s['fvu'])):.0f}%。把重建放回模型，替换真正的向量，它写字每字符要{float(s['bits_spliced']):.2f}比特，原样是{float(s['bits_clean']):.2f}，把向量换成它们的平均值是{float(s['bits_mean']):.2f}。",
+ 'f"Watch it learn.': '看它学习。这两条曲线测量当前训练批次，方差基准使用整个拟合池。比值超过一，表示误差超过了该样本池的平均向量误差基准。<bookmark '
+                      "mark='a'/>一开始，方向是随机的，惩罚还没起作用：右边这个字符打开了{n0}个特征。<bookmark "
+                      "mark='b'/>随着训练，惩罚在修剪，重建同时也在改进，因为这些方向转过来，对准了数据。<bookmark "
+                      "mark='c'/>到最后，{n1}个特征描述这个字符，剩下没解释的方差是{100 * float(fv[-1]):.0f}%。",
+ 'f"Why not just read the model\'s own neurons': '为什么不直接读模型自己的神经元，也就是每个MLP隐藏层里的数，第9部分的那些单元？<bookmark '
+                                                 "mark='a'/>这是第二个块里一个典型的神经元，在它最强的时刻：八个里有{n_med}个落在同一个字符上。<bookmark "
+                                                 "mark='b'/>数一数：每个单元最强的八个时刻里，有几个落在同一个字符上？神经元平均是{8 * "
+                                                 'npur.mean():.1f}个；特征是{8 * '
+                                                 "fpur.mean():.1f}个。两边搜索的样本池不同：神经元是57,600个位置，SAE特征是{int(s['n_vectors']):,}个位置。这是描述性比较，不是使用相同样本池的基准。{verdict}",
+ 'The features score higher in this descriptive comparison.': '在这次描述性比较中，特征的分数更高。',
+ 'The features do not score higher in this descriptive comparison.': '在这次描述性比较中，特征的分数并没有更高。',
+ 'f"Each was trained for {int(S):,} steps': '每种转码器都训练了{int(S):,}步，每层最多打开十六个特征。曲线测量拟合批次上的输出未解释方差，不是留出样本的重建基准。<bookmark '
+                                            "mark='a'/>另外，在文本上评估把每个MLP都替换后的模型；这时输入来自替换运行自身。原模型每字符要{clean:.2f}比特；把MLP换成平均输出，要{mm:.2f}。<bookmark "
+                                            "mark='b'/>{verdict}，它的首选预测在{100 * "
+                                            'winning_agree:.0f}%的时候与原模型一致。剩下的差距，也就是没有特征解释的部分，Anthropic称作暗物质，每张图都要用误差节点带着它。',
+ 'f"Now a graph for one prediction.': "现在为一次预测画一张图。提示的结尾是“she sai”，模型预期的是“{d['target']}”。<bookmark "
+                                      "mark='a'/>把这个提示的注意力模式和层归一化的缩放冻结，把每个MLP换成跨层转码器的特征，再在每个位置、每一层加上一个误差项，补上特征漏掉的部分。这个局部替代模型在这个提示上和真模型完全一致。但这种一致是误差项补出来的，并不代表已经完整解释了原模型的因果机制。从特征往后，替代模型是线性的。<bookmark "
+                                      "mark='b'/>于是从一个特征到输出的每一条路径都能打分：它的激活乘以梯度。在{int(d['n_features'])}个亮着的特征里，这里是影响最大的12个，按层和位置排开。<bookmark "
+                                      "mark='c'/>这些线是它们彼此之间、以及对输出的直接作用；下面灰色的线来自输入的字符。<bookmark "
+                                      "mark='d'/>账目是平的：“{d['target']}”的logit是{tot:.2f}，其中特征贡献{fe:.2f}，字符自己的嵌入{ee:.2f}，误差节点{er:.2f}。",
+ 'These selected interventions have high linear correlation; this alone does not establish calibration or a complete circuit.': '这些选定干预的结果具有较高的线性相关性；仅凭这一点，不能证明数值已校准，也不能证明回路完整。',
+ 'These selected interventions have moderate linear correlation; correlation alone does not establish agreement in sign or size.': '这些选定干预的结果具有中等线性相关性；仅凭相关性，不能证明符号或大小一致。',
+ 'f"Part 12 met grokking:': '第12部分讲过顿悟：一个小网络先记住了模加法，过了很久，才突然学会。这里跟着南达和同事2023年的解剖，研究内部的变化。<bookmark '
+                            "mark='a'/>我们对他们设定的改编：模{P}加法，单层Transformer，在加法表的{100 * "
+                            "float(d['frac']):.0f}%上训练，使用强权重衰减。<bookmark mark='b'/>{mem_said}<bookmark "
+                            "mark='c'/>{grok_said}",
+ 'f"Nanda and colleagues found the algorithm by reading the weights': '南达和同事通过读权重发现的算法，就是三角学。<bookmark '
+                                                                      "mark='a'/>每个数a嵌入成几个频率上的余弦和正弦。<bookmark "
+                                                                      "mark='b'/>两数相加就是角度相加；和角余弦是乘积之差，注意力和ReLU可以计算这些乘积。<bookmark "
+                                                                      "mark='c'/>反嵌入再与候选答案c比较。<bookmark "
+                                                                      "mark='d'/>正权重的波可以同时在模加法答案处达到峰值。这是算法示意，并没有约束对我们模型拟合的系数。<bookmark "
+                                                                      "mark='e'/>诊断选取最终输出映射中最强的{len(key)}个频率。",
+ '"Nanda and colleagues\' real point was a timeline': '南达和同事的重点是一条内部进度时间线。这里从最终输出映射选出五个频率，再回头追踪训练中的同一组频率。暂停预测：回路在测试损失下降时才出现，还是更早？<bookmark '
+                                                      "mark='a'/>{verdict}<bookmark "
+                                                      "mark='b'/>排除损失从logit去掉这些波，对训练数对评分：起点{float(d['excluded_loss'][0]):.2f}奈特，终点{float(d['excluded_loss'][-1]):.2f}奈特。<bookmark "
+                                                      "mark='c'/>权重范数从{wn[0]:.0f}开始，峰值{wn[iw]:.0f}，结束时{wn[-1]:.0f}。这些诊断追踪学到的计算；仅凭权重缩小不能断定记忆表被删除。最终，在所有数对上拟合、与a加b减c对齐的余弦读出，解释了中心化logit方差的{100 "
+                                                      "* float(d['fit_r2']):.0f}%。拟合代理在所有数对上的准确率是{100 * "
+                                                      "float(d['strict_cos_accuracy']):.0f}%，与模型在留出数对上的准确率是两回事。",
+ "f'The restricted loss, which keeps the fixed key waves and answer bias,": '保留固定关键频率波和答案偏置的受限损失，在第{rt:,}个记录步首次低于1奈特，早于测试损失的第{tt:,}步。这是更早的采样检查点，不是测得的连续起始时间。',
+ 'f"We retrain it here with Part 13\'s recipe and seed.': '我们在这里用第13部分的配方和种子重新训练它。<bookmark '
+                                                          "mark='a'/>起初没有学到有用的东西，然后重复部分突然容易起来，从每词元{cv[0, "
+                                                          '1]:.1f}比特降到{cv[-1, 1]:.1f}，随机部分仍然困难。<bookmark '
+                                                          "mark='b'/>看看注意力：第一层四个头中有{len(d['prev_set'])}个偏好前一个词元，这里是第{hp "
+                                                          '+ 1}个。<bookmark '
+                                                          "mark='c'/>第二层有{len(d['ind_set'])}个头，在第二遍中的词元处，看向该词元首次出现后紧接着的位置，即要复制的词元。前一词元头与归纳头。但注意力模式仍然只是相关：这些头是原因吗？",
+ 'f"Now the heads: run the clean sequence': "再看头：在干净序列中换入某个头在破坏运行里的输出。<bookmark mark='a'/>替换一个前一词元头，复制收益损失{100 * "
+                                            'p_lo:.0f}%到{100 * p_hi:.0f}%；归纳头为{100 * i_lo:.0f}%到{100 * '
+                                            "i_hi:.0f}%。<bookmark mark='b'/>第一层主要看当前词元的第{sh + 1}个头也有影响：{100 * "
+                                            'nz[0, sh]:.0f}%。其余头的影响至多{100 * '
+                                            'max(others):.0f}%，负值表示替换改善了预测。一小组头承载这个行为，第5章把它拆开。',
+ 'These passage-level changes alone do not identify a copying circuit. ': '仅凭这些段落级变化，还不能识别复制回路。',
+ "f'Training accuracy first exceeds ninety-nine percent": '训练准确率在第{tm:,}个记录步首次超过99%。',
+ 'Training accuracy never exceeds ninety-nine percent in the recorded checkpoints. ': '在记录的检查点中，训练准确率没有超过99%。',
+ "f'Held-out accuracy first exceeds ninety-nine percent": '留出准确率在第{tg:,}个记录步首次超过99%。',
+ 'Held-out accuracy never exceeds ninety-nine percent in this run. ': '本次运行中，留出准确率没有超过99%。'})
+
+ZH.update({'f"If a feature is a direction, we can push on it.': '如果一个特征是一个方向，我们就可以朝它推。<bookmark '
+                                                      "mark='a'/>拿那个在引号上亮的特征。<bookmark "
+                                                      "mark='b'/>在模型写字的时候，在每个字符的向量上加上α乘以它的方向。<bookmark "
+                                                      "mark='c'/>不推的时候，是模型自己的续写。<bookmark "
+                                                      "mark='d'/>调大强度，测量标点：引号、撇号、感叹号和问号，从每160个字符{q0:.1f}个，变成{q1:.1f}个，是{len(st['seeds'])}个样本的平均；同样长度的随机方向，给出{qr:.1f}个。这个标点代理指标并不能独立证明对话状态。我们没有改变模型权重，只移动了一个方向。2024年5月，Anthropic对Claude "
+                                                      '3 Sonnet做了同样的事，用的是一个金门大桥特征，作为演示，有一天时间，它把每段对话都绕回到那座桥上。'})
+
+ZH.update({'All three train the same way, on the same batches.': '三种的训练方式一样，用的是同样的批次。<bookmark '
+                                                       "mark='a'/>这里每种各取一次运行，都是最接近每个向量16个特征的那个，重放出来：左边是在拟合批次上测得的未解释方差，右边是每个向量用到的特征数。<bookmark "
+                                                       "mark='b'/>TopK从第一步起就把数量限制在k个以内；带惩罚的两种一开始很密，惩罚起作用后被修剪下来。",
+ 'f"Now the fair test.': '现在做公平的比较。三种都用同样的向量来训练，同样的512个潜变量、同样的步数和批量，TopK取{n_sp}个稀疏度，另外两种各取{n_l1}个，每个都用三个种子。<bookmark '
+                         "mark='a'/>画出每个向量用了多少个特征，对应留下多少没解释的方差：越低、越靠左越好。暂停一下，预测一下哪种会赢。<bookmark "
+                         "mark='b'/>L1自编码器，<bookmark mark='c'/>JumpReLU，<bookmark "
+                         "mark='d'/>还有TopK。误差棒展示各个种子的范围。<bookmark "
+                         "mark='e'/>仅在每个种子实测稀疏度的覆盖范围内插值，每向量16个特征时，{verdict}。",
+ 'f"Variance is a proxy.': '方差只是代理指标。关键是用字典重建替换向量后，模型还怎样工作。<bookmark '
+                           "mark='a'/>在Transformer第二块之后替换重建，测量每字符比特数：原模型{clean:.2f}，均值替换{mean_:.2f}。<bookmark "
+                           "mark='b'/>{result_said}这些替换损失与重建误差分开评估下游行为。",
+ 'f"One more failure grows with size.': '还有一种失败会随规模变大。<bookmark '
+                                        "mark='a'/>在测量样本中不激活的潜变量，在ReLU关闭时没有直接激活梯度；没有修复时，Gao和同事发现，不加修正时，多达90%的潜变量会死掉，加上修正后，他们的1600万个里只死了7%。<bookmark "
+                                        "mark='b'/>他们的修正叫AuxK：让死掉的潜变量去重建活着的那些漏掉的部分。<bookmark "
+                                        "mark='c'/>我们的结果：512个潜变量、k等于16时，三个种子分别死了{d16[0]}、{d16[1]}和{d16[2]}个；加上AuxK，是{da[0]}、{da[1]}和{da[2]}个；2048个潜变量时，是{d2048}个。{verdict}<bookmark "
+                                        "mark='d'/>在这里真正死掉的，是最稀疏的设定：k等于{k0:g}的TopK死了{dk:.0f}个，惩罚最强的JumpReLU死了{dj:.0f}个。",
+ "f'At sixteen features per vector, the lowest interpolated loss": '每向量16个特征时，最低插值损失为{nm[best]}，每字符{fin[best]:.2f}比特。',
+ 'No dictionary has measured sparsities bracketing sixteen here; that comparison is unavailable.': '这里没有字典的实测稀疏度覆盖16；这项比较不可用。'})
+
+ZH.update({'f"One more failure grows with size.': '还有一种随规模增长的失败。<bookmark '
+                                        "mark='a'/>测量样本中不激活的潜变量，在ReLU关闭时没有直接激活梯度。Gao等在一千万个词元上检验失活：消融实验中最多90%失活，而一千六百万潜变量的运行结合转置初始化和辅助损失后为7%。我们的计数使用自己的评估激活池。<bookmark "
+                                        "mark='b'/>AuxK让失活潜变量重建活跃潜变量遗漏的部分。<bookmark "
+                                        "mark='c'/>我们的512潜变量、k为16时，三个种子的失活数为{d16[0]}、{d16[1]}、{d16[2]}；加AuxK后为{da[0]}、{da[1]}、{da[2]}；2,048潜变量时为{d2048}。{verdict}<bookmark "
+                                        "mark='d'/>这里最稀疏的设置出现失活：k为{k0:g}的TopK平均{dk:.0f}，最高惩罚强度的JumpReLU平均{dj:.0f}。"})
+
+ZH.update({'Since the attribution graphs of chapter eleven, the tools have spread.': '自从第11章的归因图以来，工具已经传开了。<bookmark '
+                                                                           "mark='a'/>2025年5月，Anthropic研究员项目和Decode "
+                                                                           'Research把电路追踪库开源了，Gemma和Llama模型的图，谁都可以在Neuronpedia上探索。<bookmark '
+                                                                           "mark='b'/>11月，OpenAI的Leo "
+                                                                           'Gao和同事走了另一条路：训练一个大部分权重为零的Transformer，在研究的任务上，这些剪枝回路平均小了大约16倍，比较时模型的预训练损失相近，回路的任务损失也匹配。这些是小型研究模型。<bookmark '
+                                                                           "mark='c'/>12月，DeepMind的Gemma Scope "
+                                                                           '2用自编码器和转码器覆盖了Gemma 3家族的每一层。<bookmark '
+                                                                           "mark='d'/>Anthropic也开始追踪我们的图冻结掉的那一部分：注意力是怎么决定往哪里看的。",
+ 'Can a model read its own activations?': '模型能读懂自己的激活吗？<bookmark '
+                                          "mark='a'/>2025年10月，杰克·林赛往Claude模型里注入概念向量，也就是第13章的那种引导向量，再问它们有没有察觉到一个被注入的念头。<bookmark "
+                                          "mark='b'/>最好的Claude Opus "
+                                          '4和4.1，在合适的层和强度下，大约每五次有一次能察觉并说出这个概念，在没有注入的情况下，每个受测生产模型的一百次对照试验都没有出现误报。<bookmark '
+                                          "mark='c'/>林赛强调，这种能力非常有限，也不可靠。<bookmark mark='d'/>2026年4月，这个团队在Claude "
+                                          'Sonnet '
+                                          '4.5里绘制了情绪概念的图谱：171个情绪词对应的向量会影响它的选择，在构造的编程测试中，沿“平静”方向引导减少了奖励投机。他们写道，这是功能性的情绪，不是有感受的证据。',
+ 'Another application is auditing.': '另一个应用是审计。<bookmark '
+                                     "mark='a'/>2025年3月，塞缪尔·马克斯和同事教给一个模型52种虚构的奖励模型偏差，再训练它利用其中47种，并隐瞒原因。它还泛化到了留出的偏差。四个团队在不知情的情况下审计它。<bookmark "
+                                     "mark='b'/>三个团队找到了目标；没有训练数据的那个团队没有找到。最快的团队用稀疏自编码器，在90分钟内找到了关键训练文档。这只是一项小型研究，不代表一般审计的成功率。<bookmark "
+                                     "mark='c'/>到9月，可解释性已经成了一个前沿模型发布前审计的一部分：在Claude Sonnet "
+                                     '4.5里，压制“这是一场测试”的表示，模型就更少这么说，有时表现也更差。<bookmark '
+                                     "mark='d'/>2026年5月，自然语言自编码器，也就是一个模型用文字描述激活，另一个从文字重建激活，让没有那批植入训练数据的自动审计器，在12%到15%的运行中获胜，而没有这个工具时不到3%。这是一个玩具审计任务，解释也可能出错。NLA还用在了Claude "
+                                     'Opus 4.6发布前的审计中。第31部分接着讲这条线。',
+ 'f"The sharpest argument is about usefulness.': '最尖锐的争论是关于有没有用。<bookmark '
+                                                 "mark='a'/>2025年3月，谷歌DeepMind的可解释性团队报告说，在识别有害意图这件事上，建在自编码器潜变量上的探针，输给了普通的线性探针，在新类型的提示上尤其如此，于是他们暂时降低了基础SAE研究的优先级，但仍把SAE留在工具箱里；一项覆盖113个数据集的研究，也没有发现稳定的优势。<bookmark "
+                                                 "mark='b'/>在我们的模型上试一试：在小说模型第{int(d['probe_layer'])}个块之后识别“在引号里面”，用一个读全部256个数的线性探针，或者用这里训练的一个自编码器里差别最大的8个或1个潜变量，训练样本从{ns[0]}个到{ns[-1]:,}个，每种抽五次。<bookmark "
+                                                 "mark='c'/>{verdict}<bookmark mark='d'/>{verdict2}",
+ 'f"A second argument: are the features real, or artefacts of one training run?': '第二个争论：这些特征是真的，还是某一次训练的产物？<bookmark '
+                                                                                  "mark='a'/>贡萨洛·保罗和诺拉·贝尔罗斯在Llama "
+                                                                                  '3上，用不同的种子把同一个自编码器训练了两次，发现只有大约30%的潜变量是共有的。<bookmark '
+                                                                                  "mark='b'/>我们的结果，来自第9章的那些运行：对每个潜变量，找它在另一个种子的字典里最好的匹配。把余弦大于0.7算作同一个特征，{share_said}。他们的匹配要求编码器和解码器都一致；我们只检查最近的解码器方向，所以这些百分比不是使用同一规则的复现。我们的L1字典一致率为{l1_:.0f}%：特征稳不稳定，既取决于模型，也取决于训练配方。一个字典只是一种答案，不是唯一的答案。",
+ 'f"A third: a baseline that should embarrass us.': '第三个：一个应该让我们难堪的基线。<bookmark '
+                                                    "mark='a'/>托马斯·希普和同事在随机权重的Transformer上训练自编码器，发现在他们研究的自动可解释性和重建指标上，得分相近。这是在检验这些代理指标，不代表两种计算同样有意义。<bookmark "
+                                                    "mark='b'/>我们也试了：同样的自编码器，用在一个从没训练过的第13部分Transformer副本上。第8章的纯度分数，也就是一个潜变量最强的八个时刻里有几个落在同一个字符上：训练过的模型平均是{8 "
+                                                    '* tp.mean():.1f}，随机的是{8 * rp.mean():.1f}。{verdict}',
+ 'Underneath is a disagreement about the goal.': '更深处，是关于目标的分歧。<bookmark '
+                                                 "mark='a'/>雄心勃勃的那一派，要把整个模型逆向工程出来，每一个特征，每一个回路。它的障碍是暗物质：Anthropic为Claude "
+                                                 '3.5 '
+                                                 'Haiku做的最好的转码器，仍然留下大约五分之一的MLP输出没有解释；有些研究者现在改为分解参数，或者从一开始就把模型训练成稀疏的。<bookmark '
+                                                 "mark='b'/>务实的那一派，问更窄的问题：这个模型在骗我们吗？微调改变了什么？然后用一切管用的办法来回答，往往很简单：在2025年针对Gemma "
+                                                 '2 '
+                                                 '2B和9B的AxBench比较里，提示词在整体引导比较中领先；ReFT-r1在较小模型上与它有竞争力。现在两派都拿基线来衡量自己，这也许是这个领域最重要的变化。'})
+
+ZH.update({'f"Now the fair test.': '现在比较本地等预算实现。三种都用同样的向量来训练，同样的512个潜变量、同样的步数和批量，TopK取{n_sp}个稀疏度，另外两种各取{n_l1}个，每个都用三个种子。<bookmark '
+                         "mark='a'/>画出每个向量用了多少个特征，对应留下多少没解释的方差：越低、越靠左越好。暂停一下，预测一下哪种会赢。<bookmark "
+                         "mark='b'/>L1自编码器，<bookmark mark='c'/>JumpReLU，<bookmark "
+                         "mark='d'/>还有TopK。误差棒展示各个种子的范围。<bookmark "
+                         "mark='e'/>仅在每个种子实测稀疏度的覆盖范围内插值，每向量16个特征时，{verdict}。",
+ 'Two fixes came in 2024.': "2024年，出现了两种修正。<bookmark mark='a'/>OpenAI的Leo "
+                            'Gao和同事干脆去掉了惩罚：TopK只保留每个向量最大的k个特征，其余归零，于是稀疏程度直接设定，什么都不会被缩小。他们在GPT-4上训练了一个有1600万个潜变量的字典。<bookmark '
+                            "mark='b'/>DeepMind的森图兰·拉贾马诺哈兰和同事保留了惩罚，但罚的是亮着的特征个数，每个特征有一个学出来的阈值：这就是JumpReLU，也是他们公开的Gemma "
+                            'Scope字典背后的配方。阶跃之外导数为零，所以阈值是通过直通估计来训练的。',
+ 'At k of sixteen in these examples almost nothing dies,': '在这些k为16的例子里上，几乎什么都没死，所以这个修正在这里没什么可做的；到了几百万个潜变量，正是它让字典活着。',
+ "f'With AuxK, the count changes from": '加上AuxK，死掉的数量平均从{np.mean(d16):.0f}变为{np.mean(da):.0f}。'})
+
+ZH.update({'f"Steering does not need a dictionary.': '引导不一定需要字典。一个方向可以直接从对比里来。<bookmark '
+                                           "mark='a'/>把高兴的词和忧郁的词放进同样的小句子框架里，取小说模型在第{int(m['layer'])}个块之后、在这个词上的向量，把两类的平均值相减。<bookmark "
+                                           "mark='b'/>它是一种情绪吗？作为监控器，它能分开没见过的留出词，AUROC是{aw:.2f}，1是完美，0.5是瞎猜，<bookmark "
+                                           "mark='c'/>它也能分开按留出词表筛选的小说句子，高兴的对忧郁的，AUROC是{as_:.2f}。这些句子按留出词表中的词是否出现来选择，并不是人工情感标注。"})
+
+ZH.update({'"Now write with it:': '现在用它写：模型续写“The sea”、“The night”等十二个开头时，在每个位置加上α乘以方向。<bookmark '
+                        "mark='a'/>{verdict}<bookmark "
+                        "mark='b'/>用未引导模型评分，未引导文本每词元要{fv[i0][0]:.2f}比特；最强正向设置为{fv[-1][0]:.2f}，随机方向为{fr[-1][0]:.2f}。这是模型似然代理指标，不是人工流畅度评分。",
+ "f'The lexicon count is": '词表计数在未引导时为每百词{mv[i0][0]:+.1f}个欢快词减阴郁词，最强正向设置为{mv[-1][0]:+.1f}，负向设置为{mv[0][0]:+.1f}。随机方向在同样强度下为{mr[-1][0]:+.1f}和{mr[0][0]:+.1f}。这些样本摘要是词汇代理指标，不是正式显著性检验。',
+ "Let's take stock.": '我们来盘点一下。探针读出一层知道什么，但只有对照任务能说明活是不是探针干的，只有干预能说明模型是不是在用它。透镜读出流动中的残差流。修补检验由前一词元头、当前词元头和归纳头组成的复制回路，并结合权重和训练诊断。叠加让特征比维度还多，这是特征稀少时网络进入的一个相；稀疏字典把它们拆开，我们比较了L1、TopK和JumpReLU，并检查特征分裂与吸收。转码器把一次预测变成一张可以检验的图，交叉编码器把一个模型和它的微调版本做差分，一个方向可以用来引导。顿悟进度指标追踪所选频率计算在训练中的变化。'})
+
+ZH.update({'Another application is auditing.': '另一个应用是审计。<bookmark '
+                                     "mark='a'/>2025年3月，塞缪尔·马克斯和同事教给一个模型52种虚构的奖励模型偏差，再训练它利用其中47种，并隐瞒原因。它还泛化到了留出的偏差。四个团队在不知情的情况下审计它。<bookmark "
+                                     "mark='b'/>三个团队找到了目标；没有训练数据的那个团队没有找到。最快的团队用稀疏自编码器，在90分钟内找到了关键训练文档。这只是一项小型研究，不代表一般审计的成功率。<bookmark "
+                                     "mark='c'/>到9月，可解释性已经成了一个前沿模型发布前审计的一部分：Claude Sonnet "
+                                     '4.5的系统卡研究了评估意识的表征以及对它们的干预。<bookmark '
+                                     "mark='d'/>2026年5月，自然语言自编码器，也就是一个模型用文字描述激活，另一个从文字重建激活，让没有那批植入训练数据的自动审计器，在12%到15%的运行中获胜，而没有这个工具时不到3%。这是一个玩具审计任务，解释也可能出错。NLA还用在了Claude "
+                                     'Opus 4.6发布前的审计中。第31部分接着讲这条线。'})
+
+ZH.update({'f"The MLP\'s neurons tell the same story.': 'MLP的神经元也能按频率描述。<bookmark '
+                                              "mark='a'/>把每个神经元在所有a、b数对上的激活分解为波：512个神经元中，{int(clean.sum())}个的非恒定傅里叶能量有一半以上落在同一个频率族里，其中{sum(counts)}个落在关键频率族。<bookmark "
+                                              "mark='b'/>这里展示一个神经元在整个表上的激活。每个频率族包括a的波、b的波及其乘积。仅凭这种分组能量，不能确定模型使用了哪些乘积。"})
+
+ZH.update({'f"How many features does a model have?': '一个模型有多少个特征？似乎是字典说了算。<bookmark '
+                                           "mark='a'/>在同样的向量上，训练三个TopK字典，分别有{sizes[0]}、{sizes[1]}和{sizes[2]:,}个潜变量。这是最小那个里的一个潜变量，在它最强的时刻。<bookmark "
+                                           "mark='b'/>在大一号的字典里，方向相近、又在同一个字符上亮的潜变量，有{len(mid)}个；<bookmark "
+                                           "mark='c'/>在最大的字典里有{len(big)}个匹配，这里展示{min(4, "
+                                           'len(big))}个。{frequency_said}这些只是解码方向和字符上下文的示例匹配；我们没有测量它们的激活集合是否包含在较小潜变量的集合里。布里肯和同事研究了这类特征分裂。最小字典的{ncand}个字符一致候选中，有{nf}个在最大字典里有两个或更多这样的匹配。',
+ 'No largest-dictionary matches met the criterion in this run.': '这次运行中，最大字典里没有匹配达到这一标准。',
+ 'All these selected matches fire less often than the small-dictionary latent.': '这些选定匹配的激活频率，都低于小字典里的那个潜变量。',
+ "Their activation frequencies are not all lower than the small-dictionary latent's.": '这些匹配的激活频率，并不都低于小字典里的那个潜变量。'})
+
+ZH.update({'f"Splitting has a nastier cousin.': '分裂还有一个更麻烦的表亲。<bookmark '
+                                      "mark='a'/>有些特征是一般的，比如“这是大写字母”；有些是具体的，比如“这是大写的T”。稀疏字典宁愿用一个潜变量而不是两个，所以具体的潜变量可能吸收一般特征的方向，让一般潜变量沉默。戴维·查宁和同事把它叫作吸收。<bookmark "
+                                      "mark='b'/>来测量：线性探针从向量中读出大写，准确率为{100 * "
+                                      "float(a['probe_acc']):.1f}%。我们在评估的那一半样本上，按F1选出每个字典的最佳潜变量，再在同一批样本上报告召回率。它在{100 "
+                                      '* np.mean(rec):.0f}%的大写字母上亮；<bookmark '
+                                      "mark='c'/>对不同字母，它沉默的比例差别很大。我们的局部吸收代理指标计入{100 * "
+                                      'np.mean(ab):.0f}%的大写字母：主潜变量沉默，另一个潜变量承担沿探针方向所有正重建贡献之和的至少40%，且其解码方向与探针的余弦至少为0.1。这是有阈值的投影代理指标，不是因果消融，也不是从未用于选择的最终测试。',
+ 'f"Bart Bussmann, Noa Nabeshima and colleagues studied Matryoshka dictionaries in 2025': '巴特·布斯曼、诺亚·纳贝希马和同事在2025年研究了套娃字典，名字来自俄罗斯套娃。<bookmark '
+                                                                                          "mark='a'/>最前面的几个潜变量必须独自重建向量，然后是前几百个，再然后是全部。早期潜变量被推动去表示一般概念，后面的负责细化，让一般特征更少沉默。<bookmark "
+                                                                                          "mark='b'/>我们的局部版本使用逐向量TopK和图中所示的前缀损失；论文使用的是BatchTopK。两种局部字典的大小、k和步数相同，每种三个种子。<bookmark "
+                                                                                          "mark='c'/>{verdict}。评估半边样本上的平均未解释方差，套娃是{100 "
+                                                                                          '* f_m:.0f}%，TopK是{100 * '
+                                                                                          'f_t:.0f}%。',
+ 'f"Here it does not help:': '在这里它没有帮助：最佳大写潜变量在{100 * r_m:.0f}%的大写字母上亮，而TopK是{100 * r_t:.0f}%；吸收代理指标为{100 * '
+                             'a_m:.0f}%，TopK是{100 * a_t:.0f}%，种子间差别较大。这是局部配方和代理指标，不是对论文吸收评估的复现'})
+
+ZH.update({'f"A second argument: are the features real, or artefacts of one training run?': '第二个争论：这些特征是真的，还是某一次训练的产物？<bookmark '
+                                                                                  "mark='a'/>贡萨洛·保罗和诺拉·贝尔罗斯在Llama "
+                                                                                  '3上，用不同的种子把同一个自编码器训练了两次，发现只有大约30%的潜变量是共有的。<bookmark '
+                                                                                  "mark='b'/>我们的结果，来自第9章的那些运行：对每个潜变量，找它在另一个种子的字典里最好的匹配。把解码器余弦至少0.7计为匹配，{share_said}。他们的匹配要求编码器和解码器都一致；我们只检查最近的解码器方向，所以这些百分比不是使用同一规则的复现。我们的L1字典一致率为{l1_:.0f}%：特征稳不稳定，取决于模型、训练配方和匹配规则。一个字典只是一种答案，不是唯一的答案。"})
+
+ZH.update({'f"Now a graph for one prediction.': "现在为一次预测画一张图。提示的结尾是“she sai”，模型预期的是“{d['target']}”。<bookmark "
+                                      "mark='a'/>把这个提示的注意力模式和层归一化的缩放冻结，把每个MLP换成跨层转码器的特征，再在每个位置、每一层加上一个误差项，补上特征漏掉的部分。最后位置的logit在测得的精度范围内一致。但这种一致是误差项补出来的，并不代表已经完整解释了原模型的因果机制。从特征往后，替代模型是线性的。<bookmark "
+                                      "mark='b'/>于是从一个特征到输出的每一条路径都能打分：它的激活乘以梯度。在{int(d['n_features'])}个亮着的特征里，这里是影响最大的12个，按层和位置排开。<bookmark "
+                                      "mark='c'/>这些线是它们彼此之间、以及对输出的直接作用；下面灰色的线来自输入的字符。<bookmark "
+                                      "mark='d'/>账目是平的：“{d['target']}”的logit是{tot:.2f}，其中特征贡献{fe:.2f}，字符自己的嵌入{ee:.2f}，误差节点{er:.2f}，以及仿射偏置{bias:.3f}。",
+ 'f"A graph is a hypothesis about the model, so test it.': '一张图是关于模型的假设，所以要检验它。<bookmark '
+                                                           "mark='a'/>取影响最大的16个特征，在真模型里逐个去掉它的解码贡献，让注意力和下游的一切重新计算。<bookmark "
+                                                           "mark='b'/>把logit的变化与图的预测比较，包括经过其他特征的路径。<bookmark "
+                                                           "mark='c'/>皮尔逊相关系数为{r:.2f}，但只有{same_sign}个、总共{len(meas)}个效应的符号一致，均方根误差为{rmse:.2f}个logit单位。只保留每个特征的直接效应，相关系数为{direct_r:.2f}，均方根误差为{direct_rmse:.2f}。{verdict}这些是一个提示上选出的干预，不是完整忠实回路的证据。"})
+
+ZH.update({'A third: a baseline that should embarrass us.': '第三个争论：一个本该让我们难堪的基线。<bookmark '
+                                                  "mark='a'/>托马斯·希普和同事在随机权重的Transformer上训练自编码器，在他们研究的自动可解释性和重构指标上得到了相近的分数。这是在检验这些代理指标，不代表两者的计算同样有意义。<bookmark "
+                                                  "mark='b'/>我们也试了：在第13部分Transformer的一个从未训练过的副本上，训练相同的自编码器。对每个活跃潜变量，取至多八个可用的最高激活上下文，计算其中最常见字符的占比。稀有潜变量可能不足八个上下文。训练模型的{len(tp)}个活跃潜变量，平均占比为{100 "
+                                                  '* tp.mean():.1f}%；随机模型的{len(rp)}个，为{100 * '
+                                                  'rp.mean():.1f}%。直方图包含每一个活跃潜变量。这个字符代理指标在两个模型上都很高；它并不能证明语义等价，或学到的计算同样有意义。'})
+
+ZH.update({'f"Watch the embedding during training, through its Fourier spectrum': '通过傅里叶频谱，看嵌入在训练中的变化：它有多少落在每一个频率上。<bookmark '
+                                                                        "mark='a'/>一开始，能量散布在所有地方。<bookmark "
+                                                                        "mark='b'/>随着训练，少数几个频率占了上风。到最后，所选频率占了嵌入非恒定能量的{100 "
+                                                                        '* top_share:.0f}%。<bookmark '
+                                                                        "mark='c'/>在第一个所选频率的平面上，这些数一开始是散乱的，最后大致排成一个圆：角度。"})
+
+# Reviewed endpoint follow-up: precise intervention and bounded inference.
+ZH.update({'f"There is a second trap.': '还有一个陷阱。探针说明信息可以读出，并不说明模型在使用它。<bookmark '
+                              "mark='a'/>Elazar等提出：去掉探针读取的方向，观察模型的变化。我们从每个向量中投影去掉第{best}层的线性探针方向，再运行剩余部分。<bookmark "
+                              "mark='b'/>预测闭引号词元，原模型需要{b0:.2f}比特。<bookmark "
+                              "mark='c'/>十次独立随机对照中，每次移除一个随机方向，平均需要{br.mean():.2f}比特；线段显示十次结果的范围。<bookmark "
+                              "mark='d'/>移除探针方向后为{bp:.2f}比特。{verdict}这一层也由同一批验证窗口选出。读出是相关；干预后观察变化是因果检验，第4章继续讨论。",
+ 'Removing this direction raises closing-quote prediction loss more than the mean random-direction': '这里移除探针方向后，闭引号预测损失的增幅大于单个随机方向移除的平均值。这反映的是损失变化；该方向的其他作用尚未检验。',
+ 'This intervention does not show a selective closing-quote loss increase over these controls.': '这种干预没有显示超出这些对照的选择性闭引号损失上升。这个结果仅对应当前损失与干预。',
+ 'The attribution graphs of chapter eleven can check a chain of thought': '第11章的归因图，可以拿思维链和真正的计算对照。<bookmark '
+                                                                          "mark='a'/>问Claude 3.5 Haiku "
+                                                                          '0.64的平方根，它确实算了64的平方根。<bookmark '
+                                                                          "mark='b'/>问它一个大数的余弦，它声称用了计算器；图中迹象提示它可能在猜测：没有可见的计算，但这种不完整的方法无法排除图中未见的计算。<bookmark "
+                                                                          "mark='c'/>再告诉它用户手算得到的答案是4，它就倒着推：图显示，提示里的4决定了一个中间值，写出来的步骤再像是老老实实算出来似的，走到这个中间值。这就是动机推理，从内部看到的样子。<bookmark "
+                                                                          "mark='d'/>我们自己的模型不写思维链，所以这里我们只引用，不计算。"})
 
 PHRASES = {
     'The heads copy.': '这些头在复制。',

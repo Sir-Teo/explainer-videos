@@ -9,7 +9,7 @@ PUSH = C.SURPRISE
 
 
 def text_block(t: str, width_chars=56, font_size=18, color=GREY_A, hot="\"'!?") -> VGroup:
-    """Generated text, wrapped into at most three lines, with the marks of speech lit."""
+    """Generated text, wrapped into at most three lines, with the punctuation marks lit."""
     t = " ".join(t.split())
     lines = [t[i:i + width_chars] for i in range(0, min(len(t), 3 * width_chars), width_chars)]
     return VGroup(*[data_text(ln, font=MONO, font_size=font_size, color=color, t2c={h: PUSH for h in hot}) for ln in lines]).arrange(
@@ -53,7 +53,7 @@ class Steering(VoiceoverScene):
             key = f"{a:g}"
             tb = text_block(texts[key][0])
             al = MathTex(rf"\alpha = {a:g}", font_size=30, color=PUSH)
-            q = label(rf"${speech[key]:.1f}$ marks of speech \\ per $160$ characters", font_size=18, color=PUSH)
+            q = label(rf"${speech[key]:.1f}$ punctuation marks \\ per $160$ characters", font_size=18, color=PUSH)
             rows.add(VGroup(al, tb, q))
         for i, r_ in enumerate(rows):
             y = -0.15 - i * 1.25
@@ -70,10 +70,10 @@ class Steering(VoiceoverScene):
             "If a feature is a direction, we can push on it. <bookmark mark='a'/> Take the feature that fires on "
             "quotation marks. <bookmark mark='b'/> While the model writes, add alpha times its direction to the "
             "vector at every character. <bookmark mark='c'/> With no push, the model's own continuation. "
-            f"<bookmark mark='d'/> Turn the dial up, and the writing turns into talk: quote marks, apostrophes, "
+            f"<bookmark mark='d'/> Turn the dial up and measure punctuation: quote marks, apostrophes, "
             f"exclamations and questions, from {q0:.1f} to {q1:.1f} per hundred and sixty characters, averaged over "
-            f"{len(st['seeds'])} samples; a random direction of the same length gives {qr:.1f}. The model now thinks it's inside "
-            "someone's speech. We didn't train anything or change a weight; we moved one direction. In May 2024 "
+            f"{len(st['seeds'])} samples; a random direction of the same length gives {qr:.1f}. This punctuation proxy does not independently establish "
+            "a dialogue state. We did not change the model weights; we moved one direction. In May 2024 "
             "Anthropic did the same to Claude 3 Sonnet with a Golden Gate Bridge feature, and for one day, as a demo, "
             "it brought every conversation round to the bridge."
         ) as vo:
@@ -116,9 +116,9 @@ class Steering(VoiceoverScene):
                                 fill_opacity=0.55).move_to(g.ax.c2p((a + b) / 2, 0), aligned_edge=DOWN) for v, a, b in zip(hc_, e, e[1:])])
         bg = VGroup(*[Rectangle(width=w * 0.85, height=max(v / (top * 1.1) * 2.6, 0.005), stroke_width=0, fill_color=PUSH,
                                 fill_opacity=0.55).move_to(g.ax.c2p((a + b) / 2, 0), aligned_edge=DOWN) for v, a, b in zip(hg_, e, e[1:])])
-        lg = legend([(C.TRUE_P, rf"cheerful sentences \ (${int(m['n_sent'])}$)"), (PUSH, r"gloomy sentences")], font_size=18)
+        lg = legend([(C.TRUE_P, rf"word-selected cheerful sentences \ (${int(m['n_sent'])}$)"), (PUSH, r"word-selected gloomy sentences")], font_size=18)
         lg.move_to([-4.5, -0.9, 0])
-        res = label(rf"held-out words: \ AUROC ${float(m['auroc_words']):.2f}$ \\ real sentences of the novels: \ AUROC "
+        res = label(rf"held-out words: \ AUROC ${float(m['auroc_words']):.2f}$ \\ lexicon-selected novel sentences: \ AUROC "
                     rf"${float(m['auroc_sent']):.2f}$", font_size=20, color=WHITE).move_to([-4.5, -2.4, 0])
         aw, as_ = float(m["auroc_words"]), float(m["auroc_sent"])
         with self.voiceover(
@@ -127,7 +127,8 @@ class Steering(VoiceoverScene):
             f"vector at the word after block {int(m['layer'])}, and subtract the averages. <bookmark mark='b'/> Is "
             "it a mood? As a monitor, it separates held-out words it never saw with an AUROC of "
             f"{aw:.2f}, where one is perfect and a half is chance, <bookmark mark='c'/> and real sentences from the "
-            f"novels, cheerful against gloomy, with {as_:.2f}."
+            f"novels, selected by held-out word presence, with {as_:.2f}. These are lexicon-based groups, not human "
+            "sentiment labels."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(x) for x in ex], lag_ratio=0.2))
             vo.wait_until("a")
@@ -180,32 +181,16 @@ class Steering(VoiceoverScene):
         tag = note(rf"computed: \ ${len(m['topics'])}$ prompts $\times$ ${len(m['seeds'])}$ seeds, \ ${int(m['n_new'])}$ "
                    r"tokens each; \ bars: $\pm$ one standard error").to_corner(DR, buff=0.2)
         i0 = al.index(0.0)
-        d_up = mv[-1][0] - mv[i0][0]
-        d_dn = mv[0][0] - mv[i0][0]
-        se = max(mv[-1][1], mv[i0][1])
-        works = d_up > 2 * se and d_dn < -2 * max(mv[0][1], mv[i0][1])
-        r_dev = max(abs(mr[0][0] - mv[i0][0]), abs(mr[-1][0] - mv[i0][0]))
-        r_quiet = r_dev < 2 * max(mr[0][1], mr[-1][1], mv[i0][1])
-        if works and r_quiet:
-            verdict = (f"Pushing along the mood vector moves the mood: {mv[i0][0]:+.1f} cheerful-minus-gloomy words per "
-                       f"hundred unsteered, {mv[-1][0]:+.1f} at the strongest push, {mv[0][0]:+.1f} pulling the other "
-                       "way, while the random direction does nothing comparable.")
-        elif works:
-            verdict = (f"The mood rises steadily with the push: {mv[0][0]:+.1f} cheerful-minus-gloomy words per hundred "
-                       f"pulling one way, {mv[i0][0]:+.1f} unsteered, {mv[-1][0]:+.1f} pushing the other. But a random "
-                       f"direction, pushed as hard, reached {mr[-1][0]:+.1f} at the strongest setting too: a hard push "
-                       "disturbs the text whatever its direction, and at this sample size the vector's own effect is "
-                       "real but modest.")
-        else:
-            verdict = (f"The mood barely follows: {mv[i0][0]:+.1f} words per hundred unsteered, {mv[-1][0]:+.1f} at the "
-                       f"strongest push and {mv[0][0]:+.1f} the other way, within the noise. A direction that reads a "
-                       "mood well need not write it, at least not in a model this small.")
+        verdict = (f"The lexicon count is {mv[i0][0]:+.1f} cheerful-minus-gloomy words per hundred unsteered, "
+                   f"{mv[-1][0]:+.1f} at the strongest positive setting, and {mv[0][0]:+.1f} at the negative setting. "
+                   f"The random direction gives {mr[-1][0]:+.1f} and {mr[0][0]:+.1f} at those same strengths. "
+                   "These sample summaries are a vocabulary proxy, not a formal significance test.")
         with self.voiceover(
             "Now write with it: add alpha times the direction at every position while the model continues 'The sea', "
-            "'The night' and ten more openings. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> Either way "
-            f"there is a price. Unsteered text costs {fv[i0][0]:.2f} bits per token under the model's own judgement; "
-            f"at the strongest push, {fv[-1][0]:.2f}, and a random push of the same length costs about as much. "
-            "Steering trades fluency for control."
+            "'The night' and ten more openings. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> Under the unsteered model, "
+            f"unsteered text costs {fv[i0][0]:.2f} bits per token; the strongest positive setting costs "
+            f"{fv[-1][0]:.2f}, and the random direction costs {fr[-1][0]:.2f}. This is a model-likelihood proxy, "
+            "not a human fluency rating."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(lg), FadeIn(tag))
             vo.wait_until("a")

@@ -27,8 +27,8 @@ class Frontier(VoiceoverScene):
                          r"the attribution-graph library, \ for Gemma-2-2B and Llama-3.2-1B, \ graphs explored on "
                          r"Neuronpedia", width=6.6, color=FEAT, font_size=24),
             history_card(r"Nov 2025", r"L.~Gao et al.\ (OpenAI): \ weight-sparse transformers",
-                         r"train with most weights zero: \ circuits about $16$ times smaller at the same loss, \ though "
-                         r"the models are far weaker", width=6.6, color=FEAT, font_size=24),
+                         r"small research models: \ pruned task circuits about $16$ times smaller at matched loss, \ "
+                         r"averaged over the tasks studied", width=6.6, color=FEAT, font_size=24),
             history_card(r"Dec 2025", r"Google DeepMind: \ Gemma Scope 2",
                          r"autoencoders and transcoders for every layer of Gemma 3, \ $270$M to $27$B, \ cross-layer "
                          r"transcoders for the small ones", width=6.6, color=FEAT, font_size=24),
@@ -43,7 +43,8 @@ class Frontier(VoiceoverScene):
             "Anthropic Fellows and Decode Research released the circuit-tracing library as open source, with graphs "
             "for Gemma and Llama models anyone can explore on Neuronpedia. <bookmark mark='b'/> In November, OpenAI's "
             "Leo Gao and colleagues went the other way: train a transformer with most of its weights at zero, and its "
-            "circuits come out about sixteen times smaller at the same loss, though such models are far weaker. "
+            "pruned circuits average about sixteen times smaller on the tasks studied, comparing models with similar "
+            "pretraining loss and circuits at matched task loss. These were small research models. "
             "<bookmark mark='c'/> In December, DeepMind's Gemma Scope 2 covered every layer of the Gemma 3 family "
             "with autoencoders and transcoders. <bookmark mark='d'/> And Anthropic began to trace the part our graphs "
             "froze: how attention decides where to look."
@@ -83,10 +84,11 @@ class Frontier(VoiceoverScene):
             "Can a model read its own activations? <bookmark mark='a'/> In October 2025 Jack Lindsey injected "
             "concept vectors, the steering vectors of chapter thirteen, into Claude models, and asked whether they "
             "noticed an injected thought. <bookmark mark='b'/> The best, Claude Opus 4 and 4.1, noticed and named "
-            "the concept on about one trial in five, at the right layer and strength, and never claimed one when "
-            "nothing was injected. <bookmark mark='c'/> Lindsey stresses how limited and unreliable this is. "
+            "the concept on about one trial in five, at the right layer and strength. Without injection, they observed "
+            "zero false alarms in a hundred control trials for each production model tested. "
+            "<bookmark mark='c'/> Lindsey stresses how limited and unreliable this is. "
             "<bookmark mark='d'/> In April 2026 the team mapped emotion concepts in Claude Sonnet 4.5: vectors for "
-            "171 emotion words that shape its choices, so that more 'calm' meant less hacky code. Functional "
+            "171 emotion words that shape its choices; steering 'calm' reduced reward hacking in constructed coding tests. Functional "
             "emotions, they wrote, not evidence of feelings."
         ) as vo:
             self.play(Create(stream), FadeIn(q), FadeIn(sch))
@@ -104,7 +106,7 @@ class Frontier(VoiceoverScene):
     # ------------------------------------------------------------------
     def audits(self):
         game = VGroup(
-            label(r"a model trained in secret to please \\ reward models' $52$ known quirks", font_size=24),
+            label(r"taught $52$ fictional reward-model biases; \\ trained to exploit $47$ and conceal why", font_size=24),
             label(r"four blind teams; \\ three found the hidden objective", font_size=24),
             label(r"the one denied training data did not; \\ the fastest, \ with autoencoders, \ took $90$ minutes", font_size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
@@ -112,12 +114,11 @@ class Frontier(VoiceoverScene):
                                  width=6.4, color=AUD, font_size=19), game).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         g1.to_corner(UL, buff=0.35)
         aud = VGroup(
-            history_card(r"Sep 2025", r"the Claude Sonnet 4.5 system card", r"suppressing its internal sense of being "
-                         r"tested lowered how often it said so, \ and sometimes raised misaligned behaviour", width=6.0,
+            history_card(r"Sep 2025", r"the Claude Sonnet 4.5 system card", r"interpretability used to study evaluation-awareness representations \ and interventions during the pre-release audit", width=6.0,
                          color=AUD, font_size=18),
             history_card(r"May 2026", r"natural-language autoencoders", r"a model writes out what an activation means, "
-                         r"another rebuilds the activation from the words; \ in the auditing game, \ wins in $12$--$15\%$ "
-                         r"of runs against under $3\%$ without", width=6.0, color=AUD, font_size=18),
+                         r"another rebuilds the activation from the words; \ automated auditors without training data: \ "
+                         r"$12$--$15\%$ wins against under $3\%$ without NLAs", width=6.0, color=AUD, font_size=18),
         ).arrange(DOWN, buff=0.25).to_corner(UR, buff=0.35)
         teams = VGroup()
         for i in range(4):
@@ -131,15 +132,18 @@ class Frontier(VoiceoverScene):
         nd = label(r"no training data", font_size=17, color=GREY_B).next_to(teams[3][2], DOWN, buff=0.08)
         foot = label(r"model diffing, \ probes on live traffic, \ monitors: \ Part 31", font_size=22, color=CHAT).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The most practical use so far is auditing. <bookmark mark='a'/> In March 2025 Samuel Marks and colleagues "
-            "trained a model with a hidden objective: to please reward models, exploiting 52 quirks it had read "
-            "about. Four teams audited it blind. <bookmark mark='b'/> Three found the objective; the one denied the "
-            "training data did not; the fastest, using sparse autoencoders, needed ninety minutes. "
+            "Another application is auditing. <bookmark mark='a'/> In March 2025 Samuel Marks and colleagues "
+            "taught a model 52 fictional reward-model biases, then trained it to exploit 47 and hide why. It "
+            "generalized to held-out biases. Four teams audited it blind. <bookmark mark='b'/> Three found the objective; "
+            "the one denied training data did not. The fastest used sparse autoencoders to find the key training "
+            "documents in ninety minutes. This was one small study, not a general audit success rate. "
             "<bookmark mark='c'/> By September interpretability was part of a frontier model's pre-release audit: in "
-            "Claude Sonnet 4.5, suppressing the representation of 'this is a test' made the model say so less, and "
-            "sometimes behave worse. <bookmark mark='d'/> In May 2026 natural-language autoencoders, one model "
-            "describing an activation in words and another rebuilding it from them, raised the auditing game's win "
-            "rate from under 3 percent to 12 to 15, and were used in the audit of Claude Opus 4.6. Part 31 picks "
+            "Claude Sonnet 4.5, the system card examined evaluation-awareness representations and interventions in them. "
+            "<bookmark mark='d'/> In May 2026 natural-language autoencoders, one model "
+            "describing an activation in words and another rebuilding it from them, enabled automated auditors "
+            "without the planted training data to win 12 to 15 percent of runs, against under 3 percent without "
+            "the tool. This is a toy auditing task; explanations can be wrong. NLAs were also used in the "
+            "pre-deployment audit of Claude Opus 4.6. Part 31 picks "
             "up the thread."
         ) as vo:
             self.play(FadeIn(g1[0]))

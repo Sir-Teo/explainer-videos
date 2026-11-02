@@ -17,10 +17,14 @@ def char_row(text, width, y, font_size=22):
 
 
 def signed_bars(v, xs, y0, hmax, color, up=True):
-    v = np.nan_to_num(np.asarray(v, float))
-    top = max(np.abs(v).max(), 1e-9)
+    v = np.asarray(v, float)
+    finite = v[np.isfinite(v)]
+    top = max(float(np.max(np.abs(finite))) if len(finite) else 0.0, 1e-9)
     g = VGroup()
     for x, a in zip(xs, v):
+        if not np.isfinite(a):
+            g.add(Line([x - 0.05, y0, 0], [x + 0.05, y0, 0], color=GREY_B, stroke_width=2))
+            continue
         h = max(abs(a) / top * hmax, 0.01)
         sgn = 1 if (a >= 0) == up else -1
         g.add(Rectangle(width=0.16, height=h, stroke_width=0, fill_color=color,
@@ -59,6 +63,7 @@ class History(VoiceoverScene):
         ol = label(r"occlusion: \ blank one character, \ watch the score", font_size=24, color=OCC).to_corner(DL, buff=0.35)
         f2 = cmath(r"o_i = z - z_{\,\text{character } i \text{ blanked}}", font_size=30, color=OCC).next_to(ol, UP, buff=0.15)
         f2.align_to(ol, LEFT)
+        missing = note(r"last character: \ occlusion not evaluated").to_corner(DR, buff=0.35)
         h1 = history_card(2013, r"K.~Simonyan, A.~Vedaldi \& A.~Zisserman", r"saliency maps: \ which pixels the class "
                           r"score is most sensitive to", width=5.6, color=SAL, font_size=20).move_to([0, 2.0, 0])
         h2 = history_card(2014, r"M.~Zeiler \& R.~Fergus", r"occlusion: \ cover part of the image, \ see what the "
@@ -85,7 +90,7 @@ class History(VoiceoverScene):
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in sb], lag_ratio=0.03), run_time=2)
             vo.wait_until("c")
             self.play(FadeIn(h2, shift=LEFT * 0.2))
-            self.play(FadeOut(h2), FadeIn(ol), Write(f2))
+            self.play(FadeOut(h2), FadeIn(ol), Write(f2), FadeIn(missing))
             self.play(LaggedStart(*[GrowFromEdge(b, UP) for b in ob], lag_ratio=0.03), run_time=2)
             vo.wait_until("d")
             r_ = label(rf"rank correlation: \ ${rho:.2f}$ \ (here), \ ${rho24:.2f}$ \ (24 more)", font_size=26,
