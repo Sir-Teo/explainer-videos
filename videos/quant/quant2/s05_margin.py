@@ -214,9 +214,9 @@ class Margin(VoiceoverScene, ThreeDScene):
         whys = [why(r"the distance to liquidation, in log price"),
                 why(r"the reflection principle: a path that touched $-d$ is as likely to end above it as below"),
                 why(r"a driftless Brownian log price with daily volatility $\sigma$")]
-        step = ladder(self, rows, whys, keep=3, top=2.5, x=-0.8, buff=0.7, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=-0.8, buff=0.5, edge=6.9)
         ex = MathTex(rf"5\times:\ d = {q['d5']:.2f} \qquad 10\times:\ d = {q['d10']:.2f}", font_size=36,
-                     color=QC.IDEA).to_edge(DOWN, buff=1.4)
+                     color=QC.IDEA).to_edge(DOWN, buff=2.0)
         pq = desk_question(r"Go from 5x to 10x. Does the distance to liquidation halve, or worse? And the chance?",
                            width=8.0, font_size=22).to_edge(DOWN, buff=0.25)
         with self.voiceover(

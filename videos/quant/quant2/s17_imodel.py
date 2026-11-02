@@ -129,7 +129,7 @@ class MarginModel(VoiceoverScene):
         mg = np.asarray(m["m87"], float)
         x = np.array([_x(v) for v in d], float)
         x = x - x[0]
-        g = axes([0, x[-1]], [-0.22, 0.15], x_length=8.4, y_length=4.4, ylabel=r"daily return, US market, 1987",
+        g = axes([0, x[-1]], [-0.22, 0.15], x_length=7.4, y_length=4.4, ylabel=r"daily return, US market, 1987",
                  xticks=[x[list(d).index(v)] for v in (19870701, 19871001, 19871201)],
                  xfmt=lambda v: {0: "Jul"}.get(int(v), "Oct" if v < 120 else "Dec"), yticks=[-0.2, -0.1, 0, 0.1],
                  yfmt=lambda v: f"{100 * v:+.0f}\\%" if v else "0", font_size=17).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
@@ -156,7 +156,8 @@ class MarginModel(VoiceoverScene):
             "    for t in range(1, len(r)):",
             "        v[t] = lam * v[t-1] + (1 - lam) * r[t-1]**2",
             "    return z * np.sqrt(h * v)",
-        ], source="explainer/quant/house/funding.py", width=5.6, font_size=16).to_corner(DR, buff=0.3)
+        ], source="explainer/quant/house/funding.py", width=5.6, font_size=16)
+        card.next_to(res, DOWN, buff=0.35).to_edge(RIGHT, buff=0.3)
         src = real_data(r"Kenneth French, daily US market; band: the 1-day 99\% level, $\lambda = 0.97$", corner=DL)
         with self.voiceover(
             "Run it through 1987, lambda point nine seven. The band is the one-day ninety-nine percent level; bars are daily "
@@ -176,7 +177,7 @@ class MarginModel(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(card))
             lab(self, card, [f"ewma_margin(r)[16 Oct 87] = {key['19871016']:.4f}",
-                             f"ewma_margin(r)[20 Oct 87] = {key['19871020']:.4f}"], direction=LEFT)
+                             f"ewma_margin(r)[20 Oct 87] = {key['19871020']:.4f}"])
         for mm in (bnd, bars):
             mm.clear_updaters()
         self.wait(0.4)

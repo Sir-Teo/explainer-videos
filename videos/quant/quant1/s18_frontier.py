@@ -136,18 +136,18 @@ class Frontier(VoiceoverScene):
     def papers(self, s):
         cards = VGroup()
         for who, what, col in PAPERS:
-            body = VGroup(label(who, font_size=20, color=col), wrapped_label(what, 5.6, 18, WHITE)).arrange(
-                DOWN, aligned_edge=LEFT, buff=0.08)
-            frame = RoundedRectangle(width=6.1, height=body.height + 0.3, corner_radius=0.1, stroke_color=col,
+            body = VGroup(label(who, font_size=25, color=col), wrapped_label(what, 5.8, 22, WHITE)).arrange(
+                DOWN, aligned_edge=LEFT, buff=0.12)
+            frame = RoundedRectangle(width=6.3, height=body.height + 0.4, corner_radius=0.1, stroke_color=col,
                                      stroke_width=1.5, fill_color="#0E141C", fill_opacity=1).move_to(body)
             cards.add(VGroup(frame, body))
-        cards.arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.3)).to_edge(UP, buff=0.5)
+        cards.arrange_in_grid(rows=2, cols=2, buff=(0.35, 0.4)).to_edge(UP, buff=0.6)
         if cards.width > 13.0:
             cards.scale_to_fit_width(13.0)
         btc = s["btc"]
         tail = wrapped_label(rf"Bitcoin, 2017--2020, on the same card: excess kurtosis {btc['kurt']:.0f}, clustering "
                              rf"{btc['acf1_abs']:.2f} at one day but {btc['acf100_abs']:.2f} at a hundred, leverage "
-                             rf"{btc['lev']:+.3f}: the same facts, a shorter memory", 12.0, 21, BTC)
+                             rf"{btc['lev']:+.3f}: the same facts, a shorter memory", 12.0, 24, BTC)
         tail.next_to(cards, DOWN, buff=0.45)
         with self.voiceover(
             "The frontier runs exactly this test with far larger machines. Rama Cont's 2001 survey wrote down the list, "
