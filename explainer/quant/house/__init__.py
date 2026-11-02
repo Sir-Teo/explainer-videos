@@ -26,10 +26,13 @@ explicitly (``from explainer.quant.house import bs, hedge``).
   correlation, inventory-skewed quotes, Whalley-Wilmott hedging bands;
 * :mod:`volsurface` (Part 12, the volatility desk): SSVI, Gatheral's butterfly check, Dupire's local volatility, the
   variance-swap strike and the VIX formula;
+* :mod:`stochvol` (Part 13, the volatility desk): the calibrator: Heston, Bates, Kou, VG and NIG characteristic
+  functions, COS pricing, Hagan's SABR, Andersen's QE scheme, Lévy path simulators, forward-start options and
+  cliquets;
 * :mod:`trees` (Part 10): Cox–Ross–Rubinstein trees, American exercise and its boundary;
 * :mod:`paths` (Parts 5, 10, 13): GBM and Heston paths, realized volatility;
 * :mod:`hedge` (Part 10): the delta-hedged book and its P&L decomposition;
 * :mod:`surface` (Parts 1, 10, 12): the frozen options surface (the series' pricing scoreboard).
 """
 
-from explainer.quant.house import arbitrage, bs, control, econ, fundamentals, funding, hedge, martingale, sim, vol, paths, pit, quoting, smile, stats, surface, trees, valuation, volsurface  # noqa: F401
+from explainer.quant.house import arbitrage, bs, control, econ, fundamentals, funding, hedge, martingale, sim, vol, paths, pit, quoting, smile, stats, stochvol, surface, trees, valuation, volsurface  # noqa: F401

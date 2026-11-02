@@ -625,3 +625,59 @@ def test_volsurface_flat_and_ssvi():
     wq = V.ssvi_w(kk, th, -0.35, 1.1, 0.45)
     fit = V.fit_ssvi(kk, Ts, wq)
     assert fit["rmse"] < 1e-4 and abs(fit["rho"] + 0.35) < 0.02
+
+
+# ---------------------------------------------------------------- stochvol (Part 13)
+
+
+def test_cos_heston_benchmark():
+    from explainer.quant.house import stochvol as sv
+
+    # Fang and Oosterlee (2008), Table 4: reference 5.785155435
+    cf = lambda u, T: sv.heston_cf(u, T, 0.0175, 1.5768, 0.0398, 0.5751, -0.5711)  # noqa: E731
+    assert abs(sv.cos_price(cf, 100.0, 100.0, 1.0, 1)[0] - 5.785155435) < 1e-6
+
+
+def test_cos_matches_black_and_martingales():
+    from explainer.quant.house import bs, stochvol as sv
+
+    K = np.array([60.0, 80, 100, 120, 150])
+    for T in (2 / 365, 0.5):
+        for cp in (1, -1):
+            p = sv.cos_price(lambda u, TT: sv.bs_cf(u, TT, 0.6), 100.0, K, T, cp)
+            assert np.allclose(p, bs.black(100.0, K, T, 0.6, cp=cp), atol=1e-9)
+    one = np.array([-1j])
+    for cf in (lambda u: sv.vg_cf(u, 0.5, 0.5, 0.2, -0.1), lambda u: sv.nig_cf(u, 0.5, 5, -1, 1),
+               lambda u: sv.bates_cf(u, 0.5, 0.2, 2, 0.2, 1, -0.2, 1, -0.05, 0.1),
+               lambda u: sv.kou_jump_cf(u, 0.5, 1, 0.4, 10, 5)):
+        assert abs(cf(one)[0] - 1) < 1e-12
+
+
+def test_qe_and_levy_simulation_match_cos():
+    from explainer.quant.house import stochvol as sv
+
+    p = (0.0175, 1.5768, 0.0398, 0.5751, -0.5711)
+    S = sv.heston_qe(100, *p, 1.0, 50, 100_000, seed=1)
+    ref = sv.cos_price(lambda u, T: sv.heston_cf(u, T, *p), 100.0, 100.0, 1.0, 1)[0]
+    pay = np.maximum(S[-1] - 100, 0)
+    assert abs(pay.mean() - ref) < 4 * pay.std() / np.sqrt(len(pay))
+    V = sv.vg_paths(100, 0.5, 0.2, -0.1, 0.5, 20, 100_000, seed=2)
+    ref = sv.cos_price(lambda u, T: sv.vg_cf(u, T, 0.5, 0.2, -0.1), 100.0, 110.0, 0.5, 1)[0]
+    pay = np.maximum(V[-1] - 110, 0)
+    assert abs(pay.mean() - ref) < 4 * pay.std() / np.sqrt(len(pay))
+
+
+def test_sabr_atm_and_calibration_roundtrip():
+    from explainer.quant.house import stochvol as sv
+
+    # at the money with beta = 1 and no vol of vol, Hagan's vol is alpha
+    assert abs(sv.sabr_iv(1.0, 1.0, 0.5, 0.4, 1.0, 0.0, 1e-8)[0] - 0.4) < 1e-6
+    # Heston round trip: synthetic quotes from known parameters are recovered to a small error
+    x = (0.25, 3.0, 0.3, 1.2, -0.4)
+    T = np.repeat([30 / 365, 90 / 365, 180 / 365], 9)
+    K = np.tile(np.exp(np.linspace(-0.3, 0.3, 9)), 3)
+    iv = np.concatenate([sv.surface_iv("Heston", x, 1.0, K[T == t], t) for t in np.unique(T)])
+    Q = {"F": np.ones_like(K), "K": K, "T": T, "iv": iv, "cp": np.where(K >= 1, 1, -1),
+         "vega": np.ones_like(K)}
+    r = sv.calibrate("Heston", Q)
+    assert r["rmse"] < 0.05
