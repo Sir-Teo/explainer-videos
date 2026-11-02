@@ -21,13 +21,14 @@ class Calibrator(VoiceoverScene):
         self.play(FadeOut(c))
 
     def idea(self, c):
+        npts = f"{c['n_train'] + c['n_held']:,}".replace(",", "{,}")
         rows = [cmath(r"\sigma_{\text{imp}}", r"\approx", r"\mathcal{N}_w\big(H, \eta, \rho, \xi_0, \xi_1;\ T, k\big)",
                       font_size=40, colors={r"\sigma_{\text{imp}}": IV}),
                 cmath(r"\hat\theta", r"=", r"\arg\min_\theta \sum_i w_i\,\big(\mathcal{N}_w(\theta; T_i, k_i) - "
                       r"\sigma_i^{\text{mkt}}\big)^2", font_size=36, colors={r"\hat\theta": GOOD})]
         whys = [why(rf"Horvath, Muguruza and Tomas (2021): learn the map from rough Bergomi's parameters and an option's "
                     rf"expiry and moneyness to its implied volatility, offline, from Monte Carlo: here "
-                    rf"{c['n_train'] + c['n_held']:,} prices from 12{{,}}000 parameter sets".replace(",", "{,}", 1)),
+                    rf"{npts} prices from 12{{,}}000 parameter sets"),
                 why(r"then calibrate online by gradient descent through the network, which is smooth and differentiable: "
                     r"the slow simulation is paid once, not at every step of every calibration")]
         step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.6, buff=1.0, edge=6.9)
