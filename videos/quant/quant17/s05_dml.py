@@ -68,7 +68,8 @@ class DML(VoiceoverScene):
         with self.voiceover(
             "Here is a slice through the seven-dimensional price, along equal moves in every asset. The grey dots are the "
             "training labels: each one a single simulated payoff, scattered far from the price. "
-            "<bookmark mark='a'/> A network fitted to them alone, with a thousand samples, wanders around the truth. "
+            "<bookmark mark='a'/> A network fitted to them alone, with a thousand samples, drifts away from the truth "
+            "where the payoffs are largest and noisiest. "
             "<bookmark mark='b'/> Fitted to the payoffs and their derivatives, it lies on the exact price: the slopes "
             "fix its shape everywhere, and the level comes with them."
         ) as vo:
