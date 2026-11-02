@@ -9,16 +9,20 @@ Research window: to December 2020 (the sealed envelope).  Items (seconds):
 * ``cape``     the cyclically adjusted P/E against the next ten years' real total return, 1881-2010 starts;
 * ``factors``  accounting signals as long-short portfolios on Ken French's decile sorts, 1963-2020: accruals,
                operating profitability, investment, book-to-market, earnings yield; before and after publication;
-* ``dcf``      a firm's DCF value over discount rate and terminal growth (the value surface).
+* ``dcf``      a firm's DCF value over discount rate and terminal growth (the value surface);
+* ``envelope`` seals the hold-outs this part reads (Shiller's monthly price and dividend from 2021, French's five
+               accounting sorts from 2021) and registers the CAPE forecast for 2021-30 and the five signals tested.
 """
 
 from __future__ import annotations
+
+import inspect
 
 import numpy as np
 
 from explainer.ai.cache import Cache
 from explainer.quant import data
-from explainer.quant.house import valuation
+from explainer.quant.house import pit, valuation
 
 CACHE = Cache("quant3")
 load = CACHE.load
@@ -161,7 +165,33 @@ def compute_dcf() -> dict:
             "base_tv_share": base["terminal"] / base["value"], "alt": alt["value"]}
 
 
-ITEMS = {"shiller": compute_shiller, "cape": compute_cape, "factors": compute_factors, "dcf": compute_dcf}
+# ---------------------------------------------------------------------------
+def compute_envelope() -> dict:
+    """Seal the hold-out of every dataset this part reads, and register what this part tested."""
+    s = data.shiller(through="2030-12")
+    t = s["t"]
+    ym = np.round(t * 12).astype(int)
+    dates = (ym // 12) * 10000 + (ym % 12 + 1) * 100 + 1
+    ok = np.isfinite(s["price"])
+    recs = {"Shiller monthly real price": pit.seal("shiller/price_monthly", dates[ok], s["price"][ok])}
+    okd = np.isfinite(s["div"])
+    recs["Shiller monthly dividend"] = pit.seal("shiller/div_monthly", dates[okd], s["div"][okd])
+    for name, *_ in SIGNALS:
+        k = data.ken_french_sorts(name, through="2025-12")
+        recs[f"French sorts: {name}"] = pit.seal(f"kenfrench/sorts_{name}", k["date"] * 100 + 1, k["returns"])
+    c = load("cape")
+    reg = {"cape_forecast_2021_2030": pit.register(
+        "cape_forecast_2021_2030", inspect.getsource(compute_cape),
+        {"model": "10y real total return on log CAPE, OLS on 1881-2010 monthly starts", "cape_dec_2020": c["cape_now"],
+         "forecast_real_annual": c["pred_now"]}, trials=1),
+        "accounting_signals_part3": pit.register(
+        "accounting_signals_part3", inspect.getsource(compute_factors),
+        {"signals": [s_[0] for s_ in SIGNALS], "legs": "decile 10 minus decile 1, value-weighted"}, trials=len(SIGNALS))}
+    return _json({"sealed": recs, "registered": reg, "trials": pit.trials_so_far()})
+
+
+ITEMS = {"shiller": compute_shiller, "cape": compute_cape, "factors": compute_factors, "dcf": compute_dcf,
+         "envelope": compute_envelope}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

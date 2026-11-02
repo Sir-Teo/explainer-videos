@@ -1,6 +1,30 @@
 {
  "opened": {},
- "registered": {},
+ "registered": {
+  "accounting_signals_part3": {
+   "code_sha256": "37bc4b8e880d26a4531f2a2d76b3a3464d23d0f6d06c6b7348e03e40034fc820",
+   "params": {
+    "legs": "decile 10 minus decile 1, value-weighted",
+    "signals": [
+     "AC",
+     "OP",
+     "INV",
+     "BE-ME",
+     "E-P"
+    ]
+   },
+   "trials": 5
+  },
+  "cape_forecast_2021_2030": {
+   "code_sha256": "a5b36ee43c347f92565b55014118cbdaee0c27f95ef91ca15f3d9898a73461da",
+   "params": {
+    "cape_dec_2020": 33.7655914181171,
+    "forecast_real_annual": 0.006101638373512797,
+    "model": "10y real total return on log CAPE, OLS on 1881-2010 monthly starts"
+   },
+   "trials": 1
+  }
+ },
  "sealed": {
   "binance/BTCUSDT/1d": {
    "digest": "7bdad00d93ed73da631de456141d06f5ae44061c4bd30b0002c07d00d5c10ef4",
@@ -19,6 +43,48 @@
    "first": 20210104,
    "last": 20251231,
    "n": 1255
+  },
+  "kenfrench/sorts_AC": {
+   "digest": "9486ce6c7b647be94070fef0b578a84361384a817b4a2fc6da18c49532db8dc8",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/sorts_BE-ME": {
+   "digest": "0dfaa59351b4d769a1fc6aac5401f2c11b855f9b9235af710bb0da8fb622a2ff",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/sorts_E-P": {
+   "digest": "3771bceba88a6608c2519915b32bce80ed07d539a91e32a6ecfe272fd29f34aa",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/sorts_INV": {
+   "digest": "0c6ec4472c8453a54e130e495d0df3fb0d489f343819192c749cc15600cc9e9a",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/sorts_OP": {
+   "digest": "f18cae74d2314c17881787ff23ecdc94cdc91fd18773535eca400c44730a85b2",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "shiller/div_monthly": {
+   "digest": "79b54c36e8e4bcb85a955e2d7b96ac16963b33f1db456d3c869cdf04850a2461",
+   "first": 20210101,
+   "last": 20230601,
+   "n": 30
+  },
+  "shiller/price_monthly": {
+   "digest": "88ecc67db5589ae98918210bd68d4fdfebf441f43c0fe65fef2c5a43b635b533",
+   "first": 20210101,
+   "last": 20230901,
+   "n": 33
   }
  }
 }

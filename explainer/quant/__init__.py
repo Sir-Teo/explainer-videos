@@ -128,6 +128,7 @@ TIMELINE = [
     (1964, r"Sharpe: the CAPM", IDEA),
     (1965, r"Samuelson: fair prices are random", IDEA),
     (1967, r"Thorp--Kassouf: \textit{Beat the Market}", IDEA),
+    (1968, r"Ball--Brown: earnings and prices", IDEA),
     (1969, r"Merton's portfolio problem; Thorp's fund", IDEA),
     (1970, r"Fama: efficient markets", IDEA),
     (1973, r"Black--Scholes--Merton; the CBOE opens", IDEA),
