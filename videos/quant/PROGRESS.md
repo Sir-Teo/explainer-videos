@@ -71,7 +71,8 @@ the insurance fund's); netting 5,395 trades $11.0bn gross -> $3.1bn bilateral ->
 auction clears at 100.07; perp funding 2020 averaged 17.2%/yr, positive 86% of settlements, $2,238 to hold one coin
 long; SOFR 2.20 (13 Sep) 2.43 (16) 5.25 (17) 2.55 (18) 1.95 (19 Sep 2019), IOER 2.10, reserves low $1.39tn (18 Sep
 2019) from $2.05tn (Jan 2018); fees: $1 in the market 1927-2020 -> $7,893 gross, $360 after 2-and-20 with a
-high-water mark (4.5% of the profit kept), $3,288 after a 1% fee. Scenes: not started (manifest empty).
+high-water mark (4.5% of the profit kept), $3,288 after a 1% fee. Scenes: all 12 written and previewed silently (`renders/qa/quant2/`); README with solutions. Remaining: Chinese
+(zh_lines.py, on-screen text), full build.
 
 ## Next
 

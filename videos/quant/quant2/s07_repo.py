@@ -60,7 +60,8 @@ class Repo(VoiceoverScene):
         cells = list(rows[0])
         for name, h in HAIRCUTS:
             r_ = [label(name, font_size=24), MathTex(rf"{100 * h:.0f}\%", font_size=30, color=RATE),
-                  MathTex(rf"{1 / h:.0f}\times", font_size=30, color=LOSS if h >= 0.35 else QC.HOUSE)]
+                  MathTex((f"{1 / h:.0f}" if abs(1 / h - round(1 / h)) < 0.05 else f"{1 / h:.1f}") + r"\times", font_size=30,
+                          color=LOSS if h >= 0.35 else QC.HOUSE)]
             cells += r_
             rows.append(VGroup(*r_))
         grid = VGroup(*cells).arrange_in_grid(len(HAIRCUTS) + 1, 3, buff=(1.0, 0.3), col_alignments="lrr").shift(UP * 0.6)
