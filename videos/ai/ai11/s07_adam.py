@@ -180,7 +180,7 @@ class Adam(VoiceoverScene):
         a = load("adamview")
         head = cmath(r"\beta_1 = \beta_2 = 0,\ \epsilon \to 0:\quad", r"\frac{g_t}{\sqrt{g_t^2}}", "=", r"\operatorname{sign}(g_t)",
                      font_size=36).to_edge(UP, buff=0.35)
-        hl = label(r"Adam's limit: \ every weight moves by exactly $\eta$, \ up or down: \ sign descent", font_size=24,
+        hl = label(r"Adam's limit: \ nonzero gradients give moves of size $\eta$: \ sign descent", font_size=24,
                    color=C.BITS).next_to(head, DOWN, buff=0.2)
         panels = VGroup()
         for k_ in ("1", "100", "1000"):
@@ -213,9 +213,9 @@ class Adam(VoiceoverScene):
             "keep their signs from step to step.")
         with self.voiceover(
             "Now Adam's limit. Turn both memories off and let epsilon go to zero: the gradient over its own size is "
-            "its sign. Every weight moves by exactly eta: sign descent. <bookmark mark='a'/> Here is how far each "
-            f"weight of our hidden matrix moves, in units of eta. At the first step, {f1:.0%} of the "
-            "weights move by eta. "
+            "its sign for a nonzero gradient; a zero gradient gives no sign step. <bookmark mark='a'/> Here is how far each "
+            f"weight of our hidden matrix moves, in units of eta. At the first step, about {f1:.0%} of the "
+            "weights move by more than zero point nine eta. "
             + said1
         ) as vo:
             self.play(Write(head), FadeIn(hl))
@@ -239,7 +239,7 @@ class Adam(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(hist, DOWN, buff=0.45).align_to(hist, LEFT)
         notes = VGroup(label(r"$\beta_1 = 0.9$, \ $\beta_2 = 0.99$: \ two speeds of memory", font_size=22, color=GREY_A),
                        label(r"one state per weight, \ not Adam's two", font_size=22, color=GREY_A),
-                       label(r"every weight moves by $\pm\eta$: \ a smaller $\eta$, \ a larger decay $\lambda$", font_size=22,
+                       label(r"sign component: $\pm\eta$ or $0$; \ decay is additional", font_size=22,
                              color=LI)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -2.2, 0])
         keep_in_frame(notes)
         a = load("adamview")
@@ -257,7 +257,7 @@ class Adam(VoiceoverScene):
                       for s_, v in (("0", 0), (r"\eta", 1), (r"2\eta", 2))])
         ttl = label(r"how far each weight moves, \ $|\Delta\theta|$", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.2)
         lg = VGroup(label(r"Adam at step $1{,}000$ \ (computed above)", font_size=19, color=AD),
-                    label(r"Lion: \ every weight $\pm\eta$, \ by construction", font_size=19, color=LI)
+                    label(r"Lion: nonzero sign component $\pm\eta$; decay excluded", font_size=19, color=LI)
                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(ax, DOWN, buff=0.45)
         view = VGroup(ax, bars, spike, xt, ttl, lg).move_to([3.5, 0.9, 0])
         notes.next_to(view, DOWN, buff=0.4).set_x(3.4)
@@ -266,7 +266,7 @@ class Adam(VoiceoverScene):
             "That limit became an optimizer. <bookmark mark='a'/> In 2023 a Google team searched over programs for "
             "update rules and found Lion: step by the sign of a blend of momentum and gradient, "
             "<bookmark mark='b'/> then update the momentum more slowly. <bookmark mark='c'/> One state per weight, "
-            "not two, and since every step is full size, a smaller learning rate and a larger decay. It runs in "
+            "not two, and since its nonzero sign component is full size, a smaller learning rate and a larger decay. It runs in "
             "our race in Chapter 12."
         ) as vo:
             self.play(FadeIn(hist, shift=RIGHT * 0.2), Write(rows[0]))
@@ -283,7 +283,7 @@ class Adam(VoiceoverScene):
 
     def takeaway(self):
         t = takeaway_card(r"Adam: \ momentum over a running size",
-                          r"$\hat m / \sqrt{\hat v}$, \ bias-corrected so the first step is $\eta$ per weight. \ Its "
+                          r"$\hat m / \sqrt{\hat v}$: first-step size $\approx\eta$ when $|g_1|\gg\epsilon$. \ Its "
                           r"limit is sign descent, \ the steepest step when every weight is bounded on its own.",
                           r"Next: \ what weight decay does inside Adam")
         with self.voiceover(

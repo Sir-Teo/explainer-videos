@@ -74,7 +74,7 @@ class Frontier(VoiceoverScene):
             label(r"$11$ optimizers, \ $0.1$B--$1.2$B parameters, \ $1$--$8\times$ the Chinchilla data", font_size=20, color=WHITE),
             label(r"tuning AdamW's learning rate alone: \ up to $2\times$ on a $100$M model", font_size=20, color=AW),
             label(r"Muon fastest at little data per parameter; \ SOAP and Kron at $8\times$", font_size=20, color=SO),
-            label(r"NVIDIA, 2026: \ Muon and SOAP stable at $100$M-token batches \\ where AdamW degraded; \ gains modest "
+            label(r"NVIDIA, 2026: \ Muon and SOAP variants stable at $100$M-token batches \\ where AdamW degraded; \ gains modest "
                   r"and mixed across tasks", font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.6, 0.6, 0])
         keep_in_frame(pts)
@@ -87,7 +87,7 @@ class Frontier(VoiceoverScene):
             "matrix-based ones, Muon and SOAP, were about one point four times faster at a hundred million "
             "parameters, <bookmark mark='d'/> and only one point one times at a billion. <bookmark mark='e'/> Muon "
             "led with little data per parameter, SOAP with a lot. <bookmark mark='f'/> In 2026 a team at NVIDIA "
-            "trained mixtures of experts up to seventy-two billion parameters with Muon and SOAP, and found them "
+            "trained mixtures of experts up to seventy-two billion parameters with Muon and modified SOAP or KL-SOAP. They found these variants "
             "stable at batches of a hundred million tokens where AdamW degraded, with modest, mixed gains."
         ) as vo:
             self.play(Create(ax), FadeIn(yt), FadeIn(yn), FadeIn(src))

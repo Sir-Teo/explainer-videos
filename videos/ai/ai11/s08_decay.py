@@ -151,26 +151,24 @@ class Decay(VoiceoverScene):
             verdict = (f"AdamW's best is {gap:.3f} bits better than the best L2 penalty, and all three of its seeds beat "
                        "all three of L2's.")
         elif gap > 0:
-            verdict = (f"AdamW's best is ahead by {gap:.3f} bits on average, but the seeds overlap: on this model the "
-                       "difference is within the luck of the draw.")
+            verdict = (f"AdamW's best is ahead by {gap:.3f} bits on average, but the observed ranges of the three seeds "
+                       "overlap.")
         else:
             verdict = (f"here the best L2 penalty does as well as AdamW, or better, by {-gap:.3f} bits: on this small "
                        "model the decoupling doesn't pay.")
         helps = min(sa.mean(), sl.mean()) < none - 0.01
         cols_a = list(d["bestcol_adamw"])
-        steady = len(set(cols_a)) <= 2
+        best_strengths = [float(d["wd"][j]) for j in cols_a]
+        wd_lo, wd_hi = min(best_strengths), max(best_strengths)
         ea, el = ba[0] >= max(lrs), bl[0] >= max(lrs)
         etxt = (" Both bests are at our largest learning rate, so a still larger one might help both." if ea and el else
                 (" AdamW's best is at our largest learning rate, so it might gain a little more." if ea else
                  (" The L2 penalty's best is at our largest learning rate, so it might gain a little more." if el
                   else "")))
-        said1 = (" Both beat no decay at all, so here it really is regularizing." if helps else
+        said1 = (" At least one regularized setting beats no decay by more than a hundredth of a bit on average." if helps else
             " Neither beats no decay by much: even here, it barely regularizes.")
-        said2 = (" And in AdamW's grid the best decay strength barely moves as the learning rate "
-            "changes, which is what decoupling promised: two knobs that can be set separately."
-            if steady else
-            " In AdamW's grid the best decay strength still moves with the learning rate: "
-            "the product of the two is what matters.")
+        said2 = (f" Across the tested learning rates, AdamW's best decay strengths range from {wd_lo:g} to {wd_hi:g}. "
+                 "This grid does not establish that the two settings are independent, or that only their product matters.")
         with self.voiceover(
             "Does it matter? A test where regularization should matter: a smaller character model that sees only "
             "fifty thousand characters of training text, over and over. <bookmark mark='a'/> On the left, AdamW at five learning "
@@ -208,14 +206,14 @@ class Decay(VoiceoverScene):
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 1.2, 0])
         keep_in_frame(lg)
         rise0 = float(c0[-1, 1] - c0[1:, 1].min())
-        ctag = note(r"seed $0$; \ scored during training on the first $20{,}000$ held-out characters").to_corner(DL, buff=0.2)
+        ctag = note(r"seed $0$; \ scored during training on the first $20{,}000$ held-out predictions").to_corner(DL, buff=0.2)
         lnk = label(r"what decay does to normalized weights: \ Chapter 15", font_size=22, color=GREY_A).next_to(lg, DOWN, buff=0.6)
         lnk.align_to(lg, LEFT)
         keep_in_frame(lnk)
         said3 = (f"<bookmark mark='a'/> Without decay, the model starts to memorize its fifty thousand characters, and "
             f"the held-out loss climbs back up by {rise0:.2f} bits from its best. "
             if rise0 > 0.02 else
-            "<bookmark mark='a'/> Even without decay, the held-out loss keeps falling to the end. ")
+            "<bookmark mark='a'/> Without decay, the final recorded held-out loss is within 0.02 bits of its lowest recorded value. ")
         said4 = ("With decay, it ends lower. " if ca[-1, 1] < c0[-1, 1] else
             "With decay, it ends no lower on this stretch of text. ")
         with self.voiceover(

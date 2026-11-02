@@ -81,12 +81,12 @@ class Momentum(VoiceoverScene):
             cmath(r"1 + \beta - \eta\mu", "=", r"2\sqrt{\beta}, \quad 1 + \beta - \eta L = -2\sqrt{\beta}", font_size=34),
             cmath(r"\sqrt{\beta}", "=", r"\frac{\sqrt{\kappa} - 1}{\sqrt{\kappa} + 1}", r",\quad \eta = \frac{4}{(\sqrt{L} + \sqrt{\mu})^2}",
                   font_size=34, colors=cl),
-            cmath(r"k", r"\approx", r"\tfrac{\sqrt{\kappa}}{2}\,\ln(1/\varepsilon)", font_size=36),
+            cmath(r"k", r"\approx", r"\tfrac{\sqrt{\kappa}}{4}\,\ln(1/\varepsilon)", font_size=36),
         ]
         whys = [why(r"$\nabla f = \lambda x$ along it"), why(r"try $x_k = z^k$"),
                 why(r"complex modes have modulus $\sqrt{\beta}$; \ positions can oscillate"),
                 why(r"make every $\lambda$ in $[\mu, L]$ spiral"),
-                why(r"solve the two"), why(r"large $\kappa$: \ dominant-mode estimate, \ not a per-step bound")]
+                why(r"solve the two"), why(r"large $\kappa$: relative gap $\varepsilon$; ignores prefactors")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.8, buff=0.5, edge=6.9)
         thm = theorem_card(r"The heavy ball on a quadratic", r"Tuned to $[\mu, L]$, the dominant root modulus is "
                            r"$\rho = \frac{\sqrt\kappa - 1}{\sqrt\kappa + 1}$. \ This is an asymptotic rate; "
@@ -146,10 +146,10 @@ class Momentum(VoiceoverScene):
         low = label(r"no method that only sees gradients can do better \\ in the worst case \ (Nemirovski \& Yudin)",
                     font_size=20, color=GREY_A).to_edge(DOWN, buff=0.25).set_x(-3.4)
         said1 = (f"<bookmark mark='b'/> On Chapter 1's convex quadratic it stays under its bound, and after "
-            f"{len(ks):,} steps it is {ratio:.0f} times closer than gradient descent. "
+            f"{len(ks):,} steps its objective gap is {ratio:.0f} times smaller than gradient descent's. "
             if held else
             f"<bookmark mark='b'/> On Chapter 1's convex quadratic, after {len(ks):,} steps, it is {ratio:.0f} times "
-            "closer than gradient descent. ")
+            "smaller in objective gap than gradient descent. ")
         with self.voiceover(
             "In 1983 Yurii Nesterov, also in Moscow, changed one thing: take the gradient not where you are, but "
             "where momentum is about to carry you. <bookmark mark='a'/> With that look-ahead, the acceleration is "
@@ -180,7 +180,7 @@ class Momentum(VoiceoverScene):
         xt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=20, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.1) for k in range(4)])
         yt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=20, color=GREY_B).next_to(ax.c2p(0, k), LEFT, buff=0.1) for k in range(5)])
         xn = label(r"condition number $\kappa$", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        yn = label(r"steps to a millionth of the starting error", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12)
+        yn = label(r"steps to a millionth of the starting gap", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12)
         yn.align_to(ax, LEFT)
         groups, rows = VGroup(), VGroup()
         for m, col in (("gd", GD), ("hb", HB), ("nesterov", NE)):
@@ -195,7 +195,7 @@ class Momentum(VoiceoverScene):
         i = list(q["kappas"]).index(1000)
         rh, rhp = q["rate_hb"][i], q["rate_pred_hb"][i]
         rn, rnp = q["rate_nesterov"][i], q["rate_pred_nesterov"][i]
-        rates = label(rf"per step at $\kappa = 1000$: \ heavy ball ${rh:.4f}$ \ (derived ${rhp:.4f}$); \\ Nesterov "
+        rates = label(rf"late $\sqrt{{f-f^*}}$ ratios: \ heavy ball ${rh:.4f}$ \ (derived ${rhp:.4f}$); \\ Nesterov "
                       rf"${rn:.4f}$ \ (derived ${rnp:.4f}$)", font_size=20, color=GREY_A).next_to(rows, DOWN, buff=0.45)
         keep_in_frame(rates)
         caveat = label(r"on general convex losses the heavy ball can cycle forever \\ (Lessard, Recht \& Packard, "
@@ -209,8 +209,9 @@ class Momentum(VoiceoverScene):
             f"{sh:.2f} and {sn:.2f}: "
             + said2
             + f"At kappa a thousand that is {it_g:,} steps against {it_h:,} and {it_n:,}. <bookmark mark='c'/> And "
-            f"late in the run the heavy ball shrinks the error by {rh:.4f} per step, against {rhp:.4f} derived; "
-            f"Nesterov by {rn:.4f}, against {rnp:.4f}. "
+            f"the late geometric-mean ratios for the square root of the gap are {rh:.4f} for heavy ball, against "
+            f"root modulus {rhp:.4f}; "
+            f"Nesterov {rn:.4f}, against {rnp:.4f}. "
             "<bookmark mark='d'/> One warning. The heavy ball's guarantee is for quadratics: on other convex losses "
             "there are examples where it circles forever. Nesterov's form is the one with a proof."
         ) as vo:

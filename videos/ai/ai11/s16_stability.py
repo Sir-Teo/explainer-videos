@@ -36,8 +36,8 @@ class Stability(VoiceoverScene):
         xt = VGroup(*[MathTex(f"{int(v):,}".replace(",", "{,}"), font_size=18, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
                       for v in np.arange(0, T + 1, 500)])
         yt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=20, color=GREY_B).next_to(ax.c2p(0, k), LEFT, buff=0.08) for k in range(6)])
-        xn = label(r"training steps", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
-        yn = label(r"the largest attention score, \ $\max_{i,j} q_i \cdot k_j / \sqrt{d}$", font_size=20, color=GREY_A)
+        xn = label(r"steps; \ seed $0$ curve, recorded every $10$ steps", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
+        yn = label(r"largest pre-update forward score, \ $\max_{i,j} q_i \cdot k_j / \sqrt{d}$", font_size=20, color=GREY_A)
         yn.next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
 
         def line(k, col, sd=0, sw=3):
@@ -63,10 +63,11 @@ class Stability(VoiceoverScene):
             f"<bookmark mark='c'/> Here the faster run still ends at {hf:.2f} bits, against {hs:.2f}.")
         with self.voiceover(
             "Large runs sometimes blow up, and Part eighteen tells that story at scale. Here is one mechanism, "
-            "provoked on purpose in a one-layer transformer on our books. <bookmark mark='a'/> The largest attention "
-            f"score, a query times a key: with Muon at a moderate rate it grows to about {mx_s:,.0f}. "
-            f"<bookmark mark='b'/> At four times the rate it runs away, to about {mx_f:,.0f}: the softmax becomes a "
-            "hard choice and the heads stop learning. "
+            "provoked on purpose in a one-layer transformer on our books. <bookmark mark='a'/> The curves show seed "
+            "zero's pre-update forward scores, recorded every ten steps. Across two seeds, the mean of each run's "
+            f"largest recorded score is about {mx_s:,.0f} with Muon at the moderate rate. "
+            f"<bookmark mark='b'/> At four times the rate that mean is about {mx_f:,.0f}. Large differences between scores can make "
+            "the softmax nearly a hard choice and weaken gradients through it. Raw maxima alone do not measure that. "
             + said1
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(model), FadeIn(cite_))
@@ -83,7 +84,7 @@ class Stability(VoiceoverScene):
     def qkclip(self):
         s = load("spikes")
         s["cfgs"]
-        head = label(r"QK-clip, \ per head $h$, \ after every step", font_size=30).to_edge(UP, buff=0.3)
+        head = label(r"QK-clip: \ forward measurement, \ post-update feedback", font_size=30).to_edge(UP, buff=0.3)
         cl = {r"\gamma": CLIP, r"\tau": CLIP}
         rows = [
             cmath(r"S^h", "=", r"\max_{i,j}\; \frac{(W_q^h x_i) \cdot (W_k^h x_j)}{\sqrt{d}}", font_size=34),
@@ -91,17 +92,20 @@ class Stability(VoiceoverScene):
                   font_size=34, colors=cl),
             cmath(r"\gamma", "=", r"\tau / S^h \quad \text{whenever } S^h > \tau", font_size=34, colors=cl),
         ]
-        whys = [why(r"bilinear in the two weight matrices"), why(r"scale both by $\sqrt\gamma$"),
-                why(r"so the score lands exactly on $\tau$")]
+        whys = [why(r"allowed positions in a fixed batch; \ bilinear in the weights"),
+                why(r"for frozen inputs and weights: \ scale both by $\sqrt\gamma$"),
+                why(r"stored-score feedback; \ no hard post-update or next-batch cap")]
         step = ladder(self, rows, whys, keep=3, top=2.1, x=-1.4, buff=0.55, edge=6.9)
         hist = history_card(2025, r"Kimi Team \ (Moonshot AI)", rf"MuonClip: \ Muon plus QK-clip, \ $\tau = 100$. \ Kimi K2, "
                             r"\ a trillion parameters, \ trained on $15.5$ trillion tokens \ ``with zero loss spike''",
                             width=7.0).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "In 2025 Moonshot AI met exactly this training Kimi K2 with Muon, and fixed it surgically. "
-            "<bookmark mark='a'/> After each step, measure each head's largest score. <bookmark mark='b'/> It is "
-            "bilinear in the query and key weights, so scaling both by root gamma scales it by gamma. "
-            "<bookmark mark='c'/> Whenever it exceeds tau, choose gamma to put it exactly on tau. With tau at a "
+            "<bookmark mark='a'/> Record each head's largest score during the forward pass, then take the optimizer "
+            "step. <bookmark mark='b'/> For frozen inputs and weights, scaling both query and key matrices by root "
+            "gamma scales the score by gamma. <bookmark mark='c'/> Use the stored forward score to choose gamma, "
+            "then rescale the updated matrices as feedback. There is no hard cap at tau on post-update or next-batch "
+            "scores. With tau at a "
             "hundred, Kimi K2, a trillion parameters on fifteen and a half trillion tokens, reports zero loss spikes."
         ) as vo:
             self.play(FadeIn(head))
@@ -121,8 +125,8 @@ class Stability(VoiceoverScene):
         ax = CornerAxes(x_range=[0, T, 500], y_range=[0, 5, 1], x_length=6.0, y_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.2, 0.3, 0])
         yt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=18, color=GREY_B).next_to(ax.c2p(0, k), LEFT, buff=0.08) for k in range(0, 6, 1)])
-        yn = label(r"the largest attention score", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
-        xn = label(r"steps", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.1)
+        yn = label(r"largest pre-update forward score", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        xn = label(r"steps; \ seed $0$ curves, recorded every $10$ steps", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.1)
 
         def line(k, col, sd=0, sw=3):
             L = logs[k][sd]
@@ -158,16 +162,18 @@ class Stability(VoiceoverScene):
         said3 = (f"<bookmark mark='b'/> It rescues both seeds here, {hg[0]:.2f} and {hg[1]:.2f} bits against "
             f"{ha[0]:.2f} and {ha[1]:.2f}. "
             if g_both else
-            (f"<bookmark mark='b'/> It rescues one seed, at {min(hg):.2f} bits, but not the other, at {max(hg):.2f}: "
-            "clipping limits each step, not the slow drift that sends the scores up. "
+            (f"<bookmark mark='b'/> The paired endpoints are: seed zero from {ha[0]:.2f} to {hg[0]:.2f} bits, "
+            f"seed one from {ha[1]:.2f} to {hg[1]:.2f}. "
+            "clipping caps the raw gradient norm, not the adaptively rescaled AdamW displacement. "
             if g_one else
             f"<bookmark mark='b'/> Here it doesn't save the run: {hg[0]:.2f} and {hg[1]:.2f} bits. "))
         with self.voiceover(
-            f"On our small transformer, QK-clip at tau a hundred holds the fast Muon run's scores near the threshold, "
-            f"never above about {mxq:.0f}, "
+            f"On our small transformer, with QK-clip at tau a hundred, the largest recorded pre-update forward "
+            f"score across the two fast Muon seeds is about {mxq:.0f}; recording is every ten steps, "
             + said2
-            + "<bookmark mark='a'/> AdamW, run far too fast, blows its scores up even further. The oldest remedy is "
-            "gradient clipping, from 2013: whenever the gradient is longer than some c, shrink it to length c. "
+            + "<bookmark mark='a'/> The AdamW runs compare QK-clip with gradient clipping, from 2013: whenever the "
+            "raw gradient is longer than c, shrink it to length c before the optimizer update. This caps the "
+            "gradient norm, not AdamW's parameter-step length. "
             + said3
             + f"QK-clip, which targets the cause, gives {haq[0]:.2f} and {haq[1]:.2f}."
         ) as vo:
@@ -186,14 +192,14 @@ class Stability(VoiceoverScene):
         rows = [
             cmath(r"\nabla_W L \cdot W", "=", r"0", font_size=34),
             cmath(r"W_{t+1}", "=", r"(1 - \eta\lambda)\, W_t - \eta\, u_t", font_size=34),
-            cmath(r"\mathbb{E}\|W_{t+1}\|^2", r"\approx", r"(1 - 2\eta\lambda)\,\|W_t\|^2 + \eta^2\, \textstyle\sum_k \langle u_t, u_{t+k}\rangle",
+            cmath(r"0", r"\approx", r"-2\eta\lambda\,\mathbb{E}\|W\|^2 + \eta^2\!\sum_{k\in\mathbb{Z}} \mathbb{E}\langle u_t, u_{t+k}\rangle",
                   font_size=32),
-            cmath(r"\|W\|^2", r"\approx", r"\frac{\eta}{2\lambda}\,\|u\|^2\, \frac{1 + \beta_1}{1 - \beta_1}", font_size=36,
-                  colors={r"\frac{\eta}{2\lambda}\,\|u\|^2\, \frac{1 + \beta_1}{1 - \beta_1}": C.BITS}),
+            cmath(r"\mathbb{E}\|W\|^2", r"\approx", r"\frac{\eta}{2\lambda}\,\mathbb{E}\|u\|^2\, \frac{1 + \beta_1}{1 - \beta_1}", font_size=36,
+                  colors={r"\frac{\eta}{2\lambda}\,\mathbb{E}\|u\|^2\, \frac{1 + \beta_1}{1 - \beta_1}": C.BITS}),
         ]
         whys = [why(r"scale-invariant: \ the gradient is orthogonal to $W$"), why(r"decoupled decay, \ then Adam's step $u$"),
-                why(r"$u$ nearly orthogonal to $W$; \ momentum correlates the $u$s"),
-                why(r"balance: \ the decay removes what the steps add")]
+                why(r"stationary correlated-update model; \ $u$ need not be orthogonal to $W$"),
+                why(r"model correlations $\propto \beta_1^{|k|}$; \ $\eta\lambda \ll 1 - \beta_1$")]
         step = ladder(self, rows, whys, keep=4, top=2.3, x=-1.6, buff=0.45, edge=6.9)
         tl = label(r"reached in about $1/(2\eta\lambda)$ steps; \ then $\|W\| \propto \sqrt{\eta/\lambda}$", font_size=24,
                    color=C.BITS).to_edge(DOWN, buff=0.85)
@@ -202,9 +208,9 @@ class Stability(VoiceoverScene):
         with self.voiceover(
             "Weight decay has a second life. Most weight matrices are followed by a normalization, so W and twice W "
             "give the same network. <bookmark mark='a'/> Then the gradient is orthogonal to W. <bookmark mark='b'/> "
-            "Decay shrinks W by a factor; Adam's step u adds to it. <bookmark mark='c'/> Square the norm: decay "
-            "removes two eta lambda of it per step, and the steps add eta squared times u's size, times their "
-            "correlation, which momentum sets. <bookmark mark='d'/> They balance at a norm proportional to root eta "
+            "Decay shrinks W by a factor; Adam's update u need not be orthogonal to it. <bookmark mark='c'/> Model "
+            "the updates as stationary noise whose correlations decay like momentum. At small decay, their "
+            "cumulative effect balances the shrinkage. <bookmark mark='d'/> This model predicts a norm proportional to root eta "
             "over lambda. <bookmark mark='e'/> So here weight decay doesn't regularize: it sets the size at which "
             "each step is a fixed fraction of the matrix, an effective learning rate."
         ) as vo:
@@ -250,9 +256,9 @@ class Stability(VoiceoverScene):
         worst = max(errs)
         nomom = float(e[f"pred_nomom_{wds[0]}"])
         said4 = (f"<bookmark mark='b'/> The dashed lines are the predicted equilibria, and every measured norm is "
-            f"within {worst:.0%} of its prediction. "
+            f"within about {worst:.0%} of its prediction. "
             if worst < 0.25 else
-            f"<bookmark mark='b'/> The dashed lines are the predicted equilibria; the worst is off by {worst:.0%}. ")
+            f"<bookmark mark='b'/> The dashed lines are the predicted equilibria; the worst is off by about {worst:.0%}. ")
         with self.voiceover(
             "Measured on our character model, with a normalization after its second hidden matrix, at three decay "
             "strengths, each four times the last: <bookmark mark='a'/> each norm settles to a level, faster for "
@@ -276,11 +282,12 @@ class Stability(VoiceoverScene):
     def takeaway(self):
         t = takeaway_card(r"Find the cause, \ then clip it",
                           r"Runaway attention scores are bilinear in $W_q, W_k$: \ QK-clip rescales just those. \ "
-                          r"Gradient clipping caps each step. \ Weight decay sets the norm, \ $\|W\| \propto \sqrt{\eta/\lambda}$.",
+                          r"Gradient clipping caps the raw gradient norm. \ Weight decay sets the norm, \ $\|W\| \propto \sqrt{\eta/\lambda}$.",
                           r"Next: \ the optimizer race of 2024--2026")
         with self.voiceover(
-            "So the best fixes target causes: QK-clip rescales the two matrices that make a score, clipping caps "
-            "every step, and weight decay sets the size of normalized matrices. Finally: the optimizer race since "
+            "So the best fixes target causes: QK-clip feeds forward scores back into query and key rescaling after "
+            "the update; gradient clipping caps the raw gradient norm, and weight decay sets the size of normalized "
+            "matrices. Finally: the optimizer race since "
             "2024."
         ):
             self.play(FadeIn(t[0], shift=UP * 0.2))

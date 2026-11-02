@@ -138,7 +138,7 @@ class GradientDescent(VoiceoverScene):
         yn = label(r"$f(x_k) - f^*$", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         meas = curve(ax, lk, np.log10(gd[sel]), GD, 3.5)
         bound = DashedVMobject(curve(ax, lk, np.log10(bg[sel]), UP_C, 2.5), num_dashes=40)
-        thm = theorem_card(r"Gradient descent, \ convex", r"Without strong convexity ($\mu = 0$): \ "
+        thm = theorem_card(r"Gradient descent, \ convex", r"Using convexity alone: \ "
                            r"$f(x_k) - f^* \le \dfrac{L\,\|x_0 - x^*\|^2}{2k}$, \ a rate of $1/k$.", width=6.0,
                            font_size=22).move_to([3.7, 1.4, 0])
         lg = VGroup(label(r"measured", font_size=22, color=GD), label(r"the bound $L\|x_0 - x^*\|^2/2k$", font_size=22,
@@ -147,14 +147,15 @@ class GradientDescent(VoiceoverScene):
         tag = note(r"a quadratic with curvatures $1, \tfrac14, \tfrac19, \dots, 10^{-6}$; \ $\eta = 1/L$; \ computed").to_corner(DR, buff=0.25)
         held = bool((gd <= bg * (1 + 1e-9)).all())
         said1 = ("<bookmark mark='b'/> The measured gap stays under the bound at every step, as the theorem says it "
-            "must, and its slope on these log axes is the slope of a power law, not of a geometric decay."
+            "must. Over this window it looks like a power law on the log axes."
             if held else
             "<bookmark mark='b'/> The measured gap should stay under the bound; here it does not everywhere, which "
             "points to rounding at the smallest values.")
         with self.voiceover(
-            "If the loss is convex but not strongly convex, the bowl beneath it can be flat, and the guarantee "
-            "weakens: the gap falls like one over k, the number of steps. <bookmark mark='a'/> Here is gradient "
-            "descent on a quadratic whose curvatures run from one down to a millionth, with the bound drawn dashed. "
+            "Using convexity alone gives a weaker guarantee: a bound proportional to one over k, the number of "
+            "steps. <bookmark mark='a'/> Here is gradient "
+            "descent on a quadratic with curvatures from one to a millionth. We do not use its tiny positive strong "
+            "convexity; the bound is dashed. "
             + said1
         ) as vo:
             self.play(FadeIn(thm, shift=DOWN * 0.2), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn),
@@ -180,7 +181,7 @@ class GradientDescent(VoiceoverScene):
         xt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=20, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.1) for k in range(4)])
         yt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=20, color=GREY_B).next_to(ax.c2p(0, k), LEFT, buff=0.1) for k in range(5)])
         xn = label(r"condition number $\kappa$", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        yn = label(r"steps to a millionth of the starting error", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12)
+        yn = label(r"steps to a millionth of the starting gap", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12)
         yn.align_to(ax, LEFT)
         dots_ = VGroup(*[Dot(ax.c2p(a, math.log10(b)), radius=0.07, color=GD) for a, b in zip(lk, it["gd"])])
         line = DashedVMobject(curve(ax, lk, np.log10(np.maximum(pr, 1)), UP_C, 2.5), num_dashes=30)
@@ -200,26 +201,27 @@ class GradientDescent(VoiceoverScene):
             for r_ in tab:
                 r_[j].set_x(j * 2.3 + xs_ / 2 - xs_ / 2)
         tab.move_to([3.9, 1.3, 0])
-        th = label(r"the error's shrink per step, \ late in the run", font_size=22, color=GREY_A).next_to(tab, UP, buff=0.3)
+        th = label(r"late $\sqrt{f-f^*}$ ratio per step", font_size=22, color=GREY_A).next_to(tab, UP, buff=0.3)
         sl = label(rf"slope of the measured steps: \ ${slope:.2f}$", font_size=24, color=GD).next_to(tab, DOWN, buff=0.5)
-        bl = label(r"dashed: \ $\kappa \ln(10^6)/2$, \ the worst case", font_size=20, color=UP_C).next_to(sl, DOWN, buff=0.2)
+        bl = label(r"dashed: quadratic worst-case estimate", font_size=20, color=UP_C).next_to(sl, DOWN, buff=0.2)
         tag = note(r"50 dimensions, \ curvatures spread evenly on a log scale from $\mu$ to $L$; \ computed").to_corner(DL, buff=0.25)
         i1000 = list(q["kappas"]).index(1000)
         close = all(abs(rate[i] - rpred[i]) < 2e-3 for i in range(1, len(rate)))
         said2 = ("close to one, in proportion to kappa, as derived. " if 0.8 < slope < 1.2 else
             "not the slope of one the worst case predicts. ")
-        said3 = ("error shrinks per step by exactly the derived factor, one minus one over kappa, to three decimals: "
+        said3 = ("square root of the gap has a late-run ratio close to the quadratic slow-mode factor: "
             f"at kappa a thousand, {rate[i1000]:.4f}."
             if close else
-            f"error shrinks per step by {rate[i1000]:.4f} at kappa a thousand, against the derived "
+            f"square root of the gap has late-run ratio {rate[i1000]:.4f} at kappa a thousand, against the slow-mode factor "
             f"{rpred[i1000]:.4f}.")
         with self.voiceover(
             "Check it. Quadratic valleys in fifty dimensions, with condition numbers from one to a thousand, and "
             "gradient descent with step one over L. <bookmark mark='a'/> The steps it needs, on log axes, rise along "
             f"a line of slope {slope:.2f}: "
             + said2
-            + "The dashed line is the worst case; these valleys do a little better, because only one direction is "
-            "the slowest. <bookmark mark='b'/> Late in the run that slowest direction is all that is left, and the "
+            + "The dashed line is the quadratic worst-case estimate; these valleys do better, because only one "
+            "direction is slowest. <bookmark mark='b'/> For these quadratics, positions contract by one minus "
+            "one over kappa in that slow mode. The "
             + said3
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(tag))

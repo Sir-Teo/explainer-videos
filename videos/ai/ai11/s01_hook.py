@@ -13,6 +13,22 @@ def height(x, y):
     return math.log1p(rosen(x, y))
 
 
+def step_path(points, step):
+    """A visual path prefix at a shared optimization step, not arc length.
+
+    Interpolate only between adjacent cached states; at step zero show a
+    degenerate segment rather than leaking the first update into the preview.
+    """
+    points = np.asarray(points)
+    position = min(max(float(step), 0.0), len(points) - 1)
+    index = int(position)
+    prefix = points[:index + 1]
+    if index < len(points) - 1 and position > index:
+        point = points[index] + (position - index) * (points[index + 1] - points[index])
+        prefix = np.vstack((prefix, point))
+    return prefix if len(prefix) > 1 else np.repeat(prefix, 2, axis=0)
+
+
 class Hook(VoiceoverScene, ThreeDScene):
     def construct(self):
         self.race()
@@ -30,28 +46,59 @@ class Hook(VoiceoverScene, ThreeDScene):
         axes.shift(DOWN * 0.6)
         surf = loss_surface(axes, height, [-2, 2], [-1, 3], resolution=(48, 48), z_lo=0.0, z_hi=5.0, opacity=0.78)
         goal = Dot3D(axes.c2p(1, 1, 0) + OUT * 0.06, radius=0.09, color=WHITE)
+        step = ValueTracker(0)
         runners = {}
         for n in names:
             P = np.asarray(r[f"path_{n}"])
             col = WHITE if n == "gd" else OPT_COLORS[n]  # grey would vanish on the surface
-            trail = surface_path(axes, height, P, color=col, lift=0.06, stroke_width=4)
-            track = surface_path(axes, height, P, color=col, lift=0.1)
+            trace_points = np.array([axes.c2p(x, y, height(x, y)) + OUT * 0.06 for x, y in P])
+            ball_points = trace_points + OUT * (0.11 * 0.6 - 0.06)
+            trail = always_redraw(lambda points=trace_points, color=col: VMobject(color=color, stroke_width=4)
+                                  .set_points_as_corners(step_path(points, step.get_value())))
             ball = surface_ball(axes, height, *P[0], color=col, radius=0.11)
-            runners[n] = (trail, ball, track)
+            ball.add_updater(lambda m, points=ball_points: m.move_to(step_path(points, step.get_value())[-1]))
+            runners[n] = (trail, ball)
         key = VGroup(*[label(OPT_NAMES[n], font_size=26, color=WHITE if n == "gd" else OPT_COLORS[n]) for n in names]).arrange(RIGHT, buff=0.7)
         key.to_edge(UP, buff=0.4)
         tally = VGroup(*[label(rf"${reach[n]}$ steps" if reach[n] >= 0 else r"not yet", font_size=22,
                                color=OPT_COLORS[n]).next_to(key[i], DOWN, buff=0.12) for i, n in enumerate(names)])
+        for n, count in zip(names, tally):
+            # A visible first-hit cue remains readable even when the 3D valley
+            # lip occludes an arriving ball. It is not a convergence claim.
+            count.add_updater(lambda m, n=n: m.set_opacity(
+                1 if reach[n] >= 0 and step.get_value() >= reach[n] else 0))
         tag = label(rf"Rosenbrock's curved valley; \ each optimizer at its best of ${len(r['lrs'])}$ learning rates, "
                     rf"\ ${steps}$ steps", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3)
-        tl = label(r"steps until the loss is below $0.01$", font_size=20, color=GREY_A).next_to(tally, DOWN, buff=0.12)
+        tl = label(r"steps until the loss is below $0.01$", font_size=20, color=GREY_A).next_to(tag, UP, buff=0.18)
+        # A moving 3D corner can enter the label band even when the initial
+        # camera pose clears it. Keep this screen-space legend unoccluded.
+        legend_backing = Rectangle(width=config.frame_width, height=1.15, stroke_width=0,
+                                   fill_color=BACKGROUND, fill_opacity=1).to_edge(UP, buff=0).set_z_index(20)
         for m in (key, tally, tag, tl):
+            m.set_z_index(21)
+        # Reserve the final count's width before placing the fixed denominator.
+        counter = VGroup(label(r"step", font_size=22, color=GREY_A), Integer(steps, font_size=22),
+                         MathTex(rf"/ {steps}", font_size=22, color=GREY_A)).arrange(RIGHT, buff=0.12)
+        counter.to_corner(UR, buff=0.3)
+
+        def update_counter(m):
+            # Integer.set_value replaces its glyph objects. Register the new
+            # family with the 3D camera too, so the digits stay on screen.
+            self.camera.remove_fixed_in_frame_mobjects(m)
+            m.set_value(step.get_value())
+            m.set_z_index(21)
+            self.camera.add_fixed_in_frame_mobjects(m)
+
+        update_counter(counter[1])
+        counter[1].add_updater(update_counter)
+        counter.set_z_index(21)
+        for m in (key, tally, tag, tl, counter, legend_backing):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
         order = sorted([n for n in names if reach[n] >= 0], key=lambda n: reach[n])
         first, last = order[0], ([n for n in names if reach[n] < 0] or order[-1:])[-1]
         slow_never = reach[last] < 0
-        self.set_camera_orientation(phi=62 * DEGREES, theta=-120 * DEGREES, zoom=0.8)
+        self.set_camera_orientation(phi=45 * DEGREES, theta=-120 * DEGREES, zoom=0.72)
         said1 = (f"{SAY.get(last, last).capitalize()} never quite does: it is still crawling along the floor of the valley."
             if slow_never else
             f"{SAY.get(last, last).capitalize()} takes {reach[last]}, crawling along the floor of the valley.")
@@ -69,13 +116,20 @@ class Hook(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(*[FadeIn(rn[1]) for rn in runners.values()])
             vo.wait_until("b")
-            self.play(FadeIn(key))
-            self.play(*[Create(rn[0]) for rn in runners.values()],
-                      *[MoveAlongPath(rn[1], rn[2]) for rn in runners.values()], run_time=6.0, rate_func=linear)
+            self.play(FadeIn(legend_backing), FadeIn(key), FadeIn(counter), FadeIn(tl))
+            self.add(tally)
+            self.add(*[rn[0] for rn in runners.values()])
+            self.play(step.animate.set_value(steps), run_time=6.0, rate_func=linear)
+            for rn in runners.values():
+                for m in rn:
+                    m.clear_updaters()
+            for count in tally:
+                count.clear_updaters()
+            counter[1].clear_updaters()
             self.stop_ambient_camera_rotation()
             vo.wait_until("c")
             self.move_camera(phi=0, theta=-90 * DEGREES, zoom=0.66, frame_center=axes.c2p(0, 1, 0), run_time=2.0)
-            self.play(FadeIn(tally), FadeIn(tl))
+            self.play(FadeOut(counter), *[FadeIn(tally[i]) for i, n in enumerate(names) if reach[n] < 0])
         self.wait(0.3)
         self.clear_scene()
         self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1.0, frame_center=ORIGIN)

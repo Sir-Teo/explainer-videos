@@ -2,15 +2,58 @@
 
 from __future__ import annotations
 
+import json
 import math
 
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-
-from .compute import load  # noqa: F401
+from explainer.paths import ROOT as _REPO_ROOT
 
 PART = 11
+
+# This source-only handoff excludes the corrected recipe/cache contract.
+_BLOCKED_ITEMS = frozenset({"race", "ns", "schedule"})
+_CACHE_ITEMS = frozenset({
+    "race3d", "quad", "river", "noise", "temperature", "eos", "adamview",
+    "decay", "natgrad", "equilibrium", "spikes",
+})
+
+
+def load(name: str) -> dict:
+    """Read an existing cache pair without generating or certifying scientific outcomes.
+
+    Presence/structure checks do not establish input or recipe provenance. The
+    integrator must verify those separately; corrected-dependent products remain
+    blocked even when files with those names are present.
+    """
+    if not isinstance(name, str):
+        raise ValueError("Part 11 cache names must be known item names")
+    if name in _BLOCKED_ITEMS:
+        raise RuntimeError(f"Part 11 source-only handoff blocks {name!r}: "
+                           "the corrected recipe/cache contract is not included")
+    if name not in _CACHE_ITEMS:
+        raise ValueError(f"Unknown Part 11 cache item: {name!r}")
+    directory = _REPO_ROOT / ".cache" / "ai11"
+    metadata = directory / f"{name}.json"
+    arrays_path = directory / f"{name}.npz"
+    if not metadata.is_file() or not arrays_path.is_file():
+        raise FileNotFoundError(f"Part 11 rendering is cache-only: existing {metadata} and "
+                                f"{arrays_path} are required; no scientific preparation was started")
+    data = json.loads(metadata.read_text(encoding="utf-8"))
+    if not isinstance(data, dict) or not data:
+        raise ValueError("Part 11 cache metadata must be a nonempty JSON object")
+    arrays = np.load(arrays_path, allow_pickle=False)
+    if not isinstance(arrays, np.lib.npyio.NpzFile):
+        raise ValueError("Part 11 cache arrays must be an NPZ archive")
+    with arrays:
+        keys = arrays.files
+        if not keys or len(keys) != len(set(keys)):
+            raise ValueError("Part 11 NPZ keys must be nonempty and unique")
+        if set(data).intersection(keys):
+            raise ValueError("Part 11 JSON and NPZ keys must not overlap")
+        data.update({key: arrays[key] for key in keys})
+    return data
 
 # one colour per optimizer, for the whole part
 OPT_COLORS = {
@@ -137,15 +180,41 @@ def bits_axes(x_range, y_range, x_length=8.0, y_length=4.4, center=ORIGIN, xlabe
     return g
 
 
+def curve_prefix(ax, xs, ys, upto, color, stroke_width=3.0, f=lambda v: v):
+    """Replay cached checkpoints up to x, interpolating only adjacent finite samples.
+
+    Nonfinite samples end a subpath; they are never joined across. Interpolation
+    follows the displayed polyline (after f), without revealing a future endpoint.
+    """
+    line = VMobject(color=color, stroke_width=stroke_width)
+    previous = None
+    for x, y in zip(xs, ys):
+        valid = np.isfinite(x) and np.isfinite(y)
+        v = f(y) if valid else float("nan")
+        valid = valid and np.isfinite(v)
+        if x > upto:
+            if valid and previous is not None:
+                px, py = previous
+                if px < upto and x > px:
+                    a = (upto - px) / (x - px)
+                    line.add_points_as_corners([ax.c2p(upto, py + a * (v - py))])
+            break
+        if not valid:
+            previous = None
+            continue
+        point = ax.c2p(x, v)
+        if previous is None:
+            line.start_new_path(point)
+            line.add_points_as_corners([point])
+        else:
+            line.add_points_as_corners([point])
+        previous = (x, v)
+    return line
+
+
 def growing(ax, xs, ys, t: ValueTracker, color, stroke_width=3.0, f=lambda v: v):
     """A curve drawn up to the tracker's x (a training replay)."""
-
-    def make():
-        n = max(2, int(np.searchsorted(xs, t.get_value(), side="right")))
-        pts = [ax.c2p(x, f(y)) for x, y in zip(xs[:n], ys[:n]) if np.isfinite(y)]
-        return VMobject(color=color, stroke_width=stroke_width).set_points_as_corners(pts if len(pts) > 1 else pts * 2)
-
-    return always_redraw(make)
+    return always_redraw(lambda: curve_prefix(ax, xs, ys, t.get_value(), color, stroke_width, f))
 
 
 def step_counter(t: ValueTracker, anchor, direction=UL, font_size=26):

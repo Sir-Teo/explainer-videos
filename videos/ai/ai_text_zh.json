@@ -21071,7 +21071,68 @@
     "curves: \\ first $1{,}000$ test digits, $3$ seeds; \\\\ final clean/FGSM: \\ $10{,}000$; \\ PGD: \\ $2{,}000$; \\\\ ordinary: $6$ epochs; \\ on attacks: $3$ epochs; \\\\ PGD: ordinary seed $0$; \\ on attacks $3$ seeds": "曲线：\\ 前$1{,}000$个测试数字，$3$个随机种子；\\\\ 最终原图/FGSM：\\ $10{,}000$；\\ PGD：\\ $2{,}000$；\\\\ 普通训练：$6$轮；\\ 对抗训练：$3$轮；\\\\ PGD：普通网络种子$0$；\\ 对抗训练$3$个种子",
     "FGSM: \\ $10{,}000$ test digits; \\ MLP/LeNet: $3$ seeds, min--max; \\\\ PGD: \\ first $2{,}000$ test digits, \\ seed $0$": "FGSM：\\ $10{,}000$个测试数字；\\ MLP/LeNet：$3$个随机种子，最小--最大；\\\\ PGD：\\ 前$2{,}000$个测试数字，\\ 随机种子$0$",
     "transfer: error over $10{,}000$ test digits": "迁移攻击：在$10{,}000$个测试数字上的错误率",
-    "mean RGB change (heatmap), magnified; \\\\ at most $2/255$ per channel": "RGB通道改变量均值（热图），放大显示；\\\\ 每通道最多改变$2/255$"
+    "mean RGB change (heatmap), magnified; \\\\ at most $2/255$ per channel": "RGB通道改变量均值（热图），放大显示；\\\\ 每通道最多改变$2/255$",
+    "$e = 1 - \\sigma$: \\ $e \\mapsto -e^2/2 + O(e^3)$; \\ error magnitude $\\sim e^2/2$; \\ slope $2$ at $0$": "$e = 1 - \\sigma$：\\ $e \\mapsto -e^2/2 + O(e^3)$；\\ 误差大小 $\\sim e^2/2$；\\ 在 $0$ 处斜率 $2$",
+    "stationary correlated-update model; \\ $u$ need not be orthogonal to $W$": "平稳相关更新模型；\\ $u$ 不一定与 $W$ 正交",
+    "model correlations $\\propto \\beta_1^{|k|}$; \\ $\\eta\\lambda \\ll 1 - \\beta_1$": "模型相关性 $\\propto \\beta_1^{|k|}$；\\ $\\eta\\lambda \\ll 1 - \\beta_1$",
+    "Decoupled decay $W_{t+1} = (1 - \\eta\\lambda)W_t - \\eta u_t$: \\ stationary zero-mean $u_t$, \\ $\\mathbb{E}\\langle u_t, u_{t+k}\\rangle = U^2\\beta^{|k|}$, \\ $0 \\le \\beta < 1$. \\ Show the equilibrium $\\mathbb{E}\\|W\\|^2 \\approx \\dfrac{\\eta U^2}{2\\lambda}\\dfrac{1 + \\beta}{1 - \\beta}$ when $0 < \\eta\\lambda \\ll 1 - \\beta$.": "解耦衰减 $W_{t+1} = (1 - \\eta\\lambda)W_t - \\eta u_t$：\\ 平稳零均值更新 $u_t$，\\ $\\mathbb{E}\\langle u_t, u_{t+k}\\rangle = U^2\\beta^{|k|}$，\\ $0 \\le \\beta < 1$。\\ 证明 $0 < \\eta\\lambda \\ll 1 - \\beta$ 时，\\ 平衡值 $\\mathbb{E}\\|W\\|^2 \\approx \\dfrac{\\eta U^2}{2\\lambda}\\dfrac{1 + \\beta}{1 - \\beta}$。",
+    "Using convexity alone: \\ $f(x_k) - f^* \\le \\dfrac{L\\,\\|x_0 - x^*\\|^2}{2k}$, \\ a rate of $1/k$.": "只使用凸性：\\ $f(x_k) - f^* \\le \\dfrac{L\\,\\|x_0 - x^*\\|^2}{2k}$，\\ 收敛率为 $1/k$。",
+    "steps to a millionth of the starting gap": "目标差距降至初始值百万分之一的步数",
+    "late $\\sqrt{f-f^*}$ ratio per step": "后期每步 $\\sqrt{f-f^*}$ 的比率",
+    "dashed: quadratic worst-case estimate": "虚线：二次函数最坏情形估计",
+    "large $\\kappa$: relative gap $\\varepsilon$; ignores prefactors": "大 $\\kappa$：相对差距 $\\varepsilon$；忽略前置因子",
+    "late $\\sqrt{f-f^*}$ ratios: \\ heavy ball $0.9418$ \\ (derived $0.9387$); \\\\ Nesterov $0.9702$ \\ (derived $0.9684$)": "后期 $\\sqrt{f-f^*}$ 的比率：\\ 重球法 $0.9418$ \\ （根的模 $0.9387$）；\\\\ 涅斯捷罗夫 $0.9702$ \\ （根的模 $0.9684$）",
+    "NVIDIA, 2026: \\ Muon and SOAP variants stable at $100$M-token batches \\\\ where AdamW degraded; \\ gains modest and mixed across tasks": "英伟达，2026：\\ Muon与SOAP变体在$100$M词元批量下稳定，\\\\ 而AdamW变差；\\ 收益有限且随任务而异",
+    "SOAP: \\ ShampoO with Adam in the Preconditioner's eigenbasis. \\ Reported: \\ over $40\\%$ fewer steps and $35\\%$ less time than AdamW, \\ in large-batch runs at $360$M and $660$M parameters": "SOAP：\\ 在预条件器特征基中运行Adam。\\ 报告：\\ 在$360$M与$660$M参数的大批量训练中，\\ 比AdamW少用超过$40\\%$步数和$35\\%$时间",
+    "curvature: signed power-iteration estimate": "曲率：带符号的幂迭代估计",
+    "$20$ power iterations on Hessian-vector products; \\\\ $\\lambda_{\\max}$ interpretation assumes convergence \\\\ and a positive dominant-magnitude eigenvalue": "黑塞向量积上做$20$轮幂迭代；\\\\ 解释为$\\lambda_{\\max}$需假设收敛，\\\\ 且绝对值最大的特征值为正",
+    "Compare training with the stability edge": "将训练与稳定性边缘比较",
+    "Adam's limit: \\ nonzero gradients give moves of size $\\eta$: \\ sign descent": "Adam的极限：\\ 非零梯度给出大小为$\\eta$的位移：\\ 符号下降",
+    "sign component: $\\pm\\eta$ or $0$; \\ decay is additional": "符号分量：$\\pm\\eta$或$0$；\\ 另加衰减",
+    "Lion: nonzero sign component $\\pm\\eta$; decay excluded": "Lion：非零符号分量为$\\pm\\eta$；不含衰减",
+    "$\\hat m / \\sqrt{\\hat v}$: first-step size $\\approx\\eta$ when $|g_1|\\gg\\epsilon$. \\ Its limit is sign descent, \\ the steepest step when every weight is bounded on its own.": "$\\hat m / \\sqrt{\\hat v}$：$|g_1|\\gg\\epsilon$时首步大小$\\approx\\eta$。\\ 极限是符号下降，\\ 即各权重分别受限时的最陡步。",
+    "a fast walker; \\ Adam-scaled, with weight decay in practice": "快速行者；\\ 实践中由Adam缩放，并带权重衰减",
+    "$100{,}000$ held-out characters; mean of $2$ seeds": "$100{,}000$个留出字符；$2$个种子的均值",
+    "schedule-free AdamW: seed $0$ curve": "免调度AdamW：种子$0$的曲线",
+    "dots: cosine/cool-down, two-seed means": "点：余弦与冷却，两个种子的均值",
+    "the cloud: \\ typically $0.49$ from the best weights; \\ its average: \\ $0.154$": "云团：\\ 到最佳权重的典型距离$0.49$；\\ 全部点的平均：\\ $0.154$",
+    "steps; \\ seed $0$ curve, recorded every $10$ steps": "步数；\\ 种子$0$曲线，每$10$步记录一次",
+    "largest pre-update forward score, \\ $\\max_{i,j} q_i \\cdot k_j / \\sqrt{d}$": "更新前的前向最大分数，\\ $\\max_{i,j} q_i \\cdot k_j / \\sqrt{d}$",
+    "QK-clip: \\ forward measurement, \\ post-update feedback": "QK-clip：\\ 前向测量，\\ 更新后反馈",
+    "allowed positions in a fixed batch; \\ bilinear in the weights": "固定批次中允许的位置；\\ 关于权重是双线性的",
+    "for frozen inputs and weights: \\ scale both by $\\sqrt\\gamma$": "冻结输入和权重：\\ 两者都乘以$\\sqrt\\gamma$",
+    "stored-score feedback; \\ no hard post-update or next-batch cap": "已记录分数的反馈；\\ 更新后或下一批分数没有硬上界",
+    "largest pre-update forward score": "更新前的前向最大分数",
+    "steps; \\ seed $0$ curves, recorded every $10$ steps": "步数；\\ 种子$0$曲线，每$10$步记录一次",
+    "Runaway attention scores are bilinear in $W_q, W_k$: \\ QK-clip rescales just those. \\ Gradient clipping caps the raw gradient norm. \\ Weight decay sets the norm, \\ $\\|W\\| \\propto \\sqrt{\\eta/\\lambda}$.": "失控的注意力分数关于$W_q,W_k$是双线性的：\\ QK-clip只缩放这两个矩阵。\\ 梯度裁剪限制原始梯度范数。\\ 权重衰减决定范数，\\ $\\|W\\| \\propto \\sqrt{\\eta/\\lambda}$。",
+    "Heavy-ball roots $z^2 - (1 + \\beta - \\eta\\lambda)z + \\beta$: \\ tune $\\eta,\\beta$ for equal moduli on $[\\mu,L]$, allowing real repeated endpoint roots. \\ For $\\kappa=10^4$, estimate steps for a $10^6$-fold objective-gap reduction versus GD ($\\eta=1/L$); \\ explain the omitted-prefactor caveat.": "重球法的根$z^2-(1+\\beta-\\eta\\lambda)z+\\beta$：\\ 调整$\\eta,\\beta$，使$[\\mu,L]$上各根等模，允许端点出现实重根。\\ 对$\\kappa=10^4$，估计目标差距缩小$10^6$倍所需步数，与GD（$\\eta=1/L$）比较；\\ 解释忽略前置因子的局限。",
+    "computed: \\ character-model gradient, float32; \\\\ $n$: initial count above $1\\%$ of largest": "计算所得：\\ 字符模型梯度，float32；\\\\ $n$：初始大于最大值$1\\%$的个数",
+    "worst distance from $1$ among current top $n$": "当前最大的$n$个离$1$的最远距离",
+    "solid: \\ gradient; \\ dashed: \\ weight; \\\\ each matrix: $n$ initially above $1\\%$ of largest": "实线：\\ 梯度；\\ 虚线：\\ 权重；\\\\ 各矩阵的$n$：初始大于最大值$1\\%$的个数",
+    "each optimizer: \\ $6$ initial rates, \\ factor $2$ apart; \\ up to $3$ edge extensions; \\ the best re-run from $2$ more seeds": "每个优化器：\\ $6$个初始学习率，相邻差$2$倍；\\ 边缘最多扩展$3$次；\\ 最好的再用另外$2$个种子运行",
+    "full validation slice: \\ bits after $3{,}000$ steps, \\ seed $0$": "完整验证切片：\\ $3{,}000$步后的比特数，\\ 种子$0$",
+    "full validation slice, \\ $3$ seeds: \\ mean \\ (min--max)": "完整验证切片，\\ $3$个种子：\\ 均值（最小--最大）",
+    "curves: first $20{,}000$ validation predictions; \\\\ median of $3$ seeds; \\ band: \\ min to max": "曲线：前$20{,}000$个验证预测；\\\\ $3$个种子的中位数；\\ 色带：最小到最大",
+    "seed $0$ texts at shown steps; \\ bits interpolated from the validation curve": "文本来自所示步数的种子$0$模型；\\ 比特数由验证曲线插值得到",
+    "mean loop time per step, \\ $3$ seeds; \\ relative to AdamW": "平均循环每步时间，\\ $3$个种子；\\ 相对于AdamW",
+    "includes validation and $4$ text samples of $72$ characters; \\\\ initial/final evaluation excluded; \\ one shared CPU thread. \\\\ At scale on GPUs, \\ Muon's extra arithmetic is estimated at under $1\\%$.": "包含定期验证及$4$次各$72$字符的文本采样；\\\\ 不含初始及最终评估；\\ 与其他任务共享的单个CPU线程。\\\\ 在大规模GPU训练中，\\ Muon的额外运算量估计低于$1\\%$。",
+    "seed $0$; \\ scored during training on the first $20{,}000$ held-out predictions": "种子$0$；\\ 训练中对前$20{,}000$个留出字符预测打分",
+    "$100{,}000$-character held-out split; mean of $2$ seeds": "$100{,}000$字符的留出集；$2$个种子的均值",
+    "the same runs as Chapter 13, \\ seed $0$; \\ held-out bits on $20{,}000$ predictions": "与第13章相同的训练，\\ 种子$0$；\\ 在$20{,}000$个留出字符预测上计算比特",
+    "every number here on the same $20{,}000$ held-out predictions": "这里每个数字都使用相同的$20{,}000$个留出字符预测",
+    "natural gradient (damped): \\ $\\eta = 0.3$": "自然梯度（带阻尼）：\\ $\\eta = 0.3$",
+    "K-FAC (damped): \\ $\\eta = 0.1$": "K-FAC（带阻尼）：\\ $\\eta = 0.1$",
+    "Part 9's spirals; \\ a $2$--$24$--$24$--$2$ network; \\ each at its best of $5$ rates, \\ $3$ seeds (band: \\ min to max)\\\\NG: full Fisher + damping; \\ K-FAC: sampled model-label factors + factor damping": "第9部分的螺旋；\\ $2$--$24$--$24$--$2$网络；\\ 各用$5$个学习率里最好的，\\ $3$个种子（色带：最小到最大）\\\\NG：全费希尔矩阵加阻尼；\\ K-FAC：按模型标签采样的因子加因子阻尼",
+    "The ideal natural-gradient direction $-\\eta F^{-1} g$ measures local prediction change, \\ independent of smooth invertible coordinates. \\ K-FAC approximates it with two small Kronecker factors per layer.": "理想自然梯度方向$-\\eta F^{-1}g$衡量预测的局部变化，\\ 不依赖光滑可逆的坐标写法。\\ K-FAC用每层两个小克罗内克因子来近似它。",
+    "quadratics: \\ $\\kappa$ vs $\\sqrt{\\kappa}$": "二次模型：\\ $\\kappa$ 对 $\\sqrt{\\kappa}$",
+    "full-batch: \\ estimated edge": "全批量：\\ 估计的边缘",
+    "Muon: \\ approximate polar step": "Muon：\\ 近似极分解步",
+    "model: \\ $\\|W\\| \\propto \\sqrt{\\eta/\\lambda}$": "模型：\\ $\\|W\\| \\propto \\sqrt{\\eta/\\lambda}$",
+    "curves: first $20{,}000$ validation predictions; \\\\ median of $3$ seeds; \\ band: \\ min to max \\\\ losses shown from step $150$; initial values omitted": "曲线：前$20{,}000$个验证预测；\\\\ $3$个种子的中位数；\\ 色带：最小到最大 \\\\ 仅显示第$150$步起的损失；省略初始值",
+    "every number here on the same $20{,}000$ held-out predictions \\\\ losses shown from step $500$; earlier values omitted": "这里每个数字都使用相同的$20{,}000$个留出字符预测 \\\\ 仅显示第$500$步起的损失；省略更早的值",
+    "stable--decay (no warmup)": "稳定--衰减（无预热）",
+    "Averaging can replace a cool-down": "取平均可以替代学习率冷却",
+    "In a stable local quadratic model, averaging can reduce fluctuations around the solution. An EMA of the weights, and schedule-free's interpolation, can reduce the need for a scheduled learning-rate cool-down.": "在稳定的局部二次模型中，取平均可以减小解附近的波动。权重的EMA以及免调度方法的插值，可以减少对预设学习率冷却的依赖。"
   },
   "phrases": {
     "width": "宽度",
@@ -23428,6 +23489,46 @@
     [
       "^worst retained fraction per sweep: \\\\\\\\ \\$(.*?) \\\\le \\\\gamma\\$$",
       "每一遍后至多剩下的比例：\\\\\\\\ $\\1 \\\\le \\\\gamma$"
+    ],
+    [
+      "^\\$0\\.2\\\\sqrt\\{\\\\max\\(m,n\\)\\}\\$:\\ \\\\\\ an\\ orthogonal\\ \\$m\\ \\\\times\\ n\\$\\ matrix\\ has\\ entries\\ of\\ size\\ about\\ \\$1/\\\\sqrt\\{\\\\max\\(m,\\ n\\)\\}\\$,\\ \\\\\\\\\\ so\\ the\\ ideal\\ step\\ has\\ entry\\ RMS\\ \\$0\\.2\\\\eta\\$;\\ \\\\\\ compare\\ Adam's\\ median\\ \\\\\\ \\(ours,\\ \\\\\\ Chapter\\ 6:\\ \\\\\\ median\\ \\$([^$]+)\\\\,\\\\eta\\$\\)$",
+      "$0.2\\\\sqrt{\\\\max(m,n)}$：\\\\ 正交矩阵的元素均方根为$1/\\\\sqrt{\\\\max(m,n)}$；\\\\\\\\ 理想位移的元素均方根为$0.2\\\\eta$；\\\\ 对比第6章Adam的中位数$\\g<1>\\\\,\\\\eta$"
+    ],
+    [
+      "^AdamW,\\ \\\\\\ \\$\\\\eta\\ =\\ ([^$]+)\\$;\\ \\\\\\ curves:\\ seed\\ \\$0\\$,\\ first\\ \\$20\\{,\\}000\\$\\ held\\-out\\ characters$",
+      "AdamW，\\\\ $\\\\eta = \\g<1>$；\\\\ 曲线：种子$0$，前$20{,}000$个留出字符"
+    ],
+    [
+      "^At\\ a\\ fixed\\ step\\ \\$\\\\eta\\$,\\ compare\\ curvature\\ with\\ \\$2/\\\\eta\\$\\ \\\\\\ \\(second\\-half\\ power\\-estimate\\ median\\ here:\\ \\$([^$]+)\\$\\ for\\ \\$2/\\\\eta\\ =\\ 40\\$\\)\\.\\ \\\\\\ The\\ step\\ size\\ can\\ shape\\ the\\ curvature\\.$",
+      "固定步长$\\\\eta$下，将曲率与$2/\\\\eta$比较（这里后半程幂迭代估计中位数$\\g<1>$，$2/\\\\eta=40$）。\\\\ 步长可以影响曲率。"
+    ],
+    [
+      "^after\\ \\$([0-9]+(?:\\.[0-9]+)?)\\$\\ rounds,\\ \\\\\\ current\\ largest\\ \\$([0-9]+(?:\\.[0-9]+)?)\\$:\\ \\\\\\ \\$([0-9]+(?:\\.[0-9]+)?)\\$\\ to\\ \\$([0-9]+(?:\\.[0-9]+)?)\\$$",
+      "$\\g<1>$轮后，\\\\ 当前最大的$\\g<2>$个：\\\\ $\\g<3>$到$\\g<4>$"
+    ],
+    [
+      "^the\\ classical\\ cubic,\\ current\\ top\\ \\$n\\$,\\ after\\ \\$([0-9]+(?:\\.[0-9]+)?)\\$\\ rounds:\\ \\\\\\ worst\\ \\$([0-9]+(?:\\.[0-9]+)?)\\$\\ from\\ \\$1\\$;\\ \\\\\\ after\\ \\$([0-9]+(?:\\.[0-9]+)?)\\$:\\ \\\\\\ \\$([0-9]+(?:\\.[0-9]+)?)\\$$",
+      "经典三次多项式，当前最大的$n$个，$\\g<1>$轮后离$1$最远$\\g<2>$；\\\\ $\\g<3>$轮后：\\\\ $\\g<4>$"
+    ],
+    [
+      "^AdamW,\\ \\\\\\ \\$\\\\eta\\ =\\ ([^$]+)\\$;\\ \\\\\\ curves:\\ seed\\ \\$0\\$,\\ first\\ \\$20\\{,\\}000\\$\\ held\\-out\\ predictions$",
+      "AdamW，\\\\ $\\\\eta = \\g<1>$；\\\\ 曲线：种子$0$，前$20{,}000$个留出字符预测"
+    ],
+    [
+      "^constant:\\ \\\\\\ mean\\ hill\\ \\$([^$]+)\\$;\\ \\\\\\ fixed\\-x\\ linear\\ reference\\ \\$\\\\frac\\{\\\\eta\\\\sigma\\^2\\}\\{4\\}\\ \\\\big/\\ \\(1\\ \\-\\ \\\\frac\\{\\\\eta\\ A\\}\\{2\\}\\)\\ =\\ ([^$]+)\\$$",
+      "恒定：\\\\ 平均山坡损失$\\g<1>$；\\\\ 固定x线性参考$\\\\frac{\\\\eta\\\\sigma^2}{4} \\\\big/ (1 - \\\\frac{\\\\eta A}{2}) = \\g<2>$"
+    ],
+    [
+      "^natural\\ gradient\\ \\(damped\\):\\ \\\\\\ \\$\\\\eta\\ =\\ ([^$]+)\\$$",
+      "自然梯度（带阻尼）：\\\\ $\\\\eta = \\g<1>$"
+    ],
+    [
+      "^K\\-FAC\\ \\(damped\\):\\ \\\\\\ \\$\\\\eta\\ =\\ ([^$]+)\\$$",
+      "K-FAC（带阻尼）：\\\\ $\\\\eta = \\g<1>$"
+    ],
+    [
+      "^AdamW,\\ \\\\\\ \\$\\\\eta\\ =\\ ([^$]+)\\$;\\ \\\\\\ curves:\\ seed\\ \\$0\\$,\\ first\\ \\$20\\{,\\}000\\$\\ held\\-out\\ predictions\\ \\\\\\\\\\ losses\\ shown\\ from\\ step\\ \\$500\\$;\\ earlier\\ values\\ omitted$",
+      "AdamW，\\\\ $\\\\eta = \\g<1>$；\\\\ 曲线：种子$0$，前$20{,}000$个留出字符预测 \\\\\\\\ 仅显示第$500$步起的损失；省略更早的值"
     ]
   ]
 }

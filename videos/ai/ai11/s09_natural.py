@@ -159,28 +159,39 @@ class Natural(VoiceoverScene):
         opts = ["gd", "adam", "kfac", "ng"]
         curves = {o: np.asarray(n[f"curves_{o}"]) for o in opts}  # seed x step x (t, loss, acc)
         T = curves["gd"].shape[1] - 1
-        lo = -6.0
-        ax = CornerAxes(x_range=[0, T, 100], y_range=[lo, 1.0, 1], x_length=6.2, y_length=4.0, tips=False,
+        # Show the complete stored positive loss range; a display floor is not a measured plateau.
+        log_losses = {}
+        for o, c in curves.items():
+            losses = c[:, :, 1]
+            if not np.all(np.isfinite(losses) & (losses > 0)):
+                raise ValueError("Natural race requires finite positive cached losses for the log display")
+            log_losses[o] = np.log10(losses)
+        lo = float(4 * np.floor(min(L.min() for L in log_losses.values()) / 4))
+        hi = float(max(lo + 4, np.ceil(max(L.max() for L in log_losses.values()))))
+        tick_exponents = sorted(set([int(lo), int(hi), *range(int(lo), int(hi) + 1, 4)]))
+        ax = CornerAxes(x_range=[0, T, 100], y_range=[lo, hi, 1], x_length=6.2, y_length=4.0, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.1, -0.5, 0])
         xt = VGroup(*[MathTex(str(k), font_size=20, color=GREY_B).next_to(ax.c2p(k, lo), DOWN, buff=0.08) for k in range(0, T + 1, 100)])
         yt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=18, color=GREY_B).next_to(ax.c2p(0, k), LEFT, buff=0.08)
-                      for k in range(int(lo), 2, 2)])
+                      for k in tick_exponents])
         xn = label(r"full-batch steps", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
         yn = label(r"training loss \ (nats, log scale)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         t = ValueTracker(0)
         live, bands = [], VGroup()
         for o in opts:
             c = curves[o]
-            L = np.log10(np.clip(c[:, :, 1], 10 ** lo, 10))
+            L = log_losses[o]
             med = np.median(L, 0)
             ts = c[0, :, 0]
             bands.add(band(ax, ts, L.min(0), L.max(0), OPT_COLORS[o], 0.15))
             live.append(growing(ax, ts, med, t, OPT_COLORS[o], 3))
-        lab = VGroup(*[label(rf"{OPT_NAMES[o]}: \ $\eta = {n[f'best_{o}']:g}$", font_size=20, color=OPT_COLORS[o]) for o in opts])
+        race_names = dict(OPT_NAMES, ng=r"natural gradient (damped)", kfac=r"K-FAC (damped)")
+        lab = VGroup(*[label(rf"{race_names[o]}: \ $\eta = {n[f'best_{o}']:g}$", font_size=20, color=OPT_COLORS[o]) for o in opts])
         lab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.45, -1.7, 0])
         # decision maps: gradient descent against the natural gradient, through training
         snaps = list(n["snap_steps"])
         X, y = np.asarray(n["X"]), np.asarray(n["y"])
+        P, N = int(n["P"]), len(y)
 
         def dmap(o, k, center, size=2.3):
             p = np.asarray(n[f"snaps_{o}"])[k].reshape(41, 41)[::-1]  # image rows run top to bottom
@@ -202,34 +213,44 @@ class Natural(VoiceoverScene):
         at100 = {o: float(np.median(curves[o][:, k100, 1])) for o in opts}
         order = sorted(opts, key=lambda o: at100[o])
         tag = note(r"Part 9's spirals; \ a $2$--$24$--$24$--$2$ network; \ each at its best of $5$ rates, \ $3$ seeds "
-                   r"(band: \ min to max)").to_corner(DL, buff=0.15)
+                   r"(band: \ min to max)\\NG: full Fisher + damping; \ K-FAC: sampled model-label factors + factor damping").to_corner(DL, buff=0.15)
         edges = [o for o in opts if bool(n[f"edge_{o}"])]
         ecomment = (f" {SAY[edges[0]].capitalize()}'s best rate was at the end of its grid, so it may do a little better "
                     "still." if edges else "")
         said1 = ("The natural gradient carves out the two spirals almost at once. "
             if order[0] == "ng" else "")
         with self.voiceover(
-            "Race them on part nine's spirals: gradient descent, Adam, K-FAC and the exact natural gradient, each at "
+            "Race them on part nine's spirals: gradient descent, Adam, damped K-FAC and a damped full-Fisher natural gradient, each at "
             "its best of five learning rates, three seeds each. <bookmark mark='a'/> After a hundred steps, the "
             f"order is {SAY[order[0]]}, then {SAY[order[1]]}, {SAY[order[2]]} and {SAY[order[3]]}. "
             f"<bookmark mark='b'/> On the right, what the network believes, as it trains: gradient descent's map "
             "and the natural gradient's, at the same steps. "
             + said1
-            + "<bookmark mark='c'/> But each natural-gradient step solved a system with one equation per weight. On "
-            "a real model that is impossible, which is why the practical versions, K-FAC and the Shampoo of the "
-            "next chapter, approximate it." + ecomment
+            + f"<bookmark mark='c'/> The full Fisher acts on {P} parameters. Here a Woodbury identity computes the "
+            f"damped direction through a smaller system of {N} equations, one per training example. At scale, even "
+            "full-Fisher geometry is costly, so K-FAC uses layer factors. Next chapter's Shampoo uses a related "
+            "Kronecker idea." + ecomment
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(lab), FadeIn(tag))
             self.play(FadeIn(bands))
             self.add(*live)
             self.play(FadeIn(maps["gd"][0]), FadeIn(maps["ng"][0]), FadeIn(mh), FadeIn(sl))
             vo.wait_until("a")
-            self.play(t.animate.set_value(k100), run_time=3.0, rate_func=linear)
-            vo.wait_until("b")
-            for k in range(1, len(snaps)):
+            # Replay cached snapshots in chronological order. The old sequence
+            # advanced the curve alone to 100, then rewound it to snapshot 10.
+            # Keep the original 3.0 + 4 * 1.2 seconds of replay animation.
+            split = snaps.index(k100)
+
+            def advance(k, duration):
                 self.play(t.animate.set_value(snaps[k]), FadeOut(maps["gd"][k - 1]), FadeIn(maps["gd"][k]),
                           FadeOut(maps["ng"][k - 1]), FadeIn(maps["ng"][k]), ChangeDecimalToValue(stp, snaps[k]),
-                          run_time=1.2)
+                          run_time=duration, rate_func=linear)
+
+            for k in range(1, split + 1):
+                advance(k, 3.0 / split)
+            vo.wait_until("b")
+            for k in range(split + 1, len(snaps)):
+                advance(k, 1.2 * (len(snaps) - 1) / (len(snaps) - 1 - split))
             self.play(t.animate.set_value(T), run_time=1.0)
             for m_ in live:
                 m_.clear_updaters()
@@ -239,9 +260,9 @@ class Natural(VoiceoverScene):
 
     def takeaway(self):
         t = takeaway_card(r"The right ruler is the model's own",
-                          r"The natural gradient $-\eta F^{-1} g$ measures a step by the change in predictions, \ and "
-                          r"doesn't depend on how the weights are written. \ K-FAC makes it affordable, \ layer by "
-                          r"layer, \ with two small Kronecker factors.",
+                          r"The ideal natural-gradient direction $-\eta F^{-1} g$ measures local prediction change, \ "
+                          r"independent of smooth invertible coordinates. \ K-FAC approximates it with two small "
+                          r"Kronecker factors per layer.",
                           r"Next: \ Shampoo's Kronecker factors, \ from the gradient alone")
         with self.voiceover(
             "So the natural gradient measures a step by what it does to the model, and K-FAC makes that affordable "
