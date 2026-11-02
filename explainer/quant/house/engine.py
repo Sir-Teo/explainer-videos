@@ -152,11 +152,11 @@ def mlmc(eps, S0=100.0, K=100.0, T=1.0, sigma=0.2, r=0.05, M=2, L0=2, n0=4000, s
             "N": [int(sums[l][2]) for l in range(L + 1)], "V": V.tolist()}
 
 
-def mc_euler_cost(eps, S0=100.0, K=100.0, T=1.0, sigma=0.2, r=0.05, seed=0):
+def mc_euler_cost(eps, S0=100.0, K=100.0, T=1.0, sigma=0.2, r=0.05, seed=0, ref=None):
     """The standard estimator's cost at the same accuracy: Euler bias ~ h, so h ~ eps and N ~ eps^-2, cost ~ eps^-3.
     The step count is the smallest power of two whose bias (measured against a fine reference) is below eps/sqrt 2."""
     g = np.random.default_rng(seed)
-    ref = mlmc(eps / 4, S0, K, T, sigma, r, seed=seed + 7)["estimate"]
+    ref = ref if ref is not None else mlmc(eps / 4, S0, K, T, sigma, r, seed=seed + 7)["estimate"]
     for k in range(1, 12):
         n = 2 ** k
         P = _plain_euler(n, 40000, S0, K, T, sigma, r, g)  # the plain estimator with n steps; its bias vs ref

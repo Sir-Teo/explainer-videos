@@ -95,13 +95,14 @@ def compute_qmc() -> dict:
 
 
 def compute_mlmc() -> dict:
-    eps = [0.04, 0.02, 0.01, 0.005]
+    eps = [0.04, 0.02, 0.01]
+    ref = E.mlmc(0.003, S0, K, T, SIG, R, seed=11)["estimate"]  # one tight reference for every target
     ml, st = [], []
     for e in eps:
         m = E.mlmc(e, S0, K, T, SIG, R, seed=3)
         ml.append(m)
-        st.append(E.mc_euler_cost(e, S0, K, T, SIG, R, seed=4))
-    return _json({"eps": eps, "mlmc": ml, "standard": st})
+        st.append(E.mc_euler_cost(e, S0, K, T, SIG, R, seed=4, ref=ref))
+    return _json({"eps": eps, "mlmc": ml, "standard": st, "ref": ref})
 
 
 def compute_american() -> dict:
