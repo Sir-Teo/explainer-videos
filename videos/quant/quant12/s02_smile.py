@@ -104,6 +104,10 @@ class Smile(VoiceoverScene):
         self.clear_scene()
 
     def arbitrage(self, s):
+        c = chapter_card(2, r"Static arbitrage, and SSVI", r"Which smiles are possible?", part=PART)
+        with self.voiceover("Chapter two. Static arbitrage, and SSVI."):
+            self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
+        self.play(FadeOut(c))
         fit = s["ssvi"]
         rows = [cmath(r"g(k)", r"=", r"\Big(1 - \frac{k\,w'}{2w}\Big)^2 - \frac{w'^2}{4}\Big(\frac1w + \frac14\Big) + "
                       r"\frac{w''}{2} \;\ge\; 0", font_size=32, colors={r"g(k)": BAD}),

@@ -20,8 +20,9 @@ PROBLEMS = [
     r"\partial_{KK} C)$ at zero rates.",
     r"Show that $-\log(S_T/F)$ equals a forward position plus a strip of options weighted $1/K^2$, and hence derive "
     r"the variance-swap strike.",
-    r"For SSVI, show that $\partial_T w \ge 0$ whenever $\theta_T$ is non-decreasing and $\theta\varphi(\theta)$ is "
-    r"non-decreasing in $\theta$.",
+    r"For SSVI, check Gatheral and Jacquier's calendar condition: $\theta_T$ non-decreasing and $0 \le "
+    r"\partial_\theta(\theta\varphi(\theta)) \le \frac{1 + \sqrt{1 - \rho^2}}{\rho^2}\varphi(\theta)$, for the power-law "
+    r"$\varphi$.",
     r"Show that near the money, local-volatility skew is about twice the implied skew: $\partial_k\sigma_{loc} "
     r"\approx 2\,\partial_k\sigma_{imp}$.",
     r"Derive Martin's bound: if $\text{cov}(m_T R_T, R_T) \le 0$, then $\mathbb{E}[R_T] - R_f \ge \text{var}^Q(R_T)/R_f$.",
