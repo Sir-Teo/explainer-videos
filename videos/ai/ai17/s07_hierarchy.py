@@ -91,7 +91,7 @@ class Hierarchy(VoiceoverScene, MovingCameraScene):
             "about half as far. <bookmark mark='c'/> Inside each multiprocessor: a combined L1 and shared-memory "
             "pool of 256 kibibytes, of which up to 228 can be shared memory that the programmer fills on purpose; "
             "<bookmark mark='d'/> and the "
-            "registers, another 256 kilobytes, right next to the arithmetic, read every cycle. Each step down is "
+            "registers, another 256 kibibytes, right next to the arithmetic, read every cycle. Each step down is "
             "smaller and closer, and much faster to read."
         ) as vo:
             self.play(FadeIn(g.pkg), FadeIn(g.die), FadeIn(g[3]), FadeIn(g.hbm, lag_ratio=0.1), FadeIn(tag))
