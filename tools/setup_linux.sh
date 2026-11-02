@@ -21,4 +21,6 @@ command -v uv >/dev/null || { curl -LsSf https://astral.sh/uv/install.sh | sh; e
 uv pip install --python .venv/bin/python --index-url https://download.pytorch.org/whl/cpu torch
 uv pip install --python .venv/bin/python -r requirements-lock.txt
 uv pip install --python .venv/bin/python -e . --no-deps
+# Kokoro's Mandarin G2P (jieba, pypinyin, cn2an): the CPU stand-in voice for the Chinese editions (make.py --cpu-voice)
+uv pip install --python .venv/bin/python "misaki[zh]==0.9.4"
 echo "ready: source .venv/bin/activate"
